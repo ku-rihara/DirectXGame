@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXGame", "DirectXGame.vcxproj", "{18750579-E839-444C-A284-141A94DC7EFB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{2F784722-1325-4477-9B3D-43784608027C}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{18750579-E839-444C-A284-141A94DC7EFB}.Debug|x64.ActiveCfg = Debug|x64
+		{18750579-E839-444C-A284-141A94DC7EFB}.Debug|x64.Build.0 = Debug|x64
+		{18750579-E839-444C-A284-141A94DC7EFB}.Release|x64.ActiveCfg = Release|x64
+		{18750579-E839-444C-A284-141A94DC7EFB}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9DC8FF74-F370-4A5E-86C4-BD48F228B8F9}
+	EndGlobalSection
+EndGlobal
