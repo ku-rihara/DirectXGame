@@ -47,7 +47,7 @@ void WinApp::MakeWindow(const wchar_t* title, int32_t clientWidth, int32_t clien
 	AdjustWindowRect(&wrc, WS_EX_OVERLAPPEDWINDOW, false);
 
 	//ウィンドウの生成
-	HWND hwnd = CreateWindow(
+	 hwnd_ = CreateWindow(
 		wc_.lpszClassName,       //利用するクラス名
 		title,					//タイトルバーの文字
 		WS_OVERLAPPEDWINDOW,	//良く見るウィンドウスタイル
@@ -61,6 +61,6 @@ void WinApp::MakeWindow(const wchar_t* title, int32_t clientWidth, int32_t clien
 		nullptr);				//オプション
 
 	//ウィンドウを表示する
-	ShowWindow(hwnd, SW_SHOW);
+	ShowWindow(hwnd_, SW_SHOW);
 
 }

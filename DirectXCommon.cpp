@@ -29,14 +29,16 @@ void DirectXCommon::Init(WinApp* winApp, int32_t backBufferWidth, int32_t backBu
 	/// コマンド関連初期化
 	CommandInit();
 
+	//スワップチェーンの作成
+	CreateSwapChain();
 }
 
 void DirectXCommon::DXGIDeviceInit() {
 
 	//DXGIファクトリーの生成
-	IDXGIFactory7* dxgiFactory = nullptr;
+	dxgiFactory_ = nullptr;
 	//HRESULTはWindows系のエラーコード
-	 hr_ = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory));
+	hr_ = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory_));
 	//初期化の根本的な部分でエラーが出た場合はプログラムが間違っているか、どうにもできない
 	//場合が多いのでassertにしておく
 	assert(SUCCEEDED(hr_));
@@ -44,7 +46,7 @@ void DirectXCommon::DXGIDeviceInit() {
 	//使用するアダプタ用の変数。最初にnullptrを入れておく
 	IDXGIAdapter4* useAdapter = nullptr;
 	//いい順にアダプタを頼む
-	for (UINT i = 0; dxgiFactory->EnumAdapterByGpuPreference(i,
+	for (UINT i = 0; dxgiFactory_->EnumAdapterByGpuPreference(i,
 		DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE, IID_PPV_ARGS(&useAdapter)) !=
 		DXGI_ERROR_NOT_FOUND; ++i) {
 
@@ -62,7 +64,7 @@ void DirectXCommon::DXGIDeviceInit() {
 	}
 	assert(useAdapter != nullptr);
 
-	 device_ = nullptr;
+	device_ = nullptr;
 	//機能レベルとログ出力用の文字列
 	D3D_FEATURE_LEVEL featureLevels[] = {
 		D3D_FEATURE_LEVEL_12_2,D3D_FEATURE_LEVEL_12_1,D3D_FEATURE_LEVEL_12_0
@@ -87,7 +89,7 @@ void DirectXCommon::DXGIDeviceInit() {
 
 void DirectXCommon::CommandInit() {
 	//コマンドキューを作成する
-	ID3D12CommandQueue* commandQueue = nullptr;
+	 commandQueue = nullptr;
 	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
 	hr_ = device_->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue));
 	//コマンドキューの生成が上手くいかなかったので起動出来ない
@@ -104,5 +106,22 @@ void DirectXCommon::CommandInit() {
 	hr_ = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator, nullptr, IID_PPV_ARGS(&commandList));
 
 	//コマンドリストの生成がうまくいかなかったので起動出来ない
+	assert(SUCCEEDED(hr_));
+}
+
+void DirectXCommon::CreateSwapChain() {
+	//スワップチェーンを生成する
+	swapChain = nullptr;
+	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
+	swapChainDesc.Width = backBufferWidth_;//画面の幅
+	swapChainDesc.Height = backBufferHeight_;//画面の高さ
+	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//色の形式
+	swapChainDesc.SampleDesc.Count = 1;//マルチサンプルしない
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//描画のターゲットとして利用する
+	swapChainDesc.BufferCount = 2;//ダブルバッファ
+	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;//モニターに写したら、中身を破棄
+
+	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
+	hr_ = dxgiFactory_->CreateSwapChainForHwnd(commandQueue, winApp_->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain));
 	assert(SUCCEEDED(hr_));
 }
