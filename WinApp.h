@@ -18,11 +18,10 @@ public:
 
 	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
-	static void MakeWindow(const wchar_t* title = L"DirectXGame", 
-	                    	int32_t clientWidth = kWindowWidth, int32_t clientHeight = kWindowHeight);
+	 void MakeWindow(const wchar_t* title = L"DirectXGame",int32_t clientWidth = kWindowWidth, int32_t clientHeight = kWindowHeight);
 
 private://メンバ変数
-	
+	WNDCLASS wc_{};
 	
 };
 

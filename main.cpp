@@ -1,7 +1,6 @@
+#include"Keta.h"
 
 //class
-#include"WinApp.h"
-#include"DirectXCommon.h"
 
 ////Function
 //#include"Convert.h"
@@ -17,16 +16,14 @@
 //#pragma comment(lib,"dxgi.lib")
 
 
+const char kWindowTitle[] = "CG2";
+
 //windowアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
-	//ウィンドウの生成
-	WinApp::MakeWindow(L"CG2",1280,720);
+	//ライブラリの初期化
+	Keta::Initialize(kWindowTitle, 1280, 720);
 
-
-	//スワップチェーンを生成する
-	IDXGISwapChain4* swapChain = nullptr;
-	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
 
 	MSG msg{};
 	//ウィンドウのxボタンが押されるまでループ
@@ -38,8 +35,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			DispatchMessage(&msg);
 		}
 		else {
-			
-		
+
+
 
 		}
 	}

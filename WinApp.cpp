@@ -1,6 +1,7 @@
 #include "WinApp.h"
 
 
+
 const wchar_t WinApp::kWindowClassName[] = L"DirectXGame";
 
 
@@ -25,8 +26,7 @@ LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 	return DefWindowProc(hwnd, msg, wparam, lparam);
 }
 
- void WinApp::MakeWindow(const wchar_t* title, int32_t clientWidth, int32_t clientHeight) {
-	 WNDCLASS wc_{};
+void WinApp::MakeWindow(const wchar_t* title, int32_t clientWidth, int32_t clientHeight) {
 	
 	//ウィンドウプロシージャ
 	wc_.lpfnWndProc = WindowProc;

@@ -1,34 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="ヘッダー ファイル">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="リソース ファイル">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Function">
+    <Filter Include="MyEngine">
+      <UniqueIdentifier>{d0c548e8-1e8d-4fa8-af3e-514db00c514c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\Function">
       <UniqueIdentifier>{ad63e3c9-e19c-4445-b7d7-07349a5183ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="MyEngine\ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="MyEngine\Adapter">
+      <UniqueIdentifier>{8986ede4-fff3-408a-b286-3a64b9b00598}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>MyEngine\ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Convert.cpp">
-      <Filter>Function</Filter>
+      <Filter>MyEngine\Function</Filter>
     </ClCompile>
     <ClCompile Include="WinApp.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>MyEngine\ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="DirectXCommon.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Keta.cpp">
+      <Filter>MyEngine\Adapter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -36,13 +45,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Convert.h">
-      <Filter>Function</Filter>
+      <Filter>MyEngine\Function</Filter>
     </ClInclude>
     <ClInclude Include="WinApp.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="DirectXCommon.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>MyEngine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Keta.h">
+      <Filter>MyEngine\Adapter</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

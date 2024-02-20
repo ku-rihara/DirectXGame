@@ -62,7 +62,7 @@ void DirectXCommon::DXGIDeviceInit() {
 	}
 	assert(useAdapter != nullptr);
 
-	ID3D12Device* device_ = nullptr;
+	 device_ = nullptr;
 	//機能レベルとログ出力用の文字列
 	D3D_FEATURE_LEVEL featureLevels[] = {
 		D3D_FEATURE_LEVEL_12_2,D3D_FEATURE_LEVEL_12_1,D3D_FEATURE_LEVEL_12_0
