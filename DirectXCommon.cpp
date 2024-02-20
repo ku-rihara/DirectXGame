@@ -31,6 +31,9 @@ void DirectXCommon::Init(WinApp* winApp, int32_t backBufferWidth, int32_t backBu
 
 	//スワップチェーンの作成
 	CreateSwapChain();
+
+	//レンダーターゲットビューの生成
+	CreateRenderTargetView();
 }
 
 void DirectXCommon::DXGIDeviceInit() {
@@ -89,21 +92,21 @@ void DirectXCommon::DXGIDeviceInit() {
 
 void DirectXCommon::CommandInit() {
 	//コマンドキューを作成する
-	 commandQueue = nullptr;
+	 commandQueue_ = nullptr;
 	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
-	hr_ = device_->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue));
+	hr_ = device_->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue_));
 	//コマンドキューの生成が上手くいかなかったので起動出来ない
 	assert(SUCCEEDED(hr_));
 
 	//コマンドアロケータを生成する
-	ID3D12CommandAllocator* commandAllocator = nullptr;
-	hr_ = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator));
+	 commandAllocator_ = nullptr;
+	hr_ = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator_));
 	//コマンドアロケータの生成が上手くいかなかったので起動出来ない
 	assert(SUCCEEDED(hr_));
 
 	//コマンドリストを生成する
-	ID3D12GraphicsCommandList* commandList = nullptr;
-	hr_ = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator, nullptr, IID_PPV_ARGS(&commandList));
+	 commandList_ = nullptr;
+	hr_ = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_, nullptr, IID_PPV_ARGS(&commandList_));
 
 	//コマンドリストの生成がうまくいかなかったので起動出来ない
 	assert(SUCCEEDED(hr_));
@@ -111,7 +114,7 @@ void DirectXCommon::CommandInit() {
 
 void DirectXCommon::CreateSwapChain() {
 	//スワップチェーンを生成する
-	swapChain = nullptr;
+	swapChain_ = nullptr;
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
 	swapChainDesc.Width = backBufferWidth_;//画面の幅
 	swapChainDesc.Height = backBufferHeight_;//画面の高さ
@@ -122,6 +125,69 @@ void DirectXCommon::CreateSwapChain() {
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;//モニターに写したら、中身を破棄
 
 	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
-	hr_ = dxgiFactory_->CreateSwapChainForHwnd(commandQueue, winApp_->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain));
+	hr_ = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_, winApp_->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
+	assert(SUCCEEDED(hr_));
+}
+
+void DirectXCommon::CreateRenderTargetView() {
+	//ディスクリプタヒープの生成
+	rtvDescriptorHeap_ = nullptr;
+	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc{};
+	rtvDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;//レンダーターゲットビュー用
+	rtvDescriptorHeapDesc.NumDescriptors = 2;//ダブルバッファ用に2つ。
+	hr_ = device_->CreateDescriptorHeap(&rtvDescriptorHeapDesc, IID_PPV_ARGS(&rtvDescriptorHeap_));
+
+	//ディスクリプタヒープが作れなかったので起動出来ない
+	assert(SUCCEEDED(hr_));
+
+	//SwapChainからResourceを引っ張ってくる
+	for (int i = 0; i < 2; i++) {
+		swapChainResources_[i] = nullptr;
+		hr_ = swapChain_->GetBuffer(i, IID_PPV_ARGS(&swapChainResources_[i]));
+
+		//うまく取得できなければ起動できない
+		assert(SUCCEEDED(hr_));
+	}
+	
+	//RTVの設定
+	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;//出力結果をSRGBに変換して書き込む
+	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;//2dテクスチャとして書き込む
+
+	//ディスクリプタの先頭を取得する
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+	
+	//まず1つ目を作る。1つ目は最初のところに作る。作る場所をこちらで指定してあげる必要がある
+	rtvHandles_[0] = rtvStartHandle;
+	device_->CreateRenderTargetView(swapChainResources_[0], &rtvDesc, rtvHandles_[0]);
+	//2つ目のディスクリプタハンドルを得る
+	rtvHandles_[1].ptr = rtvHandles_[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	//2つ目を作る
+	device_->CreateRenderTargetView(swapChainResources_[1], &rtvDesc, rtvHandles_[1]);
+}
+void DirectXCommon::ScreenClear() {
+	//これから書き込むバックバッファのインデックスを取得
+	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
+    //描画先のRTVを設定する
+	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
+	//指定した色で画面全体をクリアする
+	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色、RGBAの順
+	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearColor, 0, nullptr);
+	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
+	hr_ = commandList_->Close();
+	assert(SUCCEEDED(hr_));
+}
+
+void DirectXCommon::CommandKick() {
+	//GPUにコマンドリストの実行を行わせる
+	ID3D12CommandList* commandLists[] = {GetCommandList()};
+	commandQueue_->ExecuteCommandLists(1, commandLists);
+
+	//GPUとOSに画面の交換を行うよう通知する
+	swapChain_->Present(1, 0);
+	//次のフレーム用のコマンドリストを準備
+	hr_ = GetCommandAllocator()->Reset();
+	assert(SUCCEEDED(hr_));
+	hr_ = GetCommandList()->Reset(GetCommandAllocator(), nullptr);
 	assert(SUCCEEDED(hr_));
 }

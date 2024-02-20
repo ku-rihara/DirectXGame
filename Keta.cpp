@@ -21,3 +21,11 @@ void Keta::Initialize(const char* title, int width, int height) {
 	sDirectXCommon = DirectXCommon::GetInstance();
 	sDirectXCommon->Init(sWinApp, width, height);
 }
+
+void Keta::BeginFrame() {
+	sDirectXCommon->ScreenClear();
+}
+
+void Keta::EndFrame() {
+	sDirectXCommon->CommandKick();
+}
