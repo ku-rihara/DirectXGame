@@ -1,9 +1,8 @@
 #include "WinApp.h"
-
+#include<d3d12.h>
 
 
 const wchar_t WinApp::kWindowClassName[] = L"DirectXGame";
-
 
 WinApp* WinApp::GetInstance() {
 	static WinApp instance;
@@ -59,6 +58,16 @@ void WinApp::MakeWindow(const wchar_t* title, int32_t clientWidth, int32_t clien
 		nullptr,				//メニューハンドル
 		wc_.hInstance,			//インスタンスハンドル
 		nullptr);				//オプション
+
+#ifdef _DEBUG
+	 ID3D12Debug1* debugController = nullptr;
+	 if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
+		 //デバッグレイヤーを有効化する
+		 debugController->EnableDebugLayer();
+		 //さらにGPU側でもチェックを行えるようにする
+		 debugController->SetEnableGPUBasedValidation(TRUE);
+	 }
+#endif
 
 	//ウィンドウを表示する
 	ShowWindow(hwnd_, SW_SHOW);

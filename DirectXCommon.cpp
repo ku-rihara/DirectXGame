@@ -1,8 +1,12 @@
 #include "DirectXCommon.h"
+//function
 #include"Convert.h"
+
+//
 #include<cassert>
 #include<format>
 
+//
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
 
@@ -88,24 +92,54 @@ void DirectXCommon::DXGIDeviceInit() {
 	//デバイスの生成が上手く行かなかったので起動出来ない
 	assert(device_ != nullptr);
 	Log("Complete create D3D12Device!!!\n");
+
+#ifdef _DEBUG
+	ID3D12InfoQueue* infoQueue = nullptr;
+	if (SUCCEEDED(device_->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
+		//ヤバいエラー時に止まる
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
+		//エラー時に止まる
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
+		//警告時に止まる
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
+
+		//抑制するメッセージのID
+		D3D12_MESSAGE_ID denyIds[] = {
+			//Windows11でのDXGIデバッグレイヤーとDX12デバッグレイヤーの相互作用バグによるエラーメッセージ
+			//https://stackoverflow.com/questions/69805245/directx-12-application-is-crashing-in-windows-11
+			D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
+		};
+		//抑制するレベル
+		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
+		D3D12_INFO_QUEUE_FILTER filter{};
+		filter.DenyList.NumIDs = _countof(denyIds);
+		filter.DenyList.pIDList = denyIds;
+		filter.DenyList.NumSeverities = _countof(severities);
+		filter.DenyList.pSeverityList = severities;
+		//指定したメッセージの表示を抑制する
+		infoQueue->PushStorageFilter(&filter);
+		//解放
+		infoQueue->Release();
+	}
+#endif 
 }
 
 void DirectXCommon::CommandInit() {
 	//コマンドキューを作成する
-	 commandQueue_ = nullptr;
+	commandQueue_ = nullptr;
 	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
 	hr_ = device_->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue_));
 	//コマンドキューの生成が上手くいかなかったので起動出来ない
 	assert(SUCCEEDED(hr_));
 
 	//コマンドアロケータを生成する
-	 commandAllocator_ = nullptr;
+	commandAllocator_ = nullptr;
 	hr_ = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator_));
 	//コマンドアロケータの生成が上手くいかなかったので起動出来ない
 	assert(SUCCEEDED(hr_));
 
 	//コマンドリストを生成する
-	 commandList_ = nullptr;
+	commandList_ = nullptr;
 	hr_ = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_, nullptr, IID_PPV_ARGS(&commandList_));
 
 	//コマンドリストの生成がうまくいかなかったので起動出来ない
@@ -148,7 +182,7 @@ void DirectXCommon::CreateRenderTargetView() {
 		//うまく取得できなければ起動できない
 		assert(SUCCEEDED(hr_));
 	}
-	
+
 	//RTVの設定
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;//出力結果をSRGBに変換して書き込む
@@ -156,7 +190,7 @@ void DirectXCommon::CreateRenderTargetView() {
 
 	//ディスクリプタの先頭を取得する
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
-	
+
 	//まず1つ目を作る。1つ目は最初のところに作る。作る場所をこちらで指定してあげる必要がある
 	rtvHandles_[0] = rtvStartHandle;
 	device_->CreateRenderTargetView(swapChainResources_[0], &rtvDesc, rtvHandles_[0]);
@@ -168,7 +202,7 @@ void DirectXCommon::CreateRenderTargetView() {
 void DirectXCommon::ScreenClear() {
 	//これから書き込むバックバッファのインデックスを取得
 	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
-    //描画先のRTVを設定する
+	//描画先のRTVを設定する
 	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
 	//指定した色で画面全体をクリアする
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色、RGBAの順
@@ -180,7 +214,7 @@ void DirectXCommon::ScreenClear() {
 
 void DirectXCommon::CommandKick() {
 	//GPUにコマンドリストの実行を行わせる
-	ID3D12CommandList* commandLists[] = {GetCommandList()};
+	ID3D12CommandList* commandLists[] = { GetCommandList() };
 	commandQueue_->ExecuteCommandLists(1, commandLists);
 
 	//GPUとOSに画面の交換を行うよう通知する
