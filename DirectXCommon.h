@@ -17,23 +17,31 @@ private://メンバ変数
 	HRESULT hr_ = 0;
 
 	//デバイス関連
-	IDXGIFactory7* dxgiFactory_ = nullptr;
-	ID3D12Device* device_ = nullptr;
+	IDXGIFactory7* dxgiFactory_;
+	ID3D12Device* device_;
 
 	//コマンド関連
-	ID3D12CommandAllocator* commandAllocator_ = nullptr;
-	ID3D12CommandQueue* commandQueue_ = nullptr;
-	ID3D12GraphicsCommandList* commandList_ = nullptr;
+	ID3D12CommandAllocator* commandAllocator_;
+	ID3D12CommandQueue* commandQueue_;
+	ID3D12GraphicsCommandList* commandList_;
 	
 	//スワップチェーン関連
-	IDXGISwapChain4* swapChain_ = nullptr;
+	IDXGISwapChain4* swapChain_;
+	ID3D12Resource* swapChainResources_[2] = {};
 	int32_t backBufferWidth_ = 0;
 	int32_t backBufferHeight_ = 0;
 
 	//レンダーターゲットビュー関連
-	ID3D12DescriptorHeap* rtvDescriptorHeap_ = nullptr;
-	ID3D12Resource* swapChainResources_[2] = { nullptr };
+	ID3D12DescriptorHeap* rtvDescriptorHeap_;
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];//RTVを2つ作るのでディスクリプタを2つ用意
+
+	//フェンス生成関連
+	ID3D12Fence* fence_;
+	HANDLE fenceEvent_;
+	uint64_t fenceValue_ = 0;
+
+	//バリア
+	D3D12_RESOURCE_BARRIER barrier_{};
 
 private://メンバ関数
 
@@ -57,6 +65,11 @@ private://メンバ関数
     /// </summary>
 	void CreateRenderTargetView();
 
+	/// <summary>
+	/// フェンスの生成
+	/// </summary>
+	void CreateFence();
+
 
 public://メンバ関数
 
@@ -72,8 +85,17 @@ public://メンバ関数
 	void CommandKick();
 
 	//getter
+	//コマンド関連
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList_; }
-
 	ID3D12CommandAllocator* GetCommandAllocator()const { return commandAllocator_; }
+	//スワップチェイン関連
+	IDXGISwapChain4* GetSwapChain()const { return swapChain_; }
+	ID3D12Resource* GetSwapChainResources(UINT num)const { return swapChainResources_[num]; }
+	//フェンス関連
+	ID3D12Fence* GetFence()const { return fence_; }
+	uint64_t GetFenceValue()const { return fenceValue_; }
+	HANDLE GetFenceEvent()const { return fenceEvent_; }
 
+	//setter
+	void SetFenceValueIncrement() { this->fenceValue_++; }
 };

@@ -38,6 +38,8 @@ void DirectXCommon::Init(WinApp* winApp, int32_t backBufferWidth, int32_t backBu
 
 	//レンダーターゲットビューの生成
 	CreateRenderTargetView();
+
+	CreateFence();
 }
 
 void DirectXCommon::DXGIDeviceInit() {
@@ -199,26 +201,77 @@ void DirectXCommon::CreateRenderTargetView() {
 	//2つ目を作る
 	device_->CreateRenderTargetView(swapChainResources_[1], &rtvDesc, rtvHandles_[1]);
 }
+
+void DirectXCommon::CreateFence() {
+	//初期値0でFenceを作る
+	 fence_ = nullptr;
+	 fenceValue_ = 0;
+	hr_ = device_->CreateFence(fenceValue_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
+	assert(SUCCEEDED(hr_));
+
+	//FenceのSignalを待つためのイベントを作成する
+	 fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
+	assert(fenceEvent_ != nullptr);
+}
+
+//フレーム開始
 void DirectXCommon::ScreenClear() {
 	//これから書き込むバックバッファのインデックスを取得
 	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
+
+	//今回のバリアはTransition
+	barrier_.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	//Noneにしておく
+	barrier_.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	//バリアを張る対象のリソース。現在のバックバッファに対して行う
+	barrier_.Transition.pResource = GetSwapChainResources(backBufferIndex);
+	//遷移前(現在)のResourceState
+	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+	//遷移後のResourceState
+	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	//TransitionBarrierを張る
+	GetCommandList()->ResourceBarrier(1, &barrier_);
+
 	//描画先のRTVを設定する
 	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
 	//指定した色で画面全体をクリアする
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色、RGBAの順
 	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearColor, 0, nullptr);
 	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
+
+	//画面に描く処理はすべて終わり、画面に映すので、状態を遷移
+	//今回はRenderTargetからPresentにする
+	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	barrier_.Transition.StateAfter= D3D12_RESOURCE_STATE_PRESENT;
+	//TransitionBarrierを張る
+	GetCommandList()->ResourceBarrier(1, &barrier_);
+
 	hr_ = commandList_->Close();
 	assert(SUCCEEDED(hr_));
 }
 
+//フレーム終わり
 void DirectXCommon::CommandKick() {
 	//GPUにコマンドリストの実行を行わせる
 	ID3D12CommandList* commandLists[] = { GetCommandList() };
 	commandQueue_->ExecuteCommandLists(1, commandLists);
 
 	//GPUとOSに画面の交換を行うよう通知する
-	swapChain_->Present(1, 0);
+	GetSwapChain()->Present(1, 0);
+	//Fenceの値を更新
+	SetFenceValueIncrement();
+	//GPUがここまでたどりついた時に、Fenceの値を指定した値に代入するようにSignalを送る
+	commandQueue_->Signal(GetFence(), GetFenceValue());
+
+	//Fenceの値が指定したSignal値にたどり着いているか確認する
+	//GetCompletedValueの初期値はFence作成時に渡した初期値
+	if (GetFence()->GetCompletedValue() < GetFenceValue()) {
+
+		//指定したSignalにたどり着いていないので、たどり着くまで待つようにイベントを設定する
+		GetFence()->SetEventOnCompletion(GetFenceValue(), GetFenceEvent());
+		//イベントを待つ
+		WaitForSingleObject(GetFenceEvent(), INFINITE);
+	}
 	//次のフレーム用のコマンドリストを準備
 	hr_ = GetCommandAllocator()->Reset();
 	assert(SUCCEEDED(hr_));
