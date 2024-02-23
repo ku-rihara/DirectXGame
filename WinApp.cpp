@@ -66,8 +66,23 @@ void WinApp::MakeWindow(const wchar_t* title, int32_t clientWidth, int32_t clien
 		debugController_->SetEnableGPUBasedValidation(TRUE);
 	}
 #endif
-
 	//ウィンドウを表示する
 	ShowWindow(hwnd_, SW_SHOW);
+}
 
+int WinApp::ProcessMessage() {
+	MSG msg{};//メッセージ
+
+	//Windowにメッセージが来てたら最優先で処理させる
+	if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {// メッセージがあるか
+		TranslateMessage(&msg);// キー入力メッセージの処理
+		DispatchMessage(&msg); // ウィンドウプロシージャにメッセージを送る
+	}
+	//ウィンドウのxボタンが押されるまでループ
+	if (msg.message == WM_QUIT) {
+		return 1;//抜ける
+	}
+	else {
+		return 0;//続ける
+	}
 }

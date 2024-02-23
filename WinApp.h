@@ -29,6 +29,8 @@ public://メンバ関数
 	// ゲームウィンドウの作成
 	void MakeWindow(const wchar_t* title = L"DirectXGame", int32_t clientWidth = kWindowWidth, int32_t clientHeight = kWindowHeight);
 
+	int ProcessMessage();
+
 	//getter
 	HWND GetHwnd() const { return hwnd_; }
 	ID3D12Debug1* GetDebugController()const { return debugController_; }

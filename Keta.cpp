@@ -20,6 +20,10 @@ void Keta::Initialize(const char* title, int width, int height) {
 	sDirectXCommon->Init(sWinApp, width, height);
 }
 
+int Keta::ProcessMessage() {
+	return sWinApp->ProcessMessage();
+}
+
 void Keta::BeginFrame() {
 	sDirectXCommon->ScreenClear();
 }
