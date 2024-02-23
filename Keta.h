@@ -14,6 +14,8 @@ public:
 
 	//フレーム終了処理
 	static void EndFrame();
-
+	
+	/// システム全体の終了
+	static void Finalize();
 };
 

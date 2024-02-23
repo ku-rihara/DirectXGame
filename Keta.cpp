@@ -2,8 +2,6 @@
 #include"Convert.h"
 #include <string>
 
-
-
 namespace {
 	WinApp* sWinApp = nullptr;
 	DirectXCommon* sDirectXCommon = nullptr;
@@ -28,4 +26,10 @@ void Keta::BeginFrame() {
 
 void Keta::EndFrame() {
 	sDirectXCommon->CommandKick();
+}
+
+void Keta::Finalize() {
+
+	sDirectXCommon->ReleaseObject();
+	sDirectXCommon->ResourceLeakCheck();
 }

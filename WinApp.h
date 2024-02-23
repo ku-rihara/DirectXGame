@@ -2,7 +2,7 @@
 
 #include<Windows.h>
 #include<cstdint>
-
+#include<d3d12.h>
 
 class WinApp {
 public://静的メンバ変数
@@ -15,7 +15,8 @@ public://静的メンバ変数
 
 private://メンバ変数
 	WNDCLASS wc_{};
-	HWND hwnd_ = nullptr;
+	HWND hwnd_;
+	ID3D12Debug1* debugController_;
 
 public://メンバ関数
 
@@ -28,7 +29,8 @@ public://メンバ関数
 	// ゲームウィンドウの作成
 	void MakeWindow(const wchar_t* title = L"DirectXGame", int32_t clientWidth = kWindowWidth, int32_t clientHeight = kWindowHeight);
 
-	// ウィンドウハンドルのゲッター
+	//getter
 	HWND GetHwnd() const { return hwnd_; }
+	ID3D12Debug1* GetDebugController()const { return debugController_; }
 };
 

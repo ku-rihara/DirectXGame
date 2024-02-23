@@ -41,6 +41,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 	}
 
+	Keta::Finalize();
 	return 0;
 }
 

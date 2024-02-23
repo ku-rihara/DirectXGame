@@ -2,8 +2,10 @@
 
 #include<Windows.h>
 #include<cstdint>
+
 #include<d3d12.h>
 #include<dxgi1_6.h>
+#include<dxgidebug.h>
 
 //class
 #include"WinApp.h"
@@ -16,11 +18,12 @@ private://メンバ変数
 
 	HRESULT hr_ = 0;
 
-	//デバイス関連
+	//デバイス初期化関連
 	IDXGIFactory7* dxgiFactory_;
 	ID3D12Device* device_;
+	IDXGIAdapter4* useAdapter_;
 
-	//コマンド関連
+	//コマンド初期化関連
 	ID3D12CommandAllocator* commandAllocator_;
 	ID3D12CommandQueue* commandQueue_;
 	ID3D12GraphicsCommandList* commandList_;
@@ -84,13 +87,27 @@ public://メンバ関数
 	//コマンドのキック
 	void CommandKick();
 
+	//リソーススリークチェック
+	void ResourceLeakCheck();
+
+	//オブジェクトのリリース
+	void ReleaseObject();
+
 	//getter
-	//コマンド関連
+	// デバイス初期化関連
+	IDXGIFactory7* GetDxgiFactory()const { return dxgiFactory_; }
+	ID3D12Device* GetDevice()const { return device_; }
+	IDXGIAdapter4* GetUseAdapter()const { return useAdapter_; }
+	
+	//コマンド初期化関連
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList_; }
 	ID3D12CommandAllocator* GetCommandAllocator()const { return commandAllocator_; }
-	//スワップチェイン関連
+	ID3D12CommandQueue* GetCommandQueue()const { return commandQueue_; }
+	//スワップチェーン関連
 	IDXGISwapChain4* GetSwapChain()const { return swapChain_; }
 	ID3D12Resource* GetSwapChainResources(UINT num)const { return swapChainResources_[num]; }
+	//レンダーターゲットビュー関連
+	ID3D12DescriptorHeap* GetRtvDescriptorHeap()const { return rtvDescriptorHeap_; }
 	//フェンス関連
 	ID3D12Fence* GetFence()const { return fence_; }
 	uint64_t GetFenceValue()const { return fenceValue_; }

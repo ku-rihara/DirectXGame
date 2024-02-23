@@ -1,6 +1,4 @@
 #include "WinApp.h"
-#include<d3d12.h>
-
 
 const wchar_t WinApp::kWindowClassName[] = L"DirectXGame";
 
@@ -26,7 +24,7 @@ LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 }
 
 void WinApp::MakeWindow(const wchar_t* title, int32_t clientWidth, int32_t clientHeight) {
-	
+
 	//ウィンドウプロシージャ
 	wc_.lpfnWndProc = WindowProc;
 	//ウィンドウクラス名
@@ -46,7 +44,7 @@ void WinApp::MakeWindow(const wchar_t* title, int32_t clientWidth, int32_t clien
 	AdjustWindowRect(&wrc, WS_EX_OVERLAPPEDWINDOW, false);
 
 	//ウィンドウの生成
-	 hwnd_ = CreateWindow(
+	hwnd_ = CreateWindow(
 		wc_.lpszClassName,       //利用するクラス名
 		title,					//タイトルバーの文字
 		WS_OVERLAPPEDWINDOW,	//良く見るウィンドウスタイル
@@ -60,13 +58,13 @@ void WinApp::MakeWindow(const wchar_t* title, int32_t clientWidth, int32_t clien
 		nullptr);				//オプション
 
 #ifdef _DEBUG
-	 ID3D12Debug1* debugController = nullptr;
-	 if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
-		 //デバッグレイヤーを有効化する
-		 debugController->EnableDebugLayer();
-		 //さらにGPU側でもチェックを行えるようにする
-		 debugController->SetEnableGPUBasedValidation(TRUE);
-	 }
+	debugController_ = nullptr;
+	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController_)))) {
+		//デバッグレイヤーを有効化する
+		debugController_->EnableDebugLayer();
+		//さらにGPU側でもチェックを行えるようにする
+		debugController_->SetEnableGPUBasedValidation(TRUE);
+	}
 #endif
 
 	//ウィンドウを表示する
