@@ -1,4 +1,6 @@
 #include "Keta.h"
+
+
 #include"Convert.h"
 #include <string>
 
@@ -6,6 +8,7 @@ namespace {
 	WinApp* sWinApp = nullptr;
 	DirectXCommon* sDirectXCommon = nullptr;
 }
+
 
 void Keta::Initialize(const char* title, int width, int height) {
 
@@ -18,22 +21,23 @@ void Keta::Initialize(const char* title, int width, int height) {
 	//DirectX初期化
 	sDirectXCommon = DirectXCommon::GetInstance();
 	sDirectXCommon->Init(sWinApp, width, height);
+	sDirectXCommon->CreateGraphicPipelene();
 }
 
+//メッセージがなければループする
 int Keta::ProcessMessage() {
 	return sWinApp->ProcessMessage();
 }
-
+//フレームの始め
 void Keta::BeginFrame() {
 	sDirectXCommon->ScreenClear();
 }
-
+//フレームの終わり
 void Keta::EndFrame() {
 	sDirectXCommon->CommandKick();
 }
 
 void Keta::Finalize() {
-
 	sDirectXCommon->ReleaseObject();
 	sDirectXCommon->ResourceLeakCheck();
 }

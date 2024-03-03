@@ -41,9 +41,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include=".editorconfig" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Convert.h">
       <Filter>MyEngine\Function</Filter>
     </ClInclude>
@@ -56,5 +53,12 @@
     <ClInclude Include="Keta.h">
       <Filter>MyEngine\Adapter</Filter>
     </ClInclude>
+    <ClInclude Include="Vector4.h">
+      <Filter>MyEngine\ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Object3d.VS.hlsl" />
+    <FxCompile Include="Object3d.PS.hlsl" />
   </ItemGroup>
 </Project>
