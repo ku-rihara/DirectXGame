@@ -14,7 +14,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//フレームの開始
 		Keta::BeginFrame();
 
-
 		//フレームの終了
 		Keta::EndFrame();
 	}

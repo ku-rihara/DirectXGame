@@ -60,6 +60,9 @@ private://メンバ変数
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 	ID3D12Resource* vertexResource_;
 
+	//Resource作成
+	ID3D12Resource* materialResource_;
+
 	//バリア
 	D3D12_RESOURCE_BARRIER barrier_{};
 
@@ -89,6 +92,8 @@ private://メンバ関数
 	/// フェンスの生成
 	/// </summary>
 	void CreateFence();
+
+	ID3D12Resource* CreateBufferResource(ID3D12Device* device, size_t sizeInBytes);
 
 	/// <summary>
 	/// dxcCompilerの初期化

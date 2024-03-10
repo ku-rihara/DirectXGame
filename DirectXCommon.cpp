@@ -3,9 +3,10 @@
 #include"Convert.h"
 
 //
+#include"Vector4.h"
 #include<format>
 #include<cassert>
-#include"Vector4.h"
+
 
 //
 #pragma comment(lib,"d3d12.lib")
@@ -304,11 +305,45 @@ void DirectXCommon::dxcCompilerInit() {
 
 }
 
+ID3D12Resource* DirectXCommon::CreateBufferResource(ID3D12Device* device, size_t sizeInBytes) {
+	//頂点リソース用のヒープの設定
+	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
+	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;//UploadHeapを使う
+	//頂点リソース用設定
+	D3D12_RESOURCE_DESC vertexResourceDesc{};
+	//ばっぱリソース。テクスチャの場合はまた別の設定をする
+	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	vertexResourceDesc.Width = sizeInBytes;//リソースのサイズ。今回はVector4を3頂点文
+	//バッファの場合はこれらは1にする決まり
+	vertexResourceDesc.Height = 1;
+	vertexResourceDesc.DepthOrArraySize = 1;
+	vertexResourceDesc.MipLevels = 1;
+	vertexResourceDesc.SampleDesc.Count = 1;
+	//バッファの場合これにする決まり
+	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	//実際に頂点リソースを作る
+	ID3D12Resource* result=nullptr;
+	hr_ = device->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE,
+		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&result));
+	assert(SUCCEEDED(hr_));
+
+	return result;
+}
+
 void DirectXCommon::CreateGraphicPipelene() {
 
 	//RootSignatureを作成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+
+	//RootParameterを作成
+	D3D12_ROOT_PARAMETER rootParameters[1] = {};
+	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PxelShaderを使う
+	rootParameters[0].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
+	descriptionRootSignature.pParameters = rootParameters;//ルートパラメーターの配列
+	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
+	
 	//シリアライズしてバイナリにする
 	signatureBlob_ = nullptr;
 	 errorBlob_ = nullptr;
@@ -373,28 +408,8 @@ void DirectXCommon::CreateGraphicPipelene() {
 	hr_ = GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&graphicsPipelineState_));
 	assert(SUCCEEDED(hr_));
 
-	//頂点リソース用のヒープの設定
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;//UploadHeapを使う
-	//頂点リソース用設定
-	D3D12_RESOURCE_DESC vertexResourceDesc{};
-	//ばっぱリソース。テクスチャの場合はまた別の設定をする
-	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc.Width = sizeof(Vector4) * 3;//リソースのサイズ。今回はVector4を3頂点文
-	//バッファの場合はこれらは1にする決まり
-	vertexResourceDesc.Height = 1;
-	vertexResourceDesc.DepthOrArraySize = 1;
-	vertexResourceDesc.MipLevels = 1;
-	vertexResourceDesc.SampleDesc.Count = 1;
-	//バッファの場合これにする決まり
-	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	//実際に頂点リソースを作る
-	vertexResource_ = nullptr;
-	hr_ = GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE,
-		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertexResource_));
-	assert(SUCCEEDED(hr_));
-
-	//VertexBufferViewを作成する
+	//VertexBufferViewを作成する	
+	vertexResource_=CreateBufferResource(GetDevice(),sizeof(Vector4)*3);
 	//リソースの先頭アドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
@@ -402,7 +417,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	vertexBufferView_.StrideInBytes = sizeof(Vector4);
 
 	//頂点リソースにデータを書き込む
-	Vector4* vertexDate = nullptr;
+	Vector4* vertexDate= nullptr;
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate));
 	//左下
 	vertexDate[0] = { -0.5f,-0.5f,0.0f,1.0f };
@@ -411,6 +426,14 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//右下
 	vertexDate[2] = { 0.5f,-0.5f,0.0f,1.0f };
 
+	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+	materialResource_ = CreateBufferResource(GetDevice(), sizeof(Vector4));
+	//マテリアルにデータを書き込む
+	Vector4* materialDate = nullptr;
+	//書き込むためのアドレスを取得
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialDate));
+	//今回は赤を書き込む
+	*materialDate = Vector4(1.0f, 0.0f, 0.0f, 1.0f);
 	//ビューポート
 	//クライアント領域のサイズと一緒にして画面全体に表示
 	viewport_.Width = WinApp::kWindowWidth;
@@ -461,6 +484,7 @@ void DirectXCommon::ScreenClear() {
 	GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	//形状を設定
 	GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	//描画(DrawCall/ドローコール)
 	GetCommandList()->DrawInstanced(3, 1, 0, 0);
 
@@ -529,6 +553,7 @@ void DirectXCommon::ReleaseObject() {
 	GetUseAdapter()->Release();
 	GetDxgiFactory()->Release();
 	vertexResource_->Release();
+	materialResource_->Release();
 	graphicsPipelineState_->Release();
 	signatureBlob_->Release();
 	if (errorBlob_) {
