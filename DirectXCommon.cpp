@@ -7,7 +7,6 @@
 #include<format>
 #include<cassert>
 
-
 //
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -236,7 +235,7 @@ void DirectXCommon::CreateSwapChain() {
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;//モニターに写したら、中身を破棄
 
 	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
-	hr_ = GetDxgiFactory()->CreateSwapChainForHwnd(GetCommandQueue(), winApp_->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
+	hr_ = dxgiFactory_->CreateSwapChainForHwnd(GetCommandQueue(), winApp_->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
 	assert(SUCCEEDED(hr_));
 }
 
@@ -337,10 +336,13 @@ void DirectXCommon::CreateGraphicPipelene() {
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
 	//RootParameterを作成
-	D3D12_ROOT_PARAMETER rootParameters[1] = {};
+	D3D12_ROOT_PARAMETER rootParameters[2] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PxelShaderを使う
 	rootParameters[0].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
+	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VertexShaderを使う
+	rootParameters[1].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
 	descriptionRootSignature.pParameters = rootParameters;//ルートパラメーターの配列
 	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
 	
@@ -430,10 +432,23 @@ void DirectXCommon::CreateGraphicPipelene() {
 	materialResource_ = CreateBufferResource(GetDevice(), sizeof(Vector4));
 	//マテリアルにデータを書き込む
 	Vector4* materialDate = nullptr;
+	
 	//書き込むためのアドレスを取得
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialDate));
 	//今回は赤を書き込む
 	*materialDate = Vector4(1.0f, 0.0f, 0.0f, 1.0f);
+
+	//WVP用のリソースを作る
+	 wvpResouce_ = CreateBufferResource(GetDevice(), sizeof(Matrix4x4));
+	//データを書き込む
+	 wvpDate_ = nullptr;
+	//書き込むためのアドレスを取得
+	wvpResouce_->Map(0, nullptr, reinterpret_cast<void**>(&wvpDate_));
+	//単位行列を書き込んでおく
+	*wvpDate_ = MakeIdentity4x4();
+
+
+
 	//ビューポート
 	//クライアント領域のサイズと一緒にして画面全体に表示
 	viewport_.Width = WinApp::kWindowWidth;
@@ -484,7 +499,9 @@ void DirectXCommon::ScreenClear() {
 	GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	//形状を設定
 	GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResouce_->GetGPUVirtualAddress());
+
 	//描画(DrawCall/ドローコール)
 	GetCommandList()->DrawInstanced(3, 1, 0, 0);
 
@@ -550,10 +567,11 @@ void DirectXCommon::ReleaseObject() {
 	GetCommandAllocator()->Release();
 	GetCommandQueue()->Release();
 	GetDevice()->Release();
-	GetUseAdapter()->Release();
-	GetDxgiFactory()->Release();
+	useAdapter_->Release();
+	dxgiFactory_->Release();
 	vertexResource_->Release();
 	materialResource_->Release();
+	wvpResouce_->Release();
 	graphicsPipelineState_->Release();
 	signatureBlob_->Release();
 	if (errorBlob_) {

@@ -2,7 +2,7 @@
 
 #include<Windows.h>
 #include<cstdint>
-
+#include"Matrix4x4.h"
 
 #include<d3d12.h>
 #include<dxgi1_6.h>
@@ -62,6 +62,8 @@ private://メンバ変数
 
 	//Resource作成
 	ID3D12Resource* materialResource_;
+	ID3D12Resource* wvpResouce_;
+	Matrix4x4* wvpDate_;
 
 	//バリア
 	D3D12_RESOURCE_BARRIER barrier_{};
@@ -127,9 +129,9 @@ public://メンバ関数
 
 	//getter
 	// デバイス初期化関連
-	IDXGIFactory7* GetDxgiFactory()const { return dxgiFactory_; }
+	
 	ID3D12Device* GetDevice()const { return device_; }
-	IDXGIAdapter4* GetUseAdapter()const { return useAdapter_; }
+
 	//コマンド初期化関連
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList_; }
 	ID3D12CommandAllocator* GetCommandAllocator()const { return commandAllocator_; }
@@ -151,4 +153,5 @@ public://メンバ関数
 
 	//setter
 	void SetFenceValueIncrement() { this->fenceValue_++; }
-};
+	void SetwvpDate(Matrix4x4 date) { *this->wvpDate_=date; }
+	};

@@ -15,12 +15,16 @@
     <ClCompile Include="DirectXCommon.cpp" />
     <ClCompile Include="Keta.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Matrix4x4.cpp" />
     <ClCompile Include="WinApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Convert.h" />
     <ClInclude Include="DirectXCommon.h" />
     <ClInclude Include="Keta.h" />
+    <ClInclude Include="Matrix4x4.h" />
+    <ClInclude Include="Transform.h" />
+    <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="WinApp.h" />
   </ItemGroup>

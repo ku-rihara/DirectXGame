@@ -39,6 +39,9 @@
     <ClCompile Include="Keta.cpp">
       <Filter>MyEngine\Adapter</Filter>
     </ClCompile>
+    <ClCompile Include="Matrix4x4.cpp">
+      <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Convert.h">
@@ -54,6 +57,15 @@
       <Filter>MyEngine\Adapter</Filter>
     </ClInclude>
     <ClInclude Include="Vector4.h">
+      <Filter>MyEngine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4x4.h">
+      <Filter>MyEngine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>MyEngine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
