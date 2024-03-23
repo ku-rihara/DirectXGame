@@ -2,6 +2,12 @@
 
 const wchar_t WinApp::kWindowClassName[] = L"DirectXGame";
 
+#ifdef _DEBUG
+#include"externals/imgui/imgui_impl_win32.h"
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+#endif
+
 WinApp* WinApp::GetInstance() {
 	static WinApp instance;
 	return &instance;
@@ -9,7 +15,11 @@ WinApp* WinApp::GetInstance() {
 
 //ウィンドウプロシージャ
 LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
-
+#ifdef _DEBUG
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)) {
+		return true;
+	}
+#endif
 	//メッセージに対してゲーム固有の処理を行う
 	switch (msg) {
 		//ウィンドウが破棄された

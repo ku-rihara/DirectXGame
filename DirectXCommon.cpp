@@ -1,4 +1,6 @@
 #include "DirectXCommon.h"
+#include"externals/imgui/imgui_impl_dx12.h"
+#include"externals/imgui/imgui_impl_win32.h"
 //function
 #include"Convert.h"
 
@@ -84,6 +86,45 @@ IDxcBlob* CompileShader(
 	return shaderBlob;
 }
 
+//ディスクリプタヒープの生成
+ID3D12DescriptorHeap* DirectXCommon::CreateDescriptorHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible) {
+
+	ID3D12DescriptorHeap* descriptorHeap = nullptr;
+	D3D12_DESCRIPTOR_HEAP_DESC DescriptorHeapDesc{};
+	DescriptorHeapDesc.Type = heapType;//レンダーターゲットビュー用
+	DescriptorHeapDesc.NumDescriptors = numDescriptors;//ダブルバッファ用に2つ。
+	DescriptorHeapDesc.Flags = shaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	HRESULT hr = device->CreateDescriptorHeap(&DescriptorHeapDesc, IID_PPV_ARGS(&descriptorHeap));
+	//ディスクリプタヒープが作れなかったので起動出来ない
+	assert(SUCCEEDED(hr));
+	return descriptorHeap;
+}
+//リソースの作成
+ID3D12Resource* DirectXCommon::CreateBufferResource(ID3D12Device* device, size_t sizeInBytes) {
+	//頂点リソース用のヒープの設定
+	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
+	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;//UploadHeapを使う
+	//頂点リソース用設定
+	D3D12_RESOURCE_DESC vertexResourceDesc{};
+	//ばっぱリソース。テクスチャの場合はまた別の設定をする
+	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	vertexResourceDesc.Width = sizeInBytes;//リソースのサイズ。今回はVector4を3頂点文
+	//バッファの場合はこれらは1にする決まり
+	vertexResourceDesc.Height = 1;
+	vertexResourceDesc.DepthOrArraySize = 1;
+	vertexResourceDesc.MipLevels = 1;
+	vertexResourceDesc.SampleDesc.Count = 1;
+	//バッファの場合これにする決まり
+	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	//実際に頂点リソースを作る
+	ID3D12Resource* result = nullptr;
+	hr_ = device->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE,
+		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&result));
+	assert(SUCCEEDED(hr_));
+
+	return result;
+}
+
 DirectXCommon* DirectXCommon::GetInstance() {
 	static DirectXCommon instance;
 	return &instance;
@@ -112,6 +153,9 @@ void DirectXCommon::Init(WinApp* winApp, int32_t backBufferWidth, int32_t backBu
 
 	//dxCompilerの初期化
 	dxcCompilerInit();
+#ifdef _DEBUG
+	ImGuiInit();
+#endif
 }
 
 void DirectXCommon::DXGIDeviceInit() {
@@ -125,7 +169,7 @@ void DirectXCommon::DXGIDeviceInit() {
 	assert(SUCCEEDED(hr_));
 
 	//使用するアダプタ用の変数。最初にnullptrを入れておく
-	 useAdapter_ = nullptr;
+	useAdapter_ = nullptr;
 	//いい順にアダプタを頼む
 	for (UINT i = 0; dxgiFactory_->EnumAdapterByGpuPreference(i,
 		DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE, IID_PPV_ARGS(&useAdapter_)) !=
@@ -198,8 +242,6 @@ void DirectXCommon::DXGIDeviceInit() {
 #endif 
 }
 
-
-
 void DirectXCommon::CommandInit() {
 	//コマンドキューを作成する
 	commandQueue_ = nullptr;
@@ -225,31 +267,24 @@ void DirectXCommon::CommandInit() {
 void DirectXCommon::CreateSwapChain() {
 	//スワップチェーンを生成する
 	swapChain_ = nullptr;
-	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
-	swapChainDesc.Width = backBufferWidth_;//画面の幅
-	swapChainDesc.Height = backBufferHeight_;//画面の高さ
-	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//色の形式
-	swapChainDesc.SampleDesc.Count = 1;//マルチサンプルしない
-	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//描画のターゲットとして利用する
-	swapChainDesc.BufferCount = 2;//ダブルバッファ
-	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;//モニターに写したら、中身を破棄
+	swapChainDesc_.Width = backBufferWidth_;//画面の幅
+	swapChainDesc_.Height = backBufferHeight_;//画面の高さ
+	swapChainDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//色の形式
+	swapChainDesc_.SampleDesc.Count = 1;//マルチサンプルしない
+	swapChainDesc_.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//描画のターゲットとして利用する
+	swapChainDesc_.BufferCount = 2;//ダブルバッファ
+	swapChainDesc_.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;//モニターに写したら、中身を破棄
 
 	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
-	hr_ = dxgiFactory_->CreateSwapChainForHwnd(GetCommandQueue(), winApp_->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
+	hr_ = dxgiFactory_->CreateSwapChainForHwnd(GetCommandQueue(), winApp_->GetHwnd(), &swapChainDesc_, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
 	assert(SUCCEEDED(hr_));
 }
 
+//レンダーターゲットビューの作成
 void DirectXCommon::CreateRenderTargetView() {
 	//ディスクリプタヒープの生成
-	rtvDescriptorHeap_ = nullptr;
-	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc{};
-	rtvDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;//レンダーターゲットビュー用
-	rtvDescriptorHeapDesc.NumDescriptors = 2;//ダブルバッファ用に2つ。
-	hr_ = GetDevice()->CreateDescriptorHeap(&rtvDescriptorHeapDesc, IID_PPV_ARGS(&rtvDescriptorHeap_));
-
-	//ディスクリプタヒープが作れなかったので起動出来ない
-	assert(SUCCEEDED(hr_));
-
+	rtvDescriptorHeap_ = CreateDescriptorHeap(GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
+	srvDescriptorHeap_ = CreateDescriptorHeap(GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
 	//SwapChainからResourceを引っ張ってくる
 	for (int i = 0; i < 2; i++) {
 		swapChainResources_[i] = nullptr;
@@ -260,73 +295,46 @@ void DirectXCommon::CreateRenderTargetView() {
 	}
 
 	//RTVの設定
-	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
-	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;//出力結果をSRGBに変換して書き込む
-	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;//2dテクスチャとして書き込む
+	rtvDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;//出力結果をSRGBに変換して書き込む
+	rtvDesc_.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;//2dテクスチャとして書き込む
 
 	//ディスクリプタの先頭を取得する
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
 
 	//まず1つ目を作る。1つ目は最初のところに作る。作る場所をこちらで指定してあげる必要がある
 	rtvHandles_[0] = rtvStartHandle;
-	GetDevice()->CreateRenderTargetView(swapChainResources_[0], &rtvDesc, rtvHandles_[0]);
+	GetDevice()->CreateRenderTargetView(swapChainResources_[0], &rtvDesc_, rtvHandles_[0]);
 	//2つ目のディスクリプタハンドルを得る
 	rtvHandles_[1].ptr = rtvHandles_[0].ptr + GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	//2つ目を作る
-	GetDevice()->CreateRenderTargetView(swapChainResources_[1], &rtvDesc, rtvHandles_[1]);
+	GetDevice()->CreateRenderTargetView(swapChainResources_[1], &rtvDesc_, rtvHandles_[1]);
 }
 
 void DirectXCommon::CreateFence() {
 	//初期値0でFenceを作る
-	 fence_ = nullptr;
-	 fenceValue_ = 0;
+	fence_ = nullptr;
+	fenceValue_ = 0;
 	hr_ = GetDevice()->CreateFence(fenceValue_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
 	assert(SUCCEEDED(hr_));
 
 	//FenceのSignalを待つためのイベントを作成する
-	 fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
+	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
 	assert(fenceEvent_ != nullptr);
 }
 
 void DirectXCommon::dxcCompilerInit() {
 	//dxcCompilerを初期化
-	 dxcUtils_ = nullptr;
-	 dxcCompiler_ = nullptr;
+	dxcUtils_ = nullptr;
+	dxcCompiler_ = nullptr;
 	hr_ = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils_));
 	assert(SUCCEEDED(hr_));
 	hr_ = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler_));
 	assert(SUCCEEDED(hr_));
 
 	//現時点でincludeはしないが、includeに対応するための設定を行っておく
-	 includeHandler_ = nullptr;
+	includeHandler_ = nullptr;
 	hr_ = dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
 	assert(SUCCEEDED(hr_));
-
-}
-
-ID3D12Resource* DirectXCommon::CreateBufferResource(ID3D12Device* device, size_t sizeInBytes) {
-	//頂点リソース用のヒープの設定
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;//UploadHeapを使う
-	//頂点リソース用設定
-	D3D12_RESOURCE_DESC vertexResourceDesc{};
-	//ばっぱリソース。テクスチャの場合はまた別の設定をする
-	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc.Width = sizeInBytes;//リソースのサイズ。今回はVector4を3頂点文
-	//バッファの場合はこれらは1にする決まり
-	vertexResourceDesc.Height = 1;
-	vertexResourceDesc.DepthOrArraySize = 1;
-	vertexResourceDesc.MipLevels = 1;
-	vertexResourceDesc.SampleDesc.Count = 1;
-	//バッファの場合これにする決まり
-	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	//実際に頂点リソースを作る
-	ID3D12Resource* result=nullptr;
-	hr_ = device->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE,
-		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&result));
-	assert(SUCCEEDED(hr_));
-
-	return result;
 }
 
 void DirectXCommon::CreateGraphicPipelene() {
@@ -345,10 +353,10 @@ void DirectXCommon::CreateGraphicPipelene() {
 	rootParameters[1].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
 	descriptionRootSignature.pParameters = rootParameters;//ルートパラメーターの配列
 	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
-	
+
 	//シリアライズしてバイナリにする
 	signatureBlob_ = nullptr;
-	 errorBlob_ = nullptr;
+	errorBlob_ = nullptr;
 	hr_ = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
 	if (FAILED(hr_)) {
 		Log(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
@@ -381,11 +389,11 @@ void DirectXCommon::CreateGraphicPipelene() {
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
 	//Shaderをコンパイルする
-	 vertexShaderBlob_ = CompileShader(L"Object3d.VS.hlsl",
+	vertexShaderBlob_ = CompileShader(L"Object3d.VS.hlsl",
 		L"vs_6_0", GetDxcUtils(), GetDxcCompiler(), GetIncludeHandler());
 	assert(vertexShaderBlob_ != nullptr);
 
-	 pixelShaderBlob_ = CompileShader(L"Object3d.PS.hlsl",
+	pixelShaderBlob_ = CompileShader(L"Object3d.PS.hlsl",
 		L"ps_6_0", GetDxcUtils(), GetDxcCompiler(), GetIncludeHandler());
 	assert(pixelShaderBlob_ != nullptr);
 
@@ -406,12 +414,12 @@ void DirectXCommon::CreateGraphicPipelene() {
 	graphicsPipelineStateDesc.SampleDesc.Count = 1;
 	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
 	//実際に生成
-	 graphicsPipelineState_ = nullptr;
+	graphicsPipelineState_ = nullptr;
 	hr_ = GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&graphicsPipelineState_));
 	assert(SUCCEEDED(hr_));
 
 	//VertexBufferViewを作成する	
-	vertexResource_=CreateBufferResource(GetDevice(),sizeof(Vector4)*3);
+	vertexResource_ = CreateBufferResource(GetDevice(), sizeof(Vector4) * 3);
 	//リソースの先頭アドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
@@ -419,7 +427,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	vertexBufferView_.StrideInBytes = sizeof(Vector4);
 
 	//頂点リソースにデータを書き込む
-	Vector4* vertexDate= nullptr;
+	Vector4* vertexDate = nullptr;
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate));
 	//左下
 	vertexDate[0] = { -0.5f,-0.5f,0.0f,1.0f };
@@ -432,22 +440,20 @@ void DirectXCommon::CreateGraphicPipelene() {
 	materialResource_ = CreateBufferResource(GetDevice(), sizeof(Vector4));
 	//マテリアルにデータを書き込む
 	Vector4* materialDate = nullptr;
-	
+
 	//書き込むためのアドレスを取得
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialDate));
 	//今回は赤を書き込む
 	*materialDate = Vector4(1.0f, 0.0f, 0.0f, 1.0f);
 
 	//WVP用のリソースを作る
-	 wvpResouce_ = CreateBufferResource(GetDevice(), sizeof(Matrix4x4));
+	wvpResouce_ = CreateBufferResource(GetDevice(), sizeof(Matrix4x4));
 	//データを書き込む
-	 wvpDate_ = nullptr;
+	wvpDate_ = nullptr;
 	//書き込むためのアドレスを取得
 	wvpResouce_->Map(0, nullptr, reinterpret_cast<void**>(&wvpDate_));
 	//単位行列を書き込んでおく
 	*wvpDate_ = MakeIdentity4x4();
-
-
 
 	//ビューポート
 	//クライアント領域のサイズと一緒にして画面全体に表示
@@ -461,9 +467,9 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//シザー矩形
 	//基本的にビューポートと同じ矩形が構成されるようにする
 	scissorRect_.left = 0;
-	scissorRect_.right= WinApp::kWindowWidth;
+	scissorRect_.right = WinApp::kWindowWidth;
 	scissorRect_.top = 0;
-	scissorRect_.bottom= WinApp::kWindowHeight;
+	scissorRect_.bottom = WinApp::kWindowHeight;
 }
 
 //フレーム開始
@@ -491,6 +497,13 @@ void DirectXCommon::ScreenClear() {
 	GetCommandList()->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearColor, 0, nullptr);
 	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
 
+	//描画用のDescriptorHeapの設定
+	/*ID3D12DescriptorHeap* descriptorHeaps[] = { rtvDescriptorHeap_ };
+	commandList_->SetDescriptorHeaps(1, descriptorHeaps);*/
+
+	ID3D12DescriptorHeap* descriptorHeaps[] = { srvDescriptorHeap_ };
+	GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps);
+
 	GetCommandList()->RSSetViewports(1, &viewport_);
 	GetCommandList()->RSSetScissorRects(1, &scissorRect_);
 	//RootSignatureを設定
@@ -501,14 +514,18 @@ void DirectXCommon::ScreenClear() {
 	GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResouce_->GetGPUVirtualAddress());
+	/*GetCommandList()->SetGraphicsRootConstantBufferView(2, tr_->GetGPUVirtualAddress());*/
 
 	//描画(DrawCall/ドローコール)
 	GetCommandList()->DrawInstanced(3, 1, 0, 0);
-
+	//実際のcommandListのImGuiの描画コマンドを積む
+#ifdef _DEBUG
+	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList_);
+#endif 
 	//画面に描く処理はすべて終わり、画面に映すので、状態を遷移
 	//今回はRenderTargetからPresentにする
 	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	barrier_.Transition.StateAfter= D3D12_RESOURCE_STATE_PRESENT;
+	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 	//TransitionBarrierを張る
 	GetCommandList()->ResourceBarrier(1, &barrier_);
 
@@ -534,15 +551,27 @@ void DirectXCommon::CommandKick() {
 	if (GetFence()->GetCompletedValue() < GetFenceValue()) {
 
 		//指定したSignalにたどり着いていないので、たどり着くまで待つようにイベントを設定する
-		GetFence()->SetEventOnCompletion(GetFenceValue(), GetFenceEvent());
+		GetFence()->SetEventOnCompletion(GetFenceValue(), fenceEvent_);
 		//イベントを待つ
-		WaitForSingleObject(GetFenceEvent(), INFINITE);
+		WaitForSingleObject(fenceEvent_, INFINITE);
 	}
 	//次のフレーム用のコマンドリストを準備
-	hr_ = GetCommandAllocator()->Reset();
+	hr_ = commandAllocator_->Reset();
 	assert(SUCCEEDED(hr_));
-	hr_ = GetCommandList()->Reset(GetCommandAllocator(), nullptr);
+	hr_ = GetCommandList()->Reset(commandAllocator_, nullptr);
 	assert(SUCCEEDED(hr_));
+}
+
+//ImGui初期化
+void DirectXCommon::ImGuiInit() {
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGui::StyleColorsDark();
+	ImGui_ImplWin32_Init(winApp_->GetHwnd());
+	ImGui_ImplDX12_Init(GetDevice(), GetSwapChainDesc().BufferCount, GetRtvDesc().Format,
+	srvDescriptorHeap_, srvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart(), srvDescriptorHeap_->GetGPUDescriptorHandleForHeapStart());
+
 }
 
 void DirectXCommon::ResourceLeakCheck() {
@@ -557,14 +586,14 @@ void DirectXCommon::ResourceLeakCheck() {
 }
 
 void DirectXCommon::ReleaseObject() {
-	CloseHandle(GetFenceEvent());
+	CloseHandle(fenceEvent_);
 	GetFence()->Release();
-	GetRtvDescriptorHeap()->Release();
+	rtvDescriptorHeap_->Release();
 	GetSwapChainResources(0)->Release();
 	GetSwapChainResources(1)->Release();
 	GetSwapChain()->Release();
 	GetCommandList()->Release();
-	GetCommandAllocator()->Release();
+	commandAllocator_->Release();
 	GetCommandQueue()->Release();
 	GetDevice()->Release();
 	useAdapter_->Release();
@@ -572,6 +601,7 @@ void DirectXCommon::ReleaseObject() {
 	vertexResource_->Release();
 	materialResource_->Release();
 	wvpResouce_->Release();
+	/*tr_->Release();*/
 	graphicsPipelineState_->Release();
 	signatureBlob_->Release();
 	if (errorBlob_) {
@@ -581,7 +611,7 @@ void DirectXCommon::ReleaseObject() {
 	pixelShaderBlob_->Release();
 	vertexShaderBlob_->Release();
 #ifdef _DEBUG
-	
+
 	winApp_->GetDebugController()->Release();
 #endif 
 	CloseWindow(winApp_->GetHwnd());

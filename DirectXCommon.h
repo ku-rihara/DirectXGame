@@ -18,6 +18,7 @@ private://メンバ変数
 	//ウィンドウズアプリケーション管理
 	WinApp* winApp_;
 
+
 	//デバイス初期化関連
 	IDXGIFactory7* dxgiFactory_;
 	ID3D12Device* device_;
@@ -30,12 +31,15 @@ private://メンバ変数
 	
 	//スワップチェーン関連
 	IDXGISwapChain4* swapChain_;
+	DXGI_SWAP_CHAIN_DESC1 swapChainDesc_{};
 	ID3D12Resource* swapChainResources_[2] = {};
 	int32_t backBufferWidth_ = 0;
 	int32_t backBufferHeight_ = 0;
 
 	//レンダーターゲットビュー関連
 	ID3D12DescriptorHeap* rtvDescriptorHeap_;
+	ID3D12DescriptorHeap* srvDescriptorHeap_;
+	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];//RTVを2つ作るのでディスクリプタを2つ用意
 
 	//フェンス生成関連
@@ -64,6 +68,8 @@ private://メンバ変数
 	ID3D12Resource* materialResource_;
 	ID3D12Resource* wvpResouce_;
 	Matrix4x4* wvpDate_;
+	/*ID3D12Resource* tr_;
+	Matrix4x4* td_;*/
 
 	//バリア
 	D3D12_RESOURCE_BARRIER barrier_{};
@@ -94,15 +100,14 @@ private://メンバ関数
 	/// フェンスの生成
 	/// </summary>
 	void CreateFence();
-
+	
+	//リソースの作成
 	ID3D12Resource* CreateBufferResource(ID3D12Device* device, size_t sizeInBytes);
-
+	
 	/// <summary>
 	/// dxcCompilerの初期化
 	/// </summary>
 	void dxcCompilerInit();
-
-
 
 public://メンバ関数
 	HRESULT hr_ = 0;
@@ -127,31 +132,34 @@ public://メンバ関数
 	//オブジェクトのリリース
 	void ReleaseObject();
 
+	void ImGuiInit();
+	
+	//DescriptorHeapの作成
+	ID3D12DescriptorHeap* CreateDescriptorHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
+
+	
 	//getter
 	// デバイス初期化関連
-	
 	ID3D12Device* GetDevice()const { return device_; }
-
 	//コマンド初期化関連
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList_; }
-	ID3D12CommandAllocator* GetCommandAllocator()const { return commandAllocator_; }
 	ID3D12CommandQueue* GetCommandQueue()const { return commandQueue_; }
 	//スワップチェーン関連
 	IDXGISwapChain4* GetSwapChain()const { return swapChain_; }
 	ID3D12Resource* GetSwapChainResources(UINT num)const { return swapChainResources_[num]; }
-	//レンダーターゲットビュー関連
-	ID3D12DescriptorHeap* GetRtvDescriptorHeap()const { return rtvDescriptorHeap_; }
+	DXGI_SWAP_CHAIN_DESC1 GetSwapChainDesc()const { return swapChainDesc_; }
+	//レンダーターゲットビュー 
+	D3D12_RENDER_TARGET_VIEW_DESC GetRtvDesc()const { return rtvDesc_; }
 	//フェンス関連
 	ID3D12Fence* GetFence()const { return fence_; }
 	uint64_t GetFenceValue()const { return fenceValue_; }
-	HANDLE GetFenceEvent()const { return fenceEvent_; }
 	//dxcCompilerの初期化関連
 	IDxcUtils* GetDxcUtils()const { return dxcUtils_; }
 	IDxcCompiler3* GetDxcCompiler()const { return dxcCompiler_; }
 	IDxcIncludeHandler* GetIncludeHandler()const { return includeHandler_; }
 	
-
 	//setter
 	void SetFenceValueIncrement() { this->fenceValue_++; }
 	void SetwvpDate(Matrix4x4 date) { *this->wvpDate_=date; }
-	};
+	
+};
