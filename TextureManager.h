@@ -1,0 +1,36 @@
+#pragma once
+
+#include <string>
+#include<d3d12.h>
+#include"externals/DirectXTex/DirectXTex.h"
+
+
+class TextureManager{
+private:
+    DirectX::ScratchImage image_{};
+    D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
+    D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
+
+    ID3D12Resource* resource_;
+    ID3D12Resource* textureResource_;
+
+public:
+
+    static TextureManager* GetInstance();
+    //TextureデータをCPUで読み込む
+    DirectX::ScratchImage LoadTexture(const std::string& filePath);
+    //Resourceデータの作成
+    ID3D12Resource* CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata);
+    //データを転送する関数
+    void UploadTextureDate(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
+
+    void Load();
+
+    void CreateResourceView();
+
+    void ReleaseObject();
+
+    //getter
+    D3D12_GPU_DESCRIPTOR_HANDLE GetTextureSrvHandleGPU()const { return textureSrvHandleGPU_; }
+};
+
