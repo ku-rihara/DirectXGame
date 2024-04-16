@@ -38,15 +38,14 @@ void Keta::Initialize(const char* title, int width, int height) {
 
 	textureManager = TextureManager::GetInstance();
 	textureManager->Load();
-
+	
 	 tramsform={ {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
-	 cameraTransform= { {1.5f,1.5f,1.5f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,-5.0f} };
+	 cameraTransform= { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,-5.0f} };
 }
 
 //メッセージがなければループする
 int Keta::ProcessMessage() {
 	return sWinApp->ProcessMessage();
-	
 }
 //フレームの始め
 void Keta::BeginFrame() {
@@ -56,10 +55,11 @@ void Keta::BeginFrame() {
 	ImGui::ShowDemoWindow();
 #endif
 	tramsform.rotate.y += 0.03f;
-	Matrix4x4 worldMatrix = MakeAffineMatrix(tramsform.scale, tramsform.rotate, tramsform.translate);
 	Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
 	Matrix4x4 viewMatrix = Inverse(cameraMatrix);
 	Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(sWinApp->kWindowWidth) / float(sWinApp->kWindowHeight), 0.1f, 100.0f);
+
+	Matrix4x4 worldMatrix = MakeAffineMatrix(tramsform.scale, tramsform.rotate, tramsform.translate);
 	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 
 	sDirectXCommon->SetwvpDate(worldViewProjectionMatrix);

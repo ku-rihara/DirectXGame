@@ -90,45 +90,6 @@ IDxcBlob* CompileShader(
 	return shaderBlob;
 }
 
-//ディスクリプタヒープの生成
-ID3D12DescriptorHeap* DirectXCommon::CreateDescriptorHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible) {
-
-	ID3D12DescriptorHeap* descriptorHeap = nullptr;
-	D3D12_DESCRIPTOR_HEAP_DESC DescriptorHeapDesc{};
-	DescriptorHeapDesc.Type = heapType;//レンダーターゲットビュー用
-	DescriptorHeapDesc.NumDescriptors = numDescriptors;//ダブルバッファ用に2つ。
-	DescriptorHeapDesc.Flags = shaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	HRESULT hr = device->CreateDescriptorHeap(&DescriptorHeapDesc, IID_PPV_ARGS(&descriptorHeap));
-	//ディスクリプタヒープが作れなかったので起動出来ない
-	assert(SUCCEEDED(hr));
-	return descriptorHeap;
-}
-//リソースの作成
-ID3D12Resource* DirectXCommon::CreateBufferResource(ID3D12Device* device, size_t sizeInBytes) {
-	//頂点リソース用のヒープの設定
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;//UploadHeapを使う
-	//頂点リソース用設定
-	D3D12_RESOURCE_DESC vertexResourceDesc{};
-	//ばっぱリソース。テクスチャの場合はまた別の設定をする
-	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc.Width = sizeInBytes;//リソースのサイズ。今回はVector4を3頂点文
-	//バッファの場合はこれらは1にする決まり
-	vertexResourceDesc.Height = 1;
-	vertexResourceDesc.DepthOrArraySize = 1;
-	vertexResourceDesc.MipLevels = 1;
-	vertexResourceDesc.SampleDesc.Count = 1;
-	//バッファの場合これにする決まり
-	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	//実際に頂点リソースを作る
-	ID3D12Resource* result = nullptr;
-	hr_ = device->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE,
-		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&result));
-	assert(SUCCEEDED(hr_));
-
-	return result;
-}
-
 DirectXCommon* DirectXCommon::GetInstance() {
 	static DirectXCommon instance;
 	return &instance;
@@ -151,6 +112,9 @@ void DirectXCommon::Init(WinApp* winApp, int32_t backBufferWidth, int32_t backBu
 
 	//レンダーターゲットビューの生成
 	CreateRenderTargetView();
+
+	//深度バッファの作成
+	CreateDepthBuffer();
 
 	//フェンス生成
 	CreateFence();
@@ -312,6 +276,27 @@ void DirectXCommon::CreateRenderTargetView() {
 	GetDevice()->CreateRenderTargetView(swapChainResources_[1], &rtvDesc_, rtvHandles_[1]);
 }
 
+void DirectXCommon::CreateDepthBuffer() {
+	depthStencilResource_ = CreateDepthStencilTextureResource(device_, WinApp::kWindowWidth, WinApp::kWindowHeight);
+
+	//DSV用のヒープでディスクリプタの数は1。DSVはShader内で触るものではないので、ShaderVisibleはfalse
+	dsvDescriptorHeap_ = CreateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
+	//DSVの設定
+	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
+	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;//Format。基本的にはResourceに合わせる
+	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;//2dTexture
+	//DSVHeapの先頭にDSVを作る
+	device_->CreateDepthStencilView(depthStencilResource_, &dsvDesc, dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart());
+
+	//DepthStencilStateの設定-------------------------------------
+	//Depthの機能を有効化する
+	depthStencilDesc.DepthEnable = true;
+	//書き込みする
+	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	//比較関数はLessEqual。つまり、近ければ描画される
+	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+}
+
 void DirectXCommon::CreateFence() {
 	//初期値0でFenceを作る
 	fence_ = nullptr;
@@ -443,18 +428,22 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//どのように画面に色を打ち込むかの設定
 	graphicsPipelineStateDesc.SampleDesc.Count = 1;
 	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
+	//DepthStencilの設定
+	graphicsPipelineStateDesc.DepthStencilState = depthStencilDesc;
+	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
 	//実際に生成
 	graphicsPipelineState_ = nullptr;
 	hr_ = GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&graphicsPipelineState_));
 	assert(SUCCEEDED(hr_));
 
 	//VertexBufferViewを作成する	
-	vertexResource_ = CreateBufferResource(GetDevice(), sizeof(Vector4) * 3+ sizeof(Vector2)*3);
+	vertexResource_ = CreateBufferResource(GetDevice(), sizeof(VertexData) * 6);
 	//リソースの先頭アドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(Vector4) * 3 + sizeof(Vector2) * 3;
-	vertexBufferView_.StrideInBytes = sizeof(Vector4) + sizeof(Vector2);
+	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 6;
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
 	//頂点リソースにデータを書き込む
 	VertexData* vertexDate = nullptr;
@@ -469,6 +458,15 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//右下
 	vertexDate[2].position = { 0.5f,-0.5f,0.0f,1.0f };
 	vertexDate[2].texcoord = { 1.0f,1.0f };
+	//左下2
+	vertexDate[3].position = { -0.5f,-0.5f,0.5f,1.0f };
+	vertexDate[3].texcoord = { 0.0f,1.0f };
+	//上2
+	vertexDate[4].position = { 0.0f,0.0f,0.0f,1.0f };
+	vertexDate[4].texcoord = { 0.5f,0.0f };
+	//右下2
+	vertexDate[5].position = { 0.5f,-0.5f,-0.5f,1.0f };
+	vertexDate[5].texcoord = { 1.0f,1.0f };
 
 	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResource_ = CreateBufferResource(GetDevice(), sizeof(Vector4));
@@ -509,14 +507,14 @@ void DirectXCommon::CreateGraphicPipelene() {
 //フレーム開始
 void DirectXCommon::ScreenClear() {
 	//これから書き込むバックバッファのインデックスを取得
-	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
+     backBufferIndex_ = swapChain_->GetCurrentBackBufferIndex();
 
 	//今回のバリアはTransition
 	barrier_.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 	//Noneにしておく
 	barrier_.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
 	//バリアを張る対象のリソース。現在のバックバッファに対して行う
-	barrier_.Transition.pResource = swapChainResources_[backBufferIndex];
+	barrier_.Transition.pResource = swapChainResources_[backBufferIndex_];
 	//遷移前(現在)のResourceState
 	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
 	//遷移後のResourceState
@@ -524,11 +522,13 @@ void DirectXCommon::ScreenClear() {
 	//TransitionBarrierを張る
 	commandList_->ResourceBarrier(1, &barrier_);
 
+	
+
 	//描画先のRTVを設定する
-	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
+	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex_], false, nullptr);
 	//指定した色で画面全体をクリアする
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色、RGBAの順
-	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearColor, 0, nullptr);
+	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex_], clearColor, 0, nullptr);
 	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
 	imguiManager_ = ImGuiManager::GetInstance();
 	ID3D12DescriptorHeap* descriptorHeaps[] = { imguiManager_->GetSrvDescriptorHeap() };
@@ -550,8 +550,11 @@ void DirectXCommon::ScreenClear() {
 	commandList_->SetGraphicsRootConstantBufferView(1, wvpResouce_->GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(2,textureManager_->GetTextureSrvHandleGPU());
 
+	//深度バッファクリア
+	ClearDepthBuffer();
+
 	//描画(DrawCall/ドローコール)
-	commandList_->DrawInstanced(3, 1, 0, 0);
+	commandList_->DrawInstanced(6, 1, 0, 0);
 
 #ifdef _DEBUG
 	//実際のcommandListのImGuiの描画コマンドを積む
@@ -626,6 +629,8 @@ void DirectXCommon::ReleaseObject() {
 	vertexResource_->Release();
 	materialResource_->Release();
 	wvpResouce_->Release();
+	depthStencilResource_->Release();
+	dsvDescriptorHeap_->Release();
 	/*tr_->Release();*/
 	graphicsPipelineState_->Release();
 	signatureBlob_->Release();
@@ -640,4 +645,89 @@ void DirectXCommon::ReleaseObject() {
 	winApp_->GetDebugController()->Release();
 #endif 
 	CloseWindow(winApp_->GetHwnd());
+}
+//*************************************************************************************************************************
+//関数----------------------------------------------------------------------------------------------------------------------
+//*************************************************************************************************************************
+
+void DirectXCommon::ClearDepthBuffer() {
+	//描画先のRTVとDSVを設定する
+	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex_], false, &dsvHandle);
+	//指定した深度で画面全体をクリアする
+	commandList_->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+}
+
+
+//ディスクリプタヒープの生成
+ID3D12DescriptorHeap* DirectXCommon::CreateDescriptorHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible) {
+
+	ID3D12DescriptorHeap* descriptorHeap = nullptr;
+	D3D12_DESCRIPTOR_HEAP_DESC DescriptorHeapDesc{};
+	DescriptorHeapDesc.Type = heapType;//レンダーターゲットビュー用
+	DescriptorHeapDesc.NumDescriptors = numDescriptors;//ダブルバッファ用に2つ。
+	DescriptorHeapDesc.Flags = shaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	HRESULT hr = device->CreateDescriptorHeap(&DescriptorHeapDesc, IID_PPV_ARGS(&descriptorHeap));
+	//ディスクリプタヒープが作れなかったので起動出来ない
+	assert(SUCCEEDED(hr));
+	return descriptorHeap;
+}
+//リソースの作成
+ID3D12Resource* DirectXCommon::CreateBufferResource(ID3D12Device* device, size_t sizeInBytes) {
+	//頂点リソース用のヒープの設定
+	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
+	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;//UploadHeapを使う
+	//頂点リソース用設定
+	D3D12_RESOURCE_DESC vertexResourceDesc{};
+	//ばっぱリソース。テクスチャの場合はまた別の設定をする
+	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	vertexResourceDesc.Width = sizeInBytes;//リソースのサイズ。今回はVector4を3頂点文
+	//バッファの場合はこれらは1にする決まり
+	vertexResourceDesc.Height = 1;
+	vertexResourceDesc.DepthOrArraySize = 1;
+	vertexResourceDesc.MipLevels = 1;
+	vertexResourceDesc.SampleDesc.Count = 1;
+	//バッファの場合これにする決まり
+	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	//実際に頂点リソースを作る
+	ID3D12Resource* result = nullptr;
+	hr_ = device->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE,
+		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&result));
+	assert(SUCCEEDED(hr_));
+
+	return result;
+}
+
+ID3D12Resource* DirectXCommon::CreateDepthStencilTextureResource(ID3D12Device* device, int32_t width, int32_t height) {
+	//生成するResourceの設定
+	D3D12_RESOURCE_DESC resourceDesc{};
+	resourceDesc.Width = width;//textureの幅
+	resourceDesc.Height = height;//textureの高さ
+	resourceDesc.MipLevels = 1;//mipmapの数
+	resourceDesc.DepthOrArraySize = 1;//奥行きor配列Textureの配列数
+	resourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;//DepthStenilとして利用可能なフォーマット
+	resourceDesc.SampleDesc.Count = 1;//サンプリングカウント。1固定
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;//2次元
+	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;//DepthStencilとして使う通知
+
+	//利用するHeapの設定
+	D3D12_HEAP_PROPERTIES heapProperties{};
+	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;//VRAM上に作る
+
+	//深度値のクリア設定
+	D3D12_CLEAR_VALUE depthClearValue{};
+	depthClearValue.DepthStencil.Depth = 1.0f;//1.0f(最大値)でクリア
+	depthClearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;//フォーマット。Resourceと合わせる
+
+	//Resoureceの生成
+	ID3D12Resource* resource = nullptr;
+	HRESULT hr = device->CreateCommittedResource(
+		&heapProperties,//Heapの設定
+		D3D12_HEAP_FLAG_NONE,//Heapの特殊な設定。特になし
+		&resourceDesc,//Resourceの設定
+		D3D12_RESOURCE_STATE_DEPTH_WRITE,//深度値を書き込む状態にしておく
+		&depthClearValue,//Clear最適値
+		IID_PPV_ARGS(&resource));//作成するResourceポインタへのポインタ
+	assert(SUCCEEDED(hr));
+	return resource;
 }

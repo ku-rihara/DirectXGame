@@ -18,7 +18,7 @@ private://メンバ変数
 	//ウィンドウズアプリケーション管理
 	WinApp* winApp_;
 
-
+	//Init------------------------------------------------------------------------------------------------------
 	//デバイス初期化関連
 	IDXGIFactory7* dxgiFactory_;
 	ID3D12Device* device_;
@@ -41,6 +41,10 @@ private://メンバ変数
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];//RTVを2つ作るのでディスクリプタを2つ用意
 
+	ID3D12DescriptorHeap* dsvDescriptorHeap_;
+	ID3D12Resource* depthStencilResource_;
+	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
+
 	//フェンス生成関連
 	ID3D12Fence* fence_;
 	HANDLE fenceEvent_;
@@ -50,6 +54,7 @@ private://メンバ変数
 	IDxcUtils* dxcUtils_;
 	IDxcCompiler3* dxcCompiler_;
 	IDxcIncludeHandler* includeHandler_;
+	//Init------------------------------------------------------------------------------------------------------
 
 	//グラフィックパイプライン関連
 	ID3D12RootSignature* rootSignature_;
@@ -67,9 +72,10 @@ private://メンバ変数
 	ID3D12Resource* materialResource_;
 	ID3D12Resource* wvpResouce_;
 	Matrix4x4* wvpDate_;
-	
+
 	//バリア
 	D3D12_RESOURCE_BARRIER barrier_{};
+	UINT backBufferIndex_;
 
 private://メンバ関数
 
@@ -94,39 +100,63 @@ private://メンバ関数
 	void CreateRenderTargetView();
 
 	/// <summary>
+	/// 深度バッファ生成
+	/// </summary>
+	void CreateDepthBuffer();
+
+	/// <summary>
 	/// フェンスの生成
 	/// </summary>
 	void CreateFence();
-	
-	//リソースの作成
-	ID3D12Resource* CreateBufferResource(ID3D12Device* device, size_t sizeInBytes);
 	
 	/// <summary>
 	/// dxcCompilerの初期化
 	/// </summary>
 	void dxcCompilerInit();
 
+	//リソースの作成
+	ID3D12Resource* CreateBufferResource(ID3D12Device* device, size_t sizeInBytes);
+
+	ID3D12Resource* CreateDepthStencilTextureResource(ID3D12Device* device, int32_t width, int32_t height);
+
 public://メンバ関数
 	HRESULT hr_ = 0;
 
 	//シングルトンインスタンスの取得
 	static DirectXCommon* GetInstance();
-	/// 初期化	
+	/// <summary>
+	/// 初期化
+	/// </summary>	
 	void Init(WinApp* win, int32_t backBufferWidth = WinApp::kWindowWidth, int32_t backBufferHeight = WinApp::kWindowHeight);
 
+	/// <summary>
 	//レンダリングパイプライン
+	/// </summary>	
 	void CreateGraphicPipelene();
 	
+	/// <summary>
 	//画面のクリア
+	/// </summary>	
 	void ScreenClear();
 
+	/// <summary>
+	/// 深度バッファのクリア
+	/// </summary>
+	void ClearDepthBuffer();
+
+	/// <summary>
 	//コマンドのキック
+	/// </summary>	
 	void CommandKick();
 
+	/// <summary>
 	//リソーススリークチェック
+	/// </summary>	
 	void ResourceLeakCheck();
 
+	/// <summary>
 	//オブジェクトのリリース
+	/// </summary>	
 	void ReleaseObject();
 
 	//DescriptorHeapの作成

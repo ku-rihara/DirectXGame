@@ -11,7 +11,6 @@ private:
     D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
     D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
 
-    ID3D12Resource* resource_;
     ID3D12Resource* textureResource_;
 
 public:
@@ -26,7 +25,7 @@ public:
 
     void Load();
 
-    void CreateResourceView();
+  /*  void CreateDepthStenilTextureResource(ID3D12Device*device,int32_t width,int32_t height);*/
 
     void ReleaseObject();
 

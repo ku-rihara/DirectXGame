@@ -50,16 +50,16 @@ ID3D12Resource* TextureManager::CreateTextureResource(ID3D12Device* device, cons
 	heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;//プロセッサの近くに配置
 
 	//3,Reourceを生成してreturnする
-    resource_ = nullptr;
+   ID3D12Resource* resource = nullptr;
 	HRESULT hr = device->CreateCommittedResource(
 		&heapProperties,//Heapの設定
 		D3D12_HEAP_FLAG_NONE,//Heapの特殊な設定。特になし
 		&resourceDesc,//Resourceの設定
 		D3D12_RESOURCE_STATE_GENERIC_READ,//初回のResourceState。Textureは基本読むだけ
 		nullptr,//Clear最適値。使わないのでnullptr
-		IID_PPV_ARGS(&resource_));//作成するResourceポインタへのポインタ
+		IID_PPV_ARGS(&resource));//作成するResourceポインタへのポインタ
     	assert(SUCCEEDED(hr));
-		return resource_;
+		return resource;
 }
 
 void TextureManager::UploadTextureDate(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages) {
@@ -108,6 +108,5 @@ void TextureManager::Load() {
 }
 
 void TextureManager::ReleaseObject() {
-	resource_->Release();
 	textureResource_->Release();
 }
