@@ -45,9 +45,6 @@
     <ClCompile Include="Keta.cpp">
       <Filter>MyEngine\Adapter</Filter>
     </ClCompile>
-    <ClCompile Include="Matrix4x4.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="externals\imgui\imgui.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
@@ -74,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="ImGuiManager.cpp">
       <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix4x4.cpp">
+      <Filter>MyEngine\Function</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,5 +149,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Object3d.hlsli" />
+    <None Include=".editorconfig" />
   </ItemGroup>
 </Project>

@@ -33,8 +33,8 @@ private://メンバ変数
 	IDXGISwapChain4* swapChain_;
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc_{};
 	ID3D12Resource* swapChainResources_[2] = {};
-	int32_t backBufferWidth_ = 0;
-	int32_t backBufferHeight_ = 0;
+	int32_t backBufferWidth_;
+	int32_t backBufferHeight_;
 
 	//レンダーターゲットビュー関連
 	ID3D12DescriptorHeap* rtvDescriptorHeap_;
@@ -65,13 +65,17 @@ private://メンバ変数
 	IDxcBlob* vertexShaderBlob_;
 	IDxcBlob* pixelShaderBlob_;
 	ID3D12PipelineState* graphicsPipelineState_;
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
-	ID3D12Resource* vertexResource_;
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite_;
 
-	//Resource作成
-	ID3D12Resource* materialResource_;
+	//Resource
+	ID3D12Resource* vertexResource_;
 	ID3D12Resource* wvpResouce_;
+	ID3D12Resource* materialResource_;
+	ID3D12Resource* vertexResourceSprite_;
+	ID3D12Resource* transformationMatrixResourceSprite_;
 	Matrix4x4* wvpDate_;
+	Matrix4x4* transformationMatrixDataSprite_;
 
 	//バリア
 	D3D12_RESOURCE_BARRIER barrier_{};
@@ -177,7 +181,8 @@ public://メンバ関数
 	IDxcIncludeHandler* GetIncludeHandler()const { return includeHandler_; }
 	
 	//setter
-	void SetFenceValueIncrement() { this->fenceValue_++; }
+	
+	void SetTransformationMatrixDataSprite(Matrix4x4 date) { *this->transformationMatrixDataSprite_ = date; }
 	void SetwvpDate(Matrix4x4 date) { *this->wvpDate_=date; }
 	
 };

@@ -1,6 +1,5 @@
 #pragma once
-#include"WinApp.h"
-#include"DirectXCommon.h"
+
 
 class Keta{
 public:

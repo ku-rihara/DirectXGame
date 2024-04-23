@@ -2,10 +2,10 @@
 //class
 #include"ImGuiManager.h"
 #include"TextureManager.h"
+#include"WinApp.h"
+#include"DirectXCommon.h"
 
-#include"Transform.h"
 #include"Matrix4x4.h"
-
 #include"Convert.h"
 #include <string>
 
@@ -14,9 +14,6 @@ namespace {
 	DirectXCommon* sDirectXCommon = nullptr;
 	ImGuiManager* imguiManager = nullptr;
 	TextureManager* textureManager = nullptr;
-
-	Transform tramsform;
-	Transform cameraTransform;
 }
 
 
@@ -38,9 +35,7 @@ void Keta::Initialize(const char* title, int width, int height) {
 
 	textureManager = TextureManager::GetInstance();
 	textureManager->Load();
-	
-	 tramsform={ {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
-	 cameraTransform= { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,-5.0f} };
+
 }
 
 //メッセージがなければループする
@@ -52,24 +47,13 @@ void Keta::BeginFrame() {
 #ifdef _DEBUG
 	imguiManager->Begin();	
 	//開発者UIの処理。実際に開発用のUIを出す場合はここをゲーム固有の処理に書き換える
-	ImGui::ShowDemoWindow();
+	
 #endif
-	tramsform.rotate.y += 0.03f;
-	Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
-	Matrix4x4 viewMatrix = Inverse(cameraMatrix);
-	Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(sWinApp->kWindowWidth) / float(sWinApp->kWindowHeight), 0.1f, 100.0f);
-
-	Matrix4x4 worldMatrix = MakeAffineMatrix(tramsform.scale, tramsform.rotate, tramsform.translate);
-	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
-
-	sDirectXCommon->SetwvpDate(worldViewProjectionMatrix);
-
-	ImGui::Render();
 	sDirectXCommon->ScreenClear();
 }
 //フレームの終わり
 void Keta::EndFrame() {
-
+	ImGui::Render();
 	sDirectXCommon->CommandKick();
 }
 
