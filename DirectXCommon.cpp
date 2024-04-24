@@ -15,8 +15,6 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
 
-
-
 ImGuiManager* imguiManager_;
 TextureManager* textureManager_;
 
@@ -69,7 +67,7 @@ IDxcBlob*CompileShader(
 	assert(SUCCEEDED(hr));
 
 	//3,警告、エラーが出ていないかを確認する
-	//警告、エラーが出てたらログに出して止める
+	//警告、エラーが出てたらログに出して止めるF
 	IDxcBlobUtf8* shaderError = nullptr;
 	shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&shaderError), nullptr);
 	if (shaderError != nullptr && shaderError->GetStringLength() != 0) {
@@ -95,7 +93,7 @@ DirectXCommon* DirectXCommon::GetInstance() {
 	static DirectXCommon instance;
 	return &instance;
 }
-
+//初期化
 void DirectXCommon::Init(WinApp* winApp, int32_t backBufferWidth, int32_t backBufferHeight) {
 
 	winApp_ = winApp;
@@ -126,7 +124,7 @@ void DirectXCommon::Init(WinApp* winApp, int32_t backBufferWidth, int32_t backBu
 	imguiManager_ = ImGuiManager::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
 }
-
+// DXGIデバイス初期化
 void DirectXCommon::DXGIDeviceInit() {
 
 	//DXGIファクトリーの生成
@@ -210,7 +208,7 @@ void DirectXCommon::DXGIDeviceInit() {
 	}
 #endif 
 }
-
+//コマンド初期化
 void DirectXCommon::CommandInit() {
 	//コマンドキューを作成する
 	commandQueue_ = nullptr;
@@ -232,7 +230,7 @@ void DirectXCommon::CommandInit() {
 	//コマンドリストの生成がうまくいかなかったので起動出来ない
 	assert(SUCCEEDED(hr_));
 }
-
+// スワップチェーンの生成
 void DirectXCommon::CreateSwapChain() {
 	//スワップチェーンを生成する
 	swapChain_ = nullptr;
@@ -277,7 +275,7 @@ void DirectXCommon::CreateRenderTargetView() {
 	//2つ目を作る
 	GetDevice()->CreateRenderTargetView(swapChainResources_[1], &rtvDesc_, rtvHandles_[1]);
 }
-
+// 深度バッファ生成
 void DirectXCommon::CreateDepthBuffer() {
 	depthStencilResource_ = CreateDepthStencilTextureResource(device_, WinApp::kWindowWidth, WinApp::kWindowHeight);
 
@@ -298,7 +296,7 @@ void DirectXCommon::CreateDepthBuffer() {
 	//比較関数はLessEqual。つまり、近ければ描画される
 	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 }
-
+//フェンス生成
 void DirectXCommon::CreateFence() {
 	//初期値0でFenceを作る
 	fence_ = nullptr;
@@ -310,7 +308,7 @@ void DirectXCommon::CreateFence() {
 	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
 	assert(fenceEvent_ != nullptr);
 }
-
+//dxcCompiler初期化
 void DirectXCommon::dxcCompilerInit() {
 	//dxcCompilerを初期化
 	dxcUtils_ = nullptr;
@@ -325,7 +323,7 @@ void DirectXCommon::dxcCompilerInit() {
 	hr_ = dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
 	assert(SUCCEEDED(hr_));
 }
-
+//グラフィックパイプラインの生成
 void DirectXCommon::CreateGraphicPipelene() {
 
 	//RootSignatureを作成
@@ -409,11 +407,11 @@ void DirectXCommon::CreateGraphicPipelene() {
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
 	//Shaderをコンパイルする
-	vertexShaderBlob_ = CompileShader(L"Object3D.VS.hlsl",
+	vertexShaderBlob_ = CompileShader(L"Object3d.VS.hlsl",
 		L"vs_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
 	assert(vertexShaderBlob_ != nullptr);
 
-	pixelShaderBlob_ = CompileShader(L"Object3D.PS.hlsl",
+	pixelShaderBlob_ = CompileShader(L"Object3d.PS.hlsl",
 		L"ps_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
 	assert(pixelShaderBlob_ != nullptr);
 
@@ -453,7 +451,6 @@ void DirectXCommon::CreateGraphicPipelene() {
 	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 6;
 	//頂点当たりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
-
 	//頂点リソースにデータを書き込む
 	VertexData* vertexDate = nullptr;
 	//書き込むためのアドレスを取得
@@ -581,7 +578,6 @@ void DirectXCommon::ScreenClear() {
 	//RootSignatureを設定
 	commandList_->SetGraphicsRootSignature(rootSignature_);
 	commandList_->SetPipelineState(graphicsPipelineState_);
-
 }
 
 //フレーム終わり

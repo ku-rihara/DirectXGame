@@ -218,6 +218,7 @@ Matrix4x4 Inverse(const Matrix4x4& m) {
 	return result;
 }
 
+
 Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip) {
 	Matrix4x4 result;
 	result.m[0][0] = (1 / aspectRatio) * (1 / std::tan(fovY / 2));

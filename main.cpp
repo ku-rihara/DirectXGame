@@ -61,8 +61,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		dxcommon->SetTransformationMatrixDataSprite(worldViewProjectionMatrixSprite);
 		//フレームの終了
 		Keta::EndFrame();
-
-		
 	}
 
 	//ライブラリの終了

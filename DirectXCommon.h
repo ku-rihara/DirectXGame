@@ -181,7 +181,6 @@ public://メンバ関数
 	IDxcIncludeHandler* GetIncludeHandler()const { return includeHandler_; }
 	
 	//setter
-	
 	void SetTransformationMatrixDataSprite(Matrix4x4 date) { *this->transformationMatrixDataSprite_ = date; }
 	void SetwvpDate(Matrix4x4 date) { *this->wvpDate_=date; }
 	
