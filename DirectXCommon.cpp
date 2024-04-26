@@ -3,11 +3,11 @@
 #include"TextureManager.h"
 //function
 #include"Convert.h"
-
 //
-#include"VertexData.h"
 #include<format>
 #include<cassert>
+//struct
+#include"VertexData.h"
 
 //
 #pragma comment(lib,"d3d12.lib")
@@ -22,7 +22,7 @@ void Log(const std::string& message) {
 	OutputDebugStringA(message.c_str());
 }
 
-IDxcBlob*CompileShader(
+IDxcBlob* CompileShader(
 	//CompilerするShaderファイルパス
 	const std::wstring& filePath,
 	//Compilerに使用するprofile
@@ -52,7 +52,7 @@ IDxcBlob*CompileShader(
 		L"-T",profile,//ShaderProfileの設定
 		L"-Zi",L"-Qembed_debug",//デバッグ用の情報を埋め込む
 		L"-Od",//最適化を外しておく
-		L"Zpr",//メモリレイアウトは行優先
+		L"-Zpr",//メモリレイアウトは行優先
 	};
 	//実際にShaderをコンパイルする
 	IDxcResult* shaderResult = nullptr;
@@ -67,7 +67,7 @@ IDxcBlob*CompileShader(
 	assert(SUCCEEDED(hr));
 
 	//3,警告、エラーが出ていないかを確認する
-	//警告、エラーが出てたらログに出して止めるF
+	//警告、エラーが出てたらログに出して止める
 	IDxcBlobUtf8* shaderError = nullptr;
 	shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&shaderError), nullptr);
 	if (shaderError != nullptr && shaderError->GetStringLength() != 0) {
@@ -440,11 +440,22 @@ void DirectXCommon::CreateGraphicPipelene() {
 	hr_ = GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&graphicsPipelineState_));
 	assert(SUCCEEDED(hr_));
 
+	//float pi = 3.1415926535f;//π
+	////緯度
+	//int latIndex = 16;
+	////経度
+	//int lonIndex = 6;
+	//const int kSubdivision = 16;//分割数
+	////経度分割1つ分の角度φ
+	//const float kLonEvery = pi * 2.0f / float(kSubdivision);
+	////緯度分割1つ分の角度φ
+	//const float kLatEvery = pi / float(kSubdivision);
+
 	//三角形****************************************************************************************
 	//VertexBufferViewを作成する	
 	vertexResource_ = CreateBufferResource(GetDevice(), sizeof(VertexData) * 6);
 	//頂点バッファビューを作成する
-	vertexBufferView_={};
+	vertexBufferView_ = {};
 	//リソースの先頭アドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
@@ -455,6 +466,16 @@ void DirectXCommon::CreateGraphicPipelene() {
 	VertexData* vertexDate = nullptr;
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate));
+
+	//緯度の方向に分割
+	//for (latIndex = 0; latIndex < kSubdivision; latIndex++) {
+	//	float lat = -pi / 2.0f + kLatEvery * latIndex;//θ
+	//}
+	////経度の方向に分割しながら
+	//for (lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
+	//	uint32_t start = (latIndex * kSubdivision + lonIndex) * 6;
+	//	float lon = lonIndex * kLonEvery;//φ
+	//}
 	//左下
 	vertexDate[0].position = { -0.5f,-0.5f,0.0f,1.0f };
 	vertexDate[0].texcoord = { 0.0f,1.0f };
@@ -495,15 +516,15 @@ void DirectXCommon::CreateGraphicPipelene() {
 
 	//スプライト**************************************************************************************************
 	//Sprite用の頂点リソースを作る
-      vertexResourceSprite_ = CreateBufferResource(device_, sizeof(VertexData) * 6);
+	vertexResourceSprite_ = CreateBufferResource(device_, sizeof(VertexData) * 6);
 	//頂点バッファビューを作成する
-	 vertexBufferViewSprite_={};
+	vertexBufferViewSprite_ = {};
 	//リソースの先頭のアドレスから使う
-	 vertexBufferViewSprite_.BufferLocation = vertexResourceSprite_->GetGPUVirtualAddress();
+	vertexBufferViewSprite_.BufferLocation = vertexResourceSprite_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点6つ分ののサイズ
-	 vertexBufferViewSprite_.SizeInBytes = sizeof(VertexData) * 6;
+	vertexBufferViewSprite_.SizeInBytes = sizeof(VertexData) * 6;
 	//頂点当たりのサイズ
-	 vertexBufferViewSprite_.StrideInBytes = sizeof(VertexData);
+	vertexBufferViewSprite_.StrideInBytes = sizeof(VertexData);
 
 	VertexData* vertexDataSprite = nullptr;
 	vertexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite));
