@@ -440,26 +440,21 @@ void DirectXCommon::CreateGraphicPipelene() {
 	hr_ = GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&graphicsPipelineState_));
 	assert(SUCCEEDED(hr_));
 
-	//float pi = 3.1415926535f;//π
-	////緯度
-	//int latIndex = 16;
-	////経度
-	//int lonIndex = 6;
-	//const int kSubdivision = 16;//分割数
-	////経度分割1つ分の角度φ
-	//const float kLonEvery = pi * 2.0f / float(kSubdivision);
-	////緯度分割1つ分の角度φ
-	//const float kLatEvery = pi / float(kSubdivision);
+	float pi = 3.1415926535f;//π
+	//経度分割1つ分の角度φ
+	const float kLonEvery = pi * 2.0f / float(kSubdivision_);
+	//緯度分割1つ分の角度φ
+	const float kLatEvery = pi / float(kSubdivision_);
 
 	//三角形****************************************************************************************
 	//VertexBufferViewを作成する	
-	vertexResource_ = CreateBufferResource(GetDevice(), sizeof(VertexData) * 6);
+	vertexResource_ = CreateBufferResource(GetDevice(), sizeof(VertexData) * shpereVertexNum_);
 	//頂点バッファビューを作成する
 	vertexBufferView_ = {};
 	//リソースの先頭アドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 6;
+	vertexBufferView_.SizeInBytes = sizeof(VertexData) * shpereVertexNum_;
 	//頂点当たりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 	//頂点リソースにデータを書き込む
@@ -468,32 +463,57 @@ void DirectXCommon::CreateGraphicPipelene() {
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate));
 
 	//緯度の方向に分割
-	//for (latIndex = 0; latIndex < kSubdivision; latIndex++) {
-	//	float lat = -pi / 2.0f + kLatEvery * latIndex;//θ
-	//}
-	////経度の方向に分割しながら
-	//for (lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
-	//	uint32_t start = (latIndex * kSubdivision + lonIndex) * 6;
-	//	float lon = lonIndex * kLonEvery;//φ
-	//}
-	//左下
-	vertexDate[0].position = { -0.5f,-0.5f,0.0f,1.0f };
-	vertexDate[0].texcoord = { 0.0f,1.0f };
-	//上
-	vertexDate[1].position = { 0.0f,0.5f,0.0f,1.0f };
-	vertexDate[1].texcoord = { 0.5f,0.0f };
-	//右下
-	vertexDate[2].position = { 0.5f,-0.5f,0.0f,1.0f };
-	vertexDate[2].texcoord = { 1.0f,1.0f };
-	//左下2
-	vertexDate[3].position = { -0.5f,-0.5f,0.5f,1.0f };
-	vertexDate[3].texcoord = { 0.0f,1.0f };
-	//上2
-	vertexDate[4].position = { 0.0f,0.0f,0.0f,1.0f };
-	vertexDate[4].texcoord = { 0.5f,0.0f };
-	//右下2
-	vertexDate[5].position = { 0.5f,-0.5f,-0.5f,1.0f };
-	vertexDate[5].texcoord = { 1.0f,1.0f };
+	for (uint32_t latIndex = 0; latIndex < kSubdivision_; latIndex++) {
+		float lat = -pi / 2.0f + kLatEvery * latIndex;//θ
+		//経度の方向に分割しながら
+		for (uint32_t lonIndex = 0; lonIndex < kSubdivision_; ++lonIndex) {
+			float u = float(lonIndex) / float(kSubdivision_);
+			float v = 1.0f - float(latIndex) / float(kSubdivision_);
+			uint32_t start = (latIndex * kSubdivision_ + lonIndex) * 6;
+			float lon = lonIndex * kLonEvery;//φ
+			//下
+			vertexDate[start].position.x = cos(lat) * sin(lon);
+			vertexDate[start].position.y = sin(lat);
+			vertexDate[start].position.z = cos(lat) * sin(lon);
+			vertexDate[start].position.w = 1.0f;
+
+			vertexDate[start+1].position.x = cos(lat + kLatEvery) * cos(lon);
+			vertexDate[start+1].position.y = sin(lat + kLatEvery);
+			vertexDate[start+1].position.z = cos(lat + kLatEvery) * sin(lon);
+			vertexDate[start+1].position.w = 1.0f;
+
+			vertexDate[start+2].position.x = cos(lat) * cos(lon + kLonEvery);
+			vertexDate[start+2].position.y = sin(lat);
+			vertexDate[start+2].position.z = cos(lat) * sin(lon + kLonEvery);
+			vertexDate[start+2].position.w = 1.0f;
+
+			vertexDate[start + 3].position.x = cos(lat + kLatEvery) * cos(lon + kLonEvery);
+			vertexDate[start + 3].position.y = sin(lat + kLatEvery);
+			vertexDate[start + 3].position.z = cos(lat + kLatEvery) * sin(lon + kLonEvery);
+			vertexDate[start + 3].position.w = 1.0f;
+			
+
+			vertexDate[start + 4].position = { cos(lat) * cos(lon + kLonEvery),sin(lat),	cos(lat) * sin(lon + kLonEvery),1.0f };
+			vertexDate[start + 5].position = { cos(lat + kLatEvery) * cos(lon),sin(lat + kLatEvery),cos(lat + kLatEvery) * sin(lon),1.0f };
+			vertexDate[start].texcoord = { u,v };
+		}
+	}
+
+	////上
+	//vertexDate[1].position = { 0.0f,0.5f,0.0f,1.0f };
+	//vertexDate[1].texcoord = { 0.5f,0.0f };
+	////右下
+	//vertexDate[2].position = { 0.5f,-0.5f,0.0f,1.0f };
+	//vertexDate[2].texcoord = { 1.0f,1.0f };
+	////左下2
+	//vertexDate[3].position = { -0.5f,-0.5f,0.5f,1.0f };
+	//vertexDate[3].texcoord = { 0.0f,1.0f };
+	////上2
+	//vertexDate[4].position = { 0.0f,0.0f,0.0f,1.0f };
+	//vertexDate[4].texcoord = { 0.5f,0.0f };
+	////右下2
+	//vertexDate[5].position = { 0.5f,-0.5f,-0.5f,1.0f };
+	//vertexDate[5].texcoord = { 1.0f,1.0f };
 
 	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResource_ = CreateBufferResource(GetDevice(), sizeof(Vector4));
@@ -611,7 +631,7 @@ void DirectXCommon::CommandKick() {
 	commandList_->SetGraphicsRootDescriptorTable(2, textureManager_->GetTextureSrvHandleGPU());
 
 	//描画(DrawCall/ドローコール)
-	commandList_->DrawInstanced(6, 1, 0, 0);
+	commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);
 
 	//Spriteの描画。変更が必要なものだけ変更する
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferViewSprite_);

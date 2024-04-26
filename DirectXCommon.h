@@ -33,8 +33,8 @@ private://メンバ変数
 	IDXGISwapChain4* swapChain_;
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc_{};
 	ID3D12Resource* swapChainResources_[2] = {};
-	int32_t backBufferWidth_;
-	int32_t backBufferHeight_;
+	uint32_t backBufferWidth_;
+	uint32_t backBufferHeight_;
 
 	//レンダーターゲットビュー関連
 	ID3D12DescriptorHeap* rtvDescriptorHeap_;
@@ -68,6 +68,9 @@ private://メンバ変数
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite_;
 
+	//球
+	const uint32_t kSubdivision_ = 16;//分割数
+	const uint32_t  shpereVertexNum_ = kSubdivision_ * kSubdivision_ * 6;
 	//Resource
 	ID3D12Resource* vertexResource_;
 	ID3D12Resource* wvpResouce_;
