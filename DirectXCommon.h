@@ -70,7 +70,7 @@ private://メンバ変数
 
 	//球
 	const uint32_t kSubdivision_ = 16;//分割数
-	const uint32_t  shpereVertexNum_ = kSubdivision_ * kSubdivision_ * 6;
+	const uint32_t  shpereVertexNum_ = 1536;
 	//Resource
 	ID3D12Resource* vertexResource_;
 	ID3D12Resource* wvpResouce_;

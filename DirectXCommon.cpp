@@ -440,12 +440,6 @@ void DirectXCommon::CreateGraphicPipelene() {
 	hr_ = GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&graphicsPipelineState_));
 	assert(SUCCEEDED(hr_));
 
-	float pi = 3.1415926535f;//π
-	//経度分割1つ分の角度φ
-	const float kLonEvery = pi * 2.0f / float(kSubdivision_);
-	//緯度分割1つ分の角度φ
-	const float kLatEvery = pi / float(kSubdivision_);
-
 	//三角形****************************************************************************************
 	//VertexBufferViewを作成する	
 	vertexResource_ = CreateBufferResource(GetDevice(), sizeof(VertexData) * shpereVertexNum_);
@@ -462,40 +456,56 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate));
 
-	//緯度の方向に分割
-	for (uint32_t latIndex = 0; latIndex < kSubdivision_; latIndex++) {
+	float pi = 3.1415926535f;//π
+	//経度分割1つ分の角度φ
+	const float kLonEvery = pi * 2.0f / float(kSubdivision_);
+	//緯度分割1つ分の角度φ
+	const float kLatEvery = pi / float(kSubdivision_);
+
+	for (uint32_t latIndex = 0; latIndex < kSubdivision_; latIndex++) {	//緯度の方向に分割
 		float lat = -pi / 2.0f + kLatEvery * latIndex;//θ
-		//経度の方向に分割しながら
-		for (uint32_t lonIndex = 0; lonIndex < kSubdivision_; ++lonIndex) {
-			float u = float(lonIndex) / float(kSubdivision_);
-			float v = 1.0f - float(latIndex) / float(kSubdivision_);
+		float v = 1.0f-float(latIndex) / float(kSubdivision_);
+
+		for (uint32_t lonIndex = 0; lonIndex < kSubdivision_; ++lonIndex) {//経度の方向に分割しながら
+			float u = float(lonIndex) / float(kSubdivision_);		
 			uint32_t start = (latIndex * kSubdivision_ + lonIndex) * 6;
 			float lon = lonIndex * kLonEvery;//φ
-			//下
-			vertexDate[start].position.x = cos(lat) * sin(lon);
+			//下//a
+			vertexDate[start].position.x = cos(lat) * cos(lon);
 			vertexDate[start].position.y = sin(lat);
 			vertexDate[start].position.z = cos(lat) * sin(lon);
 			vertexDate[start].position.w = 1.0f;
-
-			vertexDate[start+1].position.x = cos(lat + kLatEvery) * cos(lon);
-			vertexDate[start+1].position.y = sin(lat + kLatEvery);
-			vertexDate[start+1].position.z = cos(lat + kLatEvery) * sin(lon);
-			vertexDate[start+1].position.w = 1.0f;
-
-			vertexDate[start+2].position.x = cos(lat) * cos(lon + kLonEvery);
-			vertexDate[start+2].position.y = sin(lat);
-			vertexDate[start+2].position.z = cos(lat) * sin(lon + kLonEvery);
-			vertexDate[start+2].position.w = 1.0f;
-
-			vertexDate[start + 3].position.x = cos(lat + kLatEvery) * cos(lon + kLonEvery);
-			vertexDate[start + 3].position.y = sin(lat + kLatEvery);
-			vertexDate[start + 3].position.z = cos(lat + kLatEvery) * sin(lon + kLonEvery);
-			vertexDate[start + 3].position.w = 1.0f;
-			
-
-			vertexDate[start + 4].position = { cos(lat) * cos(lon + kLonEvery),sin(lat),	cos(lat) * sin(lon + kLonEvery),1.0f };
-			vertexDate[start + 5].position = { cos(lat + kLatEvery) * cos(lon),sin(lat + kLatEvery),cos(lat + kLatEvery) * sin(lon),1.0f };
 			vertexDate[start].texcoord = { u,v };
+			//b
+			vertexDate[start + 1].position.x = cos(lat + kLatEvery) * cos(lon);
+			vertexDate[start + 1].position.y = sin(lat + kLatEvery);
+			vertexDate[start + 1].position.z = cos(lat + kLatEvery) * sin(lon);
+			vertexDate[start + 1].position.w = 1.0f;
+			vertexDate[start + 1].texcoord = { u, v - (1.0f / float(kSubdivision_)) };
+			//c
+			vertexDate[start + 2].position.x = cos(lat) * cos(lon + kLonEvery);
+			vertexDate[start + 2].position.y = sin(lat);
+			vertexDate[start + 2].position.z = cos(lat) * sin(lon + kLonEvery);
+			vertexDate[start + 2].position.w = 1.0f;
+			vertexDate[start + 2].texcoord = { u + (1.0f / float(kSubdivision_)), v };
+			//上//b
+			vertexDate[start + 3].position.x = cos(lat + kLatEvery) * cos(lon);
+			vertexDate[start + 3].position.y = sin(lat + kLatEvery);
+			vertexDate[start + 3].position.z = cos(lat + kLatEvery) * sin(lon);
+			vertexDate[start + 3].position.w = 1.0f;
+			vertexDate[start + 3].texcoord = { u, v - (1.0f / float(kSubdivision_)) };
+			//d
+			vertexDate[start + 4].position.x = cos(lat + kLatEvery) * cos(lon + kLonEvery);
+			vertexDate[start + 4].position.y = sin(lat + kLatEvery);
+			vertexDate[start + 4].position.z = cos(lat + kLatEvery) * sin(lon + kLonEvery);
+			vertexDate[start + 4].position.w = 1.0f;
+			vertexDate[start + 4].texcoord = { u + (1.0f / float(kSubdivision_)), v - (1.0f / float(kSubdivision_)) };
+			//c
+			vertexDate[start + 5].position.x = cos(lat) * cos(lon + kLonEvery);
+			vertexDate[start + 5].position.y = sin(lat);
+			vertexDate[start + 5].position.z = cos(lat) * sin(lon + kLonEvery);
+			vertexDate[start + 5].position.w = 1.0f;
+			vertexDate[start + 5].texcoord = { u + (1.0f / float(kSubdivision_)), v };
 		}
 	}
 
