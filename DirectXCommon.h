@@ -121,9 +121,6 @@ private://メンバ関数
 	/// </summary>
 	void dxcCompilerInit();
 
-	//リソースの作成
-	ID3D12Resource* CreateBufferResource(ID3D12Device* device, size_t sizeInBytes);
-
 	ID3D12Resource* CreateDepthStencilTextureResource(ID3D12Device* device, int32_t width, int32_t height);
 
 public://メンバ関数
@@ -166,7 +163,10 @@ public://メンバ関数
 	/// </summary>	
 	void ReleaseObject();
 
-	void a();
+	//リソースの作成
+	ID3D12Resource* CreateBufferResource(ID3D12Device* device, size_t sizeInBytes);
+
+	void commandExecution();
 
 	//DescriptorHeapの作成
 	ID3D12DescriptorHeap* CreateDescriptorHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);

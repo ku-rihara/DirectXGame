@@ -464,10 +464,10 @@ void DirectXCommon::CreateGraphicPipelene() {
 
 	for (uint32_t latIndex = 0; latIndex < kSubdivision_; latIndex++) {	//緯度の方向に分割
 		float lat = -pi / 2.0f + kLatEvery * latIndex;//θ
-		float v = 1.0f-float(latIndex) / float(kSubdivision_);
+		float v = 1.0f - float(latIndex) / float(kSubdivision_);
 
 		for (uint32_t lonIndex = 0; lonIndex < kSubdivision_; ++lonIndex) {//経度の方向に分割しながら
-			float u = float(lonIndex) / float(kSubdivision_);		
+			float u = float(lonIndex) / float(kSubdivision_);
 			uint32_t start = (latIndex * kSubdivision_ + lonIndex) * 6;
 			float lon = lonIndex * kLonEvery;//φ
 			//下//a
@@ -692,7 +692,40 @@ void DirectXCommon::CommandKick() {
 	assert(SUCCEEDED(hr_));
 }
 
-void DirectXCommon::a() {
+void DirectXCommon::commandExecution() {
+
+	ID3D12Resource* intermediateResource = TextureManager::GetInstance()->UploadTextureDate(textureManager_->GetTextureResource(), textureManager_->GetMipImages(), device_, commandList_);
+
+	hr_ = commandList_->Close();
+	assert(SUCCEEDED(hr_));
+	//GPUにコマンドリストの実行を行わせる
+	ID3D12CommandList* commandLists[] = { commandList_ };
+	commandQueue_->ExecuteCommandLists(1, commandLists);
+
+
+	//GPUとOSに画面の交換を行うよう通知する
+	swapChain_->Present(1, 0);
+	//Fenceの値を更新
+	fenceValue_++;
+	//GPUがここまでたどりついた時に、Fenceの値を指定した値に代入するようにSignalを送る
+	commandQueue_->Signal(fence_, fenceValue_);
+
+	//Fenceの値が指定したSignal値にたどり着いているか確認する
+	//GetCompletedValueの初期値はFence作成時に渡した初期値
+	if (fence_->GetCompletedValue() < fenceValue_) {
+
+		//指定したSignalにたどり着いていないので、たどり着くまで待つようにイベントを設定する
+		fence_->SetEventOnCompletion(fenceValue_, fenceEvent_);
+		//イベントを待つ
+		WaitForSingleObject(fenceEvent_, INFINITE);
+	}
+	//次のフレーム用のコマンドリストを準備
+	hr_ = commandAllocator_->Reset();
+	assert(SUCCEEDED(hr_));
+	hr_ = commandList_->Reset(commandAllocator_, nullptr);
+	assert(SUCCEEDED(hr_));
+
+	intermediateResource->Release();
 
 }
 

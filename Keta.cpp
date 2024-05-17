@@ -35,6 +35,7 @@ void Keta::Initialize(const char* title, int width, int height) {
 
 	textureManager = TextureManager::GetInstance();
 	textureManager->Load();
+	sDirectXCommon->commandExecution();
 
 }
 
