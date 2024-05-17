@@ -692,6 +692,10 @@ void DirectXCommon::CommandKick() {
 	assert(SUCCEEDED(hr_));
 }
 
+void DirectXCommon::a() {
+
+}
+
 
 void DirectXCommon::ResourceLeakCheck() {
 	//リリースリークチェック

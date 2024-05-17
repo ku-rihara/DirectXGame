@@ -166,6 +166,8 @@ public://メンバ関数
 	/// </summary>	
 	void ReleaseObject();
 
+	void a();
+
 	//DescriptorHeapの作成
 	ID3D12DescriptorHeap* CreateDescriptorHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
 
