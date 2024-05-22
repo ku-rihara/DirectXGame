@@ -695,6 +695,7 @@ void DirectXCommon::CommandKick() {
 void DirectXCommon::commandExecution() {
 
 	ID3D12Resource* intermediateResource = TextureManager::GetInstance()->UploadTextureDate(textureManager_->GetTextureResource(), textureManager_->GetMipImages(), device_, commandList_);
+	ID3D12Resource* intermediateResource2 = TextureManager::GetInstance()->UploadTextureDate(textureManager_->GetTextureResource(), textureManager_->GetMipImages(), device_, commandList_);
 
 	hr_ = commandList_->Close();
 	assert(SUCCEEDED(hr_));
@@ -702,9 +703,6 @@ void DirectXCommon::commandExecution() {
 	ID3D12CommandList* commandLists[] = { commandList_ };
 	commandQueue_->ExecuteCommandLists(1, commandLists);
 
-
-	//GPUとOSに画面の交換を行うよう通知する
-	swapChain_->Present(1, 0);
 	//Fenceの値を更新
 	fenceValue_++;
 	//GPUがここまでたどりついた時に、Fenceの値を指定した値に代入するようにSignalを送る

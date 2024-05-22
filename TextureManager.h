@@ -10,9 +10,14 @@ private:
     DirectX::ScratchImage image_{};
     D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
     D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
-
     ID3D12Resource* textureResource_;
     DirectX::ScratchImage mipImages_;
+  //2
+    D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU2_;
+    D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU2_;
+    DirectX::ScratchImage mipImages2_;
+    ID3D12Resource* textureResource2_;
+
 
 public:
 

@@ -85,14 +85,23 @@ void TextureManager::Load() {
 	 mipImages_ = LoadTexture("resources/uvChecker.png");
 	const DirectX::TexMetadata& metadata = mipImages_.GetMetadata();
 	textureResource_ = CreateTextureResource(directXCommon_->GetDevice(), metadata);
-	/*UploadTextureDate(textureResource_, mipImages_);*/
-
+	//2
+	mipImages2_ = LoadTexture("resources/monsterBall.png");
+	const DirectX::TexMetadata& metadata2 = mipImages2_.GetMetadata();
+	textureResource2_ = CreateTextureResource(directXCommon_->GetDevice(), metadata2);
+	
 	//metaDataを基にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = metadata.format;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
+	//2
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc2{};
+	srvDesc2.Format = metadata2.format;
+	srvDesc2.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc2.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc2.Texture2D.MipLevels = UINT(metadata2.mipLevels);
 
 	imguiManager_ = ImGuiManager::GetInstance();
 	//SRVを作成するDescriptorHeapの場所を決める
@@ -101,6 +110,9 @@ void TextureManager::Load() {
 	//先頭はImGuiが使っているのでその次を使う
 	textureSrvHandleCPU_.ptr += directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	textureSrvHandleGPU_.ptr += directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	textureSrvHandleCPU2_.ptr += directXCommon_.GetGpu
+	textureSrvHandleGPU2_.ptr += directXCommon_.
+
 	//SRVの生成
 	directXCommon_->GetDevice()->CreateShaderResourceView(textureResource_, &srvDesc, textureSrvHandleCPU_);
 }
