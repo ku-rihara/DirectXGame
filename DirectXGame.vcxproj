@@ -40,6 +40,7 @@
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
     <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="Keta.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Transform.h" />

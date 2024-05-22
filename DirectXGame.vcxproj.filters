@@ -137,6 +137,9 @@
     <ClInclude Include="Vector2.h">
       <Filter>MyEngine\struct</Filter>
     </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.VS.hlsl" />

@@ -74,11 +74,14 @@ private://メンバ変数
 	//Resource
 	ID3D12Resource* vertexResource_;
 	ID3D12Resource* wvpResouce_;
-	ID3D12Resource* materialResource_;
 	ID3D12Resource* vertexResourceSprite_;
 	ID3D12Resource* transformationMatrixResourceSprite_;
 	Matrix4x4* wvpDate_;
 	Matrix4x4* transformationMatrixDataSprite_;
+
+	//Material
+	ID3D12Resource* materialResource_;
+	ID3D12Resource* materialResourceSprite_;
 
 	//DescriptorSize
 	uint32_t descriptorSizeSRV_;

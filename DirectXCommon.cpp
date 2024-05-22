@@ -8,7 +8,7 @@
 #include<cassert>
 //struct
 #include"VertexData.h"
-
+#include"Material.h"
 //
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -382,7 +382,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	assert(SUCCEEDED(hr_));
 
 	//InputLayoutの設定を行う
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[2] = {};
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
 	inputElementDescs[0].SemanticName = "POSITION";
 	inputElementDescs[0].SemanticIndex = 0;
 	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -392,6 +392,11 @@ void DirectXCommon::CreateGraphicPipelene() {
 	inputElementDescs[1].SemanticIndex = 0;
 	inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
 	inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+
+	inputElementDescs[2].SemanticName = "NORMAL";
+	inputElementDescs[2].SemanticIndex = 0;
+	inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
 	inputLayoutDesc.pInputElementDescs = inputElementDescs;
 	inputLayoutDesc.NumElements = _countof(inputElementDescs);
@@ -463,7 +468,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	const float kLonEvery = pi * 2.0f / float(kSubdivision_);
 	//緯度分割1つ分の角度φ
 	const float kLatEvery = pi / float(kSubdivision_);
-
+	vertexDate[0].normal={ 0.0f,0.0f,-1.0f };
 	for (uint32_t latIndex = 0; latIndex < kSubdivision_; latIndex++) {	//緯度の方向に分割
 		float lat = -pi / 2.0f + kLatEvery * latIndex;//θ
 		float v = 1.0f - float(latIndex) / float(kSubdivision_);
@@ -472,12 +477,16 @@ void DirectXCommon::CreateGraphicPipelene() {
 			float u = float(lonIndex) / float(kSubdivision_);
 			uint32_t start = (latIndex * kSubdivision_ + lonIndex) * 6;
 			float lon = lonIndex * kLonEvery;//φ
-			//下//a
+			//下
 			vertexDate[start].position.x = cos(lat) * cos(lon);
 			vertexDate[start].position.y = sin(lat);
 			vertexDate[start].position.z = cos(lat) * sin(lon);
 			vertexDate[start].position.w = 1.0f;
 			vertexDate[start].texcoord = { u,v };
+			vertexDate[start].normal.x = vertexDate[start].position.x;
+			vertexDate[start].normal.y = vertexDate[start].position.y;
+			vertexDate[start].normal.z = vertexDate[start].position.z;
+		
 			//b
 			vertexDate[start + 1].position.x = cos(lat + kLatEvery) * cos(lon);
 			vertexDate[start + 1].position.y = sin(lat + kLatEvery);
@@ -528,14 +537,15 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//vertexDate[5].texcoord = { 1.0f,1.0f };
 
 	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	materialResource_ = CreateBufferResource(GetDevice(), sizeof(Vector4));
+	materialResource_ = CreateBufferResource(GetDevice(), sizeof(Material));
 	//マテリアルにデータを書き込む
-	Vector4* materialDate = nullptr;
+	Material* materialDate = nullptr;
 	//書き込むためのアドレスを取得
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialDate));
 	//今回は赤を書き込む
-	*materialDate = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-
+	materialDate->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	materialDate->enableLighting = true;
+	
 	//WVP用のリソースを作る
 	wvpResouce_ = CreateBufferResource(GetDevice(), sizeof(Matrix4x4));
 	//データを書き込む
@@ -547,6 +557,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//三角形****************************************************************************************
 
 	//スプライト**************************************************************************************************
+	
 	//Sprite用の頂点リソースを作る
 	vertexResourceSprite_ = CreateBufferResource(device_, sizeof(VertexData) * 6);
 	//頂点バッファビューを作成する
@@ -575,6 +586,17 @@ void DirectXCommon::CreateGraphicPipelene() {
 	vertexDataSprite[5].position = { 640.0f,360,0.0f,1.0f };//右下
 	vertexDataSprite[5].texcoord = { 1.0f,1.0f };
 	//Sprite用のTransformationMatrix用のリソースを作る。matrix4x4　１つ分のサイズを用意する
+	
+	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+	materialResourceSprite_ = CreateBufferResource(GetDevice(), sizeof(Material));
+	//マテリアルにデータを書き込む
+	Material* materialDateSprite = nullptr;
+	//書き込むためのアドレスを取得
+	materialResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&materialDateSprite));
+	//Lightingを無効
+	materialDateSprite->color={ 1.0f,1.0f,1.0f,1.0f };
+	materialDateSprite->enableLighting = false;
+
 	transformationMatrixResourceSprite_ = CreateBufferResource(device_, sizeof(Matrix4x4));
 	//データを書き込む
 	transformationMatrixDataSprite_ = nullptr;
@@ -654,6 +676,7 @@ void DirectXCommon::CommandKick() {
 	//Spriteの描画。変更が必要なものだけ変更する
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferViewSprite_);
 	//TransformationmatrixCBufferの場所を設定
+	commandList_->SetGraphicsRootConstantBufferView(0, materialResourceSprite_->GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite_->GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(2,textureManager_->GetTextureSrvHandleGPU());
 
