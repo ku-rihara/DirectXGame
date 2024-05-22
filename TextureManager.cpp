@@ -107,16 +107,20 @@ void TextureManager::Load() {
 	//SRVを作成するDescriptorHeapの場所を決める
 	 textureSrvHandleCPU_ = imguiManager_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
 	 textureSrvHandleGPU_ = imguiManager_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
+	 textureSrvHandleCPU2_ = directXCommon_->GetCPUDescriptorHandle(imguiManager_->GetSrvDescriptorHeap(), directXCommon_->GetDescriptorSizeSRV(), 2);
+	 textureSrvHandleGPU2_ = directXCommon_->GetGPUDescriptorHandle(imguiManager_->GetSrvDescriptorHeap(), directXCommon_->GetDescriptorSizeSRV(), 2);
+
 	//先頭はImGuiが使っているのでその次を使う
 	textureSrvHandleCPU_.ptr += directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	textureSrvHandleGPU_.ptr += directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	textureSrvHandleCPU2_.ptr += directXCommon_.GetGpu
-	textureSrvHandleGPU2_.ptr += directXCommon_.
 
 	//SRVの生成
 	directXCommon_->GetDevice()->CreateShaderResourceView(textureResource_, &srvDesc, textureSrvHandleCPU_);
+	directXCommon_->GetDevice()->CreateShaderResourceView(textureResource2_, &srvDesc2, textureSrvHandleCPU2_);
+
 }
 
 void TextureManager::ReleaseObject() {
 	textureResource_->Release();
+	textureResource2_->Release();
 }

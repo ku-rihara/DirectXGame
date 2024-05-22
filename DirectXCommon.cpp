@@ -105,7 +105,9 @@ void DirectXCommon::Init(WinApp* winApp, int32_t backBufferWidth, int32_t backBu
 
 	/// コマンド関連初期化
 	CommandInit();
-
+	descriptorSizeSRV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	descriptorSizeRTV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	descriptorSizeDSV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 	//スワップチェーンの作成
 	CreateSwapChain();
 
@@ -265,7 +267,7 @@ void DirectXCommon::CreateRenderTargetView() {
 	rtvDesc_.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;//2dテクスチャとして書き込む
 
 	//ディスクリプタの先頭を取得する
-	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle =GetCPUDescriptorHandle(rtvDescriptorHeap_,descriptorSizeRTV_,0);
 
 	//まず1つ目を作る。1つ目は最初のところに作る。作る場所をこちらで指定してあげる必要がある
 	rtvHandles_[0] = rtvStartHandle;
@@ -629,16 +631,22 @@ void DirectXCommon::ScreenClear() {
 	//RootSignatureを設定
 	commandList_->SetGraphicsRootSignature(rootSignature_);
 	commandList_->SetPipelineState(graphicsPipelineState_);
+#ifdef _DEBUG
+	ImGui::Begin("useMonsterBall");
+	ImGui::Checkbox("useMonsterBall", &useMonsterBall);
+	ImGui::End();
+#endif
 }
 
 //フレーム終わり
 void DirectXCommon::CommandKick() {
+	
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	//形状を設定
 	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootConstantBufferView(1, wvpResouce_->GetGPUVirtualAddress());
-	commandList_->SetGraphicsRootDescriptorTable(2, textureManager_->GetTextureSrvHandleGPU());
+	commandList_->SetGraphicsRootDescriptorTable(2, useMonsterBall?textureManager_->GetTextureSrvHandleGPU2():textureManager_->GetTextureSrvHandleGPU());
 
 	//描画(DrawCall/ドローコール)
 	commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);
@@ -647,6 +655,8 @@ void DirectXCommon::CommandKick() {
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferViewSprite_);
 	//TransformationmatrixCBufferの場所を設定
 	commandList_->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootDescriptorTable(2,textureManager_->GetTextureSrvHandleGPU());
+
 	//描画(DrawCall/ドローコール)
 	commandList_->DrawInstanced(6, 1, 0, 0);
 
@@ -695,7 +705,7 @@ void DirectXCommon::CommandKick() {
 void DirectXCommon::commandExecution() {
 
 	ID3D12Resource* intermediateResource = TextureManager::GetInstance()->UploadTextureDate(textureManager_->GetTextureResource(), textureManager_->GetMipImages(), device_, commandList_);
-	ID3D12Resource* intermediateResource2 = TextureManager::GetInstance()->UploadTextureDate(textureManager_->GetTextureResource(), textureManager_->GetMipImages(), device_, commandList_);
+	ID3D12Resource* intermediateResource2 = TextureManager::GetInstance()->UploadTextureDate(textureManager_->GetTextureResource2(), textureManager_->GetMipImages2(), device_, commandList_);
 
 	hr_ = commandList_->Close();
 	assert(SUCCEEDED(hr_));
@@ -724,7 +734,7 @@ void DirectXCommon::commandExecution() {
 	assert(SUCCEEDED(hr_));
 
 	intermediateResource->Release();
-
+	intermediateResource2->Release();
 }
 
 
@@ -858,4 +868,15 @@ ID3D12Resource* DirectXCommon::CreateDepthStencilTextureResource(ID3D12Device* d
 		IID_PPV_ARGS(&resource));//作成するResourceポインタへのポインタ
 	assert(SUCCEEDED(hr));
 	return resource;
+}
+
+D3D12_CPU_DESCRIPTOR_HANDLE DirectXCommon::GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index) {
+	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
+	handleCPU.ptr += (descriptorSize * index);
+	return handleCPU;
+}
+D3D12_GPU_DESCRIPTOR_HANDLE DirectXCommon::GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index) {
+	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
+	handleGPU.ptr += (descriptorSize * index);
+	return handleGPU;
 }

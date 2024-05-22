@@ -26,7 +26,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	while (Keta::ProcessMessage() == 0) {
 		//フレームの開始
 		Keta::BeginFrame();
-		
+#ifdef _DEBUG
 		ImGui::Begin("Transform");
 		ImGui::DragFloat3("Scale", &tramsform.scale.x, 0.1f);
 		ImGui::DragFloat3("Rotate", &tramsform.rotate.x, 0.1f);
@@ -42,7 +42,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::DragFloat3("Rotate", &transformSprite.rotate.x, 0.1f);
 		ImGui::DragFloat3("Translate", &transformSprite.translate.x, 0.1f);
 		ImGui::End();
-
+#endif
 		//tramsform.rotate.y += 0.03f;
 		Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
 		Matrix4x4 viewMatrix = Inverse(cameraMatrix);

@@ -54,7 +54,9 @@ void Keta::BeginFrame() {
 }
 //フレームの終わり
 void Keta::EndFrame() {
+#ifdef _DEBUG
 	ImGui::Render();
+#endif
 	sDirectXCommon->CommandKick();
 }
 

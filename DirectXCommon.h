@@ -80,9 +80,17 @@ private://メンバ変数
 	Matrix4x4* wvpDate_;
 	Matrix4x4* transformationMatrixDataSprite_;
 
+	//DescriptorSize
+	uint32_t descriptorSizeSRV_;
+	uint32_t descriptorSizeRTV_;
+	uint32_t descriptorSizeDSV_;
+
 	//バリア
 	D3D12_RESOURCE_BARRIER barrier_{};
 	UINT backBufferIndex_;
+
+	//後に消す
+	bool useMonsterBall=true;
 
 private://メンバ関数
 
@@ -171,6 +179,9 @@ public://メンバ関数
 	//DescriptorHeapの作成
 	ID3D12DescriptorHeap* CreateDescriptorHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
 
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
+
 	
 	//getter
 	// デバイス初期化関連
@@ -184,6 +195,10 @@ public://メンバ関数
 	IDxcUtils* GetDxcUtils()const { return dxcUtils_; }
 	IDxcCompiler3* GetDxcCompiler()const { return dxcCompiler_; }
 	IDxcIncludeHandler* GetIncludeHandler()const { return includeHandler_; }
+
+	uint32_t GetDescriptorSizeSRV()const { return descriptorSizeSRV_; }
+	uint32_t GetDescriptorSizeRTV()const { descriptorSizeRTV_; }
+	uint32_t GetDescriptorSizeDSV()const { return descriptorSizeDSV_; }
 	
 	//setter
 	void SetTransformationMatrixDataSprite(Matrix4x4 date) { *this->transformationMatrixDataSprite_ = date; }

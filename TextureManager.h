@@ -36,5 +36,9 @@ public:
     D3D12_GPU_DESCRIPTOR_HANDLE GetTextureSrvHandleGPU()const { return textureSrvHandleGPU_; }
     ID3D12Resource* GetTextureResource()const { return textureResource_; }
     const DirectX::ScratchImage& GetMipImages() { return mipImages_;}
+
+    D3D12_GPU_DESCRIPTOR_HANDLE GetTextureSrvHandleGPU2()const { return textureSrvHandleGPU2_; }
+    ID3D12Resource* GetTextureResource2()const { return textureResource2_; }
+    const DirectX::ScratchImage& GetMipImages2() { return mipImages2_; }
 };
 
