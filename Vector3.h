@@ -7,3 +7,5 @@ struct Vector3 {
 	float y;
 	float z;
 };
+
+Vector3 Normnalize(const Vector3& v);

@@ -9,6 +9,8 @@
 //struct
 #include"VertexData.h"
 #include"Material.h"
+
+
 //
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -351,7 +353,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers);
 
 	//RootParameterを作成
-	D3D12_ROOT_PARAMETER rootParameters[3] = {};
+	D3D12_ROOT_PARAMETER rootParameters[4] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PxelShaderを使う
 	rootParameters[0].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
@@ -364,6 +366,10 @@ void DirectXCommon::CreateGraphicPipelene() {
 	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
 	rootParameters[2].DescriptorTable.pDescriptorRanges = descriptorRange;
 	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);//Tableで利用する数
+
+	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameters[3].Descriptor.ShaderRegister = 1;
 
 	descriptionRootSignature.pParameters = rootParameters;//ルートパラメーターの配列
 	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
@@ -536,7 +542,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//vertexDate[5].position = { 0.5f,-0.5f,-0.5f,1.0f };
 	//vertexDate[5].texcoord = { 1.0f,1.0f };
 
-	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+    //マテリアル--------------------------------------------------------------------------------------
 	materialResource_ = CreateBufferResource(GetDevice(), sizeof(Material));
 	//マテリアルにデータを書き込む
 	Material* materialDate = nullptr;
@@ -545,15 +551,23 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//今回は赤を書き込む
 	materialDate->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	materialDate->enableLighting = true;
-	
-	//WVP用のリソースを作る
-	wvpResouce_ = CreateBufferResource(GetDevice(), sizeof(Matrix4x4));
+	//平行光源--------------------------------------------------------------------------------------------------
+	directionalLightResource_=CreateBufferResource(GetDevice(), sizeof(DirectionalLight));
+     directionalLightData_ = nullptr;
+	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
+	//デフォルト値はこうする
+	directionalLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
+	directionalLightData_->intensity = 1.0f;
+	//行列--------------------------------------------------------------------------------------------------------
+	wvpResouce_ = CreateBufferResource(GetDevice(), sizeof(TransformationMatrix));
 	//データを書き込む
 	wvpDate_ = nullptr;
 	//書き込むためのアドレスを取得
 	wvpResouce_->Map(0, nullptr, reinterpret_cast<void**>(&wvpDate_));
 	//単位行列を書き込んでおく
-	*wvpDate_ = MakeIdentity4x4();
+	wvpDate_->WVP = MakeIdentity4x4();
+	wvpDate_->World = MakeIdentity4x4();
 	//三角形****************************************************************************************
 
 	//スプライト**************************************************************************************************
@@ -587,7 +601,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	vertexDataSprite[5].texcoord = { 1.0f,1.0f };
 	//Sprite用のTransformationMatrix用のリソースを作る。matrix4x4　１つ分のサイズを用意する
 	
-	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+	//マテリアル--------------------------------------------------------------------------------------
 	materialResourceSprite_ = CreateBufferResource(GetDevice(), sizeof(Material));
 	//マテリアルにデータを書き込む
 	Material* materialDateSprite = nullptr;
@@ -596,14 +610,24 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//Lightingを無効
 	materialDateSprite->color={ 1.0f,1.0f,1.0f,1.0f };
 	materialDateSprite->enableLighting = false;
+	//平行光源--------------------------------------------------------------------------------------------------
+	//directionalLightResourceSprite_ = CreateBufferResource(GetDevice(), sizeof(DirectionalLight));
 
-	transformationMatrixResourceSprite_ = CreateBufferResource(device_, sizeof(Matrix4x4));
+	//DirectionalLight* directionalLightDataSprite = nullptr;
+	//directionalLightResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightDataSprite));
+	////デフォルト値はこうする
+	//directionalLightDataSprite->color = { 1.0f,1.0f,1.0f,1.0f };
+	//directionalLightDataSprite->direction = { 0.0f,-1.0f,0.0f };
+	//directionalLightDataSprite->intensity = 1.0f;
+	//行列----------------------------------------------------------------------------------------------------------
+	transformationMatrixResourceSprite_ = CreateBufferResource(device_, sizeof(TransformationMatrix));
 	//データを書き込む
 	transformationMatrixDataSprite_ = nullptr;
 	//書き込むためのアドレスを取得
 	transformationMatrixResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite_));
 	//単位行列を書き込んでおく
-	*transformationMatrixDataSprite_ = MakeIdentity4x4();
+	transformationMatrixDataSprite_->World = MakeIdentity4x4();
+	transformationMatrixDataSprite_->WVP = MakeIdentity4x4();
 	//スプライト**************************************************************************************************
 	// 
 	//ビューポート
@@ -657,18 +681,25 @@ void DirectXCommon::ScreenClear() {
 	ImGui::Begin("useMonsterBall");
 	ImGui::Checkbox("useMonsterBall", &useMonsterBall);
 	ImGui::End();
+	ImGui::Begin("Lighting");
+	ImGui::ColorEdit4(" Color", (float*)&directionalLightData_->color);
+	ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction);
+	directionalLightData_->direction = Normnalize(directionalLightData_->direction);
+	ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity);
+	ImGui::End();
 #endif
 }
 
 //フレーム終わり
 void DirectXCommon::CommandKick() {
-	
+
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	//形状を設定
 	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootConstantBufferView(1, wvpResouce_->GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(2, useMonsterBall?textureManager_->GetTextureSrvHandleGPU2():textureManager_->GetTextureSrvHandleGPU());
+	commandList_->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 	//描画(DrawCall/ドローコール)
 	commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);
@@ -679,6 +710,7 @@ void DirectXCommon::CommandKick() {
 	commandList_->SetGraphicsRootConstantBufferView(0, materialResourceSprite_->GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite_->GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(2,textureManager_->GetTextureSrvHandleGPU());
+	/*commandList_->SetGraphicsRootConstantBufferView(3, directionalLightResourceSprite_->GetGPUVirtualAddress());*/
 
 	//描画(DrawCall/ドローコール)
 	commandList_->DrawInstanced(6, 1, 0, 0);

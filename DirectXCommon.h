@@ -3,14 +3,15 @@
 #include<Windows.h>
 #include<cstdint>
 #include"Matrix4x4.h"
-
 #include<d3d12.h>
 #include<dxgi1_6.h>
 #include<dxcapi.h>
 #include<dxgidebug.h>
-
 //class
 #include"WinApp.h"
+//struct
+#include"TransformationMatrix.h"
+#include"DirectionalLight.h"
 
 class DirectXCommon {
 private://メンバ変数
@@ -76,11 +77,14 @@ private://メンバ変数
 	ID3D12Resource* wvpResouce_;
 	ID3D12Resource* vertexResourceSprite_;
 	ID3D12Resource* transformationMatrixResourceSprite_;
-	Matrix4x4* wvpDate_;
-	Matrix4x4* transformationMatrixDataSprite_;
+	TransformationMatrix* wvpDate_;
+	TransformationMatrix* transformationMatrixDataSprite_;
 
 	//Material
 	ID3D12Resource* materialResource_;
+	ID3D12Resource* directionalLightResource_;
+	DirectionalLight* directionalLightData_;
+	ID3D12Resource* directionalLightResourceSprite_;
 	ID3D12Resource* materialResourceSprite_;
 
 	//DescriptorSize
@@ -92,8 +96,9 @@ private://メンバ変数
 	D3D12_RESOURCE_BARRIER barrier_{};
 	UINT backBufferIndex_;
 
-	//後に消す
+	//後に消すかも
 	bool useMonsterBall=true;
+	
 
 private://メンバ関数
 
@@ -204,7 +209,7 @@ public://メンバ関数
 	uint32_t GetDescriptorSizeDSV()const { return descriptorSizeDSV_; }
 	
 	//setter
-	void SetTransformationMatrixDataSprite(Matrix4x4 date) { *this->transformationMatrixDataSprite_ = date; }
-	void SetwvpDate(Matrix4x4 date) { *this->wvpDate_=date; }
+	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->transformationMatrixDataSprite_->WVP = date; }
+	void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP=date; }
 	
 };

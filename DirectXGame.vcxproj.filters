@@ -75,6 +75,9 @@
     <ClCompile Include="Matrix4x4.cpp">
       <Filter>MyEngine\Function</Filter>
     </ClCompile>
+    <ClCompile Include="Vector3.cpp">
+      <Filter>MyEngine\Function</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Convert.h">
@@ -138,6 +141,12 @@
       <Filter>MyEngine\struct</Filter>
     </ClInclude>
     <ClInclude Include="Material.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformationMatrix.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
       <Filter>MyEngine\struct</Filter>
     </ClInclude>
   </ItemGroup>
