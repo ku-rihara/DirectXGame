@@ -52,7 +52,7 @@ void WinApp::MakeWindow(const wchar_t* title, int32_t clientWidth, int32_t clien
 	RECT wrc = { 0,0,clientWidth,clientHeight };
 
 	//クライアント領域を元に実際のサイズにwrcを変更してもらう
-	AdjustWindowRect(&wrc, WS_EX_OVERLAPPEDWINDOW, false);
+	AdjustWindowRect(&wrc, WS_OVERLAPPEDWINDOW, false);
 
 	//ウィンドウの生成
 	hwnd_ = CreateWindow(

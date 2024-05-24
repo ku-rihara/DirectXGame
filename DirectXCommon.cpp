@@ -693,6 +693,7 @@ void DirectXCommon::ScreenClear() {
 	//RootSignatureを設定
 	commandList_->SetGraphicsRootSignature(rootSignature_);
 	commandList_->SetPipelineState(graphicsPipelineState_);
+
 #ifdef _DEBUG
 	ImGui::Begin("useMonsterBall");
 	ImGui::Checkbox("useMonsterBall", &useMonsterBall);

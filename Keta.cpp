@@ -47,8 +47,7 @@ int Keta::ProcessMessage() {
 void Keta::BeginFrame() {
 #ifdef _DEBUG
 	imguiManager->Begin();	
-	//開発者UIの処理。実際に開発用のUIを出す場合はここをゲーム固有の処理に書き換える
-	
+	//開発者UIの処理。実際に開発用のUIを出す場合はここをゲーム固有の処理に書き換える	
 #endif
 	sDirectXCommon->ScreenClear();
 }
