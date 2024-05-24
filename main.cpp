@@ -59,6 +59,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite, projectionMatrixSprite);
 		dxcommon->SetwvpDate(worldViewProjectionMatrix);
 		dxcommon->SetTransformationMatrixDataSprite(worldViewProjectionMatrixSprite);
+		
 		//フレームの終了
 		Keta::EndFrame();
 	}

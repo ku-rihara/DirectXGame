@@ -209,7 +209,9 @@ public://メンバ関数
 	uint32_t GetDescriptorSizeDSV()const { return descriptorSizeDSV_; }
 	
 	//setter
+	void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
+	void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
 	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->transformationMatrixDataSprite_->WVP = date; }
-	void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP=date; }
-	
+	void SetWorldMatrixDataSprite(Matrix4x4 date) { this->transformationMatrixDataSprite_->World = date; }
+
 };
