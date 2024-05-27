@@ -90,6 +90,8 @@ private://メンバ変数
 	TransformationMatrix* wvpDate_;
 	TransformationMatrix* wvpDataSprite_;
 	//indexリソース
+	ID3D12Resource* indexResource_;
+	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
 	ID3D12Resource* indexResourceSprite_;
 	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite_{};
 

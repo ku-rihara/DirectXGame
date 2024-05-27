@@ -453,7 +453,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	hr_ = GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&graphicsPipelineState_));
 	assert(SUCCEEDED(hr_));
 
-	//三角形****************************************************************************************
+	//三角形***********************************************************************************************************************
 	//VertexBufferViewを作成する	
 	vertexResource_ = CreateBufferResource(GetDevice(), sizeof(VertexData) * shpereVertexNum_);
 	//頂点バッファビューを作成する
@@ -468,6 +468,19 @@ void DirectXCommon::CreateGraphicPipelene() {
 	VertexData* vertexDate = nullptr;
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate));
+
+	//頂点インデックス
+	indexResource_ = CreateBufferResource(device_, sizeof(uint32_t) * shpereVertexNum_);
+
+	//リソースの先頭アドレスから使う
+	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
+	//使用するリソースのサイズはインデックス6つ分のサイズ
+	indexBufferView_.SizeInBytes = sizeof(uint32_t) * shpereVertexNum_;
+	//インデックスはuint32_tとする
+	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
+	//インデックスリソースにデータを書き込む
+	uint32_t* indexData = nullptr;
+	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData));
 
 	float pi = 3.1415926535f;//π
 	//経度分割1つ分の角度φ
@@ -492,6 +505,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 			vertexDate[start].normal.x = vertexDate[start].position.x;
 			vertexDate[start].normal.y = vertexDate[start].position.y;
 			vertexDate[start].normal.z = vertexDate[start].position.z;
+			indexData[start] = start;
 
 			//b
 			vertexDate[start + 1].position.x = cos(lat + kLatEvery) * cos(lon);
@@ -502,6 +516,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 			vertexDate[start + 1].normal.x = vertexDate[start + 1].position.x;
 			vertexDate[start + 1].normal.y = vertexDate[start + 1].position.y;
 			vertexDate[start + 1].normal.z = vertexDate[start + 1].position.z;
+			indexData[start+1] = start+1;
 			//c
 			vertexDate[start + 2].position.x = cos(lat) * cos(lon + kLonEvery);
 			vertexDate[start + 2].position.y = sin(lat);
@@ -511,6 +526,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 			vertexDate[start + 2].normal.x = vertexDate[start + 2].position.x;
 			vertexDate[start + 2].normal.y = vertexDate[start + 2].position.y;
 			vertexDate[start + 2].normal.z = vertexDate[start + 2].position.z;
+			indexData[start + 2] = start + 2;
 			//上//b
 			vertexDate[start + 3].position.x = cos(lat + kLatEvery) * cos(lon);
 			vertexDate[start + 3].position.y = sin(lat + kLatEvery);
@@ -520,6 +536,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 			vertexDate[start + 3].normal.x = vertexDate[start + 3].position.x;
 			vertexDate[start + 3].normal.y = vertexDate[start + 3].position.y;
 			vertexDate[start + 3].normal.z = vertexDate[start + 3].position.z;
+			indexData[start + 3] = start + 3;
 			//d
 			vertexDate[start + 4].position.x = cos(lat + kLatEvery) * cos(lon + kLonEvery);
 			vertexDate[start + 4].position.y = sin(lat + kLatEvery);
@@ -529,6 +546,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 			vertexDate[start + 4].normal.x = vertexDate[start + 4].position.x;
 			vertexDate[start + 4].normal.y = vertexDate[start + 4].position.y;
 			vertexDate[start + 4].normal.z = vertexDate[start + 4].position.z;
+			indexData[start + 4] = start + 4;
 			//c
 			vertexDate[start + 5].position.x = cos(lat) * cos(lon + kLonEvery);
 			vertexDate[start + 5].position.y = sin(lat);
@@ -538,8 +556,11 @@ void DirectXCommon::CreateGraphicPipelene() {
 			vertexDate[start + 5].normal.x = vertexDate[start + 5].position.x;
 			vertexDate[start + 5].normal.y = vertexDate[start + 5].position.y;
 			vertexDate[start + 5].normal.z = vertexDate[start + 5].position.z;
+			indexData[start + 5] = start + 5;
 		}
 	}
+
+	
 
 	////上
 	//vertexDate[1].position = { 0.0f,0.5f,0.0f,1.0f };
@@ -611,8 +632,6 @@ void DirectXCommon::CreateGraphicPipelene() {
 	vertexDataSprite[3].position = { 640.0f, 0.0f, 0.0f, 1.0f }; // 右上
 	vertexDataSprite[3].texcoord = { 1.0f, 0.0f };
 
-	/*Sprite用のTransformationMatrix用のリソースを作る。matrix4x4　１つ分のサイズを用意する
-	*/
 	//頂点インデックス
 	indexResourceSprite_ = CreateBufferResource(device_, sizeof(uint32_t) * 6);
 
@@ -723,6 +742,7 @@ void DirectXCommon::ScreenClear() {
 void DirectXCommon::CommandKick() {
 
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	commandList_->IASetIndexBuffer(&indexBufferView_);//IBV
 	//形状を設定
 	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
@@ -731,7 +751,8 @@ void DirectXCommon::CommandKick() {
 	commandList_->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 	//描画(DrawCall/ドローコール)
-	commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);
+	/*commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);*/
+	commandList_->DrawIndexedInstanced(shpereVertexNum_, 1, 0, 0, 0);
 
 	////Spriteの描画。変更が必要なものだけ変更する
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferViewSprite_);
@@ -740,9 +761,8 @@ void DirectXCommon::CommandKick() {
 	commandList_->SetGraphicsRootConstantBufferView(0, materialResourceSprite_->GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootConstantBufferView(1, wvpResourceSprite_->GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(2, textureManager_->GetTextureSrvHandleGPU());
-	/*commandList_->SetGraphicsRootConstantBufferView(3, directionalLightResourceSprite_->GetGPUVirtualAddress());*/
 
-	//描画(DrawCall/ドローコール)
+		//描画(DrawCall/ドローコール)
 	commandList_->DrawIndexedInstanced(6, 1, 0, 0,0);
 	//commandList_->DrawInstanced(6, 1, 0, 0);
 
@@ -852,7 +872,7 @@ void DirectXCommon::ReleaseObject() {
 	vertexResourceSprite_->Release();
 	indexResourceSprite_->Release();
 	directionalLightResource_->Release();
-	/*directionalLightResourceSprite_->Release();*/
+	indexResource_->Release();
 	wvpResourceSprite_->Release();
 	materialResource_->Release();
 	materialResourceSprite_->Release();
