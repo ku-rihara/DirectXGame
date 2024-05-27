@@ -29,7 +29,7 @@ private://メンバ変数
 	ID3D12CommandAllocator* commandAllocator_;
 	ID3D12CommandQueue* commandQueue_;
 	ID3D12GraphicsCommandList* commandList_;
-	
+
 	//スワップチェーン関連
 	IDXGISwapChain4* swapChain_;
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc_{};
@@ -72,20 +72,26 @@ private://メンバ変数
 	//球
 	const uint32_t kSubdivision_ = 16;//分割数
 	const uint32_t  shpereVertexNum_ = 1536;
-	//Resource
-	ID3D12Resource* vertexResource_;
-	ID3D12Resource* wvpResouce_;
-	ID3D12Resource* vertexResourceSprite_;
-	ID3D12Resource* transformationMatrixResourceSprite_;
-	TransformationMatrix* wvpDate_;
-	TransformationMatrix* transformationMatrixDataSprite_;
 
+	//リソース******************************************************************
 	//Material
 	ID3D12Resource* materialResource_;
-	ID3D12Resource* directionalLightResource_;
-	DirectionalLight* directionalLightData_;
-	ID3D12Resource* directionalLightResourceSprite_;
 	ID3D12Resource* materialResourceSprite_;
+	//平行光源
+	ID3D12Resource* directionalLightResource_;
+	ID3D12Resource* directionalLightResourceSprite_;
+	DirectionalLight* directionalLightData_;
+	//頂点リソース
+	ID3D12Resource* vertexResource_;
+	ID3D12Resource* vertexResourceSprite_;
+	//wvpリソース
+	ID3D12Resource* wvpResouce_;
+	ID3D12Resource* wvpResourceSprite_;
+	TransformationMatrix* wvpDate_;
+	TransformationMatrix* wvpDataSprite_;
+	//indexリソース
+	ID3D12Resource* indexResourceSprite_;
+	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite_{};
 
 	//DescriptorSize
 	uint32_t descriptorSizeSRV_;
@@ -97,8 +103,8 @@ private://メンバ変数
 	UINT backBufferIndex_;
 
 	//後に消すかも
-	bool useMonsterBall=true;
-	
+	bool useMonsterBall = true;
+
 
 private://メンバ関数
 
@@ -118,8 +124,8 @@ private://メンバ関数
 	void CreateSwapChain();
 
 	/// <summary>
-    /// レンダーターゲットビューの生成
-    /// </summary>
+	/// レンダーターゲットビューの生成
+	/// </summary>
 	void CreateRenderTargetView();
 
 	/// <summary>
@@ -131,7 +137,7 @@ private://メンバ関数
 	/// フェンスの生成
 	/// </summary>
 	void CreateFence();
-	
+
 	/// <summary>
 	/// dxcCompilerの初期化
 	/// </summary>
@@ -153,7 +159,7 @@ public://メンバ関数
 	//レンダリングパイプライン
 	/// </summary>	
 	void CreateGraphicPipelene();
-	
+
 	/// <summary>
 	//画面のクリア
 	/// </summary>	
@@ -190,7 +196,7 @@ public://メンバ関数
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
-	
+
 	//getter
 	// デバイス初期化関連
 	ID3D12Device* GetDevice()const { return device_; }
@@ -198,7 +204,7 @@ public://メンバ関数
 	DXGI_SWAP_CHAIN_DESC1 GetSwapChainDesc()const { return swapChainDesc_; }
 	//レンダーターゲットビュー 
 	D3D12_RENDER_TARGET_VIEW_DESC GetRtvDesc()const { return rtvDesc_; }
-	
+
 	//dxcCompilerの初期化関連
 	IDxcUtils* GetDxcUtils()const { return dxcUtils_; }
 	IDxcCompiler3* GetDxcCompiler()const { return dxcCompiler_; }
@@ -207,11 +213,11 @@ public://メンバ関数
 	uint32_t GetDescriptorSizeSRV()const { return descriptorSizeSRV_; }
 	uint32_t GetDescriptorSizeRTV()const { descriptorSizeRTV_; }
 	uint32_t GetDescriptorSizeDSV()const { return descriptorSizeDSV_; }
-	
+
 	//setter
 	void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
 	void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
-	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->transformationMatrixDataSprite_->WVP = date; }
-	void SetWorldMatrixDataSprite(Matrix4x4 date) { this->transformationMatrixDataSprite_->World = date; }
+	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->WVP = date; }
+	void SetWorldMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->World = date; }
 
 };

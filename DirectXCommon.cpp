@@ -589,33 +589,44 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//スプライト**************************************************************************************************
 
 	//Sprite用の頂点リソースを作る
-	vertexResourceSprite_ = CreateBufferResource(device_, sizeof(VertexData) * 6);
+	vertexResourceSprite_ = CreateBufferResource(device_, sizeof(VertexData) * 4);
 	//頂点バッファビューを作成する
 	vertexBufferViewSprite_ = {};
 	//リソースの先頭のアドレスから使う
 	vertexBufferViewSprite_.BufferLocation = vertexResourceSprite_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点6つ分ののサイズ
-	vertexBufferViewSprite_.SizeInBytes = sizeof(VertexData) * 6;
+	vertexBufferViewSprite_.SizeInBytes = sizeof(VertexData) * 4;
 	//頂点当たりのサイズ
 	vertexBufferViewSprite_.StrideInBytes = sizeof(VertexData);
 
 	VertexData* vertexDataSprite = nullptr;
 	vertexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite));
-	//一枚目の三角形
-	vertexDataSprite[0].position = { 0.0f,360,0.0f,1.0f };//左下
-	vertexDataSprite[0].texcoord = { 0.0f,1.0f };
-	vertexDataSprite[1].position = { 0.0f,0.0f,0.0f,1.0f };//左上
-	vertexDataSprite[1].texcoord = { 0.0f,0.0f };
-	vertexDataSprite[2].position = { 640.0f,360,0.0f,1.0f };//右下
-	vertexDataSprite[2].texcoord = { 1.0f,1.0f };
-	//二枚目の三角形
-	vertexDataSprite[3].position = { 0.0f,0.0f,0.0f,1.0f };//左下
-	vertexDataSprite[3].texcoord = { 0.0f,0.0f };
-	vertexDataSprite[4].position = { 640.0f,0.0f,0.0f,1.0f };//左上
-	vertexDataSprite[4].texcoord = { 1.0f,0.0f };
-	vertexDataSprite[5].position = { 640.0f,360,0.0f,1.0f };//右下
-	vertexDataSprite[5].texcoord = { 1.0f,1.0f };
-	//Sprite用のTransformationMatrix用のリソースを作る。matrix4x4　１つ分のサイズを用意する
+	//頂点データ
+	vertexDataSprite[0].position = { 0.0f, 360.0f, 0.0f, 1.0f }; // 左下
+	vertexDataSprite[0].texcoord = { 0.0f, 1.0f };
+	vertexDataSprite[1].position = { 0.0f, 0.0f, 0.0f, 1.0f };  // 左上
+	vertexDataSprite[1].texcoord = { 0.0f, 0.0f };
+	vertexDataSprite[2].position = { 640.0f, 360.0f, 0.0f, 1.0f }; // 右下
+	vertexDataSprite[2].texcoord = { 1.0f, 1.0f };
+	vertexDataSprite[3].position = { 640.0f, 0.0f, 0.0f, 1.0f }; // 右上
+	vertexDataSprite[3].texcoord = { 1.0f, 0.0f };
+
+	/*Sprite用のTransformationMatrix用のリソースを作る。matrix4x4　１つ分のサイズを用意する
+	*/
+	//頂点インデックス
+	indexResourceSprite_ = CreateBufferResource(device_, sizeof(uint32_t) * 6);
+
+	//リソースの先頭アドレスから使う
+	indexBufferViewSprite_.BufferLocation = indexResourceSprite_->GetGPUVirtualAddress();
+	//使用するリソースのサイズはインデックス6つ分のサイズ
+	indexBufferViewSprite_.SizeInBytes = sizeof(uint32_t) * 6;
+	//インデックスはuint32_tとする
+	indexBufferViewSprite_.Format = DXGI_FORMAT_R32_UINT;
+	//インデックスリソースにデータを書き込む
+	uint32_t* indexDataSprite = nullptr;
+	indexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSprite));
+	indexDataSprite[0] = 0; indexDataSprite[1] = 1; indexDataSprite[2] = 2;
+	indexDataSprite[3] = 1; indexDataSprite[4] = 3; indexDataSprite[5] = 2;
 
 	//マテリアル--------------------------------------------------------------------------------------
 	materialResourceSprite_ = CreateBufferResource(GetDevice(), sizeof(Material));
@@ -636,14 +647,15 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//directionalLightDataSprite->direction = { 0.0f,-1.0f,0.0f };
 	//directionalLightDataSprite->intensity = 1.0f;
 	//行列----------------------------------------------------------------------------------------------------------
-	transformationMatrixResourceSprite_ = CreateBufferResource(device_, sizeof(TransformationMatrix));
+	wvpResourceSprite_ = CreateBufferResource(device_, sizeof(TransformationMatrix));
 	//データを書き込む
-	transformationMatrixDataSprite_ = nullptr;
+	wvpDataSprite_ = nullptr;
 	//書き込むためのアドレスを取得
-	transformationMatrixResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite_));
+	wvpResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&wvpDataSprite_));
 	//単位行列を書き込んでおく
-	transformationMatrixDataSprite_->World = MakeIdentity4x4();
-	transformationMatrixDataSprite_->WVP = MakeIdentity4x4();
+	wvpDataSprite_->World = MakeIdentity4x4();
+	wvpDataSprite_->WVP = MakeIdentity4x4();
+	
 	//スプライト**************************************************************************************************
 	// 
 	//ビューポート
@@ -721,16 +733,18 @@ void DirectXCommon::CommandKick() {
 	//描画(DrawCall/ドローコール)
 	commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);
 
-	//Spriteの描画。変更が必要なものだけ変更する
+	////Spriteの描画。変更が必要なものだけ変更する
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferViewSprite_);
+	commandList_->IASetIndexBuffer(&indexBufferViewSprite_);//IBVを設定
 	//TransformationmatrixCBufferの場所を設定
 	commandList_->SetGraphicsRootConstantBufferView(0, materialResourceSprite_->GetGPUVirtualAddress());
-	commandList_->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(1, wvpResourceSprite_->GetGPUVirtualAddress());
 	commandList_->SetGraphicsRootDescriptorTable(2, textureManager_->GetTextureSrvHandleGPU());
 	/*commandList_->SetGraphicsRootConstantBufferView(3, directionalLightResourceSprite_->GetGPUVirtualAddress());*/
 
 	//描画(DrawCall/ドローコール)
-	commandList_->DrawInstanced(6, 1, 0, 0);
+	commandList_->DrawIndexedInstanced(6, 1, 0, 0,0);
+	//commandList_->DrawInstanced(6, 1, 0, 0);
 
 #ifdef _DEBUG
 	//実際のcommandListのImGuiの描画コマンドを積む
@@ -836,9 +850,10 @@ void DirectXCommon::ReleaseObject() {
 	dxgiFactory_->Release();
 	vertexResource_->Release();
 	vertexResourceSprite_->Release();
+	indexResourceSprite_->Release();
 	directionalLightResource_->Release();
 	/*directionalLightResourceSprite_->Release();*/
-	transformationMatrixResourceSprite_->Release();
+	wvpResourceSprite_->Release();
 	materialResource_->Release();
 	materialResourceSprite_->Release();
 	wvpResouce_->Release();
