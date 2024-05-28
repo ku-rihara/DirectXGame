@@ -38,11 +38,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::DragFloat3("Rotate", &cameraTransform.rotate.x, 0.1f);
 		ImGui::DragFloat3("Translate", &cameraTransform.translate.x, 0.1f);
 		ImGui::End();
-		ImGui::Begin("TransformSprite");
-		ImGui::DragFloat3("Scale", &transformSprite.scale.x, 0.1f);
-		ImGui::DragFloat3("Rotate", &transformSprite.rotate.x, 0.1f);
-		ImGui::DragFloat3("Translate", &transformSprite.translate.x, 0.1f);
-		ImGui::End();
 #endif
 		//tramsform.rotate.y += 0.03f;
 		Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
@@ -54,12 +49,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 		
 		//スプライト
-		Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale, transformSprite.rotate, transformSprite.translate);
-		Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
-		Matrix4x4 projectionMatrixSprite=MakeOrthographicMatrix(0.0f,0.0f, float(WinApp::kWindowWidth),float(WinApp::kWindowHeight), 0.0f, 100.0f);
-		Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite, projectionMatrixSprite);
+	
 		dxcommon->SetwvpDate(worldViewProjectionMatrix);
-		dxcommon->SetTransformationMatrixDataSprite(worldViewProjectionMatrixSprite);
 		
 		//フレームの終了
 		Keta::EndFrame();

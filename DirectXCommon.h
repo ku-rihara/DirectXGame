@@ -76,24 +76,21 @@ private://メンバ変数
 	//リソース******************************************************************
 	//Material
 	ID3D12Resource* materialResource_;
-	ID3D12Resource* materialResourceSprite_;
+
 	//平行光源
 	ID3D12Resource* directionalLightResource_;
-	ID3D12Resource* directionalLightResourceSprite_;
+	
 	DirectionalLight* directionalLightData_;
 	//頂点リソース
 	ID3D12Resource* vertexResource_;
-	ID3D12Resource* vertexResourceSprite_;
 	//wvpリソース
 	ID3D12Resource* wvpResouce_;
-	ID3D12Resource* wvpResourceSprite_;
 	TransformationMatrix* wvpDate_;
-	TransformationMatrix* wvpDataSprite_;
+
 	//indexリソース
 	ID3D12Resource* indexResource_;
 	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
-	ID3D12Resource* indexResourceSprite_;
-	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite_{};
+
 
 	//DescriptorSize
 	uint32_t descriptorSizeSRV_;
@@ -219,7 +216,6 @@ public://メンバ関数
 	//setter
 	void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
 	void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
-	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->WVP = date; }
-	void SetWorldMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->World = date; }
+
 
 };
