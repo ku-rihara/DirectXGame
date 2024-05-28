@@ -455,128 +455,56 @@ void DirectXCommon::CreateGraphicPipelene() {
 
 	//三角形***********************************************************************************************************************
 	//VertexBufferViewを作成する	
-	vertexResource_ = CreateBufferResource(GetDevice(), sizeof(VertexData) * shpereVertexNum_);
+	vertexResource_ = CreateBufferResource(GetDevice(), sizeof(VertexData) * 3);
 	//頂点バッファビューを作成する
 	vertexBufferView_ = {};
 	//リソースの先頭アドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(VertexData) * shpereVertexNum_;
+	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 3;
 	//頂点当たりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 	//頂点リソースにデータを書き込む
-	VertexData* vertexDate = nullptr;
+	VertexData* vertexData = nullptr;
 	//書き込むためのアドレスを取得
-	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate));
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 
 	//頂点インデックス
-	indexResource_ = CreateBufferResource(device_, sizeof(uint32_t) * shpereVertexNum_);
-
+	indexResource_ = CreateBufferResource(device_, sizeof(uint32_t) * 3);
 	//リソースの先頭アドレスから使う
 	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズはインデックス6つ分のサイズ
-	indexBufferView_.SizeInBytes = sizeof(uint32_t) * shpereVertexNum_;
+	indexBufferView_.SizeInBytes = sizeof(uint32_t) * 3;
 	//インデックスはuint32_tとする
 	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
 	//インデックスリソースにデータを書き込む
-	uint32_t* indexData = nullptr;
-	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData));
-
-	float pi = 3.1415926535f;//π
-	//経度分割1つ分の角度φ
-	const float kLonEvery = pi * 2.0f / float(kSubdivision_);
-	//緯度分割1つ分の角度φ
-	const float kLatEvery = pi / float(kSubdivision_);
-	vertexDate[0].normal = { 0.0f,0.0f,-1.0f };
-	for (uint32_t latIndex = 0; latIndex < kSubdivision_; latIndex++) {	//緯度の方向に分割
-		float lat = -pi / 2.0f + kLatEvery * latIndex;//θ
-		float v = 1.0f - float(latIndex) / float(kSubdivision_);
-
-		for (uint32_t lonIndex = 0; lonIndex < kSubdivision_; ++lonIndex) {//経度の方向に分割しながら
-			float u = float(lonIndex) / float(kSubdivision_);
-			uint32_t start = (latIndex * kSubdivision_ + lonIndex) * 6;
-			float lon = lonIndex * kLonEvery;//φ
-			//下
-			vertexDate[start].position.x = cos(lat) * cos(lon);
-			vertexDate[start].position.y = sin(lat);
-			vertexDate[start].position.z = cos(lat) * sin(lon);
-			vertexDate[start].position.w = 1.0f;
-			vertexDate[start].texcoord = { u,v };
-			vertexDate[start].normal.x = vertexDate[start].position.x;
-			vertexDate[start].normal.y = vertexDate[start].position.y;
-			vertexDate[start].normal.z = vertexDate[start].position.z;
-			indexData[start] = start;
-
-			//b
-			vertexDate[start + 1].position.x = cos(lat + kLatEvery) * cos(lon);
-			vertexDate[start + 1].position.y = sin(lat + kLatEvery);
-			vertexDate[start + 1].position.z = cos(lat + kLatEvery) * sin(lon);
-			vertexDate[start + 1].position.w = 1.0f;
-			vertexDate[start + 1].texcoord = { u, v - (1.0f / float(kSubdivision_)) };
-			vertexDate[start + 1].normal.x = vertexDate[start + 1].position.x;
-			vertexDate[start + 1].normal.y = vertexDate[start + 1].position.y;
-			vertexDate[start + 1].normal.z = vertexDate[start + 1].position.z;
-			indexData[start+1] = start+1;
-			//c
-			vertexDate[start + 2].position.x = cos(lat) * cos(lon + kLonEvery);
-			vertexDate[start + 2].position.y = sin(lat);
-			vertexDate[start + 2].position.z = cos(lat) * sin(lon + kLonEvery);
-			vertexDate[start + 2].position.w = 1.0f;
-			vertexDate[start + 2].texcoord = { u + (1.0f / float(kSubdivision_)), v };
-			vertexDate[start + 2].normal.x = vertexDate[start + 2].position.x;
-			vertexDate[start + 2].normal.y = vertexDate[start + 2].position.y;
-			vertexDate[start + 2].normal.z = vertexDate[start + 2].position.z;
-			indexData[start + 2] = start + 2;
-			//上//b
-			vertexDate[start + 3].position.x = cos(lat + kLatEvery) * cos(lon);
-			vertexDate[start + 3].position.y = sin(lat + kLatEvery);
-			vertexDate[start + 3].position.z = cos(lat + kLatEvery) * sin(lon);
-			vertexDate[start + 3].position.w = 1.0f;
-			vertexDate[start + 3].texcoord = { u, v - (1.0f / float(kSubdivision_)) };
-			vertexDate[start + 3].normal.x = vertexDate[start + 3].position.x;
-			vertexDate[start + 3].normal.y = vertexDate[start + 3].position.y;
-			vertexDate[start + 3].normal.z = vertexDate[start + 3].position.z;
-			indexData[start + 3] = start + 3;
-			//d
-			vertexDate[start + 4].position.x = cos(lat + kLatEvery) * cos(lon + kLonEvery);
-			vertexDate[start + 4].position.y = sin(lat + kLatEvery);
-			vertexDate[start + 4].position.z = cos(lat + kLatEvery) * sin(lon + kLonEvery);
-			vertexDate[start + 4].position.w = 1.0f;
-			vertexDate[start + 4].texcoord = { u + (1.0f / float(kSubdivision_)), v - (1.0f / float(kSubdivision_)) };
-			vertexDate[start + 4].normal.x = vertexDate[start + 4].position.x;
-			vertexDate[start + 4].normal.y = vertexDate[start + 4].position.y;
-			vertexDate[start + 4].normal.z = vertexDate[start + 4].position.z;
-			indexData[start + 4] = start + 4;
-			//c
-			vertexDate[start + 5].position.x = cos(lat) * cos(lon + kLonEvery);
-			vertexDate[start + 5].position.y = sin(lat);
-			vertexDate[start + 5].position.z = cos(lat) * sin(lon + kLonEvery);
-			vertexDate[start + 5].position.w = 1.0f;
-			vertexDate[start + 5].texcoord = { u + (1.0f / float(kSubdivision_)), v };
-			vertexDate[start + 5].normal.x = vertexDate[start + 5].position.x;
-			vertexDate[start + 5].normal.y = vertexDate[start + 5].position.y;
-			vertexDate[start + 5].normal.z = vertexDate[start + 5].position.z;
-			indexData[start + 5] = start + 5;
-		}
-	}
-
+	uint32_t* indexVertexData = nullptr;
+	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexVertexData));
 	
-
 	////上
-	//vertexDate[1].position = { 0.0f,0.5f,0.0f,1.0f };
-	//vertexDate[1].texcoord = { 0.5f,0.0f };
-	////右下
-	//vertexDate[2].position = { 0.5f,-0.5f,0.0f,1.0f };
-	//vertexDate[2].texcoord = { 1.0f,1.0f };
-	////左下2
-	//vertexDate[3].position = { -0.5f,-0.5f,0.5f,1.0f };
-	//vertexDate[3].texcoord = { 0.0f,1.0f };
-	////上2
-	//vertexDate[4].position = { 0.0f,0.0f,0.0f,1.0f };
-	//vertexDate[4].texcoord = { 0.5f,0.0f };
-	////右下2
-	//vertexDate[5].position = { 0.5f,-0.5f,-0.5f,1.0f };
-	//vertexDate[5].texcoord = { 1.0f,1.0f };
+	vertexData[0].position = { -0.5f,-0.5f,0.0f,1.0f };
+	vertexData[0].texcoord = { 0.0f,1.0f };
+	vertexData[0].normal.x = vertexData[0].position.x;
+	vertexData[0].normal.y = vertexData[0].position.y;
+	vertexData[0].normal.z = vertexData[0].position.z;
+	//右下
+	vertexData[1].position = { 0.0f,0.5f,0.0f,1.0f };
+	vertexData[1].texcoord = { 0.5f,0.0f };
+	vertexData[1].normal.x = vertexData[1].position.x;
+	vertexData[1].normal.y = vertexData[1].position.y;
+	vertexData[1].normal.z = vertexData[1].position.z;
+	//左下2
+	vertexData[2].position = { 0.5f,-0.5f,0.0f,1.0f };
+	vertexData[2].texcoord = { 1.0f,1.0f };
+	vertexData[2].normal.x = vertexData[2].position.x;
+	vertexData[2].normal.y = vertexData[2].position.y;
+	vertexData[2].normal.z = vertexData[2].position.z;
+
+	//index
+	indexVertexData[0] = 0;
+	indexVertexData[1] = 1;
+	indexVertexData[2] = 2;
+	
 
 	//マテリアル--------------------------------------------------------------------------------------
 	materialResource_ = CreateBufferResource(GetDevice(), sizeof(Material));
@@ -605,14 +533,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//単位行列を書き込んでおく
 	wvpDate_->WVP = MakeIdentity4x4();
 	wvpDate_->World = MakeIdentity4x4();
-	//三角形****************************************************************************************
-
-	//スプライト**************************************************************************************************
-
-	
-	
-	//スプライト**************************************************************************************************
-	// 
+	//三角形**************************************************************************************** 
 	//ビューポート
 	//クライアント領域のサイズと一緒にして画面全体に表示
 	viewport_.Width = WinApp::kWindowWidth;
@@ -688,7 +609,7 @@ void DirectXCommon::CommandKick() {
 
 	//描画(DrawCall/ドローコール)
 	/*commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);*/
-	commandList_->DrawIndexedInstanced(shpereVertexNum_, 1, 0, 0, 0);
+	commandList_->DrawIndexedInstanced(3, 1, 0, 0, 0);
 
 #ifdef _DEBUG
 	//実際のcommandListのImGuiの描画コマンドを積む
