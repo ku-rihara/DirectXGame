@@ -12,7 +12,7 @@
 //struct
 #include"TransformationMatrix.h"
 #include"DirectionalLight.h"
-
+const int triangleNum = 10;
 class DirectXCommon {
 private://メンバ変数
 
@@ -66,31 +66,24 @@ private://メンバ変数
 	IDxcBlob* vertexShaderBlob_;
 	IDxcBlob* pixelShaderBlob_;
 	ID3D12PipelineState* graphicsPipelineState_;
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite_;
-
-	//球
-	const uint32_t kSubdivision_ = 16;//分割数
-	const uint32_t  shpereVertexNum_ = 1536;
-
-	//リソース******************************************************************
-	//Material
-	ID3D12Resource* materialResource_;
-
-	//平行光源
-	ID3D12Resource* directionalLightResource_;
 	
-	DirectionalLight* directionalLightData_;
+	
+	//リソース******************************************************************
+    D3D12_VERTEX_BUFFER_VIEW vertexBufferView_[triangleNum];
+	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
+	//Material
+	ID3D12Resource* materialResource_[triangleNum];
+	//平行光源
+	ID3D12Resource* directionalLightResource_[triangleNum];
 	//頂点リソース
 	ID3D12Resource* vertexResource_;
 	//wvpリソース
 	ID3D12Resource* wvpResouce_;
-	TransformationMatrix* wvpDate_;
-
 	//indexリソース
 	ID3D12Resource* indexResource_;
-	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
-
+	//データ*************************************************************************
+	DirectionalLight* directionalLightData_;
+	TransformationMatrix* wvpDate_;
 
 	//DescriptorSize
 	uint32_t descriptorSizeSRV_;

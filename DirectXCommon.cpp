@@ -457,13 +457,13 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//VertexBufferViewを作成する	
 	vertexResource_ = CreateBufferResource(GetDevice(), sizeof(VertexData) * 3);
 	//頂点バッファビューを作成する
-	vertexBufferView_ = {};
+	vertexBufferView_[0] = {};
 	//リソースの先頭アドレスから使う
-	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	vertexBufferView_[0].BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 3;
+	vertexBufferView_[0].SizeInBytes = sizeof(VertexData) * 3;
 	//頂点当たりのサイズ
-	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+	vertexBufferView_[0].StrideInBytes = sizeof(VertexData);
 	//頂点リソースにデータを書き込む
 	VertexData* vertexData = nullptr;
 	//書き込むためのアドレスを取得
@@ -481,6 +481,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	uint32_t* indexVertexData = nullptr;
 	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexVertexData));
 	
+	//正面----------------------------------------------------------------
 	////上
 	vertexData[0].position = { -0.5f,-0.5f,0.0f,1.0f };
 	vertexData[0].texcoord = { 0.0f,1.0f };
@@ -499,6 +500,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	vertexData[2].normal.x = vertexData[2].position.x;
 	vertexData[2].normal.y = vertexData[2].position.y;
 	vertexData[2].normal.z = vertexData[2].position.z;
+	//
 
 	//index
 	indexVertexData[0] = 0;
@@ -570,7 +572,7 @@ void DirectXCommon::ScreenClear() {
 	//描画先のRTVを設定する
 	ClearDepthBuffer();
 	//指定した色で画面全体をクリアする
-	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色、RGBAの順
+	float clearColor[] = { 0.0f,0.0f,0.0f,1.0f };//黒背景
 	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex_], clearColor, 0, nullptr);
 	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
 	ID3D12DescriptorHeap* descriptorHeaps[] = { imguiManager_->GetSrvDescriptorHeap() };
@@ -597,8 +599,8 @@ void DirectXCommon::ScreenClear() {
 
 //フレーム終わり
 void DirectXCommon::CommandKick() {
-
-	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	
+	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_[0]);
 	commandList_->IASetIndexBuffer(&indexBufferView_);//IBV
 	//形状を設定
 	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -628,7 +630,6 @@ void DirectXCommon::CommandKick() {
 	//GPUにコマンドリストの実行を行わせる
 	ID3D12CommandList* commandLists[] = { commandList_ };
 	commandQueue_->ExecuteCommandLists(1, commandLists);
-
 
 	//GPUとOSに画面の交換を行うよう通知する
 	swapChain_->Present(1, 0);
