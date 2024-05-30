@@ -414,8 +414,8 @@ void DirectXCommon::CreateGraphicPipelene() {
 
 	//RasterizerStateの設定
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
-	//裏面を表示しない
-	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
+	//裏面を表示する
+	rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
 	//三角形の色を塗りつぶす
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
@@ -455,26 +455,26 @@ void DirectXCommon::CreateGraphicPipelene() {
 
 	//三角形***********************************************************************************************************************
 	//VertexBufferViewを作成する	
-	vertexResource_ = CreateBufferResource(GetDevice(), sizeof(VertexData) * 3);
+	vertexResource_ = CreateBufferResource(GetDevice(), sizeof(VertexData) * 3*triangleNum);
 	//頂点バッファビューを作成する
-	vertexBufferView_[0] = {};
+	vertexBufferView_ = {};
 	//リソースの先頭アドレスから使う
-	vertexBufferView_[0].BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView_[0].SizeInBytes = sizeof(VertexData) * 3;
+	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 3*triangleNum;
 	//頂点当たりのサイズ
-	vertexBufferView_[0].StrideInBytes = sizeof(VertexData);
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 	//頂点リソースにデータを書き込む
 	VertexData* vertexData = nullptr;
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 
 	//頂点インデックス
-	indexResource_ = CreateBufferResource(device_, sizeof(uint32_t) * 3);
+	indexResource_ = CreateBufferResource(device_, sizeof(uint32_t) * 3 * triangleNum);
 	//リソースの先頭アドレスから使う
 	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズはインデックス6つ分のサイズ
-	indexBufferView_.SizeInBytes = sizeof(uint32_t) * 3;
+	indexBufferView_.SizeInBytes = sizeof(uint32_t) * 3 * triangleNum;
 	//インデックスはuint32_tとする
 	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
 	//インデックスリソースにデータを書き込む
@@ -509,14 +509,18 @@ void DirectXCommon::CreateGraphicPipelene() {
 	
 
 	//マテリアル--------------------------------------------------------------------------------------
-	materialResource_ = CreateBufferResource(GetDevice(), sizeof(Material));
-	//マテリアルにデータを書き込む
-	Material* materialDate = nullptr;
-	//書き込むためのアドレスを取得
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialDate));
-	//今回は赤を書き込む
-	materialDate->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	materialDate->enableLighting = true;
+	Material* materialDate[triangleNum];
+	for (int i = 0; i < triangleNum; i++) {
+		materialResource_[i] = CreateBufferResource(GetDevice(), sizeof(Material));
+		//マテリアルにデータを書き込む
+		materialDate[i] = nullptr;
+		//書き込むためのアドレスを取得
+		materialResource_[i]->Map(0, nullptr, reinterpret_cast<void**>(&materialDate[i]));
+		//色を書き込む
+		materialDate[i]->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		//ライティングしない
+		materialDate[i]->enableLighting = false;
+	}
 	//平行光源--------------------------------------------------------------------------------------------------
 	directionalLightResource_ = CreateBufferResource(GetDevice(), sizeof(DirectionalLight));
 	//データ書き込む
@@ -527,14 +531,16 @@ void DirectXCommon::CreateGraphicPipelene() {
 	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
 	directionalLightData_->intensity = 1.0f;
 	//行列--------------------------------------------------------------------------------------------------------
-	wvpResouce_ = CreateBufferResource(GetDevice(), sizeof(TransformationMatrix));
-	//データを書き込む
-	wvpDate_ = nullptr;
-	//書き込むためのアドレスを取得
-	wvpResouce_->Map(0, nullptr, reinterpret_cast<void**>(&wvpDate_));
-	//単位行列を書き込んでおく
-	wvpDate_->WVP = MakeIdentity4x4();
-	wvpDate_->World = MakeIdentity4x4();
+	for (int i = 0; i < triangleNum; i++) {
+		wvpResouce_[i] = CreateBufferResource(GetDevice(), sizeof(TransformationMatrix));
+		//データを書き込む
+		wvpDate_[i] = nullptr;
+		//書き込むためのアドレスを取得
+		wvpResouce_[i]->Map(0, nullptr, reinterpret_cast<void**>(&wvpDate_[i]));
+		//単位行列を書き込んでおく
+		wvpDate_[i]->WVP = MakeIdentity4x4();
+		wvpDate_[i]->World = MakeIdentity4x4();
+	}
 	//三角形**************************************************************************************** 
 	//ビューポート
 	//クライアント領域のサイズと一緒にして画面全体に表示
@@ -572,7 +578,7 @@ void DirectXCommon::ScreenClear() {
 	//描画先のRTVを設定する
 	ClearDepthBuffer();
 	//指定した色で画面全体をクリアする
-	float clearColor[] = { 0.0f,0.0f,0.0f,1.0f };//黒背景
+	float clearColor[] = { 0.0f,0.2f,0.25f,1.0f };//黒背景
 	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex_], clearColor, 0, nullptr);
 	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
 	ID3D12DescriptorHeap* descriptorHeaps[] = { imguiManager_->GetSrvDescriptorHeap() };
@@ -600,18 +606,19 @@ void DirectXCommon::ScreenClear() {
 //フレーム終わり
 void DirectXCommon::CommandKick() {
 	
-	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_[0]);
+	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	commandList_->IASetIndexBuffer(&indexBufferView_);//IBV
 	//形状を設定
 	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	commandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	commandList_->SetGraphicsRootConstantBufferView(1, wvpResouce_->GetGPUVirtualAddress());
-	commandList_->SetGraphicsRootDescriptorTable(2, useMonsterBall ? textureManager_->GetTextureSrvHandleGPU2() : textureManager_->GetTextureSrvHandleGPU());
-	commandList_->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
-
-	//描画(DrawCall/ドローコール)
-	/*commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);*/
-	commandList_->DrawIndexedInstanced(3, 1, 0, 0, 0);
+	for (int i = 0; i < triangleNum; i++) {
+		commandList_->SetGraphicsRootConstantBufferView(0, materialResource_[i]->GetGPUVirtualAddress());
+		commandList_->SetGraphicsRootConstantBufferView(1, wvpResouce_[i]->GetGPUVirtualAddress());
+		commandList_->SetGraphicsRootDescriptorTable(2, useMonsterBall ? textureManager_->GetTextureSrvHandleGPU2() : textureManager_->GetTextureSrvHandleGPU());
+		commandList_->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+		//描画(DrawCall/ドローコール)
+		/*commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);*/
+		commandList_->DrawIndexedInstanced(3, 1, 0, 0, 0);
+	}
 
 #ifdef _DEBUG
 	//実際のcommandListのImGuiの描画コマンドを積む
@@ -717,8 +724,10 @@ void DirectXCommon::ReleaseObject() {
 	vertexResource_->Release();
 	directionalLightResource_->Release();
 	indexResource_->Release();
-	materialResource_->Release();
-	wvpResouce_->Release();
+	for (int i = 0; i < triangleNum; i++) {
+		materialResource_[i]->Release();
+		wvpResouce_[i]->Release();
+	}
 	depthStencilResource_->Release();
 	dsvDescriptorHeap_->Release();
 	/*tr_->Release();*/

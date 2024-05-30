@@ -69,21 +69,21 @@ private://メンバ変数
 	
 	
 	//リソース******************************************************************
-    D3D12_VERTEX_BUFFER_VIEW vertexBufferView_[triangleNum];
-	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
+    D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
+	D3D12_INDEX_BUFFER_VIEW indexBufferView_;
 	//Material
 	ID3D12Resource* materialResource_[triangleNum];
 	//平行光源
-	ID3D12Resource* directionalLightResource_[triangleNum];
+	ID3D12Resource* directionalLightResource_;
 	//頂点リソース
 	ID3D12Resource* vertexResource_;
 	//wvpリソース
-	ID3D12Resource* wvpResouce_;
+	ID3D12Resource* wvpResouce_[triangleNum];
 	//indexリソース
 	ID3D12Resource* indexResource_;
 	//データ*************************************************************************
 	DirectionalLight* directionalLightData_;
-	TransformationMatrix* wvpDate_;
+	TransformationMatrix* wvpDate_[triangleNum];
 
 	//DescriptorSize
 	uint32_t descriptorSizeSRV_;
@@ -207,8 +207,8 @@ public://メンバ関数
 	uint32_t GetDescriptorSizeDSV()const { return descriptorSizeDSV_; }
 
 	//setter
-	void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
-	void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
+	void SetwvpDate(int num,Matrix4x4 date) { this->wvpDate_[num]->WVP = date; }
+	void SetWorldMatrixDate(int num, Matrix4x4 date) { wvpDate_[num]->World = date; }
 
 
 };
