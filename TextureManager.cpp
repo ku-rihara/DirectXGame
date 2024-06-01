@@ -89,6 +89,10 @@ void TextureManager::Load() {
 	mipImages2_ = LoadTexture("resources/monsterBall.png");
 	const DirectX::TexMetadata& metadata2 = mipImages2_.GetMetadata();
 	textureResource2_ = CreateTextureResource(directXCommon_->GetDevice(), metadata2);
+	//3
+	mipImages3_ = LoadTexture("resources/fillWhite.png");
+	const DirectX::TexMetadata& metadata3 = mipImages3_.GetMetadata();
+	textureResource3_ = CreateTextureResource(directXCommon_->GetDevice(), metadata3);
 	
 	//metaDataを基にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
@@ -102,6 +106,12 @@ void TextureManager::Load() {
 	srvDesc2.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc2.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc2.Texture2D.MipLevels = UINT(metadata2.mipLevels);
+	//3
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc3{};
+	srvDesc3.Format = metadata3.format;
+	srvDesc3.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc3.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc3.Texture2D.MipLevels = UINT(metadata3.mipLevels);
 
 	imguiManager_ = ImGuiManager::GetInstance();
 	//SRVを作成するDescriptorHeapの場所を決める
@@ -109,6 +119,8 @@ void TextureManager::Load() {
 	 textureSrvHandleGPU_ = imguiManager_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
 	 textureSrvHandleCPU2_ = directXCommon_->GetCPUDescriptorHandle(imguiManager_->GetSrvDescriptorHeap(), directXCommon_->GetDescriptorSizeSRV(), 2);
 	 textureSrvHandleGPU2_ = directXCommon_->GetGPUDescriptorHandle(imguiManager_->GetSrvDescriptorHeap(), directXCommon_->GetDescriptorSizeSRV(), 2);
+	 textureSrvHandleCPU3_ = directXCommon_->GetCPUDescriptorHandle(imguiManager_->GetSrvDescriptorHeap(), directXCommon_->GetDescriptorSizeSRV(), 3);
+	 textureSrvHandleGPU3_ = directXCommon_->GetGPUDescriptorHandle(imguiManager_->GetSrvDescriptorHeap(), directXCommon_->GetDescriptorSizeSRV(), 3);
 
 	//先頭はImGuiが使っているのでその次を使う
 	textureSrvHandleCPU_.ptr += directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
@@ -117,10 +129,12 @@ void TextureManager::Load() {
 	//SRVの生成
 	directXCommon_->GetDevice()->CreateShaderResourceView(textureResource_, &srvDesc, textureSrvHandleCPU_);
 	directXCommon_->GetDevice()->CreateShaderResourceView(textureResource2_, &srvDesc2, textureSrvHandleCPU2_);
+	directXCommon_->GetDevice()->CreateShaderResourceView(textureResource3_, &srvDesc3, textureSrvHandleCPU3_);
 
 }
 
 void TextureManager::ReleaseObject() {
 	textureResource_->Release();
 	textureResource2_->Release();
+	textureResource3_->Release();
 }

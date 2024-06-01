@@ -12,10 +12,15 @@
 //struct
 #include"TransformationMatrix.h"
 #include"DirectionalLight.h"
-const int triangleNum = 10;
+#include"Material.h"
+
+const int triangleNum = 252;
+const int frontTriangleNum = 200;
+const int BackTriangleNum = 50;
 class DirectXCommon {
 private://メンバ変数
-
+	bool isVideo_;
+	float clearColor[4];
 	//ウィンドウズアプリケーション管理
 	WinApp* winApp_;
 
@@ -84,6 +89,7 @@ private://メンバ変数
 	//データ*************************************************************************
 	DirectionalLight* directionalLightData_;
 	TransformationMatrix* wvpDate_[triangleNum];
+	Material* materialDate_[triangleNum];
 
 	//DescriptorSize
 	uint32_t descriptorSizeSRV_;
@@ -95,7 +101,7 @@ private://メンバ変数
 	UINT backBufferIndex_;
 
 	//後に消すかも
-	bool useMonsterBall = true;
+	bool useMonsterBall = false;
 
 
 private://メンバ関数
@@ -206,9 +212,10 @@ public://メンバ関数
 	uint32_t GetDescriptorSizeRTV()const { descriptorSizeRTV_; }
 	uint32_t GetDescriptorSizeDSV()const { return descriptorSizeDSV_; }
 
+	bool GetIsVideo()const { return isVideo_; }
 	//setter
 	void SetwvpDate(int num,Matrix4x4 date) { this->wvpDate_[num]->WVP = date; }
 	void SetWorldMatrixDate(int num, Matrix4x4 date) { wvpDate_[num]->World = date; }
-
+	void SetColor(int num, Vector4 color) { materialDate_[num]->color = color; }
 
 };

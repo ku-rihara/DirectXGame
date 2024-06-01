@@ -18,6 +18,12 @@ private:
     DirectX::ScratchImage mipImages2_;
     ID3D12Resource* textureResource2_;
 
+    //3
+    D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU3_;
+    D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU3_;
+    DirectX::ScratchImage mipImages3_;
+    ID3D12Resource* textureResource3_;
+
 
 public:
 
@@ -40,5 +46,9 @@ public:
     D3D12_GPU_DESCRIPTOR_HANDLE GetTextureSrvHandleGPU2()const { return textureSrvHandleGPU2_; }
     ID3D12Resource* GetTextureResource2()const { return textureResource2_; }
     const DirectX::ScratchImage& GetMipImages2() { return mipImages2_; }
+
+    D3D12_GPU_DESCRIPTOR_HANDLE GetTextureSrvHandleGPU3()const { return textureSrvHandleGPU3_; }
+    ID3D12Resource* GetTextureResource3()const { return textureResource3_; }
+    const DirectX::ScratchImage& GetMipImages3() { return mipImages3_; }
 };
 

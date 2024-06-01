@@ -8,7 +8,7 @@
 #include<cassert>
 //struct
 #include"VertexData.h"
-#include"Material.h"
+
 
 
 //
@@ -410,6 +410,13 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//BlendStateの設定
 	D3D12_BLEND_DESC blendDesc{};
 	//すべての色要素を書き込む
+	blendDesc.RenderTarget[0].BlendEnable = TRUE;
+	blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+	blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
 	//RasterizerStateの設定
@@ -455,13 +462,13 @@ void DirectXCommon::CreateGraphicPipelene() {
 
 	//三角形***********************************************************************************************************************
 	//VertexBufferViewを作成する	
-	vertexResource_ = CreateBufferResource(GetDevice(), sizeof(VertexData) * 3*triangleNum);
+	vertexResource_ = CreateBufferResource(GetDevice(), sizeof(VertexData) * 3 * triangleNum);
 	//頂点バッファビューを作成する
 	vertexBufferView_ = {};
 	//リソースの先頭アドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 3*triangleNum;
+	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 3 * triangleNum;
 	//頂点当たりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 	//頂点リソースにデータを書き込む
@@ -480,7 +487,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//インデックスリソースにデータを書き込む
 	uint32_t* indexVertexData = nullptr;
 	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexVertexData));
-	
+
 	//正面----------------------------------------------------------------
 	////上
 	vertexData[0].position = { -0.5f,-0.5f,0.0f,1.0f };
@@ -500,26 +507,26 @@ void DirectXCommon::CreateGraphicPipelene() {
 	vertexData[2].normal.x = vertexData[2].position.x;
 	vertexData[2].normal.y = vertexData[2].position.y;
 	vertexData[2].normal.z = vertexData[2].position.z;
-	//
 
 	//index
 	indexVertexData[0] = 0;
 	indexVertexData[1] = 1;
 	indexVertexData[2] = 2;
-	
 
 	//マテリアル--------------------------------------------------------------------------------------
-	Material* materialDate[triangleNum];
+
 	for (int i = 0; i < triangleNum; i++) {
 		materialResource_[i] = CreateBufferResource(GetDevice(), sizeof(Material));
 		//マテリアルにデータを書き込む
-		materialDate[i] = nullptr;
+		materialDate_[i] = nullptr;
 		//書き込むためのアドレスを取得
-		materialResource_[i]->Map(0, nullptr, reinterpret_cast<void**>(&materialDate[i]));
+		materialResource_[i]->Map(0, nullptr, reinterpret_cast<void**>(&materialDate_[i]));
 		//色を書き込む
-		materialDate[i]->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+
+		materialDate_[i]->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+
 		//ライティングしない
-		materialDate[i]->enableLighting = false;
+		materialDate_[i]->enableLighting = false;
 	}
 	//平行光源--------------------------------------------------------------------------------------------------
 	directionalLightResource_ = CreateBufferResource(GetDevice(), sizeof(DirectionalLight));
@@ -578,7 +585,18 @@ void DirectXCommon::ScreenClear() {
 	//描画先のRTVを設定する
 	ClearDepthBuffer();
 	//指定した色で画面全体をクリアする
-	float clearColor[] = { 0.0f,0.2f,0.25f,1.0f };//黒背景
+	if (!isVideo_) {
+		clearColor[0] = 0.1f;
+		clearColor[1] = 0.25f;
+		clearColor[2] = 0.5f;
+		clearColor[3] = 1.0f;
+	}
+	else {
+		clearColor[0] = 0.0f;
+		clearColor[1] = 0.0f;
+		clearColor[2] = 0.0f;
+		clearColor[3] = 1.0f;
+	}
 	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex_], clearColor, 0, nullptr);
 	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
 	ID3D12DescriptorHeap* descriptorHeaps[] = { imguiManager_->GetSrvDescriptorHeap() };
@@ -591,21 +609,21 @@ void DirectXCommon::ScreenClear() {
 	commandList_->SetPipelineState(graphicsPipelineState_);
 
 #ifdef _DEBUG
-	ImGui::Begin("useMonsterBall");
-	ImGui::Checkbox("useMonsterBall", &useMonsterBall);
-	ImGui::End();
-	ImGui::Begin("Lighting");
-	ImGui::ColorEdit4(" Color", (float*)&directionalLightData_->color);
-	ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
-	directionalLightData_->direction = Normnalize(directionalLightData_->direction);
-	ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
-	ImGui::End();
+	if (!isVideo_) {
+		ImGui::Begin("IsVideo");
+		ImGui::Checkbox("isVideo", &isVideo_);
+		ImGui::End();
+		ImGui::Begin("Window");
+		ImGui::Checkbox("IsMovterBall", &useMonsterBall);
+		
+		ImGui::End();
+	}
 #endif
 }
 
 //フレーム終わり
 void DirectXCommon::CommandKick() {
-	
+
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	commandList_->IASetIndexBuffer(&indexBufferView_);//IBV
 	//形状を設定
@@ -613,7 +631,12 @@ void DirectXCommon::CommandKick() {
 	for (int i = 0; i < triangleNum; i++) {
 		commandList_->SetGraphicsRootConstantBufferView(0, materialResource_[i]->GetGPUVirtualAddress());
 		commandList_->SetGraphicsRootConstantBufferView(1, wvpResouce_[i]->GetGPUVirtualAddress());
-		commandList_->SetGraphicsRootDescriptorTable(2, useMonsterBall ? textureManager_->GetTextureSrvHandleGPU2() : textureManager_->GetTextureSrvHandleGPU());
+		if (!isVideo_) {
+			commandList_->SetGraphicsRootDescriptorTable(2, useMonsterBall ? textureManager_->GetTextureSrvHandleGPU2() : textureManager_->GetTextureSrvHandleGPU());
+		}
+		else {
+			commandList_->SetGraphicsRootDescriptorTable(2, textureManager_->GetTextureSrvHandleGPU3());
+		}
 		commandList_->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 		//描画(DrawCall/ドローコール)
 		/*commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);*/
@@ -665,6 +688,7 @@ void DirectXCommon::commandExecution() {
 
 	ID3D12Resource* intermediateResource = TextureManager::GetInstance()->UploadTextureDate(textureManager_->GetTextureResource(), textureManager_->GetMipImages(), device_, commandList_);
 	ID3D12Resource* intermediateResource2 = TextureManager::GetInstance()->UploadTextureDate(textureManager_->GetTextureResource2(), textureManager_->GetMipImages2(), device_, commandList_);
+	ID3D12Resource* intermediateResource3 = TextureManager::GetInstance()->UploadTextureDate(textureManager_->GetTextureResource3(), textureManager_->GetMipImages3(), device_, commandList_);
 
 	hr_ = commandList_->Close();
 	assert(SUCCEEDED(hr_));
@@ -694,6 +718,7 @@ void DirectXCommon::commandExecution() {
 
 	intermediateResource->Release();
 	intermediateResource2->Release();
+	intermediateResource3->Release();
 }
 
 
