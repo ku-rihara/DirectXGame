@@ -51,9 +51,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float rotateY = 0.0f;
 	float alphaEaseTime[triangleNum]{};
 
-	//エミッター
+	//パーティクル関連
 	Emitter fromtEmitter{};
 	Emitter backEmitter{};
+	int collTime = 0;
 	bool is1Lap[triangleNum]{};
 	//三角形
 	Transform triangleTramsform[triangleNum]{};
@@ -72,6 +73,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		triangleTramsform[i].scale = { 1,1,1 };
 		triangleTramsform[triangleNum - 2].rotate = { 0.0f,-0.758f,0.008f };
 		triangleTramsform[triangleNum - 1].rotate = { 0.0f,0.758f,0.008f };
+		triangleTramsform[triangleNum - 2].translate = {};
+		triangleTramsform[triangleNum - 1].translate = {0,0.3f,0 };
 	}
 	cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,-5.0f} };
 
@@ -88,12 +91,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #ifdef _DEBUG
 			ImGui::Begin("Window");
 			ImGui::ColorEdit4("color", (float*)&color);
-			ImGui::DragFloat3("triangleTramsformScale1", &triangleTramsform[triangleNum-2].scale.x, 0.01f);
-			ImGui::DragFloat3("triangleTramsformRotate1", &triangleTramsform[triangleNum - 2].rotate.x, 0.01f);
-			ImGui::DragFloat3("triangleTramsformTranslate1", &triangleTramsform[triangleNum - 2].translate.x, 0.01f);
-			ImGui::DragFloat3("triangleTramsformScale2", &triangleTramsform[triangleNum - 1].scale.x, 0.01f);
-			ImGui::DragFloat3("triangleTramsformRotate2", &triangleTramsform[triangleNum - 1].rotate.x, 0.01f);
-			ImGui::DragFloat3("triangleTramsformTranslate2", &triangleTramsform[triangleNum - 1].translate.x, 0.01f);
+			if (ImGui::TreeNode("Triangle1")){
+				ImGui::DragFloat3("Scale", &triangleTramsform[triangleNum - 2].scale.x, 0.01f);
+				ImGui::DragFloat3("Rotate", &triangleTramsform[triangleNum - 2].rotate.x, 0.01f);
+				ImGui::DragFloat3("Translate", &triangleTramsform[triangleNum - 2].translate.x, 0.01f);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("Triangle2")) {
+				ImGui::DragFloat3("Scale", &triangleTramsform[triangleNum - 1].scale.x, 0.01f);
+				ImGui::DragFloat3("Rotate", &triangleTramsform[triangleNum - 1].rotate.x, 0.01f);
+				ImGui::DragFloat3("Translate", &triangleTramsform[triangleNum - 1].translate.x, 0.01f);
+				ImGui::TreePop();
+			}
 			ImGui::End();
 #endif
 			
@@ -148,6 +157,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//発生処理(背景Triangle)
 			for (int i = frontTriangleNum; i < triangleNum-2; i++) {
 				if (isStart[i] == false) {
+					collTime++;
 					//発生位置
 					backEmitter.pos = { 0,0,10 };
 					//スケール
@@ -162,9 +172,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					triangleTramsform[i].scale = { backEmitter.scale,backEmitter.scale,backEmitter.scale };
 					velocity[i] = backEmitter.velocity;
 					triangleDirection[i] = backEmitter.direction;
-					alpha[i] = 0.4f;
-
-					isStart[i] = true;
+					alpha[i] = 0.2f;
+					alphaEaseTime[i] = 0.0f;
+					//一定間隔ごとに発射
+					if (collTime >= 2) {
+						isStart[i] = true;
+						collTime = 0;					
+					}
+					break;
 				}
 
 			}
@@ -202,6 +217,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					triangleTramsform[i].translate.z += velocity[i].z * triangleDirection[i].z;
 					triangleTramsform[i].rotate.x += 0.01f;
 					triangleTramsform[i].rotate.y += 0.01f;
+
+					//一定範囲外にいったら消滅する
+					if (triangleTramsform[i].translate.x < -2.0f || triangleTramsform[i].translate.x > 2.0f ||
+						triangleTramsform[i].translate.y < -2.0f || triangleTramsform[i].translate.y > 2.0f) {
+						//透明度のイージング
+						alphaEaseTime[i] += 0.005f;
+						alphaEaseTime[i] = Clamp(alphaEaseTime[i], 0, 1);
+
+						alpha[i] = easeOutSine(alphaEaseTime[i], 0.2f, 0);
+						if (alphaEaseTime[i] >= 1.0f) {
+							isStart[i] = false;
+						}
+					}
 
 				}
 				dxcommon->SetColor(i, Vector4{ 0.25f,0.25f,0.25f,alpha[i] });//色指定

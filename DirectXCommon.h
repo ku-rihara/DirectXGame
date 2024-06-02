@@ -14,9 +14,9 @@
 #include"DirectionalLight.h"
 #include"Material.h"
 
-const int triangleNum = 252;
+const int triangleNum = 352;
 const int frontTriangleNum = 200;
-const int BackTriangleNum = 50;
+const int BackTriangleNum = 150;
 class DirectXCommon {
 private://メンバ変数
 	bool isVideo_;
