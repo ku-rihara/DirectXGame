@@ -153,17 +153,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					isStart[i] = true;
 				}
 			}
-
+			collTime++;
 			//発生処理(背景Triangle)
 			for (int i = frontTriangleNum; i < triangleNum-2; i++) {
 				if (isStart[i] == false) {
-					collTime++;
+					
 					//発生位置
-					backEmitter.pos = { 0,0,10 };
+					backEmitter.pos = { 0,0,3 };
 					//スケール
 					backEmitter.scale = float(distribBackScale(gen));
 					//向き
-					backEmitter.direction = Normnalize({ float(distribBackX(gen)),float(distribBackY(gen)) ,0 });
+					backEmitter.direction = Normnalize({ float(distribBackX(gen)),float(distribBackY(gen)) ,-0.0f });
 					//スピード
 					backEmitter.velocity = { float(distribBackSpeed(gen)),float(distribBackSpeed(gen)) ,float(distribBackSpeed(gen)) };
 					//代入**********************************+**************
@@ -217,10 +217,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					triangleTramsform[i].translate.z += velocity[i].z * triangleDirection[i].z;
 					triangleTramsform[i].rotate.x += 0.01f;
 					triangleTramsform[i].rotate.y += 0.01f;
+					triangleTramsform[i].rotate.z += 0.01f;
 
 					//一定範囲外にいったら消滅する
-					if (triangleTramsform[i].translate.x < -2.0f || triangleTramsform[i].translate.x > 2.0f ||
-						triangleTramsform[i].translate.y < -2.0f || triangleTramsform[i].translate.y > 2.0f) {
+					if (triangleTramsform[i].translate.x < -1.5f || triangleTramsform[i].translate.x > 1.5f ||
+						triangleTramsform[i].translate.y < -1.5f || triangleTramsform[i].translate.y > 1.5f) {
 						//透明度のイージング
 						alphaEaseTime[i] += 0.005f;
 						alphaEaseTime[i] = Clamp(alphaEaseTime[i], 0, 1);
@@ -232,7 +233,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 
 				}
-				dxcommon->SetColor(i, Vector4{ 0.25f,0.25f,0.25f,alpha[i] });//色指定
+				dxcommon->SetColor(i, Vector4{ 0.0f, 0.08f, 0.08f,alpha[i] });//色指定
 			}	
 		}
 			//----------------------------------------------------------------------------------------------------------------------------------------------------
