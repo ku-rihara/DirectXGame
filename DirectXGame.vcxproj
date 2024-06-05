@@ -23,6 +23,7 @@
     <ClCompile Include="ImGuiManager.cpp" />
     <ClCompile Include="Keta.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Matrix3x3.cpp" />
     <ClCompile Include="Matrix4x4.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Vector3.cpp" />
@@ -43,6 +44,7 @@
     <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="Keta.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="Matrix3x3.h" />
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Transform.h" />

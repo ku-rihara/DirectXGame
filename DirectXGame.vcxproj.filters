@@ -78,6 +78,9 @@
     <ClCompile Include="Vector3.cpp">
       <Filter>MyEngine\Function</Filter>
     </ClCompile>
+    <ClCompile Include="Matrix3x3.cpp">
+      <Filter>MyEngine\Function</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Convert.h">
@@ -128,9 +131,6 @@
     <ClInclude Include="Transform.h">
       <Filter>MyEngine\struct</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix4x4.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="ImGuiManager.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
@@ -147,6 +147,12 @@
       <Filter>MyEngine\struct</Filter>
     </ClInclude>
     <ClInclude Include="DirectionalLight.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4x4.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix3x3.h">
       <Filter>MyEngine\struct</Filter>
     </ClInclude>
   </ItemGroup>

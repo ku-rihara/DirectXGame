@@ -12,6 +12,7 @@
 //struct
 #include"TransformationMatrix.h"
 #include"DirectionalLight.h"
+#include"Material.h"
 
 class DirectXCommon {
 private://メンバ変数
@@ -95,6 +96,8 @@ private://メンバ変数
 	//データ****************************************************************************
 	TransformationMatrix* wvpDate_;
 	TransformationMatrix* wvpDataSprite_;
+	Material* materialDate_;
+	Material* materialDateSprite_;
 	DirectionalLight* directionalLightData_;
 
 	//DescriptorSize
@@ -223,5 +226,5 @@ public://メンバ関数
 	void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
 	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->WVP = date; }
 	void SetWorldMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->World = date; }
-
+	void SetUVTransformSprite(Matrix3x3 matrix) { materialDateSprite_->uvTransform = matrix; }
 };

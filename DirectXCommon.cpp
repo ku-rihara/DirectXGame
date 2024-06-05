@@ -8,8 +8,6 @@
 #include<cassert>
 //struct
 #include"VertexData.h"
-#include"Material.h"
-
 
 //
 #pragma comment(lib,"d3d12.lib")
@@ -560,33 +558,17 @@ void DirectXCommon::CreateGraphicPipelene() {
 		}
 	}
 
-	
-
-	////上
-	//vertexDate[1].position = { 0.0f,0.5f,0.0f,1.0f };
-	//vertexDate[1].texcoord = { 0.5f,0.0f };
-	////右下
-	//vertexDate[2].position = { 0.5f,-0.5f,0.0f,1.0f };
-	//vertexDate[2].texcoord = { 1.0f,1.0f };
-	////左下2
-	//vertexDate[3].position = { -0.5f,-0.5f,0.5f,1.0f };
-	//vertexDate[3].texcoord = { 0.0f,1.0f };
-	////上2
-	//vertexDate[4].position = { 0.0f,0.0f,0.0f,1.0f };
-	//vertexDate[4].texcoord = { 0.5f,0.0f };
-	////右下2
-	//vertexDate[5].position = { 0.5f,-0.5f,-0.5f,1.0f };
-	//vertexDate[5].texcoord = { 1.0f,1.0f };
-
 	//マテリアル--------------------------------------------------------------------------------------
 	materialResource_ = CreateBufferResource(GetDevice(), sizeof(Material));
 	//マテリアルにデータを書き込む
-	Material* materialDate = nullptr;
+	materialDate_ = nullptr;
 	//書き込むためのアドレスを取得
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialDate));
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialDate_));
 	//今回は赤を書き込む
-	materialDate->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	materialDate->enableLighting = true;
+	materialDate_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	materialDate_->enableLighting = true;
+	//UVTransformは単位行列を書き込んでおく
+	materialDate_->uvTransform = MakeIdentity3x3();
 	//平行光源--------------------------------------------------------------------------------------------------
 	directionalLightResource_ = CreateBufferResource(GetDevice(), sizeof(DirectionalLight));
 	//データ書き込む
@@ -650,12 +632,14 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//マテリアル--------------------------------------------------------------------------------------
 	materialResourceSprite_ = CreateBufferResource(GetDevice(), sizeof(Material));
 	//マテリアルにデータを書き込む
-	Material* materialDateSprite = nullptr;
+	 materialDateSprite_ = nullptr;
 	//書き込むためのアドレスを取得
-	materialResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&materialDateSprite));
+	materialResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&materialDateSprite_));
 	//Lightingを無効
-	materialDateSprite->color = { 1.0f,1.0f,1.0f,1.0f };
-	materialDateSprite->enableLighting = false;
+	materialDateSprite_->color = { 1.0f,1.0f,1.0f,1.0f };
+	materialDateSprite_->enableLighting = false;
+	//UVTransformは単位行列を書き込んでおく
+	materialDateSprite_->uvTransform = MakeIdentity3x3();
 	//平行光源--------------------------------------------------------------------------------------------------
 	//directionalLightResourceSprite_ = CreateBufferResource(GetDevice(), sizeof(DirectionalLight));
 
