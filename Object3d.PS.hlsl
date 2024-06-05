@@ -24,7 +24,7 @@ struct Material
 {
     float4 color;
     int enableLighting;
-    float3x3 uvTransform;
+    float4x4 uvTransform;
 };
 
 ConstantBuffer<Material> gMaterial : register(b0);

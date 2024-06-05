@@ -568,7 +568,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	materialDate_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	materialDate_->enableLighting = true;
 	//UVTransformは単位行列を書き込んでおく
-	materialDate_->uvTransform = MakeIdentity3x3();
+	materialDate_->uvTransform = MakeIdentity4x4();
 	//平行光源--------------------------------------------------------------------------------------------------
 	directionalLightResource_ = CreateBufferResource(GetDevice(), sizeof(DirectionalLight));
 	//データ書き込む
@@ -639,7 +639,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	materialDateSprite_->color = { 1.0f,1.0f,1.0f,1.0f };
 	materialDateSprite_->enableLighting = false;
 	//UVTransformは単位行列を書き込んでおく
-	materialDateSprite_->uvTransform = MakeIdentity3x3();
+	materialDateSprite_->uvTransform = MakeIdentity4x4();
 	//平行光源--------------------------------------------------------------------------------------------------
 	//directionalLightResourceSprite_ = CreateBufferResource(GetDevice(), sizeof(DirectionalLight));
 

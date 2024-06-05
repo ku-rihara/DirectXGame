@@ -226,5 +226,5 @@ public://メンバ関数
 	void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
 	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->WVP = date; }
 	void SetWorldMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->World = date; }
-	void SetUVTransformSprite(Matrix3x3 matrix) { materialDateSprite_->uvTransform = matrix; }
+	void SetUVTransformSprite(Matrix4x4 matrix) { this->materialDateSprite_->uvTransform = matrix; }
 };
