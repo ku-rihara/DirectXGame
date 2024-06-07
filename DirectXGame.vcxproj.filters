@@ -81,6 +81,9 @@
     <ClCompile Include="Matrix3x3.cpp">
       <Filter>MyEngine\Function</Filter>
     </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Convert.h">
@@ -153,6 +156,12 @@
       <Filter>MyEngine\struct</Filter>
     </ClInclude>
     <ClInclude Include="Matrix3x3.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>MyEngine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelData.h">
       <Filter>MyEngine\struct</Filter>
     </ClInclude>
   </ItemGroup>

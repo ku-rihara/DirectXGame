@@ -451,6 +451,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	hr_ = GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&graphicsPipelineState_));
 	assert(SUCCEEDED(hr_));
 
+	//メッシュ
 	//三角形***********************************************************************************************************************
 	//VertexBufferViewを作成する	
 	vertexResource_ = CreateBufferResource(GetDevice(), sizeof(VertexData) * shpereVertexNum_);
@@ -514,7 +515,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 			vertexDate[start + 1].normal.x = vertexDate[start + 1].position.x;
 			vertexDate[start + 1].normal.y = vertexDate[start + 1].position.y;
 			vertexDate[start + 1].normal.z = vertexDate[start + 1].position.z;
-			indexData[start+1] = start+1;
+			indexData[start + 1] = start + 1;
 			//c
 			vertexDate[start + 2].position.x = cos(lat) * cos(lon + kLonEvery);
 			vertexDate[start + 2].position.y = sin(lat);
@@ -632,7 +633,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//マテリアル--------------------------------------------------------------------------------------
 	materialResourceSprite_ = CreateBufferResource(GetDevice(), sizeof(Material));
 	//マテリアルにデータを書き込む
-	 materialDateSprite_ = nullptr;
+	materialDateSprite_ = nullptr;
 	//書き込むためのアドレスを取得
 	materialResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&materialDateSprite_));
 	//Lightingを無効
@@ -658,7 +659,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	//単位行列を書き込んでおく
 	wvpDataSprite_->World = MakeIdentity4x4();
 	wvpDataSprite_->WVP = MakeIdentity4x4();
-	
+
 	//スプライト**************************************************************************************************
 	// 
 	//ビューポート
