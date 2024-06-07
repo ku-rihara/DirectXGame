@@ -2,6 +2,7 @@
 #include"Transform.h"
 #include"WinApp.h"
 #include"DirectXCommon.h"
+#include "Mesh.h"
 
 #include "externals/imgui/imgui.h"
 
@@ -12,8 +13,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//ライブラリの初期化
 	Keta::Initialize(kWindowTitle, 1280, 720);
-	DirectXCommon* dxcommon;
-	dxcommon = DirectXCommon::GetInstance();
+	/*DirectXCommon* dxcommon;*/
+	Mesh* mesh=Mesh::GetInstance();
 
 	Transform tramsform;
 	Transform transformSprite;
@@ -73,14 +74,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
 		Matrix4x4 projectionMatrixSprite=MakeOrthographicMatrix(0.0f,0.0f, float(WinApp::kWindowWidth),float(WinApp::kWindowHeight), 0.0f, 100.0f);
 		Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite, projectionMatrixSprite);
-		dxcommon->SetwvpDate(worldViewProjectionMatrix);
-		dxcommon->SetTransformationMatrixDataSprite(worldViewProjectionMatrixSprite);
+		mesh->SetwvpDate(worldViewProjectionMatrix);
+		mesh->SetTransformationMatrixDataSprite(worldViewProjectionMatrixSprite);
 
 		//UVTransform
 		Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTransformSprite.scale);
 		uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTransformSprite.rotate.z));
 		uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTransformSprite.translate));
-		dxcommon->SetUVTransformSprite(uvTransformMatrix);
+		mesh->SetUVTransformSprite(uvTransformMatrix);
 		//フレームの終了
 		Keta::EndFrame();
 	}

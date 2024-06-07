@@ -5,6 +5,7 @@
 #include"WinApp.h"
 #include"DirectXCommon.h"
 
+
 #include"Matrix4x4.h"
 #include"Convert.h"
 #include <string>
@@ -36,6 +37,7 @@ void Keta::Initialize(const char* title, int width, int height) {
 	textureManager = TextureManager::GetInstance();
 	textureManager->Load();
 	sDirectXCommon->commandExecution();
+
 
 }
 

@@ -9,10 +9,7 @@
 #include<dxgidebug.h>
 //class
 #include"WinApp.h"
-//struct
-#include"TransformationMatrix.h"
-#include"DirectionalLight.h"
-#include"Material.h"
+
 
 class DirectXCommon {
 private://メンバ変数
@@ -68,37 +65,6 @@ private://メンバ変数
 	IDxcBlob* pixelShaderBlob_;
 	ID3D12PipelineState* graphicsPipelineState_;
 	
-	//球
-	const uint32_t kSubdivision_ = 16;//分割数
-	const uint32_t  shpereVertexNum_ = 1536;
-
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite_;
-	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
-	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite_{};
-	//リソース******************************************************************
-	//Material
-	ID3D12Resource* materialResource_;
-	ID3D12Resource* materialResourceSprite_;
-	//平行光源
-	ID3D12Resource* directionalLightResource_;
-	ID3D12Resource* directionalLightResourceSprite_;	
-	//頂点リソース
-	ID3D12Resource* vertexResource_;
-	ID3D12Resource* vertexResourceSprite_;
-	//wvpリソース
-	ID3D12Resource* wvpResouce_;
-	ID3D12Resource* wvpResourceSprite_;
-	//indexリソース
-	ID3D12Resource* indexResource_;
-	ID3D12Resource* indexResourceSprite_;
-	
-	//データ****************************************************************************
-	TransformationMatrix* wvpDate_;
-	TransformationMatrix* wvpDataSprite_;
-	Material* materialDate_;
-	Material* materialDateSprite_;
-	DirectionalLight* directionalLightData_;
 
 	//DescriptorSize
 	uint32_t descriptorSizeSRV_;
@@ -109,8 +75,7 @@ private://メンバ変数
 	D3D12_RESOURCE_BARRIER barrier_{};
 	UINT backBufferIndex_;
 
-	//後に消すかも
-	bool useMonsterBall = true;
+
 
 
 private://メンバ関数
@@ -207,6 +172,8 @@ public://メンバ関数
 	//getter
 	// デバイス初期化関連
 	ID3D12Device* GetDevice()const { return device_; }
+	//コマンド
+	ID3D12GraphicsCommandList* GetCommandList()const { return commandList_; }
 	//スワップチェーン関連
 	DXGI_SWAP_CHAIN_DESC1 GetSwapChainDesc()const { return swapChainDesc_; }
 	//レンダーターゲットビュー 
@@ -220,11 +187,4 @@ public://メンバ関数
 	uint32_t GetDescriptorSizeSRV()const { return descriptorSizeSRV_; }
 	uint32_t GetDescriptorSizeRTV()const { descriptorSizeRTV_; }
 	uint32_t GetDescriptorSizeDSV()const { return descriptorSizeDSV_; }
-
-	//setter
-	void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
-	void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
-	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->WVP = date; }
-	void SetWorldMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->World = date; }
-	void SetUVTransformSprite(Matrix4x4 matrix) { this->materialDateSprite_->uvTransform = matrix; }
 };
