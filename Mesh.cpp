@@ -1,10 +1,16 @@
 #include "Mesh.h"
 #include "DirectXCommon.h"
 #include "TextureManager.h"
+#include "Model.h"
 #include "externals/imgui/imgui.h"
 //struct
 #include"VertexData.h"
 #include<format>
+
+namespace {
+	DirectXCommon* directXCommon=DirectXCommon::GetInstance();
+	Model* model=Model::GetInstance();
+}
 
 Mesh* Mesh::GetInstance() {
 	static Mesh instance;
@@ -14,7 +20,7 @@ Mesh* Mesh::GetInstance() {
 void Mesh::CreateSphere() {
 	//三角形***********************************************************************************************************************
 		//VertexBufferViewを作成する	
-	vertexResource_ = DirectXCommon::GetInstance()->CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(VertexData) * shpereVertexNum_);
+	vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(VertexData) * shpereVertexNum_);
 	//頂点バッファビューを作成する
 	vertexBufferView_ = {};
 	//リソースの先頭アドレスから使う
@@ -29,7 +35,7 @@ void Mesh::CreateSphere() {
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate));
 
 	//頂点インデックス
-	indexResource_ = DirectXCommon::GetInstance()->CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(uint32_t) * shpereVertexNum_);
+	indexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(uint32_t) * shpereVertexNum_);
 
 	//リソースの先頭アドレスから使う
 	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
@@ -120,7 +126,7 @@ void Mesh::CreateSphere() {
 	}
 
 	//マテリアル--------------------------------------------------------------------------------------
-	materialResource_ = DirectXCommon::GetInstance()->CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(Material));
+	materialResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(Material));
 	//マテリアルにデータを書き込む
 	materialDate_ = nullptr;
 	//書き込むためのアドレスを取得
@@ -131,7 +137,7 @@ void Mesh::CreateSphere() {
 	//UVTransformは単位行列を書き込んでおく
 	materialDate_->uvTransform = MakeIdentity4x4();
 	//平行光源--------------------------------------------------------------------------------------------------
-	directionalLightResource_ = DirectXCommon::GetInstance()->CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(DirectionalLight));
+	directionalLightResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(DirectionalLight));
 	//データ書き込む
 	directionalLightData_ = nullptr;
 	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
@@ -140,7 +146,7 @@ void Mesh::CreateSphere() {
 	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
 	directionalLightData_->intensity = 1.0f;
 	//行列--------------------------------------------------------------------------------------------------------
-	wvpResouce_ = DirectXCommon::GetInstance()->CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(TransformationMatrix));
+	wvpResouce_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix));
 	//データを書き込む
 	wvpDate_ = nullptr;
 	//書き込むためのアドレスを取得
@@ -154,7 +160,7 @@ void Mesh::CreateSphere() {
 void Mesh::CreateSprite() {
 	//スプライト**************************************************************************************************
 	//Sprite用の頂点リソースを作る
-	vertexResourceSprite_ = DirectXCommon::GetInstance()->CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(VertexData) * 4);
+	vertexResourceSprite_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(VertexData) * 4);
 	//頂点バッファビューを作成する
 	vertexBufferViewSprite_ = {};
 	//リソースの先頭のアドレスから使う
@@ -177,7 +183,7 @@ void Mesh::CreateSprite() {
 	vertexDataSprite[3].texcoord = { 1.0f, 0.0f };
 
 	//頂点インデックス
-	indexResourceSprite_ = DirectXCommon::GetInstance()->CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(uint32_t) * 6);
+	indexResourceSprite_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(uint32_t) * 6);
 
 	//リソースの先頭アドレスから使う
 	indexBufferViewSprite_.BufferLocation = indexResourceSprite_->GetGPUVirtualAddress();
@@ -192,7 +198,7 @@ void Mesh::CreateSprite() {
 	indexDataSprite[3] = 1; indexDataSprite[4] = 3; indexDataSprite[5] = 2;
 
 	//マテリアル--------------------------------------------------------------------------------------
-	materialResourceSprite_ = DirectXCommon::GetInstance()->CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(Material));
+	materialResourceSprite_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(Material));
 	//マテリアルにデータを書き込む
 	materialDateSprite_ = nullptr;
 	//書き込むためのアドレスを取得
@@ -212,7 +218,7 @@ void Mesh::CreateSprite() {
 	//directionalLightDataSprite->direction = { 0.0f,-1.0f,0.0f };
 	//directionalLightDataSprite->intensity = 1.0f;
 	//行列----------------------------------------------------------------------------------------------------------
-	wvpResourceSprite_ = DirectXCommon::GetInstance()->CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(TransformationMatrix));
+	wvpResourceSprite_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix));
 	//データを書き込む
 	wvpDataSprite_ = nullptr;
 	//書き込むためのアドレスを取得
@@ -223,45 +229,45 @@ void Mesh::CreateSprite() {
 	//スプライト**************************************************************************************************
 }
 #ifdef _DEBUG
-void Mesh::DebugImGui(){
-ImGui::Begin("useMonsterBall");
-ImGui::Checkbox("useMonsterBall", &useMonsterBall);
-ImGui::End();
-ImGui::Begin("Lighting");
-ImGui::ColorEdit4(" Color", (float*)&directionalLightData_->color);
-ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
-directionalLightData_->direction = Normnalize(directionalLightData_->direction);
-ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
-ImGui::End();
+void Mesh::DebugImGui() {
+	ImGui::Begin("useMonsterBall");
+	ImGui::Checkbox("useMonsterBall", &useMonsterBall);
+	ImGui::End();
+	ImGui::Begin("Lighting");
+	ImGui::ColorEdit4(" Color", (float*)&directionalLightData_->color);
+	ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
+	directionalLightData_->direction = Normnalize(directionalLightData_->direction);
+	ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
+	ImGui::End();
 }
 #endif
 
 void Mesh::DrawSphere() {
-	DirectXCommon::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
-	DirectXCommon::GetInstance()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);//IBV
+	directXCommon->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	directXCommon->GetCommandList()->IASetIndexBuffer(&indexBufferView_);//IBV
 	//形状を設定
-	DirectXCommon::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResouce_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, useMonsterBall ?TextureManager::GetInstance()->GetTextureSrvHandleGPU2() : TextureManager::GetInstance()->GetTextureSrvHandleGPU());
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+	directXCommon->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResouce_->GetGPUVirtualAddress());
+	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, useMonsterBall ? TextureManager::GetInstance()->GetTextureSrvHandleGPU2() : TextureManager::GetInstance()->GetTextureSrvHandleGPU());
+	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 	//描画(DrawCall/ドローコール)
 	/*commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);*/
-	DirectXCommon::GetInstance()->GetCommandList()->DrawIndexedInstanced(shpereVertexNum_, 1, 0, 0, 0);
+	directXCommon->GetCommandList()->DrawIndexedInstanced(shpereVertexNum_, 1, 0, 0, 0);
 }
 
 void Mesh::DrawSprite() {
-	
+
 	////Spriteの描画。変更が必要なものだけ変更する
-	DirectXCommon::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite_);
-	DirectXCommon::GetInstance()->GetCommandList()->IASetIndexBuffer(&indexBufferViewSprite_);//IBVを設定
+	directXCommon->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite_);
+	directXCommon->GetCommandList()->IASetIndexBuffer(&indexBufferViewSprite_);//IBVを設定
 	//TransformationmatrixCBufferの場所を設定
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResourceSprite_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureSrvHandleGPU());
+	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite_->GetGPUVirtualAddress());
+	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResourceSprite_->GetGPUVirtualAddress());
+	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureSrvHandleGPU());
 	//描画(DrawCall/ドローコール)
-	DirectXCommon::GetInstance()->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
+	directXCommon->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
 void Mesh::ReleaseMesh() {
 	vertexResource_->Release();
