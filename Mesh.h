@@ -60,7 +60,9 @@ public:
 	void DrawSphere();
 	
 	void DrawSprite();
-
+#ifdef _DEBUG
+	void DebugImGui();
+#endif
 	void ReleaseMesh();
 
 	//setter

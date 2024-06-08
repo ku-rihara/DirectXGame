@@ -1,6 +1,7 @@
 #include "Mesh.h"
 #include "DirectXCommon.h"
 #include "TextureManager.h"
+#include "externals/imgui/imgui.h"
 //struct
 #include"VertexData.h"
 #include<format>
@@ -221,6 +222,20 @@ void Mesh::CreateSprite() {
 	wvpDataSprite_->WVP = MakeIdentity4x4();
 	//スプライト**************************************************************************************************
 }
+#ifdef _DEBUG
+void Mesh::DebugImGui(){
+ImGui::Begin("useMonsterBall");
+ImGui::Checkbox("useMonsterBall", &useMonsterBall);
+ImGui::End();
+ImGui::Begin("Lighting");
+ImGui::ColorEdit4(" Color", (float*)&directionalLightData_->color);
+ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
+directionalLightData_->direction = Normnalize(directionalLightData_->direction);
+ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
+ImGui::End();
+}
+#endif
+
 void Mesh::DrawSphere() {
 	DirectXCommon::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	DirectXCommon::GetInstance()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);//IBV
@@ -234,7 +249,6 @@ void Mesh::DrawSphere() {
 	//描画(DrawCall/ドローコール)
 	/*commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);*/
 	DirectXCommon::GetInstance()->GetCommandList()->DrawIndexedInstanced(shpereVertexNum_, 1, 0, 0, 0);
-
 }
 
 void Mesh::DrawSprite() {

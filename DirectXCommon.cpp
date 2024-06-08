@@ -509,17 +509,9 @@ void DirectXCommon::ScreenClear() {
 	commandList_->SetGraphicsRootSignature(rootSignature_);
 	commandList_->SetPipelineState(graphicsPipelineState_);
 
-//#ifdef _DEBUG
-//	ImGui::Begin("useMonsterBall");
-//	ImGui::Checkbox("useMonsterBall", &useMonsterBall);
-//	ImGui::End();
-//	ImGui::Begin("Lighting");
-//	ImGui::ColorEdit4(" Color", (float*)&directionalLightData_->color);
-//	ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
-//	directionalLightData_->direction = Normnalize(directionalLightData_->direction);
-//	ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
-//	ImGui::End();
-//#endif
+#ifdef _DEBUG
+	mesh_->DebugImGui();
+#endif
 }
 
 //フレーム終わり
