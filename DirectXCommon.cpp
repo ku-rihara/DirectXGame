@@ -1,7 +1,9 @@
 #include "DirectXCommon.h"
-#include"Mesh.h"
 #include "ImGuiManager.h"
 #include"TextureManager.h"
+#include "Model.h"
+#include"Mesh.h"
+#include "Sprite.h"
 //function
 #include"Convert.h"
 //
@@ -16,8 +18,9 @@
 namespace {
 	ImGuiManager* imguiManager_;
 	TextureManager* textureManager_;
-	Mesh* mesh_;
-	
+	/*Mesh* mesh_;*/
+	Model* model_;
+	Sprite* sprite_;
 }
 
 DirectXCommon* DirectXCommon::GetInstance() {
@@ -129,7 +132,9 @@ void DirectXCommon::Init(WinApp* winApp, int32_t backBufferWidth, int32_t backBu
 
 	imguiManager_ = ImGuiManager::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
-	mesh_ = Mesh::GetInstance();
+	/*mesh_ = Mesh::GetInstance();*/
+	model_ = Model::GetInstance();
+	sprite_ = Sprite::GetInstance();
 }
 // DXGIデバイス初期化
 void DirectXCommon::DXGIDeviceInit() {
@@ -456,9 +461,9 @@ void DirectXCommon::CreateGraphicPipelene() {
 	hr_ = GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&graphicsPipelineState_));
 	assert(SUCCEEDED(hr_));
 
-	mesh_->CreateSphere();
 
-	mesh_->CreateSprite();
+	model_->CreateModel();
+	sprite_->CreateSprite();
 
 	// 
 	//ビューポート
@@ -510,20 +515,19 @@ void DirectXCommon::ScreenClear() {
 	commandList_->SetPipelineState(graphicsPipelineState_);
 
 #ifdef _DEBUG
-	mesh_->DebugImGui();
+	model_->DebugImGui();
 #endif
 }
 
 //フレーム終わり
 void DirectXCommon::CommandKick() {
 
-	
-	mesh_->DrawSphere();
+	model_->DrawModel();
 
-	mesh_->DrawSprite();
+	sprite_->DrawSprite();
 
-		//描画(DrawCall/ドローコール)
-	commandList_->DrawIndexedInstanced(6, 1, 0, 0,0);
+	//描画(DrawCall/ドローコール)
+	commandList_->DrawIndexedInstanced(6, 1, 0, 0, 0);
 	//commandList_->DrawInstanced(6, 1, 0, 0);
 
 #ifdef _DEBUG
@@ -630,7 +634,8 @@ void DirectXCommon::ReleaseObject() {
 	dxgiFactory_->Release();
 	depthStencilResource_->Release();
 	dsvDescriptorHeap_->Release();
-	mesh_->ReleaseMesh();
+	sprite_->ReleaseSprite();
+	model_->ReleaseModel();
 	/*tr_->Release();*/
 	graphicsPipelineState_->Release();
 	signatureBlob_->Release();

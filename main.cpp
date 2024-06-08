@@ -3,6 +3,8 @@
 #include"WinApp.h"
 #include"DirectXCommon.h"
 #include "Mesh.h"
+#include "Model.h"
+#include "Sprite.h"
 
 #include "externals/imgui/imgui.h"
 
@@ -14,7 +16,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ライブラリの初期化
 	Keta::Initialize(kWindowTitle, 1280, 720);
 	/*DirectXCommon* dxcommon;*/
-	Mesh* mesh=Mesh::GetInstance();
+	Sprite* sprite=Sprite::GetInstance();
+	Model* model = Model::GetInstance();
 
 	Transform tramsform;
 	Transform transformSprite;
@@ -40,7 +43,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::DragFloat3("Translate", &cameraTransform.translate.x, 0.01f);
 			ImGui::TreePop();
 		}
-		if (ImGui::TreeNode("Sphere")) {
+		if (ImGui::TreeNode("Model")) {
 			ImGui::DragFloat3("Scale", &tramsform.scale.x, 0.01f);
 			ImGui::DragFloat3("Rotate", &tramsform.rotate.x, 0.01f);
 			ImGui::DragFloat3("Translate", &tramsform.translate.x, 0.01f);
@@ -74,14 +77,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
 		Matrix4x4 projectionMatrixSprite=MakeOrthographicMatrix(0.0f,0.0f, float(WinApp::kWindowWidth),float(WinApp::kWindowHeight), 0.0f, 100.0f);
 		Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite, projectionMatrixSprite);
-		mesh->SetwvpDate(worldViewProjectionMatrix);
-		mesh->SetTransformationMatrixDataSprite(worldViewProjectionMatrixSprite);
+		model->SetwvpDate(worldViewProjectionMatrix);
+		sprite->SetTransformationMatrixDataSprite(worldViewProjectionMatrixSprite);
 
 		//UVTransform
 		Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTransformSprite.scale);
 		uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTransformSprite.rotate.z));
 		uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTransformSprite.translate));
-		mesh->SetUVTransformSprite(uvTransformMatrix);
+		sprite->SetUVTransformSprite(uvTransformMatrix);
 		//フレームの終了
 		Keta::EndFrame();
 	}

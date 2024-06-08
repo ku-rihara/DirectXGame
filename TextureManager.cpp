@@ -1,5 +1,6 @@
 #include "TextureManager.h"
 #include "ImGuiManager.h"
+#include "Model.h"
 #include"DirectXCommon.h"
 #include"Convert.h"
 #include<vector>
@@ -7,6 +8,7 @@
 namespace {
 	DirectXCommon* directXCommon_;
 	ImGuiManager* imguiManager_;
+	Model* model_;
 }
 
 TextureManager* TextureManager::GetInstance() {
@@ -82,11 +84,12 @@ ID3D12Resource* TextureManager::UploadTextureDate(ID3D12Resource* texture, const
 
 void TextureManager::Load() {
 	directXCommon_ = DirectXCommon::GetInstance();
+	model_ = Model::GetInstance();
 	 mipImages_ = LoadTexture("resources/uvChecker.png");
 	const DirectX::TexMetadata& metadata = mipImages_.GetMetadata();
 	textureResource_ = CreateTextureResource(directXCommon_->GetDevice(), metadata);
 	//2
-	mipImages2_ = LoadTexture("resources/monsterBall.png");
+	mipImages2_ = LoadTexture(model_->GetModelData().material.textureFilePath);
 	const DirectX::TexMetadata& metadata2 = mipImages2_.GetMetadata();
 	textureResource2_ = CreateTextureResource(directXCommon_->GetDevice(), metadata2);
 	

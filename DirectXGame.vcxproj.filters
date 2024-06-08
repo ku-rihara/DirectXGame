@@ -87,6 +87,9 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>MyEngine\ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Convert.h">
@@ -169,6 +172,12 @@
     </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>MyEngine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialData.h">
+      <Filter>MyEngine\struct</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
