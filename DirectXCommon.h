@@ -7,6 +7,7 @@
 #include<dxgi1_6.h>
 #include<dxcapi.h>
 #include<dxgidebug.h>
+#include <wrl.h>
 //class
 #include"WinApp.h"
 
@@ -19,33 +20,33 @@ private://メンバ変数
 
 	//Init------------------------------------------------------------------------------------------------------
 	//デバイス初期化関連
-	IDXGIFactory7* dxgiFactory_;
-	ID3D12Device* device_;
-	IDXGIAdapter4* useAdapter_;
+	Microsoft::WRL::ComPtr<IDXGIFactory7>dxgiFactory_;
+	Microsoft::WRL::ComPtr<ID3D12Device> device_;
+	Microsoft::WRL::ComPtr<IDXGIAdapter4> useAdapter_;
 
 	//コマンド初期化関連
-	ID3D12CommandAllocator* commandAllocator_;
-	ID3D12CommandQueue* commandQueue_;
-	ID3D12GraphicsCommandList* commandList_;
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>commandAllocator_;
+	Microsoft::WRL::ComPtr<ID3D12CommandQueue>commandQueue_;
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList_;
 
 	//スワップチェーン関連
-	IDXGISwapChain4* swapChain_;
+	Microsoft::WRL::ComPtr<IDXGISwapChain4>swapChain_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> swapChainResources_[2] = {};
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc_{};
-	ID3D12Resource* swapChainResources_[2] = {};
 	uint32_t backBufferWidth_;
 	uint32_t backBufferHeight_;
 
 	//レンダーターゲットビュー関連
-	ID3D12DescriptorHeap* rtvDescriptorHeap_;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap > rtvDescriptorHeap_;
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];//RTVを2つ作るのでディスクリプタを2つ用意
 
-	ID3D12DescriptorHeap* dsvDescriptorHeap_;
-	ID3D12Resource* depthStencilResource_;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>dsvDescriptorHeap_;
+	Microsoft::WRL::ComPtr<ID3D12Resource>depthStencilResource_;
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
 
 	//フェンス生成関連
-	ID3D12Fence* fence_;
+	Microsoft::WRL::ComPtr<ID3D12Fence> fence_;
 	HANDLE fenceEvent_;
 	uint64_t fenceValue_ = 0;
 
@@ -56,15 +57,14 @@ private://メンバ変数
 	//Init------------------------------------------------------------------------------------------------------
 
 	//グラフィックパイプライン関連
-	ID3D12RootSignature* rootSignature_;
-	ID3DBlob* signatureBlob_;
-	ID3DBlob* errorBlob_;
+	 Microsoft::WRL::ComPtr < ID3D12RootSignature> rootSignature_;
+	Microsoft::WRL::ComPtr<ID3DBlob>signatureBlob_;
+	Microsoft::WRL::ComPtr<ID3DBlob>errorBlob_;
 	D3D12_VIEWPORT viewport_{};
 	D3D12_RECT scissorRect_{};
-	IDxcBlob* vertexShaderBlob_;
-	IDxcBlob* pixelShaderBlob_;
-	ID3D12PipelineState* graphicsPipelineState_;
-	
+	 Microsoft::WRL::ComPtr<IDxcBlob>vertexShaderBlob_;
+	 Microsoft::WRL::ComPtr<IDxcBlob>pixelShaderBlob_;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineState_;
 
 	//DescriptorSize
 	uint32_t descriptorSizeSRV_;
@@ -74,8 +74,6 @@ private://メンバ変数
 	//バリア
 	D3D12_RESOURCE_BARRIER barrier_{};
 	UINT backBufferIndex_;
-
-
 
 
 private://メンバ関数
@@ -115,7 +113,7 @@ private://メンバ関数
 	/// </summary>
 	void dxcCompilerInit();
 
-	ID3D12Resource* CreateDepthStencilTextureResource(ID3D12Device* device, int32_t width, int32_t height);
+	Microsoft::WRL::ComPtr < ID3D12Resource> CreateDepthStencilTextureResource(Microsoft::WRL::ComPtr<ID3D12Device>  device, int32_t width, int32_t height);
 
 public://メンバ関数
 	HRESULT hr_ = 0;
@@ -148,32 +146,26 @@ public://メンバ関数
 	void CommandKick();
 
 	/// <summary>
-	//リソーススリークチェック
-	/// </summary>	
-	void ResourceLeakCheck();
-
-	/// <summary>
 	//オブジェクトのリリース
 	/// </summary>	
 	void ReleaseObject();
 
 	//リソースの作成
-	ID3D12Resource* CreateBufferResource(ID3D12Device* device, size_t sizeInBytes);
+	Microsoft::WRL::ComPtr < ID3D12Resource>CreateBufferResource(Microsoft::WRL::ComPtr<ID3D12Device>  device, size_t sizeInBytes);
 
 	void commandExecution();
 
 	//DescriptorHeapの作成
-	ID3D12DescriptorHeap* CreateDescriptorHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> CreateDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device>  device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
 
-	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
-	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
-
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap > descriptorHeap, uint32_t descriptorSize, uint32_t index);
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap > descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
 	//getter
 	// デバイス初期化関連
-	ID3D12Device* GetDevice()const { return device_; }
+	ID3D12Device* GetDevice()const { return device_.Get(); }
 	//コマンド
-	ID3D12GraphicsCommandList* GetCommandList()const { return commandList_; }
+	ID3D12GraphicsCommandList* GetCommandList()const { return commandList_.Get(); }
 	//スワップチェーン関連
 	DXGI_SWAP_CHAIN_DESC1 GetSwapChainDesc()const { return swapChainDesc_; }
 	//レンダーターゲットビュー 
@@ -188,3 +180,4 @@ public://メンバ関数
 	uint32_t GetDescriptorSizeRTV()const { descriptorSizeRTV_; }
 	uint32_t GetDescriptorSizeDSV()const { return descriptorSizeDSV_; }
 };
+

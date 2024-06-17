@@ -1,5 +1,6 @@
 #pragma once
 
+#include<wrl.h>
 #include<Windows.h>
 #include<cstdint>
 #include<d3d12.h>
@@ -16,7 +17,7 @@ public://静的メンバ変数
 private://メンバ変数
 	WNDCLASS wc_{};
 	HWND hwnd_;
-	ID3D12Debug1* debugController_;
+	Microsoft::WRL::ComPtr<ID3D12Debug1> debugController_;
 
 public://メンバ関数
 
@@ -33,6 +34,6 @@ public://メンバ関数
 
 	//getter
 	HWND GetHwnd() const { return hwnd_; }
-	ID3D12Debug1* GetDebugController()const { return debugController_; }
+	ID3D12Debug1* GetDebugController()const { return debugController_.Get(); }
 };
 

@@ -95,9 +95,9 @@ void Sprite::DrawSprite() {
 	directXCommon->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
 
-void Sprite::ReleaseSprite() {
-	vertexResourceSprite_->Release();
-	indexResourceSprite_->Release();
-	wvpResourceSprite_->Release();
-	materialResourceSprite_->Release();
-}
+//void Sprite::ReleaseSprite() {
+//	vertexResourceSprite_->Release();
+//	indexResourceSprite_->Release();
+//	wvpResourceSprite_->Release();
+//	materialResourceSprite_->Release();
+//}

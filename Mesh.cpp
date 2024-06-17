@@ -1,20 +1,20 @@
-#include "Mesh.h"
-#include "DirectXCommon.h"
-#include "TextureManager.h"
-#include "externals/imgui/imgui.h"
-//struct
-#include"VertexData.h"
-#include<format>
-
-namespace {
-	DirectXCommon* directXCommon = DirectXCommon::GetInstance();
-	//Model* model=Model::GetInstance();
-}
-
-Mesh* Mesh::GetInstance() {
-	static Mesh instance;
-	return &instance;
-}
+//#include "Mesh.h"
+//#include "DirectXCommon.h"
+//#include "TextureManager.h"
+//#include "externals/imgui/imgui.h"
+////struct
+//#include"VertexData.h"
+//#include<format>
+//
+//namespace {
+//	DirectXCommon* directXCommon = DirectXCommon::GetInstance();
+//	//Model* model=Model::GetInstance();
+//}
+//
+//Mesh* Mesh::GetInstance() {
+//	static Mesh instance;
+//	return &instance;
+//}
 
 //void Mesh::CreateSphere() {
 //
@@ -173,12 +173,3 @@ Mesh* Mesh::GetInstance() {
 //	directXCommon->GetCommandList()->DrawIndexedInstanced(shpereVertexNum_, 1, 0, 0, 0);
 //}
 
-
-void Mesh::ReleaseMesh() {
-	/*vertexResource_->Release();*/
-	/*directionalLightResource_->Release();
-	indexResource_->Release();*/
-	/*materialResource_->Release();*/
-	/*wvpResouce_->Release();*/
-	
-}

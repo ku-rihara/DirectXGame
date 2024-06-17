@@ -1,21 +1,22 @@
 #include"Keta.h"
 #include"Transform.h"
 #include"WinApp.h"
-#include"DirectXCommon.h"
+#include "D3DResourceLeakCheck.h"
 #include "Mesh.h"
 #include "Model.h"
 #include "Sprite.h"
 
 #include "externals/imgui/imgui.h"
 
+
 const char kWindowTitle[] = "CG2";
 
 //windowアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-
+	D3DResourceLeakChecker leakCheck;
 	//ライブラリの初期化
 	Keta::Initialize(kWindowTitle, 1280, 720);
-	/*DirectXCommon* dxcommon;*/
+
 	Sprite* sprite=Sprite::GetInstance();
 	Model* model = Model::GetInstance();
 

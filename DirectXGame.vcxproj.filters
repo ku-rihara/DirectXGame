@@ -179,6 +179,9 @@
     <ClInclude Include="MaterialData.h">
       <Filter>MyEngine\struct</Filter>
     </ClInclude>
+    <ClInclude Include="D3DResourceLeakCheck.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.VS.hlsl" />

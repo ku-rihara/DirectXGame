@@ -147,11 +147,11 @@ void Model::CreateModel() {
 	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
 	directionalLightData_->intensity = 1.0f;
 	//行列--------------------------------------------------------------------------------------------------------
-	wvpResouce_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix));
+	wvpResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix));
 	//データを書き込む
 	wvpDate_ = nullptr;
 	//書き込むためのアドレスを取得
-	wvpResouce_->Map(0, nullptr, reinterpret_cast<void**>(&wvpDate_));
+	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpDate_));
 	//単位行列を書き込んでおく
 	wvpDate_->WVP = MakeIdentity4x4();
 	wvpDate_->World = MakeIdentity4x4();
@@ -178,7 +178,7 @@ void Model::DrawModel() {
 	//形状を設定
 	directXCommon->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResouce_->GetGPUVirtualAddress());
+	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
 	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, useMonsterBall ? TextureManager::GetInstance()->GetTextureSrvHandleGPU2() : TextureManager::GetInstance()->GetTextureSrvHandleGPU());
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
@@ -187,10 +187,3 @@ void Model::DrawModel() {
 	directXCommon->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }
 
-void Model::ReleaseModel() {
-	vertexResource_->Release();
-	directionalLightResource_->Release();
-	//indexResource_->Release();
-	materialResource_->Release();
-	wvpResouce_->Release();
-}

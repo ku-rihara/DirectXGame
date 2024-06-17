@@ -67,5 +67,4 @@ void Keta::Finalize() {
 #ifdef _DEBUG
 	imguiManager->Finalizer();
 #endif
-	sDirectXCommon->ResourceLeakCheck();
 }

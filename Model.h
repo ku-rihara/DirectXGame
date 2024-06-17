@@ -1,4 +1,5 @@
 #pragma once
+#include<wrl.h>
 #include<d3d12.h>
 #include<dxgi1_6.h>
 
@@ -21,15 +22,15 @@ private:
 	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
 	//リソース******************************************************************
 	//Material
-	ID3D12Resource* materialResource_;
+	Microsoft::WRL::ComPtr<ID3D12Resource >materialResource_;
 	//平行光源
-	ID3D12Resource* directionalLightResource_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResource_;
 	//頂点リソース
-	ID3D12Resource* vertexResource_;
+	Microsoft::WRL::ComPtr<ID3D12Resource>vertexResource_;
 	//wvpリソース
-	ID3D12Resource* wvpResouce_;
+	Microsoft::WRL::ComPtr<ID3D12Resource>wvpResource_;
 	//indexリソース
-	ID3D12Resource* indexResource_;
+	Microsoft::WRL::ComPtr<ID3D12Resource>indexResource_;
 
 	//データ****************************************************************************
 	TransformationMatrix* wvpDate_;
@@ -58,7 +59,6 @@ public:
 #ifdef _DEBUG
 	void DebugImGui();
 #endif
-	void ReleaseModel();
 
 	//getter
 	ModelData GetModelData()const { return modelData_; }

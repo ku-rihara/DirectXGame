@@ -1,5 +1,5 @@
 #pragma once
-
+#include<wrl.h>
 #include<d3d12.h>
 #include<dxgi1_6.h>
 //struct
@@ -15,16 +15,15 @@ private:
 	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite_{};
 	//リソース******************************************************************
 	//Material
-	ID3D12Resource* materialResourceSprite_;
+	Microsoft::WRL::ComPtr<ID3D12Resource >materialResourceSprite_;
 	//平行光源
-	ID3D12Resource* directionalLightResourceSprite_;
+	//Microsoft::WRL::ComPtr<ID3D12Resource*> directionalLightResourceSprite_;
 	//頂点リソース
-	ID3D12Resource* vertexResourceSprite_;
+	Microsoft::WRL::ComPtr<ID3D12Resource>vertexResourceSprite_;
 	//wvpリソース
-	ID3D12Resource* wvpResourceSprite_;
+	Microsoft::WRL::ComPtr<ID3D12Resource>wvpResourceSprite_;
 	//indexリソース
-	ID3D12Resource* indexResourceSprite_;
-
+	Microsoft::WRL::ComPtr<ID3D12Resource>indexResourceSprite_;
 	//データ****************************************************************************
 	TransformationMatrix* wvpDataSprite_;
 	Material* materialDateSprite_;
@@ -39,8 +38,6 @@ public:
 	void CreateSprite();
 
 	void DrawSprite();
-
-	void ReleaseSprite();
 
 	//setter
 	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->WVP = date; }
