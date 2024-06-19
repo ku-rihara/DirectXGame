@@ -1,10 +1,11 @@
 #include"Keta.h"
 #include"Transform.h"
 #include"WinApp.h"
-#include "D3DResourceLeakCheck.h"
 #include "Mesh.h"
 #include "Model.h"
 #include "Sprite.h"
+#include "DirectXCommon.h"
+#include"D3DResourceLeakCheck.h"
 
 #include "externals/imgui/imgui.h"
 
@@ -13,7 +14,7 @@ const char kWindowTitle[] = "CG2";
 
 //windowアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-	D3DResourceLeakChecker leakCheck;
+	/*D3DResourceLeakChecker leakCheck;*/
 	//ライブラリの初期化
 	Keta::Initialize(kWindowTitle, 1280, 720);
 
@@ -93,5 +94,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ライブラリの終了
 	Keta::Finalize();
 	return 0;
+
 }
 

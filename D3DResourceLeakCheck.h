@@ -5,7 +5,8 @@
 #include<dxgidebug.h>
 #include <wrl.h>
 
-struct D3DResourceLeakChecker {
+struct  D3DResourceLeakChecker {
+	
 	~D3DResourceLeakChecker() {
 		//リリースリークチェック
 		Microsoft::WRL::ComPtr<IDXGIDebug1> debug;

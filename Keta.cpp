@@ -5,7 +5,6 @@
 #include"WinApp.h"
 #include"DirectXCommon.h"
 
-
 #include"Matrix4x4.h"
 #include"Convert.h"
 #include <string>
@@ -19,7 +18,7 @@ namespace {
 
 
 void Keta::Initialize(const char* title, int width, int height) {
-
+	
 	//ゲームウィンドウの作成
 	std::string windowTitle = std::string(title);
 	auto&& titleString= ConvertString(windowTitle);
@@ -37,8 +36,6 @@ void Keta::Initialize(const char* title, int width, int height) {
 	textureManager = TextureManager::GetInstance();
 	textureManager->Load();
 	sDirectXCommon->commandExecution();
-
-
 }
 
 //メッセージがなければループする
