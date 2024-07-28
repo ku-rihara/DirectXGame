@@ -5,6 +5,7 @@
 #include"WinApp.h"
 #include"DirectXCommon.h"
 #include "Audio.h"
+#include"Input.h"
 
 #include"Matrix4x4.h"
 #include"Convert.h"
@@ -15,8 +16,8 @@ namespace {
 	DirectXCommon* sDirectXCommon = nullptr;
 	ImGuiManager* imguiManager = nullptr;
 	TextureManager* textureManager = nullptr;
-	/*Audio* audio = nullptr;
-	 std::vector<int> soundIds;*/
+	Audio* audio = nullptr;
+	Input* input = nullptr;
 }
 
 
@@ -36,13 +37,16 @@ void Keta::Initialize(const char* title, int width, int height) {
 	imguiManager = ImGuiManager::GetInstance();
 	imguiManager->Init(sWinApp, sDirectXCommon);
 
+	HINSTANCE w;
+	input = Input::GetInstance();
+	input->Init(w,sWinApp->GetHwnd());
+
+	audio = Audio::GetInstance();
+	audio->Init();
+
 	textureManager = TextureManager::GetInstance();
 	textureManager->Load();
 	sDirectXCommon->commandExecution();
-
-	/*audio=Audio::GetInstance();
-	audio->Init();*/
-	
 }
 
 //メッセージがなければループする
@@ -55,6 +59,7 @@ void Keta::BeginFrame() {
 	imguiManager->Begin();	
 	//開発者UIの処理。実際に開発用のUIを出す場合はここをゲーム固有の処理に書き換える	
 #endif
+	input->Update();
 	sDirectXCommon->ScreenClear();
 }
 //フレームの終わり
@@ -67,9 +72,20 @@ void Keta::EndFrame() {
 
 void Keta::Finalize() {
 	CoUninitialize();
+	audio->Finalizer();
 	sDirectXCommon->ReleaseObject();
 	
 #ifdef _DEBUG
 	imguiManager->Finalizer();
 #endif
+}
+
+
+int Keta::SoundLoadWave(const char* filename) {
+	return audio->SoundLoadWave(filename);
+}
+
+
+void Keta::SoundPlayWave(int soundId) {
+	audio->SoundPlayWave(soundId);
 }

@@ -104,6 +104,10 @@ void Audio::SoundPlayWave(int soundId) {
 	result = pSourceVoice->Start();
 }
 
-void Audio::Finalizer() {
+void Audio::Finalizer() {	
 	xAudio2_.Reset();
+	for (int i = 0; i < int(soundDatas_.size()); ++i) {
+		SoundUnload(i);
+	}
+	soundDatas_.clear();
 }

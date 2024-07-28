@@ -5,13 +5,13 @@
 #include "Model.h"
 #include "Sprite.h"
 #include "DirectXCommon.h"
-#include"Audio.h"
+//#include"Audio.h"
 #include"D3DResourceLeakCheck.h"
 
 #include "externals/imgui/imgui.h"
 
 
-const char kWindowTitle[] = "CG2";
+const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ_CG2";
 
 //windowアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -31,13 +31,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	tramsform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
 	transformSprite = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
 	cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,-5.0f} };
-	// Audioの初期化
-	Audio* audio = Audio::GetInstance();
-	audio->Init();
 	
-	int soundData = 0;
-	soundData=audio->SoundLoadWave("Resources/fanfare.wav");
-	audio->SoundPlayWave(soundData);
+	int soundId = Keta::SoundLoadWave("Resources/fanfare.wav");
+	Keta::SoundPlayWave(soundId);
 	
 	//ウィンドウのxボタンが押されるまでループ
 	while (Keta::ProcessMessage() == 0) {
@@ -101,11 +97,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//ライブラリの終了
 	Keta::Finalize();
-	// 音声データ解放
-	audio->Finalizer();
-	for (int i = 0; i < audio->GetSoundDatas().size(); ++i) {
-		audio->SoundUnload(i);
-	}
+	
 	return 0;
 
 }
