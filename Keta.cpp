@@ -5,6 +5,7 @@
 #include"WinApp.h"
 #include"DirectXCommon.h"
 
+
 #include"Matrix4x4.h"
 #include"Convert.h"
 #include <string>
@@ -14,6 +15,7 @@ namespace {
 	DirectXCommon* sDirectXCommon = nullptr;
 	ImGuiManager* imguiManager = nullptr;
 	TextureManager* textureManager = nullptr;
+	Audio* audio = nullptr;
 }
 
 
@@ -36,6 +38,8 @@ void Keta::Initialize(const char* title, int width, int height) {
 	textureManager = TextureManager::GetInstance();
 	textureManager->Load();
 	sDirectXCommon->commandExecution();
+
+	
 }
 
 //メッセージがなければループする
@@ -61,6 +65,8 @@ void Keta::EndFrame() {
 void Keta::Finalize() {
 	CoUninitialize();
 	sDirectXCommon->ReleaseObject();
+	audio->Finalizer();
+	
 #ifdef _DEBUG
 	imguiManager->Finalizer();
 #endif
