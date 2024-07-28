@@ -32,13 +32,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	transformSprite = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
 	cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,-5.0f} };
 	// Audioの初期化
-	SoundData soundData1;
 	Audio* audio = Audio::GetInstance();
 	audio->Init();
-
-	SoundData soundData1;
-	audio->SoundLoadWave("Resources/Alarm01.wav");
-	audio->SoundPlayWave(audio->GetXAudio2(), Keta::so);
+	
+	int soundData = 0;
+	soundData=audio->SoundLoadWave("Resources/fanfare.wav");
+	audio->SoundPlayWave(soundData);
+	
 	//ウィンドウのxボタンが押されるまでループ
 	while (Keta::ProcessMessage() == 0) {
 		//フレームの開始
@@ -102,7 +102,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ライブラリの終了
 	Keta::Finalize();
 	// 音声データ解放
-	audio->SoundUnload(&soundData1);
+	audio->Finalizer();
+	for (int i = 0; i < audio->GetSoundDatas().size(); ++i) {
+		audio->SoundUnload(i);
+	}
 	return 0;
 
 }

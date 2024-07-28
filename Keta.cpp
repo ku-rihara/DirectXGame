@@ -4,7 +4,7 @@
 #include"TextureManager.h"
 #include"WinApp.h"
 #include"DirectXCommon.h"
-
+#include "Audio.h"
 
 #include"Matrix4x4.h"
 #include"Convert.h"
@@ -15,7 +15,8 @@ namespace {
 	DirectXCommon* sDirectXCommon = nullptr;
 	ImGuiManager* imguiManager = nullptr;
 	TextureManager* textureManager = nullptr;
-	Audio* audio = nullptr;
+	/*Audio* audio = nullptr;
+	 std::vector<int> soundIds;*/
 }
 
 
@@ -39,6 +40,8 @@ void Keta::Initialize(const char* title, int width, int height) {
 	textureManager->Load();
 	sDirectXCommon->commandExecution();
 
+	/*audio=Audio::GetInstance();
+	audio->Init();*/
 	
 }
 
@@ -65,7 +68,6 @@ void Keta::EndFrame() {
 void Keta::Finalize() {
 	CoUninitialize();
 	sDirectXCommon->ReleaseObject();
-	audio->Finalizer();
 	
 #ifdef _DEBUG
 	imguiManager->Finalizer();
