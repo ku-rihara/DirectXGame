@@ -84,7 +84,7 @@ Microsoft::WRL::ComPtr < ID3D12Resource> TextureManager::UploadTextureDate(Micro
 void TextureManager::Load() {
 	directXCommon_ = DirectXCommon::GetInstance();
 	model_ = Model::GetInstance();
-	 mipImages_ = LoadTexture("resources/uvChecker.png");
+	 mipImages_ = LoadTexture("Resources/uvChecker.png");
 	const DirectX::TexMetadata& metadata = mipImages_.GetMetadata();
 	textureResource_ = CreateTextureResource(directXCommon_->GetDevice(), metadata);
 	//2
