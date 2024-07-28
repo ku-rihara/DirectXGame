@@ -5,6 +5,7 @@
 #include "Model.h"
 #include "Sprite.h"
 #include "DirectXCommon.h"
+#include"Audio.h"
 #include"D3DResourceLeakCheck.h"
 
 #include "externals/imgui/imgui.h"
@@ -30,7 +31,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	tramsform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
 	transformSprite = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
 	cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,-5.0f} };
+	// Audioの初期化
+	SoundData soundData1;
+	Audio* audio = Audio::GetInstance();
+	audio->Init();
 
+	SoundData soundData1;
+	audio->SoundLoadWave("Resources/Alarm01.wav");
+	audio->SoundPlayWave(audio->GetXAudio2(), Keta::so);
 	//ウィンドウのxボタンが押されるまでループ
 	while (Keta::ProcessMessage() == 0) {
 		//フレームの開始
@@ -93,6 +101,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//ライブラリの終了
 	Keta::Finalize();
+	// 音声データ解放
+	audio->SoundUnload(&soundData1);
 	return 0;
 
 }
