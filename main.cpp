@@ -5,7 +5,8 @@
 #include "Model.h"
 #include "Sprite.h"
 #include "DirectXCommon.h"
-//#include"Audio.h"
+#include "SoundManager.h"
+
 #include"D3DResourceLeakCheck.h"
 
 #include "externals/imgui/imgui.h"
@@ -32,9 +33,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	transformSprite = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
 	cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,-5.0f} };
 	
-	int soundId = Keta::SoundLoadWave("Resources/fanfare.wav");
-	Keta::SoundPlayWave(soundId);
-	
+	int soundId = SoundManager::GetInstance()->SoundLoadWave("Resources/fanfare.wav");
+	SoundManager::GetInstance()->SoundPlayWave(soundId);
 	//ウィンドウのxボタンが押されるまでループ
 	while (Keta::ProcessMessage() == 0) {
 		//フレームの開始

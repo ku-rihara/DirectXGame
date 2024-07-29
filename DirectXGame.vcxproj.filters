@@ -96,6 +96,9 @@
     <ClCompile Include="Input.cpp">
       <Filter>MyEngine\ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Convert.h">
@@ -195,6 +198,9 @@
       <Filter>MyEngine\struct</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
+      <Filter>MyEngine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
