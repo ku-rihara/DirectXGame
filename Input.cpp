@@ -32,8 +32,29 @@ void Input::Init(HINSTANCE hInstance, HWND hWnd) {
 }
 
 void Input::Update() {
+	keyPre_ = key_;
 	//キーボードの情報の取得開始
 	keyboard_->Acquire();
 	//全キーの入力状態を取得する
 	keyboard_->GetDeviceState(sizeof(key_), key_.data());
+}
+
+
+bool Input::PushKey(BYTE keyNumber)const {
+	return (key_[keyNumber] & 0x80);
+}
+
+
+bool Input::TrrigerKey(BYTE keyNumber)const {
+	return (key_[keyNumber] & 0x80) && !(keyPre_[keyNumber] & 0x80);
+}
+
+
+bool Input::ReleaseKey(BYTE keyNumber)const {
+	return !(key_[keyNumber] & 0x80);
+}
+
+
+bool Input::ReleaseMomentKey(BYTE keyNumber)const {
+	return !(key_[keyNumber] & 0x80) && (keyPre_[keyNumber] & 0x80);
 }

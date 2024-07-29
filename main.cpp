@@ -6,6 +6,7 @@
 #include "Sprite.h"
 #include "DirectXCommon.h"
 #include "SoundManager.h"
+#include"Input.h"
 
 #include"D3DResourceLeakCheck.h"
 
@@ -20,26 +21,29 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ライブラリの初期化
 	Keta::Initialize(kWindowTitle, 1280, 720);
 
-	Sprite* sprite=Sprite::GetInstance();
+	Sprite* sprite = Sprite::GetInstance();
 	Model* model = Model::GetInstance();
 
 	Transform tramsform;
 	Transform transformSprite;
 	Transform cameraTransform;
 	Transform uvTransformSprite;
-	
+
 	uvTransformSprite = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
 	tramsform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
 	transformSprite = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
 	cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,-5.0f} };
-	
+
 	int soundId = SoundManager::GetInstance()->SoundLoadWave("Resources/fanfare.wav");
 	SoundManager::GetInstance()->SoundPlayWave(soundId);
+
 	//ウィンドウのxボタンが押されるまでループ
 	while (Keta::ProcessMessage() == 0) {
 		//フレームの開始
 		Keta::BeginFrame();
-		
+		if (Input::GetInstance()->TrrigerKey(DIK_A)) {
+			OutputDebugStringA("HIT A\n");
+		}
 #ifdef _DEBUG
 		ImGui::Begin("Window");
 
@@ -54,7 +58,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::DragFloat3("Rotate", &tramsform.rotate.x, 0.01f);
 			ImGui::DragFloat3("Translate", &tramsform.translate.x, 0.01f);
 			ImGui::TreePop();
-		}	
+		}
 		if (ImGui::TreeNode("Sprite")) {
 			ImGui::DragFloat3("Scale", &transformSprite.scale.x, 0.1f);
 			ImGui::DragFloat3("Rotate", &transformSprite.rotate.x, 1.0f);
@@ -62,8 +66,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("UVTransform")) {
-			ImGui::DragFloat2("Scale", &uvTransformSprite.scale.x, 0.1f,-10.0f,10.0f);
-			ImGui::DragFloat2("Translate", &uvTransformSprite.translate.x, 0.01f,-10.0f,10.0f);
+			ImGui::DragFloat2("Scale", &uvTransformSprite.scale.x, 0.1f, -10.0f, 10.0f);
+			ImGui::DragFloat2("Translate", &uvTransformSprite.translate.x, 0.01f, -10.0f, 10.0f);
 			ImGui::SliderAngle("Rotate", &uvTransformSprite.rotate.z);
 			ImGui::TreePop();
 		}
@@ -77,11 +81,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//三角形
 		Matrix4x4 worldMatrix = MakeAffineMatrix(tramsform.scale, tramsform.rotate, tramsform.translate);
 		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
-		
+
 		//スプライト
 		Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale, transformSprite.rotate, transformSprite.translate);
 		Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
-		Matrix4x4 projectionMatrixSprite=MakeOrthographicMatrix(0.0f,0.0f, float(WinApp::kWindowWidth),float(WinApp::kWindowHeight), 0.0f, 100.0f);
+		Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
 		Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite, projectionMatrixSprite);
 		model->SetwvpDate(worldViewProjectionMatrix);
 		sprite->SetTransformationMatrixDataSprite(worldViewProjectionMatrixSprite);
@@ -97,7 +101,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//ライブラリの終了
 	Keta::Finalize();
-	
+
 	return 0;
 
 }
