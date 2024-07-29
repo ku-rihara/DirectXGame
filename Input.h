@@ -15,5 +15,8 @@ public:
 	static Input* GetInstance();
 	void Init(HINSTANCE hInstance,HWND hwnd);
 	void Update();
+
+	const BYTE* GetKeyState() const { return key_.data(); }
+	const BYTE* GetPreviousKeyState() const { return keyPre_.data(); }
 };
 

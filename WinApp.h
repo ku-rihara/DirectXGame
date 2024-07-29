@@ -34,6 +34,7 @@ public://メンバ関数
 
 	//getter
 	HWND GetHwnd() const { return hwnd_; }
+	HINSTANCE GetHInstaice()const { return wc_.hInstance; }
 	ID3D12Debug1* GetDebugController()const { return debugController_.Get(); }
 };
 

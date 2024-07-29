@@ -16,7 +16,7 @@ void Audio::Init() {
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
 }
 
-int Audio::SoundLoadWave(const char* filename) {
+SoundData Audio::SoundLoadWave(const char* filename) {
 	/*HRESULT result;*/
 	//①ファイルオープン------------------------
 	//ファイル入力ストリームのインスタンス
@@ -72,31 +72,30 @@ int Audio::SoundLoadWave(const char* filename) {
 	soundData.wfex = format.fmt;
 	soundData.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
 	soundData.bufferSize = data.size;
-	soundDatas_.push_back(soundData);
-	return int(soundDatas_.size())-1;
+	return soundData;
  }
 
-void  Audio::SoundUnload(int soundId) {
+void  Audio::SoundUnload(SoundData* soundData) {
 	//バッファのメモリを解放
-	delete[]soundDatas_[soundId].pBuffer;
+	delete[]soundData->pBuffer;
 
-	soundDatas_[soundId].pBuffer = 0;
-	soundDatas_[soundId].bufferSize = 0;
-	soundDatas_[soundId].wfex = {};
+	soundData->pBuffer = 0;
+	soundData->bufferSize = 0;
+	soundData->wfex = {};
 }
 
-void Audio::SoundPlayWave(int soundId) {
+void Audio::SoundPlayWave(IXAudio2* xAudio2,const SoundData&soundData) {
 
 	HRESULT result;
 	//波形フォーマットを元にSourceVoiceの生成
 	IXAudio2SourceVoice* pSourceVoice = nullptr;
-	result = xAudio2_->CreateSourceVoice(&pSourceVoice, &soundDatas_[soundId].wfex);
+	result = xAudio2->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
 	assert(SUCCEEDED(result));
 
 	//再生する波形データの設定
 	XAUDIO2_BUFFER buf{};
-	buf.pAudioData = soundDatas_[soundId].pBuffer;
-	buf.AudioBytes = soundDatas_[soundId].bufferSize;
+	buf.pAudioData = soundData.pBuffer;
+	buf.AudioBytes = soundData.bufferSize;
 	buf.Flags = XAUDIO2_END_OF_STREAM;
 
 	//波形データの再生
@@ -106,8 +105,4 @@ void Audio::SoundPlayWave(int soundId) {
 
 void Audio::Finalizer() {	
 	xAudio2_.Reset();
-	for (int i = 0; i < int(soundDatas_.size()); ++i) {
-		SoundUnload(i);
-	}
-	soundDatas_.clear();
 }

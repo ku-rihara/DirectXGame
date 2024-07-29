@@ -18,9 +18,7 @@ public:
 	/// システム全体の終了
 	static void Finalize();
 
-	//サウンド関連
-	static int SoundLoadWave(const char* filename);
+	
 
-	static void SoundPlayWave(int soundId);
 };
 

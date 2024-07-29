@@ -4,7 +4,7 @@
 #include"TextureManager.h"
 #include"WinApp.h"
 #include"DirectXCommon.h"
-#include "Audio.h"
+#include "SoundManager.h"
 #include"Input.h"
 
 #include"Matrix4x4.h"
@@ -16,7 +16,7 @@ namespace {
 	DirectXCommon* sDirectXCommon = nullptr;
 	ImGuiManager* imguiManager = nullptr;
 	TextureManager* textureManager = nullptr;
-	Audio* audio = nullptr;
+	SoundManager* soundManager = nullptr;
 	Input* input = nullptr;
 }
 
@@ -37,12 +37,11 @@ void Keta::Initialize(const char* title, int width, int height) {
 	imguiManager = ImGuiManager::GetInstance();
 	imguiManager->Init(sWinApp, sDirectXCommon);
 
-	HINSTANCE w;
 	input = Input::GetInstance();
-	input->Init(w,sWinApp->GetHwnd());
+	input->Init(sWinApp->GetHInstaice(), sWinApp->GetHwnd());
 
-	audio = Audio::GetInstance();
-	audio->Init();
+	soundManager = SoundManager::GetInstance();
+	soundManager->Init();
 
 	textureManager = TextureManager::GetInstance();
 	textureManager->Load();
@@ -72,7 +71,7 @@ void Keta::EndFrame() {
 
 void Keta::Finalize() {
 	CoUninitialize();
-	audio->Finalizer();
+	soundManager->Finalize();
 	sDirectXCommon->ReleaseObject();
 	
 #ifdef _DEBUG
@@ -80,12 +79,3 @@ void Keta::Finalize() {
 #endif
 }
 
-
-int Keta::SoundLoadWave(const char* filename) {
-	return audio->SoundLoadWave(filename);
-}
-
-
-void Keta::SoundPlayWave(int soundId) {
-	audio->SoundPlayWave(soundId);
-}
