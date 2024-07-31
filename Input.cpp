@@ -1,9 +1,14 @@
 #include "Input.h"
 #include<assert.h>
 
-#pragma comment(lib,"dinput8.lib")
-#pragma comment(lib,"dxguid.lib")
+#pragma comment(lib, "dinput8.lib")
+#pragma comment(lib, "dxguid.lib")
+#pragma comment(lib, "xinput.lib")
 
+template bool Input::GetJoystickState<DIJOYSTATE2>(int32_t stickNo, DIJOYSTATE2& out) const;
+template bool Input::GetJoystickState<XINPUT_STATE>(int32_t stickNo, XINPUT_STATE& out) const;
+template bool Input::GetJoystickStatePrevious<DIJOYSTATE2>(int32_t stickNo, DIJOYSTATE2& out) const;
+template bool Input::GetJoystickStatePrevious<XINPUT_STATE>(int32_t stickNo, XINPUT_STATE& out) const;
 Input* Input::GetInstance() {
 	static Input instance;
 	return &instance;
@@ -29,6 +34,21 @@ void Input::Init(HINSTANCE hInstance, HWND hWnd) {
 	result = keyboard_->SetCooperativeLevel(
 		hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(result));
+
+	//XInputデバイスの追加
+	for (DWORD i = 0; i < XUSER_MAX_COUNT; ++i) {
+		XINPUT_STATE state;
+		ZeroMemory(&state, sizeof(XINPUT_STATE));
+		if (XInputGetState(i, &state) == ERROR_SUCCESS) {
+			Joystick joystick = {};
+			joystick.type_ = PadType::XInput;
+			joystick.state_ = state;
+			joystick.statePre_ = state;
+			joystick.deadZoneL_ = XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+			joystick.deadZoneR_= XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+			joysticks_.push_back(joystick);
+		}
+	}
 }
 
 void Input::Update() {
@@ -37,9 +57,22 @@ void Input::Update() {
 	keyboard_->Acquire();
 	//全キーの入力状態を取得する
 	keyboard_->GetDeviceState(sizeof(key_), key_.data());
+
+	for (auto& joystick : joysticks_) {
+		if (joystick.type_ == PadType::XInput) {
+			DWORD dwResult;
+			XINPUT_STATE state;
+			ZeroMemory(&state, sizeof(XINPUT_STATE));
+			dwResult = XInputGetState(0, &state);
+			if (dwResult == ERROR_SUCCESS) {
+				joystick.statePre_ = joystick.state_;
+				joystick.state_ = state;
+			}
+		}
+	}
 }
 
-
+//キーボード*************************************************************
 bool Input::PushKey(BYTE keyNumber)const {
 	return (key_[keyNumber] & 0x80);
 }
@@ -58,3 +91,71 @@ bool Input::ReleaseKey(BYTE keyNumber)const {
 bool Input::ReleaseMomentKey(BYTE keyNumber)const {
 	return !(key_[keyNumber] & 0x80) && (keyPre_[keyNumber] & 0x80);
 }
+
+//ゲームパッド*******************************************************************
+
+template<typename T>bool Input::GetJoystickState(int32_t stickNo, T& out)const {
+	if (stickNo < 0 || stickNo >= joysticks_.size()) {
+		return false;
+	}
+	const Joystick& joystick = joysticks_[stickNo];
+	if (joystick.type_ == PadType::DirectInput) {
+		if constexpr (std::is_same<T, DIJOYSTATE2>::value) {
+			if (std::holds_alternative<T>(joystick.state_)) {
+				out = std::get<T>(joystick.state_);
+				return true;
+			}
+		}
+	}
+	else if (joystick.type_ == PadType::XInput) {
+		if constexpr (std::is_same<T, XINPUT_STATE>::value) {
+			if (std::holds_alternative<T>(joystick.state_)) {
+				out = std::get<T>(joystick.state_);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+
+template<typename T>bool Input::GetJoystickStatePrevious(int32_t stickNo, T& out) const {
+	if (stickNo < 0 || stickNo >= joysticks_.size()) {
+		return false;
+	}
+	const Joystick& joystick = joysticks_[stickNo];
+	if (joystick.type_ == PadType::DirectInput) {
+		if constexpr (std::is_same<T, DIJOYSTATE2>::value) {
+			if (std::holds_alternative<T>(joystick.statePre_)) {
+				out = std::get<T>(joystick.statePre_);
+				return true;
+			}
+		}
+	}
+	else if (joystick.type_ == PadType::XInput) {
+		if constexpr (std::is_same<T, XINPUT_STATE>::value) {
+			if (std::holds_alternative<T>(joystick.statePre_)) {
+				out = std::get<T>(joystick.statePre_);	
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+
+
+void Input::SetJoystickDeadZone(int32_t stickNo, int32_t deadZoneL, int32_t deadZoneR) {
+
+	if (stickNo < 0 || stickNo >= static_cast<int32_t>(joysticks_.size())) {
+		return;
+	}
+
+	joysticks_[stickNo].deadZoneL_ = deadZoneL;
+	joysticks_[stickNo].deadZoneR_ = deadZoneR;
+}
+
+size_t Input::GetNumberOfJoysticks()const  {
+	return joysticks_.size();
+}
+

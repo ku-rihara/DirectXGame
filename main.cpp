@@ -41,6 +41,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	while (Keta::ProcessMessage() == 0) {
 		//フレームの開始
 		Keta::BeginFrame();
+
+
+		XINPUT_STATE xState;
+
+		bool xStateRetrieved = Input::GetInstance()->GetJoystickState(0, xState);
+
+
+		if (xStateRetrieved) {
+			// XInput のジョイスティック状態を使った処理
+			if (xState.Gamepad.wButtons&XINPUT_GAMEPAD_A) {
+				OutputDebugStringA("XInput: Joystick A \n");
+			}
+		}
+
 		if (Input::GetInstance()->TrrigerKey(DIK_A)) {
 			OutputDebugStringA("HIT A\n");
 		}
