@@ -7,6 +7,7 @@
 #include "DirectXCommon.h"
 #include "SoundManager.h"
 #include"Input.h"
+#include"DebugCamera.h"
 
 #include"D3DResourceLeakCheck.h"
 
@@ -28,7 +29,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Transform transformSprite;
 	Transform cameraTransform;
 	Transform uvTransformSprite;
-
+	DebugCamera* debugCamera_ = new DebugCamera(1280, 720);
+	debugCamera_->Init();
 	uvTransformSprite = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
 	tramsform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
 	transformSprite = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
@@ -46,7 +48,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		XINPUT_STATE xState;
 
 		bool xStateRetrieved = Input::GetInstance()->GetJoystickState(0, xState);
-
+		debugCamera_->Update();
 
 		if (xStateRetrieved) {
 			// XInput のジョイスティック状態を使った処理
@@ -89,8 +91,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #endif
 		//tramsform.rotate.y += 0.03f;
 		Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
-		Matrix4x4 viewMatrix = Inverse(cameraMatrix);
-		Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(WinApp::kWindowWidth) / float(WinApp::kWindowHeight), 0.1f, 100.0f);
+	/*	Matrix4x4 viewMatrix = Inverse(cameraMatrix);
+		Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(WinApp::kWindowWidth) / float(WinApp::kWindowHeight), 0.1f, 100.0f);*/
+		// カメラ行列の計算をデバッグカメラのビュープロジェクションから行う
+		Matrix4x4 viewMatrix = debugCamera_->GetViewProjection().matView_;
+		Matrix4x4 projectionMatrix = debugCamera_->GetViewProjection().matProjection_;
 
 		//三角形
 		Matrix4x4 worldMatrix = MakeAffineMatrix(tramsform.scale, tramsform.rotate, tramsform.translate);

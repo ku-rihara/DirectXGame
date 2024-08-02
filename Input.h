@@ -1,13 +1,24 @@
 #pragma once
-#define DIRECTNPUT_VERSION 0x0800//バージョン指定
-#include<dinput.h>
-#include <XInput.h>
+
 #include <variant>
 #include<wrl.h>
 #include<vector>
 #include <array>
+#include"Vector2.h"
+
+#include <XInput.h>
+#define DIRECTNPUT_VERSION 0x0800//バージョン指定
+#include<dinput.h>
+
+// インナークラス
+struct MouseMove {
+	LONG lX;
+	LONG lY;
+	LONG lZ;
+};
 
 class Input {
+
 private:
 	enum class PadType {
 		DirectInput,
@@ -29,6 +40,11 @@ private:
 	std::array<BYTE, 256> key_;
 	std::array<BYTE, 256> keyPre_;
 	std::vector<Joystick>joysticks_;
+
+	Microsoft::WRL::ComPtr<IDirectInputDevice8> devMouse_;
+	DIMOUSESTATE2 mouse_;
+	DIMOUSESTATE2 mousePre_;
+	Vector2 mousePosition_;
 public:
 	// シングルトンインスタンスの取得
 	static Input* GetInstance();
@@ -94,6 +110,43 @@ public:
 	/// <returns>接続されているジョイスティック数</returns>
 	size_t GetNumberOfJoysticks()const;
 
+	///// <summary>
+	///// 全マウス情報取得
+	///// </summary>
+	///// <returns>マウス情報</returns>
+	//const DIMOUSESTATE2& GetAllMouse() const;
+
+	/// <summary>
+	/// マウスの押下をチェック
+	/// </summary>
+	/// <param name="buttonNumber">マウスボタン番号(0:左,1:右,2:中,3~7:拡張マウスボタン)</param>
+	/// <returns>押されているか</returns>
+	bool IsPressMouse(int32_t mouseNumber) const;
+
+	/// <summary>
+	/// マウスのトリガーをチェック。押した瞬間だけtrueになる
+	/// </summary>
+	/// <param name="buttonNumber">マウスボタン番号(0:左,1:右,2:中,3~7:拡張マウスボタン)</param>
+	/// <returns>トリガーか</returns>
+	bool IsTriggerMouse(int32_t buttonNumber) const;
+
+	/// <summary>
+	/// マウス移動量を取得
+	/// </summary>
+	/// <returns>マウス移動量</returns>
+	MouseMove GetMouseMove();
+
+	/// <summary>
+	/// ホイールスクロール量を取得する
+	/// </summary>
+	/// <returns>ホイールスクロール量。奥側に回したら+。Windowsの設定で逆にしてたら逆</returns>
+	int32_t GetWheel() const;
+
+	/// <summary>
+	/// マウスの位置を取得する（ウィンドウ座標系）
+	/// </summary>
+	/// <returns>マウスの位置</returns>
+	const Vector2& GetMousePosition() const;
 
 	const BYTE* GetKeyState() const { return key_.data(); }
 	const BYTE* GetPreviousKeyState() const { return keyPre_.data(); }

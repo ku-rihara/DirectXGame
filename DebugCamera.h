@@ -1,17 +1,34 @@
 #pragma once
 #include"Vector3.h"
 #include"Matrix4x4.h"
+#include"ViewProjection.h"
+#include"Input.h"
 class DebugCamera{
-	//ローカル回転角
-	Vector3 rotate = {};
-	//ローカル座標
-	Vector3 translation_ = { 0,0,-50 };
-
-	//ビュー行列
-	Matrix4x4 matView_ = {};
-	//射影行列
-	Matrix4x4 matProjection_ = {};
+	// カメラ注視点までの距離
+	static const float distance_;
+private:
+	//入力クラスのポインタ
+	Input* input_;
+	//スケーリング
+	float scaleX_ = 1.0f;
+	float scaleY_ = 1.0f;
+	//ビュープロジェクション
+	ViewProjection viewProjection_;
+	//回転行列
+	Matrix4x4 matRot_;
+private:
+	/// <summary>
+	/// 行列更新
+	/// </summary>
+	void UpdateMatrix();
 public:
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="window_width">画面幅</param>
+	/// <param name="window_height">画面高さ</param>
+	DebugCamera(int window_width, int window_height);
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -21,5 +38,20 @@ public:
 	/// 更新
 	/// </summary>
 	void Update();
+
+
+	/// <summary>
+	/// プロジェクション行列計算用のメンバ設定関数群
+	/// </summary>
+	void SetFovAngleY(float value) { viewProjection_.fovAngleY_ = value; }
+	void SetAspectRatio(float value) { viewProjection_.aspectRatio_ = value; }
+	void SetNearZ(float value) { viewProjection_.nearZ_ = value; }
+	void SetFarZ(float value) { viewProjection_.farZ_ = value; }
+
+	/// <summary>
+	/// ビュープロジェクションを取得
+	/// </summary>
+	/// <returns>ビュープロジェクション</returns>
+	const ViewProjection& GetViewProjection() { return viewProjection_; }
 };
 

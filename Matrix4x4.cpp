@@ -53,7 +53,12 @@ Matrix4x4 Matrix4x4::operator - (const Matrix4x4& obj) const {
 	return result;
 }
 
-Matrix4x4 Matrix4x4::operator*(const Matrix4x4& obj) const {
+
+void Matrix4x4::operator*=(const Matrix4x4& obj) {
+	*this = *this * obj;
+}
+
+ Matrix4x4 Matrix4x4::operator*(const Matrix4x4& obj) const {
 	Matrix4x4 result;
 
 	for (int row = 0; row < 4; ++row) {
@@ -202,6 +207,10 @@ Matrix4x4 MakeRotateZMatrix(float radian) {
 	result.m[3][2] = 0;
 	result.m[3][3] = 1;
 	return result;
+}
+
+Matrix4x4 MakeRotateMatrix(Vector3 rotate) {
+	return (MakeRotateXMatrix(rotate.x) * MakeRotateYMatrix(rotate.y) * MakeRotateZMatrix(rotate.z));
 }
 
 Vector3 MatrixTransform(const Vector3& vector, const Matrix4x4& matrix) {

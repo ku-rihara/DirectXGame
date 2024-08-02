@@ -11,6 +11,7 @@ struct Matrix4x4 {
 	Matrix4x4 operator-(const Matrix4x4& obj) const; // 減算
 
 	Matrix4x4 operator*(const Matrix4x4& obj) const; // 積
+	void operator*=(const Matrix4x4& obj) ; // 積
 };
 Matrix4x4 MakeIdentity4x4();
 
@@ -30,6 +31,9 @@ Matrix4x4 MakeRotateYMatrix(float radian);
 
 // Z軸回転行列
 Matrix4x4 MakeRotateZMatrix(float radian);
+
+// 回転行列
+Matrix4x4 MakeRotateMatrix(Vector3 rotate);
 
 Vector3 MatrixTransform(const Vector3& vector, const Matrix4x4& matrix);
 
