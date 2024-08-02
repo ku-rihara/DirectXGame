@@ -1,4 +1,6 @@
-﻿#pragma once
+#pragma once
+struct Matrix4x4;
+
 struct Vector3 {
     float x;
     float y;
@@ -13,6 +15,7 @@ struct Vector3 {
 
     Vector3 operator*(const Vector3& obj)const;
     Vector3 operator*(const float& scalar)const;
+    Vector3 operator*(const Matrix4x4& obj) const; // 積
 
     Vector3 operator/(const Vector3& obj)const;
 };

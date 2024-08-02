@@ -94,20 +94,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//三角形
 		Matrix4x4 worldMatrix = MakeAffineMatrix(tramsform.scale, tramsform.rotate, tramsform.translate);
-		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
+		Matrix4x4 worldViewProjectionMatrix = worldMatrix*(viewMatrix*projectionMatrix);
 
 		//スプライト
 		Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale, transformSprite.rotate, transformSprite.translate);
 		Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
 		Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
-		Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite, projectionMatrixSprite);
+		Matrix4x4 worldViewProjectionMatrixSprite = worldMatrixSprite* projectionMatrixSprite;
 		model->SetwvpDate(worldViewProjectionMatrix);
 		sprite->SetTransformationMatrixDataSprite(worldViewProjectionMatrixSprite);
 
 		//UVTransform
 		Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTransformSprite.scale);
-		uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTransformSprite.rotate.z));
-		uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTransformSprite.translate));
+		uvTransformMatrix = (uvTransformMatrix* MakeRotateZMatrix(uvTransformSprite.rotate.z));
+		uvTransformMatrix = (uvTransformMatrix* MakeTranslateMatrix(uvTransformSprite.translate));
 		sprite->SetUVTransformSprite(uvTransformMatrix);
 		//フレームの終了
 		Keta::EndFrame();
