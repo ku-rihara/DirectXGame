@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Convert.cpp" />
+    <ClCompile Include="DebugCamera.cpp" />
     <ClCompile Include="DirectXCommon.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
     <ClCompile Include="externals\imgui\imgui_demo.cpp" />
@@ -38,6 +39,7 @@
   <ItemGroup>
     <ClInclude Include="Convert.h" />
     <ClInclude Include="D3DResourceLeakCheck.h" />
+    <ClInclude Include="DebugCamera.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="DirectXCommon.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
