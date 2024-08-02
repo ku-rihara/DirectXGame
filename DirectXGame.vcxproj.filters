@@ -75,9 +75,6 @@
     <ClCompile Include="Matrix4x4.cpp">
       <Filter>MyEngine\Function</Filter>
     </ClCompile>
-    <ClCompile Include="Vector3.cpp">
-      <Filter>MyEngine\Function</Filter>
-    </ClCompile>
     <ClCompile Include="Matrix3x3.cpp">
       <Filter>MyEngine\Function</Filter>
     </ClCompile>
@@ -98,6 +95,12 @@
     </ClCompile>
     <ClCompile Include="SoundManager.cpp">
       <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugCamera.cpp">
+      <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3.cpp">
+      <Filter>MyEngine\Function</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,9 +142,6 @@
     </ClInclude>
     <ClInclude Include="TextureManager.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector3.h">
-      <Filter>MyEngine\struct</Filter>
     </ClInclude>
     <ClInclude Include="Vector4.h">
       <Filter>MyEngine\struct</Filter>
@@ -202,6 +202,12 @@
     </ClInclude>
     <ClInclude Include="SoundManager.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugCamera.h">
+      <Filter>MyEngine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>MyEngine\struct</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
