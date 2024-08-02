@@ -1,5 +1,5 @@
-
 #include "Vector3.h"
+#include"Matrix4x4.h"
 #include<math.h>
 
 
@@ -53,6 +53,17 @@ Vector3 Vector3:: operator*(const float& obj)  const {
 	
 	return result;
 }
+
+Vector3 Vector3::operator*(const Matrix4x4& obj) const {
+	Vector3 result;
+
+	result.x = x * obj.m[0][0] + y * obj.m[1][0] + z * obj.m[2][0] + obj.m[3][0];
+	result.y = x * obj.m[0][1] + y * obj.m[1][1] + z * obj.m[2][1] + obj.m[3][1];
+	result.z = x * obj.m[0][2] + y * obj.m[1][2] + z * obj.m[2][2] + obj.m[3][2];
+
+	return result;
+
+};
 
 Vector3 Vector3:: operator/(const Vector3& obj)  const {
 

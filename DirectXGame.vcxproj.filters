@@ -102,6 +102,9 @@
     <ClCompile Include="Vector3.cpp">
       <Filter>MyEngine\Function</Filter>
     </ClCompile>
+    <ClCompile Include="WorldTransform.cpp">
+      <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Convert.h">
@@ -208,6 +211,9 @@
     </ClInclude>
     <ClInclude Include="Vector3.h">
       <Filter>MyEngine\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldTransform.h">
+      <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
