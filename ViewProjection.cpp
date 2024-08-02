@@ -1,28 +1,25 @@
-#include "WorldTransform.h"
+#include "ViewProjection.h"
 #include"DirectXCommon.h"
+#include <DirectXMath.h>
 #include<assert.h>
-
-void WorldTransform::Init() {
-	//ローカルスケール
-	scale_ = { 1,1,1 };
-	//ローカル回転角
-	rotation_ = {};
-	//ローカル座標
-	translation_ = {};
-
-	//定数バッファの生成
+void ViewProjection::Init() {
+	//定数バッファ生成
 	CreateConstantBuffer();
 	//マッピング
 	Map();
-	// 行列の更新
-	UpdateMatrix();
+	//ビュー行列の更新
+	UpdateViewMatrix();
+	//射影行列の更新
+	UpdateProjectionMatrix();
+	//行列の転送
+	TransferMatrix();
 }
 
-void WorldTransform::CreateConstantBuffer() {
+void ViewProjection::CreateConstantBuffer() {
 	//デバイスの取得
 	Microsoft::WRL::ComPtr<ID3D12Device> device = DirectXCommon::GetInstance()->GetDevice();
 	//定数バッファのサイズを計算
-	const UINT bufferSize = sizeof(ConstBufferDataWorldTransform);
+	const UINT bufferSize = sizeof(ConstBufferDataViewProjection);
 
 	//定数バッファを生成
 	constBuffer_ = DirectXCommon::GetInstance()->CreateBufferResource(device, bufferSize);
@@ -50,28 +47,41 @@ void WorldTransform::CreateConstantBuffer() {
 
 }
 
-void WorldTransform::Map() {
+void ViewProjection::Map() {
 	//定数バッファのマッピング
 	D3D12_RANGE readRange = {};
 	HRESULT hr = constBuffer_->Map(0, &readRange, reinterpret_cast<void**>(&constMap));
 	assert(SUCCEEDED(hr));
 }
 
-void WorldTransform::TransferMatrix() {
+void ViewProjection::TransferMatrix() {
 	//定数バッファに行列データを転送する
-	if (constMap) {
-		constMap->matWorld = matWorld_;
-	}
+	constMap->view = matView_;
+	constMap->projection = matProjection_;
+	constMap->cameraPos = translation_;
 }
 
 
-void WorldTransform::UpdateMatrix() {
-	// スケール、回転、平行移動を合成して行列を計算する
-	matWorld_ = MakeAffineMatrix(scale_, rotation_, translation_);
-	// 親子関係があれば親のワールド行列を掛ける
-	if (parent_) {
-		matWorld_ = matWorld_* parent_->matWorld_;
-	}
-	// 定数バッファに転送する
+void ViewProjection::UpdateMatrix() {
+	//ビュー行列の更新
+	UpdateViewMatrix();
+	//射影行列の更新
+	UpdateProjectionMatrix();
+	//行列の転送
 	TransferMatrix();
+}
+
+void ViewProjection::UpdateViewMatrix() {
+	//回転行列を計算
+	Matrix4x4 rotateMatrix = MakeRotateMatrix(rotation_);
+	//平行移動行列を計算
+	Matrix4x4 translateMatrx = MakeTranslateMatrix(translation_);
+	//ビュー行列を計算
+	Matrix4x4 cameraMatrix = rotateMatrix * translateMatrx;
+	matView_ = Inverse(cameraMatrix);
+}
+
+void ViewProjection::UpdateProjectionMatrix() {
+	matProjection_ = MakePerspectiveFovMatrix(fovAngleY_, aspectRatio_, nearZ_, farZ_);
+
 }

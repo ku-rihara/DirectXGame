@@ -35,6 +35,18 @@ void Input::Init(HINSTANCE hInstance, HWND hWnd) {
 		hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(result));
 
+	//マウスデバイスの生成
+	result = directInput_->CreateDevice(GUID_SysMouse, &devMouse_, NULL);
+	assert(SUCCEEDED(result));
+
+	//入力データ形式のセット
+	result = devMouse_->SetDataFormat(&c_dfDIMouse2);
+	assert(SUCCEEDED(result));
+
+	// 排他制御レベルのセット
+	result = devMouse_->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+	assert(SUCCEEDED(result));
+
 	//XInputデバイスの追加
 	for (DWORD i = 0; i < XUSER_MAX_COUNT; ++i) {
 		XINPUT_STATE state;
@@ -57,6 +69,14 @@ void Input::Update() {
 	keyboard_->Acquire();
 	//全キーの入力状態を取得する
 	keyboard_->GetDeviceState(sizeof(key_), key_.data());
+
+	mousePre_ = mouse_;
+	devMouse_->Acquire();
+	devMouse_->GetDeviceState(sizeof(mouse_), &mouse_);
+
+	// マウスの位置を更新
+	mousePosition_.x += static_cast<float>(mouse_.lX);
+	mousePosition_.y += static_cast<float>(mouse_.lY);
 
 	for (auto& joystick : joysticks_) {
 		if (joystick.type_ == PadType::XInput) {
@@ -143,8 +163,6 @@ template<typename T>bool Input::GetJoystickStatePrevious(int32_t stickNo, T& out
 	return false;
 }
 
-
-
 void Input::SetJoystickDeadZone(int32_t stickNo, int32_t deadZoneL, int32_t deadZoneR) {
 
 	if (stickNo < 0 || stickNo >= static_cast<int32_t>(joysticks_.size())) {
@@ -159,3 +177,28 @@ size_t Input::GetNumberOfJoysticks()const  {
 	return joysticks_.size();
 }
 
+//マウス****************************************************************
+
+bool Input::IsPressMouse(int32_t buttonNumber)const {
+	return(mouse_.rgbButtons[buttonNumber] & 0x80);
+}
+
+bool Input::IsTriggerMouse(int32_t buttonNumber)const {
+	return(mouse_.rgbButtons[buttonNumber] & 0x80) && !(mouse_.rgbButtons[buttonNumber] & 0x80);
+}
+
+MouseMove Input::GetMouseMove() {
+	MouseMove move;
+	move.lX = mouse_.lX;
+	move.lY = mouse_.lY;
+	move.lZ = mouse_.lZ;
+	return move;
+}
+
+int32_t Input::GetWheel() const{
+	return mouse_.lZ;
+}
+
+const Vector2& Input::GetMousePosition() const {
+	return mousePosition_;
+}

@@ -34,6 +34,7 @@
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Vector3.cpp" />
+    <ClCompile Include="ViewProjection.cpp" />
     <ClCompile Include="WinApp.cpp" />
     <ClCompile Include="WorldTransform.cpp" />
   </ItemGroup>
@@ -72,6 +73,7 @@
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="VertexData.h" />
+    <ClInclude Include="ViewProjection.h" />
     <ClInclude Include="WinApp.h" />
     <ClInclude Include="WorldTransform.h" />
   </ItemGroup>

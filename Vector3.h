@@ -29,5 +29,3 @@ Vector3 Cross(const Vector3& v1, const Vector3& v2);  //クロス積
 float Dot(const Vector3& v1, const Vector3& v2);  //内積
 
 float Length(const Vector3& v);   //長さ（ノルム）
-
-void VectorScreenPrintf(int x, int y, const Vector3& vector, const char* label);
