@@ -6,6 +6,7 @@
 #include"DirectXCommon.h"
 #include "SoundManager.h"
 #include"Input.h"
+#include"WorldTransformManager.h"
 
 #include"Matrix4x4.h"
 #include"Convert.h"
@@ -79,3 +80,6 @@ void Keta::Finalize() {
 #endif
 }
 
+void Keta::UpdateMatrixAll() {
+	WorldTransformManager::GetInstance().UpdateAll();
+}

@@ -31,8 +31,8 @@ private:
 	WorldTransform(const WorldTransform&) = delete;
 	WorldTransform& operator=(const WorldTransform&) = delete;
 public:
-	WorldTransform() = default;
-	~WorldTransform() = default;
+	WorldTransform() ;
+	~WorldTransform() ;
 
 	/// <summary>
 	/// 初期化

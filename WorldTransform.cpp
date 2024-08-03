@@ -1,6 +1,17 @@
 #include "WorldTransform.h"
 #include"DirectXCommon.h"
 #include<assert.h>
+#include"WorldTransformManager.h"
+
+
+WorldTransform::WorldTransform() {
+	WorldTransformManager::GetInstance().Register(this);
+}
+
+WorldTransform::~WorldTransform() {
+	WorldTransformManager::GetInstance().Unregister(this);
+}
+
 
 void WorldTransform::Init() {
 	//ローカルスケール
