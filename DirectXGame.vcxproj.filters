@@ -108,6 +108,9 @@
     <ClCompile Include="ViewProjection.cpp">
       <Filter>MyEngine\ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="WorldTransformManager.cpp">
+      <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Convert.h">
@@ -219,6 +222,9 @@
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="ViewProjection.h">
+      <Filter>MyEngine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldTransformManager.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -37,6 +37,7 @@
     <ClCompile Include="ViewProjection.cpp" />
     <ClCompile Include="WinApp.cpp" />
     <ClCompile Include="WorldTransform.cpp" />
+    <ClCompile Include="WorldTransformManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Convert.h" />
@@ -76,6 +77,7 @@
     <ClInclude Include="ViewProjection.h" />
     <ClInclude Include="WinApp.h" />
     <ClInclude Include="WorldTransform.h" />
+    <ClInclude Include="WorldTransformManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.PS.hlsl">

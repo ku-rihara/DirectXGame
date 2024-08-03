@@ -18,7 +18,7 @@ public:
 	/// システム全体の終了
 	static void Finalize();
 
-	
+	static void UpdateMatrixAll();
 
 };
 
