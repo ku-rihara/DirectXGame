@@ -44,9 +44,7 @@ void Keta::Initialize(const char* title, int width, int height) {
 	soundManager = SoundManager::GetInstance();
 	soundManager->Init();
 
-	textureManager = TextureManager::GetInstance();
-	textureManager->Load();
-	sDirectXCommon->commandExecution();
+	
 }
 
 //メッセージがなければループする

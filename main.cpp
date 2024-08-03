@@ -11,6 +11,7 @@
 #include "SoundManager.h"
 #include"Input.h"
 #include"DebugCamera.h"
+#include"TextureManager.h"
 
 #include"D3DResourceLeakCheck.h"
 
@@ -24,15 +25,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	/*D3DResourceLeakChecker leakCheck;*/
 	//ライブラリの初期化
 	Keta::Initialize(kWindowTitle, 1280, 720);
-
+	DirectXCommon* d = DirectXCommon::GetInstance();
 	Sprite* sprite = Sprite::GetInstance();
-	Model* model = Model::GetInstance();
-
+	Model* modelPlane = Model::GetInstance();
+	Model* modelAxis = Model::GetInstance();
+	modelPlane->CreateModel("Plane.obj");
+	modelAxis->CreateModel("axis.obj");
+	TextureManager*te = TextureManager::GetInstance();
+	te->Load();
+	d->commandExecution();
+	ViewProjection viewProjection;
+	WorldTransform axisTransform_;
 	WorldTransform tramsform;
 	WorldTransform transformSprite;
 	WorldTransform cameraTransform;
 	WorldTransform uvTransformSprite;
 	DebugCamera* debugCamera_ = new DebugCamera(1280, 720);
+	axisTransform_.Init();
 	debugCamera_->Init();
 	uvTransformSprite.Init();
 	tramsform.Init();
@@ -99,17 +108,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/*Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale_, cameraTransform.rotation_, cameraTransform.translation_);*/
 	/*	Matrix4x4 viewMatrix = Inverse(cameraMatrix);
 		Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(WinApp::kWindowWidth) / float(WinApp::kWindowHeight), 0.1f, 100.0f);*/
-		// カメラ行列の計算をデバッグカメラのビュープロジェクションから行う
-		Matrix4x4 viewMatrix = debugCamera_->GetViewProjection().matView_;
-		Matrix4x4 projectionMatrix = debugCamera_->GetViewProjection().matProjection_;
 
-		//三角形
-		Matrix4x4 worldViewProjectionMatrix = tramsform.matWorld_*(viewMatrix*projectionMatrix);
+		// カメラ行列の計算をデバッグカメラのビュープロジェクションから行う
+		viewProjection.matView_ = debugCamera_->GetViewProjection().matView_;
+		viewProjection.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
+
+		
 
 		//スプライト
 		Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
 		Matrix4x4 worldViewProjectionMatrixSprite = transformSprite.matWorld_* projectionMatrixSprite;
-		model->SetwvpDate(worldViewProjectionMatrix);
+	
 		sprite->SetTransformationMatrixDataSprite(worldViewProjectionMatrixSprite);
 
 		//UVTransform
@@ -117,6 +126,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		uvTransformMatrix = (uvTransformMatrix* MakeRotateZMatrix(uvTransformSprite.rotation_.z));
 		uvTransformMatrix = (uvTransformMatrix* MakeTranslateMatrix(uvTransformSprite.translation_));
 		sprite->SetUVTransformSprite(uvTransformMatrix);
+		
+		//Draw********************************************************
+		modelPlane->Draw(tramsform,viewProjection);
+		modelAxis->Draw(axisTransform_, viewProjection);
+
 		//フレームの終了
 		Keta::EndFrame();
 	}

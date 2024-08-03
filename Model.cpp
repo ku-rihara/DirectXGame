@@ -108,8 +108,8 @@ MaterialData Model:: LoadMaterialTemplateFile(const std::string& directoryPath, 
 	return materialData;
 }
 
-void Model::CreateModel() {
-	modelData_ = LoadObjFile("resources", "plane.obj");
+void Model::CreateModel(const std::string&ModelName) {
+	modelData_ = LoadObjFile("resources", ModelName);
 	//頂点リソースをつくる
 	vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(VertexData) * modelData_.vertices.size());
 	//頂点バッファビューを作成する
@@ -125,7 +125,6 @@ void Model::CreateModel() {
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate));
 	std::memcpy(vertexDate, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
-
 	//マテリアル--------------------------------------------------------------------------------------
 	materialResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(Material));
 	//マテリアルにデータを書き込む
@@ -172,7 +171,9 @@ void Model::DebugImGui() {
 }
 #endif
 
-void Model::DrawModel() {
+void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
+
+	wvpDate_->WVP = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
 	directXCommon->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	directXCommon->GetCommandList()->IASetIndexBuffer(&indexBufferView_);//IBV
 	//形状を設定

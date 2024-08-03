@@ -13,6 +13,8 @@
 #include"ModelData.h"
 #include"Material.h"
 #include "MaterialData.h"
+#include "WorldTransform.h"
+#include "ViewProjection.h"
 
 class Model{
 private:
@@ -50,11 +52,11 @@ public:
 	/// <summary>
 	/// モデル作成
 	/// </summary>
-	void CreateModel();
+	void CreateModel(const std::string& ModelName);
 	/// <summary>
 	/// モデル描画
 	/// </summary>
-	void DrawModel();
+	void Draw(const WorldTransform&worldTransform,const ViewProjection&viewProjection);
 
 #ifdef _DEBUG
 	void DebugImGui();

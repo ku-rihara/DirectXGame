@@ -34,7 +34,6 @@ public:
 	// 射影行列
 	Matrix4x4 matProjection_;
 private:
-private:
 	// 定数バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuffer_;
 	// マッピング済みアドレス
