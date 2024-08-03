@@ -20,7 +20,7 @@ Vector3 Vector3:: operator+(const Vector3& obj)  const {
 
 }
 
-Vector3 Vector3:: operator-(const Vector3& obj) const{
+Vector3 Vector3:: operator-(const Vector3& obj) const {
 
 	Vector3 result;
 
@@ -43,6 +43,13 @@ Vector3 Vector3:: operator*(const Vector3& obj) const {
 	return result;
 
 }
+Vector3 operator*(const float& scalar, const Vector3& vec) {
+	Vector3 result;
+	result.x = vec.x * scalar;
+	result.y = vec.y * scalar;
+	result.z = vec.z * scalar;
+	return result;
+}
 
 Vector3 Vector3:: operator*(const float& obj)  const {
 	Vector3 result;
@@ -50,7 +57,7 @@ Vector3 Vector3:: operator*(const float& obj)  const {
 	result.x = x * obj;
 	result.y = y * obj;
 	result.z = z * obj;
-	
+
 	return result;
 }
 
@@ -66,40 +73,17 @@ Vector3 Vector3::operator*(const Matrix4x4& obj) const {
 };
 
 Vector3 Vector3:: operator/(const Vector3& obj)  const {
-
 	Vector3 result;
-
-	if (obj.x != 0) {
-		result.x = x / obj.x;
-
-	}
-	else {
-		result.x = 0;
-
-	}
-
-	if (obj.y != 0) {
-		result.y = y / obj.y;
-
-	}
-	else {
-		result.y = 0;
-
-	}
-
-	if (obj.z != 0) {
-		result.z = z / obj.z;
-
-	}
-	else {
-		result.z = 0;
-
-	}
-
+	result.x = x / obj.x;
+	result.y = y / obj.y;
+	result.z = z / obj.z;
 	return result;
-
 }
-
+void Vector3::operator+=(const Vector3& obj) {
+	x += obj.x;
+	y += obj.y;
+	z += obj.z;
+}
 
 //内積
 float Dot(const Vector3& v1, const Vector3& v2) {
@@ -112,7 +96,7 @@ float Length(const Vector3& v) {
 }
 
 //正規化
-Vector3 Normnalize(const Vector3& v) {
+Vector3 Normalize(const Vector3& v) {
 	Vector3 result;
 
 	float length = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);

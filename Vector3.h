@@ -16,11 +16,14 @@ struct Vector3 {
     Vector3 operator*(const Vector3& obj)const;
     Vector3 operator*(const float& scalar)const;
     Vector3 operator*(const Matrix4x4& obj) const; // 積
+    friend Vector3 operator*(const float& scalar, const Vector3& vec);
 
     Vector3 operator/(const Vector3& obj)const;
+
+    void operator+=(const Vector3& obj);
 };
 
-Vector3 Normnalize(const Vector3& v);  //正規化
+Vector3 Normalize(const Vector3& v);  //正規化
 
 Vector3 Multiply(const Vector3&v1, const float& v2);
 

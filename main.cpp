@@ -120,7 +120,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//ライブラリの終了
 	Keta::Finalize();
-
+	delete debugCamera_;
 	return 0;
 
 }
