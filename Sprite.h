@@ -8,9 +8,10 @@
 #include"ModelData.h"
 #include"Material.h"
 
+class TextureManager;
 class Sprite {
 private:
-
+	TextureManager* textureManager_ = nullptr;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite_;
 	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite_{};
 	//リソース******************************************************************

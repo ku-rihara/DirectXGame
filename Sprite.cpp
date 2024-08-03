@@ -11,6 +11,9 @@ Sprite* Sprite::GetInstance() {
 	return &instance;
 }
 void Sprite::CreateSprite() {
+
+	textureManager_ = TextureManager::GetInstance();
+	textureManager_->Load("Resources/uvChecker.png");
 	//スプライト**************************************************************************************************
 	//Sprite用の頂点リソースを作る
 	vertexResourceSprite_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(VertexData) * 4);
@@ -90,7 +93,7 @@ void Sprite::DrawSprite() {
 	//TransformationmatrixCBufferの場所を設定
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite_->GetGPUVirtualAddress());
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResourceSprite_->GetGPUVirtualAddress());
-	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureSrvHandleGPU());
+	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetTextureSrvHandleGPU());
 	//描画(DrawCall/ドローコール)
 	directXCommon->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
