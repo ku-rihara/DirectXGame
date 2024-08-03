@@ -1,7 +1,7 @@
 #include "DirectXCommon.h"
 #include "ImGuiManager.h"
 #include"TextureManager.h"
-#include "Model.h"
+//#include "Model.h"
 #include"Mesh.h"
 #include "Sprite.h"
 //function
@@ -18,7 +18,7 @@
 namespace {
 	ImGuiManager* imguiManager_;
 	TextureManager* textureManager_;
-	Model* model_;
+	/*Model* model_;*/
 	Sprite* sprite_;
 }
 
@@ -134,7 +134,7 @@ void DirectXCommon::Init(WinApp* winApp, int32_t backBufferWidth, int32_t backBu
 	imguiManager_ = ImGuiManager::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
 	/*mesh_ = Mesh::GetInstance();*/
-	model_ = Model::GetInstance();
+	/*model_ = Model::GetInstance();*/
 	sprite_ = Sprite::GetInstance();
 }
 // DXGIデバイス初期化
@@ -463,7 +463,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	assert(SUCCEEDED(hr_));
 
 
-	model_->CreateModel();
+	/*model_->CreateModel();*/
 	sprite_->CreateSprite();
 
 	// 
@@ -516,14 +516,14 @@ void DirectXCommon::ScreenClear() {
 	commandList_->SetPipelineState(graphicsPipelineState_.Get());
 
 #ifdef _DEBUG
-	model_->DebugImGui();
+	//model_->DebugImGui();
 #endif
 }
 
 //フレーム終わり
 void DirectXCommon::CommandKick() {
 
-	model_->DrawModel();//モデル描画
+	//model_->DrawModel();//モデル描画
 
 	sprite_->DrawSprite();//スプライト描画
 
@@ -548,7 +548,6 @@ void DirectXCommon::CommandKick() {
 	//GPUにコマンドリストの実行を行わせる
 	Microsoft::WRL::ComPtr <ID3D12CommandList> commandLists[] = { commandList_.Get()};
 	commandQueue_->ExecuteCommandLists(1, commandLists->GetAddressOf());
-
 
 	//GPUとOSに画面の交換を行うよう通知する
 	swapChain_->Present(1, 0);
