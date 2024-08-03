@@ -4,6 +4,8 @@
 #include<dxgi1_6.h>
 
 #include<string>
+#include<map>
+#include <memory>
 #include"Vector4.h"
 #include"Vector3.h"
 #include"Vector2.h"
@@ -16,8 +18,12 @@
 #include "WorldTransform.h"
 #include "ViewProjection.h"
 
+class TextureManager;
 class Model{
 private:
+	static std::map<std::string, std::unique_ptr<Model>> modelInstances;
+
+	TextureManager* textureManager_=nullptr;
 	ModelData modelData_;
 
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
@@ -43,9 +49,9 @@ private:
 	//後に消すかも
 	bool useMonsterBall = true;
 public:
-	//シングルトンインスタンスの取得
-	static Model* GetInstance();
-
+	static Model* CreateInstance(const std::string& instanceName);
+	static Model* GetInstance(const std::string& instanceName);
+	
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
 
 	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);

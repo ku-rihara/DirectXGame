@@ -3,7 +3,7 @@
 #include"TextureManager.h"
 //#include "Model.h"
 #include"Mesh.h"
-#include "Sprite.h"
+//#include "Sprite.h"
 //function
 #include"Convert.h"
 //
@@ -19,7 +19,7 @@ namespace {
 	ImGuiManager* imguiManager_;
 	TextureManager* textureManager_;
 	/*Model* model_;*/
-	Sprite* sprite_;
+	/*Sprite* sprite_;*/
 }
 
 DirectXCommon* DirectXCommon::GetInstance() {
@@ -135,7 +135,7 @@ void DirectXCommon::Init(WinApp* winApp, int32_t backBufferWidth, int32_t backBu
 	textureManager_ = TextureManager::GetInstance();
 	/*mesh_ = Mesh::GetInstance();*/
 	/*model_ = Model::GetInstance();*/
-	sprite_ = Sprite::GetInstance();
+	/*sprite_ = Sprite::GetInstance();*/
 }
 // DXGIデバイス初期化
 void DirectXCommon::DXGIDeviceInit() {
@@ -464,7 +464,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 
 
 	/*model_->CreateModel();*/
-	sprite_->CreateSprite();
+	/*sprite_->CreateSprite();*/
 
 	// 
 	//ビューポート
@@ -525,7 +525,7 @@ void DirectXCommon::CommandKick() {
 
 	//model_->DrawModel();//モデル描画
 
-	sprite_->DrawSprite();//スプライト描画
+	//sprite_->DrawSprite();//スプライト描画
 
 	////描画(DrawCall/ドローコール)
 	//commandList_->DrawIndexedInstanced(6, 1, 0, 0, 0);
@@ -572,11 +572,10 @@ void DirectXCommon::CommandKick() {
 	assert(SUCCEEDED(hr_));
 }
 
-void DirectXCommon::commandExecution() {
+void DirectXCommon::commandExecution(Microsoft::WRL::ComPtr < ID3D12Resource>& intermediateResource) {
 
-	Microsoft::WRL::ComPtr < ID3D12Resource> intermediateResource = TextureManager::GetInstance()->UploadTextureDate(textureManager_->GetTextureResource(), textureManager_->GetMipImages(), device_.Get(), commandList_);
-	Microsoft::WRL::ComPtr < ID3D12Resource> intermediateResource2 = TextureManager::GetInstance()->UploadTextureDate(textureManager_->GetTextureResource2(), textureManager_->GetMipImages2(), device_.Get(), commandList_);
-
+	 //intermediateResource = TextureManager::GetInstance()->UploadTextureDate(textureManager_->GetTextureResource(), textureManager_->GetMipImages(), device_.Get(), commandList_);
+	
 	hr_ = commandList_->Close();
 	assert(SUCCEEDED(hr_));
 	//GPUにコマンドリストの実行を行わせる
@@ -604,7 +603,7 @@ void DirectXCommon::commandExecution() {
 	assert(SUCCEEDED(hr_));
 
 	intermediateResource.Reset();
-	intermediateResource2.Reset();
+	
 }
 
 

@@ -9,9 +9,21 @@ namespace {
 	DirectXCommon* directXCommon = DirectXCommon::GetInstance();
 	//Model* model=Model::GetInstance();
 }
-Model* Model::GetInstance() {
-	static Model instance;
-	return &instance;
+std::map<std::string, std::unique_ptr<Model>> Model::modelInstances;
+
+Model* Model::CreateInstance(const std::string& instanceName) {
+	if (modelInstances.find(instanceName) == modelInstances.end()) {
+		modelInstances[instanceName] = std::make_unique<Model>();
+	}
+	return modelInstances[instanceName].get();
+}
+
+Model* Model::GetInstance(const std::string& instanceName) {
+	auto it = modelInstances.find(instanceName);
+	if (it != modelInstances.end()) {
+		return it->second.get();
+	}
+	return nullptr;
 }
 
 ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& filename) {
@@ -109,7 +121,10 @@ MaterialData Model:: LoadMaterialTemplateFile(const std::string& directoryPath, 
 }
 
 void Model::CreateModel(const std::string&ModelName) {
-	modelData_ = LoadObjFile("resources", ModelName);
+	modelData_ = LoadObjFile("Resources", ModelName);
+	 textureManager_ = TextureManager::GetInstance();
+	textureManager_->Load(modelData_.material.textureFilePath);
+	
 	//頂点リソースをつくる
 	vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(VertexData) * modelData_.vertices.size());
 	//頂点バッファビューを作成する
@@ -180,7 +195,7 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	directXCommon->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, useMonsterBall ? TextureManager::GetInstance()->GetTextureSrvHandleGPU2() : TextureManager::GetInstance()->GetTextureSrvHandleGPU());
+	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetTextureSrvHandleGPU());
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 	//描画(DrawCall/ドローコール)

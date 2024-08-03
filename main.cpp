@@ -25,15 +25,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	/*D3DResourceLeakChecker leakCheck;*/
 	//ライブラリの初期化
 	Keta::Initialize(kWindowTitle, 1280, 720);
-	DirectXCommon* d = DirectXCommon::GetInstance();
+	
 	Sprite* sprite = Sprite::GetInstance();
-	Model* modelPlane = Model::GetInstance();
-	Model* modelAxis = Model::GetInstance();
-	modelPlane->CreateModel("Plane.obj");
-	modelAxis->CreateModel("axis.obj");
-	TextureManager*te = TextureManager::GetInstance();
-	te->Load();
-	d->commandExecution();
+	Model* modelPlane = Model::CreateInstance("Plane");
+	Model* modelAxis = Model::CreateInstance("Axis");
+
+	modelPlane->CreateModel("plane.obj");
+	modelAxis->CreateModel("Axis.obj");
+	sprite->CreateSprite();
+	/*TextureManager*te = TextureManager::GetInstance();
+	te->Load("Resources/uvChecker.png");*/
+	
 	ViewProjection viewProjection;
 	WorldTransform axisTransform_;
 	WorldTransform tramsform;
@@ -113,8 +115,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		viewProjection.matView_ = debugCamera_->GetViewProjection().matView_;
 		viewProjection.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
 
-		
-
 		//スプライト
 		Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
 		Matrix4x4 worldViewProjectionMatrixSprite = transformSprite.matWorld_* projectionMatrixSprite;
@@ -130,6 +130,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//Draw********************************************************
 		modelPlane->Draw(tramsform,viewProjection);
 		modelAxis->Draw(axisTransform_, viewProjection);
+		sprite->DrawSprite();
 
 		//フレームの終了
 		Keta::EndFrame();
