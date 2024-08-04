@@ -11,9 +11,12 @@ namespace {
 }
 std::map<std::string, std::unique_ptr<Model>> Model::modelInstances;
 
-Model* Model::CreateInstance(const std::string& instanceName) {
+Model* Model::Create(const std::string& instanceName) {
 	if (modelInstances.find(instanceName) == modelInstances.end()) {
-		modelInstances[instanceName] = std::make_unique<Model>();
+		//新しいModelインスタンスを作成
+		auto model = std::make_unique<Model>();
+		model->CreateModel(instanceName);
+		modelInstances[instanceName] = std::move(model);
 	}
 	return modelInstances[instanceName].get();
 }
@@ -73,6 +76,7 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 				for (int32_t element = 0; element < 3; ++element) {
 					std::string index;
 					std::getline(v, index, '/');//区切りでインデックスを読んでいく
+
 					elementIndices[element] = std::stoi(index);
 				}
 				//要素へのIndexから、次の要素の値を取得して、頂点を構築する
@@ -117,14 +121,18 @@ MaterialData Model:: LoadMaterialTemplateFile(const std::string& directoryPath, 
 			materialData.textureFilePath = directoryPath + "/" + textureFilename;
 		}
 	}
+	if (materialData.textureFilePath.empty())
+	{
+		std::string whiteTexture = "default.png";
+		materialData.textureFilePath = directoryPath + "/" + whiteTexture;
+	}
 	return materialData;
 }
 
 void Model::CreateModel(const std::string&ModelName) {
-	modelData_ = LoadObjFile("Resources", ModelName);
-	 textureManager_ = TextureManager::GetInstance();
-	textureManager_->Load(modelData_.material.textureFilePath);
-	
+	modelData_ = LoadObjFile("Resources", ModelName+".obj");
+		textureManager_ = TextureManager::GetInstance();
+		textureManager_->Load(modelData_.material.textureFilePath);
 	//頂点リソースをつくる
 	vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(VertexData) * modelData_.vertices.size());
 	//頂点バッファビューを作成する
@@ -151,6 +159,9 @@ void Model::CreateModel(const std::string&ModelName) {
 	materialDate_->enableLighting = true;
 	//UVTransformは単位行列を書き込んでおく
 	materialDate_->uvTransform = MakeIdentity4x4();
+
+	/*materialDate_->hasTexture = useTexture;*/
+	
 	//平行光源--------------------------------------------------------------------------------------------------
 	directionalLightResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(DirectionalLight));
 	//データ書き込む
@@ -203,3 +214,6 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	directXCommon->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }
 
+void Model::CreateSphere() {
+
+}

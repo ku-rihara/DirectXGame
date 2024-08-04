@@ -49,7 +49,7 @@ private:
 	//後に消すかも
 	bool useMonsterBall = true;
 public:
-	static Model* CreateInstance(const std::string& instanceName);
+	static Model* Create(const std::string& instanceName);
 	static Model* GetInstance(const std::string& instanceName);
 	
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
@@ -59,6 +59,10 @@ public:
 	/// モデル作成
 	/// </summary>
 	void CreateModel(const std::string& ModelName);
+	/// <summary>
+	/// 球描画
+	/// </summary>
+	void CreateSphere();
 	/// <summary>
 	/// モデル描画
 	/// </summary>
