@@ -139,7 +139,7 @@ void Model::CreateModel(const std::string&ModelName) {
 	/*	textureManager_ = TextureManager::GetInstance();
 	textureHandle_=	textureManager_->Load(modelData_.material.textureFilePath);*/
 	//頂点リソースをつくる
-	vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(VertexData) * modelData_.vertices.size());
+	vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), (sizeof(VertexData) * modelData_.vertices.size())*2);
 	//頂点バッファビューを作成する
 	vertexBufferView_ = {};
 	//リソースの先頭アドレスから使う
@@ -190,18 +190,21 @@ void Model::CreateModel(const std::string&ModelName) {
 }
 #ifdef _DEBUG
 void Model::DebugImGui() {
-	ImGui::Begin("Lighting");
+	/*ImGui::Begin("Lighting");*/
 	ImGui::ColorEdit4(" Color", (float*)&directionalLightData_->color);
 	ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
 	directionalLightData_->direction = Normalize(directionalLightData_->direction);
 	ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
-	ImGui::End();
+	const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert" };
+	ImGui::Combo("Lighting Mode", &materialDate_->lightingMode, lightingModes, IM_ARRAYSIZE(lightingModes));
+	/*ImGui::End();*/
 }
 #endif
 
 void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, D3D12_GPU_DESCRIPTOR_HANDLE texture) {
-	DebugImGui();
+	/*DebugImGui();*/
 	wvpDate_->WVP = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+
 	directXCommon->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	directXCommon->GetCommandList()->IASetIndexBuffer(&indexBufferView_);//IBV
 	//形状を設定

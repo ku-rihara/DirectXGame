@@ -25,36 +25,38 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	/*D3DResourceLeakChecker leakCheck;*/
 	//ライブラリの初期化
 	Keta::Initialize(kWindowTitle, 1280, 720);
-	TextureManager::GetInstance()->Load();
-	Sprite* sprite = Sprite::GetInstance();
-	
-	Model* modelPlane = Model::Create("Plane");
+	TextureManager* textureManager = TextureManager::GetInstance();
 
+	textureManager->Load();
+	Sprite* sprite = Sprite::GetInstance();
 	//モデル読み込み
-	
+	Model* modelPlane = Model::Create("Plane");
 	sprite->CreateSprite();
-	/*TextureManager*te = TextureManager::GetInstance();
-	te->Load("Resources/uvChecker.png");*/
+	
+	//描画フラグ
 	bool isDrawSuzanne = false;
-	bool isDrawPlane = false;
+	bool isDrawPlane = true;
 	ViewProjection viewProjection;
+	//ワールドトランスフォーム宣言***********
 	WorldTransform PlaneTransform;
+	WorldTransform PlaneTransform2;
 	WorldTransform suzanneTransform;
 	WorldTransform transformSprite;
-	WorldTransform cameraTransform;
 	WorldTransform uvTransformSprite;
-
+	//デバッグカメラ
 	DebugCamera* debugCamera_ = new DebugCamera(1280, 720);
-	//ワールドトランスフォーム初期化
+	
+	//ワールドトランスフォーム初期化******************************
 	PlaneTransform.Init();
 	debugCamera_->Init();
 	uvTransformSprite.Init();
 	suzanneTransform.Init();
 	transformSprite.Init();
-
-	cameraTransform.translation_.z = -5.0f;
-	cameraTransform.Init();
-
+	
+	//ワールドトランスフォーム値セット****************************
+	
+	PlaneTransform.rotation_.y = -4.0f;
+	PlaneTransform2.rotation_.y = -4.0f;
 	int soundId = SoundManager::GetInstance()->SoundLoadWave("Resources/fanfare.wav");
 	//SoundManager::GetInstance()->SoundPlayWave(soundId);
 
@@ -83,20 +85,30 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("Window");
 
 		if (ImGui::TreeNode("IsDrawModel")) {
-			ImGui::Checkbox("isSuzanne", &isDrawSuzanne);
-			if (isDrawSuzanne) {
-				isDrawPlane = false;
-			}
+			ImGui::Checkbox("isSuzanne", &isDrawSuzanne);		
 			ImGui::Checkbox("isPlane", &isDrawPlane);
-			if (isDrawPlane) {
-				isDrawSuzanne = false;
-			}
+			
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("Model")) {
-			ImGui::DragFloat3("Scale", &suzanneTransform.scale_.x, 0.01f);
-			ImGui::DragFloat3("Rotate", &suzanneTransform.rotation_.x, 0.01f);
-			ImGui::DragFloat3("Translate", &suzanneTransform.translation_.x, 0.01f);
+			if (ImGui::TreeNode("Suzanne")) {
+				ImGui::DragFloat3("Scale", &suzanneTransform.scale_.x, 0.01f);
+				ImGui::DragFloat3("Rotate", &suzanneTransform.rotation_.x, 0.01f);
+				ImGui::DragFloat3("Translate", &suzanneTransform.translation_.x, 0.01f);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("Plane1")) {
+				ImGui::DragFloat3("Scale", &PlaneTransform.scale_.x, 0.01f);
+				ImGui::DragFloat3("Rotate", &PlaneTransform.rotation_.x, 0.01f);
+				ImGui::DragFloat3("Translate", &PlaneTransform.translation_.x, 0.01f);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("Plane2")) {
+				ImGui::DragFloat3("Scale", &PlaneTransform2.scale_.x, 0.01f);
+				ImGui::DragFloat3("Rotate", &PlaneTransform2.rotation_.x, 0.01f);
+				ImGui::DragFloat3("Translate", &PlaneTransform2.translation_.x, 0.01f);
+				ImGui::TreePop();
+			}
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("Sprite")) {
@@ -112,14 +124,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::TreePop();
 		}
 		ImGui::End();
+		ImGui::Begin("Lighting");
+		if (ImGui::TreeNode("SuzanneDebug")) {
+			Model::GetInstance("suzanne")->DebugImGui();
+			ImGui::TreePop();
+		}
+		else if (ImGui::TreeNode("PlaneDebug")) {
+			modelPlane->DebugImGui();
+			ImGui::TreePop();
+		}
+		ImGui::End();
+
 #endif
-		//描画フラグ
 	
-			
 		//全行列更新********************
 		Keta::UpdateMatrixAll();
 		//****************************
-		// 
+		
+
 		//tramsform.rotate.y += 0.03f;
 		/*Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale_, cameraTransform.rotation_, cameraTransform.translation_);*/
 	/*	Matrix4x4 viewMatrix = Inverse(cameraMatrix);
@@ -132,7 +154,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//スプライト
 		Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
 		Matrix4x4 worldViewProjectionMatrixSprite = transformSprite.matWorld_* projectionMatrixSprite;
-	
 		sprite->SetTransformationMatrixDataSprite(worldViewProjectionMatrixSprite);
 
 		//UVTransform
@@ -144,16 +165,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//Draw********************************************************
 		//スザンヌ描画
 		if (isDrawSuzanne) {
-			Model::GetInstance("suzanne")->Draw(suzanneTransform, viewProjection, TextureManager::GetInstance()->GetTextureSrvHandleGPU2());
-			
+			Model::GetInstance("suzanne")->Draw(suzanneTransform, viewProjection, textureManager->GetTextureSrvHandleGPU2());
+			//スプライト描画
+			sprite->DrawSprite();
 		}
 		//平面描画
-		else	if (isDrawPlane) {
-			modelPlane->Draw(PlaneTransform, viewProjection, TextureManager::GetInstance()->GetTextureSrvHandleGPU());
-			
+			if (isDrawPlane) {
+			modelPlane->Draw(PlaneTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
+	
+				//スプライト描画
+			sprite->DrawSprite();
 		}
-		//スプライト描画
-		sprite->DrawSprite();
+	
 		
 		//フレームの終了
 		Keta::EndFrame();
