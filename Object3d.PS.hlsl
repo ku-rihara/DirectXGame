@@ -49,9 +49,21 @@ PixelShaderOutput main(VertexShaderOutput input)
     float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
     if (gMaterial.enableLighting != 0)
     { //Lightingする場合
-        float NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
-        float cos = pow(NdotL * 0.5f+0.5f, 2.0f);
+        float NdotL = 0.0f;
+        float cos = 0.0f;
+        if (gMaterial.enableLighting == 1)
+        {
+            NdotL = dot(normalize(input.normal), -gDirectionalLight.direction.xyz);
+            cos = NdotL;
+        }
+        else if (gMaterial.enableLighting == 2)
+        {
+        
+            NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
+            cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
+        }
         output.color = gMaterial.color * textureColor * gDirectionalLight.color * cos * gDirectionalLight.intensity;
+   
     }
     else
     {//Lightingしない場合
