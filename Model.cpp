@@ -136,8 +136,8 @@ MaterialData Model:: LoadMaterialTemplateFile(const std::string& directoryPath, 
 
 void Model::CreateModel(const std::string&ModelName) {
 	modelData_ = LoadObjFile("Resources", ModelName+".obj");
-		textureManager_ = TextureManager::GetInstance();
-	textureHandle_=	textureManager_->Load(modelData_.material.textureFilePath);
+	/*	textureManager_ = TextureManager::GetInstance();
+	textureHandle_=	textureManager_->Load(modelData_.material.textureFilePath);*/
 	//頂点リソースをつくる
 	vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(VertexData) * modelData_.vertices.size());
 	//頂点バッファビューを作成する
@@ -190,9 +190,6 @@ void Model::CreateModel(const std::string&ModelName) {
 }
 #ifdef _DEBUG
 void Model::DebugImGui() {
-	ImGui::Begin("useMonsterBall");
-	ImGui::Checkbox("useMonsterBall", &useMonsterBall);
-	ImGui::End();
 	ImGui::Begin("Lighting");
 	ImGui::ColorEdit4(" Color", (float*)&directionalLightData_->color);
 	ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
@@ -202,8 +199,8 @@ void Model::DebugImGui() {
 }
 #endif
 
-void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
-
+void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, D3D12_GPU_DESCRIPTOR_HANDLE texture) {
+	DebugImGui();
 	wvpDate_->WVP = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
 	directXCommon->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	directXCommon->GetCommandList()->IASetIndexBuffer(&indexBufferView_);//IBV
@@ -211,7 +208,7 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	directXCommon->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetTextureHandle(0));
+	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, texture);
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 	//描画(DrawCall/ドローコール)

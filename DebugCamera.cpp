@@ -45,11 +45,11 @@ void DebugCamera::Update() {
         viewProjection_.translation_.y += mouseMove.lY * 0.005f; // スケール調整
     }
     if (input_->GetWheel()) {
-       Vector3 direction = TransformNormal({ 0,0,1 }, matRot_);
-        direction = Normalize(direction);
-        viewProjection_.translation_+= (mouseMove.lZ * 0.005f)*direction;
+      /* Vector3 direction = TransformNormal({ 0,0,1 }, matRot_);
+        direction = Normalize(direction);*/
+        viewProjection_.translation_+= (mouseMove.lZ * 0.005f)*Vector3(0,0,1)/**direction*/;
     }
-  
+
     //マウスの回転
     if (input_->IsPressMouse(1)) {
        //追加回転分の回転行列を生成

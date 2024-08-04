@@ -23,10 +23,12 @@ class Model{
 private:
 	static std::map<std::string, std::unique_ptr<Model>> modelInstances;
 
+	//テクスチャ
 	TextureManager* textureManager_=nullptr;
 	int32_t textureHandle_;
 	ModelData modelData_;
 	D3D12_GPU_DESCRIPTOR_HANDLE handle_;
+
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
 	//リソース******************************************************************
@@ -67,7 +69,7 @@ public:
 	/// <summary>
 	/// モデル描画
 	/// </summary>
-	void Draw(const WorldTransform&worldTransform,const ViewProjection&viewProjection);
+	void Draw(const WorldTransform&worldTransform,const ViewProjection&viewProjection, D3D12_GPU_DESCRIPTOR_HANDLE texture);
 
 #ifdef _DEBUG
 	void DebugImGui();
