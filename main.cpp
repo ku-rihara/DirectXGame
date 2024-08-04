@@ -84,7 +84,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (ImGui::TreeNode("IsDrawModel")) {
 			ImGui::Checkbox("isSuzanne", &isDrawSuzanne);
+			if (isDrawSuzanne) {
+				isDrawPlane = false;
+			}
 			ImGui::Checkbox("isPlane", &isDrawPlane);
+			if (isDrawPlane) {
+				isDrawSuzanne = false;
+			}
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("Model")) {
@@ -108,12 +114,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::End();
 #endif
 		//描画フラグ
-		if (isDrawPlane) {
-			isDrawSuzanne = false;
-		}
-		else	if (isDrawSuzanne) {
-			isDrawPlane = false;
-		}
+	
+			
 		//全行列更新********************
 		Keta::UpdateMatrixAll();
 		//****************************
@@ -138,17 +140,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		uvTransformMatrix = (uvTransformMatrix* MakeRotateZMatrix(uvTransformSprite.rotation_.z));
 		uvTransformMatrix = (uvTransformMatrix* MakeTranslateMatrix(uvTransformSprite.translation_));
 		sprite->SetUVTransformSprite(uvTransformMatrix);
-		//スプライト描画
-		sprite->DrawSprite();
+		
 		//Draw********************************************************
 		//スザンヌ描画
 		if (isDrawSuzanne) {
 			Model::GetInstance("suzanne")->Draw(suzanneTransform, viewProjection, TextureManager::GetInstance()->GetTextureSrvHandleGPU2());
+			
 		}
 		//平面描画
 		else	if (isDrawPlane) {
 			modelPlane->Draw(PlaneTransform, viewProjection, TextureManager::GetInstance()->GetTextureSrvHandleGPU());
+			
 		}
+		//スプライト描画
+		sprite->DrawSprite();
 		
 		//フレームの終了
 		Keta::EndFrame();
