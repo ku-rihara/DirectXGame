@@ -85,8 +85,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("Window");
 
 		if (ImGui::TreeNode("IsDrawModel")) {
-			ImGui::Checkbox("isSuzanne", &isDrawSuzanne);		
 			ImGui::Checkbox("isPlane", &isDrawPlane);
+			ImGui::Checkbox("isSuzanne", &isDrawSuzanne);		
+		
 			
 			ImGui::TreePop();
 		}
@@ -125,14 +126,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		ImGui::End();
 		ImGui::Begin("Lighting");
-		if (ImGui::TreeNode("SuzanneDebug")) {
-			Model::GetInstance("suzanne")->DebugImGui();
-			ImGui::TreePop();
-		}
-		else if (ImGui::TreeNode("PlaneDebug")) {
+		 if (ImGui::TreeNode("PlaneDebug")) {
 			modelPlane->DebugImGui();
 			ImGui::TreePop();
 		}
+		 else	if (ImGui::TreeNode("SuzanneDebug")) {
+			Model::GetInstance("suzanne")->DebugImGui();
+			ImGui::TreePop();
+		}
+		
 		ImGui::End();
 
 #endif
