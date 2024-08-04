@@ -7,6 +7,9 @@
 #include"DirectionalLight.h"
 #include"ModelData.h"
 #include"Material.h"
+//class
+#include"WorldTransform.h"
+#include "ViewProjection.h"
 
 class Mesh{
 private:
@@ -27,17 +30,14 @@ private:
 	//頂点リソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>vertexResource_;
 	//wvpリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource>wvpResource_;
+	Microsoft::WRL::ComPtr<ID3D12Resource>wvpResouce_;
 	//indexリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>indexResource_;
 	//データ****************************************************************************
 	TransformationMatrix* wvpDate_;
-	TransformationMatrix* wvpDataSprite_;
 	Material* materialDate_;
-	Material* materialDateSprite_;
 	DirectionalLight* directionalLightData_;
-	//後に消すかも
-	bool useMonsterBall = true;
+
 public:
 	//シングルトンインスタンスの取得
 	static Mesh* GetInstance();
@@ -46,6 +46,10 @@ public:
 	/// 球の作成
 	/// </summary>
 	void CreateSphere();
+
+	void DebugImGui();
+
+	void DrawSphere(const WorldTransform& worldTransform, const ViewProjection& viewProjection, D3D12_GPU_DESCRIPTOR_HANDLE texture);
 
 	
 //#ifdef _DEBUG

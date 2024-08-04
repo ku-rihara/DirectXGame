@@ -1,5 +1,4 @@
 #include"Keta.h"
-#include"Transform.h"
 #include "WorldTransform.h"
 #include "WorldTransformManager.h"
 #include"ViewProjection.h"
@@ -29,13 +28,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	textureManager->Load();
 	Sprite* sprite = Sprite::GetInstance();
+	Mesh* modelSphere = Mesh::GetInstance();
 	//モデル読み込み
 	Model* modelPlane = Model::Create("Plane");
 	sprite->CreateSprite();
-	
+	modelSphere->CreateSphere();
 	//描画フラグ
 	bool isDrawSuzanne = false;
 	bool isDrawPlane = true;
+	bool isDrawSphere = true;
 	ViewProjection viewProjection;
 	//ワールドトランスフォーム宣言***********
 	WorldTransform PlaneTransform;
@@ -43,18 +44,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WorldTransform suzanneTransform;
 	WorldTransform transformSprite;
 	WorldTransform uvTransformSprite;
+	WorldTransform SphereWorldTransform;
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = new DebugCamera(1280, 720);
-	
+
 	//ワールドトランスフォーム初期化******************************
 	PlaneTransform.Init();
 	debugCamera_->Init();
 	uvTransformSprite.Init();
 	suzanneTransform.Init();
 	transformSprite.Init();
-	
+	SphereWorldTransform.Init();
+
 	//ワールドトランスフォーム値セット****************************
-	
+
 	PlaneTransform.rotation_.y = -4.0f;
 	PlaneTransform2.rotation_.y = -4.0f;
 	int soundId = SoundManager::GetInstance()->SoundLoadWave("Resources/fanfare.wav");
@@ -73,7 +76,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (xStateRetrieved) {
 			// XInput のジョイスティック状態を使った処理
-			if (xState.Gamepad.wButtons&XINPUT_GAMEPAD_A) {
+			if (xState.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
 				SoundManager::GetInstance()->SoundPlayWave(soundId);
 			}
 		}
@@ -86,9 +89,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (ImGui::TreeNode("IsDrawModel")) {
 			ImGui::Checkbox("isPlane", &isDrawPlane);
-			ImGui::Checkbox("isSuzanne", &isDrawSuzanne);		
-		
-			
+			ImGui::Checkbox("isSuzanne", &isDrawSuzanne);
+			ImGui::Checkbox("isSphere", &isDrawSphere);
+
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("Model")) {
@@ -98,16 +101,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				ImGui::DragFloat3("Translate", &suzanneTransform.translation_.x, 0.01f);
 				ImGui::TreePop();
 			}
-			if (ImGui::TreeNode("Plane1")) {
+			if (ImGui::TreeNode("Plane")) {
 				ImGui::DragFloat3("Scale", &PlaneTransform.scale_.x, 0.01f);
 				ImGui::DragFloat3("Rotate", &PlaneTransform.rotation_.x, 0.01f);
 				ImGui::DragFloat3("Translate", &PlaneTransform.translation_.x, 0.01f);
 				ImGui::TreePop();
 			}
-			if (ImGui::TreeNode("Plane2")) {
-				ImGui::DragFloat3("Scale", &PlaneTransform2.scale_.x, 0.01f);
-				ImGui::DragFloat3("Rotate", &PlaneTransform2.rotation_.x, 0.01f);
-				ImGui::DragFloat3("Translate", &PlaneTransform2.translation_.x, 0.01f);
+			if (ImGui::TreeNode("Sphere")) {
+				ImGui::DragFloat3("Scale", &SphereWorldTransform.scale_.x, 0.01f);
+				ImGui::DragFloat3("Rotate", &SphereWorldTransform.rotation_.x, 0.01f);
+				ImGui::DragFloat3("Translate", &SphereWorldTransform.translation_.x, 0.01f);
 				ImGui::TreePop();
 			}
 			ImGui::TreePop();
@@ -127,23 +130,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::End();
 		//ライティング
 		ImGui::Begin("Lighting");
-		 if (ImGui::TreeNode("PlaneDebug")) {
+		if (ImGui::TreeNode("Plane")) {
 			modelPlane->DebugImGui();
 			ImGui::TreePop();
 		}
-		 else	if (ImGui::TreeNode("SuzanneDebug")) {
+		else	if (ImGui::TreeNode("Suzanne")) {
 			Model::GetInstance("suzanne")->DebugImGui();
 			ImGui::TreePop();
 		}
-		
+		else	if (ImGui::TreeNode("Sphere")) {
+			modelSphere->DebugImGui();
+			ImGui::TreePop();
+		}
+
 		ImGui::End();
 
 #endif
-	
+
 		//全行列更新********************
 		Keta::UpdateMatrixAll();
 		//****************************
-		
+
 
 		//tramsform.rotate.y += 0.03f;
 		/*Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale_, cameraTransform.rotation_, cameraTransform.translation_);*/
@@ -156,15 +163,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//スプライト
 		Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
-		Matrix4x4 worldViewProjectionMatrixSprite = transformSprite.matWorld_* projectionMatrixSprite;
+		Matrix4x4 worldViewProjectionMatrixSprite = transformSprite.matWorld_ * projectionMatrixSprite;
 		sprite->SetTransformationMatrixDataSprite(worldViewProjectionMatrixSprite);
 
 		//UVTransform
 		Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTransformSprite.scale_);
-		uvTransformMatrix = (uvTransformMatrix* MakeRotateZMatrix(uvTransformSprite.rotation_.z));
-		uvTransformMatrix = (uvTransformMatrix* MakeTranslateMatrix(uvTransformSprite.translation_));
+		uvTransformMatrix = (uvTransformMatrix * MakeRotateZMatrix(uvTransformSprite.rotation_.z));
+		uvTransformMatrix = (uvTransformMatrix * MakeTranslateMatrix(uvTransformSprite.translation_));
 		sprite->SetUVTransformSprite(uvTransformMatrix);
-		
+
 		//Draw********************************************************
 		//スザンヌ描画
 		if (isDrawSuzanne) {
@@ -173,14 +180,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			sprite->DrawSprite();
 		}
 		//平面描画
-			if (isDrawPlane) {
+		if (isDrawPlane) {
 			modelPlane->Draw(PlaneTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
-	
-				//スプライト描画
+			//スプライト描画
 			sprite->DrawSprite();
 		}
-	
-		
+		if (isDrawSphere) {
+			modelSphere->DrawSphere(SphereWorldTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
+			//スプライト描画
+			sprite->DrawSprite();
+		}
+
 		//フレームの終了
 		Keta::EndFrame();
 	}
