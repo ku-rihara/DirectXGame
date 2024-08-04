@@ -27,11 +27,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Keta::Initialize(kWindowTitle, 1280, 720);
 	
 	Sprite* sprite = Sprite::GetInstance();
-	Model* modelPlane = Model::CreateInstance("Plane");
-	Model* modelAxis = Model::CreateInstance("Axis");
-
-	modelPlane->CreateModel("plane.obj");
-	modelAxis->CreateModel("Axis.obj");
+	Model* modelPlane = Model::Create("suzanne");
+	Model* modelAxis = Model::Create("Axis");
+	//モデル読み込み
+	
 	sprite->CreateSprite();
 	/*TextureManager*te = TextureManager::GetInstance();
 	te->Load("Resources/uvChecker.png");*/
