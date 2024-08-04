@@ -24,8 +24,9 @@ private:
 	static std::map<std::string, std::unique_ptr<Model>> modelInstances;
 
 	TextureManager* textureManager_=nullptr;
+	int32_t textureHandle_;
 	ModelData modelData_;
-
+	D3D12_GPU_DESCRIPTOR_HANDLE handle_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
 	//リソース******************************************************************

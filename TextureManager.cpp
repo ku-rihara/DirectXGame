@@ -4,7 +4,7 @@
 #include"DirectXCommon.h"
 #include"Convert.h"
 #include<vector>
-
+uint32_t TextureManager::descriptorHeapIndex_ = 0;
 namespace {
 	DirectXCommon* directXCommon_;
 	ImGuiManager* imguiManager_;
@@ -16,10 +16,11 @@ TextureManager* TextureManager::GetInstance() {
 	return &instance;
 }
 
+
 DirectX::ScratchImage TextureManager::LoadTexture(const std::string& filePath) {
 
 	//テクスチャファイルを読み込んでプログラムで扱えるようにする
-	
+
 	std::wstring filePathW = ConvertString(filePath);
 	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image_);
 	assert(SUCCEEDED(hr));
@@ -58,12 +59,12 @@ Microsoft::WRL::ComPtr < ID3D12Resource> TextureManager::CreateTextureResource(M
 		D3D12_RESOURCE_STATE_COPY_DEST,//初回のResourceState。Textureは基本読むだけ
 		nullptr,//Clear最適値。使わないのでnullptr
 		IID_PPV_ARGS(&resource));//作成するResourceポインタへのポインタ
-    	assert(SUCCEEDED(hr));
-		return resource.Get();
+	assert(SUCCEEDED(hr));
+	return resource.Get();
 }
 [[nodiscard]]
 Microsoft::WRL::ComPtr < ID3D12Resource> TextureManager::UploadTextureDate(Microsoft::WRL::ComPtr < ID3D12Resource> texture, const DirectX::ScratchImage& mipImages, Microsoft::WRL::ComPtr<ID3D12Device>device, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>commandList) {
-	 
+
 	std::vector<D3D12_SUBRESOURCE_DATA>subresources;
 	DirectX::PrepareUpload(device.Get(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresources);
 	uint64_t intermediateSize = GetRequiredIntermediateSize(texture.Get(), 0, UINT(subresources.size()));
@@ -81,27 +82,43 @@ Microsoft::WRL::ComPtr < ID3D12Resource> TextureManager::UploadTextureDate(Micro
 	return intermediateResource.Get();
 }
 
-void TextureManager::Load(const std::string& textureFilePath) {
-    directXCommon_ = DirectXCommon::GetInstance();
-    imguiManager_ = ImGuiManager::GetInstance();
+uint32_t TextureManager::Load(const std::string& textureFilePath) {
+	directXCommon_ = DirectXCommon::GetInstance();
+	imguiManager_ = ImGuiManager::GetInstance();
 
-    mipImages_ = LoadTexture(textureFilePath);
-    const DirectX::TexMetadata& metadata = mipImages_.GetMetadata();
-    textureResource_ = CreateTextureResource(directXCommon_->GetDevice(), metadata);
+	DirectX::ScratchImage mipImages = LoadTexture(textureFilePath);
+	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
+	Microsoft::WRL::ComPtr<ID3D12Resource> textureResource = CreateTextureResource(directXCommon_->GetDevice(), metadata);
 
-    D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-    srvDesc.Format = metadata.format;
-    srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-    srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-    srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	srvDesc.Format = metadata.format;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
 
-    textureSrvHandleCPU_ = imguiManager_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
-    textureSrvHandleGPU_ = imguiManager_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
+	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU = imguiManager_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
+	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU = imguiManager_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
 
-    textureSrvHandleCPU_.ptr += directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-    textureSrvHandleGPU_.ptr += directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	textureSrvHandleCPU= 
+	textureSrvHandleGPU
 
-    directXCommon_->GetDevice()->CreateShaderResourceView(textureResource_.Get(), &srvDesc, textureSrvHandleCPU_);
-	Microsoft::WRL::ComPtr < ID3D12Resource>intermediateResource=UploadTextureDate(textureResource_, mipImages_, directXCommon_->GetDevice(), directXCommon_->GetCommandList());
+	textureSrvHandleCPU.ptr += descriptorHeapIndex_ * directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	textureSrvHandleGPU.ptr += descriptorHeapIndex_ * directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+
+	directXCommon_->GetDevice()->CreateShaderResourceView(textureResource.Get(), &srvDesc, textureSrvHandleCPU);
+
+	// Upload texture data and execute command list
+	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = UploadTextureDate(textureResource, mipImages, directXCommon_->GetDevice(), directXCommon_->GetCommandList());
 	directXCommon_->commandExecution(intermediateResource);
+
+	// Save GPU handle and increment index
+	textureSrvHandles_.push_back(textureSrvHandleGPU);
+	descriptorHeapIndex_++;
+
+	return static_cast<uint32_t>(textureSrvHandles_.size() - 1);
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(uint32_t index) const {
+	return textureSrvHandles_.at(index);
 }

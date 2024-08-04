@@ -72,20 +72,25 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 				s >> vertexDefinition;
 				//頂点の要素へのIndexは「位置/UV/法線」で格納されている、分解してIndexを取得する
 				std::istringstream v(vertexDefinition);
-				uint32_t elementIndices[3];
-				for (int32_t element = 0; element < 3; ++element) {
-					std::string index;
-					std::getline(v, index, '/');//区切りでインデックスを読んでいく
-
-					elementIndices[element] = std::stoi(index);
+				uint32_t elementIndices[3] = { 0, 0, 0 };
+				
+				std::string index;
+				for (int32_t element = 0; element < 3 && std::getline(v, index, '/'); ++element) {
+					if (!index.empty()) {
+						elementIndices[element] = std::stoi(index);
+					}
 				}
 				//要素へのIndexから、次の要素の値を取得して、頂点を構築する
 				Vector4 position = positions[elementIndices[0] - 1];
-				Vector2 texccrd = texcoords[elementIndices[1] - 1];
-				Vector3 normal = normals[elementIndices[2] - 1];
-			/*	VertexData vertex = { position,texccrd,normal };
-				modelData.vertices.push_back(vertex);*/
-				triangle[faceVertex] = { position,texccrd,normal };
+				Vector2 texcoord = { 0.0f, 0.0f };
+				if (elementIndices[1] > 0) {
+					texcoord = texcoords[elementIndices[1] - 1];
+				}
+				Vector3 normal = { 0.0f, 0.0f, 0.0f };
+				if (elementIndices[2] > 0) {
+					normal = normals[elementIndices[2] - 1];
+				}
+				triangle[faceVertex] = { position, texcoord, normal };
 			}
 			//頂点を逆順で登録することで、回り順を逆にする
 			modelData.vertices.push_back(triangle[2]);
@@ -132,7 +137,7 @@ MaterialData Model:: LoadMaterialTemplateFile(const std::string& directoryPath, 
 void Model::CreateModel(const std::string&ModelName) {
 	modelData_ = LoadObjFile("Resources", ModelName+".obj");
 		textureManager_ = TextureManager::GetInstance();
-		textureManager_->Load(modelData_.material.textureFilePath);
+	textureHandle_=	textureManager_->Load(modelData_.material.textureFilePath);
 	//頂点リソースをつくる
 	vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(VertexData) * modelData_.vertices.size());
 	//頂点バッファビューを作成する
@@ -206,7 +211,7 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	directXCommon->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetTextureSrvHandleGPU());
+	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetTextureHandle(textureHandle_));
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 	//描画(DrawCall/ドローコール)
