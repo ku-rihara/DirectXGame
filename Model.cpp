@@ -161,7 +161,7 @@ void Model::CreateModel(const std::string&ModelName) {
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialDate_));
 	//今回は赤を書き込む
 	materialDate_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	materialDate_->enableLighting = true;
+	materialDate_->enableLighting = 2;
 	//UVTransformは単位行列を書き込んでおく
 	materialDate_->uvTransform = MakeIdentity4x4();
 
@@ -196,7 +196,7 @@ void Model::DebugImGui() {
 	directionalLightData_->direction = Normalize(directionalLightData_->direction);
 	ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
 	const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert" };
-	ImGui::Combo("Lighting Mode", &materialDate_->lightingMode, lightingModes, IM_ARRAYSIZE(lightingModes));
+	ImGui::Combo("Lighting Mode", &materialDate_->enableLighting, lightingModes, IM_ARRAYSIZE(lightingModes));
 	/*ImGui::End();*/
 }
 #endif
