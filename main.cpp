@@ -27,7 +27,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Keta::Initialize(kWindowTitle, 1280, 720);
 	
 	Sprite* sprite = Sprite::GetInstance();
-	Model* modelPlane = Model::Create("suzanne");
+	//Model* modelPlane = Model::Create("suzanne");
 	Model* modelAxis = Model::Create("Axis");
 	//モデル読み込み
 	
@@ -127,9 +127,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		sprite->SetUVTransformSprite(uvTransformMatrix);
 		
 		//Draw********************************************************
-		modelPlane->Draw(tramsform,viewProjection);
+		/*modelPlane->Draw(tramsform,viewProjection);*/
 		modelAxis->Draw(axisTransform_, viewProjection);
-		sprite->DrawSprite();
+	/*	sprite->DrawSprite();*/
 
 		//フレームの終了
 		Keta::EndFrame();

@@ -4,7 +4,7 @@
 #include<d3d12.h>
 #include"externals/DirectXTex/DirectXTex.h"
 #include"externals/DirectXTex/d3dx12.h"
-
+#include<vector>
 
 class TextureManager {
 private:
@@ -13,14 +13,15 @@ private:
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
 	Microsoft::WRL::ComPtr < ID3D12Resource> textureResource_;
 	DirectX::ScratchImage mipImages_;
+	std::vector<D3D12_GPU_DESCRIPTOR_HANDLE> textureSrvHandles_;
 	//2
 	//D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU2_;
 	//D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU2_;
 	//DirectX::ScratchImage mipImages2_;
 	//Microsoft::WRL::ComPtr < ID3D12Resource> textureResource2_;
-
-
 public:
+	
+	static uint32_t descriptorHeapIndex_;
 
 	static TextureManager* GetInstance();
 	//TextureデータをCPUで読み込む
@@ -30,8 +31,9 @@ public:
 	//データを転送する関数
 	Microsoft::WRL::ComPtr < ID3D12Resource> UploadTextureDate(Microsoft::WRL::ComPtr < ID3D12Resource> texture, const DirectX::ScratchImage& mipImages, Microsoft::WRL::ComPtr<ID3D12Device>device, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList);
 
-	void Load(const std::string& textureFilePath);
+	 uint32_t Load(const std::string& fileName);
 
+	 D3D12_GPU_DESCRIPTOR_HANDLE GetTextureHandle(uint32_t index)const;
 
 	//getter
 	D3D12_GPU_DESCRIPTOR_HANDLE GetTextureSrvHandleGPU()const { return textureSrvHandleGPU_; }
