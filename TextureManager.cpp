@@ -81,38 +81,88 @@ Microsoft::WRL::ComPtr < ID3D12Resource> TextureManager::UploadTextureDate(Micro
 	commandList->ResourceBarrier(1, &barrier);
 	return intermediateResource.Get();
 }
+//
+//uint32_t TextureManager::Load(const std::string& textureFilePath) {
+//	directXCommon_ = DirectXCommon::GetInstance();
+//	imguiManager_ = ImGuiManager::GetInstance();
+//	DirectX::ScratchImage mipImages = LoadTexture(textureFilePath);
+//	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
+//	Microsoft::WRL::ComPtr<ID3D12Resource> textureResource = CreateTextureResource(directXCommon_->GetDevice(), metadata);
+//
+//	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+//	srvDesc.Format = metadata.format;
+//	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+//	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+//	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
+//
+//	auto srvDescriptorSize = directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+//	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU = imguiManager_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
+//	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU = imguiManager_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
+//
+//	textureSrvHandleCPU.ptr += descriptorHeapIndex_ * srvDescriptorSize;
+//	textureSrvHandleGPU.ptr += descriptorHeapIndex_ * srvDescriptorSize;
+//
+//	directXCommon_->GetDevice()->CreateShaderResourceView(textureResource.Get(), &srvDesc, textureSrvHandleCPU);
+//
+//	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = UploadTextureDate(textureResource, mipImages, directXCommon_->GetDevice(), directXCommon_->GetCommandList());
+//	directXCommon_->commandExecution(intermediateResource);
+//
+//	textureSrvHandles_.push_back(textureSrvHandleGPU);
+//	descriptorHeapIndex_++;
+//
+//	return static_cast<uint32_t>(textureSrvHandles_.size() - 1);
+//}
 
-uint32_t TextureManager::Load(const std::string& textureFilePath) {
+D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(uint32_t index) const {
+	return textureSrvHandles_.at(index);
+}
+
+
+void TextureManager::Load() {
 	directXCommon_ = DirectXCommon::GetInstance();
-	imguiManager_ = ImGuiManager::GetInstance();
-	DirectX::ScratchImage mipImages = LoadTexture(textureFilePath);
-	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
-	Microsoft::WRL::ComPtr<ID3D12Resource> textureResource = CreateTextureResource(directXCommon_->GetDevice(), metadata);
-
+	model_ = Model::Create("suzanne");
+	 mipImages_ = LoadTexture("resources/uvChecker.png");
+	const DirectX::TexMetadata& metadata = mipImages_.GetMetadata();
+	textureResource_ = CreateTextureResource(directXCommon_->GetDevice(), metadata);
+	//2
+	mipImages2_ = LoadTexture(model_->GetModelData().material.textureFilePath);
+	const DirectX::TexMetadata& metadata2 = mipImages2_.GetMetadata();
+	textureResource2_ = CreateTextureResource(directXCommon_->GetDevice(), metadata2);
+	
+	//metaDataを基にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = metadata.format;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
+	//2
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc2{};
+	srvDesc2.Format = metadata2.format;
+	srvDesc2.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc2.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc2.Texture2D.MipLevels = UINT(metadata2.mipLevels);
 
-	auto srvDescriptorSize = directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU = imguiManager_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU = imguiManager_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
+	imguiManager_ = ImGuiManager::GetInstance();
+	//SRVを作成するDescriptorHeapの場所を決める
+	 textureSrvHandleCPU_ = imguiManager_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
+	 textureSrvHandleGPU_ = imguiManager_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
+	 textureSrvHandleCPU2_ = directXCommon_->GetCPUDescriptorHandle(imguiManager_->GetSrvDescriptorHeap(), directXCommon_->GetDescriptorSizeSRV(), 2);
+	 textureSrvHandleGPU2_ = directXCommon_->GetGPUDescriptorHandle(imguiManager_->GetSrvDescriptorHeap(), directXCommon_->GetDescriptorSizeSRV(), 2);
 
-	textureSrvHandleCPU.ptr += descriptorHeapIndex_ * srvDescriptorSize;
-	textureSrvHandleGPU.ptr += descriptorHeapIndex_ * srvDescriptorSize;
+	//先頭はImGuiが使っているのでその次を使う
+	textureSrvHandleCPU_.ptr += directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	textureSrvHandleGPU_.ptr += directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-	directXCommon_->GetDevice()->CreateShaderResourceView(textureResource.Get(), &srvDesc, textureSrvHandleCPU);
+	//SRVの生成
+	directXCommon_->GetDevice()->CreateShaderResourceView(textureResource_.Get(), &srvDesc, textureSrvHandleCPU_);
+	directXCommon_->GetDevice()->CreateShaderResourceView(textureResource2_.Get(), &srvDesc2, textureSrvHandleCPU2_);
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = UploadTextureDate(textureResource, mipImages, directXCommon_->GetDevice(), directXCommon_->GetCommandList());
+	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = UploadTextureDate(textureResource_, mipImages_, directXCommon_->GetDevice(), directXCommon_->GetCommandList());
 	directXCommon_->commandExecution(intermediateResource);
 
-	textureSrvHandles_.push_back(textureSrvHandleGPU);
-	descriptorHeapIndex_++;
 
-	return static_cast<uint32_t>(textureSrvHandles_.size() - 1);
-}
+	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource2 = UploadTextureDate(textureResource2_, mipImages2_, directXCommon_->GetDevice(), directXCommon_->GetCommandList());
+	directXCommon_->commandExecution(intermediateResource2);
 
-D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(uint32_t index) const {
-	return textureSrvHandles_.at(index);
+
 }

@@ -11,8 +11,10 @@
 class TextureManager;
 class Sprite {
 private:
+	//テクスチャ
 	int32_t TextureHandle_;
 	TextureManager* textureManager_ = nullptr;
+
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite_;
 	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite_{};
 	//リソース******************************************************************

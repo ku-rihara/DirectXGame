@@ -25,34 +25,38 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	/*D3DResourceLeakChecker leakCheck;*/
 	//ライブラリの初期化
 	Keta::Initialize(kWindowTitle, 1280, 720);
-	
+	TextureManager::GetInstance()->Load();
 	Sprite* sprite = Sprite::GetInstance();
-	//Model* modelPlane = Model::Create("suzanne");
-	Model* modelAxis = Model::Create("Axis");
+	
+	Model* modelPlane = Model::Create("Plane");
+
 	//モデル読み込み
 	
 	sprite->CreateSprite();
 	/*TextureManager*te = TextureManager::GetInstance();
 	te->Load("Resources/uvChecker.png");*/
-	
+	bool isDrawSuzanne = false;
+	bool isDrawPlane = false;
 	ViewProjection viewProjection;
-	WorldTransform axisTransform_;
-	WorldTransform tramsform;
+	WorldTransform PlaneTransform;
+	WorldTransform suzanneTransform;
 	WorldTransform transformSprite;
 	WorldTransform cameraTransform;
 	WorldTransform uvTransformSprite;
+
 	DebugCamera* debugCamera_ = new DebugCamera(1280, 720);
-	axisTransform_.Init();
+	//ワールドトランスフォーム初期化
+	PlaneTransform.Init();
 	debugCamera_->Init();
 	uvTransformSprite.Init();
-	tramsform.Init();
+	suzanneTransform.Init();
 	transformSprite.Init();
 
 	cameraTransform.translation_.z = -5.0f;
 	cameraTransform.Init();
 
 	int soundId = SoundManager::GetInstance()->SoundLoadWave("Resources/fanfare.wav");
-	SoundManager::GetInstance()->SoundPlayWave(soundId);
+	//SoundManager::GetInstance()->SoundPlayWave(soundId);
 
 	//ウィンドウのxボタンが押されるまでループ
 	while (Keta::ProcessMessage() == 0) {
@@ -68,26 +72,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (xStateRetrieved) {
 			// XInput のジョイスティック状態を使った処理
 			if (xState.Gamepad.wButtons&XINPUT_GAMEPAD_A) {
-				OutputDebugStringA("XInput: Joystick A \n");
+				SoundManager::GetInstance()->SoundPlayWave(soundId);
 			}
 		}
 
 		if (Input::GetInstance()->TrrigerKey(DIK_A)) {
-			OutputDebugStringA("HIT A\n");
+			SoundManager::GetInstance()->SoundPlayWave(soundId);
 		}
 #ifdef _DEBUG
 		ImGui::Begin("Window");
 
-		if (ImGui::TreeNode("Camera")) {
-			ImGui::DragFloat3("Scale", &cameraTransform.scale_.x, 0.01f);
-			ImGui::DragFloat3("Rotate", &cameraTransform.rotation_.x, 0.01f);
-			ImGui::DragFloat3("Translate", &cameraTransform.translation_.x, 0.01f);
+		if (ImGui::TreeNode("IsDrawModel")) {
+			ImGui::Checkbox("isSuzanne", &isDrawSuzanne);
+			ImGui::Checkbox("isPlane", &isDrawPlane);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("Model")) {
-			ImGui::DragFloat3("Scale", &tramsform.scale_.x, 0.01f);
-			ImGui::DragFloat3("Rotate", &tramsform.rotation_.x, 0.01f);
-			ImGui::DragFloat3("Translate", &tramsform.translation_.x, 0.01f);
+			ImGui::DragFloat3("Scale", &suzanneTransform.scale_.x, 0.01f);
+			ImGui::DragFloat3("Rotate", &suzanneTransform.rotation_.x, 0.01f);
+			ImGui::DragFloat3("Translate", &suzanneTransform.translation_.x, 0.01f);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("Sprite")) {
@@ -104,7 +107,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		ImGui::End();
 #endif
+		//描画フラグ
+		if (isDrawPlane) {
+			isDrawSuzanne = false;
+		}
+		else	if (isDrawSuzanne) {
+			isDrawPlane = false;
+		}
+		//全行列更新********************
 		Keta::UpdateMatrixAll();
+		//****************************
+		// 
 		//tramsform.rotate.y += 0.03f;
 		/*Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale_, cameraTransform.rotation_, cameraTransform.translation_);*/
 	/*	Matrix4x4 viewMatrix = Inverse(cameraMatrix);
@@ -125,12 +138,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		uvTransformMatrix = (uvTransformMatrix* MakeRotateZMatrix(uvTransformSprite.rotation_.z));
 		uvTransformMatrix = (uvTransformMatrix* MakeTranslateMatrix(uvTransformSprite.translation_));
 		sprite->SetUVTransformSprite(uvTransformMatrix);
-		
+		//スプライト描画
+		sprite->DrawSprite();
 		//Draw********************************************************
-		/*modelPlane->Draw(tramsform,viewProjection);*/
-		modelAxis->Draw(axisTransform_, viewProjection);
-	/*	sprite->DrawSprite();*/
-
+		//スザンヌ描画
+		if (isDrawSuzanne) {
+			Model::GetInstance("suzanne")->Draw(suzanneTransform, viewProjection, TextureManager::GetInstance()->GetTextureSrvHandleGPU2());
+		}
+		//平面描画
+		else	if (isDrawPlane) {
+			modelPlane->Draw(PlaneTransform, viewProjection, TextureManager::GetInstance()->GetTextureSrvHandleGPU());
+		}
+		
 		//フレームの終了
 		Keta::EndFrame();
 	}
