@@ -125,6 +125,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::TreePop();
 		}
 		ImGui::End();
+		//ライティング
 		ImGui::Begin("Lighting");
 		 if (ImGui::TreeNode("PlaneDebug")) {
 			modelPlane->DebugImGui();
