@@ -85,7 +85,6 @@ Microsoft::WRL::ComPtr < ID3D12Resource> TextureManager::UploadTextureDate(Micro
 uint32_t TextureManager::Load(const std::string& textureFilePath) {
 	directXCommon_ = DirectXCommon::GetInstance();
 	imguiManager_ = ImGuiManager::GetInstance();
-
 	DirectX::ScratchImage mipImages = LoadTexture(textureFilePath);
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 	Microsoft::WRL::ComPtr<ID3D12Resource> textureResource = CreateTextureResource(directXCommon_->GetDevice(), metadata);
@@ -96,23 +95,18 @@ uint32_t TextureManager::Load(const std::string& textureFilePath) {
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
 
+	auto srvDescriptorSize = directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU = imguiManager_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU = imguiManager_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
 
-	textureSrvHandleCPU= 
-	textureSrvHandleGPU
-
-	textureSrvHandleCPU.ptr += descriptorHeapIndex_ * directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	textureSrvHandleGPU.ptr += descriptorHeapIndex_ * directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
+	textureSrvHandleCPU.ptr += descriptorHeapIndex_ * srvDescriptorSize;
+	textureSrvHandleGPU.ptr += descriptorHeapIndex_ * srvDescriptorSize;
 
 	directXCommon_->GetDevice()->CreateShaderResourceView(textureResource.Get(), &srvDesc, textureSrvHandleCPU);
 
-	// Upload texture data and execute command list
 	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = UploadTextureDate(textureResource, mipImages, directXCommon_->GetDevice(), directXCommon_->GetCommandList());
 	directXCommon_->commandExecution(intermediateResource);
 
-	// Save GPU handle and increment index
 	textureSrvHandles_.push_back(textureSrvHandleGPU);
 	descriptorHeapIndex_++;
 

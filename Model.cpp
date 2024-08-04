@@ -211,7 +211,7 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	directXCommon->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetTextureHandle(textureHandle_));
+	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetTextureHandle(0));
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 	//描画(DrawCall/ドローコール)
