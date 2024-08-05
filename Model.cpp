@@ -139,7 +139,7 @@ void Model::CreateModel(const std::string&ModelName) {
 	/*	textureManager_ = TextureManager::GetInstance();
 	textureHandle_=	textureManager_->Load(modelData_.material.textureFilePath);*/
 	//頂点リソースをつくる
-	vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), (sizeof(VertexData) * modelData_.vertices.size())*2);
+	vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), (sizeof(VertexData) * modelData_.vertices.size()));
 	//頂点バッファビューを作成する
 	vertexBufferView_ = {};
 	//リソースの先頭アドレスから使う
@@ -207,6 +207,7 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 
 	directXCommon->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	directXCommon->GetCommandList()->IASetIndexBuffer(&indexBufferView_);//IBV
+
 	//形状を設定
 	directXCommon->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
