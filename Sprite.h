@@ -43,6 +43,11 @@ public:
 
 	void DrawSprite();
 
+
+#ifdef _DEBUG
+	void DebugImGui();
+#endif
+
 	//setter
 	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->WVP = date; }
 	void SetWorldMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->World = date; }

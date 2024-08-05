@@ -84,6 +84,13 @@ void Sprite::CreateSprite() {
 	//スプライト**************************************************************************************************
 }
 
+#ifdef _DEBUG
+void Sprite::DebugImGui() {
+	/*ImGui::Begin("Lighting");*/
+	ImGui::ColorEdit4(" Color", (float*)&materialDateSprite_->color);
+}
+#endif
+
 void Sprite::DrawSprite() {
 
 	////Spriteの描画。変更が必要なものだけ変更する

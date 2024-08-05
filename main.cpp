@@ -91,9 +91,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		bool IsStatePre = Input::GetInstance()->GetJoystickStatePrevious(0, xStatePre);
 		debugCamera_->Update();
 
-		if (isState&& IsStatePre) {
+		if (isState && IsStatePre) {
 			// XInput のジョイスティック状態を使った処理
-			if (xState.Gamepad.wButtons & XINPUT_GAMEPAD_A&&xStatePre.Gamepad.wButtons!=XINPUT_GAMEPAD_A) {
+			if (xState.Gamepad.wButtons & XINPUT_GAMEPAD_A && xStatePre.Gamepad.wButtons != XINPUT_GAMEPAD_A) {
 				SoundManager::GetInstance()->SoundPlayWave(soundId);
 			}
 		}
@@ -163,10 +163,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				ImGui::DragFloat3("Translate", &transformSprite.translation_.x, 1.0f);
 				ImGui::TreePop();
 			}
-			
+
 			ImGui::TreePop();
 		}
-		
+
 		if (ImGui::TreeNode("UVTransform")) {
 			ImGui::DragFloat2("Scale", &uvTransformSprite.scale_.x, 0.1f, -10.0f, 10.0f);
 			ImGui::DragFloat2("Translate", &uvTransformSprite.translation_.x, 0.01f, -10.0f, 10.0f);
@@ -180,28 +180,32 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			modelPlane->DebugImGui();
 			ImGui::TreePop();
 		}
-		else	if (ImGui::TreeNode("Suzanne")) {
+		if (ImGui::TreeNode("Suzanne")) {
 			Model::GetInstance("suzanne")->DebugImGui();
 			ImGui::TreePop();
 		}
-		else	if (ImGui::TreeNode("Sphere")) {
+		if (ImGui::TreeNode("Sphere")) {
 			modelSphere->DebugImGui();
 			ImGui::TreePop();
 		}
-		else	if (ImGui::TreeNode("teapot")) {
+		if (ImGui::TreeNode("teapot")) {
 			Model::GetInstance("teapot")->DebugImGui();
 			ImGui::TreePop();
 		}
-		else	if (ImGui::TreeNode("bunny")) {
+		if (ImGui::TreeNode("bunny")) {
 			modeBunny->DebugImGui();
 			ImGui::TreePop();
 		}
-		else	if (ImGui::TreeNode("MultiMesh")) {
+		if (ImGui::TreeNode("MultiMesh")) {
 			modelMultiMesh->DebugImGui();
 			ImGui::TreePop();
 		}
-		else	if (ImGui::TreeNode("Fence")) {
+		if (ImGui::TreeNode("Fence")) {
 			Model::GetInstance("Fence")->DebugImGui();
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("Sprite")) {
+			sprite->DebugImGui();
 			ImGui::TreePop();
 		}
 		ImGui::End();
@@ -231,7 +235,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		sprite->SetUVTransformSprite(uvTransformMatrix);
 
 		//Draw********************************************************
-	
+
 		//平面描画
 		if (isDrawPlane) {
 			modelPlane->Draw(PlaneTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
