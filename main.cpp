@@ -215,12 +215,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		sprite->SetUVTransformSprite(uvTransformMatrix);
 
 		//Draw********************************************************
-		//スザンヌ描画
-		if (isDrawSuzanne) {
-			Model::GetInstance("suzanne")->Draw(suzanneTransform, viewProjection, textureManager->GetTextureSrvHandleGPU2());
-			//スプライト描画
-			sprite->DrawSprite();
-		}
+	
 		//平面描画
 		if (isDrawPlane) {
 			modelPlane->Draw(PlaneTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
