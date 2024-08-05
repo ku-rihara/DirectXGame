@@ -31,7 +31,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Mesh* modelSphere = Mesh::GetInstance();
 	//モデル読み込み
 	Model* modelPlane = Model::Create("plane");
-	//Model* modeBunny = Model::Create("bunny");
+	Model* modeBunny = Model::Create("bunny");
 	Model* modelMultiMesh = Model::Create("multiMesh");
 	sprite->CreateSprite();
 	modelSphere->CreateSphere();
@@ -42,6 +42,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	bool isDrawTeaPot = false;
 	bool isDrawBunny = false;
 	bool isMultiMesh = false;
+	bool isDrawFence = false;
 	ViewProjection viewProjection;
 	//ワールドトランスフォーム宣言***********
 	WorldTransform PlaneTransform;
@@ -52,6 +53,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WorldTransform SphereWorldTransform;
 	WorldTransform teaPotWorldTransform;
 	WorldTransform multiMeshWorldTransform;
+	WorldTransform fenceWorldTransform;
 	//デバッグカメラ
 
 	DebugCamera* debugCamera_ = new DebugCamera(1280, 720);
@@ -66,9 +68,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	teaPotWorldTransform.Init();
 	bunnyTransform.Init();
 	multiMeshWorldTransform.Init();
+	fenceWorldTransform.Init();
 
 	//ワールドトランスフォーム値セット****************************
 	transformSprite.scale_.x = 0.7f;
+	fenceWorldTransform.rotation_.y = -3.0f;
 	PlaneTransform.rotation_.y = -3.0f;
 	multiMeshWorldTransform.rotation_.y = -3.0f;
 	int soundId = SoundManager::GetInstance()->SoundLoadWave("Resources/fanfare.wav");
@@ -81,13 +85,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		XINPUT_STATE xState;
+		XINPUT_STATE xStatePre;
 
-		bool xStateRetrieved = Input::GetInstance()->GetJoystickState(0, xState);
+		bool isState = Input::GetInstance()->GetJoystickState(0, xState);
+		bool IsStatePre = Input::GetInstance()->GetJoystickStatePrevious(0, xStatePre);
 		debugCamera_->Update();
 
-		if (xStateRetrieved) {
+		if (isState&& IsStatePre) {
 			// XInput のジョイスティック状態を使った処理
-			if (xState.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
+			if (xState.Gamepad.wButtons & XINPUT_GAMEPAD_A&&xStatePre.Gamepad.wButtons!=XINPUT_GAMEPAD_A) {
 				SoundManager::GetInstance()->SoundPlayWave(soundId);
 			}
 		}
@@ -105,7 +111,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::Checkbox("isTeapot", &isDrawTeaPot);
 			ImGui::Checkbox("isBunny", &isDrawBunny);
 			ImGui::Checkbox("isMultiMesh", &isMultiMesh);
-
+			ImGui::Checkbox("isFence", &isDrawFence);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("WorldTransform")) {
@@ -140,9 +146,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNode("MultiMesh")) {
-				ImGui::DragFloat3("Scale", &multiMeshWorldTransform.scale_.x, 0.1f);
+				ImGui::DragFloat3("Scale", &multiMeshWorldTransform.scale_.x, 0.01f);
 				ImGui::DragFloat3("Rotate", &multiMeshWorldTransform.rotation_.x, 0.01f);
 				ImGui::DragFloat3("Translate", &multiMeshWorldTransform.translation_.x, 0.01f);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("Fence")) {
+				ImGui::DragFloat3("Scale", &fenceWorldTransform.scale_.x, 0.01f);
+				ImGui::DragFloat3("Rotate", &fenceWorldTransform.rotation_.x, 0.01f);
+				ImGui::DragFloat3("Translate", &fenceWorldTransform.translation_.x, 0.01f);
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNode("Sprite")) {
@@ -181,11 +193,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::TreePop();
 		}
 		else	if (ImGui::TreeNode("bunny")) {
-		/*	modeBunny->DebugImGui();*/
+			modeBunny->DebugImGui();
 			ImGui::TreePop();
 		}
 		else	if (ImGui::TreeNode("MultiMesh")) {
 			modelMultiMesh->DebugImGui();
+			ImGui::TreePop();
+		}
+		else	if (ImGui::TreeNode("Fence")) {
+			Model::GetInstance("Fence")->DebugImGui();
 			ImGui::TreePop();
 		}
 		ImGui::End();
@@ -222,6 +238,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//スプライト描画
 			sprite->DrawSprite();
 		}
+		//球
 		if (isDrawSphere) {
 			modelSphere->DrawSphere(SphereWorldTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
 			//スプライト描画
@@ -234,18 +251,29 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			sprite->DrawSprite();
 		}
 		//バニー
-		//if (isDrawBunny) {
-		//	modeBunny->Draw(bunnyTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
-		//	//スプライト描画
-		//	sprite->DrawSprite();
-		//}
+		if (isDrawBunny) {
+			modeBunny->Draw(bunnyTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
+			//スプライト描画
+			sprite->DrawSprite();
+		}
 		//マルチメッシュ
 		if (isMultiMesh) {
 			modelMultiMesh->Draw(multiMeshWorldTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
 			//スプライト描画
 			sprite->DrawSprite();
 		}
-
+		//フェンス
+		if (isDrawFence) {
+			Model::GetInstance("Fence")->Draw(fenceWorldTransform, viewProjection, textureManager->GetTextureSrvHandleGPU4());
+			//スプライト描画
+			sprite->DrawSprite();
+		}
+		//スザンヌ
+		if (isDrawSuzanne) {
+			Model::GetInstance("suzanne")->Draw(suzanneTransform, viewProjection, textureManager->GetTextureSrvHandleGPU2());
+			//スプライト描画
+			sprite->DrawSprite();
+		}
 		//フレームの終了
 		Keta::EndFrame();
 	}

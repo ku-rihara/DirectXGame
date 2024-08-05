@@ -49,7 +49,7 @@ PixelShaderOutput main(VertexShaderOutput input)
     float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
     float NdotL = 0.0f;
     float cos = 0.0f;
-    
+   
     if (gMaterial.enableLighting != 0)
     {
         if (gMaterial.enableLighting == 1)
@@ -68,6 +68,23 @@ PixelShaderOutput main(VertexShaderOutput input)
     else
     {
         output.color = gMaterial.color * textureColor;
+    }
+    
+     //textureのα値が0の時にPixelを破棄
+    if (textureColor.a == 0.0)
+    {
+        discard;
+    }
+    //textureのα値が0.5以下の時にPixelを棄却
+    if (textureColor.a <= 0.5)
+    {
+        discard;
+    }
+    
+    //textureのα値が0.5以下の時にPixelを棄却
+    if (output.color.a ==0.0)
+    {
+        discard;
     }
     
     return output;
