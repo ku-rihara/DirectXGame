@@ -31,7 +31,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Mesh* modelSphere = Mesh::GetInstance();
 	//モデル読み込み
 	Model* modelPlane = Model::Create("plane");
-	Model* modeBunny = Model::Create("bunny");
+	//Model* modeBunny = Model::Create("bunny");
 	Model* modelMultiMesh = Model::Create("multiMesh");
 	sprite->CreateSprite();
 	modelSphere->CreateSphere();
@@ -181,7 +181,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::TreePop();
 		}
 		else	if (ImGui::TreeNode("bunny")) {
-			modeBunny->DebugImGui();
+		/*	modeBunny->DebugImGui();*/
 			ImGui::TreePop();
 		}
 		else	if (ImGui::TreeNode("MultiMesh")) {
@@ -238,13 +238,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//スプライト描画
 			sprite->DrawSprite();
 		}
-		//ティーポット
-		if (isDrawBunny) {
-			modeBunny->Draw(bunnyTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
-			//スプライト描画
-			sprite->DrawSprite();
-		}
-		//ティーポット
+		//バニー
+		//if (isDrawBunny) {
+		//	modeBunny->Draw(bunnyTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
+		//	//スプライト描画
+		//	sprite->DrawSprite();
+		//}
+		//マルチメッシュ
 		if (isMultiMesh) {
 			modelMultiMesh->Draw(multiMeshWorldTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
 			//スプライト描画
