@@ -159,7 +159,7 @@ void Mesh::CreateSphere() {
 #ifdef _DEBUG
 void Mesh::DebugImGui() {
 	/*ImGui::Begin("Lighting");*/
-	ImGui::ColorEdit4(" Color", (float*)&directionalLightData_->color);
+	ImGui::ColorEdit4(" Color", (float*)&materialDate_->color);
 	ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
 	directionalLightData_->direction = Normalize(directionalLightData_->direction);
 	ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
