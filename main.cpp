@@ -30,22 +30,30 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Sprite* sprite = Sprite::GetInstance();
 	Mesh* modelSphere = Mesh::GetInstance();
 	//モデル読み込み
-	Model* modelPlane = Model::Create("Plane");
+	Model* modelPlane = Model::Create("plane");
+	Model* modeBunny = Model::Create("bunny");
+	Model* modelMultiMesh = Model::Create("multiMesh");
 	sprite->CreateSprite();
 	modelSphere->CreateSphere();
 	//描画フラグ
 	bool isDrawSuzanne = false;
 	bool isDrawPlane = true;
-	bool isDrawSphere = true;
+	bool isDrawSphere = false;
+	bool isDrawTeaPot = false;
+	bool isDrawBunny = false;
+	bool isMultiMesh = false;
 	ViewProjection viewProjection;
 	//ワールドトランスフォーム宣言***********
 	WorldTransform PlaneTransform;
-	WorldTransform PlaneTransform2;
+	WorldTransform bunnyTransform;
 	WorldTransform suzanneTransform;
 	WorldTransform transformSprite;
 	WorldTransform uvTransformSprite;
 	WorldTransform SphereWorldTransform;
+	WorldTransform teaPotWorldTransform;
+	WorldTransform multiMeshWorldTransform;
 	//デバッグカメラ
+
 	DebugCamera* debugCamera_ = new DebugCamera(1280, 720);
 
 	//ワールドトランスフォーム初期化******************************
@@ -55,11 +63,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	suzanneTransform.Init();
 	transformSprite.Init();
 	SphereWorldTransform.Init();
+	teaPotWorldTransform.Init();
+	bunnyTransform.Init();
+	multiMeshWorldTransform.Init();
 
 	//ワールドトランスフォーム値セット****************************
-
-	PlaneTransform.rotation_.y = -4.0f;
-	PlaneTransform2.rotation_.y = -4.0f;
+	transformSprite.scale_.x = 0.7f;
+	PlaneTransform.rotation_.y = -3.0f;
+	multiMeshWorldTransform.rotation_.y = -3.0f;
 	int soundId = SoundManager::GetInstance()->SoundLoadWave("Resources/fanfare.wav");
 	//SoundManager::GetInstance()->SoundPlayWave(soundId);
 
@@ -91,10 +102,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::Checkbox("isPlane", &isDrawPlane);
 			ImGui::Checkbox("isSuzanne", &isDrawSuzanne);
 			ImGui::Checkbox("isSphere", &isDrawSphere);
+			ImGui::Checkbox("isTeapot", &isDrawTeaPot);
+			ImGui::Checkbox("isBunny", &isDrawBunny);
+			ImGui::Checkbox("isMultiMesh", &isMultiMesh);
 
 			ImGui::TreePop();
 		}
-		if (ImGui::TreeNode("Model")) {
+		if (ImGui::TreeNode("WorldTransform")) {
 			if (ImGui::TreeNode("Suzanne")) {
 				ImGui::DragFloat3("Scale", &suzanneTransform.scale_.x, 0.01f);
 				ImGui::DragFloat3("Rotate", &suzanneTransform.rotation_.x, 0.01f);
@@ -113,14 +127,34 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				ImGui::DragFloat3("Translate", &SphereWorldTransform.translation_.x, 0.01f);
 				ImGui::TreePop();
 			}
+			if (ImGui::TreeNode("teapot")) {
+				ImGui::DragFloat3("Scale", &teaPotWorldTransform.scale_.x, 0.01f);
+				ImGui::DragFloat3("Rotate", &teaPotWorldTransform.rotation_.x, 0.01f);
+				ImGui::DragFloat3("Translate", &teaPotWorldTransform.translation_.x, 0.01f);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("bunny")) {
+				ImGui::DragFloat3("Scale", &bunnyTransform.scale_.x, 0.01f);
+				ImGui::DragFloat3("Rotate", &bunnyTransform.rotation_.x, 0.01f);
+				ImGui::DragFloat3("Translate", &bunnyTransform.translation_.x, 0.01f);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("MultiMesh")) {
+				ImGui::DragFloat3("Scale", &multiMeshWorldTransform.scale_.x, 0.1f);
+				ImGui::DragFloat3("Rotate", &multiMeshWorldTransform.rotation_.x, 0.01f);
+				ImGui::DragFloat3("Translate", &multiMeshWorldTransform.translation_.x, 0.01f);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("Sprite")) {
+				ImGui::DragFloat3("Scale", &transformSprite.scale_.x, 0.1f);
+				ImGui::DragFloat3("Rotate", &transformSprite.rotation_.x, 1.0f);
+				ImGui::DragFloat3("Translate", &transformSprite.translation_.x, 1.0f);
+				ImGui::TreePop();
+			}
+			
 			ImGui::TreePop();
 		}
-		if (ImGui::TreeNode("Sprite")) {
-			ImGui::DragFloat3("Scale", &transformSprite.scale_.x, 0.1f);
-			ImGui::DragFloat3("Rotate", &transformSprite.rotation_.x, 1.0f);
-			ImGui::DragFloat3("Translate", &transformSprite.translation_.x, 1.0f);
-			ImGui::TreePop();
-		}
+		
 		if (ImGui::TreeNode("UVTransform")) {
 			ImGui::DragFloat2("Scale", &uvTransformSprite.scale_.x, 0.1f, -10.0f, 10.0f);
 			ImGui::DragFloat2("Translate", &uvTransformSprite.translation_.x, 0.01f, -10.0f, 10.0f);
@@ -142,16 +176,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			modelSphere->DebugImGui();
 			ImGui::TreePop();
 		}
-
+		else	if (ImGui::TreeNode("teapot")) {
+			Model::GetInstance("teapot")->DebugImGui();
+			ImGui::TreePop();
+		}
+		else	if (ImGui::TreeNode("bunny")) {
+			modeBunny->DebugImGui();
+			ImGui::TreePop();
+		}
+		else	if (ImGui::TreeNode("MultiMesh")) {
+			modelMultiMesh->DebugImGui();
+			ImGui::TreePop();
+		}
 		ImGui::End();
 
 #endif
-
 		//全行列更新********************
 		Keta::UpdateMatrixAll();
 		//****************************
-
-
 		//tramsform.rotate.y += 0.03f;
 		/*Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale_, cameraTransform.rotation_, cameraTransform.translation_);*/
 	/*	Matrix4x4 viewMatrix = Inverse(cameraMatrix);
@@ -187,6 +229,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		if (isDrawSphere) {
 			modelSphere->DrawSphere(SphereWorldTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
+			//スプライト描画
+			sprite->DrawSprite();
+		}
+		//ティーポット
+		if (isDrawTeaPot) {
+			Model::GetInstance("teapot")->Draw(teaPotWorldTransform, viewProjection, textureManager->GetTextureSrvHandleGPU3());
+			//スプライト描画
+			sprite->DrawSprite();
+		}
+		//ティーポット
+		if (isDrawBunny) {
+			modeBunny->Draw(bunnyTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
+			//スプライト描画
+			sprite->DrawSprite();
+		}
+		//ティーポット
+		if (isMultiMesh) {
+			modelMultiMesh->Draw(multiMeshWorldTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
 			//スプライト描画
 			sprite->DrawSprite();
 		}

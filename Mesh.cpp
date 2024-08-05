@@ -132,7 +132,7 @@ void Mesh::CreateSphere() {
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialDate_));
 	//今回は赤を書き込む
 	materialDate_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	materialDate_->enableLighting = true;
+	materialDate_->enableLighting = 2;
 	//UVTransformは単位行列を書き込んでおく
 	materialDate_->uvTransform = MakeIdentity4x4();
 	//平行光源--------------------------------------------------------------------------------------------------
