@@ -217,7 +217,7 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 
 	//描画(DrawCall/ドローコール)
 	/*commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);*/
-	directXCommon->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	directXCommon->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 10, 0, 0);
 }
 
 void Model::CreateSphere() {
