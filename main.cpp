@@ -26,21 +26,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Keta::Initialize(kWindowTitle, 1280, 720);
 	TextureManager* textureManager = TextureManager::GetInstance();
 
-	textureManager->Load();
 	Sprite* sprite = Sprite::GetInstance();
 
 	//モデル読み込み
 	Model* modelPlane = Model::Create("plane");
-	
+	 uint32_t modelInstance = modelPlane->GetKnumInstance();
 	sprite->CreateSprite();
-	
+	textureManager->Load();
 	//描画フラグ
-	
 	bool isDrawPlane = true;
 	
 	ViewProjection viewProjection;
 	//ワールドトランスフォーム宣言***********
 	WorldTransform PlaneTransform;
+	std::vector<WorldTransform>PlaneTransforms (modelInstance);
 	WorldTransform transformSprite;
 	WorldTransform uvTransformSprite;
 	//デバッグカメラ
@@ -51,6 +50,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	PlaneTransform.Init();
 	debugCamera_->Init();
 	uvTransformSprite.Init();
+	for (WorldTransform& planeTransform : PlaneTransforms) {
+		planeTransform.Init();
+	}
 
 	//ワールドトランスフォーム値セット****************************
 	transformSprite.scale_.x = 0.7f;

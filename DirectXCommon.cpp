@@ -131,11 +131,10 @@ void DirectXCommon::Init(WinApp* winApp, int32_t backBufferWidth, int32_t backBu
 	//dxCompilerの初期化
 	dxcCompilerInit();
 
+		imguiManager_ = ImGuiManager::GetInstance();
+
 	imguiManager_ = ImGuiManager::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
-	/*mesh_ = Mesh::GetInstance();*/
-	/*model_ = Model::GetInstance();*/
-	/*sprite_ = Sprite::GetInstance();*/
 }
 // DXGIデバイス初期化
 void DirectXCommon::DXGIDeviceInit() {
@@ -385,7 +384,10 @@ void DirectXCommon::CreateGraphicPipelene() {
 
 	//Particle
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignatureParticle{};
-	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+	descriptionRootSignatureParticle.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+
+	descriptionRootSignatureParticle.pStaticSamplers = staticSamplers;
+	descriptionRootSignatureParticle.NumStaticSamplers = _countof(staticSamplers);
 
 	D3D12_DESCRIPTOR_RANGE descriptorRangeForInstancing[1] = {};
 	descriptorRangeForInstancing[0].BaseShaderRegister = 0;//0から始まる
@@ -406,8 +408,12 @@ void DirectXCommon::CreateGraphicPipelene() {
 
 	particleRootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//DescriptorTableを使う
 	particleRootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
-	particleRootParameters[2].DescriptorTable.pDescriptorRanges = descriptorRange;
-	particleRootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);//Tableで利用する数
+	particleRootParameters[2].DescriptorTable.pDescriptorRanges = descriptorRangeForInstancing;
+	particleRootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing);//Tableで利用する数
+
+	descriptionRootSignatureParticle.pParameters = particleRootParameters;//ルートパラメーターの配列
+	descriptionRootSignatureParticle.NumParameters = _countof(particleRootParameters);//配列の長さ
+
 
 
 	//シリアライズしてバイナリにする

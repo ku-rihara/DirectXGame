@@ -60,6 +60,8 @@ private://メンバ変数
 	 Microsoft::WRL::ComPtr < ID3D12RootSignature> rootSignature_;
 	Microsoft::WRL::ComPtr<ID3DBlob>signatureBlob_;
 	Microsoft::WRL::ComPtr<ID3DBlob>errorBlob_;
+	//particle
+	
 	D3D12_VIEWPORT viewport_{};
 	D3D12_RECT scissorRect_{};
 	 Microsoft::WRL::ComPtr<IDxcBlob>vertexShaderBlob_;
