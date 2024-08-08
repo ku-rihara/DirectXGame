@@ -22,6 +22,7 @@ class TextureManager;
 class Model{
 private:
 	static std::map<std::string, std::unique_ptr<Model>> modelInstances;
+	 uint32_t kNumInstance_ = 10;//インスタンス数
 
 	//テクスチャ
 	TextureManager* textureManager_=nullptr;
@@ -45,6 +46,7 @@ private:
 
 	//データ****************************************************************************
 	TransformationMatrix* wvpDate_;
+	TransformationMatrix* instancingData_;
 
 	Material* materialDate_;
 	
@@ -77,6 +79,7 @@ public:
 
 	//getter
 	ModelData GetModelData()const { return modelData_; }
+	uint32_t GetKnumInstance()const { return kNumInstance_; }
 
 	//setter
 	void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }

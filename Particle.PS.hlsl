@@ -1,4 +1,4 @@
-#include "object3d.hlsli"
+#include "Particle.hlsli"
 
 
 Texture2D<float4> gTexture : register(t0);
@@ -12,13 +12,7 @@ struct Material
 };
 
 ConstantBuffer<Material> gMaterial : register(b0);
-struct DirectionalLight
-{
-    float4 color; //ライトの色
-    float3 direction; //ライトの向き
-    float intensity; //輝度
-};
-ConstantBuffer<DirectionalLight> gDirectionalLight : register(b1);
+
 
 struct PixelShaderOutput
 {

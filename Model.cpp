@@ -185,8 +185,18 @@ void Model::CreateModel(const std::string&ModelName) {
 	//単位行列を書き込んでおく
 	wvpDate_->WVP = MakeIdentity4x4();
 	wvpDate_->World = MakeIdentity4x4();
-	//三角形****************************************************************************************
-
+	//パーティクル-----------------------------------------------------------
+     kNumInstance_ = 10;//インスタンス数
+	//Instancing用のTransformationMatrixリソースを作る
+	Microsoft::WRL::ComPtr<ID3D12Resource>instancingResource = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix) * kNumInstance_);
+	//書き込む為のアドレスを取得
+	instancingData_ = nullptr;
+	instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
+	//単位行列を書き込んでおく
+	for (uint32_t index = 0; index < kNumInstance_; ++index) {
+		instancingData_[index].WVP = MakeIdentity4x4();
+		instancingData_[index].World = MakeIdentity4x4();
+	}
 }
 #ifdef _DEBUG
 void Model::DebugImGui() {

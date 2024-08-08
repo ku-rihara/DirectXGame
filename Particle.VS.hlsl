@@ -10,7 +10,7 @@ struct TransformationMatrix
     float4x4 WVP;
     float4x4 World;
 };
-ConstantBuffer<TransformationMatrix> gTransformationMatrices[10] : register(t0);
+StructuredBuffer<TransformationMatrix> gTransformationMatrices : register(t0);
 
 
 VertexShaderOutput main(VertexShaderInput input,uint instanceID:SV_InstanceID)
