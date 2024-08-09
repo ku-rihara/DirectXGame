@@ -57,16 +57,23 @@ private://メンバ変数
 	//Init------------------------------------------------------------------------------------------------------
 
 	//グラフィックパイプライン関連
-	 Microsoft::WRL::ComPtr < ID3D12RootSignature> rootSignature_;
+	//object
+	Microsoft::WRL::ComPtr < ID3D12RootSignature> rootSignature_;
 	Microsoft::WRL::ComPtr<ID3DBlob>signatureBlob_;
 	Microsoft::WRL::ComPtr<ID3DBlob>errorBlob_;
+	Microsoft::WRL::ComPtr<IDxcBlob>vertexShaderBlob_;
+	Microsoft::WRL::ComPtr<IDxcBlob>pixelShaderBlob_;
 	//particle
-	
+	Microsoft::WRL::ComPtr < ID3D12RootSignature> rootSignatureParticle_;
+	Microsoft::WRL::ComPtr<ID3DBlob>signatureBlobParticle_;
+	Microsoft::WRL::ComPtr<ID3DBlob>errorBlobParticle_;
+	Microsoft::WRL::ComPtr<IDxcBlob>vertexShaderBlobParticle_;
+	Microsoft::WRL::ComPtr<IDxcBlob>pixelShaderBlobParticle_;
 	D3D12_VIEWPORT viewport_{};
 	D3D12_RECT scissorRect_{};
-	 Microsoft::WRL::ComPtr<IDxcBlob>vertexShaderBlob_;
-	 Microsoft::WRL::ComPtr<IDxcBlob>pixelShaderBlob_;
+	
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineState_;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateParticle_;
 
 	//DescriptorSize
 	uint32_t descriptorSizeSRV_;
@@ -174,6 +181,12 @@ public://メンバ関数
 	DXGI_SWAP_CHAIN_DESC1 GetSwapChainDesc()const { return swapChainDesc_; }
 	//レンダーターゲットビュー 
 	D3D12_RENDER_TARGET_VIEW_DESC GetRtvDesc()const { return rtvDesc_; }
+
+	//rootSignature
+	ID3D12PipelineState* GetGrahipcsPipeLileState()const { return graphicsPipelineState_.Get(); }
+	ID3D12RootSignature* GetRootSignature()const { return rootSignature_.Get(); }
+	ID3D12PipelineState* GetGrahipcsPipeLileStateParticle()const { return graphicsPipelineStateParticle_.Get(); }
+	ID3D12RootSignature* GetRootSignatureParticle()const { return rootSignatureParticle_.Get(); }
 
 	//dxcCompilerの初期化関連
 	IDxcUtils* GetDxcUtils()const { return dxcUtils_; }

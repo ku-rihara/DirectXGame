@@ -53,6 +53,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	for (WorldTransform& planeTransform : PlaneTransforms) {
 		planeTransform.Init();
 	}
+	for (uint32_t index = 0; index < modelInstance; ++index) {
+		PlaneTransforms[index].translation_ = { index * 0.1f,index * 0.1f ,index * 0.1f };
+	}
 
 	//ワールドトランスフォーム値セット****************************
 	transformSprite.scale_.x = 0.7f;
@@ -128,6 +131,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//平面描画
 		if (isDrawPlane) {
+			
+			modelPlane->DrawParticle(PlaneTransforms, viewProjection, textureManager->GetTextureSrvHandleGPU());
+		
 			modelPlane->Draw(PlaneTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
 			//スプライト描画
 			sprite->DrawSprite();

@@ -171,24 +171,10 @@ void TextureManager::Load() {
 	srvDesc4.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc4.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc4.Texture2D.MipLevels = UINT(metadata4.mipLevels);
-
-	//5
-	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
-	instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
-	instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-	instancingSrvDesc.Buffer.FirstElement = 0;
-	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-	instancingSrvDesc.Buffer.NumElements = Model::GetInstance("plane")->GetKnumInstance();
-	instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
-
 	
 	//SRVを作成するDescriptorHeapの場所を決める
 	textureSrvHandleCPU_ = imguiManager_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
 	textureSrvHandleGPU_ = imguiManager_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
-
-	D3D12_CPU_DESCRIPTOR_HANDLE  instancingSrvHandleCPU = directXCommon_->GetCPUDescriptorHandle(imguiManager_->GetSrvDescriptorHeap(), directXCommon_->GetDescriptorSizeSRV(), 2);
-	D3D12_GPU_DESCRIPTOR_HANDLE  instancingSrvHandleGPU = directXCommon_->GetGPUDescriptorHandle(imguiManager_->GetSrvDescriptorHeap(), directXCommon_->GetDescriptorSizeSRV(), 2);
 
 	textureSrvHandleCPU2_ = directXCommon_->GetCPUDescriptorHandle(imguiManager_->GetSrvDescriptorHeap(), directXCommon_->GetDescriptorSizeSRV(), 3);
 	textureSrvHandleGPU2_ = directXCommon_->GetGPUDescriptorHandle(imguiManager_->GetSrvDescriptorHeap(), directXCommon_->GetDescriptorSizeSRV(), 3);
@@ -222,7 +208,4 @@ void TextureManager::Load() {
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource4 = UploadTextureDate(textureResource4_, mipImages4_, directXCommon_->GetDevice(), directXCommon_->GetCommandList());
 	directXCommon_->commandExecution(intermediateResource3);
-
-
-
 }

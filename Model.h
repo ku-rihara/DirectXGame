@@ -6,6 +6,7 @@
 #include<string>
 #include<map>
 #include <memory>
+#include<vector>
 #include"Vector4.h"
 #include"Vector3.h"
 #include"Vector2.h"
@@ -22,8 +23,9 @@ class TextureManager;
 class Model{
 private:
 	static std::map<std::string, std::unique_ptr<Model>> modelInstances;
-	 uint32_t kNumInstance_ = 10;//インスタンス数
-
+	const uint32_t kNumInstance_ = 10;//インスタンス数
+	D3D12_CPU_DESCRIPTOR_HANDLE  instancingSrvHandleCPU_;
+	D3D12_GPU_DESCRIPTOR_HANDLE  instancingSrvHandleGPU_;
 	//テクスチャ
 	TextureManager* textureManager_=nullptr;
 	int32_t textureHandle_;
@@ -72,6 +74,11 @@ public:
 	/// モデル描画
 	/// </summary>
 	void Draw(const WorldTransform&worldTransform,const ViewProjection&viewProjection, D3D12_GPU_DESCRIPTOR_HANDLE texture);
+	
+	/// <summary>
+	/// モデルバーティクル
+	/// </summary>
+	void DrawParticle(const std::vector<WorldTransform>& worldTransforms, const ViewProjection& viewProjection, D3D12_GPU_DESCRIPTOR_HANDLE texture);
 
 #ifdef _DEBUG
 	void DebugImGui();
