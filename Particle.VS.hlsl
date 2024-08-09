@@ -4,7 +4,6 @@
 //    return pos;
 //}
 
-
 struct TransformationMatrix
 {
     float4x4 WVP;

@@ -3,6 +3,7 @@
 #include<sstream>
 #include<assert.h>
 #include"DirectXCommon.h"
+#include"ImGuiManager.h"
 #include"TextureManager.h"
 #include "externals/imgui/imgui.h"
 namespace {
@@ -138,6 +139,7 @@ void Model::CreateModel(const std::string&ModelName) {
 	modelData_ = LoadObjFile("Resources", ModelName+".obj");
 	/*	textureManager_ = TextureManager::GetInstance();
 	textureHandle_=	textureManager_->Load(modelData_.material.textureFilePath);*/
+
 	//頂点リソースをつくる
 	vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), (sizeof(VertexData) * modelData_.vertices.size()));
 	//頂点バッファビューを作成する
@@ -186,7 +188,6 @@ void Model::CreateModel(const std::string&ModelName) {
 	wvpDate_->WVP = MakeIdentity4x4();
 	wvpDate_->World = MakeIdentity4x4();
 	//パーティクル-----------------------------------------------------------
-     kNumInstance_ = 10;//インスタンス数
 	//Instancing用のTransformationMatrixリソースを作る
 	Microsoft::WRL::ComPtr<ID3D12Resource>instancingResource = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix) * kNumInstance_);
 	//書き込む為のアドレスを取得
@@ -197,6 +198,21 @@ void Model::CreateModel(const std::string&ModelName) {
 		instancingData_[index].WVP = MakeIdentity4x4();
 		instancingData_[index].World = MakeIdentity4x4();
 	}
+	//SRVの作成
+	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
+	instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
+	instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+	instancingSrvDesc.Buffer.FirstElement = 0;
+	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+	instancingSrvDesc.Buffer.NumElements = kNumInstance_;
+	instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
+
+	  instancingSrvHandleCPU_ = directXCommon->GetCPUDescriptorHandle(ImGuiManager::GetInstance()->GetSrvDescriptorHeap(), directXCommon->GetDescriptorSizeSRV(), 2);
+	  instancingSrvHandleGPU_ = directXCommon->GetGPUDescriptorHandle(ImGuiManager::GetInstance()->GetSrvDescriptorHeap(), directXCommon->GetDescriptorSizeSRV(), 2);
+
+	directXCommon->GetDevice()->CreateShaderResourceView(instancingResource.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);
+
 }
 #ifdef _DEBUG
 void Model::DebugImGui() {
@@ -213,6 +229,9 @@ void Model::DebugImGui() {
 
 void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, D3D12_GPU_DESCRIPTOR_HANDLE texture) {
 	/*DebugImGui();*/
+		//RootSignatureを設定
+	directXCommon->GetCommandList()->SetGraphicsRootSignature(directXCommon->GetRootSignature());
+	directXCommon->GetCommandList()->SetPipelineState(directXCommon->GetGrahipcsPipeLileState());
 	wvpDate_->WVP = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
 
 	directXCommon->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
@@ -227,8 +246,30 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 
 	//描画(DrawCall/ドローコール)
 	/*commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);*/
-	directXCommon->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 10, 0, 0);
+	directXCommon->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }
+
+void Model::DrawParticle(const std::vector<WorldTransform>& worldTransforms, const ViewProjection& viewProjection, D3D12_GPU_DESCRIPTOR_HANDLE texture) {
+	directXCommon->GetCommandList()->SetGraphicsRootSignature(directXCommon->GetRootSignatureParticle());
+	directXCommon->GetCommandList()->SetPipelineState(directXCommon->GetGrahipcsPipeLileStateParticle());
+	
+	for (uint32_t index = 0; index < worldTransforms.size(); ++index) {
+		instancingData_[index].WVP = worldTransforms[index].matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+	}
+	directXCommon->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	directXCommon->GetCommandList()->IASetIndexBuffer(&indexBufferView_);//IBV
+
+	//形状を設定
+	directXCommon->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
+	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, texture);
+
+	//描画(DrawCall/ドローコール)
+	/*commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);*/
+	directXCommon->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), kNumInstance_, 0, 0);
+}
+
 
 void Model::CreateSphere() {
 
