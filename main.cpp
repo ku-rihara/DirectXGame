@@ -1,20 +1,21 @@
 #include"Keta.h"
+//Transform
 #include "WorldTransform.h"
-#include "WorldTransformManager.h"
 #include"ViewProjection.h"
+//DirectX
 #include"WinApp.h"
 #include "Mesh.h"
 #include "Model.h"
 #include "Sprite.h"
 #include "DirectXCommon.h"
-#include "SoundManager.h"
+#include"D3DResourceLeakCheck.h"
+#include"TextureManager.h"
+//etc
+#include "Audio.h"
 #include"Input.h"
 #include"DebugCamera.h"
-#include"TextureManager.h"
-
-#include"D3DResourceLeakCheck.h"
-
 #include "externals/imgui/imgui.h"
+
 
 
 const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ_CG2";
@@ -27,6 +28,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	TextureManager* textureManager = TextureManager::GetInstance();
 
 	Sprite* sprite = Sprite::GetInstance();
+	int soundData = Audio::GetInstance()->SoundLoadWave("Resources/fanfare.wav");
 
 	//モデル読み込み
 	Model* modelPlane = Model::Create("plane");
@@ -66,6 +68,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//フレームの開始
 		Keta::BeginFrame();
 		debugCamera_->Update();
+
+		if (Input::GetInstance()->TrrigerKey(DIK_F)) {
+			Audio::GetInstance()->SoundPlayWave(soundData);
+		}
 #ifdef _DEBUG
 		ImGui::Begin("Window");
 
@@ -107,9 +113,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::End();
 
 #endif
-		//全行列更新********************
-		Keta::UpdateMatrixAll();
-		//****************************
+		//ワールド行列更新
+		PlaneTransform.UpdateMatrix();
+		for (uint32_t i = 0; i < modelInstance; i++) {
+			PlaneTransform.UpdateMatrix();
+		}
+	
+		transformSprite.UpdateMatrix();
+		uvTransformSprite.UpdateMatrix();
+
 		//tramsform.rotate.y += 0.03f;
 		
 		// カメラ行列の計算をデバッグカメラのビュープロジェクションから行う
@@ -132,8 +144,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//平面描画
 		if (isDrawPlane) {
 			
-			modelPlane->DrawParticle(PlaneTransforms, viewProjection, textureManager->GetTextureSrvHandleGPU());
-		
+		/*	modelPlane->DrawParticle(PlaneTransforms, viewProjection, textureManager->GetTextureSrvHandleGPU());
+		*/
 			modelPlane->Draw(PlaneTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
 			//スプライト描画
 			sprite->DrawSprite();
