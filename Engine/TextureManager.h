@@ -2,8 +2,8 @@
 #include<wrl.h>
 #include <string>
 #include<d3d12.h>
-#include"externals/DirectXTex/DirectXTex.h"
-#include"externals/DirectXTex/d3dx12.h"
+#include<DirectXTex.h>
+#include<d3dx12.h>
 #include<vector>
 
 class TextureManager {

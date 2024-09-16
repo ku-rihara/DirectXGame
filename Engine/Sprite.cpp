@@ -1,7 +1,7 @@
 #include "Sprite.h"
 #include "DirectXCommon.h"
 #include "TextureManager.h"
-#include "externals/imgui/imgui.h"
+#include <imgui.h>
 namespace {
 	DirectXCommon* directXCommon = DirectXCommon::GetInstance();
 	//Model* model=Model::GetInstance();
