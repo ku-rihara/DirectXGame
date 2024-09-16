@@ -17,7 +17,7 @@ namespace {
 	DirectXCommon* sDirectXCommon = nullptr;
 	ImGuiManager* imguiManager = nullptr;
 	TextureManager* textureManager = nullptr;
-	SoundManager* soundManager = nullptr;
+	Audio* audio = nullptr;
 	Input* input = nullptr;
 }
 
@@ -41,8 +41,8 @@ void Keta::Initialize(const char* title, int width, int height) {
 	input = Input::GetInstance();
 	input->Init(sWinApp->GetHInstaice(), sWinApp->GetHwnd());
 
-	soundManager = SoundManager::GetInstance();
-	soundManager->Init();
+	audio = Audio::GetInstance();
+	audio->Init();
 
 	
 }
@@ -70,14 +70,14 @@ void Keta::EndFrame() {
 
 void Keta::Finalize() {
 	CoUninitialize();
-	soundManager->Finalize();
+	audio->Finalize();
 	sDirectXCommon->ReleaseObject();
 	
 #ifdef _DEBUG
 	imguiManager->Finalizer();
 #endif
 }
-
-void Keta::UpdateMatrixAll() {
-	WorldTransformManager::GetInstance().UpdateAll();
-}
+//
+//void Keta::UpdateMatrixAll() {
+//	WorldTransformManager::GetInstance().UpdateAll();
+//}
