@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="リソース ファイル">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="MyEngine">
       <UniqueIdentifier>{d0c548e8-1e8d-4fa8-af3e-514db00c514c}</UniqueIdentifier>
     </Filter>
@@ -25,26 +21,17 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{8ed0676c-f1d0-4af2-96bc-4c2c8c07c532}</UniqueIdentifier>
     </Filter>
+    <Filter Include="math">
+      <UniqueIdentifier>{d10818ef-728c-44dd-95e8-9e6de9fc0533}</UniqueIdentifier>
+    </Filter>
     <Filter Include="MyEngine\struct">
-      <UniqueIdentifier>{a9f6920f-f492-4ef2-bb87-6d5e97cbbbdd}</UniqueIdentifier>
+      <UniqueIdentifier>{652ad917-7098-4697-8956-5714f98e5ed8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソースファイル">
+      <UniqueIdentifier>{21fc63fa-76a7-4761-a85a-64f85e5ca5ab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Convert.cpp">
-      <Filter>MyEngine\Function</Filter>
-    </ClCompile>
-    <ClCompile Include="WinApp.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectXCommon.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Keta.cpp">
-      <Filter>MyEngine\Adapter</Filter>
-    </ClCompile>
     <ClCompile Include="externals\imgui\imgui.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
@@ -66,65 +53,68 @@
     <ClCompile Include="externals\imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
+    <ClCompile Include="Engine\Keta.cpp">
+      <Filter>MyEngine\Adapter</Filter>
     </ClCompile>
-    <ClCompile Include="ImGuiManager.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Matrix4x4.cpp">
+    <ClCompile Include="Engine\Function\Convert.cpp">
       <Filter>MyEngine\Function</Filter>
     </ClCompile>
-    <ClCompile Include="Matrix3x3.cpp">
-      <Filter>MyEngine\Function</Filter>
+    <ClCompile Include="math\Matrix3x3.cpp">
+      <Filter>math</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
+    <ClCompile Include="math\Matrix4x4.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Vector3.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio.cpp">
       <Filter>MyEngine\ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
+    <ClCompile Include="Engine\DebugCamera.cpp">
       <Filter>MyEngine\ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Sprite.cpp">
+    <ClCompile Include="Engine\DirectXCommon.cpp">
       <Filter>MyEngine\ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Audio.cpp">
+    <ClCompile Include="Engine\ImGuiManager.cpp">
       <Filter>MyEngine\ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Input.cpp">
+    <ClCompile Include="Engine\Input.cpp">
       <Filter>MyEngine\ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="SoundManager.cpp">
+    <ClCompile Include="Engine\Mesh.cpp">
       <Filter>MyEngine\ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="DebugCamera.cpp">
+    <ClCompile Include="Engine\Model.cpp">
       <Filter>MyEngine\ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Vector3.cpp">
-      <Filter>MyEngine\Function</Filter>
-    </ClCompile>
-    <ClCompile Include="WorldTransform.cpp">
+    <ClCompile Include="Engine\SoundManager.cpp">
       <Filter>MyEngine\ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ViewProjection.cpp">
+    <ClCompile Include="Engine\Sprite.cpp">
       <Filter>MyEngine\ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="WorldTransformManager.cpp">
+    <ClCompile Include="Engine\TextureManager.cpp">
+      <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\ViewProjection.cpp">
+      <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\WinApp.cpp">
+      <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\WorldTransform.cpp">
+      <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\WorldTransformManager.cpp">
+      <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>MyEngine\ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Convert.h">
-      <Filter>MyEngine\Function</Filter>
-    </ClInclude>
-    <ClInclude Include="WinApp.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXCommon.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Keta.h">
-      <Filter>MyEngine\Adapter</Filter>
-    </ClInclude>
     <ClInclude Include="externals\imgui\imconfig.h">
       <Filter>imgui</Filter>
     </ClInclude>
@@ -149,90 +139,96 @@
     <ClInclude Include="externals\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="TextureManager.h">
+    <ClInclude Include="Engine\Keta.h">
+      <Filter>MyEngine\Adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Function\Convert.h">
+      <Filter>MyEngine\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Matrix3x3.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Matrix4x4.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Vector2.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Vector3.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Vector4.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\struct\DirectionalLight.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\struct\Material.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\struct\MaterialData.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\struct\ModelData.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\struct\SoundData.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\struct\Transform.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\struct\TransformationMatrix.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\struct\VertexData.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Vector4.h">
-      <Filter>MyEngine\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>MyEngine\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGuiManager.h">
+    <ClInclude Include="Engine\DebugCamera.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="VertexData.h">
-      <Filter>MyEngine\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector2.h">
-      <Filter>MyEngine\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>MyEngine\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="TransformationMatrix.h">
-      <Filter>MyEngine\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectionalLight.h">
-      <Filter>MyEngine\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix4x4.h">
-      <Filter>MyEngine\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix3x3.h">
-      <Filter>MyEngine\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
+    <ClInclude Include="Engine\DirectXCommon.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ModelData.h">
-      <Filter>MyEngine\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
+    <ClInclude Include="Engine\ImGuiManager.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
+    <ClInclude Include="Engine\Input.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="MaterialData.h">
-      <Filter>MyEngine\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="D3DResourceLeakCheck.h">
-      <Filter>MyEngine\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Audio.h">
+    <ClInclude Include="Engine\Mesh.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="SoundData.h">
-      <Filter>MyEngine\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
+    <ClInclude Include="Engine\Model.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="SoundManager.h">
+    <ClInclude Include="Engine\SoundManager.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="DebugCamera.h">
+    <ClInclude Include="Engine\Sprite.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Vector3.h">
-      <Filter>MyEngine\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldTransform.h">
+    <ClInclude Include="Engine\TextureManager.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ViewProjection.h">
+    <ClInclude Include="Engine\ViewProjection.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="WorldTransformManager.h">
+    <ClInclude Include="Engine\WinApp.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Object3d.VS.hlsl" />
-    <FxCompile Include="Object3d.PS.hlsl" />
-    <FxCompile Include="Particle.VS.hlsl" />
-    <FxCompile Include="Particle.PS.hlsl" />
+    <ClInclude Include="Engine\WorldTransform.h">
+      <Filter>MyEngine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\WorldTransformManager.h">
+      <Filter>MyEngine\ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
@@ -240,8 +236,26 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Object3d.hlsli" />
     <None Include=".editorconfig" />
-    <None Include="Particle.hlsli" />
+    <None Include="Engine\Object3d.hlsli">
+      <Filter>リソースファイル</Filter>
+    </None>
+    <None Include="Engine\Particle.hlsli">
+      <Filter>リソースファイル</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Engine\Object3d.PS.hlsl">
+      <Filter>リソースファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Object3d.VS.hlsl">
+      <Filter>リソースファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Particle.PS.hlsl">
+      <Filter>リソースファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Particle.VS.hlsl">
+      <Filter>リソースファイル</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

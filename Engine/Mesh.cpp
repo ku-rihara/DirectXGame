@@ -1,7 +1,7 @@
 #include "Mesh.h"
 #include "DirectXCommon.h"
 #include "TextureManager.h"
-#include "externals/imgui/imgui.h"
+#include<imgui.h>
 //struct
 #include"VertexData.h"
 #include<format>
