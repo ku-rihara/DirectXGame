@@ -138,7 +138,7 @@ uint32_t TextureManager::LoadTextureResource(const std::string& filePath) {
 	descriptorHeapIndex_++;
 
 	// 割り当てられたインデックスを返す
-	return descriptorHeapIndex_ - 1;
+	return uint32_t(textureSrvHandles_.size() - 1);
 }
 
 //
