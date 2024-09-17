@@ -14,22 +14,7 @@ private:
 	Microsoft::WRL::ComPtr < ID3D12Resource> textureResource_;
 	DirectX::ScratchImage mipImages_;
 	std::vector<D3D12_GPU_DESCRIPTOR_HANDLE> textureSrvHandles_;
-	//2
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU2_;
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU2_;
-	DirectX::ScratchImage mipImages2_;
-	Microsoft::WRL::ComPtr < ID3D12Resource> textureResource2_;
-	//3
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU3_;
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU3_;
-	DirectX::ScratchImage mipImages3_;
-	Microsoft::WRL::ComPtr < ID3D12Resource> textureResource3_;
-
-	//4
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU4_;
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU4_;
-	DirectX::ScratchImage mipImages4_;
-	Microsoft::WRL::ComPtr < ID3D12Resource> textureResource4_;
+	
 public:
 	
 	static uint32_t descriptorHeapIndex_;
@@ -56,16 +41,16 @@ public:
 	ID3D12Resource* GetTextureResource()const { return textureResource_.Get(); }
 	const DirectX::ScratchImage& GetMipImages() { return mipImages_; }
 
-	D3D12_GPU_DESCRIPTOR_HANDLE GetTextureSrvHandleGPU2()const { return textureSrvHandleGPU2_; }
-	ID3D12Resource* GetTextureResource2()const { return textureResource2_.Get(); }
-	const DirectX::ScratchImage& GetMipImages2() { return mipImages2_; }
+	//D3D12_GPU_DESCRIPTOR_HANDLE GetTextureSrvHandleGPU2()const { return textureSrvHandleGPU2_; }
+	//ID3D12Resource* GetTextureResource2()const { return textureResource2_.Get(); }
+	//const DirectX::ScratchImage& GetMipImages2() { return mipImages2_; }
 
-	D3D12_GPU_DESCRIPTOR_HANDLE GetTextureSrvHandleGPU3()const { return textureSrvHandleGPU3_; }
-	ID3D12Resource* GetTextureResource3()const { return textureResource3_.Get(); }
-	const DirectX::ScratchImage& GetMipImages3() { return mipImages3_; }
+	//D3D12_GPU_DESCRIPTOR_HANDLE GetTextureSrvHandleGPU3()const { return textureSrvHandleGPU3_; }
+	//ID3D12Resource* GetTextureResource3()const { return textureResource3_.Get(); }
+	//const DirectX::ScratchImage& GetMipImages3() { return mipImages3_; }
 
-	D3D12_GPU_DESCRIPTOR_HANDLE GetTextureSrvHandleGPU4()const { return textureSrvHandleGPU4_; }
-	ID3D12Resource* GetTextureResource4()const { return textureResource4_.Get(); }
-	const DirectX::ScratchImage& GetMipImages4() { return mipImages4_; }
+	//D3D12_GPU_DESCRIPTOR_HANDLE GetTextureSrvHandleGPU4()const { return textureSrvHandleGPU4_; }
+	//ID3D12Resource* GetTextureResource4()const { return textureResource4_.Get(); }
+	//const DirectX::ScratchImage& GetMipImages4() { return mipImages4_; }
 };
 
