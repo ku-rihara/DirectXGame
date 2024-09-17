@@ -85,24 +85,24 @@ Microsoft::WRL::ComPtr < ID3D12Resource> TextureManager::UploadTextureDate(Micro
 }
 
 
-D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(uint32_t index) const {
-	// 特定のインデックスに対応するテクスチャのGPUハンドルを取得
-	D3D12_GPU_DESCRIPTOR_HANDLE handle = textureSrvHandleGPU_;
-	handle.ptr += index * DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	return handle;
-}
-
-//
 //D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(uint32_t index) const {
-//	return textureSrvHandles_.at(index);
+//	// 特定のインデックスに対応するテクスチャのGPUハンドルを取得
+//	D3D12_GPU_DESCRIPTOR_HANDLE handle = textureSrvHandleGPU_;
+//	handle.ptr += index * DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+//	return handle;
 //}
-//
+
+
+D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(uint32_t index) const {
+	return textureSrvHandles_.at(index);
+}
 
 
 uint32_t TextureManager::LoadTextureResource(const std::string& filePath) {
-	//インスタンス取得
+	// インスタンス取得
 	directXCommon_ = DirectXCommon::GetInstance();
 	imguiManager_ = ImGuiManager::GetInstance();
+
 	// テクスチャを読み込み
 	mipImages_ = LoadTexture(filePath);
 	const DirectX::TexMetadata& metadata = mipImages_.GetMetadata();
@@ -121,6 +121,9 @@ uint32_t TextureManager::LoadTextureResource(const std::string& filePath) {
 	textureSrvHandleCPU_ = directXCommon_->GetCPUDescriptorHandle(imguiManager_->GetSrvDescriptorHeap(), directXCommon_->GetDescriptorSizeSRV(), descriptorHeapIndex_);
 	textureSrvHandleGPU_ = directXCommon_->GetGPUDescriptorHandle(imguiManager_->GetSrvDescriptorHeap(), directXCommon_->GetDescriptorSizeSRV(), descriptorHeapIndex_);
 
+	/*textureSrvHandleCPU_.ptr += descriptorHeapIndex_ *  directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	textureSrvHandleGPU_.ptr += descriptorHeapIndex_ *  directXCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);*/
+
 	// SRVの生成
 	directXCommon_->GetDevice()->CreateShaderResourceView(textureResource_.Get(), &srvDesc, textureSrvHandleCPU_);
 
@@ -128,14 +131,15 @@ uint32_t TextureManager::LoadTextureResource(const std::string& filePath) {
 	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = UploadTextureDate(textureResource_, mipImages_, directXCommon_->GetDevice(), directXCommon_->GetCommandList());
 	directXCommon_->commandExecution(intermediateResource);
 
+	// GPUハンドルをリストに追加
+	textureSrvHandles_.push_back(textureSrvHandleGPU_);
+
 	// インデックスをインクリメントして次のテクスチャに備える
 	descriptorHeapIndex_++;
 
 	// 割り当てられたインデックスを返す
 	return descriptorHeapIndex_ - 1;
 }
-
-
 
 //
 //uint32_t TextureManager::Load(const std::string& textureFilePath) {
@@ -168,5 +172,3 @@ uint32_t TextureManager::LoadTextureResource(const std::string& filePath) {
 //
 //	return static_cast<uint32_t>(textureSrvHandles_.size() - 1);
 //}
-
-
