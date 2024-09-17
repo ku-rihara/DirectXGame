@@ -17,27 +17,34 @@
 #include "externals/imgui/imgui.h"
 
 
-
-const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ_CG2";
+const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ_CG3";
 
 //windowアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	/*D3DResourceLeakChecker leakCheck;*/
 	//ライブラリの初期化
 	Keta::Initialize(kWindowTitle, 1280, 720);
-	TextureManager* textureManager = TextureManager::GetInstance();
+	/*TextureManager* textureManager = TextureManager::GetInstance();*/
 
 	Sprite* sprite = Sprite::GetInstance();
 	int soundData = Audio::GetInstance()->SoundLoadWave("Resources/fanfare.wav");
 
 	//モデル読み込み
 	Model* modelPlane = Model::Create("plane");
-	 uint32_t modelInstance = modelPlane->GetKnumInstance();
+    uint32_t modelInstance = modelPlane->GetKnumInstance();
 	sprite->CreateSprite();
-	textureManager->Load();
 	//描画フラグ
 	bool isDrawPlane = true;
 	
+	/*Model*  model_ = Model::Create("suzanne");
+	Model* modelTeaPot_ = Model::Create("teapot");
+	Model* modelFence_ = Model::Create("Fence");*/
+
+	//// それぞれのテクスチャをロード
+	//uint32_t uvHandle= textureManager->LoadTextureResource(modelPlane->GetModelData().material.textureFilePath);
+	//uint32_t SuzanneHandle = TextureManager::GetInstance()->LoadTextureResource(model_->GetModelData().material.textureFilePath);
+	//uint32_t teaPotHandle = TextureManager::GetInstance()->LoadTextureResource(modelTeaPot_->GetModelData().material.textureFilePath);
+	//uint32_t FenceHandle = TextureManager::GetInstance()->LoadTextureResource(modelFence_->GetModelData().material.textureFilePath);
 	ViewProjection viewProjection;
 	//ワールドトランスフォーム宣言***********
 	WorldTransform PlaneTransform;
@@ -146,7 +153,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			
 		/*	modelPlane->DrawParticle(PlaneTransforms, viewProjection, textureManager->GetTextureSrvHandleGPU());
 		*/
-			modelPlane->Draw(PlaneTransform, viewProjection, textureManager->GetTextureSrvHandleGPU());
+			modelPlane->Draw(PlaneTransform, viewProjection);
 			//スプライト描画
 			sprite->DrawSprite();
 		}

@@ -43,8 +43,6 @@ void Keta::Initialize(const char* title, int width, int height) {
 
 	audio = Audio::GetInstance();
 	audio->Init();
-
-	
 }
 
 //メッセージがなければループする
