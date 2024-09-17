@@ -137,7 +137,7 @@ MaterialData Model:: LoadMaterialTemplateFile(const std::string& directoryPath, 
 }
 
 void Model::CreateModel(const std::string&ModelName) {
-	modelData_ = LoadObjFile("Resources", ModelName+".obj");
+	modelData_ = LoadObjFile("Resources/Model", ModelName+".obj");
 		textureManager_ = TextureManager::GetInstance();
 	textureHandle_=	textureManager_->LoadTextureResource(modelData_.material.textureFilePath);
 

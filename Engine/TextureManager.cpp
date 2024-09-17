@@ -10,9 +10,7 @@ uint32_t TextureManager::descriptorHeapIndex_ = 0;
 namespace {
 	DirectXCommon* directXCommon_;
 	ImGuiManager* imguiManager_;
-	Model* model_;
-	Model* modelTeaPot_;
-	Model* modelFence_;
+
 }
 
 TextureManager* TextureManager::GetInstance() {
@@ -94,10 +92,16 @@ D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(uint32_t index) con
 	return handle;
 }
 
+//
+//D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(uint32_t index) const {
+//	return textureSrvHandles_.at(index);
+//}
+//
+
 
 uint32_t TextureManager::LoadTextureResource(const std::string& filePath) {
 	//インスタンス取得
-	directXCommon_=DirectXCommon::GetInstance();
+	directXCommon_ = DirectXCommon::GetInstance();
 	imguiManager_ = ImGuiManager::GetInstance();
 	// テクスチャを読み込み
 	mipImages_ = LoadTexture(filePath);
@@ -164,3 +168,5 @@ uint32_t TextureManager::LoadTextureResource(const std::string& filePath) {
 //
 //	return static_cast<uint32_t>(textureSrvHandles_.size() - 1);
 //}
+
+
