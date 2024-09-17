@@ -41,7 +41,7 @@ public:
 	/// </summary>
 	void CreateSprite();
 
-	void DrawSprite();
+	void DrawSprite(D3D12_GPU_DESCRIPTOR_HANDLE texutre);
 
 
 #ifdef _DEBUG

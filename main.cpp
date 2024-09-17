@@ -24,13 +24,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	/*D3DResourceLeakChecker leakCheck;*/
 	//ライブラリの初期化
 	Keta::Initialize(kWindowTitle, 1280, 720);
-	/*TextureManager* textureManager = TextureManager::GetInstance();*/
+	TextureManager* textureManager = TextureManager::GetInstance();
 
 	Sprite* sprite = Sprite::GetInstance();
 	int soundData = Audio::GetInstance()->SoundLoadWave("Resources/fanfare.wav");
 
 	//モデル読み込み
-	Model* modelPlane = Model::Create("plane");
+	Model* modelPlane = Model::Create("teapot");
     uint32_t modelInstance = modelPlane->GetKnumInstance();
 	sprite->CreateSprite();
 	//描画フラグ
@@ -41,9 +41,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Model* modelFence_ = Model::Create("Fence");*/
 
 	//// それぞれのテクスチャをロード
-	//uint32_t uvHandle= textureManager->LoadTextureResource(modelPlane->GetModelData().material.textureFilePath);
-	//uint32_t SuzanneHandle = TextureManager::GetInstance()->LoadTextureResource(model_->GetModelData().material.textureFilePath);
-	//uint32_t teaPotHandle = TextureManager::GetInstance()->LoadTextureResource(modelTeaPot_->GetModelData().material.textureFilePath);
+	uint32_t uvHandle= textureManager->LoadTextureResource("Resources/uvChecker.png");
+	/*uint32_t SuzanneHandle = TextureManager::GetInstance()->LoadTextureResource(model_->GetModelData().material.textureFilePath);
+	*///uint32_t teaPotHandle = TextureManager::GetInstance()->LoadTextureResource(modelTeaPot_->GetModelData().material.textureFilePath);
 	//uint32_t FenceHandle = TextureManager::GetInstance()->LoadTextureResource(modelFence_->GetModelData().material.textureFilePath);
 	ViewProjection viewProjection;
 	//ワールドトランスフォーム宣言***********
@@ -155,7 +155,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		*/
 			modelPlane->Draw(PlaneTransform, viewProjection);
 			//スプライト描画
-			sprite->DrawSprite();
+			sprite->DrawSprite(textureManager->GetTextureHandle(uvHandle));
 		}
 		
 		//フレームの終了
