@@ -3,6 +3,7 @@
 #include<d3d12.h>
 #include<dxgi1_6.h>
 
+#include <optional>
 #include<string>
 #include<map>
 #include <memory>
@@ -28,7 +29,7 @@ private:
 	D3D12_GPU_DESCRIPTOR_HANDLE  instancingSrvHandleGPU_;
 	//テクスチャ
 	TextureManager* textureManager_=nullptr;
-	int32_t textureHandle_;
+	uint32_t textureHandle_;
 	ModelData modelData_;
 	D3D12_GPU_DESCRIPTOR_HANDLE handle_;
 
@@ -73,12 +74,12 @@ public:
 	/// <summary>
 	/// モデル描画
 	/// </summary>
-	void Draw(const WorldTransform&worldTransform,const ViewProjection&viewProjection, D3D12_GPU_DESCRIPTOR_HANDLE texture);
+	void Draw(const WorldTransform&worldTransform,const ViewProjection&viewProjection, std::optional<uint32_t> textureHandle = std::nullopt);
 	
 	/// <summary>
 	/// モデルバーティクル
 	/// </summary>
-	void DrawParticle(const std::vector<WorldTransform>& worldTransforms, const ViewProjection& viewProjection, D3D12_GPU_DESCRIPTOR_HANDLE texture);
+	void DrawParticle(const std::vector<WorldTransform>& worldTransforms, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt);
 
 #ifdef _DEBUG
 	void DebugImGui();

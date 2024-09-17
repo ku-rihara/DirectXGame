@@ -44,7 +44,10 @@ public:
 
 	/* uint32_t Load(const std::string& fileName);*/
 
-	 void Load();
+	/* void Load();*/
+
+	 uint32_t LoadTextureResource(const std::string& filePath);
+
 
 	 D3D12_GPU_DESCRIPTOR_HANDLE GetTextureHandle(uint32_t index)const;
 

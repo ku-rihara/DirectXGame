@@ -127,6 +127,7 @@ MaterialData Model:: LoadMaterialTemplateFile(const std::string& directoryPath, 
 			materialData.textureFilePath = directoryPath + "/" + textureFilename;
 		}
 	}
+	//テクスチャが無かったら
 	if (materialData.textureFilePath.empty())
 	{
 		std::string whiteTexture = "default.png";
@@ -137,8 +138,8 @@ MaterialData Model:: LoadMaterialTemplateFile(const std::string& directoryPath, 
 
 void Model::CreateModel(const std::string&ModelName) {
 	modelData_ = LoadObjFile("Resources", ModelName+".obj");
-	/*	textureManager_ = TextureManager::GetInstance();
-	textureHandle_=	textureManager_->Load(modelData_.material.textureFilePath);*/
+		textureManager_ = TextureManager::GetInstance();
+	textureHandle_=	textureManager_->LoadTextureResource(modelData_.material.textureFilePath);
 
 	//頂点リソースをつくる
 	vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), (sizeof(VertexData) * modelData_.vertices.size()));
@@ -227,7 +228,7 @@ void Model::DebugImGui() {
 }
 #endif
 
-void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, D3D12_GPU_DESCRIPTOR_HANDLE texture) {
+void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
 	/*DebugImGui();*/
 		//RootSignatureを設定
 	directXCommon->GetCommandList()->SetGraphicsRootSignature(directXCommon->GetRootSignature());
@@ -241,7 +242,12 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	directXCommon->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, texture);
+	if (textureHandle.has_value()) {
+		directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
+	}
+	else {
+		directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
+	}
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 	//描画(DrawCall/ドローコール)
@@ -249,7 +255,7 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	directXCommon->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }
 
-void Model::DrawParticle(const std::vector<WorldTransform>& worldTransforms, const ViewProjection& viewProjection, D3D12_GPU_DESCRIPTOR_HANDLE texture) {
+void Model::DrawParticle(const std::vector<WorldTransform>& worldTransforms, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
 	directXCommon->GetCommandList()->SetGraphicsRootSignature(directXCommon->GetRootSignatureParticle());
 	directXCommon->GetCommandList()->SetPipelineState(directXCommon->GetGrahipcsPipeLileStateParticle());
 	
@@ -263,8 +269,13 @@ void Model::DrawParticle(const std::vector<WorldTransform>& worldTransforms, con
 	directXCommon->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
-	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, texture);
+	if (textureHandle.has_value()) {
+		directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
 
+	}
+	else {
+		directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
+	}
 	//描画(DrawCall/ドローコール)
 	/*commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);*/
 	directXCommon->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), kNumInstance_, 0, 0);
