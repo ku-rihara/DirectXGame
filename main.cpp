@@ -24,31 +24,32 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	/*D3DResourceLeakChecker leakCheck;*/
 	//ライブラリの初期化
 	Keta::Initialize(kWindowTitle, 1280, 720);
-	TextureManager* textureManager = TextureManager::GetInstance();
+	/*TextureManager* textureManager = TextureManager::GetInstance();*/
 
 	Sprite* sprite = Sprite::GetInstance();
 	int soundData = Audio::GetInstance()->SoundLoadWave("Resources/fanfare.wav");
 
 	//モデル読み込み
-	Model* modelPlane = Model::Create("teapot");
+	Model* modelPlane = Model::Create("Plane");
     uint32_t modelInstance = modelPlane->GetKnumInstance();
 	sprite->CreateSprite();
 	//描画フラグ
 	bool isDrawPlane = true;
 	
-	/*Model*  model_ = Model::Create("suzanne");
-	Model* modelTeaPot_ = Model::Create("teapot");
-	Model* modelFence_ = Model::Create("Fence");*/
+	/*Model*  modelSuzanne_ = Model::Create("suzanne");*/
+	/*Model* modelTeaPot_ = Model::Create("teapot");*/
+	//Model* modelFence_ = Model::Create("Fence");
 
 	//// それぞれのテクスチャをロード
-	uint32_t uvHandle= textureManager->LoadTextureResource("Resources/uvChecker.png");
+	//uint32_t uvHandle= textureManager->LoadTextureResource("Resources/uvChecker.png");
 	/*uint32_t SuzanneHandle = TextureManager::GetInstance()->LoadTextureResource(model_->GetModelData().material.textureFilePath);
 	*///uint32_t teaPotHandle = TextureManager::GetInstance()->LoadTextureResource(modelTeaPot_->GetModelData().material.textureFilePath);
 	//uint32_t FenceHandle = TextureManager::GetInstance()->LoadTextureResource(modelFence_->GetModelData().material.textureFilePath);
 	ViewProjection viewProjection;
 	//ワールドトランスフォーム宣言***********
 	WorldTransform PlaneTransform;
-	std::vector<WorldTransform>PlaneTransforms (modelInstance);
+	WorldTransform FenceTransform;
+	std::vector<WorldTransform>PlaneTransforms(modelInstance);
 	WorldTransform transformSprite;
 	WorldTransform uvTransformSprite;
 	//デバッグカメラ
@@ -57,12 +58,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	debugCamera_->Init();
 	//ワールドトランスフォーム初期化******************************
 	PlaneTransform.Init();
+	FenceTransform.Init();
 	debugCamera_->Init();
 	uvTransformSprite.Init();
-	for (WorldTransform& planeTransform : PlaneTransforms) {
-		planeTransform.Init();
-	}
+
+	
+	//PlaneParticle
 	for (uint32_t index = 0; index < modelInstance; ++index) {
+		PlaneTransforms[index].Init();
 		PlaneTransforms[index].translation_ = { index * 0.1f,index * 0.1f ,index * 0.1f };
 	}
 
@@ -94,6 +97,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				ImGui::DragFloat3("Translate", &PlaneTransform.translation_.x, 0.01f);
 				ImGui::TreePop();
 			}
+			if (ImGui::TreeNode("Fence")) {
+				ImGui::DragFloat3("Scale", &FenceTransform.scale_.x, 0.01f);
+				ImGui::DragFloat3("Rotate", &FenceTransform.rotation_.x, 0.01f);
+				ImGui::DragFloat3("Translate", &FenceTransform.translation_.x, 0.01f);
+				ImGui::TreePop();
+			}
 			
 			if (ImGui::TreeNode("Sprite")) {
 				ImGui::DragFloat3("Scale", &transformSprite.scale_.x, 0.1f);
@@ -122,8 +131,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #endif
 		//ワールド行列更新
 		PlaneTransform.UpdateMatrix();
+		FenceTransform.UpdateMatrix();
 		for (uint32_t i = 0; i < modelInstance; i++) {
-			PlaneTransform.UpdateMatrix();
+			PlaneTransforms[i].UpdateMatrix();
 		}
 	
 		transformSprite.UpdateMatrix();
@@ -151,11 +161,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//平面描画
 		if (isDrawPlane) {
 			
-		/*	modelPlane->DrawParticle(PlaneTransforms, viewProjection, textureManager->GetTextureSrvHandleGPU());
-		*/
+			modelPlane->DrawParticle(PlaneTransforms, viewProjection);
+		
 			modelPlane->Draw(PlaneTransform, viewProjection);
-			//スプライト描画
-			sprite->DrawSprite(textureManager->GetTextureHandle(uvHandle));
+		/*	modelFence_->Draw(FenceTransform, viewProjection);*/
+		
+
+			////スプライト描画
+			//sprite->DrawSprite(textureManager->GetTextureHandle(uvHandle));
 		}
 		
 		//フレームの終了

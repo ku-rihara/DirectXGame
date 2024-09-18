@@ -185,6 +185,7 @@ public://メンバ関数
 	//rootSignature
 	ID3D12PipelineState* GetGrahipcsPipeLileState()const { return graphicsPipelineState_.Get(); }
 	ID3D12RootSignature* GetRootSignature()const { return rootSignature_.Get(); }
+
 	ID3D12PipelineState* GetGrahipcsPipeLileStateParticle()const { return graphicsPipelineStateParticle_.Get(); }
 	ID3D12RootSignature* GetRootSignatureParticle()const { return rootSignatureParticle_.Get(); }
 

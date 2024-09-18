@@ -209,11 +209,10 @@ void Model::CreateModel(const std::string&ModelName) {
 	instancingSrvDesc.Buffer.NumElements = kNumInstance_;
 	instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
 
-	  instancingSrvHandleCPU_ = directXCommon->GetCPUDescriptorHandle(ImGuiManager::GetInstance()->GetSrvDescriptorHeap(), directXCommon->GetDescriptorSizeSRV(), 2);
-	  instancingSrvHandleGPU_ = directXCommon->GetGPUDescriptorHandle(ImGuiManager::GetInstance()->GetSrvDescriptorHeap(), directXCommon->GetDescriptorSizeSRV(), 2);
+	  instancingSrvHandleCPU_ = directXCommon->GetCPUDescriptorHandle(ImGuiManager::GetInstance()->GetSrvDescriptorHeap(), directXCommon->GetDescriptorSizeSRV(), 3);
+	  instancingSrvHandleGPU_ = directXCommon->GetGPUDescriptorHandle(ImGuiManager::GetInstance()->GetSrvDescriptorHeap(), directXCommon->GetDescriptorSizeSRV(), 3);
 
-	directXCommon->GetDevice()->CreateShaderResourceView(instancingResource.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);
-
+	directXCommon->GetDevice()->CreateShaderResourceView(instancingResource.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);	
 }
 #ifdef _DEBUG
 void Model::DebugImGui() {
@@ -230,57 +229,63 @@ void Model::DebugImGui() {
 
 void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
 	/*DebugImGui();*/
+	auto commandList = directXCommon->GetCommandList();
 		//RootSignatureを設定
-	directXCommon->GetCommandList()->SetGraphicsRootSignature(directXCommon->GetRootSignature());
-	directXCommon->GetCommandList()->SetPipelineState(directXCommon->GetGrahipcsPipeLileState());
+	commandList->SetGraphicsRootSignature(directXCommon->GetRootSignature());
+	commandList->SetPipelineState(directXCommon->GetGrahipcsPipeLileState());
 	wvpDate_->WVP = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
 
-	directXCommon->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
-	directXCommon->GetCommandList()->IASetIndexBuffer(&indexBufferView_);//IBV
+	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	commandList->IASetIndexBuffer(&indexBufferView_);//IBV
 
 	//形状を設定
-	directXCommon->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
 	if (textureHandle.has_value()) {
-		directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
+		commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
 	}
 	else {
-		directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
+		commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
 	}
-	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+	commandList->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 	//描画(DrawCall/ドローコール)
 	/*commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);*/
-	directXCommon->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	commandList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }
 
 void Model::DrawParticle(const std::vector<WorldTransform>& worldTransforms, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
-	directXCommon->GetCommandList()->SetGraphicsRootSignature(directXCommon->GetRootSignatureParticle());
-	directXCommon->GetCommandList()->SetPipelineState(directXCommon->GetGrahipcsPipeLileStateParticle());
-	
+	auto commandList = directXCommon->GetCommandList();
+
+	// ルートシグネチャとパイプラインステートを設定
+	commandList->SetGraphicsRootSignature(directXCommon->GetRootSignatureParticle());
+	commandList->SetPipelineState(directXCommon->GetGrahipcsPipeLileStateParticle());
+
+	// インスタンシングデータの更新
 	for (uint32_t index = 0; index < worldTransforms.size(); ++index) {
 		instancingData_[index].WVP = worldTransforms[index].matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
 	}
-	directXCommon->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
-	directXCommon->GetCommandList()->IASetIndexBuffer(&indexBufferView_);//IBV
 
-	//形状を設定
-	directXCommon->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
+	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	commandList->IASetIndexBuffer(&indexBufferView_);
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// マテリアルのリソースを設定
+	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	commandList->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
+
+	// テクスチャハンドルの設定
 	if (textureHandle.has_value()) {
-		directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
-
+		commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
 	}
 	else {
-		directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
+		commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
 	}
-	//描画(DrawCall/ドローコール)
-	/*commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);*/
-	directXCommon->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), kNumInstance_, 0, 0);
-}
 
+	 commandList->DrawInstanced(UINT(modelData_.vertices.size()), UINT(kNumInstance_), 0, 0);
+
+}
 
 void Model::CreateSphere() {
 
