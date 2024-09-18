@@ -543,7 +543,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 	hr_ = GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&graphicsPipelineState_));
 	assert(SUCCEEDED(hr_));
 
-	//実際に生成
+	//実際に生成(パーティクル)
 	graphicsPipelineStateParticle_ = nullptr;
 	hr_ = GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDescParticle, IID_PPV_ARGS(&graphicsPipelineStateParticle_));
 	assert(SUCCEEDED(hr_));
@@ -596,9 +596,10 @@ void DirectXCommon::ScreenClear() {
 	commandList_->RSSetViewports(1, &viewport_);
 	commandList_->RSSetScissorRects(1, &scissorRect_);
 	////RootSignatureを設定
-	//commandList_->SetGraphicsRootSignature(rootSignature_.Get());
-	//commandList_->SetPipelineState(graphicsPipelineState_.Get());
-
+	/*commandList_->SetGraphicsRootSignature(rootSignature_.Get());
+	commandList_->SetPipelineState(graphicsPipelineState_.Get());*/
+	/*commandList_->SetGraphicsRootSignature(rootSignatureParticle_.Get());
+	commandList_->SetPipelineState(graphicsPipelineStateParticle_.Get());*/
 
 #ifdef _DEBUG
 	//model_->DebugImGui();
@@ -630,6 +631,7 @@ void DirectXCommon::CommandKick() {
 
 	hr_ = commandList_->Close();
 	assert(SUCCEEDED(hr_));
+	
 	//GPUにコマンドリストの実行を行わせる
 	Microsoft::WRL::ComPtr <ID3D12CommandList> commandLists[] = { commandList_.Get()};
 	commandQueue_->ExecuteCommandLists(1, commandLists->GetAddressOf());
