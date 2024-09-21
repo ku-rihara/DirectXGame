@@ -24,7 +24,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	/*D3DResourceLeakChecker leakCheck;*/
 	//ライブラリの初期化
 	Keta::Initialize(kWindowTitle, 1280, 720);
-	/*TextureManager* textureManager = TextureManager::GetInstance();*/
+	TextureManager* textureManager = TextureManager::GetInstance();
+	/*textureManager->LoadTexture("Resources/default.png");*/
 
 	Sprite* sprite = Sprite::GetInstance();
 	int soundData = Audio::GetInstance()->SoundLoadWave("Resources/fanfare.wav");
@@ -36,12 +37,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//描画フラグ
 	bool isDrawPlane = true;
 	
-	/*Model*  modelSuzanne_ = Model::Create("suzanne");*/
-	/*Model* modelTeaPot_ = Model::Create("teapot");*/
-	//Model* modelFence_ = Model::Create("Fence");
+	/*Model*  modelSuzanne_ = Model::Create("suzanne");
+	*//*Model* modelTeaPot_ = Model::Create("teapot");*/
+	Model* modelFence_ = Model::Create("Fence");
 
 	//// それぞれのテクスチャをロード
-	//uint32_t uvHandle= textureManager->LoadTextureResource("Resources/uvChecker.png");
+	/*uint32_t uvHandle= textureManager->LoadTexture("Resources/uvChecker.png");*/
 	/*uint32_t SuzanneHandle = TextureManager::GetInstance()->LoadTextureResource(model_->GetModelData().material.textureFilePath);
 	*///uint32_t teaPotHandle = TextureManager::GetInstance()->LoadTextureResource(modelTeaPot_->GetModelData().material.textureFilePath);
 	//uint32_t FenceHandle = TextureManager::GetInstance()->LoadTextureResource(modelFence_->GetModelData().material.textureFilePath);
@@ -49,7 +50,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ワールドトランスフォーム宣言***********
 	WorldTransform PlaneTransform;
 	WorldTransform FenceTransform;
+	WorldTransform SuzanneTransform;
 	std::vector<WorldTransform>PlaneTransforms(modelInstance);
+	//スプライト
 	WorldTransform transformSprite;
 	WorldTransform uvTransformSprite;
 	//デバッグカメラ
@@ -103,6 +106,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				ImGui::DragFloat3("Translate", &FenceTransform.translation_.x, 0.01f);
 				ImGui::TreePop();
 			}
+			if (ImGui::TreeNode("Suzanne")) {
+				ImGui::DragFloat3("Scale", &SuzanneTransform.scale_.x, 0.01f);
+				ImGui::DragFloat3("Rotate", &SuzanneTransform.rotation_.x, 0.01f);
+				ImGui::DragFloat3("Translate", &SuzanneTransform.translation_.x, 0.01f);
+				ImGui::TreePop();
+			}
 			
 			if (ImGui::TreeNode("Sprite")) {
 				ImGui::DragFloat3("Scale", &transformSprite.scale_.x, 0.1f);
@@ -110,6 +119,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				ImGui::DragFloat3("Translate", &transformSprite.translation_.x, 1.0f);
 				ImGui::TreePop();
 			}
+
 			ImGui::TreePop();
 		}
 
@@ -132,6 +142,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//ワールド行列更新
 		PlaneTransform.UpdateMatrix();
 		FenceTransform.UpdateMatrix();
+		SuzanneTransform.UpdateMatrix();
 		for (uint32_t i = 0; i < modelInstance; i++) {
 			PlaneTransforms[i].UpdateMatrix();
 		}
@@ -161,10 +172,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//平面描画
 		if (isDrawPlane) {
 			
-			modelPlane->DrawParticle(PlaneTransforms, viewProjection);
+		/*	modelPlane->DrawParticle(PlaneTransforms, viewProjection);*/
 		
 			modelPlane->Draw(PlaneTransform, viewProjection);
-		/*	modelFence_->Draw(FenceTransform, viewProjection);*/
+			modelFence_->Draw(FenceTransform, viewProjection);
+			///*modelSuzanne_->Draw(SuzanneTransform, viewProjection);
 		
 
 			////スプライト描画

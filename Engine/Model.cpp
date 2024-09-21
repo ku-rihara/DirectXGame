@@ -139,7 +139,7 @@ MaterialData Model:: LoadMaterialTemplateFile(const std::string& directoryPath, 
 void Model::CreateModel(const std::string&ModelName) {
 	modelData_ = LoadObjFile("Resources/Model", ModelName+".obj");
 		textureManager_ = TextureManager::GetInstance();
-	textureHandle_=	textureManager_->LoadTextureResource(modelData_.material.textureFilePath);
+	textureHandle_=	textureManager_->LoadTexture(modelData_.material.textureFilePath);
 
 	//頂点リソースをつくる
 	vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), (sizeof(VertexData) * modelData_.vertices.size()));
