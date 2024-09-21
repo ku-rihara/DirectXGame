@@ -16,7 +16,7 @@ namespace {
 	WinApp* sWinApp = nullptr;
 	DirectXCommon* sDirectXCommon = nullptr;
 	ImGuiManager* imguiManager = nullptr;
-	TextureManager* textureManager = nullptr;
+	TextureManager* stextureManager = nullptr;
 	Audio* audio = nullptr;
 	Input* input = nullptr;
 }
@@ -37,6 +37,10 @@ void Keta::Initialize(const char* title, int width, int height) {
 
 	imguiManager = ImGuiManager::GetInstance();
 	imguiManager->Init(sWinApp, sDirectXCommon);
+
+	stextureManager = TextureManager::GetInstance();
+	stextureManager->Init(sDirectXCommon);
+	//stextureManager->LoadTexture("Resources/default.png");
 
 	input = Input::GetInstance();
 	input->Init(sWinApp->GetHInstaice(), sWinApp->GetHwnd());
