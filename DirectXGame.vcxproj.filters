@@ -30,6 +30,9 @@
     <Filter Include="リソースファイル">
       <UniqueIdentifier>{21fc63fa-76a7-4761-a85a-64f85e5ca5ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{139ed3c3-bba9-47d7-a283-e1947b0bd5fb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -112,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameScene.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -228,6 +234,9 @@
     </ClInclude>
     <ClInclude Include="Engine\WorldTransformManager.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameScene.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
