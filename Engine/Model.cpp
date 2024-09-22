@@ -10,25 +10,22 @@ namespace {
 	DirectXCommon* directXCommon = DirectXCommon::GetInstance();
 	//Model* model=Model::GetInstance();
 }
-std::map<std::string, std::unique_ptr<Model>> Model::modelInstances;
+//std::map<std::string, std::unique_ptr<Model>> Model::modelInstances;
 
 Model* Model::Create(const std::string& instanceName) {
-	if (modelInstances.find(instanceName) == modelInstances.end()) {
-		//新しいModelインスタンスを作成
-		auto model = std::make_unique<Model>();
-		model->CreateModel(instanceName);
-		modelInstances[instanceName] = std::move(model);
-	}
-	return modelInstances[instanceName].get();
+	// 新しいModelインスタンスを作成
+	Model* model = new Model();
+	model->CreateModel(instanceName);
+		return model;  // 成功した場合は新しいモデルを返す
 }
 
-Model* Model::GetInstance(const std::string& instanceName) {
-	auto it = modelInstances.find(instanceName);
-	if (it != modelInstances.end()) {
-		return it->second.get();
-	}
-	return nullptr;
-}
+//Model* Model::GetInstance(const std::string& instanceName) {
+//	auto it = modelInstances.find(instanceName);
+//	if (it != modelInstances.end()) {
+//		return it->second.get();
+//	}
+//	return nullptr;
+//}
 
 ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& filename) {
 	ModelData modelData;//構築するModelData

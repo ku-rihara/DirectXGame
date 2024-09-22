@@ -18,8 +18,8 @@ void GameScene::Init() {
 	textureManager_ = TextureManager::GetInstance();
 
 	soundDataHandle_ = audio_->SoundLoadWave("Resources/fanfare.wav");
-	modelPlane_ = std::unique_ptr<Model>(Model::Create("Plane"));
-	modelFence_ = std::unique_ptr<Model>(Model::Create("Fence"));
+	modelPlane_.reset(Model::Create("Plane"));
+	modelFence_.reset(Model::Create("Fence"));
 	modelInstance_ = modelPlane_->GetKnumInstance();
 
 	sprite_ = std::make_unique<Sprite>();
