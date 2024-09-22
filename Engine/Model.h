@@ -23,7 +23,7 @@
 class TextureManager;
 class Model{
 private:
-	static std::map<std::string, std::unique_ptr<Model>> modelInstances;
+	//static std::map<std::string, std::unique_ptr<Model>> modelInstances;
 	const uint32_t kNumInstance_ = 10;//インスタンス数
 	D3D12_CPU_DESCRIPTOR_HANDLE  instancingSrvHandleCPU_;
 	D3D12_GPU_DESCRIPTOR_HANDLE  instancingSrvHandleGPU_;
@@ -58,7 +58,7 @@ private:
 	bool useMonsterBall = true;
 public:
 	static Model* Create(const std::string& instanceName);
-	static Model* GetInstance(const std::string& instanceName);
+	//static Model* GetInstance(const std::string& instanceName);
 	
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
 

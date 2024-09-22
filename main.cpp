@@ -3,15 +3,14 @@
 
 const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ_CG3";
 
+//ゲームシーン初期化
+GameScene* gameScene = nullptr;
+
 //windowアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 	Keta::Initialize(kWindowTitle, 1280, 720);
-
-	//ゲームシーン初期化
-	GameScene* gameScene = nullptr;
-
-	// ゲームシーンの初期化
+	// ゲームシーンの生成
 	gameScene = new GameScene();
 	gameScene->Init();
 
@@ -28,10 +27,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//フレームの終了
 		Keta::EndFrame();
 	}
-
+	delete gameScene;
 	//ライブラリの終了
 	Keta::Finalize();
-	
 	return 0;
 
 }
