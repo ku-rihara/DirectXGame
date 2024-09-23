@@ -190,6 +190,7 @@ void Model::CreateModel(const std::string&ModelName) {
 	//単位行列を書き込んでおく
 	wvpDate_->WVP = MakeIdentity4x4();
 	wvpDate_->World = MakeIdentity4x4();
+	wvpDate_->WorldInverseTranspose = MakeIdentity4x4();
 	//パーティクル-----------------------------------------------------------
 	//Instancing用のTransformationMatrixリソースを作る
 	Microsoft::WRL::ComPtr<ID3D12Resource>instancingResource = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix) * kNumInstance_);
@@ -238,6 +239,7 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	commandList->SetGraphicsRootSignature(directXCommon->GetRootSignature());
 	commandList->SetPipelineState(directXCommon->GetGrahipcsPipeLileState());
 	wvpDate_->WVP = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+	wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
 
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	commandList->IASetIndexBuffer(&indexBufferView_);//IBV
