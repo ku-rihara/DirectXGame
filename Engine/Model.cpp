@@ -222,6 +222,7 @@ void Model::DebugImGui() {
 	ImGui::ColorEdit4(" Color", (float*)&materialDate_->color);
 	ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
 	ImGui::DragFloat3("WorldCamera", (float*)&cameraForGPUData_->worldPosition_, 0.01f);
+	ImGui::DragFloat("Shininess", (float*)&materialDate_->shininess, 0.1f);
 	directionalLightData_->direction = Normalize(directionalLightData_->direction);
 	ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
 	const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert","Specular Reflection"};

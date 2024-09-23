@@ -29,8 +29,8 @@ void GameScene::Init() {
 	modelSuzanne_.reset(Model::Create("Suzanne"));
 	modelInstance_ = modelPlane_->GetKnumInstance();
 
-	//テクスチャハンドル
-	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/UVChecker.png");
+	////テクスチャハンドル
+	//uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/UVChecker.png");
 
 	
 	//スプライト生成
@@ -120,6 +120,10 @@ void GameScene::Update() {
 		modelPlane_->DebugImGui();
 		ImGui::TreePop();
 	}
+	if (ImGui::TreeNode("Suzanne")) {
+		modelSuzanne_->DebugImGui();
+		ImGui::TreePop();
+	}
 	ImGui::End();
 
 #endif
@@ -164,11 +168,11 @@ void GameScene::Draw() {
 	/*	modelPlane_->DrawParticle(planeTransforms_, viewProjection_);*/
 
 		modelPlane_->Draw(planeTransform_, viewProjection_);
-		modelFence_->Draw(fenceTransform_, viewProjection_);
+	/*	modelFence_->Draw(fenceTransform_, viewProjection_);*/
 		modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
 
 
-		//スプライト描画
-		sprite_->DrawSprite(textureManager_->GetTextureHandle(uvHandle_));
+		////スプライト描画
+		//sprite_->DrawSprite(textureManager_->GetTextureHandle(uvHandle_));
 	}
 }
