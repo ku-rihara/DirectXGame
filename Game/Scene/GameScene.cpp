@@ -17,24 +17,36 @@ void GameScene::Init() {
 	audio_ = Audio::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
 
+	//デバッグカメラ
+	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
+	debugCamera_->Init();
+
+	//音
 	soundDataHandle_ = audio_->SoundLoadWave("Resources/fanfare.wav");
+	//モデル
 	modelPlane_.reset(Model::Create("Plane"));
 	modelFence_.reset(Model::Create("Fence"));
+	modelSuzanne_.reset(Model::Create("Suzanne"));
 	modelInstance_ = modelPlane_->GetKnumInstance();
 
+	//テクスチャハンドル
+	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/UVChecker.png");
+
+	
+	//スプライト生成
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->CreateSprite();
+	//WorldTransform
 
 	planeTransforms_.reserve(modelInstance_);
 	for (size_t i = 0; i < modelInstance_; ++i) {
 		planeTransforms_.emplace_back(std::make_unique<WorldTransform>());
 	}
-	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
-	debugCamera_->Init();
 
 	// ワールドトランスフォーム初期化
 	planeTransform_.Init();
 	fenceTransform_.Init();
+	suzanneTransform_.Init();
 	transformSprite_.Init();
 	uvTransformSprite_.Init();
 
@@ -47,7 +59,6 @@ void GameScene::Init() {
 	// ワールドトランスフォーム値セット
 	transformSprite_.scale_.x = 0.7f;
 	planeTransform_.rotation_.y = -3.0f;
-
 }
 
 void GameScene::Update() {
@@ -78,6 +89,13 @@ void GameScene::Update() {
 			ImGui::TreePop();
 		}
 		
+		if (ImGui::TreeNode("Suzanne")) {
+			ImGui::DragFloat3("Scale", &suzanneTransform_.scale_.x, 0.01f);
+			ImGui::DragFloat3("Rotate", &suzanneTransform_.rotation_.x, 0.01f);
+			ImGui::DragFloat3("Translate", &suzanneTransform_.translation_.x, 0.01f);
+			ImGui::TreePop();
+		}
+
 
 		if (ImGui::TreeNode("Sprite")) {
 			ImGui::DragFloat3("Scale", &transformSprite_.scale_.x, 0.1f);
@@ -108,6 +126,7 @@ void GameScene::Update() {
 	//ワールド行列更新
 	planeTransform_.UpdateMatrix();
 	fenceTransform_.UpdateMatrix();
+	suzanneTransform_.UpdateMatrix();
 
 	for (uint32_t i = 0; i < modelInstance_; i++) {
 		planeTransforms_[i]->UpdateMatrix();
@@ -142,14 +161,14 @@ void GameScene::Draw() {
 		//平面描画
 	if (isDrawPlane_) {
 
-		/*	modelPlane->DrawParticle(PlaneTransforms, viewProjection);*/
+	/*	modelPlane_->DrawParticle(planeTransforms_, viewProjection_);*/
 
 		modelPlane_->Draw(planeTransform_, viewProjection_);
 		modelFence_->Draw(fenceTransform_, viewProjection_);
-		///*modelSuzanne_->Draw(SuzanneTransform, viewProjection);
+		modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
 
 
-		////スプライト描画
-		//sprite->DrawSprite(textureManager->GetTextureHandle(uvHandle));
+		//スプライト描画
+		sprite_->DrawSprite(textureManager_->GetTextureHandle(uvHandle_));
 	}
 }

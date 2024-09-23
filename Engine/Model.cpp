@@ -134,7 +134,7 @@ MaterialData Model:: LoadMaterialTemplateFile(const std::string& directoryPath, 
 }
 
 void Model::CreateModel(const std::string&ModelName) {
-	modelData_ = LoadObjFile("Resources/Model", ModelName+".obj");
+	modelData_ = LoadObjFile("./Resources/Model", ModelName+".obj");
 		textureManager_ = TextureManager::GetInstance();
 	textureHandle_=	textureManager_->LoadTexture(modelData_.material.textureFilePath);
 
@@ -176,6 +176,11 @@ void Model::CreateModel(const std::string&ModelName) {
 	directionalLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
 	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
 	directionalLightData_->intensity = 1.0f;
+	//鏡面反射-----------------------------------------------------------------------------------------------------------------
+	cameraForGPUResource_= directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(CameraForGPU));
+	//データを書き込む
+	cameraForGPUData_ = nullptr;
+	cameraForGPUResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraForGPUData_));
 	//行列--------------------------------------------------------------------------------------------------------
 	wvpResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix));
 	//データを書き込む
@@ -216,9 +221,10 @@ void Model::DebugImGui() {
 	/*ImGui::Begin("Lighting");*/
 	ImGui::ColorEdit4(" Color", (float*)&materialDate_->color);
 	ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
+	ImGui::DragFloat3("WorldCamera", (float*)&cameraForGPUData_->worldPosition_, 0.01f);
 	directionalLightData_->direction = Normalize(directionalLightData_->direction);
 	ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
-	const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert" };
+	const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert","Specular Reflection"};
 	ImGui::Combo("Lighting Mode", &materialDate_->enableLighting, lightingModes, IM_ARRAYSIZE(lightingModes));
 	/*ImGui::End();*/
 }
@@ -247,12 +253,14 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	}
 	commandList->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
+	commandList->SetGraphicsRootConstantBufferView(4, cameraForGPUResource_->GetGPUVirtualAddress());
+
 	//描画(DrawCall/ドローコール)
 	/*commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);*/
 	commandList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }
 
-void Model::DrawParticle(const std::vector<WorldTransform>& worldTransforms, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
+void Model::DrawParticle(const std::vector<std::unique_ptr<WorldTransform>>& worldTransforms, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
 	auto commandList = directXCommon->GetCommandList();
 
 	// ルートシグネチャとパイプラインステートを設定
@@ -261,7 +269,7 @@ void Model::DrawParticle(const std::vector<WorldTransform>& worldTransforms, con
 
 	// インスタンシングデータの更新
 	for (uint32_t index = 0; index < worldTransforms.size(); ++index) {
-		instancingData_[index].WVP = worldTransforms[index].matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+		instancingData_[index].WVP = worldTransforms[index]->matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
 	}
 
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
@@ -279,7 +287,7 @@ void Model::DrawParticle(const std::vector<WorldTransform>& worldTransforms, con
 	else {
 		commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
 	}
-
+	
 	 commandList->DrawInstanced(UINT(modelData_.vertices.size()), UINT(kNumInstance_), 0, 0);
 
 }

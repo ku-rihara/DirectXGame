@@ -238,6 +238,9 @@
     <ClInclude Include="Game\Scene\GameScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\struct\CameraForGPU.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">

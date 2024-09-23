@@ -52,6 +52,7 @@
     <ClInclude Include="Engine\Model.h" />
     <ClInclude Include="Engine\SoundManager.h" />
     <ClInclude Include="Engine\Sprite.h" />
+    <ClInclude Include="Engine\struct\CameraForGPU.h" />
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h" />
     <ClInclude Include="Engine\struct\DirectionalLight.h" />
     <ClInclude Include="Engine\struct\Material.h" />
