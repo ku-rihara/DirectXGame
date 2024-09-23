@@ -34,7 +34,7 @@ private:
 
 public:
 	//シングルトンインスタンスの取得
-	static Sprite* GetInstance();
+	//static Sprite* GetInstance();
 
 	/// <summary>
 	/// スプライトの作成

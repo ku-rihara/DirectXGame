@@ -89,7 +89,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(uint32_t index) con
     return textureSrvHandles_.at(index);
 }
 
-uint32_t TextureManager::LoadTexture(const std::string& filePath) {
+ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
     imguiManager_ = ImGuiManager::GetInstance();
 
     // テクスチャを読み込み

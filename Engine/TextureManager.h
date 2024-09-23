@@ -30,7 +30,7 @@ public:
 	//データを転送する関数
 	Microsoft::WRL::ComPtr < ID3D12Resource> UploadTextureDate(Microsoft::WRL::ComPtr < ID3D12Resource> texture, const DirectX::ScratchImage& mipImages, Microsoft::WRL::ComPtr<ID3D12Device>device, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList);
 
-	 uint32_t LoadTexture(const std::string& filePath);
+	  uint32_t LoadTexture(const std::string& filePath);
 
 	 D3D12_GPU_DESCRIPTOR_HANDLE GetTextureHandle(uint32_t index)const;
 

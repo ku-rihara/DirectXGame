@@ -6,10 +6,10 @@ namespace {
 	DirectXCommon* directXCommon = DirectXCommon::GetInstance();
 	//Model* model=Model::GetInstance();
 }
-Sprite* Sprite::GetInstance() {
-	static Sprite instance;
-	return &instance;
-}
+//Sprite* Sprite::GetInstance() {
+//	static Sprite instance;
+//	return &instance;
+//}
 void Sprite::CreateSprite() {
 	//textureManager_ = TextureManager::GetInstance();
 	/*TextureHandle_=textureManager_->Load("Resources/uvChecker.png");*/

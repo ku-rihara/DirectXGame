@@ -38,6 +38,8 @@ private:
 
 	std::unique_ptr<Model> modelPlane_ = nullptr;
 	std::unique_ptr<Model> modelFence_ = nullptr;
+	std::unique_ptr<Model> modelSuzanne_ = nullptr;
+
 	uint32_t modelInstance_ = 0;
 
 	bool isDrawPlane_ = true;
@@ -45,10 +47,13 @@ private:
 	ViewProjection viewProjection_;
 	WorldTransform planeTransform_;
 	WorldTransform fenceTransform_;
+	WorldTransform suzanneTransform_;
 	WorldTransform transformSprite_;
 	WorldTransform uvTransformSprite_;
 	std::vector<std::unique_ptr<WorldTransform>>  planeTransforms_;
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
+
+	uint32_t uvHandle_;
 public: 
 	/// <summary>
 	/// コンストクラタ
