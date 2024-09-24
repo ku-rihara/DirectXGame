@@ -15,6 +15,8 @@ private:
 	Microsoft::WRL::ComPtr < ID3D12Resource> textureResource_;
 	DirectX::ScratchImage mipImages_;
 	std::vector<D3D12_GPU_DESCRIPTOR_HANDLE> textureSrvHandles_;
+	// テクスチャデータのアップロード
+	  Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResources_;
 	
 public:
 	

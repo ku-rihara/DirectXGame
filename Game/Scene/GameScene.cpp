@@ -168,7 +168,7 @@ void GameScene::Draw() {
 	/*	modelPlane_->DrawParticle(planeTransforms_, viewProjection_);*/
 
 		modelPlane_->Draw(planeTransform_, viewProjection_);
-	/*	modelFence_->Draw(fenceTransform_, viewProjection_);*/
+		modelFence_->Draw(fenceTransform_, viewProjection_);
 		modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
 
 

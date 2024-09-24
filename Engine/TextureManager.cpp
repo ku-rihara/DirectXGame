@@ -113,9 +113,8 @@ D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(uint32_t index) con
     // SRVの生成
     directXCommon_->GetDevice()->CreateShaderResourceView(textureResource_.Get(), &srvDesc, textureSrvHandleCPU_);
 
-    // テクスチャデータのアップロード
-    Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = UploadTextureDate(textureResource_, mipImages_, directXCommon_->GetDevice(), directXCommon_->GetCommandList());
-    directXCommon_->commandExecution(intermediateResource);
+    intermediateResources_ = UploadTextureDate(textureResource_, mipImages_, directXCommon_->GetDevice(), directXCommon_->GetCommandList());
+    directXCommon_->commandExecution(intermediateResources_);
 
     // GPUハンドルをリストに追加
     textureSrvHandles_.push_back(textureSrvHandleGPU_);
