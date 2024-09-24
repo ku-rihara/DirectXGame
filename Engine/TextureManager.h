@@ -6,6 +6,7 @@
 #include<d3dx12.h>
 #include"DirectXCommon.h"
 #include<vector>
+#include<memory>
 
 class TextureManager {
 private:
@@ -17,6 +18,8 @@ private:
 	std::vector<DirectX::ScratchImage> mipImages_;
 	std::vector<D3D12_GPU_DESCRIPTOR_HANDLE> textureSrvHandles_;
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> intermediateResources_;
+
+
 	
 public:
 	

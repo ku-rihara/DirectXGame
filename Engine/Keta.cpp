@@ -40,7 +40,7 @@ void Keta::Initialize(const char* title, int width, int height) {
 
 	stextureManager = TextureManager::GetInstance();
 	stextureManager->Init(sDirectXCommon);
-	//stextureManager->LoadTexture("Resources/default.png");
+
 
 	input = Input::GetInstance();
 	input->Init(sWinApp->GetHInstaice(), sWinApp->GetHwnd());
