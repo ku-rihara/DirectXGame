@@ -9,14 +9,14 @@
 
 class TextureManager {
 private:
+	
 	DirectX::ScratchImage image_{};
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
-	Microsoft::WRL::ComPtr < ID3D12Resource> textureResource_;
-	DirectX::ScratchImage mipImages_;
+	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> textureResources_;
+	std::vector<DirectX::ScratchImage> mipImages_;
 	std::vector<D3D12_GPU_DESCRIPTOR_HANDLE> textureSrvHandles_;
-	// テクスチャデータのアップロード
-	  Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResources_;
+	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> intermediateResources_;
 	
 public:
 	
@@ -25,20 +25,41 @@ public:
 	static TextureManager* GetInstance();
 
 	void Init(DirectXCommon* dxCommon);
-	//TextureデータをCPUで読み込む
+	/// <summary>
+	/// TextureデータをCPUで読み込む
+	/// </summary>
+	/// <param name="filePath"></param>
+	/// <returns></returns>
 	DirectX::ScratchImage LoadTextureFile(const std::string& filePath);
-	//Resourceデータの作成
-	Microsoft::WRL::ComPtr < ID3D12Resource>  CreateTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> device, const DirectX::TexMetadata& metadata);
-	//データを転送する関数
+	/// <summary>
+	/// Resourceデータの作成
+	/// </summary>
+	/// <param name="device"></param>
+	/// <param name="metadata"></param>
+	/// <returns></returns>
+	Microsoft::WRL::ComPtr <ID3D12Resource>  CreateTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> device, const DirectX::TexMetadata& metadata);
+	/// <summary>
+	/// データを転送する関数
+	/// </summary>
+	/// <param name="texture"></param>
+	/// <param name="mipImages"></param>
+	/// <param name="device"></param>
+	/// <param name="commandList"></param>
+	/// <returns></returns>
 	Microsoft::WRL::ComPtr < ID3D12Resource> UploadTextureDate(Microsoft::WRL::ComPtr < ID3D12Resource> texture, const DirectX::ScratchImage& mipImages, Microsoft::WRL::ComPtr<ID3D12Device>device, Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList);
-
+	/// <summary>
+	/// 読み込み
+	/// </summary>
+	/// <param name="fileName">ファイル名</param>
+	/// <returns>テクスチャハンドル</returns>
 	  uint32_t LoadTexture(const std::string& filePath);
 
 	 D3D12_GPU_DESCRIPTOR_HANDLE GetTextureHandle(uint32_t index)const;
+private:
+	TextureManager() = default;
+	~TextureManager() = default;
+	TextureManager(const TextureManager&) = delete;
+	TextureManager& operator=(const TextureManager&) = delete;
 
-	//getter
-	D3D12_GPU_DESCRIPTOR_HANDLE GetTextureSrvHandleGPU()const { return textureSrvHandleGPU_; }
-	ID3D12Resource* GetTextureResource()const { return textureResource_.Get(); }
-	const DirectX::ScratchImage& GetMipImages() { return mipImages_; }
 };
 
