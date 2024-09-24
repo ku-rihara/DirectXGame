@@ -10,6 +10,7 @@ GameScene* gameScene = nullptr;
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 	Keta::Initialize(kWindowTitle, 1280, 720);
+    
 	// ゲームシーンの生成
 	gameScene = new GameScene();
 	gameScene->Init();

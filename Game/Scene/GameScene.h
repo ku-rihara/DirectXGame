@@ -31,7 +31,7 @@ private:
 	Audio* audio_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
 
-	uint32_t textureHandle_ = 0;   
+	uint32_t textureHandle_ = 0; 
 	uint32_t soundDataHandle_ = 0; 
 	uint32_t voiceHandle_ = 0;     
 	std::unique_ptr<Sprite> sprite_ = nullptr;

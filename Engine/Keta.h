@@ -3,6 +3,7 @@
 class Keta{
 public:
 
+
 	/// システム全体の初期化
 	static void Initialize(const char* title, int width = 1280, int height = 720);
 

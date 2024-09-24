@@ -16,7 +16,7 @@ void GameScene::Init() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
-
+	
 	//デバッグカメラ
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
 	debugCamera_->Init();
@@ -30,7 +30,8 @@ void GameScene::Init() {
 	modelInstance_ = modelPlane_->GetKnumInstance();
 
 	////テクスチャハンドル
-	//uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/UVChecker.png");
+	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/UVChecker.png");
+	
 
 	
 	//スプライト生成
@@ -172,7 +173,7 @@ void GameScene::Draw() {
 		modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
 
 
-		////スプライト描画
-		//sprite_->DrawSprite(textureManager_->GetTextureHandle(uvHandle_));
+		//スプライト描画
+		sprite_->DrawSprite(textureManager_->GetTextureHandle(uvHandle_));
 	}
 }
