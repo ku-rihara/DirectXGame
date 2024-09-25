@@ -18,6 +18,7 @@
 #include"ModelData.h"
 #include"Material.h"
 #include "MaterialData.h"
+#include "PointLight.h"
 #include "WorldTransform.h"
 #include "ViewProjection.h"
 
@@ -43,6 +44,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResource_;
 	//虚面反射
 	Microsoft::WRL::ComPtr<ID3D12Resource> cameraForGPUResource_;
+	//ポイントライト
+	Microsoft::WRL::ComPtr<ID3D12Resource> pointLightResource_;
 	//頂点リソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>vertexResource_;
 	//wvpリソース
@@ -59,6 +62,8 @@ private:
 	DirectionalLight* directionalLightData_;
 	//鏡面反射用データ
 	CameraForGPU* cameraForGPUData_;
+	//ポイントライトデータ
+	PointLight* pointLightData_;
 	//後に消すかも
 	bool useMonsterBall = true;
 public:
