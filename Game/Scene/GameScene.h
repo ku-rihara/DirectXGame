@@ -39,6 +39,7 @@ private:
 	std::unique_ptr<Model> modelPlane_ = nullptr;
 	std::unique_ptr<Model> modelFence_ = nullptr;
 	std::unique_ptr<Model> modelSuzanne_ = nullptr;
+	std::unique_ptr<Model> modelTerrain_ = nullptr;
 
 	uint32_t modelInstance_ = 0;
 
@@ -48,6 +49,7 @@ private:
 	WorldTransform planeTransform_;
 	WorldTransform fenceTransform_;
 	WorldTransform suzanneTransform_;
+	WorldTransform terrainTransform_;
 	WorldTransform transformSprite_;
 	WorldTransform uvTransformSprite_;
 	std::vector<std::unique_ptr<WorldTransform>>  planeTransforms_;

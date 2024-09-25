@@ -27,13 +27,12 @@ void GameScene::Init() {
 	modelPlane_.reset(Model::Create("Plane"));
 	modelFence_.reset(Model::Create("Fence"));
 	modelSuzanne_.reset(Model::Create("Suzanne"));
+	modelTerrain_.reset(Model::Create("terrain"));
 	modelInstance_ = modelPlane_->GetKnumInstance();
 
 	////テクスチャハンドル
 	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/UVChecker.png");
-	
-
-	
+		
 	//スプライト生成
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->CreateSprite();
@@ -48,6 +47,7 @@ void GameScene::Init() {
 	planeTransform_.Init();
 	fenceTransform_.Init();
 	suzanneTransform_.Init();
+	terrainTransform_.Init();
 	transformSprite_.Init();
 	uvTransformSprite_.Init();
 
@@ -125,6 +125,10 @@ void GameScene::Update() {
 		modelSuzanne_->DebugImGui();
 		ImGui::TreePop();
 	}
+	if (ImGui::TreeNode("Terrian")) {
+		modelTerrain_->DebugImGui();
+		ImGui::TreePop();
+	}
 	ImGui::End();
 
 #endif
@@ -132,6 +136,7 @@ void GameScene::Update() {
 	planeTransform_.UpdateMatrix();
 	fenceTransform_.UpdateMatrix();
 	suzanneTransform_.UpdateMatrix();
+	terrainTransform_.UpdateMatrix();
 
 	for (uint32_t i = 0; i < modelInstance_; i++) {
 		planeTransforms_[i]->UpdateMatrix();
@@ -171,7 +176,7 @@ void GameScene::Draw() {
 		modelPlane_->Draw(planeTransform_, viewProjection_);
 		modelFence_->Draw(fenceTransform_, viewProjection_);
 		modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
-
+		modelTerrain_->Draw(terrainTransform_, viewProjection_);
 
 		//スプライト描画
 		sprite_->DrawSprite(textureManager_->GetTextureHandle(uvHandle_));

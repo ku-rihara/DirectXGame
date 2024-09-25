@@ -181,6 +181,11 @@ void Model::CreateModel(const std::string&ModelName) {
 	//データを書き込む
 	cameraForGPUData_ = nullptr;
 	cameraForGPUResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraForGPUData_));
+	//鏡面反射-----------------------------------------------------------------------------------------------------------------
+	pointLightResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(PointLight));
+	pointLightData_ = nullptr;
+	pointLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData_));
+
 	//行列--------------------------------------------------------------------------------------------------------
 	wvpResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix));
 	//データを書き込む
@@ -219,14 +224,30 @@ void Model::CreateModel(const std::string&ModelName) {
 }
 #ifdef _DEBUG
 void Model::DebugImGui() {
-	/*ImGui::Begin("Lighting");*/
+
+	//Material
 	ImGui::ColorEdit4(" Color", (float*)&materialDate_->color);
-	ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
-	ImGui::DragFloat3("WorldCamera", (float*)&cameraForGPUData_->worldPosition_, 0.01f);
-	ImGui::DragFloat("Shininess", (float*)&materialDate_->shininess, 0.1f);
+	//DirectionalLight
+	if (ImGui::TreeNode("DirectionalLight")) {
+		ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
+		ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
+		ImGui::TreePop();
+	}
 	directionalLightData_->direction = Normalize(directionalLightData_->direction);
-	ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
-	const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert","Specular Reflection"};
+	//鏡面反射
+	if (ImGui::TreeNode("kyomen")) {
+		ImGui::DragFloat3("WorldCamera", (float*)&cameraForGPUData_->worldPosition_, 0.01f);
+		ImGui::DragFloat("Shininess", (float*)&materialDate_->shininess, 0.01f);
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("PointLight")) {
+		//ポイントライト
+		ImGui::ColorEdit4(" Color", (float*)&pointLightData_->color);
+		ImGui::DragFloat3(" Pos", (float*)&pointLightData_->position, 0.01f);
+		ImGui::DragFloat("  intenesity", (float*)&pointLightData_->intenesity, 0.01f);
+		ImGui::TreePop();
+	}
+	const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert","Specular Reflection","PointLight" };
 	ImGui::Combo("Lighting Mode", &materialDate_->enableLighting, lightingModes, IM_ARRAYSIZE(lightingModes));
 	/*ImGui::End();*/
 }
@@ -257,6 +278,8 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	commandList->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 	commandList->SetGraphicsRootConstantBufferView(4, cameraForGPUResource_->GetGPUVirtualAddress());
+
+	commandList->SetGraphicsRootConstantBufferView(5, pointLightResource_->GetGPUVirtualAddress());
 
 	//描画(DrawCall/ドローコール)
 	/*commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);*/
