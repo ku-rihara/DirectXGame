@@ -119,6 +119,9 @@
     <ClCompile Include="Game\Scene\GameScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Light.cpp">
+      <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -243,6 +246,9 @@
     </ClInclude>
     <ClInclude Include="Engine\struct\PointLight.h">
       <Filter>MyEngine\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light.h">
+      <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
