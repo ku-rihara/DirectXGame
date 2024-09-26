@@ -24,8 +24,6 @@ private:
 	std::vector<D3D12_GPU_DESCRIPTOR_HANDLE> textureSrvHandles_;
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> intermediateResources_;
 
-
-	
 public:
 	
 	static uint32_t descriptorHeapIndex_;

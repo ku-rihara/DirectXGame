@@ -18,6 +18,7 @@
     <ClCompile Include="Engine\ImGuiManager.cpp" />
     <ClCompile Include="Engine\Input.cpp" />
     <ClCompile Include="Engine\Keta.cpp" />
+    <ClCompile Include="Engine\Light.cpp" />
     <ClCompile Include="Engine\Mesh.cpp" />
     <ClCompile Include="Engine\Model.cpp" />
     <ClCompile Include="Engine\SoundManager.cpp" />
@@ -48,6 +49,7 @@
     <ClInclude Include="Engine\ImGuiManager.h" />
     <ClInclude Include="Engine\Input.h" />
     <ClInclude Include="Engine\Keta.h" />
+    <ClInclude Include="Engine\Light.h" />
     <ClInclude Include="Engine\Mesh.h" />
     <ClInclude Include="Engine\Model.h" />
     <ClInclude Include="Engine\SoundManager.h" />

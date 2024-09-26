@@ -1,6 +1,8 @@
 #include "GameScene.h"
 #include "TextureManager.h"
 #include <cassert>
+//class
+#include"Light.h"
 
 
 GameScene::GameScene() {}
@@ -117,6 +119,7 @@ void GameScene::Update() {
 	ImGui::End();
 	//ライティング
 	ImGui::Begin("Lighting");
+	Light::GetInstance()->DebugImGui();
 	if (ImGui::TreeNode("Plane")) {
 		modelPlane_->DebugImGui();
 		ImGui::TreePop();
