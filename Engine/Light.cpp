@@ -27,25 +27,28 @@ void Light::Init() {
 	pointLightResource_ = DirectXCommon::GetInstance()->CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(PointLight));
 	pointLightData_ = nullptr;
 	pointLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData_));
+	pointLightData_->intenesity = 1.0f;
+	pointLightData_->position.y=2.0f;
 
 }
 #ifdef _DEBUG
 void Light::DebugImGui() {
-
+	ImGui::DragFloat3("WorldCamera", (float*)&cameraForGPUData_->worldPosition_, 0.01f);
 	//DirectionalLight
 	if (ImGui::TreeNode("DirectionalLight")) {
 		ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
-		ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
-	
+		ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);	
 		directionalLightData_->direction = Normalize(directionalLightData_->direction);
-		ImGui::DragFloat3("WorldCamera", (float*)&cameraForGPUData_->worldPosition_, 0.01f);
-		ImGui::TreePop();
+			ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("PointLight")) {
 		//ポイントライト
 		ImGui::ColorEdit4(" Color", (float*)&pointLightData_->color);
 		ImGui::DragFloat3(" Pos", (float*)&pointLightData_->position, 0.01f);
 		ImGui::DragFloat("  intenesity", (float*)&pointLightData_->intenesity, 0.01f);
+		ImGui::DragFloat("  radius", (float*)&pointLightData_->radius, 0.01f);
+		ImGui::DragFloat("  decay", (float*)&pointLightData_->decay, 0.01f);
+
 		ImGui::TreePop();
 	}
 	
