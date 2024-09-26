@@ -181,7 +181,7 @@ void Model::CreateModel(const std::string&ModelName) {
 	//データを書き込む
 	cameraForGPUData_ = nullptr;
 	cameraForGPUResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraForGPUData_));
-	//鏡面反射-----------------------------------------------------------------------------------------------------------------
+	//ポイントライト-----------------------------------------------------------------------------------------------------------------
 	pointLightResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(PointLight));
 	pointLightData_ = nullptr;
 	pointLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData_));
