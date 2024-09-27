@@ -250,6 +250,9 @@
     <ClInclude Include="Engine\Light.h">
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\struct\SpotLight.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">

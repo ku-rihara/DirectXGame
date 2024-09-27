@@ -222,7 +222,7 @@ void Model::DebugImGui() {
 	//Material
 	ImGui::ColorEdit4(" Color", (float*)&materialDate_->color);
 	ImGui::DragFloat("Shininess", (float*)&materialDate_->shininess, 0.01f);
-	const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert","Specular Reflection","PointLight" };
+	const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert","Specular Reflection","PointLight","SpotLight"};
 	ImGui::Combo("Lighting Mode", &materialDate_->enableLighting, lightingModes, IM_ARRAYSIZE(lightingModes));
 }
 #endif
@@ -254,6 +254,9 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	commandList->SetGraphicsRootConstantBufferView(4, Light::GetInstance()->GetCameraForGPUResource()->GetGPUVirtualAddress());
 
 	commandList->SetGraphicsRootConstantBufferView(5, Light::GetInstance()->GetPointLightResource()->GetGPUVirtualAddress());
+
+	commandList->SetGraphicsRootConstantBufferView(6, Light::GetInstance()->GetSpotLightResource()->GetGPUVirtualAddress());
+
 
 	//描画(DrawCall/ドローコール)
 	/*commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);*/
