@@ -11,5 +11,6 @@ struct SpotLight {
 	float distance;//ライトの届く最大距離
 	float decay;//減衰率
 	float cosAngle;//スポットライトの余弦
+	float cosFalloffStart;
 	float padding[2];
 };

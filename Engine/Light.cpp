@@ -75,6 +75,7 @@ void Light::DebugImGui() {
 		ImGui::DragFloat("  Distance", (float*)&spotLightData_->distance, 0.01f);
 		ImGui::DragFloat("  intenesity", (float*)&spotLightData_->intensity, 0.01f);
 		ImGui::DragFloat("  decay", (float*)&spotLightData_->decay, 0.01f);
+		ImGui::DragFloat("  cosFalloffStart", (float*)&spotLightData_->cosFalloffStart, 0.01f);
 
 		ImGui::TreePop();
 	}
