@@ -101,7 +101,6 @@ Microsoft::WRL::ComPtr<IDxcBlob>  CompileShader(
 	return shaderBlob.Get();
 }
 
-
 //初期化
 void DirectXCommon::Init(WinApp* winApp, int32_t backBufferWidth, int32_t backBufferHeight) {
 	

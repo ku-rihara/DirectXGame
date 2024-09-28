@@ -54,6 +54,7 @@ struct SpotLight
     float distance; //ライトの届く最大距離
     float decay; //減衰率
     float cosAngle; //スポットライトの余弦
+    float cosFalloffStart;
 };
 
 ConstantBuffer<SpotLight> gSpotLight : register(b4);
@@ -146,7 +147,7 @@ PixelShaderOutput main(VertexShaderOutput input)
             //スポットライトへの距離
             float distanceSpot = length(gSpotLight.position - input.worldPosition);
             //減衰係数
-            float attenuationFactor = pow(saturate(-distanceSpot / gSpotLight.distance + 1.0f), gPointLight.decay);
+            float attenuationFactor = pow(saturate(-distanceSpot / gSpotLight.distance + 1.0f), gSpotLight.decay);
             // ライトの反射ベクトル
             float3 halfVectorSpot = normalize(-spotLightDirectionSurface + toEye);
     
@@ -155,7 +156,7 @@ PixelShaderOutput main(VertexShaderOutput input)
             float cosSpot = saturate(NdotLSpot); // 拡散反射のための余弦
             
             float cosAngle = dot(spotLightDirectionSurface, gSpotLight.direction);
-            float falloffFactor = saturate((cosAngle - gSpotLight.cosAngle) / (1.0f - gSpotLight.cosAngle));
+            float falloffFactor = saturate((cosAngle - gSpotLight.cosAngle) / (gSpotLight.cosFalloffStart - gSpotLight.cosAngle));
     
             // 反射ベクトルとの内積（鏡面反射用）
             float NdotHSpot = dot(normalize(input.normal), halfVectorSpot);
