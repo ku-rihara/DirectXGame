@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Colider" Collapsed="true">
+    <Position X="2" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAgAAAAAAgAAgAAAAAoAEAAAAAAAIAACIAiCAAA=</HashCode>
+      <FileName>Colider.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CollisionManager" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQACAICAAAgBgAAgAAAAAAAAEAIAAAAAAACAIAIAAA=</HashCode>
+      <FileName>CollisionManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BaseCharacter" Collapsed="true">
+    <Position X="4.25" Y="1.5" Width="1.5" />
+    <InheritanceLine Type="Colider">
+      <InheritanceModifierLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.11" Y="0.06" Height="0.182" Width="0.596" />
+      </InheritanceModifierLabel>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AIQQAAgAAAgAAgEAAAAAAAAAAAIAAAAAAAACAAAAAgA=</HashCode>
+      <FileName>BaseCharacter.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player" Collapsed="true">
+    <Position X="2" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQSABoBAKEANgAAAAAApggFBEIoAIAAIgZCAQkAIAA=</HashCode>
+      <FileName>Player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameScene" Collapsed="true">
+    <Position X="4.25" Y="5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>CAYACEACAAEAAwEEABAKAAKDBoA4EFEAAQBAEIBAAkI=</HashCode>
+      <FileName>scene\GameScene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Hummer" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAgAAACAAgAAQAQAAAIAAIAAAIgAIEACAgAICAA=</HashCode>
+      <FileName>Hummer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

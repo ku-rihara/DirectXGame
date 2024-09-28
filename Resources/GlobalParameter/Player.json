@@ -1,0 +1,24 @@
+{
+  "Player": {
+    "ArmL Translation": [
+      0.6000000238418579,
+      1.0,
+      0.0
+    ],
+    "ArmR Translation": [
+      -0.6000000238418579,
+      1.0,
+      0.0
+    ],
+    "Head Translation": [
+      0.0,
+      1.7000000476837158,
+      0.0
+    ],
+    "floatingAmplitude": 0.20000000298023224,
+    "floatingCycle": 70,
+    "amplitude": 0.20000000298023224,
+    "easeTime": 0.5,
+    "period": 0.20000000298023224
+  }
+}

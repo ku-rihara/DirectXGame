@@ -19,6 +19,16 @@
 #include <imgui.h>
 #include<memory>
 
+//class
+#include "player.h"
+#include "Enemy.h"
+#include "SkyDome.h"
+#include "Ground.h"
+#include "FollowCamera.h"
+#include "CollisionManager.h"
+#include"LockOn.h"
+#include "Hummer.h"
+
 
 /// <summary>
 /// ゲームシーン
@@ -41,22 +51,52 @@ private:
 	std::unique_ptr<Model> modelSuzanne_ = nullptr;
 	std::unique_ptr<Model> modelTerrain_ = nullptr;
 
+	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
+	std::unique_ptr<Model> modelSkyDome_ = nullptr; // 3Dモデル
+	std::unique_ptr<Model> modelGround_ = nullptr; // 3Dモデル
+	//プレイヤーモデル
+	std::unique_ptr<Model> modelFighterBody_ = nullptr;
+	std::unique_ptr<Model> modelFighterHead_ = nullptr;
+	std::unique_ptr<Model> modelFighterLeftArm_ = nullptr;
+	std::unique_ptr<Model> modelFighterRightArm_ = nullptr;
+	//武器モデル
+	std::unique_ptr<Model> modelPlayerWeapon_ = nullptr;
+	//敵モデル
+	std::unique_ptr<Model> modelEnemyBody_ = nullptr;
+	std::unique_ptr<Model> modelEnemyThurn_ = nullptr;
+
+	std::unique_ptr<Player> player_;
+	std::unique_ptr<Hummer> hummer_;
+	std::unique_ptr<Enemy> enemy_;
+	/*std::unique_ptr<Effect> effect_;*/
+	std::unique_ptr<Skydome> skyDome_;
+	std::unique_ptr<Ground> ground_;
+	std::unique_ptr<FollowCamera> followCamera_;
+	std::unique_ptr<CollisionManager> collisionManager_;
+
+	//敵リスト
+	std::list<std::unique_ptr<Enemy>> enemies_;
+	//ロックオン
+	std::unique_ptr<LockOn> lockOn_;
+	
+
+
 	uint32_t modelInstance_ = 0;
 
 	bool isDrawPlane_ = true;
 
+	bool isDebugCameraActive_ = false;
+
+
 	ViewProjection viewProjection_;
-	WorldTransform planeTransform_;
-	WorldTransform fenceTransform_;
-	WorldTransform suzanneTransform_;
-	WorldTransform terrainTransform_;
-	WorldTransform transformSprite_;
-	WorldTransform uvTransformSprite_;
+	WorldTransform worldTransform_;
+	
 	std::vector<std::unique_ptr<WorldTransform>>  planeTransforms_;
-	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
 
 	uint32_t uvHandle_;
 public: 
+	// エフェクトモデル
+	static std::unique_ptr<Model> modelEffect_;
 	/// <summary>
 	/// コンストクラタ
 	/// </summary>
@@ -82,4 +122,10 @@ public:
 	/// </summary>
 	void Draw();
 
+	void AddEnemy();
+
+	/// <summary>
+	/// 衝突判定と応答
+	/// </summary>
+	void CheckAllCollisions();
 };

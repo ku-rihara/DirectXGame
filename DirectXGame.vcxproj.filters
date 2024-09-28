@@ -30,8 +30,14 @@
     <Filter Include="リソースファイル">
       <UniqueIdentifier>{21fc63fa-76a7-4761-a85a-64f85e5ca5ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scene">
+    <Filter Include="Game">
+      <UniqueIdentifier>{60bf53ad-4a1b-4261-b2a9-71783ddb1956}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene">
       <UniqueIdentifier>{139ed3c3-bba9-47d7-a283-e1947b0bd5fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Other">
+      <UniqueIdentifier>{344f48bb-c6e5-4708-ae7a-9dd89da6cab4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -117,10 +123,55 @@
       <Filter>MyEngine\ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\GameScene.cpp">
-      <Filter>Scene</Filter>
+      <Filter>Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Light.cpp">
       <Filter>MyEngine\ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\other\BaseCharacter.cpp">
+      <Filter>Game\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\other\Colider.cpp">
+      <Filter>Game\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\other\CollisionManager.cpp">
+      <Filter>Game\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\other\Easing.cpp">
+      <Filter>Game\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\other\FollowCamera.cpp">
+      <Filter>Game\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\other\GlobalParameter.cpp">
+      <Filter>Game\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\other\Ground.cpp">
+      <Filter>Game\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\other\Hummer.cpp">
+      <Filter>Game\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\other\LockOn.cpp">
+      <Filter>Game\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\other\MathFunction.cpp">
+      <Filter>Game\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\other\Player.cpp">
+      <Filter>Game\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\other\SkyDome.cpp">
+      <Filter>Game\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\other\Effect.cpp">
+      <Filter>Game\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\other\CollisionRecord.cpp">
+      <Filter>Game\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\other\Enemy.cpp">
+      <Filter>Game\Other</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -239,7 +290,7 @@
       <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\GameScene.h">
-      <Filter>Scene</Filter>
+      <Filter>Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\struct\CameraForGPU.h">
       <Filter>MyEngine\struct</Filter>
@@ -252,6 +303,60 @@
     </ClInclude>
     <ClInclude Include="Engine\struct\SpotLight.h">
       <Filter>MyEngine\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\BaseCharacter.h">
+      <Filter>Game\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\Colider.h">
+      <Filter>Game\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\CollisionManager.h">
+      <Filter>Game\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\CollisionTypeIdDef.h">
+      <Filter>Game\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\Easing.h">
+      <Filter>Game\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\Effect.h">
+      <Filter>Game\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\FollowCamera.h">
+      <Filter>Game\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\GlobalParameter.h">
+      <Filter>Game\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\Ground.h">
+      <Filter>Game\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\Hummer.h">
+      <Filter>Game\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\JoyState.h">
+      <Filter>Game\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\LockOn.h">
+      <Filter>Game\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\MathFunction.h">
+      <Filter>Game\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\Pi.h">
+      <Filter>Game\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\Player.h">
+      <Filter>Game\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\SkyDome.h">
+      <Filter>Game\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\CollisionRecord.h">
+      <Filter>Game\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\other\Enemy.h">
+      <Filter>Game\Other</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -266,6 +371,9 @@
     </None>
     <None Include="Engine\Particle.hlsli">
       <Filter>リソースファイル</Filter>
+    </None>
+    <None Include="Game\other\ClassDiagram.cd">
+      <Filter>Game\Other</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

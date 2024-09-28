@@ -4,7 +4,7 @@
 //class
 #include"Light.h"
 
-
+std::unique_ptr<Model> GameScene::modelEffect_ = nullptr;
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
@@ -26,14 +26,61 @@ void GameScene::Init() {
 	//音
 	soundDataHandle_ = audio_->SoundLoadWave("Resources/fanfare.wav");
 	//モデル
-	modelPlane_.reset(Model::Create("Plane"));
-	modelFence_.reset(Model::Create("Fence"));
-	modelSuzanne_.reset(Model::Create("Suzanne"));
-	modelTerrain_.reset(Model::Create("terrain"));
-	modelInstance_ = modelPlane_->GetKnumInstance();
+	
+	modelGround_.reset(Model::Create("Ground"));
+	modelSkyDome_.reset(Model::Create("skydome"));
+	modelFighterBody_.reset(Model::Create("PlayerBody"));
+	modelFighterHead_.reset(Model::Create("PlayerHead"));
+	modelFighterLeftArm_.reset(Model::Create("PlayerLeftArm"));
+	modelFighterRightArm_.reset(Model::Create("PlayerRightArm"));
+	modelPlayerWeapon_.reset(Model::Create("Hunmer"));
+	modelEnemyBody_.reset(Model::Create("EnemyHead"));
+	modelEnemyThurn_.reset(Model::Create("EnemyThurn"));
+	GameScene::modelEffect_.reset(Model::Create("DamageEffect"));
+
+	/// <summary>
+	/// 生成
+	/// </summary>
+	player_ = std::make_unique<Player>();
+	/*effect_ = std::make_unique<Effect>();*/
+	hummer_ = std::make_unique<Hummer>();
+	enemy_ = std::make_unique<Enemy>();
+	skyDome_ = std::make_unique<Skydome>();
+	ground_ = std::make_unique<Ground>();
+	followCamera_ = std::make_unique<FollowCamera>();
+	lockOn_ = std::make_unique<LockOn>();
+	collisionManager_ = std::make_unique<CollisionManager>();
+	// 武器初期化
+	Model* weaponModel = modelPlayerWeapon_.get();
+	hummer_->Init(weaponModel);
+	player_->SetHummer(hummer_.get());
+
+	//
+	// 自キャラ初期化***********************************************************************
+	std::vector<Model*> playerModels = { modelFighterBody_.get(), modelFighterHead_.get(), modelFighterLeftArm_.get(), modelFighterRightArm_.get() };
+	player_->Init(playerModels);
+	player_->SetLockOn(lockOn_.get());
+	skyDome_->Init(modelSkyDome_.get());
+	ground_->Init(modelGround_.get());
+
+	// 追尾カメラ初期化*********************************************************************************
+	followCamera_->Init();
+	followCamera_->SetLockOn(lockOn_.get());
+	// 敵キャラ初期化*******************************************************************************
+	AddEnemy();
+	worldTransform_.Init();
+	viewProjection_.Init();
+	// ロックオン初期化*****************************************************************************************
+	lockOn_->Init();
+	// コリジョンマネージャー
+	collisionManager_->Init();
+	// 自キャラのワールドトランスフォームを追従カメラにセット
+	followCamera_->SetTarget(&player_->GetWorldTransform());
+	player_->SetViewProjection(&followCamera_->GetViewProjection());
+
 
 	////テクスチャハンドル
-	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/UVChecker.png");
+	/*uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/UVChecker.png");*/
 		
 	//スプライト生成
 	sprite_ = std::make_unique<Sprite>();
@@ -46,12 +93,7 @@ void GameScene::Init() {
 	}
 
 	// ワールドトランスフォーム初期化
-	planeTransform_.Init();
-	fenceTransform_.Init();
-	suzanneTransform_.Init();
-	terrainTransform_.Init();
-	transformSprite_.Init();
-	uvTransformSprite_.Init();
+	
 
 	// PlaneParticle
 	for (uint32_t index = 0; index < modelInstance_; ++index) {
@@ -60,128 +102,90 @@ void GameScene::Init() {
 	}
 
 	// ワールドトランスフォーム値セット
-	transformSprite_.scale_.x = 0.7f;
-	planeTransform_.rotation_.y = -3.0f;
+	
 }
 
 void GameScene::Update() {
-	debugCamera_->Update();
-
-	if (Input::GetInstance()->TrrigerKey(DIK_F)) {
-		Audio::GetInstance()->SoundPlayWave(soundDataHandle_);
-	}
 #ifdef _DEBUG
-	ImGui::Begin("Window");
-
-	if (ImGui::TreeNode("IsDrawModel")) {
-		ImGui::Checkbox("isPlane", &isDrawPlane_);
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("WorldTransform")) {
-
-		if (ImGui::TreeNode("Plane")) {
-			ImGui::DragFloat3("Scale", &planeTransform_.scale_.x, 0.01f);
-			ImGui::DragFloat3("Rotate", &planeTransform_.rotation_.x, 0.01f);
-			ImGui::DragFloat3("Translate", &planeTransform_.translation_.x, 0.01f);
-			ImGui::TreePop();
+	// デバッグカメラモード切り替え------------------------------
+	if (input_->TrrigerKey(DIK_SPACE)) {
+		if (isDebugCameraActive_ == false) {
+			isDebugCameraActive_ = true;
 		}
-		if (ImGui::TreeNode("Fence")) {
-			ImGui::DragFloat3("Scale", &fenceTransform_.scale_.x, 0.01f);
-			ImGui::DragFloat3("Rotate", &fenceTransform_.rotation_.x, 0.01f);
-			ImGui::DragFloat3("Translate", &fenceTransform_.translation_.x, 0.01f);
-			ImGui::TreePop();
+		else if (isDebugCameraActive_ == true) {
+			isDebugCameraActive_ = false;
 		}
-		
-		if (ImGui::TreeNode("Suzanne")) {
-			ImGui::DragFloat3("Scale", &suzanneTransform_.scale_.x, 0.01f);
-			ImGui::DragFloat3("Rotate", &suzanneTransform_.rotation_.x, 0.01f);
-			ImGui::DragFloat3("Translate", &suzanneTransform_.translation_.x, 0.01f);
-			ImGui::TreePop();
-		}
-
-
-		if (ImGui::TreeNode("Sprite")) {
-			ImGui::DragFloat3("Scale", &transformSprite_.scale_.x, 0.1f);
-			ImGui::DragFloat3("Rotate", &transformSprite_.rotation_.x, 1.0f);
-			ImGui::DragFloat3("Translate", &transformSprite_.translation_.x, 1.0f);
-			ImGui::TreePop();
-		}
-
-		ImGui::TreePop();
 	}
-
-	if (ImGui::TreeNode("UVTransform")) {
-		ImGui::DragFloat2("Scale", &uvTransformSprite_.scale_.x, 0.1f, -10.0f, 10.0f);
-		ImGui::DragFloat2("Translate", &uvTransformSprite_.translation_.x, 0.01f, -10.0f, 10.0f);
-		ImGui::SliderAngle("Rotate", &uvTransformSprite_.rotation_.z);
-		ImGui::TreePop();
-	}
-	ImGui::End();
-	//ライティング
-	ImGui::Begin("Lighting");
-	Light::GetInstance()->DebugImGui();
-	if (ImGui::TreeNode("Plane")) {
-		modelPlane_->DebugImGui();
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("Suzanne")) {
-		modelSuzanne_->DebugImGui();
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("Terrian")) {
-		modelTerrain_->DebugImGui();
-		ImGui::TreePop();
-	}
-	ImGui::End();
-
+	// デバッグカメラモード切り替え------------------------------
+	collisionManager_->Update();
 #endif
-	//ワールド行列更新
-	planeTransform_.UpdateMatrix();
-	fenceTransform_.UpdateMatrix();
-	suzanneTransform_.UpdateMatrix();
-	terrainTransform_.UpdateMatrix();
+	// 各クラス更新処理---------
+	skyDome_->Update();
+	ground_->Update();
+	player_->Update();
+	// hummer_->Update();
+	followCamera_->Update();
 
-	for (uint32_t i = 0; i < modelInstance_; i++) {
-		planeTransforms_[i]->UpdateMatrix();
+	for (std::unique_ptr<Enemy>& enemy : enemies_) {
+		enemy->Update();
 	}
+	lockOn_->Update(enemies_, viewProjection_);
 
-	transformSprite_.UpdateMatrix();
-	uvTransformSprite_.UpdateMatrix();
+	// 衝突判定と応答
+	CheckAllCollisions();
+	// 衝突マネージャー更新(WorldTransform)
+	collisionManager_->UpdateWorldTransform();
 
-	//tramsform.rotate.y += 0.03f;
+	if (isDebugCameraActive_ == true) { // デバッグカメラがアクティブなら
+		// デバッグカメラの更新
+		debugCamera_->Update();
+		viewProjection_.matView_ = debugCamera_->GetViewProjection().matView_;
+		viewProjection_.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
 
-	// カメラ行列の計算をデバッグカメラのビュープロジェクションから行う
-	viewProjection_.matView_ = debugCamera_->GetViewProjection().matView_;
-	viewProjection_.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
+		viewProjection_.TransferMatrix();
 
-	//スプライト
-	Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
-	Matrix4x4 worldViewProjectionMatrixSprite = transformSprite_.matWorld_ * projectionMatrixSprite;
-	sprite_->SetTransformationMatrixDataSprite(worldViewProjectionMatrixSprite);
+	}
+	// アクティブでない
+	else if (isDebugCameraActive_ == false) { // デバッグカメラがアクティブでない
+		viewProjection_.matView_ = followCamera_->GetViewProjection().matView_;
+		viewProjection_.matProjection_ = followCamera_->GetViewProjection().matProjection_;
 
-	//UVTransform
-	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTransformSprite_.scale_);
-	uvTransformMatrix = (uvTransformMatrix * MakeRotateZMatrix(uvTransformSprite_.rotation_.z));
-	uvTransformMatrix = (uvTransformMatrix * MakeTranslateMatrix(uvTransformSprite_.translation_));
-	sprite_->SetUVTransformSprite(uvTransformMatrix);
-
+		viewProjection_.TransferMatrix();
+	}
 }
 
 void GameScene::Draw() {
 
-	//Draw********************************************************
-
-		//平面描画
-	if (isDrawPlane_) {
-
-	/*	modelPlane_->DrawParticle(planeTransforms_, viewProjection_);*/
-
-		modelPlane_->Draw(planeTransform_, viewProjection_);
-		modelFence_->Draw(fenceTransform_, viewProjection_);
-		modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
-		modelTerrain_->Draw(terrainTransform_, viewProjection_);
-
-		//スプライト描画
-		sprite_->DrawSprite(textureManager_->GetTextureHandle(uvHandle_));
+	/// <summary>
+	/// ここに3Dオブジェクトの描画処理を追加できる
+	/// </summary>
+	skyDome_->Draw(viewProjection_);
+	ground_->Draw(viewProjection_);
+	for (std::unique_ptr<Enemy>& enemy : enemies_) {
+		enemy->Draw(viewProjection_);
 	}
+	player_->Draw(viewProjection_);
+
+	collisionManager_->Draw(viewProjection_);
+}
+
+
+void GameScene::AddEnemy() {
+	std::vector<Model*> enemyModels = { modelEnemyBody_.get(), modelEnemyThurn_.get(), modelEnemyThurn_.get() };
+	enemy_ = std::make_unique<Enemy>();
+	enemy_->Init(enemyModels);
+	enemies_.push_back(std::move(enemy_));
+}
+
+void GameScene::CheckAllCollisions() {
+	// 衝突マネージャーのリセット
+	collisionManager_->Reset();
+	// コライダーをリストに登録
+	collisionManager_->AddCollider(player_.get());
+	for (const std::unique_ptr<Enemy>& enemy : enemies_) {
+		collisionManager_->AddCollider(enemy.get());
+	}
+	collisionManager_->AddCollider(hummer_.get());
+	// 衝突判定と応答
+	collisionManager_->CheckAllCollisions();
 }

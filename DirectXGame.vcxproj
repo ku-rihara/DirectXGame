@@ -35,6 +35,21 @@
     <ClCompile Include="externals\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="externals\imgui\imgui_tables.cpp" />
     <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Game\other\BaseCharacter.cpp" />
+    <ClCompile Include="Game\other\Colider.cpp" />
+    <ClCompile Include="Game\other\CollisionManager.cpp" />
+    <ClCompile Include="Game\other\CollisionRecord.cpp" />
+    <ClCompile Include="Game\other\Easing.cpp" />
+    <ClCompile Include="Game\other\Effect.cpp" />
+    <ClCompile Include="Game\other\Enemy.cpp" />
+    <ClCompile Include="Game\other\FollowCamera.cpp" />
+    <ClCompile Include="Game\other\GlobalParameter.cpp" />
+    <ClCompile Include="Game\other\Ground.cpp" />
+    <ClCompile Include="Game\other\Hummer.cpp" />
+    <ClCompile Include="Game\other\LockOn.cpp" />
+    <ClCompile Include="Game\other\MathFunction.cpp" />
+    <ClCompile Include="Game\other\Player.cpp" />
+    <ClCompile Include="Game\other\SkyDome.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\Matrix3x3.cpp" />
@@ -79,6 +94,24 @@
     <ClInclude Include="externals\imgui\imstb_rectpack.h" />
     <ClInclude Include="externals\imgui\imstb_textedit.h" />
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
+    <ClInclude Include="Game\other\BaseCharacter.h" />
+    <ClInclude Include="Game\other\Colider.h" />
+    <ClInclude Include="Game\other\CollisionManager.h" />
+    <ClInclude Include="Game\other\CollisionRecord.h" />
+    <ClInclude Include="Game\other\CollisionTypeIdDef.h" />
+    <ClInclude Include="Game\other\Easing.h" />
+    <ClInclude Include="Game\other\Effect.h" />
+    <ClInclude Include="Game\other\Enemy.h" />
+    <ClInclude Include="Game\other\FollowCamera.h" />
+    <ClInclude Include="Game\other\GlobalParameter.h" />
+    <ClInclude Include="Game\other\Ground.h" />
+    <ClInclude Include="Game\other\Hummer.h" />
+    <ClInclude Include="Game\other\JoyState.h" />
+    <ClInclude Include="Game\other\LockOn.h" />
+    <ClInclude Include="Game\other\MathFunction.h" />
+    <ClInclude Include="Game\other\Pi.h" />
+    <ClInclude Include="Game\other\Player.h" />
+    <ClInclude Include="Game\other\SkyDome.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
     <ClInclude Include="math\Matrix3x3.h" />
     <ClInclude Include="math\Matrix4x4.h" />
@@ -104,6 +137,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="Game\other\ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Object3d.PS.hlsl">
@@ -167,7 +201,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)math;$(ProjectDir)Engine\Function;$(ProjectDir)Engine\struct;$(ProjectDir)externals\imgui;$(ProjectDir)externals\DirectXTex;$(ProjectDir)Game\Scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)math;$(ProjectDir)Engine\Function;$(ProjectDir)Engine\struct;$(ProjectDir)externals\imgui;$(ProjectDir)externals\DirectXTex;$(ProjectDir)Game\Scene;$(ProjectDir)externals\nlohmann;$(ProjectDir)Game\other;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -189,7 +223,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)math;$(ProjectDir)Engine\Function;$(ProjectDir)Engine\struct;$(ProjectDir)externals\imgui;$(ProjectDir)externals\DirectXTex;$(ProjectDir)Game\Scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)math;$(ProjectDir)Engine\Function;$(ProjectDir)Engine\struct;$(ProjectDir)externals\imgui;$(ProjectDir)externals\DirectXTex;$(ProjectDir)Game\Scene;$(ProjectDir)externals\nlohmann;$(ProjectDir)Game\other;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -1,6 +1,8 @@
 #include"Matrix4x4.h"
 #include<cmath>
 #include<assert.h>
+#include"ViewProjection.h"
+#include"WinApp.h"
 
 Matrix4x4 MakeIdentity4x4() {
 	Matrix4x4 result;
@@ -189,7 +191,7 @@ Matrix4x4 MakeRotateMatrix(Vector3 rotate) {
 	return (MakeRotateXMatrix(rotate.x) * MakeRotateYMatrix(rotate.y) * MakeRotateZMatrix(rotate.z));
 }
 
-Vector3 MatrixTransform(const Vector3& vector, const Matrix4x4& matrix) {
+Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) {
 	Vector3 result;
 
 	result.x = (vector.x * matrix.m[0][0]) + (vector.y * matrix.m[1][0]) + (vector.z * matrix.m[2][0]) + (1.0f * matrix.m[3][0]);
@@ -353,4 +355,13 @@ Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, f
 	result.m[3][2] = minDepth;
 	result.m[3][3] = 1;
 	return result;
+}
+
+Vector3 ScreenTransform(Vector3 worldPos, const ViewProjection& viewProjection) {
+	//ビューポート行列
+	Matrix4x4 matViewport = MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);
+	//ビュー行列とプロジェクション行列、ビューポート行列を合成する
+	Matrix4x4 matViewProjectionViewport = viewProjection.matView_ * viewProjection.matProjection_ * matViewport;
+	//ワールド→スクリーン変換
+	return Transform(worldPos, matViewProjectionViewport);
 }
