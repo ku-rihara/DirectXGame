@@ -108,6 +108,7 @@ void Sprite::PreDraw(ID3D12GraphicsCommandList* commandList){
 	commandList->IASetIndexBuffer(&indexBufferViewSprite_);//IBVを設定
 }
 
+
 void Sprite::SetPosition(const Vector2& pos) {
 	//スプライト
 	  // スプライトの平行移動行列を作成
