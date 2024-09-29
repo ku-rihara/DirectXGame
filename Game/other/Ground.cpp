@@ -10,7 +10,7 @@ void Ground::Init(Model* model) {
 	assert(model);
 	model_ = model;
 	worldTransform_.Init();
-	worldTransform_.scale_ = {2, 2, 2};
+	worldTransform_.scale_ = {1, 1, 1};
 }
 
 void Ground::Update() { worldTransform_.UpdateMatrix(); }

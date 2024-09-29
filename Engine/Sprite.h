@@ -8,20 +8,17 @@
 #include"ModelData.h"
 #include"Material.h"
 
-class TextureManager;
+
 class Sprite {
 private:
 	//テクスチャ
-	int32_t TextureHandle_;
-	TextureManager* textureManager_ = nullptr;
+	D3D12_GPU_DESCRIPTOR_HANDLE texture_;
 
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite_;
-	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite_{};
+	static D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite_;
+	static D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite_;
 	//リソース******************************************************************
 	//Material
 	Microsoft::WRL::ComPtr<ID3D12Resource >materialResourceSprite_;
-	//平行光源
-	//Microsoft::WRL::ComPtr<ID3D12Resource*> directionalLightResourceSprite_;
 	//頂点リソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>vertexResourceSprite_;
 	//wvpリソース
@@ -39,9 +36,16 @@ public:
 	/// <summary>
 	/// スプライトの作成
 	/// </summary>
-	void CreateSprite();
+	void CreateSprite(uint32_t textureHandle, Vector2 position, Vector4 color);
 
+	//描画前
+static	void PreDraw(ID3D12GraphicsCommandList* commandList);
+
+//描画
 	void DrawSprite(D3D12_GPU_DESCRIPTOR_HANDLE texutre);
+
+	//ポジションセット
+	void SetPosition(const Vector2& pos);
 
 
 #ifdef _DEBUG

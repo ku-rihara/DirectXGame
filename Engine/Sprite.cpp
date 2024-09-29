@@ -2,17 +2,19 @@
 #include "DirectXCommon.h"
 #include "TextureManager.h"
 #include <imgui.h>
+
 namespace {
 	DirectXCommon* directXCommon = DirectXCommon::GetInstance();
 	//Model* model=Model::GetInstance();
 }
-//Sprite* Sprite::GetInstance() {
-//	static Sprite instance;
-//	return &instance;
-//}
-void Sprite::CreateSprite() {
-	//textureManager_ = TextureManager::GetInstance();
-	/*TextureHandle_=textureManager_->Load("Resources/uvChecker.png");*/
+// static メンバ変数の定義
+D3D12_VERTEX_BUFFER_VIEW Sprite::vertexBufferViewSprite_;
+D3D12_INDEX_BUFFER_VIEW Sprite::indexBufferViewSprite_;
+
+void Sprite::CreateSprite(uint32_t textureHandle, Vector2 position, Vector4 color) {
+	//テクスチャ
+	texture_ = TextureManager::GetInstance()->GetTextureHandle(textureHandle);
+
 	//スプライト**************************************************************************************************
 	//Sprite用の頂点リソースを作る
 	vertexResourceSprite_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(VertexData) * 4);
@@ -63,16 +65,7 @@ void Sprite::CreateSprite() {
 	materialDateSprite_->enableLighting = false;
 	//UVTransformは単位行列を書き込んでおく
 	materialDateSprite_->uvTransform = MakeIdentity4x4();
-	//平行光源--------------------------------------------------------------------------------------------------
-	//directionalLightResourceSprite_ = CreateBufferResource(GetDevice(), sizeof(DirectionalLight));
-
-	//DirectionalLight* directionalLightDataSprite = nullptr;
-	//directionalLightResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightDataSprite));
-	////デフォルト値はこうする
-	//directionalLightDataSprite->color = { 1.0f,1.0f,1.0f,1.0f };
-	//directionalLightDataSprite->direction = { 0.0f,-1.0f,0.0f };
-	//directionalLightDataSprite->intensity = 1.0f;
-	//行列----------------------------------------------------------------------------------------------------------
+		//行列----------------------------------------------------------------------------------------------------------
 	wvpResourceSprite_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix));
 	//データを書き込む
 	wvpDataSprite_ = nullptr;
@@ -81,7 +74,8 @@ void Sprite::CreateSprite() {
 	//単位行列を書き込んでおく
 	wvpDataSprite_->World = MakeIdentity4x4();
 	wvpDataSprite_->WVP = MakeIdentity4x4();
-	//スプライト**************************************************************************************************
+//変数初期化-----------------------------------------------------------
+	
 }
 
 #ifdef _DEBUG
@@ -93,15 +87,21 @@ void Sprite::DebugImGui() {
 
 void Sprite::DrawSprite(D3D12_GPU_DESCRIPTOR_HANDLE texture) {
 
-	////Spriteの描画。変更が必要なものだけ変更する
-	directXCommon->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite_);
-	directXCommon->GetCommandList()->IASetIndexBuffer(&indexBufferViewSprite_);//IBVを設定
 	//TransformationmatrixCBufferの場所を設定
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite_->GetGPUVirtualAddress());
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResourceSprite_->GetGPUVirtualAddress());
 	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, texture);
 	//描画(DrawCall/ドローコール)
 	directXCommon->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
+}
+void Sprite::PreDraw(ID3D12GraphicsCommandList* commandList){
+	////Spriteの描画。変更が必要なものだけ変更する
+	commandList->IASetVertexBuffers(0, 1, &vertexBufferViewSprite_);
+	commandList->IASetIndexBuffer(&indexBufferViewSprite_);//IBVを設定
+}
+
+void Sprite::SetPosition(const Vector2& pos) {
+
 }
 
 //void Sprite::ReleaseSprite() {

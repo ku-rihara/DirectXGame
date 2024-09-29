@@ -228,38 +228,37 @@ void Model::DebugImGui() {
 #endif
 
 void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
-	/*DebugImGui();*/
 	auto commandList = directXCommon->GetCommandList();
-	//RootSignatureを設定
-	commandList->SetGraphicsRootSignature(directXCommon->GetRootSignature());
-	commandList->SetPipelineState(directXCommon->GetGrahipcsPipeLileState());
+
+	// WVP行列の計算
 	wvpDate_->WVP = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
 	wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
 
+	// 頂点バッファとインデックスバッファの設定
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
-	commandList->IASetIndexBuffer(&indexBufferView_);//IBV
+	commandList->IASetIndexBuffer(&indexBufferView_);  // IBV
 
-	//形状を設定
+	// 形状を設定
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// リソースの設定
 	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	commandList->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+
 	if (textureHandle.has_value()) {
 		commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
 	}
 	else {
 		commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
 	}
+
+	// 光源のリソース設定
 	commandList->SetGraphicsRootConstantBufferView(3, Light::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
-
 	commandList->SetGraphicsRootConstantBufferView(4, Light::GetInstance()->GetCameraForGPUResource()->GetGPUVirtualAddress());
-
 	commandList->SetGraphicsRootConstantBufferView(5, Light::GetInstance()->GetPointLightResource()->GetGPUVirtualAddress());
-
 	commandList->SetGraphicsRootConstantBufferView(6, Light::GetInstance()->GetSpotLightResource()->GetGPUVirtualAddress());
 
-
-	//描画(DrawCall/ドローコール)
-	/*commandList_->DrawInstanced(shpereVertexNum_, 1, 0, 0);*/
+	// 描画コール
 	commandList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }
 
@@ -293,6 +292,15 @@ void Model::DrawParticle(const std::vector<std::unique_ptr<WorldTransform>>& wor
 
 	commandList->DrawInstanced(UINT(modelData_.vertices.size()), UINT(kNumInstance_), 0, 0);
 
+}
+
+void Model::PreDraw(ID3D12GraphicsCommandList* commandList) {
+	// RootSignatureを設定
+	commandList->SetGraphicsRootSignature(directXCommon->GetRootSignature());
+	// PipelineStateを設定
+	commandList->SetPipelineState(directXCommon->GetGrahipcsPipeLileState());
+
+	// ここでさらに描画前の共通設定が必要であれば追加できます
 }
 
 void Model::CreateSphere() {

@@ -54,7 +54,8 @@ private:
 	bool useMonsterBall = true;
 public:
 	static Model* Create(const std::string& instanceName);
-	//static Model* GetInstance(const std::string& instanceName);
+	
+static	void PreDraw(ID3D12GraphicsCommandList* commandList);
 	
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
 

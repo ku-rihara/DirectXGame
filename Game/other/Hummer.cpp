@@ -32,6 +32,7 @@ void Hummer::Update() {
 
 void Hummer::Attack(float easeT) {
 	worldTransform_.rotation_.x = Lerp(-pi / 3, pi / 2, easeT);
+
 }
 
 void Hummer::Draw(const ViewProjection& viewProjection) {

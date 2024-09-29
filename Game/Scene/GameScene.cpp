@@ -155,10 +155,12 @@ void GameScene::Update() {
 }
 
 void GameScene::Draw() {
-
+	// コマンドリストの取得
+	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+	Model::PreDraw(commandList);
 	skyDome_->Draw(viewProjection_);
 	ground_->Draw(viewProjection_);
 	for (std::unique_ptr<Enemy>& enemy : enemies_) {
@@ -167,6 +169,8 @@ void GameScene::Draw() {
 	player_->Draw(viewProjection_);
 
 	collisionManager_->Draw(viewProjection_);
+
+	Sprite::PreDraw(commandList);
 }
 
 
