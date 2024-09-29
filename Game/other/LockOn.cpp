@@ -6,9 +6,9 @@
 #include"Input.h"
 
 void LockOn::Init() {
-	/*uint32_t TextureHandle = TextureManager::Load("./Resources/anchorPoint.png");
+	uint32_t TextureHandle = TextureManager::GetInstance()->LoadTexture("./Resources/anchorPoint.png");
 
-	lockOnMark_.reset(Sprite::Create(TextureHandle, Vector2{640, 320}, Vector4(1, 1, 1, 1), Vector2(0.5f, 0.5f)));*/
+	lockOnMark_.reset(Sprite::Create(TextureHandle, Vector2{640, 320}, Vector4(1, 1, 1, 1)));
 }
 
 void LockOn::Update(const std::list<std::unique_ptr<Enemy>>& enemies, const ViewProjection& viewProjection) {
@@ -40,15 +40,15 @@ void LockOn::Update(const std::list<std::unique_ptr<Enemy>>& enemies, const View
 		// Vector2に格納
 		Vector2 positionScreenV2(positionScreen.x, positionScreen.y);
 		// スプライトの座標を設定
-		/*lockOnMark_->SetPosition(positionScreenV2);*/
+		lockOnMark_->SetPosition(positionScreenV2);
 	}
 }
 
 void LockOn::Draw() {
 
-	/*if (target_) {
+	if (target_) {
 		lockOnMark_->Draw();
-	}*/
+	}
 }
 
 void LockOn::Search(const std::list<std::unique_ptr<Enemy>>& enemies, const ViewProjection& viewProjection) {

@@ -82,9 +82,9 @@ void GameScene::Init() {
 	////テクスチャハンドル
 	/*uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/UVChecker.png");*/
 		
-	//スプライト生成
-	sprite_ = std::make_unique<Sprite>();
-	sprite_->CreateSprite();
+	////スプライト生成
+	//sprite_ = std::make_unique<Sprite>();
+	//sprite_->CreateSprite();
 	//WorldTransform
 
 	planeTransforms_.reserve(modelInstance_);
@@ -171,6 +171,7 @@ void GameScene::Draw() {
 	collisionManager_->Draw(viewProjection_);
 
 	Sprite::PreDraw(commandList);
+	lockOn_->Draw();
 }
 
 
