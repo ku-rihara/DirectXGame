@@ -110,7 +110,7 @@ void Sprite::PreDraw(ID3D12GraphicsCommandList* commandList){
 
 
 void Sprite::SetPosition(const Vector2& pos) {
-	//スプライト
+
 	  // スプライトの平行移動行列を作成
 	Matrix4x4 translationMatrix = MakeTranslateMatrix({ pos.x, pos.y, 0.0f });
 	Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
