@@ -135,6 +135,21 @@ void GameScene::Update() {
 	ImGui::End();
 
 #endif
+
+	//インプット処理
+	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+		suzanneTransform_.translation_.x -= 0.01f;
+	}
+	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+		suzanneTransform_.translation_.x += 0.01f;
+	}
+	if (Input::GetInstance()->PushKey(DIK_UP)) {
+		suzanneTransform_.translation_.y += 0.01f;
+	}
+	if (Input::GetInstance()->PushKey(DIK_DOWN)) {
+		suzanneTransform_.translation_.y -= 0.01f;
+	}
+
 	//ワールド行列更新
 	planeTransform_.UpdateMatrix();
 	fenceTransform_.UpdateMatrix();
@@ -154,16 +169,16 @@ void GameScene::Update() {
 	viewProjection_.matView_ = debugCamera_->GetViewProjection().matView_;
 	viewProjection_.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
 
-	//スプライト
-	Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
-	Matrix4x4 worldViewProjectionMatrixSprite = transformSprite_.matWorld_ * projectionMatrixSprite;
-	sprite_->SetTransformationMatrixDataSprite(worldViewProjectionMatrixSprite);
+	////スプライト
+	//Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
+	//Matrix4x4 worldViewProjectionMatrixSprite = transformSprite_.matWorld_ * projectionMatrixSprite;
+	//sprite_->SetTransformationMatrixDataSprite(worldViewProjectionMatrixSprite);
 
-	//UVTransform
-	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTransformSprite_.scale_);
-	uvTransformMatrix = (uvTransformMatrix * MakeRotateZMatrix(uvTransformSprite_.rotation_.z));
-	uvTransformMatrix = (uvTransformMatrix * MakeTranslateMatrix(uvTransformSprite_.translation_));
-	sprite_->SetUVTransformSprite(uvTransformMatrix);
+	////UVTransform
+	//Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTransformSprite_.scale_);
+	//uvTransformMatrix = (uvTransformMatrix * MakeRotateZMatrix(uvTransformSprite_.rotation_.z));
+	//uvTransformMatrix = (uvTransformMatrix * MakeTranslateMatrix(uvTransformSprite_.translation_));
+	//sprite_->SetUVTransformSprite(uvTransformMatrix);
 
 }
 
