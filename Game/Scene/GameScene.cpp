@@ -37,7 +37,7 @@ void GameScene::Init() {
 		
 	//スプライト生成
 	sprite_ = std::make_unique<Sprite>();
-	sprite_->CreateSprite();
+	sprite_->CreateSprite(uvHandle_,Vector2{0,0},Vector4(1,1,1,1));
 	//WorldTransform
 
 	planeTransforms_.reserve(modelInstance_);
@@ -182,6 +182,6 @@ void GameScene::Draw() {
 		modelTerrain_->Draw(terrainTransform_, viewProjection_);
 
 		//スプライト描画
-		sprite_->DrawSprite(textureManager_->GetTextureHandle(uvHandle_));
+		sprite_->Draw();
 	}
 }
