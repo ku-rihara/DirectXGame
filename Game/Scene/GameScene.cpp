@@ -168,9 +168,10 @@ void GameScene::Update() {
 }
 
 void GameScene::Draw() {
-
+	
 	//Draw********************************************************
-
+	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+	Model::PreDraw(commandList);
 		//平面描画
 	if (isDrawPlane_) {
 
@@ -180,7 +181,7 @@ void GameScene::Draw() {
 		modelFence_->Draw(fenceTransform_, viewProjection_);
 		modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
 		modelTerrain_->Draw(terrainTransform_, viewProjection_);
-
+		Sprite::PreDraw(commandList);
 		//スプライト描画
 		sprite_->Draw();
 	}
