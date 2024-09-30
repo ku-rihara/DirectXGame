@@ -122,13 +122,13 @@ MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, c
 	if (materialData.textureFilePath.empty())
 	{
 		std::string whiteTexture = "default.png";
-		materialData.textureFilePath = directoryPath + "/" + whiteTexture;
+		materialData.textureFilePath = "./Resources/Model/" + whiteTexture;
 	}
 	return materialData;
 }
 
 void Model::CreateModel(const std::string& ModelName) {
-	modelData_ = LoadObjFile("./Resources/Model", ModelName + ".obj");
+	modelData_ = LoadObjFile("./Resources/Model/"+ ModelName, ModelName + ".obj");
 	textureManager_ = TextureManager::GetInstance();
 	textureHandle_ = textureManager_->LoadTexture(modelData_.material.textureFilePath);
 
