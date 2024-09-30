@@ -4,9 +4,9 @@
 #include"TextureManager.h"
 #include"WinApp.h"
 #include"DirectXCommon.h"
-#include "SoundManager.h"
+#include"Audio.h"
 #include"Input.h"
-#include"WorldTransformManager.h"
+//#include"WorldTransformManager.h"
 
 #include"Matrix4x4.h"
 #include"Convert.h"
