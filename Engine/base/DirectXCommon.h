@@ -126,7 +126,8 @@ private://メンバ関数
 
 public://メンバ関数
 	HRESULT hr_ = 0;
-
+	//最大SRV数
+	static const uint32_t kMaxSRVCount;
 	//シングルトンインスタンスの取得
 	static DirectXCommon* GetInstance();
 	/// <summary>
@@ -142,7 +143,7 @@ public://メンバ関数
 	/// <summary>
 	//画面のクリア
 	/// </summary>	
-	void ScreenClear();
+	void PreDraw();
 
 	/// <summary>
 	/// 深度バッファのクリア
@@ -152,7 +153,7 @@ public://メンバ関数
 	/// <summary>
 	//コマンドのキック
 	/// </summary>	
-	void CommandKick();
+	void PostDraw();
 
 	/// <summary>
 	//オブジェクトのリリース

@@ -60,19 +60,20 @@ void Keta::BeginFrame() {
 	//開発者UIの処理。実際に開発用のUIを出す場合はここをゲーム固有の処理に書き換える	
 #endif
 	input->Update();
-	sDirectXCommon->ScreenClear();
+	sDirectXCommon->PreDraw();
 }
 //フレームの終わり
 void Keta::EndFrame() {
 #ifdef _DEBUG
 	ImGui::Render();
 #endif
-	sDirectXCommon->CommandKick();
+	sDirectXCommon->PostDraw();
 }
 
 void Keta::Finalize() {
 	CoUninitialize();
 	audio->Finalize();
+	stextureManager->Finalize();
 	sDirectXCommon->ReleaseObject();
 	
 #ifdef _DEBUG
