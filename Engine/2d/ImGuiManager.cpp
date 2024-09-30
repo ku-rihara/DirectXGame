@@ -11,7 +11,7 @@ ImGuiManager* ImGuiManager::GetInstance() {
 void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon) {
 	winApp;
 	dxCommon_ = dxCommon;
-	srvDescriptorHeap_ = dxCommon_->CreateDescriptorHeap(dxCommon_->GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
+	srvDescriptorHeap_ = dxCommon_->CreateDescriptorHeap(dxCommon_->GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, DirectXCommon::kMaxSRVCount, true);
 
 #ifdef _DEBUG
 	IMGUI_CHECKVERSION();

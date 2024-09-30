@@ -40,6 +40,7 @@ private:
 	std::unique_ptr<Model> modelFence_ = nullptr;
 	std::unique_ptr<Model> modelSuzanne_ = nullptr;
 	std::unique_ptr<Model> modelTerrain_ = nullptr;
+	
 
 	uint32_t modelInstance_ = 0;
 

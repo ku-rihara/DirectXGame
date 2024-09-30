@@ -16,19 +16,17 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
 
+const uint32_t DirectXCommon::kMaxSRVCount = 512;
+
 namespace {
 	ImGuiManager* imguiManager_;
-	TextureManager* textureManager_;
-	/*Model* model_;*/
-	/*Sprite* sprite_;*/
+	TextureManager* textureManager_;	
 }
 
 DirectXCommon* DirectXCommon::GetInstance() {
 	static DirectXCommon instance;
 	return &instance;
 }
-
-
 
 void Log(const std::string& message) {
 	OutputDebugStringA(message.c_str());
@@ -586,7 +584,7 @@ void DirectXCommon::CreateGraphicPipelene() {
 }
 
 //フレーム開始
-void DirectXCommon::ScreenClear() {
+void DirectXCommon::PreDraw() {
 	//これから書き込むバックバッファのインデックスを取得
 	backBufferIndex_ = swapChain_->GetCurrentBackBufferIndex();
 	//今回のバリアはTransition
@@ -620,15 +618,7 @@ void DirectXCommon::ScreenClear() {
 }
 
 //フレーム終わり
-void DirectXCommon::CommandKick() {
-
-	//model_->DrawModel();//モデル描画
-
-	//sprite_->DrawSprite();//スプライト描画
-
-	////描画(DrawCall/ドローコール)
-	//commandList_->DrawIndexedInstanced(6, 1, 0, 0, 0);
-	//commandList_->DrawInstanced(6, 1, 0, 0);
+void DirectXCommon::PostDraw() {
 
 #ifdef _DEBUG
 	//実際のcommandListのImGuiの描画コマンドを積む

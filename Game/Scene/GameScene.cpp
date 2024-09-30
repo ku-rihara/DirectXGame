@@ -30,6 +30,7 @@ void GameScene::Init() {
 	modelFence_.reset(Model::Create("Fence"));
 	modelSuzanne_.reset(Model::Create("Suzanne"));
 	modelTerrain_.reset(Model::Create("terrain"));
+	
 	modelInstance_ = modelPlane_->GetKnumInstance();
 
 	////テクスチャハンドル
@@ -196,6 +197,7 @@ void GameScene::Draw() {
 		modelFence_->Draw(fenceTransform_, viewProjection_);
 		modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
 		modelTerrain_->Draw(terrainTransform_, viewProjection_);
+	
 		Sprite::PreDraw(commandList);
 		//スプライト描画
 		sprite_->Draw();
