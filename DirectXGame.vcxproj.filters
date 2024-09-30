@@ -7,17 +7,6 @@
     <Filter Include="MyEngine\Function">
       <UniqueIdentifier>{ad63e3c9-e19c-4445-b7d7-07349a5183ef}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\ソース ファイル">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="MyEngine\ヘッダー ファイル">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="MyEngine\Adapter">
-      <UniqueIdentifier>{8986ede4-fff3-408a-b286-3a64b9b00598}</UniqueIdentifier>
-    </Filter>
     <Filter Include="imgui">
       <UniqueIdentifier>{8ed0676c-f1d0-4af2-96bc-4c2c8c07c532}</UniqueIdentifier>
     </Filter>
@@ -27,9 +16,6 @@
     <Filter Include="MyEngine\struct">
       <UniqueIdentifier>{652ad917-7098-4697-8956-5714f98e5ed8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="リソースファイル">
-      <UniqueIdentifier>{21fc63fa-76a7-4761-a85a-64f85e5ca5ab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game">
       <UniqueIdentifier>{60bf53ad-4a1b-4261-b2a9-71783ddb1956}</UniqueIdentifier>
     </Filter>
@@ -38,6 +24,24 @@
     </Filter>
     <Filter Include="Game\Other">
       <UniqueIdentifier>{344f48bb-c6e5-4708-ae7a-9dd89da6cab4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\audio">
+      <UniqueIdentifier>{80f72fa6-592e-449b-b22e-26a951692946}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\input">
+      <UniqueIdentifier>{545e119c-efe8-4ae4-9ba4-0ffa40fa6c86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\base">
+      <UniqueIdentifier>{655996e2-a5fd-4686-b71d-0dfa63e0ffdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\2d">
+      <UniqueIdentifier>{f2ce4de0-9365-4d3f-96b6-de6ba5b69ff0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\3d">
+      <UniqueIdentifier>{e41285ff-73db-4a50-8ff3-d31cda646301}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソースファイル">
+      <UniqueIdentifier>{27ecf9a4-556d-4e80-9ee3-513c373ebc8a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -62,9 +66,6 @@
     <ClCompile Include="externals\imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Keta.cpp">
-      <Filter>MyEngine\Adapter</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Function\Convert.cpp">
       <Filter>MyEngine\Function</Filter>
     </ClCompile>
@@ -77,56 +78,8 @@
     <ClCompile Include="math\Vector3.cpp">
       <Filter>math</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Audio.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\DebugCamera.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\DirectXCommon.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\ImGuiManager.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Input.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Mesh.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Model.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\SoundManager.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Sprite.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\TextureManager.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\ViewProjection.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\WinApp.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\WorldTransform.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\WorldTransformManager.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Scene\GameScene.cpp">
       <Filter>Game\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Light.cpp">
-      <Filter>MyEngine\ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Game\other\BaseCharacter.cpp">
       <Filter>Game\Other</Filter>
@@ -173,6 +126,51 @@
     <ClCompile Include="Game\other\Enemy.cpp">
       <Filter>Game\Other</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\audio\Audio.cpp">
+      <Filter>MyEngine\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\input\Input.cpp">
+      <Filter>MyEngine\input</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\DirectXCommon.cpp">
+      <Filter>MyEngine\base</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\Keta.cpp">
+      <Filter>MyEngine\base</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\TextureManager.cpp">
+      <Filter>MyEngine\base</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\WinApp.cpp">
+      <Filter>MyEngine\base</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\2d\ImGuiManager.cpp">
+      <Filter>MyEngine\2d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\2d\Sprite.cpp">
+      <Filter>MyEngine\2d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\DebugCamera.cpp">
+      <Filter>MyEngine\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\Light.cpp">
+      <Filter>MyEngine\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\Mesh.cpp">
+      <Filter>MyEngine\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\Model.cpp">
+      <Filter>MyEngine\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\ViewProjection.cpp">
+      <Filter>MyEngine\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\WorldTransform.cpp">
+      <Filter>MyEngine\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>MyEngine\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -198,9 +196,6 @@
     </ClInclude>
     <ClInclude Include="externals\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Keta.h">
-      <Filter>MyEngine\Adapter</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Function\Convert.h">
       <Filter>MyEngine\Function</Filter>
@@ -247,48 +242,6 @@
     <ClInclude Include="Engine\struct\VertexData.h">
       <Filter>MyEngine\struct</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Audio.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\DebugCamera.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\DirectXCommon.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\ImGuiManager.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Input.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Mesh.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Model.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\SoundManager.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Sprite.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\TextureManager.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\ViewProjection.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\WinApp.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\WorldTransform.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\WorldTransformManager.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Scene\GameScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
@@ -297,9 +250,6 @@
     </ClInclude>
     <ClInclude Include="Engine\struct\PointLight.h">
       <Filter>MyEngine\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Light.h">
-      <Filter>MyEngine\ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine\struct\SpotLight.h">
       <Filter>MyEngine\struct</Filter>
@@ -358,6 +308,48 @@
     <ClInclude Include="Game\other\Enemy.h">
       <Filter>Game\Other</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\audio\Audio.h">
+      <Filter>MyEngine\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\input\Input.h">
+      <Filter>MyEngine\input</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\DirectXCommon.h">
+      <Filter>MyEngine\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\Keta.h">
+      <Filter>MyEngine\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\TextureManager.h">
+      <Filter>MyEngine\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\WinApp.h">
+      <Filter>MyEngine\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\2d\ImGuiManager.h">
+      <Filter>MyEngine\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\2d\Sprite.h">
+      <Filter>MyEngine\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\DebugCamera.h">
+      <Filter>MyEngine\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\Light.h">
+      <Filter>MyEngine\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\Mesh.h">
+      <Filter>MyEngine\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\Model.h">
+      <Filter>MyEngine\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\ViewProjection.h">
+      <Filter>MyEngine\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\WorldTransform.h">
+      <Filter>MyEngine\3d</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
@@ -366,27 +358,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
-    <None Include="Engine\Object3d.hlsli">
-      <Filter>リソースファイル</Filter>
-    </None>
-    <None Include="Engine\Particle.hlsli">
-      <Filter>リソースファイル</Filter>
-    </None>
     <None Include="Game\other\ClassDiagram.cd">
       <Filter>Game\Other</Filter>
     </None>
+    <None Include="resources\Shader\Object3d.hlsli">
+      <Filter>リソースファイル</Filter>
+    </None>
+    <None Include="resources\Shader\Particle.hlsli">
+      <Filter>リソースファイル</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Engine\Object3d.PS.hlsl">
+    <FxCompile Include="resources\Shader\Object3d.PS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Object3d.VS.hlsl">
+    <FxCompile Include="resources\Shader\Object3d.VS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Particle.PS.hlsl">
+    <FxCompile Include="resources\Shader\Particle.PS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Particle.VS.hlsl">
+    <FxCompile Include="resources\Shader\Particle.VS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
   </ItemGroup>
