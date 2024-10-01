@@ -199,7 +199,7 @@ void GameScene::Draw() {
 		modelTerrain_->Draw(terrainTransform_, viewProjection_);
 	
 		Sprite::PreDraw(commandList);
-		//スプライト描画
-		sprite_->Draw();
+		////スプライト描画
+		//sprite_->Draw();
 	}
 }

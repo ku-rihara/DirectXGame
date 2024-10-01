@@ -10,7 +10,7 @@
 #include"TextureManager.h"
 namespace {
 	DirectXCommon* directXCommon = DirectXCommon::GetInstance();
-	
+
 }
 
 
@@ -18,6 +18,13 @@ Model* Model::Create(const std::string& instanceName) {
 	// 新しいModelインスタンスを作成
 	Model* model = new Model();
 	model->CreateModel(instanceName);
+	return model;  // 成功した場合は新しいモデルを返す
+}
+
+Model* Model::CreateParticle(const std::string& instanceName) {
+	// 新しいModelインスタンスを作成
+	Model* model = new Model();
+	model->CreateModelParticle(instanceName);
 	return model;  // 成功した場合は新しいモデルを返す
 }
 
@@ -127,8 +134,8 @@ MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, c
 	return materialData;
 }
 
-void Model::CreateModel(const std::string& ModelName) {
-	modelData_ = LoadObjFile("./Resources/Model/"+ ModelName, ModelName + ".obj");
+void Model::CreateCommon(const std::string& ModelName) {
+	modelData_ = LoadObjFile("./Resources/Model/" + ModelName, ModelName + ".obj");
 	textureManager_ = TextureManager::GetInstance();
 	textureHandle_ = textureManager_->LoadTexture(modelData_.material.textureFilePath);
 
@@ -161,24 +168,6 @@ void Model::CreateModel(const std::string& ModelName) {
 
 	/*materialDate_->hasTexture = useTexture;*/
 	Light::GetInstance()->Init();
-	////平行光源--------------------------------------------------------------------------------------------------
-	//directionalLightResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(DirectionalLight));
-	////データ書き込む
-	//directionalLightData_ = nullptr;
-	//directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
-	////デフォルト値はこうする
-	//directionalLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	//directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
-	//directionalLightData_->intensity = 1.0f;
-	////鏡面反射-----------------------------------------------------------------------------------------------------------------
-	//cameraForGPUResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(CameraForGPU));
-	////データを書き込む
-	//cameraForGPUData_ = nullptr;
-	//cameraForGPUResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraForGPUData_));
-	////ポイントライト-----------------------------------------------------------------------------------------------------------------
-	//pointLightResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(PointLight));
-	//pointLightData_ = nullptr;
-	//pointLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData_));
 
 	//行列--------------------------------------------------------------------------------------------------------
 	wvpResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix));
@@ -190,6 +179,16 @@ void Model::CreateModel(const std::string& ModelName) {
 	wvpDate_->WVP = MakeIdentity4x4();
 	wvpDate_->World = MakeIdentity4x4();
 	wvpDate_->WorldInverseTranspose = MakeIdentity4x4();
+}
+
+void Model::CreateModel(const std::string& ModelName) {
+	CreateCommon(ModelName);
+	materialDate_->enableLighting = 2;
+	Light::GetInstance()->Init();
+}
+//	パーティクル
+void Model::CreateModelParticle(const std::string& ModelName) {
+	CreateCommon(ModelName);
 	//パーティクル-----------------------------------------------------------
 	//Instancing用のTransformationMatrixリソースを作る
 	Microsoft::WRL::ComPtr<ID3D12Resource>instancingResource = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix) * kNumInstance_);
@@ -211,10 +210,11 @@ void Model::CreateModel(const std::string& ModelName) {
 	instancingSrvDesc.Buffer.NumElements = kNumInstance_;
 	instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
 
-	instancingSrvHandleCPU_ = directXCommon->GetCPUDescriptorHandle(ImGuiManager::GetInstance()->GetSrvDescriptorHeap(), directXCommon->GetDescriptorSizeSRV(), 3);
-	instancingSrvHandleGPU_ = directXCommon->GetGPUDescriptorHandle(ImGuiManager::GetInstance()->GetSrvDescriptorHeap(), directXCommon->GetDescriptorSizeSRV(), 3);
+	instancingSrvHandleCPU_ = directXCommon->GetCPUDescriptorHandle(ImGuiManager::GetInstance()->GetSrvDescriptorHeap(), directXCommon->GetDescriptorSizeSRV(), 10);
+	instancingSrvHandleGPU_ = directXCommon->GetGPUDescriptorHandle(ImGuiManager::GetInstance()->GetSrvDescriptorHeap(), directXCommon->GetDescriptorSizeSRV(), 10);
 
 	directXCommon->GetDevice()->CreateShaderResourceView(instancingResource.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);
+
 }
 #ifdef _DEBUG
 void Model::DebugImGui() {
@@ -222,7 +222,7 @@ void Model::DebugImGui() {
 	//Material
 	ImGui::ColorEdit4(" Color", (float*)&materialDate_->color);
 	ImGui::DragFloat("Shininess", (float*)&materialDate_->shininess, 0.01f);
-	const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert","Specular Reflection","PointLight","SpotLight"};
+	const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert","Specular Reflection","PointLight","SpotLight" };
 	ImGui::Combo("Lighting Mode", &materialDate_->enableLighting, lightingModes, IM_ARRAYSIZE(lightingModes));
 }
 #endif
