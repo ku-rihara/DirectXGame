@@ -102,9 +102,9 @@ void GameScene::Update() {
 
 
 		if (ImGui::TreeNode("Sprite")) {
-			ImGui::DragFloat3("Scale", &transformSprite_.scale_.x, 0.1f);
-			ImGui::DragFloat3("Rotate", &transformSprite_.rotation_.x, 1.0f);
-			ImGui::DragFloat3("Translate", &transformSprite_.translation_.x, 1.0f);
+			ImGui::DragFloat3("Scale", &sprite_->transform_.scale.x, 0.1f);
+			ImGui::DragFloat3("Rotate", &sprite_->transform_.rotate.x, 1.0f);
+			ImGui::DragFloat3("Translate", &sprite_->transform_.translate.x, 1.0f);
 			ImGui::TreePop();
 		}
 
