@@ -27,11 +27,12 @@ void GameScene::Init() {
 	soundDataHandle_ = audio_->SoundLoadWave("Resources/fanfare.wav");
 	//モデル
 	modelPlane_.reset(Model::Create("Plane"));
+	modelPlaneParticle_.reset(Model::CreateParticle("Plane"));
 	modelFence_.reset(Model::Create("Fence"));
 	modelSuzanne_.reset(Model::Create("Suzanne"));
 	modelTerrain_.reset(Model::Create("terrain"));
 	
-	modelInstance_ = modelPlane_->GetKnumInstance();
+	modelInstance_ = modelPlaneParticle_->GetKnumInstance();
 
 	////テクスチャハンドル
 	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/UVChecker.png");
@@ -42,7 +43,7 @@ void GameScene::Init() {
 	//WorldTransform
 
 	planeTransforms_.reserve(modelInstance_);
-	for (size_t i = 0; i < modelInstance_; ++i) {
+	for (uint32_t i = 0; i < modelInstance_; ++i) {
 		planeTransforms_.emplace_back(std::make_unique<WorldTransform>());
 	}
 
@@ -57,6 +58,7 @@ void GameScene::Init() {
 	// PlaneParticle
 	for (uint32_t index = 0; index < modelInstance_; ++index) {
 		planeTransforms_[index]->Init();
+		planeTransforms_[index]->rotation_.y = -3;
 		planeTransforms_[index]->translation_ = { index * 0.1f, index * 0.1f, index * 0.1f };
 	}
 
@@ -84,6 +86,12 @@ void GameScene::Update() {
 			ImGui::DragFloat3("Scale", &planeTransform_.scale_.x, 0.01f);
 			ImGui::DragFloat3("Rotate", &planeTransform_.rotation_.x, 0.01f);
 			ImGui::DragFloat3("Translate", &planeTransform_.translation_.x, 0.01f);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("PlaneParticle")) {
+			ImGui::DragFloat3("Scale", &planeTransforms_[0]->scale_.x, 0.01f);
+			ImGui::DragFloat3("Rotate", &planeTransforms_[0]->rotation_.x, 0.01f);
+			ImGui::DragFloat3("Translate", &planeTransforms_[0]->translation_.x, 0.01f);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("Fence")) {
@@ -170,16 +178,7 @@ void GameScene::Update() {
 	viewProjection_.matView_ = debugCamera_->GetViewProjection().matView_;
 	viewProjection_.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
 
-	////スプライト
-	//Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
-	//Matrix4x4 worldViewProjectionMatrixSprite = transformSprite_.matWorld_ * projectionMatrixSprite;
-	//sprite_->SetTransformationMatrixDataSprite(worldViewProjectionMatrixSprite);
 
-	////UVTransform
-	//Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTransformSprite_.scale_);
-	//uvTransformMatrix = (uvTransformMatrix * MakeRotateZMatrix(uvTransformSprite_.rotation_.z));
-	//uvTransformMatrix = (uvTransformMatrix * MakeTranslateMatrix(uvTransformSprite_.translation_));
-	//sprite_->SetUVTransformSprite(uvTransformMatrix);
 
 }
 
@@ -187,16 +186,16 @@ void GameScene::Draw() {
 	
 	//Draw********************************************************
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+	modelPlaneParticle_->DrawParticle(planeTransforms_, viewProjection_);
+
 	Model::PreDraw(commandList);
 		//平面描画
 	if (isDrawPlane_) {
 
-	/*	modelPlane_->DrawParticle(planeTransforms_, viewProjection_);*/
-
-		modelPlane_->Draw(planeTransform_, viewProjection_);
+		/*modelPlane_->Draw(planeTransform_, viewProjection_);
 		modelFence_->Draw(fenceTransform_, viewProjection_);
 		modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
-		modelTerrain_->Draw(terrainTransform_, viewProjection_);
+		modelTerrain_->Draw(terrainTransform_, viewProjection_);*/
 	
 		Sprite::PreDraw(commandList);
 		////スプライト描画

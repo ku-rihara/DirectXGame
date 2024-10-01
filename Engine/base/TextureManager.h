@@ -21,18 +21,6 @@ private:
 
 	std::vector<TextureData>textureDatas;
 
-	/*DirectX::ScratchImage image_{};
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
-	Microsoft::WRL::ComPtr<ID3D12Resource>textureResource_;
-	DirectX::ScratchImage mipImage_;
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandle_;
-	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource_;*/
-
-	//std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> textureResources_;
-	//std::vector<DirectX::ScratchImage> mipImages_;
-	//std::vector<D3D12_GPU_DESCRIPTOR_HANDLE> textureSrvHandles_;
-	//std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> intermediateResources_;
 
 public:
 	
