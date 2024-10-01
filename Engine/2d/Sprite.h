@@ -10,14 +10,22 @@
 
 
 class Sprite {
-private:
+public:
 
 	struct UVTransform {
 		Vector2 scale;
 		Vector3 rotate;
 		Vector2 pos;
 	};
-
+	struct Transform {
+		Vector2 scale;
+		Vector2 rotate;
+		Vector2 translate;
+	};
+	Transform transform_;
+	
+private:
+	
 	//テクスチャ
 	D3D12_GPU_DESCRIPTOR_HANDLE texture_;
 
@@ -54,6 +62,8 @@ static	void PreDraw(ID3D12GraphicsCommandList* commandList);
 
 	//ポジションセット
 	void SetPosition(const Vector2& pos);
+	//スプライトセット
+	void SetScale(const Vector2& scale);
 
 	//UVセット
 	void SetUVTransform(const UVTransform&uvTransform);

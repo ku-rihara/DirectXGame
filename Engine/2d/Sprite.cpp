@@ -83,7 +83,8 @@ void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position
 	wvpDataSprite_->World = MakeIdentity4x4();
 	wvpDataSprite_->WVP = MakeIdentity4x4();
 //変数初期化-----------------------------------------------------------
-	SetPosition(position);
+	transform_.translate = { position.x,position.y };
+	transform_.scale = { 1,1 };
 }
 
 #ifdef _DEBUG
@@ -94,6 +95,13 @@ void Sprite::DebugImGui() {
 #endif
 
 void Sprite::Draw() {
+
+	//スプライト
+	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(Vector3{ transform_.scale.x, transform_.scale.y,0 }, Vector3{ transform_.rotate.x, transform_.rotate.y,0 }, Vector3{ transform_.translate.x, transform_.translate.y,0 });
+	Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
+	Matrix4x4 worldViewProjectionMatrixSprite = worldMatrixSprite*projectionMatrixSprite;
+
+	wvpDataSprite_->WVP=worldViewProjectionMatrixSprite;
 
 	//TransformationmatrixCBufferの場所を設定
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite_->GetGPUVirtualAddress());
@@ -108,17 +116,6 @@ void Sprite::PreDraw(ID3D12GraphicsCommandList* commandList){
 	commandList->IASetIndexBuffer(&indexBufferViewSprite_);//IBVを設定
 }
 
-
-void Sprite::SetPosition(const Vector2& pos) {
-
-	  // スプライトの平行移動行列を作成
-	Matrix4x4 translationMatrix = MakeTranslateMatrix({ pos.x, pos.y, 0.0f });
-	Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
-	Matrix4x4 worldViewProjectionMatrixSprite = translationMatrix * projectionMatrixSprite;
-	wvpDataSprite_->WVP = worldViewProjectionMatrixSprite;
-
-}
-
 void Sprite::SetUVTransform(const UVTransform& uvTransform) {
 
 	//UVTransform
@@ -126,6 +123,17 @@ void Sprite::SetUVTransform(const UVTransform& uvTransform) {
 	uvTransformMatrix = (uvTransformMatrix * MakeRotateZMatrix(uvTransform.rotate.z));
 	uvTransformMatrix = (uvTransformMatrix * MakeTranslateMatrix(Vector3{ uvTransform.pos.x,uvTransform.pos.y,0.0f }));
 	materialDateSprite_->uvTransform = uvTransformMatrix;
+}
+void Sprite::SetPosition(const Vector2& pos) {
+
+	transform_.translate =pos;
+
+}
+
+void Sprite::SetScale(const Vector2& scale) {
+
+	transform_.scale = scale;
+
 }
 
 
