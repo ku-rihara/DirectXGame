@@ -54,6 +54,8 @@ private:
 	bool useMonsterBall = true;
 public:
 	static Model* Create(const std::string& instanceName);
+
+	static Model* CreateParticle(const std::string& instanceName);
 	
 static	void PreDraw(ID3D12GraphicsCommandList* commandList);
 	
@@ -64,6 +66,16 @@ static	void PreDraw(ID3D12GraphicsCommandList* commandList);
 	/// モデル作成
 	/// </summary>
 	void CreateModel(const std::string& ModelName);
+	/// <summary>
+	/// モデルパーティクル作成
+	/// </summary>
+	/// <param name="ModelName"></param>
+	void CreateModelParticle(const std::string& ModelName);
+	/// <summary>
+	/// モデル作成共通
+	/// </summary>
+	/// <param name="ModelName"></param>
+	void CreateCommon(const std::string& ModelName);
 	/// <summary>
 	/// 球描画
 	/// </summary>
