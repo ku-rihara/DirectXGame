@@ -26,6 +26,7 @@ private:
 	const uint32_t kNumInstance_ = 10;//インスタンス数
 	D3D12_CPU_DESCRIPTOR_HANDLE  instancingSrvHandleCPU_;
 	D3D12_GPU_DESCRIPTOR_HANDLE  instancingSrvHandleGPU_;
+	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> instancingResources_;
 	//テクスチャ
 	TextureManager* textureManager_=nullptr;
 	uint32_t textureHandle_;

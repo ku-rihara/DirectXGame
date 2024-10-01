@@ -37,6 +37,7 @@ private:
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 
 	std::unique_ptr<Model> modelPlane_ = nullptr;
+	std::unique_ptr<Model> modelPlaneParticle_ = nullptr;
 	std::unique_ptr<Model> modelFence_ = nullptr;
 	std::unique_ptr<Model> modelSuzanne_ = nullptr;
 	std::unique_ptr<Model> modelTerrain_ = nullptr;

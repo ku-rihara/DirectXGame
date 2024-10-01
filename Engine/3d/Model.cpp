@@ -210,11 +210,11 @@ void Model::CreateModelParticle(const std::string& ModelName) {
 	instancingSrvDesc.Buffer.NumElements = kNumInstance_;
 	instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
 
-	instancingSrvHandleCPU_ = directXCommon->GetCPUDescriptorHandle(ImGuiManager::GetInstance()->GetSrvDescriptorHeap(), directXCommon->GetDescriptorSizeSRV(), 10);
-	instancingSrvHandleGPU_ = directXCommon->GetGPUDescriptorHandle(ImGuiManager::GetInstance()->GetSrvDescriptorHeap(), directXCommon->GetDescriptorSizeSRV(), 10);
-
+	instancingSrvHandleCPU_ = directXCommon->GetCPUDescriptorHandle(ImGuiManager::GetInstance()->GetSrvDescriptorHeap(), directXCommon->GetDescriptorSizeSRV(), 3);
+	instancingSrvHandleGPU_ = directXCommon->GetGPUDescriptorHandle(ImGuiManager::GetInstance()->GetSrvDescriptorHeap(), directXCommon->GetDescriptorSizeSRV(), 3);
+	instancingResources_.push_back(instancingResource.Get());
 	directXCommon->GetDevice()->CreateShaderResourceView(instancingResource.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);
-
+	
 }
 #ifdef _DEBUG
 void Model::DebugImGui() {
@@ -272,6 +272,8 @@ void Model::DrawParticle(const std::vector<std::unique_ptr<WorldTransform>>& wor
 	// インスタンシングデータの更新
 	for (uint32_t index = 0; index < worldTransforms.size(); ++index) {
 		instancingData_[index].WVP = worldTransforms[index]->matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+		instancingData_[index].WorldInverseTranspose = Inverse(Transpose(instancingData_[index].World));
+
 	}
 
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
