@@ -245,6 +245,9 @@
     <ClInclude Include="Engine\input\Input.h">
       <Filter>MyEngine\input</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\struct\ParticleForGPU.h">
+      <Filter>MyEngine\struct</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
