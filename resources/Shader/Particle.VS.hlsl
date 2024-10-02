@@ -4,23 +4,23 @@
 //    return pos;
 //}
 
-struct TransformationMatrix
+struct ParticleForGPU
 {
     float4x4 WVP;
     float4x4 World;
     float4x4  WorldInverseTranspose;
+    float4 color;
 };
 
-StructuredBuffer<TransformationMatrix> gTransformationMatrices : register(t0);
+StructuredBuffer<ParticleForGPU> gParticle : register(t0);
 
 VertexShaderOutput main(VertexShaderInput input,uint instanceID:SV_InstanceID)
 {
-   
     VertexShaderOutput output;
-    output.position = mul(input.position, gTransformationMatrices[instanceID].WVP);
-    //output.wo = mul(input.position, gTransformationMatrices[instanceID].World).xyz;
+    output.position = mul(input.position, gParticle[instanceID].WVP);
     output.texcoord = input.texcoord;
-    output.normal = normalize(mul(input.normal, (float3x3) gTransformationMatrices[instanceID].WorldInverseTranspose));
+    output.color = gParticle[instanceID].color;
+    output.normal = normalize(mul(input.normal, (float3x3) gParticle[instanceID].WorldInverseTranspose));
     
     return output;
 }

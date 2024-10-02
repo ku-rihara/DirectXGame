@@ -16,9 +16,9 @@
 #include"Input.h"
 //etc
 #include"DebugCamera.h"
+#include<random>
 #include <imgui.h>
 #include<memory>
-
 
 /// <summary>
 /// ゲームシーン
@@ -37,15 +37,19 @@ private:
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 
 	std::unique_ptr<Model> modelPlane_ = nullptr;
-	std::unique_ptr<Model> modelPlaneParticle_ = nullptr;
 	std::unique_ptr<Model> modelFence_ = nullptr;
 	std::unique_ptr<Model> modelSuzanne_ = nullptr;
 	std::unique_ptr<Model> modelTerrain_ = nullptr;
 	
+	//パーティクル変数
 
-	uint32_t modelInstance_ = 10;
+	const uint32_t modelInstanceMax_ = 10;
+	std::vector<Vector4>particleColor_;
+	std::unique_ptr<Model> modelPlaneParticle_ = nullptr;
+	std::vector<Vector3> particleVelocity_;
+	const float kDeltaTime_ = 1.0f / 60.0f;
 
-	bool isDrawPlane_ = true;
+	bool isDraw = true;
 
 	ViewProjection viewProjection_;
 	WorldTransform planeTransform_;
@@ -84,4 +88,6 @@ public:
 	/// </summary>
 	void Draw();
 
+	//パーティクル関連
+	void MakeParticle(std::mt19937& randomEngine);
 };

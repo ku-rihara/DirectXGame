@@ -4,7 +4,6 @@
 //class
 #include"Light.h"
 
-
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
@@ -12,7 +11,8 @@ GameScene::~GameScene() {
 }
 
 void GameScene::Init() {
-	
+	std::random_device seedGenerator;
+	std::mt19937 randomEngine(seedGenerator());
 	// メンバ変数の初期化
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
@@ -26,23 +26,27 @@ void GameScene::Init() {
 	//音
 	soundDataHandle_ = audio_->SoundLoadWave("Resources/fanfare.wav");
 	//モデル
+	std::uniform_real_distribution<float>lifeTimedist(1.0f, 3.0f);
 	modelPlane_.reset(Model::Create("Plane"));
-	modelPlaneParticle_.reset(Model::CreateParticle("Plane",modelInstance_));
+	modelPlaneParticle_.reset(Model::CreateParticle("Plane",modelInstanceMax_,randomEngine, lifeTimedist));
 	modelFence_.reset(Model::Create("Fence"));
 	modelSuzanne_.reset(Model::Create("Suzanne"));
 	modelTerrain_.reset(Model::Create("terrain"));
 	
 	////テクスチャハンドル
-	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/UVChecker.png");
+	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");
 		
 	//スプライト生成
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->CreateSprite(uvHandle_,Vector2{0,0},Vector4(1,1,1,1));
 	//WorldTransform
 
-	planeTransforms_.reserve(modelInstance_);
-	for (uint32_t i = 0; i < modelInstance_; ++i) {
+	planeTransforms_.reserve(modelInstanceMax_);
+	particleVelocity_.reserve(modelInstanceMax_);
+	for (uint32_t i = 0; i < modelInstanceMax_; ++i) {
 		planeTransforms_.emplace_back(std::make_unique<WorldTransform>());
+		particleVelocity_.emplace_back(Vector3());
+		particleColor_.emplace_back(Vector4());
 	}
 
 	// ワールドトランスフォーム初期化
@@ -53,13 +57,8 @@ void GameScene::Init() {
 	transformSprite_.Init();
 	uvTransformSprite_.Init();
 
-	// PlaneParticle
-	for (uint32_t index = 0; index < modelInstance_; ++index) {
-		planeTransforms_[index]->Init();
-		planeTransforms_[index]->rotation_.y = -3;
-		planeTransforms_[index]->translation_ = { index * 0.1f, index * 0.1f, index * 0.1f };
-	}
-
+	MakeParticle(randomEngine);
+	
 	// ワールドトランスフォーム値セット
 	transformSprite_.scale_.x = 0.7f;
 	planeTransform_.rotation_.y = -3.0f;
@@ -75,7 +74,7 @@ void GameScene::Update() {
 	ImGui::Begin("Window");
 
 	if (ImGui::TreeNode("IsDrawModel")) {
-		ImGui::Checkbox("isPlane", &isDrawPlane_);
+		ImGui::Checkbox("isPlane", &isDraw);
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("WorldTransform")) {
@@ -157,13 +156,17 @@ void GameScene::Update() {
 		suzanneTransform_.translation_.y -= 0.01f;
 	}
 
+	for (uint32_t i = 0; i < modelInstanceMax_; i++) {
+		planeTransforms_[i]->translation_ += particleVelocity_[i] * kDeltaTime_;
+	}
+
 	//ワールド行列更新
 	planeTransform_.UpdateMatrix();
 	fenceTransform_.UpdateMatrix();
 	suzanneTransform_.UpdateMatrix();
 	terrainTransform_.UpdateMatrix();
 
-	for (uint32_t i = 0; i < modelInstance_; i++) {
+	for (uint32_t i = 0; i < modelInstanceMax_; i++) {
 		planeTransforms_[i]->UpdateMatrix();
 	}
 
@@ -184,19 +187,32 @@ void GameScene::Draw() {
 	
 	//Draw********************************************************
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-	modelPlaneParticle_->DrawParticle(planeTransforms_, viewProjection_);
 
 	Model::PreDraw(commandList);
 		//平面描画
-	if (isDrawPlane_) {
+	if (isDraw) {
 
 		/*modelPlane_->Draw(planeTransform_, viewProjection_);
 		modelFence_->Draw(fenceTransform_, viewProjection_);
 		modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
 		modelTerrain_->Draw(terrainTransform_, viewProjection_);*/
 	
+		modelPlaneParticle_->DrawParticle(planeTransforms_, viewProjection_, uvHandle_, particleColor_);
 		Sprite::PreDraw(commandList);
 		////スプライト描画
 		//sprite_->Draw();
+	}
+}
+
+void GameScene::MakeParticle(std::mt19937& random) {
+	// PlaneParticle
+	std::uniform_real_distribution<float>distribution(-1.0f, 1.0f);
+	std::uniform_real_distribution<float>alphadistribution(0.0f, 1.0f);
+	for (uint32_t index = 0; index < modelInstanceMax_; ++index) {
+		planeTransforms_[index]->Init();
+		planeTransforms_[index]->rotation_.y = -3;
+		particleColor_[index]={distribution(random), distribution(random), distribution(random), 1.0f};
+		planeTransforms_[index]->translation_ = { distribution(random), distribution(random), distribution(random) };
+		particleVelocity_[index] = { alphadistribution(random), alphadistribution(random), alphadistribution(random) };
 	}
 }
