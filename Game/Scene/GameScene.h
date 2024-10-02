@@ -43,7 +43,7 @@ private:
 	std::unique_ptr<Model> modelTerrain_ = nullptr;
 	
 
-	uint32_t modelInstance_ = 0;
+	uint32_t modelInstance_ = 10;
 
 	bool isDrawPlane_ = true;
 

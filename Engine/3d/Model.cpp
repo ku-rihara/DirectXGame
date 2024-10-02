@@ -21,10 +21,10 @@ Model* Model::Create(const std::string& instanceName) {
 	return model;  // 成功した場合は新しいモデルを返す
 }
 
-Model* Model::CreateParticle(const std::string& instanceName) {
+Model* Model::CreateParticle(const std::string& instanceName, const uint32_t& instanceNum) {
 	// 新しいModelインスタンスを作成
 	Model* model = new Model();
-	model->CreateModelParticle(instanceName);
+	model->CreateModelParticle(instanceName,instanceNum);
 	return model;  // 成功した場合は新しいモデルを返す
 }
 
@@ -187,16 +187,18 @@ void Model::CreateModel(const std::string& ModelName) {
 	Light::GetInstance()->Init();
 }
 //	パーティクル
-void Model::CreateModelParticle(const std::string& ModelName) {
+void Model::CreateModelParticle(const std::string& ModelName, const uint32_t& instanceNum) {
 	CreateCommon(ModelName);
-	//パーティクル-----------------------------------------------------------
+	//パーティクル数
+	instanceNum_ = instanceNum;
+
 	//Instancing用のTransformationMatrixリソースを作る
-	Microsoft::WRL::ComPtr<ID3D12Resource>instancingResource = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix) * kNumInstance_);
+	Microsoft::WRL::ComPtr<ID3D12Resource>instancingResource = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix) * instanceNum_);
 	//書き込む為のアドレスを取得
 	instancingData_ = nullptr;
 	instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
 	//単位行列を書き込んでおく
-	for (uint32_t index = 0; index < kNumInstance_; ++index) {
+	for (uint32_t index = 0; index < instanceNum_; ++index) {
 		instancingData_[index].WVP = MakeIdentity4x4();
 		instancingData_[index].World = MakeIdentity4x4();
 	}
@@ -207,7 +209,7 @@ void Model::CreateModelParticle(const std::string& ModelName) {
 	instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
 	instancingSrvDesc.Buffer.FirstElement = 0;
 	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-	instancingSrvDesc.Buffer.NumElements = kNumInstance_;
+	instancingSrvDesc.Buffer.NumElements = instanceNum_;
 	instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
 
 	instancingSrvHandleCPU_ = directXCommon->GetCPUDescriptorHandle(ImGuiManager::GetInstance()->GetSrvDescriptorHeap(), directXCommon->GetDescriptorSizeSRV(), 3);
@@ -292,7 +294,7 @@ void Model::DrawParticle(const std::vector<std::unique_ptr<WorldTransform>>& wor
 		commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
 	}
 
-	commandList->DrawInstanced(UINT(modelData_.vertices.size()), UINT(kNumInstance_), 0, 0);
+	commandList->DrawInstanced(UINT(modelData_.vertices.size()), instanceNum_, 0, 0);
 
 }
 

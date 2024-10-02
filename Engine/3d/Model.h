@@ -23,7 +23,7 @@ class TextureManager;
 class Model{
 private:
 	//static std::map<std::string, std::unique_ptr<Model>> modelInstances;
-	const uint32_t kNumInstance_ = 10;//インスタンス数
+	 uint32_t instanceNum_;//インスタンス数
 	D3D12_CPU_DESCRIPTOR_HANDLE  instancingSrvHandleCPU_;
 	D3D12_GPU_DESCRIPTOR_HANDLE  instancingSrvHandleGPU_;
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> instancingResources_;
@@ -56,7 +56,7 @@ private:
 public:
 	static Model* Create(const std::string& instanceName);
 
-	static Model* CreateParticle(const std::string& instanceName);
+	static Model* CreateParticle(const std::string& instanceName,const uint32_t& instanceNum);
 	
 static	void PreDraw(ID3D12GraphicsCommandList* commandList);
 	
@@ -71,7 +71,7 @@ static	void PreDraw(ID3D12GraphicsCommandList* commandList);
 	/// モデルパーティクル作成
 	/// </summary>
 	/// <param name="ModelName"></param>
-	void CreateModelParticle(const std::string& ModelName);
+	void CreateModelParticle(const std::string& ModelName, const uint32_t& instanceNum);
 	/// <summary>
 	/// モデル作成共通
 	/// </summary>
@@ -97,7 +97,7 @@ static	void PreDraw(ID3D12GraphicsCommandList* commandList);
 
 	//getter
 	ModelData GetModelData()const { return modelData_; }
-	uint32_t GetKnumInstance()const { return kNumInstance_; }
+	uint32_t GetKnumInstance()const { return instanceNum_; }
 
 	//setter
 	void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
