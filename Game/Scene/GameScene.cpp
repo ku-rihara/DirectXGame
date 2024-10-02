@@ -27,13 +27,11 @@ void GameScene::Init() {
 	soundDataHandle_ = audio_->SoundLoadWave("Resources/fanfare.wav");
 	//モデル
 	modelPlane_.reset(Model::Create("Plane"));
-	modelPlaneParticle_.reset(Model::CreateParticle("Plane"));
+	modelPlaneParticle_.reset(Model::CreateParticle("Plane",modelInstance_));
 	modelFence_.reset(Model::Create("Fence"));
 	modelSuzanne_.reset(Model::Create("Suzanne"));
 	modelTerrain_.reset(Model::Create("terrain"));
 	
-	modelInstance_ = modelPlaneParticle_->GetKnumInstance();
-
 	////テクスチャハンドル
 	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/UVChecker.png");
 		
