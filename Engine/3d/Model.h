@@ -67,7 +67,10 @@ public:
 
 	static Model* CreateParticle(const std::string& instanceName, const uint32_t& instanceNum, std::mt19937& randomEngine, std::uniform_real_distribution<float> dist);
 
+
+
 	static void PreDraw(ID3D12GraphicsCommandList* commandList);
+	static void PreDrawParticle(ID3D12GraphicsCommandList* commandList);
 
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
 

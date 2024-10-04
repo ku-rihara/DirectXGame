@@ -5,6 +5,7 @@
 #include"WinApp.h"
 #include"DirectXCommon.h"
 #include"Audio.h"
+#include"Object3DCommon.h"
 #include"Input.h"
 //#include"WorldTransformManager.h"
 
@@ -17,6 +18,7 @@ namespace {
 	DirectXCommon* sDirectXCommon = nullptr;
 	ImGuiManager* imguiManager = nullptr;
 	TextureManager* stextureManager = nullptr;
+	Object3DCommon* sObject3DCommon = nullptr;
 	Audio* audio = nullptr;
 	Input* input = nullptr;
 }
@@ -34,6 +36,9 @@ void Keta::Initialize(const char* title, int width, int height) {
 	sDirectXCommon = DirectXCommon::GetInstance();
 	sDirectXCommon->Init(sWinApp, width, height);
 	sDirectXCommon->CreateGraphicPipelene();
+
+	sObject3DCommon = Object3DCommon::GetInstance();
+	sObject3DCommon->Init(sDirectXCommon);
 
 	imguiManager = ImGuiManager::GetInstance();
 	imguiManager->Init(sWinApp, sDirectXCommon);
