@@ -5,12 +5,15 @@
 #include <imgui.h>
 //class
 #include"Light.h"
-#include"DirectXCommon.h"
 #include"Object3DCommon.h"
 #include"ImGuiManager.h"
 #include"TextureManager.h"
 namespace {
 	DirectXCommon* directXCommon = DirectXCommon::GetInstance();
+}
+
+void ModelCommon::Init(DirectXCommon* dxCommon) {
+	dxCommon_ = dxCommon;
 }
 
 Model* Model::Create(const std::string& instanceName) {
@@ -168,16 +171,7 @@ void Model::CreateCommon(const std::string& ModelName) {
 	/*materialDate_->hasTexture = useTexture;*/
 	Light::GetInstance()->Init();
 
-	//行列--------------------------------------------------------------------------------------------------------
-	wvpResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix));
-	//データを書き込む
-	wvpDate_ = nullptr;
-	//書き込むためのアドレスを取得
-	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpDate_));
-	//単位行列を書き込んでおく
-	wvpDate_->WVP = MakeIdentity4x4();
-	wvpDate_->World = MakeIdentity4x4();
-	wvpDate_->WorldInverseTranspose = MakeIdentity4x4();
+
 }
 
 void Model::CreateModel(const std::string& ModelName) {
@@ -233,12 +227,8 @@ void Model::DebugImGui() {
 }
 #endif
 
-void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle, const Vector4& color) {
+void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource,std::optional<uint32_t> textureHandle, const Vector4& color) {
 	auto commandList = directXCommon->GetCommandList();
-
-	// WVP行列の計算
-	wvpDate_->WVP = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
-	wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
 	materialDate_->color = color;
 
 	// 頂点バッファとインデックスバッファの設定
@@ -250,7 +240,7 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 
 	// リソースの設定
 	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	commandList->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+	commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 
 	if (textureHandle.has_value()) {
 		commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
@@ -325,6 +315,3 @@ void  Model::PreDrawParticle(ID3D12GraphicsCommandList* commandList) {
 	Object3DCommon::GetInstance()->PreDrawParticle(commandList);
 }
 
-void Model::CreateSphere() {
-
-}

@@ -27,11 +27,11 @@ void GameScene::Init() {
 	soundDataHandle_ = audio_->SoundLoadWave("Resources/fanfare.wav");
 	//モデル
 	std::uniform_real_distribution<float>lifeTimedist(1.0f, 3.0f);
-	modelPlane_.reset(Model::Create("Plane"));
+	modelPlane_.reset(Object3d::CreateModel("Plane"));
 	modelPlaneParticle_.reset(Model::CreateParticle("Plane", modelInstanceMax_, randomEngine, lifeTimedist));
-	modelFence_.reset(Model::Create("Fence"));
-	modelSuzanne_.reset(Model::Create("Suzanne"));
-	modelTerrain_.reset(Model::Create("terrain"));
+	modelFence_.reset(Object3d::CreateModel("Fence"));
+	modelSuzanne_.reset(Object3d::CreateModel("Suzanne"));
+	modelTerrain_.reset(Object3d::CreateModel("terrain"));
 
 	////テクスチャハンドル
 	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");
@@ -141,15 +141,15 @@ void GameScene::Update() {
 	ImGui::Begin("Lighting");
 	Light::GetInstance()->DebugImGui();
 	if (ImGui::TreeNode("Plane")) {
-		modelPlane_->DebugImGui();
+		modelPlane_->DebugImgui();
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("Suzanne")) {
-		modelSuzanne_->DebugImGui();
+		modelSuzanne_->DebugImgui();
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("Terrian")) {
-		modelTerrain_->DebugImGui();
+		modelTerrain_->DebugImgui();
 		ImGui::TreePop();
 	}
 	ImGui::End();
@@ -182,7 +182,8 @@ void GameScene::Update() {
 	}*/
 
 	//ワールド行列更新
-	planeTransform_.UpdateMatrix();
+	modelPlane_->Update();
+	/*planeTransform_.UpdateMatrix();*/
 	fenceTransform_.UpdateMatrix();
 	suzanneTransform_.UpdateMatrix();
 	terrainTransform_.UpdateMatrix();
@@ -212,10 +213,10 @@ void GameScene::Draw() {
 	//平面描画
 	if (isDraw) {
 
-		/*modelPlane_->Draw(planeTransform_, viewProjection_);
-		modelFence_->Draw(fenceTransform_, viewProjection_);
-		modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
-		modelTerrain_->Draw(terrainTransform_, viewProjection_);*/
+		modelPlane_->Draw(viewProjection_);
+		modelFence_->Draw(viewProjection_);
+		modelSuzanne_->Draw(viewProjection_);
+		modelTerrain_->Draw(viewProjection_);
 		Model::PreDrawParticle(commandList);
 		modelPlaneParticle_->DrawParticle(planeTransforms_, viewProjection_, uvHandle_, particleColor_);
 		Sprite::PreDraw(commandList);

@@ -123,6 +123,12 @@
     <ClCompile Include="Engine\base\Object3DCommon.cpp">
       <Filter>MyEngine\base</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3d\Object3d.cpp">
+      <Filter>MyEngine\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\BaseObject3d.cpp">
+      <Filter>MyEngine\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -256,6 +262,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Function\Log.h">
       <Filter>MyEngine\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\Object3d.h">
+      <Filter>MyEngine\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\BaseObject3d.h">
+      <Filter>MyEngine\3d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

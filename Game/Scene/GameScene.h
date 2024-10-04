@@ -14,6 +14,7 @@
 #include "Sprite.h"
 #include "Audio.h"
 #include"Input.h"
+#include"Object3d.h"
 //etc
 #include"DebugCamera.h"
 #include<random>
@@ -36,10 +37,10 @@ private:
 	uint32_t voiceHandle_ = 0;     
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 
-	std::unique_ptr<Model> modelPlane_ = nullptr;
-	std::unique_ptr<Model> modelFence_ = nullptr;
-	std::unique_ptr<Model> modelSuzanne_ = nullptr;
-	std::unique_ptr<Model> modelTerrain_ = nullptr;
+	std::unique_ptr<Object3d> modelPlane_ = nullptr;
+	std::unique_ptr<Object3d> modelFence_ = nullptr;
+	std::unique_ptr<Object3d> modelSuzanne_ = nullptr;
+	std::unique_ptr<Object3d> modelTerrain_ = nullptr;
 	
 	//パーティクル変数
 
