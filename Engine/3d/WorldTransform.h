@@ -1,5 +1,6 @@
 #pragma once
 #include"Vector3.h"
+#include"ViewProjection.h"
 #include"Matrix4x4.h"
 #include <wrl.h>
 #include <d3d12.h>
@@ -22,7 +23,11 @@ public:
 	Matrix4x4 matWorld_;
 	//親となるワールド変換へのポインタ
 	const WorldTransform* parent_ = nullptr;
+	
+
 private:
+	Matrix4x4 billboardMatrix_;
+	Matrix4x4 backToFrontMatrix_;
 	// 定数バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuffer_;
 	// マッピング済みアドレス
@@ -58,6 +63,8 @@ public:
 	/// 行列の更新
 	/// </summary>
 	void UpdateMatrix();
+
+	void BillboardUpdateMatrix(const ViewProjection&viewProjection);
 
 	/// <summary>
 	/// 定数バッファの取得

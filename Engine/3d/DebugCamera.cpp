@@ -64,8 +64,9 @@ void DebugCamera::Update() {
 
 
 void DebugCamera::UpdateMatrix() {
-  /*  viewProjection_.UpdateMatrix();*/
+   
     Matrix4x4 translateMatrix = MakeTranslateMatrix(viewProjection_.translation_);
-    Matrix4x4 cameraMatrix =   translateMatrix* matRot_;
-    viewProjection_.matView_ = Inverse(cameraMatrix);
+   viewProjection_.cameraMatrix_ =   translateMatrix* matRot_;
+    viewProjection_.matView_ = Inverse(viewProjection_.cameraMatrix_);
+   /* viewProjection_.UpdateMatrix();*/
 }

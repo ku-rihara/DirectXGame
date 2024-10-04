@@ -290,14 +290,14 @@ void Model::DrawParticle(const std::vector<std::unique_ptr<WorldTransform>>& wor
 	else {
 		commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
 	}
-
-	instanceNum_ = 0;
+	
+	/*instanceNum_ = 0;*/
 	// インスタンシングデータの更新
 	for (uint32_t index = 0; index < worldTransforms.size(); ++index) {
-		if (lifeTimes_[index] <= currentTimes_[index]) {//生存時間を過ぎたら描画対象にしない
-			continue;
-		}
-		float alpha = 1.0f - (currentTimes_[index] / lifeTimes_[index]);
+		//if (lifeTimes_[index] <= currentTimes_[index]) {//生存時間を過ぎたら描画対象にしない
+		//	continue;
+		//}
+	/*	float alpha = 1.0f - (currentTimes_[index] / lifeTimes_[index]);*/
 		instancingData_[index].WVP = worldTransforms[index]->matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
 		instancingData_[index].WorldInverseTranspose = Inverse(Transpose(instancingData_[index].World));
 		//経過時間を足す
@@ -305,10 +305,10 @@ void Model::DrawParticle(const std::vector<std::unique_ptr<WorldTransform>>& wor
 		// 引数がない場合は白色、ある場合は指定された色を設定
 		if (index < colors.size() - 1) {
 			instancingData_[index].color = colors[index];
-			instancingData_[index].color.w = alpha;
+			instancingData_[index].color.w = 1.0f;//alpha;
 		}
 		else {
-			instancingData_[index].color = { 1, 1, 1, alpha }; // デフォルト白色
+			instancingData_[index].color = { 1, 1, 1, 1/*alpha*/ }; // デフォルト白色
 		}
 		++instanceNum_;
 	}

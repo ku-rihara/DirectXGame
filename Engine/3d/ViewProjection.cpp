@@ -2,6 +2,7 @@
 #include"DirectXCommon.h"
 #include <DirectXMath.h>
 #include<assert.h>
+
 void ViewProjection::Init() {
 	//定数バッファ生成
 	CreateConstantBuffer();
@@ -24,26 +25,7 @@ void ViewProjection::CreateConstantBuffer() {
 	//定数バッファを生成
 	constBuffer_ = DirectXCommon::GetInstance()->CreateBufferResource(device, bufferSize);
 
-	//HRESULT hr;
-	////頂点リソース用のヒープの設定
-	//D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	//uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;//UploadHeapを使う
-	////頂点リソース用設定
-	//D3D12_RESOURCE_DESC vertexResourceDesc{};
-	////ばっぱリソース。テクスチャの場合はまた別の設定をする
-	//vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	//vertexResourceDesc.Width = bufferSize;//リソースのサイズ。今回はVector4を3頂点文
-	////バッファの場合はこれらは1にする決まり
-	//vertexResourceDesc.Height = 1;
-	//vertexResourceDesc.DepthOrArraySize = 1;
-	//vertexResourceDesc.MipLevels = 1;
-	//vertexResourceDesc.SampleDesc.Count = 1;
-	////バッファの場合これにする決まり
-	//vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	//
-	//hr = device->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE,
-	//	&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&constBuffer_));
-	//assert(SUCCEEDED(hr));
+
 
 }
 
@@ -72,13 +54,17 @@ void ViewProjection::UpdateMatrix() {
 }
 
 void ViewProjection::UpdateViewMatrix() {
-	//回転行列を計算
+	////拡大縮小行れ宇
+	//Matrix4x4 scaleMatrix = MakeScaleMatrix(scale_);
+	// 回転行列を計算
 	Matrix4x4 rotateMatrix = MakeRotateMatrix(rotation_);
-	//平行移動行列を計算
-	Matrix4x4 translateMatrx = MakeTranslateMatrix(translation_);
-	//ビュー行列を計算
-	Matrix4x4 cameraMatrix = rotateMatrix * translateMatrx;
-	matView_ = Inverse(cameraMatrix);
+	// 平行移動行列を計算
+	Matrix4x4 translateMatrix = MakeTranslateMatrix(translation_);
+
+	// カメラ行列を作成
+	 cameraMatrix_ = rotateMatrix* translateMatrix;
+	// 最終的なビュー行列の設定
+	matView_ = Inverse(cameraMatrix_);
 }
 
 void ViewProjection::UpdateProjectionMatrix() {
