@@ -17,15 +17,29 @@
 #include"ModelData.h"
 #include"Material.h"
 #include "MaterialData.h"
-#include "WorldTransform.h"
-#include "ViewProjection.h"
 #include "ParticleForGPU.h"
 #include<random>
+//class
+#include "WorldTransform.h"
+#include "ViewProjection.h"
+#include"DirectXCommon.h"
+
+//3Dモデル共通部
+class ModelCommon {
+private:
+	DirectXCommon* dxCommon_;
+public:
+	void Init(DirectXCommon* dxCommon);
+
+	//getter
+	DirectXCommon* GetDxCommon()const { return dxCommon_; }
+};
 
 class TextureManager;
 class Model {
 private:
-	//static std::map<std::string, std::unique_ptr<Model>> modelInstances;
+	//ModelCommonのポインタ
+	ModelCommon* modelCommon_;
 	uint32_t instanceNum_;//インスタンス数
 	D3D12_CPU_DESCRIPTOR_HANDLE  instancingSrvHandleCPU_;
 	D3D12_GPU_DESCRIPTOR_HANDLE  instancingSrvHandleGPU_;
@@ -35,7 +49,6 @@ private:
 	uint32_t textureHandle_;
 	ModelData modelData_;
 	
-
 	D3D12_GPU_DESCRIPTOR_HANDLE handle_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
@@ -44,13 +57,11 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource >materialResource_;
 	//頂点リソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>vertexResource_;
-	//wvpリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource>wvpResource_;
 	//indexリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>indexResource_;
 
 	//データ****************************************************************************
-	TransformationMatrix* wvpDate_;
+	
 
 	Material* materialDate_;
 
@@ -66,8 +77,6 @@ public:
 	static Model* Create(const std::string& instanceName);
 
 	static Model* CreateParticle(const std::string& instanceName, const uint32_t& instanceNum, std::mt19937& randomEngine, std::uniform_real_distribution<float> dist);
-
-
 
 	static void PreDraw(ID3D12GraphicsCommandList* commandList);
 	static void PreDrawParticle(ID3D12GraphicsCommandList* commandList);
@@ -90,13 +99,9 @@ public:
 	/// <param name="ModelName"></param>
 	void CreateCommon(const std::string& ModelName);
 	/// <summary>
-	/// 球描画
-	/// </summary>
-	void CreateSphere();
-	/// <summary>
 	/// モデル描画
 	/// </summary>
-	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt,const Vector4& color={1,1,1,1});
+	void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, std::optional<uint32_t> textureHandle = std::nullopt,const Vector4& color={1,1,1,1});
 
 	/// <summary>
 	/// モデルバーティクル
@@ -111,8 +116,5 @@ public:
 	ModelData GetModelData()const { return modelData_; }
 	uint32_t GetKnumInstance()const { return instanceNum_; }
 
-	//setter
-	void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
-	void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
 };
 
