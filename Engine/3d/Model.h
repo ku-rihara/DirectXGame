@@ -11,6 +11,7 @@
 #include"Vector4.h"
 #include"Vector3.h"
 #include"Vector2.h"
+#include<numbers>
 //struct
 #include"TransformationMatrix.h"
 #include"ModelData.h"
@@ -33,8 +34,9 @@ private:
 	TextureManager* textureManager_ = nullptr;
 	uint32_t textureHandle_;
 	ModelData modelData_;
-	D3D12_GPU_DESCRIPTOR_HANDLE handle_;
+	
 
+	D3D12_GPU_DESCRIPTOR_HANDLE handle_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
 	//リソース******************************************************************
@@ -57,7 +59,7 @@ private:
 	const float kDeltaTime_ = 1.0f / 60.0f;
 	std::vector<float>lifeTimes_;
 	std::vector<float>currentTimes_;
-
+	
 	//後に消すかも
 	bool useMonsterBall = true;
 public:

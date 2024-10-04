@@ -3,36 +3,38 @@
 #include <d3d12.h>
 #include"Vector3.h"
 #include"Matrix4x4.h"
+
 // 定数バッファ用データ構造体
 struct ConstBufferDataViewProjection {
-	Matrix4x4 view;       // ワールド → ビュー変換行列
-	Matrix4x4 projection; // ビュー → プロジェクション変換行列
-	Vector3 cameraPos;    // カメラ座標（ワールド座標）
+	Matrix4x4 view;       // ビュー変換行列
+	Matrix4x4 projection; // プロジェクション変換行列
+	Vector3 cameraPos;    // カメラ座標
 };
 
 class ViewProjection{
 public:
-#pragma region ビュー行列の設定
-	// X,Y,Z軸回りのローカル回転角
+	//scale
+	Vector3 scale_{ 1,1,1 };
+	//rotate
 	Vector3 rotation_ = { 0, 0, 0 };
-	// ローカル座標
-	Vector3 translation_ = { 0, 0, -50 };
-#pragma endregion
+	// translate
+	Vector3 translation_ = { 0, 0, 0 };
 
-#pragma region 射影行列の設定
 	// 垂直方向視野角
 	float fovAngleY_ = 45.0f * 3.141592654f / 180.0f;
 	// ビューポートのアスペクト比
 	float aspectRatio_ = (float)16 / 9;
-	// 深度限界（手前側）
+	// 深度限界
 	float nearZ_ = 0.1f;
-	// 深度限界（奥側）
+	// 深度限界
 	float farZ_ = 1000.0f;
-#pragma endregion
 	// ビュー行列
 	Matrix4x4 matView_;
 	// 射影行列
 	Matrix4x4 matProjection_;
+	//カメラ行列
+	Matrix4x4 cameraMatrix_;
+
 private:
 	// 定数バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuffer_;
@@ -84,6 +86,12 @@ public:
 	/// </summary>
 	/// <returns>定数バッファ</returns>
 	const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return constBuffer_; }
+
+	/// <summary>
+	/// カメラ行列取得
+	/// </summary>
+	/// <returns></returns>
+	const Matrix4x4& GetCameraMatrix()const { return cameraMatrix_; }
 
 };
 

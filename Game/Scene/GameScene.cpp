@@ -18,7 +18,7 @@ void GameScene::Init() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
-	
+
 	//デバッグカメラ
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
 	debugCamera_->Init();
@@ -28,17 +28,17 @@ void GameScene::Init() {
 	//モデル
 	std::uniform_real_distribution<float>lifeTimedist(1.0f, 3.0f);
 	modelPlane_.reset(Model::Create("Plane"));
-	modelPlaneParticle_.reset(Model::CreateParticle("Plane",modelInstanceMax_,randomEngine, lifeTimedist));
+	modelPlaneParticle_.reset(Model::CreateParticle("Plane", modelInstanceMax_, randomEngine, lifeTimedist));
 	modelFence_.reset(Model::Create("Fence"));
 	modelSuzanne_.reset(Model::Create("Suzanne"));
 	modelTerrain_.reset(Model::Create("terrain"));
-	
+
 	////テクスチャハンドル
 	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");
-		
+
 	//スプライト生成
 	sprite_ = std::make_unique<Sprite>();
-	sprite_->CreateSprite(uvHandle_,Vector2{0,0},Vector4(1,1,1,1));
+	sprite_->CreateSprite(uvHandle_, Vector2{ 0,0 }, Vector4(1, 1, 1, 1));
 	//WorldTransform
 
 	planeTransforms_.reserve(modelInstanceMax_);
@@ -57,8 +57,11 @@ void GameScene::Init() {
 	transformSprite_.Init();
 	uvTransformSprite_.Init();
 
+	//ビュープロジェクション
+	viewProjection_.Init();
+
 	MakeParticle(randomEngine);
-	
+
 	// ワールドトランスフォーム値セット
 	transformSprite_.scale_.x = 0.7f;
 	planeTransform_.rotation_.y = -3.0f;
@@ -77,6 +80,17 @@ void GameScene::Update() {
 		ImGui::Checkbox("isPlane", &isDraw);
 		ImGui::TreePop();
 	}
+	if (ImGui::TreeNode("ViewProjection")) {
+
+
+			ImGui::DragFloat3("Scale", &viewProjection_.scale_.x, 0.01f);
+			ImGui::DragFloat3("Rotate", &viewProjection_.rotation_.x, 0.01f);
+			ImGui::DragFloat3("Translate", &viewProjection_.translation_.x, 0.01f);
+			ImGui::TreePop();
+		
+	
+	}
+
 	if (ImGui::TreeNode("WorldTransform")) {
 
 		if (ImGui::TreeNode("Plane")) {
@@ -97,7 +111,7 @@ void GameScene::Update() {
 			ImGui::DragFloat3("Translate", &fenceTransform_.translation_.x, 0.01f);
 			ImGui::TreePop();
 		}
-		
+
 		if (ImGui::TreeNode("Suzanne")) {
 			ImGui::DragFloat3("Scale", &suzanneTransform_.scale_.x, 0.01f);
 			ImGui::DragFloat3("Rotate", &suzanneTransform_.rotation_.x, 0.01f);
@@ -156,9 +170,16 @@ void GameScene::Update() {
 		suzanneTransform_.translation_.y -= 0.01f;
 	}
 
-	for (uint32_t i = 0; i < modelInstanceMax_; i++) {
+	//viewProjection_.scale_ = { 1,1,1 };
+	//viewProjection_.rotation_ = { 3.14f / 3.0f,3.14f,0 };
+	/*viewProjection_.translation_ = { 0,0,20 };*/
+
+
+
+
+	/*for (uint32_t i = 0; i < modelInstanceMax_; i++) {
 		planeTransforms_[i]->translation_ += particleVelocity_[i] * kDeltaTime_;
-	}
+	}*/
 
 	//ワールド行列更新
 	planeTransform_.UpdateMatrix();
@@ -167,7 +188,7 @@ void GameScene::Update() {
 	terrainTransform_.UpdateMatrix();
 
 	for (uint32_t i = 0; i < modelInstanceMax_; i++) {
-		planeTransforms_[i]->UpdateMatrix();
+		planeTransforms_[i]->BillboardUpdateMatrix(viewProjection_);
 	}
 
 	transformSprite_.UpdateMatrix();
@@ -178,25 +199,24 @@ void GameScene::Update() {
 	// カメラ行列の計算をデバッグカメラのビュープロジェクションから行う
 	viewProjection_.matView_ = debugCamera_->GetViewProjection().matView_;
 	viewProjection_.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
-
-
-
+	viewProjection_.cameraMatrix_ = debugCamera_->GetViewProjection().cameraMatrix_;
+	/*viewProjection_.UpdateMatrix();*/
 }
 
 void GameScene::Draw() {
-	
+
 	//Draw********************************************************
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
 	Model::PreDraw(commandList);
-		//平面描画
+	//平面描画
 	if (isDraw) {
 
 		/*modelPlane_->Draw(planeTransform_, viewProjection_);
 		modelFence_->Draw(fenceTransform_, viewProjection_);
 		modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
 		modelTerrain_->Draw(terrainTransform_, viewProjection_);*/
-	
+
 		modelPlaneParticle_->DrawParticle(planeTransforms_, viewProjection_, uvHandle_, particleColor_);
 		Sprite::PreDraw(commandList);
 		////スプライト描画
@@ -211,7 +231,7 @@ void GameScene::MakeParticle(std::mt19937& random) {
 	for (uint32_t index = 0; index < modelInstanceMax_; ++index) {
 		planeTransforms_[index]->Init();
 		planeTransforms_[index]->rotation_.y = -3;
-		particleColor_[index]={distribution(random), distribution(random), distribution(random), 1.0f};
+		particleColor_[index] = { distribution(random), distribution(random), distribution(random), 1.0f };
 		planeTransforms_[index]->translation_ = { distribution(random), distribution(random), distribution(random) };
 		particleVelocity_[index] = { alphadistribution(random), alphadistribution(random), alphadistribution(random) };
 	}
