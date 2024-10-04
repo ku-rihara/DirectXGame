@@ -8,6 +8,7 @@
 #include<dxcapi.h>
 #include<dxgidebug.h>
 #include <wrl.h>
+#include<format>
 //class
 #include"WinApp.h"
 
@@ -43,7 +44,7 @@ private://メンバ変数
 
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>dsvDescriptorHeap_;
 	Microsoft::WRL::ComPtr<ID3D12Resource>depthStencilResource_;
-	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
+	D3D12_DEPTH_STENCIL_DESC depthStencilDesc_;
 
 	//フェンス生成関連
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence_;
@@ -56,24 +57,10 @@ private://メンバ変数
 	IDxcIncludeHandler* includeHandler_;
 	//Init------------------------------------------------------------------------------------------------------
 
-	//グラフィックパイプライン関連
-	//object
-	Microsoft::WRL::ComPtr < ID3D12RootSignature> rootSignature_;
-	Microsoft::WRL::ComPtr<ID3DBlob>signatureBlob_;
-	Microsoft::WRL::ComPtr<ID3DBlob>errorBlob_;
-	Microsoft::WRL::ComPtr<IDxcBlob>vertexShaderBlob_;
-	Microsoft::WRL::ComPtr<IDxcBlob>pixelShaderBlob_;
-	//particle
-	Microsoft::WRL::ComPtr < ID3D12RootSignature> rootSignatureParticle_;
-	Microsoft::WRL::ComPtr<ID3DBlob>signatureBlobParticle_;
-	Microsoft::WRL::ComPtr<ID3DBlob>errorBlobParticle_;
-	Microsoft::WRL::ComPtr<IDxcBlob>vertexShaderBlobParticle_;
-	Microsoft::WRL::ComPtr<IDxcBlob>pixelShaderBlobParticle_;
+
 	D3D12_VIEWPORT viewport_{};
 	D3D12_RECT scissorRect_{};
 	
-	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineState_;
-	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateParticle_;
 
 	//DescriptorSize
 	uint32_t descriptorSizeSRV_;
@@ -165,6 +152,16 @@ public://メンバ関数
 	//リソースの作成
 	Microsoft::WRL::ComPtr < ID3D12Resource>CreateBufferResource(Microsoft::WRL::ComPtr<ID3D12Device>  device, size_t sizeInBytes);
 
+	Microsoft::WRL::ComPtr<IDxcBlob> CompileShader(
+		//CompilerするShaderファイルパス
+		const std::wstring& filePath,
+		//Compilerに使用するprofile
+		const wchar_t* profile,
+		//初期化で生成したものを3つ
+		IDxcUtils* dxcUtils,
+		IDxcCompiler3* dxcCompiler,
+		IDxcIncludeHandler* includeHandler);
+
 	void commandExecution(Microsoft::WRL::ComPtr < ID3D12Resource>& intermediateResource);
 
 	//DescriptorHeapの作成
@@ -183,13 +180,6 @@ public://メンバ関数
 	//レンダーターゲットビュー 
 	D3D12_RENDER_TARGET_VIEW_DESC GetRtvDesc()const { return rtvDesc_; }
 
-	//rootSignature
-	ID3D12PipelineState* GetGrahipcsPipeLileState()const { return graphicsPipelineState_.Get(); }
-	ID3D12RootSignature* GetRootSignature()const { return rootSignature_.Get(); }
-
-	ID3D12PipelineState* GetGrahipcsPipeLileStateParticle()const { return graphicsPipelineStateParticle_.Get(); }
-	ID3D12RootSignature* GetRootSignatureParticle()const { return rootSignatureParticle_.Get(); }
-
 	//dxcCompilerの初期化関連
 	IDxcUtils* GetDxcUtils()const { return dxcUtils_; }
 	IDxcCompiler3* GetDxcCompiler()const { return dxcCompiler_; }
@@ -198,5 +188,9 @@ public://メンバ関数
 	uint32_t GetDescriptorSizeSRV()const { return descriptorSizeSRV_; }
 	uint32_t GetDescriptorSizeRTV()const { descriptorSizeRTV_; }
 	uint32_t GetDescriptorSizeDSV()const { return descriptorSizeDSV_; }
+
+	// depthStencilDescのgetter
+	const D3D12_DEPTH_STENCIL_DESC& GetDepthStencilDesc() const { return depthStencilDesc_; }
+
 };
 

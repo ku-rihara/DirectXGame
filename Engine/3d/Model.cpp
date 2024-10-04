@@ -6,6 +6,7 @@
 //class
 #include"Light.h"
 #include"DirectXCommon.h"
+#include"Object3DCommon.h"
 #include"ImGuiManager.h"
 #include"TextureManager.h"
 namespace {
@@ -272,8 +273,7 @@ void Model::DrawParticle(const std::vector<std::unique_ptr<WorldTransform>>& wor
 	auto commandList = directXCommon->GetCommandList();
 
 	// ルートシグネチャとパイプラインステートを設定
-	commandList->SetGraphicsRootSignature(directXCommon->GetRootSignatureParticle());
-	commandList->SetPipelineState(directXCommon->GetGrahipcsPipeLileStateParticle());
+
 	
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	commandList->IASetIndexBuffer(&indexBufferView_);
@@ -317,13 +317,12 @@ void Model::DrawParticle(const std::vector<std::unique_ptr<WorldTransform>>& wor
 
 }
 
-void Model::PreDraw(ID3D12GraphicsCommandList* commandList) {
-	// RootSignatureを設定
-	commandList->SetGraphicsRootSignature(directXCommon->GetRootSignature());
-	// PipelineStateを設定
-	commandList->SetPipelineState(directXCommon->GetGrahipcsPipeLileState());
+void  Model::PreDraw(ID3D12GraphicsCommandList* commandList) {
+	Object3DCommon::GetInstance()->PreDraw(commandList);
+}
 
-	// ここでさらに描画前の共通設定が必要であれば追加できます
+void  Model::PreDrawParticle(ID3D12GraphicsCommandList* commandList) {
+	Object3DCommon::GetInstance()->PreDrawParticle(commandList);
 }
 
 void Model::CreateSphere() {

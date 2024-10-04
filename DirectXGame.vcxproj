@@ -22,6 +22,7 @@
     <ClCompile Include="Engine\audio\Audio.cpp" />
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\base\Keta.cpp" />
+    <ClCompile Include="Engine\base\Object3DCommon.cpp" />
     <ClCompile Include="Engine\base\TextureManager.cpp" />
     <ClCompile Include="Engine\base\WinApp.cpp" />
     <ClCompile Include="Engine\Function\Convert.cpp" />
@@ -51,9 +52,11 @@
     <ClInclude Include="Engine\audio\Audio.h" />
     <ClInclude Include="Engine\base\DirectXCommon.h" />
     <ClInclude Include="Engine\base\Keta.h" />
+    <ClInclude Include="Engine\base\Object3DCommon.h" />
     <ClInclude Include="Engine\base\TextureManager.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
     <ClInclude Include="Engine\Function\Convert.h" />
+    <ClInclude Include="Engine\Function\Log.h" />
     <ClInclude Include="Engine\input\Input.h" />
     <ClInclude Include="Engine\struct\CameraForGPU.h" />
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h" />

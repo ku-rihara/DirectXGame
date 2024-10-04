@@ -216,7 +216,7 @@ void GameScene::Draw() {
 		modelFence_->Draw(fenceTransform_, viewProjection_);
 		modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
 		modelTerrain_->Draw(terrainTransform_, viewProjection_);*/
-
+		Model::PreDrawParticle(commandList);
 		modelPlaneParticle_->DrawParticle(planeTransforms_, viewProjection_, uvHandle_, particleColor_);
 		Sprite::PreDraw(commandList);
 		////スプライト描画
