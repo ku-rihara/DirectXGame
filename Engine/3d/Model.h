@@ -18,7 +18,7 @@
 #include"Material.h"
 #include "MaterialData.h"
 #include "ParticleForGPU.h"
-#include<random>
+
 //class
 #include "WorldTransform.h"
 #include "ViewProjection.h"
@@ -40,10 +40,6 @@ class Model {
 private:
 	//ModelCommonのポインタ
 	ModelCommon* modelCommon_;
-	uint32_t instanceNum_;//インスタンス数
-	D3D12_CPU_DESCRIPTOR_HANDLE  instancingSrvHandleCPU_;
-	D3D12_GPU_DESCRIPTOR_HANDLE  instancingSrvHandleGPU_;
-	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> instancingResources_;
 	//テクスチャ
 	TextureManager* textureManager_ = nullptr;
 	uint32_t textureHandle_;
@@ -61,22 +57,15 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource>indexResource_;
 
 	//データ****************************************************************************
-	
 
 	Material* materialDate_;
 
-	ParticleFprGPU* instancingData_;
-
-	const float kDeltaTime_ = 1.0f / 60.0f;
-	std::vector<float>lifeTimes_;
-	std::vector<float>currentTimes_;
-	
 	//後に消すかも
 	bool useMonsterBall = true;
 public:
 	static Model* Create(const std::string& instanceName);
 
-	static Model* CreateParticle(const std::string& instanceName, const uint32_t& instanceNum, std::mt19937& randomEngine, std::uniform_real_distribution<float> dist);
+	static Model* CreateParticle(const std::string& instanceName);
 
 	static void PreDraw(ID3D12GraphicsCommandList* commandList);
 	static void PreDrawParticle(ID3D12GraphicsCommandList* commandList);
@@ -88,12 +77,8 @@ public:
 	/// モデル作成
 	/// </summary>
 	void CreateModel(const std::string& ModelName);
-	/// <summary>
-	/// モデルパーティクル作成
-	/// </summary>
-	/// <param name="ModelName"></param>
-	void CreateModelParticle(const std::string& ModelName, const uint32_t& instanceNum, std::mt19937& randomEngine, std::uniform_real_distribution<float> dist);
-	/// <summary>
+	
+	//// <summary>
 	/// モデル作成共通
 	/// </summary>
 	/// <param name="ModelName"></param>
@@ -106,7 +91,8 @@ public:
 	/// <summary>
 	/// モデルバーティクル
 	/// </summary>
-	void DrawParticle(const std::vector<std::unique_ptr<WorldTransform>>& worldTransforms, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt, const std::vector<Vector4>& colors = { {1, 1, 1, 1 } });
+	void DrawParticle( const uint32_t instanceNum,
+		D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, std::optional<uint32_t> textureHandle = std::nullopt);
 
 #ifdef _DEBUG
 	void DebugImGui();
@@ -114,7 +100,6 @@ public:
 
 	//getter
 	ModelData GetModelData()const { return modelData_; }
-	uint32_t GetKnumInstance()const { return instanceNum_; }
 
 };
 
