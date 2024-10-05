@@ -3,6 +3,10 @@
 #include<sstream>
 #include<assert.h>
 #include <imgui.h>
+//assimp
+#include<assimp/Importer.hpp>
+#include<assimp/scene.h>
+#include<assimp/postprocess.h>
 //class
 #include"Light.h"
 #include"Object3DCommon.h"
@@ -38,8 +42,38 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 	std::string line;//ファイルから読んだ1行を格納するもの
 	VertexData triangle[3];
 
-	std::ifstream file(directoryPath + "/" + filename);//ファイルを開く
-	assert(file.is_open());
+	Assimp::Importer importer;
+	std::string filePath(directoryPath + "/" + filename);//ファイルを開く
+	const aiScene* scene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
+	assert(scene->HasMeshes());//メッシュがないのは対応しない
+
+	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
+		aiMesh* mesh = scene->mMeshes[meshIndex];
+		assert(mesh->HasNormals());//法線がないmeshは非対応
+		assert(mesh->HasTextureCoords(0));//Texcoordがないmeshは非対応
+
+		//meshの中身faceの解析
+		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
+			aiFace& face = mesh->mFaces[faceIndex];
+			assert(face.mNumIndices = 3);//三角形のみサポート
+
+			//vertexを解析
+			for (uint32_t element = 0; element < face.mNumIndices; ++element) {
+				uint32_t vertexIndex = face.mIndices[element];
+				aiVector3D& position = mesh->mVertices[vertexIndex];
+				aiVector3D& normal = mesh->mNormals[vertexIndex];
+				aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
+				VertexData vertex;
+				vertex.position = { position.x,position.y ,position.z,1.0f };
+				vertex.normal = { normal.x,normal.y ,normal.z };
+				vertex.texcoord = { texcoord.x,texcoord.y };
+				//右手→左手に変換する
+				vertex.position.x *= -1.0f;
+				vertex.normal.x *= -1.0f;
+				modelData.vertices.push_back(vertex);
+			}
+		}
+	}
 
 	while (std::getline(file, line)) {
 		std::string identifier;
