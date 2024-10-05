@@ -15,6 +15,7 @@
 #include "Audio.h"
 #include"Input.h"
 #include"Object3d.h"
+#include"Object3dParticle.h"
 //etc
 #include"DebugCamera.h"
 #include<random>
@@ -45,24 +46,26 @@ private:
 	//パーティクル変数
 
 	const uint32_t modelInstanceMax_ = 10;
-	std::vector<Vector4>particleColor_;
-	std::unique_ptr<Model> modelPlaneParticle_ = nullptr;
-	std::vector<Vector3> particleVelocity_;
+	
+	std::unique_ptr<Object3dParticle> modelPlaneParticle_ = nullptr;
+	
 	const float kDeltaTime_ = 1.0f / 60.0f;
 
 	bool isDraw = true;
 
 	ViewProjection viewProjection_;
-	WorldTransform planeTransform_;
-	WorldTransform fenceTransform_;
-	WorldTransform suzanneTransform_;
-	WorldTransform terrainTransform_;
-	WorldTransform transformSprite_;
-	WorldTransform uvTransformSprite_;
-	std::vector<std::unique_ptr<WorldTransform>>  planeTransforms_;
+
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
 
 	uint32_t uvHandle_;
+
+	/*WorldTransform planeTransform_;
+	WorldTransform fenceTransform_;
+	WorldTransform suzanneTransform_;
+	WorldTransform terrainTransform_;*/
+	WorldTransform transformSprite_;
+	WorldTransform uvTransformSprite_;
+	/*std::vector<std::unique_ptr<WorldTransform>>  planeTransforms_;*/
 public: 
 	/// <summary>
 	/// コンストクラタ
@@ -89,6 +92,4 @@ public:
 	/// </summary>
 	void Draw();
 
-	//パーティクル関連
-	void MakeParticle(std::mt19937& randomEngine);
 };

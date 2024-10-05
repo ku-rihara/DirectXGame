@@ -5,6 +5,11 @@
 class Object3d:public BaseObject3d  {
 public:
 	
+	WorldTransform transform_;
+private:
+	//wvpリソース
+	Microsoft::WRL::ComPtr<ID3D12Resource>wvpResource_;
+	TransformationMatrix* wvpDate_;
 
 public:
 	static Object3d* CreateModel(const std::string& instanceName);
@@ -15,7 +20,10 @@ public:
 	//デバッグ表示
 	void DebugImgui()override;
 	//WVPリソース作成
-	 void CreateWVPResource()override;
-	////setter
-	//void SetModel(Model* model) { this->model_ = model; }
+	 void CreateWVPResource();
+
+	 void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
+	 void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
+
+	
 };

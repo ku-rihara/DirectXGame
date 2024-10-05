@@ -23,10 +23,10 @@ Model* Model::Create(const std::string& instanceName) {
 	return model;  // 成功した場合は新しいモデルを返す
 }
 
-Model* Model::CreateParticle(const std::string& instanceName, const uint32_t& instanceNum, std::mt19937& randomEngine, std::uniform_real_distribution<float> dist) {
+Model* Model::CreateParticle(const std::string& instanceName) {
 	// 新しいModelインスタンスを作成
 	Model* model = new Model();
-	model->CreateModelParticle(instanceName,instanceNum,randomEngine,dist);
+	model->CreateCommon(instanceName);
 	return model;  // 成功した場合は新しいモデルを返す
 }
 
@@ -170,8 +170,6 @@ void Model::CreateCommon(const std::string& ModelName) {
 
 	/*materialDate_->hasTexture = useTexture;*/
 	Light::GetInstance()->Init();
-
-
 }
 
 void Model::CreateModel(const std::string& ModelName) {
@@ -179,43 +177,11 @@ void Model::CreateModel(const std::string& ModelName) {
 	materialDate_->enableLighting = 2;
 	Light::GetInstance()->Init();
 }
-//	パーティクル
-void Model::CreateModelParticle(const std::string& ModelName, const uint32_t& instanceNum, std::mt19937& randomEngine, std::uniform_real_distribution<float> dist) {
-	CreateCommon(ModelName);
-	//パーティクル数
-	instanceNum_ = instanceNum;
-	//パーティクル変数初期化
-	lifeTimes_.resize(instanceNum);
-	currentTimes_.resize(instanceNum);
-
-	//Instancing用のTransformationMatrixリソースを作る
-	Microsoft::WRL::ComPtr<ID3D12Resource>instancingResource = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(ParticleFprGPU) * instanceNum_);
-	//書き込む為のアドレスを取得
-	instancingData_ = nullptr;
-	instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
-	//データ初期化
-	for (uint32_t index = 0; index < instanceNum_; ++index) {
-		instancingData_[index].WVP = MakeIdentity4x4();
-		instancingData_[index].World = MakeIdentity4x4();
-		instancingData_[index].color = Vector4(1.0f,1.0f,1.0f,1.0f);
-		lifeTimes_[index] = dist(randomEngine);
-	}
-	//SRVの作成
-	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
-	instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
-	instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-	instancingSrvDesc.Buffer.FirstElement = 0;
-	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-	instancingSrvDesc.Buffer.NumElements = instanceNum_;
-	instancingSrvDesc.Buffer.StructureByteStride = sizeof(ParticleFprGPU);
-
-	instancingSrvHandleCPU_ = directXCommon->GetCPUDescriptorHandle(ImGuiManager::GetInstance()->GetSrvDescriptorHeap(), directXCommon->GetDescriptorSizeSRV(), 3);
-	instancingSrvHandleGPU_ = directXCommon->GetGPUDescriptorHandle(ImGuiManager::GetInstance()->GetSrvDescriptorHeap(), directXCommon->GetDescriptorSizeSRV(), 3);
-	instancingResources_.push_back(instancingResource.Get());
-	directXCommon->GetDevice()->CreateShaderResourceView(instancingResource.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);
-	
-}
+////	パーティクル
+//void Model::CreateModelParticle(const std::string& ModelName) {
+//	CreateCommon(ModelName);
+//	
+//}
 #ifdef _DEBUG
 void Model::DebugImGui() {
 
@@ -259,19 +225,18 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource,std::optiona
 	commandList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }
 
-void Model::DrawParticle(const std::vector<std::unique_ptr<WorldTransform>>& worldTransforms, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle, const std::vector<Vector4>& colors) {
+void Model::DrawParticle( const uint32_t instanceNum,D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle,
+	std::optional<uint32_t> textureHandle) {
 	auto commandList = directXCommon->GetCommandList();
 
 	// ルートシグネチャとパイプラインステートを設定
-
-	
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	commandList->IASetIndexBuffer(&indexBufferView_);
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// マテリアルのリソースを設定
 	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	commandList->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
+	commandList->SetGraphicsRootDescriptorTable(1, instancingGUPHandle);
 
 	// テクスチャハンドルの設定
 	if (textureHandle.has_value()) {
@@ -281,29 +246,7 @@ void Model::DrawParticle(const std::vector<std::unique_ptr<WorldTransform>>& wor
 		commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
 	}
 	
-	/*instanceNum_ = 0;*/
-	// インスタンシングデータの更新
-	for (uint32_t index = 0; index < worldTransforms.size(); ++index) {
-		//if (lifeTimes_[index] <= currentTimes_[index]) {//生存時間を過ぎたら描画対象にしない
-		//	continue;
-		//}
-	/*	float alpha = 1.0f - (currentTimes_[index] / lifeTimes_[index]);*/
-		instancingData_[index].WVP = worldTransforms[index]->matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
-		instancingData_[index].WorldInverseTranspose = Inverse(Transpose(instancingData_[index].World));
-		//経過時間を足す
-		currentTimes_[index] += kDeltaTime_;
-		// 引数がない場合は白色、ある場合は指定された色を設定
-		if (index < colors.size() - 1) {
-			instancingData_[index].color = colors[index];
-			instancingData_[index].color.w = 1.0f;//alpha;
-		}
-		else {
-			instancingData_[index].color = { 1, 1, 1, 1/*alpha*/ }; // デフォルト白色
-		}
-		++instanceNum_;
-	}
-
-	commandList->DrawInstanced(UINT(modelData_.vertices.size()), instanceNum_, 0, 0);
+	commandList->DrawInstanced(UINT(modelData_.vertices.size()), instanceNum, 0, 0);
 
 }
 
