@@ -50,7 +50,7 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
 		aiMesh* mesh = scene->mMeshes[meshIndex];
 		assert(mesh->HasNormals());//法線がないmeshは非対応
-		assert(mesh->HasTextureCoords(0));//Texcoordがないmeshは非対応
+		//assert(mesh->HasTextureCoords(0));//Texcoordがないmeshは非対応
 
 		//meshの中身faceの解析
 		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
@@ -66,7 +66,9 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 				VertexData vertex;
 				vertex.position = { position.x,position.y ,position.z,1.0f };
 				vertex.normal = { normal.x,normal.y ,normal.z };
-				vertex.texcoord = { texcoord.x,texcoord.y };
+				if (mesh->HasTextureCoords(0)) {
+					vertex.texcoord = { texcoord.x,texcoord.y };
+				}
 				//右手→左手に変換する
 				vertex.position.x *= -1.0f;
 				vertex.normal.x *= -1.0f;
@@ -74,71 +76,20 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 			}
 		}
 	}
+	//Materialを解析
+	for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; ++materialIndex) {
+		aiMaterial* material = scene->mMaterials[materialIndex];
+		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
+			aiString textureFilePath;
+			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
+			modelData.material.textureFilePath = directoryPath + "/" + textureFilePath.C_Str();
+		}
+	}
+	//テクスチャが無ければ
+	if (modelData.material.textureFilePath.empty()) {
+		std::string whiteTexture = "default.png";
+		modelData.material.textureFilePath = "./Resources/Model/" + whiteTexture;
 
-	while (std::getline(file, line)) {
-		std::string identifier;
-		std::istringstream s(line);
-		s >> identifier;//先頭の識別子を読む
-
-		//identifierに応じた処理
-		if (identifier == "v") {
-			Vector4 position;
-			s >> position.x >> position.y >> position.z;
-			position.x *= -1.0f;
-			position.w = 1.0f;
-			positions.push_back(position);
-		}
-		else if (identifier == "vt") {
-			Vector2 texccord;
-			s >> texccord.x >> texccord.y;
-			texccord.y = 1.0f - texccord.y;
-			texcoords.push_back(texccord);
-		}
-		else if (identifier == "vn") {
-			Vector3 normal;
-			s >> normal.x >> normal.y >> normal.z;
-			normal.x *= -1.0f;
-			normals.push_back(normal);
-		}
-		else if (identifier == "f") {
-			//面は三角形限定。その他は未対応
-			for (int32_t faceVertex = 0; faceVertex < 3; ++faceVertex) {
-				std::string vertexDefinition;
-				s >> vertexDefinition;
-				//頂点の要素へのIndexは「位置/UV/法線」で格納されている、分解してIndexを取得する
-				std::istringstream v(vertexDefinition);
-				uint32_t elementIndices[3] = { 0, 0, 0 };
-
-				std::string index;
-				for (int32_t element = 0; element < 3 && std::getline(v, index, '/'); ++element) {
-					if (!index.empty()) {
-						elementIndices[element] = std::stoi(index);
-					}
-				}
-				//要素へのIndexから、次の要素の値を取得して、頂点を構築する
-				Vector4 position = positions[elementIndices[0] - 1];
-				Vector2 texcoord = { 0.0f, 0.0f };
-				if (elementIndices[1] > 0) {
-					texcoord = texcoords[elementIndices[1] - 1];
-				}
-				Vector3 normal = { 0.0f, 0.0f, 0.0f };
-				if (elementIndices[2] > 0) {
-					normal = normals[elementIndices[2] - 1];
-				}
-				triangle[faceVertex] = { position, texcoord, normal };
-			}
-			//頂点を逆順で登録することで、回り順を逆にする
-			modelData.vertices.push_back(triangle[2]);
-			modelData.vertices.push_back(triangle[1]);
-			modelData.vertices.push_back(triangle[0]);
-		}
-		else if (identifier == "mtllib") {
-			//materialTemplateLibraryファイルの名前を取得する
-			std::string materialFilename;
-			s >> materialFilename;
-			//基本的にobjファイルと同一改装にmtlは存在させるので、ディレクトリ名とファイル名を渡す
-			modelData.material = LoadMaterialTemplateFile(directoryPath, materialFilename);
-		}
 	}
 	return modelData;
 }
