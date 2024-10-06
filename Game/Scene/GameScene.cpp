@@ -27,11 +27,11 @@ void GameScene::Init() {
 	soundDataHandle_ = audio_->SoundLoadWave("Resources/fanfare.wav");
 	//モデル
 	std::uniform_real_distribution<float>lifeTimedist(1.0f, 3.0f);
-	modelPlane_.reset(Object3d::CreateModel("Plane"));
-	modelPlaneParticle_.reset(Object3dParticle::CreateModel("Plane", modelInstanceMax_, randomEngine, lifeTimedist));
-	modelFence_.reset(Object3d::CreateModel("Fence"));
-	modelSuzanne_.reset(Object3d::CreateModel("Suzanne"));
-	modelTerrain_.reset(Object3d::CreateModel("terrain"));
+	modelPlane_.reset(Object3d::CreateModel("Plane",".obj"));
+	modelPlaneParticle_.reset(Object3dParticle::CreateModel("Plane",".obj", modelInstanceMax_, randomEngine, lifeTimedist));
+	modelFence_.reset(Object3d::CreateModel("Fence", ".obj"));
+	modelSuzanne_.reset(Object3d::CreateModel("Suzanne", ".obj"));
+	modelTerrain_.reset(Object3d::CreateModel("terrain", ".obj"));
 
 	////テクスチャハンドル
 	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");

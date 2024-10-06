@@ -3,11 +3,11 @@
 #include"ImGuiManager.h"
 #include"DirectXCommon.h"
 
-Object3dParticle* Object3dParticle::CreateModel(const std::string& instanceName, const uint32_t& instanceNumMax, std::mt19937& randomEngine, std::uniform_real_distribution<float> dist) {
+Object3dParticle* Object3dParticle::CreateModel(const std::string& instanceName,const std::string& extension, const uint32_t& instanceNumMax, std::mt19937& randomEngine, std::uniform_real_distribution<float> dist) {
 	// 新しいModelインスタンスを作成
 	Object3dParticle* object3d = new Object3dParticle();
 	object3d->instanceMax_ = instanceNumMax;
-	object3d->model_.reset(Model::CreateParticle(instanceName));
+	object3d->model_.reset(Model::CreateParticle(instanceName,extension));
 	object3d->CreateInstancingResource(instanceNumMax,randomEngine,dist);
 	object3d->SizeSecure(instanceNumMax);
 
@@ -39,6 +39,11 @@ void Object3dParticle::Draw(const ViewProjection& viewProjection, std::optional<
 		//	continue;
 		//}
 	/*	float alpha = 1.0f - (currentTimes_[index] / lifeTimes_[index]);*/
+		// WVP行列の計算
+		if (model_->GetIsFileGltf()) {//.gltfファイルの場合
+			instancingData_[index].WVP = model_->GetModelData().rootNode.localMatrix*worldTransforms_[index]->matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+			instancingData_[index].WorldInverseTranspose = Inverse(Transpose(model_->GetModelData().rootNode.localMatrix*instancingData_[index].World));
+		}
 		instancingData_[index].WVP = worldTransforms_[index]->matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
 		instancingData_[index].WorldInverseTranspose = Inverse(Transpose(instancingData_[index].World));
 		//経過時間を足す

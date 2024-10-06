@@ -45,7 +45,7 @@ public:
 	/// <param name="randomEngine"></param>
 	/// <param name="dist"></param>
 	/// <returns></returns>
-	static Object3dParticle* CreateModel(const std::string& instanceName, const uint32_t& instanceNum, std::mt19937& randomEngine, std::uniform_real_distribution<float> dist);
+	static Object3dParticle* CreateModel(const std::string& instanceName, const std::string& extension, const uint32_t& instanceNum, std::mt19937& randomEngine, std::uniform_real_distribution<float> dist);
 	/// <summary>
 	/// 更新
 	/// </summary>
