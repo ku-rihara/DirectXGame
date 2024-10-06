@@ -12,6 +12,10 @@
 #include"Vector3.h"
 #include"Vector2.h"
 #include<numbers>
+//assimp
+#include<assimp/Importer.hpp>
+#include<assimp/scene.h>
+#include<assimp/postprocess.h>
 //struct
 #include"TransformationMatrix.h"
 #include"ModelData.h"
@@ -59,30 +63,32 @@ private:
 	//データ****************************************************************************
 
 	Material* materialDate_;
+	bool isFileGltf_;
 
 	//後に消すかも
 	bool useMonsterBall = true;
 public:
-	static Model* Create(const std::string& instanceName);
+	static Model* Create(const std::string& instanceName, const std::string& extension);
 
-	static Model* CreateParticle(const std::string& instanceName);
+	static Model* CreateParticle(const std::string& instanceName, const std::string& extension);
 
 	static void PreDraw(ID3D12GraphicsCommandList* commandList);
 	static void PreDrawParticle(ID3D12GraphicsCommandList* commandList);
 
-	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
+	ModelData LoadModelFile(const std::string& directoryPath, const std::string& filename);
+	ModelData 	LoadModelGltf(const std::string& directoryPath, const std::string& filename);
 
-	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
-	/// <summary>
+	Node ReadNode(aiNode* node);
+    /// <summary>
 	/// モデル作成
 	/// </summary>
-	void CreateModel(const std::string& ModelName);
+	void CreateModel(const std::string& ModelName, const std::string& extension);
 	
 	//// <summary>
 	/// モデル作成共通
 	/// </summary>
 	/// <param name="ModelName"></param>
-	void CreateCommon(const std::string& ModelName);
+	void CreateCommon(const std::string& ModelName, const std::string& extension);
 	/// <summary>
 	/// モデル描画
 	/// </summary>
@@ -100,6 +106,6 @@ public:
 
 	//getter
 	ModelData GetModelData()const { return modelData_; }
-
+	bool GetIsFileGltf()const { return isFileGltf_; }
 };
 

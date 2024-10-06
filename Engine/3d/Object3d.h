@@ -12,7 +12,7 @@ private:
 	TransformationMatrix* wvpDate_;
 
 public:
-	static Object3d* CreateModel(const std::string& instanceName);
+	static Object3d* CreateModel(const std::string& instanceName, const std::string& extension);
 	//更新
 	void Update();
 	//描画

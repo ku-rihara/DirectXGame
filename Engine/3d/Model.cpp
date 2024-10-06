@@ -3,10 +3,7 @@
 #include<sstream>
 #include<assert.h>
 #include <imgui.h>
-//assimp
-#include<assimp/Importer.hpp>
-#include<assimp/scene.h>
-#include<assimp/postprocess.h>
+
 //class
 #include"Light.h"
 #include"Object3DCommon.h"
@@ -20,21 +17,21 @@ void ModelCommon::Init(DirectXCommon* dxCommon) {
 	dxCommon_ = dxCommon;
 }
 
-Model* Model::Create(const std::string& instanceName) {
+Model* Model::Create(const std::string& instanceName, const std::string& extension) {
 	// 新しいModelインスタンスを作成
 	Model* model = new Model();
-	model->CreateModel(instanceName);
+	model->CreateModel(instanceName, extension);
 	return model;  // 成功した場合は新しいモデルを返す
 }
 
-Model* Model::CreateParticle(const std::string& instanceName) {
+Model* Model::CreateParticle(const std::string& instanceName, const std::string& extension) {
 	// 新しいModelインスタンスを作成
 	Model* model = new Model();
-	model->CreateCommon(instanceName);
+	model->CreateCommon(instanceName, extension);
 	return model;  // 成功した場合は新しいモデルを返す
 }
 
-ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& filename) {
+ModelData Model::LoadModelFile(const std::string& directoryPath, const std::string& filename) {
 	ModelData modelData;//構築するModelData
 	std::vector<Vector4>positions;//位置
 	std::vector<Vector3>normals;//法線
@@ -94,35 +91,38 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 	return modelData;
 }
 
-MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename) {
-	MaterialData materialData;//構築するmaterialData
-	std::string line;//ファイルから読み込んだ1行を格納するもの
-	std::ifstream file(directoryPath + "/" + filename);//ファイルを開く
-	assert(file.is_open());//開けなかったら止める
+ModelData 	Model::LoadModelGltf(const std::string& directoryPath, const std::string& filename) {
+	ModelData modelData;//構築するModelData
+	Assimp::Importer importer;
+	std::string filePath(directoryPath + "/" + filename);//ファイルを開く
+	const aiScene* scene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
+	modelData = LoadModelFile(directoryPath, filename);
+	modelData.rootNode = ReadNode(scene->mRootNode);
+	return modelData;
+}
+Node Model::ReadNode(aiNode* node) {
+	Node result;
+	aiMatrix4x4 aiLocalMatrix = node->mTransformation;//nodeのlocalMatrix
+	aiLocalMatrix.Transpose();//転置
+	result.localMatrix.m[0][0] = aiLocalMatrix[0][0];//他の要素も同様に
 
-	while (std::getline(file, line)) {
-		std::string identifier;
-		std::istringstream s(line);
-		s >> identifier;
-		//identifierに応じた処理
-		if (identifier == "map_Kd") {
-			std::string textureFilename;
-			s >> textureFilename;
-			//連結してファイルパスにする
-			materialData.textureFilePath = directoryPath + "/" + textureFilename;
-		}
+	result.name = node->mName.C_Str();//Node名を格納
+	result.cihldren.resize(node->mNumChildren);//子供の数だけ確保
+	for (uint32_t childIndex = 0; childIndex < node->mNumChildren; ++childIndex) {
+		//再帰的に読んで階層構造を作っていく
+		result.cihldren[childIndex] = ReadNode(node->mChildren[childIndex]);
 	}
-	//テクスチャが無かったら
-	if (materialData.textureFilePath.empty())
-	{
-		std::string whiteTexture = "default.png";
-		materialData.textureFilePath = "./Resources/Model/" + whiteTexture;
-	}
-	return materialData;
+	return result;
 }
 
-void Model::CreateCommon(const std::string& ModelName) {
-	modelData_ = LoadObjFile("./Resources/Model/" + ModelName, ModelName + ".obj");
+void Model::CreateCommon(const std::string& ModelName, const std::string& extension) {
+	if (extension == ".gltf") {
+		isFileGltf_ = true;
+		modelData_ = LoadModelGltf("./Resources/Model/" + ModelName, ModelName + extension);
+	}
+	else {
+		modelData_ = LoadModelFile("./Resources/Model/" + ModelName, ModelName + extension);
+	}
 	textureManager_ = TextureManager::GetInstance();
 	textureHandle_ = textureManager_->LoadTexture(modelData_.material.textureFilePath);
 
@@ -157,8 +157,8 @@ void Model::CreateCommon(const std::string& ModelName) {
 	Light::GetInstance()->Init();
 }
 
-void Model::CreateModel(const std::string& ModelName) {
-	CreateCommon(ModelName);
+void Model::CreateModel(const std::string& ModelName, const std::string& extension) {
+	CreateCommon(ModelName, extension);
 	materialDate_->enableLighting = 2;
 	Light::GetInstance()->Init();
 }
@@ -178,7 +178,7 @@ void Model::DebugImGui() {
 }
 #endif
 
-void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource,std::optional<uint32_t> textureHandle, const Vector4& color) {
+void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, std::optional<uint32_t> textureHandle, const Vector4& color) {
 	auto commandList = directXCommon->GetCommandList();
 	materialDate_->color = color;
 
@@ -210,7 +210,7 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource,std::optiona
 	commandList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }
 
-void Model::DrawParticle( const uint32_t instanceNum,D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle,
+void Model::DrawParticle(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle,
 	std::optional<uint32_t> textureHandle) {
 	auto commandList = directXCommon->GetCommandList();
 
@@ -230,7 +230,7 @@ void Model::DrawParticle( const uint32_t instanceNum,D3D12_GPU_DESCRIPTOR_HANDLE
 	else {
 		commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
 	}
-	
+
 	commandList->DrawInstanced(UINT(modelData_.vertices.size()), instanceNum, 0, 0);
 
 }
