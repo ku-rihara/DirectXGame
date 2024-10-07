@@ -42,8 +42,8 @@ public:
 class TextureManager;
 class Model {
 private:
-	//ModelCommonのポインタ
-	ModelCommon* modelCommon_;
+	////ModelCommonのポインタ
+	//ModelCommon* modelCommon_;
 	//テクスチャ
 	TextureManager* textureManager_ = nullptr;
 	uint32_t textureHandle_;
@@ -68,15 +68,12 @@ private:
 	//後に消すかも
 	bool useMonsterBall = true;
 public:
-	static Model* Create(const std::string& instanceName, const std::string& extension);
-
-	static Model* CreateParticle(const std::string& instanceName, const std::string& extension);
-
+	
 	static void PreDraw(ID3D12GraphicsCommandList* commandList);
 	static void PreDrawParticle(ID3D12GraphicsCommandList* commandList);
 
 	ModelData LoadModelFile(const std::string& directoryPath, const std::string& filename);
-	ModelData 	LoadModelGltf(const std::string& directoryPath, const std::string& filename);
+	ModelData LoadModelGltf(const std::string& directoryPath, const std::string& filename);
 
 	Node ReadNode(aiNode* node);
     /// <summary>

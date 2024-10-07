@@ -1,9 +1,18 @@
 #include"Object3d.h"
+#include"ModelManager.h"
+
+Object3d::Object3d() {
+
+}
+Object3d::~Object3d() {
+
+}
 
 Object3d* Object3d::CreateModel(const std::string& instanceName, const std::string& extension) {
 	// 新しいModelインスタンスを作成
-	Object3d* object3d = new Object3d();
-	object3d->model_.reset(Model::Create(instanceName,extension));
+	Object3d* object3d=new Object3d();
+	ModelManager::GetInstance()->LoadModel(instanceName, extension);
+	object3d->SetModel(instanceName, extension);
 	object3d->CreateWVPResource();
 	object3d->transform_.Init();
 	return object3d;
@@ -15,10 +24,10 @@ void Object3d::Update() {
 }
 
 //描画
-void Object3d::Draw( const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle, const Vector4& color) {
+void Object3d::Draw(const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle, const Vector4& color) {
 	// WVP行列の計算
 	if (model_->GetIsFileGltf()) {//.gltfファイルの場合
-		wvpDate_->WVP =model_->GetModelData().rootNode.localMatrix* transform_.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+		wvpDate_->WVP = model_->GetModelData().rootNode.localMatrix * transform_.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
 		wvpDate_->WorldInverseTranspose = Inverse(Transpose(model_->GetModelData().rootNode.localMatrix * wvpDate_->World));
 	}
 	else {//.objファイルの場合
@@ -26,11 +35,12 @@ void Object3d::Draw( const ViewProjection& viewProjection, std::optional<uint32_
 		wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
 	}
 	if (model_) {
-		model_->Draw( wvpResource_, textureHandle, color);
+		model_->Draw(wvpResource_, textureHandle, color);
 	}
 }
 
 void Object3d::DebugImgui() {
+
 	BaseObject3d::DebugImgui();
 }
 

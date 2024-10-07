@@ -7,11 +7,15 @@ public:
 	
 	WorldTransform transform_;
 private:
+	
 	//wvpリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>wvpResource_;
 	TransformationMatrix* wvpDate_;
 
 public:
+	Object3d();
+	~Object3d();
+
 	static Object3d* CreateModel(const std::string& instanceName, const std::string& extension);
 	//更新
 	void Update();

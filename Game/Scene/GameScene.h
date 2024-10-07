@@ -41,6 +41,8 @@ private:
 	std::unique_ptr<Object3d> modelPlane_ = nullptr;
 	std::unique_ptr<Object3d> modelFence_ = nullptr;
 	std::unique_ptr<Object3d> modelSuzanne_ = nullptr;
+	std::unique_ptr<Object3d> modelSuzanne2_ = nullptr;
+
 	std::unique_ptr<Object3d> modelTerrain_ = nullptr;
 	
 	//パーティクル変数
@@ -59,10 +61,7 @@ private:
 
 	uint32_t uvHandle_;
 
-	/*WorldTransform planeTransform_;
-	WorldTransform fenceTransform_;
-	WorldTransform suzanneTransform_;
-	WorldTransform terrainTransform_;*/
+	
 	WorldTransform transformSprite_;
 	WorldTransform uvTransformSprite_;
 	/*std::vector<std::unique_ptr<WorldTransform>>  planeTransforms_;*/

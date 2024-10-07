@@ -9,6 +9,7 @@
 #include<dxgidebug.h>
 #include <wrl.h>
 #include<format>
+#include<chrono>
 //class
 #include"WinApp.h"
 
@@ -18,6 +19,9 @@ private://メンバ変数
 
 	//ウィンドウズアプリケーション管理
 	WinApp* winApp_;
+
+	//記録時間
+	std::chrono::steady_clock::time_point reference_;
 
 	//Init------------------------------------------------------------------------------------------------------
 	//デバイス初期化関連
@@ -57,11 +61,9 @@ private://メンバ変数
 	IDxcIncludeHandler* includeHandler_;
 	//Init------------------------------------------------------------------------------------------------------
 
-
 	D3D12_VIEWPORT viewport_{};
 	D3D12_RECT scissorRect_{};
 	
-
 	//DescriptorSize
 	uint32_t descriptorSizeSRV_;
 	uint32_t descriptorSizeRTV_;
@@ -108,6 +110,16 @@ private://メンバ関数
 	/// dxcCompilerの初期化
 	/// </summary>
 	void dxcCompilerInit();
+
+	/// <summary>
+	/// FPS固定初期化
+	/// </summary>
+	void InitFixFPS();
+
+	/// <summary>
+	/// FPS固定更新
+	/// </summary>
+	void UpdateFixFPS();
 
 	Microsoft::WRL::ComPtr < ID3D12Resource> CreateDepthStencilTextureResource(Microsoft::WRL::ComPtr<ID3D12Device>  device, int32_t width, int32_t height);
 

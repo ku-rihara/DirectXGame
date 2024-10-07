@@ -1,4 +1,5 @@
 #include "WinApp.h"
+#pragma comment(lib,"winmm.lib")
 
 const wchar_t WinApp::kWindowClassName[] = L"DirectXGame";
 
@@ -7,11 +8,6 @@ const wchar_t WinApp::kWindowClassName[] = L"DirectXGame";
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 #endif
-
-WinApp* WinApp::GetInstance() {
-	static WinApp instance;
-	return &instance;
-}
 
 //ウィンドウプロシージャ
 LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
@@ -36,6 +32,8 @@ LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 void WinApp::MakeWindow(const wchar_t* title, int32_t clientWidth, int32_t clientHeight) {
 	//COMの初期化
 	CoInitializeEx(0, COINIT_MULTITHREADED);
+	//システムタイマーの分解能をあげる
+	timeBeginPeriod(1);
 	//ウィンドウプロシージャ
 	wc_.lpfnWndProc = WindowProc;
 	//ウィンドウクラス名

@@ -21,8 +21,8 @@ private://メンバ変数
 
 public://メンバ関数
 
-	// シングルトンインスタンスの取得
-	static WinApp* GetInstance();
+	//// シングルトンインスタンスの取得
+	//static WinApp* GetInstance();
 
 	// ウィンドウプロシージャ
 	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
