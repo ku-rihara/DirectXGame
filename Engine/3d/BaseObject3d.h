@@ -3,15 +3,17 @@
 
 class BaseObject3d {
 protected:
-	std::unique_ptr<Model>model_ = nullptr;
-	
+	Model* model_ = nullptr;
+
 public:
-	
-	//virtual	void Draw();
+	/*BaseObject3d() = default;
+	~BaseObject3d() = default;*/
+
 	//デバッグ表示
 	virtual	void DebugImgui();
-	
+
 	//setter
-	void SetModel(std::unique_ptr<Model> model) {
-		this->model_ = std::move(model);}
-  };
+	void SetModel(Model* model) {this->model_ = model;}
+
+	void SetModel(const std::string& modelName, const std::string& extension);
+};

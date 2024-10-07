@@ -264,8 +264,6 @@ void Object3DCommon::PreDraw(ID3D12GraphicsCommandList* commandList) {
 	// PipelineStateを設定
 	commandList->SetPipelineState(graphicsPipelineState_.Get());
 
-
-	// ここでさらに描画前の共通設定が必要であれば追加できます
 }
 
 void Object3DCommon :: PreDrawParticle(ID3D12GraphicsCommandList* commandList) {

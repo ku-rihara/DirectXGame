@@ -31,6 +31,7 @@ void GameScene::Init() {
 	modelPlaneParticle_.reset(Object3dParticle::CreateModel("Plane",".obj", modelInstanceMax_, randomEngine, lifeTimedist));
 	modelFence_.reset(Object3d::CreateModel("Fence", ".obj"));
 	modelSuzanne_.reset(Object3d::CreateModel("Suzanne", ".obj"));
+	modelSuzanne2_.reset(Object3d::CreateModel("Suzanne", ".obj"));
 	modelTerrain_.reset(Object3d::CreateModel("terrain", ".obj"));
 
 	////テクスチャハンドル
@@ -154,19 +155,17 @@ void GameScene::Update() {
 	if (Input::GetInstance()->PushKey(DIK_DOWN)) {
 		modelSuzanne_->transform_.translation_.y -= 0.01f;
 	}
-
 	
 	//ワールド行列更新
 	modelPlane_->Update();
 	modelFence_->Update();
 	modelSuzanne_->Update();
+	modelSuzanne2_->Update();
 	modelTerrain_->Update();
 	modelPlaneParticle_->Update(&viewProjection_);
 
 	transformSprite_.UpdateMatrix();
 	uvTransformSprite_.UpdateMatrix();
-
-	
 
 	// カメラ行列の計算をデバッグカメラのビュープロジェクションから行う
 	viewProjection_.matView_ = debugCamera_->GetViewProjection().matView_;
@@ -187,12 +186,13 @@ void GameScene::Draw() {
 		modelPlane_->Draw(viewProjection_);
 		modelFence_->Draw(viewProjection_);
 		modelSuzanne_->Draw(viewProjection_);
+		modelSuzanne2_->Draw(viewProjection_);
 		modelTerrain_->Draw(viewProjection_);
 		Model::PreDrawParticle(commandList);
 		modelPlaneParticle_->Draw(viewProjection_,uvHandle_);
 		Sprite::PreDraw(commandList);
 		////スプライト描画
-		//sprite_->Draw();
+		/*sprite_->Draw();*/
 	}
 }
 

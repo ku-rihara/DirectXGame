@@ -2,12 +2,14 @@
 #include"Object3dParticle.h"
 #include"ImGuiManager.h"
 #include"DirectXCommon.h"
+#include"ModelManager.h"
 
 Object3dParticle* Object3dParticle::CreateModel(const std::string& instanceName,const std::string& extension, const uint32_t& instanceNumMax, std::mt19937& randomEngine, std::uniform_real_distribution<float> dist) {
 	// 新しいModelインスタンスを作成
 	Object3dParticle* object3d = new Object3dParticle();
 	object3d->instanceMax_ = instanceNumMax;
-	object3d->model_.reset(Model::CreateParticle(instanceName,extension));
+	ModelManager::GetInstance()->LoadModelParticle(instanceName, extension);
+	object3d->SetModel(instanceName, extension);
 	object3d->CreateInstancingResource(instanceNumMax,randomEngine,dist);
 	object3d->SizeSecure(instanceNumMax);
 
@@ -64,7 +66,6 @@ void Object3dParticle::Draw(const ViewProjection& viewProjection, std::optional<
 void Object3dParticle::DebugImgui() {
 	BaseObject3d::DebugImgui();
 }
-
 
 void Object3dParticle::CreateInstancingResource(const uint32_t& instanceNum, std::mt19937& randomEngine, std::uniform_real_distribution<float> dist) {
 	//パーティクル数

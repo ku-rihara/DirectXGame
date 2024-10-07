@@ -132,6 +132,9 @@
     <ClCompile Include="Engine\3d\Object3dParticle.cpp">
       <Filter>MyEngine\3d</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3d\ModelManager.cpp">
+      <Filter>MyEngine\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -273,6 +276,9 @@
       <Filter>MyEngine\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\Object3dParticle.h">
+      <Filter>MyEngine\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\ModelManager.h">
       <Filter>MyEngine\3d</Filter>
     </ClInclude>
   </ItemGroup>

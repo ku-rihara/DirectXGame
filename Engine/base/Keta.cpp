@@ -6,6 +6,7 @@
 #include"DirectXCommon.h"
 #include"Audio.h"
 #include"Object3DCommon.h"
+#include"ModelManager.h"
 #include"Input.h"
 //#include"WorldTransformManager.h"
 
@@ -19,6 +20,7 @@ namespace {
 	ImGuiManager* imguiManager = nullptr;
 	TextureManager* stextureManager = nullptr;
 	Object3DCommon* sObject3DCommon = nullptr;
+	ModelManager* sModelManager = nullptr;
 	Audio* audio = nullptr;
 	Input* input = nullptr;
 }
@@ -29,7 +31,7 @@ void Keta::Initialize(const char* title, int width, int height) {
 	//ゲームウィンドウの作成
 	std::string windowTitle = std::string(title);
 	auto&& titleString= ConvertString(windowTitle);
-	sWinApp = WinApp::GetInstance();
+	sWinApp =new WinApp();
 	sWinApp->MakeWindow(titleString.c_str(), width, height);
 
 	//DirectX初期化
@@ -39,6 +41,9 @@ void Keta::Initialize(const char* title, int width, int height) {
 
 	sObject3DCommon = Object3DCommon::GetInstance();
 	sObject3DCommon->Init(sDirectXCommon);
+
+	sModelManager = ModelManager::GetInstance();
+	sModelManager->Initialize(sDirectXCommon);
 
 	imguiManager = ImGuiManager::GetInstance();
 	imguiManager->Init(sWinApp, sDirectXCommon);
@@ -80,10 +85,12 @@ void Keta::Finalize() {
 	audio->Finalize();
 	stextureManager->Finalize();
 	sDirectXCommon->ReleaseObject();
+	sModelManager->Finalize();
 	
 #ifdef _DEBUG
 	imguiManager->Finalizer();
 #endif
+	delete sWinApp;
 }
 //
 //void Keta::UpdateMatrixAll() {

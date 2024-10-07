@@ -17,20 +17,6 @@ void ModelCommon::Init(DirectXCommon* dxCommon) {
 	dxCommon_ = dxCommon;
 }
 
-Model* Model::Create(const std::string& instanceName, const std::string& extension) {
-	// 新しいModelインスタンスを作成
-	Model* model = new Model();
-	model->CreateModel(instanceName, extension);
-	return model;  // 成功した場合は新しいモデルを返す
-}
-
-Model* Model::CreateParticle(const std::string& instanceName, const std::string& extension) {
-	// 新しいModelインスタンスを作成
-	Model* model = new Model();
-	model->CreateCommon(instanceName, extension);
-	return model;  // 成功した場合は新しいモデルを返す
-}
-
 ModelData Model::LoadModelFile(const std::string& directoryPath, const std::string& filename) {
 	ModelData modelData;//構築するModelData
 	std::vector<Vector4>positions;//位置
@@ -162,11 +148,7 @@ void Model::CreateModel(const std::string& ModelName, const std::string& extensi
 	materialDate_->enableLighting = 2;
 	Light::GetInstance()->Init();
 }
-////	パーティクル
-//void Model::CreateModelParticle(const std::string& ModelName) {
-//	CreateCommon(ModelName);
-//	
-//}
+
 #ifdef _DEBUG
 void Model::DebugImGui() {
 
