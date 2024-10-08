@@ -21,6 +21,8 @@
 #include<random>
 #include <imgui.h>
 #include<memory>
+//struct 
+
 
 /// <summary>
 /// ゲームシーン
@@ -44,7 +46,6 @@ private:
 	std::unique_ptr<Object3d> modelSuzanne2_ = nullptr;
 
 	std::unique_ptr<Object3d> modelTerrain_ = nullptr;
-	
 	//パーティクル変数
 
 	const uint32_t modelInstanceMax_ = 10;

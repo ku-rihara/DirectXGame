@@ -16,9 +16,6 @@
     <Filter Include="MyEngine\struct">
       <UniqueIdentifier>{652ad917-7098-4697-8956-5714f98e5ed8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scene">
-      <UniqueIdentifier>{139ed3c3-bba9-47d7-a283-e1947b0bd5fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\2d">
       <UniqueIdentifier>{5dcb23b3-f528-445a-8d42-15128d79d561}</UniqueIdentifier>
     </Filter>
@@ -36,6 +33,12 @@
     </Filter>
     <Filter Include="リソースファイル">
       <UniqueIdentifier>{c2339910-3950-41dd-b9f7-ea5e25aeeb2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{cede4dd7-3861-4882-aa4c-62c5b0824a32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene">
+      <UniqueIdentifier>{139ed3c3-bba9-47d7-a283-e1947b0bd5fb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -73,7 +76,7 @@
       <Filter>math</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\GameScene.cpp">
-      <Filter>Scene</Filter>
+      <Filter>Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
       <Filter>MyEngine\2d</Filter>
@@ -207,7 +210,7 @@
       <Filter>MyEngine\struct</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\GameScene.h">
-      <Filter>Scene</Filter>
+      <Filter>Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\struct\CameraForGPU.h">
       <Filter>MyEngine\struct</Filter>
@@ -281,6 +284,9 @@
     <ClInclude Include="Engine\3d\ModelManager.h">
       <Filter>MyEngine\3d</Filter>
     </ClInclude>
+    <ClInclude Include="Game\random.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
@@ -295,6 +301,9 @@
     <None Include="resources\Shader\Particle.hlsli">
       <Filter>リソースファイル</Filter>
     </None>
+    <None Include="resources\Shader\Sprite.hlsli">
+      <Filter>リソースファイル</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\Shader\Object3d.PS.hlsl">
@@ -307,6 +316,12 @@
       <Filter>リソースファイル</Filter>
     </FxCompile>
     <FxCompile Include="resources\Shader\Particle.VS.hlsl">
+      <Filter>リソースファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Sprite.PS.hlsl">
+      <Filter>リソースファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Sprite.VS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
   </ItemGroup>
