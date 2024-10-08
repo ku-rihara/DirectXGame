@@ -49,7 +49,6 @@ void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position
 
 	//頂点インデックス
 	indexResourceSprite_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(uint32_t) * 6);
-
 	//リソースの先頭アドレスから使う
 	indexBufferViewSprite_.BufferLocation = indexResourceSprite_->GetGPUVirtualAddress();
 	//使用するリソースのサイズはインデックス6つ分のサイズ
@@ -135,12 +134,4 @@ void Sprite::SetScale(const Vector2& scale) {
 	transform_.scale = scale;
 
 }
-
-
-//void Sprite::ReleaseSprite() {
-//	vertexResourceSprite_->Release();
-//	indexResourceSprite_->Release();
-//	wvpResourceSprite_->Release();
-//	materialResourceSprite_->Release();
-//}
 

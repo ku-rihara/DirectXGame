@@ -2,11 +2,29 @@
 //#include"Model.h"
 #include"BaseObject3d.h"
 #include <memory>
-#include<random>
-#include<vector>
+#include"random.h"
+#include<list>
+#include"Transform.h"
 
 class Object3dParticle :public BaseObject3d {
 public:
+	struct Emitter {
+		Transform transform;
+		uint32_t count;
+		float frequency;
+		float frequencyTime;
+	};
+	struct Particle {
+		float lifeTime_;
+		float currentTime_;
+		Vector3 velocity_;
+		Vector4 color_;
+		WorldTransform worldTransform_;
+	
+	};
+	 std::list<Particle>particles_;
+	 Emitter emitter_;
+private:
 	uint32_t instanceMax_;
 	uint32_t instanceNum_;//インスタンス数
 	D3D12_CPU_DESCRIPTOR_HANDLE  instancingSrvHandleCPU_;
@@ -17,12 +35,12 @@ public:
 	ParticleFprGPU* instancingData_;
 	//パーティクル変数
 	const float kDeltaTime_ = 1.0f / 60.0f;
-	std::vector<float>lifeTimes_;
+	/*std::vector<float>lifeTimes_;
 	std::vector<float>currentTimes_;
-	std::vector<Vector3>velocities_;
+	std::vector<Vector3>velocities_;*/
 	//ワールドトランスフォーム
-	std::vector<std::unique_ptr<WorldTransform>> worldTransforms_;
-	std::vector<Vector4>colors_;
+	/*std::vector<std::unique_ptr<WorldTransform>> worldTransforms_;
+	std::vector<Vector4>colors_;*/
 private:
 	/// <summary>
 	/// リソース作成
@@ -30,11 +48,16 @@ private:
 	/// <param name="instanceNum"></param>
 	/// <param name="randomEngine"></param>
 	/// <param name="dist"></param>
-	void CreateInstancingResource(const uint32_t& instanceNum, std::mt19937& randomEngine, std::uniform_real_distribution<float> dist);
+	void CreateInstancingResource(const uint32_t& instanceNum);
 	/// <summary>
 	/// サイズ確保
 	/// </summary>
-	void SizeSecure(const uint32_t& instanceNumMax);
+	void Clear();
+	/// <summary>
+	/// ランダム生成
+	/// </summary>
+	/// <param name="random"></param>
+	Particle  MakeParticle(std::uniform_real_distribution<float> dist, std::uniform_real_distribution<float>velocityDist, float lifeTime);
 
 public:
 	/// <summary>
@@ -45,7 +68,7 @@ public:
 	/// <param name="randomEngine"></param>
 	/// <param name="dist"></param>
 	/// <returns></returns>
-	static Object3dParticle* CreateModel(const std::string& instanceName, const std::string& extension, const uint32_t& instanceNum, std::mt19937& randomEngine, std::uniform_real_distribution<float> dist);
+	static Object3dParticle* CreateModel(const std::string& instanceName, const std::string& extension, const uint32_t& instanceNum);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -62,12 +85,16 @@ public:
 	void DebugImgui()override;
 	
 	/// <summary>
-	/// ランダム生成
+	/// エミッター
 	/// </summary>
-	/// <param name="random"></param>
-	void MakeParticle(std::mt19937& random);
+	/// <param name="emitter"></param>
+	/// <param name="dist"></param>
+	/// <param name="velocityDist"></param>
+	/// <param name="lifeTime"></param>
+	void Emit(const Emitter& emitter, std::uniform_real_distribution<float> dist, std::uniform_real_distribution<float>velocityDist, float lifeTime);
 
 	//getter
 	uint32_t GetKnumInstance()const { return instanceNum_; }
-
+public:
+	
 };

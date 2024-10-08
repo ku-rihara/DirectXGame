@@ -4,6 +4,7 @@
 #include"Matrix4x4.h"
 #include <wrl.h>
 #include <d3d12.h>
+#include<list>
 // 定数バッファ用データ構造体
 struct ConstBufferDataWorldTransform {
 	Matrix4x4 matWorld; // ローカル → ワールド変換行列
@@ -13,6 +14,7 @@ struct ConstBufferDataWorldTransform {
 /// </summary>
 class WorldTransform{
 public:
+	
 	//ローカルスケール
 	Vector3 scale_ = { 1,1,1 };
 	//ローカル回転角
@@ -24,7 +26,6 @@ public:
 	//親となるワールド変換へのポインタ
 	const WorldTransform* parent_ = nullptr;
 	
-
 private:
 	Matrix4x4 billboardMatrix_;
 	Matrix4x4 backToFrontMatrix_;
@@ -72,6 +73,41 @@ public:
 	/// <returns>定数バッファ</returns>
 	const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return constBuffer_; }
 
+public:
+	
+	// ムーブコンストラクタを追加
+	WorldTransform(WorldTransform&& other) noexcept
+		: scale_(std::move(other.scale_)),
+		rotation_(std::move(other.rotation_)),
+		translation_(std::move(other.translation_)),
+		matWorld_(std::move(other.matWorld_)),
+		parent_(other.parent_),
+		billboardMatrix_(std::move(other.billboardMatrix_)),
+		backToFrontMatrix_(std::move(other.backToFrontMatrix_)),
+		constBuffer_(std::move(other.constBuffer_)),
+		constMap(other.constMap) {
+		// ムーブ後に other を初期化（必要に応じて）
+		other.constMap = nullptr; // など
+	}
 
+	
+	// ムーブ代入演算子を追加
+	WorldTransform& operator=(WorldTransform&& other) noexcept {
+		if (this != &other) {
+			scale_ = std::move(other.scale_);
+			rotation_ = std::move(other.rotation_);
+			translation_ = std::move(other.translation_);
+			matWorld_ = std::move(other.matWorld_);
+			parent_ = other.parent_;
+			billboardMatrix_ = std::move(other.billboardMatrix_);
+			backToFrontMatrix_ = std::move(other.backToFrontMatrix_);
+			constBuffer_ = std::move(other.constBuffer_);
+			constMap = other.constMap;
+
+			// ムーブ後に other を初期化
+			other.constMap = nullptr; // など
+		}
+		return *this;
+	}
 };
 

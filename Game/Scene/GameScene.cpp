@@ -28,7 +28,7 @@ void GameScene::Init() {
 	//モデル
 	std::uniform_real_distribution<float>lifeTimedist(1.0f, 3.0f);
 	modelPlane_.reset(Object3d::CreateModel("Plane",".obj"));
-	modelPlaneParticle_.reset(Object3dParticle::CreateModel("Plane",".obj", modelInstanceMax_, randomEngine, lifeTimedist));
+	modelPlaneParticle_.reset(Object3dParticle::CreateModel("Plane",".obj", modelInstanceMax_));
 	modelFence_.reset(Object3d::CreateModel("Fence", ".obj"));
 	modelSuzanne_.reset(Object3d::CreateModel("Suzanne", ".obj"));
 	modelSuzanne2_.reset(Object3d::CreateModel("Suzanne", ".obj"));
@@ -47,8 +47,13 @@ void GameScene::Init() {
 
 	//ビュープロジェクション
 	viewProjection_.Init();
-
-	modelPlaneParticle_->MakeParticle(randomEngine);
+	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
+	std::uniform_real_distribution<float> alphaDistribution(0.0f, 1.0f);
+	modelPlaneParticle_->emitter_.count = 5;
+	////1個作成
+	modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_, distribution,alphaDistribution,5);
+	/*modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_,distribution, alphaDistribution,10);
+	modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_,distribution, alphaDistribution,10);*/
 
 	// ワールドトランスフォーム値セット
 	transformSprite_.scale_.x = 0.7f;
@@ -85,12 +90,7 @@ void GameScene::Update() {
 			ImGui::DragFloat3("Translate", &modelPlane_->transform_.translation_.x, 0.01f);
 			ImGui::TreePop();
 		}
-		if (ImGui::TreeNode("PlaneParticle")) {
-			ImGui::DragFloat3("Scale", &modelPlaneParticle_->worldTransforms_[0]->scale_.x, 0.01f);
-			ImGui::DragFloat3("Rotate", &modelPlaneParticle_->worldTransforms_[0]->rotation_.x, 0.01f);
-			ImGui::DragFloat3("Translate", &modelPlaneParticle_->worldTransforms_[0]->translation_.x, 0.01f);
-			ImGui::TreePop();
-		}
+		
 		if (ImGui::TreeNode("Fence")) {
 			ImGui::DragFloat3("Scale", &modelFence_->transform_.scale_.x, 0.01f);
 			ImGui::DragFloat3("Rotate", &modelFence_->transform_.rotation_.x, 0.01f);
@@ -183,16 +183,16 @@ void GameScene::Draw() {
 	//平面描画
 	if (isDraw) {
 
-		modelPlane_->Draw(viewProjection_);
+	/*	modelPlane_->Draw(viewProjection_);
 		modelFence_->Draw(viewProjection_);
 		modelSuzanne_->Draw(viewProjection_);
 		modelSuzanne2_->Draw(viewProjection_);
-		modelTerrain_->Draw(viewProjection_);
+		modelTerrain_->Draw(viewProjection_);*/
 		Model::PreDrawParticle(commandList);
 		modelPlaneParticle_->Draw(viewProjection_,uvHandle_);
 		Sprite::PreDraw(commandList);
 		////スプライト描画
-		/*sprite_->Draw();*/
+	/*	sprite_->Draw();*/
 	}
 }
 
