@@ -18,6 +18,7 @@ Object3dParticle* Object3dParticle::CreateModel(const std::string& instanceName,
 void Object3dParticle::Update(std::optional<const ViewProjection*> viewProjection) {
 	for (std::list<Particle>::iterator particleIterator = particles_.begin();
 		particleIterator != particles_.end(); ++particleIterator) {
+		(*particleIterator).worldTransform_.translation_ += (*particleIterator).velocity_*kDeltaTime_;
 		if (viewProjection.has_value()) {
 			(*particleIterator).worldTransform_.BillboardUpdateMatrix(*viewProjection.value());
 		}
@@ -111,7 +112,7 @@ void Object3dParticle::Clear() {
 }
 
 //パーティクル作成
-Object3dParticle::Particle  Object3dParticle::MakeParticle(std::uniform_real_distribution<float> dist, std::uniform_real_distribution<float>velocityDist,float lifeTime) {
+Object3dParticle::Particle  Object3dParticle::MakeParticle(std::uniform_real_distribution<float> dist, std::uniform_real_distribution<float>velocityDist,const Transform&transform, float lifeTime) {
 	
 	Particle particle;
 	particle.lifeTime_ = lifeTime;
@@ -122,9 +123,10 @@ Object3dParticle::Particle  Object3dParticle::MakeParticle(std::uniform_real_dis
 	//色
 	particle.color_ = { dist(random), dist(random), dist(random), 1.0f };
 	//座標
-	particle.worldTransform_.translation_ = { dist(random), dist(random), dist(random) };
+	Vector3 randomTranslate= { dist(random), dist(random), dist(random) };
+	particle.worldTransform_.translation_ = transform.translate + randomTranslate;
 	//速度
-	particle.velocity_ = { velocityDist(random), velocityDist(random), velocityDist(random) };
+	particle.velocity_ = { velocityDist(random), velocityDist(random), 0 };
 	
 	return  particle;
 }
@@ -132,7 +134,7 @@ Object3dParticle::Particle  Object3dParticle::MakeParticle(std::uniform_real_dis
 void Object3dParticle::Emit(const Emitter& emitter, std::uniform_real_distribution<float> dist, std::uniform_real_distribution<float>velocityDist, float lifeTime) {
 	
 	for (uint32_t i = 0; i < emitter.count; ++i) {
-		particles_.emplace_back(MakeParticle(dist, velocityDist, lifeTime));
+		particles_.emplace_back(MakeParticle(dist, velocityDist,emitter.transform, lifeTime));
 	}
 	//for (uint32_t i = 0; i < emitter.count; ++i) {
 	//	Particle particle = MakeParticle(dist, velocityDist, lifeTime);
