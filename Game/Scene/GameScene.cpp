@@ -47,11 +47,12 @@ void GameScene::Init() {
 
 	//ビュープロジェクション
 	viewProjection_.Init();
-	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
-	std::uniform_real_distribution<float> alphaDistribution(0.0f, 1.0f);
-	modelPlaneParticle_->emitter_.count = 5;
+		//emitter
+	modelPlaneParticle_->emitter_.count = 3;
+	modelPlaneParticle_->emitter_.frequency = 0.5f;
+	modelPlaneParticle_->emitter_.frequencyTime = 0.0f;
 	////1個作成
-	modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_, distribution,alphaDistribution,5);
+	/*modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_, distribution,alphaDistribution,5);*/
 	/*modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_,distribution, alphaDistribution,10);
 	modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_,distribution, alphaDistribution,10);*/
 
@@ -61,86 +62,16 @@ void GameScene::Init() {
 }
 
 void GameScene::Update() {
+	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
+	std::uniform_real_distribution<float> alphaDistribution(0.0f, 1.0f);
+
 	debugCamera_->Update();
 
 	if (Input::GetInstance()->TrrigerKey(DIK_F)) {
 		Audio::GetInstance()->SoundPlayWave(soundDataHandle_);
 	}
-#ifdef _DEBUG
-	ImGui::Begin("Window");
 
-	if (ImGui::TreeNode("IsDrawModel")) {
-		ImGui::Checkbox("isPlane", &isDraw);
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("ViewProjection")) {
-
-
-			ImGui::DragFloat3("Scale", &viewProjection_.scale_.x, 0.01f);
-			ImGui::DragFloat3("Rotate", &viewProjection_.rotation_.x, 0.01f);
-			ImGui::DragFloat3("Translate", &viewProjection_.translation_.x, 0.01f);
-			ImGui::TreePop();	
-	}
-
-	if (ImGui::TreeNode("WorldTransform")) {
-
-		if (ImGui::TreeNode("Plane")) {
-			ImGui::DragFloat3("Scale", &modelPlane_->transform_.scale_.x, 0.01f);
-			ImGui::DragFloat3("Rotate", &modelPlane_->transform_.rotation_.x, 0.01f);
-			ImGui::DragFloat3("Translate", &modelPlane_->transform_.translation_.x, 0.01f);
-			ImGui::TreePop();
-		}
-		
-		if (ImGui::TreeNode("Fence")) {
-			ImGui::DragFloat3("Scale", &modelFence_->transform_.scale_.x, 0.01f);
-			ImGui::DragFloat3("Rotate", &modelFence_->transform_.rotation_.x, 0.01f);
-			ImGui::DragFloat3("Translate", &modelFence_->transform_.translation_.x, 0.01f);
-			ImGui::TreePop();
-		}
-
-		if (ImGui::TreeNode("Suzanne")) {
-			ImGui::DragFloat3("Scale", &modelSuzanne_->transform_.scale_.x, 0.01f);
-			ImGui::DragFloat3("Rotate", &modelSuzanne_->transform_.rotation_.x, 0.01f);
-			ImGui::DragFloat3("Translate", &modelSuzanne_->transform_.translation_.x, 0.01f);
-			ImGui::TreePop();
-		}
-
-
-		if (ImGui::TreeNode("Sprite")) {
-			ImGui::DragFloat3("Scale", &sprite_->transform_.scale.x, 0.1f);
-			ImGui::DragFloat3("Rotate", &sprite_->transform_.rotate.x, 1.0f);
-			ImGui::DragFloat3("Translate", &sprite_->transform_.translate.x, 1.0f);
-			ImGui::TreePop();
-		}
-
-		ImGui::TreePop();
-	}
-
-	if (ImGui::TreeNode("UVTransform")) {
-		ImGui::DragFloat2("Scale", &uvTransformSprite_.scale_.x, 0.1f, -10.0f, 10.0f);
-		ImGui::DragFloat2("Translate", &uvTransformSprite_.translation_.x, 0.01f, -10.0f, 10.0f);
-		ImGui::SliderAngle("Rotate", &uvTransformSprite_.rotation_.z);
-		ImGui::TreePop();
-	}
-	ImGui::End();
-	//ライティング
-	ImGui::Begin("Lighting");
-	Light::GetInstance()->DebugImGui();
-	if (ImGui::TreeNode("Plane")) {
-		modelPlane_->DebugImgui();
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("Suzanne")) {
-		modelSuzanne_->DebugImgui();
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("Terrian")) {
-		modelTerrain_->DebugImgui();
-		ImGui::TreePop();
-	}
-	ImGui::End();
-
-#endif
+	Debug();//デバッグ
 
 	//インプット処理
 	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
@@ -154,6 +85,13 @@ void GameScene::Update() {
 	}
 	if (Input::GetInstance()->PushKey(DIK_DOWN)) {
 		modelSuzanne_->transform_.translation_.y -= 0.01f;
+	}
+	
+	modelPlaneParticle_->emitter_.frequencyTime += kDeltaTime_;//時刻すすめる
+	//頻度より大きいなら
+	if (modelPlaneParticle_->emitter_.frequency <= modelPlaneParticle_->emitter_.frequencyTime) {
+		modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_, distribution, alphaDistribution, 5);
+		modelPlaneParticle_->emitter_.frequencyTime -= modelPlaneParticle_->emitter_.frequency;//時刻すすめる
 	}
 	
 	//ワールド行列更新
@@ -196,3 +134,87 @@ void GameScene::Draw() {
 	}
 }
 
+
+void GameScene::Debug() {
+#ifdef _DEBUG
+	ImGui::Begin("Window");
+
+	if (ImGui::TreeNode("IsDrawModel")) {
+		ImGui::Checkbox("isDraw", &isDraw);
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("ViewProjection")) {
+
+		ImGui::DragFloat3("Scale", &viewProjection_.scale_.x, 0.01f);
+		ImGui::DragFloat3("Rotate", &viewProjection_.rotation_.x, 0.01f);
+		ImGui::DragFloat3("Translate", &viewProjection_.translation_.x, 0.01f);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("WorldTransform")) {
+
+		if (ImGui::TreeNode("Plane")) {
+			ImGui::DragFloat3("Scale", &modelPlane_->transform_.scale_.x, 0.01f);
+			ImGui::DragFloat3("Rotate", &modelPlane_->transform_.rotation_.x, 0.01f);
+			ImGui::DragFloat3("Translate", &modelPlane_->transform_.translation_.x, 0.01f);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Fence")) {
+			ImGui::DragFloat3("Scale", &modelFence_->transform_.scale_.x, 0.01f);
+			ImGui::DragFloat3("Rotate", &modelFence_->transform_.rotation_.x, 0.01f);
+			ImGui::DragFloat3("Translate", &modelFence_->transform_.translation_.x, 0.01f);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Suzanne")) {
+			ImGui::DragFloat3("Scale", &modelSuzanne_->transform_.scale_.x, 0.01f);
+			ImGui::DragFloat3("Rotate", &modelSuzanne_->transform_.rotation_.x, 0.01f);
+			ImGui::DragFloat3("Translate", &modelSuzanne_->transform_.translation_.x, 0.01f);
+			ImGui::TreePop();
+		}
+
+
+		if (ImGui::TreeNode("Sprite")) {
+			ImGui::DragFloat3("Scale", &sprite_->transform_.scale.x, 0.1f);
+			ImGui::DragFloat3("Rotate", &sprite_->transform_.rotate.x, 1.0f);
+			ImGui::DragFloat3("Translate", &sprite_->transform_.translate.x, 1.0f);
+			ImGui::TreePop();
+		}
+
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("ParticleEmitter")) {
+		ImGui::DragFloat3("Scale", &modelPlaneParticle_->emitter_.transform.scale.x, 0.01f);
+		ImGui::DragFloat3("Rotate", &modelPlaneParticle_->emitter_.transform.rotate.x, 0.01f);
+		ImGui::DragFloat3("Translate", &modelPlaneParticle_->emitter_.transform.translate.x,0.01f);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("UVTransform")) {
+		ImGui::DragFloat2("Scale", &uvTransformSprite_.scale_.x, 0.1f, -10.0f, 10.0f);
+		ImGui::DragFloat2("Translate", &uvTransformSprite_.translation_.x, 0.01f, -10.0f, 10.0f);
+		ImGui::SliderAngle("Rotate", &uvTransformSprite_.rotation_.z);
+		ImGui::TreePop();
+	}
+	ImGui::End();
+	//ライティング
+	ImGui::Begin("Lighting");
+	Light::GetInstance()->DebugImGui();
+	if (ImGui::TreeNode("Plane")) {
+		modelPlane_->DebugImgui();
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("Suzanne")) {
+		modelSuzanne_->DebugImgui();
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("Terrian")) {
+		modelTerrain_->DebugImgui();
+		ImGui::TreePop();
+	}
+	ImGui::End();
+
+#endif
+}

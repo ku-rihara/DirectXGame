@@ -48,7 +48,7 @@ private:
 	std::unique_ptr<Object3d> modelTerrain_ = nullptr;
 	//パーティクル変数
 
-	const uint32_t modelInstanceMax_ = 10;
+	const uint32_t modelInstanceMax_ = 100;
 	
 	std::unique_ptr<Object3dParticle> modelPlaneParticle_ = nullptr;
 	
@@ -91,5 +91,10 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
+
+	/// <summary>
+	/// デバッグ表示
+	/// </summary>
+	void Debug();
 
 };

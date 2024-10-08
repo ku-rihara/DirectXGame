@@ -35,12 +35,7 @@ private:
 	ParticleFprGPU* instancingData_;
 	//パーティクル変数
 	const float kDeltaTime_ = 1.0f / 60.0f;
-	/*std::vector<float>lifeTimes_;
-	std::vector<float>currentTimes_;
-	std::vector<Vector3>velocities_;*/
-	//ワールドトランスフォーム
-	/*std::vector<std::unique_ptr<WorldTransform>> worldTransforms_;
-	std::vector<Vector4>colors_;*/
+	
 private:
 	/// <summary>
 	/// リソース作成
@@ -57,7 +52,7 @@ private:
 	/// ランダム生成
 	/// </summary>
 	/// <param name="random"></param>
-	Particle  MakeParticle(std::uniform_real_distribution<float> dist, std::uniform_real_distribution<float>velocityDist, float lifeTime);
+	Particle  MakeParticle(std::uniform_real_distribution<float> dist, std::uniform_real_distribution<float>velocityDist, const Transform& transform, float lifeTime);
 
 public:
 	/// <summary>
