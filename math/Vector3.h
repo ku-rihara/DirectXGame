@@ -19,8 +19,11 @@ struct Vector3 {
     friend Vector3 operator*(const float& scalar, const Vector3& vec);
 
     Vector3 operator/(const Vector3& obj)const;
+    Vector3 operator/(const float& scalar) const;
 
     void operator+=(const Vector3& obj);
+    void operator+=(const float& obj);
+    void operator-=(const Vector3& obj);
 };
 
 Vector3 Normalize(const Vector3& v);  //正規化

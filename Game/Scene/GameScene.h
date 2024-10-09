@@ -2,26 +2,19 @@
 
 #include"Keta.h"
 //DirectX
-#include"WinApp.h"
 #include "DirectXCommon.h"
 #include"TextureManager.h"
-//Transform
-#include "WorldTransform.h"
-#include"ViewProjection.h"
-//obj
-#include "Mesh.h"
-#include "Model.h"
+//2d
 #include "Sprite.h"
 #include "Audio.h"
-#include"Input.h"
+//3d
+#include "Model.h"
 #include"Object3d.h"
-#include"Object3dParticle.h"
 //etc
 #include"DebugCamera.h"
+//std
 #include<random>
 #include<memory>
-//struct 
-
 
 /// <summary>
 /// ゲームシーン

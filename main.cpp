@@ -1,5 +1,5 @@
 #include<GameScene.h>
-
+#include"GlobalParameter.h"
 
 const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ_CG3";
 
@@ -10,7 +10,8 @@ GameScene* gameScene = nullptr;
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 	Keta::Initialize(kWindowTitle, 1280, 720);
-    
+	//グローバル変数の読み込み
+	GlobalParameter::GetInstance()->LoadFiles();
 	// ゲームシーンの生成
 	gameScene = new GameScene();
 	gameScene->Init();
@@ -19,7 +20,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	while (Keta::ProcessMessage() == 0) {
 		//フレームの開始
 		Keta::BeginFrame();
-	
+		//グローバル変数の更新
+		GlobalParameter::GetInstance()->Update();
 		// ゲームシーンの毎フレーム処理
 		gameScene->Update();
 		// ゲームシーンの描画
