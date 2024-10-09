@@ -7,12 +7,6 @@
     <Filter Include="リソースファイル">
       <UniqueIdentifier>{c2339910-3950-41dd-b9f7-ea5e25aeeb2e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game">
-      <UniqueIdentifier>{cede4dd7-3861-4882-aa4c-62c5b0824a32}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Scene">
-      <UniqueIdentifier>{139ed3c3-bba9-47d7-a283-e1947b0bd5fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\ヘッダーファイル">
       <UniqueIdentifier>{6b2f8646-1513-4eb8-b7ab-91b2754e232d}</UniqueIdentifier>
     </Filter>
@@ -64,34 +58,40 @@
     <Filter Include="MyEngine\ヘッダーファイル\math">
       <UniqueIdentifier>{cbb557b1-5fbc-40e6-815b-b9cfc1183a38}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ect">
-      <UniqueIdentifier>{421f3ef0-a54f-40c4-b0ca-1768f5f2b979}</UniqueIdentifier>
+    <Filter Include="Game">
+      <UniqueIdentifier>{adacdffd-d6a9-4d0b-884a-77c132a957b8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ect\imgui">
+    <Filter Include="Game\Scene">
+      <UniqueIdentifier>{139ed3c3-bba9-47d7-a283-e1947b0bd5fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="etc">
+      <UniqueIdentifier>{3a26399e-1642-4e19-a43e-74c45aca95b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="etc\imgui">
       <UniqueIdentifier>{8ed0676c-f1d0-4af2-96bc-4c2c8c07c532}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
-      <Filter>ect\imgui</Filter>
+      <Filter>etc\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_demo.cpp">
-      <Filter>ect\imgui</Filter>
+      <Filter>etc\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_draw.cpp">
-      <Filter>ect\imgui</Filter>
+      <Filter>etc\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_impl_dx12.cpp">
-      <Filter>ect\imgui</Filter>
+      <Filter>etc\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_impl_win32.cpp">
-      <Filter>ect\imgui</Filter>
+      <Filter>etc\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_tables.cpp">
-      <Filter>ect\imgui</Filter>
+      <Filter>etc\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_widgets.cpp">
-      <Filter>ect\imgui</Filter>
+      <Filter>etc\imgui</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\GameScene.cpp">
       <Filter>Game\Scene</Filter>
@@ -171,28 +171,28 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
-      <Filter>ect\imgui</Filter>
+      <Filter>etc\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imgui.h">
-      <Filter>ect\imgui</Filter>
+      <Filter>etc\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imgui_impl_dx12.h">
-      <Filter>ect\imgui</Filter>
+      <Filter>etc\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imgui_impl_win32.h">
-      <Filter>ect\imgui</Filter>
+      <Filter>etc\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imgui_internal.h">
-      <Filter>ect\imgui</Filter>
+      <Filter>etc\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imstb_rectpack.h">
-      <Filter>ect\imgui</Filter>
+      <Filter>etc\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imstb_textedit.h">
-      <Filter>ect\imgui</Filter>
+      <Filter>etc\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imstb_truetype.h">
-      <Filter>ect\imgui</Filter>
+      <Filter>etc\imgui</Filter>
     </ClInclude>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
       <Filter>MyEngine\ヘッダーファイル\struct</Filter>
@@ -235,9 +235,6 @@
     </ClInclude>
     <ClInclude Include="Engine\struct\ParticleForGPU.h">
       <Filter>MyEngine\ヘッダーファイル\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\random.h">
-      <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Engine\2d\ImGuiManager.h">
       <Filter>MyEngine\ヘッダーファイル\2d</Filter>
@@ -317,10 +314,13 @@
     <ClInclude Include="Engine\3d\ViewProjection.h">
       <Filter>MyEngine\ヘッダーファイル\3d</Filter>
     </ClInclude>
+    <ClInclude Include="Game\random.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
-      <Filter>ect\imgui</Filter>
+      <Filter>etc\imgui</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

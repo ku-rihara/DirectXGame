@@ -19,7 +19,6 @@
 //etc
 #include"DebugCamera.h"
 #include<random>
-#include <imgui.h>
 #include<memory>
 //struct 
 
@@ -38,34 +37,11 @@ private:
 	uint32_t textureHandle_ = 0; 
 	uint32_t soundDataHandle_ = 0; 
 	uint32_t voiceHandle_ = 0;     
-	std::unique_ptr<Sprite> sprite_ = nullptr;
-
-	std::unique_ptr<Object3d> modelPlane_ = nullptr;
-	std::unique_ptr<Object3d> modelFence_ = nullptr;
-	std::unique_ptr<Object3d> modelSuzanne_ = nullptr;
-	std::unique_ptr<Object3d> modelSuzanne2_ = nullptr;
-
-	std::unique_ptr<Object3d> modelTerrain_ = nullptr;
-	//パーティクル変数
-
-	const uint32_t modelInstanceMax_ = 100;
 	
-	std::unique_ptr<Object3dParticle> modelPlaneParticle_ = nullptr;
-	
-	const float kDeltaTime_ = 1.0f / 60.0f;
-
-	bool isDraw = true;
-
 	ViewProjection viewProjection_;
 
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
 
-	uint32_t uvHandle_;
-
-	
-	WorldTransform transformSprite_;
-	WorldTransform uvTransformSprite_;
-	/*std::vector<std::unique_ptr<WorldTransform>>  planeTransforms_;*/
 public: 
 	/// <summary>
 	/// コンストクラタ
