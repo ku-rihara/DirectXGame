@@ -6,7 +6,7 @@
 class DebugCamera{
 	// カメラ注視点までの距離
 	static const float distance_;
-private:
+private://メンバ変数
 	//入力クラスのポインタ
 	Input* input_;
 	//スケーリング
@@ -16,6 +16,8 @@ private:
 	ViewProjection viewProjection_;
 	//回転行列
 	Matrix4x4 matRot_;
+	//アクティブ化
+	bool isActive_;
 private:
 	/// <summary>
 	/// 行列更新
@@ -53,5 +55,7 @@ public:
 	/// </summary>
 	/// <returns>ビュープロジェクション</returns>
 	const ViewProjection& GetViewProjection() { return viewProjection_; }
+
+	void SetIsActive(bool is) { isActive_ = is; }
 };
 

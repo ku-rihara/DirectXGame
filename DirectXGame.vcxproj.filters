@@ -64,31 +64,34 @@
     <Filter Include="MyEngine\ヘッダーファイル\math">
       <UniqueIdentifier>{cbb557b1-5fbc-40e6-815b-b9cfc1183a38}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\imgui">
+    <Filter Include="ect">
+      <UniqueIdentifier>{421f3ef0-a54f-40c4-b0ca-1768f5f2b979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ect\imgui">
       <UniqueIdentifier>{8ed0676c-f1d0-4af2-96bc-4c2c8c07c532}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
-      <Filter>MyEngine\imgui</Filter>
+      <Filter>ect\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_demo.cpp">
-      <Filter>MyEngine\imgui</Filter>
+      <Filter>ect\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_draw.cpp">
-      <Filter>MyEngine\imgui</Filter>
+      <Filter>ect\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_impl_dx12.cpp">
-      <Filter>MyEngine\imgui</Filter>
+      <Filter>ect\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_impl_win32.cpp">
-      <Filter>MyEngine\imgui</Filter>
+      <Filter>ect\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_tables.cpp">
-      <Filter>MyEngine\imgui</Filter>
+      <Filter>ect\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_widgets.cpp">
-      <Filter>MyEngine\imgui</Filter>
+      <Filter>ect\imgui</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\GameScene.cpp">
       <Filter>Game\Scene</Filter>
@@ -168,28 +171,28 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
-      <Filter>MyEngine\imgui</Filter>
+      <Filter>ect\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imgui.h">
-      <Filter>MyEngine\imgui</Filter>
+      <Filter>ect\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imgui_impl_dx12.h">
-      <Filter>MyEngine\imgui</Filter>
+      <Filter>ect\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imgui_impl_win32.h">
-      <Filter>MyEngine\imgui</Filter>
+      <Filter>ect\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imgui_internal.h">
-      <Filter>MyEngine\imgui</Filter>
+      <Filter>ect\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imstb_rectpack.h">
-      <Filter>MyEngine\imgui</Filter>
+      <Filter>ect\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imstb_textedit.h">
-      <Filter>MyEngine\imgui</Filter>
+      <Filter>ect\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imstb_truetype.h">
-      <Filter>MyEngine\imgui</Filter>
+      <Filter>ect\imgui</Filter>
     </ClInclude>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
       <Filter>MyEngine\ヘッダーファイル\struct</Filter>
@@ -229,9 +232,6 @@
     </ClInclude>
     <ClInclude Include="Engine\struct\SpotLight.h">
       <Filter>MyEngine\ヘッダーファイル\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\ViewProjection.h">
-      <Filter>MyEngine\cppファイル\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\struct\ParticleForGPU.h">
       <Filter>MyEngine\ヘッダーファイル\struct</Filter>
@@ -314,10 +314,13 @@
     <ClInclude Include="math\Vector2.h">
       <Filter>MyEngine\ヘッダーファイル\math</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\3d\ViewProjection.h">
+      <Filter>MyEngine\ヘッダーファイル\3d</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
-      <Filter>MyEngine\imgui</Filter>
+      <Filter>ect\imgui</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>
