@@ -41,6 +41,7 @@
     <ClCompile Include="Game\Camera\GameCamera.cpp" />
     <ClCompile Include="Game\GrobalParamater\GlobalParameter.cpp" />
     <ClCompile Include="Game\Rail\Rail.cpp" />
+    <ClCompile Include="Game\Rail\RailManager.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\MathFunction.cpp" />
@@ -94,6 +95,7 @@
     <ClInclude Include="Game\Camera\GameCamera.h" />
     <ClInclude Include="Game\GrobalParamater\GlobalParameter.h" />
     <ClInclude Include="Game\Rail\Rail.h" />
+    <ClInclude Include="Game\Rail\RailManager.h" />
     <ClInclude Include="Game\random.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
     <ClInclude Include="math\MathFunction.h" />

@@ -14,7 +14,8 @@
 #include"DebugCamera.h"
 //std
 #include<random>
-#include<memory>
+//obj
+#include"RailManager.h"
 
 /// <summary>
 /// ゲームシーン
@@ -30,10 +31,13 @@ private:
 	uint32_t textureHandle_ = 0; 
 	uint32_t soundDataHandle_ = 0; 
 	uint32_t voiceHandle_ = 0;     
-	
+	//ビュープロジェクション
 	ViewProjection viewProjection_;
-
+	//デバッグカメラ
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
+
+	//レールマネージャー
+	std::unique_ptr<RailManager>railManager_;
 
 public: 
 	/// <summary>

@@ -18,6 +18,15 @@ Object3d* Object3d::CreateModel(const std::string& instanceName, const std::stri
 	return object3d;
 }
 
+//Object3d* Object3d::CreateModel(Model*model) {
+//	// 新しいModelインスタンスを作成
+//	Object3d* object3d=new Object3d();
+//	object3d->SetModel(model);
+//	object3d->CreateWVPResource();
+//	object3d->transform_.Init();
+//	return object3d;
+//}
+
 //更新
 void Object3d::Update() {
 	transform_.UpdateMatrix();

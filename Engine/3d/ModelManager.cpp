@@ -48,6 +48,15 @@ Model* ModelManager::FindModel(const std::string& modelName, const std::string& 
 	//ファイル名一致なし
 	return nullptr;
 }
+//Model* ModelManager::Load(const std::string& modelName, const std::string& extension) {
+//	LoadModel(modelName, extension);
+//	return FindModel(modelName, extension);
+//}
+//
+//Model* ModelManager::LoadParticle(const std::string& modelName, const std::string& extension) {
+//	LoadModelParticle(modelName, extension);
+//	return FindModel(modelName, extension);
+//}
 
 // 終了
 void ModelManager::Finalize() {
