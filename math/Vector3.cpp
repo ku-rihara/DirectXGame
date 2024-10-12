@@ -74,16 +74,48 @@ Vector3 Vector3::operator*(const Matrix4x4& obj) const {
 
 Vector3 Vector3:: operator/(const Vector3& obj)  const {
 	Vector3 result;
-	result.x = x / obj.x;
-	result.y = y / obj.y;
-	result.z = z / obj.z;
+
+		result.x = x / obj.x;
+		result.y = y / obj.y;
+		result.z = z / obj.z;
+
 	return result;
 }
+
+// スカラーでの除算のオーバーロード
+Vector3 Vector3::operator/(const float& scalar) const {
+	Vector3 result;
+
+		result.x = x / scalar;
+		result.y = y / scalar;
+		result.z = z / scalar;
+	
+	return result;
+}
+
 void Vector3::operator+=(const Vector3& obj) {
+
 	x += obj.x;
 	y += obj.y;
 	z += obj.z;
+
 }
+
+void Vector3::operator+=(const float& obj) {
+
+	x += obj;
+	y += obj;
+	z += obj;
+}
+
+void Vector3::operator-=(const Vector3& obj) {
+
+	x -= obj.x;
+	y -= obj.y;
+	z -= obj.z;
+}
+
+
 
 //内積
 float Dot(const Vector3& v1, const Vector3& v2) {

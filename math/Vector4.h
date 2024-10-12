@@ -8,3 +8,7 @@ struct Vector4{
 	float z;
 	float w;
 };
+
+Vector4 Normalize(const Vector4& v);  //正規化
+
+float Length(const Vector4& v);

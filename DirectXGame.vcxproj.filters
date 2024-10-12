@@ -177,6 +177,9 @@
     <ClCompile Include="Game\Scene\GameScene.cpp">
       <Filter>Game\.cpp\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\input\Mouse.cpp">
+      <Filter>MyEngine\.cpp\input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -325,6 +328,9 @@
     </ClInclude>
     <ClInclude Include="Game\random.h">
       <Filter>Game\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\input\Mouse.h">
+      <Filter>MyEngine\.h\input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
