@@ -2,15 +2,14 @@
 #include"ModelManager.h"
 
 void RailManager::Init() {
-	/*model_ = ModelManager::GetInstance()->Load("terrain",".obj");
-  */
+	
 }
 
 //レール追加
 void  RailManager::AddRail(const Vector3& pos) {
 	std::unique_ptr<Rail>rail;
 	rail = std::make_unique<Rail>();
-	rail->objct3D_.reset(Object3d::CreateModel("terrain", ".obj"));
+	rail->objct3D_.reset(Object3d::CreateModel("cube", ".obj"));
 	rail->SetPos(pos);
 	rails_.push_back(std::move(rail));
 }

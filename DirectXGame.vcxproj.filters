@@ -79,6 +79,9 @@
     <Filter Include="Game\GrobalParamater">
       <UniqueIdentifier>{7a4660dc-5ebe-42c4-9212-f2bed1fb2a2b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player">
+      <UniqueIdentifier>{49735e03-9649-4fa4-8760-597c998ffe2f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -144,9 +147,6 @@
     <ClCompile Include="Engine\base\Keta.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\base\Object3DCommon.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
@@ -192,6 +192,10 @@
     <ClCompile Include="Game\Rail\RailManager.cpp">
       <Filter>Game\Rail</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player\Player.cpp">
+      <Filter>Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -355,6 +359,9 @@
     </ClInclude>
     <ClInclude Include="Game\Rail\RailManager.h">
       <Filter>Game\Rail</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Player.h">
+      <Filter>Game\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -34,6 +34,10 @@ void GameScene::Init() {
 
 void GameScene::Update() {
 
+	if (Input::GetInstance()->IsTriggerMouse(0)) {
+		railManager_->AddRail(Input::GetInstance()->GetMousePos3D(viewProjection_));
+	}
+
 	debugCamera_->Update();//デバッグカメラ更新
 	Debug();//デバッグ
 
@@ -77,6 +81,9 @@ void GameScene::Debug() {
 		ImGui::DragFloat3("Translate", &viewProjection_.translation_.x, 0.01f);
 		ImGui::TreePop();
 	}
+	ImGui::Text("3DX:%5.4f, 3DY:%5.4f, 3DZ:%5.4f", Input::GetInstance()->GetMousePos3D(viewProjection_).x, Input::GetInstance()->GetMousePos3D(viewProjection_).y, Input::GetInstance()->GetMousePos3D(viewProjection_).z);
+	ImGui::Text("2DX:%5.4f, 2DY:%5.4f", Input::GetInstance()->GetMousePos().x, Input::GetInstance()->GetMousePos().y);
+
 
 	ImGui::End();
 	//ライティング

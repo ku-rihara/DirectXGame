@@ -1,16 +1,19 @@
 #pragma once
 
+
+#include"Vector2.h"
+#include"Vector3.h"
+#include"ViewProjection.h"
+//std
 #include <variant>
 #include<wrl.h>
 #include<vector>
 #include <array>
-#include"Vector2.h"
-
+//input
 #include <XInput.h>
 #define DIRECTNPUT_VERSION 0x0800//バージョン指定
 #include<dinput.h>
 
-// インナークラス
 struct MouseMove {
 	LONG lX;
 	LONG lY;
@@ -18,6 +21,8 @@ struct MouseMove {
 };
 
 class Input {
+public: // インナークラス
+	
 
 private:
 	enum class PadType {
@@ -45,6 +50,8 @@ private:
 	DIMOUSESTATE2 mouse_;
 	DIMOUSESTATE2 mousePre_;
 	Vector2 mousePosition_;
+
+	HWND hWnd_;
 public:
 	// シングルトンインスタンスの取得
 	static Input* GetInstance();
@@ -146,7 +153,13 @@ public:
 	/// マウスの位置を取得する（ウィンドウ座標系）
 	/// </summary>
 	/// <returns>マウスの位置</returns>
-	const Vector2& GetMousePosition() const;
+	 Vector2 GetMousePos() ;
+
+	/// <summary>
+	/// 3Dのマウス座標を取得
+	/// </summary>
+	/// <returns></returns>
+	 Vector3 GetMousePos3D(const ViewProjection& viewprojection)const;
 
 	const BYTE* GetKeyState() const { return key_.data(); }
 	const BYTE* GetPreviousKeyState() const { return keyPre_.data(); }

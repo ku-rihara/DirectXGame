@@ -1,6 +1,6 @@
 #include "Input.h"
 #include<assert.h>
-
+#include<DirectXMath.h>
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "xinput.lib")
@@ -9,6 +9,7 @@ template bool Input::GetJoystickState<DIJOYSTATE2>(int32_t stickNo, DIJOYSTATE2&
 template bool Input::GetJoystickState<XINPUT_STATE>(int32_t stickNo, XINPUT_STATE& out) const;
 template bool Input::GetJoystickStatePrevious<DIJOYSTATE2>(int32_t stickNo, DIJOYSTATE2& out) const;
 template bool Input::GetJoystickStatePrevious<XINPUT_STATE>(int32_t stickNo, XINPUT_STATE& out) const;
+
 Input* Input::GetInstance() {
 	static Input instance;
 	return &instance;
@@ -16,7 +17,7 @@ Input* Input::GetInstance() {
 
 void Input::Init(HINSTANCE hInstance, HWND hWnd) {
 	//DirectInputの初期化
-	
+	hWnd_ = hWnd;
 	HRESULT result = DirectInput8Create(
 		hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8,
 		(void**)&directInput_, nullptr);
@@ -38,6 +39,7 @@ void Input::Init(HINSTANCE hInstance, HWND hWnd) {
 	//マウスデバイスの生成
 	result = directInput_->CreateDevice(GUID_SysMouse, &devMouse_, NULL);
 	assert(SUCCEEDED(result));
+	mousePosition_ = { 0.0f, 0.0f }; // 初期値の確認
 
 	//入力データ形式のセット
 	result = devMouse_->SetDataFormat(&c_dfDIMouse2);
@@ -57,7 +59,7 @@ void Input::Init(HINSTANCE hInstance, HWND hWnd) {
 			joystick.state_ = state;
 			joystick.statePre_ = state;
 			joystick.deadZoneL_ = XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
-			joystick.deadZoneR_= XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+			joystick.deadZoneR_ = XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
 			joysticks_.push_back(joystick);
 		}
 	}
@@ -74,9 +76,10 @@ void Input::Update() {
 	devMouse_->Acquire();
 	devMouse_->GetDeviceState(sizeof(mouse_), &mouse_);
 
+
 	// マウスの位置を更新
-	mousePosition_.x += static_cast<float>(mouse_.lX);
-	mousePosition_.y += static_cast<float>(mouse_.lY);
+	/*mousePosition_.x += static_cast<float>(mouse_.lX);
+	mousePosition_.y += static_cast<float>(mouse_.lY);*/
 
 	for (auto& joystick : joysticks_) {
 		if (joystick.type_ == PadType::XInput) {
@@ -155,7 +158,7 @@ template<typename T>bool Input::GetJoystickStatePrevious(int32_t stickNo, T& out
 	else if (joystick.type_ == PadType::XInput) {
 		if constexpr (std::is_same<T, XINPUT_STATE>::value) {
 			if (std::holds_alternative<T>(joystick.statePre_)) {
-				out = std::get<T>(joystick.statePre_);	
+				out = std::get<T>(joystick.statePre_);
 				return true;
 			}
 		}
@@ -173,7 +176,7 @@ void Input::SetJoystickDeadZone(int32_t stickNo, int32_t deadZoneL, int32_t dead
 	joysticks_[stickNo].deadZoneR_ = deadZoneR;
 }
 
-size_t Input::GetNumberOfJoysticks()const  {
+size_t Input::GetNumberOfJoysticks()const {
 	return joysticks_.size();
 }
 
@@ -184,7 +187,7 @@ bool Input::IsPressMouse(int32_t buttonNumber)const {
 }
 
 bool Input::IsTriggerMouse(int32_t buttonNumber)const {
-	return(mouse_.rgbButtons[buttonNumber] & 0x80) && !(mouse_.rgbButtons[buttonNumber] & 0x80);
+	return (mouse_.rgbButtons[buttonNumber] & 0x80) && !(mousePre_.rgbButtons[buttonNumber] & 0x80);
 }
 
 MouseMove Input::GetMouseMove() {
@@ -195,10 +198,50 @@ MouseMove Input::GetMouseMove() {
 	return move;
 }
 
-int32_t Input::GetWheel() const{
+Vector3 Input::GetMousePos3D(const ViewProjection& viewprojection)const {
+	//2dマウス座標を取得
+	Vector2 mousePos = mousePosition_;
+
+	//ウィンドウサイズ
+	float windowWidth = 1280.0f;
+	float windowHeight = 720.0f;
+
+	// スクリーン座標を正規化デバイス座標 (NDC) に変換 [-1, 1] の範囲にする
+	float ndcX = (2.0f * mousePos.x / windowWidth) - 1.0f;
+	float ndcY = 1.0f - (2.0f * mousePos.y / windowHeight);
+	float ndcZ = 3.0f;
+
+	// 逆射影行列を使ってクリップ空間からビュー空間へ変換
+	Matrix4x4 invProj = Inverse(viewprojection.matProjection_);
+
+	// NDC座標をVector4に変換（NDCのZ値をそのまま使う）
+	Vector3 clipPos = { ndcX, ndcY, ndcZ };
+
+	// クリップ空間 → ビュー空間
+	Vector3 viewPos = MatrixTransform(clipPos, invProj);
+
+	// 逆ビュー行列を使ってビュー空間からワールド空間へ変換
+	Matrix4x4 invView = Inverse(viewprojection.matView_);
+
+	// ビュー空間 → ワールド空間
+	Vector3 worldPos = MatrixTransform(viewPos, invView);
+
+	// ワールド座標を返す
+	return worldPos;
+}
+
+
+int32_t Input::GetWheel() const {
 	return mouse_.lZ;
 }
 
-const Vector2& Input::GetMousePosition() const {
+ Vector2 Input::GetMousePos()  {
+	// マウス座標を取得
+	POINT mousePos;
+	GetCursorPos(&mousePos);
+	// スクリーン座標からウィンドウ内座標に変換
+	ScreenToClient(hWnd_, &mousePos); // hWndはウィンドウハンドル
+	mousePosition_ = Vector2(float(mousePos.x), float(mousePos.y));
+
 	return mousePosition_;
 }
