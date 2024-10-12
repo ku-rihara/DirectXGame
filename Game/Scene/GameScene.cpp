@@ -35,7 +35,7 @@ void GameScene::Init() {
 void GameScene::Update() {
 	
 	if (Input::GetInstance()->IsTriggerMouse(0)) {
-		railManager_->AddRail(Input::GetInstance()->GetMousePos3D(viewProjection_,0.999f));
+		railManager_->AddRail(Input::GetMousePos3D(viewProjection_,0.999f));
 	}
 
 	debugCamera_->Update();//デバッグカメラ更新

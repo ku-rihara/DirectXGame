@@ -1,9 +1,10 @@
 #include "Input.h"
 #include<assert.h>
-#include<DirectXMath.h>
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "xinput.lib")
+
+std::unique_ptr<Mouse>Input::mouse_ = nullptr;
 
 template bool Input::GetJoystickState<DIJOYSTATE2>(int32_t stickNo, DIJOYSTATE2& out) const;
 template bool Input::GetJoystickState<XINPUT_STATE>(int32_t stickNo, XINPUT_STATE& out) const;
@@ -17,7 +18,6 @@ Input* Input::GetInstance() {
 
 void Input::Init(HINSTANCE hInstance, HWND hWnd) {
 	//DirectInputの初期化
-	hWnd_ = hWnd;
 	HRESULT result = DirectInput8Create(
 		hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8,
 		(void**)&directInput_, nullptr);
@@ -36,18 +36,9 @@ void Input::Init(HINSTANCE hInstance, HWND hWnd) {
 		hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(result));
 
-	//マウスデバイスの生成
-	result = directInput_->CreateDevice(GUID_SysMouse, &devMouse_, NULL);
-	assert(SUCCEEDED(result));
-	mousePosition_ = { 0.0f, 0.0f }; // 初期値の確認
-
-	//入力データ形式のセット
-	result = devMouse_->SetDataFormat(&c_dfDIMouse2);
-	assert(SUCCEEDED(result));
-
-	// 排他制御レベルのセット
-	result = devMouse_->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
-	assert(SUCCEEDED(result));
+	//マウス初期化
+	mouse_ = std::make_unique<Mouse>();
+	mouse_->Init(directInput_,hWnd);
 
 	//XInputデバイスの追加
 	for (DWORD i = 0; i < XUSER_MAX_COUNT; ++i) {
@@ -72,9 +63,7 @@ void Input::Update() {
 	//全キーの入力状態を取得する
 	keyboard_->GetDeviceState(sizeof(key_), key_.data());
 
-	mousePre_ = mouse_;
-	devMouse_->Acquire();
-	devMouse_->GetDeviceState(sizeof(mouse_), &mouse_);
+	mouse_->Update();//マウス更新
 
 
 	// マウスの位置を更新
@@ -182,62 +171,27 @@ size_t Input::GetNumberOfJoysticks()const {
 
 //マウス****************************************************************
 
-bool Input::IsPressMouse(int32_t buttonNumber)const {
-	return(mouse_.rgbButtons[buttonNumber] & 0x80);
+bool Input::IsPressMouse(int32_t buttonNumber) {
+	return mouse_->IsPressMouse(buttonNumber);
 }
 
-bool Input::IsTriggerMouse(int32_t buttonNumber)const {
-	return (mouse_.rgbButtons[buttonNumber] & 0x80) && !(mousePre_.rgbButtons[buttonNumber] & 0x80);
+bool Input::IsTriggerMouse(int32_t buttonNumber) {
+	return mouse_->IsTriggerMouse(buttonNumber);
 }
 
 MouseMove Input::GetMouseMove() {
-	MouseMove move;
-	move.lX = mouse_.lX;
-	move.lY = mouse_.lY;
-	move.lZ = mouse_.lZ;
-	return move;
+	return mouse_->GetMouseMove();
 }
 
-Vector3 Input::GetMousePos3D(const ViewProjection& viewprojection, float depthFactor) const {
-    // 2Dマウス座標を取得
-    Vector2 mousePos = mousePosition_;
-
-    // ウィンドウサイズ
-    float windowWidth = 1280.0f;
-    float windowHeight = 720.0f;
-
-    // スクリーン座標を正規化デバイス座標 (NDC) に変換 [-1, 1] の範囲にする
-    float ndcX = (2.0f * mousePos.x / windowWidth) - 1.0f;
-    float ndcY = 1.0f - (2.0f * mousePos.y / windowHeight);
-    float ndcZ = depthFactor; // Z軸の奥行きを調整するパラメータ
-
-    // NDC座標をVector4に変換（NDCのZ値をdepthFactorで調整）
-    Vector3 clipPos = { ndcX, ndcY, ndcZ };
-
-    // 逆射影行列を使ってクリップ空間からビュー空間へ変換
-    Matrix4x4 invProj = Inverse(viewprojection.matProjection_);
-    Vector3 viewPos = MatrixTransform(clipPos, invProj);
-
-    // ビュー空間からワールド空間へ変換
-    Matrix4x4 invView = Inverse(viewprojection.matView_);
-    Vector3 worldPos = MatrixTransform(viewPos, invView);
-
-    // ワールド座標を返す
-    return worldPos;
+Vector3 Input::GetMousePos3D(const ViewProjection& viewprojection, float depthFactor) {
+	return mouse_->GetMousePos3D(viewprojection, depthFactor);
 }
 
 
-int32_t Input::GetWheel() const {
-	return mouse_.lZ;
+int32_t Input::GetWheel()  {
+	return mouse_->GetWheel();
 }
 
  Vector2 Input::GetMousePos()  {
-	// マウス座標を取得
-	POINT mousePos;
-	GetCursorPos(&mousePos);
-	// スクリーン座標からウィンドウ内座標に変換
-	ScreenToClient(hWnd_, &mousePos); // hWndはウィンドウハンドル
-	mousePosition_ = Vector2(float(mousePos.x), float(mousePos.y));
-
-	return mousePosition_;
+	 return mouse_->GetMousePos();
 }
