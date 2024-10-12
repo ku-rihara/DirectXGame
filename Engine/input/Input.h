@@ -1,11 +1,5 @@
 #pragma once
 
-
-#include"Vector2.h"
-#include"Vector3.h"
-#include"Vector4.h"
-#include"ViewProjection.h"
-//std
 #include <variant>
 //std
 #include<wrl.h>
@@ -22,8 +16,6 @@
 #include"Mouse.h"
 
 class Input {
-public: // インナークラス
-	
 
 private:
 	enum class PadType {
