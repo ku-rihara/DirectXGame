@@ -7,6 +7,7 @@
 //obj
 #include"Object3d.h"
 class Rail {
+	static int instanceNum_;
 public://メンバ変数
 	std::unique_ptr<Object3d>objct3D_;
 private:

@@ -196,6 +196,9 @@
       <Filter>Game\Player</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="math\Vector4.cpp">
+      <Filter>MyEngine\.cpp\math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">

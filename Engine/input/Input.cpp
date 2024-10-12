@@ -198,36 +198,32 @@ MouseMove Input::GetMouseMove() {
 	return move;
 }
 
-Vector3 Input::GetMousePos3D(const ViewProjection& viewprojection)const {
-	//2dマウス座標を取得
-	Vector2 mousePos = mousePosition_;
+Vector3 Input::GetMousePos3D(const ViewProjection& viewprojection, float depthFactor) const {
+    // 2Dマウス座標を取得
+    Vector2 mousePos = mousePosition_;
 
-	//ウィンドウサイズ
-	float windowWidth = 1280.0f;
-	float windowHeight = 720.0f;
+    // ウィンドウサイズ
+    float windowWidth = 1280.0f;
+    float windowHeight = 720.0f;
 
-	// スクリーン座標を正規化デバイス座標 (NDC) に変換 [-1, 1] の範囲にする
-	float ndcX = (2.0f * mousePos.x / windowWidth) - 1.0f;
-	float ndcY = 1.0f - (2.0f * mousePos.y / windowHeight);
-	float ndcZ = 3.0f;
+    // スクリーン座標を正規化デバイス座標 (NDC) に変換 [-1, 1] の範囲にする
+    float ndcX = (2.0f * mousePos.x / windowWidth) - 1.0f;
+    float ndcY = 1.0f - (2.0f * mousePos.y / windowHeight);
+    float ndcZ = depthFactor; // Z軸の奥行きを調整するパラメータ
 
-	// 逆射影行列を使ってクリップ空間からビュー空間へ変換
-	Matrix4x4 invProj = Inverse(viewprojection.matProjection_);
+    // NDC座標をVector4に変換（NDCのZ値をdepthFactorで調整）
+    Vector3 clipPos = { ndcX, ndcY, ndcZ };
 
-	// NDC座標をVector4に変換（NDCのZ値をそのまま使う）
-	Vector3 clipPos = { ndcX, ndcY, ndcZ };
+    // 逆射影行列を使ってクリップ空間からビュー空間へ変換
+    Matrix4x4 invProj = Inverse(viewprojection.matProjection_);
+    Vector3 viewPos = MatrixTransform(clipPos, invProj);
 
-	// クリップ空間 → ビュー空間
-	Vector3 viewPos = MatrixTransform(clipPos, invProj);
+    // ビュー空間からワールド空間へ変換
+    Matrix4x4 invView = Inverse(viewprojection.matView_);
+    Vector3 worldPos = MatrixTransform(viewPos, invView);
 
-	// 逆ビュー行列を使ってビュー空間からワールド空間へ変換
-	Matrix4x4 invView = Inverse(viewprojection.matView_);
-
-	// ビュー空間 → ワールド空間
-	Vector3 worldPos = MatrixTransform(viewPos, invView);
-
-	// ワールド座標を返す
-	return worldPos;
+    // ワールド座標を返す
+    return worldPos;
 }
 
 

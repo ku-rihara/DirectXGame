@@ -3,6 +3,7 @@
 
 #include"Vector2.h"
 #include"Vector3.h"
+#include"Vector4.h"
 #include"ViewProjection.h"
 //std
 #include <variant>
@@ -153,13 +154,13 @@ public:
 	/// マウスの位置を取得する（ウィンドウ座標系）
 	/// </summary>
 	/// <returns>マウスの位置</returns>
-	 Vector2 GetMousePos() ;
+	 Vector2 GetMousePos();
 
 	/// <summary>
 	/// 3Dのマウス座標を取得
 	/// </summary>
 	/// <returns></returns>
-	 Vector3 GetMousePos3D(const ViewProjection& viewprojection)const;
+	 Vector3 GetMousePos3D(const ViewProjection& viewprojection, float adjustmentFactor)const;
 
 	const BYTE* GetKeyState() const { return key_.data(); }
 	const BYTE* GetPreviousKeyState() const { return keyPre_.data(); }

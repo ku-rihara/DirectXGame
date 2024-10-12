@@ -39,7 +39,7 @@ void Light::Init() {
 	spotLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
 	spotLightData_->position = { 2.0f,1.25f,0.0f };
 	spotLightData_->distance = 7.0f;
-	spotLightData_->direction = Normalize({ -1.0f,-1.0f,0.0f });
+	spotLightData_->direction = Normalize(Vector3{ -1.0f,-1.0f,0.0f });
 	spotLightData_->intensity = 4.0f;
 	spotLightData_->decay = 2.0f;
 	spotLightData_->cosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);

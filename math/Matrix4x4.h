@@ -1,6 +1,6 @@
 #pragma once
 #include "Vector3.h"
-
+#include "Vector4.h"
 /// <summary>
 /// 4x4行列
 /// </summary>
@@ -31,7 +31,9 @@ Matrix4x4 MakeRotateZMatrix(float radian);
 // 回転行列
 Matrix4x4 MakeRotateMatrix(Vector3 rotate);
 
+//トランスフォーム
 Vector3 MatrixTransform(const Vector3& vector, const Matrix4x4& matrix);
+Vector4 MatrixTransform(const Vector4& vector, const Matrix4x4& matrix);
 
 Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
@@ -47,4 +49,3 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 
 Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);
 
-//Vector3 ScreenTransform(Vector3 worldPos, const ViewProjection& viewProjection);
