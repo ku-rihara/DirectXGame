@@ -2,26 +2,13 @@
 #include<cmath>
 #include<assert.h>
 
+#include <DirectXMath.h>
+using namespace DirectX;
+
 Matrix4x4 MakeIdentity4x4() {
+	XMMATRIX identity = XMMatrixIdentity();
 	Matrix4x4 result;
-
-	result.m[0][0] = 1.0f;
-	result.m[0][1] = 0.0f;
-	result.m[0][2] = 0.0f;
-	result.m[0][3] = 0.0f;
-	result.m[1][0] = 0.0f;
-	result.m[1][1] = 1.0f;
-	result.m[1][2] = 0.0f;
-	result.m[1][3] = 0.0f;
-	result.m[2][0] = 0.0f;
-	result.m[2][1] = 0.0f;
-	result.m[2][2] = 1.0f;
-	result.m[2][3] = 0.0f;
-	result.m[3][0] = 0.0f;
-	result.m[3][1] = 0.0f;
-	result.m[3][2] = 0.0f;
-	result.m[3][3] = 1.0f;
-
+	XMStoreFloat4x4(reinterpret_cast<XMFLOAT4X4*>(&result), identity);
 	return result;
 }
 
@@ -203,6 +190,16 @@ Vector3 MatrixTransform(const Vector3& vector, const Matrix4x4& matrix) {
 	result.y /= w;
 	result.z /= w;
 
+	return result;
+}
+
+Vector4 MatrixTransform(const Vector4& vector, const Matrix4x4& matrix) {
+	// 行列の乗算を行い、結果を返す
+	Vector4 result;
+	result.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0] + vector.w * matrix.m[3][0];
+	result.y = vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + vector.z * matrix.m[2][1] + vector.w * matrix.m[3][1];
+	result.z = vector.x * matrix.m[0][2] + vector.y * matrix.m[1][2] + vector.z * matrix.m[2][2] + vector.w * matrix.m[3][2];
+	result.w = vector.x * matrix.m[0][3] + vector.y * matrix.m[1][3] + vector.z * matrix.m[2][3] + vector.w * matrix.m[3][3];
 	return result;
 }
 
