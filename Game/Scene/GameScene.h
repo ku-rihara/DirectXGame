@@ -10,12 +10,13 @@
 //3d
 #include "Model.h"
 #include"Object3d.h"
-//etc
+//camera
 #include"DebugCamera.h"
-//std
-#include<random>
+#include"GameCamera.h"
 //obj
 #include"RailManager.h"
+//std
+#include<random>
 
 /// <summary>
 /// ゲームシーン
@@ -35,10 +36,13 @@ private:
 	ViewProjection viewProjection_;
 	//デバッグカメラ
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
-
+	//ゲームカメラ
+	std::unique_ptr<GameCamera>gameCamera_ = nullptr;
 	//レールマネージャー
 	std::unique_ptr<RailManager>railManager_;
 
+	// デバッグカメラアクティブ
+	bool isDebugCameraActive_ = false;
 public: 
 	/// <summary>
 	/// コンストクラタ
@@ -69,5 +73,10 @@ public:
 	/// デバッグ表示
 	/// </summary>
 	void Debug();
+
+	/// <summary>
+	/// ビュープロジェクション更新
+	/// </summary>
+	void ViewProjectionUpdate();
 
 };

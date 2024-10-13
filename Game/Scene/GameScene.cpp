@@ -17,20 +17,21 @@ void GameScene::Init() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
-
-	//デバッグカメラ
+////////////////////////////////////////////////////////////////////////////////////////////
+//  生成
+////////////////////////////////////////////////////////////////////////////////////////////
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
-	debugCamera_->Init();
-	//音
-	soundDataHandle_ = audio_->SoundLoadWave("Resources/fanfare.wav");
-	//ビュープロジェクション
-	viewProjection_.Init();
-	//レールマネージャー
 	railManager_ = std::make_unique<RailManager>();
+	gameCamera_ = std::make_unique<GameCamera>();
+////////////////////////////////////////////////////////////////////////////////////////////
+//  初期化
+////////////////////////////////////////////////////////////////////////////////////////////
+	debugCamera_->Init();
+	gameCamera_->Init();
 	railManager_->Init();
-
-	railManager_->AddRail({});
-
+	viewProjection_.Init();
+	
+	/*railManager_->AddRail({});*/
 }
 
 void GameScene::Update() {
@@ -39,16 +40,15 @@ void GameScene::Update() {
 		railManager_->AddRail(Input::GetMousePos3D(viewProjection_,0.995f));
 	}
 
-	debugCamera_->Update();//デバッグカメラ更新
+
 	Debug();//デバッグ
+
+	ViewProjectionUpdate();
 
 	//レールカメラ更新
 	railManager_->Update();
 
-	// カメラ行列の計算をデバッグカメラのビュープロジェクションから行う
-	viewProjection_.matView_ = debugCamera_->GetViewProjection().matView_;
-	viewProjection_.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
-	viewProjection_.cameraMatrix_ = debugCamera_->GetViewProjection().cameraMatrix_;
+
 }
 
 void GameScene::Draw() {
@@ -92,4 +92,40 @@ void GameScene::Debug() {
 
 	ImGui::End();
 #endif
+}
+
+
+// ビュープロジェクション更新
+void GameScene::ViewProjectionUpdate() {
+
+#ifdef _DEBUG
+	// デバッグカメラモード切り替え------------------------------
+	if (input_->TrrigerKey(DIK_SPACE)) {
+		if (isDebugCameraActive_ == false) {
+			isDebugCameraActive_ = true;
+		}
+		else if (isDebugCameraActive_ == true) {
+			isDebugCameraActive_ = false;
+		}
+	}
+	// デバッグカメラモード切り替え------------------------------
+#endif
+
+	if (isDebugCameraActive_ == true) { // デバッグカメラがアクティブなら
+		// デバッグカメラの更新
+		debugCamera_->Update();
+		// カメラ行列の計算をデバッグカメラのビュープロジェクションから行う
+		viewProjection_.matView_ = debugCamera_->GetViewProjection().matView_;
+		viewProjection_.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
+		viewProjection_.cameraMatrix_ = debugCamera_->GetViewProjection().cameraMatrix_;
+
+	}
+	// アクティブでない
+	else if (isDebugCameraActive_ == false) { // デバッグカメラがアクティブでない
+		viewProjection_.matView_ = gameCamera_->GetViewProjection().matView_;
+		viewProjection_.matProjection_ = gameCamera_->GetViewProjection().matProjection_;
+		viewProjection_.cameraMatrix_ = gameCamera_->GetViewProjection().cameraMatrix_;
+
+		viewProjection_.TransferMatrix();
+	}
 }

@@ -3,9 +3,10 @@
 
 //Function
 void GameCamera::Init() {
-
+	viewProjection_.Init();
 }
-void GameCamera::Update() {
+void GameCamera::Update(const std::vector<Vector3>& controlPos) {
+	controlPos;
 	//// 線分の数+1個分の頂点座標を計算
 	//for (size_t i = 0; i < segmentCount + 1; i++) {
 	//	float t = 1.0f / segmentCount * i;
