@@ -1,7 +1,7 @@
 #pragma once
 
 #include"Rail.h"
-#include "GlobalParameter.h"
+
 //math
 #include"Vector3.h"
 //3d
@@ -10,24 +10,27 @@
 //std
 #include<list>
 #include<memory>
-class GameCamera;
+// nlohmann/jsonライブラリを使うためのインクルード
+#include <json.hpp>
+using json = nlohmann::json;
+
 class RailManager {
 private:
-	/*GameCamera* gameCamera_;*/
 	std::list<std::unique_ptr<Rail>>rails_;
-	std::vector<Vector3>controlSpot_;
+	std::vector<Vector3>controlSpots_;
 	Model* model_;
 	bool isAdaption_;
-	GlobalParameter* globalParameter_;
 	int controlNum_;
 public:
 	void AddRail(const Vector3&pos);
 	void Init();
 	void Update();
 	void Draw(const ViewProjection& viewProjection);
+	// 制御点をファイルに保存
+	void SaveControlSpots(const std::string& filename);
 
-	void ApplyGlobalParameter();
+	// 制御点をファイルから読み込み
+	void LoadControlSpots(const std::string& filename);
 
-	//制御点適応
-	void AdaptationControlSpot();
+	
 };

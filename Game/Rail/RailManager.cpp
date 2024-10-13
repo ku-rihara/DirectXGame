@@ -4,16 +4,13 @@
 #include"GameCamera.h"
 //std
 #include<string>
+#include <fstream>
+//Imgui
+#include<imgui.h>
 
 void RailManager::Init() {
-	globalParameter_ = GlobalParameter::GetInstance();
-	const char* groupName = "RailManager";
-	// グループを追加
-	globalParameter_->CreateGroup(groupName);	
-	globalParameter_->SetValue(groupName, "ControlNum", controlNum_);
-	for (int i = 0; i < controlNum_; i++) {
-		globalParameter_->SetValue(groupName, "constrolSpot"+std::to_string(int(i)), controlSpot_[i]);
-	}
+	
+	LoadControlSpots("resources/RailParamater/controlPoint.json");
 	
 }
 
@@ -24,24 +21,28 @@ void  RailManager::AddRail(const Vector3& pos) {
 	rail->objct3D_.reset(Object3d::CreateModel("cube", ".obj"));
 	rail->SetPos(pos);
 	controlNum_++;
-	controlSpot_.push_back(rail->GetPos());
+	controlSpots_.push_back(rail->GetPos());
 	rails_.push_back(std::move(rail));
 	
 }
 
 //レール更新
 void RailManager::Update() {
-	
-	auto spotIt = controlSpot_.begin(); // controlSpot_のイテレータ
+	ImGui::Begin("IsSaveParamater");
+	if (ImGui::Button("Save")) {
+		SaveControlSpots("resources/RailParamater/controlPoint.json");
+	}
+	ImGui::End();
+	auto spotIt = controlSpots_.begin(); // controlSpot_のイテレータ
 	for (const std::unique_ptr<Rail>& rail : rails_) {
 		rail->Update(); 
-		if (spotIt != controlSpot_.end()) {
+		if (spotIt != controlSpots_.end()) {
 			*spotIt = rail->GetPos(); // controlSpot_に更新された座標を入れる
 			++spotIt; // 次の要素へ進める
 		}
 	}
 
-
+	//消す
 	rails_.remove_if([](const std::unique_ptr<Rail>& rail) {
 		if (rail->GetIsDeath()) {
 			return true;
@@ -57,25 +58,35 @@ void RailManager::Draw(const ViewProjection&viewProjection) {
 	}
 }
 
-void RailManager::AdaptationControlSpot() {
-	//if (isAdaption_) {
-	//	//制御点の座標をカメラに適応
-	//	controlSpot_.clear();
-	//	for (const std::unique_ptr<Rail>& rail : rails_) {
-	//		controlSpot_.push_back(rail->GetPos());
-	//	}
-	//	isAdaption_ = false;
-	//}
 
+// レールの制御点をJSON形式で保存する
+void RailManager::SaveControlSpots(const std::string& filename) {
+	json j;
+	for (const auto& spot : controlSpots_) {
+		j.push_back({ spot.x, spot.y, spot.z });
+	}
+
+	std::ofstream file(filename);
+	if (file.is_open()) {
+		file << j.dump(4);  // 4はインデント幅
+		file.close();
+	}
+	
 }
 
-void RailManager::ApplyGlobalParameter() {
+// JSONファイルから制御点を読み込む
+void RailManager::LoadControlSpots(const std::string& filename) {
+	std::ifstream file(filename);
+	if (file.is_open()) {
+		json j;
+		file >> j;
+		file.close();
 
-	GlobalParameter* globalParameter = GlobalParameter::GetInstance();
-	const char* groupName = "RailManager";
-	controlNum_ = globalParameter->GetValue<int>(groupName, "ControlNum");
-	for (int i = 0; i < controlNum_; i++) {
-		controlSpot_[i] = globalParameter->GetValue<Vector3>(groupName, "constrolSpot" + std::to_string(int(i)));
+		// 読み込んだデータを基にレールを追加
+		for (const auto& spot : j) {
+			Vector3 pos = { spot[0], spot[1], spot[2] };
+			AddRail(pos);
+		}
 	}
 
 }
