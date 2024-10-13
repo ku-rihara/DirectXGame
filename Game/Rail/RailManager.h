@@ -32,5 +32,6 @@ public:
 	// 制御点をファイルから読み込み
 	void LoadControlSpots(const std::string& filename);
 
+	std::vector<Vector3> GetControlPoints()const { return controlSpots_; }
 	
 };

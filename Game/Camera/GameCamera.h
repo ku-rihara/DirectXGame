@@ -5,9 +5,17 @@
 #include<Vector3.h>
 //3D
 #include"ViewProjection.h"
+#include"WorldTransform.h"
 class GameCamera {
 private:
+	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
+	// 線分の数
+	const size_t segmentCount = 300;
+	float railMoveTime_;
+	Vector3 cameraRotate_;
+	int RailIndex = 0;
+	std::vector<Vector3> pointsDrawing;
 public:
 	//Function
 	void Init();

@@ -30,7 +30,6 @@ void GameScene::Init() {
 	gameCamera_->Init();
 	railManager_->Init();
 	viewProjection_.Init();
-	
 	/*railManager_->AddRail({});*/
 }
 
@@ -40,7 +39,7 @@ void GameScene::Update() {
 		railManager_->AddRail(Input::GetMousePos3D(viewProjection_,0.995f));
 	}
 
-
+	gameCamera_->Update(railManager_->GetControlPoints());
 	Debug();//デバッグ
 
 	ViewProjectionUpdate();
