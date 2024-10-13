@@ -19,6 +19,7 @@ public://メンバ関数
 	void Update();
 	void Draw(const ViewProjection& viewProjection);
 
+	Vector3 GetPos() { return objct3D_->transform_.translation_; }
 	bool GetIsDeath() { return isDeath_; }
 
 	//setter

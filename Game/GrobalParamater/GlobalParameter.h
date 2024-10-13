@@ -16,6 +16,8 @@ private:
 	std::map<std::string, Group> datas_;
 	//Json
 	using json=nlohmann::json;
+
+	std::map<std::string, bool> isValueChanged_;
 	
 	//グローバル変数の保存先ファイルパス
 	const std::string kDirectoryPath = "Resources/GlobalParameter/";
@@ -61,6 +63,10 @@ public:
 	void LoadFile(const std::string& groupName);
 
  template<typename T>T GetValue(const std::string& groupName, const std::string& key) const;
+
+
+ template<typename T> void SetValue2(const std::string& groupName, const std::string& key, T value);
+ void Update2();
 
 private:
 	GlobalParameter() = default;

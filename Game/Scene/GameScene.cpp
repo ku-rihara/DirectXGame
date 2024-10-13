@@ -27,6 +27,7 @@ void GameScene::Init() {
 	viewProjection_.Init();
 	//レールマネージャー
 	railManager_ = std::make_unique<RailManager>();
+	railManager_->Init();
 
 	railManager_->AddRail({});
 
@@ -34,8 +35,8 @@ void GameScene::Init() {
 
 void GameScene::Update() {
 	
-	if (Input::GetInstance()->IsTriggerMouse(0)) {
-		railManager_->AddRail(Input::GetMousePos3D(viewProjection_,0.999f));
+	if (Input::GetInstance()->IsTriggerMouse(3)) {
+		railManager_->AddRail(Input::GetMousePos3D(viewProjection_,0.995f));
 	}
 
 	debugCamera_->Update();//デバッグカメラ更新

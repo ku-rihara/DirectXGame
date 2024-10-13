@@ -8,6 +8,12 @@ template void GlobalParameter::SetValue<float>(const std::string& groupName, con
 template void GlobalParameter::SetValue<Vector3>(const std::string& groupName, const std::string& key, Vector3 value);
 template void GlobalParameter::SetValue<bool>(const std::string& groupName, const std::string& key, bool value);
 
+template void GlobalParameter::SetValue2<int>(const std::string& groupName, const std::string& key, int value);
+template void GlobalParameter::SetValue2<float>(const std::string& groupName, const std::string& key, float value);
+template void GlobalParameter::SetValue2<Vector3>(const std::string& groupName, const std::string& key, Vector3 value);
+template void GlobalParameter::SetValue2<bool>(const std::string& groupName, const std::string& key, bool value);
+
+
 template void GlobalParameter::AddItem<int>(const std::string& groupName, const std::string& key, int value);
 template void GlobalParameter::AddItem<float>(const std::string& groupName, const std::string& key, float value);
 template void GlobalParameter::AddItem<Vector3>(const std::string& groupName, const std::string& key, Vector3 value);
@@ -275,4 +281,28 @@ template<typename T> T GlobalParameter::GetValue(const std::string& groupName, c
 
 	// キーに対応する値を返す
 	return std::get<T>(itItem->second);
+}
+
+
+
+template<typename T>
+void GlobalParameter::SetValue2(const std::string& groupName, const std::string& key, T value) {
+	Group& group = datas_[groupName];
+
+	// 既存の値と新しい値が異なる場合のみ、変更を記録する
+	if (group.find(key) == group.end() || std::get<T>(group[key]) != value) {
+		group[key] = value;
+		isValueChanged_[groupName] = true; // 変更フラグを立てる
+	}
+}
+
+void GlobalParameter::Update2() {
+	for (const auto& [groupName, group] : datas_) {
+		// 変更されたグループのみを保存
+		if (isValueChanged_[groupName]) {
+
+			SaveFile(groupName);
+			isValueChanged_[groupName] = false; // 保存後、フラグをリセット
+		}
+	}
 }
