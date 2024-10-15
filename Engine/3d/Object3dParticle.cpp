@@ -2,7 +2,7 @@
 #include "ImGuiManager.h"
 #include "DirectXCommon.h"
 #include "ModelManager.h"
-
+#include"random.h"
 
 Object3dParticle* Object3dParticle::CreateModel(const std::string& instanceName, const std::string& extension, const uint32_t& instanceNumMax) {
 	Object3dParticle* object3d = new Object3dParticle();
@@ -107,12 +107,11 @@ void Object3dParticle::CreateInstancingResource(const uint32_t& instanceNum) {
 void Object3dParticle::Clear() {
 	
 	particles_.clear(); // リストをクリア
-	
 
 }
 
 //パーティクル作成
-Object3dParticle::Particle  Object3dParticle::MakeParticle(std::uniform_real_distribution<float> dist, std::uniform_real_distribution<float>velocityDist,const Transform&transform, float lifeTime) {
+Object3dParticle::Particle  Object3dParticle::MakeParticle(MinMax dist, MinMax velocityDist, const Transform& transform, float lifeTime) {
 	
 	Particle particle;
 	particle.lifeTime_ = lifeTime;
@@ -121,17 +120,17 @@ Object3dParticle::Particle  Object3dParticle::MakeParticle(std::uniform_real_dis
 	//回転
 	particle.worldTransform_.rotation_.y = -3.0f;
 	//色
-	particle.color_ = { dist(random), dist(random), dist(random), 1.0f };
+	particle.color_ = { Random::Range(dist.min,dist.max),  Random::Range(dist.min,dist.max),  Random::Range(dist.min,dist.max), 1.0f };
 	//座標
-	Vector3 randomTranslate= { dist(random), dist(random), dist(random) };
+	Vector3 randomTranslate= { Random::Range(dist.min,dist.max),  Random::Range(dist.min,dist.max),  Random::Range(dist.min,dist.max) };
 	particle.worldTransform_.translation_ = transform.translate + randomTranslate;
 	//速度
-	particle.velocity_ = { velocityDist(random), velocityDist(random), 0 };
+	particle.velocity_ = { Random::Range(velocityDist.min,velocityDist.max), Random::Range(velocityDist.min,velocityDist.max), 0 };
 	
 	return  particle;
 }
 
-void Object3dParticle::Emit(const Emitter& emitter, std::uniform_real_distribution<float> dist, std::uniform_real_distribution<float>velocityDist, float lifeTime) {
+void Object3dParticle::Emit(const Emitter& emitter, MinMax dist, MinMax velocityDist, float lifeTime) {
 	
 	for (uint32_t i = 0; i < emitter.count; ++i) {
 		particles_.emplace_back(MakeParticle(dist, velocityDist,emitter.transform, lifeTime));

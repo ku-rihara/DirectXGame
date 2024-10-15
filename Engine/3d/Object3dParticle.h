@@ -5,6 +5,8 @@
 #include"random.h"
 #include<list>
 #include"Transform.h"
+//math
+#include"MinMax.h"
 
 class Object3dParticle :public BaseObject3d {
 public:
@@ -52,7 +54,7 @@ private:
 	/// ランダム生成
 	/// </summary>
 	/// <param name="random"></param>
-	Particle  MakeParticle(std::uniform_real_distribution<float> dist, std::uniform_real_distribution<float>velocityDist, const Transform& transform, float lifeTime);
+	Particle  MakeParticle(MinMax dist, MinMax velocityDist, const Transform& transform, float lifeTime);
 
 public:
 	/// <summary>
@@ -86,7 +88,7 @@ public:
 	/// <param name="dist"></param>
 	/// <param name="velocityDist"></param>
 	/// <param name="lifeTime"></param>
-	void Emit(const Emitter& emitter, std::uniform_real_distribution<float> dist, std::uniform_real_distribution<float>velocityDist, float lifeTime);
+	void Emit(const Emitter& emitter, MinMax dist, MinMax velocityDist, float lifeTime);
 
 	//getter
 	uint32_t GetKnumInstance()const { return instanceNum_; }

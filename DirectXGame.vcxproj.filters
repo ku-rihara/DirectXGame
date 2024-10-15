@@ -381,6 +381,9 @@
     <ClInclude Include="math\Vector4.h">
       <Filter>liberaly\math\.h</Filter>
     </ClInclude>
+    <ClInclude Include="math\MinMax.h">
+      <Filter>liberaly\math\.h</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">

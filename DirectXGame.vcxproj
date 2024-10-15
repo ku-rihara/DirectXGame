@@ -106,6 +106,7 @@
     <ClInclude Include="math\MathFunction.h" />
     <ClInclude Include="math\Matrix3x3.h" />
     <ClInclude Include="math\Matrix4x4.h" />
+    <ClInclude Include="math\MinMax.h" />
     <ClInclude Include="math\random.h" />
     <ClInclude Include="math\Vector2.h" />
     <ClInclude Include="math\Vector3.h" />
