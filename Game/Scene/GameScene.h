@@ -15,6 +15,7 @@
 #include"GameCamera.h"
 //obj
 #include"RailManager.h"
+#include"Player/Player.h"
 //std
 #include<random>
 
@@ -34,12 +35,17 @@ private:
 	uint32_t voiceHandle_ = 0;     
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
+////////////////////////////////////////////////////////////////////////////////////////////
+//  obj
+////////////////////////////////////////////////////////////////////////////////////////////
 	//デバッグカメラ
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
 	//ゲームカメラ
 	std::unique_ptr<GameCamera>gameCamera_ = nullptr;
 	//レールマネージャー
-	std::unique_ptr<RailManager>railManager_;
+	std::unique_ptr<RailManager>railManager_=nullptr;
+	//プレイや
+	std::unique_ptr<Player>player_ = nullptr;
 
 	// デバッグカメラアクティブ
 	bool isDebugCameraActive_ = false;

@@ -31,9 +31,7 @@ public:
 	void SetNearZ(float value) { viewProjection_.nearZ_ = value; }
 	void SetFarZ(float value) { viewProjection_.farZ_ = value; }
 
-	/// <summary>
-	/// ビュープロジェクションを取得
-	/// </summary>
-	/// <returns>ビュープロジェクション</returns>
-	const ViewProjection& GetViewProjection() { return viewProjection_; }
+	//getter
+	const WorldTransform& GetWorldTransform() const { return worldTransform_; }
+	const ViewProjection& GetViewProjection() const { return viewProjection_; }
 };

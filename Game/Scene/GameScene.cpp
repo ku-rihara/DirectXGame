@@ -22,6 +22,7 @@ void GameScene::Init() {
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
 	railManager_ = std::make_unique<RailManager>();
 	gameCamera_ = std::make_unique<GameCamera>();
+	player_ = std::make_unique<Player>();
 ////////////////////////////////////////////////////////////////////////////////////////////
 //  初期化
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,22 +30,32 @@ void GameScene::Init() {
 	gameCamera_->Init();
 	railManager_->Init();
 	viewProjection_.Init();
+	player_->Init();
+	//parent
+	player_->SetParent(&gameCamera_->GetWorldTransform());
 	/*railManager_->AddRail({});*/
 }
 
 void GameScene::Update() {
-	
+	Debug();//デバッグ
+	//制御点追加
 	if (Input::GetInstance()->IsTriggerMouse(3)) {
 		railManager_->AddRail(Input::GetMousePos3D(viewProjection_,0.995f));
 	}
-
+	//カメラ更新
 	gameCamera_->Update(railManager_->GetControlPoints());
-	Debug();//デバッグ
+	
 
 	ViewProjectionUpdate();
 
+////////////////////////////////////////////////////////////////////////////////////////////
+//  各クラス更新
+////////////////////////////////////////////////////////////////////////////////////////////
+
 	//レールカメラ更新
 	railManager_->Update();
+	//プレイヤー更新
+	player_->Update();
 
 
 }
@@ -58,6 +69,8 @@ void GameScene::Draw() {
 	Model::PreDraw(commandList);
 
 	railManager_->Draw(viewProjection_);
+	//プレイヤー
+	player_->Draw(viewProjection_);
 #pragma endregion
 
 #pragma region 3Dオブジェクトパーティクル描画
