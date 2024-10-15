@@ -2,7 +2,7 @@
 
 void  Player::Init() {
 	//モデルクリエイト
-	obj3D_=obj3D_->CreateModel("suzanne", ".obj");
+	obj3D_=Object3d::CreateModel("suzanne", ".obj");
 }
 void  Player::Update() {
 	obj3D_->Update();

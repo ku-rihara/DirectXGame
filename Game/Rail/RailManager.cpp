@@ -4,6 +4,7 @@
 #include"GameCamera.h"
 //std
 #include<string>
+#include<format>
 #include <fstream>
 //Imgui
 #include<imgui.h>
@@ -31,6 +32,8 @@ void RailManager::Update() {
 	ImGui::Begin("IsSaveParamater");
 	if (ImGui::Button("Save")) {
 		SaveControlSpots("resources/RailParamater/controlPoint.json");
+		std::string message = std::format("{}.json saved.","Rail");
+		MessageBoxA(nullptr, message.c_str(), "RailParamater", 0);
 	}
 	ImGui::End();
 	auto spotIt = controlSpots_.begin(); // controlSpot_のイテレータ
@@ -71,7 +74,6 @@ void RailManager::SaveControlSpots(const std::string& filename) {
 		file << j.dump(4);  // 4はインデント幅
 		file.close();
 	}
-	
 }
 
 // JSONファイルから制御点を読み込む
