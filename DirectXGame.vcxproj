@@ -41,6 +41,7 @@
     <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="math\AABB.cpp" />
     <ClCompile Include="math\MathFunction.cpp" />
     <ClCompile Include="math\Matrix3x3.cpp" />
     <ClCompile Include="math\Matrix4x4.cpp" />
@@ -93,6 +94,7 @@
     <ClInclude Include="externals\imgui\imstb_textedit.h" />
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
+    <ClInclude Include="math\AABB.h" />
     <ClInclude Include="math\MathFunction.h" />
     <ClInclude Include="math\Matrix3x3.h" />
     <ClInclude Include="math\Matrix4x4.h" />
