@@ -11,7 +11,6 @@ GameScene::~GameScene() {
 }
 
 void GameScene::Init() {
-
 	// メンバ変数の初期化
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
@@ -81,8 +80,8 @@ void GameScene::Debug() {
 		ImGui::DragFloat3("Translate", &viewProjection_.translation_.x, 0.01f);
 		ImGui::TreePop();
 	}
-	ImGui::Text("3DX:%5.4f, 3DY:%5.4f, 3DZ:%5.4f", Input::GetInstance()->GetMousePos3D(viewProjection_,1).x, Input::GetInstance()->GetMousePos3D(viewProjection_,1).y, Input::GetInstance()->GetMousePos3D(viewProjection_,1).z);
-	ImGui::Text("2DX:%5.4f, 2DY:%5.4f", Input::GetInstance()->GetMousePos().x, Input::GetInstance()->GetMousePos().y);
+	ImGui::Text("3DX:%5.4f, 3DY:%5.4f, 3DZ:%5.4f", Input::GetMousePos3D(viewProjection_,1).x, Input::GetMousePos3D(viewProjection_,1).y, Input::GetMousePos3D(viewProjection_,1).z);
+	ImGui::Text("2DX:%5.4f, 2DY:%5.4f", Input::GetMousePos().x, Input::GetMousePos().y);
 
 
 	ImGui::End();
