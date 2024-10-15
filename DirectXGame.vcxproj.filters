@@ -192,6 +192,9 @@
     <ClCompile Include="math\Vector4.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
+    <ClCompile Include="math\AABB.cpp">
+      <Filter>liberary\.cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -326,28 +329,31 @@
     <ClInclude Include="Engine\input\Mouse.h">
       <Filter>MyEngine\.h\input</Filter>
     </ClInclude>
+    <ClInclude Include="math\MinMax.h">
+      <Filter>liberary\.h</Filter>
+    </ClInclude>
     <ClInclude Include="math\MathFunction.h">
-      <Filter>liberary</Filter>
+      <Filter>liberary\.h</Filter>
     </ClInclude>
     <ClInclude Include="math\Matrix3x3.h">
-      <Filter>liberary</Filter>
+      <Filter>liberary\.h</Filter>
     </ClInclude>
     <ClInclude Include="math\Matrix4x4.h">
-      <Filter>liberary</Filter>
+      <Filter>liberary\.h</Filter>
     </ClInclude>
     <ClInclude Include="math\random.h">
-      <Filter>liberary</Filter>
+      <Filter>liberary\.h</Filter>
     </ClInclude>
     <ClInclude Include="math\Vector2.h">
-      <Filter>liberary</Filter>
+      <Filter>liberary\.h</Filter>
     </ClInclude>
     <ClInclude Include="math\Vector3.h">
-      <Filter>liberary</Filter>
+      <Filter>liberary\.h</Filter>
     </ClInclude>
     <ClInclude Include="math\Vector4.h">
-      <Filter>liberary</Filter>
+      <Filter>liberary\.h</Filter>
     </ClInclude>
-    <ClInclude Include="math\MinMax.h">
+    <ClInclude Include="math\AABB.h">
       <Filter>liberary\.h</Filter>
     </ClInclude>
   </ItemGroup>

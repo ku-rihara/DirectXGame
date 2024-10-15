@@ -53,6 +53,11 @@ void GameScene::Init() {
 	modelPlaneParticle_->emitter_.count = 3;
 	modelPlaneParticle_->emitter_.frequency = 0.5f;
 	modelPlaneParticle_->emitter_.frequencyTime = 0.0f;
+	//acceleration
+	modelPlaneParticle_->accelerationField_.acceleration = { 15.0f,0.0f,0.0f };
+	modelPlaneParticle_->accelerationField_.area.min = { -1.0f,-1.0f,-1.0f };
+	modelPlaneParticle_->accelerationField_.area.max = { 1.0f,1.0f,1.0f };
+
 	////1個作成
 	/*modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_, distribution,alphaDistribution,5);*/
 	/*modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_,distribution, alphaDistribution,10);
@@ -94,7 +99,8 @@ void GameScene::Update() {
 		modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_, MinMax(-1.0f,1.0f), MinMax(0.0f, 1.0f), 5);
 		modelPlaneParticle_->emitter_.frequencyTime -= modelPlaneParticle_->emitter_.frequency;//時刻すすめる
 	}
-	
+
+
 	//ワールド行列更新
 	modelPlane_->Update();
 	modelFence_->Update();
@@ -140,8 +146,9 @@ void GameScene::Debug() {
 #ifdef _DEBUG
 	ImGui::Begin("Window");
 
-	if (ImGui::TreeNode("IsDrawModel")) {
+	if (ImGui::TreeNode("Frag")) {
 		ImGui::Checkbox("isDraw", &isDraw);
+		ImGui::Checkbox("isAcceleration", &modelPlaneParticle_->accelerationField_.isAdaption);
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("ViewProjection")) {
@@ -175,18 +182,16 @@ void GameScene::Debug() {
 			ImGui::TreePop();
 		}
 
-
 		if (ImGui::TreeNode("Sprite")) {
 			ImGui::DragFloat3("Scale", &sprite_->transform_.scale.x, 0.1f);
 			ImGui::DragFloat3("Rotate", &sprite_->transform_.rotate.x, 1.0f);
 			ImGui::DragFloat3("Translate", &sprite_->transform_.translate.x, 1.0f);
 			ImGui::TreePop();
 		}
-
 		ImGui::TreePop();
 	}
 
-	if (ImGui::TreeNode("ParticleEmitter")) {
+	if (ImGui::TreeNode("Particle")) {
 		ImGui::DragFloat3("Scale", &modelPlaneParticle_->emitter_.transform.scale.x, 0.01f);
 		ImGui::DragFloat3("Rotate", &modelPlaneParticle_->emitter_.transform.rotate.x, 0.01f);
 		ImGui::DragFloat3("Translate", &modelPlaneParticle_->emitter_.transform.translate.x,0.01f);
