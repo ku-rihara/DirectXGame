@@ -49,6 +49,7 @@
     <ClCompile Include="math\MathFunction.cpp" />
     <ClCompile Include="math\Matrix3x3.cpp" />
     <ClCompile Include="math\Matrix4x4.cpp" />
+    <ClCompile Include="math\random.cpp" />
     <ClCompile Include="math\Vector3.cpp" />
     <ClCompile Include="math\Vector4.cpp" />
   </ItemGroup>
@@ -101,11 +102,11 @@
     <ClInclude Include="Game\Player\Player.h" />
     <ClInclude Include="Game\Rail\Rail.h" />
     <ClInclude Include="Game\Rail\RailManager.h" />
-    <ClInclude Include="Game\random.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
     <ClInclude Include="math\MathFunction.h" />
     <ClInclude Include="math\Matrix3x3.h" />
     <ClInclude Include="math\Matrix4x4.h" />
+    <ClInclude Include="math\random.h" />
     <ClInclude Include="math\Vector2.h" />
     <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="math\Vector4.h" />

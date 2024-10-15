@@ -61,9 +61,6 @@
     <Filter Include="MyEngine\.h\struct">
       <UniqueIdentifier>{652ad917-7098-4697-8956-5714f98e5ed8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.h\math">
-      <UniqueIdentifier>{cbb557b1-5fbc-40e6-815b-b9cfc1183a38}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Camera">
       <UniqueIdentifier>{c505a2aa-c074-4031-af51-6213bee54502}</UniqueIdentifier>
     </Filter>
@@ -73,14 +70,23 @@
     <Filter Include="Game\Scene">
       <UniqueIdentifier>{0ad7b046-7871-4240-ada7-d821a24ed507}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.cpp\math">
-      <UniqueIdentifier>{e6c5e962-1f26-464e-9639-057c9d88479c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\GrobalParamater">
       <UniqueIdentifier>{7a4660dc-5ebe-42c4-9212-f2bed1fb2a2b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Player">
       <UniqueIdentifier>{49735e03-9649-4fa4-8760-597c998ffe2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="liberaly">
+      <UniqueIdentifier>{e62bfb06-e2d9-4e7e-8291-81da8c348b7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="liberaly\math">
+      <UniqueIdentifier>{1e356a5f-5f1c-42b9-b9f6-1c8f8c9eb8f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="liberaly\math\.h">
+      <UniqueIdentifier>{0a7242a1-f175-4bcc-8b36-8d06a118c682}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="liberaly\math\.cpp">
+      <UniqueIdentifier>{466d547f-bd56-4a43-9cc7-0cbb8e0e11d1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -162,15 +168,6 @@
     <ClCompile Include="Engine\Function\Convert.cpp">
       <Filter>MyEngine\.cpp\function</Filter>
     </ClCompile>
-    <ClCompile Include="math\Matrix3x3.cpp">
-      <Filter>MyEngine\.cpp\math</Filter>
-    </ClCompile>
-    <ClCompile Include="math\Matrix4x4.cpp">
-      <Filter>MyEngine\.cpp\math</Filter>
-    </ClCompile>
-    <ClCompile Include="math\Vector3.cpp">
-      <Filter>MyEngine\.cpp\math</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\audio\Audio.cpp">
       <Filter>MyEngine\.cpp\audio</Filter>
     </ClCompile>
@@ -183,9 +180,6 @@
     <ClCompile Include="Game\Camera\GameCamera.cpp">
       <Filter>Game\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="math\MathFunction.cpp">
-      <Filter>MyEngine\.cpp\math</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GrobalParamater\GlobalParameter.cpp">
       <Filter>Game\GrobalParamater</Filter>
     </ClCompile>
@@ -196,11 +190,26 @@
       <Filter>Game\Player</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="math\Vector4.cpp">
-      <Filter>MyEngine\.cpp\math</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\input\Mouse.cpp">
       <Filter>MyEngine\.cpp\input</Filter>
+    </ClCompile>
+    <ClCompile Include="math\MathFunction.cpp">
+      <Filter>liberaly\math\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Matrix3x3.cpp">
+      <Filter>liberaly\math\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Matrix4x4.cpp">
+      <Filter>liberaly\math\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Vector3.cpp">
+      <Filter>liberaly\math\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Vector4.cpp">
+      <Filter>liberaly\math\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="math\random.cpp">
+      <Filter>liberaly\math\.cpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -327,38 +336,17 @@
     <ClInclude Include="Engine\Function\Log.h">
       <Filter>MyEngine\.h\function</Filter>
     </ClInclude>
-    <ClInclude Include="math\Matrix3x3.h">
-      <Filter>MyEngine\.h\math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\Matrix4x4.h">
-      <Filter>MyEngine\.h\math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\Vector3.h">
-      <Filter>MyEngine\.h\math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\Vector4.h">
-      <Filter>MyEngine\.h\math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\Vector2.h">
-      <Filter>MyEngine\.h\math</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\3d\ViewProjection.h">
       <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\GameScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Game\random.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Rail\Rail.h">
       <Filter>Game\Rail</Filter>
     </ClInclude>
     <ClInclude Include="Game\Camera\GameCamera.h">
       <Filter>Game\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="math\MathFunction.h">
-      <Filter>MyEngine\.h\math</Filter>
     </ClInclude>
     <ClInclude Include="Game\GrobalParamater\GlobalParameter.h">
       <Filter>Game\GrobalParamater</Filter>
@@ -371,6 +359,27 @@
     </ClInclude>
     <ClInclude Include="Engine\input\Mouse.h">
       <Filter>MyEngine\.h\input</Filter>
+    </ClInclude>
+    <ClInclude Include="math\MathFunction.h">
+      <Filter>liberaly\math\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Matrix3x3.h">
+      <Filter>liberaly\math\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Matrix4x4.h">
+      <Filter>liberaly\math\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="math\random.h">
+      <Filter>liberaly\math\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Vector3.h">
+      <Filter>liberaly\math\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Vector2.h">
+      <Filter>liberaly\math\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Vector4.h">
+      <Filter>liberaly\math\.h</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
