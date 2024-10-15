@@ -116,6 +116,10 @@ void Vector3::operator-=(const Vector3& obj) {
 }
 
 
+// Vector3クラスにオペレーターを追加
+bool operator!=(const Vector3& lhs, const Vector3& rhs) {
+	return !(lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z);
+}
 
 //内積
 float Dot(const Vector3& v1, const Vector3& v2) {

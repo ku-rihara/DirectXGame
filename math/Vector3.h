@@ -24,6 +24,8 @@ struct Vector3 {
     void operator+=(const Vector3& obj);
     void operator+=(const float& obj);
     void operator-=(const Vector3& obj);
+
+    friend  bool operator!=(const Vector3& lhs, const Vector3& rhs);
 };
 
 Vector3 Normalize(const Vector3& v);  //正規化

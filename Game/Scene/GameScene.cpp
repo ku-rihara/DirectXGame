@@ -3,6 +3,8 @@
 #include <cassert>
 //class
 #include"Light.h"
+//math
+#include"MinMax.h"
 
 GameScene::GameScene() {}
 
@@ -62,8 +64,7 @@ void GameScene::Init() {
 }
 
 void GameScene::Update() {
-	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
-	std::uniform_real_distribution<float> alphaDistribution(0.0f, 1.0f);
+
 
 	debugCamera_->Update();
 
@@ -90,7 +91,7 @@ void GameScene::Update() {
 	modelPlaneParticle_->emitter_.frequencyTime += kDeltaTime_;//時刻すすめる
 	//頻度より大きいなら
 	if (modelPlaneParticle_->emitter_.frequency <= modelPlaneParticle_->emitter_.frequencyTime) {
-		modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_, distribution, alphaDistribution, 5);
+		modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_, MinMax(-1.0f,1.0f), MinMax(0.0f, 1.0f), 5);
 		modelPlaneParticle_->emitter_.frequencyTime -= modelPlaneParticle_->emitter_.frequency;//時刻すすめる
 	}
 	
