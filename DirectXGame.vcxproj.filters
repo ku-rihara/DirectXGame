@@ -214,6 +214,9 @@
     <ClCompile Include="Engine\3d\ObjectColor.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
+    <ClCompile Include="math\AABB.cpp">
+      <Filter>liberaly\math\.cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -389,6 +392,9 @@
     </ClInclude>
     <ClInclude Include="Engine\3d\ObjectColor.h">
       <Filter>MyEngine\.h\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="math\AABB.h">
+      <Filter>liberaly\math\.h</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
