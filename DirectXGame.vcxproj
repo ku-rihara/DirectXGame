@@ -21,6 +21,7 @@
     <ClCompile Include="Engine\3d\ModelManager.cpp" />
     <ClCompile Include="Engine\3d\Object3d.cpp" />
     <ClCompile Include="Engine\3d\Object3dParticle.cpp" />
+    <ClCompile Include="Engine\3d\ObjectColor.cpp" />
     <ClCompile Include="Engine\3d\ViewProjection.cpp" />
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
@@ -60,6 +61,7 @@
     <ClInclude Include="Engine\3d\ModelManager.h" />
     <ClInclude Include="Engine\3d\Object3d.h" />
     <ClInclude Include="Engine\3d\Object3dParticle.h" />
+    <ClInclude Include="Engine\3d\ObjectColor.h" />
     <ClInclude Include="Engine\3d\ViewProjection.h" />
     <ClInclude Include="Engine\3d\WorldTransform.h" />
     <ClInclude Include="Engine\audio\Audio.h" />

@@ -127,12 +127,12 @@ void GameScene::Draw() {
 	Model::PreDraw(commandList);
 	//平面描画
 	if (isDraw) {
-
-	/*	modelPlane_->Draw(viewProjection_);
-		modelFence_->Draw(viewProjection_);
+		modelSuzanne2_->color_.SetColor(Vector4(0, 0, 1, 1));
+		/*modelPlane_->Draw(viewProjection_);
+		modelFence_->Draw(viewProjection_);*/
 		modelSuzanne_->Draw(viewProjection_);
 		modelSuzanne2_->Draw(viewProjection_);
-		modelTerrain_->Draw(viewProjection_);*/
+		modelTerrain_->Draw(viewProjection_);
 		Model::PreDrawParticle(commandList);
 		modelPlaneParticle_->Draw(viewProjection_,uvHandle_);
 		Sprite::PreDraw(commandList);

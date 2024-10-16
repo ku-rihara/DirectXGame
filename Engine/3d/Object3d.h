@@ -1,10 +1,11 @@
 #pragma once
-//#include"Model.h"
+
 #include"BaseObject3d.h"
+#include"ObjectColor.h"
 
 class Object3d:public BaseObject3d  {
 public:
-	
+	ObjectColor color_;
 	WorldTransform transform_;
 private:
 	
@@ -20,7 +21,7 @@ public:
 	//更新
 	void Update();
 	//描画
-	void Draw( const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt, const Vector4& color = { 1,1,1,1 });
+	void Draw( const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt);
 	//デバッグ表示
 	void DebugImgui()override;
 	//WVPリソース作成
