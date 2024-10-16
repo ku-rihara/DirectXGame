@@ -19,7 +19,7 @@ void GameCamera::Update(const std::vector<Vector3>& controlPos) {
 		pointsDrawing.push_back(pos);
 	}
 
-	railMoveTime_ += 0.6f;
+	railMoveTime_ += 0.5f;
 	if (RailIndex < segmentCount) {
 		Vector3 eye = pointsDrawing[RailIndex];
 		Vector3 target = pointsDrawing[RailIndex + 1];

@@ -11,7 +11,7 @@ class Rail {
 public://メンバ変数
 	std::unique_ptr<Object3d>objct3D_;
 private:
-	
+	int instanceID_;  
 	bool isDeath_;
 public://メンバ関数
 
