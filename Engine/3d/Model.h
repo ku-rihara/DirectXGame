@@ -26,6 +26,7 @@
 //class
 #include "WorldTransform.h"
 #include "ViewProjection.h"
+#include"ObjectColor.h"
 #include"DirectXCommon.h"
 
 //3Dモデル共通部
@@ -89,7 +90,7 @@ public:
 	/// <summary>
 	/// モデル描画
 	/// </summary>
-	void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, std::optional<uint32_t> textureHandle = std::nullopt,const Vector4& color={1,1,1,1});
+	void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ObjectColor& color, std::optional<uint32_t> textureHandle = std::nullopt);
 
 	/// <summary>
 	/// モデルバーティクル

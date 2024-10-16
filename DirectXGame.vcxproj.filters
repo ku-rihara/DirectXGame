@@ -195,6 +195,9 @@
     <ClCompile Include="math\AABB.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3d\ObjectColor.cpp">
+      <Filter>MyEngine\.cpp\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -355,6 +358,9 @@
     </ClInclude>
     <ClInclude Include="math\AABB.h">
       <Filter>liberary\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\ObjectColor.h">
+      <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

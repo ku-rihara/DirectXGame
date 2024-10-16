@@ -14,17 +14,19 @@ Object3d* Object3d::CreateModel(const std::string& instanceName, const std::stri
 	ModelManager::GetInstance()->LoadModel(instanceName, extension);
 	object3d->SetModel(instanceName, extension);
 	object3d->CreateWVPResource();
+	object3d->color_.Init();
 	object3d->transform_.Init();
 	return object3d;
 }
 
 //更新
 void Object3d::Update() {
+	color_.TransferMatrix();
 	transform_.UpdateMatrix();
 }
 
 //描画
-void Object3d::Draw(const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle, const Vector4& color) {
+void Object3d::Draw(const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
 	// WVP行列の計算
 	if (model_->GetIsFileGltf()) {//.gltfファイルの場合
 		wvpDate_->WVP = model_->GetModelData().rootNode.localMatrix * transform_.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
@@ -35,7 +37,7 @@ void Object3d::Draw(const ViewProjection& viewProjection, std::optional<uint32_t
 		wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
 	}
 	if (model_) {
-		model_->Draw(wvpResource_, textureHandle, color);
+		model_->Draw(wvpResource_, color_,textureHandle);
 	}
 }
 
