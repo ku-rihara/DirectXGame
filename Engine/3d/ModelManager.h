@@ -24,7 +24,6 @@ public:
 	/// <param name="dxCommon"></param>
 	void Initialize(DirectXCommon* dxCommon);
 
-	
 	/// <summary>
 	/// モデルの検索
 	/// </summary>
@@ -40,28 +39,19 @@ public:
 	void LoadModel(const std::string& modelName, const std::string& extension);
 
 	/// <summary>
+	/// モデルバッファ生成
+	/// </summary>
+	/// <param name="filePath"></param>
+	/// <param name="extension"></param>
+	Model* CreateModelBuffer();
+
+
+	/// <summary>
 	/// モデルパーティクルファイル読み込み
 	/// </summary>
 	/// <param name="filePath"></param>
 	/// <param name="extension"></param>
 	void LoadModelParticle(const std::string& modelName, const std::string& extension);
-
-
-	/*/// <summary>
-	/// モデルロード
-	/// </summary>
-	/// <param name="modelName"></param>
-	/// <param name="extension"></param>
-	/// <returns></returns>
-	Model* Load(const std::string& modelName, const std::string& extension);
-
-	/// <summary>
-	/// モデルロードパーティクル
-	/// </summary>
-	/// <param name="modelName"></param>
-	/// <param name="extension"></param>
-	/// <returns></returns>
-	Model* LoadParticle(const std::string& modelName, const std::string& extension);*/
 
 
 	//シングルトンインスタンス取得

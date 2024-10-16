@@ -30,7 +30,7 @@ void GameCamera::Update(const std::vector<Vector3>& controlPos) {
 		Vector3 velocityZ = forward*cameraRotateMatrix;
 		cameraRotate_.x = std::atan2(-velocityZ.y, velocityZ.z);
 
-		worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, cameraRotate_, Lerp(eye, target, railMoveTime_));
+		worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, cameraRotate_, SLerp(eye, target, railMoveTime_));
 		viewProjection_.matView_ = Inverse(worldTransform_.matWorld_);
 		if (railMoveTime_ >= 1.0f) {
 			railMoveTime_ = 0;

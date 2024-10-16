@@ -101,7 +101,7 @@ Node Model::ReadNode(aiNode* node) {
 	return result;
 }
 
-void Model::CreateCommon(const std::string& ModelName, const std::string& extension) {
+void Model::CreateModel(const std::string& ModelName, const std::string& extension) {
 	if (extension == ".gltf") {
 		isFileGltf_ = true;
 		modelData_ = LoadModelGltf("./Resources/Model/" + ModelName, ModelName + extension);
@@ -112,6 +112,10 @@ void Model::CreateCommon(const std::string& ModelName, const std::string& extens
 	textureManager_ = TextureManager::GetInstance();
 	textureHandle_ = textureManager_->LoadTexture(modelData_.material.textureFilePath);
 
+}
+
+void Model::CreateBufferCommon() {
+	
 	//頂点リソースをつくる
 	vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), (sizeof(VertexData) * modelData_.vertices.size()));
 	//頂点バッファビューを作成する
@@ -143,8 +147,8 @@ void Model::CreateCommon(const std::string& ModelName, const std::string& extens
 	Light::GetInstance()->Init();
 }
 
-void Model::CreateModel(const std::string& ModelName, const std::string& extension) {
-	CreateCommon(ModelName, extension);
+void Model::CreateModelBuffer() {
+	CreateBufferCommon();
 	materialDate_->enableLighting = 2;
 	Light::GetInstance()->Init();
 }

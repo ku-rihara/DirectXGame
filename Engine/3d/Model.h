@@ -74,18 +74,19 @@ public:
 
 	ModelData LoadModelFile(const std::string& directoryPath, const std::string& filename);
 	ModelData LoadModelGltf(const std::string& directoryPath, const std::string& filename);
+	void CreateModel(const std::string& ModelName, const std::string& extension);
 
 	Node ReadNode(aiNode* node);
     /// <summary>
 	/// モデル作成
 	/// </summary>
-	void CreateModel(const std::string& ModelName, const std::string& extension);
+	void CreateModelBuffer();
 	
 	//// <summary>
 	/// モデル作成共通
 	/// </summary>
 	/// <param name="ModelName"></param>
-	void CreateCommon(const std::string& ModelName, const std::string& extension);
+	void CreateBufferCommon();
 	/// <summary>
 	/// モデル描画
 	/// </summary>

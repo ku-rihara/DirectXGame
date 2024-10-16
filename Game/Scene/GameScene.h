@@ -35,6 +35,8 @@ private:
 	uint32_t voiceHandle_ = 0;     
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
+	//3Dマウス位置可視化
+	std::unique_ptr<Object3d>mousePosView_;
 ////////////////////////////////////////////////////////////////////////////////////////////
 //  obj
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,6 +49,8 @@ private:
 	//プレイや
 	std::unique_ptr<Player>player_ = nullptr;
 
+	//変数
+const float mouseDepth_=0.995f;
 	// デバッグカメラアクティブ
 	bool isDebugCameraActive_ = false;
 public: 

@@ -11,6 +11,7 @@ private:
 	//wvpリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>wvpResource_;
 	TransformationMatrix* wvpDate_;
+
 private:
 	//WVPリソース作成
 	void CreateWVPResource();

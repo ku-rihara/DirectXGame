@@ -13,6 +13,7 @@ Object3d* Object3d::CreateModel(const std::string& instanceName, const std::stri
 	Object3d* object3d=new Object3d();
 	ModelManager::GetInstance()->LoadModel(instanceName, extension);
 	object3d->SetModel(instanceName, extension);
+	object3d->model_->CreateModelBuffer();
 	object3d->CreateWVPResource();
 	object3d->transform_.Init();
 	return object3d;

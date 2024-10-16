@@ -23,6 +23,7 @@ void GameScene::Init() {
 	railManager_ = std::make_unique<RailManager>();
 	gameCamera_ = std::make_unique<GameCamera>();
 	player_ = std::make_unique<Player>();
+	mousePosView_.reset(Object3d::CreateModel("cube",".obj"));
 ////////////////////////////////////////////////////////////////////////////////////////////
 //  初期化
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,21 +32,24 @@ void GameScene::Init() {
 	railManager_->Init();
 	viewProjection_.Init();
 	player_->Init();
+	
 	//parent
 	player_->SetParent(&gameCamera_->GetWorldTransform());
-	/*railManager_->AddRail({});*/
+	
 }
 
 void GameScene::Update() {
 	Debug();//デバッグ
 	//制御点追加
 	if (Input::GetInstance()->IsTriggerMouse(3)) {
-		railManager_->AddRail(Input::GetMousePos3D(viewProjection_,0.995f));
+		railManager_->AddRail(Input::GetMousePos3D(viewProjection_, mouseDepth_));
 	}
+	//可視化オブジェクトに代入
+	mousePosView_->transform_.translation_ = Input::GetMousePos3D(viewProjection_, mouseDepth_);
 	//カメラ更新
 	gameCamera_->Update(railManager_->GetControlPoints());
 	
-
+	mousePosView_->Update();
 	ViewProjectionUpdate();
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,10 +71,11 @@ void GameScene::Draw() {
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
-
 	railManager_->Draw(viewProjection_);
 	//プレイヤー
 	player_->Draw(viewProjection_);
+	//可視化オブジェクト
+	mousePosView_->Draw(viewProjection_,std::nullopt,{0,0,0,1});
 #pragma endregion
 
 #pragma region 3Dオブジェクトパーティクル描画
@@ -100,7 +105,7 @@ void GameScene::Debug() {
 	ImGui::End();
 	//ライティング
 	ImGui::Begin("Lighting");
-
+	mousePosView_->DebugImgui();
 	ImGui::End();
 #endif
 }

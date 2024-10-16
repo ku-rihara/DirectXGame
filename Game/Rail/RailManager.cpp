@@ -91,5 +91,4 @@ void RailManager::LoadControlSpots(const std::string& filename) {
 			AddRail(pos);
 		}
 	}
-
 }

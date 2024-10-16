@@ -8,7 +8,7 @@
 #include"Object3d.h"
 class Player {
 private:	
-	Object3d* obj3D_;
+	std::unique_ptr<Object3d> obj3D_;
 	bool isDeath_;
 public://メンバ関数
 
