@@ -1,10 +1,11 @@
 #pragma once
-//#include"Model.h"
+
 #include"BaseObject3d.h"
+#include"ObjectColor.h"
 
 class Object3d:public BaseObject3d  {
 public:
-	
+	ObjectColor color_;
 	WorldTransform transform_;
 private:
 	
@@ -12,22 +13,22 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource>wvpResource_;
 	TransformationMatrix* wvpDate_;
 
-private:
-	//WVPリソース作成
-	void CreateWVPResource();
 public:
 	Object3d();
 	~Object3d();
 
 	static Object3d* CreateModel(const std::string& instanceName, const std::string& extension);
-	static Object3d* CreateModel(Model*model);
 	//更新
 	void Update();
 	//描画
-	void Draw( const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt, const Vector4& color = { 1,1,1,1 });
+	void Draw( const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt);
 	//デバッグ表示
 	void DebugImgui()override;
-	
+	//WVPリソース作成
+	 void CreateWVPResource();
+
 	 void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
 	 void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
+
+	
 };

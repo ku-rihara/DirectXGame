@@ -26,6 +26,7 @@
 //class
 #include "WorldTransform.h"
 #include "ViewProjection.h"
+#include"ObjectColor.h"
 #include"DirectXCommon.h"
 
 //3Dモデル共通部
@@ -74,23 +75,22 @@ public:
 
 	ModelData LoadModelFile(const std::string& directoryPath, const std::string& filename);
 	ModelData LoadModelGltf(const std::string& directoryPath, const std::string& filename);
-	void CreateModel(const std::string& ModelName, const std::string& extension);
 
 	Node ReadNode(aiNode* node);
     /// <summary>
 	/// モデル作成
 	/// </summary>
-	void CreateModelBuffer();
+	void CreateModel(const std::string& ModelName, const std::string& extension);
 	
 	//// <summary>
 	/// モデル作成共通
 	/// </summary>
 	/// <param name="ModelName"></param>
-	void CreateBufferCommon();
+	void CreateCommon(const std::string& ModelName, const std::string& extension);
 	/// <summary>
 	/// モデル描画
 	/// </summary>
-	void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, std::optional<uint32_t> textureHandle = std::nullopt,const Vector4& color={1,1,1,1});
+	void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ObjectColor& color, std::optional<uint32_t> textureHandle = std::nullopt);
 
 	/// <summary>
 	/// モデルバーティクル

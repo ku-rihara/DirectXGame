@@ -101,7 +101,7 @@ Node Model::ReadNode(aiNode* node) {
 	return result;
 }
 
-void Model::CreateModel(const std::string& ModelName, const std::string& extension) {
+void Model::CreateCommon(const std::string& ModelName, const std::string& extension) {
 	if (extension == ".gltf") {
 		isFileGltf_ = true;
 		modelData_ = LoadModelGltf("./Resources/Model/" + ModelName, ModelName + extension);
@@ -112,10 +112,6 @@ void Model::CreateModel(const std::string& ModelName, const std::string& extensi
 	textureManager_ = TextureManager::GetInstance();
 	textureHandle_ = textureManager_->LoadTexture(modelData_.material.textureFilePath);
 
-}
-
-void Model::CreateBufferCommon() {
-	
 	//頂点リソースをつくる
 	vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), (sizeof(VertexData) * modelData_.vertices.size()));
 	//頂点バッファビューを作成する
@@ -147,8 +143,8 @@ void Model::CreateBufferCommon() {
 	Light::GetInstance()->Init();
 }
 
-void Model::CreateModelBuffer() {
-	CreateBufferCommon();
+void Model::CreateModel(const std::string& ModelName, const std::string& extension) {
+	CreateCommon(ModelName, extension);
 	materialDate_->enableLighting = 2;
 	Light::GetInstance()->Init();
 }
@@ -156,17 +152,18 @@ void Model::CreateModelBuffer() {
 #ifdef _DEBUG
 void Model::DebugImGui() {
 
-	//Material
-	ImGui::ColorEdit4(" Color", (float*)&materialDate_->color);
+	////Material
+	//ImGui::ColorEdit4(" Color", (float*)&materialDate_->color);
 	ImGui::DragFloat("Shininess", (float*)&materialDate_->shininess, 0.01f);
 	const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert","Specular Reflection","PointLight","SpotLight" };
 	ImGui::Combo("Lighting Mode", &materialDate_->enableLighting, lightingModes, IM_ARRAYSIZE(lightingModes));
 }
 #endif
 
-void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, std::optional<uint32_t> textureHandle, const Vector4& color) {
+void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ObjectColor& color, std::optional<uint32_t> textureHandle){
+
 	auto commandList = directXCommon->GetCommandList();
-	materialDate_->color = color;
+	/*materialDate_->color = color.;*/
 
 	// 頂点バッファとインデックスバッファの設定
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
@@ -174,8 +171,8 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, std::option
 
 	// 形状を設定
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	// リソースの設定
+	materialDate_->color = color.GetColor();
+	
 	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 

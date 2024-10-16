@@ -9,24 +9,24 @@ ModelManager* ModelManager::GetInstance() {
 	}
 	return instance_;
 }
-//初期化
+
 void  ModelManager::Initialize(DirectXCommon* dxCommon) {
 	modelCommon = std::make_unique<ModelCommon>();
 	modelCommon->Init(dxCommon);
 }
-//ロード
+
 void ModelManager::LoadModel(const std::string& modelName, const std::string& extension) {
-	std::unique_ptr<Model>model = std::make_unique<Model>();
 	//読み込み済みモデルを検索
 	if (models_.contains(modelName + extension)) {
 		//読み込み済みなら早期リターン
 		return;
 	}
-	model->CreateModel(modelName, extension);
-	//モデルをmapコンテナに格納する
-	models_.insert(std::make_pair(modelName + extension, std::move(model)));
+		std::unique_ptr<Model>model = std::make_unique<Model>();
+		model->CreateModel(modelName, extension);
+		//モデルをmapコンテナに格納する
+		models_.insert(std::make_pair(modelName+extension, std::move(model)));
 }
-//パーティクルロード
+
 void ModelManager::LoadModelParticle(const std::string& modelName, const std::string& extension) {
 	//読み込み済みモデルを検索
 	if (models_.contains(modelName + extension)) {
@@ -34,17 +34,16 @@ void ModelManager::LoadModelParticle(const std::string& modelName, const std::st
 		return;
 	}
 	std::unique_ptr<Model>model = std::make_unique<Model>();
-	model->CreateModel(modelName, extension);
-	model->CreateBufferCommon();
+	model->CreateCommon(modelName, extension);
 	//モデルをmapコンテナに格納する
 	models_.insert(std::make_pair(modelName + extension, std::move(model)));
 }
-//モデル検索
+
 Model* ModelManager::FindModel(const std::string& modelName, const std::string& extension) {
 	//読み込み済モデルを検索
-	if (models_.contains(modelName + extension)) {
+	if (models_.contains(modelName+extension)) {
 		//読み込み済モデルをreturn 
-		return models_.at(modelName + extension).get();
+		return models_.at(modelName+extension).get();
 	}
 	//ファイル名一致なし
 	return nullptr;
@@ -52,7 +51,7 @@ Model* ModelManager::FindModel(const std::string& modelName, const std::string& 
 
 // 終了
 void ModelManager::Finalize() {
-
+	
 	models_.clear(); // モデルデータを解放
 	modelCommon.reset(); // ModelCommonを解放
 	delete instance_;

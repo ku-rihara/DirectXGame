@@ -18,11 +18,17 @@ Object3dParticle* Object3dParticle::CreateModel(const std::string& instanceName,
 void Object3dParticle::Update(std::optional<const ViewProjection*> viewProjection) {
 	for (std::list<Particle>::iterator particleIterator = particles_.begin();
 		particleIterator != particles_.end(); ++particleIterator) {
+		if (accelerationField_.isAdaption) {//加速フィールド適応
+			if(IsCollision(accelerationField_.area, (*particleIterator).worldTransform_.translation_)) {
+				(*particleIterator).velocity_ += accelerationField_.acceleration * kDeltaTime_;
+			}
+		}
+		//位置動かす
 		(*particleIterator).worldTransform_.translation_ += (*particleIterator).velocity_*kDeltaTime_;
-		if (viewProjection.has_value()) {
+		if (viewProjection.has_value()) {//ビルボード
 			(*particleIterator).worldTransform_.BillboardUpdateMatrix(*viewProjection.value());
 		}
-		else {
+		else {//普通のUpdateMatirx
 			(*particleIterator).worldTransform_.UpdateMatrix();
 		}
 
@@ -135,9 +141,4 @@ void Object3dParticle::Emit(const Emitter& emitter, MinMax dist, MinMax velocity
 	for (uint32_t i = 0; i < emitter.count; ++i) {
 		particles_.emplace_back(MakeParticle(dist, velocityDist,emitter.transform, lifeTime));
 	}
-	//for (uint32_t i = 0; i < emitter.count; ++i) {
-	//	Particle particle = MakeParticle(dist, velocityDist, lifeTime);
-	//	particles_.push_back(particle); // emittedParticles に追加
-	//}
-	/*return particles;*/
 }

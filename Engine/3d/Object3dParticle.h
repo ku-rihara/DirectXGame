@@ -7,9 +7,16 @@
 #include"Transform.h"
 //math
 #include"MinMax.h"
+#include"AABB.h"
 
 class Object3dParticle :public BaseObject3d {
 public:
+	struct AccelerationField  {
+		Vector3 acceleration;
+		AABB area;
+		bool isAdaption;
+	};
+		
 	struct Emitter {
 		Transform transform;
 		uint32_t count;
@@ -26,6 +33,7 @@ public:
 	};
 	 std::list<Particle>particles_;
 	 Emitter emitter_;
+	 AccelerationField accelerationField_;
 private:
 	uint32_t instanceMax_;
 	uint32_t instanceNum_;//インスタンス数
