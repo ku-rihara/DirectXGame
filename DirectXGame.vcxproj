@@ -16,7 +16,6 @@
     <ClCompile Include="Engine\3d\BaseObject3d.cpp" />
     <ClCompile Include="Engine\3d\DebugCamera.cpp" />
     <ClCompile Include="Engine\3d\Light.cpp" />
-    <ClCompile Include="Engine\3d\Material.cpp" />
     <ClCompile Include="Engine\3d\Mesh.cpp" />
     <ClCompile Include="Engine\3d\Model.cpp" />
     <ClCompile Include="Engine\3d\ModelManager.cpp" />
@@ -28,6 +27,7 @@
     <ClCompile Include="Engine\audio\Audio.cpp" />
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\base\Keta.cpp" />
+    <ClCompile Include="Engine\base\Material.cpp" />
     <ClCompile Include="Engine\base\Object3DCommon.cpp" />
     <ClCompile Include="Engine\base\TextureManager.cpp" />
     <ClCompile Include="Engine\base\WinApp.cpp" />
@@ -68,6 +68,7 @@
     <ClInclude Include="Engine\audio\Audio.h" />
     <ClInclude Include="Engine\base\DirectXCommon.h" />
     <ClInclude Include="Engine\base\Keta.h" />
+    <ClInclude Include="Engine\base\Material.h" />
     <ClInclude Include="Engine\base\Object3DCommon.h" />
     <ClInclude Include="Engine\base\TextureManager.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
@@ -78,7 +79,6 @@
     <ClInclude Include="Engine\struct\CameraForGPU.h" />
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h" />
     <ClInclude Include="Engine\struct\DirectionalLight.h" />
-    <ClInclude Include="Engine\struct\Material.h" />
     <ClInclude Include="Engine\struct\MaterialData.h" />
     <ClInclude Include="Engine\struct\ModelData.h" />
     <ClInclude Include="Engine\struct\ParticleForGPU.h" />

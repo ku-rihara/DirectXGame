@@ -198,8 +198,8 @@
     <ClCompile Include="Engine\3d\ObjectColor.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Material.cpp">
-      <Filter>MyEngine\.cpp\3d</Filter>
+    <ClCompile Include="Engine\base\Material.cpp">
+      <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -362,8 +362,8 @@
     <ClInclude Include="Engine\3d\ObjectColor.h">
       <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\struct\Material.h">
-      <Filter>MyEngine\.h\3d</Filter>
+    <ClInclude Include="Engine\base\Material.h">
+      <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
