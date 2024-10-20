@@ -65,7 +65,6 @@ public:
 	/// <param name="viewprojection"></param>
 	/// <param name="depthFactor"></param>
 	/// <returns></returns>
-	Vector3 GetMousePos3D(const ViewProjection& viewprojection, float depthFactor) const;
-
+	Vector3 GetMousePos3D(const ViewProjection& viewprojection, float depthFactor, float blockSpacing=1.0f) const;
 
 };

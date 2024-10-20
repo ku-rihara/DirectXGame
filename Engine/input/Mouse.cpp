@@ -1,4 +1,5 @@
 #include"Mouse.h"
+#include <cmath>
 #include<assert.h>
 void Mouse::Init(Microsoft::WRL::ComPtr<IDirectInput8>directInput,HWND hWnd) {
     hWnd_ = hWnd;
@@ -41,7 +42,7 @@ MouseMove Mouse::GetMouseMove() {
     return move;
 }
 
-Vector3 Mouse::GetMousePos3D(const ViewProjection& viewprojection, float depthFactor) const {
+Vector3 Mouse::GetMousePos3D(const ViewProjection& viewprojection, float depthFactor, float blockSize) const {
     // 2Dマウス座標を取得
     Vector2 mousePos = mousePosition_;
 
@@ -54,7 +55,7 @@ Vector3 Mouse::GetMousePos3D(const ViewProjection& viewprojection, float depthFa
     float ndcY = 1.0f - (2.0f * mousePos.y / windowHeight);
     float ndcZ = depthFactor; // Z軸の奥行きを調整するパラメータ
 
-    // NDC座標をVector4に変換（NDCのZ値をdepthFactorで調整）
+    // NDC座標をVector3に変換（NDCのZ値をdepthFactorで調整）
     Vector3 clipPos = { ndcX, ndcY, ndcZ };
 
     // 逆射影行列を使ってクリップ空間からビュー空間へ変換
@@ -65,10 +66,16 @@ Vector3 Mouse::GetMousePos3D(const ViewProjection& viewprojection, float depthFa
     Matrix4x4 invView = Inverse(viewprojection.matView_);
     Vector3 worldPos = MatrixTransform(viewPos, invView);
 
+    // ブロックサイズに基づいてスナップ処理を適用
+    if (blockSize > 0.0f) {
+        worldPos.x = std::round(worldPos.x / blockSize) * blockSize;
+        worldPos.y = std::round(worldPos.y / blockSize) * blockSize;
+        worldPos.z = std::round(worldPos.z / blockSize) * blockSize;
+    }
+
     // ワールド座標を返す
     return worldPos;
 }
-
 
 int32_t Mouse::GetWheel() const {
     return mouse_.lZ;

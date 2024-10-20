@@ -39,13 +39,13 @@ void GameScene::Init() {
 }
 
 void GameScene::Update() {
+	//可視化オブジェクトに代入
+	mousePosView_->transform_.translation_ = Input::GetMousePos3D(viewProjection_, mouseDepth_);
 	Debug();//デバッグ
 	//制御点追加
 	if (Input::GetInstance()->IsTriggerMouse(3)) {
-		railManager_->AddRail(Input::GetMousePos3D(viewProjection_, mouseDepth_));
+		railManager_->AddRail(mousePosView_->transform_.translation_);
 	}
-	//可視化オブジェクトに代入
-	mousePosView_->transform_.translation_ = Input::GetMousePos3D(viewProjection_, mouseDepth_);
 	//カメラ更新
 	gameCamera_->Update(railManager_->GetControlPoints());
 	
@@ -98,7 +98,7 @@ void GameScene::Debug() {
 		ImGui::DragFloat3("Translate", &viewProjection_.translation_.x, 0.01f);
 		ImGui::TreePop();
 	}
-	ImGui::Text("3DX:%5.4f, 3DY:%5.4f, 3DZ:%5.4f", Input::GetMousePos3D(viewProjection_,1).x, Input::GetMousePos3D(viewProjection_,1).y, Input::GetMousePos3D(viewProjection_,1).z);
+	ImGui::Text("3DX:%5.4f, 3DY:%5.4f, 3DZ:%5.4f", mousePosView_->transform_.translation_.x, mousePosView_->transform_.translation_.y, mousePosView_->transform_.translation_.z);
 	ImGui::Text("2DX:%5.4f, 2DY:%5.4f", Input::GetMousePos().x, Input::GetMousePos().y);
 
 

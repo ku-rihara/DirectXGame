@@ -183,8 +183,8 @@ MouseMove Input::GetMouseMove() {
 	return mouse_->GetMouseMove();
 }
 
-Vector3 Input::GetMousePos3D(const ViewProjection& viewprojection, float depthFactor) {
-	return mouse_->GetMousePos3D(viewprojection, depthFactor);
+Vector3 Input::GetMousePos3D(const ViewProjection& viewprojection, float depthFactor, float blockSpacing){
+	return mouse_->GetMousePos3D(viewprojection, depthFactor,blockSpacing);
 }
 
 
