@@ -64,10 +64,10 @@ void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position
 	//マテリアル--------------------------------------------------------------------------------------
 	material_.CreateMaterialResource(directXCommon);
 	//Lightingを無効
-	material_.color = color;
-	material_.enableLighting = false;
+	material_.materialData_->color = color;
+	material_.materialData_->enableLighting = false;
 	//UVTransformは単位行列を書き込んでおく
-	material_.uvTransform = MakeIdentity4x4();
+	material_.materialData_->uvTransform = MakeIdentity4x4();
 		//行列----------------------------------------------------------------------------------------------------------
 	wvpResourceSprite_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix));
 	//データを書き込む
@@ -85,7 +85,7 @@ void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position
 #ifdef _DEBUG
 void Sprite::DebugImGui() {
 	/*ImGui::Begin("Lighting");*/
-	ImGui::ColorEdit4(" Color", (float*)&material_.color);
+	ImGui::ColorEdit4(" Color", (float*)&material_.materialData_->color);
 }
 #endif
 
@@ -99,7 +99,7 @@ void Sprite::Draw() {
 	wvpDataSprite_->WVP=worldViewProjectionMatrixSprite;
 
 	//TransformationmatrixCBufferの場所を設定
-	material_.SetToShader(directXCommon->GetCommandList());
+	material_.SetCommandList(directXCommon->GetCommandList());
 	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResourceSprite_->GetGPUVirtualAddress());
 	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, texture_);
 	//描画(DrawCall/ドローコール)
@@ -117,7 +117,7 @@ void Sprite::SetUVTransform(const UVTransform& uvTransform) {
 	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(Vector3{uvTransform.scale.x,uvTransform.scale.y,0.0f});
 	uvTransformMatrix = (uvTransformMatrix * MakeRotateZMatrix(uvTransform.rotate.z));
 	uvTransformMatrix = (uvTransformMatrix * MakeTranslateMatrix(Vector3{ uvTransform.pos.x,uvTransform.pos.y,0.0f }));
-	material_.uvTransform = uvTransformMatrix;
+	material_.materialData_->uvTransform = uvTransformMatrix;
 }
 void Sprite::SetPosition(const Vector2& pos) {
 

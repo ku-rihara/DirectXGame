@@ -75,6 +75,6 @@ static	void PreDraw(ID3D12GraphicsCommandList* commandList);
 	//setter
 	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->WVP = date; }
 	void SetWorldMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->World = date; }
-	void SetUVTransformSprite(Matrix4x4 matrix) { this->material_.uvTransform = matrix; }
+	void SetUVTransformSprite(Matrix4x4 matrix) { this->material_.materialData_->uvTransform = matrix; }
 };
 
