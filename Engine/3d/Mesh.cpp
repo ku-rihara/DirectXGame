@@ -131,10 +131,10 @@ void Mesh::CreateSphere() {
 	//書き込むためのアドレスを取得
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialDate_));
 	//今回は赤を書き込む
-	materialDate_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	materialDate_->enableLighting = 2;
+	materialDate_->materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	materialDate_->materialData_->enableLighting = 2;
 	//UVTransformは単位行列を書き込んでおく
-	materialDate_->uvTransform = MakeIdentity4x4();
+	materialDate_->materialData_->uvTransform = MakeIdentity4x4();
 	//平行光源--------------------------------------------------------------------------------------------------
 	directionalLightResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(DirectionalLight));
 	//データ書き込む
@@ -159,12 +159,12 @@ void Mesh::CreateSphere() {
 #ifdef _DEBUG
 void Mesh::DebugImGui() {
 	/*ImGui::Begin("Lighting");*/
-	ImGui::ColorEdit4(" Color", (float*)&materialDate_->color);
+	ImGui::ColorEdit4(" Color", (float*)&materialDate_->materialData_->color);
 	ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
 	directionalLightData_->direction = Normalize(directionalLightData_->direction);
 	ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
 	const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert" };
-	ImGui::Combo("Lighting Mode", &materialDate_->enableLighting, lightingModes, IM_ARRAYSIZE(lightingModes));
+	ImGui::Combo("Lighting Mode", &materialDate_->materialData_->enableLighting, lightingModes, IM_ARRAYSIZE(lightingModes));
 	/*ImGui::End();*/
 }
 #endif

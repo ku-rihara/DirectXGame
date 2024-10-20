@@ -129,12 +129,14 @@ void Model::CreateModel(const std::string& ModelName, const std::string& extensi
 	std::memcpy(vertexDate, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
 	//マテリアル--------------------------------------------------------------------------------------
 	
-	material_.textureFilePath = modelData_.material.textureFilePath;
-	Light::GetInstance()->Init();
+	//material_.textureFilePath = modelData_.material.textureFilePath;
+	
 }
 
+//マテリアルリソース作成
 void Model::CreateMaterialResource() {
 	material_.CreateMaterialResource(directXCommon);	
+	Light::GetInstance()->Init();
 }
 
 
@@ -157,9 +159,9 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Objec
 
 	// 形状を設定
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	
-	material_.UpdateMaterialData(color.GetColor());
-	material_.SetToShader(commandList);
+	color;
+	/*material_.UpdateMaterialData(color.GetColor());*/
+	material_.SetCommandList(commandList);
 	commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 
 	if (textureHandle.has_value()) {
@@ -189,7 +191,7 @@ void Model::DrawParticle(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// マテリアルのリソースを設定
-	material_.SetToShader(commandList);
+	material_.SetCommandList(commandList);
 	commandList->SetGraphicsRootDescriptorTable(1, instancingGUPHandle);
 
 	// テクスチャハンドルの設定

@@ -8,21 +8,22 @@
 class DirectXCommon;
 
 class Material {
+private:
+    struct MaterialStructure {
+        Vector4 color;
+        int32_t enableLighting;
+        float padding[3];
+        Matrix4x4 uvTransform;
+        float shininess;
+    };
 public:
-    // マテリアルの色情報
-    Vector4 color;
+    // GPUに送るマテリアルデータの実体
+    MaterialStructure* materialData_;
+private:
+    // GPUリソースへのポインタ
+    Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 
-    // マテリアルの反射率 (Shininess)
-    float shininess;
-
-    // UV座標変換用の行列
-    Matrix4x4 uvTransform;
-
-    // ライティングのモード（0: なし, 1: ランバート, 2: ハーフランバート, 3: スペキュラ）
-    int enableLighting;
-
-    // テクスチャファイルパス
-    std::string textureFilePath;
+public:
 
     // コンストラクタ
     Material();
@@ -34,17 +35,13 @@ public:
     void UpdateMaterialData(const Vector4& newColor);
 
     // シェーダーにデータを送る関数
-    void SetToShader(ID3D12GraphicsCommandList* commandList);
+    void SetCommandList(ID3D12GraphicsCommandList* commandList);
+
+
 
 #ifdef _DEBUG
     // デバッグ用ImGuiでの表示
     void DebugImGui();
 #endif
 
-private:
-    // GPUリソースへのポインタ
-    Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
-
-    // GPUに送るマテリアルデータの実体
-    Material* materialData_;
 };
