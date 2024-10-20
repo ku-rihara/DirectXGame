@@ -11,6 +11,7 @@ Object3dParticle* Object3dParticle::CreateModel(const std::string& instanceName,
 	ModelManager::GetInstance()->LoadModelParticle(instanceName, extension);
 	object3d->SetModel(instanceName, extension);
 	object3d->CreateInstancingResource(instanceNumMax);
+	object3d->model_->CreateMaterialResource();
 	object3d->Clear();
 	return object3d;
 }
@@ -136,6 +137,7 @@ Object3dParticle::Particle  Object3dParticle::MakeParticle(MinMax dist, MinMax v
 	return  particle;
 }
 
+//エミッター
 void Object3dParticle::Emit(const Emitter& emitter, MinMax dist, MinMax velocityDist, float lifeTime) {
 	
 	for (uint32_t i = 0; i < emitter.count; ++i) {
