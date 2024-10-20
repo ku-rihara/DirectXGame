@@ -217,6 +217,9 @@
     <ClCompile Include="math\AABB.cpp">
       <Filter>liberaly\math\.cpp</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\base\Material.cpp">
+      <Filter>MyEngine\.cpp\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -247,9 +250,6 @@
       <Filter>MyEngine\.h\struct</Filter>
     </ClInclude>
     <ClInclude Include="Engine\struct\DirectionalLight.h">
-      <Filter>MyEngine\.h\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\struct\Material.h">
       <Filter>MyEngine\.h\struct</Filter>
     </ClInclude>
     <ClInclude Include="Engine\struct\MaterialData.h">
@@ -395,6 +395,9 @@
     </ClInclude>
     <ClInclude Include="math\AABB.h">
       <Filter>liberaly\math\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\Material.h">
+      <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -14,6 +14,7 @@ Object3d* Object3d::CreateModel(const std::string& instanceName, const std::stri
 	ModelManager::GetInstance()->LoadModel(instanceName, extension);
 	object3d->SetModel(instanceName, extension);
 	object3d->CreateWVPResource();
+	object3d->model_->CreateMaterialResource();
 	object3d->color_.Init();
 	object3d->transform_.Init();
 	return object3d;

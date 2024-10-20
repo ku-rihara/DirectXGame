@@ -55,7 +55,7 @@ private:
 	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
 	//リソース******************************************************************
 	//Material
-	Microsoft::WRL::ComPtr<ID3D12Resource >materialResource_;
+	/*Microsoft::WRL::ComPtr<ID3D12Resource >materialResource_;*/
 	//頂点リソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>vertexResource_;
 	//indexリソース
@@ -63,7 +63,7 @@ private:
 
 	//データ****************************************************************************
 
-	Material* materialDate_;
+	Material material_;
 	bool isFileGltf_;
 
 	//後に消すかも
@@ -82,11 +82,11 @@ public:
 	/// </summary>
 	void CreateModel(const std::string& ModelName, const std::string& extension);
 	
-	//// <summary>
-	/// モデル作成共通
+	/// <summary>
+	/// マテリアルリソース
 	/// </summary>
-	/// <param name="ModelName"></param>
-	void CreateCommon(const std::string& ModelName, const std::string& extension);
+	void CreateMaterialResource();
+
 	/// <summary>
 	/// モデル描画
 	/// </summary>
