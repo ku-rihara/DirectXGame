@@ -101,7 +101,7 @@ Node Model::ReadNode(aiNode* node) {
 	return result;
 }
 
-void Model::CreateCommon(const std::string& ModelName, const std::string& extension) {
+void Model::CreateModel(const std::string& ModelName, const std::string& extension) {
 	if (extension == ".gltf") {
 		isFileGltf_ = true;
 		modelData_ = LoadModelGltf("./Resources/Model/" + ModelName, ModelName + extension);
@@ -128,35 +128,21 @@ void Model::CreateCommon(const std::string& ModelName, const std::string& extens
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate));
 	std::memcpy(vertexDate, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
 	//マテリアル--------------------------------------------------------------------------------------
-	materialResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(Material));
-	//マテリアルにデータを書き込む
-	materialDate_ = nullptr;
-	//書き込むためのアドレスを取得
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialDate_));
-	//今回は赤を書き込む
-	materialDate_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	materialDate_->enableLighting = 2;
-	//UVTransformは単位行列を書き込んでおく
-	materialDate_->uvTransform = MakeIdentity4x4();
-
-	/*materialDate_->hasTexture = useTexture;*/
+	
+	material_.textureFilePath = modelData_.material.textureFilePath;
 	Light::GetInstance()->Init();
 }
 
-void Model::CreateModel(const std::string& ModelName, const std::string& extension) {
-	CreateCommon(ModelName, extension);
-	materialDate_->enableLighting = 2;
-	Light::GetInstance()->Init();
+void Model::CreateMaterialResource() {
+	material_.CreateMaterialResource(directXCommon);	
 }
+
+
 
 #ifdef _DEBUG
 void Model::DebugImGui() {
 
-	////Material
-	//ImGui::ColorEdit4(" Color", (float*)&materialDate_->color);
-	ImGui::DragFloat("Shininess", (float*)&materialDate_->shininess, 0.01f);
-	const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert","Specular Reflection","PointLight","SpotLight" };
-	ImGui::Combo("Lighting Mode", &materialDate_->enableLighting, lightingModes, IM_ARRAYSIZE(lightingModes));
+	material_.DebugImGui();
 }
 #endif
 
@@ -167,13 +153,13 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Objec
 
 	// 頂点バッファとインデックスバッファの設定
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
-	commandList->IASetIndexBuffer(&indexBufferView_);  // IBV
+	//commandList->IASetIndexBuffer(&indexBufferView_);  // IBV
 
 	// 形状を設定
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	materialDate_->color = color.GetColor();
 	
-	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	material_.UpdateMaterialData(color.GetColor());
+	material_.SetToShader(commandList);
 	commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 
 	if (textureHandle.has_value()) {
@@ -203,7 +189,7 @@ void Model::DrawParticle(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// マテリアルのリソースを設定
-	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	material_.SetToShader(commandList);
 	commandList->SetGraphicsRootDescriptorTable(1, instancingGUPHandle);
 
 	// テクスチャハンドルの設定

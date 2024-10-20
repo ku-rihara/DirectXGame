@@ -33,7 +33,7 @@ private:
 	static D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite_;
 	//リソース******************************************************************
 	//Material
-	Microsoft::WRL::ComPtr<ID3D12Resource >materialResourceSprite_;
+	//Microsoft::WRL::ComPtr<ID3D12Resource >materialResourceSprite_;
 	//頂点リソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>vertexResourceSprite_;
 	//wvpリソース
@@ -42,7 +42,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource>indexResourceSprite_;
 	//データ****************************************************************************
 	TransformationMatrix* wvpDataSprite_;
-	Material* materialDateSprite_;
+	Material material_;
 
 
 public:
@@ -75,6 +75,6 @@ static	void PreDraw(ID3D12GraphicsCommandList* commandList);
 	//setter
 	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->WVP = date; }
 	void SetWorldMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->World = date; }
-	void SetUVTransformSprite(Matrix4x4 matrix) { this->materialDateSprite_->uvTransform = matrix; }
+	void SetUVTransformSprite(Matrix4x4 matrix) { this->material_.uvTransform = matrix; }
 };
 

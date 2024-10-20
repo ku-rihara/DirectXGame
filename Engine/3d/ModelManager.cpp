@@ -34,7 +34,7 @@ void ModelManager::LoadModelParticle(const std::string& modelName, const std::st
 		return;
 	}
 	std::unique_ptr<Model>model = std::make_unique<Model>();
-	model->CreateCommon(modelName, extension);
+	model->CreateModel(modelName, extension);
 	//モデルをmapコンテナに格納する
 	models_.insert(std::make_pair(modelName + extension, std::move(model)));
 }

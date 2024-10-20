@@ -198,6 +198,9 @@
     <ClCompile Include="Engine\3d\ObjectColor.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3d\Material.cpp">
+      <Filter>MyEngine\.cpp\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -228,9 +231,6 @@
       <Filter>MyEngine\.h\struct</Filter>
     </ClInclude>
     <ClInclude Include="Engine\struct\DirectionalLight.h">
-      <Filter>MyEngine\.h\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\struct\Material.h">
       <Filter>MyEngine\.h\struct</Filter>
     </ClInclude>
     <ClInclude Include="Engine\struct\MaterialData.h">
@@ -360,6 +360,9 @@
       <Filter>liberary\.h</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\ObjectColor.h">
+      <Filter>MyEngine\.h\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\struct\Material.h">
       <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
   </ItemGroup>
