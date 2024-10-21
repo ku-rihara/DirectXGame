@@ -201,6 +201,9 @@
     <ClCompile Include="Engine\base\Material.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\base\SpriteCommon.cpp">
+      <Filter>MyEngine\.cpp\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -363,6 +366,9 @@
       <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Material.h">
+      <Filter>MyEngine\.h\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\SpriteCommon.h">
       <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
   </ItemGroup>

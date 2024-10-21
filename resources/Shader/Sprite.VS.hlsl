@@ -1,23 +1,19 @@
-#include"Particle.hlsli"
-//float4 main(float4 pos : POSITION) : SV_POSITION
-//{
-//    return pos;
-//}
+#include "Sprite.hlsli"
 
-struct ParticleForGPU
+struct Sprite
 {
     float4x4 WVP;
     float4x4 World;
 };
 
-StructuredBuffer<ParticleForGPU> gParticle : register(t0);
+ConstantBuffer<Sprite> gSprite : register(b0);
 
-VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID)
+VertexShaderOutput main(VertexShaderInput input)
 {
     VertexShaderOutput output;
-    output.position = mul(input.position, gParticle[instanceID].WVP);
+    output.position = mul(input.position, gSprite.WVP);
     output.texcoord = input.texcoord;
-    output.normal = normalize(mul(input.normal, (float3x3) gParticle[instanceID].WorldInverseTranspose));
-    
+    output.normal = normalize(mul(input.normal, (float3x3) gSprite.World));
+
     return output;
 }
