@@ -8,6 +8,8 @@
 // 定数バッファ用データ構造体
 struct ConstBufferDataWorldTransform {
 	Matrix4x4 matWorld; // ローカル → ワールド変換行列
+	Matrix4x4 World;
+	Matrix4x4 WorldInverseTranspose;
 };
 /// <summary>
 /// ワールド変換データ
@@ -66,6 +68,8 @@ public:
 	void UpdateMatrix();
 
 	void BillboardUpdateMatrix(const ViewProjection&viewProjection);
+
+	void SetCommandList(ID3D12GraphicsCommandList* commandList);
 
 	/// <summary>
 	/// 定数バッファの取得

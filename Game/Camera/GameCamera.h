@@ -6,6 +6,7 @@
 //3D
 #include"ViewProjection.h"
 #include"WorldTransform.h"
+#include"Object3d.h"
 class GameCamera {
 private:
 	WorldTransform worldTransform_;
@@ -16,11 +17,13 @@ private:
 	Vector3 cameraRotate_;
 	int RailIndex = 0;
 	std::vector<Vector3> pointsDrawing;
+	//モデル
+	std::vector<Object3d*>object3d_;
 public:
 	//Function
 	void Init();
 	void Update(const std::vector<Vector3>&controlPos);
-	void ControlSpotDraw();
+	void RailDraw(const ViewProjection& viewProjection);
 	
 	
 	/// <summary>

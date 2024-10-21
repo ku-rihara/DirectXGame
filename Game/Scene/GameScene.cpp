@@ -76,6 +76,9 @@ void GameScene::Draw() {
 	player_->Draw(viewProjection_);
 	//可視化オブジェクト
 	mousePosView_->Draw(viewProjection_);
+	//レール
+	gameCamera_->RailDraw(viewProjection_);
+
 #pragma endregion
 
 #pragma region 3Dオブジェクトパーティクル描画

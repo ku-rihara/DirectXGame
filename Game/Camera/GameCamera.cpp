@@ -8,8 +8,21 @@
 void GameCamera::Init() {
 	viewProjection_.Init();
 	worldTransform_.Init();
+
+	object3d_.resize(IndexCount+1);
+	for (uint32_t i = 0; i < uint32_t(object3d_.size()); i++) {
+		object3d_[i]=(Object3d::CreateModel("Rail", ".obj"));
+	}
 }
 void GameCamera::Update(const std::vector<Vector3>& controlPos) {
+
+	// オブジェクト用
+	for (uint32_t i = 0; i <uint32_t(object3d_.size()); i++) {
+		float t = 1.0f / IndexCount * i;
+		Vector3 pos = CatmullRomPosition(controlPos, t);
+		object3d_[i]->transform_.translation_=pos;
+		object3d_[i]->Update();
+	}
 	
 	// 線分の数+1個分の頂点座標を計算
 	for (size_t i = 0; i < IndexCount + 1; i++) {
@@ -38,9 +51,10 @@ void GameCamera::Update(const std::vector<Vector3>& controlPos) {
 		}
 	}
 }
-void GameCamera::ControlSpotDraw() {
+void GameCamera::RailDraw(const ViewProjection& viewProjection) {
 	
-
-
+	for (size_t i = 0; i < object3d_.size(); i++) {
+		object3d_[i]->Draw(viewProjection);
+	}
 
 }
