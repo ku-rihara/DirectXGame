@@ -17,11 +17,11 @@ Vector3 Lerp(const Vector3& start, const Vector3& end, float t) {
 
 Vector3 SLerp(const Vector3& start, const Vector3& end, float t) {
     // ベクトルの正規化
-    Vector3 Nstart = Normalize(start);
-    Vector3 Nend = Normalize(end);
+    Vector3 Nstart = Vector3::Normalize(start);
+    Vector3 Nend = Vector3::Normalize(end);
 
     // 内積を求める
-    float dot = Dot(Nstart, Nend);
+    float dot = Vector3::Dot(Nstart, Nend);
 
     // ドット積の誤差補正
     if (dot > 1.0f) {
@@ -48,8 +48,8 @@ Vector3 SLerp(const Vector3& start, const Vector3& end, float t) {
     Vector3 NormalizeVector = (sinThetaFrom * Nstart + sinThetaTo * Nend) / sinTheta;
 
     // ベクトルの長さを線形補間
-    float length1 = Length(start);
-    float length2 = Length(end);
+    float length1 = Vector3::Length(start);
+    float length2 = Vector3::Length(end);
     float length = Lerp(length1, length2, t);
 
     // 補間したベクトルに長さを掛けて返す

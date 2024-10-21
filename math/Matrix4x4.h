@@ -4,6 +4,7 @@
 /// <summary>
 /// 4x4行列
 /// </summary>
+class Vector3;
 struct Matrix4x4 {
 	float m[4][4];
 	Matrix4x4 operator+(const Matrix4x4& obj) const; // 加算
