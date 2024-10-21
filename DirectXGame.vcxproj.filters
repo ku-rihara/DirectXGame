@@ -220,6 +220,9 @@
     <ClCompile Include="Engine\base\Material.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
+    <ClCompile Include="math\Quaternion.cpp">
+      <Filter>liberaly\math\.cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -398,6 +401,9 @@
     </ClInclude>
     <ClInclude Include="Engine\base\Material.h">
       <Filter>MyEngine\.h\base</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Quaternion.h">
+      <Filter>liberaly\math\.h</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
