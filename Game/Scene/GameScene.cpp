@@ -23,7 +23,7 @@ void GameScene::Init() {
 	railManager_ = std::make_unique<RailManager>();
 	gameCamera_ = std::make_unique<GameCamera>();
 	player_ = std::make_unique<Player>();
-	mousePosView_.reset(Object3d::CreateModel("cube",".obj"));
+	mousePosView_.reset(Object3d::CreateModel("Rail",".obj"));
 ////////////////////////////////////////////////////////////////////////////////////////////
 //  初期化
 ////////////////////////////////////////////////////////////////////////////////////////////

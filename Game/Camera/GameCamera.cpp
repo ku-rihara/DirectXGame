@@ -12,15 +12,15 @@ void GameCamera::Init() {
 void GameCamera::Update(const std::vector<Vector3>& controlPos) {
 	
 	// 線分の数+1個分の頂点座標を計算
-	for (size_t i = 0; i < segmentCount + 1; i++) {
-		float t = 1.0f / segmentCount * i;
+	for (size_t i = 0; i < IndexCount + 1; i++) {
+		float t = 1.0f / IndexCount * i;
 		Vector3 pos = CatmullRomPosition(controlPos, t);
 		// 描画用頂点リストに追加
 		pointsDrawing.push_back(pos);
 	}
 
 	railMoveTime_ += 0.5f;
-	if (RailIndex < segmentCount) {
+	if (RailIndex < IndexCount) {
 		Vector3 eye = pointsDrawing[RailIndex];
 		Vector3 target = pointsDrawing[RailIndex + 1];
 		Vector3 forward = target - eye;
@@ -40,4 +40,7 @@ void GameCamera::Update(const std::vector<Vector3>& controlPos) {
 }
 void GameCamera::ControlSpotDraw() {
 	
+
+
+
 }

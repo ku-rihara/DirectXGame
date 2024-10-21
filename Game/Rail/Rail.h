@@ -9,14 +9,15 @@
 class Rail {
 	static int instanceNum_;
 public://メンバ変数
-	std::unique_ptr<Object3d>objct3D_;
+	Object3d* objct3D_;
 private:
-	int instanceID_;  
+	int instanceID_;
 	bool isDeath_;
 public://メンバ関数
 
 	void Init();
 	void Update();
+	void Debug();
 	void Draw(const ViewProjection& viewProjection);
 
 	Vector3 GetPos() { return objct3D_->transform_.translation_; }

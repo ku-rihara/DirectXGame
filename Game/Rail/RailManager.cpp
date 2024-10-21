@@ -19,7 +19,6 @@ void RailManager::Init() {
 void  RailManager::AddRail(const Vector3& pos) {
 	std::unique_ptr<Rail>rail;
 	rail = std::make_unique<Rail>();
-	rail->objct3D_.reset(Object3d::CreateModel("cube", ".obj"));
 	rail->Init();
 	rail->SetPos(pos);
 	controlNum_++;
