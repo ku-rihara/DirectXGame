@@ -137,7 +137,7 @@ void GameScene::Draw() {
 		modelPlaneParticle_->Draw(viewProjection_,uvHandle_);
 		Sprite::PreDraw(commandList);
 		////スプライト描画
-	/*	sprite_->Draw();*/
+		sprite_->Draw();
 	}
 }
 

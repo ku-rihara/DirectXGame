@@ -8,7 +8,6 @@
 #include"ModelData.h"
 #include"Material.h"
 
-
 class Sprite {
 public:
 
@@ -41,7 +40,7 @@ private:
 	//indexリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>indexResourceSprite_;
 	//データ****************************************************************************
-	TransformationMatrix* wvpDataSprite_;
+	TransformationMatrix2D* wvpDataSprite_;
 	Material material_;
 
 

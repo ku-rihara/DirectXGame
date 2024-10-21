@@ -1,6 +1,7 @@
 #include "Sprite.h"
 #include "DirectXCommon.h"
 #include "TextureManager.h"
+#include"SpriteCommon.h"
 #include <imgui.h>
 
 namespace {
@@ -69,13 +70,12 @@ void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position
 	//UVTransformは単位行列を書き込んでおく
 	material_.materialData_->uvTransform = MakeIdentity4x4();
 		//行列----------------------------------------------------------------------------------------------------------
-	wvpResourceSprite_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix));
+	wvpResourceSprite_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix2D));
 	//データを書き込む
 	wvpDataSprite_ = nullptr;
 	//書き込むためのアドレスを取得
 	wvpResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&wvpDataSprite_));
 	//単位行列を書き込んでおく
-	wvpDataSprite_->World = MakeIdentity4x4();
 	wvpDataSprite_->WVP = MakeIdentity4x4();
 //変数初期化-----------------------------------------------------------
 	transform_.translate = { position.x,position.y };
@@ -105,11 +105,8 @@ void Sprite::Draw() {
 	//描画(DrawCall/ドローコール)
 	directXCommon->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
-void Sprite::PreDraw(ID3D12GraphicsCommandList* commandList){
-	////Spriteの描画。変更が必要なものだけ変更する
-	commandList->IASetVertexBuffers(0, 1, &vertexBufferViewSprite_);
-	commandList->IASetIndexBuffer(&indexBufferViewSprite_);//IBVを設定
-}
+
+
 
 void Sprite::SetUVTransform(const UVTransform& uvTransform) {
 
@@ -131,3 +128,6 @@ void Sprite::SetScale(const Vector2& scale) {
 
 }
 
+void  Sprite::PreDraw(ID3D12GraphicsCommandList* commandList) {
+	SpriteCommon::GetInstance()->PreDraw(commandList);
+}

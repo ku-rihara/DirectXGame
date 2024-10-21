@@ -6,6 +6,7 @@
 #include"DirectXCommon.h"
 #include"Audio.h"
 #include"Object3DCommon.h"
+#include"SpriteCommon.h"
 #include"ModelManager.h"
 #include"Input.h"
 //#include"WorldTransformManager.h"
@@ -19,6 +20,7 @@ namespace {
 	DirectXCommon* sDirectXCommon = nullptr;
 	ImGuiManager* imguiManager = nullptr;
 	TextureManager* stextureManager = nullptr;
+	SpriteCommon* spriteCommon = nullptr;
 	Object3DCommon* sObject3DCommon = nullptr;
 	ModelManager* sModelManager = nullptr;
 	Audio* audio = nullptr;
@@ -41,6 +43,9 @@ void Keta::Initialize(const char* title, int width, int height) {
 
 	sObject3DCommon = Object3DCommon::GetInstance();
 	sObject3DCommon->Init(sDirectXCommon);
+
+	spriteCommon = SpriteCommon::GetInstance();
+	spriteCommon->Init(sDirectXCommon);
 
 	sModelManager = ModelManager::GetInstance();
 	sModelManager->Initialize(sDirectXCommon);

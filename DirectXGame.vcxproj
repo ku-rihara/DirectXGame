@@ -29,6 +29,7 @@
     <ClCompile Include="Engine\base\Keta.cpp" />
     <ClCompile Include="Engine\base\Material.cpp" />
     <ClCompile Include="Engine\base\Object3DCommon.cpp" />
+    <ClCompile Include="Engine\base\SpriteCommon.cpp" />
     <ClCompile Include="Engine\base\TextureManager.cpp" />
     <ClCompile Include="Engine\base\WinApp.cpp" />
     <ClCompile Include="Engine\Function\Convert.cpp" />
@@ -70,6 +71,7 @@
     <ClInclude Include="Engine\base\Keta.h" />
     <ClInclude Include="Engine\base\Material.h" />
     <ClInclude Include="Engine\base\Object3DCommon.h" />
+    <ClInclude Include="Engine\base\SpriteCommon.h" />
     <ClInclude Include="Engine\base\TextureManager.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
     <ClInclude Include="Engine\Function\Convert.h" />
