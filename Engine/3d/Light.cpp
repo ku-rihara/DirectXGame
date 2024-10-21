@@ -39,7 +39,7 @@ void Light::Init() {
 	spotLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
 	spotLightData_->position = { 2.0f,1.25f,0.0f };
 	spotLightData_->distance = 7.0f;
-	spotLightData_->direction = Normalize(Vector3{ -1.0f,-1.0f,0.0f });
+	spotLightData_->direction = Vector3::Normalize({ -1.0f,-1.0f,0.0f });
 	spotLightData_->intensity = 4.0f;
 	spotLightData_->decay = 2.0f;
 	spotLightData_->cosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
@@ -53,7 +53,7 @@ void Light::DebugImGui() {
 	if (ImGui::TreeNode("DirectionalLight")) {
 		ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
 		ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);	
-		directionalLightData_->direction = Normalize(directionalLightData_->direction);
+		directionalLightData_->direction = Vector3::Normalize(directionalLightData_->direction);
 			ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("PointLight")) {
@@ -71,7 +71,7 @@ void Light::DebugImGui() {
 		ImGui::ColorEdit4(" Color", (float*)&spotLightData_->color);
 		ImGui::DragFloat3(" Pos", (float*)&spotLightData_->position, 0.01f);
 		ImGui::DragFloat3(" Direction", (float*)&spotLightData_->direction, 0.01f);
-		spotLightData_->direction = Normalize(spotLightData_->direction);
+		spotLightData_->direction = Vector3::Normalize(spotLightData_->direction);
 		ImGui::DragFloat("  Distance", (float*)&spotLightData_->distance, 0.01f);
 		ImGui::DragFloat("  intenesity", (float*)&spotLightData_->intensity, 0.01f);
 		ImGui::DragFloat("  decay", (float*)&spotLightData_->decay, 0.01f);
