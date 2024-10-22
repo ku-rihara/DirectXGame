@@ -38,10 +38,11 @@ void GameScene::Init() {
 
 	////テクスチャハンドル
 	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");
+	uint32_t uv_ = TextureManager::GetInstance()->LoadTexture("./Resources/uvChecker.png");
 
 	//スプライト生成
 	sprite_ = std::make_unique<Sprite>();
-	sprite_->CreateSprite(uvHandle_, Vector2{ 0,0 }, Vector4(1, 1, 1, 1));
+	sprite_->CreateSprite(uv_, Vector2{ 0,0 }, Vector4(1, 1, 1, 1));
 	//WorldTransform
 
 	transformSprite_.Init();
@@ -127,18 +128,20 @@ void GameScene::Draw() {
 	Model::PreDraw(commandList);
 	//平面描画
 	if (isDraw) {
-		modelSuzanne2_->color_.SetColor(Vector4(0, 0, 1, 1));
-		/*modelPlane_->Draw(viewProjection_);
-		modelFence_->Draw(viewProjection_);*/
-		modelSuzanne_->Draw(viewProjection_);
-		modelSuzanne2_->Draw(viewProjection_);
-		modelTerrain_->Draw(viewProjection_);
-		Model::PreDrawParticle(commandList);
-		modelPlaneParticle_->Draw(viewProjection_,uvHandle_);
-		Sprite::PreDraw(commandList);
+		//modelSuzanne2_->color_.SetColor(Vector4(0, 0, 1, 1));
+		///*modelPlane_->Draw(viewProjection_);
+		//modelFence_->Draw(viewProjection_);*/
+		//modelSuzanne_->Draw(viewProjection_);
+		//modelSuzanne2_->Draw(viewProjection_);
+		//modelTerrain_->Draw(viewProjection_);
+		//Model::PreDrawParticle(commandList);
+		//modelPlaneParticle_->Draw(viewProjection_,uvHandle_);
+		
+	}
+	Sprite::PreDraw(commandList);
 		////スプライト描画
 		sprite_->Draw();
-	}
+
 }
 
 
@@ -218,6 +221,10 @@ void GameScene::Debug() {
 	}
 	if (ImGui::TreeNode("Terrian")) {
 		modelTerrain_->DebugImgui();
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("Sprite")) {
+		sprite_->DebugImGui();
 		ImGui::TreePop();
 	}
 	ImGui::End();

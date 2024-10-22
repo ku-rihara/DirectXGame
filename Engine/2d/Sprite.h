@@ -17,30 +17,31 @@ public:
 		Vector2 pos;
 	};
 	struct Transform {
-		Vector2 scale;
-		Vector2 rotate;
-		Vector2 translate;
+		Vector3 scale;
+		Vector3 rotate;
+		Vector3 translate;
 	};
 	Transform transform_;
+	UVTransform uvTransform_;
 	
 private:
 	
 	//テクスチャ
 	D3D12_GPU_DESCRIPTOR_HANDLE texture_;
 
-	static D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite_;
-	static D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite_;
+	static D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
+	static D3D12_INDEX_BUFFER_VIEW indexBufferView_;
 	//リソース******************************************************************
 	//Material
 	//Microsoft::WRL::ComPtr<ID3D12Resource >materialResourceSprite_;
 	//頂点リソース
-	Microsoft::WRL::ComPtr<ID3D12Resource>vertexResourceSprite_;
+	Microsoft::WRL::ComPtr<ID3D12Resource>vertexResource_;
 	//wvpリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource>wvpResourceSprite_;
+	Microsoft::WRL::ComPtr<ID3D12Resource>wvpResource_;
 	//indexリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource>indexResourceSprite_;
+	Microsoft::WRL::ComPtr<ID3D12Resource>indexResource_;
 	//データ****************************************************************************
-	TransformationMatrix2D* wvpDataSprite_;
+	TransformationMatrix2D* wvpData_;
 	Material material_;
 
 
@@ -65,15 +66,15 @@ static	void PreDraw(ID3D12GraphicsCommandList* commandList);
 	void SetScale(const Vector2& scale);
 
 	//UVセット
-	void SetUVTransform(const UVTransform&uvTransform);
+	void SetUVTransform();
 
 #ifdef _DEBUG
 	void DebugImGui();
 #endif
 
 	//setter
-	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->WVP = date; }
-	void SetWorldMatrixDataSprite(Matrix4x4 date) { this->wvpDataSprite_->World = date; }
+	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->wvpData_->WVP = date; }
+	void SetWorldMatrixDataSprite(Matrix4x4 date) { this->wvpData_->World = date; }
 	void SetUVTransformSprite(Matrix4x4 matrix) { this->material_.materialData_->uvTransform = matrix; }
 };
 
