@@ -110,6 +110,7 @@ void GameScene::Debug() {
 	ImGui::Begin("Lighting");
 	mousePosView_->DebugImgui();
 	ImGui::End();
+	gameCamera_->Debug();
 #endif
 }
 

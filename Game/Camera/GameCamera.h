@@ -24,7 +24,7 @@ public:
 	void Init();
 	void Update(const std::vector<Vector3>&controlPos);
 	void RailDraw(const ViewProjection& viewProjection);
-	
+	void Debug();
 	
 	/// <summary>
 	/// プロジェクション行列計算用のメンバ設定関数群

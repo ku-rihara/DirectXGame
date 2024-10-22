@@ -3,13 +3,20 @@
 #include<cmath>
 //Function
 #include"MathFunction.h"
+//imgui
+#include<imgui.h>
 
-//Function
 void GameCamera::Init() {
 	viewProjection_.Init();
 	worldTransform_.Init();
 
-	object3d_.resize(70);
+    ///　値セット
+    viewProjection_.translation_.y = 3;
+    worldTransform_.UpdateMatrix();
+    viewProjection_.UpdateMatrix();
+
+    //モデルの分割数を設定
+	object3d_.resize(40);
 	for (uint32_t i = 0; i < uint32_t(object3d_.size()); i++) {
 		object3d_[i]=(Object3d::CreateModel("Rail", ".obj"));
 	}
@@ -17,7 +24,7 @@ void GameCamera::Init() {
 void GameCamera::Update(const std::vector<Vector3>& controlPos) {
     // レール全体の長さを計算
     float totalRailLength = 0.0f;
-    pointsDrawing.clear();
+  /*  pointsDrawing.clear();*/
     for (size_t i = 0; i < IndexCount + 1; i++) {
         float t = 1.0f / IndexCount * i;
         Vector3 pos = CatmullRomPosition(controlPos, t);
@@ -63,18 +70,43 @@ void GameCamera::Update(const std::vector<Vector3>& controlPos) {
         Vector3 velocityZ = forward * cameraRotateMatrix;
         cameraRotate_.x = std::atan2(-velocityZ.y, velocityZ.z);
 
-        worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, cameraRotate_, SLerp(eye, target, railMoveTime_));
+        // カメラのY方向の位置を初期設定
+        Vector3 cameraPos = SLerp(eye, target, railMoveTime_);
+        cameraPos.y += viewProjection_.translation_.y; // Y軸方向のオフセットを反映
+
+        // オブジェクトのワールド行列を更新
+        worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, cameraRotate_, cameraPos);
         viewProjection_.matView_ = Inverse(worldTransform_.matWorld_);
+
         if (railMoveTime_ >= 1.0f) {
             railMoveTime_ = 0;
             RailIndex++;
         }
     }
+   
+  
 }
+//レール描画
 void GameCamera::RailDraw(const ViewProjection& viewProjection) {
 	
 	for (size_t i = 0; i < object3d_.size(); i++) {
 		object3d_[i]->Draw(viewProjection);
 	}
 
+}
+
+void GameCamera::Debug() {
+#ifdef _DEBUG
+   /* ImGui::Begin("CameraDebug");
+
+    if (ImGui::TreeNode("ViewProjection")) {
+
+        ImGui::DragFloat3("Scale", &worldTransform_.scale_.x, 0.01f);
+        ImGui::DragFloat3("Rotate", &worldTransform_.rotation_.x, 0.01f);
+        ImGui::DragFloat3("Translate", &worldTransform_.translation_.x, 0.01f);
+        ImGui::TreePop();
+    }
+    ImGui::End();
+   */
+#endif
 }
