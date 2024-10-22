@@ -9,8 +9,8 @@ namespace {
 	//Model* model=Model::GetInstance();
 }
 // static メンバ変数の定義
-D3D12_VERTEX_BUFFER_VIEW Sprite::vertexBufferViewSprite_;
-D3D12_INDEX_BUFFER_VIEW Sprite::indexBufferViewSprite_;
+D3D12_VERTEX_BUFFER_VIEW Sprite::vertexBufferView_;
+D3D12_INDEX_BUFFER_VIEW Sprite::indexBufferView_;
 
 Sprite* Sprite::Create(const uint32_t& textureHandle, const Vector2& position, const Vector4& color) {
 	// 新しいModelインスタンスを作成
@@ -26,18 +26,18 @@ void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position
 
 	//スプライト**************************************************************************************************
 	//Sprite用の頂点リソースを作る
-	vertexResourceSprite_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(VertexData) * 4);
+	vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(VertexData) * 4);
 	//頂点バッファビューを作成する
-	vertexBufferViewSprite_ = {};
+	vertexBufferView_ = {};
 	//リソースの先頭のアドレスから使う
-	vertexBufferViewSprite_.BufferLocation = vertexResourceSprite_->GetGPUVirtualAddress();
+	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点6つ分ののサイズ
-	vertexBufferViewSprite_.SizeInBytes = sizeof(VertexData) * 4;
+	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 4;
 	//頂点当たりのサイズ
-	vertexBufferViewSprite_.StrideInBytes = sizeof(VertexData);
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
 	VertexData* vertexDataSprite = nullptr;
-	vertexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite));
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite));
 	//頂点データ
 	vertexDataSprite[0].position = { 0.0f, 360.0f, 0.0f, 1.0f }; // 左下
 	vertexDataSprite[0].texcoord = { 0.0f, 1.0f };
@@ -49,16 +49,16 @@ void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position
 	vertexDataSprite[3].texcoord = { 1.0f, 0.0f };
 
 	//頂点インデックス
-	indexResourceSprite_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(uint32_t) * 6);
+	indexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(uint32_t) * 6);
 	//リソースの先頭アドレスから使う
-	indexBufferViewSprite_.BufferLocation = indexResourceSprite_->GetGPUVirtualAddress();
+	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズはインデックス6つ分のサイズ
-	indexBufferViewSprite_.SizeInBytes = sizeof(uint32_t) * 6;
+	indexBufferView_.SizeInBytes = sizeof(uint32_t) * 6;
 	//インデックスはuint32_tとする
-	indexBufferViewSprite_.Format = DXGI_FORMAT_R32_UINT;
+	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
 	//インデックスリソースにデータを書き込む
 	uint32_t* indexDataSprite = nullptr;
-	indexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSprite));
+	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSprite));
 	indexDataSprite[0] = 0; indexDataSprite[1] = 1; indexDataSprite[2] = 2;
 	indexDataSprite[3] = 1; indexDataSprite[4] = 3; indexDataSprite[5] = 2;
 
@@ -70,37 +70,49 @@ void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position
 	//UVTransformは単位行列を書き込んでおく
 	material_.materialData_->uvTransform = MakeIdentity4x4();
 		//行列----------------------------------------------------------------------------------------------------------
-	wvpResourceSprite_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix2D));
+	wvpResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix2D));
 	//データを書き込む
-	wvpDataSprite_ = nullptr;
+	wvpData_ = nullptr;
 	//書き込むためのアドレスを取得
-	wvpResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&wvpDataSprite_));
+	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
 	//単位行列を書き込んでおく
-	wvpDataSprite_->WVP = MakeIdentity4x4();
+	wvpData_->WVP = MakeIdentity4x4();
 //変数初期化-----------------------------------------------------------
-	transform_.translate = { position.x,position.y };
-	transform_.scale = { 1,1 };
+	transform_.translate = { position.x,position.y ,1.0f};
+	transform_.scale = { 1,1,1 };
 }
 
 #ifdef _DEBUG
 void Sprite::DebugImGui() {
 	/*ImGui::Begin("Lighting");*/
 	ImGui::ColorEdit4(" Color", (float*)&material_.materialData_->color);
+	ImGui::DragFloat2(" uvScale", (float*)&uvTransform_.scale.x);
+	ImGui::DragFloat3(" uvRotate", (float*)&uvTransform_.rotate.x);
+	ImGui::DragFloat2(" uvTransform", (float*)&uvTransform_.pos.x);
 }
 #endif
 
 void Sprite::Draw() {
 
 	//スプライト
-	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(Vector3{ transform_.scale.x, transform_.scale.y,0 }, Vector3{ transform_.rotate.x, transform_.rotate.y,0 }, Vector3{ transform_.translate.x, transform_.translate.y,0 });
+	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
 	Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
 	Matrix4x4 worldViewProjectionMatrixSprite = worldMatrixSprite*projectionMatrixSprite;
 
-	wvpDataSprite_->WVP=worldViewProjectionMatrixSprite;
+	//UVTransform
+	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(Vector3{ uvTransform_.scale.x,uvTransform_.scale.y,1.0f });
+	uvTransformMatrix = (uvTransformMatrix * MakeRotateZMatrix(uvTransform_.rotate.z));
+	uvTransformMatrix = (uvTransformMatrix * MakeTranslateMatrix(Vector3{ uvTransform_.pos.x,uvTransform_.pos.y,1.0f }));
+	material_.materialData_->uvTransform = uvTransformMatrix;
+
+	wvpData_->WVP=worldViewProjectionMatrixSprite;
+
+	directXCommon->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	directXCommon->GetCommandList()->IASetIndexBuffer(&indexBufferView_);//IBVを設定
 
 	//TransformationmatrixCBufferの場所を設定
 	material_.SetCommandList(directXCommon->GetCommandList());
-	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResourceSprite_->GetGPUVirtualAddress());
+	directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
 	directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, texture_);
 	//描画(DrawCall/ドローコール)
 	directXCommon->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
@@ -108,23 +120,25 @@ void Sprite::Draw() {
 
 
 
-void Sprite::SetUVTransform(const UVTransform& uvTransform) {
+void Sprite::SetUVTransform() {
 
-	//UVTransform
-	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(Vector3{uvTransform.scale.x,uvTransform.scale.y,0.0f});
-	uvTransformMatrix = (uvTransformMatrix * MakeRotateZMatrix(uvTransform.rotate.z));
-	uvTransformMatrix = (uvTransformMatrix * MakeTranslateMatrix(Vector3{ uvTransform.pos.x,uvTransform.pos.y,0.0f }));
-	material_.materialData_->uvTransform = uvTransformMatrix;
+	////UVTransform
+	//Matrix4x4 uvTransformMatrix = MakeScaleMatrix(Vector3{uvTransform.scale.x,uvTransform.scale.y,1.0f});
+	//uvTransformMatrix = (uvTransformMatrix * MakeRotateZMatrix(uvTransform.rotate.z));
+	//uvTransformMatrix = (uvTransformMatrix * MakeTranslateMatrix(Vector3{ uvTransform.pos.x,uvTransform.pos.y,1.0f }));
+	//material_.materialData_->uvTransform = uvTransformMatrix;
 }
 void Sprite::SetPosition(const Vector2& pos) {
 
-	transform_.translate =pos;
+	transform_.translate.x = pos.x;
+	transform_.translate.y = pos.y;
 
 }
 
 void Sprite::SetScale(const Vector2& scale) {
 
-	transform_.scale = scale;
+	transform_.scale.x = scale.x;
+	transform_.scale.y = scale.y;
 
 }
 

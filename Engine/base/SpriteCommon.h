@@ -12,13 +12,13 @@ private://メンバ関数
     // グラフィックパイプライン関連
 
     // Sprite
-    Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignatureSprite_;
-    Microsoft::WRL::ComPtr<ID3DBlob> signatureBlobSprite_;
-    Microsoft::WRL::ComPtr<ID3DBlob> errorBlobSprite_;
-    Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlobSprite_;
-    Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlobSprite_;
+    Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;
+    Microsoft::WRL::ComPtr<ID3DBlob> signatureBlob_;
+    Microsoft::WRL::ComPtr<ID3DBlob> errorBlob_;
+    Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob_;
+    Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob_;
 
-    Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineStateSprite_;
+    Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_;
 
     // ルートシグネチャの作成
     void CreateRootSignature();
@@ -36,6 +36,6 @@ public://メンバ関数
     // getter
     DirectXCommon* GetDxCommon() const { return dxCommon_; }
 
-    ID3D12PipelineState* GetGraphicsPipelineStateSprite() const { return graphicsPipelineStateSprite_.Get(); }
-    ID3D12RootSignature* GetRootSignatureSprite() const { return rootSignatureSprite_.Get(); }
+    ID3D12PipelineState* GetGraphicsPipelineStateSprite() const { return graphicsPipelineState_.Get(); }
+    ID3D12RootSignature* GetRootSignatureSprite() const { return rootSignature_.Get(); }
 };
