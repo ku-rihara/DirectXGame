@@ -1,6 +1,7 @@
 #pragma once
 //std
 #include<vector>
+#include<memory>
 //math
 #include<Vector3.h>
 //3D
@@ -18,7 +19,7 @@ private:
 	int RailIndex = 0;
 	std::vector<Vector3> pointsDrawing;
 	//モデル
-	std::vector<Object3d*>object3d_;
+	std::vector<std::unique_ptr<Object3d>>object3d_;
 public:
 	//Function
 	void Init();

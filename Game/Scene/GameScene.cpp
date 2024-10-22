@@ -23,18 +23,20 @@ void GameScene::Init() {
 	railManager_ = std::make_unique<RailManager>();
 	gameCamera_ = std::make_unique<GameCamera>();
 	player_ = std::make_unique<Player>();
-	mousePosView_.reset(Object3d::CreateModel("Rail",".obj"));
+	enemyManager_ = std::make_unique<EnemyManager>();
+	mousePosView_.reset(Object3d::CreateModel("cube",".obj"));
 ////////////////////////////////////////////////////////////////////////////////////////////
 //  初期化
 ////////////////////////////////////////////////////////////////////////////////////////////
 	debugCamera_->Init();
 	gameCamera_->Init();
 	railManager_->Init();
+	enemyManager_->Init();
 	viewProjection_.Init();
 	player_->Init();
 	
 	//parent
-	player_->SetParent(&gameCamera_->GetWorldTransform());
+	player_->SetParent(&gameCamera_->GetWorldTransform());/// プレイヤーの親にゲームカメラ
 	
 }
 
@@ -45,6 +47,8 @@ void GameScene::Update() {
 	//制御点追加
 	if (Input::GetInstance()->IsTriggerMouse(3)) {
 		railManager_->AddRail(mousePosView_->transform_.translation_);
+	}else if (Input::GetInstance()->IsTriggerMouse(4)) {
+		enemyManager_->AddEnemy(mousePosView_->transform_.translation_);
 	}
 	//カメラ更新
 	gameCamera_->Update(railManager_->GetControlPoints());
@@ -58,10 +62,10 @@ void GameScene::Update() {
 
 	//レールカメラ更新
 	railManager_->Update();
+	/// 敵マネージャー更新
+	enemyManager_->Update();
 	//プレイヤー更新
 	player_->Update();
-
-
 }
 
 void GameScene::Draw() {
@@ -76,6 +80,8 @@ void GameScene::Draw() {
 	player_->Draw(viewProjection_);
 	//可視化オブジェクト
 	mousePosView_->Draw(viewProjection_);
+	///敵
+	enemyManager_->Draw(viewProjection_);
 	//レール
 	gameCamera_->RailDraw(viewProjection_);
 

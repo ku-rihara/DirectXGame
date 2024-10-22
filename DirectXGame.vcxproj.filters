@@ -88,6 +88,9 @@
     <Filter Include="liberaly\math\.cpp">
       <UniqueIdentifier>{466d547f-bd56-4a43-9cc7-0cbb8e0e11d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemy">
+      <UniqueIdentifier>{d58cbd78-41d6-4844-b373-74a3f513ff99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -222,6 +225,12 @@
     </ClCompile>
     <ClCompile Include="math\Quaternion.cpp">
       <Filter>liberaly\math\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Enemy.cpp">
+      <Filter>Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\EnemyManager.cpp">
+      <Filter>Game\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -404,6 +413,12 @@
     </ClInclude>
     <ClInclude Include="math\Quaternion.h">
       <Filter>liberaly\math\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Enemy.h">
+      <Filter>Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\EnemyManager.h">
+      <Filter>Game\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

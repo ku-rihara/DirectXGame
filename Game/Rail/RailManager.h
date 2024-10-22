@@ -19,7 +19,6 @@ private:
 	std::list<std::unique_ptr<Rail>>rails_;
 	std::vector<Vector3>controlSpots_;
 	Model* model_;
-	bool isAdaption_;
 	int controlNum_;
 public:
 	void AddRail(const Vector3&pos);

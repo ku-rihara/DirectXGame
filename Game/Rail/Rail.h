@@ -1,5 +1,6 @@
 #pragma once
-
+//std
+#include<memory>
 //math
 #include"Vector3.h"
 //3d
@@ -9,7 +10,7 @@
 class Rail {
 	static int instanceNum_;
 public://メンバ変数
-	Object3d* objct3D_;
+	std::unique_ptr<Object3d> objct3D_;
 private:
 	int instanceID_;
 	bool isDeath_;

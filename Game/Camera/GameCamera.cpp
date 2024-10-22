@@ -18,7 +18,7 @@ void GameCamera::Init() {
     //モデルの分割数を設定
 	object3d_.resize(40);
 	for (uint32_t i = 0; i < uint32_t(object3d_.size()); i++) {
-		object3d_[i]=(Object3d::CreateModel("Rail", ".obj"));
+		object3d_[i].reset(Object3d::CreateModel("Rail", ".obj"));
 	}
 }
 void GameCamera::Update(const std::vector<Vector3>& controlPos) {
@@ -83,8 +83,6 @@ void GameCamera::Update(const std::vector<Vector3>& controlPos) {
             RailIndex++;
         }
     }
-   
-  
 }
 //レール描画
 void GameCamera::RailDraw(const ViewProjection& viewProjection) {

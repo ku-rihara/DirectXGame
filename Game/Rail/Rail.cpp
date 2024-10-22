@@ -4,7 +4,7 @@
 #include<string>
 int Rail::instanceNum_ = 0;
 void Rail::Init() {
-	objct3D_=(Object3d::CreateModel("cube", ".obj"));
+	objct3D_.reset(Object3d::CreateModel("cube", ".obj"));
 	instanceID_= instanceNum_++;
 }
 //更新

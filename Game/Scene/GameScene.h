@@ -15,6 +15,7 @@
 #include"GameCamera.h"
 //obj
 #include"RailManager.h"
+#include"Enemy/EnemyManager.h"
 #include"Player/Player.h"
 //std
 #include<random>
@@ -40,13 +41,15 @@ private:
 ////////////////////////////////////////////////////////////////////////////////////////////
 //  obj
 ////////////////////////////////////////////////////////////////////////////////////////////
-	//デバッグカメラ
+	/// デバッグカメラ
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
-	//ゲームカメラ
+	/// ゲームカメラ
 	std::unique_ptr<GameCamera>gameCamera_ = nullptr;
-	//レールマネージャー
+	/// レールマネージャー
 	std::unique_ptr<RailManager>railManager_=nullptr;
-	//プレイや
+	/// エネミーマネージャー
+	std::unique_ptr<EnemyManager>enemyManager_ = nullptr;
+	/// プレイや
 	std::unique_ptr<Player>player_ = nullptr;
 
 	//変数
