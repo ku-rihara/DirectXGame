@@ -232,6 +232,9 @@
     <ClCompile Include="Game\Enemy\EnemyManager.cpp">
       <Filter>Game\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player\PlayerBullet.cpp">
+      <Filter>Game\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -419,6 +422,9 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\EnemyManager.h">
       <Filter>Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\PlayerBullet.h">
+      <Filter>Game\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

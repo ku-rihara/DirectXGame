@@ -8,9 +8,8 @@
 #include"Object3d.h"
 class Enemy {
 	static int instanceNum_;
-public://メンバ変数
-	Object3d* objct3D_;
 private:
+	std::unique_ptr<Object3d> objct3D_;
 	int instanceID_;
 	bool isDeath_;
 public://メンバ関数

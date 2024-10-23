@@ -16,7 +16,7 @@ void GameCamera::Init() {
     viewProjection_.UpdateMatrix();
 
     //モデルの分割数を設定
-	object3d_.resize(40);
+	object3d_.resize(70);
 	for (uint32_t i = 0; i < uint32_t(object3d_.size()); i++) {
 		object3d_[i].reset(Object3d::CreateModel("Rail", ".obj"));
 	}
@@ -24,7 +24,7 @@ void GameCamera::Init() {
 void GameCamera::Update(const std::vector<Vector3>& controlPos) {
     // レール全体の長さを計算
     float totalRailLength = 0.0f;
-  /*  pointsDrawing.clear();*/
+    pointsDrawing.clear();
     for (size_t i = 0; i < IndexCount + 1; i++) {
         float t = 1.0f / IndexCount * i;
         Vector3 pos = CatmullRomPosition(controlPos, t);

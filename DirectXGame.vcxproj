@@ -46,6 +46,7 @@
     <ClCompile Include="Game\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\GrobalParamater\GlobalParameter.cpp" />
     <ClCompile Include="Game\Player\Player.cpp" />
+    <ClCompile Include="Game\Player\PlayerBullet.cpp" />
     <ClCompile Include="Game\Rail\Rail.cpp" />
     <ClCompile Include="Game\Rail\RailManager.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
@@ -109,6 +110,7 @@
     <ClInclude Include="Game\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\GrobalParamater\GlobalParameter.h" />
     <ClInclude Include="Game\Player\Player.h" />
+    <ClInclude Include="Game\Player\PlayerBullet.h" />
     <ClInclude Include="Game\Rail\Rail.h" />
     <ClInclude Include="Game\Rail\RailManager.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />

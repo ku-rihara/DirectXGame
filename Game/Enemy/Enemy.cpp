@@ -4,8 +4,8 @@
 #include<string>
 int  Enemy::instanceNum_ = 0;
 void  Enemy::Init() {
-	objct3D_=(Object3d::CreateModel("axis", ".obj"));
-	instanceID_= instanceNum_++;
+	objct3D_.reset(Object3d::CreateModel("axis", ".obj"));
+	instanceID_ = instanceNum_++;
 }
 //更新
 void  Enemy::Update() {
@@ -13,7 +13,7 @@ void  Enemy::Update() {
 	Debug();
 }
 //描画
-void  Enemy::Draw(const ViewProjection&viewProjection) {
+void  Enemy::Draw(const ViewProjection& viewProjection) {
 	objct3D_->Draw(viewProjection);
 }
 

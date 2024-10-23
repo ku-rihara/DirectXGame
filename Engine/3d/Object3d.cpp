@@ -11,7 +11,7 @@ Object3d::~Object3d() {
 Object3d* Object3d::CreateModel(const std::string& instanceName, const std::string& extension) {
 	// 新しいModelインスタンスを作成
 	Object3d* object3d=new Object3d();
-	ModelManager::GetInstance()->LoadModel(instanceName, extension);
+	ModelManager::LoadModel(instanceName,extension);
 	object3d->SetModel(instanceName, extension);
 	object3d->CreateWVPResource();
 	object3d->model_->CreateMaterialResource();
