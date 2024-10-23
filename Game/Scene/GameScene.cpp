@@ -29,8 +29,8 @@ void GameScene::Init() {
 	soundDataHandle_ = audio_->SoundLoadWave("Resources/fanfare.wav");
 	//モデル
 	std::uniform_real_distribution<float>lifeTimedist(1.0f, 3.0f);
-	modelPlane_.reset(Object3d::CreateModel("Plane",".obj"));
-	modelPlaneParticle_.reset(Object3dParticle::CreateModel("Plane",".obj", modelInstanceMax_));
+	modelPlane_.reset(Object3d::CreateModel("Plane", ".obj"));
+	modelPlaneParticle_.reset(Object3dParticle::CreateModel("Plane", ".obj", modelInstanceMax_));
 	modelFence_.reset(Object3d::CreateModel("Fence", ".obj"));
 	modelSuzanne_.reset(Object3d::CreateModel("Suzanne", ".obj"));
 	modelSuzanne2_.reset(Object3d::CreateModel("Suzanne", ".obj"));
@@ -44,12 +44,11 @@ void GameScene::Init() {
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->CreateSprite(uv_, Vector2{ 0,0 }, Vector4(1, 1, 1, 1));
 	//WorldTransform
-
-	transformSprite_.Init();
-	uvTransformSprite_.Init();
-
 	//ビュープロジェクション
 	viewProjection_.Init();
+	///=======================================================================================
+	///Particle
+	///=======================================================================================
 		//emitter
 	modelPlaneParticle_->emitter_.count = 3;
 	modelPlaneParticle_->emitter_.frequency = 0.5f;
@@ -59,13 +58,8 @@ void GameScene::Init() {
 	modelPlaneParticle_->accelerationField_.area.min = { -1.0f,-1.0f,-1.0f };
 	modelPlaneParticle_->accelerationField_.area.max = { 1.0f,1.0f,1.0f };
 
-	////1個作成
-	/*modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_, distribution,alphaDistribution,5);*/
-	/*modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_,distribution, alphaDistribution,10);
-	modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_,distribution, alphaDistribution,10);*/
 
 	// ワールドトランスフォーム値セット
-	transformSprite_.scale_.x = 0.7f;
 	modelPlane_->transform_.rotation_.y = -3.0f;
 }
 
@@ -93,11 +87,11 @@ void GameScene::Update() {
 	if (Input::GetInstance()->PushKey(DIK_DOWN)) {
 		modelSuzanne_->transform_.translation_.y -= 0.01f;
 	}
-	
+
 	modelPlaneParticle_->emitter_.frequencyTime += kDeltaTime_;//時刻すすめる
 	//頻度より大きいなら
 	if (modelPlaneParticle_->emitter_.frequency <= modelPlaneParticle_->emitter_.frequencyTime) {
-		modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_, MinMax(-1.0f,1.0f), MinMax(0.0f, 1.0f), 5);
+		modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_, MinMax(-1.0f, 1.0f), MinMax(0.0f, 1.0f), 5);
 		modelPlaneParticle_->emitter_.frequencyTime -= modelPlaneParticle_->emitter_.frequency;//時刻すすめる
 	}
 
@@ -110,9 +104,7 @@ void GameScene::Update() {
 	modelTerrain_->Update();
 	modelPlaneParticle_->Update(&viewProjection_);
 
-	transformSprite_.UpdateMatrix();
-	uvTransformSprite_.UpdateMatrix();
-
+	
 	// カメラ行列の計算をデバッグカメラのビュープロジェクションから行う
 	viewProjection_.matView_ = debugCamera_->GetViewProjection().matView_;
 	viewProjection_.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
@@ -135,12 +127,12 @@ void GameScene::Draw() {
 		modelSuzanne2_->Draw(viewProjection_);
 		modelTerrain_->Draw(viewProjection_);
 		Model::PreDrawParticle(commandList);
-		modelPlaneParticle_->Draw(viewProjection_,uvHandle_);
-		
+		modelPlaneParticle_->Draw(viewProjection_, uvHandle_);
+
 	}
 	Sprite::PreDraw(commandList);
-		////スプライト描画
-		sprite_->Draw();
+	////スプライト描画
+	sprite_->Draw();
 
 }
 
@@ -197,16 +189,10 @@ void GameScene::Debug() {
 	if (ImGui::TreeNode("Particle")) {
 		ImGui::DragFloat3("Scale", &modelPlaneParticle_->emitter_.transform.scale.x, 0.01f);
 		ImGui::DragFloat3("Rotate", &modelPlaneParticle_->emitter_.transform.rotate.x, 0.01f);
-		ImGui::DragFloat3("Translate", &modelPlaneParticle_->emitter_.transform.translate.x,0.01f);
+		ImGui::DragFloat3("Translate", &modelPlaneParticle_->emitter_.transform.translate.x, 0.01f);
 		ImGui::TreePop();
 	}
 
-	if (ImGui::TreeNode("UVTransform")) {
-		ImGui::DragFloat2("Scale", &uvTransformSprite_.scale_.x, 0.1f, -10.0f, 10.0f);
-		ImGui::DragFloat2("Translate", &uvTransformSprite_.translation_.x, 0.01f, -10.0f, 10.0f);
-		ImGui::SliderAngle("Rotate", &uvTransformSprite_.rotation_.z);
-		ImGui::TreePop();
-	}
 	ImGui::End();
 	//ライティング
 	ImGui::Begin("Lighting");

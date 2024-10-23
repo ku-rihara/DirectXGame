@@ -62,9 +62,6 @@ private:
 
 	uint32_t uvHandle_;
 
-	
-	WorldTransform transformSprite_;
-	WorldTransform uvTransformSprite_;
 	/*std::vector<std::unique_ptr<WorldTransform>>  planeTransforms_;*/
 public: 
 	/// <summary>
