@@ -69,6 +69,7 @@ void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position
 	material_.materialData_->enableLighting = false;
 	//UVTransformは単位行列を書き込んでおく
 	material_.materialData_->uvTransform = MakeIdentity4x4();
+	uvTransform_.scale = { 1,1 };
 		//行列----------------------------------------------------------------------------------------------------------
 	wvpResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix2D));
 	//データを書き込む
@@ -101,7 +102,7 @@ void Sprite::Draw() {
 
 	//UVTransform
 	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(Vector3{ uvTransform_.scale.x,uvTransform_.scale.y,1.0f });
-	uvTransformMatrix = (uvTransformMatrix * MakeRotateZMatrix(uvTransform_.rotate.z));
+	uvTransformMatrix = (uvTransformMatrix * MakeRotateMatrix(uvTransform_.rotate));
 	uvTransformMatrix = (uvTransformMatrix * MakeTranslateMatrix(Vector3{ uvTransform_.pos.x,uvTransform_.pos.y,1.0f }));
 	material_.materialData_->uvTransform = uvTransformMatrix;
 
