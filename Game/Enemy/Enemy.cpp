@@ -18,9 +18,11 @@ void  Enemy::Draw(const ViewProjection& viewProjection) {
 }
 
 void  Enemy::Debug() {
-
-	ImGui::Begin("Enemies");
-	ImGui::DragFloat3(("pos" + std::to_string(instanceID_)).c_str(), &objct3D_->transform_.translation_.x, 0.01f);
+	ImGui::Begin("Positions");
+	if (ImGui::TreeNode(("Enemy" + std::to_string(instanceID_)).c_str())) {
+		ImGui::DragFloat3(("pos" + std::to_string(instanceID_)).c_str(), &objct3D_->transform_.translation_.x, 0.01f);
+		ImGui::TreePop();
+	}
 	ImGui::End();
 }
 

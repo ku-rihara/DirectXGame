@@ -19,8 +19,11 @@ void Rail::Draw(const ViewProjection&viewProjection) {
 
 void Rail::Debug() {
 
-	ImGui::Begin("Window");
-	ImGui::DragFloat3(("pos" + std::to_string(instanceID_)).c_str(), &objct3D_->transform_.translation_.x, 0.01f);
+	ImGui::Begin("Positions");
+	if (ImGui::TreeNode(("Rail" + std::to_string(instanceID_)).c_str())) {
+		ImGui::DragFloat3(("pos" + std::to_string(instanceID_)).c_str(), &objct3D_->transform_.translation_.x, 0.01f);
+		ImGui::TreePop();
+	}
 	ImGui::End();
 }
 
