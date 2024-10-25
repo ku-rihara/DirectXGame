@@ -39,6 +39,7 @@ private:
 	uint32_t soundDataHandle_ = 0; 
 	uint32_t voiceHandle_ = 0;     
 	std::unique_ptr<Sprite> sprite_ = nullptr;
+	std::unique_ptr<Sprite> sprite2_ = nullptr;
 
 	std::unique_ptr<Object3d> modelPlane_ = nullptr;
 	std::unique_ptr<Object3d> modelFence_ = nullptr;

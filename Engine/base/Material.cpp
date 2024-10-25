@@ -5,7 +5,6 @@
 
 Material::Material()
     : materialData_(nullptr) {  // materialData_の初期化
-    // MaterialStructureの初期値はCreateMaterialResourceで設定するからここでは必要ないわ
 }
 
 void Material::CreateMaterialResource(DirectXCommon* dxCommon) {
@@ -24,8 +23,8 @@ void Material::CreateMaterialResource(DirectXCommon* dxCommon) {
     materialData_->enableLighting = 1;
 }
 
-void Material::UpdateMaterialData(const Vector4& newColor) {
-    materialData_->color = newColor;
+void Material::UpdateMaterialData(const Vector4& Color) {
+    materialData_->color = Color;
 }
 
 void Material::SetCommandList(ID3D12GraphicsCommandList* commandList) {

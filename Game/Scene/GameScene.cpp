@@ -43,6 +43,9 @@ void GameScene::Init() {
 	//スプライト生成
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->CreateSprite(uv_, Vector2{ 0,0 }, Vector4(1, 1, 1, 1));
+
+	sprite2_ = std::make_unique<Sprite>();
+	sprite2_->CreateSprite(uv_, Vector2{ 700,0 }, Vector4(1, 1, 1, 1));
 	//WorldTransform
 	//ビュープロジェクション
 	viewProjection_.Init();
@@ -133,7 +136,7 @@ void GameScene::Draw() {
 	Sprite::PreDraw(commandList);
 	////スプライト描画
 	sprite_->Draw();
-
+	sprite2_->Draw();
 }
 
 
@@ -179,8 +182,9 @@ void GameScene::Debug() {
 
 		if (ImGui::TreeNode("Sprite")) {
 			ImGui::DragFloat3("Scale", &sprite_->transform_.scale.x, 0.1f);
-			ImGui::DragFloat3("Rotate", &sprite_->transform_.rotate.x, 1.0f);
+			ImGui::DragFloat3("Rotate", &sprite_->transform_.rotate.x, 0.1f);
 			ImGui::DragFloat3("Translate", &sprite_->transform_.translate.x, 1.0f);
+			/*ImGui::DragFloat3("Translate", &sprite_->transform_.translate.x, 1.0f);*/
 			ImGui::TreePop();
 		}
 		ImGui::TreePop();
