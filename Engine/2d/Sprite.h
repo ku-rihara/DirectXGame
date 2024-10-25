@@ -6,7 +6,7 @@
 #include"TransformationMatrix.h"
 #include"DirectionalLight.h"
 #include"ModelData.h"
-#include"Material.h"
+#include"SpriteMaterial.h"
 
 class Sprite {
 public:
@@ -21,19 +21,31 @@ public:
 		Vector3 rotate;
 		Vector3 translate;
 	};
-	Transform transform_;
-	UVTransform uvTransform_;
 	
+	/// Transform
+	Transform transform_;/// トランスフォーム
+	UVTransform uvTransform_;/// UVトランスフォーム
+	Vector2 size_;///サイズ
+	Vector2 textureLeftTop_;/// テクスチャ左上
+	Vector2 textureSize_;/// テクスチャサイズ
+	Vector2 textureAdjustSize_;/// テクスチャサイズ
+
+	/// anchorPoint
+	Vector2 anchorPoint_;
+
+	/// flip
+	bool isFlipX_ = false;/// FlipX
+	bool isFlipY_ = false;/// FlipY
+
 private:
-	
+
 	//テクスチャ
 	D3D12_GPU_DESCRIPTOR_HANDLE texture_;
+	uint32_t textuerIndex_;
 
 	static D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 	static D3D12_INDEX_BUFFER_VIEW indexBufferView_;
 	//リソース******************************************************************
-	//Material
-	//Microsoft::WRL::ComPtr<ID3D12Resource >materialResourceSprite_;
 	//頂点リソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>vertexResource_;
 	//wvpリソース
@@ -42,9 +54,9 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource>indexResource_;
 	//データ****************************************************************************
 	TransformationMatrix2D* wvpData_;
-	Material material_;
-
-
+	VertexData* vertexData_;
+	SpriteMaterial material_;
+	
 public:
 	//シングルトンインスタンスの取得
 	//static Sprite* GetInstance();
@@ -55,9 +67,9 @@ public:
 	void CreateSprite(const uint32_t& textureHandle, const Vector2& position, const Vector4& color);
 
 	//描画前
-static	void PreDraw(ID3D12GraphicsCommandList* commandList);
+	static	void PreDraw(ID3D12GraphicsCommandList* commandList);
 
-//描画
+	//描画
 	void Draw();
 
 	//ポジションセット
@@ -71,8 +83,24 @@ static	void PreDraw(ID3D12GraphicsCommandList* commandList);
 #ifdef _DEBUG
 	void DebugImGui();
 #endif
+	////////////////////////////////////////////////////////////////////////////////////////////
+	//  getter
+	////////////////////////////////////////////////////////////////////////////////////////////
+	const Vector2& GetAnchorPoint()const { return anchorPoint_; }
+	const Vector2& GetTextureSize()const { return textureSize_; }
+	const Vector2& GetTextureLeftTop()const { return textureLeftTop_; }
+	const bool& GetIsFlipX()const { return isFlipX_; }
+	const bool& GetIsFlipY()const { return isFlipY_; }
+    ////////////////////////////////////////////////////////////////////////////////////////////
+	//  setter
+	////////////////////////////////////////////////////////////////////////////////////////////
+	void SetAnchorPoint(const Vector2& anchorPoint) { this->anchorPoint_ = anchorPoint; }
+	void SetTextureSize(const Vector2& size) { this->textureSize_ = size; }
+	void SetTextureLeftTop(const Vector2& leftTop) { this->textureLeftTop_ = leftTop; }
 
-	//setter
+	void SetIsFlipX(const bool& isFlip) { this->isFlipX_ = isFlip; }
+	void SetIsFlipY(const bool& isFlip) { this->isFlipY_ = isFlip; }
+
 	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->wvpData_->WVP = date; }
 	void SetWorldMatrixDataSprite(Matrix4x4 date) { this->wvpData_->World = date; }
 	void SetUVTransformSprite(Matrix4x4 matrix) { this->material_.materialData_->uvTransform = matrix; }

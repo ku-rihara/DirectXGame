@@ -7,15 +7,14 @@ SamplerState gSampler : register(s0);
 struct Material
 {
     float4 color;
-    int enableLighting;
     float4x4 uvTransform;
-    float shininess;
 };
 ConstantBuffer<Material> gMaterial : register(b0);
 
 
 struct PixelShaderOutput
 {
+    
     float4 color : SV_TARGET0;
 };
 

@@ -71,7 +71,7 @@ void SpriteCommon::CreateGraphicsPipeline() {
 
     // RasterizerStateの設定
     D3D12_RASTERIZER_DESC rasterizerDesc{};
-    rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK; // 裏面を表示しない
+    rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE; // 裏面を表示しない
     rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID; // 三角形の色を塗りつぶす
 
     // Shaderをコンパイルする ()

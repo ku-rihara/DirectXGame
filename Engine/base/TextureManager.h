@@ -19,11 +19,11 @@ private:
 		D3D12_GPU_DESCRIPTOR_HANDLE srvGPUHandle;
 	};
 
-	std::vector<TextureData>textureDatas;
+	std::vector<TextureData>textureDatas_;
 
 
 public:
-	
+
 	static uint32_t kSRVIndexTop;
 
 	/// <summary>
@@ -64,14 +64,26 @@ public:
 	/// </summary>
 	/// <param name="fileName">ファイル名</param>
 	/// <returns>テクスチャハンドル</returns>
-	  uint32_t LoadTexture(const std::string& filePath);
+	uint32_t LoadTexture(const std::string& filePath);
 
-	  /// <summary>
-	  /// 終了
-	  /// </summary>
-	  void Finalize();
+	/// <summary>
+  /// テクスチャハンドル取得関数
+  /// </summary>
+  /// <param name="index"></param>
+  /// <returns></returns>
+	D3D12_GPU_DESCRIPTOR_HANDLE GetTextureHandle(uint32_t index)const;
 
-	 D3D12_GPU_DESCRIPTOR_HANDLE GetTextureHandle(uint32_t index)const;
+	/// <summary>
+	/// メタデータを取得
+	/// </summary>
+	/// <param name="textureIndex"></param>
+	/// <returns></returns>
+	const DirectX::TexMetadata& GetMetaData(uint32_t textureIndex);
+
+	/// <summary>
+	/// 終了
+	/// </summary>
+	void Finalize();
 private:
 	static TextureManager* instance;
 	TextureManager() = default;
