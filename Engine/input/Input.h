@@ -151,7 +151,7 @@ public:
 		/// <param name="viewprojection"></param>
 		/// <param name="depthFactor"></param>
 		/// <returns></returns>
-	static Vector3 GetMousePos3D(const ViewProjection& viewprojection, float depthFactor);
+	static Vector3 GetMousePos3D(const ViewProjection& viewprojection, float depthFactor, float blockSpacing=1.0f);
 
 
 	const BYTE* GetKeyState() const { return key_.data(); }
