@@ -76,6 +76,12 @@
     <Filter Include="liberary\.h">
       <UniqueIdentifier>{5cf3dd84-f1f4-4d11-b337-2e269c86331e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\Frame">
+      <UniqueIdentifier>{cf59ecf4-d58d-4e27-87b7-73bca57fcde7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Frame">
+      <UniqueIdentifier>{ec415833-3b92-41b0-ae0c-fe524996c0ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -118,9 +124,6 @@
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Keta.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Object3DCommon.cpp">
@@ -180,6 +183,10 @@
     <ClCompile Include="Engine\base\SpriteMaterial.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Frame\Frame.cpp">
+      <Filter>MyEngine\.cpp\Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -325,6 +332,9 @@
     </ClInclude>
     <ClInclude Include="Engine\base\SpriteMaterial.h">
       <Filter>MyEngine\.h\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Frame\Frame.h">
+      <Filter>MyEngine\.h\Frame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
