@@ -1,9 +1,9 @@
 #include "Mesh.h"
-#include "DirectXCommon.h"
-#include "TextureManager.h"
+#include "base/DirectXCommon.h"
+#include "base/TextureManager.h"
 #include<imgui.h>
 //struct
-#include"VertexData.h"
+#include"struct/VertexData.h"
 #include<format>
 
 namespace {

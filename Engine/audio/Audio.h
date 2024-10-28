@@ -3,7 +3,7 @@
 #include<xaudio2.h>
 #include<fstream>
 #include <vector>
-#include "SoundData.h"
+#include "struct/SoundData.h"
 
 class Audio{
 private:

@@ -6,9 +6,9 @@
 
 //class
 #include"Light.h"
-#include"Object3DCommon.h"
-#include"ImGuiManager.h"
-#include"TextureManager.h"
+#include"base/Object3DCommon.h"
+#include"2d/ImGuiManager.h"
+#include"base/TextureManager.h"
 namespace {
 	DirectXCommon* directXCommon = DirectXCommon::GetInstance();
 }

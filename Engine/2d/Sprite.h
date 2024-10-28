@@ -3,10 +3,10 @@
 #include<d3d12.h>
 #include<dxgi1_6.h>
 //struct
-#include"TransformationMatrix.h"
-#include"DirectionalLight.h"
-#include"ModelData.h"
-#include"SpriteMaterial.h"
+#include"struct/TransformationMatrix.h"
+#include"struct/DirectionalLight.h"
+#include"struct/ModelData.h"
+#include"base/SpriteMaterial.h"
 
 class Sprite {
 public:

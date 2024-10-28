@@ -1,23 +1,23 @@
 #pragma once
 
-#include"Keta.h"
+#include"base/Keta.h"
 //DirectX
-#include"WinApp.h"
-#include "DirectXCommon.h"
-#include"TextureManager.h"
+#include"base/WinApp.h"
+#include "base/DirectXCommon.h"
+#include"base/TextureManager.h"
 //Transform
-#include "WorldTransform.h"
-#include"ViewProjection.h"
+#include "3d/WorldTransform.h"
+#include"3d/ViewProjection.h"
 //obj
-#include "Mesh.h"
-#include "Model.h"
-#include "Sprite.h"
-#include "Audio.h"
-#include"Input.h"
-#include"Object3d.h"
-#include"Object3dParticle.h"
+#include "3d/Mesh.h"
+#include "3d/Model.h"
+#include "2d/Sprite.h"
+#include "audio/Audio.h"
+#include"input/Input.h"
+#include"3d/Object3d.h"
+#include"3d/Object3dParticle.h"
 //etc
-#include"DebugCamera.h"
+#include"3d/DebugCamera.h"
 #include<random>
 #include <imgui.h>
 #include<memory>

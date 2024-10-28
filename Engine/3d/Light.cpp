@@ -3,7 +3,7 @@
 #include <imgui.h>
 #include<cmath>
 #include <numbers>
-#include"DirectXCommon.h"
+#include"base/DirectXCommon.h"
 
 Light* Light::GetInstance() {
 	static Light instance;
