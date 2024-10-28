@@ -1,7 +1,7 @@
 #include "Sprite.h"
-#include "DirectXCommon.h"
-#include "TextureManager.h"
-#include"SpriteCommon.h"
+#include "base/DirectXCommon.h"
+#include "base/TextureManager.h"
+#include"base/SpriteCommon.h"
 #include <imgui.h>
 
 namespace {

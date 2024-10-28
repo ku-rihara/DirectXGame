@@ -1,18 +1,18 @@
 #include "Keta.h"
 //class
-#include"ImGuiManager.h"
+#include"2d/ImGuiManager.h"
 #include"TextureManager.h"
 #include"WinApp.h"
 #include"DirectXCommon.h"
-#include"Audio.h"
+#include"audio/Audio.h"
 #include"Object3DCommon.h"
 #include"SpriteCommon.h"
-#include"ModelManager.h"
-#include"Input.h"
+#include"3d/ModelManager.h"
+#include"input/Input.h"
 //#include"WorldTransformManager.h"
 
 #include"Matrix4x4.h"
-#include"Convert.h"
+#include"function/Convert.h"
 #include <string>
 
 namespace {

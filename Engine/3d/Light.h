@@ -4,10 +4,10 @@
 #include<d3d12.h>
 #include<dxgi1_6.h>
 //struct
-#include"DirectionalLight.h"
-#include "PointLight.h"
-#include "CameraForGPU.h"
-#include "SpotLight.h"
+#include"struct/DirectionalLight.h"
+#include "struct/PointLight.h"
+#include "struct/CameraForGPU.h"
+#include "struct/SpotLight.h"
 
 class Light {
 private:

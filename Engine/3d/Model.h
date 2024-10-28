@@ -17,17 +17,17 @@
 #include<assimp/scene.h>
 #include<assimp/postprocess.h>
 //struct
-#include"TransformationMatrix.h"
-#include"ModelData.h"
-#include"Material.h"
-#include "MaterialData.h"
-#include "ParticleForGPU.h"
+#include"struct/TransformationMatrix.h"
+#include"struct/ModelData.h"
+#include"base/Material.h"
+#include "struct/MaterialData.h"
+#include "struct/ParticleForGPU.h"
 
 //class
 #include "WorldTransform.h"
 #include "ViewProjection.h"
 #include"ObjectColor.h"
-#include"DirectXCommon.h"
+#include"base/DirectXCommon.h"
 
 //3Dモデル共通部
 class ModelCommon {

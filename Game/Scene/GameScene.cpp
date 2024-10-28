@@ -1,8 +1,8 @@
 #include "GameScene.h"
-#include "TextureManager.h"
+#include "base/TextureManager.h"
 #include <cassert>
 //class
-#include"Light.h"
+#include"3d/Light.h"
 //math
 #include"MinMax.h"
 

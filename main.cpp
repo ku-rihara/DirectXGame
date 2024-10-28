@@ -1,4 +1,4 @@
-#include<GameScene.h>
+#include<Scene/GameScene.h>
 
 
 const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ_CG3";

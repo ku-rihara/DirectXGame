@@ -1,6 +1,6 @@
 #include "Object3dParticle.h"
-#include "ImGuiManager.h"
-#include "DirectXCommon.h"
+#include "2d/ImGuiManager.h"
+#include "base/DirectXCommon.h"
 #include "ModelManager.h"
 #include"random.h"
 

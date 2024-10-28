@@ -1,5 +1,5 @@
 #include "WorldTransform.h"
-#include"DirectXCommon.h"
+#include"base/DirectXCommon.h"
 #include<assert.h>
 #include<numbers>
 
