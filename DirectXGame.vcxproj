@@ -36,13 +36,6 @@
     <ClCompile Include="Engine\Function\Convert.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
     <ClCompile Include="Engine\input\Mouse.cpp" />
-    <ClCompile Include="externals\imgui\imgui.cpp" />
-    <ClCompile Include="externals\imgui\imgui_demo.cpp" />
-    <ClCompile Include="externals\imgui\imgui_draw.cpp" />
-    <ClCompile Include="externals\imgui\imgui_impl_dx12.cpp" />
-    <ClCompile Include="externals\imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="externals\imgui\imgui_tables.cpp" />
-    <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\AABB.cpp" />
@@ -92,14 +85,6 @@
     <ClInclude Include="Engine\struct\Transform.h" />
     <ClInclude Include="Engine\struct\TransformationMatrix.h" />
     <ClInclude Include="Engine\struct\VertexData.h" />
-    <ClInclude Include="externals\imgui\imconfig.h" />
-    <ClInclude Include="externals\imgui\imgui.h" />
-    <ClInclude Include="externals\imgui\imgui_impl_dx12.h" />
-    <ClInclude Include="externals\imgui\imgui_impl_win32.h" />
-    <ClInclude Include="externals\imgui\imgui_internal.h" />
-    <ClInclude Include="externals\imgui\imstb_rectpack.h" />
-    <ClInclude Include="externals\imgui\imstb_textedit.h" />
-    <ClInclude Include="externals\imgui\imstb_truetype.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
     <ClInclude Include="math\AABB.h" />
     <ClInclude Include="math\MathFunction.h" />
@@ -112,11 +97,11 @@
     <ClInclude Include="math\Vector4.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="externals\imgui\LICENSE.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
       <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Imgui\Imgui.vcxproj">
+      <Project>{aa68be4c-a178-438b-8216-a8081995b77e}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +178,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)DirectXTex;$(SolutionDir)Imgui;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(SolutionDir)DirectXTex;$(SolutionDir)Imgui;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
@@ -204,7 +195,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)math;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\input;$(ProjectDir)Engine\base;$(ProjectDir)Engine\Function;$(ProjectDir)Engine\struct;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\imgui;$(ProjectDir)externals\DirectXTex;$(ProjectDir)Game\Scene;$(ProjectDir)Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)math;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\input;$(ProjectDir)Engine\base;$(ProjectDir)Engine\Function;$(ProjectDir)Engine\struct;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\Imgui;$(ProjectDir)externals\assimp\include;$(ProjectDir)Game\Scene;$(ProjectDir)Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -228,7 +219,8 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)math;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\input;$(ProjectDir)Engine\base;$(ProjectDir)Engine\Function;$(ProjectDir)Engine\struct;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\imgui;$(ProjectDir)externals\DirectXTex;$(ProjectDir)Game\Scene;$(ProjectDir)Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)math;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\input;$(ProjectDir)Engine\base;$(ProjectDir)Engine\Function;$(ProjectDir)Engine\struct;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\Imgui;$(ProjectDir)externals\assimp\include;$(ProjectDir)Game\Scene;$(ProjectDir)Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -5,6 +5,7 @@
 void BaseObject3d::DebugImgui() {
 	if (model_) {
 		model_->DebugImGui();
+
 	}
 }
 

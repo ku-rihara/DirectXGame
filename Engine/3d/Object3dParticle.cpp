@@ -7,8 +7,7 @@
 Object3dParticle* Object3dParticle::CreateModel(const std::string& instanceName, const std::string& extension, const uint32_t& instanceNumMax) {
 	Object3dParticle* object3d = new Object3dParticle();
 	object3d->instanceMax_ = instanceNumMax;
-
-	ModelManager::GetInstance()->LoadModelParticle(instanceName, extension);
+	ModelManager::GetInstance()->LoadModel(instanceName, extension);
 	object3d->SetModel(instanceName, extension);
 	object3d->CreateInstancingResource(instanceNumMax);
 	object3d->model_->CreateMaterialResource();

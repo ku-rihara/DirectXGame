@@ -140,13 +140,12 @@ void Model::CreateMaterialResource() {
 }
 
 
-
-#ifdef _DEBUG
 void Model::DebugImGui() {
-
+#ifdef _DEBUG
 	material_.DebugImGui();
-}
 #endif
+}
+
 
 void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ObjectColor& color, std::optional<uint32_t> textureHandle){
 
