@@ -7,25 +7,54 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXGame", "DirectXGame.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTex", "externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj", "{371B9FA9-4C90-4AC6-A123-ACED756D6C77}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Imgui", "Imgui\Imgui.vcxproj", "{AA68BE4C-A178-438B-8216-A8081995B77E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Profile|x64 = Profile|x64
+		Profile|x86 = Profile|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{18750579-E839-444C-A284-141A94DC7EFB}.Debug|x64.ActiveCfg = Debug|x64
 		{18750579-E839-444C-A284-141A94DC7EFB}.Debug|x64.Build.0 = Debug|x64
+		{18750579-E839-444C-A284-141A94DC7EFB}.Debug|x86.ActiveCfg = Debug|x64
+		{18750579-E839-444C-A284-141A94DC7EFB}.Debug|x86.Build.0 = Debug|x64
 		{18750579-E839-444C-A284-141A94DC7EFB}.Profile|x64.ActiveCfg = Release|x64
 		{18750579-E839-444C-A284-141A94DC7EFB}.Profile|x64.Build.0 = Release|x64
+		{18750579-E839-444C-A284-141A94DC7EFB}.Profile|x86.ActiveCfg = Release|x64
+		{18750579-E839-444C-A284-141A94DC7EFB}.Profile|x86.Build.0 = Release|x64
 		{18750579-E839-444C-A284-141A94DC7EFB}.Release|x64.ActiveCfg = Release|x64
 		{18750579-E839-444C-A284-141A94DC7EFB}.Release|x64.Build.0 = Release|x64
+		{18750579-E839-444C-A284-141A94DC7EFB}.Release|x86.ActiveCfg = Release|x64
+		{18750579-E839-444C-A284-141A94DC7EFB}.Release|x86.Build.0 = Release|x64
 		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Debug|x64.ActiveCfg = Debug|x64
 		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Debug|x64.Build.0 = Debug|x64
+		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Debug|x86.ActiveCfg = Debug|x64
+		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Debug|x86.Build.0 = Debug|x64
 		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Profile|x64.ActiveCfg = Profile|x64
 		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Profile|x64.Build.0 = Profile|x64
+		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Profile|x86.ActiveCfg = Profile|x64
+		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Profile|x86.Build.0 = Profile|x64
 		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Release|x64.ActiveCfg = Release|x64
 		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Release|x64.Build.0 = Release|x64
+		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Release|x86.ActiveCfg = Release|x64
+		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Release|x86.Build.0 = Release|x64
+		{AA68BE4C-A178-438B-8216-A8081995B77E}.Debug|x64.ActiveCfg = Debug|x64
+		{AA68BE4C-A178-438B-8216-A8081995B77E}.Debug|x64.Build.0 = Debug|x64
+		{AA68BE4C-A178-438B-8216-A8081995B77E}.Debug|x86.ActiveCfg = Debug|Win32
+		{AA68BE4C-A178-438B-8216-A8081995B77E}.Debug|x86.Build.0 = Debug|Win32
+		{AA68BE4C-A178-438B-8216-A8081995B77E}.Profile|x64.ActiveCfg = Debug|x64
+		{AA68BE4C-A178-438B-8216-A8081995B77E}.Profile|x64.Build.0 = Debug|x64
+		{AA68BE4C-A178-438B-8216-A8081995B77E}.Profile|x86.ActiveCfg = Debug|Win32
+		{AA68BE4C-A178-438B-8216-A8081995B77E}.Profile|x86.Build.0 = Debug|Win32
+		{AA68BE4C-A178-438B-8216-A8081995B77E}.Release|x64.ActiveCfg = Release|x64
+		{AA68BE4C-A178-438B-8216-A8081995B77E}.Release|x64.Build.0 = Release|x64
+		{AA68BE4C-A178-438B-8216-A8081995B77E}.Release|x86.ActiveCfg = Release|Win32
+		{AA68BE4C-A178-438B-8216-A8081995B77E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

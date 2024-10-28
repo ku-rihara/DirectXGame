@@ -98,9 +98,9 @@ public:
 	void DrawParticle( const uint32_t instanceNum,
 		D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, std::optional<uint32_t> textureHandle = std::nullopt);
 
-#ifdef _DEBUG
+
 	void DebugImGui();
-#endif
+
 
 	//getter
 	ModelData GetModelData()const { return modelData_; }

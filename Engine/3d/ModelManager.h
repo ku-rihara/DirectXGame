@@ -37,7 +37,7 @@ public:
     /// </summary>
     /// <param name="modelName"></param>
     /// <param name="extension"></param>
-    void LoadModelParticle(const std::string& modelName, const std::string& extension);
+   /* void LoadModelParticle(const std::string& modelName, const std::string& extension);*/
 
     /// <summary>
     /// モデルの検索

@@ -10,12 +10,6 @@
     <Filter Include="Game">
       <UniqueIdentifier>{adacdffd-d6a9-4d0b-884a-77c132a957b8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="etc">
-      <UniqueIdentifier>{3a26399e-1642-4e19-a43e-74c45aca95b7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="etc\imgui">
-      <UniqueIdentifier>{8ed0676c-f1d0-4af2-96bc-4c2c8c07c532}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.cpp">
       <UniqueIdentifier>{1e67bb20-3562-4679-8c7d-458c14e08be0}</UniqueIdentifier>
     </Filter>
@@ -84,27 +78,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="externals\imgui\imgui.cpp">
-      <Filter>etc\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="externals\imgui\imgui_demo.cpp">
-      <Filter>etc\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="externals\imgui\imgui_draw.cpp">
-      <Filter>etc\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="externals\imgui\imgui_impl_dx12.cpp">
-      <Filter>etc\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="externals\imgui\imgui_impl_win32.cpp">
-      <Filter>etc\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="externals\imgui\imgui_tables.cpp">
-      <Filter>etc\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="externals\imgui\imgui_widgets.cpp">
-      <Filter>etc\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
       <Filter>MyEngine\.cpp\2d</Filter>
     </ClCompile>
@@ -209,30 +182,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="externals\imgui\imconfig.h">
-      <Filter>etc\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="externals\imgui\imgui.h">
-      <Filter>etc\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="externals\imgui\imgui_impl_dx12.h">
-      <Filter>etc\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="externals\imgui\imgui_impl_win32.h">
-      <Filter>etc\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="externals\imgui\imgui_internal.h">
-      <Filter>etc\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="externals\imgui\imstb_rectpack.h">
-      <Filter>etc\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="externals\imgui\imstb_textedit.h">
-      <Filter>etc\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="externals\imgui\imstb_truetype.h">
-      <Filter>etc\imgui</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
       <Filter>MyEngine\.h\struct</Filter>
     </ClInclude>
@@ -377,11 +326,6 @@
     <ClInclude Include="Engine\base\SpriteMaterial.h">
       <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="externals\imgui\LICENSE.txt">
-      <Filter>etc\imgui</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
