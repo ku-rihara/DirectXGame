@@ -6,12 +6,15 @@
 class DebugCamera{
 	// カメラ注視点までの距離
 	static const float distance_;
-private://メンバ変数
+private:
 	//入力クラスのポインタ
 	Input* input_;
 	//スケーリング
 	float scaleX_ = 1.0f;
 	float scaleY_ = 1.0f;
+
+	float yaw_ = 0.0f;
+	float pitch_ = 0.0f;
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
 	//回転行列
@@ -23,6 +26,9 @@ private:
 	/// 行列更新
 	/// </summary>
 	void UpdateMatrix();
+
+	// マウス操作に基づく移動関数
+	void MoveForward(float speed);
 public:
 	/// <summary>
 	/// コンストラクタ
@@ -31,7 +37,6 @@ public:
 	/// <param name="window_height">画面高さ</param>
 	DebugCamera(int window_width, int window_height);
 
-	/// <summary>
 	/// 初期化
 	/// </summary>
 	void Init();
