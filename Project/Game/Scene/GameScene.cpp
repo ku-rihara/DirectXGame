@@ -16,36 +16,36 @@ void GameScene::Init() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
-////////////////////////////////////////////////////////////////////////////////////////////
-//  生成
-////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////
+	//  生成
+	////////////////////////////////////////////////////////////////////////////////////////////
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
-	railManager_ = std::make_unique<RailManager>();
+	controlPointManager_ = std::make_unique<ControlPointManager>();
 	gameCamera_ = std::make_unique<GameCamera>();
 	player_ = std::make_unique<Player>();
 	enemyManager_ = std::make_unique<EnemyManager>();
 	reticle_ = std::make_unique<Reticle>();
-	mousePosView_.reset(Object3d::CreateModel("cube",".obj"));
-////////////////////////////////////////////////////////////////////////////////////////////
-//  初期化
-////////////////////////////////////////////////////////////////////////////////////////////
+	mousePosView_.reset(Object3d::CreateModel("cube", ".obj"));
+	////////////////////////////////////////////////////////////////////////////////////////////
+	//  初期化
+	////////////////////////////////////////////////////////////////////////////////////////////
 	debugCamera_->Init();
 	gameCamera_->Init();
-	railManager_->Init();
+	controlPointManager_->Init();
 	enemyManager_->Init();
 	viewProjection_.Init();
 	player_->Init();
 	reticle_->Init();
 	mousePosTransform_.Init();
-////////////////////////////////////////////////////////////////////////////////////////////
-//  セット
-////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////
+	//  セット
+	////////////////////////////////////////////////////////////////////////////////////////////
 	player_->SetReticle(reticle_.get());
 	reticle_->SetPlayer(player_.get());
 
 	//parent
 	player_->SetParent(&gameCamera_->GetWorldTransform());/// プレイヤーの親にゲームカメラ
-	
+
 }
 
 void GameScene::Update() {
@@ -54,22 +54,22 @@ void GameScene::Update() {
 	Debug();//デバッグ
 	//制御点追加
 	if (Input::GetInstance()->IsTriggerMouse(3)) {
-		railManager_->AddRail(mousePosTransform_.translation_);
-	}else if (Input::GetInstance()->IsTriggerMouse(4)) {
+		controlPointManager_->AddControlPoint(mousePosTransform_.translation_);
+	}
+	else if (Input::GetInstance()->IsTriggerMouse(4)) {
 		enemyManager_->AddEnemy(mousePosTransform_.translation_);
 	}
 	//カメラ更新
-	gameCamera_->Update(railManager_->GetControlPoints());
-	
+	gameCamera_->Update(controlPointManager_->GetControlPoints());
+
 	mousePosTransform_.UpdateMatrix();
 	ViewProjectionUpdate();
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//  各クラス更新
-////////////////////////////////////////////////////////////////////////////////////////////
-
-	//レールカメラ更新
-	railManager_->Update();
+	////////////////////////////////////////////////////////////////////////////////////////////
+	//  各クラス更新
+	////////////////////////////////////////////////////////////////////////////////////////////
+		//レールカメラ更新
+	controlPointManager_->Update();
 	/// 敵マネージャー更新
 	enemyManager_->Update();
 	//プレイヤー更新
@@ -78,37 +78,37 @@ void GameScene::Update() {
 	reticle_->Updata(viewProjection_);
 }
 
-void GameScene::Draw() {
+/// ===================================================
+ /// モデル描画
+ /// ===================================================
+void GameScene::ModelDraw() {
 
-	//Draw********************************************************
-	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-#pragma region 3Dオブジェクト描画
-	// 3Dオブジェクト描画前処理
-	Model::PreDraw(commandList);
-	railManager_->Draw(viewProjection_);
+	controlPointManager_->Draw(viewProjection_);
 	//プレイヤー
 	if (isDebugCameraActive_) {
 		player_->Draw(viewProjection_);
 	}
 	player_->BulletDraw(viewProjection_);
 	////可視化オブジェクト
-	mousePosView_->Draw(mousePosTransform_,viewProjection_);
+	mousePosView_->Draw(mousePosTransform_, viewProjection_);
 	///敵
 	enemyManager_->Draw(viewProjection_);
 	//レール
 	gameCamera_->RailDraw(viewProjection_);
+}
 
-#pragma endregion
+/// ===================================================
+ /// パーティクル描画
+ /// ===================================================
+void GameScene::ParticleDraw() {
 
-#pragma region 3Dオブジェクトパーティクル描画
-	Model::PreDrawParticle(commandList);
-
-#pragma endregion
-	Sprite::PreDraw(commandList);
+}
+/// ===================================================
+/// スプライト描画
+/// ===================================================
+void GameScene::SpriteDraw() {
 	//レティクル
 	reticle_->Draw();
-	////スプライト描画
-
 }
 
 void GameScene::Debug() {

@@ -1,35 +1,30 @@
 #pragma once
-//std
-#include<memory>
-//math
-#include"Vector3.h"
-//3d
-#include"3d/ViewProjection.h"
-//obj
-#include"3d/Object3d.h"
+
+#include <vector>
+#include <memory>
+#include "Vector3.h"
+#include "3d/WorldTransform.h"
+#include "3d/Object3d.h"
+
 class Rail {
-	static int instanceNum_;
-public://メンバ変数
-	std::unique_ptr<Object3d> objct3D_;
-	WorldTransform transform_;
 private:
-	int instanceID_;
-	bool isDeath_;
-public://メンバ関数
+    const size_t IndexCount_ = 500; // レール補間点の数
+    std::vector<Vector3> controlPos_;                  // 制御点
+    std::vector<Vector3> pointsDrawing_;               // 補間された描画点
+    float totalRailLength_ = 0.0f;                     // レールの全体長
+    std::vector<std::unique_ptr<Object3d>> object3d_;  // レール上の各オブジェクト
+    std::vector<WorldTransform> transform_;            // 各オブジェクトの変換情報
 
-	void Init();
-	void Update();
-	void Debug();
-	void Draw(const ViewProjection& viewProjection);
+public:
+    void Init(size_t ObjNum);
+    void Update(const std::vector<Vector3>& controlPos);
+    void Draw(const ViewProjection& viewProjection);
 
-	Vector3 GetPos() { return transform_.translation_; }
-	bool GetIsDeath() { return isDeath_; }
+    Vector3 GetPositionOnRail(float progress) const;
 
-	//setter
+    const std::vector<Vector3>& GetPointsDrawing() const { return pointsDrawing_; }
+    float GetTotalLength() const { return totalRailLength_; }
 
-	/// <summary>
-	/// ポジションセット
-	/// </summary>
-	/// <param name="pos"></param>
-	void SetPos(const Vector3& pos) { transform_.translation_ = pos; }
+    // 各オブジェクトの変換データを取得
+    const std::vector<WorldTransform>& GetTransforms() const { return transform_; }
 };

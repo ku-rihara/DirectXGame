@@ -58,8 +58,7 @@ private:
 	SpriteMaterial material_;
 	
 public:
-	//シングルトンインスタンスの取得
-	//static Sprite* GetInstance();
+	
 	static Sprite* Create(const uint32_t& textureHandle, const Vector2& position, const Vector4& color);
 	/// <summary>
 	/// スプライトの作成
@@ -83,18 +82,18 @@ public:
 #ifdef _DEBUG
 	void DebugImGui();
 #endif
-	////////////////////////////////////////////////////////////////////////////////////////////
-	//  getter
-	////////////////////////////////////////////////////////////////////////////////////////////
+	///=========================================================================================
+	///  getter
+	///=========================================================================================
 	 Vector2 GetPosition()const { return Vector2(transform_.translate.x, transform_.translate.y); }
 	const Vector2& GetAnchorPoint()const { return anchorPoint_; }
 	const Vector2& GetTextureSize()const { return textureSize_; }
 	const Vector2& GetTextureLeftTop()const { return textureLeftTop_; }
 	const bool& GetIsFlipX()const { return isFlipX_; }
 	const bool& GetIsFlipY()const { return isFlipY_; }
-    ////////////////////////////////////////////////////////////////////////////////////////////
-	//  setter
-	////////////////////////////////////////////////////////////////////////////////////////////
+	///=========================================================================================
+   ///  setter
+   ///=========================================================================================
 	void SetAnchorPoint(const Vector2& anchorPoint) { this->anchorPoint_ = anchorPoint; }
 	void SetTextureSize(const Vector2& size) { this->textureSize_ = size; }
 	void SetTextureLeftTop(const Vector2& leftTop) { this->textureLeftTop_ = leftTop; }

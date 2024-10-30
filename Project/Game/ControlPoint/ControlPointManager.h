@@ -1,6 +1,6 @@
 #pragma once
 
-#include"Rail.h"
+#include"ControlPoint.h"
 
 //math
 #include"Vector3.h"
@@ -14,14 +14,14 @@
 #include <json.hpp>
 using json = nlohmann::json;
 
-class RailManager {
+class ControlPointManager {
 private:
-	std::list<std::unique_ptr<Rail>>rails_;
+	std::list<std::unique_ptr<ControlPoint>>rails_;
 	std::vector<Vector3>controlSpots_;
 	Model* model_;
 	int controlNum_;
 public:
-	void AddRail(const Vector3&pos);
+	void AddControlPoint(const Vector3&pos);
 	void Init();
 	void Update();
 	void Draw(const ViewProjection& viewProjection);

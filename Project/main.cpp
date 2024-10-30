@@ -42,10 +42,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ===================================================
 		/// 描画
 		/// ===================================================
-			/// ゲームシーンの描画
-		gameScene->Draw();
-		///コリジョン描画
-		/*collisionManager->Draw(gameScene->GetViewProjection());*/
+		ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+		///*******
+		/// モデル
+		///*******
+		Model::PreDraw(commandList);
+		/// ゲームシーン描画
+		gameScene->ModelDraw();
+		/// コリジョン描画
+		collisionManager->Draw(gameScene->GetViewProjection());
+		///*******
+		/// パーティクル
+		///*******
+		Model::PreDrawParticle(commandList);
+		/// ゲームシーン描画
+		gameScene->ParticleDraw();
+		///*******
+		/// スプライト
+		///*******
+		Sprite::PreDraw(commandList);
+		gameScene->SpriteDraw();
+
 		/// フレームの終了
 		Keta::EndFrame();
 	}

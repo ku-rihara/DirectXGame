@@ -1,4 +1,4 @@
-#include"RailManager.h"
+#include"ControlPointManager.h"
 #include"3d/ModelManager.h"
 //camera
 #include"camera/GameCamera.h"
@@ -9,16 +9,16 @@
 //Imgui
 #include<imgui.h>
 
-void RailManager::Init() {
+void ControlPointManager::Init() {
 	
 	LoadControlSpots("resources/RailParamater/controlPoint.json");
 	
 }
 
 //レール追加
-void  RailManager::AddRail(const Vector3& pos) {
-	std::unique_ptr<Rail>rail;
-	rail = std::make_unique<Rail>();
+void  ControlPointManager::AddControlPoint(const Vector3& pos) {
+	std::unique_ptr<ControlPoint>rail;
+	rail = std::make_unique<ControlPoint>();
 	rail->Init();
 	rail->SetPos(pos);
 	controlNum_++;
@@ -28,7 +28,7 @@ void  RailManager::AddRail(const Vector3& pos) {
 }
 
 //レール更新
-void RailManager::Update() {
+void ControlPointManager::Update() {
 	ImGui::Begin("IsSaveParamater");
 	if (ImGui::Button("Save")) {
 		SaveControlSpots("resources/RailParamater/controlPoint.json");
@@ -37,7 +37,7 @@ void RailManager::Update() {
 	}
 	ImGui::End();
 	auto spotIt = controlSpots_.begin(); // controlSpot_のイテレータ
-	for (const std::unique_ptr<Rail>& rail : rails_) {
+	for (const std::unique_ptr<ControlPoint>& rail : rails_) {
 		rail->Update(); 
 		if (spotIt != controlSpots_.end()) {
 			*spotIt = rail->GetPos(); // controlSpot_に更新された座標を入れる
@@ -46,7 +46,7 @@ void RailManager::Update() {
 	}
 
 	//消す
-	rails_.remove_if([](const std::unique_ptr<Rail>& rail) {
+	rails_.remove_if([](const std::unique_ptr<ControlPoint>& rail) {
 		if (rail->GetIsDeath()) {
 			return true;
 		}
@@ -55,15 +55,15 @@ void RailManager::Update() {
 }
 
 //レール描画
-void RailManager::Draw(const ViewProjection&viewProjection) {
-	for (const std::unique_ptr<Rail>& rail : rails_) {
+void ControlPointManager::Draw(const ViewProjection&viewProjection) {
+	for (const std::unique_ptr<ControlPoint>& rail : rails_) {
 		rail->Draw(viewProjection);
 	}
 }
 
 
 // レールの制御点をJSON形式で保存する
-void RailManager::SaveControlSpots(const std::string& filename) {
+void ControlPointManager::SaveControlSpots(const std::string& filename) {
 	json j;
 	for (const auto& spot : controlSpots_) {
 		j.push_back({ spot.x, spot.y, spot.z });
@@ -77,7 +77,7 @@ void RailManager::SaveControlSpots(const std::string& filename) {
 }
 
 // JSONファイルから制御点を読み込む
-void RailManager::LoadControlSpots(const std::string& filename) {
+void ControlPointManager::LoadControlSpots(const std::string& filename) {
 	std::ifstream file(filename);
 	if (file.is_open()) {
 		json j;
@@ -87,7 +87,7 @@ void RailManager::LoadControlSpots(const std::string& filename) {
 		// 読み込んだデータを基にレールを追加
 		for (const auto& spot : j) {
 			Vector3 pos = { spot[0], spot[1], spot[2] };
-			AddRail(pos);
+			AddControlPoint(pos);
 		}
 	}
 }

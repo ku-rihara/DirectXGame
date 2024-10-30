@@ -14,7 +14,7 @@
 #include"3d/DebugCamera.h"
 #include"Camera/GameCamera.h"
 //obj
-#include"Rail/RailManager.h"
+#include"ControlPoint/ControlPointManager.h"
 #include"Enemy/EnemyManager.h"
 #include"Player/Player.h"
 #include"Reticle/Reticle.h"
@@ -48,7 +48,7 @@ private:
 	/// ゲームカメラ
 	std::unique_ptr<GameCamera>gameCamera_ = nullptr;
 	/// レールマネージャー
-	std::unique_ptr<RailManager>railManager_=nullptr;
+	std::unique_ptr<ControlPointManager>controlPointManager_=nullptr;
 	/// エネミーマネージャー
 	std::unique_ptr<EnemyManager>enemyManager_ = nullptr;
 	/// プレイや
@@ -84,7 +84,11 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	void ModelDraw();
+
+	void SpriteDraw();
+
+	void ParticleDraw();
 
 	/// <summary>
 	/// デバッグ表示

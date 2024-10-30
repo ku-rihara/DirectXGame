@@ -85,14 +85,17 @@
     <Filter Include="Game\Player">
       <UniqueIdentifier>{a282e066-a2ca-4bd6-b5bd-983a426cabab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Rail">
-      <UniqueIdentifier>{d1a83143-a9dc-4913-8f0c-e90c2c1f3f8c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Reticle">
       <UniqueIdentifier>{15ff8acf-e7ca-4437-877f-fde100e3bdf6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Camera">
       <UniqueIdentifier>{33b03154-93e9-4279-8dfe-a3ad164a8ad0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\ControlPoint">
+      <UniqueIdentifier>{d1a83143-a9dc-4913-8f0c-e90c2c1f3f8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Rail">
+      <UniqueIdentifier>{cc4f909c-9605-4097-b1c2-e8a1b8f469f2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -211,12 +214,6 @@
     <ClCompile Include="Game\Reticle\Reticle.cpp">
       <Filter>Game\Reticle</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Rail\Rail.cpp">
-      <Filter>Game\Rail</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Rail\RailManager.cpp">
-      <Filter>Game\Rail</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\Player.cpp">
       <Filter>Game\Player</Filter>
     </ClCompile>
@@ -231,6 +228,15 @@
     </ClCompile>
     <ClCompile Include="Game\Camera\GameCamera.cpp">
       <Filter>Game\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ControlPoint\ControlPoint.cpp">
+      <Filter>Game\ControlPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ControlPoint\ControlPointManager.cpp">
+      <Filter>Game\ControlPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Rail\Rail.cpp">
+      <Filter>Game\Rail</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -393,12 +399,6 @@
     <ClInclude Include="Game\Reticle\Reticle.h">
       <Filter>Game\Reticle</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Rail\Rail.h">
-      <Filter>Game\Rail</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Rail\RailManager.h">
-      <Filter>Game\Rail</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\Player.h">
       <Filter>Game\Player</Filter>
     </ClInclude>
@@ -413,6 +413,15 @@
     </ClInclude>
     <ClInclude Include="Game\Camera\GameCamera.h">
       <Filter>Game\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ControlPoint\ControlPoint.h">
+      <Filter>Game\ControlPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ControlPoint\ControlPointManager.h">
+      <Filter>Game\ControlPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Rail\Rail.h">
+      <Filter>Game\Rail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
