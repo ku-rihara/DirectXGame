@@ -16,7 +16,6 @@ void GameScene::Init() {
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
 	// メンバ変数の初期化
-	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
@@ -37,11 +36,11 @@ void GameScene::Init() {
 	modelTerrain_.reset(Object3d::CreateModel("terrain", ".obj"));
 
 	///トランスフォーム初期化
-	 planeTransform_.Init();
-	 fenceTransform_.Init();
-	 suzanneTransform_.Init();
-	 suzanneTransform2_.Init();
-	 terrainTransform_.Init();
+	planeTransform_.Init();
+	fenceTransform_.Init();
+	suzanneTransform_.Init();
+	suzanneTransform2_.Init();
+	terrainTransform_.Init();
 
 	////テクスチャハンドル
 	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");
@@ -112,7 +111,7 @@ void GameScene::Update() {
 	terrainTransform_.UpdateMatrix();
 	modelPlaneParticle_->Update(&viewProjection_);
 
-	
+
 	// カメラ行列の計算をデバッグカメラのビュープロジェクションから行う
 	viewProjection_.matView_ = debugCamera_->GetViewProjection().matView_;
 	viewProjection_.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
@@ -120,12 +119,11 @@ void GameScene::Update() {
 	/*viewProjection_.UpdateMatrix();*/
 }
 
-void GameScene::Draw() {
+    /// ===================================================
+	/// モデル描画
+	/// ===================================================
+void GameScene::ModelDraw() {
 
-	//Draw********************************************************
-	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-
-	Model::PreDraw(commandList);
 	//平面描画
 	if (isDraw) {
 		modelSuzanne2_->color_.SetColor(Vector4(0, 0, 1, 1));
@@ -134,15 +132,25 @@ void GameScene::Draw() {
 		modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
 		modelSuzanne2_->Draw(suzanneTransform2_, viewProjection_);
 		modelTerrain_->Draw(terrainTransform_, viewProjection_);
-		Model::PreDrawParticle(commandList);
-		modelPlaneParticle_->Draw(viewProjection_, uvHandle_);
-
 	}
-	Sprite::PreDraw(commandList);
+}
+
+/// ===================================================
+   /// パーティクル描画
+   /// ===================================================
+void GameScene::ParticleDraw() {
+	modelPlaneParticle_->Draw(viewProjection_, uvHandle_);
+}
+
+/// ===================================================
+   /// スプライト描画
+   /// ===================================================
+void GameScene::SpriteDraw() {
 	////スプライト描画
 	sprite_->Draw();
 	sprite2_->Draw();
 }
+
 
 
 void GameScene::Debug() {

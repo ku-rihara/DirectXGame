@@ -71,7 +71,7 @@ private:
 
 	uint32_t uvHandle_;
 
-	/*std::vector<std::unique_ptr<WorldTransform>>  planeTransforms_;*/
+	
 public: 
 	/// <summary>
 	/// コンストクラタ
@@ -96,11 +96,17 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	void ModelDraw();
+
+	void SpriteDraw();
+
+	void ParticleDraw();
 
 	/// <summary>
 	/// デバッグ表示
 	/// </summary>
 	void Debug();
 
+
+	const ViewProjection& GetViewProjection()const { return viewProjection_; }
 };
