@@ -2,27 +2,24 @@
 
 #include"base/Keta.h"
 //DirectX
-#include"base/WinApp.h"
 #include "base/DirectXCommon.h"
 #include"base/TextureManager.h"
-//Transform
-#include "3d/WorldTransform.h"
-#include"3d/ViewProjection.h"
-//obj
-#include "3d/Mesh.h"
-#include "3d/Model.h"
+//2d
 #include "2d/Sprite.h"
 #include "audio/Audio.h"
-#include"input/Input.h"
+//3d
+#include "3d/Model.h"
 #include"3d/Object3d.h"
-#include"3d/Object3dParticle.h"
-//etc
+//camera
 #include"3d/DebugCamera.h"
+#include"Camera/GameCamera.h"
+//obj
+#include"Rail/RailManager.h"
+#include"Enemy/EnemyManager.h"
+#include"Player/Player.h"
+#include"Reticle/Reticle.h"
+//std
 #include<random>
-#include <imgui.h>
-#include<memory>
-//struct 
-
 
 /// <summary>
 /// ゲームシーン
@@ -38,40 +35,31 @@ private:
 	uint32_t textureHandle_ = 0; 
 	uint32_t soundDataHandle_ = 0; 
 	uint32_t voiceHandle_ = 0;     
-	std::unique_ptr<Sprite> sprite_ = nullptr;
-	std::unique_ptr<Sprite> sprite2_ = nullptr;
-
-	
-	std::unique_ptr<Object3d> modelPlane_ = nullptr;
-	std::unique_ptr<Object3d> modelFence_ = nullptr;
-	std::unique_ptr<Object3d> modelSuzanne_ = nullptr;
-	std::unique_ptr<Object3d> modelSuzanne2_ = nullptr;
-	std::unique_ptr<Object3d> modelTerrain_ = nullptr;
-
-	/// WorldTransform
-	WorldTransform planeTransform_;
-	WorldTransform fenceTransform_;
-	WorldTransform suzanneTransform_;
-	WorldTransform suzanneTransform2_;
-	WorldTransform terrainTransform_;
-
-	//パーティクル変数
-
-	const uint32_t modelInstanceMax_ = 100;
-	
-	std::unique_ptr<Object3dParticle> modelPlaneParticle_ = nullptr;
-	
-	const float kDeltaTime_ = 1.0f / 60.0f;
-
-	bool isDraw = true;
-
+	//ビュープロジェクション
 	ViewProjection viewProjection_;
-
+	//3Dマウス位置可視化
+	std::unique_ptr<Object3d>mousePosView_;
+	WorldTransform mousePosTransform_;
+////////////////////////////////////////////////////////////////////////////////////////////
+//  obj
+////////////////////////////////////////////////////////////////////////////////////////////
+	/// デバッグカメラ
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
+	/// ゲームカメラ
+	std::unique_ptr<GameCamera>gameCamera_ = nullptr;
+	/// レールマネージャー
+	std::unique_ptr<RailManager>railManager_=nullptr;
+	/// エネミーマネージャー
+	std::unique_ptr<EnemyManager>enemyManager_ = nullptr;
+	/// プレイや
+	std::unique_ptr<Player>player_ = nullptr;
+	/// レティクル
+	std::unique_ptr<Reticle>reticle_=nullptr;
 
-	uint32_t uvHandle_;
-
-	/*std::vector<std::unique_ptr<WorldTransform>>  planeTransforms_;*/
+	//変数
+const float mouseDepth_=0.995f;
+	// デバッグカメラアクティブ
+	bool isDebugCameraActive_ = false;
 public: 
 	/// <summary>
 	/// コンストクラタ
@@ -102,5 +90,16 @@ public:
 	/// デバッグ表示
 	/// </summary>
 	void Debug();
+
+	/// <summary>
+	/// ビュープロジェクション更新
+	/// </summary>
+	void ViewProjectionUpdate();
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+//  getter
+////////////////////////////////////////////////////////////////////////////////////////////
+	const ViewProjection& GetViewProjection()const { return viewProjection_; }
 
 };

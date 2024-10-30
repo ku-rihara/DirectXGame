@@ -79,6 +79,21 @@
     <Filter Include="Game\GrobalParamater">
       <UniqueIdentifier>{c5c8244c-32d2-4058-a087-a13767b0716d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemy">
+      <UniqueIdentifier>{c9e25bc8-89df-4587-b549-633cfc0a4159}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player">
+      <UniqueIdentifier>{a282e066-a2ca-4bd6-b5bd-983a426cabab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Rail">
+      <UniqueIdentifier>{d1a83143-a9dc-4913-8f0c-e90c2c1f3f8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Reticle">
+      <UniqueIdentifier>{15ff8acf-e7ca-4437-877f-fde100e3bdf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Camera">
+      <UniqueIdentifier>{33b03154-93e9-4279-8dfe-a3ad164a8ad0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -192,6 +207,30 @@
     </ClCompile>
     <ClCompile Include="Game\GrobalParamater\GlobalParameter.cpp">
       <Filter>Game\GrobalParamater</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Reticle\Reticle.cpp">
+      <Filter>Game\Reticle</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Rail\Rail.cpp">
+      <Filter>Game\Rail</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Rail\RailManager.cpp">
+      <Filter>Game\Rail</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Player.cpp">
+      <Filter>Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\PlayerBullet.cpp">
+      <Filter>Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\BaseEnemy.cpp">
+      <Filter>Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\EnemyManager.cpp">
+      <Filter>Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Camera\GameCamera.cpp">
+      <Filter>Game\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -350,6 +389,30 @@
     </ClInclude>
     <ClInclude Include="Game\GrobalParamater\GlobalParameter.h">
       <Filter>Game\GrobalParamater</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Reticle\Reticle.h">
+      <Filter>Game\Reticle</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Rail\Rail.h">
+      <Filter>Game\Rail</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Rail\RailManager.h">
+      <Filter>Game\Rail</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Player.h">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\PlayerBullet.h">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\BaseEnemy.h">
+      <Filter>Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\EnemyManager.h">
+      <Filter>Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Camera\GameCamera.h">
+      <Filter>Game\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

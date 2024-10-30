@@ -86,6 +86,7 @@ public:
 	////////////////////////////////////////////////////////////////////////////////////////////
 	//  getter
 	////////////////////////////////////////////////////////////////////////////////////////////
+	 Vector2 GetPosition()const { return Vector2(transform_.translate.x, transform_.translate.y); }
 	const Vector2& GetAnchorPoint()const { return anchorPoint_; }
 	const Vector2& GetTextureSize()const { return textureSize_; }
 	const Vector2& GetTextureLeftTop()const { return textureLeftTop_; }
