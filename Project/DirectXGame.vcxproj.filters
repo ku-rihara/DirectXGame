@@ -76,6 +76,9 @@
     <Filter Include="Game\Collider">
       <UniqueIdentifier>{c7234c0b-c762-4ddd-afa0-00d1023957e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GrobalParamater">
+      <UniqueIdentifier>{c5c8244c-32d2-4058-a087-a13767b0716d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -186,6 +189,9 @@
     </ClCompile>
     <ClCompile Include="Game\Colider\CollisionManager.cpp">
       <Filter>Game\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GrobalParamater\GlobalParameter.cpp">
+      <Filter>Game\GrobalParamater</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -341,6 +347,9 @@
     </ClInclude>
     <ClInclude Include="Game\Colider\CollisionManager.h">
       <Filter>Game\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GrobalParamater\GlobalParameter.h">
+      <Filter>Game\GrobalParamater</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

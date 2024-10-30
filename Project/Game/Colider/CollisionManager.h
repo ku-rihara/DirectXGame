@@ -4,7 +4,7 @@
 #include "3d/ViewProjection.h"
 //class
 #include "Colider/Collider.h"
-#include "GlobalParameter.h"
+#include "GrobalParamater/GlobalParameter.h"
 /// std
 #include<list>
 #include<memory>
