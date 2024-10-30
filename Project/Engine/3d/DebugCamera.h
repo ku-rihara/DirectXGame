@@ -12,6 +12,9 @@ private://メンバ変数
 	//スケーリング
 	float scaleX_ = 1.0f;
 	float scaleY_ = 1.0f;
+
+	float yaw_;
+	float pitch_;
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
 	//回転行列

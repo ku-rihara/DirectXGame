@@ -1,5 +1,5 @@
 #include "DebugCamera.h"
-
+#include<numbers>
 
 // カメラ注視点までの距離の初期化
 const float DebugCamera::distance_ = 10.0f;
@@ -41,32 +41,37 @@ void DebugCamera::Update() {
     MouseMove mouseMove = input_->GetMouseMove();
 
     if (input_->IsPressMouse(2)) {
-        viewProjection_.translation_.x+= mouseMove.lX * 0.005f; // スケール調整
+        viewProjection_.translation_.x += mouseMove.lX * 0.005f; // スケール調整
         viewProjection_.translation_.y += mouseMove.lY * 0.005f; // スケール調整
     }
     if (input_->GetWheel()) {
-      /* Vector3 direction = TransformNormal({ 0,0,1 }, matRot_);
-        direction = Normalize(direction);*/
-        viewProjection_.translation_+= (mouseMove.lZ * 0.005f)*Vector3(0,0,1)/**direction*/;
+        /* Vector3 direction = TransformNormal({ 0,0,1 }, matRot_);
+          direction = Normalize(direction);*/
+        viewProjection_.translation_ += (mouseMove.lZ * 0.005f) * Vector3(0, 0, 1)/**direction*/;
     }
 
-    //マウスの回転
+    // マウスの右ボタンで視点移動（マイクラ風）
     if (input_->IsPressMouse(1)) {
-       //追加回転分の回転行列を生成
-        Matrix4x4 matRotDelta = MakeIdentity4x4();
-        matRotDelta *= MakeRotateXMatrix(mouseMove.lY * 0.005f);
-        matRotDelta*=MakeRotateYMatrix(mouseMove.lX * 0.005f);
-        //累積の回転行列を合成
-        matRot_ = matRotDelta * matRot_;
+        yaw_ += mouseMove.lX * 0.005f;
+        pitch_ -= mouseMove.lY * 0.005f;
+
+        // ピッチ角の制限（-90度〜+90度）
+        pitch_ = std::fmax(std::fmin(pitch_, std::numbers::pi_v<float>*2), -std::numbers::pi_v<float>*2);
+
+        // 回転行列の更新
+        Matrix4x4 rotY = MakeRotateYMatrix(yaw_);
+        Matrix4x4 rotX = MakeRotateXMatrix(pitch_);
+        matRot_ = rotY * rotX;
     }
+
     UpdateMatrix();
 }
 
 
 void DebugCamera::UpdateMatrix() {
-   
+
     Matrix4x4 translateMatrix = MakeTranslateMatrix(viewProjection_.translation_);
-   viewProjection_.cameraMatrix_ =   translateMatrix* matRot_;
+    viewProjection_.cameraMatrix_ = translateMatrix * matRot_;
     viewProjection_.matView_ = Inverse(viewProjection_.cameraMatrix_);
-   /* viewProjection_.UpdateMatrix();*/
+    /* viewProjection_.UpdateMatrix();*/
 }

@@ -25,6 +25,7 @@ void GameScene::Init() {
 	player_ = std::make_unique<Player>();
 	enemyManager_ = std::make_unique<EnemyManager>();
 	reticle_ = std::make_unique<Reticle>();
+	skyDome_= std::make_unique<Skydome>();
 	mousePosView_.reset(Object3d::CreateModel("cube", ".obj"));
 	////////////////////////////////////////////////////////////////////////////////////////////
 	//  初期化
@@ -37,6 +38,7 @@ void GameScene::Init() {
 	player_->Init();
 	reticle_->Init();
 	mousePosTransform_.Init();
+	skyDome_->Init();
 	////////////////////////////////////////////////////////////////////////////////////////////
 	//  セット
 	////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,12 +78,16 @@ void GameScene::Update() {
 	player_->Update();
 	///レティクル更新
 	reticle_->Updata(viewProjection_);
+
+	skyDome_->Update();
 }
 
 /// ===================================================
  /// モデル描画
  /// ===================================================
 void GameScene::ModelDraw() {
+
+	skyDome_->Draw(viewProjection_);
 
 	controlPointManager_->Draw(viewProjection_);
 	//プレイヤー

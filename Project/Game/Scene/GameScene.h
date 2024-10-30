@@ -18,6 +18,7 @@
 #include"Enemy/EnemyManager.h"
 #include"Player/Player.h"
 #include"Reticle/Reticle.h"
+#include"skyDome/SkyDome.h"
 //std
 #include<random>
 
@@ -55,6 +56,8 @@ private:
 	std::unique_ptr<Player>player_ = nullptr;
 	/// レティクル
 	std::unique_ptr<Reticle>reticle_=nullptr;
+	/// 天球
+	std::unique_ptr<Skydome>skyDome_ = nullptr;
 
 	//変数
 const float mouseDepth_=0.995f;

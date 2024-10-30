@@ -97,6 +97,9 @@
     <Filter Include="Game\Rail">
       <UniqueIdentifier>{cc4f909c-9605-4097-b1c2-e8a1b8f469f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\SkyDome">
+      <UniqueIdentifier>{ea918cef-e6bf-42ae-bd11-61cf2168d0b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -240,6 +243,9 @@
     </ClCompile>
     <ClCompile Include="Game\Enemy\NormalEnemy.cpp">
       <Filter>Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\skyDome\SkyDome.cpp">
+      <Filter>Game\SkyDome</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -428,6 +434,9 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\NormalEnemy.h">
       <Filter>Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\skyDome\SkyDome.h">
+      <Filter>Game\SkyDome</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
