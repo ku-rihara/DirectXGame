@@ -2,7 +2,7 @@
 #include "AABB.h"
 
 // 静的メンバ変数の初期化
-std::list<Colider*> CollisionManager::colliders_;
+std::list<Collider*> CollisionManager::colliders_;
 
 void CollisionManager::Init() { 
 
@@ -15,12 +15,12 @@ void CollisionManager::Init() {
 	globalParameter_->AddItem(groupName, "isColliderVisible", isColliderVisible_);
 }
 
-void CollisionManager::AddCollider(Colider* collider) {
+void CollisionManager::AddCollider(Collider* collider) {
 	collider->Init();
 	colliders_.push_back(collider);
 }
 
-void CollisionManager::RemoveCollider(Colider* collider) {
+void CollisionManager::RemoveCollider(Collider* collider) {
 	colliders_.remove(collider);  // リストから削除
 }
 void CollisionManager::Reset() {
@@ -44,7 +44,7 @@ void CollisionManager::UpdateWorldTransform() {
 		return;
 	}
 	//全てのコライダーについて行列更新をする
-	for (Colider* colider : colliders_) {
+	for (Collider* colider : colliders_) {
 		colider->UpdateWorldTransform();
 	}
 
@@ -57,12 +57,12 @@ void CollisionManager::Draw(const ViewProjection& viewProjection) {
 		return;
 	}
 	//全てのコライダーを描画する
-	for (Colider* colider : colliders_) {
+	for (Collider* colider : colliders_) {
 		colider->Draw(viewProjection);
 	}
 }
 
-void CollisionManager::CheckCollisionPair(Colider* colliderA, Colider* colliderB) {
+void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* colliderB) {
 	AABB aabbA = colliderA->GetAABB();
 	AABB aabbB = colliderB->GetAABB();
 
@@ -93,16 +93,16 @@ void CollisionManager::CheckCollisionPair(Colider* colliderA, Colider* colliderB
 
 void CollisionManager::CheckAllCollisions() {
 	// リスト内のペアを総当たり
-	std::list<Colider*>::iterator itrA = colliders_.begin();
+	std::list<Collider*>::iterator itrA = colliders_.begin();
 	for (; itrA != colliders_.end(); ++itrA) {
 		// イテレータAからコライダーAを取得する
-		Colider* colliderA = *itrA;//ダブルポインタから中身のポインタを取り出す処理
+		Collider* colliderA = *itrA;//ダブルポインタから中身のポインタを取り出す処理
 
 		// イテレーターBはイテレータAの次の要素から回す（重複判定を回避）
-		std::list<Colider*>::iterator itrB = itrA;
+		std::list<Collider*>::iterator itrB = itrA;
 		itrB++;
 		for (; itrB != colliders_.end(); ++itrB) {
-			Colider* colliderB = *itrB;//ダブルポインタから中身のポインタを取り出す処理
+			Collider* colliderB = *itrB;//ダブルポインタから中身のポインタを取り出す処理
 
 			// ペアの当たり判定
 			CheckCollisionPair(colliderA, colliderB);
