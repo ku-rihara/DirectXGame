@@ -44,6 +44,7 @@
     <ClCompile Include="Game\ControlPoint\ControlPointManager.cpp" />
     <ClCompile Include="Game\Enemy\BaseEnemy.cpp" />
     <ClCompile Include="Game\Enemy\EnemyManager.cpp" />
+    <ClCompile Include="Game\Enemy\NormalEnemy.cpp" />
     <ClCompile Include="Game\GrobalParamater\GlobalParameter.cpp" />
     <ClCompile Include="Game\Player\Player.cpp" />
     <ClCompile Include="Game\Player\PlayerBullet.cpp" />
@@ -106,6 +107,7 @@
     <ClInclude Include="Game\ControlPoint\ControlPointManager.h" />
     <ClInclude Include="Game\Enemy\BaseEnemy.h" />
     <ClInclude Include="Game\Enemy\EnemyManager.h" />
+    <ClInclude Include="Game\Enemy\NormalEnemy.h" />
     <ClInclude Include="Game\GrobalParamater\GlobalParameter.h" />
     <ClInclude Include="Game\Player\Player.h" />
     <ClInclude Include="Game\Player\PlayerBullet.h" />

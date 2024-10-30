@@ -14,14 +14,14 @@ void EnemyManager::Init() {
 }
 
 //レール追加
-void  EnemyManager::AddEnemy(const Vector3& pos) {
-	std::unique_ptr<BaseEnemy>enemy;
-	enemy = std::make_unique<BaseEnemy>();
-	enemy->Init();
+void  EnemyManager::AddNormalEnemy(const Vector3& pos) {
+	std::unique_ptr<NormalEnemy>enemy;
+	enemy = std::make_unique<NormalEnemy>();
+	enemy->Init("axis",".obj");
 	enemy->SetPos(pos);
 	controlNum_++;
 	positions_.push_back(enemy->GetPos());
-	rails_.push_back(std::move(enemy));
+	enemies_.push_back(std::move(enemy));
 }
 
 //レール更新
@@ -34,7 +34,7 @@ void EnemyManager::Update() {
 	}
 	ImGui::End();
 	auto spotIt = positions_.begin(); // controlSpot_のイテレータ
-	for (const std::unique_ptr<BaseEnemy>& rail : rails_) {
+	for (const std::unique_ptr<BaseEnemy>& rail : enemies_) {
 		rail->Update(); 
 		if (spotIt != positions_.end()) {
 			*spotIt = rail->GetPos(); // controlSpot_に更新された座標を入れる
@@ -43,7 +43,7 @@ void EnemyManager::Update() {
 	}
 
 	//消す
-	rails_.remove_if([](const std::unique_ptr<BaseEnemy>& rail) {
+	enemies_.remove_if([](const std::unique_ptr<BaseEnemy>& rail) {
 		if (rail->GetIsDeath()) {
 			return true;
 		}
@@ -53,7 +53,7 @@ void EnemyManager::Update() {
 
 //レール描画
 void EnemyManager::Draw(const ViewProjection&viewProjection) {
-	for (const std::unique_ptr<BaseEnemy>& rail : rails_) {
+	for (const std::unique_ptr<BaseEnemy>& rail : enemies_) {
 		rail->Draw(viewProjection);
 	}
 }
@@ -84,7 +84,7 @@ void EnemyManager::LoadEnemyPosies(const std::string& filename) {
 		// 読み込んだデータを基にレールを追加
 		for (const auto& spot : j) {
 			Vector3 pos = { spot[0], spot[1], spot[2] };
-			AddEnemy(pos);
+			AddNormalEnemy(pos);
 		}
 	}
 }

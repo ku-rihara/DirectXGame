@@ -238,6 +238,9 @@
     <ClCompile Include="Game\Rail\Rail.cpp">
       <Filter>Game\Rail</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Enemy\NormalEnemy.cpp">
+      <Filter>Game\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -422,6 +425,9 @@
     </ClInclude>
     <ClInclude Include="Game\Rail\Rail.h">
       <Filter>Game\Rail</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\NormalEnemy.h">
+      <Filter>Game\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

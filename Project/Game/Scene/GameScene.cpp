@@ -57,7 +57,7 @@ void GameScene::Update() {
 		controlPointManager_->AddControlPoint(mousePosTransform_.translation_);
 	}
 	else if (Input::GetInstance()->IsTriggerMouse(4)) {
-		enemyManager_->AddEnemy(mousePosTransform_.translation_);
+		enemyManager_->AddNormalEnemy(mousePosTransform_.translation_);
 	}
 	//カメラ更新
 	gameCamera_->Update(controlPointManager_->GetControlPoints());

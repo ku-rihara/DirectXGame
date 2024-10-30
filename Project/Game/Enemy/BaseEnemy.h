@@ -8,8 +8,8 @@
 #include"3d/Object3d.h"
 #include"Colider/Collider.h"
 class BaseEnemy :public Collider {
-	static int instanceNum_;
-private:
+
+protected:
 	std::unique_ptr<Object3d> objct3D_;
 	WorldTransform transform_;
 	int instanceID_;
@@ -21,14 +21,14 @@ public:
 	/// ===================================================
 
 	/// 初期化、更新、デバッグ、描画
-	void Init();
-	void Update();
-	void Debug();
-	void Draw(const ViewProjection& viewProjection);
+	virtual void Init(const std::string& instanceName, const std::string& extension);
+	virtual void Update();
+	virtual void Debug();
+	virtual void Draw(const ViewProjection& viewProjection);
 
 	/// Collider
-	Vector3 GetBaseCenterPosition() const override;
-	void OnCollisionEnter([[maybe_unused]] Collider* other)override;
+	virtual	Vector3 GetBaseCenterPosition() const override;
+	virtual	void OnCollisionEnter([[maybe_unused]] Collider* other)override;
 
 	/// ===================================================
 	/// getter  method
