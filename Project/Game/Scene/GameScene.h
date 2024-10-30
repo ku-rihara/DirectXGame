@@ -41,12 +41,20 @@ private:
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 	std::unique_ptr<Sprite> sprite2_ = nullptr;
 
+	
 	std::unique_ptr<Object3d> modelPlane_ = nullptr;
 	std::unique_ptr<Object3d> modelFence_ = nullptr;
 	std::unique_ptr<Object3d> modelSuzanne_ = nullptr;
 	std::unique_ptr<Object3d> modelSuzanne2_ = nullptr;
-
 	std::unique_ptr<Object3d> modelTerrain_ = nullptr;
+
+	/// WorldTransform
+	WorldTransform planeTransform_;
+	WorldTransform fenceTransform_;
+	WorldTransform suzanneTransform_;
+	WorldTransform suzanneTransform2_;
+	WorldTransform terrainTransform_;
+
 	//パーティクル変数
 
 	const uint32_t modelInstanceMax_ = 100;

@@ -15,30 +15,41 @@ Object3d* Object3d::CreateModel(const std::string& instanceName, const std::stri
 	object3d->SetModel(instanceName, extension);
 	object3d->CreateWVPResource();
 	object3d->model_->CreateMaterialResource();
-	object3d->color_.Init();
-	object3d->transform_.Init();
+	//object3d->transform_.Init();
 	return object3d;
+}
+
+/// 初期化
+void Object3d::Init() {
+	/// WVPリソース作成
+	CreateWVPResource();
+	/// マテリアルリソース作成
+	if (model_) {
+		model_->CreateMaterialResource();
+	}
+	/// トランスフォーム初期化
+	//transform_.Init();
 }
 
 //更新
 void Object3d::Update() {
 	color_.TransferMatrix();
-	transform_.UpdateMatrix();
+	/*transform_.UpdateMatrix();*/
 }
 
 //描画
-void Object3d::Draw(const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
-	// WVP行列の計算
-	if (model_->GetIsFileGltf()) {//.gltfファイルの場合
-		wvpDate_->WVP = model_->GetModelData().rootNode.localMatrix * transform_.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
-		wvpDate_->WorldInverseTranspose = Inverse(Transpose(model_->GetModelData().rootNode.localMatrix * wvpDate_->World));
-	}
-	else {//.objファイルの場合
-		wvpDate_->WVP = transform_.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
-		wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
-	}
+void Object3d::Draw(const WorldTransform& worldTransform,const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
 	if (model_) {
-		model_->Draw(wvpResource_, color_,textureHandle);
+		// WVP行列の計算
+		if (model_->GetIsFileGltf()) {//.gltfファイルの場合
+			wvpDate_->WVP = model_->GetModelData().rootNode.localMatrix * worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+			wvpDate_->WorldInverseTranspose = Inverse(Transpose(model_->GetModelData().rootNode.localMatrix * wvpDate_->World));
+		}
+		else {//.objファイルの場合
+			wvpDate_->WVP = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+			wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
+		}
+		model_->Draw(wvpResource_, color_, textureHandle);
 	}
 }
 

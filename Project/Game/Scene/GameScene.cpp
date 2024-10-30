@@ -36,6 +36,13 @@ void GameScene::Init() {
 	modelSuzanne2_.reset(Object3d::CreateModel("Suzanne", ".obj"));
 	modelTerrain_.reset(Object3d::CreateModel("terrain", ".obj"));
 
+	///トランスフォーム初期化
+	 planeTransform_.Init();
+	 fenceTransform_.Init();
+	 suzanneTransform_.Init();
+	 suzanneTransform2_.Init();
+	 terrainTransform_.Init();
+
 	////テクスチャハンドル
 	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");
 	uint32_t uv_ = TextureManager::GetInstance()->LoadTexture("./Resources/uvChecker.png");
@@ -61,9 +68,6 @@ void GameScene::Init() {
 	modelPlaneParticle_->accelerationField_.area.min = { -1.0f,-1.0f,-1.0f };
 	modelPlaneParticle_->accelerationField_.area.max = { 1.0f,1.0f,1.0f };
 
-
-	// ワールドトランスフォーム値セット
-	modelPlane_->transform_.rotation_.y = -3.0f;
 }
 
 void GameScene::Update() {
@@ -79,16 +83,16 @@ void GameScene::Update() {
 
 	//インプット処理
 	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
-		modelSuzanne_->transform_.translation_.x -= 0.01f;
+		suzanneTransform_.translation_.x -= 0.01f;
 	}
 	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
-		modelSuzanne_->transform_.translation_.x += 0.01f;
+		suzanneTransform_.translation_.x += 0.01f;
 	}
 	if (Input::GetInstance()->PushKey(DIK_UP)) {
-		modelSuzanne_->transform_.translation_.y += 0.01f;
+		suzanneTransform_.translation_.y += 0.01f;
 	}
 	if (Input::GetInstance()->PushKey(DIK_DOWN)) {
-		modelSuzanne_->transform_.translation_.y -= 0.01f;
+		suzanneTransform_.translation_.y -= 0.01f;
 	}
 
 	modelPlaneParticle_->emitter_.frequencyTime += kDeltaTime_;//時刻すすめる
@@ -100,11 +104,12 @@ void GameScene::Update() {
 
 
 	//ワールド行列更新
-	modelPlane_->Update();
-	modelFence_->Update();
-	modelSuzanne_->Update();
-	modelSuzanne2_->Update();
-	modelTerrain_->Update();
+		///トランスフォーム初期化
+	planeTransform_.UpdateMatrix();
+	fenceTransform_.UpdateMatrix();
+	suzanneTransform_.UpdateMatrix();
+	suzanneTransform2_.UpdateMatrix();
+	terrainTransform_.UpdateMatrix();
 	modelPlaneParticle_->Update(&viewProjection_);
 
 	
@@ -126,9 +131,9 @@ void GameScene::Draw() {
 		modelSuzanne2_->color_.SetColor(Vector4(0, 0, 1, 1));
 		/*modelPlane_->Draw(viewProjection_);
 		modelFence_->Draw(viewProjection_);*/
-		modelSuzanne_->Draw(viewProjection_);
-		modelSuzanne2_->Draw(viewProjection_);
-		modelTerrain_->Draw(viewProjection_);
+		modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
+		modelSuzanne2_->Draw(suzanneTransform2_, viewProjection_);
+		modelTerrain_->Draw(terrainTransform_, viewProjection_);
 		Model::PreDrawParticle(commandList);
 		modelPlaneParticle_->Draw(viewProjection_, uvHandle_);
 
@@ -160,23 +165,23 @@ void GameScene::Debug() {
 	if (ImGui::TreeNode("WorldTransform")) {
 
 		if (ImGui::TreeNode("Plane")) {
-			ImGui::DragFloat3("Scale", &modelPlane_->transform_.scale_.x, 0.01f);
-			ImGui::DragFloat3("Rotate", &modelPlane_->transform_.rotation_.x, 0.01f);
-			ImGui::DragFloat3("Translate", &modelPlane_->transform_.translation_.x, 0.01f);
+			ImGui::DragFloat3("Scale", &planeTransform_.scale_.x, 0.01f);
+			ImGui::DragFloat3("Rotate", &planeTransform_.rotation_.x, 0.01f);
+			ImGui::DragFloat3("Translate", &planeTransform_.translation_.x, 0.01f);
 			ImGui::TreePop();
 		}
 
 		if (ImGui::TreeNode("Fence")) {
-			ImGui::DragFloat3("Scale", &modelFence_->transform_.scale_.x, 0.01f);
-			ImGui::DragFloat3("Rotate", &modelFence_->transform_.rotation_.x, 0.01f);
-			ImGui::DragFloat3("Translate", &modelFence_->transform_.translation_.x, 0.01f);
+			ImGui::DragFloat3("Scale", &fenceTransform_.scale_.x, 0.01f);
+			ImGui::DragFloat3("Rotate", &fenceTransform_.rotation_.x, 0.01f);
+			ImGui::DragFloat3("Translate", &fenceTransform_.translation_.x, 0.01f);
 			ImGui::TreePop();
 		}
 
 		if (ImGui::TreeNode("Suzanne")) {
-			ImGui::DragFloat3("Scale", &modelSuzanne_->transform_.scale_.x, 0.01f);
-			ImGui::DragFloat3("Rotate", &modelSuzanne_->transform_.rotation_.x, 0.01f);
-			ImGui::DragFloat3("Translate", &modelSuzanne_->transform_.translation_.x, 0.01f);
+			ImGui::DragFloat3("Scale", &suzanneTransform_.scale_.x, 0.01f);
+			ImGui::DragFloat3("Rotate", &suzanneTransform_.rotation_.x, 0.01f);
+			ImGui::DragFloat3("Translate", &suzanneTransform_.translation_.x, 0.01f);
 			ImGui::TreePop();
 		}
 

@@ -37,6 +37,8 @@
     <ClCompile Include="Engine\Function\Convert.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
     <ClCompile Include="Engine\input\Mouse.cpp" />
+    <ClCompile Include="Game\Colider\Collider.cpp" />
+    <ClCompile Include="Game\Colider\CollisionManager.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\AABB.cpp" />
@@ -87,6 +89,8 @@
     <ClInclude Include="Engine\struct\Transform.h" />
     <ClInclude Include="Engine\struct\TransformationMatrix.h" />
     <ClInclude Include="Engine\struct\VertexData.h" />
+    <ClInclude Include="Game\Colider\Collider.h" />
+    <ClInclude Include="Game\Colider\CollisionManager.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
     <ClInclude Include="math\AABB.h" />
     <ClInclude Include="math\MathFunction.h" />
