@@ -3,12 +3,12 @@
 #include"BaseObject3d.h"
 #include"ObjectColor.h"
 
-class Object3d:public BaseObject3d  {
+class Object3d :public BaseObject3d {
 public:
 	ObjectColor color_;
-	WorldTransform transform_;
-private:
 	
+private:
+
 	//wvpリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>wvpResource_;
 	TransformationMatrix* wvpDate_;
@@ -16,19 +16,20 @@ private:
 public:
 	Object3d();
 	~Object3d();
-
-	static Object3d* CreateModel(const std::string& instanceName, const std::string& extension);
+	/// 初期化
+	void Init();
 	//更新
 	void Update();
 	//描画
-	void Draw( const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt);
+	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt);
 	//デバッグ表示
 	void DebugImgui()override;
 	//WVPリソース作成
-	 void CreateWVPResource();
+	void CreateWVPResource();
 
-	 void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
-	 void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
+	static Object3d* CreateModel(const std::string& instanceName, const std::string& extension);
+	void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
+	void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
 
-	
+
 };

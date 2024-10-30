@@ -55,18 +55,6 @@
     <Filter Include="MyEngine\.h\struct">
       <UniqueIdentifier>{652ad917-7098-4697-8956-5714f98e5ed8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\.cpp">
-      <UniqueIdentifier>{9843fb22-706a-408f-a112-c5de2bf22983}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\.cpp\Scene">
-      <UniqueIdentifier>{0ad7b046-7871-4240-ada7-d821a24ed507}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\.h">
-      <UniqueIdentifier>{6f524202-23a3-48e0-910c-7c887a13d993}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\.h\Scene">
-      <UniqueIdentifier>{139ed3c3-bba9-47d7-a283-e1947b0bd5fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="liberary">
       <UniqueIdentifier>{93a5209c-1414-4f22-87c2-dfbef50762c0}</UniqueIdentifier>
     </Filter>
@@ -81,6 +69,12 @@
     </Filter>
     <Filter Include="MyEngine\.h\Frame">
       <UniqueIdentifier>{ec415833-3b92-41b0-ae0c-fe524996c0ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene">
+      <UniqueIdentifier>{0ad7b046-7871-4240-ada7-d821a24ed507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Collider">
+      <UniqueIdentifier>{c7234c0b-c762-4ddd-afa0-00d1023957e6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -145,7 +139,7 @@
       <Filter>MyEngine\.cpp\audio</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\GameScene.cpp">
-      <Filter>Game\.cpp\Scene</Filter>
+      <Filter>Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\input\Mouse.cpp">
       <Filter>MyEngine\.cpp\input</Filter>
@@ -187,6 +181,12 @@
       <Filter>MyEngine\.cpp\Frame</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Game\Colider\Collider.cpp">
+      <Filter>Game\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Colider\CollisionManager.cpp">
+      <Filter>Game\Collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -212,9 +212,6 @@
     </ClInclude>
     <ClInclude Include="Engine\struct\VertexData.h">
       <Filter>MyEngine\.h\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Scene\GameScene.h">
-      <Filter>Game\.h\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\struct\CameraForGPU.h">
       <Filter>MyEngine\.h\struct</Filter>
@@ -335,6 +332,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Frame\Frame.h">
       <Filter>MyEngine\.h\Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\GameScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Colider\Collider.h">
+      <Filter>Game\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Colider\CollisionManager.h">
+      <Filter>Game\Collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
