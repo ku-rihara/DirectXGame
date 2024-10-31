@@ -41,7 +41,7 @@ Vector3 BaseEnemy::GetBaseCenterPosition() const {
 	return worldPos;
 }
 
-void BaseEnemy::OnCollisionEnter([[maybe_unused]] Collider* other) {
+void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 	if (dynamic_cast<PlayerBeam*>(other)) {
 		isDeath_ = true;
 	}

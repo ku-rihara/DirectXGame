@@ -6,8 +6,8 @@
 #include"3d/ViewProjection.h"
 //obj
 #include"3d/Object3d.h"
-#include"Colider/Collider.h"
-class BaseEnemy :public Collider {
+#include"Colider/AABBCollider.h"
+class BaseEnemy :public AABBCollider {
 
 protected:
 	std::unique_ptr<Object3d> objct3D_;
@@ -28,7 +28,7 @@ public:
 
 	/// Collider
 	virtual	Vector3 GetBaseCenterPosition() const override;
-	virtual	void OnCollisionEnter([[maybe_unused]] Collider* other)override;
+	virtual	void OnCollisionEnter([[maybe_unused]] BaseCollider* other)override;
 
 	/// ===================================================
 	/// getter  method

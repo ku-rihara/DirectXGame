@@ -2,11 +2,11 @@
 
 #include"3d/Object3d.h"
 #include "3d/WorldTransform.h"
-#include"Colider/Collider.h"
+#include"Colider/AABBCollider.h"
 /// <summary>
 /// 自キャラの弾
 /// </summary>
-class PlayerBeam:public Collider {
+class PlayerBeam:public AABBCollider {
 private:
 	static const int32_t kLifeTime = 60 * 5;//寿命
 	int32_t deathTimer_ = kLifeTime;//デスタイマー

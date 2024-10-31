@@ -205,7 +205,7 @@
       <Filter>MyEngine\.cpp\Frame</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Game\Colider\Collider.cpp">
+    <ClCompile Include="Game\Colider\AABBCollider.cpp">
       <Filter>Game\Collider</Filter>
     </ClCompile>
     <ClCompile Include="Game\Colider\CollisionManager.cpp">
@@ -246,6 +246,9 @@
     </ClCompile>
     <ClCompile Include="Game\skyDome\SkyDome.cpp">
       <Filter>Game\SkyDome</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Colider\BaseCollider.cpp">
+      <Filter>Game\Collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -396,7 +399,7 @@
     <ClInclude Include="Game\Scene\GameScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Colider\Collider.h">
+    <ClInclude Include="Game\Colider\AABBCollider.h">
       <Filter>Game\Collider</Filter>
     </ClInclude>
     <ClInclude Include="Game\Colider\CollisionManager.h">
@@ -437,6 +440,9 @@
     </ClInclude>
     <ClInclude Include="Game\skyDome\SkyDome.h">
       <Filter>Game\SkyDome</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Colider\BaseCollider.h">
+      <Filter>Game\Collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
