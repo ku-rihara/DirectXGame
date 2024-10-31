@@ -2,7 +2,7 @@
 #include "AABB.h"
 
 // 静的メンバ変数の初期化
-std::list<Collider*> CollisionManager::colliders_;
+std::list<AABBCollider*> CollisionManager::AABBColliders_;
 
 void CollisionManager::Init() { 
 
@@ -15,17 +15,17 @@ void CollisionManager::Init() {
 	globalParameter_->AddItem(groupName, "isColliderVisible", isColliderVisible_);
 }
 
-void CollisionManager::AddCollider(Collider* collider) {
+void CollisionManager::AddAABBCollider(AABBCollider* collider) {
 	collider->Init();
-	colliders_.push_back(collider);
+	AABBColliders_.push_back(collider);
 }
 
-void CollisionManager::RemoveCollider(Collider* collider) {
-	colliders_.remove(collider);  // リストから削除
+void CollisionManager::RemoveAABBCollider(AABBCollider* collider) {
+	AABBColliders_.remove(collider);  // リストから削除
 }
 void CollisionManager::Reset() {
 	// リストを空っぽにする
-	colliders_.clear();
+	AABBColliders_.clear();
 }
 
 void CollisionManager::Update() { 
@@ -44,7 +44,7 @@ void CollisionManager::UpdateWorldTransform() {
 		return;
 	}
 	//全てのコライダーについて行列更新をする
-	for (Collider* colider : colliders_) {
+	for (AABBCollider* colider : AABBColliders_) {
 		colider->UpdateWorldTransform();
 	}
 
@@ -57,12 +57,12 @@ void CollisionManager::Draw(const ViewProjection& viewProjection) {
 		return;
 	}
 	//全てのコライダーを描画する
-	for (Collider* colider : colliders_) {
-		colider->Draw(viewProjection);
+	for (AABBCollider* AABBCollider : AABBColliders_) {
+		AABBCollider->Draw(viewProjection);
 	}
 }
 
-void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* colliderB) {
+void CollisionManager::CheckCollisionPair(AABBCollider* colliderA, AABBCollider* colliderB) {
 	AABB aabbA = colliderA->GetAABB();
 	AABB aabbB = colliderB->GetAABB();
 
@@ -93,16 +93,16 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 
 void CollisionManager::CheckAllCollisions() {
 	// リスト内のペアを総当たり
-	std::list<Collider*>::iterator itrA = colliders_.begin();
-	for (; itrA != colliders_.end(); ++itrA) {
+	std::list<AABBCollider*>::iterator itrA = AABBColliders_.begin();
+	for (; itrA != AABBColliders_.end(); ++itrA) {
 		// イテレータAからコライダーAを取得する
-		Collider* colliderA = *itrA;//ダブルポインタから中身のポインタを取り出す処理
+		AABBCollider* colliderA = *itrA;//ダブルポインタから中身のポインタを取り出す処理
 
 		// イテレーターBはイテレータAの次の要素から回す（重複判定を回避）
-		std::list<Collider*>::iterator itrB = itrA;
+		std::list<AABBCollider*>::iterator itrB = itrA;
 		itrB++;
-		for (; itrB != colliders_.end(); ++itrB) {
-			Collider* colliderB = *itrB;//ダブルポインタから中身のポインタを取り出す処理
+		for (; itrB != AABBColliders_.end(); ++itrB) {
+			AABBCollider* colliderB = *itrB;//ダブルポインタから中身のポインタを取り出す処理
 
 			// ペアの当たり判定
 			CheckCollisionPair(colliderA, colliderB);

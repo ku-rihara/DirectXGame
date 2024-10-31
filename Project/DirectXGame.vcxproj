@@ -37,7 +37,8 @@
     <ClCompile Include="Engine\Function\Convert.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
     <ClCompile Include="Engine\input\Mouse.cpp" />
-    <ClCompile Include="Game\Colider\Collider.cpp" />
+    <ClCompile Include="Game\Colider\AABBCollider.cpp" />
+    <ClCompile Include="Game\Colider\BaseCollider.cpp" />
     <ClCompile Include="Game\Colider\CollisionManager.cpp" />
     <ClCompile Include="Game\GrobalParamater\GlobalParameter.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
@@ -90,7 +91,8 @@
     <ClInclude Include="Engine\struct\Transform.h" />
     <ClInclude Include="Engine\struct\TransformationMatrix.h" />
     <ClInclude Include="Engine\struct\VertexData.h" />
-    <ClInclude Include="Game\Colider\Collider.h" />
+    <ClInclude Include="Game\Colider\AABBCollider.h" />
+    <ClInclude Include="Game\Colider\BaseCollider.h" />
     <ClInclude Include="Game\Colider\CollisionManager.h" />
     <ClInclude Include="Game\GrobalParamater\GlobalParameter.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />

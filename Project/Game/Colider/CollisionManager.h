@@ -3,7 +3,8 @@
 #include "3d/Object3d.h"
 #include "3d/ViewProjection.h"
 //class
-#include "Colider/Collider.h"
+#include "Colider/AABBCollider.h"
+
 #include "GrobalParamater/GlobalParameter.h"
 /// std
 #include<list>
@@ -12,7 +13,7 @@
 class CollisionManager {
 private:
 	// コライダーリスト
-	static std::list<Collider*> colliders_;
+	static std::list<AABBCollider*> AABBColliders_;
 	// コリジョンスフィア可視化
 	GlobalParameter* globalParameter_;
 	bool isColliderVisible_;
@@ -27,15 +28,16 @@ public:
 	// リセット
 	void Reset();
 	// コライダーリスト登録
-	static	void AddCollider(Collider* collider);
+	static	void AddAABBCollider(AABBCollider* collider);
 
-static	void RemoveCollider(Collider* collider);
+	static	void RemoveAABBCollider(AABBCollider* collider);
+
 	/// <summary>
 	/// コライダー2つの衝突判定と応答
 	/// </summary>
 	/// <param name="コライダーA"></param>
 	/// <param name="コライダーB"></param>
-	void CheckCollisionPair(Collider* colliderA, Collider* colliderB);
+	void CheckCollisionPair(AABBCollider* colliderA, AABBCollider* colliderB);
 	// 全ての当たり判定をチェック
 	void CheckAllCollisions();
 
