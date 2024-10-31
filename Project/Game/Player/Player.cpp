@@ -10,58 +10,43 @@
 void  Player::Init() {
 	/// プレイヤーのモデル
 	obj3D_.reset(Object3d::CreateModel("suzanne", ".obj"));
+	/// ビームの初期化
+	beam_ = std::make_unique<PlayerBeam>();
+	/// 初期化
+	beam_->Init();
+
 }
 /// 更新
 void  Player::Update() {
 
 	/// 弾発射
-	BulletShot();
+	BeamShot();
+	
 
-	// ですフラグの立った弾を削除
-	for (auto it = bullets_.begin(); it != bullets_.end(); ) {
-		if ((*it)->GetIsDead()) {
-			it = bullets_.erase(it);
-		}
-		else {
-			++it;
-		}
-	}
-
-	// 弾更新
-	for (auto& bullet : bullets_) {
-		bullet->Update();
-	}
 	transform_.UpdateMatrix();
 }
 /// 描画
 void  Player::Draw(const ViewProjection& viewProjection) {
 	obj3D_->Draw(transform_, viewProjection);
-	
+
 }
 
 /// 弾の描画
 void  Player::BulletDraw(const ViewProjection& viewProjection) {
-	
-	for (auto& bullet : bullets_) {
-		bullet->Draw(viewProjection);
-	}
+
+	beam_->Draw(viewProjection);
 }
 
-void Player::BulletShot() {
-	if (Input::IsTriggerMouse(0)) {
-		// 弾の速度
-		const float kBulletSpeed = 65.0f*Frame::DeltaTime();
-
+void Player::BeamShot() {
+	if (Input::IsPressMouse(0)) {
+		//// 弾の速度
+		//const float kBulletSpeed = 65.0f * Frame::DeltaTime();
 		// 自機から標準オブジェクトへのベクトル
-		Vector3 velocity = pReticle_->GetWorld3DRecticlPos() - GetWorldPos();
-		velocity = Vector3::Normalize(velocity) * kBulletSpeed;
-		// 弾を生成
-		std::unique_ptr<PlayerBullet> newBullet;
-		newBullet = std::make_unique<PlayerBullet>();
-		/// 初期化
-		newBullet->Init(GetWorldPos(), velocity);
-		// 弾を登録する
-		bullets_.push_back(std::move(newBullet));
+		Vector3 direction = pReticle_->GetWorld3DRecticlPos() - GetWorldPos();
+		direction = Vector3::Normalize(direction) /*kBulletSpeed*/;
+		beam_->Update(GetWorldPos(),direction);
+	
+		
 	}
 }
 

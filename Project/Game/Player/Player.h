@@ -6,7 +6,7 @@
 #include"3d/ViewProjection.h"
 //obj
 #include"3d/Object3d.h"
-#include "PlayerBullet.h"
+#include "Player/PlayerBeam.h"
 class Reticle;
 class Player {
 private:
@@ -16,8 +16,8 @@ private:
 	WorldTransform transform_;
 	std::unique_ptr<Object3d> obj3D_;
 	bool isDeath_;
-	// 弾リスト
-	std::list<std::unique_ptr<PlayerBullet>> bullets_;
+	// 弾
+	std::unique_ptr<PlayerBeam> beam_;
 
 public://メンバ関数
 
@@ -34,7 +34,7 @@ public://メンバ関数
 	/// 弾発射
 	/// </summary>
 	/// <returns></returns>
-	void BulletShot();
+	void BeamShot();
 
 	////////////////////////////////////////////////////////////////////////////////////////////
 	//  getter method

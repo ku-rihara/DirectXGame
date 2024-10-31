@@ -6,7 +6,7 @@
 /// <summary>
 /// 自キャラの弾
 /// </summary>
-class PlayerBullet:public Collider {
+class PlayerBeam:public Collider {
 private:
 	static const int32_t kLifeTime = 60 * 5;//寿命
 	int32_t deathTimer_ = kLifeTime;//デスタイマー
@@ -23,8 +23,8 @@ public:
 	/// ===================================================
 
 		/// 初期化、更新、可視化
-	void Init(const Vector3& position, const Vector3& velocity);
-	void Update();
+	void Init();
+	void Update(const Vector3& position, const Vector3& velocity);
 	void Draw(const ViewProjection& viewProjection);
 
 	/// Collider

@@ -4,7 +4,7 @@
 /// std
 #include<string>
 /// class
-#include"Player/PlayerBullet.h"
+#include"Player/PlayerBeam.h"
 
 void  BaseEnemy::Init(const std::string& instanceName, const std::string& extension) {
 	objct3D_.reset(Object3d::CreateModel(instanceName, extension));
@@ -42,7 +42,7 @@ Vector3 BaseEnemy::GetBaseCenterPosition() const {
 }
 
 void BaseEnemy::OnCollisionEnter([[maybe_unused]] Collider* other) {
-	if (dynamic_cast<PlayerBullet*>(other)) {
+	if (dynamic_cast<PlayerBeam*>(other)) {
 		isDeath_ = true;
 	}
 }
