@@ -49,6 +49,7 @@
     <ClCompile Include="Game\GrobalParamater\GlobalParameter.cpp" />
     <ClCompile Include="Game\Player\Player.cpp" />
     <ClCompile Include="Game\Player\PlayerBeam.cpp" />
+    <ClCompile Include="Game\PositionEditor\PositionEditor.cpp" />
     <ClCompile Include="Game\Rail\Rail.cpp" />
     <ClCompile Include="Game\Reticle\Reticle.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
@@ -114,6 +115,7 @@
     <ClInclude Include="Game\GrobalParamater\GlobalParameter.h" />
     <ClInclude Include="Game\Player\Player.h" />
     <ClInclude Include="Game\Player\PlayerBeam.h" />
+    <ClInclude Include="Game\PositionEditor\PositionEditor.h" />
     <ClInclude Include="Game\Rail\Rail.h" />
     <ClInclude Include="Game\Reticle\Reticle.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />

@@ -19,6 +19,7 @@
 #include"Player/Player.h"
 #include"Reticle/Reticle.h"
 #include"skyDome/SkyDome.h"
+#include"PositionEditor/PositionEditor.h"
 //std
 #include<random>
 
@@ -38,9 +39,7 @@ private:
 	uint32_t voiceHandle_ = 0;     
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
-	//3Dマウス位置可視化
-	std::unique_ptr<Object3d>mousePosView_;
-	WorldTransform mousePosTransform_;
+	
 ////////////////////////////////////////////////////////////////////////////////////////////
 //  obj
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,9 +57,10 @@ private:
 	std::unique_ptr<Reticle>reticle_=nullptr;
 	/// 天球
 	std::unique_ptr<Skydome>skyDome_ = nullptr;
+	/// 配置エディター
+	std::unique_ptr<PositionEditor>positionEditor_ = nullptr;
 
-	//変数
-const float mouseDepth_=0.995f;
+
 	// デバッグカメラアクティブ
 	bool isDebugCameraActive_ = false;
 public: 

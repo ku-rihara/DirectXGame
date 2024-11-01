@@ -26,7 +26,7 @@ void GameScene::Init() {
 	enemyManager_ = std::make_unique<EnemyManager>();
 	reticle_ = std::make_unique<Reticle>();
 	skyDome_= std::make_unique<Skydome>();
-	mousePosView_.reset(Object3d::CreateModel("cube", ".obj"));
+	positionEditor_ = std::make_unique<PositionEditor>();
 	////////////////////////////////////////////////////////////////////////////////////////////
 	//  初期化
 	////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,8 +37,8 @@ void GameScene::Init() {
 	viewProjection_.Init();
 	player_->Init();
 	reticle_->Init();
-	mousePosTransform_.Init();
 	skyDome_->Init();
+	positionEditor_->Init();
 	////////////////////////////////////////////////////////////////////////////////////////////
 	//  セット
 	////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,25 +51,25 @@ void GameScene::Init() {
 }
 
 void GameScene::Update() {
-	//可視化オブジェクトに代入
-	mousePosTransform_.translation_ = Input::GetMousePos3D(viewProjection_, mouseDepth_);
+	
+	
 	Debug();//デバッグ
-	//制御点追加
-	if (Input::GetInstance()->IsTriggerMouse(3)) {
-		controlPointManager_->AddControlPoint(mousePosTransform_.translation_);
-	}
-	else if (Input::GetInstance()->IsTriggerMouse(4)) {
-		enemyManager_->AddNormalEnemy(mousePosTransform_.translation_);
-	}
+
 	//カメラ更新
 	gameCamera_->Update(controlPointManager_->GetControlPoints());
 
-	mousePosTransform_.UpdateMatrix();
+	///========================================================================================
+	///  オブジェ配置
+	///========================================================================================
+	positionEditor_->PutControlPoint(controlPointManager_.get());
+	positionEditor_->PutEnemy(enemyManager_.get());
+
 	ViewProjectionUpdate();
 
-	////////////////////////////////////////////////////////////////////////////////////////////
-	//  各クラス更新
-	////////////////////////////////////////////////////////////////////////////////////////////
+	///========================================================================================
+	///  各クラス更新
+	///========================================================================================
+	
 		//レールカメラ更新
 	controlPointManager_->Update();
 	/// 敵マネージャー更新
@@ -80,6 +80,10 @@ void GameScene::Update() {
 	reticle_->Updata(viewProjection_);
 
 	skyDome_->Update();
+
+	positionEditor_->Update(viewProjection_);
+
+	
 }
 
 /// ===================================================
@@ -96,7 +100,7 @@ void GameScene::ModelDraw() {
 	}
 	player_->BulletDraw(viewProjection_);
 	////可視化オブジェクト
-	mousePosView_->Draw(mousePosTransform_, viewProjection_);
+	positionEditor_->Draw(viewProjection_);
 	///敵
 	enemyManager_->Draw(viewProjection_);
 	//レール
@@ -128,14 +132,13 @@ void GameScene::Debug() {
 		ImGui::DragFloat3("Translate", &viewProjection_.translation_.x, 0.01f);
 		ImGui::TreePop();
 	}
-	ImGui::Text("3DX:%5.4f, 3DY:%5.4f, 3DZ:%5.4f", mousePosTransform_.translation_.x, mousePosTransform_.translation_.y, mousePosTransform_.translation_.z);
-	ImGui::Text("2DX:%5.4f, 2DY:%5.4f", Input::GetMousePos().x, Input::GetMousePos().y);
+	
+	positionEditor_->Debug();
 
 
 	ImGui::End();
 	//ライティング
 	ImGui::Begin("Lighting");
-	mousePosView_->DebugImgui();
 	ImGui::End();
 	gameCamera_->Debug();
 #endif
