@@ -199,6 +199,9 @@
     <ClCompile Include="math\Easing.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Colider\OBBCollider.cpp">
+      <Filter>Game\Collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -362,6 +365,9 @@
     </ClInclude>
     <ClInclude Include="math\Easing.h">
       <Filter>liberary\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Colider\OBBCollider.h">
+      <Filter>Game\Collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

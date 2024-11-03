@@ -24,8 +24,7 @@ public:
     /// 初期化、更新、描画
     virtual void Init() = 0;
     virtual void UpdateWorldTransform() = 0;
-  /*  virtual void Draw(const ViewProjection& viewProjection) = 0;*/
-
+   virtual void DrawDebugCube(const ViewProjection& viewProjection);
     /// 中心座標取得
     virtual Vector3 GetBaseCenterPosition() const;
 

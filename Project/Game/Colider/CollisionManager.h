@@ -4,6 +4,7 @@
 #include "3d/ViewProjection.h"
 //class
 #include "Colider/AABBCollider.h"
+#include "Colider/OBBCollider.h"
 
 #include "GrobalParamater/GlobalParameter.h"
 /// std
@@ -13,33 +14,39 @@
 class CollisionManager {
 private:
 	// コライダーリスト
-	static std::list<AABBCollider*> AABBColliders_;
+	static std::list<BaseCollider*> baseColliders_;/// AABB
+	/*static std::list<AABBCollider*> AABBColliders_;/// AABB
+	static std::list<OBBCollider*> OBBColliders_;/// OBB*/
 	// コリジョンスフィア可視化
 	GlobalParameter* globalParameter_;
 	bool isColliderVisible_;
 
 public:
+	/// ===================================================
+   /// public  method
+   /// ===================================================
+
 	// 初期化、更新、描画
 	void Init();
 	void Update();
 	void Draw(const ViewProjection& viewProjection);
-	// コリジョンスフィアのワールド行列の更新
-	void UpdateWorldTransform();
+	void UpdateWorldTransform();	// コリジョンのワールド行列の更新
+
 	// リセット
 	void Reset();
+
 	// コライダーリスト登録
-	static	void AddAABBCollider(AABBCollider* collider);
+	static	void AddCollider(BaseCollider* collider);
+	/// リスト除外
+	static	void RemoveCollider(BaseCollider* collider);
 
-	static	void RemoveAABBCollider(AABBCollider* collider);
-
-	/// <summary>
 	/// コライダー2つの衝突判定と応答
-	/// </summary>
-	/// <param name="コライダーA"></param>
-	/// <param name="コライダーB"></param>
-	void CheckCollisionPair(AABBCollider* colliderA, AABBCollider* colliderB);
+	void CheckCollisionPair(BaseCollider* colliderA, BaseCollider* colliderB);
 	// 全ての当たり判定をチェック
 	void CheckAllCollisions();
+
+	void HandleCollision(BaseCollider* colliderA, BaseCollider* colliderB);
+	void HandleCollisionExit(BaseCollider* colliderA, BaseCollider* colliderB);
 
 	void ApplyGlobalParameter();
 };

@@ -40,6 +40,7 @@
     <ClCompile Include="Game\Colider\AABBCollider.cpp" />
     <ClCompile Include="Game\Colider\BaseCollider.cpp" />
     <ClCompile Include="Game\Colider\CollisionManager.cpp" />
+    <ClCompile Include="Game\Colider\OBBCollider.cpp" />
     <ClCompile Include="Game\GrobalParamater\GlobalParameter.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="main.cpp" />
@@ -95,6 +96,7 @@
     <ClInclude Include="Game\Colider\AABBCollider.h" />
     <ClInclude Include="Game\Colider\BaseCollider.h" />
     <ClInclude Include="Game\Colider\CollisionManager.h" />
+    <ClInclude Include="Game\Colider\OBBCollider.h" />
     <ClInclude Include="Game\GrobalParamater\GlobalParameter.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
     <ClInclude Include="math\Box.h" />

@@ -20,7 +20,7 @@ public:
 
 	void Init() override;
 	void UpdateWorldTransform() override;
-	void Draw(const ViewProjection& viewProjection);
+	void DrawDebugCube(const ViewProjection& viewProjection)override;
 
 	virtual Vector3 GetBaseCenterPosition() const override;
 

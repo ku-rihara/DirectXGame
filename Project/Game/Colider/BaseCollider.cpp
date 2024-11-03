@@ -1,6 +1,15 @@
 
 #include"Colider/BaseCollider.h"
 
+
+
+void BaseCollider::DrawDebugCube(const ViewProjection& viewProjection) {
+	// AABBのデバッグ表示
+	if (object3d_) {
+		object3d_->Draw(transform_, viewProjection);
+	}
+}
+
 Vector3 BaseCollider::GetBaseCenterPosition() const {
 	Vector3 worldPos;
 	// ワールド行列の平行移動成分を取得
@@ -10,3 +19,4 @@ Vector3 BaseCollider::GetBaseCenterPosition() const {
 
 	return worldPos;
 }
+
