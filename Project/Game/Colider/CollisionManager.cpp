@@ -1,5 +1,5 @@
 #include "CollisionManager.h"
-#include "AABB.h"
+#include "Box.h"
 
 // 静的メンバ変数の初期化
 std::list<AABBCollider*> CollisionManager::AABBColliders_;

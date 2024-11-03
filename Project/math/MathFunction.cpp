@@ -6,6 +6,14 @@ float Lerp(const float& start, const float& end, float t) {
 	return (1.0f - t) * start + end * t;
 }
 
+Vector2 Lerp(const Vector2& start, const Vector2& end, float t) {
+	Vector2 result;
+	result.x = (1.0f - t) * start.x + end.x * t;
+	result.y = (1.0f - t) * start.y + end.y * t;
+	return result;
+}
+
+
 Vector3 Lerp(const Vector3& start, const Vector3& end, float t) {
 	Vector3 result;
 	result.x = (1.0f - t) * start.x + end.x * t;

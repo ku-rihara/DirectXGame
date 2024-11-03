@@ -165,7 +165,7 @@
     <ClCompile Include="math\Vector4.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
-    <ClCompile Include="math\AABB.cpp">
+    <ClCompile Include="math\Box.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\ObjectColor.cpp">
@@ -195,6 +195,9 @@
     </ClCompile>
     <ClCompile Include="Game\Colider\BaseCollider.cpp">
       <Filter>Game\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Easing.cpp">
+      <Filter>liberary\.cpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -324,7 +327,7 @@
     <ClInclude Include="math\Vector4.h">
       <Filter>liberary\.h</Filter>
     </ClInclude>
-    <ClInclude Include="math\AABB.h">
+    <ClInclude Include="math\Box.h">
       <Filter>liberary\.h</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\ObjectColor.h">
@@ -356,6 +359,9 @@
     </ClInclude>
     <ClInclude Include="Game\Colider\BaseCollider.h">
       <Filter>Game\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Easing.h">
+      <Filter>liberary\.h</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
