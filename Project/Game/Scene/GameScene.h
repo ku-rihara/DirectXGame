@@ -20,6 +20,7 @@
 #include"Reticle/Reticle.h"
 #include"skyDome/SkyDome.h"
 #include"PositionEditor/PositionEditor.h"
+#include"Score/Score.h"
 //std
 #include<random>
 
@@ -59,6 +60,8 @@ private:
 	std::unique_ptr<Skydome>skyDome_ = nullptr;
 	/// 配置エディター
 	std::unique_ptr<PositionEditor>positionEditor_ = nullptr;
+	/// スコア
+	std::unique_ptr<Score>score_ = nullptr;
 
 
 	// デバッグカメラアクティブ

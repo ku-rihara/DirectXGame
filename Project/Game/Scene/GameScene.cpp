@@ -27,6 +27,7 @@ void GameScene::Init() {
 	reticle_ = std::make_unique<Reticle>();
 	skyDome_= std::make_unique<Skydome>();
 	positionEditor_ = std::make_unique<PositionEditor>();
+	score_ = std::make_unique<Score>();
 	////////////////////////////////////////////////////////////////////////////////////////////
 	//  初期化
 	////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,7 +45,7 @@ void GameScene::Init() {
 	////////////////////////////////////////////////////////////////////////////////////////////
 	player_->SetReticle(reticle_.get());
 	reticle_->SetPlayer(player_.get());
-
+	enemyManager_->SetScore(score_.get());
 	//parent
 	player_->SetParent(&gameCamera_->GetWorldTransform());/// プレイヤーの親にゲームカメラ
 

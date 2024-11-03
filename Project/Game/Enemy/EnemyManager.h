@@ -10,23 +10,43 @@
 #include<memory>
 //obj
 #include"BaseEnemy.h"
-#include"Enemy/NormalEnemy.h"
 // nlohmann/jsonライブラリを使うためのインクルード
 #include <json.hpp>
 using json = nlohmann::json;
 
+///============================================
+///前方宣言
+/// ===========================================
+class Score;
 class EnemyManager {
 private:
+	///============================================
+	///private variants
+	/// ===========================================
 	std::list<std::unique_ptr<BaseEnemy>>enemies_;/// 敵リスト
 	std::vector<Vector3>positions_;/// 座標
 	Model* model_;
 	bool isAdaption_;
 	int controlNum_;
+
+	/// other class
+	Score* pScore_;
+
 public:
+
+	/// ===================================================
+	/// public  method
+	/// ===================================================
+
 	void AddNormalEnemy(const Vector3&pos);
 	void Init();
 	void Update();
+	void Debug();
 	void Draw(const ViewProjection& viewProjection);
+
+	/// other classSet
+	void SetScore(Score* score);
+
 	// 制御点をファイルに保存
 	void SaveEnemyPoses(const std::string& filename);
 

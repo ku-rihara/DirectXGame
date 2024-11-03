@@ -10,10 +10,14 @@
 class BaseEnemy :public AABBCollider {
 
 protected:
+	///============================================
+	///protected variants
+	/// ===========================================
 	std::unique_ptr<Object3d> objct3D_;
 	WorldTransform transform_;
 	int instanceID_;
 	bool isDeath_;
+	int scoreValue_;
 public:
 
 	/// ===================================================
@@ -35,7 +39,7 @@ public:
 	/// ===================================================
 	Vector3 GetPos() { return transform_.translation_; }
 	bool GetIsDeath() { return isDeath_; }
-
+	int GetScoreValue()const { return scoreValue_; }
 
 	/// ===================================================
 	/// setter  method

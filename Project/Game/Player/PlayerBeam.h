@@ -8,14 +8,19 @@
 /// </summary>
 class PlayerBeam:public OBBCollider {
 private:
+	///============================================
+	///private variants
+	/// ===========================================
 	static const int32_t kLifeTime = 60 * 5;//寿命
 	int32_t deathTimer_ = kLifeTime;//デスタイマー
 	bool isDeath_ = false; // デスフラグ
-	//包含
-	std::unique_ptr<Object3d>object3D_;
 	WorldTransform transform_;
 	Vector3 velocity_; // 速度
 	uint32_t textureHandle_ = 0;
+
+	/// other class
+	std::unique_ptr<Object3d>object3D_;
+	
 
 public:
 	/// ===================================================

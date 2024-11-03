@@ -10,14 +10,18 @@
 class Reticle;
 class Player {
 private:
+
+	///============================================
+	///private variants
+	/// ===========================================
+
 	/// other class
 	Reticle* pReticle_;
   
 	WorldTransform transform_;
 	std::unique_ptr<Object3d> obj3D_;
-	bool isDeath_;
-	// 弾
-	std::unique_ptr<PlayerBeam> beam_;
+	bool isDeath_;/// 死亡フラグ
+	std::unique_ptr<PlayerBeam> beam_;// 弾
 
 public://メンバ関数
 

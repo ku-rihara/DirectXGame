@@ -103,6 +103,9 @@
     <Filter Include="Game\PositionEditor">
       <UniqueIdentifier>{24b53461-b365-42f3-85b1-b1372db5effc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Score">
+      <UniqueIdentifier>{dd4d5777-7134-412a-a280-43ac3a192723}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -258,6 +261,9 @@
     </ClCompile>
     <ClCompile Include="Game\Colider\OBBCollider.cpp">
       <Filter>Game\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Score\Score.cpp">
+      <Filter>Game\Score</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -458,6 +464,9 @@
     </ClInclude>
     <ClInclude Include="Game\Colider\OBBCollider.h">
       <Filter>Game\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Score\Score.h">
+      <Filter>Game\Score</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,11 +1,11 @@
 #include"EnemyManager.h"
-#include"3d/ModelManager.h"
-//camera
-#include"camera/GameCamera.h"
 //std
 #include<string>
 #include<format>
 #include <fstream>
+/// obj
+#include"Enemy/NormalEnemy.h"
+#include"Score/Score.h"
 //Imgui
 #include<imgui.h>
 
@@ -26,29 +26,29 @@ void  EnemyManager::AddNormalEnemy(const Vector3& pos) {
 
 //レール更新
 void EnemyManager::Update() {
-	ImGui::Begin("IsSaveParamater");
-	if (ImGui::Button("EnemySave")) {
-		SaveEnemyPoses("resources/EnemyParamater/enemyPositions.json");
-		std::string message = std::format("{}.json saved.","Enemy");
-		MessageBoxA(nullptr, message.c_str(), "EnemyParamater", 0);
-	}
-	ImGui::End();
+
+	Debug();
+
 	auto spotIt = positions_.begin(); // controlSpot_のイテレータ
-	for (const std::unique_ptr<BaseEnemy>& rail : enemies_) {
-		rail->Update(); 
+	for (std::list<std::unique_ptr<BaseEnemy>>::iterator enemyIter = enemies_.begin(); enemyIter != enemies_.end();) {
+		(*enemyIter)->Update();
+
+		// controlSpot_の更新
 		if (spotIt != positions_.end()) {
-			*spotIt = rail->GetPos(); // controlSpot_に更新された座標を入れる
-			++spotIt; // 次の要素へ進める
+			*spotIt = (*enemyIter)->GetPos();
+			++spotIt;
+		}
+
+		// 敵の死亡
+		if ((*enemyIter)->GetIsDeath()) {
+			pScore_->ScoreUp((*enemyIter)->GetScoreValue());/// スコア加算
+			enemyIter = enemies_.erase(enemyIter);/// リスト除外
+		}
+		else {
+			++enemyIter;
 		}
 	}
 
-	//消す
-	enemies_.remove_if([](const std::unique_ptr<BaseEnemy>& rail) {
-		if (rail->GetIsDeath()) {
-			return true;
-		}
-		return false;
-		});
 }
 
 //レール描画
@@ -58,6 +58,15 @@ void EnemyManager::Draw(const ViewProjection&viewProjection) {
 	}
 }
 
+void EnemyManager::Debug() {
+	ImGui::Begin("IsSaveParamater");
+	if (ImGui::Button("EnemySave")) {
+		SaveEnemyPoses("resources/EnemyParamater/enemyPositions.json");
+		std::string message = std::format("{}.json saved.", "Enemy");
+		MessageBoxA(nullptr, message.c_str(), "EnemyParamater", 0);
+	}
+	ImGui::End();
+}
 
 // レールの制御点をJSON形式で保存する
 void EnemyManager::SaveEnemyPoses(const std::string& filename) {
@@ -87,4 +96,8 @@ void EnemyManager::LoadEnemyPosies(const std::string& filename) {
 			AddNormalEnemy(pos);
 		}
 	}
+}
+
+void EnemyManager::SetScore(Score* score) {
+	pScore_ = score;
 }

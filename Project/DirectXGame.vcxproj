@@ -54,6 +54,7 @@
     <ClCompile Include="Game\Rail\Rail.cpp" />
     <ClCompile Include="Game\Reticle\Reticle.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
+    <ClCompile Include="Game\Score\Score.cpp" />
     <ClCompile Include="Game\skyDome\SkyDome.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\Box.cpp" />
@@ -121,6 +122,7 @@
     <ClInclude Include="Game\Rail\Rail.h" />
     <ClInclude Include="Game\Reticle\Reticle.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
+    <ClInclude Include="Game\Score\Score.h" />
     <ClInclude Include="Game\skyDome\SkyDome.h" />
     <ClInclude Include="math\Box.h" />
     <ClInclude Include="math\MathFunction.h" />
