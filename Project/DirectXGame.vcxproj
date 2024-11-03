@@ -55,7 +55,7 @@
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="Game\skyDome\SkyDome.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="math\AABB.cpp" />
+    <ClCompile Include="math\Box.cpp" />
     <ClCompile Include="math\MathFunction.cpp" />
     <ClCompile Include="math\Matrix3x3.cpp" />
     <ClCompile Include="math\Matrix4x4.cpp" />
@@ -120,7 +120,7 @@
     <ClInclude Include="Game\Reticle\Reticle.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
     <ClInclude Include="Game\skyDome\SkyDome.h" />
-    <ClInclude Include="math\AABB.h" />
+    <ClInclude Include="math\Box.h" />
     <ClInclude Include="math\MathFunction.h" />
     <ClInclude Include="math\Matrix3x3.h" />
     <ClInclude Include="math\Matrix4x4.h" />

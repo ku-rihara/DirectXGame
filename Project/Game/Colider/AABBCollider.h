@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseCollider.h"
-#include "AABB.h"
+#include "Box.h"
 
 class AABBCollider : public BaseCollider {
 private:
