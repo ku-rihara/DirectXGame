@@ -63,9 +63,6 @@ bool IsCollision(const OBB& obb1, const OBB& obb2) {
 	return true;
 }
 
-#include "Box.h"
-#include <algorithm>
-
 // OBBとAABBの当たり判定
 bool IsCollision(const OBB& obb, const AABB& aabb) {
     Vector3 faceNormalAndCross[15]; // OBBの軸3つ + AABBの軸3つ + 交差ベクトル9つ
