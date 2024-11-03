@@ -39,11 +39,13 @@ Vector3 PlayerBeam::GetWorldPos() {
 }
 
 Vector3 PlayerBeam::GetBaseCenterPosition() const {
-    Vector3 worldPos;
-    // ワールド行列の平行移動成分を取得
-    worldPos.x = transform_.matWorld_.m[3][0];
-    worldPos.y = transform_.matWorld_.m[3][1];
-    worldPos.z = transform_.matWorld_.m[3][2];
+    const Vector3 offset = { 0.0f, 0.0f, 6.0f };//ローカル座標のオフセット
+    // ワールド座標に変換
+    Vector3 worldPos = MatrixTransform(offset, transform_.matWorld_);
 
     return worldPos;
+}
+
+Vector3 PlayerBeam::GetRotate() const {
+    return transform_.rotation_;
 }

@@ -73,6 +73,17 @@ public:
 	/// <returns>定数バッファ</returns>
 	const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return constBuffer_; }
 
+	Vector3 GetRightVector() const {
+		return Vector3(matWorld_.m[0][0], matWorld_.m[1][0], matWorld_.m[2][0]);
+	}
+
+	Vector3 GetUpVector() const {
+		return Vector3(matWorld_.m[0][1], matWorld_.m[1][1], matWorld_.m[2][1]);
+	}
+
+	Vector3 GetForwardVector() const {
+		return Vector3(matWorld_.m[0][2], matWorld_.m[1][2], matWorld_.m[2][2]);
+	}
 public:
 	
 	// ムーブコンストラクタを追加

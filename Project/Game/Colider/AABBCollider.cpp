@@ -1,17 +1,14 @@
 #include "AABBCollider.h"
-#include "base/TextureManager.h"
-#include "assert.h"
-
 #include"Colider/CollisionManager.h"
 
 AABBCollider::AABBCollider() {
     // 自動登録する
-    CollisionManager::AddAABBCollider(this);
+    CollisionManager::AddCollider(this);
 }
 
 AABBCollider::~AABBCollider() {
     // 自動登録する
-    CollisionManager::RemoveAABBCollider(this);
+    CollisionManager::RemoveCollider(this);
 }
 
 void AABBCollider::Init() {
@@ -29,11 +26,8 @@ void AABBCollider::UpdateWorldTransform() {
     transform_.UpdateMatrix();
 }
 
-void AABBCollider::Draw(const ViewProjection& viewProjection) {
-    // AABBのデバッグ表示
-    if (object3d_) {
-        object3d_->Draw(transform_, viewProjection);
-    }
+void AABBCollider::DrawDebugCube(const ViewProjection& viewProjection) {
+    BaseCollider::DrawDebugCube(viewProjection);
 }
 
 Vector3 AABBCollider::GetBaseCenterPosition() const {

@@ -7,7 +7,7 @@
 #include"struct/Transform.h"
 //math
 #include"MinMax.h"
-#include"AABB.h"
+#include"Box.h"
 
 class Object3dParticle :public BaseObject3d {
 public:

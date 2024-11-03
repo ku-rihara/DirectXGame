@@ -63,6 +63,8 @@ public:
 	static Vector3 Cross(const Vector3& v1, const Vector3& v2);
 	static float Dot(const Vector3& v1, const Vector3& v2);
 	static float Length(const Vector3& v);
+
+
 };
 
 // スカラーとベクトルの掛け算をフレンドとして定義

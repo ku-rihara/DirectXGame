@@ -41,6 +41,7 @@
     <ClCompile Include="Game\Colider\BaseCollider.cpp" />
     <ClCompile Include="Game\Colider\AABBCollider.cpp" />
     <ClCompile Include="Game\Colider\CollisionManager.cpp" />
+    <ClCompile Include="Game\Colider\OBBCollider.cpp" />
     <ClCompile Include="Game\ControlPoint\ControlPoint.cpp" />
     <ClCompile Include="Game\ControlPoint\ControlPointManager.cpp" />
     <ClCompile Include="Game\Enemy\BaseEnemy.cpp" />
@@ -107,6 +108,7 @@
     <ClInclude Include="Game\Colider\BaseCollider.h" />
     <ClInclude Include="Game\Colider\AABBCollider.h" />
     <ClInclude Include="Game\Colider\CollisionManager.h" />
+    <ClInclude Include="Game\Colider\OBBCollider.h" />
     <ClInclude Include="Game\ControlPoint\ControlPoint.h" />
     <ClInclude Include="Game\ControlPoint\ControlPointManager.h" />
     <ClInclude Include="Game\Enemy\BaseEnemy.h" />

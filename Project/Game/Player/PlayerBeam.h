@@ -2,11 +2,11 @@
 
 #include"3d/Object3d.h"
 #include "3d/WorldTransform.h"
-#include"Colider/AABBCollider.h"
+#include"Colider/OBBCollider.h"
 /// <summary>
 /// 自キャラの弾
 /// </summary>
-class PlayerBeam:public AABBCollider {
+class PlayerBeam:public OBBCollider {
 private:
 	static const int32_t kLifeTime = 60 * 5;//寿命
 	int32_t deathTimer_ = kLifeTime;//デスタイマー
@@ -29,6 +29,7 @@ public:
 
 	/// Collider
 	Vector3 GetBaseCenterPosition() const override;
+	Vector3 GetRotate() const override;
 	//void OnCollisionEnter([[maybe_unused]] Colider* other)override;
 
 	/// ===================================================

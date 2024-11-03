@@ -185,10 +185,15 @@ Vector3 MatrixTransform(const Vector3& vector, const Matrix4x4& matrix) {
 
 	float w = (vector.x * matrix.m[0][3]) + (vector.y * matrix.m[1][3]) + (vector.z * matrix.m[2][3]) + (1.0f * matrix.m[3][3]);
 
-	assert(w != 0.0f);
-	result.x /= w;
-	result.y /= w;
-	result.z /= w;
+	if (w == 0.0f) {
+
+		return Vector3(0, 0, 0);
+	}
+	else {
+		result.x /= w;
+		result.y /= w;
+		result.z /= w;
+	}
 
 	return result;
 }
