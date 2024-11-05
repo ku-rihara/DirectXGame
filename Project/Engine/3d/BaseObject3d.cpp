@@ -3,14 +3,17 @@
 #include"ModelManager.h"
 
 void BaseObject3d::DebugImgui() {
-	if (model_) {
-		model_->DebugImGui();
-
-	}
+#ifdef _DEBUG
+	material_.DebugImGui();
+#endif
 }
 
 void BaseObject3d::SetModel(const std::string& modelName, const std::string& extension) {
 
 	//モデルを検索してセット
 	model_=(ModelManager::GetInstance()->FindModel(modelName, extension));
+}
+
+void BaseObject3d::CreateMaterialResource() {
+	material_.CreateMaterialResource(DirectXCommon::GetInstance());
 }

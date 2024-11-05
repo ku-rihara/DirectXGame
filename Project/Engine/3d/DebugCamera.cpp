@@ -41,13 +41,13 @@ void DebugCamera::Update() {
     MouseMove mouseMove = input_->GetMouseMove();
 
     if (input_->IsPressMouse(2)) {
-        viewProjection_.translation_.x+= mouseMove.lX * 0.005f; // スケール調整
+        viewProjection_.translation_.x += mouseMove.lX * 0.005f; // スケール調整
         viewProjection_.translation_.y += mouseMove.lY * 0.005f; // スケール調整
     }
     if (input_->GetWheel()) {
-      /* Vector3 direction = TransformNormal({ 0,0,1 }, matRot_);
-        direction = Normalize(direction);*/
-        viewProjection_.translation_+= (mouseMove.lZ * 0.005f)*Vector3(0,0,1)/**direction*/;
+        /* Vector3 direction = TransformNormal({ 0,0,1 }, matRot_);
+          direction = Normalize(direction);*/
+        viewProjection_.translation_ += (mouseMove.lZ * 0.005f) * Vector3(0, 0, 1)/**direction*/;
     }
 
     // マウスの右ボタンで視点移動（マイクラ風）
@@ -69,9 +69,9 @@ void DebugCamera::Update() {
 
 
 void DebugCamera::UpdateMatrix() {
-   
+
     Matrix4x4 translateMatrix = MakeTranslateMatrix(viewProjection_.translation_);
-   viewProjection_.cameraMatrix_ =   translateMatrix* matRot_;
+    viewProjection_.cameraMatrix_ = translateMatrix * matRot_;
     viewProjection_.matView_ = Inverse(viewProjection_.cameraMatrix_);
-   /* viewProjection_.UpdateMatrix();*/
+    /* viewProjection_.UpdateMatrix();*/
 }

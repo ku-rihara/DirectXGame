@@ -26,7 +26,6 @@
 //class
 #include "WorldTransform.h"
 #include "ViewProjection.h"
-#include"ObjectColor.h"
 #include"base/DirectXCommon.h"
 
 //3Dモデル共通部
@@ -63,7 +62,7 @@ private:
 
 	//データ****************************************************************************
 
-	Material material_;
+	/*Material material_;*/
 	bool isFileGltf_;
 
 	//後に消すかも
@@ -82,21 +81,18 @@ public:
 	/// </summary>
 	void CreateModel(const std::string& ModelName, const std::string& extension);
 	
-	/// <summary>
-	/// マテリアルリソース
-	/// </summary>
-	void CreateMaterialResource();
+	
 
 	/// <summary>
 	/// モデル描画
 	/// </summary>
-	void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ObjectColor& color, std::optional<uint32_t> textureHandle = std::nullopt);
+	void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, std::optional<uint32_t> textureHandle = std::nullopt);
 
 	/// <summary>
 	/// モデルバーティクル
 	/// </summary>
 	void DrawParticle( const uint32_t instanceNum,
-		D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, std::optional<uint32_t> textureHandle = std::nullopt);
+		D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, Material material, std::optional<uint32_t> textureHandle = std::nullopt);
 
 
 	void DebugImGui();

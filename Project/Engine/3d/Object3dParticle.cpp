@@ -10,7 +10,7 @@ Object3dParticle* Object3dParticle::CreateModel(const std::string& instanceName,
 	ModelManager::GetInstance()->LoadModel(instanceName, extension);
 	object3d->SetModel(instanceName, extension);
 	object3d->CreateInstancingResource(instanceNumMax);
-	object3d->model_->CreateMaterialResource();
+	object3d->CreateMaterialResource();
 	object3d->Clear();
 	return object3d;
 }
@@ -68,7 +68,7 @@ void Object3dParticle::Draw(const ViewProjection& viewProjection, std::optional<
 	}
 
 	if (model_) {
-		model_->DrawParticle(instanceNum_, instancingSrvHandleGPU_, textureHandle);
+		model_->DrawParticle(instanceNum_, instancingSrvHandleGPU_,material_, textureHandle);
 	}
 }
 
@@ -142,4 +142,10 @@ void Object3dParticle::Emit(const Emitter& emitter, MinMax dist, MinMax velocity
 	for (uint32_t i = 0; i < emitter.count; ++i) {
 		particles_.emplace_back(MakeParticle(dist, velocityDist,emitter.transform, lifeTime));
 	}
+}
+
+
+
+void  Object3dParticle::CreateMaterialResource() {
+	BaseObject3d::CreateMaterialResource();
 }

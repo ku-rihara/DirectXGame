@@ -128,26 +128,25 @@ void Model::CreateModel(const std::string& ModelName, const std::string& extensi
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate));
 	std::memcpy(vertexDate, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
 	//マテリアル--------------------------------------------------------------------------------------
-	
+	Light::GetInstance()->Init();
 	//material_.textureFilePath = modelData_.material.textureFilePath;
 	
 }
 
 //マテリアルリソース作成
-void Model::CreateMaterialResource() {
-	material_.CreateMaterialResource(directXCommon);	
-	Light::GetInstance()->Init();
-}
+//void Model::CreateMaterialResource() {
+//	
+//}
 
 
 void Model::DebugImGui() {
 #ifdef _DEBUG
-	material_.DebugImGui();
+	/*material_.DebugImGui();*/
 #endif
 }
 
 
-void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ObjectColor& color, std::optional<uint32_t> textureHandle){
+void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, std::optional<uint32_t> textureHandle){
 
 	auto commandList = directXCommon->GetCommandList();
 	/*materialDate_->color = color.;*/
@@ -158,9 +157,8 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Objec
 
 	// 形状を設定
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	color;
-	/*material_.UpdateMaterialData(color.GetColor());*/
-	material_.SetCommandList(commandList);
+
+	material.SetCommandList(commandList);
 	commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 
 	if (textureHandle.has_value()) {
@@ -180,7 +178,7 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Objec
 	commandList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }
 
-void Model::DrawParticle(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle,
+void Model::DrawParticle(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, Material material,
 	std::optional<uint32_t> textureHandle) {
 	auto commandList = directXCommon->GetCommandList();
 
@@ -190,7 +188,7 @@ void Model::DrawParticle(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// マテリアルのリソースを設定
-	material_.SetCommandList(commandList);
+	material.SetCommandList(commandList);
 	commandList->SetGraphicsRootDescriptorTable(1, instancingGUPHandle);
 
 	// テクスチャハンドルの設定

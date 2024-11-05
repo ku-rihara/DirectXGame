@@ -88,6 +88,8 @@ public:
 	/// Debug表示
 	/// </summary>
 	void DebugImgui()override;
+	// マテリアルリソース作成
+	void CreateMaterialResource()override;
 	
 	/// <summary>
 	/// エミッター
