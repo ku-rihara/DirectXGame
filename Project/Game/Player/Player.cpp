@@ -39,8 +39,7 @@ void  Player::BulletDraw(const ViewProjection& viewProjection) {
 
 void Player::BeamShot() {
 	if (Input::IsPressMouse(0)) {
-		//// 弾の速度
-		//const float kBulletSpeed = 65.0f * Frame::DeltaTime();
+		
 		// 自機から標準オブジェクトへのベクトル
 		Vector3 direction = pReticle_->GetWorld3DRecticlPos() - GetWorldPos();
 		direction = Vector3::Normalize(direction) /*kBulletSpeed*/;

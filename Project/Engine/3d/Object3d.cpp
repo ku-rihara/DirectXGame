@@ -14,7 +14,7 @@ Object3d* Object3d::CreateModel(const std::string& instanceName, const std::stri
 	ModelManager::GetInstance()->LoadModel(instanceName, extension);
 	object3d->SetModel(instanceName, extension);
 	object3d->CreateWVPResource();
-	object3d->model_->CreateMaterialResource();
+	object3d->CreateMaterialResource();
 	//object3d->transform_.Init();
 	return object3d;
 }
@@ -23,12 +23,7 @@ Object3d* Object3d::CreateModel(const std::string& instanceName, const std::stri
 void Object3d::Init() {
 	/// WVPリソース作成
 	CreateWVPResource();
-	/// マテリアルリソース作成
-	if (model_) {
-		model_->CreateMaterialResource();
-	}
-	/// トランスフォーム初期化
-	//transform_.Init();
+	
 }
 
 //更新
@@ -49,7 +44,7 @@ void Object3d::Draw(const WorldTransform& worldTransform,const ViewProjection& v
 			wvpDate_->WVP = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
 			wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
 		}
-		model_->Draw(wvpResource_, color_, textureHandle);
+		model_->Draw(wvpResource_, material_, textureHandle);
 	}
 }
 
@@ -59,7 +54,6 @@ void Object3d::DebugImgui() {
 }
 
 void Object3d::CreateWVPResource() {
-	//行列--------------------------------------------------------------------------------------------------------
 	wvpResource_ = DirectXCommon::GetInstance()->CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(TransformationMatrix));
 	//データを書き込む
 	wvpDate_ = nullptr;
@@ -69,4 +63,9 @@ void Object3d::CreateWVPResource() {
 	wvpDate_->WVP = MakeIdentity4x4();
 	wvpDate_->World = MakeIdentity4x4();
 	wvpDate_->WorldInverseTranspose = MakeIdentity4x4();
+}
+
+
+void  Object3d::CreateMaterialResource() {
+	BaseObject3d::CreateMaterialResource();
 }

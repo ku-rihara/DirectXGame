@@ -7,6 +7,8 @@ int  NormalEnemy::instanceNum_ = 0;
 
 void   NormalEnemy::Init(const std::string& instanceName, const std::string& extension) {
 	BaseEnemy::Init(instanceName, extension);
+	instanceID_ = instanceNum_ + 1;
+	instanceNum_++;
 }
 //更新
 void   NormalEnemy::Update() {
@@ -22,6 +24,7 @@ void   NormalEnemy::Debug() {
 	ImGui::Begin("Positions");
 	if (ImGui::TreeNode(("Enemy" + std::to_string(instanceID_)).c_str())) {
 		ImGui::DragFloat3(("pos" + std::to_string(instanceID_)).c_str(), &transform_.translation_.x, 0.01f);
+		objct3D_->DebugImgui();
 		ImGui::TreePop();
 	}
 	ImGui::End();
