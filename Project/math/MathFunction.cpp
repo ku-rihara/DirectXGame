@@ -1,5 +1,6 @@
 #include "MathFunction.h"
 #include <cmath>
+#include<numbers>
 #include<assert.h>
 
 float Lerp(const float& start, const float& end, float t) {
@@ -149,4 +150,14 @@ Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t) {
 
 	// 4点を指定してCamull-Rom補間
 	return CatmullRomInterpolation(p0, p1, p2, p3, t_2);
+}
+
+// 度数をラジアンに変換する関数
+float toRadian(float degrees) {
+	return degrees * (std::numbers::pi_v<float> / 180.0f);  
+}
+
+// ラジアンを度数に変換する関数
+float toDegree(float radians) {
+	return radians * (180.0f / std::numbers::pi_v<float>);
 }

@@ -33,3 +33,9 @@ Vector3 CatmullRomInterpolation(const Vector3& p0, const Vector3& p1, const Vect
 ///  <param name="t">スプラインの全区間の中での割合指定[0,1]</param>///
 ///  <returns></returns>
 Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t);
+
+// 度数をラジアンに変換する関数
+float toRadian(float degrees);
+
+// ラジアンを度数に変換する関数
+float toDegree(float radians);
