@@ -28,6 +28,8 @@ public://メンバ関数
 	void Init();
 	void Update();
 	void Draw(const ViewProjection& viewProjection);
+	void SpriteDraw();
+	void Debug();
 	void BulletDraw(const ViewProjection& viewProjection);
 
 	/// レティクルセット

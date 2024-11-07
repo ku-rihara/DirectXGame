@@ -1,5 +1,5 @@
 #include"Player.h"
-#include"3d/ModelManager.h"
+#include<imgui.h>
 //class
 #include"Reticle/Reticle.h"
 //input
@@ -22,7 +22,6 @@ void  Player::Update() {
 	/// 弾発射
 	BeamShot();
 	
-
 	transform_.UpdateMatrix();
 }
 /// 描画
@@ -37,6 +36,10 @@ void  Player::BulletDraw(const ViewProjection& viewProjection) {
 	beam_->Draw(viewProjection);
 }
 
+void Player::SpriteDraw() {
+	beam_->SpriteDraw();
+}
+
 void Player::BeamShot() {
 	if (Input::IsPressMouse(0)) {
 		
@@ -44,9 +47,23 @@ void Player::BeamShot() {
 		Vector3 direction = pReticle_->GetWorld3DRecticlPos() - GetWorldPos();
 		direction = Vector3::Normalize(direction) /*kBulletSpeed*/;
 		beam_->Update(GetWorldPos(),direction);
-	
-		
+		beam_->DecreaseGauge();
 	}
+	else {
+		beam_->IncreaseGauge();
+	}
+}
+
+void Player::Debug() {
+	if (ImGui::TreeNode("Player")) {
+		ImGui::DragFloat3("pos", &transform_.translation_.x, 0.01f);
+		if (ImGui::TreeNode("beam")) {
+			beam_->Debug();
+			ImGui::TreePop();
+		}
+		ImGui::TreePop();
+	}
+	
 }
 
 

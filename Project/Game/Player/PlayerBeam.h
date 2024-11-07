@@ -2,6 +2,7 @@
 
 #include"3d/Object3d.h"
 #include "3d/WorldTransform.h"
+#include"2d/Sprite.h"
 #include"Colider/OBBCollider.h"
 /// <summary>
 /// 自キャラの弾
@@ -11,16 +12,20 @@ private:
 	///============================================
 	///private variants
 	/// ===========================================
-	static const int32_t kLifeTime = 60 * 5;//寿命
-	int32_t deathTimer_ = kLifeTime;//デスタイマー
-	bool isDeath_ = false; // デスフラグ
 	WorldTransform transform_;
+	WorldTransform transformR_;
+	WorldTransform transformL_;
 	Vector3 velocity_; // 速度
-	uint32_t textureHandle_ = 0;
+	
+
+	/// gauge
+	std::unique_ptr<Sprite>frameSprite_;
+	std::unique_ptr<Sprite>gaugeSprite_;
+	float gauge_;
 
 	/// other class
 	std::unique_ptr<Object3d>object3D_;
-	
+	std::unique_ptr<Object3d>object3DL_;
 
 public:
 	/// ===================================================
@@ -31,15 +36,21 @@ public:
 	void Init();
 	void Update(const Vector3& position, const Vector3& velocity);
 	void Draw(const ViewProjection& viewProjection);
+	void SpriteDraw();
+	void Debug();
+
+	/// gauge
+	void DecreaseGauge();
+	void IncreaseGauge();
+
+	Vector3 PosSet(const Vector3& pos, const float& ofset);
 
 	/// Collider
 	Vector3 GetBaseCenterPosition() const override;
 	Vector3 GetRotate() const override;
-	//void OnCollisionEnter([[maybe_unused]] Colider* other)override;
-
+	
 	/// ===================================================
     /// getter  methods
     /// ===================================================
 	Vector3 GetWorldPos();
-	bool GetIsDead() const { return isDeath_; }
 };

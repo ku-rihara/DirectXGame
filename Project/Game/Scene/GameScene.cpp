@@ -120,6 +120,8 @@ void GameScene::ParticleDraw() {
 void GameScene::SpriteDraw() {
 	//レティクル
 	reticle_->Draw();
+
+	player_->SpriteDraw();
 }
 
 void GameScene::Debug() {
@@ -135,7 +137,7 @@ void GameScene::Debug() {
 	}
 	
 	positionEditor_->Debug();
-
+	player_->Debug();
 
 	ImGui::End();
 	//ライティング
