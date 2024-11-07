@@ -86,31 +86,46 @@ Vector3  PlayerBeam::PosSet(const Vector3& pos,const float& ofset) {
 }
 
 void PlayerBeam::DecreaseGauge() {
-    if (transformL_.scale_.x <= 0.0f) {
-        transformL_.scale_.x = 0.0f;
-        transformL_.scale_.y = 0.0f;
-        transformR_.scale_.x = 0.0f;
-        transformR_.scale_.y = 0.0f;
+    if (transform_.scale_.x <= 0.0f) {
+        transform_.scale_.x = 0.0f;
+        transform_.scale_.y = 0.0f;
+       
     }
     else {
-        transformL_.scale_.x -= 0.4f * Frame::DeltaTime();
-        transformL_.scale_.y -= 0.4f * Frame::DeltaTime();
-        transformR_.scale_.x -= 0.4f * Frame::DeltaTime();
-        transformR_.scale_.y -= 0.4f * Frame::DeltaTime();
+        transform_.scale_.x -= 0.4f * Frame::DeltaTime();
+        transform_.scale_.y -= 0.4f * Frame::DeltaTime(); 
+      
+    }
+    transformL_.scale_ = transform_.scale_;
+    transformR_.scale_ = transform_.scale_;
+
+    /// gauge
+    if (gaugeSprite_->uvTransform_.pos.y <= -0.45f) {
+        gaugeSprite_->uvTransform_.pos.y = -0.45f;
+    }
+    else {
+        gaugeSprite_->uvTransform_.pos.y -= 0.2f * Frame::DeltaTime();
     }
 }
 
 void PlayerBeam::IncreaseGauge() {
-    if (transformL_.scale_.x >= 1.0f) {
-        transformL_.scale_.x = 1.0f;
-        transformL_.scale_.y = 1.0f;
-        transformR_.scale_.x = 1.0f;
-        transformR_.scale_.y = 1.0f;
+    if (transform_.scale_.x >= 1.0f) {
+
+        transform_.scale_.x = 1.0f;
+        transform_.scale_.y = 1.0f;
     }
     else {
-        transformL_.scale_.x += 0.4f * Frame::DeltaTime();
-        transformL_.scale_.y += 0.4f * Frame::DeltaTime();
-        transformR_.scale_.x += 0.4f * Frame::DeltaTime();
-        transformR_.scale_.y += 0.4f * Frame::DeltaTime();
+        transform_.scale_.x += 0.4f * Frame::DeltaTime();
+        transform_.scale_.y += 0.4f * Frame::DeltaTime();     
+    }
+    transformL_.scale_ = transform_.scale_;
+    transformR_.scale_ = transform_.scale_;
+
+    ///gauge
+    if (gaugeSprite_->uvTransform_.pos.y >= 0.0f) {
+        gaugeSprite_->uvTransform_.pos.y = 0.0f;
+    }
+    else {
+        gaugeSprite_->uvTransform_.pos.y += 0.2f * Frame::DeltaTime();
     }
 }

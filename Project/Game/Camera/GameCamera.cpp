@@ -13,7 +13,7 @@ void GameCamera::Init() {
 	worldTransform_.UpdateMatrix();
 	viewProjection_.UpdateMatrix();
 	// レールの初期化（オブジェクト数を指定）
-	rail_.Init(70);
+	rail_.Init(200);
 }
 
 void GameCamera::Update(const std::vector<Vector3>& controlPos) {
