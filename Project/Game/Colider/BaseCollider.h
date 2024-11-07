@@ -9,10 +9,10 @@ protected:
     /// ===================================================
     /// protected variant
     /// ===================================================
-    WorldTransform transform_;  // ワールド変換
+    WorldTransform cTransform_;  // ワールド変換
     uint32_t typeID_ = 0u;      // コリジョンのタイプID
     bool isColliding_ = false;  // 衝突フラグ
-    std::unique_ptr<Object3d> object3d_;  // デバッグ表示用モデル
+    std::unique_ptr<Object3d> cObject3d_;  // デバッグ表示用モデル
 
 public:
     BaseCollider() = default;

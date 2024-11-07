@@ -99,12 +99,22 @@ void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position
 
 #ifdef _DEBUG
 void Sprite::DebugImGui() {
-	/*ImGui::Begin("Lighting");*/
+	
 	ImGui::ColorEdit4(" Color", (float*)&material_.materialData_->color);
-	ImGui::DragFloat2(" uvScale", (float*)&uvTransform_.scale.x);
-	ImGui::DragFloat3(" uvRotate", (float*)&uvTransform_.rotate.x);
-	ImGui::DragFloat2(" uvTransform", (float*)&uvTransform_.pos.x, 0.1f);
-	ImGui::DragFloat2(" anchorPoint", (float*)&anchorPoint_.x, 0.1f);
+	if (ImGui::TreeNode("Transform")) {
+		ImGui::DragFloat3(" pos", (float*)&transform_.translate.x);
+		ImGui::DragFloat2(" size", (float*)&textureSize_);
+
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("UV")) {
+		ImGui::DragFloat2(" uvScale", (float*)&uvTransform_.scale.x);
+		ImGui::DragFloat3(" uvRotate", (float*)&uvTransform_.rotate.x);
+		ImGui::DragFloat2(" uvTransform", (float*)&uvTransform_.pos.x, 0.1f);
+		ImGui::DragFloat2(" anchorPoint", (float*)&anchorPoint_.x, 0.1f);
+
+		ImGui::TreePop();
+	}
 }
 #endif
 
@@ -154,7 +164,7 @@ void Sprite::Draw() {
 	///==========================================================================================
 	//  Transform
 	///==========================================================================================
-	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(Vector3(size_.x,size_.y,0)*(transform_.scale), transform_.rotate, transform_.translate);
+	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(Vector3(textureSize_.x, textureSize_.y,0)*(transform_.scale), transform_.rotate, transform_.translate);
 	Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
 	Matrix4x4 worldViewProjectionMatrixSprite = worldMatrixSprite * projectionMatrixSprite;
 
