@@ -5,19 +5,19 @@
 void Score::Init() {
     numSprite_.resize(5);  // スコアは最大5桁と仮定する
     score_ = 0;
-    size_ = 144.0f;
+    size_ = 96.0f;
 
     // テクスチャ読み込み
     uint32_t numHandle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/number.png");
     uint32_t ScoreFrameHandle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/Score.png");
-
+    
     // 各桁のスプライトを初期化
-    for (size_t i = 0; i < numSprite_.size(); i++) {
-        numSprite_[i].reset(Sprite::Create(numHandle, Vector2(520, 320), Vector4(1, 1, 1, 1)));
+    for (uint32_t i = 0; i < numSprite_.size(); i++) {
+        numSprite_[i].reset(Sprite::Create(numHandle, Vector2(946 +32*float(i), 494), Vector4(1, 1, 1, 1)));
         numSprite_[i]->textureSize_.x = size_;
     }
 
-    scoreFrameSprite_.reset(Sprite::Create(ScoreFrameHandle, Vector2(520, 320), Vector4(1, 1, 1, 1)));
+    scoreFrameSprite_.reset(Sprite::Create(ScoreFrameHandle, Vector2(946, 444), Vector4(1, 1, 1, 1)));
 }
 
 void Score::Update() {
@@ -28,7 +28,7 @@ void Score::Update() {
         int digit = tempScore % 10;  // 各桁の値を取得
         tempScore /= 10;
 
-        numSprite_[i]->uvTransform_.pos.x = digit * size_;
+        numSprite_[(uint32_t(numSprite_.size())-i)-1]->uvTransform_.pos.x = (digit / 10.0f);
         // UVオフセットを適用（各桁ごとに横方向にずらす）
      /*   sprite_[i]->SetUVTransform((digit * uvOffsetX_, 0, uvOffsetX_, 1));*/
     }
@@ -47,10 +47,10 @@ void Score::ScoreUp(int num) {
 
 void Score::Debug() {
     if (ImGui::TreeNode("Score")) {
+        ImGui::DragInt("Score", &score_);
         scoreFrameSprite_->DebugImGui();
         ImGui::TreePop();
     }
-
 }
 
 //void Score::SetScore(int score) {

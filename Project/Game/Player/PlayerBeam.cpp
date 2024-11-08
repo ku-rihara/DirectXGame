@@ -67,7 +67,7 @@ Vector3 PlayerBeam::GetWorldPos() {
 }
 
 Vector3 PlayerBeam::GetBaseCenterPosition() const {
-    const Vector3 offset = { 0.0f, 0.0f, 6.0f };//ローカル座標のオフセット
+    const Vector3 offset = { 0.0f, 0.0f, 15.0f };//ローカル座標のオフセット
     // ワールド座標に変換
     Vector3 worldPos = MatrixTransform(offset, transform_.matWorld_);
 
