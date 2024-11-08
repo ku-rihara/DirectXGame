@@ -39,6 +39,7 @@ void GameScene::Init() {
 	player_->Init();
 	reticle_->Init();
 	skyDome_->Init();
+	score_->Init();
 	positionEditor_->Init();
 	////////////////////////////////////////////////////////////////////////////////////////////
 	//  セット
@@ -84,6 +85,8 @@ void GameScene::Update() {
 
 	positionEditor_->Update(viewProjection_);
 
+	score_->Update();
+
 	
 }
 
@@ -120,8 +123,9 @@ void GameScene::ParticleDraw() {
 void GameScene::SpriteDraw() {
 	//レティクル
 	reticle_->Draw();
-
 	player_->SpriteDraw();
+	score_->Draw();
+
 }
 
 void GameScene::Debug() {
@@ -138,7 +142,7 @@ void GameScene::Debug() {
 	
 	positionEditor_->Debug();
 	player_->Debug();
-
+	score_->Debug();
 	ImGui::End();
 	//ライティング
 	ImGui::Begin("Lighting");

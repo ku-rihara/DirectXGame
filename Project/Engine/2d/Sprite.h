@@ -25,10 +25,9 @@ public:
 	/// Transform
 	Transform transform_;/// トランスフォーム
 	UVTransform uvTransform_;/// UVトランスフォーム
-	Vector2 size_;///サイズ
 	Vector2 textureLeftTop_;/// テクスチャ左上
 	Vector2 textureSize_;/// テクスチャサイズ
-	Vector2 textureAdjustSize_;/// テクスチャサイズ
+
 
 	/// anchorPoint
 	Vector2 anchorPoint_;
@@ -38,13 +37,14 @@ public:
 	bool isFlipY_ = false;/// FlipY
 
 private:
+	Vector2 textureAdjustSize_;/// テクスチャサイズ
 
 	//テクスチャ
 	D3D12_GPU_DESCRIPTOR_HANDLE texture_;
 	uint32_t textuerIndex_;
 
-	static D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
-	static D3D12_INDEX_BUFFER_VIEW indexBufferView_;
+	 D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
+	 D3D12_INDEX_BUFFER_VIEW indexBufferView_;
 	//リソース******************************************************************
 	//頂点リソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>vertexResource_;
@@ -88,6 +88,7 @@ public:
 	 Vector2 GetPosition()const { return Vector2(transform_.translate.x, transform_.translate.y); }
 	const Vector2& GetAnchorPoint()const { return anchorPoint_; }
 	const Vector2& GetTextureSize()const { return textureSize_; }
+	const Vector2& GetTextureJustSize()const { return textureAdjustSize_; }
 	const Vector2& GetTextureLeftTop()const { return textureLeftTop_; }
 	const bool& GetIsFlipX()const { return isFlipX_; }
 	const bool& GetIsFlipY()const { return isFlipY_; }

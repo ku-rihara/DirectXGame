@@ -8,9 +8,6 @@ namespace {
 	DirectXCommon* directXCommon = DirectXCommon::GetInstance();
 	//Model* model=Model::GetInstance();
 }
-// static メンバ変数の定義
-D3D12_VERTEX_BUFFER_VIEW Sprite::vertexBufferView_;
-D3D12_INDEX_BUFFER_VIEW Sprite::indexBufferView_;
 
 Sprite* Sprite::Create(const uint32_t& textureHandle, const Vector2& position, const Vector4& color) {
 	// 新しいModelインスタンスを作成
@@ -92,7 +89,7 @@ void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position
 	textureAdjustSize_.x = static_cast<float>(metadata.width);
 	textureAdjustSize_.y = static_cast<float>(metadata.height);
 	/// テクスチャサイズに合わせる
-	size_ = textureAdjustSize_;
+
 	textureSize_ = textureAdjustSize_;
 
 }
@@ -102,8 +99,8 @@ void Sprite::DebugImGui() {
 	
 	ImGui::ColorEdit4(" Color", (float*)&material_.materialData_->color);
 	if (ImGui::TreeNode("Transform")) {
-		ImGui::DragFloat3(" pos", (float*)&transform_.translate.x);
-		ImGui::DragFloat2(" size", (float*)&textureSize_);
+		ImGui::DragFloat3(" pos",&transform_.translate.x);
+		ImGui::DragFloat2("size", &textureSize_.x);
 
 		ImGui::TreePop();
 	}

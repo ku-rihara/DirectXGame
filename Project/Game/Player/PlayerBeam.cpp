@@ -10,13 +10,14 @@ void PlayerBeam::Init() {
 
     /// gauge frame
     uint32_t   frameHandle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/GaugeFrame.png");
-    frameSprite_.reset(Sprite::Create(frameHandle, Vector2(120, 320), Vector4(1, 1, 1, 1)));
+    frameSprite_.reset(Sprite::Create(frameHandle, Vector2(120, 108), Vector4(1, 1, 1, 1)));
 
     /// gauge
     uint32_t   gaugeHandle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/Gauge.png");
-    gaugeSprite_.reset(Sprite::Create(gaugeHandle, Vector2(120, 80), Vector4(1, 1, 1, 1)));
-  
-    gaugeSprite_->textureLeftTop_ = { 0,frameSprite_->GetTextureSize().y };
+    gaugeSprite_.reset(Sprite::Create(gaugeHandle, Vector2(120, 108), Vector4(1, 1, 1, 1)));
+   
+    gaugeSprite_->textureSize_ = frameSprite_->GetTextureJustSize();
+    /*gaugeSprite_->textureLeftTop_ = { 0,frameSprite_->GetTextureJustSize().y };*/
  
 }
 
@@ -86,22 +87,23 @@ Vector3  PlayerBeam::PosSet(const Vector3& pos,const float& ofset) {
 }
 
 void PlayerBeam::DecreaseGauge() {
+
     if (transform_.scale_.x <= 0.0f) {
         transform_.scale_.x = 0.0f;
         transform_.scale_.y = 0.0f;
        
     }
     else {
-        transform_.scale_.x -= 0.4f * Frame::DeltaTime();
-        transform_.scale_.y -= 0.4f * Frame::DeltaTime(); 
+        transform_.scale_.x -= 0.45f * Frame::DeltaTime();
+        transform_.scale_.y -= 0.45f * Frame::DeltaTime(); 
       
     }
     transformL_.scale_ = transform_.scale_;
     transformR_.scale_ = transform_.scale_;
 
     /// gauge
-    if (gaugeSprite_->uvTransform_.pos.y <= -0.45f) {
-        gaugeSprite_->uvTransform_.pos.y = -0.45f;
+    if (gaugeSprite_->uvTransform_.pos.y <= -0.435f) {
+        gaugeSprite_->uvTransform_.pos.y = -0.435f;
     }
     else {
         gaugeSprite_->uvTransform_.pos.y -= 0.2f * Frame::DeltaTime();
@@ -115,8 +117,8 @@ void PlayerBeam::IncreaseGauge() {
         transform_.scale_.y = 1.0f;
     }
     else {
-        transform_.scale_.x += 0.4f * Frame::DeltaTime();
-        transform_.scale_.y += 0.4f * Frame::DeltaTime();     
+        transform_.scale_.x += 0.45f * Frame::DeltaTime();
+        transform_.scale_.y += 0.45f * Frame::DeltaTime();     
     }
     transformL_.scale_ = transform_.scale_;
     transformR_.scale_ = transform_.scale_;
