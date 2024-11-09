@@ -13,6 +13,9 @@ private:
 	std::unique_ptr<Sprite> scoreFrameSprite_;
 	float size_;
 	int score_;
+	int currentScore_;
+	float scoreEaseT_;
+	float scoreEaseTMax_;
 public:
 
 	///============================================

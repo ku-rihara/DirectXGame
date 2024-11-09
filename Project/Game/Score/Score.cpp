@@ -1,11 +1,15 @@
 #include "Score/Score.h"
 #include "base/TextureManager.h"
+
+#include"Frame/Frame.h"
+#include"MathFunction.h"
 #include<imgui.h>
 
 void Score::Init() {
     numSprite_.resize(5);  // スコアは最大5桁と仮定する
     score_ = 0;
     size_ = 96.0f;
+    scoreEaseTMax_ = 1.0f;
 
     // テクスチャ読み込み
     uint32_t numHandle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/number.png");
@@ -22,7 +26,12 @@ void Score::Init() {
 
 void Score::Update() {
     // スコアの数値を各桁ごとに分解
-    int tempScore = score_;
+    scoreEaseT_ += Frame::DeltaTime();
+    if (scoreEaseT_ >= scoreEaseTMax_) {
+        scoreEaseT_=scoreEaseTMax_;
+    }
+     score_ = int(Lerp(float(score_), float(currentScore_),scoreEaseT_));
+     int tempScore = score_;
    
     for (uint32_t i = 0; i < numSprite_.size(); i++) {
         int digit = tempScore % 10;  // 各桁の値を取得
@@ -42,7 +51,8 @@ void Score::Draw() {
 }
 
 void Score::ScoreUp(int num) {
-    score_ += num;
+    scoreEaseT_ = 0.0f;
+    currentScore_ += num;
 }
 
 void Score::Debug() {
