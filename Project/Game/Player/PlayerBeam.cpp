@@ -7,6 +7,17 @@
 void PlayerBeam::Init() {
     object3D_.reset(Object3d::CreateModel("PlayerBeam",".obj"));
     object3DL_.reset(Object3d::CreateModel("PlayerBeam", ".obj"));
+    
+    transformL_.Init();
+    transformR_.Init();
+    transform_.Init();
+
+    /// parent
+    transformL_.parent_ = &transform_;
+    transformR_.parent_ = &transform_;
+
+    transformL_.translation_.x = -0.5f;
+    transformR_.translation_.x = 0.5f;
 
     /// gauge frame
     uint32_t   frameHandle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/GaugeFrame.png");
@@ -27,16 +38,13 @@ void PlayerBeam::Update(const Vector3& position, const Vector3& direction) {
 
     // 位置を設定
     transform_.translation_ = position;
-    transformL_.translation_ = PosSet(position,-0.1f);
-    transformR_.translation_ = PosSet(position, 0.1f);
+  
 
     // 方向ベクトルを基にX軸とY軸の回転を計算
     float rotateY = std::atan2(direction.x, direction.z);
     float rotateX = std::atan2(-direction.y, std::sqrt(direction.x * direction.x + direction.z * direction.z));
 
     // 回転を設定
-    transformL_.rotation_ = { rotateX, rotateY, 0.0f };
-    transformR_.rotation_ = { rotateX, rotateY, 0.0f };
     transform_.rotation_ = { rotateX, rotateY, 0.0f };
 
     transform_.UpdateMatrix();
@@ -99,8 +107,7 @@ void PlayerBeam::DecreaseGauge() {
         transform_.scale_.y -= 0.45f * Frame::DeltaTime(); 
       
     }
-    transformL_.scale_ = transform_.scale_;
-    transformR_.scale_ = transform_.scale_;
+ 
 
     /// gauge
     if (gaugeSprite_->uvTransform_.pos.y <= -0.435f) {
@@ -121,8 +128,8 @@ void PlayerBeam::IncreaseGauge() {
         transform_.scale_.x += 0.45f * Frame::DeltaTime();
         transform_.scale_.y += 0.45f * Frame::DeltaTime();     
     }
-    transformL_.scale_ = transform_.scale_;
-    transformR_.scale_ = transform_.scale_;
+   /* transformL_.scale_ = transform_.scale_;
+    transformR_.scale_ = transform_.scale_;*/
 
     ///gauge
     if (gaugeSprite_->uvTransform_.pos.y >= 0.0f) {
@@ -131,4 +138,8 @@ void PlayerBeam::IncreaseGauge() {
     else {
         gaugeSprite_->uvTransform_.pos.y += 0.2f * Frame::DeltaTime();
     }
+}
+
+void PlayerBeam::SetParent(const WorldTransform& worldTransform) {
+    transform_.parent_ = &worldTransform;
 }

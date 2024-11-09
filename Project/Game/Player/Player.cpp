@@ -14,6 +14,7 @@ void  Player::Init() {
 	beam_ = std::make_unique<PlayerBeam>();
 	/// 初期化
 	beam_->Init();
+	//beam_->SetParent(transform_);
 
 }
 /// 更新

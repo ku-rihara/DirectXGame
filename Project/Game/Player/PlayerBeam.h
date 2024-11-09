@@ -39,6 +39,8 @@ public:
 	void SpriteDraw();
 	void Debug();
 
+	void SetParent(const WorldTransform& worldTransform);
+
 	/// gauge
 	void DecreaseGauge();
 	void IncreaseGauge();
