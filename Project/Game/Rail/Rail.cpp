@@ -14,7 +14,7 @@ void Rail::Init(size_t numObjects) {
 
 void Rail::Update(const std::vector<Vector3>& controlPos) {
     controlPos_ = controlPos;
-   /* pointsDrawing_.clear();*/
+    pointsDrawing_.clear();
     totalRailLength_ = 0.0f;
 
     // レールの描画点を生成（Catmull-Rom補間を使用）
