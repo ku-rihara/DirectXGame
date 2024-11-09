@@ -15,7 +15,7 @@ OBBCollider::~OBBCollider() {
 void OBBCollider::Init() {
     cObject3d_.reset(Object3d::CreateModel("CollisionCube", ".obj"));
     cTransform_.Init();
-    obb_.size = { 1.5f,1.0f,5.5f };
+    obb_.size = { 1.0f,1.0f,1.0f };
 }
 
 void OBBCollider::UpdateWorldTransform() {

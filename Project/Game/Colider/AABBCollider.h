@@ -8,7 +8,7 @@ private:
 	/// ===================================================
 	/// private variant
 	/// ===================================================
-	Vector3 radiusVector_ = { 1.5f, 1.5f, 1.5f };  // AABBのサイズ
+	Vector3 radiusVector_ = { 1.0f, 1.0f, 1.0f };  // AABBのサイズ
 	AABB aabb_;  // AABB範囲
 
 public:

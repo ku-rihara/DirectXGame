@@ -26,8 +26,8 @@ void Score::Init() {
 
 void Score::Update() {
     // スコアの数値を各桁ごとに分解
-    scoreEaseT_ += Frame::DeltaTime();
-    if (scoreEaseT_ >= scoreEaseTMax_) {
+    scoreEaseT_ += Frame::DeltaTime()*2;
+    if (scoreEaseT_ >= scoreEaseTMax_-0.4f) {
         scoreEaseT_=scoreEaseTMax_;
     }
      score_ = int(Lerp(float(score_), float(currentScore_),scoreEaseT_));
