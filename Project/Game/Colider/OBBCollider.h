@@ -35,5 +35,5 @@ public:
     /// ===================================================
     /// setter methods
     /// ===================================================
-    void SetSize(const Vector3& size) { obb_.size = size; }
+    void SetCollisionSize(const Vector3& size) { obb_.size = size; }
 };
