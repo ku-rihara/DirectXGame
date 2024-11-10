@@ -14,6 +14,7 @@ void GameCamera::Init() {
 	viewProjection_.UpdateMatrix();
 	// レールの初期化（オブジェクト数を指定）
 	rail_.Init(200);
+    railMoveSpeed_ = 0.1f;
 }
 
 void GameCamera::Update(const std::vector<Vector3>& controlPos) {
@@ -79,16 +80,13 @@ void GameCamera::RailDraw(const ViewProjection& viewProjection) {
 
 void GameCamera::Debug() {
 #ifdef _DEBUG
-	/* ImGui::Begin("CameraDebug");
 
-	 if (ImGui::TreeNode("ViewProjection")) {
+	 if (ImGui::TreeNode("CameraDebug")) {
+         ImGui::DragFloat("move", &railMoveTime_, 0.001f);
 
-		 ImGui::DragFloat3("Scale", &worldTransform_.scale_.x, 0.01f);
-		 ImGui::DragFloat3("Rotate", &worldTransform_.rotation_.x, 0.01f);
-		 ImGui::DragFloat3("Translate", &worldTransform_.translation_.x, 0.01f);
-		 ImGui::TreePop();
+         ImGui::TreePop();
 	 }
-	 ImGui::End();
-	*/
+
+	
 #endif
 }

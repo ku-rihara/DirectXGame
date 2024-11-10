@@ -143,11 +143,11 @@ void GameScene::Debug() {
 	positionEditor_->Debug();
 	player_->Debug();
 	score_->Debug();
+	gameCamera_->Debug();
 	ImGui::End();
 	//ライティング
 	ImGui::Begin("Lighting");
 	ImGui::End();
-	gameCamera_->Debug();
 #endif
 }
 

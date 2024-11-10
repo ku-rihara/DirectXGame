@@ -9,6 +9,7 @@ void Rail::Init(size_t numObjects) {
 
     for (size_t i = 0; i < numObjects; ++i) {
         object3d_[i].reset(Object3d::CreateModel("Rail",".obj"));
+        object3d_[i]->SetLightMode(2);
     }
 }
 
@@ -38,6 +39,10 @@ void Rail::Update(const std::vector<Vector3>& controlPos) {
             currentLength + Vector3::Length(pointsDrawing_[currentIndex + 1] - pointsDrawing_[currentIndex]) < segmentLength * i) {
             currentLength += Vector3::Length(pointsDrawing_[currentIndex + 1] - pointsDrawing_[currentIndex]);
             currentIndex++;
+        }
+        // 範囲外アクセスを避けるためのチェック
+        if (currentIndex >= pointsDrawing_.size() - 1) {
+            break; // ループから抜ける
         }
 
         float t = (segmentLength * i - currentLength) / Vector3::Length(pointsDrawing_[currentIndex + 1] - pointsDrawing_[currentIndex]);

@@ -17,3 +17,7 @@ void BaseObject3d::SetModel(const std::string& modelName, const std::string& ext
 void BaseObject3d::CreateMaterialResource() {
 	material_.CreateMaterialResource(DirectXCommon::GetInstance());
 }
+
+void BaseObject3d::SetLightMode(uint32_t num) {
+	material_.materialData_->enableLighting = num;
+}

@@ -14,6 +14,7 @@ void  BaseEnemy::Init(const std::string& instanceName, const std::string& extens
 //更新
 void  BaseEnemy::Update() {
 	Debug();
+	Move();
 	transform_.UpdateMatrix();
 }
 //描画

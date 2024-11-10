@@ -33,6 +33,10 @@ void   NormalEnemy::Debug() {
 }
 
 
+void NormalEnemy::Move() {
+
+}
+
 //Vector3 BaseEnemy::GetBaseCenterPosition() const {
 //	Vector3 worldPos;
 //	// ワールド行列の平行移動成分を取得

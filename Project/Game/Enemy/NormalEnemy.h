@@ -21,6 +21,8 @@ public:
 	virtual void Debug();
 	virtual void Draw(const ViewProjection& viewProjection);
 
+	void Move()override;
+
 	/*/// Collider
 	virtual	Vector3 GetBaseCenterPosition() const override;*/
 	//virtual	void OnCollisionEnter([[maybe_unused]] Collider* other)override;

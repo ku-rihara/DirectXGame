@@ -18,7 +18,7 @@ private:
 
     float railMoveTime_ = 0.0f;  // レール移動の進行度
     Vector3 cameraRotate_;       // カメラの回転角度
-    float railMoveSpeed_ = 0.1f; // レールに沿った移動速度
+    float railMoveSpeed_; // レールに沿った移動速度
 
 public:
     //Function
