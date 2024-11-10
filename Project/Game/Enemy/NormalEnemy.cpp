@@ -1,6 +1,7 @@
 
 #include"Enemy/NormalEnemy.h"
 #include<imgui.h>
+#include"Frame/Frame.h"
 
 int  NormalEnemy::instanceNum_ = 0;
 
@@ -34,7 +35,7 @@ void   NormalEnemy::Debug() {
 
 
 void NormalEnemy::Move() {
-
+	transform_.translation_.y += 5.0f * Frame::DeltaTime();
 }
 
 //Vector3 BaseEnemy::GetBaseCenterPosition() const {

@@ -6,9 +6,10 @@ Skydome::Skydome() {}
 Skydome::~Skydome() {}
 
 void Skydome::Init() {
-	objct3D_.reset(Object3d::CreateModel("skydome", ".obj"));
+	objct3D_.reset(Object3d::CreateModel("skydome",".obj"));
 	transform_.Init();
-	transform_.scale_ = {200, 200, 200};
+	transform_.scale_ = {500, 500, 500};
+	transform_.isNotViewRestriction_ = true;
 }
 
 void Skydome::Update() { 

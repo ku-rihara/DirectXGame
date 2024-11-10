@@ -47,6 +47,7 @@ public:
 
 	Vector3 PosSet(const Vector3& pos, const float& ofset);
 
+
 	/// Collider
 	Vector3 GetBaseCenterPosition() const override;
 	Vector3 GetRotate() const override;
@@ -55,4 +56,9 @@ public:
     /// getter  methods
     /// ===================================================
 	Vector3 GetWorldPos();
+
+	/// ===================================================
+	/// setter  methods
+	/// ===================================================
+	void SetRotateY(float y);
 };

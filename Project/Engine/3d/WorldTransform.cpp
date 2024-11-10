@@ -89,3 +89,11 @@ void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection)
 		// 定数バッファに転送する
 		TransferMatrix();
 }
+
+Vector3 WorldTransform::GetWolrdPosition()const {
+	Vector3 result;
+	result.x=matWorld_.m[3][0];
+	result.y= matWorld_.m[3][1];
+	result.z= matWorld_.m[3][2];
+	return result;
+}

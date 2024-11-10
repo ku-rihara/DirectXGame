@@ -23,6 +23,7 @@ public:
     void Update(const std::vector<Vector3>& controlPos);
     void Draw(const ViewProjection& viewProjection);
 
+    Vector3 RotateVectorAroundAxis(const Vector3& vec, const Vector3& axis, float angle);
     Vector3 GetPositionOnRail(float progress) const;
 
     const std::vector<Vector3>& GetPointsDrawing() const { return pointsDrawing_; }

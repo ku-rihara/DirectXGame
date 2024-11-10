@@ -40,7 +40,7 @@ public:
 
 	void AddNormalEnemy(const Vector3&pos);
 	void Init();
-	void Update();
+	void Update(const Vector3& traget);
 	void Debug();
 	void Draw(const ViewProjection& viewProjection);
 

@@ -75,7 +75,7 @@ void GameScene::Update() {
 		//レールカメラ更新
 	controlPointManager_->Update();
 	/// 敵マネージャー更新
-	enemyManager_->Update();
+	enemyManager_->Update(player_->GetWorldPos());
 	//プレイヤー更新
 	player_->Update();
 	///レティクル更新

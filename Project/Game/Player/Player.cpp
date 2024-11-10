@@ -9,11 +9,18 @@
 
 void  Player::Init() {
 	/// プレイヤーのモデル
-	obj3D_.reset(Object3d::CreateModel("suzanne", ".obj"));
+	obj3D_.reset(Object3d::CreateModel("Player", ".obj"));
 	/// ビームの初期化
 	beam_ = std::make_unique<PlayerBeam>();
 	/// 初期化
 	beam_->Init();
+
+	obj3D_->SetLightMode(2);
+	transform_.Init();
+	
+	transform_.translation_.z = 0.18f;
+	transform_.translation_.y = -0.36f;
+	transform_.isNotViewRestriction_ = true;
 	//beam_->SetParent(transform_);
 
 }

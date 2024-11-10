@@ -11,10 +11,12 @@ void PlayerBeam::Init() {
     transformL_.Init();
     transformR_.Init();
     transform_.Init();
+    transformL_.isNotViewRestriction_ = true;
+    transformR_.isNotViewRestriction_ = true;
 
     /// parent
-    transformL_.parent_ = &transform_;
-    transformR_.parent_ = &transform_;
+   /* transformL_.parent_ = &transform_;
+    transformR_.parent_ = &transform_;*/
 
     transformL_.translation_.x = -0.5f;
     transformR_.translation_.x = 0.5f;
@@ -35,22 +37,25 @@ void PlayerBeam::Init() {
 
 void PlayerBeam::Update(const Vector3& position, const Vector3& direction) {
     velocity_ = direction;
-
     // 位置を設定
-    transform_.translation_ = position;
-  
+    transformL_.translation_ = PosSet(position, 1);
+    transformR_.translation_ = PosSet(position, -1);
 
     // 方向ベクトルを基にX軸とY軸の回転を計算
     float rotateY = std::atan2(direction.x, direction.z);
     float rotateX = std::atan2(-direction.y, std::sqrt(direction.x * direction.x + direction.z * direction.z));
 
-    // 回転を設定
-    transform_.rotation_ = { rotateX, rotateY, 0.0f };
+  
+    //float rotateYOffset = -(std::numbers::pi_v<float>/15.0f); // 約5度（ラジアン）
 
-    transform_.UpdateMatrix();
+    // 左右それぞれのビームに傾きオフセットを適用
+    transformL_.rotation_ = { rotateX, rotateY, 0.0f };
+    transformR_.rotation_ = { rotateX, rotateY, 0.0f };
+
     transformR_.UpdateMatrix();
     transformL_.UpdateMatrix();
 }
+
 
 void PlayerBeam::Draw(const ViewProjection& viewProjection) {
     // モデルの描画
@@ -92,7 +97,7 @@ void PlayerBeam::Debug() {
 
 }
 Vector3  PlayerBeam::PosSet(const Vector3& pos,const float& ofset) {
-    return { pos.x + ofset,pos.y ,pos.z };
+    return { pos.x + ofset,pos.y ,pos.z+1};
 }
 
 void PlayerBeam::DecreaseGauge() {
@@ -107,7 +112,8 @@ void PlayerBeam::DecreaseGauge() {
         transform_.scale_.y -= 0.45f * Frame::DeltaTime(); 
       
     }
- 
+    transformL_.scale_ = transform_.scale_;
+    transformR_.scale_ = transform_.scale_;
 
     /// gauge
     if (gaugeSprite_->uvTransform_.pos.y <= -0.435f) {
@@ -128,8 +134,8 @@ void PlayerBeam::IncreaseGauge() {
         transform_.scale_.x += 0.45f * Frame::DeltaTime();
         transform_.scale_.y += 0.45f * Frame::DeltaTime();     
     }
-   /* transformL_.scale_ = transform_.scale_;
-    transformR_.scale_ = transform_.scale_;*/
+    transformL_.scale_ = transform_.scale_;
+    transformR_.scale_ = transform_.scale_;
 
     ///gauge
     if (gaugeSprite_->uvTransform_.pos.y >= 0.0f) {

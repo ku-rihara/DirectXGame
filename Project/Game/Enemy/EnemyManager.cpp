@@ -25,13 +25,13 @@ void  EnemyManager::AddNormalEnemy(const Vector3& pos) {
 }
 
 //レール更新
-void EnemyManager::Update() {
+void EnemyManager::Update(const Vector3& traget) {
 
 	Debug();
 
 	auto spotIt = positions_.begin(); // controlSpot_のイテレータ
 	for (std::list<std::unique_ptr<BaseEnemy>>::iterator enemyIter = enemies_.begin(); enemyIter != enemies_.end();) {
-		(*enemyIter)->Update();
+		(*enemyIter)->Update(traget);
 
 		// controlSpot_の更新
 		if (spotIt != positions_.end()) {

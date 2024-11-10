@@ -54,9 +54,9 @@ void Rail::Update(const std::vector<Vector3>& controlPos) {
         float rotateX = std::atan2(-direction.y, std::sqrt(direction.x * direction.x + direction.z * direction.z));
         Vector3 right = Vector3::Cross(Vector3(0, 1, 0), direction);
         right = Vector3::Normalize(right);
-        float rotateZ = std::atan2(right.y, right.x);
+        /*float rotateZ = std::atan2(right.y, right.x);*/
 
-        transform_[i].rotation_ = { rotateX, rotateY, rotateZ };
+        transform_[i].rotation_ = { rotateX, rotateY, 0 };
         transform_[i].translation_ = interpolatedPos;
         transform_[i].UpdateMatrix();
     }

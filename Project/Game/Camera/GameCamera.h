@@ -27,6 +27,8 @@ public:
     void RailDraw(const ViewProjection& viewProjection);
     void Debug();
 
+    Vector3 RotateVectorAroundAxis(const Vector3& vec, const Vector3& axis, float angle);
+
     /// <summary>
     /// プロジェクション行列計算用のメンバ設定関数群
     /// </summary>

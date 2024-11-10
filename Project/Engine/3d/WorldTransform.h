@@ -9,6 +9,7 @@
 struct ConstBufferDataWorldTransform {
 	Matrix4x4 matWorld; // ローカル → ワールド変換行列
 };
+
 /// <summary>
 /// ワールド変換データ
 /// </summary>
@@ -25,8 +26,11 @@ public:
 	Matrix4x4 matWorld_;
 	//親となるワールド変換へのポインタ
 	const WorldTransform* parent_ = nullptr;
+
+	bool isNotViewRestriction_;
 	
 private:
+
 	Matrix4x4 billboardMatrix_;
 	Matrix4x4 backToFrontMatrix_;
 	// 定数バッファ
@@ -36,6 +40,7 @@ private:
 	// コピー禁止
 	WorldTransform(const WorldTransform&) = delete;
 	WorldTransform& operator=(const WorldTransform&) = delete;
+
 public:
 	WorldTransform() ;
 	~WorldTransform() ;
@@ -84,6 +89,9 @@ public:
 	Vector3 GetForwardVector() const {
 		return Vector3(matWorld_.m[0][2], matWorld_.m[1][2], matWorld_.m[2][2]);
 	}
+
+	Vector3 GetWolrdPosition()const;
+	Vector3 GetScale()const { return scale_; }
 public:
 	
 	// ムーブコンストラクタを追加
@@ -97,8 +105,8 @@ public:
 		backToFrontMatrix_(std::move(other.backToFrontMatrix_)),
 		constBuffer_(std::move(other.constBuffer_)),
 		constMap(other.constMap) {
-		// ムーブ後に other を初期化（必要に応じて）
-		other.constMap = nullptr; // など
+		
+		other.constMap = nullptr; 
 	}
 
 	

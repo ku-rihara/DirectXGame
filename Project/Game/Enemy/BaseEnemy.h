@@ -7,8 +7,10 @@
 //obj
 #include"3d/Object3d.h"
 #include"Colider/AABBCollider.h"
-class BaseEnemy :public AABBCollider {
 
+class BaseEnemy :public AABBCollider {
+private:
+	Vector3 target_;
 protected:
 	///============================================
 	///protected variants
@@ -18,6 +20,8 @@ protected:
 	int instanceID_;
 	bool isDeath_;
 	int scoreValue_;
+	float distanceMax_;
+	bool isMove_;
 public:
 
 	/// ===================================================
@@ -26,7 +30,7 @@ public:
 
 	/// 初期化、更新、デバッグ、描画
 	virtual void Init(const std::string& instanceName, const std::string& extension);
-	virtual void Update();
+	 void Update(const Vector3& traget);
 	virtual void Debug();
 	virtual void Draw(const ViewProjection& viewProjection);
 
@@ -42,6 +46,7 @@ public:
 	Vector3 GetPos() { return transform_.translation_; }
 	bool GetIsDeath() { return isDeath_; }
 	int GetScoreValue()const { return scoreValue_; }
+	Vector3 GetTargetPos()const { return target_; }
 
 	/// ===================================================
 	/// setter  method

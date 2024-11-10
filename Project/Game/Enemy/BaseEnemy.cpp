@@ -10,11 +10,22 @@ void  BaseEnemy::Init(const std::string& instanceName, const std::string& extens
 	objct3D_.reset(Object3d::CreateModel(instanceName, extension));
 	/*instanceID_ = instanceNum_++;*/
 	transform_.Init();
+
+	distanceMax_ = 5;
 }
 //更新
-void  BaseEnemy::Update() {
+void  BaseEnemy::Update(const Vector3& traget) {
 	Debug();
-	Move();
+	target_ = traget;
+	// プレイヤー位置と敵位置の差を求める
+	Vector3 diff = target_ - transform_.translation_;
+	float distance= Vector3::Length(diff);
+	if (distance <= distanceMax_) {
+		isMove_ = true;
+	}
+	if (isMove_) {
+		Move();
+	}
 	transform_.UpdateMatrix();
 }
 //描画
