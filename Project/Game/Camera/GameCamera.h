@@ -36,6 +36,7 @@ public:
     void SetAspectRatio(float value) { viewProjection_.aspectRatio_ = value; }
     void SetNearZ(float value) { viewProjection_.nearZ_ = value; }
     void SetFarZ(float value) { viewProjection_.farZ_ = value; }
+    void SetMoveSpeed(float value) { railMoveSpeed_ = value; }
 
     //getter
     const WorldTransform& GetWorldTransform() const { return worldTransform_; }

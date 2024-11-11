@@ -42,8 +42,12 @@
     <ClCompile Include="Game\Colider\AABBCollider.cpp" />
     <ClCompile Include="Game\Colider\CollisionManager.cpp" />
     <ClCompile Include="Game\Colider\OBBCollider.cpp" />
+    <ClCompile Include="Game\ControlPoint\BaseSpeedControl.cpp" />
     <ClCompile Include="Game\ControlPoint\ControlPoint.cpp" />
     <ClCompile Include="Game\ControlPoint\ControlPointManager.cpp" />
+    <ClCompile Include="Game\ControlPoint\FastPoint.cpp" />
+    <ClCompile Include="Game\ControlPoint\SlowPoint.cpp" />
+    <ClCompile Include="Game\ControlPoint\SpeedPointManager.cpp" />
     <ClCompile Include="Game\Enemy\BaseEnemy.cpp" />
     <ClCompile Include="Game\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Enemy\NormalEnemy.cpp" />
@@ -110,8 +114,12 @@
     <ClInclude Include="Game\Colider\AABBCollider.h" />
     <ClInclude Include="Game\Colider\CollisionManager.h" />
     <ClInclude Include="Game\Colider\OBBCollider.h" />
+    <ClInclude Include="Game\ControlPoint\BaseSpeedControl.h" />
     <ClInclude Include="Game\ControlPoint\ControlPoint.h" />
     <ClInclude Include="Game\ControlPoint\ControlPointManager.h" />
+    <ClInclude Include="Game\ControlPoint\FastPoint.h" />
+    <ClInclude Include="Game\ControlPoint\SlowPoint.h" />
+    <ClInclude Include="Game\ControlPoint\SpeedPointManager.h" />
     <ClInclude Include="Game\Enemy\BaseEnemy.h" />
     <ClInclude Include="Game\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Enemy\NormalEnemy.h" />

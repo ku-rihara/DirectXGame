@@ -21,6 +21,7 @@ void GameScene::Init() {
 	////////////////////////////////////////////////////////////////////////////////////////////
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
 	controlPointManager_ = std::make_unique<ControlPointManager>();
+	speedPointManager_ = std::make_unique<SpeedPointManager>();
 	gameCamera_ = std::make_unique<GameCamera>();
 	player_ = std::make_unique<Player>();
 	enemyManager_ = std::make_unique<EnemyManager>();
@@ -34,6 +35,7 @@ void GameScene::Init() {
 	debugCamera_->Init();
 	gameCamera_->Init();
 	controlPointManager_->Init();
+	speedPointManager_->Init();
 	enemyManager_->Init();
 	viewProjection_.Init();
 	player_->Init();
@@ -45,6 +47,7 @@ void GameScene::Init() {
 	//  セット
 	////////////////////////////////////////////////////////////////////////////////////////////
 	player_->SetReticle(reticle_.get());
+	player_->SetGameCamera(gameCamera_.get());
 	reticle_->SetPlayer(player_.get());
 	enemyManager_->SetScore(score_.get());
 	//parent
@@ -76,6 +79,7 @@ void GameScene::Update() {
 	controlPointManager_->Update();
 	/// 敵マネージャー更新
 	enemyManager_->Update(player_->GetWorldPos());
+	speedPointManager_->Update();
 	//プレイヤー更新
 	player_->Update();
 	///レティクル更新
@@ -109,6 +113,8 @@ void GameScene::ModelDraw() {
 	enemyManager_->Draw(viewProjection_);
 	//レール
 	gameCamera_->RailDraw(viewProjection_);
+
+	speedPointManager_->Draw(viewProjection_);
 }
 
 /// ===================================================

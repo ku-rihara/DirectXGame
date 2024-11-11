@@ -7,8 +7,10 @@
 //obj
 #include"3d/Object3d.h"
 #include "Player/PlayerBeam.h"
+#include"Colider/AABBCollider.h"
 class Reticle;
-class Player {
+class GameCamera;
+class Player:public AABBCollider {
 private:
 
 	///============================================
@@ -17,6 +19,7 @@ private:
 
 	/// other class
 	Reticle* pReticle_;
+	GameCamera* pGameCamera_;
   
 	WorldTransform transform_;
 	std::unique_ptr<Object3d> obj3D_;
@@ -34,6 +37,13 @@ public://メンバ関数
 
 	/// レティクルセット
 	void SetReticle(Reticle* reticle);
+    void SetGameCamera(GameCamera* gamecamera);
+
+
+	/// Collider
+	virtual	Vector3 GetBaseCenterPosition() const override;
+	virtual	void OnCollisionEnter([[maybe_unused]] BaseCollider* other)override;
+
 
 	Matrix4x4 GetMatWorld() const { return transform_.matWorld_; }
 	/// <summary>

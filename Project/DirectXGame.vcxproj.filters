@@ -265,6 +265,18 @@
     <ClCompile Include="Game\Score\Score.cpp">
       <Filter>Game\Score</Filter>
     </ClCompile>
+    <ClCompile Include="Game\ControlPoint\BaseSpeedControl.cpp">
+      <Filter>Game\ControlPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ControlPoint\SlowPoint.cpp">
+      <Filter>Game\ControlPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ControlPoint\SpeedPointManager.cpp">
+      <Filter>Game\ControlPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ControlPoint\FastPoint.cpp">
+      <Filter>Game\ControlPoint</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -467,6 +479,18 @@
     </ClInclude>
     <ClInclude Include="Game\Score\Score.h">
       <Filter>Game\Score</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ControlPoint\BaseSpeedControl.h">
+      <Filter>Game\ControlPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ControlPoint\SlowPoint.h">
+      <Filter>Game\ControlPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ControlPoint\SpeedPointManager.h">
+      <Filter>Game\ControlPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ControlPoint\FastPoint.h">
+      <Filter>Game\ControlPoint</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

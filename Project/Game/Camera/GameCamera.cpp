@@ -11,7 +11,7 @@ void GameCamera::Init() {
     viewProjection_.UpdateMatrix();
 
     // レールの初期化（オブジェクト数を指定）
-    rail_.Init(200);
+    rail_.Init(550);
     railMoveSpeed_ = 0.0f;
 }
 
@@ -85,3 +85,4 @@ void GameCamera::Debug() {
 
 #endif
 }
+

@@ -15,6 +15,7 @@
 #include"Camera/GameCamera.h"
 //obj
 #include"ControlPoint/ControlPointManager.h"
+#include"ControlPoint/SpeedPointManager.h"
 #include"Enemy/EnemyManager.h"
 #include"Player/Player.h"
 #include"Reticle/Reticle.h"
@@ -52,6 +53,8 @@ private:
 	std::unique_ptr<ControlPointManager>controlPointManager_=nullptr;
 	/// エネミーマネージャー
 	std::unique_ptr<EnemyManager>enemyManager_ = nullptr;
+	/// スピードーマネージャー
+	std::unique_ptr<SpeedPointManager>speedPointManager_ = nullptr;
 	/// プレイや
 	std::unique_ptr<Player>player_ = nullptr;
 	/// レティクル

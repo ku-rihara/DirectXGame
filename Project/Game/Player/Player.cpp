@@ -6,6 +6,9 @@
 #include"input/Input.h"
 /// frame
 #include"Frame/Frame.h"
+#include"Camera/GameCamera.h"
+#include"ControlPoint/SlowPoint.h"
+#include"ControlPoint/FastPoint.h"
 
 void  Player::Init() {
 	/// プレイヤーのモデル
@@ -92,3 +95,26 @@ void Player::SetReticle(Reticle* reticle) {
 //setter
 //親子関係を結ぶ
 void Player::SetParent(const WorldTransform* parent) { transform_.parent_ = parent; }
+
+void Player::SetGameCamera(GameCamera* gamecamera) {
+	pGameCamera_ = gamecamera;
+}
+
+
+Vector3 Player::GetBaseCenterPosition() const {
+	const Vector3 offset = { 0.0f, 0.0f, 0.0f };//ローカル座標のオフセット
+	// ワールド座標に変換
+	Vector3 worldPos = MatrixTransform(offset, transform_.matWorld_);
+
+	return worldPos;
+}
+
+void Player::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
+	if (dynamic_cast<FastPoint*>(other)) {
+		pGameCamera_->SetMoveSpeed(2.0f);
+	}
+
+	if (dynamic_cast<SlowPoint*>(other)) {
+		pGameCamera_->SetMoveSpeed(0.05f);
+	}
+}

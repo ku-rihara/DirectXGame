@@ -1,6 +1,6 @@
 #pragma once
 
-#include"ControlPoint.h"
+#include"ControlPoint/BaseSpeedControl.h"
 
 //math
 #include"Vector3.h"
@@ -14,25 +14,28 @@
 #include <json.hpp>
 using json = nlohmann::json;
 
-class ControlPointManager {
+class SpeedPointManager {
 private:
-	std::list<std::unique_ptr<ControlPoint>>rails_;
+	std::list<std::unique_ptr<BaseSpeedControl>>rails_;
 
-	std::vector<Vector3>controlSpots_;
+	std::vector<Vector3>slowSpeed_;
+	std::vector<Vector3>fastSpeed_;
 	Model* model_;
 	int controlNum_;
 public:
-	void AddControlPoint(const Vector3&pos);
+	void AddSlowSpeed(const Vector3&pos);
+	void AddFastSpeed(const Vector3& pos);
 
 	void Init();
 	void Update();
 	void Draw(const ViewProjection& viewProjection);
+	void Debug();
 	// 制御点をファイルに保存
 	void SaveControlSpots(const std::string& filename);
 
 	// 制御点をファイルから読み込み
-	void LoadControlSpots(const std::string& filename);
+	void LoadSlowSpots(const std::string& filename);
 
-	std::vector<Vector3> GetControlPoints()const { return controlSpots_; }
+	std::vector<Vector3> GetControlPoints()const { return slowSpeed_; }
 	
 };

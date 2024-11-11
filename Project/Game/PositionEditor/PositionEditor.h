@@ -5,11 +5,18 @@
 #include"3d/Object3d.h"
 //obj
 #include"ControlPoint/ControlPointManager.h"
+#include"ControlPoint/SpeedPointManager.h"
 #include"Enemy/EnemyManager.h"
 /// std
 #include<memory>
 
 class PositionEditor {
+private:
+	enum SpeedMode {
+		NONE,
+		SLOW,
+		FAST
+	};
 private:
 
 	/// ===================================================
@@ -20,6 +27,8 @@ private:
 	WorldTransform transform_;
 	//変数
 	const float mouseDepth_ = 0.995f;
+
+	SpeedMode mode_;
 public:
 	/// ===================================================
 	///public method
@@ -29,6 +38,8 @@ public:
  	void Init();
 	void Update(const ViewProjection& viewProjection);
 	void PutControlPoint(ControlPointManager* controlPointManager);
+	void PutSpeedPoint(SpeedPointManager* speedPointManager);
+
 	void PutEnemy(EnemyManager* enemyManager);
 	void Draw(const ViewProjection& viewProjection);
 
