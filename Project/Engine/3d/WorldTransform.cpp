@@ -60,7 +60,7 @@ void WorldTransform::UpdateMatrix() {
 	matWorld_ = MakeAffineMatrix(scale_, rotation_, translation_);
 	// 親子関係があれば親のワールド行列を掛ける
 	if (parent_) {
-		matWorld_ =  parent_->matWorld_* matWorld_;
+		matWorld_ *=  parent_->matWorld_;
 	}
 	// 定数バッファに転送する
 	TransferMatrix();
@@ -68,6 +68,7 @@ void WorldTransform::UpdateMatrix() {
 
 
 void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection) {
+
 	Matrix4x4 scaleMatrix = MakeScaleMatrix(scale_);
 	// 回転行列を計算
 	Matrix4x4 rotateMatrix = MakeRotateMatrix(rotation_);
@@ -84,7 +85,7 @@ void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection)
 
 		// 親子関係があれば親のワールド行列を掛ける
 		if (parent_) {
-			matWorld_ = parent_->matWorld_* matWorld_;
+			matWorld_ *= parent_->matWorld_;
 		}
 		// 定数バッファに転送する
 		TransferMatrix();
