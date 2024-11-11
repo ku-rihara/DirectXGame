@@ -19,11 +19,11 @@ void  SlowPoint::Draw(const ViewProjection&viewProjection) {
 
 void  SlowPoint::Debug() {
 
-	ImGui::Begin("SlowPositions");
-	if (ImGui::TreeNode(("Rail" + std::to_string(instanceID_)).c_str())) {
+
+	if (ImGui::TreeNode(("SlowPos" + std::to_string(instanceID_)).c_str())) {
 		ImGui::DragFloat3(("pos" + std::to_string(instanceID_)).c_str(), &transform_.translation_.x, 0.01f);
 		ImGui::TreePop();
 	}
-	ImGui::End();
+	
 }
 

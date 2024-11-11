@@ -12,13 +12,18 @@ BaseSpeedControl::~BaseSpeedControl() {
 }
 
 void  BaseSpeedControl::Init() {
-	objct3D_.reset(Object3d::CreateModel("plane", ".obj"));
+	objct3D_.reset(Object3d::CreateModel("suzanne", ".obj"));
+	transform_.Init();
 }
 
 //更新
 void  BaseSpeedControl::Update() {
-	transform_.UpdateMatrix();
+	
+	ImGui::Begin("SpeedPositions");
 	Debug();
+	ImGui::End();
+
+	transform_.UpdateMatrix();
 }
 
 //描画

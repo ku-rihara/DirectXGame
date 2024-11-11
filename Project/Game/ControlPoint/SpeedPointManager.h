@@ -35,6 +35,7 @@ public:
 
 	// 制御点をファイルから読み込み
 	void LoadSlowSpots(const std::string& filename);
+	void LoadFastSpots(const std::string& filename);
 
 	std::vector<Vector3> GetControlPoints()const { return slowSpeed_; }
 	

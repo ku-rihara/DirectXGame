@@ -14,7 +14,7 @@
 void  SpeedPointManager::Init() {
 
 	LoadSlowSpots("resources/SpeedParamater/slowPoint.json");
-	LoadSlowSpots("resources/SpeedParamater/fastPoint.json");
+	LoadFastSpots("resources/SpeedParamater/fastPoint.json");
 
 }
 
@@ -127,3 +127,21 @@ void  SpeedPointManager::LoadSlowSpots(const std::string& filename) {
 		}
 	}
 }
+
+
+// JSONファイルから制御点を読み込む
+void  SpeedPointManager::LoadFastSpots(const std::string& filename) {
+	std::ifstream file(filename);
+	if (file.is_open()) {
+		json j;
+		file >> j;
+		file.close();
+
+		// 読み込んだデータを基にレールを追加
+		for (const auto& spot : j) {
+			Vector3 pos = { spot[0], spot[1], spot[2] };
+			AddFastSpeed(pos);
+		}
+	}
+}
+
