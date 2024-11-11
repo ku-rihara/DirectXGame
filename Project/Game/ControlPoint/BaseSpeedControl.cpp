@@ -42,3 +42,10 @@ void  BaseSpeedControl::Draw(const ViewProjection&viewProjection) {
 //}
 
 
+Vector3 BaseSpeedControl::GetBaseCenterPosition() const {
+	const Vector3 offset = { 0.0f, 0.0f, 0.0f };//ローカル座標のオフセット
+	// ワールド座標に変換
+	Vector3 worldPos = MatrixTransform(offset, transform_.matWorld_);
+
+	return worldPos;
+}

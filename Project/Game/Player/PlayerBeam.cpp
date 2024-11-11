@@ -15,11 +15,15 @@ void PlayerBeam::Init() {
     transformR_.isNotViewRestriction_ = true;
 
     /// parent
-   /* transformL_.parent_ = &transform_;
-    transformR_.parent_ = &transform_;*/
+    transformL_.parent_ = &transform_;
+    transformR_.parent_ = &transform_;
 
-    transformL_.translation_.x = -0.5f;
-    transformR_.translation_.x = 0.5f;
+    tempScale_ = { 1,1,1 };
+
+    transformL_.translation_.x = -0.3f;
+    transformR_.translation_.x = 0.3f;
+
+   
 
     /// gauge frame
     uint32_t   frameHandle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/GaugeFrame.png");
@@ -35,23 +39,25 @@ void PlayerBeam::Init() {
    
 }
 
-void PlayerBeam::Update(const Vector3& position, const Vector3& direction) {
+
+
+
+void PlayerBeam::Update(const Vector3& camerarotate, const Vector3& direction) {
     velocity_ = direction;
-    // 位置を設定
-    transformL_.translation_ = PosSet(position, 1);
-    transformR_.translation_ = PosSet(position, -1);
 
-    // 方向ベクトルを基にX軸とY軸の回転を計算
-    float rotateY = std::atan2(direction.x, direction.z);
-    float rotateX = std::atan2(-direction.y, std::sqrt(direction.x * direction.x + direction.z * direction.z));
+    // カメラの回転を考慮して、進行方向とレティクル方向が一致するように補正する
+    float rotateY = std::atan2(direction.x, direction.z) + camerarotate.y;
+    float rotateX = std::atan2(-direction.y, std::sqrt(direction.x * direction.x + direction.z * direction.z)) - camerarotate.x;
 
-  
-    //float rotateYOffset = -(std::numbers::pi_v<float>/15.0f); // 約5度（ラジアン）
+    // 親ビームの回転を設定
+    transform_.rotation_ = { rotateX, rotateY, 0.0f };
 
-    // 左右それぞれのビームに傾きオフセットを適用
-    transformL_.rotation_ = { rotateX, rotateY, 0.0f };
-    transformR_.rotation_ = { rotateX, rotateY, 0.0f };
+    // 左右のビームのローカル回転オフセットを考慮
+    transformL_.rotation_ = { 0.0f, std::numbers::pi_v<float> / 30, 0.0f };  // 左に傾ける
+    transformR_.rotation_ = { 0.0f, -std::numbers::pi_v<float> / 30, 0.0f };   // 右に傾ける
 
+    // ワールド行列の更新
+    transform_.UpdateMatrix();
     transformR_.UpdateMatrix();
     transformL_.UpdateMatrix();
 }
@@ -81,7 +87,7 @@ Vector3 PlayerBeam::GetWorldPos() {
 }
 
 Vector3 PlayerBeam::GetBaseCenterPosition() const {
-    const Vector3 offset = { 0.0f, 0.0f, 15.0f };//ローカル座標のオフセット
+    const Vector3 offset = { 0.0f, 0.0f, 1.0f };//ローカル座標のオフセット
     // ワールド座標に変換
     Vector3 worldPos = MatrixTransform(offset, transform_.matWorld_);
 
@@ -102,18 +108,18 @@ Vector3  PlayerBeam::PosSet(const Vector3& pos,const float& ofset) {
 
 void PlayerBeam::DecreaseGauge() {
 
-    if (transform_.scale_.x <= 0.0f) {
-        transform_.scale_.x = 0.0f;
-        transform_.scale_.y = 0.0f;
+    if (tempScale_.x <= 0.0f) {
+        tempScale_.x = 0.0f;
+        tempScale_.y = 0.0f;
        
     }
     else {
-        transform_.scale_.x -= 0.45f * Frame::DeltaTime();
-        transform_.scale_.y -= 0.45f * Frame::DeltaTime(); 
+        tempScale_.x -= 0.45f * Frame::DeltaTime();
+        tempScale_.y -= 0.45f * Frame::DeltaTime(); 
       
     }
-    transformL_.scale_ = transform_.scale_;
-    transformR_.scale_ = transform_.scale_;
+    transformL_.scale_ = tempScale_;
+    transformR_.scale_ = tempScale_;
 
     /// gauge
     if (gaugeSprite_->uvTransform_.pos.y <= -0.435f) {
@@ -125,17 +131,17 @@ void PlayerBeam::DecreaseGauge() {
 }
 
 void PlayerBeam::IncreaseGauge() {
-    if (transform_.scale_.x >= 1.0f) {
+    if (tempScale_.x >= 1.0f) {
 
-        transform_.scale_.x = 1.0f;
-        transform_.scale_.y = 1.0f;
+        tempScale_.x = 1.0f;
+        tempScale_.y = 1.0f;
     }
     else {
-        transform_.scale_.x += 0.45f * Frame::DeltaTime();
-        transform_.scale_.y += 0.45f * Frame::DeltaTime();     
+        tempScale_.x += 0.45f * Frame::DeltaTime();
+        tempScale_.y += 0.45f * Frame::DeltaTime();     
     }
-    transformL_.scale_ = transform_.scale_;
-    transformR_.scale_ = transform_.scale_;
+    transformL_.scale_ = tempScale_;
+    transformR_.scale_ = tempScale_;
 
     ///gauge
     if (gaugeSprite_->uvTransform_.pos.y >= 0.0f) {

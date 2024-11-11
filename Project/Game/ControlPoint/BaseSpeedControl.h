@@ -8,9 +8,9 @@
 //obj
 #include"3d/Object3d.h"
 #include"Camera/GameCamera.h"
+#include"Colider/AABBCollider.h"
 
-
-class BaseSpeedControl {
+class BaseSpeedControl :public AABBCollider {
 	
 protected://メンバ変数
 	std::unique_ptr<Object3d> objct3D_;
@@ -28,6 +28,10 @@ virtual ~BaseSpeedControl();
 	virtual void Update();
 	virtual void Debug()=0;
 	virtual void Draw(const ViewProjection& viewProjection);
+
+	/// Collider
+	virtual	Vector3 GetBaseCenterPosition() const override;
+	
 
 	Vector3 GetPos() { return transform_.translation_; }
 	bool GetIsDeath() { return isDeath_; }

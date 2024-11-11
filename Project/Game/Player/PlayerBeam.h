@@ -16,6 +16,7 @@ private:
 	WorldTransform transformR_;
 	WorldTransform transformL_;
 	Vector3 velocity_; // 速度
+	Vector3 tempScale_;
 	
 
 	/// gauge
@@ -34,7 +35,7 @@ public:
 
 		/// 初期化、更新、可視化
 	void Init();
-	void Update(const Vector3& position, const Vector3& velocity);
+	void Update(const Vector3& camerarotate, const Vector3& velocity);
 	void Draw(const ViewProjection& viewProjection);
 	void SpriteDraw();
 	void Debug();

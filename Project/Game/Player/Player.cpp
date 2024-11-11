@@ -24,7 +24,7 @@ void  Player::Init() {
 	transform_.translation_.z = 0.18f;
 	transform_.translation_.y = -0.36f;
 	transform_.isNotViewRestriction_ = true;
-	//beam_->SetParent(transform_);
+	beam_->SetParent(transform_);
 
 }
 /// 更新
@@ -57,7 +57,7 @@ void Player::BeamShot() {
 		// 自機から標準オブジェクトへのベクトル
 		Vector3 direction = pReticle_->GetWorld3DRecticlPos() - GetWorldPos();
 		direction = Vector3::Normalize(direction) /*kBulletSpeed*/;
-		beam_->Update(GetWorldPos(),direction);
+		beam_->Update(pGameCamera_->GetWorldTransform().rotation_, direction);
 		beam_->DecreaseGauge();
 	}
 	else {

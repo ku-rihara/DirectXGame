@@ -9,7 +9,7 @@ WorldTransform::WorldTransform() {
 }
 
 WorldTransform::~WorldTransform() {
-	
+
 }
 
 
@@ -55,12 +55,12 @@ void WorldTransform::TransferMatrix() {
 
 
 void WorldTransform::UpdateMatrix() {
-	
+
 	// スケール、回転、平行移動を合成して行列を計算する
 	matWorld_ = MakeAffineMatrix(scale_, rotation_, translation_);
 	// 親子関係があれば親のワールド行列を掛ける
 	if (parent_) {
-		matWorld_ =  parent_->matWorld_* matWorld_;
+		matWorld_ *= parent_->matWorld_;
 	}
 	// 定数バッファに転送する
 	TransferMatrix();
@@ -68,26 +68,27 @@ void WorldTransform::UpdateMatrix() {
 
 
 void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection) {
+
 	Matrix4x4 scaleMatrix = MakeScaleMatrix(scale_);
 	// 回転行列を計算
 	Matrix4x4 rotateMatrix = MakeRotateMatrix(rotation_);
 	// 平行移動行列を計算
 	Matrix4x4 translateMatrix = MakeTranslateMatrix(translation_);
 	backToFrontMatrix_ = MakeRotateYMatrix(std::numbers::pi_v<float>);
-	
-		billboardMatrix_ = backToFrontMatrix_* viewProjection.GetCameraMatrix();
-		billboardMatrix_.m[3][0] = 0.0f;
-		billboardMatrix_.m[3][1] = 0.0f;
-		billboardMatrix_.m[3][2] = 0.0f;
-	
-		matWorld_ = scaleMatrix * billboardMatrix_ * translateMatrix;
 
-		// 親子関係があれば親のワールド行列を掛ける
-		if (parent_) {
-			matWorld_ = parent_->matWorld_* matWorld_;
-		}
-		// 定数バッファに転送する
-		TransferMatrix();
+	billboardMatrix_ = backToFrontMatrix_ * viewProjection.GetCameraMatrix();
+	billboardMatrix_.m[3][0] = 0.0f;
+	billboardMatrix_.m[3][1] = 0.0f;
+	billboardMatrix_.m[3][2] = 0.0f;
+
+	matWorld_ = scaleMatrix * billboardMatrix_ * translateMatrix;
+
+	// 親子関係があれば親のワールド行列を掛ける
+	if (parent_) {
+		matWorld_ *= parent_->matWorld_;
+	}
+	// 定数バッファに転送する
+	TransferMatrix();
 }
 
 Vector3 WorldTransform::GetWolrdPosition()const {
