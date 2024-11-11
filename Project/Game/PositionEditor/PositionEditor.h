@@ -15,7 +15,9 @@ private:
 	enum SpeedMode {
 		NONE,
 		SLOW,
-		FAST
+		FAST,
+		NORMAL,
+		STOP,
 	};
 private:
 

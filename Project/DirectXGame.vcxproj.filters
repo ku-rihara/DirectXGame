@@ -106,6 +106,9 @@
     <Filter Include="Game\Score">
       <UniqueIdentifier>{dd4d5777-7134-412a-a280-43ac3a192723}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\SpeedBlock">
+      <UniqueIdentifier>{0d40ee2e-8f08-4596-b5ae-cdbf11f4807e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -268,17 +271,23 @@
     <ClCompile Include="Game\ControlPoint\BaseSpeedControl.cpp">
       <Filter>Game\ControlPoint</Filter>
     </ClCompile>
-    <ClCompile Include="Game\ControlPoint\SlowPoint.cpp">
-      <Filter>Game\ControlPoint</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\ControlPoint\SpeedPointManager.cpp">
-      <Filter>Game\ControlPoint</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\ControlPoint\FastPoint.cpp">
-      <Filter>Game\ControlPoint</Filter>
-    </ClCompile>
     <ClCompile Include="math\Easing.cpp">
       <Filter>liberary\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ControlPoint\FastPoint.cpp">
+      <Filter>Game\SpeedBlock</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ControlPoint\NormalPoint.cpp">
+      <Filter>Game\SpeedBlock</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ControlPoint\SlowPoint.cpp">
+      <Filter>Game\SpeedBlock</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ControlPoint\SpeedPointManager.cpp">
+      <Filter>Game\SpeedBlock</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ControlPoint\StopPoint.cpp">
+      <Filter>Game\SpeedBlock</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -486,17 +495,23 @@
     <ClInclude Include="Game\ControlPoint\BaseSpeedControl.h">
       <Filter>Game\ControlPoint</Filter>
     </ClInclude>
-    <ClInclude Include="Game\ControlPoint\SlowPoint.h">
-      <Filter>Game\ControlPoint</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\ControlPoint\SpeedPointManager.h">
-      <Filter>Game\ControlPoint</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\ControlPoint\FastPoint.h">
-      <Filter>Game\ControlPoint</Filter>
-    </ClInclude>
     <ClInclude Include="math\Easing.h">
       <Filter>liberary\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ControlPoint\FastPoint.h">
+      <Filter>Game\SpeedBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ControlPoint\NormalPoint.h">
+      <Filter>Game\SpeedBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ControlPoint\SlowPoint.h">
+      <Filter>Game\SpeedBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ControlPoint\SpeedPointManager.h">
+      <Filter>Game\SpeedBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ControlPoint\StopPoint.h">
+      <Filter>Game\SpeedBlock</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

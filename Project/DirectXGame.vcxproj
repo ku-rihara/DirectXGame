@@ -46,8 +46,10 @@
     <ClCompile Include="Game\ControlPoint\ControlPoint.cpp" />
     <ClCompile Include="Game\ControlPoint\ControlPointManager.cpp" />
     <ClCompile Include="Game\ControlPoint\FastPoint.cpp" />
+    <ClCompile Include="Game\ControlPoint\NormalPoint.cpp" />
     <ClCompile Include="Game\ControlPoint\SlowPoint.cpp" />
     <ClCompile Include="Game\ControlPoint\SpeedPointManager.cpp" />
+    <ClCompile Include="Game\ControlPoint\StopPoint.cpp" />
     <ClCompile Include="Game\Enemy\BaseEnemy.cpp" />
     <ClCompile Include="Game\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Enemy\NormalEnemy.cpp" />
@@ -119,8 +121,10 @@
     <ClInclude Include="Game\ControlPoint\ControlPoint.h" />
     <ClInclude Include="Game\ControlPoint\ControlPointManager.h" />
     <ClInclude Include="Game\ControlPoint\FastPoint.h" />
+    <ClInclude Include="Game\ControlPoint\NormalPoint.h" />
     <ClInclude Include="Game\ControlPoint\SlowPoint.h" />
     <ClInclude Include="Game\ControlPoint\SpeedPointManager.h" />
+    <ClInclude Include="Game\ControlPoint\StopPoint.h" />
     <ClInclude Include="Game\Enemy\BaseEnemy.h" />
     <ClInclude Include="Game\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Enemy\NormalEnemy.h" />

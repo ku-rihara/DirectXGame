@@ -24,6 +24,12 @@ void PositionEditor::Update(const ViewProjection& viewProjection) {
 	if (Input::GetInstance()->TrrigerKey(DIK_2)) {
 		mode_ = FAST;
 	}
+	if (Input::GetInstance()->TrrigerKey(DIK_3)) {
+		mode_ =STOP ;
+	}
+	if (Input::GetInstance()->TrrigerKey(DIK_4)) {
+		mode_ = NORMAL;
+	}
 }
 
 
@@ -55,6 +61,20 @@ void PositionEditor::PutSpeedPoint(SpeedPointManager* speedPointManager) {
 		//制御点追加
 		if (Input::GetInstance()->IsTriggerMouse(3)) {
 			speedPointManager->AddFastSpeed(transform_.translation_);
+		}
+	}
+
+	if (mode_ == STOP) {
+		//制御点追加
+		if (Input::GetInstance()->IsTriggerMouse(3)) {
+			speedPointManager->AddStopSpeed(transform_.translation_);
+		}
+	}
+
+	if (mode_ == NORMAL) {
+		//制御点追加
+		if (Input::GetInstance()->IsTriggerMouse(3)) {
+			speedPointManager->AddNormalSpeed(transform_.translation_);
 		}
 	}
 }

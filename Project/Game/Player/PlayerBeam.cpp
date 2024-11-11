@@ -35,7 +35,7 @@ void PlayerBeam::Init() {
    
     gaugeSprite_->textureSize_ = frameSprite_->GetTextureJustSize();
     /*gaugeSprite_->textureLeftTop_ = { 0,frameSprite_->GetTextureJustSize().y };*/
-    SetCollisionSize(Vector3(2.0f, 1.5f, 11.5f));
+    SetCollisionSize(Vector3(1.3f, 1.3f, 11.5f));
    
 }
 

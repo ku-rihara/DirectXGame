@@ -16,26 +16,32 @@ using json = nlohmann::json;
 
 class SpeedPointManager {
 private:
-	std::list<std::unique_ptr<BaseSpeedControl>>rails_;
+	std::list<std::unique_ptr<BaseSpeedControl>>speedBlocks_;
 
 	std::vector<Vector3>slowSpeed_;
 	std::vector<Vector3>fastSpeed_;
+	std::vector<Vector3>stopSpeed_;
+	std::vector<Vector3>normalSpeed_;
 	Model* model_;
 	int controlNum_;
 public:
 	void AddSlowSpeed(const Vector3&pos);
 	void AddFastSpeed(const Vector3& pos);
+	void AddNormalSpeed(const Vector3& pos);
+	void AddStopSpeed(const Vector3& pos);
 
 	void Init();
 	void Update();
 	void Draw(const ViewProjection& viewProjection);
 	void Debug();
 	// 制御点をファイルに保存
-	void SaveControlSpots(const std::string& filename);
+	void SaveControlSpots(const std::string& filename, const std::vector<Vector3>&points);
 
 	// 制御点をファイルから読み込み
 	void LoadSlowSpots(const std::string& filename);
 	void LoadFastSpots(const std::string& filename);
+	void LoadStopSpots(const std::string& filename);
+	void LoadNormalSpots(const std::string& filename);
 
 	std::vector<Vector3> GetControlPoints()const { return slowSpeed_; }
 	
