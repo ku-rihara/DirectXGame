@@ -39,6 +39,7 @@ public:
     void SetMoveSpeed(float value) { railMoveSpeed_ = value; }
 
     //getter
+    const Vector3& GetCameraRotate()const { return cameraRotate_; }
     const WorldTransform& GetWorldTransform() const { return worldTransform_; }
     const ViewProjection& GetViewProjection() const { return viewProjection_; }
 };

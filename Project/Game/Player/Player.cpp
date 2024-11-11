@@ -57,7 +57,7 @@ void Player::BeamShot() {
 		// 自機から標準オブジェクトへのベクトル
 		Vector3 direction = pReticle_->GetWorld3DRecticlPos() - GetWorldPos();
 		direction = Vector3::Normalize(direction) /*kBulletSpeed*/;
-		beam_->Update(pGameCamera_->GetWorldTransform().rotation_, direction);
+		beam_->Update(pGameCamera_->GetCameraRotate(), direction);
 		beam_->DecreaseGauge();
 	}
 	else {

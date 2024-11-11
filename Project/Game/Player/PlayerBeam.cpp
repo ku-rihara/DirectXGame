@@ -23,8 +23,7 @@ void PlayerBeam::Init() {
     transformL_.translation_.x = -0.3f;
     transformR_.translation_.x = 0.3f;
 
-   
-
+  
     /// gauge frame
     uint32_t   frameHandle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/GaugeFrame.png");
     frameSprite_.reset(Sprite::Create(frameHandle, Vector2(120, 108), Vector4(1, 1, 1, 1)));
@@ -46,7 +45,7 @@ void PlayerBeam::Update(const Vector3& camerarotate, const Vector3& direction) {
     velocity_ = direction;
 
     // カメラの回転を考慮して、進行方向とレティクル方向が一致するように補正する
-    float rotateY = std::atan2(direction.x, direction.z) + camerarotate.y;
+    float rotateY = std::atan2(direction.x, direction.z) - camerarotate.y;
     float rotateX = std::atan2(-direction.y, std::sqrt(direction.x * direction.x + direction.z * direction.z)) - camerarotate.x;
 
     // 親ビームの回転を設定
