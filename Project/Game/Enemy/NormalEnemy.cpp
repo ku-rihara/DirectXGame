@@ -11,6 +11,7 @@ void   NormalEnemy::Init(const std::string& instanceName, const std::string& ext
 	instanceID_ = instanceNum_ + 1;
 	instanceNum_++;
 	scoreValue_ = 50;
+	hp_ = 50;
 	SetRadiusVector(Vector3(2.0f, 2.0f, 2.0f));
 }
 //更新

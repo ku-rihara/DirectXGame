@@ -20,6 +20,7 @@ void PlayerBeam::Init() {
 
     tempScale_ = { 1,1,1 };
 
+    transform_.translation_.y = 0.2f;
     transformL_.translation_.x = -0.3f;
     transformR_.translation_.x = 0.3f;
 
@@ -34,7 +35,7 @@ void PlayerBeam::Init() {
    
     gaugeSprite_->textureSize_ = frameSprite_->GetTextureJustSize();
     /*gaugeSprite_->textureLeftTop_ = { 0,frameSprite_->GetTextureJustSize().y };*/
-    SetCollisionSize(Vector3(1.0f, 1.0f, 10.5f));
+    SetCollisionSize(Vector3(2.0f, 1.5f, 11.5f));
    
 }
 
@@ -86,7 +87,7 @@ Vector3 PlayerBeam::GetWorldPos() {
 }
 
 Vector3 PlayerBeam::GetBaseCenterPosition() const {
-    const Vector3 offset = { 0.0f, 0.0f, 1.0f };//ローカル座標のオフセット
+    const Vector3 offset = { 0.0f, 0.0f, 10.0f };//ローカル座標のオフセット
     // ワールド座標に変換
     Vector3 worldPos = MatrixTransform(offset, transform_.matWorld_);
 

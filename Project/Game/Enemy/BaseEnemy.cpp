@@ -23,9 +23,16 @@ void  BaseEnemy::Update(const Vector3& traget) {
 	if (distance <= distanceMax_) {
 		isMove_ = true;
 	}
+	/// 行動開始
 	if (isMove_) {
 		Move();
 	}
+
+	/// 死亡
+	if (hp_ <= 0) {
+		isDeath_ = true;
+	}
+
 	transform_.UpdateMatrix();
 }
 //描画
@@ -55,6 +62,10 @@ Vector3 BaseEnemy::GetBaseCenterPosition() const {
 
 void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 	if (dynamic_cast<PlayerBeam*>(other)) {
-		isDeath_ = true;
+		hp_--;
+		objct3D_->color_.SetColor(Vector4(1,0,0,1 ));
+	}
+	else {
+		objct3D_->color_.SetColor(Vector4(1, 1, 1, 1));
 	}
 }

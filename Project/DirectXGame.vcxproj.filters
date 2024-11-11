@@ -277,6 +277,9 @@
     <ClCompile Include="Game\ControlPoint\FastPoint.cpp">
       <Filter>Game\ControlPoint</Filter>
     </ClCompile>
+    <ClCompile Include="math\Easing.cpp">
+      <Filter>liberary\.cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -491,6 +494,9 @@
     </ClInclude>
     <ClInclude Include="Game\ControlPoint\FastPoint.h">
       <Filter>Game\ControlPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Easing.h">
+      <Filter>liberary\.h</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

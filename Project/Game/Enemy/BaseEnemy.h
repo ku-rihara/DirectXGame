@@ -22,6 +22,8 @@ protected:
 	int scoreValue_;
 	float distanceMax_;
 	bool isMove_;
+
+	int hp_;
 public:
 
 	/// ===================================================
