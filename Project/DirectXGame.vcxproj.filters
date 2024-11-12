@@ -109,6 +109,9 @@
     <Filter Include="Game\SpeedBlock">
       <UniqueIdentifier>{0d40ee2e-8f08-4596-b5ae-cdbf11f4807e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\JyoState">
+      <UniqueIdentifier>{950765e2-1614-403d-93b0-aa0348f6c2e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -288,6 +291,18 @@
     </ClCompile>
     <ClCompile Include="Game\ControlPoint\StopPoint.cpp">
       <Filter>Game\SpeedBlock</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\SideEnemy.cpp">
+      <Filter>Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Boss.cpp">
+      <Filter>Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\TitleScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\JoyState\JoyState.cpp">
+      <Filter>Game\JyoState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -512,6 +527,18 @@
     </ClInclude>
     <ClInclude Include="Game\ControlPoint\StopPoint.h">
       <Filter>Game\SpeedBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\SideEnemy.h">
+      <Filter>Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Boss.h">
+      <Filter>Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\TitleScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\JoyState\JoyState.h">
+      <Filter>Game\JyoState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

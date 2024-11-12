@@ -8,6 +8,7 @@
 #include"Player/Player.h"
 //input 
 #include"input/input.h"
+#include"JoyState/JoyState.h"
 
 Reticle::Reticle() {}
 
@@ -24,7 +25,16 @@ void Reticle::Init() {
 
 void Reticle::Updata(const ViewProjection& viewProjection) {
 	
-	sprite_->SetPosition(Input::GetMousePos());
+	
+	Vector2 spritePos = sprite_->GetPosition();
+	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
+		spritePos.x += (float)joyState.Gamepad.sThumbLX / SHRT_MAX * 15.0f;
+		spritePos.y -= (float)joyState.Gamepad.sThumbLY / SHRT_MAX * 15.0f;
+		sprite_->SetPosition(spritePos);
+	} else {
+		sprite_->SetPosition(Input::GetMousePos());
+	}
+
 
 	// ビューポート行列
 	Matrix4x4 matViewport = MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);

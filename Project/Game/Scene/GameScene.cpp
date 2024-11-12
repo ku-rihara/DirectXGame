@@ -3,6 +3,7 @@
 #include <imgui.h>
 //class
 #include"3d/Light.h"
+#include"Frame/Frame.h"
 
 GameScene::GameScene() {}
 
@@ -12,10 +13,9 @@ GameScene::~GameScene() {
 
 void GameScene::Init() {
 	// メンバ変数の初期化
-	dxCommon_ = DirectXCommon::GetInstance();
-	input_ = Input::GetInstance();
-	audio_ = Audio::GetInstance();
-	textureManager_ = TextureManager::GetInstance();
+	
+	
+	
 	////////////////////////////////////////////////////////////////////////////////////////////
 	//  生成
 	////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,6 +29,8 @@ void GameScene::Init() {
 	skyDome_= std::make_unique<Skydome>();
 	positionEditor_ = std::make_unique<PositionEditor>();
 	score_ = std::make_unique<Score>();
+	backScreenhandle_ = TextureManager::GetInstance()->LoadTexture("./resources/Texture/backScreen.png");
+	backScreen_.reset(Sprite::Create(backScreenhandle_, Vector2(0, 0), Vector4(0, 0, 0, 0)));
 	////////////////////////////////////////////////////////////////////////////////////////////
 	//  初期化
 	////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,6 +70,7 @@ void GameScene::Update() {
 	///========================================================================================
 	positionEditor_->PutControlPoint(controlPointManager_.get());
 	positionEditor_->PutEnemy(enemyManager_.get());
+	positionEditor_->PutSpeedPoint(speedPointManager_.get());
 
 	ViewProjectionUpdate();
 
@@ -91,6 +94,16 @@ void GameScene::Update() {
 
 	score_->Update();
 
+	/// clear
+	if (gameCamera_->GetRailMoveTime() >= 0.882f) {
+		backScreen_->SetColor(Vector4{ 1,1,1,backAlpha_ });
+		backAlpha_ += Frame::DeltaTime();
+		if (backAlpha_ >= 1.0f) {
+			backAlpha_ = 1.0f;
+			isFinished_ = true;
+		}
+	}
+
 	
 }
 
@@ -101,20 +114,22 @@ void GameScene::ModelDraw() {
 
 	skyDome_->Draw(viewProjection_);
 
-	controlPointManager_->Draw(viewProjection_);
-	//プレイヤー
-	if (isDebugCameraActive_) {
-		player_->Draw(viewProjection_);
-	}
-	player_->BulletDraw(viewProjection_);
-	////可視化オブジェクト
-	positionEditor_->Draw(viewProjection_);
-	///敵
-	enemyManager_->Draw(viewProjection_);
 	//レール
 	gameCamera_->RailDraw(viewProjection_);
 
-	speedPointManager_->Draw(viewProjection_);
+	//controlPointManager_->Draw(viewProjection_);
+	//プレイヤー
+	
+		player_->Draw(viewProjection_);
+	
+	player_->BulletDraw(viewProjection_);
+	//////可視化オブジェクト
+	//positionEditor_->Draw(viewProjection_);
+	///敵
+	enemyManager_->Draw(viewProjection_);
+
+
+	//speedPointManager_->Draw(viewProjection_);
 }
 
 /// ===================================================
@@ -131,7 +146,7 @@ void GameScene::SpriteDraw() {
 	reticle_->Draw();
 	player_->SpriteDraw();
 	score_->Draw();
-
+	backScreen_->Draw();
 }
 
 void GameScene::Debug() {
@@ -163,7 +178,7 @@ void GameScene::ViewProjectionUpdate() {
 
 #ifdef _DEBUG
 	// デバッグカメラモード切り替え------------------------------
-	if (input_->TrrigerKey(DIK_SPACE)) {
+	if (Input::GetInstance()->TrrigerKey(DIK_SPACE)) {
 		if (isDebugCameraActive_ == false) {
 			isDebugCameraActive_ = true;
 		}

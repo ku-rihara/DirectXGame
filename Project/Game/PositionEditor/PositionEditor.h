@@ -16,8 +16,14 @@ private:
 		NONE,
 		SLOW,
 		FAST,
-		NORMAL,
 		STOP,
+		NORMAL,
+	};
+
+	enum EnemyType {
+		NORMALE,
+		SIDE,
+		BOSS,
 	};
 private:
 
@@ -30,6 +36,7 @@ private:
 	//変数
 	const float mouseDepth_ = 0.995f;
 
+	EnemyType enemyType_;
 	SpeedMode mode_;
 public:
 	/// ===================================================

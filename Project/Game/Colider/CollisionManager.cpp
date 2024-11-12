@@ -47,10 +47,7 @@ void CollisionManager::Update() {
 
 void CollisionManager::UpdateWorldTransform() {
 	
-	//非表示なら抜ける
-	if (!isColliderVisible_) {
-		return;
-	}
+	
 	//全てのコライダーについて行列更新をする
 	for (BaseCollider* baseCollider : baseColliders_) {
 		baseCollider->UpdateWorldTransform();

@@ -29,6 +29,7 @@ void  ControlPointManager::AddControlPoint(const Vector3& pos) {
 
 //レール更新
 void ControlPointManager::Update() {
+#ifdef _DEBUG
 	ImGui::Begin("IsSaveParamater");
 	if (ImGui::Button("Save")) {
 		SaveControlSpots("resources/RailParamater/controlPoint.json");
@@ -44,7 +45,7 @@ void ControlPointManager::Update() {
 			++spotIt; // 次の要素へ進める
 		}
 	}
-
+#endif
 	//消す
 	rails_.remove_if([](const std::unique_ptr<ControlPoint>& rail) {
 		if (rail->GetIsDeath()) {

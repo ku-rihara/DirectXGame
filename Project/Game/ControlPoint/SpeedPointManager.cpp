@@ -17,9 +17,8 @@ void  SpeedPointManager::Init() {
 
 	LoadSlowSpots("resources/SpeedParamater/slowPoint.json");
 	LoadFastSpots("resources/SpeedParamater/fastPoint.json");
-	 LoadStopSpots("resources/SpeedParamater/StopPoint.json");
-	 LoadNormalSpots("resources/SpeedParamater/NormalPoint.json");
-
+	LoadStopSpots("resources/SpeedParamater/StopPoint.json");
+	LoadNormalSpots("resources/SpeedParamater/NormalPoint.json");
 }
 
 //レール追加
@@ -73,8 +72,11 @@ void   SpeedPointManager::AddNormalSpeed(const Vector3& pos) {
 //レール更新
 void  SpeedPointManager::Update() {
 	Debug();
+
 	auto spotItS = slowSpeed_.begin();
 	auto spotItF = fastSpeed_.begin();
+	auto spotItN = normalSpeed_.begin();
+	auto spotItSt = stopSpeed_.begin();
 
 	for (const std::unique_ptr<BaseSpeedControl>& rail : speedBlocks_) {
 		rail->Update();
@@ -90,6 +92,18 @@ void  SpeedPointManager::Update() {
 			*spotItF = fastPoint->GetPos();
 			++spotItF;
 		}
+
+		// SlowPointの更新処理
+		if (auto* stopPoint = dynamic_cast<StopPoint*>(rail.get()); stopPoint && spotItSt != stopSpeed_.end()) {
+			*spotItSt = stopPoint->GetPos();
+			++spotItSt;
+		}
+
+		// FastPointの更新処理
+		if (auto* normalSpot = dynamic_cast<NormalPoint*>(rail.get()); normalSpot && spotItN != normalSpeed_.end()) {
+			*spotItN = normalSpot->GetPos();
+			++spotItN;
+		}
 	}
 
 
@@ -103,6 +117,7 @@ void  SpeedPointManager::Update() {
 }
 
 void SpeedPointManager::Debug() {
+#ifdef _DEBUG
 	ImGui::Begin("IsSaveParamater");
 	// 遅い
 	if (ImGui::Button("SlowSave")) {
@@ -129,6 +144,7 @@ void SpeedPointManager::Debug() {
 		MessageBoxA(nullptr, message.c_str(), "SpeedParamater", 0);
 	}
 	ImGui::End();
+#endif
 }
 
 //レール描画

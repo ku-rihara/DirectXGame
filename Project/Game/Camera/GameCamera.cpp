@@ -1,7 +1,10 @@
-#include "GameCamera.h"
-#include <cmath>
-#include "MathFunction.h"
-#include <imgui.h>
+#include"GameCamera.h"
+//std
+#include<cmath>
+//Function
+#include"MathFunction.h"
+//imgui
+#include<imgui.h>
 
 void GameCamera::Init() {
     viewProjection_.Init();
@@ -9,7 +12,6 @@ void GameCamera::Init() {
 
     worldTransform_.UpdateMatrix();
     viewProjection_.UpdateMatrix();
-
     // レールの初期化（オブジェクト数を指定）
     rail_.Init(650);
     railMoveSpeed_ = 0.0f;
@@ -57,7 +59,7 @@ void GameCamera::Update(const std::vector<Vector3>& controlPos) {
     Vector3 forward = pointsDrawing[cameraIndex + 1] - pointsDrawing[cameraIndex];
     forward = Vector3::Normalize(forward);
 
-    // 進行方向に対して回転
+    // 目標回転角度を求めて補間
     float targetRotateY = std::atan2(forward.x, forward.z);
     float targetRotateX = std::atan2(-forward.y, std::sqrt(forward.x * forward.x + forward.z * forward.z));
 
@@ -70,6 +72,7 @@ void GameCamera::Update(const std::vector<Vector3>& controlPos) {
     viewProjection_.matView_ = Inverse(worldTransform_.matWorld_);
 }
 
+
 // レール上のオブジェクトを描画
 void GameCamera::RailDraw(const ViewProjection& viewProjection) {
     rail_.Draw(viewProjection);
@@ -80,9 +83,10 @@ void GameCamera::Debug() {
 
     if (ImGui::TreeNode("CameraDebug")) {
         ImGui::DragFloat("move", &railMoveTime_, 0.001f);
+
         ImGui::TreePop();
     }
 
+
 #endif
 }
-

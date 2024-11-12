@@ -30,12 +30,9 @@
 /// </summary>
 class GameScene {
 private:
-
-	DirectXCommon* dxCommon_ = nullptr;
-	Input* input_ = nullptr;
-	Audio* audio_ = nullptr;
-	TextureManager* textureManager_ = nullptr;
-
+	bool isFinished_;
+	float backAlpha_;
+	
 	uint32_t textureHandle_ = 0; 
 	uint32_t soundDataHandle_ = 0; 
 	uint32_t voiceHandle_ = 0;     
@@ -66,6 +63,9 @@ private:
 	/// スコア
 	std::unique_ptr<Score>score_ = nullptr;
 
+
+	int backScreenhandle_;
+	std::unique_ptr<Sprite>backScreen_;
 
 	// デバッグカメラアクティブ
 	bool isDebugCameraActive_ = false;
@@ -109,6 +109,7 @@ public:
 	/// </summary>
 	void ViewProjectionUpdate();
 
+	bool GetIsFinished()const { return isFinished_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 //  getter

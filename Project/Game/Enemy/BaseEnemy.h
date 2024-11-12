@@ -17,13 +17,18 @@ protected:
 	/// ===========================================
 	std::unique_ptr<Object3d> objct3D_;
 	WorldTransform transform_;
+
 	int instanceID_;
 	bool isDeath_;
 	int scoreValue_;
 	float distanceMax_;
 	bool isMove_;
-
+	/// 出現
+	float easeT_;
+	const float easeTMax_ = 0.2f;
 	int hp_;
+	float initialX_;
+
 public:
 
 	/// ===================================================
@@ -50,8 +55,9 @@ public:
 	int GetScoreValue()const { return scoreValue_; }
 	Vector3 GetTargetPos()const { return target_; }
 
+	Vector3 GetWorldPos();
 	/// ===================================================
 	/// setter  method
 	/// ===================================================
-	void SetPos(const Vector3& pos) { transform_.translation_ = pos; }
+	void SetPos(const Vector3& pos);
 };

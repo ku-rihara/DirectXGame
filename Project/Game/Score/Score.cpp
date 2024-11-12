@@ -26,7 +26,7 @@ void Score::Init() {
 
 void Score::Update() {
     // スコアの数値を各桁ごとに分解
-    scoreEaseT_ += Frame::DeltaTime()*2;
+    scoreEaseT_ += Frame::DeltaTime();
     if (scoreEaseT_ >= scoreEaseTMax_-0.4f) {
         scoreEaseT_=scoreEaseTMax_;
     }
@@ -56,11 +56,13 @@ void Score::ScoreUp(int num) {
 }
 
 void Score::Debug() {
+#ifdef _DEBUG
     if (ImGui::TreeNode("Score")) {
         ImGui::DragInt("Score", &score_);
         scoreFrameSprite_->DebugImGui();
         ImGui::TreePop();
     }
+#endif
 }
 
 //void Score::SetScore(int score) {

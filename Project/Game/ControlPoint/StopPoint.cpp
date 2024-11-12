@@ -19,11 +19,9 @@ void  StopPoint::Draw(const ViewProjection&viewProjection) {
 
 void  StopPoint::Debug() {
 
-
 	if (ImGui::TreeNode(("StopPos" + std::to_string(instanceID_)).c_str())) {
 		ImGui::DragFloat3(("pos" + std::to_string(instanceID_)).c_str(), &transform_.translation_.x, 0.01f);
 		ImGui::TreePop();
-	}
-	
+	}	
 }
 

@@ -16,7 +16,7 @@ protected://メンバ変数
 	std::unique_ptr<Object3d> objct3D_;
 	WorldTransform transform_;	
 	bool isDeath_;
-
+	
 	
 
 public://メンバ関数

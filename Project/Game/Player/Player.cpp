@@ -4,15 +4,22 @@
 #include"Reticle/Reticle.h"
 //input
 #include"input/Input.h"
+#include"JoyState/JoyState.h"
+
+/// math
+#include"MathFunction.h"
 /// frame
 #include"Frame/Frame.h"
 #include"Camera/GameCamera.h"
 #include"ControlPoint/SlowPoint.h"
 #include"ControlPoint/FastPoint.h"
+#include"ControlPoint/NormalPoint.h"
+#include"ControlPoint/StopPoint.h"
+
 
 void  Player::Init() {
 	/// プレイヤーのモデル
-	obj3D_.reset(Object3d::CreateModel("Player", ".obj"));
+	obj3D_.reset(Object3d::CreateModel("suzanne", ".obj"));
 	/// ビームの初期化
 	beam_ = std::make_unique<PlayerBeam>();
 	/// 初期化
@@ -22,13 +29,30 @@ void  Player::Init() {
 	transform_.Init();
 	
 	transform_.translation_.z = 0.18f;
-	transform_.translation_.y = -0.36f;
+	transform_.translation_.y = -1.05f;
 	transform_.isNotViewRestriction_ = true;
+
+	 targetSpeed_ = 0.15f;
+	 currentSpeed_ = 0.0f;
+	 lerpSpeed_ = 1.2f;
+
 	beam_->SetParent(transform_);
 
 }
 /// 更新
 void  Player::Update() {
+	if (isStop_) {
+		stopTime_ += Frame::DeltaTime();
+		if (stopTime_ >= stopTimeMax_) {
+			stopTime_ = 0.0f;
+			isStop_ = false;
+			targetSpeed_ = 0.15f;  // 通常速度に戻す
+		}
+	}
+
+	// Lerp関数を使ってcurrentSpeed_をtargetSpeed_に補間
+	currentSpeed_ = Lerp(currentSpeed_, targetSpeed_, lerpSpeed_*Frame::DeltaTime());
+	pGameCamera_->SetMoveSpeed(currentSpeed_);
 
 	/// 弾発射
 	BeamShot();
@@ -43,8 +67,10 @@ void  Player::Draw(const ViewProjection& viewProjection) {
 
 /// 弾の描画
 void  Player::BulletDraw(const ViewProjection& viewProjection) {
+	if (Input::IsPressMouse(0) || joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
 
 	beam_->Draw(viewProjection);
+}
 }
 
 void Player::SpriteDraw() {
@@ -52,7 +78,7 @@ void Player::SpriteDraw() {
 }
 
 void Player::BeamShot() {
-	if (Input::IsPressMouse(0)) {
+	if (Input::IsPressMouse(0)|| joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
 		
 		// 自機から標準オブジェクトへのベクトル
 		Vector3 direction = pReticle_->GetWorld3DRecticlPos() - GetWorldPos();
@@ -72,7 +98,12 @@ void Player::Debug() {
 			beam_->Debug();
 			ImGui::TreePop();
 		}
+
 		ImGui::TreePop();
+	}
+
+	if (ImGui::Button("STOP")) {
+		targetSpeed_ = 0.0f;  // 通常速度に戻す
 	}
 	
 }
@@ -111,10 +142,16 @@ Vector3 Player::GetBaseCenterPosition() const {
 
 void Player::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 	if (dynamic_cast<FastPoint*>(other)) {
-		pGameCamera_->SetMoveSpeed(2.0f);
+		targetSpeed_ = 0.65f;
 	}
-
-	if (dynamic_cast<SlowPoint*>(other)) {
-		pGameCamera_->SetMoveSpeed(0.05f);
+	else if (dynamic_cast<SlowPoint*>(other)) {
+		targetSpeed_ = 0.15f;
+	}
+	else if (dynamic_cast<NormalPoint*>(other)) {
+		targetSpeed_ = 0.3f;
+	}
+	else if (dynamic_cast<StopPoint*>(other)) {
+		targetSpeed_ = 0.0f;
+		isStop_ = true;
 	}
 }

@@ -105,5 +105,7 @@ public:
 	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->wvpData_->WVP = date; }
 	void SetWorldMatrixDataSprite(Matrix4x4 date) { this->wvpData_->World = date; }
 	void SetUVTransformSprite(Matrix4x4 matrix) { this->material_.materialData_->uvTransform = matrix; }
+
+	void SetColor(Vector4 c) { material_.materialData_->color = c; }
 };
 

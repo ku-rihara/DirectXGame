@@ -1,5 +1,5 @@
 {
     "CollisionManager": {
-        "isColliderVisible": true
+        "isColliderVisible": false
     }
 }

@@ -20,6 +20,7 @@ private:
     Vector3 cameraRotate_;       // カメラの回転角度
     float railMoveSpeed_; // レールに沿った移動速度
 
+
 public:
     //Function
     void Init();
@@ -39,6 +40,7 @@ public:
     void SetMoveSpeed(float value) { railMoveSpeed_ = value; }
 
     //getter
+    float GetRailMoveTime()const { return railMoveTime_; }
     const Vector3& GetCameraRotate()const { return cameraRotate_; }
     const WorldTransform& GetWorldTransform() const { return worldTransform_; }
     const ViewProjection& GetViewProjection() const { return viewProjection_; }

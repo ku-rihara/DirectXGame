@@ -10,33 +10,45 @@ void   NormalEnemy::Init(const std::string& instanceName, const std::string& ext
 	BaseEnemy::Init(instanceName, extension);
 	instanceID_ = instanceNum_ + 1;
 	instanceNum_++;
-	scoreValue_ = 3;
-	hp_ = 50;
-	SetRadiusVector(Vector3(2.0f, 2.0f, 2.0f));
+	scoreValue_ = 30;
+	hp_ = 1;
+	distanceMax_ = 40;
+
+	/*ojb3d_.reset(Object3d::CreateModel("flyEnemyT", ".obj"));
+	transfrom2_.isNotViewRestriction_ = true;
+	transfrom2_.Init();
+	transfrom2_.parent_ = &transform_;*/
+	/*transfrom2_.translation_.y = 1;*/
+	SetRadiusVector(Vector3(2.5f, 2.5f, 2.5f));
 }
 //更新
 void   NormalEnemy::Update() {
 	Debug();
 	transform_.UpdateMatrix();
+	/*transfrom2_.UpdateMatrix();*/
 }
 //描画
 void   NormalEnemy::Draw(const ViewProjection& viewProjection) {
 	objct3D_->Draw(transform_, viewProjection);
+	//ojb3d_->Draw(transfrom2_, viewProjection);
 }
 
 void   NormalEnemy::Debug() {
-	ImGui::Begin("Positions");
-	if (ImGui::TreeNode(("Enemy" + std::to_string(instanceID_)).c_str())) {
-		ImGui::DragFloat3(("pos" + std::to_string(instanceID_)).c_str(), &transform_.translation_.x, 0.01f);
+#ifdef _DEBUG
+	
+	if (ImGui::TreeNode(("NormalEnemy" + std::to_string(instanceID_)).c_str())) {
+		ImGui::DragFloat3(("pos"+ std::to_string(instanceID_)).c_str(), &transform_.translation_.x, 0.01f);
 		objct3D_->DebugImgui();
 		ImGui::TreePop();
 	}
-	ImGui::End();
+	
+#endif
 }
 
 
 void NormalEnemy::Move() {
-	transform_.translation_.y += 5.0f * Frame::DeltaTime();
+	/*transfrom2_.rotation_.y += 2*Frame::DeltaTime();*/
+	transform_.translation_.y += 1.0f * Frame::DeltaTime();
 }
 
 //Vector3 BaseEnemy::GetBaseCenterPosition() const {

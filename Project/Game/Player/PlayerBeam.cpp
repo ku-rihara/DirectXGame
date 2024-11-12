@@ -20,7 +20,7 @@ void PlayerBeam::Init() {
 
     tempScale_ = { 1,1,1 };
 
-    transform_.translation_.y = 0.2f;
+    transform_.translation_.y = 1.05f;
     transformL_.translation_.x = -0.3f;
     transformR_.translation_.x = 0.3f;
 
@@ -35,12 +35,9 @@ void PlayerBeam::Init() {
    
     gaugeSprite_->textureSize_ = frameSprite_->GetTextureJustSize();
     /*gaugeSprite_->textureLeftTop_ = { 0,frameSprite_->GetTextureJustSize().y };*/
-    SetCollisionSize(Vector3(1.3f, 1.3f, 11.5f));
+    SetCollisionSize(Vector3(2.5f, 2.5f, 13.5f));
    
 }
-
-
-
 
 void PlayerBeam::Update(const Vector3& camerarotate, const Vector3& direction) {
     velocity_ = direction;
@@ -53,8 +50,8 @@ void PlayerBeam::Update(const Vector3& camerarotate, const Vector3& direction) {
     transform_.rotation_ = { rotateX, rotateY, 0.0f };
 
     // 左右のビームのローカル回転オフセットを考慮
-    transformL_.rotation_ = { 0.0f, std::numbers::pi_v<float> / 30, 0.0f };  // 左に傾ける
-    transformR_.rotation_ = { 0.0f, -std::numbers::pi_v<float> / 30, 0.0f };   // 右に傾ける
+    transformL_.rotation_ = { 0.0f, std::numbers::pi_v<float> / 25, 0.0f };  // 左に傾ける
+    transformR_.rotation_ = { 0.0f, -std::numbers::pi_v<float> / 25, 0.0f };   // 右に傾ける
 
     // ワールド行列の更新
     transform_.UpdateMatrix();
@@ -99,15 +96,16 @@ Vector3 PlayerBeam::GetRotate() const {
 }
 
 void PlayerBeam::Debug() {
+#ifdef _DEBUG
     gaugeSprite_->DebugImGui();
-
+#endif // _DEBUG
 }
 Vector3  PlayerBeam::PosSet(const Vector3& pos,const float& ofset) {
     return { pos.x + ofset,pos.y ,pos.z+1};
 }
 
 void PlayerBeam::DecreaseGauge() {
-
+    isShot_ = true;
     if (tempScale_.x <= 0.0f) {
         tempScale_.x = 0.0f;
         tempScale_.y = 0.0f;
@@ -131,15 +129,18 @@ void PlayerBeam::DecreaseGauge() {
 }
 
 void PlayerBeam::IncreaseGauge() {
+    isShot_ = false;
     if (tempScale_.x >= 1.0f) {
 
         tempScale_.x = 1.0f;
         tempScale_.y = 1.0f;
     }
+
     else {
         tempScale_.x += 0.45f * Frame::DeltaTime();
         tempScale_.y += 0.45f * Frame::DeltaTime();     
     }
+
     transformL_.scale_ = tempScale_;
     transformR_.scale_ = tempScale_;
 

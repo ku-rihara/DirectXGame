@@ -5,7 +5,8 @@
 class NormalEnemy :public BaseEnemy {
 	static int instanceNum_;
 private:
-
+	WorldTransform transfrom2_;
+	std::unique_ptr<Object3d>ojb3d_;
 
 public:
 	///==================================================

@@ -37,7 +37,7 @@ void GlobalParameter::CreateGroup(const std::string& groupName) {
 }
 
 void GlobalParameter::Update() {
-	
+#ifdef _DEBUG
 	if (!ImGui::Begin("Global Parameter", nullptr, ImGuiWindowFlags_MenuBar)) {
 		ImGui::End();
 		return;
@@ -96,6 +96,7 @@ void GlobalParameter::Update() {
 
 	ImGui::EndMenuBar();
 	ImGui::End();
+#endif
 }
 
 template<typename T> void GlobalParameter::SetValue(const std::string& groupName, const std::string& key, T value) {

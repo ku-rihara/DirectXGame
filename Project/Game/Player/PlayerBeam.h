@@ -17,7 +17,8 @@ private:
 	WorldTransform transformL_;
 	Vector3 velocity_; // 速度
 	Vector3 tempScale_;
-	
+	Vector3 OBBrotate_;
+	bool isShot_;
 
 	/// gauge
 	std::unique_ptr<Sprite>frameSprite_;
@@ -57,7 +58,8 @@ public:
     /// getter  methods
     /// ===================================================
 	Vector3 GetWorldPos();
-
+	Vector3 GetScale()const { return tempScale_; }
+	bool GetIsShot()const { return isShot_; }
 	/// ===================================================
 	/// setter  methods
 	/// ===================================================

@@ -24,8 +24,11 @@ private:
 	///private variants
 	/// ===========================================
 	std::list<std::unique_ptr<BaseEnemy>>enemies_;/// 敵リスト
+
 	std::vector<Vector3>positions_;/// 座標
-	Model* model_;
+	std::vector<Vector3>sideEnemyPositions_;/// 座標
+	std::vector<Vector3>bossPositions_;/// 座標
+	
 	bool isAdaption_;
 	int controlNum_;
 
@@ -39,6 +42,9 @@ public:
 	/// ===================================================
 
 	void AddNormalEnemy(const Vector3&pos);
+	void AddSideEnemy(const Vector3& pos);
+	void AddBoss(const Vector3& pos);
+
 	void Init();
 	void Update(const Vector3& traget);
 	void Debug();
@@ -48,10 +54,12 @@ public:
 	void SetScore(Score* score);
 
 	// 制御点をファイルに保存
-	void SaveEnemyPoses(const std::string& filename);
+	void SaveEnemyPoses(const std::string& filename, const std::vector<Vector3>& pos);
 
 	// 制御点をファイルから読み込み
 	void LoadEnemyPosies(const std::string& filename);
+	void LoadSideEnemyPosies(const std::string& filename);
+	void LoadBossPosies(const std::string& filename);
 
 	std::vector<Vector3> GetPositions()const { return positions_; }
 	

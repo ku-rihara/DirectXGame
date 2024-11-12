@@ -4,9 +4,12 @@
 #include<string>
 
 int  NormalPoint::instanceNum_ = 0;
+
 void  NormalPoint::Init() {
+
 	BaseSpeedControl::Init();
 	instanceID_= instanceNum_++;
+	
 }
 //更新
 void  NormalPoint::Update() {

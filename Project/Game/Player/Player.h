@@ -26,6 +26,15 @@ private:
 	bool isDeath_;/// 死亡フラグ
 	std::unique_ptr<PlayerBeam> beam_;// 弾
 
+	bool isStop_;
+	float stopTime_;
+	const float stopTimeMax_=5.0f;
+	
+	// カメラの目標速度
+	float targetSpeed_;
+	float currentSpeed_; 
+	float lerpSpeed_;
+
 public://メンバ関数
 
 	void Init();

@@ -18,11 +18,11 @@ void  BaseSpeedControl::Init() {
 
 //更新
 void  BaseSpeedControl::Update() {
-	
+#ifdef _DEBUG
 	ImGui::Begin("SpeedPositions");
 	Debug();
 	ImGui::End();
-
+#endif
 	transform_.UpdateMatrix();
 }
 
