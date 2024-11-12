@@ -28,6 +28,7 @@ void  EnemyManager::AddNormalEnemy(const Vector3& pos) {
 	enemies_.push_back(std::move(enemy));
 }
 
+
 void EnemyManager::AddSideEnemy(const Vector3& pos) {
 	std::unique_ptr<SideEnemy>enemy;
 	enemy = std::make_unique<SideEnemy>();
