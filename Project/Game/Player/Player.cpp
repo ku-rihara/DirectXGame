@@ -27,14 +27,14 @@ void  Player::Init() {
 
 	obj3D_->SetLightMode(2);
 	transform_.Init();
-	
+
 	transform_.translation_.z = 0.18f;
 	transform_.translation_.y = -1.05f;
 	transform_.isNotViewRestriction_ = true;
 
-	 targetSpeed_ = 0.15f;
-	 currentSpeed_ = 0.0f;
-	 lerpSpeed_ = 1.2f;
+	targetSpeed_ = 0.15f;
+	currentSpeed_ = 0.0f;
+	lerpSpeed_ = 1.2f;
 
 	beam_->SetParent(transform_);
 
@@ -51,12 +51,12 @@ void  Player::Update() {
 	}
 
 	// Lerp関数を使ってcurrentSpeed_をtargetSpeed_に補間
-	currentSpeed_ = Lerp(currentSpeed_, targetSpeed_, lerpSpeed_*Frame::DeltaTime());
+	currentSpeed_ = Lerp(currentSpeed_, targetSpeed_, lerpSpeed_ * Frame::DeltaTime());
 	pGameCamera_->SetMoveSpeed(currentSpeed_);
 
 	/// 弾発射
 	BeamShot();
-	
+
 	transform_.UpdateMatrix();
 }
 /// 描画
@@ -69,8 +69,8 @@ void  Player::Draw(const ViewProjection& viewProjection) {
 void  Player::BulletDraw(const ViewProjection& viewProjection) {
 	if (Input::IsPressMouse(0) || joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
 
-	beam_->Draw(viewProjection);
-}
+		beam_->Draw(viewProjection);
+	}
 }
 
 void Player::SpriteDraw() {
@@ -78,8 +78,8 @@ void Player::SpriteDraw() {
 }
 
 void Player::BeamShot() {
-	if (Input::IsPressMouse(0)|| joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
-		
+	if (Input::IsPressMouse(0) || joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
+
 		// 自機から標準オブジェクトへのベクトル
 		Vector3 direction = pReticle_->GetWorld3DRecticlPos() - GetWorldPos();
 		direction = Vector3::Normalize(direction) /*kBulletSpeed*/;
@@ -105,7 +105,7 @@ void Player::Debug() {
 	if (ImGui::Button("STOP")) {
 		targetSpeed_ = 0.0f;  // 通常速度に戻す
 	}
-	
+
 }
 
 

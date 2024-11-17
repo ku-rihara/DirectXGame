@@ -1,7 +1,7 @@
 #include "TitleScene.h"
 #include"base/TextureManager.h"
 //class
-#include"input/Input.h"
+#include"JoyState/JoyState.h"
 
 
 TitleScene::TitleScene() {}
@@ -17,13 +17,10 @@ void TitleScene::Init() {
 }
 
 void TitleScene::Update() {
-	
-	if (Input::GetInstance()->TrrigerKey(DIK_SPACE)) {
+	if (Input::GetInstance()->TrrigerKey(DIK_SPACE) || joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
+
 		isFinished_ = true;
-	}
-	
-	
-	
+	}	
 }
 
 /// ===================================================

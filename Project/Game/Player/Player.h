@@ -50,8 +50,8 @@ public://メンバ関数
 
 
 	/// Collider
-	virtual	Vector3 GetBaseCenterPosition() const override;
-	virtual	void OnCollisionEnter([[maybe_unused]] BaseCollider* other)override;
+		Vector3 GetBaseCenterPosition() const override;
+		void OnCollisionEnter([[maybe_unused]] BaseCollider* other)override;
 
 
 	Matrix4x4 GetMatWorld() const { return transform_.matWorld_; }
