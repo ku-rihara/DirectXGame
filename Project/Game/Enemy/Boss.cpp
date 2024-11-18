@@ -16,8 +16,8 @@ void   Boss::Init(const std::string& instanceName, const std::string& extension)
 }
 //更新
 void   Boss::Update() {
-	Debug();
-	transform_.UpdateMatrix();
+	BaseEnemy::Update();
+	
 }
 //描画
 void   Boss::Draw(const ViewProjection& viewProjection) {

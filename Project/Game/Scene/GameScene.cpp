@@ -28,6 +28,7 @@ void GameScene::Init() {
 	reticle_ = std::make_unique<Reticle>();
 	skyDome_= std::make_unique<Skydome>();
 	positionEditor_ = std::make_unique<PositionEditor>();
+	ground_ = std::make_unique<Ground>();
 	score_ = std::make_unique<Score>();
 	backScreenhandle_ = TextureManager::GetInstance()->LoadTexture("./resources/Texture/backScreen.png");
 	backScreen_.reset(Sprite::Create(backScreenhandle_, Vector2(0, 0), Vector4(0, 0, 0, 0)));
@@ -35,6 +36,7 @@ void GameScene::Init() {
 	//  初期化
 	////////////////////////////////////////////////////////////////////////////////////////////
 	debugCamera_->Init();
+	ground_->Init();
 	gameCamera_->Init();
 	controlPointManager_->Init();
 	speedPointManager_->Init();
@@ -94,6 +96,8 @@ void GameScene::Update() {
 
 	score_->Update();
 
+	ground_->Update();
+
 	/// clear
 	if (gameCamera_->GetRailMoveTime() >= 0.882f) {
 		backScreen_->SetColor(Vector4{ 1,1,1,backAlpha_ });
@@ -113,6 +117,7 @@ void GameScene::Update() {
 void GameScene::ModelDraw() {
 
 	skyDome_->Draw(viewProjection_);
+	ground_->Draw(viewProjection_);
 
 	//レール
 	gameCamera_->RailDraw(viewProjection_);

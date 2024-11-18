@@ -112,6 +112,9 @@
     <Filter Include="Game\JyoState">
       <UniqueIdentifier>{950765e2-1614-403d-93b0-aa0348f6c2e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Ground">
+      <UniqueIdentifier>{e650e574-8039-4de4-b54e-bc0847eb53a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -303,6 +306,9 @@
     </ClCompile>
     <ClCompile Include="Game\JoyState\JoyState.cpp">
       <Filter>Game\JyoState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Ground\Ground.cpp">
+      <Filter>Game\Ground</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -539,6 +545,9 @@
     </ClInclude>
     <ClInclude Include="Game\JoyState\JoyState.h">
       <Filter>Game\JyoState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Ground\Ground.h">
+      <Filter>Game\Ground</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

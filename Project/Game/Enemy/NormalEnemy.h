@@ -17,10 +17,10 @@ public:
 	
 
 	/// 初期化、更新、デバッグ、描画
-	virtual void Init(const std::string& instanceName, const std::string& extension);
-	virtual void Update();
-	virtual void Debug();
-	virtual void Draw(const ViewProjection& viewProjection);
+	 void Init(const std::string& instanceName, const std::string& extension)override;
+	 void Update();
+	 void Debug()override;
+	 void Draw(const ViewProjection& viewProjection)override;
 
 	void Move()override;
 

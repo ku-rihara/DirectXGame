@@ -6,7 +6,7 @@
 
 class Object3d :public BaseObject3d {
 public:
-	ObjectColor color_;
+	ObjectColor objColor_;
 	
 private:
 	//wvpリソース

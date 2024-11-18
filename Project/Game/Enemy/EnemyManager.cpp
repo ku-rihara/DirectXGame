@@ -61,7 +61,8 @@ void EnemyManager::Update(const Vector3& traget) {
 
 	// enemies_ リストを更新
 	for (const auto& enemy : enemies_) {
-		enemy->Update(traget);
+		enemy->Update();
+		enemy->SetTarget(traget);
 
 		// NormalEnemy の位置を更新
 		if (auto* normalEnemy = dynamic_cast<NormalEnemy*>(enemy.get()); normalEnemy && spotItN != positions_.end()) {

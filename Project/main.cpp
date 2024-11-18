@@ -6,7 +6,7 @@
 #include "Colider/CollisionManager.h"
 #include <memory> // std::unique_ptr用
 
-const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ_CG3";
+const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ_ShootingCoaster";
 enum class Scene {
     kUnknown = 0,
     kTitle,

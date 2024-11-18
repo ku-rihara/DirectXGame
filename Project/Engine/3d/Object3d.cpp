@@ -28,8 +28,8 @@ void Object3d::Init() {
 
 // 更新
 void Object3d::Update() {
-    color_.TransferMatrix();
-    material_.materialData_->color = color_.GetColor();
+    objColor_.TransferMatrix();
+    material_.materialData_->color = objColor_.GetColor();
 }
 
 // 描画

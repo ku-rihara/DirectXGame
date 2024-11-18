@@ -22,6 +22,7 @@
 #include"skyDome/SkyDome.h"
 #include"PositionEditor/PositionEditor.h"
 #include"Score/Score.h"
+#include"Ground/Ground.h"
 //std
 #include<random>
 
@@ -63,6 +64,7 @@ private:
 	/// スコア
 	std::unique_ptr<Score>score_ = nullptr;
 
+	std::unique_ptr<Ground>ground_ = nullptr;
 
 	int backScreenhandle_;
 	std::unique_ptr<Sprite>backScreen_;

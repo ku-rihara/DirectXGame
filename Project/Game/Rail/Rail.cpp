@@ -10,6 +10,7 @@ void Rail::Init(size_t numObjects) {
     for (size_t i = 0; i < numObjects; ++i) {
         object3d_[i].reset(Object3d::CreateModel("Rail",".obj"));
         object3d_[i]->SetLightMode(2);
+        object3d_[i]->objColor_.SetColor(Vector4(1, 1, 0, 1));
     }
 }
 

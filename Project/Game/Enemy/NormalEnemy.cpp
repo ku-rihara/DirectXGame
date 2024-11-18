@@ -10,27 +10,28 @@ void   NormalEnemy::Init(const std::string& instanceName, const std::string& ext
 	BaseEnemy::Init(instanceName, extension);
 	instanceID_ = instanceNum_ + 1;
 	instanceNum_++;
-	scoreValue_ = 30;
+	scoreValue_ = 100;
 	hp_ = 1;
 	distanceMax_ = 40;
 
-	/*ojb3d_.reset(Object3d::CreateModel("flyEnemyT", ".obj"));
+	ojb3d_.reset(Object3d::CreateModel("flyEnemyT", ".obj"));
 	transfrom2_.isNotViewRestriction_ = true;
 	transfrom2_.Init();
-	transfrom2_.parent_ = &transform_;*/
-	/*transfrom2_.translation_.y = 1;*/
+	transfrom2_.parent_ = &transform_;
+	transfrom2_.translation_.y = -0.1f;
 	SetRadiusVector(Vector3(2.5f, 2.5f, 2.5f));
 }
 //更新
 void   NormalEnemy::Update() {
-	Debug();
-	transform_.UpdateMatrix();
-	/*transfrom2_.UpdateMatrix();*/
+	BaseEnemy::Update();
+	transfrom2_.UpdateMatrix();
+
+	
 }
 //描画
 void   NormalEnemy::Draw(const ViewProjection& viewProjection) {
 	objct3D_->Draw(transform_, viewProjection);
-	//ojb3d_->Draw(transfrom2_, viewProjection);
+	ojb3d_->Draw(transfrom2_, viewProjection);
 }
 
 void   NormalEnemy::Debug() {
@@ -47,7 +48,7 @@ void   NormalEnemy::Debug() {
 
 
 void NormalEnemy::Move() {
-	/*transfrom2_.rotation_.y += 2*Frame::DeltaTime();*/
+	transfrom2_.rotation_.y += 2*Frame::DeltaTime();
 	transform_.translation_.y += 1.0f * Frame::DeltaTime();
 }
 

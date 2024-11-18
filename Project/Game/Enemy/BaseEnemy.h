@@ -37,9 +37,11 @@ public:
 
 	/// 初期化、更新、デバッグ、描画
 	virtual void Init(const std::string& instanceName, const std::string& extension);
-	 void Update(const Vector3& traget);
+	virtual void Update();
 	virtual void Debug();
 	virtual void Draw(const ViewProjection& viewProjection);
+
+	void SetTarget(const Vector3&pos);
 
 	virtual void Move() = 0;
 

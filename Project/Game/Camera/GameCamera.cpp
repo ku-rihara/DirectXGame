@@ -13,7 +13,7 @@ void GameCamera::Init() {
     worldTransform_.UpdateMatrix();
     viewProjection_.UpdateMatrix();
     // レールの初期化（オブジェクト数を指定）
-    rail_.Init(650);
+    rail_.Init(690);
     railMoveSpeed_ = 0.0f;
 }
 

@@ -17,14 +17,14 @@ void BaseEnemy::Init(const std::string& instanceName, const std::string& extensi
     transform_.UpdateMatrix();
 }
 
-void BaseEnemy::Update(const Vector3& target) {
+void BaseEnemy::Update() {
 #ifdef _DEBUG
     ImGui::Begin("EnemyPositions");
     Debug();
     ImGui::End();
 #endif // _DEBUG
 
-    target_ = target;
+  
     // プレイヤー位置と敵位置の差を求める
     Vector3 diff = target_ - transform_.translation_;
     float distance = Vector3::Length(diff);
@@ -83,11 +83,11 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
     if (PlayerBeam* beam = dynamic_cast<PlayerBeam*>(other)) {
         if (isMove_&&beam->GetScale().x>0&&beam->GetIsShot()) {
             hp_--;
-            objct3D_->color_.SetColor(Vector4(1, 0, 0, 1));
+            objct3D_->objColor_.SetColor(Vector4(1, 0, 0, 1));
         }      
     }
     else {
-        objct3D_->color_.SetColor(Vector4(1, 1, 1, 1));
+        objct3D_->objColor_.SetColor(Vector4(1, 1, 1, 1));
     }
 }
 
@@ -110,4 +110,8 @@ void BaseEnemy::SetPos(const Vector3& pos) {
     initialX_ = transform_.translation_.x;
 
 
+}
+
+void BaseEnemy::SetTarget(const Vector3& pos) {
+    target_ = pos;
 }

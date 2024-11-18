@@ -10,15 +10,15 @@ void  SideEnemy::Init(const std::string& instanceName, const std::string& extens
 	BaseEnemy::Init(instanceName, extension);
 	instanceID_ = instanceNum_ + 1;
 	instanceNum_++;
-	scoreValue_ = 60;
+	scoreValue_ = 250;
 	hp_ = 1;
 	distanceMax_ = 40;
 	SetRadiusVector(Vector3(2.5f, 2.5f, 2.5f));
 }
 //更新
 void   SideEnemy::Update() {
-	Debug();
-	transform_.UpdateMatrix();
+	BaseEnemy::Update();
+	
 }
 //描画
 void   SideEnemy::Draw(const ViewProjection& viewProjection) {
