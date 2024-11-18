@@ -14,15 +14,21 @@ void  SideEnemy::Init(const std::string& instanceName, const std::string& extens
 	hp_ = 1;
 	distanceMax_ = 40;
 	SetRadiusVector(Vector3(2.5f, 2.5f, 2.5f));
+
+	ojb3dEye_.reset(Object3d::CreateModel("SideEnemyEye", ".obj"));
+	transfromEye_.isNotViewRestriction_ = true;
+	transfromEye_.Init();
+	transfromEye_.parent_ = &transform_;
 }
 //更新
 void   SideEnemy::Update() {
 	BaseEnemy::Update();
-	
+	transfromEye_.UpdateMatrix();
 }
 //描画
 void   SideEnemy::Draw(const ViewProjection& viewProjection) {
 	objct3D_->Draw(transform_, viewProjection);
+	ojb3dEye_->Draw(transfromEye_, viewProjection);
 }
 
 void   SideEnemy::Debug() {

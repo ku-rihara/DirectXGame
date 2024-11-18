@@ -15,23 +15,32 @@ void   NormalEnemy::Init(const std::string& instanceName, const std::string& ext
 	distanceMax_ = 40;
 
 	ojb3d_.reset(Object3d::CreateModel("flyEnemyT", ".obj"));
+	ojb3dEye_.reset(Object3d::CreateModel("EnemyEye", ".obj"));
+
 	transfrom2_.isNotViewRestriction_ = true;
 	transfrom2_.Init();
 	transfrom2_.parent_ = &transform_;
 	transfrom2_.translation_.y = -0.1f;
+
+	transfromEye_.isNotViewRestriction_ = true;
+	transfromEye_.Init();
+	transfromEye_.parent_ = &transform_;
+	/*transfrom2_.translation_.y = -0.1f;*/
+
 	SetRadiusVector(Vector3(2.5f, 2.5f, 2.5f));
 }
 //更新
 void   NormalEnemy::Update() {
 	BaseEnemy::Update();
 	transfrom2_.UpdateMatrix();
-
+	transfromEye_.UpdateMatrix();
 	
 }
 //描画
 void   NormalEnemy::Draw(const ViewProjection& viewProjection) {
 	objct3D_->Draw(transform_, viewProjection);
 	ojb3d_->Draw(transfrom2_, viewProjection);
+	ojb3dEye_->Draw(transfromEye_, viewProjection);
 }
 
 void   NormalEnemy::Debug() {

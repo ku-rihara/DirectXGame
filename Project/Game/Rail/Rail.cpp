@@ -9,12 +9,15 @@ void Rail::Init(size_t numObjects) {
 
     for (size_t i = 0; i < numObjects; ++i) {
         object3d_[i].reset(Object3d::CreateModel("Rail",".obj"));
-        object3d_[i]->SetLightMode(2);
-        object3d_[i]->objColor_.SetColor(Vector4(1, 1, 0, 1));
+        object3d_[i]->SetLightMode(1);
+        object3d_[i]->objColor_.SetColor(Vector4(1, 0.2f, 0, 1));
+        object3d_[i]->material_.materialData_->shininess = 15.0f;
+        object3d_[i]->Update();
     }
 }
 
 void Rail::Update(const std::vector<Vector3>& controlPos) {
+    
     controlPos_ = controlPos;
     pointsDrawing_.clear();
     totalRailLength_ = 0.0f;
@@ -82,5 +85,6 @@ Vector3 Rail::GetPositionOnRail(float progress) const {
 void Rail::Draw(const ViewProjection& viewProjection) {
     for (size_t i = 0; i < object3d_.size(); ++i) {
         object3d_[i]->Draw(transform_[i], viewProjection);
+        object3d_[i]->DebugImgui();
     }
 }

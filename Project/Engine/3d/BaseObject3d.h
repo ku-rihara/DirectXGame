@@ -9,6 +9,7 @@ protected:
 	///========================================================================================
 
 	Model* model_ = nullptr;
+public:
 	Material material_;
 
 public:
