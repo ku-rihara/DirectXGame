@@ -20,8 +20,8 @@ private://メンバ変数
 	//ウィンドウズアプリケーション管理
 	WinApp* winApp_;
 
-	//記録時間
-	std::chrono::steady_clock::time_point reference_;
+	////記録時間
+	//std::chrono::steady_clock::time_point reference_;
 
 	//Init------------------------------------------------------------------------------------------------------
 	//デバイス初期化関連
@@ -111,15 +111,7 @@ private://メンバ関数
 	/// </summary>
 	void dxcCompilerInit();
 
-	/// <summary>
-	/// FPS固定初期化
-	/// </summary>
-	void InitFixFPS();
-
-	/// <summary>
-	/// FPS固定更新
-	/// </summary>
-	void UpdateFixFPS();
+	
 
 	Microsoft::WRL::ComPtr < ID3D12Resource> CreateDepthStencilTextureResource(Microsoft::WRL::ComPtr<ID3D12Device>  device, int32_t width, int32_t height);
 

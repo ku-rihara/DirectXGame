@@ -1,23 +1,50 @@
-// Time.cpp
+// Frame.cpp
 #include "Frame.h"
+#include <thread>
 
-
-std::chrono::high_resolution_clock::time_point Frame::lastTime_ = std::chrono::high_resolution_clock::now();
+std::chrono::steady_clock::time_point Frame::reference_ = std::chrono::steady_clock::now();
+std::chrono::steady_clock::time_point Frame::lastTime_ = std::chrono::steady_clock::now();
 float Frame::deltaTime_ = 0.0f;
 
 void Frame::Init() {
-    lastTime_ = std::chrono::high_resolution_clock::now();
+    reference_ = std::chrono::steady_clock::now();
+    lastTime_ = reference_;
+    deltaTime_ = 0.0f;
 }
 
 void Frame::Update() {
-    auto currentTime = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<float> elapsed = currentTime - lastTime_;
-    deltaTime_ = elapsed.count(); // 秒単位の経過時間
-    lastTime_ = currentTime; // 次の更新のために現在の時間を記録
+    FixFPS(); // FPS制御を実行
 
-
+    // 経過時間（秒）を計算
+    auto currentTime = std::chrono::steady_clock::now();
+    std::chrono::duration<float> frameTime = currentTime - lastTime_;
+    deltaTime_ = frameTime.count();
+    lastTime_ = currentTime;
 }
 
 float Frame::DeltaTime() {
-    return deltaTime_; // 前回の更新からの経過時間を返す
+    return deltaTime_; // 経過時間を返す
+}
+
+void Frame::FixFPS() {
+    // 1/60秒ピッタリの時間
+    const std::chrono::microseconds kMinTime(uint64_t(1000000.0f / 60.0f));
+    // 1/60秒にわずかに短い時間
+    const std::chrono::microseconds kMinCheckTime(uint64_t(1000000.0f / 65.0f));
+
+    // 現在時刻を取得
+    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+    // 前回基準からの経過時間を取得
+    std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
+
+    // 1/60秒経っていない場合
+    if (elapsed < kMinCheckTime) {
+        // 1/60秒経過するまで微小なスリープを繰り返す
+        while (std::chrono::steady_clock::now() - reference_ < kMinTime) {
+            std::this_thread::sleep_for(std::chrono::microseconds(1)); // 1マイクロ秒スリープ
+        }
+    }
+
+    // 現在時刻を基準時間として記録
+    reference_ = std::chrono::steady_clock::now();
 }

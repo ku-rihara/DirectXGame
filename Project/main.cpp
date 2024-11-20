@@ -21,8 +21,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	CollisionManager* collisionManager = new CollisionManager();
 	collisionManager->Init();
 
-	/// 時間の初期化
-	Frame::Init();
+	/*/// 時間の初期化
+	Frame::Init();*/
 
 	//ウィンドウのxボタンが押されるまでループ
 	while (Keta::ProcessMessage() == 0) {
@@ -32,7 +32,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///更新
 		/// ===================================================
 		/// deltaTimeの更新
-		Frame::Update();
+		/*Frame::Update();*/
 		/// グローバル変数の更新
 		GlobalParameter::GetInstance()->Update();
 		/// ゲームシーンの毎フレーム処理
