@@ -14,6 +14,8 @@ void Frame::Update() {
     std::chrono::duration<float> elapsed = currentTime - lastTime_;
     deltaTime_ = elapsed.count(); // 秒単位の経過時間
     lastTime_ = currentTime; // 次の更新のために現在の時間を記録
+
+
 }
 
 float Frame::DeltaTime() {

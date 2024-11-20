@@ -407,6 +407,7 @@ void DirectXCommon::PostDraw() {
 	//TransitionBarrierを張る
 	commandList_->ResourceBarrier(1, &barrier_);
 
+
 	hr_ = commandList_->Close();
 	assert(SUCCEEDED(hr_));
 	
@@ -431,6 +432,9 @@ void DirectXCommon::PostDraw() {
 		WaitForSingleObject(fenceEvent_, INFINITE);
 		CloseHandle(fenceEvent_);
 	}
+
+	UpdateFixFPS();
+
 	//次のフレーム用のコマンドリストを準備
 	hr_ = commandAllocator_->Reset();
 	assert(SUCCEEDED(hr_));
