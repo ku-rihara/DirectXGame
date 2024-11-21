@@ -5,6 +5,7 @@
 #include"3d/Light.h"
 //math
 #include"MinMax.h"
+#include"Frame/Frame.h"
 
 GameScene::GameScene() {}
 
@@ -94,11 +95,12 @@ void GameScene::Update() {
 		suzanneTransform_.translation_.y -= 0.01f;
 	}
 
-	modelPlaneParticle_->emitter_.frequencyTime += kDeltaTime_;//時刻すすめる
+	modelPlaneParticle_->emitter_.frequencyTime += Frame::DeltaTime();//時刻すすめる
 	//頻度より大きいなら
 	if (modelPlaneParticle_->emitter_.frequency <= modelPlaneParticle_->emitter_.frequencyTime) {
 		modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_, MinMax(-1.0f, 1.0f), MinMax(0.0f, 1.0f), 5);
-		modelPlaneParticle_->emitter_.frequencyTime -= modelPlaneParticle_->emitter_.frequency;//時刻すすめる
+
+		modelPlaneParticle_->emitter_.frequencyTime -= modelPlaneParticle_->emitter_.frequency ;//時刻すすめる
 	}
 
 
