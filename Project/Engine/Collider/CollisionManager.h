@@ -3,8 +3,8 @@
 #include "3d/Object3d.h"
 #include "3d/ViewProjection.h"
 //class
-#include "Colider/AABBCollider.h"
-#include "Colider/OBBCollider.h"
+#include "Collider/AABBCollider.h"
+#include "Collider/OBBCollider.h"
 
 #include "GrobalParamater/GlobalParameter.h"
 /// std

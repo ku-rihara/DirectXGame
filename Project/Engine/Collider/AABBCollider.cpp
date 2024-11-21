@@ -1,5 +1,5 @@
 #include "AABBCollider.h"
-#include"Colider/CollisionManager.h"
+#include"Collider/CollisionManager.h"
 
 AABBCollider::AABBCollider() {
     // 自動登録する

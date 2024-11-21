@@ -1,5 +1,5 @@
 #include "OBBCollider.h"
-#include"Colider/CollisionManager.h"
+#include"Collider/CollisionManager.h"
 
 OBBCollider::OBBCollider() {
     // 自動登録する

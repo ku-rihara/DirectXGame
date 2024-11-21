@@ -73,11 +73,14 @@
     <Filter Include="Game\Scene">
       <UniqueIdentifier>{0ad7b046-7871-4240-ada7-d821a24ed507}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Collider">
-      <UniqueIdentifier>{c7234c0b-c762-4ddd-afa0-00d1023957e6}</UniqueIdentifier>
+    <Filter Include="MyEngine\.cpp\Collider">
+      <UniqueIdentifier>{31794c82-90f5-4d92-8da2-666292754e5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Collider">
+      <UniqueIdentifier>{261d89ef-d3f4-4da1-aa9e-bfd6e260bf1a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\GrobalParamater">
-      <UniqueIdentifier>{c5c8244c-32d2-4058-a087-a13767b0716d}</UniqueIdentifier>
+      <UniqueIdentifier>{2274f445-607f-4ef6-b7dc-a18bb77cde1b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -184,23 +187,23 @@
       <Filter>MyEngine\.cpp\Frame</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Game\Colider\CollisionManager.cpp">
-      <Filter>Game\Collider</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GrobalParamater\GlobalParameter.cpp">
-      <Filter>Game\GrobalParamater</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Colider\AABBCollider.cpp">
-      <Filter>Game\Collider</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Colider\BaseCollider.cpp">
-      <Filter>Game\Collider</Filter>
-    </ClCompile>
     <ClCompile Include="math\Easing.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Colider\OBBCollider.cpp">
-      <Filter>Game\Collider</Filter>
+    <ClCompile Include="Engine\Collider\AABBCollider.cpp">
+      <Filter>MyEngine\.cpp\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collider\BaseCollider.cpp">
+      <Filter>MyEngine\.cpp\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collider\CollisionManager.cpp">
+      <Filter>MyEngine\.cpp\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collider\OBBCollider.cpp">
+      <Filter>MyEngine\.cpp\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GrobalParamater\GlobalParameter.cpp">
+      <Filter>Game\GrobalParamater</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -351,23 +354,23 @@
     <ClInclude Include="Game\Scene\GameScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Colider\CollisionManager.h">
-      <Filter>Game\Collider</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GrobalParamater\GlobalParameter.h">
-      <Filter>Game\GrobalParamater</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Colider\AABBCollider.h">
-      <Filter>Game\Collider</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Colider\BaseCollider.h">
-      <Filter>Game\Collider</Filter>
-    </ClInclude>
     <ClInclude Include="math\Easing.h">
       <Filter>liberary\.h</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Colider\OBBCollider.h">
-      <Filter>Game\Collider</Filter>
+    <ClInclude Include="Engine\Collider\OBBCollider.h">
+      <Filter>MyEngine\.h\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider\AABBCollider.h">
+      <Filter>MyEngine\.h\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider\BaseCollider.h">
+      <Filter>MyEngine\.h\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider\CollisionManager.h">
+      <Filter>MyEngine\.h\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GrobalParamater\GlobalParameter.h">
+      <Filter>Game\GrobalParamater</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
