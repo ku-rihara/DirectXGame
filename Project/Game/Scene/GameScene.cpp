@@ -160,8 +160,8 @@ void GameScene::ParticleDraw() {
    /// ===================================================
 void GameScene::SpriteDraw() {
 	//////スプライト描画
-	//sprite_->Draw();
-	//sprite2_->Draw();
+	sprite_->Draw();
+	sprite2_->Draw();
 }
 
 

@@ -1,5 +1,5 @@
 
-#include"Colider/BaseCollider.h"
+#include"Collider/BaseCollider.h"
 
 
 
