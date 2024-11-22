@@ -82,6 +82,15 @@
     <Filter Include="Game\GrobalParamater">
       <UniqueIdentifier>{2274f445-607f-4ef6-b7dc-a18bb77cde1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\TestObj">
+      <UniqueIdentifier>{7bdc3ee7-e0ae-40dc-88b0-86f6e624ddbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Core">
+      <UniqueIdentifier>{b79d053e-0a76-457f-9fe2-ce730fecf455}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Core">
+      <UniqueIdentifier>{b3d46e0a-491e-4e47-a811-29112d68ed2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -204,6 +213,18 @@
     </ClCompile>
     <ClCompile Include="Game\GrobalParamater\GlobalParameter.cpp">
       <Filter>Game\GrobalParamater</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\TestObj\CollisionTest1.cpp">
+      <Filter>Game\TestObj</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\TestObj\CollisionTest2.cpp">
+      <Filter>Game\TestObj</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\KTGame.cpp">
+      <Filter>MyEngine\.cpp\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\KTFramework.cpp">
+      <Filter>MyEngine\.cpp\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -371,6 +392,18 @@
     </ClInclude>
     <ClInclude Include="Game\GrobalParamater\GlobalParameter.h">
       <Filter>Game\GrobalParamater</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\TestObj\CollisionTest1.h">
+      <Filter>Game\TestObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\TestObj\CollisionTest2.h">
+      <Filter>Game\TestObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\KTGame.h">
+      <Filter>MyEngine\.h\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\KTFramework.h">
+      <Filter>MyEngine\.h\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

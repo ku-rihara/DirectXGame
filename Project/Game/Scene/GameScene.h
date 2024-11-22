@@ -21,7 +21,9 @@
 #include<random>
 #include <imgui.h>
 #include<memory>
-//struct 
+//testobj
+#include"TestObj/CollisionTest1.h"
+#include"TestObj/CollisionTest2.h"
 
 
 /// <summary>
@@ -71,6 +73,9 @@ private:
 
 	uint32_t uvHandle_;
 
+	// test
+	std::unique_ptr<CollisionTest1>collisionTest1_;
+	std::unique_ptr<CollisionTest2>collisionTest2_;
 	
 public: 
 	/// <summary>

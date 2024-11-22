@@ -36,6 +36,12 @@ void GameScene::Init() {
 	modelSuzanne2_.reset(Object3d::CreateModel("Suzanne", ".obj"));
 	modelTerrain_.reset(Object3d::CreateModel("terrain", ".obj"));
 
+	/// test
+	collisionTest1_ = std::make_unique<CollisionTest1>();
+	collisionTest2_ = std::make_unique<CollisionTest2>();
+	collisionTest1_->Init();
+	collisionTest2_->Init();
+
 	///トランスフォーム初期化
 	planeTransform_.Init();
 	fenceTransform_.Init();
@@ -103,6 +109,8 @@ void GameScene::Update() {
 		modelPlaneParticle_->emitter_.frequencyTime -= modelPlaneParticle_->emitter_.frequency ;//時刻すすめる
 	}
 
+	collisionTest1_->Init();
+	collisionTest2_->Init();
 
 	//ワールド行列更新
 		///トランスフォーム初期化
@@ -134,6 +142,9 @@ void GameScene::ModelDraw() {
 		modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
 		modelSuzanne2_->Draw(suzanneTransform2_, viewProjection_);
 		modelTerrain_->Draw(terrainTransform_, viewProjection_);
+
+		collisionTest1_->Draw();
+		collisionTest2_->Draw();
 	}
 }
 
@@ -148,9 +159,9 @@ void GameScene::ParticleDraw() {
    /// スプライト描画
    /// ===================================================
 void GameScene::SpriteDraw() {
-	////スプライト描画
-	sprite_->Draw();
-	sprite2_->Draw();
+	//////スプライト描画
+	//sprite_->Draw();
+	//sprite2_->Draw();
 }
 
 

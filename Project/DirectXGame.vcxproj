@@ -37,12 +37,16 @@
     <ClCompile Include="Engine\Collider\BaseCollider.cpp" />
     <ClCompile Include="Engine\Collider\CollisionManager.cpp" />
     <ClCompile Include="Engine\Collider\OBBCollider.cpp" />
+    <ClCompile Include="Engine\Core\KTFramework.cpp" />
+    <ClCompile Include="Engine\Core\KTGame.cpp" />
     <ClCompile Include="Engine\Frame\Frame.cpp" />
     <ClCompile Include="Engine\Function\Convert.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
     <ClCompile Include="Engine\input\Mouse.cpp" />
     <ClCompile Include="Game\GrobalParamater\GlobalParameter.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
+    <ClCompile Include="Game\TestObj\CollisionTest1.cpp" />
+    <ClCompile Include="Game\TestObj\CollisionTest2.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\Box.cpp" />
     <ClCompile Include="math\Easing.cpp" />
@@ -80,6 +84,8 @@
     <ClInclude Include="Engine\Collider\BaseCollider.h" />
     <ClInclude Include="Engine\Collider\CollisionManager.h" />
     <ClInclude Include="Engine\Collider\OBBCollider.h" />
+    <ClInclude Include="Engine\Core\KTFramework.h" />
+    <ClInclude Include="Engine\Core\KTGame.h" />
     <ClInclude Include="Engine\Frame\Frame.h" />
     <ClInclude Include="Engine\Function\Convert.h" />
     <ClInclude Include="Engine\Function\Log.h" />
@@ -99,6 +105,8 @@
     <ClInclude Include="Engine\struct\VertexData.h" />
     <ClInclude Include="Game\GrobalParamater\GlobalParameter.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
+    <ClInclude Include="Game\TestObj\CollisionTest1.h" />
+    <ClInclude Include="Game\TestObj\CollisionTest2.h" />
     <ClInclude Include="math\Box.h" />
     <ClInclude Include="math\Easing.h" />
     <ClInclude Include="math\MathFunction.h" />
