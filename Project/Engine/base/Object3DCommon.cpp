@@ -70,6 +70,27 @@ void Object3DCommon::CreateGraphicsPipeline() {
 	blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
+	//// BlendStateの設定
+	//D3D12_BLEND_DESC blendDesc{};
+	//blendDesc.AlphaToCoverageEnable = FALSE; // アルファテストを無効に
+	//blendDesc.IndependentBlendEnable = FALSE; // 各レンダーターゲットのブレンドを独立させない
+
+	//// レンダーターゲットの設定
+	//blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+	//blendDesc.RenderTarget[0].BlendEnable = TRUE;
+
+	//// ソースブレンド、デスティネーションブレンド、ブレンドオペレーションの設定
+	//blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA; // ソースのアルファ
+	//blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA; // 1 - ソースのアルファ
+	//blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD; // 加算
+
+	//// アルファのソースとデスティネーションのブレンド設定
+	//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE; // アルファをそのまま使用
+	//blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO; // デスティネーションのアルファは無視
+	//blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD; // 加算
+
+
+
 	//RasterizerStateの設定
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	//裏面を表示しない
