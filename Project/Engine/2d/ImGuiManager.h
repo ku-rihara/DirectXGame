@@ -11,8 +11,7 @@ class DirectXCommon;
 class ImGuiManager{
 private://メンバ変数
 	DirectXCommon* dxCommon_;
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap_;
-
+	
 public://メンバ関数
 	static ImGuiManager* GetInstance();
 	//初期化
@@ -24,7 +23,6 @@ public://メンバ関数
 	//終了
 	void Finalizer();
 
-	ID3D12DescriptorHeap* GetSrvDescriptorHeap()const { return srvDescriptorHeap_.Get(); }
-	void SetSrvDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srv) { this->srvDescriptorHeap_=srv; }
+	
 };
 

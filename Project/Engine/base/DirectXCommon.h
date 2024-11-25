@@ -20,28 +20,32 @@ private://メンバ変数
 	//ウィンドウズアプリケーション管理
 	WinApp* winApp_;
 
-	////記録時間
-	//std::chrono::steady_clock::time_point reference_;
-
-	//Init------------------------------------------------------------------------------------------------------
-	//デバイス初期化関連
+	///===========================================================================
+   ///デバイス初期化関連
+  ///===========================================================================
 	Microsoft::WRL::ComPtr<IDXGIFactory7>dxgiFactory_;
 	Microsoft::WRL::ComPtr<ID3D12Device> device_;
 	Microsoft::WRL::ComPtr<IDXGIAdapter4> useAdapter_;
 
-	//コマンド初期化関連
+	///===========================================================================
+    ///コマンド初期化関連
+	///===========================================================================
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>commandAllocator_;
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue>commandQueue_;
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList_;
 
-	//スワップチェーン関連
+	///===========================================================================
+	///スワップチェーン初期化関連
+	///===========================================================================
 	Microsoft::WRL::ComPtr<IDXGISwapChain4>swapChain_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> swapChainResources_[2] = {};
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc_{};
 	uint32_t backBufferWidth_;
 	uint32_t backBufferHeight_;
 
-	//レンダーターゲットビュー関連
+	///===========================================================================
+	///RTV関連
+	///===========================================================================
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap > rtvDescriptorHeap_;
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];//RTVを2つ作るのでディスクリプタを2つ用意
@@ -50,22 +54,25 @@ private://メンバ変数
 	Microsoft::WRL::ComPtr<ID3D12Resource>depthStencilResource_;
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc_;
 
-	//フェンス生成関連
+	///===================================
+	///フェンス生成関連
+	///===================================
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence_;
 	HANDLE fenceEvent_;
 	uint64_t fenceValue_ = 0;
 
-	//dxcCompilerの初期化関連
+	///===================================
+	///dxCompiler初期化関連
+	///===================================
 	IDxcUtils* dxcUtils_;
 	IDxcCompiler3* dxcCompiler_;
 	IDxcIncludeHandler* includeHandler_;
-	//Init------------------------------------------------------------------------------------------------------
 
 	D3D12_VIEWPORT viewport_{};
 	D3D12_RECT scissorRect_{};
 	
-	//DescriptorSize
-	uint32_t descriptorSizeSRV_;
+	/// DescriptorSize
+
 	uint32_t descriptorSizeRTV_;
 	uint32_t descriptorSizeDSV_;
 
@@ -74,7 +81,11 @@ private://メンバ変数
 	UINT backBufferIndex_;
 
 
-private://メンバ関数
+private:
+
+	///==========================================================
+	///Private method
+	///==========================================================
 
 	/// <summary>
 	/// DXGIデバイス初期化
@@ -111,14 +122,16 @@ private://メンバ関数
 	/// </summary>
 	void dxcCompilerInit();
 
-	
-
 	Microsoft::WRL::ComPtr < ID3D12Resource> CreateDepthStencilTextureResource(Microsoft::WRL::ComPtr<ID3D12Device>  device, int32_t width, int32_t height);
 
-public://メンバ関数
+public:
 	HRESULT hr_ = 0;
-	//最大SRV数
-	static const uint32_t kMaxSRVCount;
+	public:
+
+	///==========================================================
+	///public method
+	///==========================================================
+
 	//シングルトンインスタンスの取得
 	static DirectXCommon* GetInstance();
 	/// <summary>
@@ -174,7 +187,10 @@ public://メンバ関数
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap > descriptorHeap, uint32_t descriptorSize, uint32_t index);
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap > descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
-	//getter
+	///==========================================================
+	///getter method
+	///==========================================================
+
 	// デバイス初期化関連
 	ID3D12Device* GetDevice()const { return device_.Get(); }
 	//コマンド
@@ -189,7 +205,6 @@ public://メンバ関数
 	IDxcCompiler3* GetDxcCompiler()const { return dxcCompiler_; }
 	IDxcIncludeHandler* GetIncludeHandler()const { return includeHandler_; }
 
-	uint32_t GetDescriptorSizeSRV()const { return descriptorSizeSRV_; }
 	uint32_t GetDescriptorSizeRTV()const { descriptorSizeRTV_; }
 	uint32_t GetDescriptorSizeDSV()const { return descriptorSizeDSV_; }
 

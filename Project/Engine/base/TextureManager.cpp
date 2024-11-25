@@ -131,14 +131,14 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 	textureData.srvCPUHandle = directXCommon_->GetCPUDescriptorHandle(imguiManager_->GetSrvDescriptorHeap(), directXCommon_->GetDescriptorSizeSRV(), uint32_t(textureDatas_.size()) +srvIndex);
 	textureData.srvGPUHandle = directXCommon_->GetGPUDescriptorHandle(imguiManager_->GetSrvDescriptorHeap(), directXCommon_->GetDescriptorSizeSRV(), uint32_t(textureDatas_.size()) +srvIndex);
 
-	// シェーダリソースビューの設定
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-	srvDesc.Format = textureData.metadata.format;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MipLevels = UINT(textureData.metadata.mipLevels);
-	//生成
-	directXCommon_->GetDevice()->CreateShaderResourceView(textureData.resource.Get(), &srvDesc, textureData.srvCPUHandle);
+	//// シェーダリソースビューの設定
+	//D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	//srvDesc.Format = textureData.metadata.format;
+	//srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	//srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	//srvDesc.Texture2D.MipLevels = UINT(textureData.metadata.mipLevels);
+	////生成
+	//directXCommon_->GetDevice()->CreateShaderResourceView(textureData.resource.Get(), &srvDesc, textureData.srvCPUHandle);
 	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = UploadTextureDate(textureData.resource, mipImage, directXCommon_->GetDevice(), directXCommon_->GetCommandList());
 		directXCommon_->commandExecution(intermediateResource);
 	

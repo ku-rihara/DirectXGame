@@ -11,15 +11,13 @@
 //
 
 #include<cassert>
-#include <iostream>
-#include<thread>
+//#include <iostream>
+//#include<thread>
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
-
-const uint32_t DirectXCommon::kMaxSRVCount = 512;
 
 namespace {
 	ImGuiManager* imguiManager_;
@@ -118,7 +116,6 @@ void DirectXCommon::Init(WinApp* winApp, int32_t backBufferWidth, int32_t backBu
 
 	/// コマンド関連初期化
 	CommandInit();
-	descriptorSizeSRV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	descriptorSizeRTV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	descriptorSizeDSV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 	//スワップチェーンの作成
@@ -381,9 +378,9 @@ void DirectXCommon::PreDraw() {
 	//指定した色で画面全体をクリアする
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色、RGBAの順
 	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex_], clearColor, 0, nullptr);
-	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeaps[] = { imguiManager_->GetSrvDescriptorHeap() };
-	commandList_->SetDescriptorHeaps(1, descriptorHeaps->GetAddressOf());
+	////コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
+	//Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeaps[] = { imguiManager_->GetSrvDescriptorHeap() };
+	//commandList_->SetDescriptorHeaps(1, descriptorHeaps->GetAddressOf());
 
 	commandList_->RSSetViewports(1, &viewport_);
 	commandList_->RSSetScissorRects(1, &scissorRect_);
