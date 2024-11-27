@@ -9,6 +9,7 @@
 #include"SpriteCommon.h"
 #include"3d/ModelManager.h"
 #include"input/Input.h"
+#include"SrvManager.h"
 //#include"WorldTransformManager.h"
 
 #include"Matrix4x4.h"
@@ -16,6 +17,7 @@
 #include <string>
 
 namespace {
+
 	WinApp* sWinApp = nullptr;
 	DirectXCommon* sDirectXCommon = nullptr;
 	ImGuiManager* imguiManager = nullptr;
@@ -23,6 +25,8 @@ namespace {
 	SpriteCommon* spriteCommon = nullptr;
 	Object3DCommon* sObject3DCommon = nullptr;
 	ModelManager* sModelManager = nullptr;
+	std::unique_ptr<SrvManager> sSrvManager = nullptr;
+
 	Audio* audio = nullptr;
 	Input* input = nullptr;
 }
@@ -41,6 +45,9 @@ void Keta::Initialize(const char* title, int width, int height) {
 	sDirectXCommon->Init(sWinApp, width, height);
 	sDirectXCommon->CreateGraphicPipelene();
 
+	sSrvManager = std::make_unique<SrvManager>();
+	sSrvManager->Init(sDirectXCommon);
+
 	sObject3DCommon = Object3DCommon::GetInstance();
 	sObject3DCommon->Init(sDirectXCommon);
 
@@ -51,11 +58,10 @@ void Keta::Initialize(const char* title, int width, int height) {
 	sModelManager->Initialize(sDirectXCommon);
 
 	imguiManager = ImGuiManager::GetInstance();
-	imguiManager->Init(sWinApp, sDirectXCommon);
+	imguiManager->Init(sWinApp, sDirectXCommon,sSrvManager.get());
 
 	stextureManager = TextureManager::GetInstance();
-	stextureManager->Init(sDirectXCommon);
-
+	stextureManager->Init(sDirectXCommon,sSrvManager.get());
 
 	input = Input::GetInstance();
 	input->Init(sWinApp->GetHInstaice(), sWinApp->GetHwnd());
@@ -76,6 +82,7 @@ void Keta::BeginFrame() {
 #endif
 	input->Update();
 	sDirectXCommon->PreDraw();
+	sSrvManager->PreDraw();
 }
 //フレームの終わり
 void Keta::EndFrame() {

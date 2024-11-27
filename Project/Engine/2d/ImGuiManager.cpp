@@ -1,16 +1,19 @@
 #include "base/WinApp.h"
 #include "base/DirectXCommon.h"
 #include "2d/ImGuiManager.h"
-
+#include"base/SrvManager.h"
 
 ImGuiManager* ImGuiManager::GetInstance() {
 	static ImGuiManager instance;
 	return &instance;
 }
 
-void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon) {
+void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srvManager) {
 	winApp;
 	dxCommon_ = dxCommon;
+	pSrvManager_ = srvManager;
+
+	dxCommon_->CreateDescriptorHeap(dxCommon_->GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, SrvManager::kMaxCount, true);
 	//srvDescriptorHeap_ = dxCommon_->CreateDescriptorHeap(dxCommon_->GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, DirectXCommon::kMaxSRVCount, true);
 
 #ifdef _DEBUG
@@ -19,7 +22,7 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon) {
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(winApp->GetHwnd());
 	ImGui_ImplDX12_Init(dxCommon_->GetDevice(), dxCommon_->GetSwapChainDesc().BufferCount, dxCommon_->GetRtvDesc().Format,
-		srvDescriptorHeap_.Get(), srvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart(), srvDescriptorHeap_->GetGPUDescriptorHandleForHeapStart());
+		pSrvManager_->GetSrvDescriptorHeap(), pSrvManager_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart(), pSrvManager_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
 #endif
 }
 

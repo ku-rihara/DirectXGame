@@ -30,8 +30,8 @@ void GameScene::Init() {
 	//モデル
 	std::uniform_real_distribution<float>lifeTimedist(1.0f, 3.0f);
 	modelPlane_.reset(Object3d::CreateModel("Plane", ".obj"));
-	modelPlaneParticle_.reset(Object3dParticle::CreateModel("Plane", ".obj", modelInstanceMax_));
-	modelFence_.reset(Object3d::CreateModel("Fence", ".obj"));
+	/*modelPlaneParticle_.reset(Object3dParticle::CreateModel("Plane", ".obj", modelInstanceMax_));
+	*/modelFence_.reset(Object3d::CreateModel("Fence", ".obj"));
 	modelSuzanne_.reset(Object3d::CreateModel("Suzanne", ".obj"));
 	modelSuzanne2_.reset(Object3d::CreateModel("Suzanne", ".obj"));
 	modelTerrain_.reset(Object3d::CreateModel("terrain", ".obj"));
@@ -65,14 +65,14 @@ void GameScene::Init() {
 	///=======================================================================================
 	///Particle
 	///=======================================================================================
-		//emitter
-	modelPlaneParticle_->emitter_.count = 3;
-	modelPlaneParticle_->emitter_.frequency = 0.5f;
-	modelPlaneParticle_->emitter_.frequencyTime = 0.0f;
-	//acceleration
-	modelPlaneParticle_->accelerationField_.acceleration = { 15.0f,0.0f,0.0f };
-	modelPlaneParticle_->accelerationField_.area.min = { -1.0f,-1.0f,-1.0f };
-	modelPlaneParticle_->accelerationField_.area.max = { 1.0f,1.0f,1.0f };
+	//	//emitter
+	//modelPlaneParticle_->emitter_.count = 3;
+	//modelPlaneParticle_->emitter_.frequency = 0.5f;
+	//modelPlaneParticle_->emitter_.frequencyTime = 0.0f;
+	////acceleration
+	//modelPlaneParticle_->accelerationField_.acceleration = { 15.0f,0.0f,0.0f };
+	//modelPlaneParticle_->accelerationField_.area.min = { -1.0f,-1.0f,-1.0f };
+	//modelPlaneParticle_->accelerationField_.area.max = { 1.0f,1.0f,1.0f };
 
 }
 
@@ -101,13 +101,13 @@ void GameScene::Update() {
 		suzanneTransform_.translation_.y -= 0.01f;
 	}
 
-	modelPlaneParticle_->emitter_.frequencyTime += Frame::DeltaTime();//時刻すすめる
-	//頻度より大きいなら
-	if (modelPlaneParticle_->emitter_.frequency <= modelPlaneParticle_->emitter_.frequencyTime) {
-		modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_, MinMax(-1.0f, 1.0f), MinMax(0.0f, 1.0f), 5);
+	//modelPlaneParticle_->emitter_.frequencyTime += Frame::DeltaTime();//時刻すすめる
+	////頻度より大きいなら
+	//if (modelPlaneParticle_->emitter_.frequency <= modelPlaneParticle_->emitter_.frequencyTime) {
+	//	modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_, MinMax(-1.0f, 1.0f), MinMax(0.0f, 1.0f), 5);
 
-		modelPlaneParticle_->emitter_.frequencyTime -= modelPlaneParticle_->emitter_.frequency ;//時刻すすめる
-	}
+	//	modelPlaneParticle_->emitter_.frequencyTime -= modelPlaneParticle_->emitter_.frequency ;//時刻すすめる
+	//}
 
 	collisionTest1_->Init();
 	collisionTest2_->Init();
@@ -119,7 +119,7 @@ void GameScene::Update() {
 	suzanneTransform_.UpdateMatrix();
 	suzanneTransform2_.UpdateMatrix();
 	terrainTransform_.UpdateMatrix();
-	modelPlaneParticle_->Update(&viewProjection_);
+	/*modelPlaneParticle_->Update(&viewProjection_);*/
 
 
 	// カメラ行列の計算をデバッグカメラのビュープロジェクションから行う
@@ -152,7 +152,7 @@ void GameScene::ModelDraw() {
    /// パーティクル描画
    /// ===================================================
 void GameScene::ParticleDraw() {
-	modelPlaneParticle_->Draw(viewProjection_, uvHandle_);
+	/*modelPlaneParticle_->Draw(viewProjection_, uvHandle_);*/
 }
 
 /// ===================================================

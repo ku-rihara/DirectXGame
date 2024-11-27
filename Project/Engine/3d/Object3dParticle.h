@@ -40,9 +40,7 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE  instancingSrvHandleCPU_;
 	D3D12_GPU_DESCRIPTOR_HANDLE  instancingSrvHandleGPU_;
 
-	//リソースとデータ
-	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> instancingResources_;
-	ParticleFprGPU* instancingData_;
+		ParticleFprGPU* instancingData_;
 	//パーティクル変数
 	const float kDeltaTime_ = 1.0f / 60.0f;
 	

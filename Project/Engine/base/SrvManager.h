@@ -13,16 +13,22 @@ private:
 	
 	/// other class
 	DirectXCommon* dxCommon_ = nullptr;
-
-	static const uint32_t kMaxSRVCount;                          //最大SRV数
+                      
 	uint32_t descriptorSize_;                                    //SRV用のデスクリプタサイズ
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;//SRV用デスクリプタ
 
 	uint32_t useIndex_ = 0;//次に使用するインデックス
 
+	/*/// structreBuffer
+	D3D12_CPU_DESCRIPTOR_HANDLE  instancingSrvHandleCPU_;
+	D3D12_GPU_DESCRIPTOR_HANDLE  instancingSrvHandleGPU_;*/
+	//リソースとデータ
+	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> instancingResources_;
 
+public: 
+	//最大SRV数
+	static const uint32_t kMaxCount;
 public:
-
 	///===================================================================
 	///public method
 	///===================================================================
@@ -33,6 +39,8 @@ public:
 
 	// 描画前処理
 	void PreDraw();
+
+	bool IsAbleSecure();
 
 	/// GPU、CPUデスクリプタハンドル取得
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(uint32_t index);

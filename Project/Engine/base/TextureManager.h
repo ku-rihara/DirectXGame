@@ -3,24 +3,27 @@
 #include <string>
 #include<d3d12.h>
 #include<DirectXTex.h>
-#include<d3dx12.h>
 #include"DirectXCommon.h"
-#include<vector>
-#include<memory>
+/// std
+#include<unordered_map>
 
+class SrvManager;
 class TextureManager {
 private:
 	//テクスチャ1枚分のデータ
 	struct TextureData {
-		std::string filePath;
+		/*std::string filePath;*/
 		DirectX::TexMetadata metadata;
+		uint32_t srvIndex;
 		Microsoft::WRL::ComPtr<ID3D12Resource>resource;
 		D3D12_CPU_DESCRIPTOR_HANDLE srvCPUHandle;
 		D3D12_GPU_DESCRIPTOR_HANDLE srvGPUHandle;
 	};
 
-	std::vector<TextureData>textureDatas_;
+	std::unordered_map <std::string,TextureData> textureDatas_;
 
+	/// ohter class
+	SrvManager* pSrvManager_;
 
 public:
 
@@ -36,7 +39,7 @@ public:
 	/// 初期化
 	/// </summary>
 	/// <param name="dxCommon"></param>
-	void Init(DirectXCommon* dxCommon);
+	void Init(DirectXCommon* dxCommon,SrvManager*srvManager);
 	/// <summary>
 	/// TextureデータをCPUで読み込む
 	/// </summary>
@@ -66,24 +69,21 @@ public:
 	/// <returns>テクスチャハンドル</returns>
 	uint32_t LoadTexture(const std::string& filePath);
 
-	/// <summary>
-  /// テクスチャハンドル取得関数
-  /// </summary>
-  /// <param name="index"></param>
-  /// <returns></returns>
-	D3D12_GPU_DESCRIPTOR_HANDLE GetTextureHandle(uint32_t index)const;
 
-	/// <summary>
-	/// メタデータを取得
-	/// </summary>
-	/// <param name="textureIndex"></param>
-	/// <returns></returns>
+	///==========================================================
+	///Getter method
+	///==========================================================
+	
+	D3D12_GPU_DESCRIPTOR_HANDLE GetTextureHandle(uint32_t index)const;
 	const DirectX::TexMetadata& GetMetaData(uint32_t textureIndex);
+	uint32_t GetSrvIndex(const std::string& filePath);
+	D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandleGPU(const std::string& filePath);
 
 	/// <summary>
 	/// 終了
 	/// </summary>
 	void Finalize();
+
 private:
 	static TextureManager* instance;
 	TextureManager() = default;

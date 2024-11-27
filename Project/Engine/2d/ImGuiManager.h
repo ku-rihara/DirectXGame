@@ -7,15 +7,17 @@
 
 class WinApp;
 class DirectXCommon;
-
+class SrvManager;
 class ImGuiManager{
-private://メンバ変数
+private:
+	/// other class
 	DirectXCommon* dxCommon_;
+	SrvManager* pSrvManager_;
 	
 public://メンバ関数
 	static ImGuiManager* GetInstance();
 	//初期化
-	void Init(WinApp* winApp, DirectXCommon* dxCommon);
+	void Init(WinApp* winApp, DirectXCommon* dxCommon,SrvManager*srvManager);
 	//フレーム始め
 	void Begin();
 	//フレーム終わり

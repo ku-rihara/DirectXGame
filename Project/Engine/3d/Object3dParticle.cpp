@@ -91,7 +91,12 @@ void Object3dParticle::CreateInstancingResource(const uint32_t& instanceNum) {
 		instancingData_[index].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
-	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
+	/*instancingSrvHandleCPU_ = DirectXCommon::GetInstance()->GetCPUDescriptorHandle(
+		GetSrvDescriptorHeap(), GetDescriptorSizeSRV(), srvIndex);
+	instancingSrvHandleGPU_ = DirectXCommon::GetInstance()->GetGPUDescriptorHandle(
+		GetSrvDescriptorHeap(), GetDescriptorSizeSRV(), srvIndex);*/
+
+	/*D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
 	instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
 	instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
@@ -107,7 +112,7 @@ void Object3dParticle::CreateInstancingResource(const uint32_t& instanceNum) {
 
 	instancingResources_.push_back(instancingResource.Get());
 
-	DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(instancingResource.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);
+	DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(instancingResource.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);*/
 }
 
 void Object3dParticle::Clear() {
