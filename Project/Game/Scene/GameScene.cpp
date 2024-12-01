@@ -172,8 +172,8 @@ void GameScene::Debug() {
 
 	if (ImGui::TreeNode("Frag")) {
 		ImGui::Checkbox("isDraw", &isDraw);
-		ImGui::Checkbox("isAcceleration", &modelPlaneParticle_->accelerationField_.isAdaption);
-		ImGui::TreePop();
+	/*	ImGui::Checkbox("isAcceleration", &modelPlaneParticle_->accelerationField_.isAdaption);
+	*/	ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("ViewProjection")) {
 
@@ -217,9 +217,9 @@ void GameScene::Debug() {
 	}
 
 	if (ImGui::TreeNode("Particle")) {
-		ImGui::DragFloat3("Scale", &modelPlaneParticle_->emitter_.transform.scale.x, 0.01f);
+	/*	ImGui::DragFloat3("Scale", &modelPlaneParticle_->emitter_.transform.scale.x, 0.01f);
 		ImGui::DragFloat3("Rotate", &modelPlaneParticle_->emitter_.transform.rotate.x, 0.01f);
-		ImGui::DragFloat3("Translate", &modelPlaneParticle_->emitter_.transform.translate.x, 0.01f);
+		ImGui::DragFloat3("Translate", &modelPlaneParticle_->emitter_.transform.translate.x, 0.01f);*/
 		ImGui::TreePop();
 	}
 

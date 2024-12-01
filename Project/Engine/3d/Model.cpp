@@ -207,7 +207,7 @@ void  Model::PreDraw(ID3D12GraphicsCommandList* commandList) {
 	Object3DCommon::GetInstance()->PreDraw(commandList);
 }
 
-void  Model::PreDrawParticle(ID3D12GraphicsCommandList* commandList) {
-	Object3DCommon::GetInstance()->PreDrawParticle(commandList);
-}
-
+//void  Model::PreDrawParticle(ID3D12GraphicsCommandList* commandList) {
+//	Object3DCommon::GetInstance()->PreDrawParticle(commandList);
+//}
+//

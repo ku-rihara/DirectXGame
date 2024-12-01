@@ -16,4 +16,6 @@ void BaseObject3d::SetModel(const std::string& modelName, const std::string& ext
 
 void BaseObject3d::CreateMaterialResource() {
 	material_.CreateMaterialResource(DirectXCommon::GetInstance());
+
+
 }

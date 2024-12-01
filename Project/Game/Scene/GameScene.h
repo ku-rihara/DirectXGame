@@ -15,9 +15,9 @@
 #include "audio/Audio.h"
 #include"input/Input.h"
 #include"3d/Object3d.h"
-#include"3d/Object3dParticle.h"
+//#include"3d/Object3dParticle.h"
 //etc
-#include"3d/DebugCamera.h"
+#include"utility/Debug/DebugCamera.h"
 #include<random>
 #include <imgui.h>
 #include<memory>
@@ -61,7 +61,7 @@ private:
 
 	const uint32_t modelInstanceMax_ = 100;
 	
-	std::unique_ptr<Object3dParticle> modelPlaneParticle_ = nullptr;
+	//std::unique_ptr<Object3dParticle> modelPlaneParticle_ = nullptr;
 	
 	const float kDeltaTime_ = 1.0f / 60.0f;
 

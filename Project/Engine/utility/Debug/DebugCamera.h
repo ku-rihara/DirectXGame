@@ -1,7 +1,7 @@
 #pragma once
 #include"Vector3.h"
 #include"Matrix4x4.h"
-#include"ViewProjection.h"
+#include"3d/ViewProjection.h"
 #include"input/Input.h"
 class DebugCamera{
 	// カメラ注視点までの距離
