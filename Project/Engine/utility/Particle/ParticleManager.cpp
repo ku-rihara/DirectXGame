@@ -15,7 +15,6 @@ ParticleManager* ParticleManager::GetInstance() {
 	return &instance;
 }
 
-
 void ParticleManager::Init(SrvManager* srvManager) {
 	pSrvManager_ = srvManager;
 	pParticleCommon_ = ParticleCommon::GetInstance();
@@ -29,7 +28,7 @@ void ParticleManager::Update(std::optional<const ViewProjection*> viewProjection
 
 		ParticleGroup& group = groupIt->second;
 		std::list<Particle>& particles = group.particles;
-		ParticleFprGPU* instancingData = group.instancingData;
+	/*	ParticleFprGPU* instancingData = group.instancingData;*/
 
 		uint32_t instanceIndex = 0; // 現在のインスタンス数
 

@@ -70,7 +70,7 @@ private:
 public:
 	
 	static void PreDraw(ID3D12GraphicsCommandList* commandList);
-	static void PreDrawParticle(ID3D12GraphicsCommandList* commandList);
+	/*static void PreDrawParticle(ID3D12GraphicsCommandList* commandList);*/
 
 	ModelData LoadModelFile(const std::string& directoryPath, const std::string& filename);
 	ModelData LoadModelGltf(const std::string& directoryPath, const std::string& filename);
