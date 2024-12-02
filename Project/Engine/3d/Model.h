@@ -1,31 +1,17 @@
 #pragma once
+
 #include<wrl.h>
 #include<d3d12.h>
 #include<dxgi1_6.h>
 
 #include <optional>
 #include<string>
-#include<map>
-#include <memory>
-#include<vector>
-#include"Vector4.h"
-#include"Vector3.h"
-#include"Vector2.h"
-#include<numbers>
-//assimp
-#include<assimp/Importer.hpp>
-#include<assimp/scene.h>
-#include<assimp/postprocess.h>
-//struct
-#include"struct/TransformationMatrix.h"
-#include"struct/ModelData.h"
-#include"base/Material.h"
-#include "struct/MaterialData.h"
-#include "struct/ParticleForGPU.h"
 
-//class
-#include "WorldTransform.h"
-#include "ViewProjection.h"
+#include<assimp/scene.h>
+//struct
+#include"struct/ModelData.h"
+
+#include"base/Material.h"
 #include"base/DirectXCommon.h"
 
 //3Dモデル共通部

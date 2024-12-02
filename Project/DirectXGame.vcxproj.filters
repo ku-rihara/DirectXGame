@@ -253,6 +253,9 @@
     <ClCompile Include="Engine\utility\Particle\ParticleManager.cpp">
       <Filter>MyEngine\.cpp\utility\Particle</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\utility\Particle\ParticleEmitter.cpp">
+      <Filter>MyEngine\.cpp\utility\Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -439,6 +442,9 @@
       <Filter>MyEngine\.h\utility\Debug</Filter>
     </ClInclude>
     <ClInclude Include="Engine\utility\Particle\ParticleManager.h">
+      <Filter>MyEngine\.h\utility\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\Particle\ParticleEmitter.h">
       <Filter>MyEngine\.h\utility\Particle</Filter>
     </ClInclude>
   </ItemGroup>

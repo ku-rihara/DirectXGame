@@ -2,7 +2,10 @@
 
 #include"BaseObject3d.h"
 #include"ObjectColor.h"
-#include"base/Material.h"
+//#include"base/Material.h"
+
+#include"3d/WorldTransform.h"
+#include"struct/TransformationMatrix.h"
 
 class Object3d :public BaseObject3d {
 public:

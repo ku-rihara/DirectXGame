@@ -1,6 +1,5 @@
 #pragma once
 
-#include"base/Keta.h"
 //DirectX
 #include"base/WinApp.h"
 #include "base/DirectXCommon.h"
@@ -9,21 +8,18 @@
 #include "3d/WorldTransform.h"
 #include"3d/ViewProjection.h"
 //obj
-#include "3d/Mesh.h"
-#include "3d/Model.h"
 #include "2d/Sprite.h"
 #include "audio/Audio.h"
 #include"input/Input.h"
 #include"3d/Object3d.h"
-//#include"3d/Object3dParticle.h"
 //etc
 #include"utility/Debug/DebugCamera.h"
-#include<random>
-#include <imgui.h>
 #include<memory>
 //testobj
 #include"TestObj/CollisionTest1.h"
 #include"TestObj/CollisionTest2.h"
+// emitter
+#include"utility/Particle/ParticleEmitter.h"
 
 
 /// <summary>
@@ -57,13 +53,8 @@ private:
 	WorldTransform suzanneTransform2_;
 	WorldTransform terrainTransform_;
 
-	//パーティクル変数
-
-	const uint32_t modelInstanceMax_ = 100;
-	
-	//std::unique_ptr<Object3dParticle> modelPlaneParticle_ = nullptr;
-	
-	const float kDeltaTime_ = 1.0f / 60.0f;
+	/// particle
+	std::unique_ptr<ParticleEmitter>emitter_;
 
 	bool isDraw = true;
 

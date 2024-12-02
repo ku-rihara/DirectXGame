@@ -5,6 +5,7 @@
 
 #include"3d/Object3d.h"
 #include"3d/ViewProjection.h"
+#include"3d/WorldTransform.h"
 
 //
 #include"struct/ParticleForGPU.h"
@@ -17,13 +18,20 @@
 
 class ParticleCommon;
 class ParticleManager {
-
-
 private:
 
 	///=========================================
 	/// struct
 	///=========================================
+
+	struct Particle {
+		float lifeTime_;
+		float currentTime_;
+		Vector3 velocity_;
+		Vector4 color_;
+		WorldTransform worldTransform_;
+
+	};
 
 	struct AccelerationField {///　加速フィールド
 		Vector3 acceleration;
@@ -79,4 +87,15 @@ public:
 	void CreateMaterialResource(const std::string& name);
 
 	void CreateInstancingResource(const std::string& name, const uint32_t& instanceNum);
+
+	Particle  MakeParticle(
+		const Vector3& basePosition,V3MinMax positionDist,
+		V3MinMax scaledist, V3MinMax velocityDist, V4MinMax colorDist, 
+		float lifeTime);
+
+	void Emit(
+		std::string name, const Vector3& basePosition, V3MinMax positionDist, 
+		V3MinMax scaledist, V3MinMax velocityDist, V4MinMax colorDist, 
+		float lifeTime, uint32_t count);
+
 };

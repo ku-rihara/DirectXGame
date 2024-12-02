@@ -1,6 +1,8 @@
 #include"Object3d.h"
 #include"ModelManager.h"
 
+//#include"struct/ModelData.h"
+
 Object3d::Object3d() {
 
 }

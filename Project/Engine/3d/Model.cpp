@@ -1,14 +1,19 @@
 #include "Model.h"
-#include<fstream>
-#include<sstream>
-#include<assert.h>
-#include <imgui.h>
+//#include<fstream>
+//#include<sstream>
+//#include<assert.h>
+//#include <imgui.h>
 
+#include<assimp/Importer.hpp>
+#include<assimp/postprocess.h>
+//
 //class
 #include"Light.h"
 #include"base/Object3DCommon.h"
-#include"2d/ImGuiManager.h"
 #include"base/TextureManager.h"
+
+
+
 namespace {
 	DirectXCommon* directXCommon = DirectXCommon::GetInstance();
 }

@@ -45,6 +45,7 @@
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
     <ClCompile Include="Engine\utility\Particle\Object3dParticle.cpp" />
     <ClCompile Include="Engine\utility\Particle\ParticleCommon.cpp" />
+    <ClCompile Include="Engine\utility\Particle\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\utility\Particle\ParticleManager.cpp" />
     <ClCompile Include="Game\GrobalParamater\GlobalParameter.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
@@ -108,6 +109,7 @@
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h" />
     <ClInclude Include="Engine\utility\Particle\Object3dParticle.h" />
     <ClInclude Include="Engine\utility\Particle\ParticleCommon.h" />
+    <ClInclude Include="Engine\utility\Particle\ParticleEmitter.h" />
     <ClInclude Include="Engine\utility\Particle\ParticleManager.h" />
     <ClInclude Include="Game\GrobalParamater\GlobalParameter.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />

@@ -1,11 +1,12 @@
 #include "GameScene.h"
 #include "base/TextureManager.h"
-#include <cassert>
 //class
 #include"3d/Light.h"
+#include"utility/Particle/ParticleManager.h"
 //math
 #include"MinMax.h"
 #include"Frame/Frame.h"
+#include<imgui.h>
 
 GameScene::GameScene() {}
 
@@ -14,8 +15,7 @@ GameScene::~GameScene() {
 }
 
 void GameScene::Init() {
-	std::random_device seedGenerator;
-	std::mt19937 randomEngine(seedGenerator());
+	
 	// メンバ変数の初期化
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
@@ -28,10 +28,9 @@ void GameScene::Init() {
 	//音
 	soundDataHandle_ = audio_->SoundLoadWave("Resources/fanfare.wav");
 	//モデル
-	std::uniform_real_distribution<float>lifeTimedist(1.0f, 3.0f);
+	
 	modelPlane_.reset(Object3d::CreateModel("Plane", ".obj"));
-	/*modelPlaneParticle_.reset(Object3dParticle::CreateModel("Plane", ".obj", modelInstanceMax_));
-	*/modelFence_.reset(Object3d::CreateModel("Fence", ".obj"));
+	modelFence_.reset(Object3d::CreateModel("Fence", ".obj"));
 	modelSuzanne_.reset(Object3d::CreateModel("Suzanne", ".obj"));
 	modelSuzanne2_.reset(Object3d::CreateModel("Suzanne", ".obj"));
 	modelTerrain_.reset(Object3d::CreateModel("terrain", ".obj"));
@@ -41,6 +40,9 @@ void GameScene::Init() {
 	collisionTest2_ = std::make_unique<CollisionTest2>();
 	collisionTest1_->Init();
 	collisionTest2_->Init();
+
+	// エミッター
+	emitter_.reset(ParticleEmitter::CreateParticle("test", "Plane", ".obj", 50));
 
 	///トランスフォーム初期化
 	planeTransform_.Init();
@@ -78,6 +80,8 @@ void GameScene::Init() {
 
 void GameScene::Update() {
 
+	emitter_->ApplyGlobalParameter();
+	ParticleManager::GetInstance()->Update(&viewProjection_);
 
 	debugCamera_->Update();
 
@@ -152,7 +156,7 @@ void GameScene::ModelDraw() {
    /// パーティクル描画
    /// ===================================================
 void GameScene::ParticleDraw() {
-	/*modelPlaneParticle_->Draw(viewProjection_, uvHandle_);*/
+	ParticleManager::GetInstance()->Draw(viewProjection_,uvHandle_);
 }
 
 /// ===================================================
@@ -163,8 +167,6 @@ void GameScene::SpriteDraw() {
 	sprite_->Draw();
 	sprite2_->Draw();
 }
-
-
 
 void GameScene::Debug() {
 #ifdef _DEBUG

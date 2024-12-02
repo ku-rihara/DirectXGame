@@ -2,6 +2,7 @@
 #include<vector>
 #include"VertexData.h"
 #include "materialData.h"
+#include"Matrix4x4.h"
 
 struct Node {
 	Matrix4x4 localMatrix;

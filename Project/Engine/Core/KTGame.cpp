@@ -1,5 +1,5 @@
 #include "KTGame.h"
-
+#include"utility/Particle/ParticleCommon.h"
 
 // ============================
 // 初期化処理
@@ -31,7 +31,7 @@ void KTGame::Draw() {
 	///////////////////////////////////////////
 	/// パーティクル
 	///////////////////////////////////////////
-	/*Model::PreDrawParticle(commandList);*/
+	ParticleCommon::GetInstance()->PreDraw(commandList);
 	/// ゲームシーン描画
 	gameScene_->ParticleDraw();
 	///////////////////////////////////////////

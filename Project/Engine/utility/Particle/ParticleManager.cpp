@@ -5,6 +5,7 @@
 #include"Frame/Frame.h"
 
 //Function
+#include"random.h"
 #include"function/Log.h"
 #include<cassert>
 #include<string>
@@ -22,6 +23,7 @@ void ParticleManager::Init(SrvManager* srvManager) {
 
 
 void ParticleManager::Update(std::optional<const ViewProjection*> viewProjection) {
+
 	// 各粒子グループを周る
 	for (std::unordered_map<std::string, ParticleGroup>::iterator groupIt = particleGroups_.begin();
 		groupIt != particleGroups_.end(); ++groupIt) {
@@ -109,10 +111,12 @@ void ParticleManager::Draw(const ViewProjection& viewProjection, std::optional<u
 }
 
 
-void ParticleManager::CreateParticleGroup(const std::string name,const std::string modelFilePath, const std::string& extension,const uint32_t& maxnum) {
+void ParticleManager::CreateParticleGroup(
+	const std::string name,const std::string modelFilePath, 
+	const std::string& extension,const uint32_t& maxnum) {
 		if (particleGroups_.contains(name)) {
 		return;
-	}
+	    }
 
 		// グループ追加
 	particleGroups_[name] = ParticleGroup();
@@ -173,37 +177,54 @@ void ParticleManager::CreateInstancingResource(const std::string& name, const ui
 	);
 }
 
-//void Object3dParticle::Clear() {
-//
-//	particles_.clear(); // リストをクリア
-//
-//}
 
-////パーティクル作成
-//Object3dParticle::Particle  Object3dParticle::MakeParticle(MinMax dist, MinMax velocityDist, const Transform& transform, float lifeTime) {
-//
-//	Particle particle;
-//	particle.lifeTime_ = lifeTime;
-//	//初期化
-//	particle.worldTransform_.Init();
-//	//回転
-//	particle.worldTransform_.rotation_.y = -3.0f;
-//	//色
-//	particle.color_ = { Random::Range(dist.min,dist.max),  Random::Range(dist.min,dist.max),  Random::Range(dist.min,dist.max), 1.0f };
-//	//座標
-//	Vector3 randomTranslate = { Random::Range(dist.min,dist.max),  Random::Range(dist.min,dist.max),  Random::Range(dist.min,dist.max) };
-//	particle.worldTransform_.translation_ = transform.translate + randomTranslate;
-//	//速度
-//	particle.velocity_ = { Random::Range(velocityDist.min,velocityDist.max), Random::Range(velocityDist.min,velocityDist.max), 0 };
-//
-//	return  particle;
-//}
+///======================================================================
+/// パーティクル作成
+///======================================================================
+ParticleManager::Particle ParticleManager::MakeParticle(
+	const Vector3& basePosition, V3MinMax positionDist, V3MinMax scaledist, 
+	V3MinMax velocityDist, V4MinMax colorDist, float lifeTime) {
 
-////エミッター
-//void ParticleManager::Emit(const Emitter& emitter, MinMax dist, MinMax velocityDist, float lifeTime) {
-//
-//	for (uint32_t i = 0; i < emitter.count; ++i) {
-//		particles_.emplace_back(MakeParticle(dist, velocityDist, emitter.transform, lifeTime));
-//	}
-//}
+	Particle particle;
+	particle.lifeTime_ = lifeTime;
+	//初期化
+	particle.worldTransform_.Init();
+	//回転
+	particle.worldTransform_.rotation_.y = -3.0f;
+	/// スケール
+    particle.worldTransform_.scale_= { Random::Range(scaledist.min.x,scaledist.max.x),  Random::Range(scaledist.min.y,scaledist.max.y),  Random::Range(scaledist.min.z,scaledist.max.z) };
+	//座標
+	Vector3 randomTranslate = { Random::Range(positionDist.min.x,positionDist.max.x),  Random::Range(positionDist.min.y,positionDist.max.y),  Random::Range(positionDist.min.z,positionDist.max.z) };
+	particle.worldTransform_.translation_ = basePosition + randomTranslate;
+	//速度
+	particle.velocity_ = { Random::Range(velocityDist.min.x,velocityDist.max.x), Random::Range(velocityDist.min.y,velocityDist.max.y), Random::Range(velocityDist.min.z,velocityDist.max.z) };
+
+	//色
+	particle.color_ = { Random::Range(colorDist.min.x,colorDist.max.x),  Random::Range(colorDist.min.y,colorDist.max.y),  Random::Range(colorDist.min.z,colorDist.max.z), 1.0f };
+	return  particle;
+}
+
+///======================================================================
+/// エミット
+///======================================================================
+void ParticleManager::Emit(
+	std::string name, const Vector3& basePosition,  V3MinMax positionDist,
+	V3MinMax scaledist, V3MinMax velocityDist,  V4MinMax colorDist,
+	float lifeTime,uint32_t count) {
+
+	// パーティクルグループが存在するか確認
+	assert(particleGroups_.find(name) != particleGroups_.end() && "Error: パーティクルグループがありません。");
+
+	// 指定されたパーティクルグループを取得
+	ParticleGroup& particleGroup = particleGroups_[name];
+
+	// 生成、グループ追加
+	std::list<Particle> particles;
+	for (uint32_t i = 0; i < count; ++i) {
+		particles.emplace_back(MakeParticle(basePosition, positionDist, scaledist, velocityDist, colorDist, lifeTime));
+	}
+
+	// グループに追加
+	particleGroup.particles.splice(particleGroup.particles.end(), particles);
+}
 
