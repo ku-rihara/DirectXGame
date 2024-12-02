@@ -132,7 +132,7 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 
 	// データをアップロード
 	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = UploadTextureDate(
-		textureData.resource,
+		textureData.resource.Get(),
 		mipImage,
 		directXCommon_->GetDevice(),
 		directXCommon_->GetCommandList()

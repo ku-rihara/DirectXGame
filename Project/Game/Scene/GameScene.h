@@ -55,6 +55,7 @@ private:
 
 	/// particle
 	std::unique_ptr<ParticleEmitter>emitter_;
+	float time_;
 
 	bool isDraw = true;
 

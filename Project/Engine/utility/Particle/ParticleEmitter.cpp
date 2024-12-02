@@ -21,7 +21,7 @@ ParticleEmitter* ParticleEmitter::CreateParticle(
 	///GrobalParamater
 	emitter->AddGrobalParamater();
 
-	return emitter.get();
+	return emitter.release();
 }
 
 ///=====================================================

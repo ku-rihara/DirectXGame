@@ -23,23 +23,16 @@ void ParticleManager::Init(SrvManager* srvManager) {
 
 
 void ParticleManager::Update(std::optional<const ViewProjection*> viewProjection) {
+	//uint32_t instanceIndex = 0; // 現在のインスタンス数
 
 	// 各粒子グループを周る
-	for (std::unordered_map<std::string, ParticleGroup>::iterator groupIt = particleGroups_.begin();
-		groupIt != particleGroups_.end(); ++groupIt) {
-
-		ParticleGroup& group = groupIt->second;
+	for (auto& groupPair : particleGroups_) {
+		ParticleGroup& group = groupPair.second;
 		std::list<Particle>& particles = group.particles;
-	/*	ParticleFprGPU* instancingData = group.instancingData;*/
 
-		uint32_t instanceIndex = 0; // 現在のインスタンス数
-
-		for (std::list<Particle>::iterator it = particles.begin(); it != particles.end();) {
-			// パーティクルの寿命をチェック
-			if (it->currentTime_ >= it->lifeTime_) {
-				it = particles.erase(it); // 寿命が尽きた場合、リストから削除
-				continue;
-			}
+		// 粒子リストを更新
+		for (auto it = particles.begin(); it != particles.end();) {
+			
 
 			// 加速度フィールドの適用
 			if (accelerationField_.isAdaption &&
@@ -64,40 +57,43 @@ void ParticleManager::Update(std::optional<const ViewProjection*> viewProjection
 		}
 
 		// グループのインスタンス数を更新
-		group.instanceNum = instanceIndex;
+	/*	group.instanceNum = instanceIndex;*/
 	}
 }
 
 
 
 void ParticleManager::Draw(const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
-	// 各粒子グループを周る
-	for (std::unordered_map<std::string, ParticleGroup>::iterator groupIt = particleGroups_.begin();
-		groupIt != particleGroups_.end(); ++groupIt) {
+	uint32_t instanceIndex = 0; // 描画するインスタンス数
 
-		ParticleGroup& group = groupIt->second;
-		const std::list<Particle>& particles = group.particles;
+	// 各粒子グループを周る
+	for (auto& groupPair : particleGroups_) {
+		ParticleGroup& group = groupPair.second;
+		std::list<Particle>& particles = group.particles;
 		ParticleFprGPU* instancingData = group.instancingData;
 
-		uint32_t instanceIndex = 0; // 描画するインスタンス数
-
-		for (std::list<Particle>::const_iterator it = particles.begin(); it != particles.end(); ++it) {
-			// インスタンシングデータを設定
-			if (instanceIndex < group.instanceNum) {
-				// WVP行列の計算
-				instancingData[instanceIndex].WVP = it->worldTransform_.matWorld_ *
-					viewProjection.matView_ * viewProjection.matProjection_;
-
-				// 法線用の逆転置行列を計算
-				instancingData[instanceIndex].WorldInverseTranspose =
-					Inverse(Transpose(it->worldTransform_.matWorld_));
-
-				// カラー設定（アルファ値を減少させる）
-				instancingData[instanceIndex].color = it->color_;
-				instancingData[instanceIndex].color.w = 1.0f - (it->currentTime_ / it->lifeTime_);
-
-				++instanceIndex;
+		// 各粒子のインスタンシングデータを設定
+		for (auto it = particles.begin(); it != particles.end();) {
+			// パーティクルの寿命をチェック
+			if (it->currentTime_ >= it->lifeTime_) {
+				it = particles.erase(it); // 寿命が尽きた場合、リストから削除
+				continue; // 次の粒子へ
 			}
+
+			// WVP行列の計算
+			instancingData[instanceIndex].WVP = it->worldTransform_.matWorld_ *
+				viewProjection.matView_ * viewProjection.matProjection_;
+
+			// 法線用の逆転置行列を計算
+			instancingData[instanceIndex].WorldInverseTranspose =
+				Inverse(Transpose(it->worldTransform_.matWorld_));
+
+			// カラー設定（アルファ値を減少させる）
+			instancingData[instanceIndex].color = it->color_;
+			instancingData[instanceIndex].color.w = 1.0f - (it->currentTime_ / it->lifeTime_);
+
+			++instanceIndex;
+			++it;
 		}
 
 		// 描画処理を呼び出す
@@ -111,30 +107,31 @@ void ParticleManager::Draw(const ViewProjection& viewProjection, std::optional<u
 }
 
 
-void ParticleManager::CreateParticleGroup(
-	const std::string name,const std::string modelFilePath, 
-	const std::string& extension,const uint32_t& maxnum) {
-		if (particleGroups_.contains(name)) {
-		return;
-	    }
 
-		// グループ追加
+void ParticleManager::CreateParticleGroup(
+	const std::string name, const std::string modelFilePath,
+	const std::string& extension, const uint32_t& maxnum) {
+	if (particleGroups_.contains(name)) {
+		return;
+	}
+
+	// グループ追加
 	particleGroups_[name] = ParticleGroup();
-	ParticleGroup& particleGroup = particleGroups_[name];
+
 
 	/// モデル
 	ModelManager::GetInstance()->LoadModel(modelFilePath, extension);
-	SetModel(name,modelFilePath, extension);
+	SetModel(name, modelFilePath, extension);
 
 	/// リソース作成
-	CreateInstancingResource(name,maxnum);//インスタンシング
+	CreateInstancingResource(name, maxnum);//インスタンシング
 	CreateMaterialResource(name);// マテリアル
 
-	particleGroup.instanceNum = 0;
+	/*particleGroup.instanceNum = 0;*/
 }
 
 
-void  ParticleManager::SetModel(const std::string& name,const std::string& modelName, const std::string& extension) {
+void  ParticleManager::SetModel(const std::string& name, const std::string& modelName, const std::string& extension) {
 
 	//モデルを検索してセット
 	particleGroups_[name].model = (ModelManager::GetInstance()->FindModel(modelName, extension));
@@ -150,13 +147,15 @@ void  ParticleManager::CreateMaterialResource(const std::string& name) {
 //}
 
 void ParticleManager::CreateInstancingResource(const std::string& name, const uint32_t& instanceNum) {
+
+
 	particleGroups_[name].instanceNum = instanceNum;
 
 	//Instancing用のTransformationMatrixリソースを作る
-	Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource = DirectXCommon::GetInstance()->CreateBufferResource(
-		DirectXCommon::GetInstance()->GetDevice(), sizeof(ParticleFprGPU) * instanceNum);
+	particleGroups_[name].instancingResource = DirectXCommon::GetInstance()->CreateBufferResource(
+		DirectXCommon::GetInstance()->GetDevice(), sizeof(ParticleFprGPU) * particleGroups_[name].instanceNum);
 
-	instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&particleGroups_[name].instanceNum));
+	particleGroups_[name].instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&particleGroups_[name].instancingData));
 
 	for (uint32_t index = 0; index < particleGroups_[name].instanceNum; ++index) {
 		particleGroups_[name].instancingData[index].WVP = MakeIdentity4x4();
@@ -182,17 +181,18 @@ void ParticleManager::CreateInstancingResource(const std::string& name, const ui
 /// パーティクル作成
 ///======================================================================
 ParticleManager::Particle ParticleManager::MakeParticle(
-	const Vector3& basePosition, V3MinMax positionDist, V3MinMax scaledist, 
+	const Vector3& basePosition, V3MinMax positionDist, V3MinMax scaledist,
 	V3MinMax velocityDist, V4MinMax colorDist, float lifeTime) {
 
 	Particle particle;
 	particle.lifeTime_ = lifeTime;
+	particle.currentTime_ = 0.0f;
 	//初期化
 	particle.worldTransform_.Init();
 	//回転
 	particle.worldTransform_.rotation_.y = -3.0f;
 	/// スケール
-    particle.worldTransform_.scale_= { Random::Range(scaledist.min.x,scaledist.max.x),  Random::Range(scaledist.min.y,scaledist.max.y),  Random::Range(scaledist.min.z,scaledist.max.z) };
+	particle.worldTransform_.scale_ = { Random::Range(scaledist.min.x,scaledist.max.x),  Random::Range(scaledist.min.y,scaledist.max.y),  Random::Range(scaledist.min.z,scaledist.max.z) };
 	//座標
 	Vector3 randomTranslate = { Random::Range(positionDist.min.x,positionDist.max.x),  Random::Range(positionDist.min.y,positionDist.max.y),  Random::Range(positionDist.min.z,positionDist.max.z) };
 	particle.worldTransform_.translation_ = basePosition + randomTranslate;
@@ -208,9 +208,9 @@ ParticleManager::Particle ParticleManager::MakeParticle(
 /// エミット
 ///======================================================================
 void ParticleManager::Emit(
-	std::string name, const Vector3& basePosition,  V3MinMax positionDist,
-	V3MinMax scaledist, V3MinMax velocityDist,  V4MinMax colorDist,
-	float lifeTime,uint32_t count) {
+	std::string name, const Vector3& basePosition, V3MinMax positionDist,
+	V3MinMax scaledist, V3MinMax velocityDist, V4MinMax colorDist,
+	float lifeTime, uint32_t count) {
 
 	// パーティクルグループが存在するか確認
 	assert(particleGroups_.find(name) != particleGroups_.end() && "Error: パーティクルグループがありません。");

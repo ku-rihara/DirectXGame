@@ -35,25 +35,29 @@ void GameScene::Init() {
 	modelSuzanne2_.reset(Object3d::CreateModel("Suzanne", ".obj"));
 	modelTerrain_.reset(Object3d::CreateModel("terrain", ".obj"));
 
+
 	/// test
 	collisionTest1_ = std::make_unique<CollisionTest1>();
 	collisionTest2_ = std::make_unique<CollisionTest2>();
 	collisionTest1_->Init();
 	collisionTest2_->Init();
 
-	// エミッター
-	emitter_.reset(ParticleEmitter::CreateParticle("test", "Plane", ".obj", 50));
-
-	///トランスフォーム初期化
+///トランスフォーム初期化
 	planeTransform_.Init();
 	fenceTransform_.Init();
 	suzanneTransform_.Init();
 	suzanneTransform2_.Init();
 	terrainTransform_.Init();
 
+	
+
 	////テクスチャハンドル
 	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");
-	uint32_t uv_ = TextureManager::GetInstance()->LoadTexture("./Resources/uvChecker.png");
+	uint32_t uv_ = TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
+
+	// エミッター
+	emitter_.reset(ParticleEmitter::CreateParticle("test", "Plane", ".obj", 500));
+
 
 	//スプライト生成
 	sprite_ = std::make_unique<Sprite>();
@@ -81,6 +85,11 @@ void GameScene::Init() {
 void GameScene::Update() {
 
 	emitter_->ApplyGlobalParameter();
+	time_ += Frame::DeltaTime();
+	if (time_ >= 1.0f) {
+		emitter_->Emit();
+		time_ = 0.0f;
+	}
 	ParticleManager::GetInstance()->Update(&viewProjection_);
 
 	debugCamera_->Update();

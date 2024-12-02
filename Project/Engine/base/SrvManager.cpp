@@ -90,7 +90,7 @@ void SrvManager::CreateSRVforStructuredBuffer(uint32_t srvIndex, ID3D12Resource*
 	instancingSrvDesc.Buffer.FirstElement = 0;
 	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 	instancingSrvDesc.Buffer.NumElements = numElements;
-	instancingSrvDesc.Buffer.StructureByteStride = sizeof(structuredByteStride);
+	instancingSrvDesc.Buffer.StructureByteStride = structuredByteStride;
 
 	instancingResources_.push_back(pResource);
 
