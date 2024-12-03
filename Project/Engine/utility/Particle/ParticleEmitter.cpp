@@ -73,9 +73,15 @@ void ParticleEmitter::EditorUpdate() {
 
         if (ImGui::Button("Save")) {// セーブ
             SaveParameters(dyrectryPath + particleName_+".json");
+            editorMessage_ = "Parameters saved to: " + particleName_;
         }
         if (ImGui::Button("Load")) {//ロード
             LoadParameters(dyrectryPath + particleName_+".json");
+            editorMessage_ = "Parameters loaded from: " + particleName_;
+        }
+        // メッセージ表示
+        if (!editorMessage_.empty()) {
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), editorMessage_.c_str());
         }
     }
     ImGui::End();

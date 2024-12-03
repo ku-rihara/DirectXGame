@@ -30,7 +30,7 @@ private:
 	int32_t particleCount_;         ///パーティクル数
 
 	const std::string dyrectryPath = "./Resources/ParticleParamater/";
-	
+	std::string editorMessage_;
 public:
 
 	// コンストラクタ 
