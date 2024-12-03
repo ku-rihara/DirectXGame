@@ -14,6 +14,7 @@ private:
 	struct TextureData {
 		/*std::string filePath;*/
 		DirectX::TexMetadata metadata;
+		uint32_t index;
 		uint32_t srvIndex;
 		Microsoft::WRL::ComPtr<ID3D12Resource>resource;
 		D3D12_CPU_DESCRIPTOR_HANDLE srvCPUHandle;

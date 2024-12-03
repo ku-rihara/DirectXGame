@@ -48,15 +48,16 @@ void GameScene::Init() {
 	suzanneTransform_.Init();
 	suzanneTransform2_.Init();
 	terrainTransform_.Init();
-
-	
+	// エミッター
+	emitter_.reset(ParticleEmitter::CreateParticle("test", "Plane", ".obj", 500));
 
 	////テクスチャハンドル
 	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");
-	uint32_t uv_ = TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
+	 uv_ = TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
 
-	// エミッター
-	emitter_.reset(ParticleEmitter::CreateParticle("test", "Plane", ".obj", 500));
+	///=======================================================================================
+	///Particle
+	///=======================================================================================
 
 
 	//スプライト生成
@@ -68,23 +69,14 @@ void GameScene::Init() {
 	//WorldTransform
 	//ビュープロジェクション
 	viewProjection_.Init();
-	///=======================================================================================
-	///Particle
-	///=======================================================================================
-	//	//emitter
-	//modelPlaneParticle_->emitter_.count = 3;
-	//modelPlaneParticle_->emitter_.frequency = 0.5f;
-	//modelPlaneParticle_->emitter_.frequencyTime = 0.0f;
-	////acceleration
-	//modelPlaneParticle_->accelerationField_.acceleration = { 15.0f,0.0f,0.0f };
-	//modelPlaneParticle_->accelerationField_.area.min = { -1.0f,-1.0f,-1.0f };
-	//modelPlaneParticle_->accelerationField_.area.max = { 1.0f,1.0f,1.0f };
+	
 
 }
 
 void GameScene::Update() {
 
 	emitter_->ApplyGlobalParameter();
+
 	time_ += Frame::DeltaTime();
 	if (time_ >= 1.0f) {
 		emitter_->Emit();
@@ -149,15 +141,15 @@ void GameScene::ModelDraw() {
 
 	//平面描画
 	if (isDraw) {
-		modelSuzanne2_->color_.SetColor(Vector4(0, 0, 1, 1));
-		/*modelPlane_->Draw(viewProjection_);
-		modelFence_->Draw(viewProjection_);*/
-		modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
-		modelSuzanne2_->Draw(suzanneTransform2_, viewProjection_);
-		modelTerrain_->Draw(terrainTransform_, viewProjection_);
+		//modelSuzanne2_->color_.SetColor(Vector4(0, 0, 1, 1));
+		///*modelPlane_->Draw(viewProjection_);
+		//modelFence_->Draw(viewProjection_);*/
+		//modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
+		//modelSuzanne2_->Draw(suzanneTransform2_, viewProjection_);
+		//modelTerrain_->Draw(terrainTransform_, viewProjection_);
 
-		collisionTest1_->Draw();
-		collisionTest2_->Draw();
+		//collisionTest1_->Draw();
+		//collisionTest2_->Draw();
 	}
 }
 
@@ -165,7 +157,7 @@ void GameScene::ModelDraw() {
    /// パーティクル描画
    /// ===================================================
 void GameScene::ParticleDraw() {
-	ParticleManager::GetInstance()->Draw(viewProjection_,uvHandle_);
+	ParticleManager::GetInstance()->Draw(viewProjection_, uv_);
 }
 
 /// ===================================================
@@ -173,8 +165,8 @@ void GameScene::ParticleDraw() {
    /// ===================================================
 void GameScene::SpriteDraw() {
 	//////スプライト描画
-	sprite_->Draw();
-	sprite2_->Draw();
+	//sprite_->Draw();
+	//sprite2_->Draw();
 }
 
 void GameScene::Debug() {

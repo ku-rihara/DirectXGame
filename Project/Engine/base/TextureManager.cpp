@@ -99,10 +99,10 @@ Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::UploadTextureDate(Microso
 
 
 uint32_t TextureManager::LoadTexture(const std::string& filePath) {
-	
+
 	// 読み込み済みテクスチャを検索
 	if (textureDatas_.contains(filePath)) {
-		return textureDatas_[filePath].srvIndex; // インデックスを返す
+		return textureDatas_[filePath].index; // インデックスを返す
 	}
 
 	// テクスチャ上限枚数をチェック
@@ -141,8 +141,9 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 	// コマンド実行
 	directXCommon_->commandExecution(intermediateResource);
 
-	// 新しく読み込んだテクスチャのインデックスを返す
-	return textureData.srvIndex;
+	// 新しく読み込んだテクスチャのインデックスを設定し、返す
+	textureData.index = static_cast<uint32_t>(textureDatas_.size() - 1);
+	return textureData.index;
 }
 
 

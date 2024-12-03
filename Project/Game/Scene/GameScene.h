@@ -64,6 +64,7 @@ private:
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
 
 	uint32_t uvHandle_;
+	uint32_t uv_;
 
 	// test
 	std::unique_ptr<CollisionTest1>collisionTest1_;
