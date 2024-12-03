@@ -19,6 +19,7 @@ private:
 	///=====================================================
 	/// private variants
 	///=====================================================
+	
 	std::string particleName_;       ///パーティクル名
 	Vector3 basePos_;                ///基準座標
 	V3MinMax positionDist_;          ///座標ランダム分配
@@ -31,6 +32,7 @@ private:
 
 	const std::string dyrectryPath = "./Resources/ParticleParamater/";
 	std::string editorMessage_;
+
 public:
 
 	// コンストラクタ 
@@ -45,7 +47,7 @@ public:
 		const std::string name, const std::string modelFilePath,
 		const std::string& extension, const int32_t& maxnum);
 
-	void Init();
+	void Init();/// 初期化
 	void Emit();///　エミット
 
 	///=====================================================

@@ -13,6 +13,8 @@
 #include"utility/Particle/ParticleCommon.h"
 #include"utility/Particle/ParticleManager.h"
 
+#include<imgui_impl_dx12.h>
+
 #include"Matrix4x4.h"
 #include"function/Convert.h"
 #include <string>
