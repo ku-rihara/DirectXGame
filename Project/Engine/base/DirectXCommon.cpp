@@ -14,6 +14,10 @@
 //#include <iostream>
 //#include<thread>
 
+#include<d3d12.h>
+#include<imgui_impl_dx12.h>
+
+
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
 #pragma comment(lib,"dxguid.lib")

@@ -3,6 +3,10 @@
 #include "2d/ImGuiManager.h"
 #include"base/SrvManager.h"
 
+#include<d3d12.h>
+#include<imgui_impl_dx12.h>
+#include<imgui_impl_win32.h>
+
 ImGuiManager* ImGuiManager::GetInstance() {
 	static ImGuiManager instance;
 	return &instance;
@@ -19,6 +23,9 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
 #ifdef _DEBUG
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // ドッキングを有効化
+	
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(winApp->GetHwnd());
 	ImGui_ImplDX12_Init(dxCommon_->GetDevice(), dxCommon_->GetSwapChainDesc().BufferCount, dxCommon_->GetRtvDesc().Format,
@@ -33,6 +40,7 @@ void ImGuiManager::Begin() {
 	ImGui_ImplDX12_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
+
 #endif
 }
 //フレーム終わり
@@ -40,6 +48,8 @@ void ImGuiManager::End() {
 #ifdef _DEBUG
 	// 描画前準備
 	ImGui::Render();
+
+	
 #endif
 }
 
