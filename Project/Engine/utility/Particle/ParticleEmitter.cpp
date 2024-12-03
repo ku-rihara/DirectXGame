@@ -37,9 +37,7 @@ void ParticleEmitter::Init() {
     colorDist_.min = {0,0,0,0};
     colorDist_.max = { 0,0,0,0 };
     baseColor_ = { 0,0,0,0 };
-
 }
-
 
 ///=====================================================
 /// エミット
