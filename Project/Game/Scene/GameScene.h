@@ -63,7 +63,7 @@ private:
 
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
 
-	uint32_t uvHandle_;
+	uint32_t circleHandle_;
 	uint32_t uv_;
 
 	// test

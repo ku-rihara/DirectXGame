@@ -43,7 +43,6 @@
     <ClCompile Include="Engine\input\Input.cpp" />
     <ClCompile Include="Engine\input\Mouse.cpp" />
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
-    <ClCompile Include="Engine\utility\Particle\Object3dParticle.cpp" />
     <ClCompile Include="Engine\utility\Particle\ParticleCommon.cpp" />
     <ClCompile Include="Engine\utility\Particle\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\utility\Particle\ParticleManager.cpp" />
@@ -107,7 +106,6 @@
     <ClInclude Include="Engine\struct\TransformationMatrix.h" />
     <ClInclude Include="Engine\struct\VertexData.h" />
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h" />
-    <ClInclude Include="Engine\utility\Particle\Object3dParticle.h" />
     <ClInclude Include="Engine\utility\Particle\ParticleCommon.h" />
     <ClInclude Include="Engine\utility\Particle\ParticleEmitter.h" />
     <ClInclude Include="Engine\utility\Particle\ParticleManager.h" />

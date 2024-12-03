@@ -89,13 +89,13 @@ public:
 	void CreateInstancingResource(const std::string& name, const uint32_t& instanceNum);
 
 	Particle  MakeParticle(
-		const Vector3& basePosition,V3MinMax positionDist,
-		V3MinMax scaledist, V3MinMax velocityDist, V4MinMax colorDist, 
-		float lifeTime);
+		const Vector3& basePosition, V3MinMax positionDist,
+		V3MinMax scaledist, V3MinMax velocityDist, const Vector4& baseColor,
+		const V4MinMax& colorDist, float lifeTime);
 
 	void Emit(
-		std::string name, const Vector3& basePosition, V3MinMax positionDist, 
-		V3MinMax scaledist, V3MinMax velocityDist, V4MinMax colorDist, 
-		float lifeTime, uint32_t count);
+		std::string name, const Vector3& basePosition, V3MinMax positionDist,
+		V3MinMax scaledist, V3MinMax velocityDist, const Vector4& baseColor,
+		const V4MinMax& colorDist,float lifeTime, uint32_t count);
 
 };

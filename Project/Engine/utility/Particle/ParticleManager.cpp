@@ -181,8 +181,9 @@ void ParticleManager::CreateInstancingResource(const std::string& name, const ui
 /// パーティクル作成
 ///======================================================================
 ParticleManager::Particle ParticleManager::MakeParticle(
-	const Vector3& basePosition, V3MinMax positionDist, V3MinMax scaledist,
-	V3MinMax velocityDist, V4MinMax colorDist, float lifeTime) {
+	const Vector3& basePosition, V3MinMax positionDist,
+	V3MinMax scaledist, V3MinMax velocityDist, const Vector4& baseColor,
+	const V4MinMax& colorDist, float lifeTime) {
 
 	Particle particle;
 	particle.lifeTime_ = lifeTime;
@@ -200,7 +201,14 @@ ParticleManager::Particle ParticleManager::MakeParticle(
 	particle.velocity_ = { Random::Range(velocityDist.min.x,velocityDist.max.x), Random::Range(velocityDist.min.y,velocityDist.max.y), Random::Range(velocityDist.min.z,velocityDist.max.z) };
 
 	//色
-	particle.color_ = { Random::Range(colorDist.min.x,colorDist.max.x),  Random::Range(colorDist.min.y,colorDist.max.y),  Random::Range(colorDist.min.z,colorDist.max.z), 1.0f };
+	Vector4 randomColor{ 
+		Random::Range(colorDist.min.x,colorDist.max.x), 
+		Random::Range(colorDist.min.y,colorDist.max.y), 
+		Random::Range(colorDist.min.z,colorDist.max.z), 
+		0.0f };
+
+	particle.color_ = baseColor + randomColor;
+
 	return  particle;
 }
 
@@ -209,8 +217,8 @@ ParticleManager::Particle ParticleManager::MakeParticle(
 ///======================================================================
 void ParticleManager::Emit(
 	std::string name, const Vector3& basePosition, V3MinMax positionDist,
-	V3MinMax scaledist, V3MinMax velocityDist, V4MinMax colorDist,
-	float lifeTime, uint32_t count) {
+	V3MinMax scaledist, V3MinMax velocityDist, const Vector4& baseColor,
+	const V4MinMax& colorDist,float lifeTime, uint32_t count) {
 
 	// パーティクルグループが存在するか確認
 	assert(particleGroups_.find(name) != particleGroups_.end() && "Error: パーティクルグループがありません。");
@@ -221,7 +229,7 @@ void ParticleManager::Emit(
 	// 生成、グループ追加
 	std::list<Particle> particles;
 	for (uint32_t i = 0; i < count; ++i) {
-		particles.emplace_back(MakeParticle(basePosition, positionDist, scaledist, velocityDist, colorDist, lifeTime));
+		particles.emplace_back(MakeParticle(basePosition, positionDist, scaledist, velocityDist,baseColor, colorDist, lifeTime));
 	}
 
 	// グループに追加

@@ -25,3 +25,8 @@ Vector4 Normalize(const Vector4& v) {
 	}
 	return result;
 }
+
+// ベクトル加算
+Vector4 Vector4::operator+(const Vector4& other) const {
+	return Vector4(x + other.x, y + other.y, z + other.z, w + other.w);
+}

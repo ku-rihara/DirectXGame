@@ -3,8 +3,8 @@
 //class
 #include"3d/Light.h"
 #include"utility/Particle/ParticleManager.h"
+
 //math
-#include"MinMax.h"
 #include"Frame/Frame.h"
 #include<imgui.h>
 
@@ -52,7 +52,7 @@ void GameScene::Init() {
 	emitter_.reset(ParticleEmitter::CreateParticle("test", "Plane", ".obj", 500));
 
 	////テクスチャハンドル
-	uvHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");
+	circleHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");
 	 uv_ = TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
 
 	///=======================================================================================
@@ -75,7 +75,7 @@ void GameScene::Init() {
 
 void GameScene::Update() {
 
-	emitter_->ApplyGlobalParameter();
+	emitter_->EditorUpdate();
 
 	time_ += Frame::DeltaTime();
 	if (time_ >= 1.0f) {
@@ -157,7 +157,7 @@ void GameScene::ModelDraw() {
    /// パーティクル描画
    /// ===================================================
 void GameScene::ParticleDraw() {
-	ParticleManager::GetInstance()->Draw(viewProjection_, uv_);
+	ParticleManager::GetInstance()->Draw(viewProjection_, circleHandle_);
 }
 
 /// ===================================================

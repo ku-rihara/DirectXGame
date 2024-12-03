@@ -241,9 +241,6 @@
     <ClCompile Include="Engine\base\SrvManager.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\Particle\Object3dParticle.cpp">
-      <Filter>MyEngine\.cpp\utility\Particle</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\utility\Particle\ParticleCommon.cpp">
       <Filter>MyEngine\.cpp\utility\Particle</Filter>
     </ClCompile>
@@ -431,9 +428,6 @@
     </ClInclude>
     <ClInclude Include="Engine\base\SrvManager.h">
       <Filter>MyEngine\.h\base</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\Particle\Object3dParticle.h">
-      <Filter>MyEngine\.h\utility\Particle</Filter>
     </ClInclude>
     <ClInclude Include="Engine\utility\Particle\ParticleCommon.h">
       <Filter>MyEngine\.h\utility\Particle</Filter>
