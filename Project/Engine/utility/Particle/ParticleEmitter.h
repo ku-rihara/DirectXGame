@@ -29,7 +29,8 @@ private:
 	const std::string dyrectryPath = "./Resources/ParticleParamater/";
 	std::string editorMessage_;
 
-	///
+	///editor
+	GlobalParameter* globalParameter_;
 
 public:
 
@@ -56,7 +57,7 @@ public:
 	///=====================================================
 	/// Editor 
 	///=====================================================
-
+	void AddParmGroup();
 	/// パラメータをImGuiで編集する
 	void EditorUpdate();
 };
