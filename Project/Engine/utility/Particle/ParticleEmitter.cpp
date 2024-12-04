@@ -22,53 +22,9 @@ void ParticleEmitter::Init() {
     colorDist_.min = { 0, 0, 0, 0 };
     colorDist_.max = { 0, 0, 0, 0 };
 
-    ////JSON関連****************************************************************
+    ////JSON関連
+    AddParmGroup();
    
-}
-
-void ParticleEmitter::AddParmGroup() {
-    globalParameter_ = GlobalParameter::GetInstance();
-   const char* groupName = "CollisionManager";
-   // グループを追加
-   globalParameter_->CreateGroup(groupName);
-
-   globalParameter_ = GlobalParameter::GetInstance();
-   const char* groupName = "CollisionManager";
-
-   // グループを追加
-   globalParameter_->CreateGroup(groupName);
-
-   // Position ツリーノード
-   globalParameter_->AddTreeNode("Position");
-   globalParameter_->AddItem(groupName, "BasePos", basePos_, GlobalParameter::DrawSettings::WidgetType::DragFloat3);
-   globalParameter_->AddItem(groupName, "Position Max", positionDist_.max, GlobalParameter::DrawSettings::WidgetType::DragFloat3);
-   globalParameter_->AddItem(groupName, "Position Min", positionDist_.min, GlobalParameter::DrawSettings::WidgetType::DragFloat3);
-   globalParameter_->AddTreePoP();
-
-   // Scale ツリーノード
-   globalParameter_->AddTreeNode("Scale");
-   globalParameter_->AddItem(groupName, "Scale Max", scaleDist_.max, GlobalParameter::DrawSettings::WidgetType::DragFloat3);
-   globalParameter_->AddItem(groupName, "Scale Min", scaleDist_.min, GlobalParameter::DrawSettings::WidgetType::DragFloat3);
-   globalParameter_->AddTreePoP();
-
-   // Velocity ツリーノード
-   globalParameter_->AddTreeNode("Velocity");
-   globalParameter_->AddItem(groupName, "Velocity Max", velocityDist_.max, GlobalParameter::DrawSettings::WidgetType::DragFloat3);
-   globalParameter_->AddItem(groupName, "Velocity Min", velocityDist_.min, GlobalParameter::DrawSettings::WidgetType::DragFloat3);
-   globalParameter_->AddTreePoP();
-
-   // Color ツリーノード
-   globalParameter_->AddTreeNode("Color");
-   globalParameter_->AddItem(groupName, "BaseColor", baseColor_, GlobalParameter::DrawSettings::WidgetType::ColorEdit4);
-   globalParameter_->AddItem(groupName, "Color Max", colorDist_.max, GlobalParameter::DrawSettings::WidgetType::ColorEdit4);
-   globalParameter_->AddItem(groupName, "Color Min", colorDist_.min, GlobalParameter::DrawSettings::WidgetType::ColorEdit4);
-   globalParameter_->AddTreePoP();
-
-   // その他のパラメータ
-   globalParameter_->AddItem(groupName, "LifeTime", lifeTime_, GlobalParameter::DrawSettings::WidgetType::DragFloat);
-   globalParameter_->AddItem(groupName, "Particle Count", particleCount_, GlobalParameter::DrawSettings::WidgetType::SliderInt);
-
-
 }
 
 void ParticleEmitter::Emit() {
@@ -77,23 +33,63 @@ void ParticleEmitter::Emit() {
         velocityDist_, baseColor_, colorDist_, lifeTime_, particleCount_);
 }
 
-void ParticleEmitter::EditorUpdate() {
-   /* if (ImGui::Begin("Particle Emitter Editor")) {
-        ImGui::DragFloat3("Base Position", &basePos_.x, 0.1f);
-        ImGui::DragFloat3("Position  Min", &positionDist_.min.x, 0.1f);
-        ImGui::DragFloat3("Position  Max", &positionDist_.max.x, 0.1f);
-        ImGui::DragFloat3("Scale  Min", &scaleDist_.min.x, 0.1f);
-        ImGui::DragFloat3("Scale  Max", &scaleDist_.max.x, 0.1f);
-        ImGui::DragFloat3("Velocity  Min", &velocityDist_.min.x, 0.1f);
-        ImGui::DragFloat3("Velocity  Max", &velocityDist_.max.x, 0.1f);
-        ImGui::ColorEdit4("Base Color", &baseColor_.x);
-        ImGui::ColorEdit4("Color  Min", &colorDist_.min.x);
-        ImGui::ColorEdit4("Color  Max", &colorDist_.max.x);
-        ImGui::DragFloat("Lifetime", &lifeTime_, 0.1f);
-        ImGui::DragInt("Particle Count", &particleCount_, 1, 1, 100);
+
+void ParticleEmitter::AddParmGroup() {
+   
+    globalParameter_ = GlobalParameter::GetInstance();
+    const char* groupName = particleName_.c_str();
+
+    // グループを追加
+    globalParameter_->CreateGroup(groupName);
+
+    // Position ツリーノード
+    globalParameter_->AddTreeNode("Position");
+    globalParameter_->AddItem(groupName, "Position Base", basePos_, GlobalParameter::WidgetType::DragFloat3);
+    globalParameter_->AddItem(groupName, "Position Max", positionDist_.max, GlobalParameter::WidgetType::DragFloat3);
+    globalParameter_->AddItem(groupName, "Position Min", positionDist_.min, GlobalParameter::WidgetType::DragFloat3);
+    globalParameter_->AddTreePoP();
+
+    // Scale ツリーノード
+    globalParameter_->AddTreeNode("Scale");
+    globalParameter_->AddItem(groupName, "Scale Max", scaleDist_.max, GlobalParameter::WidgetType::DragFloat3);
+    globalParameter_->AddItem(groupName, "Scale Min", scaleDist_.min, GlobalParameter::WidgetType::DragFloat3);
+    globalParameter_->AddTreePoP();
+
+    // Velocity ツリーノード
+    globalParameter_->AddTreeNode("Velocity");
+    globalParameter_->AddItem(groupName, "Velocity Max", velocityDist_.max, GlobalParameter::WidgetType::DragFloat3);
+    globalParameter_->AddItem(groupName, "Velocity Min", velocityDist_.min, GlobalParameter::WidgetType::DragFloat3);
+    globalParameter_->AddTreePoP();
+
+    // Color ツリーノード
+    globalParameter_->AddTreeNode("Color");
+    globalParameter_->AddItem(groupName, "BaseColor", baseColor_, GlobalParameter::WidgetType::ColorEdit4);
+    globalParameter_->AddItem(groupName, "Color Max", colorDist_.max, GlobalParameter::WidgetType::ColorEdit4);
+    globalParameter_->AddItem(groupName, "Color Min", colorDist_.min, GlobalParameter::WidgetType::ColorEdit4);
+    globalParameter_->AddTreePoP();
+
+    // その他のパラメータ
+    globalParameter_->AddItem(groupName, "LifeTime", lifeTime_, GlobalParameter::WidgetType::DragFloat);
+    globalParameter_->AddItem(groupName, "Particle Count", particleCount_, GlobalParameter::WidgetType::SliderInt);
 
 
-    }
-    ImGui::End();*/
 }
 
+///=====================================================
+///  ImGuiからパラメータを得る
+///===================================================== 
+void ParticleEmitter::ApplyGlobalParameter() {
+
+    basePos_ = globalParameter_->GetValue<Vector3>(particleName_, "Position Base");
+    positionDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "Position Min");
+    positionDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "Position Max");
+    scaleDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "Scale Min");
+    scaleDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "Scale Max");
+    velocityDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "Velocity Min");
+    velocityDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "Velocity Max");
+    baseColor_ = globalParameter_->GetValue<Vector4>(particleName_, "BaseColor");
+    colorDist_.min = globalParameter_->GetValue<Vector4>(particleName_, "Color Min");
+    colorDist_.max = globalParameter_->GetValue<Vector4>(particleName_, "Color Max");
+    lifeTime_ = globalParameter_->GetValue<float>(particleName_, "LifeTime");
+    particleCount_ = globalParameter_->GetValue<int32_t>(particleName_, "Particle Count");
+}

@@ -11,21 +11,21 @@
 
 class GlobalParameter {
 public:
+    enum class WidgetType {
+        SliderInt,
+        DragFloat,
+        DragFloat2,
+        DragFloat3,
+        DragFloat4,
+        Checkbox,
+        ColorEdit4,
+    };
     // 描画設定用の構造体
     struct DrawSettings {
-        enum class WidgetType {
-            SliderInt,
-            DragFloat,
-            DragFloat2,
-            DragFloat3,
-            DragFloat4,
-            Checkbox,
-            ColorEdit4,   
-        };
-
+  
         WidgetType widgetType;       // 使用するImGuiウィジェットの種類
         float minValue = 0.0f;       // 最小値 (必要に応じて)
-        float maxValue = 1.0f;       // 最大値 (必要に応じて)
+        float maxValue = 100.0f;       // 最大値 (必要に応じて)
         std::string treeNodeLabel;   // TreeNodeの場合のラベル (必要に応じて)
     };
 
@@ -79,13 +79,15 @@ public:
     // ツリーのノードを閉じる
     void AddTreePoP();
 
+    void DrawGroup(Group& group);
+
     void DrawWidget(const std::string& itemName, Item& item, const DrawSettings& drawSettings);
 
     // 値を設定する
-    template<typename T> void SetValue(const std::string& groupName, const std::string& key, T value, GlobalParameter::DrawSettings::WidgetType widgetType);
+    template<typename T> void SetValue(const std::string& groupName, const std::string& key, T value, WidgetType widgetType);
 
     // 新しいアイテムをグループに追加する
-    template<typename T> void AddItem(const std::string& groupName, const std::string& key, T value, GlobalParameter::DrawSettings::WidgetType widgetType);
+    template<typename T> void AddItem(const std::string& groupName, const std::string& key, T value,WidgetType widgetType);
 
     // 値を取得する
     template<typename T> T GetValue(const std::string& groupName, const std::string& key) const;

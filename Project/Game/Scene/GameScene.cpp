@@ -75,7 +75,7 @@ void GameScene::Init() {
 
 void GameScene::Update() {
 
-	emitter_->EditorUpdate();
+	emitter_->ApplyGlobalParameter();
 
 	time_ += Frame::DeltaTime();
 	if (time_ >= 1.0f) {
