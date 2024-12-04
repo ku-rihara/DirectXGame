@@ -5,7 +5,9 @@
 
 ParticleEmitter::ParticleEmitter() {}
 
-ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const std::string& modelFilePath, const std::string& extension, const int32_t& maxnum) {
+ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const std::string& modelFilePath, 
+    const std::string& extension, const int32_t& maxnum) {
+
     auto emitter = std::make_unique<ParticleEmitter>();
     emitter->particleName_ = name;
     ParticleManager::GetInstance()->CreateParticleGroup(emitter->particleName_, modelFilePath, extension, maxnum);
@@ -19,6 +21,16 @@ void ParticleEmitter::Init() {
     baseColor_ = { 0, 0, 0, 0 };
     colorDist_.min = { 0, 0, 0, 0 };
     colorDist_.max = { 0, 0, 0, 0 };
+
+    ////JSON関連****************************************************************
+    //globalParameter_ = GlobalParameter::GetInstance();
+    //const char* groupName = "CollisionManager";
+    //// グループを追加
+    //globalParameter_->CreateGroup(groupName);
+
+    //globalParameter_->AddTreeNode("AA");
+    //globalParameter_->AddItem(groupName, "isColliderVisible", isColliderVisible_, GlobalParameter::DrawSettings::WidgetType::Checkbox);
+
 }
 
 void ParticleEmitter::Emit() {
@@ -28,7 +40,7 @@ void ParticleEmitter::Emit() {
 }
 
 void ParticleEmitter::EditorUpdate() {
-    if (ImGui::Begin("Particle Emitter Editor")) {
+   /* if (ImGui::Begin("Particle Emitter Editor")) {
         ImGui::DragFloat3("Base Position", &basePos_.x, 0.1f);
         ImGui::DragFloat3("Position  Min", &positionDist_.min.x, 0.1f);
         ImGui::DragFloat3("Position  Max", &positionDist_.max.x, 0.1f);
@@ -44,6 +56,6 @@ void ParticleEmitter::EditorUpdate() {
 
 
     }
-    ImGui::End();
+    ImGui::End();*/
 }
 

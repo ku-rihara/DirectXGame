@@ -148,12 +148,7 @@ void GlobalParameter::SetValue(const std::string& groupName, const std::string& 
     bool isInTreeNode = !treeNodeStack_.empty();
 
     // ツリー内である場合、ツリーラベルを使用する
-    std::string treeNodeLabel;
-    if (isInTreeNode) {
-        if (!treeNodeStack_.empty()) {
-            treeNodeLabel = treeNodeStack_.top(); 
-        }
-    }
+    std::string treeNodeLabel = isInTreeNode ? treeNodeStack_.top() : "";
 
     DrawSettings settings;
     settings.widgetType = widgetType;  // WidgetTypeを設定
@@ -163,22 +158,36 @@ void GlobalParameter::SetValue(const std::string& groupName, const std::string& 
     group[key] = { value, settings };
 }
 
+
 ///============================================================================
 /// アイテム追加
 ///=============================================================================
 template<typename T>
-void GlobalParameter::AddItem(const std::string& groupName, const std::string& key, T value, GlobalParameter::DrawSettings::WidgetType widgetType) {
-    json root;
-    json::iterator itGroup = root.find(groupName);
+void GlobalParameter::AddItem(const std::string& groupName, const std::string& key, T defaultValue, GlobalParameter::DrawSettings::WidgetType widgetType) {
+    // グループの存在確認
+    Group& group = datas_[groupName];
 
-    // グループが存在する場合、値を更新
-    if (itGroup != root.end()) {
-        SetValue(groupName, key, value, widgetType);  // グループが存在すれば、値を更新
+    // 既存データが存在する場合はその値を優先する
+    if (group.find(key) != group.end()) {
+        auto& existingParam = group[key];
+        if (std::holds_alternative<T>(existingParam.first)) {
+            // 型が一致すれば値を上書き
+            defaultValue = std::get<T>(existingParam.first);
+        }
+        // 描画設定を更新 (WidgetTypeが異なる可能性もあるため)
+        existingParam.second.widgetType = widgetType;
+        if (!treeNodeStack_.empty()) {
+            existingParam.second.treeNodeLabel = treeNodeStack_.top();
+        }
     }
     else {
-        // グループが存在しない場合、エラーハンドリングまたは新規作成する処理を追加
-        // 必要に応じて、新規グループを作成する処理を追加することができます
-        // 例: root[groupName] = json::object();
+        // 新規の場合、ツリーノードの情報を追加
+        DrawSettings settings;
+        settings.widgetType = widgetType;
+        if (!treeNodeStack_.empty()) {
+            settings.treeNodeLabel = treeNodeStack_.top();
+        }
+        group[key] = { defaultValue, settings }; // 新規データを追加
     }
 }
 

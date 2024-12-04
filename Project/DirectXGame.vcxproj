@@ -44,10 +44,10 @@
     <ClCompile Include="Engine\input\Mouse.cpp" />
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
     <ClCompile Include="Engine\utility\Editor\Editor.cpp" />
+    <ClCompile Include="Engine\utility\Editor\GlobalParameter.cpp" />
     <ClCompile Include="Engine\utility\Particle\ParticleCommon.cpp" />
     <ClCompile Include="Engine\utility\Particle\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\utility\Particle\ParticleManager.cpp" />
-    <ClCompile Include="Game\GrobalParamater\GlobalParameter.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="Game\TestObj\CollisionTest1.cpp" />
     <ClCompile Include="Game\TestObj\CollisionTest2.cpp" />
@@ -108,10 +108,10 @@
     <ClInclude Include="Engine\struct\VertexData.h" />
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h" />
     <ClInclude Include="Engine\utility\Editor\Editor.h" />
+    <ClInclude Include="Engine\utility\Editor\GlobalParameter.h" />
     <ClInclude Include="Engine\utility\Particle\ParticleCommon.h" />
     <ClInclude Include="Engine\utility\Particle\ParticleEmitter.h" />
     <ClInclude Include="Engine\utility\Particle\ParticleManager.h" />
-    <ClInclude Include="Game\GrobalParamater\GlobalParameter.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
     <ClInclude Include="Game\TestObj\CollisionTest1.h" />
     <ClInclude Include="Game\TestObj\CollisionTest2.h" />

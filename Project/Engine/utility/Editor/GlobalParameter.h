@@ -20,8 +20,7 @@ public:
             DragFloat3,
             DragFloat4,
             Checkbox,
-            ColorEdit4,
-      
+            ColorEdit4,   
         };
 
         WidgetType widgetType;       // 使用するImGuiウィジェットの種類

@@ -10,12 +10,12 @@ void CollisionManager::Init() {
 	//JSON関連****************************************************************
 	globalParameter_ = GlobalParameter::GetInstance();
 	const char* groupName = "CollisionManager";
+
 	// グループを追加
 	globalParameter_->CreateGroup(groupName);
-
-
 	globalParameter_->AddTreeNode("AA");
 	globalParameter_->AddItem(groupName, "isColliderVisible", isColliderVisible_, GlobalParameter::DrawSettings::WidgetType::Checkbox);
+	globalParameter_->AddTreePoP();
 }
 
 void CollisionManager::AddCollider(BaseCollider* collider) {
