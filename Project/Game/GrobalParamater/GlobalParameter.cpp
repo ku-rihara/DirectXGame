@@ -168,14 +168,17 @@ void GlobalParameter::SetValue(const std::string& groupName, const std::string& 
 ///=============================================================================
 template<typename T>
 void GlobalParameter::AddItem(const std::string& groupName, const std::string& key, T value, GlobalParameter::DrawSettings::WidgetType widgetType) {
-    Group& group = datas_[groupName];
-    if (group.find(key) != group.end()) {
-        SetValue(groupName, key, value, { widgetType });  // 既にあれば更新
+    json root;
+    json::iterator itGroup = root.find(groupName);
+
+    // グループが存在する場合、値を更新
+    if (itGroup != root.end()) {
+        SetValue(groupName, key, value, widgetType);  // グループが存在すれば、値を更新
     }
     else {
-        DrawSettings settings;
-        settings.widgetType = widgetType;
-        group[key] = { value, settings };  // 新規追加
+        // グループが存在しない場合、エラーハンドリングまたは新規作成する処理を追加
+        // 必要に応じて、新規グループを作成する処理を追加することができます
+        // 例: root[groupName] = json::object();
     }
 }
 
