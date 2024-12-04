@@ -1,16 +1,15 @@
 #pragma once
 
-#include "utility/Editor/Editor.h"
 #include "MinMax.h"
 #include <string>
-#include <json.hpp>
+#include"GrobalParamater/GlobalParameter.h"
 
 /// <summary>
 /// パーティクルエミッタ
 /// </summary>
 class ParticleEmitter {
 private:
-    using json = nlohmann::json;
+  
 
     std::string particleName_;
     Vector3 basePos_;
@@ -23,7 +22,7 @@ private:
     int32_t particleCount_;
 
     const std::string dyrectryPath = "./Resources/ParticleParamater/";
-    Editor editor_;
+   
 
 public:
     ParticleEmitter();
@@ -32,10 +31,4 @@ public:
     void Init();
     void Emit();
     void EditorUpdate();
-
-    /// 保存処理に必要なシリアライズロジック
-    json Serialize() const;
-
-    /// 読み込み処理に必要なデシリアライズロジック
-    void Deserialize(const json& data);
 };
