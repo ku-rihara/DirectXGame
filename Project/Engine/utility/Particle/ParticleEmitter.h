@@ -1,72 +1,41 @@
 #pragma once
 
-#include"MinMax.h"
-///std
-#include<string>
-///json
+#include "utility/Editor/Editor.h"
+#include "MinMax.h"
+#include <string>
 #include <json.hpp>
 
-
 /// <summary>
-/// Emitter
+/// パーティクルエミッタ
 /// </summary>
 class ParticleEmitter {
 private:
+    using json = nlohmann::json;
 
-	/// json
-	using json = nlohmann::json;
+    std::string particleName_;
+    Vector3 basePos_;
+    V3MinMax positionDist_;
+    V3MinMax scaleDist_;
+    V3MinMax velocityDist_;
+    V4MinMax colorDist_;
+    Vector4 baseColor_;
+    float lifeTime_;
+    int32_t particleCount_;
 
-	///=====================================================
-	/// private variants
-	///=====================================================
-	
-	std::string particleName_;       ///パーティクル名
-	Vector3 basePos_;                ///基準座標
-	V3MinMax positionDist_;          ///座標ランダム分配
-	V3MinMax scaleDist_;             ///スケールランダム分配
-	V3MinMax velocityDist_;          ///速度ランダム分配
-	V4MinMax colorDist_;             ///色分配
-	Vector4 baseColor_;              ///基準の色
-	float lifeTime_;                 ///生存時間
-	int32_t particleCount_;         ///パーティクル数
-
-	const std::string dyrectryPath = "./Resources/ParticleParamater/";
-	std::string editorMessage_;
+    const std::string dyrectryPath = "./Resources/ParticleParamater/";
+    Editor editor_;
 
 public:
+    ParticleEmitter();
+    static ParticleEmitter* CreateParticle(const std::string& name, const std::string& modelFilePath, const std::string& extension, const int32_t& maxnum);
 
-	// コンストラクタ 
-	ParticleEmitter();
+    void Init();
+    void Emit();
+    void EditorUpdate();
 
-	///=====================================================
-	/// public method
-	///=====================================================
+    /// 保存処理に必要なシリアライズロジック
+    json Serialize() const;
 
-	/// 初期化
-	static ParticleEmitter* CreateParticle(
-		const std::string name, const std::string modelFilePath,
-		const std::string& extension, const int32_t& maxnum);
-
-	void Init();/// 初期化
-	void Emit();///　エミット
-
-	///=====================================================
-    /// getter method
-    ///=====================================================
-	const std::string& GetParticleName()const { return particleName_; }
-
-	///=====================================================
-	/// Editor 
-	///=====================================================
-
-	/// パラメータをImGuiで編集する
-	void EditorUpdate();
-
-	/// パラメータをJSON形式で保存
-	void SaveParameters(const std::string& filepath) const;
-
-	/// パラメータをJSON形式から読み込む
-	void LoadParameters(const std::string& filepath);
-
-
+    /// 読み込み処理に必要なデシリアライズロジック
+    void Deserialize(const json& data);
 };

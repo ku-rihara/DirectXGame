@@ -30,54 +30,40 @@ void GlobalParameter::Update() {
         ImGui::End();
         return;
     }
+
     // メニューバーの作成
     if (!ImGui::BeginMenuBar())
         return;
 
     // 各グループの処理
-    for (auto& [groupName, group] : datas_) {
+    for (std::map<std::string, Group>::iterator groupIt = datas_.begin(); groupIt != datas_.end(); ++groupIt) {
+        const std::string& groupName = groupIt->first;
+        Group& group = groupIt->second;
+
         if (!ImGui::BeginMenu(groupName.c_str()))
             continue;
 
         // 各アイテムの処理
-        for (auto& [itemName, item] : group) {
-            if (std::holds_alternative<int32_t>(item)) {
-                int32_t* ptr = std::get_if<int32_t>(&item);
-                ImGui::SliderInt(itemName.c_str(), ptr, 0, 100);
-            }
-            else if (std::holds_alternative<uint32_t>(item)) {
-                uint32_t* ptr = std::get_if<uint32_t>(&item);
+        for (std::map<std::string, Parameter>::iterator itemIt = group.begin(); itemIt != group.end(); ++itemIt) {
+            const std::string& itemName = itemIt->first;
+            Parameter& param = itemIt->second;
+            Item& item = param.first;  // 値
+            const DrawSettings& drawSettings = param.second;  // 描画設定
 
-                // 一時的に int 型として操作する
-                int tempValue = static_cast<int>(*ptr);
-
-                // ImGui に tempValue を渡して操作
-                if (ImGui::SliderInt(itemName.c_str(), &tempValue, 0, 100)) {
-                    // 値が変更された場合に元の uint32_t に戻す
-                    *ptr = static_cast<uint32_t>(tempValue);
+            // ツリーラベルが設定されている場合、TreeNodeを開始する
+            if (!drawSettings.treeNodeLabel.empty()) {
+                if (ImGui::TreeNode(drawSettings.treeNodeLabel.c_str())) {
+                    // ツリー内にアイテムを描画
+                    DrawWidget(itemName, item, drawSettings);
+                    ImGui::TreePop();  // ツリーの終了
                 }
             }
-            else if (std::holds_alternative<float>(item)) {
-                float* ptr = std::get_if<float>(&item);
-                ImGui::DragFloat(itemName.c_str(), ptr, 0.1f);
-            }
-            else if (std::holds_alternative<Vector2>(item)) {
-                Vector2* ptr = std::get_if<Vector2>(&item);
-                ImGui::DragFloat2(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
-            }
-            else if (std::holds_alternative<Vector3>(item)) {
-                Vector3* ptr = std::get_if<Vector3>(&item);
-                ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
-            }
-            else if (std::holds_alternative<Vector4>(item)) {
-                Vector4* ptr = std::get_if<Vector4>(&item);
-                ImGui::ColorEdit4(itemName.c_str(), reinterpret_cast<float*>(ptr));
-            }
-            else if (std::holds_alternative<bool>(item)) {
-                bool* ptr = std::get_if<bool>(&item);
-                ImGui::Checkbox(itemName.c_str(), ptr);
+            else {
+                // ツリーラベルがない場合、通常のウィジェットを描画
+                DrawWidget(itemName, item, drawSettings);
             }
         }
+
         // セーブボタン
         ImGui::Text("\n");
         if (ImGui::Button("Save")) {
@@ -93,76 +79,181 @@ void GlobalParameter::Update() {
 #endif // _DEBUG
 }
 
-/// =====================================================================================
-/// 指定グループとキーに対して値を設定
-/// 任意の型に対応
-/// =====================================================================================
-template<typename T> void GlobalParameter::SetValue(const std::string& groupName, const std::string& key, T value) {
-    Group& group = datas_[groupName];
-    Item newItem{};
-    newItem = value;
-    group[key] = value;
-}
+// 描画処理を分ける関数
+void GlobalParameter::DrawWidget(const std::string& itemName, Item& item, const DrawSettings& drawSettings) {
+    switch (drawSettings.widgetType) {
+    case DrawSettings::WidgetType::SliderInt:
+        if (std::holds_alternative<int32_t>(item)) {
+            int32_t* ptr = std::get_if<int32_t>(&item);
+            ImGui::SliderInt(itemName.c_str(), ptr, static_cast<int>(drawSettings.minValue), static_cast<int>(drawSettings.maxValue));
+        }
+        break;
 
-/// =====================================================================================
-/// 新しいアイテムをグループに追加
-/// すでに存在する場合は`SetValue`で更新
-/// =====================================================================================
-template<typename T> void GlobalParameter::AddItem(const std::string& groupName, const std::string& key, T value) {
-    json root;
-    json::iterator itGroup = root.find(groupName);
-    if (itGroup != root.end()) {
-        SetValue(groupName, key, value);
+    case DrawSettings::WidgetType::DragFloat:
+        if (std::holds_alternative<float>(item)) {
+            float* ptr = std::get_if<float>(&item);
+            ImGui::DragFloat(itemName.c_str(), ptr, 0.1f, drawSettings.minValue, drawSettings.maxValue);
+        }
+        break;
+
+    case DrawSettings::WidgetType::DragFloat2:
+        if (std::holds_alternative<Vector2>(item)) {
+            Vector2* ptr = std::get_if<Vector2>(&item);
+            ImGui::DragFloat2(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f, drawSettings.minValue, drawSettings.maxValue);
+        }
+        break;
+
+    case DrawSettings::WidgetType::DragFloat3:
+        if (std::holds_alternative<Vector3>(item)) {
+            Vector3* ptr = std::get_if<Vector3>(&item);
+            ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f, drawSettings.minValue, drawSettings.maxValue);
+        }
+        break;
+
+    case DrawSettings::WidgetType::DragFloat4:
+        if (std::holds_alternative<Vector4>(item)) {
+            Vector4* ptr = std::get_if<Vector4>(&item);
+            ImGui::DragFloat4(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f, drawSettings.minValue, drawSettings.maxValue);
+        }
+        break;
+
+    case DrawSettings::WidgetType::Checkbox:
+        if (std::holds_alternative<bool>(item)) {
+            bool* ptr = std::get_if<bool>(&item);
+            ImGui::Checkbox(itemName.c_str(), ptr);
+        }
+        break;
+
+    case DrawSettings::WidgetType::ColorEdit4:
+        if (std::holds_alternative<Vector4>(item)) {
+            Vector4* ptr = std::get_if<Vector4>(&item);
+            ImGui::ColorEdit4(itemName.c_str(), reinterpret_cast<float*>(ptr));
+        }
+        break;
+
+    default:
+        break;
     }
 }
 
-/// =====================================================================================
-/// グループのデータをファイルに保存
-/// =====================================================================================
-void GlobalParameter::SaveFile(const std::string& groupName) {
 
-    // グループが存在することを確認
+///============================================================================
+/// 値セット
+///=============================================================================
+template<typename T>
+void GlobalParameter::SetValue(const std::string& groupName, const std::string& key, T value, GlobalParameter::DrawSettings::WidgetType widgetType) {
+    Group& group = datas_[groupName];
+
+    // ツリーが開始されている場合、ツリー内にアイテムを追加
+    bool isInTreeNode = !treeNodeStack_.empty();
+
+    // ツリー内である場合、ツリーラベルを使用する
+    std::string treeNodeLabel;
+    if (isInTreeNode) {
+        if (!treeNodeStack_.empty()) {
+            treeNodeLabel = treeNodeStack_.top(); 
+        }
+    }
+
+    DrawSettings settings;
+    settings.widgetType = widgetType;  // WidgetTypeを設定
+    settings.treeNodeLabel = treeNodeLabel;  // ツリーラベルを設定
+
+    // 値とウィジェット設定をセット
+    group[key] = { value, settings };
+}
+
+///============================================================================
+/// アイテム追加
+///=============================================================================
+template<typename T>
+void GlobalParameter::AddItem(const std::string& groupName, const std::string& key, T value, GlobalParameter::DrawSettings::WidgetType widgetType) {
+    json root;
+    json::iterator itGroup = root.find(groupName);
+
+    // グループが存在する場合、値を更新
+    if (itGroup != root.end()) {
+        SetValue(groupName, key, value, widgetType);  // グループが存在すれば、値を更新
+    }
+    else {
+        // グループが存在しない場合、エラーハンドリングまたは新規作成する処理を追加
+        // 必要に応じて、新規グループを作成する処理を追加することができます
+        // 例: root[groupName] = json::object();
+    }
+}
+
+
+///============================================================================
+/// 値取得
+///=============================================================================
+template<typename T>
+T GlobalParameter::GetValue(const std::string& groupName, const std::string& key) const {
     auto itGroup = datas_.find(groupName);
     assert(itGroup != datas_.end());
 
-    json root = json::object();
-    root[groupName] = json::object();
+    const Group& group = datas_.at(groupName);
+    auto itItem = group.find(key);
+    assert(itItem != group.end());
 
-    // 各アイテムをJSON形式に変換
+    return std::get<T>(itItem->second.first);
+}
+
+
+
+// ツリーのノード追加
+void GlobalParameter::AddTreeNode(const std::string& nodeName) {
+    treeNodeStack_.push(nodeName);  // 現在のツリー状態をスタックに追加
+}
+
+// ツリーのノードを閉じる
+void GlobalParameter::AddTreePoP() {
+    if (!treeNodeStack_.empty()) {
+        treeNodeStack_.pop();  // スタックから最後のノードを削除
+    }
+}
+
+
+//==============================================================================
+// ファイル保存・読み込み
+//==============================================================================
+
+void GlobalParameter::SaveFile(const std::string& groupName) {
+    auto itGroup = datas_.find(groupName);
+    assert(itGroup != datas_.end());
+
+    json root;
     for (auto& [itemName, item] : itGroup->second) {
-        if (std::holds_alternative<int32_t>(item)) {
-            root[groupName][itemName] = std::get<int32_t>(item);
+        if (std::holds_alternative<int32_t>(item.first)) {
+            root[groupName][itemName] = std::get<int32_t>(item.first);
         }
-        else if (std::holds_alternative<uint32_t>(item)) {
-            root[groupName][itemName] = std::get<uint32_t>(item);
+        else if (std::holds_alternative<uint32_t>(item.first)) {
+            root[groupName][itemName] = std::get<uint32_t>(item.first);
         }
-        else if (std::holds_alternative<float>(item)) {
-            root[groupName][itemName] = std::get<float>(item);
+        else if (std::holds_alternative<float>(item.first)) {
+            root[groupName][itemName] = std::get<float>(item.first);
         }
-        else if (std::holds_alternative<Vector2>(item)) {
-            Vector2 value = std::get<Vector2>(item);
+        else if (std::holds_alternative<Vector2>(item.first)) {
+            Vector2 value = std::get<Vector2>(item.first);
             root[groupName][itemName] = json::array({ value.x, value.y });
         }
-        else if (std::holds_alternative<Vector3>(item)) {
-            Vector3 value = std::get<Vector3>(item);
+        else if (std::holds_alternative<Vector3>(item.first)) {
+            Vector3 value = std::get<Vector3>(item.first);
             root[groupName][itemName] = json::array({ value.x, value.y, value.z });
         }
-        else if (std::holds_alternative<Vector4>(item)) {
-            Vector4 value = std::get<Vector4>(item);
+        else if (std::holds_alternative<Vector4>(item.first)) {
+            Vector4 value = std::get<Vector4>(item.first);
             root[groupName][itemName] = json::array({ value.x, value.y, value.z, value.w });
         }
-        else if (std::holds_alternative<bool>(item)) {
-            root[groupName][itemName] = std::get<bool>(item);
+        else if (std::holds_alternative<bool>(item.first)) {
+            root[groupName][itemName] = std::get<bool>(item.first);
         }
     }
 
-    // ディレクトリの作成
-    std::filesystem::path dri(kDirectoryPath);
-    if (!std::filesystem::exists(dri)) {
-        std::filesystem::create_directories(dri);
+    std::filesystem::path dir(kDirectoryPath);
+    if (!std::filesystem::exists(dir)) {
+        std::filesystem::create_directories(dir);
     }
 
-    // ファイル書き込み
     std::string filePath = kDirectoryPath + groupName + ".json";
     std::ofstream ofs(filePath);
     if (ofs.fail()) {
@@ -176,16 +267,12 @@ void GlobalParameter::SaveFile(const std::string& groupName) {
 }
 
 void GlobalParameter::LoadFiles() {
-    std::filesystem::path driPath(kDirectoryPath);
-    if (!std::filesystem::exists(driPath)) {
-        return;
-    }
-    for (const auto& entry : std::filesystem::directory_iterator(driPath)) {
+    std::filesystem::path dir(kDirectoryPath);
+    if (!std::filesystem::exists(dir)) return;
+
+    for (const auto& entry : std::filesystem::directory_iterator(dir)) {
         const std::filesystem::path& filePath = entry.path();
-        std::string extension = filePath.extension().string();
-        if (extension.compare(".json") != 0) {
-            continue;
-        }
+        if (filePath.extension() != ".json") continue;
         LoadFile(filePath.stem().string());
     }
 }
@@ -199,72 +286,70 @@ void GlobalParameter::LoadFile(const std::string& groupName) {
         assert(0);
         return;
     }
+
     json root;
     ifs >> root;
     ifs.close();
+
     auto itGroup = root.find(groupName);
     assert(itGroup != root.end());
 
     for (auto itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
         const std::string& itemName = itItem.key();
+
+        // Integer (int32_t)
         if (itItem->is_number_integer()) {
             int32_t value = itItem->get<int32_t>();
-            SetValue(groupName, itemName, value);
+            SetValue(groupName, itemName, value,DrawSettings::WidgetType::SliderInt);
         }
+        // Unsigned Integer (uint32_t)
         else if (itItem->is_number_integer()) {
             uint32_t value = itItem->get<uint32_t>();
-            SetValue(groupName, itemName, static_cast<uint32_t>(value));
+            SetValue(groupName, itemName, value,  DrawSettings::WidgetType::SliderInt );
         }
+        // Float (float)
         else if (itItem->is_number_float()) {
             double value = itItem->get<double>();
-            SetValue(groupName, itemName, static_cast<float>(value));
+            SetValue(groupName, itemName, static_cast<float>(value),DrawSettings::WidgetType::DragFloat);
         }
+        // Vector2 (Array of 2 elements)
         else if (itItem->is_array() && itItem->size() == 2) {
             Vector2 value = { itItem->at(0), itItem->at(1) };
-            SetValue(groupName, itemName, value);
+            SetValue(groupName, itemName, value, DrawSettings::WidgetType::DragFloat2);
         }
+        // Vector3 (Array of 3 elements)
         else if (itItem->is_array() && itItem->size() == 3) {
             Vector3 value = { itItem->at(0), itItem->at(1), itItem->at(2) };
-            SetValue(groupName, itemName, value);
+            SetValue(groupName, itemName, value,DrawSettings::WidgetType::DragFloat3);
         }
+        // Vector4 (Array of 4 elements)
         else if (itItem->is_array() && itItem->size() == 4) {
             Vector4 value = { itItem->at(0), itItem->at(1), itItem->at(2), itItem->at(3) };
-            SetValue(groupName, itemName, value);
+            SetValue(groupName, itemName, value, DrawSettings::WidgetType::DragFloat4);
         }
+        // Boolean
         else if (itItem->is_boolean()) {
             bool value = itItem->get<bool>();
-            SetValue(groupName, itemName, value);
+            SetValue(groupName, itemName, value,DrawSettings::WidgetType::Checkbox);
         }
     }
 }
 
-template<typename T> T GlobalParameter::GetValue(const std::string& groupName, const std::string& key) const {
-    auto itGroup = datas_.find(groupName);
-    assert(itGroup != datas_.end());
+    template void GlobalParameter::SetValue<int>(const std::string& groupName, const std::string& key, int value, GlobalParameter::DrawSettings::WidgetType widgetType);
+    template void GlobalParameter::SetValue<uint32_t>(const std::string& groupName, const std::string& key, uint32_t value, GlobalParameter::DrawSettings::WidgetType widgetType);
+    template void GlobalParameter::SetValue<float>(const std::string& groupName, const std::string& key, float value, GlobalParameter::DrawSettings::WidgetType widgetType);
+    template void GlobalParameter::SetValue<Vector2>(const std::string& groupName, const std::string& key, Vector2 value, GlobalParameter::DrawSettings::WidgetType widgetType);
+    template void GlobalParameter::SetValue<Vector3>(const std::string& groupName, const std::string& key, Vector3 value, GlobalParameter::DrawSettings::WidgetType widgetType);
+    template void GlobalParameter::SetValue<Vector4>(const std::string& groupName, const std::string& key, Vector4 value, GlobalParameter::DrawSettings::WidgetType widgetType);
+    template void GlobalParameter::SetValue<bool>(const std::string& groupName, const std::string& key, bool value, GlobalParameter::DrawSettings::WidgetType widgetType);
 
-    const Group& group = datas_.at(groupName);
-    auto itItem = group.find(key);
-    assert(itItem != group.end());
-
-    return std::get<T>(itItem->second);
-}
-
-
-    template void GlobalParameter::SetValue<int>(const std::string& groupName, const std::string& key, int value);
-    template void GlobalParameter::SetValue<uint32_t>(const std::string& groupName, const std::string& key, uint32_t value);
-    template void GlobalParameter::SetValue<float>(const std::string& groupName, const std::string& key, float value);
-    template void GlobalParameter::SetValue<Vector2>(const std::string& groupName, const std::string& key, Vector2 value);
-    template void GlobalParameter::SetValue<Vector3>(const std::string& groupName, const std::string& key, Vector3 value);
-    template void GlobalParameter::SetValue<Vector4>(const std::string& groupName, const std::string& key, Vector4 value);
-    template void GlobalParameter::SetValue<bool>(const std::string& groupName, const std::string& key, bool value);
-
-    template void GlobalParameter::AddItem<int>(const std::string& groupName, const std::string& key, int value);
-    template void GlobalParameter::AddItem<uint32_t>(const std::string& groupName, const std::string& key, uint32_t value);
-    template void GlobalParameter::AddItem<float>(const std::string& groupName, const std::string& key, float value);
-    template void GlobalParameter::AddItem<Vector2>(const std::string& groupName, const std::string& key, Vector2 value);
-    template void GlobalParameter::AddItem<Vector3>(const std::string& groupName, const std::string& key, Vector3 value);
-    template void GlobalParameter::AddItem<Vector4>(const std::string& groupName, const std::string& key, Vector4 value);
-    template void GlobalParameter::AddItem<bool>(const std::string& groupName, const std::string& key, bool value);
+    template void GlobalParameter::AddItem<int>(const std::string& groupName, const std::string& key, int value, GlobalParameter::DrawSettings::WidgetType widgetType);
+    template void GlobalParameter::AddItem<uint32_t>(const std::string& groupName, const std::string& key, uint32_t value, GlobalParameter::DrawSettings::WidgetType widgetType);
+    template void GlobalParameter::AddItem<float>(const std::string& groupName, const std::string& key, float value, GlobalParameter::DrawSettings::WidgetType widgetType);
+    template void GlobalParameter::AddItem<Vector2>(const std::string& groupName, const std::string& key, Vector2 value, GlobalParameter::DrawSettings::WidgetType widgetType);
+    template void GlobalParameter::AddItem<Vector3>(const std::string& groupName, const std::string& key, Vector3 value, GlobalParameter::DrawSettings::WidgetType widgetType);
+    template void GlobalParameter::AddItem<Vector4>(const std::string& groupName, const std::string& key, Vector4 value, GlobalParameter::DrawSettings::WidgetType widgetType);
+    template void GlobalParameter::AddItem<bool>(const std::string& groupName, const std::string& key, bool value, GlobalParameter::DrawSettings::WidgetType widgetType);
 
     template int32_t GlobalParameter::GetValue<int32_t>(const std::string& groupName, const std::string& key) const;
     template uint32_t GlobalParameter::GetValue<uint32_t>(const std::string& groupName, const std::string& key) const;
