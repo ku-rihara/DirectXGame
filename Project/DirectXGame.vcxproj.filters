@@ -109,6 +109,12 @@
     <Filter Include="MyEngine\.h\utility\Debug">
       <UniqueIdentifier>{20818b80-a58e-4c65-84c7-f8fe2b0bdb85}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\utility\Editor">
+      <UniqueIdentifier>{38b63eec-6feb-456d-8ec6-809cc5cedf01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\Editor">
+      <UniqueIdentifier>{fd8669ab-e586-4603-8989-fde63074b7f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -252,6 +258,9 @@
     </ClCompile>
     <ClCompile Include="Engine\utility\Particle\ParticleEmitter.cpp">
       <Filter>MyEngine\.cpp\utility\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\Editor\Editor.cpp">
+      <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -440,6 +449,9 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\Particle\ParticleEmitter.h">
       <Filter>MyEngine\.h\utility\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\Editor\Editor.h">
+      <Filter>MyEngine\.h\utility\Editor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

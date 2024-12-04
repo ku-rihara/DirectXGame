@@ -12,7 +12,10 @@ void CollisionManager::Init() {
 	const char* groupName = "CollisionManager";
 	// グループを追加
 	globalParameter_->CreateGroup(groupName);
-	globalParameter_->AddItem(groupName, "isColliderVisible", isColliderVisible_);
+
+
+	globalParameter_->AddTreeNode("AA");
+	globalParameter_->AddItem(groupName, "isColliderVisible", isColliderVisible_, GlobalParameter::DrawSettings::WidgetType::Checkbox);
 }
 
 void CollisionManager::AddCollider(BaseCollider* collider) {
