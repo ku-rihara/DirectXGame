@@ -59,6 +59,7 @@ public:
 	///=====================================================
 	void AddParmGroup();
 	void ApplyGlobalParameter();
-	/// パラメータをImGuiで編集する
-	void EditorUpdate();
+	void ParmLoadForImGui();
+
+	void ImGuiUpdate();
 };

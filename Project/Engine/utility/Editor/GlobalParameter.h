@@ -36,11 +36,13 @@ private:
         <int32_t,uint32_t, float, Vector2, Vector3, Vector4, bool>;
 
     using Parameter = std::pair<Item, DrawSettings>; // 値と描画設定をペアにする
-    using Group = std::map<std::string, Parameter>;  // パラメータ名とペアをマップに格納
-
+    using Group = std::map<std::string, Parameter>;  // パラメータ名とペア
 
     /// json
     using json = nlohmann::json;
+
+    /// 
+    bool isLoading_;
 
 private:
 
@@ -49,10 +51,13 @@ private:
     ///=================================================================================
 
     // グループ名(キー)とグループのデータ
-    std::map<std::string, Group> datas_;
+    std::unordered_map<std::string, Group> datas_;
 
     // 値が変更されたかどうかのフラグ
-    std::map<std::string, bool> isValueChanged_;
+    std::unordered_map<std::string, bool> isValueChanged_;
+
+    /// グループごとの可視性フラグを管理
+    std::unordered_map<std::string, bool> visibilityFlags_;
 
     // データを保存する際のディレクトリパス
     const std::string kDirectoryPath = "Resources/GlobalParameter/";
@@ -71,10 +76,10 @@ public:
     void Update();
 
     // 新しいグループを作成
-    void CreateGroup(const std::string& groupName);
+    void CreateGroup(const std::string& groupName, const bool& isVisible);
 
     // ツリーのノード追加
-    void AddTreeNode(const std::string& nodeName);
+    void AddSeparatorText(const std::string& nodeName);
 
     // ツリーのノードを閉じる
     void AddTreePoP();
@@ -96,12 +101,16 @@ public:
     // ファイルへの保存・読み込み
     // ------------------------------------------------------------------------------
 
-     // 特定のグループのデータをファイルに保存する
-    void SaveFile(const std::string& groupName);
-
+    void ParmSaveForImGui(const std::string& groupName);
+    
     // すべてのグループのデータをファイルから読み込む
     void LoadFiles();
 
-    // 特定のグループのデータをファイルから読み込む
+      // 特定のグループのデータをファイルから読み込む
     void LoadFile(const std::string& groupName);
+
+private:
+    // 特定のグループのデータをファイルに保存する
+    void SaveFile(const std::string& groupName);
+    void ParmLoadForImGui(const std::string& groupName);
 };

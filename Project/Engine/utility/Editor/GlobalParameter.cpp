@@ -11,12 +11,12 @@ GlobalParameter* GlobalParameter::GetInstance() {
 }
 
 /// =====================================================================================
-/// 指定したグループ名のグループを作成。
+/// 指定したグループ名のグループを作成し、表示フラグを設定。
 /// =====================================================================================
-void GlobalParameter::CreateGroup(const std::string& groupName) {
-    datas_[groupName];
+void GlobalParameter::CreateGroup(const std::string& groupName, const bool& isVisible) {
+    datas_[groupName]; // グループを作成
+    visibilityFlags_[groupName] = isVisible; // 表示フラグを設定
 }
-
 
 /// =====================================================================================
 /// デバッグ時の更新処理。
@@ -30,60 +30,49 @@ void GlobalParameter::Update() {
         return;
     }
 
-    if (ImGui::BeginMenuBar()) {
-        // 各グループの処理
-        for (auto& [groupName, group] : datas_) {
-            if (ImGui::BeginMenu(groupName.c_str())) {
-                std::string currentTreeNode; // 現在のツリーノード名を追跡
-
-                for (auto& [itemName, param] : group) {
-                    auto& [item, drawSettings] = param;
-
-                    // ツリーノードが指定されている場合
-                    if (!drawSettings.treeNodeLabel.empty()) {
-                        // 異なるツリーノードならば新しいツリーノードを開始
-                        if (currentTreeNode != drawSettings.treeNodeLabel) {
-                            // 現在のツリーノードを閉じる
-                            if (!currentTreeNode.empty()) {
-                                ImGui::TreePop();
-                            }
-
-                            currentTreeNode = drawSettings.treeNodeLabel;
-                            if (ImGui::TreeNode(currentTreeNode.c_str())) {
-                                // ツリーノードが開かれているとき、内容を描画
-                            }
-                            else {
-                                currentTreeNode.clear();
-                                break; // ツリーノードが閉じられた場合、描画をスキップ
-                            }
-                        }
-                    }
-
-                    // アイテム描画
-                    DrawWidget(itemName, item, drawSettings);
-                }
-
-                // 最後にツリーノードを閉じる
-                if (!currentTreeNode.empty()) {
-                    ImGui::TreePop();
-                }
-
-                // 保存ボタン
-                if (ImGui::Button("Save")) {
-                    SaveFile(groupName);
-                    std::string message = std::format("{}.json saved.", groupName);
-                    MessageBoxA(nullptr, message.c_str(), "GlobalParameter", 0);
-                }
-
-                ImGui::EndMenu();
-            }
+    for (auto& [groupName, group] : datas_) {
+        // 表示フラグを確認
+        if (!visibilityFlags_[groupName]) {
+            continue; // フラグがオフならスキップ
         }
-        ImGui::EndMenuBar();
+
+        // グループタイトルを表示
+        if (ImGui::CollapsingHeader(groupName.c_str())) {
+            std::string currentSection; // 現在のセクション名を追跡
+
+            for (auto& [itemName, param] : group) {
+                auto& [item, drawSettings] = param;
+
+                // セクション（ツリーノード）ラベルが指定されている場合
+                if (!drawSettings.treeNodeLabel.empty()) {
+                    // 異なるセクションの場合、新しいセクションを開始
+                    if (currentSection != drawSettings.treeNodeLabel) {
+                        currentSection = drawSettings.treeNodeLabel;
+                        ImGui::SeparatorText(currentSection.c_str());
+                    }
+                }
+
+                // アイテム描画
+                DrawWidget(itemName, item, drawSettings);
+
+                // ウィジェット間にスペースを挿入
+                ImGui::Spacing();
+            }
+
+            /// セーブ
+            ParmSaveForImGui(groupName);
+            ParmLoadForImGui(groupName);
+        }
+
+        // グループ間に区切りを挿入
+        ImGui::Separator();
     }
 
     ImGui::End();
 #endif // _DEBUG
 }
+
+
 
 
 // 描画処理を分ける関数
@@ -139,16 +128,19 @@ void GlobalParameter::SetValue(const std::string& groupName, const std::string& 
         else {
             throw std::runtime_error("Type mismatch for key: " + key);
         }
-
-        // 描画設定の更新 (ツリーノードやウィジェットタイプが変更される可能性がある)
-        existingSettings.widgetType = widgetType;
-        existingSettings.treeNodeLabel = treeNodeLabel;
+        if (!isLoading_) {
+            // 描画設定の更新 (ツリーノードやウィジェットタイプが変更される可能性がある)
+            existingSettings.widgetType = widgetType;
+            existingSettings.treeNodeLabel = treeNodeLabel;
+        }
     }
     else {
         // 新規の場合、値と設定を追加
-        DrawSettings settings;
-        settings.widgetType = widgetType;
-        settings.treeNodeLabel = treeNodeLabel;
+        
+            DrawSettings settings;
+            settings.widgetType = widgetType;
+            settings.treeNodeLabel = treeNodeLabel;
+        
         group[key] = { value, settings };
     }
 }
@@ -205,7 +197,7 @@ T GlobalParameter::GetValue(const std::string& groupName, const std::string& key
 
 
 
-void GlobalParameter::AddTreeNode(const std::string& nodeName) {
+void GlobalParameter::AddSeparatorText(const std::string& nodeName) {
     treeNodeStack_.push(nodeName); // ノード名をスタックに追加
 }
 
@@ -280,6 +272,8 @@ void GlobalParameter::LoadFiles() {
 }
 
 void GlobalParameter::LoadFile(const std::string& groupName) {
+    isLoading_ = true;
+
     std::string filePath = kDirectoryPath + groupName + ".json";
     std::ifstream ifs(filePath);
     if (ifs.fail()) {
@@ -335,7 +329,28 @@ void GlobalParameter::LoadFile(const std::string& groupName) {
             SetValue(groupName, itemName, value,WidgetType::Checkbox);
         }
     }
+    isLoading_ = false;
 }
+
+void GlobalParameter::ParmSaveForImGui(const std::string& groupName) {
+    // 保存ボタン
+    if (ImGui::Button(std::format("Save {}", groupName).c_str())) {
+        SaveFile(groupName);
+        // セーブ完了メッセージ
+        ImGui::Text("Save Successful: %s", groupName.c_str());
+    }
+}
+
+void GlobalParameter::ParmLoadForImGui(const std::string& groupName) {
+    // ロードボタン
+    if (ImGui::Button(std::format("Load {}", groupName).c_str())) {
+
+        LoadFile(groupName);
+        // セーブ完了メッセージ
+        ImGui::Text("Load Successful: %s", groupName.c_str());
+    }
+}
+
 
     template void GlobalParameter::SetValue<int>(const std::string& groupName, const std::string& key, int value, WidgetType widgetType);
     template void GlobalParameter::SetValue<uint32_t>(const std::string& groupName, const std::string& key, uint32_t value, WidgetType widgetType);
