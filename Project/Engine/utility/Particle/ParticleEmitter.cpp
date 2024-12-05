@@ -6,6 +6,9 @@
 
 ParticleEmitter::ParticleEmitter() {}
 
+///=================================================================================
+///パーティクル作成
+///=================================================================================
 ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const std::string& modelFilePath,
 	const std::string& extension, const int32_t& maxnum) {
 
@@ -16,6 +19,9 @@ ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const 
 	return emitter.release();
 }
 
+///=================================================================================
+///初期化
+///=================================================================================
 void ParticleEmitter::Init() {
 	particleCount_ = 0;
 	lifeTime_ = 0.0f;
@@ -28,45 +34,9 @@ void ParticleEmitter::Init() {
 	ApplyGlobalParameter();
 }
 
-void ParticleEmitter::Emit() {
-	ParticleManager::GetInstance()->Emit(
-		particleName_, basePos_, positionDist_, scaleDist_,
-		velocityDist_, baseColor_, colorDist_, lifeTime_, particleCount_);
-}
-
-//void ParticleEmitter::ImGuiUpdate() {
-//	if (ImGui::Begin("Particle Emitter Editor")) {
-//		ImGui::DragFloat3("Base Position", &basePos_.x, 0.1f);
-//		ImGui::DragFloat3("Position  Min", &positionDist_.min.x, 0.1f);
-//		ImGui::DragFloat3("Position  Max", &positionDist_.max.x, 0.1f);
-//		ImGui::DragFloat3("Scale  Min", &scaleDist_.min.x, 0.1f);
-//		ImGui::DragFloat3("Scale  Max", &scaleDist_.max.x, 0.1f);
-//		ImGui::DragFloat3("Velocity  Min", &velocityDist_.min.x, 0.1f);
-//		ImGui::DragFloat3("Velocity  Max", &velocityDist_.max.x, 0.1f);
-//		ImGui::SeparatorText("color");
-//		ImGui::ColorEdit4("Base Color", &baseColor_.x);
-//		ImGui::ColorEdit4("Color  Min", &colorDist_.min.x);
-//		ImGui::ColorEdit4("Color  Max", &colorDist_.max.x);
-//		ImGui::DragFloat("Lifetime", &lifeTime_, 0.1f);
-//		ImGui::DragInt("Particle Count", &particleCount_, 1, 1, 100);
-//
-//		/// セーブロード
-//		globalParameter_->ParmSaveForImGui(particleName_.c_str());
-//		ParmLoadForImGui();
-//	}
-//	ImGui::End();
-//}
-
-void ParticleEmitter::ParmLoadForImGui() {
-	// ロードボタン
-	if (ImGui::Button(std::format("Load {}", particleName_).c_str())) {
-		globalParameter_->LoadFile(particleName_);
-		// セーブ完了メッセージ
-		ImGui::Text("Load Successful: %s", particleName_.c_str());
-		ApplyGlobalParameter();
-	}
-}
-
+///=================================================================================
+///パラメータをグループに追加
+///=================================================================================
 void ParticleEmitter::AddParmGroup() {
 
 	globalParameter_ = GlobalParameter::GetInstance();
@@ -122,3 +92,45 @@ void ParticleEmitter::ApplyGlobalParameter() {
 	lifeTime_ = globalParameter_->GetValue<float>(particleName_, "LifeTime");
 	particleCount_ = globalParameter_->GetValue<int32_t>(particleName_, "Particle Count");
 }
+
+///=================================================================================
+///エミット
+///=================================================================================
+void ParticleEmitter::Emit() {
+	ParticleManager::GetInstance()->Emit(
+		particleName_, basePos_, positionDist_, scaleDist_,
+		velocityDist_, baseColor_, colorDist_, lifeTime_, particleCount_);
+}
+
+//void ParticleEmitter::ImGuiUpdate() {
+//	if (ImGui::Begin("Particle Emitter Editor")) {
+//		ImGui::DragFloat3("Base Position", &basePos_.x, 0.1f);
+//		ImGui::DragFloat3("Position  Min", &positionDist_.min.x, 0.1f);
+//		ImGui::DragFloat3("Position  Max", &positionDist_.max.x, 0.1f);
+//		ImGui::DragFloat3("Scale  Min", &scaleDist_.min.x, 0.1f);
+//		ImGui::DragFloat3("Scale  Max", &scaleDist_.max.x, 0.1f);
+//		ImGui::DragFloat3("Velocity  Min", &velocityDist_.min.x, 0.1f);
+//		ImGui::DragFloat3("Velocity  Max", &velocityDist_.max.x, 0.1f);
+//		ImGui::SeparatorText("color");
+//		ImGui::ColorEdit4("Base Color", &baseColor_.x);
+//		ImGui::ColorEdit4("Color  Min", &colorDist_.min.x);
+//		ImGui::ColorEdit4("Color  Max", &colorDist_.max.x);
+//		ImGui::DragFloat("Lifetime", &lifeTime_, 0.1f);
+//		ImGui::DragInt("Particle Count", &particleCount_, 1, 1, 100);
+//
+//		/// セーブロード
+//		globalParameter_->ParmSaveForImGui(particleName_.c_str());
+//		ParmLoadForImGui();
+//	}
+//	ImGui::End();
+//}
+
+//void ParticleEmitter::ParmLoadForImGui() {
+//	// ロードボタン
+//	if (ImGui::Button(std::format("Load {}", particleName_).c_str())) {
+//		globalParameter_->LoadFile(particleName_);
+//		// セーブ完了メッセージ
+//		ImGui::Text("Load Successful: %s", particleName_.c_str());
+//		ApplyGlobalParameter();
+//	}
+//}
