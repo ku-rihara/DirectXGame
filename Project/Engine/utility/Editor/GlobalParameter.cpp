@@ -49,7 +49,10 @@ void GlobalParameter::Update() {
                             }
 
                             currentTreeNode = drawSettings.treeNodeLabel;
-                            if (!ImGui::TreeNode(currentTreeNode.c_str())) {
+                            if (ImGui::TreeNode(currentTreeNode.c_str())) {
+                                // ツリーノードが開かれているとき、内容を描画
+                            }
+                            else {
                                 currentTreeNode.clear();
                                 break; // ツリーノードが閉じられた場合、描画をスキップ
                             }
@@ -82,40 +85,6 @@ void GlobalParameter::Update() {
 #endif // _DEBUG
 }
 
-
-void GlobalParameter::DrawGroup(Group& group) {
-    group;
-    //std::string currentTreeNodeLabel;
-    //bool treeNodeOpen = false;
-
-    //for (auto& [key, parameter] : group) {
-    //    auto& [value, settings] = parameter;
-
-    //    // ツリーノードの管理
-    //    if (settings.treeNodeLabel != currentTreeNodeLabel) {
-    //        if (treeNodeOpen) {
-    //            ImGui::TreePop();
-    //            treeNodeOpen = false;
-    //        }
-    //        if (!settings.treeNodeLabel.empty()) {
-    //            if (ImGui::TreeNode(settings.treeNodeLabel.c_str())) {
-    //                currentTreeNodeLabel = settings.treeNodeLabel;
-    //                treeNodeOpen = true;
-    //            }
-    //        } else {
-    //            currentTreeNodeLabel.clear();
-    //        }
-    //    }
-
-    //    if (treeNodeOpen || settings.treeNodeLabel.empty()) {
-    //        DrawWidget(key, value, settings); // 各変数の描画
-    //    }
-    //}
-
-    //if (treeNodeOpen) {
-    //    ImGui::TreePop();
-    //}
-}
 
 // 描画処理を分ける関数
 void GlobalParameter::DrawWidget(const std::string& itemName, Item& item, const DrawSettings& drawSettings) {
