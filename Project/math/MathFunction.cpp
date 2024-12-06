@@ -161,3 +161,21 @@ float toRadian(float degrees) {
 float toDegree(float radians) {
 	return radians * (180.0f / std::numbers::pi_v<float>);
 }
+
+// 度数をラジアンに変換する関数
+Vector3 toRadian(const Vector3& degrees) {
+	return
+	{ degrees.x * (std::numbers::pi_v<float> / 180.0f),
+	  degrees.y * (std::numbers::pi_v<float> / 180.0f),
+	  degrees.z * (std::numbers::pi_v<float> / 180.0f), 
+	};
+}
+
+// ラジアンを度数に変換する関数
+Vector3 toDegree(const Vector3& radians) {
+	return 
+	  { radians.x * (180.0f / std::numbers::pi_v<float>),
+		radians.y * (180.0f / std::numbers::pi_v<float>),
+		radians.z * (180.0f / std::numbers::pi_v<float>),
+	};
+}

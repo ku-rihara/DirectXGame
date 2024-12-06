@@ -1,41 +1,77 @@
 #pragma once
 
-#include "utility/Editor/Editor.h"
-#include "MinMax.h"
-#include <string>
-#include <json.hpp>
+#include"MinMax.h"
+#include"utility/Editor/GlobalParameter.h"
+///std
+#include<string>
 
 /// <summary>
-/// パーティクルエミッタ
+/// Emitter
 /// </summary>
 class ParticleEmitter {
 private:
-    using json = nlohmann::json;
 
-    std::string particleName_;
-    Vector3 basePos_;
-    V3MinMax positionDist_;
-    V3MinMax scaleDist_;
-    V3MinMax velocityDist_;
-    V4MinMax colorDist_;
-    Vector4 baseColor_;
-    float lifeTime_;
-    int32_t particleCount_;
+	///=====================================================
+	/// private variants
+	///=====================================================
 
-    const std::string dyrectryPath = "./Resources/ParticleParamater/";
-    Editor editor_;
+	/// name
+	std::string particleName_;       ///パーティクル名
+
+	/// base
+	Vector3 basePos_;                ///基準座標
+	Vector3 baseRotate_;
+	Vector3 baseRotateSpeed_;       /// 回転スピード基準
+	Vector4 baseColor_;              ///基準の色
+
+	/// rondom
+	V3MinMax positionDist_;          ///座標ランダム分配
+	FMinMax scaleDist_;             ///スケールランダム分配
+	V3MinMax rotateSpeedDist_;     /// 回転スピード分配
+	V3MinMax rotateDist_;           /// 回転ランダム分配
+	V3MinMax velocityDist_;          ///速度ランダム分配
+	V4MinMax colorDist_;             ///色分配
+
+	/// etc
+	float lifeTime_;                 ///生存時間
+	float gravity_;                 ///重力パラメータ
+	int32_t particleCount_;         ///パーティクル数
+
+	/// name
+	const std::string dyrectryPath = "./Resources/ParticleParamater/";
+	std::string editorMessage_;
+
+	///editor
+	GlobalParameter* globalParameter_;
 
 public:
-    ParticleEmitter();
-    static ParticleEmitter* CreateParticle(const std::string& name, const std::string& modelFilePath, const std::string& extension, const int32_t& maxnum);
 
-    void Init();
-    void Emit();
-    void EditorUpdate();
+	// コンストラクタ 
+	ParticleEmitter();
 
-    /// 保存処理に必要なシリアライズロジック
-    json Serialize() const;
+	///=====================================================
+	/// public method
+	///=====================================================
 
-    /// 読み込み処理に必要なデシリアライズロジック
-    void Deserialize(const json& data);
+	/// 初期化
+	static ParticleEmitter* CreateParticle(
+		const std::string& name, const std::string& modelFilePath,
+		const std::string& extension, const int32_t& maxnum);
+
+	void Init();/// 初期化
+	void Emit();///　エミット
+
+	///=====================================================
+	/// getter method
+	///=====================================================
+	const std::string& GetParticleName()const { return particleName_; }
+
+	///=====================================================
+	/// Editor 
+	///=====================================================
+	void AddParmGroup();
+	void ApplyGlobalParameter();
+	void ParmLoadForImGui();
+
+	void ImGuiUpdate();
 };

@@ -2,7 +2,7 @@
 #include<Scene/GameScene.h>
 
 ///utility
-#include"GrobalParamater/GlobalParameter.h"
+#include"utility/Editor/GlobalParameter.h"
 #include "Frame/Frame.h"
 #include"Collider/CollisionManager.h"
 /// std

@@ -6,7 +6,7 @@
 #include "Collider/AABBCollider.h"
 #include "Collider/OBBCollider.h"
 
-#include "GrobalParamater/GlobalParameter.h"
+#include"utility/Editor/GlobalParameter.h"
 /// std
 #include<list>
 #include<memory>
