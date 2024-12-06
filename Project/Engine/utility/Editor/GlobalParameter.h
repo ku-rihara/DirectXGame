@@ -19,6 +19,7 @@ public:
         DragFloat4,
         Checkbox,
         ColorEdit4,
+        SlideAngle,
     };
     // 描画設定用の構造体
     struct DrawSettings {

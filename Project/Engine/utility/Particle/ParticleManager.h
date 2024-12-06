@@ -27,7 +27,9 @@ private:
 	struct Particle {
 		float lifeTime_;
 		float currentTime_;
+		float gravity_;
 		Vector3 velocity_;
+		Vector3 rotateSpeed_;
 		Vector4 color_;
 		WorldTransform worldTransform_;
 
@@ -89,13 +91,17 @@ public:
 	void CreateInstancingResource(const std::string& name, const uint32_t& instanceNum);
 
 	Particle  MakeParticle(
-		const Vector3& basePosition, V3MinMax positionDist,
-		V3MinMax scaledist, V3MinMax velocityDist, const Vector4& baseColor,
-		const V4MinMax& colorDist, float lifeTime);
+		const Vector3& basePosition, const V3MinMax& positionDist,
+		const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
+		const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
+		const Vector3& baseRotate, const Vector3& baseRotateSpeed, const V3MinMax& RotateDist,
+		const V3MinMax& rotateSpeedDist);
 
 	void Emit(
-		std::string name, const Vector3& basePosition, V3MinMax positionDist,
-		V3MinMax scaledist, V3MinMax velocityDist, const Vector4& baseColor,
-		const V4MinMax& colorDist,float lifeTime, uint32_t count);
+		std::string name, const Vector3& basePosition, const V3MinMax& positionDist,
+		const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
+		const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
+		const Vector3&baseRotate,const Vector3&baseRotateSpeed,const V3MinMax& RotateDist,
+		const V3MinMax& rotateSpeedDist, uint32_t count);
 
 };

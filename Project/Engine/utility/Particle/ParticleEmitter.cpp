@@ -1,6 +1,5 @@
 #include "ParticleEmitter.h"
 #include "ParticleManager.h"
-#include<format>
 #include <imgui.h>
 
 
@@ -25,6 +24,7 @@ ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const 
 void ParticleEmitter::Init() {
 	particleCount_ = 0;
 	lifeTime_ = 0.0f;
+	gravity_ = 0.0f;
 	baseColor_ = { 0, 0, 0, 0 };
 	colorDist_.min = { 0, 0, 0, 0 };
 	colorDist_.max = { 0, 0, 0, 0 };
@@ -53,8 +53,17 @@ void ParticleEmitter::AddParmGroup() {
 
 	// Scale ツリーノード
 	globalParameter_->AddSeparatorText("Scale");
-	globalParameter_->AddItem(groupName, "Scale Max", scaleDist_.max, GlobalParameter::WidgetType::DragFloat3);
-	globalParameter_->AddItem(groupName, "Scale Min", scaleDist_.min, GlobalParameter::WidgetType::DragFloat3);
+	globalParameter_->AddItem(groupName, "Scale Max", scaleDist_.max, GlobalParameter::WidgetType::DragFloat);
+	globalParameter_->AddItem(groupName, "Scale Min", scaleDist_.min, GlobalParameter::WidgetType::DragFloat);
+
+	// Rotate ツリーノード
+	globalParameter_->AddSeparatorText("Rotate");
+	globalParameter_->AddItem(groupName, "Rotate Base", baseRotate_, GlobalParameter::WidgetType::SlideAngle);
+	globalParameter_->AddItem(groupName, "Rotate Max", rotateDist_.max, GlobalParameter::WidgetType::SlideAngle);
+	globalParameter_->AddItem(groupName, "Rotate Min", rotateDist_.min, GlobalParameter::WidgetType::SlideAngle);
+	globalParameter_->AddItem(groupName, "RotateSpeed Base", baseRotateSpeed_, GlobalParameter::WidgetType::SlideAngle);
+	globalParameter_->AddItem(groupName, "RotateSpeed Max", rotateSpeedDist_.max, GlobalParameter::WidgetType::SlideAngle);
+	globalParameter_->AddItem(groupName, "RotateSpeed Min", rotateSpeedDist_.min, GlobalParameter::WidgetType::SlideAngle);
 
 	// Velocity ツリーノード
 	globalParameter_->AddSeparatorText("Velocity");
@@ -68,27 +77,47 @@ void ParticleEmitter::AddParmGroup() {
 	globalParameter_->AddItem(groupName, "Color Min", colorDist_.min, GlobalParameter::WidgetType::ColorEdit4);
 
 	// その他のパラメータ
-	globalParameter_->AddSeparatorText("etc");
+	globalParameter_->AddSeparatorText("Prm");
+	globalParameter_->AddItem(groupName, "Gravity", gravity_, GlobalParameter::WidgetType::DragFloat);
 	globalParameter_->AddItem(groupName, "LifeTime", lifeTime_, GlobalParameter::WidgetType::DragFloat);
 	globalParameter_->AddItem(groupName, "Particle Count", particleCount_, GlobalParameter::WidgetType::SliderInt);
 }
-
 
 ///=====================================================
 ///  ImGuiからパラメータを得る
 ///===================================================== 
 void ParticleEmitter::ApplyGlobalParameter() {
 
-	basePos_ = globalParameter_->GetValue<Vector3>(particleName_, "Position Base");
+	// Position
+	basePos_ = globalParameter_->GetValue<Vector3>(particleName_,"Position Base");
 	positionDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "Position Min");
 	positionDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "Position Max");
-	scaleDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "Scale Min");
-	scaleDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "Scale Max");
+
+	// Scale
+	scaleDist_.min = globalParameter_->GetValue<float>(particleName_, "Scale Min");
+	scaleDist_.max = globalParameter_->GetValue<float>(particleName_, "Scale Max");
+
+	// Rotate
+	baseRotate_ = globalParameter_->GetValue<Vector3>(particleName_, "Rotate Base");
+	rotateDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "Rotate Min");
+	rotateDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "Rotate Max");
+
+	// Rotate Speed
+	baseRotateSpeed_ = globalParameter_->GetValue<Vector3>(particleName_, "RotateSpeed Base");
+	rotateSpeedDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "RotateSpeed Min");
+	rotateSpeedDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "RotateSpeed Max");
+
+	// Velocity
 	velocityDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "Velocity Min");
 	velocityDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "Velocity Max");
+
+	// Color
 	baseColor_ = globalParameter_->GetValue<Vector4>(particleName_, "BaseColor");
 	colorDist_.min = globalParameter_->GetValue<Vector4>(particleName_, "Color Min");
 	colorDist_.max = globalParameter_->GetValue<Vector4>(particleName_, "Color Max");
+
+	// その他のパラメータ
+	gravity_ = globalParameter_->GetValue<float>(particleName_, "Gravity");
 	lifeTime_ = globalParameter_->GetValue<float>(particleName_, "LifeTime");
 	particleCount_ = globalParameter_->GetValue<int32_t>(particleName_, "Particle Count");
 }
@@ -99,38 +128,7 @@ void ParticleEmitter::ApplyGlobalParameter() {
 void ParticleEmitter::Emit() {
 	ParticleManager::GetInstance()->Emit(
 		particleName_, basePos_, positionDist_, scaleDist_,
-		velocityDist_, baseColor_, colorDist_, lifeTime_, particleCount_);
+		velocityDist_, baseColor_, colorDist_, lifeTime_,gravity_,baseRotate_,
+		baseRotateSpeed_,rotateDist_,rotateSpeedDist_, particleCount_);
 }
 
-//void ParticleEmitter::ImGuiUpdate() {
-//	if (ImGui::Begin("Particle Emitter Editor")) {
-//		ImGui::DragFloat3("Base Position", &basePos_.x, 0.1f);
-//		ImGui::DragFloat3("Position  Min", &positionDist_.min.x, 0.1f);
-//		ImGui::DragFloat3("Position  Max", &positionDist_.max.x, 0.1f);
-//		ImGui::DragFloat3("Scale  Min", &scaleDist_.min.x, 0.1f);
-//		ImGui::DragFloat3("Scale  Max", &scaleDist_.max.x, 0.1f);
-//		ImGui::DragFloat3("Velocity  Min", &velocityDist_.min.x, 0.1f);
-//		ImGui::DragFloat3("Velocity  Max", &velocityDist_.max.x, 0.1f);
-//		ImGui::SeparatorText("color");
-//		ImGui::ColorEdit4("Base Color", &baseColor_.x);
-//		ImGui::ColorEdit4("Color  Min", &colorDist_.min.x);
-//		ImGui::ColorEdit4("Color  Max", &colorDist_.max.x);
-//		ImGui::DragFloat("Lifetime", &lifeTime_, 0.1f);
-//		ImGui::DragInt("Particle Count", &particleCount_, 1, 1, 100);
-//
-//		/// セーブロード
-//		globalParameter_->ParmSaveForImGui(particleName_.c_str());
-//		ParmLoadForImGui();
-//	}
-//	ImGui::End();
-//}
-
-//void ParticleEmitter::ParmLoadForImGui() {
-//	// ロードボタン
-//	if (ImGui::Button(std::format("Load {}", particleName_).c_str())) {
-//		globalParameter_->LoadFile(particleName_);
-//		// セーブ完了メッセージ
-//		ImGui::Text("Load Successful: %s", particleName_.c_str());
-//		ApplyGlobalParameter();
-//	}
-//}

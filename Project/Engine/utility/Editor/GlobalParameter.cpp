@@ -30,36 +30,37 @@ void GlobalParameter::Update() {
         return;
     }
 
+    // 各グループの順番通りに処理
     for (auto& [groupName, group] : datas_) {
-        // 表示フラグを確認
+        // 表示フラグがオフの場合スキップ
         if (!visibilityFlags_[groupName]) {
-            continue; // フラグがオフならスキップ
+            continue;
         }
 
         // グループタイトルを表示
         if (ImGui::CollapsingHeader(groupName.c_str())) {
-            std::string currentSection; // 現在のセクション名を追跡
+            std::string currentSection;
 
+            // 順番通りにアイテムを表示
             for (auto& [itemName, param] : group) {
                 auto& [item, drawSettings] = param;
 
-                // セクション（ツリーノード）ラベルが指定されている場合
+                // セクションタイトルが設定されている場合
                 if (!drawSettings.treeNodeLabel.empty()) {
-                    // 異なるセクションの場合、新しいセクションを開始
                     if (currentSection != drawSettings.treeNodeLabel) {
                         currentSection = drawSettings.treeNodeLabel;
-                        ImGui::SeparatorText(currentSection.c_str());
+                        ImGui::SeparatorText(currentSection.c_str()); // セクションヘッダ表示
                     }
                 }
 
                 // アイテム描画
                 DrawWidget(itemName, item, drawSettings);
 
-                // ウィジェット間にスペースを挿入
+                // アイテム間にスペースを追加
                 ImGui::Spacing();
             }
 
-            /// セーブ
+            // セーブ・ロード
             ParmSaveForImGui(groupName);
             ParmLoadForImGui(groupName);
         }
@@ -71,7 +72,6 @@ void GlobalParameter::Update() {
     ImGui::End();
 #endif // _DEBUG
 }
-
 
 
 
@@ -88,10 +88,23 @@ void GlobalParameter::DrawWidget(const std::string& itemName, Item& item, const 
             if (drawSettings.widgetType == WidgetType::DragFloat) {
                 ImGui::DragFloat(itemName.c_str(), &value, 0.1f);
             }
+            else if (drawSettings.widgetType == WidgetType::SlideAngle) {
+                // 角度用ウィジェットの描画（SliderAngle使用）
+                ImGui::SliderAngle(itemName.c_str(), &value, 0, 360);
+            }
         }
         else if constexpr (std::is_same_v<T, Vector3>) {
             if (drawSettings.widgetType == WidgetType::DragFloat3) {
                 ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(&value), 0.1f);
+            }
+            else if (drawSettings.widgetType == WidgetType::SlideAngle) {
+                // Vector3の各成分ごとにSliderAngleを描画
+                if (ImGui::TreeNode((itemName + " (Angle)").c_str())) {
+                    ImGui::SliderAngle("X", &value.x, 0, 360);
+                    ImGui::SliderAngle("Y", &value.y, 0, 360);
+                    ImGui::SliderAngle("Z", &value.z, 0, 360);
+                    ImGui::TreePop();
+                }
             }
         }
         else if constexpr (std::is_same_v<T, bool>) {
@@ -106,6 +119,7 @@ void GlobalParameter::DrawWidget(const std::string& itemName, Item& item, const 
         }
         }, item);
 }
+
 
 ///============================================================================
 /// 値セット

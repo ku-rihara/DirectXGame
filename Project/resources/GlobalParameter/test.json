@@ -1,7 +1,7 @@
 {
     "test": {
         "BaseColor": [
-            0.6196078658103943,
+            0.0,
             0.0,
             0.0,
             0.0
@@ -18,46 +18,64 @@
             0.0,
             0.0
         ],
-        "LifeTime": 5.900000095367432,
-        "Particle Count": 17,
+        "Gravity": -31.899999618530273,
+        "LifeTime": 2.0999999046325684,
+        "Particle Count": 27,
         "Position Base": [
             0.0,
             0.0,
             0.0
         ],
         "Position Max": [
-            1.0,
-            1.0,
+            1.5,
+            1.5,
             0.0
         ],
         "Position Min": [
-            1.0,
-            -1.0,
+            -1.5,
+            -1.5,
             0.0
         ],
-        "PositionBase": [
-            0.10000000149011612,
+        "Rotate Base": [
+            0.0,
             0.0,
             0.0
         ],
-        "Scale Max": [
-            1.0,
-            1.0,
+        "Rotate Max": [
+            0.0,
+            0.0,
             0.0
         ],
-        "Scale Min": [
-            1.0,
-            1.0,
+        "Rotate Min": [
+            0.0,
+            0.0,
             0.0
         ],
+        "RotateSpeed Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale Max": 1.5,
+        "Scale Min": 1.0,
         "Velocity Max": [
-            1.0,
-            1.0,
+            5.0,
+            7.0,
             0.0
         ],
         "Velocity Min": [
-            -1.0,
-            -1.0,
+            -5.0,
+            7.0,
             0.0
         ]
     }

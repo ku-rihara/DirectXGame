@@ -39,3 +39,7 @@ float toRadian(float degrees);
 
 // ラジアンを度数に変換する関数
 float toDegree(float radians);
+
+Vector3 toDegree(const Vector3& radians);
+
+Vector3 toRadian(const Vector3& degrees);

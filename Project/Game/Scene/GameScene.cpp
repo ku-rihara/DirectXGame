@@ -35,7 +35,6 @@ void GameScene::Init() {
 	modelSuzanne2_.reset(Object3d::CreateModel("Suzanne", ".obj"));
 	modelTerrain_.reset(Object3d::CreateModel("terrain", ".obj"));
 
-
 	/// test
 	collisionTest1_ = std::make_unique<CollisionTest1>();
 	collisionTest2_ = std::make_unique<CollisionTest2>();
@@ -58,7 +57,6 @@ void GameScene::Init() {
 	///=======================================================================================
 	///Particle
 	///=======================================================================================
-
 
 	//スプライト生成
 	sprite_ = std::make_unique<Sprite>();
