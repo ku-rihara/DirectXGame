@@ -22,9 +22,12 @@ private:
 	float currentTime_;
 	float intervalTime_;
 
+	/// Move
+	Vector3 movePos_;
+
 	/// base
 	Vector3 basePos_;                ///基準座標
-	Vector3 baseRotate_;
+	Vector3 baseRotate_;             ///回転基準
 	Vector3 baseRotateSpeed_;       /// 回転スピード基準
 	Vector4 baseColor_;              ///基準の色
 

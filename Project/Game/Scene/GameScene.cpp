@@ -73,7 +73,7 @@ void GameScene::Init() {
 
 void GameScene::Update() {
 
-	emitter_->ApplyGlobalParameter();
+	emitter_->ImGuiUpdate();
 
 	emitter_->Emit();
 
