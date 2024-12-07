@@ -18,6 +18,10 @@ private:
 	/// name
 	std::string particleName_;       ///パーティクル名
 
+	/// time
+	float currentTime_;
+	float intervalTime_;
+
 	/// base
 	Vector3 basePos_;                ///基準座標
 	Vector3 baseRotate_;

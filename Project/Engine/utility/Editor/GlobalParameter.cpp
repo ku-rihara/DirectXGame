@@ -209,8 +209,6 @@ T GlobalParameter::GetValue(const std::string& groupName, const std::string& key
     return std::get<T>(itItem->second.first);
 }
 
-
-
 void GlobalParameter::AddSeparatorText(const std::string& nodeName) {
     treeNodeStack_.push(nodeName); // ノード名をスタックに追加
 }
