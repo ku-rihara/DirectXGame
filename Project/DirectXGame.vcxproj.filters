@@ -253,10 +253,13 @@
     <ClCompile Include="Engine\utility\Particle\ParticleEmitter.cpp">
       <Filter>MyEngine\.cpp\utility\Particle</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\Editor\Editor.cpp">
+    <ClCompile Include="Engine\utility\Editor\GlobalParameter.cpp">
       <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\Editor\GlobalParameter.cpp">
+    <ClCompile Include="Engine\utility\Editor\EditorRail.cpp">
+      <Filter>MyEngine\.cpp\utility\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\Editor\EditorRailManager.cpp">
       <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
   </ItemGroup>
@@ -444,10 +447,13 @@
     <ClInclude Include="Engine\utility\Particle\ParticleEmitter.h">
       <Filter>MyEngine\.h\utility\Particle</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\Editor\Editor.h">
+    <ClInclude Include="Engine\utility\Editor\GlobalParameter.h">
       <Filter>MyEngine\.h\utility\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\Editor\GlobalParameter.h">
+    <ClInclude Include="Engine\utility\Editor\EditorRail.h">
+      <Filter>MyEngine\.h\utility\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\Editor\EditorRailManager.h">
       <Filter>MyEngine\.h\utility\Editor</Filter>
     </ClInclude>
   </ItemGroup>
