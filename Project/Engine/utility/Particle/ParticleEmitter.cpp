@@ -39,16 +39,15 @@ void ParticleEmitter::Init() {
 /// ロード
 ///=================================================================================
 void ParticleEmitter::ParmLoadForImGui() {
-	
-		// ロードボタン
-		if (ImGui::Button(std::format("Load {}", particleName_).c_str())) {
+
+	// ロードボタン
+	if (ImGui::Button(std::format("Load {}", particleName_).c_str())) {
 
 		globalParameter_->LoadFile(particleName_);
-			// セーブ完了メッセージ
-			ImGui::Text("Load Successful: %s", particleName_.c_str());
-			ApplyGlobalParameter();
-		}
-	
+		// セーブ完了メッセージ
+		ImGui::Text("Load Successful: %s", particleName_.c_str());
+		ApplyGlobalParameter();
+	}
 
 }
 
@@ -108,7 +107,7 @@ void ParticleEmitter::AddParmGroup() {
 void ParticleEmitter::ApplyGlobalParameter() {
 
 	// Position
-	basePos_ = globalParameter_->GetValue<Vector3>(particleName_,"Position Base");
+	basePos_ = globalParameter_->GetValue<Vector3>(particleName_, "Position Base");
 	positionDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "Position Min");
 	positionDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "Position Max");
 
@@ -171,7 +170,7 @@ void ParticleEmitter::ImGuiUpdate() {
 	// Color
 	if (ImGui::CollapsingHeader("Color")) {
 		ImGui::SeparatorText("Base Color:");
-		ImGui::ColorEdit4("Base",&baseColor_.x);
+		ImGui::ColorEdit4("Base", &baseColor_.x);
 
 		ImGui::SeparatorText("Color Range:");
 		ImGui::ColorEdit4("Max", &colorDist_.max.x);
@@ -181,7 +180,7 @@ void ParticleEmitter::ImGuiUpdate() {
 	// Position
 	if (ImGui::CollapsingHeader("Position")) {
 		ImGui::SeparatorText("Position Base:");
-		ImGui::DragFloat3("Base",&basePos_.x, 0.1f);
+		ImGui::DragFloat3("Base", &basePos_.x, 0.1f);
 
 		ImGui::SeparatorText("Position Range:");
 		ImGui::DragFloat3("Position Max", &positionDist_.max.x, 0.1f);
@@ -210,7 +209,7 @@ void ParticleEmitter::ImGuiUpdate() {
 			ImGui::SliderAngle("X", &baseRotate_.x, 0, 360);
 			ImGui::SliderAngle("Y", &baseRotate_.y, 0, 360);
 			ImGui::SliderAngle("Z", &baseRotate_.z, 0, 360);
-	
+
 		}
 
 		ImGui::SeparatorText("Rotation Range:");
@@ -221,7 +220,7 @@ void ParticleEmitter::ImGuiUpdate() {
 			ImGui::SliderAngle("Min X", &rotateDist_.min.x, 0, 360);
 			ImGui::SliderAngle("Min Y", &rotateDist_.min.y, 0, 360);
 			ImGui::SliderAngle("Min Z", &rotateDist_.min.z, 0, 360);
-		
+
 		}
 
 		ImGui::SeparatorText("Rotation Speed:");
@@ -229,7 +228,7 @@ void ParticleEmitter::ImGuiUpdate() {
 			ImGui::SliderAngle("Base", &baseRotateSpeed_.x, 0, 360);
 			ImGui::SliderAngle("Max", &rotateSpeedDist_.max.x, 0, 360);
 			ImGui::SliderAngle("Min", &rotateSpeedDist_.min.x, 0, 360);
-		
+
 		}
 	}
 
@@ -244,6 +243,6 @@ void ParticleEmitter::ImGuiUpdate() {
 	globalParameter_->ParmSaveForImGui(particleName_);
 	ParmLoadForImGui();
 
-		ImGui::End();
+	ImGui::End();
 #endif // _DEBUG
 }

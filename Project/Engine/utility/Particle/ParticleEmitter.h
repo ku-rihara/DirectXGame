@@ -2,6 +2,7 @@
 
 #include"MinMax.h"
 #include"utility/Editor/GlobalParameter.h"
+#include"utility/Editor/EmitRailMove.h"
 ///std
 #include<string>
 
@@ -19,16 +20,17 @@ private:
 	std::string particleName_;       ///パーティクル名
 
 	/// time
-	float currentTime_;
-	float intervalTime_;
+	float currentTime_;              ///現在の時間
+	float intervalTime_;             ///発生するまでの間隔
 
-	/// Move
-	Vector3 movePos_;
+	/// Line
+	Vector3 movePos_;                /// 移動座標
+	EmitRailMove
 
 	/// base
 	Vector3 basePos_;                ///基準座標
 	Vector3 baseRotate_;             ///回転基準
-	Vector3 baseRotateSpeed_;       /// 回転スピード基準
+	Vector3 baseRotateSpeed_;        /// 回転スピード基準
 	Vector4 baseColor_;              ///基準の色
 
 	/// rondom

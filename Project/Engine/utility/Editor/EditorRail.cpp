@@ -1,14 +1,14 @@
-#include "EditorRail.h"
+#include "EmitRail.h"
 #include "MathFunction.h"
 #include "base/SrvManager.h"
 
-void EditorRail::Init(SrvManager* srvManager, size_t numObjects) {
+void EmitRail::Init(SrvManager* srvManager, size_t numObjects) {
     // レールオブジェクト（インスタンス用）の初期化
     railObject_.reset(Object3dSRV::CreateModel("EditorRail", ".obj", uint32_t(numObjects), srvManager));
     railObject_->UpdateTransform();
 }
 
-void EditorRail::Update(const std::vector<Vector3>& controlPos) {
+void EmitRail::Update(const std::vector<Vector3>& controlPos) {
     controlPos_ = controlPos;
     pointsDrawing_.clear();
     totalRailLength_ = 0.0f;
@@ -62,7 +62,7 @@ void EditorRail::Update(const std::vector<Vector3>& controlPos) {
     }
 }
 
-Vector3 EditorRail::GetPositionOnRail(float progress) const {
+Vector3 EmitRail::GetPositionOnRail(float progress) const {
     float distance = progress * totalRailLength_;
     float accumulatedDistance = 0.0f;
 
@@ -75,11 +75,9 @@ Vector3 EditorRail::GetPositionOnRail(float progress) const {
         accumulatedDistance += segmentLength;
     }
     return pointsDrawing_.back(); // 最終位置（進行度が1.0fの時）
-
-   
 }
 
-void EditorRail::Draw(const ViewProjection& viewProjection) {
+void EmitRail::Draw(const ViewProjection& viewProjection) {
     if (railObject_) {
         railObject_->Draw(viewProjection);   // 描画
     }
