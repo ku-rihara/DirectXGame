@@ -10,10 +10,10 @@ private:
 	///=========================================
 	///private variant
 	///=========================================
-	
+
 	/// other class
 	DirectXCommon* dxCommon_ = nullptr;
-                      
+
 	uint32_t descriptorSize_;                                    //SRV用のデスクリプタサイズ
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;//SRV用デスクリプタ
 
@@ -25,10 +25,28 @@ private:
 	//リソースとデータ
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> instancingResources_;
 
-public: 
+public:
 	//最大SRV数
 	static const uint32_t kMaxCount;
+
+private:
+	///=========================================
+  /// private constructor / destructor
+  ///=========================================
+	SrvManager() = default;
+	~SrvManager() = default;
+
+	// コピーコンストラクタ・代入演算子を削除してシングルトンにする
+	SrvManager(const SrvManager&) = delete;
+	SrvManager& operator=(const SrvManager&) = delete;
+
 public:
+
+	///===================================================================
+	/// public static method for Singleton
+	///===================================================================
+	static SrvManager* GetInstance();
+
 	///===================================================================
 	///public method
 	///===================================================================

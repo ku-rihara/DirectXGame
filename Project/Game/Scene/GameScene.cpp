@@ -72,7 +72,7 @@ void GameScene::Init() {
 
 void GameScene::Update() {
 
-	emitter_->ImGuiUpdate();
+	emitter_->EditorUpdate();
 
 	emitter_->Emit();
 
@@ -137,6 +137,7 @@ void GameScene::ModelDraw() {
 
 		//collisionTest1_->Draw();
 		//collisionTest2_->Draw();
+		emitter_->PositionDraw(viewProjection_);
 	}
 }
 
@@ -144,6 +145,7 @@ void GameScene::ModelDraw() {
    /// パーティクル描画
    /// ===================================================
 void GameScene::ParticleDraw() {
+	emitter_->RailDraw(viewProjection_);
 	ParticleManager::GetInstance()->Draw(viewProjection_, circleHandle_);
 }
 

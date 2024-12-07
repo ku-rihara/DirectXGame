@@ -1,6 +1,8 @@
 #include "ParticleEmitter.h"
 #include "ParticleManager.h"
 #include"Frame/Frame.h"
+#include"base/SrvManager.h"
+
 #include <imgui.h>
 #include<format>
 
@@ -23,6 +25,7 @@ ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const 
 ///初期化
 ///=================================================================================
 void ParticleEmitter::Init() {
+
 	particleCount_ = 0;
 	lifeTime_ = 0.0f;
 	gravity_ = 0.0f;
@@ -30,7 +33,16 @@ void ParticleEmitter::Init() {
 	colorDist_.min = { 0, 0, 0, 0 };
 	colorDist_.max = { 0, 0, 0, 0 };
 	intervalTime_ = 1.0f;
-	////JSON関連
+
+	// レールマネージャー
+	railManager_ = std::make_unique<EmitRailManager>();
+	railManager_->Init(SrvManager::GetInstance());
+
+	/// 制御点マネージャー
+	emitControlPosManager_ = std::make_unique<EmitControlPosManager>();
+	emitControlPosManager_->LoadFromFile(particleName_);
+
+	/// JSON関連
 	AddParmGroup();
 	ApplyGlobalParameter();
 }
@@ -48,7 +60,6 @@ void ParticleEmitter::ParmLoadForImGui() {
 		ImGui::Text("Load Successful: %s", particleName_.c_str());
 		ApplyGlobalParameter();
 	}
-
 }
 
 ///=================================================================================
@@ -81,6 +92,10 @@ void ParticleEmitter::AddParmGroup() {
 	globalParameter_->AddItem(groupName, "RotateSpeed Base", baseRotateSpeed_, GlobalParameter::WidgetType::SlideAngle);
 	globalParameter_->AddItem(groupName, "RotateSpeed Max", rotateSpeedDist_.max, GlobalParameter::WidgetType::SlideAngle);
 	globalParameter_->AddItem(groupName, "RotateSpeed Min", rotateSpeedDist_.min, GlobalParameter::WidgetType::SlideAngle);
+
+	///rail 
+	globalParameter_->AddItem(groupName, "isMoveForRail",isMoveForRail_, GlobalParameter::WidgetType::Checkbox);
+	globalParameter_->AddItem(groupName, "moveSpeed", moveSpeed_, GlobalParameter::WidgetType::DragFloat);
 
 	// Velocity
 	/*globalParameter_->AddSeparatorText("Velocity");*/
@@ -125,6 +140,11 @@ void ParticleEmitter::ApplyGlobalParameter() {
 	rotateSpeedDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "RotateSpeed Min");
 	rotateSpeedDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "RotateSpeed Max");
 
+	///rail
+	moveSpeed_ = globalParameter_->GetValue<float>(particleName_, "moveSpeed");
+	isMoveForRail_ = globalParameter_->GetValue<bool>(particleName_, "isMoveForRail");
+
+
 	// Velocity
 	velocityDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "Velocity Min");
 	velocityDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "Velocity Max");
@@ -146,12 +166,22 @@ void ParticleEmitter::ApplyGlobalParameter() {
 ///エミット
 ///=================================================================================
 void ParticleEmitter::Emit() {
+
+	//　発生座標のパターン切り替え
+	if (isMoveForRail_) {
+		emitPos_ = railManager_->GetWorldPos();
+	}
+	else {
+		emitPos_ = basePos_;
+	}
+
+
 	currentTime_ += Frame::DeltaTime();// 時間加算
 
 	if (currentTime_ >= intervalTime_) {//　間隔ごとに発動
 
 		ParticleManager::GetInstance()->Emit(
-			particleName_, basePos_, positionDist_, scaleDist_,
+			particleName_, emitPos_, positionDist_, scaleDist_,
 			velocityDist_, baseColor_, colorDist_, lifeTime_, gravity_, baseRotate_,
 			baseRotateSpeed_, rotateDist_, rotateSpeedDist_, particleCount_);
 
@@ -163,8 +193,12 @@ void ParticleEmitter::Emit() {
 ///=================================================================================
 ///ImGui更新
 ///=================================================================================
-void ParticleEmitter::ImGuiUpdate() {
+void ParticleEmitter::EditorUpdate() {
 #ifdef _DEBUG
+
+
+	/*railManager_->Update(emitControlPosManager_->GetPositions(), moveSpeed_);*/
+
 	ImGui::Begin(particleName_.c_str());
 
 	// Color
@@ -175,6 +209,16 @@ void ParticleEmitter::ImGuiUpdate() {
 		ImGui::SeparatorText("Color Range:");
 		ImGui::ColorEdit4("Max", &colorDist_.max.x);
 		ImGui::ColorEdit4("Min", &colorDist_.min.x);
+	}
+
+	/// rail
+	if (ImGui::CollapsingHeader("MoveForRail")) {
+		ImGui::SeparatorText("Paramater");
+		ImGui::Checkbox("isMoveForRail",&isMoveForRail_);
+		ImGui::DragFloat("moveSpeed", &moveSpeed_,0.001f);
+
+		ImGui::SeparatorText("ControlPoints:");
+		emitControlPosManager_->ImGuiUpdate(particleName_);
 	}
 
 	// Position
@@ -245,4 +289,12 @@ void ParticleEmitter::ImGuiUpdate() {
 
 	ImGui::End();
 #endif // _DEBUG
+}
+
+
+void ParticleEmitter::RailDraw(const ViewProjection& viewProjection) {
+	railManager_->RailDraw(viewProjection);
+}
+void ParticleEmitter::PositionDraw(const ViewProjection& viewProjection) {
+	railManager_->Draw(viewProjection);
 }

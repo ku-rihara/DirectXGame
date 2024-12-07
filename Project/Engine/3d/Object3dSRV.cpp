@@ -59,7 +59,7 @@ void Object3dSRV::Draw(const ViewProjection& viewProjection, std::optional<uint3
 	}
 
 	if (model_) {
-		model_->DrawParticle(instanceNum_, instancingSrvHandleGPU_,material_, textureHandle);
+		model_->DrawParticle(instanceNum_, pSrvManager_->GetGPUDescriptorHandle(srvIndex_),material_, textureHandle);
 	}
 }
 

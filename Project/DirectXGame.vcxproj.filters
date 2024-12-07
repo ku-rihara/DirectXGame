@@ -256,13 +256,16 @@
     <ClCompile Include="Engine\utility\Editor\GlobalParameter.cpp">
       <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\Editor\EditorRail.cpp">
-      <Filter>MyEngine\.cpp\utility\Editor</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\3d\Object3dSRV.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\Editor\EmitRailMove.cpp">
+    <ClCompile Include="Engine\utility\Particle\EmitRail.cpp">
+      <Filter>MyEngine\.cpp\utility\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\Particle\EmitRailManager.cpp">
+      <Filter>MyEngine\.cpp\utility\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\Editor\EmitControlPosManager.cpp">
       <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
   </ItemGroup>
@@ -453,14 +456,17 @@
     <ClInclude Include="Engine\utility\Editor\GlobalParameter.h">
       <Filter>MyEngine\.h\utility\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\Editor\EmitRail.h">
-      <Filter>MyEngine\.h\utility\Editor</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\3d\Object3dSRV.h">
       <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\Editor\EmitRailMove.h">
+    <ClInclude Include="Engine\utility\Editor\EmitControlPosManager.h">
       <Filter>MyEngine\.h\utility\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\Particle\EmitRailManager.h">
+      <Filter>MyEngine\.h\utility\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\Particle\EmitRail.h">
+      <Filter>MyEngine\.h\utility\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

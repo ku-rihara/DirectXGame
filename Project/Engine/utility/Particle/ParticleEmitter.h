@@ -1,10 +1,15 @@
 #pragma once
 
 #include"MinMax.h"
+#include"3d/ViewProjection.h"
+/// editor
 #include"utility/Editor/GlobalParameter.h"
-#include"utility/Editor/EmitRailMove.h"
+#include"utility/Editor/EmitControlPosManager.h"
+
+#include"utility/Particle/EmitRailManager.h"
 ///std
 #include<string>
+#include<vector>
 
 /// <summary>
 /// Emitter
@@ -16,35 +21,40 @@ private:
 	/// private variants
 	///=====================================================
 
-	/// name
-	std::string particleName_;       ///パーティクル名
-
-	/// time
-	float currentTime_;              ///現在の時間
-	float intervalTime_;             ///発生するまでの間隔
-
-	/// Line
-	Vector3 movePos_;                /// 移動座標
-	EmitRailMove
-
-	/// base
-	Vector3 basePos_;                ///基準座標
-	Vector3 baseRotate_;             ///回転基準
-	Vector3 baseRotateSpeed_;        /// 回転スピード基準
-	Vector4 baseColor_;              ///基準の色
-
-	/// rondom
-	V3MinMax positionDist_;          ///座標ランダム分配
-	FMinMax scaleDist_;             ///スケールランダム分配
-	V3MinMax rotateSpeedDist_;     /// 回転スピード分配
-	V3MinMax rotateDist_;           /// 回転ランダム分配
-	V3MinMax velocityDist_;          ///速度ランダム分配
-	V4MinMax colorDist_;             ///色分配
-
-	/// etc
-	float lifeTime_;                 ///生存時間
-	float gravity_;                 ///重力パラメータ
-	int32_t particleCount_;         ///パーティクル数
+	/// name								      
+	std::string particleName_;                     ///パーティクル名
+	std::string railFilePath_;                     // レールデータの名前
+									               
+	/// time						               
+	float currentTime_;                            ///現在の時間
+	float intervalTime_;                           ///発生するまでの間隔
+											      
+	/// base								      
+	Vector3 emitPos_;                              ///発生座標
+	Vector3 basePos_;                              ///基準座標
+	Vector3 baseRotate_;                           ///回転基準
+	Vector3 baseRotateSpeed_;                      /// 回転スピード基準
+	Vector4 baseColor_;                           ///基準の色
+								                  
+	/// rondom					                  
+	V3MinMax positionDist_;                       ///座標ランダム分配
+	FMinMax scaleDist_;                           ///スケールランダム分配
+	V3MinMax rotateSpeedDist_;                    /// 回転スピード分配
+	V3MinMax rotateDist_;                         /// 回転ランダム分配
+	V3MinMax velocityDist_;                       ///速度ランダム分配
+	V4MinMax colorDist_;                          ///色分配
+								                  
+	/// etc						                  
+	float lifeTime_;                              ///生存時間
+	float gravity_;                               ///重力パラメータ
+	int32_t particleCount_;                       ///パーティクル数
+											      
+	/// Line								      
+	bool isMoveForRail_;                           ///レールに沿って動くか
+	float moveSpeed_;                              /// 移動速さ
+	std::unique_ptr<EmitRailManager> railManager_; /// レールマネージャ
+	std::unique_ptr
+	<EmitControlPosManager>emitControlPosManager_;
 
 	/// name
 	const std::string dyrectryPath = "./Resources/ParticleParamater/";
@@ -70,6 +80,9 @@ public:
 	void Init();/// 初期化
 	void Emit();///　エミット
 
+	void RailDraw(const ViewProjection&viewProjection);
+	void PositionDraw(const ViewProjection& viewProjection);
+
 	///=====================================================
 	/// getter method
 	///=====================================================
@@ -78,9 +91,18 @@ public:
 	///=====================================================
 	/// Editor 
 	///=====================================================
+
+	///update
+	void EditorUpdate();
+
+	/// globalParamater
 	void AddParmGroup();
 	void ApplyGlobalParameter();
 	void ParmLoadForImGui();
 
-	void ImGuiUpdate();
+	// Line関連
+	void SavePositionsToFile();
+	void LoadPositionsFromFile();
+
+	
 };
