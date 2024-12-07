@@ -6,7 +6,9 @@ void EmitRail::Init(SrvManager* srvManager, size_t numObjects) {
     // レールオブジェクト（インスタンス用）の初期化
     railObject_.reset(Object3dSRV::CreateModel("EditorRail", ".obj", uint32_t(numObjects), srvManager));
     railObject_->UpdateTransform();
+    railObject_->particles_.resize(numObjects); // 必要なインスタンス分だけ確保
 }
+
 
 void EmitRail::Update(const std::vector<Vector3>& controlPos) {
     controlPos_ = controlPos;
@@ -29,16 +31,16 @@ void EmitRail::Update(const std::vector<Vector3>& controlPos) {
     float currentLength = 0.0f;
     size_t currentIndex = 0;
 
-    //railObject_->Clear(); // 既存のパーティクルデータをクリア
-
-    for (size_t i = 0; i < railObject_->GetKnumInstance(); i++) {
+    // リストのイテレータを使用してデータを更新
+    auto it = railObject_->particles_.begin();
+    for (size_t i = 0; i < railObject_->GetKnumInstance(); ++i) {
         while (currentIndex < pointsDrawing_.size() - 1 &&
             currentLength + Vector3::Length(pointsDrawing_[currentIndex + 1] - pointsDrawing_[currentIndex]) < segmentLength * i) {
             currentLength += Vector3::Length(pointsDrawing_[currentIndex + 1] - pointsDrawing_[currentIndex]);
             currentIndex++;
         }
 
-        if (currentIndex >= pointsDrawing_.size() - 1) {
+        if (currentIndex >= pointsDrawing_.size() - 1 || it == railObject_->particles_.end()) {
             break; // 範囲外アクセスを防ぐ
         }
 
@@ -51,15 +53,14 @@ void EmitRail::Update(const std::vector<Vector3>& controlPos) {
         float rotateX = std::atan2(-direction.y, std::sqrt(direction.x * direction.x + direction.z * direction.z));
 
         // Transformデータを更新
-        WorldTransform transform;
-        transform.rotation_ = { rotateX, rotateY, 0.0f };
-        transform.translation_ = interpolatedPos;
-        transform.UpdateMatrix();
-
-        railObject_->particles_.push_back(std::move(transform));  // ムーブ
-
-        railObject_->UpdateTransform();  // インスタンスデータを更新
+        it->rotation_ = { rotateX, rotateY, 0.0f };
+        it->translation_ = interpolatedPos;
+        it->UpdateMatrix();
+        ++it; // 次のパーティクルに進む
     }
+
+    // インスタンスデータを一括更新
+    railObject_->UpdateTransform();
 }
 
 Vector3 EmitRail::GetPositionOnRail(float progress) const {
@@ -76,6 +77,7 @@ Vector3 EmitRail::GetPositionOnRail(float progress) const {
     }
     return pointsDrawing_.back(); // 最終位置（進行度が1.0fの時）
 }
+
 
 void EmitRail::Draw(const ViewProjection& viewProjection) {
     if (railObject_) {

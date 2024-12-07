@@ -197,7 +197,7 @@ void ParticleEmitter::EditorUpdate() {
 #ifdef _DEBUG
 
 
-	/*railManager_->Update(emitControlPosManager_->GetPositions(), moveSpeed_);*/
+	railManager_->Update(emitControlPosManager_->GetPositions(), moveSpeed_);
 
 	ImGui::Begin(particleName_.c_str());
 

@@ -15,9 +15,7 @@ public:
 private:
 	uint32_t instanceMax_;
 	uint32_t instanceNum_;//インスタンス数
-	D3D12_CPU_DESCRIPTOR_HANDLE  instancingSrvHandleCPU_;
-	D3D12_GPU_DESCRIPTOR_HANDLE  instancingSrvHandleGPU_;
-
+	
 	SrvManager* pSrvManager_;
 
 	//リソースとデータ
