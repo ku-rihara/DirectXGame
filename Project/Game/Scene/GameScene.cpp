@@ -68,7 +68,6 @@ void GameScene::Init() {
 	//ビュープロジェクション
 	viewProjection_.Init();
 
-
 }
 
 void GameScene::Update() {

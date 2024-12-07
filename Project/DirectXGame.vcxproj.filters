@@ -262,6 +262,9 @@
     <ClCompile Include="Engine\utility\Editor\EditorRailManager.cpp">
       <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3d\Object3dSRV.cpp">
+      <Filter>MyEngine\.cpp\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -455,6 +458,9 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\Editor\EditorRailManager.h">
       <Filter>MyEngine\.h\utility\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\Object3dSRV.h">
+      <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

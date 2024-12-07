@@ -19,6 +19,7 @@
     <ClCompile Include="Engine\3d\Model.cpp" />
     <ClCompile Include="Engine\3d\ModelManager.cpp" />
     <ClCompile Include="Engine\3d\Object3d.cpp" />
+    <ClCompile Include="Engine\3d\Object3dSRV.cpp" />
     <ClCompile Include="Engine\3d\ObjectColor.cpp" />
     <ClCompile Include="Engine\3d\ViewProjection.cpp" />
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
@@ -71,6 +72,7 @@
     <ClInclude Include="Engine\3d\Model.h" />
     <ClInclude Include="Engine\3d\ModelManager.h" />
     <ClInclude Include="Engine\3d\Object3d.h" />
+    <ClInclude Include="Engine\3d\Object3dSRV.h" />
     <ClInclude Include="Engine\3d\ObjectColor.h" />
     <ClInclude Include="Engine\3d\ViewProjection.h" />
     <ClInclude Include="Engine\3d\WorldTransform.h" />

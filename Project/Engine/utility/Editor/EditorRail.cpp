@@ -1,20 +1,14 @@
 #include "EditorRail.h"
 #include "MathFunction.h"
-#include <cmath>
+#include "base/SrvManager.h"
 
-void EditorRail::Init(size_t numObjects) {
-    // オブジェクトと変換情報の初期化
-    object3d_.resize(numObjects);
-    transform_.resize(numObjects);
-
-    for (size_t i = 0; i < numObjects; ++i) {
-        object3d_[i].reset(Object3d::CreateModel("Rail",".obj"));
-        object3d_[i]->Update();
-    }
+void EditorRail::Init(SrvManager* srvManager, size_t numObjects) {
+    // レールオブジェクト（インスタンス用）の初期化
+    railObject_.reset(Object3dSRV::CreateModel("EditorRail", ".obj", uint32_t(numObjects), srvManager));
+    railObject_->UpdateTransform();
 }
 
 void EditorRail::Update(const std::vector<Vector3>& controlPos) {
-    
     controlPos_ = controlPos;
     pointsDrawing_.clear();
     totalRailLength_ = 0.0f;
@@ -30,20 +24,22 @@ void EditorRail::Update(const std::vector<Vector3>& controlPos) {
         }
     }
 
-    // 各オブジェクトの位置と回転を設定
-    float segmentLength = totalRailLength_ / float(object3d_.size() - 1);
+    // 各オブジェクトの位置と回転を計算
+    float segmentLength = totalRailLength_ / float(railObject_->GetKnumInstance() - 1);
     float currentLength = 0.0f;
     size_t currentIndex = 0;
 
-    for (size_t i = 0; i < object3d_.size(); i++) {
+    //railObject_->Clear(); // 既存のパーティクルデータをクリア
+
+    for (size_t i = 0; i < railObject_->GetKnumInstance(); i++) {
         while (currentIndex < pointsDrawing_.size() - 1 &&
             currentLength + Vector3::Length(pointsDrawing_[currentIndex + 1] - pointsDrawing_[currentIndex]) < segmentLength * i) {
             currentLength += Vector3::Length(pointsDrawing_[currentIndex + 1] - pointsDrawing_[currentIndex]);
             currentIndex++;
         }
-        // 範囲外アクセスを避けるためのチェック
+
         if (currentIndex >= pointsDrawing_.size() - 1) {
-            break; // ループから抜ける
+            break; // 範囲外アクセスを防ぐ
         }
 
         float t = (segmentLength * i - currentLength) / Vector3::Length(pointsDrawing_[currentIndex + 1] - pointsDrawing_[currentIndex]);
@@ -53,13 +49,16 @@ void EditorRail::Update(const std::vector<Vector3>& controlPos) {
         direction = Vector3::Normalize(direction);
         float rotateY = std::atan2(direction.x, direction.z);
         float rotateX = std::atan2(-direction.y, std::sqrt(direction.x * direction.x + direction.z * direction.z));
-        Vector3 right = Vector3::Cross(Vector3(0, 1, 0), direction);
-        right = Vector3::Normalize(right);
-        /*float rotateZ = std::atan2(right.y, right.x);*/
 
-        transform_[i].rotation_ = { rotateX, rotateY, 0 };
-        transform_[i].translation_ = interpolatedPos;
-        transform_[i].UpdateMatrix();
+        // Transformデータを更新
+        WorldTransform transform;
+        transform.rotation_ = { rotateX, rotateY, 0.0f };
+        transform.translation_ = interpolatedPos;
+        transform.UpdateMatrix();
+
+        railObject_->particles_.push_back(std::move(transform));  // ムーブ
+
+        railObject_->UpdateTransform();  // インスタンスデータを更新
     }
 }
 
@@ -76,12 +75,12 @@ Vector3 EditorRail::GetPositionOnRail(float progress) const {
         accumulatedDistance += segmentLength;
     }
     return pointsDrawing_.back(); // 最終位置（進行度が1.0fの時）
+
+   
 }
 
-
 void EditorRail::Draw(const ViewProjection& viewProjection) {
-    for (size_t i = 0; i < object3d_.size(); ++i) {
-        object3d_[i]->Draw(transform_[i], viewProjection);
-        object3d_[i]->DebugImgui();
+    if (railObject_) {
+        railObject_->Draw(viewProjection);   // 描画
     }
 }
