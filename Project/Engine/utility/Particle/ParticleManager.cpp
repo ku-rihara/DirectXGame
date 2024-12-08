@@ -1,6 +1,7 @@
 #include"ParticleManager.h"
 #include"ParticleCommon.h"
 #include"3d/ModelManager.h"
+#include"base/TextureManager.h"
 //frame
 #include"Frame/Frame.h"
 
@@ -80,49 +81,43 @@ void ParticleManager::Update(std::optional<const ViewProjection*> viewProjection
 
 
 
-void ParticleManager::Draw(const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
-	// 各粒子グループを周る
-	for (auto& groupPair : particleGroups_) {
-		ParticleGroup& group = groupPair.second;
-		std::list<Particle>& particles = group.particles;
-		ParticleFprGPU* instancingData = group.instancingData;
+void ParticleManager::Draw(const ViewProjection& viewProjection) {
+    for (auto& groupPair : particleGroups_) {
+        ParticleGroup& group = groupPair.second;
+        std::list<Particle>& particles = group.particles;
+        ParticleFprGPU* instancingData = group.instancingData;
 
-		uint32_t instanceIndex = 0; // グループごとにリセット
+        uint32_t instanceIndex = 0;
 
-		// 各粒子のインスタンシングデータを設定
-		for (auto it = particles.begin(); it != particles.end();) {
-			// パーティクルの寿命をチェック
-			if (it->currentTime_ >= it->lifeTime_) {
-				it = particles.erase(it); // 寿命が尽きた場合、リストから削除
-				continue; // 次の粒子へ
-			}
+        // 各粒子のインスタンシングデータを設定
+        for (auto it = particles.begin(); it != particles.end();) {
+            if (it->currentTime_ >= it->lifeTime_) {
+                it = particles.erase(it);
+                continue;
+            }
 
-			// WVP行列の計算
-			instancingData[instanceIndex].WVP = it->worldTransform_.matWorld_ *
-				viewProjection.matView_ * viewProjection.matProjection_;
+            instancingData[instanceIndex].WVP = it->worldTransform_.matWorld_ *
+                viewProjection.matView_ * viewProjection.matProjection_;
 
-			// 法線用の逆転置行列を計算
-			instancingData[instanceIndex].WorldInverseTranspose =
-				Inverse(Transpose(it->worldTransform_.matWorld_));
+            instancingData[instanceIndex].WorldInverseTranspose =
+                Inverse(Transpose(it->worldTransform_.matWorld_));
 
-			// カラー設定（アルファ値を減少させる）
-			instancingData[instanceIndex].color = it->color_;
-			instancingData[instanceIndex].color.w = 1.0f - (it->currentTime_ / it->lifeTime_);
+            instancingData[instanceIndex].color = it->color_;
+            instancingData[instanceIndex].color.w = 1.0f - (it->currentTime_ / it->lifeTime_);
 
-			++instanceIndex;
-			++it;
-		}
-
-		// 描画処理を呼び出す
-		if (instanceIndex > 0 && group.model) { // 描画するインスタンスがある場合のみ
-			group.model->DrawParticle(instanceIndex,
-				pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
-				group.material,
-				textureHandle);
-		}
-	}
+            ++instanceIndex;
+            ++it;
+        }
+		
+        if (instanceIndex > 0 && group.model) {
+           
+            group.model->DrawParticle(instanceIndex,
+                pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
+                group.material,
+				group.textureHandle);
+        }
+    }
 }
-
 
 
 void ParticleManager::CreateParticleGroup(
@@ -147,11 +142,18 @@ void ParticleManager::CreateParticleGroup(
 	particleGroups_[name].instanceNum = 0;
 }
 
+void ParticleManager::SetTextureHandle(const std::string name, const uint32_t& handle) {
+	particleGroups_[name].textureHandle = handle;
+}
+
 
 void  ParticleManager::SetModel(const std::string& name, const std::string& modelName, const std::string& extension) {
 
 	//モデルを検索してセット
+	//ModelManager::GetInstance()->LoadModel(modelName, extension);
 	particleGroups_[name].model = (ModelManager::GetInstance()->FindModel(modelName, extension));
+	particleGroups_[name].textureHandle = TextureManager::GetInstance()->LoadTexture(
+		particleGroups_[name].model->GetModelData().material.textureFilePath);
 }
 
 void  ParticleManager::CreateMaterialResource(const std::string& name) {

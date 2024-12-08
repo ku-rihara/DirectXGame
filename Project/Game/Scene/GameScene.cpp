@@ -59,6 +59,9 @@ void GameScene::Init() {
 	circleHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/default.png");
 	uv_ = TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
 
+	leftEmitter_->SetTextureHandle(circleHandle_);
+	rightEmitter_->SetTextureHandle(circleHandle_);
+
 	///=======================================================================================
 	///Particle
 	///=======================================================================================
@@ -159,9 +162,9 @@ void GameScene::ModelDraw() {
 		//collisionTest2_->Draw();
 
 		ground_->Draw(viewProjection_);
-		emitter_->PositionDraw(viewProjection_);
+	/*	emitter_->PositionDraw(viewProjection_);
 		leftEmitter_->PositionDraw(viewProjection_);
-		rightEmitter_->PositionDraw(viewProjection_);
+		rightEmitter_->PositionDraw(viewProjection_);*/
 	}
 }
 
@@ -170,7 +173,7 @@ void GameScene::ModelDraw() {
    /// ===================================================
 void GameScene::ParticleDraw() {
 	emitter_->RailDraw(viewProjection_);
-	ParticleManager::GetInstance()->Draw(viewProjection_, circleHandle_);
+	ParticleManager::GetInstance()->Draw(viewProjection_);
 }
 
 /// ===================================================

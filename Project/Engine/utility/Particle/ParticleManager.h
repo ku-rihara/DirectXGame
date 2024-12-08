@@ -49,6 +49,7 @@ private:
 		Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
 		uint32_t instanceNum;
 		ParticleFprGPU* instancingData;
+		uint32_t textureHandle;
 	};
 
 
@@ -80,7 +81,9 @@ public:
 		//初期化
 	void Init(SrvManager* srvManager);
 	void Update(std::optional<const ViewProjection*> viewProjection);
-	void Draw(const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle);
+	void Draw(const ViewProjection& viewProjection);
+
+	void SetTextureHandle(const std::string name,const uint32_t& handle);
 
 	void CreateParticleGroup(const std::string name, const std::string modelFilePath,const std::string& extension, const uint32_t& maxnum);
 
