@@ -13,12 +13,17 @@
 class SrvManager;
 class EmitRailManager {
 private:
+
+    /// other class
+    EmitRail rail_; 
+
     WorldTransform worldTransform_;
     ViewProjection viewProjection_;
-    EmitRail rail_;   // 追加：Railクラスのインスタンス
+ 
 
     float railMoveTime_ = 0.0f;  // レール移動の進行度
     Vector3 cameraRotate_;       // カメラの回転角度
+    Vector3 scale_;
  
     std::unique_ptr<Object3d>obj3D_;
 
@@ -48,4 +53,7 @@ public:
     Vector3 GetWorldPos()const;
     const WorldTransform& GetWorldTransform() const { return worldTransform_; }
     const ViewProjection& GetViewProjection() const { return viewProjection_; }
+
+    /// set
+    void SetScale(Vector3 scale) { scale_ = scale; }
 };

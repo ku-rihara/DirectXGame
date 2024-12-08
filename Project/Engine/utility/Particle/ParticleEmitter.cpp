@@ -42,6 +42,10 @@ void ParticleEmitter::Init() {
 	emitControlPosManager_ = std::make_unique<EmitControlPosManager>();
 	emitControlPosManager_->LoadFromFile(particleName_);
 
+	/// 発生位置可視化オブジェ
+	emitObj_.reset(Object3d::CreateModel("DebugCube", ".obj"));
+	emitTransform_.Init();
+
 	/// JSON関連
 	AddParmGroup();
 	ApplyGlobalParameter();
@@ -196,8 +200,11 @@ void ParticleEmitter::Emit() {
 void ParticleEmitter::EditorUpdate() {
 #ifdef _DEBUG
 
-
+	// レール更新
 	railManager_->Update(emitControlPosManager_->GetPositions(), moveSpeed_);
+
+	UpdateEmitTransform();
+
 
 	ImGui::Begin(particleName_.c_str());
 
@@ -291,10 +298,29 @@ void ParticleEmitter::EditorUpdate() {
 #endif // _DEBUG
 }
 
+void ParticleEmitter::UpdateEmitTransform() {
+	emitTransform_.translation_ = basePos_;
+	// スケールを範囲の大きさで設定
+	emitTransform_.scale_ = {
+		positionDist_.max.x - positionDist_.min.x,
+		positionDist_.max.y - positionDist_.min.y,
+		positionDist_.max.z - positionDist_.min.z
+	};
+	railManager_->SetScale(emitTransform_.scale_);
+
+	emitTransform_.UpdateMatrix();
+}
+
 
 void ParticleEmitter::RailDraw(const ViewProjection& viewProjection) {
 	railManager_->RailDraw(viewProjection);
 }
 void ParticleEmitter::PositionDraw(const ViewProjection& viewProjection) {
-	railManager_->Draw(viewProjection);
+
+	if (isMoveForRail_) {// レールに沿うエミット位置
+		railManager_->Draw(viewProjection);
+	}
+	else {// レールに沿わないエミット位置
+		emitObj_->Draw(emitTransform_, viewProjection);
+	}
 }

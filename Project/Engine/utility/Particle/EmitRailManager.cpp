@@ -21,8 +21,8 @@ void EmitRailManager::Init(SrvManager* srvManager) {
    
 
     /// 現在位置モデル
-    obj3D_.reset(Object3d::CreateModel("cube",".obj"));
-    obj3D_->Init();
+    obj3D_.reset(Object3d::CreateModel("DebugCube",".obj"));
+  /*  obj3D_->Init();*/
 }
 
 ///=====================================================
@@ -79,7 +79,7 @@ void EmitRailManager::Update(const std::vector<Vector3>& controlPos,const float&
     //cameraRotate_.x += (targetRotateX - cameraRotate_.x) * 0.1f;
 
     // 行列の更新
-    worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, cameraRotate_, interpolatedPos);
+    worldTransform_.matWorld_ = MakeAffineMatrix(scale_, cameraRotate_, interpolatedPos);
   /*  viewProjection_.matView_ = Inverse(worldTransform_.matWorld_);*/
 }
 

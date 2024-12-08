@@ -20,6 +20,10 @@ private:
 	///=====================================================
 	/// private variants
 	///=====================================================
+	
+	/// obj
+	std::unique_ptr<Object3d>emitObj_;             /// 発生位置のオブジェ
+	WorldTransform emitTransform_;
 
 	/// name								      
 	std::string particleName_;                     ///パーティクル名
@@ -79,6 +83,7 @@ public:
 
 	void Init();/// 初期化
 	void Emit();///　エミット
+	void UpdateEmitTransform();
 
 	void RailDraw(const ViewProjection&viewProjection);
 	void PositionDraw(const ViewProjection& viewProjection);

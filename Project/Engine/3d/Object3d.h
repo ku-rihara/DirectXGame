@@ -25,6 +25,7 @@ public:
 	void Update();
 	//描画
 	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt);
+	void Draw(const Vector3& position, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt);
 	//デバッグ表示
 	void DebugImgui()override;
 	//WVPリソース作成
