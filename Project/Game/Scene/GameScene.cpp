@@ -25,31 +25,7 @@ void GameScene::Init() {
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
 	debugCamera_->Init();
 
-	//音
-	soundDataHandle_ = audio_->SoundLoadWave("Resources/fanfare.wav");
-	//モデル
 
-	modelPlane_.reset(Object3d::CreateModel("Plane", ".obj"));
-	modelFence_.reset(Object3d::CreateModel("Fence", ".obj"));
-	modelSuzanne_.reset(Object3d::CreateModel("Suzanne", ".obj"));
-	modelSuzanne2_.reset(Object3d::CreateModel("Suzanne", ".obj"));
-	modelTerrain_.reset(Object3d::CreateModel("terrain", ".obj"));
-
-	ground_ = std::make_unique<Ground>();
-	ground_->Init();
-
-	/// test
-	/*collisionTest1_ = std::make_unique<CollisionTest1>();
-	collisionTest2_ = std::make_unique<CollisionTest2>();
-	collisionTest1_->Init();
-	collisionTest2_->Init();*/
-
-	///トランスフォーム初期化
-	planeTransform_.Init();
-	fenceTransform_.Init();
-	suzanneTransform_.Init();
-	suzanneTransform2_.Init();
-	terrainTransform_.Init();
 	// エミッター
 	emitter_.reset(ParticleEmitter::CreateParticle("test", "cube", ".obj", 300,false));
 	leftEmitter_.reset(ParticleEmitter::CreateParticle("LeftSide", "cube", ".obj", 300,false));
@@ -59,6 +35,9 @@ void GameScene::Init() {
 	circleHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/default.png");
 	uv_ = TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
 
+	ground_ = std::make_unique<Ground>();
+	ground_->Init();
+
 	leftEmitter_->SetTextureHandle(circleHandle_);
 	rightEmitter_->SetTextureHandle(circleHandle_);
 
@@ -66,12 +45,7 @@ void GameScene::Init() {
 	///Particle
 	///=======================================================================================
 
-	//スプライト生成
-	sprite_ = std::make_unique<Sprite>();
-	sprite_->CreateSprite(uv_, Vector2{ 0,0 }, Vector4(1, 1, 1, 1));
-
-	sprite2_ = std::make_unique<Sprite>();
-	sprite2_->CreateSprite(uv_, Vector2{ 700,0 }, Vector4(1, 1, 1, 1));
+	
 	//WorldTransform
 	//ビュープロジェクション
 	viewProjection_.Init();
@@ -103,45 +77,6 @@ void GameScene::Update() {
 	Debug();
 	ViewProjectionUpdate();
 
-	//if (Input::GetInstance()->TrrigerKey(DIK_F)) {
-	//	Audio::GetInstance()->SoundPlayWave(soundDataHandle_);
-	//}
-
-	//Debug();//デバッグ
-
-	////インプット処理
-	//if (Input::GetInstance()->PushKey(DIK_LEFT)) {
-	//	suzanneTransform_.translation_.x -= 0.01f;
-	//}
-	//if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
-	//	suzanneTransform_.translation_.x += 0.01f;
-	//}
-	//if (Input::GetInstance()->PushKey(DIK_UP)) {
-	//	suzanneTransform_.translation_.y += 0.01f;
-	//}
-	//if (Input::GetInstance()->PushKey(DIK_DOWN)) {
-	//	suzanneTransform_.translation_.y -= 0.01f;
-	//}
-
-
-	/*collisionTest1_->Init();
-	collisionTest2_->Init();*/
-
-	//ワールド行列更新
-	//	///トランスフォーム初期化
-	//planeTransform_.UpdateMatrix();
-	//fenceTransform_.UpdateMatrix();
-	//suzanneTransform_.UpdateMatrix();
-	//suzanneTransform2_.UpdateMatrix();
-	//terrainTransform_.UpdateMatrix();
-	/*modelPlaneParticle_->Update(&viewProjection_);*/
-
-
-	// カメラ行列の計算をデバッグカメラのビュープロジェクションから行う
-	/*viewProjection_.matView_ = debugCamera_->GetViewProjection().matView_;
-	viewProjection_.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
-	viewProjection_.cameraMatrix_ = debugCamera_->GetViewProjection().cameraMatrix_;*/
-	/*viewProjection_.UpdateMatrix();*/
 }
 
 /// ===================================================
@@ -151,20 +86,10 @@ void GameScene::ModelDraw() {
 
 	//平面描画
 	if (isDraw) {
-		//modelSuzanne2_->color_.SetColor(Vector4(0, 0, 1, 1));
-		///*modelPlane_->Draw(viewProjection_);
-		//modelFence_->Draw(viewProjection_);*/
-		//modelSuzanne_->Draw(suzanneTransform_, viewProjection_);
-		//modelSuzanne2_->Draw(suzanneTransform2_, viewProjection_);
-		//modelTerrain_->Draw(terrainTransform_, viewProjection_);
-
-		//collisionTest1_->Draw();
-		//collisionTest2_->Draw();
+	
 
 		ground_->Draw(viewProjection_);
-	/*	emitter_->PositionDraw(viewProjection_);
-		leftEmitter_->PositionDraw(viewProjection_);
-		rightEmitter_->PositionDraw(viewProjection_);*/
+	
 	}
 }
 
@@ -180,9 +105,7 @@ void GameScene::ParticleDraw() {
    /// スプライト描画
    /// ===================================================
 void GameScene::SpriteDraw() {
-	//////スプライト描画
-	//sprite_->Draw();
-	//sprite2_->Draw();
+
 }
 
 void GameScene::Debug() {

@@ -37,31 +37,15 @@ private:
 	uint32_t textureHandle_ = 0;
 	uint32_t soundDataHandle_ = 0;
 	uint32_t voiceHandle_ = 0;
-	std::unique_ptr<Sprite> sprite_ = nullptr;
-	std::unique_ptr<Sprite> sprite2_ = nullptr;
-
-
-	std::unique_ptr<Object3d> modelPlane_ = nullptr;
-	std::unique_ptr<Object3d> modelFence_ = nullptr;
-	std::unique_ptr<Object3d> modelSuzanne_ = nullptr;
-	std::unique_ptr<Object3d> modelSuzanne2_ = nullptr;
-	std::unique_ptr<Object3d> modelTerrain_ = nullptr;
+	
 
 	std::unique_ptr<Ground> ground_ = nullptr;
-
-	/// WorldTransform
-	WorldTransform planeTransform_;
-	WorldTransform fenceTransform_;
-	WorldTransform suzanneTransform_;
-	WorldTransform suzanneTransform2_;
-	WorldTransform terrainTransform_;
 
 	/// particle
 	std::unique_ptr<ParticleEmitter>emitter_;
 	std::unique_ptr<ParticleEmitter>leftEmitter_;
 	std::unique_ptr<ParticleEmitter>rightEmitter_;
-	float time_;
-
+	
 	bool isDebugCameraActive_;
 	bool isDraw = true;
 
@@ -72,9 +56,7 @@ private:
 	uint32_t circleHandle_;
 	uint32_t uv_;
 
-	// test
-	std::unique_ptr<CollisionTest1>collisionTest1_;
-	std::unique_ptr<CollisionTest2>collisionTest2_;
+	
 
 public:
 	/// <summary>
