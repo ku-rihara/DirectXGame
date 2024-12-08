@@ -12,19 +12,19 @@ ParticleEmitter::ParticleEmitter() {}
 ///パーティクル作成
 ///=================================================================================
 ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const std::string& modelFilePath,
-	const std::string& extension, const int32_t& maxnum) {
+	const std::string& extension, const int32_t& maxnum,const bool& isFirst) {
 
 	auto emitter = std::make_unique<ParticleEmitter>();
 	emitter->particleName_ = name;
 	ParticleManager::GetInstance()->CreateParticleGroup(emitter->particleName_, modelFilePath, extension, maxnum);
-	emitter->Init();
+	emitter->Init(isFirst);
 	return emitter.release();
 }
 
 ///=================================================================================
 ///初期化
 ///=================================================================================
-void ParticleEmitter::Init() {
+void ParticleEmitter::Init(const bool& isFirst) {
 
 	particleCount_ = 0;
 	lifeTime_ = 0.0f;
@@ -46,8 +46,14 @@ void ParticleEmitter::Init() {
 	emitObj_.reset(Object3d::CreateModel("DebugCube", ".obj"));
 	emitTransform_.Init();
 
-	/// JSON関連
-	AddParmGroup();
+	if (isFirst) {
+		SetValues();
+	}
+	else {
+		/// JSON関連
+		AddParmGroup();
+	}
+
 	ApplyGlobalParameter();
 }
 

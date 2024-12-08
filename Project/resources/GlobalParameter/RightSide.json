@@ -1,15 +1,15 @@
 {
-    "test": {
+    "RightSide": {
         "BaseColor": [
-            1.0,
-            0.029411792755126953,
-            0.029411792755126953,
+            0.4745098054409027,
+            0.0,
+            0.0,
             0.0
         ],
         "Color Max": [
+            0.16078431904315948,
             0.0,
-            0.16470588743686676,
-            0.07450980693101883,
+            0.0,
             0.0
         ],
         "Color Min": [
@@ -18,23 +18,23 @@
             0.0,
             0.0
         ],
-        "Gravity": 0.0,
-        "IntervalTime": 1.090000033378601,
-        "LifeTime": 1.0,
-        "Particle Count": 29,
+        "Gravity": 24.200000762939453,
+        "IntervalTime": 0.23999999463558197,
+        "LifeTime": 1.2000000476837158,
+        "Particle Count": 24,
         "Position Base": [
-            0.0,
-            0.0,
+            71.5,
+            -11.0,
             0.0
         ],
         "Position Max": [
-            1.5,
-            1.5,
+            1.0,
+            1.0,
             0.0
         ],
         "Position Min": [
-            -1.5,
-            -1.5,
+            -1.0,
+            -1.0,
             0.0
         ],
         "Rotate Base": [
@@ -67,19 +67,19 @@
             0.0,
             0.0
         ],
-        "Scale Max": 1.5,
+        "Scale Max": 1.0,
         "Scale Min": 1.0,
         "Velocity Max": [
-            5.0,
-            5.0,
+            4.0,
+            19.0,
             0.0
         ],
         "Velocity Min": [
             -5.0,
-            -5.0,
+            2.0,
             0.0
         ],
-        "isMoveForRail": true,
-        "moveSpeed": 0.27399998903274536
+        "isMoveForRail": false,
+        "moveSpeed": 0.0
     }
 }

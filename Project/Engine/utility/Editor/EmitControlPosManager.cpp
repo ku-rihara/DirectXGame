@@ -37,7 +37,7 @@ void EmitControlPosManager::SaveToFile(const std::string& filename) {
         root.push_back({ {"x", pos.x}, {"y", pos.y}, {"z", pos.z} });
     }
 
-    std::ofstream file(dyrectrypath_ + filename+"railPos" + ".json", std::ios::out);
+    std::ofstream file(dyrectrypath_ + filename + ".json", std::ios::out);
     if (file.is_open()) {
         file << root.dump(4); // JSON データを整形して保存
         file.close();
@@ -51,7 +51,7 @@ void EmitControlPosManager::SaveToFile(const std::string& filename) {
 /// ロード
 ///=====================================================
 void EmitControlPosManager::LoadFromFile(const std::string& filename) {
-    std::ifstream file(dyrectrypath_ + filename+"railPos"+".json", std::ios::in);
+    std::ifstream file(dyrectrypath_ + filename+".json", std::ios::in);
     if (file.is_open()) {
         json root;
         file >> root; // JSON データを読み込み

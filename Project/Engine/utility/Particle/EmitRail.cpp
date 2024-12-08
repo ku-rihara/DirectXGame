@@ -3,9 +3,11 @@
 #include "base/SrvManager.h"
 
 void EmitRail::Init(SrvManager* srvManager, size_t numObjects) {
-    // レールオブジェクト（インスタンス用）の初期化
-    railObject_.reset(Object3dSRV::CreateModel("EditorRail", ".obj", uint32_t(numObjects), srvManager));
-    railTransforms_.resize(numObjects); // 必要なインスタンス分だけ確保
+    srvManager;
+    numObjects;
+    //// レールオブジェクト（インスタンス用）の初期化
+    //railObject_.reset(Object3dSRV::CreateModel("EditorRail", ".obj", uint32_t(numObjects), srvManager));
+    //railTransforms_.resize(numObjects); // 必要なインスタンス分だけ確保
 }
 
 void EmitRail::Update(const std::vector<Vector3>& controlPos) {
@@ -74,8 +76,9 @@ Vector3 EmitRail::GetPositionOnRail(float progress) const {
 }
 
 void EmitRail::Draw(const ViewProjection& viewProjection) {
-    if (railObject_) {
-        // railTransforms_を渡して描画
-        railObject_->Draw(railTransforms_, viewProjection);
-    }
+    viewProjection;
+    //if (railObject_) {
+    //    // railTransforms_を渡して描画
+    //    railObject_->Draw(railTransforms_, viewProjection);
+    //}
 }

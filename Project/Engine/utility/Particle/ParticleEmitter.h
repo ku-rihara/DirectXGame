@@ -79,9 +79,9 @@ public:
 	/// 初期化
 	static ParticleEmitter* CreateParticle(
 		const std::string& name, const std::string& modelFilePath,
-		const std::string& extension, const int32_t& maxnum);
+		const std::string& extension, const int32_t& maxnum, const bool& isFirst);
 
-	void Init();/// 初期化
+	void Init(const bool& isFirst);/// 初期化
 	void Emit();///　エミット
 	void UpdateEmitTransform();
 

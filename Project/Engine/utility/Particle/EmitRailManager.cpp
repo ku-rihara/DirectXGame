@@ -94,7 +94,8 @@ void EmitRailManager::Draw(const ViewProjection& viewProjection) {
 /// レール描画
 ///=====================================================
 void EmitRailManager::RailDraw(const ViewProjection& viewProjection) {
-    rail_.Draw(viewProjection);
+    /*rail_.Draw(viewProjection);*/
+    viewProjection;
 }
 
 

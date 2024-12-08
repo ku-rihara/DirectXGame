@@ -79,14 +79,15 @@ void ParticleManager::Update(std::optional<const ViewProjection*> viewProjection
 
 
 
-void ParticleManager::Draw(const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
-	uint32_t instanceIndex = 0; // 描画するインスタンス数
 
+void ParticleManager::Draw(const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
 	// 各粒子グループを周る
 	for (auto& groupPair : particleGroups_) {
 		ParticleGroup& group = groupPair.second;
 		std::list<Particle>& particles = group.particles;
 		ParticleFprGPU* instancingData = group.instancingData;
+
+		uint32_t instanceIndex = 0; // グループごとにリセット
 
 		// 各粒子のインスタンシングデータを設定
 		for (auto it = particles.begin(); it != particles.end();) {
@@ -113,7 +114,7 @@ void ParticleManager::Draw(const ViewProjection& viewProjection, std::optional<u
 		}
 
 		// 描画処理を呼び出す
-		if (group.model) {
+		if (instanceIndex > 0 && group.model) { // 描画するインスタンスがある場合のみ
 			group.model->DrawParticle(instanceIndex,
 				pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
 				group.material,
@@ -143,7 +144,7 @@ void ParticleManager::CreateParticleGroup(
 	CreateInstancingResource(name, maxnum);//インスタンシング
 	CreateMaterialResource(name);// マテリアル
 
-	/*particleGroup.instanceNum = 0;*/
+	particleGroups_[name].instanceNum = 0;
 }
 
 

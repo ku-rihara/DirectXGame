@@ -34,13 +34,13 @@ private:
 	Audio* audio_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
 
-	uint32_t textureHandle_ = 0; 
-	uint32_t soundDataHandle_ = 0; 
-	uint32_t voiceHandle_ = 0;     
+	uint32_t textureHandle_ = 0;
+	uint32_t soundDataHandle_ = 0;
+	uint32_t voiceHandle_ = 0;
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 	std::unique_ptr<Sprite> sprite2_ = nullptr;
 
-	
+
 	std::unique_ptr<Object3d> modelPlane_ = nullptr;
 	std::unique_ptr<Object3d> modelFence_ = nullptr;
 	std::unique_ptr<Object3d> modelSuzanne_ = nullptr;
@@ -58,8 +58,11 @@ private:
 
 	/// particle
 	std::unique_ptr<ParticleEmitter>emitter_;
+	std::unique_ptr<ParticleEmitter>leftEmitter_;
+	std::unique_ptr<ParticleEmitter>rightEmitter_;
 	float time_;
 
+	bool isDebugCameraActive_;
 	bool isDraw = true;
 
 	ViewProjection viewProjection_;
@@ -72,8 +75,8 @@ private:
 	// test
 	std::unique_ptr<CollisionTest1>collisionTest1_;
 	std::unique_ptr<CollisionTest2>collisionTest2_;
-	
-public: 
+
+public:
 	/// <summary>
 	/// コンストクラタ
 	/// </summary>
@@ -108,6 +111,7 @@ public:
 	/// </summary>
 	void Debug();
 
+	void ViewProjectionUpdate();
 
 	const ViewProjection& GetViewProjection()const { return viewProjection_; }
 };
