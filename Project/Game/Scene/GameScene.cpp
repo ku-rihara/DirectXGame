@@ -15,7 +15,7 @@ GameScene::~GameScene() {
 }
 
 void GameScene::Init() {
-	
+
 	// メンバ変数の初期化
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
@@ -28,7 +28,7 @@ void GameScene::Init() {
 	//音
 	soundDataHandle_ = audio_->SoundLoadWave("Resources/fanfare.wav");
 	//モデル
-	
+
 	modelPlane_.reset(Object3d::CreateModel("Plane", ".obj"));
 	modelFence_.reset(Object3d::CreateModel("Fence", ".obj"));
 	modelSuzanne_.reset(Object3d::CreateModel("Suzanne", ".obj"));
@@ -36,12 +36,12 @@ void GameScene::Init() {
 	modelTerrain_.reset(Object3d::CreateModel("terrain", ".obj"));
 
 	/// test
-	collisionTest1_ = std::make_unique<CollisionTest1>();
+	/*collisionTest1_ = std::make_unique<CollisionTest1>();
 	collisionTest2_ = std::make_unique<CollisionTest2>();
 	collisionTest1_->Init();
-	collisionTest2_->Init();
+	collisionTest2_->Init();*/
 
-///トランスフォーム初期化
+	///トランスフォーム初期化
 	planeTransform_.Init();
 	fenceTransform_.Init();
 	suzanneTransform_.Init();
@@ -52,7 +52,7 @@ void GameScene::Init() {
 
 	////テクスチャハンドル
 	circleHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");
-	 uv_ = TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
+	uv_ = TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
 
 	///=======================================================================================
 	///Particle
@@ -67,20 +67,15 @@ void GameScene::Init() {
 	//WorldTransform
 	//ビュープロジェクション
 	viewProjection_.Init();
-	
 
 }
 
 void GameScene::Update() {
 
-	emitter_->ApplyGlobalParameter();
+	emitter_->EditorUpdate();
 
+	emitter_->Emit();
 
-	time_ += Frame::DeltaTime();
-	if (time_ >= 1.0f) {
-		emitter_->Emit();
-		time_ = 0.0f;
-	}
 	ParticleManager::GetInstance()->Update(&viewProjection_);
 
 	debugCamera_->Update();
@@ -105,16 +100,9 @@ void GameScene::Update() {
 		suzanneTransform_.translation_.y -= 0.01f;
 	}
 
-	//modelPlaneParticle_->emitter_.frequencyTime += Frame::DeltaTime();//時刻すすめる
-	////頻度より大きいなら
-	//if (modelPlaneParticle_->emitter_.frequency <= modelPlaneParticle_->emitter_.frequencyTime) {
-	//	modelPlaneParticle_->Emit(modelPlaneParticle_->emitter_, MinMax(-1.0f, 1.0f), MinMax(0.0f, 1.0f), 5);
 
-	//	modelPlaneParticle_->emitter_.frequencyTime -= modelPlaneParticle_->emitter_.frequency ;//時刻すすめる
-	//}
-
-	collisionTest1_->Init();
-	collisionTest2_->Init();
+	/*collisionTest1_->Init();
+	collisionTest2_->Init();*/
 
 	//ワールド行列更新
 		///トランスフォーム初期化
@@ -133,9 +121,9 @@ void GameScene::Update() {
 	/*viewProjection_.UpdateMatrix();*/
 }
 
-    /// ===================================================
-	/// モデル描画
-	/// ===================================================
+/// ===================================================
+/// モデル描画
+/// ===================================================
 void GameScene::ModelDraw() {
 
 	//平面描画
@@ -149,6 +137,7 @@ void GameScene::ModelDraw() {
 
 		//collisionTest1_->Draw();
 		//collisionTest2_->Draw();
+		emitter_->PositionDraw(viewProjection_);
 	}
 }
 
@@ -156,6 +145,7 @@ void GameScene::ModelDraw() {
    /// パーティクル描画
    /// ===================================================
 void GameScene::ParticleDraw() {
+	emitter_->RailDraw(viewProjection_);
 	ParticleManager::GetInstance()->Draw(viewProjection_, circleHandle_);
 }
 
@@ -174,8 +164,8 @@ void GameScene::Debug() {
 
 	if (ImGui::TreeNode("Frag")) {
 		ImGui::Checkbox("isDraw", &isDraw);
-	/*	ImGui::Checkbox("isAcceleration", &modelPlaneParticle_->accelerationField_.isAdaption);
-	*/	ImGui::TreePop();
+		/*	ImGui::Checkbox("isAcceleration", &modelPlaneParticle_->accelerationField_.isAdaption);
+		*/	ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("ViewProjection")) {
 
@@ -219,9 +209,9 @@ void GameScene::Debug() {
 	}
 
 	if (ImGui::TreeNode("Particle")) {
-	/*	ImGui::DragFloat3("Scale", &modelPlaneParticle_->emitter_.transform.scale.x, 0.01f);
-		ImGui::DragFloat3("Rotate", &modelPlaneParticle_->emitter_.transform.rotate.x, 0.01f);
-		ImGui::DragFloat3("Translate", &modelPlaneParticle_->emitter_.transform.translate.x, 0.01f);*/
+		/*	ImGui::DragFloat3("Scale", &modelPlaneParticle_->emitter_.transform.scale.x, 0.01f);
+			ImGui::DragFloat3("Rotate", &modelPlaneParticle_->emitter_.transform.rotate.x, 0.01f);
+			ImGui::DragFloat3("Translate", &modelPlaneParticle_->emitter_.transform.translate.x, 0.01f);*/
 		ImGui::TreePop();
 	}
 

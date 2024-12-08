@@ -29,7 +29,7 @@ namespace {
 	Object3DCommon* sObject3DCommon = nullptr;
 	ModelManager* sModelManager = nullptr;
 	ParticleCommon*sParticleCommon = nullptr;
-	std::unique_ptr<SrvManager> sSrvManager = nullptr;
+	SrvManager* sSrvManager = nullptr;
 
 	Audio* audio = nullptr;
 	Input* input = nullptr;
@@ -50,7 +50,7 @@ void Keta::Initialize(const char* title, int width, int height) {
 	sDirectXCommon->CreateGraphicPipelene();
 
 	/// srvManager
-	sSrvManager = std::make_unique<SrvManager>();
+	sSrvManager = SrvManager::GetInstance();
 	sSrvManager->Init(sDirectXCommon);
 
 	/// Object3dCommon
@@ -61,7 +61,7 @@ void Keta::Initialize(const char* title, int width, int height) {
 	sParticleCommon = ParticleCommon::GetInstance();
 	sParticleCommon->Init(sDirectXCommon);
 
-	ParticleManager::GetInstance()->Init(sSrvManager.get());
+	ParticleManager::GetInstance()->Init(sSrvManager);
 
 	/// SpriteCommon
 	spriteCommon = SpriteCommon::GetInstance();
@@ -73,11 +73,11 @@ void Keta::Initialize(const char* title, int width, int height) {
 
 	/// ImguiManager
 	imguiManager = ImGuiManager::GetInstance();
-	imguiManager->Init(sWinApp, sDirectXCommon,sSrvManager.get());
+	imguiManager->Init(sWinApp, sDirectXCommon,sSrvManager);
 
 	/// TextureManager
 	stextureManager = TextureManager::GetInstance();
-	stextureManager->Init(sDirectXCommon,sSrvManager.get());
+	stextureManager->Init(sDirectXCommon,sSrvManager);
 
 	/// Input
 	input = Input::GetInstance();

@@ -1,6 +1,13 @@
 #include"SrvManager.h"
 
-const uint32_t SrvManager::kMaxCount = 512;
+// 最大SRV数の定義
+const uint32_t SrvManager::kMaxCount = 1024;
+
+// シングルトンインスタンスの取得
+SrvManager* SrvManager::GetInstance() {
+	static SrvManager instance; // 静的インスタンス
+	return &instance;
+}
 
   ///=========================================
   ///初期化

@@ -1,8 +1,8 @@
 {
     "test": {
         "BaseColor": [
-            0.0,
-            0.0,
+            1.0,
+            1.0,
             0.0,
             0.0
         ],
@@ -19,6 +19,7 @@
             0.0
         ],
         "Gravity": -31.899999618530273,
+        "IntervalTime": 1.0,
         "LifeTime": 2.0999999046325684,
         "Particle Count": 27,
         "Position Base": [
@@ -77,6 +78,8 @@
             -5.0,
             7.0,
             0.0
-        ]
+        ],
+        "isMoveForRail": false,
+        "moveSpeed": 0.0
     }
 }
