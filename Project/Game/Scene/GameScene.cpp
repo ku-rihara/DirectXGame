@@ -32,7 +32,7 @@ void GameScene::Init() {
 	ground_->Init();
 
 	// エミッター
-	emitter_.reset(ParticleEmitter::CreateParticle("test", "Plane", ".obj", 1400,false));
+	emitter_.reset(ParticleEmitter::CreateParticle("test", "Plane", ".obj", 1600,false));
 	leftEmitter_.reset(ParticleEmitter::CreateParticle("LeftSide", "cube", ".obj", 300,false));
 	rightEmitter_.reset(ParticleEmitter::CreateParticle("RightSide", "cube", ".obj", 300,false));
 

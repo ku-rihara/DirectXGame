@@ -19,7 +19,7 @@
             0.0
         ],
         "Gravity": -0.800000011920929,
-        "IntervalTime": 0.05000000074505806,
+        "IntervalTime": 0.019999999552965164,
         "LifeTime": 5.800000190734863,
         "Particle Count": 9,
         "Position Base": [
@@ -80,6 +80,6 @@
             0.0
         ],
         "isMoveForRail": true,
-        "moveSpeed": 1.784000039100647
+        "moveSpeed": 1.5499999523162842
     }
 }
