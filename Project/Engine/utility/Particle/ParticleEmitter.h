@@ -86,7 +86,7 @@ public:
 	void UpdateEmitTransform();
 
 	void RailDraw(const ViewProjection&viewProjection);
-	void PositionDraw(const ViewProjection& viewProjection);
+	void DebugDraw(const ViewProjection& viewProjection);
 
 	///=====================================================
 	/// getter method

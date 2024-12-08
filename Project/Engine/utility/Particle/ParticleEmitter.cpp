@@ -273,8 +273,6 @@ void ParticleEmitter::Emit() {
 ///ImGui更新
 ///=================================================================================
 void ParticleEmitter::EditorUpdate() {
-#ifdef _DEBUG
-
 	// レール更新
 	railManager_->Update(emitControlPosManager_->GetPositions(), moveSpeed_);
 
@@ -282,6 +280,7 @@ void ParticleEmitter::EditorUpdate() {
 
 	SetValues();
 
+#ifdef _DEBUG
 
 	ImGui::Begin(particleName_.c_str());
 
@@ -393,7 +392,8 @@ void ParticleEmitter::RailDraw(const ViewProjection& viewProjection) {
 	viewProjection;
 	/*railManager_->RailDraw(viewProjection);*/
 }
-void ParticleEmitter::PositionDraw(const ViewProjection& viewProjection) {
+void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
+#ifdef _DEBUG
 
 	if (isMoveForRail_) {// レールに沿うエミット位置
 		railManager_->Draw(viewProjection);
@@ -402,4 +402,5 @@ void ParticleEmitter::PositionDraw(const ViewProjection& viewProjection) {
 	else {// レールに沿わないエミット位置
 		emitObj_->Draw(emitTransform_, viewProjection);
 	}
+#endif // _DEBUG
 }

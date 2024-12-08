@@ -95,9 +95,9 @@ void GameScene::ModelDraw() {
 
 		ground_->Draw(viewProjection_);
 
-		emitter_->PositionDraw(viewProjection_);
-		leftEmitter_->PositionDraw(viewProjection_);
-		rightEmitter_->PositionDraw(viewProjection_);
+		emitter_->DebugDraw(viewProjection_);
+		leftEmitter_->DebugDraw(viewProjection_);
+		rightEmitter_->DebugDraw(viewProjection_);
 	}
 }
 
