@@ -17,7 +17,7 @@ void EmitRailManager::Init(SrvManager* srvManager) {
     worldTransform_.UpdateMatrix();
     viewProjection_.UpdateMatrix();
     // レールの初期化（オブジェクト数を指定）
-    rail_.Init(srvManager,40);
+    rail_.Init(srvManager,5);
    
 
     /// 現在位置モデル

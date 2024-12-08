@@ -102,12 +102,10 @@ public:
 
 	/// globalParamater
 	void AddParmGroup();
+	void SetValues();
+
 	void ApplyGlobalParameter();
 	void ParmLoadForImGui();
-
-	// Line関連
-	void SavePositionsToFile();
-	void LoadPositionsFromFile();
 
 	
 };

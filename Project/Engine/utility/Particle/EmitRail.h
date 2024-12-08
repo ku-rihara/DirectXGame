@@ -9,7 +9,7 @@
 
 class EmitRail {
 private:
-    const size_t IndexCount_ = 150;                      // レール補間点の数
+    const size_t IndexCount_ = 20;                      // レール補間点の数
     std::vector<Vector3> controlPos_;                    // 制御点
     std::vector<Vector3> pointsDrawing_;                 // 補間された描画点
     float totalRailLength_ = 0.0f;                       // レールの全体長
