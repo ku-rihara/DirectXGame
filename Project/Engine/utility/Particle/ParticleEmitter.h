@@ -79,9 +79,9 @@ public:
 	/// 初期化
 	static ParticleEmitter* CreateParticle(
 		const std::string& name, const std::string& modelFilePath,
-		const std::string& extension, const int32_t& maxnum);
+		const std::string& extension, const int32_t& maxnum, const bool& isFirst);
 
-	void Init();/// 初期化
+	void Init(const bool& isFirst);/// 初期化
 	void Emit();///　エミット
 	void UpdateEmitTransform();
 
@@ -93,6 +93,13 @@ public:
 	///=====================================================
 	const std::string& GetParticleName()const { return particleName_; }
 
+
+	///=====================================================
+/// setter method
+///=====================================================
+
+	void SetTextureHandle(const uint32_t& hanle);
+
 	///=====================================================
 	/// Editor 
 	///=====================================================
@@ -102,12 +109,10 @@ public:
 
 	/// globalParamater
 	void AddParmGroup();
+	void SetValues();
+
 	void ApplyGlobalParameter();
 	void ParmLoadForImGui();
-
-	// Line関連
-	void SavePositionsToFile();
-	void LoadPositionsFromFile();
 
 	
 };

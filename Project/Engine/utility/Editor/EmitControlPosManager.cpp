@@ -1,28 +1,31 @@
 #include "EmitControlPosManager.h"
 #include <fstream>
 #include <imgui.h>
-
+#include<d3d12.h>
 
 EmitControlPosManager::EmitControlPosManager(){}
 
 ///=====================================================
 /// 制御点追加
 ///=====================================================
-void EmitControlPosManager::AddPosition(const Vector3& position) {
+void EmitControlPosManager::AddPoint(const Vector3& position) {
     movePosies_.push_back(position);
+    
+    std::unique_ptr<Object3d> obj3d;
+    obj3d.reset(Object3d::CreateModel("DebugSphere", ".obj"));
+
+    obj3ds_.push_back(std::move(obj3d));
+    
 }
 
 ///=====================================================
 /// 制御点削除
 ///=====================================================
-void EmitControlPosManager::RemovePosition(size_t index) {
+void EmitControlPosManager::RemovePoint(size_t index) {
     if (index < movePosies_.size()) {
         movePosies_.erase(movePosies_.begin() + index);
+        obj3ds_.erase(obj3ds_.begin() + index);  // ベクターから削除
     }
-}
-
-const std::vector<Vector3>& EmitControlPosManager::GetPositions() const {
-    return movePosies_;
 }
 
 ///=====================================================
@@ -34,7 +37,7 @@ void EmitControlPosManager::SaveToFile(const std::string& filename) {
         root.push_back({ {"x", pos.x}, {"y", pos.y}, {"z", pos.z} });
     }
 
-    std::ofstream file(dyrectrypath_ + filename+".json", std::ios::out);
+    std::ofstream file(dyrectrypath_ + filename + ".json", std::ios::out);
     if (file.is_open()) {
         file << root.dump(4); // JSON データを整形して保存
         file.close();
@@ -60,7 +63,7 @@ void EmitControlPosManager::LoadFromFile(const std::string& filename) {
             pos.x = position.at("x").get<float>();
             pos.y = position.at("y").get<float>();
             pos.z = position.at("z").get<float>();
-            movePosies_.push_back(pos);
+            AddPoint(pos);
         }
     }
     else {
@@ -72,7 +75,15 @@ void EmitControlPosManager::LoadFromFile(const std::string& filename) {
 /// ImGuiでの処理
 ///=====================================================
 void EmitControlPosManager::ImGuiUpdate(const std::string& filename) {
+
+    // 色を変更
+    ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.8f, 0.3f, 0.3f, 1.0f));      // 通常時の色
+    ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(1.0f, 0.5f, 0.5f, 1.0f)); // ホバー時の色
+    ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(1.0f, 0.2f, 0.2f, 1.0f));  // アクティブ時の色
+
+    // ヘッダーの開始
     if (ImGui::CollapsingHeader("Move Position Manager")) {
+
         // 現在の座標リストを表示
         ImGui::SeparatorText("Current Positions");
         for (size_t i = 0; i < movePosies_.size(); ++i) {
@@ -84,7 +95,7 @@ void EmitControlPosManager::ImGuiUpdate(const std::string& filename) {
             }
             ImGui::SameLine();
             if (ImGui::Button("Remove")) {
-                RemovePosition(i);
+                RemovePoint(i);
             }
             ImGui::PopID(); // IDスコープを終了
         }
@@ -93,7 +104,7 @@ void EmitControlPosManager::ImGuiUpdate(const std::string& filename) {
         ImGui::SeparatorText("Add New Position");
         ImGui::DragFloat3("New Position", &tempAddPosition_.x, 0.1f);
         if (ImGui::Button("Add Position")) {
-            AddPosition(tempAddPosition_);
+            AddPoint(tempAddPosition_);
             tempAddPosition_ = { 0.0f, 0.0f, 0.0f }; // 入力用をリセット
         }
 
@@ -101,10 +112,31 @@ void EmitControlPosManager::ImGuiUpdate(const std::string& filename) {
         ImGui::SeparatorText("File Operations");
         if (ImGui::Button("Save Positions")) {
             SaveToFile(filename);
+            std::string message = std::format("{}.json saved.", filename);
+            MessageBoxA(nullptr, message.c_str(), "EmitRailPosition", 0);
         }
         ImGui::SameLine();
         if (ImGui::Button("Load Positions")) {
             LoadFromFile(filename);
         }
     }
+
+    // 色のリセットをヘッダー処理終了後に行う
+    ImGui::PopStyleColor(3);
 }
+
+
+
+void EmitControlPosManager::Draw(const ViewProjection& viewProjection) {
+    for (size_t i = 0; i < movePosies_.size(); ++i) {
+        // 各制御点に対応するObject3dを描画
+        if (i < obj3ds_.size()) {
+            obj3ds_[i]->Draw(movePosies_[i], viewProjection);  // 各制御点の位置を描画
+        }
+    }
+}
+
+const std::vector<Vector3>& EmitControlPosManager::GetPositions() const {
+    return movePosies_;
+}
+

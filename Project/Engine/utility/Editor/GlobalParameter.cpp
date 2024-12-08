@@ -150,11 +150,11 @@ void GlobalParameter::SetValue(const std::string& groupName, const std::string& 
     }
     else {
         // 新規の場合、値と設定を追加
-        
-            DrawSettings settings;
-            settings.widgetType = widgetType;
-            settings.treeNodeLabel = treeNodeLabel;
-        
+
+        DrawSettings settings;
+        settings.widgetType = widgetType;
+        settings.treeNodeLabel = treeNodeLabel;
+
         group[key] = { value, settings };
     }
 }
@@ -308,17 +308,17 @@ void GlobalParameter::LoadFile(const std::string& groupName) {
         // Integer (int32_t)
         if (itItem->is_number_integer()) {
             int32_t value = itItem->get<int32_t>();
-            SetValue(groupName, itemName, value,WidgetType::SliderInt);
+            SetValue(groupName, itemName, value, WidgetType::SliderInt);
         }
         // Unsigned Integer (uint32_t)
         else if (itItem->is_number_integer()) {
             uint32_t value = itItem->get<uint32_t>();
-            SetValue(groupName, itemName, value,  WidgetType::SliderInt );
+            SetValue(groupName, itemName, value, WidgetType::SliderInt);
         }
         // Float (float)
         else if (itItem->is_number_float()) {
             double value = itItem->get<double>();
-            SetValue(groupName, itemName, static_cast<float>(value),WidgetType::DragFloat);
+            SetValue(groupName, itemName, static_cast<float>(value), WidgetType::DragFloat);
         }
         // Vector2 (Array of 2 elements)
         else if (itItem->is_array() && itItem->size() == 2) {
@@ -328,7 +328,7 @@ void GlobalParameter::LoadFile(const std::string& groupName) {
         // Vector3 (Array of 3 elements)
         else if (itItem->is_array() && itItem->size() == 3) {
             Vector3 value = { itItem->at(0), itItem->at(1), itItem->at(2) };
-            SetValue(groupName, itemName, value,WidgetType::DragFloat3);
+            SetValue(groupName, itemName, value, WidgetType::DragFloat3);
         }
         // Vector4 (Array of 4 elements)
         else if (itItem->is_array() && itItem->size() == 4) {
@@ -338,7 +338,7 @@ void GlobalParameter::LoadFile(const std::string& groupName) {
         // Boolean
         else if (itItem->is_boolean()) {
             bool value = itItem->get<bool>();
-            SetValue(groupName, itemName, value,WidgetType::Checkbox);
+            SetValue(groupName, itemName, value, WidgetType::Checkbox);
         }
     }
     isLoading_ = false;
@@ -349,7 +349,8 @@ void GlobalParameter::ParmSaveForImGui(const std::string& groupName) {
     if (ImGui::Button(std::format("Save {}", groupName).c_str())) {
         SaveFile(groupName);
         // セーブ完了メッセージ
-        ImGui::Text("Save Successful: %s", groupName.c_str());
+        std::string message = std::format("{}.json saved.", groupName);
+        MessageBoxA(nullptr, message.c_str(), "GlobalParameter", 0);
     }
 }
 
@@ -364,28 +365,27 @@ void GlobalParameter::ParmLoadForImGui(const std::string& groupName) {
 }
 
 
-    template void GlobalParameter::SetValue<int>(const std::string& groupName, const std::string& key, int value, WidgetType widgetType);
-    template void GlobalParameter::SetValue<uint32_t>(const std::string& groupName, const std::string& key, uint32_t value, WidgetType widgetType);
-    template void GlobalParameter::SetValue<float>(const std::string& groupName, const std::string& key, float value, WidgetType widgetType);
-    template void GlobalParameter::SetValue<Vector2>(const std::string& groupName, const std::string& key, Vector2 value, WidgetType widgetType);
-    template void GlobalParameter::SetValue<Vector3>(const std::string& groupName, const std::string& key, Vector3 value, WidgetType widgetType);
-    template void GlobalParameter::SetValue<Vector4>(const std::string& groupName, const std::string& key, Vector4 value, WidgetType widgetType);
-    template void GlobalParameter::SetValue<bool>(const std::string& groupName, const std::string& key, bool value, WidgetType widgetType);
+template void GlobalParameter::SetValue<int>(const std::string& groupName, const std::string& key, int value, WidgetType widgetType);
+template void GlobalParameter::SetValue<uint32_t>(const std::string& groupName, const std::string& key, uint32_t value, WidgetType widgetType);
+template void GlobalParameter::SetValue<float>(const std::string& groupName, const std::string& key, float value, WidgetType widgetType);
+template void GlobalParameter::SetValue<Vector2>(const std::string& groupName, const std::string& key, Vector2 value, WidgetType widgetType);
+template void GlobalParameter::SetValue<Vector3>(const std::string& groupName, const std::string& key, Vector3 value, WidgetType widgetType);
+template void GlobalParameter::SetValue<Vector4>(const std::string& groupName, const std::string& key, Vector4 value, WidgetType widgetType);
+template void GlobalParameter::SetValue<bool>(const std::string& groupName, const std::string& key, bool value, WidgetType widgetType);
 
-    template void GlobalParameter::AddItem<int>(const std::string& groupName, const std::string& key, int value, WidgetType widgetType);
-    template void GlobalParameter::AddItem<uint32_t>(const std::string& groupName, const std::string& key, uint32_t value, WidgetType widgetType);
-    template void GlobalParameter::AddItem<float>(const std::string& groupName, const std::string& key, float value, WidgetType widgetType);
-    template void GlobalParameter::AddItem<Vector2>(const std::string& groupName, const std::string& key, Vector2 value, WidgetType widgetType);
-    template void GlobalParameter::AddItem<Vector3>(const std::string& groupName, const std::string& key, Vector3 value, WidgetType widgetType);
-    template void GlobalParameter::AddItem<Vector4>(const std::string& groupName, const std::string& key, Vector4 value, WidgetType widgetType);
-    template void GlobalParameter::AddItem<bool>(const std::string& groupName, const std::string& key, bool value, WidgetType widgetType);
+template void GlobalParameter::AddItem<int>(const std::string& groupName, const std::string& key, int value, WidgetType widgetType);
+template void GlobalParameter::AddItem<uint32_t>(const std::string& groupName, const std::string& key, uint32_t value, WidgetType widgetType);
+template void GlobalParameter::AddItem<float>(const std::string& groupName, const std::string& key, float value, WidgetType widgetType);
+template void GlobalParameter::AddItem<Vector2>(const std::string& groupName, const std::string& key, Vector2 value, WidgetType widgetType);
+template void GlobalParameter::AddItem<Vector3>(const std::string& groupName, const std::string& key, Vector3 value, WidgetType widgetType);
+template void GlobalParameter::AddItem<Vector4>(const std::string& groupName, const std::string& key, Vector4 value, WidgetType widgetType);
+template void GlobalParameter::AddItem<bool>(const std::string& groupName, const std::string& key, bool value, WidgetType widgetType);
 
-    template int32_t GlobalParameter::GetValue<int32_t>(const std::string& groupName, const std::string& key) const;
-    template uint32_t GlobalParameter::GetValue<uint32_t>(const std::string& groupName, const std::string& key) const;
-    template float GlobalParameter::GetValue<float>(const std::string& groupName, const std::string& key) const;
-    template Vector2 GlobalParameter::GetValue<Vector2>(const std::string& groupName, const std::string& key) const;
-    template Vector3 GlobalParameter::GetValue<Vector3>(const std::string& groupName, const std::string& key) const;
-    template Vector4 GlobalParameter::GetValue<Vector4>(const std::string& groupName, const std::string& key) const;
-    template bool GlobalParameter::GetValue<bool>(const std::string& groupName, const std::string& key) const;
+template int32_t GlobalParameter::GetValue<int32_t>(const std::string& groupName, const std::string& key) const;
+template uint32_t GlobalParameter::GetValue<uint32_t>(const std::string& groupName, const std::string& key) const;
+template float GlobalParameter::GetValue<float>(const std::string& groupName, const std::string& key) const;
+template Vector2 GlobalParameter::GetValue<Vector2>(const std::string& groupName, const std::string& key) const;
+template Vector3 GlobalParameter::GetValue<Vector3>(const std::string& groupName, const std::string& key) const;
+template Vector4 GlobalParameter::GetValue<Vector4>(const std::string& groupName, const std::string& key) const;
+template bool GlobalParameter::GetValue<bool>(const std::string& groupName, const std::string& key) const;
 
-  
