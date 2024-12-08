@@ -362,7 +362,7 @@ void ParticleEmitter::EditorUpdate() {
 
 	// その他のパラメータ
 	if (ImGui::CollapsingHeader("etcParamater")) {
-		ImGui::DragFloat("IntervalTime", &intervalTime_, 0.01f,0.2f,100.0f);
+		ImGui::DragFloat("IntervalTime", &intervalTime_, 0.01f,0.05f,100.0f);
 		ImGui::DragFloat("Gravity", &gravity_, 0.1f);
 		ImGui::DragFloat("LifeTime", &lifeTime_, 0.1f);
 		ImGui::SliderInt("Particle Count", &particleCount_, 1, 100);

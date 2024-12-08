@@ -150,7 +150,7 @@ void ParticleManager::SetTextureHandle(const std::string name, const uint32_t& h
 void  ParticleManager::SetModel(const std::string& name, const std::string& modelName, const std::string& extension) {
 
 	//モデルを検索してセット
-	//ModelManager::GetInstance()->LoadModel(modelName, extension);
+	ModelManager::GetInstance()->LoadModel(modelName, extension);
 	particleGroups_[name].model = (ModelManager::GetInstance()->FindModel(modelName, extension));
 	particleGroups_[name].textureHandle = TextureManager::GetInstance()->LoadTexture(
 		particleGroups_[name].model->GetModelData().material.textureFilePath);

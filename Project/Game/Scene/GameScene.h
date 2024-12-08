@@ -40,6 +40,7 @@ private:
 	
 
 	std::unique_ptr<Ground> ground_ = nullptr;
+	std::unique_ptr<Object3d>modelPlane_ = nullptr;
 
 	/// particle
 	std::unique_ptr<ParticleEmitter>emitter_;
@@ -53,6 +54,7 @@ private:
 
 	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
 
+	uint32_t defaultHandle_;
 	uint32_t circleHandle_;
 	uint32_t uv_;
 

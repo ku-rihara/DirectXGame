@@ -25,21 +25,26 @@ void GameScene::Init() {
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
 	debugCamera_->Init();
 
+	modelPlane_.reset(Object3d::CreateModel("Plane", ".obj"));
 
-	// エミッター
-	emitter_.reset(ParticleEmitter::CreateParticle("test", "cube", ".obj", 300,false));
-	leftEmitter_.reset(ParticleEmitter::CreateParticle("LeftSide", "cube", ".obj", 300,false));
-	rightEmitter_.reset(ParticleEmitter::CreateParticle("RightSide", "cube", ".obj", 300,false));
-
-	//テクスチャハンドル
-	circleHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/default.png");
-	uv_ = TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
 
 	ground_ = std::make_unique<Ground>();
 	ground_->Init();
 
-	leftEmitter_->SetTextureHandle(circleHandle_);
-	rightEmitter_->SetTextureHandle(circleHandle_);
+	// エミッター
+	emitter_.reset(ParticleEmitter::CreateParticle("test", "Plane", ".obj", 1400,false));
+	leftEmitter_.reset(ParticleEmitter::CreateParticle("LeftSide", "cube", ".obj", 300,false));
+	rightEmitter_.reset(ParticleEmitter::CreateParticle("RightSide", "cube", ".obj", 300,false));
+
+	//テクスチャハンドル
+	circleHandle_= TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");
+	defaultHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/default.png");
+	uv_ = TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
+
+	
+	emitter_->SetTextureHandle(circleHandle_);
+	leftEmitter_->SetTextureHandle(defaultHandle_);
+	rightEmitter_->SetTextureHandle(defaultHandle_);
 
 	///=======================================================================================
 	///Particle
@@ -50,7 +55,7 @@ void GameScene::Init() {
 	//ビュープロジェクション
 	viewProjection_.Init();
 
-	viewProjection_.translation_ = { 0,-6,-130.0f };
+	viewProjection_.translation_ = { 0,-6.2f,-109.0f };
 
 }
 
@@ -89,7 +94,10 @@ void GameScene::ModelDraw() {
 	
 
 		ground_->Draw(viewProjection_);
-	
+
+		emitter_->PositionDraw(viewProjection_);
+		leftEmitter_->PositionDraw(viewProjection_);
+		rightEmitter_->PositionDraw(viewProjection_);
 	}
 }
 

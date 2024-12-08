@@ -75,7 +75,15 @@ void EmitControlPosManager::LoadFromFile(const std::string& filename) {
 /// ImGuiでの処理
 ///=====================================================
 void EmitControlPosManager::ImGuiUpdate(const std::string& filename) {
+
+    // 色を変更
+    ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.8f, 0.3f, 0.3f, 1.0f));      // 通常時の色
+    ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(1.0f, 0.5f, 0.5f, 1.0f)); // ホバー時の色
+    ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(1.0f, 0.2f, 0.2f, 1.0f));  // アクティブ時の色
+
+    // ヘッダーの開始
     if (ImGui::CollapsingHeader("Move Position Manager")) {
+
         // 現在の座標リストを表示
         ImGui::SeparatorText("Current Positions");
         for (size_t i = 0; i < movePosies_.size(); ++i) {
@@ -98,7 +106,6 @@ void EmitControlPosManager::ImGuiUpdate(const std::string& filename) {
         if (ImGui::Button("Add Position")) {
             AddPoint(tempAddPosition_);
             tempAddPosition_ = { 0.0f, 0.0f, 0.0f }; // 入力用をリセット
-
         }
 
         // 保存・ロードボタン
@@ -113,7 +120,11 @@ void EmitControlPosManager::ImGuiUpdate(const std::string& filename) {
             LoadFromFile(filename);
         }
     }
+
+    // 色のリセットをヘッダー処理終了後に行う
+    ImGui::PopStyleColor(3);
 }
+
 
 
 void EmitControlPosManager::Draw(const ViewProjection& viewProjection) {
