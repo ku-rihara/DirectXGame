@@ -36,32 +36,30 @@ void Object3dSRV::UpdateTransform(std::optional<const ViewProjection*> viewProje
 	}
 }
 
-void Object3dSRV::Draw(const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
-	instanceNum_ = 0; // 描画するインスタンスの数をリセット
+void Object3dSRV::Draw(const std::list<WorldTransform>& transforms, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
+	instanceNum_ = 0; // 描画するインスタンス数をリセット
 
-	for (auto particleIterator = particles_.begin(); particleIterator != particles_.end(); /* ++particleIterator はここに置かない */) {
-
-			if (instanceNum_ < instanceMax_) {
-			// WVP行列の計算
-			if (model_->GetIsFileGltf()) {
-				instancingData_[instanceNum_].WVP = model_->GetModelData().rootNode.localMatrix * (*particleIterator).matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
-				instancingData_[instanceNum_].WorldInverseTranspose = Inverse(Transpose(model_->GetModelData().rootNode.localMatrix * (*particleIterator).matWorld_));
-			}
-			else {
-				instancingData_[instanceNum_].WVP = (*particleIterator).matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
-				instancingData_[instanceNum_].WorldInverseTranspose = Inverse(Transpose((*particleIterator).matWorld_));
-			}
-
-			++instanceNum_;
+	auto it = transforms.begin(); // 渡されたリストを参照
+	for (; it != transforms.end() && instanceNum_ < instanceMax_; ++it) {
+		// WVP行列の計算
+		if (model_->GetIsFileGltf()) {
+			instancingData_[instanceNum_].WVP = model_->GetModelData().rootNode.localMatrix * it->matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+			instancingData_[instanceNum_].WorldInverseTranspose = Inverse(Transpose(model_->GetModelData().rootNode.localMatrix * it->matWorld_));
+		}
+		else {
+			instancingData_[instanceNum_].WVP = it->matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+			instancingData_[instanceNum_].WorldInverseTranspose = Inverse(Transpose(it->matWorld_));
 		}
 
-		++particleIterator; // ここでインクリメント
+		++instanceNum_;
 	}
 
+	// 描画処理
 	if (model_) {
-		model_->DrawParticle(instanceNum_, pSrvManager_->GetGPUDescriptorHandle(srvIndex_),material_, textureHandle);
+		model_->DrawParticle(instanceNum_, pSrvManager_->GetGPUDescriptorHandle(srvIndex_), material_, textureHandle);
 	}
 }
+
 
 void Object3dSRV::DebugImgui() {
 	BaseObject3d::DebugImgui();

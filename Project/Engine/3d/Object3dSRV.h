@@ -21,8 +21,7 @@ private:
 	//リソースとデータ
 	uint32_t srvIndex_;
 	TransformationMatrix* instancingData_;
-	//パーティクル変数
-	const float kDeltaTime_ = 1.0f / 60.0f;
+
 	
 private:
 	/// <summary>
@@ -58,7 +57,7 @@ public:
 	/// </summary>
 	/// <param name="viewProjection"></param>
 	/// <param name="textureHandle"></param>
-	void Draw(const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt);
+	void Draw(const std::list<WorldTransform>& transforms,const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt);
 	/// <summary>
 	/// Debug表示
 	/// </summary>

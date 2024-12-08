@@ -97,10 +97,6 @@ void ParticleEmitter::AddParmGroup() {
 	globalParameter_->AddItem(groupName, "RotateSpeed Max", rotateSpeedDist_.max, GlobalParameter::WidgetType::SlideAngle);
 	globalParameter_->AddItem(groupName, "RotateSpeed Min", rotateSpeedDist_.min, GlobalParameter::WidgetType::SlideAngle);
 
-	///rail 
-	globalParameter_->AddItem(groupName, "isMoveForRail",isMoveForRail_, GlobalParameter::WidgetType::Checkbox);
-	globalParameter_->AddItem(groupName, "moveSpeed", moveSpeed_, GlobalParameter::WidgetType::DragFloat);
-
 	// Velocity
 	/*globalParameter_->AddSeparatorText("Velocity");*/
 	globalParameter_->AddItem(groupName, "Velocity Max", velocityDist_.max, GlobalParameter::WidgetType::DragFloat3);
@@ -118,6 +114,11 @@ void ParticleEmitter::AddParmGroup() {
 	globalParameter_->AddItem(groupName, "Gravity", gravity_, GlobalParameter::WidgetType::DragFloat);
 	globalParameter_->AddItem(groupName, "LifeTime", lifeTime_, GlobalParameter::WidgetType::DragFloat);
 	globalParameter_->AddItem(groupName, "Particle Count", particleCount_, GlobalParameter::WidgetType::SliderInt);
+
+	///rail 
+	globalParameter_->AddItem(groupName, "isMoveForRail", isMoveForRail_, GlobalParameter::WidgetType::Checkbox);
+	globalParameter_->AddItem(groupName, "moveSpeed", moveSpeed_, GlobalParameter::WidgetType::DragFloat);
+
 }
 
 ///=====================================================
@@ -144,10 +145,6 @@ void ParticleEmitter::ApplyGlobalParameter() {
 	rotateSpeedDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "RotateSpeed Min");
 	rotateSpeedDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "RotateSpeed Max");
 
-	///rail
-	moveSpeed_ = globalParameter_->GetValue<float>(particleName_, "moveSpeed");
-	isMoveForRail_ = globalParameter_->GetValue<bool>(particleName_, "isMoveForRail");
-
 
 	// Velocity
 	velocityDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "Velocity Min");
@@ -164,6 +161,10 @@ void ParticleEmitter::ApplyGlobalParameter() {
 	lifeTime_ = globalParameter_->GetValue<float>(particleName_, "LifeTime");
 	particleCount_ = globalParameter_->GetValue<int32_t>(particleName_, "Particle Count");
 
+	///rail
+	
+	isMoveForRail_ = globalParameter_->GetValue<bool>(particleName_, "isMoveForRail");
+	moveSpeed_ = globalParameter_->GetValue<float>(particleName_, "moveSpeed");
 }
 
 ///=================================================================================
@@ -319,6 +320,7 @@ void ParticleEmitter::PositionDraw(const ViewProjection& viewProjection) {
 
 	if (isMoveForRail_) {// レールに沿うエミット位置
 		railManager_->Draw(viewProjection);
+		emitControlPosManager_->Draw(viewProjection);
 	}
 	else {// レールに沿わないエミット位置
 		emitObj_->Draw(emitTransform_, viewProjection);

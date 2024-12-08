@@ -5,10 +5,8 @@
 void EmitRail::Init(SrvManager* srvManager, size_t numObjects) {
     // レールオブジェクト（インスタンス用）の初期化
     railObject_.reset(Object3dSRV::CreateModel("EditorRail", ".obj", uint32_t(numObjects), srvManager));
-    railObject_->UpdateTransform();
-    railObject_->particles_.resize(numObjects); // 必要なインスタンス分だけ確保
+    railTransforms_.resize(numObjects); // 必要なインスタンス分だけ確保
 }
-
 
 void EmitRail::Update(const std::vector<Vector3>& controlPos) {
     controlPos_ = controlPos;
@@ -27,20 +25,19 @@ void EmitRail::Update(const std::vector<Vector3>& controlPos) {
     }
 
     // 各オブジェクトの位置と回転を計算
-    float segmentLength = totalRailLength_ / float(railObject_->GetKnumInstance() - 1);
+    float segmentLength = totalRailLength_ / float(railTransforms_.size() - 1);
     float currentLength = 0.0f;
     size_t currentIndex = 0;
 
-    // リストのイテレータを使用してデータを更新
-    auto it = railObject_->particles_.begin();
-    for (size_t i = 0; i < railObject_->GetKnumInstance(); ++i) {
+    auto it = railTransforms_.begin(); // イテレータを使用
+    for (size_t i = 0; it != railTransforms_.end(); ++it, ++i) {
         while (currentIndex < pointsDrawing_.size() - 1 &&
             currentLength + Vector3::Length(pointsDrawing_[currentIndex + 1] - pointsDrawing_[currentIndex]) < segmentLength * i) {
             currentLength += Vector3::Length(pointsDrawing_[currentIndex + 1] - pointsDrawing_[currentIndex]);
             currentIndex++;
         }
 
-        if (currentIndex >= pointsDrawing_.size() - 1 || it == railObject_->particles_.end()) {
+        if (currentIndex >= pointsDrawing_.size() - 1) {
             break; // 範囲外アクセスを防ぐ
         }
 
@@ -54,14 +51,12 @@ void EmitRail::Update(const std::vector<Vector3>& controlPos) {
 
         // Transformデータを更新
         it->rotation_ = { rotateX, rotateY, 0.0f };
+        it->scale_ = { 1, 1, 1 };
         it->translation_ = interpolatedPos;
         it->UpdateMatrix();
-        ++it; // 次のパーティクルに進む
     }
-
-    // インスタンスデータを一括更新
-    railObject_->UpdateTransform();
 }
+
 
 Vector3 EmitRail::GetPositionOnRail(float progress) const {
     float distance = progress * totalRailLength_;
@@ -78,9 +73,9 @@ Vector3 EmitRail::GetPositionOnRail(float progress) const {
     return pointsDrawing_.back(); // 最終位置（進行度が1.0fの時）
 }
 
-
 void EmitRail::Draw(const ViewProjection& viewProjection) {
     if (railObject_) {
-        railObject_->Draw(viewProjection);   // 描画
+        // railTransforms_を渡して描画
+        railObject_->Draw(railTransforms_, viewProjection);
     }
 }
