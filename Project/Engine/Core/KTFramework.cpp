@@ -5,7 +5,7 @@
 #include<imgui.h>
 
 
-const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ_CG3";
+const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ";
 
 // ============================
 // 実行
