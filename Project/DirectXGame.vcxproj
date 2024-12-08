@@ -51,6 +51,7 @@
     <ClCompile Include="Engine\utility\Particle\ParticleCommon.cpp" />
     <ClCompile Include="Engine\utility\Particle\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\utility\Particle\ParticleManager.cpp" />
+    <ClCompile Include="Game\Ground\Ground.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="Game\TestObj\CollisionTest1.cpp" />
     <ClCompile Include="Game\TestObj\CollisionTest2.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="Engine\utility\Particle\ParticleCommon.h" />
     <ClInclude Include="Engine\utility\Particle\ParticleEmitter.h" />
     <ClInclude Include="Engine\utility\Particle\ParticleManager.h" />
+    <ClInclude Include="Game\Ground\Ground.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
     <ClInclude Include="Game\TestObj\CollisionTest1.h" />
     <ClInclude Include="Game\TestObj\CollisionTest2.h" />

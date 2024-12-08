@@ -18,6 +18,7 @@
 //testobj
 #include"TestObj/CollisionTest1.h"
 #include"TestObj/CollisionTest2.h"
+#include"Ground/Ground.h"
 // emitter
 #include"utility/Particle/ParticleEmitter.h"
 
@@ -45,6 +46,8 @@ private:
 	std::unique_ptr<Object3d> modelSuzanne_ = nullptr;
 	std::unique_ptr<Object3d> modelSuzanne2_ = nullptr;
 	std::unique_ptr<Object3d> modelTerrain_ = nullptr;
+
+	std::unique_ptr<Ground> ground_ = nullptr;
 
 	/// WorldTransform
 	WorldTransform planeTransform_;

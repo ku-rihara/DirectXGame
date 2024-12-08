@@ -2,7 +2,7 @@
 #include<numbers>
 
 // カメラ注視点までの距離の初期化
-const float DebugCamera::distance_ = 40.0f;
+const float DebugCamera::distance_ = 20.0f;
 
 DebugCamera::DebugCamera(int window_width, int window_height) {
     // Inputクラスのインスタンスを取得（仮）
@@ -12,7 +12,7 @@ DebugCamera::DebugCamera(int window_width, int window_height) {
     viewProjection_.Init();
 
     // カメラの初期位置を設定
-    viewProjection_.translation_ = { 0, 0, -distance_ };
+    viewProjection_.translation_ = { 0, 35, -distance_ };
     viewProjection_.rotation_ = { 0, 0, 0 };
     matRot_ = MakeIdentity4x4();
 

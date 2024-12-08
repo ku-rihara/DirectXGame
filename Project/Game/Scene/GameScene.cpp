@@ -35,6 +35,9 @@ void GameScene::Init() {
 	modelSuzanne2_.reset(Object3d::CreateModel("Suzanne", ".obj"));
 	modelTerrain_.reset(Object3d::CreateModel("terrain", ".obj"));
 
+	ground_ = std::make_unique<Ground>();
+	ground_->Init();
+
 	/// test
 	/*collisionTest1_ = std::make_unique<CollisionTest1>();
 	collisionTest2_ = std::make_unique<CollisionTest2>();
@@ -48,10 +51,10 @@ void GameScene::Init() {
 	suzanneTransform2_.Init();
 	terrainTransform_.Init();
 	// エミッター
-	emitter_.reset(ParticleEmitter::CreateParticle("test", "Plane", ".obj", 500));
+	emitter_.reset(ParticleEmitter::CreateParticle("test", "cube", ".obj", 500));
 
 	////テクスチャハンドル
-	circleHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");
+	circleHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/default.png");
 	uv_ = TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
 
 	///=======================================================================================
@@ -73,33 +76,36 @@ void GameScene::Init() {
 
 void GameScene::Update() {
 
+	//emitter
 	emitter_->EditorUpdate();
-
 	emitter_->Emit();
-
 	ParticleManager::GetInstance()->Update(&viewProjection_);
 
+	/// debugcamera
 	debugCamera_->Update();
 
-	if (Input::GetInstance()->TrrigerKey(DIK_F)) {
-		Audio::GetInstance()->SoundPlayWave(soundDataHandle_);
-	}
+	//各クラス更新
+	ground_->Update();
 
-	Debug();//デバッグ
+	//if (Input::GetInstance()->TrrigerKey(DIK_F)) {
+	//	Audio::GetInstance()->SoundPlayWave(soundDataHandle_);
+	//}
 
-	//インプット処理
-	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
-		suzanneTransform_.translation_.x -= 0.01f;
-	}
-	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
-		suzanneTransform_.translation_.x += 0.01f;
-	}
-	if (Input::GetInstance()->PushKey(DIK_UP)) {
-		suzanneTransform_.translation_.y += 0.01f;
-	}
-	if (Input::GetInstance()->PushKey(DIK_DOWN)) {
-		suzanneTransform_.translation_.y -= 0.01f;
-	}
+	//Debug();//デバッグ
+
+	////インプット処理
+	//if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+	//	suzanneTransform_.translation_.x -= 0.01f;
+	//}
+	//if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+	//	suzanneTransform_.translation_.x += 0.01f;
+	//}
+	//if (Input::GetInstance()->PushKey(DIK_UP)) {
+	//	suzanneTransform_.translation_.y += 0.01f;
+	//}
+	//if (Input::GetInstance()->PushKey(DIK_DOWN)) {
+	//	suzanneTransform_.translation_.y -= 0.01f;
+	//}
 
 
 	/*collisionTest1_->Init();
@@ -114,11 +120,11 @@ void GameScene::Update() {
 	terrainTransform_.UpdateMatrix();
 	/*modelPlaneParticle_->Update(&viewProjection_);*/
 
-
+	viewProjection_.UpdateMatrix
 	// カメラ行列の計算をデバッグカメラのビュープロジェクションから行う
-	viewProjection_.matView_ = debugCamera_->GetViewProjection().matView_;
+	/*viewProjection_.matView_ = debugCamera_->GetViewProjection().matView_;
 	viewProjection_.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
-	viewProjection_.cameraMatrix_ = debugCamera_->GetViewProjection().cameraMatrix_;
+	viewProjection_.cameraMatrix_ = debugCamera_->GetViewProjection().cameraMatrix_;*/
 	/*viewProjection_.UpdateMatrix();*/
 }
 
@@ -138,6 +144,8 @@ void GameScene::ModelDraw() {
 
 		//collisionTest1_->Draw();
 		//collisionTest2_->Draw();
+
+		ground_->Draw(viewProjection_);
 		emitter_->PositionDraw(viewProjection_);
 	}
 }

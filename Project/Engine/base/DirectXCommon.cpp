@@ -380,7 +380,8 @@ void DirectXCommon::PreDraw() {
 	//描画先のRTVを設定する
 	ClearDepthBuffer();
 	//指定した色で画面全体をクリアする
-	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色、RGBAの順
+	//float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色、RGBAの順
+	float clearColor[] = { 0.1f,0.1f,0.1f,1.0f };//青っぽい色、RGBAの順
 	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex_], clearColor, 0, nullptr);
 	////コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
 	//Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeaps[] = { imguiManager_->GetSrvDescriptorHeap() };
