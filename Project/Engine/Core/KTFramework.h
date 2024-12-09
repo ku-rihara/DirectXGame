@@ -1,9 +1,7 @@
 #pragma once
-#include<Scene/GameScene.h>
+#include"Scene/Manager/SceneManager.h"
 
 ///utility
-#include"utility/Editor/GlobalParameter.h"
-#include "Frame/Frame.h"
 #include"Collider/CollisionManager.h"
 /// std
 #include<memory>
@@ -12,7 +10,7 @@
 class KTFramework {
 protected:
 	
-	std::unique_ptr<GameScene>gameScene_;
+	std::unique_ptr<SceneManager>scemeManager_=nullptr;
 
 	std::unique_ptr<CollisionManager>collisionManager_;
 	

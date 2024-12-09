@@ -25,21 +25,22 @@ void GameScene::Init() {
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
 	debugCamera_->Init();
 
-	modelPlane_.reset(Object3d::CreateModel("Plane", ".obj"));
 
-
-	ground_ = std::make_unique<Ground>();
-	ground_->Init();
-
+	
+	
 	// エミッター
 	emitter_.reset(ParticleEmitter::CreateParticle("test", "Plane", ".obj", 1600,false));
 	leftEmitter_.reset(ParticleEmitter::CreateParticle("LeftSide", "cube", ".obj", 300,false));
 	rightEmitter_.reset(ParticleEmitter::CreateParticle("RightSide", "cube", ".obj", 300,false));
 
+	
 	//テクスチャハンドル
 	circleHandle_= TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");
 	defaultHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/default.png");
 	uv_ = TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
+
+	ground_ = std::make_unique<Ground>();
+	ground_->Init();
 
 	
 	emitter_->SetTextureHandle(circleHandle_);
@@ -130,33 +131,5 @@ void GameScene::Debug() {
 
 // ビュープロジェクション更新
 void GameScene::ViewProjectionUpdate() {
-
-#ifdef _DEBUG
-	// デバッグカメラモード切り替え------------------------------
-	if (Input::GetInstance()->TrrigerKey(DIK_SPACE)) {
-		if (isDebugCameraActive_ == false) {
-			isDebugCameraActive_ = true;
-		}
-		else if (isDebugCameraActive_ == true) {
-			isDebugCameraActive_ = false;
-		}
-	}
-	// デバッグカメラモード切り替え------------------------------
-#endif
-
-	if (isDebugCameraActive_ == true) { // デバッグカメラがアクティブなら
-		// デバッグカメラの更新
-		debugCamera_->Update();
-		// カメラ行列の計算をデバッグカメラのビュープロジェクションから行う
-		viewProjection_.matView_ = debugCamera_->GetViewProjection().matView_;
-		viewProjection_.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
-		viewProjection_.cameraMatrix_ = debugCamera_->GetViewProjection().cameraMatrix_;
-
-	}
-	// アクティブでない
-	else if (isDebugCameraActive_ == false) { // デバッグカメラがアクティブでない
-		viewProjection_.UpdateMatrix();
-
-		/*viewProjection_.TransferMatrix();*/
-	}
+	BaseScene::ViewProjectionUpdate();
 }

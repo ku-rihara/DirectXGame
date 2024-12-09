@@ -4,6 +4,9 @@
 /// imgui
 #include<imgui.h>
 
+#include"utility/Editor/GlobalParameter.h"
+#include "Frame/Frame.h"
+
 
 const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ";
 
@@ -41,8 +44,9 @@ void KTFramework::Init() {
 	//グローバル変数の読み込み
 	GlobalParameter::GetInstance()->LoadFiles();
 	// ゲームシーンの生成
-	gameScene_ =std::make_unique<GameScene>();
-	gameScene_->Init();
+	scemeManager_ = std::make_unique<SceneManager>();
+	/*gameScene_ =std::make_unique<GameScene>();
+	gameScene_->Init();*/
 
 	collisionManager_= std::make_unique<CollisionManager>();
 	collisionManager_->Init();
@@ -57,7 +61,7 @@ void KTFramework::Update() {
 	/// グローバル変数の更新
 	GlobalParameter::GetInstance()->Update();
 	/// ゲームシーンの毎フレーム処理
-	gameScene_->Update();
+	scemeManager_->Update();
 	///当たり判定
 	collisionManager_->Update();
 }

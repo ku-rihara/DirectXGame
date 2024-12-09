@@ -6,6 +6,9 @@
 // ============================
 void KTGame::Init() {
 	KTFramework::Init();
+
+	std::unique_ptr<BaseScene>scene = std::make_unique<BaseScene>();
+	scemeManager_->SetNextScene(scene.get());
 }
 
 // ============================
@@ -25,20 +28,20 @@ void KTGame::Draw() {
 	///////////////////////////////////////////
 	Model::PreDraw(commandList);
 	/// ゲームシーン描画
-	gameScene_->ModelDraw();
+	scemeManager_->ModelDraw();
 	/// コリジョン描画
-	collisionManager_->Draw(gameScene_->GetViewProjection());
+	collisionManager_->Draw(scemeManager_->GetScene()->GetViewProjection());
 	///////////////////////////////////////////
 	/// パーティクル
 	///////////////////////////////////////////
 	ParticleCommon::GetInstance()->PreDraw(commandList);
 	/// ゲームシーン描画
-	gameScene_->ParticleDraw();
+	scemeManager_->ParticleDraw();
 	///////////////////////////////////////////
 	/// スプライト
     ///////////////////////////////////////////
 	Sprite::PreDraw(commandList);
-	gameScene_->SpriteDraw();
+	scemeManager_->SpriteDraw();
 }
 
 // ============================

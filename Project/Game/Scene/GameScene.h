@@ -1,20 +1,8 @@
 #pragma once
 
-//DirectX
-#include"base/WinApp.h"
-#include "base/DirectXCommon.h"
-#include"base/TextureManager.h"
-//Transform
-#include "3d/WorldTransform.h"
-#include"3d/ViewProjection.h"
-//obj
-#include "2d/Sprite.h"
-#include "audio/Audio.h"
-#include"input/Input.h"
-#include"3d/Object3d.h"
-//etc
-#include"utility/Debug/DebugCamera.h"
-#include<memory>
+/// base
+#include"BaseScene.h"
+
 //testobj
 #include"TestObj/CollisionTest1.h"
 #include"TestObj/CollisionTest2.h"
@@ -26,13 +14,12 @@
 /// <summary>
 /// ゲームシーン
 /// </summary>
-class GameScene {
+class GameScene:public BaseScene {
 private:
 
-	DirectXCommon* dxCommon_ = nullptr;
-	Input* input_ = nullptr;
-	Audio* audio_ = nullptr;
-	TextureManager* textureManager_ = nullptr;
+	///========================================================
+	/// Private variants
+	///========================================================
 
 	uint32_t textureHandle_ = 0;
 	uint32_t soundDataHandle_ = 0;
@@ -47,12 +34,12 @@ private:
 	std::unique_ptr<ParticleEmitter>leftEmitter_;
 	std::unique_ptr<ParticleEmitter>rightEmitter_;
 	
-	bool isDebugCameraActive_;
+	//bool isDebugCameraActive_;
 	bool isDraw = true;
 
 	ViewProjection viewProjection_;
 
-	std::unique_ptr<DebugCamera> debugCamera_ = nullptr;
+	/*std::unique_ptr<DebugCamera> debugCamera_ = nullptr;*/
 
 	uint32_t defaultHandle_;
 	uint32_t circleHandle_;
@@ -61,41 +48,26 @@ private:
 	
 
 public:
-	/// <summary>
-	/// コンストクラタ
-	/// </summary>
+	
+	///========================================================
+	/// Constralt destract
+	///========================================================
 	GameScene();
+	~GameScene()override;
 
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~GameScene();
+	///========================================================
+	/// private method
+	///========================================================
+	
+	/// 初期化、更新、描画
+	void Init()override;
+	void Update()override;
+	void ModelDraw()override;
+	void SpriteDraw()override;
+	void ParticleDraw()override;
 
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	void Init();
+	void Debug()override;/// debug
+	void ViewProjectionUpdate()override;
 
-	/// <summary>
-	/// 毎フレーム処理
-	/// </summary>
-	void Update();
-
-	/// <summary>
-	/// 描画
-	/// </summary>
-	void ModelDraw();
-
-	void SpriteDraw();
-
-	void ParticleDraw();
-
-	/// <summary>
-	/// デバッグ表示
-	/// </summary>
-	void Debug();
-
-	void ViewProjectionUpdate();
-
-	const ViewProjection& GetViewProjection()const { return viewProjection_; }
+	/*const ViewProjection& GetViewProjection()const { return viewProjection_; }*/
 };
