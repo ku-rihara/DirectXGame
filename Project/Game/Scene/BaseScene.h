@@ -17,12 +17,10 @@
 #include"utility/Debug/DebugCamera.h"
 #include<memory>
 
-/// <summary>
-/// ゲームシーン
-/// </summary>
 class BaseScene {
-protected:
 
+
+protected:
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
@@ -38,7 +36,7 @@ public:
 	///========================================================
 	/// Constralt destract
 	///========================================================
-	BaseScene();
+	BaseScene() = default;
 	virtual ~BaseScene() = default;
 
 	/// <summary>
@@ -64,5 +62,15 @@ public:
 	virtual	void Debug();
 	virtual	void ViewProjectionUpdate();
 
+
+	///========================================================
+	/// getter method
+	///========================================================
 	const ViewProjection& GetViewProjection()const { return viewProjection_; }
+
+	///========================================================
+	/// setter method
+	///========================================================
+
+
 };

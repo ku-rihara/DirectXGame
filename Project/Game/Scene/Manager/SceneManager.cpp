@@ -1,20 +1,21 @@
-#include"SceneManager.h"
+#include "SceneManager.h"
+#include <cassert>
 
-SceneManager::~SceneManager() {
-    delete scene_;
+// シングルトンインスタンスの取得
+SceneManager* SceneManager::GetInstance() {
+    static SceneManager instance; // 静的インスタンス
+    return &instance;
 }
 
+SceneManager::~SceneManager() {
+    // unique_ptrによる自動解放
+}
 
 void SceneManager::Update() {
+   
     // 次のシーンが設定されている場合
     if (nextScene_) {
-      
-        if (scene_) {
-            delete scene_;
-        }
-        scene_ = nextScene_;
-        nextScene_ = nullptr;
-        // 初期化処理を呼び出す
+        scene_ = std::move(nextScene_);
         scene_->Init();
     }
 
@@ -23,7 +24,6 @@ void SceneManager::Update() {
         scene_->Update();
     }
 }
-
 
 void SceneManager::ModelDraw() {
     if (scene_) {
@@ -41,4 +41,16 @@ void SceneManager::ParticleDraw() {
     if (scene_) {
         scene_->ParticleDraw();
     }
+}
+
+void SceneManager::ChangeScene(const std::string& scenemane) {
+    assert(sceneFactory_);
+    assert(!nextScene_);
+
+    // 次のシーンを生成
+    nextScene_ = std::unique_ptr<BaseScene>(sceneFactory_->CreateScene(scenemane));
+
+  
+
+   
 }

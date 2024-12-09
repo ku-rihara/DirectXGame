@@ -37,7 +37,7 @@ private:
 	//bool isDebugCameraActive_;
 	bool isDraw = true;
 
-	ViewProjection viewProjection_;
+	/*ViewProjection viewProjection_;*/
 
 	/*std::unique_ptr<DebugCamera> debugCamera_ = nullptr;*/
 

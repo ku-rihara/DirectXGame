@@ -1,4 +1,8 @@
+///scene
+#include"Manager/SceneManager.h"
 #include "TitleScene.h"
+#include "GameScene.h"
+
 #include "base/TextureManager.h"
 //class
 
@@ -27,15 +31,23 @@ void TitleScene::Init() {
 	//ビュープロジェクション
 	viewProjection_.Init();
 
-	viewProjection_.translation_ = { 0,-0.2f,-0 };
+	viewProjection_.translation_ = { 0,-0.2f,0.0f };
 
 }
 
 void TitleScene::Update() {
 
+	
+
 	Debug();
 	ViewProjectionUpdate();
 
+	if (input_->TrrigerKey(DIK_RETURN)) {
+
+		SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+	}
+
+	
 }
 
 /// ===================================================

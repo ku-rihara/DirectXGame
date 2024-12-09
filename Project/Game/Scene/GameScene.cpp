@@ -8,6 +8,9 @@
 #include"Frame/Frame.h"
 #include<imgui.h>
 
+#include"Scene/Manager/SceneManager.h"
+
+
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
@@ -24,9 +27,6 @@ void GameScene::Init() {
 	//デバッグカメラ
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
 	debugCamera_->Init();
-
-
-	
 	
 	// エミッター
 	emitter_.reset(ParticleEmitter::CreateParticle("test", "Plane", ".obj", 1600,false));
@@ -42,7 +42,6 @@ void GameScene::Init() {
 	ground_ = std::make_unique<Ground>();
 	ground_->Init();
 
-	
 	emitter_->SetTextureHandle(circleHandle_);
 	leftEmitter_->SetTextureHandle(defaultHandle_);
 	rightEmitter_->SetTextureHandle(defaultHandle_);
@@ -83,6 +82,12 @@ void GameScene::Update() {
 	Debug();
 	ViewProjectionUpdate();
 
+
+	if (input_->TrrigerKey(DIK_RETURN)) {
+
+		SceneManager::GetInstance()->ChangeScene("TITLE");
+	}
+
 }
 
 /// ===================================================
@@ -93,7 +98,6 @@ void GameScene::ModelDraw() {
 	//平面描画
 	if (isDraw) {
 	
-
 		ground_->Draw(viewProjection_);
 
 		emitter_->DebugDraw(viewProjection_);

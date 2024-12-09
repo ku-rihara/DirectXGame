@@ -1,12 +1,11 @@
-#include"KTFramework.h"
+#include "KTFramework.h"
 /// base
-#include"base/Keta.h"
+#include "base/Keta.h"
 /// imgui
-#include<imgui.h>
+#include <imgui.h>
+#include "utility/Editor/GlobalParameter.h"
 
-#include"utility/Editor/GlobalParameter.h"
 #include "Frame/Frame.h"
-
 
 const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ";
 
@@ -14,66 +13,61 @@ const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ";
 // 実行
 // ============================
 void KTFramework::Run() {
+    Init(); /// 初期化
 
-	Init();/// 初期化
+    // ウィンドウのxボタンが押されるまでループ
+    while (Keta::ProcessMessage() == 0) {
+        Keta::BeginFrame(); /// フレームの開始
 
-	//ウィンドウのxボタンが押されるまでループ
-	while (Keta::ProcessMessage() == 0) {
+        Update(); /// 更新
 
-		Keta::BeginFrame();/// フレームの開始
+        Keta::PreDraw();
 
-		Update();/// 更新
+        Draw(); /// 描画
 
-		Draw();/// 描画
-
-		Keta::EndFrame();/// フレームの終了
-	}
-	Finalize();
-	
+        Keta::EndFrame(); /// フレームの終了
+    }
+    Finalize();
 }
-
 
 // ============================
 // 初期化
 // ============================
 void KTFramework::Init() {
+    /// ウィンドウ初期化
+    Keta::Initialize(kWindowTitle, 1280, 720);
 
-	/// ウィンドウ初期化
-	Keta::Initialize(kWindowTitle, 1280, 720);
+    // グローバル変数の読み込み
+    GlobalParameter::GetInstance()->LoadFiles();
 
-	//グローバル変数の読み込み
-	GlobalParameter::GetInstance()->LoadFiles();
-	// ゲームシーンの生成
-	scemeManager_ = std::make_unique<SceneManager>();
-	/*gameScene_ =std::make_unique<GameScene>();
-	gameScene_->Init();*/
+   
 
-	collisionManager_= std::make_unique<CollisionManager>();
-	collisionManager_->Init();
+    // コリジョン
+    collisionManager_ = std::make_unique<CollisionManager>();
+    collisionManager_->Init();
 }
 
 // ============================
 // 更新処理
 // ============================
 void KTFramework::Update() {
-	///FPS表示
-	DisplayFPS();
-	/// グローバル変数の更新
-	GlobalParameter::GetInstance()->Update();
-	/// ゲームシーンの毎フレーム処理
-	scemeManager_->Update();
-	///当たり判定
-	collisionManager_->Update();
+    /// FPS表示
+    DisplayFPS();
+    /// グローバル変数の更新
+    GlobalParameter::GetInstance()->Update();
+    /// ゲームシーンの毎フレーム処理
+    sceneManager_->Update();
+    /// 当たり判定
+    collisionManager_->Update();
 }
 
 // ============================
 // 解放
 // ============================
 void KTFramework::Finalize() {
-	//ライブラリの終了
-	Keta::Finalize();
+    // ライブラリの終了
+    Keta::Finalize();
 }
-
 
 // ============================
 // FPS表示

@@ -13,13 +13,14 @@ public:
 	//フレーム開始処理
 	static void BeginFrame();
 
+	static void PreDraw();
+
 	//フレーム終了処理
 	static void EndFrame();
 	
 	/// システム全体の終了
 	static void Finalize();
 
-	static void UpdateMatrixAll();
 
 };
 

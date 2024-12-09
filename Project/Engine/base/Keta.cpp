@@ -92,21 +92,29 @@ void Keta::Initialize(const char* title, int width, int height) {
 int Keta::ProcessMessage() {
 	return sWinApp->ProcessMessage();
 }
+
 //フレームの始め
 void Keta::BeginFrame() {
 #ifdef _DEBUG
-	imguiManager->Begin();	
-	//開発者UIの処理。実際に開発用のUIを出す場合はここをゲーム固有の処理に書き換える	
+	imguiManager->Begin();	/// imGui begin
 #endif
-	input->Update();
+	input->Update();	
+}
+
+//フレームの始め
+void Keta::PreDraw() {
 	sDirectXCommon->PreDraw();
 	sSrvManager->PreDraw();
 }
+
 //フレームの終わり
 void Keta::EndFrame() {
+
 #ifdef _DEBUG
 	ImGui::Render();
 #endif
+
+	//imguiManager->Draw();
 	sDirectXCommon->PostDraw();
 }
 

@@ -1,8 +1,6 @@
 #include "BaseScene.h"
 #include<imgui.h>
 
-BaseScene::BaseScene() {
-}
 
 void BaseScene::Debug() {
 #ifdef _DEBUG

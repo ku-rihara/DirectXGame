@@ -118,6 +118,9 @@
     <Filter Include="Game\Scene\Manager">
       <UniqueIdentifier>{20578600-268f-441b-8c4f-b9fd3cd175ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Scene\Factory">
+      <UniqueIdentifier>{33f429d3-39ce-4d12-9f0a-521b426150fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -285,6 +288,9 @@
     </ClCompile>
     <ClCompile Include="Game\Scene\Manager\SceneManager.cpp">
       <Filter>Game\Scene\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp">
+      <Filter>Game\Scene\Factory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -497,6 +503,12 @@
     </ClInclude>
     <ClInclude Include="Game\Scene\Manager\SceneManager.h">
       <Filter>Game\Scene\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\Factory\AbstractSceneFactory.h">
+      <Filter>Game\Scene\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\Factory\SceneFactory.h">
+      <Filter>Game\Scene\Factory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

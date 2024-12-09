@@ -1,5 +1,8 @@
 #include "KTGame.h"
 #include"utility/Particle/ParticleCommon.h"
+/// Scene
+#include "Scene/Factory/SceneFactory.h"
+
 
 // ============================
 // 初期化処理
@@ -7,8 +10,11 @@
 void KTGame::Init() {
 	KTFramework::Init();
 
-	std::unique_ptr<BaseScene>scene = std::make_unique<BaseScene>();
-	scemeManager_->SetNextScene(scene.get());
+	// シーン
+	sceneManager_ = SceneManager::GetInstance();
+	sceneFactory_ = std::make_unique<SceneFactory>();
+	sceneManager_->SetSceneFactory(sceneFactory_.get());
+	sceneManager_->ChangeScene("TITLE");
 }
 
 // ============================
@@ -28,20 +34,20 @@ void KTGame::Draw() {
 	///////////////////////////////////////////
 	Model::PreDraw(commandList);
 	/// ゲームシーン描画
-	scemeManager_->ModelDraw();
+	sceneManager_->ModelDraw();
 	/// コリジョン描画
-	collisionManager_->Draw(scemeManager_->GetScene()->GetViewProjection());
+	collisionManager_->Draw(sceneManager_->GetScene()->GetViewProjection());
 	///////////////////////////////////////////
 	/// パーティクル
 	///////////////////////////////////////////
 	ParticleCommon::GetInstance()->PreDraw(commandList);
 	/// ゲームシーン描画
-	scemeManager_->ParticleDraw();
+	sceneManager_->ParticleDraw();
 	///////////////////////////////////////////
 	/// スプライト
     ///////////////////////////////////////////
 	Sprite::PreDraw(commandList);
-	scemeManager_->SpriteDraw();
+	sceneManager_->SpriteDraw();
 }
 
 // ============================

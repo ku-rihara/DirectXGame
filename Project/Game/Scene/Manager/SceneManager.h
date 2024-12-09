@@ -1,32 +1,40 @@
 #pragma once
 
-#include"Scene/BaseScene.h"
+#include "Scene/BaseScene.h"
+#include "Scene/Factory/AbstractSceneFactory.h"
+#include <memory> // unique_ptr
 
 /// <summary>
 /// シーン管理
 /// </summary>
 class SceneManager {
 private:
-
-	BaseScene* scene_ = nullptr;
-	BaseScene* nextScene_ = nullptr;
+    std::unique_ptr<BaseScene> scene_;             
+    std::unique_ptr<BaseScene> nextScene_;         
+    AbstractSceneFactory* sceneFactory_ = nullptr; 
 
 public:
+    static SceneManager* GetInstance();
+    ~SceneManager();
 
-	~SceneManager();
+    // 更新、描画
+    void Update();
+    void ModelDraw();
+    void SpriteDraw();
+    void ParticleDraw();
 
-	void Update();
+    void ChangeScene(const std::string& scenemane);
 
-	void ModelDraw();
-	void SpriteDraw();
-	void ParticleDraw();
+    ///===========================================================
+    ///getter method
+    ///===========================================================
+    BaseScene* GetScene() const { return scene_.get(); } // ポインタを返す
 
-	///===========================================================
-	///getter method
-	///===========================================================
-	BaseScene* GetScene()const { return scene_; }
-	///===========================================================
-	///setter method
-	///===========================================================
-	void SetNextScene(BaseScene* nextScene) { nextScene_ = nextScene; }
+    ///===========================================================
+    ///setter method
+    ///===========================================================
+    void SetNextScene(std::unique_ptr<BaseScene> nextScene) { nextScene_ = std::move(nextScene); }
+    void SetSceneFactory(AbstractSceneFactory* abstractfactory) {
+        sceneFactory_ = abstractfactory;
+    }
 };
