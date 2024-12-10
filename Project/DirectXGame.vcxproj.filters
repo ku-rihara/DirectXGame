@@ -130,6 +130,15 @@
     <Filter Include="Game\BaseObject">
       <UniqueIdentifier>{832ab39a-2d4b-4fe4-8856-94b07328ddf2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\JoyState">
+      <UniqueIdentifier>{5ee7ea7f-09f5-48ab-b7fa-ce64d4d89f8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Field">
+      <UniqueIdentifier>{dadd7790-843c-4680-92b4-e67a4786f1af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\LockOn">
+      <UniqueIdentifier>{2dbf6ab4-b342-4a0c-bd73-1841d2da805a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -301,9 +310,6 @@
     <ClCompile Include="Game\Player\PlayerBehavior\BasePlayerBehavior.cpp">
       <Filter>Game\Player\Behavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\PlayerBehavior\PlayerCompress.cpp">
-      <Filter>Game\Player\Behavior</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerJump.cpp">
       <Filter>Game\Player\Behavior</Filter>
     </ClCompile>
@@ -315,6 +321,15 @@
     </ClCompile>
     <ClCompile Include="Game\BaseObject\BaseObject.cpp">
       <Filter>Game\BaseObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\JoyState\JoyState.cpp">
+      <Filter>Game\JoyState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Field\Field.cpp">
+      <Filter>Game\Field</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\LockOn\LockOn.cpp">
+      <Filter>Game\LockOn</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -534,9 +549,6 @@
     <ClInclude Include="Game\Player\PlayerBehavior\BasePlayerBehavior.h">
       <Filter>Game\Player\Behavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\PlayerBehavior\PlayerCompress.h">
-      <Filter>Game\Player\Behavior</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerJump.h">
       <Filter>Game\Player\Behavior</Filter>
     </ClInclude>
@@ -548,6 +560,15 @@
     </ClInclude>
     <ClInclude Include="Game\BaseObject\BaseObject.h">
       <Filter>Game\BaseObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\JoyState\JoyState.h">
+      <Filter>Game\JoyState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Field\Field.h">
+      <Filter>Game\Field</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\LockOn\LockOn.h">
+      <Filter>Game\LockOn</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

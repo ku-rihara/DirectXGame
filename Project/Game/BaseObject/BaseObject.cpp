@@ -4,12 +4,12 @@
 void BaseObject::Init() {
 
 	/// ワールドトランスフォームの初期化
-	transform_.Initialize();
+	transform_.Init();
 	/*aabb_.min = { 0,0,0 };
 	aabb_.max = { 1,1,1 };*/
 	//カラーのセット
-	objColor_.Initialize();
-	objColor_.SetColor(Vector4(1, 1, 1, 1));
+	//objColor_.Initialize();
+	//objColor_.SetColor(Vector4(1, 1, 1, 1));
 }
 
 void BaseObject::Update() {
@@ -17,11 +17,11 @@ void BaseObject::Update() {
 	//元となるワールドトランスフォームの更新
 	transform_.UpdateMatrix();
 	/// 色転送
-	objColor_.TransferMatrix();
+	/*objColor_.TransferMatrix();*/
 }
 
 void BaseObject::Draw(const ViewProjection& viewProjection) {
-	obj3d_->Draw(transform_, viewProjection, &objColor_);
+	obj3d_->Draw(transform_, viewProjection);
 }
 
 Vector3 BaseObject::GetWorldPosition() const {
@@ -34,9 +34,8 @@ Vector3 BaseObject::GetWorldPosition() const {
 	return worldPos;
 }
 
-void BaseObject::CreateModel(const std::string modelname) {
-	obj3d_ = std::make_unique<Object3d>();
-	obj3d_->Initialize(modelname);
+void BaseObject::CreateModel(const std::string modelname, const std::string name) {
+	obj3d_.reset(Object3d::CreateModel(modelname, name));
 }
 
 

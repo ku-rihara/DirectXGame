@@ -1,20 +1,20 @@
 #include "Player.h"
 
-#ifdef _DEBUG
-#include"imgui.h"
-#endif 
-
 #include"JoyState/JoyState.h"
 #include"Frame/Frame.h"
 
 /// math
 #include"MathFunction.h"
 
+#include"Field/Field.h"
+
 /// behavior
 #include"PlayerBehavior/PlayerRoot.h"
 #include"PlayerBehavior/PlayerJump.h"
-#include"PlayerBehavior/PlayerCompress.h"
 
+#ifdef _DEBUG
+#include"imgui.h"
+#endif 
 
 float Player::InitY_ = 0.5f;
 
@@ -26,10 +26,9 @@ void Player::Init() {
 	// 基底クラスの初期化
 	BaseObject::Init();
 	/// モデルセット
-	BaseObject::CreateModel("Player/Player.obj");
+	BaseObject::CreateModel("Player/Player",".obj");
 
 	transform_.translation_.y = Player::InitY_;//  パーツの変位
-
 
 	jumpSpeed_ = 0.0f;
 	muzzelJumpSpeed_ = 1.5f;
@@ -41,8 +40,7 @@ void Player::Init() {
 /// 更新
 void Player::Update() {
 	prePos_ = GetWorldPosition();
-	/// 攻撃フラグ切り替え
-	AttackFragChange();
+	
 	/// ダメージエフェクト
 	DamageRendition();
 	/// 振る舞い処理
@@ -186,7 +184,7 @@ bool Player::GetIsMoving() {
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
 		// 移動量
 		StickVelocity = { (float)joyState.Gamepad.sThumbLX / SHRT_MAX, 0, (float)joyState.Gamepad.sThumbLY / SHRT_MAX };
-		if ((StickVelocity).Length() > thresholdValue) {
+		if (Vector3::Length((StickVelocity)) > thresholdValue) {
 			isMoving = true;
 		}
 	}
@@ -207,7 +205,7 @@ bool Player::GetIsMoving() {
 		if (input->PushKey(DIK_D)) {
 			keyBoradVelocity.x += 1.0f;  // 右移動
 		}
-		if ((keyBoradVelocity).Length() > 0) {
+		if (Vector3::Length((keyBoradVelocity)) > 0) {
 			isMoving = true;
 		}
 	}
@@ -290,7 +288,6 @@ void Player::Debug() {
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Player")) {
 		ImGui::DragFloat3("Pos", &transform_.translation_.x, 0.01f);
-		ImGui::DragInt("HP", &life_);
 		ImGui::DragFloat("JumpSpeed", &muzzelJumpSpeed_, 0.01f);
 		ImGui::Text("Isattack:%d", isAttack_);
 		behavior_->Debug();
@@ -299,26 +296,21 @@ void Player::Debug() {
 #endif // _DEBUG
 }
 
-Vector3 Player::GetCenterPosition() const {
-
-	const Vector3 offset = { 0.0f, 1.0f, 0.0f };//ローカル座標のオフセット
-	// ワールド座標に変換
-	Vector3 worldPos = Transformation(offset, transform_.matWorld_);
-
-	return worldPos;
-};
-
-Vector3 Player::GetCenterRotation() const {
-	return transform_.rotation_;
-}
-
+//Vector3 Player::GetCenterPosition() const {
+//
+//	const Vector3 offset = { 0.0f, 1.0f, 0.0f };//ローカル座標のオフセット
+//	// ワールド座標に変換
+//	Vector3 worldPos = Transformation(offset, transform_.matWorld_);
+//
+//	return worldPos;
+//};
 
 void Player::TakeDamage() {
-	if (!isDamage_) {
+	/*if (!isDamage_) {
 		life_--;
 		isDamage_ = true;
 		damageTime_ = damageCollTime_;
-	}
+	}*/
 }
 
 ///=========================================================
@@ -332,38 +324,3 @@ void Player::SetBoss(Boss* boss) {
 ///=========================================================
 /// Collision
 ///==========================================================
-
-void Player::OnCollisionEnter([[maybe_unused]] Collider* other) {
-
-	//* TODO
-
-		/// ガレキとの当たり
-		if (BaseDebris* debri = dynamic_cast<BaseDebris*>(other)) {
-			if (!debri->GetIsNoRide()&&!debri->GetCanAttack()) {
-				fallSpeed_ = 0.0f;
-				isCollisionDebris_ = true;
-				transform_.translation_.y = debri->GetWorldPosition().y + 1.0f;
-			}
-		}
-		
-	/// ボスとの衝突
-	if (dynamic_cast<Boss*>(other)) {
-		TakeDamage();
-		/// ボスのプレスをしている間潰れる
-		if (pBoss_->GetIsPress()) {
-			if (!dynamic_cast<PlayerCompress*>(behavior_.get())) {
-				ChangeBehavior(std::make_unique<PlayerCompress>(this));
-			}
-		}
-	}
-}
-
-// ガレキから出た時
-void Player::OnCollisionOut([[maybe_unused]] Collider* other) {
-
-	/*if (dynamic_cast<BaseDebris*>(other)) {
-		if (isCollisionDebris_) {
-		ChangeBehavior(std::make_unique<PlayerJump>(this));
-		}
-	}*/
-}

@@ -19,7 +19,7 @@ protected:
 	// ベースのワールド変換データ
 	WorldTransform transform_;
 	//カラー
-	ObjColor objColor_;
+	/*ObjColor objColor_;*/
 
 	/*AABB aabb_;*/
 
@@ -34,7 +34,8 @@ public:
 	virtual void Update();
 	virtual void Draw(const ViewProjection& viewProjection);
 	
-	virtual void CreateModel(const std::string modelname);
+	virtual void CreateModel(
+	const std::string modelname,const std::string name);
 
 	// 中心座標取得
 	virtual Vector3 GetWorldPosition() const;
@@ -48,7 +49,7 @@ public:
 	/// ===================================================
     ///setter 
     /// ===================================================
-	void SetObjColor(Vector4 c) { objColor_.SetColor(c); }
+	//void SetObjColor(Vector4 c) { objColor_.SetColor(c); }
 	void SetWorldPosition(Vector3 pos) { transform_.translation_ = pos; }
 	void SetWorldPositionY(float pos) { transform_.translation_.y = pos; }
 	void SetWorldPositionX(float pos) { transform_.translation_.x = pos; }

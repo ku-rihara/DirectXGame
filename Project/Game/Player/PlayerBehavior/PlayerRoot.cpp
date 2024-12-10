@@ -3,11 +3,13 @@
 #include"PlayerJump.h"
 
 /// boss
-#include"Game/Player/Player.h"
+#include"Player/Player.h"
 /// frame
-#include"myEngine/Frame/Frame.h"
+#include"Frame/Frame.h"
 /// inupt
-#include"myEngine/input/Input.h"
+#include"input/Input.h"
+/// imgui
+#include<imgui.h>
 
 //初期化
 PlayerRoot::PlayerRoot(Player* boss)
@@ -29,7 +31,7 @@ void PlayerRoot::Update() {
 
 	pPlayer_->Move(0.3f);
 
-	if (Input::GetInstance()->TriggerKey(DIK_J)) {
+	if (Input::GetInstance()->TrrigerKey(DIK_J)) {
 		pPlayer_->ChangeBehavior(std::make_unique<PlayerJump>(pPlayer_));
 	}
 }

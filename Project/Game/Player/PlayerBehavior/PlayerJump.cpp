@@ -3,9 +3,10 @@
 #include"PlayerRoot.h"
 
 /// boss
-#include"Game/Player/Player.h"
+#include"Player/Player.h"
 /// frame
-#include"myEngine/Frame/Frame.h"
+#include"Frame/Frame.h"
+#include<imgui.h>
 
 
 //初期化
@@ -15,15 +16,9 @@ PlayerJump::PlayerJump(Player* player)
 	/// ===================================================
 	///変数初期化
 	/// ===================================================
-	
-	if (pPlayer_->GetIsCollisionDebris()) {
-		speed_ = 0.0f;
-		pPlayer_->SetIsCollisionDebris(false);
-	}
-	else {
+
 		speed_ = pPlayer_->GetMuzzulJumpSpeed();
-	}
-	/*pPlayer_->SetJumpSpeed(1.5f);*/
+	
 }
 
 PlayerJump ::~PlayerJump() {
