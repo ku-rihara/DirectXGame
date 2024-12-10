@@ -26,7 +26,7 @@ void Player::Init() {
 	// 基底クラスの初期化
 	BaseObject::Init();
 	/// モデルセット
-	BaseObject::CreateModel("PlayerBody",".obj");
+	BaseObject::CreateModel("cube",".obj");
 
 	transform_.translation_.y = Player::InitY_;//  パーツの変位
 

@@ -31,7 +31,7 @@ void PlayerRoot::Update() {
 
 	pPlayer_->Move(0.3f);
 
-	if (Input::GetInstance()->TrrigerKey(DIK_J)) {
+	if (Input::GetInstance()->PushKey(DIK_J)) {
 		pPlayer_->ChangeBehavior(std::make_unique<PlayerJump>(pPlayer_));
 	}
 }
