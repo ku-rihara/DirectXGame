@@ -139,6 +139,9 @@
     <Filter Include="Game\LockOn">
       <UniqueIdentifier>{2dbf6ab4-b342-4a0c-bd73-1841d2da805a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemy">
+      <UniqueIdentifier>{e50a6726-f665-4727-8499-eab58c410ec3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -330,6 +333,9 @@
     </ClCompile>
     <ClCompile Include="Game\LockOn\LockOn.cpp">
       <Filter>Game\LockOn</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\BaseEnemy.cpp">
+      <Filter>Game\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -569,6 +575,9 @@
     </ClInclude>
     <ClInclude Include="Game\LockOn\LockOn.h">
       <Filter>Game\LockOn</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\BaseEnemy.h">
+      <Filter>Game\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

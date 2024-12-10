@@ -61,6 +61,7 @@ public:
 	/// </summary>
 	virtual	void Debug();
 	virtual	void ViewProjectionUpdate();
+	virtual	void ViewProssess() = 0;
 
 
 	///========================================================

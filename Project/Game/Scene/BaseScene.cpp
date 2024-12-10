@@ -39,7 +39,7 @@ void BaseScene::ViewProjectionUpdate() {
 	}
 	// アクティブでない
 	else if (isDebugCameraActive_ == false) { // デバッグカメラがアクティブでない
-		viewProjection_.UpdateMatrix();
+		ViewProssess();
 
 		/*viewProjection_.TransferMatrix();*/
 	}

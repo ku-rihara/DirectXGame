@@ -30,5 +30,5 @@ public:
 
 	void Debug()override;/// debug
 	void ViewProjectionUpdate()override;
-	
+	void ViewProssess()override;
 };

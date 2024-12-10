@@ -12,20 +12,17 @@
 /// <summary>
 /// プレイヤークラス
 /// </summary>
-class Boss;
+
 class Player : public BaseObject{
-private:
-	enum Parts {
-		IndexBody,
-	};
-private:
-	/// other class
-	Boss* pBoss_;
+
+	
 private:
 	/// ===================================================
 	///private variaus
 	/// ===================================================
 	
+	/// other class
+	/*Boss* pBoss_;*/
 	
 	// カメラのビュープロジェクション
 	const ViewProjection* viewProjection_ = nullptr;
@@ -74,7 +71,7 @@ public:
 	
 	void Debug();
 
-	void SetBoss(Boss* boss);
+	/*void SetBoss(Boss* boss);*/
 	
 	/// collision
 
@@ -86,7 +83,7 @@ public:
 	/// getter
 	/// ===================================================
 	const bool& GetIsAttack()const { return isAttack_; }
-	Boss* GetBoss()const { return pBoss_; }
+
 
 	float GetMuzzulJumpSpeed()const { return muzzelJumpSpeed_; }
 	/// ===================================================

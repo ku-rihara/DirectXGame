@@ -21,7 +21,6 @@ private:
 	float destinationAngleY_;
 	int viewMoveTime_;
 	const int kViewMoveTime_ = 20;
-	bool isTutorialViewMove_;
 
 public:
 	/// ===================================================
@@ -30,12 +29,8 @@ public:
 	void Init();
 	void Update();
 	void Reset();
-	void TutorialViewMove();
+	void GetIsCameraMove();
 	Vector3 OffsetCalc()const;
-
-	// getter
-	const ViewProjection& GetViewProjection() { return viewprojection_; }
-	bool GetIsTutorialViewMove()const { return isTutorialViewMove_; }
 
 	Vector3 GetBaseCenterPosition() const;
 
@@ -44,7 +39,6 @@ public:
 	/// ===================================================
 	const ViewProjection& GetViewProjection() { return viewprojection_; }
 		Vector3 GetTargetPos()const;
-	Vector3 GetBaseCenterPosition() const;
 	/// ===================================================
 	/// setter
 	/// ===================================================

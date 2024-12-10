@@ -3,8 +3,8 @@
 #include "Matrix4x4.h"
 #include "base/TextureManager.h"
 #include"MathFunction.h"
-//class
-#include "BaseEnemy.h"
+////class
+#include "Enemy/BaseEnemy.h"
 
 //初期化
 void LockOn::Init() {
@@ -34,7 +34,7 @@ void LockOn::Update(const std::list<std::unique_ptr<BaseEnemy>>& enemies, const 
 	// ロックオン継続
 	if (target_) {
 		// 敵のロックオン座標取得
-		Vector3 positionWorld = target_->GetBaseCenterPosition();
+		Vector3 positionWorld = target_->GetWorldPosition();
 		// ワールド座標からスクリーン座標に変換
 		Vector3 positionScreen = ScreenTransform(positionWorld, viewProjection);
 		// Vector2に格納
@@ -43,24 +43,13 @@ void LockOn::Update(const std::list<std::unique_ptr<BaseEnemy>>& enemies, const 
 		LarpTimeIncrement(0.1f);
 		lockOnMarkPos_ = Lerp(prePos_, positionScreenV2, lerpTime_);
 
-		//// 距離に応じてスケールを調整
-		//float distance = Distance(positionWorld,viewProjection.translation_);
-
-		//// スケールを距離に反比例させる（距離が遠いほど小さくなる）
-		//float scaleFactor = max(1.0f, distance / maxDistance_);
-
-		//// スプライトの最大サイズを144に設定
-		//const float maxSize = 144.0f;
-		//float size = maxSize / scaleFactor; // 反比例させるために除算
-
-		//// スプライトのサイズを設定
-		//lockOnMark_->SetSize(Vector2(size, size));
+	
 
 		// スプライトの座標を設定
 		lockOnMark_->SetPosition(lockOnMarkPos_);
-		spriteRotation_ += 0.01f;
-		//回転を設定
-		lockOnMark_->SetRotation(spriteRotation_);
+		//spriteRotation_ += 0.01f;
+		////回転を設定
+		//lockOnMark_->SetRotation(spriteRotation_);
 	}
 }
 
@@ -78,7 +67,7 @@ void LockOn::Search(const std::list<std::unique_ptr<BaseEnemy>>& enemies, const 
 
 	// 全ての敵に対して順にロックオンを判定
 	for (const std::unique_ptr<BaseEnemy>& enemy : enemies) {
-		if (!enemy->GetIsBurst() && IsTargetRange(*enemy, viewProjection, positionView)) {
+		if (/*!enemy->GetIsBurst() &&*/ IsTargetRange(*enemy, viewProjection, positionView)) {
 			targets.emplace_back(std::make_pair(positionView.z, enemy.get()));
 		}
 	}
@@ -111,9 +100,9 @@ bool LockOn::IsOutOfRange(const std::list<std::unique_ptr<BaseEnemy>>& enemies, 
 bool LockOn::IsTargetRange(const BaseEnemy& enemy, const ViewProjection& viewProjection, Vector3& positionView) {
 
 	// 敵のロックオン座標を取得
-	Vector3 positionWorld = enemy.GetBaseCenterPosition();
+	Vector3 positionWorld = enemy.GetWorldPosition();
 	// ワールド→ビュー座標系
-	positionView = Transform(positionWorld, viewProjection.matView);
+	positionView = MatrixTransform(positionWorld, viewProjection.matView_);
 	// 距離条件チェック
 	if (minDistance_ <= positionView.z && positionView.z <= maxDistance_) {
 		// カメラ前方との角度を計算
@@ -127,7 +116,7 @@ bool LockOn::IsTargetRange(const BaseEnemy& enemy, const ViewProjection& viewPro
 // 敵の中心座標取得をこのクラスでも作る
 Vector3 LockOn::GetTargetPosition() const {
 	if (ExistTarget()) {
-		return target_->GetBaseCenterPosition();
+		return target_->GetWorldPosition();
 	}
 	return Vector3();
 }

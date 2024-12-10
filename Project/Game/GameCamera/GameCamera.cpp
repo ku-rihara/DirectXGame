@@ -80,11 +80,10 @@ void GameCamera::SetTarget(const WorldTransform* target) {
 	Reset();
 }
 
-void GameCamera::TutorialViewMove() {
+void GameCamera::GetIsCameraMove() {
 	if (Vector3::Length(stickInput_) > 0.1f) {
 		viewMoveTime_++;
 		if (viewMoveTime_ >= kViewMoveTime_) {
-			isTutorialViewMove_ = true;
 		}
 	}
 }

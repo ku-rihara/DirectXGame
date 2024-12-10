@@ -32,16 +32,26 @@ void GameScene::Init() {
 	/// 生成
 	///=======================================================================================
 
-	ground_ = std::make_unique<Ground>();
+	field_ = std::make_unique<Field>();
+	lockOn_= std::make_unique<LockOn>();
+	player_ = std::make_unique<Player>();
+	gamecamera_ = std::make_unique<GameCamera>();
 
 	///=======================================================================================
 	/// 初期化
 	///=======================================================================================
-	ground_->Init();
+	field_->Init();
+	player_->Init();
+	lockOn_->Init();
+	gamecamera_->Init();
+	
+	viewProjection_.Init();//ビュープロジェクション
 
-	//ビュープロジェクション
-	viewProjection_.Init();
-	viewProjection_.translation_ = { 0,-6.2f,-109.0f };
+	gamecamera_->SetTarget(&player_->GetTransform());
+	player_->SetViewProjection(&viewProjection_);
+
+	
+	
 }
 
 void GameScene::Update() {
@@ -51,7 +61,10 @@ void GameScene::Update() {
 	debugCamera_->Update();
 
 	//各クラス更新
-	ground_->Update();
+	player_->Update();
+	/*lockOn_->Update()*/
+	field_->Update();
+	gamecamera_->Update();
 
 	Debug();
 	ViewProjectionUpdate();
@@ -71,8 +84,8 @@ void GameScene::ModelDraw() {
 	//平面描画
 	if (isDraw) {
 	
-		ground_->Draw(viewProjection_);
-
+		field_->Draw(viewProjection_);
+		player_->Draw(viewProjection_);
 	}
 }
 
@@ -105,4 +118,8 @@ void GameScene::Debug() {
 // ビュープロジェクション更新
 void GameScene::ViewProjectionUpdate() {
 	BaseScene::ViewProjectionUpdate();
+}
+
+void GameScene::ViewProssess() {
+	viewProjection_.UpdateMatrix();
 }

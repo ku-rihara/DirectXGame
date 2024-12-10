@@ -3,10 +3,12 @@
 /// base
 #include"BaseScene.h"
 
-//testobj
-#include"TestObj/CollisionTest1.h"
-#include"TestObj/CollisionTest2.h"
-#include"Ground/Ground.h"
+//object
+#include"Field/Field.h"
+#include"Player/Player.h"
+#include"LockOn/LockOn.h"
+#include"GameCamera/GameCamera.h"
+
 // emitter
 #include"utility/Particle/ParticleEmitter.h"
 
@@ -25,16 +27,16 @@ private:
 	uint32_t soundDataHandle_ = 0;
 	uint32_t voiceHandle_ = 0;
 	
+	///* objects
+	std::unique_ptr<GameCamera> gamecamera_ = nullptr;
+	std::unique_ptr<Field> field_ = nullptr;
+	std::unique_ptr<LockOn> lockOn_ = nullptr;
+	std::unique_ptr<Player> player_ = nullptr;
 
-	std::unique_ptr<Ground> ground_ = nullptr;
 	
-	
-	//bool isDebugCameraActive_;
 	bool isDraw = true;
 
-	/*ViewProjection viewProjection_;*/
-
-	/*std::unique_ptr<DebugCamera> debugCamera_ = nullptr;*/
+	
 
 	uint32_t defaultHandle_;
 	uint32_t circleHandle_;
@@ -63,6 +65,7 @@ public:
 
 	void Debug()override;/// debug
 	void ViewProjectionUpdate()override;
+	void ViewProssess()override;
 
 	/*const ViewProjection& GetViewProjection()const { return viewProjection_; }*/
 };

@@ -26,7 +26,7 @@ void Player::Init() {
 	// 基底クラスの初期化
 	BaseObject::Init();
 	/// モデルセット
-	BaseObject::CreateModel("Player/Player",".obj");
+	BaseObject::CreateModel("PlayerBody",".obj");
 
 	transform_.translation_.y = Player::InitY_;//  パーツの変位
 
@@ -136,7 +136,6 @@ Vector3 Player::GetInputVelocity() {
 	}
 
 	// ジョイスティック入力
-	XINPUT_STATE joyState;
 	if (input->GetJoystickState(0, joyState)) {
 		velocity.x += (float)joyState.Gamepad.sThumbLX / SHRT_MAX;
 		velocity.z += (float)joyState.Gamepad.sThumbLY / SHRT_MAX;
@@ -317,9 +316,9 @@ void Player::TakeDamage() {
 /// Class Set
 ///==========================================================
 
-void Player::SetBoss(Boss* boss) {
-	pBoss_ = boss;
-}
+//void Player::SetBoss(Boss* boss) {
+//	pBoss_ = boss;
+//}
 
 ///=========================================================
 /// Collision
