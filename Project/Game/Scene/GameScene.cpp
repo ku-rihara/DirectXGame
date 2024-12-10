@@ -27,13 +27,13 @@ void GameScene::Init() {
 	//デバッグカメラ
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
 	debugCamera_->Init();
-	
+
 	///=======================================================================================
 	/// 生成
 	///=======================================================================================
 
 	field_ = std::make_unique<Field>();
-	lockOn_= std::make_unique<LockOn>();
+	lockOn_ = std::make_unique<LockOn>();
 	player_ = std::make_unique<Player>();
 	gamecamera_ = std::make_unique<GameCamera>();
 
@@ -44,14 +44,14 @@ void GameScene::Init() {
 	player_->Init();
 	lockOn_->Init();
 	gamecamera_->Init();
-	
+
 	viewProjection_.Init();//ビュープロジェクション
 
 	gamecamera_->SetTarget(&player_->GetTransform());
 	player_->SetViewProjection(&viewProjection_);
 
-	
-	
+
+
 }
 
 void GameScene::Update() {
@@ -83,7 +83,7 @@ void GameScene::ModelDraw() {
 
 	//平面描画
 	if (isDraw) {
-	
+
 		field_->Draw(viewProjection_);
 		player_->Draw(viewProjection_);
 	}
@@ -121,5 +121,9 @@ void GameScene::ViewProjectionUpdate() {
 }
 
 void GameScene::ViewProssess() {
-	viewProjection_.UpdateMatrix();
+	viewProjection_.matView_ = gamecamera_->GetViewProjection().matView_;
+	viewProjection_.matProjection_ = gamecamera_->GetViewProjection().matProjection_;
+
+	viewProjection_.TransferMatrix();
+
 }
