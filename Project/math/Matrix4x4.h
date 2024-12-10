@@ -1,10 +1,12 @@
 #pragma once
-#include "Vector3.h"
+
 #include "Vector4.h"
 /// <summary>
 /// 4x4行列
 /// </summary>
 class Vector3;
+class ViewProjection;
+
 struct Matrix4x4 {
 	float m[4][4];
 	Matrix4x4 operator+(const Matrix4x4& obj) const; // 加算
@@ -50,3 +52,4 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 
 Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);
 
+Vector3 ScreenTransform(Vector3 worldPos, const ViewProjection& viewProjection);

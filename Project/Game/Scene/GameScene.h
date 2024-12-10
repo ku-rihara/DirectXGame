@@ -68,6 +68,7 @@ public:
 
 	void Debug()override;/// debug
 	void ViewProjectionUpdate()override;
+	void ViewProssess()override;
 
 	/*const ViewProjection& GetViewProjection()const { return viewProjection_; }*/
 };

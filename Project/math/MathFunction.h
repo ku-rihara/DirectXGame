@@ -34,6 +34,9 @@ Vector3 CatmullRomInterpolation(const Vector3& p0, const Vector3& p1, const Vect
 ///  <returns></returns>
 Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t);
 
+float LerpShortAngle(float a, float b, float t);
+
+
 // 度数をラジアンに変換する関数
 float toRadian(float degrees);
 

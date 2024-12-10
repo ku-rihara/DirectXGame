@@ -138,3 +138,8 @@ void GameScene::Debug() {
 void GameScene::ViewProjectionUpdate() {
 	BaseScene::ViewProjectionUpdate();
 }
+
+
+void GameScene::ViewProssess() {
+	viewProjection_.UpdateMatrix();
+}
