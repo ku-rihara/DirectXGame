@@ -79,9 +79,6 @@
     <Filter Include="MyEngine\.h\Collider">
       <UniqueIdentifier>{261d89ef-d3f4-4da1-aa9e-bfd6e260bf1a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\TestObj">
-      <UniqueIdentifier>{7bdc3ee7-e0ae-40dc-88b0-86f6e624ddbf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.cpp\Core">
       <UniqueIdentifier>{b79d053e-0a76-457f-9fe2-ce730fecf455}</UniqueIdentifier>
     </Filter>
@@ -123,6 +120,15 @@
     </Filter>
     <Filter Include="Game\Player">
       <UniqueIdentifier>{17bc6e81-f103-4b8a-895b-a16298dcba9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Behavior">
+      <UniqueIdentifier>{cf9a79e5-c843-492f-9a28-30d2c3517ba4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameCamera">
+      <UniqueIdentifier>{bfdbb484-9e65-4a8a-af2e-0ef01be0733a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\BaseObject">
+      <UniqueIdentifier>{832ab39a-2d4b-4fe4-8856-94b07328ddf2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -238,12 +244,6 @@
     <ClCompile Include="Engine\Collider\OBBCollider.cpp">
       <Filter>MyEngine\.cpp\Collider</Filter>
     </ClCompile>
-    <ClCompile Include="Game\TestObj\CollisionTest1.cpp">
-      <Filter>Game\TestObj</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\TestObj\CollisionTest2.cpp">
-      <Filter>Game\TestObj</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Core\KTGame.cpp">
       <Filter>MyEngine\.cpp\Core</Filter>
     </ClCompile>
@@ -294,6 +294,27 @@
     </ClCompile>
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp">
       <Filter>Game\Scene\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Player.cpp">
+      <Filter>Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\PlayerBehavior\BasePlayerBehavior.cpp">
+      <Filter>Game\Player\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\PlayerBehavior\PlayerCompress.cpp">
+      <Filter>Game\Player\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\PlayerBehavior\PlayerJump.cpp">
+      <Filter>Game\Player\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\PlayerBehavior\PlayerRoot.cpp">
+      <Filter>Game\Player\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameCamera\GameCamera.cpp">
+      <Filter>Game\GameCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BaseObject\BaseObject.cpp">
+      <Filter>Game\BaseObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -453,12 +474,6 @@
     <ClInclude Include="Engine\Collider\CollisionManager.h">
       <Filter>MyEngine\.h\Collider</Filter>
     </ClInclude>
-    <ClInclude Include="Game\TestObj\CollisionTest1.h">
-      <Filter>Game\TestObj</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\TestObj\CollisionTest2.h">
-      <Filter>Game\TestObj</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Core\KTGame.h">
       <Filter>MyEngine\.h\Core</Filter>
     </ClInclude>
@@ -512,6 +527,27 @@
     </ClInclude>
     <ClInclude Include="Game\Scene\Factory\SceneFactory.h">
       <Filter>Game\Scene\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Player.h">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\PlayerBehavior\BasePlayerBehavior.h">
+      <Filter>Game\Player\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\PlayerBehavior\PlayerCompress.h">
+      <Filter>Game\Player\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\PlayerBehavior\PlayerJump.h">
+      <Filter>Game\Player\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\PlayerBehavior\PlayerRoot.h">
+      <Filter>Game\Player\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameCamera\GameCamera.h">
+      <Filter>Game\GameCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BaseObject\BaseObject.h">
+      <Filter>Game\BaseObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
