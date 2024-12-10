@@ -28,51 +28,24 @@ void GameScene::Init() {
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
 	debugCamera_->Init();
 	
-	// エミッター
-	emitter_.reset(ParticleEmitter::CreateParticle("test", "Plane", ".obj", 1600,false));
-	leftEmitter_.reset(ParticleEmitter::CreateParticle("LeftSide", "cube", ".obj", 300,false));
-	rightEmitter_.reset(ParticleEmitter::CreateParticle("RightSide", "cube", ".obj", 300,false));
-
-	//テクスチャハンドル
-	circleHandle_= TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");
-	defaultHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/default.png");
-	uv_ = TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
+	///=======================================================================================
+	/// 生成
+	///=======================================================================================
 
 	ground_ = std::make_unique<Ground>();
+
+	///=======================================================================================
+	/// 初期化
+	///=======================================================================================
 	ground_->Init();
 
-	emitter_->SetTextureHandle(circleHandle_);
-	leftEmitter_->SetTextureHandle(defaultHandle_);
-	rightEmitter_->SetTextureHandle(defaultHandle_);
-
-	///=======================================================================================
-	///Particle
-	///=======================================================================================
-
-	
-	//WorldTransform
 	//ビュープロジェクション
 	viewProjection_.Init();
-
 	viewProjection_.translation_ = { 0,-6.2f,-109.0f };
-
-	
-
 }
 
 void GameScene::Update() {
 
-	//emitter
-	emitter_->EditorUpdate();
-	emitter_->Emit();
-
-	leftEmitter_->EditorUpdate();
-	leftEmitter_->Emit();
-
-	rightEmitter_->EditorUpdate();
-	rightEmitter_->Emit();
-
-	ParticleManager::GetInstance()->Update(&viewProjection_);
 
 	/// debugcamera
 	debugCamera_->Update();
@@ -84,11 +57,10 @@ void GameScene::Update() {
 	ViewProjectionUpdate();
 
 
+	/// タイトルに戻る
 	if (input_->TrrigerKey(DIK_RETURN)) {
-
 		SceneManager::GetInstance()->ChangeScene("TITLE");
 	}
-
 }
 
 /// ===================================================
@@ -101,9 +73,6 @@ void GameScene::ModelDraw() {
 	
 		ground_->Draw(viewProjection_);
 
-		emitter_->DebugDraw(viewProjection_);
-		leftEmitter_->DebugDraw(viewProjection_);
-		rightEmitter_->DebugDraw(viewProjection_);
 	}
 }
 
@@ -111,8 +80,7 @@ void GameScene::ModelDraw() {
    /// パーティクル描画
    /// ===================================================
 void GameScene::ParticleDraw() {
-	emitter_->RailDraw(viewProjection_);
-	ParticleManager::GetInstance()->Draw(viewProjection_);
+
 }
 
 /// ===================================================

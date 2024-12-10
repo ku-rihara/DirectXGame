@@ -27,12 +27,7 @@ private:
 	
 
 	std::unique_ptr<Ground> ground_ = nullptr;
-	std::unique_ptr<Object3d>modelPlane_ = nullptr;
-
-	/// particle
-	std::unique_ptr<ParticleEmitter>emitter_;
-	std::unique_ptr<ParticleEmitter>leftEmitter_;
-	std::unique_ptr<ParticleEmitter>rightEmitter_;
+	
 	
 	//bool isDebugCameraActive_;
 	bool isDraw = true;
