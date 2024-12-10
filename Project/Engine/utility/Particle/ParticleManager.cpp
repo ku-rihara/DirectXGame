@@ -17,12 +17,17 @@ ParticleManager* ParticleManager::GetInstance() {
 	return &instance;
 }
 
+///============================================================
+///　初期化
+///============================================================
 void ParticleManager::Init(SrvManager* srvManager) {
 	pSrvManager_ = srvManager;
 	pParticleCommon_ = ParticleCommon::GetInstance();
 }
 
-
+///============================================================
+/// 更新
+///============================================================
 void ParticleManager::Update(std::optional<const ViewProjection*> viewProjection) {
 	//uint32_t instanceIndex = 0; // 現在のインスタンス数
 
@@ -80,7 +85,9 @@ void ParticleManager::Update(std::optional<const ViewProjection*> viewProjection
 
 
 
-
+///============================================================
+/// 描画
+///============================================================
 void ParticleManager::Draw(const ViewProjection& viewProjection) {
     for (auto& groupPair : particleGroups_) {
         ParticleGroup& group = groupPair.second;
@@ -119,7 +126,9 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
     }
 }
 
-
+///============================================================
+/// グループ作成
+///============================================================
 void ParticleManager::CreateParticleGroup(
 	const std::string name, const std::string modelFilePath,
 	const std::string& extension, const uint32_t& maxnum) {
@@ -142,10 +151,16 @@ void ParticleManager::CreateParticleGroup(
 	particleGroups_[name].instanceNum = 0;
 }
 
+///============================================================
+/// テクスチャセット
+///============================================================
 void ParticleManager::SetTextureHandle(const std::string name, const uint32_t& handle) {
 	particleGroups_[name].textureHandle = handle;
 }
 
+///============================================================
+/// モデルセット
+///============================================================
 
 void  ParticleManager::SetModel(const std::string& name, const std::string& modelName, const std::string& extension) {
 
@@ -160,11 +175,9 @@ void  ParticleManager::CreateMaterialResource(const std::string& name) {
 	particleGroups_[name].material.CreateMaterialResource(DirectXCommon::GetInstance());
 }
 
-//
-//void Object3dParticle::DebugImgui() {
-//	BaseObject3d::DebugImgui();
-//}
-
+///============================================================
+/// インスタンシングリソース作成
+///============================================================
 void ParticleManager::CreateInstancingResource(const std::string& name, const uint32_t& instanceNum) {
 
 
@@ -181,7 +194,6 @@ void ParticleManager::CreateInstancingResource(const std::string& name, const ui
 		particleGroups_[name].instancingData[index].World = MakeIdentity4x4();
 		particleGroups_[name].instancingData[index].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	}
-
 
 	// SRV確保
 	particleGroups_[name].srvIndex = pSrvManager_->Allocate();

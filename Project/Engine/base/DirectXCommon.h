@@ -122,7 +122,7 @@ private:
 	/// </summary>
 	void dxcCompilerInit();
 
-	Microsoft::WRL::ComPtr < ID3D12Resource> CreateDepthStencilTextureResource(Microsoft::WRL::ComPtr<ID3D12Device>  device, int32_t width, int32_t height);
+	Microsoft::WRL::ComPtr <ID3D12Resource> CreateDepthStencilTextureResource(Microsoft::WRL::ComPtr<ID3D12Device>  device, int32_t width, int32_t height);
 
 public:
 	HRESULT hr_ = 0;
@@ -142,7 +142,7 @@ public:
 	/// <summary>
 	//レンダリングパイプライン
 	/// </summary>	
-	void CreateGraphicPipelene();
+	void CreateGraphicPipelene();//レンダリングパイプライン
 
 	/// <summary>
 	//画面のクリア
@@ -169,6 +169,7 @@ public:
 	//リソースの作成
 	Microsoft::WRL::ComPtr < ID3D12Resource>CreateBufferResource(Microsoft::WRL::ComPtr<ID3D12Device>  device, size_t sizeInBytes);
 
+	/// シェーダーコンパイル
 	Microsoft::WRL::ComPtr<IDxcBlob> CompileShader(
 		//CompilerするShaderファイルパス
 		const std::wstring& filePath,

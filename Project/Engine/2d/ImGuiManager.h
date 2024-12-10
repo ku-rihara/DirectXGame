@@ -3,25 +3,32 @@
 class WinApp;
 class DirectXCommon;
 class SrvManager;
-class ImGuiManager{
+class ImGuiManager {
 private:
+
+	///===========================================================
+   ///private variants
+   ///============================================================
+
 	/// other class
 	DirectXCommon* dxCommon_;
 	SrvManager* pSrvManager_;
-	
-public://メンバ関数
+
+public:
 	static ImGuiManager* GetInstance();
-	//初期化
-	void Init(WinApp* winApp, DirectXCommon* dxCommon,SrvManager*srvManager);
-	//フレーム始め
-	void Begin();
-	//フレーム終わり
-	void End();
-	//終了
-	void Finalizer();
 
-	void Draw();
-
+	///===========================================================
+   ///public method
+   ///===========================================================
 	
+	void Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srvManager);//初期化
+
+	void Begin();//開始
+
+	void End();	//終わり
+	
+	void Finalizer();//解放
+
+	/*void Draw();*/
 };
 

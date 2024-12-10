@@ -2,8 +2,6 @@
 #include "2d/ImGuiManager.h"
 #include"TextureManager.h"
 
-#include"3d/Mesh.h"
-
 //function
 #include"function/Convert.h"
 #include"function/Log.h"
@@ -11,8 +9,6 @@
 //
 
 #include<cassert>
-//#include <iostream>
-//#include<thread>
 
 #include<d3d12.h>
 #include<imgui_impl_dx12.h>
@@ -37,6 +33,9 @@ DirectXCommon* DirectXCommon::GetInstance() {
 //	OutputDebugStringA(message.c_str());
 //}
 
+///==========================================================
+///  シェーダーコンパイル
+///==========================================================
 Microsoft::WRL::ComPtr<IDxcBlob>  DirectXCommon::CompileShader(
 	//CompilerするShaderファイルパス
 	const std::wstring& filePath,
@@ -104,7 +103,9 @@ Microsoft::WRL::ComPtr<IDxcBlob>  DirectXCommon::CompileShader(
 	return shaderBlob.Get();
 }
 
-//初期化
+///==========================================================
+///	初期化
+///==========================================================
 void DirectXCommon::Init(WinApp* winApp, int32_t backBufferWidth, int32_t backBufferHeight) {
 	
 	winApp_ = winApp;
@@ -140,7 +141,10 @@ void DirectXCommon::Init(WinApp* winApp, int32_t backBufferWidth, int32_t backBu
 	imguiManager_ = ImGuiManager::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
 }
-// DXGIデバイス初期化
+
+///==========================================================
+/// DXGIデバイス初期化
+///==========================================================
 void DirectXCommon::DXGIDeviceInit() {
 
 	//DXGIファクトリーの生成
@@ -224,7 +228,10 @@ void DirectXCommon::DXGIDeviceInit() {
 	}
 #endif 
 }
-//コマンド初期化
+
+///==========================================================
+/// コマンド初期化
+///==========================================================
 void DirectXCommon::CommandInit() {
 	//コマンドキューを作成する
 	commandQueue_ = nullptr;
@@ -246,7 +253,10 @@ void DirectXCommon::CommandInit() {
 	//コマンドリストの生成がうまくいかなかったので起動出来ない
 	assert(SUCCEEDED(hr_));
 }
-// スワップチェーンの生成
+
+///==========================================================
+/// スワップチェーン作成
+///==========================================================
 void DirectXCommon::CreateSwapChain() {
 	//スワップチェーンを生成する
 	swapChain_ = nullptr;
@@ -263,7 +273,9 @@ void DirectXCommon::CreateSwapChain() {
 	assert(SUCCEEDED(hr_));
 }
 
-//レンダーターゲットビューの作成
+///==========================================================
+/// レンダーターゲットビューの作成
+///==========================================================
 void DirectXCommon::CreateRenderTargetView() {
 	//ディスクリプタヒープの生成
 	rtvDescriptorHeap_ = CreateDescriptorHeap(GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
@@ -291,7 +303,10 @@ void DirectXCommon::CreateRenderTargetView() {
 	//2つ目を作る
 	GetDevice()->CreateRenderTargetView(swapChainResources_[1].Get(), &rtvDesc_, rtvHandles_[1]);
 }
-// 深度バッファ生成
+
+///==========================================================
+///深度バッファ生成
+///==========================================================
 void DirectXCommon::CreateDepthBuffer() {
 	depthStencilResource_ = CreateDepthStencilTextureResource(device_, WinApp::kWindowWidth, WinApp::kWindowHeight);
 
@@ -312,7 +327,10 @@ void DirectXCommon::CreateDepthBuffer() {
 	//比較関数はLessEqual。つまり、近ければ描画される
 	depthStencilDesc_.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 }
-//フェンス生成
+
+///==========================================================
+/// フェンス生成
+///==========================================================
 void DirectXCommon::CreateFence() {
 	//初期値0でFenceを作る
 	fence_ = nullptr;
@@ -324,7 +342,10 @@ void DirectXCommon::CreateFence() {
 	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
 	assert(fenceEvent_ != nullptr);
 }
-//dxcCompiler初期化
+
+///==========================================================
+/// dxcCompiler初期化
+///==========================================================
 void DirectXCommon::dxcCompilerInit() {
 	//dxcCompilerを初期化
 	dxcUtils_ = nullptr;
@@ -339,8 +360,10 @@ void DirectXCommon::dxcCompilerInit() {
 	hr_ = dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
 	assert(SUCCEEDED(hr_));
 }
-//グラフィックパイプラインの生成
 
+///==========================================================
+/// グラフィックパイプラインの生成
+///==========================================================
 void DirectXCommon::CreateGraphicPipelene() {
 	
 	// 
@@ -361,7 +384,9 @@ void DirectXCommon::CreateGraphicPipelene() {
 	scissorRect_.bottom = WinApp::kWindowHeight;
 }
 
-//フレーム開始
+///==========================================================
+/// 描画前処理
+///==========================================================
 void DirectXCommon::PreDraw() {
 	//これから書き込むバックバッファのインデックスを取得
 	backBufferIndex_ = swapChain_->GetCurrentBackBufferIndex();
@@ -383,10 +408,7 @@ void DirectXCommon::PreDraw() {
 	//float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色、RGBAの順
 	float clearColor[] = { 0.1f,0.1f,0.1f,1.0f };//青っぽい色、RGBAの順
 	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex_], clearColor, 0, nullptr);
-	////コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
-	//Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeaps[] = { imguiManager_->GetSrvDescriptorHeap() };
-	//commandList_->SetDescriptorHeaps(1, descriptorHeaps->GetAddressOf());
-
+	
 	commandList_->RSSetViewports(1, &viewport_);
 	commandList_->RSSetScissorRects(1, &scissorRect_);
 
@@ -396,7 +418,9 @@ void DirectXCommon::PreDraw() {
 #endif
 }
 
-//フレーム終わり
+///==========================================================
+/// 描画後処理
+///==========================================================
 void DirectXCommon::PostDraw() {
 
 #ifdef _DEBUG
@@ -446,6 +470,9 @@ void DirectXCommon::PostDraw() {
 	assert(SUCCEEDED(hr_));
 }
 
+///==========================================================
+///Command Excution
+///==========================================================
 void DirectXCommon::commandExecution(Microsoft::WRL::ComPtr < ID3D12Resource>& intermediateResource) {
 
 	 //intermediateResource = TextureManager::GetInstance()->UploadTextureDate(textureManager_->GetTextureResource(), textureManager_->GetMipImages(), device_.Get(), commandList_);
@@ -480,14 +507,15 @@ void DirectXCommon::commandExecution(Microsoft::WRL::ComPtr < ID3D12Resource>& i
 	
 }
 
-
-
+///==========================================================
+///　オブジェクト解放
+///==========================================================
 void DirectXCommon::ReleaseObject() {
-	/*CloseHandle(fenceEvent_);*/
 	device_.Reset();
 	commandAllocator_.Reset();
 	CloseWindow(winApp_->GetHwnd());
 }
+
 //*************************************************************************************************************************
 //関数----------------------------------------------------------------------------------------------------------------------
 //*************************************************************************************************************************
@@ -500,7 +528,9 @@ void DirectXCommon::ClearDepthBuffer() {
 	commandList_->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 }
 
-//ディスクリプタヒープの生成
+///==========================================================
+/// ディスクリプタヒープの生成
+///==========================================================
 Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DirectXCommon::CreateDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device> device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible) {
 
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap = nullptr;
@@ -513,7 +543,10 @@ Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DirectXCommon::CreateDescriptorHeap
 	assert(SUCCEEDED(hr));
 	return descriptorHeap.Get();
 }
-//リソースの作成
+
+///==========================================================
+/// バッファリソース生成
+///==========================================================
 Microsoft::WRL::ComPtr <ID3D12Resource>DirectXCommon::CreateBufferResource(Microsoft::WRL::ComPtr<ID3D12Device> device, size_t sizeInBytes) {
 	HRESULT hr;
 	//頂点リソース用のヒープの設定
@@ -540,6 +573,9 @@ Microsoft::WRL::ComPtr <ID3D12Resource>DirectXCommon::CreateBufferResource(Micro
 	return result.Get();
 }
 
+///==========================================================
+/// 生成
+///==========================================================
 Microsoft::WRL::ComPtr <ID3D12Resource> DirectXCommon::CreateDepthStencilTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> device, int32_t width, int32_t height) {
 	//生成するResourceの設定
 	D3D12_RESOURCE_DESC resourceDesc{};

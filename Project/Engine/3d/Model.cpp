@@ -1,8 +1,5 @@
 #include "Model.h"
-//#include<fstream>
-//#include<sstream>
-//#include<assert.h>
-//#include <imgui.h>
+
 
 #include<assimp/Importer.hpp>
 #include<assimp/postprocess.h>

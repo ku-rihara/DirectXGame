@@ -2,7 +2,7 @@
 
 #include<wrl.h>
 #include<d3d12.h>
-#include<dxgi1_6.h>
+
 
 #include <optional>
 #include<string>
@@ -17,74 +17,81 @@
 //3Dモデル共通部
 class ModelCommon {
 private:
+	///============================================================
+    /// private variants
+    ///============================================================	
 	DirectXCommon* dxCommon_;
 public:
+	///============================================================
+    /// public method
+    ///============================================================
 	void Init(DirectXCommon* dxCommon);
-
-	//getter
+	///============================================================
+	/// getter method
+	///============================================================
 	DirectXCommon* GetDxCommon()const { return dxCommon_; }
 };
 
 class TextureManager;
 class Model {
 private:
-	////ModelCommonのポインタ
-	//ModelCommon* modelCommon_;
-	//テクスチャ
+	
+	///============================================================
+	/// private variants
+	///============================================================	
+
+	///テクスチャ
 	TextureManager* textureManager_ = nullptr;
 	uint32_t textureHandle_;
 	ModelData modelData_;
 	
+	/// GPUHandle,BufferView
 	D3D12_GPU_DESCRIPTOR_HANDLE handle_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
-	//リソース******************************************************************
-	//Material
-	/*Microsoft::WRL::ComPtr<ID3D12Resource >materialResource_;*/
-	//頂点リソース
-	Microsoft::WRL::ComPtr<ID3D12Resource>vertexResource_;
-	//indexリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource>indexResource_;
 
-	//データ****************************************************************************
+	/// リソース
+	Microsoft::WRL::ComPtr<ID3D12Resource>vertexResource_; //頂点リソース
+	Microsoft::WRL::ComPtr<ID3D12Resource>indexResource_; //indexリソース
 
-	/*Material material_;*/
-	bool isFileGltf_;
+	bool isFileGltf_;// gitfファイルかのフラグ
 
-	//後に消すかも
-	bool useMonsterBall = true;
 public:
-	
-	static void PreDraw(ID3D12GraphicsCommandList* commandList);
-	/*static void PreDrawParticle(ID3D12GraphicsCommandList* commandList);*/
 
+	///============================================================
+    /// public method
+    ///============================================================	
+	
+	/// モデル作成
+	void CreateModel(const std::string& ModelName, const std::string& extension);
+
+	/// モデルロード
 	ModelData LoadModelFile(const std::string& directoryPath, const std::string& filename);
 	ModelData LoadModelGltf(const std::string& directoryPath, const std::string& filename);
 
+	/// 描画前処理
+	static void PreDraw(ID3D12GraphicsCommandList* commandList);
+
+
 	Node ReadNode(aiNode* node);
-    /// <summary>
-	/// モデル作成
-	/// </summary>
-	void CreateModel(const std::string& ModelName, const std::string& extension);
+	void DebugImGui();// デバッグ表示
+
+	///============================================================
+	/// Draw method
+	///============================================================	
+
+	void Draw(
+		Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material,
+		std::optional<uint32_t> textureHandle = std::nullopt);	/// モデル描画
 	
-	
+	void DrawParticle(
+		const uint32_t instanceNum,D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, 
+		Material material,
+		std::optional<uint32_t> textureHandle = std::nullopt);/// モデルバーティクル
 
-	/// <summary>
-	/// モデル描画
-	/// </summary>
-	void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, std::optional<uint32_t> textureHandle = std::nullopt);
-
-	/// <summary>
-	/// モデルバーティクル
-	/// </summary>
-	void DrawParticle( const uint32_t instanceNum,
-		D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, Material material, std::optional<uint32_t> textureHandle = std::nullopt);
-
-
-	void DebugImGui();
-
-
-	//getter
+	///============================================================
+	/// getter method
+	///============================================================	
 	ModelData GetModelData()const { return modelData_; }
 	bool GetIsFileGltf()const { return isFileGltf_; }
 };

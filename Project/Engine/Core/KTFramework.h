@@ -11,18 +11,22 @@
 class KTFramework {
 protected:
 
-    SceneManager* sceneManager_ = nullptr;
-    std::unique_ptr<AbstractSceneFactory> sceneFactory_; // unique_ptrに変更
+    /// other class
+    SceneManager* pSceneManager_ = nullptr;
 
+    ///=======================================================
+    /// private variants
+   ///=======================================================
+    std::unique_ptr<AbstractSceneFactory> sceneFactory_;
     std::unique_ptr<CollisionManager> collisionManager_;
 
 public:
 
     virtual ~KTFramework() = default;
 
-    ///======================================
+    ///=======================================================
     ///public method
-    ///======================================
+    ///=======================================================
     virtual void Init();
     virtual void Update();
     virtual void Draw() = 0;

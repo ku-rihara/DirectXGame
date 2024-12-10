@@ -10,6 +10,9 @@ Object3d::~Object3d() {
 
 }
 
+///============================================================
+/// モデル作成
+///============================================================
 Object3d* Object3d::CreateModel(const std::string& instanceName, const std::string& extension) {
 	// 新しいModelインスタンスを作成
 	Object3d* object3d=new Object3d();
@@ -21,20 +24,23 @@ Object3d* Object3d::CreateModel(const std::string& instanceName, const std::stri
 	return object3d;
 }
 
+///============================================================
 /// 初期化
+///============================================================
 void Object3d::Init() {
-	/// WVPリソース作成
-	/*CreateWVPResource();*/
 	
 }
 
-//更新
+///============================================================
+/// 更新
+///============================================================
 void Object3d::Update() {
 	color_.TransferMatrix();
-	/*transform_.UpdateMatrix();*/
 }
 
-//描画
+///============================================================
+/// 描画
+///============================================================
 void Object3d::Draw(const WorldTransform& worldTransform,const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
 	if (model_) {
 		// WVP行列の計算
@@ -50,8 +56,10 @@ void Object3d::Draw(const WorldTransform& worldTransform,const ViewProjection& v
 	}
 }
 
+///============================================================
+/// 描画 (Vector3)
+///============================================================
 
-// 描画 (Vector3)
 void Object3d::Draw(const Vector3& position, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
 	if (model_) {
 		// 一時的なワールドトランスフォームを構築
@@ -76,12 +84,17 @@ void Object3d::Draw(const Vector3& position, const ViewProjection& viewProjectio
 	}
 }
 
+///============================================================
+/// デバッグ表示
+///============================================================
 
 void Object3d::DebugImgui() {
-
 	BaseObject3d::DebugImgui();
 }
 
+///============================================================
+/// WVPリソース作成
+///============================================================
 void Object3d::CreateWVPResource() {
 	wvpResource_ = DirectXCommon::GetInstance()->CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(TransformationMatrix));
 	//データを書き込む
@@ -95,6 +108,9 @@ void Object3d::CreateWVPResource() {
 }
 
 
+///============================================================
+/// マテリアルリソース作成
+///============================================================
 void  Object3d::CreateMaterialResource() {
 	BaseObject3d::CreateMaterialResource();
 }

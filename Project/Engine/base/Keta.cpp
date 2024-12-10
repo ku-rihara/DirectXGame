@@ -1,136 +1,148 @@
 #include "Keta.h"
-//class
-#include"2d/ImGuiManager.h"
-#include"TextureManager.h"
-#include"WinApp.h"
-#include"DirectXCommon.h"
-#include"audio/Audio.h"
-#include"Object3DCommon.h"
-#include"SpriteCommon.h"
-#include"3d/ModelManager.h"
-#include"input/Input.h"
-#include"SrvManager.h"
-#include"utility/Particle/ParticleCommon.h"
-#include"utility/Particle/ParticleManager.h"
+/// 2d
+#include "2d/ImGuiManager.h"
 
-#include<imgui_impl_dx12.h>
+/// 3d
+#include "3d/ModelManager.h"
 
-#include"Matrix4x4.h"
-#include"function/Convert.h"
+/// base
+#include "TextureManager.h"
+#include "WinApp.h"
+#include "DirectXCommon.h"
+#include "Object3DCommon.h"
+#include "SpriteCommon.h"
+#include "SrvManager.h"
+
+/// audio,input
+#include "audio/Audio.h"
+#include "input/Input.h"
+
+/// utility
+#include "utility/Particle/ParticleCommon.h"
+#include "utility/Particle/ParticleManager.h"
+
+/// imgui,function
+#include <imgui_impl_dx12.h>
+#include "function/Convert.h"
+
+/// std
 #include <string>
 
-namespace {
-
-	WinApp* sWinApp = nullptr;
-	DirectXCommon* sDirectXCommon = nullptr;
-	ImGuiManager* imguiManager = nullptr;
-	TextureManager* stextureManager = nullptr;
-	SpriteCommon* spriteCommon = nullptr;
-	Object3DCommon* sObject3DCommon = nullptr;
-	ModelManager* sModelManager = nullptr;
-	ParticleCommon*sParticleCommon = nullptr;
-	SrvManager* sSrvManager = nullptr;
-
-	Audio* audio = nullptr;
-	Input* input = nullptr;
-}
+// 静的メンバ変数の定義
+std::unique_ptr<WinApp> Keta::winApp_ = nullptr;
+DirectXCommon* Keta::directXCommon_ = nullptr;
+ImGuiManager* Keta::imguiManager_ = nullptr;
+TextureManager* Keta::textureManager_ = nullptr;
+SpriteCommon* Keta::spriteCommon_ = nullptr;
+Object3DCommon* Keta::object3DCommon_ = nullptr;
+ModelManager* Keta::modelManager_ = nullptr;
+ParticleCommon* Keta::particleCommon_ = nullptr;
+SrvManager* Keta::srvManager_ = nullptr;
+Audio* Keta::audio_ = nullptr;
+Input* Keta::input_ = nullptr;
 
 
+ ///=======================================================================
+ ///初期化
+ ///========================================================================
 void Keta::Initialize(const char* title, int width, int height) {
-	
-	//ゲームウィンドウの作成
-	std::string windowTitle = std::string(title);
-	auto&& titleString= ConvertString(windowTitle);
-	sWinApp =new WinApp();
-	sWinApp->MakeWindow(titleString.c_str(), width, height);
+    // ゲームウィンドウの作成
+    std::string windowTitle = std::string(title);
+    auto&& titleString = ConvertString(windowTitle);
+    winApp_ = std::make_unique<WinApp>();
+    winApp_->MakeWindow(titleString.c_str(), width, height);
 
-	//DirectX初期化
-	sDirectXCommon = DirectXCommon::GetInstance();
-	sDirectXCommon->Init(sWinApp, width, height);
-	sDirectXCommon->CreateGraphicPipelene();
+    // DirectX初期化
+    directXCommon_ = DirectXCommon::GetInstance();
+    directXCommon_->Init(winApp_.get(), width, height);
+    directXCommon_->CreateGraphicPipelene();
 
-	/// srvManager
-	sSrvManager = SrvManager::GetInstance();
-	sSrvManager->Init(sDirectXCommon);
+    // srvManager
+    srvManager_ = SrvManager::GetInstance();
+    srvManager_->Init(directXCommon_);
 
-	/// Object3dCommon
-	sObject3DCommon = Object3DCommon::GetInstance();
-	sObject3DCommon->Init(sDirectXCommon);
+    // Object3DCommon
+    object3DCommon_ = Object3DCommon::GetInstance();
+    object3DCommon_->Init(directXCommon_);
 
-	///ParticleCommon
-	sParticleCommon = ParticleCommon::GetInstance();
-	sParticleCommon->Init(sDirectXCommon);
+    // ParticleCommon
+    particleCommon_ = ParticleCommon::GetInstance();
+    particleCommon_->Init(directXCommon_);
+    ParticleManager::GetInstance()->Init(srvManager_);
 
-	ParticleManager::GetInstance()->Init(sSrvManager);
+    // SpriteCommon
+    spriteCommon_ = SpriteCommon::GetInstance();
+    spriteCommon_->Init(directXCommon_);
 
-	/// SpriteCommon
-	spriteCommon = SpriteCommon::GetInstance();
-	spriteCommon->Init(sDirectXCommon);
+    // ModelManager
+    modelManager_ = ModelManager::GetInstance();
+    modelManager_->Initialize(directXCommon_);
 
-	/// ModelManager
-	sModelManager = ModelManager::GetInstance();
-	sModelManager->Initialize(sDirectXCommon);
+    // ImGuiManager
+    imguiManager_ = ImGuiManager::GetInstance();
+    imguiManager_->Init(winApp_.get(), directXCommon_, srvManager_);
 
-	/// ImguiManager
-	imguiManager = ImGuiManager::GetInstance();
-	imguiManager->Init(sWinApp, sDirectXCommon,sSrvManager);
+    // TextureManager
+    textureManager_ = TextureManager::GetInstance();
+    textureManager_->Init(directXCommon_, srvManager_);
 
-	/// TextureManager
-	stextureManager = TextureManager::GetInstance();
-	stextureManager->Init(sDirectXCommon,sSrvManager);
+    // Input
+    input_ = Input::GetInstance();
+    input_->Init(winApp_->GetHInstaice(), winApp_->GetHwnd());
 
-	/// Input
-	input = Input::GetInstance();
-	input->Init(sWinApp->GetHInstaice(), sWinApp->GetHwnd());
-
-	/// Audio
-	audio = Audio::GetInstance();
-	audio->Init();
+    // Audio
+    audio_ = Audio::GetInstance();
+    audio_->Init();
 }
 
-//メッセージがなければループする
+///=======================================================================
+///　メッセージが無ければループする
+///========================================================================
 int Keta::ProcessMessage() {
-	return sWinApp->ProcessMessage();
+    return winApp_->ProcessMessage();
 }
 
-//フレームの始め
+///=======================================================================
+///フレーム開始処理
+///========================================================================
 void Keta::BeginFrame() {
 #ifdef _DEBUG
-	imguiManager->Begin();	/// imGui begin
+    imguiManager_->Begin();  /// imGui begin
 #endif
-	input->Update();	
+    input_->Update();
 }
 
-//フレームの始め
+///=======================================================================
+///　描画前処理
+///========================================================================
 void Keta::PreDraw() {
-	sDirectXCommon->PreDraw();
-	sSrvManager->PreDraw();
+    directXCommon_->PreDraw();
+    srvManager_->PreDraw();
 }
 
-//フレームの終わり
+///=======================================================================
+///　フレーム終わり処理
+///========================================================================
 void Keta::EndFrame() {
-
 #ifdef _DEBUG
-	ImGui::Render();
+    ImGui::Render();
 #endif
-
-	//imguiManager->Draw();
-	sDirectXCommon->PostDraw();
+    directXCommon_->PostDraw();
 }
 
+///=======================================================================
+///解放
+///========================================================================
 void Keta::Finalize() {
-	CoUninitialize();
-	audio->Finalize();
-	stextureManager->Finalize();
-	sDirectXCommon->ReleaseObject();
-	sModelManager->Finalize();
-	
+
+    CoUninitialize();
+    audio_->Finalize();
+    textureManager_->Finalize();
+    directXCommon_->ReleaseObject();
+    modelManager_->Finalize();
+
 #ifdef _DEBUG
-	imguiManager->Finalizer();
+    imguiManager_->Finalizer();
 #endif
-	delete sWinApp;
+
 }
-//
-//void Keta::UpdateMatrixAll() {
-//	WorldTransformManager::GetInstance().UpdateAll();
-//}
