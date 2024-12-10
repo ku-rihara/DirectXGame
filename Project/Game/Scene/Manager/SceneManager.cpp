@@ -1,56 +1,72 @@
 #include "SceneManager.h"
+#include"utility/Particle/ParticleManager.h"
 #include <cassert>
 
 // シングルトンインスタンスの取得
 SceneManager* SceneManager::GetInstance() {
-    static SceneManager instance; // 静的インスタンス
-    return &instance;
+	static SceneManager instance; // 静的インスタンス
+	return &instance;
 }
 
 SceneManager::~SceneManager() {
-    // unique_ptrによる自動解放
+	// unique_ptrによる自動解放
 }
 
+///==============================================
+/// 更新
+///==============================================
 void SceneManager::Update() {
-   
-    // 次のシーンが設定されている場合
-    if (nextScene_) {
-        scene_ = std::move(nextScene_);
-        scene_->Init();
-    }
 
-    // 現在のシーンを更新
-    if (scene_) {
-        scene_->Update();
-    }
+	// 次のシーンが設定されている場合
+	if (nextScene_) {
+		scene_ = std::move(nextScene_);
+		scene_->Init();
+	}
+
+	// 現在のシーンを更新
+	if (scene_) {
+		scene_->Update();
+	}
 }
 
+///==============================================
+/// モデル描画
+///==============================================
 void SceneManager::ModelDraw() {
-    if (scene_) {
-        scene_->ModelDraw();
-    }
+	if (scene_) {
+		scene_->ModelDraw();
+	}
 }
 
+///==============================================
+/// スプライト描画
+///==============================================
 void SceneManager::SpriteDraw() {
-    if (scene_) {
-        scene_->SpriteDraw();
-    }
+	if (scene_) {
+		scene_->SpriteDraw();
+	}
 }
 
+///==============================================
+/// パーティクル描画
+///==============================================
 void SceneManager::ParticleDraw() {
-    if (scene_) {
-        scene_->ParticleDraw();
-    }
+	if (scene_) {
+		scene_->ParticleDraw();
+	}
 }
 
+///==============================================
+/// シーン切り替え
+///==============================================
 void SceneManager::ChangeScene(const std::string& scenemane) {
-    assert(sceneFactory_);
-    assert(!nextScene_);
+	assert(sceneFactory_);
+	assert(!nextScene_);
 
-    // 次のシーンを生成
-    nextScene_ = std::unique_ptr<BaseScene>(sceneFactory_->CreateScene(scenemane));
+	// 次のシーンを生成
+	nextScene_ = std::unique_ptr<BaseScene>(sceneFactory_->CreateScene(scenemane));
 
-  
+	//パーティクルリセット
+	ParticleManager::GetInstance()->ResetAllParticles();
 
-   
 }

@@ -326,3 +326,20 @@ void ParticleManager::Emit(
 	// グループに追加
 	particleGroup.particles.splice(particleGroup.particles.end(), particles);
 }
+
+
+void ParticleManager::ResetAllParticles() {
+	for (auto& groupPair : particleGroups_) {
+		ParticleGroup& group = groupPair.second;
+
+		// 全てのパーティクルを消去
+		group.particles.clear();
+
+		// インスタンシングデータをリセット
+		for (uint32_t index = 0; index < group.instanceNum; ++index) {
+			group.instancingData[index].WVP = MakeIdentity4x4();
+			group.instancingData[index].World = MakeIdentity4x4();
+			group.instancingData[index].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		}
+	}
+}

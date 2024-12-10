@@ -78,28 +78,34 @@ public:
 	///public method
 	///==============================================
 
-		//初期化
+	//初期化、更新、描画
 	void Init(SrvManager* srvManager);
 	void Update(std::optional<const ViewProjection*> viewProjection);
 	void Draw(const ViewProjection& viewProjection);
 
-	void SetTextureHandle(const std::string name,const uint32_t& handle);
-
+	/// グループ作成
 	void CreateParticleGroup(const std::string name, const std::string modelFilePath,const std::string& extension, const uint32_t& maxnum);
 
-	// モデル、マテリアル作成
+	// モデル、リソース作成
 	void SetModel(const std::string& name,const std::string& modelName, const std::string& extension);
 	void CreateMaterialResource(const std::string& name);
-
 	void CreateInstancingResource(const std::string& name, const uint32_t& instanceNum);
 
+	// テクスチャセット
+	void SetTextureHandle(const std::string name, const uint32_t& handle);
+
+	/// リセット
+	void ResetAllParticles();
+
+	// 作成
 	Particle  MakeParticle(
 		const Vector3& basePosition, const V3MinMax& positionDist,
 		const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
 		const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
 		const Vector3& baseRotate, const Vector3& baseRotateSpeed, const V3MinMax& RotateDist,
 		const V3MinMax& rotateSpeedDist);
-
+	
+	//　エミット
 	void Emit(
 		std::string name, const Vector3& basePosition, const V3MinMax& positionDist,
 		const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,

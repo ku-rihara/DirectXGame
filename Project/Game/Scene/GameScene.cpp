@@ -33,7 +33,6 @@ void GameScene::Init() {
 	leftEmitter_.reset(ParticleEmitter::CreateParticle("LeftSide", "cube", ".obj", 300,false));
 	rightEmitter_.reset(ParticleEmitter::CreateParticle("RightSide", "cube", ".obj", 300,false));
 
-	
 	//テクスチャハンドル
 	circleHandle_= TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");
 	defaultHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/default.png");
@@ -56,6 +55,8 @@ void GameScene::Init() {
 	viewProjection_.Init();
 
 	viewProjection_.translation_ = { 0,-6.2f,-109.0f };
+
+	
 
 }
 
