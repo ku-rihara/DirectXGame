@@ -61,7 +61,7 @@ void DebugCamera::Update() {
         pitch_ += mouseMove.lY * 0.005f;
 
         // ピッチ角の制限（-90度〜+90度）
-        pitch_ = std::fmax(std::fmin(pitch_, std::numbers::pi_v<float> / 2), -std::numbers::pi_v<float> / 2);
+       /* pitch_ = std::fmax(std::fmin(pitch_, std::numbers::pi_v<float> / 2), -std::numbers::pi_v<float> / 2);*/
 
         // 回転行列の更新
         Matrix4x4 rotY = MakeRotateYMatrix(yaw_);
