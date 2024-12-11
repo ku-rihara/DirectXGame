@@ -145,6 +145,15 @@
     <Filter Include="Game\SkyDome">
       <UniqueIdentifier>{be115c28-99db-4631-90c5-48e4db1bce50}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player\core">
+      <UniqueIdentifier>{d3e51b1b-0df3-4fb3-bd66-3f185b05cfcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\core">
+      <UniqueIdentifier>{acd7df78-4aff-4ea7-bee3-3255835cbd89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\Manager">
+      <UniqueIdentifier>{4ec20f46-29f9-433f-80de-43dc9f16cb67}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -310,9 +319,6 @@
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp">
       <Filter>Game\Scene\Factory</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\Player.cpp">
-      <Filter>Game\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\PlayerBehavior\BasePlayerBehavior.cpp">
       <Filter>Game\Player\Behavior</Filter>
     </ClCompile>
@@ -337,14 +343,20 @@
     <ClCompile Include="Game\LockOn\LockOn.cpp">
       <Filter>Game\LockOn</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\BaseEnemy.cpp">
-      <Filter>Game\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Game\SkyDome\SkyDome.cpp">
       <Filter>Game\SkyDome</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\EnemyManager.cpp">
-      <Filter>Game\Enemy</Filter>
+      <Filter>Game\Enemy\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Player.cpp">
+      <Filter>Game\Player\core</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\BaseEnemy.cpp">
+      <Filter>Game\Enemy\core</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\NormalEnemy.cpp">
+      <Filter>Game\Enemy\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -558,9 +570,6 @@
     <ClInclude Include="Game\Scene\Factory\SceneFactory.h">
       <Filter>Game\Scene\Factory</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\Player.h">
-      <Filter>Game\Player</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\PlayerBehavior\BasePlayerBehavior.h">
       <Filter>Game\Player\Behavior</Filter>
     </ClInclude>
@@ -585,14 +594,20 @@
     <ClInclude Include="Game\LockOn\LockOn.h">
       <Filter>Game\LockOn</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\BaseEnemy.h">
-      <Filter>Game\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Game\SkyDome\SkyDome.h">
       <Filter>Game\SkyDome</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\EnemyManager.h">
-      <Filter>Game\Enemy</Filter>
+      <Filter>Game\Enemy\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Player.h">
+      <Filter>Game\Player\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\BaseEnemy.h">
+      <Filter>Game\Enemy\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\NormalEnemy.h">
+      <Filter>Game\Enemy\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,15 +1,9 @@
 #include "GameScene.h"
-#include "base/TextureManager.h"
-//class
-#include"3d/Light.h"
-#include"utility/Particle/ParticleManager.h"
-
-//math
-#include"Frame/Frame.h"
-#include<imgui.h>
-
 #include"Scene/Manager/SceneManager.h"
-
+// base
+#include "base/TextureManager.h"
+//math
+#include<imgui.h>
 
 GameScene::GameScene() {}
 

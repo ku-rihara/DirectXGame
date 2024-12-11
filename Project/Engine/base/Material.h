@@ -8,6 +8,16 @@
 class DirectXCommon;
 
 class Material {
+public:
+    enum LightGroup {
+        NONE,
+        LAMBERT,
+        HALF_LAMBERT,
+        SPECULAR_REFLECTION,
+        POINTLIGHT,
+        SOPTLIGHT,
+    };
+
 private:
     struct MaterialStructure {
         Vector4 color;
@@ -24,8 +34,6 @@ public:
 private:
     // GPUリソースへのポインタ
     Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
-
-
 public:
 
     // コンストラクタ
