@@ -19,6 +19,12 @@ GameScene::~GameScene() {
 
 void GameScene::Init() {
 
+	////* TODO 
+	/// ライト使いやすく
+	/// 2Dゲームをリファレンスとしたコンボを実装(来週まで)
+	/// 敵の配置パターンのエディター(来週まで)
+
+
 	// メンバ変数の初期化
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();

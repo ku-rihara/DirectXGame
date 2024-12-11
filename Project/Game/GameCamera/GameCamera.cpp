@@ -90,7 +90,6 @@ void GameCamera::GetIsCameraMove() {
 
 Vector3 GameCamera::GetBaseCenterPosition()const {
 
-
 	Vector3 worldPos;
 	// ワールド行列の平行移動成分を取得
 	worldPos.x = viewprojection_.matView_.m[3][0];
