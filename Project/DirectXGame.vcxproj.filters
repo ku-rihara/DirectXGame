@@ -142,6 +142,9 @@
     <Filter Include="Game\Enemy">
       <UniqueIdentifier>{e50a6726-f665-4727-8499-eab58c410ec3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\SkyDome">
+      <UniqueIdentifier>{be115c28-99db-4631-90c5-48e4db1bce50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -335,6 +338,12 @@
       <Filter>Game\LockOn</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\BaseEnemy.cpp">
+      <Filter>Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\SkyDome\SkyDome.cpp">
+      <Filter>Game\SkyDome</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\EnemyManager.cpp">
       <Filter>Game\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
@@ -577,6 +586,12 @@
       <Filter>Game\LockOn</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\BaseEnemy.h">
+      <Filter>Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\SkyDome\SkyDome.h">
+      <Filter>Game\SkyDome</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\EnemyManager.h">
       <Filter>Game\Enemy</Filter>
     </ClInclude>
   </ItemGroup>

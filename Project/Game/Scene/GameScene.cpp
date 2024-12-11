@@ -36,14 +36,17 @@ void GameScene::Init() {
 	lockOn_ = std::make_unique<LockOn>();
 	player_ = std::make_unique<Player>();
 	gamecamera_ = std::make_unique<GameCamera>();
+	skydome_= std::make_unique<Skydome>();
 
 	///=======================================================================================
 	/// 初期化
 	///=======================================================================================
 	field_->Init();
+	skydome_->Init();
 	player_->Init();
 	lockOn_->Init();
 	gamecamera_->Init();
+
 
 	viewProjection_.Init();//ビュープロジェクション
 
@@ -62,7 +65,7 @@ void GameScene::Update() {
 
 	//各クラス更新
 	player_->Update();
-	/*lockOn_->Update()*/
+	skydome_->Update();
 	field_->Update();
 	gamecamera_->Update();
 
@@ -83,7 +86,7 @@ void GameScene::ModelDraw() {
 
 	//平面描画
 	if (isDraw) {
-
+		skydome_->Draw(viewProjection_);
 		field_->Draw(viewProjection_);
 		player_->Draw(viewProjection_);
 	}

@@ -11,7 +11,7 @@ Field::~Field() {}
 
 void Field::Init() {
 
-	obj3d_.reset(Object3d::CreateModel("Ground",".obj"));
+	obj3d_.reset(Object3d::CreateModel("Field",".obj"));
 	
 	transform_.Init();
 	transform_.scale_ = baseScale_;

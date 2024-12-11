@@ -5,6 +5,7 @@
 
 //object
 #include"Field/Field.h"
+#include"SkyDome/SkyDome.h"
 #include"Player/Player.h"
 #include"LockOn/LockOn.h"
 #include"GameCamera/GameCamera.h"
@@ -32,7 +33,7 @@ private:
 	std::unique_ptr<Field> field_ = nullptr;
 	std::unique_ptr<LockOn> lockOn_ = nullptr;
 	std::unique_ptr<Player> player_ = nullptr;
-
+	std::unique_ptr<Skydome> skydome_ = nullptr;
 	
 	bool isDraw = true;
 
