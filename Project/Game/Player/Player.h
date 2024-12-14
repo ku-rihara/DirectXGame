@@ -1,13 +1,14 @@
 #pragma once
 
 #include "3d/ViewProjection.h"
-#include <memory>
 
 //class
 #include"BaseObject/BaseObject.h"
 #include"Collider/AABBCollider.h"
 /// behavior
 #include"PlayerBehavior/BasePlayerBehavior.h"
+
+#include <memory>
 
 /// <summary>
 /// プレイヤークラス

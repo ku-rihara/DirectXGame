@@ -1,5 +1,5 @@
 #include "Ground.h"
-#include "assert.h"
+
 
 Ground::Ground() {}
 

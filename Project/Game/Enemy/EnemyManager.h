@@ -1,4 +1,5 @@
 #pragma once
+
 #include "BaseEnemy.h"
 #include "3d/ViewProjection.h"
 

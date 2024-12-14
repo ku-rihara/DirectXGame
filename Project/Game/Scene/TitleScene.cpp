@@ -1,13 +1,14 @@
 ///scene
-#include"Manager/SceneManager.h"
 #include "TitleScene.h"
-#include "GameScene.h"
+#include"Manager/SceneManager.h"
+
+
 
 #include "base/TextureManager.h"
 //class
 
 //math
-#include"Frame/Frame.h"
+
 #include<imgui.h>
 
 TitleScene::TitleScene() {}
