@@ -65,17 +65,17 @@ void GameScene::Update() {
 
 	/// debugcamera
 	debugCamera_->Update();
+	Debug();
 
 	//各クラス更新
 	player_->Update();
 	skydome_->Update();
 	field_->Update();
+	enemyManager_->Update();
 	gamecamera_->Update();
 	lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
-
-	Debug();
+	
 	ViewProjectionUpdate();
-
 
 	/// タイトルに戻る
 	if (input_->TrrigerKey(DIK_RETURN)) {
@@ -92,6 +92,7 @@ void GameScene::ModelDraw() {
 	if (isDraw) {
 		skydome_->Draw(viewProjection_);
 		field_->Draw(viewProjection_);
+		enemyManager_->Draw(viewProjection_);
 		player_->Draw(viewProjection_);
 	}
 }

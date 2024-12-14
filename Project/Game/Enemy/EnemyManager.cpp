@@ -1,5 +1,6 @@
-#include "EnemyManager.h"
 
+#include "EnemyManager.h"
+#include"NormalEnemy.h"
 
 #include "Frame/Frame.h"
 

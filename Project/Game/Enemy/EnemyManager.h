@@ -1,11 +1,13 @@
 #pragma once
-#include "NormalEnemy.h"
+#include "BaseEnemy.h"
 #include "3d/ViewProjection.h"
+
+/// std
 #include <vector>
+#include <list>
 #include <memory>
+#include<utility>
 #include <string>
-
-
 
 #include <json.hpp>
 
