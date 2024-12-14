@@ -12,7 +12,7 @@
 /// <summary>
 /// プレイヤークラス
 /// </summary>
-
+class LockOn;
 class Player : public BaseObject{
 
 	
@@ -23,6 +23,7 @@ private:
 	
 	/// other class
 	/*Boss* pBoss_;*/
+	LockOn* pLockOn_;
 	
 	// カメラのビュープロジェクション
 	const ViewProjection* viewProjection_ = nullptr;
@@ -71,7 +72,7 @@ public:
 	
 	void Debug();
 
-	/*void SetBoss(Boss* boss);*/
+	void SetLockOn(LockOn* lockon);
 	
 	/// collision
 

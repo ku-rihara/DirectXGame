@@ -4,11 +4,9 @@
 #include <vector>
 #include <memory>
 #include <string>
-#include <imgui.h>
 
-#include "EnemyManager.h"
-#include <format>
-#include <fstream>
+
+
 #include <json.hpp>
 
 class EnemyManager {
@@ -20,7 +18,7 @@ private:
     ///========================================================================================
   
     /// リスト
-    std::vector<std::unique_ptr<BaseEnemy>> enemies_;
+    std::list<std::unique_ptr<BaseEnemy>> enemies_;
     std::vector<std::string> enemyTypes_ = { "NormalEnemy" };
 
     // 一時的な敵生成用データ
@@ -55,4 +53,7 @@ public:
 
     // ImGuiによるエディタ
     void ImGuiUpdate();
+
+
+    std::list<std::unique_ptr<BaseEnemy>>GetEnemies()const { return enemies_; }
 };

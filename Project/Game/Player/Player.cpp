@@ -7,14 +7,15 @@
 #include"MathFunction.h"
 
 #include"Field/Field.h"
+#include"LockOn/LockOn.h"
 
 /// behavior
 #include"PlayerBehavior/PlayerRoot.h"
 #include"PlayerBehavior/PlayerJump.h"
 
-#ifdef _DEBUG
-#include"imgui.h"
-#endif 
+
+#include<imgui.h>
+
 
 float Player::InitY_ = 0.5f;
 
@@ -152,21 +153,24 @@ void Player::Move(const float& speed) {
 
 	/// 移動処理
 	if (GetIsMoving()) {
-		// 移動ベクトルの正規化と速さの適用
-		velocity_ = (velocity_).Normalize() * speed;
-
-		// 移動ベクトルをカメラの角度に基づいて回転
+		// 移動量に速さを反映
+		velocity_ = Vector3::Normalize(velocity_) * (speed)*Frame::DeltaTime();
+		// 移動ベクトルをカメラの角度だけ回転する
 		Matrix4x4 rotateMatrix = MakeRotateYMatrix(viewProjection_->rotation_.y);
 		velocity_ = TransformNormal(velocity_, rotateMatrix);
-
-		// 位置を更新
+		// 移動
 		transform_.translation_ += velocity_;
-
-		// 目標角度を計算
+		// 目標角度
 		objectiveAngle_ = std::atan2(velocity_.x, velocity_.z);
-
-		// 最短角度補間でプレイヤーの回転を更新
+		// 最短角度補間
 		transform_.rotation_.y = LerpShortAngle(transform_.rotation_.y, objectiveAngle_, 0.3f);
+
+	}
+	else if (pLockOn_ && pLockOn_->GetEnemyTarget()) {
+		Vector3 differectialVector = pLockOn_->GetTargetPosition() - GetWorldPosition();
+
+		// Y軸周り角度(θy)
+		transform_.rotation_.y = std::atan2(differectialVector.x, differectialVector.z);
 	}
 }
 
@@ -316,9 +320,9 @@ void Player::TakeDamage() {
 /// Class Set
 ///==========================================================
 
-//void Player::SetBoss(Boss* boss) {
-//	pBoss_ = boss;
-//}
+ void Player::SetLockOn(LockOn* lockon) {
+	pLockOn_ = lockon;
+ }
 
 ///=========================================================
 /// Collision

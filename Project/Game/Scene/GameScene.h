@@ -9,6 +9,7 @@
 #include"Player/Player.h"
 #include"LockOn/LockOn.h"
 #include"GameCamera/GameCamera.h"
+#include"Enemy/EnemyManager.h"
 
 // emitter
 #include"utility/Particle/ParticleEmitter.h"
@@ -34,6 +35,7 @@ private:
 	std::unique_ptr<LockOn> lockOn_ = nullptr;
 	std::unique_ptr<Player> player_ = nullptr;
 	std::unique_ptr<Skydome> skydome_ = nullptr;
+	std::unique_ptr<EnemyManager>enemyManager_ = nullptr;
 	
 	bool isDraw = true;
 

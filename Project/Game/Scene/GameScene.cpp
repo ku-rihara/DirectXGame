@@ -36,6 +36,7 @@ void GameScene::Init() {
 	lockOn_ = std::make_unique<LockOn>();
 	player_ = std::make_unique<Player>();
 	gamecamera_ = std::make_unique<GameCamera>();
+	enemyManager_ = std::make_unique<EnemyManager>();
 	skydome_= std::make_unique<Skydome>();
 
 	///=======================================================================================
@@ -45,14 +46,16 @@ void GameScene::Init() {
 	skydome_->Init();
 	player_->Init();
 	lockOn_->Init();
+	enemyManager_->Init();
 	gamecamera_->Init();
 
 
 	viewProjection_.Init();//ビュープロジェクション
 
+
 	gamecamera_->SetTarget(&player_->GetTransform());
 	player_->SetViewProjection(&viewProjection_);
-
+	player_->SetLockOn(lockOn_.get());
 
 
 }
@@ -68,6 +71,7 @@ void GameScene::Update() {
 	skydome_->Update();
 	field_->Update();
 	gamecamera_->Update();
+	lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
 
 	Debug();
 	ViewProjectionUpdate();
@@ -103,7 +107,7 @@ void GameScene::ParticleDraw() {
    /// スプライト描画
    /// ===================================================
 void GameScene::SpriteDraw() {
-
+	lockOn_->Draw();
 }
 
 void GameScene::Debug() {
@@ -113,6 +117,7 @@ void GameScene::Debug() {
 	ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
 	ImGui::End();
 
+	enemyManager_->ImGuiUpdate();
 
 #endif
 }
