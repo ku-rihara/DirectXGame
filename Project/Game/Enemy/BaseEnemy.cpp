@@ -16,7 +16,7 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	// 基底クラスの初期化
 	BaseObject::Init();
 	/// モデルセット
-	BaseObject::CreateModel("Player",".obj");
+	BaseObject::CreateModel("axis",".obj");
 
 	transform_.translation_=spownPos;
 }

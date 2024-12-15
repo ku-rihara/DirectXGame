@@ -18,52 +18,89 @@ EnemyManager::EnemyManager() {
 ///========================================================================================
 
 void EnemyManager::Init() {
-
 	selectedEnemyType_ = "NormalEnemy";
 	spownPosition_ = {};
-	spownTime_ = 0.0f;
+
+	spownNum_ = 1;
+	currentPhase_ = 0;
+	currentTime_ = 0.0f;
+
+	// デフォルトのフェーズ0を作成
+	if (phases_.find(0) == phases_.end()) {
+		Phase phase;
+		phases_[0] = phase;
+	}
 }
+
 
 ///========================================================================================
 ///  敵の生成
 ///========================================================================================
-void EnemyManager::SpawnEnemy(const Vector3& spawnPos) {
-	std::unique_ptr<BaseEnemy> enemy;
+void EnemyManager::SpawnEnemy(const std::vector<Vector3>& spawnPositions) {
+	for (const auto& position : spawnPositions) {//　位置
 
-	if (selectedEnemyType_ == "NormalEnemy") {
-		enemy = std::make_unique<NormalEnemy>();
-	}
-	// 他の敵タイプもここに追加可能
+	
+			std::unique_ptr<BaseEnemy> enemy;
 
-	enemy->Init(spawnPos);
-	enemies_.push_back(std::move(enemy));
+			if (selectedEnemyType_ == "NormalEnemy") {// 通常敵
+				enemy = std::make_unique<NormalEnemy>();
+			}
+
+			// 位置初期化とlistに追加
+			enemy->Init(position);
+			enemies_.push_back(std::move(enemy));
+		}
+	
 }
+
 
 ///========================================================================================
 ///  更新処理
 ///========================================================================================
 void EnemyManager::Update() {
-	currentTime_ += Frame::DeltaTime();
-	for (auto it = spownSchedule_.begin(); it != spownSchedule_.end(); ++it) {
-		if (currentTime_ >= it->first) { // 時間超えたら生成
-			SpawnEnemy(it->second);
-			it = spownSchedule_.erase(it);
-		}
-		else {
-			++it; // 次の要素
+	if (isEditorMode_) {
+		return; // エディタモード中は停止
+	}
+
+	currentTime_ += Frame::DeltaTime(); //* 現在時間加算
+
+	auto& phase = phases_[currentPhase_];//* 現在フェーズの取得
+
+	// Waveの処理
+	for (Wave& wave : phase.waves) {
+		if (currentTime_ >= wave.startTime) { // Wave開始
+
+			for (auto& spawn : wave.spawns) {
+				if (currentTime_ >= spawn.spownTime) {// 次の生成時間に達した場合
+
+					/// グループ
+					for (const auto& group : spawn.enemyGroups) {
+						
+							std::unique_ptr<BaseEnemy> enemy;
+
+							// 種類に応じて敵追加
+							if (group.enemyType == "NormalEnemy") {
+								enemy = std::make_unique<NormalEnemy>();
+							}
+
+							// 他の敵タイプを追加可能
+							enemy->Init(group.position);
+							enemies_.push_back(std::move(enemy));
+						}
+					
+				}
+			}
 		}
 	}
 
-	for (auto it = enemies_.begin(); it != enemies_.end(); ++it) {
-		(*it)->Update();
-	
-		// if ((*it)->ShouldBeRemoved()) {
-		//     it = enemies_.erase(it);
-		// } else {
-		//     ++it;
-		// }
+	for (auto it = enemies_.begin(); it != enemies_.end();) {
+		(*it)->Update();// 更新
+		++it;
 	}
 }
+
+
+
 
 ///========================================================================================
 ///  描画処理
@@ -87,71 +124,185 @@ void EnemyManager::SpriteDraw(const ViewProjection& viewProjection) {
 ///  ImGuiによるエディタ
 ///========================================================================================
 void EnemyManager::ImGuiUpdate() {
-#ifdef _DEBUG
+	ImGui::Begin("Enemy Manager");
 
-	ImGui::Begin("Enemy Manager");/// begin
+	// エディターモードフラグ
+	ImGui::SeparatorText("EditorMode");
+	ImGui::Checkbox("IsEditorMode", &isEditorMode_);
 
-	/// 敵の種類選択
-	if (ImGui::BeginCombo("Enemy Type", selectedEnemyType_.c_str())) {
-		for (const auto& type : enemyTypes_) {
-			if (ImGui::Selectable(type.c_str(), type == selectedEnemyType_)) {
-				selectedEnemyType_ = type;
-			}
-		}
-		ImGui::EndCombo();
-	}
+	//* フェーズ選択と Wave 編集
+	ImGui::InputInt("Current Phase", &currentPhase_);
+	auto& phase = phases_[currentPhase_];
 
-	// 敵の座標と時間を設定
-	ImGui::DragFloat3("Spawn Position", &spownPosition_.x, 0.1f);
-	ImGui::DragFloat("Spawn Time", &spownTime_, 0.1f);
+	for (size_t waveIndex = 0; waveIndex < phase.waves.size(); ++waveIndex) {
+		auto& wave = phase.waves[waveIndex];
+		if (ImGui::CollapsingHeader(std::format("Wave {}", waveIndex).c_str())) {
+			ImGui::DragFloat("Start Time", &wave.startTime, 0.1f);
 
-	// スケジュール表示
-	ImGui::SeparatorText("Spawn Schedule:");
+			// 敵の生成パラメータについて
+			for (size_t spawnIndex = 0; spawnIndex < wave.spawns.size(); ++spawnIndex) {
+				auto& spawn = wave.spawns[spawnIndex];
+				ImGui::PushID(int(spawnIndex));
 
-	for (size_t i = 0; i < spownSchedule_.size(); ++i) {
-		ImGui::Text("Time: %.2f, Position: (%.2f, %.2f, %.2f)", spownSchedule_[i].first,
-			spownSchedule_[i].second.x, spownSchedule_[i].second.y, spownSchedule_[i].second.z);
-		/// 敵削除
-		if (ImGui::Button(std::format("Remove##{}", i).c_str())) {
-			spownSchedule_.erase(spownSchedule_.begin() + i);
-		}
-	}
+				/// 敵グループ
+				ImGui::SeparatorText("Enemy Groups:");
+				for (size_t groupIndex = 0; groupIndex < spawn.enemyGroups.size(); ++groupIndex) {
+					auto& group = spawn.enemyGroups[groupIndex];
+					ImGui::PushID(int(groupIndex));
 
-	/// セーブ
-	if (ImGui::Button("Save Schedule")) {
-		json schedule;
-		/// push back
-		for (const auto& [time, pos] : spownSchedule_) {
-			schedule.push_back({ {"time",time}, {"position", { {"x", pos.x}, {"y", pos.y}, {"z", pos.z} }} });
-		}
+					// Remove Group ボタンを同じ行に配置
+					ImGui::Text("Group %zu", groupIndex); // グループインデックス表示
+					ImGui::SameLine();
+					if (ImGui::Button("Remove Group")) {
+						spawn.enemyGroups.erase(spawn.enemyGroups.begin() + groupIndex);
+						ImGui::PopID();
+						continue; // 削除後に他のUI要素を更新しないように
+					}
 
-		//ファイルに書き込み
-		std::ofstream file("enemy_schedule.json");
-		if (file.is_open()) {
-			file << schedule.dump(4);
-			file.close();
-		}
-	}
-		// ロード
-		ImGui::SameLine();
-		if (ImGui::Button("Load Schedule")) {
-			std::ifstream file("enemy_schedule.json");
-			if (file.is_open()) {
-				json schedule;
-				file >> schedule;
-				file.close();
+					// 敵グループの設定UI
+					ImGui::InputText("Type", &group.enemyType[0], group.enemyType.size());
+					ImGui::DragFloat3("Position", &group.position.x, 0.1f);
+					/*ImGui::DragInt("Count", (int*)&group.count, 1, 1, 100);*/
 
-				spownSchedule_.clear();
-				for (const auto& entry : schedule) {
-					Vector3 pos = { entry["position"]["x"], entry["position"]["y"], entry["position"]["z"] };
-					spownSchedule_.emplace_back(entry["time"], pos);
+					ImGui::PopID();
 				}
+
+				// 敵グループ追加
+				if (ImGui::Button("Add Enemy Group")) {
+					spawn.enemyGroups.push_back({ "NormalEnemy", {},});
+				}
+
+				// 生成するまでかかる時間
+				ImGui::DragFloat("Spawn Time", &spawn.spownTime, 0.1f);
+
+				ImGui::PopID();
+			}
+
+			if (ImGui::Button("Add Spawn")) {
+				wave.spawns.push_back({ {}, 2.0f });
 			}
 		}
 
-		ImGui::End();
-
-
-#endif // _DEBUG
+		ImGui::SeparatorText("Wave");
+		if (ImGui::Button(std::format("Remove Wave ##{}", waveIndex).c_str())) {
+			phase.waves.erase(phase.waves.begin() + waveIndex);
+		}
 	}
 
+	if (ImGui::Button("Add Wave")) {
+		phase.waves.push_back({ currentTime_, {} });
+	}
+
+	/// セーブロード
+	ImGui::SeparatorText("Save and Load");
+	SaveAndLoad();
+
+	ImGui::End();
+}
+
+
+void EnemyManager::SetPhase(int phase) {
+	if (phases_.find(phase) != phases_.end()) {
+		currentPhase_ = phase;
+		currentTime_ = 0.0f;
+	}
+	else {
+		ImGui::Text("Invalid phase!");
+	}
+}
+
+void EnemyManager::SaveAndLoad() {
+	if (ImGui::Button("Save Schedules")) {
+		json scheduleJson;
+		for (const auto& [phaseNum, phase] : phases_) {
+			json phaseJson;
+			for (const auto& wave : phase.waves) {
+				json waveJson;
+				waveJson["startTime"] = wave.startTime;
+
+				for (const auto& spawn : wave.spawns) {
+					json spawnJson;
+					spawnJson["SpownTime"] = spawn.spownTime; 
+
+					for (const auto& group : spawn.enemyGroups) {
+						spawnJson["enemyGroups"].push_back({
+							{"enemyType", group.enemyType},
+							{"position", {{"x", group.position.x}, {"y", group.position.y}, {"z", group.position.z}}}
+							});
+					}
+
+					waveJson["spawns"].push_back(spawnJson);
+				}
+
+				phaseJson.push_back(waveJson);
+			}
+			scheduleJson[std::to_string(phaseNum)] = phaseJson;
+		}
+
+		std::ofstream file(directrypath_ + filename_);
+		if (file.is_open()) {
+			file << scheduleJson.dump(4); // JSON をインデント付きで保存
+		}
+	}
+
+	if (ImGui::Button("Load Schedules")) {
+		std::ifstream file(directrypath_ + filename_);
+		if (file.is_open()) {
+			json scheduleJson;
+			file >> scheduleJson;
+
+			phases_.clear();
+			for (auto& [phaseNum, phaseData] : scheduleJson.items()) {
+				Phase phase;
+				for (const auto& waveData : phaseData) {
+					Wave wave;
+
+					// startTime の型チェック
+					if (waveData.contains("startTime") && waveData["startTime"].is_number()) {
+						wave.startTime = waveData["startTime"];
+					}
+
+					for (const auto& spawnData : waveData["spawns"]) {
+						EnemySpawn spawn;
+
+						// spawnInterval の型チェック
+						if (spawnData.contains("SpownTime") && spawnData["SpownTime"].is_number()) {
+							spawn.spownTime = spawnData["SpownTime"];
+						}
+
+						for (const auto& groupData : spawnData["enemyGroups"]) {
+							if (groupData.contains("enemyType") && groupData["enemyType"].is_string() &&
+								groupData.contains("position") && groupData["position"].is_object() &&
+								groupData["position"].contains("x") && groupData["position"]["x"].is_number() &&
+								groupData["position"].contains("y") && groupData["position"]["y"].is_number() &&
+								groupData["position"].contains("z") && groupData["position"]["z"].is_number()/* &&
+								groupData.contains("count") && groupData["count"].is_number_integer()*/) {
+
+								// Vector3 の座標値を安全にロード
+								Vector3 position{
+									groupData["position"]["x"],
+									groupData["position"]["y"],
+									groupData["position"]["z"]
+								};
+
+								spawn.enemyGroups.push_back({
+									groupData["enemyType"],
+									position
+									});
+							}
+						}
+						wave.spawns.push_back(spawn);
+					}
+					phase.waves.push_back(wave);
+				}
+				phases_[std::stoi(phaseNum)] = phase;
+			}
+		}
+	}
+}
+
+
+
+void EnemyManager::SetEditorMode(bool isEditorMode) {
+	isEditorMode_ = isEditorMode;
+}

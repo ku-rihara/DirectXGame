@@ -29,7 +29,7 @@ PlayerRoot ::~PlayerRoot() {
 //更新
 void PlayerRoot::Update() {
 
-	pPlayer_->Move(0.3f);
+	pPlayer_->Move(10.3f);
 
 	if (Input::GetInstance()->PushKey(DIK_J)) {
 		pPlayer_->ChangeBehavior(std::make_unique<PlayerJump>(pPlayer_));
