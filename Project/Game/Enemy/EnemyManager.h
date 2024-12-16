@@ -17,14 +17,14 @@ private:
     using json = nlohmann::json;
 private:
 
-    struct EnemyGroup {
+    struct SpownEnemy {
         std::string enemyType;    // 敵の種類
         Vector3 position;         // 敵の座標
  
     };
 
-    struct EnemySpawn {
-        std::vector<EnemyGroup> enemyGroups; // 敵グループのリスト
+    struct EnemyGroup {
+        std::vector<SpownEnemy> spownEnemies; // 敵グループのリスト
         float spownTime;                 // グループ生成間隔
         
     };
@@ -32,7 +32,7 @@ private:
 
     struct Wave {
         float startTime;                   // Waveの開始時間（フェーズ内の相対時間）
-        std::vector<EnemySpawn> spawns;    // Wave内で発生する敵の情報
+        std::vector<EnemyGroup> groups;    // Wave内で発生する敵の情報
     };
 
     struct Phase {
@@ -96,6 +96,11 @@ public:
     // ImGuiによるエディタ
     void ImGuiUpdate();
     void SaveAndLoad();
+    void SaveSchedules();
+    void LoadSchedules();
+    void LoadPhase(Phase& phase, const json& phaseData);
+    void LoadSpawn(EnemyGroup& spawn, const json& spawnData);
+
     void SetEditorMode(bool isEditorMode);
 
     ///========================================================

@@ -1,12 +1,50 @@
 {
-    "0": [
-        {
-            "spawns": [
-                {
-                    "SpownTime": 2.0
-                }
-            ],
-            "startTime": 5.783769607543945
-        }
-    ]
+    "0": {
+        "waves": [
+            {
+                "spawns": [
+                    {
+                        "spawnTime": 2.0,
+                        "spownEnemies": [
+                            {
+                                "enemyType": "NormalEnemy",
+                                "position": {
+                                    "x": 2.200000047683716,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                }
+                            },
+                            {
+                                "enemyType": "NormalEnemy",
+                                "position": {
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                }
+                            },
+                            {
+                                "enemyType": "NormalEnemy",
+                                "position": {
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "spawnTime": 2.0
+                    },
+                    {
+                        "spawnTime": 2.0
+                    },
+                    {
+                        "spawnTime": 2.0
+                    }
+                ],
+                "startTime": 11.453287124633789
+            }
+        ]
+    },
+    "isEditorMode": true
 }

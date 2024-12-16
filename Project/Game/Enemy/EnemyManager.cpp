@@ -39,18 +39,18 @@ void EnemyManager::Init() {
 void EnemyManager::SpawnEnemy(const std::vector<Vector3>& spawnPositions) {
 	for (const auto& position : spawnPositions) {//　位置
 
-	
-			std::unique_ptr<BaseEnemy> enemy;
 
-			if (selectedEnemyType_ == "NormalEnemy") {// 通常敵
-				enemy = std::make_unique<NormalEnemy>();
-			}
+		std::unique_ptr<BaseEnemy> enemy;
 
-			// 位置初期化とlistに追加
-			enemy->Init(position);
-			enemies_.push_back(std::move(enemy));
+		if (selectedEnemyType_ == "NormalEnemy") {// 通常敵
+			enemy = std::make_unique<NormalEnemy>();
 		}
-	
+
+		// 位置初期化とlistに追加
+		enemy->Init(position);
+		enemies_.push_back(std::move(enemy));
+	}
+
 }
 
 
@@ -70,24 +70,24 @@ void EnemyManager::Update() {
 	for (Wave& wave : phase.waves) {
 		if (currentTime_ >= wave.startTime) { // Wave開始
 
-			for (auto& spawn : wave.spawns) {
+			for (auto& spawn : wave.groups) {
 				if (currentTime_ >= spawn.spownTime) {// 次の生成時間に達した場合
 
 					/// グループ
-					for (const auto& group : spawn.enemyGroups) {
-						
-							std::unique_ptr<BaseEnemy> enemy;
+					for (const auto& group : spawn.spownEnemies) {
 
-							// 種類に応じて敵追加
-							if (group.enemyType == "NormalEnemy") {
-								enemy = std::make_unique<NormalEnemy>();
-							}
+						std::unique_ptr<BaseEnemy> enemy;
 
-							// 他の敵タイプを追加可能
-							enemy->Init(group.position);
-							enemies_.push_back(std::move(enemy));
+						// 種類に応じて敵追加
+						if (group.enemyType == "NormalEnemy") {
+							enemy = std::make_unique<NormalEnemy>();
 						}
-					
+
+						// 他の敵タイプを追加可能
+						enemy->Init(group.position);
+						enemies_.push_back(std::move(enemy));
+					}
+
 				}
 			}
 		}
@@ -140,21 +140,33 @@ void EnemyManager::ImGuiUpdate() {
 			ImGui::DragFloat("Start Time", &wave.startTime, 0.1f);
 
 			// 敵の生成パラメータについて
-			for (size_t spawnIndex = 0; spawnIndex < wave.spawns.size(); ++spawnIndex) {
-				auto& spawn = wave.spawns[spawnIndex];
-				ImGui::PushID(int(spawnIndex));
+			for (size_t groupIndex = 0; groupIndex < wave.groups.size(); ++groupIndex) {
+				auto& spawn = wave.groups[groupIndex];
+				ImGui::PushID(int(groupIndex));
 
 				/// 敵グループ
-				ImGui::SeparatorText("Enemy Groups:");
-				for (size_t groupIndex = 0; groupIndex < spawn.enemyGroups.size(); ++groupIndex) {
-					auto& group = spawn.enemyGroups[groupIndex];
-					ImGui::PushID(int(groupIndex));
+				ImGui::SeparatorText("Enemies:");
 
-					// Remove Group ボタンを同じ行に配置
-					ImGui::Text("Group %zu", groupIndex); // グループインデックス表示
+				ImGui::SameLine();
+				// Group削除
+				if (ImGui::Button("Remove Group")) {
+					wave.groups.erase(wave.groups.begin() + groupIndex);
+					ImGui::PopID();
+					break; // 削除後は次のグループの描画をスキップ
+				}
+
+
+
+				for (size_t spownEnemyIndex = 0; spownEnemyIndex < spawn.spownEnemies.size(); ++spownEnemyIndex) {
+					auto& group = spawn.spownEnemies[spownEnemyIndex];
+					ImGui::PushID(int(spownEnemyIndex));
+
+				
+					ImGui::Text("Enemy %zu", spownEnemyIndex); // 敵のIndex表示
 					ImGui::SameLine();
-					if (ImGui::Button("Remove Group")) {
-						spawn.enemyGroups.erase(spawn.enemyGroups.begin() + groupIndex);
+					
+					if (ImGui::Button("Remove Enemy")) {/// 敵削除
+						spawn.spownEnemies.erase(spawn.spownEnemies.begin() + spownEnemyIndex);
 						ImGui::PopID();
 						continue; // 削除後に他のUI要素を更新しないように
 					}
@@ -162,33 +174,42 @@ void EnemyManager::ImGuiUpdate() {
 					// 敵グループの設定UI
 					ImGui::InputText("Type", &group.enemyType[0], group.enemyType.size());
 					ImGui::DragFloat3("Position", &group.position.x, 0.1f);
-					/*ImGui::DragInt("Count", (int*)&group.count, 1, 1, 100);*/
 
 					ImGui::PopID();
 				}
 
-				// 敵グループ追加
-				if (ImGui::Button("Add Enemy Group")) {
-					spawn.enemyGroups.push_back({ "NormalEnemy", {},});
+               ///-----------------------------------------------------------------------------------------
+               ///  敵追加
+               ///-----------------------------------------------------------------------------------------
+	  
+				if (ImGui::Button("Add Enemy")) {
+					spawn.spownEnemies.push_back({ "NormalEnemy", {}, });
 				}
 
 				// 生成するまでかかる時間
 				ImGui::DragFloat("Spawn Time", &spawn.spownTime, 0.1f);
 
 				ImGui::PopID();
-			}
 
-			if (ImGui::Button("Add Spawn")) {
-				wave.spawns.push_back({ {}, 2.0f });
-			}
+				///* Group追加削除
+				if (ImGui::Button(("Add Group " + std::to_string(groupIndex)).c_str())) {
+					wave.groups.push_back({ {}, 2.0f });
+				}
+
+			}		
 		}
+		///-----------------------------------------------------------------------------------------
+		///  Wave
+		///-----------------------------------------------------------------------------------------
 
 		ImGui::SeparatorText("Wave");
+
+		/// Wave削除
 		if (ImGui::Button(std::format("Remove Wave ##{}", waveIndex).c_str())) {
 			phase.waves.erase(phase.waves.begin() + waveIndex);
 		}
 	}
-
+	/// Wave追加
 	if (ImGui::Button("Add Wave")) {
 		phase.waves.push_back({ currentTime_, {} });
 	}
@@ -210,98 +231,138 @@ void EnemyManager::SetPhase(int phase) {
 		ImGui::Text("Invalid phase!");
 	}
 }
-
+///========================================================================================
+///  セーブ/ロード機能
+///========================================================================================
 void EnemyManager::SaveAndLoad() {
 	if (ImGui::Button("Save Schedules")) {
-		json scheduleJson;
-		for (const auto& [phaseNum, phase] : phases_) {
-			json phaseJson;
-			for (const auto& wave : phase.waves) {
-				json waveJson;
-				waveJson["startTime"] = wave.startTime;
-
-				for (const auto& spawn : wave.spawns) {
-					json spawnJson;
-					spawnJson["SpownTime"] = spawn.spownTime; 
-
-					for (const auto& group : spawn.enemyGroups) {
-						spawnJson["enemyGroups"].push_back({
-							{"enemyType", group.enemyType},
-							{"position", {{"x", group.position.x}, {"y", group.position.y}, {"z", group.position.z}}}
-							});
-					}
-
-					waveJson["spawns"].push_back(spawnJson);
-				}
-
-				phaseJson.push_back(waveJson);
-			}
-			scheduleJson[std::to_string(phaseNum)] = phaseJson;
-		}
-
-		std::ofstream file(directrypath_ + filename_);
-		if (file.is_open()) {
-			file << scheduleJson.dump(4); // JSON をインデント付きで保存
-		}
+		SaveSchedules();
 	}
 
 	if (ImGui::Button("Load Schedules")) {
-		std::ifstream file(directrypath_ + filename_);
-		if (file.is_open()) {
-			json scheduleJson;
-			file >> scheduleJson;
+		LoadSchedules();
+	}
+}
 
-			phases_.clear();
-			for (auto& [phaseNum, phaseData] : scheduleJson.items()) {
-				Phase phase;
-				for (const auto& waveData : phaseData) {
-					Wave wave;
+///========================================================================================
+///  JSON を保存する関数
+///========================================================================================
+void EnemyManager::SaveSchedules() {
+	json scheduleJson;
 
-					// startTime の型チェック
-					if (waveData.contains("startTime") && waveData["startTime"].is_number()) {
-						wave.startTime = waveData["startTime"];
-					}
+	scheduleJson["isEditorMode"] = isEditorMode_;// isEditorMode を保存
 
-					for (const auto& spawnData : waveData["spawns"]) {
-						EnemySpawn spawn;
+	// フェーズごとのデータをJSONに変換
+	for (const auto& [phaseNum, phase] : phases_) {
+		json phaseJson;
+		for (const auto& wave : phase.waves) {
+			json waveJson;
+			waveJson["startTime"] = wave.startTime;
+		
+			// グループ
+			for (const auto& group : wave.groups) {
+				json groupJson;
+				groupJson["spawnTime"] = group.spownTime;
 
-						// spawnInterval の型チェック
-						if (spawnData.contains("SpownTime") && spawnData["SpownTime"].is_number()) {
-							spawn.spownTime = spawnData["SpownTime"];
-						}
-
-						for (const auto& groupData : spawnData["enemyGroups"]) {
-							if (groupData.contains("enemyType") && groupData["enemyType"].is_string() &&
-								groupData.contains("position") && groupData["position"].is_object() &&
-								groupData["position"].contains("x") && groupData["position"]["x"].is_number() &&
-								groupData["position"].contains("y") && groupData["position"]["y"].is_number() &&
-								groupData["position"].contains("z") && groupData["position"]["z"].is_number()/* &&
-								groupData.contains("count") && groupData["count"].is_number_integer()*/) {
-
-								// Vector3 の座標値を安全にロード
-								Vector3 position{
-									groupData["position"]["x"],
-									groupData["position"]["y"],
-									groupData["position"]["z"]
-								};
-
-								spawn.enemyGroups.push_back({
-									groupData["enemyType"],
-									position
-									});
-							}
-						}
-						wave.spawns.push_back(spawn);
-					}
-					phase.waves.push_back(wave);
+				/// スポーンエネミー
+				for (const auto& enemy : group.spownEnemies) {
+					groupJson["spownEnemies"].push_back({
+						{"enemyType", enemy.enemyType},
+						{"position", {{"x", enemy.position.x}, {"y", enemy.position.y}, {"z", enemy.position.z}}}
+						});
 				}
-				phases_[std::stoi(phaseNum)] = phase;
+
+				waveJson["spawns"].push_back(groupJson);
 			}
+			phaseJson["waves"].push_back(waveJson);
+		}
+		scheduleJson[std::to_string(phaseNum)] = phaseJson;
+	}
+
+	// ファイルに書き出し
+	std::ofstream file(directrypath_ + filename_);
+	if (file.is_open()) {
+		file << scheduleJson.dump(4); // JSONデータを整形して書き出し
+	}
+}
+
+///========================================================================================
+///  JSON をロードする関数
+///========================================================================================
+void EnemyManager::LoadSchedules() {
+	std::ifstream file(directrypath_ + filename_);
+	if (file.is_open()) {
+		json scheduleJson;
+		file >> scheduleJson;
+
+		// isEditorMode をロード
+		if (scheduleJson.contains("isEditorMode")) {
+			isEditorMode_ = scheduleJson["isEditorMode"].get<bool>();
+		}
+
+		phases_.clear(); // データをクリア
+
+		for (const auto& [phaseNum, phaseData] : scheduleJson.items()) {
+			// "isEditorMode" をスキップ
+			if (phaseNum == "isEditorMode") continue;
+
+			Phase phase;
+			LoadPhase(phase, phaseData); // フェーズデータを読み込み
+			phases_[std::stoi(phaseNum)] = phase;
 		}
 	}
 }
 
+///========================================================================================
+///  フェーズデータをロードする補助関数
+///========================================================================================
+void EnemyManager::LoadPhase(Phase& phase, const json& phaseData) {
+	if (!phaseData.contains("waves")) return;
 
+	for (const auto& waveData : phaseData["waves"]) {
+		Wave wave;
+
+		// "startTime" の存在チェック
+		wave.startTime = waveData.contains("startTime") ? waveData["startTime"].get<float>() : 0.0f;
+
+		if (waveData.contains("spawns")) {
+			for (const auto& spawnData : waveData["spawns"]) {
+				EnemyGroup spawn;
+				LoadSpawn(spawn, spawnData); // スポーンデータを読み込み
+				wave.groups.push_back(spawn);
+			}
+		}
+
+		phase.waves.push_back(wave);
+	}
+}
+
+///========================================================================================
+///  スポーンデータをロードする補助関数
+///========================================================================================
+void EnemyManager::LoadSpawn(EnemyGroup& spawn, const json& spawnData) {
+	// "spawnTime" の存在チェック
+	spawn.spownTime = spawnData.contains("spawnTime") ? spawnData["spawnTime"].get<float>() : 0.0f;
+
+	// "spownEnemies" の存在チェック
+	if (spawnData.contains("spownEnemies")) {
+		for (const auto& groupData : spawnData["spownEnemies"]) {
+			if (groupData.contains("enemyType") && groupData.contains("position")) {
+				const auto& positionData = groupData["position"];
+
+				// 各軸の存在チェック
+				float x = positionData.contains("x") ? positionData["x"].get<float>() : 0.0f;
+				float y = positionData.contains("y") ? positionData["y"].get<float>() : 0.0f;
+				float z = positionData.contains("z") ? positionData["z"].get<float>() : 0.0f;
+
+				spawn.spownEnemies.push_back({
+					groupData["enemyType"].get<std::string>(),
+					{x, y, z}
+					});
+			}
+		}
+	}
+}
 
 void EnemyManager::SetEditorMode(bool isEditorMode) {
 	isEditorMode_ = isEditorMode;
