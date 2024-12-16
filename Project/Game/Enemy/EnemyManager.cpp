@@ -139,62 +139,68 @@ void EnemyManager::ImGuiUpdate() {
 		if (ImGui::CollapsingHeader(std::format("Wave {}", waveIndex).c_str())) {
 			ImGui::DragFloat("Start Time", &wave.startTime, 0.1f);
 
+			///--------------------------------------------------------
+			/// グループ追加・削除
+			///--------------------------------------------------------
+
+			 ///* 追加
+			if (ImGui::Button("Add Group")) {
+				wave.groups.push_back({ {}, 2.0f });
+			}
+
+			
 			// 敵の生成パラメータについて
 			for (size_t groupIndex = 0; groupIndex < wave.groups.size(); ++groupIndex) {
 				auto& spawn = wave.groups[groupIndex];
 				ImGui::PushID(int(groupIndex));
 
-				/// 敵グループ
-				ImGui::SeparatorText("Enemies:");
+				/// 敵のスポーンパターン(Typeと位置)
+				if (ImGui::CollapsingHeader(("Enemies:" + std::to_string(groupIndex)).c_str())) {
 
-				ImGui::SameLine();
-				// Group削除
-				if (ImGui::Button("Remove Group")) {
-					wave.groups.erase(wave.groups.begin() + groupIndex);
-					ImGui::PopID();
-					break; // 削除後は次のグループの描画をスキップ
-				}
-
-
-
-				for (size_t spownEnemyIndex = 0; spownEnemyIndex < spawn.spownEnemies.size(); ++spownEnemyIndex) {
-					auto& group = spawn.spownEnemies[spownEnemyIndex];
-					ImGui::PushID(int(spownEnemyIndex));
-
-				
-					ImGui::Text("Enemy %zu", spownEnemyIndex); // 敵のIndex表示
-					ImGui::SameLine();
-					
-					if (ImGui::Button("Remove Enemy")) {/// 敵削除
-						spawn.spownEnemies.erase(spawn.spownEnemies.begin() + spownEnemyIndex);
+					///* 削除
+					if (ImGui::Button("Remove Group")) {
+						wave.groups.erase(wave.groups.begin() + groupIndex);
 						ImGui::PopID();
-						continue; // 削除後に他のUI要素を更新しないように
+						break;
 					}
 
-					// 敵グループの設定UI
-					ImGui::InputText("Type", &group.enemyType[0], group.enemyType.size());
-					ImGui::DragFloat3("Position", &group.position.x, 0.1f);
+					for (size_t spownEnemyIndex = 0; spownEnemyIndex < spawn.spownEnemies.size(); ++spownEnemyIndex) {
+						auto& group = spawn.spownEnemies[spownEnemyIndex];
+						ImGui::PushID(int(spownEnemyIndex));
 
-					ImGui::PopID();
+
+						ImGui::Text("Enemy: %zu", spownEnemyIndex); // 敵のIndex表示
+						ImGui::SameLine();
+
+						if (ImGui::Button("Remove Enemy")) {/// 敵削除
+							spawn.spownEnemies.erase(spawn.spownEnemies.begin() + spownEnemyIndex);
+							ImGui::PopID(); // 敵のIDを解除
+							continue;
+						}
+
+						// 敵グループの設定UI
+						ImGui::InputText("Type", &group.enemyType[0], group.enemyType.size());
+						ImGui::DragFloat3("Position", &group.position.x, 0.1f);
+
+						ImGui::PopID(); // 敵ID解除
+					}
+				
+				///-----------------------------------------------------------------------------------------
+			  ///  敵追加
+			  ///-----------------------------------------------------------------------------------------
+
+					if (ImGui::Button("Add Enemy")) {
+						spawn.spownEnemies.push_back({ "NormalEnemy", {}, });
+					}
+
+					// 生成するまでかかる時間
+					ImGui::DragFloat("Spawn Time", &spawn.spownTime, 0.1f);
+
+			
+					
 				}
-
-               ///-----------------------------------------------------------------------------------------
-               ///  敵追加
-               ///-----------------------------------------------------------------------------------------
-	  
-				if (ImGui::Button("Add Enemy")) {
-					spawn.spownEnemies.push_back({ "NormalEnemy", {}, });
-				}
-
-				// 生成するまでかかる時間
-				ImGui::DragFloat("Spawn Time", &spawn.spownTime, 0.1f);
 
 				ImGui::PopID();
-
-				///* Group追加削除
-				if (ImGui::Button(("Add Group " + std::to_string(groupIndex)).c_str())) {
-					wave.groups.push_back({ {}, 2.0f });
-				}
 
 			}		
 		}
@@ -222,6 +228,9 @@ void EnemyManager::ImGuiUpdate() {
 }
 
 
+///========================================================================================
+/// フェーズ変更
+///========================================================================================
 void EnemyManager::SetPhase(int phase) {
 	if (phases_.find(phase) != phases_.end()) {
 		currentPhase_ = phase;
@@ -231,23 +240,32 @@ void EnemyManager::SetPhase(int phase) {
 		ImGui::Text("Invalid phase!");
 	}
 }
+
+///========================================================================================
+/// エディターモード変更
+///========================================================================================
+void EnemyManager::SetEditorMode(bool isEditorMode) {
+	isEditorMode_ = isEditorMode;
+}
+
+
 ///========================================================================================
 ///  セーブ/ロード機能
 ///========================================================================================
 void EnemyManager::SaveAndLoad() {
 	if (ImGui::Button("Save Schedules")) {
-		SaveSchedules();
+		SaveEnemyPoPData();
 	}
 
 	if (ImGui::Button("Load Schedules")) {
-		LoadSchedules();
+		LoadEnemyPoPData();
 	}
 }
 
 ///========================================================================================
 ///  JSON を保存する関数
 ///========================================================================================
-void EnemyManager::SaveSchedules() {
+void EnemyManager::SaveEnemyPoPData() {
 	json scheduleJson;
 
 	scheduleJson["isEditorMode"] = isEditorMode_;// isEditorMode を保存
@@ -289,7 +307,7 @@ void EnemyManager::SaveSchedules() {
 ///========================================================================================
 ///  JSON をロードする関数
 ///========================================================================================
-void EnemyManager::LoadSchedules() {
+void EnemyManager::LoadEnemyPoPData() {
 	std::ifstream file(directrypath_ + filename_);
 	if (file.is_open()) {
 		json scheduleJson;
@@ -362,8 +380,4 @@ void EnemyManager::LoadSpawn(EnemyGroup& spawn, const json& spawnData) {
 			}
 		}
 	}
-}
-
-void EnemyManager::SetEditorMode(bool isEditorMode) {
-	isEditorMode_ = isEditorMode;
 }

@@ -93,14 +93,20 @@ public:
    /// editor method
    ///========================================================
 
-    // ImGuiによるエディタ
-    void ImGuiUpdate();
-    void SaveAndLoad();
-    void SaveSchedules();
-    void LoadSchedules();
+   
+    void ImGuiUpdate();/// ImGuiによるエディタ
+
+    void SaveAndLoad();/// セーブとロード
+
+    ///* セーブ
+    void SaveEnemyPoPData();
+
+    ///* ロード
+    void LoadEnemyPoPData();
     void LoadPhase(Phase& phase, const json& phaseData);
     void LoadSpawn(EnemyGroup& spawn, const json& spawnData);
 
+    ///* EditorModeセット
     void SetEditorMode(bool isEditorMode);
 
     ///========================================================
