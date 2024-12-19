@@ -20,13 +20,14 @@ private:
     struct SpownEnemy {
         std::string enemyType;    // 敵の種類
         Vector3 position;         // 敵の座標
+     
  
     };
 
     struct EnemyGroup {
         std::vector<SpownEnemy> spownEnemies; // 敵グループのリスト
         float spownTime;                 // グループ生成間隔
-        
+        bool isSpowned;
     };
 
 
@@ -82,6 +83,7 @@ public:
 
     // 更新処理
     void Update();
+    void SpawnUpdate();
 
     // 描画処理
     void Draw(const ViewProjection& viewProjection);

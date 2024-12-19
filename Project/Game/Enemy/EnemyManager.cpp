@@ -62,36 +62,8 @@ void EnemyManager::Update() {
 		return; // エディタモード中は停止
 	}
 
-	currentTime_ += Frame::DeltaTime(); //* 現在時間加算
 
-	auto& phase = phases_[currentPhase_];//* 現在フェーズの取得
-
-	// Waveの処理
-	for (Wave& wave : phase.waves) {
-		if (currentTime_ >= wave.startTime) { // Wave開始
-
-			for (auto& spawn : wave.groups) {
-				if (currentTime_ >= spawn.spownTime) {// 次の生成時間に達した場合
-
-					/// グループ
-					for (const auto& group : spawn.spownEnemies) {
-
-						std::unique_ptr<BaseEnemy> enemy;
-
-						// 種類に応じて敵追加
-						if (group.enemyType == "NormalEnemy") {
-							enemy = std::make_unique<NormalEnemy>();
-						}
-
-						// 他の敵タイプを追加可能
-						enemy->Init(group.position);
-						enemies_.push_back(std::move(enemy));
-					}
-
-				}
-			}
-		}
-	}
+	SpawnUpdate(); // スポーン更新
 
 	for (auto it = enemies_.begin(); it != enemies_.end();) {
 		(*it)->Update();// 更新
@@ -99,6 +71,42 @@ void EnemyManager::Update() {
 	}
 }
 
+
+void EnemyManager::SpawnUpdate() {
+	currentTime_ += Frame::DeltaTime(); //* 現在時間加算
+
+	auto& phase = phases_[currentPhase_];//* 現在フェーズの取得
+
+	// Waveの処理
+	for (Wave& wave : phase.waves) {
+		// Waveがまだ開始されていない場合はスキップ
+		if (currentTime_ < wave.startTime) continue;
+
+		for (auto& group : wave.groups) {
+			// 次の生成時間に達していない場合はスキップ
+			if (currentTime_ < group.spownTime) continue;
+			if (group.isSpowned) continue;
+
+
+
+			// グループ生成処理
+			for (const auto& spawn : group.spownEnemies) {
+				std::unique_ptr<BaseEnemy> enemy;
+
+				// 種類に応じて敵追加
+				if (spawn.enemyType == "NormalEnemy") {
+					enemy = std::make_unique<NormalEnemy>();
+				}
+
+				// 他の敵タイプを追加可能
+				enemy->Init(spawn.position);
+				enemies_.push_back(std::move(enemy));
+
+			}
+			group.isSpowned = true;
+		}
+	}
+}
 
 
 
@@ -143,10 +151,13 @@ void EnemyManager::ImGuiUpdate() {
 			/// グループ追加・削除
 			///--------------------------------------------------------
 
-			 ///* 追加
+			// Add Group: 青色
+			
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 1.0f, 1.0f));  // 青色に変更
 			if (ImGui::Button("Add Group")) {
 				wave.groups.push_back({ {}, 2.0f });
 			}
+			ImGui::PopStyleColor();
 
 			
 			// 敵の生成パラメータについて
@@ -155,28 +166,34 @@ void EnemyManager::ImGuiUpdate() {
 				ImGui::PushID(int(groupIndex));
 
 				/// 敵のスポーンパターン(Typeと位置)
-				if (ImGui::CollapsingHeader(("Enemies:" + std::to_string(groupIndex)).c_str())) {
+				if (ImGui::CollapsingHeader(("Group:" + std::to_string(groupIndex)).c_str())) {
 
-					///* 削除
+					// Remove Group: 赤色
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 0.2f, 0.2f, 1.0f));  // 赤色に変更
 					if (ImGui::Button("Remove Group")) {
 						wave.groups.erase(wave.groups.begin() + groupIndex);
 						ImGui::PopID();
+						ImGui::PopStyleColor();
 						break;
 					}
+					ImGui::PopStyleColor();
 
 					for (size_t spownEnemyIndex = 0; spownEnemyIndex < spawn.spownEnemies.size(); ++spownEnemyIndex) {
 						auto& group = spawn.spownEnemies[spownEnemyIndex];
 						ImGui::PushID(int(spownEnemyIndex));
 
-
 						ImGui::Text("Enemy: %zu", spownEnemyIndex); // 敵のIndex表示
 						ImGui::SameLine();
 
-						if (ImGui::Button("Remove Enemy")) {/// 敵削除
+						// Remove Enemy: 赤色
+						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 0.2f, 0.2f, 1.0f));  // 赤色に変更
+						if (ImGui::Button("Remove Enemy")) {
 							spawn.spownEnemies.erase(spawn.spownEnemies.begin() + spownEnemyIndex);
 							ImGui::PopID(); // 敵のIDを解除
+							ImGui::PopStyleColor();
 							continue;
 						}
+						ImGui::PopStyleColor();
 
 						// 敵グループの設定UI
 						ImGui::InputText("Type", &group.enemyType[0], group.enemyType.size());
@@ -184,41 +201,47 @@ void EnemyManager::ImGuiUpdate() {
 
 						ImGui::PopID(); // 敵ID解除
 					}
-				
-				///-----------------------------------------------------------------------------------------
-			  ///  敵追加
-			  ///-----------------------------------------------------------------------------------------
 
+					///-----------------------------------------------------------------------------------------
+					/// 敵追加
+					///-----------------------------------------------------------------------------------------
+
+					// Add Enemy: 青色
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 1.0f, 1.0f));  // 青色に変更
 					if (ImGui::Button("Add Enemy")) {
 						spawn.spownEnemies.push_back({ "NormalEnemy", {}, });
 					}
+					ImGui::PopStyleColor();
 
 					// 生成するまでかかる時間
 					ImGui::DragFloat("Spawn Time", &spawn.spownTime, 0.1f);
-
-			
-					
 				}
 
 				ImGui::PopID();
-
-			}		
+			}
 		}
 		///-----------------------------------------------------------------------------------------
-		///  Wave
+		/// Wave
 		///-----------------------------------------------------------------------------------------
 
 		ImGui::SeparatorText("Wave");
-
-		/// Wave削除
+																							
+		// Remove Wave: 赤色
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 0.2f, 0.2f, 1.0f));  // 赤色に変更
 		if (ImGui::Button(std::format("Remove Wave ##{}", waveIndex).c_str())) {
 			phase.waves.erase(phase.waves.begin() + waveIndex);
+			ImGui::PopStyleColor();
 		}
+		ImGui::PopStyleColor();
 	}
+
 	/// Wave追加
+	// Add Wave: 青色
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 1.0f, 1.0f));  // 青色に変更
 	if (ImGui::Button("Add Wave")) {
 		phase.waves.push_back({ currentTime_, {} });
 	}
+	ImGui::PopStyleColor();
 
 	/// セーブロード
 	ImGui::SeparatorText("Save and Load");
@@ -226,6 +249,7 @@ void EnemyManager::ImGuiUpdate() {
 
 	ImGui::End();
 }
+
 
 
 ///========================================================================================
@@ -345,9 +369,10 @@ void EnemyManager::LoadPhase(Phase& phase, const json& phaseData) {
 
 		if (waveData.contains("spawns")) {
 			for (const auto& spawnData : waveData["spawns"]) {
-				EnemyGroup spawn;
-				LoadSpawn(spawn, spawnData); // スポーンデータを読み込み
-				wave.groups.push_back(spawn);
+				EnemyGroup group;
+				group.isSpowned = false;
+				LoadSpawn(group, spawnData); // スポーンデータを読み込み
+				wave.groups.push_back(group);
 			}
 		}
 
@@ -358,9 +383,9 @@ void EnemyManager::LoadPhase(Phase& phase, const json& phaseData) {
 ///========================================================================================
 ///  スポーンデータをロードする補助関数
 ///========================================================================================
-void EnemyManager::LoadSpawn(EnemyGroup& spawn, const json& spawnData) {
+void EnemyManager::LoadSpawn(EnemyGroup& group, const json& spawnData) {
 	// "spawnTime" の存在チェック
-	spawn.spownTime = spawnData.contains("spawnTime") ? spawnData["spawnTime"].get<float>() : 0.0f;
+	group.spownTime = spawnData.contains("spawnTime") ? spawnData["spawnTime"].get<float>() : 0.0f;
 
 	// "spownEnemies" の存在チェック
 	if (spawnData.contains("spownEnemies")) {
@@ -373,7 +398,7 @@ void EnemyManager::LoadSpawn(EnemyGroup& spawn, const json& spawnData) {
 				float y = positionData.contains("y") ? positionData["y"].get<float>() : 0.0f;
 				float z = positionData.contains("z") ? positionData["z"].get<float>() : 0.0f;
 
-				spawn.spownEnemies.push_back({
+				group.spownEnemies.push_back({
 					groupData["enemyType"].get<std::string>(),
 					{x, y, z}
 					});

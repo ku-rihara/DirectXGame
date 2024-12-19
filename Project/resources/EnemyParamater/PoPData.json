@@ -17,7 +17,7 @@
                             {
                                 "enemyType": "NormalEnemy",
                                 "position": {
-                                    "x": 0.0,
+                                    "x": 8.300000190734863,
                                     "y": 0.0,
                                     "z": 0.0
                                 }
@@ -25,10 +25,17 @@
                         ]
                     },
                     {
-                        "spawnTime": 2.0
-                    },
-                    {
-                        "spawnTime": 2.0
+                        "spawnTime": 6.0,
+                        "spownEnemies": [
+                            {
+                                "enemyType": "NormalEnemy",
+                                "position": {
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 6.400000095367432
+                                }
+                            }
+                        ]
                     }
                 ],
                 "startTime": 2.1367762088775635
