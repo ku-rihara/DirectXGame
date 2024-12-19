@@ -1,11 +1,13 @@
 #include "Player.h"
 
+/// input
 #include"JoyState/JoyState.h"
 #include"Frame/Frame.h"
 
 /// math
 #include"MathFunction.h"
 
+/// other class
 #include"Field/Field.h"
 #include"LockOn/LockOn.h"
 
@@ -13,15 +15,19 @@
 #include"PlayerBehavior/PlayerRoot.h"
 #include"PlayerBehavior/PlayerJump.h"
 
-
+/// imgui
 #include<imgui.h>
 
-
+///=========================================================
+///　static 変数初期化
+///==========================================================
 float Player::InitY_ = 0.5f;
 
 Player::Player() {}
 
-//初期化
+///=========================================================
+///　初期化
+///==========================================================
 void Player::Init() {
 
 	// 基底クラスの初期化
@@ -38,7 +44,9 @@ void Player::Init() {
 	ChangeBehavior(std::make_unique<PlayerRoot>(this));
 }
 
-/// 更新
+///=========================================================
+///　更新
+///==========================================================
 void Player::Update() {
 	prePos_ = GetWorldPosition();
 	
@@ -55,27 +63,9 @@ void Player::Update() {
 	BaseObject::Update();
 }
 
-void Player::Fall() {
-	if (!dynamic_cast<PlayerJump*>(behavior_.get())) {
-	
-		// 移動
-		transform_.translation_.y += fallSpeed_;
-		// 重力加速度
-		const float kGravityAcceleration = 3.4f * Frame::DeltaTime();
-		// 加速度ベクトル
-		float accelerationY = -kGravityAcceleration;
-		// 加速する
-		fallSpeed_ = max(fallSpeed_ + accelerationY, -0.75f);
-
-		// 着地
-		if (transform_.translation_.y <= Player::InitY_) {
-			transform_.translation_.y = Player::InitY_;
-		}
-	}
-}
-
-
-/// 描画
+///=========================================================
+///　描画
+///==========================================================
 void Player::Draw(const ViewProjection& viewProjection) {
 
 	BaseObject::Draw(viewProjection);
@@ -113,11 +103,9 @@ void Player::DamageRendition() {
 
 
 
-/// ===================================================
-///  Player Move
-/// ===================================================
-
-/// 入力処理
+///=========================================================
+/// 移動の入力処理
+///==========================================================
 Vector3 Player::GetInputVelocity() {
 	Vector3 velocity = { 0.0f, 0.0f, 0.0f };
 	Input* input = Input::GetInstance();
@@ -145,7 +133,9 @@ Vector3 Player::GetInputVelocity() {
 	return velocity;
 }
 
-// 移動の処理
+///=========================================================
+/// 移動
+///==========================================================
 void Player::Move(const float& speed) {
 
 	/// Inuputから速度代入
@@ -174,16 +164,20 @@ void Player::Move(const float& speed) {
 	}
 }
 
-//動いているか
+///=========================================================
+/// 動いているか
+///==========================================================
 bool Player::GetIsMoving() {
 	Input* input = Input::GetInstance();
 	bool isMoving = false;
 	const float thresholdValue = 0.3f;
 	Vector3 StickVelocity;
 	Vector3 keyBoradVelocity;
-	/// ===================================================
+
+	/// ----------------------------------------------------------------------
 	///  JoyStick
-	/// ===================================================
+	/// -----------------------------------------------------------------------
+
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
 		// 移動量
 		StickVelocity = { (float)joyState.Gamepad.sThumbLX / SHRT_MAX, 0, (float)joyState.Gamepad.sThumbLY / SHRT_MAX };
@@ -191,9 +185,11 @@ bool Player::GetIsMoving() {
 			isMoving = true;
 		}
 	}
-	/// ===================================================
+
+	/// ------------------------------------------------------------------------------
 	///  keyBorad
-	/// ===================================================
+	/// -------------------------------------------------------------------------------
+
 	else {
 		// キーボード入力
 		if (input->PushKey(DIK_W)) {
@@ -212,6 +208,7 @@ bool Player::GetIsMoving() {
 			isMoving = true;
 		}
 	}
+
 	return isMoving;
 }
 
@@ -227,7 +224,7 @@ void Player::Jump(float& speed) {
 	// 加速度ベクトル
 	float accelerationY = -kGravityAcceleration;
 	// 加速する
-	speed = max(speed + accelerationY, jumpLimit_);
+	speed = max(speed + accelerationY, fallLimit_);
 
 	// 着地
 	if (transform_.translation_.y <= Player::InitY_) {
@@ -238,6 +235,9 @@ void Player::Jump(float& speed) {
 	}
 }
 
+///=========================================================
+///　移動制限
+///==========================================================
 void Player::MoveToLimit() {
 
 	// フィールドの中心とスケールを取得
@@ -252,9 +252,9 @@ void Player::MoveToLimit() {
 	bool insideX = std::abs(transform_.translation_.x - fieldCenter.x) <= radiusX;
 	bool insideZ = std::abs(transform_.translation_.z - fieldCenter.z) <= radiusZ;
 
-	//////////////////////////////////////////////////////
+	///--------------------------------------------------------------------------------
 	///範囲外なら戻す
-	//////////////////////////////////////////////////////
+	///--------------------------------------------------------------------------------
 
 	if (!insideX) {/// X座標
 		transform_.translation_.x = std::clamp(
@@ -280,13 +280,41 @@ void Player::MoveToLimit() {
 	}
 }
 
+///=========================================================
+///　落ちる
+///==========================================================
+void Player::Fall() {
+	if (!dynamic_cast<PlayerJump*>(behavior_.get())) {
+
+		// 移動
+		transform_.translation_.y += fallSpeed_;
+		// 重力加速度
+		const float kGravityAcceleration = 3.4f * Frame::DeltaTime();
+		// 加速度ベクトル
+		float accelerationY = -kGravityAcceleration;
+		// 加速する
+		fallSpeed_ = max(fallSpeed_ + accelerationY, -0.75f);
+
+		// 着地
+		if (transform_.translation_.y <= Player::InitY_) {
+			transform_.translation_.y = Player::InitY_;
+		}
+	}
+}
+
+
+///=========================================================
+///振る舞い切り替え
+///==========================================================
 void Player::ChangeBehavior(std::unique_ptr<BasePlayerBehavior>behavior) {
 	//引数で受け取った状態を次の状態としてセット
 	behavior_ = std::move(behavior);
 }
 
 
-
+///=========================================================
+/// ImGuiデバッグ
+///==========================================================
 void Player::Debug() {
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Player")) {
@@ -308,6 +336,9 @@ void Player::Debug() {
 //	return worldPos;
 //};
 
+///=========================================================
+/// ダメージ受ける
+///==========================================================
 void Player::TakeDamage() {
 	/*if (!isDamage_) {
 		life_--;
