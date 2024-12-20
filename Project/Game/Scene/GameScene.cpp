@@ -120,6 +120,10 @@ void GameScene::Debug() {
 
 	enemyManager_->ImGuiUpdate();
 
+
+	ImGui::Begin("ParamaterEditor");
+	player_->ImguiParmUpdate();
+	ImGui::End();
 #endif
 }
 

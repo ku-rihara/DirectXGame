@@ -32,8 +32,11 @@ Player::Player() {}
 void Player::Init() {
 
 	BaseObject::Init();	// 基底クラスの初期化 
-	
-	BaseObject::CreateModel("cube",".obj");/// モデルセット
+	BaseObject::CreateModel("cube", ".obj");/// モデルセット
+
+	globalParameter_ = GlobalParameter::GetInstance();
+	AddParmGroup();
+	ApplyGlobalParameter();
 
 	transform_.translation_.y = Player::InitY_;//  パーツの変位
 
@@ -49,27 +52,21 @@ void Player::Init() {
 ///　更新
 ///==========================================================
 void Player::Update() {
-	prePos_ = GetWorldPosition();
-	
-	/// ダメージエフェクト
-	DamageRendition();
+	prePos_ = GetWorldPosition();// 前フレームの座標
+
+	DamageRendition();        /// ダメージエフェクト
 
 	/// 振る舞い処理(コンボ攻撃中は中止)
-	if(!dynamic_cast<ComboAttackRoot*>(behavior_.get())) {
+	if (!dynamic_cast<ComboAttackRoot*>(behavior_.get())) {
 		behavior_->Update();
-	} 
+	}
 
-	///　コンボ攻撃攻撃
-	comboBehavior_->Update();
-	
-	//　移動制限
-	MoveToLimit();
+	comboBehavior_->Update();	///　コンボ攻撃攻撃
+	MoveToLimit();              ///　移動制限
+	Fall();                     /// 落ちる
 
-	// 落ちる
-	Fall(); 
+	BaseObject::Update();       /// 更新 
 
-	/// 更新
-	BaseObject::Update();
 }
 
 ///=========================================================
@@ -316,14 +313,13 @@ void Player::Fall() {
 ///=========================================================
 /// ImGuiデバッグ
 ///==========================================================
-void Player::Debug() {
+void Player::ImguiParmUpdate() {
 #ifdef _DEBUG
-	if (ImGui::TreeNode("Player")) {
-		ImGui::DragFloat3("Pos", &transform_.translation_.x, 0.01f);
-		ImGui::DragFloat("JumpSpeed", &muzzelJumpSpeed_, 0.01f);
-		ImGui::Text("Isattack:%d", isAttack_);
-		behavior_->Debug();
-		ImGui::TreePop();
+	if (ImGui::CollapsingHeader("Player")) {
+
+		/// セーブとロード
+		globalParameter_->ParmSaveForImGui(groupName_);
+		ParmLoadForImGui();
 	}
 #endif // _DEBUG
 }
@@ -352,9 +348,9 @@ void Player::TakeDamage() {
 /// Class Set
 ///==========================================================
 
- void Player::SetLockOn(LockOn* lockon) {
+void Player::SetLockOn(LockOn* lockon) {
 	pLockOn_ = lockon;
- }
+}
 
 ///=========================================================
 /// Collision
@@ -365,12 +361,65 @@ void Player::TakeDamage() {
 ///=========================================================
 ///振る舞い切り替え
 ///==========================================================
- void Player::ChangeBehavior(std::unique_ptr<BasePlayerBehavior>behavior) {
-	 //引数で受け取った状態を次の状態としてセット
-	 behavior_ = std::move(behavior);
- }
- void Player::ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior>behavior) {
-	 //引数で受け取った状態を次の状態としてセット
-	 comboBehavior_ = std::move(behavior);
- }
+void Player::ChangeBehavior(std::unique_ptr<BasePlayerBehavior>behavior) {
+	//引数で受け取った状態を次の状態としてセット
+	behavior_ = std::move(behavior);
+}
+void Player::ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior>behavior) {
+	//引数で受け取った状態を次の状態としてセット
+	comboBehavior_ = std::move(behavior);
+}
 
+
+///=================================================================================
+/// ロード
+///=================================================================================
+void Player::ParmLoadForImGui() {
+
+	// ロードボタン
+	if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
+
+		globalParameter_->LoadFile(groupName_);
+		// セーブ完了メッセージ
+		ImGui::Text("Load Successful: %s", groupName_.c_str());
+		ApplyGlobalParameter();
+	}
+}
+
+
+///=================================================================================
+///パラメータをグループに追加
+///=================================================================================
+void Player::AddParmGroup() {
+	globalParameter_->CreateGroup(groupName_, false);
+
+	// Position
+	//globalParameter_->AddSeparatorText("Position");
+	globalParameter_->AddItem(groupName_, "Translate", transform_.translation_);
+
+}
+
+
+///=================================================================================
+///パラメータをグループに追加
+///=================================================================================
+void Player::SetValues() {
+
+	// グループを追加(GlobalParamaterで表示はしない)
+	globalParameter_->CreateGroup(groupName_, false);
+
+	// Position
+	//globalParameter_->AddSeparatorText("Position");
+	globalParameter_->SetValue(groupName_, "Translate", transform_.translation_);
+
+}
+
+
+///=====================================================
+///  ImGuiからパラメータを得る
+///===================================================== 
+void Player::ApplyGlobalParameter() {
+	// Position
+	transform_.translation_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
+
+}

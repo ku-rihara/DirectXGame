@@ -33,8 +33,9 @@ private:
 	
 	/// other class
 	LockOn* pLockOn_;                   /// LockOnクラス 
-	GlobalParameter* globalParamater_;  /// グローバルパラメータ
-	
+	GlobalParameter* globalParameter_;  /// グローバルパラメータ
+	const std::string groupName_="Player";
+
 	/// move
 	float objectiveAngle_;              /// 目標角度
 	Vector3 velocity_;                  /// 速度
@@ -88,7 +89,7 @@ public:
 	void ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior>behavior);
 
 
-	void Debug();                      /// デバッグ
+	void ImguiParmUpdate();                      /// デバッグ
 	void SetLockOn(LockOn* lockon);    /// ロックオンクラスをセット
 	
 	/// collision
@@ -97,9 +98,11 @@ public:
 	void TakeDamage();                 /// ダメージ受ける     
 	void DamageRendition();            /// ダメージリアクション
 
-	/// Editor
-	void AddItem();
-	void SetValue();
+	
+	void ParmLoadForImGui();
+	void AddParmGroup();
+	void SetValues();
+	void ApplyGlobalParameter();
            
 	/// ===================================================
 	/// getter
