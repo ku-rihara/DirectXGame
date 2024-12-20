@@ -35,7 +35,7 @@ void GameScene::Init() {
 
 	//テクスチャハンドル
 	circleHandle_= TextureManager::GetInstance()->LoadTexture("./Resources/Texture/circle.png");
-	defaultHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/Tedxture/default.png");
+	defaultHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/Texture/default.png");
 	uv_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/uvChecker.png");
 
 	ground_ = std::make_unique<Ground>();
