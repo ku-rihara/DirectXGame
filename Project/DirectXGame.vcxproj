@@ -51,7 +51,10 @@
     <ClCompile Include="Engine\utility\Particle\ParticleCommon.cpp" />
     <ClCompile Include="Engine\utility\Particle\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\utility\Particle\ParticleManager.cpp" />
+    <ClCompile Include="Game\Command\Command.cpp" />
     <ClCompile Include="Game\Ground\Ground.cpp" />
+    <ClCompile Include="Game\InputHandle\InputHandle.cpp" />
+    <ClCompile Include="Game\Player\Player.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
@@ -123,7 +126,10 @@
     <ClInclude Include="Engine\utility\Particle\ParticleCommon.h" />
     <ClInclude Include="Engine\utility\Particle\ParticleEmitter.h" />
     <ClInclude Include="Engine\utility\Particle\ParticleManager.h" />
+    <ClInclude Include="Game\Command\Command.h" />
     <ClInclude Include="Game\Ground\Ground.h" />
+    <ClInclude Include="Game\InputHandle\InputHandle.h" />
+    <ClInclude Include="Game\Player\Player.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
     <ClInclude Include="Game\Scene\Factory\AbstractSceneFactory.h" />
     <ClInclude Include="Game\Scene\Factory\SceneFactory.h" />

@@ -1,13 +1,5 @@
 #include "GameScene.h"
-#include "base/TextureManager.h"
-//class
-#include"3d/Light.h"
-#include"utility/Particle/ParticleManager.h"
-
-//math
-#include"Frame/Frame.h"
 #include<imgui.h>
-
 #include"Scene/Manager/SceneManager.h"
 
 
@@ -21,12 +13,14 @@ void GameScene::Init() {
 
 	BaseScene::Init();
 	
+	inputHandler_ = std::make_unique<InputHandler>();
 
-	ground_ = std::make_unique<Ground>();
-	ground_->Init();
+	// assign command
+	inputHandler_->AssignMoveRightCommand2PressKeyD();
+	inputHandler_->AssignMoveLeftCommand2PressKeyA();
 
-	
-
+	player_ = std::make_unique<Player>();
+	player_->Init();
 }
 
 void GameScene::Update() {
@@ -37,7 +31,13 @@ void GameScene::Update() {
 	Debug();
 
 	//各クラス更新
-	ground_->Update();
+	iCommand_ = inputHandler_->HandleInput();
+
+	if (this->iCommand_) {
+		iCommand_->Exec(*player_);
+	}
+
+	player_->Update();
 
 	
 	ViewProjectionUpdate();
@@ -52,7 +52,7 @@ void GameScene::Update() {
 /// モデル描画
 /// ===================================================
 void GameScene::ModelDraw() {
-	ground_->Draw(viewProjection_);
+	player_->Draw(viewProjection_);
 
 }
 

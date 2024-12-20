@@ -4,11 +4,10 @@
 #include"BaseScene.h"
 
 //testobj
-#include"TestObj/CollisionTest1.h"
-#include"TestObj/CollisionTest2.h"
-#include"Ground/Ground.h"
-// emitter
-#include"utility/Particle/ParticleEmitter.h"
+#include"Player/Player.h"
+#include"Command/Command.h"
+#include"InputHandle/InputHandle.h"
+
 
 
 /// <summary>
@@ -22,7 +21,9 @@ private:
 	///========================================================
 
 	
-	std::unique_ptr<Ground> ground_ = nullptr;
+	std::unique_ptr<Player> player_ = nullptr;
+	ICommand* iCommand_ = nullptr;
+	std::unique_ptr<InputHandler> inputHandler_ = nullptr;
 
 	
 

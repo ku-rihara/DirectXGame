@@ -121,6 +121,15 @@
     <Filter Include="Game\Scene\Factory">
       <UniqueIdentifier>{33f429d3-39ce-4d12-9f0a-521b426150fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player">
+      <UniqueIdentifier>{7a5d0742-9ae4-4f8d-8b0f-ed52a7cb2b1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Command">
+      <UniqueIdentifier>{80d7340e-c7af-4924-a46d-e60c47a2e253}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\InputHandle">
+      <UniqueIdentifier>{34fd79ed-48b1-448b-8fd4-1bac5846aa2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -291,6 +300,15 @@
     </ClCompile>
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp">
       <Filter>Game\Scene\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Player.cpp">
+      <Filter>Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Command\Command.cpp">
+      <Filter>Game\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\InputHandle\InputHandle.cpp">
+      <Filter>Game\InputHandle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -509,6 +527,15 @@
     </ClInclude>
     <ClInclude Include="Game\Scene\Factory\SceneFactory.h">
       <Filter>Game\Scene\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Player.h">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Command\Command.h">
+      <Filter>Game\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\InputHandle\InputHandle.h">
+      <Filter>Game\InputHandle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
