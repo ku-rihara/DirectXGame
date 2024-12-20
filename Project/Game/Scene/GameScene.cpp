@@ -34,9 +34,9 @@ void GameScene::Init() {
 	rightEmitter_.reset(ParticleEmitter::CreateParticle("RightSide", "cube", ".obj", 300,false));
 
 	//テクスチャハンドル
-	circleHandle_= TextureManager::GetInstance()->LoadTexture("./Resources/circle.png");
-	defaultHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/default.png");
-	uv_ = TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
+	circleHandle_= TextureManager::GetInstance()->LoadTexture("./Resources/Texture/circle.png");
+	defaultHandle_ = TextureManager::GetInstance()->LoadTexture("./Resources/Tedxture/default.png");
+	uv_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/uvChecker.png");
 
 	ground_ = std::make_unique<Ground>();
 	ground_->Init();

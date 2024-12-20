@@ -6,7 +6,7 @@
 #include "function/Convert.h"
 #include <vector>
 #include <d3dx12.h>
-
+#include <cstdlib>
 
 
 // descriptorHeapIndex_ の初期化
@@ -38,12 +38,19 @@ DirectX::ScratchImage TextureManager::LoadTextureFile(const std::string& filePat
 	DirectX::ScratchImage image{};
 	std::wstring filePathW = ConvertString(filePath);
 	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
-	assert(SUCCEEDED(hr));
+
+	if (FAILED(hr)) {
+		throw std::runtime_error("Texture file not found! File path: " + filePath);// ファイルパスが見つからない
+	}
+
 
 	// ミニマップの作成
 	DirectX::ScratchImage mipImages{};
 	hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
-	assert(SUCCEEDED(hr));
+	if (FAILED(hr)) {
+		throw std::runtime_error("MiniMap Generate Faild: " + filePath);
+	}
+
 
 	// ミニマップ付きのデータを返す
 	return mipImages;
