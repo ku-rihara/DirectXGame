@@ -54,14 +54,19 @@ void Player::Update() {
 	/// ダメージエフェクト
 	DamageRendition();
 
-	/// 振る舞い処理
-	behavior_->Update();
+	/// 振る舞い処理(コンボ攻撃中は中止)
+	if(!dynamic_cast<ComboAttackRoot*>(behavior_.get())) {
+		behavior_->Update();
+	} 
 
+	///　コンボ攻撃攻撃
+	comboBehavior_->Update();
+	
 	//　移動制限
 	MoveToLimit();
 
 	// 落ちる
-	Fall();
+	Fall(); 
 
 	/// 更新
 	BaseObject::Update();

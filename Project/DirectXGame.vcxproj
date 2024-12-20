@@ -62,6 +62,7 @@
     <ClCompile Include="Game\LockOn\LockOn.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackFirst.cpp" />
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackJumpFirst.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.cpp" />
     <ClCompile Include="Game\Player\Player.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="Game\LockOn\LockOn.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackFirst.h" />
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackJumpFirst.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.h" />
     <ClInclude Include="Game\Player\Player.h" />

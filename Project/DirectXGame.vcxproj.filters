@@ -157,6 +157,12 @@
     <Filter Include="Game\Player\ComboBehavior">
       <UniqueIdentifier>{b716b7ec-c13b-49ad-9c4b-07471c4c9782}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player\ComboBehavior\Normal">
+      <UniqueIdentifier>{fffcf07a-76a3-443b-9184-ae0f9224713e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\ComboBehavior\Jump">
+      <UniqueIdentifier>{7a626b88-685f-48d5-93f8-d3026437db2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -361,16 +367,19 @@
     <ClCompile Include="Game\Enemy\NormalEnemy.cpp">
       <Filter>Game\Enemy\core</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp">
-      <Filter>Game\Player\ComboBehavior</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackFirst.cpp">
-      <Filter>Game\Player\ComboBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.cpp">
-      <Filter>Game\Player\ComboBehavior</Filter>
+      <Filter>Game\Player\ComboBehavior\Normal</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp">
+      <Filter>Game\Player\ComboBehavior\Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.cpp">
+      <Filter>Game\Player\ComboBehavior\Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackJumpFirst.cpp">
+      <Filter>Game\Player\ComboBehavior\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp">
       <Filter>Game\Player\ComboBehavior</Filter>
     </ClCompile>
   </ItemGroup>
@@ -624,16 +633,19 @@
     <ClInclude Include="Game\Enemy\NormalEnemy.h">
       <Filter>Game\Enemy\core</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h">
-      <Filter>Game\Player\ComboBehavior</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackFirst.h">
-      <Filter>Game\Player\ComboBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.h">
-      <Filter>Game\Player\ComboBehavior</Filter>
+      <Filter>Game\Player\ComboBehavior\Normal</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h">
+      <Filter>Game\Player\ComboBehavior\Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.h">
+      <Filter>Game\Player\ComboBehavior\Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackJumpFirst.h">
+      <Filter>Game\Player\ComboBehavior\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h">
       <Filter>Game\Player\ComboBehavior</Filter>
     </ClInclude>
   </ItemGroup>

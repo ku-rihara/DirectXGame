@@ -4,11 +4,16 @@
 
 //class
 #include"BaseObject/BaseObject.h"
-#include"Collider/AABBCollider.h"
+
+/// utility
+#include"utility/Editor/GlobalParameter.h"
+
 /// behavior
 #include"ComboAttackBehavior/ComboAttackFirst.h"
 #include"PlayerBehavior/BasePlayerBehavior.h"
 
+/// std
+#include<array>
 #include <memory>
 
 /// <summary>
@@ -16,7 +21,10 @@
 /// </summary>
 class LockOn;
 class Player : public BaseObject{
-
+private:
+	struct ComboParm {
+		float permissionTime;
+	};
 	
 private:
 	/// ===================================================
@@ -25,6 +33,7 @@ private:
 	
 	/// other class
 	LockOn* pLockOn_;                   /// LockOnクラス 
+	GlobalParameter* globalParamater_;  /// グローバルパラメータ
 	
 	/// move
 	float objectiveAngle_;              /// 目標角度
@@ -39,6 +48,9 @@ private:
 
 	bool isAttack_;                     /// 攻撃フラグ 
 	float fallSpeed_;                  	/// 落ちるスピード
+
+	///* コンボに関するパラメータ
+	std::array<ComboParm, 2>normalComboParms_;
 
 	// カメラのビュープロジェクション
 	const ViewProjection* viewProjection_ = nullptr;
@@ -82,14 +94,19 @@ public:
 	/// collision
 
 	/// ダメージ
-	void TakeDamage();                 
-	void DamageRendition();
+	void TakeDamage();                 /// ダメージ受ける     
+	void DamageRendition();            /// ダメージリアクション
+
+	/// Editor
+	void AddItem();
+	void SetValue();
            
 	/// ===================================================
 	/// getter
 	/// ===================================================
 	const bool& GetIsAttack()const { return isAttack_; }
 	float GetMuzzulJumpSpeed()const { return muzzelJumpSpeed_; }
+	BasePlayerBehavior* GetBehavior()const { return behavior_.get(); }
 	/// ===================================================
 	/// setter
 	/// ===================================================

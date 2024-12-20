@@ -1,6 +1,10 @@
-/// behavior
+/// Combobehavior
 #include"ComboAttackRoot.h"
+#include"ComboAttackFirst.h"
+#include"ComboAttackJumpFirst.h"
 
+#include"Player/PlayerBehavior/PlayerJump.h"
+#include"input/Input.h"
 
 /// Player
 #include"Player/Player.h"
@@ -26,9 +30,24 @@ ComboAttackRoot ::~ComboAttackRoot() {
 
 //更新
 void ComboAttackRoot::Update() {
-	/*pPlayer_->Move(10.3f);*/
-	//pPlayer_->Jump(speed_);
 
+	///---------------------------------------------------------
+	/// キー入力によるコンボ開始処理
+	///---------------------------------------------------------
+
+	/// 浮遊時のコンボ
+	if (dynamic_cast<PlayerJump*>(pPlayer_->GetBehavior())) {
+		if (Input::GetInstance()->TrrigerKey(DIK_H)) {
+			pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackJumpFirst>(pPlayer_));
+		}
+	}
+	//　通常のコンボ
+	else {
+		if (Input::GetInstance()->TrrigerKey(DIK_H)) {
+
+			pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackFirst>(pPlayer_));
+		}
+	}
 }
 
 
