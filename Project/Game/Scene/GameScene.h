@@ -21,29 +21,8 @@ private:
 	/// Private variants
 	///========================================================
 
-	uint32_t textureHandle_ = 0;
-	uint32_t soundDataHandle_ = 0;
-	uint32_t voiceHandle_ = 0;
 	
-
 	std::unique_ptr<Ground> ground_ = nullptr;
-	std::unique_ptr<Object3d>modelPlane_ = nullptr;
-
-	/// particle
-	std::unique_ptr<ParticleEmitter>emitter_;
-	std::unique_ptr<ParticleEmitter>leftEmitter_;
-	std::unique_ptr<ParticleEmitter>rightEmitter_;
-	
-	//bool isDebugCameraActive_;
-	bool isDraw = true;
-
-	/*ViewProjection viewProjection_;*/
-
-	/*std::unique_ptr<DebugCamera> debugCamera_ = nullptr;*/
-
-	uint32_t defaultHandle_;
-	uint32_t circleHandle_;
-	uint32_t uv_;
 
 	
 
