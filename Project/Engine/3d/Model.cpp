@@ -73,7 +73,7 @@ ModelData Model::LoadModelFile(const std::string& directoryPath, const std::stri
 	//テクスチャが無ければ
 	if (modelData.material.textureFilePath.empty()) {
 		std::string whiteTexture = "default.png";
-		modelData.material.textureFilePath = "./Resources/Model/" + whiteTexture;
+		modelData.material.textureFilePath = texturePath_ + whiteTexture;
 
 	}
 	return modelData;
@@ -106,10 +106,10 @@ Node Model::ReadNode(aiNode* node) {
 void Model::CreateModel(const std::string& ModelName, const std::string& extension) {
 	if (extension == ".gltf") {
 		isFileGltf_ = true;
-		modelData_ = LoadModelGltf("./Resources/Model/" + ModelName, ModelName + extension);
+		modelData_ = LoadModelGltf(modelPath_ + ModelName, ModelName + extension);
 	}
 	else {
-		modelData_ = LoadModelFile("./Resources/Model/" + ModelName, ModelName + extension);
+		modelData_ = LoadModelFile(modelPath_ + ModelName, ModelName + extension);
 	}
 	textureManager_ = TextureManager::GetInstance();
 	textureHandle_ = textureManager_->LoadTexture(modelData_.material.textureFilePath);
