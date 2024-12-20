@@ -121,9 +121,6 @@
     <Filter Include="Game\Player">
       <UniqueIdentifier>{17bc6e81-f103-4b8a-895b-a16298dcba9e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player\Behavior">
-      <UniqueIdentifier>{cf9a79e5-c843-492f-9a28-30d2c3517ba4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\GameCamera">
       <UniqueIdentifier>{bfdbb484-9e65-4a8a-af2e-0ef01be0733a}</UniqueIdentifier>
     </Filter>
@@ -153,6 +150,12 @@
     </Filter>
     <Filter Include="Game\Enemy\Manager">
       <UniqueIdentifier>{4ec20f46-29f9-433f-80de-43dc9f16cb67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\MoveBehavior">
+      <UniqueIdentifier>{cf9a79e5-c843-492f-9a28-30d2c3517ba4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\ComboBehavior">
+      <UniqueIdentifier>{b716b7ec-c13b-49ad-9c4b-07471c4c9782}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -320,13 +323,13 @@
       <Filter>Game\Scene\Factory</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\PlayerBehavior\BasePlayerBehavior.cpp">
-      <Filter>Game\Player\Behavior</Filter>
+      <Filter>Game\Player\MoveBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerJump.cpp">
-      <Filter>Game\Player\Behavior</Filter>
+      <Filter>Game\Player\MoveBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerRoot.cpp">
-      <Filter>Game\Player\Behavior</Filter>
+      <Filter>Game\Player\MoveBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\GameCamera\GameCamera.cpp">
       <Filter>Game\GameCamera</Filter>
@@ -357,6 +360,18 @@
     </ClCompile>
     <ClCompile Include="Game\Enemy\NormalEnemy.cpp">
       <Filter>Game\Enemy\core</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp">
+      <Filter>Game\Player\ComboBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackFirst.cpp">
+      <Filter>Game\Player\ComboBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.cpp">
+      <Filter>Game\Player\ComboBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp">
+      <Filter>Game\Player\ComboBehavior</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -571,13 +586,13 @@
       <Filter>Game\Scene\Factory</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\PlayerBehavior\BasePlayerBehavior.h">
-      <Filter>Game\Player\Behavior</Filter>
+      <Filter>Game\Player\MoveBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerJump.h">
-      <Filter>Game\Player\Behavior</Filter>
+      <Filter>Game\Player\MoveBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerRoot.h">
-      <Filter>Game\Player\Behavior</Filter>
+      <Filter>Game\Player\MoveBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameCamera\GameCamera.h">
       <Filter>Game\GameCamera</Filter>
@@ -608,6 +623,18 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\NormalEnemy.h">
       <Filter>Game\Enemy\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h">
+      <Filter>Game\Player\ComboBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackFirst.h">
+      <Filter>Game\Player\ComboBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.h">
+      <Filter>Game\Player\ComboBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h">
+      <Filter>Game\Player\ComboBehavior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

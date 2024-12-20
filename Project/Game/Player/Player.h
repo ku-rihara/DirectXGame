@@ -6,6 +6,7 @@
 #include"BaseObject/BaseObject.h"
 #include"Collider/AABBCollider.h"
 /// behavior
+#include"ComboAttackBehavior/ComboAttackFirst.h"
 #include"PlayerBehavior/BasePlayerBehavior.h"
 
 #include <memory>
@@ -23,7 +24,7 @@ private:
 	/// ===================================================
 	
 	/// other class
-	LockOn* pLockOn_;
+	LockOn* pLockOn_;                   /// LockOnクラス 
 	
 	/// move
 	float objectiveAngle_;              /// 目標角度
@@ -44,6 +45,7 @@ private:
 
 	/// behavior
 	std::unique_ptr<BasePlayerBehavior>behavior_ = nullptr;
+	std::unique_ptr<BaseComboAattackBehavior>comboBehavior_ = nullptr;
 
 
 public:
@@ -71,7 +73,9 @@ public:
 
 	/// 振る舞い切り替え
 	void ChangeBehavior(std::unique_ptr<BasePlayerBehavior>behavior);
-	 
+	void ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior>behavior);
+
+
 	void Debug();                      /// デバッグ
 	void SetLockOn(LockOn* lockon);    /// ロックオンクラスをセット
 	

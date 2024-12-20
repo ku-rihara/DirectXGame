@@ -14,6 +14,7 @@
 /// behavior
 #include"PlayerBehavior/PlayerRoot.h"
 #include"PlayerBehavior/PlayerJump.h"
+#include"ComboAttackBehavior/ComboAttackRoot.h"
 
 /// imgui
 #include<imgui.h>
@@ -30,10 +31,9 @@ Player::Player() {}
 ///==========================================================
 void Player::Init() {
 
-	// 基底クラスの初期化
-	BaseObject::Init();
-	/// モデルセット
-	BaseObject::CreateModel("cube",".obj");
+	BaseObject::Init();	// 基底クラスの初期化 
+	
+	BaseObject::CreateModel("cube",".obj");/// モデルセット
 
 	transform_.translation_.y = Player::InitY_;//  パーツの変位
 
@@ -42,6 +42,7 @@ void Player::Init() {
 
 	/// 通常モードから
 	ChangeBehavior(std::make_unique<PlayerRoot>(this));
+	ChangeComboBehavior(std::make_unique<ComboAttackRoot>(this));
 }
 
 ///=========================================================
@@ -52,10 +53,13 @@ void Player::Update() {
 	
 	/// ダメージエフェクト
 	DamageRendition();
+
 	/// 振る舞い処理
 	behavior_->Update();
+
 	//　移動制限
 	MoveToLimit();
+
 	// 落ちる
 	Fall();
 
@@ -303,14 +307,6 @@ void Player::Fall() {
 }
 
 
-///=========================================================
-///振る舞い切り替え
-///==========================================================
-void Player::ChangeBehavior(std::unique_ptr<BasePlayerBehavior>behavior) {
-	//引数で受け取った状態を次の状態としてセット
-	behavior_ = std::move(behavior);
-}
-
 
 ///=========================================================
 /// ImGuiデバッグ
@@ -358,3 +354,18 @@ void Player::TakeDamage() {
 ///=========================================================
 /// Collision
 ///==========================================================
+
+
+
+///=========================================================
+///振る舞い切り替え
+///==========================================================
+ void Player::ChangeBehavior(std::unique_ptr<BasePlayerBehavior>behavior) {
+	 //引数で受け取った状態を次の状態としてセット
+	 behavior_ = std::move(behavior);
+ }
+ void Player::ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior>behavior) {
+	 //引数で受け取った状態を次の状態としてセット
+	 comboBehavior_ = std::move(behavior);
+ }
+

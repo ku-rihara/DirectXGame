@@ -60,6 +60,10 @@
     <ClCompile Include="Game\Ground\Ground.cpp" />
     <ClCompile Include="Game\JoyState\JoyState.cpp" />
     <ClCompile Include="Game\LockOn\LockOn.cpp" />
+    <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp" />
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackFirst.cpp" />
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp" />
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.cpp" />
     <ClCompile Include="Game\Player\Player.cpp" />
     <ClCompile Include="Game\Player\PlayerBehavior\BasePlayerBehavior.cpp" />
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerJump.cpp" />
@@ -143,6 +147,10 @@
     <ClInclude Include="Game\Ground\Ground.h" />
     <ClInclude Include="Game\JoyState\JoyState.h" />
     <ClInclude Include="Game\LockOn\LockOn.h" />
+    <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h" />
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackFirst.h" />
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h" />
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.h" />
     <ClInclude Include="Game\Player\Player.h" />
     <ClInclude Include="Game\Player\PlayerBehavior\BasePlayerBehavior.h" />
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerJump.h" />
