@@ -2,6 +2,21 @@
 #include<imgui.h>
 
 
+void BaseScene::Init() {
+	// メンバ変数の初期化
+	input_ = Input::GetInstance();
+	audio_ = Audio::GetInstance();
+	textureManager_ = TextureManager::GetInstance();
+
+	//デバッグカメラ
+	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
+	debugCamera_->Init();
+
+	//ビュープロジェクション
+	viewProjection_.Init();
+	viewProjection_.translation_ = { 0,-6.2f,-109.0f };
+}
+
 void BaseScene::Debug() {
 #ifdef _DEBUG
 	ImGui::Begin("Camera");

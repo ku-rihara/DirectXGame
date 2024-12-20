@@ -42,7 +42,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	virtual	void Init() = 0;
+	virtual	void Init();
 
 	/// <summary>
 	/// 毎フレーム処理
