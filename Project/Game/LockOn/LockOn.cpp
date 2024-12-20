@@ -10,7 +10,7 @@
 void LockOn::Init() {
 	//スプライトの読み込みと作成
 	uint32_t TextureHandle = TextureManager::GetInstance()->
-		LoadTexture("./Resources/anchorPoint.png");
+		LoadTexture("./Resources/Texture/anchorPoint.png");
 	lockOnMark_.reset(Sprite::Create(TextureHandle, Vector2{640, 320}, Vector4(1, 1, 1, 1)));
 }
 
