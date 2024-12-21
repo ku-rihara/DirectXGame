@@ -90,3 +90,8 @@ void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection)
 		// 定数バッファに転送する
 		TransferMatrix();
 }
+
+
+void WorldTransform::SetParent(const WorldTransform* parent) {
+	parent_ = parent;
+}
