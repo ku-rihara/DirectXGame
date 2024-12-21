@@ -14,10 +14,12 @@ protected:
 	/// ===================================================
 
 	/*uint32_t partsnum_;*/
+
 	// モデル配列データ
      std::unique_ptr<Object3d> obj3d_;
 	// ベースのワールド変換データ
 	WorldTransform transform_;
+
 	//カラー
 	/*ObjColor objColor_;*/
 

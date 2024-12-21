@@ -163,6 +163,9 @@
     <Filter Include="Game\Player\ComboBehavior\Jump">
       <UniqueIdentifier>{7a626b88-685f-48d5-93f8-d3026437db2d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player\Weapon">
+      <UniqueIdentifier>{ea7b30de-436e-4b71-9943-2e80e0085740}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -381,6 +384,15 @@
     </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp">
       <Filter>Game\Player\ComboBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Weapon\PlayerHandLeft.cpp">
+      <Filter>Game\Player\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Weapon\BasePlayerHand.cpp">
+      <Filter>Game\Player\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Weapon\PlayerHandRight.cpp">
+      <Filter>Game\Player\Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -647,6 +659,15 @@
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h">
       <Filter>Game\Player\ComboBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Weapon\PlayerHandLeft.h">
+      <Filter>Game\Player\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Weapon\BasePlayerHand.h">
+      <Filter>Game\Player\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Weapon\PlayerHandRight.h">
+      <Filter>Game\Player\Weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

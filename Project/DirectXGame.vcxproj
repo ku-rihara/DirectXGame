@@ -69,6 +69,9 @@
     <ClCompile Include="Game\Player\PlayerBehavior\BasePlayerBehavior.cpp" />
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerJump.cpp" />
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerRoot.cpp" />
+    <ClCompile Include="Game\Player\Weapon\BasePlayerHand.cpp" />
+    <ClCompile Include="Game\Player\Weapon\PlayerHandLeft.cpp" />
+    <ClCompile Include="Game\Player\Weapon\PlayerHandRight.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
@@ -157,6 +160,9 @@
     <ClInclude Include="Game\Player\PlayerBehavior\BasePlayerBehavior.h" />
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerJump.h" />
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerRoot.h" />
+    <ClInclude Include="Game\Player\Weapon\BasePlayerHand.h" />
+    <ClInclude Include="Game\Player\Weapon\PlayerHandLeft.h" />
+    <ClInclude Include="Game\Player\Weapon\PlayerHandRight.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
     <ClInclude Include="Game\Scene\Factory\AbstractSceneFactory.h" />
     <ClInclude Include="Game\Scene\Factory\SceneFactory.h" />

@@ -2,8 +2,12 @@
 
 #include "3d/ViewProjection.h"
 
-//class
+//object
 #include"BaseObject/BaseObject.h"
+
+/// Weapon
+#include"Weapon/PlayerHandLeft.h"
+#include"Weapon/PlayerHandRight.h"
 
 /// utility
 #include"utility/Editor/GlobalParameter.h"
@@ -15,6 +19,7 @@
 /// std
 #include<array>
 #include <memory>
+#include<string>
 
 /// <summary>
 /// プレイヤークラス
@@ -31,26 +36,29 @@ private:
 	///private variaus
 	/// ===================================================
 	
+	/// グローバルなパラメータ
+	GlobalParameter* globalParameter_;            /// グローバルパラメータ
+	const std::string groupName_ = "Player";      /// グループ名
+
 	/// other class
-	LockOn* pLockOn_;                   /// LockOnクラス 
-	GlobalParameter* globalParameter_;  /// グローバルパラメータ
-	const std::string groupName_="Player";
-
-	/// move
-	float objectiveAngle_;              /// 目標角度
-	Vector3 velocity_;                  /// 速度
-	Vector3 prePos_;                    /// 移動前座標
+	LockOn* pLockOn_;                            /// LockOnクラス 
+	std::unique_ptr<PlayerHandLeft>leftHand_;    /// 左手
+	std::unique_ptr<PlayerHandRight>rightHand_;  /// 右手
 	
-	/// jump
-	float jumpSpeed_;	                /// ジャンプスピード
-	float muzzelJumpSpeed_;	            /// ジャンプ初速
-	const float fallLimit_ = -1.2f;     /// ジャンプ
+	/// move
+	float objectiveAngle_;                       /// 目標角度
+	Vector3 velocity_;                           /// 速度
+	Vector3 prePos_;                             /// 移動前座標
+										         
+	/// jump							         
+	float jumpSpeed_;	                         /// ジャンプ初速
+	const float fallLimit_ = -1.2f;              /// ジャンプ
+										         
+										         
+	bool isAttack_;                              /// 攻撃フラグ 
+	float fallSpeed_;                  	         /// 落ちるスピード
 
-
-	bool isAttack_;                     /// 攻撃フラグ 
-	float fallSpeed_;                  	/// 落ちるスピード
-
-	///* コンボに関するパラメータ
+	///* コンボパラメータ
 	std::array<ComboParm, 2>normalComboParms_;
 
 	// カメラのビュープロジェクション
@@ -66,7 +74,7 @@ public:
 	Player();
 
 	/// ===================================================
-	///public method
+	///  public method
 	/// ===================================================
 
 	//初期化、更新、描画
@@ -108,7 +116,7 @@ public:
 	/// getter
 	/// ===================================================
 	const bool& GetIsAttack()const { return isAttack_; }
-	float GetMuzzulJumpSpeed()const { return muzzelJumpSpeed_; }
+	float GetMuzzulJumpSpeed()const { return jumpSpeed_; }
 	BasePlayerBehavior* GetBehavior()const { return behavior_.get(); }
 	/// ===================================================
 	/// setter

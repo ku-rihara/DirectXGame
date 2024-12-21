@@ -2,12 +2,14 @@
 
 /// input
 #include"JoyState/JoyState.h"
+
+/// frame
 #include"Frame/Frame.h"
 
 /// math
 #include"MathFunction.h"
 
-/// other class
+/// object
 #include"Field/Field.h"
 #include"LockOn/LockOn.h"
 
@@ -31,17 +33,22 @@ Player::Player() {}
 ///==========================================================
 void Player::Init() {
 
+	///* model生成
 	BaseObject::Init();	// 基底クラスの初期化 
 	BaseObject::CreateModel("cube", ".obj");/// モデルセット
 
+	///* グローバルパラメータ
 	globalParameter_ = GlobalParameter::GetInstance();
+	globalParameter_->CreateGroup(groupName_, false);
 	AddParmGroup();
 	ApplyGlobalParameter();
 
-	transform_.translation_.y = Player::InitY_;//  パーツの変位
+	
+	///* 武器生成
+	leftHand_ = std::make_unique<PlayerHandLeft>();
+	rightHand_ = std::make_unique<PlayerHandRight>();
 
-	jumpSpeed_ = 0.0f;
-	muzzelJumpSpeed_ = 1.5f;
+
 
 	/// 通常モードから
 	ChangeBehavior(std::make_unique<PlayerRoot>(this));
@@ -63,7 +70,7 @@ void Player::Update() {
 
 	comboBehavior_->Update();	///　コンボ攻撃攻撃
 	MoveToLimit();              ///　移動制限
-	Fall();                     /// 落ちる
+	//Fall();                     /// 落ちる
 
 	BaseObject::Update();       /// 更新 
 
@@ -113,6 +120,7 @@ void Player::DamageRendition() {
 /// 移動の入力処理
 ///==========================================================
 Vector3 Player::GetInputVelocity() {
+
 	Vector3 velocity = { 0.0f, 0.0f, 0.0f };
 	Input* input = Input::GetInstance();
 
@@ -290,21 +298,20 @@ void Player::MoveToLimit() {
 ///　落ちる
 ///==========================================================
 void Player::Fall() {
-	if (!dynamic_cast<PlayerJump*>(behavior_.get())) {
+	if (dynamic_cast<PlayerJump*>(behavior_.get())) return;
 
-		// 移動
-		transform_.translation_.y += fallSpeed_;
-		// 重力加速度
-		const float kGravityAcceleration = 3.4f * Frame::DeltaTime();
-		// 加速度ベクトル
-		float accelerationY = -kGravityAcceleration;
-		// 加速する
-		fallSpeed_ = max(fallSpeed_ + accelerationY, -0.75f);
+	// 移動
+	transform_.translation_.y += fallSpeed_;
+	// 重力加速度
+	const float kGravityAcceleration = 3.4f * Frame::DeltaTime();
+	// 加速度ベクトル
+	float accelerationY = -kGravityAcceleration;
+	// 加速する
+	fallSpeed_ = max(fallSpeed_ + accelerationY, -0.75f);
 
-		// 着地
-		if (transform_.translation_.y <= Player::InitY_) {
-			transform_.translation_.y = Player::InitY_;
-		}
+	// 着地
+	if (transform_.translation_.y <= Player::InitY_) {
+		transform_.translation_.y = Player::InitY_;
 	}
 }
 
@@ -314,13 +321,33 @@ void Player::Fall() {
 /// ImGuiデバッグ
 ///==========================================================
 void Player::ImguiParmUpdate() {
+	SetValues();
 #ifdef _DEBUG
 	if (ImGui::CollapsingHeader("Player")) {
+
+		/// 位置
+		ImGui::SeparatorText("Transform");
+		ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
+
+		///　Floatのパラメータ
+		ImGui::SeparatorText("FloatParamater");
+		ImGui::DragFloat("jumpSpeed", &jumpSpeed_, 0.1f);
+
+		/// コンボパラメータ
+		if (ImGui::CollapsingHeader("NormalCombo")) {
+
+			for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
+				ImGui::DragFloat(("ComboPTime" + std::to_string(int(i + 1))).c_str(),
+					&normalComboParms_[i].permissionTime,
+					0.1f);
+			}
+		}
 
 		/// セーブとロード
 		globalParameter_->ParmSaveForImGui(groupName_);
 		ParmLoadForImGui();
 	}
+
 #endif // _DEBUG
 }
 
@@ -391,12 +418,16 @@ void Player::ParmLoadForImGui() {
 ///パラメータをグループに追加
 ///=================================================================================
 void Player::AddParmGroup() {
-	globalParameter_->CreateGroup(groupName_, false);
 
-	// Position
-	//globalParameter_->AddSeparatorText("Position");
 	globalParameter_->AddItem(groupName_, "Translate", transform_.translation_);
-
+	globalParameter_->AddItem(groupName_, "JumpSpeed", jumpSpeed_);
+	/// コンボ持続時間
+	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
+		globalParameter_->AddItem(
+			groupName_,
+			"NComboPTime" + std::to_string(int(i + 1)),
+			normalComboParms_[i].permissionTime);
+	}
 }
 
 
@@ -405,13 +436,15 @@ void Player::AddParmGroup() {
 ///=================================================================================
 void Player::SetValues() {
 
-	// グループを追加(GlobalParamaterで表示はしない)
-	globalParameter_->CreateGroup(groupName_, false);
-
-	// Position
-	//globalParameter_->AddSeparatorText("Position");
 	globalParameter_->SetValue(groupName_, "Translate", transform_.translation_);
-
+	globalParameter_->SetValue(groupName_, "JumpSpeed", jumpSpeed_);
+	/// コンボ持続時間
+	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
+		globalParameter_->SetValue(
+			groupName_,
+			"NComboPTime" + std::to_string(int(i + 1)),
+			normalComboParms_[i].permissionTime);
+	}
 }
 
 
@@ -421,5 +454,11 @@ void Player::SetValues() {
 void Player::ApplyGlobalParameter() {
 	// Position
 	transform_.translation_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
-
+	jumpSpeed_=globalParameter_->GetValue<float>(groupName_, "JumpSpeed");
+	/// コンボ持続時間
+	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
+		normalComboParms_[i].permissionTime = globalParameter_->GetValue<float>(
+			groupName_,
+			"NComboPTime" + std::to_string(int(i + 1)));
+	}
 }
