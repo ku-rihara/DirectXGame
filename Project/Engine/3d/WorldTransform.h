@@ -65,6 +65,8 @@ public:
 	/// </summary>
 	void UpdateMatrix();
 
+	void SetParent(const WorldTransform* parent);
+
 	void BillboardUpdateMatrix(const ViewProjection&viewProjection);
 
 	/// <summary>
