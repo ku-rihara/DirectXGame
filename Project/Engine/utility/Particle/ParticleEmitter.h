@@ -22,8 +22,8 @@ private:
 	///=====================================================
 	
 	/// obj
-	std::unique_ptr<Object3d>emitObj_;             /// 発生位置のオブジェ
-	WorldTransform emitTransform_;
+	std::unique_ptr<Object3d>obj3d_;             /// 発生位置のオブジェ
+	WorldTransform transform_;
 
 	/// name								      
 	std::string particleName_;                     ///パーティクル名
@@ -97,7 +97,7 @@ public:
 	///=====================================================
 /// setter method
 ///=====================================================
-
+	void SetParentBasePos(WorldTransform*parent);
 	void SetTextureHandle(const uint32_t& hanle);
 
 	///=====================================================
