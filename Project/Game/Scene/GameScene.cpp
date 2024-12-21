@@ -122,7 +122,7 @@ void GameScene::Debug() {
 
 
 	ImGui::Begin("ParamaterEditor");
-	player_->ImguiParmUpdate();
+	player_->AdjustParm();
 	ImGui::End();
 #endif
 }

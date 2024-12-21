@@ -48,7 +48,12 @@ void Player::Init() {
 	leftHand_ = std::make_unique<PlayerHandLeft>();
 	rightHand_ = std::make_unique<PlayerHandRight>();
 
+	leftHand_->Init();
+	rightHand_->Init();
 
+	///* ペアレント
+	leftHand_->SetParent(&transform_);
+	rightHand_->SetParent(&transform_);
 
 	/// 通常モードから
 	ChangeBehavior(std::make_unique<PlayerRoot>(this));
@@ -68,10 +73,12 @@ void Player::Update() {
 		behavior_->Update();
 	}
 
-	comboBehavior_->Update();	///　コンボ攻撃攻撃
-	MoveToLimit();              ///　移動制限
+	comboBehavior_->Update();	  ///　コンボ攻撃攻撃
+	MoveToLimit();                ///　移動制限
 	//Fall();                     /// 落ちる
 
+	leftHand_->Update();
+	rightHand_->Update();
 	BaseObject::Update();       /// 更新 
 
 }
@@ -82,6 +89,9 @@ void Player::Update() {
 void Player::Draw(const ViewProjection& viewProjection) {
 
 	BaseObject::Draw(viewProjection);
+	leftHand_->Draw(viewProjection);
+	rightHand_->Draw(viewProjection);
+	
 }
 
 void Player::DamageRendition() {
@@ -318,9 +328,9 @@ void Player::Fall() {
 
 
 ///=========================================================
-/// ImGuiデバッグ
+/// パラメータ調整
 ///==========================================================
-void Player::ImguiParmUpdate() {
+void Player::AdjustParm() {
 	SetValues();
 #ifdef _DEBUG
 	if (ImGui::CollapsingHeader("Player")) {
@@ -347,6 +357,9 @@ void Player::ImguiParmUpdate() {
 		globalParameter_->ParmSaveForImGui(groupName_);
 		ParmLoadForImGui();
 	}
+
+	leftHand_->AdjustParm();
+	rightHand_->AdjustParm();
 
 #endif // _DEBUG
 }

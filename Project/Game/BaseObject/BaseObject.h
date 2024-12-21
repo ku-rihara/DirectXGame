@@ -26,7 +26,7 @@ protected:
 	/*AABB aabb_;*/
 
 public:
-
+	virtual ~BaseObject() = default;
 	/// ===================================================
 	///public method
 	/// ===================================================
@@ -42,7 +42,6 @@ public:
 	// 中心座標取得
 	virtual Vector3 GetWorldPosition() const;
 	
-	//AABB GetAABB()const override;
 
 	/// ===================================================
     ///getter 
@@ -51,7 +50,7 @@ public:
 	/// ===================================================
     ///setter 
     /// ===================================================
-	//void SetObjColor(Vector4 c) { objColor_.SetColor(c); }
+	void SetParent(WorldTransform* parent);
 	void SetWorldPosition(Vector3 pos) { transform_.translation_ = pos; }
 	void SetWorldPositionY(float pos) { transform_.translation_.y = pos; }
 	void SetWorldPositionX(float pos) { transform_.translation_.x = pos; }

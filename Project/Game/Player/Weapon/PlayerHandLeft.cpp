@@ -10,10 +10,12 @@ PlayerHandLeft::PlayerHandLeft() {}
 ///==========================================================
 void PlayerHandLeft::Init() {
 
-	BaseObject::Init();	// 基底クラスの初期化 
-	BaseObject::CreateModel("cube", ".obj");/// モデルセット
+	// グループネーム
+	groupName_ = "LeftHand";
 
-	BasePlayerHand();
+	BaseObject::CreateModel("cube", ".obj");/// モデルセット
+	BasePlayerHand::Init();
+
 }
 
 ///=========================================================
@@ -31,4 +33,30 @@ void PlayerHandLeft::Update() {
 void PlayerHandLeft::Draw(const ViewProjection& viewProjection) {
 	BasePlayerHand::Draw(viewProjection);
 	
+}
+
+///=====================================================
+///  パラメータ調節
+///=====================================================
+void PlayerHandLeft::AdjustParm() {
+
+	BasePlayerHand::SetValues(); /// setvalue
+
+	if (ImGui::CollapsingHeader("LeftHand")) {
+		ImGui::PushID("LeftHand"); 
+		ImGui::SeparatorText("Transform");
+		ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
+
+		SaveAndLoad();
+		ImGui::PopID();
+	}
+}
+
+
+///=====================================================
+///  セーブロード
+///=====================================================
+void PlayerHandLeft::SaveAndLoad() {
+
+	BasePlayerHand::SaveAndLoad();
 }

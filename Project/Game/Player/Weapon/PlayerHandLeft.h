@@ -25,4 +25,7 @@ public:
 	void Init()override;
 	void Update()override;
 	void Draw(const ViewProjection& viewprojection)override;
+
+	 void AdjustParm()override;
+	  void SaveAndLoad()override;
 };

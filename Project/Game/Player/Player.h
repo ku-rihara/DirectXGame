@@ -27,6 +27,7 @@
 class LockOn;
 class Player : public BaseObject{
 private:
+
 	struct ComboParm {
 		float permissionTime;
 	};
@@ -97,7 +98,7 @@ public:
 	void ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior>behavior);
 
 
-	void ImguiParmUpdate();                      /// デバッグ
+	void AdjustParm();                      /// デバッグ
 	void SetLockOn(LockOn* lockon);    /// ロックオンクラスをセット
 	
 	/// collision
