@@ -17,17 +17,20 @@ void BasePlayerHand::Init() {
     AddParmGroup();
     ApplyGlobalParameter();
 
+    emitter_.reset(ParticleEmitter::CreateParticle(groupName_, "DebugCube", ".obj", 300, false));
+   
 }
 
 ///=========================================================
 ///　更新
 ///==========================================================
 void BasePlayerHand::Update() {
-	
+    emitter_->Update();
+    emitter_->Emit();
 	BaseObject::Update();
 }
 
-///=========================================================
+///============================================================
 ///　描画
 ///==========================================================
 void BasePlayerHand::Draw(const ViewProjection& viewProjection) {

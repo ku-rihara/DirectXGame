@@ -16,7 +16,7 @@ protected:
 	std::string groupName_;                      /// グループ名
 
 	// エミッター
-	
+	std::unique_ptr<ParticleEmitter>emitter_;
 
 public:
 	/*virtual ~BasePlayerHand() = default;*/
