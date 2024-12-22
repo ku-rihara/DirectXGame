@@ -99,7 +99,7 @@ public:
 ///=====================================================
 	void SetParentBasePos(WorldTransform*parent);
 	void SetTextureHandle(const uint32_t& hanle);
-
+	void SetPosition(const Vector3& pos) { transform_.translation_ = pos; }
 	///=====================================================
 	/// Editor 
 	///=====================================================
