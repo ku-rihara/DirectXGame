@@ -62,16 +62,22 @@ float Vector3::Length() const {
 	return std::sqrt(x * x + y * y + z * z);
 }
 
-// 自身を正規化する
-void Vector3::Normalize() {
-	float length = Length(); // const メソッドの Length を利用
-	if (length != 0) {
-		x /= length;
-		y /= length;
-		z /= length;
-	}
-}
+Vector3 Vector3::Normalize()const {
+	Vector3 result;
 
+	float length = sqrtf(x * x + y * y + z * z);
+	if (length != 0) {
+		result.x = x / length;
+		result.y = y / length;
+		result.z = z / length;
+	}
+	else {
+		result.x = 0;
+		result.y = 0;
+		result.z = 0;
+	}
+	return result;
+}
 
 // 上方向の単位ベクトルを返す
 Vector3 Vector3::ToUp() {

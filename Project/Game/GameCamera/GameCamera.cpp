@@ -81,7 +81,7 @@ void GameCamera::SetTarget(const WorldTransform* target) {
 }
 
 void GameCamera::GetIsCameraMove() {
-	if (Vector3::Length(stickInput_) > 0.1f) {
+	if ((stickInput_).Length() > 0.1f) {
 		viewMoveTime_++;
 		if (viewMoveTime_ >= kViewMoveTime_) {
 		}
