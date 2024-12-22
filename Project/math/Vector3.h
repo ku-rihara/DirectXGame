@@ -68,7 +68,7 @@ public:
 	static Vector3 ToRight();   // 右方向
 	static Vector3 Zero();
 
-	void Normalize();
+	Vector3 Normalize()const;
 	float Length()const;
 };
 
