@@ -16,7 +16,7 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	/// 変数初期化
 	///---------------------------------------------------------
 	startPos_ = pPlayer_->GetRightHand()->GetTransform().translation_;
-	targetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3());
+	targetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward());
 
 	
 }
