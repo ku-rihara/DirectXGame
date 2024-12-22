@@ -25,6 +25,7 @@ void BasePlayerHand::Init() {
 ///　更新
 ///==========================================================
 void BasePlayerHand::Update() {
+    emitter_->SetTargetPosition(GetWorldPosition());
     emitter_->Update();
     emitter_->Emit();
 	BaseObject::Update();
