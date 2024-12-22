@@ -272,7 +272,7 @@ void ParticleEmitter::Emit() {
 ///=================================================================================
 ///ImGui更新
 ///=================================================================================
-void ParticleEmitter::EditorUpdate() {
+void ParticleEmitter::Update() {
 	// レール更新
 	railManager_->Update(emitControlPosManager_->GetPositions(), moveSpeed_);
 

@@ -62,13 +62,13 @@ void GameScene::Init() {
 void GameScene::Update() {
 
 	//emitter
-	emitter_->EditorUpdate();
+	emitter_->Update();
 	emitter_->Emit();
 
-	leftEmitter_->EditorUpdate();
+	leftEmitter_->Update();
 	leftEmitter_->Emit();
 
-	rightEmitter_->EditorUpdate();
+	rightEmitter_->Update();
 	rightEmitter_->Emit();
 
 	ParticleManager::GetInstance()->Update(&viewProjection_);
