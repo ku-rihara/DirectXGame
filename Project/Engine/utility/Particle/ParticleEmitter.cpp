@@ -33,6 +33,7 @@ void ParticleEmitter::Init(const bool& isFirst) {
 	colorDist_.min = { 0, 0, 0, 0 };
 	colorDist_.max = { 0, 0, 0, 0 };
 	intervalTime_ = 1.0f;
+	targetPos_ = { 0,0,0 };
 
 	// レールマネージャー
 	railManager_ = std::make_unique<EmitRailManager>();
@@ -44,7 +45,7 @@ void ParticleEmitter::Init(const bool& isFirst) {
 
 	/// 発生位置可視化オブジェ
 	obj3d_.reset(Object3d::CreateModel("DebugCube", ".obj"));
-	transform_.Init();
+	emitBoxTransform_.Init();
 
 	/// グローバル変数
 	globalParameter_ = GlobalParameter::GetInstance();
@@ -226,8 +227,7 @@ void ParticleEmitter::ApplyGlobalParameter() {
 	lifeTime_ = globalParameter_->GetValue<float>(particleName_, "LifeTime");
 	particleCount_ = globalParameter_->GetValue<int32_t>(particleName_, "Particle Count");
 
-	///rail
-	
+	///rail	
 	isMoveForRail_ = globalParameter_->GetValue<bool>(particleName_, "isMoveForRail");
 	moveSpeed_ = globalParameter_->GetValue<float>(particleName_, "moveSpeed");
 }
@@ -251,7 +251,7 @@ void ParticleEmitter::Emit() {
 	if (currentTime_ >= intervalTime_) {//　間隔ごとに発動
 
 		ParticleManager::GetInstance()->Emit(
-			particleName_, emitPos_, positionDist_, scaleDist_,
+			particleName_, targetPos_+emitPos_, positionDist_, scaleDist_,
 			velocityDist_, baseColor_, colorDist_, lifeTime_, gravity_, baseRotate_,
 			baseRotateSpeed_, rotateDist_, rotateSpeedDist_, particleCount_);
 
@@ -366,16 +366,16 @@ void ParticleEmitter::Update() {
 }
 
 void ParticleEmitter::UpdateEmitTransform() {
-	transform_.translation_ = basePos_;
+	emitBoxTransform_.translation_ = basePos_;
 	// スケールを範囲の大きさで設定
-	transform_.scale_ = {
+	emitBoxTransform_.scale_ = {
 		positionDist_.max.x - positionDist_.min.x,
 		positionDist_.max.y - positionDist_.min.y,
 		positionDist_.max.z - positionDist_.min.z
 	};
-	railManager_->SetScale(transform_.scale_);
+	railManager_->SetScale(emitBoxTransform_.scale_);
 
-	transform_.UpdateMatrix();
+	emitBoxTransform_.UpdateMatrix();
 }
 
 
@@ -391,12 +391,12 @@ void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
 		emitControlPosManager_->Draw(viewProjection);
 	}
 	else {// レールに沿わないエミット位置
-		obj3d_->Draw(transform_, viewProjection);
+		obj3d_->Draw(emitBoxTransform_, viewProjection);
 	}
 #endif // _DEBUG
 }
 
 
 void ParticleEmitter::SetParentBasePos(WorldTransform* parent) {
-	transform_.parent_ = parent;
+	emitBoxTransform_.parent_ = parent;
 }

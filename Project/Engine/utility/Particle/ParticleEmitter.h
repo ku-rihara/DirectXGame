@@ -23,7 +23,7 @@ private:
 	
 	/// obj
 	std::unique_ptr<Object3d>obj3d_;             /// 発生位置のオブジェ
-	WorldTransform transform_;
+	WorldTransform emitBoxTransform_;
 
 	/// name								      
 	std::string particleName_;                     ///パーティクル名
@@ -32,6 +32,9 @@ private:
 	/// time						               
 	float currentTime_;                            ///現在の時間
 	float intervalTime_;                           ///発生するまでの間隔
+
+	/// target
+	Vector3 targetPos_;                            /// 対象座標
 											      
 	/// base								      
 	Vector3 emitPos_;                              ///発生座標
@@ -95,11 +98,11 @@ public:
 
 
 	///=====================================================
-/// setter method
-///=====================================================
+    /// setter method
+    ///=====================================================
 	void SetParentBasePos(WorldTransform*parent);
 	void SetTextureHandle(const uint32_t& hanle);
-	void SetPosition(const Vector3& pos) { transform_.translation_ = pos; }
+	void SetTargetPosition(const Vector3& pos) { targetPos_ = pos; }
 	///=====================================================
 	/// Editor 
 	///=====================================================
