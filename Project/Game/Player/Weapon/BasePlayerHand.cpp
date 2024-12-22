@@ -31,13 +31,6 @@ void BasePlayerHand::Update() {
 	emitter_->Update();
 	emitter_->Emit();
 
-	
-	//向いている方向を計算
-	Matrix4x4 rotateMatrix = MakeRotateYMatrix(transform_.rotation_.y);
-	Vector3 forward = { 0, 0, 1 };
-	Vector3 direction = TransformNormal(forward, rotateMatrix);
-	direction_ = Vector3::Normalize(direction);
-
 	BaseObject::Update();
 
 }
