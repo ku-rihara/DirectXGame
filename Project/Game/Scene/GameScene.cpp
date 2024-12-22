@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include"Scene/Manager/SceneManager.h"
+#include"utility/Particle/ParticleManager.h"
 // base
 #include "base/TextureManager.h"
 //math
@@ -74,6 +75,9 @@ void GameScene::Update() {
 	enemyManager_->Update();
 	gamecamera_->Update();
 	lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
+
+	/// パーティクル更新
+	ParticleManager::GetInstance()->Update(&viewProjection_);
 	
 	ViewProjectionUpdate();
 
@@ -101,7 +105,7 @@ void GameScene::ModelDraw() {
    /// パーティクル描画
    /// ===================================================
 void GameScene::ParticleDraw() {
-	
+	ParticleManager::GetInstance()->Draw(viewProjection_);
 }
 
 /// ===================================================

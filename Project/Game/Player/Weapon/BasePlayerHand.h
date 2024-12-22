@@ -2,7 +2,7 @@
 
 #include"utility/Editor/GlobalParameter.h"
 #include"BaseObject/BaseObject.h"
-
+#include"utility/Particle/ParticleEmitter.h"
 
 class BasePlayerHand :public BaseObject {
 protected:
@@ -13,7 +13,10 @@ protected:
 
     /// グローバルなパラメータ
 	GlobalParameter* globalParameter_;            /// グローバルパラメータ
-	std::string groupName_;                     /// グループ名
+	std::string groupName_;                      /// グループ名
+
+	// エミッター
+	
 
 public:
 	/*virtual ~BasePlayerHand() = default;*/
