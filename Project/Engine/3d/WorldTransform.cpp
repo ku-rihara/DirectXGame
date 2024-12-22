@@ -95,3 +95,27 @@ void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection)
 void WorldTransform::SetParent(const WorldTransform* parent) {
 	parent_ = parent;
 }
+
+Vector3 WorldTransform::LookAt(const Vector3& direction) {
+	// 引数の方向ベクトルを正規化
+	Vector3 normalizedDirection = Vector3::Normalize(direction);
+
+	// Yaw（水平回転）：XZ平面での角度
+	rotation_.y = std::atan2(normalizedDirection.x, normalizedDirection.z);
+
+	// Pitch（垂直回転）：Y方向の角度
+	float horizontalLength = std::sqrt(
+		normalizedDirection.x * normalizedDirection.x +
+		normalizedDirection.z * normalizedDirection.z);
+	rotation_.x = std::atan2(normalizedDirection.y, horizontalLength);
+
+	// Rollはそのまま（通常は0）
+	rotation_.z = 0.0f;
+
+	// 行列を更新
+	UpdateMatrix();
+
+	// ワールド空間での正規化方向ベクトルを計算
+	Vector3 worldDirection = TransformNormal(normalizedDirection, matWorld_);
+	return Vector3::Normalize(worldDirection);
+}
