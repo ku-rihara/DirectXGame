@@ -22,7 +22,7 @@ void EmitRail::Update(const std::vector<Vector3>& controlPos) {
         pointsDrawing_.push_back(pos);
 
         if (i > 0) {
-            totalRailLength_ += Vector3::Length(pointsDrawing_[i] - pointsDrawing_[i - 1]);
+            totalRailLength_ +=(pointsDrawing_[i] - pointsDrawing_[i - 1]).Length();
         }
     }
 
@@ -34,8 +34,8 @@ void EmitRail::Update(const std::vector<Vector3>& controlPos) {
     auto it = railTransforms_.begin(); // イテレータを使用
     for (size_t i = 0; it != railTransforms_.end(); ++it, ++i) {
         while (currentIndex < pointsDrawing_.size() - 1 &&
-            currentLength + Vector3::Length(pointsDrawing_[currentIndex + 1] - pointsDrawing_[currentIndex]) < segmentLength * i) {
-            currentLength += Vector3::Length(pointsDrawing_[currentIndex + 1] - pointsDrawing_[currentIndex]);
+            currentLength + (pointsDrawing_[currentIndex + 1] - pointsDrawing_[currentIndex]).Length() < segmentLength * i) {
+            currentLength += (pointsDrawing_[currentIndex + 1] - pointsDrawing_[currentIndex]).Length();
             currentIndex++;
         }
 
@@ -43,7 +43,7 @@ void EmitRail::Update(const std::vector<Vector3>& controlPos) {
             break; // 範囲外アクセスを防ぐ
         }
 
-        float t = (segmentLength * i - currentLength) / Vector3::Length(pointsDrawing_[currentIndex + 1] - pointsDrawing_[currentIndex]);
+        float t = (segmentLength * i - currentLength) / (pointsDrawing_[currentIndex + 1] - pointsDrawing_[currentIndex]).Length();
         Vector3 interpolatedPos = Lerp(pointsDrawing_[currentIndex], pointsDrawing_[currentIndex + 1], t);
 
         Vector3 direction = pointsDrawing_[currentIndex + 1] - interpolatedPos;
@@ -65,7 +65,7 @@ Vector3 EmitRail::GetPositionOnRail(float progress) const {
     float accumulatedDistance = 0.0f;
 
     for (size_t i = 0; i < pointsDrawing_.size() - 1; ++i) {
-        float segmentLength = Vector3::Length(pointsDrawing_[i + 1] - pointsDrawing_[i]);
+        float segmentLength = (pointsDrawing_[i + 1] - pointsDrawing_[i]).Length();
         if (accumulatedDistance + segmentLength >= distance) {
             float segmentProgress = (distance - accumulatedDistance) / segmentLength;
             return Lerp(pointsDrawing_[i], pointsDrawing_[i + 1], segmentProgress);

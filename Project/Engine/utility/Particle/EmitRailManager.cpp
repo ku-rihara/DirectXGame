@@ -51,7 +51,7 @@ void EmitRailManager::Update(const std::vector<Vector3>& controlPos,const float&
     size_t cameraIndex = 0;
 
     for (size_t i = 0; i < pointsDrawing.size() - 1; i++) {
-        float segment = Vector3::Length(pointsDrawing[i + 1] - pointsDrawing[i]);
+        float segment =(pointsDrawing[i + 1] - pointsDrawing[i]).Length();
         if (traveledLength + segment >= railProgress) {
             cameraIndex = i;
             break;
@@ -60,7 +60,7 @@ void EmitRailManager::Update(const std::vector<Vector3>& controlPos,const float&
     }
 
     // 線形補間で進行中の位置を計算
-    float segmentT = (railProgress - traveledLength) / Vector3::Length(pointsDrawing[cameraIndex + 1] - pointsDrawing[cameraIndex]);
+    float segmentT = (railProgress - traveledLength) / (pointsDrawing[cameraIndex + 1] - pointsDrawing[cameraIndex]).Length();
     Vector3 interpolatedPos = Lerp(pointsDrawing[cameraIndex], pointsDrawing[cameraIndex + 1], segmentT);
 
     // interpolatedPosのY成分にもオフセットを加える

@@ -9,10 +9,7 @@ float Vector3::Dot(const Vector3& v1, const Vector3& v2) {
 	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
-//長さ（ノルム）
-float Vector3::Length(const Vector3& v) {
-	return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
-}
+
 
 //正規化
 Vector3 Vector3::Normalize(const Vector3& v){
@@ -60,20 +57,38 @@ Vector3 Vector3::operator*(const Matrix4x4& obj) const {
 
 }
 
+// 長さを取得する
+float Vector3::Length() const {
+	return std::sqrt(x * x + y * y + z * z);
+}
 
-Vector3 Vector3::Normalize()const {
-	Vector3 result;
-
-	float length = sqrtf(x * x + y * y + z * z);
+// 自身を正規化する
+void Vector3::Normalize() {
+	float length = Length(); // const メソッドの Length を利用
 	if (length != 0) {
-		result.x = x / length;
-		result.y = y / length;
-		result.z = z / length;
+		x /= length;
+		y /= length;
+		z /= length;
 	}
-	else {
-		result.x = 0;
-		result.y = 0;
-		result.z = 0;
-	}
-	return result;
+}
+
+
+// 上方向の単位ベクトルを返す
+Vector3 Vector3::ToUp() {
+	return Vector3(0.0f, 1.0f, 0.0f);
+}
+
+// 前方向の単位ベクトルを返す
+Vector3 Vector3::ToForward() {
+	return Vector3(0.0f, 0.0f, 1.0f);
+}
+
+// 右方向の単位ベクトルを返す
+Vector3 Vector3::ToRight() {
+	return Vector3(1.0f, 0.0f, 0.0f);
+}
+
+// ゼロベクトル
+Vector3 Vector3::Zero() {
+	return Vector3(0, 0, 0);
 }

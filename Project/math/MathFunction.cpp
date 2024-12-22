@@ -57,8 +57,8 @@ Vector3 SLerp(const Vector3& start, const Vector3& end, float t) {
     Vector3 NormalizeVector = (sinThetaFrom * Nstart + sinThetaTo * Nend) / sinTheta;
 
     // ベクトルの長さを線形補間
-    float length1 = Vector3::Length(start);
-    float length2 = Vector3::Length(end);
+    float length1 = (start).Length();
+    float length2 = (end).Length();
     float length = Lerp(length1, length2, t);
 
     // 補間したベクトルに長さを掛けて返す
