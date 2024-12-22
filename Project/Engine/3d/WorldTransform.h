@@ -67,7 +67,7 @@ public:
 
 	void SetParent(const WorldTransform* parent);
 
-	Vector3 LookAt(const Vector3& direction);
+	Vector3 LookAt(const Vector3& direction)const;
 
 	void BillboardUpdateMatrix(const ViewProjection&viewProjection);
 
