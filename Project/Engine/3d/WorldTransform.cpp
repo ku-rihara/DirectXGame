@@ -96,7 +96,7 @@ void WorldTransform::SetParent(const WorldTransform* parent) {
 	parent_ = parent;
 }
 
-#include <cmath> // std::atan2, std::sqrt
+
 
 Vector3 WorldTransform::LookAt(const Vector3& direction) const {
 	// 引数の方向ベクトルを正規化
