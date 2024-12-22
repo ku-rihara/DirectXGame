@@ -9,26 +9,37 @@
 ///==========================================================
 void BasePlayerHand::Init() {
 
-    BaseObject::Init();
+	BaseObject::Init();
 
-    ///* グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
-    globalParameter_->CreateGroup(groupName_, false);
-    AddParmGroup();
-    ApplyGlobalParameter();
+	///* グローバルパラメータ
+	globalParameter_ = GlobalParameter::GetInstance();
+	globalParameter_->CreateGroup(groupName_, false);
+	AddParmGroup();
+	ApplyGlobalParameter();
 
-    emitter_.reset(ParticleEmitter::CreateParticle(groupName_, "DebugCube", ".obj", 300, false));
-   
+	emitter_.reset(ParticleEmitter::CreateParticle(groupName_, "DebugCube", ".obj", 300, false));
+
 }
 
 ///=========================================================
 ///　更新
 ///==========================================================
 void BasePlayerHand::Update() {
-    emitter_->SetTargetPosition(GetWorldPosition());
-    emitter_->Update();
-    emitter_->Emit();
+
+	// エミッター更新
+	emitter_->SetTargetPosition(GetWorldPosition());
+	emitter_->Update();
+	emitter_->Emit();
+
+	
+	//向いている方向を計算
+	Matrix4x4 rotateMatrix = MakeRotateYMatrix(transform_.rotation_.y);
+	Vector3 forward = { 0, 0, 1 };
+	Vector3 direction = TransformNormal(forward, rotateMatrix);
+	direction_ = Vector3::Normalize(direction);
+
 	BaseObject::Update();
+
 }
 
 ///============================================================
@@ -44,14 +55,14 @@ void BasePlayerHand::Draw(const ViewProjection& viewProjection) {
 ///=================================================================================
 void BasePlayerHand::ParmLoadForImGui() {
 
-    // ロードボタン
-    if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
+	// ロードボタン
+	if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
 
-        globalParameter_->LoadFile(groupName_);
-        // セーブ完了メッセージ
-        ImGui::Text("Load Successful: %s", groupName_.c_str());
-        ApplyGlobalParameter();
-    }
+		globalParameter_->LoadFile(groupName_);
+		// セーブ完了メッセージ
+		ImGui::Text("Load Successful: %s", groupName_.c_str());
+		ApplyGlobalParameter();
+	}
 }
 
 
@@ -59,11 +70,11 @@ void BasePlayerHand::ParmLoadForImGui() {
 ///パラメータをグループに追加
 ///=================================================================================
 void BasePlayerHand::AddParmGroup() {
-    globalParameter_->CreateGroup(groupName_, false);
+	globalParameter_->CreateGroup(groupName_, false);
 
-    // Position
-    //globalParameter_->AddSeparatorText("Position");
-    globalParameter_->AddItem(groupName_, "Translate", transform_.translation_);
+	// Position
+	//globalParameter_->AddSeparatorText("Position");
+	globalParameter_->AddItem(groupName_, "Translate", transform_.translation_);
 
 }
 
@@ -73,12 +84,12 @@ void BasePlayerHand::AddParmGroup() {
 ///=================================================================================
 void BasePlayerHand::SetValues() {
 
-    // グループを追加(GlobalParamaterで表示はしない)
-    globalParameter_->CreateGroup(groupName_, false);
+	// グループを追加(GlobalParamaterで表示はしない)
+	globalParameter_->CreateGroup(groupName_, false);
 
-    // Position
-    //globalParameter_->AddSeparatorText("Position");
-    globalParameter_->SetValue(groupName_, "Translate", transform_.translation_);
+	// Position
+	//globalParameter_->AddSeparatorText("Position");
+	globalParameter_->SetValue(groupName_, "Translate", transform_.translation_);
 
 }
 
@@ -87,8 +98,8 @@ void BasePlayerHand::SetValues() {
 ///  ImGuiからパラメータを得る
 ///===================================================== 
 void BasePlayerHand::ApplyGlobalParameter() {
-    // Position
-    transform_.translation_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
+	// Position
+	transform_.translation_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
 
 }
 
@@ -97,6 +108,6 @@ void BasePlayerHand::ApplyGlobalParameter() {
 ///=====================================================
 void BasePlayerHand::SaveAndLoad() {
 
-    globalParameter_->ParmSaveForImGui(groupName_);
-    ParmLoadForImGui();
+	globalParameter_->ParmSaveForImGui(groupName_);
+	ParmLoadForImGui();
 }

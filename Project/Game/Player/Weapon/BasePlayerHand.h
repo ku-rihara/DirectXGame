@@ -13,10 +13,11 @@ protected:
 
     /// グローバルなパラメータ
 	GlobalParameter* globalParameter_;            /// グローバルパラメータ
-	std::string groupName_;                      /// グループ名
+	std::string groupName_;                       /// グループ名
 
 	// エミッター
 	std::unique_ptr<ParticleEmitter>emitter_;
+	Vector3 direction_;
 
 public:
 	/*virtual ~BasePlayerHand() = default;*/
@@ -39,4 +40,13 @@ public:
 	void ApplyGlobalParameter();
 
 	virtual void SaveAndLoad();
+
+	///============================================
+	/// getter method
+	///=============================================
+	Vector3 GetDirection()const { return direction_; }
+
+	///============================================
+	/// setter method
+	///=============================================
 };

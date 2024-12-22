@@ -15,7 +15,8 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	///---------------------------------------------------------
 	/// 変数初期化
 	///---------------------------------------------------------
-
+	startPos_ = pPlayer_->GetRightHand()->GetTransform().translation_;
+	targetPos_= 
 
 	
 }
@@ -28,6 +29,9 @@ ComboAttackFirst::~ComboAttackFirst() {
 void ComboAttackFirst::Update() {
 	/*pPlayer_->Move(10.3f);*/
 	//pPlayer_->Jump(speed_);
+
+	// 最初のコンボの動き
+	
 	
 }
 

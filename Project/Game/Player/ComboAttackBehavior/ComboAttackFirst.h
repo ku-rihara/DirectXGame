@@ -10,6 +10,10 @@ private:
 	///private varians
 	/// ===================================================
 
+	Vector3 targetPos_;   /// ターゲット座標
+	Vector3 startPos_;    /// スタート座標
+
+
 public:
 	//コンストラクタ
 	ComboAttackFirst(Player* boss);

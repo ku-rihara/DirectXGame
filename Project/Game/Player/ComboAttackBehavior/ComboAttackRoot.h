@@ -16,7 +16,5 @@ public:
 	~ComboAttackRoot();
 
 	void Update()override;
-
 	void Debug()override;
-
 };

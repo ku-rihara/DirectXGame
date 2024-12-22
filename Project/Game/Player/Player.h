@@ -116,6 +116,8 @@ public:
 	/// ===================================================
 	/// getter
 	/// ===================================================
+	PlayerHandLeft* GetLeftHand() const{ return leftHand_.get(); }
+	PlayerHandRight* GetRightHand() const { return rightHand_.get(); }
 	const bool& GetIsAttack()const { return isAttack_; }
 	float GetMuzzulJumpSpeed()const { return jumpSpeed_; }
 	BasePlayerBehavior* GetBehavior()const { return behavior_.get(); }
