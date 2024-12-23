@@ -43,7 +43,7 @@ void Player::Init() {
 	AddParmGroup();
 	ApplyGlobalParameter();
 
-	
+
 	///* 武器生成
 	leftHand_ = std::make_unique<PlayerHandLeft>();
 	rightHand_ = std::make_unique<PlayerHandRight>();
@@ -79,7 +79,7 @@ void Player::Update() {
 
 	leftHand_->Update();
 	rightHand_->Update();
-	BaseObject::Update();       /// 更新 
+	BaseObject::Update();         /// 更新 
 
 }
 
@@ -91,7 +91,7 @@ void Player::Draw(const ViewProjection& viewProjection) {
 	BaseObject::Draw(viewProjection);
 	leftHand_->Draw(viewProjection);
 	rightHand_->Draw(viewProjection);
-	
+
 }
 
 void Player::DamageRendition() {
@@ -345,12 +345,17 @@ void Player::AdjustParm() {
 
 		/// コンボパラメータ
 		if (ImGui::CollapsingHeader("NormalCombo")) {
+			ImGui::SeparatorText("FirstCombo");   /// 1コンボ目
+			ImGui::DragFloat("ComboPTime1",
+				&normalComboParms_[0].permissionTime,
+				0.1f);
+			ImGui::DragFloat("rushSpeed", &rushSpeed_, 0.1f);
 
-			for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
-				ImGui::DragFloat(("ComboPTime" + std::to_string(int(i + 1))).c_str(),
-					&normalComboParms_[i].permissionTime,
-					0.1f);
-			}
+			ImGui::SeparatorText("SecondCombo");  /// 2コンボ目
+			ImGui::DragFloat("ComboPTime2",
+				&normalComboParms_[1].permissionTime,
+				0.1f);
+
 		}
 
 		/// セーブとロード
@@ -434,6 +439,7 @@ void Player::AddParmGroup() {
 
 	globalParameter_->AddItem(groupName_, "Translate", transform_.translation_);
 	globalParameter_->AddItem(groupName_, "JumpSpeed", jumpSpeed_);
+	globalParameter_->AddItem(groupName_, "rushSpeed", rushSpeed_);
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
 		globalParameter_->AddItem(
@@ -451,6 +457,7 @@ void Player::SetValues() {
 
 	globalParameter_->SetValue(groupName_, "Translate", transform_.translation_);
 	globalParameter_->SetValue(groupName_, "JumpSpeed", jumpSpeed_);
+	globalParameter_->SetValue(groupName_, "rushSpeed", rushSpeed_);
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
 		globalParameter_->SetValue(
@@ -467,7 +474,9 @@ void Player::SetValues() {
 void Player::ApplyGlobalParameter() {
 	// Position
 	transform_.translation_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
-	jumpSpeed_=globalParameter_->GetValue<float>(groupName_, "JumpSpeed");
+	jumpSpeed_ = globalParameter_->GetValue<float>(groupName_, "JumpSpeed");
+	rushSpeed_ = globalParameter_->GetValue<float>(groupName_, "rushSpeed");
+
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
 		normalComboParms_[i].permissionTime = globalParameter_->GetValue<float>(

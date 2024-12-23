@@ -5,22 +5,39 @@
 
 class ComboAttackFirst : public BaseComboAattackBehavior {
 private:
+	enum class Order{
+		RUSH,
+		PUNCH,
+	};
+private:
 	
 	/// ===================================================
 	///private varians
 	/// ===================================================
 
-	Vector3 targetPos_;   /// ターゲット座標
-	Vector3 startPos_;    /// スタート座標
+	Order order_;                /// 振る舞い順序
 
+	/// 突進
+	Vector3 initPos_;            /// スタート座標
+	Vector3 rushPos_;            /// 突進座標
+	Vector3 forwardDirection_;   ///向き
+	float speed_;
+	float rushEaseT_;
+
+	Vector3 rHandStartPos_;    /// ハンドスタート座標
+	Vector3 rHandTargetPos_;   /// ハンドターゲット座標
+
+	
 
 public:
 	//コンストラクタ
 	ComboAttackFirst(Player* boss);
 	~ComboAttackFirst();
 
+	/// 更新、デバッグ
 	void Update()override;
-
 	void Debug()override;
 
+
+	void ChangeSpeedForLockOn();
 };

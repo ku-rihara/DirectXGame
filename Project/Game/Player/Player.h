@@ -48,6 +48,7 @@ private:
 	
 	/// move
 	float objectiveAngle_;                       /// 目標角度
+	float rushSpeed_;                            /// 突進スピード
 	Vector3 velocity_;                           /// 速度
 	Vector3 prePos_;                             /// 移動前座標
 										         
@@ -118,8 +119,10 @@ public:
 	/// ===================================================
 	PlayerHandLeft* GetLeftHand() const{ return leftHand_.get(); }
 	PlayerHandRight* GetRightHand() const { return rightHand_.get(); }
+	LockOn* GetLockOn() const { return pLockOn_; }
 	const bool& GetIsAttack()const { return isAttack_; }
 	float GetMuzzulJumpSpeed()const { return jumpSpeed_; }
+	float GetRushSpeed()const { return rushSpeed_; }
 	BasePlayerBehavior* GetBehavior()const { return behavior_.get(); }
 	/// ===================================================
 	/// setter
