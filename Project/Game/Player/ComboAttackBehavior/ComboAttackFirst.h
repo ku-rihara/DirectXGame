@@ -8,6 +8,8 @@ private:
 	enum class Order{
 		RUSH,
 		PUNCH,
+		BACKPUNCH,
+		WAIT,
 	};
 private:
 	
@@ -28,8 +30,9 @@ private:
 	Easing punchEase_;
 	Vector3 rHandStartPos_;    /// ハンドスタート座標
 	Vector3 rHandTargetPos_;   /// ハンドターゲット座標
-
+	Vector3 punchPosition_;
 	
+	float waitTine_;          /// 次コンボまでの待機時間
 
 public:
 	//コンストラクタ

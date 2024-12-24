@@ -97,7 +97,6 @@ void WorldTransform::SetParent(const WorldTransform* parent) {
 }
 
 
-
 Vector3 WorldTransform::LookAt(const Vector3& direction) const {
 	// 引数の方向ベクトルを正規化
 	Vector3 normalizedDirection = Vector3::Normalize(direction);

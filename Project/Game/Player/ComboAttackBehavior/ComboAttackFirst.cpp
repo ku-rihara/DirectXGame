@@ -30,6 +30,7 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	rushEase_.time = 0.0f;
 	punchEase_.time = 0.0f;
 	speed_ = pPlayer_->GetRushDistance();
+	waitTine_ = 0.0f;
 
 	// 振る舞い順序初期化
 	order_ = Order::RUSH;
@@ -62,8 +63,10 @@ void ComboAttackFirst::Update() {
 		if (rushEase_.time >= pPlayer_->GetRushEaseMax()) {
 			rushEase_.time = pPlayer_->GetRushEaseMax();
 
+			/// パンチ座標セット
 			rHandStartPos_ = pPlayer_->GetRightHand()->GetTransform().translation_;
 			rHandTargetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayer_->GetPunchReach(Player::FIRST);
+			
 			order_ = Order::PUNCH;
 		}
 
@@ -76,22 +79,44 @@ void ComboAttackFirst::Update() {
 
 		punchEase_.time += Frame::DeltaTime();
 	
-		// イージングでハンドのワールド座標を計算
-		Vector3 easedPosition = 
+		/// 拳を突き出す
+		punchPosition_ =
 			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayer_->GetPunchEaseMax(Player::FIRST));
 
 
 		// ハンドのローカル座標を更新
-		pPlayer_->GetRightHand()->SetWorldPosition(easedPosition);
+		pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
 
 		// イージング終了時の処理
 		if (punchEase_.time >= pPlayer_->GetPunchEaseMax(Player::FIRST)) {
 			punchEase_.time = pPlayer_->GetPunchEaseMax(Player::FIRST);
-			//order_ = Order::END; // 次の段階へ進む
+			order_ = Order::BACKPUNCH;
 		}
+
 	break;
 
-	
+	case Order::BACKPUNCH:
+		///----------------------------------------------------
+		/// バックパンチ
+		///----------------------------------------------------
+		punchEase_.time -= Frame::DeltaTime();
+
+		punchPosition_ =
+			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayer_->GetPunchEaseMax(Player::FIRST));
+
+		// ハンドのローカル座標を更新
+		pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
+
+		// イージング終了時の処理
+		if (punchEase_.time <= 0.0f) {
+			punchEase_.time = 0.0f;
+			order_ = Order::WAIT;
+		}
+		break;
+
+	case Order::WAIT:
+		waitTine_ += Frame::DeltaTime();
+
 	}
 
 }
