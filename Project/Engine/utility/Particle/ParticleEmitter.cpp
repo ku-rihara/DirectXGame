@@ -246,7 +246,7 @@ void ParticleEmitter::Emit() {
 	}
 
 
-	currentTime_ += Frame::DeltaTime();// 時間加算
+	currentTime_ += Frame::DeltaTimeRate();// 時間加算
 
 	if (currentTime_ >= intervalTime_) {//　間隔ごとに発動
 

@@ -73,7 +73,7 @@ void EnemyManager::Update() {
 
 
 void EnemyManager::SpawnUpdate() {
-	currentTime_ += Frame::DeltaTime(); //* 現在時間加算
+	currentTime_ += Frame::DeltaTimeRate(); //* 現在時間加算
 
 	auto& phase = phases_[currentPhase_];//* 現在フェーズの取得
 

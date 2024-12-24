@@ -69,7 +69,7 @@ void Player::Update() {
 	DamageRendition();        /// ダメージエフェクト
 
 	/// 振る舞い処理(コンボ攻撃中は中止)
-	if (!dynamic_cast<ComboAttackRoot*>(behavior_.get())) {
+	if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
 		behavior_->Update();
 	}
 
@@ -96,11 +96,11 @@ void Player::Draw(const ViewProjection& viewProjection) {
 
 void Player::DamageRendition() {
 	//if (isDamage_) {
-	//	damageTime_ -= Frame::DeltaTime();
+	//	damageTime_ -= Frame::DeltaTimeRate();
 
 	//	// ダメージ時間がまだ残っている場合
 
-	//	blinkTimer_ += Frame::DeltaTime();
+	//	blinkTimer_ += Frame::DeltaTimeRate();
 
 	//	// チカチカ間隔ごとに透明フラグを切り替え
 	//	if (blinkTimer_ >= blinkInterval_) {
@@ -168,7 +168,7 @@ void Player::Move(const float& speed) {
 	/// 移動処理
 	if (GetIsMoving()) {
 		// 移動量に速さを反映
-		velocity_ = Vector3::Normalize(velocity_) * (speed)*Frame::DeltaTime();
+		velocity_ = Vector3::Normalize(velocity_) * (speed)*Frame::DeltaTimeRate();
 		// 移動ベクトルをカメラの角度だけ回転する
 		Matrix4x4 rotateMatrix = MakeRotateYMatrix(viewProjection_->rotation_.y);
 		velocity_ = TransformNormal(velocity_, rotateMatrix);
@@ -245,7 +245,7 @@ void Player::Jump(float& speed) {
 	// 移動
 	transform_.translation_.y += speed;
 	// 重力加速度
-	const float kGravityAcceleration = 4.4f * Frame::DeltaTime();
+	const float kGravityAcceleration = 4.4f * Frame::DeltaTimeRate();
 	// 加速度ベクトル
 	float accelerationY = -kGravityAcceleration;
 	// 加速する
@@ -314,7 +314,7 @@ void Player::Fall() {
 	// 移動
 	transform_.translation_.y += fallSpeed_;
 	// 重力加速度
-	const float kGravityAcceleration = 3.4f * Frame::DeltaTime();
+	const float kGravityAcceleration = 3.4f * Frame::DeltaTimeRate();
 	// 加速度ベクトル
 	float accelerationY = -kGravityAcceleration;
 	// 加速する
@@ -353,8 +353,8 @@ void Player::AdjustParm() {
 				0.1f);
 
 
-			ImGui::DragFloat("rushDistance", &rushDistance_, 0.1f);
-			ImGui::DragFloat("rushEaseMax", &rushEaseMax_, 0.1f, 0);
+			ImGui::DragFloat("rushDistance", &rushDistance_, 0.01f);
+			ImGui::DragFloat("rushEaseMax", &rushEaseMax_, 0.01f, 0);
 
 			ImGui::DragFloat("PunchEaseMax1",
 				&normalComboParms_[0].punchEaseMax,
@@ -546,4 +546,8 @@ float Player::GetPunchEaseMax(ComboNum index)const {
 
 float Player::GetPunchReach(ComboNum index)const {
 	return normalComboParms_[index].punchReach;
+}
+
+float Player::GetWaitTime(ComboNum index)const {
+	return normalComboParms_[index].permissionTime;
 }

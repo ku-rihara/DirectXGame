@@ -1,13 +1,16 @@
 /// behavior
 #include"ComboAttackFirst.h"
-
+#include"ComboAttackSecond.h"
+#include"ComboAttackRoot.h"
 
 /// objs
 #include"Player/Player.h"
 #include"LockOn/LockOn.h"
 
-/// math
-#include"MathFunction.h"
+/// input
+#include"input/Input.h"
+
+/// frame
 #include"Frame/Frame.h"
 
 #include<imgui.h>
@@ -53,7 +56,7 @@ void ComboAttackFirst::Update() {
 		ChangeSpeedForLockOn();// ロックオンによる突進スピードの変化
 		rushPos_ = initPos_+(forwardDirection_ * speed_); // 突進座標を決める
 
-		rushEase_.time += Frame::DeltaTime();
+		rushEase_.time += Frame::DeltaTimeRate();
 
 		// 突進の動き
 		pPlayer_->SetWorldPosition(
@@ -77,7 +80,7 @@ void ComboAttackFirst::Update() {
 		/// パンチ
 		///----------------------------------------------------
 
-		punchEase_.time += Frame::DeltaTime();
+		punchEase_.time += Frame::DeltaTimeRate();
 	
 		/// 拳を突き出す
 		punchPosition_ =
@@ -99,7 +102,7 @@ void ComboAttackFirst::Update() {
 		///----------------------------------------------------
 		/// バックパンチ
 		///----------------------------------------------------
-		punchEase_.time -= Frame::DeltaTime();
+		punchEase_.time -= Frame::DeltaTimeRate();
 
 		punchPosition_ =
 			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayer_->GetPunchEaseMax(Player::FIRST));
@@ -117,6 +120,16 @@ void ComboAttackFirst::Update() {
 	case Order::WAIT:
 		waitTine_ += Frame::DeltaTime();
 
+		/// コンボ途切れ
+		if (waitTine_ >= pPlayer_->GetWaitTime(Player::FIRST)) {
+			pPlayer_->ChangeComboBehavior
+			(std::make_unique<ComboAttackRoot>(pPlayer_));
+		}
+		/// 2コンボ目に移行
+		else if (Input::GetInstance()->TrrigerKey(DIK_H)) {
+			pPlayer_->ChangeComboBehavior
+			(std::make_unique<ComboAttackSecond>(pPlayer_));
+		}
 	}
 
 }

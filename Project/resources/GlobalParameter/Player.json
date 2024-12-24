@@ -4,15 +4,15 @@
         "NComboPTime1": 1.5,
         "NComboPTime2": 0.0,
         "NComboPunchEaseTime1": 0.20000000298023224,
-        "NComboPunchEaseTime2": 0.0,
+        "NComboPunchEaseTime2": 0.20000000298023224,
         "NComboPunchReach1": 4.0,
-        "NComboPunchReach2": 0.0,
+        "NComboPunchReach2": 10.0,
         "Translate": [
-            -9.319018363952637,
+            -5.333069324493408,
             0.0,
-            13.163374900817871
+            32.733585357666016
         ],
         "rushDistance": 10.0,
-        "rushEaseMax": 0.20000000298023224
+        "rushEaseMax": 0.09000000357627869
     }
 }

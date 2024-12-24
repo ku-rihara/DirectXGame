@@ -47,23 +47,23 @@ void ParticleManager::Update(std::optional<const ViewProjection*> viewProjection
 			///------------------------------------------------------------------------
 			if (accelerationField_.isAdaption &&
 				IsCollision(accelerationField_.area, it->worldTransform_.translation_)) {
-				it->velocity_ += accelerationField_.acceleration * Frame::DeltaTime();
+				it->velocity_ += accelerationField_.acceleration * Frame::DeltaTimeRate();
 			}
 
 			///------------------------------------------------------------------------
 			/// 回転させる
 			///------------------------------------------------------------------------
-			it->worldTransform_.rotation_ += it->rotateSpeed_ * Frame::DeltaTime();
+			it->worldTransform_.rotation_ += it->rotateSpeed_ * Frame::DeltaTimeRate();
 
 			///------------------------------------------------------------------------
 			/// 重力の適用
 			///------------------------------------------------------------------------
-			it->velocity_.y += it->gravity_ * Frame::DeltaTime();
+			it->velocity_.y += it->gravity_ * Frame::DeltaTimeRate();
 
 			///------------------------------------------------------------------------
 			/// 変位更新
 			///------------------------------------------------------------------------
-			it->worldTransform_.translation_ += it->velocity_ * Frame::DeltaTime();
+			it->worldTransform_.translation_ += it->velocity_ * Frame::DeltaTimeRate();
 
 			///------------------------------------------------------------------------
 			/// ビルボードまたは通常の行列更新
@@ -77,7 +77,7 @@ void ParticleManager::Update(std::optional<const ViewProjection*> viewProjection
 			}
 
 			// 時間を進める
-			it->currentTime_ += Frame::DeltaTime();
+			it->currentTime_ += Frame::DeltaTimeRate();
 			++it;
 		}
 	}

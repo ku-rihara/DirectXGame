@@ -145,7 +145,7 @@ public:
 	float GetRushDistance()const { return rushDistance_; }
 	float GetRushEaseMax()const { return rushEaseMax_; }
 
+	float GetWaitTime(ComboNum index)const;
 	float GetPunchEaseMax(ComboNum index)const;
-
 	float GetPunchReach(ComboNum index)const;
 };
