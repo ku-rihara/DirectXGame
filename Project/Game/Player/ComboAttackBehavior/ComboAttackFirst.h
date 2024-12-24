@@ -22,7 +22,7 @@ private:
 	Vector3 rushPos_;            /// 突進座標
 	Vector3 forwardDirection_;   ///向き
 	float speed_;
-	float rushEaseT_;
+	Easing rushEase_;
 
 	Vector3 rHandStartPos_;    /// ハンドスタート座標
 	Vector3 rHandTargetPos_;   /// ハンドターゲット座標

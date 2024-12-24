@@ -29,8 +29,8 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	rHandStartPos_ = pPlayer_->GetRightHand()->GetTransform().translation_;
 	rHandTargetPos_ = pPlayer_->GetTransform().LookAt(Vector3::ToForward());//* ×速度
 
-	rushEaseT_ = 0.0f;
-	speed_ = pPlayer_->GetRushSpeed();
+	rushEase_.time = 0.0f;
+	speed_ = pPlayer_->GetRushDistance();
 
 	// 振る舞い順序初期化
 	order_ = Order::RUSH;
@@ -53,15 +53,15 @@ void ComboAttackFirst::Update() {
 		ChangeSpeedForLockOn();// ロックオンによる突進スピードの変化
 		rushPos_ = initPos_+(forwardDirection_ * speed_); // 突進座標を決める
 
-		rushEaseT_ += Frame::DeltaTime();
+		rushEase_.time += Frame::DeltaTime();
 
 		// 突進の動き
 		pPlayer_->SetWorldPosition(
-			Lerp(initPos_,rushPos_, rushEaseT_));
+			EaseInSine(initPos_,rushPos_, rushEase_.time,pPlayer_->GetRushEaseMax()));
 
 		/// パンチオーダーに移行
-		if (rushEaseT_ >= 1.0f) {
-			rushEaseT_ = 1.0f;
+		if (rushEase_.time >= pPlayer_->GetRushEaseMax()) {
+			rushEase_.time = pPlayer_->GetRushEaseMax();
 			order_ = Order::PUNCH;
 		}
 

@@ -349,13 +349,13 @@ void Player::AdjustParm() {
 			ImGui::DragFloat("ComboPTime1",
 				&normalComboParms_[0].permissionTime,
 				0.1f);
-			ImGui::DragFloat("rushSpeed", &rushSpeed_, 0.1f);
+			ImGui::DragFloat("rushDistance", &rushDistance_, 0.1f);
+			ImGui::DragFloat("rushEaseMax", &rushEaseMax_, 0.1f,0);
 
 			ImGui::SeparatorText("SecondCombo");  /// 2コンボ目
 			ImGui::DragFloat("ComboPTime2",
 				&normalComboParms_[1].permissionTime,
 				0.1f);
-
 		}
 
 		/// セーブとロード
@@ -363,6 +363,7 @@ void Player::AdjustParm() {
 		ParmLoadForImGui();
 	}
 
+	/// 手のパラメータ調整
 	leftHand_->AdjustParm();
 	rightHand_->AdjustParm();
 
@@ -439,7 +440,9 @@ void Player::AddParmGroup() {
 
 	globalParameter_->AddItem(groupName_, "Translate", transform_.translation_);
 	globalParameter_->AddItem(groupName_, "JumpSpeed", jumpSpeed_);
-	globalParameter_->AddItem(groupName_, "rushSpeed", rushSpeed_);
+	globalParameter_->AddItem(groupName_, "rushDistance", rushDistance_);
+	globalParameter_->AddItem(groupName_, "rushEaseMax", rushEaseMax_);
+
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
 		globalParameter_->AddItem(
@@ -457,7 +460,8 @@ void Player::SetValues() {
 
 	globalParameter_->SetValue(groupName_, "Translate", transform_.translation_);
 	globalParameter_->SetValue(groupName_, "JumpSpeed", jumpSpeed_);
-	globalParameter_->SetValue(groupName_, "rushSpeed", rushSpeed_);
+	globalParameter_->SetValue(groupName_, "rushDistance", rushDistance_);
+	globalParameter_->SetValue(groupName_, "rushEaseMax", rushEaseMax_);
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
 		globalParameter_->SetValue(
@@ -475,7 +479,9 @@ void Player::ApplyGlobalParameter() {
 	// Position
 	transform_.translation_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
 	jumpSpeed_ = globalParameter_->GetValue<float>(groupName_, "JumpSpeed");
-	rushSpeed_ = globalParameter_->GetValue<float>(groupName_, "rushSpeed");
+	rushDistance_ = globalParameter_->GetValue<float>(groupName_, "rushDistance");
+	rushEaseMax_ = globalParameter_->GetValue<float>(groupName_, "rushEaseMax");
+
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {

@@ -48,17 +48,20 @@ private:
 	
 	/// move
 	float objectiveAngle_;                       /// 目標角度
-	float rushSpeed_;                            /// 突進スピード
 	Vector3 velocity_;                           /// 速度
 	Vector3 prePos_;                             /// 移動前座標
 										         
 	/// jump							         
-	float jumpSpeed_;	                         /// ジャンプ初速
 	const float fallLimit_ = -1.2f;              /// ジャンプ
 										         
 										         
 	bool isAttack_;                              /// 攻撃フラグ 
 	float fallSpeed_;                  	         /// 落ちるスピード
+
+	/// paramater
+	float rushDistance_;                           /// 突進距離
+	float rushEaseMax_;                            /// 突進スピード
+	float jumpSpeed_;	                           /// ジャンプ初速
 
 	///* コンボパラメータ
 	std::array<ComboParm, 2>normalComboParms_;
@@ -122,7 +125,8 @@ public:
 	LockOn* GetLockOn() const { return pLockOn_; }
 	const bool& GetIsAttack()const { return isAttack_; }
 	float GetMuzzulJumpSpeed()const { return jumpSpeed_; }
-	float GetRushSpeed()const { return rushSpeed_; }
+	float GetRushDistance()const { return rushDistance_; }
+	float GetRushEaseMax()const { return rushEaseMax_; }
 	BasePlayerBehavior* GetBehavior()const { return behavior_.get(); }
 	/// ===================================================
 	/// setter
