@@ -26,10 +26,18 @@
 /// </summary>
 class LockOn;
 class Player : public BaseObject{
+public:
+	enum ComboNum {
+		FIRST,
+		SECOND,
+	};
+
 private:
 
 	struct ComboParm {
 		float permissionTime;
+		float punchEaseMax;
+		float punchReach;
 	};
 	
 private:
@@ -125,8 +133,6 @@ public:
 	LockOn* GetLockOn() const { return pLockOn_; }
 	const bool& GetIsAttack()const { return isAttack_; }
 	float GetMuzzulJumpSpeed()const { return jumpSpeed_; }
-	float GetRushDistance()const { return rushDistance_; }
-	float GetRushEaseMax()const { return rushEaseMax_; }
 	BasePlayerBehavior* GetBehavior()const { return behavior_.get(); }
 	/// ===================================================
 	/// setter
@@ -135,4 +141,11 @@ public:
 	void SetViewProjection(const ViewProjection* viewProjection) { viewProjection_ = viewProjection; }
 
 
+	/// comboParamater
+	float GetRushDistance()const { return rushDistance_; }
+	float GetRushEaseMax()const { return rushEaseMax_; }
+
+	float GetPunchEaseMax(ComboNum index)const;
+
+	float GetPunchReach(ComboNum index)const;
 };

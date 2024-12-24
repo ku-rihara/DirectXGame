@@ -79,7 +79,7 @@ void Player::Update() {
 
 	leftHand_->Update();
 	rightHand_->Update();
-	BaseObject::Update();         /// 更新 
+	BaseObject::Update();        /// 更新 
 
 }
 
@@ -192,6 +192,7 @@ void Player::Move(const float& speed) {
 /// 動いているか
 ///==========================================================
 bool Player::GetIsMoving() {
+
 	Input* input = Input::GetInstance();
 	bool isMoving = false;
 	const float thresholdValue = 0.3f;
@@ -346,15 +347,35 @@ void Player::AdjustParm() {
 		/// コンボパラメータ
 		if (ImGui::CollapsingHeader("NormalCombo")) {
 			ImGui::SeparatorText("FirstCombo");   /// 1コンボ目
-			ImGui::DragFloat("ComboPTime1",
+
+			ImGui::DragFloat("PTime1",
 				&normalComboParms_[0].permissionTime,
 				0.1f);
+
+
 			ImGui::DragFloat("rushDistance", &rushDistance_, 0.1f);
-			ImGui::DragFloat("rushEaseMax", &rushEaseMax_, 0.1f,0);
+			ImGui::DragFloat("rushEaseMax", &rushEaseMax_, 0.1f, 0);
+
+			ImGui::DragFloat("PunchEaseMax1",
+				&normalComboParms_[0].punchEaseMax,
+				0.1f);
+
+			ImGui::DragFloat("PunchReach1",
+				&normalComboParms_[0].punchReach,
+				0.1f);
 
 			ImGui::SeparatorText("SecondCombo");  /// 2コンボ目
-			ImGui::DragFloat("ComboPTime2",
+
+			ImGui::DragFloat("PTime2",
 				&normalComboParms_[1].permissionTime,
+				0.1f);
+
+			ImGui::DragFloat("PunchEaseMax2",
+				&normalComboParms_[1].punchEaseMax,
+				0.1f);
+
+			ImGui::DragFloat("PunchReach2",
+				&normalComboParms_[1].punchReach,
 				0.1f);
 		}
 
@@ -449,6 +470,16 @@ void Player::AddParmGroup() {
 			groupName_,
 			"NComboPTime" + std::to_string(int(i + 1)),
 			normalComboParms_[i].permissionTime);
+
+		globalParameter_->AddItem(
+			groupName_,
+			"NComboPunchEaseTime" + std::to_string(int(i + 1)),
+			normalComboParms_[i].punchEaseMax);
+
+		globalParameter_->AddItem(
+			groupName_,
+			"NComboPunchReach" + std::to_string(int(i + 1)),
+			normalComboParms_[i].punchReach);
 	}
 }
 
@@ -468,6 +499,16 @@ void Player::SetValues() {
 			groupName_,
 			"NComboPTime" + std::to_string(int(i + 1)),
 			normalComboParms_[i].permissionTime);
+
+		globalParameter_->SetValue(
+			groupName_,
+			"NComboPunchEaseTime" + std::to_string(int(i + 1)),
+			normalComboParms_[i].punchEaseMax);
+
+		globalParameter_->SetValue(
+			groupName_,
+			"NComboPunchReach" + std::to_string(int(i + 1)),
+			normalComboParms_[i].punchReach);
 	}
 }
 
@@ -488,5 +529,21 @@ void Player::ApplyGlobalParameter() {
 		normalComboParms_[i].permissionTime = globalParameter_->GetValue<float>(
 			groupName_,
 			"NComboPTime" + std::to_string(int(i + 1)));
+
+		normalComboParms_[i].punchEaseMax = globalParameter_->GetValue<float>(
+			groupName_,
+			"NComboPunchEaseTime" + std::to_string(int(i + 1)));
+
+		normalComboParms_[i].punchReach = globalParameter_->GetValue<float>(
+			groupName_,
+			"NComboPunchReach" + std::to_string(int(i + 1)));
 	}
+}
+
+float Player::GetPunchEaseMax(ComboNum index)const {
+	return normalComboParms_[index].punchEaseMax;
+}
+
+float Player::GetPunchReach(ComboNum index)const {
+	return normalComboParms_[index].punchReach;
 }

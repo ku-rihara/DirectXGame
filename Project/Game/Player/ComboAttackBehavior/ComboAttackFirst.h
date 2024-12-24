@@ -24,6 +24,8 @@ private:
 	float speed_;
 	Easing rushEase_;
 
+	/// パンチ
+	Easing punchEase_;
 	Vector3 rHandStartPos_;    /// ハンドスタート座標
 	Vector3 rHandTargetPos_;   /// ハンドターゲット座標
 

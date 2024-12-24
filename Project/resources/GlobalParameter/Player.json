@@ -3,10 +3,14 @@
         "JumpSpeed": 1.5,
         "NComboPTime1": 1.5,
         "NComboPTime2": 0.0,
+        "NComboPunchEaseTime1": 0.20000000298023224,
+        "NComboPunchEaseTime2": 0.0,
+        "NComboPunchReach1": 4.0,
+        "NComboPunchReach2": 0.0,
         "Translate": [
-            0.3059981167316437,
+            -9.319018363952637,
             0.0,
-            6.3509626388549805
+            13.163374900817871
         ],
         "rushDistance": 10.0,
         "rushEaseMax": 0.20000000298023224
