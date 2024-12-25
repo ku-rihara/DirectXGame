@@ -23,16 +23,18 @@ void TitleScene::Init() {
 
 	ctest1_ = std::make_unique<CollisionTest1>();
 	ctest2_ = std::make_unique<CollisionTest2>();
-	
+	ctest3_ = std::make_unique<CollisionTest3>();
+
 	ctest1_->Init();
 	ctest2_->Init();
-
+	ctest3_->Init();
 }
 
 void TitleScene::Update() {
 
 	ctest1_->Update();
 	ctest2_->Update();
+	ctest3_->Update();
 
 	Debug();
 	ViewProjectionUpdate();

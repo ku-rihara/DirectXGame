@@ -5,7 +5,7 @@
 
 #include"TestObj/CollisionTest1.h"
 #include"TestObj/CollisionTest2.h"
-
+#include"TestObj/CollisionTest3.h"
 /// <summary>
 /// タイトルシーン
 /// </summary>
@@ -14,7 +14,7 @@ private:
 
 	std::unique_ptr<CollisionTest1>ctest1_;
 	std::unique_ptr<CollisionTest2>ctest2_;
-
+	std::unique_ptr<CollisionTest3>ctest3_;
 public:
 	///========================================================
 	/// Constralt destract

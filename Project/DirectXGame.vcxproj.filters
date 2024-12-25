@@ -403,6 +403,9 @@
     <ClCompile Include="Game\TestObj\CollisionTest2.cpp">
       <Filter>Game\TestObj</Filter>
     </ClCompile>
+    <ClCompile Include="Game\TestObj\CollisionTest3.cpp">
+      <Filter>Game\TestObj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -682,6 +685,9 @@
       <Filter>Game\TestObj</Filter>
     </ClInclude>
     <ClInclude Include="Game\TestObj\CollisionTest2.h">
+      <Filter>Game\TestObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\TestObj\CollisionTest3.h">
       <Filter>Game\TestObj</Filter>
     </ClInclude>
   </ItemGroup>
