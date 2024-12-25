@@ -35,9 +35,10 @@ void CollisionManager::RemoveCollider(BaseCollider* collider) {
 }
 
 void CollisionManager::Reset() {
-	// リストを空っぽにする
 	baseColliders_.clear();
+	collisionStates_.clear();  // 状態リセット
 }
+
 
 void CollisionManager::Update() { 
 	
@@ -77,37 +78,44 @@ void CollisionManager::Draw(const ViewProjection& viewProjection) {
 void CollisionManager::CheckCollisionPair(BaseCollider* colliderA, BaseCollider* colliderB) {
 	bool collisionDetected = false;
 
-	// dynamic_castでAABBとOBBに変換して各ケースで判定
+	// dynamic_cast を使用して AABB と OBB の判定
 	if (auto* aabbA = dynamic_cast<AABBCollider*>(colliderA)) {
 		if (auto* aabbB = dynamic_cast<AABBCollider*>(colliderB)) {
-			// AABB同士の当たり判定
 			collisionDetected = IsCollision(aabbA->GetAABB(), aabbB->GetAABB());
 		}
 		else if (auto* obbB = dynamic_cast<OBBCollider*>(colliderB)) {
-			// AABBとOBBの当たり判定
 			collisionDetected = IsCollision(obbB->GetOBB(), aabbA->GetAABB());
 		}
 	}
 	else if (auto* obbA = dynamic_cast<OBBCollider*>(colliderA)) {
 		if (auto* obbB = dynamic_cast<OBBCollider*>(colliderB)) {
-			// OBB同士の当たり判定
 			collisionDetected = IsCollision(obbA->GetOBB(), obbB->GetOBB());
 		}
 		else if (auto* aabbB = dynamic_cast<AABBCollider*>(colliderB)) {
-			// OBBとAABBの当たり判定
 			collisionDetected = IsCollision(obbA->GetOBB(), aabbB->GetAABB());
 		}
 	}
 
+	// ペアをキーにして状態を管理
+	auto pair = std::make_pair(colliderA, colliderB);
 	if (collisionDetected) {
-		HandleCollision(colliderA, colliderB);
+		if (collisionStates_[pair] == false) {
+			HandleCollision(colliderA, colliderB);  // 新しい衝突
+		}
+		else {
+			// 既存の衝突継続
+			colliderA->OnCollisionStay(colliderB);
+			colliderB->OnCollisionStay(colliderA);
+		}
+		collisionStates_[pair] = true;  // 衝突中に設定
 	}
 	else {
-		// 衝突していない場合に終了処理を呼ぶ
-		HandleCollisionExit(colliderA, colliderB);
+		if (collisionStates_[pair] == true) {
+			HandleCollisionExit(colliderA, colliderB);  // 衝突終了
+		}
+		collisionStates_[pair] = false;  // 衝突なしに設定
 	}
 }
-
 
 // コリジョン処理を分ける関数
 void CollisionManager::HandleCollision(BaseCollider* colliderA, BaseCollider* colliderB) {

@@ -12,11 +12,19 @@
 #include<memory>
 
 class CollisionManager {
+public:
+	struct PairHash {
+		template <typename T1, typename T2>
+		std::size_t operator()(const std::pair<T1, T2>& p) const {
+			return std::hash<T1>()(p.first) ^ std::hash<T2>()(p.second);
+		}
+	};
 private:
 	// コライダーリスト
 	static std::list<BaseCollider*> baseColliders_;/// AABB
-	/*static std::list<AABBCollider*> AABBColliders_;/// AABB
-	static std::list<OBBCollider*> OBBColliders_;/// OBB*/
+	// 衝突状態をペアごとに管理するマップ
+	std::unordered_map<std::pair<BaseCollider*, BaseCollider*>, bool, PairHash> collisionStates_;
+
 	// コリジョンスフィア可視化
 	GlobalParameter* globalParameter_;
 	bool isColliderVisible_;
