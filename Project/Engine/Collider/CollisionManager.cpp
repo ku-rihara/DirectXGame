@@ -40,6 +40,7 @@ void CollisionManager::Reset() {
 }
 
 void CollisionManager::Update() { 
+	
 	//imguiからパラメータを取得
 	ApplyGlobalParameter();
 
@@ -57,6 +58,7 @@ void CollisionManager::UpdateWorldTransform() {
 	//全てのコライダーについて行列更新をする
 	for (BaseCollider* baseCollider : baseColliders_) {
 		baseCollider->UpdateWorldTransform();
+		baseCollider->RevertColor();
 	}	
 }
 

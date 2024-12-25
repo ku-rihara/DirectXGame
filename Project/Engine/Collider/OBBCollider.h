@@ -24,7 +24,7 @@ public:
     void UpdateWorldTransform()override;
     void DrawDebugCube(const ViewProjection& viewProjection)override;
   
-    virtual Vector3 GetBaseCenterPosition() const override;
+    virtual Vector3 GetCollisionPos() const override;
     virtual Vector3 GetRotate() const;
 
     /// ===================================================

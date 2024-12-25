@@ -34,15 +34,19 @@ void Object3d::Init() {
 ///============================================================
 /// 更新
 ///============================================================
-void Object3d::Update() {
-	color_.TransferMatrix();
+void Object3d::ColorUpdate() {
+
+	material_.materialData_->color = objColor_.GetColor();
 }
 
 ///============================================================
 /// 描画
 ///============================================================
 void Object3d::Draw(const WorldTransform& worldTransform,const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
-	if (model_) {
+	if (!model_) return;
+
+	ColorUpdate();
+
 		// WVP行列の計算
 		if (model_->GetIsFileGltf()) {//.gltfファイルの場合
 			wvpDate_->WVP = model_->GetModelData().rootNode.localMatrix * worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
@@ -52,8 +56,9 @@ void Object3d::Draw(const WorldTransform& worldTransform,const ViewProjection& v
 			wvpDate_->WVP = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
 			wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
 		}
+
 		model_->Draw(wvpResource_, material_, textureHandle);
-	}
+	
 }
 
 ///============================================================

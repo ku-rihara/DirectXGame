@@ -18,26 +18,20 @@ TitleScene::~TitleScene() {
 
 void TitleScene::Init() {
 
-	// メンバ変数の初期化
-	input_ = Input::GetInstance();
-	audio_ = Audio::GetInstance();
-	textureManager_ = TextureManager::GetInstance();
+	BaseScene::Init();
 
-	//デバッグカメラ
-	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
-	debugCamera_->Init();
-
+	ctest1_ = std::make_unique<CollisionTest1>();
+	ctest2_ = std::make_unique<CollisionTest2>();
 	
-	//ビュープロジェクション
-	viewProjection_.Init();
-
-	viewProjection_.translation_ = { 0,-0.2f,0.0f };
+	ctest1_->Init();
+	ctest2_->Init();
 
 }
 
 void TitleScene::Update() {
 
-	
+	ctest1_->Update();
+	ctest2_->Update();
 
 	Debug();
 	ViewProjectionUpdate();
