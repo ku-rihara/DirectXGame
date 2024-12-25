@@ -26,7 +26,7 @@ void BaseCollider::RevertColor() {
 }
 
 void BaseCollider::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
-	cObject3d_->objColor_.SetColor(Vector4(1, 0, 0, 1));
+	cObject3d_->objColor_.SetColor(Vector4(1, 1, 0, 1));
 }
 
 void BaseCollider::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
@@ -34,6 +34,6 @@ void BaseCollider::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
 }
 void BaseCollider::OnCollisionExit([[maybe_unused]] BaseCollider* other) {
-	cObject3d_->objColor_.SetColor(Vector4(1, 0, 0, 1));
+	cObject3d_->objColor_.SetColor(Vector4(1, 0, 1, 1));
 
 }

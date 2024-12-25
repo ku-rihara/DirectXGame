@@ -292,6 +292,9 @@
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp">
       <Filter>Game\Scene\Factory</Filter>
     </ClCompile>
+    <ClCompile Include="Game\TestObj\CollisionTest3.cpp">
+      <Filter>Game\TestObj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -509,6 +512,9 @@
     </ClInclude>
     <ClInclude Include="Game\Scene\Factory\SceneFactory.h">
       <Filter>Game\Scene\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\TestObj\CollisionTest3.h">
+      <Filter>Game\TestObj</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

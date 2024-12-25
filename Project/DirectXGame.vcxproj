@@ -59,6 +59,7 @@
     <ClCompile Include="Game\Scene\TitleScene.cpp" />
     <ClCompile Include="Game\TestObj\CollisionTest1.cpp" />
     <ClCompile Include="Game\TestObj\CollisionTest2.cpp" />
+    <ClCompile Include="Game\TestObj\CollisionTest3.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\Box.cpp" />
     <ClCompile Include="math\Easing.cpp" />
@@ -132,6 +133,7 @@
     <ClInclude Include="Game\Scene\TitleScene.h" />
     <ClInclude Include="Game\TestObj\CollisionTest1.h" />
     <ClInclude Include="Game\TestObj\CollisionTest2.h" />
+    <ClInclude Include="Game\TestObj\CollisionTest3.h" />
     <ClInclude Include="math\Box.h" />
     <ClInclude Include="math\Easing.h" />
     <ClInclude Include="math\MathFunction.h" />
