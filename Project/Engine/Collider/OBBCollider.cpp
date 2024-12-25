@@ -13,7 +13,7 @@ OBBCollider::~OBBCollider() {
 
 
 void OBBCollider::Init() {
-    cObject3d_.reset(Object3d::CreateModel("CollisionCube", ".obj"));
+    cObject3d_.reset(Object3d::CreateModel("DebugCube", ".obj"));
     cTransform_.Init();
     obb_.size = { 1.5f,1.5f,1.5f };
 }
@@ -21,11 +21,11 @@ void OBBCollider::Init() {
 void OBBCollider::UpdateWorldTransform() {
  
     // OBBの中心をワールド座標に更新
-    cTransform_.translation_ = GetBaseCenterPosition();
+    cTransform_.translation_ = GetCollisionPos();
     cTransform_.rotation_ = GetRotate();
     cTransform_.scale_ = obb_.size;
 
-     obb_.center = GetBaseCenterPosition();
+     obb_.center = GetCollisionPos();
 
     // 回転ベクトルを更新（各軸に対応する方向ベクトル）
     obb_.orientations[0] = cTransform_.GetRightVector();    // X軸方向ベクトル
@@ -40,8 +40,8 @@ void OBBCollider::DrawDebugCube(const ViewProjection& viewProjection) {
     BaseCollider::DrawDebugCube(viewProjection);
 }
 
-Vector3 OBBCollider::GetBaseCenterPosition() const {
-    return BaseCollider::GetBaseCenterPosition();
+Vector3 OBBCollider::GetCollisionPos() const {
+    return BaseCollider::GetCollisionPos();
 }
 
 Vector3 OBBCollider::GetRotate() const {
