@@ -406,6 +406,9 @@
     <ClCompile Include="Game\TestObj\CollisionTest3.cpp">
       <Filter>Game\TestObj</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackThird.cpp">
+      <Filter>Game\Player\ComboBehavior\Normal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -689,6 +692,9 @@
     </ClInclude>
     <ClInclude Include="Game\TestObj\CollisionTest3.h">
       <Filter>Game\TestObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackThird.h">
+      <Filter>Game\Player\ComboBehavior\Normal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

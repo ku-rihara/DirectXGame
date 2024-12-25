@@ -1,8 +1,8 @@
 #include "BaseEnemy.h"
 #include"Matrix4x4.h"
 
-
 //uint32_t BaseEnemy::nextSerialNum_ = 0;
+
 BaseEnemy::BaseEnemy() {
 	//// シリアル番号を振る
 	//serialNum_ = nextSerialNum_;
@@ -79,4 +79,26 @@ void BaseEnemy::SpriteDraw(const ViewProjection& viewProjection) {
 	//		hpbar_->Draw();
 	//	}
 	//}
+}
+
+void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
+
+}
+
+void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
+
+
+}
+void BaseEnemy::OnCollisionExit([[maybe_unused]] BaseCollider* other) {
+
+
+}
+
+
+Vector3 BaseEnemy::GetCollisionPos() const {
+	// ローカル座標でのオフセット
+	const Vector3 offset = { 0.0f, 0.0f, 0.0f };
+	// ワールド座標に変換
+	Vector3 worldPos = MatrixTransform(offset, transform_.matWorld_);
+	return worldPos;
 }

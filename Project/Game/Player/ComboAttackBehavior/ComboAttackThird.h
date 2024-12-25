@@ -3,9 +3,8 @@
 #include"BaseComboAattackBehavior.h"
 #include"Easing.h"
 
-class ComboAttackSecond : public BaseComboAattackBehavior {
+class ComboAttackThird : public BaseComboAattackBehavior {
 private:
-	///　振る舞いオーダー
 	enum class Order {
 		PUNCH,
 		BACKPUNCH,
@@ -20,18 +19,17 @@ private:
 	Order order_;                /// 振る舞い順序
 
 	/// パンチ
-	Easing punchEase_;         /// パンチイージング
+	Easing punchEase_;
 	Vector3 lHandStartPos_;    /// ハンドスタート座標
 	Vector3 lHandTargetPos_;   /// ハンドターゲット座標
-	Vector3 punchPosition_;    /// パンチ位置
+	Vector3 punchPosition_;
 
 	float waitTine_;          /// 次コンボまでの待機時間
 
 public:
-
 	//コンストラクタ
-	ComboAttackSecond(Player* boss);
-	~ComboAttackSecond();
+	ComboAttackThird(Player* boss);
+	~ComboAttackThird();
 
 	/// 更新、デバッグ
 	void Update()override;

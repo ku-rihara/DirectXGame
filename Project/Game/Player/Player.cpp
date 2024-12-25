@@ -77,6 +77,7 @@ void Player::Update() {
 	MoveToLimit();                ///　移動制限
 	//Fall();                     /// 落ちる
 
+	/// 行列更新
 	leftHand_->Update();
 	rightHand_->Update();
 	BaseObject::Update();        /// 更新 
@@ -94,6 +95,9 @@ void Player::Draw(const ViewProjection& viewProjection) {
 
 }
 
+///=======================================================================
+/// ダメ―ジ演出
+///=======================================================================
 void Player::DamageRendition() {
 	//if (isDamage_) {
 	//	damageTime_ -= Frame::DeltaTimeRate();
