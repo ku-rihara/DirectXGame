@@ -166,6 +166,9 @@
     <Filter Include="Game\Player\Weapon">
       <UniqueIdentifier>{ea7b30de-436e-4b71-9943-2e80e0085740}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\TestObj">
+      <UniqueIdentifier>{763a23ed-9f81-4bb8-b3d7-ffe44d95c51f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -393,6 +396,12 @@
     </ClCompile>
     <ClCompile Include="Game\Player\Weapon\PlayerHandRight.cpp">
       <Filter>Game\Player\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\TestObj\CollisionTest1.cpp">
+      <Filter>Game\TestObj</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\TestObj\CollisionTest2.cpp">
+      <Filter>Game\TestObj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -668,6 +677,12 @@
     </ClInclude>
     <ClInclude Include="Game\Player\Weapon\PlayerHandRight.h">
       <Filter>Game\Player\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\TestObj\CollisionTest1.h">
+      <Filter>Game\TestObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\TestObj\CollisionTest2.h">
+      <Filter>Game\TestObj</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
