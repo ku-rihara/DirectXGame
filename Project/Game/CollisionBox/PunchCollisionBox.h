@@ -1,8 +1,8 @@
 #pragma once
 
-#include"BasePunchCollisionBox.h"
+#include"BaseCollisionBox.h"
 
-class PunchCollisionFirst :public BasePunchCollisionBox {
+class PunchCollisionBox :public BaseCollisionBox {
 private:
 	
 public:

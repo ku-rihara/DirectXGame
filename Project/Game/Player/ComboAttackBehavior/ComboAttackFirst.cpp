@@ -28,6 +28,9 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	initPos_ = pPlayer_->GetWorldPosition();
 	forwardDirection_ = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
 
+	/// collisionBox
+	collisionBox_ = std::make_unique<PunchCollisionBox>();
+	collisionBox_->Init();
 
 	/// parm
 	rushEase_.time = 0.0f;

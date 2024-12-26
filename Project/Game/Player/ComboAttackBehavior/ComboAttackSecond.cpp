@@ -29,6 +29,10 @@ ComboAttackSecond::ComboAttackSecond(Player* player)
 	punchEase_.time = 0.0f;
 	waitTine_ = 0.0f;
 
+	/// collisionBox
+	collisionBox_ = std::make_unique<PunchCollisionBox>();
+	collisionBox_->Init();
+
 	/// パンチ座標セット
 	lHandStartPos_ = pPlayer_->GetLeftHand()->GetTransform().translation_;
 	lHandTargetPos_ = pPlayer_->GetLeftHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayer_->GetPunchReach(Player::SECOND);

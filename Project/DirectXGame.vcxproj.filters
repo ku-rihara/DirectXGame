@@ -415,10 +415,10 @@
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackThird.cpp">
       <Filter>Game\Player\ComboBehavior\Normal</Filter>
     </ClCompile>
-    <ClCompile Include="Game\CollisionBox\BasePunchCollisionBox.cpp">
+    <ClCompile Include="Game\CollisionBox\BaseCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
-    <ClCompile Include="Game\CollisionBox\PunchCollisionFirst.cpp">
+    <ClCompile Include="Game\CollisionBox\PunchCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
     <ClCompile Include="Game\CollisionBox\PunchCollisionSecond.cpp">
@@ -720,10 +720,10 @@
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackThird.h">
       <Filter>Game\Player\ComboBehavior\Normal</Filter>
     </ClInclude>
-    <ClInclude Include="Game\CollisionBox\BasePunchCollisionBox.h">
+    <ClInclude Include="Game\CollisionBox\BaseCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
-    <ClInclude Include="Game\CollisionBox\PunchCollisionFirst.h">
+    <ClInclude Include="Game\CollisionBox\PunchCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
     <ClInclude Include="Game\CollisionBox\PunchCollisionSecond.h">

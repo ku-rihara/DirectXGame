@@ -2,18 +2,18 @@
 #include<imgui.h>
 
 void PunchCollisionSecond::Init() {
-	BasePunchCollisionBox::Init();
+	BaseCollisionBox::Init();
 }
 
 void PunchCollisionSecond::Update() {
-	BasePunchCollisionBox::Update();
+	BaseCollisionBox::Update();
 }
 
 void PunchCollisionSecond::Draw() {
-	BasePunchCollisionBox::Draw();
+	BaseCollisionBox::Draw();
 }
 
 
 Vector3 PunchCollisionSecond::GetCollisionPos() const {
-	return BasePunchCollisionBox::GetCollisionPos();
+	return BaseCollisionBox::GetCollisionPos();
 }

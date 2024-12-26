@@ -2,6 +2,7 @@
 
 #include"BaseComboAattackBehavior.h"
 #include"Easing.h"
+#include"CollisionBox/PunchCollisionBox.h"
 
 class ComboAttackFirst : public BaseComboAattackBehavior {
 private:
@@ -18,6 +19,9 @@ private:
 	/// ===================================================
 
 	Order order_;                /// 振る舞い順序
+
+	// collision
+	std::unique_ptr<PunchCollisionBox>collisionBox_;
 
 	/// 突進
 	Vector3 initPos_;            /// スタート座標

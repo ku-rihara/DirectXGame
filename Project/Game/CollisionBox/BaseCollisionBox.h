@@ -3,7 +3,7 @@
 #include"Collider/AABBCollider.h"
 #include"3d/WorldTransform.h"
 
-class BasePunchCollisionBox :public AABBCollider {
+class BaseCollisionBox :public AABBCollider {
 private:
 	bool isEnter_;
 	bool isStay_;
