@@ -7,11 +7,11 @@
 #include <vector>
 #include <list>
 #include <memory>
-#include<utility>
 #include <string>
 #include<map>
 #include <json.hpp>
 
+class Player;
 class EnemyManager {
 private:
     using json = nlohmann::json;
@@ -20,8 +20,6 @@ private:
     struct SpownEnemy {
         std::string enemyType;    // 敵の種類
         Vector3 position;         // 敵の座標
-     
- 
     };
 
     struct EnemyGroup {
@@ -44,6 +42,8 @@ private:
     /// Private variants
     ///========================================================
 
+    // ohter class
+    Player* pPlayer_;
   
     bool isEditorMode_;             // エディタモード中かどうか
     std::map<int, Phase> phases_;  // フェーズ番号をキーとしたフェーズマップ
@@ -62,7 +62,6 @@ private:
     uint32_t spownNum_;
 
   
-
     const std::string directrypath_ = "./resources/EnemyParamater/";// path
     const std::string filename_ = "PoPData.json";// name
 
@@ -79,7 +78,7 @@ public:
     void Init();
 
     // 敵の生成
-    void SpawnEnemy(const std::vector<Vector3>& spawnPositions);
+    void SpawnEnemy(const std::string& enemyType, const Vector3& position);
 
     // 更新処理
     void Update();
@@ -97,7 +96,6 @@ public:
 
    
     void ImGuiUpdate();/// ImGuiによるエディタ
-
     void SaveAndLoad();/// セーブとロード
 
     ///* セーブ
@@ -114,7 +112,8 @@ public:
     ///========================================================
     /// setter method
     ///========================================================
-    
+    void SetPlayer(Player* plyaer);
+
     // フェーズの切り替え
     void SetPhase(int phase);
 

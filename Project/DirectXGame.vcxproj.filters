@@ -169,6 +169,12 @@
     <Filter Include="Game\TestObj">
       <UniqueIdentifier>{763a23ed-9f81-4bb8-b3d7-ffe44d95c51f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\CollisionBox">
+      <UniqueIdentifier>{95fdcb87-3d52-42b9-957c-8a29c004140d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\Behevior">
+      <UniqueIdentifier>{980998d2-8fc8-49fa-8ebd-747b3b8183d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -408,6 +414,24 @@
     </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackThird.cpp">
       <Filter>Game\Player\ComboBehavior\Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CollisionBox\BasePunchCollisionBox.cpp">
+      <Filter>Game\CollisionBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CollisionBox\PunchCollisionFirst.cpp">
+      <Filter>Game\CollisionBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CollisionBox\PunchCollisionSecond.cpp">
+      <Filter>Game\CollisionBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\BaseEnemyBehavior.cpp">
+      <Filter>Game\Enemy\Behevior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\EnemyDamage.cpp">
+      <Filter>Game\Enemy\Behevior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\EnemyChasePlayer.cpp">
+      <Filter>Game\Enemy\Behevior</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -695,6 +719,24 @@
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackThird.h">
       <Filter>Game\Player\ComboBehavior\Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CollisionBox\BasePunchCollisionBox.h">
+      <Filter>Game\CollisionBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CollisionBox\PunchCollisionFirst.h">
+      <Filter>Game\CollisionBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CollisionBox\PunchCollisionSecond.h">
+      <Filter>Game\CollisionBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\BaseEnemyBehavior.h">
+      <Filter>Game\Enemy\Behevior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\EnemyDamage.h">
+      <Filter>Game\Enemy\Behevior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\EnemyChasePlayer.h">
+      <Filter>Game\Enemy\Behevior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

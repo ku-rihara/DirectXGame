@@ -1,5 +1,8 @@
 #include "BaseEnemy.h"
+// bvehaivor
+#include"Behavior/EnemyChasePlayer.h"
 #include"Matrix4x4.h"
+#include"Player/Player.h"
 
 //uint32_t BaseEnemy::nextSerialNum_ = 0;
 
@@ -19,6 +22,9 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	BaseObject::CreateModel("axis",".obj");
 
 	transform_.translation_=spownPos;
+
+	ChangeBehavior(std::make_unique<EnemyChasePlayer>(this));/// 追っかけ
+
 }
 
 ///========================================================
@@ -26,6 +32,7 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 ///========================================================
 void BaseEnemy::Update() {
 
+	behavior_->Update();
 	//
 	//// 体力がなくなったら死亡
 	//if (hp_ <= 0 && !isBurst_) {
@@ -101,4 +108,15 @@ Vector3 BaseEnemy::GetCollisionPos() const {
 	// ワールド座標に変換
 	Vector3 worldPos = MatrixTransform(offset, transform_.matWorld_);
 	return worldPos;
+}
+
+
+void BaseEnemy::SetPlayer(Player* player) {
+	pPlayer_ = player;
+}
+
+
+void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseEnemyBehaivor>behavior) {
+	//引数で受け取った状態を次の状態としてセット
+	behavior_ = std::move(behavior);
 }

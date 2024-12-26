@@ -36,21 +36,19 @@ void EnemyManager::Init() {
 ///========================================================================================
 ///  敵の生成
 ///========================================================================================
-void EnemyManager::SpawnEnemy(const std::vector<Vector3>& spawnPositions) {
-	for (const auto& position : spawnPositions) {//　位置
-
-
+void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& position) {
+	
 		std::unique_ptr<BaseEnemy> enemy;
 
-		if (selectedEnemyType_ == "NormalEnemy") {// 通常敵
-			enemy = std::make_unique<NormalEnemy>();
+		if (enemyType == "NormalEnemy") {// 通常敵
+			enemy = std::make_unique<NormalEnemy>();		
 		}
 
 		// 位置初期化とlistに追加
 		enemy->Init(position);
+		enemy->SetPlayer(pPlayer_);// プレイヤーセット
 		enemies_.push_back(std::move(enemy));
-	}
-
+	
 }
 
 
@@ -61,7 +59,6 @@ void EnemyManager::Update() {
 	if (isEditorMode_) {
 		return; // エディタモード中は停止
 	}
-
 
 	SpawnUpdate(); // スポーン更新
 
@@ -88,26 +85,15 @@ void EnemyManager::SpawnUpdate() {
 			if (group.isSpowned) continue;
 
 
-
 			// グループ生成処理
 			for (const auto& spawn : group.spownEnemies) {
-				std::unique_ptr<BaseEnemy> enemy;
-
-				// 種類に応じて敵追加
-				if (spawn.enemyType == "NormalEnemy") {
-					enemy = std::make_unique<NormalEnemy>();
-				}
-
-				// 他の敵タイプを追加可能
-				enemy->Init(spawn.position);
-				enemies_.push_back(std::move(enemy));
+				SpawnEnemy(spawn.enemyType, spawn.position);
 
 			}
 			group.isSpowned = true;
 		}
 	}
 }
-
 
 
 ///========================================================================================
@@ -405,4 +391,9 @@ void EnemyManager::LoadSpawn(EnemyGroup& group, const json& spawnData) {
 			}
 		}
 	}
+}
+
+
+void EnemyManager::SetPlayer(Player* player) {
+	pPlayer_ = player;
 }
