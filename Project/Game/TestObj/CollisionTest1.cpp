@@ -3,6 +3,7 @@
 
 void CollisionTest1::Init() {
 	transform_.Init();
+
 }
 void CollisionTest1::Update() {
 	ImGui::Begin("c1");

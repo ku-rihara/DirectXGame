@@ -15,6 +15,7 @@ protected:
     bool isColliding_ = false;             // 衝突フラグ
     std::unique_ptr<Object3d> cObject3d_;  // デバッグ表示用モデル
 
+   bool isNotCollision_=false;
 public:
     BaseCollider() = default;
     virtual ~BaseCollider() = default;
@@ -40,10 +41,11 @@ public:
    /// ===================================================
     uint32_t GetTypeID() const { return typeID_; }
     bool GetIsColliding() const { return isColliding_; }
-
+    bool GetIsNotCollision()const { return isNotCollision_; }
     /// ===================================================
     /// setter  methods
     /// ===================================================
     void SetTypeID(uint32_t typeID) { typeID_ = typeID; }
     void SetColliding(bool colliding) { isColliding_ = colliding; }
+    void SetIsNotCollision(bool is) { isNotCollision_ = is; }
 };

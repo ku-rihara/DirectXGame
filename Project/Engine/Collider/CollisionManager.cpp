@@ -76,6 +76,11 @@ void CollisionManager::Draw(const ViewProjection& viewProjection) {
 
 // CheckCollisionPairを改造
 void CollisionManager::CheckCollisionPair(BaseCollider* colliderA, BaseCollider* colliderB) {
+
+	if (colliderA->GetIsNotCollision() || colliderB->GetIsNotCollision()) {
+		return;
+	}
+
 	bool collisionDetected = false;
 
 	// dynamic_cast を使用して AABB と OBB の判定
