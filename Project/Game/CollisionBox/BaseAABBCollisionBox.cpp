@@ -3,7 +3,7 @@
 
 void BaseAABBCollisionBox::Init() {
 	transform_.Init();
-	SetZeroSizeCollision();
+	/*SetZeroSizeCollision();*/
 }
 void BaseAABBCollisionBox::Update() {
 
@@ -23,7 +23,6 @@ void BaseAABBCollisionBox::OnCollisionStay([[maybe_unused]] BaseCollider* other)
 }
 void BaseAABBCollisionBox::OnCollisionExit([[maybe_unused]] BaseCollider* other) {
 	BaseCollider::OnCollisionExit(other);
-
 }
 
 Vector3 BaseAABBCollisionBox::GetCollisionPos() const {
@@ -46,4 +45,8 @@ void BaseAABBCollisionBox::SetPosition(const Vector3& position) {
 
 void BaseAABBCollisionBox::SetOffset(const Vector3& offset) {
 	offset_ = offset;
+}
+
+void BaseAABBCollisionBox::SetIsNotCollision(bool is) {
+	SetIsNotCollision(is);
 }

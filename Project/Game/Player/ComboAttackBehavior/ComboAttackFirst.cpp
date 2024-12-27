@@ -89,6 +89,7 @@ void ComboAttackFirst::Update() {
 		/// パンチ
 		///----------------------------------------------------
 
+		collisionBox_->SetIsNotCollision(false);
 		collisionBox_->SetSize(collisionSize_);// 当たり判定サイズ
 
 		punchEase_.time += Frame::DeltaTimeRate();
@@ -114,7 +115,7 @@ void ComboAttackFirst::Update() {
 		/// バックパンチ
 		///----------------------------------------------------
 		
-		collisionBox_->SetZeroSizeCollision();/// 当たり判定消す
+		collisionBox_->SetIsNotCollision(true);
 
 		punchEase_.time -= Frame::DeltaTimeRate();
 

@@ -31,3 +31,7 @@ void PunchCollisionBox::SetPosition(const Vector3& position) {
 void PunchCollisionBox::SetOffset(const Vector3& offset) {
 	BaseAABBCollisionBox::SetOffset(offset);
 }
+
+void PunchCollisionBox::SetIsNotCollision(bool is) {
+	BaseAABBCollisionBox::SetIsNotCollision(is);
+}

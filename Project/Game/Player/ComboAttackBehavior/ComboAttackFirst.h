@@ -26,7 +26,7 @@ private:
 	/// 突進
 	Vector3 initPos_;            /// スタート座標
 	Vector3 rushPos_;            /// 突進座標
-	Vector3 forwardDirection_;   ///向き
+	Vector3 forwardDirection_;   /// 向き
 	float speed_;
 	Easing rushEase_;
 
