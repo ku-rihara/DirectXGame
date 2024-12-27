@@ -77,7 +77,7 @@ void CollisionManager::Draw(const ViewProjection& viewProjection) {
 // CheckCollisionPairを改造
 void CollisionManager::CheckCollisionPair(BaseCollider* colliderA, BaseCollider* colliderB) {
 
-	if (colliderA->GetIsNotCollision() || colliderB->GetIsNotCollision()) {
+	if (!colliderA->GetIsCollision() || !colliderB->GetIsCollision()) {
 		return;
 	}
 
