@@ -21,8 +21,13 @@ Vector3 BaseCollider::GetCollisionPos() const {
 	return worldPos;
 }
 
-void BaseCollider::RevertColor() {
-	cObject3d_->objColor_.SetColor(Vector4(1, 1, 1, 1));
+void BaseCollider::ReverseNormalColor() {
+	if (!isCollision_) {
+		cObject3d_->objColor_.SetColor(Vector4(1, 1, 1, 0.1f));
+	}
+	else {
+		cObject3d_->objColor_.SetColor(Vector4(1, 1, 1, 1.0f));
+	}
 }
 
 void BaseCollider::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
