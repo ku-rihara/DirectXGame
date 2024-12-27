@@ -17,7 +17,7 @@ public:
 	virtual void Draw();
 
 	virtual void SetZeroSizeCollision();
-	virtual void SetIsNotCollision(bool is);
+	virtual void IsAdapt(bool is);
 	virtual void SetSize(const Vector3& size);
 	virtual void SetPosition(const Vector3&position);
 	virtual void SetOffset(const Vector3& offset);

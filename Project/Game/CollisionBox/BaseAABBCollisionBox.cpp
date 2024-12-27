@@ -47,6 +47,6 @@ void BaseAABBCollisionBox::SetOffset(const Vector3& offset) {
 	offset_ = offset;
 }
 
-void BaseAABBCollisionBox::SetIsNotCollision(bool is) {
-	SetIsNotCollision(is);
+void BaseAABBCollisionBox::IsAdapt(bool is) {
+	SetIsCollision(is);
 }

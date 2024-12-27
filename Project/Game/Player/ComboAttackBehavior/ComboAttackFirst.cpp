@@ -31,6 +31,7 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	collisionBox_ = std::make_unique<PunchCollisionBox>();
 	collisionBox_->Init();
 	collisionSize_ = Vector3(1, 1, 1);
+	collisionBox_->SetSize(collisionSize_);// 当たり判定サイズ
 
 	/// parm
 	rushEase_.time = 0.0f;
@@ -89,8 +90,8 @@ void ComboAttackFirst::Update() {
 		/// パンチ
 		///----------------------------------------------------
 
-		collisionBox_->SetIsNotCollision(false);
-		collisionBox_->SetSize(collisionSize_);// 当たり判定サイズ
+		collisionBox_->IsAdapt(true);
+
 
 		punchEase_.time += Frame::DeltaTimeRate();
 	
@@ -115,7 +116,7 @@ void ComboAttackFirst::Update() {
 		/// バックパンチ
 		///----------------------------------------------------
 		
-		collisionBox_->SetIsNotCollision(true);
+		collisionBox_->IsAdapt(false);
 
 		punchEase_.time -= Frame::DeltaTimeRate();
 
