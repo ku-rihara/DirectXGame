@@ -1,8 +1,8 @@
 #pragma once
 
-#include"BaseCollisionBox.h"
+#include"BaseAABBCollisionBox.h"
 
-class PunchCollisionBox :public BaseCollisionBox {
+class PunchCollisionBox :public BaseAABBCollisionBox {
 private:
 	
 public:
@@ -11,6 +11,10 @@ public:
 	void Update()override;
 	void Draw()override;
 
-
 	Vector3 GetCollisionPos() const override;
+
+	 void SetZeroSizeCollision()override;
+	 void SetSize(const Vector3& size)override;
+	 void SetPosition(const Vector3& position)override;
+	 void SetOffset(const Vector3& offset)override;
 };

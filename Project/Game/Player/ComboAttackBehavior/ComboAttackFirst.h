@@ -31,10 +31,12 @@ private:
 	Easing rushEase_;
 
 	/// パンチ
-	Easing punchEase_;
+	Easing  punchEase_;
 	Vector3 rHandStartPos_;    /// ハンドスタート座標
 	Vector3 rHandTargetPos_;   /// ハンドターゲット座標
 	Vector3 punchPosition_;
+
+	Vector3 collisionSize_;
 	
 	float waitTine_;          /// 次コンボまでの待機時間
 

@@ -6,16 +6,11 @@
 /// objs
 #include"Player/Player.h"
 
-
 /// input
 #include"input/Input.h"
 
-/// math
-#include"MathFunction.h"
+/// frame
 #include"Frame/Frame.h"
-
-#include<imgui.h>
-
 
 //初期化
 ComboAttackSecond::ComboAttackSecond(Player* player)

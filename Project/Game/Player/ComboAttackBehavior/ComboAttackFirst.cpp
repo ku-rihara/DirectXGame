@@ -15,7 +15,6 @@
 
 #include<imgui.h>
 
-
 //初期化
 ComboAttackFirst::ComboAttackFirst(Player* player)
 	: BaseComboAattackBehavior("ComboAttackFirst", player) {
@@ -31,6 +30,7 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	/// collisionBox
 	collisionBox_ = std::make_unique<PunchCollisionBox>();
 	collisionBox_->Init();
+	collisionSize_ = Vector3(1, 1, 1);
 
 	/// parm
 	rushEase_.time = 0.0f;
@@ -48,6 +48,12 @@ ComboAttackFirst::~ComboAttackFirst() {
 
 //更新
 void ComboAttackFirst::Update() {
+
+	/// 当たり判定座標
+	collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+	collisionBox_->SetOffset(forwardDirection_*4.0f);
+	collisionBox_->Update();
+
 	switch (order_){
 	
 	case Order::RUSH:
@@ -83,6 +89,8 @@ void ComboAttackFirst::Update() {
 		/// パンチ
 		///----------------------------------------------------
 
+		collisionBox_->SetSize(collisionSize_);// 当たり判定サイズ
+
 		punchEase_.time += Frame::DeltaTimeRate();
 	
 		/// 拳を突き出す
@@ -105,6 +113,9 @@ void ComboAttackFirst::Update() {
 		///----------------------------------------------------
 		/// バックパンチ
 		///----------------------------------------------------
+		
+		collisionBox_->SetZeroSizeCollision();/// 当たり判定消す
+
 		punchEase_.time -= Frame::DeltaTimeRate();
 
 		punchPosition_ =
@@ -134,7 +145,6 @@ void ComboAttackFirst::Update() {
 			(std::make_unique<ComboAttackSecond>(pPlayer_));
 		}
 	}
-
 }
 
 void ComboAttackFirst::ChangeSpeedForLockOn() {
@@ -161,7 +171,6 @@ void ComboAttackFirst::ChangeSpeedForLockOn() {
 	if (speed_ > distance - threshold) {
 		speed_ = distance - threshold;
 	}
-
 }
 
 void  ComboAttackFirst::Debug() {

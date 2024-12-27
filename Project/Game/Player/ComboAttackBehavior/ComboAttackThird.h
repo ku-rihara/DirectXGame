@@ -16,7 +16,7 @@ private:
 	///private varians
 	/// ===================================================
 
-	Order order_;                /// 振る舞い順序
+	Order order_;               /// 振る舞い順序
 
 	/// パンチ
 	Easing punchEase_;

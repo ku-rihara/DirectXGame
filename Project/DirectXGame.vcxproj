@@ -52,7 +52,7 @@
     <ClCompile Include="Engine\utility\Particle\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\utility\Particle\ParticleManager.cpp" />
     <ClCompile Include="Game\BaseObject\BaseObject.cpp" />
-    <ClCompile Include="Game\CollisionBox\BaseCollisionBox.cpp" />
+    <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp" />
     <ClCompile Include="Game\CollisionBox\PunchCollisionBox.cpp" />
     <ClCompile Include="Game\CollisionBox\PunchCollisionSecond.cpp" />
     <ClCompile Include="Game\Enemy\BaseEnemy.cpp" />
@@ -153,7 +153,7 @@
     <ClInclude Include="Engine\utility\Particle\ParticleEmitter.h" />
     <ClInclude Include="Engine\utility\Particle\ParticleManager.h" />
     <ClInclude Include="Game\BaseObject\BaseObject.h" />
-    <ClInclude Include="Game\CollisionBox\BaseCollisionBox.h" />
+    <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h" />
     <ClInclude Include="Game\CollisionBox\PunchCollisionBox.h" />
     <ClInclude Include="Game\CollisionBox\PunchCollisionSecond.h" />
     <ClInclude Include="Game\Enemy\BaseEnemy.h" />

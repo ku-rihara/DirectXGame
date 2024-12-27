@@ -346,7 +346,7 @@ void Player::AdjustParm() {
 
 		///　Floatのパラメータ
 		ImGui::SeparatorText("FloatParamater");
-		ImGui::DragFloat("jumpSpeed", &jumpSpeed_, 0.1f);
+		ImGui::DragFloat("jumpSpeed", &jumpSpeed_, 0.01f);
 
 		/// コンボパラメータ
 		if (ImGui::CollapsingHeader("NormalCombo")) {
@@ -354,7 +354,7 @@ void Player::AdjustParm() {
 
 			ImGui::DragFloat("PTime1",
 				&normalComboParms_[0].permissionTime,
-				0.1f);
+				0.01f);
 
 
 			ImGui::DragFloat("rushDistance", &rushDistance_, 0.01f);
@@ -362,25 +362,25 @@ void Player::AdjustParm() {
 
 			ImGui::DragFloat("PunchEaseMax1",
 				&normalComboParms_[0].punchEaseMax,
-				0.1f);
+				0.01f);
 
 			ImGui::DragFloat("PunchReach1",
 				&normalComboParms_[0].punchReach,
-				0.1f);
+				0.01f);
 
 			ImGui::SeparatorText("SecondCombo");  /// 2コンボ目
 
 			ImGui::DragFloat("PTime2",
 				&normalComboParms_[1].permissionTime,
-				0.1f);
+				0.01f);
 
 			ImGui::DragFloat("PunchEaseMax2",
 				&normalComboParms_[1].punchEaseMax,
-				0.1f);
+				0.01f);
 
 			ImGui::DragFloat("PunchReach2",
 				&normalComboParms_[1].punchReach,
-				0.1f);
+				0.01f);
 		}
 
 		/// セーブとロード

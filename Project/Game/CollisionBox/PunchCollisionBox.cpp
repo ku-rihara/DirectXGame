@@ -2,18 +2,32 @@
 #include<imgui.h>
 
 void PunchCollisionBox::Init() {
-	BaseCollisionBox::Init();
+	BaseAABBCollisionBox::Init();
 }
 
 void PunchCollisionBox::Update() {
-	BaseCollisionBox::Update();
+	BaseAABBCollisionBox::Update();
 }
 
 void PunchCollisionBox::Draw() {
-	BaseCollisionBox::Draw();
+	BaseAABBCollisionBox::Draw();
 }
 
-
 Vector3 PunchCollisionBox::GetCollisionPos() const {
-	return BaseCollisionBox::GetCollisionPos();
+	return BaseAABBCollisionBox::GetCollisionPos();
+}
+
+void PunchCollisionBox::SetZeroSizeCollision() {
+	BaseAABBCollisionBox::SetZeroSizeCollision();
+}
+void PunchCollisionBox::SetSize(const Vector3& size) {
+	BaseAABBCollisionBox::SetSize(size);
+}
+
+void PunchCollisionBox::SetPosition(const Vector3& position) {
+	BaseAABBCollisionBox::SetPosition(position);
+}
+
+void PunchCollisionBox::SetOffset(const Vector3& offset) {
+	BaseAABBCollisionBox::SetOffset(offset);
 }

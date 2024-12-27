@@ -35,5 +35,5 @@ public:
 	///=========================================================================================
    ///  setter method
    ///=========================================================================================
-	void SetRadiusVector(Vector3 radius) { radiusVector_ = radius; }
+	void SetCollisionRadius(Vector3 radius) { radiusVector_ = radius; }
 };

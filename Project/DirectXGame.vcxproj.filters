@@ -415,7 +415,7 @@
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackThird.cpp">
       <Filter>Game\Player\ComboBehavior\Normal</Filter>
     </ClCompile>
-    <ClCompile Include="Game\CollisionBox\BaseCollisionBox.cpp">
+    <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
     <ClCompile Include="Game\CollisionBox\PunchCollisionBox.cpp">
@@ -720,7 +720,7 @@
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackThird.h">
       <Filter>Game\Player\ComboBehavior\Normal</Filter>
     </ClInclude>
-    <ClInclude Include="Game\CollisionBox\BaseCollisionBox.h">
+    <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
     <ClInclude Include="Game\CollisionBox\PunchCollisionBox.h">
