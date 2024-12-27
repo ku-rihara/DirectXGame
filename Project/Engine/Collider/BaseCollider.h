@@ -35,7 +35,7 @@ public:
     virtual void OnCollisionStay([[maybe_unused]] BaseCollider* other);
     virtual void OnCollisionExit([[maybe_unused]] BaseCollider* other);
 
-    void RevertColor();
+    void ReverseNormalColor();
     /// ===================================================
    /// getter  methods
    /// ===================================================
