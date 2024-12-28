@@ -1,4 +1,4 @@
-#include"EmitRailManager.h"
+#include"RailManager.h"
 //std
 #include<cmath>
 //Function
@@ -10,26 +10,33 @@
    ///=====================================================
    /// 初期化
    ///=====================================================
-void EmitRailManager::Init(SrvManager* srvManager) {
+void RailManager::Init(const std::string& groupName) {
+    ///グループネーム
+    groupName_ = groupName;
+
     viewProjection_.Init();
     worldTransform_.Init();
 
     worldTransform_.UpdateMatrix();
     viewProjection_.UpdateMatrix();
     // レールの初期化（オブジェクト数を指定）
-    rail_.Init(srvManager,5);
+    rail_.Init(5);
    
-
     /// 現在位置モデル
     obj3D_.reset(Object3d::CreateModel("DebugCube",".obj"));
-  /*  obj3D_->Init();*/
+ 
+    /// 制御点マネージャー
+    emitControlPosManager_ = std::make_unique<ControlPosManager>();
+    emitControlPosManager_->LoadFromFile(groupName_);
+
 }
 
 ///=====================================================
 ///更新
 ///=====================================================
-void EmitRailManager::Update(const std::vector<Vector3>& controlPos,const float&speed) {
-    rail_.Update(controlPos);
+void RailManager::Update(const float&speed) {
+    emitControlPosManager_->Update();
+    rail_.Update(emitControlPosManager_->GetPositions());
 
     // カメラの移動とレールに沿った描画
     railMoveTime_ += speed / rail_.GetTotalLength();
@@ -86,14 +93,15 @@ void EmitRailManager::Update(const std::vector<Vector3>& controlPos,const float&
 ///=====================================================
 /// 現在位置描画
 ///=====================================================
-void EmitRailManager::Draw(const ViewProjection& viewProjection) {
+void RailManager::Draw(const ViewProjection& viewProjection) {
     obj3D_->Draw(worldTransform_, viewProjection);
+    emitControlPosManager_->Draw(viewProjection);
 }
 
 ///=====================================================
 /// レール描画
 ///=====================================================
-void EmitRailManager::RailDraw(const ViewProjection& viewProjection) {
+void RailManager::RailDraw(const ViewProjection& viewProjection) {
     /*rail_.Draw(viewProjection);*/
     viewProjection;
 }
@@ -102,7 +110,7 @@ void EmitRailManager::RailDraw(const ViewProjection& viewProjection) {
 ///=====================================================
 /// WorldPos取得
 ///=====================================================
-Vector3 EmitRailManager::GetWorldPos() const {
+Vector3 RailManager::GetWorldPos() const {
 
     return Vector3(
         worldTransform_.matWorld_.m[3][0], // X成分
@@ -111,13 +119,10 @@ Vector3 EmitRailManager::GetWorldPos() const {
     );
 }
 
-//void EmitRailManager::Debug() {
-//#ifdef _DEBUG
-//
-//    if (ImGui::TreeNode("CameraDebug")) {
-//        ImGui::DragFloat("move", &railMoveTime_, 0.001f);
-//
-//        ImGui::TreePop();
-//    }
-//#endif
-//}
+void RailManager::ImGuiEdit() {
+    emitControlPosManager_->ImGuiUpdate(groupName_);
+}
+
+void RailManager::SetParent(WorldTransform* parent) {
+    emitControlPosManager_->SetParent(parent);
+}

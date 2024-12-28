@@ -319,9 +319,6 @@
     <ClCompile Include="Engine\utility\Particle\EmitRail.cpp">
       <Filter>MyEngine\.cpp\utility\Particle</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\Particle\EmitRailManager.cpp">
-      <Filter>MyEngine\.cpp\utility\Particle</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\utility\Editor\ControlPosManager.cpp">
       <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
@@ -411,6 +408,9 @@
     </ClCompile>
     <ClCompile Include="Game\TestObj\CollisionTest3.cpp">
       <Filter>Game\TestObj</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\Editor\RailManager.cpp">
+      <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackThird.cpp">
       <Filter>Game\Player\ComboBehavior\Normal</Filter>
@@ -621,9 +621,6 @@
     <ClInclude Include="Engine\utility\Editor\ControlPosManager.h">
       <Filter>MyEngine\.h\utility\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\Particle\EmitRailManager.h">
-      <Filter>MyEngine\.h\utility\Particle</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\utility\Particle\EmitRail.h">
       <Filter>MyEngine\.h\utility\Particle</Filter>
     </ClInclude>
@@ -716,6 +713,9 @@
     </ClInclude>
     <ClInclude Include="Game\TestObj\CollisionTest3.h">
       <Filter>Game\TestObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\Editor\RailManager.h">
+      <Filter>MyEngine\.h\utility\Editor</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackThird.h">
       <Filter>Game\Player\ComboBehavior\Normal</Filter>

@@ -3,6 +3,7 @@
 #include <string>
 #include "Vector3.h"
 #include "3d/ViewProjection.h"
+#include"3d/WorldTransform.h"
 #include"3d/Object3d.h"
 #include <json.hpp>
 
@@ -15,10 +16,11 @@ private:
     /// private variants
     ///=====================================================
 
-    std::vector<Vector3> movePosies_;  // 移動座標リスト
+    std::vector<WorldTransform>transforms_;
+    std::vector<Vector3> movePosies_;                    // 移動座標リスト
     std::vector<std::unique_ptr<Object3d>>obj3ds_;       // モデルデータ
-    std::string filePath_;         // 座標データの保存先
-    Vector3 tempAddPosition_;      // ImGuiで座標を一時入力する変数
+    std::string filePath_;                               // 座標データの保存先
+    Vector3 tempAddPosition_;                            // ImGuiで座標を一時入力する変数
 
     const std::string  dyrectrypath_ = "./Resources/GlobalParameter/ControlPos/";
 
@@ -29,8 +31,11 @@ public:
   /// pbulic method
   ///=====================================================
   
-
+    void Init();
+    void Update(const Vector3& = {1.0f, 1.0f, 1.0f} );
     void Draw(const ViewProjection& viewProjection);
+
+    void SetParent(WorldTransform* parent);
 
     // 座標管理
     void AddPoint(const Vector3& position);
@@ -47,5 +52,5 @@ public:
     ///=====================================================
    /// getter method
    ///=====================================================
-    const std::vector<Vector3>& GetPositions() const;
+     std::vector<Vector3> GetPositions() const;
 };

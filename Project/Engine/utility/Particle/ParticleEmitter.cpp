@@ -36,12 +36,9 @@ void ParticleEmitter::Init(const bool& isFirst) {
 	targetPos_ = { 0,0,0 };
 
 	// レールマネージャー
-	railManager_ = std::make_unique<EmitRailManager>();
-	railManager_->Init(SrvManager::GetInstance());
+	railManager_ = std::make_unique<RailManager>();
+	railManager_->Init(particleName_);
 
-	/// 制御点マネージャー
-	emitControlPosManager_ = std::make_unique<ControlPosManager>();
-	emitControlPosManager_->LoadFromFile(particleName_);
 
 	/// 発生位置可視化オブジェ
 	obj3d_.reset(Object3d::CreateModel("DebugCube", ".obj"));
@@ -264,7 +261,7 @@ void ParticleEmitter::Emit() {
 ///=================================================================================
 void ParticleEmitter::Update() {
 	// レール更新
-	railManager_->Update(emitControlPosManager_->GetPositions(), moveSpeed_);
+	railManager_->Update(moveSpeed_);
 
 	UpdateEmitTransform();
 
@@ -291,7 +288,7 @@ void ParticleEmitter::Update() {
 		ImGui::DragFloat("moveSpeed", &moveSpeed_,0.001f);
 
 		ImGui::SeparatorText("ControlPoints:");
-		emitControlPosManager_->ImGuiUpdate(particleName_);
+		railManager_->ImGuiEdit();
 	}
 
 	// Position
@@ -385,7 +382,7 @@ void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
 
 	if (isMoveForRail_) {// レールに沿うエミット位置
 		railManager_->Draw(viewProjection);
-		emitControlPosManager_->Draw(viewProjection);
+		
 	}
 	else {// レールに沿わないエミット位置
 		obj3d_->Draw(emitBoxTransform_, viewProjection);
