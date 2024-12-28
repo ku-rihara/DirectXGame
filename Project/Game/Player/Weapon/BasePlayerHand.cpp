@@ -17,8 +17,8 @@ void BasePlayerHand::Init() {
 	AddParmGroup();
 	ApplyGlobalParameter();
 
-	railManager_= std::make_unique<EmitRailManager>();
-	controlPosManager_ = std::make_unique<ControlPosManager>();
+	railManager_= std::make_unique<RailManager>();
+	railManager_->Init(groupName_);
 
 	emitter_.reset(ParticleEmitter::CreateParticle(groupName_, "DebugCube", ".obj", 300, false));
 
@@ -34,10 +34,9 @@ void BasePlayerHand::Update() {
 	emitter_->Update();
 	emitter_->Emit();
 
-	railManager_->Update(controlPosManager_->GetPositions(), 0.5f);
-
+	railManager_->Update(0.2f);
+	
 	BaseObject::Update();
-
 }
 
 ///============================================================
@@ -45,6 +44,7 @@ void BasePlayerHand::Update() {
 ///==========================================================
 void BasePlayerHand::Draw(const ViewProjection& viewProjection) {
 	BaseObject::Draw(viewProjection);
+	railManager_->Draw(viewProjection);
 }
 
 

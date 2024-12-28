@@ -37,6 +37,7 @@ void RailManager::Init(const std::string& groupName) {
 void RailManager::Update(const float&speed) {
     emitControlPosManager_->Update();
     rail_.Update(emitControlPosManager_->GetPositions());
+  
 
     // カメラの移動とレールに沿った描画
     railMoveTime_ += speed / rail_.GetTotalLength();

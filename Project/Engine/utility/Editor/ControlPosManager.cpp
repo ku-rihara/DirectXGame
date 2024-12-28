@@ -18,25 +18,24 @@ void ControlPosManager::Update(const Vector3& Direction) {
     for (auto& transform : transforms_) {
         transform.UpdateMatrix();
     }
-
 }
 
 ///=====================================================
 /// 制御点追加
 ///=====================================================
 void ControlPosManager::AddPoint(const Vector3& position) {
+    // movePosies に新しい位置を追加
+    movePosies_.push_back(position);
+
+    // transformsに新しい WorldTransform を追加
     WorldTransform newTransform;
     newTransform.Init();
-    newTransform.translation_ = position;
-
     transforms_.push_back(std::move(newTransform));
-    movePosies_.push_back(position);
-    
+
+  
     std::unique_ptr<Object3d> obj3d;
     obj3d.reset(Object3d::CreateModel("DebugSphere", ".obj"));
-
     obj3ds_.push_back(std::move(obj3d));
-    
 }
 
 ///=====================================================
@@ -44,8 +43,10 @@ void ControlPosManager::AddPoint(const Vector3& position) {
 ///=====================================================
 void ControlPosManager::RemovePoint(size_t index) {
     if (index < movePosies_.size()) {
+      
         movePosies_.erase(movePosies_.begin() + index);
-        obj3ds_.erase(obj3ds_.begin() + index);  // ベクターから削除
+        transforms_.erase(transforms_.begin() + index);  
+        obj3ds_.erase(obj3ds_.begin() + index);  
     }
 }
 
@@ -159,7 +160,7 @@ void ControlPosManager::Draw(const ViewProjection& viewProjection) {
 
 std::vector<Vector3> ControlPosManager::GetPositions() const {
     std::vector<Vector3> positions;
-    positions.reserve(transforms_.size());
+ 
     for (const auto& transform : transforms_) {
         positions.push_back(transform.translation_);
     }

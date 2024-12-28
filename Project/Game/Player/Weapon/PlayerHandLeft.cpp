@@ -24,7 +24,7 @@ void PlayerHandLeft::Init() {
 void PlayerHandLeft::Update() {
 	
 	BasePlayerHand::Update();
-
+	
 }
 
 ///=========================================================
@@ -33,7 +33,7 @@ void PlayerHandLeft::Update() {
 void PlayerHandLeft::Draw(const ViewProjection& viewProjection) {
 	BasePlayerHand::Draw(viewProjection);
 	
-	controlPosManager_->Draw(viewProjection);
+	
 }
 
 ///=====================================================
@@ -50,9 +50,10 @@ void PlayerHandLeft::AdjustParm() {
 
 		SaveAndLoad();
 		ImGui::PopID();
+
+		railManager_->ImGuiEdit();
 	}
 
-	controlPosManager_->ImGuiUpdate(groupName_);
 }
 
 

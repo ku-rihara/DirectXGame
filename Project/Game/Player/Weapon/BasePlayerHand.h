@@ -2,7 +2,7 @@
 
 #include"utility/Editor/GlobalParameter.h"
 #include"utility/Editor/ControlPosManager.h"
-#include"utility/Particle/EmitRailManager.h"
+#include"utility/Editor/RailManager.h"
 
 #include"BaseObject/BaseObject.h"
 #include"utility/Particle/ParticleEmitter.h"
@@ -23,8 +23,7 @@ protected:
 	Vector3 direction_;
 
 	//　移動用制御点
-	std::unique_ptr<EmitRailManager> railManager_; /// レールマネージャ
-	std::unique_ptr<ControlPosManager>controlPosManager_;
+	std::unique_ptr<RailManager> railManager_; /// レールマネージャ
 
 public:
 	/*virtual ~BasePlayerHand() = default;*/
