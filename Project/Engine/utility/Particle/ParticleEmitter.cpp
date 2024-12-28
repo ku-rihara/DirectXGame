@@ -245,7 +245,6 @@ void ParticleEmitter::Emit() {
 		emitPos_ = basePos_;
 	}
 
-
 	currentTime_ += Frame::DeltaTimeRate();// 時間加算
 
 	if (currentTime_ >= intervalTime_) {//　間隔ごとに発動
@@ -327,7 +326,6 @@ void ParticleEmitter::Update() {
 			ImGui::SliderAngle("X", &baseRotate_.x, 0, 360);
 			ImGui::SliderAngle("Y", &baseRotate_.y, 0, 360);
 			ImGui::SliderAngle("Z", &baseRotate_.z, 0, 360);
-
 		}
 
 		ImGui::SeparatorText("Rotation Range:");
@@ -346,7 +344,6 @@ void ParticleEmitter::Update() {
 			ImGui::SliderAngle("Base", &baseRotateSpeed_.x, 0, 360);
 			ImGui::SliderAngle("Max", &rotateSpeedDist_.max.x, 0, 360);
 			ImGui::SliderAngle("Min", &rotateSpeedDist_.min.x, 0, 360);
-
 		}
 	}
 
