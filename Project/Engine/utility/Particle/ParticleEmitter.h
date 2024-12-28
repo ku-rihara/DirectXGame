@@ -4,9 +4,8 @@
 #include"3d/ViewProjection.h"
 /// editor
 #include"utility/Editor/GlobalParameter.h"
-#include"utility/Editor/ControlPosManager.h"
 
-#include"utility/Particle/EmitRailManager.h"
+#include"utility/Editor/RailManager.h"
 ///std
 #include<string>
 #include<vector>
@@ -59,9 +58,8 @@ private:
 	/// Line								      
 	bool isMoveForRail_;                           ///レールに沿って動くか
 	float moveSpeed_;                              /// 移動速さ
-	std::unique_ptr<EmitRailManager> railManager_; /// レールマネージャ
-	std::unique_ptr
-	<ControlPosManager>emitControlPosManager_;
+	std::unique_ptr<RailManager> railManager_; /// レールマネージャ
+	
 
 	/// name
 	const std::string dyrectryPath = "./Resources/ParticleParamater/";

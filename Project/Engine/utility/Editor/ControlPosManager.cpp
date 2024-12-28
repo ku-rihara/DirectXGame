@@ -5,10 +5,31 @@
 
 ControlPosManager::ControlPosManager(){}
 
+void ControlPosManager::Init() {
+   
+}
+
+void ControlPosManager::Update(const Vector3& Direction) {
+
+    for (size_t i = 0; i < movePosies_.size(); ++i) {
+        transforms_[i].translation_ = movePosies_[i] * Direction;
+    }
+
+    for (auto& transform : transforms_) {
+        transform.UpdateMatrix();
+    }
+
+}
+
 ///=====================================================
 /// 制御点追加
 ///=====================================================
 void ControlPosManager::AddPoint(const Vector3& position) {
+    WorldTransform newTransform;
+    newTransform.Init();
+    newTransform.translation_ = position;
+
+    transforms_.push_back(std::move(newTransform));
     movePosies_.push_back(position);
     
     std::unique_ptr<Object3d> obj3d;
@@ -128,15 +149,25 @@ void ControlPosManager::ImGuiUpdate(const std::string& filename) {
 
 
 void ControlPosManager::Draw(const ViewProjection& viewProjection) {
-    for (size_t i = 0; i < movePosies_.size(); ++i) {
+    for (size_t i = 0; i < transforms_.size(); ++i) {
         // 各制御点に対応するObject3dを描画
         if (i < obj3ds_.size()) {
-            obj3ds_[i]->Draw(movePosies_[i], viewProjection);  // 各制御点の位置を描画
+            obj3ds_[i]->Draw(transforms_[i], viewProjection);  // 各制御点の位置を描画
         }
     }
 }
 
-const std::vector<Vector3>& ControlPosManager::GetPositions() const {
-    return movePosies_;
+std::vector<Vector3> ControlPosManager::GetPositions() const {
+    std::vector<Vector3> positions;
+    positions.reserve(transforms_.size());
+    for (const auto& transform : transforms_) {
+        positions.push_back(transform.translation_);
+    }
+    return positions;  
 }
 
+void ControlPosManager::SetParent(WorldTransform* parent) {
+    for (auto& transform : transforms_) {
+        transform.SetParent(parent);
+    }
+}

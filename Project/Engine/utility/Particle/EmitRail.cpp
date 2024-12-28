@@ -2,8 +2,8 @@
 #include "MathFunction.h"
 #include "base/SrvManager.h"
 
-void EmitRail::Init(SrvManager* srvManager, size_t numObjects) {
-    srvManager;
+void EmitRail::Init(size_t numObjects) {
+  
     numObjects;
     //// レールオブジェクト（インスタンス用）の初期化
     //railObject_.reset(Object3dSRV::CreateModel("EditorRail", ".obj", uint32_t(numObjects), srvManager));
@@ -11,14 +11,14 @@ void EmitRail::Init(SrvManager* srvManager, size_t numObjects) {
 }
 
 void EmitRail::Update(const std::vector<Vector3>& controlPos) {
-    controlPos_ = controlPos;
+    controlPosies_ = controlPos;
     pointsDrawing_.clear();
     totalRailLength_ = 0.0f;
 
     // レールの描画点を生成（Catmull-Rom補間を使用）
     for (size_t i = 0; i <= IndexCount_; ++i) {
         float t = static_cast<float>(i) / IndexCount_;
-        Vector3 pos = CatmullRomPosition(controlPos_, t);
+        Vector3 pos = CatmullRomPosition(controlPosies_, t);
         pointsDrawing_.push_back(pos);
 
         if (i > 0) {

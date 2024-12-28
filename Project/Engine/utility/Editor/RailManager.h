@@ -8,14 +8,20 @@
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
 #include "3d/Object3d.h"
+
 #include"utility/Particle/EmitRail.h"
+#include"utility/Editor/ControlPosManager.h"
 
 class SrvManager;
-class EmitRailManager {
+class RailManager {
 private:
+    ///name
+    std::string groupName_;
 
     /// other class
     EmitRail rail_; 
+
+    std::unique_ptr<ControlPosManager>emitControlPosManager_;
 
     WorldTransform worldTransform_;
     ViewProjection viewProjection_;
@@ -29,13 +35,13 @@ private:
 
 public:
     //Function
-    void Init(SrvManager* srvManager);
-    void Update(const std::vector<Vector3>& controlPos,const float& speed);
+    void Init(const std::string& groupName);
+    void Update(const float& speed);
 
     void Draw(const ViewProjection& viewProjection);
     void RailDraw(const ViewProjection& viewProjection);
 
-    void Debug();
+    void ImGuiEdit();
 
     Vector3 RotateVectorAroundAxis(const Vector3& vec, const Vector3& axis, float angle);
 
@@ -55,5 +61,6 @@ public:
     const ViewProjection& GetViewProjection() const { return viewProjection_; }
 
     /// set
+    void SetParent(WorldTransform* parent);
     void SetScale(Vector3 scale) { scale_ = scale; }
 };
