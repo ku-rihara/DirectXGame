@@ -274,7 +274,7 @@
     <ClCompile Include="Engine\utility\Particle\EmitRailManager.cpp">
       <Filter>MyEngine\.cpp\utility\Particle</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\Editor\EmitControlPosManager.cpp">
+    <ClCompile Include="Engine\utility\Editor\ControlPosManager.cpp">
       <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
     <ClCompile Include="Game\Ground\Ground.cpp">
@@ -486,7 +486,7 @@
     <ClInclude Include="Engine\3d\Object3dSRV.h">
       <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\Editor\EmitControlPosManager.h">
+    <ClInclude Include="Engine\utility\Editor\ControlPosManager.h">
       <Filter>MyEngine\.h\utility\Editor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\utility\Particle\EmitRailManager.h">

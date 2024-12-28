@@ -6,7 +6,7 @@
 #include"3d/Object3d.h"
 #include <json.hpp>
 
-class EmitControlPosManager {
+class ControlPosManager {
 private:
     using json = nlohmann::json; // 別名を定義
 private:
@@ -20,10 +20,10 @@ private:
     std::string filePath_;         // 座標データの保存先
     Vector3 tempAddPosition_;      // ImGuiで座標を一時入力する変数
 
-    const std::string  dyrectrypath_ = "./Resources/GlobalParameter/EmitControlPos/";
+    const std::string  dyrectrypath_ = "./Resources/GlobalParameter/ControlPos/";
 
 public:
-    EmitControlPosManager();
+    ControlPosManager();
 
     ///=====================================================
   /// pbulic method
