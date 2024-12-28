@@ -3,10 +3,10 @@
 #include <imgui.h>
 #include<d3d12.h>
 
-ControlPosManager::ControlPosManager(){}
+ControlPosManager::ControlPosManager() {}
 
 void ControlPosManager::Init() {
-   
+
 }
 
 void ControlPosManager::Update(const Vector3& Direction) {
@@ -33,6 +33,9 @@ void ControlPosManager::AddPoint(const Vector3& position) {
     transforms_.push_back(std::move(newTransform));
 
   
+    transforms_.push_back(std::move(newTransform));
+
+
     std::unique_ptr<Object3d> obj3d;
     obj3d.reset(Object3d::CreateModel("DebugSphere", ".obj"));
     obj3ds_.push_back(std::move(obj3d));
@@ -44,9 +47,12 @@ void ControlPosManager::AddPoint(const Vector3& position) {
 void ControlPosManager::RemovePoint(size_t index) {
     if (index < movePosies_.size()) {
       
+
         movePosies_.erase(movePosies_.begin() + index);
         transforms_.erase(transforms_.begin() + index);  
         obj3ds_.erase(obj3ds_.begin() + index);  
+        transforms_.erase(transforms_.begin() + index);
+        obj3ds_.erase(obj3ds_.begin() + index);
     }
 }
 
@@ -73,7 +79,7 @@ void ControlPosManager::SaveToFile(const std::string& filename) {
 /// ロード
 ///=====================================================
 void ControlPosManager::LoadFromFile(const std::string& filename) {
-    std::ifstream file(dyrectrypath_ + filename+".json", std::ios::in);
+    std::ifstream file(dyrectrypath_ + filename + ".json", std::ios::in);
     if (file.is_open()) {
         json root;
         file >> root; // JSON データを読み込み
@@ -104,7 +110,7 @@ void ControlPosManager::ImGuiUpdate(const std::string& filename) {
     ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(1.0f, 0.2f, 0.2f, 1.0f));  // アクティブ時の色
 
     // ヘッダーの開始
-    if (ImGui::CollapsingHeader("Move Position Manager")) {
+    if (ImGui::CollapsingHeader("Control Points")) {
 
         // 現在の座標リストを表示
         ImGui::SeparatorText("Current Positions");
@@ -161,10 +167,11 @@ void ControlPosManager::Draw(const ViewProjection& viewProjection) {
 std::vector<Vector3> ControlPosManager::GetPositions() const {
     std::vector<Vector3> positions;
  
+
     for (const auto& transform : transforms_) {
         positions.push_back(transform.translation_);
     }
-    return positions;  
+    return positions;
 }
 
 void ControlPosManager::SetParent(WorldTransform* parent) {
