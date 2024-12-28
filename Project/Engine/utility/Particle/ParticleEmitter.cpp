@@ -40,7 +40,7 @@ void ParticleEmitter::Init(const bool& isFirst) {
 	railManager_->Init(SrvManager::GetInstance());
 
 	/// 制御点マネージャー
-	emitControlPosManager_ = std::make_unique<EmitControlPosManager>();
+	emitControlPosManager_ = std::make_unique<ControlPosManager>();
 	emitControlPosManager_->LoadFromFile(particleName_);
 
 	/// 発生位置可視化オブジェ

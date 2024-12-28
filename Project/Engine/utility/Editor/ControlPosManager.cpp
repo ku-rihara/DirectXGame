@@ -1,14 +1,14 @@
-#include "EmitControlPosManager.h"
+#include "ControlPosManager.h"
 #include <fstream>
 #include <imgui.h>
 #include<d3d12.h>
 
-EmitControlPosManager::EmitControlPosManager(){}
+ControlPosManager::ControlPosManager(){}
 
 ///=====================================================
 /// 制御点追加
 ///=====================================================
-void EmitControlPosManager::AddPoint(const Vector3& position) {
+void ControlPosManager::AddPoint(const Vector3& position) {
     movePosies_.push_back(position);
     
     std::unique_ptr<Object3d> obj3d;
@@ -21,7 +21,7 @@ void EmitControlPosManager::AddPoint(const Vector3& position) {
 ///=====================================================
 /// 制御点削除
 ///=====================================================
-void EmitControlPosManager::RemovePoint(size_t index) {
+void ControlPosManager::RemovePoint(size_t index) {
     if (index < movePosies_.size()) {
         movePosies_.erase(movePosies_.begin() + index);
         obj3ds_.erase(obj3ds_.begin() + index);  // ベクターから削除
@@ -31,7 +31,7 @@ void EmitControlPosManager::RemovePoint(size_t index) {
 ///=====================================================
 /// セーブ
 ///=====================================================
-void EmitControlPosManager::SaveToFile(const std::string& filename) {
+void ControlPosManager::SaveToFile(const std::string& filename) {
     json root;
     for (const auto& pos : movePosies_) {
         root.push_back({ {"x", pos.x}, {"y", pos.y}, {"z", pos.z} });
@@ -50,7 +50,7 @@ void EmitControlPosManager::SaveToFile(const std::string& filename) {
 ///=====================================================
 /// ロード
 ///=====================================================
-void EmitControlPosManager::LoadFromFile(const std::string& filename) {
+void ControlPosManager::LoadFromFile(const std::string& filename) {
     std::ifstream file(dyrectrypath_ + filename+".json", std::ios::in);
     if (file.is_open()) {
         json root;
@@ -74,7 +74,7 @@ void EmitControlPosManager::LoadFromFile(const std::string& filename) {
 ///=====================================================
 /// ImGuiでの処理
 ///=====================================================
-void EmitControlPosManager::ImGuiUpdate(const std::string& filename) {
+void ControlPosManager::ImGuiUpdate(const std::string& filename) {
 
     // 色を変更
     ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.8f, 0.3f, 0.3f, 1.0f));      // 通常時の色
@@ -127,7 +127,7 @@ void EmitControlPosManager::ImGuiUpdate(const std::string& filename) {
 
 
 
-void EmitControlPosManager::Draw(const ViewProjection& viewProjection) {
+void ControlPosManager::Draw(const ViewProjection& viewProjection) {
     for (size_t i = 0; i < movePosies_.size(); ++i) {
         // 各制御点に対応するObject3dを描画
         if (i < obj3ds_.size()) {
@@ -136,7 +136,7 @@ void EmitControlPosManager::Draw(const ViewProjection& viewProjection) {
     }
 }
 
-const std::vector<Vector3>& EmitControlPosManager::GetPositions() const {
+const std::vector<Vector3>& ControlPosManager::GetPositions() const {
     return movePosies_;
 }
 

@@ -4,7 +4,7 @@
 #include"3d/ViewProjection.h"
 /// editor
 #include"utility/Editor/GlobalParameter.h"
-#include"utility/Editor/EmitControlPosManager.h"
+#include"utility/Editor/ControlPosManager.h"
 
 #include"utility/Particle/EmitRailManager.h"
 ///std
@@ -61,7 +61,7 @@ private:
 	float moveSpeed_;                              /// 移動速さ
 	std::unique_ptr<EmitRailManager> railManager_; /// レールマネージャ
 	std::unique_ptr
-	<EmitControlPosManager>emitControlPosManager_;
+	<ControlPosManager>emitControlPosManager_;
 
 	/// name
 	const std::string dyrectryPath = "./Resources/ParticleParamater/";
