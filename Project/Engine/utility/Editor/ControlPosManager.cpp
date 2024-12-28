@@ -32,10 +32,6 @@ void ControlPosManager::AddPoint(const Vector3& position) {
     newTransform.Init();
     transforms_.push_back(std::move(newTransform));
 
-  
-    transforms_.push_back(std::move(newTransform));
-
-
     std::unique_ptr<Object3d> obj3d;
     obj3d.reset(Object3d::CreateModel("DebugSphere", ".obj"));
     obj3ds_.push_back(std::move(obj3d));
@@ -51,8 +47,7 @@ void ControlPosManager::RemovePoint(size_t index) {
         movePosies_.erase(movePosies_.begin() + index);
         transforms_.erase(transforms_.begin() + index);  
         obj3ds_.erase(obj3ds_.begin() + index);  
-        transforms_.erase(transforms_.begin() + index);
-        obj3ds_.erase(obj3ds_.begin() + index);
+       
     }
 }
 
