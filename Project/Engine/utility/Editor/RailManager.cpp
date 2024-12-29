@@ -34,8 +34,8 @@ void RailManager::Init(const std::string& groupName) {
 ///=====================================================
 ///更新
 ///=====================================================
-void RailManager::Update(const float&speed) {
-    emitControlPosManager_->Update();
+void RailManager::Update(const float&speed,const Vector3& Direction) {
+    emitControlPosManager_->Update(Direction);
     rail_.Update(emitControlPosManager_->GetPositions());
 
     // カメラの移動とレールに沿った描画

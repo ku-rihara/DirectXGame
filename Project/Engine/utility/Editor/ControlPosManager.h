@@ -34,7 +34,7 @@ public:
   ///=====================================================
   
     void Init();
-    void Update(const Vector3& = {1.0f, 1.0f, 1.0f} );
+    void Update(const Vector3&Direction = {1.0f, 1.0f, 1.0f} );
     void Draw(const ViewProjection& viewProjection);
 
     void SetParent(WorldTransform* parent);

@@ -36,7 +36,7 @@ private:
 public:
     //Function
     void Init(const std::string& groupName);
-    void Update(const float& speed);
+    void Update(const float& speed, const Vector3& dirention= { 1.0f, 1.0f, 1.0f });
 
     void Draw(const ViewProjection& viewProjection);
     void RailDraw(const ViewProjection& viewProjection);
