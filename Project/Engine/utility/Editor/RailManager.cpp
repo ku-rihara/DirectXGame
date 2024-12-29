@@ -19,6 +19,7 @@ void RailManager::Init(const std::string& groupName) {
 
     worldTransform_.UpdateMatrix();
     viewProjection_.UpdateMatrix();
+
     // レールの初期化（オブジェクト数を指定）
     rail_.Init(5);
    

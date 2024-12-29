@@ -39,6 +39,3 @@ void BaseObject::CreateModel(const std::string modelname, const std::string name
 }
 
 
-void BaseObject::SetParent(WorldTransform* parent) {
-	transform_.parent_ = parent;
-}

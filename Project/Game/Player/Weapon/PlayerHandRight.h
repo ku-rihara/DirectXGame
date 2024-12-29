@@ -12,7 +12,7 @@ private:
 	///===========================================
 	/// private variant
 	///=============================================
-
+	std::string threeComboName_;
 	
 public:
 	PlayerHandRight();
@@ -26,4 +26,7 @@ public:
 
 	void AdjustParm()override;
 	void SaveAndLoad()override;
+
+
+	void SetParent(WorldTransform* parent);
 };

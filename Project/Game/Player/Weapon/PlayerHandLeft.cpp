@@ -51,7 +51,7 @@ void PlayerHandLeft::AdjustParm() {
 		SaveAndLoad();
 		ImGui::PopID();
 
-		railManager_->ImGuiEdit();
+
 	}
 
 }
@@ -63,4 +63,9 @@ void PlayerHandLeft::AdjustParm() {
 void PlayerHandLeft::SaveAndLoad() {
 
 	BasePlayerHand::SaveAndLoad();
+}
+
+
+void PlayerHandLeft::SetParent(WorldTransform* parent) {
+	BasePlayerHand::SetParent(parent);
 }

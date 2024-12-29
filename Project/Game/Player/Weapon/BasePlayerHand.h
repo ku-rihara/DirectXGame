@@ -55,4 +55,6 @@ public:
 	///============================================
 	/// setter method
 	///=============================================
+	
+	virtual void SetParent(WorldTransform* parent);
 };

@@ -28,4 +28,7 @@ public:
 
 	 void AdjustParm()override;
 	  void SaveAndLoad()override;
+
+
+	  void SetParent(WorldTransform* parent)override;
 };

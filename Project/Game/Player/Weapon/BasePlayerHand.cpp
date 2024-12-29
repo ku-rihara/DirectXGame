@@ -18,8 +18,6 @@ void BasePlayerHand::Init() {
 	ApplyGlobalParameter();
 
 	railManager_= std::make_unique<RailManager>();
-	railManager_->Init(groupName_);
-
 	emitter_.reset(ParticleEmitter::CreateParticle(groupName_, "DebugCube", ".obj", 300, false));
 
 }
@@ -34,7 +32,6 @@ void BasePlayerHand::Update() {
 	emitter_->Update();
 	emitter_->Emit();
 
-	railManager_->Update(0.2f);
 	
 	BaseObject::Update();
 }
@@ -44,7 +41,7 @@ void BasePlayerHand::Update() {
 ///==========================================================
 void BasePlayerHand::Draw(const ViewProjection& viewProjection) {
 	BaseObject::Draw(viewProjection);
-	railManager_->Draw(viewProjection);
+	
 }
 
 
@@ -108,4 +105,9 @@ void BasePlayerHand::SaveAndLoad() {
 
 	globalParameter_->ParmSaveForImGui(groupName_);
 	ParmLoadForImGui();
+}
+
+
+void BasePlayerHand::SetParent(WorldTransform* parent) {
+	transform_.parent_ = parent;
 }

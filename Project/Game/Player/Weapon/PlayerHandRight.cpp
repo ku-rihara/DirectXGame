@@ -11,9 +11,12 @@ PlayerHandRight::PlayerHandRight() {}
 void PlayerHandRight::Init() {
 	// グループネーム
 	groupName_ = "RightHand";
+	threeComboName_ = "ThreeComboRail";
 
 	BaseObject::CreateModel("cube", ".obj");/// モデルセット
 	BasePlayerHand::Init();
+
+	railManager_->Init(threeComboName_);
 
 }
 
@@ -23,6 +26,8 @@ void PlayerHandRight::Init() {
 void PlayerHandRight::Update() {
 	
 	BasePlayerHand::Update();
+
+	railManager_->Update(0.2f);
 }
 
 ///=========================================================
@@ -30,6 +35,7 @@ void PlayerHandRight::Update() {
 ///==========================================================
 void PlayerHandRight::Draw(const ViewProjection& viewProjection) {
 	BasePlayerHand::Draw(viewProjection);
+	railManager_->Draw(viewProjection);
 }
 
 
@@ -41,7 +47,7 @@ void PlayerHandRight::AdjustParm() {
 		ImGui::PushID("RightHand");
 		ImGui::SeparatorText("Transform");
 		ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
-		
+		railManager_->ImGuiEdit();
 		SaveAndLoad();
 		ImGui::PopID();
 	}
@@ -53,4 +59,10 @@ void PlayerHandRight::AdjustParm() {
 void PlayerHandRight::SaveAndLoad() {
 
 	BasePlayerHand::SaveAndLoad();
+}
+
+
+void PlayerHandRight::SetParent(WorldTransform* parent) {
+	BasePlayerHand::SetParent(parent);
+	railManager_->SetParent(parent);
 }
