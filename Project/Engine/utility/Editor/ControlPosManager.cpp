@@ -102,10 +102,10 @@ void ControlPosManager::ImGuiUpdate(const std::string& filename) {
 	// 色を変更
 	ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.8f, 0.3f, 0.3f, 1.0f));      // 通常時の色
 	ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(1.0f, 0.5f, 0.5f, 1.0f)); // ホバー時の色
-	ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(1.0f, 0.2f, 0.2f, 1.0f));  // アクティブ時の色
+	ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(1.0f, 0.4f, 0.4f, 1.0f));  // アクティブ時の色
 
 	// ヘッダーの開始
-	if (ImGui::CollapsingHeader((filename + "Control Points").c_str())) {
+	if (ImGui::CollapsingHeader((filename + " Control Points").c_str())) {
 
 		// 現在の座標リストを表示
 		ImGui::SeparatorText("Current Positions");
