@@ -16,11 +16,13 @@ private:
     /// private variants
     ///=====================================================
 
+
     std::vector<WorldTransform>transforms_;
     std::vector<Vector3> movePosies_;                    // 移動座標リスト
     std::vector<std::unique_ptr<Object3d>>obj3ds_;       // モデルデータ
     std::string filePath_;                               // 座標データの保存先
     Vector3 tempAddPosition_;                            // ImGuiで座標を一時入力する変数
+    WorldTransform* parentTransform_;
 
     const std::string  dyrectrypath_ = "./Resources/GlobalParameter/ControlPos/";
 
