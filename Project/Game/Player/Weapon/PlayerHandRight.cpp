@@ -18,16 +18,23 @@ void PlayerHandRight::Init() {
 
 	railManager_->Init(threeComboName_);
 
+	combo3MoveObj_.reset(Object3d::CreateModel("cube", ".obj"));
+	
 }
 
 ///=========================================================
 ///　更新
 ///==========================================================
 void PlayerHandRight::Update() {
+
+	///*Todo
+	/// ワールド座標しか取得できない
 	
 	BasePlayerHand::Update();
 
-	railManager_->Update(0.2f);
+	railManager_->Update(0.2f,transform_.parent_->LookAt(Vector3(1,1,1)));
+
+	combo3MovePos_ = railManager_->GetWorldPos();
 }
 
 ///=========================================================
@@ -36,6 +43,7 @@ void PlayerHandRight::Update() {
 void PlayerHandRight::Draw(const ViewProjection& viewProjection) {
 	BasePlayerHand::Draw(viewProjection);
 	railManager_->Draw(viewProjection);
+	combo3MoveObj_->Draw(combo3MovePos_, viewProjection);
 }
 
 

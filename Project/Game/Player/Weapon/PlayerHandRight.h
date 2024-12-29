@@ -13,6 +13,8 @@ private:
 	/// private variant
 	///=============================================
 	std::string threeComboName_;
+	Vector3 combo3MovePos_;
+	std::unique_ptr<Object3d>combo3MoveObj_;
 	
 public:
 	PlayerHandRight();
