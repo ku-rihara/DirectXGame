@@ -121,6 +121,26 @@ Vector3 RailManager::GetWorldPos() const {
 	);
 }
 
+///=====================================================
+/// ローカル座標取得
+///=====================================================
+Vector3 RailManager::GetLocalPos() const {
+    // 親が設定されていない場合はワールド座標をそのまま返す
+    if (worldTransform_.parent_ == nullptr) {
+        return GetWorldPos();
+    }
+
+    // 親のワールド行列の逆行列を計算
+    Matrix4x4 parentInverse = Inverse(worldTransform_.parent_->matWorld_);
+
+    // ワールド座標を取得
+    Vector3 worldPos = GetWorldPos();
+
+    // 親の逆行列を使ってローカル座標を計算
+    Vector3 localPos = MatrixTransform(worldPos, parentInverse);
+    return localPos;
+}
+
 void RailManager::ImGuiEdit() {
 	emitControlPosManager_->ImGuiUpdate(groupName_);
 }

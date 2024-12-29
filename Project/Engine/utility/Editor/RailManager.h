@@ -57,6 +57,7 @@ public:
     float GetRailMoveTime()const { return railMoveTime_; }
     const Vector3& GetCameraRotate()const { return cameraRotate_; }
     Vector3 GetWorldPos()const;
+    Vector3 GetLocalPos() const;
     const WorldTransform& GetWorldTransform() const { return worldTransform_; }
     const ViewProjection& GetViewProjection() const { return viewProjection_; }
 
