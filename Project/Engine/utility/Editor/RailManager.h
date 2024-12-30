@@ -15,7 +15,7 @@
 class SrvManager;
 class RailManager {
 public:
-    enum  PositionMode {
+    enum class PositionMode {
         WORLD,
         LOCAL,
     };
