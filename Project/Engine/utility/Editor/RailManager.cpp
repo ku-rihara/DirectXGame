@@ -126,14 +126,14 @@ void RailManager::SetParent(WorldTransform* parent) {
 ///=====================================================
 /// WorldPos取得
 ///=====================================================
-Vector3 RailManager::GetWorldPos() const {
+Vector3 RailManager::GetPositionOnRail() const {
     return  worldTransform_.GetWorldPos();
 }
 
-///=====================================================
-/// ローカル座標取得
-///=====================================================
-Vector3 RailManager::GetLocalPos() const {
-    return  worldTransform_.GetLocalPos();
-}
-
+/////=====================================================
+///// ローカル座標取得
+/////=====================================================
+//Vector3 RailManager::GetLocalPos() const {
+//    return  worldTransform_.GetLocalPos();
+//}
+//

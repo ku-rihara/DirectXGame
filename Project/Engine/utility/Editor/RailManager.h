@@ -63,8 +63,8 @@ public:
     const Vector3& GetCameraRotate()const { return cameraRotate_; }
     const WorldTransform& GetWorldTransform() const { return worldTransform_; }
     const ViewProjection& GetViewProjection() const { return viewProjection_; }
-    Vector3 GetLocalPos() const;
-    Vector3 GetWorldPos() const;
+   /* Vector3 GetLocalPos() const;*/
+    Vector3 GetPositionOnRail() const;
     /// set
     void SetParent(WorldTransform* parent);
     void SetScale(Vector3 scale) { scale_ = scale; }
