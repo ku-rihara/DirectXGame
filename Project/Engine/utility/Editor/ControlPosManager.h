@@ -24,7 +24,7 @@ private:
     Vector3 tempAddPosition_;                            // ImGuiで座標を一時入力する変数
     WorldTransform* parentTransform_;
 
-    const std::string  dyrectrypath_ = "./Resources/GlobalParameter/ControlPos/";
+    const std::string  dyrectrypath_ = "./Resources/GlobalParameter/ControlPoint/";
 
 public:
     ControlPosManager();
@@ -50,6 +50,7 @@ public:
 
     // ImGui用UI
     void ImGuiUpdate(const std::string& filename);
+
 
     ///=====================================================
    /// getter method
