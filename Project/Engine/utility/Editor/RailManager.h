@@ -14,6 +14,11 @@
 
 class SrvManager;
 class RailManager {
+public:
+    enum class PositionMode {
+        WORLD,
+        LOCAL,
+    };
 private:
     ///name
     std::string groupName_;
@@ -36,7 +41,7 @@ private:
 public:
     //Function
     void Init(const std::string& groupName);
-    void Update(const float& speed, const Vector3& dirention= { 1.0f, 1.0f, 1.0f });
+    void Update(const float& speed,const PositionMode&mode=PositionMode::WORLD, const Vector3& dirention= { 1.0f, 1.0f, 1.0f });
 
     void Draw(const ViewProjection& viewProjection);
     void RailDraw(const ViewProjection& viewProjection);
@@ -58,7 +63,8 @@ public:
     const Vector3& GetCameraRotate()const { return cameraRotate_; }
     const WorldTransform& GetWorldTransform() const { return worldTransform_; }
     const ViewProjection& GetViewProjection() const { return viewProjection_; }
-
+    Vector3 GetLocalPos() const;
+    Vector3 GetWorldPos() const;
     /// set
     void SetParent(WorldTransform* parent);
     void SetScale(Vector3 scale) { scale_ = scale; }

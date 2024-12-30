@@ -159,14 +159,24 @@ void ControlPosManager::Draw(const ViewProjection& viewProjection) {
 	}
 }
 
-std::vector<Vector3> ControlPosManager::GetPositions() const {
+std::vector<Vector3> ControlPosManager::GetWorldPositions() const {
 	std::vector<Vector3> positions;
 
 	for (const auto& transform : transforms_) {
-		positions.push_back(transform.translation_);
+		positions.push_back(transform.GetWorldPos());
 	}
 	return positions;
 }
+
+std::vector<Vector3> ControlPosManager::GetLocalPositions() const {
+	std::vector<Vector3> positions;
+
+	for (const auto& transform : transforms_) {
+		positions.push_back(transform.GetLocalPos());
+	}
+	return positions;
+}
+
 
 void ControlPosManager::SetParent(WorldTransform* parent) {
 	parentTransform_ = parent;

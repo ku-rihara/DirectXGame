@@ -34,9 +34,15 @@ void RailManager::Init(const std::string& groupName) {
 ///=====================================================
 ///更新
 ///=====================================================
-void RailManager::Update(const float&speed,const Vector3& Direction) {
+void RailManager::Update(const float&speed, const PositionMode& mode,const Vector3& Direction) {
     emitControlPosManager_->Update(Direction);
-    rail_.Update(emitControlPosManager_->GetPositions());
+
+    if (mode == PositionMode::LOCAL) {
+        rail_.Update(emitControlPosManager_->GetLocalPositions());
+    }
+    else {
+        rail_.Update(emitControlPosManager_->GetWorldPositions());
+    }
 
     // カメラの移動とレールに沿った描画
     railMoveTime_ += speed / rail_.GetTotalLength();
@@ -114,3 +120,19 @@ void RailManager::ImGuiEdit() {
 void RailManager::SetParent(WorldTransform* parent) {
     emitControlPosManager_->SetParent(parent);
 }
+
+
+///=====================================================
+/// WorldPos取得
+///=====================================================
+Vector3 RailManager::GetWorldPos() const {
+    return  worldTransform_.GetWorldPos();
+}
+
+///=====================================================
+/// ローカル座標取得
+///=====================================================
+Vector3 RailManager::GetLocalPos() const {
+    return  worldTransform_.GetLocalPos();
+}
+
