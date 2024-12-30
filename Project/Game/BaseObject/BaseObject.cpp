@@ -39,3 +39,6 @@ void BaseObject::CreateModel(const std::string modelname, const std::string name
 }
 
 
+void  BaseObject::SetColor(const Vector4& color) {
+	obj3d_->objColor_.SetColor(color);
+}

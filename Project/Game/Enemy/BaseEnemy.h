@@ -32,6 +32,8 @@ public:
 	virtual void Draw(const ViewProjection& viewProjection);
 	virtual void SpriteDraw(const ViewProjection& viewProjection);
 	
+	Vector3 GetDirectionToPlayer();
+
 	/// Hpバー処理
 	virtual void DisplayHpBar(const ViewProjection& viewProjection);
 
@@ -40,11 +42,8 @@ public:
 
 	// 当たり判定
 	void OnCollisionEnter([[maybe_unused]] BaseCollider* other)override;
-	void OnCollisionStay([[maybe_unused]] BaseCollider* other)override;
-	void OnCollisionExit([[maybe_unused]] BaseCollider* other) override;
-
+	
 	Vector3 GetCollisionPos() const override;
-
 	///========================================================================================
 	///  getter method
 	///========================================================================================
@@ -54,6 +53,7 @@ public:
 	///  setter method
 	///========================================================================================
 	void SetPlayer(Player* plyaer);
+	
 
 private:
 	bool IsInView(const ViewProjection& viewProjection) const;

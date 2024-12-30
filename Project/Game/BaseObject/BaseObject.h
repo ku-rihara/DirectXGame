@@ -51,6 +51,7 @@ public:
     ///setter 
     /// ===================================================
 	void SetParent(WorldTransform* parent);
+	void SetColor(const Vector4& color);
 	void SetWorldPosition(Vector3 pos) { transform_.translation_ = pos; }
 	void SetWorldPositionY(float pos) { transform_.translation_.y = pos; }
 	void SetWorldPositionX(float pos) { transform_.translation_.x = pos; }

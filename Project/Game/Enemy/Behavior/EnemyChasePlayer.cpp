@@ -35,13 +35,9 @@ EnemyChasePlayer::~EnemyChasePlayer() {
 
 void EnemyChasePlayer::Update() {
 	if (!isChase_) return;
-		// ターゲット座標を取得
-		Vector3 target = pBaseEnemy_->GetPlayer()->GetWorldPosition();
-		// 現在のボス位置を取得
-		Vector3 bossPosition = pBaseEnemy_->GetWorldPosition();
-
+		
 		// ターゲットへのベクトル
-		Vector3 direction = target - bossPosition;
+		Vector3 direction =pBaseEnemy_->GetDirectionToPlayer();
 
 		// 距離
 		distance_ = std::sqrt(direction.x * direction.x + direction.z * direction.z);
@@ -58,7 +54,6 @@ void EnemyChasePlayer::Update() {
 
 		/// 変位加算
 		pBaseEnemy_->AddPosition(direction * (chaseSpeedNormal_ * Frame::DeltaTime()));
-
 
 		// 目標角度を計算
 		float objectiveAngle = std::atan2(-direction.x, -direction.z);

@@ -1,8 +1,15 @@
 #include "BaseEnemy.h"
 // bvehaivor
 #include"Behavior/EnemyChasePlayer.h"
+#include"Behavior/EnemyHitBackDamage.h"
+
 #include"Matrix4x4.h"
 #include"Player/Player.h"
+
+/// collisionBox
+#include"CollisionBox/PunchCollisionBox.h"
+#include"CollisionBox/PunchCollisionSecond.h"
+
 
 //uint32_t BaseEnemy::nextSerialNum_ = 0;
 
@@ -33,20 +40,13 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 void BaseEnemy::Update() {
 
 	behavior_->Update();
-	//
+	
 	//// 体力がなくなったら死亡
 	//if (hp_ <= 0 && !isBurst_) {
 	//	behaviorRequest_ = Behavior::kDeath;
-	//	Audio::GetInstance()->PlayWave(deathSound_);
+	//	/*Audio::GetInstance()->PlayWave(deathSound_);*/
 	//}
-	//// ダメージ受けてたら赤色
-	//if (behavior_ == Behavior::kDamage) {
-	//	objColor_.SetColor(Vector4(0.9f, 0, 0, 0.9f));
-	//} else {
-	//	objColor_.SetColor(Vector4(1, 1, 1, 1));
-	//}
-
-
+	
 	BaseObject::Update();
 }
 ///========================================================
@@ -65,6 +65,18 @@ void BaseEnemy::DisplayHpBar(const ViewProjection& viewProjection) {
 	//hpbar_->SetPosition(hpBarPosition);
 	//// Hpバー更新
 	//hpbar_->Update(hp_);
+}
+
+Vector3 BaseEnemy::GetDirectionToPlayer() {
+	// ターゲット座標を取得
+	Vector3 target = GetPlayer()->GetWorldPosition();
+	// 現在のボス位置を取得
+	Vector3 enemyPosition =GetWorldPosition();
+
+	// ターゲットへのベクトル
+	Vector3 direction = target - enemyPosition;
+
+	return direction;
 }
 
 ///========================================================
@@ -89,18 +101,18 @@ void BaseEnemy::SpriteDraw(const ViewProjection& viewProjection) {
 }
 
 void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
+	//普通のパンチに攻撃されたら
+	if (dynamic_cast<PunchCollisionBox*>(other)) {
 
+		if (!dynamic_cast<EnemyHitBackDamage*>(behavior_.get())) {
+			ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
+		}
+	}
+
+	/*if (dynamic_cast<PunchCollisionSecond*>(other)) {
+
+	}*/
 }
-
-void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
-
-
-}
-void BaseEnemy::OnCollisionExit([[maybe_unused]] BaseCollider* other) {
-
-
-}
-
 
 Vector3 BaseEnemy::GetCollisionPos() const {
 	// ローカル座標でのオフセット

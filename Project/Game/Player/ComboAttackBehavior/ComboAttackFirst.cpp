@@ -64,6 +64,7 @@ void ComboAttackFirst::Update() {
 		///----------------------------------------------------
 
 		ChangeSpeedForLockOn();// ロックオンによる突進スピードの変化
+
 		rushPos_ = initPos_+(forwardDirection_ * speed_); // 突進座標を決める
 
 		rushEase_.time += Frame::DeltaTimeRate();

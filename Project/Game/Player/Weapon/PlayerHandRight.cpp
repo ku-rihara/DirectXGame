@@ -14,7 +14,7 @@ void PlayerHandRight::Init() {
 	threeComboName_ = "ThreeComboRail";
 
 	BaseObject::CreateModel("cube", ".obj");/// モデルセット
-	BasePlayerHand::Init();
+	BasePlayerHand::Init();	
 	railManager_->Init(threeComboName_);
 
 	combo3MoveObj_.reset(Object3d::CreateModel("cube", ".obj"));

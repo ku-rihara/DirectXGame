@@ -427,7 +427,7 @@
     <ClCompile Include="Game\Enemy\Behavior\BaseEnemyBehavior.cpp">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyDamage.cpp">
+    <ClCompile Include="Game\Enemy\Behavior\EnemyHitBackDamage.cpp">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\EnemyChasePlayer.cpp">
@@ -732,7 +732,7 @@
     <ClInclude Include="Game\Enemy\Behavior\BaseEnemyBehavior.h">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyDamage.h">
+    <ClInclude Include="Game\Enemy\Behavior\EnemyHitBackDamage.h">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\EnemyChasePlayer.h">

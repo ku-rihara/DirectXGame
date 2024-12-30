@@ -58,7 +58,7 @@
     <ClCompile Include="Game\Enemy\BaseEnemy.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\BaseEnemyBehavior.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyChasePlayer.cpp" />
-    <ClCompile Include="Game\Enemy\Behavior\EnemyDamage.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\EnemyHitBackDamage.cpp" />
     <ClCompile Include="Game\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Enemy\NormalEnemy.cpp" />
     <ClCompile Include="Game\Field\Field.cpp" />
@@ -159,7 +159,7 @@
     <ClInclude Include="Game\Enemy\BaseEnemy.h" />
     <ClInclude Include="Game\Enemy\Behavior\BaseEnemyBehavior.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyChasePlayer.h" />
-    <ClInclude Include="Game\Enemy\Behavior\EnemyDamage.h" />
+    <ClInclude Include="Game\Enemy\Behavior\EnemyHitBackDamage.h" />
     <ClInclude Include="Game\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Enemy\NormalEnemy.h" />
     <ClInclude Include="Game\Field\Field.h" />
