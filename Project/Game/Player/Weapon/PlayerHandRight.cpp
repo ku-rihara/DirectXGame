@@ -15,7 +15,6 @@ void PlayerHandRight::Init() {
 
 	BaseObject::CreateModel("cube", ".obj");/// モデルセット
 	BasePlayerHand::Init();
-
 	railManager_->Init(threeComboName_);
 
 	combo3MoveObj_.reset(Object3d::CreateModel("cube", ".obj"));
@@ -32,7 +31,7 @@ void PlayerHandRight::Update() {
 	
 	BasePlayerHand::Update();
 
-	railManager_->Update(0.2f,transform_.parent_->LookAt(Vector3(1,1,1)));
+	railManager_->Update(0.2f,(Vector3(1,1,1)));
 
 	combo3MovePos_ = transform_.parent_->translation_+railManager_->GetLocalPos();
 }
@@ -71,5 +70,5 @@ void PlayerHandRight::SaveAndLoad() {
 
 void PlayerHandRight::SetParent(WorldTransform* parent) {
 	BasePlayerHand::SetParent(parent);
-	railManager_->SetParent(&transform_);
+	railManager_->SetParent(parent);
 }
