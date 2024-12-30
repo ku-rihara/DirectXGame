@@ -171,4 +171,8 @@ std::vector<Vector3> ControlPosManager::GetPositions() const {
 void ControlPosManager::SetParent(WorldTransform* parent) {
 	parentTransform_ = parent;
 
+	for ( auto& transform : transforms_) {
+		transform.SetParent(parent);
+	}
+
 }
