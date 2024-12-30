@@ -19,6 +19,7 @@ void RailManager::Init(const std::string& groupName) {
 
     worldTransform_.UpdateMatrix();
     viewProjection_.UpdateMatrix();
+    isRoop_ = true;
     // レールの初期化（オブジェクト数を指定）
     rail_.Init(5);
    
@@ -46,9 +47,9 @@ void RailManager::Update(const float&speed, const PositionMode& mode,const Vecto
 
     // カメラの移動とレールに沿った描画
     railMoveTime_ += speed / rail_.GetTotalLength();
-    if (railMoveTime_ >= 1.0f) {
-        railMoveTime_ = 0.0f;
-    }
+
+
+    RoopOrStop();// ループか止まるか
 
     // Y軸のオフセット
     float offsetY = 0.0f; // オフセットの値をここで設定
@@ -94,6 +95,18 @@ void RailManager::Update(const float&speed, const PositionMode& mode,const Vecto
     // 行列の更新
     worldTransform_.matWorld_ = MakeAffineMatrix(scale_, cameraRotate_, interpolatedPos);
   /*  viewProjection_.matView_ = Inverse(worldTransform_.matWorld_);*/
+}
+
+void RailManager::RoopOrStop() {
+    if (railMoveTime_ < 1.0f) return;
+
+    if (isRoop_) {
+        railMoveTime_ = 0.0f;
+    }
+    else {
+        railMoveTime_ = 1.0f;
+    }
+    
 }
 
 ///=====================================================
