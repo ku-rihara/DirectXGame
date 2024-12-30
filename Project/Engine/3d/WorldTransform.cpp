@@ -108,3 +108,37 @@ Vector3 WorldTransform::LookAt(const Vector3& direction) const {
 	// 正規化して返す
 	return Vector3::Normalize(worldDirection);
 }
+
+///=====================================================
+/// WorldPos取得
+///=====================================================
+Vector3 WorldTransform::GetWorldPos() const {
+
+	return Vector3(
+		matWorld_.m[3][0], // X成分
+		matWorld_.m[3][1], // Y成分
+		matWorld_.m[3][2]  // Z成分
+	);
+}
+
+
+///=====================================================
+/// ローカル座標取得
+///=====================================================
+Vector3 WorldTransform::GetLocalPos() const {
+	// 親が設定されていない場合はワールド座標をそのまま返す
+	if (parent_ == nullptr) {
+		return GetWorldPos();
+	}
+
+	// 親のワールド行列の逆行列を計算
+	Matrix4x4 parentInverse = Inverse(parent_->matWorld_);
+
+	// ワールド座標を取得
+	Vector3 worldPos = GetWorldPos();
+
+	// 親の逆行列を使ってローカル座標を計算
+	Vector3 localPos = MatrixTransform(worldPos, parentInverse);
+	return localPos;
+}
+

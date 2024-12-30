@@ -35,16 +35,21 @@ void RailManager::Init(const std::string& groupName) {
 ///=====================================================
 ///更新
 ///=====================================================
-void RailManager::Update(const float& speed, const Vector3& Direction) {
-	emitControlPosManager_->Update(Direction);
-	rail_.Update(emitControlPosManager_->GetPositions());
+void RailManager::Update(const float&speed, const PositionMode& mode,const Vector3& Direction) {
+    emitControlPosManager_->Update(Direction);
 
+    if (mode == PositionMode::LOCAL) {
+        rail_.Update(emitControlPosManager_->GetLocalPositions());
+    }
+    else {
+        rail_.Update(emitControlPosManager_->GetWorldPositions());
+    }
 
-	// カメラの移動とレールに沿った描画
-	railMoveTime_ += speed / rail_.GetTotalLength();
-	if (railMoveTime_ >= 1.0f) {
-		railMoveTime_ = 0.0f;
-	}
+    // カメラの移動とレールに沿った描画
+    railMoveTime_ += speed / rail_.GetTotalLength();
+    if (railMoveTime_ >= 1.0f) {
+        railMoveTime_ = 0.0f;
+    }
 
 	// Y軸のオフセット
 	float offsetY = 0.0f; // オフセットの値をここで設定
@@ -109,42 +114,26 @@ void RailManager::RailDraw(const ViewProjection& viewProjection) {
 }
 
 
+void RailManager::ImGuiEdit() {
+    emitControlPosManager_->ImGuiUpdate(groupName_);
+}
+
+void RailManager::SetParent(WorldTransform* parent) {
+    emitControlPosManager_->SetParent(parent);
+}
+
+
 ///=====================================================
 /// WorldPos取得
 ///=====================================================
 Vector3 RailManager::GetWorldPos() const {
-
-	return Vector3(
-		worldTransform_.matWorld_.m[3][0], // X成分
-		worldTransform_.matWorld_.m[3][1], // Y成分
-		worldTransform_.matWorld_.m[3][2]  // Z成分
-	);
+    return  worldTransform_.GetWorldPos();
 }
 
 ///=====================================================
 /// ローカル座標取得
 ///=====================================================
 Vector3 RailManager::GetLocalPos() const {
-    // 親が設定されていない場合はワールド座標をそのまま返す
-    if (worldTransform_.parent_ == nullptr) {
-        return GetWorldPos();
-    }
-
-    // 親のワールド行列の逆行列を計算
-    Matrix4x4 parentInverse = Inverse(worldTransform_.parent_->matWorld_);
-
-    // ワールド座標を取得
-    Vector3 worldPos = GetWorldPos();
-
-    // 親の逆行列を使ってローカル座標を計算
-    Vector3 localPos = MatrixTransform(worldPos, parentInverse);
-    return localPos;
+    return  worldTransform_.GetLocalPos();
 }
 
-void RailManager::ImGuiEdit() {
-	emitControlPosManager_->ImGuiUpdate(groupName_);
-}
-
-void RailManager::SetParent(WorldTransform* parent) {
-	emitControlPosManager_->SetParent(parent);
-}

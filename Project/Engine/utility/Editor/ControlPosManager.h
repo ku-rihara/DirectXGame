@@ -8,6 +8,7 @@
 #include <json.hpp>
 
 class ControlPosManager {
+
 private:
     using json = nlohmann::json; // 別名を定義
 private:
@@ -55,5 +56,6 @@ public:
     ///=====================================================
    /// getter method
    ///=====================================================
-     std::vector<Vector3> GetPositions() const;
+     std::vector<Vector3> GetWorldPositions() const;
+     std::vector<Vector3> GetLocalPositions() const;
 };

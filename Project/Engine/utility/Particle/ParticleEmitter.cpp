@@ -236,7 +236,7 @@ void ParticleEmitter::Emit() {
 
 	//　発生座標のパターン切り替え
 	if (isMoveForRail_) {
-		emitPos_ = railManager_->GetWorldPos();
+		emitPos_ = railManager_->GetWorldTransform().GetWorldPos();
 	}
 	else {
 		emitPos_ = basePos_;
