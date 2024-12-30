@@ -31,9 +31,9 @@ void PlayerHandRight::Update() {
 	
 	BasePlayerHand::Update();
 
-	railManager_->Update(0.2f,(Vector3(1,1,1)));
+	railManager_->Update(0.2f,RailManager::PositionMode::LOCAL,(Vector3(1,1,1)));
 
-	combo3MovePos_ = transform_.parent_->translation_+railManager_->GetLocalPos();
+	combo3MovePos_ = transform_.parent_->translation_+railManager_->GetWorldPos();
 }
 
 ///=========================================================
