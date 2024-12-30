@@ -50,10 +50,7 @@ void PlayerHandLeft::AdjustParm() {
 
 		SaveAndLoad();
 		ImGui::PopID();
-
-
 	}
-
 }
 
 

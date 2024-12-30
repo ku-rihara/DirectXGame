@@ -11,14 +11,14 @@ private:
 /// ===================================================
 
 	
-
 public:
 	//コンストラクタ
 	PlayerRoot(Player* boss);
 	~PlayerRoot();
 
 	void Update()override;
-
 	void Debug()override;
+
+	void JumpForJoyState();
 
 };

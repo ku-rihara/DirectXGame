@@ -13,44 +13,90 @@
 
 void GameCamera::Init() {
 	viewprojection_.Init();
+
+	rotate_ = 2.0f;
+	offset_ = { 0,10,-30 };
 }
 
 void GameCamera::Update() {
 
+	MoveUpdate();
+	// ビュー行列の更新
+	viewprojection_.UpdateMatrix();
+}
 
-	// 旋回操作
-	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
-		const float rotateSpeed = 0.08f; // 回転速度
+void GameCamera::MoveUpdate() {
+	Input* input = Input::GetInstance();
+	const float rotateSpeed = 0.08f; // 回転速度
+
+	// 旋回操作: 左右キーでY軸の回転を操作
+	stickInput_ = { 0.0f, 0.0f, 0.0f }; // スティック入力相当のベクトルをリセット
+
+
+	///----------------------------------------------------------------------------------
+	///kyebord
+	///---------------------------------------------------------------------------------- 
+	if (input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT)) {
+
+		if (input->PushKey(DIK_RIGHT)) {
+			stickInput_.x = 1.0f;
+		}
+		else if (input->PushKey(DIK_LEFT)) {
+			stickInput_.x = -1.0f;
+		}
+	}
+	else  if (Input::GetInstance()->GetJoystickState(0, joyState)) {
+		///---------------------------------------------------------------------------------- 
+		///pad
+		///----------------------------------------------------------------------------------  
 
 		// スティックの入力を正規化して回転角度を決定
 		stickInput_ = { (float)joyState.Gamepad.sThumbRX / SHRT_MAX, (float)joyState.Gamepad.sThumbRY / SHRT_MAX, 0.0f };
-		stickInput_ = Vector3::Normalize(stickInput_);
 
-		// Y軸の回転角度を計算
+	}
+	// tekiou 
+	if ((stickInput_).Length() > 0.1f) {
+		stickInput_ = (stickInput_).Normalize();
 		destinationAngleY_ += stickInput_.x * rotateSpeed;
+	}
 
-		// 右スティック押し込みでリセット
-		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) {
-			Reset();
+	// リセット操作: Rキーでリセット
+	if (input->TrrigerKey(DIK_R)) {
+		Reset();
+	}
+	else {
+
+		if (Input::GetInstance()->GetJoystickState(0, joyState)) {
+			// 右スティック押し込みでリセット
+			if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) {
+				Reset();
+			}
 		}
 	}
 
+	// Y軸の回転補間処理
 	viewprojection_.rotation_.y = LerpShortAngle(viewprojection_.rotation_.y, destinationAngleY_, 0.3f);
 
-	// 追従対象がいれば
-	if (target_) {
-		// 追従座標の補間
-		interTarget_ = Lerp(interTarget_, target_->translation_, 0.4f);
+	TranslateAdapt(); // 変位適応
 
-		Vector3 offset = OffsetCalc();
-		// 座標をコピーしてオフセットはずらす
-		viewprojection_.translation_ = interTarget_ + offset;
-	}
-	// カメラの回転を固定の見下ろし角度に設定
-	const float fixedPitchAngle = 10.0f * (std::numbers::pi_v<float>) / 180.0f; // 見下ろし角度をラジアンに変換
-	viewprojection_.rotation_.x = fixedPitchAngle;       // 固定角度を設定
-	// ビュー行列の更新
-	viewprojection_.UpdateMatrix();
+	RotateAdapt();    // 回転適応
+}
+
+void GameCamera::RotateAdapt() {
+	// Y軸の回転補間処理
+	viewprojection_.rotation_.y = LerpShortAngle(viewprojection_.rotation_.y, destinationAngleY_, 0.3f);
+
+	// 見下ろし角度の固定
+	const float fixedPitchAngle = rotate_ * std::numbers::pi_v<float> / 180.0f;
+	viewprojection_.rotation_.x = fixedPitchAngle;
+}
+
+void GameCamera::TranslateAdapt() {
+	if (!target_) return;
+	interTarget_ = Lerp(interTarget_, target_->translation_, 1.0f);
+	Vector3 offset = OffsetCalc(offset_);
+	viewprojection_.translation_ = interTarget_ + offset;
+
 }
 
 void GameCamera::Reset() {
@@ -62,17 +108,16 @@ void GameCamera::Reset() {
 	}
 	destinationAngleY_ = viewprojection_.rotation_.y;
 	// 追従対象からのオフセット
-	Vector3 offset = OffsetCalc();
+	Vector3 offset = OffsetCalc(offset_);
 	viewprojection_.translation_ = interTarget_ + offset;
 }
 
-Vector3 GameCamera::OffsetCalc() const {
-	// 追従対象からカメラまでのオフセット
-	Vector3 offset = { 0.0f, 8.0f, -18.0f };
+Vector3 GameCamera::OffsetCalc(const Vector3& offset) const {
+	
 	// カメラの角度から回転行列を計算する
 	Matrix4x4 rotateMatrix = MakeRotateYMatrix(viewprojection_.rotation_.y);
-	offset = TransformNormal(offset, rotateMatrix);
-	return offset;
+	Vector3 resultOffset = TransformNormal(offset, rotateMatrix);
+	return resultOffset;
 }
 
 void GameCamera::SetTarget(const WorldTransform* target) {
@@ -82,9 +127,7 @@ void GameCamera::SetTarget(const WorldTransform* target) {
 
 void GameCamera::GetIsCameraMove() {
 	if ((stickInput_).Length() > 0.1f) {
-		viewMoveTime_++;
-		if (viewMoveTime_ >= kViewMoveTime_) {
-		}
+
 	}
 }
 

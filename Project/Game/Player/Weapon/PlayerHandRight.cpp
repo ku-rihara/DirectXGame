@@ -34,7 +34,7 @@ void PlayerHandRight::Update() {
 
 	railManager_->Update(0.2f,transform_.parent_->LookAt(Vector3(1,1,1)));
 
-	combo3MovePos_ = railManager_->GetWorldPos();
+	combo3MovePos_ = transform_.parent_->translation_+railManager_->GetLocalPos();
 }
 
 ///=========================================================
@@ -45,7 +45,6 @@ void PlayerHandRight::Draw(const ViewProjection& viewProjection) {
 	railManager_->Draw(viewProjection);
 	combo3MoveObj_->Draw(combo3MovePos_, viewProjection);
 }
-
 
 void PlayerHandRight::AdjustParm() {
 
@@ -72,5 +71,5 @@ void PlayerHandRight::SaveAndLoad() {
 
 void PlayerHandRight::SetParent(WorldTransform* parent) {
 	BasePlayerHand::SetParent(parent);
-	railManager_->SetParent(parent);
+	railManager_->SetParent(&transform_);
 }

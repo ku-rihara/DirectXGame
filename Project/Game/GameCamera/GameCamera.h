@@ -9,29 +9,33 @@ private:
 	/// ===================================================
 	///private varius
 	/// ===================================================
-//包含
-	LockOn* lockOn_;
 
+	LockOn* lockOn_;
 	ViewProjection viewprojection_;
-	// 追従対象
-	const WorldTransform* target_ = nullptr;
-	//追従対象の残像座標
-	Vector3 stickInput_;
-	Vector3 interTarget_ = {};
-	float destinationAngleY_;
-	int viewMoveTime_;
-	const int kViewMoveTime_ = 20;
+
+	const WorldTransform* target_ = nullptr;  /// 追従対象
+	Vector3 stickInput_;                      /// スティック入力ベクトル
+	Vector3 interTarget_ = {};                /// 
+	float destinationAngleY_;                 /// Y軸回転
+	int viewMoveTime_;                        /// カメラ移動時間
+
+	float rotate_;                            /// 回転
+	Vector3 offset_;                          /// オフセット
 
 public:
 	/// ===================================================
 	///public method
 	/// ===================================================
-	void Init();
-	void Update();
-	void Reset();
-	void GetIsCameraMove();
-	Vector3 OffsetCalc()const;
+	void Init();              /// 初期化
+	void Update();            /// 更新
+	void MoveUpdate();        /// カメラ移動更新
+	void Reset();             /// リセット
+	void GetIsCameraMove();   /// カメラ動いているか
 
+	void RotateAdapt();
+	void TranslateAdapt();
+
+	Vector3 OffsetCalc(const Vector3& offset)const;
 	Vector3 GetBaseCenterPosition() const;
 
 	/// ===================================================

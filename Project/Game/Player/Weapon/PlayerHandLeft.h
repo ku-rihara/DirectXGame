@@ -3,8 +3,7 @@
 
 #include"Player/Weapon/BasePlayerHand.h"
 
-#include<array>
-#include<memory>
+
 
 class PlayerHandLeft:public BasePlayerHand {
 private:
@@ -27,7 +26,7 @@ public:
 	void Draw(const ViewProjection& viewprojection)override;
 
 	 void AdjustParm()override;
-	  void SaveAndLoad()override;
+	 void SaveAndLoad()override;
 
 
 	  void SetParent(WorldTransform* parent)override;
