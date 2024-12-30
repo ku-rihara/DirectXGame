@@ -43,7 +43,7 @@ public:
 
     void ImGuiEdit();
 
-    Vector3 RotateVectorAroundAxis(const Vector3& vec, const Vector3& axis, float angle);
+  /*  Vector3 RotateVectorAroundAxis(const Vector3& vec, const Vector3& axis, float angle);*/
 
     /// <summary>
     /// プロジェクション行列計算用のメンバ設定関数群
@@ -56,8 +56,6 @@ public:
     //getter
     float GetRailMoveTime()const { return railMoveTime_; }
     const Vector3& GetCameraRotate()const { return cameraRotate_; }
-    Vector3 GetWorldPos()const;
-    Vector3 GetLocalPos() const;
     const WorldTransform& GetWorldTransform() const { return worldTransform_; }
     const ViewProjection& GetViewProjection() const { return viewProjection_; }
 
