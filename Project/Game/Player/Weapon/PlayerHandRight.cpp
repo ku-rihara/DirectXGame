@@ -26,14 +26,11 @@ void PlayerHandRight::Init() {
 ///==========================================================
 void PlayerHandRight::Update() {
 
-	///*Todo
-	/// ワールド座標しか取得できない
-	
 	BasePlayerHand::Update();
 
-	railManager_->Update(0.2f,RailManager::PositionMode::LOCAL,(Vector3(1,1,1)));
+	railManager_->Update(0.2f,RailManager::PositionMode::LOCAL,transform_.parent_->LookAt(Vector3(0,1,1)));
 
-	combo3MovePos_ = transform_.parent_->translation_+railManager_->GetWorldPos();
+	combo3MovePos_ = railManager_->GetPositionOnRail();
 }
 
 ///=========================================================
@@ -70,5 +67,5 @@ void PlayerHandRight::SaveAndLoad() {
 
 void PlayerHandRight::SetParent(WorldTransform* parent) {
 	BasePlayerHand::SetParent(parent);
-	railManager_->SetParent(parent);
+	/*railManager_->SetParent(parent);*/
 }
