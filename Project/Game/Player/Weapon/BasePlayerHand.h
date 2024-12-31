@@ -25,6 +25,9 @@ protected:
 	//　移動用制御点
 	std::unique_ptr<RailManager> railManager_; /// レールマネージャ
 
+	/// paramater
+	float railRunSpeed_;
+
 public:
 	/*virtual ~BasePlayerHand() = default;*/
 	///============================================
@@ -46,6 +49,7 @@ public:
 	void AddParmGroup();
 	void SetValues();
 	void ApplyGlobalParameter();
+	void AjustParmBase();
 
 	virtual void SaveAndLoad();
 

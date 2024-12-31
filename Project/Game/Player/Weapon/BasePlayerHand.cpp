@@ -70,6 +70,7 @@ void BasePlayerHand::AddParmGroup() {
 	// Position
 	//globalParameter_->AddSeparatorText("Position");
 	globalParameter_->AddItem(groupName_, "Translate", transform_.translation_);
+	globalParameter_->AddItem(groupName_, "RailRunSpeed", railRunSpeed_);
 
 }
 
@@ -85,6 +86,7 @@ void BasePlayerHand::SetValues() {
 	// Position
 	//globalParameter_->AddSeparatorText("Position");
 	globalParameter_->SetValue(groupName_, "Translate", transform_.translation_);
+	globalParameter_->SetValue(groupName_, "RailRunSpeed", railRunSpeed_);
 
 }
 
@@ -95,7 +97,7 @@ void BasePlayerHand::SetValues() {
 void BasePlayerHand::ApplyGlobalParameter() {
 	// Position
 	transform_.translation_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
-
+	railRunSpeed_ = globalParameter_->GetValue<float>(groupName_, "RailRunSpeed");
 }
 
 ///=====================================================
@@ -107,6 +109,11 @@ void BasePlayerHand::SaveAndLoad() {
 	ParmLoadForImGui();
 }
 
+void BasePlayerHand::AjustParmBase() {
+	ImGui::SeparatorText("Param");
+	ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
+	ImGui::DragFloat("RailRunSpeed", &railRunSpeed_, 0.01f);
+}
 
 void BasePlayerHand::SetParent(WorldTransform* parent) {
 	transform_.parent_ = parent;

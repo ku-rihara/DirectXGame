@@ -5,7 +5,7 @@
 
 PlayerHandRight::PlayerHandRight() {}
 
-///=========================================================
+///==========================================================
 ///　初期化
 ///==========================================================
 void PlayerHandRight::Init() {
@@ -25,17 +25,16 @@ void PlayerHandRight::Init() {
 ///　更新
 ///==========================================================
 void PlayerHandRight::Update() {
-
+	
 	BasePlayerHand::Update();
-
+	railManager_->Update(railRunSpeed_, RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
 }
 
 void PlayerHandRight::RailUpdate() {
-	railManager_->Update(0.2f, RailManager::PositionMode::LOCAL, transform_.parent_->LookAt(Vector3(0, 1, 1)));
 
-	combo3MovePos_ = railManager_->GetPositionOnRail();
+	/// レール更新
+	railManager_->Update(railRunSpeed_, RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
 }
-
 ///=========================================================
 ///　描画
 ///==========================================================
@@ -51,8 +50,7 @@ void PlayerHandRight::AdjustParm() {
 
 	if (ImGui::CollapsingHeader("RightHand")) {
 		ImGui::PushID("RightHand");
-		ImGui::SeparatorText("Transform");
-		ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
+		BasePlayerHand::AjustParmBase();
 		railManager_->ImGuiEdit();
 		SaveAndLoad();
 		ImGui::PopID();
@@ -70,5 +68,5 @@ void PlayerHandRight::SaveAndLoad() {
 
 void PlayerHandRight::SetParent(WorldTransform* parent) {
 	BasePlayerHand::SetParent(parent);
-	/*railManager_->SetParent(parent);*/
+	railManager_->SetParent(parent);
 }

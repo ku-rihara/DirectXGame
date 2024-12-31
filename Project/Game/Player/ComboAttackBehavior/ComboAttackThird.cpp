@@ -31,7 +31,7 @@ ComboAttackThird::ComboAttackThird(Player* player)
 
 	railManager_ = pPlayer_->GetRightHand()->GetRailManager();
 	railManager_->SetRailMoveTime(0.0f);
-	railManager_->SetIsRoop(false);
+	railManager_->SetIsRoop(true);
 
 	// 振る舞い順序初期化
 	order_ = Order::UPPER;

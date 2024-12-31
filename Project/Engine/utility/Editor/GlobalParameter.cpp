@@ -345,6 +345,7 @@ void GlobalParameter::LoadFile(const std::string& groupName) {
 }
 
 void GlobalParameter::ParmSaveForImGui(const std::string& groupName) {
+    ImGui::SeparatorText("SaveAndLoad");
     // 保存ボタン
     if (ImGui::Button(std::format("Save {}", groupName).c_str())) {
         SaveFile(groupName);

@@ -50,9 +50,7 @@ void PlayerHandLeft::AdjustParm() {
 
 	if (ImGui::CollapsingHeader("LeftHand")) {
 		ImGui::PushID("LeftHand"); 
-		ImGui::SeparatorText("Transform");
-		ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
-
+		BasePlayerHand::AjustParmBase();
 		SaveAndLoad();
 		ImGui::PopID();
 	}
