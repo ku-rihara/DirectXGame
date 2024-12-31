@@ -2,6 +2,7 @@
 #include"ComboAttackFirst.h"
 #include"ComboAttackSecond.h"
 #include"ComboAttackRoot.h"
+#include"ComboAttackThird.h"
 
 /// objs
 #include"Player/Player.h"
@@ -95,11 +96,11 @@ void ComboAttackSecond::Update() {
 			pPlayer_->ChangeComboBehavior
 			(std::make_unique<ComboAttackRoot>(pPlayer_));
 		}
-		/*/// 3コンボ目に移行
+		/// 3コンボ目に移行
 		else if (Input::GetInstance()->TrrigerKey(DIK_H)) {
 			pPlayer_->ChangeComboBehavior
-			(std::make_unique<ComboAttackSecond>(pPlayer_));
-		}*/
+			(std::make_unique<ComboAttackThird>(pPlayer_));
+		}
 	}
 
 }

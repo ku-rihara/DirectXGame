@@ -2,15 +2,15 @@
     "Player": {
         "JumpSpeed": 1.5,
         "NComboPTime1": 0.3799999952316284,
-        "NComboPTime2": 0.0,
+        "NComboPTime2": 0.5400000214576721,
         "NComboPunchEaseTime1": 0.20000000298023224,
         "NComboPunchEaseTime2": 0.20000000298023224,
         "NComboPunchReach1": 4.0,
         "NComboPunchReach2": 10.0,
         "Translate": [
-            -4.338934421539307,
+            -14.332757949829102,
             0.0,
-            4.202694416046143
+            6.916916847229004
         ],
         "rushDistance": 10.0,
         "rushEaseMax": 0.09000000357627869

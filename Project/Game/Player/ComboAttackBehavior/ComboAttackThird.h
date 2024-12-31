@@ -3,10 +3,11 @@
 #include"BaseComboAattackBehavior.h"
 #include"Easing.h"
 
+class RailManager;
 class ComboAttackThird : public BaseComboAattackBehavior {
 private:
 	enum class Order {
-		PUNCH,
+		UPPER,
 		BACKPUNCH,
 		WAIT,
 	};
@@ -17,6 +18,7 @@ private:
 	/// ===================================================
 
 	Order order_;               /// 振る舞い順序
+	RailManager* railManager_;
 
 	/// パンチ
 	Easing punchEase_;

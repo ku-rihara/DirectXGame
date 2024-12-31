@@ -26,8 +26,10 @@ public:
 	void Update()override;
 	void Draw(const ViewProjection& viewprojection)override;
 
+	void RailUpdate()override;
 	void AdjustParm()override;
 	void SaveAndLoad()override;
+
 
 
 	void SetParent(WorldTransform* parent);

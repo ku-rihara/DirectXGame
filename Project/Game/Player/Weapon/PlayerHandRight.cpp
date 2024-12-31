@@ -28,7 +28,10 @@ void PlayerHandRight::Update() {
 
 	BasePlayerHand::Update();
 
-	railManager_->Update(0.2f,RailManager::PositionMode::LOCAL,transform_.parent_->LookAt(Vector3(0,1,1)));
+}
+
+void PlayerHandRight::RailUpdate() {
+	railManager_->Update(0.2f, RailManager::PositionMode::LOCAL, transform_.parent_->LookAt(Vector3(0, 1, 1)));
 
 	combo3MovePos_ = railManager_->GetPositionOnRail();
 }

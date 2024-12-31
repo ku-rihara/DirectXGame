@@ -29,8 +29,12 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	lHandTargetPos_ = pPlayer_->GetLeftHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayer_->GetPunchReach(Player::SECOND);
 
 
+	railManager_ = pPlayer_->GetRightHand()->GetRailManager();
+	railManager_->SetRailMoveTime(0.0f);
+	railManager_->SetIsRoop(false);
+
 	// 振る舞い順序初期化
-	order_ = Order::PUNCH;
+	order_ = Order::UPPER;
 }
 
 ComboAttackThird::~ComboAttackThird() {
@@ -41,26 +45,20 @@ ComboAttackThird::~ComboAttackThird() {
 void ComboAttackThird::Update() {
 	switch (order_) {
 
-	case Order::PUNCH:
+	case Order::UPPER:
 
 		///----------------------------------------------------
-		/// パンチ
+		/// アッパー
 		///----------------------------------------------------
 
-		punchEase_.time += Frame::DeltaTimeRate();
+		pPlayer_->GetRightHand()->RailUpdate();
 
-		/// 拳を突き出す
-		punchPosition_ =
-			EaseInSine(lHandStartPos_, lHandTargetPos_, punchEase_.time, pPlayer_->GetPunchEaseMax(Player::SECOND));
-
-
-		// ハンドのローカル座標を更新
-		pPlayer_->GetLeftHand()->SetWorldPosition(punchPosition_);
+		pPlayer_->GetRightHand()->SetWorldPosition(railManager_->GetPositionOnRail());
 
 		// イージング終了時の処理
-		if (punchEase_.time >= pPlayer_->GetPunchEaseMax(Player::SECOND)) {
-			punchEase_.time = pPlayer_->GetPunchEaseMax(Player::SECOND);
-			order_ = Order::BACKPUNCH;
+		if (railManager_->GetRailMoveTime() >= 1.0f) {
+			railManager_->SetRailMoveTime(1.0f);
+			
 		}
 
 		break;
