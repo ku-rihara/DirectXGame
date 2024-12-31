@@ -63,10 +63,11 @@ public:
 	static float Dot(const Vector3& v1, const Vector3& v2);
 	/*static float Length(const Vector3& v);*/
 
-	static Vector3 ToUp();       // 上方向
+	static Vector3 ToUp();      // 上方向
 	static Vector3 ToForward(); // 前方向
 	static Vector3 ToRight();   // 右方向
-	static Vector3 Zero();
+	static Vector3 UnitVector();// 単位ベクトル
+	static Vector3 ZeroVector();
 
 	Vector3 Normalize()const;
 	float Length()const;

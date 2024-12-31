@@ -96,6 +96,11 @@ Vector3 Vector3::ToRight() {
 }
 
 // ゼロベクトル
-Vector3 Vector3::Zero() {
+Vector3 Vector3::ZeroVector() {
 	return Vector3(0, 0, 0);
+}
+
+// 単位ベクトル
+Vector3  Vector3::UnitVector() {
+	return Vector3(1.0f, 1.0f, 1.0f);
 }
