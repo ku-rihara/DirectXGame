@@ -22,11 +22,9 @@ private:
 
 	/// パンチ
 	Easing punchEase_;
-	Vector3 lHandStartPos_;    /// ハンドスタート座標
-	Vector3 lHandTargetPos_;   /// ハンドターゲット座標
-	Vector3 punchPosition_;
-
+	Easing upperJumpEase_;
 	float waitTine_;          /// 次コンボまでの待機時間
+	float initPosY_;
 
 public:
 	//コンストラクタ

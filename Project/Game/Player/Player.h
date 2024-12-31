@@ -70,6 +70,7 @@ private:
 	float rushDistance_;                           /// 突進距離
 	float rushEaseMax_;                            /// 突進スピード
 	float jumpSpeed_;	                           /// ジャンプ初速
+	float upperPosY_;                              /// アッパー時の高さ
 
 	///* コンボパラメータ
 	std::array<ComboParm, 2>normalComboParms_;
@@ -133,13 +134,14 @@ public:
 	LockOn* GetLockOn() const { return pLockOn_; }
 	const bool& GetIsAttack()const { return isAttack_; }
 	float GetMuzzulJumpSpeed()const { return jumpSpeed_; }
+	float GetUpperPosY()const { return upperPosY_; }
 	BasePlayerBehavior* GetBehavior()const { return behavior_.get(); }
 	/// ===================================================
 	/// setter
 	/// ===================================================
 	void SetIsAttack(bool is) { isAttack_ = is; }
 	void SetViewProjection(const ViewProjection* viewProjection) { viewProjection_ = viewProjection; }
-
+	/*void SetUpperPosY(const float& posy) { upperPosY_ = posy; }*/
 
 	/// comboParamater
 	float GetRushDistance()const { return rushDistance_; }

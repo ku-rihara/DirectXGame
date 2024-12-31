@@ -379,6 +379,9 @@ void Player::AdjustParm() {
 			ImGui::DragFloat("PunchReach2",
 				&normalComboParms_[1].punchReach,
 				0.01f);
+
+			ImGui::SeparatorText("ThirdCombo");   /// 3コンボ目
+			ImGui::DragFloat("UpperPosY", &upperPosY_, 0.1f);
 		}
 
 		/// セーブとロード
@@ -465,7 +468,7 @@ void Player::AddParmGroup() {
 	globalParameter_->AddItem(groupName_, "JumpSpeed", jumpSpeed_);
 	globalParameter_->AddItem(groupName_, "rushDistance", rushDistance_);
 	globalParameter_->AddItem(groupName_, "rushEaseMax", rushEaseMax_);
-
+	globalParameter_->AddItem(groupName_, "UpperPosY", upperPosY_);
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
 		globalParameter_->AddItem(
@@ -495,6 +498,8 @@ void Player::SetValues() {
 	globalParameter_->SetValue(groupName_, "JumpSpeed", jumpSpeed_);
 	globalParameter_->SetValue(groupName_, "rushDistance", rushDistance_);
 	globalParameter_->SetValue(groupName_, "rushEaseMax", rushEaseMax_);
+	globalParameter_->SetValue(groupName_, "UpperPosY", upperPosY_);
+
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
 		globalParameter_->SetValue(
@@ -524,7 +529,7 @@ void Player::ApplyGlobalParameter() {
 	jumpSpeed_ = globalParameter_->GetValue<float>(groupName_, "JumpSpeed");
 	rushDistance_ = globalParameter_->GetValue<float>(groupName_, "rushDistance");
 	rushEaseMax_ = globalParameter_->GetValue<float>(groupName_, "rushEaseMax");
-
+	upperPosY_= globalParameter_->GetValue<float>(groupName_, "UpperPosY");
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {

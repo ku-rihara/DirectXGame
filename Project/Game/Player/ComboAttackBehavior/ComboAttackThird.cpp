@@ -8,6 +8,7 @@
 
 /// math
 #include"Frame/Frame.h"
+#include<algorithm>
 
 #include<imgui.h>
 
@@ -20,18 +21,18 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	/// 変数初期化
 	///---------------------------------------------------------
 
+	initPosY_ = pPlayer_->GetWorldPosition().y;
+
 	/// parm
 	punchEase_.time = 0.0f;
 	waitTine_ = 0.0f;
-
-	/// パンチ座標セット
-	lHandStartPos_ = pPlayer_->GetLeftHand()->GetTransform().translation_;
-	lHandTargetPos_ = pPlayer_->GetLeftHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayer_->GetPunchReach(Player::SECOND);
-
+	upperJumpEase_.time = 0.0f;
+	upperJumpEase_.maxTime = 0.1f;
+	
 
 	railManager_ = pPlayer_->GetRightHand()->GetRailManager();
 	railManager_->SetRailMoveTime(0.0f);
-	railManager_->SetIsRoop(true);
+	railManager_->SetIsRoop(false);
 
 	// 振る舞い順序初期化
 	order_ = Order::UPPER;
@@ -51,14 +52,21 @@ void ComboAttackThird::Update() {
 		/// アッパー
 		///----------------------------------------------------
 
-		pPlayer_->GetRightHand()->RailUpdate();
+		upperJumpEase_.time += Frame::DeltaTimeRate();
 
+		upperJumpEase_.time = std::min(upperJumpEase_.time, upperJumpEase_.maxTime);
+
+		// レール更新と座標反映
+		pPlayer_->GetRightHand()->RailUpdate();
 		pPlayer_->GetRightHand()->SetWorldPosition(railManager_->GetPositionOnRail());
+
+		pPlayer_->SetWorldPositionY(
+			EaseInSine(initPosY_,initPosY_+pPlayer_->GetUpperPosY(),upperJumpEase_.time,upperJumpEase_.maxTime)
+		);
 
 		// イージング終了時の処理
 		if (railManager_->GetRailMoveTime() >= 1.0f) {
 			railManager_->SetRailMoveTime(1.0f);
-			
 		}
 
 		break;
@@ -67,19 +75,13 @@ void ComboAttackThird::Update() {
 		///----------------------------------------------------
 		/// バックパンチ
 		///----------------------------------------------------
-		punchEase_.time -= Frame::DeltaTimeRate();
+		
 
-		punchPosition_ =
-			EaseInSine(lHandStartPos_, lHandTargetPos_, punchEase_.time, pPlayer_->GetPunchEaseMax(Player::SECOND));
-
-		// ハンドのローカル座標を更新
-		pPlayer_->GetLeftHand()->SetWorldPosition(punchPosition_);
-
-		// イージング終了時の処理
-		if (punchEase_.time <= 0.0f) {
-			punchEase_.time = 0.0f;
-			order_ = Order::WAIT;
-		}
+		//// イージング終了時の処理
+		//if (punchEase_.time <= 0.0f) {
+		//	punchEase_.time = 0.0f;
+		//	order_ = Order::WAIT;
+		//}
 		break;
 
 	case Order::WAIT:

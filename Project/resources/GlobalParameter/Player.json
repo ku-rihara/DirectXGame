@@ -8,10 +8,11 @@
         "NComboPunchReach1": 4.0,
         "NComboPunchReach2": 10.0,
         "Translate": [
-            -14.332757949829102,
+            -12.541450500488281,
             0.0,
             6.916916847229004
         ],
+        "UpperPosY": 5.5,
         "rushDistance": 10.0,
         "rushEaseMax": 0.09000000357627869
     }
