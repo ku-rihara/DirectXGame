@@ -58,7 +58,7 @@ private:
 	/// Line								      
 	bool isMoveForRail_;                           ///レールに沿って動くか
 	float moveSpeed_;                              /// 移動速さ
-	std::unique_ptr<RailManager> railManager_; /// レールマネージャ
+	std::unique_ptr<RailManager> railManager_;     /// レールマネージャ
 	
 
 	/// name
@@ -93,6 +93,7 @@ public:
 	/// getter method
 	///=====================================================
 	const std::string& GetParticleName()const { return particleName_; }
+	
 
 
 	///=====================================================
@@ -101,6 +102,7 @@ public:
 	void SetParentBasePos(WorldTransform*parent);
 	void SetTextureHandle(const uint32_t& hanle);
 	void SetTargetPosition(const Vector3& pos) { targetPos_ = pos; }
+	
 	///=====================================================
 	/// Editor 
 	///=====================================================

@@ -17,18 +17,18 @@ void RailManager::Init(const std::string& groupName) {
 	viewProjection_.Init();
 	worldTransform_.Init();
 
-	worldTransform_.UpdateMatrix();
-	viewProjection_.UpdateMatrix();
-
-	// レールの初期化（オブジェクト数を指定）
-	rail_.Init(5);
-
-	/// 現在位置モデル
-	obj3D_.reset(Object3d::CreateModel("DebugCube", ".obj"));
-
-	/// 制御点マネージャー
-	emitControlPosManager_ = std::make_unique<ControlPosManager>();
-	emitControlPosManager_->LoadFromFile(groupName_);
+    worldTransform_.UpdateMatrix();
+    viewProjection_.UpdateMatrix();
+    isRoop_ = true;
+    // レールの初期化（オブジェクト数を指定）
+    rail_.Init(5);
+   
+    /// 現在位置モデル
+    obj3D_.reset(Object3d::CreateModel("DebugCube",".obj"));
+ 
+    /// 制御点マネージャー
+    emitControlPosManager_ = std::make_unique<ControlPosManager>();
+    emitControlPosManager_->LoadFromFile(groupName_);
 
 }
 
@@ -47,13 +47,13 @@ void RailManager::Update(const float&speed, const PositionMode& mode,const Vecto
 
     // カメラの移動とレールに沿った描画
     railMoveTime_ += speed / rail_.GetTotalLength();
-    if (railMoveTime_ >= 1.0f) {
-        railMoveTime_ = 0.0f;
-    }
 
-	// Y軸のオフセット
-	float offsetY = 0.0f; // オフセットの値をここで設定
-	Vector3 cameraPos = rail_.GetPositionOnRail(railMoveTime_);
+
+    RoopOrStop();// ループか止まるか
+
+    // Y軸のオフセット
+    float offsetY = 0.0f; // オフセットの値をここで設定
+    Vector3 cameraPos = rail_.GetPositionOnRail(railMoveTime_);
 
 	// ここでオフセットを加算
 	cameraPos.y += offsetY;
@@ -95,6 +95,18 @@ void RailManager::Update(const float&speed, const PositionMode& mode,const Vecto
 	// 行列の更新
 	worldTransform_.matWorld_ = MakeAffineMatrix(scale_, cameraRotate_, interpolatedPos);
 	/*  viewProjection_.matView_ = Inverse(worldTransform_.matWorld_);*/
+}
+
+void RailManager::RoopOrStop() {
+    if (railMoveTime_ < 1.0f) return;
+
+    if (isRoop_) {
+        railMoveTime_ = 0.0f;
+    }
+    else {
+        railMoveTime_ = 1.0f;
+    }
+    
 }
 
 ///=====================================================
