@@ -32,9 +32,9 @@ void RailManager::Init(const std::string& groupName) {
 
 }
 
-///=====================================================
+///===================================================================
 ///更新
-///=====================================================
+///====================================================================
 void RailManager::Update(const float&speed, const PositionMode& mode,const Vector3& Direction) {
     emitControlPosManager_->Update(Direction);
 
@@ -92,9 +92,9 @@ void RailManager::Update(const float&speed, const PositionMode& mode,const Vecto
 	//cameraRotate_.y += (targetRotateY - cameraRotate_.y) * 0.1f;
 	//cameraRotate_.x += (targetRotateX - cameraRotate_.x) * 0.1f;
 
-	// 行列の更新
-	worldTransform_.matWorld_ = MakeAffineMatrix(scale_, cameraRotate_, interpolatedPos);
-	/*  viewProjection_.matView_ = Inverse(worldTransform_.matWorld_);*/
+    // 行列の更新
+    worldTransform_.matWorld_ = MakeAffineMatrix(scale_, cameraRotate_, interpolatedPos);
+    /*viewProjection_.matView_ = Inverse(worldTransform_.matWorld_);*/
 }
 
 void RailManager::RoopOrStop() {
