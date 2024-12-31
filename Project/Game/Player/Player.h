@@ -31,6 +31,7 @@ public:
 	enum ComboNum {
 		FIRST,
 		SECOND,
+		THIRD,
 	};
 
 private:
@@ -73,7 +74,7 @@ private:
 	float upperPosY_;                              /// アッパー時の高さ
 
 	///* コンボパラメータ
-	std::array<ComboParm, 2>normalComboParms_;
+	std::array<ComboParm, 3>normalComboParms_;
 
 	// カメラのビュープロジェクション
 	const ViewProjection* viewProjection_ = nullptr;

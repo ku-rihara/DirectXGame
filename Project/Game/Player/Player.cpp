@@ -381,6 +381,15 @@ void Player::AdjustParm() {
 				0.01f);
 
 			ImGui::SeparatorText("ThirdCombo");   /// 3コンボ目
+
+			ImGui::DragFloat("PTime3",
+				&normalComboParms_[2].permissionTime,
+				0.01f);
+
+			ImGui::DragFloat("PunchEaseMax3",
+				&normalComboParms_[2].punchEaseMax,
+				0.01f);
+
 			ImGui::DragFloat("UpperPosY", &upperPosY_, 0.1f);
 		}
 

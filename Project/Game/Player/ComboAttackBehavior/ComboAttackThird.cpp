@@ -26,8 +26,7 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	/// parm
 	punchEase_.time = 0.0f;
 	waitTine_ = 0.0f;
-	upperJumpEase_.time = 0.0f;
-	upperJumpEase_.maxTime = 0.1f;
+	upperJumpEaseT_ = 0.0f;
 	
 
 	railManager_ = pPlayer_->GetRightHand()->GetRailManager();
@@ -52,21 +51,22 @@ void ComboAttackThird::Update() {
 		/// アッパー
 		///----------------------------------------------------
 
-		upperJumpEase_.time += Frame::DeltaTimeRate();
+		upperJumpEaseT_ += Frame::DeltaTimeRate();
 
-		upperJumpEase_.time = std::min(upperJumpEase_.time, upperJumpEase_.maxTime);
+		upperJumpEaseT_ = std::min(upperJumpEaseT_, pPlayer_->GetPunchEaseMax(Player::THIRD));
 
 		// レール更新と座標反映
 		pPlayer_->GetRightHand()->RailUpdate();
 		pPlayer_->GetRightHand()->SetWorldPosition(railManager_->GetPositionOnRail());
 
 		pPlayer_->SetWorldPositionY(
-			EaseInSine(initPosY_,initPosY_+pPlayer_->GetUpperPosY(),upperJumpEase_.time,upperJumpEase_.maxTime)
+			EaseInSine(initPosY_,initPosY_+pPlayer_->GetUpperPosY(),upperJumpEaseT_, pPlayer_->GetPunchEaseMax(Player::THIRD))
 		);
 
 		// イージング終了時の処理
 		if (railManager_->GetRailMoveTime() >= 1.0f) {
 			railManager_->SetRailMoveTime(1.0f);
+			order_ = Order::BACKPUNCH;
 		}
 
 		break;
@@ -75,7 +75,7 @@ void ComboAttackThird::Update() {
 		///----------------------------------------------------
 		/// バックパンチ
 		///----------------------------------------------------
-		
+		pPlayer_->Fall();
 
 		//// イージング終了時の処理
 		//if (punchEase_.time <= 0.0f) {

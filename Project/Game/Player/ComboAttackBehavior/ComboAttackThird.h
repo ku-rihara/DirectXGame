@@ -22,7 +22,7 @@ private:
 
 	/// パンチ
 	Easing punchEase_;
-	Easing upperJumpEase_;
+	float upperJumpEaseT_;
 	float waitTine_;          /// 次コンボまでの待機時間
 	float initPosY_;
 
