@@ -64,7 +64,8 @@ private:
 
 										         
 	/// jump							         
-	const float fallLimit_ = -1.2f;              /// ジャンプ
+	const float fallSpeedLimit_ = -1.2f;              /// ジャンプ
+	float gravity_;
 										         										         
 	bool isAttack_;                              /// 攻撃フラグ 
 	float fallSpeed_;                  	         /// 落ちるスピード

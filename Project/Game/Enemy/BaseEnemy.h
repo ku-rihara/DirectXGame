@@ -18,7 +18,8 @@ protected:
 
 	/// behavior
 	std::unique_ptr<BaseEnemyBehaivor>behavior_ = nullptr;
-
+public:
+	static float InitY_;
 public:
 	BaseEnemy();
 
@@ -32,7 +33,7 @@ public:
 	virtual void Draw(const ViewProjection& viewProjection);
 	virtual void SpriteDraw(const ViewProjection& viewProjection);
 	
-	Vector3 GetDirectionToPlayer();
+	Vector3 GetDirectionToTarget(const Vector3&target);
 
 	/// Hpバー処理
 	virtual void DisplayHpBar(const ViewProjection& viewProjection);

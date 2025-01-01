@@ -2,22 +2,23 @@
 // bvehaivor
 #include"Behavior/EnemyChasePlayer.h"
 #include"Behavior/EnemyHitBackDamage.h"
+#include"Behavior/EnemyUpperDamage.h"
 
 #include"Matrix4x4.h"
 #include"Player/Player.h"
 
 /// collisionBox
 #include"CollisionBox/PunchCollisionBox.h"
+#include"CollisionBox/UpperCollisionBox.h"
 
 
-
-//uint32_t BaseEnemy::nextSerialNum_ = 0;
+///=========================================================
+///　static 変数初期化
+///==========================================================
+float BaseEnemy::InitY_ = 0.5f;
 
 BaseEnemy::BaseEnemy() {
-	//// シリアル番号を振る
-	//serialNum_ = nextSerialNum_;
-	//// 次の番号を加算
-	//++nextSerialNum_;
+
 }
 ///========================================================
 ///  初期化
@@ -67,9 +68,8 @@ void BaseEnemy::DisplayHpBar(const ViewProjection& viewProjection) {
 	//hpbar_->Update(hp_);
 }
 
-Vector3 BaseEnemy::GetDirectionToPlayer() {
-	// ターゲット座標を取得
-	Vector3 target = GetPlayer()->GetWorldPosition();
+Vector3 BaseEnemy::GetDirectionToTarget(const Vector3& target) {
+	
 	// 現在のボス位置を取得
 	Vector3 enemyPosition =GetWorldPosition();
 
@@ -107,6 +107,16 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 		if (!dynamic_cast<EnemyHitBackDamage*>(behavior_.get())) {
 			ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
 		}
+		return;
+	}
+
+	//アッパーを食らったら
+	 if (dynamic_cast<UpperCollisionBox*>(other)) {
+
+		if (!dynamic_cast<EnemyUpperDamage*>(behavior_.get())) {
+			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
+		}
+		return;
 	}
 
 	/*if (dynamic_cast<PunchCollisionSecond*>(other)) {

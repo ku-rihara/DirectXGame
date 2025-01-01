@@ -1,5 +1,6 @@
 {
     "Player": {
+        "Gravity": 4.420000076293945,
         "JumpSpeed": 1.5,
         "MoveSpeed": 10.520000457763672,
         "NComboPTime1": 0.23999999463558197,

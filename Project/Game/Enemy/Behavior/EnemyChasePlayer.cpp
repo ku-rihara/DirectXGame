@@ -36,7 +36,7 @@ void EnemyChasePlayer::Update() {
 	if (!isChase_) return;
 		
 		// ターゲットへのベクトル
-		Vector3 direction =pBaseEnemy_->GetDirectionToPlayer();
+		Vector3 direction =pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());
 
 		// 距離
 		distance_ = std::sqrt(direction.x * direction.x + direction.z * direction.z);

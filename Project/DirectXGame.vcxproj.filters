@@ -433,6 +433,9 @@
     <ClCompile Include="Game\Enemy\Behavior\EnemyChasePlayer.cpp">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\EnemyUpperDamage.cpp">
+      <Filter>Game\Enemy\Behevior</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -736,6 +739,9 @@
       <Filter>Game\Enemy\Behevior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\EnemyChasePlayer.h">
+      <Filter>Game\Enemy\Behevior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\EnemyUpperDamage.h">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClInclude>
   </ItemGroup>

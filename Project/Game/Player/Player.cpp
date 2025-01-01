@@ -244,14 +244,11 @@ bool Player::GetIsMoving() {
 ///  Player Jump
 /// ===================================================
 void Player::Jump(float& speed) {
-	// 移動
+	//ジャンプスピード加算
 	transform_.translation_.y += speed;
-	// 重力加速度
-	const float kGravityAcceleration = 4.4f * Frame::DeltaTimeRate();
-	// 加速度ベクトル
-	float accelerationY = -kGravityAcceleration;
-	// 加速する
-	speed = max(speed + accelerationY, fallLimit_);
+
+	// 落下スピード限界まで重力かける
+	speed = max(speed - (gravity_ * Frame::DeltaTimeRate()), fallSpeedLimit_);
 
 	// 着地
 	if (transform_.translation_.y <= Player::InitY_) {
@@ -315,12 +312,8 @@ void Player::Fall() {
 
 	// 移動
 	transform_.translation_.y += fallSpeed_;
-	// 重力加速度
-	const float kGravityAcceleration = 3.4f * Frame::DeltaTimeRate();
-	// 加速度ベクトル
-	float accelerationY = -kGravityAcceleration;
 	// 加速する
-	fallSpeed_ = max(fallSpeed_ + accelerationY, -0.75f);
+	fallSpeed_ = max(fallSpeed_ - (gravity_ * Frame::DeltaTimeRate()), -0.75f);
 
 	// 着地
 	if (transform_.translation_.y <= Player::InitY_) {
@@ -346,6 +339,7 @@ void Player::AdjustParm() {
 		ImGui::SeparatorText("FloatParamater");
 		ImGui::DragFloat("jumpSpeed", &jumpSpeed_, 0.01f);
 		ImGui::DragFloat("MoveSpeed", &moveSpeed_, 0.01f);
+		ImGui::DragFloat("Gravity", &gravity_, 0.01f);
 
 		/// コンボパラメータ
 		if (ImGui::CollapsingHeader("NormalCombo")) {
@@ -480,6 +474,7 @@ void Player::AddParmGroup() {
 	globalParameter_->AddItem(groupName_, "rushEaseMax", rushEaseMax_);
 	globalParameter_->AddItem(groupName_, "UpperPosY", upperPosY_);
 	globalParameter_->AddItem(groupName_, "MoveSpeed", moveSpeed_);
+	globalParameter_->AddItem(groupName_, "Gravity", gravity_);
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
@@ -512,6 +507,7 @@ void Player::SetValues() {
 	globalParameter_->SetValue(groupName_, "rushEaseMax", rushEaseMax_);
 	globalParameter_->SetValue(groupName_, "UpperPosY", upperPosY_);
 	globalParameter_->SetValue(groupName_, "MoveSpeed", moveSpeed_);
+	globalParameter_->SetValue(groupName_, "Gravity", gravity_);
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
@@ -544,7 +540,7 @@ void Player::ApplyGlobalParameter() {
 	rushEaseMax_ = globalParameter_->GetValue<float>(groupName_, "rushEaseMax");
 	upperPosY_= globalParameter_->GetValue<float>(groupName_, "UpperPosY");
 	moveSpeed_ = globalParameter_->GetValue<float>(groupName_, "MoveSpeed");
-
+	gravity_ = globalParameter_->GetValue<float>(groupName_, "Gravity");
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {

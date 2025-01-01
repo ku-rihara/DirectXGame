@@ -1,6 +1,6 @@
 
 /// behavior
-#include"EnemyHitBackDamage.h"
+#include"EnemyUpperDamage.h"
 #include"EnemyChasePlayer.h"
 /// obj
 #include"Enemy/BaseEnemy.h"
@@ -9,35 +9,35 @@
 #include"MathFunction.h"
 #include"Frame/Frame.h"
 
-//初期化
-EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
-	: BaseEnemyBehaivor("EnemyHitBackDamage", boss) {
 
-	/// ヒットバックのパラメータ
-	initPos_ = pBaseEnemy_->GetWorldPosition();
-	speed_ = 0.15f;
+//初期化
+EnemyUpperDamage::EnemyUpperDamage(BaseEnemy* boss)
+	: BaseEnemyBehaivor("EnemyUpperDamage", boss) {
+
+	
+	speed_ = 1.2f; 
+	gravity_ = 3.4f;
+	
 	// 赤色
 	pBaseEnemy_->SetColor(Vector4(0.9f, 0, 0, 0.9f));
 
-	easing_.time = 0.0f;
-	easing_.maxTime = 0.15f;
-
-	step_ = Step::DIRECTIONSET; /// ステップ初期化
+	step_ = Step::HITBACK; /// ステップ初期化
 }
 
-EnemyHitBackDamage::~EnemyHitBackDamage() {
+EnemyUpperDamage::~EnemyUpperDamage() {
 
 }
 
-void EnemyHitBackDamage::Update() {
+void EnemyUpperDamage::Update() {
 	
 	
 	switch (step_)
 	{
 
-	case Step::DIRECTIONSET:
+	case Step::HITBACK:
+
 	/// ------------------------------------------------------
-	/// 向き計算
+	/// ヒットバッグ
 	///---------------------------------------------------------
 
 		// ターゲットへのベクトル
@@ -49,39 +49,25 @@ void EnemyHitBackDamage::Update() {
 		// 目標角度を計算
 		objectiveAngle_ = std::atan2(-direction_.x, -direction_.z);
 
-		/// 吹っ飛ぶ距離を計算
-		backPos_ = initPos_ + (direction_ * -speed_);
-
-		step_ = Step::HITBACK;
-		break;
-
-	case Step::HITBACK:
-
-	/// ------------------------------------------------------
-	/// ヒットバッグ
-	///---------------------------------------------------------
-
 		// 最短角度補間でプレイヤーの回転を更新
 		pBaseEnemy_->SetRotationY(LerpShortAngle(pBaseEnemy_->GetTransform().rotation_.y, objectiveAngle_, 0.5f));
 
-		easing_.time += Frame::DeltaTimeRate();
+		// Yに加算
+		pBaseEnemy_->AddPosition(Vector3(0, speed_, 0));
+		
+		// 加速する
+		speed_ =max(speed_ - (gravity_ * Frame::DeltaTimeRate()), fallSpeedLimit_);
 
-		/// イージングでヒットバックする
-		pBaseEnemy_->SetWorldPosition(
-			EaseInSine(initPos_, backPos_, easing_.time, easing_.maxTime)
-		);
-
-		//次のステップ	
-		if (easing_.time >= easing_.maxTime) {
-			easing_.time = easing_.maxTime;
+		// 着地
+		if (pBaseEnemy_->GetTransform().translation_.y > BaseEnemy::InitY_) break;
+		// 追従に戻す
+			pBaseEnemy_->SetWorldPositionY(BaseEnemy::InitY_);
 			step_ = Step::RETUNROOT;
-		}
-
-
+		
 		break;
 	case Step::RETUNROOT:
 	/// -------------------------------------------------------
-	/// 通常に戻す
+	/// 追従に戻す
 	///---------------------------------------------------------
 		pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
 		break;
@@ -90,7 +76,7 @@ void EnemyHitBackDamage::Update() {
 	
 }
 
-void EnemyHitBackDamage::Debug() {
+void EnemyUpperDamage::Debug() {
 	
 
 }
