@@ -13,8 +13,6 @@ public:
 
 
 	Vector3 GetCollisionPos() const override;
-
-	void SetZeroSizeCollision()override;
 	void IsAdapt(bool is)override;
 	void SetSize(const Vector3& size)override;
 	void SetPosition(const Vector3& position)override;

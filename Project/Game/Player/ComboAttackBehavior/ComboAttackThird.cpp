@@ -28,8 +28,12 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	/// collisionBox
 	collisionBox_ = std::make_unique<UpperCollisionBox>();
 	collisionBox_->Init();
-	Vector3 collisionSize = Vector3::UnitVector();
-	collisionBox_->SetSize(collisionSize);// 当たり判定サイズ
+
+	collisionBox_->SetSize(Vector3::UnitVector());// 当たり判定サイズ
+	collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+	Vector3 forwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
+	collisionBox_->SetOffset(forwardDirection * 4.0f);
+	collisionBox_->IsAdapt(true);
 
 	railManager_ = pPlayer_->GetRightHand()->GetRailManager();
 	railManager_->SetRailMoveTime(0.0f);
@@ -58,11 +62,16 @@ void ComboAttackThird::Update() {
 
 		upperJumpEaseT_ += Frame::DeltaTimeRate();
 
+		///0.3秒で当たり判定消す
+		if (upperJumpEaseT_ >= kCollisionAliveTime_) {
+			collisionBox_->IsAdapt(false);
+		}
+
 		upperJumpEaseT_ = std::min(upperJumpEaseT_, pPlayer_->GetPunchEaseMax(Player::THIRD));
 
 		// レール更新と座標反映
 		pPlayer_->GetRightHand()->RailUpdate(pPlayer_->GetRightHand()->GetRailRunSpeed());
-		pPlayer_->GetRightHand()->SetWorldPosition(railManager_->GetPositionOnRail());
+		
 
 		pPlayer_->SetWorldPositionY(
 			EaseInSine(initPosY_,initPosY_+pPlayer_->GetUpperPosY(),upperJumpEaseT_, pPlayer_->GetPunchEaseMax(Player::THIRD))
@@ -103,10 +112,17 @@ void ComboAttackThird::Update() {
 
 		// レール更新と座標反映
 		pPlayer_->GetRightHand()->RailUpdate(-pPlayer_->GetRightHand()->GetRailRunSpeed());
-		pPlayer_->GetRightHand()->SetWorldPosition(railManager_->GetPositionOnRail());
-
+		
+		/// 3コンボ目終了の条件
 		if (pPlayer_->GetWorldPosition().y > pPlayer_->InitY_)break;
 		if (railManager_->GetRailMoveTime() > 0.0f) break;
+
+		pPlayer_->SetWorldPositionY(pPlayer_->InitY_);
+		railManager_->SetRailMoveTime(0.0f);
+
+		// レール更新と座標反映
+		pPlayer_->GetRightHand()->RailUpdate(0.0f);
+
 
 		pPlayer_->ChangeComboBehavior
 		(std::make_unique<ComboAttackRoot>(pPlayer_));

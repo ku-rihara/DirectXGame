@@ -2,22 +2,22 @@
     "Player": {
         "JumpSpeed": 1.5,
         "MoveSpeed": 10.520000457763672,
-        "NComboPTime1": 0.3799999952316284,
-        "NComboPTime2": 0.5400000214576721,
-        "NComboPTime3": 0.38999998569488525,
-        "NComboPunchEaseTime1": 0.20000000298023224,
-        "NComboPunchEaseTime2": 0.20000000298023224,
+        "NComboPTime1": 0.23999999463558197,
+        "NComboPTime2": 0.20000000298023224,
+        "NComboPTime3": 0.23999999463558197,
+        "NComboPunchEaseTime1": 0.15000000596046448,
+        "NComboPunchEaseTime2": 0.15000000596046448,
         "NComboPunchEaseTime3": 0.10000000149011612,
         "NComboPunchReach1": 4.0,
-        "NComboPunchReach2": 10.0,
+        "NComboPunchReach2": 4.0,
         "NComboPunchReach3": 0.0,
         "Translate": [
-            -12.541450500488281,
-            0.0,
-            6.916916847229004
+            27.203567504882813,
+            0.5,
+            32.71660232543945
         ],
         "UpperPosY": 6.199999809265137,
-        "rushDistance": 10.0,
+        "rushDistance": 2.4100000858306885,
         "rushEaseMax": 0.09000000357627869
     }
 }

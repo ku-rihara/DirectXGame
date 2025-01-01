@@ -33,6 +33,7 @@ void PlayerHandRight::Update() {
 void PlayerHandRight::RailUpdate(const float& speed) {
 	/// レール更新
 	railManager_->Update(speed, RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
+	SetWorldPosition(railManager_->GetPositionOnRail());
 }
 
 

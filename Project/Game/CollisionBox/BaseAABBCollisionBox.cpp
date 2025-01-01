@@ -32,9 +32,7 @@ Vector3 BaseAABBCollisionBox::GetCollisionPos() const {
 	return worldPos;
 }
 
-void BaseAABBCollisionBox::SetZeroSizeCollision() {
-	SetCollisionRadius(Vector3{ 0,0,0 });
-}
+
 void BaseAABBCollisionBox::SetSize(const Vector3& size) {
 	SetCollisionRadius(size);
 }

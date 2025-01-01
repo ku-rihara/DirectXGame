@@ -18,10 +18,6 @@ Vector3 UpperCollisionBox::GetCollisionPos() const {
 	return BaseAABBCollisionBox::GetCollisionPos();
 }
 
-void UpperCollisionBox::SetZeroSizeCollision() {
-	BaseAABBCollisionBox::SetZeroSizeCollision();
-}
-
 void UpperCollisionBox::SetSize(const Vector3& size) {
 	BaseAABBCollisionBox::SetSize(size);
 }

@@ -2,21 +2,25 @@
 
 #include"Collider/AABBCollider.h"
 #include"3d/WorldTransform.h"
+#include"utility/Editor/GlobalParameter.h"
 
 class BaseAABBCollisionBox :public AABBCollider {
 protected:
-	bool isEnter_;
-	bool isStay_;
-	bool isExit_;
+	/// *TODO 
+	/// Imguiで編集できるエディターを作成
+
+	GlobalParameter* globalParamater_;
 	WorldTransform transform_;
+	float scalerOffset_;
 	Vector3 offset_;
+	float aliveTime_;
 public:
 
 	virtual void Init();
 	virtual void Update();
 	virtual void Draw();
 
-	virtual void SetZeroSizeCollision();
+
 	virtual void IsAdapt(bool is);
 	virtual void SetSize(const Vector3& size);
 	virtual void SetPosition(const Vector3&position);
