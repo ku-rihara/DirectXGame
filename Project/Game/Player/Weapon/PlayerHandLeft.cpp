@@ -27,8 +27,8 @@ void PlayerHandLeft::Update() {
 	
 }
 
-void PlayerHandLeft::RailUpdate() {
-	
+void PlayerHandLeft::RailUpdate(const float& speed) {
+	speed;
 }
 
 

@@ -133,7 +133,7 @@ void Player::DamageRendition() {
 ///=========================================================
 /// 移動の入力処理
 ///==========================================================
-Vector3 Player::GetInputVelocity() {
+Vector3 Player::GetInputDirecton() {
 
 	Vector3 velocity = { 0.0f, 0.0f, 0.0f };
 	Input* input = Input::GetInstance();
@@ -167,19 +167,19 @@ Vector3 Player::GetInputVelocity() {
 void Player::Move(const float& speed) {
 
 	/// Inuputから速度代入
-	velocity_ = GetInputVelocity();
+	direction_ = GetInputDirecton();
 
 	/// 移動処理
 	if (GetIsMoving()) {
 		// 移動量に速さを反映
-		velocity_ = Vector3::Normalize(velocity_) * (speed)*Frame::DeltaTimeRate();
+		direction_ = Vector3::Normalize(direction_) * (speed)*Frame::DeltaTimeRate();
 		// 移動ベクトルをカメラの角度だけ回転する
 		Matrix4x4 rotateMatrix = MakeRotateYMatrix(viewProjection_->rotation_.y);
-		velocity_ = TransformNormal(velocity_, rotateMatrix);
+		direction_ = TransformNormal(direction_, rotateMatrix);
 		// 移動
-		transform_.translation_ += velocity_;
+		transform_.translation_ += direction_;
 		// 目標角度
-		objectiveAngle_ = std::atan2(velocity_.x, velocity_.z);
+		objectiveAngle_ = std::atan2(direction_.x, direction_.z);
 		// 最短角度補間
 		transform_.rotation_.y = LerpShortAngle(transform_.rotation_.y, objectiveAngle_, 0.3f);
 
@@ -345,6 +345,7 @@ void Player::AdjustParm() {
 		///　Floatのパラメータ
 		ImGui::SeparatorText("FloatParamater");
 		ImGui::DragFloat("jumpSpeed", &jumpSpeed_, 0.01f);
+		ImGui::DragFloat("MoveSpeed", &moveSpeed_, 0.01f);
 
 		/// コンボパラメータ
 		if (ImGui::CollapsingHeader("NormalCombo")) {
@@ -478,6 +479,8 @@ void Player::AddParmGroup() {
 	globalParameter_->AddItem(groupName_, "rushDistance", rushDistance_);
 	globalParameter_->AddItem(groupName_, "rushEaseMax", rushEaseMax_);
 	globalParameter_->AddItem(groupName_, "UpperPosY", upperPosY_);
+	globalParameter_->AddItem(groupName_, "MoveSpeed", moveSpeed_);
+
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
 		globalParameter_->AddItem(
@@ -508,6 +511,7 @@ void Player::SetValues() {
 	globalParameter_->SetValue(groupName_, "rushDistance", rushDistance_);
 	globalParameter_->SetValue(groupName_, "rushEaseMax", rushEaseMax_);
 	globalParameter_->SetValue(groupName_, "UpperPosY", upperPosY_);
+	globalParameter_->SetValue(groupName_, "MoveSpeed", moveSpeed_);
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
@@ -539,6 +543,8 @@ void Player::ApplyGlobalParameter() {
 	rushDistance_ = globalParameter_->GetValue<float>(groupName_, "rushDistance");
 	rushEaseMax_ = globalParameter_->GetValue<float>(groupName_, "rushEaseMax");
 	upperPosY_= globalParameter_->GetValue<float>(groupName_, "UpperPosY");
+	moveSpeed_ = globalParameter_->GetValue<float>(groupName_, "MoveSpeed");
+
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {

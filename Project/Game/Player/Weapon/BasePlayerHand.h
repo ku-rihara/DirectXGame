@@ -39,7 +39,7 @@ public:
 	
 	virtual void Draw(const ViewProjection& viewprojection);
 
-	virtual void RailUpdate() = 0;
+	virtual void RailUpdate(const float& speed) = 0;
 	virtual void AdjustParm() = 0;
 
 	///-------------------------------------------------------------------------------------
@@ -57,6 +57,7 @@ public:
 	/// getter method
 	///=============================================
 	Vector3 GetDirection()const { return direction_; }
+	float GetRailRunSpeed()const { return railRunSpeed_; }
 	RailManager* GetRailManager() { return railManager_.get(); }
 	///============================================
 	/// setter method

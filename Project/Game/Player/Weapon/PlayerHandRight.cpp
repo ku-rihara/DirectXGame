@@ -27,14 +27,15 @@ void PlayerHandRight::Init() {
 void PlayerHandRight::Update() {
 	
 	BasePlayerHand::Update();
-	railManager_->Update(railRunSpeed_, RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
+	
 }
 
-void PlayerHandRight::RailUpdate() {
-
+void PlayerHandRight::RailUpdate(const float& speed) {
 	/// レール更新
-	railManager_->Update(railRunSpeed_, RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
+	railManager_->Update(speed, RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
 }
+
+
 ///=========================================================
 ///　描画
 ///==========================================================

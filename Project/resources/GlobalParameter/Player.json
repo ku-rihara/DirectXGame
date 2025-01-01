@@ -1,6 +1,7 @@
 {
     "Player": {
         "JumpSpeed": 1.5,
+        "MoveSpeed": 10.520000457763672,
         "NComboPTime1": 0.3799999952316284,
         "NComboPTime2": 0.5400000214576721,
         "NComboPTime3": 0.38999998569488525,

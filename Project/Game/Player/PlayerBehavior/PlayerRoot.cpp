@@ -29,7 +29,7 @@ PlayerRoot ::~PlayerRoot() {
 //更新
 void PlayerRoot::Update() {
 
-	pPlayer_->Move(10.3f);
+	pPlayer_->Move(pPlayer_->GetMoveSpeed());
 
 	//　ジャンプに切り替え
 	if (Input::GetInstance()->PushKey(DIK_J)) {

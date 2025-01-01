@@ -25,7 +25,7 @@ public:
 	void Update()override;
 	void Draw(const ViewProjection& viewprojection)override;
 
-	void RailUpdate()override;
+	void RailUpdate(const float& speed)override;
 	 void AdjustParm()override;
 	 void SaveAndLoad()override;
 

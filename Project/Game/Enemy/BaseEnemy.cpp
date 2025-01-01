@@ -8,7 +8,7 @@
 
 /// collisionBox
 #include"CollisionBox/PunchCollisionBox.h"
-#include"CollisionBox/PunchCollisionSecond.h"
+
 
 
 //uint32_t BaseEnemy::nextSerialNum_ = 0;

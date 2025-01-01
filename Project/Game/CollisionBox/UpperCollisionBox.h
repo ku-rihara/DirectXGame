@@ -2,7 +2,7 @@
 
 #include"BaseAABBCollisionBox.h"
 
-class PunchCollisionSecond :public BaseAABBCollisionBox {
+class UpperCollisionBox :public BaseAABBCollisionBox {
 private:
 	
 public:

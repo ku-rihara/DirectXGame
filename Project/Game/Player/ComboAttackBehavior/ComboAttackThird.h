@@ -2,14 +2,15 @@
 
 #include"BaseComboAattackBehavior.h"
 #include"Easing.h"
+#include"CollisionBox/UpperCollisionBox.h"
 
 class RailManager;
 class ComboAttackThird : public BaseComboAattackBehavior {
 private:
 	enum class Order {
 		UPPER,
-		BACKPUNCH,
 		WAIT,
+		FALL,
 	};
 private:
 
@@ -19,6 +20,7 @@ private:
 
 	Order order_;               /// 振る舞い順序
 	RailManager* railManager_;
+	std::unique_ptr<UpperCollisionBox>collisionBox_;
 
 	/// パンチ
 	Easing punchEase_;

@@ -28,6 +28,8 @@ ComboAttackSecond::ComboAttackSecond(Player* player)
 	/// collisionBox
 	collisionBox_ = std::make_unique<PunchCollisionBox>();
 	collisionBox_->Init();
+	Vector3 collisionSize = Vector3::UnitVector();
+	collisionBox_->SetSize(collisionSize);// 当たり判定サイズ
 
 	/// パンチ座標セット
 	lHandStartPos_ = pPlayer_->GetLeftHand()->GetTransform().translation_;

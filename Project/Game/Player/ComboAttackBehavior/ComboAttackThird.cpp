@@ -1,6 +1,5 @@
 /// behavior
 #include"ComboAttackThird.h"
-#include"ComboAttackSecond.h"
 #include"ComboAttackRoot.h"
 
 /// objs
@@ -8,9 +7,7 @@
 
 /// math
 #include"Frame/Frame.h"
-#include<algorithm>
 
-#include<imgui.h>
 
 
 //初期化
@@ -28,6 +25,11 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	waitTine_ = 0.0f;
 	upperJumpEaseT_ = 0.0f;
 	
+	/// collisionBox
+	collisionBox_ = std::make_unique<UpperCollisionBox>();
+	collisionBox_->Init();
+	Vector3 collisionSize = Vector3::UnitVector();
+	collisionBox_->SetSize(collisionSize);// 当たり判定サイズ
 
 	railManager_ = pPlayer_->GetRightHand()->GetRailManager();
 	railManager_->SetRailMoveTime(0.0f);
@@ -43,6 +45,9 @@ ComboAttackThird::~ComboAttackThird() {
 
 //更新
 void ComboAttackThird::Update() {
+
+	collisionBox_->Update();/// コリジョンボックス更新
+
 	switch (order_) {
 
 	case Order::UPPER:
@@ -56,7 +61,7 @@ void ComboAttackThird::Update() {
 		upperJumpEaseT_ = std::min(upperJumpEaseT_, pPlayer_->GetPunchEaseMax(Player::THIRD));
 
 		// レール更新と座標反映
-		pPlayer_->GetRightHand()->RailUpdate();
+		pPlayer_->GetRightHand()->RailUpdate(pPlayer_->GetRightHand()->GetRailRunSpeed());
 		pPlayer_->GetRightHand()->SetWorldPosition(railManager_->GetPositionOnRail());
 
 		pPlayer_->SetWorldPositionY(
@@ -64,33 +69,23 @@ void ComboAttackThird::Update() {
 		);
 
 		// イージング終了時の処理
-		if (railManager_->GetRailMoveTime() >= 1.0f) {
+		if (railManager_->GetRailMoveTime() < 1.0f) break;
+
 			railManager_->SetRailMoveTime(1.0f);
-			order_ = Order::BACKPUNCH;
-		}
+			order_ = Order::WAIT;
 
-		break;
-
-	case Order::BACKPUNCH:
-		///----------------------------------------------------
-		/// バックパンチ
-		///----------------------------------------------------
-		pPlayer_->Fall();
-
-		//// イージング終了時の処理
-		//if (punchEase_.time <= 0.0f) {
-		//	punchEase_.time = 0.0f;
-		//	order_ = Order::WAIT;
-		//}
 		break;
 
 	case Order::WAIT:
+		///----------------------------------------------------
+		/// 待機
+		///----------------------------------------------------
+		
 		waitTine_ += Frame::DeltaTime();
 
 		/// コンボ途切れ
-		if (waitTine_ >= pPlayer_->GetWaitTime(Player::SECOND)) {
-			pPlayer_->ChangeComboBehavior
-			(std::make_unique<ComboAttackRoot>(pPlayer_));
+		if (waitTine_ >= pPlayer_->GetWaitTime(Player::THIRD)) {
+			order_ = Order::FALL;
 		}
 
 		/*/// 3コンボ目に移行
@@ -98,6 +93,25 @@ void ComboAttackThird::Update() {
 			pPlayer_->ChangeComboBehavior
 			(std::make_unique<ComboAttackSecond>(pPlayer_));
 		}*/
+
+		break;
+
+	case Order::FALL:
+
+		pPlayer_->Move(pPlayer_->GetMoveSpeed());/// 
+		pPlayer_->Fall();
+
+		// レール更新と座標反映
+		pPlayer_->GetRightHand()->RailUpdate(-pPlayer_->GetRightHand()->GetRailRunSpeed());
+		pPlayer_->GetRightHand()->SetWorldPosition(railManager_->GetPositionOnRail());
+
+		if (pPlayer_->GetWorldPosition().y > pPlayer_->InitY_)break;
+		if (railManager_->GetRailMoveTime() > 0.0f) break;
+
+		pPlayer_->ChangeComboBehavior
+		(std::make_unique<ComboAttackRoot>(pPlayer_));
+		
+		break;
 	}
 
 }

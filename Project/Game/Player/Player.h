@@ -58,8 +58,10 @@ private:
 	
 	/// move
 	float objectiveAngle_;                       /// 目標角度
-	Vector3 velocity_;                           /// 速度
+	Vector3 direction_;                          /// 速度
 	Vector3 prePos_;                             /// 移動前座標
+	float moveSpeed_;                            ///移動速度
+
 										         
 	/// jump							         
 	const float fallLimit_ = -1.2f;              /// ジャンプ
@@ -100,7 +102,7 @@ public:
 	/// 移動
 	void Move(const float& speed);      /// 移動
 	bool GetIsMoving();                 /// 動かしてるかフラグ
-	Vector3 GetInputVelocity();         /// 入力による速度
+	Vector3 GetInputDirecton();         /// 入力による速度
 	void MoveToLimit();                 /// 移動制限
 
 	
@@ -135,6 +137,7 @@ public:
 	LockOn* GetLockOn() const { return pLockOn_; }
 	const bool& GetIsAttack()const { return isAttack_; }
 	float GetMuzzulJumpSpeed()const { return jumpSpeed_; }
+	float GetMoveSpeed()const { return moveSpeed_; }
 	float GetUpperPosY()const { return upperPosY_; }
 	BasePlayerBehavior* GetBehavior()const { return behavior_.get(); }
 	/// ===================================================
