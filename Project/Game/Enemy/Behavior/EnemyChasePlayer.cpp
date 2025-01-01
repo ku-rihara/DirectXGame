@@ -20,8 +20,7 @@ EnemyChasePlayer::EnemyChasePlayer(BaseEnemy* boss)
 	
 
 	//パラメータ初期化
-	chaseSpeedMax_ = 0.5f;
-	chaseSpeedNormal_ = 0.5f;
+	chaseSpeedNormal_ = 0.2f;
 	waveAttackStartPos_ = 25.0f;/// ボス
 	normalAttackStartPos_ = 7.0f;
 	attackCoolTime_ = 1.0f;
@@ -43,7 +42,7 @@ void EnemyChasePlayer::Update() {
 		distance_ = std::sqrt(direction.x * direction.x + direction.z * direction.z);
 
 		// 近すぎる場合は追従を停止して攻撃
-		if (distance_ < 1.0f) {
+		if (distance_ < 2.0f) {
 			// 攻撃開始処理を書くべきところ
 			return;
 		}

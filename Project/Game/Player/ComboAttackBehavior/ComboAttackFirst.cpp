@@ -30,8 +30,7 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	/// collisionBox
 	collisionBox_ = std::make_unique<PunchCollisionBox>();
 	collisionBox_->Init();
-	Vector3 collisionSize = Vector3::UnitVector();
-	collisionBox_->SetSize(collisionSize);// 当たり判定サイズ
+	collisionBox_->SetSize(Vector3::UnitVector());// 当たり判定サイズ
 
 	/// parm
 	rushEase_.time = 0.0f;
@@ -92,7 +91,6 @@ void ComboAttackFirst::Update() {
 		///----------------------------------------------------
 
 		collisionBox_->IsAdapt(true);
-
 
 		punchEase_.time += Frame::DeltaTimeRate();
 	
@@ -161,7 +159,7 @@ void ComboAttackFirst::ChangeSpeedForLockOn() {
 	// 距離
 	float distance = differectialVector.Length();
 	// 距離しきい値
-	const float threshold = 0.2f;
+	const float threshold = 1.2f;
 
 	// しきい値より離れていない場合は終了
 	if (distance <= threshold) {

@@ -1,6 +1,7 @@
 
 /// behavior
 #include"EnemyHitBackDamage.h"
+#include"EnemyChasePlayer.h"
 /// obj
 #include"Enemy/BaseEnemy.h"
 /// math
@@ -13,12 +14,12 @@ EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
 
 	/// ヒットバックのパラメータ
 	initPos_ = pBaseEnemy_->GetWorldPosition();
-	speed_ = 2.0f;
+	speed_ = 0.15f;
 	// 赤色
 	pBaseEnemy_->SetColor(Vector4(0.9f, 0, 0, 0.9f));
 
 	easing_.time = 0.0f;
-	easing_.maxTime = 0.4f;
+	easing_.maxTime = 0.15f;
 
 	step_ = Step::DIRECTIONSET; /// ステップ初期化
 }
@@ -72,14 +73,16 @@ void EnemyHitBackDamage::Update() {
 		//次のステップ	
 		if (easing_.time >= easing_.maxTime) {
 			easing_.time = easing_.maxTime;
+			step_ = Step::RETUNROOT;
 		}
 
 
 		break;
 	case Step::RETUNROOT:
-	/// ------------------------------------------------------
+	/// -------------------------------------------------------
 	/// 通常に戻す
 	///---------------------------------------------------------
+		pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
 		break;
 
 	}

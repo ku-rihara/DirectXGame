@@ -28,8 +28,13 @@ ComboAttackSecond::ComboAttackSecond(Player* player)
 	/// collisionBox
 	collisionBox_ = std::make_unique<PunchCollisionBox>();
 	collisionBox_->Init();
+
 	Vector3 collisionSize = Vector3::UnitVector();
 	collisionBox_->SetSize(collisionSize);// 当たり判定サイズ
+	collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+	Vector3 forwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
+	collisionBox_->SetOffset(forwardDirection * 4.0f);
+	collisionBox_->IsAdapt(true);
 
 	/// パンチ座標セット
 	lHandStartPos_ = pPlayer_->GetLeftHand()->GetTransform().translation_;
@@ -46,6 +51,9 @@ ComboAttackSecond::~ComboAttackSecond() {
 
 //更新
 void ComboAttackSecond::Update() {
+
+	collisionBox_->Update();
+
 	switch (order_) {
 
 	case Order::PUNCH:
@@ -75,6 +83,7 @@ void ComboAttackSecond::Update() {
 		///----------------------------------------------------
 		/// バックパンチ
 		///----------------------------------------------------
+		collisionBox_->IsAdapt(false);
 		punchEase_.time -= Frame::DeltaTimeRate();
 
 		punchPosition_ =
