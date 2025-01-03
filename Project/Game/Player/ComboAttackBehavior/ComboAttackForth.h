@@ -11,8 +11,9 @@ private:
 	///　振る舞いオーダー
 	enum class Order {
 		RPUNCH,
+		RBACKPUNCH,
 		LPUNCH,
-		BACKPUNCH,
+		LBACKPUNCH,
 		WAIT,
 	};
 private:

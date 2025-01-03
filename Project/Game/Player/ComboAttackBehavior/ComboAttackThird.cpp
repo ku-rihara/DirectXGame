@@ -72,7 +72,7 @@ void ComboAttackThird::Update() {
 		upperJumpEaseT_ = std::min(upperJumpEaseT_, pPlayer_->GetPunchEaseMax(Player::THIRD));
 
 		// レール更新と座標反映
-		pPlayer_->GetRightHand()->RailThreeComboUpdate(pPlayer_->GetRightHand()->GetRailRunSpeed());
+		pPlayer_->GetRightHand()->RailThreeComboUpdate(pPlayer_->GetRightHand()->GetRailRunSpeedThree());
 		
 
 		pPlayer_->SetWorldPositionY(
@@ -112,7 +112,7 @@ void ComboAttackThird::Update() {
 		pPlayer_->Fall();
 
 		// レール更新と座標反映
-		pPlayer_->GetRightHand()->RailThreeComboUpdate(-pPlayer_->GetRightHand()->GetRailRunSpeed());
+		pPlayer_->GetRightHand()->RailThreeComboUpdate(-pPlayer_->GetRightHand()->GetRailRunSpeedThree());
 		
 		/// 3コンボ目終了の条件
 		if (pPlayer_->GetWorldPosition().y > pPlayer_->InitY_)break;

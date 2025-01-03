@@ -24,7 +24,8 @@ protected:
 
 	
 	/// paramater
-	float railRunSpeed_;
+	float railRunSpeedThree_;
+	float railRunSpeedForth_;
 
 public:
 	/*virtual ~BasePlayerHand() = default;*/
@@ -54,7 +55,8 @@ public:
 	/// getter method
 	///=============================================
 	Vector3 GetDirection()const { return direction_; }
-	float GetRailRunSpeed()const { return railRunSpeed_; }
+	float GetRailRunSpeedThree()const { return railRunSpeedThree_; }
+	float GetRailRunSpeedForth()const { return railRunSpeedForth_; }
 
 	///============================================
 	/// setter method

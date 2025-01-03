@@ -26,7 +26,7 @@ public:
 	void Update()override;
 	void Draw(const ViewProjection& viewprojection)override;
 
-	void RailTrustUpdat(const float& speed);
+	void RailForthComboUpdate(const float& speed);
 	 void AdjustParm()override;
 	 void SaveAndLoad()override;
 

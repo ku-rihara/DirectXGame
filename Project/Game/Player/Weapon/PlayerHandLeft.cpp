@@ -29,7 +29,7 @@ void PlayerHandLeft::Update() {
 	BasePlayerHand::Update();
 }
 
-void PlayerHandLeft::RailTrustUpdat(const float& speed) {
+void PlayerHandLeft::RailForthComboUpdate(const float& speed) {
 	/// 突き飛ばしコンボレール更新
 	trustRailManager_->Update(speed, RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
 	SetWorldPosition(trustRailManager_->GetPositionOnRail());
