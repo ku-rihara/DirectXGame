@@ -147,7 +147,6 @@ void ControlPosManager::ImGuiUpdate(const std::string& filename) {
 		}
 	}
 
-
 	ImGui::PopID();
 
 	// 色のリセットをヘッダー処理終了後に行う

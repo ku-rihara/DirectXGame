@@ -59,6 +59,6 @@ public:
 	///============================================
 	/// setter method
 	///=============================================
-	
+	virtual void SetRailParent(WorldTransform* parent)=0;
 	virtual void SetParent(WorldTransform* parent);
 };

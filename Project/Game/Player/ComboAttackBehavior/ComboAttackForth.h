@@ -4,6 +4,7 @@
 #include"Easing.h"
 #include"CollisionBox/ThrustCollisionBox.h"
 #include"CollisionBox/StopCollisionBox.h"
+#include"utility/Editor/RailManager.h"
 
 class ComboAttackForth : public BaseComboAattackBehavior {
 private:
@@ -21,6 +22,9 @@ private:
 	/// ===================================================
 
 	Order order_;                /// 振る舞い順序
+
+	RailManager* stopRailManager_;
+	RailManager* thrustRailManager_;
 
 	// collision
 	std::unique_ptr<StopCollisionBox>stopCollisionBox_;

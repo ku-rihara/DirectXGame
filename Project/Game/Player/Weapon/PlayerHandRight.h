@@ -17,7 +17,7 @@ private:
 
 	//　移動用制御点
 	std::unique_ptr<RailManager> threeComboRailManager_; 
-	std::unique_ptr<RailManager> forthComboRailManager_; 
+	std::unique_ptr<RailManager> stopPunchRailManager_; 
 
 
 	Vector3 combo3MovePos_;
@@ -38,8 +38,15 @@ public:
 	void AdjustParm()override;
 	void SaveAndLoad()override;
 
+	///===========================================
+	/// getter method
+	///=============================================
 	RailManager* GetThreeComboRailManager() { return threeComboRailManager_.get(); }
+	RailManager* GetStopRailManager() { return stopPunchRailManager_.get(); }
 
-	void SetRailParent(WorldTransform* parent);
-	void SetParent(WorldTransform* parent);
+	///===========================================
+	/// setter method
+	///=============================================
+	void SetRailParent(WorldTransform* parent)override;
+	void SetParent(WorldTransform* parent)override;
 };

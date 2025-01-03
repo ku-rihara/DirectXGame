@@ -12,7 +12,7 @@ void PlayerHandRight::Init() {
 	// グループネーム
 	groupName_      = "RightHand";
 	threeComboName_ = "ThreeComboRail";
-	forthComboName_ = "ForthComboRail";
+	forthComboName_ = "StopPunchRail";
 
 	BaseObject::CreateModel("cube",	".obj");/// モデルセット
 	BasePlayerHand::Init();	
@@ -21,16 +21,15 @@ void PlayerHandRight::Init() {
 	threeComboRailManager_ = std::make_unique<RailManager>();
 	threeComboRailManager_->Init(threeComboName_);
 
-	forthComboRailManager_ = std::make_unique<RailManager>();
-	forthComboRailManager_->Init(forthComboName_);
-
+	stopPunchRailManager_ = std::make_unique<RailManager>();
+	stopPunchRailManager_->Init(forthComboName_);
 }
 
 ///=========================================================
 ///　更新
 ///==========================================================
 void PlayerHandRight::Update() {
-	forthComboRailManager_->Update(0.1f, RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
+	stopPunchRailManager_->Update(0.1f, RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
 	BasePlayerHand::Update();
 	
 }
@@ -43,8 +42,8 @@ void PlayerHandRight::RailThreeComboUpdate(const float& speed) {
 
 void PlayerHandRight::RailForthComboUpdate(const float& speed) {
 	/// 4コンボレール更新
-	forthComboRailManager_->Update(speed, RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
-	SetWorldPosition(forthComboRailManager_->GetPositionOnRail());
+	stopPunchRailManager_->Update(speed, RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
+	SetWorldPosition(stopPunchRailManager_->GetPositionOnRail());
 }
 
 ///=========================================================
@@ -52,7 +51,7 @@ void PlayerHandRight::RailForthComboUpdate(const float& speed) {
 ///==========================================================
 void PlayerHandRight::Draw(const ViewProjection& viewProjection) {
 	BasePlayerHand::Draw(viewProjection);
-	forthComboRailManager_->Draw(viewProjection);
+	stopPunchRailManager_->Draw(viewProjection);
 
 }
 
@@ -64,7 +63,7 @@ void PlayerHandRight::AdjustParm() {
 		ImGui::PushID("RightHand");
 		BasePlayerHand::AjustParmBase();
 		threeComboRailManager_->ImGuiEdit();
-		forthComboRailManager_->ImGuiEdit();
+		stopPunchRailManager_->ImGuiEdit();
 		SaveAndLoad();
 		ImGui::PopID();
 	}
@@ -85,5 +84,5 @@ void PlayerHandRight::SetParent(WorldTransform* parent) {
 
 void PlayerHandRight::SetRailParent(WorldTransform* parent) {
 	threeComboRailManager_->SetParent(parent);
-	forthComboRailManager_->SetParent(parent);
+	stopPunchRailManager_->SetParent(parent);
 }
