@@ -24,25 +24,25 @@ private:
     std::string groupName_;
 
     /// other class
-    EmitRail rail_; 
+    EmitRail rail_;
 
     std::unique_ptr<ControlPosManager>emitControlPosManager_;
 
     WorldTransform worldTransform_;
     ViewProjection viewProjection_;
- 
+
 
     float railMoveTime_ = 0.0f;  // レール移動の進行度
-    //Vector3 cameraRotate_;       // カメラの回転角度
-    //Vector3 scale_;
-    bool isRoop_;                 
- 
+    Vector3 cameraRotate_;       // カメラの回転角度
+    Vector3 scale_;
+    bool isRoop_;
+
     std::unique_ptr<Object3d>obj3D_;
 
 public:
     //Function
     void Init(const std::string& groupName);
-    void Update(const float& speed,const PositionMode&mode=PositionMode::WORLD, const Vector3& dirention= { 1.0f, 1.0f, 1.0f });
+    void Update(const float& speed, const PositionMode& mode = PositionMode::WORLD, const Vector3& dirention = { 1.0f, 1.0f, 1.0f });
 
     void Draw(const ViewProjection& viewProjection);
     void RailDraw(const ViewProjection& viewProjection);
@@ -50,15 +50,15 @@ public:
 
     void ImGuiEdit();
 
-  /*  Vector3 RotateVectorAroundAxis(const Vector3& vec, const Vector3& axis, float angle);*/
+    /*  Vector3 RotateVectorAroundAxis(const Vector3& vec, const Vector3& axis, float angle);*/
 
-   ///=====================================================
-   /// getter method
-   ///=====================================================
+     ///=====================================================
+     /// getter method
+     ///=====================================================
 
     bool GetIsRoop()const { return isRoop_; }
     float GetRailMoveTime()const { return railMoveTime_; }
-   /* const Vector3& GetCameraRotate()const { return cameraRotate_; }*/
+    const Vector3& GetCameraRotate()const { return cameraRotate_; }
     const WorldTransform& GetWorldTransform() const { return worldTransform_; }
     const ViewProjection& GetViewProjection() const { return viewProjection_; }
     Vector3 GetPositionOnRail() const;
@@ -67,8 +67,8 @@ public:
     /// setter method
     ///=====================================================
     void SetParent(WorldTransform* parent);
-    void SetScale(Vector3 scale) { worldTransform_.scale_ = scale; }
-    void SetRailMoveTime(const float& t);
+    void SetScale(Vector3 scale) { scale_ = scale; }
+    void SetRailMoveTime(const float& t) { railMoveTime_ = t; }
     void SetIsRoop(const bool& is) { isRoop_ = is; }
 
     /// <summary>
