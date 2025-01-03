@@ -98,18 +98,14 @@ void ControlPosManager::LoadFromFile(const std::string& filename) {
 /// ImGuiでの処理
 ///=====================================================
 void ControlPosManager::ImGuiUpdate(const std::string& filename) {
-
-	// 色を変更
-	ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.8f, 0.3f, 0.3f, 1.0f));      // 通常時の色
-	ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(1.0f, 0.5f, 0.5f, 1.0f)); // ホバー時の色
-	ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(1.0f, 0.4f, 0.4f, 1.0f));  // アクティブ時の色
-
+	// 色を緑系統に変更
+	ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));      // 通常時の色（緑色）
+	
 	// 一意のスコープIDを設定
 	ImGui::PushID(filename.c_str());
 
 	// ヘッダーの開始
 	if (ImGui::CollapsingHeader((filename + " Control Points").c_str())) {
-
 		// 現在の座標リストを表示
 		ImGui::SeparatorText("Current Positions");
 		for (size_t i = 0; i < movePosies_.size(); ++i) {
@@ -136,22 +132,30 @@ void ControlPosManager::ImGuiUpdate(const std::string& filename) {
 
 		// 保存・ロードボタン
 		ImGui::SeparatorText("File Operations");
+
+		// セーブボタン（青色）
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.5f, 1.0f, 1.0f)); // ボタン色
 		if (ImGui::Button("Save Positions")) {
 			SaveToFile(filename);
 			std::string message = std::format("{}.json saved.", filename);
 			MessageBoxA(nullptr, message.c_str(), "EmitRailPosition", 0);
 		}
+		ImGui::PopStyleColor(); // 色をリセット
+
 		ImGui::SameLine();
+
+		// ロードボタン（黄色）
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 0.2f, 1.0f)); // ボタン色
 		if (ImGui::Button("Load Positions")) {
 			LoadFromFile(filename);
 		}
+		ImGui::PopStyleColor(); // 色をリセット
 	}
-
 
 	ImGui::PopID();
 
 	// 色のリセットをヘッダー処理終了後に行う
-	ImGui::PopStyleColor(3);
+	ImGui::PopStyleColor();
 }
 
 
