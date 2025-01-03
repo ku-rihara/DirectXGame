@@ -104,6 +104,9 @@ void ControlPosManager::ImGuiUpdate(const std::string& filename) {
 	ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(1.0f, 0.5f, 0.5f, 1.0f)); // ホバー時の色
 	ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(1.0f, 0.4f, 0.4f, 1.0f));  // アクティブ時の色
 
+	// 一意のスコープIDを設定
+	ImGui::PushID(filename.c_str());
+
 	// ヘッダーの開始
 	if (ImGui::CollapsingHeader((filename + " Control Points").c_str())) {
 
@@ -143,6 +146,9 @@ void ControlPosManager::ImGuiUpdate(const std::string& filename) {
 			LoadFromFile(filename);
 		}
 	}
+
+
+	ImGui::PopID();
 
 	// 色のリセットをヘッダー処理終了後に行う
 	ImGui::PopStyleColor(3);
