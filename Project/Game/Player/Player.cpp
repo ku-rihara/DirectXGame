@@ -57,6 +57,7 @@ void Player::Init() {
 
 	/// レールペアレント
 	rightHand_->SetRailParent(&transform_);
+	leftHand_->SetRailParent(&transform_);
 
 	/// 通常モードから
 	ChangeBehavior(std::make_unique<PlayerRoot>(this));
@@ -321,6 +322,7 @@ void Player::Fall() {
 	// 着地
 	if (transform_.translation_.y <= Player::InitY_) {
 		transform_.translation_.y = Player::InitY_;
+		fallSpeed_ = 0.0f;
 	}
 }
 
@@ -389,6 +391,12 @@ void Player::AdjustParm() {
 				0.01f);
 
 			ImGui::DragFloat("UpperPosY", &upperPosY_, 0.1f);
+
+			ImGui::SeparatorText("ForthCombo");   /// 4コンボ目
+
+			ImGui::DragFloat("PTime4",
+				&normalComboParms_[3].permissionTime,
+				0.01f);
 		}
 
 		/// セーブとロード

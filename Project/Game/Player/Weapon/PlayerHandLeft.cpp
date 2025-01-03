@@ -26,6 +26,7 @@ void PlayerHandLeft::Init() {
 ///　更新
 ///==========================================================
 void PlayerHandLeft::Update() {
+	
 	BasePlayerHand::Update();
 }
 
@@ -40,6 +41,7 @@ void PlayerHandLeft::RailForthComboUpdate(const float& speed) {
 ///==========================================================
 void PlayerHandLeft::Draw(const ViewProjection& viewProjection) {
 	BasePlayerHand::Draw(viewProjection);
+	trustRailManager_->Draw(viewProjection);
 }
 
 ///=====================================================

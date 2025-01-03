@@ -32,6 +32,7 @@ public:
 		FIRST,
 		SECOND,
 		THIRD,
+		FORTH,
 	};
 
 private:
@@ -77,7 +78,7 @@ private:
 	float upperPosY_;                              /// アッパー時の高さ
 
 	///* コンボパラメータ
-	std::array<ComboParm, 3>normalComboParms_;
+	std::array<ComboParm, 4>normalComboParms_;
 
 	// カメラのビュープロジェクション
 	const ViewProjection* viewProjection_ = nullptr;

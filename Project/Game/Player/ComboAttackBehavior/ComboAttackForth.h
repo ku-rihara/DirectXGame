@@ -10,6 +10,7 @@ class ComboAttackForth : public BaseComboAattackBehavior {
 private:
 	///　振る舞いオーダー
 	enum class Order {
+		FIRSTWAIT,
 		RPUNCH,
 		RBACKPUNCH,
 		LPUNCH,
@@ -26,6 +27,10 @@ private:
 
 	RailManager* stopRailManager_;
 	RailManager* thrustRailManager_;
+
+	/// 
+	float firstWaitTime_;
+	float firstWaitTimeMax_;
 
 	// collision
 	std::unique_ptr<StopCollisionBox>stopCollisionBox_;
