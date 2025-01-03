@@ -2,6 +2,8 @@
 
 #include<string>
 
+#include<memory>
+
 class Player;
 class BaseComboAattackBehavior {
 protected:
@@ -13,7 +15,9 @@ public:
 
 	BaseComboAattackBehavior(const std::string& name, Player* player) :name_(name), pPlayer_(player) {}
 	virtual ~BaseComboAattackBehavior() {}
-
+	
 	virtual void Update()=0;   /// 更新
 	virtual void Debug() = 0;  /// デバッグ
+
+	void ChangeNextComboForButton(std::unique_ptr<BaseComboAattackBehavior>nextCombo);
 };

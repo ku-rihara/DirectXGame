@@ -51,11 +51,11 @@ void ComboAttackFirst::Update() {
 
 	/// 当たり判定座標
 	collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
-	collisionBox_->SetOffset(forwardDirection_*4.0f);
+	collisionBox_->SetOffset(forwardDirection_ * 4.0f);
 	collisionBox_->Update();
 
-	switch (order_){
-	
+	switch (order_) {
+
 	case Order::RUSH:
 
 		///----------------------------------------------------
@@ -64,13 +64,13 @@ void ComboAttackFirst::Update() {
 
 		ChangeSpeedForLockOn();// ロックオンによる突進スピードの変化
 
-		rushPos_ = initPos_+(forwardDirection_ * speed_); // 突進座標を決める
+		rushPos_ = initPos_ + (forwardDirection_ * speed_); // 突進座標を決める
 
 		rushEase_.time += Frame::DeltaTimeRate();
 
 		// 突進の動き
 		pPlayer_->SetWorldPosition(
-			EaseInSine(initPos_,rushPos_, rushEase_.time,pPlayer_->GetRushEaseMax()));
+			EaseInSine(initPos_, rushPos_, rushEase_.time, pPlayer_->GetRushEaseMax()));
 
 		/// パンチオーダーに移行
 		if (rushEase_.time >= pPlayer_->GetRushEaseMax()) {
@@ -79,7 +79,7 @@ void ComboAttackFirst::Update() {
 			/// パンチ座標セット
 			rHandStartPos_ = pPlayer_->GetRightHand()->GetTransform().translation_;
 			rHandTargetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayer_->GetPunchReach(Player::FIRST);
-			
+
 			order_ = Order::PUNCH;
 		}
 
@@ -93,7 +93,7 @@ void ComboAttackFirst::Update() {
 		collisionBox_->IsAdapt(true);
 
 		punchEase_.time += Frame::DeltaTimeRate();
-	
+
 		/// 拳を突き出す
 		punchPosition_ =
 			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayer_->GetPunchEaseMax(Player::FIRST));
@@ -108,13 +108,13 @@ void ComboAttackFirst::Update() {
 			order_ = Order::BACKPUNCH;
 		}
 
-	break;
+		break;
 
 	case Order::BACKPUNCH:
 		///----------------------------------------------------
 		/// バックパンチ
 		///----------------------------------------------------
-		
+
 		collisionBox_->IsAdapt(false);
 
 		punchEase_.time -= Frame::DeltaTimeRate();
@@ -140,10 +140,9 @@ void ComboAttackFirst::Update() {
 			pPlayer_->ChangeComboBehavior
 			(std::make_unique<ComboAttackRoot>(pPlayer_));
 		}
-		/// 2コンボ目に移行
-		else if (Input::GetInstance()->TrrigerKey(DIK_H)) {
-			pPlayer_->ChangeComboBehavior
-			(std::make_unique<ComboAttackSecond>(pPlayer_));
+		else {
+			/// ボタンで次のコンボ
+		BaseComboAattackBehavior::ChangeNextComboForButton(std::make_unique<ComboAttackSecond>(pPlayer_));//コントローラジャンプ		
 		}
 	}
 }
@@ -174,6 +173,8 @@ void ComboAttackFirst::ChangeSpeedForLockOn() {
 	}
 }
 
+
 void  ComboAttackFirst::Debug() {
 	ImGui::Text("ComboAttackFirst");
 }
+

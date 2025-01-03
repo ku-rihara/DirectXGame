@@ -436,6 +436,12 @@
     <ClCompile Include="Game\Enemy\Behavior\EnemyUpperDamage.cpp">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackForth.cpp">
+      <Filter>Game\Player\ComboBehavior\Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CollisionBox\ThrustCollisionBox.cpp">
+      <Filter>Game\CollisionBox</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -743,6 +749,12 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\EnemyUpperDamage.h">
       <Filter>Game\Enemy\Behevior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackForth.h">
+      <Filter>Game\Player\ComboBehavior\Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CollisionBox\ThrustCollisionBox.h">
+      <Filter>Game\CollisionBox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

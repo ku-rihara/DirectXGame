@@ -1,14 +1,16 @@
 /// behavior
 #include"ComboAttackThird.h"
 #include"ComboAttackRoot.h"
+#include"ComboAttackForth.h"
 
 /// objs
 #include"Player/Player.h"
 
+// input
+#include"JoyState/JoyState.h"
+
 /// math
 #include"Frame/Frame.h"
-
-
 
 //初期化
 ComboAttackThird::ComboAttackThird(Player* player)
@@ -97,11 +99,15 @@ void ComboAttackThird::Update() {
 			order_ = Order::FALL;
 		}
 
-		/*/// 3コンボ目に移行
-		else if (Input::GetInstance()->TrrigerKey(DIK_H)) {
-			pPlayer_->ChangeComboBehavior
-			(std::make_unique<ComboAttackSecond>(pPlayer_));
-		}*/
+		else {
+			railManager_->SetRailMoveTime(0.0f);
+
+			// レール更新と座標反映
+			pPlayer_->GetRightHand()->RailUpdate(0.0f);
+			/// ボタンで次のコンボ
+			BaseComboAattackBehavior::ChangeNextComboForButton(std::make_unique<ComboAttackForth>(pPlayer_));
+			break;
+		}
 
 		break;
 

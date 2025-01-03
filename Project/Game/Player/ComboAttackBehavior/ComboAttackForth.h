@@ -4,16 +4,16 @@
 #include"Easing.h"
 #include"CollisionBox/PunchCollisionBox.h"
 
-class ComboAttackFirst : public BaseComboAattackBehavior {
+class ComboAttackForth : public BaseComboAattackBehavior {
 private:
-	enum class Order{
-		RUSH,
+	///　振る舞いオーダー
+	enum class Order {
 		PUNCH,
 		BACKPUNCH,
 		WAIT,
 	};
 private:
-	
+
 	/// ===================================================
 	///private varians
 	/// ===================================================
@@ -23,30 +23,24 @@ private:
 	// collision
 	std::unique_ptr<PunchCollisionBox>collisionBox_;
 
-	/// 突進
-	Vector3 initPos_;            /// スタート座標
-	Vector3 rushPos_;            /// 突進座標
-	Vector3 forwardDirection_;   /// 向き
-	float speed_;
-	Easing rushEase_;
 
 	/// パンチ
-	Easing  punchEase_;
-	Vector3 rHandStartPos_;    /// ハンドスタート座標
-	Vector3 rHandTargetPos_;   /// ハンドターゲット座標
-	Vector3 punchPosition_;
+	Easing punchEase_;         /// パンチイージング
+	Vector3 lHandStartPos_;    /// ハンドスタート座標
+	Vector3 lHandTargetPos_;   /// ハンドターゲット座標
+	Vector3 punchPosition_;    /// パンチ位置
 
-	
 	float waitTine_;          /// 次コンボまでの待機時間
 
 public:
+
 	//コンストラクタ
-	ComboAttackFirst(Player* boss);
-	~ComboAttackFirst();
+	ComboAttackForth(Player* boss);
+	~ComboAttackForth();
 
 	/// 更新、デバッグ
 	void Update()override;
 	void Debug()override;
 
-	void ChangeSpeedForLockOn();
+
 };

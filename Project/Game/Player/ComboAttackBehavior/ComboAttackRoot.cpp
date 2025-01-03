@@ -40,43 +40,18 @@ void ComboAttackRoot::Update() {
 	switch (attackPatern_)
 	{
 	case AttackPatern::NORMAL:
-		if (Input::GetInstance()->TrrigerKey(DIK_H)) {
-			pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackFirst>(pPlayer_));
-		}
-		else {
-			NormalAttackChangeForJoyStick();
-		}
+		/// 通常攻撃
+		BaseComboAattackBehavior::ChangeNextComboForButton(std::make_unique<ComboAttackFirst>(pPlayer_));
 
 		break;
 	case AttackPatern::JUMP:
-		if (Input::GetInstance()->TrrigerKey(DIK_H)) {
-			pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackJumpFirst>(pPlayer_));
-		}
-		else {
-			JumpAttackAttackChangeForJoyStick();
-		}
+		/// ジャンプ攻撃
+		BaseComboAattackBehavior::ChangeNextComboForButton(std::make_unique<ComboAttackJumpFirst>(pPlayer_));
+
 		break;
 	default:
 		break;
 	}
-
-}
-
-void ComboAttackRoot::NormalAttackChangeForJoyStick() {
-	if (!(Input::GetInstance()->GetJoystickState(0, joyState))) return;
-
-	if (!((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B))) return;
-
-	pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackFirst>(pPlayer_));
-
-}
-
-void ComboAttackRoot::JumpAttackAttackChangeForJoyStick() {
-	if (!(Input::GetInstance()->GetJoystickState(0, joyState))) return;
-
-	if (!((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B))) return;
-
-	pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackJumpFirst>(pPlayer_));
 
 }
 

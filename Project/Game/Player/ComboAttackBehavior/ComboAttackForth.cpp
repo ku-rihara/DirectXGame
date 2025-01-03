@@ -1,21 +1,20 @@
 /// behavior
 #include"ComboAttackFirst.h"
-#include"ComboAttackSecond.h"
 #include"ComboAttackRoot.h"
-#include"ComboAttackThird.h"
+#include"ComboAttackForth.h"
 
 /// objs
 #include"Player/Player.h"
 
 /// input
-#include"JoyState/JoyState.h"
+#include"input/Input.h"
 
 /// frame
 #include"Frame/Frame.h"
 
 //初期化
-ComboAttackSecond::ComboAttackSecond(Player* player)
-	: BaseComboAattackBehavior("ComboAttackSecond", player) {
+ComboAttackForth::ComboAttackForth(Player* player)
+	: BaseComboAattackBehavior("ComboAttackForth", player) {
 
 	///---------------------------------------------------------
 	/// 変数初期化
@@ -45,12 +44,12 @@ ComboAttackSecond::ComboAttackSecond(Player* player)
 	order_ = Order::PUNCH;
 }
 
-ComboAttackSecond::~ComboAttackSecond() {
+ComboAttackForth::~ComboAttackForth() {
 
 }
 
 //更新
-void ComboAttackSecond::Update() {
+void ComboAttackForth::Update() {
 
 	collisionBox_->Update();
 
@@ -107,14 +106,11 @@ void ComboAttackSecond::Update() {
 			pPlayer_->ChangeComboBehavior
 			(std::make_unique<ComboAttackRoot>(pPlayer_));
 		}
-		else {
-			/// ボタンで次のコンボ
-			BaseComboAattackBehavior::ChangeNextComboForButton(std::make_unique<ComboAttackThird>(pPlayer_));//コントローラジャンプ		
-		}
+		
 	}
 
 }
 
-void ComboAttackSecond::Debug() {
+void ComboAttackForth::Debug() {
 
 }
