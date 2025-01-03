@@ -24,25 +24,25 @@ private:
     std::string groupName_;
 
     /// other class
-    EmitRail rail_; 
+    EmitRail rail_;
 
     std::unique_ptr<ControlPosManager>emitControlPosManager_;
 
     WorldTransform worldTransform_;
     ViewProjection viewProjection_;
- 
+
 
     float railMoveTime_ = 0.0f;  // レール移動の進行度
     Vector3 cameraRotate_;       // カメラの回転角度
     Vector3 scale_;
-    bool isRoop_;                 
- 
+    bool isRoop_;
+
     std::unique_ptr<Object3d>obj3D_;
 
 public:
     //Function
     void Init(const std::string& groupName);
-    void Update(const float& speed,const PositionMode&mode=PositionMode::WORLD, const Vector3& dirention= { 1.0f, 1.0f, 1.0f });
+    void Update(const float& speed, const PositionMode& mode = PositionMode::WORLD, const Vector3& dirention = { 1.0f, 1.0f, 1.0f });
 
     void Draw(const ViewProjection& viewProjection);
     void RailDraw(const ViewProjection& viewProjection);
@@ -50,11 +50,11 @@ public:
 
     void ImGuiEdit();
 
-  /*  Vector3 RotateVectorAroundAxis(const Vector3& vec, const Vector3& axis, float angle);*/
+    /*  Vector3 RotateVectorAroundAxis(const Vector3& vec, const Vector3& axis, float angle);*/
 
-   ///=====================================================
-   /// getter method
-   ///=====================================================
+     ///=====================================================
+     /// getter method
+     ///=====================================================
 
     bool GetIsRoop()const { return isRoop_; }
     float GetRailMoveTime()const { return railMoveTime_; }

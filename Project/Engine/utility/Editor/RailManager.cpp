@@ -22,10 +22,10 @@ void RailManager::Init(const std::string& groupName) {
     isRoop_ = true;
     // レールの初期化（オブジェクト数を指定）
     rail_.Init(5);
-   
+
     /// 現在位置モデル
-    obj3D_.reset(Object3d::CreateModel("DebugCube",".obj"));
- 
+    obj3D_.reset(Object3d::CreateModel("DebugCube", ".obj"));
+
     /// 制御点マネージャー
     emitControlPosManager_ = std::make_unique<ControlPosManager>();
     emitControlPosManager_->LoadFromFile(groupName_);
@@ -35,7 +35,7 @@ void RailManager::Init(const std::string& groupName) {
 ///===================================================================
 ///更新
 ///====================================================================
-void RailManager::Update(const float&speed, const PositionMode& mode,const Vector3& Direction) {
+void RailManager::Update(const float& speed, const PositionMode& mode, const Vector3& Direction) {
     emitControlPosManager_->Update(Direction);
 
     if (mode == PositionMode::LOCAL) {
@@ -64,14 +64,14 @@ void RailManager::Update(const float&speed, const PositionMode& mode,const Vecto
 	float traveledLength = 0.0f;
 	size_t cameraIndex = 0;
 
-	for (size_t i = 0; i < pointsDrawing.size() - 1; i++) {
-		float segment = (pointsDrawing[i + 1] - pointsDrawing[i]).Length();
-		if (traveledLength + segment >= railProgress) {
-			cameraIndex = i;
-			break;
-		}
-		traveledLength += segment;
-	}
+    for (size_t i = 0; i < pointsDrawing.size() - 1; i++) {
+        float segment = (pointsDrawing[i + 1] - pointsDrawing[i]).Length();
+        if (traveledLength + segment >= railProgress) {
+            cameraIndex = i;
+            break;
+        }
+        traveledLength += segment;
+    }
 
 	// 線形補間で進行中の位置を計算
 	float segmentT = (railProgress - traveledLength) / (pointsDrawing[cameraIndex + 1] - pointsDrawing[cameraIndex]).Length();
@@ -106,7 +106,7 @@ void RailManager::RoopOrStop() {
     else {
         railMoveTime_ = 1.0f;
     }
-    
+
 }
 
 ///=====================================================
