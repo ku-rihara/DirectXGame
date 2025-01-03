@@ -2,8 +2,6 @@
 /// imgui
 #include<imgui.h>
 
-
-
 ///=========================================================
 ///　初期化
 ///==========================================================
@@ -17,7 +15,6 @@ void BasePlayerHand::Init() {
 	AddParmGroup();
 	ApplyGlobalParameter();
 
-	railManager_= std::make_unique<RailManager>();
 	emitter_.reset(ParticleEmitter::CreateParticle(groupName_, "DebugCube", ".obj", 300, false));
 
 }

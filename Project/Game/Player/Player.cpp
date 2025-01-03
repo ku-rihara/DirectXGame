@@ -55,6 +55,9 @@ void Player::Init() {
 	leftHand_->SetParent(&transform_);
 	rightHand_->SetParent(&transform_);
 
+	/// レールペアレント
+	rightHand_->SetRailParent(&transform_);
+
 	/// 通常モードから
 	ChangeBehavior(std::make_unique<PlayerRoot>(this));
 	ChangeComboBehavior(std::make_unique<ComboAttackRoot>(this));

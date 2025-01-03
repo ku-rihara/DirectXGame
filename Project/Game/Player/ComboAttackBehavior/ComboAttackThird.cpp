@@ -14,7 +14,7 @@
 
 //初期化
 ComboAttackThird::ComboAttackThird(Player* player)
-	: BaseComboAattackBehavior("ComboAttackSecond", player) {
+	: BaseComboAattackBehavior("ComboAttackThird", player) {
 
 	///---------------------------------------------------------
 	/// 変数初期化
@@ -37,7 +37,7 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	collisionBox_->SetOffset(forwardDirection * 4.0f);
 	collisionBox_->IsAdapt(true);
 
-	railManager_ = pPlayer_->GetRightHand()->GetRailManager();
+	railManager_ = pPlayer_->GetRightHand()->GetThreeComboRailManager();
 	railManager_->SetRailMoveTime(0.0f);
 	railManager_->SetIsRoop(false);
 
@@ -72,7 +72,7 @@ void ComboAttackThird::Update() {
 		upperJumpEaseT_ = std::min(upperJumpEaseT_, pPlayer_->GetPunchEaseMax(Player::THIRD));
 
 		// レール更新と座標反映
-		pPlayer_->GetRightHand()->RailUpdate(pPlayer_->GetRightHand()->GetRailRunSpeed());
+		pPlayer_->GetRightHand()->RailThreeComboUpdate(pPlayer_->GetRightHand()->GetRailRunSpeed());
 		
 
 		pPlayer_->SetWorldPositionY(
@@ -99,14 +99,9 @@ void ComboAttackThird::Update() {
 			order_ = Order::FALL;
 		}
 
-		else {
-			railManager_->SetRailMoveTime(0.0f);
-
-			// レール更新と座標反映
-			pPlayer_->GetRightHand()->RailUpdate(0.0f);
+		else {			
 			/// ボタンで次のコンボ
 			BaseComboAattackBehavior::ChangeNextComboForButton(std::make_unique<ComboAttackForth>(pPlayer_));
-			break;
 		}
 
 		break;
@@ -117,7 +112,7 @@ void ComboAttackThird::Update() {
 		pPlayer_->Fall();
 
 		// レール更新と座標反映
-		pPlayer_->GetRightHand()->RailUpdate(-pPlayer_->GetRightHand()->GetRailRunSpeed());
+		pPlayer_->GetRightHand()->RailThreeComboUpdate(-pPlayer_->GetRightHand()->GetRailRunSpeed());
 		
 		/// 3コンボ目終了の条件
 		if (pPlayer_->GetWorldPosition().y > pPlayer_->InitY_)break;
@@ -127,8 +122,7 @@ void ComboAttackThird::Update() {
 		railManager_->SetRailMoveTime(0.0f);
 
 		// レール更新と座標反映
-		pPlayer_->GetRightHand()->RailUpdate(0.0f);
-
+		pPlayer_->GetRightHand()->RailThreeComboUpdate(0.0f);
 
 		pPlayer_->ChangeComboBehavior
 		(std::make_unique<ComboAttackRoot>(pPlayer_));

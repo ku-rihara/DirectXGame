@@ -2,13 +2,15 @@
 
 #include"BaseComboAattackBehavior.h"
 #include"Easing.h"
-#include"CollisionBox/PunchCollisionBox.h"
+#include"CollisionBox/ThrustCollisionBox.h"
+#include"CollisionBox/StopCollisionBox.h"
 
 class ComboAttackForth : public BaseComboAattackBehavior {
 private:
 	///　振る舞いオーダー
 	enum class Order {
-		PUNCH,
+		RPUNCH,
+		LPUNCH,
 		BACKPUNCH,
 		WAIT,
 	};
@@ -21,14 +23,8 @@ private:
 	Order order_;                /// 振る舞い順序
 
 	// collision
-	std::unique_ptr<PunchCollisionBox>collisionBox_;
-
-
-	/// パンチ
-	Easing punchEase_;         /// パンチイージング
-	Vector3 lHandStartPos_;    /// ハンドスタート座標
-	Vector3 lHandTargetPos_;   /// ハンドターゲット座標
-	Vector3 punchPosition_;    /// パンチ位置
+	std::unique_ptr<StopCollisionBox>stopCollisionBox_;
+	std::unique_ptr<ThrustCollisionBox>thrustCollisionBox_;
 
 	float waitTine_;          /// 次コンボまでの待機時間
 

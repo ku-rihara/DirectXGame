@@ -22,9 +22,7 @@ protected:
 	std::unique_ptr<ParticleEmitter>emitter_;
 	Vector3 direction_;
 
-	//　移動用制御点
-	std::unique_ptr<RailManager> railManager_; /// レールマネージャ
-
+	
 	/// paramater
 	float railRunSpeed_;
 
@@ -39,7 +37,6 @@ public:
 	
 	virtual void Draw(const ViewProjection& viewprojection);
 
-	virtual void RailUpdate(const float& speed) = 0;
 	virtual void AdjustParm() = 0;
 
 	///-------------------------------------------------------------------------------------
@@ -58,7 +55,7 @@ public:
 	///=============================================
 	Vector3 GetDirection()const { return direction_; }
 	float GetRailRunSpeed()const { return railRunSpeed_; }
-	RailManager* GetRailManager() { return railManager_.get(); }
+
 	///============================================
 	/// setter method
 	///=============================================
