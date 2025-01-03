@@ -33,8 +33,8 @@ private:
  
 
     float railMoveTime_ = 0.0f;  // レール移動の進行度
-    Vector3 cameraRotate_;       // カメラの回転角度
-    Vector3 scale_;
+    //Vector3 cameraRotate_;       // カメラの回転角度
+    //Vector3 scale_;
     bool isRoop_;                 
  
     std::unique_ptr<Object3d>obj3D_;
@@ -58,7 +58,7 @@ public:
 
     bool GetIsRoop()const { return isRoop_; }
     float GetRailMoveTime()const { return railMoveTime_; }
-    const Vector3& GetCameraRotate()const { return cameraRotate_; }
+   /* const Vector3& GetCameraRotate()const { return cameraRotate_; }*/
     const WorldTransform& GetWorldTransform() const { return worldTransform_; }
     const ViewProjection& GetViewProjection() const { return viewProjection_; }
     Vector3 GetPositionOnRail() const;
@@ -67,8 +67,8 @@ public:
     /// setter method
     ///=====================================================
     void SetParent(WorldTransform* parent);
-    void SetScale(Vector3 scale) { scale_ = scale; }
-    void SetRailMoveTime(const float& t) { railMoveTime_ = t; }
+    void SetScale(Vector3 scale) { worldTransform_.scale_ = scale; }
+    void SetRailMoveTime(const float& t);
     void SetIsRoop(const bool& is) { isRoop_ = is; }
 
     /// <summary>

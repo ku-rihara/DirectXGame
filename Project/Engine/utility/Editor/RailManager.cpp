@@ -75,10 +75,10 @@ void RailManager::Update(const float&speed, const PositionMode& mode,const Vecto
 
     // 線形補間で進行中の位置を計算
     float segmentT = (railProgress - traveledLength) / (pointsDrawing[cameraIndex + 1] - pointsDrawing[cameraIndex]).Length();
-    Vector3 interpolatedPos = Lerp(pointsDrawing[cameraIndex], pointsDrawing[cameraIndex + 1], segmentT);
+    worldTransform_.translation_ = Lerp(pointsDrawing[cameraIndex], pointsDrawing[cameraIndex + 1], segmentT);
 
     // interpolatedPosのY成分にもオフセットを加える
-    interpolatedPos.y += offsetY;
+    worldTransform_.translation_.y += offsetY;
 
     //// カメラの進行方向を計算
     //Vector3 forward = pointsDrawing[cameraIndex + 1] - pointsDrawing[cameraIndex];
@@ -92,8 +92,10 @@ void RailManager::Update(const float&speed, const PositionMode& mode,const Vecto
     //cameraRotate_.y += (targetRotateY - cameraRotate_.y) * 0.1f;
     //cameraRotate_.x += (targetRotateX - cameraRotate_.x) * 0.1f;
 
-    // 行列の更新
-    worldTransform_.matWorld_ = MakeAffineMatrix(scale_, cameraRotate_, interpolatedPos);
+    worldTransform_.UpdateMatrix();
+
+    //// 行列の更新
+    //worldTransform_.matWorld_ = MakeAffineMatrix(scale_, cameraRotate_, interpolatedPos);
     /*viewProjection_.matView_ = Inverse(worldTransform_.matWorld_);*/
 }
 
@@ -101,10 +103,10 @@ void RailManager::RoopOrStop() {
     if (railMoveTime_ < 1.0f) return;
 
     if (isRoop_) {
-        railMoveTime_ = 0.0f;
+        SetRailMoveTime(0.0f);
     }
     else {
-        railMoveTime_ = 1.0f;
+        SetRailMoveTime(1.0f);
     }
     
 }
@@ -142,10 +144,7 @@ Vector3 RailManager::GetPositionOnRail() const {
     return  worldTransform_.GetWorldPos();
 }
 
-/////=====================================================
-///// ローカル座標取得
-/////=====================================================
-//Vector3 RailManager::GetLocalPos() const {
-//    return  worldTransform_.GetLocalPos();
-//}
-//
+void RailManager::SetRailMoveTime(const float& t) {
+    railMoveTime_ = t; 
+    Update(0.0f);
+}
