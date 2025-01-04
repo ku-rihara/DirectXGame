@@ -46,7 +46,7 @@ void RailManager::Update(const float& speed, const PositionMode& mode, const Vec
     }
 
     // カメラの移動とレールに沿った描画
-    railMoveTime_ += (speed / rail_.GetTotalLength())* Frame::DeltaTimeRate();
+    railMoveTime_ += (speed *Frame::DeltaTimeRate()) / rail_.GetTotalLength();
 
 
     RoopOrStop();// ループか止まるか
