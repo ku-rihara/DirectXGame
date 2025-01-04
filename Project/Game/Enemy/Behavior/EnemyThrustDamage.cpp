@@ -15,12 +15,15 @@ EnemyThrustDamage::EnemyThrustDamage(BaseEnemy* boss)
 
 	/// ヒットバックのパラメータ
 	initPos_ = pBaseEnemy_->GetWorldPosition();
-	speed_ = 5.5f;
+	speed_ = 3.5f;
 	// 赤色
 	pBaseEnemy_->SetColor(Vector4(0.9f, 0, 0, 0.9f));
 
 	easing_.time = 0.0f;
 	easing_.maxTime = 0.15f;
+
+	kHitStopTime_ = 0.5f;
+	Frame::SetTimeScale(0.1f);
 
 	step_ = Step::DIRECTIONSET; /// ステップ初期化
 }
@@ -30,6 +33,12 @@ EnemyThrustDamage::~EnemyThrustDamage() {
 }
 
 void EnemyThrustDamage::Update() {
+
+	hitStopTime_ += Frame::DeltaTime();
+	if (hitStopTime_ >= kHitStopTime_) {
+		Frame::SetTimeScale(1.0f);
+	}
+
 	switch (step_)
 	{
 

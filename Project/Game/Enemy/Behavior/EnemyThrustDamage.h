@@ -23,6 +23,9 @@ private:
 
 	Easing easing_;
 
+	float hitStopTime_;
+	float kHitStopTime_;
+
 public:
 	//コンストラクタ
 	EnemyThrustDamage(BaseEnemy* boss);
