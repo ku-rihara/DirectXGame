@@ -15,9 +15,11 @@ EnemyUpperDamage::EnemyUpperDamage(BaseEnemy* boss)
 	: BaseEnemyBehaivor("EnemyUpperDamage", boss) {
 
 	
-	speed_ = 1.2f; 
-	gravity_ = 2.4f;
-	
+	speed_ = 1.5f; 
+	gravity_ = 3.5f;
+	fallSpeedLimit_ = -0.0f;
+	stopTime_ = 0.0f;
+	kStopTime_ = 0.3f;
 	// 赤色
 	pBaseEnemy_->SetColor(Vector4(0.9f, 0, 0, 0.9f));
 
@@ -58,6 +60,14 @@ void EnemyUpperDamage::Update() {
 		// 加速する
 		speed_ =max(speed_ - (gravity_ * Frame::DeltaTimeRate()), fallSpeedLimit_);
 
+		if (speed_ > 0.0f) break;
+
+			stopTime_ += Frame::DeltaTime();
+			if (stopTime_ >= kStopTime_) {
+				fallSpeedLimit_ = -1.2f;
+			}
+		
+
 		// 着地
 		if (pBaseEnemy_->GetTransform().translation_.y > BaseEnemy::InitY_) break;
 		// 追従に戻す
@@ -71,9 +81,7 @@ void EnemyUpperDamage::Update() {
 	///---------------------------------------------------------
 		pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
 		break;
-
 	}
-	
 }
 
 void EnemyUpperDamage::Debug() {

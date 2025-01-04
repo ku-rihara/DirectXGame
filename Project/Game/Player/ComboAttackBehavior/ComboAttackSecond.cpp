@@ -29,8 +29,7 @@ ComboAttackSecond::ComboAttackSecond(Player* player)
 	collisionBox_ = std::make_unique<PunchCollisionBox>();
 	collisionBox_->Init();
 
-	collisionBox_->SetSize(Vector3::UnitVector() * 3);// 当たり判定サイズ
-	collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+	collisionBox_->SetSize(Vector3::UnitVector() * 1.5f);// 当たり判定サイズ
 	Vector3 forwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
 	collisionBox_->SetOffset(forwardDirection * 4.0f);
 	collisionBox_->IsAdapt(false);
@@ -75,7 +74,7 @@ void ComboAttackSecond::Update() {
 			punchEase_.time = pPlayer_->GetPunchEaseMax(Player::SECOND);
 			order_ = Order::BACKPUNCH;
 		}
-
+		collisionBox_->SetPosition(pPlayer_->GetLeftHand()->GetWorldPosition());
 		collisionBox_->Update();
 
 		break;

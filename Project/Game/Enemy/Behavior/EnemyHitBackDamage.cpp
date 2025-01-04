@@ -15,12 +15,12 @@ EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
 
 	/// ヒットバックのパラメータ
 	initPos_ = pBaseEnemy_->GetWorldPosition();
-	speed_ = 0.10f;
+	speed_ = 0.01f;
 	// 赤色
 	pBaseEnemy_->SetColor(Vector4(0.9f, 0, 0, 0.9f));
 
 	easing_.time = 0.0f;
-	easing_.maxTime = 0.15f;
+	easing_.maxTime = 0.01f;
 
 	step_ = Step::DIRECTIONSET; /// ステップ初期化
 }

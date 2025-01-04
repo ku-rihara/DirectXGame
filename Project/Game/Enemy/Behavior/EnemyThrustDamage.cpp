@@ -1,6 +1,7 @@
 
 /// behavior
 #include"EnemyThrustDamage.h"
+#include"Enemy/Behavior/EnemyChasePlayer.h"
 
 /// obj
 #include"Enemy/BaseEnemy.h"
@@ -22,8 +23,9 @@ EnemyThrustDamage::EnemyThrustDamage(BaseEnemy* boss)
 	easing_.time = 0.0f;
 	easing_.maxTime = 0.15f;
 
-	kHitStopTime_ = 0.5f;
-	Frame::SetTimeScale(0.1f);
+	hitStopTime_ = 0.0f;
+	kHitStopTime_ = 0.05f;
+	Frame::SetTimeScale(0.01f);
 
 	step_ = Step::DIRECTIONSET; /// ステップ初期化
 }
@@ -85,7 +87,9 @@ void EnemyThrustDamage::Update() {
 			easing_.time = easing_.maxTime;
 			step_ = Step::RETUNROOT;
 		}
-
+		break;
+	case Step::RETUNROOT:
+		pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
 		break;
 	}
 }

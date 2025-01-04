@@ -1,7 +1,7 @@
 #include "BasePlayerHand.h"
 /// imgui
 #include<imgui.h>
-
+#include"base/TextureManager.h"
 ///=========================================================
 ///　初期化
 ///==========================================================
@@ -15,8 +15,9 @@ void BasePlayerHand::Init() {
 	AddParmGroup();
 	ApplyGlobalParameter();
 
-	emitter_.reset(ParticleEmitter::CreateParticle(groupName_, "DebugCube", ".obj", 300, false));
-
+	emitter_.reset(ParticleEmitter::CreateParticle(groupName_, "plane", ".obj", 300, false));
+	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
+	emitter_->SetTextureHandle(handle);
 }
 
 ///=========================================================

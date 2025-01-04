@@ -16,8 +16,7 @@ EnemyStopDamage::EnemyStopDamage(BaseEnemy* boss)
 
 	// 赤色
 	pBaseEnemy_->SetColor(Vector4(0.9f, 0, 0, 0.9f));
-
-
+	kStopTime_ = 1.0f;
 }
 
 EnemyStopDamage::~EnemyStopDamage() {
@@ -25,14 +24,28 @@ EnemyStopDamage::~EnemyStopDamage() {
 }
 
 void EnemyStopDamage::Update() {
-	
 
+	stopTime_ += Frame::DeltaTime();
+	if (stopTime_ < kStopTime_) return;
 	
+	// Yに加算
+	pBaseEnemy_->AddPosition(Vector3(0, speed_, 0));
+
+	// 加速する
+	speed_ = max(speed_ - (4.8f * Frame::DeltaTimeRate()),-1.3f);
 	
-	
+	// 着地
+	if (pBaseEnemy_->GetTransform().translation_.y > BaseEnemy::InitY_) return;
+	pBaseEnemy_->SetWorldPositionY(BaseEnemy::InitY_);
+
+	/// -------------------------------------------------------
+	/// 追従に戻す
+	///---------------------------------------------------------
+	pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
+
 }
 
 void EnemyStopDamage::Debug() {
-	
+
 
 }

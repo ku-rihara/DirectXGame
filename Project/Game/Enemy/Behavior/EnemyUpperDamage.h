@@ -16,10 +16,13 @@ private:
 	Vector3 direction_;
 
 	float speed_;
-	float fallSpeedLimit_ = -1.2f;
+	float fallSpeedLimit_;
 	float gravity_;
 
 	Easing easing_;
+
+	float stopTime_;
+	float kStopTime_;
 
 public:
 	//コンストラクタ

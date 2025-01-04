@@ -25,18 +25,17 @@ ComboAttackForth::ComboAttackForth(Player* player)
 
 	// stop
 	stopCollisionBox_->Init();
-	stopCollisionBox_->SetSize(Vector3::UnitVector() * 3);// 当たり判定サイズ
-	stopCollisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+	stopCollisionBox_->SetSize(Vector3::UnitVector() * 3.5f);// 当たり判定サイズ
 	Vector3 sforwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
 	stopCollisionBox_->SetOffset(sforwardDirection * 5.0f);
-	stopCollisionBox_->IsAdapt(true);
+	stopCollisionBox_->IsAdapt(false);
 
 	stopRailManager_ = pPlayer_->GetRightHand()->GetStopRailManager();
 	stopRailManager_->SetIsRoop(false);
 
 	/// trust
 	thrustCollisionBox_->Init();
-	thrustCollisionBox_->SetSize(Vector3::UnitVector() * 3);// 当たり判定サイズ
+	thrustCollisionBox_->SetSize(Vector3::UnitVector() * 3.5f);// 当たり判定サイズ
 	thrustCollisionBox_->SetPosition(pPlayer_->GetWorldPosition());
 	Vector3 tforwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
 	thrustCollisionBox_->SetOffset(tforwardDirection * 5.0f);
@@ -55,8 +54,6 @@ ComboAttackForth::~ComboAttackForth() {
 //更新
 void ComboAttackForth::Update() {
 
-	stopCollisionBox_->Update();
-	thrustCollisionBox_->Update();
 
 	switch (order_) {
 	case Order::FIRSTWAIT:
@@ -65,6 +62,7 @@ void ComboAttackForth::Update() {
 		///----------------------------------------------------
 		firstWaitTime_ += Frame::DeltaTime();
 		if (firstWaitTime_ >= firstWaitTimeMax_) {
+			stopCollisionBox_->IsAdapt(true);
 			order_ = Order::RPUNCH;
 		}
 		break;
@@ -77,8 +75,11 @@ void ComboAttackForth::Update() {
 		// レール更新と座標反映
 		pPlayer_->GetRightHand()->RailForthComboUpdate(pPlayer_->GetRightHand()->GetRailRunSpeedForth());
 
+		stopCollisionBox_->SetPosition(pPlayer_->GetRightHand()->GetWorldPosition());
+		stopCollisionBox_->Update();
 		// イージング終了時の処理
 		if (stopRailManager_->GetRailMoveTime() < 1.0f) break;
+
 
 		stopRailManager_->SetRailMoveTime(1.0f);
 		pPlayer_->GetRightHand()->RailForthComboUpdate(0.0f);
@@ -115,6 +116,8 @@ void ComboAttackForth::Update() {
 
 		// レール更新と座標反映
 		pPlayer_->GetLeftHand()->RailForthComboUpdate(pPlayer_->GetLeftHand()->GetRailRunSpeedForth());
+		thrustCollisionBox_->SetPosition(pPlayer_->GetLeftHand()->GetWorldPosition());
+		thrustCollisionBox_->Update();
 
 		// イージング終了時の処理
 		if (thrustRailManager_->GetRailMoveTime() < 1.0f) break;

@@ -38,7 +38,7 @@
             0.0
         ],
         "RailRunSpeed": 0.0,
-        "RailRunSpeedF": 1.0,
+        "RailRunSpeedF": 60.0,
         "Rotate Base": [
             0.0,
             0.0,

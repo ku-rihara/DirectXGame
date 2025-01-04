@@ -7,8 +7,9 @@ class EnemyStopDamage : public BaseEnemyBehaivor {
 private:
 	
 private:
-
-	
+	float stopTime_;
+	float kStopTime_;
+	float speed_;
 
 public:
 	//コンストラクタ
