@@ -1,7 +1,7 @@
 
 /// behavior
-#include"EnemyHitBackDamage.h"
-#include"EnemyChasePlayer.h"
+#include"EnemyThrustDamage.h"
+
 /// obj
 #include"Enemy/BaseEnemy.h"
 #include"Player/Player.h"
@@ -10,12 +10,12 @@
 #include"Frame/Frame.h"
 
 //初期化
-EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
-	: BaseEnemyBehaivor("EnemyHitBackDamage", boss) {
+EnemyThrustDamage::EnemyThrustDamage(BaseEnemy* boss)
+	: BaseEnemyBehaivor("EnemyThrustDamage", boss) {
 
 	/// ヒットバックのパラメータ
 	initPos_ = pBaseEnemy_->GetWorldPosition();
-	speed_ = 0.10f;
+	speed_ = 5.5f;
 	// 赤色
 	pBaseEnemy_->SetColor(Vector4(0.9f, 0, 0, 0.9f));
 
@@ -25,21 +25,20 @@ EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
 	step_ = Step::DIRECTIONSET; /// ステップ初期化
 }
 
-EnemyHitBackDamage::~EnemyHitBackDamage() {
+EnemyThrustDamage::~EnemyThrustDamage() {
 
 }
 
-void EnemyHitBackDamage::Update() {
-	
+void EnemyThrustDamage::Update() {
 	switch (step_)
 	{
 
 	case Step::DIRECTIONSET:
-	/// ------------------------------------------------------
-	/// 向き計算
-	///---------------------------------------------------------
+		/// ------------------------------------------------------
+		/// 向き計算
+		///---------------------------------------------------------
 
-		// ターゲットへのベクトル
+			// ターゲットへのベクトル
 		direction_ = pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());
 
 		direction_.y = 0.0f;
@@ -50,15 +49,16 @@ void EnemyHitBackDamage::Update() {
 
 		/// 吹っ飛ぶ距離を計算
 		backPos_ = initPos_ + (direction_ * -speed_);
+		backPos_.y = BaseEnemy::InitY_;
 
 		step_ = Step::HITBACK;
 		break;
 
 	case Step::HITBACK:
 
-	/// ------------------------------------------------------
-	/// ヒットバッグ
-	///---------------------------------------------------------
+		/// ------------------------------------------------------
+		/// ヒットバッグ
+		///---------------------------------------------------------
 
 		// 最短角度補間でプレイヤーの回転を更新
 		pBaseEnemy_->SetRotationY(LerpShortAngle(pBaseEnemy_->GetTransform().rotation_.y, objectiveAngle_, 0.5f));
@@ -70,26 +70,18 @@ void EnemyHitBackDamage::Update() {
 			EaseInSine(initPos_, backPos_, easing_.time, easing_.maxTime)
 		);
 
+
 		//次のステップ	
 		if (easing_.time >= easing_.maxTime) {
 			easing_.time = easing_.maxTime;
 			step_ = Step::RETUNROOT;
 		}
 
-
 		break;
-	case Step::RETUNROOT:
-	/// -------------------------------------------------------
-	/// 通常に戻す
-	///---------------------------------------------------------
-		pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
-		break;
-
 	}
-	
 }
 
-void EnemyHitBackDamage::Debug() {
+void EnemyThrustDamage::Debug() {
 	
 
 }

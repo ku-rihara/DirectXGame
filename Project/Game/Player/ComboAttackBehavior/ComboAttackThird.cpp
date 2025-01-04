@@ -31,7 +31,7 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	collisionBox_ = std::make_unique<UpperCollisionBox>();
 	collisionBox_->Init();
 
-	collisionBox_->SetSize(Vector3::UnitVector());// 当たり判定サイズ
+	collisionBox_->SetSize(Vector3::UnitVector() * 3);// 当たり判定サイズ
 	collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
 	Vector3 forwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
 	collisionBox_->SetOffset(forwardDirection * 4.0f);
@@ -74,7 +74,6 @@ void ComboAttackThird::Update() {
 		// レール更新と座標反映
 		pPlayer_->GetRightHand()->RailThreeComboUpdate(pPlayer_->GetRightHand()->GetRailRunSpeedThree());
 		
-
 		pPlayer_->SetWorldPositionY(
 			EaseInSine(initPosY_,initPosY_+pPlayer_->GetUpperPosY(),upperJumpEaseT_, pPlayer_->GetPunchEaseMax(Player::THIRD))
 		);

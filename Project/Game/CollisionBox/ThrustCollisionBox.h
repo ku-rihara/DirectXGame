@@ -11,7 +11,6 @@ public:
 	void Update()override;
 	void Draw()override;
 
-
 	Vector3 GetCollisionPos() const override;
 	void IsAdapt(bool is)override;
 	void SetSize(const Vector3& size)override;

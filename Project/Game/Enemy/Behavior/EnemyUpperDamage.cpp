@@ -16,7 +16,7 @@ EnemyUpperDamage::EnemyUpperDamage(BaseEnemy* boss)
 
 	
 	speed_ = 1.2f; 
-	gravity_ = 3.4f;
+	gravity_ = 2.4f;
 	
 	// 赤色
 	pBaseEnemy_->SetColor(Vector4(0.9f, 0, 0, 0.9f));

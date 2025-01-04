@@ -445,6 +445,12 @@
     <ClCompile Include="Game\CollisionBox\StopCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\EnemyStopDamage.cpp">
+      <Filter>Game\Enemy\Behevior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\EnemyThrustDamage.cpp">
+      <Filter>Game\Enemy\Behevior</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -761,6 +767,12 @@
     </ClInclude>
     <ClInclude Include="Game\CollisionBox\StopCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\EnemyStopDamage.h">
+      <Filter>Game\Enemy\Behevior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\EnemyThrustDamage.h">
+      <Filter>Game\Enemy\Behevior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

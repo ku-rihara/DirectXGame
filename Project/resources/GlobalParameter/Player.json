@@ -7,21 +7,21 @@
         "NComboPTime2": 0.3499999940395355,
         "NComboPTime3": 0.3400000035762787,
         "NComboPTime4": 0.09000000357627869,
-        "NComboPunchEaseTime1": 0.15000000596046448,
-        "NComboPunchEaseTime2": 0.15000000596046448,
-        "NComboPunchEaseTime3": 0.10000000149011612,
+        "NComboPunchEaseTime1": 0.09000000357627869,
+        "NComboPunchEaseTime2": 0.09000000357627869,
+        "NComboPunchEaseTime3": 0.09000000357627869,
         "NComboPunchEaseTime4": 0.0,
         "NComboPunchReach1": 4.0,
         "NComboPunchReach2": 4.0,
         "NComboPunchReach3": 0.0,
         "NComboPunchReach4": 0.0,
         "Translate": [
-            27.203535079956055,
-            6.699999809265137,
-            16.99652099609375
+            6.285429954528809,
+            0.5,
+            -20.06766700744629
         ],
-        "UpperPosY": 6.199999809265137,
-        "rushDistance": 2.4100000858306885,
-        "rushEaseMax": 0.09000000357627869
+        "UpperPosY": 15.300000190734863,
+        "rushDistance": 2.2799999713897705,
+        "rushEaseMax": 0.05000000074505806
     }
 }

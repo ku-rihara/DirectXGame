@@ -29,12 +29,11 @@ ComboAttackSecond::ComboAttackSecond(Player* player)
 	collisionBox_ = std::make_unique<PunchCollisionBox>();
 	collisionBox_->Init();
 
-	Vector3 collisionSize = Vector3::UnitVector();
-	collisionBox_->SetSize(collisionSize);// 当たり判定サイズ
+	collisionBox_->SetSize(Vector3::UnitVector() * 3);// 当たり判定サイズ
 	collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
 	Vector3 forwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
 	collisionBox_->SetOffset(forwardDirection * 4.0f);
-	collisionBox_->IsAdapt(true);
+	collisionBox_->IsAdapt(false);
 
 	/// パンチ座標セット
 	lHandStartPos_ = pPlayer_->GetLeftHand()->GetTransform().translation_;
@@ -52,7 +51,7 @@ ComboAttackSecond::~ComboAttackSecond() {
 //更新
 void ComboAttackSecond::Update() {
 
-	collisionBox_->Update();
+	
 
 	switch (order_) {
 
@@ -60,7 +59,7 @@ void ComboAttackSecond::Update() {
 		///----------------------------------------------------
 		/// パンチ
 		///----------------------------------------------------
-
+		collisionBox_->IsAdapt(true);
 		punchEase_.time += Frame::DeltaTimeRate();
 
 		/// 拳を突き出す
@@ -76,6 +75,8 @@ void ComboAttackSecond::Update() {
 			punchEase_.time = pPlayer_->GetPunchEaseMax(Player::SECOND);
 			order_ = Order::BACKPUNCH;
 		}
+
+		collisionBox_->Update();
 
 		break;
 

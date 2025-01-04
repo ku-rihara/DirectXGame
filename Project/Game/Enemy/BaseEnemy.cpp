@@ -3,13 +3,18 @@
 #include"Behavior/EnemyChasePlayer.h"
 #include"Behavior/EnemyHitBackDamage.h"
 #include"Behavior/EnemyUpperDamage.h"
-
-#include"Matrix4x4.h"
-#include"Player/Player.h"
+#include"Behavior/EnemyStopDamage.h"
+#include"Behavior/EnemyThrustDamage.h"
 
 /// collisionBox
 #include"CollisionBox/PunchCollisionBox.h"
 #include"CollisionBox/UpperCollisionBox.h"
+#include"CollisionBox/StopCollisionBox.h"
+#include"CollisionBox/ThrustCollisionBox.h"
+
+#include"Matrix4x4.h"
+#include"Player/Player.h"
+
 
 
 ///=========================================================
@@ -20,6 +25,7 @@ float BaseEnemy::InitY_ = 0.5f;
 BaseEnemy::BaseEnemy() {
 
 }
+
 ///========================================================
 ///  初期化
 ///========================================================
@@ -119,9 +125,25 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 		return;
 	}
 
-	/*if (dynamic_cast<PunchCollisionSecond*>(other)) {
+	 //止まる攻撃
+	 if (dynamic_cast<StopCollisionBox*>(other)) {
 
-	}*/
+		 if (!dynamic_cast<EnemyStopDamage*>(behavior_.get())) {
+			 ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
+		 }
+
+		 return;
+	 }
+
+	 //月飛ばし攻撃
+	 if (dynamic_cast<ThrustCollisionBox*>(other)) {
+
+		 if (!dynamic_cast<EnemyThrustDamage*>(behavior_.get())) {
+			 ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
+		 }
+
+		 return;
+	 }
 }
 
 Vector3 BaseEnemy::GetCollisionPos() const {

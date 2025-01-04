@@ -61,6 +61,8 @@
     <ClCompile Include="Game\Enemy\Behavior\BaseEnemyBehavior.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyChasePlayer.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyHitBackDamage.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\EnemyStopDamage.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\EnemyThrustDamage.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyUpperDamage.cpp" />
     <ClCompile Include="Game\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Enemy\NormalEnemy.cpp" />
@@ -166,6 +168,8 @@
     <ClInclude Include="Game\Enemy\Behavior\BaseEnemyBehavior.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyChasePlayer.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyHitBackDamage.h" />
+    <ClInclude Include="Game\Enemy\Behavior\EnemyStopDamage.h" />
+    <ClInclude Include="Game\Enemy\Behavior\EnemyThrustDamage.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyUpperDamage.h" />
     <ClInclude Include="Game\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Enemy\NormalEnemy.h" />
