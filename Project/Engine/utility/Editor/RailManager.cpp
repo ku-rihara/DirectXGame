@@ -5,7 +5,7 @@
 #include"MathFunction.h"
 //imgui
 #include<imgui.h>
-
+#include"Frame/Frame.h"
 
    ///=====================================================
    /// 初期化
@@ -46,7 +46,7 @@ void RailManager::Update(const float& speed, const PositionMode& mode, const Vec
     }
 
     // カメラの移動とレールに沿った描画
-    railMoveTime_ += speed / rail_.GetTotalLength();
+    railMoveTime_ += (speed / rail_.GetTotalLength())* Frame::DeltaTimeRate();
 
 
     RoopOrStop();// ループか止まるか
