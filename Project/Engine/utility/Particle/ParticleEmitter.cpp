@@ -393,6 +393,7 @@ void ParticleEmitter::RailDraw(const ViewProjection& viewProjection) {
 	/*railManager_->RailDraw(viewProjection);*/
 }
 void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
+	viewProjection;
 #ifdef _DEBUG
 
 	if (isMoveForRail_) {// レールに沿うエミット位置
