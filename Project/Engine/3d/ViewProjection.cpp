@@ -33,7 +33,9 @@ void ViewProjection::Map() {
 	//定数バッファのマッピング
 	D3D12_RANGE readRange = {};
 	HRESULT hr = constBuffer_->Map(0, &readRange, reinterpret_cast<void**>(&constMap));
-	assert(SUCCEEDED(hr));
+	if (FAILED(hr)) {
+		throw std::runtime_error("Failed to map constant buffer.");
+	}
 }
 
 void ViewProjection::TransferMatrix() {

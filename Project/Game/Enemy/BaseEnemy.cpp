@@ -117,7 +117,7 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 	}
 
 	//アッパーを食らったら
-	 if (dynamic_cast<UpperCollisionBox*>(other)) {
+	if (dynamic_cast<UpperCollisionBox*>(other)) {
 
 		if (!dynamic_cast<EnemyUpperDamage*>(behavior_.get())) {
 			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
@@ -125,25 +125,65 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 		return;
 	}
 
-	 //止まる攻撃
-	 if (dynamic_cast<StopCollisionBox*>(other)) {
+	//止まる攻撃
+	if (dynamic_cast<StopCollisionBox*>(other)) {
 
-		 if (!dynamic_cast<EnemyStopDamage*>(behavior_.get())) {
-			 ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
-		 }
+		if (!dynamic_cast<EnemyStopDamage*>(behavior_.get())) {
+			ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
+		}
 
-		 return;
-	 }
+		return;
+	}
 
-	 //月飛ばし攻撃
-	 if (dynamic_cast<ThrustCollisionBox*>(other)) {
+	//月飛ばし攻撃
+	if (dynamic_cast<ThrustCollisionBox*>(other)) {
 
-		 if (!dynamic_cast<EnemyThrustDamage*>(behavior_.get())) {
-			 ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
-		 }
+		if (!dynamic_cast<EnemyThrustDamage*>(behavior_.get())) {
+			ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
+		}
 
-		 return;
-	 }
+		return;
+	}
+}
+
+void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
+	////普通のパンチに攻撃されたら
+	//if (dynamic_cast<PunchCollisionBox*>(other)) {
+
+	//	if (!dynamic_cast<EnemyHitBackDamage*>(behavior_.get())) {
+	//		ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
+	//	}
+	//	return;
+	//}
+
+	////アッパーを食らったら
+	//if (dynamic_cast<UpperCollisionBox*>(other)) {
+
+	//	if (!dynamic_cast<EnemyUpperDamage*>(behavior_.get())) {
+	//		ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
+	//	}
+	//	return;
+	//}
+
+	////止まる攻撃
+	//if (dynamic_cast<StopCollisionBox*>(other)) {
+
+	//	if (!dynamic_cast<EnemyStopDamage*>(behavior_.get())) {
+	//		ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
+	//	}
+
+	//	return;
+	//}
+
+	////月飛ばし攻撃
+	//if (dynamic_cast<ThrustCollisionBox*>(other)) {
+
+	//	if (!dynamic_cast<EnemyThrustDamage*>(behavior_.get())) {
+	//		ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
+	//	}
+
+	//	return;
+	//}
 }
 
 Vector3 BaseEnemy::GetCollisionPos() const {

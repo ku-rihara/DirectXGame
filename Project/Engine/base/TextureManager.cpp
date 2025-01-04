@@ -81,7 +81,9 @@ Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::CreateTextureResource(Mic
 		nullptr,
 		IID_PPV_ARGS(&resource)
 	);
-	assert(SUCCEEDED(hr));
+	if (FAILED(hr)) {
+		throw std::runtime_error("Failed to map constant buffer.");
+	}
 	return resource.Get();
 }
 

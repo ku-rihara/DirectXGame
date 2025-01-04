@@ -34,8 +34,9 @@ Vector3 BaseObject::GetWorldPosition() const {
 	return worldPos;
 }
 
-void BaseObject::CreateModel(const std::string modelname, const std::string name) {
+void BaseObject::CreateModel(const std::string& modelname, const std::string& name) {
 	obj3d_.reset(Object3d::CreateModel(modelname, name));
+	
 }
 
 

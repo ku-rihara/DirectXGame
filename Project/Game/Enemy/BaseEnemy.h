@@ -43,7 +43,8 @@ public:
 
 	// 当たり判定
 	void OnCollisionEnter([[maybe_unused]] BaseCollider* other)override;
-	
+	void OnCollisionStay([[maybe_unused]] BaseCollider* other)override;
+
 	Vector3 GetCollisionPos() const override;
 	///========================================================================================
 	///  getter method

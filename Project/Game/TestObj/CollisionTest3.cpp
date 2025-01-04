@@ -5,10 +5,11 @@ void CollisionTest3::Init() {
 	transform_.Init();
 }
 void CollisionTest3::Update() {
+#ifdef _DEBUG
 	ImGui::Begin("c3");
 	ImGui::DragFloat3("pos", &transform_.translation_.x, 0.1f);
 	ImGui::End();
-
+#endif
 	transform_.UpdateMatrix();
 }
 void CollisionTest3::Draw() {

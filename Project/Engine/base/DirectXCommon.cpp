@@ -540,7 +540,9 @@ Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DirectXCommon::CreateDescriptorHeap
 	DescriptorHeapDesc.Flags = shaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	HRESULT hr = device->CreateDescriptorHeap(&DescriptorHeapDesc, IID_PPV_ARGS(&descriptorHeap));
 	//ディスクリプタヒープが作れなかったので起動出来ない
-	assert(SUCCEEDED(hr));
+	if (FAILED(hr)) {
+		throw std::runtime_error("Failed to map constant buffer.");
+	}
 	return descriptorHeap.Get();
 }
 
@@ -606,7 +608,9 @@ Microsoft::WRL::ComPtr <ID3D12Resource> DirectXCommon::CreateDepthStencilTexture
 		D3D12_RESOURCE_STATE_DEPTH_WRITE,//深度値を書き込む状態にしておく
 		&depthClearValue,//Clear最適値
 		IID_PPV_ARGS(&resource));//作成するResourceポインタへのポインタ
-	assert(SUCCEEDED(hr));
+	if (FAILED(hr)) {
+		throw std::runtime_error("Failed to map constant buffer.");
+	}
 	return resource.Get();
 }
 

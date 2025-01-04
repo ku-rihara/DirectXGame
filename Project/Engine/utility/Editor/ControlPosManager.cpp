@@ -89,9 +89,9 @@ void ControlPosManager::LoadFromFile(const std::string& filename) {
 			AddPoint(pos);
 		}
 	}
-	else {
+	/*else {
 		ImGui::Text("Failed to load positions from file.");
-	}
+	}*/
 }
 
 ///=====================================================

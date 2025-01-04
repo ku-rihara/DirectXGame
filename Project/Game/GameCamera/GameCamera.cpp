@@ -9,13 +9,14 @@
 #include"LockOn/LockOn.h"
 /// std
 #include<numbers>
+#include<imgui.h>
 
 
 void GameCamera::Init() {
 	viewprojection_.Init();
 
-	rotate_ = 2.0f;
-	offset_ = { 0,10,-30 };
+	rotate_ = 20.0f;
+	offset_ = { 0,17,-37 };
 }
 
 void GameCamera::Update() {
@@ -141,4 +142,9 @@ Vector3 GameCamera::GetBaseCenterPosition()const {
 
 	return worldPos;
 
+}
+
+void GameCamera::Debug() {
+	ImGui::DragFloat("rotate", & rotate_, 0.01f);
+	ImGui::DragFloat3("offset", &offset_.x, 0.1f);
 }

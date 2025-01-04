@@ -1,6 +1,7 @@
 #include "ObjectColor.h"
 #include "base/DirectXCommon.h"
 #include <cassert>
+#include <intsafe.h>
 
 // 初期化
 void ObjectColor::Init() {
@@ -33,11 +34,13 @@ void ObjectColor::CreateConstBuffer() {
 void ObjectColor::Map() {
     // 定数バッファのマッピング
     HRESULT result = constBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&constMap_));
-    assert(SUCCEEDED(result));
-
+    if (FAILED(result)) {
+        throw std::runtime_error("Failed to map constant buffer.");
+    }
     // 初期色の転送
     constMap_->color_ = color_;
 }
+
 
 // 行列を転送する
 void ObjectColor::TransferMatrix() {

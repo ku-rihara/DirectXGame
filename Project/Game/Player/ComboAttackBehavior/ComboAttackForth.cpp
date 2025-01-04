@@ -80,7 +80,6 @@ void ComboAttackForth::Update() {
 		// イージング終了時の処理
 		if (stopRailManager_->GetRailMoveTime() < 1.0f) break;
 
-
 		stopRailManager_->SetRailMoveTime(1.0f);
 		pPlayer_->GetRightHand()->RailForthComboUpdate(0.0f);
 
@@ -106,7 +105,6 @@ void ComboAttackForth::Update() {
 	
 
 		order_ = Order::LPUNCH;
-
 		break;
 
 	case Order::LPUNCH:

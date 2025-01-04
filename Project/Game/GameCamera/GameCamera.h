@@ -32,6 +32,8 @@ public:
 	void Reset();             /// リセット
 	void GetIsCameraMove();   /// カメラ動いているか
 
+	void Debug();
+
 	void RotateAdapt();
 	void TranslateAdapt();
 

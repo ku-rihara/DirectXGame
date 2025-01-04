@@ -14,20 +14,8 @@ GameScene::~GameScene() {
 
 void GameScene::Init() {
 
-	////* TODO 
-	/// ライト使いやすく
-	/// 2Dゲームをリファレンスとしたコンボを実装(来週まで)
-	/// 敵の配置パターンのエディター(来週まで)
-
-
-	// メンバ変数の初期化
-	input_ = Input::GetInstance();
-	audio_ = Audio::GetInstance();
-	textureManager_ = TextureManager::GetInstance();
-
-	//デバッグカメラ
-	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
-	debugCamera_->Init();
+	BaseScene::Init();
+	
 
 	///=======================================================================================
 	/// 生成
@@ -119,8 +107,7 @@ void GameScene::SpriteDraw() {
 void GameScene::Debug() {
 #ifdef _DEBUG
 	ImGui::Begin("Camera");
-	ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
-	ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
+	gamecamera_->Debug();
 	ImGui::End();
 
 	enemyManager_->ImGuiUpdate();
