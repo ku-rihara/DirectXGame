@@ -31,10 +31,10 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	collisionBox_ = std::make_unique<UpperCollisionBox>();
 	collisionBox_->Init();
 
-	collisionBox_->SetSize(Vector3::UnitVector() * 1.5f);// 当たり判定サイズ
+	collisionBox_->SetSize(Vector3::UnitVector() * 4.5f);// 当たり判定サイズ
 	
 	Vector3 forwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
-	collisionBox_->SetOffset(forwardDirection * 4.0f);
+	collisionBox_->SetOffset(forwardDirection * 3.0f);
 	collisionBox_->IsAdapt(false);
 
 	railManager_ = pPlayer_->GetRightHand()->GetThreeComboRailManager();
@@ -63,7 +63,7 @@ void ComboAttackThird::Update() {
 		///----------------------------------------------------
 
 		upperJumpEaseT_ += Frame::DeltaTimeRate();
-		collisionBox_->SetPosition(pPlayer_->GetRightHand()->GetWorldPosition());
+		collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
 
 		///0.3秒で当たり判定消す
 		if (upperJumpEaseT_ >= kCollisionAliveTime_) {

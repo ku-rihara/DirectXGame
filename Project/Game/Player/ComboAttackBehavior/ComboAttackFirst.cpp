@@ -30,7 +30,7 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	/// collisionBox
 	collisionBox_ = std::make_unique<PunchCollisionBox>();
 	collisionBox_->Init();
-	collisionBox_->SetSize(Vector3::UnitVector()*1.5f);// 当たり判定サイズ
+	collisionBox_->SetSize(Vector3::UnitVector()*2.5f);// 当たり判定サイズ
 	collisionBox_->IsAdapt(false);
 	/// parm
 	rushEase_.time = 0.0f;
@@ -106,7 +106,7 @@ void ComboAttackFirst::Update() {
 
 		/// 当たり判定座標
 		collisionBox_->SetPosition(pPlayer_->GetRightHand()->GetWorldPosition());
-		collisionBox_->SetOffset(forwardDirection_ * 4.0f);
+		collisionBox_->SetOffset(forwardDirection_ * 1.0f);
 		collisionBox_->Update();
 
 

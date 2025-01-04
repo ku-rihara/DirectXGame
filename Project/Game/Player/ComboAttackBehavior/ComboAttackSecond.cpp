@@ -29,9 +29,9 @@ ComboAttackSecond::ComboAttackSecond(Player* player)
 	collisionBox_ = std::make_unique<PunchCollisionBox>();
 	collisionBox_->Init();
 
-	collisionBox_->SetSize(Vector3::UnitVector() * 1.5f);// 当たり判定サイズ
+	collisionBox_->SetSize(Vector3::UnitVector() * 2.5f);// 当たり判定サイズ
 	Vector3 forwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
-	collisionBox_->SetOffset(forwardDirection * 4.0f);
+	collisionBox_->SetOffset(forwardDirection * 1.0f);
 	collisionBox_->IsAdapt(false);
 
 	/// パンチ座標セット

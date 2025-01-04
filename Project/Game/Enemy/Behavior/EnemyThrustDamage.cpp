@@ -16,7 +16,7 @@ EnemyThrustDamage::EnemyThrustDamage(BaseEnemy* boss)
 
 	/// ヒットバックのパラメータ
 	initPos_ = pBaseEnemy_->GetWorldPosition();
-	speed_ = 3.5f;
+	speed_ = 2.5f;
 	// 赤色
 	pBaseEnemy_->SetColor(Vector4(0.9f, 0, 0, 0.9f));
 
@@ -25,7 +25,7 @@ EnemyThrustDamage::EnemyThrustDamage(BaseEnemy* boss)
 
 	hitStopTime_ = 0.0f;
 	kHitStopTime_ = 0.05f;
-	Frame::SetTimeScale(0.01f);
+
 
 	step_ = Step::DIRECTIONSET; /// ステップ初期化
 }
@@ -36,10 +36,10 @@ EnemyThrustDamage::~EnemyThrustDamage() {
 
 void EnemyThrustDamage::Update() {
 
-	hitStopTime_ += Frame::DeltaTime();
+	/*hitStopTime_ += Frame::DeltaTime();
 	if (hitStopTime_ >= kHitStopTime_) {
 		Frame::SetTimeScale(1.0f);
-	}
+	}*/
 
 	switch (step_)
 	{
@@ -89,6 +89,7 @@ void EnemyThrustDamage::Update() {
 		}
 		break;
 	case Step::RETUNROOT:
+		pBaseEnemy_->SetColor(Vector4(1.0f, 1, 1, 1.0f));
 		pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
 		break;
 	}
