@@ -14,7 +14,7 @@
 
 #include"Matrix4x4.h"
 #include"Player/Player.h"
-
+#include"base/TextureManager.h"
 
 
 ///=========================================================
@@ -38,6 +38,7 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	transform_.translation_=spownPos;
 
 	ChangeBehavior(std::make_unique<EnemyChasePlayer>(this));/// 追っかけ
+
 
 }
 

@@ -7,6 +7,7 @@
 #include "BaseObject/BaseObject.h"
 #include"Collider/AABBCollider.h"
 #include"Behavior/BaseEnemyBehavior.h"
+#include"utility/Particle/ParticleEmitter.h"
 
 class Player;
 class BaseEnemy : public BaseObject,public AABBCollider {
@@ -18,6 +19,10 @@ protected:
 
 	/// behavior
 	std::unique_ptr<BaseEnemyBehaivor>behavior_ = nullptr;
+
+	/// エミッター
+	std::unique_ptr<ParticleEmitter>emitter_;
+
 public:
 	static float InitY_;
 public:

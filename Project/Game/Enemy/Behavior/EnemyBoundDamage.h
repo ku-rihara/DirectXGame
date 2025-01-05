@@ -3,33 +3,31 @@
 #include"BaseEnemyBehavior.h"
 #include"Easing.h"
 
-class EnemyThrustDamage : public BaseEnemyBehaivor {
+class EnemyBoundDamage : public BaseEnemyBehaivor {
 private:
-
 	enum class Step {
-		DIRECTIONSET,
-		HITBACK,
-		NEXTBEHAVIOR,
+		BOUND,
+		RETUNROOT,
 	};
-
 private:
 
 	Step step_;
 	float objectiveAngle_;
-	Vector3 initPos_;
-	Vector3 backPos_;
-	float speed_;
 	Vector3 direction_;
+
+	float speed_;
+	float fallSpeedLimit_;
+	float gravity_;
 
 	Easing easing_;
 
-	float hitStopTime_;
-	float kHitStopTime_;
+	float stopTime_;
+	float kStopTime_;
 
 public:
 	//コンストラクタ
-	EnemyThrustDamage(BaseEnemy* boss);
-	~EnemyThrustDamage();
+	EnemyBoundDamage(BaseEnemy* boss);
+	~EnemyBoundDamage();
 
 
 	void Update()override;

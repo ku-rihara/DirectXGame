@@ -1,6 +1,7 @@
 
 /// behavior
 #include"EnemyThrustDamage.h"
+#include"EnemyBoundDamage.h"
 #include"Enemy/Behavior/EnemyChasePlayer.h"
 
 /// obj
@@ -49,7 +50,7 @@ void EnemyThrustDamage::Update() {
 		/// 向き計算
 		///---------------------------------------------------------
 
-			// ターゲットへのベクトル
+		// ターゲットへのベクトル
 		direction_ = pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());
 
 		direction_.y = 0.0f;
@@ -85,12 +86,12 @@ void EnemyThrustDamage::Update() {
 		//次のステップ	
 		if (easing_.time >= easing_.maxTime) {
 			easing_.time = easing_.maxTime;
-			step_ = Step::RETUNROOT;
+			step_ = Step::NEXTBEHAVIOR;
 		}
 		break;
-	case Step::RETUNROOT:
+	case Step::NEXTBEHAVIOR:
 		pBaseEnemy_->SetColor(Vector4(1.0f, 1, 1, 1.0f));
-		pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
+		pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyBoundDamage>(pBaseEnemy_));
 		break;
 	}
 }

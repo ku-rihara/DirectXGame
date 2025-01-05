@@ -59,6 +59,7 @@
     <ClCompile Include="Game\CollisionBox\UpperCollisionBox.cpp" />
     <ClCompile Include="Game\Enemy\BaseEnemy.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\BaseEnemyBehavior.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\EnemyBoundDamage.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyChasePlayer.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyHitBackDamage.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyStopDamage.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="Game\CollisionBox\UpperCollisionBox.h" />
     <ClInclude Include="Game\Enemy\BaseEnemy.h" />
     <ClInclude Include="Game\Enemy\Behavior\BaseEnemyBehavior.h" />
+    <ClInclude Include="Game\Enemy\Behavior\EnemyBoundDamage.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyChasePlayer.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyHitBackDamage.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyStopDamage.h" />

@@ -451,6 +451,9 @@
     <ClCompile Include="Game\Enemy\Behavior\EnemyThrustDamage.cpp">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\EnemyBoundDamage.cpp">
+      <Filter>Game\Enemy\Behevior</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -772,6 +775,9 @@
       <Filter>Game\Enemy\Behevior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\EnemyThrustDamage.h">
+      <Filter>Game\Enemy\Behevior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\EnemyBoundDamage.h">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClInclude>
   </ItemGroup>
