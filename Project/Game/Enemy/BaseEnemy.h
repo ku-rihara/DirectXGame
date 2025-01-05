@@ -16,6 +16,9 @@ protected:
 	/// other class
 	Player* pPlayer_;
 	bool isdeath_;
+	float hp_;
+	float HPMax_;
+	float hpbarSize_;
 
 	/// behavior
 	std::unique_ptr<BaseEnemyBehaivor>behavior_ = nullptr;
@@ -39,6 +42,8 @@ public:
 	virtual void SpriteDraw(const ViewProjection& viewProjection);
 	
 	Vector3 GetDirectionToTarget(const Vector3&target);
+
+	void DamageForPar(const float& par);
 
 	/// Hpバー処理
 	virtual void DisplayHpBar(const ViewProjection& viewProjection);

@@ -175,6 +175,9 @@
     <Filter Include="Game\Enemy\Behevior">
       <UniqueIdentifier>{980998d2-8fc8-49fa-8ebd-747b3b8183d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemy\HPBsr">
+      <UniqueIdentifier>{c80a07fc-a6fa-4934-a64f-d533cf749ad6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -453,6 +456,9 @@
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\EnemyBoundDamage.cpp">
       <Filter>Game\Enemy\Behevior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\HPBar\EnemyHPBar.cpp">
+      <Filter>Game\Enemy\HPBsr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -779,6 +785,9 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\EnemyBoundDamage.h">
       <Filter>Game\Enemy\Behevior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\HPBar\EnemyHPBar.h">
+      <Filter>Game\Enemy\HPBsr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -35,11 +35,11 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	/// モデルセット
 	BaseObject::CreateModel("axis",".obj");
 
+	HPMax_ = 48.0f;
+	hpbarSize_ = HPMax_;
 	transform_.translation_=spownPos;
 
 	ChangeBehavior(std::make_unique<EnemyChasePlayer>(this));/// 追っかけ
-
-
 }
 
 ///========================================================
@@ -49,11 +49,11 @@ void BaseEnemy::Update() {
 
 	behavior_->Update();
 	
-	//// 体力がなくなったら死亡
-	//if (hp_ <= 0 && !isBurst_) {
-	//	behaviorRequest_ = Behavior::kDeath;
-	//	/*Audio::GetInstance()->PlayWave(deathSound_);*/
-	//}
+	// 体力がなくなったら死亡
+	if (hp_ <= 0) {
+		isdeath_;
+		/*Audio::GetInstance()->PlayWave(deathSound_);*/
+	}
 	
 	BaseObject::Update();
 }
@@ -67,12 +67,12 @@ void BaseEnemy::DisplayHpBar(const ViewProjection& viewProjection) {
 	Vector2 positionScreenV2(positionScreen.x, positionScreen.y - 30.0f);
 	// Hpバーの座標確定
 	Vector2 hpBarPosition = positionScreenV2;
-	//// Hpバーのサイズ
-	//hpbar_->SetSize(hpbarSize_);
-	//// HPBarスプライト
-	//hpbar_->SetPosition(hpBarPosition);
-	//// Hpバー更新
-	//hpbar_->Update(hp_);
+	// Hpバーのサイズ
+	hpbar_->SetSize(hpbarSize_);
+	// HPBarスプライト
+	hpbar_->SetPosition(hpBarPosition);
+	// Hpバー更新
+	hpbar_->Update(hp_);
 }
 
 Vector3 BaseEnemy::GetDirectionToTarget(const Vector3& target) {
@@ -98,13 +98,10 @@ void BaseEnemy::Draw(const ViewProjection& viewProjection) {
 /// Sprite描画
 ///========================================================
 void BaseEnemy::SpriteDraw(const ViewProjection& viewProjection) {
-	viewProjection;
-	//// HPバー描画
-	//if (!isBurst_) {
-	//	if (IsInView(viewProjection)) {
-	//		hpbar_->Draw();
-	//	}
-	//}
+	
+		if (IsInView(viewProjection)) {
+			hpbar_->Draw();
+		}
 }
 
 void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
@@ -117,6 +114,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
 		if (!dynamic_cast<EnemyHitBackDamage*>(behavior_.get())) {
 			ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
+			DamageForPar(0.2f);
 		}
 		return;
 	}
@@ -126,6 +124,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
 		if (!dynamic_cast<EnemyUpperDamage*>(behavior_.get())) {
 			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
+			DamageForPar(0.2f);
 		}
 		return;
 	}
@@ -135,6 +134,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
 		if (!dynamic_cast<EnemyStopDamage*>(behavior_.get())) {
 			ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
+			DamageForPar(0.2f);
 		}
 
 		return;
@@ -145,6 +145,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
 		if (!dynamic_cast<EnemyThrustDamage*>(behavior_.get())) {
 			ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
+			DamageForPar(0.2f);
 		}
 
 		return;
@@ -168,4 +169,39 @@ void BaseEnemy::SetPlayer(Player* player) {
 void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseEnemyBehaivor>behavior) {
 	//引数で受け取った状態を次の状態としてセット
 	behavior_ = std::move(behavior);
+}
+
+
+// 視界にいるか
+bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
+	Vector3 positionView = {};
+	// 敵のロックオン座標を取得
+	Vector3 positionWorld = GetWorldPosition();
+	// ワールド→ビュー座標系
+	positionView = MatrixTransform(positionWorld, viewProjection.matView_);
+	// 距離条件チェック
+	if (0.0f <= positionView.z && positionView.z <= 1280.0f) {
+		// カメラ前方との角度を計算
+		float actTangent = std::atan2(std::sqrt(positionView.x * positionView.x + positionView.y * positionView.y), positionView.z);
+
+		// 角度条件チェック（コーンに収まっているか）
+		return (std::fabsf(actTangent) <= std::fabsf(180 * 3.14f));
+	}
+	return false;
+}
+
+//割合によるダメージ
+void BaseEnemy::DamageForPar(const float& par) {
+
+	//割合によるインクる面とする値を決める
+	float decrementSize = HPMax_ * par;
+	// HP減少
+	hp_ -= decrementSize;
+
+	////HPが0以下にならないように
+	//if (hp_ <= 0) {
+	//	//// 死亡処理
+	//	//DeathMethod();
+	//	//HP_ = 0.0f;
+	//}
 }

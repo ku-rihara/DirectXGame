@@ -66,6 +66,7 @@
     <ClCompile Include="Game\Enemy\Behavior\EnemyThrustDamage.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyUpperDamage.cpp" />
     <ClCompile Include="Game\Enemy\EnemyManager.cpp" />
+    <ClCompile Include="Game\Enemy\HPBar\EnemyHPBar.cpp" />
     <ClCompile Include="Game\Enemy\NormalEnemy.cpp" />
     <ClCompile Include="Game\Field\Field.cpp" />
     <ClCompile Include="Game\GameCamera\GameCamera.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Game\Enemy\Behavior\EnemyThrustDamage.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyUpperDamage.h" />
     <ClInclude Include="Game\Enemy\EnemyManager.h" />
+    <ClInclude Include="Game\Enemy\HPBar\EnemyHPBar.h" />
     <ClInclude Include="Game\Enemy\NormalEnemy.h" />
     <ClInclude Include="Game\Field\Field.h" />
     <ClInclude Include="Game\GameCamera\GameCamera.h" />
