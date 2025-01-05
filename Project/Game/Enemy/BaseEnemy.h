@@ -8,6 +8,7 @@
 #include"Collider/AABBCollider.h"
 #include"Behavior/BaseEnemyBehavior.h"
 #include"utility/Particle/ParticleEmitter.h"
+#include"Enemy/HPBar/EnemyHPBar.h"
 
 class Player;
 class BaseEnemy : public BaseObject,public AABBCollider {
@@ -19,6 +20,7 @@ protected:
 	float hp_;
 	float HPMax_;
 	float hpbarSize_;
+	std::unique_ptr<EnemyHPBar>hpbar_;
 
 	/// behavior
 	std::unique_ptr<BaseEnemyBehaivor>behavior_ = nullptr;
