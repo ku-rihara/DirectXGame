@@ -60,36 +60,23 @@ void ParticleCommon::CreateGraphicsPipeline() {
 	inputLayoutDesc.pInputElementDescs = inputElementDescs;
 	inputLayoutDesc.NumElements = _countof(inputElementDescs);
 
-	//BlendStateの設定
-	D3D12_BLEND_DESC blendDesc{};
-	//すべての色要素を書き込む
-	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-	blendDesc.RenderTarget[0].BlendEnable = TRUE;
-	blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
-	blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-	blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
-	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-	blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
-	//// BlendStateの設定
-	//D3D12_BLEND_DESC blendDesc{};
-	//blendDesc.AlphaToCoverageEnable = FALSE; // アルファテストを無効に
-	//blendDesc.IndependentBlendEnable = FALSE; // 各レンダーターゲットのブレンドを独立させない
+	// ADD ブレンドの設定
+	D3D12_BLEND_DESC blendDescAdd = {};
+	blendDescAdd.RenderTarget[0].BlendEnable = TRUE;
+	blendDescAdd.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blendDescAdd.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
+	blendDescAdd.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	blendDescAdd.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDescAdd.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+	blendDescAdd.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blendDescAdd.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
-	//// レンダーターゲットの設定
-	//blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-	//blendDesc.RenderTarget[0].BlendEnable = TRUE;
+	// 通常のブレンド（何もしない）
+	D3D12_BLEND_DESC blendDescNone = {};
+	blendDescNone.RenderTarget[0].BlendEnable = FALSE;
+	blendDescNone.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
-	//// ソースブレンド、デスティネーションブレンド、ブレンドオペレーションの設定
-	//blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA; // ソースのアルファ
-	//blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA; // 1 - ソースのアルファ
-	//blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD; // 加算
-
-	//// アルファのソースとデスティネーションのブレンド設定
-	//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE; // アルファをそのまま使用
-	//blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO; // デスティネーションのアルファは無視
-	//blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD; // 加算
 
 
 
@@ -110,57 +97,30 @@ void ParticleCommon::CreateGraphicsPipeline() {
 		L"ps_6_0", pDxCommon_->GetDxcUtils(), pDxCommon_->GetDxcCompiler(), pDxCommon_->GetIncludeHandler());
 	assert(pixelShaderBlob_ != nullptr);
 
-	//PSOを生成
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
-	graphicsPipelineStateDesc.pRootSignature = rootSignature_.Get();
-	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
-	graphicsPipelineStateDesc.VS = { vertexShaderBlob_->GetBufferPointer(),vertexShaderBlob_->GetBufferSize() };
-	graphicsPipelineStateDesc.PS = { pixelShaderBlob_->GetBufferPointer(),pixelShaderBlob_->GetBufferSize() };
-	graphicsPipelineStateDesc.BlendState = blendDesc;
-	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;
-	//書き込むRTVの情報
-	graphicsPipelineStateDesc.NumRenderTargets = 1;
-	graphicsPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-	//利用するトポロジ（形状）のタイプ。三角形
-	graphicsPipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	//どのように画面に色を打ち込むかの設定
-	graphicsPipelineStateDesc.SampleDesc.Count = 1;
-	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
-	//DepthStencilの設定
-	graphicsPipelineStateDesc.DepthStencilState = pDxCommon_->GetDepthStencilDesc();
-	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	// PSO作成用関数
+	auto CreatePSO = [&](D3D12_BLEND_DESC& blendDesc, Microsoft::WRL::ComPtr<ID3D12PipelineState>& pso) {
+		D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc = {};
+		graphicsPipelineStateDesc.pRootSignature = rootSignature_.Get();
+		graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
+		graphicsPipelineStateDesc.VS = { vertexShaderBlob_->GetBufferPointer(), vertexShaderBlob_->GetBufferSize() };
+		graphicsPipelineStateDesc.PS = { pixelShaderBlob_->GetBufferPointer(), pixelShaderBlob_->GetBufferSize() };
+		graphicsPipelineStateDesc.BlendState = blendDesc;
+		graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;
+		graphicsPipelineStateDesc.NumRenderTargets = 1;
+		graphicsPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		graphicsPipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+		graphicsPipelineStateDesc.SampleDesc.Count = 1;
+		graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
+		graphicsPipelineStateDesc.DepthStencilState = pDxCommon_->GetDepthStencilDesc();
+		graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
-	//Particle用のPSOを生成
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDescParticle{};
-	graphicsPipelineStateDescParticle.pRootSignature = rootSignature_.Get();
-	graphicsPipelineStateDescParticle.InputLayout = inputLayoutDesc;
-	graphicsPipelineStateDescParticle.VS = { vertexShaderBlob_->GetBufferPointer(), vertexShaderBlob_->GetBufferSize() };
-	graphicsPipelineStateDescParticle.PS = { pixelShaderBlob_->GetBufferPointer(), pixelShaderBlob_->GetBufferSize() };
-	graphicsPipelineStateDescParticle.BlendState = blendDesc;
-	graphicsPipelineStateDescParticle.RasterizerState = rasterizerDesc;
-	//書き込むRTVの情報
-	graphicsPipelineStateDescParticle.NumRenderTargets = 1;
-	graphicsPipelineStateDescParticle.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-	//利用するトポロジ（形状）のタイプ。三角形
-	graphicsPipelineStateDescParticle.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	//どのように画面に色を打ち込むかの設定
-	graphicsPipelineStateDescParticle.SampleDesc.Count = 1;
-	graphicsPipelineStateDescParticle.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
-	//DepthStencilの設定
-	graphicsPipelineStateDescParticle.DepthStencilState = pDxCommon_->GetDepthStencilDesc();
-	graphicsPipelineStateDescParticle.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		hr = pDxCommon_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&pso));
+		assert(SUCCEEDED(hr));
+		};
 
-	//実際に生成
-	graphicsPipelineState_ = nullptr;
-	hr = pDxCommon_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&graphicsPipelineState_));
-	assert(SUCCEEDED(hr));
-
-	//実際に生成(パーティクル)
-	graphicsPipelineState_ = nullptr;
-	hr = pDxCommon_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDescParticle, IID_PPV_ARGS(&graphicsPipelineState_));
-	assert(SUCCEEDED(hr));
-	/*model_->CreateModel();*/
-	/*sprite_->CreateSprite();*/
+	// 各ブレンドモードのPSOを作成
+	CreatePSO(blendDescAdd, graphicsPipelineStateAdd_);
+	CreatePSO(blendDescNone, graphicsPipelineStateNone_);
 
 }
 
@@ -213,9 +173,15 @@ void ParticleCommon::CreateRootSignature() {
 
 }
 
-
-void ParticleCommon::PreDraw(ID3D12GraphicsCommandList* commandList) {
-
+void ParticleCommon::PreDraw(ID3D12GraphicsCommandList* commandList, BlendMode blendMode) {
 	commandList->SetGraphicsRootSignature(rootSignature_.Get());
-	commandList->SetPipelineState(graphicsPipelineState_.Get());
+
+	switch (blendMode) {
+	case BlendMode::Add:
+		commandList->SetPipelineState(graphicsPipelineStateAdd_.Get());
+		break;
+	case BlendMode::None:
+		commandList->SetPipelineState(graphicsPipelineStateNone_.Get());
+		break;
+	}
 }

@@ -89,6 +89,9 @@ void ParticleManager::Update(std::optional<const ViewProjection*> viewProjection
 /// 描画
 ///============================================================
 void ParticleManager::Draw(const ViewProjection& viewProjection) {
+	/// commandList取得
+	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+
     for (auto& groupPair : particleGroups_) {
         ParticleGroup& group = groupPair.second;
         std::list<Particle>& particles = group.particles;
@@ -117,7 +120,7 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
         }
 		
         if (instanceIndex > 0 && group.model) {
-           
+			ParticleCommon::GetInstance()->PreDraw(commandList,group.blendMode_);
             group.model->DrawParticle(instanceIndex,
                 pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
                 group.material,
@@ -219,6 +222,9 @@ ParticleManager::Particle ParticleManager::MakeParticle(
 	const V3MinMax& rotateSpeedDist) {  // 新パラメータ追加
 
 	Particle particle;
+
+	/*particle.blendMode_ = blendmode;*/
+
 	particle.lifeTime_ = lifeTime;
 	particle.currentTime_ = 0.0f;
 	// 初期化
@@ -318,13 +324,14 @@ void ParticleManager::Emit(
 	const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
 	const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
 	const Vector3& baseRotate, const Vector3& baseRotateSpeed, const V3MinMax& RotateDist,
-	const V3MinMax& rotateSpeedDist, uint32_t count) {  // 新パラメータ追加
+	const V3MinMax& rotateSpeedDist, uint32_t count,const BlendMode& blendmode) {  // 新パラメータ追加
 
 	// パーティクルグループが存在するか確認
 	assert(particleGroups_.find(name) != particleGroups_.end() && "Error: Not Find ParticleGroup");
 
 	// 指定されたパーティクルグループを取得
 	ParticleGroup& particleGroup = particleGroups_[name];
+	particleGroup.blendMode_ = blendmode;
 
 	// 生成、グループ追加
 	std::list<Particle> particles;
