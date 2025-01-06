@@ -107,6 +107,43 @@ template<typename T> T EaseInQuart(const T& start, const T& end, float x, float 
 template<typename T> T EaseOutQuart(const T& start, const T& end, float x, float totalx);
 
 //*******************************************************************************************************************************************************************
+// back**************************************************************************************************************************************************************
+//*******************************************************************************************************************************************************************
+
+/// <summary>
+/// EaseInBack
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <param name="start"></param>
+/// <param name="end"></param>
+/// <param name="x"></param>
+/// <param name="totalx"></param>
+/// <returns></returns>
+template<typename T> T EaseInBack(const T& start, const T& end, float x, float totalX);
+
+/// <summary>
+/// EaseOutBack
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <param name="start"></param>
+/// <param name="end"></param>
+/// <param name="x"></param>
+/// <param name="totalx"></param>
+/// <returns></returns>
+template<typename T> T EaseOutBack(const T& start, const T& end, float x, float totalX);
+
+/// <summary>
+/// EaseInOutBack
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <param name="start"></param>
+/// <param name="end"></param>
+/// <param name="x"></param>
+/// <param name="totalx"></param>
+/// <returns></returns>
+template<typename T> T EaseInOutBack(const T& start, const T& end, float x, float totalX);
+
+//*******************************************************************************************************************************************************************
 // Bounce**************************************************************************************************************************************************************
 //*******************************************************************************************************************************************************************
 
