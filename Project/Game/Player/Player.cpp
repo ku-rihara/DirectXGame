@@ -46,6 +46,7 @@ void Player::Init() {
 	AddParmGroup();
 	ApplyGlobalParameter();
 	
+	obj3d_->material_.materialData_->enableLighting = 4;
 
 	///* 武器生成
 	leftHand_ = std::make_unique<PlayerHandLeft>();

@@ -14,7 +14,7 @@ void Ground::Init() {
 	transform_.Init();
 	transform_.translation_.y = -10.0f;
 	transform_.scale_ = {1, 2, 1};
-	
+
 }
 
 ///========================================================

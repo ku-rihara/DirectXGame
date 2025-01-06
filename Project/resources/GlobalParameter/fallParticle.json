@@ -21,7 +21,7 @@
         "Gravity": -60.5,
         "IntervalTime": 0.0,
         "LifeTime": 6.199999809265137,
-        "Particle Count": 14,
+        "Particle Count": 32,
         "Position Base": [
             0.0,
             0.0,
@@ -67,8 +67,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 1.0,
-        "Scale Min": 1.0,
+        "Scale Max": 0.4000000059604645,
+        "Scale Min": 0.4000000059604645,
         "Velocity Max": [
             20.0,
             15.5,

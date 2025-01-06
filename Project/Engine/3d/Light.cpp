@@ -29,8 +29,11 @@ void Light::Init() {
 	pointLightResource_ = DirectXCommon::GetInstance()->CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(PointLight));
 	pointLightData_ = nullptr;
 	pointLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData_));
-	pointLightData_->intenesity = 1.0f;
-	pointLightData_->position.y=2.0f;
+	pointLightData_->intenesity = 2.6f;
+	pointLightData_->position.y=2.7f;
+	pointLightData_->radius = 2.75f;
+	pointLightData_->decay = 0.29f;
+	pointLightData_->color = { 0.5f,0.5f,0.5f,1.0f };
 	//スポットライト-----------------------------------------------------------------------------------------------------------------
 	spotLightResource_ = DirectXCommon::GetInstance()->CreateBufferResource(DirectXCommon::GetInstance()->GetDevice(), sizeof(SpotLight));
 	spotLightData_ = nullptr;

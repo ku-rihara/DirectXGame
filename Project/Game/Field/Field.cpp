@@ -15,6 +15,7 @@ void Field::Init() {
 	
 	transform_.Init();
 	transform_.scale_ = baseScale_;
+	obj3d_->material_.materialData_->enableLighting = 4;
 }
 
 void Field::Update() {
