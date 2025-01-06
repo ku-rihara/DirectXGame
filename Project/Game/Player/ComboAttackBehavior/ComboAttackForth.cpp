@@ -28,7 +28,9 @@ ComboAttackForth::ComboAttackForth(Player* player)
 	stopCollisionBox_->SetSize(Vector3::UnitVector() * 4.5f);// 当たり判定サイズ
 	Vector3 sforwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
 	stopCollisionBox_->SetOffset(sforwardDirection * 3.0f);
+	stopCollisionBox_->SetPosition(pPlayer_->GetRightHand()->GetWorldPosition());
 	stopCollisionBox_->IsAdapt(false);
+	stopCollisionBox_->Update();
 
 	stopRailManager_ = pPlayer_->GetRightHand()->GetStopRailManager();
 	stopRailManager_->SetIsRoop(false);
@@ -40,6 +42,7 @@ ComboAttackForth::ComboAttackForth(Player* player)
 	Vector3 tforwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
 	thrustCollisionBox_->SetOffset(tforwardDirection * 3.0f);
 	thrustCollisionBox_->IsAdapt(false);
+	thrustCollisionBox_->Update();
 
 	thrustRailManager_ = pPlayer_->GetLeftHand()->GetThrustRailManager();
 	thrustRailManager_->SetIsRoop(false);
@@ -77,6 +80,7 @@ void ComboAttackForth::Update() {
 
 		stopCollisionBox_->SetPosition(pPlayer_->GetRightHand()->GetWorldPosition());
 		stopCollisionBox_->Update();
+		
 		// イージング終了時の処理
 		if (stopRailManager_->GetRailMoveTime() < 1.0f) break;
 

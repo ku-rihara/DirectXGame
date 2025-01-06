@@ -463,6 +463,12 @@
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackJumpSecond.cpp">
       <Filter>Game\Player\ComboBehavior\Jump</Filter>
     </ClCompile>
+    <ClCompile Include="Game\CollisionBox\FallCollisionBox.cpp">
+      <Filter>Game\CollisionBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CollisionBox\RushCollisionBox.cpp">
+      <Filter>Game\CollisionBox</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -794,6 +800,12 @@
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackJumpSecond.h">
       <Filter>Game\Player\ComboBehavior\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CollisionBox\FallCollisionBox.h">
+      <Filter>Game\CollisionBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CollisionBox\RushCollisionBox.h">
+      <Filter>Game\CollisionBox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -111,7 +111,7 @@ void ComboAttackSecond::Update() {
 		}
 		else {
 			BaseComboAattackBehavior::ChangeNextComboFragForButton();
-			//次のコンボ
+
 			BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackThird>(pPlayer_));
 		}
 		break;

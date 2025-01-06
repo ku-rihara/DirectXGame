@@ -5,12 +5,15 @@
 #include"Behavior/EnemyUpperDamage.h"
 #include"Behavior/EnemyStopDamage.h"
 #include"Behavior/EnemyThrustDamage.h"
+#include"Behavior/EnemyBoundDamage.h"
 
 /// collisionBox
 #include"CollisionBox/PunchCollisionBox.h"
 #include"CollisionBox/UpperCollisionBox.h"
 #include"CollisionBox/StopCollisionBox.h"
 #include"CollisionBox/ThrustCollisionBox.h"
+#include"CollisionBox/FallCollisionBox.h"
+#include"CollisionBox/RushCollisionBox.h"
 
 #include"Matrix4x4.h"
 #include"Player/Player.h"
@@ -150,6 +153,28 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
 		if (!dynamic_cast<EnemyThrustDamage*>(behavior_.get())) {
 			ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
+			DamageForPar(0.2f);
+		}
+
+		return;
+	}
+
+	//落下攻撃
+	if (dynamic_cast<FallCollisionBox*>(other)) {
+
+		if (!dynamic_cast<EnemyUpperDamage*>(behavior_.get())) {
+			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
+			DamageForPar(0.2f);
+		}
+
+		return;
+	}
+
+	//突進攻撃
+	if (dynamic_cast<RushCollisionBox*>(other)) {
+
+		if (!dynamic_cast<EnemyBoundDamage*>(behavior_.get())) {
+			ChangeBehavior(std::make_unique<EnemyBoundDamage>(this));
 			DamageForPar(0.2f);
 		}
 

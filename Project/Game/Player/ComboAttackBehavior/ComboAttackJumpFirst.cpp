@@ -19,6 +19,9 @@ ComboAttackJumpFirst::ComboAttackJumpFirst(Player* player)
 	///---------------------------------------------------------
 
 	step_ = STEP::FALL; // 落ちる
+
+	fallCollisionBox_ = std::make_unique<FallCollisionBox>();
+	fallCollisionBox_->Init();
 	fallRotateY_ = 0.0f;
 
 	boundSpeed_ = 1.4f;
@@ -26,6 +29,14 @@ ComboAttackJumpFirst::ComboAttackJumpFirst(Player* player)
 	boundFallSpeedLimit_ = -5.2f;
 	rotateXSpeed_ = 11.0f;
 	rotateYSpeed_ = 20.0f;
+
+	/// collisionBox
+	fallCollisionBox_ = std::make_unique<FallCollisionBox>();
+	fallCollisionBox_->Init();
+	fallCollisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+	fallCollisionBox_->SetSize(Vector3(4.5f,2.0f,4.5f));// 当たり判定サイズ
+	fallCollisionBox_->Update();
+	fallCollisionBox_->IsAdapt(false);
 
 	initRotate_ = pPlayer_->GetTransform().rotation_;
 
@@ -69,11 +80,14 @@ void ComboAttackJumpFirst::Update() {
 
 		/// 着地の瞬間
 		if (fallEaseT_ < pPlayer_->GetJPunchEaseMax(Player::JFIRST))break;
+
 		pPlayer_->SetRotation(initRotate_);
 		pPlayer_->GetLeftHand()->SetWorldPositionY(fallInitPosLHand_);
 		pPlayer_->GetRightHand()->SetWorldPositionY(fallInitPosRHand_);
 		pPlayer_->SetWorldPositionY(Player::InitY_);
+
 		step_ = STEP::LANDING;
+
 		break;
 	case STEP::LANDING:
 	///---------------------------------------------------------
@@ -87,6 +101,16 @@ void ComboAttackJumpFirst::Update() {
 		landScaleEasing_.time = std::min(landScaleEasing_.time, landScaleEasing_.maxTime);
 		pPlayer_->SetScale(EaseAmplitudeScale(Vector3::UnitVector(), landScaleEasing_.time, landScaleEasing_.maxTime,
 			                                  landScaleEasing_.amplitude, landScaleEasing_.period));
+
+		if (landScaleEasing_.time <= 0.15f) {
+			/// 当たり判定座標
+			fallCollisionBox_->IsAdapt(true);
+			fallCollisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+			fallCollisionBox_->Update();
+		}
+		else {
+			fallCollisionBox_->IsAdapt(false);
+		}
 
 		// 回転する
 		landRotateX_ += Frame::DeltaTimeRate() * rotateXSpeed_;
@@ -107,7 +131,7 @@ void ComboAttackJumpFirst::Update() {
 		///---------------------------------------------------------
 		/// 待機
 		///---------------------------------------------------------
-		
+		fallCollisionBox_->IsAdapt(false);
 		waitTime_ += Frame::DeltaTime();
 		
 		if (waitTime_ >= pPlayer_->GetJWaitTime(Player::JFIRST)) {

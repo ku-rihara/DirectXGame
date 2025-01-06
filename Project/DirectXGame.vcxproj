@@ -53,7 +53,9 @@
     <ClCompile Include="Engine\utility\Particle\ParticleManager.cpp" />
     <ClCompile Include="Game\BaseObject\BaseObject.cpp" />
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp" />
+    <ClCompile Include="Game\CollisionBox\FallCollisionBox.cpp" />
     <ClCompile Include="Game\CollisionBox\PunchCollisionBox.cpp" />
+    <ClCompile Include="Game\CollisionBox\RushCollisionBox.cpp" />
     <ClCompile Include="Game\CollisionBox\StopCollisionBox.cpp" />
     <ClCompile Include="Game\CollisionBox\ThrustCollisionBox.cpp" />
     <ClCompile Include="Game\CollisionBox\UpperCollisionBox.cpp" />
@@ -163,7 +165,9 @@
     <ClInclude Include="Engine\utility\Particle\ParticleManager.h" />
     <ClInclude Include="Game\BaseObject\BaseObject.h" />
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h" />
+    <ClInclude Include="Game\CollisionBox\FallCollisionBox.h" />
     <ClInclude Include="Game\CollisionBox\PunchCollisionBox.h" />
+    <ClInclude Include="Game\CollisionBox\RushCollisionBox.h" />
     <ClInclude Include="Game\CollisionBox\StopCollisionBox.h" />
     <ClInclude Include="Game\CollisionBox\ThrustCollisionBox.h" />
     <ClInclude Include="Game\CollisionBox\UpperCollisionBox.h" />
