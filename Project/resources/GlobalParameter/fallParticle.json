@@ -18,10 +18,10 @@
             0.0,
             0.0
         ],
-        "Gravity": -35.79999923706055,
+        "Gravity": -60.5,
         "IntervalTime": 0.0,
         "LifeTime": 6.199999809265137,
-        "Particle Count": 20,
+        "Particle Count": 14,
         "Position Base": [
             0.0,
             0.0,
@@ -67,17 +67,17 @@
             0.0,
             0.0
         ],
-        "Scale Max": 2.0,
-        "Scale Min": 2.0,
+        "Scale Max": 1.0,
+        "Scale Min": 1.0,
         "Velocity Max": [
-            15.699999809265137,
-            7.5,
-            12.800000190734863
+            20.0,
+            15.5,
+            20.0
         ],
         "Velocity Min": [
-            -10.899999618530273,
-            5.900000095367432,
-            -17.899999618530273
+            -20.0,
+            13.100000381469727,
+            -20.0
         ],
         "isMoveForRail": false,
         "moveSpeed": 0.0

@@ -13,6 +13,7 @@
 #include"Field/Field.h"
 #include"LockOn/LockOn.h"
 #include"base/TextureManager.h"
+#include"utility/Particle/ParticleCommon.h"
 
 /// behavior
 #include"PlayerBehavior/PlayerRoot.h"
@@ -61,9 +62,9 @@ void Player::Init() {
 	rightHand_->SetRailParent(&transform_);
 	leftHand_->SetRailParent(&transform_);
 
-	fallEmitter_.reset(ParticleEmitter::CreateParticle("fallParticle", "Plane", ".obj", 100, false));
-	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
-	fallEmitter_->SetTextureHandle(handle);
+	fallEmitter_.reset(ParticleEmitter::CreateParticle("fallParticle", "DebugSphere", ".obj", 200, false));
+	
+	fallEmitter_->SetBlendMode(BlendMode::None);
 
 	/// 通常モードから
 	ChangeBehavior(std::make_unique<PlayerRoot>(this));
