@@ -18,12 +18,13 @@
 #include"Matrix4x4.h"
 #include"Player/Player.h"
 #include"base/TextureManager.h"
-
+#include"Frame/Frame.h"
 
 ///=========================================================
 ///　static 変数初期化
 ///==========================================================
 float BaseEnemy::InitY_ = 0.5f;
+Vector3 BaseEnemy::InitScale_ = Vector3::UnitVector();
 
 BaseEnemy::BaseEnemy() {
 
@@ -46,6 +47,10 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	hpbar_->Init(hpbarSize_);
 	transform_.translation_ = spownPos;
 
+	///spawn
+	spawnEasing_.time = 0.0f;
+	spawnEasing_.maxTime = 0.8f;
+	transform_.scale_ = Vector3::ZeroVector();
 
 	ChangeBehavior(std::make_unique<EnemyChasePlayer>(this));/// 追っかけ
 }
@@ -54,6 +59,13 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 /// 更新
 ///========================================================
 void BaseEnemy::Update() {
+
+	/// 生成処理
+	spawnEasing_.time += Frame::DeltaTime();
+	spawnEasing_.time = std::min(spawnEasing_.time, spawnEasing_.maxTime);
+	transform_.scale_ = 
+		EaseOutBack(Vector3::ZeroVector(), BaseEnemy::InitScale_,
+		spawnEasing_.time, spawnEasing_.maxTime);
 
 	behavior_->Update();
 	

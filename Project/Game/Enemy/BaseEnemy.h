@@ -23,6 +23,8 @@ protected:
 	std::unique_ptr<EnemyHPBar>hpbar_;
 	float damageParm_;
 
+	Easing spawnEasing_;
+
 	/// behavior
 	std::unique_ptr<BaseEnemyBehaivor>behavior_ = nullptr;
 
@@ -31,6 +33,7 @@ protected:
 
 public:
 	static float InitY_;
+	static Vector3 InitScale_;
 public:
 	BaseEnemy();
 
