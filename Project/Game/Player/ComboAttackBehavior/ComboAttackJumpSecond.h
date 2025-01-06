@@ -28,6 +28,9 @@ private:
 	Vector3 targetLPos_;
 	Vector3 rushTargetPos_;
 
+	///wait
+	float waitTime_;
+
 public:
 	//コンストラクタ
 	ComboAttackJumpSecond(Player* boss);

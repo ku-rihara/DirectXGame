@@ -1,6 +1,8 @@
 /// behavior
 #include"ComboAttackJumpFirst.h"
 #include"ComboAttackJumpSecond.h"
+#include"ComboAttackRoot.h"
+#include"Player/PlayerBehavior/PlayerRoot.h"
 
 /// Player
 #include"Player/Player.h"
@@ -29,13 +31,15 @@ ComboAttackJumpFirst::ComboAttackJumpFirst(Player* player)
 
 	///land
 	landScaleEasing_.maxTime = 0.5f;
-	landScaleEasing_.amplitude = 0.4f;
+	landScaleEasing_.amplitude = 0.6f;
 	landScaleEasing_.period = 0.2f;
 
 	// ハンド初期化
 	playerInitPosY_ = pPlayer_->GetWorldPosition().y;
 	fallInitPosLHand_= pPlayer_->GetLeftHand()->GetTransform().translation_.y;
 	fallInitPosRHand_= pPlayer_->GetRightHand()->GetTransform().translation_.y;
+
+	pPlayer_->ChangeBehavior(std::make_unique<PlayerRoot>(pPlayer_));
 }
 
 ComboAttackJumpFirst::~ComboAttackJumpFirst() {
@@ -58,11 +62,13 @@ void ComboAttackJumpFirst::Update() {
 		pPlayer_->GetRightHand()->SetWorldPositionY(0.2f);
 		pPlayer_->SetRotationY(fallRotateY_);
 
+		/// プレイヤーが落ちる
 		pPlayer_->SetWorldPositionY(
 			EaseInSine(playerInitPosY_, Player::InitY_, fallEaseT_, pPlayer_->GetJPunchEaseMax(Player::JFIRST))
 			);
 
-		if (fallEaseT_ < pPlayer_->GetJWaitTime(Player::JFIRST))break;
+		/// 着地の瞬間
+		if (fallEaseT_ < pPlayer_->GetJPunchEaseMax(Player::JFIRST))break;
 		pPlayer_->SetRotation(initRotate_);
 		pPlayer_->GetLeftHand()->SetWorldPositionY(fallInitPosLHand_);
 		pPlayer_->GetRightHand()->SetWorldPositionY(fallInitPosRHand_);
@@ -95,11 +101,25 @@ void ComboAttackJumpFirst::Update() {
 		if (pPlayer_->GetTransform().translation_.y > pPlayer_->InitY_) break;
 		pPlayer_->SetRotation(initRotate_);
 		pPlayer_->SetWorldPositionY(Player::InitY_);
-		step_ = STEP::RETURNROOT;
+		step_ = STEP::WAIT;
+		break;
+	case STEP::WAIT:
+		///---------------------------------------------------------
+		/// 待機
+		///---------------------------------------------------------
+		
+		waitTime_ += Frame::DeltaTime();
+		
+		if (waitTime_ >= pPlayer_->GetJWaitTime(Player::JFIRST)) {
+			step_ = STEP::RETURNROOT;
+		}
+		else {
+			BaseComboAattackBehavior::ChangeNextComboFragForButton();//次のコンボに移行可能
+			BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackJumpSecond>(pPlayer_));
+		}
 		break;
 	case STEP::RETURNROOT:
-		BaseComboAattackBehavior::ChangeNextComboFragForButton();//次のコンボに移行可能
-		BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackJumpSecond>(pPlayer_));
+		pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
 		break;
 	default:
 		break;

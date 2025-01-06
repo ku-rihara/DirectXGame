@@ -1,5 +1,6 @@
 /// behavior
 #include"ComboAttackJumpSecond.h"
+#include"ComboAttackRoot.h"
 
 /// Player
 #include"Player/Player.h"
@@ -73,12 +74,12 @@ void ComboAttackJumpSecond::Update() {
 		///---------------------------------------------------------
 		/// 待機
 		///---------------------------------------------------------
-
-
+		waitTime_ += Frame::DeltaTime();
+		if (waitTime_ < pPlayer_->GetJWaitTime(Player::JSECOND))break;
+		step_ = STEP::RETURNROOT;
 		break;
 	case STEP::RETURNROOT:
-		BaseComboAattackBehavior::ChangeNextComboFragForButton();//次のコンボに移行可能
-		/*BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<>)*/
+		pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
 		break;
 	default:
 		break;

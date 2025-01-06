@@ -38,7 +38,6 @@ ComboAttackSecond::ComboAttackSecond(Player* player)
 	lHandStartPos_ = pPlayer_->GetLeftHand()->GetTransform().translation_;
 	lHandTargetPos_ = pPlayer_->GetLeftHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayer_->GetPunchReach(Player::SECOND);
 
-
 	// 振る舞い順序初期化
 	order_ = Order::PUNCH;
 }

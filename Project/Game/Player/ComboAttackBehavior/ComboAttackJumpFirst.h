@@ -8,9 +8,10 @@ class ComboAttackJumpFirst : public BaseComboAattackBehavior {
 	enum class STEP {
 		FALL,
 		LANDING,
+		WAIT,
 		RETURNROOT,
 	};
-
+	
 private:
 	
 	/// ===================================================
@@ -34,6 +35,8 @@ private:
 	float rotateYSpeed_;
 	float gravity_;
 	Easing landScaleEasing_;
+
+	float waitTime_;
 
 public:
 	//コンストラクタ
