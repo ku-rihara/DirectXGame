@@ -302,6 +302,44 @@ template<typename T> T EaseInOutQuart(const T& start, const T& end, float x, flo
 	return Lerp(start, end, easeT);
 }
 
+/// EaseInBack
+template<typename T>
+T EaseInBack(const T& start, const T& end, float x, float totalX) {
+	const float s = 1.70158f; 
+	float t = x / totalX;
+	float easeT = t * t * ((s + 1) * t - s);
+	return Lerp(start, end, easeT);
+}
+
+/// EaseOutBack
+template<typename T>
+T EaseOutBack(const T& start, const T& end, float x, float totalX) {
+	const float s = 1.70158f; 
+	float t = x / totalX - 1;
+	float easeT = (t * t * ((s + 1) * t + s)) + 1;
+	return Lerp(start, end, easeT);
+}
+
+
+/// EaseInOutBack
+template<typename T>
+T EaseInOutBack(const T& start, const T& end, float x, float totalX) {
+	const float s = 1.70158f * 1.525f; 
+	float t = x / (totalX / 2.0f);
+	float easeT;
+
+	if (t < 1) {
+		easeT = 0.5f * (t * t * ((s + 1) * t - s));
+	}
+	else {
+		t -= 2;
+		easeT = 0.5f * ((t * t * ((s + 1) * t + s)) + 2);
+	}
+
+	return Lerp(start, end, easeT);
+}
+
+
 //バウンス補助関数
 float BounceEaseOut(float x) {
 
@@ -469,3 +507,15 @@ template float EaseOutBounce<float>(const float& start, const float& end, float 
 template Vector3 EaseInOutBounce<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseInOutBounce<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseInOutBounce<float>(const float& start, const float& end, float x, float totalX);
+
+template Vector3 EaseInBack(const Vector3& start, const Vector3& end, float x, float totalX);
+template Vector2 EaseInBack(const Vector2& start, const Vector2& end, float x, float totalX);
+template float EaseInBack(const float& start, const float& end, float x, float totalX);
+
+template Vector3 EaseOutBack(const Vector3& start, const Vector3& end, float x, float totalX);
+template Vector2 EaseOutBack(const Vector2& start, const Vector2& end, float x, float totalX);
+template float EaseOutBack(const float& start, const float& end, float x, float totalX);
+
+template Vector3 EaseInOutBack(const Vector3& start, const Vector3& end, float x, float totalX);
+template Vector2 EaseInOutBack(const Vector2& start, const Vector2& end, float x, float totalX);
+template float EaseInOutBack(const float& start, const float& end, float x, float totalX);
