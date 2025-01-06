@@ -85,6 +85,7 @@ void ComboAttackJumpFirst::Update() {
 		pPlayer_->GetLeftHand()->SetWorldPositionY(fallInitPosLHand_);
 		pPlayer_->GetRightHand()->SetWorldPositionY(fallInitPosRHand_);
 		pPlayer_->SetWorldPositionY(Player::InitY_);
+		pPlayer_->FallParticleEmit();
 
 		step_ = STEP::LANDING;
 

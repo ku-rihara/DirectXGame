@@ -12,6 +12,7 @@
 /// object
 #include"Field/Field.h"
 #include"LockOn/LockOn.h"
+#include"base/TextureManager.h"
 
 /// behavior
 #include"PlayerBehavior/PlayerRoot.h"
@@ -36,6 +37,7 @@ void Player::Init() {
 	///* model生成
 	BaseObject::Init();	// 基底クラスの初期化 
 	BaseObject::CreateModel("cube",".obj");/// モデルセット
+	fallParticleName_ = "fallParticle";
 
 	///* グローバルパラメータ
 	globalParameter_ = GlobalParameter::GetInstance();
@@ -59,6 +61,10 @@ void Player::Init() {
 	rightHand_->SetRailParent(&transform_);
 	leftHand_->SetRailParent(&transform_);
 
+	fallEmitter_.reset(ParticleEmitter::CreateParticle("fallParticle", "Plane", ".obj", 100, false));
+	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
+	fallEmitter_->SetTextureHandle(handle);
+
 	/// 通常モードから
 	ChangeBehavior(std::make_unique<PlayerRoot>(this));
 	ChangeComboBehavior(std::make_unique<ComboAttackRoot>(this));
@@ -69,6 +75,8 @@ void Player::Init() {
 ///==========================================================
 void Player::Update() {
 	prePos_ = GetWorldPosition();// 前フレームの座標
+	fallEmitter_->SetTargetPosition(GetWorldPosition());
+	fallEmitter_->Update();
 
 	DamageRendition();        /// ダメージエフェクト
 
@@ -99,6 +107,7 @@ void Player::Draw(const ViewProjection& viewProjection) {
 	rightHand_->Draw(viewProjection);
 
 }
+
 
 ///=======================================================================
 /// ダメ―ジ演出
@@ -133,7 +142,9 @@ void Player::DamageRendition() {
 	//}
 }
 
-
+void Player::FallParticleEmit() {
+	fallEmitter_->Emit();
+}
 
 ///=========================================================
 /// 移動の入力処理

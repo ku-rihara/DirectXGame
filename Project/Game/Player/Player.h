@@ -11,7 +11,7 @@
 
 /// utility
 #include"utility/Editor/GlobalParameter.h"
-
+#include"utility/Particle/ParticleEmitter.h"
 
 /// behavior
 #include"ComboAttackBehavior/ComboAttackFirst.h"
@@ -93,6 +93,9 @@ private:
 	std::unique_ptr<BasePlayerBehavior>behavior_ = nullptr;
 	std::unique_ptr<BaseComboAattackBehavior>comboBehavior_ = nullptr;
 
+	std::string fallParticleName_;
+	std::unique_ptr<ParticleEmitter>fallEmitter_;
+
 
 public:
 	static float InitY_;
@@ -106,14 +109,14 @@ public:
 	void Init() override;
 	void Update() override;
 	void Draw(const ViewProjection& viewProjection) override;
-
+	
 	/// 移動
 	void Move(const float& speed);      /// 移動
 	bool GetIsMoving();                 /// 動かしてるかフラグ
 	Vector3 GetInputDirecton();         /// 入力による速度
 	void MoveToLimit();                 /// 移動制限
 
-	
+	void FallParticleEmit();
 	void Jump(float& speed);           /// ジャンプ
 	void Fall();                       /// 落ちる
 
