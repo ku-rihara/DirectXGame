@@ -59,7 +59,7 @@ void BaseEnemy::Update() {
 	
 	// 体力がなくなったら死亡
 	if (hp_ <= 0) {
-		isdeath_;
+		isdeath_=true;
 		/*Audio::GetInstance()->PlayWave(deathSound_);*/
 	}
 	
@@ -230,6 +230,9 @@ void BaseEnemy::DamageForPar(const float& par) {
 
 	////HPが0以下にならないように
 	//if (hp_ <= 0) {
+
+	//	hp_ = 0.0f;
+	//	isdeath_ = true;
 	//	//// 死亡処理
 	//	//DeathMethod();
 	//	//HP_ = 0.0f;

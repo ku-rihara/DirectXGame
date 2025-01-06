@@ -21,7 +21,7 @@ void EnemyManager::Init() {
 	selectedEnemyType_ = "NormalEnemy";
 	spownPosition_ = {};
 
-
+  
 	spownNum_ = 1;
 	currentPhase_ = 0;
 	currentTime_ = 0.0f;
@@ -63,10 +63,17 @@ void EnemyManager::Update() {
 
 	SpawnUpdate(); // スポーン更新
 
-	for (auto it = enemies_.begin(); it != enemies_.end();) {
-		(*it)->Update();// 更新
-		++it;
+	for (auto it = enemies_.begin(); it != enemies_.end(); ) {
+		(*it)->Update(); // 更新
+
+		if ((*it)->GetIsDeath()) {
+			it = enemies_.erase(it); // 削除して次の要素を指すイテレータを取得
+		}
+		else {
+			++it; // 削除しない場合はイテレータを進める
+		}
 	}
+
 }
 
 void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
