@@ -21,6 +21,7 @@ protected:
 	float HPMax_;
 	Vector2 hpbarSize_;
 	std::unique_ptr<EnemyHPBar>hpbar_;
+	float damageParm_;
 
 	/// behavior
 	std::unique_ptr<BaseEnemyBehaivor>behavior_ = nullptr;

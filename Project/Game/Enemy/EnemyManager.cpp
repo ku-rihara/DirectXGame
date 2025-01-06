@@ -1,6 +1,7 @@
 
 #include "EnemyManager.h"
 #include"NormalEnemy.h"
+#include"StrongEnemy.h"
 
 #include "Frame/Frame.h"
 
@@ -44,12 +45,14 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
 		if (enemyType == "NormalEnemy") {// 通常敵
 			enemy = std::make_unique<NormalEnemy>();		
 		}
+		if (enemyType == "StrongEnemy") {// 通常敵
+			enemy = std::make_unique<StrongEnemy>();
+		}
 
 		// 位置初期化とlistに追加
 		enemy->Init(position);
 		enemy->SetPlayer(pPlayer_);// プレイヤーセット
 		enemies_.push_back(std::move(enemy));
-	
 }
 
 
@@ -212,9 +215,28 @@ void EnemyManager::ImGuiUpdate() {
 
 					// Add Enemy: 青色
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 1.0f, 1.0f));  // 青色に変更
-					if (ImGui::Button("Add Enemy")) {
-						spawn.spownEnemies.push_back({ "NormalEnemy", {}, });
+					static int selectedEnemyTypeIndex = 0; // 選択された敵タイプのインデックス
+
+					// 敵の種類を選択する Combo
+					if (ImGui::Combo("Select Enemy Type", &selectedEnemyTypeIndex, [](void* data, int idx, const char** out_text) {
+						const auto& types = *reinterpret_cast<std::vector<std::string>*>(data);
+						if (idx < 0 || idx >= static_cast<int>(types.size())) return false;
+						*out_text = types[idx].c_str();
+						return true;
+						}, &enemyTypes_, static_cast<int>(enemyTypes_.size()))) {
+						// Comboの選択が変更された場合の処理（必要に応じて追加）
 					}
+
+					// 敵を追加するボタン
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 1.0f, 1.0f));  // 青色に変更
+					if (ImGui::Button("Add Enemy")) {
+						// 選択された敵タイプを基に敵を追加
+						if (selectedEnemyTypeIndex >= 0 && selectedEnemyTypeIndex < static_cast<int>(enemyTypes_.size())) {
+							spawn.spownEnemies.push_back({ enemyTypes_[selectedEnemyTypeIndex], {}, });
+						}
+					}
+					ImGui::PopStyleColor();
+
 					ImGui::PopStyleColor();
 
 					// 生成するまでかかる時間

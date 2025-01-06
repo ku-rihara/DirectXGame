@@ -1,18 +1,18 @@
-#include "NormalEnemy.h"
+#include "StrongEnemy.h"
 
 ///========================================================
 ///  初期化
 ///========================================================
-void NormalEnemy::Init(const Vector3& spownPos) {
+void StrongEnemy::Init(const Vector3& spownPos) {
 	BaseEnemy::Init(spownPos);
-	damageParm_ = 0.2f;
+	damageParm_ = 0.1f;
 }
 
 ///========================================================
 /// 更新
 ///========================================================
 
-void NormalEnemy::Update() {
+void StrongEnemy::Update() {
 	BaseEnemy::Update();
 }
 
@@ -20,20 +20,20 @@ void NormalEnemy::Update() {
 /// 描画
 ///========================================================
 
-void NormalEnemy::Draw(const ViewProjection& viewProjection) {
+void StrongEnemy::Draw(const ViewProjection& viewProjection) {
 	BaseEnemy::Draw(viewProjection);
 }
 
 ///========================================================
 /// HpBar表示
 ///========================================================
-void NormalEnemy::DisplayHpBar(const ViewProjection& viewProjection) {
+void StrongEnemy::DisplayHpBar(const ViewProjection& viewProjection) {
 	BaseEnemy::DisplayHpBar(viewProjection);
 }
 
 ///========================================================
 /// Sprite描画
 ///========================================================
-void NormalEnemy::SpriteDraw(const ViewProjection& viewProjection) {
+void StrongEnemy::SpriteDraw(const ViewProjection& viewProjection) {
 	BaseEnemy::SpriteDraw(viewProjection);
 }

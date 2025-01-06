@@ -55,7 +55,7 @@ private:
     std::list<std::unique_ptr<BaseEnemy>> enemies_;
 
     ///* 敵の種類リスト
-    std::vector<std::string> enemyTypes_ = { "NormalEnemy" };
+    std::vector<std::string> enemyTypes_ = { "NormalEnemy","StrongEnemy"};
 
     //* 一時的な敵生成用データ
     std::string selectedEnemyType_;

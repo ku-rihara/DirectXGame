@@ -41,11 +41,11 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	HPMax_ = 80.0f;
 	hp_ = HPMax_;
 	hpbarSize_ = { HPMax_ ,90};
-	transform_.translation_=spownPos;
-
+	
 	hpbar_ = std::make_unique<EnemyHPBar>();
 	hpbar_->Init(hpbarSize_);
-	
+	transform_.translation_ = spownPos;
+
 
 	ChangeBehavior(std::make_unique<EnemyChasePlayer>(this));/// 追っかけ
 }
@@ -122,7 +122,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
 		if (!dynamic_cast<EnemyHitBackDamage*>(behavior_.get())) {
 			ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
-			DamageForPar(0.2f);
+			DamageForPar(damageParm_);
 		}
 		return;
 	}
@@ -132,7 +132,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
 		if (!dynamic_cast<EnemyUpperDamage*>(behavior_.get())) {
 			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
-			DamageForPar(0.2f);
+			DamageForPar(damageParm_);
 		}
 		return;
 	}
@@ -142,7 +142,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
 		if (!dynamic_cast<EnemyStopDamage*>(behavior_.get())) {
 			ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
-			DamageForPar(0.2f);
+			DamageForPar(damageParm_);
 		}
 
 		return;
@@ -153,7 +153,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
 		if (!dynamic_cast<EnemyThrustDamage*>(behavior_.get())) {
 			ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
-			DamageForPar(0.2f);
+			DamageForPar(damageParm_);
 		}
 
 		return;
@@ -164,7 +164,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
 		if (!dynamic_cast<EnemyUpperDamage*>(behavior_.get())) {
 			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
-			DamageForPar(0.2f);
+			DamageForPar(damageParm_);
 		}
 
 		return;
@@ -175,7 +175,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
 		if (!dynamic_cast<EnemyBoundDamage*>(behavior_.get())) {
 			ChangeBehavior(std::make_unique<EnemyBoundDamage>(this));
-			DamageForPar(0.2f);
+			DamageForPar(damageParm_);
 		}
 
 		return;
