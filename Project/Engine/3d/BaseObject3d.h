@@ -3,13 +3,15 @@
 #include"base/Material.h"
 
 class BaseObject3d {
+public:
+	Material material_;
 protected:
 	///========================================================================================
 	///  protected variant
 	///========================================================================================
 
 	Model* model_ = nullptr;
-	Material material_;
+
 
 public:
 
