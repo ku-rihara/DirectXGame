@@ -5,6 +5,7 @@
 #include "base/TextureManager.h"
 //math
 #include<imgui.h>
+#include"3d/Light.h"
 
 GameScene::GameScene() {}
 
@@ -114,7 +115,8 @@ void GameScene::Debug() {
 	ImGui::End();
 
 	enemyManager_->ImGuiUpdate();
-
+	Light::GetInstance()->DebugImGui();
+	
 
 	ImGui::Begin("ParamaterEditor");
 	player_->AdjustParm();

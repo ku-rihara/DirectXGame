@@ -45,7 +45,7 @@ void Player::Init() {
 	globalParameter_->CreateGroup(groupName_, false);
 	AddParmGroup();
 	ApplyGlobalParameter();
-
+	
 
 	///* 武器生成
 	leftHand_ = std::make_unique<PlayerHandLeft>();
