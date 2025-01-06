@@ -16,10 +16,11 @@
 #include<list>
 #include<unordered_map>
 
+enum class BlendMode;
 class ParticleCommon;
 class ParticleManager {
 private:
-
+	
 	///============================================================
 	/// struct
 	///============================================================
@@ -32,7 +33,7 @@ private:
 		Vector3 rotateSpeed_;
 		Vector4 color_;
 		WorldTransform worldTransform_;
-
+	
 	};
 
 	struct AccelerationField {///　加速フィールド
@@ -45,6 +46,7 @@ private:
 		Model* model;
 		Material material;
 		std::list<Particle>particles;
+		BlendMode blendMode_;
 		uint32_t srvIndex;
 		Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
 		uint32_t instanceNum;
@@ -109,6 +111,6 @@ public:
 		const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
 		const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
 		const Vector3&baseRotate,const Vector3&baseRotateSpeed,const V3MinMax& RotateDist,
-		const V3MinMax& rotateSpeedDist, uint32_t count);
+		const V3MinMax& rotateSpeedDist, uint32_t count, const BlendMode& blendmode);
 
 };

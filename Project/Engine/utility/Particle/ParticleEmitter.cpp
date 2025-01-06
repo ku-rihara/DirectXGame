@@ -1,7 +1,9 @@
 #include "ParticleEmitter.h"
 #include "ParticleManager.h"
+#include"ParticleCommon.h"
 #include"Frame/Frame.h"
 #include"base/SrvManager.h"
+
 
 #include <imgui.h>
 #include<format>
@@ -25,7 +27,7 @@ ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const 
 ///初期化
 ///=================================================================================
 void ParticleEmitter::Init(const bool& isFirst) {
-
+	
 	particleCount_ = 0;
 	lifeTime_ = 0.0f;
 	gravity_ = 0.0f;
@@ -249,7 +251,7 @@ void ParticleEmitter::Emit() {
 		ParticleManager::GetInstance()->Emit(
 			particleName_, targetPos_+emitPos_, positionDist_, scaleDist_,
 			velocityDist_, baseColor_, colorDist_, lifeTime_, gravity_, baseRotate_,
-			baseRotateSpeed_, rotateDist_, rotateSpeedDist_, particleCount_);
+			baseRotateSpeed_, rotateDist_, rotateSpeedDist_, particleCount_,blendMode_);
 
 		currentTime_ = 0.0f;// 時間を戻す
 	}
@@ -394,4 +396,8 @@ void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
 
 void ParticleEmitter::SetParentBasePos(WorldTransform* parent) {
 	emitBoxTransform_.parent_ = parent;
+}
+
+void  ParticleEmitter::SetBlendMode(const BlendMode& blendmode) {
+	blendMode_ = blendmode;
 }

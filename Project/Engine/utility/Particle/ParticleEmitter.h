@@ -13,9 +13,10 @@
 /// <summary>
 /// Emitter
 /// </summary>
+ enum class BlendMode;
 class ParticleEmitter {
 private:
-
+	BlendMode blendMode_;
 	///=====================================================
 	/// private variants
 	///=====================================================
@@ -85,7 +86,7 @@ public:
 	void Init(const bool& isFirst);/// 初期化
 	void Emit();///　エミット
 	void UpdateEmitTransform();
-
+	
 	void RailDraw(const ViewProjection&viewProjection);
 	void DebugDraw(const ViewProjection& viewProjection);
 
@@ -95,14 +96,13 @@ public:
 	const std::string& GetParticleName()const { return particleName_; }
 	
 
-
 	///=====================================================
     /// setter method
     ///=====================================================
 	void SetParentBasePos(WorldTransform*parent);
 	void SetTextureHandle(const uint32_t& hanle);
 	void SetTargetPosition(const Vector3& pos) { targetPos_ = pos; }
-	
+	void SetBlendMode(const BlendMode& blendmode);
 	///=====================================================
 	/// Editor 
 	///=====================================================
