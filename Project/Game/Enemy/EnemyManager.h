@@ -45,6 +45,7 @@ private:
     // ohter class
     Player* pPlayer_;
   
+  
     bool isEditorMode_;             // エディタモード中かどうか
     std::map<int, Phase> phases_;  // フェーズ番号をキーとしたフェーズマップ
     int currentPhase_;             // 現在のフェーズ
@@ -82,6 +83,7 @@ public:
 
     // 更新処理
     void Update();
+    void HpBarUpdate(const ViewProjection&viewProjection);
     void SpawnUpdate();
 
     // 描画処理

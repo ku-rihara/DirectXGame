@@ -28,11 +28,16 @@
 class LockOn;
 class Player : public BaseObject{
 public:
-	enum ComboNum {
+	enum NormalComboNum {
 		FIRST,
 		SECOND,
 		THIRD,
 		FORTH,
+	};
+
+	enum JumpComboNum {
+		JFIRST,
+		JSECOND,
 	};
 
 private:
@@ -79,6 +84,7 @@ private:
 
 	///* コンボパラメータ
 	std::array<ComboParm, 4>normalComboParms_;
+	std::array<ComboParm, 2>jumpComboParms_;
 
 	// カメラのビュープロジェクション
 	const ViewProjection* viewProjection_ = nullptr;
@@ -153,7 +159,10 @@ public:
 	float GetRushDistance()const { return rushDistance_; }
 	float GetRushEaseMax()const { return rushEaseMax_; }
 
-	float GetWaitTime(ComboNum index)const;
-	float GetPunchEaseMax(ComboNum index)const;
-	float GetPunchReach(ComboNum index)const;
+	float GetWaitTime(NormalComboNum index)const;
+	float GetPunchEaseMax(NormalComboNum index)const;
+	float GetPunchReach(NormalComboNum index)const;
+
+	float GetJWaitTime(JumpComboNum index)const;
+	float GetJPunchEaseMax(JumpComboNum index)const;
 };

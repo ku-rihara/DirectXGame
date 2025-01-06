@@ -1,6 +1,12 @@
 {
     "Player": {
         "Gravity": 4.420000076293945,
+        "JComboPTime1": 0.09000000357627869,
+        "JComboPTime2": 0.0,
+        "JComboPunchEaseTime1": 0.03999999910593033,
+        "JComboPunchEaseTime2": 0.0,
+        "JComboPunchReach1": 0.0,
+        "JComboPunchReach2": 0.0,
         "JumpSpeed": 1.5,
         "MoveSpeed": 10.520000457763672,
         "NComboPTime1": 0.3499999940395355,

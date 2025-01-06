@@ -37,6 +37,7 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	punchEase_.time = 0.0f;
 	speed_ = pPlayer_->GetRushDistance();
 	waitTine_ = 0.0f;
+	
 
 	// 振る舞い順序初期化
 	order_ = Order::RUSH;
@@ -48,8 +49,6 @@ ComboAttackFirst::~ComboAttackFirst() {
 
 //更新
 void ComboAttackFirst::Update() {
-
-	
 	switch (order_) {
 
 	case Order::RUSH:
@@ -116,6 +115,7 @@ void ComboAttackFirst::Update() {
 		///----------------------------------------------------
 		/// バックパンチ
 		///----------------------------------------------------
+		BaseComboAattackBehavior::ChangeNextComboFragForButton();
 
 		collisionBox_->IsAdapt(false);
 
@@ -144,7 +144,8 @@ void ComboAttackFirst::Update() {
 		}
 		else {
 			/// ボタンで次のコンボ
-		BaseComboAattackBehavior::ChangeNextComboForButton(std::make_unique<ComboAttackSecond>(pPlayer_));//コントローラジャンプ		
+		BaseComboAattackBehavior::ChangeNextComboFragForButton();
+		BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackSecond>(pPlayer_));
 		}
 	}
 }

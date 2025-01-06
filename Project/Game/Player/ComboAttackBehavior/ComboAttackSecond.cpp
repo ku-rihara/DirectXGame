@@ -92,6 +92,9 @@ void ComboAttackSecond::Update() {
 		// ハンドのローカル座標を更新
 		pPlayer_->GetLeftHand()->SetWorldPosition(punchPosition_);
 
+		/// ボタンで次のコンボ
+		BaseComboAattackBehavior::ChangeNextComboFragForButton();//コントローラジャンプ	
+
 		// イージング終了時の処理
 		if (punchEase_.time <= 0.0f) {
 			punchEase_.time = 0.0f;
@@ -108,9 +111,11 @@ void ComboAttackSecond::Update() {
 			(std::make_unique<ComboAttackRoot>(pPlayer_));
 		}
 		else {
-			/// ボタンで次のコンボ
-			BaseComboAattackBehavior::ChangeNextComboForButton(std::make_unique<ComboAttackThird>(pPlayer_));//コントローラジャンプ		
+			BaseComboAattackBehavior::ChangeNextComboFragForButton();
+			//次のコンボ
+			BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackThird>(pPlayer_));
 		}
+		break;
 	}
 
 }

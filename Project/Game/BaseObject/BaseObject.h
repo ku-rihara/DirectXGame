@@ -59,5 +59,7 @@ public:
 	void AddPosition(Vector3 pos) { transform_.translation_ += pos; }
 	void SetRotation(Vector3 rotate) { transform_.rotation_ = rotate; }
 	void SetRotationY(float rotate) { transform_.rotation_.y = rotate; }
+	void SetRotationX(float rotate) { transform_.rotation_.x = rotate; }
+	void SetRotationZ(float rotate) { transform_.rotation_.z = rotate; }
 	void SetScale(Vector3 scale) { transform_.scale_ = scale; }
 };

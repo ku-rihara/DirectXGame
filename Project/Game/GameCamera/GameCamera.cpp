@@ -15,8 +15,8 @@
 void GameCamera::Init() {
 	viewprojection_.Init();
 
-	rotate_ = 20.0f;
-	offset_ = { 0,17,-37 };
+	rotate_ = 5.6f;
+	offset_ = { 0,11,-36.0f };
 }
 
 void GameCamera::Update() {

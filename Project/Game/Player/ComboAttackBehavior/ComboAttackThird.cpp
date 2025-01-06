@@ -68,6 +68,8 @@ void ComboAttackThird::Update() {
 		///0.3秒で当たり判定消す
 		if (upperJumpEaseT_ >= kCollisionAliveTime_) {
 			collisionBox_->IsAdapt(false);
+			/// ボタンで次のコンボ
+			BaseComboAattackBehavior::ChangeNextComboFragForButton();
 		}
 		else {
 			collisionBox_->IsAdapt(true);
@@ -107,7 +109,8 @@ void ComboAttackThird::Update() {
 
 		else {			
 			/// ボタンで次のコンボ
-			BaseComboAattackBehavior::ChangeNextComboForButton(std::make_unique<ComboAttackForth>(pPlayer_));
+			BaseComboAattackBehavior::ChangeNextComboFragForButton();
+			BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackForth>(pPlayer_));
 		}
 
 		break;

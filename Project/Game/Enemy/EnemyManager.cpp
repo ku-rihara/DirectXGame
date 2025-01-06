@@ -21,6 +21,7 @@ void EnemyManager::Init() {
 	selectedEnemyType_ = "NormalEnemy";
 	spownPosition_ = {};
 
+
 	spownNum_ = 1;
 	currentPhase_ = 0;
 	currentTime_ = 0.0f;
@@ -68,6 +69,16 @@ void EnemyManager::Update() {
 	}
 }
 
+void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
+	if (isEditorMode_) {
+		return; // エディタモード中は停止
+	}
+
+	for (auto it = enemies_.begin(); it != enemies_.end();) {
+		(*it)->DisplayHpBar(viewProjection);// 更新
+		++it;
+	}
+}
 
 void EnemyManager::SpawnUpdate() {
 	currentTime_ += Frame::DeltaTimeRate(); //* 現在時間加算

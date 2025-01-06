@@ -63,6 +63,8 @@ void GameScene::Update() {
 	field_->Update();
 	enemyManager_->Update();
 	gamecamera_->Update();
+
+	enemyManager_->HpBarUpdate(viewProjection_);
 	lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
 
 	/// パーティクル更新
@@ -101,6 +103,7 @@ void GameScene::ParticleDraw() {
    /// スプライト描画
    /// ===================================================
 void GameScene::SpriteDraw() {
+	enemyManager_->SpriteDraw(viewProjection_);
 	lockOn_->Draw();
 }
 

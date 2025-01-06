@@ -11,6 +11,8 @@ protected:
 	std::string name_;          //振る舞い名
 	Player* pPlayer_ = nullptr; /// プレイヤー
 
+	bool isNextCombo_;
+
 public:
 
 	BaseComboAattackBehavior(const std::string& name, Player* player) :name_(name), pPlayer_(player) {}
@@ -19,5 +21,6 @@ public:
 	virtual void Update()=0;   /// 更新
 	virtual void Debug() = 0;  /// デバッグ
 
-	void ChangeNextComboForButton(std::unique_ptr<BaseComboAattackBehavior>nextCombo);
+	virtual void ChangeNextComboFragForButton();
+	virtual void ChangeNextCombo(std::unique_ptr<BaseComboAattackBehavior>nextCombo);
 };

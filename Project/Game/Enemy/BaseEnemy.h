@@ -19,7 +19,7 @@ protected:
 	bool isdeath_;
 	float hp_;
 	float HPMax_;
-	float hpbarSize_;
+	Vector2 hpbarSize_;
 	std::unique_ptr<EnemyHPBar>hpbar_;
 
 	/// behavior

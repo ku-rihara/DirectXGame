@@ -35,9 +35,14 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	/// モデルセット
 	BaseObject::CreateModel("axis",".obj");
 
-	HPMax_ = 48.0f;
-	hpbarSize_ = HPMax_;
+	HPMax_ = 80.0f;
+	hp_ = HPMax_;
+	hpbarSize_ = { HPMax_ ,90};
 	transform_.translation_=spownPos;
+
+	hpbar_ = std::make_unique<EnemyHPBar>();
+	hpbar_->Init(hpbarSize_);
+	
 
 	ChangeBehavior(std::make_unique<EnemyChasePlayer>(this));/// 追っかけ
 }
@@ -64,7 +69,7 @@ void BaseEnemy::DisplayHpBar(const ViewProjection& viewProjection) {
 	// ワールド座標からスクリーン座標に変換
 	Vector3 positionScreen = ScreenTransform(GetWorldPosition(), viewProjection);
 	// Vector2に格納
-	Vector2 positionScreenV2(positionScreen.x, positionScreen.y - 30.0f);
+	Vector2 positionScreenV2(positionScreen.x-70, positionScreen.y - 90.0f);
 	// Hpバーの座標確定
 	Vector2 hpBarPosition = positionScreenV2;
 	// Hpバーのサイズ
@@ -72,7 +77,7 @@ void BaseEnemy::DisplayHpBar(const ViewProjection& viewProjection) {
 	// HPBarスプライト
 	hpbar_->SetPosition(hpBarPosition);
 	// Hpバー更新
-	hpbar_->Update(hp_);
+	hpbar_->Update(int(hp_));
 }
 
 Vector3 BaseEnemy::GetDirectionToTarget(const Vector3& target) {
