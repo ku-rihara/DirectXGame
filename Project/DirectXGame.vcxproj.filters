@@ -460,6 +460,9 @@
     <ClCompile Include="Game\Enemy\HPBar\EnemyHPBar.cpp">
       <Filter>Game\Enemy\HPBsr</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackJumpSecond.cpp">
+      <Filter>Game\Player\ComboBehavior\Jump</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -788,6 +791,9 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\HPBar\EnemyHPBar.h">
       <Filter>Game\Enemy\HPBsr</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackJumpSecond.h">
+      <Filter>Game\Player\ComboBehavior\Jump</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

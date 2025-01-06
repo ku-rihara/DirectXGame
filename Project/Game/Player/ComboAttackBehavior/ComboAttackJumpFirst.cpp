@@ -1,5 +1,6 @@
 /// behavior
 #include"ComboAttackJumpFirst.h"
+#include"ComboAttackJumpSecond.h"
 
 /// Player
 #include"Player/Player.h"
@@ -98,7 +99,7 @@ void ComboAttackJumpFirst::Update() {
 		break;
 	case STEP::RETURNROOT:
 		BaseComboAattackBehavior::ChangeNextComboFragForButton();//次のコンボに移行可能
-		/*BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<>)*/
+		BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackJumpSecond>(pPlayer_));
 		break;
 	default:
 		break;

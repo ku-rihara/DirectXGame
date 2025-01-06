@@ -410,6 +410,20 @@ void Player::AdjustParm() {
 				&jumpComboParms_[0].punchEaseMax,
 				0.01f);
 
+			ImGui::SeparatorText("SecondCombo");   /// 2コンボ目
+
+			ImGui::DragFloat("JPTime2",
+				&jumpComboParms_[1].permissionTime,
+				0.01f);
+
+			ImGui::DragFloat("JPunchEaseMax2",
+				&jumpComboParms_[1].punchEaseMax,
+				0.01f);
+
+			ImGui::DragFloat("JPunchReach2",
+				&jumpComboParms_[1].punchReach,
+				0.01f);
+
 		}
 
 		/// セーブとロード
@@ -650,4 +664,8 @@ float Player::GetJWaitTime(JumpComboNum index)const {
 }
 float Player::GetJPunchEaseMax(JumpComboNum index)const {
 	return jumpComboParms_[index].punchEaseMax;
+}
+
+float Player::GetJPunchReach(JumpComboNum index)const {
+	return jumpComboParms_[index].punchReach;
 }

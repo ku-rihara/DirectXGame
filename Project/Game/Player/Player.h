@@ -165,4 +165,5 @@ public:
 
 	float GetJWaitTime(JumpComboNum index)const;
 	float GetJPunchEaseMax(JumpComboNum index)const;
+	float GetJPunchReach(JumpComboNum index)const;
 };

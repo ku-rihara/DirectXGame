@@ -4,11 +4,13 @@
 #include"Easing.h"
 
 class ComboAttackJumpFirst : public BaseComboAattackBehavior {
+
 	enum class STEP {
 		FALL,
 		LANDING,
 		RETURNROOT,
 	};
+
 private:
 	
 	/// ===================================================

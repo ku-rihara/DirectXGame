@@ -77,6 +77,7 @@
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackFirst.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackForth.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackJumpFirst.cpp" />
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackJumpSecond.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackThird.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackFirst.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackForth.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackJumpFirst.h" />
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackJumpSecond.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackThird.h" />
