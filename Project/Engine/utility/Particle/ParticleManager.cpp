@@ -69,7 +69,8 @@ void ParticleManager::Update(std::optional<const ViewProjection*> viewProjection
 			/// ビルボードまたは通常の行列更新
 			///------------------------------------------------------------------------
 
-			if (viewProjection.has_value()) {
+			if (viewProjection.has_value() && group.isBillBord) {
+
 				it->worldTransform_.BillboardUpdateMatrix(*viewProjection.value());
 			}
 			else {
@@ -92,41 +93,41 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
 	/// commandList取得
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 
-    for (auto& groupPair : particleGroups_) {
-        ParticleGroup& group = groupPair.second;
-        std::list<Particle>& particles = group.particles;
-        ParticleFprGPU* instancingData = group.instancingData;
+	for (auto& groupPair : particleGroups_) {
+		ParticleGroup& group = groupPair.second;
+		std::list<Particle>& particles = group.particles;
+		ParticleFprGPU* instancingData = group.instancingData;
 
-        uint32_t instanceIndex = 0;
+		uint32_t instanceIndex = 0;
 
-        // 各粒子のインスタンシングデータを設定
-        for (auto it = particles.begin(); it != particles.end();) {
-            if (it->currentTime_ >= it->lifeTime_) {
-                it = particles.erase(it);
-                continue;
-            }
+		// 各粒子のインスタンシングデータを設定
+		for (auto it = particles.begin(); it != particles.end();) {
+			if (it->currentTime_ >= it->lifeTime_) {
+				it = particles.erase(it);
+				continue;
+			}
 
-            instancingData[instanceIndex].WVP = it->worldTransform_.matWorld_ *
-                viewProjection.matView_ * viewProjection.matProjection_;
+			instancingData[instanceIndex].WVP = it->worldTransform_.matWorld_ *
+				viewProjection.matView_ * viewProjection.matProjection_;
 
-            instancingData[instanceIndex].WorldInverseTranspose =
-                Inverse(Transpose(it->worldTransform_.matWorld_));
+			instancingData[instanceIndex].WorldInverseTranspose =
+				Inverse(Transpose(it->worldTransform_.matWorld_));
 
-            instancingData[instanceIndex].color = it->color_;
-            instancingData[instanceIndex].color.w = 1.0f - (it->currentTime_ / it->lifeTime_);
+			instancingData[instanceIndex].color = it->color_;
+			instancingData[instanceIndex].color.w = 1.0f - (it->currentTime_ / it->lifeTime_);
 
-            ++instanceIndex;
-            ++it;
-        }
-		
-        if (instanceIndex > 0 && group.model) {
-			ParticleCommon::GetInstance()->PreDraw(commandList,group.blendMode_);
-            group.model->DrawParticle(instanceIndex,
-                pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
-                group.material,
+			++instanceIndex;
+			++it;
+		}
+
+		if (instanceIndex > 0 && group.model) {
+			ParticleCommon::GetInstance()->PreDraw(commandList, group.blendMode_);
+			group.model->DrawParticle(instanceIndex,
+				pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
+				group.material,
 				group.textureHandle);
-        }
-    }
+		}
+	}
 }
 
 ///============================================================
@@ -286,7 +287,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(
 	///------------------------------------------------------------------------
 	/// スケール
 	///------------------------------------------------------------------------
-	
+
 	float scale = Random::Range(scaledist.min, scaledist.max);
 
 	/// 代入
@@ -324,7 +325,7 @@ void ParticleManager::Emit(
 	const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
 	const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
 	const Vector3& baseRotate, const Vector3& baseRotateSpeed, const V3MinMax& RotateDist,
-	const V3MinMax& rotateSpeedDist, uint32_t count,const BlendMode& blendmode) {  // 新パラメータ追加
+	const V3MinMax& rotateSpeedDist, uint32_t count, const bool& isbillbord, const BlendMode& blendmode) {  // 新パラメータ追加
 
 	// パーティクルグループが存在するか確認
 	assert(particleGroups_.find(name) != particleGroups_.end() && "Error: Not Find ParticleGroup");
@@ -332,6 +333,7 @@ void ParticleManager::Emit(
 	// 指定されたパーティクルグループを取得
 	ParticleGroup& particleGroup = particleGroups_[name];
 	particleGroup.blendMode_ = blendmode;
+	particleGroup.isBillBord = isbillbord;
 
 	// 生成、グループ追加
 	std::list<Particle> particles;

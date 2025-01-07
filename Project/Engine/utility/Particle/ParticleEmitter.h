@@ -55,6 +55,7 @@ private:
 	float lifeTime_;                              ///生存時間
 	float gravity_;                               ///重力パラメータ
 	int32_t particleCount_;                       ///パーティクル数
+	bool isBillBord_;
 											      
 	/// Line								      
 	bool isMoveForRail_;                           ///レールに沿って動くか
@@ -102,6 +103,9 @@ public:
 	void SetParentBasePos(WorldTransform*parent);
 	void SetTextureHandle(const uint32_t& hanle);
 	void SetTargetPosition(const Vector3& pos) { targetPos_ = pos; }
+
+	//imgui化すべき
+	void SetIsBillBord(const bool& is) { isBillBord_ = is; }
 	void SetBlendMode(const BlendMode& blendmode);
 	///=====================================================
 	/// Editor 

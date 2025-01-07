@@ -36,6 +36,7 @@ void ParticleEmitter::Init(const bool& isFirst) {
 	colorDist_.max = { 0, 0, 0, 0 };
 	intervalTime_ = 1.0f;
 	targetPos_ = { 0,0,0 };
+	isBillBord_ = true;
 
 	// レールマネージャー
 	railManager_ = std::make_unique<RailManager>();
@@ -252,7 +253,7 @@ void ParticleEmitter::Emit() {
 		ParticleManager::GetInstance()->Emit(
 			particleName_, targetPos_+emitPos_, positionDist_, scaleDist_,
 			velocityDist_, baseColor_, colorDist_, lifeTime_, gravity_, baseRotate_,
-			baseRotateSpeed_, rotateDist_, rotateSpeedDist_, particleCount_,blendMode_);
+			baseRotateSpeed_, rotateDist_, rotateSpeedDist_, particleCount_,isBillBord_,blendMode_);
 
 		currentTime_ = 0.0f;// 時間を戻す
 	}
