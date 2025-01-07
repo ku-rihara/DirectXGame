@@ -86,3 +86,7 @@ void Light::DebugImGui() {
 	/*ImGui::End();*/
 }
 #endif
+
+void Light::SetPointLightPos(const Vector3& pos) {
+	pointLightData_->position = pos;
+}

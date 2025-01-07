@@ -52,8 +52,13 @@ void GameScene::Init() {
 }
 
 void GameScene::Update() {
-
-
+	Light::GetInstance()->SetPointLightPos(
+		Vector3(
+		player_->GetWorldPosition().x,
+		player_->GetWorldPosition().y+2.0f,
+		player_->GetWorldPosition().z
+		)
+	);
 	/// debugcamera
 	debugCamera_->Update();
 	Debug();
