@@ -29,6 +29,7 @@ private:
 		float lifeTime_;
 		float currentTime_;
 		float gravity_;
+		Vector3 direction_;
 		Vector3 velocity_;
 		Vector3 rotateSpeed_;
 		Vector4 color_;
@@ -103,7 +104,7 @@ public:
 		const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
 		const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
 		const Vector3& baseRotate, const Vector3& baseRotateSpeed, const V3MinMax& RotateDist,
-		const V3MinMax& rotateSpeedDist);
+		const V3MinMax& rotateSpeedDist, const bool& isRotateforDirection);
 	
 	//　エミット
 	void Emit(
@@ -111,6 +112,6 @@ public:
 		const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
 		const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
 		const Vector3&baseRotate,const Vector3&baseRotateSpeed,const V3MinMax& RotateDist,
-		const V3MinMax& rotateSpeedDist, uint32_t count,const bool&isbillbord, const BlendMode& blendmode);
+		const V3MinMax& rotateSpeedDist, uint32_t count,const bool&isbillbord, const bool& isRotateforDirection, const BlendMode& blendmode);
 
 };

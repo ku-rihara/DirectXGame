@@ -56,6 +56,7 @@ private:
 	float gravity_;                               ///重力パラメータ
 	int32_t particleCount_;                       ///パーティクル数
 	bool isBillBord_;
+	bool isRotateforDirection_;
 											      
 	/// Line								      
 	bool isMoveForRail_;                           ///レールに沿って動くか
@@ -106,6 +107,7 @@ public:
 
 	//imgui化すべき
 	void SetIsBillBord(const bool& is) { isBillBord_ = is; }
+	void SetIsRotateForDirection(const bool& is) { isRotateforDirection_ = is; }
 	void SetBlendMode(const BlendMode& blendmode);
 	///=====================================================
 	/// Editor 

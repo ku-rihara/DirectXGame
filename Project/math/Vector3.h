@@ -69,6 +69,9 @@ public:
 	static Vector3 UnitVector();// 単位ベクトル
 	static Vector3 ZeroVector();
 
+	static Vector3 DirectionToEulerAngles(const Vector3& direction);
+
+
 	Vector3 Normalize()const;
 	float Length()const;
 };
