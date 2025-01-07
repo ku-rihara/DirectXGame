@@ -109,6 +109,7 @@ public:
 
 	///update
 	void Update();
+	void EditorUpdate();
 
 	/// globalParamater
 	void AddParmGroup();

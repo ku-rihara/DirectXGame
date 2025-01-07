@@ -269,7 +269,9 @@ void ParticleEmitter::Update() {
 	UpdateEmitTransform();
 
 	SetValues();
+}
 
+void ParticleEmitter::EditorUpdate() {
 #ifdef _DEBUG
 
 	ImGui::Begin(particleName_.c_str());
@@ -287,8 +289,8 @@ void ParticleEmitter::Update() {
 	/// rail
 	if (ImGui::CollapsingHeader("MoveForRail")) {
 		ImGui::SeparatorText("Paramater");
-		ImGui::Checkbox("isMoveForRail",&isMoveForRail_);
-		ImGui::DragFloat("moveSpeed", &moveSpeed_,0.001f);
+		ImGui::Checkbox("isMoveForRail", &isMoveForRail_);
+		ImGui::DragFloat("moveSpeed", &moveSpeed_, 0.001f);
 
 		ImGui::SeparatorText("ControlPoints:");
 		railManager_->ImGuiEdit();
@@ -351,7 +353,7 @@ void ParticleEmitter::Update() {
 
 	// その他のパラメータ
 	if (ImGui::CollapsingHeader("etcParamater")) {
-		ImGui::DragFloat("IntervalTime", &intervalTime_, 0.01f,0.01f,100.0f);
+		ImGui::DragFloat("IntervalTime", &intervalTime_, 0.01f, 0.01f, 100.0f);
 		ImGui::DragFloat("Gravity", &gravity_, 0.1f);
 		ImGui::DragFloat("LifeTime", &lifeTime_, 0.1f);
 		ImGui::SliderInt("Particle Count", &particleCount_, 1, 100);
