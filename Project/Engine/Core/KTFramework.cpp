@@ -7,7 +7,7 @@
 
 #include "Frame/Frame.h"
 
-const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ";
+const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ_パンチラッシュ!";
 
 // ========================================================
 // 実行

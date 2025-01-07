@@ -6,6 +6,8 @@
 //math
 #include<imgui.h>
 #include"3d/Light.h"
+#include"Frame/Frame.h"
+#include"JoyState/JoyState.h"
 
 GameScene::GameScene() {}
 
@@ -48,11 +50,32 @@ void GameScene::Init() {
 	player_->SetViewProjection(&viewProjection_);
 	player_->SetLockOn(lockOn_.get());
 	enemyManager_->SetLockon(lockOn_.get());
+
+	enemyManager_->FSpawn();
+
+	isfirstChange_ = false;
+	alpha_ = 2.5f;
+	shandle_ = TextureManager::GetInstance()->LoadTexture("./resources/Texture/screenChange.png");
+	screenSprite_.reset(Sprite::Create(shandle_, Vector2(0, 0), Vector4(1, 1, 1, alpha_)));
+
+	cease_.time = 0.0f;
+	cease_.maxTime = 0.5f;
+	chandle_ = TextureManager::GetInstance()->LoadTexture("./resources/Texture/Clear.png");
+	cSprite_.reset(Sprite::Create(chandle_, Vector2(0, -720), Vector4(1, 1, 1, 1.0f)));
 }
 
 void GameScene::Update() {
 
-	
+	screenSprite_->SetAlpha(alpha_);
+
+	if (!isfirstChange_) {
+		alpha_ -= Frame::DeltaTime();
+		if (alpha_ <= 0.0f) {
+			alpha_ = 0.0f;
+			isfirstChange_ = true;
+		}
+	}
+
 	/// debugcamera
 	debugCamera_->Update();
 	Debug();
@@ -74,10 +97,40 @@ void GameScene::Update() {
 	
 	ViewProjectionUpdate();
 
-	/// タイトルに戻る
-	if (input_->TrrigerKey(DIK_RETURN)) {
-		SceneManager::GetInstance()->ChangeScene("TITLE");
+	/// クリア
+	if (enemyManager_->GetCread()) {
+		cease_.time += Frame::DeltaTime();
+	
+		if (cease_.time >= cease_.maxTime) {
+			cease_.time = cease_.maxTime;
+			cSprite_->SetPosition(Vector2(0, 0));
+		
+			//　ジャンプに切り替え
+			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+				isend_ = true;
+			}
+			else {
+				ChangeForJoyState();//コントローラジャンプ
+			}
+
+		}
+		else {
+			cSprite_->SetPosition(Vector2(0, EaseInCubic(-720.0f, 0.0f, cease_.time, cease_.maxTime)));
+
+		}
 	}
+	if (isend_) {
+		alpha_ += Frame::DeltaTime();
+		if (alpha_ >= 1.2f) {
+			alpha_ = 1.0f;
+			SceneManager::GetInstance()->ChangeScene("TITLE");
+		}
+	}
+
+	///// タイトルに戻る
+	//if (input_->TrrigerKey(DIK_RETURN)) {
+	//	SceneManager::GetInstance()->ChangeScene("TITLE");
+	//}
 }
 
 /// ===================================================
@@ -109,6 +162,8 @@ void GameScene::SpriteDraw() {
 	enemyManager_->SpriteDraw(viewProjection_);
 	lockOn_->Draw();
 	howToOperate_->Draw();
+	cSprite_->Draw();
+	screenSprite_->Draw();
 }
 
 void GameScene::Debug() {
@@ -139,5 +194,14 @@ void GameScene::ViewProssess() {
 	viewProjection_.matProjection_ = gamecamera_->GetViewProjection().matProjection_;
 
 	viewProjection_.TransferMatrix();
+
+}
+
+void  GameScene::ChangeForJoyState() {
+	if (!(Input::GetInstance()->GetJoystickState(0, joyState))) return;
+
+	if (!((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A))) return;
+
+	isend_ = true;
 
 }

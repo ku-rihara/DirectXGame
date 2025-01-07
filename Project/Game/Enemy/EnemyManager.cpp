@@ -32,8 +32,17 @@ void EnemyManager::Init() {
 		Phase phase;
 		phases_[0] = phase;
 	}
+
+	LoadEnemyPoPData();
+	
+
+	isEditorMode_ = false;
 }
 
+void  EnemyManager::FSpawn() {
+	SpawnEnemy("NormalEnemy", Vector3{-30,0,40});
+	SpawnEnemy("StrongEnemy", Vector3{ 30,0,40 });
+}
 
 ///========================================================================================
 ///  敵の生成
@@ -73,6 +82,7 @@ void EnemyManager::Update(const ViewProjection& viewprojection) {
 			pLockOn_->OnEnemyDestroyed((*it).get());
 			pLockOn_->Search(enemies_, viewprojection);
 			it = enemies_.erase(it); // 削除して次の要素を指すイテレータを取得
+			UpdateEnemyClearedFlag(); // フラグを更新
 		}
 		else {
 			++it; // 削除しない場合はイテレータを進める
@@ -466,4 +476,20 @@ void EnemyManager::SetPlayer(Player* player) {
 }   
 void EnemyManager::SetLockon(LockOn* lockOn) {
 	pLockOn_ = lockOn;
+}
+
+void EnemyManager::UpdateEnemyClearedFlag() {
+	areAllEnemiesCleared_ = enemies_.empty(); // 現在の敵リストが空かを確認
+
+	// スポーン予定の敵を確認
+	for (const auto& [phaseNum, phase] : phases_) {
+		for (const auto& wave : phase.waves) {
+			for (const auto& group : wave.groups) {
+				if (!group.isSpowned) { // 未スポーンの敵がいる場合
+					areAllEnemiesCleared_ = false;
+					return;
+				}
+			}
+		}
+	}
 }

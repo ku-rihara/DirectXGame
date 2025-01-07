@@ -64,7 +64,8 @@ private:
     Vector3 spownPosition_;
     uint32_t spownNum_;
 
-  
+    bool areAllEnemiesCleared_; // 敵がすべていなくなったことを示すフラグ
+
     const std::string directrypath_ = "./resources/EnemyParamater/";// path
     const std::string filename_ = "PoPData.json";// name
 
@@ -79,6 +80,9 @@ public:
 
     // 初期化
     void Init();
+    void FSpawn();
+
+    void UpdateEnemyClearedFlag();
 
     // 敵の生成
     void SpawnEnemy(const std::string& enemyType, const Vector3& position);
@@ -88,6 +92,7 @@ public:
     void HpBarUpdate(const ViewProjection&viewProjection);
     void SpawnUpdate();
     void CheckWaveCompletion();
+
     // 描画処理
     void Draw(const ViewProjection& viewProjection);
 
@@ -112,6 +117,8 @@ public:
 
     ///* EditorModeセット
     void SetEditorMode(bool isEditorMode);
+
+    bool GetCread()const { return areAllEnemiesCleared_; }
 
     ///========================================================
     /// setter method

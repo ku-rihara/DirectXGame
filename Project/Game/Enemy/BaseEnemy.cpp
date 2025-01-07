@@ -25,7 +25,7 @@
 ///　static 変数初期化
 ///==========================================================
 float BaseEnemy::InitY_ = 0.5f;
-Vector3 BaseEnemy::InitScale_ = Vector3::UnitVector();
+Vector3 BaseEnemy::InitScale_ = Vector3::UnitVector()*2;
 
 BaseEnemy::BaseEnemy() {
 
@@ -88,6 +88,8 @@ void BaseEnemy::Update() {
 	thrustEmit_->SetTargetPosition(GetWorldPosition());
 	thrustEmit_->Update();
 
+	FallEffectUpdate();
+
 	
 	// 体力がなくなったら死亡
 	if (hp_ <= 0) {
@@ -130,6 +132,15 @@ Vector3 BaseEnemy::GetDirectionToTarget(const Vector3& target) {
 /// 描画
 ///========================================================
 void BaseEnemy::Draw(const ViewProjection& viewProjection) {
+
+	// 各エフェクトを更新
+	effects_.reverse();
+	for (std::unique_ptr<Effect>& effect : effects_) {
+		if (effect) {
+			effect->Draw(viewProjection);
+		}
+	}
+	effects_.reverse();
 	// 敵描画
 	BaseObject::Draw(viewProjection);
 }
@@ -281,4 +292,24 @@ void BaseEnemy::DamageEmit() {
 
 void BaseEnemy::ThrustEmit() {
 	thrustEmit_->Emit();
+}
+
+void BaseEnemy::FallEffectInit(const Vector3& pos) {
+	std::unique_ptr<Effect> effect = std::make_unique<Effect>();
+
+	effect->Init(pos);
+
+	effects_.push_back(std::move(effect));
+}
+
+
+void BaseEnemy::FallEffectUpdate() {
+	// 各エフェクトを更新
+	for (std::unique_ptr<Effect>& effect : effects_) {
+		if (effect) {
+			effect->Update();
+		}
+	}
+	// 完了したエフェクトを消す
+	effects_.erase(std::remove_if(effects_.begin(), effects_.end(), [](const std::unique_ptr<Effect>& effect) { return effect->IsFinished(); }), effects_.end());
 }

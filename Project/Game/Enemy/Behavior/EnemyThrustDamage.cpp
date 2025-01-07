@@ -92,7 +92,9 @@ void EnemyThrustDamage::Update() {
 		break;
 	case Step::NEXTBEHAVIOR:
 		pBaseEnemy_->ThrustEmit();
+		pBaseEnemy_->FallEffectInit(pBaseEnemy_->GetWorldPosition());
 		pBaseEnemy_->SetColor(Vector4(1.0f, 1, 1, 1.0f));
+		pBaseEnemy_->SetWorldPositionY(BaseEnemy::InitY_);
 		pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyBoundDamage>(pBaseEnemy_));
 		break;
 	}

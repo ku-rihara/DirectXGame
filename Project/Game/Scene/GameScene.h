@@ -41,6 +41,16 @@ private:
 	uint32_t circleHandle_;
 	uint32_t uv_;
 
+	bool isfirstChange_;
+	float alpha_;
+	int shandle_;
+	std::unique_ptr<Sprite>screenSprite_;
+
+	int chandle_;
+	Easing cease_;
+	std::unique_ptr<Sprite>cSprite_;
+	bool isend_;
+
 public:
 	
 	///========================================================
@@ -64,5 +74,6 @@ public:
 	void ViewProjectionUpdate()override;
 	void ViewProssess()override;
 
+	void ChangeForJoyState();
 	/*const ViewProjection& GetViewProjection()const { return viewProjection_; }*/
 };

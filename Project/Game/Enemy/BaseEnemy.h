@@ -9,6 +9,7 @@
 #include"Behavior/BaseEnemyBehavior.h"
 #include"utility/Particle/ParticleEmitter.h"
 #include"Enemy/HPBar/EnemyHPBar.h"
+#include"Effect/Effect.h"
 
 class Player;
 class BaseEnemy : public BaseObject,public AABBCollider {
@@ -36,7 +37,7 @@ protected:
 
 	/// エミッター
 	std::unique_ptr<ParticleEmitter>emitter_;
-
+	std::list<std::unique_ptr<Effect>> effects_;
 public:
 	static float InitY_;
 	static Vector3 InitScale_;
@@ -55,6 +56,8 @@ public:
 
 	void DamageEmit();
 	void ThrustEmit();
+	void FallEffectUpdate();
+	void FallEffectInit(const Vector3& pos);
 	
 	Vector3 GetDirectionToTarget(const Vector3&target);
 
