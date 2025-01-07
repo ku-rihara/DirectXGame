@@ -91,7 +91,7 @@ void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
 }
 
 void EnemyManager::SpawnUpdate() {
-	currentTime_ += Frame::DeltaTimeRate(); //* 現在時間加算
+	currentTime_ += Frame::DeltaTime(); //* 現在時間加算
 
 	auto& phase = phases_[currentPhase_];//* 現在フェーズの取得
 
@@ -112,6 +112,31 @@ void EnemyManager::SpawnUpdate() {
 
 			}
 			group.isSpowned = true;
+		}
+	}
+}
+
+///========================================================================================
+///  Wave完了チェック
+///========================================================================================
+void EnemyManager::CheckWaveCompletion() {
+	auto& phase = phases_[currentPhase_]; // 現在フェーズの取得
+
+	// 現在のWaveに所属する敵が全て倒されたか確認
+	if (enemies_.empty()) {
+		// 次のWaveに進む
+		++currentWave_;
+
+		if (currentWave_ >= phase.waves.size()) {
+			// 全てのWaveが完了した場合、次のフェーズに進む
+			++currentPhase_;
+			if (phases_.find(currentPhase_) == phases_.end()) {
+				// フェーズが存在しなければ終了
+				--currentPhase_; // フェーズを戻して停止
+			}
+			else {
+				currentWave_ = 0; // 次フェーズの最初のWaveへ
+			}
 		}
 	}
 }

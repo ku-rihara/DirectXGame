@@ -50,7 +50,7 @@ private:
     std::map<int, Phase> phases_;  // フェーズ番号をキーとしたフェーズマップ
     int currentPhase_;             // 現在のフェーズ
     float currentTime_;            // 現在のフェーズ内の経過時間
-
+    int currentWave_;
     ///* 敵リスト
     std::list<std::unique_ptr<BaseEnemy>> enemies_;
 
@@ -85,7 +85,7 @@ public:
     void Update();
     void HpBarUpdate(const ViewProjection&viewProjection);
     void SpawnUpdate();
-
+    void CheckWaveCompletion();
     // 描画処理
     void Draw(const ViewProjection& viewProjection);
 
