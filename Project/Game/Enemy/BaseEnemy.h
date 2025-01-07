@@ -28,6 +28,9 @@ protected:
 	std::string damageName_;
 	std::unique_ptr<ParticleEmitter>damageEmitter_;
 
+	std::string thrustName_;
+	std::unique_ptr<ParticleEmitter>thrustEmit_;
+
 	/// behavior
 	std::unique_ptr<BaseEnemyBehaivor>behavior_ = nullptr;
 
@@ -51,6 +54,7 @@ public:
 	virtual void SpriteDraw(const ViewProjection& viewProjection);
 
 	void DamageEmit();
+	void ThrustEmit();
 	
 	Vector3 GetDirectionToTarget(const Vector3&target);
 
@@ -72,11 +76,12 @@ public:
 	///========================================================================================
 	bool GetIsDeath()const { return isdeath_; }
 	Player* GetPlayer() { return pPlayer_; }
+	
 	///========================================================================================
 	///  setter method
 	///========================================================================================
 	void SetPlayer(Player* plyaer);
-	
+
 
 private:
 	bool IsInView(const ViewProjection& viewProjection) const;

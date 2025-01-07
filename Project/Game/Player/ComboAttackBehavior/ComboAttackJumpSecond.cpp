@@ -30,11 +30,14 @@ ComboAttackJumpSecond::ComboAttackJumpSecond(Player* player)
 	rushCollisionBox_->Update();
 	rushCollisionBox_->IsAdapt(false);
 
+	pPlayer_->FaceToTarget();
 	initPos_ = pPlayer_->GetWorldPosition();
 	direction_ = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
 	rushTargetPos_ = initPos_ + (direction_ * pPlayer_->GetJPunchReach(Player::JSECOND));
 	
 	rushEaseTime_ = 0.0f;
+
+
 
 	step_ = STEP::RUSH; // 突進
 

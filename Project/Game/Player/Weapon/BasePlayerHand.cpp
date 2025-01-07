@@ -15,7 +15,7 @@ void BasePlayerHand::Init() {
 	AddParmGroup();
 	ApplyGlobalParameter();
 
-	obj3d_->material_.materialData_->enableLighting = 4;
+	obj3d_->material_.materialData_->enableLighting = 3;
 
 	emitter_.reset(ParticleEmitter::CreateParticle(groupName_, "plane", ".obj", 300, false));
 	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");

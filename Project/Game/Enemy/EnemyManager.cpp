@@ -4,10 +4,10 @@
 #include"StrongEnemy.h"
 
 #include "Frame/Frame.h"
+#include"LockOn/LockOn.h"
 
 #include <format>
 #include <fstream>
-
 #include <imgui.h>
 
 EnemyManager::EnemyManager() {
@@ -59,7 +59,7 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
 ///========================================================================================
 ///  更新処理
 ///========================================================================================
-void EnemyManager::Update() {
+void EnemyManager::Update(const ViewProjection& viewprojection) {
 	if (isEditorMode_) {
 		return; // エディタモード中は停止
 	}
@@ -70,6 +70,8 @@ void EnemyManager::Update() {
 		(*it)->Update(); // 更新
 
 		if ((*it)->GetIsDeath()) {
+			pLockOn_->OnEnemyDestroyed((*it).get());
+			pLockOn_->Search(enemies_, viewprojection);
 			it = enemies_.erase(it); // 削除して次の要素を指すイテレータを取得
 		}
 		else {
@@ -461,4 +463,7 @@ void EnemyManager::LoadSpawn(EnemyGroup& group, const json& spawnData) {
 
 void EnemyManager::SetPlayer(Player* player) {
 	pPlayer_ = player;
+}   
+void EnemyManager::SetLockon(LockOn* lockOn) {
+	pLockOn_ = lockOn;
 }

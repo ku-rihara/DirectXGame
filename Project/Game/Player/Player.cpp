@@ -46,7 +46,7 @@ void Player::Init() {
 	AddParmGroup();
 	ApplyGlobalParameter();
 	
-	obj3d_->material_.materialData_->enableLighting = 3;
+	obj3d_->material_.materialData_->enableLighting = 2;
 
 	///* 武器生成
 	leftHand_ = std::make_unique<PlayerHandLeft>();
@@ -211,7 +211,13 @@ void Player::Move(const float& speed) {
 		transform_.rotation_.y = LerpShortAngle(transform_.rotation_.y, objectiveAngle_, 0.3f);
 
 	}
-	else if (pLockOn_ && pLockOn_->GetEnemyTarget()) {
+	else {
+		FaceToTarget();// ターゲットを向くか
+	}
+}
+
+void Player::FaceToTarget() {
+	if (pLockOn_ && pLockOn_->GetEnemyTarget()) {
 		Vector3 differectialVector = pLockOn_->GetTargetPosition() - GetWorldPosition();
 
 		// Y軸周り角度(θy)

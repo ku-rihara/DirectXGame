@@ -19,6 +19,7 @@
 #include"Player/Player.h"
 #include"base/TextureManager.h"
 #include"Frame/Frame.h"
+#include"utility/Particle/ParticleCommon.h"
 
 ///=========================================================
 ///　static 変数初期化
@@ -52,7 +53,14 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	spawnEasing_.maxTime = 0.8f;
 	transform_.scale_ = Vector3::ZeroVector();
 
-	/// particle
+	/// particleT
+	thrustName_ = "TrushParticle";
+	thrustEmit_.reset(ParticleEmitter::CreateParticle(thrustName_, "Stick",".obj", 200, false));
+	
+	thrustEmit_->SetIsBillBord(false);
+	thrustEmit_->SetIsRotateForDirection(true);
+
+	/// particleD
 	damageName_ = "DamageParticle";
 	damageEmitter_.reset(ParticleEmitter::CreateParticle(damageName_, "Plane", ".obj", 300, false));
 	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
@@ -78,6 +86,9 @@ void BaseEnemy::Update() {
 	damageEmitter_->SetTargetPosition(GetWorldPosition());
 	damageEmitter_->Update();
 	
+	thrustEmit_->SetTargetPosition(GetWorldPosition());
+	thrustEmit_->Update();
+
 	
 	// 体力がなくなったら死亡
 	if (hp_ <= 0) {
@@ -176,7 +187,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 	if (dynamic_cast<ThrustCollisionBox*>(other)) {
 
 		if (!dynamic_cast<EnemyThrustDamage*>(behavior_.get())) {
-			
+
 			DamageForPar(damageParm_);
 			ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
 		}
@@ -201,9 +212,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 		if (!dynamic_cast<EnemyBoundDamage*>(behavior_.get())) {
 		
 			DamageForPar(damageParm_);
-			ChangeBehavior(std::make_unique<EnemyBoundDamage>(this));
-			
-			
+			ChangeBehavior(std::make_unique<EnemyBoundDamage>(this));	
 		}
 
 		return;
@@ -269,4 +278,8 @@ void BaseEnemy::DamageForPar(const float& par) {
 
 void BaseEnemy::DamageEmit() {
 	damageEmitter_->Emit();
+}
+
+void BaseEnemy::ThrustEmit() {
+	thrustEmit_->Emit();
 }

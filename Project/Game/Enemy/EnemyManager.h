@@ -12,6 +12,7 @@
 #include <json.hpp>
 
 class Player;
+class LockOn;
 class EnemyManager {
 private:
     using json = nlohmann::json;
@@ -44,6 +45,7 @@ private:
 
     // ohter class
     Player* pPlayer_;
+    LockOn* pLockOn_;
   
   
     bool isEditorMode_;             // エディタモード中かどうか
@@ -82,7 +84,7 @@ public:
     void SpawnEnemy(const std::string& enemyType, const Vector3& position);
 
     // 更新処理
-    void Update();
+    void Update(const ViewProjection&viewprojection);
     void HpBarUpdate(const ViewProjection&viewProjection);
     void SpawnUpdate();
     void CheckWaveCompletion();
@@ -115,6 +117,7 @@ public:
     /// setter method
     ///========================================================
     void SetPlayer(Player* plyaer);
+    void SetLockon(LockOn* lockOn);
 
     // フェーズの切り替え
     void SetPhase(int phase);

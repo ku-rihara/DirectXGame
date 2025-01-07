@@ -27,7 +27,7 @@ ComboAttackForth::ComboAttackForth(Player* player)
 	stopCollisionBox_->Init();
 	stopCollisionBox_->SetSize(Vector3::UnitVector() * 4.5f);// 当たり判定サイズ
 	Vector3 sforwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
-	stopCollisionBox_->SetOffset(sforwardDirection * 3.0f);
+	stopCollisionBox_->SetOffset(sforwardDirection * 2.0f);
 	stopCollisionBox_->SetPosition(pPlayer_->GetRightHand()->GetWorldPosition());
 	stopCollisionBox_->IsAdapt(false);
 	stopCollisionBox_->Update();
@@ -40,7 +40,7 @@ ComboAttackForth::ComboAttackForth(Player* player)
 	thrustCollisionBox_->SetSize(Vector3::UnitVector() * 4.5f);// 当たり判定サイズ
 	thrustCollisionBox_->SetPosition(pPlayer_->GetWorldPosition());
 	Vector3 tforwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
-	thrustCollisionBox_->SetOffset(tforwardDirection * 3.0f);
+	thrustCollisionBox_->SetOffset(tforwardDirection * 2.0f);
 	thrustCollisionBox_->IsAdapt(false);
 	thrustCollisionBox_->Update();
 

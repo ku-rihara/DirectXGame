@@ -17,7 +17,7 @@ EnemyThrustDamage::EnemyThrustDamage(BaseEnemy* boss)
 
 	/// ヒットバックのパラメータ
 	initPos_ = pBaseEnemy_->GetWorldPosition();
-	speed_ = 2.5f;
+	speed_ = 1.5f;
 	// 赤色
 	pBaseEnemy_->SetColor(Vector4(0.9f, 0, 0, 0.9f));
 
@@ -91,6 +91,7 @@ void EnemyThrustDamage::Update() {
 		}
 		break;
 	case Step::NEXTBEHAVIOR:
+		pBaseEnemy_->ThrustEmit();
 		pBaseEnemy_->SetColor(Vector4(1.0f, 1, 1, 1.0f));
 		pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyBoundDamage>(pBaseEnemy_));
 		break;

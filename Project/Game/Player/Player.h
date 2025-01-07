@@ -142,6 +142,8 @@ public:
 	void AddParmGroup();
 	void SetValues();
 	void ApplyGlobalParameter();
+
+	void FaceToTarget();
            
 	/// ===================================================
 	/// getter

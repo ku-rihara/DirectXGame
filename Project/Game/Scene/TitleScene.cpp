@@ -21,18 +21,11 @@ void TitleScene::Init() {
 
 	BaseScene::Init();
 
-	thrustName_ = "TrushParticle";
-	damageEmitter_.reset(ParticleEmitter::CreateParticle(thrustName_, "cube", ".obj", 200, false));
-	damageEmitter_->SetBlendMode(BlendMode::None);
-	damageEmitter_->SetIsBillBord(false);
+	
 }
 
 void TitleScene::Update() {
-	damageEmitter_->Update();
-	damageEmitter_->EditorUpdate();
 	
-
-	damageEmitter_->Emit();
 	
 	ParticleManager::GetInstance()->Update(&viewProjection_);
 
@@ -59,7 +52,7 @@ void TitleScene::ModelDraw() {
    /// パーティクル描画
    /// ===================================================
 void TitleScene::ParticleDraw() {
-	ParticleManager::GetInstance()->Draw(viewProjection_);
+	/*ParticleManager::GetInstance()->Draw(viewProjection_);*/
 }
 
 /// ===================================================

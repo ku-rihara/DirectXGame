@@ -47,8 +47,7 @@ void GameScene::Init() {
 	enemyManager_->SetPlayer(player_.get());
 	player_->SetViewProjection(&viewProjection_);
 	player_->SetLockOn(lockOn_.get());
-
-
+	enemyManager_->SetLockon(lockOn_.get());
 }
 
 void GameScene::Update() {
@@ -57,16 +56,17 @@ void GameScene::Update() {
 	/// debugcamera
 	debugCamera_->Update();
 	Debug();
-
+	
 	//各クラス更新
 	player_->Update();
 	skydome_->Update();
 	field_->Update();
-	enemyManager_->Update();
+	enemyManager_->Update(viewProjection_);
 	gamecamera_->Update();
 
 	enemyManager_->HpBarUpdate(viewProjection_);
 	lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
+
 
 	/// パーティクル更新
 	ParticleManager::GetInstance()->Update(&viewProjection_);

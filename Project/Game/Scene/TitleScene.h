@@ -11,7 +11,7 @@
 class TitleScene:public BaseScene {
 private:
 	std::string thrustName_;
-	std::unique_ptr<ParticleEmitter>damageEmitter_;
+	std::unique_ptr<ParticleEmitter>thrustEmit_;
 	
 public:
 	///========================================================

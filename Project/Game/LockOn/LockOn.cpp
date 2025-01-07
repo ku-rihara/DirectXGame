@@ -2,29 +2,33 @@
 #include "JoyState/JoyState.h"
 #include "Matrix4x4.h"
 #include "base/TextureManager.h"
+//function
 #include"MathFunction.h"
-////class
+//class
 #include "Enemy/BaseEnemy.h"
+#include"Frame/Frame.h"
 
 //初期化
 void LockOn::Init() {
 	//スプライトの読み込みと作成
-	uint32_t TextureHandle = TextureManager::GetInstance()->
-		LoadTexture("./Resources/Texture/anchorPoint.png");
-	lockOnMark_.reset(Sprite::Create(TextureHandle, Vector2{640, 320}, Vector4(1, 1, 1, 1)));
+	int TextureHandle = TextureManager::GetInstance()->LoadTexture("./Resources/Texture/anchorPoint.png");
+	lockOnMark_.reset(Sprite::Create(TextureHandle, Vector2{ 640, 320 }, Vector4(1, 1, 1, 1)));
+	lockOnMark_->SetAnchorPoint(Vector2(0.5f,0.5f));
 }
 
 void LockOn::Update(const std::list<std::unique_ptr<BaseEnemy>>& enemies, const ViewProjection& viewProjection) {
 	if (Input::GetInstance()->GetJoystickState(0, joyState) && Input::GetInstance()->GetJoystickStatePrevious(0, joyStatePre)) {
 		// ロックオンを外す
 		if (target_) {
-			if ((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_X) && !(joyStatePre.Gamepad.wButtons & XINPUT_GAMEPAD_X)) {
-				target_ = nullptr;
-			} else if (IsOutOfRange(enemies, viewProjection)) {
+			if ((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B) && !(joyStatePre.Gamepad.wButtons & XINPUT_GAMEPAD_B)) {
 				target_ = nullptr;
 			}
-		} else {
-			if ((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_X) && !(joyStatePre.Gamepad.wButtons & XINPUT_GAMEPAD_X)) { // ロックオンする
+			else if (IsOutOfRange(enemies, viewProjection)) {
+				target_ = nullptr;
+			}
+		}
+		else {
+			if ((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B) && !(joyStatePre.Gamepad.wButtons & XINPUT_GAMEPAD_B)) { // ロックオンする
 				// ロックオン対象の検索
 				Search(enemies, viewProjection);
 			}
@@ -43,13 +47,24 @@ void LockOn::Update(const std::list<std::unique_ptr<BaseEnemy>>& enemies, const 
 		LarpTimeIncrement(0.1f);
 		lockOnMarkPos_ = Lerp(prePos_, positionScreenV2, lerpTime_);
 
-	
+		//// 距離に応じてスケールを調整
+		//float distance = Distance(positionWorld,viewProjection.translation_);
+
+		//// スケールを距離に反比例させる（距離が遠いほど小さくなる）
+		//float scaleFactor = max(1.0f, distance / maxDistance_);
+
+		//// スプライトの最大サイズを144に設定
+		//const float maxSize = 144.0f;
+		//float size = maxSize / scaleFactor; // 反比例させるために除算
+
+		//// スプライトのサイズを設定
+		//lockOnMark_->SetSize(Vector2(size, size));
 
 		// スプライトの座標を設定
 		lockOnMark_->SetPosition(lockOnMarkPos_);
-		//spriteRotation_ += 0.01f;
-		////回転を設定
-		//lockOnMark_->SetRotation(spriteRotation_);
+		spriteRotation_ += Frame::DeltaTime();
+		//回転を設定
+		lockOnMark_->transform_.rotate.z=(spriteRotation_);
 	}
 }
 
@@ -67,7 +82,7 @@ void LockOn::Search(const std::list<std::unique_ptr<BaseEnemy>>& enemies, const 
 
 	// 全ての敵に対して順にロックオンを判定
 	for (const std::unique_ptr<BaseEnemy>& enemy : enemies) {
-		if (/*!enemy->GetIsBurst() &&*/ IsTargetRange(*enemy, viewProjection, positionView)) {
+		if (!enemy->GetIsDeath() && IsTargetRange(*enemy, viewProjection, positionView)) {
 			targets.emplace_back(std::make_pair(positionView.z, enemy.get()));
 		}
 	}
@@ -122,11 +137,11 @@ Vector3 LockOn::GetTargetPosition() const {
 }
 void LockOn::OnEnemyDestroyed(BaseEnemy* enemy) {
 	if (target_ == enemy) {
-		target_ = nullptr;	
+		target_ = nullptr;
 	}
 }
 //線形補間タイムインクリメント
-void LockOn::LarpTimeIncrement(float incrementTime) { 
+void LockOn::LarpTimeIncrement(float incrementTime) {
 	lerpTime_ += incrementTime;
 	if (lerpTime_ >= 1.0f) {
 		lerpTime_ = 1.0f;
