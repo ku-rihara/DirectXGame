@@ -47,13 +47,15 @@ void ParticleManager::Update(std::optional<const ViewProjection*> viewProjection
 			///------------------------------------------------------------------------
 			if (accelerationField_.isAdaption &&
 				IsCollision(accelerationField_.area, it->worldTransform_.translation_)) {
-				it->velocity_ += accelerationField_.acceleration * Frame::DeltaTime();
+				it->velocity_ += accelerationField_.acceleration * Frame::DeltaTimeRate();
 			}
 
 			///------------------------------------------------------------------------
 			/// 回転させる
 			///------------------------------------------------------------------------
-			it->worldTransform_.rotation_ += it->rotateSpeed_ * Frame::DeltaTime();
+			it->worldTransform_.rotation_.x += it->rotateSpeed_.x* Frame::DeltaTimeRate();
+			it->worldTransform_.rotation_.y += it->rotateSpeed_.y * Frame::DeltaTimeRate();
+			it->worldTransform_.rotation_.z += it->rotateSpeed_.z * Frame::DeltaTimeRate();
 
 			///------------------------------------------------------------------------
 			/// 重力の適用
@@ -220,20 +222,16 @@ ParticleManager::Particle ParticleManager::MakeParticle(
 	const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
 	const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
 	const Vector3& baseRotate, const Vector3& baseRotateSpeed, const V3MinMax& RotateDist,
-	const V3MinMax& rotateSpeedDist) {  // 新パラメータ追加
+	const V3MinMax& rotateSpeedDist, const bool& isRotateforDirection) {
 
 	Particle particle;
 
-	/*particle.blendMode_ = blendmode;*/
-
 	particle.lifeTime_ = lifeTime;
 	particle.currentTime_ = 0.0f;
-	// 初期化
 	particle.worldTransform_.Init();
 
-
 	///------------------------------------------------------------------------
-	///　座標
+	/// 座標
 	///------------------------------------------------------------------------
 	Vector3 randomTranslate = {
 		Random::Range(positionDist.min.x, positionDist.max.x),
@@ -254,18 +252,32 @@ ParticleManager::Particle ParticleManager::MakeParticle(
 	///------------------------------------------------------------------------
 	/// 回転
 	///------------------------------------------------------------------------
-	Vector3 rotate = {
-		Random::Range(RotateDist.min.x,  RotateDist.max.x),
-		Random::Range(RotateDist.min.y,  RotateDist.max.y),
-		Random::Range(RotateDist.min.z,  RotateDist.max.z)
-	};
-	/// Radianに変換
-	rotate.x = toRadian(rotate.x);
-	rotate.y = toRadian(rotate.y);
-	rotate.z = toRadian(rotate.z);
+	if (isRotateforDirection) {
+		// 進行方向（速度）を基に回転を計算
+		if (particle.velocity_.Length() > 0.0001f) { // 速度がゼロに近くない場合
+			Vector3 direction = Vector3::Normalize(particle.velocity_);
+			particle.worldTransform_.rotation_ = Vector3::DirectionToEulerAngles(direction);
+		}
+		else {
+			// 速度がゼロの場合はデフォルト回転
+			particle.worldTransform_.rotation_ = toRadian(baseRotate);
+		}
+	}
+	else {
+		// ランダム回転を設定
+		Vector3 rotate = {
+			Random::Range(RotateDist.min.x, RotateDist.max.x),
+			Random::Range(RotateDist.min.y, RotateDist.max.y),
+			Random::Range(RotateDist.min.z, RotateDist.max.z)
+		};
 
-	/// 代入
-	particle.worldTransform_.rotation_ = toRadian(baseRotate) + rotate;
+		// ラジアン変換
+		rotate.x = toRadian(rotate.x);
+		rotate.y = toRadian(rotate.y);
+		rotate.z = toRadian(rotate.z);
+
+		particle.worldTransform_.rotation_ = toRadian(baseRotate) + rotate;
+	}
 
 	///------------------------------------------------------------------------
 	/// 回転スピード
@@ -276,46 +288,38 @@ ParticleManager::Particle ParticleManager::MakeParticle(
 		Random::Range(rotateSpeedDist.min.z, rotateSpeedDist.max.z)
 	};
 
-	/// Radianに変換
 	rotateSpeed.x = toRadian(rotateSpeed.x);
 	rotateSpeed.y = toRadian(rotateSpeed.y);
 	rotateSpeed.z = toRadian(rotateSpeed.z);
 
-	/// 代入
 	particle.rotateSpeed_ = toRadian(baseRotateSpeed) + rotateSpeed;
 
 	///------------------------------------------------------------------------
 	/// スケール
 	///------------------------------------------------------------------------
-
 	float scale = Random::Range(scaledist.min, scaledist.max);
-
-	/// 代入
-	particle.worldTransform_.scale_ = {
-		scale,
-		scale,
-		scale,
-	};
+	particle.worldTransform_.scale_ = { scale, scale, scale };
 
 	///------------------------------------------------------------------------
 	/// 色
 	///------------------------------------------------------------------------
-	Vector4 randomColor{
+	Vector4 randomColor = {
 		Random::Range(colorDist.min.x, colorDist.max.x),
 		Random::Range(colorDist.min.y, colorDist.max.y),
 		Random::Range(colorDist.min.z, colorDist.max.z),
 		0.0f
 	};
-	// 代入
+
 	particle.color_ = baseColor + randomColor;
 
-
-	/// 重力値
+	///------------------------------------------------------------------------
+	/// 重力
+	///------------------------------------------------------------------------
 	particle.gravity_ = gravity;
-
 
 	return particle;
 }
+
 
 ///======================================================================
 /// エミット
@@ -325,7 +329,7 @@ void ParticleManager::Emit(
 	const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
 	const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
 	const Vector3& baseRotate, const Vector3& baseRotateSpeed, const V3MinMax& RotateDist,
-	const V3MinMax& rotateSpeedDist, uint32_t count, const bool& isbillbord, const BlendMode& blendmode) {  // 新パラメータ追加
+	const V3MinMax& rotateSpeedDist, uint32_t count, const bool& isbillbord, const bool& isRotateforDirection, const BlendMode& blendmode) {  // 新パラメータ追加
 
 	// パーティクルグループが存在するか確認
 	assert(particleGroups_.find(name) != particleGroups_.end() && "Error: Not Find ParticleGroup");
@@ -341,7 +345,7 @@ void ParticleManager::Emit(
 		particles.emplace_back(MakeParticle(
 			basePosition, positionDist, scaledist, velocityDist, baseColor,
 			colorDist, lifeTime, gravity, baseRotate, baseRotateSpeed,
-			RotateDist, rotateSpeedDist));
+			RotateDist,rotateSpeedDist, isRotateforDirection));
 	}
 
 	// グループに追加
