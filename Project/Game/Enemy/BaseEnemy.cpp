@@ -169,7 +169,6 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 			DamageForPar(damageParm_);
 			ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
 		}
-
 		return;
 	}
 
@@ -180,9 +179,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 			
 			DamageForPar(damageParm_);
 			ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
-			
 		}
-
 		return;
 	}
 

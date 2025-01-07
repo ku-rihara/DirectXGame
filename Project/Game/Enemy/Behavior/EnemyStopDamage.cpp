@@ -1,4 +1,3 @@
-
 /// behavior
 #include"EnemyStopDamage.h"
 #include"EnemyChasePlayer.h"
@@ -8,7 +7,6 @@
 /// math
 #include"MathFunction.h"
 #include"Frame/Frame.h"
-
 
 //初期化
 EnemyStopDamage::EnemyStopDamage(BaseEnemy* boss)

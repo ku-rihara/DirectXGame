@@ -1,0 +1,85 @@
+{
+    "TrushParticle": {
+        "BaseColor": [
+            0.20588237047195435,
+            0.11764705926179886,
+            0.0,
+            0.0
+        ],
+        "Color Max": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Color Min": [
+            0.0235294122248888,
+            0.04313725605607033,
+            0.04313725605607033,
+            0.0
+        ],
+        "Gravity": 0.0,
+        "IntervalTime": 1.0,
+        "LifeTime": 0.800000011920929,
+        "Particle Count": 35,
+        "Position Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Position Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Position Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale Max": 2.299999952316284,
+        "Scale Min": 3.0,
+        "Velocity Max": [
+            5.0,
+            2.0,
+            5.0
+        ],
+        "Velocity Min": [
+            -5.0,
+            1.0,
+            -5.0
+        ],
+        "isMoveForRail": false,
+        "moveSpeed": 0.0
+    }
+}

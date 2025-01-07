@@ -10,7 +10,7 @@
 /// </summary>
 class TitleScene:public BaseScene {
 private:
-	std::string damageName_;
+	std::string thrustName_;
 	std::unique_ptr<ParticleEmitter>damageEmitter_;
 	
 public:
