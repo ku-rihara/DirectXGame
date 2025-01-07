@@ -41,8 +41,14 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	railManager_->SetRailMoveTime(0.0f);
 	railManager_->SetIsRoop(false);
 
+	///land
+	startEasing_.maxTime = 0.5f;
+	startEasing_.amplitude = 0.6f;
+	startEasing_.period = 0.2f;
+
 	// 振る舞い順序初期化
 	order_ = Order::UPPER;
+
 }
 
 ComboAttackThird::~ComboAttackThird() {
@@ -52,12 +58,16 @@ ComboAttackThird::~ComboAttackThird() {
 //更新
 void ComboAttackThird::Update() {
 
-
+	/// スケール変化
+	startEasing_.time += Frame::DeltaTimeRate();
+	startEasing_.time = std::min(startEasing_.time, startEasing_.maxTime);
+	pPlayer_->SetScale(EaseAmplitudeScale(Vector3::UnitVector(), startEasing_.time, startEasing_.maxTime,
+		startEasing_.amplitude, startEasing_.period));
 
 	switch (order_) {
 
 	case Order::UPPER:
-
+		
 		///----------------------------------------------------
 		/// アッパー
 		///----------------------------------------------------

@@ -38,6 +38,11 @@ ComboAttackSecond::ComboAttackSecond(Player* player)
 	lHandStartPos_ = pPlayer_->GetLeftHand()->GetTransform().translation_;
 	lHandTargetPos_ = pPlayer_->GetLeftHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayer_->GetPunchReach(Player::SECOND);
 
+	///land
+	startEasing_.maxTime = 0.5f;
+	startEasing_.amplitude = 0.6f;
+	startEasing_.period = 0.2f;
+
 	// 振る舞い順序初期化
 	order_ = Order::PUNCH;
 }
@@ -49,11 +54,18 @@ ComboAttackSecond::~ComboAttackSecond() {
 //更新
 void ComboAttackSecond::Update() {
 
-	
+	/// スケール変化
+	startEasing_.time += Frame::DeltaTimeRate();
+	startEasing_.time = std::min(startEasing_.time, startEasing_.maxTime);
+	pPlayer_->SetScale(EaseAmplitudeScale(Vector3::UnitVector(), startEasing_.time, startEasing_.maxTime,
+		startEasing_.amplitude, startEasing_.period));
+
+
 
 	switch (order_) {
 
 	case Order::PUNCH:
+
 		///----------------------------------------------------
 		/// パンチ
 		///----------------------------------------------------

@@ -66,7 +66,7 @@ void SceneManager::ChangeScene(const std::string& scenemane) {
 
 	// 次のシーンを生成
 	nextScene_ = std::unique_ptr<BaseScene>(sceneFactory_->CreateScene(scenemane));
-
+	nextScene_->Init();
 	//パーティクルリセット
 	ParticleManager::GetInstance()->ResetAllParticles();
 	//// グローバル変数の読み込み

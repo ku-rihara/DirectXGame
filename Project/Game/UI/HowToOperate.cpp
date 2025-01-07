@@ -8,7 +8,7 @@ void HowToOperate::Init() {
 	
 	sprite_.reset(Sprite::Create(handle, {}, { 1,1,1,1 }));
 	sprite_->anchorPoint_ = { 0.5f,0.5f };
-	position_ = { 50,50 };
+	position_ = { 1033,509 };
 }
 
 void HowToOperate::Update() {

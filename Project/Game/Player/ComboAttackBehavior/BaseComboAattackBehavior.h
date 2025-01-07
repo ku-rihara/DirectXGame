@@ -1,8 +1,8 @@
 #pragma once
 
 #include<string>
-
 #include<memory>
+#include"Easing.h"
 
 class Player;
 class BaseComboAattackBehavior {
@@ -12,6 +12,9 @@ protected:
 	Player* pPlayer_ = nullptr; /// プレイヤー
 
 	bool isNextCombo_;
+
+	Easing startEasing_;
+	
 
 public:
 

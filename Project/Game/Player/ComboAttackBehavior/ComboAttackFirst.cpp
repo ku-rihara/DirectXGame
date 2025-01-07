@@ -38,6 +38,10 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	speed_ = pPlayer_->GetRushDistance();
 	waitTine_ = 0.0f;
 	
+	///land
+	startEasing_.maxTime = 0.5f;
+	startEasing_.amplitude = 0.6f;
+	startEasing_.period = 0.2f;
 
 	// 振る舞い順序初期化
 	order_ = Order::RUSH;
@@ -49,10 +53,18 @@ ComboAttackFirst::~ComboAttackFirst() {
 
 //更新
 void ComboAttackFirst::Update() {
+	/// スケール変化
+	startEasing_.time += Frame::DeltaTimeRate();
+	startEasing_.time = std::min(startEasing_.time, startEasing_.maxTime);
+	pPlayer_->SetScale(EaseAmplitudeScale(Vector3::UnitVector(), startEasing_.time, startEasing_.maxTime,
+		startEasing_.amplitude, startEasing_.period));
+
+
 	switch (order_) {
 
 	case Order::RUSH:
 
+		
 		///----------------------------------------------------
 		/// 突進
 		///----------------------------------------------------

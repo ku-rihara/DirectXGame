@@ -40,7 +40,7 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	/// モデルセット
 	BaseObject::CreateModel("axis",".obj");
 
-	HPMax_ = 80.0f;
+	HPMax_ = 105.0f;
 	hp_ = HPMax_;
 	hpbarSize_ = { HPMax_ ,90};
 	
@@ -56,7 +56,7 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	/// particleT
 	thrustName_ = "TrushParticle";
 	thrustEmit_.reset(ParticleEmitter::CreateParticle(thrustName_, "Stick",".obj", 200, false));
-	
+	thrustEmit_->SetBlendMode(BlendMode::None);
 	thrustEmit_->SetIsBillBord(false);
 	thrustEmit_->SetIsRotateForDirection(true);
 
