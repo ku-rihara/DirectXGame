@@ -37,7 +37,7 @@ void Player::Init() {
 
 	///* model生成
 	BaseObject::Init();	// 基底クラスの初期化 
-	BaseObject::CreateModel("cube",".obj");/// モデルセット
+	BaseObject::CreateModel("Player",".obj");/// モデルセット
 	fallParticleName_ = "fallParticle";
 
 	///* グローバルパラメータ

@@ -2,7 +2,7 @@
 #include "TitleScene.h"
 #include"Manager/SceneManager.h"
 #include"utility/Particle/ParticleManager.h"
-
+#include"utility/Particle/ParticleCommon.h"
 
 #include "base/TextureManager.h"
 //class
@@ -22,10 +22,9 @@ void TitleScene::Init() {
 	BaseScene::Init();
 
 	thrustName_ = "TrushParticle";
-	damageEmitter_.reset(ParticleEmitter::CreateParticle(thrustName_, "Plane", ".obj", 200, false));
-	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
-	damageEmitter_->SetTextureHandle(handle);
-	
+	damageEmitter_.reset(ParticleEmitter::CreateParticle(thrustName_, "cube", ".obj", 200, false));
+	damageEmitter_->SetBlendMode(BlendMode::None);
+	damageEmitter_->SetIsBillBord(false);
 }
 
 void TitleScene::Update() {
