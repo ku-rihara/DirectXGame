@@ -14,7 +14,7 @@ void PlayerHandLeft::Init() {
 	groupName_      = "LeftHand";
 	railGroupName_ = "ThrustRail";
 
-	BaseObject::CreateModel("cube", ".obj");/// モデルセット
+	BaseObject::CreateModel("LHand", ".obj");/// モデルセット
 	BasePlayerHand::Init();
 
 
