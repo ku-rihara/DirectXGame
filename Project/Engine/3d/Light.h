@@ -38,4 +38,8 @@ public:
 	ID3D12Resource* GetCameraForGPUResource()const { return cameraForGPUResource_.Get(); }
 	ID3D12Resource* GetPointLightResource()const { return pointLightResource_.Get(); }
 	ID3D12Resource* GetSpotLightResource()const { return spotLightResource_.Get(); }
+
+	void SetPointLightPos(const Vector3& pos);
+	void SetSpotLightPos(const Vector3& pos);
+	void SetWorldCameraPos(const Vector3& pos);
 };

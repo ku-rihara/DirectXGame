@@ -83,3 +83,14 @@ void Light::DebugImGui() {
 	/*ImGui::End();*/
 }
 #endif
+
+void Light::SetPointLightPos(const Vector3& pos) {
+	pointLightData_->position = pos;
+}
+void Light::SetSpotLightPos(const Vector3& pos) {
+	spotLightData_->position = pos;
+}
+
+void Light::SetWorldCameraPos(const Vector3& pos) {
+	cameraForGPUData_->worldPosition_ = pos;
+}
