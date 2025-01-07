@@ -27,6 +27,8 @@ EnemyThrustDamage::EnemyThrustDamage(BaseEnemy* boss)
 	hitStopTime_ = 0.0f;
 	kHitStopTime_ = 0.05f;
 
+	pBaseEnemy_->DamageEmit();
+
 	step_ = Step::DIRECTIONSET; /// ステップ初期化
 }
 

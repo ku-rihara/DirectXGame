@@ -35,7 +35,7 @@ private:
 	
 	bool isDraw = true;
 
-	
+	Vector3 lightPos_;
 
 	uint32_t defaultHandle_;
 	uint32_t circleHandle_;

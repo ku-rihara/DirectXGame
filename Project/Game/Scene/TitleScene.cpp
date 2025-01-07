@@ -1,7 +1,7 @@
 ///scene
 #include "TitleScene.h"
 #include"Manager/SceneManager.h"
-
+#include"utility/Particle/ParticleManager.h"
 
 
 #include "base/TextureManager.h"
@@ -21,20 +21,21 @@ void TitleScene::Init() {
 
 	BaseScene::Init();
 
-	ctest1_ = std::make_unique<CollisionTest1>();
-	ctest2_ = std::make_unique<CollisionTest2>();
-	ctest3_ = std::make_unique<CollisionTest3>();
-
-	ctest1_->Init();
-	ctest2_->Init();
-	ctest3_->Init();
+	damageName_ = "DamageParticle";
+	damageEmitter_.reset(ParticleEmitter::CreateParticle(damageName_, "Plane", ".obj", 200, false));
+	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
+	damageEmitter_->SetTextureHandle(handle);
+	
 }
 
 void TitleScene::Update() {
+	damageEmitter_->Update();
+	damageEmitter_->EditorUpdate();
+	
 
-	ctest1_->Update();
-	ctest2_->Update();
-	ctest3_->Update();
+	damageEmitter_->Emit();
+	
+	ParticleManager::GetInstance()->Update(&viewProjection_);
 
 	Debug();
 	ViewProjectionUpdate();
@@ -59,7 +60,7 @@ void TitleScene::ModelDraw() {
    /// パーティクル描画
    /// ===================================================
 void TitleScene::ParticleDraw() {
-	
+
 }
 
 /// ===================================================

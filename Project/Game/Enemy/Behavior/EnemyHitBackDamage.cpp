@@ -22,6 +22,8 @@ EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
 	easing_.time = 0.0f;
 	easing_.maxTime = 0.01f;
 
+	pBaseEnemy_->DamageEmit();
+
 	step_ = Step::DIRECTIONSET; /// ステップ初期化
 }
 

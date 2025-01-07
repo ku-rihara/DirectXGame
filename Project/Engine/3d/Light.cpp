@@ -40,9 +40,9 @@ void Light::Init() {
 	spotLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&spotLightData_));
 	//パラメータ設定
 	spotLightData_->color = { 0.4f,1.0f,0.7f,1.0f };
-	spotLightData_->position = { 2.0f,9.25f,0.0f };
+	spotLightData_->position = { 2.0f,0.25f,0.0f };
 	spotLightData_->distance = 9.0f;
-	spotLightData_->direction = Vector3::Normalize({ -1.0f,-1.0f,0.0f });
+	spotLightData_->direction = Vector3::Normalize({ 0.0f,-1.0f,0.0f });
 	spotLightData_->intensity = 9.0f;
 	spotLightData_->decay = 3.0f;
 	spotLightData_->cosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);

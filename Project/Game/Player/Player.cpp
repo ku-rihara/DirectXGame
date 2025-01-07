@@ -46,7 +46,7 @@ void Player::Init() {
 	AddParmGroup();
 	ApplyGlobalParameter();
 	
-	obj3d_->material_.materialData_->enableLighting = 4;
+	obj3d_->material_.materialData_->enableLighting = 3;
 
 	///* 武器生成
 	leftHand_ = std::make_unique<PlayerHandLeft>();
@@ -63,8 +63,7 @@ void Player::Init() {
 	rightHand_->SetRailParent(&transform_);
 	leftHand_->SetRailParent(&transform_);
 
-	fallEmitter_.reset(ParticleEmitter::CreateParticle("fallParticle", "DebugSphere", ".obj", 300, false));
-	
+	fallEmitter_.reset(ParticleEmitter::CreateParticle(fallParticleName_, "DebugSphere", ".obj", 300, false));
 	fallEmitter_->SetBlendMode(BlendMode::None);
 
 	/// 通常モードから

@@ -25,6 +25,9 @@ protected:
 
 	Easing spawnEasing_;
 
+	std::string damageName_;
+	std::unique_ptr<ParticleEmitter>damageEmitter_;
+
 	/// behavior
 	std::unique_ptr<BaseEnemyBehaivor>behavior_ = nullptr;
 
@@ -46,6 +49,8 @@ public:
 	virtual void Update();
 	virtual void Draw(const ViewProjection& viewProjection);
 	virtual void SpriteDraw(const ViewProjection& viewProjection);
+
+	void DamageEmit();
 	
 	Vector3 GetDirectionToTarget(const Vector3&target);
 

@@ -17,6 +17,8 @@ EnemyStopDamage::EnemyStopDamage(BaseEnemy* boss)
 	// 赤色
 	pBaseEnemy_->SetColor(Vector4(0.9f, 0, 0, 0.9f));
 	kStopTime_ = 1.0f;
+
+	pBaseEnemy_->DamageEmit();
 }
 
 EnemyStopDamage::~EnemyStopDamage() {

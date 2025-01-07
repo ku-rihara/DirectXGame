@@ -18,6 +18,8 @@ EnemyBoundDamage::EnemyBoundDamage(BaseEnemy* boss)
 	gravity_ = 8.8f;
 	fallSpeedLimit_ = -5.2f;
 
+	pBaseEnemy_->DamageEmit();
+
 	step_ = Step::BOUND; /// ステップ初期化
 }
 

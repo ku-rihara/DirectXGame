@@ -52,6 +52,12 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	spawnEasing_.maxTime = 0.8f;
 	transform_.scale_ = Vector3::ZeroVector();
 
+	/// particle
+	damageName_ = "DamageParticle";
+	damageEmitter_.reset(ParticleEmitter::CreateParticle(damageName_, "Plane", ".obj", 300, false));
+	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
+	damageEmitter_->SetTextureHandle(handle);
+
 	ChangeBehavior(std::make_unique<EnemyChasePlayer>(this));/// 追っかけ
 }
 
@@ -68,6 +74,10 @@ void BaseEnemy::Update() {
 		spawnEasing_.time, spawnEasing_.maxTime);
 
 	behavior_->Update();
+
+	damageEmitter_->SetTargetPosition(GetWorldPosition());
+	damageEmitter_->Update();
+	
 	
 	// 体力がなくなったら死亡
 	if (hp_ <= 0) {
@@ -133,8 +143,9 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 	if (dynamic_cast<PunchCollisionBox*>(other)) {
 
 		if (!dynamic_cast<EnemyHitBackDamage*>(behavior_.get())) {
-			ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
+		
 			DamageForPar(damageParm_);
+			ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
 		}
 		return;
 	}
@@ -143,8 +154,9 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 	if (dynamic_cast<UpperCollisionBox*>(other)) {
 
 		if (!dynamic_cast<EnemyUpperDamage*>(behavior_.get())) {
-			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
+		
 			DamageForPar(damageParm_);
+			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 		}
 		return;
 	}
@@ -153,8 +165,9 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 	if (dynamic_cast<StopCollisionBox*>(other)) {
 
 		if (!dynamic_cast<EnemyStopDamage*>(behavior_.get())) {
-			ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
+		
 			DamageForPar(damageParm_);
+			ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
 		}
 
 		return;
@@ -164,8 +177,10 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 	if (dynamic_cast<ThrustCollisionBox*>(other)) {
 
 		if (!dynamic_cast<EnemyThrustDamage*>(behavior_.get())) {
-			ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
+			
 			DamageForPar(damageParm_);
+			ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
+			
 		}
 
 		return;
@@ -175,8 +190,9 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 	if (dynamic_cast<FallCollisionBox*>(other)) {
 
 		if (!dynamic_cast<EnemyUpperDamage*>(behavior_.get())) {
-			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
+		
 			DamageForPar(damageParm_);
+			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 		}
 
 		return;
@@ -186,8 +202,11 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 	if (dynamic_cast<RushCollisionBox*>(other)) {
 
 		if (!dynamic_cast<EnemyBoundDamage*>(behavior_.get())) {
-			ChangeBehavior(std::make_unique<EnemyBoundDamage>(this));
+		
 			DamageForPar(damageParm_);
+			ChangeBehavior(std::make_unique<EnemyBoundDamage>(this));
+			
+			
 		}
 
 		return;
@@ -249,4 +268,8 @@ void BaseEnemy::DamageForPar(const float& par) {
 	//	//DeathMethod();
 	//	//HP_ = 0.0f;
 	//}
+}
+
+void BaseEnemy::DamageEmit() {
+	damageEmitter_->Emit();
 }
