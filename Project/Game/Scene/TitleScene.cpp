@@ -21,10 +21,19 @@ void TitleScene::Init() {
 
 	BaseScene::Init();
 
-	
+	/*/// particleD
+	damageName_ = "DamageParticle";
+	damageEmitter_.reset(ParticleEmitter::CreateParticle(damageName_, "Plane", ".obj", 300, false));
+	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
+	damageEmitter_->SetTextureHandle(handle);
+	*/
 }
 
 void TitleScene::Update() {
+	
+	/*damageEmitter_->Update();
+	damageEmitter_->EditorUpdate();
+	damageEmitter_->Emit();*/
 	
 	
 	ParticleManager::GetInstance()->Update(&viewProjection_);
@@ -52,7 +61,7 @@ void TitleScene::ModelDraw() {
    /// パーティクル描画
    /// ===================================================
 void TitleScene::ParticleDraw() {
-	/*ParticleManager::GetInstance()->Draw(viewProjection_);*/
+	ParticleManager::GetInstance()->Draw(viewProjection_);
 }
 
 /// ===================================================

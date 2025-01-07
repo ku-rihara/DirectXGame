@@ -5,6 +5,8 @@
 ///========================================================
 void NormalEnemy::Init(const Vector3& spownPos) {
 	BaseEnemy::Init(spownPos);
+	/// モデルセット
+	BaseObject::CreateModel("NormalEnemy", ".obj");
 	damageParm_ = 0.2f;
 }
 

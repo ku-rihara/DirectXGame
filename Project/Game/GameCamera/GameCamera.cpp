@@ -15,8 +15,8 @@
 void GameCamera::Init() {
 	viewprojection_.Init();
 
-	rotate_ = 5.6f;
-	offset_ = { 0,11,-36.0f };
+	rotate_ = 8.9f;
+	offset_ = { 0,17,-47.0f };
 }
 
 void GameCamera::Update() {
@@ -37,24 +37,24 @@ void GameCamera::MoveUpdate() {
 	///----------------------------------------------------------------------------------
 	///kyebord
 	///---------------------------------------------------------------------------------- 
-	if (input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT)) {
+	//if (input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT)) {
 
-		if (input->PushKey(DIK_RIGHT)) {
-			stickInput_.x = 1.0f;
-		}
-		else if (input->PushKey(DIK_LEFT)) {
-			stickInput_.x = -1.0f;
-		}
-	}
-	else  if (Input::GetInstance()->GetJoystickState(0, joyState)) {
-		///---------------------------------------------------------------------------------- 
-		///pad
-		///----------------------------------------------------------------------------------  
+	//	if (input->PushKey(DIK_RIGHT)) {
+	//		stickInput_.x = 1.0f;
+	//	}
+	//	else if (input->PushKey(DIK_LEFT)) {
+	//		stickInput_.x = -1.0f;
+	//	}
+	//}
+	//else  if (Input::GetInstance()->GetJoystickState(0, joyState)) {
+	//	///---------------------------------------------------------------------------------- 
+	//	///pad
+	//	///----------------------------------------------------------------------------------  
 
-		// スティックの入力を正規化して回転角度を決定
-		stickInput_ = { (float)joyState.Gamepad.sThumbRX / SHRT_MAX, (float)joyState.Gamepad.sThumbRY / SHRT_MAX, 0.0f };
+	//	// スティックの入力を正規化して回転角度を決定
+	//	stickInput_ = { (float)joyState.Gamepad.sThumbRX / SHRT_MAX, (float)joyState.Gamepad.sThumbRY / SHRT_MAX, 0.0f };
 
-	}
+	//}
 	// tekiou 
 	if ((stickInput_).Length() > 0.1f) {
 		stickInput_ = (stickInput_).Normalize();

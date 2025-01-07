@@ -37,8 +37,7 @@ BaseEnemy::BaseEnemy() {
 void BaseEnemy::Init(const Vector3& spownPos) {
 	// 基底クラスの初期化
 	BaseObject::Init();
-	/// モデルセット
-	BaseObject::CreateModel("axis",".obj");
+	
 
 	HPMax_ = 105.0f;
 	hp_ = HPMax_;

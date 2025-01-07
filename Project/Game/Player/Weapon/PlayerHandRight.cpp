@@ -51,8 +51,6 @@ void PlayerHandRight::RailForthComboUpdate(const float& speed) {
 ///==========================================================
 void PlayerHandRight::Draw(const ViewProjection& viewProjection) {
 	BasePlayerHand::Draw(viewProjection);
-	stopPunchRailManager_->Draw(viewProjection);
-
 }
 
 void PlayerHandRight::AdjustParm() {

@@ -17,7 +17,7 @@
                             {
                                 "enemyType": "NormalEnemy",
                                 "position": {
-                                    "x": 8.300000190734863,
+                                    "x": 23.899999618530273,
                                     "y": 0.0,
                                     "z": 0.0
                                 }
@@ -32,7 +32,7 @@
                                 "position": {
                                     "x": 0.0,
                                     "y": 0.0,
-                                    "z": 6.400000095367432
+                                    "z": 22.399999618530273
                                 }
                             }
                         ]
@@ -43,30 +43,14 @@
             {
                 "spawns": [
                     {
-                        "spawnTime": 1.0,
+                        "spawnTime": 1.399999976158142,
                         "spownEnemies": [
-                            {
-                                "enemyType": "StrongEnemy",
-                                "position": {
-                                    "x": -5.0,
-                                    "y": 0.0,
-                                    "z": 0.0
-                                }
-                            },
-                            {
-                                "enemyType": "StrongEnemy",
-                                "position": {
-                                    "x": 0.0,
-                                    "y": 0.0,
-                                    "z": 0.0
-                                }
-                            },
                             {
                                 "enemyType": "StrongEnemy",
                                 "position": {
                                     "x": 6.699999809265137,
                                     "y": 0.0,
-                                    "z": 0.0
+                                    "z": 17.299999237060547
                                 }
                             },
                             {
@@ -74,13 +58,13 @@
                                 "position": {
                                     "x": 0.0,
                                     "y": 0.0,
-                                    "z": 5.0
+                                    "z": -10.100000381469727
                                 }
                             }
                         ]
                     },
                     {
-                        "spawnTime": 7.199999809265137,
+                        "spawnTime": 4.699999809265137,
                         "spownEnemies": [
                             {
                                 "enemyType": "NormalEnemy",
@@ -89,19 +73,137 @@
                                     "y": 0.0,
                                     "z": -11.899999618530273
                                 }
-                            },
-                            {
-                                "enemyType": "NormalEnemy",
-                                "position": {
-                                    "x": -18.200000762939453,
-                                    "y": 0.0,
-                                    "z": 0.0
-                                }
                             }
                         ]
                     }
                 ],
                 "startTime": 10.354000091552734
+            },
+            {
+                "spawns": [
+                    {
+                        "spawnTime": 2.0,
+                        "spownEnemies": [
+                            {
+                                "enemyType": "StrongEnemy",
+                                "position": {
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 5.800000190734863
+                                }
+                            },
+                            {
+                                "enemyType": "StrongEnemy",
+                                "position": {
+                                    "x": -6.199999809265137,
+                                    "y": 0.0,
+                                    "z": 5.800000190734863
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "startTime": 16.840999603271484
+            },
+            {
+                "spawns": [
+                    {
+                        "spawnTime": 2.0,
+                        "spownEnemies": [
+                            {
+                                "enemyType": "NormalEnemy",
+                                "position": {
+                                    "x": -39.900001525878906,
+                                    "y": 0.0,
+                                    "z": -14.800000190734863
+                                }
+                            },
+                            {
+                                "enemyType": "NormalEnemy",
+                                "position": {
+                                    "x": 48.29999923706055,
+                                    "y": 0.0,
+                                    "z": -28.600000381469727
+                                }
+                            },
+                            {
+                                "enemyType": "StrongEnemy",
+                                "position": {
+                                    "x": -6.800000190734863,
+                                    "y": 0.0,
+                                    "z": -20.799999237060547
+                                }
+                            },
+                            {
+                                "enemyType": "StrongEnemy",
+                                "position": {
+                                    "x": 4.199999809265137,
+                                    "y": 0.0,
+                                    "z": 24.100000381469727
+                                }
+                            },
+                            {
+                                "enemyType": "StrongEnemy",
+                                "position": {
+                                    "x": -7.5,
+                                    "y": 0.0,
+                                    "z": 29.799999237060547
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "startTime": 20.179000854492188
+            },
+            {
+                "spawns": [
+                    {
+                        "spawnTime": 2.0,
+                        "spownEnemies": [
+                            {
+                                "enemyType": "NormalEnemy",
+                                "position": {
+                                    "x": -20.799999237060547,
+                                    "y": 0.0,
+                                    "z": -6.199999809265137
+                                }
+                            },
+                            {
+                                "enemyType": "NormalEnemy",
+                                "position": {
+                                    "x": -7.900000095367432,
+                                    "y": 0.0,
+                                    "z": 22.5
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "spawnTime": 7.0,
+                        "spownEnemies": [
+                            {
+                                "enemyType": "StrongEnemy",
+                                "position": {
+                                    "x": -33.29999923706055,
+                                    "y": 0.0,
+                                    "z": 15.800000190734863
+                                }
+                            },
+                            {
+                                "enemyType": "StrongEnemy",
+                                "position": {
+                                    "x": 38.099998474121094,
+                                    "y": 0.0,
+                                    "z": -49.0
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "spawnTime": 2.0
+                    }
+                ],
+                "startTime": 40.42300033569336
             }
         ]
     },

@@ -41,7 +41,7 @@ void PlayerHandLeft::RailForthComboUpdate(const float& speed) {
 ///==========================================================
 void PlayerHandLeft::Draw(const ViewProjection& viewProjection) {
 	BasePlayerHand::Draw(viewProjection);
-	trustRailManager_->Draw(viewProjection);
+	
 }
 
 ///=====================================================
