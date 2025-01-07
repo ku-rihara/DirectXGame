@@ -30,6 +30,7 @@ void BasePlayerHand::Update() {
 	// エミッター更新
 	emitter_->SetTargetPosition(GetWorldPosition());
 	emitter_->Update();
+	emitter_->EditorUpdate();
 	emitter_->Emit();
 
 	BaseObject::Update();
