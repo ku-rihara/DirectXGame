@@ -28,6 +28,7 @@ void GameScene::Init() {
 	gamecamera_ = std::make_unique<GameCamera>();
 	enemyManager_ = std::make_unique<EnemyManager>();
 	skydome_= std::make_unique<Skydome>();
+	howToOperate_ = std::make_unique<HowToOperate>();
 
 	///=======================================================================================
 	/// 初期化
@@ -38,10 +39,9 @@ void GameScene::Init() {
 	lockOn_->Init();
 	enemyManager_->Init();
 	gamecamera_->Init();
-
+	howToOperate_->Init();
 
 	viewProjection_.Init();//ビュープロジェクション
-
 
 	gamecamera_->SetTarget(&player_->GetTransform());
 	enemyManager_->SetPlayer(player_.get());
@@ -60,6 +60,7 @@ void GameScene::Update() {
 	//各クラス更新
 	player_->Update();
 	skydome_->Update();
+	howToOperate_->Update();
 	field_->Update();
 	enemyManager_->Update(viewProjection_);
 	gamecamera_->Update();
@@ -90,6 +91,7 @@ void GameScene::ModelDraw() {
 		field_->Draw(viewProjection_);
 		enemyManager_->Draw(viewProjection_);
 		player_->Draw(viewProjection_);
+		
 	}
 }
 
@@ -106,6 +108,7 @@ void GameScene::ParticleDraw() {
 void GameScene::SpriteDraw() {
 	enemyManager_->SpriteDraw(viewProjection_);
 	lockOn_->Draw();
+	howToOperate_->Draw();
 }
 
 void GameScene::Debug() {
@@ -116,6 +119,7 @@ void GameScene::Debug() {
 
 	enemyManager_->ImGuiUpdate();
 	Light::GetInstance()->DebugImGui();
+	howToOperate_->Debug();
 	
 
 	ImGui::Begin("ParamaterEditor");

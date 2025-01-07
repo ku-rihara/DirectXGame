@@ -10,7 +10,7 @@
 #include"LockOn/LockOn.h"
 #include"GameCamera/GameCamera.h"
 #include"Enemy/EnemyManager.h"
-
+#include"UI/HowToOperate.h"
 
 
 
@@ -24,7 +24,6 @@ private:
 	/// Private variants
 	///========================================================
 
-	
 	///* objects
 	std::unique_ptr<GameCamera> gamecamera_ = nullptr;
 	std::unique_ptr<Field> field_ = nullptr;
@@ -32,6 +31,7 @@ private:
 	std::unique_ptr<Player> player_ = nullptr;
 	std::unique_ptr<Skydome> skydome_ = nullptr;
 	std::unique_ptr<EnemyManager>enemyManager_ = nullptr;
+	std::unique_ptr<HowToOperate>howToOperate_ = nullptr;
 	
 	bool isDraw = true;
 
@@ -40,8 +40,6 @@ private:
 	uint32_t defaultHandle_;
 	uint32_t circleHandle_;
 	uint32_t uv_;
-
-	
 
 public:
 	

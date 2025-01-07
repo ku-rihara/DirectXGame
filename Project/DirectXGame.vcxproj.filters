@@ -181,6 +181,12 @@
     <Filter Include="Game\Effect">
       <UniqueIdentifier>{a3d6f1f9-88f4-4eb5-8164-d190b53188e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\UI">
+      <UniqueIdentifier>{87049752-476b-4d24-840f-3b5ba8a3170f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\UI\HowToOperate">
+      <UniqueIdentifier>{eba982c5-fc14-4c04-b2b6-bbbd2cc2b653}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -477,6 +483,9 @@
     </ClCompile>
     <ClCompile Include="Game\Effect\Effect.cpp">
       <Filter>Game\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\HowToOperate.cpp">
+      <Filter>Game\UI\HowToOperate</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -821,6 +830,9 @@
     </ClInclude>
     <ClInclude Include="Game\Effect\Effect.h">
       <Filter>Game\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\HowToOperate.h">
+      <Filter>Game\UI\HowToOperate</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
