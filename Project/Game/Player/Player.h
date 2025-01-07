@@ -4,6 +4,7 @@
 
 //object
 #include"BaseObject/BaseObject.h"
+#include"Effect/Effect.h"
 
 /// Weapon
 #include"Weapon/PlayerHandLeft.h"
@@ -61,7 +62,8 @@ private:
 	LockOn* pLockOn_;                            /// LockOnクラス 
 	std::unique_ptr<PlayerHandLeft>leftHand_;    /// 左手
 	std::unique_ptr<PlayerHandRight>rightHand_;  /// 右手
-	
+	std::list<std::unique_ptr<Effect>> effects_;
+
 	/// move
 	float objectiveAngle_;                       /// 目標角度
 	Vector3 direction_;                          /// 速度
@@ -124,7 +126,8 @@ public:
 	void ChangeBehavior(std::unique_ptr<BasePlayerBehavior>behavior);
 	void ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior>behavior);
 
-
+	void FallEffectUpdate();
+	void FallEffectInit(const Vector3& pos);
 	void AdjustParm();                      /// デバッグ
 	void SetLockOn(LockOn* lockon);    /// ロックオンクラスをセット
 	

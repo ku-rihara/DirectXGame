@@ -63,7 +63,7 @@ void Player::Init() {
 	rightHand_->SetRailParent(&transform_);
 	leftHand_->SetRailParent(&transform_);
 
-	fallEmitter_.reset(ParticleEmitter::CreateParticle("fallParticle", "DebugSphere", ".obj", 200, false));
+	fallEmitter_.reset(ParticleEmitter::CreateParticle("fallParticle", "DebugSphere", ".obj", 300, false));
 	
 	fallEmitter_->SetBlendMode(BlendMode::None);
 
@@ -79,6 +79,7 @@ void Player::Update() {
 	prePos_ = GetWorldPosition();// 前フレームの座標
 	fallEmitter_->SetTargetPosition(GetWorldPosition());
 	fallEmitter_->Update();
+	fallEmitter_->EditorUpdate();
 
 	DamageRendition();        /// ダメージエフェクト
 
@@ -90,7 +91,7 @@ void Player::Update() {
 
 	comboBehavior_->Update();	  ///　コンボ攻撃攻撃
 	MoveToLimit();                ///　移動制限
-	//Fall();                     /// 落ちる
+	FallEffectUpdate();
 
 	/// 行列更新
 	leftHand_->Update();
@@ -103,6 +104,15 @@ void Player::Update() {
 ///　描画
 ///==========================================================
 void Player::Draw(const ViewProjection& viewProjection) {
+
+	// 各エフェクトを更新
+	effects_.reverse();
+	for (std::unique_ptr<Effect>& effect : effects_) {
+		if (effect) {
+			effect->Draw(viewProjection);
+		}
+	}
+	effects_.reverse();
 
 	BaseObject::Draw(viewProjection);
 	leftHand_->Draw(viewProjection);
@@ -452,14 +462,25 @@ void Player::AdjustParm() {
 #endif // _DEBUG
 }
 
-//Vector3 Player::GetCenterPosition() const {
-//
-//	const Vector3 offset = { 0.0f, 1.0f, 0.0f };//ローカル座標のオフセット
-//	// ワールド座標に変換
-//	Vector3 worldPos = Transformation(offset, transform_.matWorld_);
-//
-//	return worldPos;
-//};
+void Player::FallEffectInit(const Vector3& pos) {
+	std::unique_ptr<Effect> effect = std::make_unique<Effect>();
+
+	effect->Init(pos);
+
+	effects_.push_back(std::move(effect));
+}
+
+
+void Player::FallEffectUpdate() {
+	// 各エフェクトを更新
+	for (std::unique_ptr<Effect>& effect : effects_) {
+		if (effect) {
+			effect->Update();
+		}
+	}
+	// 完了したエフェクトを消す
+	effects_.erase(std::remove_if(effects_.begin(), effects_.end(), [](const std::unique_ptr<Effect>& effect) { return effect->IsFinished(); }), effects_.end());
+}
 
 ///=========================================================
 /// ダメージ受ける
