@@ -16,6 +16,7 @@ void KTGame::Init() {
 	// タイトルから始める
 	pSceneManager_ = SceneManager::GetInstance();
 	pSceneManager_->SetSceneFactory(sceneFactory_.get());
+	pSceneManager_->ChangeScene("GAMEPLAY");
 	pSceneManager_->ChangeScene("TITLE");
 }
 

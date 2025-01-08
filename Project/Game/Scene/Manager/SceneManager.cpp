@@ -1,5 +1,6 @@
 #include "SceneManager.h"
 #include"utility/Particle/ParticleManager.h"
+#include"utility/Editor/GlobalParameter.h"
 #include <cassert>
 
 // シングルトンインスタンスの取得
@@ -17,11 +18,11 @@ SceneManager::~SceneManager() {
 ///==============================================
 void SceneManager::Update() {
 
-	// 次のシーンが設定されている場合
-	if (nextScene_) {
-		scene_ = std::move(nextScene_);
-		scene_->Init();
-	}
+	//// 次のシーンが設定されている場合
+	//if (nextScene_) {
+	//	scene_ = std::move(nextScene_);
+	//	scene_->Init();
+	//}
 
 	// 現在のシーンを更新
 	if (scene_) {
@@ -65,8 +66,10 @@ void SceneManager::ChangeScene(const std::string& scenemane) {
 
 	// 次のシーンを生成
 	nextScene_ = std::unique_ptr<BaseScene>(sceneFactory_->CreateScene(scenemane));
-
+	scene_ = std::move(nextScene_);
+	scene_->Init();
 	//パーティクルリセット
 	ParticleManager::GetInstance()->ResetAllParticles();
-
+	//// グローバル変数の読み込み
+	GlobalParameter::GetInstance()->LoadFiles();
 }
