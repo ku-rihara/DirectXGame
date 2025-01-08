@@ -18,11 +18,11 @@ SceneManager::~SceneManager() {
 ///==============================================
 void SceneManager::Update() {
 
-	// 次のシーンが設定されている場合
-	if (nextScene_) {
-		scene_ = std::move(nextScene_);
-		scene_->Init();
-	}
+	//// 次のシーンが設定されている場合
+	//if (nextScene_) {
+	//	scene_ = std::move(nextScene_);
+	//	scene_->Init();
+	//}
 
 	// 現在のシーンを更新
 	if (scene_) {
