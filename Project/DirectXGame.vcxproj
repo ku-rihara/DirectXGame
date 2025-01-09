@@ -67,6 +67,7 @@
     <ClCompile Include="math\Matrix3x3.cpp" />
     <ClCompile Include="math\Matrix4x4.cpp" />
     <ClCompile Include="math\random.cpp" />
+    <ClCompile Include="math\Shake.cpp" />
     <ClCompile Include="math\Vector3.cpp" />
     <ClCompile Include="math\Vector4.cpp" />
   </ItemGroup>
@@ -141,6 +142,7 @@
     <ClInclude Include="math\Matrix4x4.h" />
     <ClInclude Include="math\MinMax.h" />
     <ClInclude Include="math\random.h" />
+    <ClInclude Include="math\Shake.h" />
     <ClInclude Include="math\Vector2.h" />
     <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="math\Vector4.h" />

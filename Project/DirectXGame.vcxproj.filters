@@ -295,6 +295,9 @@
     <ClCompile Include="Engine\utility\Editor\Rail.cpp">
       <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
+    <ClCompile Include="math\Shake.cpp">
+      <Filter>liberary\.cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -515,6 +518,9 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\Editor\Rail.h">
       <Filter>MyEngine\.h\utility\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Shake.h">
+      <Filter>liberary\.h</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
