@@ -1,4 +1,5 @@
 #include "Audio.h"
+#include<fstream>
 #include<assert.h>
 
 #pragma comment(lib,"xaudio2.lib")
@@ -16,73 +17,97 @@ void Audio::Init() {
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
 }
 
-int Audio::SoundLoadWave(const char* filename) {
-	//ファイルオープン------------------------
-	std::ifstream file;
-	file.open(filename, std::ios_base::binary);
-	assert(file.is_open());
+int Audio::LoadWave(const std::string& filename) {
+    // ファイルがすでに読み込まれている場合
+    auto it = soundIndexMap_.find(filename);
 
-	//RIFFヘッダーの読み込み
-	RiffHeader riff;
-	file.read((char*)&riff, sizeof(riff));
-	if (strncmp(riff.chunk.id, "RIFF", 4) != 0 || strncmp(riff.type, "WAVE", 4) != 0) {
-		assert(0);
-	}
+    if (it != soundIndexMap_.end()) {
+        return it->second; // 既存のインデックスを返す
+    }
 
-	//Formatチャンクの読み込み
-	FormatChunk format = {};
-	file.read((char*)&format, sizeof(ChunkHeader));
-	assert(strncmp(format.chunk.id, "fmt ", 4) == 0);
-	assert(format.chunk.size <= sizeof(format.fmt));
-	file.read((char*)&format.fmt, format.chunk.size);
+    // ファイルオープン------------------------
+    std::ifstream file;
+    file.open(filename, std::ios_base::binary);
+    assert(file.is_open());
 
-	//Dataチャンクの読み込み
-	ChunkHeader data;
-	file.read((char*)&data, sizeof(data));
-	if (strncmp(data.id, "JUNK", 4) == 0) {
-		file.seekg(data.size, std::ios_base::cur);
-		file.read((char*)&data, sizeof(data));
-	}
-	assert(strncmp(data.id, "data", 4) == 0);
+    // RIFFヘッダーの読み込み
+    RiffHeader riff;
+    file.read((char*)&riff, sizeof(riff));
+    if (strncmp(riff.chunk.id, "RIFF", 4) != 0 || strncmp(riff.type, "WAVE", 4) != 0) {
+        assert(0);
+    }
 
-	//波形データの読み込み
-	char* pBuffer = new char[data.size];
-	file.read(pBuffer, data.size);
-	file.close();
+    // Formatチャンクの読み込み
+    FormatChunk format = {};
+    file.read((char*)&format, sizeof(ChunkHeader));
+    assert(strncmp(format.chunk.id, "fmt ", 4) == 0);
+    assert(format.chunk.size <= sizeof(format.fmt));
+    file.read((char*)&format.fmt, format.chunk.size);
 
-	//読み込んだ音声データを保存
-	SoundData soundData = {};
-	soundData.wfex = format.fmt;
-	soundData.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
-	soundData.bufferSize = data.size;
+    // Dataチャンクの読み込み (汎用チャンクスキップ対応)
+    ChunkHeader chunk;
+    char* pBuffer = nullptr;
+    size_t dataSize = 0;
 
-	// soundDatas_ に追加
-	soundDatas_.push_back(soundData);
+    while (file.read((char*)&chunk, sizeof(chunk))) {
+        if (strncmp(chunk.id, "data", 4) == 0) {
+            // 波形データの読み込み
+            pBuffer = new char[chunk.size];
+            file.read(pBuffer, chunk.size);
+            dataSize = chunk.size;
+            break;
+        }
+        else {
+            // その他チャンクをスキップ
+            file.seekg(chunk.size, std::ios_base::cur);
+        }
+    }
+    assert(pBuffer != nullptr && dataSize > 0);
+    file.close();
 
-	// 追加されたサウンドデータのインデックスを返す
-	return int(soundDatas_.size()) - 1;
+    // 読み込んだ音声データを保存
+    SoundData soundData = {};
+    soundData.wfex = format.fmt;
+    soundData.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
+    soundData.bufferSize = int(dataSize);
+
+    // soundDatas_に追加
+    soundDatas_.push_back(soundData);
+    int index = int(soundDatas_.size()) - 1;
+
+    // ファイル名とインデックスをマップに保存
+    soundIndexMap_[filename] = index;
+
+    return index;
 }
 
-void Audio::SoundPlayWave(int soundId) {
-	if (soundId >= 0 && soundId < soundDatas_.size()) {
-		const SoundData& soundData = soundDatas_[soundId];
+void Audio::PlayWave(const int& soundId, const float& volume) {
+    if (soundId >= 0 && soundId < soundDatas_.size()) {
+        const SoundData& soundData = soundDatas_[soundId];
 
-		HRESULT result;
-		IXAudio2SourceVoice* pSourceVoice = nullptr;
-		result = xAudio2_->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
-		assert(SUCCEEDED(result));
+        HRESULT result;
+        IXAudio2SourceVoice* pSourceVoice = nullptr;
+        result = xAudio2_->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
+        assert(SUCCEEDED(result));
 
-		XAUDIO2_BUFFER buf{};
-		buf.pAudioData = soundData.pBuffer;
-		buf.AudioBytes = soundData.bufferSize;
-		buf.Flags = XAUDIO2_END_OF_STREAM;
+        // 再生前にボリュームを設定
+        result = pSourceVoice->SetVolume(volume);
+        assert(SUCCEEDED(result));
 
-		result = pSourceVoice->SubmitSourceBuffer(&buf);
-		result = pSourceVoice->Start();
-	}
+        XAUDIO2_BUFFER buf{};
+        buf.pAudioData = soundData.pBuffer;
+        buf.AudioBytes = soundData.bufferSize;
+        buf.Flags = XAUDIO2_END_OF_STREAM;
+
+        result = pSourceVoice->SubmitSourceBuffer(&buf);
+        assert(SUCCEEDED(result));
+
+        result = pSourceVoice->Start();
+        assert(SUCCEEDED(result));
+    }
 }
 
-void Audio::SoundUnload(int soundId) {
+void Audio::Unload(const int& soundId) {
 	if (soundId >= 0 && soundId < soundDatas_.size()) {
 		SoundData& soundData = soundDatas_[soundId];
 		delete[] soundData.pBuffer;
