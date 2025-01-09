@@ -45,9 +45,9 @@
     <ClCompile Include="Engine\input\Mouse.cpp" />
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
     <ClCompile Include="Engine\utility\Editor\ControlPosManager.cpp" />
+    <ClCompile Include="Engine\utility\Editor\Rail.cpp" />
     <ClCompile Include="Engine\utility\Editor\RailManager.cpp" />
     <ClCompile Include="Engine\utility\Editor\GlobalParameter.cpp" />
-    <ClCompile Include="Engine\utility\Particle\EmitRail.cpp" />
     <ClCompile Include="Engine\utility\Particle\ParticleCommon.cpp" />
     <ClCompile Include="Engine\utility\Particle\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\utility\Particle\ParticleManager.cpp" />
@@ -160,9 +160,9 @@
     <ClInclude Include="Engine\struct\VertexData.h" />
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h" />
     <ClInclude Include="Engine\utility\Editor\ControlPosManager.h" />
+    <ClInclude Include="Engine\utility\Editor\Rail.h" />
     <ClInclude Include="Engine\utility\Editor\RailManager.h" />
     <ClInclude Include="Engine\utility\Editor\GlobalParameter.h" />
-    <ClInclude Include="Engine\utility\Particle\EmitRail.h" />
     <ClInclude Include="Engine\utility\Particle\ParticleCommon.h" />
     <ClInclude Include="Engine\utility\Particle\ParticleEmitter.h" />
     <ClInclude Include="Engine\utility\Particle\ParticleManager.h" />
