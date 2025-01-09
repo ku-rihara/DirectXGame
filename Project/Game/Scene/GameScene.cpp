@@ -47,7 +47,7 @@ void GameScene::Init() {
 
 	gamecamera_->SetTarget(&player_->GetTransform());
 	enemyManager_->SetPlayer(player_.get());
-	player_->SetViewProjection(&viewProjection_); /*&gamecamera_->GetViewProjection()*/
+	player_->SetViewProjection(&viewProjection_); 
 	player_->SetLockOn(lockOn_.get());
 	enemyManager_->SetLockon(lockOn_.get());
 

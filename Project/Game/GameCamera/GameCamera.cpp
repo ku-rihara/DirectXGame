@@ -7,6 +7,9 @@
 #include"JoyState/JoyState.h"
 //class
 #include"LockOn/LockOn.h"
+// behavior
+#include"Behavior/GameCameraRoot.h"
+#include"Behavior/GameCameraShake.h"
 /// std
 #include<numbers>
 #include<imgui.h>
@@ -17,10 +20,12 @@ void GameCamera::Init() {
 
 	rotate_ = 8.9f;
 	offset_ = { 0,17,-47.0f };
+
+	ChangeBehavior(std::make_unique<GameCameraShake>(this));
 }
 
 void GameCamera::Update() {
-
+	behavior_->Update();
 	MoveUpdate();
 	// ビュー行列の更新
 	viewprojection_.UpdateMatrix();
@@ -114,10 +119,10 @@ void GameCamera::Reset() {
 }
 
 Vector3 GameCamera::OffsetCalc(const Vector3& offset) const {
-	
+
 	// カメラの角度から回転行列を計算する
 	Matrix4x4 rotateMatrix = MakeRotateYMatrix(viewprojection_.rotation_.y);
-	Vector3 resultOffset = TransformNormal(offset, rotateMatrix);
+	Vector3 resultOffset = TransformNormal(offset + shakePos_, rotateMatrix);
 	return resultOffset;
 }
 
@@ -145,6 +150,15 @@ Vector3 GameCamera::GetBaseCenterPosition()const {
 }
 
 void GameCamera::Debug() {
-	ImGui::DragFloat("rotate", & rotate_, 0.01f);
+	ImGui::DragFloat("rotate", &rotate_, 0.01f);
 	ImGui::DragFloat3("offset", &offset_.x, 0.1f);
+}
+Vector3 GameCamera::GetTargetPos() const
+{
+	return Vector3();
+}
+
+void GameCamera::ChangeBehavior(std::unique_ptr<BaseGameCameraBehavior>behavior) {
+	//引数で受け取った状態を次の状態としてセット
+	behavior_ = std::move(behavior);
 }

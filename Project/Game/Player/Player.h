@@ -113,10 +113,10 @@ public:
 	void Draw(const ViewProjection& viewProjection) override;
 
 	/// 移動
-	void Move(const float& speed);                             /// 移動
-	bool GetIsMoving();                                        /// 動かしてるかフラグ
-	void MoveToLimit();                                        /// 移動制限
-	Vector3 GetInputDirecton();                                /// 入力による速度
+	void Move(const float& speed);                               /// 移動
+	bool GetIsMoving();                                          /// 動かしてるかフラグ
+	void MoveToLimit();                                          /// 移動制限
+	Vector3 GetInputDirecton();                                  /// 入力による速度
 
 
 

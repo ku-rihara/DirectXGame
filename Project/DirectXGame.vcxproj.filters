@@ -187,6 +187,9 @@
     <Filter Include="Game\UI\HowToOperate">
       <UniqueIdentifier>{eba982c5-fc14-4c04-b2b6-bbbd2cc2b653}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameCamera\Behavior">
+      <UniqueIdentifier>{2aa02fce-99c5-4754-a297-6ce1884e9ca1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -489,6 +492,15 @@
     </ClCompile>
     <ClCompile Include="math\Shake.cpp">
       <Filter>liberary\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameCamera\Behavior\BaseGameCameraBehavior.cpp">
+      <Filter>Game\GameCamera\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameCamera\Behavior\GameCameraShake.cpp">
+      <Filter>Game\GameCamera\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameCamera\Behavior\GameCameraRoot.cpp">
+      <Filter>Game\GameCamera\Behavior</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -839,6 +851,15 @@
     </ClInclude>
     <ClInclude Include="math\Shake.h">
       <Filter>liberary\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameCamera\Behavior\BaseGameCameraBehavior.h">
+      <Filter>Game\GameCamera\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameCamera\Behavior\GameCameraShake.h">
+      <Filter>Game\GameCamera\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameCamera\Behavior\GameCameraRoot.h">
+      <Filter>Game\GameCamera\Behavior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
