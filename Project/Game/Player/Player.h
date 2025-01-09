@@ -27,7 +27,7 @@
 /// プレイヤークラス
 /// </summary>
 class LockOn;
-class Player : public BaseObject{
+class Player : public BaseObject {
 public:
 	enum NormalComboNum {
 		FIRST,
@@ -48,12 +48,12 @@ private:
 		float punchEaseMax;
 		float punchReach;
 	};
-	
+
 private:
 	/// ===================================================
 	///private variaus
 	/// ===================================================
-	
+
 	/// グローバルなパラメータ
 	GlobalParameter* globalParameter_;            /// グローバルパラメータ
 	const std::string groupName_ = "Player";      /// グループ名
@@ -70,11 +70,11 @@ private:
 	Vector3 prePos_;                             /// 移動前座標
 	float moveSpeed_;                            ///移動速度
 
-										         
+
 	/// jump							         
 	const float fallSpeedLimit_ = -1.2f;              /// ジャンプ
 	float gravity_;
-										         										         
+
 	bool isAttack_;                              /// 攻撃フラグ 
 	float fallSpeed_;                  	         /// 落ちるスピード
 
@@ -111,16 +111,18 @@ public:
 	void Init() override;
 	void Update() override;
 	void Draw(const ViewProjection& viewProjection) override;
-	
+
 	/// 移動
-	void Move(const float& speed);      /// 移動
-	bool GetIsMoving();                 /// 動かしてるかフラグ
-	Vector3 GetInputDirecton();         /// 入力による速度
-	void MoveToLimit();                 /// 移動制限
+	void Move(const float& speed);                             /// 移動
+	bool GetIsMoving();                                        /// 動かしてるかフラグ
+	void MoveToLimit();                                        /// 移動制限
+	Vector3 GetInputDirecton();                                /// 入力による速度
+
+
 
 	void FallParticleEmit();
-	void Jump(float& speed);                            /// ジャンプ
-	void Fall(float& speed,const bool& isJump = false); /// 落ちる
+	void Jump(float& speed);                                     /// ジャンプ
+	void Fall(float& speed, const bool& isJump = false);         /// 落ちる
 
 	/// 振る舞い切り替え
 	void ChangeBehavior(std::unique_ptr<BasePlayerBehavior>behavior);
@@ -128,27 +130,27 @@ public:
 
 	void FallEffectUpdate();
 	void FallEffectInit(const Vector3& pos);
-	void AdjustParm();                      /// デバッグ
-	void SetLockOn(LockOn* lockon);    /// ロックオンクラスをセット
-	
+	void AdjustParm();                             /// デバッグ
+	void SetLockOn(LockOn* lockon);                /// ロックオンクラスをセット
+
 	/// collision
 
 	/// ダメージ
-	void TakeDamage();                 /// ダメージ受ける     
-	void DamageRendition();            /// ダメージリアクション
+	void TakeDamage();                             /// ダメージ受ける     
+	void DamageRendition();                        /// ダメージリアクション
 
-	
+
 	void ParmLoadForImGui();
 	void AddParmGroup();
 	void SetValues();
 	void ApplyGlobalParameter();
 
 	void FaceToTarget();
-           
+
 	/// ===================================================
 	/// getter
 	/// ===================================================
-	PlayerHandLeft* GetLeftHand() const{ return leftHand_.get(); }
+	PlayerHandLeft* GetLeftHand() const { return leftHand_.get(); }
 	PlayerHandRight* GetRightHand() const { return rightHand_.get(); }
 	LockOn* GetLockOn() const { return pLockOn_; }
 	const bool& GetIsAttack()const { return isAttack_; }

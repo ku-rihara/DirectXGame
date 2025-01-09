@@ -68,7 +68,7 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
 ///========================================================================================
 ///  更新処理
 ///========================================================================================
-void EnemyManager::Update(const ViewProjection& viewprojection) {
+void EnemyManager::Update() {
 	if (isEditorMode_) {
 		return; // エディタモード中は停止
 	}

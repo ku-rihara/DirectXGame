@@ -47,7 +47,7 @@ void GameScene::Init() {
 
 	gamecamera_->SetTarget(&player_->GetTransform());
 	enemyManager_->SetPlayer(player_.get());
-	player_->SetViewProjection(&viewProjection_);
+	player_->SetViewProjection(&viewProjection_); /*&gamecamera_->GetViewProjection()*/
 	player_->SetLockOn(lockOn_.get());
 	enemyManager_->SetLockon(lockOn_.get());
 
@@ -85,9 +85,10 @@ void GameScene::Update() {
 	skydome_->Update();
 	howToOperate_->Update();
 	field_->Update();
-	enemyManager_->Update(viewProjection_);
+	enemyManager_->Update();
 	gamecamera_->Update();
 
+	//
 	enemyManager_->HpBarUpdate(viewProjection_);
 	lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
 
@@ -189,10 +190,12 @@ void GameScene::ViewProjectionUpdate() {
 	BaseScene::ViewProjectionUpdate();
 }
 
+
 void GameScene::ViewProssess() {
 	viewProjection_.matView_ = gamecamera_->GetViewProjection().matView_;
 	viewProjection_.matProjection_ = gamecamera_->GetViewProjection().matProjection_;
-
+	viewProjection_.cameraMatrix_ = gamecamera_->GetViewProjection().cameraMatrix_;
+	viewProjection_.rotation_ = gamecamera_->GetViewProjection().rotation_;
 	viewProjection_.TransferMatrix();
 
 }

@@ -88,7 +88,7 @@ public:
     void SpawnEnemy(const std::string& enemyType, const Vector3& position);
 
     // 更新処理
-    void Update(const ViewProjection&viewprojection);
+    void Update();
     void HpBarUpdate(const ViewProjection&viewProjection);
     void SpawnUpdate();
     void CheckWaveCompletion();

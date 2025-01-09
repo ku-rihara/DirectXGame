@@ -11,6 +11,7 @@ private:
 	/// ===================================================
 
 	LockOn* lockOn_;
+	//Player* pPlayer_;
 	ViewProjection viewprojection_;
 
 	const WorldTransform* target_ = nullptr;  /// 追従対象
@@ -44,12 +45,13 @@ public:
 	/// getter
 	/// ===================================================
 	const ViewProjection& GetViewProjection() { return viewprojection_; }
-		Vector3 GetTargetPos()const;
+	Vector3 GetTargetPos()const;
 	/// ===================================================
 	/// setter
 	/// ===================================================
 	void SetTarget(const WorldTransform* target);
 	void SetLockOn(LockOn* lockon) { lockOn_ = lockon; }
+	/*void SetPlayer(Player* player) { pPlayer_ = player; }*/
 	void SetDestinationAngleY_(float angle) { destinationAngleY_ = angle; }
 	void SetViewProjectionPos(Vector3 pos) { viewprojection_.translation_ = pos; }
 	
