@@ -1,9 +1,11 @@
 #pragma once
 #include<wrl.h>
 #include<xaudio2.h>
-#include<fstream>
-#include <vector>
 #include "struct/SoundData.h"
+#include<string>
+#include<unordered_map>
+#include <vector>
+
 
 class Audio{
 private:
@@ -11,13 +13,16 @@ private:
 	Microsoft::WRL::ComPtr<IXAudio2>xAudio2_;
 	IXAudio2MasteringVoice* masterVoice_;
 	std::vector<SoundData> soundDatas_;
+	std::unordered_map<std::string, int> soundIndexMap_;
+
+	
 public:
 	static Audio* GetInstance();
 
 	void Init();
-	int SoundLoadWave(const char* filename);
-	void SoundUnload(int soundId);
-	void SoundPlayWave(int soundId);
+	int LoadWave(const std::string& filename);
+	void Unload(const int& soundId);
+	void PlayWave(const int& soundId, const float& volume);
 	void Finalize();
 	
 	IXAudio2* GetXAudio2()const { return xAudio2_.Get(); }

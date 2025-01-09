@@ -1,4 +1,7 @@
 #pragma once
+
+#include <cstdint>
+
 //チャンクヘッダ
 struct ChunkHeader {
 	char id[4];//チャンク毎のID
