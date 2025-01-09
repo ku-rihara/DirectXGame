@@ -49,6 +49,8 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	// 振る舞い順序初期化
 	order_ = Order::UPPER;
 
+	fallInitSpeed_ = 0.0f;
+
 }
 
 ComboAttackThird::~ComboAttackThird() {
@@ -128,7 +130,7 @@ void ComboAttackThird::Update() {
 	case Order::FALL:
 
 		pPlayer_->Move(pPlayer_->GetMoveSpeed());/// 
-		pPlayer_->Fall();
+		pPlayer_->Fall(fallInitSpeed_);
 
 		// レール更新と座標反映
 		pPlayer_->GetRightHand()->RailThreeComboUpdate(-pPlayer_->GetRightHand()->GetRailRunSpeedThree());

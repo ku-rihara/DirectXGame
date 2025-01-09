@@ -119,8 +119,8 @@ public:
 	void MoveToLimit();                 /// 移動制限
 
 	void FallParticleEmit();
-	void Jump(float& speed);           /// ジャンプ
-	void Fall();                       /// 落ちる
+	void Jump(float& speed);                            /// ジャンプ
+	void Fall(float& speed,const bool& isJump = false); /// 落ちる
 
 	/// 振る舞い切り替え
 	void ChangeBehavior(std::unique_ptr<BasePlayerBehavior>behavior);

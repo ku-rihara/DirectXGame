@@ -53,6 +53,8 @@ ComboAttackForth::ComboAttackForth(Player* player)
 	startEasing_.period = 0.2f;
 
 	order_ = Order::FIRSTWAIT; // 振る舞い順序初期化
+
+	fallInitSpeed_ = 0.0f;
 }
 
 ComboAttackForth::~ComboAttackForth() {
@@ -168,7 +170,7 @@ void ComboAttackForth::Update() {
 	case Order::WAIT:
 	
 		waitTine_ += Frame::DeltaTime();
-		pPlayer_->Fall();
+		pPlayer_->Fall(fallInitSpeed_);
 
 		if (pPlayer_->GetWorldPosition().y > pPlayer_->InitY_)break;
 		if (waitTine_ < pPlayer_->GetWaitTime(Player::FORTH)) break;

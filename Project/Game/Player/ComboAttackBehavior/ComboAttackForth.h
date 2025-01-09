@@ -31,6 +31,7 @@ private:
 	/// 
 	float firstWaitTime_;
 	float firstWaitTimeMax_;
+	float fallInitSpeed_;
 
 	// collision
 	std::unique_ptr<StopCollisionBox>stopCollisionBox_;

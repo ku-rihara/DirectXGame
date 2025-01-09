@@ -22,6 +22,7 @@ private:
 	RailManager* railManager_;
 	std::unique_ptr<UpperCollisionBox>collisionBox_;
 	const float kCollisionAliveTime_=0.3f;
+	float fallInitSpeed_;
 
 	/// パンチ
 	Easing punchEase_;

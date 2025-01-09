@@ -273,24 +273,7 @@ bool Player::GetIsMoving() {
 	return isMoving;
 }
 
-/// ===================================================
-///  Player Jump
-/// ===================================================
-void Player::Jump(float& speed) {
-	//ジャンプスピード加算
-	transform_.translation_.y += speed;
 
-	// 落下スピード限界まで重力かける
-	speed = max(speed - (gravity_ * Frame::DeltaTimeRate()), fallSpeedLimit_);
-
-	// 着地
-	if (transform_.translation_.y <= Player::InitY_) {
-		transform_.translation_.y = Player::InitY_;
-
-		// ジャンプ終了
-		ChangeBehavior(std::make_unique<PlayerRoot>(this));
-	}
-}
 
 ///=========================================================
 ///　移動制限
@@ -337,21 +320,37 @@ void Player::MoveToLimit() {
 	}
 }
 
+
+/// ===================================================
+///  Player Jump
+/// ===================================================
+void Player::Jump(float& speed) {
+	// 移動
+	transform_.translation_.y += speed;
+	Fall(speed,true);
+
+}
+
 ///=========================================================
 ///　落ちる
 ///==========================================================
-void Player::Fall() {
-	if (dynamic_cast<PlayerJump*>(behavior_.get())) return;
+void Player::Fall(float& speed, const bool& isJump) {
 
-	// 移動
-	transform_.translation_.y += fallSpeed_;
+	if (!isJump) {
+		// 移動
+		transform_.translation_.y += speed;
+	}
+
 	// 加速する
-	fallSpeed_ = max(fallSpeed_ - (gravity_ * Frame::DeltaTimeRate()), -0.75f);
+	speed = max(speed - (gravity_ * Frame::DeltaTime()), -1.0f);
 
 	// 着地
 	if (transform_.translation_.y <= Player::InitY_) {
 		transform_.translation_.y = Player::InitY_;
-		fallSpeed_ = 0.0f;
+		speed = 0.0f;
+		if (!dynamic_cast<PlayerJump*>(behavior_.get()))return;
+		// ジャンプ終了
+		ChangeBehavior(std::make_unique<PlayerRoot>(this));
 	}
 }
 
