@@ -80,7 +80,7 @@ void EnemyManager::Update(const ViewProjection& viewprojection) {
 
 		if ((*it)->GetIsDeath()) {
 			pLockOn_->OnEnemyDestroyed((*it).get());
-			pLockOn_->Search(enemies_, viewprojection);
+		/*	pLockOn_->Search(enemies_, viewprojection);*/
 			it = enemies_.erase(it); // 削除して次の要素を指すイテレータを取得
 			UpdateEnemyClearedFlag(); // フラグを更新
 		}
@@ -88,7 +88,6 @@ void EnemyManager::Update(const ViewProjection& viewprojection) {
 			++it; // 削除しない場合はイテレータを進める
 		}
 	}
-
 }
 
 void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
