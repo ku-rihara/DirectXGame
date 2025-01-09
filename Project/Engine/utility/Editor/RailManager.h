@@ -9,7 +9,7 @@
 #include "3d/WorldTransform.h"
 #include "3d/Object3d.h"
 
-#include"utility/Particle/EmitRail.h"
+#include"utility/Editor/Rail.h"
 #include"utility/Editor/ControlPosManager.h"
 
 class SrvManager;
@@ -24,7 +24,7 @@ private:
     std::string groupName_;
 
     /// other class
-    EmitRail rail_;
+    Rail rail_;
 
     std::unique_ptr<ControlPosManager>emitControlPosManager_;
 

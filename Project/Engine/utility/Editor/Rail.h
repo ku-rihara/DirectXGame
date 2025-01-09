@@ -7,7 +7,7 @@
 #include "3d/WorldTransform.h"
 #include "3d/Object3dSRV.h"
 
-class EmitRail {
+class Rail {
 private:
     const size_t IndexCount_ = 20;                      // レール補間点の数
     std::vector<Vector3> controlPosies_;                    // 制御点

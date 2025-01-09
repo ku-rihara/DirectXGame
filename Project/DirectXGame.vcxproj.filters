@@ -268,9 +268,6 @@
     <ClCompile Include="Engine\3d\Object3dSRV.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\Particle\EmitRail.cpp">
-      <Filter>MyEngine\.cpp\utility\Particle</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\utility\Editor\ControlPosManager.cpp">
       <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
@@ -293,6 +290,9 @@
       <Filter>Game\TestObj</Filter>
     </ClCompile>
     <ClCompile Include="Engine\utility\Editor\RailManager.cpp">
+      <Filter>MyEngine\.cpp\utility\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\Editor\Rail.cpp">
       <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
   </ItemGroup>
@@ -489,9 +489,6 @@
     <ClInclude Include="Engine\utility\Editor\ControlPosManager.h">
       <Filter>MyEngine\.h\utility\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\Particle\EmitRail.h">
-      <Filter>MyEngine\.h\utility\Particle</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Ground\Ground.h">
       <Filter>Game\Ground</Filter>
     </ClInclude>
@@ -514,6 +511,9 @@
       <Filter>Game\TestObj</Filter>
     </ClInclude>
     <ClInclude Include="Engine\utility\Editor\RailManager.h">
+      <Filter>MyEngine\.h\utility\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\Editor\Rail.h">
       <Filter>MyEngine\.h\utility\Editor</Filter>
     </ClInclude>
   </ItemGroup>

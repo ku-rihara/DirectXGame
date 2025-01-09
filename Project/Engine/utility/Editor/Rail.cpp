@@ -1,8 +1,8 @@
-#include "EmitRail.h"
+#include "Rail.h"
 #include "MathFunction.h"
 #include "base/SrvManager.h"
 
-void EmitRail::Init(size_t numObjects) {
+void Rail::Init(size_t numObjects) {
   
     numObjects;
     //// レールオブジェクト（インスタンス用）の初期化
@@ -10,7 +10,7 @@ void EmitRail::Init(size_t numObjects) {
     //railTransforms_.resize(numObjects); // 必要なインスタンス分だけ確保
 }
 
-void EmitRail::Update(const std::vector<Vector3>& controlPos) {
+void Rail::Update(const std::vector<Vector3>& controlPos) {
     controlPosies_ = controlPos;
     pointsDrawing_.clear();
     totalRailLength_ = 0.0f;
@@ -60,7 +60,7 @@ void EmitRail::Update(const std::vector<Vector3>& controlPos) {
 }
 
 
-Vector3 EmitRail::GetPositionOnRail(float progress) const {
+Vector3 Rail::GetPositionOnRail(float progress) const {
     float distance = progress * totalRailLength_;
     float accumulatedDistance = 0.0f;
 
@@ -75,7 +75,7 @@ Vector3 EmitRail::GetPositionOnRail(float progress) const {
     return pointsDrawing_.back(); // 最終位置（進行度が1.0fの時）
 }
 
-void EmitRail::Draw(const ViewProjection& viewProjection) {
+void Rail::Draw(const ViewProjection& viewProjection) {
     viewProjection;
     //if (railObject_) {
     //    // railTransforms_を渡して描画
