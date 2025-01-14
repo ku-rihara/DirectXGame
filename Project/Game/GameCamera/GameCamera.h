@@ -5,11 +5,13 @@
 #include "3d/WorldTransform.h"
 #include <memory>
 
+
 class LockOn;
 class GameCamera {
 private:
+
 	/// ===================================================
-	///private varius
+	/// private varius
 	/// ===================================================
 
 	LockOn* lockOn_;
@@ -28,7 +30,7 @@ private:
 
 public:
 	/// ===================================================
-	///public method
+	/// public method
 	/// ===================================================
 	void Init();                                              /// 初期化
 	void Update();                                            /// 更新
@@ -44,6 +46,7 @@ public:
 	Vector3 OffsetCalc(const Vector3& offset)const;
 	Vector3 GetBaseCenterPosition() const;
 
+	void ChangeShakeMode();
 	void ChangeBehavior(std::unique_ptr<BaseGameCameraBehavior>behavior);
 
 	/// ===================================================

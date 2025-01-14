@@ -21,7 +21,7 @@ void GameCamera::Init() {
 	rotate_ = 8.9f;
 	offset_ = { 0,17,-47.0f };
 
-	ChangeBehavior(std::make_unique<GameCameraShake>(this));
+	ChangeBehavior(std::make_unique<GameCameraRoot>(this));
 }
 
 void GameCamera::Update() {
@@ -151,7 +151,7 @@ Vector3 GameCamera::GetBaseCenterPosition()const {
 
 void GameCamera::Debug() {
 	ImGui::DragFloat("rotate", &rotate_, 0.01f);
-	ImGui::DragFloat3("offset", &offset_.x, 0.1f);
+	ImGui::DragFloat3("offset", &offset_.x,0.1f);
 }
 Vector3 GameCamera::GetTargetPos() const
 {
@@ -161,4 +161,9 @@ Vector3 GameCamera::GetTargetPos() const
 void GameCamera::ChangeBehavior(std::unique_ptr<BaseGameCameraBehavior>behavior) {
 	//引数で受け取った状態を次の状態としてセット
 	behavior_ = std::move(behavior);
+}
+
+void GameCamera::ChangeShakeMode() {
+	if (dynamic_cast<GameCameraShake*>(behavior_.get()))return;
+	ChangeBehavior(std::make_unique<GameCameraShake>(this));
 }

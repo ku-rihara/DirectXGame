@@ -12,11 +12,14 @@
 #include"Effect/Effect.h"
 
 class Player;
+class GameCamera;
 class BaseEnemy : public BaseObject,public AABBCollider {
 protected:
 
 	/// other class
 	Player* pPlayer_;
+	GameCamera* pGameCamera_;
+
 	bool isdeath_;
 	float hp_;
 	float HPMax_;
@@ -79,11 +82,12 @@ public:
 	///========================================================================================
 	bool GetIsDeath()const { return isdeath_; }
 	Player* GetPlayer() { return pPlayer_; }
-	
+	GameCamera* GetGameCamera() { return pGameCamera_; }
 	///========================================================================================
 	///  setter method
 	///========================================================================================
 	void SetPlayer(Player* plyaer);
+	void SetGameCamera(GameCamera* gamecamera);
 
 
 private:

@@ -3,6 +3,7 @@
 #include"EnemyThrustDamage.h"
 #include"EnemyBoundDamage.h"
 #include"Enemy/Behavior/EnemyChasePlayer.h"
+#include"GameCamera/GameCamera.h"
 
 /// obj
 #include"Enemy/BaseEnemy.h"
@@ -91,10 +92,14 @@ void EnemyThrustDamage::Update() {
 		}
 		break;
 	case Step::NEXTBEHAVIOR:
+		/// ------------------------------------------------------
+		/// 次の振る舞い
+		///---------------------------------------------------------
 		pBaseEnemy_->ThrustEmit();
 		pBaseEnemy_->FallEffectInit(pBaseEnemy_->GetWorldPosition());
 		pBaseEnemy_->SetColor(Vector4(1.0f, 1, 1, 1.0f));
 		pBaseEnemy_->SetWorldPositionY(BaseEnemy::InitY_);
+		pBaseEnemy_->GetGameCamera()->ChangeShakeMode();
 		pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyBoundDamage>(pBaseEnemy_));
 		break;
 	}

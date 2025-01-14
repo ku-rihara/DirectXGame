@@ -61,6 +61,7 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
 		// 位置初期化とlistに追加
 		enemy->Init(position);
 		enemy->SetPlayer(pPlayer_);// プレイヤーセット
+		enemy->SetGameCamera(pGameCamera_);
 		enemies_.push_back(std::move(enemy));
 }
 
@@ -491,4 +492,8 @@ void EnemyManager::UpdateEnemyClearedFlag() {
 			}
 		}
 	}
+}
+
+void EnemyManager::SetGameCamera(GameCamera* gamecamera) {
+	pGameCamera_ = gamecamera;
 }

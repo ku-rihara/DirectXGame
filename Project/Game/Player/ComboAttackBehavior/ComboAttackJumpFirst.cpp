@@ -6,6 +6,7 @@
 
 /// Player
 #include"Player/Player.h"
+#include"GameCamera/GameCamera.h"
 
 #include<imgui.h>
 #include"Frame/Frame.h"
@@ -87,7 +88,7 @@ void ComboAttackJumpFirst::Update() {
 		pPlayer_->SetWorldPositionY(Player::InitY_);
 		pPlayer_->FallParticleEmit();
 		pPlayer_->FallEffectInit(pPlayer_->GetWorldPosition());
-
+		pPlayer_->GetGameCamera()->ChangeShakeMode();
 		step_ = STEP::LANDING;
 
 		break;

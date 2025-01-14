@@ -27,6 +27,7 @@
 /// プレイヤークラス
 /// </summary>
 class LockOn;
+class GameCamera;
 class Player : public BaseObject {
 public:
 	enum NormalComboNum {
@@ -59,7 +60,8 @@ private:
 	const std::string groupName_ = "Player";      /// グループ名
 
 	/// other class
-	LockOn* pLockOn_;                            /// LockOnクラス 
+	LockOn* pLockOn_;                            /// LockOnクラス
+	GameCamera* pGameCamera_;
 	std::unique_ptr<PlayerHandLeft>leftHand_;    /// 左手
 	std::unique_ptr<PlayerHandRight>rightHand_;  /// 右手
 	std::list<std::unique_ptr<Effect>> effects_;
@@ -131,7 +133,7 @@ public:
 	void FallEffectUpdate();
 	void FallEffectInit(const Vector3& pos);
 	void AdjustParm();                             /// デバッグ
-	void SetLockOn(LockOn* lockon);                /// ロックオンクラスをセット
+	
 
 	/// collision
 
@@ -150,30 +152,33 @@ public:
 	/// ===================================================
 	/// getter
 	/// ===================================================
-	PlayerHandLeft* GetLeftHand() const { return leftHand_.get(); }
-	PlayerHandRight* GetRightHand() const { return rightHand_.get(); }
-	LockOn* GetLockOn() const { return pLockOn_; }
-	const bool& GetIsAttack()const { return isAttack_; }
-	float GetMuzzulJumpSpeed()const { return jumpSpeed_; }
-	float GetMoveSpeed()const { return moveSpeed_; }
-	float GetUpperPosY()const { return upperPosY_; }
-	BasePlayerBehavior* GetBehavior()const { return behavior_.get(); }
+	PlayerHandLeft*     GetLeftHand()        const        { return leftHand_.get();  }
+	PlayerHandRight*    GetRightHand()       const        { return rightHand_.get(); }
+	LockOn*             GetLockOn()          const        { return pLockOn_;   }
+	GameCamera*         GetGameCamera()      const        {return pGameCamera_;}
+	const bool&         GetIsAttack()        const        { return isAttack_;  }
+	float               GetMuzzulJumpSpeed() const        { return jumpSpeed_; }
+	float               GetMoveSpeed()       const        { return moveSpeed_; }
+	float               GetUpperPosY()       const        { return upperPosY_; }
+	BasePlayerBehavior* GetBehavior()        const        { return behavior_.get();}
+
 	/// ===================================================
 	/// setter
 	/// ===================================================
-	void SetIsAttack(bool is) { isAttack_ = is; }
+	void SetIsAttack      (bool is)                              { isAttack_ = is; }
 	void SetViewProjection(const ViewProjection* viewProjection) { viewProjection_ = viewProjection; }
-	/*void SetUpperPosY(const float& posy) { upperPosY_ = posy; }*/
+	void SetLockOn        (LockOn* lockon); 
+	void SetGameCamera    (GameCamera*gamecamera);
 
 	/// comboParamater
-	float GetRushDistance()const { return rushDistance_; }
-	float GetRushEaseMax()const { return rushEaseMax_; }
+	float GetRushDistance() const { return rushDistance_; }
+	float GetRushEaseMax()  const { return rushEaseMax_;  }
 
-	float GetWaitTime(NormalComboNum index)const;
-	float GetPunchEaseMax(NormalComboNum index)const;
-	float GetPunchReach(NormalComboNum index)const;
+	float GetWaitTime      (NormalComboNum index)const;
+	float GetPunchEaseMax  (NormalComboNum index)const;
+	float GetPunchReach    (NormalComboNum index)const;
 
-	float GetJWaitTime(JumpComboNum index)const;
-	float GetJPunchEaseMax(JumpComboNum index)const;
-	float GetJPunchReach(JumpComboNum index)const;
+	float GetJWaitTime     (JumpComboNum index)const;
+	float GetJPunchEaseMax (JumpComboNum index)const;
+	float GetJPunchReach   (JumpComboNum index)const;
 };

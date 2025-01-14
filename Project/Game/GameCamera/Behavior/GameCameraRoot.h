@@ -5,11 +5,11 @@
 
 class GameCameraRoot : public BaseGameCameraBehavior {
 private:
-	float speed_;
+
 	/// ===================================================
 	///private varians
 	/// ===================================================
-
+	float speed_;
 public:
 
 	//コンストラクタ

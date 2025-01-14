@@ -49,6 +49,8 @@ void GameScene::Init() {
 	enemyManager_->SetPlayer(player_.get());
 	player_->SetViewProjection(&viewProjection_); 
 	player_->SetLockOn(lockOn_.get());
+	player_->SetGameCamera(gamecamera_.get());
+	enemyManager_->SetGameCamera(gamecamera_.get());
 	enemyManager_->SetLockon(lockOn_.get());
 
 	enemyManager_->FSpawn();

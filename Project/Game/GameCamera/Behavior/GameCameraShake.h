@@ -5,11 +5,14 @@
 
 class GameCameraShake : public BaseGameCameraBehavior {
 private:
-	
+	enum class Step {
+		SHAKE,
+		RETURNROOT,
+	};
 	/// ===================================================
 	///private varians
 	/// ===================================================
-
+	Step step_;
 	float shakeT_;
 	float shakeTMax_;
 

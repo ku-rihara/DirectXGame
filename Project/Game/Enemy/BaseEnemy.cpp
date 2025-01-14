@@ -313,3 +313,8 @@ void BaseEnemy::FallEffectUpdate() {
 	// 完了したエフェクトを消す
 	effects_.erase(std::remove_if(effects_.begin(), effects_.end(), [](const std::unique_ptr<Effect>& effect) { return effect->IsFinished(); }), effects_.end());
 }
+
+
+void BaseEnemy::SetGameCamera(GameCamera* gamecamera) {
+	pGameCamera_ = gamecamera;
+}

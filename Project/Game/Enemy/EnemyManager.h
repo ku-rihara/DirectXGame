@@ -13,6 +13,7 @@
 
 class Player;
 class LockOn;
+class GameCamera;
 class EnemyManager {
 private:
     using json = nlohmann::json;
@@ -46,13 +47,14 @@ private:
     // ohter class
     Player* pPlayer_;
     LockOn* pLockOn_;
-  
+    GameCamera* pGameCamera_;
   
     bool isEditorMode_;             // エディタモード中かどうか
-    std::map<int, Phase> phases_;  // フェーズ番号をキーとしたフェーズマップ
-    int currentPhase_;             // 現在のフェーズ
-    float currentTime_;            // 現在のフェーズ内の経過時間
-    int currentWave_;
+    std::map<int, Phase> phases_;   // フェーズ番号をキーとしたフェーズマップ
+    int   currentPhase_;            // 現在のフェーズ
+    float currentTime_;             // 現在のフェーズ内の経過時間
+    int   currentWave_;
+
     ///* 敵リスト
     std::list<std::unique_ptr<BaseEnemy>> enemies_;
 
@@ -118,13 +120,16 @@ public:
     ///* EditorModeセット
     void SetEditorMode(bool isEditorMode);
 
+    ///========================================================
+   /// getter method
+   ///========================================================
     bool GetCread()const { return areAllEnemiesCleared_; }
-
     ///========================================================
     /// setter method
     ///========================================================
     void SetPlayer(Player* plyaer);
     void SetLockon(LockOn* lockOn);
+    void SetGameCamera(GameCamera* gamecamera);
 
     // フェーズの切り替え
     void SetPhase(int phase);
