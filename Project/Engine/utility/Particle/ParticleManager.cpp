@@ -7,7 +7,6 @@
 
 //Function
 #include"random.h"
-#include"MathFunction.h"
 #include<cassert>
 #include<string>
 
@@ -221,7 +220,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(
 	const Vector3& basePosition, const V3MinMax& positionDist,
 	const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
 	const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
-	const Vector3& baseRotate, const Vector3& baseRotateSpeed, const V3MinMax& RotateDist,
+	const Vector3& baseRotate, const V3MinMax& RotateDist,
 	const V3MinMax& rotateSpeedDist, const bool& isRotateforDirection) {
 
 	Particle particle;
@@ -260,7 +259,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(
 		}
 		else {
 			// 速度がゼロの場合はデフォルト回転
-			particle.worldTransform_.rotation_ = toRadian(baseRotate);
+			particle.worldTransform_.rotation_ = (baseRotate);
 		}
 	}
 	else {
@@ -272,11 +271,11 @@ ParticleManager::Particle ParticleManager::MakeParticle(
 		};
 
 		// ラジアン変換
-		rotate.x = toRadian(rotate.x);
-		rotate.y = toRadian(rotate.y);
-		rotate.z = toRadian(rotate.z);
+		rotate.x = (rotate.x);
+		rotate.y = (rotate.y);
+		rotate.z = (rotate.z);
 
-		particle.worldTransform_.rotation_ = toRadian(baseRotate) + rotate;
+		particle.worldTransform_.rotation_ = (baseRotate) + rotate;
 	}
 
 	///------------------------------------------------------------------------
@@ -288,11 +287,11 @@ ParticleManager::Particle ParticleManager::MakeParticle(
 		Random::Range(rotateSpeedDist.min.z, rotateSpeedDist.max.z)
 	};
 
-	rotateSpeed.x = toRadian(rotateSpeed.x);
-	rotateSpeed.y = toRadian(rotateSpeed.y);
-	rotateSpeed.z = toRadian(rotateSpeed.z);
+	rotateSpeed.x = (rotateSpeed.x);
+	rotateSpeed.y = (rotateSpeed.y);
+	rotateSpeed.z = (rotateSpeed.z);
 
-	particle.rotateSpeed_ = toRadian(baseRotateSpeed) + rotateSpeed;
+	particle.rotateSpeed_ = rotateSpeed;
 
 	///------------------------------------------------------------------------
 	/// スケール
@@ -328,7 +327,7 @@ void ParticleManager::Emit(
 	std::string name, const Vector3& basePosition, const V3MinMax& positionDist,
 	const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
 	const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
-	const Vector3& baseRotate, const Vector3& baseRotateSpeed, const V3MinMax& RotateDist,
+	const Vector3& baseRotate, const V3MinMax& RotateDist,
 	const V3MinMax& rotateSpeedDist, uint32_t count, const bool& isbillbord, const bool& isRotateforDirection, const BlendMode& blendmode) {  // 新パラメータ追加
 
 	// パーティクルグループが存在するか確認
@@ -344,7 +343,7 @@ void ParticleManager::Emit(
 	for (uint32_t i = 0; i < count; ++i) {
 		particles.emplace_back(MakeParticle(
 			basePosition, positionDist, scaledist, velocityDist, baseColor,
-			colorDist, lifeTime, gravity, baseRotate, baseRotateSpeed,
+			colorDist, lifeTime, gravity, baseRotate,
 			RotateDist,rotateSpeedDist, isRotateforDirection));
 	}
 

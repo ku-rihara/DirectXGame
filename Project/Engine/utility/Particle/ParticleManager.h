@@ -103,7 +103,7 @@ public:
 		const Vector3& basePosition, const V3MinMax& positionDist,
 		const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
 		const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
-		const Vector3& baseRotate, const Vector3& baseRotateSpeed, const V3MinMax& RotateDist,
+		const Vector3& baseRotate, const V3MinMax& RotateDist,
 		const V3MinMax& rotateSpeedDist, const bool& isRotateforDirection);
 	
 	//　エミット
@@ -111,7 +111,7 @@ public:
 		std::string name, const Vector3& basePosition, const V3MinMax& positionDist,
 		const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
 		const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
-		const Vector3&baseRotate,const Vector3&baseRotateSpeed,const V3MinMax& RotateDist,
+		const Vector3&baseRotate,const V3MinMax& RotateDist,
 		const V3MinMax& rotateSpeedDist, uint32_t count,const bool&isbillbord, const bool& isRotateforDirection, const BlendMode& blendmode);
 
 };

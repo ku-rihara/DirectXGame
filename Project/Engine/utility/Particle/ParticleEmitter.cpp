@@ -3,7 +3,7 @@
 #include"ParticleCommon.h"
 #include"Frame/Frame.h"
 #include"base/SrvManager.h"
-
+#include"MathFunction.h"
 
 #include <imgui.h>
 #include<format>
@@ -14,19 +14,19 @@ ParticleEmitter::ParticleEmitter() {}
 ///パーティクル作成
 ///=================================================================================
 ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const std::string& modelFilePath,
-	const std::string& extension, const int32_t& maxnum,const bool& isFirst) {
+	const std::string& extension, const int32_t& maxnum) {
 
 	auto emitter = std::make_unique<ParticleEmitter>();
 	emitter->particleName_ = name;
 	ParticleManager::GetInstance()->CreateParticleGroup(emitter->particleName_, modelFilePath, extension, maxnum);
-	emitter->Init(isFirst);
+	emitter->Init();
 	return emitter.release();
 }
 
 ///=================================================================================
 ///初期化
 ///=================================================================================
-void ParticleEmitter::Init(const bool& isFirst) {
+void ParticleEmitter::Init() {
 	
 	particleCount_ = 0;
 	lifeTime_ = 0.0f;
@@ -52,14 +52,7 @@ void ParticleEmitter::Init(const bool& isFirst) {
 	globalParameter_ = GlobalParameter::GetInstance();
 	globalParameter_->CreateGroup(particleName_, false);
 
-	if (isFirst) {
-		SetValues();
-	}
-	else {
-		
 		AddParmGroup();
-	}
-
 	ApplyGlobalParameter();
 }
 
@@ -110,7 +103,6 @@ void ParticleEmitter::AddParmGroup() {
 	globalParameter_->AddItem(particleName_, "Rotate Base", baseRotate_);
 	globalParameter_->AddItem(particleName_, "Rotate Max", rotateDist_.max);
 	globalParameter_->AddItem(particleName_, "Rotate Min", rotateDist_.min);
-	globalParameter_->AddItem(particleName_, "RotateSpeed Base", baseRotateSpeed_);
 	globalParameter_->AddItem(particleName_, "RotateSpeed Max", rotateSpeedDist_.max);
 	globalParameter_->AddItem(particleName_, "RotateSpeed Min", rotateSpeedDist_.min);
 
@@ -159,7 +151,6 @@ void ParticleEmitter::SetValues() {
 	globalParameter_->SetValue(particleName_, "Rotate Base", baseRotate_);
 	globalParameter_->SetValue(particleName_, "Rotate Max", rotateDist_.max);
 	globalParameter_->SetValue(particleName_, "Rotate Min", rotateDist_.min);
-	globalParameter_->SetValue(particleName_, "RotateSpeed Base", baseRotateSpeed_);
 	globalParameter_->SetValue(particleName_, "RotateSpeed Max", rotateSpeedDist_.max);
 	globalParameter_->SetValue(particleName_, "RotateSpeed Min", rotateSpeedDist_.min);
 
@@ -208,7 +199,6 @@ void ParticleEmitter::ApplyGlobalParameter() {
 	rotateDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "Rotate Max");
 
 	// Rotate Speed
-	baseRotateSpeed_ = globalParameter_->GetValue<Vector3>(particleName_, "RotateSpeed Base");
 	rotateSpeedDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "RotateSpeed Min");
 	rotateSpeedDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "RotateSpeed Max");
 
@@ -252,8 +242,9 @@ void ParticleEmitter::Emit() {
 
 		ParticleManager::GetInstance()->Emit(
 			particleName_, targetPos_+emitPos_, positionDist_, scaleDist_,
-			velocityDist_, baseColor_, colorDist_, lifeTime_, gravity_, baseRotate_,
-			baseRotateSpeed_, rotateDist_, rotateSpeedDist_, particleCount_,isBillBord_,isRotateforDirection_, blendMode_);
+			velocityDist_, baseColor_, colorDist_, lifeTime_, gravity_, toRadian(baseRotate_),
+			 V3MinMax(toRadian(rotateDist_.min), toRadian(rotateDist_.max)), V3MinMax(toRadian(rotateSpeedDist_.min), toRadian(rotateSpeedDist_.max))
+			, particleCount_,isBillBord_,isRotateforDirection_, blendMode_);
 
 		currentTime_ = 0.0f;// 時間を戻す
 	}
@@ -323,32 +314,19 @@ void ParticleEmitter::EditorUpdate() {
 	}
 
 	// Rotate
-	if (ImGui::CollapsingHeader("Rotate")) {
-		ImGui::SeparatorText("Base Rotation:");
-		if (ImGui::CollapsingHeader("Base Rotate (Angle)")) {
-			ImGui::SliderAngle("X", &baseRotate_.x, 0, 360);
-			ImGui::SliderAngle("Y", &baseRotate_.y, 0, 360);
-			ImGui::SliderAngle("Z", &baseRotate_.z, 0, 360);
-		}
+	if (ImGui::CollapsingHeader("Rotate(Degree)")) {
 
-		ImGui::SeparatorText("Rotation Range:");
-		if (ImGui::CollapsingHeader("Rotate Dist (Angle)")) {
-			ImGui::SliderAngle("Max X", &rotateDist_.max.x, 0, 360);
-			ImGui::SliderAngle("Max Y", &rotateDist_.max.y, 0, 360);
-			ImGui::SliderAngle("Max Z", &rotateDist_.max.z, 0, 360);
-			ImGui::SliderAngle("Min X", &rotateDist_.min.x, 0, 360);
-			ImGui::SliderAngle("Min Y", &rotateDist_.min.y, 0, 360);
-			ImGui::SliderAngle("Min Z", &rotateDist_.min.z, 0, 360);
+		ImGui::DragFloat3("BaseRotate", &baseRotate_.x,0.1f, 0, 360);
+		ImGui::DragFloat3("Rotate Max", &rotateDist_.max.x, 0.1f, 0, 360);
+		ImGui::DragFloat3("Rotate Min", &rotateDist_.min.z, 0.1f, 0, 360);
 
-		}
-
-		ImGui::SeparatorText("Rotation Speed:");
-		if (ImGui::CollapsingHeader("Rotate Speed (Angle)")) {
-			ImGui::SliderAngle("Base", &baseRotateSpeed_.x, 0, 360);
-			ImGui::SliderAngle("Max", &rotateSpeedDist_.max.x, 0, 360);
-			ImGui::SliderAngle("Min", &rotateSpeedDist_.min.x, 0, 360);
-		}
 	}
+	
+	if (ImGui::CollapsingHeader("Rotate Speed(Degree)")) {
+		ImGui::DragFloat3("Rotate Speed Max", &rotateSpeedDist_.max.x, 0.1f, 0, 720);
+		ImGui::DragFloat3("Rotate Speed Min", &rotateSpeedDist_.min.x, 0.1f, 0, 720);
+	}
+	
 
 	// その他のパラメータ
 	if (ImGui::CollapsingHeader("etcParamater")) {
