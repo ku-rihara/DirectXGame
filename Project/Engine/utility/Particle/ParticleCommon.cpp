@@ -61,7 +61,7 @@ void ParticleCommon::CreateGraphicsPipeline() {
 	inputLayoutDesc.NumElements = _countof(inputElementDescs);
 
 
-	// ADD ブレンドの設定
+	// ADD ブレンド設定
 	D3D12_BLEND_DESC blendDescAdd = {};
 	blendDescAdd.RenderTarget[0].BlendEnable = TRUE;
 	blendDescAdd.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
@@ -72,12 +72,43 @@ void ParticleCommon::CreateGraphicsPipeline() {
 	blendDescAdd.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blendDescAdd.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
-	// 通常のブレンド（何もしない）
+	// 通常（ブレンドなし）
 	D3D12_BLEND_DESC blendDescNone = {};
 	blendDescNone.RenderTarget[0].BlendEnable = FALSE;
 	blendDescNone.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
+	// 乗算ブレンド設定
+	D3D12_BLEND_DESC blendDescMultiply = {};
+	blendDescMultiply.RenderTarget[0].BlendEnable = TRUE;
+	blendDescMultiply.RenderTarget[0].SrcBlend = D3D12_BLEND_ZERO;
+	blendDescMultiply.RenderTarget[0].DestBlend = D3D12_BLEND_SRC_COLOR;
+	blendDescMultiply.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	blendDescMultiply.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ZERO;
+	blendDescMultiply.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ONE;
+	blendDescMultiply.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blendDescMultiply.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
+	// 減算ブレンド設定
+	D3D12_BLEND_DESC blendDescSubtractive = {};
+	blendDescSubtractive.RenderTarget[0].BlendEnable = TRUE;
+	blendDescSubtractive.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blendDescSubtractive.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
+	blendDescSubtractive.RenderTarget[0].BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
+	blendDescSubtractive.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDescSubtractive.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+	blendDescSubtractive.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blendDescSubtractive.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
+	// スクリーンブレンド設定
+	D3D12_BLEND_DESC blendDescScreen = {};
+	blendDescScreen.RenderTarget[0].BlendEnable = TRUE;
+	blendDescScreen.RenderTarget[0].SrcBlend = D3D12_BLEND_ONE;
+	blendDescScreen.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_COLOR;
+	blendDescScreen.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	blendDescScreen.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDescScreen.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+	blendDescScreen.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blendDescScreen.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
 
 	//RasterizerStateの設定
@@ -121,6 +152,9 @@ void ParticleCommon::CreateGraphicsPipeline() {
 	// 各ブレンドモードのPSOを作成
 	CreatePSO(blendDescAdd, graphicsPipelineStateAdd_);
 	CreatePSO(blendDescNone, graphicsPipelineStateNone_);
+	CreatePSO(blendDescMultiply, graphicsPipelineStateMultiply_);
+	CreatePSO(blendDescSubtractive, graphicsPipelineStateSubtractive_);
+	CreatePSO(blendDescScreen, graphicsPipelineStateScreen_);
 
 }
 
@@ -182,6 +216,15 @@ void ParticleCommon::PreDraw(ID3D12GraphicsCommandList* commandList, BlendMode b
 		break;
 	case BlendMode::None:
 		commandList->SetPipelineState(graphicsPipelineStateNone_.Get());
+		break;
+	case BlendMode::Multiply:
+		commandList->SetPipelineState(graphicsPipelineStateMultiply_.Get());
+		break;
+	case BlendMode::Subtractive:
+		commandList->SetPipelineState(graphicsPipelineStateSubtractive_.Get());
+		break;
+	case BlendMode::Screen:
+		commandList->SetPipelineState(graphicsPipelineStateScreen_.Get());
 		break;
 	}
 }

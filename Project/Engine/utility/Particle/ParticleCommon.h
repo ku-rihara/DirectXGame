@@ -3,7 +3,10 @@
 #include"base/SrvManager.h"
 enum class BlendMode {
 	Add,
-	None
+	None,
+	Multiply,
+	Subtractive,
+	Screen,
 };
 class ParticleCommon {
 public:
@@ -23,8 +26,12 @@ public:
 	Microsoft::WRL::ComPtr<ID3DBlob>errorBlob_;
 	Microsoft::WRL::ComPtr<IDxcBlob>vertexShaderBlob_;
 	Microsoft::WRL::ComPtr<IDxcBlob>pixelShaderBlob_;
+
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateAdd_;
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateNone_;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateMultiply_;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateSubtractive_;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateScreen_;
 private:
 
 	///==============================================
