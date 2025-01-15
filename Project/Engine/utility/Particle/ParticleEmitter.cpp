@@ -319,7 +319,7 @@ void ParticleEmitter::EditorUpdate() {
 
 		ImGui::DragFloat3("BaseRotate", &baseRotate_.x,0.1f, 0, 360);
 		ImGui::DragFloat3("Rotate Max", &rotateDist_.max.x, 0.1f, 0, 360);
-		ImGui::DragFloat3("Rotate Min", &rotateDist_.min.z, 0.1f, 0, 360);
+		ImGui::DragFloat3("Rotate Min", &rotateDist_.min.x, 0.1f, 0, 360);
 
 	}
 	
