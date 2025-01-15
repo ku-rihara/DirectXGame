@@ -91,8 +91,7 @@ void TitleScene::ModelDraw() {
    /// パーティクル描画
    /// ===================================================
 void TitleScene::ParticleDraw() {
-	emitter_->DebugDraw(viewProjection_);
-	emitter_->RailDraw(viewProjection_);
+	
 	ParticleManager::GetInstance()->Draw(viewProjection_);
 }
 

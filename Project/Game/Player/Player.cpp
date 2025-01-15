@@ -63,7 +63,7 @@ void Player::Init() {
 	rightHand_->SetRailParent(&transform_);
 	leftHand_->SetRailParent(&transform_);
 
-	fallEmitter_.reset(ParticleEmitter::CreateParticle(fallParticleName_, "DebugSphere", ".obj", 300, false));
+	fallEmitter_.reset(ParticleEmitter::CreateParticle(fallParticleName_, "DebugSphere", ".obj", 300));
 	fallEmitter_->SetBlendMode(BlendMode::None);
 
 	/// 通常モードから

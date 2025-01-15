@@ -54,14 +54,14 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 
 	/// particleT
 	thrustName_ = "TrushParticle";
-	thrustEmit_.reset(ParticleEmitter::CreateParticle(thrustName_, "Stick",".obj", 200, false));
+	thrustEmit_.reset(ParticleEmitter::CreateParticle(thrustName_, "Stick",".obj", 200));
 	thrustEmit_->SetBlendMode(BlendMode::None);
 	thrustEmit_->SetIsBillBord(false);
 	thrustEmit_->SetIsRotateForDirection(true);
 
 	/// particleD
 	damageName_ = "DamageParticle";
-	damageEmitter_.reset(ParticleEmitter::CreateParticle(damageName_, "Plane", ".obj", 300, false));
+	damageEmitter_.reset(ParticleEmitter::CreateParticle(damageName_, "Plane", ".obj", 300));
 	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
 	damageEmitter_->SetTextureHandle(handle);
 
