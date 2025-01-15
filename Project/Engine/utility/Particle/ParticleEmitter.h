@@ -40,8 +40,7 @@ private:
 	Vector3 emitPos_;                              ///発生座標
 	Vector3 basePos_;                              ///基準座標
 	Vector3 baseRotate_;                           ///回転基準
-	Vector3 baseRotateSpeed_;                      /// 回転スピード基準
-	Vector4 baseColor_;                           ///基準の色
+	Vector4 baseColor_;                            ///基準の色
 								                  
 	/// rondom					                  
 	V3MinMax positionDist_;                       ///座標ランダム分配
@@ -83,9 +82,9 @@ public:
 	/// 初期化
 	static ParticleEmitter* CreateParticle(
 		const std::string& name, const std::string& modelFilePath,
-		const std::string& extension, const int32_t& maxnum, const bool& isFirst);
+		const std::string& extension, const int32_t& maxnum);
 
-	void Init(const bool& isFirst);/// 初期化
+	void Init();/// 初期化
 	void Emit();///　エミット
 	void UpdateEmitTransform();
 	

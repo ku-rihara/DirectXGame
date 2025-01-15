@@ -5,6 +5,7 @@
 
 #include "base/TextureManager.h"
 //class
+#include"utility/Particle/ParticleManager.h"
 
 //math
 #include"Frame/Frame.h"
@@ -24,6 +25,9 @@ void TitleScene::Init() {
 	ctest2_ = std::make_unique<CollisionTest2>();
 	ctest3_ = std::make_unique<CollisionTest3>();
 
+	emitter_.reset(ParticleEmitter::CreateParticle("punchEffect", "cube", ".obj", 200));
+
+
 	ctest1_->Init();
 	ctest2_->Init();
 	ctest3_->Init();
@@ -34,6 +38,12 @@ void TitleScene::Update() {
 	ctest1_->Update();
 	ctest2_->Update();
 	ctest3_->Update();
+
+	emitter_->Update();
+	emitter_->EditorUpdate();
+	emitter_->Emit();
+
+	ParticleManager::GetInstance()->Update(&viewProjection_);
 
 	Debug();
 	ViewProjectionUpdate();
@@ -58,7 +68,9 @@ void TitleScene::ModelDraw() {
    /// パーティクル描画
    /// ===================================================
 void TitleScene::ParticleDraw() {
-	
+	emitter_->DebugDraw(viewProjection_);
+	emitter_->RailDraw(viewProjection_);
+	ParticleManager::GetInstance()->Draw(viewProjection_);
 }
 
 /// ===================================================
