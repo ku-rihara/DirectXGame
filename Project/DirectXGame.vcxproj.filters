@@ -502,6 +502,9 @@
     <ClCompile Include="Game\GameCamera\Behavior\GameCameraRoot.cpp">
       <Filter>Game\GameCamera\Behavior</Filter>
     </ClCompile>
+    <ClCompile Include="math\Quaternion.cpp">
+      <Filter>liberary\.cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -860,6 +863,9 @@
     </ClInclude>
     <ClInclude Include="Game\GameCamera\Behavior\GameCameraRoot.h">
       <Filter>Game\GameCamera\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Quaternion.h">
+      <Filter>liberary\.h</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -11,6 +11,7 @@
 #include<string>
 
 
+
 ParticleManager* ParticleManager::GetInstance() {
 	static ParticleManager instance;
 	return &instance;
@@ -216,16 +217,11 @@ void ParticleManager::CreateInstancingResource(const std::string& name, const ui
 ///======================================================================
 /// パーティクル作成
 ///======================================================================
-ParticleManager::Particle ParticleManager::MakeParticle(
-	const Vector3& basePosition, const V3MinMax& positionDist,
-	const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
-	const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
-	const Vector3& baseRotate, const V3MinMax& RotateDist,
-	const V3MinMax& rotateSpeedDist, const bool& isRotateforDirection) {
+ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::Parameters& paramaters) {
 
 	Particle particle;
 
-	particle.lifeTime_ = lifeTime;
+	particle.lifeTime_ = paramaters.lifeTime;
 	particle.currentTime_ = 0.0f;
 	particle.worldTransform_.Init();
 
@@ -233,25 +229,25 @@ ParticleManager::Particle ParticleManager::MakeParticle(
 	/// 座標
 	///------------------------------------------------------------------------
 	Vector3 randomTranslate = {
-		Random::Range(positionDist.min.x, positionDist.max.x),
-		Random::Range(positionDist.min.y, positionDist.max.y),
-		Random::Range(positionDist.min.z, positionDist.max.z)
+		Random::Range(paramaters.positionDist.min.x, paramaters.positionDist.max.x),
+		Random::Range(paramaters.positionDist.min.y, paramaters.positionDist.max.y),
+		Random::Range(paramaters.positionDist.min.z, paramaters.positionDist.max.z)
 	};
-	particle.worldTransform_.translation_ = basePosition + randomTranslate;
+	particle.worldTransform_.translation_ = paramaters.emitPos + randomTranslate;
 
 	///------------------------------------------------------------------------
 	/// 速度
 	///------------------------------------------------------------------------
 	particle.velocity_ = {
-		Random::Range(velocityDist.min.x, velocityDist.max.x),
-		Random::Range(velocityDist.min.y, velocityDist.max.y),
-		Random::Range(velocityDist.min.z, velocityDist.max.z)
+		Random::Range(paramaters.velocityDist.min.x,paramaters.velocityDist.max.x),
+		Random::Range(paramaters.velocityDist.min.y,paramaters.velocityDist.max.y),
+		Random::Range(paramaters.velocityDist.min.z,paramaters.velocityDist.max.z)
 	};
 
 	///------------------------------------------------------------------------
 	/// 回転
 	///------------------------------------------------------------------------
-	if (isRotateforDirection) {
+	if (paramaters.isRotateforDirection) {
 		// 進行方向（速度）を基に回転を計算
 		if (particle.velocity_.Length() > 0.0001f) { // 速度がゼロに近くない場合
 			Vector3 direction = Vector3::Normalize(particle.velocity_);
@@ -259,15 +255,15 @@ ParticleManager::Particle ParticleManager::MakeParticle(
 		}
 		else {
 			// 速度がゼロの場合はデフォルト回転
-			particle.worldTransform_.rotation_ = (baseRotate);
+			particle.worldTransform_.rotation_ = (paramaters.baseRotate);
 		}
 	}
 	else {
 		// ランダム回転を設定
 		Vector3 rotate = {
-			Random::Range(RotateDist.min.x, RotateDist.max.x),
-			Random::Range(RotateDist.min.y, RotateDist.max.y),
-			Random::Range(RotateDist.min.z, RotateDist.max.z)
+			Random::Range(paramaters.rotateDist.min.x, paramaters.rotateDist.max.x),
+			Random::Range(paramaters.rotateDist.min.y, paramaters.rotateDist.max.y),
+			Random::Range(paramaters.rotateDist.min.z, paramaters.rotateDist.max.z)
 		};
 
 		// ラジアン変換
@@ -275,16 +271,16 @@ ParticleManager::Particle ParticleManager::MakeParticle(
 		rotate.y = (rotate.y);
 		rotate.z = (rotate.z);
 
-		particle.worldTransform_.rotation_ = (baseRotate) + rotate;
+		particle.worldTransform_.rotation_ = (paramaters.baseRotate) + rotate;
 	}
 
 	///------------------------------------------------------------------------
 	/// 回転スピード
 	///------------------------------------------------------------------------
 	Vector3 rotateSpeed = {
-		Random::Range(rotateSpeedDist.min.x, rotateSpeedDist.max.x),
-		Random::Range(rotateSpeedDist.min.y, rotateSpeedDist.max.y),
-		Random::Range(rotateSpeedDist.min.z, rotateSpeedDist.max.z)
+		Random::Range(paramaters.rotateSpeedDist.min.x, paramaters.rotateSpeedDist.max.x),
+		Random::Range(paramaters.rotateSpeedDist.min.y, paramaters.rotateSpeedDist.max.y),
+		Random::Range(paramaters.rotateSpeedDist.min.z, paramaters.rotateSpeedDist.max.z)
 	};
 
 	rotateSpeed.x = (rotateSpeed.x);
@@ -296,25 +292,25 @@ ParticleManager::Particle ParticleManager::MakeParticle(
 	///------------------------------------------------------------------------
 	/// スケール
 	///------------------------------------------------------------------------
-	float scale = Random::Range(scaledist.min, scaledist.max);
+	float scale = Random::Range(paramaters.scaleDist.min, paramaters.scaleDist.max);
 	particle.worldTransform_.scale_ = { scale, scale, scale };
 
 	///------------------------------------------------------------------------
 	/// 色
 	///------------------------------------------------------------------------
 	Vector4 randomColor = {
-		Random::Range(colorDist.min.x, colorDist.max.x),
-		Random::Range(colorDist.min.y, colorDist.max.y),
-		Random::Range(colorDist.min.z, colorDist.max.z),
+		Random::Range(paramaters.colorDist.min.x, paramaters.colorDist.max.x),
+		Random::Range(paramaters.colorDist.min.y, paramaters.colorDist.max.y),
+		Random::Range(paramaters.colorDist.min.z, paramaters.colorDist.max.z),
 		0.0f
 	};
 
-	particle.color_ = baseColor + randomColor;
+	particle.color_ = paramaters.baseColor + randomColor;
 
 	///------------------------------------------------------------------------
 	/// 重力
 	///------------------------------------------------------------------------
-	particle.gravity_ = gravity;
+	particle.gravity_ = paramaters.gravity;
 
 	return particle;
 }
@@ -324,27 +320,21 @@ ParticleManager::Particle ParticleManager::MakeParticle(
 /// エミット
 ///======================================================================
 void ParticleManager::Emit(
-	std::string name, const Vector3& basePosition, const V3MinMax& positionDist,
-	const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
-	const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
-	const Vector3& baseRotate, const V3MinMax& RotateDist,
-	const V3MinMax& rotateSpeedDist, uint32_t count, const bool& isbillbord, const bool& isRotateforDirection, const BlendMode& blendmode) {  // 新パラメータ追加
+	std::string name, const ParticleEmitter::Parameters&
+	paramaters, const ParticleEmitter::GroupParamaters& groupParamaters,const int32_t& count) {  // 新パラメータ追加
 
 	// パーティクルグループが存在するか確認
 	assert(particleGroups_.find(name) != particleGroups_.end() && "Error: Not Find ParticleGroup");
 
 	// 指定されたパーティクルグループを取得
 	ParticleGroup& particleGroup = particleGroups_[name];
-	particleGroup.blendMode_ = blendmode;
-	particleGroup.isBillBord = isbillbord;
+	particleGroup.blendMode_ = groupParamaters.blendMode;
+	particleGroup.isBillBord = groupParamaters.isBillBord;
 
 	// 生成、グループ追加
 	std::list<Particle> particles;
-	for (uint32_t i = 0; i < count; ++i) {
-		particles.emplace_back(MakeParticle(
-			basePosition, positionDist, scaledist, velocityDist, baseColor,
-			colorDist, lifeTime, gravity, baseRotate,
-			RotateDist,rotateSpeedDist, isRotateforDirection));
+	for (uint32_t i = 0; i < uint32_t(count); ++i) {
+		particles.emplace_back(MakeParticle(paramaters));
 	}
 
 	// グループに追加
