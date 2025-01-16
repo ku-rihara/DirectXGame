@@ -17,8 +17,8 @@ ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const 
 	const std::string& extension, const int32_t& maxnum) {
 
 	auto emitter = std::make_unique<ParticleEmitter>();
-	emitter->particleName_ = name;
-	ParticleManager::GetInstance()->CreateParticleGroup(emitter->particleName_, modelFilePath, extension, maxnum);
+	emitter->particleName = name;
+	ParticleManager::GetInstance()->CreateParticleGroup(emitter->particleName, modelFilePath, extension, maxnum);
 	emitter->Init();
 	return emitter.release();
 }
@@ -27,21 +27,21 @@ ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const 
 ///初期化
 ///=================================================================================
 void ParticleEmitter::Init() {
-	
-	particleCount_ = 0;
-	lifeTime_ = 0.0f;
-	gravity_ = 0.0f;
-	baseColor_ = { 0, 0, 0, 0 };
-	colorDist_.min = { 0, 0, 0, 0 };
-	colorDist_.max = { 0, 0, 0, 0 };
+
+	parameters_.particleCount = 0;
+	parameters_.lifeTime = 0.0f;
+	parameters_.gravity = 0.0f;
+	parameters_.baseColor = { 0, 0, 0, 0 };
+	parameters_.colorDist.min = { 0, 0, 0, 0 };
+	parameters_.colorDist.max = { 0, 0, 0, 0 };
 	intervalTime_ = 1.0f;
-	targetPos_ = { 0,0,0 };
-	isBillBord_ = true;
-	isRotateforDirection_ = false;
+	parameters_.targetPos = { 0,0,0 };
+	groupParamaters_.isBillBord = true;
+	parameters_.isRotateforDirection = false;
 
 	// レールマネージャー
 	railManager_ = std::make_unique<RailManager>();
-	railManager_->Init(particleName_);
+	railManager_->Init(particleName);
 
 
 	/// 発生位置可視化オブジェ
@@ -50,9 +50,9 @@ void ParticleEmitter::Init() {
 
 	/// グローバル変数
 	globalParameter_ = GlobalParameter::GetInstance();
-	globalParameter_->CreateGroup(particleName_, false);
+	globalParameter_->CreateGroup(particleName, false);
 
-		AddParmGroup();
+	AddParmGroup();
 	ApplyGlobalParameter();
 }
 
@@ -62,11 +62,11 @@ void ParticleEmitter::Init() {
 void ParticleEmitter::ParmLoadForImGui() {
 
 	// ロードボタン
-	if (ImGui::Button(std::format("Load {}", particleName_).c_str())) {
+	if (ImGui::Button(std::format("Load {}",particleName).c_str())) {
 
-		globalParameter_->LoadFile(particleName_);
+		globalParameter_->LoadFile(particleName);
 		// セーブ完了メッセージ
-		ImGui::Text("Load Successful: %s", particleName_.c_str());
+		ImGui::Text("Load Successful: %s",particleName.c_str());
 		ApplyGlobalParameter();
 	}
 }
@@ -77,8 +77,8 @@ void ParticleEmitter::ParmLoadForImGui() {
 ///=================================================================================
 void ParticleEmitter::SetTextureHandle(const uint32_t& handle) {
 
-	ParticleManager::GetInstance()->SetTextureHandle(particleName_, handle);
-	
+	ParticleManager::GetInstance()->SetTextureHandle(particleName, handle);
+
 }
 
 
@@ -89,44 +89,44 @@ void ParticleEmitter::AddParmGroup() {
 
 	// Position
 	//globalParameter_->AddSeparatorText("Position");
-	globalParameter_->AddItem(particleName_, "Position Base", basePos_);
-	globalParameter_->AddItem(particleName_, "Position Max", positionDist_.max);
-	globalParameter_->AddItem(particleName_, "Position Min", positionDist_.min);
+	globalParameter_->AddItem(particleName, "Position Base", parameters_.emitPos);
+	globalParameter_->AddItem(particleName, "Position Max", parameters_.positionDist.max);
+	globalParameter_->AddItem(particleName, "Position Min", parameters_.positionDist.min);
 
 	// Scale
 	/*globalParameter_->AddSeparatorText("Scale");*/
-	globalParameter_->AddItem(particleName_, "Scale Max", scaleDist_.max);
-	globalParameter_->AddItem(particleName_, "Scale Min", scaleDist_.min);
+	globalParameter_->AddItem(particleName, "Scale Max", parameters_.scaleDist.max);
+	globalParameter_->AddItem(particleName, "Scale Min", parameters_.scaleDist.min);
 
 	// Rotate
 	/*globalParameter_->AddSeparatorText("Rotate");*/
-	globalParameter_->AddItem(particleName_, "Rotate Base", baseRotate_);
-	globalParameter_->AddItem(particleName_, "Rotate Max", rotateDist_.max);
-	globalParameter_->AddItem(particleName_, "Rotate Min", rotateDist_.min);
-	globalParameter_->AddItem(particleName_, "RotateSpeed Max", rotateSpeedDist_.max);
-	globalParameter_->AddItem(particleName_, "RotateSpeed Min", rotateSpeedDist_.min);
+	globalParameter_->AddItem(particleName, "Rotate Base", parameters_.baseRotate);
+	globalParameter_->AddItem(particleName, "Rotate Max", parameters_.rotateDist.max);
+	globalParameter_->AddItem(particleName, "Rotate Min", parameters_.rotateDist.min);
+	globalParameter_->AddItem(particleName, "RotateSpeed Max", parameters_.rotateSpeedDist.max);
+	globalParameter_->AddItem(particleName, "RotateSpeed Min", parameters_.rotateSpeedDist.min);
 
 	// Velocity
 	/*globalParameter_->AddSeparatorText("Velocity");*/
-	globalParameter_->AddItem(particleName_, "Velocity Max", velocityDist_.max);
-	globalParameter_->AddItem(particleName_, "Velocity Min", velocityDist_.min);
+	globalParameter_->AddItem(particleName, "Velocity Max", parameters_.velocityDist.max);
+	globalParameter_->AddItem(particleName, "Velocity Min", parameters_.velocityDist.min);
 
 	// Color
 	/*globalParameter_->AddSeparatorText("Color");*/
-	globalParameter_->AddItem(particleName_, "BaseColor", baseColor_);
-	globalParameter_->AddItem(particleName_, "Color Max", colorDist_.max);
-	globalParameter_->AddItem(particleName_, "Color Min", colorDist_.min);
+	globalParameter_->AddItem(particleName, "BaseColor", parameters_.baseColor);
+	globalParameter_->AddItem(particleName, "Color Max", parameters_.colorDist.max);
+	globalParameter_->AddItem(particleName, "Color Min", parameters_.colorDist.min);
 
 	// その他
 	/*globalParameter_->AddSeparatorText("Prm");*/
-	globalParameter_->AddItem(particleName_, "IntervalTime", intervalTime_);
-	globalParameter_->AddItem(particleName_, "Gravity", gravity_ );
-	globalParameter_->AddItem(particleName_, "LifeTime", lifeTime_);
-	globalParameter_->AddItem(particleName_, "Particle Count", particleCount_);
+	globalParameter_->AddItem(particleName, "IntervalTime", intervalTime_);
+	globalParameter_->AddItem(particleName, "Gravity", parameters_.gravity);
+	globalParameter_->AddItem(particleName, "LifeTime", parameters_.lifeTime);
+	globalParameter_->AddItem(particleName, "Particle Count", parameters_.particleCount);
 
 	///rail 
-	globalParameter_->AddItem(particleName_, "isMoveForRail", isMoveForRail_);
-	globalParameter_->AddItem(particleName_, "moveSpeed", moveSpeed_);
+	globalParameter_->AddItem(particleName, "isMoveForRail", isMoveForRail_);
+	globalParameter_->AddItem(particleName, "moveSpeed", moveSpeed_);
 
 }
 
@@ -137,44 +137,44 @@ void ParticleEmitter::AddParmGroup() {
 void ParticleEmitter::SetValues() {
 	// Position
 		//globalParameter_->AddSeparatorText("Position");
-	globalParameter_->SetValue(particleName_, "Position Base", basePos_);
-	globalParameter_->SetValue(particleName_, "Position Max", positionDist_.max);
-	globalParameter_->SetValue(particleName_, "Position Min", positionDist_.min);
+	globalParameter_->SetValue(particleName, "Position Base", parameters_.emitPos);
+	globalParameter_->SetValue(particleName, "Position Max", parameters_.positionDist.max);
+	globalParameter_->SetValue(particleName, "Position Min", parameters_.positionDist.min);
 
 	// Scale
 	/*globalParameter_->AddSeparatorText("Scale");*/
-	globalParameter_->SetValue(particleName_, "Scale Max", scaleDist_.max);
-	globalParameter_->SetValue(particleName_, "Scale Min", scaleDist_.min);
+	globalParameter_->SetValue(particleName, "Scale Max", parameters_.scaleDist.max);
+	globalParameter_->SetValue(particleName, "Scale Min", parameters_.scaleDist.min);
 
 	// Rotate
 	/*globalParameter_->AddSeparatorText("Rotate");*/
-	globalParameter_->SetValue(particleName_, "Rotate Base", baseRotate_);
-	globalParameter_->SetValue(particleName_, "Rotate Max", rotateDist_.max);
-	globalParameter_->SetValue(particleName_, "Rotate Min", rotateDist_.min);
-	globalParameter_->SetValue(particleName_, "RotateSpeed Max", rotateSpeedDist_.max);
-	globalParameter_->SetValue(particleName_, "RotateSpeed Min", rotateSpeedDist_.min);
+	globalParameter_->SetValue(particleName, "Rotate Base", parameters_.baseRotate);
+	globalParameter_->SetValue(particleName, "Rotate Max", parameters_.rotateDist.max);
+	globalParameter_->SetValue(particleName, "Rotate Min", parameters_.rotateDist.min);
+	globalParameter_->SetValue(particleName, "RotateSpeed Max", parameters_.rotateSpeedDist.max);
+	globalParameter_->SetValue(particleName, "RotateSpeed Min", parameters_.rotateSpeedDist.min);
 
 	// Velocity
 	/*globalParameter_->AddSeparatorText("Velocity");*/
-	globalParameter_->SetValue(particleName_, "Velocity Max", velocityDist_.max);
-	globalParameter_->SetValue(particleName_, "Velocity Min", velocityDist_.min);
+	globalParameter_->SetValue(particleName, "Velocity Max", parameters_.velocityDist.max);
+	globalParameter_->SetValue(particleName, "Velocity Min", parameters_.velocityDist.min);
 
 	// Color
 	/*globalParameter_->AddSeparatorText("Color");*/
-	globalParameter_->SetValue(particleName_, "BaseColor", baseColor_);
-	globalParameter_->SetValue(particleName_, "Color Max", colorDist_.max);
-	globalParameter_->SetValue(particleName_, "Color Min", colorDist_.min);
+	globalParameter_->SetValue(particleName, "BaseColor", parameters_.baseColor);
+	globalParameter_->SetValue(particleName, "Color Max", parameters_.colorDist.max);
+	globalParameter_->SetValue(particleName, "Color Min", parameters_.colorDist.min);
 
 	// その他
 	/*globalParameter_->AddSeparatorText("Prm");*/
-	globalParameter_->SetValue(particleName_, "IntervalTime", intervalTime_);
-	globalParameter_->SetValue(particleName_, "Gravity", gravity_);
-	globalParameter_->SetValue(particleName_, "LifeTime", lifeTime_);
-	globalParameter_->SetValue(particleName_, "Particle Count", particleCount_);
+	globalParameter_->SetValue(particleName, "IntervalTime", intervalTime_);
+	globalParameter_->SetValue(particleName, "Gravity", parameters_.gravity);
+	globalParameter_->SetValue(particleName, "LifeTime", parameters_.lifeTime);
+	globalParameter_->SetValue(particleName, "Particle Count", parameters_.particleCount);
 
 	///rail 
-	globalParameter_->SetValue(particleName_, "isMoveForRail", isMoveForRail_);
-	globalParameter_->SetValue(particleName_, "moveSpeed", moveSpeed_);
+	globalParameter_->SetValue(particleName, "isMoveForRail", isMoveForRail_);
+	globalParameter_->SetValue(particleName, "moveSpeed", moveSpeed_);
 
 }
 
@@ -185,42 +185,42 @@ void ParticleEmitter::SetValues() {
 void ParticleEmitter::ApplyGlobalParameter() {
 
 	// Position
-	basePos_ = globalParameter_->GetValue<Vector3>(particleName_, "Position Base");
-	positionDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "Position Min");
-	positionDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "Position Max");
+	parameters_.emitPos = globalParameter_->GetValue<Vector3>(particleName, "Position Base");
+	parameters_.positionDist.min = globalParameter_->GetValue<Vector3>(particleName, "Position Min");
+	parameters_.positionDist.max = globalParameter_->GetValue<Vector3>(particleName, "Position Max");
 
 	// Scale
-	scaleDist_.min = globalParameter_->GetValue<float>(particleName_, "Scale Min");
-	scaleDist_.max = globalParameter_->GetValue<float>(particleName_, "Scale Max");
+	parameters_.scaleDist.min = globalParameter_->GetValue<float>(particleName, "Scale Min");
+	parameters_.scaleDist.max = globalParameter_->GetValue<float>(particleName, "Scale Max");
 
 	// Rotate
-	baseRotate_ = globalParameter_->GetValue<Vector3>(particleName_, "Rotate Base");
-	rotateDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "Rotate Min");
-	rotateDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "Rotate Max");
+	parameters_.baseRotate = globalParameter_->GetValue<Vector3>(particleName, "Rotate Base");
+	parameters_.rotateDist.min = globalParameter_->GetValue<Vector3>(particleName, "Rotate Min");
+	parameters_.rotateDist.max = globalParameter_->GetValue<Vector3>(particleName, "Rotate Max");
 
 	// Rotate Speed
-	rotateSpeedDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "RotateSpeed Min");
-	rotateSpeedDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "RotateSpeed Max");
+	parameters_.rotateSpeedDist.min = globalParameter_->GetValue<Vector3>(particleName, "RotateSpeed Min");
+	parameters_.rotateSpeedDist.max = globalParameter_->GetValue<Vector3>(particleName, "RotateSpeed Max");
 
 
 	// Velocity
-	velocityDist_.min = globalParameter_->GetValue<Vector3>(particleName_, "Velocity Min");
-	velocityDist_.max = globalParameter_->GetValue<Vector3>(particleName_, "Velocity Max");
+	parameters_.velocityDist.min = globalParameter_->GetValue<Vector3>(particleName, "Velocity Min");
+	parameters_.velocityDist.max = globalParameter_->GetValue<Vector3>(particleName, "Velocity Max");
 
 	// Color
-	baseColor_ = globalParameter_->GetValue<Vector4>(particleName_, "BaseColor");
-	colorDist_.min = globalParameter_->GetValue<Vector4>(particleName_, "Color Min");
-	colorDist_.max = globalParameter_->GetValue<Vector4>(particleName_, "Color Max");
+	parameters_.baseColor = globalParameter_->GetValue<Vector4>(particleName, "BaseColor");
+	parameters_.colorDist.min = globalParameter_->GetValue<Vector4>(particleName, "Color Min");
+	parameters_.colorDist.max = globalParameter_->GetValue<Vector4>(particleName, "Color Max");
 
 	// その他のパラメータ
-	intervalTime_ = globalParameter_->GetValue<float>(particleName_, "IntervalTime");
-	gravity_ = globalParameter_->GetValue<float>(particleName_, "Gravity");
-	lifeTime_ = globalParameter_->GetValue<float>(particleName_, "LifeTime");
-	particleCount_ = globalParameter_->GetValue<int32_t>(particleName_, "Particle Count");
+	intervalTime_ = globalParameter_->GetValue<float>(particleName, "IntervalTime");
+	parameters_.gravity = globalParameter_->GetValue<float>(particleName, "Gravity");
+	parameters_.lifeTime = globalParameter_->GetValue<float>(particleName, "LifeTime");
+	parameters_.particleCount = globalParameter_->GetValue<int32_t>(particleName, "Particle Count");
 
 	///rail	
-	isMoveForRail_ = globalParameter_->GetValue<bool>(particleName_, "isMoveForRail");
-	moveSpeed_ = globalParameter_->GetValue<float>(particleName_, "moveSpeed");
+	isMoveForRail_ = globalParameter_->GetValue<bool>(particleName, "isMoveForRail");
+	moveSpeed_ = globalParameter_->GetValue<float>(particleName, "moveSpeed");
 }
 
 ///=================================================================================
@@ -230,10 +230,10 @@ void ParticleEmitter::Emit() {
 
 	//　発生座標のパターン切り替え
 	if (isMoveForRail_) {
-		emitPos_ = railManager_->GetWorldTransform().GetWorldPos();
+		parameters_.emitPos = railManager_->GetWorldTransform().GetWorldPos();
 	}
 	else {
-		emitPos_ = basePos_;
+		parameters_.emitPos = parameters_.emitPos;
 	}
 
 
@@ -242,10 +242,10 @@ void ParticleEmitter::Emit() {
 	if (currentTime_ >= intervalTime_) {//　間隔ごとに発動
 
 		ParticleManager::GetInstance()->Emit(
-			particleName_, targetPos_+emitPos_, positionDist_, scaleDist_,
-			velocityDist_, baseColor_, colorDist_, lifeTime_, gravity_, toRadian(baseRotate_),
-			 V3MinMax(toRadian(rotateDist_.min), toRadian(rotateDist_.max)), V3MinMax(toRadian(rotateSpeedDist_.min), toRadian(rotateSpeedDist_.max))
-			, particleCount_,isBillBord_,isRotateforDirection_, blendMode_);
+			particleName, parameters_.targetPos + parameters_.emitPos, parameters_.positionDist, parameters_.scaleDist,
+			parameters_.velocityDist, parameters_.baseColor, parameters_.colorDist, parameters_.lifeTime, parameters_.gravity, toRadian(parameters_.baseRotate),
+			V3MinMax(toRadian(parameters_.rotateDist.min), toRadian(parameters_.rotateDist.max)), V3MinMax(toRadian(parameters_.rotateSpeedDist.min), toRadian(parameters_.rotateSpeedDist.max))
+			, parameters_.particleCount, groupParamaters_.isBillBord, parameters_.isRotateforDirection, groupParamaters_.blendMode);
 
 		currentTime_ = 0.0f;// 時間を戻す
 	}
@@ -267,16 +267,16 @@ void ParticleEmitter::Update() {
 void ParticleEmitter::EditorUpdate() {
 #ifdef _DEBUG
 
-	ImGui::Begin(particleName_.c_str());
+	ImGui::Begin(particleName.c_str());
 
 	// Color
 	if (ImGui::CollapsingHeader("Color")) {
 		ImGui::SeparatorText("Base Color:");
-		ImGui::ColorEdit4("Base", &baseColor_.x);
+		ImGui::ColorEdit4("Base", &parameters_.baseColor.x);
 
 		ImGui::SeparatorText("Color Range:");
-		ImGui::ColorEdit4("Max", &colorDist_.max.x);
-		ImGui::ColorEdit4("Min", &colorDist_.min.x);
+		ImGui::ColorEdit4("Max", &parameters_.colorDist.max.x);
+		ImGui::ColorEdit4("Min", &parameters_.colorDist.min.x);
 	}
 
 	/// rail
@@ -292,52 +292,52 @@ void ParticleEmitter::EditorUpdate() {
 	// Position
 	if (ImGui::CollapsingHeader("Position")) {
 		ImGui::SeparatorText("Position Base:");
-		ImGui::DragFloat3("Base", &basePos_.x, 0.1f);
+		ImGui::DragFloat3("Base", &parameters_.emitPos.x, 0.1f);
 
 		ImGui::SeparatorText("Position Range:");
-		ImGui::DragFloat3("Position Max", &positionDist_.max.x, 0.1f);
-		ImGui::DragFloat3("Position Min", &positionDist_.min.x, 0.1f);
+		ImGui::DragFloat3("Position Max", &parameters_.positionDist.max.x, 0.1f);
+		ImGui::DragFloat3("Position Min", &parameters_.positionDist.min.x, 0.1f);
 	}
 
 
 	// Velocity
 	if (ImGui::CollapsingHeader("Velocity")) {
 		ImGui::SeparatorText("Velocity Range:");
-		ImGui::DragFloat3("Velocity Max", &velocityDist_.max.x, 0.1f);
-		ImGui::DragFloat3("Velocity Min", &velocityDist_.min.x, 0.1f);
+		ImGui::DragFloat3("Velocity Max", &parameters_.velocityDist.max.x, 0.1f);
+		ImGui::DragFloat3("Velocity Min", &parameters_.velocityDist.min.x, 0.1f);
 	}
 
 	// Scale
 	if (ImGui::CollapsingHeader("Scale")) {
 		ImGui::SeparatorText("Scale Range:");
-		ImGui::DragFloat("Scale Max", &scaleDist_.max, 0.1f);
-		ImGui::DragFloat("Scale Min", &scaleDist_.min, 0.1f);
+		ImGui::DragFloat("Scale Max", &parameters_.scaleDist.max, 0.1f);
+		ImGui::DragFloat("Scale Min", &parameters_.scaleDist.min, 0.1f);
 	}
 
 	// Rotate
 	if (ImGui::CollapsingHeader("Rotate(Degree)")) {
 
-		ImGui::DragFloat3("BaseRotate", &baseRotate_.x,0.1f, 0, 360);
-		ImGui::DragFloat3("Rotate Max", &rotateDist_.max.x, 0.1f, 0, 360);
-		ImGui::DragFloat3("Rotate Min", &rotateDist_.min.x, 0.1f, 0, 360);
+		ImGui::DragFloat3("BaseRotate", &parameters_.baseRotate.x, 0.1f, 0, 360);
+		ImGui::DragFloat3("Rotate Max", &parameters_.rotateDist.max.x, 0.1f, 0, 360);
+		ImGui::DragFloat3("Rotate Min", &parameters_.rotateDist.min.x, 0.1f, 0, 360);
 
 	}
-	
+
 	if (ImGui::CollapsingHeader("Rotate Speed(Degree)")) {
-		ImGui::DragFloat3("Rotate Speed Max", &rotateSpeedDist_.max.x, 0.1f, 0, 720);
-		ImGui::DragFloat3("Rotate Speed Min", &rotateSpeedDist_.min.x, 0.1f, 0, 720);
+		ImGui::DragFloat3("Rotate Speed Max", &parameters_.rotateSpeedDist.max.x, 0.1f, 0, 720);
+		ImGui::DragFloat3("Rotate Speed Min", &parameters_.rotateSpeedDist.min.x, 0.1f, 0, 720);
 	}
-	
+
 
 	// その他のパラメータ
 	if (ImGui::CollapsingHeader("etcParamater")) {
 		ImGui::DragFloat("IntervalTime", &intervalTime_, 0.01f, 0.01f, 100.0f);
-		ImGui::DragFloat("Gravity", &gravity_, 0.1f);
-		ImGui::DragFloat("LifeTime", &lifeTime_, 0.1f);
-		ImGui::SliderInt("Particle Count", &particleCount_, 1, 100);
+		ImGui::DragFloat("Gravity", &parameters_.gravity, 0.1f);
+		ImGui::DragFloat("LifeTime", &parameters_.lifeTime, 0.1f);
+		ImGui::SliderInt("Particle Count", &parameters_.particleCount, 1, 100);
 	}
 
-	globalParameter_->ParmSaveForImGui(particleName_);
+	globalParameter_->ParmSaveForImGui(particleName);
 	ParmLoadForImGui();
 
 	ImGui::End();
@@ -345,12 +345,12 @@ void ParticleEmitter::EditorUpdate() {
 }
 
 void ParticleEmitter::UpdateEmitTransform() {
-	emitBoxTransform_.translation_ = basePos_;
+	emitBoxTransform_.translation_ = parameters_.emitPos;
 	// スケールを範囲の大きさで設定
 	emitBoxTransform_.scale_ = {
-		positionDist_.max.x - positionDist_.min.x,
-		positionDist_.max.y - positionDist_.min.y,
-		positionDist_.max.z - positionDist_.min.z
+		parameters_.positionDist.max.x - parameters_.positionDist.min.x,
+		parameters_.positionDist.max.y - parameters_.positionDist.min.y,
+		parameters_.positionDist.max.z - parameters_.positionDist.min.z
 	};
 	railManager_->SetScale(emitBoxTransform_.scale_);
 
@@ -367,7 +367,7 @@ void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
 
 	if (isMoveForRail_) {// レールに沿うエミット位置
 		railManager_->Draw(viewProjection);
-		
+
 	}
 	else {// レールに沿わないエミット位置
 		obj3d_->Draw(emitBoxTransform_, viewProjection);
@@ -381,5 +381,5 @@ void ParticleEmitter::SetParentBasePos(WorldTransform* parent) {
 }
 
 void  ParticleEmitter::SetBlendMode(const BlendMode& blendmode) {
-	blendMode_ = blendmode;
+	groupParamaters_.blendMode = blendmode;
 }

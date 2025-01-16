@@ -8,6 +8,7 @@
 #include"3d/WorldTransform.h"
 
 //
+#include"ParticleEmitter.h"
 #include"struct/ParticleForGPU.h"
 //math
 #include"MinMax.h"
@@ -18,6 +19,8 @@
 
 enum class BlendMode;
 class ParticleCommon;
+struct ParticleEmitter::GroupParamaters;
+struct ParticleEmitter::Parameters;
 class ParticleManager {
 private:
 	

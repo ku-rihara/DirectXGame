@@ -298,6 +298,9 @@
     <ClCompile Include="math\Shake.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
+    <ClCompile Include="math\Quaternion.cpp">
+      <Filter>liberary\.cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -520,6 +523,9 @@
       <Filter>MyEngine\.h\utility\Editor</Filter>
     </ClInclude>
     <ClInclude Include="math\Shake.h">
+      <Filter>liberary\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Quaternion.h">
       <Filter>liberary\.h</Filter>
     </ClInclude>
   </ItemGroup>
