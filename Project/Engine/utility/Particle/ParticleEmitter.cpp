@@ -28,7 +28,7 @@ ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const 
 ///=================================================================================
 void ParticleEmitter::Init() {
 
-	parameters_.particleCount = 0;
+	particleCount = 0;
 	parameters_.lifeTime = 0.0f;
 	parameters_.gravity = 0.0f;
 	parameters_.baseColor = { 0, 0, 0, 0 };
@@ -122,7 +122,7 @@ void ParticleEmitter::AddParmGroup() {
 	globalParameter_->AddItem(particleName, "IntervalTime", intervalTime_);
 	globalParameter_->AddItem(particleName, "Gravity", parameters_.gravity);
 	globalParameter_->AddItem(particleName, "LifeTime", parameters_.lifeTime);
-	globalParameter_->AddItem(particleName, "Particle Count", parameters_.particleCount);
+	globalParameter_->AddItem(particleName, "Particle Count", particleCount);
 
 	///rail 
 	globalParameter_->AddItem(particleName, "isMoveForRail", isMoveForRail_);
@@ -170,7 +170,7 @@ void ParticleEmitter::SetValues() {
 	globalParameter_->SetValue(particleName, "IntervalTime", intervalTime_);
 	globalParameter_->SetValue(particleName, "Gravity", parameters_.gravity);
 	globalParameter_->SetValue(particleName, "LifeTime", parameters_.lifeTime);
-	globalParameter_->SetValue(particleName, "Particle Count", parameters_.particleCount);
+	globalParameter_->SetValue(particleName, "Particle Count", particleCount);
 
 	///rail 
 	globalParameter_->SetValue(particleName, "isMoveForRail", isMoveForRail_);
@@ -216,7 +216,7 @@ void ParticleEmitter::ApplyGlobalParameter() {
 	intervalTime_ = globalParameter_->GetValue<float>(particleName, "IntervalTime");
 	parameters_.gravity = globalParameter_->GetValue<float>(particleName, "Gravity");
 	parameters_.lifeTime = globalParameter_->GetValue<float>(particleName, "LifeTime");
-	parameters_.particleCount = globalParameter_->GetValue<int32_t>(particleName, "Particle Count");
+	particleCount = globalParameter_->GetValue<int32_t>(particleName, "Particle Count");
 
 	///rail	
 	isMoveForRail_ = globalParameter_->GetValue<bool>(particleName, "isMoveForRail");
@@ -242,12 +242,8 @@ void ParticleEmitter::Emit() {
 	if (currentTime_ >= intervalTime_) {//　間隔ごとに発動
 
 		ParticleManager::GetInstance()->Emit(
-			particleName, parameters_.targetPos + parameters_.emitPos, parameters_.positionDist, parameters_.scaleDist,
-			parameters_.velocityDist, parameters_.baseColor, parameters_.colorDist, parameters_.lifeTime, parameters_.gravity, toRadian(parameters_.baseRotate),
-			V3MinMax(toRadian(parameters_.rotateDist.min), toRadian(parameters_.rotateDist.max)), V3MinMax(toRadian(parameters_.rotateSpeedDist.min), toRadian(parameters_.rotateSpeedDist.max))
-			, parameters_.particleCount, groupParamaters_.isBillBord, parameters_.isRotateforDirection, groupParamaters_.blendMode);
-
-		currentTime_ = 0.0f;// 時間を戻す
+			particleName, parameters_,groupParamaters_,particleCount);
+            currentTime_ = 0.0f;// 時間を戻す
 	}
 }
 
@@ -334,7 +330,7 @@ void ParticleEmitter::EditorUpdate() {
 		ImGui::DragFloat("IntervalTime", &intervalTime_, 0.01f, 0.01f, 100.0f);
 		ImGui::DragFloat("Gravity", &parameters_.gravity, 0.1f);
 		ImGui::DragFloat("LifeTime", &parameters_.lifeTime, 0.1f);
-		ImGui::SliderInt("Particle Count", &parameters_.particleCount, 1, 100);
+		ImGui::SliderInt("Particle Count", &particleCount, 1, 100);
 	}
 
 	globalParameter_->ParmSaveForImGui(particleName);

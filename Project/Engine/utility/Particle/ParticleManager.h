@@ -102,19 +102,11 @@ public:
 	void ResetAllParticles();
 
 	// 作成
-	Particle  MakeParticle(
-		const Vector3& basePosition, const V3MinMax& positionDist,
-		const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
-		const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
-		const Vector3& baseRotate, const V3MinMax& RotateDist,
-		const V3MinMax& rotateSpeedDist, const bool& isRotateforDirection);
+	Particle  MakeParticle(const ParticleEmitter::Parameters&paramaters);
 	
 	//　エミット
 	void Emit(
-		std::string name, const Vector3& basePosition, const V3MinMax& positionDist,
-		const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
-		const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
-		const Vector3&baseRotate,const V3MinMax& RotateDist,
-		const V3MinMax& rotateSpeedDist, uint32_t count,const bool&isbillbord, const bool& isRotateforDirection, const BlendMode& blendmode);
+		std::string name, const ParticleEmitter::Parameters&
+		paramaters,const ParticleEmitter::GroupParamaters&groupParamaters, const int32_t& count);
 
 };

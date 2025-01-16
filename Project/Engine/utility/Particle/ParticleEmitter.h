@@ -15,18 +15,13 @@
 /// </summary>
  enum class BlendMode;
 class ParticleEmitter {
-private:
-	
-	///=====================================================
-	/// private variants
-	///=====================================================
-	std::string particleName;             // パーティクル名
+public:
 	struct GroupParamaters {
 		BlendMode blendMode;
 		bool isBillBord;                      // ビルボードフラグ
 	};
 
-	  // パーティクル設定を統合する構造体
+	// パーティクル設定を統合する構造体
 	struct Parameters {
 		Vector3 targetPos;                    // 対象座標
 		Vector3 emitPos;                      // 発生座標
@@ -40,9 +35,15 @@ private:
 		Vector3 baseRotate;                   // 回転基準
 		V3MinMax rotateDist;                  // 回転ランダム分配
 		V3MinMax rotateSpeedDist;             // 回転スピード分配
-		int32_t particleCount;                // パーティクル数
 		bool isRotateforDirection;            // 方向回転フラグ
 	};
+private:
+	
+	///=====================================================
+	/// private variants
+	///=====================================================
+	std::string particleName;             // パーティクル名
+	int32_t particleCount;
 
 	/// パーティクル設定
 	Parameters parameters_;
