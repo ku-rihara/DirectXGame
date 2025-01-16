@@ -233,7 +233,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 		Random::Range(paramaters.positionDist.min.y, paramaters.positionDist.max.y),
 		Random::Range(paramaters.positionDist.min.z, paramaters.positionDist.max.z)
 	};
-	particle.worldTransform_.translation_ = paramaters.emitPos + randomTranslate;
+	particle.worldTransform_.translation_ = paramaters.targetPos+ paramaters.emitPos + randomTranslate;
 
 	///------------------------------------------------------------------------
 	/// 速度
