@@ -35,6 +35,11 @@ void EnemyManager::Init() {
 
 	LoadEnemyPoPData();
 	
+	///* グローバルパラメータ
+	globalParameter_ = GlobalParameter::GetInstance();
+	globalParameter_->CreateGroup(groupName_, false);
+	AddParmGroup();
+	ApplyGlobalParameter();
 
 	isEditorMode_ = false;
 }
@@ -51,11 +56,13 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
 	
 		std::unique_ptr<BaseEnemy> enemy;
 
-		if (enemyType == "NormalEnemy") {// 通常敵
-			enemy = std::make_unique<NormalEnemy>();		
+		if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]) {// 通常敵
+			enemy = std::make_unique<NormalEnemy>();
+			enemy->SetParamater(BaseEnemy::Type::NORMAL,paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
 		}
-		if (enemyType == "StrongEnemy") {// 通常敵
+		if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)]) {// 通常敵
 			enemy = std::make_unique<StrongEnemy>();
+			enemy->SetParamater(BaseEnemy::Type::STRONG,paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
 		}
 
 		// 位置初期化とlistに追加
@@ -77,6 +84,14 @@ void EnemyManager::Update() {
 	SpawnUpdate(); // スポーン更新
 
 	for (auto it = enemies_.begin(); it != enemies_.end(); ) {
+
+		if ((*it)->GetType() == BaseEnemy::Type::NORMAL) {
+			(*it)->SetParamater(BaseEnemy::Type::NORMAL, paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
+		}
+		else if ((*it)->GetType() == BaseEnemy::Type::STRONG) {
+			(*it)->SetParamater(BaseEnemy::Type::STRONG, paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+		}
+
 		(*it)->Update(); // 更新
 
 		if ((*it)->GetIsDeath()) {
@@ -496,4 +511,139 @@ void EnemyManager::UpdateEnemyClearedFlag() {
 
 void EnemyManager::SetGameCamera(GameCamera* gamecamera) {
 	pGameCamera_ = gamecamera;
+}
+
+
+///=================================================================================
+/// ロード
+///=================================================================================
+void EnemyManager::ParmLoadForImGui() {
+
+	/// ロードボタン
+	if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
+
+		globalParameter_->LoadFile(groupName_);
+		/// セーブ完了メッセージ
+		ImGui::Text("Load Successful: %s", groupName_.c_str());
+		ApplyGlobalParameter();
+	}
+}
+
+
+///=================================================================================
+///パラメータをグループに追加
+///=================================================================================
+void EnemyManager::AddParmGroup() {
+
+	for (uint32_t i = 0; i < paramaters_.size(); ++i) {
+		globalParameter_->AddItem(
+			groupName_,
+			"chaseDistance" + std::to_string(int(i + 1)),
+			paramaters_[i].chaseDistance);
+
+		globalParameter_->AddItem(
+			groupName_,
+			"chaseSpeed" + std::to_string(int(i + 1)),
+			paramaters_[i].chaseSpeed);
+
+		
+	}
+
+}
+
+
+///=================================================================================
+///パラメータをグループに追加
+///=================================================================================
+void EnemyManager::SetValues() {
+
+
+	for (uint32_t i = 0; i < paramaters_.size(); ++i) {
+		globalParameter_->SetValue(
+			groupName_,
+			"chaseDistance" + std::to_string(int(i + 1)),
+			paramaters_[i].chaseDistance);
+
+		globalParameter_->SetValue(
+			groupName_,
+			"chaseSpeed" + std::to_string(int(i + 1)),
+			paramaters_[i].chaseSpeed);
+
+		
+	}
+
+}
+
+
+///=====================================================
+///  ImGuiからパラメータを得る
+///===================================================== 
+void EnemyManager::ApplyGlobalParameter() {
+	/// パラメータ
+	for (uint32_t i = 0; i < paramaters_.size(); ++i) {
+		paramaters_[i].chaseDistance = globalParameter_->GetValue<float>(
+			groupName_,
+			"chaseDistance" + std::to_string(int(i + 1)));
+
+		paramaters_[i].chaseSpeed = globalParameter_->GetValue<float>(
+			groupName_,
+			"chaseSpeed" + std::to_string(int(i + 1)));
+
+		
+	}
+
+}
+
+///=========================================================
+/// パラメータ調整
+///==========================================================
+void EnemyManager::AdjustParm() {
+	SetValues();
+#ifdef _DEBUG
+
+	if (ImGui::CollapsingHeader(groupName_.c_str())) {
+		ImGui::PushID(groupName_.c_str());
+		///---------------------------------------------------------
+		/// 通常敵
+		///----------------------------------------------------------
+
+		ImGui::SeparatorText(enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].c_str());
+		ImGui::PushID(enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].c_str());
+
+		ImGui::DragFloat("ChaseSpeed",
+			&paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].chaseSpeed,
+			0.01f);
+
+		ImGui::DragFloat("ChaseDistance",
+			&paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].chaseDistance,
+			0.01f);
+
+		
+		ImGui::PopID();
+
+		///---------------------------------------------------------
+		/// ストロングな敵
+		///----------------------------------------------------------
+
+		ImGui::SeparatorText(enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)].c_str());
+		ImGui::PushID(enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)].c_str());
+
+		ImGui::DragFloat("ChaseSpeed",
+			&paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].chaseSpeed,
+			0.01f);
+
+		ImGui::DragFloat("ChaseDistance",
+			&paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].chaseDistance,
+			0.01f);
+
+
+		ImGui::PopID();
+		/// セーブとロード
+		globalParameter_->ParmSaveForImGui(groupName_);
+		ParmLoadForImGui();
+
+		ImGui::PopID();
+	}
+
+#endif // _DEBUG
 }

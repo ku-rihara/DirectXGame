@@ -1,7 +1,7 @@
 
 /// behavior
-#include"EnemyChasePlayer.h"
 #include"EnemyRoot.h"
+#include"EnemyChasePlayer.h"
 
 /// math
 #include"MathFunction.h"
@@ -16,12 +16,12 @@
 #include<cmath> 
 
 //初期化
-EnemyChasePlayer::EnemyChasePlayer(BaseEnemy* boss)
-	: BaseEnemyMoveBehavior("EnemyChasePlayer", boss) {
+EnemyRoot::EnemyRoot(BaseEnemy* boss)
+	: BaseEnemyMoveBehavior("EnemyRoot", boss) {
 	
 
 	//パラメータ初期化
-	chaseSpeedNormal_ = pBaseEnemy_->GetParamater().chaseSpeed;
+	chaseSpeedNormal_ = 0.2f;
 	waveAttackStartPos_ = 25.0f;/// ボス
 	normalAttackStartPos_ = 7.0f;
 	attackCoolTime_ = 1.0f;
@@ -29,13 +29,12 @@ EnemyChasePlayer::EnemyChasePlayer(BaseEnemy* boss)
 	isChase_ = true;//	デバッグ用
 }
 
-EnemyChasePlayer::~EnemyChasePlayer() {
+EnemyRoot::~EnemyRoot() {
 
 }
 
-void EnemyChasePlayer::Update() {
-	if (!isChase_) return;
-		
+void EnemyRoot::Update() {
+	
 		// ターゲットへのベクトル
 		Vector3 direction =pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());
 
@@ -43,17 +42,14 @@ void EnemyChasePlayer::Update() {
 		distance_ = std::sqrt(direction.x * direction.x + direction.z * direction.z);
 
 		// 近すぎる場合は追従を停止して攻撃
-		if (distance_ > pBaseEnemy_->GetParamater().chaseDistance+5.0f) {
-			pBaseEnemy_->ChangeMoveBehavior(std::make_unique<EnemyRoot>(pBaseEnemy_));
+		if (distance_ < pBaseEnemy_->GetParamater().chaseDistance) {
+			pBaseEnemy_->ChangeMoveBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
 			return;
 		}
 
 		// 正規化
 		direction.y = 0.0f;
 		direction.Normalize();
-
-		/// 変位加算
-		pBaseEnemy_->AddPosition(direction * (chaseSpeedNormal_ * Frame::DeltaTime()));
 
 		// 目標角度を計算
 		float objectiveAngle = std::atan2(-direction.x, -direction.z);
@@ -63,7 +59,7 @@ void EnemyChasePlayer::Update() {
 
 }
 
-void EnemyChasePlayer::Debug() {
+void EnemyRoot::Debug() {
 	
 		
 }

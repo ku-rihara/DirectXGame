@@ -55,7 +55,7 @@ void EnemyBoundDamage::Update() {
 	///---------------------------------------------------------
 		pBaseEnemy_->SetColor(Vector4(1.0f, 1, 1, 1.0f));
 		pBaseEnemy_->SetWorldPositionY(BaseEnemy::InitY_);
-		pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
+		pBaseEnemy_->BackToDamageRoot();
 		break;
 	}
 }

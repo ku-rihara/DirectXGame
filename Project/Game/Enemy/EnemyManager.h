@@ -14,128 +14,146 @@
 class Player;
 class LockOn;
 class GameCamera;
+enum class Type;
+struct BaseEnemy::Paramater;
 class EnemyManager {
 private:
-    using json = nlohmann::json;
+	using json = nlohmann::json;
 private:
 
-    struct SpownEnemy {
-        std::string enemyType;    // 敵の種類
-        Vector3 position;         // 敵の座標
-    };
 
-    struct EnemyGroup {
-        std::vector<SpownEnemy> spownEnemies; // 敵グループのリスト
-        float spownTime;                 // グループ生成間隔
-        bool isSpowned;
-    };
+	struct SpownEnemy {
+		std::string enemyType;    // 敵の種類
+		Vector3 position;         // 敵の座標
+	};
+
+	struct EnemyGroup {
+		std::vector<SpownEnemy> spownEnemies; // 敵グループのリスト
+		float spownTime;                 // グループ生成間隔
+		bool isSpowned;
+	};
 
 
-    struct Wave {
-        float startTime;                   // Waveの開始時間（フェーズ内の相対時間）
-        std::vector<EnemyGroup> groups;    // Wave内で発生する敵の情報
-    };
+	struct Wave {
+		float startTime;                   // Waveの開始時間（フェーズ内の相対時間）
+		std::vector<EnemyGroup> groups;    // Wave内で発生する敵の情報
+	};
 
-    struct Phase {
-        std::vector<Wave> waves; // フェーズ内のWaveリスト
-    };
+	struct Phase {
+		std::vector<Wave> waves; // フェーズ内のWaveリスト
+	};
 
-    ///========================================================
-    /// Private variants
-    ///========================================================
+	///========================================================
+	/// Private variants
+	///========================================================
 
-    // ohter class
-    Player* pPlayer_;
-    LockOn* pLockOn_;
-    GameCamera* pGameCamera_;
-  
-    bool isEditorMode_;             // エディタモード中かどうか
-    std::map<int, Phase> phases_;   // フェーズ番号をキーとしたフェーズマップ
-    int   currentPhase_;            // 現在のフェーズ
-    float currentTime_;             // 現在のフェーズ内の経過時間
-    int   currentWave_;
+    /// グローバルなパラメータ
+	GlobalParameter* globalParameter_;            /// グローバルパラメータ
+	const std::string groupName_ = "Enemies";      /// グループ名
+	std::array<BaseEnemy::Paramater,2> paramaters_;
 
-    ///* 敵リスト
-    std::list<std::unique_ptr<BaseEnemy>> enemies_;
+	// ohter class
+	Player* pPlayer_;
+	LockOn* pLockOn_;
+	GameCamera* pGameCamera_;
 
-    ///* 敵の種類リスト
-    std::vector<std::string> enemyTypes_ = { "NormalEnemy","StrongEnemy"};
+	bool isEditorMode_;             // エディタモード中かどうか
+	std::map<int, Phase> phases_;   // フェーズ番号をキーとしたフェーズマップ
+	int   currentPhase_;            // 現在のフェーズ
+	float currentTime_;             // 現在のフェーズ内の経過時間
+	int   currentWave_;
 
-    //* 一時的な敵生成用データ
-    std::string selectedEnemyType_;
-    Vector3 spownPosition_;
-    uint32_t spownNum_;
+	///* 敵リスト
+	std::list<std::unique_ptr<BaseEnemy>> enemies_;
 
-    bool areAllEnemiesCleared_; // 敵がすべていなくなったことを示すフラグ
+	///* 敵の種類リスト
+	std::vector<std::string> enemyTypes_ = { "NormalEnemy","StrongEnemy" };
 
-    const std::string directrypath_ = "./resources/EnemyParamater/";// path
-    const std::string filename_ = "PoPData.json";// name
+	//* 一時的な敵生成用データ
+	std::string selectedEnemyType_;
+	Vector3 spownPosition_;
+	uint32_t spownNum_;
+
+	bool areAllEnemiesCleared_; // 敵がすべていなくなったことを示すフラグ
+
+	const std::string directrypath_ = "./resources/EnemyParamater/";// path
+	const std::string filename_ = "PoPData.json";// name
 
 public:
 
-    ///========================================================
-    /// public method
-    ///========================================================
+	///========================================================
+	/// public method
+	///========================================================
 
-    // コンストラクタ
-    EnemyManager();
+	// コンストラクタ
+	EnemyManager();
 
-    // 初期化
-    void Init();
-    void FSpawn();
+	// 初期化
+	void Init();
+	void FSpawn();
 
-    void UpdateEnemyClearedFlag();
+	void UpdateEnemyClearedFlag();
 
-    // 敵の生成
-    void SpawnEnemy(const std::string& enemyType, const Vector3& position);
+	// 敵の生成
+	void SpawnEnemy(const std::string& enemyType, const Vector3& position);
 
-    // 更新処理
-    void Update();
-    void HpBarUpdate(const ViewProjection&viewProjection);
-    void SpawnUpdate();
-    void CheckWaveCompletion();
+	// 更新処理
+	void Update();
+	void HpBarUpdate(const ViewProjection& viewProjection);
+	void SpawnUpdate();
+	void CheckWaveCompletion();
 
-    // 描画処理
-    void Draw(const ViewProjection& viewProjection);
+	// 描画処理
+	void Draw(const ViewProjection& viewProjection);
 
-    // スプライト描画処理
-    void SpriteDraw(const ViewProjection& viewProjection);
+	// スプライト描画処理
+	void SpriteDraw(const ViewProjection& viewProjection);
 
-    ///========================================================
+	///========================================================
    /// editor method
    ///========================================================
 
-   
-    void ImGuiUpdate();/// ImGuiによるエディタ
-    void SaveAndLoad();/// セーブとロード
 
-    ///* セーブ
-    void SaveEnemyPoPData();
+	void ImGuiUpdate();/// ImGuiによるエディタ
+	void SaveAndLoad();/// セーブとロード
 
-    ///* ロード
-    void LoadEnemyPoPData();
-    void LoadPhase(Phase& phase, const json& phaseData);
-    void LoadSpawn(EnemyGroup& spawn, const json& spawnData);
+	///* セーブ
+	void SaveEnemyPoPData();
 
-    ///* EditorModeセット
-    void SetEditorMode(bool isEditorMode);
+	///* ロード
+	void LoadEnemyPoPData();
+	void LoadPhase(Phase& phase, const json& phaseData);
+	void LoadSpawn(EnemyGroup& spawn, const json& spawnData);
 
-    ///========================================================
+	///* EditorModeセット
+	void SetEditorMode(bool isEditorMode);
+
+	///-------------------------------------------------------------------------------------
+	///Editor
+	///-------------------------------------------------------------------------------------
+	void ParmLoadForImGui();
+	void AddParmGroup();
+	void SetValues();
+	void ApplyGlobalParameter();
+	void AdjustParm();
+
+	///========================================================
    /// getter method
    ///========================================================
-    bool GetCread()const { return areAllEnemiesCleared_; }
-    ///========================================================
-    /// setter method
-    ///========================================================
-    void SetPlayer(Player* plyaer);
-    void SetLockon(LockOn* lockOn);
-    void SetGameCamera(GameCamera* gamecamera);
+	bool GetCread()const { return areAllEnemiesCleared_; }
+	///========================================================
+	/// setter method
+	///========================================================
+	void SetPlayer(Player* plyaer);
+	void SetLockon(LockOn* lockOn);
+	void SetGameCamera(GameCamera* gamecamera);
 
-    // フェーズの切り替え
-    void SetPhase(int phase);
+	// フェーズの切り替え
+	void SetPhase(int phase);
 
-    // 現在の敵リスト取得
-    const std::list<std::unique_ptr<BaseEnemy>>& GetEnemies() const {
-        return enemies_;}
+	// 現在の敵リスト取得
+	const std::list<std::unique_ptr<BaseEnemy>>& GetEnemies() const {
+		return enemies_;
+	}
 };
 

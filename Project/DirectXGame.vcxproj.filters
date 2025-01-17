@@ -190,6 +190,9 @@
     <Filter Include="Game\GameCamera\Behavior">
       <UniqueIdentifier>{2aa02fce-99c5-4754-a297-6ce1884e9ca1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemy\MoveBehavior">
+      <UniqueIdentifier>{e99abf53-21bf-4374-907f-ce66abce6461}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -442,9 +445,6 @@
     <ClCompile Include="Game\Enemy\Behavior\EnemyHitBackDamage.cpp">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyChasePlayer.cpp">
-      <Filter>Game\Enemy\Behevior</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\EnemyUpperDamage.cpp">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClCompile>
@@ -504,6 +504,21 @@
     </ClCompile>
     <ClCompile Include="math\Quaternion.cpp">
       <Filter>liberary\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\BaseEnemyMoveBehavior.cpp">
+      <Filter>Game\Enemy\MoveBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\EnemyRoot.cpp">
+      <Filter>Game\Enemy\MoveBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\EnemyChasePlayer.cpp">
+      <Filter>Game\Enemy\MoveBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\EnemyDamageRoot.cpp">
+      <Filter>Game\Enemy\Behevior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\EnemySpawn.cpp">
+      <Filter>Game\Enemy\MoveBehavior</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -804,9 +819,6 @@
     <ClInclude Include="Game\Enemy\Behavior\EnemyHitBackDamage.h">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyChasePlayer.h">
-      <Filter>Game\Enemy\Behevior</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\EnemyUpperDamage.h">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClInclude>
@@ -866,6 +878,21 @@
     </ClInclude>
     <ClInclude Include="math\Quaternion.h">
       <Filter>liberary\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\BaseEnemyMoveBehavior.h">
+      <Filter>Game\Enemy\MoveBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\EnemyRoot.h">
+      <Filter>Game\Enemy\MoveBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\EnemyChasePlayer.h">
+      <Filter>Game\Enemy\MoveBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\EnemyDamageRoot.h">
+      <Filter>Game\Enemy\Behevior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\EnemySpawn.h">
+      <Filter>Game\Enemy\MoveBehavior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

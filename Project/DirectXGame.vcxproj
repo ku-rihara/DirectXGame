@@ -62,9 +62,13 @@
     <ClCompile Include="Game\Effect\Effect.cpp" />
     <ClCompile Include="Game\Enemy\BaseEnemy.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\BaseEnemyBehavior.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\BaseEnemyMoveBehavior.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyBoundDamage.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyChasePlayer.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\EnemyDamageRoot.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyHitBackDamage.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\EnemyRoot.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\EnemySpawn.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyStopDamage.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyThrustDamage.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyUpperDamage.cpp" />
@@ -182,9 +186,13 @@
     <ClInclude Include="Game\Effect\Effect.h" />
     <ClInclude Include="Game\Enemy\BaseEnemy.h" />
     <ClInclude Include="Game\Enemy\Behavior\BaseEnemyBehavior.h" />
+    <ClInclude Include="Game\Enemy\Behavior\BaseEnemyMoveBehavior.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyBoundDamage.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyChasePlayer.h" />
+    <ClInclude Include="Game\Enemy\Behavior\EnemyDamageRoot.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyHitBackDamage.h" />
+    <ClInclude Include="Game\Enemy\Behavior\EnemyRoot.h" />
+    <ClInclude Include="Game\Enemy\Behavior\EnemySpawn.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyStopDamage.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyThrustDamage.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyUpperDamage.h" />

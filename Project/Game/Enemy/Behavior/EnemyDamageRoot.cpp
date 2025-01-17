@@ -1,0 +1,32 @@
+
+/// behavior
+#include"EnemyDamageRoot.h"
+#include"EnemyChasePlayer.h"
+/// obj
+#include"Enemy/BaseEnemy.h"
+#include"Player/Player.h"
+/// math
+#include"MathFunction.h"
+#include"Frame/Frame.h"
+
+
+//初期化
+EnemyDamageRoot::EnemyDamageRoot(BaseEnemy* boss)
+	: BaseEnemyBehaivor("EnemyDamageRoot", boss) {
+	
+	
+}
+
+EnemyDamageRoot::~EnemyDamageRoot() {
+
+}
+
+void EnemyDamageRoot::Update() {
+	
+}
+
+void EnemyDamageRoot::Debug() {
+	
+
+}
+

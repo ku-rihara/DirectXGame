@@ -1,11 +1,12 @@
 #include "BaseEnemy.h"
 // bvehaivor
-#include"Behavior/EnemyChasePlayer.h"
+#include"Behavior/EnemySpawn.h"
 #include"Behavior/EnemyHitBackDamage.h"
 #include"Behavior/EnemyUpperDamage.h"
 #include"Behavior/EnemyStopDamage.h"
 #include"Behavior/EnemyThrustDamage.h"
 #include"Behavior/EnemyBoundDamage.h"
+#include"Behavior/EnemyDamageRoot.h"
 
 /// collisionBox
 #include"CollisionBox/PunchCollisionBox.h"
@@ -38,7 +39,6 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	// 基底クラスの初期化
 	BaseObject::Init();
 	
-
 	HPMax_ = 105.0f;
 	hp_ = HPMax_;
 	hpbarSize_ = { HPMax_ ,90};
@@ -47,9 +47,7 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	hpbar_->Init(hpbarSize_);
 	transform_.translation_ = spownPos;
 
-	///spawn
-	spawnEasing_.time = 0.0f;
-	spawnEasing_.maxTime = 0.8f;
+	
 	transform_.scale_ = Vector3::ZeroVector();
 
 	/// particleT
@@ -65,7 +63,8 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
 	damageEmitter_->SetTextureHandle(handle);
 
-	ChangeBehavior(std::make_unique<EnemyChasePlayer>(this));/// 追っかけ
+	ChangeBehavior(std::make_unique<EnemyDamageRoot>(this));/// 追っかけ
+	ChangeMoveBehavior(std::make_unique<EnemySpawn>(this));/// 追っかけ
 }
 
 ///========================================================
@@ -73,14 +72,12 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 ///========================================================
 void BaseEnemy::Update() {
 
-	/// 生成処理
-	spawnEasing_.time += Frame::DeltaTime();
-	spawnEasing_.time = std::min(spawnEasing_.time, spawnEasing_.maxTime);
-	transform_.scale_ = 
-		EaseOutBack(Vector3::ZeroVector(), BaseEnemy::InitScale_,
-		spawnEasing_.time, spawnEasing_.maxTime);
+	
+	if (dynamic_cast<EnemyDamageRoot*>(damageBehavior_.get())) {
+		moveBehavior_->Update();
+	}
+	damageBehavior_->Update();
 
-	behavior_->Update();
 
 	damageEmitter_->SetTargetPosition(GetWorldPosition());
 	damageEmitter_->Update();
@@ -163,7 +160,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 	//普通のパンチに攻撃されたら
 	if (dynamic_cast<PunchCollisionBox*>(other)) {
 
-		if (!dynamic_cast<EnemyHitBackDamage*>(behavior_.get())) {
+		if (!dynamic_cast<EnemyHitBackDamage*>(damageBehavior_.get())) {
 		
 			DamageForPar(damageParm_);
 			ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
@@ -174,7 +171,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 	//アッパーを食らったら
 	if (dynamic_cast<UpperCollisionBox*>(other)) {
 
-		if (!dynamic_cast<EnemyUpperDamage*>(behavior_.get())) {
+		if (!dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
 		
 			DamageForPar(damageParm_);
 			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
@@ -185,7 +182,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 	//止まる攻撃
 	if (dynamic_cast<StopCollisionBox*>(other)) {
 
-		if (!dynamic_cast<EnemyStopDamage*>(behavior_.get())) {
+		if (!dynamic_cast<EnemyStopDamage*>(damageBehavior_.get())) {
 		
 			DamageForPar(damageParm_);
 			ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
@@ -196,7 +193,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 	//月飛ばし攻撃
 	if (dynamic_cast<ThrustCollisionBox*>(other)) {
 
-		if (!dynamic_cast<EnemyThrustDamage*>(behavior_.get())) {
+		if (!dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) {
 
 			DamageForPar(damageParm_);
 			ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
@@ -207,7 +204,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 	//落下攻撃
 	if (dynamic_cast<FallCollisionBox*>(other)) {
 
-		if (!dynamic_cast<EnemyUpperDamage*>(behavior_.get())) {
+		if (!dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
 		
 			DamageForPar(damageParm_);
 			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
@@ -219,7 +216,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 	//突進攻撃
 	if (dynamic_cast<RushCollisionBox*>(other)) {
 
-		if (!dynamic_cast<EnemyBoundDamage*>(behavior_.get())) {
+		if (!dynamic_cast<EnemyBoundDamage*>(damageBehavior_.get())) {
 		
 			DamageForPar(damageParm_);
 			ChangeBehavior(std::make_unique<EnemyBoundDamage>(this));	
@@ -245,9 +242,12 @@ void BaseEnemy::SetPlayer(Player* player) {
 
 void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseEnemyBehaivor>behavior) {
 	//引数で受け取った状態を次の状態としてセット
-	behavior_ = std::move(behavior);
+	damageBehavior_ = std::move(behavior);
 }
 
+void BaseEnemy::ChangeMoveBehavior(std::unique_ptr<BaseEnemyMoveBehavior>behavior) {
+	moveBehavior_ = std::move(behavior);
+}
 
 // 視界にいるか
 bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
@@ -317,4 +317,13 @@ void BaseEnemy::FallEffectUpdate() {
 
 void BaseEnemy::SetGameCamera(GameCamera* gamecamera) {
 	pGameCamera_ = gamecamera;
+}
+
+void BaseEnemy::BackToDamageRoot() {
+	ChangeBehavior(std::make_unique<EnemyDamageRoot>(this));/// 追っかけ
+}
+
+void BaseEnemy::SetParamater(const Type& type, const Paramater& paramater) {
+	type_ = type;
+	paramater_ = paramater;
 }

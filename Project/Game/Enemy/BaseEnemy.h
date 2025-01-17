@@ -7,6 +7,7 @@
 #include "BaseObject/BaseObject.h"
 #include"Collider/AABBCollider.h"
 #include"Behavior/BaseEnemyBehavior.h"
+#include"Behavior/BaseEnemyMoveBehavior.h"
 #include"utility/Particle/ParticleEmitter.h"
 #include"Enemy/HPBar/EnemyHPBar.h"
 #include"Effect/Effect.h"
@@ -14,7 +15,19 @@
 class Player;
 class GameCamera;
 class BaseEnemy : public BaseObject,public AABBCollider {
+public:
+	struct Paramater {
+		float chaseDistance;
+		float chaseSpeed;
+	};
+	enum class Type {
+		NORMAL,
+		STRONG,
+	};
 protected:
+
+	Type type_;
+	Paramater paramater_;
 
 	/// other class
 	Player* pPlayer_;
@@ -27,8 +40,6 @@ protected:
 	std::unique_ptr<EnemyHPBar>hpbar_;
 	float damageParm_;
 
-	Easing spawnEasing_;
-
 	std::string damageName_;
 	std::unique_ptr<ParticleEmitter>damageEmitter_;
 
@@ -36,7 +47,8 @@ protected:
 	std::unique_ptr<ParticleEmitter>thrustEmit_;
 
 	/// behavior
-	std::unique_ptr<BaseEnemyBehaivor>behavior_ = nullptr;
+	std::unique_ptr<BaseEnemyBehaivor>damageBehavior_ = nullptr;
+	std::unique_ptr<BaseEnemyMoveBehavior>moveBehavior_ = nullptr;
 
 	/// エミッター
 	std::unique_ptr<ParticleEmitter>emitter_;
@@ -70,7 +82,8 @@ public:
 	virtual void DisplayHpBar(const ViewProjection& viewProjection);
 
 	void ChangeBehavior(std::unique_ptr<BaseEnemyBehaivor>behavior);
-
+	void ChangeMoveBehavior(std::unique_ptr<BaseEnemyMoveBehavior>behavior);
+	void BackToDamageRoot();
 
 	// 当たり判定
 	void OnCollisionEnter([[maybe_unused]] BaseCollider* other)override;
@@ -81,14 +94,16 @@ public:
 	///  getter method
 	///========================================================================================
 	bool GetIsDeath()const { return isdeath_; }
+	Type GetType()const { return type_; }
 	Player* GetPlayer() { return pPlayer_; }
 	GameCamera* GetGameCamera() { return pGameCamera_; }
+	Paramater GetParamater() { return paramater_; }
 	///========================================================================================
 	///  setter method
 	///========================================================================================
 	void SetPlayer(Player* plyaer);
 	void SetGameCamera(GameCamera* gamecamera);
-
+	void SetParamater(const Type&type,const Paramater& paramater);
 
 private:
 	bool IsInView(const ViewProjection& viewProjection) const;
