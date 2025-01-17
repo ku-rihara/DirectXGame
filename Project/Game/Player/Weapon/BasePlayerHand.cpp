@@ -1,4 +1,5 @@
 #include "BasePlayerHand.h"
+#include"utility/Particle/ParticleCommon.h"
 /// imgui
 #include<imgui.h>
 #include"base/TextureManager.h"
@@ -21,6 +22,7 @@ void BasePlayerHand::Init() {
 	emitter_.reset(ParticleEmitter::CreateParticle(groupName_, "plane", ".obj", 300));
 	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
 	emitter_->SetTextureHandle(handle);
+	/*emitter_->SetBlendMode(BlendMode::);*/
 	/*emitter_->SetIsBillBord(true);*/
 }
 
