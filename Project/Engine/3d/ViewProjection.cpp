@@ -73,3 +73,12 @@ void ViewProjection::UpdateProjectionMatrix() {
 	matProjection_ = MakePerspectiveFovMatrix(fovAngleY_, aspectRatio_, nearZ_, farZ_);
 
 }
+
+Vector3 ViewProjection::GetWorldPos() const {
+	// カメラ行列(cameraMatrix_)の位置成分を取得する
+	return Vector3(
+		cameraMatrix_.m[3][0], // X成分
+		cameraMatrix_.m[3][1], // Y成分
+		cameraMatrix_.m[3][2]  // Z成分
+	);
+}

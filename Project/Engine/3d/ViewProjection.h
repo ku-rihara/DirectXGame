@@ -81,6 +81,7 @@ public:
 	/// </summary>
 	void UpdateProjectionMatrix();
 
+	Vector3 GetWorldPos()const;
 	/// <summary>
 	/// 定数バッファの取得
 	/// </summary>
