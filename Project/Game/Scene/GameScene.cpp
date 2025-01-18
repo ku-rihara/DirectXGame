@@ -199,6 +199,7 @@ void GameScene::ViewProssess() {
 	viewProjection_.cameraMatrix_ = gamecamera_->GetViewProjection().cameraMatrix_;
 	viewProjection_.rotation_ = gamecamera_->GetViewProjection().rotation_;
 	viewProjection_.TransferMatrix();
+	Light::GetInstance()->SetWorldCameraPos(gamecamera_->GetWorldPos());
 
 }
 

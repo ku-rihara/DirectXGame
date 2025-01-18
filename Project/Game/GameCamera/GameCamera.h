@@ -44,7 +44,7 @@ public:
 	void TranslateAdapt();
 
 	Vector3 OffsetCalc(const Vector3& offset)const;
-	Vector3 GetBaseCenterPosition() const;
+	Vector3 GetWorldPos() const;
 
 	void ChangeShakeMode();
 	void ChangeBehavior(std::unique_ptr<BaseGameCameraBehavior>behavior);
