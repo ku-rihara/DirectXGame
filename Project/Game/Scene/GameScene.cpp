@@ -5,7 +5,7 @@
 #include "base/TextureManager.h"
 //math
 #include<imgui.h>
-#include"3d/Light.h"
+#include"Lighrt/Light.h"
 #include"Frame/Frame.h"
 #include"JoyState/JoyState.h"
 
