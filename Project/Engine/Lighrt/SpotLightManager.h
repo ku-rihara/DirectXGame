@@ -5,10 +5,21 @@
 
 class SpotLightManager {
 private:
-    std::vector<std::unique_ptr<SpotLight>> spotLights_;
+	std::vector<std::unique_ptr<SpotLight>> spotLights_;
 public:
-    void Add(ID3D12Device* device);
-    void Remove(int index);
-    std::vector<SpotLight*> GetLights();
-    void SetLightCommand(ID3D12GraphicsCommandList* commandList);
+	///=========================================================================================
+	///  public  method
+	///=========================================================================================
+
+	void Add(ID3D12Device* device);
+	void Remove(int index);
+	std::vector<SpotLight*> GetLights();
+	void SetLightCommand(ID3D12GraphicsCommandList* commandList);
+
+	   ///=========================================================================================
+	   ///  getter  method
+	   ///=========================================================================================
+
+	SpotLight* GetSpotLight(int num) { return spotLights_[num].get(); }
+
 };
