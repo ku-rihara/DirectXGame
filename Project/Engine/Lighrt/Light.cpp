@@ -34,10 +34,12 @@ void Light::DebugImGui() {
 	ImGui::DragFloat3("WorldCamera", (float*)&cameraForGPUData_->worldPosition_, 0.01f);
 	directionalLight_->DebugImGui();
 	if (ImGui::TreeNode("PointLights")) {
-		auto& pointLights = pointLightManager_->GetLights();
+		// const auto& に変更
+		const auto& pointLights = pointLightManager_->GetLights();
 		for (size_t i = 0; i < pointLights.size(); ++i) {
 			if (ImGui::TreeNode(("PointLight" + std::to_string(i)).c_str())) {
-				pointLights[i].DebugImGui();
+				//ポインタでアクセスするように変更
+				pointLights[i]->DebugImGui();
 				ImGui::TreePop();
 			}
 		}
@@ -47,10 +49,12 @@ void Light::DebugImGui() {
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("SpotLights")) {
-		auto& spotLights = spotLightManager_->GetLights();
+		// const auto& に変更
+		const auto& spotLights = spotLightManager_->GetLights();
 		for (size_t i = 0; i < spotLights.size(); ++i) {
 			if (ImGui::TreeNode(("SpotLight" + std::to_string(i)).c_str())) {
-				spotLights[i].DebugImGui();
+				//ポインタでアクセスするように変更
+				spotLights[i]->DebugImGui();
 				ImGui::TreePop();
 			}
 		}
