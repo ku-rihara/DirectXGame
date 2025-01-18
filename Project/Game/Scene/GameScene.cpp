@@ -1,7 +1,7 @@
 #include "GameScene.h"
 #include "base/TextureManager.h"
 //class
-#include"3d/Light.h"
+
 #include"utility/Particle/ParticleManager.h"
 
 //math
