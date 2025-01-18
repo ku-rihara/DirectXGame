@@ -5,7 +5,7 @@
 #include<assimp/postprocess.h>
 //
 //class
-#include"Light.h"
+#include"Lighrt/Light.h"
 #include"base/Object3DCommon.h"
 #include"base/TextureManager.h"
 
@@ -17,6 +17,7 @@ namespace {
 
 void ModelCommon::Init(DirectXCommon* dxCommon) {
 	dxCommon_ = dxCommon;
+	Light::GetInstance()->Init(directXCommon->GetDevice());
 }
 
 ModelData Model::LoadModelFile(const std::string& directoryPath, const std::string& filename) {
@@ -130,7 +131,7 @@ void Model::CreateModel(const std::string& ModelName, const std::string& extensi
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate));
 	std::memcpy(vertexDate, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
 	//マテリアル--------------------------------------------------------------------------------------
-	Light::GetInstance()->Init();
+	
 	//material_.textureFilePath = modelData_.material.textureFilePath;
 	
 }
@@ -148,7 +149,7 @@ void Model::DebugImGui() {
 }
 
 
-void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, std::optional<uint32_t> textureHandle){
+void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, std::optional<uint32_t> textureHandle) {
 
 	auto commandList = directXCommon->GetCommandList();
 	/*materialDate_->color = color.;*/
@@ -161,7 +162,7 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material ma
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	material.SetCommandList(commandList);
-	
+
 	commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 
 	if (textureHandle.has_value()) {
@@ -170,12 +171,7 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material ma
 	else {
 		commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
 	}
-
-	// 光源のリソース設定
-	commandList->SetGraphicsRootConstantBufferView(3, Light::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
-	commandList->SetGraphicsRootConstantBufferView(4, Light::GetInstance()->GetCameraForGPUResource()->GetGPUVirtualAddress());
-	commandList->SetGraphicsRootConstantBufferView(5, Light::GetInstance()->GetPointLightResource()->GetGPUVirtualAddress());
-	commandList->SetGraphicsRootConstantBufferView(6, Light::GetInstance()->GetSpotLightResource()->GetGPUVirtualAddress());
+	Light::GetInstance()->SetLightCommands(commandList);
 
 	// 描画コール
 	commandList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
