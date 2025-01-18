@@ -190,6 +190,12 @@
     <Filter Include="Game\GameCamera\Behavior">
       <UniqueIdentifier>{2aa02fce-99c5-4754-a297-6ce1884e9ca1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.h\Light">
+      <UniqueIdentifier>{628ab431-7495-4a04-bd50-fe846b42960d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Light">
+      <UniqueIdentifier>{5396bc61-e016-4b3e-8707-c28cc9c03b94}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -197,9 +203,6 @@
     </ClCompile>
     <ClCompile Include="Engine\2d\Sprite.cpp">
       <Filter>MyEngine\.cpp\2d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\Light.cpp">
-      <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\Mesh.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
@@ -505,12 +508,27 @@
     <ClCompile Include="math\Quaternion.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Lighrt\Light.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Lighrt\DirectionalLight.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Lighrt\PointLight.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Lighrt\SpotLight.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Lighrt\PointLightManager.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Lighrt\SpotLightManager.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
-      <Filter>MyEngine\.h\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\struct\DirectionalLight.h">
       <Filter>MyEngine\.h\struct</Filter>
     </ClInclude>
     <ClInclude Include="Engine\struct\MaterialData.h">
@@ -531,15 +549,6 @@
     <ClInclude Include="Engine\struct\VertexData.h">
       <Filter>MyEngine\.h\struct</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\struct\CameraForGPU.h">
-      <Filter>MyEngine\.h\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\struct\PointLight.h">
-      <Filter>MyEngine\.h\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\struct\SpotLight.h">
-      <Filter>MyEngine\.h\struct</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\struct\ParticleForGPU.h">
       <Filter>MyEngine\.h\struct</Filter>
     </ClInclude>
@@ -550,9 +559,6 @@
       <Filter>MyEngine\.h\2d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\BaseObject3d.h">
-      <Filter>MyEngine\.h\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\Light.h">
       <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\Mesh.h">
@@ -866,6 +872,24 @@
     </ClInclude>
     <ClInclude Include="math\Quaternion.h">
       <Filter>liberary\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\PointLight.h">
+      <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\SpotLight.h">
+      <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\DirectionalLight.h">
+      <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\Light.h">
+      <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\PointLightManager.h">
+      <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\SpotLightManager.h">
+      <Filter>MyEngine\.h\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
