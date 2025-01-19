@@ -1,4 +1,5 @@
 #include "BaseScene.h"
+#include"Lighrt/Light.h"
 #include<imgui.h>
 
 
@@ -58,4 +59,6 @@ void BaseScene::ViewProjectionUpdate() {
 
 		/*viewProjection_.TransferMatrix();*/
 	}
+
+	Light::GetInstance()->SetWorldCameraPos(viewProjection_.GetWorldPos());
 }

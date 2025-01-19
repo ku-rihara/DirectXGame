@@ -4,8 +4,6 @@
 #include"BaseScene.h"
 
 //testobj
-#include"TestObj/CollisionTest1.h"
-#include"TestObj/CollisionTest2.h"
 #include"Ground/Ground.h"
 // emitter
 #include"utility/Particle/ParticleEmitter.h"

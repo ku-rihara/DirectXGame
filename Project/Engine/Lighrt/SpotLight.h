@@ -13,7 +13,7 @@ struct SpotLightData {
     float decay;            // 減衰率
     float cosAngle;         // スポットライトの余弦
     float cosFalloffStart;  //減衰開始の余弦
-    float padding[2];
+    float padding[1];
 };
 
 class SpotLight {
