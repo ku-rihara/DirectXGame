@@ -11,6 +11,9 @@
 #include"Enemy/HPBar/EnemyHPBar.h"
 #include"Effect/Effect.h"
 
+#include"IsFindSprite/FindSprite.h"
+#include"IsFindSprite/NotFindSprite.h"
+
 class Player;
 class GameCamera;
 class BaseEnemy : public BaseObject,public AABBCollider {
@@ -19,6 +22,9 @@ protected:
 	/// other class
 	Player* pPlayer_;
 	GameCamera* pGameCamera_;
+	std::unique_ptr<FindSprite>findSprite_;
+	std::unique_ptr<NotFindSprite>notFindSprite_;
+
 
 	bool isdeath_;
 	float hp_;
@@ -67,7 +73,7 @@ public:
 	void DamageForPar(const float& par);
 
 	/// Hpバー処理
-	virtual void DisplayHpBar(const ViewProjection& viewProjection);
+	virtual void DisplaySprite(const ViewProjection& viewProjection);
 
 	void ChangeBehavior(std::unique_ptr<BaseEnemyBehaivor>behavior);
 
@@ -83,6 +89,8 @@ public:
 	bool GetIsDeath()const { return isdeath_; }
 	Player* GetPlayer() { return pPlayer_; }
 	GameCamera* GetGameCamera() { return pGameCamera_; }
+	FindSprite* GetFindSprite() { return findSprite_.get(); }
+	NotFindSprite* GetNotFindSprite() { return notFindSprite_.get(); }
 	///========================================================================================
 	///  setter method
 	///========================================================================================

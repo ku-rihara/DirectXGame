@@ -29,8 +29,8 @@ void NormalEnemy::Draw(const ViewProjection& viewProjection) {
 ///========================================================
 /// HpBar表示
 ///========================================================
-void NormalEnemy::DisplayHpBar(const ViewProjection& viewProjection) {
-	BaseEnemy::DisplayHpBar(viewProjection);
+void NormalEnemy::DisplaySprite(const ViewProjection& viewProjection) {
+	BaseEnemy::DisplaySprite(viewProjection);
 }
 
 ///========================================================

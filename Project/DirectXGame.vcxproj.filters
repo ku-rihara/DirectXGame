@@ -196,6 +196,9 @@
     <Filter Include="MyEngine\.cpp\Light">
       <UniqueIdentifier>{5396bc61-e016-4b3e-8707-c28cc9c03b94}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\IsFindSprite">
+      <UniqueIdentifier>{27dc28c0-6ee7-4d37-a63d-89c6f21a24ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -525,6 +528,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Lighrt\SpotLightManager.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\IsFindSprite\FindSprite.cpp">
+      <Filter>Game\IsFindSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\IsFindSprite\NotFindSprite.cpp">
+      <Filter>Game\IsFindSprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -890,6 +899,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Lighrt\SpotLightManager.h">
       <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\IsFindSprite\FindSprite.h">
+      <Filter>Game\IsFindSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\IsFindSprite\NotFindSprite.h">
+      <Filter>Game\IsFindSprite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

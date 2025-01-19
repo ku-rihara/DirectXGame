@@ -65,6 +65,11 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
 	damageEmitter_->SetTextureHandle(handle);
 
+	findSprite_ = std::make_unique<FindSprite>();
+	notFindSprite_ = std::make_unique<NotFindSprite>();
+	findSprite_->Init();
+	notFindSprite_->Init();
+
 	ChangeBehavior(std::make_unique<EnemyChasePlayer>(this));/// 追っかけ
 }
 
@@ -102,7 +107,7 @@ void BaseEnemy::Update() {
 ///========================================================
 /// HpBar表示
 ///========================================================
-void BaseEnemy::DisplayHpBar(const ViewProjection& viewProjection) {
+void BaseEnemy::DisplaySprite(const ViewProjection& viewProjection) {
 	// ワールド座標からスクリーン座標に変換
 	Vector3 positionScreen = ScreenTransform(GetWorldPosition(), viewProjection);
 	// Vector2に格納
@@ -115,6 +120,17 @@ void BaseEnemy::DisplayHpBar(const ViewProjection& viewProjection) {
 	hpbar_->SetPosition(hpBarPosition);
 	// Hpバー更新
 	hpbar_->Update(int(hp_));
+
+
+	// HPBarスプライト
+	findSprite_->SetPosition(hpBarPosition);
+	// Hpバー更新
+	findSprite_->Update();
+
+	// HPBarスプライト
+	notFindSprite_->SetPosition(hpBarPosition);
+	// Hpバー更新
+	notFindSprite_->Update();
 }
 
 Vector3 BaseEnemy::GetDirectionToTarget(const Vector3& target) {

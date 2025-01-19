@@ -11,6 +11,7 @@ void SpotLightManager::Remove(int index) {
         spotLights_.erase(spotLights_.begin() + index);
     }
 }
+
 std::vector<SpotLight*> SpotLightManager::GetLights() {
     std::vector<SpotLight*> lights;
     for (const auto& light : spotLights_)

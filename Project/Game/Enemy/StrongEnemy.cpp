@@ -28,8 +28,8 @@ void StrongEnemy::Draw(const ViewProjection& viewProjection) {
 ///========================================================
 /// HpBar表示
 ///========================================================
-void StrongEnemy::DisplayHpBar(const ViewProjection& viewProjection) {
-	BaseEnemy::DisplayHpBar(viewProjection);
+void StrongEnemy::DisplaySprite(const ViewProjection& viewProjection) {
+	BaseEnemy::DisplaySprite(viewProjection);
 }
 
 ///========================================================

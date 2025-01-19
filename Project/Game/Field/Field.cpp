@@ -14,7 +14,7 @@ void Field::Init() {
 	obj3d_.reset(Object3d::CreateModel("Field",".obj"));
 	
 	transform_.Init();
-	transform_.scale_ = baseScale_;
+	transform_.scale_ = {1,1,1};
 	obj3d_->material_.materialData_->enableLighting = 5;
 }
 

@@ -97,7 +97,7 @@ void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
 	}
 
 	for (auto it = enemies_.begin(); it != enemies_.end();) {
-		(*it)->DisplayHpBar(viewProjection);// 更新
+		(*it)->DisplaySprite(viewProjection);// 更新
 		++it;
 	}
 }

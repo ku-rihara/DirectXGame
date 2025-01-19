@@ -26,7 +26,7 @@ void SpotLight::Init(ID3D12Device* device) {
     lightData_->position = { 2.0f,1.25f,0.0f };
     lightData_->distance = 38.0f;
     lightData_->direction = Vector3::Normalize({ 0.0f,-1.0f,0.0f });
-    lightData_->intensity = 2.0f;
+    lightData_->intensity = 17.0f;
     lightData_->decay = 0.15f;
     lightData_->cosAngle = 0.5f;
     lightData_->cosFalloffStart = 3.0f;

@@ -75,6 +75,8 @@
     <ClCompile Include="Game\Enemy\Behavior\EnemyUpperDamage.cpp" />
     <ClCompile Include="Game\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Enemy\HPBar\EnemyHPBar.cpp" />
+    <ClCompile Include="Game\Enemy\IsFindSprite\FindSprite.cpp" />
+    <ClCompile Include="Game\Enemy\IsFindSprite\NotFindSprite.cpp" />
     <ClCompile Include="Game\Enemy\NormalEnemy.cpp" />
     <ClCompile Include="Game\Enemy\StrongEnemy.cpp" />
     <ClCompile Include="Game\Field\Field.cpp" />
@@ -196,6 +198,8 @@
     <ClInclude Include="Game\Enemy\Behavior\EnemyUpperDamage.h" />
     <ClInclude Include="Game\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Enemy\HPBar\EnemyHPBar.h" />
+    <ClInclude Include="Game\Enemy\IsFindSprite\FindSprite.h" />
+    <ClInclude Include="Game\Enemy\IsFindSprite\NotFindSprite.h" />
     <ClInclude Include="Game\Enemy\NormalEnemy.h" />
     <ClInclude Include="Game\Enemy\StrongEnemy.h" />
     <ClInclude Include="Game\Field\Field.h" />

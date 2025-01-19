@@ -28,7 +28,7 @@ public:
 	void SpriteDraw(const ViewProjection& viewProjection)override;
 
 	/// Hpバー処理
-	void DisplayHpBar(const ViewProjection& viewProjection)override;
+	void DisplaySprite(const ViewProjection& viewProjection)override;
 	
 	
 };
