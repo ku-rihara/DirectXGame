@@ -24,11 +24,13 @@ void SpotLight::Init(ID3D12Device* device) {
     lightResource_->Map(0, nullptr, reinterpret_cast<void**>(&lightData_));
     lightData_->color = { 1.0f,1.0f,1.0f,1.0f };
     lightData_->position = { 2.0f,1.25f,0.0f };
-    lightData_->distance = 7.0f;
-    lightData_->direction = Vector3::Normalize({ -1.0f,-1.0f,0.0f });
-    lightData_->intensity = 4.0f;
-    lightData_->decay = 2.0f;
-    lightData_->cosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
+    lightData_->distance = 38.0f;
+    lightData_->direction = Vector3::Normalize({ 0.0f,-1.0f,0.0f });
+    lightData_->intensity = 2.0f;
+    lightData_->decay = 0.15f;
+    lightData_->cosAngle = 0.5f;
+    lightData_->cosFalloffStart = 3.0f;
+
 }
 
 void SpotLight::DebugImGui() {

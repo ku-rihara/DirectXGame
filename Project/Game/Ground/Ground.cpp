@@ -1,4 +1,6 @@
 #include "Ground.h"
+#include "assert.h"
+#include"Lighrt/Light.h"
 
 
 Ground::Ground() {}
@@ -6,7 +8,7 @@ Ground::Ground() {}
 Ground::~Ground() {}
 
 ///========================================================
-/// 初期化
+/// ������
 ///========================================================
 void Ground::Init() {
 
@@ -14,18 +16,19 @@ void Ground::Init() {
 	transform_.Init();
 	transform_.translation_.y = -10.0f;
 	transform_.scale_ = {1, 2, 1};
-
+	
+	objct3D_->material_.materialData_->enableLighting = 5;
 }
 
 ///========================================================
-/// 更新
+/// �X�V
 ///========================================================
 void Ground::Update() {
 	transform_.UpdateMatrix();
 }
 
 ///========================================================
-/// 描画
+/// �`��
 ///========================================================
 void Ground::Draw(ViewProjection& viewProjection) {
 	objct3D_->Draw(transform_, viewProjection); 
