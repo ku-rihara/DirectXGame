@@ -24,6 +24,11 @@ EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
 
 	pBaseEnemy_->DamageEmit();
 
+	pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2(0, 0));
+	pBaseEnemy_->GetFindSprite()->SetScale(Vector2(1, 1));
+	pBaseEnemy_->SetScale(BaseEnemy::InitScale_);
+
+
 	step_ = Step::DIRECTIONSET; /// ステップ初期化
 }
 

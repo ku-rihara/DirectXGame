@@ -26,6 +26,11 @@ EnemyRoot::EnemyRoot(BaseEnemy* boss)
 	normalAttackStartPos_ = 7.0f;
 	attackCoolTime_ = 1.0f;
 
+	pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2(0, 0));
+	pBaseEnemy_->GetFindSprite()->SetScale(Vector2(0, 0));
+	spriteEase_.maxTime = 1.0f;
+	spriteEase_.time = 0.0f;
+
 	isChase_ = true;//	デバッグ用
 }
 
@@ -34,6 +39,10 @@ EnemyRoot::~EnemyRoot() {
 }
 
 void EnemyRoot::Update() {
+
+	spriteEase_.time += Frame::DeltaTime();
+	spriteEase_.time = std::min(spriteEase_.time, spriteEase_.maxTime);
+	pBaseEnemy_->GetNotFindSprite()->SetScale(EaseOutBack(Vector2(0,0), Vector2(1, 1), spriteEase_.time, spriteEase_.maxTime));
 	
 		// ターゲットへのベクトル
 		Vector3 direction =pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());

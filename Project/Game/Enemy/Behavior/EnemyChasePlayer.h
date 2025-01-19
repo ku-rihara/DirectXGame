@@ -1,6 +1,7 @@
 #pragma once
 
 #include"BaseEnemyMoveBehavior.h"
+#include"Easing.h"
 
 class EnemyChasePlayer : public BaseEnemyMoveBehavior {
 private:
@@ -17,6 +18,8 @@ private:
 
 	bool isChase_;
 
+	Easing spriteEase_;
+	Easing scaleEase_;
 public:
 	//コンストラクタ
 	EnemyChasePlayer(BaseEnemy* boss);

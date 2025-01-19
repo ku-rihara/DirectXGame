@@ -68,7 +68,6 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	findSprite_->Init();
 	notFindSprite_->Init();
 
-	ChangeBehavior(std::make_unique<EnemyChasePlayer>(this));/// 追っかけ
 	ChangeBehavior(std::make_unique<EnemyDamageRoot>(this));/// 追っかけ
 	ChangeMoveBehavior(std::make_unique<EnemySpawn>(this));/// 追っかけ
 }
@@ -119,14 +118,15 @@ void BaseEnemy::DisplaySprite(const ViewProjection& viewProjection) {
 	// Hpバー更新
 	hpbar_->Update(int(hp_));
 
+	Vector2 findPos(positionScreen.x , positionScreen.y - 100.0f);
 
 	// HPBarスプライト
-	findSprite_->SetPosition(hpBarPosition);
+	findSprite_->SetPosition(findPos);
 	// Hpバー更新
 	findSprite_->Update();
 
 	// HPBarスプライト
-	notFindSprite_->SetPosition(hpBarPosition);
+	notFindSprite_->SetPosition(findPos);
 	// Hpバー更新
 	notFindSprite_->Update();
 }
@@ -165,6 +165,8 @@ void BaseEnemy::Draw(const ViewProjection& viewProjection) {
 void BaseEnemy::SpriteDraw(const ViewProjection& viewProjection) {
 	
 		if (IsInView(viewProjection)) {
+			findSprite_->Draw();
+			notFindSprite_->Draw();
 			hpbar_->Draw();
 		}
 }
