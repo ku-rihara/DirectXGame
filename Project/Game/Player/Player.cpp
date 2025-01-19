@@ -5,7 +5,8 @@
 
 /// frame
 #include"Frame/Frame.h"
-
+#include"Lighrt/Light.h"
+#include"Lighrt/SpotLightManager.h"
 /// math
 #include"MathFunction.h"
 
@@ -46,7 +47,7 @@ void Player::Init() {
 	AddParmGroup();
 	ApplyGlobalParameter();
 	
-	obj3d_->material_.materialData_->enableLighting = 2;
+	obj3d_->material_.materialData_->enableLighting = 5;
 
 	///* 武器生成
 	leftHand_ = std::make_unique<PlayerHandLeft>();
@@ -87,6 +88,11 @@ void Player::Update() {
 		behavior_->Update();
 		
 	}
+
+	Light::GetInstance()->GetSpotLightManager()->GetSpotLight(0)->SetPosition(Vector3(
+		transform_.translation_.x,
+		transform_.translation_.y+5.0f,
+		transform_.translation_.z));
 
 	comboBehavior_->Update();	  ///　コンボ攻撃攻撃
 	MoveToLimit();                ///　移動制限
