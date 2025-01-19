@@ -2,7 +2,7 @@
 
 #include"BaseEnemyMoveBehavior.h"
 
-class EnemyChasePlayer : public BaseEnemyMoveBehavior {
+class EnemyRoot : public BaseEnemyMoveBehavior {
 private:
 	
 	float chaseSpeedMax_;//ストーカースピード(速い)
@@ -19,8 +19,8 @@ private:
 
 public:
 	//コンストラクタ
-	EnemyChasePlayer(BaseEnemy* boss);
-	~EnemyChasePlayer();
+	EnemyRoot(BaseEnemy* boss);
+	~EnemyRoot();
 
 
 	void Update()override;

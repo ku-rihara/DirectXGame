@@ -19,7 +19,7 @@ void GameCamera::Init() {
 	viewprojection_.Init();
 
 	rotate_ = 8.9f;
-	offset_ = { 0,17,-47.0f };
+	offset_ = { 5,9,-22.0f };
 
 	ChangeBehavior(std::make_unique<GameCameraRoot>(this));
 }
@@ -37,7 +37,6 @@ void GameCamera::MoveUpdate() {
 
 	// 旋回操作: 左右キーでY軸の回転を操作
 	stickInput_ = { 0.0f, 0.0f, 0.0f }; // スティック入力相当のベクトルをリセット
-
 
 	///----------------------------------------------------------------------------------
 	///kyebord
@@ -84,7 +83,6 @@ void GameCamera::MoveUpdate() {
 	viewprojection_.rotation_.y = LerpShortAngle(viewprojection_.rotation_.y, destinationAngleY_, 0.3f);
 
 	TranslateAdapt(); // 変位適応
-
 	RotateAdapt();    // 回転適応
 }
 

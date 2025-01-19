@@ -41,7 +41,7 @@ void EnemyStopDamage::Update() {
 	/// -------------------------------------------------------
 	/// 追従に戻す
 	///---------------------------------------------------------
-	pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
+	pBaseEnemy_->BackToDamageRoot();
 
 }
 

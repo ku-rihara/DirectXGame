@@ -182,6 +182,7 @@ void GameScene::Debug() {
 
 	ImGui::Begin("ParamaterEditor");
 	player_->AdjustParm();
+	enemyManager_->AdjustParm();
 	ImGui::End();
 #endif
 }

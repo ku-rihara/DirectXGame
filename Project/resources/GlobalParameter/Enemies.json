@@ -1,0 +1,8 @@
+{
+    "Enemies": {
+        "chaseDistance1": 21.440000534057617,
+        "chaseDistance2": 14.010000228881836,
+        "chaseSpeed1": 0.3499999940395355,
+        "chaseSpeed2": 0.3700000047683716
+    }
+}
