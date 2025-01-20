@@ -1,0 +1,145 @@
+/// behavior
+#include"TitleSecondPunch.h"
+#include"TitleThirdPunch.h"
+/// objs
+#include"Player/Player.h"
+#include"LockOn/LockOn.h"
+
+/// input
+#include"input/Input.h"
+
+/// frame
+#include"Frame/Frame.h"
+
+#include<imgui.h>
+
+//初期化
+TitleSecondPunch::TitleSecondPunch(Player* player)
+	: BaseTitleBehavior("TitleSecondPunch", player) {
+
+	///---------------------------------------------------------
+	/// 変数初期化
+	///---------------------------------------------------------
+
+	///　突進の動き
+	initPos_ = pPlayer_->GetWorldPosition();
+	forwardDirection_ = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
+
+	/// parm
+	rushEase_.time = 0.0f;
+	punchEase_.time = 0.0f;
+	waitTine_ = 0.0f;
+	
+	///land
+	startEasing_.maxTime = 0.5f;
+	startEasing_.amplitude = 0.6f;
+	startEasing_.period = 0.2f;
+
+	// 振る舞い順序初期化
+	order_ = Order::RUSH;
+}
+
+TitleSecondPunch::~TitleSecondPunch() {
+
+}
+
+//更新
+void TitleSecondPunch::Update() {
+	/// スケール変化
+	startEasing_.time += Frame::DeltaTimeRate();
+	startEasing_.time = std::min(startEasing_.time, startEasing_.maxTime);
+	pPlayer_->SetScale(EaseAmplitudeScale(Vector3::UnitVector(), startEasing_.time, startEasing_.maxTime,
+		startEasing_.amplitude, startEasing_.period));
+
+
+	switch (order_) {
+
+	case Order::RUSH:
+
+		
+		///----------------------------------------------------
+		/// 突進
+		///----------------------------------------------------
+
+
+		rushPos_ = initPos_ + (forwardDirection_ * 0.0f); // 突進座標を決める
+
+		rushEase_.time += Frame::DeltaTimeRate();
+
+		// 突進の動き
+		pPlayer_->SetWorldPosition(
+			EaseInSine(initPos_, rushPos_, rushEase_.time, pPlayer_->GetRushEaseMax()));
+
+		/// パンチオーダーに移行
+		if (rushEase_.time >= pPlayer_->GetRushEaseMax()) {
+			rushEase_.time = pPlayer_->GetRushEaseMax();
+
+			/// パンチ座標セット
+			rHandStartPos_ = pPlayer_->GetRightHand()->GetTransform().translation_;
+			rHandTargetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward()) * 2.0f;
+
+			order_ = Order::PUNCH;
+		}
+
+		break;
+
+	case Order::PUNCH:
+		///----------------------------------------------------
+		/// パンチ
+		///----------------------------------------------------
+
+	
+		punchEase_.time += Frame::DeltaTimeRate();
+
+		/// 拳を突き出す
+		punchPosition_ =
+			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayer_->GetPunchEaseMax(Player::FIRST));
+
+
+		// ハンドのローカル座標を更新
+		pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
+
+		// イージング終了時の処理
+		if (punchEase_.time >= pPlayer_->GetPunchEaseMax(Player::FIRST)) {
+			punchEase_.time = pPlayer_->GetPunchEaseMax(Player::FIRST);
+			order_ = Order::BACKPUNCH;
+		}
+
+
+		break;
+
+	case Order::BACKPUNCH:
+		///----------------------------------------------------
+		/// バックパンチ
+		///----------------------------------------------------
+
+		punchEase_.time -= Frame::DeltaTimeRate();
+
+		punchPosition_ =
+			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayer_->GetPunchEaseMax(Player::FIRST));
+
+		// ハンドのローカル座標を更新
+		pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
+
+		// イージング終了時の処理
+		if (punchEase_.time <= 0.0f) {
+			punchEase_.time = 0.0f;
+			order_ = Order::WAIT;
+		}
+		break;
+
+	case Order::WAIT:
+		waitTine_ += Frame::DeltaTime();
+
+		/// コンボ途切れ
+		if (waitTine_ >= pPlayer_->GetWaitTime(Player::FIRST)) {
+			pPlayer_->ChangeTitleBehavior(std::make_unique<TitleThirdPunch>(pPlayer_));
+		}
+	}
+}
+
+
+void  TitleSecondPunch::Debug() {
+	ImGui::Text("TitleSecondPunch");
+}
+

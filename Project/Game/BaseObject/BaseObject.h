@@ -62,4 +62,7 @@ public:
 	void SetRotationX(float rotate) { transform_.rotation_.x = rotate; }
 	void SetRotationZ(float rotate) { transform_.rotation_.z = rotate; }
 	void SetScale(Vector3 scale) { transform_.scale_ = scale; }
+	void SetScaleX(float scale) { transform_.scale_.x = scale; }
+	void SetScaleY(float scale) { transform_.scale_.y = scale; }
+	void SetScaleZ(float scale) { transform_.scale_.z = scale; }
 };

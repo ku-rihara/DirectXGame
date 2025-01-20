@@ -20,6 +20,7 @@
 #include"PlayerBehavior/PlayerRoot.h"
 #include"PlayerBehavior/PlayerJump.h"
 #include"ComboAttackBehavior/ComboAttackRoot.h"
+#include"TitleBehavior/TitleFirstFall.h"
 
 /// imgui
 #include<imgui.h>
@@ -27,7 +28,7 @@
 ///=========================================================
 ///　static 変数初期化
 ///==========================================================
-float Player::InitY_ = 0.5f;
+float Player::InitY_ = 0.0f;
 
 Player::Player() {}
 
@@ -89,11 +90,6 @@ void Player::Update() {
 		
 	}
 
-	Light::GetInstance()->GetSpotLightManager()->GetSpotLight(0)->SetPosition(Vector3(
-		transform_.translation_.x,
-		transform_.translation_.y+5.0f,
-		transform_.translation_.z));
-
 	comboBehavior_->Update();	  ///　コンボ攻撃攻撃
 	MoveToLimit();                ///　移動制限
 	FallEffectUpdate();
@@ -103,6 +99,22 @@ void Player::Update() {
 	rightHand_->Update();
 	BaseObject::Update();        /// 更新 
 
+}
+void Player::TitleUpdate() {
+	fallEmitter_->SetTargetPosition(GetWorldPosition());
+	fallEmitter_->Update();
+	FallEffectUpdate();
+
+	Light::GetInstance()->GetSpotLightManager()->GetSpotLight(0)->SetPosition(Vector3(
+		transform_.translation_.x,
+		transform_.translation_.y + 5.0f,
+		transform_.translation_.z));
+
+	titleBehavior_->Update();
+	/// 行列更新
+	leftHand_->Update();
+	rightHand_->Update();
+	BaseObject::Update();
 }
 
 ///=========================================================
@@ -530,6 +542,9 @@ void Player::ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior>behavi
 	comboBehavior_ = std::move(behavior);
 }
 
+void Player::ChangeTitleBehavior(std::unique_ptr<BaseTitleBehavior>behavior) {
+	titleBehavior_ = std::move(behavior);
+}
 
 ///=================================================================================
 /// ロード
@@ -714,4 +729,12 @@ float Player::GetJPunchEaseMax(JumpComboNum index)const {
 
 float Player::GetJPunchReach(JumpComboNum index)const {
 	return jumpComboParms_[index].punchReach;
+}
+
+void Player::SetTitleBehavior() {
+	ChangeTitleBehavior(std::make_unique<TitleFirstFall>(this));
+}
+
+void Player::UpdateMatrix() {
+	BaseObject::Update();
 }

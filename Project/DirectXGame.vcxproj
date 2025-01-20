@@ -103,6 +103,11 @@
     <ClCompile Include="Game\Player\PlayerBehavior\BasePlayerBehavior.cpp" />
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerJump.cpp" />
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerRoot.cpp" />
+    <ClCompile Include="Game\Player\TitleBehavior\BaseTitleBehavior.cpp" />
+    <ClCompile Include="Game\Player\TitleBehavior\TitleFirstFall.cpp" />
+    <ClCompile Include="Game\Player\TitleBehavior\TitleSecondPunch.cpp" />
+    <ClCompile Include="Game\Player\TitleBehavior\TitleThirdPunch.cpp" />
+    <ClCompile Include="Game\Player\TitleBehavior\TitleWait.cpp" />
     <ClCompile Include="Game\Player\Weapon\BasePlayerHand.cpp" />
     <ClCompile Include="Game\Player\Weapon\PlayerHandLeft.cpp" />
     <ClCompile Include="Game\Player\Weapon\PlayerHandRight.cpp" />
@@ -116,6 +121,7 @@
     <ClCompile Include="Game\TestObj\CollisionTest2.cpp" />
     <ClCompile Include="Game\TestObj\CollisionTest3.cpp" />
     <ClCompile Include="Game\UI\HowToOperate.cpp" />
+    <ClCompile Include="Game\UI\TitleFont.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\Box.cpp" />
     <ClCompile Include="math\Easing.cpp" />
@@ -230,6 +236,11 @@
     <ClInclude Include="Game\Player\PlayerBehavior\BasePlayerBehavior.h" />
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerJump.h" />
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerRoot.h" />
+    <ClInclude Include="Game\Player\TitleBehavior\BaseTitleBehavior.h" />
+    <ClInclude Include="Game\Player\TitleBehavior\TitleFirstFall.h" />
+    <ClInclude Include="Game\Player\TitleBehavior\TitleSecondPunch.h" />
+    <ClInclude Include="Game\Player\TitleBehavior\TitleThirdPunch.h" />
+    <ClInclude Include="Game\Player\TitleBehavior\TitleWait.h" />
     <ClInclude Include="Game\Player\Weapon\BasePlayerHand.h" />
     <ClInclude Include="Game\Player\Weapon\PlayerHandLeft.h" />
     <ClInclude Include="Game\Player\Weapon\PlayerHandRight.h" />
@@ -244,6 +255,7 @@
     <ClInclude Include="Game\TestObj\CollisionTest2.h" />
     <ClInclude Include="Game\TestObj\CollisionTest3.h" />
     <ClInclude Include="Game\UI\HowToOperate.h" />
+    <ClInclude Include="Game\UI\TitleFont.h" />
     <ClInclude Include="math\Box.h" />
     <ClInclude Include="math\Easing.h" />
     <ClInclude Include="math\MathFunction.h" />

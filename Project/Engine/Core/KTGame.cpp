@@ -19,6 +19,7 @@ void KTGame::Init() {
 
 	pSceneManager_->ChangeScene("GAMEPLAY");
 	pSceneManager_->ChangeScene("TITLE");
+	
 }
 
 // =============================================================

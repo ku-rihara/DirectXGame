@@ -4,11 +4,11 @@
 #include"Manager/SceneManager.h"
 #include"utility/Particle/ParticleManager.h"
 #include"utility/Particle/ParticleCommon.h"
+#include"Player/TitleBehavior/TitleSecondPunch.h"
 
 #include "base/TextureManager.h"
 #include"Frame/Frame.h"
-//class
-#include"utility/Particle/ParticleManager.h"
+
 
 //math
 
@@ -23,16 +23,38 @@ TitleScene::~TitleScene() {
 void TitleScene::Init() {
 
 	BaseScene::Init();
+	///=======================================================================================
+	/// 生成
+	///=======================================================================================
 
-	handle_ = TextureManager::GetInstance()->LoadTexture("./resources/Texture/Title.png");
+	field_ = std::make_unique<Field>();
+	player_ = std::make_unique<Player>();
+	skydome_ = std::make_unique<Skydome>();
+	titleFont_ = std::make_unique<TitleFont>();
+
+
+	///=======================================================================================
+	/// 初期化
+	///=======================================================================================
+	field_->Init();
+	skydome_->Init();
+	player_->Init();
+	titleFont_->Init();
+		
 	alpha_ = 0.0f;
-	titleSprite_.reset(Sprite::Create(handle_, Vector2(0, 0), Vector4(1, 1, 1, 1)));
-
+	
+	viewProjection_.translation_ = { 7.8f,3.6f,8.3f };
+	viewProjection_.rotation_.y= 3.8f;
 
 	shandle_ = TextureManager::GetInstance()->LoadTexture("./resources/Texture/screenChange.png");
 	screenSprite_.reset(Sprite::Create(shandle_, Vector2(0, 0), Vector4(1, 1, 1, alpha_)));
 	
+	player_->SetTitleBehavior();
 
+	player_->SetWorldPositionY(30.0f);
+	player_->UpdateMatrix();
+
+	
 	/*/// particleD
 	damageName_ = "DamageParticle";
 	damageEmitter_.reset(ParticleEmitter::CreateParticle(damageName_, "Plane", ".obj", 300, false));
@@ -43,13 +65,25 @@ void TitleScene::Init() {
 
 void TitleScene::Update() {
 	
-	/*damageEmitter_->Update();
-	damageEmitter_->EditorUpdate();
-	damageEmitter_->Emit();*/
 	
 	screenSprite_->SetAlpha(alpha_);
 
-	//　ジャンプに切り替え
+	player_->TitleUpdate();
+	field_->Update();
+	skydome_->Update();
+
+	if (dynamic_cast<TitleSecondPunch*>(player_->GetTitleBehavior())) {
+		if (!isFontUpdate_) {
+			isFontUpdate_ = true;
+		}
+	}
+	if (isFontUpdate_) {
+		titleFont_->Update();
+	}
+
+	ParticleManager::GetInstance()->Update(&viewProjection_);
+
+	//　ゲーム遷移
 	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 		isFinished_ = true;
 	}
@@ -67,6 +101,8 @@ void TitleScene::Update() {
 			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 		}
 	}
+
+	
 }
 
 void TitleScene::ChangeForJoyState() {
@@ -84,7 +120,10 @@ void TitleScene::ChangeForJoyState() {
 /// ===================================================
 void TitleScene::ModelDraw() {
 
-	
+
+	skydome_->Draw(viewProjection_);
+	field_->Draw(viewProjection_);
+	player_->Draw(viewProjection_);
 }
 
 /// ===================================================
@@ -99,7 +138,8 @@ void TitleScene::ParticleDraw() {
    /// スプライト描画
    /// ===================================================
 void TitleScene::SpriteDraw() {
-	titleSprite_->Draw();
+	titleFont_->Draw();
+
 	screenSprite_->Draw();
 }
 
@@ -108,7 +148,11 @@ void TitleScene::Debug() {
 	ImGui::Begin("Camera");
 	ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
 	ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
+	titleFont_->Debug();
+	/*player_->AdjustParm();*/
 	ImGui::End();
+
+
 #endif
 }
 

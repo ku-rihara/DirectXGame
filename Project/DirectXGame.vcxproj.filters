@@ -202,6 +202,12 @@
     <Filter Include="Game\IsFindSprite">
       <UniqueIdentifier>{27dc28c0-6ee7-4d37-a63d-89c6f21a24ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player\TitleBehavior">
+      <UniqueIdentifier>{b01ecc97-be49-417c-b138-660a6158c88c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\UI\TitleFont">
+      <UniqueIdentifier>{26f2b0d5-af5f-4226-8a18-93999703de7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -549,6 +555,24 @@
     </ClCompile>
     <ClCompile Include="Game\Enemy\IsFindSprite\NotFindSprite.cpp">
       <Filter>Game\IsFindSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\TitleBehavior\BaseTitleBehavior.cpp">
+      <Filter>Game\Player\TitleBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\TitleBehavior\TitleFirstFall.cpp">
+      <Filter>Game\Player\TitleBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\TitleBehavior\TitleSecondPunch.cpp">
+      <Filter>Game\Player\TitleBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\TitleBehavior\TitleThirdPunch.cpp">
+      <Filter>Game\Player\TitleBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\TitleBehavior\TitleWait.cpp">
+      <Filter>Game\Player\TitleBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\TitleFont.cpp">
+      <Filter>Game\UI\TitleFont</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -932,6 +956,24 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\IsFindSprite\NotFindSprite.h">
       <Filter>Game\IsFindSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\TitleBehavior\BaseTitleBehavior.h">
+      <Filter>Game\Player\TitleBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\TitleBehavior\TitleFirstFall.h">
+      <Filter>Game\Player\TitleBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\TitleBehavior\TitleSecondPunch.h">
+      <Filter>Game\Player\TitleBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\TitleBehavior\TitleThirdPunch.h">
+      <Filter>Game\Player\TitleBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\TitleBehavior\TitleWait.h">
+      <Filter>Game\Player\TitleBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\TitleFont.h">
+      <Filter>Game\UI\TitleFont</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

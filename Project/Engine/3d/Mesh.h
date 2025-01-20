@@ -4,7 +4,7 @@
 #include<dxgi1_6.h>
 //struct
 #include"struct/TransformationMatrix.h"
-#include"struct/DirectionalLight.h"
+#include"Lighrt/DirectionalLight.h"
 #include"struct/ModelData.h"
 #include"base/Material.h"
 //class

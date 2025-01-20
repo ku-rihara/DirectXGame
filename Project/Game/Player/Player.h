@@ -17,6 +17,7 @@
 /// behavior
 #include"ComboAttackBehavior/ComboAttackFirst.h"
 #include"PlayerBehavior/BasePlayerBehavior.h"
+#include"TitleBehavior/BaseTitleBehavior.h"
 
 /// std
 #include<array>
@@ -96,6 +97,7 @@ private:
 	/// behavior
 	std::unique_ptr<BasePlayerBehavior>behavior_ = nullptr;
 	std::unique_ptr<BaseComboAattackBehavior>comboBehavior_ = nullptr;
+	std::unique_ptr<BaseTitleBehavior>titleBehavior_ = nullptr;
 
 	std::string fallParticleName_;
 	std::unique_ptr<ParticleEmitter>fallEmitter_;
@@ -112,6 +114,7 @@ public:
 	//初期化、更新、描画
 	void Init() override;
 	void Update() override;
+	void TitleUpdate();
 	void Draw(const ViewProjection& viewProjection) override;
 
 	/// 移動
@@ -119,7 +122,7 @@ public:
 	bool GetIsMoving();                                          /// 動かしてるかフラグ
 	void MoveToLimit();                                          /// 移動制限
 	Vector3 GetInputDirecton();                                  /// 入力による速度
-
+	void UpdateMatrix();
 
 
 	void FallParticleEmit();
@@ -129,6 +132,8 @@ public:
 	/// 振る舞い切り替え
 	void ChangeBehavior(std::unique_ptr<BasePlayerBehavior>behavior);
 	void ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior>behavior);
+	void ChangeTitleBehavior(std::unique_ptr<BaseTitleBehavior>behavior);
+
 
 	void FallEffectUpdate();
 	void FallEffectInit(const Vector3& pos);
@@ -161,7 +166,7 @@ public:
 	float               GetMoveSpeed()       const        { return moveSpeed_; }
 	float               GetUpperPosY()       const        { return upperPosY_; }
 	BasePlayerBehavior* GetBehavior()        const        { return behavior_.get();}
-
+	BaseTitleBehavior*  GetTitleBehavior()   const        { return titleBehavior_.get(); }
 	/// ===================================================
 	/// setter
 	/// ===================================================
@@ -169,6 +174,7 @@ public:
 	void SetViewProjection(const ViewProjection* viewProjection) { viewProjection_ = viewProjection; }
 	void SetLockOn        (LockOn* lockon); 
 	void SetGameCamera    (GameCamera*gamecamera);
+	void SetTitleBehavior ();
 
 	/// comboParamater
 	float GetRushDistance() const { return rushDistance_; }

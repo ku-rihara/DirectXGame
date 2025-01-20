@@ -2,22 +2,29 @@
 
 ///baseScene
 #include"BaseScene.h"
-
 #include"utility/Particle/ParticleEmitter.h"
+
+#include"Player/Player.h"
+#include"Field/Field.h"
+#include"SkyDome/SkyDome.h"
+#include"UI/TitleFont.h"
 
 /// <summary>
 /// タイトルシーン
 /// </summary>
 class TitleScene:public BaseScene {
 private:
-	/*std::string damageName_;
-	std::unique_ptr<ParticleEmitter>damageEmitter_;*/
-	int handle_;
-	std::unique_ptr<Sprite>titleSprite_;
+	
 
 	int shandle_;
 	std::unique_ptr<Sprite>screenSprite_;
 
+	std::unique_ptr<Player>player_ = nullptr;
+	std::unique_ptr<Field>field_ = nullptr;
+	std::unique_ptr<Skydome> skydome_ = nullptr;
+	std::unique_ptr<TitleFont>titleFont_ = nullptr;
+
+	bool isFontUpdate_;
 	bool isFinished_;
 	float alpha_;
 public:
