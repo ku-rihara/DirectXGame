@@ -158,14 +158,14 @@ void Mesh::CreateSphere() {
 
 #ifdef _DEBUG
 void Mesh::DebugImGui() {
-	/*ImGui::Begin("Lighting");*/
-	ImGui::ColorEdit4(" Color", (float*)&materialDate_->materialData_->color);
-	ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
-	directionalLightData_->direction = Vector3::Normalize(directionalLightData_->direction);
-	ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
-	const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert" };
-	ImGui::Combo("Lighting Mode", &materialDate_->materialData_->enableLighting, lightingModes, IM_ARRAYSIZE(lightingModes));
-	/*ImGui::End();*/
+	///*ImGui::Begin("Lighting");*/
+	//ImGui::ColorEdit4(" Color", (float*)&materialDate_->materialData_->color);
+	//ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
+	//directionalLightData_->direction = Vector3::Normalize(directionalLightData_->direction);
+	//ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
+	//const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert" };
+	//ImGui::Combo("Lighting Mode", &materialDate_->materialData_->enableLighting, lightingModes, IM_ARRAYSIZE(lightingModes));
+	///*ImGui::End();*/
 }
 #endif
 
