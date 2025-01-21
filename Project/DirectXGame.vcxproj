@@ -42,6 +42,8 @@
     <ClCompile Include="Engine\Function\Convert.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
     <ClCompile Include="Engine\input\Mouse.cpp" />
+    <ClCompile Include="Engine\Lighrt\AreaLight.cpp" />
+    <ClCompile Include="Engine\Lighrt\AreaLightManager.cpp" />
     <ClCompile Include="Engine\Lighrt\DirectionalLight.cpp" />
     <ClCompile Include="Engine\Lighrt\Light.cpp" />
     <ClCompile Include="Engine\Lighrt\PointLight.cpp" />
@@ -167,6 +169,8 @@
     <ClInclude Include="Engine\Function\Log.h" />
     <ClInclude Include="Engine\input\Input.h" />
     <ClInclude Include="Engine\input\Mouse.h" />
+    <ClInclude Include="Engine\Lighrt\AreaLight.h" />
+    <ClInclude Include="Engine\Lighrt\AreaLightManager.h" />
     <ClInclude Include="Engine\Lighrt\DirectionalLight.h" />
     <ClInclude Include="Engine\Lighrt\Light.h" />
     <ClInclude Include="Engine\Lighrt\PointLight.h" />

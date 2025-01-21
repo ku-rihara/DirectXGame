@@ -15,6 +15,7 @@ struct CameraForGPU {
 class DirectionalLight;
 class PointLightManager;
 class SpotLightManager;
+class AreaLightManager;
 
 class Light {
 private:
@@ -22,6 +23,7 @@ private:
     std::unique_ptr<DirectionalLight> directionalLight_;
     std::unique_ptr<PointLightManager> pointLightManager_;
     std::unique_ptr<SpotLightManager> spotLightManager_;
+    std::unique_ptr<AreaLightManager>areaLightManager_;
 
     //虚面反射
     Microsoft::WRL::ComPtr<ID3D12Resource> cameraForGPUResource_;
@@ -41,10 +43,7 @@ public:
     // 各ライトのリソースを取得する関数
     ID3D12Resource* GetDirectionalLightResource() const;
     ID3D12Resource* GetCameraForGPUResources() const;
-    std::vector<ID3D12Resource*> GetPointLightResources() const;
-
-
-
+ 
     void SetWorldCameraPos(const Vector3& pos);
 
     // ライトマネージャーを取得するためのメソッド

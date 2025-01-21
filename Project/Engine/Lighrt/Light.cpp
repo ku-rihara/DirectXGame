@@ -3,6 +3,7 @@
 #include "DirectionalLight.h"
 #include "PointLightManager.h"
 #include "SpotLightManager.h"
+#include"AreaLightManager.h"
 #include "base/DirectXCommon.h"
 #include <imgui.h>
 #include <vector>
@@ -25,16 +26,18 @@ void Light::Init(ID3D12Device* device) {
 
 	pointLightManager_ = std::make_unique<PointLightManager>();
 	spotLightManager_ = std::make_unique<SpotLightManager>();
+	areaLightManager_= std::make_unique<AreaLightManager>();
 
 	// 初期ライトを一つ追加
 	pointLightManager_->Add(device);
 	spotLightManager_->Add(device);
+	areaLightManager_->Add(device);
 }
 
 void Light::DebugImGui() {
 	ImGui::DragFloat3("WorldCamera", (float*)&cameraForGPUData_->worldPosition_, 0.01f);
 	directionalLight_->DebugImGui();
-	if (ImGui::TreeNode("PointLights")) {
+	if (ImGui::TreeNode("PointLights")) { /// point
 		// const auto& に変更
 		const auto& pointLights = pointLightManager_->GetLights();
 		for (size_t i = 0; i < pointLights.size(); ++i) {
@@ -49,7 +52,7 @@ void Light::DebugImGui() {
 		}
 		ImGui::TreePop();
 	}
-	if (ImGui::TreeNode("SpotLights")) {
+	if (ImGui::TreeNode("SpotLights")) {/// spot
 		// const auto& に変更
 		const auto& spotLights = spotLightManager_->GetLights();
 		for (size_t i = 0; i < spotLights.size(); ++i) {
@@ -64,23 +67,24 @@ void Light::DebugImGui() {
 		}
 		ImGui::TreePop();
 	}
+
+	if (ImGui::TreeNode("AreaLight")) {   /// AreaLight
+		// const auto& に変更
+		const auto& areaLights = areaLightManager_->GetLights();
+		for (size_t i = 0; i < areaLights.size(); ++i) {
+			if (ImGui::TreeNode(("AreaLight" + std::to_string(i)).c_str())) {
+				//ポインタでアクセスするように変更
+				areaLights[i]->DebugImGui();
+				ImGui::TreePop();
+			}
+		}
+		if (ImGui::Button("Add Area Light")) {
+			areaLightManager_->Add(DirectXCommon::GetInstance()->GetDevice());
+		}
+		ImGui::TreePop();
+	}
 }
 
-// ID3D12Resource* Light::GetLightResources() const {
-// 	std::vector<ID3D12Resource*> resources;
-// 	resources.push_back(directionalLight_->GetLightResource());
-//     resources.push_back(cameraForGPUResource_.Get());
-// 	for (auto& pointLight : pointLightManager_->GetLights())
-// 	{
-// 		resources.push_back(pointLight.GetLightResource());
-// 	}
-// 	for (auto& spotLight : spotLightManager_->GetLights())
-// 	{
-// 		resources.push_back(spotLight.GetLightResource());
-// 	}
-
-// 	return resources;
-// }
 
 ID3D12Resource* Light::GetDirectionalLightResource() const {
 	return directionalLight_->GetLightResource();
@@ -95,6 +99,7 @@ void  Light::SetLightCommands(ID3D12GraphicsCommandList* commandList) {
 	commandList->SetGraphicsRootConstantBufferView(4, cameraForGPUResource_->GetGPUVirtualAddress());
 	pointLightManager_->SetLightCommand(commandList);
 	spotLightManager_->SetLightCommand(commandList);
+	areaLightManager_->SetLightCommand(commandList);
 }
 
 

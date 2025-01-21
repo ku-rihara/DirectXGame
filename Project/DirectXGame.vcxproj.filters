@@ -574,6 +574,12 @@
     <ClCompile Include="Game\UI\TitleFont.cpp">
       <Filter>Game\UI\TitleFont</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Lighrt\AreaLightManager.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Lighrt\AreaLight.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -974,6 +980,12 @@
     </ClInclude>
     <ClInclude Include="Game\UI\TitleFont.h">
       <Filter>Game\UI\TitleFont</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\AreaLightManager.h">
+      <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\AreaLight.h">
+      <Filter>MyEngine\.h\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
