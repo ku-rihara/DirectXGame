@@ -8,7 +8,7 @@
 
 namespace {
 	DirectXCommon* directXCommon = DirectXCommon::GetInstance();
-	
+
 }
 
 Mesh* Mesh::GetInstance() {
@@ -141,9 +141,9 @@ void Mesh::CreateSphere() {
 	directionalLightData_ = nullptr;
 	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
 	//デフォルト値はこうする
-	directionalLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightData_->intensity = 1.0f;
+	directionalLightData_->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	directionalLightData_->SetDirection({ 0.0f,-1.0f,0.0f });
+	directionalLightData_->SetIntensity(1.0f);
 	//行列--------------------------------------------------------------------------------------------------------
 	wvpResouce_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix));
 	//データを書き込む
@@ -158,14 +158,14 @@ void Mesh::CreateSphere() {
 
 #ifdef _DEBUG
 void Mesh::DebugImGui() {
-	/*ImGui::Begin("Lighting");*/
-	ImGui::ColorEdit4(" Color", (float*)&materialDate_->materialData_->color);
-	ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
-	directionalLightData_->direction = Vector3::Normalize(directionalLightData_->direction);
-	ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
-	const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert" };
-	ImGui::Combo("Lighting Mode", &materialDate_->materialData_->enableLighting, lightingModes, IM_ARRAYSIZE(lightingModes));
-	/*ImGui::End();*/
+	///*ImGui::Begin("Lighting");*/
+	//ImGui::ColorEdit4(" Color", (float*)&materialDate_->materialData_->color);
+	//ImGui::DragFloat3("Direction", (float*)&directionalLightData_->direction, 0.01f);
+	//directionalLightData_->direction = Vector3::Normalize(directionalLightData_->direction);
+	//ImGui::DragFloat("Intensity", (float*)&directionalLightData_->intensity, 0.1f);
+	//const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert" };
+	//ImGui::Combo("Lighting Mode", &materialDate_->materialData_->enableLighting, lightingModes, IM_ARRAYSIZE(lightingModes));
+	///*ImGui::End();*/
 }
 #endif
 

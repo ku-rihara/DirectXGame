@@ -1,3 +1,4 @@
+// Light.cpp
 #include "Light.h"
 #include "DirectionalLight.h"
 #include "PointLightManager.h"

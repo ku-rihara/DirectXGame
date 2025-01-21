@@ -21,7 +21,9 @@ std::vector<PointLight*> PointLightManager::GetLights() {
 }
 
 void PointLightManager::SetLightCommand(ID3D12GraphicsCommandList* commandList) {
-  
-        pointLights_[0]->SetLightCommand(commandList);
-    
+    // 全てのスポットライトに対して処理を行う
+    for (size_t i = 0; i < pointLights_.size(); ++i) {
+        // 各スポットライトのデータを設定
+        pointLights_[i]->SetLightCommand(commandList, static_cast<int>(i));
+    }
 }

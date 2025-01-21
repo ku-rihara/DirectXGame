@@ -23,7 +23,7 @@ public:
     ~PointLight();
 
     void Init(ID3D12Device* device);
-    void SetLightCommand(ID3D12GraphicsCommandList* commandList);
+    void SetLightCommand(ID3D12GraphicsCommandList* commandList, const int& index);
 
     ID3D12Resource* GetLightResource() const { return lightResource_.Get(); }
 
