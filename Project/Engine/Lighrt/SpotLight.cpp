@@ -41,7 +41,7 @@ void SpotLight::DebugImGui() {
     ImGui::DragFloat("  Distance", (float*)&lightData_->distance, 0.01f);
     ImGui::DragFloat("  intenesity", (float*)&lightData_->intensity, 0.01f);
     ImGui::DragFloat("  decay", (float*)&lightData_->decay, 0.01f);
-    ImGui::DragFloat("  cosFalloffStart", (float*)&lightData_->cosAngle, 0.01f);
+    ImGui::DragFloat("  cosAngle", (float*)&lightData_->cosAngle, 0.01f);
     ImGui::DragFloat("  cosFalloffStart", (float*)&lightData_->cosFalloffStart, 0.01f);
 }
 
