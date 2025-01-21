@@ -24,7 +24,7 @@ private:
 public:
     SpotLight();
     ~SpotLight();
-    void SetLightCommand(ID3D12GraphicsCommandList* commandList);
+    void SetLightCommand(ID3D12GraphicsCommandList* commandList, const int& index);
 
     void Init(ID3D12Device* device);
     ID3D12Resource* GetLightResource() const { return lightResource_.Get(); }

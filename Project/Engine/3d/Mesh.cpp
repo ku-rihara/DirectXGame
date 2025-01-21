@@ -8,7 +8,7 @@
 
 namespace {
 	DirectXCommon* directXCommon = DirectXCommon::GetInstance();
-	
+
 }
 
 Mesh* Mesh::GetInstance() {
@@ -141,9 +141,9 @@ void Mesh::CreateSphere() {
 	directionalLightData_ = nullptr;
 	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
 	//デフォルト値はこうする
-	directionalLightData_->SetColor(Vector4( 1.0f,1.0f,1.0f,1.0f) );
+	directionalLightData_->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	directionalLightData_->SetDirection({ 0.0f,-1.0f,0.0f });
-	directionalLightData_->SetIntensity ( 1.0f);
+	directionalLightData_->SetIntensity(1.0f);
 	//行列--------------------------------------------------------------------------------------------------------
 	wvpResouce_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(TransformationMatrix));
 	//データを書き込む
