@@ -19,12 +19,10 @@ TitleWait::TitleWait(Player* player)
 	/// 変数初期化
 	///---------------------------------------------------------
 
-	pressEase_.maxTime = 0.5f;
-	restEase_.maxTime = 0.5f;
-	pressScale_ = 0.7f;
+	pressEase_.maxTime = 0.3f;
+	restEase_.maxTime = 0.25f;
+	pressScale_ = 0.85f;
 	step_ = STEP::PRESS; // 落ちる
-
-	
 }
 
 TitleWait::~TitleWait() {

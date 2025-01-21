@@ -87,8 +87,13 @@ void Player::Update() {
 	/// 振る舞い処理(コンボ攻撃中は中止)
 	if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
 		behavior_->Update();
-		
 	}
+
+	Light::GetInstance()->GetSpotLightManager()->GetSpotLight(0)->SetPosition(Vector3(
+		transform_.translation_.x,
+		transform_.translation_.y + 5.0f,
+		transform_.translation_.z));
+
 
 	comboBehavior_->Update();	  ///　コンボ攻撃攻撃
 	MoveToLimit();                ///　移動制限

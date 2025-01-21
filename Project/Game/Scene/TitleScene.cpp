@@ -1,5 +1,6 @@
 ///scene
 #include "TitleScene.h"
+#include"Lighrt/Light.h"
 #include"JoyState/JoyState.h"
 #include"Manager/SceneManager.h"
 #include"utility/Particle/ParticleManager.h"
@@ -149,6 +150,7 @@ void TitleScene::Debug() {
 	ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
 	ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
 	titleFont_->Debug();
+	Light::GetInstance()->DebugImGui();
 	/*player_->AdjustParm();*/
 	ImGui::End();
 
