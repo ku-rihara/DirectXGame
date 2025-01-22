@@ -4,6 +4,11 @@
 
 
 class Object3DCommon {
+public:
+	enum class BlendMode {
+		Add,
+		None,
+	};
 private://メンバ変数
 
 	DirectXCommon* dxCommon_;
@@ -19,7 +24,8 @@ private://メンバ関数
 	Microsoft::WRL::ComPtr<IDxcBlob>pixelShaderBlob_;
 
 
-	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineState_;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateAdd_;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateNone_;
 
 private:
 	//ルートシグネチャの作成
@@ -30,7 +36,7 @@ private:
 public://メンバ関数
 	//共通描画処理
 	void PreDraw(ID3D12GraphicsCommandList* commandList);
-
+	void PreBlendSet(ID3D12GraphicsCommandList* commandList,BlendMode blendMode=BlendMode::None);
 	//初期化
 	void Init(DirectXCommon* dxCommon);
 
@@ -40,7 +46,7 @@ public://メンバ関数
 	DirectXCommon* GetDxCommon()const {	return dxCommon_ ;}
 
 	//rootSignature
-	ID3D12PipelineState* GetGrahipcsPipeLileState()const { return graphicsPipelineState_.Get(); }
+	ID3D12PipelineState* GetGrahipcsPipeLileStateAdd()const { return graphicsPipelineStateAdd_.Get(); }
 	ID3D12RootSignature* GetRootSignature()const { return rootSignature_.Get(); }
 
 
