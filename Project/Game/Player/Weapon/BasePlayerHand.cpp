@@ -126,3 +126,10 @@ void BasePlayerHand::AjustParmBase() {
 void BasePlayerHand::SetParent(WorldTransform* parent) {
 	transform_.parent_ = parent;
 }
+
+void BasePlayerHand::SetBlendModeSub() {
+	emitter_->SetBlendMode(BlendMode::Subtractive);
+}
+void BasePlayerHand::SetBlendModeAdd() {
+	emitter_->SetBlendMode(BlendMode::Add);
+}

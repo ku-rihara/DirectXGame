@@ -63,4 +63,6 @@ public:
 	///=============================================
 	virtual void SetRailParent(WorldTransform* parent)=0;
 	virtual void SetParent(WorldTransform* parent);
+	void SetBlendModeSub();
+	void SetBlendModeAdd();
 };

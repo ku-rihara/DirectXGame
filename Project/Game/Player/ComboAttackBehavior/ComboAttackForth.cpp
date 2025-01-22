@@ -175,7 +175,8 @@ void ComboAttackForth::Update() {
 		if (pPlayer_->GetWorldPosition().y > pPlayer_->InitY_)break;
 		if (waitTine_ < pPlayer_->GetWaitTime(Player::FORTH)) break;
 
-
+		pPlayer_->GetRightHand()->SetBlendModeAdd();
+		pPlayer_->GetLeftHand()->SetBlendModeAdd();
 			pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));	
 	}
 

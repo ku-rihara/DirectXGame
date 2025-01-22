@@ -46,6 +46,10 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	startEasing_.amplitude = 0.6f;
 	startEasing_.period = 0.2f;
 
+	pPlayer_->GetRightHand()->SetBlendModeSub();
+	pPlayer_->GetLeftHand()->SetBlendModeSub();
+
+
 	// 振る舞い順序初期化
 	order_ = Order::UPPER;
 
@@ -145,8 +149,9 @@ void ComboAttackThird::Update() {
 		// レール更新と座標反映
 		pPlayer_->GetRightHand()->RailThreeComboUpdate(0.0f);
 
-		pPlayer_->ChangeComboBehavior
-		(std::make_unique<ComboAttackRoot>(pPlayer_));
+		pPlayer_->GetRightHand()->SetBlendModeAdd();
+		pPlayer_->GetLeftHand()->SetBlendModeAdd();
+		pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
 		
 		break;
 	}
