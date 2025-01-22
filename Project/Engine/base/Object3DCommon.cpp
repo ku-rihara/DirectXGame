@@ -81,10 +81,17 @@ void Object3DCommon::CreateGraphicsPipeline() {
 	blendDescAdd.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blendDescAdd.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
-	// 通常（ブレンドなし）
+	// BlendMode::None のブレンド設定を透明度対応に変更
 	D3D12_BLEND_DESC blendDescNone = {};
-	blendDescNone.RenderTarget[0].BlendEnable = FALSE;
+	blendDescNone.RenderTarget[0].BlendEnable = TRUE; // ブレンドを有効化
+	blendDescNone.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blendDescNone.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA; // 1 - SrcAlpha
+	blendDescNone.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	blendDescNone.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDescNone.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+	blendDescNone.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blendDescNone.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
 
 
 	//RasterizerStateの設定
