@@ -191,6 +191,7 @@ void GameScene::Debug() {
 // ビュープロジェクション更新
 void GameScene::ViewProjectionUpdate() {
 	BaseScene::ViewProjectionUpdate();
+	Light::GetInstance()->SetWorldCameraPos(player_->GetWorldPosition());
 }
 
 

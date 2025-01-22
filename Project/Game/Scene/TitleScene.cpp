@@ -162,6 +162,7 @@ void TitleScene::Debug() {
 // ビュープロジェクション更新
 void TitleScene::ViewProjectionUpdate() {
 	BaseScene::ViewProjectionUpdate();
+	Light::GetInstance()->SetWorldCameraPos(player_->GetWorldPosition());
 }
 
 void TitleScene::ViewProssess() {

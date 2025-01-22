@@ -48,7 +48,7 @@ void Player::Init() {
 	AddParmGroup();
 	ApplyGlobalParameter();
 	
-	obj3d_->material_.materialData_->enableLighting = 5;
+	obj3d_->material_.materialData_->enableLighting = 2;
 
 	///* 武器生成
 	leftHand_ = std::make_unique<PlayerHandLeft>();
@@ -348,8 +348,8 @@ void Player::MoveToLimit() {
 /// ===================================================
 void Player::Jump(float& speed) {
 	// 移動
-	transform_.translation_.y += speed;
-	Fall(speed,true);
+	transform_.translation_.y += speed * Frame::DeltaTime();
+	Fall(speed, true);
 
 }
 
@@ -360,11 +360,11 @@ void Player::Fall(float& speed, const bool& isJump) {
 
 	if (!isJump) {
 		// 移動
-		transform_.translation_.y += speed;
+		transform_.translation_.y += speed * Frame::DeltaTime();
 	}
 
 	// 加速する
-	speed = max(speed - (gravity_ * Frame::DeltaTime()), -1.0f);
+	speed = max(speed - (gravity_ * Frame::DeltaTime()), -80.0f);
 
 	// 着地
 	if (transform_.translation_.y <= Player::InitY_) {
@@ -375,6 +375,7 @@ void Player::Fall(float& speed, const bool& isJump) {
 		ChangeBehavior(std::make_unique<PlayerRoot>(this));
 	}
 }
+
 
 ///=========================================================
 /// パラメータ調整
