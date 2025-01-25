@@ -50,9 +50,8 @@ private:
 		Model* model;
 		Material material;
 		std::list<Particle>particles;
-		BlendMode blendMode_;
 		uint32_t srvIndex;
-		bool isBillBord;
+		ParticleEmitter::GroupParamaters parm;
 		Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
 		uint32_t instanceNum;
 		ParticleFprGPU* instancingData;
@@ -84,7 +83,7 @@ public:
 
 	//初期化、更新、描画
 	void Init(SrvManager* srvManager);
-	void Update(std::optional<const ViewProjection*> viewProjection);
+	void Update(const ViewProjection& viewProjection);
 	void Draw(const ViewProjection& viewProjection);
 
 	/// グループ作成

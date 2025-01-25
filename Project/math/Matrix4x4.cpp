@@ -367,3 +367,23 @@ Vector3 ScreenTransform(Vector3 worldPos, const ViewProjection& viewProjection) 
 	//ワールド→スクリーン変換
 	return MatrixTransform(worldPos, matViewProjectionViewport);
 }
+
+// 行列の特定の行（0, 1, 2のいずれか）を正規化し、新しい行列を返す
+Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, int row) {
+	Matrix4x4 result = matrix; // 元の行列をコピー
+
+	// 行のベクトルを取り出す（X, Y, Z 成分）
+	float length = std::sqrt(result.m[row][0] * result.m[row][0] +
+		result.m[row][1] * result.m[row][1] +
+		result.m[row][2] * result.m[row][2]);
+
+	// 長さが0でないことを確認
+	if (length > 0.0f) {
+		// 正規化（長さを1にする）
+		result.m[row][0] /= length;
+		result.m[row][1] /= length;
+		result.m[row][2] /= length;
+	}
+
+	return result; // 正規化された行列を返す
+}

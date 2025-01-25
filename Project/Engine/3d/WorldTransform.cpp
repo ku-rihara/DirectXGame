@@ -69,29 +69,61 @@ void WorldTransform::UpdateMatrix() {
 }
 
 
-void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection) {
-
+void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis) {
+	// スケール、回転、平行移動行列を計算
 	Matrix4x4 scaleMatrix = MakeScaleMatrix(scale_);
-	// 回転行列を計算
 	Matrix4x4 rotateMatrix = MakeRotateMatrix(rotation_);
-	// 平行移動行列を計算
 	Matrix4x4 translateMatrix = MakeTranslateMatrix(translation_);
-	backToFrontMatrix_ = MakeRotateYMatrix(std::numbers::pi_v<float>);
+
+	// カメラ行列とビルボード行列を計算
+	Matrix4x4 cameraMatrix = viewProjection.GetCameraMatrix();
+	backToFrontMatrix_ = MakeRotateYMatrix(std::numbers::pi_v<float>); // 視点を反転
+	billboardMatrix_ = backToFrontMatrix_ * cameraMatrix;
 	
-		billboardMatrix_ = backToFrontMatrix_* viewProjection.GetCameraMatrix();
+	// ビルボードパターンに応じて行列を設定
+	switch (billboardAxis) {
+	case BillboardType::XYZ:
+		// 全方向ビルボード（XYZ）
 		billboardMatrix_.m[3][0] = 0.0f;
 		billboardMatrix_.m[3][1] = 0.0f;
 		billboardMatrix_.m[3][2] = 0.0f;
-	
-		matWorld_ = scaleMatrix * billboardMatrix_ * translateMatrix;
+		break;
 
-		// 親子関係があれば親のワールド行列を掛ける
-		if (parent_) {
-			matWorld_ *= parent_->matWorld_;
-		}
-		// 定数バッファに転送する
-		TransferMatrix();
+	case BillboardType::X:
+		// X 軸ビルボード（Y、Z軸を無効化）
+		billboardMatrix_.m[1][0] = 0.0f;
+		billboardMatrix_.m[2][0] = 0.0f;
+		break;
+
+	case BillboardType::Y:
+		// Y 軸ビルボード（X、Z軸を無効化）
+		billboardMatrix_.m[0][1] = 0.0f;
+		billboardMatrix_.m[2][1] = 0.0f;
+		break;
+
+	case BillboardType::Z:
+		// Z 軸ビルボード（X、Y軸を無効化）
+		billboardMatrix_.m[0][2] = 0.0f;
+		billboardMatrix_.m[1][2] = 0.0f;
+		break;
+
+	default:
+		// デフォルトは何もしない
+		break;
+	}
+
+	// 最終的なワールド行列を計算
+	matWorld_ = scaleMatrix * billboardMatrix_ * translateMatrix;
+
+	// 親子関係があれば親のワールド行列を掛ける
+	if (parent_) {
+		matWorld_ *= parent_->matWorld_;
+	}
+
+	// 定数バッファに転送する
+	TransferMatrix();
 }
+
 
 
 void WorldTransform::SetParent(const WorldTransform* parent) {

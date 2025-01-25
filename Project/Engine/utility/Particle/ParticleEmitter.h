@@ -13,12 +13,14 @@
 /// <summary>
 /// Emitter
 /// </summary>
+enum class WorldTransform::BillboardType;
  enum class BlendMode;
 class ParticleEmitter {
 public:
 	struct GroupParamaters {
 		BlendMode blendMode;
-		bool isBillBord;                      // ビルボードフラグ
+		bool isBillBord;
+		WorldTransform::BillboardType  billBordType;
 	};
 
 	// パーティクル設定を統合する構造体
@@ -26,7 +28,9 @@ public:
 		Vector3 targetPos;                    // 対象座標
 		Vector3 emitPos;                      // 発生座標
 		V3MinMax positionDist;                // 座標ランダム分配
+		bool isScalerScale;                   //スカラーのスケールにするか
 		FMinMax scaleDist;                    // スケールランダム分配
+		V3MinMax scaleDistV3;                // スケールランダム分配
 		V3MinMax velocityDist;                // 速度ランダム分配
 		Vector4 baseColor;                    // 基準の色
 		V4MinMax colorDist;                   // 色ランダム分配
@@ -102,9 +106,9 @@ public:
 	void SetTargetPosition(const Vector3& pos) { parameters_.targetPos = pos; }
 
 	//imgui化すべき
-	void SetIsBillBord(const bool& is) { groupParamaters_.isBillBord = is; }
 	void SetIsRotateForDirection(const bool& is) { parameters_.isRotateforDirection = is; }
 	void SetBlendMode(const BlendMode& blendmode);
+	void SetBillBordType(const WorldTransform::BillboardType& billboardType);
 	///=====================================================
 	/// Editor 
 	///=====================================================
