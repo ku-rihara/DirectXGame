@@ -69,6 +69,16 @@
         ],
         "Scale Max": 2.299999952316284,
         "Scale Min": 1.0,
+        "ScaleV3 Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "ScaleV3 Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "Velocity Max": [
             26.600000381469727,
             36.5,
@@ -79,7 +89,10 @@
             4.900000095367432,
             -28.5
         ],
+        "isBillBord": false,
         "isMoveForRail": false,
+        "isRotateforDirection": true,
+        "isScalerScale": true,
         "moveSpeed": 0.0
     }
 }

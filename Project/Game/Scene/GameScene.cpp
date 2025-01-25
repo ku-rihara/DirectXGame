@@ -96,7 +96,7 @@ void GameScene::Update() {
 
 
 	/// パーティクル更新
-	ParticleManager::GetInstance()->Update(&viewProjection_);
+	ParticleManager::GetInstance()->Update(viewProjection_);
 	
 	ViewProjectionUpdate();
 

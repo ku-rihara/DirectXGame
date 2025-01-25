@@ -54,7 +54,6 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	thrustName_ = "TrushParticle";
 	thrustEmit_.reset(ParticleEmitter::CreateParticle(thrustName_, "Stick",".obj", 200));
 	thrustEmit_->SetBlendMode(BlendMode::None);
-	thrustEmit_->SetIsBillBord(false);
 	thrustEmit_->SetIsRotateForDirection(true);
 
 	/// particleD
@@ -89,7 +88,6 @@ void BaseEnemy::Update() {
 	
 	thrustEmit_->SetTargetPosition(GetWorldPosition());
 	thrustEmit_->Update();
-
 	FallEffectUpdate();
 
 	
