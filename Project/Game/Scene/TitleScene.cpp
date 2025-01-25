@@ -25,7 +25,7 @@ void TitleScene::Init() {
 	ctest2_ = std::make_unique<CollisionTest2>();
 	ctest3_ = std::make_unique<CollisionTest3>();
 
-	emitter_.reset(ParticleEmitter::CreateParticle("punchEffect", "cube", ".obj", 200));
+	emitter_.reset(ParticleEmitter::CreateParticle("punchEffect", "Plane", ".obj", 200));
 
 
 	ctest1_->Init();
@@ -43,7 +43,7 @@ void TitleScene::Update() {
 	emitter_->EditorUpdate();
 	emitter_->Emit();
 
-	ParticleManager::GetInstance()->Update(&viewProjection_);
+	ParticleManager::GetInstance()->Update(viewProjection_);
 
 	Debug();
 	ViewProjectionUpdate();

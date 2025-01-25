@@ -5,6 +5,7 @@
 #include"base/SrvManager.h"
 #include"MathFunction.h"
 
+
 #include <imgui.h>
 #include<format>
 
@@ -36,7 +37,9 @@ void ParticleEmitter::Init() {
 	parameters_.colorDist.max = { 0, 0, 0, 0 };
 	intervalTime_ = 1.0f;
 	parameters_.targetPos = { 0,0,0 };
-	groupParamaters_.isBillBord = true;
+	groupParamaters_.isBillBord=true;
+	groupParamaters_.billBordType = WorldTransform::BillboardType::XYZ;
+	parameters_.isScalerScale = true;
 	parameters_.isRotateforDirection = false;
 
 	// レールマネージャー
@@ -97,6 +100,8 @@ void ParticleEmitter::AddParmGroup() {
 	/*globalParameter_->AddSeparatorText("Scale");*/
 	globalParameter_->AddItem(particleName, "Scale Max", parameters_.scaleDist.max);
 	globalParameter_->AddItem(particleName, "Scale Min", parameters_.scaleDist.min);
+	globalParameter_->AddItem(particleName, "ScaleV3 Max", parameters_.scaleDistV3.max);
+	globalParameter_->AddItem(particleName, "ScaleV3 Min", parameters_.scaleDistV3.min);
 
 	// Rotate
 	/*globalParameter_->AddSeparatorText("Rotate");*/
@@ -128,6 +133,14 @@ void ParticleEmitter::AddParmGroup() {
 	globalParameter_->AddItem(particleName, "isMoveForRail", isMoveForRail_);
 	globalParameter_->AddItem(particleName, "moveSpeed", moveSpeed_);
 
+	/// frag
+	globalParameter_->AddItem(particleName, "isScalerScale", parameters_.isScalerScale);
+	globalParameter_->AddItem(particleName, "isRotateforDirection", parameters_.isRotateforDirection);
+	globalParameter_->AddItem(particleName, "isBillBord", groupParamaters_.isBillBord);
+
+	/*/// enum
+	globalParameter_->SetValue(particleName, "BillBordType", static_cast<int32_t>(groupParamaters_.billBordType));*/
+
 }
 
 
@@ -145,7 +158,8 @@ void ParticleEmitter::SetValues() {
 	/*globalParameter_->AddSeparatorText("Scale");*/
 	globalParameter_->SetValue(particleName, "Scale Max", parameters_.scaleDist.max);
 	globalParameter_->SetValue(particleName, "Scale Min", parameters_.scaleDist.min);
-
+	globalParameter_->SetValue(particleName, "ScaleV3 Max", parameters_.scaleDistV3.max);
+	globalParameter_->SetValue(particleName, "ScaleV3 Min", parameters_.scaleDistV3.min);
 	// Rotate
 	/*globalParameter_->AddSeparatorText("Rotate");*/
 	globalParameter_->SetValue(particleName, "Rotate Base", parameters_.baseRotate);
@@ -176,6 +190,14 @@ void ParticleEmitter::SetValues() {
 	globalParameter_->SetValue(particleName, "isMoveForRail", isMoveForRail_);
 	globalParameter_->SetValue(particleName, "moveSpeed", moveSpeed_);
 
+	/// frag
+	globalParameter_->SetValue(particleName, "isScalerScale", parameters_.isScalerScale);
+	globalParameter_->SetValue(particleName, "isRotateforDirection", parameters_.isRotateforDirection);
+	globalParameter_->SetValue(particleName, "isBillBord", groupParamaters_.isBillBord);
+
+	/// enum
+	/*globalParameter_->SetValue(particleName, "BillBordType", static_cast<int32_t>(groupParamaters_.billBordType));*/
+
 }
 
 
@@ -192,6 +214,8 @@ void ParticleEmitter::ApplyGlobalParameter() {
 	// Scale
 	parameters_.scaleDist.min = globalParameter_->GetValue<float>(particleName, "Scale Min");
 	parameters_.scaleDist.max = globalParameter_->GetValue<float>(particleName, "Scale Max");
+	parameters_.scaleDistV3.min = globalParameter_->GetValue<Vector3>(particleName, "ScaleV3 Min");
+	parameters_.scaleDistV3.max = globalParameter_->GetValue<Vector3>(particleName, "ScaleV3 Max");
 
 	// Rotate
 	parameters_.baseRotate = globalParameter_->GetValue<Vector3>(particleName, "Rotate Base");
@@ -221,6 +245,13 @@ void ParticleEmitter::ApplyGlobalParameter() {
 	///rail	
 	isMoveForRail_ = globalParameter_->GetValue<bool>(particleName, "isMoveForRail");
 	moveSpeed_ = globalParameter_->GetValue<float>(particleName, "moveSpeed");
+
+	parameters_.isScalerScale = globalParameter_->GetValue<bool>(particleName, "isScalerScale");
+	parameters_.isRotateforDirection = globalParameter_->GetValue<bool>(particleName, "isRotateforDirection");
+	groupParamaters_.isBillBord = globalParameter_->GetValue<bool>(particleName, "isBillBord");
+
+	/*int32_t itype= static_cast<int>(globalParameter_->GetValue<int32_t>(particleName, "isBillBord"));
+	groupParamaters_.billBordType = static_cast<WorldTransform::BillboardType>(itype);*/
 }
 
 ///=================================================================================
@@ -264,6 +295,7 @@ void ParticleEmitter::EditorUpdate() {
 #ifdef _DEBUG
 
 	ImGui::Begin(particleName.c_str());
+	ImGui::PushID(particleName.c_str());
 
 	// Color
 	if (ImGui::CollapsingHeader("Color")) {
@@ -306,8 +338,15 @@ void ParticleEmitter::EditorUpdate() {
 	// Scale
 	if (ImGui::CollapsingHeader("Scale")) {
 		ImGui::SeparatorText("Scale Range:");
-		ImGui::DragFloat("Scale Max", &parameters_.scaleDist.max, 0.1f);
-		ImGui::DragFloat("Scale Min", &parameters_.scaleDist.min, 0.1f);
+		if (ImGui::Checkbox("IsScalerScale", &parameters_.isScalerScale)) {
+			ImGui::DragFloat("Scale Max", &parameters_.scaleDist.max, 0.1f);
+			ImGui::DragFloat("Scale Min", &parameters_.scaleDist.min, 0.1f);
+		}
+		else {
+			ImGui::DragFloat3("ScaleV3 Max", &parameters_.scaleDistV3.max.x, 0.1f);
+			ImGui::DragFloat3("ScaleV3 Min", &parameters_.scaleDistV3.min.x, 0.1f);
+		}
+		
 	}
 
 	// Rotate
@@ -333,9 +372,34 @@ void ParticleEmitter::EditorUpdate() {
 		ImGui::SliderInt("Particle Count", &particleCount, 1, 100);
 	}
 
+	// チェックが有効なら、BillboardType の設定を表示
+	if (ImGui::CollapsingHeader("BillBoard")) {
+
+		// IsBillBoard のチェックボックス
+		ImGui::Checkbox("IsBillBoard", &groupParamaters_.isBillBord);
+
+		const char* items[] = { "X", "Y", "Z", "XYZ" }; // ビルボードの種類
+		int current_item = static_cast<int>(groupParamaters_.billBordType);
+		// ビルボードの種類を選択するコンボボックス
+		if (ImGui::Combo("Billboard Type", &current_item, items, IM_ARRAYSIZE(items))) {
+			// 選択した値を反映
+			groupParamaters_.billBordType = static_cast<WorldTransform::BillboardType>(current_item);
+		}
+	}
+
+
+	// その他のパラメータ
+	if (ImGui::CollapsingHeader("Frag")) {
+		
+		// IsRotateforDirection のチェックボックス
+		ImGui::Checkbox("IsRotateforDirection", &parameters_.isRotateforDirection);
+	}
+
+
 	globalParameter_->ParmSaveForImGui(particleName);
 	ParmLoadForImGui();
 
+	ImGui::PopID();
 	ImGui::End();
 #endif // _DEBUG
 }
@@ -378,4 +442,8 @@ void ParticleEmitter::SetParentBasePos(WorldTransform* parent) {
 
 void  ParticleEmitter::SetBlendMode(const BlendMode& blendmode) {
 	groupParamaters_.blendMode = blendmode;
+}
+
+void  ParticleEmitter::SetBillBordType(const WorldTransform::BillboardType& billboardType) {
+	groupParamaters_.billBordType = billboardType;
 }

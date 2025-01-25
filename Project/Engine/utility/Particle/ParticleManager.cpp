@@ -28,7 +28,7 @@ void ParticleManager::Init(SrvManager* srvManager) {
 ///============================================================
 /// 更新
 ///============================================================
-void ParticleManager::Update(std::optional<const ViewProjection*> viewProjection) {
+void ParticleManager::Update(const ViewProjection& viewProjection) {
 	//uint32_t instanceIndex = 0; // 現在のインスタンス数
 
 	// 各粒子グループを周る
@@ -71,14 +71,14 @@ void ParticleManager::Update(std::optional<const ViewProjection*> viewProjection
 			/// ビルボードまたは通常の行列更新
 			///------------------------------------------------------------------------
 
-			if (viewProjection.has_value() && group.isBillBord) {
+				if (group.parm.isBillBord) {
 
-				it->worldTransform_.BillboardUpdateMatrix(*viewProjection.value());
-			}
-			else {
-				it->worldTransform_.UpdateMatrix();
-			}
-
+					it->worldTransform_.BillboardUpdateMatrix(viewProjection,group.parm.billBordType);
+				}
+				else {
+					it->worldTransform_.UpdateMatrix();
+				}
+			
 			// 時間を進める
 			it->currentTime_ += Frame::DeltaTime();
 			++it;
@@ -123,7 +123,7 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
 		}
 
 		if (instanceIndex > 0 && group.model) {
-			ParticleCommon::GetInstance()->PreDraw(commandList, group.blendMode_);
+			ParticleCommon::GetInstance()->PreDraw(commandList, group.parm.blendMode);
 			group.model->DrawParticle(instanceIndex,
 				pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
 				group.material,
@@ -283,18 +283,24 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 		Random::Range(paramaters.rotateSpeedDist.min.z, paramaters.rotateSpeedDist.max.z)
 	};
 
-	rotateSpeed.x = (rotateSpeed.x);
-	rotateSpeed.y = (rotateSpeed.y);
-	rotateSpeed.z = (rotateSpeed.z);
-
 	particle.rotateSpeed_ = rotateSpeed;
 
 	///------------------------------------------------------------------------
 	/// スケール
 	///------------------------------------------------------------------------
-	float scale = Random::Range(paramaters.scaleDist.min, paramaters.scaleDist.max);
-	particle.worldTransform_.scale_ = { scale, scale, scale };
+	if (paramaters.isScalerScale) {// スカラー
+		float scale = Random::Range(paramaters.scaleDist.min, paramaters.scaleDist.max);
+		particle.worldTransform_.scale_ = { scale, scale, scale };
+	}
+	else {/// V3
+		Vector3 ScaleV3 = {
+			Random::Range(paramaters.scaleDistV3.min.x, paramaters.scaleDistV3.max.x),
+			Random::Range(paramaters.scaleDistV3.min.y, paramaters.scaleDistV3.max.y),
+			Random::Range(paramaters.scaleDistV3.min.z, paramaters.scaleDistV3.max.z)
+		};
 
+		particle.worldTransform_.scale_ = ScaleV3;
+	}
 	///------------------------------------------------------------------------
 	/// 色
 	///------------------------------------------------------------------------
@@ -328,9 +334,10 @@ void ParticleManager::Emit(
 
 	// 指定されたパーティクルグループを取得
 	ParticleGroup& particleGroup = particleGroups_[name];
-	particleGroup.blendMode_ = groupParamaters.blendMode;
-	particleGroup.isBillBord = groupParamaters.isBillBord;
-
+	particleGroup.parm.blendMode = groupParamaters.blendMode;
+	particleGroup.parm.isBillBord = groupParamaters.isBillBord;
+	particleGroup.parm.billBordType = groupParamaters.billBordType;
+	
 	// 生成、グループ追加
 	std::list<Particle> particles;
 	for (uint32_t i = 0; i < uint32_t(count); ++i) {

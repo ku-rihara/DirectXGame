@@ -22,13 +22,13 @@ Object3dSRV* Object3dSRV::CreateModel(
 }
 
 
-void Object3dSRV::UpdateTransform(std::optional<const ViewProjection*> viewProjection) {
+void Object3dSRV::UpdateTransform(const WorldTransform::BillboardType& axis, std::optional<const ViewProjection*>viewProjection) {
 	for (std::list<WorldTransform>::iterator particleIterator = particles_.begin();
 		particleIterator != particles_.end(); ++particleIterator) {
 	
 
 		if (viewProjection.has_value()) {//ビルボード
-			(*particleIterator).BillboardUpdateMatrix(*viewProjection.value());
+			(*particleIterator).BillboardUpdateMatrix(*viewProjection.value(),axis);
 		}
 		else {//普通のUpdateMatirx
 			(*particleIterator).UpdateMatrix();
