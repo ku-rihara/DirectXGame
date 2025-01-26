@@ -78,6 +78,9 @@ void GameScene::Debug() {
 	ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
 	ImGui::End();
 	Light::GetInstance()->DebugImGui();
+	ImGui::Begin("Object");
+	ground_->Debug();
+	ImGui::End();
 
 #endif
 }
