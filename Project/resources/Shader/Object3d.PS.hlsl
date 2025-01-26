@@ -155,36 +155,36 @@ PixelShaderOutput main(VertexShaderOutput input)
             output.color.rgb = diffuseDirectionalLight + specularDirectionalLight + diffusePointLight + specularPointLight;
         }
            //SpotLight
+       // SpotLight
         else if (gMaterial.enableLighting == 5)
         {
+    // 入射光（スポットライトの方向ベクトル）
             float3 spotLightDirectionSurface = normalize(input.worldPosition - gSpotLight.position);
-            //スポットライトへの距離
+
+    // スポットライトへの距離
             float distanceSpot = length(gSpotLight.position - input.worldPosition);
-            //減衰係数
+
+    // 減衰係数
             float attenuationFactor = pow(saturate(-distanceSpot / gSpotLight.distance + 1.0f), gSpotLight.decay);
-            // ライトの反射ベクトル
-            float3 halfVectorSpot = normalize(-spotLightDirectionSurface + toEye);
-    
-            // 法線と入射光の内積（拡散反射用）
+
+    // 法線と入射光の内積（拡散反射用）
             float NdotLSpot = dot(normalize(input.normal), -spotLightDirectionSurface);
             float cosSpot = saturate(NdotLSpot); // 拡散反射のための余弦
-            
+
+    // スポットライトの方向と角度の計算
             float cosAngle = dot(spotLightDirectionSurface, gSpotLight.direction);
             float falloffFactor = saturate((cosAngle - gSpotLight.cosAngle) / (gSpotLight.cosFalloffStart - gSpotLight.cosAngle));
-    
-            // 反射ベクトルとの内積（鏡面反射用）
-            float NdotHSpot = dot(normalize(input.normal), halfVectorSpot);
-            float specularPowSpot = pow(saturate(NdotHSpot), gMaterial.shininess);
-    
-           // 拡散反射の計算 (PointLight)
+
+    // 拡散反射の計算 (SpotLight)
             diffuseSpotLight = gMaterial.color.rgb * textureColor.rgb * gSpotLight.color.rgb * cosSpot * gSpotLight.intensity * attenuationFactor * falloffFactor;
-    
-            // 鏡面反射の計算 (PointLight)
-            specularSpotLight = gSpotLight.color.rgb * gSpotLight.intensity * specularPowSpot * float3(1.0f, 1.0f, 1.0f);
-            
-                   // PointLight と Directional Light の反射を足す
+
+    // 鏡面反射を考慮しない
+            specularSpotLight = float3(0.0f, 0.0f, 0.0f);
+
+    // スポットライトと他のライトの結果を加算
             output.color.rgb = diffuseDirectionalLight + specularDirectionalLight + diffuseSpotLight + specularSpotLight;
         }
+
            //AreaLight
         else if (gMaterial.enableLighting == 6)
         {
