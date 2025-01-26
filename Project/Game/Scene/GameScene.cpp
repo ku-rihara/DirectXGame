@@ -24,9 +24,11 @@ void GameScene::Init() {
 
 	ground_ = std::make_unique<Ground>();
 	monsterBall_= std::make_unique<MonsterBall>();
+	plane_= std::make_unique<Plane>();
 
 	monsterBall_->Init();
 	ground_->Init();
+	plane_->Init();
 
 	isDebugCameraActive_ = true;
 	
@@ -43,6 +45,7 @@ void GameScene::Update() {
 	//各クラス更新
 	ground_->Update();
 	monsterBall_->Update();
+	plane_->Update();
 	
 	ViewProjectionUpdate();
 
@@ -57,6 +60,7 @@ void GameScene::Update() {
 /// ===================================================
 void GameScene::ModelDraw() {
 	ground_->Draw(viewProjection_);
+	plane_->Draw(viewProjection_);
 	monsterBall_->Draw(viewProjection_);
 }
 
@@ -84,6 +88,7 @@ void GameScene::Debug() {
 	ImGui::Begin("Object");
 	ground_->Debug();
 	monsterBall_->Debug();
+	plane_->Debug();
 	ImGui::End();
 
 #endif

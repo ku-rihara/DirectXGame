@@ -127,6 +127,9 @@
     <Filter Include="Game\MonsterBall">
       <UniqueIdentifier>{0fe76578-dd93-4ebc-a7b1-ff86299b8b82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Plane">
+      <UniqueIdentifier>{70c3c5e1-9bef-4a27-b4f2-dba2a4e9ab55}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -321,6 +324,9 @@
     </ClCompile>
     <ClCompile Include="Game\MonsterBall\MonsterBall.cpp">
       <Filter>Game\MonsterBall</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Plane\Plane.cpp">
+      <Filter>Game\Plane</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -551,6 +557,9 @@
     </ClInclude>
     <ClInclude Include="Game\MonsterBall\MonsterBall.h">
       <Filter>Game\MonsterBall</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Plane\Plane.h">
+      <Filter>Game\Plane</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

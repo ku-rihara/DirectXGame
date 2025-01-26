@@ -47,15 +47,15 @@ void Object3d::Draw(const WorldTransform& worldTransform,const ViewProjection& v
 
 	ColorUpdate();
 
-		// WVP行列の計算
-		if (model_->GetIsFileGltf()) {//.gltfファイルの場合
-			wvpDate_->WVP = model_->GetModelData().rootNode.localMatrix * worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
-			wvpDate_->WorldInverseTranspose = Inverse(Transpose(model_->GetModelData().rootNode.localMatrix * wvpDate_->World));
-		}
-		else {//.objファイルの場合
+		//// WVP行列の計算
+		//if (model_->GetIsFileGltf()) {//.gltfファイルの場合
+		//	wvpDate_->WVP = model_->GetModelData().rootNode.localMatrix * worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+		//	wvpDate_->WorldInverseTranspose = Inverse(Transpose(model_->GetModelData().rootNode.localMatrix * wvpDate_->World));
+		//}
+		//else {//.objファイルの場合
 			wvpDate_->WVP = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
 			wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
-		}
+		/*}*/
 
 		Object3DCommon::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
 		model_->Draw(wvpResource_, material_, textureHandle);
