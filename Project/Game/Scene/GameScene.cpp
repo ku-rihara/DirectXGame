@@ -23,6 +23,9 @@ void GameScene::Init() {
 	
 
 	ground_ = std::make_unique<Ground>();
+	monsterBall_= std::make_unique<MonsterBall>();
+
+	monsterBall_->Init();
 	ground_->Init();
 
 	isDebugCameraActive_ = true;
@@ -39,7 +42,7 @@ void GameScene::Update() {
 
 	//各クラス更新
 	ground_->Update();
-	
+	monsterBall_->Update();
 	
 	ViewProjectionUpdate();
 
@@ -54,7 +57,7 @@ void GameScene::Update() {
 /// ===================================================
 void GameScene::ModelDraw() {
 	ground_->Draw(viewProjection_);
-
+	monsterBall_->Draw(viewProjection_);
 }
 
 /// ===================================================
@@ -73,13 +76,14 @@ void GameScene::SpriteDraw() {
 
 void GameScene::Debug() {
 #ifdef _DEBUG
-	ImGui::Begin("Camera");
+	/*ImGui::Begin("Camera");
 	ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
 	ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
-	ImGui::End();
+	ImGui::End();*/
 	Light::GetInstance()->DebugImGui();
 	ImGui::Begin("Object");
 	ground_->Debug();
+	monsterBall_->Debug();
 	ImGui::End();
 
 #endif

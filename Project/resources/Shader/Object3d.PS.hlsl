@@ -92,13 +92,16 @@ PixelShaderOutput main(VertexShaderOutput input)
     //ライティングあり
     if (gMaterial.enableLighting != 0)
     {
+        float NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
+        float cosDirrectional = pow(NdotL * 0.5f + 0.5f, 2.0f);
            //camera
         float3 toEye = normalize(gCamera.worldPosition - input.worldPosition);
             //ライトの反射ベクトル
         float3 halfVector = normalize(-gDirectionalLight.direction + toEye);
             //内積
-        float NdotH = dot(normalize(input.normal), halfVector);
-        float cosDirrectional = saturate(NdotH); // 拡散反射のための余弦
+        float NdotH = dot(normalize(input.normal), halfVector); 
+      
+            
             //反射強度
         float specularPow = pow(saturate(NdotH), gMaterial.shininess);
          //拡散反射
@@ -155,33 +158,32 @@ PixelShaderOutput main(VertexShaderOutput input)
             output.color.rgb = diffuseDirectionalLight + specularDirectionalLight + diffusePointLight + specularPointLight;
         }
            //SpotLight
-       // SpotLight
         else if (gMaterial.enableLighting == 5)
         {
-    // 入射光（スポットライトの方向ベクトル）
+          // 入射光（スポットライトの方向ベクトル）
             float3 spotLightDirectionSurface = normalize(input.worldPosition - gSpotLight.position);
 
-    // スポットライトへの距離
+             // スポットライトへの距離
             float distanceSpot = length(gSpotLight.position - input.worldPosition);
 
-    // 減衰係数
+            // 減衰係数
             float attenuationFactor = pow(saturate(-distanceSpot / gSpotLight.distance + 1.0f), gSpotLight.decay);
 
-    // 法線と入射光の内積（拡散反射用）
+              // 法線と入射光の内積（拡散反射用）
             float NdotLSpot = dot(normalize(input.normal), -spotLightDirectionSurface);
             float cosSpot = saturate(NdotLSpot); // 拡散反射のための余弦
 
-    // スポットライトの方向と角度の計算
+              // スポットライトの方向と角度の計算
             float cosAngle = dot(spotLightDirectionSurface, gSpotLight.direction);
             float falloffFactor = saturate((cosAngle - gSpotLight.cosAngle) / (gSpotLight.cosFalloffStart - gSpotLight.cosAngle));
 
-    // 拡散反射の計算 (SpotLight)
+             // 拡散反射の計算 (SpotLight)
             diffuseSpotLight = gMaterial.color.rgb * textureColor.rgb * gSpotLight.color.rgb * cosSpot * gSpotLight.intensity * attenuationFactor * falloffFactor;
 
-    // 鏡面反射を考慮しない
+            // 鏡面反射を考慮しない
             specularSpotLight = float3(0.0f, 0.0f, 0.0f);
 
-    // スポットライトと他のライトの結果を加算
+             // スポットライトと他のライトの結果を加算
             output.color.rgb = diffuseDirectionalLight + specularDirectionalLight + diffuseSpotLight + specularSpotLight;
         }
 

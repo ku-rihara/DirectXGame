@@ -124,6 +124,9 @@
     <Filter Include="MyEngine\.cpp\Light">
       <UniqueIdentifier>{5396bc61-e016-4b3e-8707-c28cc9c03b94}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\MonsterBall">
+      <UniqueIdentifier>{0fe76578-dd93-4ebc-a7b1-ff86299b8b82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -315,6 +318,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Lighrt\AreaLight.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MonsterBall\MonsterBall.cpp">
+      <Filter>Game\MonsterBall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -542,6 +548,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Lighrt\AreaLight.h">
       <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MonsterBall\MonsterBall.h">
+      <Filter>Game\MonsterBall</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

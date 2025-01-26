@@ -59,6 +59,7 @@
     <ClCompile Include="Engine\utility\Particle\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\utility\Particle\ParticleManager.cpp" />
     <ClCompile Include="Game\Ground\Ground.cpp" />
+    <ClCompile Include="Game\MonsterBall\MonsterBall.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
@@ -134,6 +135,7 @@
     <ClInclude Include="Engine\utility\Particle\ParticleEmitter.h" />
     <ClInclude Include="Engine\utility\Particle\ParticleManager.h" />
     <ClInclude Include="Game\Ground\Ground.h" />
+    <ClInclude Include="Game\MonsterBall\MonsterBall.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
     <ClInclude Include="Game\Scene\Factory\AbstractSceneFactory.h" />
     <ClInclude Include="Game\Scene\Factory\SceneFactory.h" />
