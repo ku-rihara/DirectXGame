@@ -15,9 +15,9 @@ void Ground::Init() {
 	objct3D_.reset(Object3d::CreateModel("Ground",".obj"));
 	transform_.Init();
 	transform_.translation_.y = -10.0f;
-	transform_.scale_ = {1, 2, 1};
+	transform_.scale_ = {1, 1, 1};
 	
-	objct3D_->material_.materialData_->enableLighting = 6;
+	objct3D_->material_.materialData_->enableLighting = 3;
 }
 
 ///========================================================

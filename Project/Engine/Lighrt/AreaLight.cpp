@@ -29,7 +29,7 @@ void AreaLight::Init(ID3D12Device* device) {
     lightData_->position = { 0.0f, 1.0f, 0.0f };
     lightData_->intensity = 1.0f;
     lightData_->normal = { 0.0f, 1.0f, 0.0f };
-    lightData_->size = { 2.0f, 0.2f, 2.0f };
+    lightData_->radius = 2.0f;
     lightData_->decay = 0.15f;
 
 }
@@ -39,7 +39,7 @@ void AreaLight::DebugImGui() {
     ImGui::DragFloat3("Position", (float*)&lightData_->position, 0.01f);
     ImGui::DragFloat3("Normal", (float*)&lightData_->normal, 0.01f);
     lightData_->normal = Vector3::Normalize(lightData_->normal);
-    ImGui::DragFloat3("Size", (float*)&lightData_->size, 0.01f);
+    ImGui::DragFloat("Radius", (float*)&lightData_->radius, 0.01f);
     ImGui::DragFloat("Intensity", (float*)&lightData_->intensity, 0.01f);
     ImGui::DragFloat("Decay", (float*)&lightData_->decay, 0.01f);
 

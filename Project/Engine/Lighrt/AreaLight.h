@@ -9,7 +9,7 @@ struct AreaLightData {
     Vector3 position;        // ライトの中心位置
     float intensity;         // 輝度
     Vector3 normal;          // エリアライトの法線
-    Vector3 size;            // エリアライトのサイズ(x,y,zでそれぞれ幅、高さ、奥行き)
+    float radius;            // エリアライトのサイズ(x,y,zでそれぞれ幅、高さ、奥行き)
     float decay;             // 減衰率
     float padding[3];
 };
