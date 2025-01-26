@@ -60,13 +60,16 @@ ConstantBuffer<SpotLight> gSpotLight : register(b4);
 
 struct AreaLight
 {
-    float4 color; //ライトの色
-    float3 position; //ライトの中心位置
-    float intensity; //輝度
-    float3 normal; // エリアライトの法線
-    float radius; // エリアライトのサイズ
-    float decay; //減衰率
+    float4 color; // ライトの色
+    float3 position; // ライトの中心位置
+    float3 normal; // ライトの法線ベクトル
+    float3 up; // 矩形ライトの「上方向」ベクトル（平面の回転を決める）
+    float width; // ライトの幅
+    float height; // ライトの高さ
+    float intensity; // 輝度
+    float decay; // 減衰率
 };
+
 
 //エリアライト
 ConstantBuffer<AreaLight> gAreaLight : register(b5);
@@ -187,60 +190,64 @@ PixelShaderOutput main(VertexShaderOutput input)
             output.color.rgb = diffuseDirectionalLight + specularDirectionalLight + diffuseSpotLight + specularSpotLight;
         }
 
-           //AreaLight
-        else if (gMaterial.enableLighting == 6)
+        if (gMaterial.enableLighting == 6)
         {
-            // エリアライトの表面からの距離
-            float3 areaLightToSurface = input.worldPosition - gAreaLight.position;
+    // 入射光のベクトル
+            float3 toSurface = input.worldPosition - gAreaLight.position;
 
-             // エリアライトの表面からの距離の法線成分
-            float projectedDistance = dot(areaLightToSurface, gAreaLight.normal);
+    // ライトの法線方向からの距離を計算
+            float distanceToPlane = dot(toSurface, gAreaLight.normal);
 
-             // エリアライトの中心からの最近点
-            float3 closestPoint = input.worldPosition - (projectedDistance * gAreaLight.normal);
+    // 平面上の最近接点を計算
+            float3 projectedPoint = input.worldPosition - distanceToPlane * gAreaLight.normal;
 
-            // エリアライトの半径（新しい変数を使用）
-            float radius = gAreaLight.radius;
+    // 矩形のローカル座標軸を計算（右方向、上方向）
+            float3 right = normalize(cross(gAreaLight.up, gAreaLight.normal));
+            float3 up = normalize(gAreaLight.up);
 
-            // エリアライトの境界線との距離を判定（球体内判定）
-            float distanceToCenter = length(closestPoint - gAreaLight.position);
-            bool inArea = distanceToCenter <= radius;
+    // 矩形のサイズをスケール
+            float3 halfRight = right * gAreaLight.width * 0.5f;
+            float3 halfUp = up * gAreaLight.height * 0.5f;
 
-            if (inArea)
+    // 平面の境界内にあるか確認
+            float3 localPoint = projectedPoint - gAreaLight.position;
+            float x = dot(localPoint, right) / gAreaLight.width;
+            float y = dot(localPoint, up) / gAreaLight.height;
+
+    // 境界チェック
+            if (abs(x) <= 0.5f && abs(y) <= 0.5f)
             {
-               // 入射光
-                float3 areaLightDirectionSurface = normalize(input.worldPosition - gAreaLight.position);
+        // 入射方向を計算
+                float3 areaLightDirection = normalize(projectedPoint - input.worldPosition);
 
-               // 減衰
-                float distanceArea = length(gAreaLight.position - input.worldPosition);
-                float attenuationFactor = pow(saturate(-distanceArea / 10 + 1.0f), gAreaLight.decay);
+        // 距離減衰
+                float distance = length(toSurface);
+                float attenuationFactor = pow(saturate(-distance / 10.0f + 1.0f), gAreaLight.decay);
 
-                // ライトの反射ベクトル
-                float3 halfVectorArea = normalize(-areaLightDirectionSurface + toEye);
+        // 拡散反射
+                float NdotL = dot(normalize(input.normal), -areaLightDirection);
+                float diffuseFactor = saturate(NdotL);
 
-                 // 法線と入射光の内積（拡散反射用）
-                float NdotLArea = dot(normalize(input.normal), -areaLightDirectionSurface);
-                float cosArea = saturate(NdotLArea);
+        // 鏡面反射
+                float3 toEye = normalize(gCamera.worldPosition - input.worldPosition);
+                float3 halfVector = normalize(-areaLightDirection + toEye);
+                float NdotH = dot(normalize(input.normal), halfVector);
+                float specularFactor = pow(saturate(NdotH), gMaterial.shininess);
 
-                // 反射ベクトルとの内積（鏡面反射用）
-                float NdotHArea = dot(normalize(input.normal), halfVectorArea);
-                float specularPowArea = pow(saturate(NdotHArea), gMaterial.shininess);
+        // 色の計算
+                diffuseAreaLight = gMaterial.color.rgb * textureColor.rgb * gAreaLight.color.rgb * diffuseFactor * gAreaLight.intensity * attenuationFactor;
+                specularAreaLight = gAreaLight.color.rgb * gAreaLight.intensity * specularFactor * float3(1.0f, 1.0f, 1.0f);
 
-               // 拡散反射
-                diffuseAreaLight = gMaterial.color.rgb * textureColor.rgb * gAreaLight.color.rgb * cosArea * gAreaLight.intensity * attenuationFactor;
-
-               // 鏡面反射
-                specularAreaLight = gAreaLight.color.rgb * gAreaLight.intensity * specularPowArea * float3(1.0f, 1.0f, 1.0f);
-
-               // 出力カラー
-                output.color.rgb = diffuseDirectionalLight + specularDirectionalLight + diffuseAreaLight + specularAreaLight;
+                output.color.rgb += diffuseAreaLight + specularAreaLight;
             }
             else
             {
-              // 境界外の場合
-                output.color.rgb = diffuseDirectionalLight + specularDirectionalLight;
+        // 境界外の場合
+                output.color.rgb += diffuseDirectionalLight + specularDirectionalLight;
             }
         }
+
+
 
        
         output.color.a = gMaterial.color.a * textureColor.a;
