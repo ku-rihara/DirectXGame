@@ -89,6 +89,7 @@ void Player::Update() {
 		behavior_->Update();
 	}
 
+	// ライト位置
 	Light::GetInstance()->GetSpotLightManager()->GetSpotLight(0)->SetPosition(Vector3(
 		transform_.translation_.x,
 		transform_.translation_.y + 5.0f,
@@ -105,11 +106,14 @@ void Player::Update() {
 	BaseObject::Update();        /// 更新 
 
 }
+
+// タイトル更新
 void Player::TitleUpdate() {
 	fallEmitter_->SetTargetPosition(GetWorldPosition());
 	fallEmitter_->Update();
 	FallEffectUpdate();
 
+	// ライト位置
 	Light::GetInstance()->GetSpotLightManager()->GetSpotLight(0)->SetPosition(Vector3(
 		transform_.translation_.x,
 		transform_.translation_.y + 5.0f,
