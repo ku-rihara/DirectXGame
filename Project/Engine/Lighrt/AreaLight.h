@@ -34,5 +34,3 @@ public:
     void DebugImGui();
     AreaLightData* GetData() { return lightData_; }
 };
-
-

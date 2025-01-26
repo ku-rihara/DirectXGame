@@ -241,6 +241,20 @@ PixelShaderOutput main(VertexShaderOutput input)
             }
 
         }
+        
+        // 環境ライト (Ambient Light)
+        else if (gMaterial.enableLighting == 7)
+        {
+             // 環境光の色を計算
+            float3 ambientLight = gMaterial.color.rgb * textureColor.rgb * gAreaLight.color.rgb * gAreaLight.intensity;
+
+            // 環境光のみを適用 (他のライトを除外してテスト)
+            output.color.rgb = ambientLight;
+
+         // 他のライトと組み合わせたい場合は、コメントを外す
+            output.color.rgb += diffuseDirectionalLight + specularDirectionalLight;
+        }
+
 
         output.color.a = gMaterial.color.a * textureColor.a;
    
