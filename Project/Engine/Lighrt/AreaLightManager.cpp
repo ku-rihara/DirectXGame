@@ -1,4 +1,7 @@
 #include "AreaLightManager.h"
+#include"base/DirectXCommon.h"
+#include<imgui.h>
+#include<string>
 
 void AreaLightManager::Add(ID3D12Device* device) {
     
@@ -26,5 +29,24 @@ void AreaLightManager::SetLightCommand(ID3D12GraphicsCommandList* commandList) {
     for (size_t i = 0; i < areaLights_.size(); ++i){
         // 各スポットライトのデータを設定
         areaLights_[i]->SetLightCommand(commandList,static_cast<int>(i));
+    }
+}
+
+
+void AreaLightManager::DebugImGui() {
+
+    if (ImGui::CollapsingHeader("AreaLight")) {   /// AreaLight
+        // const auto& に変更
+        const auto& areaLights = GetLights();
+        for (size_t i = 0; i < areaLights.size(); ++i) {
+            if (ImGui::TreeNode(("AreaLight" + std::to_string(i)).c_str())) {
+                //ポインタでアクセスするように変更
+                areaLights[i]->DebugImGui();
+                ImGui::TreePop();
+            }
+        }
+        if (ImGui::Button("Add Area Light")) {
+            Add(DirectXCommon::GetInstance()->GetDevice());
+        }
     }
 }
