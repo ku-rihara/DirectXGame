@@ -328,6 +328,9 @@
     <ClCompile Include="Game\Plane\Plane.cpp">
       <Filter>Game\Plane</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Lighrt\AmbientLight.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -560,6 +563,9 @@
     </ClInclude>
     <ClInclude Include="Game\Plane\Plane.h">
       <Filter>Game\Plane</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\AmbientLight.h">
+      <Filter>MyEngine\.h\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

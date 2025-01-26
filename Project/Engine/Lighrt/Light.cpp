@@ -1,6 +1,7 @@
 // Light.cpp
 #include "Light.h"
 #include "DirectionalLight.h"
+#include"AmbientLight.h"
 #include "PointLightManager.h"
 #include "SpotLightManager.h"
 #include"AreaLightManager.h"
@@ -27,6 +28,8 @@ void Light::Init(ID3D12Device* device) {
 	pointLightManager_ = std::make_unique<PointLightManager>();
 	spotLightManager_ = std::make_unique<SpotLightManager>();
 	areaLightManager_= std::make_unique<AreaLightManager>();
+	ambientLight_ = std::make_unique<AmbientLight>();
+	ambientLight_->Init(device);
 
 	// 初期ライトを一つ追加
 	pointLightManager_->Add(device);
@@ -41,6 +44,7 @@ void Light::DebugImGui() {
 	pointLightManager_->DebugImGui();
 	spotLightManager_->DebugImGui();
 	areaLightManager_->DebugImGui();
+	ambientLight_->DebugImGui();
 	ImGui::End();
 	
 }
@@ -60,6 +64,7 @@ void  Light::SetLightCommands(ID3D12GraphicsCommandList* commandList) {
 	pointLightManager_->SetLightCommand(commandList);
 	spotLightManager_->SetLightCommand(commandList);
 	areaLightManager_->SetLightCommand(commandList);
+	ambientLight_->SetLightCommand(commandList);
 }
 
 

@@ -78,6 +78,18 @@ struct AreaLight
 ConstantBuffer<AreaLight> gAreaLight : register(b5);
 
 
+// 環境ライト用の構造体
+struct AmbientLight
+{
+    float4 color; // 環境ライトの色
+    float intensity; // 環境ライトの強度
+    float radius; // 環境ライトの影響範囲
+    float decay; // 減衰率
+    float3 position; // 環境ライトの中心位置
+};
+
+// 環境ライトの定数バッファ
+ConstantBuffer<AmbientLight> gAmbientLight : register(b6);
 
 PixelShaderOutput main(VertexShaderOutput input)
 {
@@ -97,6 +109,8 @@ PixelShaderOutput main(VertexShaderOutput input)
     float NdotL = 0.0f;
     float cos = 0.0f;
    
+    // 環境ライトの初期化
+    float3 ambientColor = float3(0.0f, 0.0f, 0.0f);
     //ライティングあり
     if (gMaterial.enableLighting != 0)
     {
@@ -242,16 +256,26 @@ PixelShaderOutput main(VertexShaderOutput input)
 
         }
         
-        // 環境ライト (Ambient Light)
-        else if (gMaterial.enableLighting == 7)
+        if (gMaterial.enableLighting == 7) // 環境ライト
         {
-             // 環境光の色を計算
-            float3 ambientLight = gMaterial.color.rgb * textureColor.rgb * gAreaLight.color.rgb * gAreaLight.intensity;
+            // 環境ライトの影響を計算
+            float3 toLight = gAmbientLight.position - input.worldPosition; // 環境ライトまでのベクトル
+            float distance = length(toLight); // 環境ライトとの距離
 
-            // 環境光のみを適用 (他のライトを除外してテスト)
-            output.color.rgb = ambientLight;
+            // 距離による減衰
+            float attenuationFactor = pow(saturate(-distance / gAmbientLight.radius + 1.0f), gAmbientLight.decay);
 
-         // 他のライトと組み合わせたい場合は、コメントを外す
+            // 基本の環境光色
+            ambientColor = gAmbientLight.color.rgb * gAmbientLight.intensity * attenuationFactor;
+
+            // 影の計算（法線方向による遮蔽効果）
+            float shadowFactor = saturate(dot(normalize(input.normal), normalize(-toLight)));
+            ambientColor *= shadowFactor; // 影を適用
+
+            // 環境ライトのみ適用
+            output.color.rgb = gMaterial.color.rgb * textureColor.rgb * ambientColor;
+
+            // 他のライトを組み合わせる場合（必要なら以下を有効化）
             output.color.rgb += diffuseDirectionalLight + specularDirectionalLight;
         }
 
