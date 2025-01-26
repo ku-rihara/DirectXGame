@@ -1,3 +1,5 @@
+
+
 #include "AreaLight.h"
 #include "base/DirectXCommon.h"
 #include <imgui.h>
@@ -28,14 +30,14 @@ void AreaLight::Init(ID3D12Device* device) {
     lightResource_->Map(0, nullptr, reinterpret_cast<void**>(&lightData_));
 
     // 初期値設定
-    lightData_->color = { 1.0f, 1.0f, 1.0f, 1.0f };       // 色
-    lightData_->position = { -0.5f, -0.8f, 7.5f };          // 中心位置
+    lightData_->color = { 0.9943f,0.0773f,0.0773f, 1.0f };       // 色
+    lightData_->position = { -5.3f, -1.8f, -3.1f };          // 中心位置
     lightData_->intensity = 1.0f;                         // 輝度
-    lightData_->normal = { 0.0f, 1.0f, 0.0f };            // 法線
-    lightData_->width = 5.0f;                             // 幅
-    lightData_->height = 3.0f;                            // 高さ
-    lightData_->up = { 1.0f, 0.0f, 0.0f };                // 上方向ベクトル
-    lightData_->decay = 0.15f;                            // 減衰率
+    lightData_->normal = { 0.0f, 1.0f, -0.03f };            // 法線
+    lightData_->width = 6.4f;                             // 幅
+    lightData_->height = 0.29f;                            // 高さ
+    lightData_->up = { 0.0f, 0.0f, 1.0f };                // 上方向ベクトル
+    lightData_->decay = 2.7f;                            // 減衰率
 }
 
 // ImGuiによるデバッグUI
