@@ -13,7 +13,7 @@ void Ground::Init() {
 	transform_.translation_.y = -10.0f;
 	transform_.scale_ = {1, 1, 1};
 	
-    lightMode_ = Mode::POINT;
+  
 }
 
 void Ground::Update() {
