@@ -29,12 +29,12 @@ void AreaLight::Init(ID3D12Device* device) {
 
     // 初期値設定
     lightData_->color = { 1.0f, 1.0f, 1.0f, 1.0f };       // 色
-    lightData_->position = { 0.0f, 1.0f, 0.0f };          // 中心位置
+    lightData_->position = { -0.5f, -0.8f, 7.5f };          // 中心位置
     lightData_->intensity = 1.0f;                         // 輝度
     lightData_->normal = { 0.0f, 1.0f, 0.0f };            // 法線
-    lightData_->width = 2.0f;                             // 幅
-    lightData_->height = 2.0f;                            // 高さ
-    lightData_->up = { 0.0f, 0.0f, 1.0f };                // 上方向ベクトル
+    lightData_->width = 5.0f;                             // 幅
+    lightData_->height = 3.0f;                            // 高さ
+    lightData_->up = { 1.0f, 0.0f, 0.0f };                // 上方向ベクトル
     lightData_->decay = 0.15f;                            // 減衰率
 }
 
@@ -42,7 +42,7 @@ void AreaLight::Init(ID3D12Device* device) {
 void AreaLight::DebugImGui() {
     ImGui::ColorEdit4("Color", (float*)&lightData_->color);              // 色編集
     ImGui::DragFloat3("Position", (float*)&lightData_->position, 0.01f); // 位置編集
-    ImGui::DragFloat3("Normal", (float*)&lightData_->normal, 0.01f);     // 法線編集
+    ImGui::DragFloat3("Direction", (float*)&lightData_->normal, 0.01f);     // 法線編集
     lightData_->normal = Vector3::Normalize(lightData_->normal);         // 法線を正規化
 
     ImGui::DragFloat("Width", (float*)&lightData_->width, 0.01f);        // 幅編集
