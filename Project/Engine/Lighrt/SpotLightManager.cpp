@@ -45,9 +45,9 @@ void SpotLightManager::DebugImGui() {
                 ImGui::TreePop();
             }
         }
-        if (ImGui::Button("Add Spot Light")) {
+        /*if (ImGui::Button("Add Spot Light")) {
             Add(DirectXCommon::GetInstance()->GetDevice());
-        }
+        }*/
         ImGui::PopID();
     }
 }

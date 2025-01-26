@@ -44,9 +44,9 @@ void PointLightManager::DebugImGui(){
                 ImGui::TreePop();
             }
         }
-        if (ImGui::Button("Add Point Light")) {
+       /* if (ImGui::Button("Add Point Light")) {
             Add(DirectXCommon::GetInstance()->GetDevice());
-        }
+        }*/
         ImGui::PopID();
     }
 }

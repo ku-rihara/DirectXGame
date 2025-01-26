@@ -83,9 +83,6 @@ struct AmbientLight
 {
     float4 color; // 環境ライトの色
     float intensity; // 環境ライトの強度
-    float radius; // 環境ライトの影響範囲
-    float decay; // 減衰率
-    float3 position; // 環境ライトの中心位置
 };
 
 // 環境ライトの定数バッファ
@@ -240,7 +237,7 @@ PixelShaderOutput main(VertexShaderOutput input)
     
                 diffuseAreaLight = gMaterial.color.rgb * textureColor.rgb * gAreaLight.color.rgb * diffuse * gAreaLight.intensity * attenuationFactor;
     
-               // 鏡面反射の計算（仮）
+               // 鏡面反射の計算
                 float3 toEye = normalize(gCamera.worldPosition - input.worldPosition);
                 float3 halfVector = normalize(-lightDir + toEye);
                 float specular = pow(saturate(dot(normalize(input.normal), halfVector)), gMaterial.shininess);
@@ -258,24 +255,11 @@ PixelShaderOutput main(VertexShaderOutput input)
         
         if (gMaterial.enableLighting == 7) // 環境ライト
         {
-            // 環境ライトの影響を計算
-            float3 toLight = gAmbientLight.position - input.worldPosition; // 環境ライトまでのベクトル
-            float distance = length(toLight); // 環境ライトとの距離
+           // 基本の環境光色
+            float3 ambientColor = gAmbientLight.color.rgb * gAmbientLight.intensity;
 
-            // 距離による減衰
-            float attenuationFactor = pow(saturate(-distance / gAmbientLight.radius + 1.0f), gAmbientLight.decay);
-
-            // 基本の環境光色
-            ambientColor = gAmbientLight.color.rgb * gAmbientLight.intensity * attenuationFactor;
-
-            // 影の計算（法線方向による遮蔽効果）
-            float shadowFactor = saturate(dot(normalize(input.normal), normalize(-toLight)));
-            ambientColor *= shadowFactor; // 影を適用
-
-            // 環境ライトのみ適用
+           // 環境ライトの最終的な色
             output.color.rgb = gMaterial.color.rgb * textureColor.rgb * ambientColor;
-
-            // 他のライトを組み合わせる場合（必要なら以下を有効化）
             output.color.rgb += diffuseDirectionalLight + specularDirectionalLight;
         }
 

@@ -46,9 +46,9 @@ void AreaLightManager::DebugImGui() {
                 ImGui::TreePop();
             }
         }
-        if (ImGui::Button("Add Area Light")) {
+      /*  if (ImGui::Button("Add Area Light")) {
             Add(DirectXCommon::GetInstance()->GetDevice());
-        }
+        }*/
         ImGui::PopID();
     }
 }

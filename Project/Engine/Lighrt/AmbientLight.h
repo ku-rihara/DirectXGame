@@ -7,11 +7,6 @@
 struct AmbientLightData {
     Vector4 color;       // 16 バイト
     float intensity;     // 4 バイト
-    float radius;        // 4 バイト
-    float decay;         // 4 バイト
-    float padding;       // 4 バイト（アライメント調整用）
-    Vector3 position;    // 12 バイト
-    float padding2;      // 4 バイト（アライメント調整用）
 };
 class AmbientLight {
 private:
