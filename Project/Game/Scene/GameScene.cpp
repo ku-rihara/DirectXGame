@@ -21,14 +21,6 @@ void GameScene::Init() {
 
 	BaseScene::Init();
 	
-	inputHandler_ = std::make_unique<InputHandler>();
-
-	// assign command
-	inputHandler_->AssignMoveRightCommand2PressKeyD();
-	inputHandler_->AssignMoveLeftCommand2PressKeyA();
-
-	player_ = std::make_unique<Player>();
-	player_->Init();
 }
 
 void GameScene::Update() {
@@ -38,8 +30,7 @@ void GameScene::Update() {
 	debugCamera_->Update();
 	Debug();
 
-	//各クラス更新
-	ground_->Update();
+	
 	
 	
 	ViewProjectionUpdate();
@@ -54,7 +45,6 @@ void GameScene::Update() {
 /// モデル描画
 /// ===================================================
 void GameScene::ModelDraw() {
-	player_->Draw(viewProjection_);
 
 }
 

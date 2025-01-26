@@ -20,10 +20,6 @@ private:
 	///========================================================
 
 	
-	std::unique_ptr<Player> player_ = nullptr;
-	ICommand* iCommand_ = nullptr;
-	std::unique_ptr<InputHandler> inputHandler_ = nullptr;
-
 	
 
 public:
