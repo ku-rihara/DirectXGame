@@ -13,6 +13,8 @@ public:
 
     void Add(ID3D12Device* device);
     void Remove(int index);
+
+    void DebugImGui();
     std::vector<PointLight*> GetLights();
     void SetLightCommand(ID3D12GraphicsCommandList* commandList);
 

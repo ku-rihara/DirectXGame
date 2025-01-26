@@ -1,5 +1,7 @@
-// SpotLightManager.cpp
 #include "SpotLightManager.h"
+#include"base/DirectXCommon.h"
+#include<imgui.h>
+#include<string>
 
 void SpotLightManager::Add(ID3D12Device* device) {
     
@@ -27,5 +29,24 @@ void SpotLightManager::SetLightCommand(ID3D12GraphicsCommandList* commandList) {
     for (size_t i = 0; i < spotLights_.size(); ++i){
         // 各スポットライトのデータを設定
         spotLights_[i]->SetLightCommand(commandList,static_cast<int>(i));
+    }
+}
+
+void SpotLightManager::DebugImGui() {
+
+    if (ImGui::CollapsingHeader("SpotLights")) {/// spot
+        // const auto& に変更
+        const auto& spotLights = GetLights();
+        for (size_t i = 0; i < spotLights.size(); ++i) {
+            if (ImGui::TreeNode(("SpotLight" + std::to_string(i)).c_str())) {
+                //ポインタでアクセスするように変更
+                spotLights[i]->DebugImGui();
+                ImGui::TreePop();
+            }
+        }
+        if (ImGui::Button("Add Spot Light")) {
+            Add(DirectXCommon::GetInstance()->GetDevice());
+        }
+       
     }
 }
