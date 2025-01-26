@@ -25,6 +25,7 @@ void GameScene::Init() {
 	ground_ = std::make_unique<Ground>();
 	ground_->Init();
 
+	isDebugCameraActive_ = true;
 	
 
 }

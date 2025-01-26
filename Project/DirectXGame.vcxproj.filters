@@ -79,9 +79,6 @@
     <Filter Include="MyEngine\.h\Collider">
       <UniqueIdentifier>{261d89ef-d3f4-4da1-aa9e-bfd6e260bf1a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\TestObj">
-      <UniqueIdentifier>{7bdc3ee7-e0ae-40dc-88b0-86f6e624ddbf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.cpp\Core">
       <UniqueIdentifier>{b79d053e-0a76-457f-9fe2-ce730fecf455}</UniqueIdentifier>
     </Filter>
@@ -238,12 +235,6 @@
     <ClCompile Include="Engine\Collider\OBBCollider.cpp">
       <Filter>MyEngine\.cpp\Collider</Filter>
     </ClCompile>
-    <ClCompile Include="Game\TestObj\CollisionTest1.cpp">
-      <Filter>Game\TestObj</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\TestObj\CollisionTest2.cpp">
-      <Filter>Game\TestObj</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Core\KTGame.cpp">
       <Filter>MyEngine\.cpp\Core</Filter>
     </ClCompile>
@@ -288,9 +279,6 @@
     </ClCompile>
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp">
       <Filter>Game\Scene\Factory</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\TestObj\CollisionTest3.cpp">
-      <Filter>Game\TestObj</Filter>
     </ClCompile>
     <ClCompile Include="Engine\utility\Editor\RailManager.cpp">
       <Filter>MyEngine\.cpp\utility\Editor</Filter>
@@ -471,12 +459,6 @@
     <ClInclude Include="Engine\Collider\CollisionManager.h">
       <Filter>MyEngine\.h\Collider</Filter>
     </ClInclude>
-    <ClInclude Include="Game\TestObj\CollisionTest1.h">
-      <Filter>Game\TestObj</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\TestObj\CollisionTest2.h">
-      <Filter>Game\TestObj</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Core\KTGame.h">
       <Filter>MyEngine\.h\Core</Filter>
     </ClInclude>
@@ -524,9 +506,6 @@
     </ClInclude>
     <ClInclude Include="Game\Scene\Factory\SceneFactory.h">
       <Filter>Game\Scene\Factory</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\TestObj\CollisionTest3.h">
-      <Filter>Game\TestObj</Filter>
     </ClInclude>
     <ClInclude Include="Engine\utility\Editor\RailManager.h">
       <Filter>MyEngine\.h\utility\Editor</Filter>
