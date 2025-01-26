@@ -60,16 +60,18 @@ ConstantBuffer<SpotLight> gSpotLight : register(b4);
 
 struct AreaLight
 {
-    float4 color; // ライトの色 (RGBA)
-    float3 position; // ライトの中心位置
-    float3 normal; // エリアライトの法線
-    float intensity; // 輝度
-    float width; // 幅
-    float height; // 高さ
-    float decay; // 減衰率
-    float3 up; // エリアライトの「上」方向ベクトル
-
+    float4 color; // 16バイト
+    float3 position; // 12バイト
+    float padding1; // アライメント用パディング
+    float3 normal; // 12バイト
+    float intensity; // 4バイト
+    float width; // 4バイト
+    float height; // 4バイト
+    float decay; // 4バイト
+    float3 up; // 12バイト
+    float padding2; // アライメント用パディング
 };
+
 
 
 //エリアライト
@@ -230,7 +232,8 @@ PixelShaderOutput main(VertexShaderOutput input)
                 float specular = pow(saturate(dot(normalize(input.normal), halfVector)), gMaterial.shininess);
                 specularAreaLight = gAreaLight.color.rgb * gAreaLight.intensity * specular;
     
-                output.color.rgb = diffuseDirectionalLight + specularDirectionalLight + diffuseAreaLight + specularAreaLight;
+                output.color.rgb = diffuseAreaLight + specularAreaLight; // 他ライトを排除してテスト
+
             }
             else
             {
