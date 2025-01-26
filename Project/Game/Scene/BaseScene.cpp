@@ -60,5 +60,5 @@ void BaseScene::ViewProjectionUpdate() {
 		/*viewProjection_.TransferMatrix();*/
 	}
 
-	
+	Light::GetInstance()->SetWorldCameraPos(viewProjection_.GetWorldPos());
 }
