@@ -40,13 +40,14 @@ void AmbientLight::SetIntensity(float intensity) {
 void AmbientLight::DebugImGui(){
 
     if (ImGui::CollapsingHeader("AmbientLight")){
-    
+        ImGui::PushID("AmbientLight");
         // ImGui を使って環境ライトのパラメータを調整
         ImGui::DragFloat3("Position", (float*)&lightData_->position, 0.1f);
         ImGui::DragFloat("Intensity", &lightData_->intensity, 0.1f, 0.0f, 10.0f);
         ImGui::DragFloat("Radius", &lightData_->radius, 0.1f, 0.0f, 100.0f);
         ImGui::DragFloat("Decay", &lightData_->decay, 0.1f, 0.1f, 10.0f);
         ImGui::ColorEdit4("Color", (float*)&lightData_->color);
+        ImGui::PopID();
     }
 }
 
