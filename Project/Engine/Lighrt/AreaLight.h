@@ -5,14 +5,17 @@
 #include "Vector4.h"
 
 struct AreaLightData {
-    Vector4 color;           // ライトの色
+    Vector4 color;           // ライトの色 (R, G, B, A)
     Vector3 position;        // ライトの中心位置
     float intensity;         // 輝度
     Vector3 normal;          // エリアライトの法線
-    float radius;            // エリアライトのサイズ(x,y,zでそれぞれ幅、高さ、奥行き)
+    float width;             // エリアライトの幅 (x方向のサイズ)
+    float height;            // エリアライトの高さ (y方向のサイズ)
+    Vector3 up;              // エリアライトの「上方向」ベクトル
     float decay;             // 減衰率
-    float padding[3];
+    float padding[3];        // パディング（必要に応じて追加）
 };
+
 
 class AreaLight {
 private:
@@ -30,3 +33,5 @@ public:
     void DebugImGui();
     AreaLightData* GetData() { return lightData_; }
 };
+
+

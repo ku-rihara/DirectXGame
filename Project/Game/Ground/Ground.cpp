@@ -12,7 +12,7 @@ void Ground::Init() {
 	transform_.translation_.y = -10.0f;
 	transform_.scale_ = {1, 1, 1};
 	
-	objct3D_->material_.materialData_->enableLighting = 5;
+	objct3D_->material_.materialData_->enableLighting = 6;
 }
 
 void Ground::Update() {
