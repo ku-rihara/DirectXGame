@@ -1,6 +1,14 @@
 #include "GameScene.h"
-#include<imgui.h>
+#include "base/TextureManager.h"
+//class
+#include"utility/Particle/ParticleManager.h"
+
+//math
+#include"Frame/Frame.h"
 #include"Scene/Manager/SceneManager.h"
+#include"Lighrt/Light.h"
+
+#include<imgui.h>
 
 
 GameScene::GameScene() {}
@@ -31,14 +39,8 @@ void GameScene::Update() {
 	Debug();
 
 	//各クラス更新
-	iCommand_ = inputHandler_->HandleInput();
-
-	if (this->iCommand_) {
-		iCommand_->Exec(*player_);
-	}
-
-	player_->Update();
-
+	ground_->Update();
+	
 	
 	ViewProjectionUpdate();
 
@@ -76,7 +78,7 @@ void GameScene::Debug() {
 	ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
 	ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
 	ImGui::End();
-
+	Light::GetInstance()->DebugImGui();
 
 #endif
 }

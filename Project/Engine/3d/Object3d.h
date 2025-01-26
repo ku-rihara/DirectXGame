@@ -9,7 +9,7 @@
 
 class Object3d :public BaseObject3d {
 public:
-	ObjectColor color_;
+	ObjectColor objColor_;
 private:
 
 	///============================================================
@@ -33,7 +33,7 @@ public:
 
 	/// 初期化、更新、描画
 	void Init();
-	void Update();
+	void ColorUpdate();
 	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt);
 	void Draw(const Vector3& position, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt);
 

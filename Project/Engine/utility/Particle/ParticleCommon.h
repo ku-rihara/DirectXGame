@@ -1,10 +1,16 @@
 #pragma once
 #include"base/DirectXCommon.h"
 #include"base/SrvManager.h"
-
+enum class BlendMode {
+	Add,
+	None,
+	Multiply,
+	Subtractive,
+	Screen,
+};
 class ParticleCommon {
-private:
-
+public:
+	
 	///=========================================
 	///private variant
 	///=========================================
@@ -20,8 +26,12 @@ private:
 	Microsoft::WRL::ComPtr<ID3DBlob>errorBlob_;
 	Microsoft::WRL::ComPtr<IDxcBlob>vertexShaderBlob_;
 	Microsoft::WRL::ComPtr<IDxcBlob>pixelShaderBlob_;
-	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineState_;
 
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateAdd_;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateNone_;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateMultiply_;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateSubtractive_;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateScreen_;
 private:
 
 	///==============================================
@@ -44,13 +54,14 @@ public:
 
 	//初期化
 	void Init(DirectXCommon* dxCommon);
-	void PreDraw(ID3D12GraphicsCommandList* commandList);
+	void PreDraw(ID3D12GraphicsCommandList* commandList, BlendMode blendMode);
 
 	///==============================================
 	///getter method
 	///==============================================
 
 	DirectXCommon* GetDxCommon()const { return pDxCommon_; }
-	ID3D12PipelineState* GetGrahipcsPipeLileState()const { return graphicsPipelineState_.Get(); }
+	ID3D12PipelineState* GetGrahipcsPipeLileStateAdd()const { return graphicsPipelineStateAdd_.Get(); }
+	ID3D12PipelineState* GetGrahipcsPipeLileStateNone()const { return graphicsPipelineStateNone_.Get(); }
 	ID3D12RootSignature* GetRootSignature()const { return rootSignature_.Get(); }
 };

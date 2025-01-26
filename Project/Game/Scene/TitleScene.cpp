@@ -5,6 +5,7 @@
 
 #include "base/TextureManager.h"
 //class
+#include"utility/Particle/ParticleManager.h"
 
 //math
 #include"Frame/Frame.h"
@@ -18,26 +19,31 @@ TitleScene::~TitleScene() {
 
 void TitleScene::Init() {
 
-	// メンバ変数の初期化
-	input_ = Input::GetInstance();
-	audio_ = Audio::GetInstance();
-	textureManager_ = TextureManager::GetInstance();
+	BaseScene::Init();
 
-	//デバッグカメラ
-	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
-	debugCamera_->Init();
+	ctest1_ = std::make_unique<CollisionTest1>();
+	ctest2_ = std::make_unique<CollisionTest2>();
+	ctest3_ = std::make_unique<CollisionTest3>();
 
-	
-	//ビュープロジェクション
-	viewProjection_.Init();
+	emitter_.reset(ParticleEmitter::CreateParticle("punchEffect", "Plane", ".obj", 200));
 
-	viewProjection_.translation_ = { 0,-0.2f,0.0f };
 
+	ctest1_->Init();
+	ctest2_->Init();
+	ctest3_->Init();
 }
 
 void TitleScene::Update() {
 
-	
+	ctest1_->Update();
+	ctest2_->Update();
+	ctest3_->Update();
+
+	emitter_->Update();
+	emitter_->EditorUpdate();
+	emitter_->Emit();
+
+	ParticleManager::GetInstance()->Update(viewProjection_);
 
 	Debug();
 	ViewProjectionUpdate();
@@ -62,7 +68,9 @@ void TitleScene::ModelDraw() {
    /// パーティクル描画
    /// ===================================================
 void TitleScene::ParticleDraw() {
-	
+	emitter_->DebugDraw(viewProjection_);
+	emitter_->RailDraw(viewProjection_);
+	ParticleManager::GetInstance()->Draw(viewProjection_);
 }
 
 /// ===================================================

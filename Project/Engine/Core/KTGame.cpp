@@ -17,6 +17,7 @@ void KTGame::Init() {
 	pSceneManager_ = SceneManager::GetInstance();
 	pSceneManager_->SetSceneFactory(sceneFactory_.get());
 	pSceneManager_->ChangeScene("GAMEPLAY");
+	pSceneManager_->ChangeScene("TITLE");
 }
 
 // =============================================================
@@ -46,7 +47,6 @@ void KTGame::Draw() {
 	// --------------------------------------------------------------------------
 	/// パーティクル描画
 	// --------------------------------------------------------------------------
-	ParticleCommon::GetInstance()->PreDraw(commandList);
 	
 	pSceneManager_->ParticleDraw();/// ゲームシーン描画
 

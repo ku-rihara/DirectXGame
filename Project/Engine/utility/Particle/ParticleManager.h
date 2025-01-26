@@ -8,6 +8,7 @@
 #include"3d/WorldTransform.h"
 
 //
+#include"ParticleEmitter.h"
 #include"struct/ParticleForGPU.h"
 //math
 #include"MinMax.h"
@@ -16,10 +17,13 @@
 #include<list>
 #include<unordered_map>
 
+enum class BlendMode;
 class ParticleCommon;
+struct ParticleEmitter::GroupParamaters;
+struct ParticleEmitter::Parameters;
 class ParticleManager {
 private:
-
+	
 	///============================================================
 	/// struct
 	///============================================================
@@ -28,11 +32,12 @@ private:
 		float lifeTime_;
 		float currentTime_;
 		float gravity_;
+		Vector3 direction_;
 		Vector3 velocity_;
 		Vector3 rotateSpeed_;
 		Vector4 color_;
 		WorldTransform worldTransform_;
-
+	
 	};
 
 	struct AccelerationField {///　加速フィールド
@@ -46,6 +51,7 @@ private:
 		Material material;
 		std::list<Particle>particles;
 		uint32_t srvIndex;
+		ParticleEmitter::GroupParamaters parm;
 		Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
 		uint32_t instanceNum;
 		ParticleFprGPU* instancingData;
@@ -62,7 +68,6 @@ private:
 	//other class
 	SrvManager* pSrvManager_;
 	ParticleCommon* pParticleCommon_;
-
 	AccelerationField accelerationField_;
 	
 
@@ -78,7 +83,7 @@ public:
 
 	//初期化、更新、描画
 	void Init(SrvManager* srvManager);
-	void Update(std::optional<const ViewProjection*> viewProjection);
+	void Update(const ViewProjection& viewProjection);
 	void Draw(const ViewProjection& viewProjection);
 
 	/// グループ作成
@@ -96,19 +101,11 @@ public:
 	void ResetAllParticles();
 
 	// 作成
-	Particle  MakeParticle(
-		const Vector3& basePosition, const V3MinMax& positionDist,
-		const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
-		const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
-		const Vector3& baseRotate, const Vector3& baseRotateSpeed, const V3MinMax& RotateDist,
-		const V3MinMax& rotateSpeedDist);
+	Particle  MakeParticle(const ParticleEmitter::Parameters&paramaters);
 	
 	//　エミット
 	void Emit(
-		std::string name, const Vector3& basePosition, const V3MinMax& positionDist,
-		const FMinMax& scaledist, const V3MinMax& velocityDist, const Vector4& baseColor,
-		const V4MinMax& colorDist, const float& lifeTime, const float& gravity,
-		const Vector3&baseRotate,const Vector3&baseRotateSpeed,const V3MinMax& RotateDist,
-		const V3MinMax& rotateSpeedDist, uint32_t count);
+		std::string name, const ParticleEmitter::Parameters&
+		paramaters,const ParticleEmitter::GroupParamaters&groupParamaters, const int32_t& count);
 
 };

@@ -14,6 +14,14 @@ struct ConstBufferDataWorldTransform {
 /// </summary>
 class WorldTransform{
 public:
+	enum class BillboardType {
+		X, //x
+	    Y, //y
+		Z, //z
+		XYZ //xyz
+	};
+
+public:
 	
 	//ローカルスケール
 	Vector3 scale_ = { 1,1,1 };
@@ -65,7 +73,14 @@ public:
 	/// </summary>
 	void UpdateMatrix();
 
-	void BillboardUpdateMatrix(const ViewProjection&viewProjection);
+	void SetParent(const WorldTransform* parent);
+
+	Vector3 GetLocalPos() const;
+	Vector3 GetWorldPos() const;
+
+	Vector3 LookAt(const Vector3& direction)const;
+
+	void BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis=BillboardType::XYZ);
 
 	/// <summary>
 	/// 定数バッファの取得

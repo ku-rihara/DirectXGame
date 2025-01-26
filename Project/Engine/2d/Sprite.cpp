@@ -65,6 +65,7 @@ void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position
 	material_.CreateMaterialResource(directXCommon);
 	//Lightingを無効
 	material_.materialData_->color = color;
+	alpha_ = color.w;
 	//UVTransformは単位行列を書き込んでおく
 	material_.materialData_->uvTransform = MakeIdentity4x4();
 	uvTransform_.scale = { 1,1 };
@@ -213,4 +214,12 @@ void Sprite::SetScale(const Vector2& scale) {
 
 void  Sprite::PreDraw(ID3D12GraphicsCommandList* commandList) {
 	SpriteCommon::GetInstance()->PreDraw(commandList);
+}
+
+
+
+void Sprite::SetAlpha(const float& alpha) {
+	alpha_ = alpha;
+	material_.materialData_->color.w = alpha;
+
 }

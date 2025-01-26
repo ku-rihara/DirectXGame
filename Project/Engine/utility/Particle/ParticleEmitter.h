@@ -4,9 +4,8 @@
 #include"3d/ViewProjection.h"
 /// editor
 #include"utility/Editor/GlobalParameter.h"
-#include"utility/Editor/EmitControlPosManager.h"
 
-#include"utility/Particle/EmitRailManager.h"
+#include"utility/Editor/RailManager.h"
 ///std
 #include<string>
 #include<vector>
@@ -14,58 +13,63 @@
 /// <summary>
 /// Emitter
 /// </summary>
+enum class WorldTransform::BillboardType;
+ enum class BlendMode;
 class ParticleEmitter {
-private:
+public:
+	struct GroupParamaters {
+		BlendMode blendMode;
+		bool isBillBord;
+		WorldTransform::BillboardType  billBordType;
+	};
 
+	// パーティクル設定を統合する構造体
+	struct Parameters {
+		Vector3 targetPos;                    // 対象座標
+		Vector3 emitPos;                      // 発生座標
+		V3MinMax positionDist;                // 座標ランダム分配
+		bool isScalerScale;                   //スカラーのスケールにするか
+		FMinMax scaleDist;                    // スケールランダム分配
+		V3MinMax scaleDistV3;                // スケールランダム分配
+		V3MinMax velocityDist;                // 速度ランダム分配
+		Vector4 baseColor;                    // 基準の色
+		V4MinMax colorDist;                   // 色ランダム分配
+		float lifeTime;                       // 生存時間
+		float gravity;                        // 重力パラメータ
+		Vector3 baseRotate;                   // 回転基準
+		V3MinMax rotateDist;                  // 回転ランダム分配
+		V3MinMax rotateSpeedDist;             // 回転スピード分配
+		bool isRotateforDirection;            // 方向回転フラグ
+	};
+private:
+	
 	///=====================================================
 	/// private variants
 	///=====================================================
-	
-	/// obj
-	std::unique_ptr<Object3d>emitObj_;             /// 発生位置のオブジェ
-	WorldTransform emitTransform_;
+	std::string particleName;             // パーティクル名
+	int32_t particleCount;
 
-	/// name								      
-	std::string particleName_;                     ///パーティクル名
-	std::string railFilePath_;                     // レールデータの名前
-									               
-	/// time						               
+	/// パーティクル設定
+	Parameters parameters_;
+	GroupParamaters groupParamaters_;
+	
+
 	float currentTime_;                            ///現在の時間
 	float intervalTime_;                           ///発生するまでの間隔
-											      
-	/// base								      
-	Vector3 emitPos_;                              ///発生座標
-	Vector3 basePos_;                              ///基準座標
-	Vector3 baseRotate_;                           ///回転基準
-	Vector3 baseRotateSpeed_;                      /// 回転スピード基準
-	Vector4 baseColor_;                           ///基準の色
-								                  
-	/// rondom					                  
-	V3MinMax positionDist_;                       ///座標ランダム分配
-	FMinMax scaleDist_;                           ///スケールランダム分配
-	V3MinMax rotateSpeedDist_;                    /// 回転スピード分配
-	V3MinMax rotateDist_;                         /// 回転ランダム分配
-	V3MinMax velocityDist_;                       ///速度ランダム分配
-	V4MinMax colorDist_;                          ///色分配
-								                  
-	/// etc						                  
-	float lifeTime_;                              ///生存時間
-	float gravity_;                               ///重力パラメータ
-	int32_t particleCount_;                       ///パーティクル数
-											      
-	/// Line								      
-	bool isMoveForRail_;                           ///レールに沿って動くか
-	float moveSpeed_;                              /// 移動速さ
-	std::unique_ptr<EmitRailManager> railManager_; /// レールマネージャ
-	std::unique_ptr
-	<EmitControlPosManager>emitControlPosManager_;
 
-	/// name
+	/// 発生位置関連
+	std::unique_ptr<Object3d> obj3d_;         // 発生位置のオブジェクト
+	WorldTransform emitBoxTransform_;        // 発生位置のワールド変換
+
+	/// レール関連
+	bool isMoveForRail_;                      // レールに沿って動くか
+	float moveSpeed_;                         // 移動速度
+	std::unique_ptr<RailManager> railManager_; // レールマネージャ
+
+	/// その他
 	const std::string dyrectryPath = "./Resources/ParticleParamater/";
-	std::string editorMessage_;
-
-	///editor
-	GlobalParameter* globalParameter_;
+	std::string editorMessage_;              // エディタ用メッセージ
+	GlobalParameter* globalParameter_;       // グローバルパラメータ
 
 public:
 
@@ -79,32 +83,38 @@ public:
 	/// 初期化
 	static ParticleEmitter* CreateParticle(
 		const std::string& name, const std::string& modelFilePath,
-		const std::string& extension, const int32_t& maxnum, const bool& isFirst);
+		const std::string& extension, const int32_t& maxnum);
 
-	void Init(const bool& isFirst);/// 初期化
+	void Init();/// 初期化
 	void Emit();///　エミット
 	void UpdateEmitTransform();
-
+	
 	void RailDraw(const ViewProjection&viewProjection);
 	void DebugDraw(const ViewProjection& viewProjection);
 
 	///=====================================================
 	/// getter method
 	///=====================================================
-	const std::string& GetParticleName()const { return particleName_; }
-
+	const std::string& GetParticleName()const { return particleName; }
+	
 
 	///=====================================================
-/// setter method
-///=====================================================
-
+    /// setter method
+    ///=====================================================
+	void SetParentBasePos(WorldTransform*parent);
 	void SetTextureHandle(const uint32_t& hanle);
+	void SetTargetPosition(const Vector3& pos) { parameters_.targetPos = pos; }
 
+	//imgui化すべき
+	void SetIsRotateForDirection(const bool& is) { parameters_.isRotateforDirection = is; }
+	void SetBlendMode(const BlendMode& blendmode);
+	void SetBillBordType(const WorldTransform::BillboardType& billboardType);
 	///=====================================================
 	/// Editor 
 	///=====================================================
 
 	///update
+	void Update();
 	void EditorUpdate();
 
 	/// globalParamater

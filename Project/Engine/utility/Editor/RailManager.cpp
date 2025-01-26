@@ -1,41 +1,55 @@
-#include"EmitRailManager.h"
+#include"RailManager.h"
 //std
 #include<cmath>
 //Function
 #include"MathFunction.h"
 //imgui
 #include<imgui.h>
-
+#include"Frame/Frame.h"
 
    ///=====================================================
    /// 初期化
    ///=====================================================
-void EmitRailManager::Init(SrvManager* srvManager) {
+void RailManager::Init(const std::string& groupName) {
+    ///グループネーム
+    groupName_ = groupName;
+
     viewProjection_.Init();
     worldTransform_.Init();
 
     worldTransform_.UpdateMatrix();
     viewProjection_.UpdateMatrix();
+    isRoop_ = true;
     // レールの初期化（オブジェクト数を指定）
-    rail_.Init(srvManager,5);
-   
+    rail_.Init(5);
 
     /// 現在位置モデル
-    obj3D_.reset(Object3d::CreateModel("DebugCube",".obj"));
-  /*  obj3D_->Init();*/
+    obj3D_.reset(Object3d::CreateModel("DebugCube", ".obj"));
+
+    /// 制御点マネージャー
+    emitControlPosManager_ = std::make_unique<ControlPosManager>();
+    emitControlPosManager_->LoadFromFile(groupName_);
+
 }
 
-///=====================================================
+///===================================================================
 ///更新
-///=====================================================
-void EmitRailManager::Update(const std::vector<Vector3>& controlPos,const float&speed) {
-    rail_.Update(controlPos);
+///====================================================================
+void RailManager::Update(const float& speed, const PositionMode& mode, const Vector3& Direction) {
+    emitControlPosManager_->Update(Direction);
+
+    if (mode == PositionMode::LOCAL) {
+        rail_.Update(emitControlPosManager_->GetLocalPositions());
+    }
+    else {
+        rail_.Update(emitControlPosManager_->GetWorldPositions());
+    }
 
     // カメラの移動とレールに沿った描画
-    railMoveTime_ += speed / rail_.GetTotalLength();
-    if (railMoveTime_ >= 1.0f) {
-        railMoveTime_ = 0.0f;
-    }
+    railMoveTime_ += (speed *Frame::DeltaTimeRate()) / rail_.GetTotalLength();
+
+
+    RoopOrStop();// ループか止まるか
 
     // Y軸のオフセット
     float offsetY = 0.0f; // オフセットの値をここで設定
@@ -51,7 +65,7 @@ void EmitRailManager::Update(const std::vector<Vector3>& controlPos,const float&
     size_t cameraIndex = 0;
 
     for (size_t i = 0; i < pointsDrawing.size() - 1; i++) {
-        float segment = Vector3::Length(pointsDrawing[i + 1] - pointsDrawing[i]);
+        float segment = (pointsDrawing[i + 1] - pointsDrawing[i]).Length();
         if (traveledLength + segment >= railProgress) {
             cameraIndex = i;
             break;
@@ -60,7 +74,7 @@ void EmitRailManager::Update(const std::vector<Vector3>& controlPos,const float&
     }
 
     // 線形補間で進行中の位置を計算
-    float segmentT = (railProgress - traveledLength) / Vector3::Length(pointsDrawing[cameraIndex + 1] - pointsDrawing[cameraIndex]);
+    float segmentT = (railProgress - traveledLength) / (pointsDrawing[cameraIndex + 1] - pointsDrawing[cameraIndex]).Length();
     Vector3 interpolatedPos = Lerp(pointsDrawing[cameraIndex], pointsDrawing[cameraIndex + 1], segmentT);
 
     // interpolatedPosのY成分にもオフセットを加える
@@ -80,44 +94,58 @@ void EmitRailManager::Update(const std::vector<Vector3>& controlPos,const float&
 
     // 行列の更新
     worldTransform_.matWorld_ = MakeAffineMatrix(scale_, cameraRotate_, interpolatedPos);
-  /*  viewProjection_.matView_ = Inverse(worldTransform_.matWorld_);*/
+    /*viewProjection_.matView_ = Inverse(worldTransform_.matWorld_);*/
+}
+
+void RailManager::RoopOrStop() {
+    if (railMoveTime_ < 1.0f) return;
+
+    if (isRoop_) {
+        railMoveTime_ = 0.0f;
+    }
+    else {
+        railMoveTime_ = 1.0f;
+    }
+
 }
 
 ///=====================================================
 /// 現在位置描画
 ///=====================================================
-void EmitRailManager::Draw(const ViewProjection& viewProjection) {
+void RailManager::Draw(const ViewProjection& viewProjection) {
     obj3D_->Draw(worldTransform_, viewProjection);
+    emitControlPosManager_->Draw(viewProjection);
 }
 
 ///=====================================================
 /// レール描画
 ///=====================================================
-void EmitRailManager::RailDraw(const ViewProjection& viewProjection) {
+void RailManager::RailDraw(const ViewProjection& viewProjection) {
     /*rail_.Draw(viewProjection);*/
     viewProjection;
+}
+
+
+void RailManager::ImGuiEdit() {
+    emitControlPosManager_->ImGuiUpdate(groupName_);
+}
+
+void RailManager::SetParent(WorldTransform* parent) {
+    emitControlPosManager_->SetParent(parent);
 }
 
 
 ///=====================================================
 /// WorldPos取得
 ///=====================================================
-Vector3 EmitRailManager::GetWorldPos() const {
-
-    return Vector3(
-        worldTransform_.matWorld_.m[3][0], // X成分
-        worldTransform_.matWorld_.m[3][1], // Y成分
-        worldTransform_.matWorld_.m[3][2]  // Z成分
-    );
+Vector3 RailManager::GetPositionOnRail() const {
+    return  worldTransform_.GetWorldPos();
 }
 
-//void EmitRailManager::Debug() {
-//#ifdef _DEBUG
-//
-//    if (ImGui::TreeNode("CameraDebug")) {
-//        ImGui::DragFloat("move", &railMoveTime_, 0.001f);
-//
-//        ImGui::TreePop();
-//    }
-//#endif
+/////=====================================================
+///// ローカル座標取得
+/////=====================================================
+//Vector3 RailManager::GetLocalPos() const {
+//    return  worldTransform_.GetLocalPos();
 //}
+//

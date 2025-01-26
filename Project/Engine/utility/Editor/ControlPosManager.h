@@ -3,10 +3,12 @@
 #include <string>
 #include "Vector3.h"
 #include "3d/ViewProjection.h"
+#include"3d/WorldTransform.h"
 #include"3d/Object3d.h"
 #include <json.hpp>
 
-class EmitControlPosManager {
+class ControlPosManager {
+
 private:
     using json = nlohmann::json; // 別名を定義
 private:
@@ -15,22 +17,28 @@ private:
     /// private variants
     ///=====================================================
 
-    std::vector<Vector3> movePosies_;  // 移動座標リスト
-    std::vector<std::unique_ptr<Object3d>>obj3ds_;       // モデルデータ
-    std::string filePath_;         // 座標データの保存先
-    Vector3 tempAddPosition_;      // ImGuiで座標を一時入力する変数
 
-    const std::string  dyrectrypath_ = "./Resources/GlobalParameter/EmitControlPos/";
+    std::vector<WorldTransform>transforms_;
+    std::vector<Vector3> movePosies_;                    // 移動座標リスト
+    std::vector<std::unique_ptr<Object3d>>obj3ds_;       // モデルデータ
+    std::string filePath_;                               // 座標データの保存先
+    Vector3 tempAddPosition_;                            // ImGuiで座標を一時入力する変数
+    WorldTransform* parentTransform_;
+
+    const std::string  dyrectrypath_ = "./Resources/GlobalParameter/ControlPoint/";
 
 public:
-    EmitControlPosManager();
+    ControlPosManager();
 
     ///=====================================================
   /// pbulic method
   ///=====================================================
   
-
+    void Init();
+    void Update(const Vector3&Direction = {1.0f, 1.0f, 1.0f} );
     void Draw(const ViewProjection& viewProjection);
+
+    void SetParent(WorldTransform* parent);
 
     // 座標管理
     void AddPoint(const Vector3& position);
@@ -44,8 +52,10 @@ public:
     // ImGui用UI
     void ImGuiUpdate(const std::string& filename);
 
+
     ///=====================================================
    /// getter method
    ///=====================================================
-    const std::vector<Vector3>& GetPositions() const;
+     std::vector<Vector3> GetWorldPositions() const;
+     std::vector<Vector3> GetLocalPositions() const;
 };

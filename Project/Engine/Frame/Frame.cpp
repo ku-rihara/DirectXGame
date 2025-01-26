@@ -5,11 +5,14 @@
 std::chrono::steady_clock::time_point Frame::reference_ = std::chrono::steady_clock::now();
 std::chrono::steady_clock::time_point Frame::lastTime_ = std::chrono::steady_clock::now();
 float Frame::deltaTime_ = 0.0f;
+float Frame::deltaTimeRate_ = 0.0f;
+float Frame::timeScale_ = 1.0f;
 
 void Frame::Init() {
     reference_ = std::chrono::steady_clock::now();
     lastTime_ = reference_;
     deltaTime_ = 0.0f;
+    timeScale_ = 1.0f;
 }
 
 void Frame::Update() {
@@ -19,11 +22,16 @@ void Frame::Update() {
     auto currentTime = std::chrono::steady_clock::now();
     std::chrono::duration<float> frameTime = currentTime - lastTime_;
     deltaTime_ = frameTime.count();
+    deltaTimeRate_ = deltaTime_ * timeScale_;
     lastTime_ = currentTime;
 }
 
 float Frame::DeltaTime() {
     return deltaTime_; // 経過時間を返す
+}
+
+float Frame::DeltaTimeRate() {
+    return deltaTimeRate_;
 }
 
 void Frame::FixFPS() {
@@ -47,4 +55,16 @@ void Frame::FixFPS() {
 
     // 現在時刻を基準時間として記録
     reference_ = std::chrono::steady_clock::now();
+}
+
+
+void Frame::SetTimeScale(float scale) {
+    if (scale < 0.0f) {
+        scale = 0.0f; // 負の値を防ぐ
+    }
+    timeScale_ = scale;
+}
+
+float Frame::GetTimeScale() {
+    return timeScale_;
 }

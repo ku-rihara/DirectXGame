@@ -9,10 +9,7 @@ float Vector3::Dot(const Vector3& v1, const Vector3& v2) {
 	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
-//長さ（ノルム）
-float Vector3::Length(const Vector3& v) {
-	return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
-}
+
 
 //正規化
 Vector3 Vector3::Normalize(const Vector3& v){
@@ -60,6 +57,10 @@ Vector3 Vector3::operator*(const Matrix4x4& obj) const {
 
 }
 
+// 長さを取得する
+float Vector3::Length() const {
+	return std::sqrt(x * x + y * y + z * z);
+}
 
 Vector3 Vector3::Normalize()const {
 	Vector3 result;
@@ -76,4 +77,43 @@ Vector3 Vector3::Normalize()const {
 		result.z = 0;
 	}
 	return result;
+}
+
+
+// 上方向の単位ベクトルを返す
+Vector3 Vector3::ToUp() {
+	return Vector3(0.0f, 1.0f, 0.0f);
+}
+
+// 前方向の単位ベクトルを返す
+Vector3 Vector3::ToForward() {
+	return Vector3(0.0f, 0.0f, 1.0f);
+}
+
+// 右方向の単位ベクトルを返す
+Vector3 Vector3::ToRight() {
+	return Vector3(1.0f, 0.0f, 0.0f);
+}
+
+// ゼロベクトル
+Vector3 Vector3::ZeroVector() {
+	return Vector3(0, 0, 0);
+}
+
+// 単位ベクトル
+Vector3  Vector3::UnitVector() {
+	return Vector3(1.0f, 1.0f, 1.0f);
+}
+
+Vector3 Vector3::DirectionToEulerAngles(const Vector3& direction) {
+	// ピッチの計算（上下方向）
+	float pitch = std::atan2(-direction.y, std::sqrt(direction.x * direction.x + direction.z * direction.z));
+
+	// ヨーの計算（左右方向）
+	float yaw = std::atan2(direction.x, direction.z);
+
+	// ロールはゼロ（傾きは進行方向には関係ない）
+	float roll = 0.0f;
+
+	return { pitch, yaw, roll };
 }

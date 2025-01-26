@@ -13,13 +13,13 @@ AABBCollider::~AABBCollider() {
 
 void AABBCollider::Init() {
     // モデル作成（デバッグ用の可視化）
-    cObject3d_.reset(Object3d::CreateModel("CollisionCube", ".obj"));
+    cObject3d_.reset(Object3d::CreateModel("DebugCube", ".obj"));
     cTransform_.Init();
 }
 
 void AABBCollider::UpdateWorldTransform() {
     // AABBのワールド行列を更新
-    cTransform_.translation_ = GetBaseCenterPosition();
+    cTransform_.translation_ = GetCollisionPos();
     aabb_.min = cTransform_.translation_ - radiusVector_;
     aabb_.max = cTransform_.translation_ + radiusVector_;
     cTransform_.scale_ = radiusVector_;
@@ -30,6 +30,6 @@ void AABBCollider::DrawDebugCube(const ViewProjection& viewProjection) {
     BaseCollider::DrawDebugCube(viewProjection);
 }
 
-Vector3 AABBCollider::GetBaseCenterPosition() const {
-   return BaseCollider::GetBaseCenterPosition();
+Vector3 AABBCollider::GetCollisionPos() const {
+   return BaseCollider::GetCollisionPos();
 }

@@ -121,6 +121,12 @@
     <Filter Include="Game\Scene\Factory">
       <UniqueIdentifier>{33f429d3-39ce-4d12-9f0a-521b426150fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.h\Light">
+      <UniqueIdentifier>{628ab431-7495-4a04-bd50-fe846b42960d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Light">
+      <UniqueIdentifier>{5396bc61-e016-4b3e-8707-c28cc9c03b94}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Game\Player">
       <UniqueIdentifier>{7a5d0742-9ae4-4f8d-8b0f-ed52a7cb2b1e}</UniqueIdentifier>
     </Filter>
@@ -137,9 +143,6 @@
     </ClCompile>
     <ClCompile Include="Engine\2d\Sprite.cpp">
       <Filter>MyEngine\.cpp\2d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\Light.cpp">
-      <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\Mesh.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
@@ -277,13 +280,7 @@
     <ClCompile Include="Engine\3d\Object3dSRV.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\Particle\EmitRail.cpp">
-      <Filter>MyEngine\.cpp\utility\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\Particle\EmitRailManager.cpp">
-      <Filter>MyEngine\.cpp\utility\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\Editor\EmitControlPosManager.cpp">
+    <ClCompile Include="Engine\utility\Editor\ControlPosManager.cpp">
       <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
     <ClCompile Include="Game\Ground\Ground.cpp">
@@ -301,6 +298,45 @@
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp">
       <Filter>Game\Scene\Factory</Filter>
     </ClCompile>
+    <ClCompile Include="Game\TestObj\CollisionTest3.cpp">
+      <Filter>Game\TestObj</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\Editor\RailManager.cpp">
+      <Filter>MyEngine\.cpp\utility\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\Editor\Rail.cpp">
+      <Filter>MyEngine\.cpp\utility\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Shake.cpp">
+      <Filter>liberary\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Quaternion.cpp">
+      <Filter>liberary\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Lighrt\Light.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Lighrt\DirectionalLight.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Lighrt\PointLight.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Lighrt\SpotLight.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Lighrt\PointLightManager.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Lighrt\SpotLightManager.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Lighrt\AreaLightManager.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Lighrt\AreaLight.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
     <ClCompile Include="Game\Player\Player.cpp">
       <Filter>Game\Player</Filter>
     </ClCompile>
@@ -313,9 +349,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
-      <Filter>MyEngine\.h\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\struct\DirectionalLight.h">
       <Filter>MyEngine\.h\struct</Filter>
     </ClInclude>
     <ClInclude Include="Engine\struct\MaterialData.h">
@@ -336,15 +369,6 @@
     <ClInclude Include="Engine\struct\VertexData.h">
       <Filter>MyEngine\.h\struct</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\struct\CameraForGPU.h">
-      <Filter>MyEngine\.h\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\struct\PointLight.h">
-      <Filter>MyEngine\.h\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\struct\SpotLight.h">
-      <Filter>MyEngine\.h\struct</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\struct\ParticleForGPU.h">
       <Filter>MyEngine\.h\struct</Filter>
     </ClInclude>
@@ -355,9 +379,6 @@
       <Filter>MyEngine\.h\2d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\BaseObject3d.h">
-      <Filter>MyEngine\.h\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\Light.h">
       <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\Mesh.h">
@@ -501,14 +522,8 @@
     <ClInclude Include="Engine\3d\Object3dSRV.h">
       <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\Editor\EmitControlPosManager.h">
+    <ClInclude Include="Engine\utility\Editor\ControlPosManager.h">
       <Filter>MyEngine\.h\utility\Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\Particle\EmitRailManager.h">
-      <Filter>MyEngine\.h\utility\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\Particle\EmitRail.h">
-      <Filter>MyEngine\.h\utility\Particle</Filter>
     </ClInclude>
     <ClInclude Include="Game\Ground\Ground.h">
       <Filter>Game\Ground</Filter>
@@ -527,6 +542,45 @@
     </ClInclude>
     <ClInclude Include="Game\Scene\Factory\SceneFactory.h">
       <Filter>Game\Scene\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\TestObj\CollisionTest3.h">
+      <Filter>Game\TestObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\Editor\RailManager.h">
+      <Filter>MyEngine\.h\utility\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\Editor\Rail.h">
+      <Filter>MyEngine\.h\utility\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Shake.h">
+      <Filter>liberary\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Quaternion.h">
+      <Filter>liberary\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\PointLight.h">
+      <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\SpotLight.h">
+      <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\DirectionalLight.h">
+      <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\Light.h">
+      <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\PointLightManager.h">
+      <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\SpotLightManager.h">
+      <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\AreaLightManager.h">
+      <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\AreaLight.h">
+      <Filter>MyEngine\.h\Light</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\Player.h">
       <Filter>Game\Player</Filter>

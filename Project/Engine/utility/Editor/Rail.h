@@ -7,10 +7,10 @@
 #include "3d/WorldTransform.h"
 #include "3d/Object3dSRV.h"
 
-class EmitRail {
+class Rail {
 private:
     const size_t IndexCount_ = 20;                      // レール補間点の数
-    std::vector<Vector3> controlPos_;                    // 制御点
+    std::vector<Vector3> controlPosies_;                    // 制御点
     std::vector<Vector3> pointsDrawing_;                 // 補間された描画点
     float totalRailLength_ = 0.0f;                       // レールの全体長
     std::unique_ptr<Object3dSRV> railObject_;            // レールオブジェクト (SRVで管理)
@@ -22,7 +22,7 @@ public:
     /// </summary>
     /// <param name="srvManager">SRVマネージャのポインタ</param>
     /// <param name="numObjects">インスタンス数</param>
-    void Init(SrvManager* srvManager, size_t numObjects);
+    void Init(size_t numObjects);
 
     /// <summary>
     /// 更新処理

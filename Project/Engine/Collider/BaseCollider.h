@@ -9,11 +9,13 @@ protected:
     /// ===================================================
     /// protected variant
     /// ===================================================
-    WorldTransform cTransform_;  // ワールド変換
-    uint32_t typeID_ = 0u;      // コリジョンのタイプID
-    bool isColliding_ = false;  // 衝突フラグ
+    
+    WorldTransform cTransform_;            // ワールド変換
+    uint32_t typeID_ = 0u;                 // コリジョンのタイプID
+    bool isColliding_ = false;             // 衝突フラグ
     std::unique_ptr<Object3d> cObject3d_;  // デバッグ表示用モデル
 
+   bool isCollision_=true;
 public:
     BaseCollider() = default;
     virtual ~BaseCollider() = default;
@@ -26,22 +28,24 @@ public:
     virtual void UpdateWorldTransform() = 0;
    virtual void DrawDebugCube(const ViewProjection& viewProjection);
     /// 中心座標取得
-    virtual Vector3 GetBaseCenterPosition() const;
+    virtual Vector3 GetCollisionPos() const;
 
     /// 各種当たり判定
-    virtual void OnCollisionEnter([[maybe_unused]] BaseCollider* other) {}
-    virtual void OnCollisionStay([[maybe_unused]] BaseCollider* other) {}
-    virtual void OnCollisionExit([[maybe_unused]] BaseCollider* other) {}
+    virtual void OnCollisionEnter([[maybe_unused]] BaseCollider* other);
+    virtual void OnCollisionStay([[maybe_unused]] BaseCollider* other);
+    virtual void OnCollisionExit([[maybe_unused]] BaseCollider* other);
 
+    void ReverseNormalColor();
     /// ===================================================
    /// getter  methods
    /// ===================================================
     uint32_t GetTypeID() const { return typeID_; }
     bool GetIsColliding() const { return isColliding_; }
-
+    bool GetIsCollision()const { return isCollision_; }
     /// ===================================================
     /// setter  methods
     /// ===================================================
     void SetTypeID(uint32_t typeID) { typeID_ = typeID; }
     void SetColliding(bool colliding) { isColliding_ = colliding; }
+    void SetIsCollision(bool is) { isCollision_ = is; }
 };

@@ -4,7 +4,6 @@
 #include<dxgi1_6.h>
 //struct
 #include"struct/TransformationMatrix.h"
-#include"struct/DirectionalLight.h"
 #include"struct/ModelData.h"
 #include"base/SpriteMaterial.h"
 
@@ -35,6 +34,8 @@ public:
 	/// flip
 	bool isFlipX_ = false;/// FlipX
 	bool isFlipY_ = false;/// FlipY
+
+	float alpha_;
 
 private:
 	Vector2 textureAdjustSize_;/// テクスチャサイズ
@@ -92,6 +93,7 @@ public:
 	const Vector2& GetTextureLeftTop()const { return textureLeftTop_; }
 	const bool& GetIsFlipX()const { return isFlipX_; }
 	const bool& GetIsFlipY()const { return isFlipY_; }
+	const float& GetAlpha()const { return alpha_; }
 	///=========================================================================================
    ///  setter
    ///=========================================================================================
@@ -101,6 +103,8 @@ public:
 
 	void SetIsFlipX(const bool& isFlip) { this->isFlipX_ = isFlip; }
 	void SetIsFlipY(const bool& isFlip) { this->isFlipY_ = isFlip; }
+
+	void SetAlpha(const float& alpha);
 
 	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->wvpData_->WVP = date; }
 	void SetWorldMatrixDataSprite(Matrix4x4 date) { this->wvpData_->World = date; }
