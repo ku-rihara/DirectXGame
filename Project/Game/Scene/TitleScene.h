@@ -13,6 +13,7 @@
 class TitleScene:public BaseScene {
 private:
 
+	std::unique_ptr<ParticleEmitter>emitter_;
 	
 
 public:

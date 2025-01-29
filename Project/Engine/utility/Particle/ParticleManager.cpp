@@ -73,7 +73,7 @@ void ParticleManager::Update(const ViewProjection& viewProjection) {
 
 				if (group.parm.isBillBord) {
 
-					it->worldTransform_.BillboardUpdateMatrix(viewProjection,group.parm.billBordType);
+					it->worldTransform_.BillboardUpdateMatrix(viewProjection,group.parm.billBordType,group.parm.adaptRotate_);
 				}
 				else {
 					it->worldTransform_.UpdateMatrix();
@@ -108,6 +108,8 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
 				it = particles.erase(it);
 				continue;
 			}
+
+			instancingData[instanceIndex].World= it->worldTransform_.matWorld_;
 
 			instancingData[instanceIndex].WVP = it->worldTransform_.matWorld_ *
 				viewProjection.matView_ * viewProjection.matProjection_;
@@ -266,10 +268,6 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 			Random::Range(paramaters.rotateDist.min.z, paramaters.rotateDist.max.z)
 		};
 
-		// ラジアン変換
-		rotate.x = (rotate.x);
-		rotate.y = (rotate.y);
-		rotate.z = (rotate.z);
 
 		particle.worldTransform_.rotation_ = (paramaters.baseRotate) + rotate;
 	}
@@ -337,6 +335,7 @@ void ParticleManager::Emit(
 	particleGroup.parm.blendMode = groupParamaters.blendMode;
 	particleGroup.parm.isBillBord = groupParamaters.isBillBord;
 	particleGroup.parm.billBordType = groupParamaters.billBordType;
+	particleGroup.parm.adaptRotate_ = groupParamaters.adaptRotate_;
 	
 	// 生成、グループ追加
 	std::list<Particle> particles;

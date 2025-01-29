@@ -137,6 +137,9 @@ void ParticleEmitter::AddParmGroup() {
 	globalParameter_->AddItem(particleName, "isScalerScale", parameters_.isScalerScale);
 	globalParameter_->AddItem(particleName, "isRotateforDirection", parameters_.isRotateforDirection);
 	globalParameter_->AddItem(particleName, "isBillBord", groupParamaters_.isBillBord);
+	globalParameter_->AddItem(particleName, "AdaptRotateIsX", groupParamaters_.adaptRotate_.isX_);
+	globalParameter_->AddItem(particleName, "AdaptRotateIsY", groupParamaters_.adaptRotate_.isY_);
+	globalParameter_->AddItem(particleName, "AdaptRotateIsZ", groupParamaters_.adaptRotate_.isZ_);
 
 	/*/// enum
 	globalParameter_->SetValue(particleName, "BillBordType", static_cast<int32_t>(groupParamaters_.billBordType));*/
@@ -194,6 +197,10 @@ void ParticleEmitter::SetValues() {
 	globalParameter_->SetValue(particleName, "isScalerScale", parameters_.isScalerScale);
 	globalParameter_->SetValue(particleName, "isRotateforDirection", parameters_.isRotateforDirection);
 	globalParameter_->SetValue(particleName, "isBillBord", groupParamaters_.isBillBord);
+	globalParameter_->SetValue(particleName, "AdaptRotateIsX", groupParamaters_.adaptRotate_.isX_);
+	globalParameter_->SetValue(particleName, "AdaptRotateIsY", groupParamaters_.adaptRotate_.isY_);
+	globalParameter_->SetValue(particleName, "AdaptRotateIsZ", groupParamaters_.adaptRotate_.isZ_);
+
 
 	/// enum
 	/*globalParameter_->SetValue(particleName, "BillBordType", static_cast<int32_t>(groupParamaters_.billBordType));*/
@@ -249,6 +256,9 @@ void ParticleEmitter::ApplyGlobalParameter() {
 	parameters_.isScalerScale = globalParameter_->GetValue<bool>(particleName, "isScalerScale");
 	parameters_.isRotateforDirection = globalParameter_->GetValue<bool>(particleName, "isRotateforDirection");
 	groupParamaters_.isBillBord = globalParameter_->GetValue<bool>(particleName, "isBillBord");
+	groupParamaters_.adaptRotate_.isX_ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsX");
+	groupParamaters_.adaptRotate_.isY_ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsY");
+	groupParamaters_.adaptRotate_.isZ_ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsZ");
 
 	/*int32_t itype= static_cast<int>(globalParameter_->GetValue<int32_t>(particleName, "isBillBord"));
 	groupParamaters_.billBordType = static_cast<WorldTransform::BillboardType>(itype);*/
@@ -377,6 +387,13 @@ void ParticleEmitter::EditorUpdate() {
 
 		// IsBillBoard のチェックボックス
 		ImGui::Checkbox("IsBillBoard", &groupParamaters_.isBillBord);
+		
+		ImGui::SeparatorText("IsRotateAdapt");
+		ImGui::Checkbox("IsX", &groupParamaters_.adaptRotate_.isX_);
+		ImGui::Checkbox("IsY", &groupParamaters_.adaptRotate_.isY_);
+		ImGui::Checkbox("IsZ", &groupParamaters_.adaptRotate_.isZ_);
+
+		ImGui::SeparatorText("BillBordType");
 
 		const char* items[] = { "X", "Y", "Z", "XYZ" }; // ビルボードの種類
 		int current_item = static_cast<int>(groupParamaters_.billBordType);

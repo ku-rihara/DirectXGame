@@ -14,6 +14,7 @@
 /// Emitter
 /// </summary>
 enum class WorldTransform::BillboardType;
+struct WorldTransform::AdaptRotate;
  enum class BlendMode;
 class ParticleEmitter {
 public:
@@ -21,6 +22,7 @@ public:
 		BlendMode blendMode;
 		bool isBillBord;
 		WorldTransform::BillboardType  billBordType;
+		WorldTransform::AdaptRotate adaptRotate_;
 	};
 
 	// パーティクル設定を統合する構造体

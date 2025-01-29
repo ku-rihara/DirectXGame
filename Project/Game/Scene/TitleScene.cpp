@@ -22,11 +22,19 @@ void TitleScene::Init() {
 	BaseScene::Init();
 
 	
+
+	emitter_.reset(ParticleEmitter::CreateParticle("punchEffect", "Plane", ".obj", 200));
+
 }
 
 void TitleScene::Update() {
 
 	
+	emitter_->Update();
+	emitter_->EditorUpdate();
+	emitter_->Emit();
+
+	ParticleManager::GetInstance()->Update(viewProjection_);
 
 	Debug();
 	ViewProjectionUpdate();
@@ -36,7 +44,7 @@ void TitleScene::Update() {
 		SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 	}
 
-	
+
 }
 
 /// ===================================================
@@ -44,14 +52,16 @@ void TitleScene::Update() {
 /// ===================================================
 void TitleScene::ModelDraw() {
 
-	
+
 }
 
 /// ===================================================
    /// パーティクル描画
    /// ===================================================
 void TitleScene::ParticleDraw() {
-	
+	emitter_->DebugDraw(viewProjection_);
+	emitter_->RailDraw(viewProjection_);
+	ParticleManager::GetInstance()->Draw(viewProjection_);
 }
 
 /// ===================================================

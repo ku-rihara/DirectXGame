@@ -53,6 +53,7 @@ void Object3d::Draw(const WorldTransform& worldTransform,const ViewProjection& v
 		//	wvpDate_->WorldInverseTranspose = Inverse(Transpose(model_->GetModelData().rootNode.localMatrix * wvpDate_->World));
 		//}
 		//else {//.objファイルの場合
+	        wvpDate_->World = worldTransform.matWorld_;
 			wvpDate_->WVP = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
 			wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
 		/*}*/
@@ -77,10 +78,12 @@ void Object3d::Draw(const Vector3& position, const ViewProjection& viewProjectio
 
 		// WVP行列の計算
 		if (model_->GetIsFileGltf()) { // .gltfファイルの場合
+			wvpDate_->World = tempTransform.matWorld_;
 			wvpDate_->WVP = model_->GetModelData().rootNode.localMatrix * tempTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
 			wvpDate_->WorldInverseTranspose = Inverse(Transpose(model_->GetModelData().rootNode.localMatrix * wvpDate_->World));
 		}
 		else { // .objファイルの場合
+			wvpDate_->World = tempTransform.matWorld_;
 			wvpDate_->WVP = tempTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
 			wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
 		}
