@@ -69,7 +69,7 @@ void WorldTransform::UpdateMatrix() {
 
 void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis, const AdaptRotate& adaptRotate) {
 	// スケール、回転、平行移動行列を計算
-	Matrix4x4 scaleMatrix = MakeScaleMatrix(Vector3{ 1,1,1 });
+	Matrix4x4 scaleMatrix = MakeScaleMatrix(scale_);
 	Matrix4x4 translateMatrix = MakeTranslateMatrix(translation_);
 
 	// カメラ行列を取得
