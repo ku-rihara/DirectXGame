@@ -347,17 +347,22 @@ void ParticleEmitter::EditorUpdate() {
 
 	// Scale
 	if (ImGui::CollapsingHeader("Scale")) {
-		ImGui::SeparatorText("Scale Range:");
-		if (ImGui::Checkbox("IsScalerScale", &parameters_.isScalerScale)) {
+		ImGui::SeparatorText("Scale Range");
+
+		ImGui::Checkbox("IsScalerScale", &parameters_.isScalerScale);
+		ImGui::SameLine();
+		ImGui::Text("Select Scale Mode");
+
+		if (parameters_.isScalerScale) {
 			ImGui::DragFloat("Scale Max", &parameters_.scaleDist.max, 0.1f);
 			ImGui::DragFloat("Scale Min", &parameters_.scaleDist.min, 0.1f);
 		}
 		else {
-			ImGui::DragFloat3("ScaleV3 Max", &parameters_.scaleDistV3.max.x, 0.1f);
-			ImGui::DragFloat3("ScaleV3 Min", &parameters_.scaleDistV3.min.x, 0.1f);
+			ImGui::DragFloat3("ScaleV3 Max", reinterpret_cast<float*>(&parameters_.scaleDistV3.max), 0.1f);
+			ImGui::DragFloat3("ScaleV3 Min", reinterpret_cast<float*>(&parameters_.scaleDistV3.min), 0.1f);
 		}
-		
 	}
+
 
 	// Rotate
 	if (ImGui::CollapsingHeader("Rotate(Degree)")) {

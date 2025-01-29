@@ -24,6 +24,8 @@ void TitleScene::Init() {
 	
 
 	emitter_.reset(ParticleEmitter::CreateParticle("punchEffect", "Plane", ".obj", 200));
+	uint32_t t=TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
+	emitter_->SetTextureHandle(t);
 
 }
 
