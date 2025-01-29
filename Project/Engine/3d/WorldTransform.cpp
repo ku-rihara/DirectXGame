@@ -9,7 +9,7 @@ WorldTransform::WorldTransform() {
 }
 
 WorldTransform::~WorldTransform() {
-	
+
 }
 
 
@@ -43,9 +43,7 @@ void WorldTransform::Map() {
 	//定数バッファのマッピング
 	D3D12_RANGE readRange = {};
 	HRESULT hr = constBuffer_->Map(0, &readRange, reinterpret_cast<void**>(&constMap));
-	if (FAILED(hr)) {
-		throw std::runtime_error("Failed to map constant buffer.");
-	}
+	assert(SUCCEEDED(hr));
 }
 
 void WorldTransform::TransferMatrix() {
@@ -57,60 +55,68 @@ void WorldTransform::TransferMatrix() {
 
 
 void WorldTransform::UpdateMatrix() {
-	
+
 	// スケール、回転、平行移動を合成して行列を計算する
 	matWorld_ = MakeAffineMatrix(scale_, rotation_, translation_);
 	// 親子関係があれば親のワールド行列を掛ける
 	if (parent_) {
-		matWorld_ *=  parent_->matWorld_;
+		matWorld_ *= parent_->matWorld_;
 	}
 	// 定数バッファに転送する
 	TransferMatrix();
 }
 
 
-void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis) {
+void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis, const AdaptRotate& adaptRotate) {
 	// スケール、回転、平行移動行列を計算
-	Matrix4x4 scaleMatrix = MakeScaleMatrix(scale_);
-	Matrix4x4 rotateMatrix = MakeRotateMatrix(rotation_);
+	Matrix4x4 scaleMatrix = MakeScaleMatrix(Vector3{ 1,1,1 });
 	Matrix4x4 translateMatrix = MakeTranslateMatrix(translation_);
 
-	// カメラ行列とビルボード行列を計算
+	// カメラ行列を取得
 	Matrix4x4 cameraMatrix = viewProjection.GetCameraMatrix();
 	backToFrontMatrix_ = MakeRotateYMatrix(std::numbers::pi_v<float>); // 視点を反転
-	billboardMatrix_ = backToFrontMatrix_ * cameraMatrix;
-	
-	// ビルボードパターンに応じて行列を設定
+
+	// カメラ位置を取得し、オブジェクトとのベクトルを計算
+	Vector3 cameraPos = viewProjection.GetWorldPos();
+	Vector3 toCamera = { cameraPos.x - translation_.x, 0.0f, cameraPos.z - translation_.z };
+	toCamera = (toCamera).Normalize();
+
+	// ビルボード行列の計算
 	switch (billboardAxis) {
 	case BillboardType::XYZ:
-		// 全方向ビルボード（XYZ）
-		billboardMatrix_.m[3][0] = 0.0f;
-		billboardMatrix_.m[3][1] = 0.0f;
-		billboardMatrix_.m[3][2] = 0.0f;
+		// 完全なビルボード（カメラの回転を全適用）
+		billboardMatrix_ = backToFrontMatrix_ * cameraMatrix;
+
 		break;
 
-	case BillboardType::X:
-		// X 軸ビルボード（Y、Z軸を無効化）
-		billboardMatrix_.m[1][0] = 0.0f;
-		billboardMatrix_.m[2][0] = 0.0f;
-		break;
+	case BillboardType::Y: {
+		// Y軸ビルボード（XZ平面でカメラの方向を向く）
+		float angleY = std::atan2(toCamera.x, toCamera.z);
+		billboardMatrix_ = MakeRotateYMatrix(angleY);
 
-	case BillboardType::Y:
-		// Y 軸ビルボード（X、Z軸を無効化）
-		billboardMatrix_.m[0][1] = 0.0f;
-		billboardMatrix_.m[2][1] = 0.0f;
-		break;
-
-	case BillboardType::Z:
-		// Z 軸ビルボード（X、Y軸を無効化）
-		billboardMatrix_.m[0][2] = 0.0f;
-		billboardMatrix_.m[1][2] = 0.0f;
-		break;
-
-	default:
-		// デフォルトは何もしない
 		break;
 	}
+
+	default:
+		// 何もしない
+		billboardMatrix_ = MakeIdentity4x4();
+		break;
+	}
+
+	if (!adaptRotate.isX_) { rotation_.x = 0.0f; }
+	if (!adaptRotate.isY_) { rotation_.y = 0.0f; }
+	if (!adaptRotate.isZ_) { rotation_.z = 0.0f; }
+
+	// X/Z軸の回転を適用
+	Matrix4x4 xzRotationMatrix = MakeRotateMatrix(rotation_);
+
+	// ビルボード行列に適用（Y軸回転 → X/Z軸回転の順）
+	billboardMatrix_ = xzRotationMatrix * billboardMatrix_;
+
+	// ビルボード行列の平行移動成分をクリア
+	billboardMatrix_.m[3][0] = 0.0f;
+	billboardMatrix_.m[3][1] = 0.0f;
+	billboardMatrix_.m[3][2] = 0.0f;
 
 	// 最終的なワールド行列を計算
 	matWorld_ = scaleMatrix * billboardMatrix_ * translateMatrix;
@@ -129,6 +135,7 @@ void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection,
 void WorldTransform::SetParent(const WorldTransform* parent) {
 	parent_ = parent;
 }
+
 
 
 Vector3 WorldTransform::LookAt(const Vector3& direction) const {
@@ -175,4 +182,3 @@ Vector3 WorldTransform::GetLocalPos() const {
 	Vector3 localPos = MatrixTransform(worldPos, parentInverse);
 	return localPos;
 }
-

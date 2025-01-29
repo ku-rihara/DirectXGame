@@ -37,7 +37,7 @@ void ParticleEmitter::Init() {
 	parameters_.colorDist.max = { 0, 0, 0, 0 };
 	intervalTime_ = 1.0f;
 	parameters_.targetPos = { 0,0,0 };
-	groupParamaters_.isBillBord=true;
+	groupParamaters_.isBillBord = true;
 	groupParamaters_.billBordType = WorldTransform::BillboardType::XYZ;
 	parameters_.isScalerScale = true;
 	parameters_.isRotateforDirection = false;
@@ -65,11 +65,11 @@ void ParticleEmitter::Init() {
 void ParticleEmitter::ParmLoadForImGui() {
 
 	// ロードボタン
-	if (ImGui::Button(std::format("Load {}",particleName).c_str())) {
+	if (ImGui::Button(std::format("Load {}", particleName).c_str())) {
 
 		globalParameter_->LoadFile(particleName);
 		// セーブ完了メッセージ
-		ImGui::Text("Load Successful: %s",particleName.c_str());
+		ImGui::Text("Load Successful: %s", particleName.c_str());
 		ApplyGlobalParameter();
 	}
 }
@@ -137,6 +137,9 @@ void ParticleEmitter::AddParmGroup() {
 	globalParameter_->AddItem(particleName, "isScalerScale", parameters_.isScalerScale);
 	globalParameter_->AddItem(particleName, "isRotateforDirection", parameters_.isRotateforDirection);
 	globalParameter_->AddItem(particleName, "isBillBord", groupParamaters_.isBillBord);
+	globalParameter_->AddItem(particleName, "AdaptRotateIsX", groupParamaters_.adaptRotate_.isX_);
+	globalParameter_->AddItem(particleName, "AdaptRotateIsY", groupParamaters_.adaptRotate_.isY_);
+	globalParameter_->AddItem(particleName, "AdaptRotateIsZ", groupParamaters_.adaptRotate_.isZ_);
 
 	/*/// enum
 	globalParameter_->SetValue(particleName, "BillBordType", static_cast<int32_t>(groupParamaters_.billBordType));*/
@@ -194,6 +197,10 @@ void ParticleEmitter::SetValues() {
 	globalParameter_->SetValue(particleName, "isScalerScale", parameters_.isScalerScale);
 	globalParameter_->SetValue(particleName, "isRotateforDirection", parameters_.isRotateforDirection);
 	globalParameter_->SetValue(particleName, "isBillBord", groupParamaters_.isBillBord);
+	globalParameter_->SetValue(particleName, "AdaptRotateIsX", groupParamaters_.adaptRotate_.isX_);
+	globalParameter_->SetValue(particleName, "AdaptRotateIsY", groupParamaters_.adaptRotate_.isY_);
+	globalParameter_->SetValue(particleName, "AdaptRotateIsZ", groupParamaters_.adaptRotate_.isZ_);
+
 
 	/// enum
 	/*globalParameter_->SetValue(particleName, "BillBordType", static_cast<int32_t>(groupParamaters_.billBordType));*/
@@ -249,6 +256,9 @@ void ParticleEmitter::ApplyGlobalParameter() {
 	parameters_.isScalerScale = globalParameter_->GetValue<bool>(particleName, "isScalerScale");
 	parameters_.isRotateforDirection = globalParameter_->GetValue<bool>(particleName, "isRotateforDirection");
 	groupParamaters_.isBillBord = globalParameter_->GetValue<bool>(particleName, "isBillBord");
+	groupParamaters_.adaptRotate_.isX_ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsX");
+	groupParamaters_.adaptRotate_.isY_ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsY");
+	groupParamaters_.adaptRotate_.isZ_ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsZ");
 
 	/*int32_t itype= static_cast<int>(globalParameter_->GetValue<int32_t>(particleName, "isBillBord"));
 	groupParamaters_.billBordType = static_cast<WorldTransform::BillboardType>(itype);*/
@@ -267,13 +277,14 @@ void ParticleEmitter::Emit() {
 		parameters_.emitPos = parameters_.emitPos;
 	}
 
-	currentTime_ += Frame::DeltaTimeRate();// 時間加算
+
+	currentTime_ += Frame::DeltaTime();// 時間加算
 
 	if (currentTime_ >= intervalTime_) {//　間隔ごとに発動
 
 		ParticleManager::GetInstance()->Emit(
-			particleName, parameters_,groupParamaters_,particleCount);
-            currentTime_ = 0.0f;// 時間を戻す
+			particleName, parameters_, groupParamaters_, particleCount);
+		currentTime_ = 0.0f;// 時間を戻す
 	}
 }
 
@@ -345,7 +356,7 @@ void ParticleEmitter::EditorUpdate() {
 			ImGui::DragFloat3("ScaleV3 Max", &parameters_.scaleDistV3.max.x, 0.1f);
 			ImGui::DragFloat3("ScaleV3 Min", &parameters_.scaleDistV3.min.x, 0.1f);
 		}
-		
+
 	}
 
 	// Rotate
@@ -377,6 +388,13 @@ void ParticleEmitter::EditorUpdate() {
 		// IsBillBoard のチェックボックス
 		ImGui::Checkbox("IsBillBoard", &groupParamaters_.isBillBord);
 
+		ImGui::SeparatorText("IsRotateAdapt");
+		ImGui::Checkbox("IsX", &groupParamaters_.adaptRotate_.isX_);
+		ImGui::Checkbox("IsY", &groupParamaters_.adaptRotate_.isY_);
+		ImGui::Checkbox("IsZ", &groupParamaters_.adaptRotate_.isZ_);
+
+		ImGui::SeparatorText("BillBordType");
+
 		const char* items[] = { "X", "Y", "Z", "XYZ" }; // ビルボードの種類
 		int current_item = static_cast<int>(groupParamaters_.billBordType);
 		// ビルボードの種類を選択するコンボボックス
@@ -389,7 +407,7 @@ void ParticleEmitter::EditorUpdate() {
 
 	// その他のパラメータ
 	if (ImGui::CollapsingHeader("Frag")) {
-		
+
 		// IsRotateforDirection のチェックボックス
 		ImGui::Checkbox("IsRotateforDirection", &parameters_.isRotateforDirection);
 	}
@@ -422,7 +440,6 @@ void ParticleEmitter::RailDraw(const ViewProjection& viewProjection) {
 	/*railManager_->RailDraw(viewProjection);*/
 }
 void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
-	viewProjection;
 #ifdef _DEBUG
 
 	if (isMoveForRail_) {// レールに沿うエミット位置

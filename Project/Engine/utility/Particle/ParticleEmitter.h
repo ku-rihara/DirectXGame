@@ -14,13 +14,15 @@
 /// Emitter
 /// </summary>
 enum class WorldTransform::BillboardType;
- enum class BlendMode;
+struct WorldTransform::AdaptRotate;
+enum class BlendMode;
 class ParticleEmitter {
 public:
 	struct GroupParamaters {
 		BlendMode blendMode;
 		bool isBillBord;
 		WorldTransform::BillboardType  billBordType;
+		WorldTransform::AdaptRotate adaptRotate_;
 	};
 
 	// パーティクル設定を統合する構造体
@@ -30,7 +32,7 @@ public:
 		V3MinMax positionDist;                // 座標ランダム分配
 		bool isScalerScale;                   //スカラーのスケールにするか
 		FMinMax scaleDist;                    // スケールランダム分配
-		V3MinMax scaleDistV3;                // スケールランダム分配
+		V3MinMax scaleDistV3;                 // スケールランダム分配
 		V3MinMax velocityDist;                // 速度ランダム分配
 		Vector4 baseColor;                    // 基準の色
 		V4MinMax colorDist;                   // 色ランダム分配
@@ -42,34 +44,34 @@ public:
 		bool isRotateforDirection;            // 方向回転フラグ
 	};
 private:
-	
+
 	///=====================================================
 	/// private variants
 	///=====================================================
-	std::string particleName;             // パーティクル名
+	std::string particleName;                 // パーティクル名
 	int32_t particleCount;
 
 	/// パーティクル設定
 	Parameters parameters_;
 	GroupParamaters groupParamaters_;
-	
+
 
 	float currentTime_;                            ///現在の時間
 	float intervalTime_;                           ///発生するまでの間隔
 
 	/// 発生位置関連
-	std::unique_ptr<Object3d> obj3d_;         // 発生位置のオブジェクト
-	WorldTransform emitBoxTransform_;        // 発生位置のワールド変換
+	std::unique_ptr<Object3d> obj3d_;              // 発生位置のオブジェクト
+	WorldTransform emitBoxTransform_;              // 発生位置のワールド変換
 
 	/// レール関連
-	bool isMoveForRail_;                      // レールに沿って動くか
-	float moveSpeed_;                         // 移動速度
-	std::unique_ptr<RailManager> railManager_; // レールマネージャ
+	bool isMoveForRail_;                           // レールに沿って動くか
+	float moveSpeed_;                              // 移動速度
+	std::unique_ptr<RailManager> railManager_;     // レールマネージャ
 
 	/// その他
 	const std::string dyrectryPath = "./Resources/ParticleParamater/";
-	std::string editorMessage_;              // エディタ用メッセージ
-	GlobalParameter* globalParameter_;       // グローバルパラメータ
+	std::string editorMessage_;                   // エディタ用メッセージ
+	GlobalParameter* globalParameter_;            // グローバルパラメータ
 
 public:
 
@@ -88,20 +90,20 @@ public:
 	void Init();/// 初期化
 	void Emit();///　エミット
 	void UpdateEmitTransform();
-	
-	void RailDraw(const ViewProjection&viewProjection);
+
+	void RailDraw(const ViewProjection& viewProjection);
 	void DebugDraw(const ViewProjection& viewProjection);
 
 	///=====================================================
 	/// getter method
 	///=====================================================
 	const std::string& GetParticleName()const { return particleName; }
-	
+
 
 	///=====================================================
-    /// setter method
-    ///=====================================================
-	void SetParentBasePos(WorldTransform*parent);
+	/// setter method
+	///=====================================================
+	void SetParentBasePos(WorldTransform* parent);
 	void SetTextureHandle(const uint32_t& hanle);
 	void SetTargetPosition(const Vector3& pos) { parameters_.targetPos = pos; }
 
@@ -124,5 +126,5 @@ public:
 	void ApplyGlobalParameter();
 	void ParmLoadForImGui();
 
-	
+
 };

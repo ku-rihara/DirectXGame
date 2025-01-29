@@ -45,6 +45,9 @@ void GameScene::Init() {
 
 	viewProjection_.Init();//ビュープロジェクション
 
+	///=======================================================================================
+	/// セット
+	///=======================================================================================
 	gamecamera_->SetTarget(&player_->GetTransform());
 	enemyManager_->SetPlayer(player_.get());
 	player_->SetViewProjection(&viewProjection_); 

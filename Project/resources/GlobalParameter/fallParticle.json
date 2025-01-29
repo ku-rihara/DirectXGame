@@ -1,5 +1,8 @@
 {
     "fallParticle": {
+        "AdaptRotateIsX": false,
+        "AdaptRotateIsY": false,
+        "AdaptRotateIsZ": false,
         "BaseColor": [
             0.1882352977991104,
             0.0313725508749485,
@@ -69,6 +72,16 @@
         ],
         "Scale Max": 0.4000000059604645,
         "Scale Min": 0.4000000059604645,
+        "ScaleV3 Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "ScaleV3 Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "Velocity Max": [
             20.0,
             15.5,
@@ -79,7 +92,10 @@
             13.100000381469727,
             -20.0
         ],
+        "isBillBord": false,
         "isMoveForRail": false,
+        "isRotateforDirection": false,
+        "isScalerScale": true,
         "moveSpeed": 0.0
     }
 }

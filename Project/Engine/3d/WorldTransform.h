@@ -12,17 +12,24 @@ struct ConstBufferDataWorldTransform {
 /// <summary>
 /// ワールド変換データ
 /// </summary>
-class WorldTransform{
+class WorldTransform {
 public:
+
 	enum class BillboardType {
 		X, //x
-	    Y, //y
+		Y, //y
 		Z, //z
 		XYZ //xyz
 	};
 
+	struct AdaptRotate {
+		bool isX_;
+		bool isY_;
+		bool isZ_;
+	};
+
 public:
-	
+
 	//ローカルスケール
 	Vector3 scale_ = { 1,1,1 };
 	//ローカル回転角
@@ -33,10 +40,11 @@ public:
 	Matrix4x4 matWorld_;
 	//親となるワールド変換へのポインタ
 	const WorldTransform* parent_ = nullptr;
-	
+
 private:
 	Matrix4x4 billboardMatrix_;
 	Matrix4x4 backToFrontMatrix_;
+
 	// 定数バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuffer_;
 	// マッピング済みアドレス
@@ -45,8 +53,8 @@ private:
 	WorldTransform(const WorldTransform&) = delete;
 	WorldTransform& operator=(const WorldTransform&) = delete;
 public:
-	WorldTransform() ;
-	~WorldTransform() ;
+	WorldTransform();
+	~WorldTransform();
 
 	/// <summary>
 	/// 初期化
@@ -80,7 +88,7 @@ public:
 
 	Vector3 LookAt(const Vector3& direction)const;
 
-	void BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis=BillboardType::XYZ);
+	void BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis = BillboardType::XYZ, const AdaptRotate& adaptRotate = { false,false,false });
 
 	/// <summary>
 	/// 定数バッファの取得
@@ -100,7 +108,7 @@ public:
 		return Vector3(matWorld_.m[0][2], matWorld_.m[1][2], matWorld_.m[2][2]);
 	}
 public:
-	
+
 	// ムーブコンストラクタを追加
 	WorldTransform(WorldTransform&& other) noexcept
 		: scale_(std::move(other.scale_)),
@@ -116,7 +124,7 @@ public:
 		other.constMap = nullptr; // など
 	}
 
-	
+
 	// ムーブ代入演算子を追加
 	WorldTransform& operator=(WorldTransform&& other) noexcept {
 		if (this != &other) {
@@ -136,4 +144,3 @@ public:
 		return *this;
 	}
 };
-

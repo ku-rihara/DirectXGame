@@ -53,34 +53,34 @@ void ParticleManager::Update(const ViewProjection& viewProjection) {
 			///------------------------------------------------------------------------
 			/// 回転させる
 			///------------------------------------------------------------------------
-			it->worldTransform_.rotation_.x += it->rotateSpeed_.x* Frame::DeltaTimeRate();
+			it->worldTransform_.rotation_.x += it->rotateSpeed_.x * Frame::DeltaTimeRate();
 			it->worldTransform_.rotation_.y += it->rotateSpeed_.y * Frame::DeltaTimeRate();
 			it->worldTransform_.rotation_.z += it->rotateSpeed_.z * Frame::DeltaTimeRate();
 
 			///------------------------------------------------------------------------
 			/// 重力の適用
 			///------------------------------------------------------------------------
-			it->velocity_.y += it->gravity_ * Frame::DeltaTimeRate();
+			it->velocity_.y += it->gravity_ * Frame::DeltaTime();
 
 			///------------------------------------------------------------------------
 			/// 変位更新
 			///------------------------------------------------------------------------
-			it->worldTransform_.translation_ += it->velocity_ * Frame::DeltaTimeRate();
+			it->worldTransform_.translation_ += it->velocity_ * Frame::DeltaTime();
 
 			///------------------------------------------------------------------------
 			/// ビルボードまたは通常の行列更新
 			///------------------------------------------------------------------------
 
-				if (group.parm.isBillBord) {
+			if (group.parm.isBillBord) {
 
-					it->worldTransform_.BillboardUpdateMatrix(viewProjection,group.parm.billBordType);
-				}
-				else {
-					it->worldTransform_.UpdateMatrix();
-				}
-			
+				it->worldTransform_.BillboardUpdateMatrix(viewProjection, group.parm.billBordType, group.parm.adaptRotate_);
+			}
+			else {
+				it->worldTransform_.UpdateMatrix();
+			}
+
 			// 時間を進める
-			it->currentTime_ += Frame::DeltaTimeRate();
+			it->currentTime_ += Frame::DeltaTime();
 			++it;
 		}
 	}
@@ -108,6 +108,8 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
 				it = particles.erase(it);
 				continue;
 			}
+
+			instancingData[instanceIndex].World = it->worldTransform_.matWorld_;
 
 			instancingData[instanceIndex].WVP = it->worldTransform_.matWorld_ *
 				viewProjection.matView_ * viewProjection.matProjection_;
@@ -233,7 +235,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 		Random::Range(paramaters.positionDist.min.y, paramaters.positionDist.max.y),
 		Random::Range(paramaters.positionDist.min.z, paramaters.positionDist.max.z)
 	};
-	particle.worldTransform_.translation_ = paramaters.targetPos+ paramaters.emitPos + randomTranslate;
+	particle.worldTransform_.translation_ = paramaters.targetPos + paramaters.emitPos + randomTranslate;
 
 	///------------------------------------------------------------------------
 	/// 速度
@@ -266,10 +268,6 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 			Random::Range(paramaters.rotateDist.min.z, paramaters.rotateDist.max.z)
 		};
 
-		// ラジアン変換
-		rotate.x = (rotate.x);
-		rotate.y = (rotate.y);
-		rotate.z = (rotate.z);
 
 		particle.worldTransform_.rotation_ = (paramaters.baseRotate) + rotate;
 	}
@@ -327,7 +325,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 ///======================================================================
 void ParticleManager::Emit(
 	std::string name, const ParticleEmitter::Parameters&
-	paramaters, const ParticleEmitter::GroupParamaters& groupParamaters,const int32_t& count) {  // 新パラメータ追加
+	paramaters, const ParticleEmitter::GroupParamaters& groupParamaters, const int32_t& count) {  // 新パラメータ追加
 
 	// パーティクルグループが存在するか確認
 	assert(particleGroups_.find(name) != particleGroups_.end() && "Error: Not Find ParticleGroup");
@@ -337,7 +335,8 @@ void ParticleManager::Emit(
 	particleGroup.parm.blendMode = groupParamaters.blendMode;
 	particleGroup.parm.isBillBord = groupParamaters.isBillBord;
 	particleGroup.parm.billBordType = groupParamaters.billBordType;
-	
+	particleGroup.parm.adaptRotate_ = groupParamaters.adaptRotate_;
+
 	// 生成、グループ追加
 	std::list<Particle> particles;
 	for (uint32_t i = 0; i < uint32_t(count); ++i) {
