@@ -37,7 +37,7 @@ ComboAttackJumpSecond::ComboAttackJumpSecond(Player* player)
 	
 	rushEaseTime_ = 0.0f;
 
-	emitter_.reset(ParticleEmitter::CreateParticle("rushParticle", "Plane", ".obj", 700));
+	emitter_.reset(ParticleEmitter::CreateParticle("rushParticle", "Plane", ".obj", 800));
 	emitter_->SetTextureHandle(pPlayer_->GetCircleTexture());
 
 
@@ -60,6 +60,7 @@ void ComboAttackJumpSecond::Update() {
 		///---------------------------------------------------------
 		emitter_->SetTargetPosition(pPlayer_->GetWorldPosition());
 		emitter_->Update();
+		emitter_->EditorUpdate();
 		emitter_->Emit();
 
 		handMoveEasing_.time += Frame::DeltaTimeRate();

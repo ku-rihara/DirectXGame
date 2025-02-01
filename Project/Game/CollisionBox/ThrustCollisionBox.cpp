@@ -37,12 +37,15 @@ void ThrustCollisionBox::IsAdapt(bool is) {
 }
 
 void ThrustCollisionBox::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
-	
-}
-
-void ThrustCollisionBox::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 	if (dynamic_cast<BaseEnemy*>(other)) {
 		isSlow_ = true;
 
 	}
+}
+
+void ThrustCollisionBox::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
+	/*if (dynamic_cast<BaseEnemy*>(other)) {
+		isSlow_ = true;
+
+	}*/
 }

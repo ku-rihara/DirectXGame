@@ -26,7 +26,7 @@
 ///　static 変数初期化
 ///==========================================================
 float BaseEnemy::InitY_ = 0.5f;
-Vector3 BaseEnemy::InitScale_ = Vector3::UnitVector()*2;
+Vector3 BaseEnemy::InitScale_ = Vector3::UnitVector()*1.6f;
 
 BaseEnemy::BaseEnemy() {
 
