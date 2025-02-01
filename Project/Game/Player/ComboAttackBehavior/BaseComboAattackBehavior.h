@@ -24,6 +24,6 @@ public:
 	virtual void Update()=0;   /// 更新
 	virtual void Debug() = 0;  /// デバッグ
 
-	virtual void ChangeNextComboFragForButton();
+	virtual void PreOderNextComboForButton();
 	virtual void ChangeNextCombo(std::unique_ptr<BaseComboAattackBehavior>nextCombo);
 };

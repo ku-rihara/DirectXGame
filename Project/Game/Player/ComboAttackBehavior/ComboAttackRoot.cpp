@@ -41,7 +41,7 @@ void ComboAttackRoot::Update() {
 	{
 	case AttackPatern::NORMAL:
 		/// 通常攻撃
-		BaseComboAattackBehavior::ChangeNextComboFragForButton();
+		BaseComboAattackBehavior::PreOderNextComboForButton();
 		if (!isNextCombo_) break;
 			BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackFirst>(pPlayer_));
 		
@@ -49,7 +49,7 @@ void ComboAttackRoot::Update() {
 		break;
 	case AttackPatern::JUMP:
 		/// ジャンプ攻撃
-		BaseComboAattackBehavior::ChangeNextComboFragForButton();
+		BaseComboAattackBehavior::PreOderNextComboForButton();
 		if (!isNextCombo_) break;
 		BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackJumpFirst>(pPlayer_));
 

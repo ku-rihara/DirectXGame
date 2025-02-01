@@ -105,7 +105,7 @@ void ComboAttackSecond::Update() {
 		pPlayer_->GetLeftHand()->SetWorldPosition(punchPosition_);
 
 		/// ボタンで次のコンボ
-		BaseComboAattackBehavior::ChangeNextComboFragForButton();//コントローラジャンプ	
+		BaseComboAattackBehavior::PreOderNextComboForButton();//コントローラジャンプ	
 
 		// イージング終了時の処理
 		if (punchEase_.time <= 0.0f) {
@@ -123,7 +123,7 @@ void ComboAttackSecond::Update() {
 			(std::make_unique<ComboAttackRoot>(pPlayer_));
 		}
 		else {
-			BaseComboAattackBehavior::ChangeNextComboFragForButton();
+			BaseComboAattackBehavior::PreOderNextComboForButton();
 
 			BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackThird>(pPlayer_));
 		}

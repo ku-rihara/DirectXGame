@@ -128,7 +128,7 @@ void ComboAttackFirst::Update() {
 		///----------------------------------------------------
 		/// バックパンチ
 		///----------------------------------------------------
-		BaseComboAattackBehavior::ChangeNextComboFragForButton();
+		BaseComboAattackBehavior::PreOderNextComboForButton();
 
 		collisionBox_->IsAdapt(false);
 
@@ -157,7 +157,7 @@ void ComboAttackFirst::Update() {
 		}
 		else {
 			/// ボタンで次のコンボ
-		BaseComboAattackBehavior::ChangeNextComboFragForButton();
+		BaseComboAattackBehavior::PreOderNextComboForButton();
 		BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackSecond>(pPlayer_));
 		}
 	}

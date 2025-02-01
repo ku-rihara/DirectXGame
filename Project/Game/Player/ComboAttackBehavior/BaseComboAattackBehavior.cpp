@@ -7,7 +7,7 @@
 ///  コンボ移動フラグ処理
 /// </summary>
 /// <param name="nextCombo"></param>
-void BaseComboAattackBehavior::ChangeNextComboFragForButton() {
+void BaseComboAattackBehavior::PreOderNextComboForButton() {
   
     if (Input::GetInstance()->TrrigerKey(DIK_H)) {
         isNextCombo_ = true;

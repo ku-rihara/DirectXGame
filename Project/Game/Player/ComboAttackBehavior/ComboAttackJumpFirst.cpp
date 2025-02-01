@@ -97,7 +97,7 @@ void ComboAttackJumpFirst::Update() {
 	/// 着地
 	///---------------------------------------------------------
 	   
-		BaseComboAattackBehavior::ChangeNextComboFragForButton();//次のコンボに移行可能
+		BaseComboAattackBehavior::PreOderNextComboForButton();//次のコンボに移行可能
 
 		/// スケール変化
 		landScaleEasing_.time += Frame::DeltaTimeRate();
@@ -141,7 +141,7 @@ void ComboAttackJumpFirst::Update() {
 			step_ = STEP::RETURNROOT;
 		}
 		else {
-			BaseComboAattackBehavior::ChangeNextComboFragForButton();//次のコンボに移行可能
+			BaseComboAattackBehavior::PreOderNextComboForButton();//次のコンボに移行可能
 			BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackJumpSecond>(pPlayer_));
 		}
 		break;

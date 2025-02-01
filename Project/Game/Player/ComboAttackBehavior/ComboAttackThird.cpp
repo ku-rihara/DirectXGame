@@ -87,7 +87,7 @@ void ComboAttackThird::Update() {
 		if (upperJumpEaseT_ >= kCollisionAliveTime_) {
 			collisionBox_->IsAdapt(false);
 			/// ボタンで次のコンボ
-			BaseComboAattackBehavior::ChangeNextComboFragForButton();
+			BaseComboAattackBehavior::PreOderNextComboForButton();
 		}
 		else {
 			collisionBox_->IsAdapt(true);
@@ -127,7 +127,7 @@ void ComboAttackThird::Update() {
 
 		else {			
 			/// ボタンで次のコンボ
-			BaseComboAattackBehavior::ChangeNextComboFragForButton();
+			BaseComboAattackBehavior::PreOderNextComboForButton();
 			BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackForth>(pPlayer_));
 		}
 

@@ -2,6 +2,7 @@
 #include"ComboAttackFirst.h"
 #include"ComboAttackRoot.h"
 #include"ComboAttackForth.h"
+#include"ComboAttackJumpFirst.h"
 
 /// objs
 #include"Player/Player.h"
@@ -173,6 +174,10 @@ void ComboAttackForth::Update() {
 		// レール更新と座標反映
 		pPlayer_->GetLeftHand()->RailForthComboUpdate(-pPlayer_->GetLeftHand()->GetRailRunSpeedForth());
 
+			/// コンボ先行予約
+			BaseComboAattackBehavior::PreOderNextComboForButton();
+			
+
 		// イージング終了時の処理
 		if (thrustRailManager_->GetRailMoveTime() > 0.0f) break;
 
@@ -189,14 +194,22 @@ void ComboAttackForth::Update() {
 		waitTine_ += Frame::DeltaTimeRate();
 		pPlayer_->Fall(fallInitSpeed_);
 
-		if (pPlayer_->GetWorldPosition().y > pPlayer_->InitY_)break;
-		if (waitTine_ < pPlayer_->GetWaitTime(Player::FORTH)) break;
+		if (pPlayer_->GetWorldPosition().y <= pPlayer_->InitY_) {
+			
+			if (waitTine_ >= pPlayer_->GetWaitTime(Player::FORTH)) {
 
-		pPlayer_->GetRightHand()->SetBlendModeAdd();
-		pPlayer_->GetLeftHand()->SetBlendModeAdd();
-		Frame::SetTimeScale(1.0f);
+				pPlayer_->GetRightHand()->SetBlendModeAdd();
+				pPlayer_->GetLeftHand()->SetBlendModeAdd();
+				Frame::SetTimeScale(1.0f);
 
-			pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));	
+				pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
+			}
+		}
+		else {
+			/// ボタンで次のコンボ
+			BaseComboAattackBehavior::PreOderNextComboForButton();
+			BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackJumpFirst>(pPlayer_));
+		}
 	}
 
 }
