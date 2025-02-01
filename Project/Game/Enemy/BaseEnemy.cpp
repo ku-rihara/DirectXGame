@@ -58,7 +58,7 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 
 	/// particleD
 	damageName_ = "DamageParticle";
-	damageEmitter_.reset(ParticleEmitter::CreateParticle(damageName_, "Plane", ".obj", 300));
+	damageEmitter_.reset(ParticleEmitter::CreateParticle(damageName_, "Plane", ".obj", 600));
 	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
 	damageEmitter_->SetTextureHandle(handle);
 

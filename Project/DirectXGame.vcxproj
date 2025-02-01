@@ -89,6 +89,7 @@
     <ClCompile Include="Game\GameCamera\Behavior\BaseGameCameraBehavior.cpp" />
     <ClCompile Include="Game\GameCamera\Behavior\GameCameraRoot.cpp" />
     <ClCompile Include="Game\GameCamera\Behavior\GameCameraShake.cpp" />
+    <ClCompile Include="Game\GameCamera\Behavior\GameCameraZoomInOut.cpp" />
     <ClCompile Include="Game\GameCamera\GameCamera.cpp" />
     <ClCompile Include="Game\Ground\Ground.cpp" />
     <ClCompile Include="Game\JoyState\JoyState.cpp" />
@@ -224,6 +225,7 @@
     <ClInclude Include="Game\GameCamera\Behavior\BaseGameCameraBehavior.h" />
     <ClInclude Include="Game\GameCamera\Behavior\GameCameraRoot.h" />
     <ClInclude Include="Game\GameCamera\Behavior\GameCameraShake.h" />
+    <ClInclude Include="Game\GameCamera\Behavior\GameCameraZoomInOut.h" />
     <ClInclude Include="Game\GameCamera\GameCamera.h" />
     <ClInclude Include="Game\Ground\Ground.h" />
     <ClInclude Include="Game\JoyState\JoyState.h" />

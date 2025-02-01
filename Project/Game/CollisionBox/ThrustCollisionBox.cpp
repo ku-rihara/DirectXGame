@@ -1,4 +1,6 @@
 #include"ThrustCollisionBox.h"
+#include"Enemy/BaseEnemy.h"
+#include"Frame/Frame.h"
 #include<imgui.h>
 
 void ThrustCollisionBox::Init() {
@@ -6,6 +8,7 @@ void ThrustCollisionBox::Init() {
 }
 
 void ThrustCollisionBox::Update() {
+
 	BaseAABBCollisionBox::Update();
 }
 
@@ -31,4 +34,11 @@ void ThrustCollisionBox::SetOffset(const Vector3& offset) {
 
 void ThrustCollisionBox::IsAdapt(bool is) {
 	BaseAABBCollisionBox::IsAdapt(is);
+}
+
+void ThrustCollisionBox::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
+	if (dynamic_cast<BaseEnemy*>(other)) {
+		isSlow_ = true;
+
+	}
 }

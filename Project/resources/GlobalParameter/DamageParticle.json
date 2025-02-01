@@ -1,85 +1,101 @@
 {
-    "DamageParticle": {
-        "BaseColor": [
-            0.9529411792755127,
-            0.16470588743686676,
-            0.0,
-            0.0
-        ],
-        "Color Max": [
-            0.1882352977991104,
-            0.16078431904315948,
-            0.10196078568696976,
-            0.0
-        ],
-        "Color Min": [
-            0.0941176488995552,
-            0.21176470816135406,
-            0.12941177189350128,
-            0.0
-        ],
-        "Gravity": 0.0,
-        "IntervalTime": 0.00000000149011612,
-        "LifeTime": 0.5,
-        "Particle Count": 15,
-        "Position Base": [
-            0.0,
-            0.0,
-            0.0
-        ],
-        "Position Max": [
-            1.0,
-            1.0,
-            1.0
-        ],
-        "Position Min": [
-            -1.0,
-            -1.0,
-            -1.0
-        ],
-        "Rotate Base": [
-            0.0,
-            0.0,
-            0.0
-        ],
-        "Rotate Max": [
-            0.0,
-            0.0,
-            0.0
-        ],
-        "Rotate Min": [
-            0.0,
-            0.0,
-            0.0
-        ],
-        "RotateSpeed Base": [
-            0.0,
-            0.0,
-            0.0
-        ],
-        "RotateSpeed Max": [
-            0.0,
-            0.0,
-            0.0
-        ],
-        "RotateSpeed Min": [
-            0.0,
-            0.0,
-            0.0
-        ],
-        "Scale Max": 0.20000000149011612,
-        "Scale Min": 1.0,
-        "Velocity Max": [
-            6.300000190734863,
-            8.199999809265137,
-            6.0
-        ],
-        "Velocity Min": [
-            -7.199999809265137,
-            -7.900000095367432,
-            -9.800000190734863
-        ],
-        "isMoveForRail": false,
-        "moveSpeed": 0.0
-    }
+  "DamageParticle": {
+    "AdaptRotateIsX": false,
+    "AdaptRotateIsY": false,
+    "AdaptRotateIsZ": true,
+    "BaseColor": [
+      0.9656862616539001,
+      0.08994137495756149,
+      0.08994137495756149,
+      0.0
+    ],
+    "Color Max": [
+      0.09019608050584793,
+      0.09019608050584793,
+      0.0,
+      0.0
+    ],
+    "Color Min": [
+      0.1764705926179886,
+      0.0,
+      0.062745101749897,
+      0.0
+    ],
+    "Gravity": -19.299999237060547,
+    "IntervalTime": 0.0,
+    "LifeTime": 0.4000000059604645,
+    "Particle Count": 30,
+    "Position Base": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Position Max": [
+      2.700000047683716,
+      0.4000000059604645,
+      3.0999999046325684
+    ],
+    "Position Min": [
+      1.100000023841858,
+      -0.800000011920929,
+      -2.5
+    ],
+    "Rotate Base": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Rotate Max": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Rotate Min": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "RotateSpeed Base": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "RotateSpeed Max": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "RotateSpeed Min": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale Max": 1.0,
+    "Scale Min": 1.0,
+    "ScaleV3 Max": [
+      0.5,
+      3.0,
+      1.0
+    ],
+    "ScaleV3 Min": [
+      0.5,
+      3.0,
+      1.0
+    ],
+    "Velocity Max": [
+      26.200000762939453,
+      22.200000762939453,
+      0.0
+    ],
+    "Velocity Min": [
+      -22.899999618530273,
+      10.0,
+      0.0
+    ],
+    "isBillBord": true,
+    "isMoveForRail": false,
+    "isRotateforDirection": true,
+    "isScalerScale": false,
+    "moveSpeed": 0.0
+  }
 }

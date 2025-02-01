@@ -52,8 +52,10 @@ ComboAttackForth::ComboAttackForth(Player* player)
 	startEasing_.amplitude = 0.6f;
 	startEasing_.period = 0.2f;
 
-	order_ = Order::FIRSTWAIT; // 振る舞い順序初期化
+	timeDownTime_ = 0.6f;
+	istimeSlow_ = false;
 
+	order_ = Order::FIRSTWAIT; // 振る舞い順序初期化
 	fallInitSpeed_ = 0.0f;
 }
 
@@ -69,12 +71,17 @@ void ComboAttackForth::Update() {
 	pPlayer_->SetScale(EaseAmplitudeScale(Vector3::UnitVector(), startEasing_.time, startEasing_.maxTime,
 		startEasing_.amplitude, startEasing_.period));
 
+	/*pPlayer_->Move(0.01f);*/
 
+	// スロータイム
+	if (istimeSlow_) {
+		timeDownTime_ += Frame::DeltaTime();
+		if (timeDownTime_ <timeDownTime_)return ;
+		Frame::SetTimeScale(1.0f);
+	}
 
 	switch (order_) {
 	case Order::FIRSTWAIT:
-
-	
 
 		///----------------------------------------------------
 		/// 最初の硬直
@@ -104,7 +111,6 @@ void ComboAttackForth::Update() {
 		pPlayer_->GetRightHand()->RailForthComboUpdate(0.0f);
 
 		stopCollisionBox_->IsAdapt(false);
-		thrustCollisionBox_->IsAdapt(true);
 		order_ = Order::RBACKPUNCH;
 
 		break;
@@ -122,7 +128,7 @@ void ComboAttackForth::Update() {
 
 		stopRailManager_->SetRailMoveTime(0.0f);
 		pPlayer_->GetRightHand()->RailForthComboUpdate(0.0f);
-	
+		thrustCollisionBox_->IsAdapt(true);
 
 		order_ = Order::LPUNCH;
 		break;
@@ -136,6 +142,12 @@ void ComboAttackForth::Update() {
 		pPlayer_->GetLeftHand()->RailForthComboUpdate(pPlayer_->GetLeftHand()->GetRailRunSpeedForth());
 		thrustCollisionBox_->SetPosition(pPlayer_->GetLeftHand()->GetWorldPosition());
 		thrustCollisionBox_->Update();
+
+		//デルタタイムスケール小さく
+		if(thrustCollisionBox_->GetIsSlow()&&!istimeSlow_){ 
+			Frame::SetTimeScale(0.1f);
+			istimeSlow_ = true;
+		}
 
 		// イージング終了時の処理
 		if (thrustRailManager_->GetRailMoveTime() < 1.0f) break;
@@ -177,6 +189,8 @@ void ComboAttackForth::Update() {
 
 		pPlayer_->GetRightHand()->SetBlendModeAdd();
 		pPlayer_->GetLeftHand()->SetBlendModeAdd();
+		Frame::SetTimeScale(1.0f);
+
 			pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));	
 	}
 

@@ -60,6 +60,7 @@ void ComboAttackSecond::Update() {
 	pPlayer_->SetScale(EaseAmplitudeScale(Vector3::UnitVector(), startEasing_.time, startEasing_.maxTime,
 		startEasing_.amplitude, startEasing_.period));
 
+	pPlayer_->Move(0.01f);
 
 
 	switch (order_) {

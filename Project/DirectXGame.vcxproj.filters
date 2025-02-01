@@ -580,6 +580,9 @@
     <ClCompile Include="Engine\Lighrt\AreaLight.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
     </ClCompile>
+    <ClCompile Include="Game\GameCamera\Behavior\GameCameraZoomInOut.cpp">
+      <Filter>Game\GameCamera\Behavior</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -986,6 +989,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Lighrt\AreaLight.h">
       <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameCamera\Behavior\GameCameraZoomInOut.h">
+      <Filter>Game\GameCamera\Behavior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

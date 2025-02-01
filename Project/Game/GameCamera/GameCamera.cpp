@@ -18,8 +18,14 @@
 void GameCamera::Init() {
 	viewprojection_.Init();
 
-	rotate_ = 8.9f;
-	offset_ = { 5,9,-22.0f };
+	firstOffset_ = { 5,13,-29.0f };
+	zoomOffset_  = { 0,0,-0 };
+	firstRotate_ = 14.25f;
+	zoomORotate_ = 0.0f;
+
+
+	rotate_ = firstRotate_;
+	offset_ = firstOffset_;
 
 	ChangeBehavior(std::make_unique<GameCameraRoot>(this));
 }

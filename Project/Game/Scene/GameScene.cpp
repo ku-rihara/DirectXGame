@@ -148,8 +148,9 @@ void GameScene::ModelDraw() {
 	if (isDraw) {
 		skydome_->Draw(viewProjection_);
 		field_->Draw(viewProjection_);
-		enemyManager_->Draw(viewProjection_);
 		player_->Draw(viewProjection_);
+		enemyManager_->Draw(viewProjection_);
+		
 		
 	}
 }

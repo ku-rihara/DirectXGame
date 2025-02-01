@@ -13,18 +13,6 @@ void BaseAABBCollisionBox::Draw() {
 
 }
 
-void BaseAABBCollisionBox::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
-	BaseCollider::OnCollisionEnter(other);
-}
-
-void BaseAABBCollisionBox::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
-	BaseCollider::OnCollisionStay(other);
-
-}
-void BaseAABBCollisionBox::OnCollisionExit([[maybe_unused]] BaseCollider* other) {
-	BaseCollider::OnCollisionExit(other);
-}
-
 Vector3 BaseAABBCollisionBox::GetCollisionPos() const {
 
 	// ワールド座標に変換
