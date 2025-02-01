@@ -6,7 +6,7 @@
 void StrongEnemy::Init(const Vector3& spownPos) {
 	BaseEnemy::Init(spownPos);
 	BaseObject::CreateModel("StrongEnemy", ".obj");
-	damageParm_ = 0.1f;
+	damageParm_ = 5.0f;
 }
 
 ///========================================================

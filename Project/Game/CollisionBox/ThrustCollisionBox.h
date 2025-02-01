@@ -19,6 +19,7 @@ public:
 	void SetOffset(const Vector3& offset)override;
 	
 	void OnCollisionEnter([[maybe_unused]] BaseCollider* other)override;
+	void OnCollisionStay([[maybe_unused]] BaseCollider* other)override;
 
 	bool GetIsSlow()const { return isSlow_; }
 	void SetIsSlow(const bool& is) { isSlow_ = is; }

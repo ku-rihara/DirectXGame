@@ -204,6 +204,7 @@ void EnemyManager::ImGuiUpdate() {
 	for (size_t waveIndex = 0; waveIndex < phase.waves.size(); ++waveIndex) {
 		auto& wave = phase.waves[waveIndex];
 		if (ImGui::CollapsingHeader(std::format("Wave {}", waveIndex).c_str())) {
+			ImGui::PushID(std::format("Wave {}", waveIndex).c_str());
 			ImGui::DragFloat("Start Time", &wave.startTime, 0.1f);
 
 			///--------------------------------------------------------
@@ -297,6 +298,7 @@ void EnemyManager::ImGuiUpdate() {
 
 				ImGui::PopID();
 			}
+			ImGui::PopID();
 		}
 		///-----------------------------------------------------------------------------------------
 		/// Wave
@@ -304,11 +306,13 @@ void EnemyManager::ImGuiUpdate() {
 
 		ImGui::SeparatorText("Wave");
 																							
-		// Remove Wave: 赤色
+		// Remove Wave ボタン
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 0.2f, 0.2f, 1.0f));  // 赤色に変更
 		if (ImGui::Button(std::format("Remove Wave ##{}", waveIndex).c_str())) {
-			phase.waves.erase(phase.waves.begin() + waveIndex);
+			// ボタンが押されたらまず Push した分を Pop し、その後ループから抜ける
 			ImGui::PopStyleColor();
+			phase.waves.erase(phase.waves.begin() + waveIndex);
+			break;  // 削除後はループから抜ける
 		}
 		ImGui::PopStyleColor();
 	}

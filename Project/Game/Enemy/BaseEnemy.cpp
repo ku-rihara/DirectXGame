@@ -288,7 +288,7 @@ bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
 void BaseEnemy::DamageForPar(const float& par) {
 
 	//割合によるインクる面とする値を決める
-	float decrementSize = HPMax_ * par;
+	float decrementSize = HPMax_ * (par/100.0f);
 	// HP減少
 	hp_ -= decrementSize;
 

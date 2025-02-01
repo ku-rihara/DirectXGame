@@ -18,9 +18,9 @@ GameCameraZoomInOut::GameCameraZoomInOut(GameCamera* gameCamera)
 	/// ===================================================
 
 	 
-	 inEase_.maxTime = 0.4f;
-	 outEase_.maxTime = 0.4f;
-	 kWaitTime_ = 1.0f;
+	 inEase_.maxTime = 0.2f;
+	 outEase_.maxTime = 0.2f;
+	 kWaitTime_ = 0.6f;
 
 	 shakeTMax_ = kWaitTime_+ inEase_.maxTime;
 	 shakeT_ = shakeTMax_;
@@ -50,6 +50,7 @@ void GameCameraZoomInOut::Update() {
 
 		// next
 		if (inEase_.time < inEase_.maxTime)break;	
+		pGameCamera_->SetOffSet(pGameCamera_->GetZoomOffset());
 		inEase_.time = inEase_.maxTime;
 			step_ = Step::WAIT;
 		
@@ -81,6 +82,7 @@ void GameCameraZoomInOut::Update() {
 
 		// next
 		if (outEase_.time < outEase_.maxTime)break;
+		pGameCamera_->SetOffSet(pGameCamera_->GetFirstOffset());
 		outEase_.time = outEase_.maxTime;
 		step_ = Step::RETURNROOT;
 	

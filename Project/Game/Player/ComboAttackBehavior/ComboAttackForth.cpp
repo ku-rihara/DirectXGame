@@ -5,6 +5,7 @@
 
 /// objs
 #include"Player/Player.h"
+#include"GameCamera/GameCamera.h"
 
 /// frame
 #include"Frame/Frame.h"
@@ -52,7 +53,8 @@ ComboAttackForth::ComboAttackForth(Player* player)
 	startEasing_.amplitude = 0.6f;
 	startEasing_.period = 0.2f;
 
-	timeDownTime_ = 0.6f;
+	kTimeDownTime_ = 1.1f;
+	timeDownTime_ = 0.0f;
 	istimeSlow_ = false;
 
 	order_ = Order::FIRSTWAIT; // 振る舞い順序初期化
@@ -73,11 +75,20 @@ void ComboAttackForth::Update() {
 
 	/*pPlayer_->Move(0.01f);*/
 
+	//デルタタイムスケール小さく
+	if (thrustCollisionBox_->GetIsSlow() && !istimeSlow_) {
+		Frame::SetTimeScale(0.01f);
+		pPlayer_->GetGameCamera()->ChangeZoomInOut();
+		istimeSlow_ = true;
+	}
+
+
 	// スロータイム
 	if (istimeSlow_) {
 		timeDownTime_ += Frame::DeltaTime();
-		if (timeDownTime_ <timeDownTime_)return ;
-		Frame::SetTimeScale(1.0f);
+		if (timeDownTime_ >= kTimeDownTime_) {
+			Frame::SetTimeScale(1.0f);
+		}
 	}
 
 	switch (order_) {
@@ -143,12 +154,6 @@ void ComboAttackForth::Update() {
 		thrustCollisionBox_->SetPosition(pPlayer_->GetLeftHand()->GetWorldPosition());
 		thrustCollisionBox_->Update();
 
-		//デルタタイムスケール小さく
-		if(thrustCollisionBox_->GetIsSlow()&&!istimeSlow_){ 
-			Frame::SetTimeScale(0.1f);
-			istimeSlow_ = true;
-		}
-
 		// イージング終了時の処理
 		if (thrustRailManager_->GetRailMoveTime() < 1.0f) break;
 
@@ -181,7 +186,7 @@ void ComboAttackForth::Update() {
 
 	case Order::WAIT:
 	
-		waitTine_ += Frame::DeltaTime();
+		waitTine_ += Frame::DeltaTimeRate();
 		pPlayer_->Fall(fallInitSpeed_);
 
 		if (pPlayer_->GetWorldPosition().y > pPlayer_->InitY_)break;

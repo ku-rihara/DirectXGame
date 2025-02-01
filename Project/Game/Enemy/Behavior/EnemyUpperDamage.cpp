@@ -15,7 +15,7 @@ EnemyUpperDamage::EnemyUpperDamage(BaseEnemy* boss)
 	: BaseEnemyBehaivor("EnemyUpperDamage", boss) {
 
 	
-	speed_ = 1.5f*60.0f; 
+	speed_ = 1.35f*60.0f; 
 	gravity_ = 3.5f * 60.0f;
 	fallSpeedLimit_ = -0.0f;
 	stopTime_ = 0.0f;

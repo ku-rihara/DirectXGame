@@ -34,6 +34,7 @@ private:
 	float fallInitSpeed_;
 
 	float timeDownTime_;
+	float kTimeDownTime_;
 	bool istimeSlow_;
 
 	// collision

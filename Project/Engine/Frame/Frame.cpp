@@ -21,7 +21,7 @@ void Frame::Update() {
     // 経過時間（秒）を計算
     auto currentTime = std::chrono::steady_clock::now();
     std::chrono::duration<float> frameTime = currentTime - lastTime_;
-    deltaTime_ = frameTime.count();
+    deltaTime_ = frameTime.count();  
     deltaTimeRate_ = deltaTime_ * timeScale_;
     lastTime_ = currentTime;
 }

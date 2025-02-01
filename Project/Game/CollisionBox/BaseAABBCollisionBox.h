@@ -27,9 +27,9 @@ public:
 	virtual void SetOffset(const Vector3& offset);
 	
 	// 当たり
-	 /*void OnCollisionEnter([[maybe_unused]] BaseCollider* other)override;
-	 void OnCollisionStay([[maybe_unused]] BaseCollider* other)override;
-	 void OnCollisionExit([[maybe_unused]] BaseCollider* other) override;*/
+	virtual void OnCollisionEnter([[maybe_unused]] BaseCollider* other)override;
+	virtual void OnCollisionStay([[maybe_unused]] BaseCollider* other)override;
+	/* void OnCollisionExit([[maybe_unused]] BaseCollider* other) override;*/
 
 	virtual Vector3 GetCollisionPos() const override;
 };

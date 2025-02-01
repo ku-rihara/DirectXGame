@@ -52,6 +52,7 @@ public:
 	Vector3 GetWorldPos() const;
 
 	void ChangeShakeMode();
+	void ChangeZoomInOut();
 	void ChangeBehavior(std::unique_ptr<BaseGameCameraBehavior>behavior);
 
 	/// ===================================================

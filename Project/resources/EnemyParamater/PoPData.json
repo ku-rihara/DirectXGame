@@ -141,71 +141,13 @@
                                     "y": 0.0,
                                     "z": 24.100000381469727
                                 }
-                            },
-                            {
-                                "enemyType": "StrongEnemy",
-                                "position": {
-                                    "x": -7.5,
-                                    "y": 0.0,
-                                    "z": 29.799999237060547
-                                }
                             }
                         ]
                     }
                 ],
                 "startTime": 20.179000854492188
-            },
-            {
-                "spawns": [
-                    {
-                        "spawnTime": 2.0,
-                        "spownEnemies": [
-                            {
-                                "enemyType": "NormalEnemy",
-                                "position": {
-                                    "x": -20.799999237060547,
-                                    "y": 0.0,
-                                    "z": -6.199999809265137
-                                }
-                            },
-                            {
-                                "enemyType": "NormalEnemy",
-                                "position": {
-                                    "x": -7.900000095367432,
-                                    "y": 0.0,
-                                    "z": 22.5
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "spawnTime": 7.0,
-                        "spownEnemies": [
-                            {
-                                "enemyType": "StrongEnemy",
-                                "position": {
-                                    "x": -33.29999923706055,
-                                    "y": 0.0,
-                                    "z": 15.800000190734863
-                                }
-                            },
-                            {
-                                "enemyType": "StrongEnemy",
-                                "position": {
-                                    "x": 38.099998474121094,
-                                    "y": 0.0,
-                                    "z": -49.0
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "spawnTime": 2.0
-                    }
-                ],
-                "startTime": 40.42300033569336
             }
         ]
     },
-    "isEditorMode": true
+    "isEditorMode": false
 }

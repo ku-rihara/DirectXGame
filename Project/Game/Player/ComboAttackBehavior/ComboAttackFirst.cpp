@@ -174,7 +174,7 @@ void ComboAttackFirst::ChangeSpeedForLockOn() {
 	// 距離
 	float distance = differectialVector.Length();
 	// 距離しきい値
-	const float threshold = 1.2f;
+	const float threshold = 2.2f;
 
 	// しきい値より離れていない場合は終了
 	if (distance <= threshold) {

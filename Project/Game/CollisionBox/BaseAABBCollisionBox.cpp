@@ -36,3 +36,11 @@ void BaseAABBCollisionBox::SetOffset(const Vector3& offset) {
 void BaseAABBCollisionBox::IsAdapt(bool is) {
 	SetIsCollision(is);
 }
+
+void  BaseAABBCollisionBox::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
+
+}
+
+void  BaseAABBCollisionBox::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
+
+}

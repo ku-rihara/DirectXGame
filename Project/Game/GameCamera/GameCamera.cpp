@@ -10,6 +10,7 @@
 // behavior
 #include"Behavior/GameCameraRoot.h"
 #include"Behavior/GameCameraShake.h"
+#include"Behavior/GameCameraZoomInOut.h"
 /// std
 #include<numbers>
 #include<imgui.h>
@@ -19,9 +20,9 @@ void GameCamera::Init() {
 	viewprojection_.Init();
 
 	firstOffset_ = { 5,13,-29.0f };
-	zoomOffset_  = { 0,0,-0 };
+	zoomOffset_  = { 0.0f,4.795f,-16.0f };
 	firstRotate_ = 14.25f;
-	zoomORotate_ = 0.0f;
+	zoomORotate_ = 5.7f;
 
 
 	rotate_ = firstRotate_;
@@ -168,6 +169,12 @@ void GameCamera::ChangeBehavior(std::unique_ptr<BaseGameCameraBehavior>behavior)
 }
 
 void GameCamera::ChangeShakeMode() {
-	if (dynamic_cast<GameCameraShake*>(behavior_.get()))return;
+
+	if (!dynamic_cast<GameCameraRoot*>(behavior_.get()))return;
 	ChangeBehavior(std::make_unique<GameCameraShake>(this));
+}
+
+void GameCamera::ChangeZoomInOut() {
+	if (!dynamic_cast<GameCameraRoot*>(behavior_.get()))return;
+	ChangeBehavior(std::make_unique<GameCameraZoomInOut>(this));
 }
