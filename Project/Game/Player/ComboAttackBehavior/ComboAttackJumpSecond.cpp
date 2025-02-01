@@ -58,7 +58,7 @@ void ComboAttackJumpSecond::Update() {
 		///---------------------------------------------------------
 		/// 着地
 		///---------------------------------------------------------
-		
+		emitter_->SetTargetPosition(pPlayer_->GetWorldPosition());
 		emitter_->Update();
 		emitter_->Emit();
 
