@@ -23,8 +23,8 @@ void TitleScene::Init() {
 
 	
 
-	emitter_.reset(ParticleEmitter::CreateParticle("rushParticle", "Plane", ".obj", 500));
-	uint32_t t=TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
+	emitter_.reset(ParticleEmitter::CreateParticle("ThrustDamage", "cube", ".obj", 900));
+	uint32_t t=TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
 	emitter_->SetTextureHandle(t);
 
 }
