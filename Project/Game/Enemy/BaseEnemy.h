@@ -57,7 +57,7 @@ protected:
 	std::unique_ptr<BaseEnemyMoveBehavior>moveBehavior_ = nullptr;
 
 	/// エミッター
-	std::unique_ptr<ParticleEmitter>emitter_;
+	
 	std::list<std::unique_ptr<Effect>> effects_;
 public:
 	static float InitY_;

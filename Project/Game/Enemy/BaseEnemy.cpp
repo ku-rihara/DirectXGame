@@ -51,10 +51,10 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	transform_.scale_ = Vector3::ZeroVector();
 
 	/// particleT
-	thrustName_ = "TrushParticle";
-	thrustEmit_.reset(ParticleEmitter::CreateParticle(thrustName_, "Stick",".obj", 200));
-	thrustEmit_->SetBlendMode(BlendMode::None);
-	thrustEmit_->SetIsRotateForDirection(true);
+	thrustName_ = "ThrustDamage";
+	thrustEmit_.reset(ParticleEmitter::CreateParticle(thrustName_, "cube", ".obj", 900));
+	uint32_t t = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
+	thrustEmit_->SetTextureHandle(t);
 
 	/// particleD
 	damageName_ = "DamageParticle";

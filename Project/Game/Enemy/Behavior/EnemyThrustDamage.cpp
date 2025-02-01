@@ -95,7 +95,6 @@ void EnemyThrustDamage::Update() {
 		/// ------------------------------------------------------
 		/// 次の振る舞い
 		///---------------------------------------------------------
-		pBaseEnemy_->ThrustEmit();
 		pBaseEnemy_->FallEffectInit(pBaseEnemy_->GetWorldPosition());
 		pBaseEnemy_->SetColor(Vector4(1.0f, 1, 1, 1.0f));
 		pBaseEnemy_->SetWorldPositionY(BaseEnemy::InitY_);

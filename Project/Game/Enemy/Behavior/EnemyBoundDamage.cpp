@@ -31,7 +31,7 @@ EnemyBoundDamage::~EnemyBoundDamage() {
 }
 
 void EnemyBoundDamage::Update() {
-	
+
 	
 	switch (step_)
 	{
@@ -41,6 +41,7 @@ void EnemyBoundDamage::Update() {
 	/// ------------------------------------------------------
 	/// ヒットバッグ
 	///---------------------------------------------------------
+		pBaseEnemy_->ThrustEmit();
 		// Yに加算
 		pBaseEnemy_->AddPosition(Vector3(0, speed_, 0));
 
