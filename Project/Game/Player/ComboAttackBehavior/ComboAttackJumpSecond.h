@@ -3,6 +3,7 @@
 #include"BaseComboAattackBehavior.h"
 #include"Easing.h"
 #include"CollisionBox/RushCollisionBox.h"
+#include"utility/Particle/ParticleEmitter.h"
 
 class ComboAttackJumpSecond : public BaseComboAattackBehavior {
 	enum class STEP {
@@ -30,6 +31,7 @@ private:
 	Vector3 rushTargetPos_;
 
 	std::unique_ptr<RushCollisionBox>rushCollisionBox_;
+	std::unique_ptr<ParticleEmitter>emitter_;
 
 	///wait
 	float waitTime_;

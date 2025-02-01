@@ -37,6 +37,8 @@ ComboAttackJumpSecond::ComboAttackJumpSecond(Player* player)
 	
 	rushEaseTime_ = 0.0f;
 
+	emitter_.reset(ParticleEmitter::CreateParticle("rushParticle", "Plane", ".obj", 700));
+	emitter_->SetTextureHandle(pPlayer_->GetCircleTexture());
 
 
 	step_ = STEP::RUSH; // 突進
@@ -56,6 +58,10 @@ void ComboAttackJumpSecond::Update() {
 		///---------------------------------------------------------
 		/// 着地
 		///---------------------------------------------------------
+		
+		emitter_->Update();
+		emitter_->Emit();
+
 		handMoveEasing_.time += Frame::DeltaTimeRate();
 		rushEaseTime_ += Frame::DeltaTimeRate();
 

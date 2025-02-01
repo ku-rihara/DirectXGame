@@ -102,6 +102,7 @@ private:
 	std::string fallParticleName_;
 	std::unique_ptr<ParticleEmitter>fallEmitter_;
 
+	uint32_t cirlceTexture_;
 
 public:
 	static float InitY_;
@@ -167,6 +168,7 @@ public:
 	float               GetUpperPosY()       const        { return upperPosY_; }
 	BasePlayerBehavior* GetBehavior()        const        { return behavior_.get();}
 	BaseTitleBehavior*  GetTitleBehavior()   const        { return titleBehavior_.get(); }
+	uint32_t            GetCircleTexture()   const        { return cirlceTexture_; }
 	/// ===================================================
 	/// setter
 	/// ===================================================

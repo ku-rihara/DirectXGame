@@ -42,6 +42,8 @@ void Player::Init() {
 	BaseObject::CreateModel("Player",".obj");/// モデルセット
 	fallParticleName_ = "fallParticle";
 
+	cirlceTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
+
 	///* グローバルパラメータ
 	globalParameter_ = GlobalParameter::GetInstance();
 	globalParameter_->CreateGroup(groupName_, false);
