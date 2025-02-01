@@ -4,10 +4,10 @@
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": false,
         "BaseColor": [
-            0.07843136787414551,
-            0.07843136787414551,
-            0.07843136787414551,
-            0.0
+            0.12254899740219116,
+            0.12254899740219116,
+            0.12254899740219116,
+            1.0
         ],
         "Color Max": [
             0.0,
@@ -24,7 +24,7 @@
         "Gravity": 0.0,
         "IntervalTime": 0.12999999523162842,
         "LifeTime": 0.6000000238418579,
-        "Particle Count": 3,
+        "Particle Count": 5,
         "Position Base": [
             0.0,
             0.0,
@@ -65,8 +65,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 2.0,
-        "Scale Min": 1.399999976158142,
+        "Scale Max": 4.0,
+        "Scale Min": 3.0,
         "ScaleV3 Max": [
             0.0,
             0.0,
@@ -79,12 +79,12 @@
         ],
         "Velocity Max": [
             0.0,
-            5.0,
+            12.100000381469727,
             0.0
         ],
         "Velocity Min": [
             0.0,
-            3.0,
+            15.800000190734863,
             0.0
         ],
         "isBillBord": true,
