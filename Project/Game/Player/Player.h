@@ -65,6 +65,8 @@ private:
 	GameCamera* pGameCamera_;
 	std::unique_ptr<PlayerHandLeft>leftHand_;    /// 左手
 	std::unique_ptr<PlayerHandRight>rightHand_;  /// 右手
+	std::unique_ptr<Object3d>headObj_;
+	WorldTransform headTransform_;
 	std::list<std::unique_ptr<Effect>> effects_;
 
 	/// move
@@ -189,4 +191,6 @@ public:
 	float GetJWaitTime     (JumpComboNum index)const;
 	float GetJPunchEaseMax (JumpComboNum index)const;
 	float GetJPunchReach   (JumpComboNum index)const;
+
+	void SetHeadRotateX(const float& zrotate) { headTransform_.rotation_.x = zrotate; }
 };

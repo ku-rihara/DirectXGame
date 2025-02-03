@@ -2,7 +2,7 @@
 #include"ComboAttackThird.h"
 #include"ComboAttackRoot.h"
 #include"ComboAttackForth.h"
-
+#include<numbers>
 /// objs
 #include"Player/Player.h"
 
@@ -46,9 +46,8 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	startEasing_.amplitude = 0.6f;
 	startEasing_.period = 0.2f;
 
-	pPlayer_->GetRightHand()->SetBlendModeSub();
-	pPlayer_->GetLeftHand()->SetBlendModeSub();
-
+	rotateEase_.time = 0.0f;
+	rotateEase_.maxTime = 0.7f;
 
 	// 振る舞い順序初期化
 	order_ = Order::UPPER;
@@ -70,8 +69,21 @@ void ComboAttackThird::Update() {
 	pPlayer_->SetScale(EaseAmplitudeScale(Vector3::UnitVector(), startEasing_.time, startEasing_.maxTime,
 		startEasing_.amplitude, startEasing_.period));
 
+	// 向き変更
 	pPlayer_->Move(0.01f);
 
+	
+	pPlayer_->SetHeadRotateX(zRotate_);
+
+	if (rotateEase_.time >= rotateEase_.maxTime) {
+		rotateEase_.time = rotateEase_.maxTime;
+		zRotate_ = 0.0f;
+		pPlayer_->SetHeadRotateX(0.0f);
+	}
+	else {
+		rotateEase_.time += Frame::DeltaTimeRate();
+		zRotate_ += 70.0f * Frame::DeltaTimeRate();
+	}
 	switch (order_) {
 
 	case Order::UPPER:
@@ -102,6 +114,7 @@ void ComboAttackThird::Update() {
 			EaseInSine(initPosY_,initPosY_+pPlayer_->GetUpperPosY(),upperJumpEaseT_, pPlayer_->GetPunchEaseMax(Player::THIRD))
 		);
 
+		
 		collisionBox_->Update();/// コリジョンボックス更新
 
 		// イージング終了時の処理
@@ -151,8 +164,7 @@ void ComboAttackThird::Update() {
 		// レール更新と座標反映
 		pPlayer_->GetRightHand()->RailThreeComboUpdate(0.0f);
 
-		pPlayer_->GetRightHand()->SetBlendModeAdd();
-		pPlayer_->GetLeftHand()->SetBlendModeAdd();
+		pPlayer_->SetHeadRotateX(0.0f);
 		pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
 		
 		break;

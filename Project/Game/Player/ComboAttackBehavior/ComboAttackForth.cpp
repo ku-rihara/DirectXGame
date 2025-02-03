@@ -20,6 +20,7 @@ ComboAttackForth::ComboAttackForth(Player* player)
 	///---------------------------------------------------------
 
 	firstWaitTimeMax_ = 0.2f;
+	pPlayer_->SetHeadRotateX(0.0f);
 
 	///collision
 	stopCollisionBox_=std::make_unique<StopCollisionBox>();
@@ -198,8 +199,7 @@ void ComboAttackForth::Update() {
 			
 			if (waitTine_ >= pPlayer_->GetWaitTime(Player::FORTH)) {
 
-				pPlayer_->GetRightHand()->SetBlendModeAdd();
-				pPlayer_->GetLeftHand()->SetBlendModeAdd();
+				
 				Frame::SetTimeScale(1.0f);
 
 				pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));

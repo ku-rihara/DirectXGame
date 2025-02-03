@@ -72,6 +72,7 @@ public:
 	void SetOffSet(const Vector3& offset) { offset_ = offset; }
 	void SetLockOn(LockOn* lockon) { lockOn_ = lockon; }
 	void SetShakePos(const Vector3& shake) { shakePos_ = shake; }
+	void SetShakePosY(const float& shake) { shakePos_.y = shake; }
 	void SetDestinationAngleY_(float angle) { destinationAngleY_ = angle; }
 	void SetViewProjectionPos(Vector3 pos) { viewprojection_.translation_ = pos; }
 

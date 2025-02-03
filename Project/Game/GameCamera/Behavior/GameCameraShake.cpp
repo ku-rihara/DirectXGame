@@ -16,10 +16,10 @@ GameCameraShake::GameCameraShake(GameCamera* gameCamera)
 	/// ===================================================
 	///変数初期化
 	/// ===================================================
-	
-	 shakeTMax_ = 0.7f;
-	 shakeT_ = shakeTMax_;
-	 step_ = Step::SHAKE;
+
+	shakeTMax_ = 0.8f;
+	shakeT_ = shakeTMax_;
+	step_ = Step::SHAKE;
 }
 
 GameCameraShake::~GameCameraShake() {
@@ -34,14 +34,14 @@ void GameCameraShake::Update() {
 		/// ------------------------------------------------------
 		/// シェイク
 		///---------------------------------------------------------
-		pGameCamera_->SetShakePos(Shake<Vector3>(shakeT_, 1.3f));
+		pGameCamera_->SetShakePos(ShakeWave<Vector3>(shakeT_, 0.6f));
 		shakeT_ -= Frame::DeltaTime();
 
 		if (shakeT_ > 0.0f) return;
-			shakeT_ = 0.0f;
-			pGameCamera_->SetShakePos(Vector3::ZeroVector());
-			step_ = Step::RETURNROOT;
-		
+		shakeT_ = 0.0f;
+		pGameCamera_->SetShakePos(Vector3::ZeroVector());
+		step_ = Step::RETURNROOT;
+
 		break;
 	case Step::RETURNROOT:
 		/// ------------------------------------------------------
@@ -52,7 +52,7 @@ void GameCameraShake::Update() {
 	default:
 		break;
 	}
-	
+
 }
 
 

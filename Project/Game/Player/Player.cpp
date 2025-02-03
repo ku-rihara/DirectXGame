@@ -55,11 +55,14 @@ void Player::Init() {
 	///* 武器生成
 	leftHand_ = std::make_unique<PlayerHandLeft>();
 	rightHand_ = std::make_unique<PlayerHandRight>();
+	headObj_.reset(Object3d::CreateModel("Player", ".obj"));
 
+	headTransform_.Init();
 	leftHand_->Init();
 	rightHand_->Init();
 
 	///* ペアレント
+	headTransform_.SetParent(&transform_);
 	leftHand_->SetParent(&transform_);
 	rightHand_->SetParent(&transform_);
 
@@ -103,6 +106,7 @@ void Player::Update() {
 	FallEffectUpdate();
 
 	/// 行列更新
+	headTransform_.UpdateMatrix();
 	leftHand_->Update();
 	rightHand_->Update();
 	BaseObject::Update();        /// 更新 
@@ -123,6 +127,7 @@ void Player::TitleUpdate() {
 
 	titleBehavior_->Update();
 	/// 行列更新
+	headTransform_.UpdateMatrix();
 	leftHand_->Update();
 	rightHand_->Update();
 	BaseObject::Update();
@@ -142,7 +147,7 @@ void Player::Draw(const ViewProjection& viewProjection) {
 	}
 	effects_.reverse();
 
-	BaseObject::Draw(viewProjection);
+	headObj_->Draw(headTransform_, viewProjection);
 	leftHand_->Draw(viewProjection);
 	rightHand_->Draw(viewProjection);
 

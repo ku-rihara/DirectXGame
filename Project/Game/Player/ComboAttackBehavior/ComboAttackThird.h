@@ -30,6 +30,10 @@ private:
 	float waitTine_;          /// 次コンボまでの待機時間
 	float initPosY_;
 
+	float zRotate_;
+
+	Easing rotateEase_;
+
 public:
 	//コンストラクタ
 	ComboAttackThird(Player* boss);
