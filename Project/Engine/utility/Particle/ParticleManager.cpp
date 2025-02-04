@@ -12,6 +12,7 @@
 
 
 
+
 ParticleManager* ParticleManager::GetInstance() {
 	static ParticleManager instance;
 	return &instance;
@@ -74,8 +75,7 @@ void ParticleManager::Update(const ViewProjection& viewProjection) {
 			if (group.parm.isBillBord) {
 
 				it->worldTransform_.BillboardUpdateMatrix(viewProjection, group.parm.billBordType, group.parm.adaptRotate_);
-			}
-			else {
+			} else {
 				it->worldTransform_.UpdateMatrix();
 			}
 
@@ -251,16 +251,9 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 	///------------------------------------------------------------------------
 	if (paramaters.isRotateforDirection) {
 		// 進行方向（速度）を基に回転を計算
-		if (particle.velocity_.Length() > 0.0001f) { // 速度がゼロに近くない場合
-			Vector3 direction = Vector3::Normalize(particle.velocity_);
-			particle.worldTransform_.rotation_ = Vector3::DirectionToEulerAngles(direction);
-		}
-		else {
-			// 速度がゼロの場合はデフォルト回転
-			particle.worldTransform_.rotation_ = (paramaters.baseRotate);
-		}
-	}
-	else {
+
+		particle.worldTransform_.rotation_ = DirectionToEulerAngles(particle.velocity_,*viewProjection_);
+	} else {
 		// ランダム回転を設定
 		Vector3 rotate = {
 			Random::Range(paramaters.rotateDist.min.x, paramaters.rotateDist.max.x),
@@ -289,8 +282,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 	if (paramaters.isScalerScale) {// スカラー
 		float scale = Random::Range(paramaters.scaleDist.min, paramaters.scaleDist.max);
 		particle.worldTransform_.scale_ = { scale, scale, scale };
-	}
-	else {/// V3
+	} else {/// V3
 		Vector3 ScaleV3 = {
 			Random::Range(paramaters.scaleDistV3.min.x, paramaters.scaleDistV3.max.x),
 			Random::Range(paramaters.scaleDistV3.min.y, paramaters.scaleDistV3.max.y),
@@ -362,4 +354,31 @@ void ParticleManager::ResetAllParticles() {
 			group.instancingData[index].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 	}
+}
+
+Vector3 ParticleManager::DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view) {
+
+	// ベクトル正規化
+	Vector3 rdirection = direction.Normalize();
+
+	// カメラの回転を反映した回転行列を作成
+	Matrix4x4 rotateCameraMatrix = MakeRotateMatrix(Vector3(-view.rotation_.x, -view.rotation_.y, -view.rotation_.z));
+	rdirection = TransformNormal(rdirection, rotateCameraMatrix);
+
+	// 基準ベクトル(上方向)をカメラの回転で変換
+	Vector3 up = { 0.0f, 1.0f, 0.0f };
+	up = TransformNormal(up, rotateCameraMatrix);
+
+	// 方向変換行列を作成
+	Matrix4x4 dToDMatrix = DirectionToDirection(up, rdirection);
+
+	// 方向変換行列からオイラー角を抽出
+	Vector3 angle = ExtractEulerAngles(dToDMatrix);
+
+	return  angle;
+}
+
+void ParticleManager::SetViewProjection(const ViewProjection* view){
+
+	viewProjection_ = view;
 }

@@ -2,6 +2,7 @@
 #include <cmath>
 #include"Matrix4x4.h"
 struct Matrix4x4;
+
 class Vector3 {
 public:
 	float x;
@@ -69,7 +70,7 @@ public:
 	static Vector3 UnitVector();// 単位ベクトル
 	static Vector3 ZeroVector();
 
-	static Vector3 DirectionToEulerAngles(const Vector3& direction);
+
 
 
 	Vector3 Normalize()const;

@@ -68,6 +68,8 @@ void GameScene::Init() {
 	cease_.maxTime = 0.5f;
 	chandle_ = TextureManager::GetInstance()->LoadTexture("./resources/Texture/Clear.png");
 	cSprite_.reset(Sprite::Create(chandle_, Vector2(0, -720), Vector4(1, 1, 1, 1.0f)));
+
+	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
 void GameScene::Update() {
