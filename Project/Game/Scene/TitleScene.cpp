@@ -23,7 +23,7 @@ void TitleScene::Init() {
 
 	
 
-	emitter_.reset(ParticleEmitter::CreateParticle("ThrustDamage", "cube", ".obj", 900));
+	emitter_.reset(ParticleEmitter::CreateParticle("punchEffect", "Plane", ".obj", 900));
 	uint32_t t=TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
 	emitter_->SetTextureHandle(t);
 
