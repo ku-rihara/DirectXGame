@@ -2,6 +2,7 @@
 #include <cmath>
 #include"Matrix4x4.h"
 struct Matrix4x4;
+
 class Vector3 {
 public:
 	float x;

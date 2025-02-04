@@ -85,6 +85,7 @@ public:
 	void Init(SrvManager* srvManager);
 	void Update(const ViewProjection& viewProjection);
 	void Draw(const ViewProjection& viewProjection);
+	Vector3 DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view);
 
 	/// グループ作成
 	void CreateParticleGroup(const std::string name, const std::string modelFilePath,const std::string& extension, const uint32_t& maxnum);
