@@ -9,6 +9,7 @@
 #include"random.h"
 #include<cassert>
 #include<string>
+#include <MathFunction.cpp>
 
 
 
@@ -53,7 +54,7 @@ void ParticleManager::Update(const ViewProjection& viewProjection) {
 			///------------------------------------------------------------------------
 			/// 回転させる
 			///------------------------------------------------------------------------
-			it->worldTransform_.rotation_.x += it->rotateSpeed_.x* Frame::DeltaTimeRate();
+			it->worldTransform_.rotation_.x += it->rotateSpeed_.x * Frame::DeltaTimeRate();
 			it->worldTransform_.rotation_.y += it->rotateSpeed_.y * Frame::DeltaTimeRate();
 			it->worldTransform_.rotation_.z += it->rotateSpeed_.z * Frame::DeltaTimeRate();
 
@@ -71,14 +72,13 @@ void ParticleManager::Update(const ViewProjection& viewProjection) {
 			/// ビルボードまたは通常の行列更新
 			///------------------------------------------------------------------------
 
-				if (group.parm.isBillBord) {
+			if (group.parm.isBillBord) {
 
-					it->worldTransform_.BillboardUpdateMatrix(viewProjection,group.parm.billBordType,group.parm.adaptRotate_);
-				}
-				else {
-					it->worldTransform_.UpdateMatrix();
-				}
-			
+				it->worldTransform_.BillboardUpdateMatrix(viewProjection, group.parm.billBordType, group.parm.adaptRotate_);
+			} else {
+				it->worldTransform_.UpdateMatrix();
+			}
+
 			// 時間を進める
 			it->currentTime_ += Frame::DeltaTime();
 			++it;
@@ -109,7 +109,7 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
 				continue;
 			}
 
-			instancingData[instanceIndex].World= it->worldTransform_.matWorld_;
+			instancingData[instanceIndex].World = it->worldTransform_.matWorld_;
 
 			instancingData[instanceIndex].WVP = it->worldTransform_.matWorld_ *
 				viewProjection.matView_ * viewProjection.matProjection_;
@@ -235,7 +235,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 		Random::Range(paramaters.positionDist.min.y, paramaters.positionDist.max.y),
 		Random::Range(paramaters.positionDist.min.z, paramaters.positionDist.max.z)
 	};
-	particle.worldTransform_.translation_ = paramaters.targetPos+ paramaters.emitPos + randomTranslate;
+	particle.worldTransform_.translation_ = paramaters.targetPos + paramaters.emitPos + randomTranslate;
 
 	///------------------------------------------------------------------------
 	/// 速度
@@ -251,16 +251,9 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 	///------------------------------------------------------------------------
 	if (paramaters.isRotateforDirection) {
 		// 進行方向（速度）を基に回転を計算
-		if (particle.velocity_.Length() > 0.0001f) { // 速度がゼロに近くない場合
-			Vector3 direction = Vector3::Normalize(particle.velocity_);
-			particle.worldTransform_.rotation_ = Vector3::DirectionToEulerAngles(direction);
-		}
-		else {
-			// 速度がゼロの場合はデフォルト回転
-			particle.worldTransform_.rotation_ = (paramaters.baseRotate);
-		}
-	}
-	else {
+
+		particle.worldTransform_.rotation_.z = DirectionToEulerAngles(particle.velocity_, );
+	} else {
 		// ランダム回転を設定
 		Vector3 rotate = {
 			Random::Range(paramaters.rotateDist.min.x, paramaters.rotateDist.max.x),
@@ -289,8 +282,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 	if (paramaters.isScalerScale) {// スカラー
 		float scale = Random::Range(paramaters.scaleDist.min, paramaters.scaleDist.max);
 		particle.worldTransform_.scale_ = { scale, scale, scale };
-	}
-	else {/// V3
+	} else {/// V3
 		Vector3 ScaleV3 = {
 			Random::Range(paramaters.scaleDistV3.min.x, paramaters.scaleDistV3.max.x),
 			Random::Range(paramaters.scaleDistV3.min.y, paramaters.scaleDistV3.max.y),
@@ -325,7 +317,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 ///======================================================================
 void ParticleManager::Emit(
 	std::string name, const ParticleEmitter::Parameters&
-	paramaters, const ParticleEmitter::GroupParamaters& groupParamaters,const int32_t& count) {  // 新パラメータ追加
+	paramaters, const ParticleEmitter::GroupParamaters& groupParamaters, const int32_t& count) {  // 新パラメータ追加
 
 	// パーティクルグループが存在するか確認
 	assert(particleGroups_.find(name) != particleGroups_.end() && "Error: Not Find ParticleGroup");
@@ -336,7 +328,7 @@ void ParticleManager::Emit(
 	particleGroup.parm.isBillBord = groupParamaters.isBillBord;
 	particleGroup.parm.billBordType = groupParamaters.billBordType;
 	particleGroup.parm.adaptRotate_ = groupParamaters.adaptRotate_;
-	
+
 	// 生成、グループ追加
 	std::list<Particle> particles;
 	for (uint32_t i = 0; i < uint32_t(count); ++i) {
@@ -365,19 +357,21 @@ void ParticleManager::ResetAllParticles() {
 }
 
 
-Vector3 ParticleManager::DirectionToEulerAngles(const Vector3& direction,const ViewProjection&view) {
-	// ピッチの計算（上下方向）
-	float pitch = std::atan2(-direction.y, std::sqrt(direction.x * direction.x + direction.z * direction.z));
+float ParticleManager::DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view) {
 
-	// ヨーの計算（左右方向）
-	float yaw = std::atan2(direction.x, direction.z);
+	// 移動量に速さを反映
+	Vector3 rdirection = Vector3::Normalize(direction);
+	// 移動ベクトルをカメラの角度だけ回転する
+	Matrix4x4 rotateMatrix = MakeRotateYMatrix(view.rotation_.y);
+	rdirection = TransformNormal(rdirection, rotateMatrix);
 
-	// 右向きベクトルを取得（進行方向と上ベクトルの外積）
-	Vector3 right = Vector3::Cross(Vector3(0, 0, 1), direction);
-	right = Vector3::Normalize(right);
+	float objectiveAngle_ = std::atan2(direction.x, direction.z);
+	// 最短角度補間
+	return objectiveAngle_;
 
-	// ロールは右ベクトルのY成分から計算
-	float roll = std::atan2(right.y, std::sqrt(right.x * right.x + right.z * right.z));
+}
 
-	return { pitch, yaw, roll };
+ViewProjection* ParticleManager::SetViewProjection(ViewProjection& view) {
+
+	viewProjection_ = view;
 }

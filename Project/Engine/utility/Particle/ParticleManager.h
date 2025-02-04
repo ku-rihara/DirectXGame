@@ -69,7 +69,7 @@ private:
 	SrvManager* pSrvManager_;
 	ParticleCommon* pParticleCommon_;
 	AccelerationField accelerationField_;
-	
+	ViewProjection* viewProjection_;
 
 public:
 	std::unordered_map<std::string, ParticleGroup>particleGroups_;
@@ -85,7 +85,9 @@ public:
 	void Init(SrvManager* srvManager);
 	void Update(const ViewProjection& viewProjection);
 	void Draw(const ViewProjection& viewProjection);
-	Vector3 DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view);
+	float DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view);
+
+	 ViewProjection* SetViewProjection(const ViewProjection& view);
 
 	/// グループ作成
 	void CreateParticleGroup(const std::string name, const std::string modelFilePath,const std::string& extension, const uint32_t& maxnum);
