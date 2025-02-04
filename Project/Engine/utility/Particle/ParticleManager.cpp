@@ -9,7 +9,7 @@
 #include"random.h"
 #include<cassert>
 #include<string>
-#include <MathFunction.cpp>
+
 
 
 
@@ -252,7 +252,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 	if (paramaters.isRotateforDirection) {
 		// 進行方向（速度）を基に回転を計算
 
-		particle.worldTransform_.rotation_.z = DirectionToEulerAngles(particle.velocity_, );
+		particle.worldTransform_.rotation_ = DirectionToEulerAngles(particle.velocity_,*viewProjection_);
 	} else {
 		// ランダム回転を設定
 		Vector3 rotate = {
@@ -356,22 +356,29 @@ void ParticleManager::ResetAllParticles() {
 	}
 }
 
+Vector3 ParticleManager::DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view) {
 
-float ParticleManager::DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view) {
+	// ベクトル正規化
+	Vector3 rdirection = direction.Normalize();
 
-	// 移動量に速さを反映
-	Vector3 rdirection = Vector3::Normalize(direction);
-	// 移動ベクトルをカメラの角度だけ回転する
-	Matrix4x4 rotateMatrix = MakeRotateYMatrix(view.rotation_.y);
-	rdirection = TransformNormal(rdirection, rotateMatrix);
+	// カメラの回転を反映した回転行列を作成
+	Matrix4x4 rotateCameraMatrix = MakeRotateMatrix(Vector3(-view.rotation_.x, -view.rotation_.y, -view.rotation_.z));
+	rdirection = TransformNormal(rdirection, rotateCameraMatrix);
 
-	float objectiveAngle_ = std::atan2(direction.x, direction.z);
-	// 最短角度補間
-	return objectiveAngle_;
+	// 基準ベクトル(上方向)をカメラの回転で変換
+	Vector3 up = { 0.0f, 1.0f, 0.0f };
+	up = TransformNormal(up, rotateCameraMatrix);
 
+	// 方向変換行列を作成
+	Matrix4x4 dToDMatrix = DirectionToDirection(up, rdirection);
+
+	// 方向変換行列からオイラー角を抽出
+	Vector3 angle = ExtractEulerAngles(dToDMatrix);
+
+	return  angle;
 }
 
-ViewProjection* ParticleManager::SetViewProjection(ViewProjection& view) {
+void ParticleManager::SetViewProjection(const ViewProjection* view){
 
 	viewProjection_ = view;
 }

@@ -27,6 +27,8 @@ void TitleScene::Init() {
 	uint32_t t=TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
 	emitter_->SetTextureHandle(t);
 
+	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
+
 }
 
 void TitleScene::Update() {
