@@ -29,4 +29,5 @@ void BaseComboAattackBehavior::PreOderNextComboForButton() {
 void BaseComboAattackBehavior::ChangeNextCombo(std::unique_ptr<BaseComboAattackBehavior> nextCombo) {
     if (!isNextCombo_)return;
            pPlayer_->ChangeComboBehavior(std::move(nextCombo));
+         
 }

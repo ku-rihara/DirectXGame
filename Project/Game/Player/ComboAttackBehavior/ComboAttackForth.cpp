@@ -61,6 +61,9 @@ ComboAttackForth::ComboAttackForth(Player* player)
 
 	order_ = Order::FIRSTWAIT; // 振る舞い順序初期化
 	fallInitSpeed_ = 0.0f;
+
+	////音
+	//pPlayer_->SoundPunch();
 }
 
 ComboAttackForth::~ComboAttackForth() {
@@ -80,6 +83,7 @@ void ComboAttackForth::Update() {
 	//デルタタイムスケール小さく
 	if (thrustCollisionBox_->GetIsSlow() && !istimeSlow_) {
 		Frame::SetTimeScale(0.01f);
+		pPlayer_->SoundStrongPunch();
 		pPlayer_->GetGameCamera()->ChangeZoomInOut();
 		istimeSlow_ = true;
 	}
@@ -102,6 +106,7 @@ void ComboAttackForth::Update() {
 		firstWaitTime_ += Frame::DeltaTime();
 		if (firstWaitTime_ >= firstWaitTimeMax_) {
 			stopCollisionBox_->IsAdapt(true);
+			pPlayer_->SoundPunch();
 			order_ = Order::RPUNCH;
 		}
 		break;
@@ -142,7 +147,8 @@ void ComboAttackForth::Update() {
 		stopRailManager_->SetRailMoveTime(0.0f);
 		pPlayer_->GetRightHand()->RailForthComboUpdate(0.0f);
 		thrustCollisionBox_->IsAdapt(true);
-
+		//音
+		pPlayer_->SoundPunch();
 		order_ = Order::LPUNCH;
 		break;
 

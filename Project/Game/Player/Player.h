@@ -106,6 +106,11 @@ private:
 
 	uint32_t cirlceTexture_;
 
+	///sound 
+	int punchSoundID_;
+	int strongPunch_;
+	int fallSound_;
+
 public:
 	static float InitY_;
 	Player();
@@ -156,6 +161,13 @@ public:
 	void ApplyGlobalParameter();
 
 	void FaceToTarget();
+
+	/// <summary>
+	/// sound
+	/// </summary>
+	void SoundPunch();
+	void SoundStrongPunch();
+	void FallSound();
 
 	/// ===================================================
 	/// getter

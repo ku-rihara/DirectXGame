@@ -16,7 +16,8 @@ GameScene::~GameScene() {
 }
 
 void GameScene::Init() {
-
+	//// グローバル変数の読み込み
+	GlobalParameter::GetInstance()->LoadFiles();
 	BaseScene::Init();
 	
 

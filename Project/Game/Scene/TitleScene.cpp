@@ -22,7 +22,8 @@ TitleScene::~TitleScene() {
 }
 
 void TitleScene::Init() {
-
+	//// グローバル変数の読み込み
+	GlobalParameter::GetInstance()->LoadFiles();
 	BaseScene::Init();
 	///=======================================================================================
 	/// 生成

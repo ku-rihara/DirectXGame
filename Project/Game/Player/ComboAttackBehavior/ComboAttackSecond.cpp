@@ -43,6 +43,7 @@ ComboAttackSecond::ComboAttackSecond(Player* player)
 	startEasing_.amplitude = 0.6f;
 	startEasing_.period = 0.2f;
 
+	pPlayer_->SoundPunch();
 	// 振る舞い順序初期化
 	order_ = Order::PUNCH;
 }
@@ -122,10 +123,12 @@ void ComboAttackSecond::Update() {
 			pPlayer_->ChangeComboBehavior
 			(std::make_unique<ComboAttackRoot>(pPlayer_));
 		}
-		else {
+		else 
+		{
 			BaseComboAattackBehavior::PreOderNextComboForButton();
-
-			BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackThird>(pPlayer_));
+			if (isNextCombo_) {
+				BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackThird>(pPlayer_));
+			}
 		}
 		break;
 	}

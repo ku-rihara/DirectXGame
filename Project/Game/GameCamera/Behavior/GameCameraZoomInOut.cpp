@@ -102,7 +102,7 @@ void GameCameraZoomInOut::Update() {
 }
 
 void GameCameraZoomInOut::ShakeUpdate() {
-	pGameCamera_->SetShakePos(Shake<Vector3>(shakeT_, 0.5f));
+	pGameCamera_->SetShakePos(Shake<Vector3>(shakeT_, 0.7f));
 	shakeT_ -= Frame::DeltaTime();
 
 	if (shakeT_ > 0.0f) return;

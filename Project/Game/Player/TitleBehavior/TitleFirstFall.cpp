@@ -22,7 +22,7 @@ TitleFirstFall::TitleFirstFall(Player* player)
 	step_ = STEP::FALL; // 落ちる
 
 	fallRotateY_ = 0.0f;
-	fallSpeed_ = 1.0f;
+	fallSpeed_ = 0.2f;
 
 	boundSpeed_ = 1.4f;
 	gravity_ = 8.8f;
@@ -38,7 +38,7 @@ TitleFirstFall::TitleFirstFall(Player* player)
 	landScaleEasing_.period = 0.2f;
 
 	// ハンド初期化
-	playerInitPosY_ = pPlayer_->GetWorldPosition().y;
+	playerInitPosY_ = 10.0f;
 	fallInitPosLHand_= pPlayer_->GetLeftHand()->GetTransform().translation_.y;
 	fallInitPosRHand_= pPlayer_->GetRightHand()->GetTransform().translation_.y;
 
@@ -56,7 +56,7 @@ void TitleFirstFall::Update() {
 	///---------------------------------------------------------
 	///落ちる
 	///---------------------------------------------------------
-
+		if (Frame::DeltaTimeRate() > 2)break;
 		fallEaseT_ += Frame::DeltaTimeRate();
 		fallRotateY_ += Frame::DeltaTimeRate()* rotateYSpeed_;
 	

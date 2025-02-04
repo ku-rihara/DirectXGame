@@ -43,6 +43,7 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	startEasing_.amplitude = 0.6f;
 	startEasing_.period = 0.2f;
 
+
 	// 振る舞い順序初期化
 	order_ = Order::RUSH;
 }
@@ -87,7 +88,8 @@ void ComboAttackFirst::Update() {
 			/// パンチ座標セット
 			rHandStartPos_ = pPlayer_->GetRightHand()->GetTransform().translation_;
 			rHandTargetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayer_->GetPunchReach(Player::FIRST);
-
+			//音
+			pPlayer_->SoundPunch();
 			order_ = Order::PUNCH;
 		}
 
@@ -157,8 +159,10 @@ void ComboAttackFirst::Update() {
 		}
 		else {
 			/// ボタンで次のコンボ
-		BaseComboAattackBehavior::PreOderNextComboForButton();
-		BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackSecond>(pPlayer_));
+			BaseComboAattackBehavior::PreOderNextComboForButton();
+			if (isNextCombo_) {
+				BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackSecond>(pPlayer_));
+			}
 		}
 	}
 }

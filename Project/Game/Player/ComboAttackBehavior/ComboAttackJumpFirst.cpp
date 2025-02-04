@@ -89,6 +89,7 @@ void ComboAttackJumpFirst::Update() {
 		pPlayer_->FallParticleEmit();
 		pPlayer_->FallEffectInit(pPlayer_->GetWorldPosition());
 		pPlayer_->GetGameCamera()->ChangeShakeMode();
+		pPlayer_->FallSound();
 		step_ = STEP::LANDING;
 
 		break;

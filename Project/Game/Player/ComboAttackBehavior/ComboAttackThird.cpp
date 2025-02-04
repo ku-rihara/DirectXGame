@@ -49,6 +49,8 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	rotateEase_.time = 0.0f;
 	rotateEase_.maxTime = 0.7f;
 
+	pPlayer_->SoundPunch();
+
 	// 振る舞い順序初期化
 	order_ = Order::UPPER;
 
@@ -138,10 +140,13 @@ void ComboAttackThird::Update() {
 			order_ = Order::FALL;
 		}
 
-		else {			
+		else 
+		{
 			/// ボタンで次のコンボ
 			BaseComboAattackBehavior::PreOderNextComboForButton();
-			BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackForth>(pPlayer_));
+			if (isNextCombo_) {
+				BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackForth>(pPlayer_));
+			}
 		}
 
 		break;

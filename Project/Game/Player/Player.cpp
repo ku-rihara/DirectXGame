@@ -1,4 +1,5 @@
 #include "Player.h"
+#include"audio/Audio.h"
 
 /// input
 #include"JoyState/JoyState.h"
@@ -73,9 +74,13 @@ void Player::Init() {
 	fallEmitter_.reset(ParticleEmitter::CreateParticle(fallParticleName_, "DebugSphere", ".obj", 300));
 	fallEmitter_->SetBlendMode(BlendMode::None);
 
+	 punchSoundID_ = Audio::GetInstance()->LoadWave("Resources/punchAir.wav");
+	 strongPunch_= Audio::GetInstance()->LoadWave("Resources/StrongPunch.wav");
+	 fallSound_ = Audio::GetInstance()->LoadWave("Resources/PlayerFall.wav");
 	/// 通常モードから
 	ChangeBehavior(std::make_unique<PlayerRoot>(this));
 	ChangeComboBehavior(std::make_unique<ComboAttackRoot>(this));
+	/*ChangeTitleBehavior(std::make_unique<TitleFirstFall>(this));*/
 }
 
 ///=========================================================
@@ -153,7 +158,15 @@ void Player::Draw(const ViewProjection& viewProjection) {
 
 }
 
-
+void Player::SoundPunch() {
+	Audio::GetInstance()->PlayWave(punchSoundID_, 0.5f);
+}
+void Player::SoundStrongPunch() {
+	Audio::GetInstance()->PlayWave(strongPunch_, 0.5f);
+}
+void Player::FallSound() {
+	Audio::GetInstance()->PlayWave(fallSound_, 0.2f);
+}
 ///=======================================================================
 /// ダメ―ジ演出
 ///=======================================================================
