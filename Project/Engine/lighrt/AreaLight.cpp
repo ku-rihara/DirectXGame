@@ -15,12 +15,7 @@ AreaLight::AreaLight()
 // デストラクタ
 AreaLight::~AreaLight()
 {
-    if (lightResource_)
-    {
-        lightResource_->Release();
-        lightResource_ = nullptr;
-    }
-    lightData_ = nullptr;
+   
 }
 
 // 初期化

@@ -10,12 +10,7 @@ SpotLight::SpotLight()
 }
 SpotLight::~SpotLight()
 {
-    if (lightResource_)
-    {
-        lightResource_->Release();
-        lightResource_ = nullptr;
-    }
-    lightData_ = nullptr;
+   
 }
 
 void SpotLight::Init(ID3D12Device* device) {
