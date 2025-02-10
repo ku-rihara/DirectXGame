@@ -32,7 +32,7 @@ public:
 		V3MinMax positionDist;                // 座標ランダム分配
 		bool isScalerScale;                   //スカラーのスケールにするか
 		FMinMax scaleDist;                    // スケールランダム分配
-		V3MinMax scaleDistV3;                // スケールランダム分配
+		V3MinMax scaleDistV3;                 // スケールランダム分配
 		V3MinMax velocityDist;                // 速度ランダム分配
 		Vector4 baseColor;                    // 基準の色
 		V4MinMax colorDist;                   // 色ランダム分配
@@ -48,7 +48,7 @@ private:
 	///=====================================================
 	/// private variants
 	///=====================================================
-	std::string particleName;             // パーティクル名
+	std::string particleName_;                            // パーティクル名
 	int32_t particleCount;
 
 	/// パーティクル設定
@@ -56,22 +56,23 @@ private:
 	GroupParamaters groupParamaters_;
 	
 
-	float currentTime_;                            ///現在の時間
-	float intervalTime_;                           ///発生するまでの間隔
+	float currentTime_;                                   ///現在の時間
+	float intervalTime_;                                  ///発生するまでの間隔
 
 	/// 発生位置関連
-	std::unique_ptr<Object3d> obj3d_;         // 発生位置のオブジェクト
-	WorldTransform emitBoxTransform_;        // 発生位置のワールド変換
+	std::unique_ptr<Object3d> obj3d_;                     // 発生位置のオブジェクト
+	WorldTransform emitBoxTransform_;                    // 発生位置のワールド変換
 
 	/// レール関連
-	bool isMoveForRail_;                      // レールに沿って動くか
-	float moveSpeed_;                         // 移動速度
-	std::unique_ptr<RailManager> railManager_; // レールマネージャ
+	bool isMoveForRail_;                                 // レールに沿って動くか
+	float moveSpeed_;                                    // 移動速度
+	std::unique_ptr<RailManager> railManager_;           // レールマネージャ
 
 	/// その他
-	const std::string dyrectryPath = "./Resources/ParticleParamater/";
-	std::string editorMessage_;              // エディタ用メッセージ
-	GlobalParameter* globalParameter_;       // グローバルパラメータ
+	const std::string folderName_ = "Particle";
+	std::string editorMessage_;                          // エディタ用メッセージ
+	GlobalParameter* globalParameter_;                   // グローバルパラメータ
+	
 
 public:
 
@@ -97,7 +98,7 @@ public:
 	///=====================================================
 	/// getter method
 	///=====================================================
-	const std::string& GetParticleName()const { return particleName; }
+	const std::string& GetParticleName()const { return particleName_; }
 	
 
 	///=====================================================
@@ -123,8 +124,11 @@ public:
 	void AddParmGroup();
 	void SetValues();
 
-	void ApplyGlobalParameter();
+	void ApplyGlobalParameter(const std::string&particleName);
 	void ParmLoadForImGui();
+	void ParmSaveForImGui();
 
-	
+	void ParticleChange();
+
+	std::vector<std::string> GetParticleFiles(const std::string& directory);
 };

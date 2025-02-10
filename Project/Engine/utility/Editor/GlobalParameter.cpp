@@ -223,7 +223,7 @@ void GlobalParameter::AddTreePoP() {
 // ファイル保存・読み込み
 //==============================================================================
 
-void GlobalParameter::SaveFile(const std::string& groupName) {
+void GlobalParameter::SaveFile(const std::string& groupName, const std::string& folderName) {
     auto itGroup = datas_.find(groupName);
     assert(itGroup != datas_.end());
 
@@ -260,7 +260,7 @@ void GlobalParameter::SaveFile(const std::string& groupName) {
         std::filesystem::create_directories(dir);
     }
 
-    std::string filePath = kDirectoryPath + groupName + ".json";
+    std::string filePath = kDirectoryPath + folderName+ groupName + ".json";
     std::ofstream ofs(filePath);
     if (ofs.fail()) {
         std::string message = "Failed to open data file for write.";
@@ -276,17 +276,54 @@ void GlobalParameter::LoadFiles() {
     std::filesystem::path dir(kDirectoryPath);
     if (!std::filesystem::exists(dir)) return;
 
+    // kDirectoryPath 直下のファイルを処理
     for (const auto& entry : std::filesystem::directory_iterator(dir)) {
+        if (!entry.is_regular_file()) continue; // ファイルのみを処理
         const std::filesystem::path& filePath = entry.path();
+
+        // .json ファイルのみを対象
         if (filePath.extension() != ".json") continue;
-        LoadFile(filePath.stem().string());
+
+        // フォルダ名は空文字列
+        std::string folderName = "";
+
+        // 拡張子を除いたファイル名を取得
+        std::string fileName = filePath.stem().string();
+
+        // フォルダ名とファイル名を渡して LoadFile を呼び出し
+        LoadFile(fileName, folderName);
+    }
+
+
+    // kDirectoryPath 直下のフォルダを処理
+    for (const auto& entry : std::filesystem::directory_iterator(dir)) {
+        if (!entry.is_directory()) continue; // フォルダのみを処理
+
+        std::filesystem::path folderPath = entry.path();
+        std::string folderName = folderPath.filename().string();
+
+        // 各フォルダ内のファイルを処理
+        for (const auto& fileEntry : std::filesystem::directory_iterator(folderPath)) {
+            if (!fileEntry.is_regular_file()) continue;  // ファイルのみを処理
+
+            const std::filesystem::path& filePath = fileEntry.path();
+
+            // .json ファイルのみを対象
+            if (filePath.extension() != ".json") continue;
+
+            // 拡張子を除いたファイル名を取得
+            std::string fileName = filePath.stem().string();
+
+            // フォルダ名とファイル名を渡して LoadFile を呼び出し
+            LoadFile(fileName, folderName);
+        }
     }
 }
 
-void GlobalParameter::LoadFile(const std::string& groupName) {
+void GlobalParameter::LoadFile(const std::string& groupName, const std::string& folderName) {
     isLoading_ = true;
 
-    std::string filePath = kDirectoryPath + groupName + ".json";
+    std::string filePath = kDirectoryPath + folderName+ "/" + groupName + ".json";
     std::ifstream ifs(filePath);
     if (ifs.fail()) {
         std::string message = "Failed to open data file for read.";

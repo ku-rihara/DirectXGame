@@ -37,7 +37,6 @@ void GameScene::Init() {
 
 void GameScene::Update() {
 
-
 	/// debugcamera
 	debugCamera_->Update();
 	Debug();
@@ -64,26 +63,23 @@ void GameScene::ModelDraw() {
 	monsterBall_->Draw(viewProjection_);
 }
 
-/// ===================================================
-   /// パーティクル描画
-   /// ===================================================
+/// ======================================================
+/// パーティクル描画
+/// ======================================================
 void GameScene::ParticleDraw() {
 
 }
 
-/// ===================================================
-   /// スプライト描画
-   /// ===================================================
+/// ======================================================
+/// スプライト描画
+/// ======================================================
 void GameScene::SpriteDraw() {
 
 }
 
 void GameScene::Debug() {
 #ifdef _DEBUG
-	/*ImGui::Begin("Camera");
-	ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
-	ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
-	ImGui::End();*/
+	
 	Light::GetInstance()->DebugImGui();
 	ImGui::Begin("Object");
 	ground_->Debug();

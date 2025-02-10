@@ -331,6 +331,9 @@
     <ClCompile Include="Engine\Lighrt\AmbientLight.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Function\GetFile.cpp">
+      <Filter>MyEngine\.cpp\function</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -566,6 +569,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Lighrt\AmbientLight.h">
       <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Function\GetFile.h">
+      <Filter>MyEngine\.h\function</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

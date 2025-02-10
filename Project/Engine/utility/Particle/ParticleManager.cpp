@@ -4,9 +4,9 @@
 #include"base/TextureManager.h"
 //frame
 #include"Frame/Frame.h"
-
 //Function
 #include"random.h"
+#include"Function/GetFile.h"
 #include<cassert>
 #include<string>
 
@@ -24,6 +24,7 @@ ParticleManager* ParticleManager::GetInstance() {
 void ParticleManager::Init(SrvManager* srvManager) {
 	pSrvManager_ = srvManager;
 	pParticleCommon_ = ParticleCommon::GetInstance();
+	particleFiles_ = GetFileNamesForDyrectry(dyrectry_);
 }
 
 ///============================================================
@@ -356,6 +357,7 @@ void ParticleManager::ResetAllParticles() {
 	}
 }
 
+
 Vector3 ParticleManager::DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view) {
 
 	// ベクトル正規化
@@ -382,3 +384,4 @@ void ParticleManager::SetViewProjection(const ViewProjection* view){
 
 	viewProjection_ = view;
 }
+
