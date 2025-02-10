@@ -109,17 +109,11 @@
     <Filter Include="MyEngine\.h\utility\Editor">
       <UniqueIdentifier>{fd8669ab-e586-4603-8989-fde63074b7f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Ground">
-      <UniqueIdentifier>{1d7f274d-8636-4850-a0ef-f6132e04c95b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Scene\Manager">
       <UniqueIdentifier>{20578600-268f-441b-8c4f-b9fd3cd175ca}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Scene\Factory">
       <UniqueIdentifier>{33f429d3-39ce-4d12-9f0a-521b426150fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Player">
-      <UniqueIdentifier>{17bc6e81-f103-4b8a-895b-a16298dcba9e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\GameCamera">
       <UniqueIdentifier>{bfdbb484-9e65-4a8a-af2e-0ef01be0733a}</UniqueIdentifier>
@@ -142,32 +136,11 @@
     <Filter Include="Game\SkyDome">
       <UniqueIdentifier>{be115c28-99db-4631-90c5-48e4db1bce50}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player\core">
-      <UniqueIdentifier>{d3e51b1b-0df3-4fb3-bd66-3f185b05cfcd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Enemy\core">
       <UniqueIdentifier>{acd7df78-4aff-4ea7-bee3-3255835cbd89}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Enemy\Manager">
       <UniqueIdentifier>{4ec20f46-29f9-433f-80de-43dc9f16cb67}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Player\MoveBehavior">
-      <UniqueIdentifier>{cf9a79e5-c843-492f-9a28-30d2c3517ba4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Player\ComboBehavior">
-      <UniqueIdentifier>{b716b7ec-c13b-49ad-9c4b-07471c4c9782}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Player\ComboBehavior\Normal">
-      <UniqueIdentifier>{fffcf07a-76a3-443b-9184-ae0f9224713e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Player\ComboBehavior\Jump">
-      <UniqueIdentifier>{7a626b88-685f-48d5-93f8-d3026437db2d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Player\Weapon">
-      <UniqueIdentifier>{ea7b30de-436e-4b71-9943-2e80e0085740}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\TestObj">
-      <UniqueIdentifier>{763a23ed-9f81-4bb8-b3d7-ffe44d95c51f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\CollisionBox">
       <UniqueIdentifier>{95fdcb87-3d52-42b9-957c-8a29c004140d}</UniqueIdentifier>
@@ -190,9 +163,6 @@
     <Filter Include="Game\GameCamera\Behavior">
       <UniqueIdentifier>{2aa02fce-99c5-4754-a297-6ce1884e9ca1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Enemy\MoveBehavior">
-      <UniqueIdentifier>{e99abf53-21bf-4374-907f-ce66abce6461}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.h\Light">
       <UniqueIdentifier>{628ab431-7495-4a04-bd50-fe846b42960d}</UniqueIdentifier>
     </Filter>
@@ -202,17 +172,56 @@
     <Filter Include="Game\IsFindSprite">
       <UniqueIdentifier>{27dc28c0-6ee7-4d37-a63d-89c6f21a24ce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player\TitleBehavior">
-      <UniqueIdentifier>{b01ecc97-be49-417c-b138-660a6158c88c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\UI\TitleFont">
       <UniqueIdentifier>{26f2b0d5-af5f-4226-8a18-93999703de7c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\MonsterBall">
       <UniqueIdentifier>{0fe76578-dd93-4ebc-a7b1-ff86299b8b82}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Plane">
-      <UniqueIdentifier>{70c3c5e1-9bef-4a27-b4f2-dba2a4e9ab55}</UniqueIdentifier>
+    <Filter Include="Game\Player">
+      <UniqueIdentifier>{17bc6e81-f103-4b8a-895b-a16298dcba9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\core">
+      <UniqueIdentifier>{d3e51b1b-0df3-4fb3-bd66-3f185b05cfcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Weapon">
+      <UniqueIdentifier>{ea7b30de-436e-4b71-9943-2e80e0085740}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Behavior">
+      <UniqueIdentifier>{fa87dd0d-508a-4164-9fe9-b239a2dc26e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Behavior\TitleBehavior">
+      <UniqueIdentifier>{b01ecc97-be49-417c-b138-660a6158c88c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\Behevior\Base">
+      <UniqueIdentifier>{1746ae5f-60db-477d-aa9e-b09ea00862c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\Behevior\MoveBehavior">
+      <UniqueIdentifier>{e99abf53-21bf-4374-907f-ce66abce6461}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Behavior\Base">
+      <UniqueIdentifier>{566bf61f-7694-4068-9d7b-8bd02d70ef3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Behavior\ComboBehavior">
+      <UniqueIdentifier>{b716b7ec-c13b-49ad-9c4b-07471c4c9782}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Behavior\ComboBehavior\Normal">
+      <UniqueIdentifier>{fffcf07a-76a3-443b-9184-ae0f9224713e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Behavior\ComboBehavior\Jump">
+      <UniqueIdentifier>{7a626b88-685f-48d5-93f8-d3026437db2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Behavior\Base\Atacck">
+      <UniqueIdentifier>{b2fb692f-a018-4f1b-b2d5-15d9f559adf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Behavior\Base\Title">
+      <UniqueIdentifier>{e327e147-a821-4473-90ce-64cbd5002fd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Behavior\Base\Normal">
+      <UniqueIdentifier>{599452ed-ae64-4940-9c36-8113d6eb7c0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Behavior\NormalBehavior">
+      <UniqueIdentifier>{cf9a79e5-c843-492f-9a28-30d2c3517ba4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -355,9 +364,6 @@
     <ClCompile Include="Engine\utility\Editor\ControlPosManager.cpp">
       <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Ground\Ground.cpp">
-      <Filter>Game\Ground</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Scene\TitleScene.cpp">
       <Filter>Game\Scene</Filter>
     </ClCompile>
@@ -374,7 +380,7 @@
       <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackThird.cpp">
-      <Filter>Game\Player\ComboBehavior\Normal</Filter>
+      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClCompile>
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
@@ -385,9 +391,6 @@
     <ClCompile Include="Game\CollisionBox\UpperCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\BaseEnemyBehavior.cpp">
-      <Filter>Game\Enemy\Behevior</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\EnemyHitBackDamage.cpp">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClCompile>
@@ -395,7 +398,7 @@
       <Filter>Game\Enemy\Behevior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackForth.cpp">
-      <Filter>Game\Player\ComboBehavior\Normal</Filter>
+      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClCompile>
     <ClCompile Include="Game\CollisionBox\ThrustCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
@@ -416,7 +419,7 @@
       <Filter>Game\Enemy\HPBsr</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackJumpSecond.cpp">
-      <Filter>Game\Player\ComboBehavior\Jump</Filter>
+      <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
     </ClCompile>
     <ClCompile Include="Game\CollisionBox\FallCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
@@ -429,9 +432,6 @@
     </ClCompile>
     <ClCompile Include="Game\Effect\Effect.cpp">
       <Filter>Game\Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\HowToOperate.cpp">
-      <Filter>Game\UI\HowToOperate</Filter>
     </ClCompile>
     <ClCompile Include="Engine\utility\Editor\Rail.cpp">
       <Filter>MyEngine\.cpp\utility\Editor</Filter>
@@ -451,20 +451,17 @@
     <ClCompile Include="math\Quaternion.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\BaseEnemyMoveBehavior.cpp">
-      <Filter>Game\Enemy\MoveBehavior</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\EnemyRoot.cpp">
-      <Filter>Game\Enemy\MoveBehavior</Filter>
+      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\EnemyChasePlayer.cpp">
-      <Filter>Game\Enemy\MoveBehavior</Filter>
+      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\EnemyDamageRoot.cpp">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\EnemySpawn.cpp">
-      <Filter>Game\Enemy\MoveBehavior</Filter>
+      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Lighrt\Light.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
@@ -490,23 +487,17 @@
     <ClCompile Include="Game\Enemy\IsFindSprite\NotFindSprite.cpp">
       <Filter>Game\IsFindSprite</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\TitleBehavior\BaseTitleBehavior.cpp">
-      <Filter>Game\Player\TitleBehavior</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\TitleBehavior\TitleFirstFall.cpp">
-      <Filter>Game\Player\TitleBehavior</Filter>
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\TitleBehavior\TitleSecondPunch.cpp">
-      <Filter>Game\Player\TitleBehavior</Filter>
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\TitleBehavior\TitleThirdPunch.cpp">
-      <Filter>Game\Player\TitleBehavior</Filter>
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\TitleBehavior\TitleWait.cpp">
-      <Filter>Game\Player\TitleBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\UI\TitleFont.cpp">
-      <Filter>Game\UI\TitleFont</Filter>
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Lighrt\AreaLightManager.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
@@ -520,11 +511,86 @@
     <ClCompile Include="Game\MonsterBall\MonsterBall.cpp">
       <Filter>Game\MonsterBall</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Plane\Plane.cpp">
-      <Filter>Game\Plane</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Lighrt\AmbientLight.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\SkyDome\SkyDome.cpp">
+      <Filter>Game\SkyDome</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\TitleFont.cpp">
+      <Filter>Game\UI\TitleFont</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\HowToOperate.cpp">
+      <Filter>Game\UI\HowToOperate</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackFirst.cpp">
+      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackJumpFirst.cpp">
+      <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.cpp">
+      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp">
+      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Weapon\PlayerHandLeft.cpp">
+      <Filter>Game\Player\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Weapon\PlayerHandRight.cpp">
+      <Filter>Game\Player\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\PlayerBehavior\PlayerJump.cpp">
+      <Filter>Game\Player\Behavior\NormalBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\PlayerBehavior\PlayerRoot.cpp">
+      <Filter>Game\Player\Behavior\NormalBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Player.cpp">
+      <Filter>Game\Player\core</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\LockOn\LockOn.cpp">
+      <Filter>Game\LockOn</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BaseObject\BaseObject.cpp">
+      <Filter>Game\BaseObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Weapon\BasePlayerHand.cpp">
+      <Filter>Game\Player\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Field\Field.cpp">
+      <Filter>Game\Field</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\JoyState\JoyState.cpp">
+      <Filter>Game\JoyState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameCamera\GameCamera.cpp">
+      <Filter>Game\GameCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\EnemyManager.cpp">
+      <Filter>Game\Enemy\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\BaseEnemyBehavior.cpp">
+      <Filter>Game\Enemy\Behevior\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\BaseEnemyMoveBehavior.cpp">
+      <Filter>Game\Enemy\Behevior\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp">
+      <Filter>Game\Player\Behavior\Base\Atacck</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\TitleBehavior\BaseTitleBehavior.cpp">
+      <Filter>Game\Player\Behavior\Base\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\PlayerBehavior\BasePlayerBehavior.cpp">
+      <Filter>Game\Player\Behavior\Base\Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\BaseEnemy.cpp">
+      <Filter>Game\Enemy\core</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\NormalEnemy.cpp">
+      <Filter>Game\Enemy\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -699,9 +765,6 @@
     <ClInclude Include="Engine\utility\Editor\ControlPosManager.h">
       <Filter>MyEngine\.h\utility\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Ground\Ground.h">
-      <Filter>Game\Ground</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Scene\TitleScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
@@ -721,7 +784,7 @@
       <Filter>MyEngine\.h\utility\Editor</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackThird.h">
-      <Filter>Game\Player\ComboBehavior\Normal</Filter>
+      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClInclude>
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
@@ -732,9 +795,6 @@
     <ClInclude Include="Game\CollisionBox\UpperCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\BaseEnemyBehavior.h">
-      <Filter>Game\Enemy\Behevior</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\EnemyHitBackDamage.h">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClInclude>
@@ -742,7 +802,7 @@
       <Filter>Game\Enemy\Behevior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackForth.h">
-      <Filter>Game\Player\ComboBehavior\Normal</Filter>
+      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClInclude>
     <ClInclude Include="Game\CollisionBox\ThrustCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
@@ -763,7 +823,7 @@
       <Filter>Game\Enemy\HPBsr</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackJumpSecond.h">
-      <Filter>Game\Player\ComboBehavior\Jump</Filter>
+      <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
     </ClInclude>
     <ClInclude Include="Game\CollisionBox\FallCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
@@ -776,9 +836,6 @@
     </ClInclude>
     <ClInclude Include="Game\Effect\Effect.h">
       <Filter>Game\Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\HowToOperate.h">
-      <Filter>Game\UI\HowToOperate</Filter>
     </ClInclude>
     <ClInclude Include="Engine\utility\Editor\Rail.h">
       <Filter>MyEngine\.h\utility\Editor</Filter>
@@ -798,20 +855,17 @@
     <ClInclude Include="math\Quaternion.h">
       <Filter>liberary\.h</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\BaseEnemyMoveBehavior.h">
-      <Filter>Game\Enemy\MoveBehavior</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\EnemyRoot.h">
-      <Filter>Game\Enemy\MoveBehavior</Filter>
+      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\EnemyChasePlayer.h">
-      <Filter>Game\Enemy\MoveBehavior</Filter>
+      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\EnemyDamageRoot.h">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\EnemySpawn.h">
-      <Filter>Game\Enemy\MoveBehavior</Filter>
+      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Lighrt\PointLight.h">
       <Filter>MyEngine\.h\Light</Filter>
@@ -837,23 +891,17 @@
     <ClInclude Include="Game\Enemy\IsFindSprite\NotFindSprite.h">
       <Filter>Game\IsFindSprite</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\TitleBehavior\BaseTitleBehavior.h">
-      <Filter>Game\Player\TitleBehavior</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\TitleBehavior\TitleFirstFall.h">
-      <Filter>Game\Player\TitleBehavior</Filter>
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\TitleBehavior\TitleSecondPunch.h">
-      <Filter>Game\Player\TitleBehavior</Filter>
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\TitleBehavior\TitleThirdPunch.h">
-      <Filter>Game\Player\TitleBehavior</Filter>
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\TitleBehavior\TitleWait.h">
-      <Filter>Game\Player\TitleBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\UI\TitleFont.h">
-      <Filter>Game\UI\TitleFont</Filter>
+      <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Lighrt\AreaLightManager.h">
       <Filter>MyEngine\.h\Light</Filter>
@@ -867,11 +915,86 @@
     <ClInclude Include="Game\MonsterBall\MonsterBall.h">
       <Filter>Game\MonsterBall</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Plane\Plane.h">
-      <Filter>Game\Plane</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Lighrt\AmbientLight.h">
       <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\SkyDome\SkyDome.h">
+      <Filter>Game\SkyDome</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\TitleFont.h">
+      <Filter>Game\UI\TitleFont</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\HowToOperate.h">
+      <Filter>Game\UI\HowToOperate</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackFirst.h">
+      <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackJumpFirst.h">
+      <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.h">
+      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h">
+      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Weapon\BasePlayerHand.h">
+      <Filter>Game\Player\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Weapon\PlayerHandLeft.h">
+      <Filter>Game\Player\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\PlayerBehavior\PlayerJump.h">
+      <Filter>Game\Player\Behavior\NormalBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\PlayerBehavior\PlayerRoot.h">
+      <Filter>Game\Player\Behavior\NormalBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Weapon\PlayerHandRight.h">
+      <Filter>Game\Player\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Player.h">
+      <Filter>Game\Player\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\LockOn\LockOn.h">
+      <Filter>Game\LockOn</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BaseObject\BaseObject.h">
+      <Filter>Game\BaseObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Field\Field.h">
+      <Filter>Game\Field</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\JoyState\JoyState.h">
+      <Filter>Game\JoyState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameCamera\GameCamera.h">
+      <Filter>Game\GameCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\EnemyManager.h">
+      <Filter>Game\Enemy\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\BaseEnemyBehavior.h">
+      <Filter>Game\Enemy\Behevior\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\BaseEnemyMoveBehavior.h">
+      <Filter>Game\Enemy\Behevior\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h">
+      <Filter>Game\Player\Behavior\Base\Atacck</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\TitleBehavior\BaseTitleBehavior.h">
+      <Filter>Game\Player\Behavior\Base\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\PlayerBehavior\BasePlayerBehavior.h">
+      <Filter>Game\Player\Behavior\Base\Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\BaseEnemy.h">
+      <Filter>Game\Enemy\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\NormalEnemy.h">
+      <Filter>Game\Enemy\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

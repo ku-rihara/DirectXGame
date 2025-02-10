@@ -42,28 +42,27 @@ void Object3d::ColorUpdate() {
 ///============================================================
 /// 描画
 ///============================================================
-void Object3d::Draw(const WorldTransform& worldTransform,const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
+void Object3d::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
 	if (!model_) return;
 
 	ColorUpdate();
 
-		// WVP行列の計算
-		if (model_->GetIsFileGltf()) {//.gltfファイルの場合
-			wvpDate_->World = worldTransform.matWorld_;
-			wvpDate_->WVP = model_->GetModelData().rootNode.localMatrix * worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
-			wvpDate_->WorldInverseTranspose = Inverse(Transpose(model_->GetModelData().rootNode.localMatrix * wvpDate_->World));
-		}
-		else {//.objファイルの場合
-			wvpDate_->World = worldTransform.matWorld_;
-			wvpDate_->WVP = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
-			wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
+	// WVP行列の計算
+	if (model_->GetIsFileGltf()) {//.gltfファイルの場合
+		wvpDate_->World = worldTransform.matWorld_;
+		wvpDate_->WVP = model_->GetModelData().rootNode.localMatrix * worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+		wvpDate_->WorldInverseTranspose = Inverse(Transpose(model_->GetModelData().rootNode.localMatrix * wvpDate_->World));
+	} else {//.objファイルの場合
+		wvpDate_->World = worldTransform.matWorld_;
+		wvpDate_->WVP = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+		wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
 		/*}*/
 
 		Object3DCommon::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
 		model_->Draw(wvpResource_, material_, textureHandle);
-	
-}
 
+	}
+}
 ///============================================================
 /// 描画 (Vector3)
 ///============================================================
