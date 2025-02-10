@@ -592,6 +592,9 @@
     <ClCompile Include="Game\Enemy\NormalEnemy.cpp">
       <Filter>Game\Enemy\core</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Function\GetFile.cpp">
+      <Filter>MyEngine\.cpp\function</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -995,6 +998,9 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\NormalEnemy.h">
       <Filter>Game\Enemy\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Function\GetFile.h">
+      <Filter>MyEngine\.h\function</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
