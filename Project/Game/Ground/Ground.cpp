@@ -26,6 +26,8 @@ void Ground::Draw(ViewProjection& viewProjection) {
 }
 
 void  Ground::Debug() {
+#ifdef _DEBUG
+
     if (ImGui::CollapsingHeader("Ground")) {
 		ImGui::PushID("Ground");
 		ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
@@ -33,4 +35,5 @@ void  Ground::Debug() {
 		objct3D_->material_.DebugImGui();
 		ImGui::PopID();
     }
+#endif // _DEBUG
 }
