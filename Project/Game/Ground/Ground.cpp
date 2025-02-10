@@ -1,6 +1,7 @@
 #include "Ground.h"
 #include "assert.h"
 #include"Lighrt/Light.h"
+#include<imgui.h>
 
 
 Ground::Ground() {}
@@ -17,13 +18,14 @@ void Ground::Init() {
 	transform_.translation_.y = -10.0f;
 	transform_.scale_ = {1, 1, 1};
 	
-	objct3D_->material_.materialData_->enableLighting = 6;
+  
 }
 
 ///========================================================
 /// �X�V
 ///========================================================
 void Ground::Update() {
+    
 	transform_.UpdateMatrix();
 }
 
@@ -32,4 +34,17 @@ void Ground::Update() {
 ///========================================================
 void Ground::Draw(ViewProjection& viewProjection) {
 	objct3D_->Draw(transform_, viewProjection); 
+}
+
+void  Ground::Debug() {
+#ifdef _DEBUG
+
+    if (ImGui::CollapsingHeader("Ground")) {
+		ImGui::PushID("Ground");
+		ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
+		ImGui::DragFloat3("Scale", &transform_.scale_.x, 0.1f);
+		objct3D_->material_.DebugImGui();
+		ImGui::PopID();
+    }
+#endif // _DEBUG
 }

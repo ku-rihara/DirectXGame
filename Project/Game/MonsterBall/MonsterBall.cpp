@@ -28,11 +28,13 @@ void MonsterBall::Draw(ViewProjection& viewProjection) {
 }
 
 void  MonsterBall::Debug() {
-    if (ImGui::CollapsingHeader("MonsterBall")) {
+#ifdef _DEBUG
+	if (ImGui::CollapsingHeader("MonsterBall")) {
 		ImGui::PushID("MonsterBall");
-		ImGui::DragFloat3("Position", &transform_.translation_.x,0.1f);
+		ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
 		ImGui::DragFloat3("Scale", &transform_.scale_.x, 0.1f);
 		objct3D_->material_.DebugImGui();
 		ImGui::PopID();
-    }
+	}
+#endif // _DEBUG
 }

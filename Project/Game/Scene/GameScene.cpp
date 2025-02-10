@@ -24,6 +24,7 @@ void GameScene::Init() {
 	///=======================================================================================
 	/// 生成
 	///=======================================================================================
+	plane_->Init();
 
 	field_ = std::make_unique<Field>();
 	lockOn_ = std::make_unique<LockOn>();
@@ -103,7 +104,6 @@ void GameScene::Update() {
 
 	/// パーティクル更新
 	ParticleManager::GetInstance()->Update(viewProjection_);
-	
 	ViewProjectionUpdate();
 
 	/// クリア

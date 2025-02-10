@@ -208,6 +208,12 @@
     <Filter Include="Game\UI\TitleFont">
       <UniqueIdentifier>{26f2b0d5-af5f-4226-8a18-93999703de7c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\MonsterBall">
+      <UniqueIdentifier>{0fe76578-dd93-4ebc-a7b1-ff86299b8b82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Plane">
+      <UniqueIdentifier>{70c3c5e1-9bef-4a27-b4f2-dba2a4e9ab55}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -364,78 +370,6 @@
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp">
       <Filter>Game\Scene\Factory</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\PlayerBehavior\BasePlayerBehavior.cpp">
-      <Filter>Game\Player\MoveBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\PlayerBehavior\PlayerJump.cpp">
-      <Filter>Game\Player\MoveBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\PlayerBehavior\PlayerRoot.cpp">
-      <Filter>Game\Player\MoveBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GameCamera\GameCamera.cpp">
-      <Filter>Game\GameCamera</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\BaseObject\BaseObject.cpp">
-      <Filter>Game\BaseObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\JoyState\JoyState.cpp">
-      <Filter>Game\JoyState</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Field\Field.cpp">
-      <Filter>Game\Field</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\LockOn\LockOn.cpp">
-      <Filter>Game\LockOn</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\SkyDome\SkyDome.cpp">
-      <Filter>Game\SkyDome</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\EnemyManager.cpp">
-      <Filter>Game\Enemy\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\Player.cpp">
-      <Filter>Game\Player\core</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\BaseEnemy.cpp">
-      <Filter>Game\Enemy\core</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\NormalEnemy.cpp">
-      <Filter>Game\Enemy\core</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackFirst.cpp">
-      <Filter>Game\Player\ComboBehavior\Normal</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp">
-      <Filter>Game\Player\ComboBehavior\Normal</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.cpp">
-      <Filter>Game\Player\ComboBehavior\Normal</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackJumpFirst.cpp">
-      <Filter>Game\Player\ComboBehavior\Jump</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp">
-      <Filter>Game\Player\ComboBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\Weapon\PlayerHandLeft.cpp">
-      <Filter>Game\Player\Weapon</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\Weapon\BasePlayerHand.cpp">
-      <Filter>Game\Player\Weapon</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\Weapon\PlayerHandRight.cpp">
-      <Filter>Game\Player\Weapon</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\TestObj\CollisionTest1.cpp">
-      <Filter>Game\TestObj</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\TestObj\CollisionTest2.cpp">
-      <Filter>Game\TestObj</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\TestObj\CollisionTest3.cpp">
-      <Filter>Game\TestObj</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\utility\Editor\RailManager.cpp">
       <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
@@ -582,6 +516,15 @@
     </ClCompile>
     <ClCompile Include="Game\GameCamera\Behavior\GameCameraZoomInOut.cpp">
       <Filter>Game\GameCamera\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MonsterBall\MonsterBall.cpp">
+      <Filter>Game\MonsterBall</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Plane\Plane.cpp">
+      <Filter>Game\Plane</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Lighrt\AmbientLight.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -774,78 +717,6 @@
     <ClInclude Include="Game\Scene\Factory\SceneFactory.h">
       <Filter>Game\Scene\Factory</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\PlayerBehavior\BasePlayerBehavior.h">
-      <Filter>Game\Player\MoveBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\PlayerBehavior\PlayerJump.h">
-      <Filter>Game\Player\MoveBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\PlayerBehavior\PlayerRoot.h">
-      <Filter>Game\Player\MoveBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameCamera\GameCamera.h">
-      <Filter>Game\GameCamera</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\BaseObject\BaseObject.h">
-      <Filter>Game\BaseObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\JoyState\JoyState.h">
-      <Filter>Game\JoyState</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Field\Field.h">
-      <Filter>Game\Field</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\LockOn\LockOn.h">
-      <Filter>Game\LockOn</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\SkyDome\SkyDome.h">
-      <Filter>Game\SkyDome</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\EnemyManager.h">
-      <Filter>Game\Enemy\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\Player.h">
-      <Filter>Game\Player\core</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\BaseEnemy.h">
-      <Filter>Game\Enemy\core</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\NormalEnemy.h">
-      <Filter>Game\Enemy\core</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackFirst.h">
-      <Filter>Game\Player\ComboBehavior\Normal</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h">
-      <Filter>Game\Player\ComboBehavior\Normal</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.h">
-      <Filter>Game\Player\ComboBehavior\Normal</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackJumpFirst.h">
-      <Filter>Game\Player\ComboBehavior\Jump</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h">
-      <Filter>Game\Player\ComboBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\Weapon\PlayerHandLeft.h">
-      <Filter>Game\Player\Weapon</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\Weapon\BasePlayerHand.h">
-      <Filter>Game\Player\Weapon</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\Weapon\PlayerHandRight.h">
-      <Filter>Game\Player\Weapon</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\TestObj\CollisionTest1.h">
-      <Filter>Game\TestObj</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\TestObj\CollisionTest2.h">
-      <Filter>Game\TestObj</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\TestObj\CollisionTest3.h">
-      <Filter>Game\TestObj</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\utility\Editor\RailManager.h">
       <Filter>MyEngine\.h\utility\Editor</Filter>
     </ClInclude>
@@ -992,6 +863,15 @@
     </ClInclude>
     <ClInclude Include="Game\GameCamera\Behavior\GameCameraZoomInOut.h">
       <Filter>Game\GameCamera\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MonsterBall\MonsterBall.h">
+      <Filter>Game\MonsterBall</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Plane\Plane.h">
+      <Filter>Game\Plane</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\AmbientLight.h">
+      <Filter>MyEngine\.h\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

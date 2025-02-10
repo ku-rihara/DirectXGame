@@ -85,10 +85,10 @@ public:
 
 	Vector3 GetLocalPos() const;
 	Vector3 GetWorldPos() const;
-
+	
 	Vector3 LookAt(const Vector3& direction)const;
 
-	void BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis = BillboardType::XYZ, const AdaptRotate& adaptRotate = { false,false,false });
+	void BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis=BillboardType::XYZ,const AdaptRotate& adaptRotate={false,false,false});
 
 	/// <summary>
 	/// 定数バッファの取得

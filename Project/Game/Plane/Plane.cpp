@@ -43,7 +43,7 @@ void Plane::Draw(ViewProjection& viewProjection) {
 }
 
 void  Plane::Debug() {
-
+#ifdef _DEBUG
 	/// .obj
     if (ImGui::CollapsingHeader("Plane")) {
 		ImGui::PushID("Plane");
@@ -61,4 +61,5 @@ void  Plane::Debug() {
 		gobjct3D_->material_.DebugImGui();
 		ImGui::PopID();
 	}
+#endif // _DEBUG
 }

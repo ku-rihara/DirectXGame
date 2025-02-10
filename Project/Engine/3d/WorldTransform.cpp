@@ -69,7 +69,7 @@ void WorldTransform::UpdateMatrix() {
 }
 
 
-void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis, const AdaptRotate& adaptRotate) {
+void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis,const AdaptRotate& adaptRotate) {
 	// スケール、回転、平行移動行列を計算
 	Matrix4x4 scaleMatrix = MakeScaleMatrix(scale_);
 	Matrix4x4 translateMatrix = MakeTranslateMatrix(translation_);
@@ -113,7 +113,7 @@ void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection,
 	Matrix4x4 xzRotationMatrix = MakeRotateMatrix(rotation_);
 
 	// ビルボード行列に適用（Y軸回転 → X/Z軸回転の順）
-	billboardMatrix_ = xzRotationMatrix * billboardMatrix_;
+	billboardMatrix_ = xzRotationMatrix* billboardMatrix_;
 
 	// ビルボード行列の平行移動成分をクリア
 	billboardMatrix_.m[3][0] = 0.0f;

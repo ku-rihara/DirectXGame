@@ -393,6 +393,13 @@ void ParticleEmitter::EditorUpdate() {
 
 		// IsBillBoard のチェックボックス
 		ImGui::Checkbox("IsBillBoard", &groupParamaters_.isBillBord);
+		
+		ImGui::SeparatorText("IsRotateAdapt");
+		ImGui::Checkbox("IsX", &groupParamaters_.adaptRotate_.isX_);
+		ImGui::Checkbox("IsY", &groupParamaters_.adaptRotate_.isY_);
+		ImGui::Checkbox("IsZ", &groupParamaters_.adaptRotate_.isZ_);
+
+		ImGui::SeparatorText("BillBordType");
 
 		ImGui::SeparatorText("IsRotateAdapt");
 		ImGui::Checkbox("IsX", &groupParamaters_.adaptRotate_.isX_);
