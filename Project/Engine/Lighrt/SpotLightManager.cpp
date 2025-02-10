@@ -35,7 +35,6 @@ void SpotLightManager::SetLightCommand(ID3D12GraphicsCommandList* commandList) {
 void SpotLightManager::DebugImGui() {
 
     if (ImGui::CollapsingHeader("SpotLights")) {/// spot
-        ImGui::PushID("SpotLights");
         // const auto& に変更
         const auto& spotLights = GetLights();
         for (size_t i = 0; i < spotLights.size(); ++i) {
@@ -45,9 +44,9 @@ void SpotLightManager::DebugImGui() {
                 ImGui::TreePop();
             }
         }
-        /*if (ImGui::Button("Add Spot Light")) {
+        if (ImGui::Button("Add Spot Light")) {
             Add(DirectXCommon::GetInstance()->GetDevice());
-        }*/
-        ImGui::PopID();
+        }
+       
     }
 }

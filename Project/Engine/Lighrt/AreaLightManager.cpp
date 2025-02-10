@@ -36,7 +36,6 @@ void AreaLightManager::SetLightCommand(ID3D12GraphicsCommandList* commandList) {
 void AreaLightManager::DebugImGui() {
 
     if (ImGui::CollapsingHeader("AreaLight")) {   /// AreaLight
-        ImGui::PushID("AreaLight");
         // const auto& に変更
         const auto& areaLights = GetLights();
         for (size_t i = 0; i < areaLights.size(); ++i) {
@@ -46,9 +45,8 @@ void AreaLightManager::DebugImGui() {
                 ImGui::TreePop();
             }
         }
-      /*  if (ImGui::Button("Add Area Light")) {
+        if (ImGui::Button("Add Area Light")) {
             Add(DirectXCommon::GetInstance()->GetDevice());
-        }*/
-        ImGui::PopID();
+        }
     }
 }

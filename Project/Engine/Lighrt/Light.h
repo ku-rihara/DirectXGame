@@ -16,7 +16,6 @@ class DirectionalLight;
 class PointLightManager;
 class SpotLightManager;
 class AreaLightManager;
-class AmbientLight;
 
 class Light {
 private:
@@ -25,7 +24,7 @@ private:
     std::unique_ptr<PointLightManager> pointLightManager_;
     std::unique_ptr<SpotLightManager> spotLightManager_;
     std::unique_ptr<AreaLightManager>areaLightManager_;
-    std::unique_ptr<AmbientLight>ambientLight_;
+
     //虚面反射
     Microsoft::WRL::ComPtr<ID3D12Resource> cameraForGPUResource_;
     //鏡面反射用データ

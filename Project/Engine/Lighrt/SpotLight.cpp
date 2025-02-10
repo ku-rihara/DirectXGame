@@ -10,26 +10,21 @@ SpotLight::SpotLight()
 }
 SpotLight::~SpotLight()
 {
-    if (lightResource_)
-    {
-        lightResource_->Release();
-        lightResource_ = nullptr;
-    }
-    lightData_ = nullptr;
+   
 }
 
 void SpotLight::Init(ID3D12Device* device) {
     lightResource_ = DirectXCommon::GetInstance()->CreateBufferResource(device, sizeof(SpotLightData));
     lightData_ = nullptr;
     lightResource_->Map(0, nullptr, reinterpret_cast<void**>(&lightData_));
-    lightData_->color = { 1.0f,1.0f,1.0f,1.0f };
-    lightData_->position = { 2.0f,1.25f,0.0f };
+    lightData_->color = {0.8235f, 0.5882f, 0.2078f,1.0f };
+    lightData_->position = { 2.3f,5.0f,0.0f };
     lightData_->distance = 7.0f;
-    lightData_->direction = Vector3::Normalize({ -1.0f,-1.0f,0.0f });
-    lightData_->intensity = 2.0f;
-    lightData_->decay = 2.0f;
-    lightData_->cosAngle = std::cos(std::numbers::pi_v<float>/3.0f);
-    lightData_->cosFalloffStart = 3.0f;
+    lightData_->direction = Vector3::Normalize({ 0.0f,-1.0f,0.0f });
+    lightData_->intensity = 5.0f;
+    lightData_->decay = 0.05f;
+    lightData_->cosAngle = 0.5f;
+    lightData_->cosFalloffStart = 1.5f;
 
 }
 

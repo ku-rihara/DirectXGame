@@ -11,12 +11,7 @@ DirectionalLight::DirectionalLight()
 }
 DirectionalLight::~DirectionalLight()
 {
-    if (lightResource_)
-    {
-        lightResource_->Release();
-        lightResource_ = nullptr;
-    }
-    lightData_ = nullptr;
+    
 }
 void DirectionalLight::Init(ID3D12Device* device) {
     lightResource_ = DirectXCommon::GetInstance()->CreateBufferResource(device, sizeof(DirectionalLightData));
@@ -38,11 +33,10 @@ void DirectionalLight::SetIntensity(float intensity) {
 }
 void DirectionalLight::DebugImGui() {
     if (ImGui::CollapsingHeader("DirectionalLight")) {
-        ImGui::PushID("DirectionalLight");
         ImGui::DragFloat3("Direction", (float*)&lightData_->direction, 0.01f);
         ImGui::DragFloat("Intensity", (float*)&lightData_->intensity, 0.1f);
         lightData_->direction = Vector3::Normalize(lightData_->direction);
-        ImGui::PopID();
+       
     }
 }
 

@@ -34,7 +34,6 @@ void PointLightManager::SetLightCommand(ID3D12GraphicsCommandList* commandList) 
 void PointLightManager::DebugImGui(){
 
     if (ImGui::CollapsingHeader("PointLights")) { /// point
-        ImGui::PushID("PointLights");
         // const auto& に変更
         const auto& pointLights = GetLights();
         for (size_t i = 0; i < pointLights.size(); ++i) {
@@ -44,9 +43,9 @@ void PointLightManager::DebugImGui(){
                 ImGui::TreePop();
             }
         }
-       /* if (ImGui::Button("Add Point Light")) {
+        if (ImGui::Button("Add Point Light")) {
             Add(DirectXCommon::GetInstance()->GetDevice());
-        }*/
-        ImGui::PopID();
+        }
+   
     }
 }
