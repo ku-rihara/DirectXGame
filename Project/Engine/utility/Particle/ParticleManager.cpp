@@ -24,7 +24,8 @@ ParticleManager* ParticleManager::GetInstance() {
 void ParticleManager::Init(SrvManager* srvManager) {
 	pSrvManager_ = srvManager;
 	pParticleCommon_ = ParticleCommon::GetInstance();
-	particleFiles_ = GetFileNamesForDyrectry(dyrectry_);
+	SetAllParticleFile();
+	
 }
 
 ///============================================================
@@ -385,3 +386,6 @@ void ParticleManager::SetViewProjection(const ViewProjection* view){
 	viewProjection_ = view;
 }
 
+void ParticleManager::SetAllParticleFile() {
+	particleFiles_ = GetFileNamesForDyrectry(dyrectry_);
+}

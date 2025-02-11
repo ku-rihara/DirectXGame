@@ -260,7 +260,7 @@ void GlobalParameter::SaveFile(const std::string& groupName, const std::string& 
         std::filesystem::create_directories(dir);
     }
 
-    std::string filePath = kDirectoryPath + folderName+ groupName + ".json";
+    std::string filePath = kDirectoryPath + folderName + "/" + groupName + ".json";
     std::ofstream ofs(filePath);
     if (ofs.fail()) {
         std::string message = "Failed to open data file for write.";

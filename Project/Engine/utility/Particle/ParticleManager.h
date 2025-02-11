@@ -114,5 +114,5 @@ public:
 	///============================================================
 	void SetViewProjection(const ViewProjection* view);
 	void SetTextureHandle(const std::string name, const uint32_t& handle);
-
+	void SetAllParticleFile();
 };
