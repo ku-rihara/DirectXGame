@@ -80,6 +80,8 @@ void ParticleEmitter::ParmSaveForImGui() {
 		// セーブ完了メッセージ
 		std::string message = std::format("{}.json saved.", folderName_ + particleName_);
 		MessageBoxA(nullptr, message.c_str(), "GlobalParameter", 0);
+
+		ParticleManager::GetInstance()->SetAllParticleFile();
 	}
 }
 
@@ -490,8 +492,7 @@ void ParticleEmitter::ParticleChange() {
 			names.push_back(file.c_str());
 
 			if (file != particleName_) continue;
-			myParticleNum_ = int(names.size()-1);
-			
+		
 		}
 		if (ImGui::CollapsingHeader("SelectParticle")) {
 			// 選択
