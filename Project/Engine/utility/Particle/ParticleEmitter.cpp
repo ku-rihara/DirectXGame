@@ -415,15 +415,15 @@ void ParticleEmitter::EditorUpdate() {
 		}
 	}
 
-	// パーティクル切り替え
-	ParticleChange();
-
 	// その他のパラメータ
 	if (ImGui::CollapsingHeader("Frag")) {
 
 		// IsRotateforDirection のチェックボックス
 		ImGui::Checkbox("IsRotateforDirection", &parameters_.isRotateforDirection);
 	}
+
+	// パーティクル切り替え
+	ParticleChange();
 
 	ParmSaveForImGui();
 	ParmLoadForImGui();

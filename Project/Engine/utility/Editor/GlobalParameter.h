@@ -112,8 +112,8 @@ public:
 	void LoadFiles();
 
 	// 特定のグループのデータをファイルから読み込む
-	void LoadFile(const std::string& groupName, const std::string& fileName = NULL);
-	void SaveFile(const std::string& groupName, const std::string& fileName = NULL);
+	void LoadFile(const std::string& groupName, const std::string& fileName="");
+	void SaveFile(const std::string& groupName, const std::string& fileName = "");
 private:
 
 	void ParmLoadForImGui(const std::string& groupName);
