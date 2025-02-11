@@ -1,4 +1,7 @@
 #include "PointLightManager.h"
+#include"base/DirectXCommon.h"
+#include<imgui.h>
+#include<string>
 
 void PointLightManager::Add(ID3D12Device* device) {
     auto newLight = std::make_unique<PointLight>();
@@ -25,5 +28,24 @@ void PointLightManager::SetLightCommand(ID3D12GraphicsCommandList* commandList) 
     for (size_t i = 0; i < pointLights_.size(); ++i) {
         // 各スポットライトのデータを設定
         pointLights_[i]->SetLightCommand(commandList, static_cast<int>(i));
+    }
+}
+
+void PointLightManager::DebugImGui(){
+
+    if (ImGui::CollapsingHeader("PointLights")) { /// point
+        // const auto& に変更
+        const auto& pointLights = GetLights();
+        for (size_t i = 0; i < pointLights.size(); ++i) {
+            if (ImGui::TreeNode(("PointLight" + std::to_string(i)).c_str())) {
+                //ポインタでアクセスするように変更
+                pointLights[i]->DebugImGui();
+                ImGui::TreePop();
+            }
+        }
+        if (ImGui::Button("Add Point Light")) {
+            Add(DirectXCommon::GetInstance()->GetDevice());
+        }
+   
     }
 }

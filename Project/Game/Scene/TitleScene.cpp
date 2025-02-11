@@ -21,24 +21,17 @@ void TitleScene::Init() {
 
 	BaseScene::Init();
 
-	ctest1_ = std::make_unique<CollisionTest1>();
-	ctest2_ = std::make_unique<CollisionTest2>();
-	ctest3_ = std::make_unique<CollisionTest3>();
+	emitter_.reset(ParticleEmitter::CreateParticle("punchEffect", "Plane", ".obj", 900));
+	uint32_t t=TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
+	emitter_->SetTextureHandle(t);
 
-	emitter_.reset(ParticleEmitter::CreateParticle("punchEffect", "Plane", ".obj", 200));
+	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 
-
-	ctest1_->Init();
-	ctest2_->Init();
-	ctest3_->Init();
 }
 
 void TitleScene::Update() {
 
-	ctest1_->Update();
-	ctest2_->Update();
-	ctest3_->Update();
-
+	
 	emitter_->Update();
 	emitter_->EditorUpdate();
 	emitter_->Emit();
@@ -53,7 +46,7 @@ void TitleScene::Update() {
 		SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 	}
 
-	
+
 }
 
 /// ===================================================
@@ -61,7 +54,7 @@ void TitleScene::Update() {
 /// ===================================================
 void TitleScene::ModelDraw() {
 
-	
+
 }
 
 /// ===================================================

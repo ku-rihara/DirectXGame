@@ -1,7 +1,7 @@
 #pragma once
 #include "3d/Object3d.h"
 #include "3d/WorldTransform.h"
-class Ground {
+class Plane {
 public:
 
 private:
@@ -10,10 +10,15 @@ private:
 	// モデル
 	std::unique_ptr<Object3d> objct3D_=nullptr;
 
+	// ワールド変換データ
+	WorldTransform gtransform_;
+	// モデル
+	std::unique_ptr<Object3d> gobjct3D_ = nullptr;
+
 	
 public:
-	Ground();
-	~Ground();
+	Plane();
+	~Plane();
 	void Init();
 	void Update();
 	void Draw(ViewProjection& viewProjection);

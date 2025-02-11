@@ -9,12 +9,6 @@ PointLight::PointLight()
 }
 PointLight::~PointLight()
 {
-    if (lightResource_)
-    {
-        lightResource_->Release();
-        lightResource_ = nullptr;
-    }
-    lightData_ = nullptr;
 }
 
 void PointLight::Init(ID3D12Device* device) {

@@ -5,6 +5,8 @@
 
 //testobj
 #include"Ground/Ground.h"
+#include"MonsterBall/MonsterBall.h"
+#include"Plane/Plane.h"
 // emitter
 #include"utility/Particle/ParticleEmitter.h"
 
@@ -20,7 +22,9 @@ private:
 	///========================================================
 
 	
-	
+	std::unique_ptr<Ground> ground_ = nullptr;
+	std::unique_ptr<MonsterBall> monsterBall_ = nullptr;
+	std::unique_ptr<Plane> plane_ = nullptr;
 
 public:
 	

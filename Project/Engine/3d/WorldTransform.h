@@ -14,11 +14,18 @@ struct ConstBufferDataWorldTransform {
 /// </summary>
 class WorldTransform{
 public:
+
 	enum class BillboardType {
 		X, //x
 	    Y, //y
 		Z, //z
 		XYZ //xyz
+	};
+
+	struct AdaptRotate {
+		bool isX_;
+		bool isY_;
+		bool isZ_;
 	};
 
 public:
@@ -37,6 +44,7 @@ public:
 private:
 	Matrix4x4 billboardMatrix_;
 	Matrix4x4 backToFrontMatrix_;
+
 	// 定数バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuffer_;
 	// マッピング済みアドレス
@@ -77,10 +85,10 @@ public:
 
 	Vector3 GetLocalPos() const;
 	Vector3 GetWorldPos() const;
-
+	
 	Vector3 LookAt(const Vector3& direction)const;
 
-	void BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis=BillboardType::XYZ);
+	void BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis=BillboardType::XYZ,const AdaptRotate& adaptRotate={false,false,false});
 
 	/// <summary>
 	/// 定数バッファの取得

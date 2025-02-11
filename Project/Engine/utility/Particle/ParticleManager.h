@@ -69,7 +69,11 @@ private:
 	SrvManager* pSrvManager_;
 	ParticleCommon* pParticleCommon_;
 	AccelerationField accelerationField_;
-	
+	const ViewProjection* viewProjection_;
+
+	/// Particle File
+	std::vector<std::string> particleFiles_; //パーティクルのファイル達
+	const std::string dyrectry_="./Resources/GlobalParameter/Particle";
 
 public:
 	std::unordered_map<std::string, ParticleGroup>particleGroups_;
@@ -82,30 +86,33 @@ public:
 	///============================================================
 
 	//初期化、更新、描画
-	void Init(SrvManager* srvManager);
+	void Init (SrvManager* srvManager);
 	void Update(const ViewProjection& viewProjection);
 	void Draw(const ViewProjection& viewProjection);
+	Vector3 DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view);
 
-	/// グループ作成
-	void CreateParticleGroup(const std::string name, const std::string modelFilePath,const std::string& extension, const uint32_t& maxnum);
 
-	// モデル、リソース作成
+	// モデル、リソース作成(グループ作成)
+	void CreateParticleGroup(const std::string name, const std::string modelFilePath, const std::string& extension, const uint32_t& maxnum);
 	void SetModel(const std::string& name,const std::string& modelName, const std::string& extension);
 	void CreateMaterialResource(const std::string& name);
 	void CreateInstancingResource(const std::string& name, const uint32_t& instanceNum);
 
-	// テクスチャセット
-	void SetTextureHandle(const std::string name, const uint32_t& handle);
-
-	/// リセット
-	void ResetAllParticles();
-
-	// 作成
+	/// リセット、パーティクル作成、エミット
+	void      ResetAllParticles();
 	Particle  MakeParticle(const ParticleEmitter::Parameters&paramaters);
-	
-	//　エミット
-	void Emit(
-		std::string name, const ParticleEmitter::Parameters&
-		paramaters,const ParticleEmitter::GroupParamaters&groupParamaters, const int32_t& count);
+	void      Emit(std::string name, const ParticleEmitter::Parameters&paramaters,
+		      const ParticleEmitter::GroupParamaters&groupParamaters, const int32_t& count);
 
+	///============================================================
+	///getter method
+	///============================================================
+	const std::vector<std::string>& GetParticleFiles() const {return particleFiles_;}
+	const std::string& getDirectory() const {return dyrectry_;}
+	///============================================================
+	///setter method
+	///============================================================
+	void SetViewProjection(const ViewProjection* view);
+	void SetTextureHandle(const std::string name, const uint32_t& handle);
+	void SetAllParticleFile();
 };

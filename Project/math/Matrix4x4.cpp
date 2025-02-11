@@ -387,3 +387,93 @@ Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, int row) {
 
 	return result; // 正規化された行列を返す
 }
+
+Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to) {
+	Matrix4x4 result;
+
+
+	float cosTheta = Vector3::Dot(from, to);
+	Vector3 cross = Vector3::Cross(from, to);
+
+
+	if (cosTheta < -0.9999f) {
+		Vector3 axis = (std::abs(from.x) > std::abs(from.z))
+			? Vector3{ 0.0f, 0.0f, 1.0f }
+		: Vector3{ 1.0f, 0.0f, 0.0f };
+		axis = (Vector3::Cross(from, axis).Normalize());
+
+		result.m[0][0] = -1.0f + 2.0f * axis.x * axis.x;
+		result.m[0][1] = 2.0f * axis.x * axis.y;
+		result.m[0][2] = 2.0f * axis.x * axis.z;
+		result.m[0][3] = 0.0f;
+
+		result.m[1][0] = 2.0f * axis.x * axis.y;
+		result.m[1][1] = -1.0f + 2.0f * axis.y * axis.y;
+		result.m[1][2] = 2.0f * axis.y * axis.z;
+		result.m[1][3] = 0.0f;
+
+		result.m[2][0] = 2.0f * axis.x * axis.z;
+		result.m[2][1] = 2.0f * axis.y * axis.z;
+		result.m[2][2] = -1.0f + 2.0f * axis.z * axis.z;
+		result.m[2][3] = 0.0f;
+
+		result.m[3][0] = 0.0f;
+		result.m[3][1] = 0.0f;
+		result.m[3][2] = 0.0f;
+		result.m[3][3] = 1.0f;
+
+		return result;
+	}
+
+
+	Vector3 axis = (cross).Normalize();
+
+
+	float sinTheta = (cross).Length();
+	float oneMinusCosTheta = 1.0f - cosTheta;
+
+	result.m[0][0] = cosTheta + axis.x * axis.x * oneMinusCosTheta;
+	result.m[0][1] = axis.x * axis.y * oneMinusCosTheta - axis.z * sinTheta;
+	result.m[0][2] = axis.x * axis.z * oneMinusCosTheta + axis.y * sinTheta;
+	result.m[0][3] = 0.0f;
+
+	result.m[1][0] = axis.y * axis.x * oneMinusCosTheta + axis.z * sinTheta;
+	result.m[1][1] = cosTheta + axis.y * axis.y * oneMinusCosTheta;
+	result.m[1][2] = axis.y * axis.z * oneMinusCosTheta - axis.x * sinTheta;
+	result.m[1][3] = 0.0f;
+
+	result.m[2][0] = axis.z * axis.x * oneMinusCosTheta - axis.y * sinTheta;
+	result.m[2][1] = axis.z * axis.y * oneMinusCosTheta + axis.x * sinTheta;
+	result.m[2][2] = cosTheta + axis.z * axis.z * oneMinusCosTheta;
+	result.m[2][3] = 0.0f;
+
+	result.m[3][0] = 0.0f;
+	result.m[3][1] = 0.0f;
+	result.m[3][2] = 0.0f;
+	result.m[3][3] = 1.0f;
+
+	result = Transpose(result);
+
+	return result;
+}
+
+Vector3 ExtractEulerAngles(const Matrix4x4& matrix) {
+	Vector3 angles;
+
+	// ピッチ (X軸回転)
+	angles.x = std::asin(-matrix.m[1][2]);
+
+	// コサインのチェック (Gimbal Lock 対策)
+	if (std::abs(std::cos(angles.x)) > 1e-6f) {
+		// ヨー (Y軸回転)
+		angles.y = std::atan2(matrix.m[0][2], matrix.m[2][2]);
+		// ロール (Z軸回転)
+		angles.z = std::atan2(matrix.m[1][0], matrix.m[1][1]);
+	} else {
+		// Gimbal Lock が発生した場合、Yaw を 0 にして Roll のみ調整
+		angles.y = 0.0f;
+		angles.z = std::atan2(-matrix.m[0][1], matrix.m[0][0]);
+	}
+
+	return angles;
+}

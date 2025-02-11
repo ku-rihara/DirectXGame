@@ -35,54 +35,14 @@ void Light::Init(ID3D12Device* device) {
 }
 
 void Light::DebugImGui() {
+	ImGui::Begin("Light");
 	ImGui::DragFloat3("WorldCamera", (float*)&cameraForGPUData_->worldPosition_, 0.01f);
 	directionalLight_->DebugImGui();
-	if (ImGui::TreeNode("PointLights")) { /// point
-		// const auto& に変更
-		const auto& pointLights = pointLightManager_->GetLights();
-		for (size_t i = 0; i < pointLights.size(); ++i) {
-			if (ImGui::TreeNode(("PointLight" + std::to_string(i)).c_str())) {
-				//ポインタでアクセスするように変更
-				pointLights[i]->DebugImGui();
-				ImGui::TreePop();
-			}
-		}
-		if (ImGui::Button("Add Point Light")) {
-			pointLightManager_->Add(DirectXCommon::GetInstance()->GetDevice());
-		}
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("SpotLights")) {/// spot
-		// const auto& に変更
-		const auto& spotLights = spotLightManager_->GetLights();
-		for (size_t i = 0; i < spotLights.size(); ++i) {
-			if (ImGui::TreeNode(("SpotLight" + std::to_string(i)).c_str())) {
-				//ポインタでアクセスするように変更
-				spotLights[i]->DebugImGui();
-				ImGui::TreePop();
-			}
-		}
-		if (ImGui::Button("Add Spot Light")) {
-			spotLightManager_->Add(DirectXCommon::GetInstance()->GetDevice());
-		}
-		ImGui::TreePop();
-	}
-
-	if (ImGui::TreeNode("AreaLight")) {   /// AreaLight
-		// const auto& に変更
-		const auto& areaLights = areaLightManager_->GetLights();
-		for (size_t i = 0; i < areaLights.size(); ++i) {
-			if (ImGui::TreeNode(("AreaLight" + std::to_string(i)).c_str())) {
-				//ポインタでアクセスするように変更
-				areaLights[i]->DebugImGui();
-				ImGui::TreePop();
-			}
-		}
-		if (ImGui::Button("Add Area Light")) {
-			areaLightManager_->Add(DirectXCommon::GetInstance()->GetDevice());
-		}
-		ImGui::TreePop();
-	}
+	pointLightManager_->DebugImGui();
+	spotLightManager_->DebugImGui();
+	areaLightManager_->DebugImGui();
+	ImGui::End();
+	
 }
 
 

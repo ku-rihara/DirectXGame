@@ -13,11 +13,8 @@
 class TitleScene:public BaseScene {
 private:
 
-	std::unique_ptr<CollisionTest1>ctest1_;
-	std::unique_ptr<CollisionTest2>ctest2_;
-	std::unique_ptr<CollisionTest3>ctest3_;
-
 	std::unique_ptr<ParticleEmitter>emitter_;
+	
 
 public:
 	///========================================================

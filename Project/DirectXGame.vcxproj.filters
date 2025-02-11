@@ -79,9 +79,6 @@
     <Filter Include="MyEngine\.h\Collider">
       <UniqueIdentifier>{261d89ef-d3f4-4da1-aa9e-bfd6e260bf1a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\TestObj">
-      <UniqueIdentifier>{7bdc3ee7-e0ae-40dc-88b0-86f6e624ddbf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.cpp\Core">
       <UniqueIdentifier>{b79d053e-0a76-457f-9fe2-ce730fecf455}</UniqueIdentifier>
     </Filter>
@@ -126,6 +123,12 @@
     </Filter>
     <Filter Include="MyEngine\.cpp\Light">
       <UniqueIdentifier>{5396bc61-e016-4b3e-8707-c28cc9c03b94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\MonsterBall">
+      <UniqueIdentifier>{0fe76578-dd93-4ebc-a7b1-ff86299b8b82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Plane">
+      <UniqueIdentifier>{70c3c5e1-9bef-4a27-b4f2-dba2a4e9ab55}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Player">
       <UniqueIdentifier>{7a5d0742-9ae4-4f8d-8b0f-ed52a7cb2b1e}</UniqueIdentifier>
@@ -247,12 +250,6 @@
     <ClCompile Include="Engine\Collider\OBBCollider.cpp">
       <Filter>MyEngine\.cpp\Collider</Filter>
     </ClCompile>
-    <ClCompile Include="Game\TestObj\CollisionTest1.cpp">
-      <Filter>Game\TestObj</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\TestObj\CollisionTest2.cpp">
-      <Filter>Game\TestObj</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Core\KTGame.cpp">
       <Filter>MyEngine\.cpp\Core</Filter>
     </ClCompile>
@@ -298,9 +295,6 @@
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp">
       <Filter>Game\Scene\Factory</Filter>
     </ClCompile>
-    <ClCompile Include="Game\TestObj\CollisionTest3.cpp">
-      <Filter>Game\TestObj</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\utility\Editor\RailManager.cpp">
       <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
@@ -336,6 +330,18 @@
     </ClCompile>
     <ClCompile Include="Engine\Lighrt\AreaLight.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MonsterBall\MonsterBall.cpp">
+      <Filter>Game\MonsterBall</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Plane\Plane.cpp">
+      <Filter>Game\Plane</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Lighrt\AmbientLight.cpp">
+      <Filter>MyEngine\.cpp\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Function\GetFile.cpp">
+      <Filter>MyEngine\.cpp\function</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\Player.cpp">
       <Filter>Game\Player</Filter>
@@ -489,12 +495,6 @@
     <ClInclude Include="Engine\Collider\CollisionManager.h">
       <Filter>MyEngine\.h\Collider</Filter>
     </ClInclude>
-    <ClInclude Include="Game\TestObj\CollisionTest1.h">
-      <Filter>Game\TestObj</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\TestObj\CollisionTest2.h">
-      <Filter>Game\TestObj</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Core\KTGame.h">
       <Filter>MyEngine\.h\Core</Filter>
     </ClInclude>
@@ -543,9 +543,6 @@
     <ClInclude Include="Game\Scene\Factory\SceneFactory.h">
       <Filter>Game\Scene\Factory</Filter>
     </ClInclude>
-    <ClInclude Include="Game\TestObj\CollisionTest3.h">
-      <Filter>Game\TestObj</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\utility\Editor\RailManager.h">
       <Filter>MyEngine\.h\utility\Editor</Filter>
     </ClInclude>
@@ -581,6 +578,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Lighrt\AreaLight.h">
       <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MonsterBall\MonsterBall.h">
+      <Filter>Game\MonsterBall</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Plane\Plane.h">
+      <Filter>Game\Plane</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Lighrt\AmbientLight.h">
+      <Filter>MyEngine\.h\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Function\GetFile.h">
+      <Filter>MyEngine\.h\function</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\Player.h">
       <Filter>Game\Player</Filter>

@@ -55,3 +55,8 @@ Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, f
 Vector3 ScreenTransform(Vector3 worldPos, const ViewProjection& viewProjection);
 
 Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, int row);
+
+
+Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to);
+
+Vector3 ExtractEulerAngles(const Matrix4x4& matrix);

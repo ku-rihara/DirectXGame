@@ -1,0 +1,96 @@
+{
+    "ThrustDamage": {
+        "AdaptRotateIsX": false,
+        "AdaptRotateIsY": false,
+        "AdaptRotateIsZ": false,
+        "BaseColor": [
+            0.9019607901573181,
+            0.3308229446411133,
+            0.09284888952970505,
+            0.0
+        ],
+        "Color Max": [
+            0.6029411554336548,
+            0.26009225845336914,
+            0.26009225845336914,
+            0.0
+        ],
+        "Color Min": [
+            0.07750698179006577,
+            0.06300462782382965,
+            0.18627452850341797,
+            0.0
+        ],
+        "Gravity": -47.099998474121094,
+        "IntervalTime": 0.03999999910593033,
+        "LifeTime": 1.0,
+        "Particle Count": 1,
+        "Position Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Position Max": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Position Min": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "Rotate Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Max": [
+            0.0,
+            0.0,
+            26.100000381469727
+        ],
+        "RotateSpeed Min": [
+            0.0,
+            0.0,
+            13.300000190734863
+        ],
+        "Scale Max": 1.0,
+        "Scale Min": 1.0,
+        "ScaleV3 Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "ScaleV3 Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Velocity Max": [
+            10.0,
+            39.900001525878906,
+            10.0
+        ],
+        "Velocity Min": [
+            -10.199999809265137,
+            29.100000381469727,
+            -12.800000190734863
+        ],
+        "isBillBord": false,
+        "isMoveForRail": false,
+        "isRotateforDirection": false,
+        "isScalerScale": true,
+        "moveSpeed": 0.0
+    }
+}

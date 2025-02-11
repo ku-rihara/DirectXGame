@@ -1,7 +1,7 @@
 #pragma once
 #include "3d/Object3d.h"
 #include "3d/WorldTransform.h"
-class Ground {
+class MonsterBall {
 public:
 
 private:
@@ -12,8 +12,8 @@ private:
 
 	
 public:
-	Ground();
-	~Ground();
+	MonsterBall();
+	~MonsterBall();
 	void Init();
 	void Update();
 	void Draw(ViewProjection& viewProjection);

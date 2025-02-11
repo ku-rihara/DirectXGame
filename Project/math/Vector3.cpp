@@ -105,15 +105,3 @@ Vector3  Vector3::UnitVector() {
 	return Vector3(1.0f, 1.0f, 1.0f);
 }
 
-Vector3 Vector3::DirectionToEulerAngles(const Vector3& direction) {
-	// ピッチの計算（上下方向）
-	float pitch = std::atan2(-direction.y, std::sqrt(direction.x * direction.x + direction.z * direction.z));
-
-	// ヨーの計算（左右方向）
-	float yaw = std::atan2(direction.x, direction.z);
-
-	// ロールはゼロ（傾きは進行方向には関係ない）
-	float roll = 0.0f;
-
-	return { pitch, yaw, roll };
-}
