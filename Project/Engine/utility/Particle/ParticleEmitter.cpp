@@ -488,16 +488,26 @@ void ParticleEmitter::ParticleChange() {
 		std::vector<const char*> names;
 		for (const auto& file : filenames) {
 			names.push_back(file.c_str());
+
+			if (file != particleName_) continue;
+			myParticleNum_ = int(names.size()-1);
+			
 		}
+		if (ImGui::CollapsingHeader("SelectParticle")) {
+			// 選択
+			ImGui::ListBox("Particles", &selectedIndex, names.data(), static_cast<int>(names.size()));
 
-		// 選択
-		ImGui::ListBox("Particles", &selectedIndex, names.data(), static_cast<int>(names.size()));
+			// 適応
+			if (ImGui::Button("Apply")) {
+				ApplyGlobalParameter(filenames[selectedIndex]);
 
-		// 適応
-		if (ImGui::Button("Apply")) {
-			ApplyGlobalParameter(filenames[selectedIndex]);
+				globalParameter_->LoadFile(filenames[selectedIndex], folderName_);
+				// セーブ完了メッセージ
+				ImGui::Text("Load Successful: %s", (folderName_ + filenames[selectedIndex]).c_str());
+				ApplyGlobalParameter(filenames[selectedIndex]);
+
+			}
 		}
-
 		// NotFind
 	} else {
 		ImGui::Text("No particle files found.");
