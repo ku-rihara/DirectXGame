@@ -1,5 +1,7 @@
 {
     "Player": {
+        "FallSpeed": 0.0,
+        "FallSpeedLimit": 80.0,
         "Gravity": 109.54000091552734,
         "JComboPTime1": 0.15000000596046448,
         "JComboPTime2": 0.009999999776482582,

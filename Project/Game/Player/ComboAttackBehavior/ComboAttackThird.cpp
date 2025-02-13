@@ -113,7 +113,7 @@ void ComboAttackThird::Update() {
 		pPlayer_->GetRightHand()->RailThreeComboUpdate(pPlayer_->GetRightHand()->GetRailRunSpeedThree());
 		
 		pPlayer_->SetWorldPositionY(
-			EaseInSine(initPosY_,initPosY_+pPlayer_->GetUpperPosY(),upperJumpEaseT_, pPlayer_->GetPunchEaseMax(Player::THIRD))
+			EaseInSine(initPosY_,initPosY_+pPlayer_->GetPlayerParams().upperPosY,upperJumpEaseT_, pPlayer_->GetPunchEaseMax(Player::THIRD))
 		);
 
 		
@@ -153,7 +153,7 @@ void ComboAttackThird::Update() {
 
 	case Order::FALL:
 
-		pPlayer_->Move(pPlayer_->GetMoveSpeed());/// 
+		pPlayer_->Move(pPlayer_->GetPlayerParams().moveSpeed);/// 
 		pPlayer_->Fall(fallInitSpeed_);
 
 		// レール更新と座標反映

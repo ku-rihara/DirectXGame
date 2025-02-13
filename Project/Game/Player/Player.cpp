@@ -40,7 +40,7 @@ void Player::Init() {
 
 	///* model生成
 	BaseObject::Init();	// 基底クラスの初期化 
-	BaseObject::CreateModel("Player",".obj");/// モデルセット
+	BaseObject::CreateModel("Player", ".obj");/// モデルセット
 	fallParticleName_ = "fallParticle";
 
 	cirlceTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
@@ -50,7 +50,7 @@ void Player::Init() {
 	globalParameter_->CreateGroup(groupName_, false);
 	AddParmGroup();
 	ApplyGlobalParameter();
-	
+
 	obj3d_->material_.materialData_->enableLighting = 2;
 
 	///* 武器生成
@@ -74,9 +74,9 @@ void Player::Init() {
 	fallEmitter_.reset(ParticleEmitter::CreateParticle(fallParticleName_, "DebugSphere", ".obj", 300));
 	fallEmitter_->SetBlendMode(BlendMode::None);
 
-	 punchSoundID_ = Audio::GetInstance()->LoadWave("Resources/punchAir.wav");
-	 strongPunch_= Audio::GetInstance()->LoadWave("Resources/StrongPunch.wav");
-	 fallSound_ = Audio::GetInstance()->LoadWave("Resources/PlayerFall.wav");
+	punchSoundID_ = Audio::GetInstance()->LoadWave("Resources/punchAir.wav");
+	strongPunch_ = Audio::GetInstance()->LoadWave("Resources/StrongPunch.wav");
+	fallSound_ = Audio::GetInstance()->LoadWave("Resources/PlayerFall.wav");
 	/// 通常モードから
 	ChangeBehavior(std::make_unique<PlayerRoot>(this));
 	ChangeComboBehavior(std::make_unique<ComboAttackRoot>(this));
@@ -256,8 +256,7 @@ void Player::Move(const float& speed) {
 		objectiveAngle_ = std::atan2(direction_.x, direction_.z);
 		// 最短角度補間
 		transform_.rotation_.y = LerpShortAngle(transform_.rotation_.y, objectiveAngle_, 0.3f);
-	}
-	else {
+	} else {
 		FaceToTarget();// ターゲットを向くか
 	}
 }
@@ -303,8 +302,7 @@ bool Player::GetIsMoving() {
 		if ((keyBoradVelocity).Length() > 0) {
 			isMoving = true;
 		}
-	}
-	else {
+	} else {
 		/// ----------------------------------------------------------
 		///  JoyStick
 		/// ----------------------------------------------------------
@@ -388,7 +386,7 @@ void Player::Fall(float& speed, const bool& isJump) {
 	}
 
 	// 加速する
-	speed = max(speed - (gravity_ * Frame::DeltaTime()), -80.0f);
+	speed = max(speed - (playerParams_.gravity * Frame::DeltaTime()), -playerParams_.fallSpeedLimit);
 
 	// 着地
 	if (transform_.translation_.y <= Player::InitY_) {
@@ -415,9 +413,15 @@ void Player::AdjustParm() {
 
 		///　Floatのパラメータ
 		ImGui::SeparatorText("FloatParamater");
-		ImGui::DragFloat("jumpSpeed", &jumpSpeed_, 0.01f);
-		ImGui::DragFloat("MoveSpeed", &moveSpeed_, 0.01f);
-		ImGui::DragFloat("Gravity", &gravity_, 0.01f);
+		ImGui::DragFloat("jumpSpeed", &playerParams_.jumpSpeed, 0.01f);
+		ImGui::DragFloat("MoveSpeed", &playerParams_.moveSpeed, 0.01f);
+		ImGui::DragFloat("Gravity", &playerParams_.gravity, 0.01f);
+		ImGui::DragFloat("FallSpeed", &playerParams_.fallSpeed, 0.01f);
+		ImGui::DragFloat("fallSpeedLimit", &playerParams_.fallSpeedLimit, 0.1f);
+		ImGui::DragFloat("rushDistance", &playerParams_.rushDistance, 0.01f);
+		ImGui::DragFloat("rushEaseMax", &playerParams_.rushEaseMax, 0.01f, 0);
+		ImGui::DragFloat("UpperPosY", &playerParams_.upperPosY, 0.1f);
+
 
 		/// コンボパラメータ
 		if (ImGui::CollapsingHeader("NormalCombo")) {
@@ -427,9 +431,6 @@ void Player::AdjustParm() {
 				&normalComboParms_[0].permissionTime,
 				0.01f);
 
-
-			ImGui::DragFloat("rushDistance", &rushDistance_, 0.01f);
-			ImGui::DragFloat("rushEaseMax", &rushEaseMax_, 0.01f, 0);
 
 			ImGui::DragFloat("PunchEaseMax1",
 				&normalComboParms_[0].punchEaseMax,
@@ -463,8 +464,6 @@ void Player::AdjustParm() {
 				&normalComboParms_[2].punchEaseMax,
 				0.01f);
 
-			ImGui::DragFloat("UpperPosY", &upperPosY_, 0.1f);
-
 			ImGui::SeparatorText("ForthCombo");   /// 4コンボ目
 
 			ImGui::DragFloat("PTime4",
@@ -496,7 +495,6 @@ void Player::AdjustParm() {
 			ImGui::DragFloat("JPunchReach2",
 				&jumpComboParms_[1].punchReach,
 				0.01f);
-
 		}
 
 		/// セーブとロード
@@ -535,9 +533,9 @@ void Player::SetGameCamera(GameCamera* gamecamera) {
 	pGameCamera_ = gamecamera;
 }
 
-///=========================================================
+///==============================================================================
 /// ダメージ受ける
-///==========================================================
+///===============================================================================
 void Player::TakeDamage() {
 	/*if (!isDamage_) {
 		life_--;
@@ -546,23 +544,23 @@ void Player::TakeDamage() {
 	}*/
 }
 
-///=========================================================
+///==============================================================================
 /// Class Set
-///==========================================================
+///===============================================================================
 
 void Player::SetLockOn(LockOn* lockon) {
 	pLockOn_ = lockon;
 }
 
-///=========================================================
+///==============================================================================
 /// Collision
-///==========================================================
+///===============================================================================
 
 
 
-///=========================================================
+///==============================================================================
 ///振る舞い切り替え
-///==========================================================
+///===============================================================================
 void Player::ChangeBehavior(std::unique_ptr<BasePlayerBehavior>behavior) {
 	//引数で受け取った状態を次の状態としてセット
 	behavior_ = std::move(behavior);
@@ -598,12 +596,14 @@ void Player::ParmLoadForImGui() {
 void Player::AddParmGroup() {
 
 	globalParameter_->AddItem(groupName_, "Translate", transform_.translation_);
-	globalParameter_->AddItem(groupName_, "JumpSpeed", jumpSpeed_);
-	globalParameter_->AddItem(groupName_, "rushDistance", rushDistance_);
-	globalParameter_->AddItem(groupName_, "rushEaseMax", rushEaseMax_);
-	globalParameter_->AddItem(groupName_, "UpperPosY", upperPosY_);
-	globalParameter_->AddItem(groupName_, "MoveSpeed", moveSpeed_);
-	globalParameter_->AddItem(groupName_, "Gravity", gravity_);
+	globalParameter_->AddItem(groupName_, "JumpSpeed", playerParams_.jumpSpeed);
+	globalParameter_->AddItem(groupName_, "rushDistance", playerParams_.rushDistance);
+	globalParameter_->AddItem(groupName_, "rushEaseMax", playerParams_.rushEaseMax);
+	globalParameter_->AddItem(groupName_, "UpperPosY", playerParams_.upperPosY);
+	globalParameter_->AddItem(groupName_, "MoveSpeed", playerParams_.moveSpeed);
+	globalParameter_->AddItem(groupName_, "Gravity", playerParams_.gravity);
+	globalParameter_->AddItem(groupName_, "FallSpeed", playerParams_.fallSpeed);
+	globalParameter_->AddItem(groupName_, "FallSpeedLimit", playerParams_.fallSpeedLimit);
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
@@ -649,12 +649,14 @@ void Player::AddParmGroup() {
 void Player::SetValues() {
 
 	globalParameter_->SetValue(groupName_, "Translate", transform_.translation_);
-	globalParameter_->SetValue(groupName_, "JumpSpeed", jumpSpeed_);
-	globalParameter_->SetValue(groupName_, "rushDistance", rushDistance_);
-	globalParameter_->SetValue(groupName_, "rushEaseMax", rushEaseMax_);
-	globalParameter_->SetValue(groupName_, "UpperPosY", upperPosY_);
-	globalParameter_->SetValue(groupName_, "MoveSpeed", moveSpeed_);
-	globalParameter_->SetValue(groupName_, "Gravity", gravity_);
+	globalParameter_->SetValue(groupName_, "JumpSpeed", playerParams_.jumpSpeed);
+	globalParameter_->SetValue(groupName_, "rushDistance", playerParams_.rushDistance);
+	globalParameter_->SetValue(groupName_, "rushEaseMax", playerParams_.rushEaseMax);
+	globalParameter_->SetValue(groupName_, "UpperPosY", playerParams_.upperPosY);
+	globalParameter_->SetValue(groupName_, "MoveSpeed", playerParams_.moveSpeed);
+	globalParameter_->SetValue(groupName_, "Gravity", playerParams_.gravity);
+	globalParameter_->SetValue(groupName_, "FallSpeed", playerParams_.fallSpeed);
+	globalParameter_->SetValue(groupName_, "FallSpeedLimit", playerParams_.fallSpeedLimit);
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
@@ -694,18 +696,21 @@ void Player::SetValues() {
 }
 
 
+
 ///=====================================================
 ///  ImGuiからパラメータを得る
 ///===================================================== 
 void Player::ApplyGlobalParameter() {
 	// Position
 	transform_.translation_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
-	jumpSpeed_ = globalParameter_->GetValue<float>(groupName_, "JumpSpeed");
-	rushDistance_ = globalParameter_->GetValue<float>(groupName_, "rushDistance");
-	rushEaseMax_ = globalParameter_->GetValue<float>(groupName_, "rushEaseMax");
-	upperPosY_= globalParameter_->GetValue<float>(groupName_, "UpperPosY");
-	moveSpeed_ = globalParameter_->GetValue<float>(groupName_, "MoveSpeed");
-	gravity_ = globalParameter_->GetValue<float>(groupName_, "Gravity");
+	playerParams_.jumpSpeed = globalParameter_->GetValue<float>(groupName_, "JumpSpeed");
+	playerParams_.rushDistance = globalParameter_->GetValue<float>(groupName_, "rushDistance");
+	playerParams_.rushEaseMax = globalParameter_->GetValue<float>(groupName_, "rushEaseMax");
+	playerParams_.upperPosY = globalParameter_->GetValue<float>(groupName_, "UpperPosY");
+	playerParams_.moveSpeed = globalParameter_->GetValue<float>(groupName_, "MoveSpeed");
+	playerParams_.gravity = globalParameter_->GetValue<float>(groupName_, "Gravity");
+	playerParams_.fallSpeed = globalParameter_->GetValue<float>(groupName_, "FallSpeed");
+	playerParams_.fallSpeedLimit = globalParameter_->GetValue<float>(groupName_, "FallSpeedLimit");
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
@@ -737,6 +742,10 @@ void Player::ApplyGlobalParameter() {
 			"JComboPunchReach" + std::to_string(int(i + 1)));
 	}
 }
+
+/// =========================================================================================
+/// getter method
+/// =========================================================================================
 
 float Player::GetPunchEaseMax(NormalComboNum index)const {
 	return normalComboParms_[index].punchEaseMax;

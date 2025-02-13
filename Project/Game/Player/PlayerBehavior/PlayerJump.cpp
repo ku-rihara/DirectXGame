@@ -17,7 +17,7 @@ PlayerJump::PlayerJump(Player* player)
 	///変数初期化
 	/// ===================================================
 
-		speed_ = pPlayer_->GetMuzzulJumpSpeed();
+	speed_ = pPlayer_->GetPlayerParams().jumpSpeed;
 	
 }
 
@@ -27,7 +27,7 @@ PlayerJump ::~PlayerJump() {
 
 //更新
 void PlayerJump::Update() {
-	pPlayer_->Move(pPlayer_->GetMoveSpeed());
+	pPlayer_->Move(pPlayer_->GetPlayerParams().moveSpeed);
 	pPlayer_->Jump(speed_);
 	
 }

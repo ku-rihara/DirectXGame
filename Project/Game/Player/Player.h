@@ -44,6 +44,17 @@ public:
 	};
 
 private:
+	///Paramater構造体
+	struct PlayerParams {
+		float jumpSpeed;
+		float rushDistance ;
+		float rushEaseMax  ;
+		float upperPosY ;
+		float moveSpeed ;
+		float gravity ;
+		float fallSpeed;
+		float fallSpeedLimit;
+	};
 
 	struct ComboParm {
 		float permissionTime;
@@ -51,50 +62,11 @@ private:
 		float punchReach;
 	};
 
-private:
-	/// ===================================================
-	///private variaus
-	/// ===================================================
-
+private: ///*other class
+	
 	/// グローバルなパラメータ
 	GlobalParameter* globalParameter_;            /// グローバルパラメータ
 	const std::string groupName_ = "Player";      /// グループ名
-
-	/// other class
-	LockOn* pLockOn_;                            /// LockOnクラス
-	GameCamera* pGameCamera_;
-	std::unique_ptr<PlayerHandLeft>leftHand_;    /// 左手
-	std::unique_ptr<PlayerHandRight>rightHand_;  /// 右手
-	std::unique_ptr<Object3d>headObj_;
-	WorldTransform headTransform_;
-	std::list<std::unique_ptr<Effect>> effects_;
-
-	/// move
-	float objectiveAngle_;                       /// 目標角度
-	Vector3 direction_;                          /// 速度
-	Vector3 prePos_;                             /// 移動前座標
-	float moveSpeed_;                            ///移動速度
-
-
-	/// jump							         
-	const float fallSpeedLimit_ = -1.2f;              /// ジャンプ
-	float gravity_;
-
-	bool isAttack_;                              /// 攻撃フラグ 
-	float fallSpeed_;                  	         /// 落ちるスピード
-
-	/// paramater
-	float rushDistance_;                           /// 突進距離
-	float rushEaseMax_;                            /// 突進スピード
-	float jumpSpeed_;	                           /// ジャンプ初速
-	float upperPosY_;                              /// アッパー時の高さ
-
-	///* コンボパラメータ
-	std::array<ComboParm, 4>normalComboParms_;
-	std::array<ComboParm, 2>jumpComboParms_;
-
-	// カメラのビュープロジェクション
-	const ViewProjection* viewProjection_ = nullptr;
 
 	/// behavior
 	std::unique_ptr<BasePlayerBehavior>behavior_ = nullptr;
@@ -104,12 +76,42 @@ private:
 	std::string fallParticleName_;
 	std::unique_ptr<ParticleEmitter>fallEmitter_;
 
+	/// other class
+	LockOn*                            pLockOn_;     /// LockOnクラス
+	GameCamera*                        pGameCamera_;
+	std::unique_ptr<PlayerHandLeft>    leftHand_;     /// 左手
+	std::unique_ptr<PlayerHandRight>   rightHand_;    /// 右手
+	std::unique_ptr<Object3d>          headObj_;
+	WorldTransform                     headTransform_;
+	std::list<std::unique_ptr<Effect>> effects_;
+
+private:
+	/// ===================================================
+	///private variaus
+	/// ===================================================
+
+	/// move
+	float   objectiveAngle_;                     /// 目標角度
+	Vector3 direction_;                          /// 速度
+	Vector3 prePos_;                             /// 移動前座標
+
+	//PlayerParams playerParms_;
+
+	///* コンボパラメータ
+	std::array<ComboParm, 4>normalComboParms_;
+	std::array<ComboParm, 2>jumpComboParms_;
+
+	// カメラのビュープロジェクション
+	const ViewProjection* viewProjection_ = nullptr;
 	uint32_t cirlceTexture_;
 
 	///sound 
 	int punchSoundID_;
 	int strongPunch_;
 	int fallSound_;
+
+	///PlayerParameter
+	PlayerParams playerParams_;
 
 public:
 	static float InitY_;
@@ -119,48 +121,48 @@ public:
 	///  public method
 	/// ===================================================
 
-	//初期化、更新、描画
+	///* 初期化、更新、描画
 	void Init() override;
 	void Update() override;
 	void TitleUpdate();
 	void Draw(const ViewProjection& viewProjection) override;
 
-	/// 移動
-	void Move(const float& speed);                               /// 移動
-	bool GetIsMoving();                                          /// 動かしてるかフラグ
-	void MoveToLimit();                                          /// 移動制限
-	Vector3 GetInputDirecton();                                  /// 入力による速度
-	void UpdateMatrix();
+	///* 移動
+	void    Move(const float& speed);         /// 移動
+	bool    GetIsMoving();                    /// 動かしてるかフラグ
+	void    MoveToLimit();                    /// 移動制限
+	Vector3 GetInputDirecton();               /// 入力による速度
+	void    UpdateMatrix();                   ///　行列更新
 
+	//* ジャンプ                             
+	void Jump(float& speed);                              /// ジャンプ
+	void Fall(float& speed, const bool& isJump = false);  /// 落ちる
 
-	void FallParticleEmit();
-	void Jump(float& speed);                                     /// ジャンプ
-	void Fall(float& speed, const bool& isJump = false);         /// 落ちる
-
-	/// 振る舞い切り替え
+	///* 振る舞い切り替え
 	void ChangeBehavior(std::unique_ptr<BasePlayerBehavior>behavior);
 	void ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior>behavior);
 	void ChangeTitleBehavior(std::unique_ptr<BaseTitleBehavior>behavior);
 
-
+	//* エフェクト
+	void FallParticleEmit();
 	void FallEffectUpdate();
 	void FallEffectInit(const Vector3& pos);
-	void AdjustParm();                             /// デバッグ
+	void AdjustParm();                          
 	
+	///* ダメージ
+	void TakeDamage();          /// ダメージ受ける     
+	void DamageRendition();     /// ダメージリアクション
 
-	/// collision
+	///* 向き
+	void FaceToTarget();
 
-	/// ダメージ
-	void TakeDamage();                             /// ダメージ受ける     
-	void DamageRendition();                        /// ダメージリアクション
-
-
+	/// ===================================================
+	/// Editor
+	/// ===================================================
 	void ParmLoadForImGui();
 	void AddParmGroup();
 	void SetValues();
 	void ApplyGlobalParameter();
-
-	void FaceToTarget();
 
 	/// <summary>
 	/// sound
@@ -169,32 +171,24 @@ public:
 	void SoundStrongPunch();
 	void FallSound();
 
-	/// ===================================================
+	/// =========================================================================================
 	/// getter
-	/// ===================================================
+	/// =========================================================================================
 	PlayerHandLeft*     GetLeftHand()        const        { return leftHand_.get();  }
 	PlayerHandRight*    GetRightHand()       const        { return rightHand_.get(); }
 	LockOn*             GetLockOn()          const        { return pLockOn_;   }
 	GameCamera*         GetGameCamera()      const        {return pGameCamera_;}
-	const bool&         GetIsAttack()        const        { return isAttack_;  }
-	float               GetMuzzulJumpSpeed() const        { return jumpSpeed_; }
-	float               GetMoveSpeed()       const        { return moveSpeed_; }
-	float               GetUpperPosY()       const        { return upperPosY_; }
+	PlayerParams        GetPlayerParams()    const        { return playerParams_; }
 	BasePlayerBehavior* GetBehavior()        const        { return behavior_.get();}
 	BaseTitleBehavior*  GetTitleBehavior()   const        { return titleBehavior_.get(); }
 	uint32_t            GetCircleTexture()   const        { return cirlceTexture_; }
-	/// ===================================================
+	/// =========================================================================================
 	/// setter
-	/// ===================================================
-	void SetIsAttack      (bool is)                              { isAttack_ = is; }
+	/// =========================================================================================
 	void SetViewProjection(const ViewProjection* viewProjection) { viewProjection_ = viewProjection; }
 	void SetLockOn        (LockOn* lockon); 
 	void SetGameCamera    (GameCamera*gamecamera);
 	void SetTitleBehavior ();
-
-	/// comboParamater
-	float GetRushDistance() const { return rushDistance_; }
-	float GetRushEaseMax()  const { return rushEaseMax_;  }
 
 	float GetWaitTime      (NormalComboNum index)const;
 	float GetPunchEaseMax  (NormalComboNum index)const;
