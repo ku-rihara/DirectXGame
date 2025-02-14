@@ -27,6 +27,9 @@ private://メンバ関数
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateAdd_;
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateNone_;
 
+	// depth
+	D3D12_DEPTH_STENCIL_DESC depthStencilDesc_;
+
 private:
 	//ルートシグネチャの作成
 	void CreateRootSignature();

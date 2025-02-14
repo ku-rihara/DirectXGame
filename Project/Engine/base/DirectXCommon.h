@@ -52,7 +52,6 @@ private://メンバ変数
 
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>dsvDescriptorHeap_;
 	Microsoft::WRL::ComPtr<ID3D12Resource>depthStencilResource_;
-	D3D12_DEPTH_STENCIL_DESC depthStencilDesc_;
 
 	///===================================
 	///フェンス生成関連
@@ -208,9 +207,6 @@ public:
 
 	uint32_t GetDescriptorSizeRTV()const { descriptorSizeRTV_; }
 	uint32_t GetDescriptorSizeDSV()const { return descriptorSizeDSV_; }
-
-	// depthStencilDescのgetter
-	const D3D12_DEPTH_STENCIL_DESC& GetDepthStencilDesc() const { return depthStencilDesc_; }
 
 };
 
