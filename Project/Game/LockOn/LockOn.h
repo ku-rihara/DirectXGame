@@ -17,13 +17,6 @@ private:
 	const BaseEnemy* target_ = nullptr;
 	/*bool isRockOn_ = false;*/
 
-	float kDegreeToRadian = 3.14f / 6.0f;
-	// 最小距離
-	float minDistance_ = 10.0f;
-	// 最大距離
-	float maxDistance_ = 120.0f;
-	// 角度範囲
-	float angleRange_ = 20.0f * kDegreeToRadian;
 	//線形補間タイム
 	float lerpTime_;
 	//ロックオン前の座標
@@ -31,6 +24,15 @@ private:
 	//LockOnMarkに格納する変数
 	Vector2 lockOnMarkPos_;
 	float spriteRotation_;
+
+	///* ロックオンパラメータ
+	float kDegreeToRadian_;
+	// 最小距離
+	float minDistance_;
+	// 最大距離
+	float maxDistance_;
+	// 角度範囲
+	float angleRange_;
 
 public:
 	void Init();

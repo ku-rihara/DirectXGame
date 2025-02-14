@@ -14,6 +14,14 @@ void LockOn::Init() {
 	int TextureHandle = TextureManager::GetInstance()->LoadTexture("./Resources/Texture/anchorPoint.png");
 	lockOnMark_.reset(Sprite::Create(TextureHandle, Vector2{ 640, 320 }, Vector4(1, 1, 1, 1)));
 	lockOnMark_->SetAnchorPoint(Vector2(0.5f,0.5f));
+
+	 kDegreeToRadian_ = 3.14f / 6.0f;
+	// 最小距離
+	 minDistance_ = 5.0f;
+	// 最大距離
+	 maxDistance_ = 90.0f;
+	// 角度範囲
+	 angleRange_ = 20.0f * kDegreeToRadian_;
 }
 
 void LockOn::Update(const std::list<std::unique_ptr<BaseEnemy>>& enemies, const ViewProjection& viewProjection) {
