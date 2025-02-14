@@ -21,7 +21,7 @@ public:
     void Update();
     void ModelDraw();
     void SpriteDraw();
-    void ParticleDraw();
+ /*   void ParticleDraw();*/
 
     void ChangeScene(const std::string& scenemane);
 
