@@ -318,14 +318,6 @@ void DirectXCommon::CreateDepthBuffer() {
 	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;//2dTexture
 	//DSVHeapの先頭にDSVを作る
 	device_->CreateDepthStencilView(depthStencilResource_.Get(), &dsvDesc, dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart());
-
-	//DepthStencilStateの設定-------------------------------------
-	//Depthの機能を有効化する
-	depthStencilDesc_.DepthEnable = true;
-	//書き込みする
-	depthStencilDesc_.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
-	//比較関数はLessEqual。つまり、近ければ描画される
-	depthStencilDesc_.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 }
 
 ///==========================================================

@@ -32,6 +32,9 @@ public:
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateMultiply_;
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateSubtractive_;
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineStateScreen_;
+
+	// depth
+	D3D12_DEPTH_STENCIL_DESC depthStencilDesc_;
 private:
 
 	///==============================================

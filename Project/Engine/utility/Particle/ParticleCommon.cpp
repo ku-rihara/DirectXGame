@@ -118,6 +118,13 @@ void ParticleCommon::CreateGraphicsPipeline() {
 	//三角形の色を塗りつぶす
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
+	//DepthStencilStateの設定-------------------------------------
+   //Depthの機能を有効化する
+	depthStencilDesc_.DepthEnable = true;
+	//書き込みする
+	depthStencilDesc_.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+	//比較関数はLessEqual。つまり、近ければ描画される
+	depthStencilDesc_.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
 	//ShaderをコンパイルするParticle
 	vertexShaderBlob_ = pDxCommon_->CompileShader(L"resources/Shader/Particle.VS.hlsl",
@@ -142,7 +149,7 @@ void ParticleCommon::CreateGraphicsPipeline() {
 		graphicsPipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 		graphicsPipelineStateDesc.SampleDesc.Count = 1;
 		graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
-		graphicsPipelineStateDesc.DepthStencilState = pDxCommon_->GetDepthStencilDesc();
+		graphicsPipelineStateDesc.DepthStencilState = depthStencilDesc_;
 		graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 		hr = pDxCommon_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&pso));
