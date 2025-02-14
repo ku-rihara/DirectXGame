@@ -259,6 +259,7 @@ void Player::Move(const float& speed) {
 		objectiveAngle_ = std::atan2(direction_.x, direction_.z);
 		// 最短角度補間
 		transform_.rotation_.y = LerpShortAngle(transform_.rotation_.y, objectiveAngle_, 0.3f);
+		FaceToTarget();
 	} else {
 		FaceToTarget();// ターゲットを向くか
 	}

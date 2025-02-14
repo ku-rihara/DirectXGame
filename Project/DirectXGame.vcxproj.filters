@@ -181,9 +181,6 @@
     <Filter Include="Game\Player">
       <UniqueIdentifier>{17bc6e81-f103-4b8a-895b-a16298dcba9e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player\core">
-      <UniqueIdentifier>{d3e51b1b-0df3-4fb3-bd66-3f185b05cfcd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Player\Weapon">
       <UniqueIdentifier>{ea7b30de-436e-4b71-9943-2e80e0085740}</UniqueIdentifier>
     </Filter>
@@ -222,6 +219,9 @@
     </Filter>
     <Filter Include="Game\Player\Behavior\NormalBehavior">
       <UniqueIdentifier>{cf9a79e5-c843-492f-9a28-30d2c3517ba4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\core">
+      <UniqueIdentifier>{d3e51b1b-0df3-4fb3-bd66-3f185b05cfcd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

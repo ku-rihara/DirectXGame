@@ -116,7 +116,6 @@ void TitleScene::ChangeForJoyState() {
 
 }
 
-
 /// ===================================================
 /// モデル描画
 /// ===================================================
@@ -125,9 +124,7 @@ void TitleScene::ModelDraw() {
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 	Model::PreDraw(commandList);
 
-	/// commandList取得
-	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
-
+	
 	Model::PreDraw(commandList);
 	skydome_->Draw(viewProjection_);
 	field_->Draw(viewProjection_);
