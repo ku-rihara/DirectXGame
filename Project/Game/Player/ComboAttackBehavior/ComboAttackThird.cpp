@@ -72,7 +72,7 @@ void ComboAttackThird::Update() {
 		startEasing_.amplitude, startEasing_.period));
 
 	// 向き変更
-	pPlayer_->Move(0.01f);
+	pPlayer_->Move(pPlayer_->GetPlayerParams().moveSpeed);
 
 	
 	pPlayer_->SetHeadRotateX(zRotate_);
