@@ -122,21 +122,17 @@ void TitleScene::ChangeForJoyState() {
 /// ===================================================
 void TitleScene::ModelDraw() {
 
-	emitter_->DebugDraw(viewProjection_);
-	emitter_->RailDraw(viewProjection_);
-	ParticleManager::GetInstance()->Draw(viewProjection_);
+	/// commandList取得
+	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 
+	Model::PreDraw(commandList);
 	skydome_->Draw(viewProjection_);
 	field_->Draw(viewProjection_);
 	player_->Draw(viewProjection_);
-}
 
-   /// ===================================================
-   /// パーティクル描画
-   /// ===================================================
-void TitleScene::ParticleDraw() {
-	
 	ParticleManager::GetInstance()->Draw(viewProjection_);
+	Model::PreDraw(commandList);
+	player_->EffectDraw(viewProjection_);
 }
 
 /// ===================================================

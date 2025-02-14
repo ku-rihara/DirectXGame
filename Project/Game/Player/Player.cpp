@@ -147,6 +147,10 @@ void Player::Draw(const ViewProjection& viewProjection) {
 	leftHand_->Draw(viewProjection);
 	rightHand_->Draw(viewProjection);
 
+
+}
+
+void Player::EffectDraw(const ViewProjection& viewProjection) {
 	// 各エフェクトを更新
 	effects_.reverse();
 	for (std::unique_ptr<Effect>& effect : effects_) {

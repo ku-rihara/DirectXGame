@@ -145,24 +145,22 @@ void GameScene::Update() {
 /// モデル描画
 /// ===================================================
 void GameScene::ModelDraw() {
-
-	//平面描画
-	if (isDraw) {
+	/// commandList取得
+	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+	Model::PreDraw(commandList);
 		skydome_->Draw(viewProjection_);
 		field_->Draw(viewProjection_);
 		player_->Draw(viewProjection_);
 		enemyManager_->Draw(viewProjection_);
-		
-		
-	}
+
+	
+		ParticleManager::GetInstance()->Draw(viewProjection_);
+
+		Model::PreDraw(commandList);
+		player_->EffectDraw(viewProjection_);
+
 }
 
-/// ======================================================
-/// パーティクル描画
-/// ======================================================
-void GameScene::ParticleDraw() {
-	ParticleManager::GetInstance()->Draw(viewProjection_);
-}
 
 /// ======================================================
 /// スプライト描画

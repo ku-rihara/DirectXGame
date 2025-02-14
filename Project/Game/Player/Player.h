@@ -126,6 +126,7 @@ public:
 	void Update() override;
 	void TitleUpdate();
 	void Draw(const ViewProjection& viewProjection) override;
+	void EffectDraw(const ViewProjection& viewProjection);
 
 	///* 移動
 	void    Move(const float& speed);         /// 移動
