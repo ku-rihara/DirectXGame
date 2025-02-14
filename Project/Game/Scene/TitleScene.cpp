@@ -53,6 +53,9 @@ void TitleScene::Update() {
 /// モデル描画
 /// ===================================================
 void TitleScene::ModelDraw() {
+	/// commandList取得
+	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+	Model::PreDraw(commandList);
 
 	emitter_->DebugDraw(viewProjection_);
 	emitter_->RailDraw(viewProjection_);
