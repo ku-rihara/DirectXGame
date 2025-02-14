@@ -122,13 +122,16 @@ void TitleScene::ChangeForJoyState() {
 /// ===================================================
 void TitleScene::ModelDraw() {
 
+	emitter_->DebugDraw(viewProjection_);
+	emitter_->RailDraw(viewProjection_);
+	ParticleManager::GetInstance()->Draw(viewProjection_);
 
 	skydome_->Draw(viewProjection_);
 	field_->Draw(viewProjection_);
 	player_->Draw(viewProjection_);
 }
 
-/// ===================================================
+   /// ===================================================
    /// パーティクル描画
    /// ===================================================
 void TitleScene::ParticleDraw() {

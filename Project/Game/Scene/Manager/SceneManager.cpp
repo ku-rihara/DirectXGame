@@ -51,11 +51,11 @@ void SceneManager::SpriteDraw() {
 ///==============================================
 /// パーティクル描画
 ///==============================================
-void SceneManager::ParticleDraw() {
-	if (scene_) {
-		scene_->ParticleDraw();
-	}
-}
+//void SceneManager::ParticleDraw() {
+//	if (scene_) {
+//		scene_->ParticleDraw();
+//	}
+//}
 
 ///==============================================
 /// シーン切り替え

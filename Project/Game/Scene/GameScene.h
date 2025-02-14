@@ -68,7 +68,7 @@ public:
 	void Update()override;
 	void ModelDraw()override;
 	void SpriteDraw()override;
-	void ParticleDraw()override;
+	/*void ParticleDraw()override;*/
 
 	void Debug()override;/// debug
 	void ViewProjectionUpdate()override;
