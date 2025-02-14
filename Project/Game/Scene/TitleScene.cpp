@@ -121,6 +121,9 @@ void TitleScene::ChangeForJoyState() {
 /// モデル描画
 /// ===================================================
 void TitleScene::ModelDraw() {
+	/// commandList取得
+	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+	Model::PreDraw(commandList);
 
 	/// commandList取得
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
