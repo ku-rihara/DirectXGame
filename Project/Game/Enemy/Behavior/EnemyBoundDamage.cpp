@@ -48,7 +48,7 @@ void EnemyBoundDamage::Update() {
 		// 加速する
 		speed_ = max(speed_ - (gravity_ * Frame::DeltaTimeRate()),fallSpeedLimit_);
 	
-		if (pBaseEnemy_->GetTransform().translation_.y > pBaseEnemy_->InitY_) break;
+		if (pBaseEnemy_->GetTransform().translation_.y > pBaseEnemy_->GetParamater().basePosY) break;
 
 		step_ = Step::RETUNROOT;
 	
@@ -58,7 +58,7 @@ void EnemyBoundDamage::Update() {
 	/// 追従に戻す
 	///---------------------------------------------------------
 		pBaseEnemy_->SetColor(Vector4(1.0f, 1, 1, 1.0f));
-		pBaseEnemy_->SetWorldPositionY(BaseEnemy::InitY_);
+		pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetParamater().basePosY);
 		pBaseEnemy_->BackToDamageRoot();
 		break;
 	}

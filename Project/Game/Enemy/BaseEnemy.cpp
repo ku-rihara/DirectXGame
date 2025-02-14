@@ -25,7 +25,7 @@
 ///=========================================================
 ///　static 変数初期化
 ///==========================================================
-float BaseEnemy::InitY_ = 0.5f;
+
 Vector3 BaseEnemy::InitScale_ = Vector3::UnitVector()*1.6f;
 
 BaseEnemy::BaseEnemy() {
@@ -39,15 +39,16 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	// 基底クラスの初期化
 	BaseObject::Init();
 	
+	//HP
 	HPMax_ = 105.0f;
 	hp_ = HPMax_;
 	hpbarSize_ = { HPMax_ ,90};
-	
 	hpbar_ = std::make_unique<EnemyHPBar>();
 	hpbar_->Init(hpbarSize_);
-	transform_.translation_ = spownPos;
 
-	
+
+	transform_.translation_ = spownPos;
+	transform_.translation_.y = paramater_.basePosY;
 	transform_.scale_ = Vector3::ZeroVector();
 
 	/// particleT

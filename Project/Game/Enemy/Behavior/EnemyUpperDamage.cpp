@@ -71,9 +71,9 @@ void EnemyUpperDamage::Update() {
 		
 
 		// 着地
-		if (pBaseEnemy_->GetTransform().translation_.y > BaseEnemy::InitY_) break;
+		if (pBaseEnemy_->GetTransform().translation_.y > pBaseEnemy_->GetParamater().basePosY) break;
 		// 追従に戻す
-			pBaseEnemy_->SetWorldPositionY(BaseEnemy::InitY_);
+			pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetParamater().basePosY);
 			step_ = Step::RETUNROOT;
 		
 		break;

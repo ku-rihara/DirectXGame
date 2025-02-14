@@ -143,6 +143,10 @@ void Player::TitleUpdate() {
 ///==========================================================
 void Player::Draw(const ViewProjection& viewProjection) {
 
+	headObj_->Draw(headTransform_, viewProjection);
+	leftHand_->Draw(viewProjection);
+	rightHand_->Draw(viewProjection);
+
 	// 各エフェクトを更新
 	effects_.reverse();
 	for (std::unique_ptr<Effect>& effect : effects_) {
@@ -151,11 +155,6 @@ void Player::Draw(const ViewProjection& viewProjection) {
 		}
 	}
 	effects_.reverse();
-
-	headObj_->Draw(headTransform_, viewProjection);
-	leftHand_->Draw(viewProjection);
-	rightHand_->Draw(viewProjection);
-
 }
 
 void Player::SoundPunch() {
@@ -427,74 +426,38 @@ void Player::AdjustParm() {
 		if (ImGui::CollapsingHeader("NormalCombo")) {
 			ImGui::SeparatorText("FirstCombo");   /// 1コンボ目
 
-			ImGui::DragFloat("PTime1",
-				&normalComboParms_[0].permissionTime,
-				0.01f);
-
-
-			ImGui::DragFloat("PunchEaseMax1",
-				&normalComboParms_[0].punchEaseMax,
-				0.01f);
-
-			ImGui::DragFloat("PunchReach1",
-				&normalComboParms_[0].punchReach,
-				0.01f);
+			ImGui::DragFloat("PTime1",&normalComboParms_[0].permissionTime,0.01f);
+			ImGui::DragFloat("PunchEaseMax1",&normalComboParms_[0].punchEaseMax,0.01f);
+			ImGui::DragFloat("PunchReach1",&normalComboParms_[0].punchReach,0.01f);
 
 			ImGui::SeparatorText("SecondCombo");  /// 2コンボ目
 
-			ImGui::DragFloat("PTime2",
-				&normalComboParms_[1].permissionTime,
-				0.01f);
-
-			ImGui::DragFloat("PunchEaseMax2",
-				&normalComboParms_[1].punchEaseMax,
-				0.01f);
-
-			ImGui::DragFloat("PunchReach2",
-				&normalComboParms_[1].punchReach,
-				0.01f);
+			ImGui::DragFloat("PTime2",&normalComboParms_[1].permissionTime,0.01f);
+			ImGui::DragFloat("PunchEaseMax2",&normalComboParms_[1].punchEaseMax,0.01f);
+     		ImGui::DragFloat("PunchReach2",&normalComboParms_[1].punchReach,0.01f);
 
 			ImGui::SeparatorText("ThirdCombo");   /// 3コンボ目
 
-			ImGui::DragFloat("PTime3",
-				&normalComboParms_[2].permissionTime,
-				0.01f);
-
-			ImGui::DragFloat("PunchEaseMax3",
-				&normalComboParms_[2].punchEaseMax,
-				0.01f);
+			ImGui::DragFloat("PTime3",&normalComboParms_[2].permissionTime,0.01f);
+			ImGui::DragFloat("PunchEaseMax3",&normalComboParms_[2].punchEaseMax,0.01f);
 
 			ImGui::SeparatorText("ForthCombo");   /// 4コンボ目
 
-			ImGui::DragFloat("PTime4",
-				&normalComboParms_[3].permissionTime,
-				0.01f);
+			ImGui::DragFloat("PTime4",&normalComboParms_[3].permissionTime,0.01f);
 		}
 
 		if (ImGui::CollapsingHeader("JumpCombo")) {
 			ImGui::SeparatorText("FirstCombo");   /// 1コンボ目
 
-			ImGui::DragFloat("JPTime1",
-				&jumpComboParms_[0].permissionTime,
-				0.01f);
+			ImGui::DragFloat("JPTime1",&jumpComboParms_[0].permissionTime,0.01f);
 
-			ImGui::DragFloat("JPunchEaseMax1",
-				&jumpComboParms_[0].punchEaseMax,
-				0.01f);
+			ImGui::DragFloat("JPunchEaseMax1",&jumpComboParms_[0].punchEaseMax,0.01f);
 
 			ImGui::SeparatorText("SecondCombo");   /// 2コンボ目
 
-			ImGui::DragFloat("JPTime2",
-				&jumpComboParms_[1].permissionTime,
-				0.01f);
-
-			ImGui::DragFloat("JPunchEaseMax2",
-				&jumpComboParms_[1].punchEaseMax,
-				0.01f);
-
-			ImGui::DragFloat("JPunchReach2",
-				&jumpComboParms_[1].punchReach,
-				0.01f);
+			ImGui::DragFloat("JPTime2",&jumpComboParms_[1].permissionTime,0.01f);
+			ImGui::DragFloat("JPunchEaseMax2",&jumpComboParms_[1].punchEaseMax,0.01f);
+			ImGui::DragFloat("JPunchReach2",&jumpComboParms_[1].punchReach,0.01f);
 		}
 
 		/// セーブとロード
@@ -607,38 +570,16 @@ void Player::AddParmGroup() {
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
-		globalParameter_->AddItem(
-			groupName_,
-			"NComboPTime" + std::to_string(int(i + 1)),
-			normalComboParms_[i].permissionTime);
-
-		globalParameter_->AddItem(
-			groupName_,
-			"NComboPunchEaseTime" + std::to_string(int(i + 1)),
-			normalComboParms_[i].punchEaseMax);
-
-		globalParameter_->AddItem(
-			groupName_,
-			"NComboPunchReach" + std::to_string(int(i + 1)),
-			normalComboParms_[i].punchReach);
+		globalParameter_->AddItem(groupName_,"NComboPTime" + std::to_string(int(i + 1)),normalComboParms_[i].permissionTime);
+		globalParameter_->AddItem(groupName_,"NComboPunchEaseTime" + std::to_string(int(i + 1)),normalComboParms_[i].punchEaseMax);
+		globalParameter_->AddItem(groupName_,"NComboPunchReach" + std::to_string(int(i + 1)),normalComboParms_[i].punchReach);
 	}
 
 	/// コンボ持続時間(ジャンプ)
 	for (uint32_t i = 0; i < jumpComboParms_.size(); ++i) {
-		globalParameter_->AddItem(
-			groupName_,
-			"JComboPTime" + std::to_string(int(i + 1)),
-			normalComboParms_[i].permissionTime);
-
-		globalParameter_->AddItem(
-			groupName_,
-			"JComboPunchEaseTime" + std::to_string(int(i + 1)),
-			normalComboParms_[i].punchEaseMax);
-
-		globalParameter_->AddItem(
-			groupName_,
-			"JComboPunchReach" + std::to_string(int(i + 1)),
-			normalComboParms_[i].punchReach);
+		globalParameter_->AddItem(groupName_,"JComboPTime" + std::to_string(int(i + 1)),normalComboParms_[i].permissionTime);
+		globalParameter_->AddItem(groupName_,"JComboPunchEaseTime" + std::to_string(int(i + 1)),normalComboParms_[i].punchEaseMax);
+		globalParameter_->AddItem(groupName_,"JComboPunchReach" + std::to_string(int(i + 1)),normalComboParms_[i].punchReach);
 	}
 }
 
@@ -660,38 +601,16 @@ void Player::SetValues() {
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
-		globalParameter_->SetValue(
-			groupName_,
-			"NComboPTime" + std::to_string(int(i + 1)),
-			normalComboParms_[i].permissionTime);
-
-		globalParameter_->SetValue(
-			groupName_,
-			"NComboPunchEaseTime" + std::to_string(int(i + 1)),
-			normalComboParms_[i].punchEaseMax);
-
-		globalParameter_->SetValue(
-			groupName_,
-			"NComboPunchReach" + std::to_string(int(i + 1)),
-			normalComboParms_[i].punchReach);
+		globalParameter_->SetValue(groupName_,"NComboPTime" + std::to_string(int(i + 1)),normalComboParms_[i].permissionTime);
+		globalParameter_->SetValue(groupName_,"NComboPunchEaseTime" + std::to_string(int(i + 1)),normalComboParms_[i].punchEaseMax);
+		globalParameter_->SetValue(groupName_,"NComboPunchReach" + std::to_string(int(i + 1)),normalComboParms_[i].punchReach);
 	}
 
 	/// コンボ持続時間(ジャンプ)
 	for (uint32_t i = 0; i < jumpComboParms_.size(); ++i) {
-		globalParameter_->SetValue(
-			groupName_,
-			"JComboPTime" + std::to_string(int(i + 1)),
-			jumpComboParms_[i].permissionTime);
-
-		globalParameter_->SetValue(
-			groupName_,
-			"JComboPunchEaseTime" + std::to_string(int(i + 1)),
-			jumpComboParms_[i].punchEaseMax);
-
-		globalParameter_->SetValue(
-			groupName_,
-			"JComboPunchReach" + std::to_string(int(i + 1)),
-			jumpComboParms_[i].punchReach);
+		globalParameter_->SetValue(groupName_,"JComboPTime" + std::to_string(int(i + 1)),jumpComboParms_[i].permissionTime);
+		globalParameter_->SetValue(groupName_,"JComboPunchEaseTime" + std::to_string(int(i + 1)),jumpComboParms_[i].punchEaseMax);
+		globalParameter_->SetValue(groupName_,"JComboPunchReach" + std::to_string(int(i + 1)),jumpComboParms_[i].punchReach);
 	}
 }
 
@@ -714,32 +633,17 @@ void Player::ApplyGlobalParameter() {
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
-		normalComboParms_[i].permissionTime = globalParameter_->GetValue<float>(
-			groupName_,
-			"NComboPTime" + std::to_string(int(i + 1)));
+		normalComboParms_[i].permissionTime = globalParameter_->GetValue<float>(groupName_,"NComboPTime" + std::to_string(int(i + 1)));
+		normalComboParms_[i].punchEaseMax = globalParameter_->GetValue<float>(groupName_,"NComboPunchEaseTime" + std::to_string(int(i + 1)));
 
-		normalComboParms_[i].punchEaseMax = globalParameter_->GetValue<float>(
-			groupName_,
-			"NComboPunchEaseTime" + std::to_string(int(i + 1)));
-
-		normalComboParms_[i].punchReach = globalParameter_->GetValue<float>(
-			groupName_,
-			"NComboPunchReach" + std::to_string(int(i + 1)));
+		normalComboParms_[i].punchReach = globalParameter_->GetValue<float>(groupName_,"NComboPunchReach" + std::to_string(int(i + 1)));
 	}
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < jumpComboParms_.size(); ++i) {
-		jumpComboParms_[i].permissionTime = globalParameter_->GetValue<float>(
-			groupName_,
-			"JComboPTime" + std::to_string(int(i + 1)));
-
-		jumpComboParms_[i].punchEaseMax = globalParameter_->GetValue<float>(
-			groupName_,
-			"JComboPunchEaseTime" + std::to_string(int(i + 1)));
-
-		jumpComboParms_[i].punchReach = globalParameter_->GetValue<float>(
-			groupName_,
-			"JComboPunchReach" + std::to_string(int(i + 1)));
+		jumpComboParms_[i].permissionTime = globalParameter_->GetValue<float>(groupName_,"JComboPTime" + std::to_string(int(i + 1)));
+		jumpComboParms_[i].punchEaseMax = globalParameter_->GetValue<float>(groupName_,"JComboPunchEaseTime" + std::to_string(int(i + 1)));
+		jumpComboParms_[i].punchReach = globalParameter_->GetValue<float>(groupName_,"JComboPunchReach" + std::to_string(int(i + 1)));
 	}
 }
 

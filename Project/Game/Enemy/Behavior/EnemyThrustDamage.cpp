@@ -63,7 +63,7 @@ void EnemyThrustDamage::Update() {
 
 		/// 吹っ飛ぶ距離を計算
 		backPos_ = initPos_ + (direction_ * -speed_);
-		backPos_.y = BaseEnemy::InitY_;
+		backPos_.y = pBaseEnemy_->GetParamater().basePosY;
 
 		step_ = Step::HITBACK;
 		break;
@@ -97,7 +97,7 @@ void EnemyThrustDamage::Update() {
 		///---------------------------------------------------------
 		pBaseEnemy_->FallEffectInit(pBaseEnemy_->GetWorldPosition());
 		pBaseEnemy_->SetColor(Vector4(1.0f, 1, 1, 1.0f));
-		pBaseEnemy_->SetWorldPositionY(BaseEnemy::InitY_);
+		pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetParamater().basePosY);
 		pBaseEnemy_->GetGameCamera()->ChangeShakeMode();
 		pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyBoundDamage>(pBaseEnemy_));
 		break;

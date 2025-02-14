@@ -117,56 +117,7 @@ void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
 	}
 }
 
-void EnemyManager::SpawnUpdate() {
-	currentTime_ += Frame::DeltaTime(); //* 現在時間加算
 
-	auto& phase = phases_[currentPhase_];//* 現在フェーズの取得
-
-	// Waveの処理
-	for (Wave& wave : phase.waves) {
-		// Waveがまだ開始されていない場合はスキップ
-		if (currentTime_ < wave.startTime) continue;
-
-		for (auto& group : wave.groups) {
-			// 次の生成時間に達していない場合はスキップ
-			if (currentTime_ < group.spownTime) continue;
-			if (group.isSpowned) continue;
-
-
-			// グループ生成処理
-			for (const auto& spawn : group.spownEnemies) {
-				SpawnEnemy(spawn.enemyType, spawn.position);
-
-			}
-			group.isSpowned = true;
-		}
-	}
-}
-
-///========================================================================================
-///  Wave完了チェック
-///========================================================================================
-void EnemyManager::CheckWaveCompletion() {
-	auto& phase = phases_[currentPhase_]; // 現在フェーズの取得
-
-	// 現在のWaveに所属する敵が全て倒されたか確認
-	if (enemies_.empty()) {
-		// 次のWaveに進む
-		++currentWave_;
-
-		if (currentWave_ >= phase.waves.size()) {
-			// 全てのWaveが完了した場合、次のフェーズに進む
-			++currentPhase_;
-			if (phases_.find(currentPhase_) == phases_.end()) {
-				// フェーズが存在しなければ終了
-				--currentPhase_; // フェーズを戻して停止
-			}
-			else {
-				currentWave_ = 0; // 次フェーズの最初のWaveへ
-			}
-		}
-	}
-}
 
 
 ///========================================================================================
@@ -238,16 +189,9 @@ void EnemyManager::ParmLoadForImGui() {
 void EnemyManager::AddParmGroup() {
 
 	for (uint32_t i = 0; i < paramaters_.size(); ++i) {
-		globalParameter_->AddItem(
-			groupName_,
-			"chaseDistance" + std::to_string(int(i + 1)),
-			paramaters_[i].chaseDistance);
-
-		globalParameter_->AddItem(
-			groupName_,
-			"chaseSpeed" + std::to_string(int(i + 1)),
-			paramaters_[i].chaseSpeed);
-
+		globalParameter_->AddItem(groupName_,"chaseDistance" + std::to_string(int(i + 1)),paramaters_[i].chaseDistance);
+		globalParameter_->AddItem(groupName_,"chaseSpeed" + std::to_string(int(i + 1)),paramaters_[i].chaseSpeed);
+		globalParameter_->AddItem(groupName_, "basePosY_" + std::to_string(int(i + 1)), paramaters_[i].basePosY);
 		
 	}
 
@@ -261,16 +205,9 @@ void EnemyManager::SetValues() {
 
 
 	for (uint32_t i = 0; i < paramaters_.size(); ++i) {
-		globalParameter_->SetValue(
-			groupName_,
-			"chaseDistance" + std::to_string(int(i + 1)),
-			paramaters_[i].chaseDistance);
-
-		globalParameter_->SetValue(
-			groupName_,
-			"chaseSpeed" + std::to_string(int(i + 1)),
-			paramaters_[i].chaseSpeed);
-
+		globalParameter_->SetValue(groupName_,"chaseDistance" + std::to_string(int(i + 1)),paramaters_[i].chaseDistance);
+		globalParameter_->SetValue(groupName_,"chaseSpeed" + std::to_string(int(i + 1)),paramaters_[i].chaseSpeed);
+		globalParameter_->SetValue(groupName_, "basePosY_" + std::to_string(int(i + 1)), paramaters_[i].basePosY);
 		
 	}
 
@@ -283,15 +220,9 @@ void EnemyManager::SetValues() {
 void EnemyManager::ApplyGlobalParameter() {
 	/// パラメータ
 	for (uint32_t i = 0; i < paramaters_.size(); ++i) {
-		paramaters_[i].chaseDistance = globalParameter_->GetValue<float>(
-			groupName_,
-			"chaseDistance" + std::to_string(int(i + 1)));
-
-		paramaters_[i].chaseSpeed = globalParameter_->GetValue<float>(
-			groupName_,
-			"chaseSpeed" + std::to_string(int(i + 1)));
-
-		
+		paramaters_[i].chaseDistance = globalParameter_->GetValue<float>(groupName_,"chaseDistance" + std::to_string(int(i + 1)));
+		paramaters_[i].chaseSpeed = globalParameter_->GetValue<float>(groupName_,"chaseSpeed" + std::to_string(int(i + 1)));
+		paramaters_[i].basePosY = globalParameter_->GetValue<float>(groupName_, "basePosY_" + std::to_string(int(i + 1)));		
 	}
 
 }
@@ -312,12 +243,13 @@ void EnemyManager::AdjustParm() {
 		ImGui::SeparatorText(enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].c_str());
 		ImGui::PushID(enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].c_str());
 
-		ImGui::DragFloat("ChaseSpeed",
-			&paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].chaseSpeed,
+		ImGui::DragFloat("ChaseSpeed",&paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].chaseSpeed,
 			0.01f);
 
-		ImGui::DragFloat("ChaseDistance",
-			&paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].chaseDistance,
+		ImGui::DragFloat("ChaseDistance",&paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].chaseDistance,
+			0.01f);
+
+		ImGui::DragFloat("basePosY", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].basePosY,
 			0.01f);
 
 		
@@ -330,14 +262,14 @@ void EnemyManager::AdjustParm() {
 		ImGui::SeparatorText(enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)].c_str());
 		ImGui::PushID(enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)].c_str());
 
-		ImGui::DragFloat("ChaseSpeed",
-			&paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].chaseSpeed,
+		ImGui::DragFloat("ChaseSpeed",&paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].chaseSpeed,
 			0.01f);
 
-		ImGui::DragFloat("ChaseDistance",
-			&paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].chaseDistance,
+		ImGui::DragFloat("ChaseDistance",&paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].chaseDistance,
 			0.01f);
 
+		ImGui::DragFloat("basePosY", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].basePosY,
+			0.01f);
 
 		ImGui::PopID();
 		/// セーブとロード
@@ -351,7 +283,55 @@ void EnemyManager::AdjustParm() {
 }
 
 
+void EnemyManager::SpawnUpdate() {
+	currentTime_ += Frame::DeltaTime(); //* 現在時間加算
 
+	auto& phase = phases_[currentPhase_];//* 現在フェーズの取得
+
+	// Waveの処理
+	for (Wave& wave : phase.waves) {
+		// Waveがまだ開始されていない場合はスキップ
+		if (currentTime_ < wave.startTime) continue;
+
+		for (auto& group : wave.groups) {
+			// 次の生成時間に達していない場合はスキップ
+			if (currentTime_ < group.spownTime) continue;
+			if (group.isSpowned) continue;
+
+
+			// グループ生成処理
+			for (const auto& spawn : group.spownEnemies) {
+				SpawnEnemy(spawn.enemyType, spawn.position);
+
+			}
+			group.isSpowned = true;
+		}
+	}
+}
+
+///========================================================================================
+///  Wave完了チェック
+///========================================================================================
+void EnemyManager::CheckWaveCompletion() {
+	auto& phase = phases_[currentPhase_]; // 現在フェーズの取得
+
+	// 現在のWaveに所属する敵が全て倒されたか確認
+	if (enemies_.empty()) {
+		// 次のWaveに進む
+		++currentWave_;
+
+		if (currentWave_ >= phase.waves.size()) {
+			// 全てのWaveが完了した場合、次のフェーズに進む
+			++currentPhase_;
+			if (phases_.find(currentPhase_) == phases_.end()) {
+				// フェーズが存在しなければ終了
+				--currentPhase_; // フェーズを戻して停止
+			} else {
+				currentWave_ = 0; // 次フェーズの最初のWaveへ
+			}
+		}
+	}
+}
 
 ///========================================================================================
 ///  ImGuiによるエディタ

@@ -22,6 +22,7 @@ public:
 	struct Paramater {
 		float chaseDistance;
 		float chaseSpeed;
+		float basePosY;
 	};
 	enum class Type {
 		NORMAL,
@@ -60,7 +61,6 @@ protected:
 	
 	std::list<std::unique_ptr<Effect>> effects_;
 public:
-	static float InitY_;
 	static Vector3 InitScale_;
 public:
 	BaseEnemy();
