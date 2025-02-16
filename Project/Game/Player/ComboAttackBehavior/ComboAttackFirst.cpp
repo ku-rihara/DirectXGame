@@ -6,6 +6,7 @@
 /// objs
 #include"Player/Player.h"
 #include"LockOn/LockOn.h"
+#include"MathFunction.h"
 
 /// input
 #include"input/Input.h"
@@ -40,7 +41,9 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	waitTine_ = 0.0f;
 
 	// motion
-
+	rotateValue_ =pPlayer_->GetPlayerParams().attackRotate;
+	rotateEaseT_ = 0.0f;
+	pPlayer_->SetHeadRotateY(0.0f);
 	
 	// 振る舞い順序初期化
 	order_ = Order::RUSH;
@@ -54,6 +57,13 @@ ComboAttackFirst::~ComboAttackFirst() {
 void ComboAttackFirst::Update() {
 
 	//　モーション
+	RotateMotion();
+
+	/// スケール変化
+	startEasing_.time += Frame::DeltaTimeRate();
+	startEasing_.time = std::min(startEasing_.time, startEasing_.maxTime);
+	pPlayer_->SetScale(EaseAmplitudeScale(Vector3::UnitVector(), startEasing_.time, startEasing_.maxTime,
+		startEasing_.amplitude, startEasing_.period));
 
 
 	// 攻撃中の移動
@@ -194,3 +204,15 @@ void  ComboAttackFirst::Debug() {
 	ImGui::Text("ComboAttackFirst");
 }
 
+void ComboAttackFirst::RotateMotion() {
+	rotateEaseT_ += Frame::DeltaTimeRate();
+	tempRotateValue_ = EaseInSine(0.0f, rotateValue_, rotateEaseT_, pPlayer_->GetPlayerParams().attackRotateEaseT);
+
+	pPlayer_->SetHeadRotateY(tempRotateValue_);
+
+	if (rotateEaseT_ < pPlayer_->GetPlayerParams().attackRotateEaseT) return;
+	rotateEaseT_ = pPlayer_->GetPlayerParams().attackRotateEaseT;
+	pPlayer_->SetHeadRotateY(0.0f);
+	
+
+}

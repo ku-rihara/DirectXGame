@@ -43,6 +43,11 @@ ComboAttackSecond::ComboAttackSecond(Player* player)
 	startEasing_.amplitude = 0.6f;
 	startEasing_.period = 0.2f;
 
+	// motion
+	rotateValue_ = pPlayer_->GetPlayerParams().attackRotate;
+	rotateEaseT_ = 0.0f;
+	pPlayer_->SetHeadRotateY(0.0f);
+
 	pPlayer_->SoundPunch();
 	// 振る舞い順序初期化
 	order_ = Order::PUNCH;
@@ -54,6 +59,10 @@ ComboAttackSecond::~ComboAttackSecond() {
 
 //更新
 void ComboAttackSecond::Update() {
+
+	//　モーション
+	RotateMotion();
+
 
 	/// スケール変化
 	startEasing_.time += Frame::DeltaTimeRate();
@@ -136,5 +145,18 @@ void ComboAttackSecond::Update() {
 }
 
 void ComboAttackSecond::Debug() {
+
+}
+
+void ComboAttackSecond::RotateMotion() {
+	rotateEaseT_ += Frame::DeltaTimeRate();
+	tempRotateValue_ = EaseInSine(0.0f, rotateValue_, rotateEaseT_, pPlayer_->GetPlayerParams().attackRotateEaseT);
+
+	pPlayer_->SetHeadRotateY(-tempRotateValue_);
+
+	if (rotateEaseT_ < pPlayer_->GetPlayerParams().attackRotateEaseT) return;
+	rotateEaseT_ = pPlayer_->GetPlayerParams().attackRotateEaseT;
+	pPlayer_->SetHeadRotateY(0.0f);
+
 
 }

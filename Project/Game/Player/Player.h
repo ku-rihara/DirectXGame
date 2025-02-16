@@ -23,6 +23,7 @@
 #include<array>
 #include <memory>
 #include<string>
+#include <variant>
 
 /// <summary>
 /// プレイヤークラス
@@ -31,8 +32,6 @@ class LockOn;
 class GameCamera;
 class Player : public BaseObject {
 
-	// AddItem に適用できる型を定義
-	using ParamValue = std::variant<int, float, Vector3>;
 
 public:
 	enum NormalComboNum {
@@ -50,6 +49,7 @@ public:
 private:
 	///Paramater構造体
 	struct PlayerParams {
+		Vector3 startPos_;
 		float jumpSpeed;
 		float rushDistance ;
 		float rushEaseMax  ;
@@ -58,6 +58,8 @@ private:
 		float gravity ;
 		float fallSpeed;
 		float fallSpeedLimit;
+		float attackRotate;
+		float attackRotateEaseT;
 	};
 
 	struct ComboParm {
@@ -71,7 +73,6 @@ private: ///*other class
 	/// グローバルなパラメータ
 	GlobalParameter* globalParameter_;            /// グローバルパラメータ
 	const std::string groupName_ = "Player";      /// グループ名
-	std::unordered_map<std::string, ParamValue> paramCombies_;
 
 	/// behavior
 	std::unique_ptr<BasePlayerBehavior>behavior_ = nullptr;
@@ -99,8 +100,6 @@ private:
 	float   objectiveAngle_;                     /// 目標角度
 	Vector3 direction_;                          /// 速度
 	Vector3 prePos_;                             /// 移動前座標
-
-	//PlayerParams playerParms_;
 
 	///* コンボパラメータ
 	std::array<ComboParm, 4>normalComboParms_;
@@ -170,7 +169,6 @@ public:
 	void SetValues();
 	void ApplyGlobalParameter();
 	void AdjustParm();
-	void SetParmCombies();
 
 	/// <summary>
 	/// sound
@@ -207,4 +205,5 @@ public:
 	float GetJPunchReach   (JumpComboNum index)const;
 
 	void SetHeadRotateX(const float& zrotate) { headTransform_.rotation_.x = zrotate; }
+	void SetHeadRotateY(const float& zrotate) { headTransform_.rotation_.y = zrotate; }
 };

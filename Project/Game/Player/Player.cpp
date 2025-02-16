@@ -46,7 +46,6 @@ void Player::Init() {
 	cirlceTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
 
 	///* グローバルパラメータ
-	SetParmCombies();
 	globalParameter_ = GlobalParameter::GetInstance();
 	globalParameter_->CreateGroup(groupName_, false);
 	AddParmGroup();
@@ -74,6 +73,9 @@ void Player::Init() {
 
 	fallEmitter_.reset(ParticleEmitter::CreateParticle(fallParticleName_, "DebugSphere", ".obj", 300));
 	fallEmitter_->SetBlendMode(BlendMode::None);
+
+	//パラメータセット
+	transform_.translation_ = playerParams_.startPos_;
 
 	punchSoundID_ = Audio::GetInstance()->LoadWave("Resources/punchAir.wav");
 	strongPunch_ = Audio::GetInstance()->LoadWave("Resources/StrongPunch.wav");
@@ -424,6 +426,8 @@ void Player::AdjustParm() {
 		ImGui::DragFloat("rushDistance", &playerParams_.rushDistance, 0.01f);
 		ImGui::DragFloat("rushEaseMax", &playerParams_.rushEaseMax, 0.01f, 0);
 		ImGui::DragFloat("UpperPosY", &playerParams_.upperPosY, 0.1f);
+		ImGui::SliderAngle("attackRotate", &playerParams_.attackRotate,0,720);
+		ImGui::DragFloat("attackRotateEaseT", &playerParams_.attackRotateEaseT, 0.01f);
 
 
 		/// コンボパラメータ
@@ -562,10 +566,19 @@ void Player::ParmLoadForImGui() {
 ///=================================================================================
 void Player::AddParmGroup() {
 
-	// 一括登録
-	for (const auto& [name, value] : paramCombies_) {
-		globalParameter_->AddItem(groupName_, name, value);
-	}
+	globalParameter_->AddItem(groupName_, "Translate", playerParams_.startPos_);
+	globalParameter_->AddItem(groupName_, "JumpSpeed", playerParams_.jumpSpeed);
+	globalParameter_->AddItem(groupName_, "rushDistance", playerParams_.rushDistance);
+	globalParameter_->AddItem(groupName_, "rushEaseMax", playerParams_.rushEaseMax);
+	globalParameter_->AddItem(groupName_, "UpperPosY", playerParams_.upperPosY);
+	globalParameter_->AddItem(groupName_, "MoveSpeed", playerParams_.moveSpeed);
+	globalParameter_->AddItem(groupName_, "Gravity", playerParams_.gravity);
+	globalParameter_->AddItem(groupName_, "FallSpeed", playerParams_.fallSpeed);
+	globalParameter_->AddItem(groupName_, "FallSpeedLimit", playerParams_.fallSpeedLimit);
+	globalParameter_->AddItem(groupName_, "attackRotate", playerParams_.attackRotate);
+	globalParameter_->AddItem(groupName_, "attackRotateEaseT", playerParams_.attackRotateEaseT);
+
+
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
@@ -588,10 +601,18 @@ void Player::AddParmGroup() {
 ///=================================================================================
 void Player::SetValues() {
 
-	// 一括登録
-	for (const auto& [name, value] : paramCombies_) {
-		globalParameter_->SetValue(groupName_, name, value);
-	}
+	globalParameter_->SetValue(groupName_, "Translate", playerParams_.startPos_);
+	globalParameter_->SetValue(groupName_, "JumpSpeed", playerParams_.jumpSpeed);
+	globalParameter_->SetValue(groupName_, "rushDistance", playerParams_.rushDistance);
+	globalParameter_->SetValue(groupName_, "rushEaseMax", playerParams_.rushEaseMax);
+	globalParameter_->SetValue(groupName_, "UpperPosY", playerParams_.upperPosY);
+	globalParameter_->SetValue(groupName_, "MoveSpeed", playerParams_.moveSpeed);
+	globalParameter_->SetValue(groupName_, "Gravity", playerParams_.gravity);
+	globalParameter_->SetValue(groupName_, "FallSpeed", playerParams_.fallSpeed);
+	globalParameter_->SetValue(groupName_, "FallSpeedLimit", playerParams_.fallSpeedLimit);
+	globalParameter_->SetValue(groupName_, "attackRotate", playerParams_.attackRotate);
+	globalParameter_->SetValue(groupName_, "attackRotateEaseT", playerParams_.attackRotateEaseT);
+
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
@@ -609,28 +630,27 @@ void Player::SetValues() {
 }
 
 
-
 ///=====================================================
 ///  ImGuiからパラメータを得る
 ///===================================================== 
 void Player::ApplyGlobalParameter() {
 
-	// paramCombies_ から値を取得
-	for (auto& [name, value] : paramCombies_) {
-		if (std::holds_alternative<int>(value)) {
-			value = globalParameter_->GetValue<int>(groupName_, name);
-		} else if (std::holds_alternative<float>(value)) {
-			value = globalParameter_->GetValue<float>(groupName_, name);
-		} else if (std::holds_alternative<Vector3>(value)) {
-			value = globalParameter_->GetValue<Vector3>(groupName_, name);
-		}
-	}
+	playerParams_.startPos_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
+	playerParams_.jumpSpeed = globalParameter_->GetValue<float>(groupName_, "JumpSpeed");
+	playerParams_.rushDistance = globalParameter_->GetValue<float>(groupName_, "rushDistance");
+	playerParams_.rushEaseMax = globalParameter_->GetValue<float>(groupName_, "rushEaseMax");
+	playerParams_.upperPosY = globalParameter_->GetValue<float>(groupName_, "UpperPosY");
+	playerParams_.moveSpeed = globalParameter_->GetValue<float>(groupName_, "MoveSpeed");
+	playerParams_.gravity = globalParameter_->GetValue<float>(groupName_, "Gravity");
+	playerParams_.fallSpeed = globalParameter_->GetValue<float>(groupName_, "FallSpeed");
+	playerParams_.fallSpeedLimit = globalParameter_->GetValue<float>(groupName_, "FallSpeedLimit");
+	playerParams_.attackRotateEaseT = globalParameter_->GetValue<float>(groupName_, "attackRotateEaseT");
+	playerParams_.attackRotate = globalParameter_->GetValue<float>(groupName_, "attackRotate");
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
 		normalComboParms_[i].permissionTime = globalParameter_->GetValue<float>(groupName_,"NComboPTime" + std::to_string(int(i + 1)));
 		normalComboParms_[i].punchEaseMax = globalParameter_->GetValue<float>(groupName_,"NComboPunchEaseTime" + std::to_string(int(i + 1)));
-
 		normalComboParms_[i].punchReach = globalParameter_->GetValue<float>(groupName_,"NComboPunchReach" + std::to_string(int(i + 1)));
 	}
 
@@ -677,17 +697,3 @@ void Player::UpdateMatrix() {
 	BaseObject::Update();
 }
 
-void Player::SetParmCombies() {
-	paramCombies_ = {
-        {"Translate", transform_.translation_},
-		{"JumpSpeed", playerParams_.jumpSpeed},
-		{"rushDistance", playerParams_.rushDistance},
-		{"rushEaseMax", playerParams_.rushEaseMax},
-		{"UpperPosY", playerParams_.upperPosY},
-		{"MoveSpeed", playerParams_.moveSpeed},
-		{"Gravity", playerParams_.gravity},
-		{"FallSpeed", playerParams_.fallSpeed},
-		{"FallSpeedLimit", playerParams_.fallSpeedLimit}
-	};
-
-}
