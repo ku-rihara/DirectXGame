@@ -36,6 +36,8 @@ private:
 	Vector3 rHandTargetPos_;   /// ハンドターゲット座標
 	Vector3 punchPosition_;
 
+	/// motion
+
 	
 	float waitTine_;          /// 次コンボまでの待機時間
 

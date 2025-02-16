@@ -32,18 +32,16 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	collisionBox_->Init();
 	collisionBox_->SetSize(Vector3::UnitVector()*2.5f);// 当たり判定サイズ
 	collisionBox_->IsAdapt(false);
+
 	/// parm
 	rushEase_.time = 0.0f;
 	punchEase_.time = 0.0f;
 	speed_ = pPlayer_->GetPlayerParams().rushDistance;
 	waitTine_ = 0.0f;
+
+	// motion
+
 	
-	///land
-	startEasing_.maxTime = 0.5f;
-	startEasing_.amplitude = 0.6f;
-	startEasing_.period = 0.2f;
-
-
 	// 振る舞い順序初期化
 	order_ = Order::RUSH;
 }
@@ -54,22 +52,21 @@ ComboAttackFirst::~ComboAttackFirst() {
 
 //更新
 void ComboAttackFirst::Update() {
-	/// スケール変化
-	startEasing_.time += Frame::DeltaTimeRate();
-	startEasing_.time = std::min(startEasing_.time, startEasing_.maxTime);
-	pPlayer_->SetScale(EaseAmplitudeScale(Vector3::UnitVector(), startEasing_.time, startEasing_.maxTime,
-		startEasing_.amplitude, startEasing_.period));
 
+	//　モーション
+
+
+	// 攻撃中の移動
 	pPlayer_->Move(pPlayer_->GetPlayerParams().moveSpeed);
+
 
 	switch (order_) {
 
 	case Order::RUSH:
-
-		
-		///----------------------------------------------------
+	
+		///-----------------------------------------------------------------------------
 		/// 突進
-		///----------------------------------------------------
+		///------------------------------------------------------------------------------
 
 		ChangeSpeedForLockOn();// ロックオンによる突進スピードの変化
 
@@ -122,7 +119,6 @@ void ComboAttackFirst::Update() {
 		collisionBox_->SetPosition(pPlayer_->GetRightHand()->GetWorldPosition());
 		collisionBox_->SetOffset(forwardDirection_ * 1.0f);
 		collisionBox_->Update();
-
 
 		break;
 

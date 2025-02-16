@@ -30,6 +30,10 @@
 class LockOn;
 class GameCamera;
 class Player : public BaseObject {
+
+	// AddItem に適用できる型を定義
+	using ParamValue = std::variant<int, float, Vector3>;
+
 public:
 	enum NormalComboNum {
 		FIRST,
@@ -67,6 +71,7 @@ private: ///*other class
 	/// グローバルなパラメータ
 	GlobalParameter* globalParameter_;            /// グローバルパラメータ
 	const std::string groupName_ = "Player";      /// グループ名
+	std::unordered_map<std::string, ParamValue> paramCombies_;
 
 	/// behavior
 	std::unique_ptr<BasePlayerBehavior>behavior_ = nullptr;
@@ -148,7 +153,7 @@ public:
 	void FallParticleEmit();
 	void FallEffectUpdate();
 	void FallEffectInit(const Vector3& pos);
-	void AdjustParm();                          
+             
 	
 	///* ダメージ
 	void TakeDamage();          /// ダメージ受ける     
@@ -164,6 +169,8 @@ public:
 	void AddParmGroup();
 	void SetValues();
 	void ApplyGlobalParameter();
+	void AdjustParm();
+	void SetParmCombies();
 
 	/// <summary>
 	/// sound
