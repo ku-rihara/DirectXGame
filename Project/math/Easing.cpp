@@ -253,7 +253,7 @@ template<typename T> T EaseInOutQuart(const T& start, const T& end, float x, flo
 /// EaseInBack
 template<typename T>
 T EaseInBack(const T& start, const T& end, float x, float totalX) {
-	const float s = 1.70158f; 
+	const float s = 1.70158f;
 	float t = x / totalX;
 	float easeT = t * t * ((s + 1) * t - s);
 	return Lerp(start, end, easeT);
@@ -262,7 +262,7 @@ T EaseInBack(const T& start, const T& end, float x, float totalX) {
 /// EaseOutBack
 template<typename T>
 T EaseOutBack(const T& start, const T& end, float x, float totalX) {
-	const float s = 1.70158f; 
+	const float s = 1.70158f;
 	float t = x / totalX - 1;
 	float easeT = (t * t * ((s + 1) * t + s)) + 1;
 	return Lerp(start, end, easeT);
@@ -272,14 +272,13 @@ T EaseOutBack(const T& start, const T& end, float x, float totalX) {
 /// EaseInOutBack
 template<typename T>
 T EaseInOutBack(const T& start, const T& end, float x, float totalX) {
-	const float s = 1.70158f * 1.525f; 
+	const float s = 1.70158f * 1.525f;
 	float t = x / (totalX / 2.0f);
 	float easeT;
 
 	if (t < 1) {
 		easeT = 0.5f * (t * t * ((s + 1) * t - s));
-	}
-	else {
+	} else {
 		t -= 2;
 		easeT = 0.5f * ((t * t * ((s + 1) * t + s)) + 2);
 	}
@@ -337,22 +336,280 @@ template<typename T> T EaseInOutBounce(const T& start, const T& end, float x, fl
 	return Lerp(start, end, easeT);
 }
 
-//template<typename T> T  EaseTimeControl(float& t, const float& totalTime, const T& start, const T& end){	
-//	if (t <= 0.0f) {
-//		return start;
-//	}
-//
-//	if (t >= totalTime) {
-//		return end;
-//	}
-//	t /= totalTime;
-//}
 
+namespace Back {
 
-//// イージングタイムコントール
-//template void EaseTimeControl(float& t, const float& totalTime, const Vector3& start, const Vector3& end);
-//template void EaseTimeControl(float& t, const float& totalTime, const Vector2& start, const Vector2& end);
-//template void EaseTimeControl(float& t, const float& totalTime, const float& start, const float& end);
+	template<typename T> T  InSineZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime;
+		float delta = end - start;
+		return delta * (1 - cosf(t * std::numbers::pi_v<float> *0.5f) * (1 - b) + b * sinf(t * std::numbers::pi_v<float> *0.5f)) + start;
+	}
+
+	template<typename T> T OutSineZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime;
+		float delta = end - start;
+		return delta * sinf(t * std::numbers::pi_v<float> *0.5f) * (1 - b) + delta * b * (1 - cosf(t * std::numbers::pi_v<float> *0.5f)) + start;
+	}
+
+	template<typename T> T InOutSineZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime * 0.5f;
+		if (t < 1)
+		{
+			float delta = end - start;
+			return delta * 0.5f * (1 - cosf(t * std::numbers::pi_v<float> *0.5f) * (1 - b) + b * sinf(t * std::numbers::pi_v<float> *0.5f)) + start;
+		} else
+		{
+			t--;
+			float delta = end - start;
+			return delta * 0.5f * (sinf(t * std::numbers::pi_v<float> *0.5f) * (1 - b) + b * (1 - cosf(t * std::numbers::pi_v<float> *0.5f))) + delta * 0.5f + start;
+		}
+	}
+
+	template<typename T> T InQuadZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime;
+		float delta = end - start;
+		return delta * t * t * (1 - b) + delta * b * t + start;
+	}
+
+	template<typename T> T OutQuadZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime;
+		float delta = end - start;
+		return -delta * t * (t - 2) * (1 - b) + delta * b * t + start;
+	}
+
+	template<typename T> T InOutQuadZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime * 0.5f;
+		if (t < 1)
+		{
+			float delta = end - start;
+			return delta * 0.5f * t * t * (1 - b) + delta * 0.5f * b * t + start;
+		} else
+		{
+			t--;
+			float delta = end - start;
+			return -delta * 0.5f * (t * (t - 2) - 1) * (1 - b) + delta * 0.5f * b * (t + 1) + start;
+		}
+	}
+
+	template<typename T> T InCubicZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime;
+		float delta = end - start;
+		return delta * t * t * t * (1 - b) + delta * b * t + start;
+	}
+
+	template<typename T> T OutCubicZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime;
+		t--;
+		float delta = end - start;
+		return delta * (t * t * t + 1) * (1 - b) + delta * b * (t + 1) + start;
+	}
+
+	template<typename T> T InOutCubicZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime * 0.5f;
+		if (t < 1)
+		{
+			float delta = end - start;
+			return delta * 0.5f * t * t * t * (1 - b) + delta * 0.5f * b * t + start;
+		} else
+		{
+			t -= 2;
+			float delta = end - start;
+			return delta * 0.5f * (t * t * t + 2) * (1 - b) + delta * 0.5f * b * (t + 2) + start;
+		}
+	}
+
+	template<typename T> T InQuartZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime;
+		float delta = end - start;
+		return delta * t * t * t * t * (1 - b) + delta * b * t + start;
+	}
+
+	template<typename T> T OutQuartZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime;
+		t--;
+		float delta = end - start;
+		return -delta * (t * t * t * t - 1) * (1 - b) + delta * b * (t + 1) + start;
+	}
+
+	template<typename T> T InOutQuartZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime * 0.5f;
+		if (t < 1)
+		{
+			float delta = end - start;
+			return delta * 0.5f * t * t * t * t * (1 - b) + delta * 0.5f * b * t + start;
+		} else
+		{
+			t -= 2;
+			float delta = end - start;
+			return -delta * 0.5f * (t * t * t * t - 2) * (1 - b) + delta * 0.5f * b * (t + 2) + start;
+		}
+	}
+
+	template<typename T> T InQuintZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime;
+		float delta = end - start;
+		return delta * t * t * t * t * t * (1 - b) + delta * b * t + start;
+	}
+
+	template<typename T> T OutQuintZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime;
+		t--;
+		float delta = end - start;
+		return delta * (t * t * t * t * t + 1) * (1 - b) + delta * b * (t + 1) + start;
+	}
+
+	template<typename T> T InOutQuintZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime * 0.5f;
+		if (t < 1)
+		{
+			float delta = end - start;
+			return delta * 0.5f * t * t * t * t * t * (1 - b) + delta * 0.5f * b * t + start;
+		} else
+		{
+			t -= 2;
+			float delta = end - start;
+			return delta * 0.5f * (t * t * t * t * t + 2) * (1 - b) + delta * 0.5f * b * (t + 2) + start;
+		}
+	}
+
+	template<typename T> T InExpoZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		float delta = end - start;
+
+		if (t == 0) return start;
+		t /= totaltime;
+		return delta * powf(2, 10 * (t - 1)) * (1 - b) + delta * b * t + start;
+	}
+
+	template<typename T> T OutExpoZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		float delta = end - start;
+
+		if (t == totaltime) return end;
+		t /= totaltime;
+		return delta * (-powf(2, -10 * t) + 1) * (1 - b) + delta * b * t + start;
+	}
+
+	template<typename T> T InOutExpoZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		float delta = end - start;
+
+		if (t == 0) return start;
+		if (t == totaltime) return end;
+
+		t /= totaltime * 0.5f;
+
+		if (t < 1)
+		{
+			return delta * 0.5f * powf(2, 10 * (t - 1)) * (1 - b) + delta * 0.5f * b * t + start;
+		}
+
+		t--;
+
+		return delta * 0.5f * (-powf(2, -10 * t) + 2) * (1 - b) + delta * 0.5f * b * (t + 1) + start;
+	}
+
+	template<typename T> T InCircZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime;
+		float delta = end - start;
+
+		return -delta * (sqrtf(1 - t * t) - 1) * (1 - b) + delta * b * t + start;
+	}
+
+	template<typename T> T OutCircZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime;
+		t--;
+		float delta = end - start;
+
+		return delta * sqrtf(1 - t * t) * (1 - b) + delta * b * (t + 1) + start;
+	}
+
+	template<typename T> T InOutCircZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime * 0.5f;
+		if (t < 1)
+		{
+			float delta = end - start;
+			return -delta * 0.5f * (sqrtf(1 - t * t) - 1) * (1 - b) + delta * 0.5f * b * t + start;
+		}
+
+		t -= 2;
+		float delta = end - start;
+		return delta * 0.5f * (sqrtf(1 - t * t) + 1) * (1 - b) + delta * 0.5f * b * (t + 2) + start;
+	}
+
+	template<typename T> T InBackZero(const T& start, const T& end, float t, float totaltime, float s, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime;
+		float delta = end - start;
+		return delta * t * t * ((s + 1) * t - s) * (1 - b) + delta * b * t + start;
+	}
+
+	template<typename T> T OutBackZero(const T& start, const T& end, float t, float totaltime, float s, float backRaito)
+	{
+		float b = backRaito;
+		t /= totaltime;
+		t--;
+		float delta = end - start;
+		return delta * (t * t * ((s + 1) * t + s) + 1) * (1 - b) + delta * b * (t + 1) + start;
+	}
+
+	template<typename T> T InOutBackZero(const T& start, const T& end, float t, float totaltime, float s, float backRaito)
+	{
+		float b = backRaito;
+		float s_modified = s * 1.525f; // sを修正
+		t /= totaltime * 0.5f;
+
+		if (t < 1)
+		{
+			float delta = end - start;
+			return delta * 0.5f * (t * t * ((s_modified + 1) * t - s_modified)) * (1 - b) + delta * 0.5f * b * t + start;
+		}
+		t -= 2;
+		float delta = end - start;
+		return delta * 0.5f * (t * t * ((s_modified + 1) * t + s_modified) + 2) * (1 - b) + delta * 0.5f * b * (t + 2) + start;
+	}
+}
+
 // ぷにぷに
 template Vector3 EaseAmplitudeScale<Vector3>(const Vector3& initScale, const float& easeT, const float& easeTime, const float& amplitude, const float& period);
 template Vector2 EaseAmplitudeScale<Vector2>(const Vector2& initScale, const float& easeT, const float& easeTime, const float& amplitude, const float& period);
@@ -467,3 +724,4 @@ template float EaseOutBack(const float& start, const float& end, float x, float 
 template Vector3 EaseInOutBack(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseInOutBack(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseInOutBack(const float& start, const float& end, float x, float totalX);
+
