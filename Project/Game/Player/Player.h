@@ -207,6 +207,7 @@ public:
 	ComboParm GetNormalComboParm(const ComboNum& index)const {return normalComboParms_[static_cast<int>(index)];}
 	ComboParm GetJumpComboParm(const ComboNum& index)const { return jumpComboParms_[static_cast<int>(index)];}
 
+	void SetHeadPosY(const float& posy) { headTransform_.translation_.y = posy; }
 	void SetHeadRotateX(const float& zrotate) { headTransform_.rotation_.x = zrotate; }
 	void SetHeadRotateY(const float& zrotate) { headTransform_.rotation_.y = zrotate; }
 };

@@ -22,8 +22,9 @@ protected:
 
 	/// floatMotion
 	float floatValue_;
-	float floatEaseT_;
 	float tempFloatValue_;
+
+	Easing floatEase_;
 
 public:
 
