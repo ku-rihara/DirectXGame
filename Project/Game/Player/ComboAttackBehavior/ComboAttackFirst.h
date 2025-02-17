@@ -35,11 +35,6 @@ private:
 	Vector3 rHandStartPos_;    /// ハンドスタート座標
 	Vector3 rHandTargetPos_;   /// ハンドターゲット座標
 	Vector3 punchPosition_;
-
-	/// motion
-	float rotateValue_;
-	float rotateEaseT_;
-	float tempRotateValue_;
 	
 	float waitTine_;          /// 次コンボまでの待機時間
 
@@ -51,7 +46,7 @@ public:
 	/// 更新、デバッグ
 	void Update()override;
 	void Debug()override;
-	void RotateMotion();
+	
 
 	void ChangeSpeedForLockOn();
 };

@@ -42,14 +42,11 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	railManager_->SetRailMoveTime(0.0f);
 	railManager_->SetIsRoop(false);
 
-	///land
-	startEasing_.maxTime = 0.5f;
-	startEasing_.amplitude = 0.6f;
-	startEasing_.period = 0.2f;
-
 	rotateEase_.time = 0.0f;
 	rotateEase_.maxTime = 0.7f;
-	pPlayer_->SetHeadRotateY(0.0f);
+	
+	//　モーション
+	BaseComboAattackBehavior::AnimationInit();
 
 	// 音
 	pPlayer_->SoundPunch();
@@ -68,12 +65,7 @@ ComboAttackThird::~ComboAttackThird() {
 //更新
 void ComboAttackThird::Update() {
 
-	/// スケール変化
-	startEasing_.time += Frame::DeltaTimeRate();
-	startEasing_.time = std::min(startEasing_.time, startEasing_.maxTime);
-	pPlayer_->SetScale(EaseAmplitudeScale(Vector3::UnitVector(), startEasing_.time, startEasing_.maxTime,
-		startEasing_.amplitude, startEasing_.period));
-
+	BaseComboAattackBehavior::ScalingEaseUpdate();
 	// 向き変更
 	pPlayer_->Move(pPlayer_->GetPlayerParams().moveSpeed);
 
@@ -110,13 +102,13 @@ void ComboAttackThird::Update() {
 			collisionBox_->IsAdapt(true);
 		}
 
-		upperJumpEaseT_ = std::min(upperJumpEaseT_, pPlayer_->GetPunchEaseMax(Player::THIRD));
+		upperJumpEaseT_ = std::min(upperJumpEaseT_, pPlayer_->GetNormalComboParm(Player::ComboNum::THIRD).attackEaseMax);
 
 		// レール更新と座標反映
 		pPlayer_->GetRightHand()->RailThreeComboUpdate(pPlayer_->GetRightHand()->GetRailRunSpeedThree());
 		
 		pPlayer_->SetWorldPositionY(
-			EaseInSine(initPosY_,initPosY_+pPlayer_->GetPlayerParams().upperPosY,upperJumpEaseT_, pPlayer_->GetPunchEaseMax(Player::THIRD))
+			EaseInSine(initPosY_,initPosY_+pPlayer_->GetPlayerParams().upperPosY,upperJumpEaseT_, pPlayer_->GetNormalComboParm(Player::ComboNum::THIRD).attackEaseMax)
 		);
 
 		
@@ -139,7 +131,7 @@ void ComboAttackThird::Update() {
 		waitTine_ += Frame::DeltaTime();
 
 		/// コンボ途切れ
-		if (waitTine_ >= pPlayer_->GetWaitTime(Player::THIRD)) {
+		if (waitTine_ >= pPlayer_->GetNormalComboParm(Player::ComboNum::THIRD).waitTime) {
 			order_ = Order::FALL;
 		}
 

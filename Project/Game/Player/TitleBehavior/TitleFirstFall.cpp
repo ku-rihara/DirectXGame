@@ -114,7 +114,7 @@ void TitleFirstFall::Update() {
 	
 		waitTime_ += Frame::DeltaTime();
 		
-		if (waitTime_ >= pPlayer_->GetJWaitTime(Player::JFIRST)) {
+		if (waitTime_ >= pPlayer_->GetJumpComboParm(Player::ComboNum::FIRST).waitTime) {
 			step_ = STEP::RETURNROOT;
 		}
 		break;

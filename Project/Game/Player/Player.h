@@ -19,6 +19,9 @@
 #include"PlayerBehavior/BasePlayerBehavior.h"
 #include"TitleBehavior/BaseTitleBehavior.h"
 
+/// collider 
+#include"Collider/AABBCollider.h"
+
 /// std
 #include<array>
 #include <memory>
@@ -29,20 +32,15 @@
 /// </summary>
 class LockOn;
 class GameCamera;
-class Player : public BaseObject {
+class Player : public BaseObject,public AABBCollider{
 
 
 public:
-	enum NormalComboNum {
+	enum class ComboNum {
 		FIRST,
 		SECOND,
 		THIRD,
 		FORTH,
-	};
-
-	enum JumpComboNum {
-		JFIRST,
-		JSECOND,
 	};
 
 private:
@@ -59,12 +57,14 @@ private:
 		float fallSpeedLimit;
 		float attackRotate;
 		float attackRotateEaseT;
+		float attackFloatValue;
+		float attackFloatEaseT;
 	};
 
 	struct ComboParm {
-		float permissionTime;
-		float punchEaseMax;
-		float punchReach;
+		float waitTime;
+		float attackEaseMax;
+		float attackReach;
 	};
 
 private: ///*other class
@@ -90,6 +90,7 @@ private: ///*other class
 	std::unique_ptr<Object3d>          headObj_;       /// 頭
 	WorldTransform                     headTransform_; /// 頭トランスフォーム
 	std::list<std::unique_ptr<Effect>> effects_;       /// エフェクト
+
 
 private:
 	/// ===================================================
@@ -133,11 +134,11 @@ public:
 	void EffectDraw(const ViewProjection& viewProjection);
 
 	///* 移動
-	void    Move(const float& speed);         /// 移動
-	bool    GetIsMoving();                    /// 動かしてるかフラグ
-	void    MoveToLimit();                    /// 移動制限
-	Vector3 GetInputDirecton();               /// 入力による速度
-	void    UpdateMatrix();                   ///　行列更新
+	void    Move(const float& speed);                     /// 移動
+	bool    GetIsMoving();                                /// 動かしてるかフラグ
+	void    MoveToLimit();                                /// 移動制限
+	Vector3 GetInputDirecton();                           /// 入力による速度
+	void    UpdateMatrix();                               ///　行列更新
 
 	//* ジャンプ                             
 	void Jump(float& speed);                              /// ジャンプ
@@ -161,14 +162,20 @@ public:
 	///* 向き
 	void FaceToTarget();
 
-	/// ===================================================
+	/// ====================================================================
 	/// Editor
-	/// ===================================================
+	/// ====================================================================
 	void ParmLoadForImGui();
 	void AddParmGroup();
 	void SetValues();
 	void ApplyGlobalParameter();
 	void AdjustParm();
+
+	/// ====================================================================
+    /// Collision
+    /// ====================================================================
+	void OnCollisionStay ([[maybe_unused]] BaseCollider* other) override;
+	Vector3 GetCollisionPos() const override;
 
 	/// <summary>
 	/// sound
@@ -196,13 +203,9 @@ public:
 	void SetGameCamera    (GameCamera*gamecamera);
 	void SetTitleBehavior ();
 
-	float GetWaitTime      (NormalComboNum index)const;
-	float GetPunchEaseMax  (NormalComboNum index)const;
-	float GetPunchReach    (NormalComboNum index)const;
-
-	float GetJWaitTime     (JumpComboNum index)const;
-	float GetJPunchEaseMax (JumpComboNum index)const;
-	float GetJPunchReach   (JumpComboNum index)const;
+	///* 
+	ComboParm GetNormalComboParm(const ComboNum& index)const {return normalComboParms_[static_cast<int>(index)];}
+	ComboParm GetJumpComboParm(const ComboNum& index)const { return jumpComboParms_[static_cast<int>(index)];}
 
 	void SetHeadRotateX(const float& zrotate) { headTransform_.rotation_.x = zrotate; }
 	void SetHeadRotateY(const float& zrotate) { headTransform_.rotation_.y = zrotate; }

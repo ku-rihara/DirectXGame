@@ -87,31 +87,34 @@ public:
 	/// Hpバー処理
 	virtual void DisplaySprite(const ViewProjection& viewProjection);
 
-	void ChangeBehavior(std::unique_ptr<BaseEnemyBehaivor>behavior);
+	/// Behavior
+	void ChangeBehavior    (std::unique_ptr<BaseEnemyBehaivor>behavior);
 	void ChangeMoveBehavior(std::unique_ptr<BaseEnemyMoveBehavior>behavior);
-	void BackToDamageRoot();
+	void BackToDamageRoot  ();
 
-	// 当たり判定
+	/// ====================================================================
+    /// Collision
+    /// ====================================================================
 	void OnCollisionEnter([[maybe_unused]] BaseCollider* other)override;
-	void OnCollisionStay([[maybe_unused]] BaseCollider* other)override;
-
+	void OnCollisionStay ([[maybe_unused]] BaseCollider* other)override;
 	Vector3 GetCollisionPos() const override;
+	
 	///========================================================================================
 	///  getter method
 	///========================================================================================
-	bool GetIsDeath()const { return isdeath_; }
-	Type GetType()const { return type_; }
-	Player* GetPlayer() { return pPlayer_; }
-	GameCamera* GetGameCamera() { return pGameCamera_; }
-	FindSprite* GetFindSprite() { return findSprite_.get(); }
-	NotFindSprite* GetNotFindSprite() { return notFindSprite_.get(); }
-	Paramater GetParamater() { return paramater_; }
+	bool           GetIsDeath()         const   { return isdeath_; }
+	Type           GetType()            const   { return type_; }
+	Paramater      GetParamater()       const   { return paramater_; }
+	Player*        GetPlayer()                  { return pPlayer_; }
+	GameCamera*    GetGameCamera()              { return pGameCamera_; }
+	FindSprite*    GetFindSprite()              { return findSprite_.get(); }
+	NotFindSprite* GetNotFindSprite()           { return notFindSprite_.get(); }
 	///========================================================================================
 	///  setter method
 	///========================================================================================
-	void SetPlayer(Player* plyaer);
-	void SetGameCamera(GameCamera* gamecamera);
-	void SetParamater(const Type&type,const Paramater& paramater);
+	void SetPlayer     (Player* plyaer);
+	void SetGameCamera (GameCamera* gamecamera);
+	void SetParamater  (const Type&type,const Paramater& paramater);
 
 private:
 	bool IsInView(const ViewProjection& viewProjection) const;

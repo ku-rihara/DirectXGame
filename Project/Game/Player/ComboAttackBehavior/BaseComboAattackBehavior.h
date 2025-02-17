@@ -12,9 +12,14 @@ protected:
 	Player* pPlayer_ = nullptr; /// プレイヤー
 
 	bool isNextCombo_;
-
 	Easing startEasing_;
 	
+
+	/// motion
+	float rotateValue_;
+	float rotateEaseT_;
+	float tempRotateValue_;
+
 
 public:
 
@@ -23,6 +28,12 @@ public:
 	
 	virtual void Update()=0;   /// 更新
 	virtual void Debug() = 0;  /// デバッグ
+
+	void AnimationInit();
+
+	void ScalingEaseUpdate();
+	void RotateMotionUpdate(const bool& isClockwise);
+	void FloatAnimationUpdate();
 
 	virtual void PreOderNextComboForButton();
 	virtual void ChangeNextCombo(std::unique_ptr<BaseComboAattackBehavior>nextCombo);

@@ -40,10 +40,8 @@ ComboAttackForth::ComboAttackForth(Player* player)
 	thrustRailManager_ = pPlayer_->GetLeftHand()->GetThrustRailManager();
 	thrustRailManager_->SetIsRoop(false);
 
-	///land
-	startEasing_.maxTime = 0.5f;
-	startEasing_.amplitude = 0.6f;
-	startEasing_.period = 0.2f;
+
+	BaseComboAattackBehavior::AnimationInit();
 
 	kTimeDownTime_ = 1.1f;
 	timeDownTime_ = 0.0f;
@@ -63,10 +61,7 @@ ComboAttackForth::~ComboAttackForth() {
 //更新
 void ComboAttackForth::Update() {
 	/// スケール変化
-	startEasing_.time += Frame::DeltaTimeRate();
-	startEasing_.time = std::min(startEasing_.time, startEasing_.maxTime);
-	pPlayer_->SetScale(EaseAmplitudeScale(Vector3::UnitVector(), startEasing_.time, startEasing_.maxTime,
-		startEasing_.amplitude, startEasing_.period));
+	BaseComboAattackBehavior::ScalingEaseUpdate();
 
 	/*pPlayer_->Move(0.01f);*/
 
@@ -193,7 +188,7 @@ void ComboAttackForth::Update() {
 
 		if (pPlayer_->GetWorldPosition().y <= pPlayer_->InitY_) {
 			
-			if (waitTine_ >= pPlayer_->GetWaitTime(Player::FORTH)) {
+			if (waitTine_ >= pPlayer_->GetNormalComboParm(Player::ComboNum::FORTH).waitTime) {
 
 				
 				Frame::SetTimeScale(1.0f);

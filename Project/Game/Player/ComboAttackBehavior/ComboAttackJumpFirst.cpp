@@ -75,11 +75,11 @@ void ComboAttackJumpFirst::Update() {
 
 		/// プレイヤーが落ちる
 		pPlayer_->SetWorldPositionY(
-			EaseInSine(playerInitPosY_, Player::InitY_, fallEaseT_, pPlayer_->GetJPunchEaseMax(Player::JFIRST))
+			EaseInSine(playerInitPosY_, Player::InitY_, fallEaseT_, pPlayer_->GetJumpComboParm(Player::ComboNum::FIRST).attackEaseMax)
 			);
 
 		/// 着地の瞬間
-		if (fallEaseT_ < pPlayer_->GetJPunchEaseMax(Player::JFIRST))break;
+		if (fallEaseT_ < pPlayer_->GetJumpComboParm(Player::ComboNum::FIRST).attackEaseMax)break;
 
 		pPlayer_->SetRotation(initRotate_);
 		pPlayer_->GetLeftHand()->SetWorldPositionY(fallInitPosLHand_);
@@ -137,7 +137,7 @@ void ComboAttackJumpFirst::Update() {
 		collisionBox_->IsAdapt(false);
 		waitTime_ += Frame::DeltaTime();
 		
-		if (waitTime_ >= pPlayer_->GetJWaitTime(Player::JFIRST)) {
+		if (waitTime_ >= pPlayer_->GetJumpComboParm(Player::ComboNum::FIRST).waitTime) {
 			step_ = STEP::RETURNROOT;
 		}
 		else {

@@ -41,10 +41,8 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	speed_ = pPlayer_->GetPlayerParams().rushDistance;
 	waitTine_ = 0.0f;
 
-	// motion
-	rotateValue_ =pPlayer_->GetPlayerParams().attackRotate;
-	rotateEaseT_ = 0.0f;
-	pPlayer_->SetHeadRotateY(0.0f);
+	//　モーション
+	BaseComboAattackBehavior::AnimationInit();
 	
 	// 振る舞い順序初期化
 	order_ = Order::RUSH;
@@ -58,13 +56,9 @@ ComboAttackFirst::~ComboAttackFirst() {
 void ComboAttackFirst::Update() {
 
 	//　モーション
-	RotateMotion();
-
+	BaseComboAattackBehavior::RotateMotionUpdate(true);
 	/// スケール変化
-	startEasing_.time += Frame::DeltaTimeRate();
-	startEasing_.time = std::min(startEasing_.time, startEasing_.maxTime);
-	pPlayer_->SetScale(EaseAmplitudeScale(Vector3::UnitVector(), startEasing_.time, startEasing_.maxTime,
-		startEasing_.amplitude, startEasing_.period));
+	BaseComboAattackBehavior::ScalingEaseUpdate();
 
 
 	// 攻撃中の移動
@@ -95,7 +89,7 @@ void ComboAttackFirst::Update() {
 
 			/// パンチ座標セット
 			rHandStartPos_ = pPlayer_->GetRightHand()->GetTransform().translation_;
-			rHandTargetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayer_->GetPunchReach(Player::FIRST);
+			rHandTargetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayer_->GetNormalComboParm(Player::ComboNum::FIRST).attackReach;
 			//音
 			pPlayer_->SoundPunch();
 			order_ = Order::PUNCH;
@@ -114,15 +108,15 @@ void ComboAttackFirst::Update() {
 
 		/// 拳を突き出す
 		punchPosition_ =
-			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayer_->GetPunchEaseMax(Player::FIRST));
+			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayer_->GetNormalComboParm(Player::ComboNum::FIRST).attackEaseMax);
 
 
 		// ハンドのローカル座標を更新
 		pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
 
 		// イージング終了時の処理
-		if (punchEase_.time >= pPlayer_->GetPunchEaseMax(Player::FIRST)) {
-			punchEase_.time = pPlayer_->GetPunchEaseMax(Player::FIRST);
+		if (punchEase_.time >= pPlayer_->GetNormalComboParm(Player::ComboNum::FIRST).attackEaseMax) {
+			punchEase_.time = pPlayer_->GetNormalComboParm(Player::ComboNum::FIRST).attackEaseMax;
 			order_ = Order::BACKPUNCH;
 		}
 
@@ -144,7 +138,7 @@ void ComboAttackFirst::Update() {
 		punchEase_.time -= Frame::DeltaTimeRate();
 
 		punchPosition_ =
-			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayer_->GetPunchEaseMax(Player::FIRST));
+			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayer_->GetNormalComboParm(Player::ComboNum::FIRST).attackEaseMax);
 
 		// ハンドのローカル座標を更新
 		pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
@@ -160,7 +154,7 @@ void ComboAttackFirst::Update() {
 		waitTine_ += Frame::DeltaTime();
 
 		/// コンボ途切れ
-		if (waitTine_ >= pPlayer_->GetWaitTime(Player::FIRST)) {
+		if (waitTine_ >= pPlayer_->GetNormalComboParm(Player::ComboNum::FIRST).waitTime) {
 			pPlayer_->ChangeComboBehavior
 			(std::make_unique<ComboAttackRoot>(pPlayer_));
 		}
@@ -203,17 +197,4 @@ void ComboAttackFirst::ChangeSpeedForLockOn() {
 
 void  ComboAttackFirst::Debug() {
 	ImGui::Text("ComboAttackFirst");
-}
-
-void ComboAttackFirst::RotateMotion() {
-	rotateEaseT_ += Frame::DeltaTimeRate();
-	tempRotateValue_ = EaseInSine(0.0f, rotateValue_, rotateEaseT_, pPlayer_->GetPlayerParams().attackRotateEaseT);
-
-	pPlayer_->SetHeadRotateY(tempRotateValue_);
-
-	if (rotateEaseT_ < pPlayer_->GetPlayerParams().attackRotateEaseT) return;
-	rotateEaseT_ = pPlayer_->GetPlayerParams().attackRotateEaseT;
-	pPlayer_->SetHeadRotateY(0.0f);
-	
-
 }

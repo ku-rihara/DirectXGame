@@ -32,10 +32,7 @@ private:
 
 	float waitTine_;          /// 次コンボまでの待機時間
 
-	/// motion
-	float rotateValue_;
-	float rotateEaseT_;
-	float tempRotateValue_;
+	
 
 public:
 
