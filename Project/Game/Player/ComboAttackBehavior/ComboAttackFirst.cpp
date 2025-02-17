@@ -57,6 +57,7 @@ void ComboAttackFirst::Update() {
 
 	//　モーション
 	BaseComboAattackBehavior::RotateMotionUpdate(true);
+	BaseComboAattackBehavior::FloatAnimationUpdate();
 	/// スケール変化
 	BaseComboAattackBehavior::ScalingEaseUpdate();
 
