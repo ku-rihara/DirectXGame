@@ -388,9 +388,6 @@
     <ClCompile Include="Game\CollisionBox\AttackCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
-    <ClCompile Include="Game\CollisionBox\UpperCollisionBox.cpp">
-      <Filter>Game\CollisionBox</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\EnemyHitBackDamage.cpp">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClCompile>
@@ -399,12 +396,6 @@
     </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackForth.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\CollisionBox\ThrustCollisionBox.cpp">
-      <Filter>Game\CollisionBox</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\CollisionBox\StopCollisionBox.cpp">
-      <Filter>Game\CollisionBox</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\EnemyStopDamage.cpp">
       <Filter>Game\Enemy\Behevior</Filter>
@@ -420,12 +411,6 @@
     </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackJumpSecond.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\CollisionBox\FallCollisionBox.cpp">
-      <Filter>Game\CollisionBox</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\CollisionBox\RushCollisionBox.cpp">
-      <Filter>Game\CollisionBox</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\StrongEnemy.cpp">
       <Filter>Game\Enemy\core</Filter>
@@ -795,9 +780,6 @@
     <ClInclude Include="Game\CollisionBox\AttackCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
-    <ClInclude Include="Game\CollisionBox\UpperCollisionBox.h">
-      <Filter>Game\CollisionBox</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\EnemyHitBackDamage.h">
       <Filter>Game\Enemy\Behevior</Filter>
     </ClInclude>
@@ -806,12 +788,6 @@
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackForth.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\CollisionBox\ThrustCollisionBox.h">
-      <Filter>Game\CollisionBox</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\CollisionBox\StopCollisionBox.h">
-      <Filter>Game\CollisionBox</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\EnemyStopDamage.h">
       <Filter>Game\Enemy\Behevior</Filter>
@@ -827,12 +803,6 @@
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackJumpSecond.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\CollisionBox\FallCollisionBox.h">
-      <Filter>Game\CollisionBox</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\CollisionBox\RushCollisionBox.h">
-      <Filter>Game\CollisionBox</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\StrongEnemy.h">
       <Filter>Game\Enemy\core</Filter>

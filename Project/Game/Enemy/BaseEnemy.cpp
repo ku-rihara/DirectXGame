@@ -10,11 +10,6 @@
 
 /// collisionBox
 #include"CollisionBox/AttackCollisionBox.h"
-#include"CollisionBox/UpperCollisionBox.h"
-#include"CollisionBox/StopCollisionBox.h"
-#include"CollisionBox/ThrustCollisionBox.h"
-#include"CollisionBox/FallCollisionBox.h"
-#include"CollisionBox/RushCollisionBox.h"
 
 #include"Matrix4x4.h"
 #include"Player/Player.h"

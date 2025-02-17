@@ -62,12 +62,7 @@
     <ClCompile Include="Engine\utility\Particle\ParticleManager.cpp" />
     <ClCompile Include="Game\BaseObject\BaseObject.cpp" />
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp" />
-    <ClCompile Include="Game\CollisionBox\FallCollisionBox.cpp" />
     <ClCompile Include="Game\CollisionBox\AttackCollisionBox.cpp" />
-    <ClCompile Include="Game\CollisionBox\RushCollisionBox.cpp" />
-    <ClCompile Include="Game\CollisionBox\StopCollisionBox.cpp" />
-    <ClCompile Include="Game\CollisionBox\ThrustCollisionBox.cpp" />
-    <ClCompile Include="Game\CollisionBox\UpperCollisionBox.cpp" />
     <ClCompile Include="Game\Effect\Effect.cpp" />
     <ClCompile Include="Game\Enemy\BaseEnemy.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\BaseEnemyBehavior.cpp" />
@@ -197,12 +192,7 @@
     <ClInclude Include="Engine\utility\Particle\ParticleManager.h" />
     <ClInclude Include="Game\BaseObject\BaseObject.h" />
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h" />
-    <ClInclude Include="Game\CollisionBox\FallCollisionBox.h" />
     <ClInclude Include="Game\CollisionBox\AttackCollisionBox.h" />
-    <ClInclude Include="Game\CollisionBox\RushCollisionBox.h" />
-    <ClInclude Include="Game\CollisionBox\StopCollisionBox.h" />
-    <ClInclude Include="Game\CollisionBox\ThrustCollisionBox.h" />
-    <ClInclude Include="Game\CollisionBox\UpperCollisionBox.h" />
     <ClInclude Include="Game\Effect\Effect.h" />
     <ClInclude Include="Game\Enemy\BaseEnemy.h" />
     <ClInclude Include="Game\Enemy\Behavior\BaseEnemyBehavior.h" />

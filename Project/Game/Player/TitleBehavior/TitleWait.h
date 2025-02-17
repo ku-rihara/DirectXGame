@@ -1,7 +1,6 @@
 #pragma once
 
 #include"BaseTitleBehavior.h"
-#include"CollisionBox/FallCollisionBox.h"
 #include"Easing.h"
 
 class TitleWait : public BaseTitleBehavior {
