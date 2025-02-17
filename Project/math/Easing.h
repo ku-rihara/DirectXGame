@@ -5,7 +5,7 @@
 struct Easing {
 	float time;
 	float maxTime;
-	float incrementTime_;
+	float backRatio;
 	float amplitude;
 	float period;
 };
