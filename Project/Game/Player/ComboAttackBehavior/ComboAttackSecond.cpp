@@ -26,9 +26,9 @@ ComboAttackSecond::ComboAttackSecond(Player* player)
 	waitTine_ = 0.0f;
 
 	/// collisionBox
-	collisionBox_ = std::make_unique<PunchCollisionBox>();
+	collisionBox_ = std::make_unique<AttackCollisionBox>();
 	collisionBox_->Init();
-
+	collisionBox_->attackType_ = AttackCollisionBox::AttackType::NORMAL;
 	collisionBox_->SetSize(Vector3::UnitVector() * 2.5f);// 当たり判定サイズ
 	Vector3 forwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
 	collisionBox_->SetOffset(forwardDirection * 1.0f);
@@ -62,7 +62,6 @@ void ComboAttackSecond::Update() {
 
 	//　モーション
 	RotateMotion();
-
 
 	/// スケール変化
 	startEasing_.time += Frame::DeltaTimeRate();

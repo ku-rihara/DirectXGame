@@ -2,7 +2,7 @@
 
 #include"BaseTitleBehavior.h"
 #include"Easing.h"
-#include"CollisionBox/PunchCollisionBox.h"
+
 
 class TitleSecondPunch : public BaseTitleBehavior {
 private:

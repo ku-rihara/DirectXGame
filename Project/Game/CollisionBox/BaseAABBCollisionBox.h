@@ -3,6 +3,7 @@
 #include"Collider/AABBCollider.h"
 #include"3d/WorldTransform.h"
 #include"utility/Editor/GlobalParameter.h"
+#include<string>
 
 class BaseAABBCollisionBox :public AABBCollider {
 protected:
@@ -14,6 +15,8 @@ protected:
 	float scalerOffset_;
 	Vector3 offset_;
 	float aliveTime_;
+public:
+	std::string tag_;
 public:
 
 	virtual void Init();
@@ -29,7 +32,8 @@ public:
 	// 当たり
 	virtual void OnCollisionEnter([[maybe_unused]] BaseCollider* other)override;
 	virtual void OnCollisionStay([[maybe_unused]] BaseCollider* other)override;
-	/* void OnCollisionExit([[maybe_unused]] BaseCollider* other) override;*/
-
+	
 	virtual Vector3 GetCollisionPos() const override;
+
+	std::string GetTag()const { return tag_; }
 };

@@ -2,7 +2,7 @@
 
 #include"BaseComboAattackBehavior.h"
 #include"Easing.h"
-#include"CollisionBox/UpperCollisionBox.h"
+#include"CollisionBox/AttackCollisionBox.h"
 
 class RailManager;
 class ComboAttackThird : public BaseComboAattackBehavior {
@@ -20,7 +20,7 @@ private:
 
 	Order order_;               /// 振る舞い順序
 	RailManager* railManager_;
-	std::unique_ptr<UpperCollisionBox>collisionBox_;
+	std::unique_ptr<AttackCollisionBox>collisionBox_;
 	const float kCollisionAliveTime_=0.3f;
 	float fallInitSpeed_;
 

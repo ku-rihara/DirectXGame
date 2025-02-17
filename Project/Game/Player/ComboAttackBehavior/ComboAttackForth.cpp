@@ -23,29 +23,19 @@ ComboAttackForth::ComboAttackForth(Player* player)
 	pPlayer_->SetHeadRotateX(0.0f);
 
 	///collision
-	stopCollisionBox_=std::make_unique<StopCollisionBox>();
-	thrustCollisionBox_ = std::make_unique<ThrustCollisionBox>();
+	collisionBox_ = std::make_unique<AttackCollisionBox>();
 
-	// stop
-	stopCollisionBox_->Init();
-	stopCollisionBox_->SetSize(Vector3::UnitVector() * 4.5f);// 当たり判定サイズ
-	Vector3 sforwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
-	stopCollisionBox_->SetOffset(sforwardDirection * 2.0f);
-	stopCollisionBox_->SetPosition(pPlayer_->GetRightHand()->GetWorldPosition());
-	stopCollisionBox_->IsAdapt(false);
-	stopCollisionBox_->Update();
+	collisionBox_->Init();
+	collisionBox_->attackType_ = AttackCollisionBox::AttackType::STOPPER;
+	collisionBox_->SetSize(Vector3::UnitVector() * 4.5f);// 当たり判定サイズ
+	collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+	Vector3 tforwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
+	collisionBox_->SetOffset(tforwardDirection * 2.0f);
+	collisionBox_->IsAdapt(false);
+	collisionBox_->Update();
 
 	stopRailManager_ = pPlayer_->GetRightHand()->GetStopRailManager();
 	stopRailManager_->SetIsRoop(false);
-
-	/// trust
-	thrustCollisionBox_->Init();
-	thrustCollisionBox_->SetSize(Vector3::UnitVector() * 4.5f);// 当たり判定サイズ
-	thrustCollisionBox_->SetPosition(pPlayer_->GetWorldPosition());
-	Vector3 tforwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
-	thrustCollisionBox_->SetOffset(tforwardDirection * 2.0f);
-	thrustCollisionBox_->IsAdapt(false);
-	thrustCollisionBox_->Update();
 
 	thrustRailManager_ = pPlayer_->GetLeftHand()->GetThrustRailManager();
 	thrustRailManager_->SetIsRoop(false);
@@ -81,13 +71,12 @@ void ComboAttackForth::Update() {
 	/*pPlayer_->Move(0.01f);*/
 
 	//デルタタイムスケール小さく
-	if (thrustCollisionBox_->GetIsSlow() && !istimeSlow_) {
+	if (collisionBox_->GetIsSlow() && !istimeSlow_) {
 		Frame::SetTimeScale(0.01f);
 		pPlayer_->SoundStrongPunch();
 		pPlayer_->GetGameCamera()->ChangeZoomInOut();
 		istimeSlow_ = true;
 	}
-
 
 	// スロータイム
 	if (istimeSlow_) {
@@ -105,7 +94,7 @@ void ComboAttackForth::Update() {
 		///----------------------------------------------------
 		firstWaitTime_ += Frame::DeltaTime();
 		if (firstWaitTime_ >= firstWaitTimeMax_) {
-			stopCollisionBox_->IsAdapt(true);
+			collisionBox_->IsAdapt(true);
 			pPlayer_->SoundPunch();
 			order_ = Order::RPUNCH;
 		}
@@ -119,8 +108,8 @@ void ComboAttackForth::Update() {
 		// レール更新と座標反映
 		pPlayer_->GetRightHand()->RailForthComboUpdate(pPlayer_->GetRightHand()->GetRailRunSpeedForth());
 
-		stopCollisionBox_->SetPosition(pPlayer_->GetRightHand()->GetWorldPosition());
-		stopCollisionBox_->Update();
+		collisionBox_->SetPosition(pPlayer_->GetRightHand()->GetWorldPosition());
+		collisionBox_->Update();
 		
 		// イージング終了時の処理
 		if (stopRailManager_->GetRailMoveTime() < 1.0f) break;
@@ -128,7 +117,7 @@ void ComboAttackForth::Update() {
 		stopRailManager_->SetRailMoveTime(1.0f);
 		pPlayer_->GetRightHand()->RailForthComboUpdate(0.0f);
 
-		stopCollisionBox_->IsAdapt(false);
+		collisionBox_->IsAdapt(false);
 		order_ = Order::RBACKPUNCH;
 
 		break;
@@ -146,7 +135,8 @@ void ComboAttackForth::Update() {
 
 		stopRailManager_->SetRailMoveTime(0.0f);
 		pPlayer_->GetRightHand()->RailForthComboUpdate(0.0f);
-		thrustCollisionBox_->IsAdapt(true);
+		collisionBox_->IsAdapt(true);
+		collisionBox_->attackType_ = AttackCollisionBox::AttackType::THRUST;
 		//音
 		pPlayer_->SoundPunch();
 		order_ = Order::LPUNCH;
@@ -159,8 +149,8 @@ void ComboAttackForth::Update() {
 
 		// レール更新と座標反映
 		pPlayer_->GetLeftHand()->RailForthComboUpdate(pPlayer_->GetLeftHand()->GetRailRunSpeedForth());
-		thrustCollisionBox_->SetPosition(pPlayer_->GetLeftHand()->GetWorldPosition());
-		thrustCollisionBox_->Update();
+		collisionBox_->SetPosition(pPlayer_->GetLeftHand()->GetWorldPosition());
+		collisionBox_->Update();
 
 		// イージング終了時の処理
 		if (thrustRailManager_->GetRailMoveTime() < 1.0f) break;
@@ -168,7 +158,7 @@ void ComboAttackForth::Update() {
 		thrustRailManager_->SetRailMoveTime(1.0f);
 		pPlayer_->GetLeftHand()->RailForthComboUpdate(0.0f);
 		order_ = Order::LBACKPUNCH;
-		thrustCollisionBox_->IsAdapt(false);
+		collisionBox_->IsAdapt(false);
 
 		break;
 

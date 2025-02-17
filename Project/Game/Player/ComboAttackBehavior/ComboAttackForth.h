@@ -2,8 +2,7 @@
 
 #include"BaseComboAattackBehavior.h"
 #include"Easing.h"
-#include"CollisionBox/ThrustCollisionBox.h"
-#include"CollisionBox/StopCollisionBox.h"
+#include"CollisionBox/AttackCollisionBox.h"
 #include"utility/Editor/RailManager.h"
 
 class ComboAttackForth : public BaseComboAattackBehavior {
@@ -38,9 +37,8 @@ private:
 	bool istimeSlow_;
 
 	// collision
-	std::unique_ptr<StopCollisionBox>stopCollisionBox_;
-	std::unique_ptr<ThrustCollisionBox>thrustCollisionBox_;
-
+	std::unique_ptr<AttackCollisionBox>collisionBox_;
+	
 	float waitTine_;          /// 次コンボまでの待機時間
 
 public:

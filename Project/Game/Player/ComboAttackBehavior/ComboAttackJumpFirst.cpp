@@ -21,8 +21,6 @@ ComboAttackJumpFirst::ComboAttackJumpFirst(Player* player)
 
 	step_ = STEP::FALL; // 落ちる
 
-	fallCollisionBox_ = std::make_unique<FallCollisionBox>();
-	fallCollisionBox_->Init();
 	fallRotateY_ = 0.0f;
 
 	boundSpeed_ = 1.4f;
@@ -32,12 +30,13 @@ ComboAttackJumpFirst::ComboAttackJumpFirst(Player* player)
 	rotateYSpeed_ = 20.0f;
 
 	/// collisionBox
-	fallCollisionBox_ = std::make_unique<FallCollisionBox>();
-	fallCollisionBox_->Init();
-	fallCollisionBox_->SetPosition(pPlayer_->GetWorldPosition());
-	fallCollisionBox_->SetSize(Vector3(4.5f,2.0f,4.5f));// 当たり判定サイズ
-	fallCollisionBox_->Update();
-	fallCollisionBox_->IsAdapt(false);
+	collisionBox_ = std::make_unique<AttackCollisionBox>();
+	collisionBox_->Init();
+	collisionBox_->attackType_ = AttackCollisionBox::AttackType::FALL;
+	collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+	collisionBox_->SetSize(Vector3(4.5f,2.0f,4.5f));// 当たり判定サイズ
+	collisionBox_->Update();
+	collisionBox_->IsAdapt(false);
 
 	initRotate_ = pPlayer_->GetTransform().rotation_;
 
@@ -108,12 +107,12 @@ void ComboAttackJumpFirst::Update() {
 
 		if (landScaleEasing_.time <= 0.15f) {
 			/// 当たり判定座標
-			fallCollisionBox_->IsAdapt(true);
-			fallCollisionBox_->SetPosition(pPlayer_->GetWorldPosition());
-			fallCollisionBox_->Update();
+			collisionBox_->IsAdapt(true);
+			collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+			collisionBox_->Update();
 		}
 		else {
-			fallCollisionBox_->IsAdapt(false);
+			collisionBox_->IsAdapt(false);
 		}
 
 		// 回転する
@@ -135,7 +134,7 @@ void ComboAttackJumpFirst::Update() {
 		///---------------------------------------------------------
 		/// 待機
 		///---------------------------------------------------------
-		fallCollisionBox_->IsAdapt(false);
+		collisionBox_->IsAdapt(false);
 		waitTime_ += Frame::DeltaTime();
 		
 		if (waitTime_ >= pPlayer_->GetJWaitTime(Player::JFIRST)) {

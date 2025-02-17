@@ -2,7 +2,7 @@
 
 #include"BaseComboAattackBehavior.h"
 #include"Easing.h"
-#include"CollisionBox/RushCollisionBox.h"
+#include"CollisionBox/AttackCollisionBox.h"
 #include"utility/Particle/ParticleEmitter.h"
 
 class ComboAttackJumpSecond : public BaseComboAattackBehavior {
@@ -30,7 +30,7 @@ private:
 	Vector3 targetLPos_;
 	Vector3 rushTargetPos_;
 
-	std::unique_ptr<RushCollisionBox>rushCollisionBox_;
+	std::unique_ptr<AttackCollisionBox>rushCollisionBox_;
 	std::unique_ptr<ParticleEmitter>emitter_;
 
 	///wait

@@ -23,7 +23,6 @@
 #include<array>
 #include <memory>
 #include<string>
-#include <variant>
 
 /// <summary>
 /// プレイヤークラス
@@ -51,8 +50,8 @@ private:
 	struct PlayerParams {
 		Vector3 startPos_;
 		float jumpSpeed;
-		float rushDistance ;
-		float rushEaseMax  ;
+		float rushDistance;
+		float rushEaseMax;
 		float upperPosY ;
 		float moveSpeed ;
 		float gravity ;
@@ -79,17 +78,18 @@ private: ///*other class
 	std::unique_ptr<BaseComboAattackBehavior>comboBehavior_ = nullptr;
 	std::unique_ptr<BaseTitleBehavior>titleBehavior_ = nullptr;
 
+	/// Particle
 	std::string fallParticleName_;
 	std::unique_ptr<ParticleEmitter>fallEmitter_;
 
 	/// other class
-	LockOn*                            pLockOn_;     /// LockOnクラス
-	GameCamera*                        pGameCamera_;
-	std::unique_ptr<PlayerHandLeft>    leftHand_;     /// 左手
-	std::unique_ptr<PlayerHandRight>   rightHand_;    /// 右手
-	std::unique_ptr<Object3d>          headObj_;
-	WorldTransform                     headTransform_;
-	std::list<std::unique_ptr<Effect>> effects_;
+	LockOn*                            pLockOn_;       /// LockOnクラス
+	GameCamera*                        pGameCamera_;   /// ゲームカメラポインタ
+	std::unique_ptr<PlayerHandLeft>    leftHand_;      /// 左手
+	std::unique_ptr<PlayerHandRight>   rightHand_;     /// 右手
+	std::unique_ptr<Object3d>          headObj_;       /// 頭
+	WorldTransform                     headTransform_; /// 頭トランスフォーム
+	std::list<std::unique_ptr<Effect>> effects_;       /// エフェクト
 
 private:
 	/// ===================================================

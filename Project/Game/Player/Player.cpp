@@ -51,6 +51,7 @@ void Player::Init() {
 	AddParmGroup();
 	ApplyGlobalParameter();
 
+	/// ライティング
 	obj3d_->material_.materialData_->enableLighting = 2;
 
 	///* 武器生成
@@ -58,6 +59,7 @@ void Player::Init() {
 	rightHand_ = std::make_unique<PlayerHandRight>();
 	headObj_.reset(Object3d::CreateModel("Player", ".obj"));
 
+	// トランスフォーム初期化
 	headTransform_.Init();
 	leftHand_->Init();
 	rightHand_->Init();
@@ -71,12 +73,14 @@ void Player::Init() {
 	rightHand_->SetRailParent(&transform_);
 	leftHand_->SetRailParent(&transform_);
 
+	// パーティクル初期化
 	fallEmitter_.reset(ParticleEmitter::CreateParticle(fallParticleName_, "DebugSphere", ".obj", 300));
 	fallEmitter_->SetBlendMode(BlendMode::None);
 
 	//パラメータセット
 	transform_.translation_ = playerParams_.startPos_;
 
+	// 音
 	punchSoundID_ = Audio::GetInstance()->LoadWave("Resources/punchAir.wav");
 	strongPunch_ = Audio::GetInstance()->LoadWave("Resources/StrongPunch.wav");
 	fallSound_ = Audio::GetInstance()->LoadWave("Resources/PlayerFall.wav");
@@ -113,12 +117,7 @@ void Player::Update() {
 	MoveToLimit();                ///　移動制限
 	FallEffectUpdate();
 
-	/// 行列更新
-	headTransform_.UpdateMatrix();
-	leftHand_->Update();
-	rightHand_->Update();
-	BaseObject::Update();        /// 更新 
-
+	UpdateMatrix();
 }
 
 // タイトル更新
@@ -135,10 +134,7 @@ void Player::TitleUpdate() {
 
 	titleBehavior_->Update();
 	/// 行列更新
-	headTransform_.UpdateMatrix();
-	leftHand_->Update();
-	rightHand_->Update();
-	BaseObject::Update();
+	UpdateMatrix();
 }
 
 ///=========================================================
@@ -175,33 +171,7 @@ void Player::FallSound() {
 /// ダメ―ジ演出
 ///=======================================================================
 void Player::DamageRendition() {
-	//if (isDamage_) {
-	//	damageTime_ -= Frame::DeltaTimeRate();
 
-	//	// ダメージ時間がまだ残っている場合
-
-	//	blinkTimer_ += Frame::DeltaTimeRate();
-
-	//	// チカチカ間隔ごとに透明フラグを切り替え
-	//	if (blinkTimer_ >= blinkInterval_) {
-	//		blinkTimer_ = 0.0f;          // チカチカタイマーをリセット
-	//		isTransparent_ = !isTransparent_; // 透明フラグを反転
-
-	//		if (isTransparent_) {
-	//			objColor_.SetColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f)); // 透明色
-	//		}
-	//		else {
-	//			objColor_.SetColor(Vector4(0.5f, 0.0f, 0.0f, 0.99f)); // 赤常色
-	//		}
-	//	}
-
-	//	if (damageTime_ <= 0.0f) {
-	//		// ダメージ時間が終了したらフラグをリセット
-	//		isDamage_ = false;
-	//		isTransparent_ = false;
-	//		objColor_.SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f)); // 通常色に戻す
-	//	}
-	//}
 }
 
 void Player::FallParticleEmit() {
@@ -286,9 +256,9 @@ bool Player::GetIsMoving() {
 	Vector3 StickVelocity;
 	Vector3 keyBoradVelocity;
 
-	/// ----------------------------------------------------------
+	/// ---------------------------------------------------------------------
 	///  keyBorad
-	/// ----------------------------------------------------------
+	/// ---------------------------------------------------------------------
 	if (input->PushKey(DIK_W) || input->PushKey(DIK_A) || input->PushKey(DIK_S) || input->PushKey(DIK_D)) {
 
 		// キーボード入力
@@ -484,7 +454,6 @@ void Player::FallEffectInit(const Vector3& pos) {
 	std::unique_ptr<Effect> effect = std::make_unique<Effect>();
 
 	effect->Init(pos);
-
 	effects_.push_back(std::move(effect));
 }
 
@@ -577,8 +546,6 @@ void Player::AddParmGroup() {
 	globalParameter_->AddItem(groupName_, "FallSpeedLimit", playerParams_.fallSpeedLimit);
 	globalParameter_->AddItem(groupName_, "attackRotate", playerParams_.attackRotate);
 	globalParameter_->AddItem(groupName_, "attackRotateEaseT", playerParams_.attackRotateEaseT);
-
-
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
@@ -694,6 +661,10 @@ void Player::SetTitleBehavior() {
 }
 
 void Player::UpdateMatrix() {
+	/// 行列更新
+	headTransform_.UpdateMatrix();
+	leftHand_->Update();
+	rightHand_->Update();
 	BaseObject::Update();
 }
 

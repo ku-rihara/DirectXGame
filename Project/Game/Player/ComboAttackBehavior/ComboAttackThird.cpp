@@ -28,8 +28,9 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	upperJumpEaseT_ = 0.0f;
 	
 	/// collisionBox
-	collisionBox_ = std::make_unique<UpperCollisionBox>();
+	collisionBox_ = std::make_unique<AttackCollisionBox>();
 	collisionBox_->Init();
+	collisionBox_->attackType_ = AttackCollisionBox::AttackType::UPPER;
 
 	collisionBox_->SetSize(Vector3::UnitVector() * 4.5f);// 当たり判定サイズ
 	
@@ -48,7 +49,9 @@ ComboAttackThird::ComboAttackThird(Player* player)
 
 	rotateEase_.time = 0.0f;
 	rotateEase_.maxTime = 0.7f;
+	pPlayer_->SetHeadRotateY(0.0f);
 
+	// 音
 	pPlayer_->SoundPunch();
 
 	// 振る舞い順序初期化

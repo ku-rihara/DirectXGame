@@ -1,7 +1,7 @@
 #pragma once
 
 #include"BaseComboAattackBehavior.h"
-#include"CollisionBox/FallCollisionBox.h"
+#include"CollisionBox/AttackCollisionBox.h"
 #include"Easing.h"
 
 class ComboAttackJumpFirst : public BaseComboAattackBehavior {
@@ -37,7 +37,7 @@ private:
 	float gravity_;
 	Easing landScaleEasing_;
 
-	std::unique_ptr<FallCollisionBox>fallCollisionBox_;
+	std::unique_ptr<AttackCollisionBox>collisionBox_;
 
 	float waitTime_;
 

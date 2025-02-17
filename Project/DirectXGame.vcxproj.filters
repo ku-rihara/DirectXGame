@@ -109,9 +109,6 @@
     <Filter Include="MyEngine\.h\utility\Editor">
       <UniqueIdentifier>{fd8669ab-e586-4603-8989-fde63074b7f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Scene\Manager">
-      <UniqueIdentifier>{20578600-268f-441b-8c4f-b9fd3cd175ca}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Scene\Factory">
       <UniqueIdentifier>{33f429d3-39ce-4d12-9f0a-521b426150fd}</UniqueIdentifier>
     </Filter>
@@ -222,6 +219,9 @@
     </Filter>
     <Filter Include="Game\Player\core">
       <UniqueIdentifier>{d3e51b1b-0df3-4fb3-bd66-3f185b05cfcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Behavior\ComboBehavior\Normal\Manager">
+      <UniqueIdentifier>{20578600-268f-441b-8c4f-b9fd3cd175ca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -371,7 +371,7 @@
       <Filter>Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\Manager\SceneManager.cpp">
-      <Filter>Game\Scene\Manager</Filter>
+      <Filter>Game\Player\Behavior\ComboBehavior\Normal\Manager</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp">
       <Filter>Game\Scene\Factory</Filter>
@@ -385,7 +385,7 @@
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
-    <ClCompile Include="Game\CollisionBox\PunchCollisionBox.cpp">
+    <ClCompile Include="Game\CollisionBox\AttackCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
     <ClCompile Include="Game\CollisionBox\UpperCollisionBox.cpp">
@@ -775,7 +775,7 @@
       <Filter>Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\Manager\SceneManager.h">
-      <Filter>Game\Scene\Manager</Filter>
+      <Filter>Game\Player\Behavior\ComboBehavior\Normal\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\Factory\AbstractSceneFactory.h">
       <Filter>Game\Scene\Factory</Filter>
@@ -792,7 +792,7 @@
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
-    <ClInclude Include="Game\CollisionBox\PunchCollisionBox.h">
+    <ClInclude Include="Game\CollisionBox\AttackCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
     <ClInclude Include="Game\CollisionBox\UpperCollisionBox.h">

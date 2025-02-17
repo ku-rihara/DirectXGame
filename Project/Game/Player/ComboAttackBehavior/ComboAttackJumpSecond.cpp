@@ -23,8 +23,9 @@ ComboAttackJumpSecond::ComboAttackJumpSecond(Player* player)
 	targetRPos_ = initRHandPos_ +(Vector3::ToForward()*2.0f);
 	targetLPos_ = initLHandPos_ +(Vector3::ToForward()*2.0f);
 
-	rushCollisionBox_ = std::make_unique<RushCollisionBox>();
+	rushCollisionBox_ = std::make_unique<AttackCollisionBox>();
 	rushCollisionBox_->Init();
+	rushCollisionBox_->attackType_ = AttackCollisionBox::AttackType::RUSH;
 	rushCollisionBox_->SetPosition(pPlayer_->GetWorldPosition());
 	rushCollisionBox_->SetSize(Vector3(2.0f, 2.0f, 2.0f));// 当たり判定サイズ
 	rushCollisionBox_->Update();

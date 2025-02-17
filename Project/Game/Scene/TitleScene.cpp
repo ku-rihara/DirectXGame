@@ -54,8 +54,6 @@ void TitleScene::Init() {
 	player_->SetTitleBehavior();
 
 	player_->SetWorldPositionY(30.0f);
-	player_->UpdateMatrix();
-
 	
 	/*/// particleD
 	damageName_ = "DamageParticle";

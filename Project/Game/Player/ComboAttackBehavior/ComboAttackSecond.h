@@ -2,7 +2,7 @@
 
 #include"BaseComboAattackBehavior.h"
 #include"Easing.h"
-#include"CollisionBox/PunchCollisionBox.h"
+#include"CollisionBox/AttackCollisionBox.h"
 
 class ComboAttackSecond : public BaseComboAattackBehavior {
 private:
@@ -21,7 +21,7 @@ private:
 	Order order_;                /// 振る舞い順序
 
 	// collision
-	std::unique_ptr<PunchCollisionBox>collisionBox_;
+	std::unique_ptr<AttackCollisionBox>collisionBox_;
 
 
 	/// パンチ

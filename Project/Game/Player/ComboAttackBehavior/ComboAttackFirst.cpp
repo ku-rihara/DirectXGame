@@ -29,8 +29,9 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	forwardDirection_ = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
 
 	/// collisionBox
-	collisionBox_ = std::make_unique<PunchCollisionBox>();
+	collisionBox_ = std::make_unique<AttackCollisionBox>();
 	collisionBox_->Init();
+	collisionBox_->attackType_ = AttackCollisionBox::AttackType::NORMAL;
 	collisionBox_->SetSize(Vector3::UnitVector()*2.5f);// 当たり判定サイズ
 	collisionBox_->IsAdapt(false);
 

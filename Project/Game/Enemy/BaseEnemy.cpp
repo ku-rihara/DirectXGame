@@ -9,7 +9,7 @@
 #include"Behavior/EnemyDamageRoot.h"
 
 /// collisionBox
-#include"CollisionBox/PunchCollisionBox.h"
+#include"CollisionBox/AttackCollisionBox.h"
 #include"CollisionBox/UpperCollisionBox.h"
 #include"CollisionBox/StopCollisionBox.h"
 #include"CollisionBox/ThrustCollisionBox.h"
@@ -26,7 +26,7 @@
 ///　static 変数初期化
 ///==========================================================
 
-Vector3 BaseEnemy::InitScale_ = Vector3::UnitVector()*1.6f;
+Vector3 BaseEnemy::InitScale_ = Vector3::UnitVector() * 1.6f;
 
 BaseEnemy::BaseEnemy() {
 
@@ -38,11 +38,11 @@ BaseEnemy::BaseEnemy() {
 void BaseEnemy::Init(const Vector3& spownPos) {
 	// 基底クラスの初期化
 	BaseObject::Init();
-	
+
 	//HP
 	HPMax_ = 105.0f;
 	hp_ = HPMax_;
-	hpbarSize_ = { HPMax_ ,90};
+	hpbarSize_ = { HPMax_ ,90 };
 	hpbar_ = std::make_unique<EnemyHPBar>();
 	hpbar_->Init(hpbarSize_);
 
@@ -77,7 +77,7 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 ///========================================================
 void BaseEnemy::Update() {
 
-	
+
 	if (dynamic_cast<EnemyDamageRoot*>(damageBehavior_.get())) {
 		moveBehavior_->Update();
 	}
@@ -86,18 +86,18 @@ void BaseEnemy::Update() {
 
 	damageEmitter_->SetTargetPosition(GetWorldPosition());
 	damageEmitter_->Update();
-	
+
 	thrustEmit_->SetTargetPosition(GetWorldPosition());
 	thrustEmit_->Update();
 	FallEffectUpdate();
 
-	
+
 	// 体力がなくなったら死亡
 	if (hp_ <= 0) {
-		isdeath_=true;
+		isdeath_ = true;
 		/*Audio::GetInstance()->PlayWave(deathSound_);*/
 	}
-	
+
 	BaseObject::Update();
 }
 ///========================================================
@@ -107,7 +107,7 @@ void BaseEnemy::DisplaySprite(const ViewProjection& viewProjection) {
 	// ワールド座標からスクリーン座標に変換
 	Vector3 positionScreen = ScreenTransform(GetWorldPosition(), viewProjection);
 	// Vector2に格納
-	Vector2 positionScreenV2(positionScreen.x-70, positionScreen.y - 90.0f);
+	Vector2 positionScreenV2(positionScreen.x - 70, positionScreen.y - 90.0f);
 	// Hpバーの座標確定
 	Vector2 hpBarPosition = positionScreenV2;
 	// Hpバーのサイズ
@@ -117,7 +117,7 @@ void BaseEnemy::DisplaySprite(const ViewProjection& viewProjection) {
 	// Hpバー更新
 	hpbar_->Update(int(hp_));
 
-	Vector2 findPos(positionScreen.x , positionScreen.y - 100.0f);
+	Vector2 findPos(positionScreen.x, positionScreen.y - 100.0f);
 
 	// HPBarスプライト
 	findSprite_->SetPosition(findPos);
@@ -131,9 +131,9 @@ void BaseEnemy::DisplaySprite(const ViewProjection& viewProjection) {
 }
 
 Vector3 BaseEnemy::GetDirectionToTarget(const Vector3& target) {
-	
+
 	// 現在のボス位置を取得
-	Vector3 enemyPosition =GetWorldPosition();
+	Vector3 enemyPosition = GetWorldPosition();
 
 	// ターゲットへのベクトル
 	Vector3 direction = target - enemyPosition;
@@ -162,85 +162,94 @@ void BaseEnemy::Draw(const ViewProjection& viewProjection) {
 /// Sprite描画
 ///========================================================
 void BaseEnemy::SpriteDraw(const ViewProjection& viewProjection) {
-	
-		if (IsInView(viewProjection)) {
-			findSprite_->Draw();
-			notFindSprite_->Draw();
-			hpbar_->Draw();
-		}
+
+	if (IsInView(viewProjection)) {
+		findSprite_->Draw();
+		notFindSprite_->Draw();
+		hpbar_->Draw();
+	}
 }
 
 void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
-	
+
 }
 
 void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 	//普通のパンチに攻撃されたら
-	if (dynamic_cast<PunchCollisionBox*>(other)) {
+	if (AttackCollisionBox* attackCollisionBox = dynamic_cast<AttackCollisionBox*>(other)) {
 
-		if (!dynamic_cast<EnemyHitBackDamage*>(damageBehavior_.get())) {
-		
-			DamageForPar(damageParm_);
-			ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
+		switch (attackCollisionBox->attackType_)
+		{
+			///------------------------------------------------------------------
+			/// 通常
+			///------------------------------------------------------------------
+		case AttackCollisionBox::AttackType::NORMAL:
+			if (!dynamic_cast<EnemyHitBackDamage*>(damageBehavior_.get())) {
+
+				DamageForPar(damageParm_);
+				ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
+			}
+			break;
+			///------------------------------------------------------------------
+			/// アッパー
+			///------------------------------------------------------------------
+		case AttackCollisionBox::AttackType::UPPER:
+
+			if (!dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
+
+				DamageForPar(damageParm_);
+				ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
+			}
+
+			break;
+			///------------------------------------------------------------------
+			/// ストッパー
+			///------------------------------------------------------------------
+		case AttackCollisionBox::AttackType::STOPPER:
+			if (!dynamic_cast<EnemyStopDamage*>(damageBehavior_.get())) {
+
+				DamageForPar(damageParm_);
+				ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
+			}
+			
+			break;
+			///------------------------------------------------------------------
+			/// 突き飛ばし	
+			///------------------------------------------------------------------
+		case AttackCollisionBox::AttackType::THRUST:
+			if (!dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) {
+
+				DamageForPar(damageParm_);
+				ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
+			}
+			
+			break;
+			///------------------------------------------------------------------
+			/// 落下攻撃
+			///------------------------------------------------------------------
+		case AttackCollisionBox::AttackType::FALL:
+			if (!dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
+
+				DamageForPar(damageParm_);
+				ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
+			}
+
+			return;
+
+			break;
+			///------------------------------------------------------------------
+			/// ストッパー
+			///------------------------------------------------------------------
+		case AttackCollisionBox::AttackType::RUSH:
+			if (!dynamic_cast<EnemyBoundDamage*>(damageBehavior_.get())) {
+
+				DamageForPar(damageParm_);
+				ChangeBehavior(std::make_unique<EnemyBoundDamage>(this));
+			}
+			break;
+		default:
+			break;
 		}
-		return;
-	}
-
-	//アッパーを食らったら
-	if (dynamic_cast<UpperCollisionBox*>(other)) {
-
-		if (!dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
-		
-			DamageForPar(damageParm_);
-			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
-		}
-		return;
-	}
-
-	//止まる攻撃
-	if (dynamic_cast<StopCollisionBox*>(other)) {
-
-		if (!dynamic_cast<EnemyStopDamage*>(damageBehavior_.get())) {
-		
-			DamageForPar(damageParm_);
-			ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
-		}
-		return;
-	}
-
-	//月飛ばし攻撃
-	if (dynamic_cast<ThrustCollisionBox*>(other)) {
-
-		if (!dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) {
-
-			DamageForPar(damageParm_);
-			ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
-		}
-		return;
-	}
-
-	//落下攻撃
-	if (dynamic_cast<FallCollisionBox*>(other)) {
-
-		if (!dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
-		
-			DamageForPar(damageParm_);
-			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
-		}
-
-		return;
-	}
-
-	//突進攻撃
-	if (dynamic_cast<RushCollisionBox*>(other)) {
-
-		if (!dynamic_cast<EnemyBoundDamage*>(damageBehavior_.get())) {
-		
-			DamageForPar(damageParm_);
-			ChangeBehavior(std::make_unique<EnemyBoundDamage>(this));	
-		}
-
-		return;
 	}
 }
 
@@ -289,7 +298,7 @@ bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
 void BaseEnemy::DamageForPar(const float& par) {
 
 	//割合によるインクる面とする値を決める
-	float decrementSize = HPMax_ * (par/100.0f);
+	float decrementSize = HPMax_ * (par / 100.0f);
 	// HP減少
 	hp_ -= decrementSize;
 
