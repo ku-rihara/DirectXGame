@@ -39,12 +39,18 @@ void BaseComboAattackBehavior::AnimationInit() {
     tempRotateValue_ = 0.0f;
     pPlayer_->SetHeadRotateY(0.0f);
     rotateValue_ = pPlayer_->GetPlayerParams().attackRotate;
+
     //scaling
     startEasing_.time = 0.0f;
     pPlayer_->SetScale(Vector3::UnitVector());
     startEasing_.maxTime = 0.5f;
     startEasing_.amplitude = 0.6f;
     startEasing_.period = 0.2f;
+    
+    /// floatmotion
+    floatEaseT_ = 0.0f;
+    floatValue_ = pPlayer_->GetPlayerParams().attackFloatValue;
+    tempFloatValue_ = 0.0f;
  
 }
 

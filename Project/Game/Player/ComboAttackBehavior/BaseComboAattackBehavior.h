@@ -20,6 +20,10 @@ protected:
 	float rotateEaseT_;
 	float tempRotateValue_;
 
+	/// floatMotion
+	float floatValue_;
+	float floatEaseT_;
+	float tempFloatValue_;
 
 public:
 
