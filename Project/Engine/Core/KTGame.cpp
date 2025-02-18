@@ -43,7 +43,8 @@ void KTGame::Draw() {
 	
 	pSceneManager_->ModelDraw();/// ゲームシーン描画
 
-	/*collisionManager_->Draw(pSceneManager_->GetScene()->GetViewProjection());	/// コリジョン描画*/
+	Model::PreDraw(commandList);
+	collisionManager_->Draw(pSceneManager_->GetScene()->GetViewProjection());	/// コリジョン描画
 
 	// --------------------------------------------------------------------------
 	/// パーティクル描画

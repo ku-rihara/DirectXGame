@@ -660,7 +660,7 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
 Vector3 Player::GetCollisionPos() const {
 	// ローカル座標でのオフセット
-	const Vector3 offset = { 0.0f, 0.0f, 0.0f };
+	const Vector3 offset = { 0.0f, 1.5f, 0.0f };
 	// ワールド座標に変換
 	Vector3 worldPos = MatrixTransform(offset, transform_.matWorld_);
 	return worldPos;
