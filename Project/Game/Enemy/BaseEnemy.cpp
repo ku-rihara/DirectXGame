@@ -46,6 +46,12 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	transform_.translation_.y = paramater_.basePosY;
 	transform_.scale_ = Vector3::ZeroVector();
 
+	///collision
+	enemyCollisionBox_ = std::make_unique<EnemyCollisionBox>();
+	enemyCollisionBox_->Init();
+	enemyCollisionBox_->SetSize(Vector3(3.5f, 3.5f, 3.5f));
+	enemyCollisionBox_->IsAdapt(true);
+
 	/// particleT
 	thrustName_ = "ThrustDamage";
 	thrustEmit_.reset(ParticleEmitter::CreateParticle(thrustName_, "cube", ".obj", 900));
@@ -93,6 +99,8 @@ void BaseEnemy::Update() {
 		/*Audio::GetInstance()->PlayWave(deathSound_);*/
 	}
 
+	enemyCollisionBox_->SetPosition(GetWorldPosition());
+	enemyCollisionBox_->Update();
 	BaseObject::Update();
 }
 ///========================================================

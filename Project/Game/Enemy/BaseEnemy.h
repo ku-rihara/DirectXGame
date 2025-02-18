@@ -5,6 +5,7 @@
 #include "Easing.h"
 // class
 #include "BaseObject/BaseObject.h"
+#include"CollisionBox/EnemyCollisionBox.h"
 #include"Collider/AABBCollider.h"
 #include"Behavior/BaseEnemyBehavior.h"
 #include"Behavior/BaseEnemyMoveBehavior.h"
@@ -38,6 +39,7 @@ protected:
 	GameCamera* pGameCamera_;
 	std::unique_ptr<FindSprite>findSprite_;
 	std::unique_ptr<NotFindSprite>notFindSprite_;
+	std::unique_ptr<EnemyCollisionBox>enemyCollisionBox_;
 
 
 	bool isdeath_;

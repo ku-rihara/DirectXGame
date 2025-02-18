@@ -15,6 +15,7 @@
 #include"Field/Field.h"
 #include"LockOn/LockOn.h"
 #include"Enemy/BaseEnemy.h"
+#include"CollisionBox/EnemyCollisionBox.h"
 #include"base/TextureManager.h"
 #include"utility/Particle/ParticleCommon.h"
 
@@ -653,12 +654,11 @@ void Player::UpdateMatrix() {
 	rightHand_->Update();
 	BaseObject::Update();
 }
-
 void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-	if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
+	if (EnemyCollisionBox* enemy = dynamic_cast<EnemyCollisionBox*>(other)) {
 		// 敵の中心座標を取得
-		const Vector3& enemyPosition = enemy->GetWorldPosition();
+		const Vector3& enemyPosition = enemy->GetCollisionPos();
 
 		// プレイヤーと敵の位置の差分ベクトルを計算
 		Vector3 delta = transform_.translation_ - enemyPosition;
@@ -667,48 +667,50 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 		Vector3 enemyScale = enemy->GetCollisonScale();
 		Vector3 myScale = GetCollisonScale();
 
-		// XとZ方向のスケールから、それぞれ押し出す距離を計算
-		float pushDistanceX = enemyScale.x / 2.0f + myScale.x / 2.0f + 0.1f;
-		float pushDistanceZ = enemyScale.z / 2.0f + myScale.z / 2.0f + 0.1f;
+		// 押し出す距離の計算
+		float pushDistanceX = (enemyScale.x + myScale.x) / 2.0f + 0.1f;
+		float pushDistanceZ = (enemyScale.z + myScale.z) / 2.0f + 0.1f;
 
-		// めり込み具合に応じて、XとZのどちらを優先して押し出すか決めるために、それぞれの押し出し量を計算
+		// 実際の押し戻し距離を計算
 		float pushAmountX = pushDistanceX - std::abs(delta.x);
 		float pushAmountZ = pushDistanceZ - std::abs(delta.z);
 
-		// X方向とZ方向の押し出す距離の内、大きいほうを優先
+		// ワープを防ぐために0以下の値を無効化
+		pushAmountX = max(0.0f, pushAmountX);
+		pushAmountZ = max(0.0f, pushAmountZ);
+
+		// 押し戻し方向
+		Vector3 pushDirection = { 0, 0, 0 };
 		float pushDistance = 0.0f;
-		Vector3 pushDirection = { 0,0,0 };
 
 		if (pushAmountX > 0.0f && pushAmountZ > 0.0f) {
 			// XとZ両方めり込んでいる場合
-
 			if (pushAmountX > pushAmountZ) {
 				pushDistance = pushAmountX;
-				pushDirection = { delta.x > 0 ? 1.0f : -1.0f, 0, 0 }; // X方向に押し出す
+				pushDirection = { delta.x > 0 ? 1.0f : -1.0f, 0, 0 };
 			} else {
 				pushDistance = pushAmountZ;
-				pushDirection = { 0, 0, delta.z > 0 ? 1.0f : -1.0f }; // Z方向に押し出す
+				pushDirection = { 0, 0, delta.z > 0 ? 1.0f : -1.0f };
 			}
-
 		} else if (pushAmountX > 0.0f) {
-			// X方向のみめり込んでいる場合
 			pushDistance = pushAmountX;
-			pushDirection = { delta.x > 0 ? 1.0f : -1.0f, 0, 0 }; // X方向に押し出す
-
+			pushDirection = { delta.x > 0 ? 1.0f : -1.0f, 0, 0 };
 		} else if (pushAmountZ > 0.0f) {
-			// Z方向のみめり込んでいる場合
 			pushDistance = pushAmountZ;
-			pushDirection = { 0, 0, delta.z > 0 ? 1.0f : -1.0f }; // Z方向に押し出す
+			pushDirection = { 0, 0, delta.z > 0 ? 1.0f : -1.0f };
 		}
 
-		// めり込んでいる場合、プレイヤーの位置を押し出す方向に移動させる
-		if (pushDistance > 0.0f) {
+		// ワープを防ぐため、最大移動量を制限
+		 float MAX_PUSH_DISTANCE = 0.5f;
+		pushDistance = std::min(pushDistance, MAX_PUSH_DISTANCE);
 
+		// 実際に押し戻す
+		if (pushDistance > 0.0f) {
 			transform_.translation_ += pushDirection * pushDistance;
 		}
 	}
-
 }
+
 
 
 
