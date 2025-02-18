@@ -8,7 +8,7 @@ private:
 	/// ===================================================
 	/// private variant
 	/// ===================================================
-	Vector3 radiusVector_ = { 1.5f, 1.5f, 1.5f };  // AABBのサイズ
+	Vector3 collisionScale_ = { 1.5f, 1.5f, 1.5f };  // AABBのサイズ
 	AABB aabb_;  // AABB範囲
 
 public:
@@ -30,10 +30,10 @@ public:
 
 	/// AABBの範囲を取得
 	AABB GetAABB() const { return aabb_; }
-	Vector3 GetRadiusVector() const { return radiusVector_; }
+	Vector3 GetCollisonScale() const { return collisionScale_; }
 
 	///=========================================================================================
    ///  setter method
    ///=========================================================================================
-	void SetRadiusVector(Vector3 radius) { radiusVector_ = radius; }
+	void SetCollisionScale(Vector3 radius) { collisionScale_ = radius; }
 };
