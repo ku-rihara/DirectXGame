@@ -22,7 +22,7 @@ Vector3 BaseAABBCollisionBox::GetCollisionPos() const {
 
 
 void BaseAABBCollisionBox::SetSize(const Vector3& size) {
-	SetCollisionRadius(size);
+	SetCollisionScale(size);
 }
 
 void BaseAABBCollisionBox::SetPosition(const Vector3& position) {

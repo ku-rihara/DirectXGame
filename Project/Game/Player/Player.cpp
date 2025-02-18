@@ -664,8 +664,8 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 		Vector3 delta = transform_.translation_ - enemyPosition;
 
 		// スケール取得
-		Vector3 enemyScale = enemy->GetScale();
-		Vector3 myScale = GetScale();
+		Vector3 enemyScale = enemy->GetCollisonScale();
+		Vector3 myScale = GetCollisonScale();
 
 		// XとZ方向のスケールから、それぞれ押し出す距離を計算
 		float pushDistanceX = enemyScale.x / 2.0f + myScale.x / 2.0f + 0.1f;
