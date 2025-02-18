@@ -47,6 +47,7 @@ public:
     ///getter 
     /// ===================================================
 	const WorldTransform& GetTransform() { return transform_; }
+	Vector3 GetScale()const { return transform_.scale_; }
 	/// ===================================================
     ///setter 
     /// ===================================================

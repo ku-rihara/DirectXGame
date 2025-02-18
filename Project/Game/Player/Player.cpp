@@ -14,6 +14,7 @@
 /// object
 #include"Field/Field.h"
 #include"LockOn/LockOn.h"
+#include"Enemy/BaseEnemy.h"
 #include"base/TextureManager.h"
 #include"utility/Particle/ParticleCommon.h"
 
@@ -96,7 +97,7 @@ void Player::Init() {
 ///==========================================================
 void Player::Update() {
 	prePos_ = GetWorldPosition();// 前フレームの座標
-	
+
 	// 落ちるパーティクルエミッター
 	fallEmitter_->SetTargetPosition(GetWorldPosition());
 	fallEmitter_->Update();
@@ -396,7 +397,7 @@ void Player::AdjustParm() {
 		ImGui::DragFloat("rushDistance", &playerParams_.rushDistance, 0.01f);
 		ImGui::DragFloat("rushEaseMax", &playerParams_.rushEaseMax, 0.01f, 0);
 		ImGui::DragFloat("UpperPosY", &playerParams_.upperPosY, 0.1f);
-		ImGui::SliderAngle("attackRotate", &playerParams_.attackRotate,0,720);
+		ImGui::SliderAngle("attackRotate", &playerParams_.attackRotate, 0, 720);
 		ImGui::DragFloat("attackRotateEaseT", &playerParams_.attackRotateEaseT, 0.01f);
 		ImGui::DragFloat("attackFloatEaseT", &playerParams_.attackFloatEaseT, 0.01f);
 		ImGui::DragFloat("attackFloatValue", &playerParams_.attackFloatValue, 0.01f);
@@ -405,38 +406,38 @@ void Player::AdjustParm() {
 		if (ImGui::CollapsingHeader("NormalCombo")) {
 			ImGui::SeparatorText("FirstCombo");   /// 1コンボ目
 
-			ImGui::DragFloat("PTime1",&normalComboParms_[0].waitTime,0.01f);
-			ImGui::DragFloat("PunchEaseMax1",&normalComboParms_[0].attackEaseMax,0.01f);
-			ImGui::DragFloat("PunchReach1",&normalComboParms_[0].attackReach,0.01f);
+			ImGui::DragFloat("PTime1", &normalComboParms_[0].waitTime, 0.01f);
+			ImGui::DragFloat("PunchEaseMax1", &normalComboParms_[0].attackEaseMax, 0.01f);
+			ImGui::DragFloat("PunchReach1", &normalComboParms_[0].attackReach, 0.01f);
 
 			ImGui::SeparatorText("SecondCombo");  /// 2コンボ目
 
-			ImGui::DragFloat("PTime2",&normalComboParms_[1].waitTime,0.01f);
-			ImGui::DragFloat("PunchEaseMax2",&normalComboParms_[1].attackEaseMax,0.01f);
-     		ImGui::DragFloat("PunchReach2",&normalComboParms_[1].attackReach,0.01f);
+			ImGui::DragFloat("PTime2", &normalComboParms_[1].waitTime, 0.01f);
+			ImGui::DragFloat("PunchEaseMax2", &normalComboParms_[1].attackEaseMax, 0.01f);
+			ImGui::DragFloat("PunchReach2", &normalComboParms_[1].attackReach, 0.01f);
 
 			ImGui::SeparatorText("ThirdCombo");   /// 3コンボ目
 
-			ImGui::DragFloat("PTime3",&normalComboParms_[2].waitTime,0.01f);
-			ImGui::DragFloat("PunchEaseMax3",&normalComboParms_[2].attackEaseMax,0.01f);
+			ImGui::DragFloat("PTime3", &normalComboParms_[2].waitTime, 0.01f);
+			ImGui::DragFloat("PunchEaseMax3", &normalComboParms_[2].attackEaseMax, 0.01f);
 
 			ImGui::SeparatorText("ForthCombo");   /// 4コンボ目
 
-			ImGui::DragFloat("PTime4",&normalComboParms_[3].waitTime,0.01f);
+			ImGui::DragFloat("PTime4", &normalComboParms_[3].waitTime, 0.01f);
 		}
 
 		if (ImGui::CollapsingHeader("JumpCombo")) {
 			ImGui::SeparatorText("FirstCombo");   /// 1コンボ目
 
-			ImGui::DragFloat("JPTime1",&jumpComboParms_[0].waitTime,0.01f);
+			ImGui::DragFloat("JPTime1", &jumpComboParms_[0].waitTime, 0.01f);
 
-			ImGui::DragFloat("JPunchEaseMax1",&jumpComboParms_[0].attackEaseMax,0.01f);
+			ImGui::DragFloat("JPunchEaseMax1", &jumpComboParms_[0].attackEaseMax, 0.01f);
 
 			ImGui::SeparatorText("SecondCombo");   /// 2コンボ目
 
-			ImGui::DragFloat("JPTime2",&jumpComboParms_[1].waitTime,0.01f);
-			ImGui::DragFloat("JPunchEaseMax2",&jumpComboParms_[1].attackEaseMax,0.01f);
-			ImGui::DragFloat("JPunchReach2",&jumpComboParms_[1].attackReach,0.01f);
+			ImGui::DragFloat("JPTime2", &jumpComboParms_[1].waitTime, 0.01f);
+			ImGui::DragFloat("JPunchEaseMax2", &jumpComboParms_[1].attackEaseMax, 0.01f);
+			ImGui::DragFloat("JPunchReach2", &jumpComboParms_[1].attackReach, 0.01f);
 		}
 
 		/// セーブとロード
@@ -466,6 +467,7 @@ void Player::FallEffectUpdate() {
 			effect->Update();
 		}
 	}
+
 	// 完了したエフェクトを消す
 	effects_.erase(std::remove_if(effects_.begin(), effects_.end(), [](const std::unique_ptr<Effect>& effect) { return effect->IsFinished(); }), effects_.end());
 }
@@ -552,16 +554,16 @@ void Player::AddParmGroup() {
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
-		globalParameter_->AddItem(groupName_,"NComboPTime" + std::to_string(int(i + 1)),normalComboParms_[i].waitTime);
-		globalParameter_->AddItem(groupName_,"NComboPunchEaseTime" + std::to_string(int(i + 1)),normalComboParms_[i].attackEaseMax);
-		globalParameter_->AddItem(groupName_,"NComboPunchReach" + std::to_string(int(i + 1)),normalComboParms_[i].attackReach);
+		globalParameter_->AddItem(groupName_, "NComboPTime" + std::to_string(int(i + 1)), normalComboParms_[i].waitTime);
+		globalParameter_->AddItem(groupName_, "NComboPunchEaseTime" + std::to_string(int(i + 1)), normalComboParms_[i].attackEaseMax);
+		globalParameter_->AddItem(groupName_, "NComboPunchReach" + std::to_string(int(i + 1)), normalComboParms_[i].attackReach);
 	}
 
 	/// コンボ持続時間(ジャンプ)
 	for (uint32_t i = 0; i < jumpComboParms_.size(); ++i) {
-		globalParameter_->AddItem(groupName_,"JComboPTime" + std::to_string(int(i + 1)),normalComboParms_[i].waitTime);
-		globalParameter_->AddItem(groupName_,"JComboPunchEaseTime" + std::to_string(int(i + 1)),normalComboParms_[i].attackEaseMax);
-		globalParameter_->AddItem(groupName_,"JComboPunchReach" + std::to_string(int(i + 1)),normalComboParms_[i].attackReach);
+		globalParameter_->AddItem(groupName_, "JComboPTime" + std::to_string(int(i + 1)), normalComboParms_[i].waitTime);
+		globalParameter_->AddItem(groupName_, "JComboPunchEaseTime" + std::to_string(int(i + 1)), normalComboParms_[i].attackEaseMax);
+		globalParameter_->AddItem(groupName_, "JComboPunchReach" + std::to_string(int(i + 1)), normalComboParms_[i].attackReach);
 	}
 }
 
@@ -587,16 +589,16 @@ void Player::SetValues() {
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
-		globalParameter_->SetValue(groupName_,"NComboPTime" + std::to_string(int(i + 1)),normalComboParms_[i].waitTime);
-		globalParameter_->SetValue(groupName_,"NComboPunchEaseTime" + std::to_string(int(i + 1)),normalComboParms_[i].attackEaseMax);
-		globalParameter_->SetValue(groupName_,"NComboPunchReach" + std::to_string(int(i + 1)),normalComboParms_[i].attackReach);
+		globalParameter_->SetValue(groupName_, "NComboPTime" + std::to_string(int(i + 1)), normalComboParms_[i].waitTime);
+		globalParameter_->SetValue(groupName_, "NComboPunchEaseTime" + std::to_string(int(i + 1)), normalComboParms_[i].attackEaseMax);
+		globalParameter_->SetValue(groupName_, "NComboPunchReach" + std::to_string(int(i + 1)), normalComboParms_[i].attackReach);
 	}
 
 	/// コンボ持続時間(ジャンプ)
 	for (uint32_t i = 0; i < jumpComboParms_.size(); ++i) {
-		globalParameter_->SetValue(groupName_,"JComboPTime" + std::to_string(int(i + 1)),jumpComboParms_[i].waitTime);
-		globalParameter_->SetValue(groupName_,"JComboPunchEaseTime" + std::to_string(int(i + 1)),jumpComboParms_[i].attackEaseMax);
-		globalParameter_->SetValue(groupName_,"JComboPunchReach" + std::to_string(int(i + 1)),jumpComboParms_[i].attackReach);
+		globalParameter_->SetValue(groupName_, "JComboPTime" + std::to_string(int(i + 1)), jumpComboParms_[i].waitTime);
+		globalParameter_->SetValue(groupName_, "JComboPunchEaseTime" + std::to_string(int(i + 1)), jumpComboParms_[i].attackEaseMax);
+		globalParameter_->SetValue(groupName_, "JComboPunchReach" + std::to_string(int(i + 1)), jumpComboParms_[i].attackReach);
 	}
 }
 
@@ -622,16 +624,16 @@ void Player::ApplyGlobalParameter() {
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
-		normalComboParms_[i].waitTime = globalParameter_->GetValue<float>(groupName_,"NComboPTime" + std::to_string(int(i + 1)));
-		normalComboParms_[i].attackEaseMax = globalParameter_->GetValue<float>(groupName_,"NComboPunchEaseTime" + std::to_string(int(i + 1)));
-		normalComboParms_[i].attackReach = globalParameter_->GetValue<float>(groupName_,"NComboPunchReach" + std::to_string(int(i + 1)));
+		normalComboParms_[i].waitTime = globalParameter_->GetValue<float>(groupName_, "NComboPTime" + std::to_string(int(i + 1)));
+		normalComboParms_[i].attackEaseMax = globalParameter_->GetValue<float>(groupName_, "NComboPunchEaseTime" + std::to_string(int(i + 1)));
+		normalComboParms_[i].attackReach = globalParameter_->GetValue<float>(groupName_, "NComboPunchReach" + std::to_string(int(i + 1)));
 	}
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < jumpComboParms_.size(); ++i) {
-		jumpComboParms_[i].waitTime = globalParameter_->GetValue<float>(groupName_,"JComboPTime" + std::to_string(int(i + 1)));
-		jumpComboParms_[i].attackEaseMax = globalParameter_->GetValue<float>(groupName_,"JComboPunchEaseTime" + std::to_string(int(i + 1)));
-		jumpComboParms_[i].attackReach = globalParameter_->GetValue<float>(groupName_,"JComboPunchReach" + std::to_string(int(i + 1)));
+		jumpComboParms_[i].waitTime = globalParameter_->GetValue<float>(groupName_, "JComboPTime" + std::to_string(int(i + 1)));
+		jumpComboParms_[i].attackEaseMax = globalParameter_->GetValue<float>(groupName_, "JComboPunchEaseTime" + std::to_string(int(i + 1)));
+		jumpComboParms_[i].attackReach = globalParameter_->GetValue<float>(groupName_, "JComboPunchReach" + std::to_string(int(i + 1)));
 	}
 }
 
@@ -654,8 +656,60 @@ void Player::UpdateMatrix() {
 
 void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
+	if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
+		// 敵の中心座標を取得
+		const Vector3& enemyPosition = enemy->GetWorldPosition();
+
+		// プレイヤーと敵の位置の差分ベクトルを計算
+		Vector3 delta = transform_.translation_ - enemyPosition;
+
+		// スケール取得
+		Vector3 enemyScale = enemy->GetScale();
+		Vector3 myScale = GetScale();
+
+		// XとZ方向のスケールから、それぞれ押し出す距離を計算
+		float pushDistanceX = enemyScale.x / 2.0f + myScale.x / 2.0f + 0.1f;
+		float pushDistanceZ = enemyScale.z / 2.0f + myScale.z / 2.0f + 0.1f;
+
+		// めり込み具合に応じて、XとZのどちらを優先して押し出すか決めるために、それぞれの押し出し量を計算
+		float pushAmountX = pushDistanceX - std::abs(delta.x);
+		float pushAmountZ = pushDistanceZ - std::abs(delta.z);
+
+		// X方向とZ方向の押し出す距離の内、大きいほうを優先
+		float pushDistance = 0.0f;
+		Vector3 pushDirection = { 0,0,0 };
+
+		if (pushAmountX > 0.0f && pushAmountZ > 0.0f) {
+			// XとZ両方めり込んでいる場合
+
+			if (pushAmountX > pushAmountZ) {
+				pushDistance = pushAmountX;
+				pushDirection = { delta.x > 0 ? 1.0f : -1.0f, 0, 0 }; // X方向に押し出す
+			} else {
+				pushDistance = pushAmountZ;
+				pushDirection = { 0, 0, delta.z > 0 ? 1.0f : -1.0f }; // Z方向に押し出す
+			}
+
+		} else if (pushAmountX > 0.0f) {
+			// X方向のみめり込んでいる場合
+			pushDistance = pushAmountX;
+			pushDirection = { delta.x > 0 ? 1.0f : -1.0f, 0, 0 }; // X方向に押し出す
+
+		} else if (pushAmountZ > 0.0f) {
+			// Z方向のみめり込んでいる場合
+			pushDistance = pushAmountZ;
+			pushDirection = { 0, 0, delta.z > 0 ? 1.0f : -1.0f }; // Z方向に押し出す
+		}
+
+		// めり込んでいる場合、プレイヤーの位置を押し出す方向に移動させる
+		if (pushDistance > 0.0f) {
+
+			transform_.translation_ += pushDirection * pushDistance;
+		}
+	}
 
 }
+
 
 
 Vector3 Player::GetCollisionPos() const {
