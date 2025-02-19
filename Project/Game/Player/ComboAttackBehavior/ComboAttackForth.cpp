@@ -47,8 +47,13 @@ ComboAttackForth::ComboAttackForth(Player* player)
 	timeDownTime_ = 0.0f;
 	istimeSlow_ = false;
 
-	order_ = Order::FIRSTWAIT; // 振る舞い順序初期化
+	order_ = Order::LPUNCH; // 振る舞い順序初期化
 	fallInitSpeed_ = 0.0f;
+
+	stopRailManager_->SetRailMoveTime(0.0f);
+	pPlayer_->GetRightHand()->RailForthComboUpdate(0.0f);
+	collisionBox_->IsAdapt(true);
+	collisionBox_->attackType_ = AttackCollisionBox::AttackType::THRUST;
 
 	////音
 	//pPlayer_->SoundPunch();
@@ -63,23 +68,8 @@ void ComboAttackForth::Update() {
 	/// スケール変化
 	BaseComboAattackBehavior::ScalingEaseUpdate();
 
-	/*pPlayer_->Move(0.01f);*/
-
-	//デルタタイムスケール小さく
-	if (collisionBox_->GetIsSlow() && !istimeSlow_) {
-		Frame::SetTimeScale(0.01f);
-		pPlayer_->SoundStrongPunch();
-		pPlayer_->GetGameCamera()->ChangeZoomInOut();
-		istimeSlow_ = true;
-	}
-
-	// スロータイム
-	if (istimeSlow_) {
-		timeDownTime_ += Frame::DeltaTime();
-		if (timeDownTime_ >= kTimeDownTime_) {
-			Frame::SetTimeScale(1.0f);
-		}
-	}
+	ChangeSlow();
+	
 
 	switch (order_) {
 	case Order::FIRSTWAIT:
@@ -207,4 +197,22 @@ void ComboAttackForth::Update() {
 
 void ComboAttackForth::Debug() {
 
+}
+
+void ComboAttackForth::ChangeSlow() {
+	//デルタタイムスケール小さく
+	if (collisionBox_->GetIsSlow() && !istimeSlow_) {
+		Frame::SetTimeScale(0.01f);
+		pPlayer_->SoundStrongPunch();
+		pPlayer_->GetGameCamera()->ChangeZoomInOut();
+		istimeSlow_ = true;
+	}
+
+	// スロータイム
+	if (istimeSlow_) {
+		timeDownTime_ += Frame::DeltaTime();
+		if (timeDownTime_ >= kTimeDownTime_) {
+			Frame::SetTimeScale(1.0f);
+		}
+	}
 }

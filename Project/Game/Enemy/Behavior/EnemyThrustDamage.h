@@ -26,6 +26,9 @@ private:
 	float hitStopTime_;
 	float kHitStopTime_;
 
+	/// 回転
+	float rotate_;
+
 public:
 	//コンストラクタ
 	EnemyThrustDamage(BaseEnemy* boss);

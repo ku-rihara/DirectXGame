@@ -17,7 +17,7 @@ EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
 	initPos_ = pBaseEnemy_->GetWorldPosition();
 	speed_ = 0.01f;
 	// 赤色
-	pBaseEnemy_->SetColor(Vector4(0.9f, 0, 0, 0.9f));
+	pBaseEnemy_->SetBodyColor(Vector4(0.9f, 0, 0, 0.9f));
 
 	easing_.time = 0.0f;
 	easing_.maxTime = 0.01f;
@@ -89,7 +89,7 @@ void EnemyHitBackDamage::Update() {
 	/// -------------------------------------------------------
 	/// 通常に戻す
 	///---------------------------------------------------------
-		pBaseEnemy_->SetColor(Vector4(1.0f, 1, 1, 1.0f));
+		pBaseEnemy_->SetBodyColor(Vector4(1.0f, 1, 1, 1.0f));
 		pBaseEnemy_->BackToDamageRoot();
 		break;
 

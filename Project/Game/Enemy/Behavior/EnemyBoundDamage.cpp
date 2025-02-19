@@ -57,7 +57,7 @@ void EnemyBoundDamage::Update() {
 	/// -------------------------------------------------------
 	/// 追従に戻す
 	///---------------------------------------------------------
-		pBaseEnemy_->SetColor(Vector4(1.0f, 1, 1, 1.0f));
+		pBaseEnemy_->SetBodyColor(Vector4(1.0f, 1, 1, 1.0f));
 		pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetParamater().basePosY);
 		pBaseEnemy_->BackToDamageRoot();
 		break;

@@ -20,7 +20,7 @@ EnemyThrustDamage::EnemyThrustDamage(BaseEnemy* boss)
 	initPos_ = pBaseEnemy_->GetWorldPosition();
 	speed_ = 1.5f;
 	// 赤色
-	pBaseEnemy_->SetColor(Vector4(0.9f, 0, 0, 0.9f));
+	pBaseEnemy_->SetBodyColor(Vector4(0.9f, 0, 0, 0.9f));
 
 	easing_.time = 0.0f;
 	easing_.maxTime = 0.15f;
@@ -76,8 +76,10 @@ void EnemyThrustDamage::Update() {
 
 		// 最短角度補間でプレイヤーの回転を更新
 		pBaseEnemy_->SetRotationY(LerpShortAngle(pBaseEnemy_->GetTransform().rotation_.y, objectiveAngle_, 0.5f));
-
 		easing_.time += Frame::DeltaTimeRate();
+
+		rotate_ += pBaseEnemy_->GetParamater().thrustRotateSpeed * Frame::DeltaTimeRate();
+		pBaseEnemy_->SetBodyRotateZ(rotate_);
 
 		/// イージングでヒットバックする
 		pBaseEnemy_->SetWorldPosition(
@@ -86,17 +88,18 @@ void EnemyThrustDamage::Update() {
 
 
 		//次のステップ	
-		if (easing_.time >= easing_.maxTime) {
-			easing_.time = easing_.maxTime;
-			step_ = Step::NEXTBEHAVIOR;
-		}
+		if (easing_.time < easing_.maxTime) break;
+		easing_.time = easing_.maxTime;
+		step_ = Step::NEXTBEHAVIOR;
+
 		break;
 	case Step::NEXTBEHAVIOR:
 		/// ------------------------------------------------------
 		/// 次の振る舞い
 		///---------------------------------------------------------
 		pBaseEnemy_->FallEffectInit(pBaseEnemy_->GetWorldPosition());
-		pBaseEnemy_->SetColor(Vector4(1.0f, 1, 1, 1.0f));
+		pBaseEnemy_->SetBodyRotateZ(0.0f);
+		pBaseEnemy_->SetBodyColor(Vector4(1.0f, 1, 1, 1.0f));
 		pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetParamater().basePosY);
 		pBaseEnemy_->GetGameCamera()->ChangeShakeMode();
 		pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyBoundDamage>(pBaseEnemy_));
@@ -105,6 +108,6 @@ void EnemyThrustDamage::Update() {
 }
 
 void EnemyThrustDamage::Debug() {
-	
+
 
 }

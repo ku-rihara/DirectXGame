@@ -50,6 +50,7 @@ public:
 	/// 更新、デバッグ
 	void Update()override;
 	void Debug()override;
+	void ChangeSlow();
 
 
 };

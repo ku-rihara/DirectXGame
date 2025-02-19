@@ -5,8 +5,10 @@
 ///========================================================
 void StrongEnemy::Init(const Vector3& spownPos) {
 	BaseEnemy::Init(spownPos);
-	BaseObject::CreateModel("StrongEnemy", ".obj");
 	damageParm_ = 5.0f;
+	bodyObj_.reset(Object3d::CreateModel("StrongEnemy", ".obj"));
+	bodyTransform_.Init();
+	bodyTransform_.SetParent(&transform_);
 }
 
 ///========================================================
@@ -15,6 +17,7 @@ void StrongEnemy::Init(const Vector3& spownPos) {
 
 void StrongEnemy::Update() {
 	BaseEnemy::Update();
+	bodyTransform_.UpdateMatrix();
 }
 
 ///========================================================
@@ -23,6 +26,7 @@ void StrongEnemy::Update() {
 
 void StrongEnemy::Draw(const ViewProjection& viewProjection) {
 	BaseEnemy::Draw(viewProjection);
+	bodyObj_->Draw(bodyTransform_, viewProjection);
 }
 
 ///========================================================

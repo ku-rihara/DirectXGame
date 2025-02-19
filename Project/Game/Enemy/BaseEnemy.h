@@ -24,6 +24,7 @@ public:
 		float chaseDistance;
 		float chaseSpeed;
 		float basePosY;
+		float thrustRotateSpeed;
 	};
 	enum class Type {
 		NORMAL,
@@ -49,6 +50,9 @@ protected:
 	std::unique_ptr<EnemyHPBar>hpbar_;
 	float damageParm_;
 
+	WorldTransform bodyTransform_;
+	std::unique_ptr<Object3d>bodyObj_;
+
 	std::string damageName_;
 	std::unique_ptr<ParticleEmitter>damageEmitter_;
 
@@ -58,8 +62,6 @@ protected:
 	/// behavior
 	std::unique_ptr<BaseEnemyBehaivor>damageBehavior_ = nullptr;
 	std::unique_ptr<BaseEnemyMoveBehavior>moveBehavior_ = nullptr;
-
-	/// エミッター
 	
 	std::list<std::unique_ptr<Effect>> effects_;
 public:
@@ -117,6 +119,8 @@ public:
 	void SetPlayer     (Player* plyaer);
 	void SetGameCamera (GameCamera* gamecamera);
 	void SetParamater  (const Type&type,const Paramater& paramater);
+	void SetBodyRotateZ(const float& r) { bodyTransform_.rotation_.z = r; }
+	void SetBodyColor(const Vector4& color);
 
 private:
 	bool IsInView(const ViewProjection& viewProjection) const;

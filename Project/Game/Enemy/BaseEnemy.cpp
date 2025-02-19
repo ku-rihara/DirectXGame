@@ -41,10 +41,11 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	hpbar_ = std::make_unique<EnemyHPBar>();
 	hpbar_->Init(hpbarSize_);
 
-
+	/// transform
 	transform_.translation_ = spownPos;
 	transform_.translation_.y = paramater_.basePosY;
 	transform_.scale_ = Vector3::ZeroVector();
+
 
 	///collision
 	enemyCollisionBox_ = std::make_unique<EnemyCollisionBox>();
@@ -157,8 +158,7 @@ void BaseEnemy::Draw(const ViewProjection& viewProjection) {
 		}
 	}
 	effects_.reverse();
-	// 敵描画
-	BaseObject::Draw(viewProjection);
+
 }
 
 ///========================================================
@@ -214,7 +214,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 				DamageForPar(damageParm_);
 				ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
 			}
-			
+
 			break;
 			///------------------------------------------------------------------
 			/// 突き飛ばし	
@@ -225,7 +225,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 				DamageForPar(damageParm_);
 				ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
 			}
-			
+
 			break;
 			///------------------------------------------------------------------
 			/// 落下攻撃
@@ -356,4 +356,7 @@ void BaseEnemy::BackToDamageRoot() {
 void BaseEnemy::SetParamater(const Type& type, const Paramater& paramater) {
 	type_ = type;
 	paramater_ = paramater;
+}
+void  BaseEnemy::SetBodyColor(const Vector4& color){
+	bodyObj_->objColor_.SetColor(color);
 }

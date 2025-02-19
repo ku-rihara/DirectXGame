@@ -21,7 +21,7 @@ EnemyUpperDamage::EnemyUpperDamage(BaseEnemy* boss)
 	stopTime_ = 0.0f;
 	kStopTime_ = 0.3f;
 	// 赤色
-	pBaseEnemy_->SetColor(Vector4(0.9f, 0, 0, 0.9f));
+	pBaseEnemy_->SetBodyColor(Vector4(0.9f, 0, 0, 0.9f));
 
 	pBaseEnemy_->DamageEmit();
 
@@ -81,7 +81,7 @@ void EnemyUpperDamage::Update() {
 	/// -------------------------------------------------------
 	/// 追従に戻す
 	///---------------------------------------------------------
-		pBaseEnemy_->SetColor(Vector4(1.0f, 1, 1, 1.0f));
+		pBaseEnemy_->SetBodyColor(Vector4(1.0f, 1, 1, 1.0f));
 		pBaseEnemy_->BackToDamageRoot();
 		break;
 	}

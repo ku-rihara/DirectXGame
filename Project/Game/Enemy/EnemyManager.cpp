@@ -192,7 +192,8 @@ void EnemyManager::AddParmGroup() {
 		globalParameter_->AddItem(groupName_,"chaseDistance" + std::to_string(int(i + 1)),paramaters_[i].chaseDistance);
 		globalParameter_->AddItem(groupName_,"chaseSpeed" + std::to_string(int(i + 1)),paramaters_[i].chaseSpeed);
 		globalParameter_->AddItem(groupName_, "basePosY_" + std::to_string(int(i + 1)), paramaters_[i].basePosY);
-		
+		globalParameter_->AddItem(groupName_, "thrustRotateSpeed" + std::to_string(int(i + 1)), paramaters_[i].thrustRotateSpeed);
+
 	}
 
 }
@@ -208,7 +209,8 @@ void EnemyManager::SetValues() {
 		globalParameter_->SetValue(groupName_,"chaseDistance" + std::to_string(int(i + 1)),paramaters_[i].chaseDistance);
 		globalParameter_->SetValue(groupName_,"chaseSpeed" + std::to_string(int(i + 1)),paramaters_[i].chaseSpeed);
 		globalParameter_->SetValue(groupName_, "basePosY_" + std::to_string(int(i + 1)), paramaters_[i].basePosY);
-		
+		globalParameter_->SetValue(groupName_, "thrustRotateSpeed" + std::to_string(int(i + 1)), paramaters_[i].thrustRotateSpeed);
+
 	}
 
 }
@@ -222,7 +224,9 @@ void EnemyManager::ApplyGlobalParameter() {
 	for (uint32_t i = 0; i < paramaters_.size(); ++i) {
 		paramaters_[i].chaseDistance = globalParameter_->GetValue<float>(groupName_,"chaseDistance" + std::to_string(int(i + 1)));
 		paramaters_[i].chaseSpeed = globalParameter_->GetValue<float>(groupName_,"chaseSpeed" + std::to_string(int(i + 1)));
-		paramaters_[i].basePosY = globalParameter_->GetValue<float>(groupName_, "basePosY_" + std::to_string(int(i + 1)));		
+		paramaters_[i].basePosY = globalParameter_->GetValue<float>(groupName_, "basePosY_" + std::to_string(int(i + 1)));
+		paramaters_[i].thrustRotateSpeed = globalParameter_->GetValue<float>(groupName_, "thrustRotateSpeed" + std::to_string(int(i + 1)));
+
 	}
 
 }
@@ -252,6 +256,9 @@ void EnemyManager::AdjustParm() {
 		ImGui::DragFloat("basePosY", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].basePosY,
 			0.01f);
 
+		ImGui::DragFloat("thrustRotateSpeed", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].thrustRotateSpeed,
+			0.01f);
+
 		
 		ImGui::PopID();
 
@@ -269,6 +276,9 @@ void EnemyManager::AdjustParm() {
 			0.01f);
 
 		ImGui::DragFloat("basePosY", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].basePosY,
+			0.01f);
+
+		ImGui::DragFloat("thrustRotateSpeed", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].thrustRotateSpeed,
 			0.01f);
 
 		ImGui::PopID();

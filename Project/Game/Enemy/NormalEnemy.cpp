@@ -5,9 +5,12 @@
 ///========================================================
 void NormalEnemy::Init(const Vector3& spownPos) {
 	BaseEnemy::Init(spownPos);
-	/// モデルセット
-	BaseObject::CreateModel("NormalEnemy", ".obj");
+	///// モデルセット
+	//BaseObject::CreateModel("NormalEnemy", ".obj");
 	damageParm_ = 10.0f;
+	bodyObj_.reset(Object3d::CreateModel("NormalEnemy", ".obj"));
+	bodyTransform_.Init();
+	bodyTransform_.SetParent(&transform_);
 }
 
 ///========================================================
@@ -16,6 +19,7 @@ void NormalEnemy::Init(const Vector3& spownPos) {
 
 void NormalEnemy::Update() {
 	BaseEnemy::Update();
+	bodyTransform_.UpdateMatrix();
 }
 
 ///========================================================
@@ -24,6 +28,7 @@ void NormalEnemy::Update() {
 
 void NormalEnemy::Draw(const ViewProjection& viewProjection) {
 	BaseEnemy::Draw(viewProjection);
+	bodyObj_->Draw(bodyTransform_, viewProjection);
 }
 
 ///========================================================
@@ -31,6 +36,7 @@ void NormalEnemy::Draw(const ViewProjection& viewProjection) {
 ///========================================================
 void NormalEnemy::DisplaySprite(const ViewProjection& viewProjection) {
 	BaseEnemy::DisplaySprite(viewProjection);
+
 }
 
 ///========================================================
