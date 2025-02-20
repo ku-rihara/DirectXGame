@@ -81,7 +81,7 @@ void TitleScene::Update() {
 		titleFont_->Update();
 	}
 
-	ParticleManager::GetInstance()->Update(viewProjection_);
+	ParticleManager::GetInstance()->Update();
 
 	//　ゲーム遷移
 	if (Input::GetInstance()->PushKey(DIK_SPACE)) {

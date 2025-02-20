@@ -96,6 +96,7 @@
         "isMoveForRail": false,
         "isRotateforDirection": true,
         "isScalerScale": false,
+        "isShot": false,
         "moveSpeed": 0.0
     }
 }

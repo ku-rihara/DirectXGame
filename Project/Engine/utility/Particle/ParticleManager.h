@@ -87,7 +87,7 @@ public:
 
 	//初期化、更新、描画
 	void Init (SrvManager* srvManager);
-	void Update(const ViewProjection& viewProjection);
+	void Update();
 	void Draw(const ViewProjection& viewProjection);
 	Vector3 DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view);
 

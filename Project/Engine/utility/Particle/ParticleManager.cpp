@@ -31,9 +31,8 @@ void ParticleManager::Init(SrvManager* srvManager) {
 ///============================================================
 /// 更新
 ///============================================================
-void ParticleManager::Update(const ViewProjection& viewProjection) {
-	//uint32_t instanceIndex = 0; // 現在のインスタンス数
-
+void ParticleManager::Update() {
+	
 	// 各粒子グループを周る
 	for (auto& groupPair : particleGroups_) {
 		ParticleGroup& group = groupPair.second;
@@ -76,7 +75,7 @@ void ParticleManager::Update(const ViewProjection& viewProjection) {
 
 			if (group.parm.isBillBord) {
 
-				it->worldTransform_.BillboardUpdateMatrix(viewProjection, group.parm.billBordType, group.parm.adaptRotate_);
+				it->worldTransform_.BillboardUpdateMatrix(*viewProjection_, group.parm.billBordType, group.parm.adaptRotate_);
 			} else {
 				it->worldTransform_.UpdateMatrix();
 			}

@@ -21,6 +21,7 @@ public:
 	struct GroupParamaters {
 		BlendMode blendMode;
 		bool isBillBord;
+		bool isShot;
 		WorldTransform::BillboardType  billBordType;
 		WorldTransform::AdaptRotate adaptRotate_;
 	};
@@ -55,6 +56,7 @@ private:
 	Parameters parameters_;
 	GroupParamaters groupParamaters_;
 
+	bool preIsShot_;
 	float currentTime_;                                   ///現在の時間
 	float intervalTime_;                                  ///発生するまでの間隔
 
