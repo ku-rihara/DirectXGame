@@ -56,6 +56,8 @@ void ParticleEmitter::Init() {
 
 	AddParmGroup();
 	ApplyGlobalParameter(particleName_);
+
+	groupParamaters_.isShot = preIsShot_;
 }
 
 ///=================================================================================
@@ -150,6 +152,7 @@ void ParticleEmitter::AddParmGroup() {
 	globalParameter_->AddItem(particleName_, "AdaptRotateIsX", groupParamaters_.adaptRotate_.isX_);
 	globalParameter_->AddItem(particleName_, "AdaptRotateIsY", groupParamaters_.adaptRotate_.isY_);
 	globalParameter_->AddItem(particleName_, "AdaptRotateIsZ", groupParamaters_.adaptRotate_.isZ_);
+	globalParameter_->AddItem(particleName_, "isShot", preIsShot_);
 }
 
 
@@ -206,7 +209,7 @@ void ParticleEmitter::SetValues() {
 	globalParameter_->SetValue(particleName_, "AdaptRotateIsX", groupParamaters_.adaptRotate_.isX_);
 	globalParameter_->SetValue(particleName_, "AdaptRotateIsY", groupParamaters_.adaptRotate_.isY_);
 	globalParameter_->SetValue(particleName_, "AdaptRotateIsZ", groupParamaters_.adaptRotate_.isZ_);
-
+	globalParameter_->SetValue(particleName_, "isShot", preIsShot_);
 }
 
 
@@ -261,6 +264,7 @@ void ParticleEmitter::ApplyGlobalParameter(const std::string& particleName) {
 	groupParamaters_.adaptRotate_.isX_ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsX");
 	groupParamaters_.adaptRotate_.isY_ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsY");
 	groupParamaters_.adaptRotate_.isZ_ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsZ");
+	preIsShot_ = globalParameter_->GetValue<bool>(particleName, "isShot");
 
 }
 
@@ -275,11 +279,11 @@ void ParticleEmitter::Emit() {
 	} else {
 		parameters_.emitPos = parameters_.emitPos;
 	}
-
+	
 
 	currentTime_ += Frame::DeltaTime();// 時間加算
 
-	if (currentTime_ >= intervalTime_) {//　間隔ごとに発動
+	if (currentTime_ >= intervalTime_||groupParamaters_.isShot) {//　間隔ごとに発動
 
 		ParticleManager::GetInstance()->Emit(
 			particleName_, parameters_, groupParamaters_, particleCount);
@@ -412,6 +416,7 @@ void ParticleEmitter::EditorUpdate() {
 
 		// IsRotateforDirection のチェックボックス
 		ImGui::Checkbox("IsRotateforDirection", &parameters_.isRotateforDirection);
+		ImGui::Checkbox("IsShot", &preIsShot_);
 	}
 
 	// パーティクル切り替え
@@ -482,7 +487,7 @@ void ParticleEmitter::ParticleChange() {
 		for (const auto& file : filenames) {
 			names.push_back(file.c_str());
 
-			if (file != particleName_) continue;
+		/*	if (file != particleName_) continue;*/
 		
 		}
 		if (ImGui::CollapsingHeader("SelectParticle")) {

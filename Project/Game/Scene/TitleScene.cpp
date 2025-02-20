@@ -36,7 +36,7 @@ void TitleScene::Update() {
 	emitter_->EditorUpdate();
 	emitter_->Emit();
 
-	ParticleManager::GetInstance()->Update(viewProjection_);
+	ParticleManager::GetInstance()->Update();
 
 	Debug();
 	ViewProjectionUpdate();
