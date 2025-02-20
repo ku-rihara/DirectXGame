@@ -45,6 +45,10 @@ void EnemyBoundDamage::Update() {
 		// Yに加算
 		pBaseEnemy_->AddPosition(Vector3(0, speed_, 0));
 
+		// 回転
+		rotate_ += pBaseEnemy_->GetParamater().thrustRotateSpeed * Frame::DeltaTimeRate();
+		pBaseEnemy_->SetBodyRotateX(rotate_);
+
 		// 加速する
 		speed_ = max(speed_ - (gravity_ * Frame::DeltaTimeRate()),fallSpeedLimit_);
 	
@@ -58,6 +62,7 @@ void EnemyBoundDamage::Update() {
 	/// 追従に戻す
 	///---------------------------------------------------------
 		pBaseEnemy_->SetBodyColor(Vector4(1.0f, 1, 1, 1.0f));
+		pBaseEnemy_->SetBodyRotateX(0.0f);
 		pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetParamater().basePosY);
 		pBaseEnemy_->BackToDamageRoot();
 		break;

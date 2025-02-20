@@ -58,9 +58,9 @@ void ComboAttackFirst::Update() {
 	//　モーション
 	BaseComboAattackBehavior::RotateMotionUpdate(true);
 	BaseComboAattackBehavior::FloatAnimationUpdate();
+
 	/// スケール変化
 	BaseComboAattackBehavior::ScalingEaseUpdate();
-
 
 	// 攻撃中の移動
 	pPlayer_->Move(pPlayer_->GetPlayerParams().moveSpeed);

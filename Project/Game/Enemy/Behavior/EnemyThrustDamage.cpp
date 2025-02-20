@@ -79,7 +79,7 @@ void EnemyThrustDamage::Update() {
 		easing_.time += Frame::DeltaTimeRate();
 
 		rotate_ += pBaseEnemy_->GetParamater().thrustRotateSpeed * Frame::DeltaTimeRate();
-		pBaseEnemy_->SetBodyRotateZ(rotate_);
+		pBaseEnemy_->SetBodyRotateX(rotate_);
 
 		/// イージングでヒットバックする
 		pBaseEnemy_->SetWorldPosition(
@@ -98,7 +98,7 @@ void EnemyThrustDamage::Update() {
 		/// 次の振る舞い
 		///---------------------------------------------------------
 		pBaseEnemy_->FallEffectInit(pBaseEnemy_->GetWorldPosition());
-		pBaseEnemy_->SetBodyRotateZ(0.0f);
+		pBaseEnemy_->SetBodyRotateX(0.0f);
 		pBaseEnemy_->SetBodyColor(Vector4(1.0f, 1, 1, 1.0f));
 		pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetParamater().basePosY);
 		pBaseEnemy_->GetGameCamera()->ChangeShakeMode();

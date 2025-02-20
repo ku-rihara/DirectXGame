@@ -25,6 +25,9 @@ public:
 		float chaseSpeed;
 		float basePosY;
 		float thrustRotateSpeed;
+		float upperGravity;
+		float upperFallSpeedLimit;
+		float upperJumpPower;
 	};
 	enum class Type {
 		NORMAL,
@@ -83,6 +86,10 @@ public:
 	void ThrustEmit();
 	void FallEffectUpdate();
 	void FallEffectInit(const Vector3& pos);
+
+	/// jump
+	void Jump(float& speed, const float& fallSpeedLimit,const float& gravity);
+	void Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump);
 	
 	Vector3 GetDirectionToTarget(const Vector3&target);
 
@@ -119,7 +126,7 @@ public:
 	void SetPlayer     (Player* plyaer);
 	void SetGameCamera (GameCamera* gamecamera);
 	void SetParamater  (const Type&type,const Paramater& paramater);
-	void SetBodyRotateZ(const float& r) { bodyTransform_.rotation_.z = r; }
+	void SetBodyRotateX(const float& r) { bodyTransform_.rotation_.x = r; }
 	void SetBodyColor(const Vector4& color);
 
 private:

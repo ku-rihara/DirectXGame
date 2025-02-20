@@ -17,6 +17,7 @@ private:
 
 	float speed_;
 	float fallSpeedLimit_;
+	float kFallSpeedLimit_;
 	float gravity_;
 
 	Easing easing_;

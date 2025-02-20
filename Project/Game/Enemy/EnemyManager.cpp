@@ -193,7 +193,9 @@ void EnemyManager::AddParmGroup() {
 		globalParameter_->AddItem(groupName_,"chaseSpeed" + std::to_string(int(i + 1)),paramaters_[i].chaseSpeed);
 		globalParameter_->AddItem(groupName_, "basePosY_" + std::to_string(int(i + 1)), paramaters_[i].basePosY);
 		globalParameter_->AddItem(groupName_, "thrustRotateSpeed" + std::to_string(int(i + 1)), paramaters_[i].thrustRotateSpeed);
-
+		globalParameter_->AddItem(groupName_, "upperGravity" + std::to_string(int(i + 1)), paramaters_[i].upperGravity);
+		globalParameter_->AddItem(groupName_, "upperJumpPower" + std::to_string(int(i + 1)), paramaters_[i].upperJumpPower);
+		globalParameter_->AddItem(groupName_, "upperFallSpeedLimit" + std::to_string(int(i + 1)), paramaters_[i].upperFallSpeedLimit);
 	}
 
 }
@@ -210,7 +212,9 @@ void EnemyManager::SetValues() {
 		globalParameter_->SetValue(groupName_,"chaseSpeed" + std::to_string(int(i + 1)),paramaters_[i].chaseSpeed);
 		globalParameter_->SetValue(groupName_, "basePosY_" + std::to_string(int(i + 1)), paramaters_[i].basePosY);
 		globalParameter_->SetValue(groupName_, "thrustRotateSpeed" + std::to_string(int(i + 1)), paramaters_[i].thrustRotateSpeed);
-
+		globalParameter_->SetValue(groupName_, "upperGravity" + std::to_string(int(i + 1)), paramaters_[i].upperGravity);
+		globalParameter_->SetValue(groupName_, "upperJumpPower" + std::to_string(int(i + 1)), paramaters_[i].upperJumpPower);
+		globalParameter_->SetValue(groupName_, "upperFallSpeedLimit" + std::to_string(int(i + 1)), paramaters_[i].upperFallSpeedLimit);
 	}
 
 }
@@ -226,6 +230,9 @@ void EnemyManager::ApplyGlobalParameter() {
 		paramaters_[i].chaseSpeed = globalParameter_->GetValue<float>(groupName_,"chaseSpeed" + std::to_string(int(i + 1)));
 		paramaters_[i].basePosY = globalParameter_->GetValue<float>(groupName_, "basePosY_" + std::to_string(int(i + 1)));
 		paramaters_[i].thrustRotateSpeed = globalParameter_->GetValue<float>(groupName_, "thrustRotateSpeed" + std::to_string(int(i + 1)));
+		paramaters_[i].upperGravity = globalParameter_->GetValue<float>(groupName_, "upperGravity" + std::to_string(int(i + 1)));
+		paramaters_[i].upperJumpPower = globalParameter_->GetValue<float>(groupName_, "upperJumpPower" + std::to_string(int(i + 1)));
+		paramaters_[i].upperFallSpeedLimit = globalParameter_->GetValue<float>(groupName_, "upperFallSpeedLimit" + std::to_string(int(i + 1)));
 
 	}
 
@@ -259,6 +266,15 @@ void EnemyManager::AdjustParm() {
 		ImGui::DragFloat("thrustRotateSpeed", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].thrustRotateSpeed,
 			0.01f);
 
+		ImGui::DragFloat("upperGravity", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].upperGravity,
+			0.01f);
+
+		ImGui::DragFloat("upperJumpPowe", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].upperJumpPower,
+			0.01f);
+
+		ImGui::DragFloat("upperFallSpeedLimit", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].upperFallSpeedLimit,
+			0.01f);
+
 		
 		ImGui::PopID();
 
@@ -279,6 +295,15 @@ void EnemyManager::AdjustParm() {
 			0.01f);
 
 		ImGui::DragFloat("thrustRotateSpeed", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].thrustRotateSpeed,
+			0.01f);
+
+		ImGui::DragFloat("upperGravity", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].upperGravity,
+			0.01f);
+
+		ImGui::DragFloat("upperJumpPowe", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].upperJumpPower,
+			0.01f);
+
+		ImGui::DragFloat("upperFallSpeedLimit", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].upperFallSpeedLimit,
 			0.01f);
 
 		ImGui::PopID();

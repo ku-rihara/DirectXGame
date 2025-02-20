@@ -345,6 +345,38 @@ void BaseEnemy::FallEffectUpdate() {
 }
 
 
+/// ===================================================
+///  BaseEnemy Jump
+/// ===================================================
+void BaseEnemy::Jump(float& speed, const float& fallSpeedLimit, const float& gravity) {
+	// 移動
+	transform_.translation_.y += speed * Frame::DeltaTime();
+	Fall(speed, fallSpeedLimit,gravity, true);
+
+}
+
+///=========================================================
+///　落ちる
+///==========================================================
+void BaseEnemy::Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump) {
+
+	if (!isJump) {
+		// 移動
+		transform_.translation_.y += speed * Frame::DeltaTime();
+	}
+
+	// 加速する
+	speed = max(speed - (gravity * Frame::DeltaTime()), -fallSpeedLimit);
+
+	// 着地
+	if (transform_.translation_.y <= Player::InitY_) {
+		transform_.translation_.y = Player::InitY_;
+		speed = 0.0f;
+		
+	}
+}
+
+
 void BaseEnemy::SetGameCamera(GameCamera* gamecamera) {
 	pGameCamera_ = gamecamera;
 }

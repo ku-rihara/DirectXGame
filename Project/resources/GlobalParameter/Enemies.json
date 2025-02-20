@@ -6,7 +6,13 @@
         "chaseDistance2": 34.52000045776367,
         "chaseSpeed1": 0.3499999940395355,
         "chaseSpeed2": 0.3700000047683716,
-        "thrustRotateSpeed1": 20.0,
-        "thrustRotateSpeed2": 20.0
+        "thrustRotateSpeed1": 43.560001373291016,
+        "thrustRotateSpeed2": 20.0,
+        "upperFallSpeedLimit1": 1.2000000476837158,
+        "upperFallSpeedLimit2": 1.2000000476837158,
+        "upperGravity1": 3.509999990463257,
+        "upperGravity2": 3.5199999809265137,
+        "upperJumpPower1": 1.350000023841858,
+        "upperJumpPower2": 1.350000023841858
     }
 }

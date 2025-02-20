@@ -23,6 +23,7 @@
 #include"PlayerBehavior/PlayerRoot.h"
 #include"PlayerBehavior/PlayerJump.h"
 #include"ComboAttackBehavior/ComboAttackRoot.h"
+#include"ComboAttackBehavior/ComboAttackJumpSecond.h"
 #include"TitleBehavior/TitleFirstFall.h"
 
 /// imgui
@@ -231,7 +232,9 @@ void Player::Move(const float& speed) {
 		// 目標角度
 		objectiveAngle_ = std::atan2(direction_.x, direction_.z);
 		// 最短角度補間
-		transform_.rotation_.y = LerpShortAngle(transform_.rotation_.y, objectiveAngle_, 0.3f);
+		if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
+			transform_.rotation_.y = LerpShortAngle(transform_.rotation_.y, objectiveAngle_, 0.3f);
+		}
 		FaceToTarget();
 	} else {
 		FaceToTarget();// ターゲットを向くか
@@ -655,6 +658,8 @@ void Player::UpdateMatrix() {
 	BaseObject::Update();
 }
 void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
+
+	if (dynamic_cast<ComboAttackJumpSecond*>(comboBehavior_.get()))return;
 
 	if (EnemyCollisionBox* enemy = dynamic_cast<EnemyCollisionBox*>(other)) {
 		// 敵の中心座標を取得

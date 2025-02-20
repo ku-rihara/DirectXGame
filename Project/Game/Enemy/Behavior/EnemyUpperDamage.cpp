@@ -15,8 +15,9 @@ EnemyUpperDamage::EnemyUpperDamage(BaseEnemy* boss)
 	: BaseEnemyBehaivor("EnemyUpperDamage", boss) {
 
 	
-	speed_ = 1.35f*60.0f; 
-	gravity_ = 3.5f * 60.0f;
+	speed_ = pBaseEnemy_->GetParamater().upperJumpPower *60.0f; //1.35
+	gravity_ = pBaseEnemy_->GetParamater().upperGravity * 60.0f;//3.5
+	kFallSpeedLimit_ = pBaseEnemy_->GetParamater().upperFallSpeedLimit*60.0f;//1.2f
 	fallSpeedLimit_ = -0.0f;
 	stopTime_ = 0.0f;
 	kStopTime_ = 0.3f;
@@ -56,17 +57,13 @@ void EnemyUpperDamage::Update() {
 		// 最短角度補間でプレイヤーの回転を更新
 		pBaseEnemy_->SetRotationY(LerpShortAngle(pBaseEnemy_->GetTransform().rotation_.y, objectiveAngle_, 0.5f));
 
-		// Yに加算
-		pBaseEnemy_->AddPosition(Vector3(0, speed_* Frame::DeltaTimeRate(), 0));
-		
-		// 加速する
-		speed_ =max(speed_ - (gravity_ * Frame::DeltaTimeRate()), fallSpeedLimit_);
+		pBaseEnemy_->Jump(speed_, fallSpeedLimit_, gravity_);
 
 		if (speed_ > 0.0f) break;
 
 			stopTime_ += Frame::DeltaTime();
 			if (stopTime_ >= kStopTime_) {
-				fallSpeedLimit_ = -1.2f*60.0f;
+				fallSpeedLimit_ = kFallSpeedLimit_ ;
 			}
 		
 
