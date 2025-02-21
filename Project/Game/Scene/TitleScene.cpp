@@ -54,6 +54,8 @@ void TitleScene::Init() {
 	player_->SetTitleBehavior();
 
 	player_->SetWorldPositionY(30.0f);
+
+	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 	
 	/*/// particleD
 	damageName_ = "DamageParticle";
