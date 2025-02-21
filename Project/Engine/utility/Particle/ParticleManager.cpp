@@ -240,11 +240,17 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 	///------------------------------------------------------------------------
 	/// 速度
 	///------------------------------------------------------------------------
-	particle.velocity_ = {
+	Vector3 velocity = {
 		Random::Range(paramaters.velocityDist.min.x,paramaters.velocityDist.max.x),
 		Random::Range(paramaters.velocityDist.min.y,paramaters.velocityDist.max.y),
 		Random::Range(paramaters.velocityDist.min.z,paramaters.velocityDist.max.z)
 	};
+
+	// カメラの回転行列を取得
+	Matrix4x4 cameraRotationMatrix = MakeRotateMatrix(viewProjection_->rotation_);
+
+	// 速度ベクトルをカメラの向きに変換
+	particle.velocity_ = TransformNormal(velocity, cameraRotationMatrix);
 
 	///------------------------------------------------------------------------
 	/// 回転
