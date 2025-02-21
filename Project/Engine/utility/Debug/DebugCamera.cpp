@@ -11,7 +11,6 @@ DebugCamera::DebugCamera(int window_width, int window_height) {
     // ビュープロジェクションの初期化
     viewProjection_.Init();
 
-  
     matRot_ = MakeIdentity4x4();
 
     // ビュープロジェクションのパラメータを設定

@@ -24,9 +24,6 @@ void ViewProjection::CreateConstantBuffer() {
 
 	//定数バッファを生成
 	constBuffer_ = DirectXCommon::GetInstance()->CreateBufferResource(device, bufferSize);
-
-
-
 }
 
 void ViewProjection::Map() {

@@ -22,7 +22,7 @@ void TitleScene::Init() {
 	BaseScene::Init();
 
 	emitter_.reset(ParticleEmitter::CreateParticle("punchEffect", "Plane", ".obj", 900));
-	uint32_t t=TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
+	uint32_t t=TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
 	emitter_->SetTextureHandle(t);
 
 	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);

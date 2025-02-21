@@ -59,6 +59,7 @@ public:
 	/// <returns>ビュープロジェクション</returns>
 	const ViewProjection& GetViewProjection() { return viewProjection_; }
 
+
 	void SetIsActive(bool is) { isActive_ = is; }
 };
 
