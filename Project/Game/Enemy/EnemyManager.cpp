@@ -196,6 +196,9 @@ void EnemyManager::AddParmGroup() {
 		globalParameter_->AddItem(groupName_, "upperGravity" + std::to_string(int(i + 1)), paramaters_[i].upperGravity);
 		globalParameter_->AddItem(groupName_, "upperJumpPower" + std::to_string(int(i + 1)), paramaters_[i].upperJumpPower);
 		globalParameter_->AddItem(groupName_, "upperFallSpeedLimit" + std::to_string(int(i + 1)), paramaters_[i].upperFallSpeedLimit);
+		globalParameter_->AddItem(groupName_, "hitbackRotateTime" + std::to_string(int(i + 1)), paramaters_[i].archingbackTime);
+		globalParameter_->AddItem(groupName_, "hitbackRotateValue" + std::to_string(int(i + 1)), paramaters_[i].archingbackValue);
+		globalParameter_->AddItem(groupName_, "hitbackRotateBackRatio" + std::to_string(int(i + 1)), paramaters_[i].archingbackRatio);
 	}
 
 }
@@ -215,6 +218,9 @@ void EnemyManager::SetValues() {
 		globalParameter_->SetValue(groupName_, "upperGravity" + std::to_string(int(i + 1)), paramaters_[i].upperGravity);
 		globalParameter_->SetValue(groupName_, "upperJumpPower" + std::to_string(int(i + 1)), paramaters_[i].upperJumpPower);
 		globalParameter_->SetValue(groupName_, "upperFallSpeedLimit" + std::to_string(int(i + 1)), paramaters_[i].upperFallSpeedLimit);
+		globalParameter_->SetValue(groupName_, "hitbackRotateTime" + std::to_string(int(i + 1)), paramaters_[i].archingbackTime);
+		globalParameter_->SetValue(groupName_, "hitbackRotateValue" + std::to_string(int(i + 1)), paramaters_[i].archingbackValue);
+		globalParameter_->SetValue(groupName_, "hitbackRotateBackRatio" + std::to_string(int(i + 1)), paramaters_[i].archingbackRatio);
 	}
 
 }
@@ -233,7 +239,9 @@ void EnemyManager::ApplyGlobalParameter() {
 		paramaters_[i].upperGravity = globalParameter_->GetValue<float>(groupName_, "upperGravity" + std::to_string(int(i + 1)));
 		paramaters_[i].upperJumpPower = globalParameter_->GetValue<float>(groupName_, "upperJumpPower" + std::to_string(int(i + 1)));
 		paramaters_[i].upperFallSpeedLimit = globalParameter_->GetValue<float>(groupName_, "upperFallSpeedLimit" + std::to_string(int(i + 1)));
-
+		paramaters_[i].archingbackValue = globalParameter_->GetValue<float>(groupName_, "hitbackRotateValue" + std::to_string(int(i + 1)));
+		paramaters_[i].archingbackRatio = globalParameter_->GetValue<float>(groupName_, "hitbackRotateBackRatio" + std::to_string(int(i + 1)));
+		paramaters_[i].archingbackTime = globalParameter_->GetValue<float>(groupName_, "hitbackRotateTime" + std::to_string(int(i + 1)));
 	}
 
 }
@@ -275,6 +283,15 @@ void EnemyManager::AdjustParm() {
 		ImGui::DragFloat("upperFallSpeedLimit", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].upperFallSpeedLimit,
 			0.01f);
 
+		ImGui::SliderAngle("hitbackRotateValue", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].archingbackValue, 0, 720.0f
+		);
+
+		ImGui::DragFloat("hitbackRotateBackRatio", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].archingbackRatio,
+			0.01f);
+
+		ImGui::DragFloat("hitbackRotateTime", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].archingbackTime,
+			0.01f);
+
 		
 		ImGui::PopID();
 
@@ -304,6 +321,15 @@ void EnemyManager::AdjustParm() {
 			0.01f);
 
 		ImGui::DragFloat("upperFallSpeedLimit", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].upperFallSpeedLimit,
+			0.01f);
+
+		ImGui::SliderAngle("hitbackRotateValue", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].archingbackValue,0,720.0f
+		);
+
+		ImGui::DragFloat("hitbackRotateBackRatio", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].archingbackRatio,
+			0.01f);
+
+		ImGui::DragFloat("hitbackRotateTime", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].archingbackTime,
 			0.01f);
 
 		ImGui::PopID();

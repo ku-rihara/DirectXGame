@@ -19,6 +19,10 @@ private:
 	float speed_;
 	Vector3 direction_;
 
+	//hitbackmove
+	Easing archingbackEase_;
+	float preRotate_;
+
 	Easing easing_;
 
 public:

@@ -28,6 +28,9 @@ public:
 		float upperGravity;
 		float upperFallSpeedLimit;
 		float upperJumpPower;
+		float archingbackValue;
+		float archingbackRatio;
+		float archingbackTime;
 	};
 	enum class Type {
 		NORMAL,
@@ -86,6 +89,7 @@ public:
 	void ThrustEmit();
 	void FallEffectUpdate();
 	void FallEffectInit(const Vector3& pos);
+	void RotateInit();
 
 	/// jump
 	void Jump(float& speed, const float& fallSpeedLimit,const float& gravity);

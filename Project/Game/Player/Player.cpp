@@ -697,6 +697,7 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 				pushDistance = pushAmountZ;
 				pushDirection = { 0, 0, delta.z > 0 ? 1.0f : -1.0f };
 			}
+			/// それぞれ片方ずるめり込んでいる
 		} else if (pushAmountX > 0.0f) {
 			pushDistance = pushAmountX;
 			pushDirection = { delta.x > 0 ? 1.0f : -1.0f, 0, 0 };
@@ -715,8 +716,6 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 		}
 	}
 }
-
-
 
 
 Vector3 Player::GetCollisionPos() const {

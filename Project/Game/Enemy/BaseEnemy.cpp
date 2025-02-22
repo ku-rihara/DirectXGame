@@ -21,7 +21,7 @@
 ///　static 変数初期化
 ///==========================================================
 
-Vector3 BaseEnemy::InitScale_ = Vector3::UnitVector() * 1.6f;
+Vector3 BaseEnemy::InitScale_ = Vector3::UnitVector() * 1.4f;
 
 BaseEnemy::BaseEnemy() {
 
@@ -50,7 +50,7 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	///collision
 	enemyCollisionBox_ = std::make_unique<EnemyCollisionBox>();
 	enemyCollisionBox_->Init();
-	enemyCollisionBox_->SetSize(Vector3(3.5f, 3.5f, 3.5f));
+	enemyCollisionBox_->SetSize(Vector3(3.2f, 3.2f, 3.2f));
 	enemyCollisionBox_->IsAdapt(true);
 
 	/// particleT
@@ -187,55 +187,54 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 			/// 通常
 			///------------------------------------------------------------------
 		case AttackCollisionBox::AttackType::NORMAL:
-			if (!dynamic_cast<EnemyHitBackDamage*>(damageBehavior_.get())) {
+		/*	if (dynamic_cast<EnemyHitBackDamage*>(damageBehavior_.get())) break;*/
 
 				DamageForPar(damageParm_);
 				ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
-			}
+			
 			break;
 			///------------------------------------------------------------------
 			/// アッパー
 			///------------------------------------------------------------------
 		case AttackCollisionBox::AttackType::UPPER:
 
-			if (!dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
+			if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) break;
 
 				DamageForPar(damageParm_);
 				ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
-			}
+			
 
 			break;
 			///------------------------------------------------------------------
 			/// ストッパー
 			///------------------------------------------------------------------
 		case AttackCollisionBox::AttackType::STOPPER:
-			if (!dynamic_cast<EnemyStopDamage*>(damageBehavior_.get())) {
+			if (dynamic_cast<EnemyStopDamage*>(damageBehavior_.get())) break;
 
 				DamageForPar(damageParm_);
 				ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
-			}
 
 			break;
 			///------------------------------------------------------------------
 			/// 突き飛ばし	
 			///------------------------------------------------------------------
 		case AttackCollisionBox::AttackType::THRUST:
-			if (!dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) {
+			if (dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) break;
 
 				DamageForPar(damageParm_);
 				ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
-			}
+			
 
 			break;
 			///------------------------------------------------------------------
 			/// 落下攻撃
 			///------------------------------------------------------------------
 		case AttackCollisionBox::AttackType::FALL:
-			if (!dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
+			if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) break;
 
 				DamageForPar(damageParm_);
 				ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
-			}
+			
 
 			return;
 
@@ -244,11 +243,11 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 			/// ストッパー
 			///------------------------------------------------------------------
 		case AttackCollisionBox::AttackType::RUSH:
-			if (!dynamic_cast<EnemyBoundDamage*>(damageBehavior_.get())) {
+			if (dynamic_cast<EnemyBoundDamage*>(damageBehavior_.get())) break;
 
 				DamageForPar(damageParm_);
 				ChangeBehavior(std::make_unique<EnemyBoundDamage>(this));
-			}
+			
 			break;
 		default:
 			break;
@@ -391,4 +390,8 @@ void BaseEnemy::SetParamater(const Type& type, const Paramater& paramater) {
 }
 void  BaseEnemy::SetBodyColor(const Vector4& color){
 	bodyObj_->objColor_.SetColor(color);
+}
+
+void BaseEnemy::RotateInit() {
+	bodyTransform_.rotation_ = { 0.0f,0.0f,0.0f };
 }

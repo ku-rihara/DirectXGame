@@ -98,7 +98,7 @@ void EnemyThrustDamage::Update() {
 		/// 次の振る舞い
 		///---------------------------------------------------------
 		pBaseEnemy_->FallEffectInit(pBaseEnemy_->GetWorldPosition());
-		pBaseEnemy_->SetBodyRotateX(0.0f);
+		pBaseEnemy_->RotateInit();
 		pBaseEnemy_->SetBodyColor(Vector4(1.0f, 1, 1, 1.0f));
 		pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetParamater().basePosY);
 		pBaseEnemy_->GetGameCamera()->ChangeShakeMode();

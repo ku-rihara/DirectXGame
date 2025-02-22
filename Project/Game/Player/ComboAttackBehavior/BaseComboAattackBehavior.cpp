@@ -49,7 +49,7 @@ void BaseComboAattackBehavior::AnimationInit() {
     
     /// floatmotion
     floatEase_.time = 0.0f;
-    floatEase_.backRatio = 50.0f;
+    floatEase_.backRatio = 5.0f;
     floatEase_.maxTime = pPlayer_->GetPlayerParams().attackFloatEaseT;
     floatValue_ = pPlayer_->GetPlayerParams().attackFloatValue;
     tempFloatValue_ = 0.0f;

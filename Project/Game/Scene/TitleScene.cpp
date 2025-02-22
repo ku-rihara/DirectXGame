@@ -153,8 +153,6 @@ void TitleScene::Debug() {
 	Light::GetInstance()->DebugImGui();
 	/*player_->AdjustParm();*/
 	ImGui::End();
-
-
 #endif
 }
 
