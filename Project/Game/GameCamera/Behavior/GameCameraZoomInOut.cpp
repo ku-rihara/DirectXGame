@@ -20,7 +20,7 @@ GameCameraZoomInOut::GameCameraZoomInOut(GameCamera* gameCamera)
 	 
 	 inEase_.maxTime = 0.2f;
 	 outEase_.maxTime = 0.2f;
-	 kWaitTime_ = 0.6f;
+	 kWaitTime_ = 0.3f;
 
 	 shakeTMax_ = kWaitTime_+ inEase_.maxTime;
 	 shakeT_ = shakeTMax_;

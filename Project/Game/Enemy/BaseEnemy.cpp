@@ -187,7 +187,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 			/// 通常
 			///------------------------------------------------------------------
 		case AttackCollisionBox::AttackType::NORMAL:
-		/*	if (dynamic_cast<EnemyHitBackDamage*>(damageBehavior_.get())) break;*/
+			if (dynamic_cast<EnemyHitBackDamage*>(damageBehavior_.get())) break;
 
 				DamageForPar(damageParm_);
 				ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));

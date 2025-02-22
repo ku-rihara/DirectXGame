@@ -43,7 +43,7 @@ ComboAttackForth::ComboAttackForth(Player* player)
 
 	BaseComboAattackBehavior::AnimationInit();
 
-	kTimeDownTime_ = 1.1f;
+	kTimeDownTime_ = 0.6f;
 	timeDownTime_ = 0.0f;
 	istimeSlow_ = false;
 
