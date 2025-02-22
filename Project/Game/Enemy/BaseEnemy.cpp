@@ -174,10 +174,6 @@ void BaseEnemy::SpriteDraw(const ViewProjection& viewProjection) {
 }
 
 void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
-
-}
-
-void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 	//普通のパンチに攻撃されたら
 	if (AttackCollisionBox* attackCollisionBox = dynamic_cast<AttackCollisionBox*>(other)) {
 
@@ -187,11 +183,10 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 			/// 通常
 			///------------------------------------------------------------------
 		case AttackCollisionBox::AttackType::NORMAL:
-			if (dynamic_cast<EnemyHitBackDamage*>(damageBehavior_.get())) break;
-
-				DamageForPar(damageParm_);
-				ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
 			
+			DamageForPar(damageParm_);
+			ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
+
 			break;
 			///------------------------------------------------------------------
 			/// アッパー
@@ -200,9 +195,9 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
 			if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) break;
 
-				DamageForPar(damageParm_);
-				ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
-			
+			DamageForPar(damageParm_);
+			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
+
 
 			break;
 			///------------------------------------------------------------------
@@ -211,8 +206,8 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 		case AttackCollisionBox::AttackType::STOPPER:
 			if (dynamic_cast<EnemyStopDamage*>(damageBehavior_.get())) break;
 
-				DamageForPar(damageParm_);
-				ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
+			DamageForPar(damageParm_);
+			ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
 
 			break;
 			///------------------------------------------------------------------
@@ -221,9 +216,9 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 		case AttackCollisionBox::AttackType::THRUST:
 			if (dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) break;
 
-				DamageForPar(damageParm_);
-				ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
-			
+			DamageForPar(damageParm_);
+			ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
+
 
 			break;
 			///------------------------------------------------------------------
@@ -232,9 +227,9 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 		case AttackCollisionBox::AttackType::FALL:
 			if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) break;
 
-				DamageForPar(damageParm_);
-				ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
-			
+			DamageForPar(damageParm_);
+			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
+
 
 			return;
 
@@ -245,14 +240,18 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 		case AttackCollisionBox::AttackType::RUSH:
 			if (dynamic_cast<EnemyBoundDamage*>(damageBehavior_.get())) break;
 
-				DamageForPar(damageParm_);
-				ChangeBehavior(std::make_unique<EnemyBoundDamage>(this));
-			
+			DamageForPar(damageParm_);
+			ChangeBehavior(std::make_unique<EnemyBoundDamage>(this));
+
 			break;
 		default:
 			break;
 		}
 	}
+}
+
+void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
+	
 }
 
 Vector3 BaseEnemy::GetCollisionPos() const {
@@ -349,7 +348,7 @@ void BaseEnemy::FallEffectUpdate() {
 /// ===================================================
 void BaseEnemy::Jump(float& speed, const float& fallSpeedLimit, const float& gravity) {
 	// 移動
-	transform_.translation_.y += speed * Frame::DeltaTime();
+	transform_.translation_.y += speed * Frame::DeltaTimeRate();
 	Fall(speed, fallSpeedLimit,gravity, true);
 
 }
@@ -361,11 +360,11 @@ void BaseEnemy::Fall(float& speed, const float& fallSpeedLimit, const float& gra
 
 	if (!isJump) {
 		// 移動
-		transform_.translation_.y += speed * Frame::DeltaTime();
+		transform_.translation_.y += speed * Frame::DeltaTimeRate();
 	}
 
 	// 加速する
-	speed = max(speed - (gravity * Frame::DeltaTime()), -fallSpeedLimit);
+	speed = max(speed - (gravity * Frame::DeltaTimeRate()), -fallSpeedLimit);
 
 	// 着地
 	if (transform_.translation_.y <= Player::InitY_) {

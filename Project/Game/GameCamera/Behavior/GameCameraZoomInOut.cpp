@@ -20,9 +20,9 @@ GameCameraZoomInOut::GameCameraZoomInOut(GameCamera* gameCamera)
 	 
 	 inEase_.maxTime = 0.2f;
 	 outEase_.maxTime = 0.2f;
-	 kWaitTime_ = 0.3f;
+	 kWaitTime_ = 0.2f;
 
-	 shakeTMax_ = kWaitTime_+ inEase_.maxTime;
+	 shakeTMax_ = kWaitTime_+ inEase_.maxTime+0.2f;
 	 shakeT_ = shakeTMax_;
 
 	 step_ = Step::ZOOMIN;
@@ -102,7 +102,7 @@ void GameCameraZoomInOut::Update() {
 }
 
 void GameCameraZoomInOut::ShakeUpdate() {
-	pGameCamera_->SetShakePos(Shake<Vector3>(shakeT_, 0.8f));
+	pGameCamera_->SetShakePos(Shake<Vector3>(shakeT_, 1.6f));
 	shakeT_ -= Frame::DeltaTime();
 
 	if (shakeT_ > 0.0f) return;

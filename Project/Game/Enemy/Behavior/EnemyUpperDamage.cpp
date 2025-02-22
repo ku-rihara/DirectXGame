@@ -23,7 +23,7 @@ EnemyUpperDamage::EnemyUpperDamage(BaseEnemy* boss)
 	kStopTime_ = 0.3f;
 	// 赤色
 	pBaseEnemy_->SetBodyColor(Vector4(0.9f, 0, 0, 0.9f));
-
+	pBaseEnemy_->RotateInit();
 	pBaseEnemy_->DamageEmit();
 
 	step_ = Step::HITBACK; /// ステップ初期化
@@ -61,7 +61,7 @@ void EnemyUpperDamage::Update() {
 
 		if (speed_ > 0.0f) break;
 
-			stopTime_ += Frame::DeltaTime();
+			stopTime_ += Frame::DeltaTimeRate();
 			if (stopTime_ >= kStopTime_) {
 				fallSpeedLimit_ = kFallSpeedLimit_ ;
 			}

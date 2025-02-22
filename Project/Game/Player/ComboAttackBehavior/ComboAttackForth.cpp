@@ -25,14 +25,7 @@ ComboAttackForth::ComboAttackForth(Player* player)
 	///collision
 	collisionBox_ = std::make_unique<AttackCollisionBox>();
 
-	collisionBox_->Init();
-	collisionBox_->attackType_ = AttackCollisionBox::AttackType::STOPPER;
-	collisionBox_->SetSize(Vector3::UnitVector() * 4.5f);// 当たり判定サイズ
-	collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
-	Vector3 tforwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
-	collisionBox_->SetOffset(tforwardDirection * 2.0f);
-	collisionBox_->IsAdapt(false);
-	collisionBox_->Update();
+	
 
 	stopRailManager_ = pPlayer_->GetRightHand()->GetStopRailManager();
 	stopRailManager_->SetIsRoop(false);
@@ -42,8 +35,9 @@ ComboAttackForth::ComboAttackForth(Player* player)
 
 
 	BaseComboAattackBehavior::AnimationInit();
+	ThrustCollisionSet();
 
-	kTimeDownTime_ = 0.6f;
+	kTimeDownTime_ = 0.65f;
 	timeDownTime_ = 0.0f;
 	istimeSlow_ = false;
 
@@ -52,8 +46,7 @@ ComboAttackForth::ComboAttackForth(Player* player)
 
 	stopRailManager_->SetRailMoveTime(0.0f);
 	pPlayer_->GetRightHand()->RailForthComboUpdate(0.0f);
-	collisionBox_->IsAdapt(true);
-	collisionBox_->attackType_ = AttackCollisionBox::AttackType::THRUST;
+	
 
 	////音
 	//pPlayer_->SoundPunch();
@@ -93,7 +86,7 @@ void ComboAttackForth::Update() {
 		// レール更新と座標反映
 		pPlayer_->GetRightHand()->RailForthComboUpdate(pPlayer_->GetRightHand()->GetRailRunSpeedForth());
 
-		collisionBox_->SetPosition(pPlayer_->GetRightHand()->GetWorldPosition());
+	/*	collisionBox_->SetPosition(pPlayer_->GetRightHand()->GetWorldPosition());*/
 		collisionBox_->Update();
 		
 		// イージング終了時の処理
@@ -134,7 +127,7 @@ void ComboAttackForth::Update() {
 
 		// レール更新と座標反映
 		pPlayer_->GetLeftHand()->RailForthComboUpdate(pPlayer_->GetLeftHand()->GetRailRunSpeedForth());
-		collisionBox_->SetPosition(pPlayer_->GetLeftHand()->GetWorldPosition());
+		/*collisionBox_->SetPosition(pPlayer_->GetWorldPosition());*/
 		collisionBox_->Update();
 
 		// イージング終了時の処理
@@ -202,7 +195,7 @@ void ComboAttackForth::Debug() {
 void ComboAttackForth::ChangeSlow() {
 	//デルタタイムスケール小さく
 	if (collisionBox_->GetIsSlow() && !istimeSlow_) {
-		Frame::SetTimeScale(0.01f);
+		Frame::SetTimeScale(0.001f);
 		pPlayer_->SoundStrongPunch();
 		pPlayer_->GetGameCamera()->ChangeZoomInOut();
 		istimeSlow_ = true;
@@ -215,4 +208,15 @@ void ComboAttackForth::ChangeSlow() {
 			Frame::SetTimeScale(1.0f);
 		}
 	}
+}
+
+void ComboAttackForth::ThrustCollisionSet() {
+	collisionBox_->Init();
+	collisionBox_->SetSize(Vector3::UnitVector() * 5.5f);// 当たり判定サイズ
+	Vector3 tforwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
+	collisionBox_->SetOffset(tforwardDirection * 3.0f);
+	collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+	collisionBox_->Update();
+	collisionBox_->IsAdapt(true);
+	collisionBox_->attackType_ = AttackCollisionBox::AttackType::THRUST;
 }

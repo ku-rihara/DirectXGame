@@ -23,13 +23,13 @@ ComboAttackJumpSecond::ComboAttackJumpSecond(Player* player)
 	targetRPos_ = initRHandPos_ +(Vector3::ToForward()*2.0f);
 	targetLPos_ = initLHandPos_ +(Vector3::ToForward()*2.0f);
 
-	rushCollisionBox_ = std::make_unique<AttackCollisionBox>();
-	rushCollisionBox_->Init();
-	rushCollisionBox_->attackType_ = AttackCollisionBox::AttackType::RUSH;
-	rushCollisionBox_->SetPosition(pPlayer_->GetWorldPosition());
-	rushCollisionBox_->SetSize(Vector3(2.0f, 2.0f, 2.0f));// 当たり判定サイズ
-	rushCollisionBox_->Update();
-	rushCollisionBox_->IsAdapt(false);
+	collisionBox_ = std::make_unique<AttackCollisionBox>();
+	collisionBox_->Init();
+	collisionBox_->attackType_ = AttackCollisionBox::AttackType::RUSH;
+	collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+	collisionBox_->SetSize(Vector3(2.0f, 2.0f, 2.0f));// 当たり判定サイズ
+	collisionBox_->Update();
+	collisionBox_->IsAdapt(false);
 
 	pPlayer_->FaceToTarget();
 	initPos_ = pPlayer_->GetWorldPosition();
@@ -84,9 +84,9 @@ void ComboAttackJumpSecond::Update() {
 		);
 
 		/// 当たり判定座標
-		rushCollisionBox_->IsAdapt(true);
-		rushCollisionBox_->SetPosition(pPlayer_->GetWorldPosition());
-		rushCollisionBox_->Update();
+		collisionBox_->IsAdapt(true);
+		collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+		collisionBox_->Update();
 
 		// 早期break
 		if (rushEaseTime_ < pPlayer_->GetJumpComboParm(Player::ComboNum::SECOND).attackEaseMax)break;
@@ -99,7 +99,7 @@ void ComboAttackJumpSecond::Update() {
 		///---------------------------------------------------------
 		/// 待機
 		///---------------------------------------------------------
-		rushCollisionBox_->IsAdapt(false);
+		collisionBox_->IsAdapt(false);
 		waitTime_ += Frame::DeltaTime();
 		if (waitTime_ < pPlayer_->GetJumpComboParm(Player::ComboNum::SECOND).waitTime)break;
 		step_ = STEP::RETURNROOT;

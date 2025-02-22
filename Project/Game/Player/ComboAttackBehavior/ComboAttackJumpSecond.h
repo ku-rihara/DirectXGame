@@ -30,7 +30,7 @@ private:
 	Vector3 targetLPos_;
 	Vector3 rushTargetPos_;
 
-	std::unique_ptr<AttackCollisionBox>rushCollisionBox_;
+	std::unique_ptr<AttackCollisionBox>collisionBox_;
 	std::unique_ptr<ParticleEmitter>emitter_;
 
 	///wait

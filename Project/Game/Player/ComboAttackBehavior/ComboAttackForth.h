@@ -52,5 +52,5 @@ public:
 	void Debug()override;
 	void ChangeSlow();
 
-
+	void ThrustCollisionSet();
 };
