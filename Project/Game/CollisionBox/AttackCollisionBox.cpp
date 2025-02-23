@@ -42,8 +42,27 @@ void AttackCollisionBox::IsAdapt(bool is) {
 
 void AttackCollisionBox::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 	if (dynamic_cast<BaseEnemy*>(other)) {
-		if (attackType_!=AttackType::THRUST)return;
-		isSlow_ = true;
-
+		switch (attackType_)
+		{
+		case AttackCollisionBox::AttackType::NORMAL:
+			break;
+		case AttackCollisionBox::AttackType::FALL:
+			break;
+		case AttackCollisionBox::AttackType::RUSH:
+			break;
+		case AttackCollisionBox::AttackType::STOPPER:
+			break;
+		case AttackCollisionBox::AttackType::THRUST:
+			isSlow_ = true;
+			break;
+		case AttackCollisionBox::AttackType::UPPER:
+			isHitStop_ = true;
+			break;
+		case AttackCollisionBox::AttackType::COUNT:
+			break;
+		default:
+			break;
+		}
+		
 	}
 }

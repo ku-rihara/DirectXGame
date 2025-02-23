@@ -32,6 +32,11 @@ private:
 
 	float zRotate_;
 
+	//hitstop
+	bool isHitStop_;
+	float hitStopTime_;
+	float kHitStopTime_;
+
 	Easing rotateEase_;
 
 public:
@@ -42,4 +47,7 @@ public:
 	/// 更新、デバッグ
 	void Update()override;
 	void Debug()override;
+
+
+	void HitStopUpdate();
 };

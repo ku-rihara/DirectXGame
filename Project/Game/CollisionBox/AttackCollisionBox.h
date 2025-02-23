@@ -16,6 +16,7 @@ public:
 	};
 private:
 	bool isSlow_;
+	bool isHitStop_;
 public:
 	AttackType attackType_;
 public:
@@ -30,9 +31,12 @@ public:
 	 void SetSize(const Vector3& size)override;
 	 void SetPosition(const Vector3& position)override;
 	 void SetOffset(const Vector3& offset)override;
-	 void SetIsSlow(const bool& is) { isSlow_ = is; }
 
-	 bool GetIsSlow()const { return isSlow_; }
+	 void SetIsSlow(const bool& is) { isSlow_ = is; }
+	 void SetIsHitStop(const bool& is) { isHitStop_ = is; }
+
 	 Vector3 GetCollisionPos() const override;
+	 bool GetIsSlow()const { return isSlow_; }
+	 bool GetIsHitStop()const { return isHitStop_; }
 	 AttackType GetTagList()const { return attackType_; }
 };

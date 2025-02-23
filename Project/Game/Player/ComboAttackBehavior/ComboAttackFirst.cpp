@@ -133,7 +133,7 @@ void ComboAttackFirst::Update() {
 		/// バックパンチ
 		///----------------------------------------------------
 		BaseComboAattackBehavior::PreOderNextComboForButton();
-
+		pPlayer_->AdaptRotate();
 		collisionBox_->IsAdapt(false);
 
 		punchEase_.time -= Frame::DeltaTimeRate();
@@ -153,6 +153,7 @@ void ComboAttackFirst::Update() {
 
 	case Order::WAIT:
 		waitTine_ += Frame::DeltaTime();
+		pPlayer_->AdaptRotate();
 
 		/// コンボ途切れ
 		if (waitTine_ >= pPlayer_->GetNormalComboParm(Player::ComboNum::FIRST).waitTime) {

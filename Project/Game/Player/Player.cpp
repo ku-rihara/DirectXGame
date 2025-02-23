@@ -233,7 +233,7 @@ void Player::Move(const float& speed) {
 		objectiveAngle_ = std::atan2(direction_.x, direction_.z);
 		// 最短角度補間
 		if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
-			transform_.rotation_.y = LerpShortAngle(transform_.rotation_.y, objectiveAngle_, 0.3f);
+			AdaptRotate();//回転適応
 		}
 		FaceToTarget();
 	} else {
@@ -248,6 +248,11 @@ void Player::FaceToTarget() {
 		// Y軸周り角度(θy)
 		transform_.rotation_.y = std::atan2(differectialVector.x, differectialVector.z);
 	}
+}
+
+void Player::AdaptRotate() {
+	transform_.rotation_.y = LerpShortAngle(transform_.rotation_.y, objectiveAngle_, 0.3f);
+
 }
 
 ///=========================================================

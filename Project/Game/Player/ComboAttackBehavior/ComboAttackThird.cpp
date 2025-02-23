@@ -26,14 +26,14 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	punchEase_.time = 0.0f;
 	waitTine_ = 0.0f;
 	upperJumpEaseT_ = 0.0f;
-	
+
 	/// collisionBox
 	collisionBox_ = std::make_unique<AttackCollisionBox>();
 	collisionBox_->Init();
 	collisionBox_->attackType_ = AttackCollisionBox::AttackType::UPPER;
 
 	collisionBox_->SetSize(Vector3::UnitVector() * 4.5f);// 当たり判定サイズ
-	
+
 	Vector3 forwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
 	collisionBox_->SetOffset(forwardDirection * 3.0f);
 	collisionBox_->IsAdapt(false);
@@ -44,9 +44,13 @@ ComboAttackThird::ComboAttackThird(Player* player)
 
 	rotateEase_.time = 0.0f;
 	rotateEase_.maxTime = 0.7f;
-	
+
 	//　モーション
 	BaseComboAattackBehavior::AnimationInit();
+
+	//hitstop
+	kHitStopTime_ = 0.10f;
+	isHitStop_ = false;
 
 	// 音
 	pPlayer_->SoundPunch();
@@ -69,22 +73,23 @@ void ComboAttackThird::Update() {
 	// 向き変更
 	pPlayer_->Move(pPlayer_->GetPlayerParams().moveSpeed);
 
-	
+	// ヒットストップ
+	HitStopUpdate();
+
 	pPlayer_->SetHeadRotateX(zRotate_);
 
 	if (rotateEase_.time >= rotateEase_.maxTime) {
 		rotateEase_.time = rotateEase_.maxTime;
 		zRotate_ = 0.0f;
 		pPlayer_->SetHeadRotateX(0.0f);
-	}
-	else {
+	} else {
 		rotateEase_.time += Frame::DeltaTimeRate();
 		zRotate_ += 70.0f * Frame::DeltaTimeRate();
 	}
 	switch (order_) {
 
 	case Order::UPPER:
-		
+
 		///----------------------------------------------------
 		/// アッパー
 		///----------------------------------------------------
@@ -97,8 +102,7 @@ void ComboAttackThird::Update() {
 			collisionBox_->IsAdapt(false);
 			/// ボタンで次のコンボ
 			BaseComboAattackBehavior::PreOderNextComboForButton();
-		}
-		else {
+		} else {
 			collisionBox_->IsAdapt(true);
 		}
 
@@ -106,28 +110,29 @@ void ComboAttackThird::Update() {
 
 		// レール更新と座標反映
 		pPlayer_->GetRightHand()->RailThreeComboUpdate(pPlayer_->GetRightHand()->GetRailRunSpeedThree());
-		
+
 		pPlayer_->SetWorldPositionY(
-			EaseInSine(initPosY_,initPosY_+pPlayer_->GetPlayerParams().upperPosY,upperJumpEaseT_, pPlayer_->GetNormalComboParm(Player::ComboNum::THIRD).attackEaseMax)
+			EaseInSine(initPosY_, initPosY_ + pPlayer_->GetPlayerParams().upperPosY, upperJumpEaseT_, pPlayer_->GetNormalComboParm(Player::ComboNum::THIRD).attackEaseMax)
 		);
 
-		
+
 		collisionBox_->Update();/// コリジョンボックス更新
 
 		// イージング終了時の処理
 		if (railManager_->GetRailMoveTime() < 1.0f) break;
 
-			railManager_->SetRailMoveTime(1.0f);
-			order_ = Order::WAIT;
+		railManager_->SetRailMoveTime(1.0f);
+		Frame::SetTimeScale(1.0f);
+		order_ = Order::WAIT;
 
-	
+
 		break;
 
 	case Order::WAIT:
 		///----------------------------------------------------
 		/// 待機
 		///----------------------------------------------------
-		
+
 		waitTine_ += Frame::DeltaTime();
 
 		/// コンボ途切れ
@@ -135,7 +140,7 @@ void ComboAttackThird::Update() {
 			order_ = Order::FALL;
 		}
 
-		else 
+		else
 		{
 			/// ボタンで次のコンボ
 			BaseComboAattackBehavior::PreOderNextComboForButton();
@@ -153,7 +158,7 @@ void ComboAttackThird::Update() {
 
 		// レール更新と座標反映
 		pPlayer_->GetRightHand()->RailThreeComboUpdate(-pPlayer_->GetRightHand()->GetRailRunSpeedThree());
-		
+
 		/// 3コンボ目終了の条件
 		if (pPlayer_->GetWorldPosition().y > pPlayer_->InitY_)break;
 		if (railManager_->GetRailMoveTime() > 0.0f) break;
@@ -166,7 +171,7 @@ void ComboAttackThird::Update() {
 
 		pPlayer_->SetHeadRotateX(0.0f);
 		pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
-		
+
 		break;
 	}
 
@@ -174,4 +179,21 @@ void ComboAttackThird::Update() {
 
 void ComboAttackThird::Debug() {
 
+}
+
+
+void ComboAttackThird::HitStopUpdate() {
+	//デルタタイムスケール小さく
+	if (collisionBox_->GetIsHitStop() && !isHitStop_) {
+		Frame::SetTimeScale(0.1f);
+		isHitStop_ = true;
+	}
+
+	// スロータイム
+	if (isHitStop_) {
+		hitStopTime_ += Frame::DeltaTime();
+		if (hitStopTime_ >= kHitStopTime_) {
+			Frame::SetTimeScale(1.0f);
+		}
+	}
 }

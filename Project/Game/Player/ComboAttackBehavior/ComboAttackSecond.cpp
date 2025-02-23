@@ -95,6 +95,7 @@ void ComboAttackSecond::Update() {
 		/// バックパンチ
 		///----------------------------------------------------
 		collisionBox_->IsAdapt(false);
+		pPlayer_->AdaptRotate();
 		punchEase_.time -= Frame::DeltaTimeRate();
 
 		punchPosition_ =
@@ -115,6 +116,7 @@ void ComboAttackSecond::Update() {
 
 	case Order::WAIT:
 		waitTine_ += Frame::DeltaTime();
+		pPlayer_->AdaptRotate();
 
 		/// コンボ途切れ
 		if (waitTine_ >= pPlayer_->GetNormalComboParm(Player::ComboNum::SECOND).waitTime) {
