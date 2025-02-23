@@ -182,3 +182,4 @@ Vector3 WorldTransform::GetLocalPos() const {
 	Vector3 localPos = MatrixTransform(worldPos, parentInverse);
 	return localPos;
 }
+

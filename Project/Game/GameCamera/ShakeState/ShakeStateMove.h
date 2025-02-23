@@ -1,14 +1,12 @@
 #pragma once
 
-#include "BaseGameCameraBehavior.h"
+#include "BaseShakeState.h"
 #include"Easing.h"
 
-class GameCameraZoomInOut : public BaseGameCameraBehavior {
+class ShakeStateMove: public BaseShakeState {
 private:
 	enum class Step {
-		ZOOMIN,
-		WAIT,
-		ZOOMOUT,
+		SHAKE,
 		RETURNROOT,
 	};
 	/// ===================================================
@@ -17,21 +15,15 @@ private:
 	Step step_;
 	float shakeT_;
 	float shakeTMax_;
-
-	Easing inEase_;
-	Easing outEase_;
-	float waitTime_;
-	float kWaitTime_;
-	float timeOffset_;
+	Easing shakeEase_;
 
 public:
 
 	//コンストラクタ
-	GameCameraZoomInOut(GameCamera* camera);
-	~GameCameraZoomInOut();
+	ShakeStateMove(GameCamera* camera);
+	~ShakeStateMove();
 
 	void Update()override;
-	void ShakeUpdate();
 
 	void Debug()override;
 

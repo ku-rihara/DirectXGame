@@ -183,11 +183,21 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 			/// 通常
 			///------------------------------------------------------------------
 		case AttackCollisionBox::AttackType::NORMAL:
-			
+
 			DamageForPar(damageParm_);
 			ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
 
-			break;
+		}
+	}
+}
+
+void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
+	//普通のパンチに攻撃されたら
+	if (AttackCollisionBox* attackCollisionBox = dynamic_cast<AttackCollisionBox*>(other)) {
+
+		switch (attackCollisionBox->attackType_)
+		{
+			
 			///------------------------------------------------------------------
 			/// アッパー
 			///------------------------------------------------------------------
@@ -248,10 +258,6 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 			break;
 		}
 	}
-}
-
-void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
-	
 }
 
 Vector3 BaseEnemy::GetCollisionPos() const {

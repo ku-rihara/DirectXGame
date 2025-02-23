@@ -1,6 +1,6 @@
 /// behavior
-#include"GameCameraRoot.h"
-#include"GameCameraShake.h"
+#include"ShakeStateMove.h"
+#include"ShakeStateRoot.h"
 /// boss
 #include"GameCamera/GameCamera.h"
 /// frame
@@ -10,8 +10,8 @@
 
 
 //初期化
-GameCameraShake::GameCameraShake(GameCamera* gameCamera)
-	: BaseGameCameraBehavior("GameCameraShake", gameCamera) {
+ShakeStateMove::ShakeStateMove(GameCamera* gameCamera)
+	: BaseShakeState("GameCameraShake", gameCamera) {
 
 	/// ===================================================
 	///変数初期化
@@ -22,12 +22,12 @@ GameCameraShake::GameCameraShake(GameCamera* gameCamera)
 	step_ = Step::SHAKE;
 }
 
-GameCameraShake::~GameCameraShake() {
+ShakeStateMove::~ShakeStateMove() {
 
 }
 
 //更新
-void GameCameraShake::Update() {
+void ShakeStateMove::Update() {
 	switch (step_)
 	{
 	case Step::SHAKE:
@@ -47,7 +47,7 @@ void GameCameraShake::Update() {
 		/// ------------------------------------------------------
 		/// 通常モードに戻る
 		///---------------------------------------------------------
-		pGameCamera_->ChangeBehavior(std::make_unique<GameCameraRoot>(pGameCamera_));
+		pGameCamera_->ChangeShakeState(std::make_unique<ShakeStateRoot>(pGameCamera_));
 		break;
 	default:
 		break;
@@ -56,6 +56,6 @@ void GameCameraShake::Update() {
 }
 
 
-void  GameCameraShake::Debug() {
+void  ShakeStateMove::Debug() {
 	ImGui::Text("GameCameraShake");
 }

@@ -1,23 +1,19 @@
 #pragma once
 
 #include<string>
-#include"Vector3.h"
-
 
 class GameCamera;
-class BaseGameCameraBehavior {
+class BaseShakeState {
 protected:
 	//振る舞い名
 	std::string name_;
 	//ゲームカメラ
 	GameCamera* pGameCamera_ = nullptr;
-
-	Vector3 saveOffset_;
 public:
 
-	BaseGameCameraBehavior(const std::string& name, GameCamera* camera) :name_(name), pGameCamera_(camera) {}
+	BaseShakeState(const std::string& name, GameCamera* camera) :name_(name), pGameCamera_(camera) {}
 	
-	virtual ~BaseGameCameraBehavior() {}
+	virtual ~BaseShakeState() {}
 
 	virtual void Update()=0;
 

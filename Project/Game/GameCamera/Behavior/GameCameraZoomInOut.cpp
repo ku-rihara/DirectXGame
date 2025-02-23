@@ -1,6 +1,7 @@
 /// behavior
 #include"GameCameraRoot.h"
 #include"GameCameraZoomInOut.h"
+#include"GameCameraBacklash.h"
 /// boss
 #include"GameCamera/GameCamera.h"
 /// frame
@@ -21,6 +22,8 @@ GameCameraZoomInOut::GameCameraZoomInOut(GameCamera* gameCamera)
 	 inEase_.maxTime = 0.2f;
 	 outEase_.maxTime = 0.2f;
 	 kWaitTime_ = 0.2f;
+	 timeOffset_ = 0.01f;
+	 saveOffset_ = {};
 
 	 shakeTMax_ = kWaitTime_+ inEase_.maxTime+0.2f;
 	 shakeT_ = shakeTMax_;
@@ -37,7 +40,7 @@ void GameCameraZoomInOut::Update() {
 	switch (step_)
 	{
 
-		/// ------------------------------------------------------
+		/// --------------------------------------------------------
 		/// イン
 		///---------------------------------------------------------
 	case Step::ZOOMIN:
@@ -45,17 +48,17 @@ void GameCameraZoomInOut::Update() {
 		inEase_.time += Frame::DeltaTime();
 		
 		/// いージんぐ適応
-		pGameCamera_->SetOffSet(EaseInCubic(pGameCamera_->GetFirstOffset(), pGameCamera_->GetZoomOffset(),
+		pGameCamera_->SetOffSet(EaseInCubic(pGameCamera_->GetParamater().firstOffset_, pGameCamera_->GetParamater().zoomOffset_,
 			                                inEase_.time, inEase_.maxTime));
 
 		// next
 		if (inEase_.time < inEase_.maxTime)break;	
-		pGameCamera_->SetOffSet(pGameCamera_->GetZoomOffset());
+		pGameCamera_->SetOffSet(pGameCamera_->GetParamater().zoomOffset_);
 		inEase_.time = inEase_.maxTime;
 			step_ = Step::WAIT;
 		
 		break;
-		/// ------------------------------------------------------
+		/// --------------------------------------------------------
 		/// イン
 		///---------------------------------------------------------
 	case Step::WAIT:
@@ -77,13 +80,12 @@ void GameCameraZoomInOut::Update() {
 		outEase_.time += Frame::DeltaTime();
 
 		/// いージんぐ適応
-		pGameCamera_->SetOffSet(EaseInCubic(pGameCamera_->GetZoomOffset(), pGameCamera_->GetFirstOffset(),
+		pGameCamera_->SetOffSet(EaseInCubic(pGameCamera_->GetParamater().zoomOffset_, pGameCamera_->GetParamater().firstOffset_,
 			outEase_.time, outEase_.maxTime));
 
 		// next
-		if (outEase_.time < outEase_.maxTime)break;
-		pGameCamera_->SetOffSet(pGameCamera_->GetFirstOffset());
-		outEase_.time = outEase_.maxTime;
+		if (outEase_.time < outEase_.maxTime- timeOffset_)break;
+		saveOffset_ = pGameCamera_->GetOffset();
 		step_ = Step::RETURNROOT;
 	
 
@@ -93,7 +95,7 @@ void GameCameraZoomInOut::Update() {
 		///---------------------------------------------------------
 	case Step::RETURNROOT:
 	
-		pGameCamera_->ChangeBehavior(std::make_unique<GameCameraRoot>(pGameCamera_));
+		pGameCamera_->ChangeBehavior(std::make_unique<GameCameraBackLash>(pGameCamera_));
 		break;
 	default:
 		break;

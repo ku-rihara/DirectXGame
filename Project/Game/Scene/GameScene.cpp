@@ -177,6 +177,7 @@ void GameScene::Debug() {
 #ifdef _DEBUG
 	ImGui::Begin("Camera");
 	gamecamera_->Debug();
+	gamecamera_->AdjustParm();
 	ImGui::End();
 
 	enemyManager_->ImGuiUpdate();

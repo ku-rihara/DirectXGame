@@ -223,6 +223,9 @@
     <Filter Include="Game\Player\Behavior\ComboBehavior\Normal\Manager">
       <UniqueIdentifier>{20578600-268f-441b-8c4f-b9fd3cd175ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameCamera\ShakeState">
+      <UniqueIdentifier>{9b037334-580c-496b-8f10-8dd932361185}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -427,9 +430,6 @@
     <ClCompile Include="Game\GameCamera\Behavior\BaseGameCameraBehavior.cpp">
       <Filter>Game\GameCamera\Behavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameCamera\Behavior\GameCameraShake.cpp">
-      <Filter>Game\GameCamera\Behavior</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GameCamera\Behavior\GameCameraRoot.cpp">
       <Filter>Game\GameCamera\Behavior</Filter>
     </ClCompile>
@@ -582,6 +582,18 @@
     </ClCompile>
     <ClCompile Include="Game\CollisionBox\EnemyCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameCamera\ShakeState\BaseShakeState.cpp">
+      <Filter>Game\GameCamera\ShakeState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameCamera\ShakeState\ShakeStateRoot.cpp">
+      <Filter>Game\GameCamera\ShakeState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameCamera\ShakeState\ShakeStateMove.cpp">
+      <Filter>Game\GameCamera\ShakeState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameCamera\Behavior\GameCameraBacklash.cpp">
+      <Filter>Game\GameCamera\Behavior</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -822,9 +834,6 @@
     <ClInclude Include="Game\GameCamera\Behavior\BaseGameCameraBehavior.h">
       <Filter>Game\GameCamera\Behavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameCamera\Behavior\GameCameraShake.h">
-      <Filter>Game\GameCamera\Behavior</Filter>
-    </ClInclude>
     <ClInclude Include="Game\GameCamera\Behavior\GameCameraRoot.h">
       <Filter>Game\GameCamera\Behavior</Filter>
     </ClInclude>
@@ -977,6 +986,18 @@
     </ClInclude>
     <ClInclude Include="Game\CollisionBox\EnemyCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameCamera\ShakeState\BaseShakeState.h">
+      <Filter>Game\GameCamera\ShakeState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameCamera\ShakeState\ShakeStateRoot.h">
+      <Filter>Game\GameCamera\ShakeState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameCamera\ShakeState\ShakeStateMove.h">
+      <Filter>Game\GameCamera\ShakeState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameCamera\Behavior\GameCameraBacklash.h">
+      <Filter>Game\GameCamera\Behavior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

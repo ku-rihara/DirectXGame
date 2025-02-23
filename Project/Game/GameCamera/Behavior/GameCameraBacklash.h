@@ -3,25 +3,22 @@
 #include "BaseGameCameraBehavior.h"
 #include"Easing.h"
 
-class GameCameraShake : public BaseGameCameraBehavior {
+class GameCameraBackLash : public BaseGameCameraBehavior {
 private:
 	enum class Step {
-		SHAKE,
+		OUTIN,
 		RETURNROOT,
 	};
 	/// ===================================================
 	///private varians
 	/// ===================================================
 	Step step_;
-	float shakeT_;
-	float shakeTMax_;
-	Easing shakeEase_;
-
+	Easing ease_;
 public:
 
 	//コンストラクタ
-	GameCameraShake(GameCamera* camera);
-	~GameCameraShake();
+	GameCameraBackLash(GameCamera* camera);
+	~GameCameraBackLash();
 
 	void Update()override;
 
