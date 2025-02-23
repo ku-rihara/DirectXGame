@@ -335,281 +335,513 @@ template<typename T> T EaseInOutBounce(const T& start, const T& end, float x, fl
 	}
 	return Lerp(start, end, easeT);
 }
-
-
 namespace Back {
 
-	template<typename T> T Lerp(const T& start, const T& end, float t)
-	{
-		return start + (end - start) * t;
-	}
 
-	template<typename T> T  InSineZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		float b = backRaito;
-		t /= totaltime;
-		float easeT = (1 - cosf(t * std::numbers::pi_v<float> *0.5f) * (1 - b) + b * sinf(t * std::numbers::pi_v<float> *0.5f));
-		return Lerp(start, end, easeT);
-	}
 
-	template<typename T> T OutSineZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	template<typename T>
+	T OutSineZero(float t, float totaltime, const T& min, const T& max, float backRatio)
 	{
-		float b = backRaito;
-		t /= totaltime;
-		float easeT = sinf(t * std::numbers::pi_v<float> *0.5f) * (1 - b) + b * (1 - cosf(t * std::numbers::pi_v<float> *0.5f));
-		return Lerp(start, end, easeT);
-	}
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
 
-	template<typename T> T InOutSineZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		float b = backRaito;
-		t /= totaltime * 0.5f;
-		float easeT;
-		if (t < 1)
+
+		float backPoint = totaltime * backRatio;
+
+		if (t < backPoint)
 		{
-			easeT = 0.5f * (1 - cosf(t * std::numbers::pi_v<float> *0.5f) * (1 - b) + b * sinf(t * std::numbers::pi_v<float> *0.5f));
+			return Lerp(min, max, sinf((t / backPoint) * std::numbers::pi_v<float> *0.5f)); // OutSine from min to max
 		} else
 		{
-			t--;
-			easeT = 0.5f * (sinf(t * std::numbers::pi_v<float> *0.5f) * (1 - b) + b * (1 - cosf(t * std::numbers::pi_v<float> *0.5f))) + 0.5f;
+			return Lerp(max, min, 1.0f - cosf(((t - backPoint) / (totaltime - backPoint)) * std::numbers::pi_v<float> *0.5f)); // InSine from max to min
 		}
-		return Lerp(start, end, easeT);
 	}
 
-	template<typename T> T InQuadZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	template<typename T>
+	T InOutSineZero(float t, float totaltime, const T& min, const T& max, float backRatio)
 	{
-		float b = backRaito;
-		t /= totaltime;
-		float easeT = t * t * (1 - b) + b * t;
-		return Lerp(start, end, easeT);
-	}
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
 
-	template<typename T> T OutQuadZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		float b = backRaito;
-		t /= totaltime;
-		float easeT = -t * (t - 2) * (1 - b) + b * t;
-		return Lerp(start, end, easeT);
-	}
+		float backPoint = totaltime * backRatio;
 
-	template<typename T> T InOutQuadZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		float b = backRaito;
-		t /= totaltime * 0.5f;
-		float easeT;
-		if (t < 1)
+		if (t < backPoint)
 		{
-			easeT = 0.5f * t * t * (1 - b) + 0.5f * b * t;
+			return Lerp(min, max, -0.5f * (cosf((t / backPoint) * std::numbers::pi_v<float>) - 1.0f)); // InOutSine from min to max
 		} else
 		{
-			t--;
-			easeT = -0.5f * (t * (t - 2) - 1) * (1 - b) + 0.5f * b * (t + 1);
+			return Lerp(max, min, -0.5f * (cosf(((t - backPoint) / (totaltime - backPoint)) * std::numbers::pi_v<float>) - 1.0f)); // InOutSine from max to min
 		}
-		return Lerp(start, end, easeT);
 	}
 
-	template<typename T> T InCubicZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	template<typename T>
+	T InQuadZero(float t, float totaltime, const T& min, const T& max, float backRatio)
 	{
-		float b = backRaito;
-		t /= totaltime;
-		float easeT = t * t * t * (1 - b) + b * t;
-		return Lerp(start, end, easeT);
-	}
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
 
-	template<typename T> T OutCubicZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		float b = backRaito;
-		t /= totaltime;
-		t--;
-		float easeT = (t * t * t + 1) * (1 - b) + b * (t + 1);
-		return Lerp(start, end, easeT);
-	}
+		float backPoint = totaltime * backRatio;
 
-	template<typename T> T InOutCubicZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		float b = backRaito;
-		t /= totaltime * 0.5f;
-		float easeT;
-		if (t < 1)
+		if (t < backPoint)
 		{
-			easeT = 0.5f * t * t * t * (1 - b) + 0.5f * b * t;
+			float u = t / backPoint;
+			return Lerp(min, max, u * u); // InQuad from min to max
 		} else
 		{
-			t -= 2;
-			easeT = 0.5f * (t * t * t + 2) * (1 - b) + 0.5f * b * (t + 2);
+			float u = (t - backPoint) / (totaltime - backPoint);
+			return Lerp(max, min, -u * (u - 2.0f)); // OutQuad from max to min
 		}
-		return Lerp(start, end, easeT);
 	}
 
-	template<typename T> T InQuartZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	template<typename T>
+	T OutQuadZero(float t, float totaltime, const T& min, const T& max, float backRatio)
 	{
-		float b = backRaito;
-		t /= totaltime;
-		float easeT = t * t * t * t * (1 - b) + b * t;
-		return Lerp(start, end, easeT);
-	}
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
 
-	template<typename T> T OutQuartZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		float b = backRaito;
-		t /= totaltime;
-		t--;
-		float easeT = -(t * t * t * t - 1) * (1 - b) + b * (t + 1);
-		return Lerp(start, end, easeT);
-	}
+		float backPoint = totaltime * backRatio;
 
-	template<typename T> T InOutQuartZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		float b = backRaito;
-		t /= totaltime * 0.5f;
-		float easeT;
-		if (t < 1)
+		if (t < backPoint)
 		{
-			easeT = 0.5f * t * t * t * t * (1 - b) + 0.5f * b * t;
+			float u = t / backPoint;
+			return Lerp(min, max, -u * (u - 2.0f)); // OutQuad from min to max
 		} else
 		{
-			t -= 2;
-			easeT = -0.5f * (t * t * t * t - 2) * (1 - b) + 0.5f * b * (t + 2);
+			float u = (t - backPoint) / (totaltime - backPoint);
+			return Lerp(max, min, u * u); // InQuad from max to min
 		}
-		return Lerp(start, end, easeT);
 	}
 
-	template<typename T> T InQuintZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	template<typename T>
+	T InOutQuadZero(float t, float totaltime, const T& min, const T& max, float backRatio)
 	{
-		float b = backRaito;
-		t /= totaltime;
-		float easeT = t * t * t * t * t * (1 - b) + b * t;
-		return Lerp(start, end, easeT);
-	}
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
 
-	template<typename T> T OutQuintZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		float b = backRaito;
-		t /= totaltime;
-		t--;
-		float easeT = (t * t * t * t * t + 1) * (1 - b) + b * (t + 1);
-		return Lerp(start, end, easeT);
-	}
+		float backPoint = totaltime * backRatio;
 
-	template<typename T> T InOutQuintZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		float b = backRaito;
-		t /= totaltime * 0.5f;
-		float easeT;
-		if (t < 1)
+		if (t < backPoint)
 		{
-			easeT = 0.5f * t * t * t * t * t * (1 - b) + 0.5f * b * t;
+			float u = t / (backPoint * 0.5f);
+			if (u < 1.0f) return Lerp(min, max, 0.5f * u * u);
+			u--;
+			return Lerp(min, max, -0.5f * (u * (u - 2.0f) - 1.0f)); // InOutQuad from min to max
 		} else
 		{
-			t -= 2;
-			easeT = 0.5f * (t * t * t * t * t + 2) * (1 - b) + 0.5f * b * (t + 2);
+			float u = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
+			if (u < 1.0f) return Lerp(max, min, 0.5f * u * u);
+			u--;
+			return Lerp(max, min, -0.5f * (u * (u - 2.0f) - 1.0f)); // InOutQuad from max to min
 		}
-		return Lerp(start, end, easeT);
 	}
 
-	template<typename T> T InExpoZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	template<typename T>
+	T InCubicZero(float t, float totaltime, const T& min, const T& max, float backRatio)
 	{
-		float b = backRaito;
-		if (t == 0) return start;
-		t /= totaltime;
-		float easeT = powf(2, 10 * (t - 1)) * (1 - b) + b * t;
-		return Lerp(start, end, easeT);
-	}
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
 
-	template<typename T> T OutExpoZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		float b = backRaito;
-		if (t == totaltime) return end;
-		t /= totaltime;
-		float easeT = (-powf(2, -10 * t) + 1) * (1 - b) + b * t;
-		return Lerp(start, end, easeT);
-	}
+		float backPoint = totaltime * backRatio;
 
-	template<typename T> T InOutExpoZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		float b = backRaito;
-		if (t == 0) return start;
-		if (t == totaltime) return end;
-
-		t /= totaltime * 0.5f;
-		float easeT;
-		if (t < 1)
+		if (t < backPoint)
 		{
-			easeT = 0.5f * powf(2, 10 * (t - 1)) * (1 - b) + 0.5f * b * t;
+			float u = t / backPoint;
+			return Lerp(min, max, u * u * u); // InCubic from min to max
 		} else
 		{
-			t--;
-			easeT = 0.5f * (-powf(2, -10 * t) + 2) * (1 - b) + 0.5f * b * (t + 1);
+			float u = (t - backPoint) / (totaltime - backPoint) - 1.0f;
+			return Lerp(max, min, u * u * u + 1.0f); // OutCubic from max to min
 		}
-		return Lerp(start, end, easeT);
 	}
 
-	template<typename T> T InCircZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	template<typename T>
+	T OutCubicZero(float t, float totaltime, const T& min, const T& max, float backRatio)
 	{
-		float b = backRaito;
-		t /= totaltime;
-		float easeT = -(sqrtf(1 - t * t) - 1) * (1 - b) + b * t;
-		return Lerp(start, end, easeT);
-	}
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
 
-	template<typename T> T OutCircZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		float b = backRaito;
-		t /= totaltime;
-		t--;
-		float easeT = sqrtf(1 - t * t) * (1 - b) + b * (t + 1);
-		return Lerp(start, end, easeT);
-	}
+		float backPoint = totaltime * backRatio;
 
-	template<typename T> T InOutCircZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		float b = backRaito;
-		t /= totaltime * 0.5f;
-		float easeT;
-		if (t < 1)
+		if (t < backPoint)
 		{
-			easeT = -0.5f * (sqrtf(1 - t * t) - 1) * (1 - b) + 0.5f * b * t;
+			float u = t / backPoint - 1.0f;
+			return Lerp(min, max, u * u * u + 1.0f); // OutCubic from min to max
 		} else
 		{
-			t -= 2;
-			easeT = 0.5f * (sqrtf(1 - t * t) + 1) * (1 - b) + 0.5f * b * (t + 2);
+			float u = (t - backPoint) / (totaltime - backPoint);
+			return Lerp(max, min, u * u * u); // InCubic from max to min
 		}
-		return Lerp(start, end, easeT);
 	}
 
-	template<typename T> T InBackZero(const T& start, const T& end, float t, float totaltime, float s, float backRaito)
+	template<typename T>
+	T InOutCubicZero(float t, float totaltime, const T& min, const T& max, float backRatio)
 	{
-		float b = backRaito;
-		t /= totaltime;
-		float easeT = t * t * ((s + 1) * t - s) * (1 - b) + b * t;
-		return Lerp(start, end, easeT);
-	}
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
 
-	template<typename T> T OutBackZero(const T& start, const T& end, float t, float totaltime, float s, float backRaito)
-	{
-		float b = backRaito;
-		t /= totaltime;
-		t--;
-		float easeT = (t * t * ((s + 1) * t + s) + 1) * (1 - b) + b * (t + 1);
-		return Lerp(start, end, easeT);
-	}
+		float backPoint = totaltime * backRatio;
 
-	template<typename T> T InOutBackZero(const T& start, const T& end, float t, float totaltime, float s, float backRaito)
-	{
-		float b = backRaito;
-		float s_modified = s * 1.525f; // sを修正
-		t /= totaltime * 0.5f;
-
-		float easeT;
-		if (t < 1)
+		if (t < backPoint)
 		{
-			easeT = 0.5f * (t * t * ((s_modified + 1) * t - s_modified)) * (1 - b) + 0.5f * b * t;
+			float u = t / (backPoint * 0.5f);
+			if (u < 1.0f) return Lerp(min, max, 0.5f * u * u * u);
+			u -= 2.0f;
+			return Lerp(min, max, 0.5f * (u * u * u + 2.0f)); // InOutCubic from min to max
 		} else
 		{
-			t -= 2;
-			easeT = 0.5f * (t * t * ((s_modified + 1) * t + s_modified) + 2) * (1 - b) + 0.5f * b * (t + 2);
+			float u = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
+			if (u < 1.0f) return Lerp(max, min, 0.5f * u * u * u);
+			u -= 2.0f;
+			return Lerp(max, min, 0.5f * (u * u * u + 2.0f)); // InOutCubic from max to min
 		}
-		return Lerp(start, end, easeT);
+	}
+
+	template<typename T>
+	T InQuartZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	{
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
+
+		float backPoint = totaltime * backRatio;
+
+		if (t < backPoint)
+		{
+			float u = t / backPoint;
+			return Lerp(min, max, u * u * u * u); // InQuart from min to max
+		} else
+		{
+			float u = (t - backPoint) / (totaltime - backPoint) - 1.0f;
+			return Lerp(max, min, -(u * u * u * u - 1.0f)); // OutQuart from max to min
+		}
+	}
+
+	template<typename T>
+	T OutQuartZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	{
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
+
+		float backPoint = totaltime * backRatio;
+
+		if (t < backPoint)
+		{
+			float u = t / backPoint - 1.0f;
+			return Lerp(min, max, -(u * u * u * u - 1.0f)); // OutQuart from min to max
+		} else
+		{
+			float u = (t - backPoint) / (totaltime - backPoint);
+			return Lerp(max, min, u * u * u * u); // InQuart from max to min
+		}
+	}
+
+	template<typename T>
+	T InOutQuartZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	{
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
+
+		float backPoint = totaltime * backRatio;
+
+		if (t < backPoint)
+		{
+			float u = t / (backPoint * 0.5f);
+			if (u < 1.0f) return Lerp(min, max, 0.5f * u * u * u * u);
+			u -= 2.0f;
+			return Lerp(min, max, -0.5f * (u * u * u * u - 2.0f)); // InOutQuart from min to max
+		} else
+		{
+			float u = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
+			if (u < 1.0f) return Lerp(max, min, 0.5f * u * u * u * u);
+			u -= 2.0f;
+			return Lerp(max, min, -0.5f * (u * u * u * u - 2.0f)); // InOutQuart from max to min
+		}
+	}
+
+	template<typename T>
+	T InQuintZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	{
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
+
+		float backPoint = totaltime * backRatio;
+
+		if (t < backPoint)
+		{
+			float u = t / backPoint;
+			return Lerp(min, max, u * u * u * u * u); // InQuint from min to max
+		} else
+		{
+			float u = (t - backPoint) / (totaltime - backPoint) - 1.0f;
+			return Lerp(max, min, u * u * u * u * u + 1.0f); // OutQuint from max to min
+		}
+	}
+
+	template<typename T>
+	T OutQuintZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	{
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
+
+		float backPoint = totaltime * backRatio;
+
+		if (t < backPoint)
+		{
+			float u = t / backPoint - 1.0f;
+			return Lerp(min, max, u * u * u * u * u + 1.0f); // OutQuint from min to max
+		} else
+		{
+			float u = (t - backPoint) / (totaltime - backPoint);
+			return Lerp(max, min, u * u * u * u * u); // InQuint from max to min
+		}
+	}
+
+	template<typename T>
+	T InOutQuintZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	{
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
+
+		float backPoint = totaltime * backRatio;
+
+		if (t < backPoint)
+		{
+			float u = t / (backPoint * 0.5f);
+			if (u < 1.0f) return Lerp(min, max, 0.5f * u * u * u * u * u);
+			u -= 2.0f;
+			return Lerp(min, max, 0.5f * (u * u * u * u * u + 2.0f)); // InOutQuint from min to max
+		} else
+		{
+			float u = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
+			if (u < 1.0f) return Lerp(max, min, 0.5f * u * u * u * u * u);
+			u -= 2.0f;
+			return Lerp(max, min, 0.5f * (u * u * u * u * u + 2.0f)); // InOutQuint from max to min
+		}
+	}
+
+	template<typename T>
+	T InExpoZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	{
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
+
+		float backPoint = totaltime * backRatio;
+
+		if (t < backPoint)
+		{
+			return Lerp(min, max, (powf(2.0f, 10.0f * (t / backPoint - 1.0f)) - 0.001f)); // InExpo from min to max
+		} else
+		{
+			return Lerp(max, min, (1.0f - powf(2.0f, -10.0f * ((t - backPoint) / (totaltime - backPoint))))); // OutExpo from max to min
+		}
+	}
+
+	template<typename T>
+	T OutExpoZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	{
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
+
+		float backPoint = totaltime * backRatio;
+
+		if (t < backPoint)
+		{
+			return Lerp(min, max, (1.0f - powf(2.0f, -10.0f * (t / backPoint)))); // OutExpo from min to max
+		} else
+		{
+			return Lerp(max, min, (powf(2.0f, 10.0f * ((t - backPoint) / (totaltime - backPoint) - 1.0f)))); // InExpo from max to min
+		}
+	}
+
+	template<typename T>
+	T InOutExpoZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	{
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
+
+		float backPoint = totaltime * backRatio;
+
+		if (t < backPoint)
+		{
+			float u = t / (backPoint * 0.5f);
+			if (u < 1.0f) return Lerp(min, max, 0.5f * powf(2.0f, 10.0f * (u - 1.0f)));
+			u--;
+			return Lerp(min, max, 0.5f * (2.0f - powf(2.0f, -10.0f * u))); // InOutExpo from min to max
+		} else
+		{
+			float u = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
+			if (u < 1.0f) return Lerp(max, min, 0.5f * powf(2.0f, 10.0f * (u - 1.0f)));
+			u--;
+			return Lerp(max, min, 0.5f * (2.0f - powf(2.0f, -10.0f * u))); // InOutExpo from max to min
+		}
+	}
+
+	template<typename T>
+	T InCircZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	{
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
+
+		float backPoint = totaltime * backRatio;
+
+		if (t < backPoint)
+		{
+			float u = t / backPoint;
+			return Lerp(min, max, -(sqrtf(1.0f - u * u) - 1.0f)); // InCirc from min to max
+		} else
+		{
+			float u = (t - backPoint) / (totaltime - backPoint) - 1.0f;
+			return Lerp(max, min, sqrtf(1.0f - u * u)); // OutCirc from max to min
+		}
+	}
+
+	template<typename T>
+	T OutCircZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	{
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
+
+		float backPoint = totaltime * backRatio;
+
+		if (t < backPoint)
+		{
+			float u = t / backPoint - 1.0f;
+			return Lerp(min, max, sqrtf(1.0f - u * u)); // OutCirc from min to max
+		} else
+		{
+			float u = (t - backPoint) / (totaltime - backPoint);
+			return Lerp(max, min, -(sqrtf(1.0f - u * u) - 1.0f)); // InCirc from max to min
+		}
+	}
+
+	template<typename T>
+	T InOutCircZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	{
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
+
+		float backPoint = totaltime * backRatio;
+
+		if (t < backPoint)
+		{
+			float u = t / (backPoint * 0.5f);
+			if (u < 1.0f) return Lerp(min, max, -0.5f * (sqrtf(1.0f - u * u) - 1.0f));
+			u -= 2.0f;
+			return Lerp(min, max, 0.5f * (sqrtf(1.0f - u * u) + 1.0f)); // InOutCirc from min to max
+		} else
+		{
+			float u = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
+			if (u < 1.0f) return Lerp(max, min, -0.5f * (sqrtf(1.0f - u * u) - 1.0f));
+			u -= 2.0f;
+			return Lerp(max, min, 0.5f * (sqrtf(1.0f - u * u) + 1.0f)); // InOutCirc from max to min
+		}
+	}
+
+	template<typename T>
+	T InBackZero(float t, float totaltime, const T& min, const T& max, float s, float backRatio)
+	{
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
+
+		float backPoint = totaltime * backRatio;
+
+		if (t < backPoint)
+		{
+			float u = t / backPoint;
+			return Lerp(min, max, u * u * ((s + 1.0f) * u - s)); // InBack from min to max
+		} else
+		{
+			float u = (t - backPoint) / (totaltime - backPoint) - 1.0f;
+			return Lerp(max, min, u * u * ((s + 1.0f) * u + s) + 1.0f); // OutBack from max to min
+		}
+	}
+
+	template<typename T>
+	T OutBackZero(float t, float totaltime, const T& min, const T& max, float s, float backRatio)
+	{
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
+
+		float backPoint = totaltime * backRatio;
+
+		if (t < backPoint)
+		{
+			float u = t / backPoint - 1.0f;
+			return Lerp(min, max, u * u * ((s + 1.0f) * u + s) + 1.0f); // OutBack from min to max
+		} else
+		{
+			float u = (t - backPoint) / (totaltime - backPoint);
+			return Lerp(max, min, u * u * ((s + 1.0f) * u - s)); // InBack from max to min
+		}
+	}
+
+	template<typename T>
+	T InOutBackZero(float t, float totaltime, const T& min, const T& max, float s, float backRatio)
+	{
+		if (t <= 0.0f) return min;
+		if (t >= totaltime) return min;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
+
+		float backPoint = totaltime * backRatio;
+		float s_modified = s * 1.525f;
+
+		if (t < backPoint)
+		{
+			float u = t / (backPoint * 0.5f);
+			if (u < 1.0f) return Lerp(min, max, 0.5f * (u * u * ((s_modified + 1.0f) * u - s_modified)));
+			u -= 2.0f;
+			return Lerp(min, max, 0.5f * (u * u * ((s_modified + 1.0f) * u + s_modified) + 2.0f)); // InOutBack from min to max
+		} else
+		{
+			float u = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
+			if (u < 1.0f) return Lerp(max, min, 0.5f * (u * u * ((s_modified + 1.0f) * u - s_modified)));
+			u -= 2.0f;
+			return Lerp(max, min, 0.5f * (u * u * ((s_modified + 1.0f) * u + s_modified) + 2.0f)); // InOutBack from max to min
+		}
 	}
 }
 
