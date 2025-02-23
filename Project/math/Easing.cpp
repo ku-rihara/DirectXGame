@@ -337,16 +337,34 @@ template<typename T> T EaseInOutBounce(const T& start, const T& end, float x, fl
 }
 namespace Back {
 
+	template<typename T>
+	T InSineZero(const T& start, const T& end, float t, float totaltime, float backRatio)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+		if (backRatio < 0.0f) backRatio = 0.0f;
+		if (backRatio > 1.0f) backRatio = 1.0f;
 
+		float backPoint = totaltime * backRatio;
+
+		if (t < backPoint)
+		{
+			// InSine from start to end
+			return Lerp(start, end, 1.0f - cosf((t / backPoint) * std::numbers::pi_v<float> *0.5f));
+		} else
+		{
+			// OutSine from end to start
+			return Lerp(end, start, sinf(((t - backPoint) / (totaltime - backPoint)) * std::numbers::pi_v<float> *0.5f));
+		}
+	}
 
 	template<typename T>
-	T OutSineZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T OutSineZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
 		if (backRatio < 0.0f) backRatio = 0.0f;
 		if (backRatio > 1.0f) backRatio = 1.0f;
-
 
 		float backPoint = totaltime * backRatio;
 
@@ -360,7 +378,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T InOutSineZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T InOutSineZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -379,7 +397,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T InQuadZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T InQuadZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -400,7 +418,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T OutQuadZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T OutQuadZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -421,7 +439,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T InOutQuadZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T InOutQuadZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -446,7 +464,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T InCubicZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T InCubicZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -467,7 +485,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T OutCubicZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T OutCubicZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -488,7 +506,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T InOutCubicZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T InOutCubicZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -513,7 +531,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T InQuartZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T InQuartZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -534,7 +552,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T OutQuartZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T OutQuartZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -555,7 +573,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T InOutQuartZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T InOutQuartZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -574,13 +592,13 @@ namespace Back {
 		{
 			float u = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
 			if (u < 1.0f) return Lerp(max, min, 0.5f * u * u * u * u);
-			u -= 2.0f;
+			u--;
 			return Lerp(max, min, -0.5f * (u * u * u * u - 2.0f)); // InOutQuart from max to min
 		}
 	}
 
 	template<typename T>
-	T InQuintZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T InQuintZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -601,7 +619,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T OutQuintZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T OutQuintZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -622,7 +640,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T InOutQuintZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T InOutQuintZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -647,7 +665,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T InExpoZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T InExpoZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -666,7 +684,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T OutExpoZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T OutExpoZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -685,7 +703,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T InOutExpoZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T InOutExpoZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -710,7 +728,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T InCircZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T InCircZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -731,7 +749,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T OutCircZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T OutCircZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -752,7 +770,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T InOutCircZero(float t, float totaltime, const T& min, const T& max, float backRatio)
+	T InOutCircZero(const T& min, const T& max, float t, float totaltime, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -777,7 +795,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T InBackZero(float t, float totaltime, const T& min, const T& max, float s, float backRatio)
+	T InBackZero(const T& min, const T& max, float t, float totaltime, float s, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -798,7 +816,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T OutBackZero(float t, float totaltime, const T& min, const T& max, float s, float backRatio)
+	T OutBackZero(const T& min, const T& max, float t, float totaltime, float s, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -819,7 +837,7 @@ namespace Back {
 	}
 
 	template<typename T>
-	T InOutBackZero(float t, float totaltime, const T& min, const T& max, float s, float backRatio)
+	T InOutBackZero(const T& min, const T& max, float t, float totaltime, float s, float backRatio)
 	{
 		if (t <= 0.0f) return min;
 		if (t >= totaltime) return min;
@@ -844,7 +862,6 @@ namespace Back {
 		}
 	}
 }
-
 // ぷにぷに
 template Vector3 EaseAmplitudeScale<Vector3>(const Vector3& initScale, const float& easeT, const float& easeTime, const float& amplitude, const float& period);
 template Vector2 EaseAmplitudeScale<Vector2>(const Vector2& initScale, const float& easeT, const float& easeTime, const float& amplitude, const float& period);
