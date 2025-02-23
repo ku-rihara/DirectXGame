@@ -43,7 +43,6 @@ void GameScene::Init() {
 	enemyManager_->Init();
 	gamecamera_->Init();
 	howToOperate_->Init();
-
 	viewProjection_.Init();//ビュープロジェクション
 
 	///=======================================================================================

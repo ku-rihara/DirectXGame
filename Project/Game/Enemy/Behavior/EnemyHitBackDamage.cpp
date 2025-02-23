@@ -79,7 +79,7 @@ void EnemyHitBackDamage::Update() {
 		easing_.time += Frame::DeltaTimeRate();
 		archingbackEase_.time += Frame::DeltaTimeRate();
 		//のけぞり
-		preRotate_ = Back::InCubicZero(0.0f, pBaseEnemy_->GetParamater().archingbackValue, archingbackEase_.time, archingbackEase_.maxTime,archingbackEase_.backRatio);
+		preRotate_ = Back::OutCircZero(0.0f, pBaseEnemy_->GetParamater().archingbackValue, archingbackEase_.time, archingbackEase_.maxTime,archingbackEase_.backRatio);
 		//のけぞり適応
 		pBaseEnemy_->SetBodyRotateX(preRotate_);
 

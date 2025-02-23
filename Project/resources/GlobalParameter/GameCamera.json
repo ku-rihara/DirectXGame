@@ -2,10 +2,10 @@
     "GameCamera": {
         "backLashOffset_": [
             5.0,
-            15.800000190734863,
-            -35.0
+            17.100000381469727,
+            -37.29999923706055
         ],
-        "backLashRatio_": 5.0,
+        "backLashRatio_": 0.800000011920929,
         "backLashTime_": 0.5799999833106995,
         "firstOffset_": [
             5.0,

@@ -39,7 +39,7 @@ void GameCameraBackLash::Update() {
 		ease_.time += Frame::DeltaTimeRate();
 
 		/// いージんぐ適応
-		pGameCamera_->SetOffSet(Back::InCubicZero(pGameCamera_->GetParamater().firstOffset_, pGameCamera_->GetParamater().backLashOffset_,
+		pGameCamera_->SetOffSet(Back::OutCircZero(pGameCamera_->GetParamater().firstOffset_, pGameCamera_->GetParamater().backLashOffset_,
 			ease_.time, ease_.maxTime, ease_.backRatio));
 
 		// next

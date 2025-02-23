@@ -49,7 +49,7 @@ void BaseComboAattackBehavior::AnimationInit() {
     
     /// floatmotion
     floatEase_.time = 0.0f;
-    floatEase_.backRatio = 5.0f;
+    floatEase_.backRatio = 0.8f;
     floatEase_.maxTime = pPlayer_->GetPlayerParams().attackFloatEaseT;
     floatValue_ = pPlayer_->GetPlayerParams().attackFloatValue;
     tempFloatValue_ = 0.0f;
@@ -81,7 +81,7 @@ void BaseComboAattackBehavior::RotateMotionUpdate(const bool& isClockwise) {
 
 void BaseComboAattackBehavior::FloatAnimationUpdate() {
     floatEase_.time += Frame::DeltaTimeRate();
-    tempFloatValue_ = Back::InCubicZero(0.0f, floatValue_, floatEase_.time, floatEase_.maxTime, floatEase_.backRatio);
+    tempFloatValue_ = Back::OutQuintZero(0.0f, floatValue_, floatEase_.time, floatEase_.maxTime, floatEase_.backRatio);
     pPlayer_->SetHeadPosY(tempFloatValue_);
     if (floatEase_.time < floatEase_.maxTime)return;
     floatEase_.time = floatEase_.maxTime;
