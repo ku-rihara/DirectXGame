@@ -4,6 +4,7 @@
 #include"3d/ViewProjection.h"
 #include"base/WinApp.h"
 #include <DirectXMath.h>
+#include<numbers>
 using namespace DirectX;
 
 Matrix4x4 MakeIdentity4x4() {
@@ -457,23 +458,24 @@ return	MakeRotateAxisAngle(axis,angle);
 	
 }
 
-Vector3 ExtractEulerAngles(const Matrix4x4& matrix) {
-	Vector3 angles;
+Vector3 ExtractEulerAngles(const Matrix4x4& rotationMatrix) {
+	Vector3 eulerAngles;
 
-	// ピッチ (X軸回転)
-	angles.x = std::asin(-matrix.m[1][2]);
-
-	// コサインのチェック (Gimbal Lock 対策)
-	if (std::abs(std::cos(angles.x)) > 1e-6f) {
-		// ヨー (Y軸回転)
-		angles.y = std::atan2(matrix.m[0][2], matrix.m[2][2]);
-		// ロール (Z軸回転)
-		angles.z = std::atan2(matrix.m[1][0], matrix.m[1][1]);
-	} else {
-		// Gimbal Lock が発生した場合、Yaw を 0 にして Roll のみ調整
-		angles.y = 0.0f;
-		angles.z = std::atan2(-matrix.m[0][1], matrix.m[0][0]);
+	if (rotationMatrix.m[2][0] < 1) {
+		if (rotationMatrix.m[2][0] > -1) {
+			eulerAngles.y = asinf(rotationMatrix.m[2][0]);
+			eulerAngles.x = atan2f(-rotationMatrix.m[2][1], rotationMatrix.m[2][2]);
+			eulerAngles.z = atan2f(-rotationMatrix.m[1][0], rotationMatrix.m[0][0]);
+		} else { // rotationMatrix.m[2][0] <= -1
+			eulerAngles.y = -std::numbers::pi_v<float> / 2.0f;
+			eulerAngles.x = -atan2f(rotationMatrix.m[1][2], rotationMatrix.m[1][1]);
+			eulerAngles.z = 0;
+		}
+	} else { // rotationMatrix.m[2][0] >= 1
+		eulerAngles.y = std::numbers::pi_v<float> / 2;
+		eulerAngles.x = atan2f(rotationMatrix.m[1][2], rotationMatrix.m[1][1]);
+		eulerAngles.z = 0;
 	}
 
-	return angles;
+	return eulerAngles;
 }
