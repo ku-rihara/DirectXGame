@@ -76,8 +76,7 @@ void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection,
 
 	// カメラ行列を取得
 	Matrix4x4 cameraMatrix = viewProjection.GetCameraMatrix();
-	backToFrontMatrix_ = MakeRotateYMatrix(std::numbers::pi_v<float>); // 視点を反転
-
+	
 	// カメラ位置を取得し、オブジェクトとのベクトルを計算
 	Vector3 cameraPos = viewProjection.GetWorldPos();
 	Vector3 toCamera = { cameraPos.x - translation_.x, 0.0f, cameraPos.z - translation_.z };
@@ -87,7 +86,7 @@ void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection,
 	switch (billboardAxis) {
 	case BillboardType::XYZ:
 		// 完全なビルボード（カメラの回転を全適用）
-		billboardMatrix_ = backToFrontMatrix_ * cameraMatrix;
+		billboardMatrix_ =  cameraMatrix;
 
 		break;
 
