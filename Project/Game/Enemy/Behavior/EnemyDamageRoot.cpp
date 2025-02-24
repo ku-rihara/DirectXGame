@@ -12,7 +12,7 @@
 
 //初期化
 EnemyDamageRoot::EnemyDamageRoot(BaseEnemy* boss)
-	: BaseEnemyBehaivor("EnemyDamageRoot", boss) {
+	: BaseEnemyBehavior("EnemyDamageRoot", boss) {
 	
 	
 }

@@ -31,6 +31,12 @@ public:
 		float archingbackValue;
 		float archingbackRatio;
 		float archingbackTime;
+		float blowValue;
+		float blowValueY;
+		float blowTime;
+		float blowRotateSpeed;
+		float burstTime;
+		float blowGravity;
 	};
 	enum class Type {
 		NORMAL,
@@ -46,7 +52,7 @@ protected:
 	GameCamera* pGameCamera_;
 	std::unique_ptr<FindSprite>findSprite_;
 	std::unique_ptr<NotFindSprite>notFindSprite_;
-	std::unique_ptr<EnemyCollisionBox>enemyCollisionBox_;
+	std::unique_ptr<EnemyCollisionBox>collisionBox_;
 
 
 	bool isdeath_;
@@ -66,7 +72,7 @@ protected:
 	std::unique_ptr<ParticleEmitter>thrustEmit_;
 
 	/// behavior
-	std::unique_ptr<BaseEnemyBehaivor>damageBehavior_ = nullptr;
+	std::unique_ptr<BaseEnemyBehavior>damageBehavior_ = nullptr;
 	std::unique_ptr<BaseEnemyMoveBehavior>moveBehavior_ = nullptr;
 	
 	std::list<std::unique_ptr<Effect>> effects_;
@@ -103,9 +109,10 @@ public:
 	virtual void DisplaySprite(const ViewProjection& viewProjection);
 
 	/// Behavior
-	void ChangeBehavior    (std::unique_ptr<BaseEnemyBehaivor>behavior);
+	void ChangeBehavior    (std::unique_ptr<BaseEnemyBehavior>behavior);
 	void ChangeMoveBehavior(std::unique_ptr<BaseEnemyMoveBehavior>behavior);
 	void BackToDamageRoot  ();
+	void BehaviorChangeDeath();
 
 	/// ====================================================================
     /// Collision
@@ -132,6 +139,7 @@ public:
 	void SetParamater  (const Type&type,const Paramater& paramater);
 	void SetBodyRotateX(const float& r) { bodyTransform_.rotation_.x = r; }
 	void SetBodyColor(const Vector4& color);
+	void SetIsDeath(const bool& is) { isdeath_ = is; }
 
 private:
 	bool IsInView(const ViewProjection& viewProjection) const;

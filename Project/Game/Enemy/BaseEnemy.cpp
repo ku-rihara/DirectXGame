@@ -7,6 +7,7 @@
 #include"Behavior/EnemyThrustDamage.h"
 #include"Behavior/EnemyBoundDamage.h"
 #include"Behavior/EnemyDamageRoot.h"
+#include"Behavior/EnemyDeath.h"
 
 /// collisionBox
 #include"CollisionBox/AttackCollisionBox.h"
@@ -48,10 +49,10 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 
 
 	///collision
-	enemyCollisionBox_ = std::make_unique<EnemyCollisionBox>();
-	enemyCollisionBox_->Init();
-	enemyCollisionBox_->SetSize(Vector3(3.2f, 3.2f, 3.2f));
-	enemyCollisionBox_->IsAdapt(true);
+	collisionBox_ = std::make_unique<EnemyCollisionBox>();
+	collisionBox_->Init();
+	collisionBox_->SetSize(Vector3(3.2f, 3.2f, 3.2f));
+	collisionBox_->IsAdapt(true);
 
 	/// particleT
 	thrustName_ = "ThrustDamage";
@@ -93,15 +94,15 @@ void BaseEnemy::Update() {
 	thrustEmit_->Update();
 	FallEffectUpdate();
 
+	BehaviorChangeDeath();
+	//// 体力がなくなったら死亡
+	//if (hp_ <= 0) {
+	//	isdeath_ = true;
+	//	/*Audio::GetInstance()->PlayWave(deathSound_);*/
+	//}
 
-	// 体力がなくなったら死亡
-	if (hp_ <= 0) {
-		isdeath_ = true;
-		/*Audio::GetInstance()->PlayWave(deathSound_);*/
-	}
-
-	enemyCollisionBox_->SetPosition(GetWorldPosition());
-	enemyCollisionBox_->Update();
+	collisionBox_->SetPosition(GetWorldPosition());
+	collisionBox_->Update();
 	BaseObject::Update();
 }
 ///========================================================
@@ -274,13 +275,21 @@ void BaseEnemy::SetPlayer(Player* player) {
 }
 
 
-void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseEnemyBehaivor>behavior) {
+void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseEnemyBehavior>behavior) {
 	//引数で受け取った状態を次の状態としてセット
 	damageBehavior_ = std::move(behavior);
 }
 
 void BaseEnemy::ChangeMoveBehavior(std::unique_ptr<BaseEnemyMoveBehavior>behavior) {
 	moveBehavior_ = std::move(behavior);
+}
+
+void BaseEnemy::BehaviorChangeDeath() {
+	if (hp_ > 0) return;
+	if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())|| dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get()))return;
+	isCollision_ = false;
+	collisionBox_->SetIsCollision(false);
+	ChangeBehavior(std::make_unique<EnemyDeath>(this));
 }
 
 // 視界にいるか
@@ -308,16 +317,6 @@ void BaseEnemy::DamageForPar(const float& par) {
 	float decrementSize = HPMax_ * (par / 100.0f);
 	// HP減少
 	hp_ -= decrementSize;
-
-	////HPが0以下にならないように
-	//if (hp_ <= 0) {
-
-	//	hp_ = 0.0f;
-	//	isdeath_ = true;
-	//	//// 死亡処理
-	//	//DeathMethod();
-	//	//HP_ = 0.0f;
-	//}
 }
 
 void BaseEnemy::DamageEmit() {
@@ -379,7 +378,6 @@ void BaseEnemy::Fall(float& speed, const float& fallSpeedLimit, const float& gra
 		
 	}
 }
-
 
 void BaseEnemy::SetGameCamera(GameCamera* gamecamera) {
 	pGameCamera_ = gamecamera;

@@ -226,6 +226,9 @@
     <Filter Include="Game\GameCamera\ShakeState">
       <UniqueIdentifier>{9b037334-580c-496b-8f10-8dd932361185}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemy\Behevior\Damage">
+      <UniqueIdentifier>{d269b1c9-4fa2-49cd-99e9-ef7cc1bcd7fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -391,23 +394,8 @@
     <ClCompile Include="Game\CollisionBox\AttackCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyHitBackDamage.cpp">
-      <Filter>Game\Enemy\Behevior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyUpperDamage.cpp">
-      <Filter>Game\Enemy\Behevior</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackForth.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyStopDamage.cpp">
-      <Filter>Game\Enemy\Behevior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyThrustDamage.cpp">
-      <Filter>Game\Enemy\Behevior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyBoundDamage.cpp">
-      <Filter>Game\Enemy\Behevior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\HPBar\EnemyHPBar.cpp">
       <Filter>Game\Enemy\HPBsr</Filter>
@@ -441,9 +429,6 @@
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\EnemyChasePlayer.cpp">
       <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyDamageRoot.cpp">
-      <Filter>Game\Enemy\Behevior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\EnemySpawn.cpp">
       <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
@@ -594,6 +579,27 @@
     </ClCompile>
     <ClCompile Include="Game\GameCamera\Behavior\GameCameraBacklash.cpp">
       <Filter>Game\GameCamera\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\EnemyBoundDamage.cpp">
+      <Filter>Game\Enemy\Behevior\Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\EnemyDamageRoot.cpp">
+      <Filter>Game\Enemy\Behevior\Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\EnemyDeath.cpp">
+      <Filter>Game\Enemy\Behevior\Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\EnemyHitBackDamage.cpp">
+      <Filter>Game\Enemy\Behevior\Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\EnemyStopDamage.cpp">
+      <Filter>Game\Enemy\Behevior\Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\EnemyThrustDamage.cpp">
+      <Filter>Game\Enemy\Behevior\Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\EnemyUpperDamage.cpp">
+      <Filter>Game\Enemy\Behevior\Damage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -795,23 +801,8 @@
     <ClInclude Include="Game\CollisionBox\AttackCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyHitBackDamage.h">
-      <Filter>Game\Enemy\Behevior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyUpperDamage.h">
-      <Filter>Game\Enemy\Behevior</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackForth.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyStopDamage.h">
-      <Filter>Game\Enemy\Behevior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyThrustDamage.h">
-      <Filter>Game\Enemy\Behevior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyBoundDamage.h">
-      <Filter>Game\Enemy\Behevior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\HPBar\EnemyHPBar.h">
       <Filter>Game\Enemy\HPBsr</Filter>
@@ -845,9 +836,6 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\EnemyChasePlayer.h">
       <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyDamageRoot.h">
-      <Filter>Game\Enemy\Behevior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\EnemySpawn.h">
       <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
@@ -998,6 +986,27 @@
     </ClInclude>
     <ClInclude Include="Game\GameCamera\Behavior\GameCameraBacklash.h">
       <Filter>Game\GameCamera\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\EnemyBoundDamage.h">
+      <Filter>Game\Enemy\Behevior\Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\EnemyDamageRoot.h">
+      <Filter>Game\Enemy\Behevior\Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\EnemyDeath.h">
+      <Filter>Game\Enemy\Behevior\Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\EnemyHitBackDamage.h">
+      <Filter>Game\Enemy\Behevior\Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\EnemyStopDamage.h">
+      <Filter>Game\Enemy\Behevior\Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\EnemyThrustDamage.h">
+      <Filter>Game\Enemy\Behevior\Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\EnemyUpperDamage.h">
+      <Filter>Game\Enemy\Behevior\Damage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

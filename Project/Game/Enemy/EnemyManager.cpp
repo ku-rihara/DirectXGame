@@ -199,6 +199,13 @@ void EnemyManager::AddParmGroup() {
 		globalParameter_->AddItem(groupName_, "hitbackRotateTime" + std::to_string(int(i + 1)), paramaters_[i].archingbackTime);
 		globalParameter_->AddItem(groupName_, "hitbackRotateValue" + std::to_string(int(i + 1)), paramaters_[i].archingbackValue);
 		globalParameter_->AddItem(groupName_, "hitbackRotateBackRatio" + std::to_string(int(i + 1)), paramaters_[i].archingbackRatio);
+		globalParameter_->AddItem(groupName_, "blowValue_" + std::to_string(int(i + 1)), paramaters_[i].blowValue);
+		globalParameter_->AddItem(groupName_, "blowValueY_" + std::to_string(int(i + 1)), paramaters_[i].blowValueY);
+		globalParameter_->AddItem(groupName_, "blowTime" + std::to_string(int(i + 1)), paramaters_[i].blowTime);
+		globalParameter_->AddItem(groupName_, "blowRotateSpeed" + std::to_string(int(i + 1)), paramaters_[i].blowRotateSpeed);
+		globalParameter_->AddItem(groupName_, "burstTime" + std::to_string(int(i + 1)), paramaters_[i].burstTime);
+		globalParameter_->AddItem(groupName_, "blowGravity" + std::to_string(int(i + 1)), paramaters_[i].blowGravity);
+
 	}
 
 }
@@ -221,6 +228,13 @@ void EnemyManager::SetValues() {
 		globalParameter_->SetValue(groupName_, "hitbackRotateTime" + std::to_string(int(i + 1)), paramaters_[i].archingbackTime);
 		globalParameter_->SetValue(groupName_, "hitbackRotateValue" + std::to_string(int(i + 1)), paramaters_[i].archingbackValue);
 		globalParameter_->SetValue(groupName_, "hitbackRotateBackRatio" + std::to_string(int(i + 1)), paramaters_[i].archingbackRatio);
+		globalParameter_->SetValue(groupName_, "blowValue_" + std::to_string(int(i + 1)), paramaters_[i].blowValue);
+		globalParameter_->SetValue(groupName_, "blowValueY_" + std::to_string(int(i + 1)), paramaters_[i].blowValueY);
+		globalParameter_->SetValue(groupName_, "blowTime" + std::to_string(int(i + 1)), paramaters_[i].blowTime);
+		globalParameter_->SetValue(groupName_, "blowRotateSpeed" + std::to_string(int(i + 1)), paramaters_[i].blowRotateSpeed);
+		globalParameter_->SetValue(groupName_, "burstTime" + std::to_string(int(i + 1)), paramaters_[i].burstTime);
+		globalParameter_->SetValue(groupName_, "blowGravity" + std::to_string(int(i + 1)), paramaters_[i].blowGravity);
+
 	}
 
 }
@@ -242,6 +256,14 @@ void EnemyManager::ApplyGlobalParameter() {
 		paramaters_[i].archingbackValue = globalParameter_->GetValue<float>(groupName_, "hitbackRotateValue" + std::to_string(int(i + 1)));
 		paramaters_[i].archingbackRatio = globalParameter_->GetValue<float>(groupName_, "hitbackRotateBackRatio" + std::to_string(int(i + 1)));
 		paramaters_[i].archingbackTime = globalParameter_->GetValue<float>(groupName_, "hitbackRotateTime" + std::to_string(int(i + 1)));
+		paramaters_[i].blowValue = globalParameter_->GetValue<float>(groupName_, "blowValue_" + std::to_string(int(i + 1)));
+		paramaters_[i].blowValueY = globalParameter_->GetValue<float>(groupName_, "blowValueY_" + std::to_string(int(i + 1)));
+		paramaters_[i].blowTime = globalParameter_->GetValue<float>(groupName_, "blowTime" + std::to_string(int(i + 1)));
+		paramaters_[i].blowRotateSpeed = globalParameter_->GetValue<float>(groupName_, "blowRotateSpeed" + std::to_string(int(i + 1)));
+		paramaters_[i].blowGravity = globalParameter_->GetValue<float>(groupName_, "blowGravity" + std::to_string(int(i + 1)));
+		paramaters_[i].burstTime = globalParameter_->GetValue<float>(groupName_, "burstTime" + std::to_string(int(i + 1)));
+
+
 	}
 
 }
@@ -292,7 +314,23 @@ void EnemyManager::AdjustParm() {
 		ImGui::DragFloat("hitbackRotateTime", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].archingbackTime,
 			0.01f);
 
+		ImGui::DragFloat("blowValue", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].blowValue,
+			0.01f);
+
+		ImGui::DragFloat("blowValueY", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].blowValueY,
+			0.01f);
+
+		ImGui::DragFloat("blowRotateSpeed", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].blowRotateSpeed,
+			0.01f);
+
+		ImGui::DragFloat("burstTime", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].burstTime,
+			0.01f);
+
+		ImGui::DragFloat("blowGravity", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].blowGravity,
+			0.01f);
 		
+		ImGui::DragFloat("blowTime", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].blowTime,
+			0.01f);
 		ImGui::PopID();
 
 		///---------------------------------------------------------
@@ -330,6 +368,24 @@ void EnemyManager::AdjustParm() {
 			0.01f);
 
 		ImGui::DragFloat("hitbackRotateTime", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].archingbackTime,
+			0.01f);
+
+		ImGui::DragFloat("blowValue", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].blowValue,
+			0.01f);
+
+		ImGui::DragFloat("blowValueY", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].blowValueY,
+			0.01f);
+
+		ImGui::DragFloat("blowRotateSpeed", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].blowRotateSpeed,
+			0.01f);
+
+		ImGui::DragFloat("burstTime", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].burstTime,
+			0.01f);
+
+		ImGui::DragFloat("blowGravity", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].blowGravity,
+			0.01f);
+
+		ImGui::DragFloat("blowTime", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].blowTime,
 			0.01f);
 
 		ImGui::PopID();

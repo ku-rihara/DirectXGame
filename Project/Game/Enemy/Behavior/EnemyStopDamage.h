@@ -3,7 +3,7 @@
 #include"BaseEnemyBehavior.h"
 #include"Easing.h"
 
-class EnemyStopDamage : public BaseEnemyBehaivor {
+class EnemyStopDamage : public BaseEnemyBehavior {
 private:
 	
 private:

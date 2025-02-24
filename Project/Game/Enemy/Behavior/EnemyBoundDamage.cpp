@@ -12,11 +12,11 @@
 
 //初期化
 EnemyBoundDamage::EnemyBoundDamage(BaseEnemy* boss)
-	: BaseEnemyBehaivor("EnemyBoundDamage", boss) {
+	: BaseEnemyBehavior("EnemyBoundDamage", boss) {
 	
-	speed_ = 2.0f;
-	gravity_ = 8.8f;
-	fallSpeedLimit_ = -5.2f;
+	speed_ = 2.0f* kFrame_;
+	gravity_ = 8.8f * kFrame_;
+	fallSpeedLimit_ = 5.2f * kFrame_;
 
 	pBaseEnemy_->DamageEmit();
 	pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2(0, 0));
@@ -42,15 +42,16 @@ void EnemyBoundDamage::Update() {
 	/// ヒットバッグ
 	///---------------------------------------------------------
 		pBaseEnemy_->ThrustEmit();
-		// Yに加算
-		pBaseEnemy_->AddPosition(Vector3(0, speed_, 0));
+		//// Yに加算
+		//pBaseEnemy_->AddPosition(Vector3(0, speed_, 0));
 
 		// 回転
 		rotate_ += pBaseEnemy_->GetParamater().thrustRotateSpeed * Frame::DeltaTimeRate();
 		pBaseEnemy_->SetBodyRotateX(rotate_);
 
+		pBaseEnemy_->Jump(speed_, fallSpeedLimit_, gravity_);
 		// 加速する
-		speed_ = max(speed_ - (gravity_ * Frame::DeltaTimeRate()),fallSpeedLimit_);
+		/*speed_ = max(speed_ - (gravity_ * Frame::DeltaTimeRate()),fallSpeedLimit_);*/
 	
 		if (pBaseEnemy_->GetTransform().translation_.y > pBaseEnemy_->GetParamater().basePosY) break;
 

@@ -3,7 +3,7 @@
 #include"BaseEnemyBehavior.h"
 #include"Easing.h"
 
-class EnemyBoundDamage : public BaseEnemyBehaivor {
+class EnemyBoundDamage : public BaseEnemyBehavior {
 private:
 	enum class Step {
 		BOUND,
@@ -25,6 +25,8 @@ private:
 	float kStopTime_;
 
 	float rotate_;
+
+	const float kFrame_=60.0f;
 
 public:
 	//コンストラクタ

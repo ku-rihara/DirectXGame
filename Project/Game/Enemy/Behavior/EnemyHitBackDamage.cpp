@@ -11,7 +11,7 @@
 
 //初期化
 EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
-	: BaseEnemyBehaivor("EnemyHitBackDamage", boss) {
+	: BaseEnemyBehavior("EnemyHitBackDamage", boss) {
 
 	/// ヒットバックのパラメータ
 	initPos_ = pBaseEnemy_->GetWorldPosition();
@@ -46,31 +46,22 @@ void EnemyHitBackDamage::Update() {
 	switch (step_)
 	{
 
-	case Step::DIRECTIONSET:
 	/// ------------------------------------------------------
 	/// 向き計算
 	///---------------------------------------------------------
-
-		// ターゲットへのベクトル
-		direction_ = pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());
-
-		direction_.y = 0.0f;
-		direction_.Normalize();
-
-		// 目標角度を計算
-		objectiveAngle_ = std::atan2(-direction_.x, -direction_.z);
-
+	case Step::DIRECTIONSET:
+		AngleCaluclation();
+		
 		/// 吹っ飛ぶ距離を計算
 		backPos_ = initPos_ + (direction_ * -speed_);
 
 		step_ = Step::HITBACK;
 		break;
 
-	case Step::HITBACK:
-
 	/// ------------------------------------------------------
 	/// ヒットバッグ
 	///---------------------------------------------------------
+	case Step::HITBACK:
 
 		// 最短角度補間でプレイヤーの回転を更新
 		pBaseEnemy_->SetRotationY(LerpShortAngle(pBaseEnemy_->GetTransform().rotation_.y, objectiveAngle_, 0.5f));
@@ -97,10 +88,11 @@ void EnemyHitBackDamage::Update() {
 		
 
 		break;
-	case Step::RETUNROOT:
 	/// -------------------------------------------------------
 	/// 通常に戻す
 	///---------------------------------------------------------
+	case Step::RETUNROOT:
+	
 		pBaseEnemy_->SetBodyColor(Vector4(1.0f, 1, 1, 1.0f));
 		pBaseEnemy_->RotateInit();
 		pBaseEnemy_->BackToDamageRoot();

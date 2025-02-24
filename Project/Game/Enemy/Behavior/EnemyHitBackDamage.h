@@ -3,7 +3,7 @@
 #include"BaseEnemyBehavior.h"
 #include"Easing.h"
 
-class EnemyHitBackDamage : public BaseEnemyBehaivor {
+class EnemyHitBackDamage : public BaseEnemyBehavior {
 private:
 	enum class Step {
 		DIRECTIONSET,
@@ -13,12 +13,11 @@ private:
 private:
 
 	Step step_;
-	float objectiveAngle_;
+	
 	Vector3 initPos_;
 	Vector3 backPos_;
 	float speed_;
-	Vector3 direction_;
-
+	
 	//hitbackmove
 	Easing archingbackEase_;
 	float preRotate_;

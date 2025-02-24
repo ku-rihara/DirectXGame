@@ -12,7 +12,7 @@
 
 //初期化
 EnemyUpperDamage::EnemyUpperDamage(BaseEnemy* boss)
-	: BaseEnemyBehaivor("EnemyUpperDamage", boss) {
+	: BaseEnemyBehavior("EnemyUpperDamage", boss) {
 
 	
 	speed_ = pBaseEnemy_->GetParamater().upperJumpPower *60.0f; //1.35

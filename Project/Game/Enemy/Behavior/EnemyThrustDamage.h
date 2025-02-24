@@ -3,7 +3,7 @@
 #include"BaseEnemyBehavior.h"
 #include"Easing.h"
 
-class EnemyThrustDamage : public BaseEnemyBehaivor {
+class EnemyThrustDamage : public BaseEnemyBehavior {
 private:
 
 	enum class Step {

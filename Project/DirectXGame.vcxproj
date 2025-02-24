@@ -71,6 +71,7 @@
     <ClCompile Include="Game\Enemy\Behavior\EnemyBoundDamage.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyChasePlayer.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyDamageRoot.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\EnemyDeath.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyHitBackDamage.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyRoot.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemySpawn.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="Game\Enemy\Behavior\EnemyBoundDamage.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyChasePlayer.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyDamageRoot.h" />
+    <ClInclude Include="Game\Enemy\Behavior\EnemyDeath.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyHitBackDamage.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyRoot.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemySpawn.h" />

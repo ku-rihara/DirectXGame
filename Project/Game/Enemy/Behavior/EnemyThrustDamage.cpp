@@ -14,7 +14,7 @@
 
 //初期化
 EnemyThrustDamage::EnemyThrustDamage(BaseEnemy* boss)
-	: BaseEnemyBehaivor("EnemyThrustDamage", boss) {
+	: BaseEnemyBehavior("EnemyThrustDamage", boss) {
 
 	/// ヒットバックのパラメータ
 	initPos_ = pBaseEnemy_->GetWorldPosition();

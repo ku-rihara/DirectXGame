@@ -10,7 +10,7 @@
 
 //初期化
 EnemyStopDamage::EnemyStopDamage(BaseEnemy* boss)
-	: BaseEnemyBehaivor("EnemyStopDamage", boss) {
+	: BaseEnemyBehavior("EnemyStopDamage", boss) {
 
 	// 赤色
 	pBaseEnemy_->SetBodyColor(Vector4(0.9f, 0, 0, 0.9f));
