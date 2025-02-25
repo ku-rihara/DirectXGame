@@ -50,4 +50,5 @@ public:
     // ライトマネージャーを取得するためのメソッド
     PointLightManager* GetPointLightManager() { return pointLightManager_.get(); }
     SpotLightManager* GetSpotLightManager() { return spotLightManager_.get(); }
+    AmbientLight* GetAmbientLight() { return ambientLight_.get(); }
 };
