@@ -63,13 +63,12 @@ void Player::Init() {
 	AddParmGroup();
 	ApplyGlobalParameter();
 
-	/// ライティング
-	obj3d_->material_.materialData_->enableLighting = 2;
-
 	///* 武器生成
 	leftHand_ = std::make_unique<PlayerHandLeft>();
 	rightHand_ = std::make_unique<PlayerHandRight>();
 	headObj_.reset(Object3d::CreateModel("Player", ".obj"));
+	headObj_->material_.materialData_->enableLighting = 7;
+
 
 	// トランスフォーム初期化
 	headTransform_.Init();
@@ -118,12 +117,8 @@ void Player::Update() {
 		behavior_->Update();
 	}
 
-	// ライト位置
-	Light::GetInstance()->GetSpotLightManager()->GetSpotLight(0)->SetPosition(Vector3(
-		transform_.translation_.x,
-		transform_.translation_.y + 5.0f,
-		transform_.translation_.z));
-
+	//ライト位置セット
+	SetLightPos();
 
 	comboBehavior_->Update();	  ///　コンボ攻撃攻撃
 	MoveToLimit();                ///　移動制限
@@ -140,11 +135,9 @@ void Player::TitleUpdate() {
 	fallCrack_->Update();
 	FallEffectUpdate();
 
-	// ライト位置
-	Light::GetInstance()->GetSpotLightManager()->GetSpotLight(0)->SetPosition(Vector3(
-		transform_.translation_.x,
-		transform_.translation_.y + 5.0f,
-		transform_.translation_.z));
+	//ライト位置セット
+	SetLightPos();
+	
 
 	titleBehavior_->Update();
 	/// 行列更新
@@ -789,4 +782,12 @@ Vector3 Player::GetCollisionPos() const {
 void Player::SetRotateInit() {
 	headTransform_.rotation_ = { 0,0,0 };
 	headTransform_.translation_.y = 0.0f;
+}
+
+void Player::SetLightPos() {
+	// ライト位置
+	Light::GetInstance()->GetSpotLightManager()->GetSpotLight(0)->SetPosition(Vector3(
+		transform_.translation_.x,
+		transform_.translation_.y + 5.0f,
+		transform_.translation_.z));
 }

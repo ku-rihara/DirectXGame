@@ -23,8 +23,8 @@ void AmbientLight::Init(ID3D12Device* device) {
     lightData_ = nullptr;
     lightResource_->Map(0, nullptr, reinterpret_cast<void**>(&lightData_));
     // 初期化
-    lightData_->color = { 1.0f, 1.0f, 1.0f, 1.0f };
-    lightData_->intensity = 1.0f;
+    lightData_->color = { 0.396, 0.796, 0.180, 1.0f };
+    lightData_->intensity = 0.9f;
     lightData_->radius = 10.0f;     // 初期値：影響範囲
     lightData_->decay = 1.0f;      // 初期値：減衰率
     lightData_->position = { 0.0f, 0.0f, 0.0f }; // 初期値：中心位置

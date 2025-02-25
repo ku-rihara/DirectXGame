@@ -205,13 +205,13 @@ public:
 	/// =========================================================================================
 	/// getter
 	/// =========================================================================================
-	PlayerHandLeft* GetLeftHand()        const { return leftHand_.get(); }
-	PlayerHandRight* GetRightHand()       const { return rightHand_.get(); }
-	LockOn* GetLockOn()          const { return pLockOn_; }
-	GameCamera* GetGameCamera()      const { return pGameCamera_; }
-	PlayerParams        GetParamater()    const { return playerParams_; }
+	PlayerHandLeft*     GetLeftHand()        const { return leftHand_.get(); }
+	PlayerHandRight*    GetRightHand()       const { return rightHand_.get(); }
+	LockOn*             GetLockOn()          const { return pLockOn_; }
+	GameCamera*         GetGameCamera()      const { return pGameCamera_; }
+	PlayerParams           GetParamater()    const { return playerParams_; }
 	BasePlayerBehavior* GetBehavior()        const { return behavior_.get(); }
-	BaseTitleBehavior* GetTitleBehavior()   const { return titleBehavior_.get(); }
+	BaseTitleBehavior*  GetTitleBehavior()   const { return titleBehavior_.get(); }
 	uint32_t            GetCircleTexture()   const { return cirlceTexture_; }
 	/// =========================================================================================
 	/// setter
@@ -221,6 +221,7 @@ public:
 	void SetGameCamera(GameCamera* gamecamera);
 	void SetTitleBehavior();
 	void SetRotateInit();
+	void SetLightPos();
 
 	///* 
 	ComboParm GetNormalComboParm(const ComboNum& index)const { return normalComboParms_[static_cast<int>(index)]; }
