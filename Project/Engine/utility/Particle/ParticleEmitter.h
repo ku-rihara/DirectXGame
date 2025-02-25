@@ -56,6 +56,7 @@ private:
 	Parameters parameters_;
 	GroupParamaters groupParamaters_;
 
+	int preBillBordType_;
 	bool preIsShot_;
 	float currentTime_;                                   ///現在の時間
 	float intervalTime_;                                  ///発生するまでの間隔

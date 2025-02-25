@@ -97,6 +97,7 @@
         "isRotateforDirection": true,
         "isScalerScale": false,
         "isShot": false,
-        "moveSpeed": 0.0
+        "moveSpeed": 0.0,
+        "preBillBordType_": 0
     }
 }

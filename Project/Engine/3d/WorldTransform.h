@@ -16,10 +16,10 @@ class WorldTransform{
 public:
 
 	enum class BillboardType {
+		XYZ, //xyz
 		X, //x
 	    Y, //y
 		Z, //z
-		XYZ //xyz
 	};
 
 	struct AdaptRotate {
