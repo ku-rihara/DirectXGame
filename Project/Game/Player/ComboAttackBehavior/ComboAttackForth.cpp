@@ -167,15 +167,13 @@ void ComboAttackForth::Update() {
 	case Order::WAIT:
 	
 		waitTine_ += Frame::DeltaTimeRate();
-		pPlayer_->Fall(fallInitSpeed_);
+		pPlayer_->Fall(fallInitSpeed_,pPlayer_->GetParamater().normalJump.fallSpeedLimit, pPlayer_->GetParamater().normalJump.gravity);
 
 		if (pPlayer_->GetWorldPosition().y <= pPlayer_->InitY_) {
 			
 			if (waitTine_ >= pPlayer_->GetNormalComboParm(Player::ComboNum::FORTH).waitTime) {
-
-				
+		
 				Frame::SetTimeScale(1.0f);
-
 				pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
 			}
 		}

@@ -23,9 +23,9 @@ ComboAttackJumpFirst::ComboAttackJumpFirst(Player* player)
 
 	fallRotateY_ = 0.0f;
 
-	boundSpeed_ = 1.4f;
-	gravity_ = 8.8f;
-	boundFallSpeedLimit_ = -5.2f;
+	boundSpeed_ = pPlayer_->GetParamater().bountJump.jumpSpeed*60.0f;//1.4
+	gravity_ = pPlayer_->GetParamater().bountJump.gravity * 60.0f;//8.8
+	boundFallSpeedLimit_ = pPlayer_->GetParamater().bountJump.fallSpeedLimit * 60.0f;//5.2
 	rotateXSpeed_ = 11.0f;
 	rotateYSpeed_ = 20.0f;
 
@@ -119,10 +119,7 @@ void ComboAttackJumpFirst::Update() {
 		landRotateX_ += Frame::DeltaTimeRate() * rotateXSpeed_;
 		pPlayer_->SetRotationX(landRotateX_);
 
-		// Yに加算
-		pPlayer_->AddPosition(Vector3(0, boundSpeed_, 0));
-		// 加速する
-		boundSpeed_ = max(boundSpeed_ - (gravity_ * Frame::DeltaTimeRate()), boundFallSpeedLimit_);
+		pPlayer_->Jump(boundSpeed_, boundFallSpeedLimit_, gravity_);
 
 	// 次の振る舞い
 		if (pPlayer_->GetTransform().translation_.y > pPlayer_->InitY_) break;

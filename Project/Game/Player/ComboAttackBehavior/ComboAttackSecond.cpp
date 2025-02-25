@@ -59,7 +59,7 @@ void ComboAttackSecond::Update() {
 	/// スケール変化
 	BaseComboAattackBehavior::ScalingEaseUpdate();
 
-	pPlayer_->Move(pPlayer_->GetPlayerParams().moveSpeed);
+	pPlayer_->Move(pPlayer_->GetParamater().moveSpeed);
 
 
 	switch (order_) {

@@ -18,7 +18,7 @@ PlayerRoot::PlayerRoot(Player* boss)
 	/// ===================================================
 	///変数初期化
 	/// ===================================================
-	speed_ = pPlayer_->GetPlayerParams().moveSpeed;
+	speed_ = pPlayer_->GetParamater().moveSpeed;
 
 }
 
@@ -31,14 +31,14 @@ void PlayerRoot::Update() {
 
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
 		if ((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_Y)) {
-			pPlayer_->Move(pPlayer_->GetPlayerParams().moveSpeed *2.4f);
+			pPlayer_->Move(pPlayer_->GetParamater().moveSpeed *2.4f);
 		}
 		else {
-			pPlayer_->Move(pPlayer_->GetPlayerParams().moveSpeed);
+			pPlayer_->Move(pPlayer_->GetParamater().moveSpeed);
 		}
 	}
 	else {
-		pPlayer_->Move(pPlayer_->GetPlayerParams().moveSpeed);
+		pPlayer_->Move(pPlayer_->GetParamater().moveSpeed);
 	}
 
 	//　ジャンプに切り替え

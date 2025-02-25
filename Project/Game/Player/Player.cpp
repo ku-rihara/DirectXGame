@@ -111,7 +111,7 @@ void Player::Update() {
 
 	fallCrack_->SetTargetPosition(Vector3(GetWorldPosition().x, 0.0f, GetWorldPosition().z));
 	fallCrack_->Update();
-	/*fallCrack_->EditorUpdate();*/
+	fallCrack_->EditorUpdate();
 
 	/// 振る舞い処理(コンボ攻撃中は中止)
 	if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
@@ -363,35 +363,33 @@ void Player::MoveToLimit() {
 
 
 /// ===================================================
-///  Player Jump
+///   Jump
 /// ===================================================
-void Player::Jump(float& speed) {
+void Player::Jump(float& speed, const float& fallSpeedLimit, const float& gravity) {
 	// 移動
-	transform_.translation_.y += speed * Frame::DeltaTime();
-	Fall(speed, true);
+	transform_.translation_.y += speed * Frame::DeltaTimeRate();
+	Fall(speed, fallSpeedLimit, gravity, true);
 
 }
 
 ///=========================================================
 ///　落ちる
 ///==========================================================
-void Player::Fall(float& speed, const bool& isJump) {
+void Player::Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump) {
 
 	if (!isJump) {
 		// 移動
-		transform_.translation_.y += speed * Frame::DeltaTime();
+		transform_.translation_.y += speed * Frame::DeltaTimeRate();
 	}
 
 	// 加速する
-	speed = max(speed - (playerParams_.gravity * Frame::DeltaTime()), -playerParams_.fallSpeedLimit);
+	speed = max(speed - (gravity * Frame::DeltaTimeRate()), -fallSpeedLimit);
 
 	// 着地
 	if (transform_.translation_.y <= Player::InitY_) {
 		transform_.translation_.y = Player::InitY_;
 		speed = 0.0f;
-		if (!dynamic_cast<PlayerJump*>(behavior_.get()))return;
-		// ジャンプ終了
-		ChangeBehavior(std::make_unique<PlayerRoot>(this));
+
 	}
 }
 
@@ -410,18 +408,30 @@ void Player::AdjustParm() {
 
 		///　Floatのパラメータ
 		ImGui::SeparatorText("FloatParamater");
-		ImGui::DragFloat("jumpSpeed", &playerParams_.jumpSpeed, 0.01f);
+		ImGui::SeparatorText("Normal");
+		ImGui::DragFloat("jumpSpeed", &playerParams_.normalJump.jumpSpeed, 0.01f);
 		ImGui::DragFloat("MoveSpeed", &playerParams_.moveSpeed, 0.01f);
-		ImGui::DragFloat("Gravity", &playerParams_.gravity, 0.01f);
+		ImGui::DragFloat("Gravity", &playerParams_.normalJump.gravity, 0.01f);
 		ImGui::DragFloat("FallSpeed", &playerParams_.fallSpeed, 0.01f);
-		ImGui::DragFloat("fallSpeedLimit", &playerParams_.fallSpeedLimit, 0.1f);
+		ImGui::DragFloat("fallSpeedLimit", &playerParams_.normalJump.fallSpeedLimit, 0.1f);
+		ImGui::SeparatorText("FurstPunch");
 		ImGui::DragFloat("rushDistance", &playerParams_.rushDistance, 0.01f);
 		ImGui::DragFloat("rushEaseMax", &playerParams_.rushEaseMax, 0.01f, 0);
-		ImGui::DragFloat("UpperPosY", &playerParams_.upperPosY, 0.1f);
 		ImGui::SliderAngle("attackRotate", &playerParams_.attackRotate, 0, 720);
 		ImGui::DragFloat("attackRotateEaseT", &playerParams_.attackRotateEaseT, 0.01f);
 		ImGui::DragFloat("attackFloatEaseT", &playerParams_.attackFloatEaseT, 0.01f);
 		ImGui::DragFloat("attackFloatValue", &playerParams_.attackFloatValue, 0.01f);
+		ImGui::SeparatorText("Upper");
+		ImGui::DragFloat("BackLashEaseTime", &playerParams_.upperParm.BackLashEaseTime, 0.01f);
+		ImGui::DragFloat("BackLashValue", &playerParams_.upperParm.BackLashValue, 0.01f);
+		ImGui::DragFloat("jumpPowerU", &playerParams_.upperJump.jumpSpeed, 0.01f);
+		ImGui::DragFloat("gravityU", &playerParams_.upperJump.gravity, 0.01f);
+		ImGui::DragFloat("fallSpeedLimitU", &playerParams_.upperJump.fallSpeedLimit, 0.01f);
+		ImGui::DragFloat("UpperPosY", &playerParams_.upperPosY, 0.1f);
+		ImGui::SeparatorText("Bound");
+		ImGui::DragFloat("jumpPowerB", &playerParams_.bountJump.jumpSpeed, 0.01f);
+		ImGui::DragFloat("gravityB", &playerParams_.bountJump.gravity, 0.01f);
+		ImGui::DragFloat("fallSpeedLimitB", &playerParams_.bountJump.fallSpeedLimit, 0.01f);
 
 		/// コンボパラメータ
 		if (ImGui::CollapsingHeader("NormalCombo")) {
@@ -537,6 +547,9 @@ void Player::ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior>behavi
 void Player::ChangeTitleBehavior(std::unique_ptr<BaseTitleBehavior>behavior) {
 	titleBehavior_ = std::move(behavior);
 }
+void Player::ChangeCombBoRoot() {
+	ChangeComboBehavior(std::make_unique<ComboAttackRoot>(this));
+}
 
 ///=================================================================================
 /// ロード
@@ -560,18 +573,27 @@ void Player::ParmLoadForImGui() {
 void Player::AddParmGroup() {
 
 	globalParameter_->AddItem(groupName_, "Translate", playerParams_.startPos_);
-	globalParameter_->AddItem(groupName_, "JumpSpeed", playerParams_.jumpSpeed);
+	globalParameter_->AddItem(groupName_, "JumpSpeed", playerParams_.normalJump.jumpSpeed);
 	globalParameter_->AddItem(groupName_, "rushDistance", playerParams_.rushDistance);
 	globalParameter_->AddItem(groupName_, "rushEaseMax", playerParams_.rushEaseMax);
 	globalParameter_->AddItem(groupName_, "UpperPosY", playerParams_.upperPosY);
 	globalParameter_->AddItem(groupName_, "MoveSpeed", playerParams_.moveSpeed);
-	globalParameter_->AddItem(groupName_, "Gravity", playerParams_.gravity);
+	globalParameter_->AddItem(groupName_, "Gravity", playerParams_.normalJump.gravity);
 	globalParameter_->AddItem(groupName_, "FallSpeed", playerParams_.fallSpeed);
-	globalParameter_->AddItem(groupName_, "FallSpeedLimit", playerParams_.fallSpeedLimit);
+	globalParameter_->AddItem(groupName_, "FallSpeedLimit", playerParams_.normalJump.fallSpeedLimit);
 	globalParameter_->AddItem(groupName_, "attackRotate", playerParams_.attackRotate);
 	globalParameter_->AddItem(groupName_, "attackRotateEaseT", playerParams_.attackRotateEaseT);
 	globalParameter_->AddItem(groupName_, "attackFloatEaseT_", playerParams_.attackFloatEaseT);
 	globalParameter_->AddItem(groupName_, "attackFloatValue_", playerParams_.attackFloatValue);
+	globalParameter_->AddItem(groupName_, "upperBackLashEaseTime_", playerParams_.upperParm.BackLashEaseTime);
+	globalParameter_->AddItem(groupName_, "upperBackLashValue_", playerParams_.upperParm.BackLashValue);
+	globalParameter_->AddItem(groupName_, "jumpPowerU", playerParams_.upperJump.jumpSpeed);
+	globalParameter_->AddItem(groupName_, "gravityU", playerParams_.upperJump.gravity);
+	globalParameter_->AddItem(groupName_, "fallSpeedLimitU", playerParams_.upperJump.fallSpeedLimit);
+	globalParameter_->AddItem(groupName_, "jumpSpeedB", playerParams_.bountJump.jumpSpeed);
+	globalParameter_->AddItem(groupName_, "gravityB", playerParams_.bountJump.gravity);
+	globalParameter_->AddItem(groupName_, "fallSpeedLimitB", playerParams_.bountJump.fallSpeedLimit);
+
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
@@ -595,18 +617,27 @@ void Player::AddParmGroup() {
 void Player::SetValues() {
 
 	globalParameter_->SetValue(groupName_, "Translate", playerParams_.startPos_);
-	globalParameter_->SetValue(groupName_, "JumpSpeed", playerParams_.jumpSpeed);
+	globalParameter_->SetValue(groupName_, "JumpSpeed", playerParams_.normalJump.jumpSpeed);
 	globalParameter_->SetValue(groupName_, "rushDistance", playerParams_.rushDistance);
 	globalParameter_->SetValue(groupName_, "rushEaseMax", playerParams_.rushEaseMax);
 	globalParameter_->SetValue(groupName_, "UpperPosY", playerParams_.upperPosY);
 	globalParameter_->SetValue(groupName_, "MoveSpeed", playerParams_.moveSpeed);
-	globalParameter_->SetValue(groupName_, "Gravity", playerParams_.gravity);
+	globalParameter_->SetValue(groupName_, "Gravity", playerParams_.normalJump.gravity);
 	globalParameter_->SetValue(groupName_, "FallSpeed", playerParams_.fallSpeed);
-	globalParameter_->SetValue(groupName_, "FallSpeedLimit", playerParams_.fallSpeedLimit);
+	globalParameter_->SetValue(groupName_, "FallSpeedLimit", playerParams_.normalJump.fallSpeedLimit);
 	globalParameter_->SetValue(groupName_, "attackRotate", playerParams_.attackRotate);
 	globalParameter_->SetValue(groupName_, "attackRotateEaseT", playerParams_.attackRotateEaseT);
 	globalParameter_->SetValue(groupName_, "attackFloatEaseT_", playerParams_.attackFloatEaseT);
 	globalParameter_->SetValue(groupName_, "attackFloatValue_", playerParams_.attackFloatValue);
+	globalParameter_->SetValue(groupName_, "upperBackLashEaseTime_", playerParams_.upperParm.BackLashEaseTime);
+	globalParameter_->SetValue(groupName_, "upperBackLashValue_", playerParams_.upperParm.BackLashValue);
+	globalParameter_->SetValue(groupName_, "jumpPowerU", playerParams_.upperJump.jumpSpeed);
+	globalParameter_->SetValue(groupName_, "gravityU", playerParams_.upperJump.gravity);
+	globalParameter_->SetValue(groupName_, "fallSpeedLimitU", playerParams_.upperJump.fallSpeedLimit);
+	globalParameter_->SetValue(groupName_, "jumpSpeedB", playerParams_.bountJump.jumpSpeed);
+	globalParameter_->SetValue(groupName_, "gravityB", playerParams_.bountJump.gravity);
+	globalParameter_->SetValue(groupName_, "fallSpeedLimitB", playerParams_.bountJump.fallSpeedLimit);
+
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
@@ -630,18 +661,30 @@ void Player::SetValues() {
 void Player::ApplyGlobalParameter() {
 
 	playerParams_.startPos_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
-	playerParams_.jumpSpeed = globalParameter_->GetValue<float>(groupName_, "JumpSpeed");
+	playerParams_.normalJump.jumpSpeed = globalParameter_->GetValue<float>(groupName_, "JumpSpeed");
 	playerParams_.rushDistance = globalParameter_->GetValue<float>(groupName_, "rushDistance");
 	playerParams_.rushEaseMax = globalParameter_->GetValue<float>(groupName_, "rushEaseMax");
 	playerParams_.upperPosY = globalParameter_->GetValue<float>(groupName_, "UpperPosY");
 	playerParams_.moveSpeed = globalParameter_->GetValue<float>(groupName_, "MoveSpeed");
-	playerParams_.gravity = globalParameter_->GetValue<float>(groupName_, "Gravity");
+	playerParams_.normalJump.gravity = globalParameter_->GetValue<float>(groupName_, "Gravity");
 	playerParams_.fallSpeed = globalParameter_->GetValue<float>(groupName_, "FallSpeed");
-	playerParams_.fallSpeedLimit = globalParameter_->GetValue<float>(groupName_, "FallSpeedLimit");
+	playerParams_.normalJump.fallSpeedLimit = globalParameter_->GetValue<float>(groupName_, "FallSpeedLimit");
 	playerParams_.attackRotateEaseT = globalParameter_->GetValue<float>(groupName_, "attackRotateEaseT");
 	playerParams_.attackRotate = globalParameter_->GetValue<float>(groupName_, "attackRotate");
 	playerParams_.attackFloatEaseT = globalParameter_->GetValue<float>(groupName_, "attackFloatEaseT_");
 	playerParams_.attackFloatValue = globalParameter_->GetValue<float>(groupName_, "attackFloatValue_");
+	playerParams_.upperParm.BackLashValue = globalParameter_->GetValue<float>(groupName_, "upperBackLashValue_");
+	playerParams_.upperParm.BackLashEaseTime = globalParameter_->GetValue<float>(groupName_, "upperBackLashEaseTime_");
+	playerParams_.upperJump.jumpSpeed = globalParameter_->GetValue<float>(groupName_, "jumpPowerU");
+
+	playerParams_.bountJump.fallSpeedLimit = globalParameter_->GetValue<float>(groupName_, "fallSpeedLimitB");
+	playerParams_.bountJump.gravity = globalParameter_->GetValue<float>(groupName_, "gravityB");
+	playerParams_.bountJump.jumpSpeed = globalParameter_->GetValue<float>(groupName_, "jumpSpeedB");
+
+	playerParams_.upperJump.fallSpeedLimit = globalParameter_->GetValue<float>(groupName_, "fallSpeedLimitU");
+	playerParams_.upperJump.gravity = globalParameter_->GetValue<float>(groupName_, "gravityU");
+	playerParams_.upperJump.jumpSpeed = globalParameter_->GetValue<float>(groupName_, "jumpPowerU");
+
 
 	/// コンボ持続時間
 	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
@@ -741,4 +784,9 @@ Vector3 Player::GetCollisionPos() const {
 	// ワールド座標に変換
 	Vector3 worldPos = MatrixTransform(offset, transform_.matWorld_);
 	return worldPos;
+}
+
+void Player::SetRotateInit() {
+	headTransform_.rotation_ = { 0,0,0 };
+	headTransform_.translation_.y = 0.0f;
 }

@@ -103,8 +103,6 @@ void TitleScene::Update() {
 			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 		}
 	}
-
-	
 }
 
 void TitleScene::ChangeForJoyState() {

@@ -32,7 +32,7 @@
 /// </summary>
 class LockOn;
 class GameCamera;
-class Player : public BaseObject,public AABBCollider{
+class Player : public BaseObject, public AABBCollider {
 
 
 public:
@@ -44,17 +44,29 @@ public:
 	};
 
 private:
+
+	struct UpperParm {
+		float BackLashValue;
+		float BackLashEaseTime;
+		float nextWaitTime;
+	};
+	struct JumpParm {
+		float jumpSpeed;
+		float gravity;
+		float fallSpeedLimit;
+	};
 	///Paramater構造体
 	struct PlayerParams {
 		Vector3 startPos_;
-		float jumpSpeed;
 		float rushDistance;
 		float rushEaseMax;
-		float upperPosY ;
-		float moveSpeed ;
-		float gravity ;
+		float upperPosY;
+		UpperParm upperParm;
+		JumpParm normalJump;
+		JumpParm bountJump;
+		JumpParm upperJump;
+		float moveSpeed;
 		float fallSpeed;
-		float fallSpeedLimit;
 		float attackRotate;
 		float attackRotateEaseT;
 		float attackFloatValue;
@@ -68,7 +80,7 @@ private:
 	};
 
 private: ///*other class
-	
+
 	/// グローバルなパラメータ
 	GlobalParameter* globalParameter_;            /// グローバルパラメータ
 	const std::string groupName_ = "Player";      /// グループ名
@@ -88,8 +100,8 @@ private: ///*other class
 	uint32_t crackTexture_;
 
 	/// other class
-	LockOn*                            pLockOn_;       /// LockOnクラス
-	GameCamera*                        pGameCamera_;   /// ゲームカメラポインタ
+	LockOn* pLockOn_;       /// LockOnクラス
+	GameCamera* pGameCamera_;   /// ゲームカメラポインタ
 	std::unique_ptr<PlayerHandLeft>    leftHand_;      /// 左手
 	std::unique_ptr<PlayerHandRight>   rightHand_;     /// 右手
 	std::unique_ptr<Object3d>          headObj_;       /// 頭
@@ -146,20 +158,21 @@ public:
 	void    UpdateMatrix();                               ///　行列更新
 
 	//* ジャンプ                             
-	void Jump(float& speed);                              /// ジャンプ
-	void Fall(float& speed, const bool& isJump = false);  /// 落ちる
+	void Jump(float& speed, const float& fallSpeedLimit, const float& gravity);                              /// ジャンプ
+	void Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump = false);  /// 落ちる
 
 	///* 振る舞い切り替え
 	void ChangeBehavior(std::unique_ptr<BasePlayerBehavior>behavior);
 	void ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior>behavior);
 	void ChangeTitleBehavior(std::unique_ptr<BaseTitleBehavior>behavior);
+	void ChangeCombBoRoot();
 
 	//* エフェクト
 	void FallParticleEmit();
 	void FallEffectUpdate();
 	void FallEffectInit(const Vector3& pos);
-             
-	
+
+
 	///* ダメージ
 	void TakeDamage();          /// ダメージ受ける     
 	void DamageRendition();     /// ダメージリアクション
@@ -178,9 +191,9 @@ public:
 	void AdjustParm();
 
 	/// ====================================================================
-    /// Collision
-    /// ====================================================================
-	void OnCollisionStay ([[maybe_unused]] BaseCollider* other) override;
+	/// Collision
+	/// ====================================================================
+	void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 	Vector3 GetCollisionPos() const override;
 
 	/// <summary>
@@ -193,25 +206,26 @@ public:
 	/// =========================================================================================
 	/// getter
 	/// =========================================================================================
-	PlayerHandLeft*     GetLeftHand()        const        { return leftHand_.get();  }
-	PlayerHandRight*    GetRightHand()       const        { return rightHand_.get(); }
-	LockOn*             GetLockOn()          const        { return pLockOn_;   }
-	GameCamera*         GetGameCamera()      const        {return pGameCamera_;}
-	PlayerParams        GetPlayerParams()    const        { return playerParams_; }
-	BasePlayerBehavior* GetBehavior()        const        { return behavior_.get();}
-	BaseTitleBehavior*  GetTitleBehavior()   const        { return titleBehavior_.get(); }
-	uint32_t            GetCircleTexture()   const        { return cirlceTexture_; }
+	PlayerHandLeft* GetLeftHand()        const { return leftHand_.get(); }
+	PlayerHandRight* GetRightHand()       const { return rightHand_.get(); }
+	LockOn* GetLockOn()          const { return pLockOn_; }
+	GameCamera* GetGameCamera()      const { return pGameCamera_; }
+	PlayerParams        GetParamater()    const { return playerParams_; }
+	BasePlayerBehavior* GetBehavior()        const { return behavior_.get(); }
+	BaseTitleBehavior* GetTitleBehavior()   const { return titleBehavior_.get(); }
+	uint32_t            GetCircleTexture()   const { return cirlceTexture_; }
 	/// =========================================================================================
 	/// setter
 	/// =========================================================================================
 	void SetViewProjection(const ViewProjection* viewProjection) { viewProjection_ = viewProjection; }
-	void SetLockOn        (LockOn* lockon); 
-	void SetGameCamera    (GameCamera*gamecamera);
-	void SetTitleBehavior ();
+	void SetLockOn(LockOn* lockon);
+	void SetGameCamera(GameCamera* gamecamera);
+	void SetTitleBehavior();
+	void SetRotateInit();
 
 	///* 
-	ComboParm GetNormalComboParm(const ComboNum& index)const {return normalComboParms_[static_cast<int>(index)];}
-	ComboParm GetJumpComboParm(const ComboNum& index)const { return jumpComboParms_[static_cast<int>(index)];}
+	ComboParm GetNormalComboParm(const ComboNum& index)const { return normalComboParms_[static_cast<int>(index)]; }
+	ComboParm GetJumpComboParm(const ComboNum& index)const { return jumpComboParms_[static_cast<int>(index)]; }
 
 	void SetHeadPosY(const float& posy) { headTransform_.translation_.y = posy; }
 	void SetHeadRotateX(const float& zrotate) { headTransform_.rotation_.x = zrotate; }

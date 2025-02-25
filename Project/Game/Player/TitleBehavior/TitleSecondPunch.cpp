@@ -68,11 +68,11 @@ void TitleSecondPunch::Update() {
 
 		// 突進の動き
 		pPlayer_->SetWorldPosition(
-			EaseInSine(initPos_, rushPos_, rushEase_.time, pPlayer_->GetPlayerParams().rushEaseMax));
+			EaseInSine(initPos_, rushPos_, rushEase_.time, pPlayer_->GetParamater().rushEaseMax));
 
 		/// パンチオーダーに移行
-		if (rushEase_.time >= pPlayer_->GetPlayerParams().rushEaseMax) {
-			rushEase_.time =  pPlayer_->GetPlayerParams().rushEaseMax;
+		if (rushEase_.time >= pPlayer_->GetParamater().rushEaseMax) {
+			rushEase_.time =  pPlayer_->GetParamater().rushEaseMax;
 
 			/// パンチ座標セット
 			rHandStartPos_ = pPlayer_->GetRightHand()->GetTransform().translation_;

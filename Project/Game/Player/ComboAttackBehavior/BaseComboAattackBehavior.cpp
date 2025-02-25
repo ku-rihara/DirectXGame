@@ -37,8 +37,8 @@ void BaseComboAattackBehavior::AnimationInit() {
     //rotate
     rotateEaseT_ = 0.0f;
     tempRotateValue_ = 0.0f;
-    pPlayer_->SetHeadRotateY(0.0f);
-    rotateValue_ = pPlayer_->GetPlayerParams().attackRotate;
+    pPlayer_->SetRotateInit();
+    rotateValue_ = pPlayer_->GetParamater().attackRotate;
 
     //scaling
     startEasing_.time = 0.0f;
@@ -50,11 +50,10 @@ void BaseComboAattackBehavior::AnimationInit() {
     /// floatmotion
     floatEase_.time = 0.0f;
     floatEase_.backRatio = 0.8f;
-    floatEase_.maxTime = pPlayer_->GetPlayerParams().attackFloatEaseT;
-    floatValue_ = pPlayer_->GetPlayerParams().attackFloatValue;
+    floatEase_.maxTime = pPlayer_->GetParamater().attackFloatEaseT;
+    floatValue_ = pPlayer_->GetParamater().attackFloatValue;
     tempFloatValue_ = 0.0f;
-    pPlayer_->SetHeadPosY(0.0f);
- 
+   
 }
 
 void BaseComboAattackBehavior::ScalingEaseUpdate() {
@@ -66,7 +65,7 @@ void BaseComboAattackBehavior::ScalingEaseUpdate() {
 
 void BaseComboAattackBehavior::RotateMotionUpdate(const bool& isClockwise) {
     rotateEaseT_ += Frame::DeltaTimeRate();
-    tempRotateValue_ = EaseInSine(0.0f, rotateValue_, rotateEaseT_, pPlayer_->GetPlayerParams().attackRotateEaseT);
+    tempRotateValue_ = EaseInSine(0.0f, rotateValue_, rotateEaseT_, pPlayer_->GetParamater().attackRotateEaseT);
 
     if (isClockwise) {
         pPlayer_->SetHeadRotateY(tempRotateValue_);
@@ -74,8 +73,8 @@ void BaseComboAattackBehavior::RotateMotionUpdate(const bool& isClockwise) {
         pPlayer_->SetHeadRotateY(-tempRotateValue_);
     }
 
-    if (rotateEaseT_ < pPlayer_->GetPlayerParams().attackRotateEaseT) return;
-    rotateEaseT_ = pPlayer_->GetPlayerParams().attackRotateEaseT;
+    if (rotateEaseT_ < pPlayer_->GetParamater().attackRotateEaseT) return;
+    rotateEaseT_ = pPlayer_->GetParamater().attackRotateEaseT;
     pPlayer_->SetHeadRotateY(0.0f);
 }
 

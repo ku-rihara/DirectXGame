@@ -38,7 +38,7 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	/// parm
 	rushEase_.time = 0.0f;
 	punchEase_.time = 0.0f;
-	speed_ = pPlayer_->GetPlayerParams().rushDistance;
+	speed_ = pPlayer_->GetParamater().rushDistance;
 	waitTine_ = 0.0f;
 
 	//　モーション
@@ -63,7 +63,7 @@ void ComboAttackFirst::Update() {
 	BaseComboAattackBehavior::ScalingEaseUpdate();
 
 	// 攻撃中の移動
-	pPlayer_->Move(pPlayer_->GetPlayerParams().moveSpeed);
+	pPlayer_->Move(pPlayer_->GetParamater().moveSpeed);
 
 
 	switch (order_) {
@@ -82,11 +82,11 @@ void ComboAttackFirst::Update() {
 
 		// 突進の動き
 		pPlayer_->SetWorldPosition(
-			EaseInSine(initPos_, rushPos_, rushEase_.time, pPlayer_->GetPlayerParams().rushEaseMax));
+			EaseInSine(initPos_, rushPos_, rushEase_.time, pPlayer_->GetParamater().rushEaseMax));
 
 		/// パンチオーダーに移行
-		if (rushEase_.time >= pPlayer_->GetPlayerParams().rushEaseMax) {
-			rushEase_.time = pPlayer_->GetPlayerParams().rushEaseMax;
+		if (rushEase_.time >= pPlayer_->GetParamater().rushEaseMax) {
+			rushEase_.time = pPlayer_->GetParamater().rushEaseMax;
 
 			/// パンチ座標セット
 			rHandStartPos_ = pPlayer_->GetRightHand()->GetTransform().translation_;
