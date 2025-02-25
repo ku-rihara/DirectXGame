@@ -96,7 +96,7 @@ void Player::Init() {
 	/// 通常モードから
 	ChangeBehavior(std::make_unique<PlayerRoot>(this));
 	ChangeComboBehavior(std::make_unique<ComboAttackRoot>(this));
-	/*ChangeTitleBehavior(std::make_unique<TitleFirstFall>(this));*/
+	HeadLightSetting();
 }
 
 ///=========================================================
@@ -104,6 +104,7 @@ void Player::Init() {
 ///==========================================================
 void Player::Update() {
 	prePos_ = GetWorldPosition();// 前フレームの座標
+	HeadLightSetting();
 
 	// 落ちるパーティクルエミッター
 	fallEmitter_->SetTargetPosition(GetWorldPosition());
@@ -794,5 +795,9 @@ void Player::SetLightPos() {
 }
 
 void Player::HeadLightSetting() {
-	Light::GetInstance().
+	if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
+		Light::GetInstance()->GetAmbientLight()->SetIntensity(0.0f);
+	} else {
+		Light::GetInstance()->GetAmbientLight()->SetIntensity(0.9f);
+	}
 }
