@@ -1,5 +1,6 @@
 /// behavior
 #include"ComboAttackThird.h"
+#include"ComboAttackHalfThird.h"
 #include"ComboAttackRoot.h"
 #include"ComboAttackForth.h"
 #include<numbers>
@@ -29,8 +30,7 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	upperJumpEaseT_ = 0.0f;
 	collisionSize_ = 4.5f;
 	kCollisionAliveTime_ = 0.3f;
-	rotateSpeed_ = 11.0f;
-
+	
 	/// collisionBox
 	CollisionInit();
 
@@ -56,7 +56,6 @@ ComboAttackThird::ComboAttackThird(Player* player)
 
 	// 振る舞い順序初期化
 	order_ = Order::UPPER;
-
 	fallInitSpeed_ = 0.0f;
 
 }
@@ -122,7 +121,7 @@ void ComboAttackThird::Update() {
 		waitTine_ += Frame::DeltaTime();
 
 		/// コンボ途切れ
-		if (waitTine_ >= pPlayer_->GetParamater().upperParm.nextWaitTime) {
+		if (waitTine_ >= pPlayer_->GetNormalComboParm(Player::ComboNum::THIRD).waitTime) {
 			
 			order_ = Order::END;
 		}
@@ -132,7 +131,7 @@ void ComboAttackThird::Update() {
 			/// ボタンで次のコンボ
 			BaseComboAattackBehavior::PreOderNextComboForButton();
 			if (isNextCombo_) {
-				BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackForth>(pPlayer_));
+				BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackHalfThird>(pPlayer_));
 			}
 		}
 
@@ -184,7 +183,6 @@ void ComboAttackThird::HitStopUpdate() {
 
 void ComboAttackThird::AnimationMove() {
 	/// minを返す
-	/*upperJumpEaseT_ = std::min(upperJumpEaseT_, pPlayer_->GetNormalComboParm(Player::ComboNum::THIRD).attackEaseMax);*/
 	backlashEase_.time = std::min(backlashEase_.time, backlashEase_.maxTime);
 	railManager_->SetRailMoveTime(std::min(railManager_->GetRailMoveTime(), 1.0f));
 

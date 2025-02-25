@@ -48,7 +48,6 @@ private:
 	struct UpperParm {
 		float BackLashValue;
 		float BackLashEaseTime;
-		float nextWaitTime;
 	};
 	struct JumpParm {
 		float jumpSpeed;
