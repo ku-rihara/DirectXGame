@@ -8,6 +8,7 @@
 #include"random.h"
 #include"Function/GetFile.h"
 #include<cassert>
+#include"MathFunction.h"
 #include<string>
 
 
@@ -268,7 +269,8 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 		};
 
 
-		particle.worldTransform_.rotation_ = (paramaters.baseRotate) + rotate;
+
+		particle.worldTransform_.rotation_ = toRadian(paramaters.baseRotate + rotate);
 	}
 
 	///------------------------------------------------------------------------
