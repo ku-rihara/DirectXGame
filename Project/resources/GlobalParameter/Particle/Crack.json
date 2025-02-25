@@ -1,6 +1,6 @@
 {
     "Crack": {
-        "AdaptRotateIsX": false,
+        "AdaptRotateIsX": true,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": false,
         "BaseColor": [
@@ -27,7 +27,7 @@
         "Particle Count": 1,
         "Position Base": [
             0.0,
-            0.0,
+            0.20000000298023224,
             0.0
         ],
         "Position Max": [
@@ -65,8 +65,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 2.0,
-        "Scale Min": 2.0,
+        "Scale Max": 6.0,
+        "Scale Min": 6.0,
         "ScaleV3 Max": [
             0.0,
             0.0,
@@ -87,7 +87,7 @@
             0.0,
             0.0
         ],
-        "isBillBord": true,
+        "isBillBord": false,
         "isMoveForRail": false,
         "isRotateforDirection": false,
         "isScalerScale": true,

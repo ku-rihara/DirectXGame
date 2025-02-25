@@ -109,7 +109,7 @@ void Player::Update() {
 	fallEmitter_->SetTargetPosition(GetWorldPosition());
 	fallEmitter_->Update();
 
-	fallCrack_->SetTargetPosition(GetWorldPosition());
+	fallCrack_->SetTargetPosition(Vector3(GetWorldPosition().x, 0.0f, GetWorldPosition().z));
 	fallCrack_->Update();
 	fallCrack_->EditorUpdate();
 
