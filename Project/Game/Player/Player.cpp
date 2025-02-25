@@ -53,7 +53,7 @@ void Player::Init() {
 
 	fallCrackName_ = "Crack";
 	crackTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
-	fallCrack_.reset(ParticleEmitter::CreateParticle(fallCrackName_, "Plane", ".obj", 300));
+	fallCrack_.reset(ParticleEmitter::CreateParticle(fallCrackName_, "Plane", ".obj", 30));
 	fallCrack_->SetTextureHandle(crackTexture_);
 	fallCrack_->SetBlendMode(BlendMode::None);
 
@@ -109,7 +109,7 @@ void Player::Update() {
 	fallEmitter_->SetTargetPosition(GetWorldPosition());
 	fallEmitter_->Update();
 
-	fallCrack_->SetTargetPosition(GetWorldPosition()+Vector3(0,0,0));
+	fallCrack_->SetTargetPosition(GetWorldPosition());
 	fallCrack_->Update();
 	fallCrack_->EditorUpdate();
 

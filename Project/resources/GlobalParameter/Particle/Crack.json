@@ -23,8 +23,8 @@
         ],
         "Gravity": 0.0,
         "IntervalTime": 1.0,
-        "LifeTime": 0.0,
-        "Particle Count": 0,
+        "LifeTime": 1.0,
+        "Particle Count": 1,
         "Position Base": [
             0.0,
             0.0,
@@ -41,7 +41,7 @@
             0.0
         ],
         "Rotate Base": [
-            0.0,
+            90.0,
             0.0,
             0.0
         ],
@@ -65,8 +65,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 0.0,
-        "Scale Min": 0.0,
+        "Scale Max": 2.0,
+        "Scale Min": 2.0,
         "ScaleV3 Max": [
             0.0,
             0.0,
@@ -91,7 +91,7 @@
         "isMoveForRail": false,
         "isRotateforDirection": false,
         "isScalerScale": true,
-        "isShot": false,
+        "isShot": true,
         "moveSpeed": 0.0
     }
 }

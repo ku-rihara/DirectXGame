@@ -68,7 +68,7 @@ void ParticleEmitter::ParmLoadForImGui() {
 	// ロードボタン
 	if (ImGui::Button(std::format("Load {}", particleName_).c_str())) {
 
-		globalParameter_->LoadFile(particleName_,folderName_);
+		globalParameter_->LoadFile(particleName_, folderName_);
 		// セーブ完了メッセージ
 		ImGui::Text("Load Successful: %s", (folderName_ + particleName_).c_str());
 		ApplyGlobalParameter(particleName_);
@@ -78,7 +78,7 @@ void ParticleEmitter::ParmLoadForImGui() {
 void ParticleEmitter::ParmSaveForImGui() {
 	// 保存ボタン
 	if (ImGui::Button(std::format("Save {}", particleName_).c_str())) {
-		globalParameter_->SaveFile(particleName_,folderName_);
+		globalParameter_->SaveFile(particleName_, folderName_);
 		// セーブ完了メッセージ
 		std::string message = std::format("{}.json saved.", folderName_ + particleName_);
 		MessageBoxA(nullptr, message.c_str(), "GlobalParameter", 0);
@@ -279,11 +279,11 @@ void ParticleEmitter::Emit() {
 	} else {
 		parameters_.emitPos = parameters_.emitPos;
 	}
-	
+
 
 	currentTime_ += Frame::DeltaTime();// 時間加算
 
-	if (currentTime_ >= intervalTime_||groupParamaters_.isShot) {//　間隔ごとに発動
+	if (currentTime_ >= intervalTime_ || groupParamaters_.isShot) {//　間隔ごとに発動
 
 		ParticleManager::GetInstance()->Emit(
 			particleName_, parameters_, groupParamaters_, particleCount);
@@ -348,7 +348,6 @@ void ParticleEmitter::EditorUpdate() {
 		ImGui::DragFloat3("Velocity Min", &parameters_.velocityDist.min.x, 0.1f);
 	}
 
-
 	// Scale
 	if (ImGui::CollapsingHeader("Scale")) {
 		ImGui::SeparatorText("Scale Range");
@@ -381,27 +380,12 @@ void ParticleEmitter::EditorUpdate() {
 	}
 
 
-	// その他のパラメータ
-	if (ImGui::CollapsingHeader("etcParamater")) {
-		ImGui::DragFloat("IntervalTime", &intervalTime_, 0.01f, 0.01f, 100.0f);
-		ImGui::DragFloat("Gravity", &parameters_.gravity, 0.1f);
-		ImGui::DragFloat("LifeTime", &parameters_.lifeTime, 0.1f);
-		ImGui::SliderInt("Particle Count", &particleCount, 1, 100);
-	}
-
 	// チェックが有効なら、BillboardType の設定を表示
 	if (ImGui::CollapsingHeader("BillBoard")) {
 
 		// IsBillBoard のチェックボックス
 		ImGui::Checkbox("IsBillBoard", &groupParamaters_.isBillBord);
 
-
-		ImGui::SeparatorText("IsRotateAdapt");
-		ImGui::Checkbox("IsX", &groupParamaters_.adaptRotate_.isX_);
-		ImGui::Checkbox("IsY", &groupParamaters_.adaptRotate_.isY_);
-		ImGui::Checkbox("IsZ", &groupParamaters_.adaptRotate_.isZ_);
-
-		ImGui::SeparatorText("BillBordType");
 
 		ImGui::SeparatorText("IsRotateAdapt");
 		ImGui::Checkbox("IsX", &groupParamaters_.adaptRotate_.isX_);
@@ -430,6 +414,14 @@ void ParticleEmitter::EditorUpdate() {
 	// パーティクル切り替え
 	ParticleChange();
 
+	// その他のパラメータ
+	if (ImGui::CollapsingHeader("etcParamater")) {
+		ImGui::DragFloat("IntervalTime", &intervalTime_, 0.01f, 0.01f, 100.0f);
+		ImGui::DragFloat("Gravity", &parameters_.gravity, 0.1f);
+		ImGui::DragFloat("LifeTime", &parameters_.lifeTime, 0.1f);
+		ImGui::SliderInt("Particle Count", &particleCount, 1, 100);
+	}
+
 	ParmSaveForImGui();
 	ParmLoadForImGui();
 
@@ -457,7 +449,6 @@ void ParticleEmitter::RailDraw(const ViewProjection& viewProjection) {
 	/*railManager_->RailDraw(viewProjection);*/
 }
 void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
-	viewProjection;
 #ifdef _DEBUG
 
 	if (isMoveForRail_) {// レールに沿うエミット位置
@@ -496,8 +487,8 @@ void ParticleEmitter::ParticleChange() {
 		for (const auto& file : filenames) {
 			names.push_back(file.c_str());
 
-		/*	if (file != particleName_) continue;*/
-		
+			/*	if (file != particleName_) continue;*/
+
 		}
 		if (ImGui::CollapsingHeader("SelectParticle")) {
 			// 選択
