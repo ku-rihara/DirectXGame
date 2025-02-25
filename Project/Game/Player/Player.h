@@ -81,6 +81,11 @@ private: ///*other class
 	/// Particle
 	std::string fallParticleName_;
 	std::unique_ptr<ParticleEmitter>fallEmitter_;
+	uint32_t cirlceTexture_;
+
+	std::string fallCrackName_;
+	std::unique_ptr<ParticleEmitter>fallCrack_;
+	uint32_t crackTexture_;
 
 	/// other class
 	LockOn*                            pLockOn_;       /// LockOnクラス
@@ -108,7 +113,7 @@ private:
 
 	// カメラのビュープロジェクション
 	const ViewProjection* viewProjection_ = nullptr;
-	uint32_t cirlceTexture_;
+
 
 	///sound 
 	int punchSoundID_;

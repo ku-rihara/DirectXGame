@@ -44,9 +44,18 @@ void Player::Init() {
 	///* model生成
 	BaseObject::Init();	// 基底クラスの初期化 
 	BaseObject::CreateModel("Player", ".obj");/// モデルセット
-	fallParticleName_ = "fallParticle";
 
+	//particle
+	fallParticleName_ = "fallParticle";
 	cirlceTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
+	fallEmitter_.reset(ParticleEmitter::CreateParticle(fallParticleName_, "DebugSphere", ".obj", 300));
+	fallEmitter_->SetBlendMode(BlendMode::None);
+
+	fallCrackName_ = "Crack";
+	crackTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
+	fallCrack_.reset(ParticleEmitter::CreateParticle(fallCrackName_, "Plane", ".obj", 300));
+	fallCrack_->SetTextureHandle(crackTexture_);
+	fallCrack_->SetBlendMode(BlendMode::None);
 
 	///* グローバルパラメータ
 	globalParameter_ = GlobalParameter::GetInstance();
@@ -76,10 +85,6 @@ void Player::Init() {
 	rightHand_->SetRailParent(&transform_);
 	leftHand_->SetRailParent(&transform_);
 
-	// パーティクル初期化
-	fallEmitter_.reset(ParticleEmitter::CreateParticle(fallParticleName_, "DebugSphere", ".obj", 300));
-	fallEmitter_->SetBlendMode(BlendMode::None);
-
 	//パラメータセット
 	transform_.translation_ = playerParams_.startPos_;
 
@@ -103,6 +108,10 @@ void Player::Update() {
 	// 落ちるパーティクルエミッター
 	fallEmitter_->SetTargetPosition(GetWorldPosition());
 	fallEmitter_->Update();
+
+	fallCrack_->SetTargetPosition(GetWorldPosition()+Vector3(0,0,0));
+	fallCrack_->Update();
+	fallCrack_->EditorUpdate();
 
 	/// 振る舞い処理(コンボ攻撃中は中止)
 	if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
@@ -179,6 +188,7 @@ void Player::DamageRendition() {
 
 void Player::FallParticleEmit() {
 	fallEmitter_->Emit();
+	fallCrack_->Emit();
 }
 
 ///=========================================================
