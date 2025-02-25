@@ -32,12 +32,14 @@ void Material::SetCommandList(ID3D12GraphicsCommandList* commandList) {
     commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 }
 
-#ifdef _DEBUG
+
 void Material::DebugImGui() {
+#ifdef _DEBUG
     ImGui::ColorEdit4("Color", reinterpret_cast<float*>(&materialData_->color));  // materialData_のcolorを使用
     ImGui::DragFloat("Shininess", &materialData_->shininess, 0.01f);  // materialData_のshininessを使用
     const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert", "Specular Reflection",
-                                    "PointLight", "SpotLight","AreaLight","Ambient"};
+                                    "PointLight", "SpotLight","AreaLight","Ambient" };
     ImGui::Combo("Lighting Mode", &materialData_->enableLighting, lightingModes, IM_ARRAYSIZE(lightingModes));  // materialData_のenableLightingを使用
-}
 #endif
+}
+
