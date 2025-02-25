@@ -111,7 +111,7 @@ void Player::Update() {
 
 	fallCrack_->SetTargetPosition(Vector3(GetWorldPosition().x, 0.0f, GetWorldPosition().z));
 	fallCrack_->Update();
-	fallCrack_->EditorUpdate();
+	/*fallCrack_->EditorUpdate();*/
 
 	/// 振る舞い処理(コンボ攻撃中は中止)
 	if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
@@ -136,6 +136,8 @@ void Player::Update() {
 void Player::TitleUpdate() {
 	fallEmitter_->SetTargetPosition(GetWorldPosition());
 	fallEmitter_->Update();
+	fallCrack_->SetTargetPosition(Vector3(GetWorldPosition().x, 0.0f, GetWorldPosition().z));
+	fallCrack_->Update();
 	FallEffectUpdate();
 
 	// ライト位置
