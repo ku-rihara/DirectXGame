@@ -222,6 +222,7 @@ public:
 	void SetTitleBehavior();
 	void SetRotateInit();
 	void SetLightPos();
+	void HeadLightSetting();
 
 	///* 
 	ComboParm GetNormalComboParm(const ComboNum& index)const { return normalComboParms_[static_cast<int>(index)]; }

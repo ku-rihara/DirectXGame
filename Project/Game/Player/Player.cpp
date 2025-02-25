@@ -8,6 +8,7 @@
 #include"Frame/Frame.h"
 #include"Lighrt/Light.h"
 #include"Lighrt/SpotLightManager.h"
+#include"Lighrt/AmbientLight.h"
 /// math
 #include"MathFunction.h"
 
@@ -790,4 +791,8 @@ void Player::SetLightPos() {
 		transform_.translation_.x,
 		transform_.translation_.y + 5.0f,
 		transform_.translation_.z));
+}
+
+void Player::HeadLightSetting() {
+	Light::GetInstance().
 }
