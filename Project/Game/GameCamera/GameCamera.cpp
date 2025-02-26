@@ -47,53 +47,39 @@ void GameCamera::Update() {
 	// ビュー行列の更新
 	viewprojection_.UpdateMatrix();
 }
-
 void GameCamera::MoveUpdate() {
 	Input* input = Input::GetInstance();
 	const float rotateSpeed = 0.08f; // 回転速度
 
-	// 旋回操作: 左右キーでY軸の回転を操作
-	stickInput_ = { 0.0f, 0.0f, 0.0f }; // スティック入力相当のベクトルをリセット
+	// 旋回操作: 左右キーまたは右スティックでY軸の回転を操作
+	Vector2 stickInput = { 0.0f, 0.0f}; // スティック入力相当のベクトルをリセット
 
-	///----------------------------------------------------------------------------------
-	///kyebord
-	///---------------------------------------------------------------------------------- 
+	//----------------------------------------------------------------------------------
+	// keyboard
+	//----------------------------------------------------------------------------------
 	if (input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT)) {
-
 		if (input->PushKey(DIK_RIGHT)) {
-			stickInput_.x = 1.0f;
+			stickInput.x = 1.0f;
+		} else if (input->PushKey(DIK_LEFT)) {
+			stickInput.x = -1.0f;
 		}
-		else if (input->PushKey(DIK_LEFT)) {
-			stickInput_.x = -1.0f;
-		}
-	}
-	else  if (Input::GetInstance()->GetJoystickState(0, joyState)) {
-		///---------------------------------------------------------------------------------- 
-		///pad
-		///----------------------------------------------------------------------------------  
-
-		// スティックの入力を正規化して回転角度を決定
-		stickInput_ = { (float)joyState.Gamepad.sThumbRX / SHRT_MAX, (float)joyState.Gamepad.sThumbRY / SHRT_MAX, 0.0f };
-
-	}
-	// tekiou 
-	if ((stickInput_).Length() > 0.1f) {
-		stickInput_ = (stickInput_).Normalize();
-		destinationAngleY_ += stickInput_.x * rotateSpeed;
+	} else {
+		//----------------------------------------------------------------------------------
+		// pad
+		//----------------------------------------------------------------------------------
+		stickInput = Input::GetPadStick(0, 1); // 右スティックの入力を取得
+		//↑の引数。0:padNo, 1:rightStick
 	}
 
-	// リセット操作: Rキーでリセット
-	if (input->TrrigerKey(DIK_R)) {
+	// 適用
+	if (stickInput.Length() > 0.1f) {
+		stickInput = stickInput.Normalize();
+		destinationAngleY_ += stickInput.x * rotateSpeed;
+	}
+
+	// リセット操作: Rキーまたは右スティック押し込みでリセット
+	if (input->TrrigerKey(DIK_R) || Input::IsTriggerPad(0, XINPUT_GAMEPAD_RIGHT_THUMB)) {
 		Reset();
-	}
-	else {
-
-		if (Input::GetInstance()->GetJoystickState(0, joyState)) {
-			// 右スティック押し込みでリセット
-			if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) {
-				Reset();
-			}
-		}
 	}
 
 	// Y軸の回転補間処理

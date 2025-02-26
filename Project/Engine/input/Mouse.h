@@ -27,7 +27,7 @@ public:
 	void Init(Microsoft::WRL::ComPtr<IDirectInput8>directInput,HWND hWnd);
 	void Update();
 
-	/// <summary>
+	    /// <summary>
 		/// マウスの押下をチェック
 		/// </summary>
 		/// <param name="buttonNumber">マウスボタン番号(0:左,1:右,2:中,3~7:拡張マウスボタン)</param>
