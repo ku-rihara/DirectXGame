@@ -144,34 +144,39 @@ public:
 	///   /// <param name="rightVelocity">右モーター</param>
 	static void SetVibration(int32_t padNumber, float leftVelocity, float rightVelocity);
 
-	///// <summary>
-	///// 現在のジョイスティック状態を取得する
-	///// </summary>
-	///// <param name="stickNo">ジョイスティック番号</param>
-	///// <param name="out">現在のジョイスティック状態</param>
-	///// <returns>正しく取得できたか</returns>
-	//template<typename T> bool GetJoystickState(int32_t stickNo, T& out) const;
+	/// <summary>
+	/// 現在のジョイスティック状態を取得する
+	/// </summary>
+	/// <param name="stickNo">ジョイスティック番号</param>
+	/// <param name="out">現在のジョイスティック状態</param>
+	/// <returns>正しく取得できたか</returns>
+	template<typename T>static bool GetJoystickState(int32_t stickNo, T& out);
 
-	///// <summary>
-	///// 前回のジョイスティック状態を取得する
-	///// </summary>
-	///// <param name="stickNo">ジョイスティック番号</param>
-	///// <param name="out">前回のジョイスティック状態</param>
-	///// <returns>正しく取得できたか</returns>
-	//template<typename T> bool GetJoystickStatePrevious(int32_t stickNo, T& out) const;
+	/// <summary>
+	/// 前回のジョイスティック状態を取得する
+	/// </summary>
+	/// <param name="stickNo">ジョイスティック番号</param>
+	/// <param name="out">前回のジョイスティック状態</param>
+	/// <returns>正しく取得できたか</returns>
+	template<typename T>static bool GetJoystickStatePrevious(int32_t stickNo, T& out);
 
-	///// <summary>
-	///// デッドゾーンを設定する
-	///// </summary>
-	///// <param name="stickNo">ジョイスティック番号</param>
-	///// <param name="deadZoneL">デッドゾーン左スティック 0~32768</param>
-	///// <param name="deadZoneR">デッドゾーン右スティック 0~32768</param>
-	///// <returns>正しく取得できたか</returns>
-	//void SetJoystickDeadZone(int32_t stickNo, int32_t deadZoneL, int32_t deadZoneR);
+	/// <summary>
+	/// デッドゾーンを設定する
+	/// </summary>
+	/// <param name="stickNo">ジョイスティック番号</param>
+	/// <param name="deadZoneL">デッドゾーン左スティック 0~32768</param>
+	/// <param name="deadZoneR">デッドゾーン右スティック 0~32768</param>
+	/// <returns>正しく取得できたか</returns>
+	static void SetJoystickDeadZone(int32_t stickNo, int32_t deadZoneL, int32_t deadZoneR);
 
-	///// <summary>
-	///// 接続されているジョイスティック数を取得する
-	///// </summary>
-	///// <returns>接続されているジョイスティック数</returns>
-	//size_t GetNumberOfJoysticks()const;
+	/// <summary>
+	/// 接続されているジョイスティック数を取得する
+	/// </summary>
+	/// <returns>接続されているジョイスティック数</returns>
+	static size_t GetNumberOfJoysticks();
 };
+
+
+
+
+
