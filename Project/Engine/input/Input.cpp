@@ -63,25 +63,10 @@ void Input::Update() {
 
 	mouse_->Update();//マウス更新
 
-
-	// マウスの位置を更新
-	/*mousePosition_.x += static_cast<float>(mouse_.lX);
-	mousePosition_.y += static_cast<float>(mouse_.lY);*/
 	for (auto& gamepad : gamepads_) {
 		gamepad->Update();
 	}
-	/*for (auto& joystick : joysticks_) {
-		if (joystick.type_ == PadType::XInput) {
-			DWORD dwResult;
-			XINPUT_STATE state;
-			ZeroMemory(&state, sizeof(XINPUT_STATE));
-			dwResult = XInputGetState(0, &state);
-			if (dwResult == ERROR_SUCCESS) {
-				joystick.statePre_ = joystick.state_;
-				joystick.state_ = state;
-			}
-		}
-	}*/
+	
 }
 
 //キーボード*************************************************************
@@ -179,7 +164,7 @@ template<typename T>bool Input::GetJoystickState(int32_t stickNo, T& out) {
 }
 
 
-template<typename T>bool Input::GetJoystickStatePrevious(int32_t stickNo, T& out)  {
+template<typename T>bool Input::GetJoystickStatePrevious(int32_t stickNo, T& out) {
 	if (stickNo < 0 || stickNo >= gamepads_.size()) {
 		return false;
 	}
@@ -201,8 +186,8 @@ size_t Input::GetNumberOfJoysticks() {
 }
 
 
-template bool Input::GetJoystickState<DIJOYSTATE2>(int32_t stickNo, DIJOYSTATE2& out) ;
-template bool Input::GetJoystickState<XINPUT_STATE>(int32_t stickNo, XINPUT_STATE& out) ;
-template bool Input::GetJoystickStatePrevious<DIJOYSTATE2>(int32_t stickNo, DIJOYSTATE2& out) ;
-template bool Input::GetJoystickStatePrevious<XINPUT_STATE>(int32_t stickNo, XINPUT_STATE& out) ;
+template bool Input::GetJoystickState<DIJOYSTATE2>(int32_t stickNo, DIJOYSTATE2& out);
+template bool Input::GetJoystickState<XINPUT_STATE>(int32_t stickNo, XINPUT_STATE& out);
+template bool Input::GetJoystickStatePrevious<DIJOYSTATE2>(int32_t stickNo, DIJOYSTATE2& out);
+template bool Input::GetJoystickStatePrevious<XINPUT_STATE>(int32_t stickNo, XINPUT_STATE& out);
 

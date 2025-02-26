@@ -150,7 +150,7 @@ public:
 	/// <param name="stickNo">ジョイスティック番号</param>
 	/// <param name="out">現在のジョイスティック状態</param>
 	/// <returns>正しく取得できたか</returns>
-	 template<typename T>static bool GetJoystickState(int32_t stickNo, T& out) ;
+	template<typename T>static bool GetJoystickState(int32_t stickNo, T& out);
 
 	/// <summary>
 	/// 前回のジョイスティック状態を取得する
@@ -158,7 +158,7 @@ public:
 	/// <param name="stickNo">ジョイスティック番号</param>
 	/// <param name="out">前回のジョイスティック状態</param>
 	/// <returns>正しく取得できたか</returns>
-	 template<typename T>static bool GetJoystickStatePrevious(int32_t stickNo, T& out) ;
+	template<typename T>static bool GetJoystickStatePrevious(int32_t stickNo, T& out);
 
 	/// <summary>
 	/// デッドゾーンを設定する
@@ -175,3 +175,8 @@ public:
 	/// <returns>接続されているジョイスティック数</returns>
 	static size_t GetNumberOfJoysticks();
 };
+
+
+
+
+

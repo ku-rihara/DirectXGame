@@ -57,7 +57,7 @@ void Gamepad::Update() {
 
 bool Gamepad::IsPressButton(int32_t buttonNumber) const {
 	if (type_ == PadType::XInput) {
-		return (state_.xi.Gamepad.wButtons & (1 << buttonNumber)) != 0;
+		return (state_.xi.Gamepad.wButtons &  buttonNumber) != 0;
 	} else if (type_ == PadType::DirectInput) {
 		// TODO: DirectInput のボタン入力処理を実装
 		return false;
@@ -67,8 +67,10 @@ bool Gamepad::IsPressButton(int32_t buttonNumber) const {
 
 bool Gamepad::IsTriggerButton(int32_t buttonNumber) const {
 	if (type_ == PadType::XInput) {
-		return ((state_.xi.Gamepad.wButtons & (1 << buttonNumber)) != 0) &&
-			((statePre_.xi.Gamepad.wButtons & (1 << buttonNumber)) == 0);
+		bool current = (state_.xi.Gamepad.wButtons & buttonNumber) != 0;
+		bool previous = (statePre_.xi.Gamepad.wButtons & buttonNumber) != 0;
+
+		return current && !previous;
 	} else if (type_ == PadType::DirectInput) {
 		// TODO: DirectInput のボタン入力処理を実装
 		return false;
@@ -172,7 +174,7 @@ void Gamepad::SetVibration(float leftVelocity, float rightVelocity) {
 
 
 
-template bool Gamepad::GetState<DIJOYSTATE2>( DIJOYSTATE2& out)const;
+template bool Gamepad::GetState<DIJOYSTATE2>(DIJOYSTATE2& out)const;
 template bool Gamepad::GetState<XINPUT_STATE>(XINPUT_STATE& out)const;
-template bool Gamepad::GetStatePrevious<DIJOYSTATE2>( DIJOYSTATE2& out)const;
-template bool Gamepad::GetStatePrevious<XINPUT_STATE>( XINPUT_STATE& out)const;
+template bool Gamepad::GetStatePrevious<DIJOYSTATE2>(DIJOYSTATE2& out)const;
+template bool Gamepad::GetStatePrevious<XINPUT_STATE>(XINPUT_STATE& out)const;
