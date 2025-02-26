@@ -14,9 +14,7 @@ void BaseComboAattackBehavior::PreOderNextComboForButton() {
         isNextCombo_ = true;
     }
     else {
-        if (!(Input::GetInstance()->GetJoystickState(0, joyState))) return;
-
-        if (!((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_X))) return;
+        if (!(Input::IsTriggerPad(0, XINPUT_GAMEPAD_X))) return;
 
         isNextCombo_ = true;
     }

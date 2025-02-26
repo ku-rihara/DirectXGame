@@ -106,9 +106,8 @@ void TitleScene::Update() {
 }
 
 void TitleScene::ChangeForJoyState() {
-	if (!(Input::GetInstance()->GetJoystickState(0, joyState))) return;
-
-	if (!((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A))) return;
+	
+	if (!((Input::IsTriggerPad(0, XINPUT_GAMEPAD_A)))) return;
 
 	isFinished_ = true;
 

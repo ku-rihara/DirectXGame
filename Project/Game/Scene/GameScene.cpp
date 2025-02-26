@@ -209,9 +209,8 @@ void GameScene::ViewProssess() {
 }
 
 void  GameScene::ChangeForJoyState() {
-	if (!(Input::GetInstance()->GetJoystickState(0, joyState))) return;
-
-	if (!((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A))) return;
+	
+	if (!((Input::IsTriggerPad(0, XINPUT_GAMEPAD_A)))) return;
 
 	isend_ = true;
 

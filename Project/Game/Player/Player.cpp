@@ -211,13 +211,13 @@ Vector3 Player::GetInputDirecton() {
 	}
 
 	// ジョイスティック入力
-	if (input->GetJoystickState(0, joyState)) {
-		velocity.x += (float)joyState.Gamepad.sThumbLX / SHRT_MAX;
-		velocity.z += (float)joyState.Gamepad.sThumbLY / SHRT_MAX;
-	}
+	Vector2 stickInput = Input::GetPadStick(0, 0); 
+	velocity.x += stickInput.x;
+	velocity.z += stickInput.y;
 
 	return velocity;
 }
+
 
 ///=========================================================
 /// 移動
@@ -266,49 +266,45 @@ void Player::AdaptRotate() {
 /// 動いているか
 ///==========================================================
 bool Player::GetIsMoving() {
-
 	Input* input = Input::GetInstance();
 	bool isMoving = false;
 	const float thresholdValue = 0.3f;
-	Vector3 StickVelocity;
-	Vector3 keyBoradVelocity;
+	Vector3 keyboardVelocity = { 0.0f, 0.0f, 0.0f };
 
-	/// ---------------------------------------------------------------------
-	///  keyBorad
-	/// ---------------------------------------------------------------------
+	//---------------------------------------------------------------------
+	// keyboard
+	//---------------------------------------------------------------------
 	if (input->PushKey(DIK_W) || input->PushKey(DIK_A) || input->PushKey(DIK_S) || input->PushKey(DIK_D)) {
-
 		// キーボード入力
 		if (input->PushKey(DIK_W)) {
-			keyBoradVelocity.z += 1.0f;  // 前進
+			keyboardVelocity.z += 1.0f;  // 前進
 		}
 		if (input->PushKey(DIK_S)) {
-			keyBoradVelocity.z -= 1.0f;  // 後退
+			keyboardVelocity.z -= 1.0f;  // 後退
 		}
 		if (input->PushKey(DIK_A)) {
-			keyBoradVelocity.x -= 1.0f;  // 左移動
+			keyboardVelocity.x -= 1.0f;  // 左移動
 		}
 		if (input->PushKey(DIK_D)) {
-			keyBoradVelocity.x += 1.0f;  // 右移動
+			keyboardVelocity.x += 1.0f;  // 右移動
 		}
-		if ((keyBoradVelocity).Length() > 0) {
+
+		if (keyboardVelocity.Length() > 0) {
 			isMoving = true;
 		}
 	} else {
-		/// ----------------------------------------------------------
-		///  JoyStick
-		/// ----------------------------------------------------------
-		if (Input::GetInstance()->GetJoystickState(0, joyState)) {
-			// 移動量
-			StickVelocity = { (float)joyState.Gamepad.sThumbLX / SHRT_MAX, 0, (float)joyState.Gamepad.sThumbLY / SHRT_MAX };
-			if ((StickVelocity).Length() > thresholdValue) {
-				isMoving = true;
-			}
+		//----------------------------------------------------------
+		// JoyStick
+		//----------------------------------------------------------
+		Vector2 stickInput = Input::GetPadStick(0, 0); 
+
+		if (stickInput.Length() > thresholdValue) {
+			isMoving = true;
 		}
 	}
+
 	return isMoving;
 }
-
 
 
 ///=========================================================

@@ -29,17 +29,15 @@ PlayerRoot ::~PlayerRoot() {
 //更新
 void PlayerRoot::Update() {
 
-	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
-		if ((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_Y)) {
+
+		if ((Input::IsTriggerPad(0, XINPUT_GAMEPAD_Y))) {
 			pPlayer_->Move(pPlayer_->GetParamater().moveSpeed *2.4f);
 		}
 		else {
 			pPlayer_->Move(pPlayer_->GetParamater().moveSpeed);
 		}
-	}
-	else {
-		pPlayer_->Move(pPlayer_->GetParamater().moveSpeed);
-	}
+	
+	
 
 	//　ジャンプに切り替え
 	if (Input::GetInstance()->PushKey(DIK_J)) {
@@ -51,9 +49,8 @@ void PlayerRoot::Update() {
 }
 
 void PlayerRoot::JumpForJoyState() {
-	if (!(Input::GetInstance()->GetJoystickState(0, joyState))) return;
-
-	if (!((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A))) return;
+	
+	if (!(Input::IsTriggerPad(0, XINPUT_GAMEPAD_A))) return;
 
 	pPlayer_->ChangeBehavior(std::make_unique<PlayerJump>(pPlayer_));
 		
