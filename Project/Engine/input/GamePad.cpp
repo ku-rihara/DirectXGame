@@ -20,22 +20,22 @@ bool Gamepad::Init(Microsoft::WRL::ComPtr<IDirectInput8> directInput, DWORD padN
 		return true;
 	}
 
-	// DirectInput デバイスとして初期化を試みる
-	for (int i = 0; i < 256; i++) {
-		DIDEVICEINSTANCE deviceInstance;
-		deviceInstance.dwSize = sizeof(deviceInstance);
-		HRESULT result = directInput->EnumDevices(DI8DEVCLASS_GAMECTRL,
-			[](LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef) -> BOOL {
-				std::vector<DIDEVICEINSTANCE>* deviceInstances = static_cast<std::vector<DIDEVICEINSTANCE>*>(pvRef);
-				deviceInstances->push_back(*lpddi);
-				return DIENUM_CONTINUE;
-			},
-			&deviceInstance, DIEDFL_ALLDEVICES);
+	//// DirectInput デバイスとして初期化を試みる
+	//for (int i = 0; i < 256; i++) {
+	//	DIDEVICEINSTANCE deviceInstance;
+	//	deviceInstance.dwSize = sizeof(deviceInstance);
+	//	HRESULT result = directInput->EnumDevices(DI8DEVCLASS_GAMECTRL,
+	//		[](LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef) -> BOOL {
+	//			std::vector<DIDEVICEINSTANCE>* deviceInstances = static_cast<std::vector<DIDEVICEINSTANCE>*>(pvRef);
+	//			deviceInstances->push_back(*lpddi);
+	//			return DIENUM_CONTINUE;
+	//		},
+	//		&deviceInstance, DIEDFL_ALLDEVICES);
 
-		if (FAILED(result)) {
-			return false;
-		}
-	}
+	//	if (FAILED(result)) {
+	//		return false;
+	//	}
+	//}
 
 	return false;
 }
