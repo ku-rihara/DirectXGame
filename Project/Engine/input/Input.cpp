@@ -1,6 +1,7 @@
 // Input.cpp
 #include "Input.h"
 #include<assert.h>
+#include<string>
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "xinput.lib")
@@ -39,14 +40,18 @@ void Input::Init(HINSTANCE hInstance, HWND hWnd) {
 	mouse_->Init(directInput_, hWnd);
 
 
-	//XInputデバイスの追加
 	for (DWORD i = 0; i < XUSER_MAX_COUNT; ++i) {
-		//gamepads_.emplace_back(std::make_unique<Gamepad>(directInput_, i));
-		auto gamepad = std::make_unique<Gamepad>(); // Gamepadのインスタンスを作成
+		auto gamepad = std::make_unique<Gamepad>();
 		if (gamepad->Init(directInput_, i)) {
-			gamepads_.push_back(std::move(gamepad)); // ベクターに追加
+			gamepads_.push_back(std::move(gamepad));
+			OutputDebugStringA(("Gamepad " + std::to_string(i) + " initialized successfully\n").c_str()); // デバッグ出力
+		} else {
+			OutputDebugStringA(("Gamepad " + std::to_string(i) + " initialization failed\n").c_str()); // デバッグ出力
 		}
 	}
+
+	OutputDebugStringA(("Number of gamepads initialized: " + std::to_string(gamepads_.size()) + "\n").c_str()); // デバッグ出力
+
 }
 
 void Input::Update() {
