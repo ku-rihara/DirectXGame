@@ -12,7 +12,6 @@ void BaseComboAattackBehavior::PreOderNextComboForButton() {
   
     if (Input::GetInstance()->TrrigerKey(DIK_H)) {
         isNextCombo_ = true;
-     /*   pPlayer_->ChangeComboBehavior(std::move(nextCombo));*/
     }
     else {
         if (!(Input::GetInstance()->GetJoystickState(0, joyState))) return;
@@ -43,7 +42,7 @@ void BaseComboAattackBehavior::AnimationInit() {
     //scaling
     startEasing_.time = 0.0f;
     pPlayer_->SetScale(Vector3::UnitVector());
-    startEasing_.maxTime = 0.5f;
+    startEasing_.maxTime = 0.7f;
     startEasing_.amplitude = 0.6f;
     startEasing_.period = 0.2f;
     
