@@ -168,3 +168,11 @@ void Gamepad::SetVibration(float leftVelocity, float rightVelocity) {
 		// TODO: DirectInput の振動処理を実装
 	}
 }
+
+
+
+
+template bool Gamepad::GetState<DIJOYSTATE2>( DIJOYSTATE2& out)const;
+template bool Gamepad::GetState<XINPUT_STATE>(XINPUT_STATE& out)const;
+template bool Gamepad::GetStatePrevious<DIJOYSTATE2>( DIJOYSTATE2& out)const;
+template bool Gamepad::GetStatePrevious<XINPUT_STATE>( XINPUT_STATE& out)const;
