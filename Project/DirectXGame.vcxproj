@@ -41,6 +41,7 @@
     <ClCompile Include="Engine\Frame\Frame.cpp" />
     <ClCompile Include="Engine\Function\Convert.cpp" />
     <ClCompile Include="Engine\Function\GetFile.cpp" />
+    <ClCompile Include="Engine\input\GamePad.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
     <ClCompile Include="Engine\input\Mouse.cpp" />
     <ClCompile Include="Engine\Lighrt\AmbientLight.cpp" />
@@ -112,6 +113,7 @@
     <ClInclude Include="Engine\Function\Convert.h" />
     <ClInclude Include="Engine\Function\GetFile.h" />
     <ClInclude Include="Engine\Function\Log.h" />
+    <ClInclude Include="Engine\input\GamePad.h" />
     <ClInclude Include="Engine\input\Input.h" />
     <ClInclude Include="Engine\input\Mouse.h" />
     <ClInclude Include="Engine\Lighrt\AmbientLight.h" />

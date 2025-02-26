@@ -1,6 +1,7 @@
 #include"Mouse.h"
 #include <cmath>
 #include<assert.h>
+#include"base/WinApp.h"
 void Mouse::Init(Microsoft::WRL::ComPtr<IDirectInput8>directInput,HWND hWnd) {
     hWnd_ = hWnd;
     //マウスデバイスの生成
@@ -47,8 +48,8 @@ Vector3 Mouse::GetMousePos3D(const ViewProjection& viewprojection, float depthFa
     Vector2 mousePos = mousePosition_;
 
     // ウィンドウサイズ
-    float windowWidth = 1280.0f;
-    float windowHeight = 720.0f;
+    float windowWidth = WinApp::kWindowWidth;
+    float windowHeight = WinApp::kWindowHeight;
 
     // スクリーン座標を正規化デバイス座標 (NDC) に変換 [-1, 1] の範囲にする
     float ndcX = (2.0f * mousePos.x / windowWidth) - 1.0f;

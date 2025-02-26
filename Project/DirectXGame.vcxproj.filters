@@ -334,6 +334,9 @@
     <ClCompile Include="Engine\Function\GetFile.cpp">
       <Filter>MyEngine\.cpp\function</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\input\GamePad.cpp">
+      <Filter>MyEngine\.cpp\input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -572,6 +575,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Function\GetFile.h">
       <Filter>MyEngine\.h\function</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\input\GamePad.h">
+      <Filter>MyEngine\.h\input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
