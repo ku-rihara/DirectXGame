@@ -11,12 +11,7 @@ AmbientLight::AmbientLight()
 }
 AmbientLight::~AmbientLight()
 {
-    if (lightResource_)
-    {
-        lightResource_->Release();
-        lightResource_ = nullptr;
-    }
-    lightData_ = nullptr;
+   
 }
 void AmbientLight::Init(ID3D12Device* device) {
     lightResource_ = DirectXCommon::GetInstance()->CreateBufferResource(device, sizeof(AmbientLightData));
