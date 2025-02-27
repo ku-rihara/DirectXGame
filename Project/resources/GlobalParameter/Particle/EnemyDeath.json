@@ -1,0 +1,103 @@
+{
+  "EnemyDeath": {
+    "AdaptRotateIsX": false,
+    "AdaptRotateIsY": false,
+    "AdaptRotateIsZ": true,
+    "BaseColor": [
+      0.035659365355968475,
+      0.13725489377975464,
+      0.04761176556348801,
+      0.0
+    ],
+    "Color Max": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Color Min": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Gravity": -17.5,
+    "IntervalTime": 1.0399999618530273,
+    "LifeTime": 0.44999998807907104,
+    "Particle Count": 31,
+    "Position Base": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Position Max": [
+      2.700000047683716,
+      0.4000000059604645,
+      3.0999999046325684
+    ],
+    "Position Min": [
+      1.100000023841858,
+      -0.800000011920929,
+      -2.5
+    ],
+    "Rotate Base": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Rotate Max": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Rotate Min": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "RotateSpeed Base": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "RotateSpeed Max": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "RotateSpeed Min": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale Max": 4.0,
+    "Scale Min": 4.0,
+    "ScaleV3 Max": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "ScaleV3 Min": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "Velocity Max": [
+      13.100000381469727,
+      19.399999618530273,
+      13.5
+    ],
+    "Velocity Min": [
+      -13.100000381469727,
+      10.0,
+      -13.399999618530273
+    ],
+    "isBillBord": true,
+    "isMoveForRail": false,
+    "isRotateforDirection": true,
+    "isScalerScale": true,
+    "isShot": false,
+    "moveSpeed": 0.0,
+    "preBillBordType_": 0
+  }
+}

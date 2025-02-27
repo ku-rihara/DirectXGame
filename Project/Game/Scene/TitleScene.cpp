@@ -21,10 +21,10 @@ void TitleScene::Init() {
 
 	BaseScene::Init();
 
-	emitter_.reset(ParticleEmitter::CreateParticle("punchEffect", "Plane", ".obj", 900));
+	emitter_.reset(ParticleEmitter::CreateParticle("EnemyDeath", "Plane", ".obj", 900));
 	uint32_t t=TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
 	emitter_->SetTextureHandle(t);
-
+	emitter_->SetBlendMode(ParticleCommon::BlendMode::Subtractive);
 	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 
 }
