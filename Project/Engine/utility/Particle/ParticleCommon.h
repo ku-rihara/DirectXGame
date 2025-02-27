@@ -1,20 +1,20 @@
 #pragma once
 #include"base/DirectXCommon.h"
 #include"base/SrvManager.h"
-enum class BlendMode {
-	Add,
-	None,
-	Multiply,
-	Subtractive,
-	Screen,
-};
+
 class ParticleCommon {
 public:
-	
+	enum class BlendMode {
+		Add,
+		None,
+		Multiply,
+		Subtractive,
+		Screen,
+	};
 	///=========================================
 	///private variant
 	///=========================================
-
+private:
 	// ohter class
 	SrvManager* pSrvManager_;
 	DirectXCommon* pDxCommon_;
