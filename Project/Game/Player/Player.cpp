@@ -50,13 +50,13 @@ void Player::Init() {
 	fallParticleName_ = "fallParticle";
 	cirlceTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
 	fallEmitter_.reset(ParticleEmitter::CreateParticle(fallParticleName_, "DebugSphere", ".obj", 300));
-	fallEmitter_->SetBlendMode(BlendMode::None);
+	fallEmitter_->SetBlendMode(ParticleCommon::BlendMode::None);
 
 	fallCrackName_ = "Crack";
 	crackTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
 	fallCrack_.reset(ParticleEmitter::CreateParticle(fallCrackName_, "Plane", ".obj", 30));
 	fallCrack_->SetTextureHandle(crackTexture_);
-	fallCrack_->SetBlendMode(BlendMode::None);
+	fallCrack_->SetBlendMode(ParticleCommon::BlendMode::None);
 
 	///* グローバルパラメータ
 	globalParameter_ = GlobalParameter::GetInstance();

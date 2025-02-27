@@ -6,6 +6,7 @@
 #include"utility/Editor/GlobalParameter.h"
 
 #include"utility/Editor/RailManager.h"
+#include"utility/Particle/ParticleCommon.h"
 ///std
 #include<string>
 #include<vector>
@@ -15,11 +16,11 @@
 /// </summary>
 enum class WorldTransform::BillboardType;
 struct WorldTransform::AdaptRotate;
-enum class BlendMode;
+ enum class ParticleCommon::BlendMode;
 class ParticleEmitter {
 public:
 	struct GroupParamaters {
-		BlendMode blendMode;
+		ParticleCommon::BlendMode blendMode;
 		bool isBillBord;
 		bool isShot;
 		WorldTransform::BillboardType  billBordType;
@@ -112,7 +113,7 @@ public:
 
 	//imgui化すべき
 	void SetIsRotateForDirection(const bool& is) { parameters_.isRotateforDirection = is; }
-	void SetBlendMode(const BlendMode& blendmode);
+	void SetBlendMode(const ParticleCommon::BlendMode& blendmode);
 	void SetBillBordType(const WorldTransform::BillboardType& billboardType);
 	///=====================================================
 	/// Editor 

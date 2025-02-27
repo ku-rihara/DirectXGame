@@ -468,7 +468,7 @@ void ParticleEmitter::SetParentBasePos(WorldTransform* parent) {
 	emitBoxTransform_.parent_ = parent;
 }
 
-void  ParticleEmitter::SetBlendMode(const BlendMode& blendmode) {
+void  ParticleEmitter::SetBlendMode(const ParticleCommon::BlendMode& blendmode) {
 	groupParamaters_.blendMode = blendmode;
 }
 
