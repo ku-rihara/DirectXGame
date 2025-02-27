@@ -41,7 +41,7 @@ void BaseComboAattackBehavior::AnimationInit() {
     startEasing_.time = 0.0f;
     pPlayer_->SetScale(Vector3::UnitVector());
     startEasing_.maxTime = 0.7f;
-    startEasing_.amplitude = 0.6f;
+    startEasing_.amplitude = 1.2f;
     startEasing_.period = 0.2f;
     
     /// floatmotion

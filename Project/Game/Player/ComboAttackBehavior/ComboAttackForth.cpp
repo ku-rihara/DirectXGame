@@ -58,8 +58,7 @@ ComboAttackForth::~ComboAttackForth() {
 
 //更新
 void ComboAttackForth::Update() {
-	/// スケール変化
-	BaseComboAattackBehavior::ScalingEaseUpdate();
+	BaseComboAattackBehavior::RotateMotionUpdate(true);
 
 	ChangeSlow();
 	
@@ -203,6 +202,8 @@ void ComboAttackForth::ChangeSlow() {
 	if (istimeSlow_) {
 		timeDownTime_ += Frame::DeltaTime();
 		if (timeDownTime_ >= kTimeDownTime_) {
+			/// スケール変化
+			BaseComboAattackBehavior::ScalingEaseUpdate();
 			Frame::SetTimeScale(1.0f);
 		}
 	}
