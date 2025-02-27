@@ -42,6 +42,16 @@ public:
 		NORMAL,
 		STRONG,
 	};
+private:
+	/// Particle
+	std::string damageName_;
+	std::unique_ptr<ParticleEmitter>damageEmitter_;
+
+	std::string thrustName_;
+	std::unique_ptr<ParticleEmitter>thrustEmit_;
+
+	std::string DeathName_;
+	std::unique_ptr<ParticleEmitter>deathEmitter_;
 protected:
 
 	Type type_;
@@ -65,12 +75,6 @@ protected:
 	WorldTransform bodyTransform_;
 	std::unique_ptr<Object3d>bodyObj_;
 
-	std::string damageName_;
-	std::unique_ptr<ParticleEmitter>damageEmitter_;
-
-	std::string thrustName_;
-	std::unique_ptr<ParticleEmitter>thrustEmit_;
-
 	/// behavior
 	std::unique_ptr<BaseEnemyBehavior>damageBehavior_ = nullptr;
 	std::unique_ptr<BaseEnemyMoveBehavior>moveBehavior_ = nullptr;
@@ -93,6 +97,7 @@ public:
 
 	void DamageEmit();
 	void ThrustEmit();
+	void DeathEmit();
 	void FallEffectUpdate();
 	void FallEffectInit(const Vector3& pos);
 	void RotateInit();

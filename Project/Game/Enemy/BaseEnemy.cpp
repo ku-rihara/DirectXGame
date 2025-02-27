@@ -54,17 +54,23 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	collisionBox_->SetSize(Vector3(3.2f, 3.2f, 3.2f));
 	collisionBox_->IsAdapt(true);
 
+	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
+	uint32_t t = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
+
 	/// particleT
 	thrustName_ = "ThrustDamage";
 	thrustEmit_.reset(ParticleEmitter::CreateParticle(thrustName_, "cube", ".obj", 900));
-	uint32_t t = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
-	thrustEmit_->SetTextureHandle(t);
+		thrustEmit_->SetTextureHandle(t);
 
 	/// particleD
 	damageName_ = "DamageParticle";
 	damageEmitter_.reset(ParticleEmitter::CreateParticle(damageName_, "Plane", ".obj", 900));
-	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
 	damageEmitter_->SetTextureHandle(handle);
+
+	DeathName_ = "EnemyDeath";
+	deathEmitter_.reset(ParticleEmitter::CreateParticle(DeathName_, "Plane", ".obj", 900));
+		deathEmitter_->SetTextureHandle(handle);
+	deathEmitter_->SetBlendMode(ParticleCommon::BlendMode::Subtractive);
 
 	findSprite_ = std::make_unique<FindSprite>();
 	notFindSprite_ = std::make_unique<NotFindSprite>();
@@ -92,6 +98,9 @@ void BaseEnemy::Update() {
 
 	thrustEmit_->SetTargetPosition(GetWorldPosition());
 	thrustEmit_->Update();
+
+	deathEmitter_->SetTargetPosition(GetWorldPosition());
+	deathEmitter_->Update();
 	FallEffectUpdate();
 
 	BehaviorChangeDeath();
@@ -325,6 +334,10 @@ void BaseEnemy::DamageEmit() {
 
 void BaseEnemy::ThrustEmit() {
 	thrustEmit_->Emit();
+}
+
+void BaseEnemy::DeathEmit() {
+	deathEmitter_->Emit();
 }
 
 void BaseEnemy::FallEffectInit(const Vector3& pos) {
