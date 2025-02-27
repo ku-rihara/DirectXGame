@@ -67,6 +67,7 @@ private:
 		float moveSpeed;
 		float fallSpeed;
 		float attackRotate;
+		float attackRotateAnit;
 		float attackRotateEaseT;
 		float attackFloatValue;
 		float attackFloatEaseT;
@@ -231,4 +232,5 @@ public:
 	void SetHeadPosY(const float& posy) { headTransform_.translation_.y = posy; }
 	void SetHeadRotateX(const float& zrotate) { headTransform_.rotation_.x = zrotate; }
 	void SetHeadRotateY(const float& zrotate) { headTransform_.rotation_.y = zrotate; }
+	void SetHeadScale(const Vector3& scale) { headTransform_.scale_ = scale; }
 };

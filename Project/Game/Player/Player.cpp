@@ -409,6 +409,7 @@ void Player::AdjustParm() {
 		ImGui::DragFloat("rushDistance", &playerParams_.rushDistance, 0.01f);
 		ImGui::DragFloat("rushEaseMax", &playerParams_.rushEaseMax, 0.01f, 0);
 		ImGui::SliderAngle("attackRotate", &playerParams_.attackRotate, 0, 720);
+		ImGui::SliderAngle("attackRotateAnit", &playerParams_.attackRotateAnit, -360, 720);
 		ImGui::DragFloat("attackRotateEaseT", &playerParams_.attackRotateEaseT, 0.01f);
 		ImGui::DragFloat("attackFloatEaseT", &playerParams_.attackFloatEaseT, 0.01f);
 		ImGui::DragFloat("attackFloatValue", &playerParams_.attackFloatValue, 0.01f);
@@ -584,6 +585,7 @@ void Player::AddParmGroup() {
 	globalParameter_->AddItem(groupName_, "jumpSpeedB", playerParams_.bountJump.jumpSpeed);
 	globalParameter_->AddItem(groupName_, "gravityB", playerParams_.bountJump.gravity);
 	globalParameter_->AddItem(groupName_, "fallSpeedLimitB", playerParams_.bountJump.fallSpeedLimit);
+	globalParameter_->AddItem(groupName_, "attackRotateAnit", playerParams_.attackRotateAnit);
 
 
 	/// コンボ持続時間
@@ -628,6 +630,7 @@ void Player::SetValues() {
 	globalParameter_->SetValue(groupName_, "jumpSpeedB", playerParams_.bountJump.jumpSpeed);
 	globalParameter_->SetValue(groupName_, "gravityB", playerParams_.bountJump.gravity);
 	globalParameter_->SetValue(groupName_, "fallSpeedLimitB", playerParams_.bountJump.fallSpeedLimit);
+	globalParameter_->SetValue(groupName_, "attackRotateAnit", playerParams_.attackRotateAnit);
 
 
 	/// コンボ持続時間
@@ -664,6 +667,8 @@ void Player::ApplyGlobalParameter() {
 	playerParams_.attackRotate = globalParameter_->GetValue<float>(groupName_, "attackRotate");
 	playerParams_.attackFloatEaseT = globalParameter_->GetValue<float>(groupName_, "attackFloatEaseT_");
 	playerParams_.attackFloatValue = globalParameter_->GetValue<float>(groupName_, "attackFloatValue_");
+	playerParams_.attackRotateAnit = globalParameter_->GetValue<float>(groupName_, "attackRotateAnit");
+
 	playerParams_.upperParm.BackLashValue = globalParameter_->GetValue<float>(groupName_, "upperBackLashValue_");
 	playerParams_.upperParm.BackLashEaseTime = globalParameter_->GetValue<float>(groupName_, "upperBackLashEaseTime_");
 	playerParams_.upperJump.jumpSpeed = globalParameter_->GetValue<float>(groupName_, "jumpPowerU");

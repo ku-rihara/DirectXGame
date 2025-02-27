@@ -32,6 +32,7 @@
         "attackFloatEaseT_": 0.49000000953674316,
         "attackFloatValue_": 1.9299999475479126,
         "attackRotate": 6.370452404022217,
+        "attackRotateAnit": 1.3613568544387817,
         "attackRotateEaseT": 0.49000000953674316,
         "fallSpeedLimitB": 5.199999809265137,
         "fallSpeedLimitU": 6.75,

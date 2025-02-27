@@ -12,6 +12,6 @@ void BaseEnemyBehavior::AngleCaluclation() {
 	direction_.Normalize();
 
 	// 目標角度を計算
-	objectiveAngle_ = std::atan2(direction_.x, -direction_.z);
+	objectiveAngle_ = std::atan2(-direction_.x, -direction_.z);
 
 }

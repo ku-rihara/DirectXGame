@@ -36,12 +36,13 @@ void BaseComboAattackBehavior::AnimationInit() {
     tempRotateValue_ = 0.0f;
     pPlayer_->SetRotateInit();
     rotateValue_ = pPlayer_->GetParamater().attackRotate;
+    rotateValueAnti_ = pPlayer_->GetParamater().attackRotateAnit;
 
     //scaling
     startEasing_.time = 0.0f;
-    pPlayer_->SetScale(Vector3::UnitVector());
+    pPlayer_->SetHeadScale(Vector3::UnitVector());
     startEasing_.maxTime = 0.7f;
-    startEasing_.amplitude = 1.2f;
+    startEasing_.amplitude = 1.5f;
     startEasing_.period = 0.2f;
     
     /// floatmotion
@@ -56,23 +57,20 @@ void BaseComboAattackBehavior::AnimationInit() {
 void BaseComboAattackBehavior::ScalingEaseUpdate() {
     startEasing_.time += Frame::DeltaTimeRate();
     startEasing_.time = std::min(startEasing_.time, startEasing_.maxTime);
-    pPlayer_->SetScale(EaseAmplitudeScale(Vector3::UnitVector(), startEasing_.time, startEasing_.maxTime,
+    pPlayer_->SetHeadScale(EaseAmplitudeScale(Vector3::UnitVector(), startEasing_.time, startEasing_.maxTime,
         startEasing_.amplitude, startEasing_.period));
 }
 
-void BaseComboAattackBehavior::RotateMotionUpdate(const bool& isClockwise) {
+void BaseComboAattackBehavior::RotateMotionUpdate(const float& start, const float& end, const bool& isClockwise) {
     rotateEaseT_ += Frame::DeltaTimeRate();
-    tempRotateValue_ = EaseInSine(0.0f, rotateValue_, rotateEaseT_, pPlayer_->GetParamater().attackRotateEaseT);
+    float plus = isClockwise ? 1.0f : -1.0f;
 
-    if (isClockwise) {
-        pPlayer_->SetHeadRotateY(tempRotateValue_);
-    } else {
-        pPlayer_->SetHeadRotateY(-tempRotateValue_);
-    }
+    tempRotateValue_ = EaseInSine(start, end* plus, rotateEaseT_, pPlayer_->GetParamater().attackRotateEaseT);
+    pPlayer_->SetHeadRotateY(tempRotateValue_);
 
     if (rotateEaseT_ < pPlayer_->GetParamater().attackRotateEaseT) return;
     rotateEaseT_ = pPlayer_->GetParamater().attackRotateEaseT;
-    pPlayer_->SetHeadRotateY(0.0f);
+  
 }
 
 void BaseComboAattackBehavior::FloatAnimationUpdate() {

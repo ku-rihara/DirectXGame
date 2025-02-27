@@ -54,7 +54,7 @@ ComboAttackSecond::~ComboAttackSecond() {
 void ComboAttackSecond::Update() {
 
 	//　モーション
-	BaseComboAattackBehavior::RotateMotionUpdate(false);
+	BaseComboAattackBehavior::RotateMotionUpdate(0, GetRotateValue(), true);
 	BaseComboAattackBehavior::FloatAnimationUpdate();
 	/// スケール変化
 	BaseComboAattackBehavior::ScalingEaseUpdate();
@@ -108,10 +108,10 @@ void ComboAttackSecond::Update() {
 		BaseComboAattackBehavior::PreOderNextComboForButton();//コントローラジャンプ	
 
 		// イージング終了時の処理
-		if (punchEase_.time <= 0.0f) {
+		if (punchEase_.time > 0.0f) break;
 			punchEase_.time = 0.0f;
 			order_ = Order::WAIT;
-		}
+		
 		break;
 
 	case Order::WAIT:
@@ -120,8 +120,8 @@ void ComboAttackSecond::Update() {
 
 		/// コンボ途切れ
 		if (waitTine_ >= pPlayer_->GetNormalComboParm(Player::ComboNum::SECOND).waitTime) {
-			pPlayer_->ChangeComboBehavior
-			(std::make_unique<ComboAttackRoot>(pPlayer_));
+		
+			pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
 		}
 		else 
 		{

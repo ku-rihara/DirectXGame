@@ -56,7 +56,7 @@ ComboAttackFirst::~ComboAttackFirst() {
 void ComboAttackFirst::Update() {
 
 	//　モーション
-	BaseComboAattackBehavior::RotateMotionUpdate(true);
+	BaseComboAattackBehavior::RotateMotionUpdate(0,GetRotateValue(), false);
 	BaseComboAattackBehavior::FloatAnimationUpdate();
 
 	/// スケール変化
@@ -145,10 +145,10 @@ void ComboAttackFirst::Update() {
 		pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
 
 		// イージング終了時の処理
-		if (punchEase_.time <= 0.0f) {
+		if (punchEase_.time > 0.0f) break;
 			punchEase_.time = 0.0f;
 			order_ = Order::WAIT;
-		}
+		
 		break;
 
 	case Order::WAIT:
@@ -157,8 +157,8 @@ void ComboAttackFirst::Update() {
 
 		/// コンボ途切れ
 		if (waitTine_ >= pPlayer_->GetNormalComboParm(Player::ComboNum::FIRST).waitTime) {
-			pPlayer_->ChangeComboBehavior
-			(std::make_unique<ComboAttackRoot>(pPlayer_));
+			
+			pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
 		}
 		else {
 			/// ボタンで次のコンボ

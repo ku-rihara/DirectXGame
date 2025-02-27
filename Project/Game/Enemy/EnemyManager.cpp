@@ -305,7 +305,7 @@ void EnemyManager::AdjustParm() {
 		ImGui::DragFloat("upperFallSpeedLimit", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].upperFallSpeedLimit,
 			0.01f);
 
-		ImGui::SliderAngle("hitbackRotateValue", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].archingbackValue, 0, 720.0f
+		ImGui::SliderAngle("hitbackRotateValue", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].archingbackValue, -360.0f, 720.0f
 		);
 
 		ImGui::DragFloat("hitbackRotateBackRatio", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].archingbackRatio,
@@ -361,7 +361,7 @@ void EnemyManager::AdjustParm() {
 		ImGui::DragFloat("upperFallSpeedLimit", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].upperFallSpeedLimit,
 			0.01f);
 
-		ImGui::SliderAngle("hitbackRotateValue", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].archingbackValue,0,720.0f
+		ImGui::SliderAngle("hitbackRotateValue", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].archingbackValue,-360.0f,720.0f
 		);
 
 		ImGui::DragFloat("hitbackRotateBackRatio", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].archingbackRatio,

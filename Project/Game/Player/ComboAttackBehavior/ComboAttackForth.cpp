@@ -58,7 +58,7 @@ ComboAttackForth::~ComboAttackForth() {
 
 //更新
 void ComboAttackForth::Update() {
-	BaseComboAattackBehavior::RotateMotionUpdate(true);
+	BaseComboAattackBehavior::RotateMotionUpdate(GetRotateValueAnti(), GetRotateValue(), false);
 
 	ChangeSlow();
 	
@@ -167,11 +167,11 @@ void ComboAttackForth::Update() {
 	
 		waitTine_ += Frame::DeltaTimeRate();
 		pPlayer_->Fall(fallInitSpeed_,pPlayer_->GetParamater().normalJump.fallSpeedLimit, pPlayer_->GetParamater().normalJump.gravity);
-
+		pPlayer_->SetHeadScale(Vector3::UnitVector());
 		if (pPlayer_->GetWorldPosition().y <= pPlayer_->InitY_) {
-			
+			pPlayer_->SetWorldPositionY(pPlayer_->InitY_);
 			if (waitTine_ >= pPlayer_->GetNormalComboParm(Player::ComboNum::FORTH).waitTime) {
-		
+		 
 				Frame::SetTimeScale(1.0f);
 				pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
 			}

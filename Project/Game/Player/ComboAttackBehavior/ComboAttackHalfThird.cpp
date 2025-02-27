@@ -41,7 +41,7 @@ ComboAttackHalfThird::~ComboAttackHalfThird() {
 
 //更新
 void ComboAttackHalfThird::Update() {
-
+	BaseComboAattackBehavior::RotateMotionUpdate(0, GetRotateValueAnti(), true);
 	BaseComboAattackBehavior::ScalingEaseUpdate();
 	
 

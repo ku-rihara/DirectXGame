@@ -17,6 +17,7 @@ protected:
 
 	/// motion
 	float rotateValue_;
+	float rotateValueAnti_;
 	float rotateEaseT_;
 	float tempRotateValue_;
 
@@ -37,9 +38,12 @@ public:
 	void AnimationInit();
 
 	void ScalingEaseUpdate();
-	void RotateMotionUpdate(const bool& isClockwise);
+	void RotateMotionUpdate(const float &start,const float &end, const bool& isClockwise);
 	void FloatAnimationUpdate();
 
 	virtual void PreOderNextComboForButton();
 	virtual void ChangeNextCombo(std::unique_ptr<BaseComboAattackBehavior>nextCombo);
+
+	float GetRotateValue()const { return rotateValue_; }
+	float GetRotateValueAnti()const { return rotateValueAnti_; }
 };

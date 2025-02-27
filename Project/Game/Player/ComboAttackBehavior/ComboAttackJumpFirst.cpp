@@ -124,13 +124,14 @@ void ComboAttackJumpFirst::Update() {
 	// 次の振る舞い
 		if (pPlayer_->GetTransform().translation_.y > pPlayer_->InitY_) break;
 		pPlayer_->SetRotation(initRotate_);
-		pPlayer_->SetWorldPositionY(Player::InitY_);
 		step_ = STEP::WAIT;
 		break;
-	case STEP::WAIT:
 		///---------------------------------------------------------
 		/// 待機
 		///---------------------------------------------------------
+	case STEP::WAIT:
+		
+		pPlayer_->SetWorldPositionY(Player::InitY_);
 		collisionBox_->IsAdapt(false);
 		waitTime_ += Frame::DeltaTime();
 		
