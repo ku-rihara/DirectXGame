@@ -67,8 +67,8 @@ void ParticleManager::Update() {
 			///------------------------------------------------------------------------
 			/// 変位更新
 			///------------------------------------------------------------------------
-			it->worldTransform_.translation_ += it->velocity_ * Frame::DeltaTime();
-
+			it->worldTransform_.translation_.y += it->velocity_.y* Frame::DeltaTime();
+			it->worldTransform_.translation_ += it->direction_*it->speed_ * Frame::DeltaTime();
 			///------------------------------------------------------------------------
 			/// ビルボードまたは通常の行列更新
 			///------------------------------------------------------------------------
@@ -239,17 +239,21 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 	///------------------------------------------------------------------------
 	/// 速度
 	///------------------------------------------------------------------------
-	Vector3 velocity = {
-		Random::Range(paramaters.velocityDist.min.x,paramaters.velocityDist.max.x),
-		Random::Range(paramaters.velocityDist.min.y,paramaters.velocityDist.max.y),
-		Random::Range(paramaters.velocityDist.min.z,paramaters.velocityDist.max.z)
+	Vector3 direction = {
+		Random::Range(paramaters.directionDist.min.x,paramaters.directionDist.max.x),
+		Random::Range(paramaters.directionDist.min.y,paramaters.directionDist.max.y),
+		Random::Range(paramaters.directionDist.min.z,paramaters.directionDist.max.z)
 	};
+
+	direction = direction.Normalize();
+	float speed = {Random::Range(paramaters.speedDist.min,paramaters.speedDist.max)};
 
 	// カメラの回転行列を取得
 	Matrix4x4 cameraRotationMatrix = MakeRotateMatrix(viewProjection_->rotation_);
 
 	// 速度ベクトルをカメラの向きに変換
-	particle.velocity_ = TransformNormal(velocity, cameraRotationMatrix);
+	particle.direction_ = TransformNormal(direction, cameraRotationMatrix);
+	particle.speed_ = speed;
 
 	///------------------------------------------------------------------------
 	/// 回転
@@ -257,7 +261,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 	if (paramaters.isRotateforDirection) {
 		// 進行方向（速度）を基に回転を計算
 
-		particle.worldTransform_.rotation_ = DirectionToEulerAngles(particle.velocity_,*viewProjection_);
+		particle.worldTransform_.rotation_ = DirectionToEulerAngles(particle.direction_,*viewProjection_);
 	} else {
 		// ランダム回転を設定
 		Vector3 rotate = {
@@ -265,8 +269,6 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 			Random::Range(paramaters.rotateDist.min.y, paramaters.rotateDist.max.y),
 			Random::Range(paramaters.rotateDist.min.z, paramaters.rotateDist.max.z)
 		};
-
-
 
 		particle.worldTransform_.rotation_ = toRadian(paramaters.baseRotate + rotate);
 	}

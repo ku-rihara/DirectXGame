@@ -1,0 +1,99 @@
+{
+    "EnemyDeathSmoke": {
+        "AdaptRotateIsX": false,
+        "AdaptRotateIsY": false,
+        "AdaptRotateIsZ": false,
+        "BaseColor": [
+            0.04901963472366333,
+            0.04861914739012718,
+            0.04661671072244644,
+            1.0
+        ],
+        "Color Max": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Color Min": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Gravity": 0.0,
+        "IntervalTime": 1.0,
+        "LifeTime": 0.7400000095367432,
+        "Particle Count": 12,
+        "Position Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Position Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Position Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale Max": 1.0,
+        "Scale Min": 1.0,
+        "ScaleV3 Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "ScaleV3 Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Velocity Max": [
+            1.5,
+            1.5,
+            1.0
+        ],
+        "Velocity Min": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "isAlphaNoMove": true,
+        "isBillBord": true,
+        "isMoveForRail": false,
+        "isRotateforDirection": false,
+        "isScalerScale": true,
+        "isShot": false,
+        "moveSpeed": 0.0,
+        "preBillBordType_": 0
+    }
+}

@@ -34,6 +34,7 @@ private:
 		float gravity_;
 		Vector3 direction_;
 		Vector3 velocity_;
+		float speed_;
 		Vector3 rotateSpeed_;
 		Vector4 color_;
 		WorldTransform worldTransform_;

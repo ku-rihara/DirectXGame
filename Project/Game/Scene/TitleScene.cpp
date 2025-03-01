@@ -21,20 +21,40 @@ void TitleScene::Init() {
 
 	BaseScene::Init();
 
-	emitter_.reset(ParticleEmitter::CreateParticle("EnemyDeath", "Plane", ".obj", 900));
-	uint32_t t=TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
-	emitter_->SetTextureHandle(t);
-	emitter_->SetBlendMode(ParticleCommon::BlendMode::Subtractive);
-	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
+	uint32_t t = TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
+	uint32_t t2 = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
 
+	smokeName_ = "EnemyDeathSmoke";
+	smokeEmitter_.reset(ParticleEmitter::CreateParticle(smokeName_, "Plane", ".obj", 900));
+	smokeEmitter_->SetTextureHandle(t);
+	smokeEmitter_->SetBlendMode(ParticleCommon::BlendMode::None);
+
+	fireSmokeName_ = "EnemyDeathFireSmoke";
+	fireSmokeEmitter_.reset(ParticleEmitter::CreateParticle(fireSmokeName_, "Plane", ".obj", 900));
+	fireSmokeEmitter_->SetTextureHandle(t2);
+	fireSmokeEmitter_->SetBlendMode(ParticleCommon::BlendMode::Add);
+
+	sparkName_ = "EnemyDeathSpark";
+	sparkEmitter_.reset(ParticleEmitter::CreateParticle(sparkName_, "Plane", ".obj", 900));
+	sparkEmitter_->SetTextureHandle(t2);
+	sparkEmitter_->SetBlendMode(ParticleCommon::BlendMode::Add);
+	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
 void TitleScene::Update() {
 
 	
-	emitter_->Update();
-	emitter_->EditorUpdate();
-	emitter_->Emit();
+	smokeEmitter_->Update();
+	smokeEmitter_->EditorUpdate();
+	smokeEmitter_->Emit();
+
+	fireSmokeEmitter_->Update();
+	fireSmokeEmitter_->EditorUpdate();
+	fireSmokeEmitter_->Emit();
+
+	sparkEmitter_->Update();
+	sparkEmitter_->EditorUpdate();
+	sparkEmitter_->Emit();
 
 	ParticleManager::GetInstance()->Update();
 
@@ -45,8 +65,6 @@ void TitleScene::Update() {
 
 		SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 	}
-
-
 }
 
 /// ===================================================
@@ -57,8 +75,8 @@ void TitleScene::ModelDraw() {
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 	Model::PreDraw(commandList);
 
-	emitter_->DebugDraw(viewProjection_);
-	emitter_->RailDraw(viewProjection_);
+	smokeEmitter_->DebugDraw(viewProjection_);
+	smokeEmitter_->RailDraw(viewProjection_);
 	ParticleManager::GetInstance()->Draw(viewProjection_);
 
 }

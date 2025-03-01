@@ -125,8 +125,12 @@ void ParticleEmitter::AddParmGroup() {
 
 	// Velocity
 	/*globalParameter_->AddSeparatorText("Velocity");*/
-	globalParameter_->AddItem(particleName_, "Velocity Max", parameters_.velocityDist.max);
-	globalParameter_->AddItem(particleName_, "Velocity Min", parameters_.velocityDist.min);
+	globalParameter_->AddItem(particleName_, "Speed Max", parameters_.speedDist.max);
+	globalParameter_->AddItem(particleName_, "Speed Min", parameters_.speedDist.min);
+
+	globalParameter_->AddItem(particleName_, "Direction Max", parameters_.directionDist.max);
+	globalParameter_->AddItem(particleName_, "Direction Min", parameters_.directionDist.min);
+
 
 	// Color
 	/*globalParameter_->AddSeparatorText("Color");*/
@@ -184,8 +188,12 @@ void ParticleEmitter::SetValues() {
 
 	// Velocity
 	/*globalParameter_->AddSeparatorText("Velocity");*/
-	globalParameter_->SetValue(particleName_, "Velocity Max", parameters_.velocityDist.max);
-	globalParameter_->SetValue(particleName_, "Velocity Min", parameters_.velocityDist.min);
+	globalParameter_->SetValue(particleName_, "Speed Max", parameters_.speedDist.max);
+	globalParameter_->SetValue(particleName_, "Speed Min", parameters_.speedDist.min);
+
+	globalParameter_->SetValue(particleName_, "Direction Max", parameters_.directionDist.max);
+	globalParameter_->SetValue(particleName_, "Direction Min", parameters_.directionDist.min);
+
 
 	// Color
 	/*globalParameter_->AddSeparatorText("Color");*/
@@ -244,8 +252,11 @@ void ParticleEmitter::ApplyGlobalParameter(const std::string& particleName) {
 
 
 	// Velocity
-	parameters_.velocityDist.min = globalParameter_->GetValue<Vector3>(particleName, "Velocity Min");
-	parameters_.velocityDist.max = globalParameter_->GetValue<Vector3>(particleName, "Velocity Max");
+	parameters_.speedDist.min = globalParameter_->GetValue<float>(particleName, "Speed Min");
+	parameters_.speedDist.max = globalParameter_->GetValue<float>(particleName, "Speed Max");
+	parameters_.directionDist.min = globalParameter_->GetValue<Vector3>(particleName, "Direction Min");
+	parameters_.directionDist.max = globalParameter_->GetValue<Vector3>(particleName, "Direction Max");
+
 
 	// Color
 	parameters_.baseColor = globalParameter_->GetValue<Vector4>(particleName, "BaseColor");
@@ -349,8 +360,11 @@ void ParticleEmitter::EditorUpdate() {
 	// Velocity
 	if (ImGui::CollapsingHeader("Velocity")) {
 		ImGui::SeparatorText("Velocity Range:");
-		ImGui::DragFloat3("Velocity Max", &parameters_.velocityDist.max.x, 0.1f);
-		ImGui::DragFloat3("Velocity Min", &parameters_.velocityDist.min.x, 0.1f);
+		ImGui::DragFloat("Velocity Max", &parameters_.speedDist.max, 0.1f);
+		ImGui::DragFloat("Velocity Min", &parameters_.speedDist.min, 0.1f);
+		ImGui::SeparatorText("Direction Range:");
+		ImGui::DragFloat3("Direction Max", &parameters_.directionDist.max.x, 0.01f,-1.0f,1.0f);
+		ImGui::DragFloat3("Direction Min", &parameters_.directionDist.min.x, 0.01f, -1.0f, 1.0f);
 	}
 
 	// Scale

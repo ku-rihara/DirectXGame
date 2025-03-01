@@ -36,7 +36,8 @@ public:
 		bool isScalerScale;                   //スカラーのスケールにするか
 		FMinMax scaleDist;                    // スケールランダム分配
 		V3MinMax scaleDistV3;                 // スケールランダム分配
-		V3MinMax velocityDist;                // 速度ランダム分配
+		FMinMax speedDist;                  // 速度ランダム分配
+		V3MinMax directionDist;                // 速度ランダム分配
 		Vector4 baseColor;                    // 基準の色
 		V4MinMax colorDist;                   // 色ランダム分配
 		float lifeTime;                       // 生存時間
