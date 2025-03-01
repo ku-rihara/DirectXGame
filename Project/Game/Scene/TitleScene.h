@@ -12,7 +12,7 @@
 /// <summary>
 /// タイトルシーン
 /// </summary>
-class TitleScene:public BaseScene {
+class TitleScene :public BaseScene {
 private:
 	
 

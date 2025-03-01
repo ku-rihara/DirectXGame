@@ -1,13 +1,13 @@
 {
-    "EnemyDeath": {
+    "EnemyDeathSpark": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": true,
         "BaseColor": [
-            0.035659365355968475,
-            0.13725489377975464,
-            0.04761176556348801,
-            0.0
+            0.6029411554336548,
+            0.11822374910116196,
+            0.11822374910116196,
+            1.0
         ],
         "Color Max": [
             0.0,
@@ -21,24 +21,34 @@
             0.0,
             0.0
         ],
-        "Gravity": -17.5,
-        "IntervalTime": 1.0399999618530273,
-        "LifeTime": 0.44999998807907104,
-        "Particle Count": 31,
+        "Direction Max": [
+            1.0,
+            1.0,
+            0.0
+        ],
+        "Direction Min": [
+            -1.0,
+            -1.0,
+            0.0
+        ],
+        "Gravity": 0.0,
+        "IntervalTime": 1.0,
+        "LifeTime": 0.49000000953674316,
+        "Particle Count": 16,
         "Position Base": [
             0.0,
             0.0,
             0.0
         ],
         "Position Max": [
-      2.700000047683716,
-      0.4000000059604645,
-      3.0999999046325684
+            0.0,
+            0.0,
+            0.0
         ],
         "Position Min": [
-      1.100000023841858,
-      -0.800000011920929,
-      -2.5
+            0.0,
+            0.0,
+            0.0
         ],
         "Rotate Base": [
             0.0,
@@ -55,11 +65,6 @@
             0.0,
             0.0
         ],
-        "RotateSpeed Base": [
-            0.0,
-            0.0,
-            0.0
-        ],
         "RotateSpeed Max": [
             0.0,
             0.0,
@@ -70,33 +75,36 @@
             0.0,
             0.0
         ],
-        "Scale Max": 4.0,
-        "Scale Min": 4.0,
+        "Scale Max": 1.0,
+        "Scale Min": 1.0,
         "ScaleV3 Max": [
-            1.0,
-            1.0,
-            1.0
+            0.5,
+            4.0,
+            0.0
         ],
         "ScaleV3 Min": [
-            1.0,
-            1.0,
-            1.0
+            0.5,
+            4.0,
+            0.0
         ],
+        "Speed Max": 19.0,
+        "Speed Min": 10.899999618530273,
         "Velocity Max": [
-            13.100000381469727,
-      19.399999618530273,
-            13.5
+            17.0,
+            17.0,
+            0.0
         ],
         "Velocity Min": [
-            -13.100000381469727,
-      10.0,
-            -13.399999618530273
+            17.0,
+            17.0,
+            0.0
         ],
+        "isAlphaNoMove": false,
         "isBillBord": true,
         "isMoveForRail": false,
         "isRotateforDirection": true,
-        "isScalerScale": true,
-    "isShot": true,
+        "isScalerScale": false,
+        "isShot": false,
         "moveSpeed": 0.0,
         "preBillBordType_": 0
     }
