@@ -146,7 +146,6 @@ void ParticleManager::CreateParticleGroup(
 	// グループ追加
 	particleGroups_[name] = ParticleGroup();
 
-
 	/// モデル
 	ModelManager::GetInstance()->LoadModel(modelFilePath, extension);
 	SetModel(name, modelFilePath, extension);
@@ -186,7 +185,6 @@ void  ParticleManager::CreateMaterialResource(const std::string& name) {
 /// インスタンシングリソース作成
 ///============================================================
 void ParticleManager::CreateInstancingResource(const std::string& name, const uint32_t& instanceNum) {
-
 
 	particleGroups_[name].instanceNum = instanceNum;
 
