@@ -154,6 +154,7 @@ void ParticleEmitter::AddParmGroup() {
 	globalParameter_->AddItem(particleName_, "AdaptRotateIsY", groupParamaters_.adaptRotate_.isY_);
 	globalParameter_->AddItem(particleName_, "AdaptRotateIsZ", groupParamaters_.adaptRotate_.isZ_);
 	globalParameter_->AddItem(particleName_, "isShot", preIsShot_);
+	globalParameter_->AddItem(particleName_, "isAlphaNoMove", groupParamaters_.isAlphaNoMove);
 }
 
 
@@ -212,6 +213,7 @@ void ParticleEmitter::SetValues() {
 	globalParameter_->SetValue(particleName_, "AdaptRotateIsY", groupParamaters_.adaptRotate_.isY_);
 	globalParameter_->SetValue(particleName_, "AdaptRotateIsZ", groupParamaters_.adaptRotate_.isZ_);
 	globalParameter_->SetValue(particleName_, "isShot", preIsShot_);
+	globalParameter_->SetValue(particleName_, "isAlphaNoMove", groupParamaters_.isAlphaNoMove);
 }
 
 
@@ -268,7 +270,7 @@ void ParticleEmitter::ApplyGlobalParameter(const std::string& particleName) {
 	groupParamaters_.adaptRotate_.isY_ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsY");
 	groupParamaters_.adaptRotate_.isZ_ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsZ");
 	preIsShot_ = globalParameter_->GetValue<bool>(particleName, "isShot");
-
+	groupParamaters_.isAlphaNoMove = globalParameter_->GetValue<bool>(particleName, "isAlphaNoMove");
 }
 
 ///=================================================================================
@@ -383,6 +385,14 @@ void ParticleEmitter::EditorUpdate() {
 	}
 
 
+	// その他のパラメータ
+	if (ImGui::CollapsingHeader("etcParamater")) {
+		ImGui::DragFloat("IntervalTime", &intervalTime_, 0.01f, 0.01f, 100.0f);
+		ImGui::DragFloat("Gravity", &parameters_.gravity, 0.1f);
+		ImGui::DragFloat("LifeTime", &parameters_.lifeTime, 0.01f);
+		ImGui::SliderInt("Particle Count", &particleCount, 1, 100);
+	}
+
 	// チェックが有効なら、BillboardType の設定を表示
 	if (ImGui::CollapsingHeader("BillBoard")) {
 
@@ -411,6 +421,7 @@ void ParticleEmitter::EditorUpdate() {
 		// IsRotateforDirection のチェックボックス
 		ImGui::Checkbox("IsRotateforDirection", &parameters_.isRotateforDirection);
 		ImGui::Checkbox("IsShot", &preIsShot_);
+		ImGui::Checkbox("isAlphaNoMove", &groupParamaters_.isAlphaNoMove);
 	}
 
 	// パーティクル切り替え

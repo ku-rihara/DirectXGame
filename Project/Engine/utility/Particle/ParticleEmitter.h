@@ -23,6 +23,7 @@ public:
 		ParticleCommon::BlendMode blendMode;
 		bool isBillBord;
 		bool isShot;
+		bool isAlphaNoMove;
 		WorldTransform::BillboardType  billBordType;
 		WorldTransform::AdaptRotate adaptRotate_;
 	};

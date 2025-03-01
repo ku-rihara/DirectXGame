@@ -104,6 +104,11 @@ public:
 		      const ParticleEmitter::GroupParamaters&groupParamaters, const int32_t& count);
 
 	///============================================================
+	/// parm change
+	///============================================================
+	void AlphaAdapt(ParticleFprGPU& data,const Particle&parm, const ParticleGroup&group);
+
+	///============================================================
 	///getter method
 	///============================================================
 	const std::vector<std::string>& GetParticleFiles() const {return particleFiles_;}

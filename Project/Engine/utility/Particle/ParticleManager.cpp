@@ -44,7 +44,6 @@ void ParticleManager::Update() {
 		///*************************************************
 		for (auto it = particles.begin(); it != particles.end();) {
 
-
 			///------------------------------------------------------------------------
 			///加速フィールド
 			///------------------------------------------------------------------------
@@ -118,9 +117,8 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
 			instancingData[instanceIndex].WorldInverseTranspose =
 				Inverse(Transpose(it->worldTransform_.matWorld_));
 
-			instancingData[instanceIndex].color = it->color_;
-			instancingData[instanceIndex].color.w = 1.0f - (it->currentTime_ / it->lifeTime_);
-
+			AlphaAdapt(instancingData[instanceIndex],*it,group);
+			
 			++instanceIndex;
 			++it;
 		}
@@ -336,6 +334,7 @@ void ParticleManager::Emit(
 	particleGroup.parm.isBillBord = groupParamaters.isBillBord;
 	particleGroup.parm.billBordType = groupParamaters.billBordType;
 	particleGroup.parm.adaptRotate_ = groupParamaters.adaptRotate_;
+	particleGroup.parm.isAlphaNoMove = groupParamaters.isAlphaNoMove;
 
 	// 生成、グループ追加
 	std::list<Particle> particles;
@@ -394,4 +393,11 @@ void ParticleManager::SetViewProjection(const ViewProjection* view){
 
 void ParticleManager::SetAllParticleFile() {
 	particleFiles_ = GetFileNamesForDyrectry(dyrectry_);
+}
+
+void ParticleManager::AlphaAdapt(ParticleFprGPU& data, const Particle& parm, const ParticleGroup& group) {
+	data.color = parm.color_;
+	if (group.parm.isAlphaNoMove)return;
+	data.color.w = 1.0f - (parm.currentTime_ / parm.lifeTime_);
+
 }
