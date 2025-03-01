@@ -154,6 +154,7 @@ void ParticleEmitter::AddParmGroup() {
 	globalParameter_->AddItem(particleName_, "AdaptRotateIsY", groupParamaters_.adaptRotate_.isY_);
 	globalParameter_->AddItem(particleName_, "AdaptRotateIsZ", groupParamaters_.adaptRotate_.isZ_);
 	globalParameter_->AddItem(particleName_, "isShot", preIsShot_);
+	globalParameter_->AddItem(particleName_, "isAlphaNoMove", groupParamaters_.isAlphaNoMove);
 }
 
 
@@ -212,6 +213,7 @@ void ParticleEmitter::SetValues() {
 	globalParameter_->SetValue(particleName_, "AdaptRotateIsY", groupParamaters_.adaptRotate_.isY_);
 	globalParameter_->SetValue(particleName_, "AdaptRotateIsZ", groupParamaters_.adaptRotate_.isZ_);
 	globalParameter_->SetValue(particleName_, "isShot", preIsShot_);
+	globalParameter_->SetValue(particleName_, "isAlphaNoMove", groupParamaters_.isAlphaNoMove);
 }
 
 
@@ -268,7 +270,7 @@ void ParticleEmitter::ApplyGlobalParameter(const std::string& particleName) {
 	groupParamaters_.adaptRotate_.isY_ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsY");
 	groupParamaters_.adaptRotate_.isZ_ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsZ");
 	preIsShot_ = globalParameter_->GetValue<bool>(particleName, "isShot");
-
+	groupParamaters_.isAlphaNoMove = globalParameter_->GetValue<bool>(particleName, "isAlphaNoMove");
 }
 
 ///=================================================================================
@@ -419,6 +421,7 @@ void ParticleEmitter::EditorUpdate() {
 		// IsRotateforDirection のチェックボックス
 		ImGui::Checkbox("IsRotateforDirection", &parameters_.isRotateforDirection);
 		ImGui::Checkbox("IsShot", &preIsShot_);
+		ImGui::Checkbox("isAlphaNoMove", &groupParamaters_.isAlphaNoMove);
 	}
 
 	// パーティクル切り替え
