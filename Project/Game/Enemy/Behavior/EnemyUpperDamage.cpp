@@ -45,17 +45,13 @@ void EnemyUpperDamage::Update() {
 	/// ヒットバッグ
 	///---------------------------------------------------------
 
-		// ターゲットへのベクトル
-		direction_ = pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());
-
-		direction_.y = 0.0f;
-		direction_.Normalize();
-
-		// 目標角度を計算
-		objectiveAngle_ = std::atan2(-direction_.x, -direction_.z);
+		AngleCaluclation();
 
 		// 最短角度補間でプレイヤーの回転を更新
 		pBaseEnemy_->SetRotationY(LerpShortAngle(pBaseEnemy_->GetTransform().rotation_.y, objectiveAngle_, 0.5f));
+
+		rotate_ += pBaseEnemy_->GetParamater().thrustRotateSpeed * Frame::DeltaTimeRate();
+		pBaseEnemy_->SetBodyRotateX(rotate_);
 
 		pBaseEnemy_->Jump(speed_, fallSpeedLimit_, gravity_);
 
@@ -78,6 +74,7 @@ void EnemyUpperDamage::Update() {
 	/// -------------------------------------------------------
 	/// 追従に戻す
 	///---------------------------------------------------------
+		pBaseEnemy_->RotateInit();
 		pBaseEnemy_->SetBodyColor(Vector4(1.0f, 1, 1, 1.0f));
 		pBaseEnemy_->BackToDamageRoot();
 		break;

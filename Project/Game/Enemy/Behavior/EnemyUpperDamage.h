@@ -25,6 +25,8 @@ private:
 	float stopTime_;
 	float kStopTime_;
 
+	float rotate_;
+
 public:
 	//コンストラクタ
 	EnemyUpperDamage(BaseEnemy* boss);

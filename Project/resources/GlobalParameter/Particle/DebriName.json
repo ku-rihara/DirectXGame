@@ -31,10 +31,10 @@
             0.8100000023841858,
             -0.30000001192092896
         ],
-        "Gravity": -196.1999969482422,
+        "Gravity": -369.79998779296875,
         "IntervalTime": 1.0,
         "LifeTime": 1.159999966621399,
-        "Particle Count": 19,
+        "Particle Count": 38,
         "Position Base": [
             0.0,
             0.0,
@@ -42,12 +42,12 @@
         ],
         "Position Max": [
             0.20000000298023224,
-            3.9000000953674316,
+            -1.0,
             0.20000000298023224
         ],
         "Position Min": [
             -0.20000000298023224,
-            1.5,
+            -1.0,
             -0.20000000298023224
         ],
         "Rotate Base": [
@@ -68,32 +68,32 @@
         "RotateSpeed Max": [
             0.0,
             0.0,
-            25.100000381469727
+            11.0
         ],
         "RotateSpeed Min": [
             0.0,
             0.0,
-            28.600000381469727
+            11.0
         ],
-        "Scale Max": 2.0,
-        "Scale Min": 2.0,
+        "Scale Max": 1.7000000476837158,
+        "Scale Min": 0.20000000298023224,
         "ScaleV3 Max": [
-            2.0,
-            2.0,
-            5.0
+            1.5,
+            1.5,
+            1.5
         ],
         "ScaleV3 Min": [
-            2.0,
-            2.0,
-            5.0
+            1.0,
+            1.0,
+            1.0
         ],
-        "Speed Max": 56.70000076293945,
-        "Speed Min": 51.29999923706055,
+        "Speed Max": 100.0999984741211,
+        "Speed Min": 99.30000305175781,
         "isAlphaNoMove": true,
         "isBillBord": false,
         "isMoveForRail": false,
         "isRotateforDirection": false,
-        "isScalerScale": false,
+        "isScalerScale": true,
         "isShot": true,
         "moveSpeed": 0.0,
         "preBillBordType_": 0,

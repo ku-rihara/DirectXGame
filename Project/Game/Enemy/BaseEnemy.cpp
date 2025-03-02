@@ -57,6 +57,7 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	uint32_t circleHandle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
 	uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
 	uint32_t boalHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
+	uint32_t crackTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
 
 
 	/// particleD
@@ -73,8 +74,12 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 
 	//
 	InitParticleEffect(debriParticle_[0], "DebriName","debri",defaultHandle,900);
-	
+	debriParticle_[0].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
 
+	// crack
+	fallCrack_.reset(ParticleEmitter::CreateParticle("Crack", "Plane", ".obj", 30));
+	fallCrack_->SetTextureHandle(crackTexture_);
+	fallCrack_->SetBlendMode(ParticleCommon::BlendMode::None);
 
 	findSprite_ = std::make_unique<FindSprite>();
 	notFindSprite_ = std::make_unique<NotFindSprite>();
@@ -99,6 +104,9 @@ void BaseEnemy::Update() {
 
 	damageEmitter_->SetTargetPosition(GetWorldPosition());
 	damageEmitter_->Update();
+
+	fallCrack_->SetTargetPosition(Vector3(GetWorldPosition().x, 0.0f, GetWorldPosition().z));
+	fallCrack_->Update();
 
 
 	// 死亡パーティクル
@@ -273,7 +281,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 			if (dynamic_cast<EnemyBoundDamage*>(damageBehavior_.get())) break;
 
 			DamageForPar(damageParm_);
-			ChangeBehavior(std::make_unique<EnemyBoundDamage>(this));
+			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 
 			break;
 		default:
@@ -349,6 +357,7 @@ void BaseEnemy::ThrustEmit() {
 	for (uint32_t i = 0; i < debriParticle_.size(); i++) {
 		debriParticle_[i].emitter->Emit();
 	}
+	fallCrack_->Emit();
 }
 
 void BaseEnemy::DeathEmit() {

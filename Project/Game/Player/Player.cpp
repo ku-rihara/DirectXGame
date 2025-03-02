@@ -157,30 +157,6 @@ void Player::EffectDraw(const ViewProjection& viewProjection) {
 }
 
 
-void Player::FallParticleEmit() {
-	//ガレキパーティクル
-	for (uint32_t i = 0; i < debriParticle_.size(); i++) {
-		debriParticle_[i].emitter->Emit();
-	}
-	fallCrack_->Emit();
-}
-
-void Player::ParticleUpdate() {
-	//ガレキパーティクル
-	for (uint32_t i = 0; i < debriParticle_.size(); i++) {
-		debriParticle_[i].emitter->SetTargetPosition(GetWorldPosition());
-		debriParticle_[i].emitter->Update();
-	}
-
-	//星パーティクル
-	for (uint32_t i = 0; i < starEffect_.size(); i++) {
-		starEffect_[i].emitter->Update();
-		starEffect_[i].emitter->EditorUpdate();
-	}
-
-	fallCrack_->SetTargetPosition(Vector3(GetWorldPosition().x, 0.0f, GetWorldPosition().z));
-	fallCrack_->Update();
-}
 
 ///=========================================================
 /// 移動の入力処理
@@ -469,32 +445,7 @@ void Player::AdjustParm() {
 #endif // _DEBUG
 }
 
-void Player::StartEffectEmit() {
-	//星パーティクル
-	for (uint32_t i = 0; i < starEffect_.size(); i++) {
-		starEffect_[i].emitter->Emit();
-	}
-}
 
-void Player::FallEffectInit(const Vector3& pos) {
-	std::unique_ptr<Effect> effect = std::make_unique<Effect>();
-
-	effect->Init(pos);
-	effects_.push_back(std::move(effect));
-}
-
-
-void Player::FallEffectUpdate() {
-	// 各エフェクトを更新
-	for (std::unique_ptr<Effect>& effect : effects_) {
-		if (effect) {
-			effect->Update();
-		}
-	}
-
-	// 完了したエフェクトを消す
-	effects_.erase(std::remove_if(effects_.begin(), effects_.end(), [](const std::unique_ptr<Effect>& effect) { return effect->IsFinished(); }), effects_.end());
-}
 
 void Player::SetGameCamera(GameCamera* gamecamera) {
 	pGameCamera_ = gamecamera;
@@ -777,6 +728,10 @@ void Player::SetRotateInit() {
 	headTransform_.translation_.y = 0.0f;
 }
 
+
+/// =======================================================================================
+/// Rendition
+/// =======================================================================================
 void Player::SetLightPos() {
 	// ライト位置
 	Light::GetInstance()->GetSpotLightManager()->GetSpotLight(0)->SetPosition(Vector3(
@@ -824,6 +779,62 @@ void  Player::ParticleInit() {
 	fallCrack_.reset(ParticleEmitter::CreateParticle("Crack", "Plane", ".obj", 30));
 	fallCrack_->SetTextureHandle(crackTexture_);
 	fallCrack_->SetBlendMode(ParticleCommon::BlendMode::None);
+}
+
+
+void Player::FallParticleEmit() {
+	//ガレキパーティクル
+	for (uint32_t i = 0; i < debriParticle_.size(); i++) {
+		debriParticle_[i].emitter->Emit();
+	}
+	fallCrack_->Emit();
+}
+
+void Player::ParticleUpdate() {
+	//ガレキパーティクル
+	for (uint32_t i = 0; i < debriParticle_.size(); i++) {
+		debriParticle_[i].emitter->SetTargetPosition(GetWorldPosition());
+		debriParticle_[i].emitter->Update();
+		debriParticle_[i].emitter->EditorUpdate();
+	}
+
+	//星パーティクル
+	for (uint32_t i = 0; i < starEffect_.size(); i++) {
+		starEffect_[i].emitter->Update();
+		starEffect_[i].emitter->EditorUpdate();
+	}
+
+	fallCrack_->SetTargetPosition(Vector3(GetWorldPosition().x, 0.0f, GetWorldPosition().z));
+	fallCrack_->Update();
+	fallCrack_->EditorUpdate();
+}
+
+
+void Player::StartEffectEmit() {
+	//星パーティクル
+	for (uint32_t i = 0; i < starEffect_.size(); i++) {
+		starEffect_[i].emitter->Emit();
+	}
+}
+
+void Player::FallEffectInit(const Vector3& pos) {
+	std::unique_ptr<Effect> effect = std::make_unique<Effect>();
+
+	effect->Init(pos);
+	effects_.push_back(std::move(effect));
+}
+
+
+void Player::FallEffectUpdate() {
+	// 各エフェクトを更新
+	for (std::unique_ptr<Effect>& effect : effects_) {
+		if (effect) {
+			effect->Update();
+		}
+	}
+
+	// 完了したエフェクトを消す
+	effects_.erase(std::remove_if(effects_.begin(), effects_.end(), [](const std::unique_ptr<Effect>& effect) { return effect->IsFinished(); }), effects_.end());
 }
 
 /// <summary>

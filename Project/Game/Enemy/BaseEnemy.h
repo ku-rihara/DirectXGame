@@ -55,6 +55,7 @@ private:
 
 	std::array<ParticleEffect, 4>deathParticle_;
 	std::array<ParticleEffect, 1>debriParticle_;
+	std::unique_ptr<ParticleEmitter>fallCrack_;
 protected:
 
 	Type type_;
