@@ -104,7 +104,7 @@
         "isMoveForRail": false,
         "isRotateforDirection": true,
         "isScalerScale": false,
-        "isShot": false,
+        "isShot": true,
         "moveSpeed": 0.0,
         "preBillBordType_": 0,
         "scaleEaseParm.easeSpeed": 0.6700000166893005,

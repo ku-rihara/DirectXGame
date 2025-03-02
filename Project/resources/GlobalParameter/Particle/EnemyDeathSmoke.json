@@ -87,8 +87,8 @@
             0.0,
             0.0
         ],
-        "Speed Max": 3.0,
-        "Speed Min": -1.600000023841858,
+        "Speed Max": 6.400000095367432,
+        "Speed Min": -4.400000095367432,
         "Velocity Max": [
             1.5,
             1.5,
@@ -104,7 +104,7 @@
         "isMoveForRail": false,
         "isRotateforDirection": false,
         "isScalerScale": true,
-        "isShot": false,
+        "isShot": true,
         "moveSpeed": 0.0,
         "preBillBordType_": 0,
         "scaleEaseParm.easeTypeInt": 0,
