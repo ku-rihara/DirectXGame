@@ -233,6 +233,13 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 	particle.worldTransform_.Init();
 
 	///------------------------------------------------------------------------
+	/// ペアレント
+	///------------------------------------------------------------------------
+	if (paramaters.parentTransform) {
+		particle.worldTransform_.parent_ = paramaters.parentTransform;
+	}
+
+	///------------------------------------------------------------------------
 	/// 座標
 	///------------------------------------------------------------------------
 	Vector3 randomTranslate = {

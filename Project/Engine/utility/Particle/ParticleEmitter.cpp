@@ -586,6 +586,11 @@ void ParticleEmitter::ParticleChange() {
 	}
 }
 
+/// <summary>
+/// setter
+/// </summary>
+/// <param name="parent"></param>
+
 void ParticleEmitter::SetParentBasePos(WorldTransform* parent) {
 	emitBoxTransform_.parent_ = parent;
 }
@@ -596,4 +601,8 @@ void  ParticleEmitter::SetBlendMode(const ParticleCommon::BlendMode& blendmode) 
 
 void  ParticleEmitter::SetBillBordType(const WorldTransform::BillboardType& billboardType) {
 	groupParamaters_.billBordType = billboardType;
+}
+
+void ParticleEmitter::SetParentTransform(const WorldTransform* transform) {
+	parameters_.parentTransform = transform;
 }
