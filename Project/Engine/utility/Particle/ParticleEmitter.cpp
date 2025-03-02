@@ -603,3 +603,7 @@ void  ParticleEmitter::SetBillBordType(const WorldTransform::BillboardType& bill
 void ParticleEmitter::SetParentTransform(const WorldTransform* transform) {
 	parameters_.parentTransform = transform;
 }
+
+void ParticleEmitter::SetFollowingPos(const Vector3* pos) {
+	parameters_.followingPos_=pos;
+}

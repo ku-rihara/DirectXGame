@@ -48,6 +48,7 @@ public:
 	struct Parameters {
 		const WorldTransform* parentTransform = nullptr;
 		Vector3 targetPos;                    // 対象座標
+		const Vector3* followingPos_=nullptr;
 		Vector3 emitPos;                      // 発生座標
 		V3MinMax positionDist;                // 座標ランダム分配
 		bool isScalerScale;                   //スカラーのスケールにするか
@@ -131,6 +132,7 @@ public:
 	void SetTextureHandle(const uint32_t& hanle);
 	void SetTargetPosition(const Vector3& pos) { parameters_.targetPos = pos; }
 	void SetParentTransform(const WorldTransform* transform);
+	void SetFollowingPos(const Vector3* pos);
 
 	//imgui化すべき
 	void SetIsRotateForDirection(const bool& is) { parameters_.isRotateforDirection = is; }
