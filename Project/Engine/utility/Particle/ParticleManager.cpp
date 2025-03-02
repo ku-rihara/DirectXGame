@@ -76,7 +76,7 @@ void ParticleManager::Update() {
 			/// 変位更新
 			///------------------------------------------------------------------------
 			if(it->followPos){
-				it->worldTransform_.translation_ = *it->followPos;
+				it->worldTransform_.translation_ = *it->followPos+ it->offSet;
 			} else {
 				it->worldTransform_.translation_.y += it->velocity_.y * Frame::DeltaTime();
 				it->worldTransform_.translation_ += it->direction_ * it->speed_ * Frame::DeltaTime();
@@ -258,7 +258,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 		Random::Range(paramaters.positionDist.min.z, paramaters.positionDist.max.z)
 	};
 	particle.worldTransform_.translation_ = paramaters.targetPos + paramaters.emitPos + randomTranslate;
-
+	particle.offSet= paramaters.targetPos + paramaters.emitPos + randomTranslate;
 	///------------------------------------------------------------------------
 	/// 速度
 	///------------------------------------------------------------------------
