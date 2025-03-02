@@ -106,6 +106,22 @@
         "isScalerScale": false,
         "isShot": false,
         "moveSpeed": 0.0,
-        "preBillBordType_": 0
+        "preBillBordType_": 0,
+        "scaleEaseParm.easeSpeed": 0.6700000166893005,
+        "scaleEaseParm.easeTypeInt": 0,
+        "scaleEaseParm.endValueF.max": 0.0,
+        "scaleEaseParm.endValueF.min": 0.0,
+        "scaleEaseParm.endValueV3.max": [
+            5.0,
+            5.0,
+            5.0
+        ],
+        "scaleEaseParm.endValueV3.min": [
+            1.0,
+            1.0,
+            0.0
+        ],
+        "scaleEaseParm.isScaleEase": true,
+        "scaleEaseParm.maxTime": 0.17000000178813934
     }
 }

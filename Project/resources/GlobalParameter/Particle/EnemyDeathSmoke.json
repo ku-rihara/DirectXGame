@@ -21,6 +21,16 @@
             0.0,
             0.0
         ],
+        "Direction Max": [
+            1.0,
+            1.0,
+            0.0
+        ],
+        "Direction Min": [
+            -1.0,
+            -1.0,
+            0.0
+        ],
         "Gravity": 0.0,
         "IntervalTime": 1.0,
         "LifeTime": 0.7400000095367432,
@@ -77,6 +87,8 @@
             0.0,
             0.0
         ],
+        "Speed Max": 1.0,
+        "Speed Min": 1.0,
         "Velocity Max": [
             1.5,
             1.5,

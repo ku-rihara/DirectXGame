@@ -21,12 +21,19 @@ enum class BlendMode;
 class ParticleCommon;
 struct ParticleEmitter::GroupParamaters;
 struct ParticleEmitter::Parameters;
+struct ParticleEmitter::EaseParm;
 class ParticleManager {
 private:
 	
 	///============================================================
 	/// struct
 	///============================================================
+
+	struct ScaleInFo {
+		Vector3 tempScaleV3;
+		Vector3 easeEndScale;
+		ParticleEmitter::EaseParm easeparm;
+	};
 
 	struct Particle {
 		float lifeTime_;
@@ -38,7 +45,8 @@ private:
 		Vector3 rotateSpeed_;
 		Vector4 color_;
 		WorldTransform worldTransform_;
-	
+		ScaleInFo scaleInfo;
+		float easeTime;
 	};
 
 	struct AccelerationField {///　加速フィールド
@@ -106,9 +114,12 @@ public:
 		      const ParticleEmitter::GroupParamaters&groupParamaters, const int32_t& count);
 
 	///============================================================
-	/// parm change
+	/// parm Adapt
 	///============================================================
 	void AlphaAdapt(ParticleFprGPU& data,const Particle&parm, const ParticleGroup&group);
+	Vector3 ScaleAdapt(const float& time, const ScaleInFo& parm);
+	Vector3 EaseAdapt( const ParticleEmitter::EaseType& easetype,const Vector3& start, 
+		               const Vector3& end, const float& time, const float& maxTime);
 
 	///============================================================
 	///getter method

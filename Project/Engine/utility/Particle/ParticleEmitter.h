@@ -16,10 +16,16 @@
 /// </summary>
 enum class WorldTransform::BillboardType;
 struct WorldTransform::AdaptRotate;
- enum class ParticleCommon::BlendMode;
+enum class ParticleCommon::BlendMode;
 class ParticleEmitter {
 public:
-	struct GroupParamaters {
+	enum class EaseType {
+		INSINE,
+		OUTSINE,
+		OUTBACK,
+	};
+public:
+	struct GroupParamaters {// グループパラメータ
 		ParticleCommon::BlendMode blendMode;
 		bool isBillBord;
 		bool isShot;
@@ -28,15 +34,26 @@ public:
 		WorldTransform::AdaptRotate adaptRotate_;
 	};
 
+	struct EaseParm { // イージングパラメータ
+		bool isScaleEase;
+		float maxTime;
+		float easeSpeed;
+		EaseType easeType;
+		int easeTypeInt;
+		FMinMax endValueF;
+		V3MinMax endValueV3;
+	};
+
 	// パーティクル設定を統合する構造体
 	struct Parameters {
 		Vector3 targetPos;                    // 対象座標
 		Vector3 emitPos;                      // 発生座標
 		V3MinMax positionDist;                // 座標ランダム分配
 		bool isScalerScale;                   //スカラーのスケールにするか
+		EaseParm scaleEaseParm;
 		FMinMax scaleDist;                    // スケールランダム分配
 		V3MinMax scaleDistV3;                 // スケールランダム分配
-		FMinMax speedDist;                  // 速度ランダム分配
+		FMinMax speedDist;                    // 速度ランダム分配
 		V3MinMax directionDist;                // 速度ランダム分配
 		Vector4 baseColor;                    // 基準の色
 		V4MinMax colorDist;                   // 色ランダム分配
@@ -48,7 +65,7 @@ public:
 		bool isRotateforDirection;            // 方向回転フラグ
 	};
 private:
-	
+
 	///=====================================================
 	/// private variants
 	///=====================================================
@@ -77,7 +94,7 @@ private:
 	const std::string folderName_ = "Particle";
 	std::string editorMessage_;                          // エディタ用メッセージ
 	GlobalParameter* globalParameter_;                   // グローバルパラメータ
-	
+
 
 public:
 
@@ -96,20 +113,20 @@ public:
 	void Init();/// 初期化
 	void Emit();///　エミット
 	void UpdateEmitTransform();
-	
-	void RailDraw(const ViewProjection&viewProjection);
+
+	void RailDraw(const ViewProjection& viewProjection);
 	void DebugDraw(const ViewProjection& viewProjection);
 
 	///=====================================================
 	/// getter method
 	///=====================================================
 	const std::string& GetParticleName()const { return particleName_; }
-	
+
 
 	///=====================================================
-    /// setter method
-    ///=====================================================
-	void SetParentBasePos(WorldTransform*parent);
+	/// setter method
+	///=====================================================
+	void SetParentBasePos(WorldTransform* parent);
 	void SetTextureHandle(const uint32_t& hanle);
 	void SetTargetPosition(const Vector3& pos) { parameters_.targetPos = pos; }
 
@@ -129,11 +146,12 @@ public:
 	void AddParmGroup();
 	void SetValues();
 
-	void ApplyGlobalParameter(const std::string&particleName);
+	void ApplyGlobalParameter(const std::string& particleName);
 	void ParmLoadForImGui();
 	void ParmSaveForImGui();
 
 	void ParticleChange();
 
-	std::vector<std::string> GetParticleFiles(const std::string& directory);
+	/// parm
+	void ScaleParmEditor();
 };
