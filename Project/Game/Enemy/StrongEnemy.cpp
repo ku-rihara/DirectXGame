@@ -5,7 +5,7 @@
 ///========================================================
 void StrongEnemy::Init(const Vector3& spownPos) {
 	BaseEnemy::Init(spownPos);
-	damageParm_ = 5.0f;
+	damageParm_ = 20.0f;
 	bodyObj_.reset(Object3d::CreateModel("StrongEnemy", ".obj"));
 	bodyTransform_.Init();
 	bodyTransform_.SetParent(&transform_);

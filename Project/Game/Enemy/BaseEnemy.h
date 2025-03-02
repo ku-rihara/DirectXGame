@@ -49,13 +49,13 @@ public:
 
 private:
 	/// Particle
-	std::string damageName_;
-	std::unique_ptr<ParticleEmitter>damageEmitter_;
-
-
 	std::array<ParticleEffect, 4>deathParticle_;
 	std::array<ParticleEffect, 1>debriParticle_;
+	std::array<ParticleEffect, 1>damageParticle;
 	std::unique_ptr<ParticleEmitter>fallCrack_;
+private:
+	int deathSound_;
+	int thurstSound_;
 protected:
 
 	Type type_;

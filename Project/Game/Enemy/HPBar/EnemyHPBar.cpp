@@ -29,7 +29,7 @@ void EnemyHPBar::Update(int hp) {
 	hpSprite_->SetAlpha(1.0f);
 
 	hpSprite_->SetPosition(Vector2(position_.x, position_.y));
-	hpSprite_->SetTextureSize(Vector2(float(hp), size_.y));
+	hpSprite_->SetTextureSize(Vector2(float(max(hp,0.0f)), size_.y));
 
 	sprite_->SetPosition(position_);
 	sprite_->SetTextureSize(size_);

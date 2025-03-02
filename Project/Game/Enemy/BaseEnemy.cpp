@@ -17,6 +17,7 @@
 #include"base/TextureManager.h"
 #include"Frame/Frame.h"
 #include"utility/Particle/ParticleCommon.h"
+#include"audio/Audio.h"
 
 ///=========================================================
 ///　static 変数初期化
@@ -59,11 +60,8 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	uint32_t boalHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
 	uint32_t crackTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
 
-
-	/// particleD
-	damageName_ = "DamageParticle";
-	damageEmitter_.reset(ParticleEmitter::CreateParticle(damageName_, "Plane", ".obj", 900));
-	damageEmitter_->SetTextureHandle(circleHandle);
+	//damage
+	InitParticleEffect(damageParticle[0], "EnemyDamage", "Plane", circleHandle, 900);
 
 	/// death
 	InitParticleEffect(deathParticle_[0], "EnemyDeathSmoke","Plane", boalHandle, 900);
@@ -86,6 +84,12 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	findSprite_->Init();
 	notFindSprite_->Init();
 
+	//audio
+	deathSound_=Audio::GetInstance()->LoadWave("./Resources/EnemyDeath.wav");
+	thurstSound_ = Audio::GetInstance()->LoadWave("./Resources/Enemythurst.wav");
+
+	
+
 	ChangeBehavior(std::make_unique<EnemyDamageRoot>(this));/// 追っかけ
 	ChangeMoveBehavior(std::make_unique<EnemySpawn>(this));/// 追っかけ
 }
@@ -102,8 +106,11 @@ void BaseEnemy::Update() {
 	damageBehavior_->Update();
 
 
-	damageEmitter_->SetTargetPosition(GetWorldPosition());
-	damageEmitter_->Update();
+	// 死亡パーティクル
+	for (uint32_t i = 0; i < damageParticle.size(); i++) {
+		damageParticle[i].emitter->SetTargetPosition(GetWorldPosition());
+		damageParticle[i].emitter->Update();
+	}
 
 	fallCrack_->SetTargetPosition(Vector3(GetWorldPosition().x, 0.0f, GetWorldPosition().z));
 	fallCrack_->Update();
@@ -256,7 +263,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 		case AttackCollisionBox::AttackType::THRUST:
 			if (dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) break;
 
-			DamageForPar(damageParm_);
+			DamageForPar(damageParm_*2.0f);
 			ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
 
 
@@ -349,7 +356,10 @@ void BaseEnemy::DamageForPar(const float& par) {
 }
 
 void BaseEnemy::DamageEmit() {
-	damageEmitter_->Emit();
+	for (uint32_t i = 0; i < damageParticle.size(); i++) {
+		damageParticle[i].emitter->Emit();
+
+	}
 }
 
 void BaseEnemy::ThrustEmit() {
@@ -358,13 +368,14 @@ void BaseEnemy::ThrustEmit() {
 		debriParticle_[i].emitter->Emit();
 	}
 	fallCrack_->Emit();
+	Audio::GetInstance()->PlayWave(thurstSound_, 0.2f);
 }
 
 void BaseEnemy::DeathEmit() {
 	for (uint32_t i = 0; i < deathParticle_.size(); i++) {
 		deathParticle_[i].emitter->Emit();
-
 	}
+	Audio::GetInstance()->PlayWave(deathSound_, 0.5f);
 }
 
 void BaseEnemy::FallEffectInit(const Vector3& pos) {
