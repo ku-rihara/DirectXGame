@@ -12,17 +12,9 @@
 class TitleScene :public BaseScene {
 private:
 	
-	std::string debriName_;
-	std::unique_ptr<ParticleEmitter>debriEmitter_;
+	std::unique_ptr<ParticleEmitter>EnemydamageEffect_;
 
-	std::string starName_;
-	std::unique_ptr<ParticleEmitter>starEmitter_;
-
-	std::string centerStar_;
-	std::unique_ptr<ParticleEmitter>centerStarEmitter_;
-
-	std::string starFrame_;
-	std::unique_ptr<ParticleEmitter>starFrameEmitter_;
+	
 public:
 	///========================================================
 	/// Constralt destract
