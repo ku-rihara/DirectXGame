@@ -11,18 +11,18 @@
 /// </summary>
 class TitleScene :public BaseScene {
 private:
-	std::string smokeName_;
-	std::unique_ptr<ParticleEmitter>smokeEmitter_;
+	
+	std::string debriName_;
+	std::unique_ptr<ParticleEmitter>debriEmitter_;
 
-	std::string fireSmokeName_;
-	std::unique_ptr<ParticleEmitter>fireSmokeEmitter_;
+	std::string starName_;
+	std::unique_ptr<ParticleEmitter>starEmitter_;
 
-	std::string sparkName_;
-	std::unique_ptr<ParticleEmitter>sparkEmitter_;
+	std::string centerStar_;
+	std::unique_ptr<ParticleEmitter>centerStarEmitter_;
 
-	std::string miniSparkName_;
-	std::unique_ptr<ParticleEmitter>miniSparkEmitter_;
-
+	std::string starFrame_;
+	std::unique_ptr<ParticleEmitter>starFrameEmitter_;
 public:
 	///========================================================
 	/// Constralt destract

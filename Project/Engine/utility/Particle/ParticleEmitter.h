@@ -46,6 +46,7 @@ public:
 
 	// パーティクル設定を統合する構造体
 	struct Parameters {
+		const WorldTransform* parentTransform = nullptr;
 		Vector3 targetPos;                    // 対象座標
 		Vector3 emitPos;                      // 発生座標
 		V3MinMax positionDist;                // 座標ランダム分配
@@ -129,6 +130,7 @@ public:
 	void SetParentBasePos(WorldTransform* parent);
 	void SetTextureHandle(const uint32_t& hanle);
 	void SetTargetPosition(const Vector3& pos) { parameters_.targetPos = pos; }
+	void SetParentTransform(const WorldTransform* transform);
 
 	//imgui化すべき
 	void SetIsRotateForDirection(const bool& is) { parameters_.isRotateforDirection = is; }

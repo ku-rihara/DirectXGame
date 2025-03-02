@@ -21,10 +21,14 @@ void TitleScene::Init() {
 
 	BaseScene::Init();
 
-	uint32_t t = TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
-	uint32_t t2 = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
+	//uint32_t t = TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
+	uint32_t circleHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
+	/*uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");*/
+	uint32_t starHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/star.png");
+	uint32_t starFrameHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circleFrame.png");
 
-	smokeName_ = "EnemyDeathSmoke";
+
+	/*smokeName_ = "EnemyDeathSmoke";
 	smokeEmitter_.reset(ParticleEmitter::CreateParticle(smokeName_, "Plane", ".obj", 900));
 	smokeEmitter_->SetTextureHandle(t);
 	smokeEmitter_->SetBlendMode(ParticleCommon::BlendMode::None);
@@ -42,28 +46,48 @@ void TitleScene::Init() {
 	miniSparkName_ = "EnemyDeathMiniSpark";
 	miniSparkEmitter_.reset(ParticleEmitter::CreateParticle(miniSparkName_, "Plane", ".obj", 900));
 	miniSparkEmitter_->SetTextureHandle(t2);
-	miniSparkEmitter_->SetBlendMode(ParticleCommon::BlendMode::Add);
+	miniSparkEmitter_->SetBlendMode(ParticleCommon::BlendMode::Add);*/
+
+	/*debriName_ = "DebriName";
+	debriEmitter_.reset(ParticleEmitter::CreateParticle(debriName_, "debri", ".obj", 900));
+	debriEmitter_->SetTextureHandle(defaultHandle);
+	debriEmitter_->SetBlendMode(ParticleCommon::BlendMode::None);*/
+
+	starName_ = "StarEffect";
+	starEmitter_.reset(ParticleEmitter::CreateParticle(starName_, "plane", ".obj", 10));
+	starEmitter_->SetTextureHandle(starHandle);
+	starEmitter_->SetBlendMode(ParticleCommon::BlendMode::None);
+
+	centerStar_ = "CenterStarEffect";
+	centerStarEmitter_.reset(ParticleEmitter::CreateParticle(centerStar_, "plane", ".obj", 10));
+	centerStarEmitter_->SetTextureHandle(circleHandle);
+	centerStarEmitter_->SetBlendMode(ParticleCommon::BlendMode::Add);
+
+	starFrame_ = "StarFrame";
+	starFrameEmitter_.reset(ParticleEmitter::CreateParticle(starFrame_, "plane", ".obj", 10));
+	starFrameEmitter_->SetTextureHandle(starFrameHandle);
+	starFrameEmitter_->SetBlendMode(ParticleCommon::BlendMode::None);
 
 	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
 void TitleScene::Update() {
 
-	smokeEmitter_->Update();
-	smokeEmitter_->EditorUpdate();
-	smokeEmitter_->Emit();
+	/*debriEmitter_->Update();
+	debriEmitter_->EditorUpdate();
+	debriEmitter_->Emit();*/
 
-	fireSmokeEmitter_->Update();
-	fireSmokeEmitter_->EditorUpdate();
-	fireSmokeEmitter_->Emit();
+	starEmitter_->Update();
+	starEmitter_->EditorUpdate();
+	starEmitter_->Emit();
 
-	sparkEmitter_->Update();
-	sparkEmitter_->EditorUpdate();
-	sparkEmitter_->Emit();
+	centerStarEmitter_->Update();
+	centerStarEmitter_->EditorUpdate();
+	centerStarEmitter_->Emit();
 
-	miniSparkEmitter_->Update();
-	miniSparkEmitter_->EditorUpdate();
-	miniSparkEmitter_->Emit();
+	starFrameEmitter_->Update();
+	starFrameEmitter_->EditorUpdate();
+	starFrameEmitter_->Emit();
 
 	ParticleManager::GetInstance()->Update();
 
@@ -84,8 +108,8 @@ void TitleScene::ModelDraw() {
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 	Model::PreDraw(commandList);
 
-	smokeEmitter_->DebugDraw(viewProjection_);
-	smokeEmitter_->RailDraw(viewProjection_);
+	//debriEmitter_->DebugDraw(viewProjection_);
+	//debriEmitter_->RailDraw(viewProjection_);
 	ParticleManager::GetInstance()->Draw(viewProjection_);
 
 }
