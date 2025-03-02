@@ -130,7 +130,6 @@ void Player::TitleUpdate() {
 	//ライト位置セット
 	SetLightPos();
 	
-
 	titleBehavior_->Update();
 	/// 行列更新
 	UpdateMatrix();
@@ -175,8 +174,8 @@ void Player::ParticleUpdate() {
 
 	//星パーティクル
 	for (uint32_t i = 0; i < starEffect_.size(); i++) {
-		starEffect_[i].emitter->SetTargetPosition(GetWorldPosition());
 		starEffect_[i].emitter->Update();
+		starEffect_[i].emitter->EditorUpdate();
 	}
 
 	fallCrack_->SetTargetPosition(Vector3(GetWorldPosition().x, 0.0f, GetWorldPosition().z));

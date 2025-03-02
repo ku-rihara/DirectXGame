@@ -108,9 +108,9 @@ void BaseEnemy::Update() {
 	}
 
 	//ガレキパーティクル
-	for (uint32_t i = 0; i < deathParticle_.size(); i++) {
-		deathParticle_[i].emitter->SetTargetPosition(GetWorldPosition());
-		deathParticle_[i].emitter->Update();
+	for (uint32_t i = 0; i < debriParticle_.size(); i++) {
+		debriParticle_[i].emitter->SetTargetPosition(GetWorldPosition());
+		debriParticle_[i].emitter->Update();
 	}
 
 	FallEffectUpdate();

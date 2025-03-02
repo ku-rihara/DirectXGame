@@ -22,7 +22,7 @@ EnemyBoundDamage::EnemyBoundDamage(BaseEnemy* boss)
 	pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2(0, 0));
 	pBaseEnemy_->GetFindSprite()->SetScale(Vector2(1, 1));
 	pBaseEnemy_->SetScale(BaseEnemy::InitScale_);
-
+	pBaseEnemy_->ThrustEmit();
 	step_ = Step::BOUND; /// ステップ初期化
 }
 
@@ -41,7 +41,7 @@ void EnemyBoundDamage::Update() {
 	/// ------------------------------------------------------
 	/// ヒットバッグ
 	///---------------------------------------------------------
-		pBaseEnemy_->ThrustEmit();
+	
 		//// Yに加算
 		//pBaseEnemy_->AddPosition(Vector3(0, speed_, 0));
 
