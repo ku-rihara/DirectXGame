@@ -78,13 +78,13 @@
         "Scale Max": 1.0,
         "Scale Min": 1.0,
         "ScaleV3 Max": [
-            2.0,
-            2.0,
+            5.0,
+            5.0,
             0.0
         ],
         "ScaleV3 Min": [
-            2.0,
-            2.0,
+            5.0,
+            5.0,
             0.0
         ],
         "Speed Max": 31.700000762939453,
@@ -94,7 +94,7 @@
         "isMoveForRail": false,
         "isRotateforDirection": true,
         "isScalerScale": false,
-        "isShot": false,
+        "isShot": true,
         "moveSpeed": 0.0,
         "preBillBordType_": 0,
         "scaleEaseParm.easeTypeInt": 0,
