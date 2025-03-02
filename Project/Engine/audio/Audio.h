@@ -5,7 +5,8 @@
 #include<string>
 #include<unordered_map>
 #include <vector>
-
+#include <chrono>
+#include <unordered_map>
 
 class Audio{
 private:
@@ -14,6 +15,8 @@ private:
 	IXAudio2MasteringVoice* masterVoice_;
 	std::vector<SoundData> soundDatas_;
 	std::unordered_map<std::string, int> soundIndexMap_;
+
+	std::unordered_map<int, std::chrono::steady_clock::time_point> lastPlayTimes_; // 直前の再生時間を記録
 
 	
 public:
