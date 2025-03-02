@@ -57,7 +57,8 @@ void ParticleManager::Update() {
 			///------------------------------------------------------------------------
 			/// スケール変更
 			///------------------------------------------------------------------------
-			(*it).easeTime += (*it).scaleInfo.easeparm.easeSpeed * Frame::DeltaTimeRate();
+			(*it).easeTime +=  Frame::DeltaTimeRate();
+			(*it).easeTime = std::min((*it).easeTime, (*it).scaleInfo.easeparm.maxTime);
 			(*it).worldTransform_.scale_ = ScaleAdapt((*it).easeTime,(*it).scaleInfo);
 			///------------------------------------------------------------------------
 			/// 回転させる
@@ -328,8 +329,8 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 		particle.scaleInfo.easeEndScale = endScaleV3;
 	}
 
+	particle.easeTime = 0.0f;
 	particle.scaleInfo.easeparm.isScaleEase = paramaters.scaleEaseParm.isScaleEase;
-	particle.scaleInfo.easeparm.easeSpeed = paramaters.scaleEaseParm.easeSpeed;
 	particle.scaleInfo.easeparm.maxTime = paramaters.scaleEaseParm.maxTime;
 	particle.scaleInfo.easeparm.easeType = paramaters.scaleEaseParm.easeType;
 
@@ -467,6 +468,9 @@ Vector3 ParticleManager::EaseAdapt(const ParticleEmitter::EaseType& easetype,
 
 	case ParticleEmitter::EaseType::OUTBACK:
 		return EaseInOutBack(start, end, time, maxTime);
+		break;
+	case ParticleEmitter::EaseType::OUTQUINT:
+		return EaseOutQuint(start, end, time, maxTime);
 		break;
 	default:
 		return Vector3::ZeroVector();

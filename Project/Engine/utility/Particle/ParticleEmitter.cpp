@@ -164,7 +164,6 @@ void ParticleEmitter::AddParmGroup() {
 	//easeParm
 	globalParameter_->AddItem(particleName_, "scaleEaseParm.isScaleEase", parameters_.scaleEaseParm.isScaleEase);
 	globalParameter_->AddItem(particleName_, "scaleEaseParm.maxTime", parameters_.scaleEaseParm.maxTime);
-	globalParameter_->AddItem(particleName_, "scaleEaseParm.easeSpeed", parameters_.scaleEaseParm.easeSpeed);
 	globalParameter_->AddItem(particleName_, "scaleEaseParm.easeTypeInt", parameters_.scaleEaseParm.easeTypeInt);
 	globalParameter_->AddItem(particleName_, "scaleEaseParm.endValueF.max", parameters_.scaleEaseParm.endValueF.max);
 	globalParameter_->AddItem(particleName_, "scaleEaseParm.endValueF.min", parameters_.scaleEaseParm.endValueF.min);
@@ -237,7 +236,6 @@ void ParticleEmitter::SetValues() {
 	//easeParm
 	globalParameter_->SetValue(particleName_, "scaleEaseParm.isScaleEase", parameters_.scaleEaseParm.isScaleEase);
 	globalParameter_->SetValue(particleName_, "scaleEaseParm.maxTime", parameters_.scaleEaseParm.maxTime);
-	globalParameter_->SetValue(particleName_, "scaleEaseParm.easeSpeed", parameters_.scaleEaseParm.easeSpeed);
 	globalParameter_->SetValue(particleName_, "scaleEaseParm.easeTypeInt", parameters_.scaleEaseParm.easeTypeInt);
 	globalParameter_->SetValue(particleName_, "scaleEaseParm.endValueF.max", parameters_.scaleEaseParm.endValueF.max);
 	globalParameter_->SetValue(particleName_, "scaleEaseParm.endValueF.min", parameters_.scaleEaseParm.endValueF.min);
@@ -307,7 +305,6 @@ void ParticleEmitter::ApplyGlobalParameter(const std::string& particleName) {
 	///easeParm
 	parameters_.scaleEaseParm.isScaleEase= globalParameter_->GetValue<bool>(particleName, "scaleEaseParm.isScaleEase");
 	parameters_.scaleEaseParm.maxTime = globalParameter_->GetValue<float>(particleName, "scaleEaseParm.maxTime");
-	parameters_.scaleEaseParm.easeSpeed = globalParameter_->GetValue<float>(particleName, "scaleEaseParm.easeSpeed");
 	parameters_.scaleEaseParm.easeTypeInt = globalParameter_->GetValue<int32_t>(particleName, "scaleEaseParm.easeTypeInt");
 	parameters_.scaleEaseParm.endValueF.max = globalParameter_->GetValue<float>(particleName, "scaleEaseParm.endValueF.max");
 	parameters_.scaleEaseParm.endValueF.min = globalParameter_->GetValue<float>(particleName, "scaleEaseParm.endValueF.min");
@@ -535,10 +532,9 @@ void ParticleEmitter::ScaleParmEditor() {
 			//イージングパラメータ
 			ImGui::SeparatorText("Ease Paramater");
 			ImGui::DragFloat("maxTime", &parameters_.scaleEaseParm.maxTime,0.01f);
-			ImGui::DragFloat("easeSpeed", &parameters_.scaleEaseParm.easeSpeed, 0.01f);
 			ImGui::SeparatorText("EaseType");
 			// イージング種類
-			const char* easeItems[] = { "InSine","OutSine", "OutBack"};
+			const char* easeItems[] = { "InSine","OutSine", "OutBack","OutQuint"};
 			// ビルボードの種類を選択するコンボボックス
 			if (ImGui::Combo("Easing Type", &parameters_.scaleEaseParm.easeTypeInt, easeItems, IM_ARRAYSIZE(easeItems))) {
 				// 選択した値を反映

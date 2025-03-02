@@ -20,6 +20,9 @@ private:
 	std::string sparkName_;
 	std::unique_ptr<ParticleEmitter>sparkEmitter_;
 
+	std::string miniSparkName_;
+	std::unique_ptr<ParticleEmitter>miniSparkEmitter_;
+
 public:
 	///========================================================
 	/// Constralt destract

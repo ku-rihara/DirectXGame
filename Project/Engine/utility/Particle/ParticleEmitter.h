@@ -23,6 +23,7 @@ public:
 		INSINE,
 		OUTSINE,
 		OUTBACK,
+		OUTQUINT,
 	};
 public:
 	struct GroupParamaters {// グループパラメータ
@@ -37,7 +38,6 @@ public:
 	struct EaseParm { // イージングパラメータ
 		bool isScaleEase;
 		float maxTime;
-		float easeSpeed;
 		EaseType easeType;
 		int easeTypeInt;
 		FMinMax endValueF;

@@ -38,12 +38,17 @@ void TitleScene::Init() {
 	sparkEmitter_.reset(ParticleEmitter::CreateParticle(sparkName_, "Plane", ".obj", 900));
 	sparkEmitter_->SetTextureHandle(t2);
 	sparkEmitter_->SetBlendMode(ParticleCommon::BlendMode::Add);
+
+	miniSparkName_ = "EnemyDeathMiniSpark";
+	miniSparkEmitter_.reset(ParticleEmitter::CreateParticle(miniSparkName_, "Plane", ".obj", 900));
+	miniSparkEmitter_->SetTextureHandle(t2);
+	miniSparkEmitter_->SetBlendMode(ParticleCommon::BlendMode::Add);
+
 	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
 void TitleScene::Update() {
 
-	
 	smokeEmitter_->Update();
 	smokeEmitter_->EditorUpdate();
 	smokeEmitter_->Emit();
@@ -55,6 +60,10 @@ void TitleScene::Update() {
 	sparkEmitter_->Update();
 	sparkEmitter_->EditorUpdate();
 	sparkEmitter_->Emit();
+
+	miniSparkEmitter_->Update();
+	miniSparkEmitter_->EditorUpdate();
+	miniSparkEmitter_->Emit();
 
 	ParticleManager::GetInstance()->Update();
 
