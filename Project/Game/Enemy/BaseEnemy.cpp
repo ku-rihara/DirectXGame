@@ -58,22 +58,21 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
 	uint32_t boalHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
 
-	/// particleT
-	thrustName_ = "ThrustDamage";
-	thrustEmit_.reset(ParticleEmitter::CreateParticle(thrustName_, "cube", ".obj", 900));
-		thrustEmit_->SetTextureHandle(defaultHandle);
 
 	/// particleD
 	damageName_ = "DamageParticle";
 	damageEmitter_.reset(ParticleEmitter::CreateParticle(damageName_, "Plane", ".obj", 900));
 	damageEmitter_->SetTextureHandle(circleHandle);
 
-	InitParticleEffect(deathParticle_[0], "EnemyDeathSmoke", boalHandle, 1,900); 
-	InitParticleEffect(deathParticle_[1], "EnemyDeathFireSmoke", circleHandle, 0, 900);
-	InitParticleEffect(deathParticle_[2], "EnemyDeathSpark", circleHandle, 0, 900);
-	InitParticleEffect(deathParticle_[3], "EnemyDeathMiniSpark", circleHandle, 0, 900);
+	/// death
+	InitParticleEffect(deathParticle_[0], "EnemyDeathSmoke","Plane", boalHandle, 900);
+	deathParticle_[0].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
+	InitParticleEffect(deathParticle_[1], "EnemyDeathFireSmoke","Plane", circleHandle,900);
+	InitParticleEffect(deathParticle_[2], "EnemyDeathSpark","Plane", circleHandle, 900);
+	InitParticleEffect(deathParticle_[3], "EnemyDeathMiniSpark","Plane", circleHandle, 900);
 
-	InitParticleEffect(debriParticle_[0], "DebriName", defaultHandle, 0, 900);
+	//
+	InitParticleEffect(debriParticle_[0], "DebriName","debri",defaultHandle,900);
 	
 
 
@@ -101,8 +100,6 @@ void BaseEnemy::Update() {
 	damageEmitter_->SetTargetPosition(GetWorldPosition());
 	damageEmitter_->Update();
 
-	thrustEmit_->SetTargetPosition(GetWorldPosition());
-	thrustEmit_->Update();
 
 	// 死亡パーティクル
 	for (uint32_t i = 0; i < deathParticle_.size(); i++) {
@@ -348,7 +345,10 @@ void BaseEnemy::DamageEmit() {
 }
 
 void BaseEnemy::ThrustEmit() {
-	thrustEmit_->Emit();
+	//ガレキパーティクル
+	for (uint32_t i = 0; i < debriParticle_.size(); i++) {
+		debriParticle_[i].emitter->Emit();
+	}
 }
 
 void BaseEnemy::DeathEmit() {
@@ -364,10 +364,7 @@ void BaseEnemy::FallEffectInit(const Vector3& pos) {
 	effect->Init(pos);
 	effects_.push_back(std::move(effect));
 
-	//ガレキパーティクル
-	for (uint32_t i = 0; i < deathParticle_.size(); i++) {
-		deathParticle_[i].emitter->Emit();
-	}
+	
 }
 
 
@@ -435,9 +432,8 @@ void BaseEnemy::RotateInit() {
 }
 
 
-void BaseEnemy::InitParticleEffect(ParticleEffect& effect, const std::string& name, const uint32_t& textureHandle, const int& blendMode, const int32_t& maxnum) {
+void BaseEnemy::InitParticleEffect(ParticleEffect& effect, const std::string& name, const std::string& modelName, const uint32_t& textureHandle, const int32_t& maxnum) {
 	effect.name = name;
-	effect.emitter.reset(ParticleEmitter::CreateParticle(name, "Plane", ".obj", maxnum));
+	effect.emitter.reset(ParticleEmitter::CreateParticle(name, modelName, ".obj", maxnum));
 	effect.emitter->SetTextureHandle(textureHandle);
-	effect.emitter->SetBlendMode(static_cast<ParticleCommon::BlendMode>(blendMode));
 }

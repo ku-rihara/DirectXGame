@@ -46,17 +46,10 @@ void Player::Init() {
 	BaseObject::Init();	// 基底クラスの初期化 
 	BaseObject::CreateModel("Player", ".obj");/// モデルセット
 
-	//particle
-	fallParticleName_ = "fallParticle";
-	cirlceTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
-	fallEmitter_.reset(ParticleEmitter::CreateParticle(fallParticleName_, "DebugSphere", ".obj", 300));
-	fallEmitter_->SetBlendMode(ParticleCommon::BlendMode::None);
-
-	fallCrackName_ = "Crack";
-	crackTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
-	fallCrack_.reset(ParticleEmitter::CreateParticle(fallCrackName_, "Plane", ".obj", 30));
-	fallCrack_->SetTextureHandle(crackTexture_);
-	fallCrack_->SetBlendMode(ParticleCommon::BlendMode::None);
+	
+	//* particle
+	ParticleInit();
+	
 
 	///* グローバルパラメータ
 	globalParameter_ = GlobalParameter::GetInstance();
@@ -104,20 +97,16 @@ void Player::Init() {
 ///==========================================================
 void Player::Update() {
 	prePos_ = GetWorldPosition();// 前フレームの座標
+	//ライト
 	HeadLightSetting();
-
-	// 落ちるパーティクルエミッター
-	fallEmitter_->SetTargetPosition(GetWorldPosition());
-	fallEmitter_->Update();
-
-	fallCrack_->SetTargetPosition(Vector3(GetWorldPosition().x, 0.0f, GetWorldPosition().z));
-	fallCrack_->Update();
-	fallCrack_->EditorUpdate();
 
 	/// 振る舞い処理(コンボ攻撃中は中止)
 	if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
 		behavior_->Update();
 	}
+
+	///Particle
+	ParticleUpdate();
 
 	//ライト位置セット
 	SetLightPos();
@@ -131,10 +120,11 @@ void Player::Update() {
 
 // タイトル更新
 void Player::TitleUpdate() {
-	fallEmitter_->SetTargetPosition(GetWorldPosition());
-	fallEmitter_->Update();
-	fallCrack_->SetTargetPosition(Vector3(GetWorldPosition().x, 0.0f, GetWorldPosition().z));
-	fallCrack_->Update();
+	
+	///Particle
+	ParticleUpdate();
+
+	//エフェクト
 	FallEffectUpdate();
 
 	//ライト位置セット
@@ -167,25 +157,30 @@ void Player::EffectDraw(const ViewProjection& viewProjection) {
 	effects_.reverse();
 }
 
-void Player::SoundPunch() {
-	Audio::GetInstance()->PlayWave(punchSoundID_, 0.5f);
-}
-void Player::SoundStrongPunch() {
-	Audio::GetInstance()->PlayWave(strongPunch_, 0.5f);
-}
-void Player::FallSound() {
-	Audio::GetInstance()->PlayWave(fallSound_, 0.2f);
-}
-///=======================================================================
-/// ダメ―ジ演出
-///=======================================================================
-void Player::DamageRendition() {
-
-}
 
 void Player::FallParticleEmit() {
-	fallEmitter_->Emit();
+	//ガレキパーティクル
+	for (uint32_t i = 0; i < debriParticle_.size(); i++) {
+		debriParticle_[i].emitter->Emit();
+	}
 	fallCrack_->Emit();
+}
+
+void Player::ParticleUpdate() {
+	//ガレキパーティクル
+	for (uint32_t i = 0; i < debriParticle_.size(); i++) {
+		debriParticle_[i].emitter->SetTargetPosition(GetWorldPosition());
+		debriParticle_[i].emitter->Update();
+	}
+
+	//星パーティクル
+	for (uint32_t i = 0; i < starEffect_.size(); i++) {
+		starEffect_[i].emitter->SetTargetPosition(GetWorldPosition());
+		starEffect_[i].emitter->Update();
+	}
+
+	fallCrack_->SetTargetPosition(Vector3(GetWorldPosition().x, 0.0f, GetWorldPosition().z));
+	fallCrack_->Update();
 }
 
 ///=========================================================
@@ -475,6 +470,13 @@ void Player::AdjustParm() {
 #endif // _DEBUG
 }
 
+void Player::StartEffectEmit() {
+	//星パーティクル
+	for (uint32_t i = 0; i < starEffect_.size(); i++) {
+		starEffect_[i].emitter->Emit();
+	}
+}
+
 void Player::FallEffectInit(const Vector3& pos) {
 	std::unique_ptr<Effect> effect = std::make_unique<Effect>();
 
@@ -500,28 +502,12 @@ void Player::SetGameCamera(GameCamera* gamecamera) {
 }
 
 ///==============================================================================
-/// ダメージ受ける
-///===============================================================================
-void Player::TakeDamage() {
-	/*if (!isDamage_) {
-		life_--;
-		isDamage_ = true;
-		damageTime_ = damageCollTime_;
-	}*/
-}
-
-///==============================================================================
 /// Class Set
 ///===============================================================================
 
 void Player::SetLockOn(LockOn* lockon) {
 	pLockOn_ = lockon;
 }
-
-///==============================================================================
-/// Collision
-///===============================================================================
-
 
 
 ///==============================================================================
@@ -713,6 +699,11 @@ void Player::UpdateMatrix() {
 	rightHand_->Update();
 	BaseObject::Update();
 }
+
+///==============================================================================
+/// Collision
+///===============================================================================
+
 void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
 	if (dynamic_cast<ComboAttackJumpSecond*>(comboBehavior_.get()))return;
@@ -802,3 +793,50 @@ void Player::HeadLightSetting() {
 		Light::GetInstance()->GetAmbientLight()->SetIntensity(0.9f);
 	}
 }
+
+void Player::InitParticleEffect(ParticleEffect& effect, const std::string& name, const std::string& modelName, const uint32_t& textureHandle, const int32_t& maxnum) {
+	effect.name = name;
+	effect.emitter.reset(ParticleEmitter::CreateParticle(name, modelName, ".obj", maxnum));
+	effect.emitter->SetTextureHandle(textureHandle);
+}
+
+void  Player::ParticleInit() {
+	//texture
+	cirlceTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
+	uint32_t crackTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
+	uint32_t starHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Star.png");
+	uint32_t startFrameHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/CircleFrame.png");
+	uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
+
+	InitParticleEffect(debriParticle_[0], "DebriName", "debri", defaultHandle, 900);
+	debriParticle_[0].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
+
+	//star
+	InitParticleEffect(starEffect_[0], "StarEffect", "plane", starHandle, 10);
+	InitParticleEffect(starEffect_[1], "CenterStarEffect", "plane", cirlceTexture_, 10);
+	InitParticleEffect(starEffect_[2], "StarFrame", "plane", startFrameHandle, 10);
+	starEffect_[0].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
+	starEffect_[2].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
+	for (uint32_t i = 0; i < starEffect_.size(); i++) {
+		starEffect_[i].emitter->SetParentTransform(&transform_);
+	}
+
+	// crack
+	fallCrack_.reset(ParticleEmitter::CreateParticle("Crack", "Plane", ".obj", 30));
+	fallCrack_->SetTextureHandle(crackTexture_);
+	fallCrack_->SetBlendMode(ParticleCommon::BlendMode::None);
+}
+
+/// <summary>
+/// Sound
+/// </summary>
+void Player::SoundPunch() {
+	Audio::GetInstance()->PlayWave(punchSoundID_, 0.5f);
+}
+void Player::SoundStrongPunch() {
+	Audio::GetInstance()->PlayWave(strongPunch_, 0.5f);
+}
+void Player::FallSound() {
+	Audio::GetInstance()->PlayWave(fallSound_, 0.2f);
+}
+

@@ -169,6 +169,7 @@ void ComboAttackThird::HitStopUpdate() {
 	//デルタタイムスケール小さく
 	if (collisionBox_->GetIsHitStop() && !isHitStop_) {
 		Frame::SetTimeScale(0.1f);
+		pPlayer_->StartEffectEmit();
 		isHitStop_ = true;
 	}
 

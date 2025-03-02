@@ -52,8 +52,6 @@ private:
 	std::string damageName_;
 	std::unique_ptr<ParticleEmitter>damageEmitter_;
 
-	std::string thrustName_;
-	std::unique_ptr<ParticleEmitter>thrustEmit_;
 
 	std::array<ParticleEffect, 4>deathParticle_;
 	std::array<ParticleEffect, 1>debriParticle_;
@@ -125,7 +123,7 @@ public:
 	void BehaviorChangeDeath();
 
 	// ヘルパー関数: ParticleEffect を初期化する
-	void InitParticleEffect(ParticleEffect& effect, const std::string& name, const uint32_t& textureHandle, const int& blendMode, const int32_t& maxnum);
+	void InitParticleEffect(ParticleEffect& effect, const std::string& name, const std::string& modelName, const uint32_t& textureHandle, const int32_t& maxnum);
 
 	/// ====================================================================
     /// Collision

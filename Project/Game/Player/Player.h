@@ -79,6 +79,11 @@ private:
 		float attackReach;
 	};
 
+	struct ParticleEffect {
+		std::string name;
+		std::unique_ptr<ParticleEmitter>emitter;
+	};
+
 private: ///*other class
 
 	/// グローバルなパラメータ
@@ -91,13 +96,10 @@ private: ///*other class
 	std::unique_ptr<BaseTitleBehavior>titleBehavior_ = nullptr;
 
 	/// Particle
-	std::string fallParticleName_;
-	std::unique_ptr<ParticleEmitter>fallEmitter_;
 	uint32_t cirlceTexture_;
-
-	std::string fallCrackName_;
 	std::unique_ptr<ParticleEmitter>fallCrack_;
-	uint32_t crackTexture_;
+	std::array<ParticleEffect,1> debriParticle_;
+	std::array<ParticleEffect, 3> starEffect_;
 
 	/// other class
 	LockOn* pLockOn_;       /// LockOnクラス
@@ -170,16 +172,18 @@ public:
 	//* エフェクト
 	void FallParticleEmit();
 	void FallEffectUpdate();
+	void StartEffectEmit();
 	void FallEffectInit(const Vector3& pos);
-
-
-	///* ダメージ
-	void TakeDamage();          /// ダメージ受ける     
-	void DamageRendition();     /// ダメージリアクション
+	void ParticleUpdate();
+	void ParticleInit();
 
 	///* 向き
 	void FaceToTarget();
 	void AdaptRotate();
+
+	// ヘルパー関数: ParticleEffect を初期化する
+	void InitParticleEffect(ParticleEffect& effect, const std::string& name, const std::string& modelName, const uint32_t& textureHandle,  const int32_t& maxnum);
+
 
 	/// ====================================================================
 	/// Editor
