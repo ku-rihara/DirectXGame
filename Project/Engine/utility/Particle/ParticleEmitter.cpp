@@ -37,7 +37,6 @@ void ParticleEmitter::Init() {
 	intervalTime_ = 1.0f;
 	parameters_.targetPos = { 0,0,0 };
 	groupParamaters_.isBillBord = true;
-	groupParamaters_.billBordType = static_cast<WorldTransform::BillboardType>(preBillBordType_);
 	parameters_.isScalerScale = true;
 	parameters_.isRotateforDirection = false;
 
@@ -57,7 +56,9 @@ void ParticleEmitter::Init() {
 	AddParmGroup();
 	ApplyGlobalParameter(particleName_);
 
+	groupParamaters_.billBordType = static_cast<WorldTransform::BillboardType>(preBillBordType_);
 	groupParamaters_.isShot = preIsShot_;
+	parameters_.scaleEaseParm.easeType = static_cast<EaseType>(parameters_.scaleEaseParm.easeTypeInt);
 }
 
 ///=================================================================================
@@ -159,6 +160,15 @@ void ParticleEmitter::AddParmGroup() {
 	globalParameter_->AddItem(particleName_, "AdaptRotateIsZ", groupParamaters_.adaptRotate_.isZ_);
 	globalParameter_->AddItem(particleName_, "isShot", preIsShot_);
 	globalParameter_->AddItem(particleName_, "isAlphaNoMove", groupParamaters_.isAlphaNoMove);
+
+	//easeParm
+	globalParameter_->AddItem(particleName_, "scaleEaseParm.isScaleEase", parameters_.scaleEaseParm.isScaleEase);
+	globalParameter_->AddItem(particleName_, "scaleEaseParm.maxTime", parameters_.scaleEaseParm.maxTime);
+	globalParameter_->AddItem(particleName_, "scaleEaseParm.easeTypeInt", parameters_.scaleEaseParm.easeTypeInt);
+	globalParameter_->AddItem(particleName_, "scaleEaseParm.endValueF.max", parameters_.scaleEaseParm.endValueF.max);
+	globalParameter_->AddItem(particleName_, "scaleEaseParm.endValueF.min", parameters_.scaleEaseParm.endValueF.min);
+	globalParameter_->AddItem(particleName_, "scaleEaseParm.endValueV3.max", parameters_.scaleEaseParm.endValueV3.max);
+	globalParameter_->AddItem(particleName_, "scaleEaseParm.endValueV3.min", parameters_.scaleEaseParm.endValueV3.min);
 }
 
 
@@ -222,6 +232,15 @@ void ParticleEmitter::SetValues() {
 	globalParameter_->SetValue(particleName_, "AdaptRotateIsZ", groupParamaters_.adaptRotate_.isZ_);
 	globalParameter_->SetValue(particleName_, "isShot", preIsShot_);
 	globalParameter_->SetValue(particleName_, "isAlphaNoMove", groupParamaters_.isAlphaNoMove);
+
+	//easeParm
+	globalParameter_->SetValue(particleName_, "scaleEaseParm.isScaleEase", parameters_.scaleEaseParm.isScaleEase);
+	globalParameter_->SetValue(particleName_, "scaleEaseParm.maxTime", parameters_.scaleEaseParm.maxTime);
+	globalParameter_->SetValue(particleName_, "scaleEaseParm.easeTypeInt", parameters_.scaleEaseParm.easeTypeInt);
+	globalParameter_->SetValue(particleName_, "scaleEaseParm.endValueF.max", parameters_.scaleEaseParm.endValueF.max);
+	globalParameter_->SetValue(particleName_, "scaleEaseParm.endValueF.min", parameters_.scaleEaseParm.endValueF.min);
+	globalParameter_->SetValue(particleName_, "scaleEaseParm.endValueV3.max", parameters_.scaleEaseParm.endValueV3.max);
+	globalParameter_->SetValue(particleName_, "scaleEaseParm.endValueV3.min", parameters_.scaleEaseParm.endValueV3.min);
 }
 
 
@@ -282,6 +301,15 @@ void ParticleEmitter::ApplyGlobalParameter(const std::string& particleName) {
 	groupParamaters_.adaptRotate_.isZ_ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsZ");
 	preIsShot_ = globalParameter_->GetValue<bool>(particleName, "isShot");
 	groupParamaters_.isAlphaNoMove = globalParameter_->GetValue<bool>(particleName, "isAlphaNoMove");
+
+	///easeParm
+	parameters_.scaleEaseParm.isScaleEase= globalParameter_->GetValue<bool>(particleName, "scaleEaseParm.isScaleEase");
+	parameters_.scaleEaseParm.maxTime = globalParameter_->GetValue<float>(particleName, "scaleEaseParm.maxTime");
+	parameters_.scaleEaseParm.easeTypeInt = globalParameter_->GetValue<int32_t>(particleName, "scaleEaseParm.easeTypeInt");
+	parameters_.scaleEaseParm.endValueF.max = globalParameter_->GetValue<float>(particleName, "scaleEaseParm.endValueF.max");
+	parameters_.scaleEaseParm.endValueF.min = globalParameter_->GetValue<float>(particleName, "scaleEaseParm.endValueF.min");
+	parameters_.scaleEaseParm.endValueV3.max = globalParameter_->GetValue<Vector3>(particleName, "scaleEaseParm.endValueV3.max");
+	parameters_.scaleEaseParm.endValueV3.min = globalParameter_->GetValue<Vector3>(particleName, "scaleEaseParm.endValueV3.min");
 }
 
 ///=================================================================================
@@ -362,27 +390,14 @@ void ParticleEmitter::EditorUpdate() {
 		ImGui::SeparatorText("Velocity Range:");
 		ImGui::DragFloat("Velocity Max", &parameters_.speedDist.max, 0.1f);
 		ImGui::DragFloat("Velocity Min", &parameters_.speedDist.min, 0.1f);
+
 		ImGui::SeparatorText("Direction Range:");
 		ImGui::DragFloat3("Direction Max", &parameters_.directionDist.max.x, 0.01f,-1.0f,1.0f);
 		ImGui::DragFloat3("Direction Min", &parameters_.directionDist.min.x, 0.01f, -1.0f, 1.0f);
 	}
 
-	// Scale
-	if (ImGui::CollapsingHeader("Scale")) {
-		ImGui::SeparatorText("Scale Range");
-
-		ImGui::Checkbox("IsScalerScale", &parameters_.isScalerScale);
-		ImGui::SameLine();
-		ImGui::Text("Select Scale Mode");
-
-		if (parameters_.isScalerScale) {
-			ImGui::DragFloat("Scale Max", &parameters_.scaleDist.max, 0.1f);
-			ImGui::DragFloat("Scale Min", &parameters_.scaleDist.min, 0.1f);
-		} else {
-			ImGui::DragFloat3("ScaleV3 Max", reinterpret_cast<float*>(&parameters_.scaleDistV3.max), 0.1f);
-			ImGui::DragFloat3("ScaleV3 Min", reinterpret_cast<float*>(&parameters_.scaleDistV3.min), 0.1f);
-		}
-	}
+	// scale Parm
+	ScaleParmEditor();
 
 	// Rotate
 	if (ImGui::CollapsingHeader("Rotate(Degree)")) {
@@ -390,7 +405,6 @@ void ParticleEmitter::EditorUpdate() {
 		ImGui::DragFloat3("BaseRotate", &parameters_.baseRotate.x, 0.1f, 0, 360);
 		ImGui::DragFloat3("Rotate Max", &parameters_.rotateDist.max.x, 0.1f, 0, 360);
 		ImGui::DragFloat3("Rotate Min", &parameters_.rotateDist.min.x, 0.1f, 0, 360);
-
 	}
 
 	if (ImGui::CollapsingHeader("Rotate Speed(Degree)")) {
@@ -483,18 +497,57 @@ void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
 }
 
 
-void ParticleEmitter::SetParentBasePos(WorldTransform* parent) {
-	emitBoxTransform_.parent_ = parent;
-}
 
-void  ParticleEmitter::SetBlendMode(const ParticleCommon::BlendMode& blendmode) {
-	groupParamaters_.blendMode = blendmode;
-}
 
-void  ParticleEmitter::SetBillBordType(const WorldTransform::BillboardType& billboardType) {
-	groupParamaters_.billBordType = billboardType;
-}
+void ParticleEmitter::ScaleParmEditor() {
+	// Scale
+	if (ImGui::CollapsingHeader("Scale")) {
+		ImGui::SeparatorText("Scale Mode");
 
+		ImGui::Checkbox("IsScalerScale", &parameters_.isScalerScale);
+		ImGui::Checkbox("IsEasingMode", &parameters_.scaleEaseParm.isScaleEase);
+
+		if (parameters_.isScalerScale) {
+			ImGui::SeparatorText("Scaler Range");
+			ImGui::DragFloat("Scale Max", &parameters_.scaleDist.max, 0.1f);
+			ImGui::DragFloat("Scale Min", &parameters_.scaleDist.min, 0.1f);
+		
+		} else {
+			ImGui::SeparatorText("V3 Range");
+			ImGui::DragFloat3("ScaleV3 Max", reinterpret_cast<float*>(&parameters_.scaleDistV3.max), 0.1f);
+			ImGui::DragFloat3("ScaleV3 Min", reinterpret_cast<float*>(&parameters_.scaleDistV3.min), 0.1f);
+		}
+
+		//EaseParm
+		if (parameters_.scaleEaseParm.isScaleEase) {
+			
+			if (parameters_.isScalerScale) {
+				ImGui::SeparatorText("EaseRange Float");
+				ImGui::DragFloat("EaseValue Min", &parameters_.scaleEaseParm.endValueF.min, 0.1f);
+				ImGui::DragFloat("EaseValue Max", &parameters_.scaleEaseParm.endValueF.max, 0.1f);
+			}
+
+			else {
+				ImGui::SeparatorText("EaseRange V3");
+				ImGui::DragFloat3("EaseValueV3 Max", reinterpret_cast<float*>(&parameters_.scaleEaseParm.endValueV3.max), 0.1f);
+				ImGui::DragFloat3("EaseValueV3 Min", reinterpret_cast<float*>(&parameters_.scaleEaseParm.endValueV3.min), 0.1f);
+			}
+			//イージングパラメータ
+			ImGui::SeparatorText("Ease Paramater");
+			ImGui::DragFloat("maxTime", &parameters_.scaleEaseParm.maxTime,0.01f);
+			ImGui::SeparatorText("EaseType");
+			// イージング種類
+			const char* easeItems[] = { "InSine","OutSine", "OutBack","OutQuint"};
+			// ビルボードの種類を選択するコンボボックス
+			if (ImGui::Combo("Easing Type", &parameters_.scaleEaseParm.easeTypeInt, easeItems, IM_ARRAYSIZE(easeItems))) {
+				// 選択した値を反映
+				parameters_.scaleEaseParm.easeType = static_cast<EaseType>(parameters_.scaleEaseParm.easeTypeInt);
+			}
+		}
+
+		
+	}
+}
 
 ///------------------------------------------------------------------------------------------------
 /// パーティクル切り替え
@@ -531,4 +584,16 @@ void ParticleEmitter::ParticleChange() {
 	} else {
 		ImGui::Text("No particle files found.");
 	}
+}
+
+void ParticleEmitter::SetParentBasePos(WorldTransform* parent) {
+	emitBoxTransform_.parent_ = parent;
+}
+
+void  ParticleEmitter::SetBlendMode(const ParticleCommon::BlendMode& blendmode) {
+	groupParamaters_.blendMode = blendmode;
+}
+
+void  ParticleEmitter::SetBillBordType(const WorldTransform::BillboardType& billboardType) {
+	groupParamaters_.billBordType = billboardType;
 }

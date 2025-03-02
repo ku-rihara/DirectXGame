@@ -42,6 +42,11 @@ public:
 		NORMAL,
 		STRONG,
 	};
+	struct ParticleEffect {
+		std::string name;
+		std::unique_ptr<ParticleEmitter>emitter;
+	};
+
 private:
 	/// Particle
 	std::string damageName_;
@@ -50,8 +55,7 @@ private:
 	std::string thrustName_;
 	std::unique_ptr<ParticleEmitter>thrustEmit_;
 
-	std::string DeathName_;
-	std::unique_ptr<ParticleEmitter>deathEmitter_;
+	std::array<ParticleEffect, 4>deathParticle_;
 protected:
 
 	Type type_;
@@ -118,6 +122,9 @@ public:
 	void ChangeMoveBehavior(std::unique_ptr<BaseEnemyMoveBehavior>behavior);
 	void BackToDamageRoot  ();
 	void BehaviorChangeDeath();
+
+	// ヘルパー関数: ParticleEffect を初期化する
+	void InitParticleEffect(ParticleEffect& effect, const std::string& name, uint32_t textureHandle, int blendMode);
 
 	/// ====================================================================
     /// Collision

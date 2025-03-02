@@ -54,8 +54,9 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	collisionBox_->SetSize(Vector3(3.2f, 3.2f, 3.2f));
 	collisionBox_->IsAdapt(true);
 
-	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
+	uint32_t circleHandle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
 	uint32_t t = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
+	uint32_t boalHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
 
 	/// particleT
 	thrustName_ = "ThrustDamage";
@@ -65,12 +66,15 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	/// particleD
 	damageName_ = "DamageParticle";
 	damageEmitter_.reset(ParticleEmitter::CreateParticle(damageName_, "Plane", ".obj", 900));
-	damageEmitter_->SetTextureHandle(handle);
+	damageEmitter_->SetTextureHandle(circleHandle);
 
-	DeathName_ = "EnemyDeath";
-	deathEmitter_.reset(ParticleEmitter::CreateParticle(DeathName_, "Plane", ".obj", 900));
-		deathEmitter_->SetTextureHandle(handle);
-	deathEmitter_->SetBlendMode(ParticleCommon::BlendMode::Subtractive);
+	InitParticleEffect(deathParticle_[0], "EnemyDeathSmoke", boalHandle, 0); 
+	InitParticleEffect(deathParticle_[1], "EnemyDeathFireSmoke", circleHandle, 1); 
+	InitParticleEffect(deathParticle_[2], "EnemyDeathSpark", circleHandle, 1); 
+	InitParticleEffect(deathParticle_[3], "EnemyDeathMiniSpark", circleHandle, 1); 
+
+
+
 
 	findSprite_ = std::make_unique<FindSprite>();
 	notFindSprite_ = std::make_unique<NotFindSprite>();
@@ -99,8 +103,10 @@ void BaseEnemy::Update() {
 	thrustEmit_->SetTargetPosition(GetWorldPosition());
 	thrustEmit_->Update();
 
-	deathEmitter_->SetTargetPosition(GetWorldPosition());
-	deathEmitter_->Update();
+	for (uint32_t i = 0; i < deathParticle_.size(); i++) {
+		deathParticle_[i].emitter->SetTargetPosition(GetWorldPosition());
+		deathParticle_[i].emitter->Update();
+	}
 	FallEffectUpdate();
 
 	BehaviorChangeDeath();
@@ -337,7 +343,10 @@ void BaseEnemy::ThrustEmit() {
 }
 
 void BaseEnemy::DeathEmit() {
-	deathEmitter_->Emit();
+	for (uint32_t i = 0; i < deathParticle_.size(); i++) {
+		deathParticle_[i].emitter->Emit();
+
+	}
 }
 
 void BaseEnemy::FallEffectInit(const Vector3& pos) {
@@ -410,4 +419,12 @@ void  BaseEnemy::SetBodyColor(const Vector4& color){
 
 void BaseEnemy::RotateInit() {
 	bodyTransform_.rotation_ = { 0.0f,0.0f,0.0f };
+}
+
+
+void BaseEnemy::InitParticleEffect(ParticleEffect& effect, const std::string& name, uint32_t textureHandle, int blendMode) {
+	effect.name = name;
+	effect.emitter.reset(ParticleEmitter::CreateParticle(name, "Plane", ".obj", 900));
+	effect.emitter->SetTextureHandle(textureHandle);
+	effect.emitter->SetBlendMode(static_cast<ParticleCommon::BlendMode>(blendMode));
 }

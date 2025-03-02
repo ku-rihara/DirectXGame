@@ -21,23 +21,33 @@
             0.0,
             0.0
         ],
-        "Gravity": 0.0,
+        "Direction Max": [
+            1.0,
+            1.0,
+            0.0
+        ],
+        "Direction Min": [
+            -1.0,
+            -1.0,
+            0.0
+        ],
+        "Gravity": 4.800000190734863,
         "IntervalTime": 1.0,
         "LifeTime": 0.7400000095367432,
-        "Particle Count": 12,
+        "Particle Count": 34,
         "Position Base": [
             0.0,
             0.0,
             0.0
         ],
         "Position Max": [
-            0.0,
-            0.0,
+            1.2999999523162842,
+            1.0,
             0.0
         ],
         "Position Min": [
-            0.0,
-            0.0,
+            -1.2000000476837158,
+            -1.7999999523162842,
             0.0
         ],
         "Rotate Base": [
@@ -65,8 +75,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 1.0,
-        "Scale Min": 1.0,
+        "Scale Max": 2.0,
+        "Scale Min": 2.0,
         "ScaleV3 Max": [
             0.0,
             0.0,
@@ -77,6 +87,8 @@
             0.0,
             0.0
         ],
+        "Speed Max": 3.0,
+        "Speed Min": -1.600000023841858,
         "Velocity Max": [
             1.5,
             1.5,
@@ -94,6 +106,21 @@
         "isScalerScale": true,
         "isShot": false,
         "moveSpeed": 0.0,
-        "preBillBordType_": 0
+        "preBillBordType_": 0,
+        "scaleEaseParm.easeTypeInt": 0,
+        "scaleEaseParm.endValueF.max": 0.0,
+        "scaleEaseParm.endValueF.min": 0.0,
+        "scaleEaseParm.endValueV3.max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "scaleEaseParm.endValueV3.min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "scaleEaseParm.isScaleEase": true,
+        "scaleEaseParm.maxTime": 0.6399999856948853
     }
 }

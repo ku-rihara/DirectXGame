@@ -4,19 +4,19 @@
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": true,
         "BaseColor": [
-            0.6029411554336548,
-            0.11822374910116196,
-            0.11822374910116196,
+            0.9117646813392639,
+            0.37543249130249023,
+            0.37543249130249023,
             1.0
         ],
         "Color Max": [
-            0.0,
+            0.1568627506494522,
             0.0,
             0.0,
             0.0
         ],
         "Color Min": [
-            0.0,
+            0.10980392247438431,
             0.0,
             0.0,
             0.0
@@ -33,8 +33,8 @@
         ],
         "Gravity": 0.0,
         "IntervalTime": 1.0,
-        "LifeTime": 0.49000000953674316,
-        "Particle Count": 16,
+        "LifeTime": 0.28999999165534973,
+        "Particle Count": 38,
         "Position Base": [
             0.0,
             0.0,
@@ -78,17 +78,17 @@
         "Scale Max": 1.0,
         "Scale Min": 1.0,
         "ScaleV3 Max": [
-            0.5,
-            4.0,
+            2.0,
+            2.0,
             0.0
         ],
         "ScaleV3 Min": [
-            0.5,
-            4.0,
+            2.0,
+            2.0,
             0.0
         ],
-        "Speed Max": 19.0,
-        "Speed Min": 10.899999618530273,
+        "Speed Max": 31.700000762939453,
+        "Speed Min": 30.799999237060547,
         "Velocity Max": [
             17.0,
             17.0,
@@ -106,6 +106,22 @@
         "isScalerScale": false,
         "isShot": false,
         "moveSpeed": 0.0,
-        "preBillBordType_": 0
+        "preBillBordType_": 0,
+        "scaleEaseParm.easeSpeed": 0.6700000166893005,
+        "scaleEaseParm.easeTypeInt": 0,
+        "scaleEaseParm.endValueF.max": 0.0,
+        "scaleEaseParm.endValueF.min": 0.0,
+        "scaleEaseParm.endValueV3.max": [
+            0.699999988079071,
+            4.0,
+            0.0
+        ],
+        "scaleEaseParm.endValueV3.min": [
+            0.699999988079071,
+            3.0,
+            0.0
+        ],
+        "scaleEaseParm.isScaleEase": true,
+        "scaleEaseParm.maxTime": 0.20000000298023224
     }
 }
