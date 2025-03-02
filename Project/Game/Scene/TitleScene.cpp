@@ -23,7 +23,7 @@ void TitleScene::Init() {
 
 	//uint32_t t = TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
 	uint32_t circleHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
-	/*uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");*/
+	uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
 	uint32_t starHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/star.png");
 	uint32_t starFrameHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circleFrame.png");
 
@@ -48,10 +48,10 @@ void TitleScene::Init() {
 	miniSparkEmitter_->SetTextureHandle(t2);
 	miniSparkEmitter_->SetBlendMode(ParticleCommon::BlendMode::Add);*/
 
-	/*debriName_ = "DebriName";
+	debriName_ = "DebriName";
 	debriEmitter_.reset(ParticleEmitter::CreateParticle(debriName_, "debri", ".obj", 900));
 	debriEmitter_->SetTextureHandle(defaultHandle);
-	debriEmitter_->SetBlendMode(ParticleCommon::BlendMode::None);*/
+	debriEmitter_->SetBlendMode(ParticleCommon::BlendMode::None);
 
 	starName_ = "StarEffect";
 	starEmitter_.reset(ParticleEmitter::CreateParticle(starName_, "plane", ".obj", 10));
@@ -73,9 +73,9 @@ void TitleScene::Init() {
 
 void TitleScene::Update() {
 
-	/*debriEmitter_->Update();
+	debriEmitter_->Update();
 	debriEmitter_->EditorUpdate();
-	debriEmitter_->Emit();*/
+	debriEmitter_->Emit();
 
 	starEmitter_->Update();
 	starEmitter_->EditorUpdate();
