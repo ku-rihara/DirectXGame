@@ -133,6 +133,7 @@ private:
 	int punchSoundID_;
 	int strongPunch_;
 	int fallSound_;
+	int starSound_;
 
 	///PlayerParameter
 	PlayerParams playerParams_;

@@ -85,6 +85,7 @@ void Player::Init() {
 	punchSoundID_ = Audio::GetInstance()->LoadWave("Resources/punchAir.wav");
 	strongPunch_ = Audio::GetInstance()->LoadWave("Resources/StrongPunch.wav");
 	fallSound_ = Audio::GetInstance()->LoadWave("Resources/PlayerFall.wav");
+	starSound_ = Audio::GetInstance()->LoadWave("Resources/starEffect.wav");
 
 	/// 通常モードから
 	ChangeBehavior(std::make_unique<PlayerRoot>(this));
@@ -815,6 +816,7 @@ void Player::StartEffectEmit() {
 	for (uint32_t i = 0; i < starEffect_.size(); i++) {
 		starEffect_[i].emitter->Emit();
 	}
+	Audio::GetInstance()->PlayWave(starSound_, 0.5f);
 }
 
 void Player::FallEffectInit(const Vector3& pos) {
