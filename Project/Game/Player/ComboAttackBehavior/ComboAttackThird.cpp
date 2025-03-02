@@ -168,18 +168,10 @@ void ComboAttackThird::RailInit() {
 void ComboAttackThird::HitStopUpdate() {
 	//デルタタイムスケール小さく
 	if (collisionBox_->GetIsHitStop() && !isHitStop_) {
-		Frame::SetTimeScale(0.1f);
 		pPlayer_->StartEffectEmit();
 		isHitStop_ = true;
 	}
 
-	// スロータイム
-	if (isHitStop_) {
-		hitStopTime_ += Frame::DeltaTime();
-		if (hitStopTime_ >= kHitStopTime_) {
-			Frame::SetTimeScale(1.0f);
-		}
-	}
 }
 
 void ComboAttackThird::AnimationMove() {

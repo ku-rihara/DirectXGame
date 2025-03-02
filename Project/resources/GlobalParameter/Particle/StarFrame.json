@@ -33,12 +33,12 @@
         ],
         "Gravity": 0.0,
         "IntervalTime": 1.0,
-        "LifeTime": 0.3700000047683716,
+        "LifeTime": 0.6299999952316284,
         "Particle Count": 1,
         "Position Base": [
             0.0,
             0.0,
-            0.0
+            -5.0
         ],
         "Position Max": [
             0.0,

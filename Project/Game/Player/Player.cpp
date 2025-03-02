@@ -817,7 +817,7 @@ void  Player::ParticleInit() {
 	starEffect_[0].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
 	starEffect_[2].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
 	for (uint32_t i = 0; i < starEffect_.size(); i++) {
-		starEffect_[i].emitter->SetParentTransform(&transform_);
+		starEffect_[i].emitter->SetFollowingPos(&transform_.translation_);
 	}
 
 	// crack
