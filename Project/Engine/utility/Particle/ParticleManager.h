@@ -39,6 +39,7 @@ private:
 		float lifeTime_;
 		float currentTime_;
 		float gravity_;
+		const Vector3* followPos=nullptr;
 		Vector3 direction_;
 		Vector3 velocity_;
 		float speed_;

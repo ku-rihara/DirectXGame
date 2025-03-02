@@ -75,8 +75,12 @@ void ParticleManager::Update() {
 			///------------------------------------------------------------------------
 			/// 変位更新
 			///------------------------------------------------------------------------
-			it->worldTransform_.translation_.y += it->velocity_.y * Frame::DeltaTime();
-			it->worldTransform_.translation_ += it->direction_ * it->speed_ * Frame::DeltaTime();
+			if(it->followPos){
+				it->worldTransform_.translation_ = *it->followPos;
+			} else {
+				it->worldTransform_.translation_.y += it->velocity_.y * Frame::DeltaTime();
+				it->worldTransform_.translation_ += it->direction_ * it->speed_ * Frame::DeltaTime();
+			}
 			///------------------------------------------------------------------------
 			/// ビルボードまたは通常の行列更新
 			///------------------------------------------------------------------------
@@ -237,6 +241,10 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 	///------------------------------------------------------------------------
 	if (paramaters.parentTransform) {
 		particle.worldTransform_.parent_ = paramaters.parentTransform;
+	}
+
+	if (paramaters.followingPos_) {
+		particle.followPos =paramaters.followingPos_;
 	}
 
 	///------------------------------------------------------------------------
