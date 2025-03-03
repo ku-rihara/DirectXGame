@@ -33,6 +33,7 @@ public:
     virtual void Finalize();
 
     void DisplayFPS(); /// FPS表示
+    void AllLoad();
 
     void Run(); /// 実行
 };

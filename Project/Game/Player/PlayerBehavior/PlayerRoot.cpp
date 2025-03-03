@@ -30,7 +30,7 @@ PlayerRoot ::~PlayerRoot() {
 void PlayerRoot::Update() {
 
 
-		if ((Input::IsTriggerPad(0, XINPUT_GAMEPAD_Y))) {
+		if ((Input::IsPressPad(0, XINPUT_GAMEPAD_Y))) {
 			pPlayer_->Move(pPlayer_->GetParamater().moveSpeed *2.4f);
 		}
 		else {

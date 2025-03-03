@@ -96,7 +96,6 @@ void EnemyManager::Update() {
 
 		if ((*it)->GetIsDeath()) {
 			pLockOn_->OnEnemyDestroyed((*it).get());
-		/*	pLockOn_->Search(enemies_, viewprojection);*/
 			it = enemies_.erase(it); // 削除して次の要素を指すイテレータを取得
 			UpdateEnemyClearedFlag(); // フラグを更新
 		}

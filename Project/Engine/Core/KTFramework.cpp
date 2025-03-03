@@ -4,6 +4,7 @@
 /// imgui
 #include <imgui.h>
 #include "utility/Editor/GlobalParameter.h"
+#include"3d/ModelManager.h"
 
 #include "Frame/Frame.h"
 
@@ -36,6 +37,8 @@ void KTFramework::Run() {
 void KTFramework::Init() {
     /// ウィンドウ初期化
     Keta::Initialize(kWindowTitle, 1280, 720);
+
+     AllLoad();
 
     // グローバル変数の読み込み
     GlobalParameter::GetInstance()->LoadFiles();
@@ -96,4 +99,14 @@ void KTFramework::DisplayFPS(){
 
 	ImGui::End();
 #endif 
+}
+
+void KTFramework::AllLoad() {
+    TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
+    Audio::GetInstance()->LoadWave("./Resources/EnemyDeath.wav");
+    Audio::GetInstance()->LoadWave("./Resources/Enemythurst.wav");
+    ModelManager::GetInstance()->LoadModel("debri",".obj");
 }

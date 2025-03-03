@@ -55,9 +55,9 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	collisionBox_->SetSize(Vector3(3.2f, 3.2f, 3.2f));
 	collisionBox_->IsAdapt(true);
 
-	uint32_t circleHandle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
+	uint32_t circleHandle =  TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
 	uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
-	uint32_t boalHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
+	uint32_t boalHandle =    TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
 	uint32_t crackTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
 
 	//damage
@@ -71,7 +71,7 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	InitParticleEffect(deathParticle_[3], "EnemyDeathMiniSpark","Plane", circleHandle, 900);
 
 	//
-	InitParticleEffect(debriParticle_[0], "DebriName","debri",defaultHandle,900);
+	InitParticleEffect(debriParticle_[0], "DebriName","debri",defaultHandle,500);
 	debriParticle_[0].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
 
 	// crack
@@ -85,13 +85,11 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	notFindSprite_->Init();
 
 	//audio
-	deathSound_=Audio::GetInstance()->LoadWave("./Resources/EnemyDeath.wav");
+	deathSound_  = Audio::GetInstance()->LoadWave("./Resources/EnemyDeath.wav");
 	thurstSound_ = Audio::GetInstance()->LoadWave("./Resources/Enemythurst.wav");
 
-	
-
-	ChangeBehavior(std::make_unique<EnemyDamageRoot>(this));/// 追っかけ
-	ChangeMoveBehavior(std::make_unique<EnemySpawn>(this));/// 追っかけ
+	ChangeBehavior(std::make_unique<EnemyDamageRoot>(this)); /// 振る舞い初期化
+	ChangeMoveBehavior(std::make_unique<EnemySpawn>(this));  /// 振る舞い初期化
 }
 
 ///========================================================
@@ -131,11 +129,6 @@ void BaseEnemy::Update() {
 	FallEffectUpdate();
 
 	BehaviorChangeDeath();
-	//// 体力がなくなったら死亡
-	//if (hp_ <= 0) {
-	//	isdeath_ = true;
-	//	/*Audio::GetInstance()->PlayWave(deathSound_);*/
-	//}
 
 	collisionBox_->SetPosition(GetWorldPosition());
 	collisionBox_->Update();
