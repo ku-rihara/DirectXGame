@@ -60,7 +60,7 @@ void EnemyDeath::Update() {
 			pBaseEnemy_->Jump(blowJumpValue_, kFallSpeedLimit_, gravity_);
 
 
-		if (burstTime_ < pBaseEnemy_->GetParamater().burstTime)break
+		if (burstTime_ < pBaseEnemy_->GetParamater().burstTime)break;
 		step_ = Step::BURST;
 		break;
 	
