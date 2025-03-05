@@ -34,7 +34,6 @@ private:
 	LockOn* pLockOn_;
 	GameCamera* pGameCamera_;
 
-
 	///* 敵リスト
 	std::list<std::unique_ptr<BaseEnemy>> enemies_;
 
@@ -62,7 +61,7 @@ public:
 	void FSpawn();
 	void ParticleInit();
 
-	void UpdateEnemyClearedFlag();
+	void GetIsEnemiesCleared();
 
 	// 敵の生成
 	void SpawnEnemy(const std::string& enemyType, const Vector3& position);

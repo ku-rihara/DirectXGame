@@ -8,6 +8,7 @@
 #include <map>
 #include <json.hpp>
 
+class EnemyManager;
 class EnemySpawner {
 private:
     using json = nlohmann::json;
@@ -38,12 +39,15 @@ private:
     std::vector<std::string> enemyTypes_ = { "NormalEnemy", "StrongEnemy" };
 
 private:
+
+    EnemyManager* pEnemyManager_ = nullptr;
+
     std::map<int, Phase> phases_;   // フェーズ番号をキーとしたフェーズマップ
     int   currentPhase_;            // 現在のフェーズ
     float currentTime_;             // 現在のフェーズ内の経過時間
     int   currentWave_;
 
-    bool areAllEnemiesCleared_; // 敵がすべていなくなったことを示すフラグ
+    bool isAllSpawn_; // 敵がすべていなくなったことを示すフラグ
 
     ///* EditorModeセット
     void SetEditorMode(bool isEditorMode);
@@ -59,15 +63,13 @@ public:
 
     // 初期化
     void Init();
+    void Update();
 
-    // 敵の生成
-    std::unique_ptr<BaseEnemy> SpawnEnemy(const std::string& enemyType,
-        const Vector3& position);
-
-    // スポーン更新処理
-    void Update(float deltaTime, std::list<std::unique_ptr<BaseEnemy>>& enemies);
-
-    void CheckWaveCompletion(std::list<std::unique_ptr<BaseEnemy>>& enemies);
+    ///=======================================================================================
+    /// Editor method
+    ///=======================================================================================
+    void CheckWaveCompletion();
+	void CheckAllSpowned();
 
     // JSONのロード
     void LoadEnemyPoPData(const std::string& directrypath, const std::string& filename);
@@ -78,13 +80,16 @@ public:
     // セーブとロード
     void SaveAndLoad(const std::string& directrypath, const std::string& filename);
     void SaveEnemyPoPData(const std::string& directrypath, const std::string& filename);
+    
+    ///=======================================================================================
+    /// getter method
+    ///=======================================================================================
+    bool GetIsAllSpawn() const { return isAllSpawn_; }
 
-    bool GetCread() const { return areAllEnemiesCleared_; }
-
-    // 必要な情報のgetter, setter
-    std::map<int, Phase>& GetPhases() { return phases_; }
-    int& GetCurrentPhase() { return currentPhase_; }
-    float& GetCurrentTimeer() { return currentTime_; }
+    ///=======================================================================================
+   /// setter method
+   ///=======================================================================================
+    void SetEnemyManager(EnemyManager* enemyManager);
 
 private:
       // JSON のロード補助関数

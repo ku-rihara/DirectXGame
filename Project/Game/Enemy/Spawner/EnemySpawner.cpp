@@ -2,6 +2,8 @@
 #include "EnemySpawner.h"
 #include "Enemy/NormalEnemy.h"
 #include "Enemy/StrongEnemy.h"
+#include"Enemy/EnemyManager.h"
+#include"Frame/Frame.h"
 #include <fstream>
 #include <imgui.h>
 #include <format>
@@ -19,8 +21,8 @@ void EnemySpawner::Init() {
     }
 }
 
-void EnemySpawner::Update(float deltaTime, std::list<std::unique_ptr<BaseEnemy>>& enemies) {
-    currentTime_ += deltaTime; //* 現在時間加算
+void EnemySpawner::Update() {
+    currentTime_ += Frame::DeltaTimeRate(); //* 現在時間加算
 
     auto& phase = phases_[currentPhase_];//* 現在フェーズの取得
 
@@ -34,22 +36,21 @@ void EnemySpawner::Update(float deltaTime, std::list<std::unique_ptr<BaseEnemy>>
             if (currentTime_ < group.spownTime) continue;
             if (group.isSpowned) continue;
 
-
             // グループ生成処理
             for (const auto& spawn : group.spownEnemies) {
-                pEnemyManager_->SpawnEnemy(enemyType, Vector3(position.x, position.y, 0.0f));
-                enemies.push_back(std::move(enemy));
+                pEnemyManager_->SpawnEnemy(spawn.enemyType, Vector3(spawn.position.x, spawn.position.y, spawn.position.z));
             }
             group.isSpowned = true;
         }
     }
+	CheckAllSpowned(); // すべての敵がスポーンしたか確認
 }
 
-void EnemySpawner::CheckWaveCompletion(std::list<std::unique_ptr<BaseEnemy>>& enemies) {
+void EnemySpawner::CheckWaveCompletion() {
     auto& phase = phases_[currentPhase_]; // 現在フェーズの取得
 
     // 現在のWaveに所属する敵が全て倒されたか確認
-    if (enemies.empty()) {
+    if (pEnemyManager_->GetEnemies().empty()) {
         // 次のWaveに進む
         ++currentWave_;
 
@@ -61,6 +62,20 @@ void EnemySpawner::CheckWaveCompletion(std::list<std::unique_ptr<BaseEnemy>>& en
                 --currentPhase_; // フェーズを戻して停止
             } else {
                 currentWave_ = 0; // 次フェーズの最初のWaveへ
+            }
+        }
+    }
+}
+
+void EnemySpawner::CheckAllSpowned() {
+    // スポーン予定の敵を確認
+    for (const auto& [phaseNum, phase] : phases_) {
+        for (const auto& wave : phase.waves) {
+            for (const auto& group : wave.groups) {
+                if (!group.isSpowned) { // 未スポーンの敵がいる場合
+                    isAllSpawn_ = false;
+                    return;
+                }
             }
         }
     }
@@ -175,11 +190,6 @@ void EnemySpawner::ImGuiUpdate() {
         ///-----------------------------------------------------------------------------------------
         /// Wave
         ///-----------------------------------------------------------------------------------------
-
-        ///-----------------------------------------------------------------------------------------
-        /// Wave
-        ///-----------------------------------------------------------------------------------------
-
         ImGui::SeparatorText("Wave");
 
         // Remove Wave ボタン
@@ -320,4 +330,7 @@ void EnemySpawner::SaveEnemyPoPData(const std::string& directrypath, const std::
 
 void EnemySpawner::SetEditorMode(bool isEditorMode) {
     isEditorMode_ = isEditorMode;
+}
+void EnemySpawner::SetEnemyManager(EnemyManager* enemyManager) { 
+    pEnemyManager_ = enemyManager; 
 }

@@ -30,6 +30,7 @@ void GameScene::Init() {
 	player_ = std::make_unique<Player>();
 	gamecamera_ = std::make_unique<GameCamera>();
 	enemyManager_ = std::make_unique<EnemyManager>();
+	enemySpawner_ = std::make_unique<EnemySpawner>();
 	skydome_= std::make_unique<Skydome>();
 	howToOperate_ = std::make_unique<HowToOperate>();
 
@@ -41,6 +42,7 @@ void GameScene::Init() {
 	player_->Init();
 	lockOn_->Init();
 	enemyManager_->Init();
+	enemySpawner_->Init();
 	gamecamera_->Init();
 	howToOperate_->Init();
 	viewProjection_.Init();//ビュープロジェクション
@@ -50,11 +52,12 @@ void GameScene::Init() {
 	///=======================================================================================
 	gamecamera_->SetTarget(&player_->GetTransform());
 	enemyManager_->SetPlayer(player_.get());
+	enemyManager_->SetGameCamera(gamecamera_.get());
+	enemyManager_->SetLockon(lockOn_.get());
 	player_->SetViewProjection(&viewProjection_); 
 	player_->SetLockOn(lockOn_.get());
 	player_->SetGameCamera(gamecamera_.get());
-	enemyManager_->SetGameCamera(gamecamera_.get());
-	enemyManager_->SetLockon(lockOn_.get());
+	enemySpawner_->SetEnemyManager(enemyManager_.get());
 
 	enemyManager_->FSpawn();
 
@@ -92,6 +95,7 @@ void GameScene::Update() {
 	skydome_->Update();
 	howToOperate_->Update();
 	field_->Update();
+	enemySpawner_->Update();
 	enemyManager_->Update();
 	gamecamera_->Update();
 
@@ -105,7 +109,7 @@ void GameScene::Update() {
 	ViewProjectionUpdate();
 
 	/// クリア
-	if (enemyManager_->GetCread()) {
+	if (enemyManager_->GetCread()&&enemySpawner_->GetIsAllSpawn()) {
 		cease_.time += Frame::DeltaTime();
 	
 		if (cease_.time >= cease_.maxTime) {
@@ -179,7 +183,7 @@ void GameScene::Debug() {
 	gamecamera_->AdjustParm();
 	ImGui::End();
 
-	enemyManager_->ImGuiUpdate();
+	enemySpawner_->ImGuiUpdate();
 	Light::GetInstance()->DebugImGui();
 	howToOperate_->Debug();
 	

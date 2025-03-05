@@ -69,9 +69,7 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
 ///  更新処理
 ///========================================================================================
 void EnemyManager::Update() {
-	if (isEditorMode_) {
-		return; // エディタモード中は停止
-	}
+	
 
 	//SpawnUpdate(); // スポーン更新
 
@@ -89,7 +87,7 @@ void EnemyManager::Update() {
 		if ((*it)->GetIsDeath()) {
 			pLockOn_->OnEnemyDestroyed((*it).get());
 			it = enemies_.erase(it); // 削除して次の要素を指すイテレータを取得
-			UpdateEnemyClearedFlag(); // フラグを更新
+			GetIsEnemiesCleared(); // フラグを更新
 		}
 		else {
 			++it; // 削除しない場合はイテレータを進める
@@ -98,9 +96,9 @@ void EnemyManager::Update() {
 }
 
 void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
-	if (isEditorMode_) {
-		return; // エディタモード中は停止
-	}
+	//if (isEditorMode_) {
+	//	return; // エディタモード中は停止
+	//}
 
 	for (auto it = enemies_.begin(); it != enemies_.end();) {
 		(*it)->DisplaySprite(viewProjection);// 更新
@@ -129,7 +127,6 @@ void EnemyManager::SpriteDraw(const ViewProjection& viewProjection) {
 	}
 }
 
-
 void EnemyManager::SetPlayer(Player* player) {
 	pPlayer_ = player;
 }   
@@ -137,20 +134,10 @@ void EnemyManager::SetLockon(LockOn* lockOn) {
 	pLockOn_ = lockOn;
 }
 
-void EnemyManager::UpdateEnemyClearedFlag() {
+void EnemyManager::GetIsEnemiesCleared() {
 	areAllEnemiesCleared_ = enemies_.empty(); // 現在の敵リストが空かを確認
 
-	// スポーン予定の敵を確認
-	for (const auto& [phaseNum, phase] : phases_) {
-		for (const auto& wave : phase.waves) {
-			for (const auto& group : wave.groups) {
-				if (!group.isSpowned) { // 未スポーンの敵がいる場合
-					areAllEnemiesCleared_ = false;
-					return;
-				}
-			}
-		}
-	}
+	
 }
 
 void EnemyManager::SetGameCamera(GameCamera* gamecamera) {

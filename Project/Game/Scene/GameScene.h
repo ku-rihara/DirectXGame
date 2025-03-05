@@ -11,7 +11,7 @@
 #include"GameCamera/GameCamera.h"
 #include"Enemy/EnemyManager.h"
 #include"UI/HowToOperate.h"
-
+#include"Enemy/Spawner/EnemySpawner.h"
 
 
 /// <summary>
@@ -31,6 +31,7 @@ private:
 	std::unique_ptr<Player> player_ = nullptr;
 	std::unique_ptr<Skydome> skydome_ = nullptr;
 	std::unique_ptr<EnemyManager>enemyManager_ = nullptr;
+	std::unique_ptr<EnemySpawner>enemySpawner_ = nullptr;
 	std::unique_ptr<HowToOperate>howToOperate_ = nullptr;
 	
 	bool isDraw = true;
