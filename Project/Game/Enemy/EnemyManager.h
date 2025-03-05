@@ -11,37 +11,14 @@
 #include<map>
 #include <json.hpp>
 
+enum class Type;
+struct BaseEnemy::Paramater;
 class Player;
 class LockOn;
 class GameCamera;
-enum class Type;
-struct BaseEnemy::Paramater;
 class EnemyManager {
 private:
 	using json = nlohmann::json;
-private:
-
-
-	struct SpownEnemy {
-		std::string enemyType;    // 敵の種類
-		Vector3 position;         // 敵の座標
-	};
-
-	struct EnemyGroup {
-		std::vector<SpownEnemy> spownEnemies; // 敵グループのリスト
-		float spownTime;                 // グループ生成間隔
-		bool isSpowned;
-	};
-
-
-	struct Wave {
-		float startTime;                   // Waveの開始時間（フェーズ内の相対時間）
-		std::vector<EnemyGroup> groups;    // Wave内で発生する敵の情報
-	};
-
-	struct Phase {
-		std::vector<Wave> waves; // フェーズ内のWaveリスト
-	};
 
 	///========================================================
 	/// Private variants
@@ -57,11 +34,6 @@ private:
 	LockOn* pLockOn_;
 	GameCamera* pGameCamera_;
 
-	bool isEditorMode_;             // エディタモード中かどうか
-	std::map<int, Phase> phases_;   // フェーズ番号をキーとしたフェーズマップ
-	int   currentPhase_;            // 現在のフェーズ
-	float currentTime_;             // 現在のフェーズ内の経過時間
-	int   currentWave_;
 
 	///* 敵リスト
 	std::list<std::unique_ptr<BaseEnemy>> enemies_;
@@ -76,9 +48,6 @@ private:
 
 	bool areAllEnemiesCleared_; // 敵がすべていなくなったことを示すフラグ
 
-	const std::string directrypath_ = "./resources/EnemyParamater/";// path
-	const std::string filename_ = "PoPData.json";// name
-
 public:
 
 	///========================================================
@@ -91,6 +60,7 @@ public:
 	// 初期化
 	void Init();
 	void FSpawn();
+	void ParticleInit();
 
 	void UpdateEnemyClearedFlag();
 
@@ -100,33 +70,12 @@ public:
 	// 更新処理
 	void Update();
 	void HpBarUpdate(const ViewProjection& viewProjection);
-	void SpawnUpdate();
-	void CheckWaveCompletion();
-
+	
 	// 描画処理
 	void Draw(const ViewProjection& viewProjection);
 
 	// スプライト描画処理
 	void SpriteDraw(const ViewProjection& viewProjection);
-
-	///========================================================
-   /// editor method
-   ///========================================================
-
-
-	void ImGuiUpdate();/// ImGuiによるエディタ
-	void SaveAndLoad();/// セーブとロード
-
-	///* セーブ
-	void SaveEnemyPoPData();
-
-	///* ロード
-	void LoadEnemyPoPData();
-	void LoadPhase(Phase& phase, const json& phaseData);
-	void LoadSpawn(EnemyGroup& spawn, const json& spawnData);
-
-	///* EditorModeセット
-	void SetEditorMode(bool isEditorMode);
 
 	///-------------------------------------------------------------------------------------
 	///Editor

@@ -229,6 +229,9 @@
     <Filter Include="Game\Scene\Manager">
       <UniqueIdentifier>{20578600-268f-441b-8c4f-b9fd3cd175ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemy\Spawner">
+      <UniqueIdentifier>{56719232-7938-486e-b2c4-15494f312b10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -612,6 +615,9 @@
     </ClCompile>
     <ClCompile Include="Game\Effect\StarEffect.cpp">
       <Filter>Game\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Spawner\EnemySpawner.cpp">
+      <Filter>Game\Enemy\Spawner</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1028,6 +1034,9 @@
     </ClInclude>
     <ClInclude Include="Game\Effect\StarEffect.h">
       <Filter>Game\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Spawner\EnemySpawner.h">
+      <Filter>Game\Enemy\Spawner</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
