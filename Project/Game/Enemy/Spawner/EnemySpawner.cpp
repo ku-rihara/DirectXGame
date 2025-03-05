@@ -19,6 +19,8 @@ void EnemySpawner::Init() {
         Phase phase;
         phases_[0] = phase;
     }
+
+    LoadEnemyPoPData();
 }
 
 void EnemySpawner::Update() {
@@ -43,28 +45,29 @@ void EnemySpawner::Update() {
             group.isSpowned = true;
         }
     }
+  /*  CheckWaveCompletion();*/
 	CheckAllSpowned(); // すべての敵がスポーンしたか確認
 }
 
 void EnemySpawner::CheckWaveCompletion() {
-    auto& phase = phases_[currentPhase_]; // 現在フェーズの取得
+    //auto& phase = phases_[currentPhase_]; // 現在フェーズの取得
 
-    // 現在のWaveに所属する敵が全て倒されたか確認
-    if (pEnemyManager_->GetEnemies().empty()) {
-        // 次のWaveに進む
-        ++currentWave_;
+    //// 現在のWaveに所属する敵が全て倒されたか確認
+    //if (pEnemyManager_->GetEnemies().empty()) {
+    //    // 次のWaveに進む
+    //    ++currentWave_;
 
-        if (currentWave_ >= phase.waves.size()) {
-            // 全てのWaveが完了した場合、次のフェーズに進む
-            ++currentPhase_;
-            if (phases_.find(currentPhase_) == phases_.end()) {
-                // フェーズが存在しなければ終了
-                --currentPhase_; // フェーズを戻して停止
-            } else {
-                currentWave_ = 0; // 次フェーズの最初のWaveへ
-            }
-        }
-    }
+    //    if (currentWave_ >= phase.waves.size()) {
+    //        // 全てのWaveが完了した場合、次のフェーズに進む
+    //        ++currentPhase_;
+    //        if (phases_.find(currentPhase_) == phases_.end()) {
+    //            // フェーズが存在しなければ終了
+    //            --currentPhase_; // フェーズを戻して停止
+    //        } else {
+    //            currentWave_ = 0; // 次フェーズの最初のWaveへ
+    //        }
+    //    }
+    //}
 }
 
 void EnemySpawner::CheckAllSpowned() {
@@ -75,6 +78,8 @@ void EnemySpawner::CheckAllSpowned() {
                 if (!group.isSpowned) { // 未スポーンの敵がいる場合
                     isAllSpawn_ = false;
                     return;
+                } else {
+                    isAllSpawn_ = true;
                 }
             }
         }
@@ -213,86 +218,40 @@ void EnemySpawner::ImGuiUpdate() {
 
     /// セーブロード
     ImGui::SeparatorText("Save and Load");
-    SaveAndLoad(directrypath_,filename_);
+    SaveAndLoad();
 
     ImGui::End();
 }
 
-void EnemySpawner::LoadEnemyPoPData(const std::string& directrypath, const std::string& filename) {
-    std::ifstream file(directrypath + filename);
-    if (file.is_open()) {
-        json scheduleJson;
-        file >> scheduleJson;
 
-        phases_.clear(); // データをクリア
-
-        for (const auto& [phaseNum, phaseData] : scheduleJson.items()) {
-            Phase phase;
-            LoadPhase(phase, phaseData); // フェーズデータを読み込み
-            phases_[std::stoi(phaseNum)] = phase;
-        }
-    }
-}
-
-void EnemySpawner::LoadPhase(Phase& phase, const json& phaseData) {
-    if (!phaseData.contains("waves")) return;
-
-    for (const auto& waveData : phaseData["waves"]) {
-        Wave wave;
-
-        // "startTime" の存在チェック
-        wave.startTime = waveData.contains("startTime") ? waveData["startTime"].get<float>() : 0.0f;
-
-        if (waveData.contains("spawns")) {
-            for (const auto& spawnData : waveData["spawns"]) {
-                EnemyGroup group;
-                group.isSpowned = false;
-                LoadSpawn(group, spawnData); // スポーンデータを読み込み
-                wave.groups.push_back(group);
-            }
-        }
-
-        phase.waves.push_back(wave);
-    }
-}
-
-void EnemySpawner::LoadSpawn(EnemyGroup& group, const json& spawnData) {
-    // "spawnTime" の存在チェック
-    group.spownTime = spawnData.contains("spawnTime") ? spawnData["spawnTime"].get<float>() : 0.0f;
-
-    // "spownEnemies" の存在チェック
-    if (spawnData.contains("spownEnemies")) {
-        for (const auto& groupData : spawnData["spownEnemies"]) {
-            if (groupData.contains("enemyType") && groupData.contains("position")) {
-                const auto& positionData = groupData["position"];
-
-                // 各軸の存在チェック
-                float x = positionData.contains("x") ? positionData["x"].get<float>() : 0.0f;
-                float y = positionData.contains("y") ? positionData["y"].get<float>() : 0.0f;
-                float z = positionData.contains("z") ? positionData["z"].get<float>() : 0.0f;
-
-                group.spownEnemies.push_back({
-                    groupData["enemyType"].get<std::string>(),
-                    {x, y, z}
-                    });
-            }
-        }
-    }
+///========================================================================================
+/// エディターモード変更
+///========================================================================================
+void EnemySpawner::SetEditorMode(bool isEditorMode) {
+    isEditorMode_ = isEditorMode;
 }
 
 
-void EnemySpawner::SaveAndLoad(const std::string& directrypath, const std::string& filename) {
+///========================================================================================
+///  セーブ/ロード機能
+///========================================================================================
+void EnemySpawner::SaveAndLoad() {
     if (ImGui::Button("Save Schedules")) {
-        SaveEnemyPoPData(directrypath, filename);
+        SaveEnemyPoPData();
     }
 
     if (ImGui::Button("Load Schedules")) {
-        LoadEnemyPoPData(directrypath, filename);
+        LoadEnemyPoPData();
     }
 }
 
-void EnemySpawner::SaveEnemyPoPData(const std::string& directrypath, const std::string& filename) {
+///========================================================================================
+///  JSON を保存する関数
+///========================================================================================
+void EnemySpawner::SaveEnemyPoPData() {
     json scheduleJson;
+
+    scheduleJson["isEditorMode"] = isEditorMode_;// isEditorMode を保存
 
     // フェーズごとのデータをJSONに変換
     for (const auto& [phaseNum, phase] : phases_) {
@@ -322,15 +281,91 @@ void EnemySpawner::SaveEnemyPoPData(const std::string& directrypath, const std::
     }
 
     // ファイルに書き出し
-    std::ofstream file(directrypath + filename);
+    std::ofstream file(directrypath_ + filename_);
     if (file.is_open()) {
         file << scheduleJson.dump(4); // JSONデータを整形して書き出し
     }
 }
 
-void EnemySpawner::SetEditorMode(bool isEditorMode) {
-    isEditorMode_ = isEditorMode;
+///========================================================================================
+///  JSON をロードする関数
+///========================================================================================
+void EnemySpawner::LoadEnemyPoPData() {
+    std::ifstream file(directrypath_ + filename_);
+    if (file.is_open()) {
+        json scheduleJson;
+        file >> scheduleJson;
+
+        // isEditorMode をロード
+        if (scheduleJson.contains("isEditorMode")) {
+            isEditorMode_ = scheduleJson["isEditorMode"].get<bool>();
+        }
+
+        phases_.clear(); // データをクリア
+
+        for (const auto& [phaseNum, phaseData] : scheduleJson.items()) {
+            // "isEditorMode" をスキップ
+            if (phaseNum == "isEditorMode") continue;
+
+            Phase phase;
+            LoadPhase(phase, phaseData); // フェーズデータを読み込み
+            phases_[std::stoi(phaseNum)] = phase;
+        }
+    }
 }
+
+///========================================================================================
+///  フェーズデータをロードする補助関数
+///========================================================================================
+void EnemySpawner::LoadPhase(Phase& phase, const json& phaseData) {
+    if (!phaseData.contains("waves")) return;
+
+    for (const auto& waveData : phaseData["waves"]) {
+        Wave wave;
+
+        // "startTime" の存在チェック
+        wave.startTime = waveData.contains("startTime") ? waveData["startTime"].get<float>() : 0.0f;
+
+        if (waveData.contains("spawns")) {
+            for (const auto& spawnData : waveData["spawns"]) {
+                EnemyGroup group;
+                group.isSpowned = false;
+                LoadSpawn(group, spawnData); // スポーンデータを読み込み
+                wave.groups.push_back(group);
+            }
+        }
+
+        phase.waves.push_back(wave);
+    }
+}
+
+///========================================================================================
+///  スポーンデータをロードする補助関数
+///========================================================================================
+void EnemySpawner::LoadSpawn(EnemyGroup& group, const json& spawnData) {
+    // "spawnTime" の存在チェック
+    group.spownTime = spawnData.contains("spawnTime") ? spawnData["spawnTime"].get<float>() : 0.0f;
+
+    // "spownEnemies" の存在チェック
+    if (spawnData.contains("spownEnemies")) {
+        for (const auto& groupData : spawnData["spownEnemies"]) {
+            if (groupData.contains("enemyType") && groupData.contains("position")) {
+                const auto& positionData = groupData["position"];
+
+                // 各軸の存在チェック
+                float x = positionData.contains("x") ? positionData["x"].get<float>() : 0.0f;
+                float y = positionData.contains("y") ? positionData["y"].get<float>() : 0.0f;
+                float z = positionData.contains("z") ? positionData["z"].get<float>() : 0.0f;
+
+                group.spownEnemies.push_back({
+                    groupData["enemyType"].get<std::string>(),
+                    {x, y, z}
+                    });
+            }
+        }
+    }
+}
+
 void EnemySpawner::SetEnemyManager(EnemyManager* enemyManager) { 
     pEnemyManager_ = enemyManager; 
 }

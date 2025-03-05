@@ -72,14 +72,14 @@ public:
 	void CheckAllSpowned();
 
     // JSONのロード
-    void LoadEnemyPoPData(const std::string& directrypath, const std::string& filename);
+    void LoadEnemyPoPData();
 
     // ImGuiによる設定
     void ImGuiUpdate();
 
     // セーブとロード
-    void SaveAndLoad(const std::string& directrypath, const std::string& filename);
-    void SaveEnemyPoPData(const std::string& directrypath, const std::string& filename);
+    void SaveAndLoad();
+    void SaveEnemyPoPData();
     
     ///=======================================================================================
     /// getter method
