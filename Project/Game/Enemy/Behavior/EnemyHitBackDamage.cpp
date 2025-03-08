@@ -22,7 +22,7 @@ EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
 	easing_.time = 0.0f;
 	easing_.maxTime = 0.2f;
 
-	pBaseEnemy_->DamageEmit();
+	pBaseEnemy_->DamageRenditionInit();
 
 	///
 	pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2(0, 0));

@@ -18,11 +18,11 @@ EnemyBoundDamage::EnemyBoundDamage(BaseEnemy* boss)
 	gravity_ = 8.8f * kFrame_;
 	fallSpeedLimit_ = 5.2f * kFrame_;
 
-	pBaseEnemy_->DamageEmit();
+	pBaseEnemy_->DamageRenditionInit();
 	pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2(0, 0));
 	pBaseEnemy_->GetFindSprite()->SetScale(Vector2(1, 1));
 	pBaseEnemy_->SetScale(BaseEnemy::InitScale_);
-	pBaseEnemy_->ThrustEmit();
+	pBaseEnemy_->ThrustRenditionInit();
 	step_ = Step::BOUND; /// ステップ初期化
 }
 

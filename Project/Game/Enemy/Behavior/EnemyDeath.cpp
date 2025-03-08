@@ -68,7 +68,7 @@ void EnemyDeath::Update() {
 	/// 爆散
 	///---------------------------------------------------------
 	case EnemyDeath::Step::BURST:
-		pBaseEnemy_->DeathEmit();
+		pBaseEnemy_->DeathRenditionInit();
 		step_ = Step::DEATH;
 		break;
 	

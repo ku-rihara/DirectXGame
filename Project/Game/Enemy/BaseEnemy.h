@@ -9,7 +9,6 @@
 #include"Collider/AABBCollider.h"
 #include"Behavior/BaseEnemyBehavior.h"
 #include"Behavior/BaseEnemyMoveBehavior.h"
-#include"utility/Particle/ParticleEmitter.h"
 #include"Enemy/HPBar/EnemyHPBar.h"
 #include"Effect/Effect.h"
 
@@ -18,6 +17,7 @@
 
 class Player;
 class GameCamera;
+class EnemyManager;
 class BaseEnemy : public BaseObject,public AABBCollider {
 public:
 	struct Paramater {
@@ -42,17 +42,9 @@ public:
 		NORMAL,
 		STRONG,
 	};
-	struct ParticleEffect {
-		std::string name;
-		std::unique_ptr<ParticleEmitter>emitter;
-	};
 
-private:
-	/// Particle
-	std::array<ParticleEffect, 4>deathParticle_;
-	std::array<ParticleEffect, 1>debriParticle_;
-	std::array<ParticleEffect, 1>damageParticle;
-	std::unique_ptr<ParticleEmitter>fallCrack_;
+
+
 private:
 	int deathSound_;
 	int thurstSound_;
@@ -64,6 +56,8 @@ protected:
 	/// other class
 	Player* pPlayer_;
 	GameCamera* pGameCamera_;
+	EnemyManager* pEnemyManager_;
+
 	std::unique_ptr<FindSprite>findSprite_;
 	std::unique_ptr<NotFindSprite>notFindSprite_;
 	std::unique_ptr<EnemyCollisionBox>collisionBox_;
@@ -99,9 +93,9 @@ public:
 	virtual void Draw(const ViewProjection& viewProjection);
 	virtual void SpriteDraw(const ViewProjection& viewProjection);
 
-	void DamageEmit();
-	void ThrustEmit();
-	void DeathEmit();
+	void DamageRenditionInit();
+	void ThrustRenditionInit();
+	void DeathRenditionInit();
 	void FallEffectUpdate();
 	void FallEffectInit(const Vector3& pos);
 	void RotateInit();
@@ -123,9 +117,7 @@ public:
 	void BackToDamageRoot  ();
 	void BehaviorChangeDeath();
 
-	// ヘルパー関数: ParticleEffect を初期化する
-	void InitParticleEffect(ParticleEffect& effect, const std::string& name, const std::string& modelName, const uint32_t& textureHandle, const int32_t& maxnum);
-
+	
 	/// ====================================================================
     /// Collision
     /// ====================================================================
@@ -148,6 +140,7 @@ public:
 	///========================================================================================
 	void SetPlayer     (Player* plyaer);
 	void SetGameCamera (GameCamera* gamecamera);
+	void SetManager(EnemyManager* manager);
 	void SetParamater  (const Type&type,const Paramater& paramater);
 	void SetBodyRotateX(const float& r) { bodyTransform_.rotation_.x = r; }
 	void SetBodyColor(const Vector4& color);

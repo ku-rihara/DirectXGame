@@ -24,7 +24,7 @@ EnemyUpperDamage::EnemyUpperDamage(BaseEnemy* boss)
 	// 赤色
 	pBaseEnemy_->SetBodyColor(Vector4(0.9f, 0, 0, 0.9f));
 	pBaseEnemy_->RotateInit();
-	pBaseEnemy_->DamageEmit();
+	pBaseEnemy_->DamageRenditionInit();
 
 	step_ = Step::HITBACK; /// ステップ初期化
 }

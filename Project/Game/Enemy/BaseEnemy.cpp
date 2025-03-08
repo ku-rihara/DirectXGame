@@ -8,6 +8,7 @@
 #include"Behavior/EnemyBoundDamage.h"
 #include"Behavior/EnemyDamageRoot.h"
 #include"Behavior/EnemyDeath.h"
+#include"Enemy/EnemyManager.h"
 
 /// collisionBox
 #include"CollisionBox/AttackCollisionBox.h"
@@ -55,32 +56,9 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 	collisionBox_->SetSize(Vector3(3.2f, 3.2f, 3.2f));
 	collisionBox_->IsAdapt(true);
 
-	uint32_t circleHandle =  TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
-	uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
-	uint32_t boalHandle =    TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
-	uint32_t crackTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
-
-	//damage
-	InitParticleEffect(damageParticle[0], "EnemyDamage", "Plane", circleHandle, 900);
-
-	/// death
-	InitParticleEffect(deathParticle_[0], "EnemyDeathSmoke","Plane", boalHandle, 900);
-	deathParticle_[0].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
-	InitParticleEffect(deathParticle_[1], "EnemyDeathFireSmoke","Plane", circleHandle,900);
-	InitParticleEffect(deathParticle_[2], "EnemyDeathSpark","Plane", circleHandle, 900);
-	InitParticleEffect(deathParticle_[3], "EnemyDeathMiniSpark","Plane", circleHandle, 900);
-
-	//
-	InitParticleEffect(debriParticle_[0], "DebriName","debri",defaultHandle,500);
-	debriParticle_[0].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
-
-	// crack
-	fallCrack_.reset(ParticleEmitter::CreateParticle("Crack", "Plane", ".obj", 30));
-	fallCrack_->SetTextureHandle(crackTexture_);
-	fallCrack_->SetBlendMode(ParticleCommon::BlendMode::None);
-
 	findSprite_ = std::make_unique<FindSprite>();
 	notFindSprite_ = std::make_unique<NotFindSprite>();
+	
 	findSprite_->Init();
 	notFindSprite_->Init();
 
@@ -97,35 +75,13 @@ void BaseEnemy::Init(const Vector3& spownPos) {
 ///========================================================
 void BaseEnemy::Update() {
 
-
 	if (dynamic_cast<EnemyDamageRoot*>(damageBehavior_.get())) {
 		moveBehavior_->Update();
 	}
 	damageBehavior_->Update();
 
 
-	// 死亡パーティクル
-	for (uint32_t i = 0; i < damageParticle.size(); i++) {
-		damageParticle[i].emitter->SetTargetPosition(GetWorldPosition());
-		damageParticle[i].emitter->Update();
-	}
-
-	fallCrack_->SetTargetPosition(Vector3(GetWorldPosition().x, 0.0f, GetWorldPosition().z));
-	fallCrack_->Update();
-
-
-	// 死亡パーティクル
-	for (uint32_t i = 0; i < deathParticle_.size(); i++) {
-		deathParticle_[i].emitter->SetTargetPosition(GetWorldPosition());
-		deathParticle_[i].emitter->Update();
-	}
-
-	//ガレキパーティクル
-	for (uint32_t i = 0; i < debriParticle_.size(); i++) {
-		debriParticle_[i].emitter->SetTargetPosition(GetWorldPosition());
-		debriParticle_[i].emitter->Update();
-	}
-
+	
 	FallEffectUpdate();
 
 	BehaviorChangeDeath();
@@ -348,26 +304,20 @@ void BaseEnemy::DamageForPar(const float& par) {
 	hp_ -= decrementSize;
 }
 
-void BaseEnemy::DamageEmit() {
-	for (uint32_t i = 0; i < damageParticle.size(); i++) {
-		damageParticle[i].emitter->Emit();
+void BaseEnemy::DamageRenditionInit() {
 
-	}
+	pEnemyManager_->DamageEmit(GetWorldPosition());
 }
 
-void BaseEnemy::ThrustEmit() {
+void BaseEnemy::ThrustRenditionInit() {
 	//ガレキパーティクル
-	for (uint32_t i = 0; i < debriParticle_.size(); i++) {
-		debriParticle_[i].emitter->Emit();
-	}
-	fallCrack_->Emit();
+	pEnemyManager_->ThrustEmit(GetWorldPosition());
+	
 	Audio::GetInstance()->PlayWave(thurstSound_, 0.2f);
 }
 
-void BaseEnemy::DeathEmit() {
-	for (uint32_t i = 0; i < deathParticle_.size(); i++) {
-		deathParticle_[i].emitter->Emit();
-	}
+void BaseEnemy::DeathRenditionInit() {
+	pEnemyManager_->DeathEmit(GetWorldPosition());
 	Audio::GetInstance()->PlayWave(deathSound_, 0.5f);
 }
 
@@ -428,6 +378,10 @@ void BaseEnemy::SetGameCamera(GameCamera* gamecamera) {
 	pGameCamera_ = gamecamera;
 }
 
+void  BaseEnemy::SetManager(EnemyManager* manager) {
+	pEnemyManager_ = manager;
+}
+
 void BaseEnemy::BackToDamageRoot() {
 	ChangeBehavior(std::make_unique<EnemyDamageRoot>(this));/// 追っかけ
 }
@@ -445,8 +399,3 @@ void BaseEnemy::RotateInit() {
 }
 
 
-void BaseEnemy::InitParticleEffect(ParticleEffect& effect, const std::string& name, const std::string& modelName, const uint32_t& textureHandle, const int32_t& maxnum) {
-	effect.name = name;
-	effect.emitter.reset(ParticleEmitter::CreateParticle(name, modelName, ".obj", maxnum));
-	effect.emitter->SetTextureHandle(textureHandle);
-}

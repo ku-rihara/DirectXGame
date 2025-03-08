@@ -2,6 +2,8 @@
 
 #include "BaseEnemy.h"
 #include "3d/ViewProjection.h"
+#include"utility/Particle/ParticleEmitter.h"
+
 
 /// std
 #include <vector>
@@ -17,6 +19,11 @@ class Player;
 class LockOn;
 class GameCamera;
 class EnemyManager {
+private:
+	struct ParticleEffect {
+		std::string name;
+		std::unique_ptr<ParticleEmitter>emitter;
+	};
 private:
 	using json = nlohmann::json;
 
@@ -47,6 +54,12 @@ private:
 
 	bool areAllEnemiesCleared_; // 敵がすべていなくなったことを示すフラグ
 
+private:
+	/// Particle
+	std::array<ParticleEffect, 4>deathParticle_;
+	std::array<ParticleEffect, 1>debriParticle_;
+	std::array<ParticleEffect, 1>damageParticle;
+	std::unique_ptr<ParticleEmitter>fallCrack_;
 public:
 
 	///========================================================
@@ -76,6 +89,15 @@ public:
 	// スプライト描画処理
 	void SpriteDraw(const ViewProjection& viewProjection);
 
+	///-------------------------------------------------------------------------------------
+	///Particle
+	///-------------------------------------------------------------------------------------
+	// ヘルパー関数: ParticleEffect を初期化する
+	void InitParticleEffect(ParticleEffect& effect, const std::string& name, const std::string& modelName, const uint32_t& textureHandle, const int32_t& maxnum);
+	void DamageEmit(const Vector3& pos);
+	void ThrustEmit(const Vector3& pos);
+	void DeathEmit(const Vector3& pos);
+	void ParticleUpdate();
 	///-------------------------------------------------------------------------------------
 	///Editor
 	///-------------------------------------------------------------------------------------

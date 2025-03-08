@@ -2,6 +2,7 @@
 #include "EnemyManager.h"
 #include"NormalEnemy.h"
 #include"StrongEnemy.h"
+#include"base/TextureManager.h"
 
 #include "Frame/Frame.h"
 #include"LockOn/LockOn.h"
@@ -61,6 +62,7 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
 		enemy->Init(position);
 		enemy->SetPlayer(pPlayer_);// プレイヤーセット
 		enemy->SetGameCamera(pGameCamera_);
+		enemy->SetManager(this);
 		enemies_.push_back(std::move(enemy));
 }
 
@@ -93,6 +95,7 @@ void EnemyManager::Update() {
 			++it; // 削除しない場合はイテレータを進める
 		}
 	}
+	ParticleUpdate(); // パーティクル更新
 }
 
 void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
@@ -378,23 +381,86 @@ void EnemyManager::AdjustParm() {
 }
 
 void EnemyManager::ParticleInit() {
-	////damage
-	//InitParticleEffect(damageParticle[0], "EnemyDamage", "Plane", circleHandle, 900);
+	uint32_t circleHandle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
+	uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
+	uint32_t boalHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
+	uint32_t crackTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
 
-	///// death
-	//InitParticleEffect(deathParticle_[0], "EnemyDeathSmoke", "Plane", boalHandle, 900);
-	//deathParticle_[0].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
-	//InitParticleEffect(deathParticle_[1], "EnemyDeathFireSmoke", "Plane", circleHandle, 900);
-	//InitParticleEffect(deathParticle_[2], "EnemyDeathSpark", "Plane", circleHandle, 900);
-	//InitParticleEffect(deathParticle_[3], "EnemyDeathMiniSpark", "Plane", circleHandle, 900);
+	//damage
+	InitParticleEffect(damageParticle[0], "EnemyDamage", "Plane", circleHandle, 900);
 
-	////
-	//InitParticleEffect(debriParticle_[0], "DebriName", "debri", defaultHandle, 500);
-	//debriParticle_[0].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
+	/// death
+	InitParticleEffect(deathParticle_[0], "EnemyDeathSmoke", "Plane", boalHandle, 900);
+	deathParticle_[0].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
+	InitParticleEffect(deathParticle_[1], "EnemyDeathFireSmoke", "Plane", circleHandle, 900);
+	InitParticleEffect(deathParticle_[2], "EnemyDeathSpark", "Plane", circleHandle, 900);
+	InitParticleEffect(deathParticle_[3], "EnemyDeathMiniSpark", "Plane", circleHandle, 900);
 
-	//// crack
-	//fallCrack_.reset(ParticleEmitter::CreateParticle("Crack", "Plane", ".obj", 30));
-	//fallCrack_->SetTextureHandle(crackTexture_);
-	//fallCrack_->SetBlendMode(ParticleCommon::BlendMode::None);
+	//
+	InitParticleEffect(debriParticle_[0], "DebriName", "debri", defaultHandle, 500);
+	debriParticle_[0].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
+
+	// crack
+	fallCrack_.reset(ParticleEmitter::CreateParticle("Crack", "Plane", ".obj", 30));
+	fallCrack_->SetTextureHandle(crackTexture_);
+	fallCrack_->SetBlendMode(ParticleCommon::BlendMode::None);
+
+	
+
+}
+
+void EnemyManager::InitParticleEffect(ParticleEffect& effect, const std::string& name, const std::string& modelName, const uint32_t& textureHandle, const int32_t& maxnum) {
+	effect.name = name;
+	effect.emitter.reset(ParticleEmitter::CreateParticle(name, modelName, ".obj", maxnum));
+	effect.emitter->SetTextureHandle(textureHandle);
+}
+
+void EnemyManager::DamageEmit(const Vector3& pos) {
+	for (uint32_t i = 0; i < damageParticle.size(); i++) {
+		damageParticle[i].emitter->SetTargetPosition(pos);
+		damageParticle[i].emitter->Emit();
+
+	}
+}
+
+void EnemyManager::ThrustEmit(const Vector3& pos) {
+	//ガレキパーティクル
+	for (uint32_t i = 0; i < debriParticle_.size(); i++) {
+		debriParticle_[i].emitter->SetTargetPosition(pos);
+		debriParticle_[i].emitter->Emit();
+	}
+	fallCrack_->SetTargetPosition(Vector3(pos.x, 0.0f, pos.z));
+	fallCrack_->Emit();
+	
+}
+
+void EnemyManager::DeathEmit(const Vector3&pos) {
+	// 死亡パーティクル
+	for (uint32_t i = 0; i < deathParticle_.size(); i++) {
+		deathParticle_[i].emitter->SetTargetPosition(pos);
+		deathParticle_[i].emitter->Emit();
+	}
+}
+
+void EnemyManager::ParticleUpdate() {
+	// 死亡パーティクル
+	for (uint32_t i = 0; i < damageParticle.size(); i++) {
+	
+		damageParticle[i].emitter->Update();
+	}
+
+	fallCrack_->Update();
+
+
+	// 死亡パーティクル
+	for (uint32_t i = 0; i < deathParticle_.size(); i++) {
+		deathParticle_[i].emitter->Update();
+	}
+
+	//ガレキパーティクル
+	for (uint32_t i = 0; i < debriParticle_.size(); i++) {
+		
+		debriParticle_[i].emitter->Update();
+	}
 
 }
