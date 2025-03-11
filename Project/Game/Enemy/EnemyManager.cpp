@@ -409,6 +409,10 @@ void EnemyManager::ParticleInit() {
 
 }
 
+///---------------------------------------------------------
+/// Particle
+///----------------------------------------------------------
+
 void EnemyManager::InitParticleEffect(ParticleEffect& effect, const std::string& name, const std::string& modelName, const uint32_t& textureHandle, const int32_t& maxnum) {
 	effect.name = name;
 	effect.emitter.reset(ParticleEmitter::CreateParticle(name, modelName, ".obj", maxnum));
