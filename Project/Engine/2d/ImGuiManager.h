@@ -29,6 +29,6 @@ public:
 	
 	void Finalizer();//解放
 
-	/*void Draw();*/
+	void Draw();
 };
 

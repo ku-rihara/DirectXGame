@@ -56,10 +56,8 @@ void ImGuiManager::Begin() {
 ///===========================================================
 void ImGuiManager::End() {
 #ifdef _DEBUG
-	// 描画前準備
-	ImGui::Render();
 
-	
+	ImGui::Render();
 #endif
 }
 
@@ -77,15 +75,15 @@ void ImGuiManager::Finalizer() {
 
 
 //
-//void ImGuiManager::Draw(){
-//
-//#ifdef _DEBUG
-//	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-//
-//	// デスクリプタヒープの配列をセットするコマンド
-//	ID3D12DescriptorHeap* ppHeaps[] = { pSrvManager_->GetSrvDescriptorHeap()};
-//	commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-//	// 描画コマンドを発行
-//	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList);
-//#endif
-//}
+void ImGuiManager::Draw(){
+
+#ifdef _DEBUG
+	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+
+	// デスクリプタヒープの配列をセットするコマンド
+	ID3D12DescriptorHeap* ppHeaps[] = { pSrvManager_->GetSrvDescriptorHeap()};
+	commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	// 描画コマンドを発行
+	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList);
+#endif
+}

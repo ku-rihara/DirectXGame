@@ -13,7 +13,7 @@
 //class
 #include"WinApp.h"
 
-
+class SrvManager;
 class DirectXCommon {
 private://メンバ変数
 
@@ -28,7 +28,7 @@ private://メンバ変数
 	Microsoft::WRL::ComPtr<IDXGIAdapter4> useAdapter_;
 
 	///===========================================================================
-    ///コマンド初期化関連
+	///コマンド初期化関連
 	///===========================================================================
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>commandAllocator_;
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue>commandQueue_;
@@ -48,11 +48,12 @@ private://メンバ変数
 	///===========================================================================
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap > rtvDescriptorHeap_;
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
-	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];//RTVを2つ作るのでディスクリプタを2つ用意
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[3];//RTVを2つ作るのでディスクリプタを2つ用意
 
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>dsvDescriptorHeap_;
 	Microsoft::WRL::ComPtr<ID3D12Resource>depthStencilResource_;
-
+	Microsoft::WRL::ComPtr<ID3D12Resource>renderTextureResource_;
+	D3D12_CLEAR_VALUE clearValue_;
 	///===================================
 	///フェンス生成関連
 	///===================================
@@ -69,7 +70,7 @@ private://メンバ変数
 
 	D3D12_VIEWPORT viewport_{};
 	D3D12_RECT scissorRect_{};
-	
+
 	/// DescriptorSize
 
 	uint32_t descriptorSizeRTV_;
@@ -123,9 +124,10 @@ private:
 
 	Microsoft::WRL::ComPtr <ID3D12Resource> CreateDepthStencilTextureResource(Microsoft::WRL::ComPtr<ID3D12Device>  device, int32_t width, int32_t height);
 
+
 public:
 	HRESULT hr_ = 0;
-	public:
+public:
 
 	///==========================================================
 	///public method
@@ -136,7 +138,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>	
-	void Init(WinApp* win, int32_t backBufferWidth = WinApp::kWindowWidth, int32_t backBufferHeight = WinApp::kWindowHeight);
+	void Init(WinApp* win,  int32_t backBufferWidth = WinApp::kWindowWidth, int32_t backBufferHeight = WinApp::kWindowHeight);
 
 	/// <summary>
 	//レンダリングパイプライン
@@ -183,6 +185,19 @@ public:
 
 	//DescriptorHeapの作成
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> CreateDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device>  device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
+
+public:
+
+	/// RebderTextureの作成
+	Microsoft::WRL::ComPtr<ID3D12Resource>
+		CreateRenderTextureResource(Microsoft::WRL::ComPtr<ID3D12Device>device, uint32_t width, uint32_t heigth,
+			DXGI_FORMAT format, const Vector4& clearColor);
+
+	void CreateRenderTextureResource();
+	void PreRenderTexture();
+	void DepthBarrierTransition();
+	public:
+		void PutTransitionBarrier(ID3D12Resource* pResource, D3D12_RESOURCE_STATES Before, D3D12_RESOURCE_STATES After);
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap > descriptorHeap, uint32_t descriptorSize, uint32_t index);
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap > descriptorHeap, uint32_t descriptorSize, uint32_t index);

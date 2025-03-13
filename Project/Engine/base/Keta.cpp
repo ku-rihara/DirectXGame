@@ -61,6 +61,8 @@ void Keta::Initialize(const char* title, int width, int height) {
     srvManager_ = SrvManager::GetInstance();
     srvManager_->Init(directXCommon_);
 
+	directXCommon_->CreateRenderTextureResource();
+
     // Object3DCommon
     object3DCommon_ = Object3DCommon::GetInstance();
     object3DCommon_->Init(directXCommon_);
@@ -116,7 +118,7 @@ void Keta::BeginFrame() {
 ///　描画前処理
 ///========================================================================
 void Keta::PreDraw() {
-    directXCommon_->PreDraw();
+    directXCommon_->PreRenderTexture();
     srvManager_->PreDraw();
 }
 
@@ -124,8 +126,11 @@ void Keta::PreDraw() {
 ///　フレーム終わり処理
 ///========================================================================
 void Keta::EndFrame() {
+	
 #ifdef _DEBUG
-    ImGui::Render();
+    directXCommon_->PreDraw();
+	directXCommon_->DepthBarrierTransition();
+	imguiManager_->End();
 #endif
     directXCommon_->PostDraw();
 }
