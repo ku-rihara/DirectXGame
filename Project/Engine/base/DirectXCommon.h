@@ -53,6 +53,9 @@ private://メンバ変数
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>dsvDescriptorHeap_;
 	Microsoft::WRL::ComPtr<ID3D12Resource>depthStencilResource_;
 	Microsoft::WRL::ComPtr<ID3D12Resource>renderTextureResource_;
+	D3D12_CPU_DESCRIPTOR_HANDLE renderTextureCPUSrvHandle_;
+	D3D12_GPU_DESCRIPTOR_HANDLE renderTextureGPUSrvHandle_;
+	D3D12_RESOURCE_STATES renderTextureCurrentState_ = D3D12_RESOURCE_STATE_RENDER_TARGET; // 初期状態
 	D3D12_CLEAR_VALUE clearValue_;
 	///===================================
 	///フェンス生成関連
@@ -124,7 +127,6 @@ private:
 
 	Microsoft::WRL::ComPtr <ID3D12Resource> CreateDepthStencilTextureResource(Microsoft::WRL::ComPtr<ID3D12Device>  device, int32_t width, int32_t height);
 
-
 public:
 	HRESULT hr_ = 0;
 public:
@@ -138,7 +140,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>	
-	void Init(WinApp* win,  int32_t backBufferWidth = WinApp::kWindowWidth, int32_t backBufferHeight = WinApp::kWindowHeight);
+	void Init(WinApp* win, int32_t backBufferWidth = WinApp::kWindowWidth, int32_t backBufferHeight = WinApp::kWindowHeight);
 
 	/// <summary>
 	//レンダリングパイプライン
@@ -193,18 +195,25 @@ public:
 		CreateRenderTextureResource(Microsoft::WRL::ComPtr<ID3D12Device>device, uint32_t width, uint32_t heigth,
 			DXGI_FORMAT format, const Vector4& clearColor);
 
-	void CreateRenderTextureResource();
+	void CreateRnderSrvHandle();
 	void PreRenderTexture();
 	void DepthBarrierTransition();
-	public:
-		void PutTransitionBarrier(ID3D12Resource* pResource, D3D12_RESOURCE_STATES Before, D3D12_RESOURCE_STATES After);
+public:
+	void PutTransitionBarrier(ID3D12Resource* pResource, D3D12_RESOURCE_STATES Before, D3D12_RESOURCE_STATES After);
 
-	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap > descriptorHeap, uint32_t descriptorSize, uint32_t index);
-	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap > descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
 	///==========================================================
 	///getter method
 	///==========================================================
+	/// 
+
+	/// dsvDescriptorHeapの取得
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap > descriptorHeap, uint32_t descriptorSize, uint32_t index);
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap > descriptorHeap, uint32_t descriptorSize, uint32_t index);
+
+	///TextureRenderのSRVハンドル取得
+	D3D12_GPU_DESCRIPTOR_HANDLE GetRenderTextureGPUSrvHandle()const { return renderTextureGPUSrvHandle_; }
+	D3D12_CPU_DESCRIPTOR_HANDLE GetRenderTextureCPUSrvHandle()const { return renderTextureCPUSrvHandle_; }
 
 	// デバイス初期化関連
 	ID3D12Device* GetDevice()const { return device_.Get(); }

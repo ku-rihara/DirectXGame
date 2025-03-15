@@ -29,7 +29,8 @@ public:
     ///=======================================================
     virtual void Init();
     virtual void Update();
-    virtual void Draw() = 0;
+    virtual void DrawModel() = 0;
+	virtual void DrawSprite() = 0;  
     virtual void Finalize();
 
     void DisplayFPS(); /// FPS表示

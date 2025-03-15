@@ -295,7 +295,6 @@ void DirectXCommon::CreateRenderTargetView() {
 	//RTVの設定
 	rtvDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;//出力結果をSRGBに変換して書き込む
 	rtvDesc_.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;//2dテクスチャとして書き込む
-
 	
 	//まず1つ目を作る。1つ目は最初のところに作る。作る場所をこちらで指定してあげる必要がある
 	rtvHandles_[0] = GetCPUDescriptorHandle(rtvDescriptorHeap_, descriptorSizeRTV_, 0);
@@ -306,7 +305,7 @@ void DirectXCommon::CreateRenderTargetView() {
 	GetDevice()->CreateRenderTargetView(swapChainResources_[1].Get(), &rtvDesc_, rtvHandles_[1]);
 
 	//3
-	const Vector4 color = { 1.0f,0.0f,0.0f,1.0f };
+	const Vector4 color = { 1.0f,0.0f,1.0f,0.0f };
 
 	renderTextureResource_ = CreateRenderTextureResource(
 		device_, WinApp::kWindowWidth, WinApp::kWindowHeight,
@@ -391,9 +390,12 @@ void DirectXCommon::CreateGraphicPipelene() {
 void DirectXCommon::PreRenderTexture() {
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
 
-	//// RenderTexture をレンダーターゲットとして使用するためのバリア
-	//PutTransitionBarrier(renderTextureResource_.Get(),
-	//	D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	// 現在の状態がすでにRENDER_TARGETでない場合のみ遷移
+	if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_RENDER_TARGET) {
+		PutTransitionBarrier(renderTextureResource_.Get(),
+			renderTextureCurrentState_, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		renderTextureCurrentState_ = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	}
 
 	commandList_->OMSetRenderTargets(1, &rtvHandles_[2], FALSE, &dsvHandle);
 	// レンダーターゲットと深度ステンシルビューをクリア
@@ -411,11 +413,13 @@ void DirectXCommon::PreDraw() {
 	//これから書き込むバックバッファのインデックスを取得
 	backBufferIndex_ = swapChain_->GetCurrentBackBufferIndex();
 
-	// 深度リソースをピクセルシェーダーリソースとして読み取る準備
-	/*PutTransitionBarrier(depthStencilResource.Get(),
-		D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);*/
-	/*PutTransitionBarrier(renderTextureResource_.Get(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);*/
+	// 現在の状態がすでにPIXEL_SHADER_RESOURCEでない場合のみ遷移
+	if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE) {
+		PutTransitionBarrier(renderTextureResource_.Get(),
+			renderTextureCurrentState_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+		renderTextureCurrentState_ = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+	}
+
 
 
 	// SwapChain をレンダーターゲットとして使用するためのバリア
@@ -701,13 +705,15 @@ DirectXCommon::CreateRenderTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> 
 
 
 
-void DirectXCommon::CreateRenderTextureResource() {
-	
+void DirectXCommon::CreateRnderSrvHandle() {
+	uint32_t srvIndex = srvManager_->Allocate();
+
+	renderTextureGPUSrvHandle_ = srvManager_->GetGPUDescriptorHandle(srvIndex);
+	renderTextureCPUSrvHandle_ = srvManager_->GetCPUDescriptorHandle(srvIndex);
 
 	///Srvの設定
-	D3D12_SHADER_RESOURCE_VIEW_DESC renderTextureSrvDesc{};
 	srvManager_->CreateSRVforTexture2D(
-		srvManager_->Allocate(), 
+		srvIndex,
 		renderTextureResource_.Get(),
 		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
 		1);
