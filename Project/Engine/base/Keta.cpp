@@ -138,8 +138,10 @@ void Keta::PreDraw() {
 void Keta::EndFrame() {
 #ifdef _DEBUG
 
-	imguiManager_->End();
+	imguiManager_->preDrawa();
+	imguiManager_->Draw();  
 #endif
+
     directXCommon_->PostDraw();
 }
 

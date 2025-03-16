@@ -458,11 +458,7 @@ void DirectXCommon::DepthBarrierTransition() {
 
 void DirectXCommon::PostDraw() {
 
-#ifdef _DEBUG
-	//実際のcommandListのImGuiの描画コマンドを積む
-	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList_.Get());
-#endif 
-	
+
 	//TransitionBarrierを張る
 	PutTransitionBarrier(swapChainResources_[backBufferIndex_].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 
