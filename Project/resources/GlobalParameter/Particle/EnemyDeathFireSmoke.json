@@ -1,12 +1,12 @@
 {
-    "rushParticle": {
+    "EnemyDeathFireSmoke": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": false,
         "BaseColor": [
-            0.12254899740219116,
-            0.12254899740219116,
-            0.12254899740219116,
+            0.8627451062202454,
+            0.1144355908036232,
+            0.06766627728939056,
             1.0
         ],
         "Color Max": [
@@ -21,10 +21,20 @@
             0.0,
             0.0
         ],
+        "Direction Max": [
+            1.0,
+            1.0,
+            0.0
+        ],
+        "Direction Min": [
+            -1.0,
+            -1.0,
+            0.0
+        ],
         "Gravity": 0.0,
-        "IntervalTime": 0.12999999523162842,
-        "LifeTime": 0.6000000238418579,
-        "Particle Count": 5,
+        "IntervalTime": 1.0,
+        "LifeTime": 0.49000000953674316,
+        "Particle Count": 18,
         "Position Base": [
             0.0,
             0.0,
@@ -65,8 +75,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 4.0,
-        "Scale Min": 3.0,
+        "Scale Max": 10.0,
+        "Scale Min": 10.0,
         "ScaleV3 Max": [
             0.0,
             0.0,
@@ -77,20 +87,40 @@
             0.0,
             0.0
         ],
+        "Speed Max": 0.6000000238418579,
+        "Speed Min": 0.5,
         "Velocity Max": [
-            0.0,
-            12.100000381469727,
-            0.0
+            0.5,
+            0.5,
+            0.5
         ],
         "Velocity Min": [
-            0.0,
-            15.800000190734863,
-            0.0
+            -0.5,
+            -0.5,
+            -0.5
         ],
+        "isAlphaNoMove": false,
         "isBillBord": true,
         "isMoveForRail": false,
         "isRotateforDirection": false,
         "isScalerScale": true,
-        "moveSpeed": 0.0
+        "isShot": true,
+        "moveSpeed": 0.0,
+        "preBillBordType_": 0,
+        "scaleEaseParm.easeTypeInt": 0,
+        "scaleEaseParm.endValueF.max": 0.0,
+        "scaleEaseParm.endValueF.min": 0.0,
+        "scaleEaseParm.endValueV3.max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "scaleEaseParm.endValueV3.min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "scaleEaseParm.isScaleEase": true,
+        "scaleEaseParm.maxTime": 0.1599999964237213
     }
 }

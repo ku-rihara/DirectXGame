@@ -56,6 +56,7 @@ Vector3 ScreenTransform(Vector3 worldPos, const ViewProjection& viewProjection);
 
 Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, int row);
 
+Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle);
 
 Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to);
 

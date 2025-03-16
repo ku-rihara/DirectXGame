@@ -6,6 +6,7 @@
 #include"utility/Editor/GlobalParameter.h"
 
 #include"utility/Editor/RailManager.h"
+#include"utility/Particle/ParticleCommon.h"
 ///std
 #include<string>
 #include<vector>
@@ -15,25 +16,47 @@
 /// </summary>
 enum class WorldTransform::BillboardType;
 struct WorldTransform::AdaptRotate;
- enum class BlendMode;
+enum class ParticleCommon::BlendMode;
 class ParticleEmitter {
 public:
-	struct GroupParamaters {
-		BlendMode blendMode;
+	enum class EaseType {
+		INSINE,
+		OUTSINE,
+		OUTBACK,
+		OUTQUINT,
+	};
+public:
+	struct GroupParamaters {// グループパラメータ
+		ParticleCommon::BlendMode blendMode;
 		bool isBillBord;
+		bool isShot;
+		bool isAlphaNoMove;
 		WorldTransform::BillboardType  billBordType;
 		WorldTransform::AdaptRotate adaptRotate_;
 	};
 
+	struct EaseParm { // イージングパラメータ
+		bool isScaleEase;
+		float maxTime;
+		EaseType easeType;
+		int easeTypeInt;
+		FMinMax endValueF;
+		V3MinMax endValueV3;
+	};
+
 	// パーティクル設定を統合する構造体
 	struct Parameters {
+		const WorldTransform* parentTransform = nullptr;
 		Vector3 targetPos;                    // 対象座標
+		const Vector3* followingPos_=nullptr;
 		Vector3 emitPos;                      // 発生座標
 		V3MinMax positionDist;                // 座標ランダム分配
 		bool isScalerScale;                   //スカラーのスケールにするか
+		EaseParm scaleEaseParm;
 		FMinMax scaleDist;                    // スケールランダム分配
 		V3MinMax scaleDistV3;                 // スケールランダム分配
-		V3MinMax velocityDist;                // 速度ランダム分配
+		FMinMax speedDist;                    // 速度ランダム分配
+		V3MinMax directionDist;                // 速度ランダム分配
 		Vector4 baseColor;                    // 基準の色
 		V4MinMax colorDist;                   // 色ランダム分配
 		float lifeTime;                       // 生存時間
@@ -44,7 +67,7 @@ public:
 		bool isRotateforDirection;            // 方向回転フラグ
 	};
 private:
-	
+
 	///=====================================================
 	/// private variants
 	///=====================================================
@@ -55,6 +78,8 @@ private:
 	Parameters parameters_;
 	GroupParamaters groupParamaters_;
 
+	int preBillBordType_;
+	bool preIsShot_;
 	float currentTime_;                                   ///現在の時間
 	float intervalTime_;                                  ///発生するまでの間隔
 
@@ -71,7 +96,7 @@ private:
 	const std::string folderName_ = "Particle";
 	std::string editorMessage_;                          // エディタ用メッセージ
 	GlobalParameter* globalParameter_;                   // グローバルパラメータ
-	
+
 
 public:
 
@@ -90,26 +115,28 @@ public:
 	void Init();/// 初期化
 	void Emit();///　エミット
 	void UpdateEmitTransform();
-	
-	void RailDraw(const ViewProjection&viewProjection);
+
+	void RailDraw(const ViewProjection& viewProjection);
 	void DebugDraw(const ViewProjection& viewProjection);
 
 	///=====================================================
 	/// getter method
 	///=====================================================
 	const std::string& GetParticleName()const { return particleName_; }
-	
+
 
 	///=====================================================
-    /// setter method
-    ///=====================================================
-	void SetParentBasePos(WorldTransform*parent);
+	/// setter method
+	///=====================================================
+	void SetParentBasePos(WorldTransform* parent);
 	void SetTextureHandle(const uint32_t& hanle);
 	void SetTargetPosition(const Vector3& pos) { parameters_.targetPos = pos; }
+	void SetParentTransform(const WorldTransform* transform);
+	void SetFollowingPos(const Vector3* pos);
 
 	//imgui化すべき
 	void SetIsRotateForDirection(const bool& is) { parameters_.isRotateforDirection = is; }
-	void SetBlendMode(const BlendMode& blendmode);
+	void SetBlendMode(const ParticleCommon::BlendMode& blendmode);
 	void SetBillBordType(const WorldTransform::BillboardType& billboardType);
 	///=====================================================
 	/// Editor 
@@ -123,11 +150,12 @@ public:
 	void AddParmGroup();
 	void SetValues();
 
-	void ApplyGlobalParameter(const std::string&particleName);
+	void ApplyGlobalParameter(const std::string& particleName);
 	void ParmLoadForImGui();
 	void ParmSaveForImGui();
 
 	void ParticleChange();
 
-	std::vector<std::string> GetParticleFiles(const std::string& directory);
+	/// parm
+	void ScaleParmEditor();
 };

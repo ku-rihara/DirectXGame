@@ -5,58 +5,6 @@
 #include<numbers>
 #include <cmath>
 
-//float Lerp(const float& start, const float& end, float t) { return (1.0f - t) * start + end * t; }
-//
-//Vector3 Lerp(const Vector3& start, const Vector3& end, float t) {
-//	Vector3 result;
-//	result.x = (1.0f - t) * start.x + end.x * t;
-//	result.y = (1.0f - t) * start.y + end.y * t;
-//	result.z = (1.0f - t) * start.z + end.z * t;
-//	return result;
-//}
-//
-//Vector2 Lerp(const Vector2& start, const Vector2& end, float t) {
-//	Vector2 result;
-//	result.x = (1.0f - t) * start.x + end.x * t;
-//	result.y = (1.0f - t) * start.y + end.y * t;
-//
-//	return result;
-//}
-
-//Vector3 SLerp(const Vector3& start, const Vector3& end, float t) {
-//	Vector3 Nstart = Vector3::Normalize(start);
-//	Vector3 Nend = Vector3::Normalize(end);
-//	// 内積を求める
-//	float dot = Vector3::Dot(Nstart, Nend);
-//	// 誤差により1.0fを超えるのを防ぐ
-//	if (dot > 1.0f) {
-//		dot = 1.0f;
-//	}
-//	// アークコサインでθの角度を求める
-//	float theta = std::acos(dot);
-//	// θの角度からsinθを求める
-//	float sinTheta = std::sin(theta);
-//	// サイン(θ(1-t))を求める
-//	float sinThetaFrom = std::sin((1 - t) * theta);
-//	// サインθtを求める
-//	float sinThetaTo = std::sin(t * theta);
-//	Vector3 NormalizeVector;
-//	if (sinTheta < 1.0e-5) {
-//		NormalizeVector = Nstart;
-//	} else {
-//		// 球面線形補間したベクトル(単位ベクトル)
-//		NormalizeVector.x = (sinThetaFrom * Nstart.x + sinThetaTo * Nend.x) / sinTheta;
-//		NormalizeVector.y = (sinThetaFrom * Nstart.y + sinThetaTo * Nend.y) / sinTheta;
-//		NormalizeVector.z = (sinThetaFrom * Nstart.z + sinThetaTo * Nend.z) / sinTheta;
-//	}
-//	// ベクトルの長さはstartとendの長さを線形補間
-//	float length1 = Vector3::Length(start);
-//	float length2 = Vector3::Length(end);
-//	// Lerpで補間ベクトルの長さを求める
-//	float length = Lerp(length1, length2, t);
-//	// 長さを反映
-//	return NormalizeVector * length;
-//}
 
 
 float EaseInElasticAmplitude(float t, const float& totaltime, const float& amplitude, const float& period) {
@@ -305,7 +253,7 @@ template<typename T> T EaseInOutQuart(const T& start, const T& end, float x, flo
 /// EaseInBack
 template<typename T>
 T EaseInBack(const T& start, const T& end, float x, float totalX) {
-	const float s = 1.70158f; 
+	const float s = 1.70158f;
 	float t = x / totalX;
 	float easeT = t * t * ((s + 1) * t - s);
 	return Lerp(start, end, easeT);
@@ -314,7 +262,7 @@ T EaseInBack(const T& start, const T& end, float x, float totalX) {
 /// EaseOutBack
 template<typename T>
 T EaseOutBack(const T& start, const T& end, float x, float totalX) {
-	const float s = 1.70158f; 
+	const float s = 1.70158f;
 	float t = x / totalX - 1;
 	float easeT = (t * t * ((s + 1) * t + s)) + 1;
 	return Lerp(start, end, easeT);
@@ -324,14 +272,13 @@ T EaseOutBack(const T& start, const T& end, float x, float totalX) {
 /// EaseInOutBack
 template<typename T>
 T EaseInOutBack(const T& start, const T& end, float x, float totalX) {
-	const float s = 1.70158f * 1.525f; 
+	const float s = 1.70158f * 1.525f;
 	float t = x / (totalX / 2.0f);
 	float easeT;
 
 	if (t < 1) {
 		easeT = 0.5f * (t * t * ((s + 1) * t - s));
-	}
-	else {
+	} else {
 		t -= 2;
 		easeT = 0.5f * ((t * t * ((s + 1) * t + s)) + 2);
 	}
@@ -388,23 +335,482 @@ template<typename T> T EaseInOutBounce(const T& start, const T& end, float x, fl
 	}
 	return Lerp(start, end, easeT);
 }
+namespace Back {
 
-//template<typename T> T  EaseTimeControl(float& t, const float& totalTime, const T& start, const T& end){	
-//	if (t <= 0.0f) {
-//		return start;
-//	}
-//
-//	if (t >= totalTime) {
-//		return end;
-//	}
-//	t /= totalTime;
-//}
+	template<typename T> T Lerp(const T& start, const T& end, float t)
+	{
+		return start + (end - start) * t;
+	}
 
+	template<typename T> T  InSineZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
 
-//// イージングタイムコントール
-//template void EaseTimeControl(float& t, const float& totalTime, const Vector3& start, const Vector3& end);
-//template void EaseTimeControl(float& t, const float& totalTime, const Vector2& start, const Vector2& end);
-//template void EaseTimeControl(float& t, const float& totalTime, const float& start, const float& end);
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			return Lerp(start, end, sinf((t / backPoint) * std::numbers::pi_v<float> *0.5f));
+		} else
+		{
+			return Lerp(end, start, 1.0f - cosf(((t - backPoint) / (totaltime - backPoint)) * std::numbers::pi_v<float> *0.5f));
+		}
+	}
+
+	template<typename T> T OutSineZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			return Lerp(start, end, 1.0f - cosf((t / backPoint) * std::numbers::pi_v<float> *0.5f));
+		} else
+		{
+			return Lerp(end, start, sinf(((t - backPoint) / (totaltime - backPoint)) * std::numbers::pi_v<float> *0.5f));
+		}
+	}
+
+	template<typename T> T InOutSineZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			return Lerp(start, end, -0.5f * (cosf(std::numbers::pi_v<float> *(t / backPoint)) - 1.0f));
+		} else
+		{
+			return Lerp(end, start, 0.5f * (1.0f - cosf(std::numbers::pi_v<float> *((t - backPoint) / (totaltime - backPoint)))));
+		}
+	}
+
+	template<typename T> T InQuadZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / backPoint;
+			return Lerp(start, end, normalizedTime * normalizedTime);
+		} else
+		{
+			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
+			return Lerp(end, start, -normalizedTime * (normalizedTime - 2));
+		}
+	}
+
+	template<typename T> T OutQuadZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / backPoint;
+			return Lerp(start, end, -normalizedTime * (normalizedTime - 2));
+		} else
+		{
+			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
+			return Lerp(end, start, normalizedTime * normalizedTime);
+		}
+	}
+
+	template<typename T> T InOutQuadZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / (backPoint * 0.5f);
+			if (normalizedTime < 1) return Lerp(start, end, 0.5f * normalizedTime * normalizedTime);
+			normalizedTime--;
+			return Lerp(start, end, -0.5f * (normalizedTime * (normalizedTime - 2) - 1));
+		} else
+		{
+			float normalizedTime = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
+			if (normalizedTime < 1) return Lerp(end, start, 0.5f * normalizedTime * normalizedTime);
+			normalizedTime--;
+			return Lerp(end, start, -0.5f * (normalizedTime * (normalizedTime - 2) - 1));
+		}
+	}
+
+	template<typename T> T InCubicZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / backPoint;
+			return Lerp(start, end, normalizedTime * normalizedTime * normalizedTime);
+		} else
+		{
+			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
+			normalizedTime--;
+			return Lerp(end, start, normalizedTime * normalizedTime * normalizedTime + 1);
+		}
+	}
+
+	template<typename T> T OutCubicZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / backPoint;
+			normalizedTime--;
+			return Lerp(start, end, normalizedTime * normalizedTime * normalizedTime + 1);
+		} else
+		{
+			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
+			return Lerp(end, start, normalizedTime * normalizedTime * normalizedTime);
+		}
+	}
+
+	template<typename T> T InOutCubicZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / (backPoint * 0.5f);
+			if (normalizedTime < 1) return Lerp(start, end, 0.5f * normalizedTime * normalizedTime * normalizedTime);
+			normalizedTime -= 2;
+			return Lerp(start, end, 0.5f * (normalizedTime * normalizedTime * normalizedTime + 2));
+		} else
+		{
+			float normalizedTime = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
+			if (normalizedTime < 1) return Lerp(end, start, 0.5f * normalizedTime * normalizedTime * normalizedTime);
+			normalizedTime -= 2;
+			return Lerp(end, start, 0.5f * (normalizedTime * normalizedTime * normalizedTime + 2));
+		}
+	}
+
+	template<typename T> T InQuartZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / backPoint;
+			return Lerp(start, end, normalizedTime * normalizedTime * normalizedTime * normalizedTime);
+		} else
+		{
+			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
+			normalizedTime--;
+			return Lerp(end, start, -(normalizedTime * normalizedTime * normalizedTime * normalizedTime - 1));
+		}
+	}
+
+	template<typename T> T OutQuartZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / backPoint;
+			normalizedTime--;
+			return Lerp(start, end, -(normalizedTime * normalizedTime * normalizedTime * normalizedTime - 1));
+		} else
+		{
+			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
+			return Lerp(end, start, normalizedTime * normalizedTime * normalizedTime * normalizedTime);
+		}
+	}
+
+	template<typename T> T InOutQuartZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / (backPoint * 0.5f);
+			if (normalizedTime < 1) return Lerp(start, end, 0.5f * normalizedTime * normalizedTime * normalizedTime * normalizedTime);
+			normalizedTime -= 2;
+			return Lerp(start, end, -0.5f * (normalizedTime * normalizedTime * normalizedTime * normalizedTime - 2));
+		} else
+		{
+			float normalizedTime = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
+			if (normalizedTime < 1) return Lerp(end, start, 0.5f * normalizedTime * normalizedTime * normalizedTime * normalizedTime);
+			normalizedTime -= 2;
+			return Lerp(end, start, -0.5f * (normalizedTime * normalizedTime * normalizedTime * normalizedTime - 2));
+		}
+	}
+
+	template<typename T> T InQuintZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / backPoint;
+			return Lerp(start, end, normalizedTime * normalizedTime * normalizedTime * normalizedTime * normalizedTime);
+		} else
+		{
+			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
+			normalizedTime--;
+			return Lerp(end, start, normalizedTime * normalizedTime * normalizedTime * normalizedTime * normalizedTime + 1);
+		}
+	}
+
+	template<typename T> T OutQuintZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / backPoint;
+			normalizedTime--;
+			return Lerp(start, end, normalizedTime * normalizedTime * normalizedTime * normalizedTime * normalizedTime + 1);
+		} else
+		{
+			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
+			return Lerp(end, start, normalizedTime * normalizedTime * normalizedTime * normalizedTime * normalizedTime);
+		}
+	}
+
+	template<typename T> T InOutQuintZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / (backPoint * 0.5f);
+			if (normalizedTime < 1) return Lerp(start, end, 0.5f * normalizedTime * normalizedTime * normalizedTime * normalizedTime * normalizedTime);
+			normalizedTime -= 2;
+			return Lerp(start, end, 0.5f * (normalizedTime * normalizedTime * normalizedTime * normalizedTime * normalizedTime + 2));
+		} else
+		{
+			float normalizedTime = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
+			if (normalizedTime < 1) return Lerp(end, start, 0.5f * normalizedTime * normalizedTime * normalizedTime * normalizedTime * normalizedTime);
+			normalizedTime -= 2;
+			return Lerp(end, start, 0.5f * (normalizedTime * normalizedTime * normalizedTime * normalizedTime * normalizedTime + 2));
+		}
+	}
+
+	template<typename T> T InExpoZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / backPoint;
+			return Lerp(start, end, (normalizedTime == 0) ? 0 : powf(2, 10 * (normalizedTime - 1)));
+		} else
+		{
+			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
+			return Lerp(end, start, (normalizedTime == 1) ? 1 : (-powf(2, -10 * normalizedTime) + 1));
+		}
+	}
+
+	template<typename T> T OutExpoZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / backPoint;
+			return Lerp(start, end, (normalizedTime == 1) ? 1 : (-powf(2, -10 * normalizedTime) + 1));
+		} else
+		{
+			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
+			return Lerp(end, start, (normalizedTime == 0) ? 0 : powf(2, 10 * (normalizedTime - 1)));
+		}
+	}
+
+	template<typename T> T InOutExpoZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / (backPoint * 0.5f);
+			if (normalizedTime == 0) return start;
+			if (normalizedTime == 2) return end;
+			if (normalizedTime < 1) return Lerp(start, end, 0.5f * powf(2, 10 * (normalizedTime - 1)));
+			normalizedTime--;
+			return Lerp(start, end, 0.5f * (-powf(2, -10 * normalizedTime) + 2));
+		} else
+		{
+			float normalizedTime = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
+			if (normalizedTime == 0) return end;
+			if (normalizedTime == 2) return start;
+			if (normalizedTime < 1) return Lerp(end, start, 0.5f * powf(2, 10 * (normalizedTime - 1)));
+			normalizedTime--;
+			return Lerp(end, start, 0.5f * (-powf(2, -10 * normalizedTime) + 2));
+		}
+	}
+
+	template<typename T> T InCircZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / backPoint;
+			return Lerp(start, end, -(sqrtf(1 - normalizedTime * normalizedTime) - 1));
+		} else
+		{
+			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
+			normalizedTime--;
+			return Lerp(end, start, sqrtf(1 - normalizedTime * normalizedTime));
+		}
+	}
+
+	template<typename T> T OutCircZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / backPoint;
+			normalizedTime--;
+			return Lerp(start, end, sqrtf(1 - normalizedTime * normalizedTime));
+		} else
+		{
+			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
+			return Lerp(end, start, -(sqrtf(1 - normalizedTime * normalizedTime) - 1));
+		}
+	}
+
+	template<typename T> T InOutCircZero(const T& start, const T& end, float t, float totaltime, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / (backPoint * 0.5f);
+			if (normalizedTime < 1) return Lerp(start, end, -0.5f * (sqrtf(1 - normalizedTime * normalizedTime) - 1));
+			normalizedTime -= 2;
+			return Lerp(start, end, 0.5f * (sqrtf(1 - normalizedTime * normalizedTime) + 1));
+		} else
+		{
+			float normalizedTime = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
+			if (normalizedTime < 1) return Lerp(end, start, -0.5f * (sqrtf(1 - normalizedTime * normalizedTime) - 1));
+			normalizedTime -= 2;
+			return Lerp(end, start, 0.5f * (sqrtf(1 - normalizedTime * normalizedTime) + 1));
+		}
+	}
+
+	template<typename T> T InBackZero(const T& start, const T& end, float t, float totaltime, float s, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / backPoint;
+			return Lerp(start, end, normalizedTime * normalizedTime * ((s + 1) * normalizedTime - s));
+		} else
+		{
+			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
+			normalizedTime--;
+			return Lerp(end, start, normalizedTime * normalizedTime * ((s + 1) * normalizedTime + s) + 1);
+		}
+	}
+
+	template<typename T> T OutBackZero(const T& start, const T& end, float t, float totaltime, float s, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / backPoint;
+			normalizedTime--;
+			return Lerp(start, end, normalizedTime * normalizedTime * ((s + 1) * normalizedTime + s) + 1);
+		} else
+		{
+			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
+			return Lerp(end, start, normalizedTime * normalizedTime * ((s + 1) * normalizedTime - s));
+		}
+	}
+
+	template<typename T> T InOutBackZero(const T& start, const T& end, float t, float totaltime, float s, float backRaito)
+	{
+		if (t <= 0.0f) return start;
+		if (t >= totaltime) return start;
+
+		float backPoint = totaltime * backRaito;
+		float s_modified = s * 1.525f;
+
+		if (t < backPoint)
+		{
+			float normalizedTime = t / (backPoint * 0.5f);
+			if (normalizedTime < 1) return Lerp(start, end, 0.5f * (normalizedTime * normalizedTime * ((s_modified + 1) * normalizedTime - s_modified)));
+			normalizedTime -= 2;
+			return Lerp(start, end, 0.5f * (normalizedTime * normalizedTime * ((s_modified + 1) * normalizedTime + s_modified) + 2));
+		} else
+		{
+			float normalizedTime = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
+			if (normalizedTime < 1) return Lerp(end, start, 0.5f * (normalizedTime * normalizedTime * ((s_modified + 1) * normalizedTime - s_modified)));
+			normalizedTime -= 2;
+			return Lerp(end, start, 0.5f * (normalizedTime * normalizedTime * ((s_modified + 1) * normalizedTime + s_modified) + 2));
+		}
+	}
+}
 // ぷにぷに
 template Vector3 EaseAmplitudeScale<Vector3>(const Vector3& initScale, const float& easeT, const float& easeTime, const float& amplitude, const float& period);
 template Vector2 EaseAmplitudeScale<Vector2>(const Vector2& initScale, const float& easeT, const float& easeTime, const float& amplitude, const float& period);
@@ -519,3 +925,104 @@ template float EaseOutBack(const float& start, const float& end, float x, float 
 template Vector3 EaseInOutBack(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseInOutBack(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseInOutBack(const float& start, const float& end, float x, float totalX);
+
+namespace Back {
+
+	template float InSineZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 InSineZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito);
+	template Vector3 InSineZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito);
+
+	template float OutSineZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 OutSineZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 OutSineZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float InOutSineZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 InOutSineZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 InOutSineZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float InQuadZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 InQuadZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 InQuadZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float OutQuadZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 OutQuadZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 OutQuadZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float InOutQuadZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 InOutQuadZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 InOutQuadZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float InCubicZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 InCubicZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 InCubicZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float OutCubicZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 OutCubicZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 OutCubicZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float InOutCubicZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 InOutCubicZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 InOutCubicZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float InQuartZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 InQuartZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 InQuartZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float OutQuartZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 OutQuartZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 OutQuartZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float InOutQuartZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 InOutQuartZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 InOutQuartZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float InQuintZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 InQuintZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 InQuintZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float OutQuintZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 OutQuintZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 OutQuintZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float InOutQuintZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 InOutQuintZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 InOutQuintZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float InExpoZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 InExpoZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 InExpoZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float OutExpoZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 OutExpoZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 OutExpoZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float InOutExpoZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 InOutExpoZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 InOutExpoZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float InCircZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 InCircZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 InCircZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float OutCircZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 OutCircZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 OutCircZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float InOutCircZero(const float& start, const float& end, float t, float totaltime, float backRaito);
+	template Vector2 InOutCircZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 InOutCircZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float InBackZero(const float& start, const float& end, float t, float totaltime, float s, float backRaito);
+	template Vector2 InBackZero(const Vector2& start, const Vector2& end, float t, float totaltime, float s, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 InBackZero(const Vector3& start, const Vector3& end, float t, float totaltime, float s, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float OutBackZero(const float& start, const float& end, float t, float totaltime, float s, float backRaito);
+	template Vector2 OutBackZero(const Vector2& start, const Vector2& end, float t, float totaltime, float s, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 OutBackZero(const Vector3& start, const Vector3& end, float t, float totaltime, float s, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+	template float InOutBackZero(const float& start, const float& end, float t, float totaltime, float s, float backRaito);
+	template Vector2 InOutBackZero(const Vector2& start, const Vector2& end, float t, float totaltime, float s, float backRaito); // Vector2型に対する特殊化（必要に応じて）
+	template Vector3 InOutBackZero(const Vector3& start, const Vector3& end, float t, float totaltime, float s, float backRaito); //Vector3に対する特殊化（必要に応じて）
+
+
+}

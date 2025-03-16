@@ -21,22 +21,25 @@ void TitleScene::Init() {
 
 	BaseScene::Init();
 
-	emitter_.reset(ParticleEmitter::CreateParticle("punchEffect", "Plane", ".obj", 900));
-	uint32_t t=TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
-	emitter_->SetTextureHandle(t);
+	//uint32_t t = TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
+	uint32_t circleHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
+	//uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
+	//uint32_t starHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/star.png");
+	//uint32_t starFrameHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circleFrame.png");
+
+	EnemydamageEffect_.reset(ParticleEmitter::CreateParticle("EnemyDamage", "Plane", ".obj", 800));
+	EnemydamageEffect_->SetTextureHandle(circleHandle);
 
 	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
-
 }
 
 void TitleScene::Update() {
 
-	
-	emitter_->Update();
-	emitter_->EditorUpdate();
-	emitter_->Emit();
+	EnemydamageEffect_->Update();
+	EnemydamageEffect_->EditorUpdate();
+	EnemydamageEffect_->Emit();
 
-	ParticleManager::GetInstance()->Update(viewProjection_);
+	ParticleManager::GetInstance()->Update();
 
 	Debug();
 	ViewProjectionUpdate();
@@ -45,26 +48,28 @@ void TitleScene::Update() {
 
 		SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 	}
-
-
 }
 
 /// ===================================================
 /// モデル描画
 /// ===================================================
 void TitleScene::ModelDraw() {
+	/// commandList取得
+	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+	Model::PreDraw(commandList);
 
+	//debriEmitter_->DebugDraw(viewProjection_);
+	//debriEmitter_->RailDraw(viewProjection_);
+	ParticleManager::GetInstance()->Draw(viewProjection_);
 
 }
 
-/// ===================================================
+   /// ===================================================
    /// パーティクル描画
    /// ===================================================
-void TitleScene::ParticleDraw() {
-	emitter_->DebugDraw(viewProjection_);
-	emitter_->RailDraw(viewProjection_);
-	ParticleManager::GetInstance()->Draw(viewProjection_);
-}
+//void TitleScene::ParticleDraw() {
+//	
+//}
 
 /// ===================================================
    /// スプライト描画

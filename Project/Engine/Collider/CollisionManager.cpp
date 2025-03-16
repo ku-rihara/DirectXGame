@@ -64,6 +64,8 @@ void CollisionManager::UpdateWorldTransform() {
 }
 
 void CollisionManager::Draw(const ViewProjection& viewProjection) {
+#ifdef _DEBUG
+
 	// 非表示なら抜ける
 	if (!isColliderVisible_) {
 		return;
@@ -72,6 +74,8 @@ void CollisionManager::Draw(const ViewProjection& viewProjection) {
 	for (BaseCollider* baseCollider : baseColliders_) {
 		baseCollider->DrawDebugCube(viewProjection);
 	}
+#endif // _DEBUG
+	viewProjection;
 }
 
 // CheckCollisionPairを改造
@@ -124,15 +128,14 @@ void CollisionManager::CheckCollisionPair(BaseCollider* colliderA, BaseCollider*
 
 // コリジョン処理を分ける関数
 void CollisionManager::HandleCollision(BaseCollider* colliderA, BaseCollider* colliderB) {
-	// 衝突中の処理
-	if (!colliderA->GetIsColliding() || !colliderB->GetIsColliding()) {
-		colliderA->OnCollisionEnter(colliderB);
-		colliderB->OnCollisionEnter(colliderA);
-	}
-	else {
-		colliderA->OnCollisionStay(colliderB);
-		colliderB->OnCollisionStay(colliderA);
-	}
+	// **必ず OnCollisionEnter を呼ぶ**
+	colliderA->OnCollisionEnter(colliderB);
+	colliderB->OnCollisionEnter(colliderA);
+
+	// その後、継続処理も実行
+	colliderA->OnCollisionStay(colliderB);
+	colliderB->OnCollisionStay(colliderA);
+
 	colliderA->SetColliding(true);
 	colliderB->SetColliding(true);
 }

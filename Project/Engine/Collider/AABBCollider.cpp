@@ -20,9 +20,9 @@ void AABBCollider::Init() {
 void AABBCollider::UpdateWorldTransform() {
     // AABBのワールド行列を更新
     cTransform_.translation_ = GetCollisionPos();
-    aabb_.min = cTransform_.translation_ - radiusVector_;
-    aabb_.max = cTransform_.translation_ + radiusVector_;
-    cTransform_.scale_ = radiusVector_;
+    aabb_.min = cTransform_.translation_ - collisionScale_;
+    aabb_.max = cTransform_.translation_ + collisionScale_;
+    cTransform_.scale_ = collisionScale_;
     cTransform_.UpdateMatrix();
 }
 

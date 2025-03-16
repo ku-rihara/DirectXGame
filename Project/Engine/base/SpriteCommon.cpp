@@ -74,6 +74,14 @@ void SpriteCommon::CreateGraphicsPipeline() {
     rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE; // 裏面を表示しない
     rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID; // 三角形の色を塗りつぶす
 
+    //DepthStencilStateの設定-------------------------------------
+    //Depthの機能を有効化する
+    depthStencilDesc_.DepthEnable = true;
+    //書き込みする
+    depthStencilDesc_.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+    //比較関数はLessEqual。つまり、近ければ描画される
+    depthStencilDesc_.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+
     // Shaderをコンパイルする ()
     vertexShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/Sprite.VS.hlsl",
         L"vs_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
@@ -96,7 +104,7 @@ void SpriteCommon::CreateGraphicsPipeline() {
     graphicsPipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
     graphicsPipelineStateDesc.SampleDesc.Count = 1;
     graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
-    graphicsPipelineStateDesc.DepthStencilState = dxCommon_->GetDepthStencilDesc();
+    graphicsPipelineStateDesc.DepthStencilState = depthStencilDesc_;
     graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
     // 実際に生成 ()

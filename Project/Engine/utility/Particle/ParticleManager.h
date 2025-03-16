@@ -21,6 +21,7 @@ enum class BlendMode;
 class ParticleCommon;
 struct ParticleEmitter::GroupParamaters;
 struct ParticleEmitter::Parameters;
+struct ParticleEmitter::EaseParm;
 class ParticleManager {
 private:
 	
@@ -28,16 +29,26 @@ private:
 	/// struct
 	///============================================================
 
+	struct ScaleInFo {
+		Vector3 tempScaleV3;
+		Vector3 easeEndScale;
+		ParticleEmitter::EaseParm easeparm;
+	};
+
 	struct Particle {
 		float lifeTime_;
 		float currentTime_;
 		float gravity_;
+	    Vector3 offSet;
+		const Vector3* followPos=nullptr;
 		Vector3 direction_;
 		Vector3 velocity_;
+		float speed_;
 		Vector3 rotateSpeed_;
 		Vector4 color_;
 		WorldTransform worldTransform_;
-	
+		ScaleInFo scaleInfo;
+		float easeTime;
 	};
 
 	struct AccelerationField {///　加速フィールド
@@ -87,7 +98,7 @@ public:
 
 	//初期化、更新、描画
 	void Init (SrvManager* srvManager);
-	void Update(const ViewProjection& viewProjection);
+	void Update();
 	void Draw(const ViewProjection& viewProjection);
 	Vector3 DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view);
 
@@ -103,6 +114,14 @@ public:
 	Particle  MakeParticle(const ParticleEmitter::Parameters&paramaters);
 	void      Emit(std::string name, const ParticleEmitter::Parameters&paramaters,
 		      const ParticleEmitter::GroupParamaters&groupParamaters, const int32_t& count);
+
+	///============================================================
+	/// parm Adapt
+	///============================================================
+	void AlphaAdapt(ParticleFprGPU& data,const Particle&parm, const ParticleGroup&group);
+	Vector3 ScaleAdapt(const float& time, const ScaleInFo& parm);
+	Vector3 EaseAdapt( const ParticleEmitter::EaseType& easetype,const Vector3& start, 
+		               const Vector3& end, const float& time, const float& maxTime);
 
 	///============================================================
 	///getter method

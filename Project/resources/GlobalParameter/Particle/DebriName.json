@@ -1,0 +1,116 @@
+{
+    "DebriName": {
+        "AdaptRotateIsX": false,
+        "AdaptRotateIsY": false,
+        "AdaptRotateIsZ": false,
+        "BaseColor": [
+            0.20588237047195435,
+            0.19143207371234894,
+            0.19074395298957825,
+            1.0
+        ],
+        "Color Max": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Color Min": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Direction Max": [
+            0.30000001192092896,
+            1.0,
+            0.30000001192092896
+        ],
+        "Direction Min": [
+            -0.30000001192092896,
+            0.8100000023841858,
+            -0.30000001192092896
+        ],
+        "Gravity": -196.1999969482422,
+        "IntervalTime": 1.0,
+        "LifeTime": 1.159999966621399,
+        "Particle Count": 19,
+        "Position Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Position Max": [
+            0.20000000298023224,
+            3.9000000953674316,
+            0.20000000298023224
+        ],
+        "Position Min": [
+            -0.20000000298023224,
+            1.5,
+            -0.20000000298023224
+        ],
+        "Rotate Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Max": [
+            0.0,
+            0.0,
+            25.100000381469727
+        ],
+        "RotateSpeed Min": [
+            0.0,
+            0.0,
+            28.600000381469727
+        ],
+        "Scale Max": 2.0,
+        "Scale Min": 2.0,
+        "ScaleV3 Max": [
+            2.0,
+            2.0,
+            5.0
+        ],
+        "ScaleV3 Min": [
+            2.0,
+            2.0,
+            5.0
+        ],
+        "Speed Max": 56.70000076293945,
+        "Speed Min": 51.29999923706055,
+        "isAlphaNoMove": true,
+        "isBillBord": false,
+        "isMoveForRail": false,
+        "isRotateforDirection": false,
+        "isScalerScale": false,
+        "isShot": true,
+        "moveSpeed": 0.0,
+        "preBillBordType_": 0,
+        "scaleEaseParm.easeTypeInt": 0,
+        "scaleEaseParm.endValueF.max": 0.0,
+        "scaleEaseParm.endValueF.min": 0.0,
+        "scaleEaseParm.endValueV3.max": [
+            0.5,
+            4.0,
+            0.0
+        ],
+        "scaleEaseParm.endValueV3.min": [
+            0.5,
+            3.0,
+            0.0
+        ],
+        "scaleEaseParm.isScaleEase": false,
+        "scaleEaseParm.maxTime": 0.27000001072883606
+    }
+}

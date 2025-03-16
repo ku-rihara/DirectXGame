@@ -51,7 +51,7 @@ void BaseScene::ViewProjectionUpdate() {
 		viewProjection_.matView_ = debugCamera_->GetViewProjection().matView_;
 		viewProjection_.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
 		viewProjection_.cameraMatrix_ = debugCamera_->GetViewProjection().cameraMatrix_;
-
+		
 	}
 	// アクティブでない
 	else if (isDebugCameraActive_ == false) { // デバッグカメラがアクティブでない

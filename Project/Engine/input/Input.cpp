@@ -1,15 +1,14 @@
+// Input.cpp
 #include "Input.h"
 #include<assert.h>
+#include<string>
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "xinput.lib")
 
 std::unique_ptr<Mouse>Input::mouse_ = nullptr;
+std::vector<std::unique_ptr<Gamepad>> Input::gamepads_ = {}; // Gamepadクラスのベクター初期化
 
-template bool Input::GetJoystickState<DIJOYSTATE2>(int32_t stickNo, DIJOYSTATE2& out) const;
-template bool Input::GetJoystickState<XINPUT_STATE>(int32_t stickNo, XINPUT_STATE& out) const;
-template bool Input::GetJoystickStatePrevious<DIJOYSTATE2>(int32_t stickNo, DIJOYSTATE2& out) const;
-template bool Input::GetJoystickStatePrevious<XINPUT_STATE>(int32_t stickNo, XINPUT_STATE& out) const;
 
 Input* Input::GetInstance() {
 	static Input instance;
@@ -38,22 +37,21 @@ void Input::Init(HINSTANCE hInstance, HWND hWnd) {
 
 	//マウス初期化
 	mouse_ = std::make_unique<Mouse>();
-	mouse_->Init(directInput_,hWnd);
+	mouse_->Init(directInput_, hWnd);
 
-	//XInputデバイスの追加
+
 	for (DWORD i = 0; i < XUSER_MAX_COUNT; ++i) {
-		XINPUT_STATE state;
-		ZeroMemory(&state, sizeof(XINPUT_STATE));
-		if (XInputGetState(i, &state) == ERROR_SUCCESS) {
-			Joystick joystick = {};
-			joystick.type_ = PadType::XInput;
-			joystick.state_ = state;
-			joystick.statePre_ = state;
-			joystick.deadZoneL_ = XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
-			joystick.deadZoneR_ = XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
-			joysticks_.push_back(joystick);
+		auto gamepad = std::make_unique<Gamepad>();
+		if (gamepad->Init(directInput_, i)) {
+			gamepads_.push_back(std::move(gamepad));
+			OutputDebugStringA(("Gamepad " + std::to_string(i) + " initialized successfully\n").c_str()); // デバッグ出力
+		} else {
+			OutputDebugStringA(("Gamepad " + std::to_string(i) + " initialization failed\n").c_str()); // デバッグ出力
 		}
 	}
+
+	OutputDebugStringA(("Number of gamepads initialized: " + std::to_string(gamepads_.size()) + "\n").c_str()); // デバッグ出力
+
 }
 
 void Input::Update() {
@@ -65,23 +63,10 @@ void Input::Update() {
 
 	mouse_->Update();//マウス更新
 
-
-	// マウスの位置を更新
-	/*mousePosition_.x += static_cast<float>(mouse_.lX);
-	mousePosition_.y += static_cast<float>(mouse_.lY);*/
-
-	for (auto& joystick : joysticks_) {
-		if (joystick.type_ == PadType::XInput) {
-			DWORD dwResult;
-			XINPUT_STATE state;
-			ZeroMemory(&state, sizeof(XINPUT_STATE));
-			dwResult = XInputGetState(0, &state);
-			if (dwResult == ERROR_SUCCESS) {
-				joystick.statePre_ = joystick.state_;
-				joystick.state_ = state;
-			}
-		}
+	for (auto& gamepad : gamepads_) {
+		gamepad->Update();
 	}
+	
 }
 
 //キーボード*************************************************************
@@ -104,70 +89,6 @@ bool Input::ReleaseMomentKey(BYTE keyNumber)const {
 	return !(key_[keyNumber] & 0x80) && (keyPre_[keyNumber] & 0x80);
 }
 
-//ゲームパッド*******************************************************************
-
-template<typename T>bool Input::GetJoystickState(int32_t stickNo, T& out)const {
-	if (stickNo < 0 || stickNo >= joysticks_.size()) {
-		return false;
-	}
-	const Joystick& joystick = joysticks_[stickNo];
-	if (joystick.type_ == PadType::DirectInput) {
-		if constexpr (std::is_same<T, DIJOYSTATE2>::value) {
-			if (std::holds_alternative<T>(joystick.state_)) {
-				out = std::get<T>(joystick.state_);
-				return true;
-			}
-		}
-	}
-	else if (joystick.type_ == PadType::XInput) {
-		if constexpr (std::is_same<T, XINPUT_STATE>::value) {
-			if (std::holds_alternative<T>(joystick.state_)) {
-				out = std::get<T>(joystick.state_);
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
-
-template<typename T>bool Input::GetJoystickStatePrevious(int32_t stickNo, T& out) const {
-	if (stickNo < 0 || stickNo >= joysticks_.size()) {
-		return false;
-	}
-	const Joystick& joystick = joysticks_[stickNo];
-	if (joystick.type_ == PadType::DirectInput) {
-		if constexpr (std::is_same<T, DIJOYSTATE2>::value) {
-			if (std::holds_alternative<T>(joystick.statePre_)) {
-				out = std::get<T>(joystick.statePre_);
-				return true;
-			}
-		}
-	}
-	else if (joystick.type_ == PadType::XInput) {
-		if constexpr (std::is_same<T, XINPUT_STATE>::value) {
-			if (std::holds_alternative<T>(joystick.statePre_)) {
-				out = std::get<T>(joystick.statePre_);
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
-void Input::SetJoystickDeadZone(int32_t stickNo, int32_t deadZoneL, int32_t deadZoneR) {
-
-	if (stickNo < 0 || stickNo >= static_cast<int32_t>(joysticks_.size())) {
-		return;
-	}
-
-	joysticks_[stickNo].deadZoneL_ = deadZoneL;
-	joysticks_[stickNo].deadZoneR_ = deadZoneR;
-}
-
-size_t Input::GetNumberOfJoysticks()const {
-	return joysticks_.size();
-}
 
 //マウス****************************************************************
 
@@ -183,15 +104,90 @@ MouseMove Input::GetMouseMove() {
 	return mouse_->GetMouseMove();
 }
 
-Vector3 Input::GetMousePos3D(const ViewProjection& viewprojection, float depthFactor, float blockSpacing){
-	return mouse_->GetMousePos3D(viewprojection, depthFactor,blockSpacing);
+Vector3 Input::GetMousePos3D(const ViewProjection& viewprojection, float depthFactor, float blockSpacing) {
+	return mouse_->GetMousePos3D(viewprojection, depthFactor, blockSpacing);
 }
 
 
-int32_t Input::GetWheel()  {
+int32_t Input::GetWheel() {
 	return mouse_->GetWheel();
 }
 
- Vector2 Input::GetMousePos()  {
-	 return mouse_->GetMousePos();
+Vector2 Input::GetMousePos() {
+	return mouse_->GetMousePos();
 }
+
+//-------------------------------------------------------------------------------------------------------
+// ゲームパッド
+//-------------------------------------------------------------------------------------------------------
+
+bool Input::IsPressPad(int32_t padNumber, int32_t buttonNumber)
+{
+	if (padNumber < 0 || padNumber >= gamepads_.size()) {
+		return false;
+	}
+
+	return gamepads_[padNumber]->IsPressButton(buttonNumber);
+}
+
+bool Input::IsTriggerPad(int32_t padNumber, int32_t buttonNumber)
+{
+	if (padNumber < 0 || padNumber >= gamepads_.size()) {
+		return false;
+	}
+
+	return gamepads_[padNumber]->IsTriggerButton(buttonNumber);
+}
+
+Vector2 Input::GetPadStick(int32_t padNumber, int32_t stickNumber)
+{
+	if (padNumber < 0 || padNumber >= gamepads_.size()) {
+		return Vector2();
+	}
+
+	return gamepads_[padNumber]->GetStick(stickNumber);
+}
+void Input::SetVibration(int32_t padNumber, float leftVelocity, float rightVelocity) {
+
+	if (padNumber < 0 || padNumber >= gamepads_.size()) {
+		return;
+	}
+	gamepads_[padNumber]->SetVibration(leftVelocity, rightVelocity);
+}
+
+template<typename T>bool Input::GetJoystickState(int32_t stickNo, T& out) {
+	if (stickNo < 0 || stickNo >= gamepads_.size()) {
+		return false;
+	}
+
+	return gamepads_[stickNo]->GetState(out);
+}
+
+
+template<typename T>bool Input::GetJoystickStatePrevious(int32_t stickNo, T& out) {
+	if (stickNo < 0 || stickNo >= gamepads_.size()) {
+		return false;
+	}
+
+	return gamepads_[stickNo]->GetStatePrevious(out);
+}
+
+void Input::SetJoystickDeadZone(int32_t stickNo, int32_t deadZoneL, int32_t deadZoneR) {
+
+	if (stickNo < 0 || stickNo >= static_cast<int32_t>(gamepads_.size())) {
+		return;
+	}
+
+	gamepads_[stickNo]->SetDeadZone(deadZoneL, deadZoneR);
+}
+
+size_t Input::GetNumberOfJoysticks() {
+	return gamepads_.size();
+}
+
+
+template bool Input::GetJoystickState<DIJOYSTATE2>(int32_t stickNo, DIJOYSTATE2& out);
+template bool Input::GetJoystickState<XINPUT_STATE>(int32_t stickNo, XINPUT_STATE& out);
+template bool Input::GetJoystickStatePrevious<DIJOYSTATE2>(int32_t stickNo, DIJOYSTATE2& out);
+template bool Input::GetJoystickStatePrevious<XINPUT_STATE>(int32_t stickNo, XINPUT_STATE& out);
+

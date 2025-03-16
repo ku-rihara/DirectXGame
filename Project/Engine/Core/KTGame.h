@@ -12,5 +12,6 @@ public:
 	 void Init()override;
 	 void Update()override;
 	 void Draw()override;
+	 void DrawImGuietc()override;
 	 void Finalize()override;
 };

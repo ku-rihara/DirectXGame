@@ -58,6 +58,10 @@ void GameScene::Update() {
 /// モデル描画
 /// ===================================================
 void GameScene::ModelDraw() {
+	/// commandList取得
+	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+	Model::PreDraw(commandList);
+
 	ground_->Draw(viewProjection_);
 	plane_->Draw(viewProjection_);
 	monsterBall_->Draw(viewProjection_);
@@ -66,9 +70,9 @@ void GameScene::ModelDraw() {
 /// ======================================================
 /// パーティクル描画
 /// ======================================================
-void GameScene::ParticleDraw() {
-
-}
+//void GameScene::ParticleDraw() {
+//
+//}
 
 /// ======================================================
 /// スプライト描画

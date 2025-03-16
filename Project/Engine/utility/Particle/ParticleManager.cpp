@@ -6,7 +6,10 @@
 #include"Frame/Frame.h"
 //Function
 #include"random.h"
+#include"Easing.h"
 #include"Function/GetFile.h"
+#include"MathFunction.h"
+//std
 #include<cassert>
 #include<string>
 
@@ -25,14 +28,13 @@ void ParticleManager::Init(SrvManager* srvManager) {
 	pSrvManager_ = srvManager;
 	pParticleCommon_ = ParticleCommon::GetInstance();
 	SetAllParticleFile();
-	
+
 }
 
 ///============================================================
 /// 更新
 ///============================================================
-void ParticleManager::Update(const ViewProjection& viewProjection) {
-	//uint32_t instanceIndex = 0; // 現在のインスタンス数
+void ParticleManager::Update() {
 
 	// 各粒子グループを周る
 	for (auto& groupPair : particleGroups_) {
@@ -44,7 +46,6 @@ void ParticleManager::Update(const ViewProjection& viewProjection) {
 		///*************************************************
 		for (auto it = particles.begin(); it != particles.end();) {
 
-
 			///------------------------------------------------------------------------
 			///加速フィールド
 			///------------------------------------------------------------------------
@@ -53,6 +54,12 @@ void ParticleManager::Update(const ViewProjection& viewProjection) {
 				it->velocity_ += accelerationField_.acceleration * Frame::DeltaTimeRate();
 			}
 
+			///------------------------------------------------------------------------
+			/// スケール変更
+			///------------------------------------------------------------------------
+			(*it).easeTime +=  Frame::DeltaTimeRate();
+			(*it).easeTime = std::min((*it).easeTime, (*it).scaleInfo.easeparm.maxTime);
+			(*it).worldTransform_.scale_ = ScaleAdapt((*it).easeTime,(*it).scaleInfo);
 			///------------------------------------------------------------------------
 			/// 回転させる
 			///------------------------------------------------------------------------
@@ -68,15 +75,19 @@ void ParticleManager::Update(const ViewProjection& viewProjection) {
 			///------------------------------------------------------------------------
 			/// 変位更新
 			///------------------------------------------------------------------------
-			it->worldTransform_.translation_ += it->velocity_ * Frame::DeltaTime();
-
+			if(it->followPos){
+				it->worldTransform_.translation_ = *it->followPos+ it->offSet;
+			} else {
+				it->worldTransform_.translation_.y += it->velocity_.y * Frame::DeltaTime();
+				it->worldTransform_.translation_ += it->direction_ * it->speed_ * Frame::DeltaTime();
+			}
 			///------------------------------------------------------------------------
 			/// ビルボードまたは通常の行列更新
 			///------------------------------------------------------------------------
 
 			if (group.parm.isBillBord) {
 
-				it->worldTransform_.BillboardUpdateMatrix(viewProjection, group.parm.billBordType, group.parm.adaptRotate_);
+				it->worldTransform_.BillboardUpdateMatrix(*viewProjection_, group.parm.billBordType, group.parm.adaptRotate_);
 			} else {
 				it->worldTransform_.UpdateMatrix();
 			}
@@ -118,8 +129,7 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
 			instancingData[instanceIndex].WorldInverseTranspose =
 				Inverse(Transpose(it->worldTransform_.matWorld_));
 
-			instancingData[instanceIndex].color = it->color_;
-			instancingData[instanceIndex].color.w = 1.0f - (it->currentTime_ / it->lifeTime_);
+			AlphaAdapt(instancingData[instanceIndex], *it, group);
 
 			++instanceIndex;
 			++it;
@@ -229,6 +239,17 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 	particle.worldTransform_.Init();
 
 	///------------------------------------------------------------------------
+	/// ペアレント
+	///------------------------------------------------------------------------
+	if (paramaters.parentTransform) {
+		particle.worldTransform_.parent_ = paramaters.parentTransform;
+	}
+
+	if (paramaters.followingPos_) {
+		particle.followPos =paramaters.followingPos_;
+	}
+
+	///------------------------------------------------------------------------
 	/// 座標
 	///------------------------------------------------------------------------
 	Vector3 randomTranslate = {
@@ -237,15 +258,25 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 		Random::Range(paramaters.positionDist.min.z, paramaters.positionDist.max.z)
 	};
 	particle.worldTransform_.translation_ = paramaters.targetPos + paramaters.emitPos + randomTranslate;
-
+	particle.offSet= paramaters.targetPos + paramaters.emitPos + randomTranslate;
 	///------------------------------------------------------------------------
 	/// 速度
 	///------------------------------------------------------------------------
-	particle.velocity_ = {
-		Random::Range(paramaters.velocityDist.min.x,paramaters.velocityDist.max.x),
-		Random::Range(paramaters.velocityDist.min.y,paramaters.velocityDist.max.y),
-		Random::Range(paramaters.velocityDist.min.z,paramaters.velocityDist.max.z)
+	Vector3 direction = {
+		Random::Range(paramaters.directionDist.min.x,paramaters.directionDist.max.x),
+		Random::Range(paramaters.directionDist.min.y,paramaters.directionDist.max.y),
+		Random::Range(paramaters.directionDist.min.z,paramaters.directionDist.max.z)
 	};
+
+	direction = direction.Normalize();
+	float speed = { Random::Range(paramaters.speedDist.min,paramaters.speedDist.max) };
+
+	// カメラの回転行列を取得
+	Matrix4x4 cameraRotationMatrix = MakeRotateMatrix(viewProjection_->rotation_);
+
+	// 速度ベクトルをカメラの向きに変換
+	particle.direction_ = TransformNormal(direction, cameraRotationMatrix);
+	particle.speed_ = speed;
 
 	///------------------------------------------------------------------------
 	/// 回転
@@ -253,7 +284,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 	if (paramaters.isRotateforDirection) {
 		// 進行方向（速度）を基に回転を計算
 
-		particle.worldTransform_.rotation_ = DirectionToEulerAngles(particle.velocity_,*viewProjection_);
+		particle.worldTransform_.rotation_ = DirectionToEulerAngles(particle.direction_, *viewProjection_);
 	} else {
 		// ランダム回転を設定
 		Vector3 rotate = {
@@ -262,8 +293,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 			Random::Range(paramaters.rotateDist.min.z, paramaters.rotateDist.max.z)
 		};
 
-
-		particle.worldTransform_.rotation_ = (paramaters.baseRotate) + rotate;
+		particle.worldTransform_.rotation_ = toRadian(paramaters.baseRotate + rotate);
 	}
 
 	///------------------------------------------------------------------------
@@ -281,9 +311,20 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 	/// スケール
 	///------------------------------------------------------------------------
 	if (paramaters.isScalerScale) {// スカラー
+
+		///* 初期スケール
 		float scale = Random::Range(paramaters.scaleDist.min, paramaters.scaleDist.max);
 		particle.worldTransform_.scale_ = { scale, scale, scale };
+		particle.scaleInfo.tempScaleV3 = particle.worldTransform_.scale_;
+
+		///*　イージングのエンドスケール
+		float endscale = Random::Range(paramaters.scaleEaseParm.endValueF.min, paramaters.scaleEaseParm.endValueF.min);
+		particle.scaleInfo.easeEndScale = { endscale ,endscale,endscale };
+
+
 	} else {/// V3
+
+		///* 初期スケール
 		Vector3 ScaleV3 = {
 			Random::Range(paramaters.scaleDistV3.min.x, paramaters.scaleDistV3.max.x),
 			Random::Range(paramaters.scaleDistV3.min.y, paramaters.scaleDistV3.max.y),
@@ -291,7 +332,23 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 		};
 
 		particle.worldTransform_.scale_ = ScaleV3;
+		particle.scaleInfo.tempScaleV3 = ScaleV3;
+
+		///*　イージングのエンドスケール
+		Vector3 endScaleV3 = {
+			Random::Range(paramaters.scaleEaseParm.endValueV3.min.x, paramaters.scaleEaseParm.endValueV3.max.x),
+			Random::Range(paramaters.scaleEaseParm.endValueV3.min.y, paramaters.scaleEaseParm.endValueV3.max.y),
+			Random::Range(paramaters.scaleEaseParm.endValueV3.min.z, paramaters.scaleEaseParm.endValueV3.max.z)
+		};
+
+		particle.scaleInfo.easeEndScale = endScaleV3;
 	}
+
+	particle.easeTime = 0.0f;
+	particle.scaleInfo.easeparm.isScaleEase = paramaters.scaleEaseParm.isScaleEase;
+	particle.scaleInfo.easeparm.maxTime = paramaters.scaleEaseParm.maxTime;
+	particle.scaleInfo.easeparm.easeType = paramaters.scaleEaseParm.easeType;
+
 	///------------------------------------------------------------------------
 	/// 色
 	///------------------------------------------------------------------------
@@ -329,6 +386,7 @@ void ParticleManager::Emit(
 	particleGroup.parm.isBillBord = groupParamaters.isBillBord;
 	particleGroup.parm.billBordType = groupParamaters.billBordType;
 	particleGroup.parm.adaptRotate_ = groupParamaters.adaptRotate_;
+	particleGroup.parm.isAlphaNoMove = groupParamaters.isAlphaNoMove;
 
 	// 生成、グループ追加
 	std::list<Particle> particles;
@@ -380,11 +438,57 @@ Vector3 ParticleManager::DirectionToEulerAngles(const Vector3& direction, const 
 	return  angle;
 }
 
-void ParticleManager::SetViewProjection(const ViewProjection* view){
+void ParticleManager::SetViewProjection(const ViewProjection* view) {
 
 	viewProjection_ = view;
 }
 
 void ParticleManager::SetAllParticleFile() {
 	particleFiles_ = GetFileNamesForDyrectry(dyrectry_);
+}
+
+///=================================================================================================
+/// parm Adapt
+///=================================================================================================
+void ParticleManager::AlphaAdapt(ParticleFprGPU& data, const Particle& parm, const ParticleGroup& group) {
+	data.color = parm.color_;
+	if (group.parm.isAlphaNoMove)return;
+	data.color.w = 1.0f - (parm.currentTime_ / parm.lifeTime_);
+
+}
+
+Vector3 ParticleManager::ScaleAdapt(const float& time, const ScaleInFo& info) {
+
+	if (!info.easeparm.isScaleEase) {
+		return info.tempScaleV3;
+	} 
+
+	return	EaseAdapt(info.easeparm.easeType,info.tempScaleV3, info.easeEndScale,
+			time, info.easeparm.maxTime);
+	
+}
+
+Vector3 ParticleManager::EaseAdapt(const ParticleEmitter::EaseType& easetype,
+	const Vector3& start, const Vector3& end, const float& time, const float& maxTime) {
+
+	switch (easetype)
+	{
+	case ParticleEmitter::EaseType::INSINE:
+		return EaseInSine(start, end, time, maxTime);
+		break;
+
+	case ParticleEmitter::EaseType::OUTSINE:
+		return EaseInOutSine(start, end, time, maxTime);
+		break;
+
+	case ParticleEmitter::EaseType::OUTBACK:
+		return EaseInOutBack(start, end, time, maxTime);
+		break;
+	case ParticleEmitter::EaseType::OUTQUINT:
+		return EaseOutQuint(start, end, time, maxTime);
+		break;
+	default:
+		return Vector3::ZeroVector();
+		break;
+	}
 }

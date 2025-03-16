@@ -16,6 +16,7 @@ class DirectionalLight;
 class PointLightManager;
 class SpotLightManager;
 class AreaLightManager;
+class AmbientLight;
 
 class Light {
 private:
@@ -24,7 +25,7 @@ private:
     std::unique_ptr<PointLightManager> pointLightManager_;
     std::unique_ptr<SpotLightManager> spotLightManager_;
     std::unique_ptr<AreaLightManager>areaLightManager_;
-
+    std::unique_ptr<AmbientLight>ambientLight_;
     //虚面反射
     Microsoft::WRL::ComPtr<ID3D12Resource> cameraForGPUResource_;
     //鏡面反射用データ
@@ -43,10 +44,11 @@ public:
     // 各ライトのリソースを取得する関数
     ID3D12Resource* GetDirectionalLightResource() const;
     ID3D12Resource* GetCameraForGPUResources() const;
- 
+
     void SetWorldCameraPos(const Vector3& pos);
 
     // ライトマネージャーを取得するためのメソッド
     PointLightManager* GetPointLightManager() { return pointLightManager_.get(); }
     SpotLightManager* GetSpotLightManager() { return spotLightManager_.get(); }
+    AmbientLight* GetAmbientLight() { return ambientLight_.get(); }
 };

@@ -3,19 +3,18 @@
 ///baseScene
 #include"BaseScene.h"
 
-#include"TestObj/CollisionTest1.h"
-#include"TestObj/CollisionTest2.h"
-#include"TestObj/CollisionTest3.h"
+
 #include"utility/Particle/ParticleEmitter.h"
+#include<string>
 /// <summary>
 /// タイトルシーン
 /// </summary>
-class TitleScene:public BaseScene {
+class TitleScene :public BaseScene {
 private:
-
-	std::unique_ptr<ParticleEmitter>emitter_;
 	
+	std::unique_ptr<ParticleEmitter>EnemydamageEffect_;
 
+	
 public:
 	///========================================================
 	/// Constralt destract
@@ -32,7 +31,7 @@ public:
 	void Update()override;
 	void ModelDraw()override;
 	void SpriteDraw()override;
-	void ParticleDraw()override;
+	/*void ParticleDraw()override;*/
 
 	void Debug()override;/// debug
 	void ViewProjectionUpdate()override;

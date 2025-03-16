@@ -4,6 +4,7 @@
 #include"3d/ViewProjection.h"
 #include"base/WinApp.h"
 #include <DirectXMath.h>
+#include<numbers>
 using namespace DirectX;
 
 Matrix4x4 MakeIdentity4x4() {
@@ -388,63 +389,36 @@ Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, int row) {
 	return result; // 正規化された行列を返す
 }
 
-Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to) {
-	Matrix4x4 result;
+//任意軸回転行列
+Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 
+	Matrix4x4 result{};
 
-	float cosTheta = Vector3::Dot(from, to);
-	Vector3 cross = Vector3::Cross(from, to);
-
-
-	if (cosTheta < -0.9999f) {
-		Vector3 axis = (std::abs(from.x) > std::abs(from.z))
-			? Vector3{ 0.0f, 0.0f, 1.0f }
-		: Vector3{ 1.0f, 0.0f, 0.0f };
-		axis = (Vector3::Cross(from, axis).Normalize());
-
-		result.m[0][0] = -1.0f + 2.0f * axis.x * axis.x;
-		result.m[0][1] = 2.0f * axis.x * axis.y;
-		result.m[0][2] = 2.0f * axis.x * axis.z;
-		result.m[0][3] = 0.0f;
-
-		result.m[1][0] = 2.0f * axis.x * axis.y;
-		result.m[1][1] = -1.0f + 2.0f * axis.y * axis.y;
-		result.m[1][2] = 2.0f * axis.y * axis.z;
-		result.m[1][3] = 0.0f;
-
-		result.m[2][0] = 2.0f * axis.x * axis.z;
-		result.m[2][1] = 2.0f * axis.y * axis.z;
-		result.m[2][2] = -1.0f + 2.0f * axis.z * axis.z;
-		result.m[2][3] = 0.0f;
-
-		result.m[3][0] = 0.0f;
-		result.m[3][1] = 0.0f;
-		result.m[3][2] = 0.0f;
-		result.m[3][3] = 1.0f;
-
-		return result;
+	float length = std::sqrt(axis.x * axis.x + axis.y * axis.y + axis.z * axis.z);
+	if (length == 0.0f) {
+		length = 1.0f;
 	}
+	float x = axis.x / length;
+	float y = axis.y / length;
+	float z = axis.z / length;
 
+	float c = std::cos(angle);
+	float s = std::sin(angle);
+	float t = 1.0f - c;
 
-	Vector3 axis = (cross).Normalize();
-
-
-	float sinTheta = (cross).Length();
-	float oneMinusCosTheta = 1.0f - cosTheta;
-
-	result.m[0][0] = cosTheta + axis.x * axis.x * oneMinusCosTheta;
-	result.m[0][1] = axis.x * axis.y * oneMinusCosTheta - axis.z * sinTheta;
-	result.m[0][2] = axis.x * axis.z * oneMinusCosTheta + axis.y * sinTheta;
+	result.m[0][0] = c + x * x * t;
+	result.m[0][1] = x * y * t + z * s;
+	result.m[0][2] = x * z * t - y * s;
 	result.m[0][3] = 0.0f;
 
-	result.m[1][0] = axis.y * axis.x * oneMinusCosTheta + axis.z * sinTheta;
-	result.m[1][1] = cosTheta + axis.y * axis.y * oneMinusCosTheta;
-	result.m[1][2] = axis.y * axis.z * oneMinusCosTheta - axis.x * sinTheta;
+	result.m[1][0] = y * x * t - z * s;
+	result.m[1][1] = c + y * y * t;
+	result.m[1][2] = y * z * t + x * s;
 	result.m[1][3] = 0.0f;
 
-	result.m[2][0] = axis.z * axis.x * oneMinusCosTheta - axis.y * sinTheta;
-	result.m[2][1] = axis.z * axis.y * oneMinusCosTheta + axis.x * sinTheta;
-	result.m[2][2] = cosTheta + axis.z * axis.z * oneMinusCosTheta;
+	result.m[2][0] = z * x * t + y * s;
+	result.m[2][1] = z * y * t - x * s;
+	result.m[2][2] = c + z * z * t;
 	result.m[2][3] = 0.0f;
 
 	result.m[3][0] = 0.0f;
@@ -452,28 +426,56 @@ Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to) {
 	result.m[3][2] = 0.0f;
 	result.m[3][3] = 1.0f;
 
-	result = Transpose(result);
-
 	return result;
 }
 
-Vector3 ExtractEulerAngles(const Matrix4x4& matrix) {
-	Vector3 angles;
 
-	// ピッチ (X軸回転)
-	angles.x = std::asin(-matrix.m[1][2]);
+Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to) {
+	Matrix4x4 result;
 
-	// コサインのチェック (Gimbal Lock 対策)
-	if (std::abs(std::cos(angles.x)) > 1e-6f) {
-		// ヨー (Y軸回転)
-		angles.y = std::atan2(matrix.m[0][2], matrix.m[2][2]);
-		// ロール (Z軸回転)
-		angles.z = std::atan2(matrix.m[1][0], matrix.m[1][1]);
-	} else {
-		// Gimbal Lock が発生した場合、Yaw を 0 にして Roll のみ調整
-		angles.y = 0.0f;
-		angles.z = std::atan2(-matrix.m[0][1], matrix.m[0][0]);
+	Vector3 fromNorm = from.Normalize();
+	Vector3 toNorm = to.Normalize();
+
+	Vector3 axis = Vector3::Cross(fromNorm,toNorm);
+	float dot = Vector3::Dot(fromNorm,toNorm);
+	float angle = std::acos(dot);
+
+	if (axis.Length() < 1e-6f) {
+		if (dot > 0.9999f) {
+			result.m[0][0] = result.m[1][1] = result.m[2][2] = result.m[3][3] = 1.0f;
+			return result;
+		} else {
+			if (std::abs(fromNorm.x) > 0.99f) {
+				axis = { 0.0f, 1.0f, 0.0f };
+			} else {
+				axis = { 0.0f, 0.0f, 1.0f };
+			}
+		}
 	}
 
-	return angles;
+return	MakeRotateAxisAngle(axis,angle);
+
+	
+}
+
+Vector3 ExtractEulerAngles(const Matrix4x4& rotationMatrix) {
+	Vector3 eulerAngles;
+
+	if (rotationMatrix.m[2][0] < 1) {
+		if (rotationMatrix.m[2][0] > -1) {
+			eulerAngles.y = asinf(rotationMatrix.m[2][0]);
+			eulerAngles.x = atan2f(-rotationMatrix.m[2][1], rotationMatrix.m[2][2]);
+			eulerAngles.z = atan2f(-rotationMatrix.m[1][0], rotationMatrix.m[0][0]);
+		} else { // rotationMatrix.m[2][0] <= -1
+			eulerAngles.y = -std::numbers::pi_v<float> / 2.0f;
+			eulerAngles.x = -atan2f(rotationMatrix.m[1][2], rotationMatrix.m[1][1]);
+			eulerAngles.z = 0;
+		}
+	} else { // rotationMatrix.m[2][0] >= 1
+		eulerAngles.y = std::numbers::pi_v<float> / 2;
+		eulerAngles.x = atan2f(rotationMatrix.m[1][2], rotationMatrix.m[1][1]);
+		eulerAngles.z = 0;
+	}
+
+	return eulerAngles;
 }

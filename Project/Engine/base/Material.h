@@ -40,11 +40,7 @@ public:
     // シェーダーにデータを送る関数
     void SetCommandList(ID3D12GraphicsCommandList* commandList);
 
-
-
-#ifdef _DEBUG
-    // デバッグ用ImGuiでの表示
     void DebugImGui();
-#endif
+
 
 };
