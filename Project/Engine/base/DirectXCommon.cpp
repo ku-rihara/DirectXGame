@@ -305,7 +305,7 @@ void DirectXCommon::CreateRenderTargetView() {
 	GetDevice()->CreateRenderTargetView(swapChainResources_[1].Get(), &rtvDesc_, rtvHandles_[1]);
 
 	//3
-	const Vector4 color = { 1.0f,0.0f,1.0f,0.0f };
+	const Vector4 color = { 0.1f,0.1f,0.1f,1.0f };
 
 	renderTextureResource_ = CreateRenderTextureResource(
 		device_, WinApp::kWindowWidth, WinApp::kWindowHeight,
@@ -396,6 +396,8 @@ void DirectXCommon::PreRenderTexture() {
 			renderTextureCurrentState_, D3D12_RESOURCE_STATE_RENDER_TARGET);
 		renderTextureCurrentState_ = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	}
+	/*PutTransitionBarrier(renderTextureResource_.Get(),
+		D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_RENDER_TARGET);*/
 
 	commandList_->OMSetRenderTargets(1, &rtvHandles_[2], FALSE, &dsvHandle);
 	// レンダーターゲットと深度ステンシルビューをクリア
@@ -420,6 +422,8 @@ void DirectXCommon::PreDraw() {
 		renderTextureCurrentState_ = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
 	}
 
+	/*PutTransitionBarrier(renderTextureResource_.Get(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);*/
 
 
 	// SwapChain をレンダーターゲットとして使用するためのバリア
@@ -669,8 +673,8 @@ DirectXCommon::CreateRenderTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> 
 	// 1. metadataを基にResourceの設定
 	D3D12_RESOURCE_DESC resourceDesc{};
 	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D; // 2Dテクスチャ
-	resourceDesc.Width = UINT(width);
-	resourceDesc.Height = UINT(height);
+	resourceDesc.Width = width;
+	resourceDesc.Height = height;
 	resourceDesc.DepthOrArraySize = 1; // 必須
 	resourceDesc.MipLevels = 1; // 最低1は必要
 	resourceDesc.Format = format;

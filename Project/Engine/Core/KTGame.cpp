@@ -30,7 +30,7 @@ void KTGame::Update() {
 // =============================================================
 // 描画処理
 // =============================================================
-void KTGame::DrawModel() {
+void KTGame::Draw() {
 
 	/// commandList取得
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
@@ -44,21 +44,22 @@ void KTGame::DrawModel() {
 
 	collisionManager_->Draw(pSceneManager_->GetScene()->GetViewProjection());	/// コリジョン描画
 
-	CopyImageRenderer::GetInstance()->Draw(commandList);/// 画像コピー描画
+	// --------------------------------------------------------------------------
+	/// スプライト描画
+	// --------------------------------------------------------------------------
+	Sprite::PreDraw(commandList);
+
+	pSceneManager_->SpriteDraw();/// ゲームシーン描画
+
 }
 
-void KTGame::DrawSprite() {
+void KTGame::DrawImGuietc() {
 
 	/// commandList取得
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 
-
-	// --------------------------------------------------------------------------
-    /// スプライト描画
-    // --------------------------------------------------------------------------
-	Sprite::PreDraw(commandList);
-
-	pSceneManager_->SpriteDraw();/// ゲームシーン描画
+	CopyImageRenderer::GetInstance()->Draw(commandList);/// 画像コピー描画
+	
 }
 
 // =============================================================

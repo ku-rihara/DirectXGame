@@ -11,7 +11,7 @@ class KTGame :public KTFramework {
 public:
 	 void Init()override;
 	 void Update()override;
-	 void DrawModel()override;
-	 void DrawSprite()override;
+	 void Draw()override;
+	 void DrawImGuietc()override;
 	 void Finalize()override;
 };

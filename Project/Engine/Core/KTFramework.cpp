@@ -23,11 +23,11 @@ void KTFramework::Run() {
 
 		Keta::PreRenderTexture(); /// 描画前処理
 
-        DrawModel(); /// 描画
+        Draw(); /// 描画
 
 		Keta::PreDraw(); /// 描画前処理
 
-		DrawSprite(); /// 描画
+		DrawImGuietc(); /// 描画
 
         Keta::EndFrame(); /// フレームの終了
     }
