@@ -7,7 +7,6 @@
 #include <vector>
 #include <chrono>
 #include <unordered_map>
-
 class Audio {
 private:
 	//XAudio2のインスタンス
