@@ -7,8 +7,7 @@
 #include <vector>
 #include <chrono>
 #include <unordered_map>
-
-class Audio{
+class Audio {
 private:
 	//XAudio2のインスタンス
 	Microsoft::WRL::ComPtr<IXAudio2>xAudio2_;
@@ -27,7 +26,7 @@ public:
 	void Unload(const int& soundId);
 	void PlayWave(const int& soundId, const float& volume);
 	void Finalize();
-	
+
 	IXAudio2* GetXAudio2()const { return xAudio2_.Get(); }
 };
 

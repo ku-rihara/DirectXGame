@@ -12,6 +12,7 @@
 #include "Object3DCommon.h"
 #include "SpriteCommon.h"
 #include "SrvManager.h"
+#include"CopyImageRenderer.h"
 
 /// audio,input
 #include "audio/Audio.h"
@@ -38,6 +39,7 @@ Object3DCommon* Keta::object3DCommon_ = nullptr;
 ModelManager* Keta::modelManager_ = nullptr;
 ParticleCommon* Keta::particleCommon_ = nullptr;
 SrvManager* Keta::srvManager_ = nullptr;
+CopyImageRenderer* Keta::copyImageRenderer_ = nullptr;
 Audio* Keta::audio_ = nullptr;
 Input* Keta::input_ = nullptr;
 
@@ -61,9 +63,14 @@ void Keta::Initialize(const char* title, int width, int height) {
     srvManager_ = SrvManager::GetInstance();
     srvManager_->Init(directXCommon_);
 
+	directXCommon_->CreateRnderSrvHandle();
+
     // Object3DCommon
     object3DCommon_ = Object3DCommon::GetInstance();
     object3DCommon_->Init(directXCommon_);
+
+	copyImageRenderer_ = CopyImageRenderer::GetInstance();
+	copyImageRenderer_->Init(directXCommon_);
 
     // ParticleCommon
     particleCommon_ = ParticleCommon::GetInstance();
@@ -115,9 +122,14 @@ void Keta::BeginFrame() {
 ///=======================================================================
 ///　描画前処理
 ///========================================================================
+void Keta::PreRenderTexture() {
+    directXCommon_->PreRenderTexture();
+    srvManager_->PreDraw(); 
+}
+
 void Keta::PreDraw() {
     directXCommon_->PreDraw();
-    srvManager_->PreDraw();
+    directXCommon_->DepthBarrierTransition();
 }
 
 ///=======================================================================
@@ -125,8 +137,11 @@ void Keta::PreDraw() {
 ///========================================================================
 void Keta::EndFrame() {
 #ifdef _DEBUG
-    ImGui::Render();
+
+	imguiManager_->preDrawa();
+	imguiManager_->Draw();  
 #endif
+
     directXCommon_->PostDraw();
 }
 

@@ -2,7 +2,7 @@
 #include"utility/Particle/ParticleCommon.h"
 /// Scene
 #include "Scene/Factory/SceneFactory.h"
-
+#include"base/CopyImageRenderer.h"
 
 // =============================================================
 // 初期化処理
@@ -40,17 +40,12 @@ void KTGame::Draw() {
 	// --------------------------------------------------------------------------
 	/// モデル描画
 	// --------------------------------------------------------------------------
-	
+	Model::PreDraw(commandList);
+
 	pSceneManager_->ModelDraw();/// ゲームシーン描画
 
 	Model::PreDraw(commandList);
 	collisionManager_->Draw(pSceneManager_->GetScene()->GetViewProjection());	/// コリジョン描画
-
-	// --------------------------------------------------------------------------
-	/// パーティクル描画
-	// --------------------------------------------------------------------------
-	
-	/*pSceneManager_->ParticleDraw();/// ゲームシーン描画*/
 
 	// --------------------------------------------------------------------------
 	/// スプライト描画
@@ -58,6 +53,16 @@ void KTGame::Draw() {
 	Sprite::PreDraw(commandList);
 
 	pSceneManager_->SpriteDraw();/// ゲームシーン描画
+
+}
+
+void KTGame::DrawImGuietc() {
+
+	/// commandList取得
+	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+
+	CopyImageRenderer::GetInstance()->Draw(commandList);/// 画像コピー描画
+	
 }
 
 // =============================================================

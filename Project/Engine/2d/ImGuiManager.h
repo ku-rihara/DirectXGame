@@ -1,4 +1,6 @@
 #pragma once
+#include <d3d12.h>
+#include <wrl/client.h>
 
 class WinApp;
 class DirectXCommon;
@@ -13,7 +15,8 @@ private:
 	/// other class
 	DirectXCommon* dxCommon_;
 	SrvManager* pSrvManager_;
-
+	// SRV用デスクリプタヒープ
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>srvHeap_;
 public:
 	static ImGuiManager* GetInstance();
 
@@ -25,10 +28,10 @@ public:
 
 	void Begin();//開始
 
-	void End();	//終わり
+	void preDrawa();	//終わり
 	
 	void Finalizer();//解放
 
-	/*void Draw();*/
+	void Draw();
 };
 

@@ -7,15 +7,15 @@
 
 
 Audio* Audio::GetInstance() {
-	static Audio instance;
-	return &instance;
+    static Audio instance;
+    return &instance;
 }
 
 void Audio::Init() {
-	//XAudioエンジンのインスタンスを生成
-	HRESULT hr = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
-	// マスターボイスを作成
-	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
+    //XAudioエンジンのインスタンスを生成
+    HRESULT hr = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
+    // マスターボイスを作成
+    hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
 }
 
 int Audio::LoadWave(const std::string& filename) {
@@ -57,8 +57,7 @@ int Audio::LoadWave(const std::string& filename) {
             file.read(pBuffer, chunk.size);
             dataSize = chunk.size;
             break;
-        }
-        else {
+        } else {
             // その他チャンクをスキップ
             file.seekg(chunk.size, std::ios_base::cur);
         }
@@ -126,22 +125,22 @@ void Audio::PlayWave(const int& soundId, const float& volume) {
 }
 
 void Audio::Unload(const int& soundId) {
-	if (soundId >= 0 && soundId < soundDatas_.size()) {
-		SoundData& soundData = soundDatas_[soundId];
-		delete[] soundData.pBuffer;
-		soundData.pBuffer = nullptr;
-		soundData.bufferSize = 0;
-		soundData.wfex = {};
-	}
+    if (soundId >= 0 && soundId < soundDatas_.size()) {
+        SoundData& soundData = soundDatas_[soundId];
+        delete[] soundData.pBuffer;
+        soundData.pBuffer = nullptr;
+        soundData.bufferSize = 0;
+        soundData.wfex = {};
+    }
 }
 
 void Audio::Finalize() {
-	for (auto& soundData : soundDatas_) {
-		delete[] soundData.pBuffer;
-		soundData.pBuffer = nullptr;
-	}
-	soundDatas_.clear();
-	xAudio2_.Reset();
+    for (auto& soundData : soundDatas_) {
+        delete[] soundData.pBuffer;
+        soundData.pBuffer = nullptr;
+    }
+    soundDatas_.clear();
+    xAudio2_.Reset();
 }
 //
 //Audio* Audio::GetInstance() {

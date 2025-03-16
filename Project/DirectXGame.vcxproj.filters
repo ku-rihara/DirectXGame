@@ -619,6 +619,9 @@
     <ClCompile Include="Game\Enemy\Spawner\EnemySpawner.cpp">
       <Filter>Game\Enemy\Spawner</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\base\CopyImageRenderer.cpp">
+      <Filter>MyEngine\.cpp\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1038,6 +1041,9 @@
     <ClInclude Include="Game\Enemy\Spawner\EnemySpawner.h">
       <Filter>Game\Enemy\Spawner</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\base\CopyImageRenderer.h">
+      <Filter>MyEngine\.h\base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -1048,6 +1054,9 @@
       <Filter>リソースファイル</Filter>
     </None>
     <None Include="resources\Shader\Sprite.hlsli">
+      <Filter>リソースファイル</Filter>
+    </None>
+    <None Include="resources\Shader\CopyImage.hlsli">
       <Filter>リソースファイル</Filter>
     </None>
   </ItemGroup>
@@ -1068,6 +1077,12 @@
       <Filter>リソースファイル</Filter>
     </FxCompile>
     <FxCompile Include="resources\Shader\Sprite.VS.hlsl">
+      <Filter>リソースファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\CopyImage.VS.hlsl">
+      <Filter>リソースファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\CopyImage.PS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
   </ItemGroup>

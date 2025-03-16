@@ -13,6 +13,7 @@ class ParticleCommon;
 class SrvManager;
 class Audio;
 class Input;
+class CopyImageRenderer;
 
 class Keta {
 
@@ -32,6 +33,7 @@ private:
     static SrvManager* srvManager_;
     static Audio* audio_;
     static Input* input_;
+	static CopyImageRenderer* copyImageRenderer_;
 
 public:
 
@@ -48,6 +50,7 @@ public:
     // フレーム開始処理
     static void BeginFrame();
 
+    static void PreRenderTexture();
     static void PreDraw();
 
     // フレーム終了処理
