@@ -2,6 +2,7 @@
 #include"Vector3.h"
 #include"ViewProjection.h"
 #include"Matrix4x4.h"
+#include"Quaternion.h"
 #include <wrl.h>
 #include <d3d12.h>
 #include<list>
@@ -28,6 +29,11 @@ public:
 		bool isZ_;
 	};
 
+	enum class RotateOder {
+		XYZ,
+		Quaternion,
+	};
+
 public:
 	
 	//ローカルスケール
@@ -36,10 +42,12 @@ public:
 	Vector3 rotation_ = {};
 	//ローカル座標
 	Vector3 translation_ = {};
+	Quaternion quaternion_ = {};
 	//ローカル→ワールド変換行列
 	Matrix4x4 matWorld_;
 	//親となるワールド変換へのポインタ
 	const WorldTransform* parent_ = nullptr;
+	RotateOder rotateOder_ = RotateOder::XYZ;
 	
 private:
 	Matrix4x4 billboardMatrix_;
@@ -80,6 +88,8 @@ public:
 	/// 行列の更新
 	/// </summary>
 	void UpdateMatrix();
+
+	void UpdateAffineMatrix();
 
 	void SetParent(const WorldTransform* parent);
 
