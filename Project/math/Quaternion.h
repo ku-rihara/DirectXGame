@@ -1,4 +1,5 @@
-#include"Vector3.h"
+class Vector3;
+
 class Quaternion {
 public:
 	float x;

@@ -3,6 +3,7 @@
 #include<assert.h>
 #include"3d/ViewProjection.h"
 #include"base/WinApp.h"
+#include"Quaternion.h"
 #include <DirectXMath.h>
 #include<numbers>
 using namespace DirectX;
@@ -478,4 +479,36 @@ Vector3 ExtractEulerAngles(const Matrix4x4& rotationMatrix) {
 	}
 
 	return eulerAngles;
+}
+
+// クォータニオンから回転行列を作成する関数
+Matrix4x4 MakeRotateMatrixFromQuaternion(const Quaternion&q) {
+	float x = q.x;
+	float y = q.y;
+	float z = q.z;
+	float w = q.w;
+
+	Matrix4x4 matrix;
+
+	matrix.m[0][0] = 1.0f - 2.0f * (y * y + z * z);
+	matrix.m[0][1] = 2.0f * (x * y - w * z);
+	matrix.m[0][2] = 2.0f * (x * z + w * y);
+	matrix.m[0][3] = 0.0f;
+
+	matrix.m[1][0] = 2.0f * (x * y + w * z);
+	matrix.m[1][1] = 1.0f - 2.0f * (x * x + z * z);
+	matrix.m[1][2] = 2.0f * (y * z - w * x);
+	matrix.m[1][3] = 0.0f;
+
+	matrix.m[2][0] = 2.0f * (x * z - w * y);
+	matrix.m[2][1] = 2.0f * (y * z + w * x);
+	matrix.m[2][2] = 1.0f - 2.0f * (x * x + y * y);
+	matrix.m[2][3] = 0.0f;
+
+	matrix.m[3][0] = 0.0f;
+	matrix.m[3][1] = 0.0f;
+	matrix.m[3][2] = 0.0f;
+	matrix.m[3][3] = 1.0f;
+
+	return matrix;
 }

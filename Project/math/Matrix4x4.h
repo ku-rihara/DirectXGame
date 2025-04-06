@@ -5,6 +5,7 @@
 /// 4x4行列
 /// </summary>
 class Vector3;
+class Quaternion;
 class ViewProjection;
 
 struct Matrix4x4 {
@@ -61,3 +62,5 @@ Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle);
 Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to);
 
 Vector3 ExtractEulerAngles(const Matrix4x4& matrix);
+
+Matrix4x4 MakeRotateMatrixFromQuaternion(const Quaternion& q);
