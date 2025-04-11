@@ -11,8 +11,8 @@
 #include"Weapon/PlayerHandRight.h"
 
 /// utility
-#include"utility/Editor/GlobalParameter.h"
-#include"utility/Particle/ParticleEmitter.h"
+#include"utility/ParamaterEditor/GlobalParameter.h"
+#include"utility/ParticleEditor/ParticleEmitter.h"
 
 /// behavior
 #include"ComboAttackBehavior/ComboAttackFirst.h"

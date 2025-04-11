@@ -5,7 +5,7 @@
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
 
-#include"utility/Editor/GlobalParameter.h"
+#include"utility/ParamaterEditor/GlobalParameter.h"
 #include <memory>
 
 

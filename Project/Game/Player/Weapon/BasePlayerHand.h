@@ -1,11 +1,11 @@
 #pragma once
 
-#include"utility/Editor/GlobalParameter.h"
-#include"utility/Editor/ControlPosManager.h"
-#include"utility/Editor/RailManager.h"
+#include"utility/ParamaterEditor/GlobalParameter.h"
+#include"utility/RailEditor/ControlPosManager.h"
+#include"utility/RailEditor/RailManager.h"
 
 #include"BaseObject/BaseObject.h"
-#include"utility/Particle/ParticleEmitter.h"
+#include"utility/ParticleEditor/ParticleEmitter.h"
 
 class BasePlayerHand :public BaseObject {
 protected:

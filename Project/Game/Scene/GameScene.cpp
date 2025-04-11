@@ -1,6 +1,6 @@
 #include "GameScene.h"
 #include"Scene/Manager/SceneManager.h"
-#include"utility/Particle/ParticleManager.h"
+#include"utility/ParticleEditor/ParticleManager.h"
 // base
 #include "base/TextureManager.h"
 //math

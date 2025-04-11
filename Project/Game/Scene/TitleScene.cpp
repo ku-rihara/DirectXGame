@@ -3,8 +3,8 @@
 #include"Lighrt/Light.h"
 #include"JoyState/JoyState.h"
 #include"Manager/SceneManager.h"
-#include"utility/Particle/ParticleManager.h"
-#include"utility/Particle/ParticleCommon.h"
+#include"utility/ParticleEditor/ParticleManager.h"
+#include"utility/ParticleEditor/ParticleCommon.h"
 #include"Player/TitleBehavior/TitleSecondPunch.h"
 
 #include "base/TextureManager.h"

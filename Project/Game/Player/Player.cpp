@@ -18,7 +18,7 @@
 #include"Enemy/BaseEnemy.h"
 #include"CollisionBox/EnemyCollisionBox.h"
 #include"base/TextureManager.h"
-#include"utility/Particle/ParticleCommon.h"
+#include"utility/ParticleEditor/ParticleCommon.h"
 
 /// behavior
 #include"PlayerBehavior/PlayerRoot.h"

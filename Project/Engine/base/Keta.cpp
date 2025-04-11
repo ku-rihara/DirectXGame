@@ -19,8 +19,8 @@
 #include "input/Input.h"
 
 /// utility
-#include "utility/Particle/ParticleCommon.h"
-#include "utility/Particle/ParticleManager.h"
+#include "utility/ParticleEditor/ParticleCommon.h"
+#include "utility/ParticleEditor/ParticleManager.h"
 
 /// imgui,function
 #include <imgui_impl_dx12.h>

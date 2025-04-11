@@ -3,7 +3,7 @@
 #include"BaseComboAattackBehavior.h"
 #include"Easing.h"
 #include"CollisionBox/AttackCollisionBox.h"
-#include"utility/Particle/ParticleEmitter.h"
+#include"utility/ParticleEditor/ParticleEmitter.h"
 
 class ComboAttackJumpSecond : public BaseComboAattackBehavior {
 	enum class STEP {

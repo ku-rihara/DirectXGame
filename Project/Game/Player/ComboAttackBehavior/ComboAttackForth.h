@@ -3,7 +3,7 @@
 #include"BaseComboAattackBehavior.h"
 #include"Easing.h"
 #include"CollisionBox/AttackCollisionBox.h"
-#include"utility/Editor/RailManager.h"
+#include"utility/RailEditor/RailManager.h"
 
 class ComboAttackForth : public BaseComboAattackBehavior {
 private:

@@ -3,10 +3,10 @@
 #include"MinMax.h"
 #include"3d/ViewProjection.h"
 /// editor
-#include"utility/Editor/GlobalParameter.h"
+#include"utility/ParamaterEditor/GlobalParameter.h"
 
-#include"utility/Editor/RailManager.h"
-#include"utility/Particle/ParticleCommon.h"
+#include"utility/RailEditor/RailManager.h"
+#include"utility/ParticleEditor/ParticleCommon.h"
 ///std
 #include<string>
 #include<vector>
