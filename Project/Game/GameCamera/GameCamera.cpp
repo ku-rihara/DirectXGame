@@ -27,12 +27,6 @@ void GameCamera::Init() {
 	AddParmGroup();
 	ApplyGlobalParameter();
 
-	/*paramater_.firstOffset_ = { 5,13,-29.0f };
-	paramater_.zoomOffset_  = { 0.0f,4.795f,-16.0f };
-	paramater_.firstRotate_ = 14.25f;
-	paramater_.zoomRotate_ = 5.7f;*/
-
-
 	rotate_ = paramater_.firstRotate_;
 	offset_ = paramater_.firstOffset_;
 
@@ -48,30 +42,33 @@ void GameCamera::Update() {
 	viewprojection_.UpdateMatrix();
 }
 void GameCamera::MoveUpdate() {
+
+	///============================================================
+	// 入力処理
+	///============================================================
 	Input* input = Input::GetInstance();
 	const float rotateSpeed = 0.08f; // 回転速度
+	Vector2 stickInput = { 0.0f, 0.0f }; // スティック入力相当のベクトルをリセット
 
-	// 旋回操作: 左右キーまたは右スティックでY軸の回転を操作
-	Vector2 stickInput = { 0.0f, 0.0f}; // スティック入力相当のベクトルをリセット
-
-	//----------------------------------------------------------------------------------
-	// keyboard
-	//----------------------------------------------------------------------------------
+	// ================================= keybord ================================= //
 	if (input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT)) {
-		if (input->PushKey(DIK_RIGHT)) {
+
+		if (input->PushKey(DIK_RIGHT)) {// 右回転
 			stickInput.x = 1.0f;
-		} else if (input->PushKey(DIK_LEFT)) {
+
+		} else if (input->PushKey(DIK_LEFT)) {// 左回転
 			stickInput.x = -1.0f;
 		}
+
 	} else {
-		//----------------------------------------------------------------------------------
-		// pad
-		//----------------------------------------------------------------------------------
+		// ================================= GamePad ================================= //
 		stickInput = Input::GetPadStick(0, 1); // 右スティックの入力を取得
-		//↑の引数。0:padNo, 1:rightStick
+
 	}
 
-	// 適用
+	///============================================================
+	// 入力に対する回転処理
+	///============================================================
 	if (stickInput.Length() > 0.1f) {
 		stickInput = stickInput.Normalize();
 		destinationAngleY_ += stickInput.x * rotateSpeed;
@@ -85,6 +82,9 @@ void GameCamera::MoveUpdate() {
 	// Y軸の回転補間処理
 	viewprojection_.rotation_.y = LerpShortAngle(viewprojection_.rotation_.y, destinationAngleY_, 0.3f);
 
+	///============================================================
+	// 回転、変位の適応
+	///============================================================
 	TranslateAdapt(); // 変位適応
 	RotateAdapt();    // 回転適応
 }
@@ -127,36 +127,82 @@ Vector3 GameCamera::OffsetCalc(const Vector3& offset) const {
 	return resultOffset;
 }
 
-void GameCamera::SetTarget(const WorldTransform* target) {
-	target_ = target;
-	Reset();
-}
 
-void GameCamera::GetIsCameraMove() {
-	if ((stickInput_).Length() > 0.1f) {
+// ================================= Paramater Edit ================================= //
+void GameCamera::ParmLoadForImGui() {
 
+	// ロードボタン
+	if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
+
+		globalParameter_->LoadFile(groupName_);
+		// セーブ完了メッセージ
+		ImGui::Text("Load Successful: %s", groupName_.c_str());
+		ApplyGlobalParameter();
 	}
 }
 
-Vector3 GameCamera::GetWorldPos()const {
 
-	Vector3 worldPos;
-	// ワールド行列の平行移動成分を取得
-	worldPos.x = viewprojection_.matView_.m[3][0];
-	worldPos.y = viewprojection_.matView_.m[3][1];
-	worldPos.z = viewprojection_.matView_.m[3][2];
+void GameCamera::AddParmGroup() {
+	globalParameter_->AddItem(groupName_, "zoomOffset_", paramater_.zoomOffset_);
+	globalParameter_->AddItem(groupName_, "firstRotate_", paramater_.firstRotate_);
+	globalParameter_->AddItem(groupName_, "firstOffset_", paramater_.firstOffset_);
+	globalParameter_->AddItem(groupName_, "zoomORotate_", paramater_.zoomRotate_);
+	globalParameter_->AddItem(groupName_, "backLashOffset_", paramater_.backLashOffset_);
+	globalParameter_->AddItem(groupName_, "backLashTime_", paramater_.backLashTime_);
+	globalParameter_->AddItem(groupName_, "backLashRatio_", paramater_.backLashRatio_);
 
-	return worldPos;
 }
 
-void GameCamera::Debug() {
-	ImGui::DragFloat("rotate", &rotate_, 0.01f);
-	ImGui::DragFloat3("offset", &offset_.x,0.1f);
+void GameCamera::SetValues() {
+	globalParameter_->SetValue(groupName_, "zoomOffset_", paramater_.zoomOffset_);
+	globalParameter_->SetValue(groupName_, "firstRotate_", paramater_.firstRotate_);
+	globalParameter_->SetValue(groupName_, "firstOffset_", paramater_.firstOffset_);
+	globalParameter_->SetValue(groupName_, "zoomORotate_", paramater_.zoomRotate_);
+	globalParameter_->SetValue(groupName_, "backLashOffset_", paramater_.backLashOffset_);
+	globalParameter_->SetValue(groupName_, "backLashTime_", paramater_.backLashTime_);
+	globalParameter_->SetValue(groupName_, "backLashRatio_", paramater_.backLashRatio_);
+
 }
-Vector3 GameCamera::GetTargetPos() const
-{
-	return Vector3();
+
+void GameCamera::ApplyGlobalParameter() {
+	// paramCombies_ から値を取得
+	paramater_.zoomOffset_ = globalParameter_->GetValue<Vector3>(groupName_, "zoomOffset_");
+	paramater_.firstOffset_ = globalParameter_->GetValue<Vector3>(groupName_, "firstOffset_");
+	paramater_.firstRotate_ = globalParameter_->GetValue<float>(groupName_, "firstRotate_");
+	paramater_.zoomRotate_ = globalParameter_->GetValue<float>(groupName_, "zoomORotate_");
+	paramater_.backLashOffset_ = globalParameter_->GetValue<Vector3>(groupName_, "backLashOffset_");
+	paramater_.backLashTime_ = globalParameter_->GetValue<float>(groupName_, "backLashTime_");
+	paramater_.backLashRatio_ = globalParameter_->GetValue<float>(groupName_, "backLashRatio_");
+
 }
+
+void GameCamera::AdjustParm() {
+	SetValues();
+#ifdef _DEBUG
+
+	if (ImGui::CollapsingHeader(groupName_.c_str())) {
+		ImGui::PushID(groupName_.c_str());
+
+		/// 変数の調整
+		ImGui::DragFloat3("Zoom Offset", &paramater_.zoomOffset_.x, 0.1f);
+		ImGui::DragFloat3("First Offset", &paramater_.firstOffset_.x, 0.1f);
+		ImGui::SliderAngle("First Rotate", &paramater_.firstRotate_, 0, 1000);
+		ImGui::SliderAngle("Zoom Rotate", &paramater_.zoomRotate_, 0, 1000);
+		ImGui::DragFloat("Backlash Time", &paramater_.backLashTime_, 0.01f);
+		ImGui::DragFloat("backLash Ratio", &paramater_.backLashRatio_, 0.01f);
+		ImGui::DragFloat3("Backlash Offset", &paramater_.backLashOffset_.x, 0.1f);
+
+
+		/// セーブとロード
+		globalParameter_->ParmSaveForImGui(groupName_);
+		ParmLoadForImGui();
+		ImGui::PopID();
+	}
+
+#endif // _DEBUG
+}
+
+// ================================= Change Behavior ================================= //
 
 void GameCamera::ChangeBehavior(std::unique_ptr<BaseGameCameraBehavior>behavior) {
 	//引数で受け取った状態を次の状態としてセット
@@ -179,90 +225,38 @@ void GameCamera::ChangeZoomInOut() {
 	ChangeBehavior(std::make_unique<GameCameraZoomInOut>(this));
 }
 
-///=====================================================
-///  ロード
-///===================================================== 
-void GameCamera::ParmLoadForImGui() {
+// ================================= Setter Method ================================= //
 
-	// ロードボタン
-	if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
+void GameCamera::SetTarget(const WorldTransform* target) {
+	target_ = target;
+	Reset();
+}
 
-		globalParameter_->LoadFile(groupName_);
-		// セーブ完了メッセージ
-		ImGui::Text("Load Successful: %s", groupName_.c_str());
-		ApplyGlobalParameter();
+// ================================= Getter Method ================================= //
+
+void GameCamera::GetIsCameraMove() {
+	if ((stickInput_).Length() > 0.1f) {
+
 	}
 }
 
-///=====================================================
-///  パラメータをグループに追加
-///===================================================== 
-void GameCamera::AddParmGroup() {
-	globalParameter_->AddItem(groupName_, "zoomOffset_", paramater_.zoomOffset_);
-	globalParameter_->AddItem(groupName_, "firstRotate_", paramater_.firstRotate_);
-	globalParameter_->AddItem(groupName_, "firstOffset_", paramater_.firstOffset_);
-	globalParameter_->AddItem(groupName_, "zoomORotate_", paramater_.zoomRotate_);
-	globalParameter_->AddItem(groupName_, "backLashOffset_", paramater_.backLashOffset_);
-	globalParameter_->AddItem(groupName_, "backLashTime_", paramater_.backLashTime_);
-	globalParameter_->AddItem(groupName_, "backLashRatio_", paramater_.backLashRatio_);
+Vector3 GameCamera::GetWorldPos()const {
 
-}
-///=====================================================
-/// パラメータ値セット
-///===================================================== 
-void GameCamera::SetValues() {
-	globalParameter_->SetValue(groupName_, "zoomOffset_", paramater_.zoomOffset_);
-	globalParameter_->SetValue(groupName_, "firstRotate_", paramater_.firstRotate_);
-	globalParameter_->SetValue(groupName_, "firstOffset_", paramater_.firstOffset_);
-	globalParameter_->SetValue(groupName_, "zoomORotate_", paramater_.zoomRotate_);
-	globalParameter_->SetValue(groupName_, "backLashOffset_", paramater_.backLashOffset_);
-	globalParameter_->SetValue(groupName_, "backLashTime_", paramater_.backLashTime_);
-	globalParameter_->SetValue(groupName_, "backLashRatio_", paramater_.backLashRatio_);
+	Vector3 worldPos;
+	// ワールド行列の平行移動成分を取得
+	worldPos.x = viewprojection_.matView_.m[3][0];
+	worldPos.y = viewprojection_.matView_.m[3][1];
+	worldPos.z = viewprojection_.matView_.m[3][2];
 
+	return worldPos;
 }
 
 
-///=====================================================
-///  ImGuiからパラメータを得る
-///===================================================== 
-void GameCamera::ApplyGlobalParameter() {
-	// paramCombies_ から値を取得
-	paramater_.zoomOffset_ = globalParameter_->GetValue<Vector3>(groupName_, "zoomOffset_");
-	paramater_.firstOffset_ = globalParameter_->GetValue<Vector3>(groupName_, "firstOffset_");
-	paramater_.firstRotate_ = globalParameter_->GetValue<float>(groupName_, "firstRotate_");
-	paramater_.zoomRotate_ = globalParameter_->GetValue<float>(groupName_, "zoomORotate_");
-	paramater_.backLashOffset_ = globalParameter_->GetValue<Vector3>(groupName_, "backLashOffset_");
-	paramater_.backLashTime_ = globalParameter_->GetValue<float>(groupName_, "backLashTime_");
-	paramater_.backLashRatio_ = globalParameter_->GetValue<float>(groupName_, "backLashRatio_");
-
+Vector3 GameCamera::GetTargetPos() const {
+	return Vector3();
 }
 
-///=========================================================
-/// パラメータ調整
-///==========================================================
-void GameCamera::AdjustParm() {
-	SetValues();
-#ifdef _DEBUG
-
-	if (ImGui::CollapsingHeader(groupName_.c_str())) {
-		ImGui::PushID(groupName_.c_str());
-
-		/// 変数の調整
-		ImGui::DragFloat3("Zoom Offset", &paramater_.zoomOffset_.x, 0.1f);
-		ImGui::DragFloat3("First Offset", &paramater_.firstOffset_.x, 0.1f);
-		ImGui::SliderAngle("First Rotate", &paramater_.firstRotate_,0,1000);
-		ImGui::SliderAngle("Zoom Rotate", &paramater_.zoomRotate_,0,1000);
-		ImGui::DragFloat("Backlash Time", &paramater_.backLashTime_, 0.01f);
-		ImGui::DragFloat("backLash Ratio", &paramater_.backLashRatio_, 0.01f);
-		ImGui::DragFloat3("Backlash Offset", &paramater_.backLashOffset_.x, 0.1f);
-
-
-		/// セーブとロード
-		globalParameter_->ParmSaveForImGui(groupName_);
-		ParmLoadForImGui();
-		ImGui::PopID();
-	}
-
-#endif // _DEBUG
+void GameCamera::Debug() {
+	ImGui::DragFloat("rotate", &rotate_, 0.01f);
+	ImGui::DragFloat3("offset", &offset_.x, 0.1f);
 }
-
