@@ -220,6 +220,24 @@
     <Filter Include="Game\Enemy\Spawner">
       <UniqueIdentifier>{56719232-7938-486e-b2c4-15494f312b10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\utility\RailEditor">
+      <UniqueIdentifier>{51a8756f-630b-4731-a137-18eb9e2bad0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\RailEditor">
+      <UniqueIdentifier>{a1a4d21c-afb7-499c-938c-549c4c6ef567}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\ParticleEditor">
+      <UniqueIdentifier>{ef4cf453-ddc8-44a4-8472-d26f34bd117a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\ParticleEditor">
+      <UniqueIdentifier>{faf4888a-672e-4301-bb40-9621257e786a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\ParamaterEditor">
+      <UniqueIdentifier>{68cc7c40-2b21-43d7-9461-36612c85f182}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\ParamaterEditor">
+      <UniqueIdentifier>{6045dc64-7d52-4582-b49c-567e7f5074bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -588,6 +606,27 @@
     </ClCompile>
     <ClCompile Include="Engine\base\CopyImageRenderer.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\RailEditor\ControlPosManager.cpp">
+      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\RailEditor\Rail.cpp">
+      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\RailEditor\RailManager.cpp">
+      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ParticleEditor\ParticleCommon.cpp">
+      <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ParticleEditor\ParticleEmitter.cpp">
+      <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ParticleEditor\ParticleManager.cpp">
+      <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ParamaterEditor\GlobalParameter.cpp">
+      <Filter>MyEngine\.cpp\utility\ParamaterEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -989,6 +1028,27 @@
     </ClInclude>
     <ClInclude Include="Engine\base\CopyImageRenderer.h">
       <Filter>MyEngine\.h\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\RailEditor\Rail.h">
+      <Filter>MyEngine\.h\utility\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\RailEditor\RailManager.h">
+      <Filter>MyEngine\.h\utility\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\RailEditor\ControlPosManager.h">
+      <Filter>MyEngine\.h\utility\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ParticleEditor\ParticleEmitter.h">
+      <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ParticleEditor\ParticleManager.h">
+      <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ParticleEditor\ParticleCommon.h">
+      <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ParamaterEditor\GlobalParameter.h">
+      <Filter>MyEngine\.h\utility\ParamaterEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
