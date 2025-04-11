@@ -2,7 +2,7 @@
 
 #include"Collider/AABBCollider.h"
 #include"3d/WorldTransform.h"
-#include"utility/ParamaterEditor/GlobalParameter.h"
+#include"utility/ParameterEditor/GlobalParameter.h"
 #include<string>
 
 class BaseAABBCollisionBox :public AABBCollider {

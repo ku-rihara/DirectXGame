@@ -3,7 +3,7 @@
 #include "base/Keta.h"
 /// imgui
 #include <imgui.h>
-#include "utility/ParamaterEditor/GlobalParameter.h"
+#include "utility/ParameterEditor/GlobalParameter.h"
 #include"3d/ModelManager.h"
 
 #include "Frame/Frame.h"

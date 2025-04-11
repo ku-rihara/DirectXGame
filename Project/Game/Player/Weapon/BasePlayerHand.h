@@ -1,6 +1,6 @@
 #pragma once
 
-#include"utility/ParamaterEditor/GlobalParameter.h"
+#include"utility/ParameterEditor/GlobalParameter.h"
 #include"utility/RailEditor/ControlPosManager.h"
 #include"utility/RailEditor/RailManager.h"
 
