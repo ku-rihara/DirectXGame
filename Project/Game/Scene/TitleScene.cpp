@@ -5,7 +5,7 @@
 
 #include "base/TextureManager.h"
 //class
-#include"utility/Particle/ParticleManager.h"
+#include"utility/ParticleEditor/ParticleManager.h"
 
 //math
 #include"Frame/Frame.h"
