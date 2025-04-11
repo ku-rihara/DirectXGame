@@ -232,12 +232,6 @@
     <Filter Include="MyEngine\.h\utility\ParticleEditor">
       <UniqueIdentifier>{faf4888a-672e-4301-bb40-9621257e786a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.cpp\utility\ParamaterEditor">
-      <UniqueIdentifier>{68cc7c40-2b21-43d7-9461-36612c85f182}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.h\utility\ParamaterEditor">
-      <UniqueIdentifier>{6045dc64-7d52-4582-b49c-567e7f5074bc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.h\utility\RailEditor">
       <UniqueIdentifier>{fd8669ab-e586-4603-8989-fde63074b7f4}</UniqueIdentifier>
     </Filter>
@@ -255,6 +249,12 @@
     </Filter>
     <Filter Include="MyEngine\.cpp\utility\ParamaterEditor">
       <UniqueIdentifier>{c77b02e3-7e6e-47c2-96b6-027952dccbc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\ParameterEditor">
+      <UniqueIdentifier>{68cc7c40-2b21-43d7-9461-36612c85f182}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\ParameterEditor">
+      <UniqueIdentifier>{6045dc64-7d52-4582-b49c-567e7f5074bc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -643,8 +643,8 @@
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleManager.cpp">
       <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\ParamaterEditor\GlobalParameter.cpp">
-      <Filter>MyEngine\.cpp\utility\ParamaterEditor</Filter>
+    <ClCompile Include="Engine\utility\ParameterEditor\GlobalParameter.cpp">
+      <Filter>MyEngine\.cpp\utility\ParameterEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1065,8 +1065,8 @@
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleCommon.h">
       <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\ParamaterEditor\GlobalParameter.h">
-      <Filter>MyEngine\.h\utility\ParamaterEditor</Filter>
+    <ClInclude Include="Engine\utility\ParameterEditor\GlobalParameter.h">
+      <Filter>MyEngine\.h\utility\ParameterEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
