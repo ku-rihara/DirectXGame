@@ -71,6 +71,7 @@ public:
     void SetParentBasePos(WorldTransform* parent);
     void SetIsMoveForRail(const bool& isMoveForRail) { isMoveForRail_ = isMoveForRail; }
     void SetMoveSpeed(const float& moveSpeed) { moveSpeed_ = moveSpeed; }
+	void SetTargetPosition(const Vector3& targetPos) { parameters_.targetPos = targetPos; }
 
    
 };
