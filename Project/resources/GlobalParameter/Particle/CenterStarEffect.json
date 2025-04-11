@@ -33,12 +33,12 @@
         ],
         "Gravity": 0.0,
         "IntervalTime": 1.0,
-        "LifeTime": 0.38999998569488525,
+        "LifeTime": 1.0299999713897705,
         "Particle Count": 1,
         "Position Base": [
             0.0,
-            0.0,
-            0.0
+            3.0,
+            -5.0
         ],
         "Position Max": [
             0.0,
@@ -75,8 +75,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 8.0,
-        "Scale Min": 8.0,
+        "Scale Max": 13.0,
+        "Scale Min": 13.0,
         "ScaleV3 Max": [
             0.0,
             0.0,
@@ -94,7 +94,7 @@
         "isMoveForRail": false,
         "isRotateforDirection": false,
         "isScalerScale": true,
-        "isShot": true,
+        "isShot": false,
         "moveSpeed": 0.0,
         "preBillBordType_": 0,
         "scaleEaseParm.easeTypeInt": 2,
@@ -111,6 +111,6 @@
             0.0
         ],
         "scaleEaseParm.isScaleEase": true,
-        "scaleEaseParm.maxTime": 0.550000011920929
+        "scaleEaseParm.maxTime": 1.0
     }
 }

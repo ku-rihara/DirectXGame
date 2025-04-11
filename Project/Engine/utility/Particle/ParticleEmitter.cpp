@@ -4,7 +4,6 @@
 #include"Frame/Frame.h"
 #include"ParticleManager.h"
 
-
 #include <imgui.h>
 #include<format>
 
@@ -28,14 +27,33 @@ ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const 
 /// =================================================================================
 void ParticleEmitter::Init() {
 
+	//パラメータの初期化
+	ParmReset();
+
+	/// グローバル変数
+	globalParameter_ = GlobalParameter::GetInstance();
+	globalParameter_->CreateGroup(particleName_, false);
+
+	AddParmGroup();
+	ApplyGlobalParameter(particleName_);
+
+	//Editor上で設定したテクスチャを適応
+
+	///ビルボード、単発フラグ、イージングタイプの設定
+	groupParamaters_.billBordType = static_cast<WorldTransform::BillboardType>(preBillBordType_);
+	groupParamaters_.isShot = preIsShot_;
+	parameters_.scaleEaseParm.easeType = static_cast<EaseType>(parameters_.scaleEaseParm.easeTypeInt);
+}
+
+void ParticleEmitter::ParmReset() {
 	particleCount = 0;
 	parameters_.lifeTime = 0.0f;
 	parameters_.gravity = 0.0f;
-	parameters_.baseColor = { 0, 0, 0, 0 };
-	parameters_.colorDist.min = { 0, 0, 0, 0 };
-	parameters_.colorDist.max = { 0, 0, 0, 0 };
+	parameters_.baseColor = { 0.0f, 0.0f, 0.0f, 0.0f };
+	parameters_.colorDist.min = { 0.0f, 0.0f, 0.0f, 0.0f };
+	parameters_.colorDist.max = { 0.0f, 0.0f, 0.0f, 0.0f };
 	intervalTime_ = 1.0f;
-	parameters_.targetPos = { 0,0,0 };
+	parameters_.targetPos = { 0.0f, 0.0f, 0.0f };
 	groupParamaters_.isBillBord = true;
 	parameters_.isScalerScale = true;
 	parameters_.isRotateforDirection = false;
@@ -48,17 +66,6 @@ void ParticleEmitter::Init() {
 	/// 発生位置可視化オブジェ
 	obj3d_.reset(Object3d::CreateModel("DebugCube", ".obj"));
 	emitBoxTransform_.Init();
-
-	/// グローバル変数
-	globalParameter_ = GlobalParameter::GetInstance();
-	globalParameter_->CreateGroup(particleName_, false);
-
-	AddParmGroup();
-	ApplyGlobalParameter(particleName_);
-
-	groupParamaters_.billBordType = static_cast<WorldTransform::BillboardType>(preBillBordType_);
-	groupParamaters_.isShot = preIsShot_;
-	parameters_.scaleEaseParm.easeType = static_cast<EaseType>(parameters_.scaleEaseParm.easeTypeInt);
 }
 
 ///=================================================================================

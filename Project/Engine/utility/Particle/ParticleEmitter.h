@@ -107,37 +107,19 @@ public:
 	/// public method
 	///=====================================================
 
-	/// 初期化
+	/// 生成関数
 	static ParticleEmitter* CreateParticle(
 		const std::string& name, const std::string& modelFilePath,
 		const std::string& extension, const int32_t& maxnum);
 
 	void Init();/// 初期化
+	void ParmReset();/// パラメータリセット
 	void Emit();///　エミット
 	void UpdateEmitTransform();
 
 	void RailDraw(const ViewProjection& viewProjection);
 	void DebugDraw(const ViewProjection& viewProjection);
 
-	///=====================================================
-	/// getter method
-	///=====================================================
-	const std::string& GetParticleName()const { return particleName_; }
-
-
-	///=====================================================
-	/// setter method
-	///=====================================================
-	void SetParentBasePos(WorldTransform* parent);
-	void SetTextureHandle(const uint32_t& hanle);
-	void SetTargetPosition(const Vector3& pos) { parameters_.targetPos = pos; }
-	void SetParentTransform(const WorldTransform* transform);
-	void SetFollowingPos(const Vector3* pos);
-
-	//imgui化すべき
-	void SetIsRotateForDirection(const bool& is) { parameters_.isRotateforDirection = is; }
-	void SetBlendMode(const ParticleCommon::BlendMode& blendmode);
-	void SetBillBordType(const WorldTransform::BillboardType& billboardType);
 	///=====================================================
 	/// Editor 
 	///=====================================================
@@ -158,4 +140,25 @@ public:
 
 	/// parm
 	void ScaleParmEditor();
+
+	///=====================================================
+	/// getter method
+	///=====================================================
+	const std::string& GetParticleName()const { return particleName_; }
+
+
+	///=====================================================
+	/// setter method
+	///=====================================================
+	void SetParentBasePos(WorldTransform* parent);
+	void SetTextureHandle(const uint32_t& hanle);
+	void SetTargetPosition(const Vector3& pos) { parameters_.targetPos = pos; }
+	void SetParentTransform(const WorldTransform* transform);
+	void SetFollowingPos(const Vector3* pos);
+
+	//imgui化すべき
+	void SetIsRotateForDirection(const bool& is) { parameters_.isRotateforDirection = is; }
+	void SetBlendMode(const ParticleCommon::BlendMode& blendmode);
+	void SetBillBordType(const WorldTransform::BillboardType& billboardType);
+	
 };

@@ -6,13 +6,14 @@
 
 #include"utility/Particle/ParticleEmitter.h"
 #include<string>
+#include<array>
 /// <summary>
 /// タイトルシーン
 /// </summary>
 class TitleScene :public BaseScene {
 private:
 	
-	std::unique_ptr<ParticleEmitter>EnemydamageEffect_;
+	std::array<std::unique_ptr<ParticleEmitter>,3>EnemydamageEffect_;
 
 	
 public:

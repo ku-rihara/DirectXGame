@@ -22,22 +22,33 @@ void TitleScene::Init() {
 	BaseScene::Init();
 
 	//uint32_t t = TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
-	uint32_t circleHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
 	//uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
-	//uint32_t starHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/star.png");
-	//uint32_t starFrameHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circleFrame.png");
 
-	EnemydamageEffect_.reset(ParticleEmitter::CreateParticle("EnemyDamage", "Plane", ".obj", 800));
-	EnemydamageEffect_->SetTextureHandle(circleHandle);
+	///テクスチャロード
+	uint32_t circleHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
+	uint32_t starHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/star.png");
+	uint32_t starFrameHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circleFrame.png");
+
+	///パーティクルデータの読み込みと、モデルの読み込み
+	EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticle("CenterStarEffect", "Plane", ".obj", 800));
+	EnemydamageEffect_[0]->SetTextureHandle(circleHandle);
+	EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticle("StarEffect", "Plane", ".obj", 800));
+	EnemydamageEffect_[1]->SetTextureHandle(starHandle);
+	EnemydamageEffect_[2].reset(ParticleEmitter::CreateParticle("StarFrame", "Plane", ".obj", 800));
+	EnemydamageEffect_[2]->SetTextureHandle(starFrameHandle);
 
 	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
 void TitleScene::Update() {
 
-	EnemydamageEffect_->Update();
-	EnemydamageEffect_->EditorUpdate();
-	EnemydamageEffect_->Emit();
+	/// 
+	for (int i = 0; i < EnemydamageEffect_.size(); i++) {
+		EnemydamageEffect_[i]->Update();
+		EnemydamageEffect_[i]->EditorUpdate();
+		EnemydamageEffect_[i]->Emit();
+	}
+	
 
 	ParticleManager::GetInstance()->Update();
 
