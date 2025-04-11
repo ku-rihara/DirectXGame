@@ -130,11 +130,11 @@
     <Filter Include="MyEngine\.h\utility\ParticleEditor">
       <UniqueIdentifier>{4b1e989d-a14e-4aab-8692-e2fbb2059019}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.h\utility\ParamaterEditor">
-      <UniqueIdentifier>{308716b1-61b9-4593-8d69-0efe690d1ff1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.cpp\utility\ParamaterEditor">
+    <Filter Include="MyEngine\.cpp\utility\ParameterEditor">
       <UniqueIdentifier>{c77b02e3-7e6e-47c2-96b6-027952dccbc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\ParameterEditor">
+      <UniqueIdentifier>{308716b1-61b9-4593-8d69-0efe690d1ff1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -346,8 +346,8 @@
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleCommon.cpp">
       <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\ParamaterEditor\GlobalParameter.cpp">
-      <Filter>MyEngine\.cpp\utility\ParamaterEditor</Filter>
+    <ClCompile Include="Engine\utility\ParameterEditor\GlobalParameter.cpp">
+      <Filter>MyEngine\.cpp\utility\ParameterEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -591,8 +591,8 @@
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleEmitter.h">
       <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\ParamaterEditor\GlobalParameter.h">
-      <Filter>MyEngine\.h\utility\ParamaterEditor</Filter>
+    <ClInclude Include="Engine\utility\ParameterEditor\GlobalParameter.h">
+      <Filter>MyEngine\.h\utility\ParameterEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
