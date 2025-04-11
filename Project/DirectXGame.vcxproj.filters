@@ -643,6 +643,9 @@
     <ClCompile Include="Engine\utility\ParameterEditor\GlobalParameter.cpp">
       <Filter>MyEngine\.cpp\utility\ParameterEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\utility\ParticleEditor\ParticleParameter.cpp">
+      <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1064,6 +1067,9 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\ParameterEditor\GlobalParameter.h">
       <Filter>MyEngine\.h\utility\ParameterEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ParticleEditor\ParticleParameter.h">
+      <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
