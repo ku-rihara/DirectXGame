@@ -3,7 +3,7 @@
 #include"MinMax.h"
 #include"3d/ViewProjection.h"
 /// editor
-#include"utility/ParamaterEditor/GlobalParameter.h"
+#include"utility/ParameterEditor/GlobalParameter.h"
 
 #include"utility/RailEditor/RailManager.h"
 #include"utility/ParticleEditor/ParticleCommon.h"

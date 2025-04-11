@@ -1,6 +1,6 @@
 #include "SceneManager.h"
 #include"utility/ParticleEditor/ParticleManager.h"
-#include"utility/ParamaterEditor/GlobalParameter.h"
+#include"utility/ParameterEditor/GlobalParameter.h"
 #include <cassert>
 
 // シングルトンインスタンスの取得

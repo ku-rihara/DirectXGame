@@ -244,10 +244,7 @@
     <Filter Include="MyEngine\.h\utility\ParticleEditor">
       <UniqueIdentifier>{4b1e989d-a14e-4aab-8692-e2fbb2059019}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.h\utility\ParamaterEditor">
-      <UniqueIdentifier>{308716b1-61b9-4593-8d69-0efe690d1ff1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.cpp\utility\ParamaterEditor">
+    <Filter Include="MyEngine\.cpp\utility\ParameterEditor">
       <UniqueIdentifier>{c77b02e3-7e6e-47c2-96b6-027952dccbc6}</UniqueIdentifier>
     </Filter>
     <Filter Include="MyEngine\.cpp\utility\ParameterEditor">
