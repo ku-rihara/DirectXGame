@@ -96,7 +96,7 @@ void ControlPosManager::LoadFromFile(const std::string& filename) {
 ///=====================================================
 void ControlPosManager::ImGuiUpdate(const std::string& filename) {
 	// 色を緑系統に変更
-	ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));      // 通常時の色（緑色）
+	//ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));      // 通常時の色（緑色）
 	
 	// 一意のスコープIDを設定
 	ImGui::PushID(filename.c_str());
@@ -131,28 +131,28 @@ void ControlPosManager::ImGuiUpdate(const std::string& filename) {
 		ImGui::SeparatorText("File Operations");
 
 		// セーブボタン（青色）
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.5f, 1.0f, 1.0f)); // ボタン色
+		//ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.5f, 1.0f, 1.0f)); // ボタン色
 		if (ImGui::Button("Save Positions")) {
 			SaveToFile(filename);
 			std::string message = std::format("{}.json saved.", filename);
 			MessageBoxA(nullptr, message.c_str(), "EmitRailPosition", 0);
 		}
-		ImGui::PopStyleColor(); // 色をリセット
+		//ImGui::PopStyleColor(); // 色をリセット
 
 		ImGui::SameLine();
 
 		// ロードボタン（黄色）
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 0.2f, 1.0f)); // ボタン色
+		//ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 0.2f, 1.0f)); // ボタン色
 		if (ImGui::Button("Load Positions")) {
 			LoadFromFile(filename);
 		}
-		ImGui::PopStyleColor(); // 色をリセット
+		//ImGui::PopStyleColor(); // 色をリセット
 	}
 
 	ImGui::PopID();
 
 	// 色のリセットをヘッダー処理終了後に行う
-	ImGui::PopStyleColor();
+	//ImGui::PopStyleColor();
 }
 
 

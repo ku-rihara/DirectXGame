@@ -40,6 +40,7 @@ ComboAttackThird::ComboAttackThird(Player* player)
 	//backlash
 	backlashPos_ = initPos_ + (forwardDirection_*-pPlayer_->GetParamater().upperParm.BackLashValue);
 	backlashEase_.maxTime = pPlayer_->GetParamater().upperParm.BackLashEaseTime;
+
 	jumpPower_ = pPlayer_->GetParamater().upperJump.jumpSpeed * 60.0f;//1.4
 	gravity_ = pPlayer_->GetParamater().upperJump.gravity * 60.0f;//8.8
 	fallSpeedLimit_ = pPlayer_->GetParamater().upperJump.fallSpeedLimit * 60.0f;//5.2
@@ -109,6 +110,7 @@ void ComboAttackThird::Update() {
 		pPlayer_->SetWorldPositionY(pPlayer_->InitY_);
 		railManager_->SetRailMoveTime(0.0f);
 		pPlayer_->GetRightHand()->RailThreeComboUpdate(0.0f);
+
 		ChangeOrder();
 
 		break;
