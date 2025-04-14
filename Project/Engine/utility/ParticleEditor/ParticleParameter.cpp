@@ -240,12 +240,16 @@ void ParticleParameter::ApplyGlobalParameter(const std::string& particleName) {
 	parameters_.scaleEaseParm.endValueF.min = globalParameter_->GetValue<float>(particleName, "scaleEaseParm.endValueF.min");
 	parameters_.scaleEaseParm.endValueV3.max = globalParameter_->GetValue<Vector3>(particleName, "scaleEaseParm.endValueV3.max");
 	parameters_.scaleEaseParm.endValueV3.min = globalParameter_->GetValue<Vector3>(particleName, "scaleEaseParm.endValueV3.min");
+
 	selectedTexturePath_ = globalParameter_->GetValue<std::string>(particleName, "selectedTexturePath_");
+	if (selectedTexturePath_ == "")return;
+	// テクスチャのハンドルを取得
+	ParticleManager::GetInstance()->SetTextureHandle(particleName_, TextureManager::GetInstance()->LoadTexture(selectedTexturePath_));
 }
 
 void ParticleParameter::ApplyTexture(const std::string& texturename) {
 	//テクスチャ
-	selectedTexturePath_ = textureFilePath_+"/"+texturename+".png";
+	selectedTexturePath_ = textureFilePath_ + "/" + texturename + ".png";
 	ParticleManager::GetInstance()->SetTextureHandle(particleName_, TextureManager::GetInstance()->LoadTexture(selectedTexturePath_));
 }
 
