@@ -1,0 +1,108 @@
+# === ベーススタイル ===
+# ベースとなるスタイルを指定します。（LLVM, Google, Chromium, Mozilla, WebKit などから選択可能）
+BasedOnStyle: LLVM
+
+# === インデントとタブ設定 ===
+# タブを使用せず、スペースでインデントを行います。
+UseTab: Never
+# インデントの幅（スペース数）を指定します。
+IndentWidth: 4
+# タブ文字の幅をスペース数で指定します。
+TabWidth: 4
+# 継続行（改行された行）のインデント幅を指定します。
+ContinuationIndentWidth: 4
+# switch 文内の case ラベルをインデントするかどうかを指定します。
+IndentCaseLabels: false
+
+# === 改行と行の制限設定 ===
+# 1行の文字数制限を指定します。（0の場合、制限なし）
+ColumnLimit: 0
+# 波括弧 ({ }) の配置を指定します。（Attach は同じ行に配置）
+BreakBeforeBraces: Attach
+# 短い if 文を1行にまとめるかどうかを指定します。
+AllowShortIfStatementsOnASingleLine: false
+# 短い関数を1行にまとめるかどうかを指定します。
+AllowShortFunctionsOnASingleLine: All
+# 短いブロック（{ ... }）を1行にまとめるかどうかを指定します。
+AllowShortBlocksOnASingleLine: Always
+# 短いラムダ式を1行にまとめるかどうかを指定します。
+AllowShortLambdasOnASingleLine: Inline
+# 変数の宣言を改行しないように設定を追加します。
+#AllowShortVariablesOnASingleLine: All
+# 演算子の前で改行するかを指定します。
+BreakBeforeBinaryOperators: NonAssignment
+# コンストラクタの初期化リストの改行スタイルを指定します。
+BreakConstructorInitializers: BeforeColon
+# 関数呼び出しの最初の引数の前で改行する場合のペナルティ値を指定します。
+PenaltyBreakBeforeFirstCallParameter: 19
+
+# === アライメント（整列）設定 ===
+# 括弧の後の要素を揃えるかを指定します。
+AlignAfterOpenBracket: DontAlign
+# 演算子を揃えるかどうかを指定します。
+AlignOperands: true
+# 代入演算子の整列を有効にします。
+AlignConsecutiveAssignments: true
+# 行末コメントを揃えるかどうかを指定します。
+AlignTrailingComments: false
+# ポインタや参照の位置を指定します。（Left: 型に近づける, Right: 名前に近づける, Middle: 中央）
+PointerAlignment: Left
+# ポインタ配置をソースコードから自動推測するかどうかを指定します。
+DerivePointerAlignment: false
+# === 関数と引数の設定 ===
+# 関数引数を1行に詰め込むかどうかを指定します。
+BinPackArguments: true
+# 関数パラメータを1行に詰め込むかどうかを指定します。
+BinPackParameters: true
+# すべての引数を次の行に配置することを許可します。
+AllowAllArgumentsOnNextLine: false
+# すべてのパラメータを次の行に配置することを許可します。
+AllowAllParametersOfDeclarationOnNextLine: false
+# 関数呼び出しの改行に対するペナルティ値を指定します。
+#PenaltyBreakFunctionCall: 19
+
+# === コメント設定 ===
+# コメントを再フォーマットするかどうかを指定します。
+ReflowComments: true
+# 行末コメントの前に入れるスペースの数を指定します。
+SpacesBeforeTrailingComments: 1
+
+# === インクルード関連設定 ===
+# インクルードのソート順を指定します。（CaseInsensitive: 大文字小文字を区別しない）
+SortIncludes: CaseInsensitive
+# インクルードのブロック分け方法を指定します。（Preserve, Merge, Regroup）
+IncludeBlocks: Preserve
+# メインファイルのインクルードを指定する正規表現。
+IncludeIsMainRegex: "([-_](test|unittest))?$"
+
+# === C++ 固有の設定 ===
+# C++11の波括弧スタイルを使用するかを指定します。
+#Cpp11BracedListStyle: false
+# C++の標準バージョンを指定します。（Cpp03, Cpp11, Cpp14, Cpp17, Cpp20）
+#Standard: Cpp20
+# 名前空間の閉じコメントを追加するかどうかを指定します。
+FixNamespaceComments: false
+# 山括弧 (< >) の中にスペースを入れるかを指定します。
+SpacesInAngles: false
+# コンテナリテラル内のスペースを指定します。
+SpacesInContainerLiterals: false
+# Cスタイルキャストの括弧内にスペースを入れるかを指定します。
+SpacesInCStyleCastParentheses: false
+
+# === カスタマイズ ===
+# アクセス修飾子（public, private など）のインデント量を指定します。
+AccessModifierOffset: -4
+# 名前空間内のすべての要素をインデントするかを指定します。
+NamespaceIndentation: None
+# 短い列挙型を1行にまとめるかどうかを指定します。
+AllowShortEnumsOnASingleLine: true
+# 許容される文字数超過のペナルティを指定します。
+PenaltyExcessCharacter: 1000000
+# 戻り値の型が独自行になる場合のペナルティを指定します。
+PenaltyReturnTypeOnItsOwnLine: 200
+# 括弧の前にスペースを入れるかを指定します。（ControlStatements, Never, Always）
+SpaceBeforeParens: ControlStatements
+# 括弧内にスペースを入れるかを指定します。
+SpacesInParentheses: false
+# 角括弧内にスペースを入れるかを指定します。
+SpacesInSquareBrackets: false

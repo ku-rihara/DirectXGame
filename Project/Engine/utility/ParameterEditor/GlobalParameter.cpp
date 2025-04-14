@@ -1,9 +1,8 @@
-
+// GlobalParameter.cpp
 #include "GlobalParameter.h"
 #include "base/WinApp.h"
 #include <fstream>
 #include <imgui.h>
-
 
 GlobalParameter* GlobalParameter::GetInstance() {
     static GlobalParameter instance;
@@ -73,8 +72,6 @@ void GlobalParameter::Update() {
 #endif // _DEBUG
 }
 
-
-
 // 描画処理を分ける関数
 void GlobalParameter::DrawWidget(const std::string& itemName, Item& item, const DrawSettings& drawSettings) {
     std::visit([&](auto& value) {
@@ -83,21 +80,17 @@ void GlobalParameter::DrawWidget(const std::string& itemName, Item& item, const 
             if (drawSettings.widgetType == WidgetType::SliderInt) {
                 ImGui::SliderInt(itemName.c_str(), &value, static_cast<int>(drawSettings.minValue), static_cast<int>(drawSettings.maxValue));
             }
-        }
-        else if constexpr (std::is_same_v<T, float>) {
+        } else if constexpr (std::is_same_v<T, float>) {
             if (drawSettings.widgetType == WidgetType::DragFloat) {
                 ImGui::DragFloat(itemName.c_str(), &value, 0.1f);
-            }
-            else if (drawSettings.widgetType == WidgetType::SlideAngle) {
+            } else if (drawSettings.widgetType == WidgetType::SlideAngle) {
                 // 角度用ウィジェットの描画（SliderAngle使用）
                 ImGui::SliderAngle(itemName.c_str(), &value, 0, 360);
             }
-        }
-        else if constexpr (std::is_same_v<T, Vector3>) {
+        } else if constexpr (std::is_same_v<T, Vector3>) {
             if (drawSettings.widgetType == WidgetType::DragFloat3) {
                 ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(&value), 0.1f);
-            }
-            else if (drawSettings.widgetType == WidgetType::SlideAngle) {
+            } else if (drawSettings.widgetType == WidgetType::SlideAngle) {
                 // Vector3の各成分ごとにSliderAngleを描画
                 if (ImGui::TreeNode((itemName + " (Angle)").c_str())) {
                     ImGui::SliderAngle("X", &value.x, 0, 360);
@@ -106,20 +99,22 @@ void GlobalParameter::DrawWidget(const std::string& itemName, Item& item, const 
                     ImGui::TreePop();
                 }
             }
-        }
-        else if constexpr (std::is_same_v<T, bool>) {
+        } else if constexpr (std::is_same_v<T, bool>) {
             if (drawSettings.widgetType == WidgetType::Checkbox) {
                 ImGui::Checkbox(itemName.c_str(), &value);
             }
-        }
-        else if constexpr (std::is_same_v<T, Vector4>) {
+        } else if constexpr (std::is_same_v<T, Vector4>) {
             if (drawSettings.widgetType == WidgetType::ColorEdit4) {
                 ImGui::ColorEdit4(itemName.c_str(), reinterpret_cast<float*>(&value));
+            }
+        } else if constexpr (std::is_same_v<T, std::string>) {
+            // std::stringの場合は表示しない
+            if (drawSettings.widgetType == WidgetType::NONE) {
+                /*  ImGui::Text(itemName.c_str());*/
             }
         }
         }, item);
 }
-
 
 ///============================================================================
 /// 値セット
@@ -138,8 +133,7 @@ void GlobalParameter::SetValue(const std::string& groupName, const std::string& 
         // 値の型が一致していれば更新
         if (std::holds_alternative<T>(existingItem)) {
             existingItem = value;
-        }
-        else {
+        } else {
             throw std::runtime_error("Type mismatch for key: " + key);
         }
         if (!isLoading_) {
@@ -147,8 +141,7 @@ void GlobalParameter::SetValue(const std::string& groupName, const std::string& 
             existingSettings.widgetType = widgetType;
             existingSettings.treeNodeLabel = treeNodeLabel;
         }
-    }
-    else {
+    } else {
         // 新規の場合、値と設定を追加
 
         DrawSettings settings;
@@ -158,7 +151,6 @@ void GlobalParameter::SetValue(const std::string& groupName, const std::string& 
         group[key] = { value, settings };
     }
 }
-
 
 ///============================================================================
 /// アイテム追加
@@ -180,8 +172,7 @@ void GlobalParameter::AddItem(const std::string& groupName, const std::string& k
         if (!treeNodeStack_.empty()) {
             existingParam.second.treeNodeLabel = treeNodeStack_.top();
         }
-    }
-    else {
+    } else {
         // 新規アイテムの追加
         DrawSettings settings;
         settings.widgetType = widgetType;
@@ -191,8 +182,6 @@ void GlobalParameter::AddItem(const std::string& groupName, const std::string& k
         group[key] = { defaultValue, settings }; // 新規データを追加
     }
 }
-
-
 
 ///============================================================================
 /// 値取得
@@ -231,27 +220,23 @@ void GlobalParameter::SaveFile(const std::string& groupName, const std::string& 
     for (auto& [itemName, item] : itGroup->second) {
         if (std::holds_alternative<int32_t>(item.first)) {
             root[groupName][itemName] = std::get<int32_t>(item.first);
-        }
-        else if (std::holds_alternative<uint32_t>(item.first)) {
+        } else if (std::holds_alternative<uint32_t>(item.first)) {
             root[groupName][itemName] = std::get<uint32_t>(item.first);
-        }
-        else if (std::holds_alternative<float>(item.first)) {
+        } else if (std::holds_alternative<float>(item.first)) {
             root[groupName][itemName] = std::get<float>(item.first);
-        }
-        else if (std::holds_alternative<Vector2>(item.first)) {
+        } else if (std::holds_alternative<Vector2>(item.first)) {
             Vector2 value = std::get<Vector2>(item.first);
             root[groupName][itemName] = json::array({ value.x, value.y });
-        }
-        else if (std::holds_alternative<Vector3>(item.first)) {
+        } else if (std::holds_alternative<Vector3>(item.first)) {
             Vector3 value = std::get<Vector3>(item.first);
             root[groupName][itemName] = json::array({ value.x, value.y, value.z });
-        }
-        else if (std::holds_alternative<Vector4>(item.first)) {
+        } else if (std::holds_alternative<Vector4>(item.first)) {
             Vector4 value = std::get<Vector4>(item.first);
             root[groupName][itemName] = json::array({ value.x, value.y, value.z, value.w });
-        }
-        else if (std::holds_alternative<bool>(item.first)) {
+        } else if (std::holds_alternative<bool>(item.first)) {
             root[groupName][itemName] = std::get<bool>(item.first);
+        } else if (std::holds_alternative<std::string>(item.first)) {
+            root[groupName][itemName] = std::get<std::string>(item.first);
         }
     }
 
@@ -294,7 +279,6 @@ void GlobalParameter::LoadFiles() {
         LoadFile(fileName, folderName);
     }
 
-
     // kDirectoryPath 直下のフォルダを処理
     for (const auto& entry : std::filesystem::directory_iterator(dir)) {
         if (!entry.is_directory()) continue; // フォルダのみを処理
@@ -323,7 +307,7 @@ void GlobalParameter::LoadFiles() {
 void GlobalParameter::LoadFile(const std::string& groupName, const std::string& folderName) {
     isLoading_ = true;
 
-    std::string filePath = kDirectoryPath + folderName+ "/" + groupName + ".json";
+    std::string filePath = kDirectoryPath + folderName + "/" + groupName + ".json";
     std::ifstream ifs(filePath);
     if (ifs.fail()) {
         std::string message = "Failed to open data file for read.";
@@ -377,6 +361,11 @@ void GlobalParameter::LoadFile(const std::string& groupName, const std::string& 
             bool value = itItem->get<bool>();
             SetValue(groupName, itemName, value, WidgetType::Checkbox);
         }
+        // String
+        else if (itItem->is_string()) {
+            std::string value = itItem->get<std::string>();
+            SetValue(groupName, itemName, value, WidgetType::NONE);
+        }
     }
     isLoading_ = false;
 }
@@ -394,13 +383,11 @@ void GlobalParameter::ParmSaveForImGui(const std::string& groupName) {
 void GlobalParameter::ParmLoadForImGui(const std::string& groupName) {
     // ロードボタン
     if (ImGui::Button(std::format("Load {}", groupName).c_str())) {
-
         LoadFile(groupName);
         // セーブ完了メッセージ
         ImGui::Text("Load Successful: %s", groupName.c_str());
     }
 }
-
 
 template void GlobalParameter::SetValue<int>(const std::string& groupName, const std::string& key, int value, WidgetType widgetType);
 template void GlobalParameter::SetValue<uint32_t>(const std::string& groupName, const std::string& key, uint32_t value, WidgetType widgetType);
@@ -409,6 +396,7 @@ template void GlobalParameter::SetValue<Vector2>(const std::string& groupName, c
 template void GlobalParameter::SetValue<Vector3>(const std::string& groupName, const std::string& key, Vector3 value, WidgetType widgetType);
 template void GlobalParameter::SetValue<Vector4>(const std::string& groupName, const std::string& key, Vector4 value, WidgetType widgetType);
 template void GlobalParameter::SetValue<bool>(const std::string& groupName, const std::string& key, bool value, WidgetType widgetType);
+template void GlobalParameter::SetValue<std::string>(const std::string& groupName, const std::string& key, std::string value, WidgetType widgetType);
 
 template void GlobalParameter::AddItem<int>(const std::string& groupName, const std::string& key, int value, WidgetType widgetType);
 template void GlobalParameter::AddItem<uint32_t>(const std::string& groupName, const std::string& key, uint32_t value, WidgetType widgetType);
@@ -417,6 +405,7 @@ template void GlobalParameter::AddItem<Vector2>(const std::string& groupName, co
 template void GlobalParameter::AddItem<Vector3>(const std::string& groupName, const std::string& key, Vector3 value, WidgetType widgetType);
 template void GlobalParameter::AddItem<Vector4>(const std::string& groupName, const std::string& key, Vector4 value, WidgetType widgetType);
 template void GlobalParameter::AddItem<bool>(const std::string& groupName, const std::string& key, bool value, WidgetType widgetType);
+template void GlobalParameter::AddItem<std::string>(const std::string& groupName, const std::string& key, std::string value, WidgetType widgetType);
 
 template int32_t GlobalParameter::GetValue<int32_t>(const std::string& groupName, const std::string& key) const;
 template uint32_t GlobalParameter::GetValue<uint32_t>(const std::string& groupName, const std::string& key) const;
@@ -425,4 +414,4 @@ template Vector2 GlobalParameter::GetValue<Vector2>(const std::string& groupName
 template Vector3 GlobalParameter::GetValue<Vector3>(const std::string& groupName, const std::string& key) const;
 template Vector4 GlobalParameter::GetValue<Vector4>(const std::string& groupName, const std::string& key) const;
 template bool GlobalParameter::GetValue<bool>(const std::string& groupName, const std::string& key) const;
-
+template std::string GlobalParameter::GetValue<std::string>(const std::string& groupName, const std::string& key) const;

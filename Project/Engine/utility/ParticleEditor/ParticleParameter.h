@@ -63,11 +63,14 @@ protected:
     Parameters parameters_;
     GroupParamaters groupParamaters_;
     std::string folderName_ = "Particle";
+	std::string textureFilePath_ = "Resources/texture";
     GlobalParameter* globalParameter_;
     int preBillBordType_;
     bool preIsShot_;
     float intervalTime_;
     int32_t particleCount;
+
+    std::string selectedTexturePath_;
 
 public:
 	ParticleParameter() = default;
@@ -85,7 +88,8 @@ public:
     void AddParmGroup();              // グループを追加
    virtual  void SetValues();                 // グループに値をセット
    virtual  void ApplyGlobalParameter(const std::string& particleName);  // ImGuiからパラメータを得る
-  
+  virtual  void ApplyTexture(const std::string& texturename);
+   
    
     //getter
     std::string GetParticleName()const { return particleName_; }
