@@ -1,8 +1,12 @@
+// ParticleEmitter.cpp
+
 #include "ParticleEmitter.h"
 #include "ParticleManager.h"
 #include"ParticleCommon.h"
 #include"Frame/Frame.h"
 #include"ParticleManager.h"
+#include"base/TextureManager.h"
+#include "Function/GetFile.h"
 
 #include <imgui.h>
 #include<format>
@@ -39,15 +43,6 @@ void ParticleEmitter::Init() {
 	/// 発生位置可視化オブジェ
 	obj3d_.reset(Object3d::CreateModel("DebugCube", ".obj"));
 	emitBoxTransform_.Init();
-	
-}
-
-
-///=================================================================================
-/// テクスチャ切り替え
-///=================================================================================
-void ParticleEmitter::SetTextureHandle(const uint32_t& handle) {
-	ParticleManager::GetInstance()->SetTextureHandle(particleName_, handle);
 }
 
 
@@ -63,11 +58,11 @@ void ParticleEmitter::Emit() {
 	} else {
 		parameters_.emitPos = parameters_.emitPos;
 	}
-	
+
 
 	currentTime_ += Frame::DeltaTime();// 時間加算
 
-	if (currentTime_ >= intervalTime_||groupParamaters_.isShot) {//　間隔ごとに発動
+	if (currentTime_ >= intervalTime_ || groupParamaters_.isShot) {//　間隔ごとに発動
 
 		ParticleManager::GetInstance()->Emit(
 			particleName_, parameters_, groupParamaters_, particleCount);
@@ -132,7 +127,7 @@ void ParticleEmitter::EditorUpdate() {
 		ImGui::DragFloat("Velocity Min", &parameters_.speedDist.min, 0.1f);
 
 		ImGui::SeparatorText("Direction Range:");
-		ImGui::DragFloat3("Direction Max", &parameters_.directionDist.max.x, 0.01f,-1.0f,1.0f);
+		ImGui::DragFloat3("Direction Max", &parameters_.directionDist.max.x, 0.01f, -1.0f, 1.0f);
 		ImGui::DragFloat3("Direction Min", &parameters_.directionDist.min.x, 0.01f, -1.0f, 1.0f);
 	}
 
@@ -175,7 +170,7 @@ void ParticleEmitter::EditorUpdate() {
 
 		ImGui::SeparatorText("BillBordType");
 
-		const char* items[] = {"XYZ","X", "Y", "Z"}; // ビルボードの種類
+		const char* items[] = { "XYZ","X", "Y", "Z" }; // ビルボードの種類
 		// ビルボードの種類を選択するコンボボックス
 		if (ImGui::Combo("Billboard Type", &preBillBordType_, items, IM_ARRAYSIZE(items))) {
 			// 選択した値を反映
@@ -191,6 +186,9 @@ void ParticleEmitter::EditorUpdate() {
 		ImGui::Checkbox("IsShot", &preIsShot_);
 		ImGui::Checkbox("isAlphaNoMove", &groupParamaters_.isAlphaNoMove);
 	}
+
+	ImGuiTextureSelection();
+
 
 	// パーティクル切り替え
 	ParticleChange();
@@ -233,44 +231,52 @@ void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
 #endif // _DEBUG
 }
 
-///------------------------------------------------------------------------------------------------
-/// パーティクル切り替え
-///------------------------------------------------------------------------------------------------
-void ParticleEmitter::ParticleChange() {
-	static int selectedIndex = 0;  // 現在選択中のインデックス
-	std::vector<std::string>filenames = ParticleManager::GetInstance()->GetParticleFiles();
-
-	// リストに追加
+// 共通部分を関数化
+void ParticleEmitter::DisplayFileSelection(const std::string& header, const std::vector<std::string>& filenames, int& selectedIndex, const std::function<void(const std::string&)>& onApply) {
 	if (!filenames.empty()) {
 		std::vector<const char*> names;
 		for (const auto& file : filenames) {
 			names.push_back(file.c_str());
-
-		/*	if (file != particleName_) continue;*/
-		
 		}
-		if (ImGui::CollapsingHeader("SelectParticle")) {
-			// 選択
-			ImGui::ListBox("Particles", &selectedIndex, names.data(), static_cast<int>(names.size()));
 
-			// 適応
-			if (ImGui::Button("Apply")) {
-				ApplyGlobalParameter(filenames[selectedIndex]);
+		if (ImGui::CollapsingHeader(header.c_str())) {
+			// リストボックスの表示
+			ImGui::ListBox(header.c_str(), &selectedIndex, names.data(), static_cast<int>(names.size()));
 
-				globalParameter_->LoadFile(filenames[selectedIndex], folderName_);
-				// セーブ完了メッセージ
-				ImGui::Text("Load Successful: %s", (folderName_ + filenames[selectedIndex]).c_str());
-				ApplyGlobalParameter(filenames[selectedIndex]);
-
+			// 適用ボタン
+			if (ImGui::Button(("Apply:" + header).c_str())) {
+				onApply(filenames[selectedIndex]);
 			}
 		}
-		// NotFind
 	} else {
-		ImGui::Text("No particle files found.");
+		ImGui::Text("No %s files found.", header.c_str());
 	}
 }
 
+// Particleファイル選択
+void ParticleEmitter::ParticleChange() {
+	static int selectedIndex = 0;  // 現在選択中のインデックス
+	std::vector<std::string> filenames = ParticleManager::GetInstance()->GetParticleFiles();
 
+	DisplayFileSelection("SelectParticle", filenames, selectedIndex, [this](const std::string& selectedFile) {
+		ApplyGlobalParameter(selectedFile);
+		globalParameter_->LoadFile(selectedFile, folderName_);
+		ImGui::Text("Load Successful: %s", (folderName_ + selectedFile).c_str());
+		});
+}
+
+/// texture選択
+void ParticleEmitter::ImGuiTextureSelection() {
+	static int selectedIndex = 0;  // 現在選択中のインデックス
+	std::vector<std::string> filenames = GetFileNamesForDyrectry(textureFilePath_);
+
+	DisplayFileSelection("SelectTexture", filenames, selectedIndex, [this](const std::string& selectedFile) {
+
+		ApplyTexture(selectedFile);
+
+		ImGui::Text("Texture Applied: %s", selectedFile.c_str());
+		});
+}
 void ParticleEmitter::ScaleParmEditor() {
 	// Scale
 	if (ImGui::CollapsingHeader("Scale")) {
@@ -316,6 +322,7 @@ void ParticleEmitter::ScaleParmEditor() {
 	}
 }
 
+
 /// <summary>
 /// setter
 /// </summary>
@@ -338,8 +345,17 @@ void ParticleEmitter::SetParentTransform(const WorldTransform* transform) {
 }
 
 void ParticleEmitter::SetFollowingPos(const Vector3* pos) {
-	parameters_.followingPos_=pos;
+	parameters_.followingPos_ = pos;
 }
+
+///=================================================================================
+/// テクスチャ切り替え
+///=================================================================================
+void ParticleEmitter::SetTextureHandle(const uint32_t& handle) {
+	ParticleManager::GetInstance()->SetTextureHandle(particleName_, handle);
+	//SetSelectedTexturePath(handle); // 選択されたテクスチャハンドルを更新
+}
+
 
 /// override function
 
@@ -353,6 +369,11 @@ void   ParticleEmitter::ParmLoadForImGui() {
 void  ParticleEmitter::ApplyGlobalParameter(const std::string& particleName) {
 	ParticleParameter::ApplyGlobalParameter(particleName);
 }
+void ParticleEmitter::ApplyTexture( const std::string& texturename) {
+	ParticleParameter::ApplyTexture(texturename);
+}
+
 void ParticleEmitter::SetValues() {
 	ParticleParameter::SetValues();
 }
+

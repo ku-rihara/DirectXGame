@@ -1,3 +1,5 @@
+// GlobalParameter.h
+
 #pragma once
 #include "Vector3.h"
 #include "Vector2.h"
@@ -36,7 +38,7 @@ private:
 
 	/// 格納できる複数の値の型を定義
 	using Item = std::variant
-		<int32_t, uint32_t, float, Vector2, Vector3, Vector4, bool>;
+		<int32_t, uint32_t, float, Vector2, Vector3, Vector4, bool, std::string>;
 
 	using Parameter = std::pair<Item, DrawSettings>; // 値と描画設定をペアにする
 	using Group = std::map<std::string, Parameter>;  // パラメータ名とペア
@@ -112,7 +114,7 @@ public:
 	void LoadFiles();
 
 	// 特定のグループのデータをファイルから読み込む
-	void LoadFile(const std::string& groupName, const std::string& fileName="");
+	void LoadFile(const std::string& groupName, const std::string& fileName = "");
 	void SaveFile(const std::string& groupName, const std::string& fileName = "");
 private:
 
