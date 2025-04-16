@@ -23,51 +23,83 @@ struct ParticleEmitter::GroupParamaters;
 struct ParticleEmitter::Parameters;
 struct ParticleEmitter::EaseParm;
 class ParticleManager {
-private:
-	
+
+	private:
+    ///============================================================
+    /// struct
+    ///============================================================
+
+    struct ScaleInFo {
+        Vector3 tempScaleV3;
+        Vector3 easeEndScale;
+        ParticleEmitter::EaseParm easeparm;
+    };
+
+    struct Particle {
+        float lifeTime_;
+        float currentTime_;
+        float gravity_;
+        Vector3 offSet;
+        const Vector3* followPos = nullptr;
+        Vector3 direction_;
+        Vector3 velocity_;
+        float speed_;
+        Vector3 rotateSpeed_;
+        Vector4 color_;
+        WorldTransform worldTransform_;
+        ScaleInFo scaleInfo;
+        float easeTime;
+    };
+
+    struct AccelerationField { /// 　加速フィールド
+        Vector3 acceleration;
+        AABB area;
+        bool isAdaption;
+    };
+
+    struct ParticleGroup { /// パーティクルグループ
+        Model* model;
+        Material material;
+        std::list<Particle> particles;
+        uint32_t srvIndex;
+        ParticleEmitter::GroupParamaters parm;
+        Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
+        uint32_t instanceNum;
+        ParticleFprGPU* instancingData;
+        uint32_t textureHandle;
+    };
+
+public:
 	///============================================================
-	/// struct
-	///============================================================
+    /// public method
+    ///============================================================
 
-	struct ScaleInFo {
-		Vector3 tempScaleV3;
-		Vector3 easeEndScale;
-		ParticleEmitter::EaseParm easeparm;
-	};
+    // 初期化、更新、描画
+    void Init(SrvManager* srvManager);
+    void Update();
+    void Draw(const ViewProjection& viewProjection);
+    Vector3 DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view);
 
-	struct Particle {
-		float lifeTime_;
-		float currentTime_;
-		float gravity_;
-	    Vector3 offSet;
-		const Vector3* followPos=nullptr;
-		Vector3 direction_;
-		Vector3 velocity_;
-		float speed_;
-		Vector3 rotateSpeed_;
-		Vector4 color_;
-		WorldTransform worldTransform_;
-		ScaleInFo scaleInfo;
-		float easeTime;
-	};
+    // モデル、リソース作成(グループ作成)
+    void CreateParticleGroup(const std::string name, const std::string modelFilePath, const std::string& extension, const uint32_t& maxnum);
+    void SetModel(const std::string& name, const std::string& modelName, const std::string& extension);
+    void CreateMaterialResource(const std::string& name);
+    void CreateInstancingResource(const std::string& name, const uint32_t& instanceNum);
 
-	struct AccelerationField {///　加速フィールド
-		Vector3 acceleration;
-		AABB area;
-		bool isAdaption;
-	};
+    /// リセット、パーティクル作成、エミット
+    void ResetAllParticles();
+    Particle MakeParticle(const ParticleEmitter::Parameters& paramaters);
+    void Emit(std::string name, const ParticleEmitter::Parameters& paramaters,
+        const ParticleEmitter::GroupParamaters& groupParamaters, const int32_t& count);
 
-	struct ParticleGroup {/// パーティクルグループ
-		Model* model;
-		Material material;
-		std::list<Particle>particles;
-		uint32_t srvIndex;
-		ParticleEmitter::GroupParamaters parm;
-		Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
-		uint32_t instanceNum;
-		ParticleFprGPU* instancingData;
-		uint32_t textureHandle;
-	};
+    ///============================================================
+    /// parm Adapt
+    ///============================================================
+    void AlphaAdapt(ParticleFprGPU& data, const Particle& parm, const ParticleGroup& group);
+    Vector3 ScaleAdapt(const float& time, const ScaleInFo& parm);
+    Vector3 EaseAdapt(const ParticleEmitter::EaseType& easetype, const Vector3& start,
+        const Vector3& end, const float& time, const float& maxTime);
+
 
 
 private:
@@ -92,37 +124,7 @@ public:
 
 	static	ParticleManager* GetInstance();
 
-	///============================================================
-	///public method
-	///============================================================
-
-	//初期化、更新、描画
-	void Init (SrvManager* srvManager);
-	void Update();
-	void Draw(const ViewProjection& viewProjection);
-	Vector3 DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view);
-
-
-	// モデル、リソース作成(グループ作成)
-	void CreateParticleGroup(const std::string name, const std::string modelFilePath, const std::string& extension, const uint32_t& maxnum);
-	void SetModel(const std::string& name,const std::string& modelName, const std::string& extension);
-	void CreateMaterialResource(const std::string& name);
-	void CreateInstancingResource(const std::string& name, const uint32_t& instanceNum);
-
-	/// リセット、パーティクル作成、エミット
-	void      ResetAllParticles();
-	Particle  MakeParticle(const ParticleEmitter::Parameters&paramaters);
-	void      Emit(std::string name, const ParticleEmitter::Parameters&paramaters,
-		      const ParticleEmitter::GroupParamaters&groupParamaters, const int32_t& count);
-
-	///============================================================
-	/// parm Adapt
-	///============================================================
-	void AlphaAdapt(ParticleFprGPU& data,const Particle&parm, const ParticleGroup&group);
-	Vector3 ScaleAdapt(const float& time, const ScaleInFo& parm);
-	Vector3 EaseAdapt( const ParticleEmitter::EaseType& easetype,const Vector3& start, 
-		               const Vector3& end, const float& time, const float& maxTime);
-
+	
 	///============================================================
 	///getter method
 	///============================================================
