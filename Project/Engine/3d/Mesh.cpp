@@ -20,7 +20,7 @@ void Mesh::Init(DirectXCommon* directXCommon, const uint32_t& vertexNum) {
     // 書き込むためのアドレスを取得
     vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate_));
 
-    defaultTextureHandle_ = TextureManager::GetInstance()->LoadTexture("default.png");
+    defaultTextureHandle_ = TextureManager::GetInstance()->LoadTexture("resources/Texture/default.png");
 }
 
 void Mesh::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, Material material,

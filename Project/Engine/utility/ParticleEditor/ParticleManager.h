@@ -1,21 +1,24 @@
 #pragma once
-#include"base/DirectXCommon.h"
-#include"base/SrvManager.h"
-#include"base/Material.h"
+#include "base/DirectXCommon.h"
+#include "base/Material.h"
+#include "base/SrvManager.h"
 
-#include"3d/Object3d.h"
-#include"3d/ViewProjection.h"
-#include"3d/WorldTransform.h"
+#include "3d/Object3d.h"
+#include "3d/ViewProjection.h"
+#include "3d/WorldTransform.h"
 
 //
-#include"ParticleEmitter.h"
-#include"struct/ParticleForGPU.h"
-//math
-#include"MinMax.h"
-#include"Box.h"
+#include "ParticleEmitter.h"
+#include "struct/ParticleForGPU.h"
+
+
+// math
+#include "Box.h"
+#include "MinMax.h"
 // std
-#include<list>
-#include<unordered_map>
+#include <list>
+#include <unordered_map>
+#include <memory>
 
 enum class BlendMode;
 class ParticleCommon;
@@ -24,7 +27,7 @@ struct ParticleEmitter::Parameters;
 struct ParticleEmitter::EaseParm;
 class ParticleManager {
 
-	private:
+private:
     ///============================================================
     /// struct
     ///============================================================
@@ -58,7 +61,8 @@ class ParticleManager {
     };
 
     struct ParticleGroup { /// パーティクルグループ
-        Model* model;
+        Model* model = nullptr;
+        std::unique_ptr<IPrimitive> primitive_=nullptr;
         Material material;
         std::list<Particle> particles;
         uint32_t srvIndex;
@@ -70,7 +74,7 @@ class ParticleManager {
     };
 
 public:
-	///============================================================
+    ///============================================================
     /// public method
     ///============================================================
 
@@ -82,6 +86,8 @@ public:
 
     // モデル、リソース作成(グループ作成)
     void CreateParticleGroup(const std::string name, const std::string modelFilePath, const std::string& extension, const uint32_t& maxnum);
+    void CreatePrimitiveParticle(const std::string& name, PrimitiveType type, const uint32_t& maxnum);
+
     void SetModel(const std::string& name, const std::string& modelName, const std::string& extension);
     void CreateMaterialResource(const std::string& name);
     void CreateInstancingResource(const std::string& name, const uint32_t& instanceNum);
@@ -100,40 +106,36 @@ public:
     Vector3 EaseAdapt(const ParticleEmitter::EaseType& easetype, const Vector3& start,
         const Vector3& end, const float& time, const float& maxTime);
 
-
-
 private:
+    ///============================================================
+    /// private variant
+    ///============================================================
 
-	///============================================================
-	///private variant
-	///============================================================
+    // other class
+    SrvManager* pSrvManager_;
+    ParticleCommon* pParticleCommon_;
+    AccelerationField accelerationField_;
+    const ViewProjection* viewProjection_;
 
-	//other class
-	SrvManager* pSrvManager_;
-	ParticleCommon* pParticleCommon_;
-	AccelerationField accelerationField_;
-	const ViewProjection* viewProjection_;
-
-	/// Particle File
-	std::vector<std::string> particleFiles_; //パーティクルのファイル達
-	const std::string dyrectry_="./Resources/GlobalParameter/Particle";
+    /// Particle File
+    std::vector<std::string> particleFiles_; // パーティクルのファイル達
+    const std::string dyrectry_ = "./Resources/GlobalParameter/Particle";
 
 public:
-	std::unordered_map<std::string, ParticleGroup>particleGroups_;
+    std::unordered_map<std::string, ParticleGroup> particleGroups_;
+
 public:
+    static ParticleManager* GetInstance();
 
-	static	ParticleManager* GetInstance();
-
-	
-	///============================================================
-	///getter method
-	///============================================================
-	const std::vector<std::string>& GetParticleFiles() const {return particleFiles_;}
-	const std::string& getDirectory() const {return dyrectry_;}
-	///============================================================
-	///setter method
-	///============================================================
-	void SetViewProjection(const ViewProjection* view);
-	void SetTextureHandle(const std::string name, const uint32_t& handle);
-	void SetAllParticleFile();
+    ///============================================================
+    /// getter method
+    ///============================================================
+    const std::vector<std::string>& GetParticleFiles() const { return particleFiles_; }
+    const std::string& getDirectory() const { return dyrectry_; }
+    ///============================================================
+    /// setter method
+    ///============================================================
+    void SetViewProjection(const ViewProjection* view);
+    void SetTextureHandle(const std::string name, const uint32_t& handle);
+    void SetAllParticleFile();
 };

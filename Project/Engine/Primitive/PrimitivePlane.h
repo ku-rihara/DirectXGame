@@ -2,7 +2,8 @@
 
 #include"Primitive/IPrimitive.h"
 
-class PrimitivePlane:IPrimitive{
+class PrimitivePlane:
+	public IPrimitive{
 public:
 
 	void Init() override;

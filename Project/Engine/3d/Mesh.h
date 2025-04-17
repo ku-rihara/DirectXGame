@@ -13,8 +13,8 @@
 class DirectXCommon;
 class Mesh {
 public:
-    Mesh()          = default;
-    virtual ~Mesh() = default;
+    Mesh()  = default;
+    ~Mesh() = default;
 
     ///==========================================================
     /// public method

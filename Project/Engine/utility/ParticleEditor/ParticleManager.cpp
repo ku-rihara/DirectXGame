@@ -2,6 +2,8 @@
 #include "3d/ModelManager.h"
 #include "base/TextureManager.h"
 #include "ParticleCommon.h"
+// Primitive
+#include "Primitive/PrimitivePlane.h"
 // frame
 #include "Frame/Frame.h"
 // Function
@@ -37,9 +39,7 @@ void ParticleManager::Update() {
         ParticleGroup& group           = groupPair.second;
         std::list<Particle>& particles = group.particles;
 
-        ///*************************************************
-        /// パーティクル更新
-        ///*************************************************
+        /// 粒子一つ一つの更新
         for (auto it = particles.begin(); it != particles.end();) {
 
             ///------------------------------------------------------------------------
@@ -117,12 +117,9 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
                 continue;
             }
 
-            instancingData[instanceIndex].World = it->worldTransform_.matWorld_;
-
-            instancingData[instanceIndex].WVP = it->worldTransform_.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
-
-            instancingData[instanceIndex].WorldInverseTranspose =
-                Inverse(Transpose(it->worldTransform_.matWorld_));
+            instancingData[instanceIndex].World                 = it->worldTransform_.matWorld_;
+            instancingData[instanceIndex].WVP                   = it->worldTransform_.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+            instancingData[instanceIndex].WorldInverseTranspose = Inverse(Transpose(it->worldTransform_.matWorld_));
 
             AlphaAdapt(instancingData[instanceIndex], *it, group);
 
@@ -130,13 +127,17 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
             ++it;
         }
 
-        if (instanceIndex > 0 && group.model) {
+        if (instanceIndex > 0) {
             ParticleCommon::GetInstance()->PreDraw(commandList, group.parm.blendMode);
-
-            group.model->DrawInstancing(instanceIndex,
-                pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
-                group.material,
-                group.textureHandle);
+            // モデル描画
+            if (group.model) {
+                group.model->DrawInstancing(instanceIndex, pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
+                    group.material, group.textureHandle);
+                // メッシュ描画
+            } else if (group.primitive_->GetMesh()) {
+                group.primitive_->GetMesh()->DrawInstancing(instanceIndex, pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
+                    group.material, group.textureHandle);
+            }
         }
     }
 }
@@ -161,6 +162,35 @@ void ParticleManager::CreateParticleGroup(
     /// リソース作成
     CreateInstancingResource(name, maxnum); // インスタンシング
     CreateMaterialResource(name); // マテリアル
+
+    particleGroups_[name].instanceNum = 0;
+}
+
+void ParticleManager::CreatePrimitiveParticle(const std::string& name, PrimitiveType type, const uint32_t& maxnum) {
+    if (particleGroups_.contains(name)) {
+        return;
+    }
+
+    // グループを追加
+    particleGroups_[name] = ParticleGroup();
+
+    switch (type) {
+    case PrimitiveType::Plane:
+        particleGroups_[name].primitive_ = std::make_unique<PrimitivePlane>();
+        break;
+    // 他のプリミティブを追加する場合はここに記述
+    default:
+        assert(false && "Unsupported PrimitiveType");
+        return;
+    }
+
+    // プリミティブの初期化と作成
+    particleGroups_[name].primitive_->Init();
+    particleGroups_[name].primitive_->Create();
+
+    // インスタンシングリソースとマテリアルリソースを作成
+    CreateInstancingResource(name, maxnum);
+    CreateMaterialResource(name);
 
     particleGroups_[name].instanceNum = 0;
 }
@@ -226,6 +256,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 
     Particle particle;
 
+    /// Init
     particle.lifeTime_    = paramaters.lifeTime;
     particle.currentTime_ = 0.0f;
     particle.worldTransform_.Init();
@@ -233,7 +264,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
     ///------------------------------------------------------------------------
     /// ペアレント
     ///------------------------------------------------------------------------
-    if (paramaters.parentTransform) {
+    if (paramaters.parentTransform) { // parent
         particle.worldTransform_.parent_ = paramaters.parentTransform;
     }
 
@@ -244,55 +275,67 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
     ///------------------------------------------------------------------------
     /// 座標
     ///------------------------------------------------------------------------
+
+    /// random
     Vector3 randomTranslate = {
         Random::Range(paramaters.positionDist.min.x, paramaters.positionDist.max.x),
         Random::Range(paramaters.positionDist.min.y, paramaters.positionDist.max.y),
         Random::Range(paramaters.positionDist.min.z, paramaters.positionDist.max.z)};
+
+    /// adapt
     particle.worldTransform_.translation_ = paramaters.targetPos + paramaters.emitPos + randomTranslate;
     particle.offSet                       = paramaters.targetPos + paramaters.emitPos + randomTranslate;
+
     ///------------------------------------------------------------------------
-    /// 速度
+    /// 速度、向き
     ///------------------------------------------------------------------------
+
+    /// random
     Vector3 direction = {
         Random::Range(paramaters.directionDist.min.x, paramaters.directionDist.max.x),
         Random::Range(paramaters.directionDist.min.y, paramaters.directionDist.max.y),
         Random::Range(paramaters.directionDist.min.z, paramaters.directionDist.max.z)};
 
-    direction   = direction.Normalize();
     float speed = {Random::Range(paramaters.speedDist.min, paramaters.speedDist.max)};
 
-    // カメラの回転行列を取得
+    // get camera rotate Matrix
     Matrix4x4 cameraRotationMatrix = MakeRotateMatrix(viewProjection_->rotation_);
 
-    // 速度ベクトルをカメラの向きに変換
+    // adapt
+    direction           = direction.Normalize();
     particle.direction_ = TransformNormal(direction, cameraRotationMatrix);
     particle.speed_     = speed;
 
     ///------------------------------------------------------------------------
     /// 回転
     ///------------------------------------------------------------------------
-    if (paramaters.isRotateforDirection) {
-        // 進行方向（速度）を基に回転を計算
+    if (paramaters.isRotateforDirection) { // 進行方向向く場合
 
+        // caluclation direction angle
         particle.worldTransform_.rotation_ = DirectionToEulerAngles(particle.direction_, *viewProjection_);
+
     } else {
-        // ランダム回転を設定
+        // random
         Vector3 rotate = {
             Random::Range(paramaters.rotateDist.min.x, paramaters.rotateDist.max.x),
             Random::Range(paramaters.rotateDist.min.y, paramaters.rotateDist.max.y),
             Random::Range(paramaters.rotateDist.min.z, paramaters.rotateDist.max.z)};
 
+        // adapt
         particle.worldTransform_.rotation_ = toRadian(paramaters.baseRotate + rotate);
     }
 
     ///------------------------------------------------------------------------
     /// 回転スピード
     ///------------------------------------------------------------------------
+
+    /// random
     Vector3 rotateSpeed = {
         Random::Range(paramaters.rotateSpeedDist.min.x, paramaters.rotateSpeedDist.max.x),
         Random::Range(paramaters.rotateSpeedDist.min.y, paramaters.rotateSpeedDist.max.y),
         Random::Range(paramaters.rotateSpeedDist.min.z, paramaters.rotateSpeedDist.max.z)};
 
+    /// adapt
     particle.rotateSpeed_ = rotateSpeed;
 
     ///------------------------------------------------------------------------
@@ -300,18 +343,18 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
     ///------------------------------------------------------------------------
     if (paramaters.isScalerScale) { // スカラー
 
-        ///* 初期スケール
+        /// Easing Start Scale
         float scale                     = Random::Range(paramaters.scaleDist.min, paramaters.scaleDist.max);
         particle.worldTransform_.scale_ = {scale, scale, scale};
         particle.scaleInfo.tempScaleV3  = particle.worldTransform_.scale_;
 
-        ///*　イージングのエンドスケール
+        /// 　Easing end Scale
         float endscale                  = Random::Range(paramaters.scaleEaseParm.endValueF.min, paramaters.scaleEaseParm.endValueF.min);
         particle.scaleInfo.easeEndScale = {endscale, endscale, endscale};
 
-    } else { /// V3
+    } else { /// Vector3
 
-        ///* 初期スケール
+        /// Easing Start Scale
         Vector3 ScaleV3 = {
             Random::Range(paramaters.scaleDistV3.min.x, paramaters.scaleDistV3.max.x),
             Random::Range(paramaters.scaleDistV3.min.y, paramaters.scaleDistV3.max.y),
@@ -320,7 +363,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
         particle.worldTransform_.scale_ = ScaleV3;
         particle.scaleInfo.tempScaleV3  = ScaleV3;
 
-        ///*　イージングのエンドスケール
+        /// 　Easing end Scale
         Vector3 endScaleV3 = {
             Random::Range(paramaters.scaleEaseParm.endValueV3.min.x, paramaters.scaleEaseParm.endValueV3.max.x),
             Random::Range(paramaters.scaleEaseParm.endValueV3.min.y, paramaters.scaleEaseParm.endValueV3.max.y),
@@ -329,6 +372,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
         particle.scaleInfo.easeEndScale = endScaleV3;
     }
 
+    // EaseParm Adapt
     particle.easeTime                       = 0.0f;
     particle.scaleInfo.easeparm.isScaleEase = paramaters.scaleEaseParm.isScaleEase;
     particle.scaleInfo.easeparm.maxTime     = paramaters.scaleEaseParm.maxTime;
@@ -337,12 +381,15 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
     ///------------------------------------------------------------------------
     /// 色
     ///------------------------------------------------------------------------
+
+    /// ramdom
     Vector4 randomColor = {
         Random::Range(paramaters.colorDist.min.x, paramaters.colorDist.max.x),
         Random::Range(paramaters.colorDist.min.y, paramaters.colorDist.max.y),
         Random::Range(paramaters.colorDist.min.z, paramaters.colorDist.max.z),
         0.0f};
 
+    /// adapt
     particle.color_ = paramaters.baseColor + randomColor;
 
     ///------------------------------------------------------------------------
@@ -418,15 +465,6 @@ Vector3 ParticleManager::DirectionToEulerAngles(const Vector3& direction, const 
     return angle;
 }
 
-void ParticleManager::SetViewProjection(const ViewProjection* view) {
-
-    viewProjection_ = view;
-}
-
-void ParticleManager::SetAllParticleFile() {
-    particleFiles_ = GetFileNamesForDyrectry(dyrectry_);
-}
-
 ///=================================================================================================
 /// parm Adapt
 ///=================================================================================================
@@ -469,4 +507,13 @@ Vector3 ParticleManager::EaseAdapt(const ParticleEmitter::EaseType& easetype,
         return Vector3::ZeroVector();
         break;
     }
+}
+
+void ParticleManager::SetViewProjection(const ViewProjection* view) {
+
+    viewProjection_ = view;
+}
+
+void ParticleManager::SetAllParticleFile() {
+    particleFiles_ = GetFileNamesForDyrectry(dyrectry_);
 }

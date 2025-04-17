@@ -27,6 +27,19 @@ ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const 
     return emitter.release();
 }
 
+
+///=================================================================================
+/// パーティクル作成(Primitive)
+///=================================================================================
+ParticleEmitter* ParticleEmitter::CreateParticlePrimitive(const std::string& name, const PrimitiveType& primitiveType, const int32_t& maxnum) {
+
+    auto emitter           = std::make_unique<ParticleEmitter>();
+    emitter->particleName_ = name;
+    ParticleManager::GetInstance()->CreatePrimitiveParticle(emitter->particleName_, primitiveType, maxnum);
+    emitter->Init();
+    return emitter.release();
+}
+
 /// =================================================================================
 /// 初期化
 /// =================================================================================

@@ -30,7 +30,7 @@ void TitleScene::Init() {
 	uint32_t starFrameHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circleFrame.png");
 
 	///パーティクルデータの読み込みと、モデルの読み込み
-	EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticle("CenterStarEffect", "Plane", ".obj", 800));
+	EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticlePrimitive("CenterStarEffect",PrimitiveType::Plane, 800));
 	EnemydamageEffect_[0]->SetTextureHandle(circleHandle);
 	EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticle("StarEffect", "Plane", ".obj", 800));
 	EnemydamageEffect_[1]->SetTextureHandle(starHandle);
