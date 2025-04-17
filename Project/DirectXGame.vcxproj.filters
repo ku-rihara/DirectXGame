@@ -253,6 +253,12 @@
     <Filter Include="MyEngine\.h\utility\ParameterEditor">
       <UniqueIdentifier>{6045dc64-7d52-4582-b49c-567e7f5074bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\Primitive">
+      <UniqueIdentifier>{a660c6f0-a988-46d1-bca0-d2fc5408ee78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Primitive">
+      <UniqueIdentifier>{0015d049-85db-4bcb-ab82-220bbf98f1a9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -260,9 +266,6 @@
     </ClCompile>
     <ClCompile Include="Engine\2d\Sprite.cpp">
       <Filter>MyEngine\.cpp\2d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\Mesh.cpp">
-      <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\Model.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
@@ -645,6 +648,15 @@
     </ClCompile>
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleParameter.cpp">
       <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Primitive\PrimitivePlane.cpp">
+      <Filter>MyEngine\.cpp\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Primitive\IPrimitive.cpp">
+      <Filter>MyEngine\.cpp\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\Mesh.cpp">
+      <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1070,6 +1082,12 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleParameter.h">
       <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\PrimitivePlane.h">
+      <Filter>MyEngine\.h\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\IPrimitive.h">
+      <Filter>MyEngine\.h\Primitive</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

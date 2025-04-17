@@ -1,10 +1,13 @@
 #pragma once
 
-#include "MinMax.h"
 #include "3d/ViewProjection.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
 #include "utility/RailEditor/RailManager.h"
 #include "utility/ParticleEditor/ParticleCommon.h"
+
+/// primitive
+#include "Primitive/IPrimitive.h"
+#include"3d/Mesh.h"
+
 #include "ParticleParameter.h" // ParticleParameterのヘッダーをインクルード
 #include <string>
 #include <vector>
@@ -33,6 +36,9 @@ public:
 	static ParticleEmitter* CreateParticle(
 		const std::string& name, const std::string& modelFilePath,
 		const std::string& extension, const int32_t& maxnum);
+
+	static ParticleEmitter* CreateParticlePrimitive(
+        const std::string& name, const PrimitiveType&primitiveType, const int32_t& maxnum);
 
 	// 初期化
 	void Init();
