@@ -8,11 +8,12 @@
 #include "Primitive/IPrimitive.h"
 #include"3d/Mesh.h"
 
-#include "ParticleParameter.h" // ParticleParameterのヘッダーをインクルード
+#include "ParticleParameter.h"
 #include <string>
 #include <vector>
 
-class ParticleEmitter : public ParticleParameter { // ParticleParameterを継承
+
+class ParticleEmitter : public ParticleParameter { 
 private:
 
 	float currentTime_;
@@ -60,7 +61,7 @@ public:
 	void  ParmSaveForImGui()override;
 	void  ParmLoadForImGui()override;
 	void ApplyGlobalParameter(const std::string& particleName)override;
-	void ApplyTexture(const std::string& texturename)override;
+	void ApplyTexture(const std::string& texturename);
 	void SetValues()override;
 	void ImGuiTextureSelection();
 
@@ -77,8 +78,8 @@ public:
 	void SetTextureHandle(const uint32_t& hanle);
 	void SetParentTransform(const WorldTransform* transform);
 	void SetFollowingPos(const Vector3* pos);
-	void SetBlendMode(const ParticleCommon::BlendMode& blendmode);
-	void SetBillBordType(const WorldTransform::BillboardType& billboardType);
+	void SetBlendMode(const BlendMode& blendmode);
+	void SetBillBordType(const BillboardType& billboardType);
 	void SetParentBasePos(WorldTransform* parent);
 	void SetIsMoveForRail(const bool& isMoveForRail) { isMoveForRail_ = isMoveForRail; }
 	void SetMoveSpeed(const float& moveSpeed) { moveSpeed_ = moveSpeed; }

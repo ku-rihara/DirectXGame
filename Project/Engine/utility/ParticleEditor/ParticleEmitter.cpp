@@ -6,7 +6,6 @@
 #include "Function/GetFile.h"
 #include "ParticleCommon.h"
 #include "ParticleManager.h"
-#include "ParticleManager.h"
 
 #include <format>
 #include <imgui.h>
@@ -22,11 +21,11 @@ ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const 
 
     auto emitter           = std::make_unique<ParticleEmitter>();
     emitter->particleName_ = name;
+
     ParticleManager::GetInstance()->CreateParticleGroup(emitter->particleName_, modelFilePath, extension, maxnum);
     emitter->Init();
     return emitter.release();
 }
-
 
 ///=================================================================================
 /// パーティクル作成(Primitive)
@@ -35,6 +34,7 @@ ParticleEmitter* ParticleEmitter::CreateParticlePrimitive(const std::string& nam
 
     auto emitter           = std::make_unique<ParticleEmitter>();
     emitter->particleName_ = name;
+
     ParticleManager::GetInstance()->CreatePrimitiveParticle(emitter->particleName_, primitiveType, maxnum);
     emitter->Init();
     return emitter.release();
@@ -73,14 +73,11 @@ void ParticleEmitter::Emit() {
     if (currentTime_ >= intervalTime_ || groupParamaters_.isShot) { // 　間隔ごとに発動
 
         ParticleManager::GetInstance()->Emit(
-            particleName_, parameters_, groupParamaters_, particleCount);
+            particleName_, parameters_, groupParamaters_, particleCount_);
         currentTime_ = 0.0f; // 時間を戻す
     }
 }
 
-///=================================================================================
-/// ImGui更新
-///=================================================================================
 void ParticleEmitter::Update() {
     // レール更新
     railManager_->Update(moveSpeed_);
@@ -90,6 +87,9 @@ void ParticleEmitter::Update() {
     SetValues();
 }
 
+///=================================================================================
+/// Editor 更新
+///=================================================================================
 void ParticleEmitter::EditorUpdate() {
 #ifdef _DEBUG
 
@@ -158,7 +158,7 @@ void ParticleEmitter::EditorUpdate() {
         ImGui::DragFloat("IntervalTime", &intervalTime_, 0.01f, 0.01f, 100.0f);
         ImGui::DragFloat("Gravity", &parameters_.gravity, 0.1f);
         ImGui::DragFloat("LifeTime", &parameters_.lifeTime, 0.01f);
-        ImGui::SliderInt("Particle Count", &particleCount, 1, 100);
+        ImGui::SliderInt("Particle Count", &particleCount_, 1, 100);
     }
 
     // チェックが有効なら、BillboardType の設定を表示
@@ -168,17 +168,27 @@ void ParticleEmitter::EditorUpdate() {
         ImGui::Checkbox("IsBillBoard", &groupParamaters_.isBillBord);
 
         ImGui::SeparatorText("IsRotateAdapt");
-        ImGui::Checkbox("IsX", &groupParamaters_.adaptRotate_.isX_);
-        ImGui::Checkbox("IsY", &groupParamaters_.adaptRotate_.isY_);
-        ImGui::Checkbox("IsZ", &groupParamaters_.adaptRotate_.isZ_);
+        ImGui::Checkbox("IsX", &groupParamaters_.adaptRotate_.isX);
+        ImGui::Checkbox("IsY", &groupParamaters_.adaptRotate_.isY);
+        ImGui::Checkbox("IsZ", &groupParamaters_.adaptRotate_.isZ);
 
         ImGui::SeparatorText("BillBordType");
 
-        const char* items[] = {"XYZ", "X", "Y", "Z"}; // ビルボードの種類
+        const char* billBordItems[] = {"XYZ", "X", "Y", "Z"}; // ビルボードの種類
         // ビルボードの種類を選択するコンボボックス
-        if (ImGui::Combo("Billboard Type", &preBillBordType_, items, IM_ARRAYSIZE(items))) {
+        if (ImGui::Combo("Billboard Type", &billBordType_, billBordItems, IM_ARRAYSIZE(billBordItems))) {
             // 選択した値を反映
-            groupParamaters_.billBordType = static_cast<WorldTransform::BillboardType>(preBillBordType_);
+            groupParamaters_.billBordType = static_cast<BillboardType>(billBordType_);
+        }
+    }
+
+    if (ImGui::CollapsingHeader("BlendMode")) {
+
+        const char* blendModeItems[] = {"Add", "None", "Multiply", "Subtractive", "Screen"}; // ビルボードの種類
+        // ビルボードの種類を選択するコンボボックス
+        if (ImGui::Combo("Blend Mode", &blendMode_, blendModeItems, IM_ARRAYSIZE(blendModeItems))) {
+            // 選択した値を反映
+            groupParamaters_.blendMode = static_cast<BlendMode>(blendMode_);
         }
     }
 
@@ -187,7 +197,7 @@ void ParticleEmitter::EditorUpdate() {
 
         // IsRotateforDirection のチェックボックス
         ImGui::Checkbox("IsRotateforDirection", &parameters_.isRotateforDirection);
-        ImGui::Checkbox("IsShot", &preIsShot_);
+        ImGui::Checkbox("IsShot", &isShot_);
         ImGui::Checkbox("isAlphaNoMove", &groupParamaters_.isAlphaNoMove);
     }
 
@@ -232,51 +242,6 @@ void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
 #endif // _DEBUG
 }
 
-// 共通部分を関数化
-void ParticleEmitter::DisplayFileSelection(const std::string& header, const std::vector<std::string>& filenames, int& selectedIndex, const std::function<void(const std::string&)>& onApply) {
-    if (!filenames.empty()) {
-        std::vector<const char*> names;
-        for (const auto& file : filenames) {
-            names.push_back(file.c_str());
-        }
-
-        if (ImGui::CollapsingHeader(header.c_str())) {
-            // リストボックスの表示
-            ImGui::ListBox(header.c_str(), &selectedIndex, names.data(), static_cast<int>(names.size()));
-
-            // 適用ボタン
-            if (ImGui::Button(("Apply:" + header).c_str())) {
-                onApply(filenames[selectedIndex]);
-            }
-        }
-    } else {
-        ImGui::Text("No %s files found.", header.c_str());
-    }
-}
-
-// Particleファイル選択
-void ParticleEmitter::ParticleChange() {
-    static int selectedIndex           = 0; // 現在選択中のインデックス
-    std::vector<std::string> filenames = ParticleManager::GetInstance()->GetParticleFiles();
-
-    DisplayFileSelection("SelectParticle", filenames, selectedIndex, [this](const std::string& selectedFile) {
-        ApplyGlobalParameter(selectedFile);
-        globalParameter_->LoadFile(selectedFile, folderName_);
-        ImGui::Text("Load Successful: %s", (folderName_ + selectedFile).c_str());
-    });
-}
-
-/// texture選択
-void ParticleEmitter::ImGuiTextureSelection() {
-    static int selectedIndex           = 0; // 現在選択中のインデックス
-    std::vector<std::string> filenames = GetFileNamesForDyrectry(textureFilePath_);
-
-    DisplayFileSelection("SelectTexture", filenames, selectedIndex, [this](const std::string& selectedFile) {
-        ApplyTexture(selectedFile);
-
-        ImGui::Text("Texture Applied: %s", selectedFile.c_str());
-    });
-}
 void ParticleEmitter::ScaleParmEditor() {
     // Scale
     if (ImGui::CollapsingHeader("Scale")) {
@@ -322,29 +287,50 @@ void ParticleEmitter::ScaleParmEditor() {
     }
 }
 
-/// <summary>
-/// setter
-/// </summary>
-/// <param name="parent"></param>
+// ImGuiファイル項目選択
+void ParticleEmitter::DisplayFileSelection(const std::string& header, const std::vector<std::string>& filenames, int& selectedIndex, const std::function<void(const std::string&)>& onApply) {
+    if (!filenames.empty()) {
+        std::vector<const char*> names;
+        for (const auto& file : filenames) {
+            names.push_back(file.c_str());
+        }
 
-void ParticleEmitter::SetParentBasePos(WorldTransform* parent) {
-    emitBoxTransform_.parent_ = parent;
+        if (ImGui::CollapsingHeader(header.c_str())) {
+            // リストボックスの表示
+            ImGui::ListBox(header.c_str(), &selectedIndex, names.data(), static_cast<int>(names.size()));
+
+            // 適用ボタン
+            if (ImGui::Button(("Apply:" + header).c_str())) {
+                onApply(filenames[selectedIndex]);
+            }
+        }
+    } else {
+        ImGui::Text("No %s files found.", header.c_str());
+    }
 }
 
-void ParticleEmitter::SetBlendMode(const ParticleCommon::BlendMode& blendmode) {
-    groupParamaters_.blendMode = blendmode;
+// Particleファイル選択
+void ParticleEmitter::ParticleChange() {
+    static int selectedIndex           = 0; // 現在選択中のインデックス
+    std::vector<std::string> filenames = ParticleManager::GetInstance()->GetParticleFiles();
+
+    DisplayFileSelection("SelectParticle", filenames, selectedIndex, [this](const std::string& selectedFile) {
+        ApplyGlobalParameter(selectedFile);
+        globalParameter_->LoadFile(selectedFile, folderName_);
+        ImGui::Text("Load Successful: %s", (folderName_ + selectedFile).c_str());
+    });
 }
 
-void ParticleEmitter::SetBillBordType(const WorldTransform::BillboardType& billboardType) {
-    groupParamaters_.billBordType = billboardType;
-}
+/// texture選択
+void ParticleEmitter::ImGuiTextureSelection() {
+    static int selectedIndex           = 0; // 現在選択中のインデックス
+    std::vector<std::string> filenames = GetFileNamesForDyrectry(textureFilePath_);
 
-void ParticleEmitter::SetParentTransform(const WorldTransform* transform) {
-    parameters_.parentTransform = transform;
-}
+    DisplayFileSelection("SelectTexture", filenames, selectedIndex, [this](const std::string& selectedFile) {
+        ApplyTexture(selectedFile);
 
-void ParticleEmitter::SetFollowingPos(const Vector3* pos) {
-    parameters_.followingPos_ = pos;
+        ImGui::Text("Texture Applied: %s", selectedFile.c_str());
+    });
 }
 
 ///=================================================================================
@@ -355,7 +341,15 @@ void ParticleEmitter::SetTextureHandle(const uint32_t& handle) {
     // SetSelectedTexturePath(handle); // 選択されたテクスチャハンドルを更新
 }
 
+void ParticleEmitter::ApplyTexture(const std::string& texturename) {
+    // テクスチャ
+    selectedTexturePath_ = textureFilePath_ + "/" + texturename + ".png";
+    ParticleManager::GetInstance()->SetTextureHandle(particleName_, TextureManager::GetInstance()->LoadTexture(selectedTexturePath_));
+}
+
+///=================================================================================
 /// override function
+///=================================================================================
 
 void ParticleEmitter::ParmSaveForImGui() {
     ParticleParameter::ParmSaveForImGui();
@@ -367,10 +361,30 @@ void ParticleEmitter::ParmLoadForImGui() {
 void ParticleEmitter::ApplyGlobalParameter(const std::string& particleName) {
     ParticleParameter::ApplyGlobalParameter(particleName);
 }
-void ParticleEmitter::ApplyTexture(const std::string& texturename) {
-    ParticleParameter::ApplyTexture(texturename);
-}
 
 void ParticleEmitter::SetValues() {
     ParticleParameter::SetValues();
+}
+
+/// =======================================================================================
+/// setter method
+/// ========================================================================================
+void ParticleEmitter::SetParentBasePos(WorldTransform* parent) {
+    emitBoxTransform_.parent_ = parent;
+}
+
+void ParticleEmitter::SetBlendMode(const BlendMode& blendmode) {
+    groupParamaters_.blendMode = blendmode;
+}
+
+void ParticleEmitter::SetBillBordType(const BillboardType& billboardType) {
+    groupParamaters_.billBordType = billboardType;
+}
+
+void ParticleEmitter::SetParentTransform(const WorldTransform* transform) {
+    parameters_.parentTransform = transform;
+}
+
+void ParticleEmitter::SetFollowingPos(const Vector3* pos) {
+    parameters_.followingPos_ = pos;
 }

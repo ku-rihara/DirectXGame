@@ -1,5 +1,4 @@
 // ParticleParameter.cpp
-
 #include "ParticleParameter.h"
 #include "base/TextureManager.h"
 #include "Frame/Frame.h"
@@ -7,9 +6,9 @@
 #include <format>
 #include <imgui.h>
 
-void ParticleParameter::ResetParameters() {
+void ParticleParameter::ParameterInit() {
 
-    particleCount                    = 0;
+    particleCount_                   = 0;
     parameters_.lifeTime             = 0.0f;
     parameters_.gravity              = 0.0f;
     parameters_.baseColor            = {0.0f, 0.0f, 0.0f, 0.0f};
@@ -20,25 +19,28 @@ void ParticleParameter::ResetParameters() {
     groupParamaters_.isBillBord      = true;
     parameters_.isScalerScale        = true;
     parameters_.isRotateforDirection = false;
-    selectedTexturePath_             = ""; // 初期化時にテクスチャパスをリセット
+    selectedTexturePath_             = "";
 }
 
 void ParticleParameter::Init() {
 
-    ResetParameters();
+    ParameterInit();
 
-    /// グローバル変数
+    /// グローバルパラメータ作成
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(particleName_, false);
 
+    // 　グループ追加
     AddParmGroup();
     ApplyGlobalParameter(particleName_);
 
     // Editor上で設定したテクスチャを適応
+    AdaptTexture();
 
-    /// ビルボード、単発フラグ、イージングタイプの設定
-    groupParamaters_.billBordType      = static_cast<WorldTransform::BillboardType>(preBillBordType_);
-    groupParamaters_.isShot            = preIsShot_;
+    /// セッティングしたもの適応
+    groupParamaters_.billBordType      = static_cast<BillboardType>(billBordType_);
+    groupParamaters_.isShot            = isShot_;
+    groupParamaters_.blendMode         = static_cast<BlendMode>(blendMode_);
     parameters_.scaleEaseParm.easeType = static_cast<EaseType>(parameters_.scaleEaseParm.easeTypeInt);
 }
 
@@ -64,118 +66,124 @@ void ParticleParameter::ParmSaveForImGui() {
 
 void ParticleParameter::AddParmGroup() {
     // Position
-    globalParameter_->AddItem(particleName_, "Position Base", parameters_.emitPos, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->AddItem(particleName_, "Position Max", parameters_.positionDist.max, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->AddItem(particleName_, "Position Min", parameters_.positionDist.min, GlobalParameter::WidgetType::DragFloat3);
+    globalParameter_->AddItem(particleName_, "Position Base", parameters_.emitPos);
+    globalParameter_->AddItem(particleName_, "Position Max", parameters_.positionDist.max);
+    globalParameter_->AddItem(particleName_, "Position Min", parameters_.positionDist.min);
 
     // Scale
-    globalParameter_->AddItem(particleName_, "Scale Max", parameters_.scaleDist.max, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->AddItem(particleName_, "Scale Min", parameters_.scaleDist.min, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->AddItem(particleName_, "ScaleV3 Max", parameters_.scaleDistV3.max, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->AddItem(particleName_, "ScaleV3 Min", parameters_.scaleDistV3.min, GlobalParameter::WidgetType::DragFloat3);
+    globalParameter_->AddItem(particleName_, "Scale Max", parameters_.scaleDist.max);
+    globalParameter_->AddItem(particleName_, "Scale Min", parameters_.scaleDist.min);
+    globalParameter_->AddItem(particleName_, "ScaleV3 Max", parameters_.scaleDistV3.max);
+    globalParameter_->AddItem(particleName_, "ScaleV3 Min", parameters_.scaleDistV3.min);
 
     // Rotate
-    globalParameter_->AddItem(particleName_, "Rotate Base", parameters_.baseRotate, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->AddItem(particleName_, "Rotate Max", parameters_.rotateDist.max, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->AddItem(particleName_, "Rotate Min", parameters_.rotateDist.min, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->AddItem(particleName_, "RotateSpeed Max", parameters_.rotateSpeedDist.max, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->AddItem(particleName_, "RotateSpeed Min", parameters_.rotateSpeedDist.min, GlobalParameter::WidgetType::DragFloat3);
+    globalParameter_->AddItem(particleName_, "Rotate Base", parameters_.baseRotate);
+    globalParameter_->AddItem(particleName_, "Rotate Max", parameters_.rotateDist.max);
+    globalParameter_->AddItem(particleName_, "Rotate Min", parameters_.rotateDist.min);
+    globalParameter_->AddItem(particleName_, "RotateSpeed Max", parameters_.rotateSpeedDist.max);
+    globalParameter_->AddItem(particleName_, "RotateSpeed Min", parameters_.rotateSpeedDist.min);
 
     // Velocity
-    globalParameter_->AddItem(particleName_, "Speed Max", parameters_.speedDist.max, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->AddItem(particleName_, "Speed Min", parameters_.speedDist.min, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->AddItem(particleName_, "Direction Max", parameters_.directionDist.max, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->AddItem(particleName_, "Direction Min", parameters_.directionDist.min, GlobalParameter::WidgetType::DragFloat3);
+    globalParameter_->AddItem(particleName_, "Speed Max", parameters_.speedDist.max);
+    globalParameter_->AddItem(particleName_, "Speed Min", parameters_.speedDist.min);
+    globalParameter_->AddItem(particleName_, "Direction Max", parameters_.directionDist.max);
+    globalParameter_->AddItem(particleName_, "Direction Min", parameters_.directionDist.min);
 
     // Color
-    globalParameter_->AddItem(particleName_, "BaseColor", parameters_.baseColor, GlobalParameter::WidgetType::ColorEdit4);
-    globalParameter_->AddItem(particleName_, "Color Max", parameters_.colorDist.max, GlobalParameter::WidgetType::ColorEdit4);
-    globalParameter_->AddItem(particleName_, "Color Min", parameters_.colorDist.min, GlobalParameter::WidgetType::ColorEdit4);
+    globalParameter_->AddItem(particleName_, "BaseColor", parameters_.baseColor);
+    globalParameter_->AddItem(particleName_, "Color Max", parameters_.colorDist.max);
+    globalParameter_->AddItem(particleName_, "Color Min", parameters_.colorDist.min);
 
     // その他
-    globalParameter_->AddItem(particleName_, "IntervalTime", intervalTime_, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->AddItem(particleName_, "Gravity", parameters_.gravity, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->AddItem(particleName_, "LifeTime", parameters_.lifeTime, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->AddItem(particleName_, "Particle Count", particleCount, GlobalParameter::WidgetType::SliderInt);
+    globalParameter_->AddItem(particleName_, "IntervalTime", intervalTime_);
+    globalParameter_->AddItem(particleName_, "Gravity", parameters_.gravity);
+    globalParameter_->AddItem(particleName_, "LifeTime", parameters_.lifeTime);
+    globalParameter_->AddItem(particleName_, "Particle Count", particleCount_);
 
     /// frag
-    globalParameter_->AddItem(particleName_, "isScalerScale", parameters_.isScalerScale, GlobalParameter::WidgetType::Checkbox);
-    globalParameter_->AddItem(particleName_, "preBillBordType_", preBillBordType_, GlobalParameter::WidgetType::SliderInt);
-    globalParameter_->AddItem(particleName_, "isRotateforDirection", parameters_.isRotateforDirection, GlobalParameter::WidgetType::Checkbox);
-    globalParameter_->AddItem(particleName_, "isBillBord", groupParamaters_.isBillBord, GlobalParameter::WidgetType::Checkbox);
-    globalParameter_->AddItem(particleName_, "AdaptRotateIsX", groupParamaters_.adaptRotate_.isX_, GlobalParameter::WidgetType::Checkbox);
-    globalParameter_->AddItem(particleName_, "AdaptRotateIsY", groupParamaters_.adaptRotate_.isY_, GlobalParameter::WidgetType::Checkbox);
-    globalParameter_->AddItem(particleName_, "AdaptRotateIsZ", groupParamaters_.adaptRotate_.isZ_, GlobalParameter::WidgetType::Checkbox);
-    globalParameter_->AddItem(particleName_, "isShot", preIsShot_, GlobalParameter::WidgetType::Checkbox);
-    globalParameter_->AddItem(particleName_, "isAlphaNoMove", groupParamaters_.isAlphaNoMove, GlobalParameter::WidgetType::Checkbox);
+    globalParameter_->AddItem(particleName_, "isScalerScale", parameters_.isScalerScale);
+    globalParameter_->AddItem(particleName_, "isRotateforDirection", parameters_.isRotateforDirection);
+    globalParameter_->AddItem(particleName_, "isBillBord", groupParamaters_.isBillBord);
+    globalParameter_->AddItem(particleName_, "AdaptRotateIsX", groupParamaters_.adaptRotate_.isX);
+    globalParameter_->AddItem(particleName_, "AdaptRotateIsY", groupParamaters_.adaptRotate_.isY);
+    globalParameter_->AddItem(particleName_, "AdaptRotateIsZ", groupParamaters_.adaptRotate_.isZ);
+    globalParameter_->AddItem(particleName_, "isShot", isShot_);
+    globalParameter_->AddItem(particleName_, "isAlphaNoMove", groupParamaters_.isAlphaNoMove);
 
     // easeParm
-    globalParameter_->AddItem(particleName_, "scaleEaseParm.isScaleEase", parameters_.scaleEaseParm.isScaleEase, GlobalParameter::WidgetType::Checkbox);
-    globalParameter_->AddItem(particleName_, "scaleEaseParm.maxTime", parameters_.scaleEaseParm.maxTime, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->AddItem(particleName_, "scaleEaseParm.easeTypeInt", parameters_.scaleEaseParm.easeTypeInt, GlobalParameter::WidgetType::SliderInt);
-    globalParameter_->AddItem(particleName_, "scaleEaseParm.endValueF.max", parameters_.scaleEaseParm.endValueF.max, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->AddItem(particleName_, "scaleEaseParm.endValueF.min", parameters_.scaleEaseParm.endValueF.min, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->AddItem(particleName_, "scaleEaseParm.endValueV3.max", parameters_.scaleEaseParm.endValueV3.max, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->AddItem(particleName_, "scaleEaseParm.endValueV3.min", parameters_.scaleEaseParm.endValueV3.min, GlobalParameter::WidgetType::DragFloat3);
+    globalParameter_->AddItem(particleName_, "scaleEaseParm.isScaleEase", parameters_.scaleEaseParm.isScaleEase);
+    globalParameter_->AddItem(particleName_, "scaleEaseParm.maxTime", parameters_.scaleEaseParm.maxTime);
+    globalParameter_->AddItem(particleName_, "scaleEaseParm.easeTypeInt", parameters_.scaleEaseParm.easeTypeInt);
+    globalParameter_->AddItem(particleName_, "scaleEaseParm.endValueF.max", parameters_.scaleEaseParm.endValueF.max);
+    globalParameter_->AddItem(particleName_, "scaleEaseParm.endValueF.min", parameters_.scaleEaseParm.endValueF.min);
+    globalParameter_->AddItem(particleName_, "scaleEaseParm.endValueV3.max", parameters_.scaleEaseParm.endValueV3.max);
+    globalParameter_->AddItem(particleName_, "scaleEaseParm.endValueV3.min", parameters_.scaleEaseParm.endValueV3.min);
+
+    // mpde Setting
+    globalParameter_->AddItem(particleName_, "preBillBordType_", billBordType_);
+    globalParameter_->AddItem(particleName_, "blendMode", blendMode_);
 
     // テクスチャ
-    globalParameter_->AddItem(particleName_, "selectedTexturePath_", selectedTexturePath_, GlobalParameter::WidgetType::NONE);
+    globalParameter_->AddItem(particleName_, "selectedTexturePath_", selectedTexturePath_);
 }
 
 void ParticleParameter::SetValues() {
     // Position
-    globalParameter_->SetValue(particleName_, "Position Base", parameters_.emitPos, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->SetValue(particleName_, "Position Max", parameters_.positionDist.max, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->SetValue(particleName_, "Position Min", parameters_.positionDist.min, GlobalParameter::WidgetType::DragFloat3);
+    globalParameter_->SetValue(particleName_, "Position Base", parameters_.emitPos);
+    globalParameter_->SetValue(particleName_, "Position Max", parameters_.positionDist.max);
+    globalParameter_->SetValue(particleName_, "Position Min", parameters_.positionDist.min);
 
     // Scale
-    globalParameter_->SetValue(particleName_, "Scale Max", parameters_.scaleDist.max, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->SetValue(particleName_, "Scale Min", parameters_.scaleDist.min, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->SetValue(particleName_, "ScaleV3 Max", parameters_.scaleDistV3.max, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->SetValue(particleName_, "ScaleV3 Min", parameters_.scaleDistV3.min, GlobalParameter::WidgetType::DragFloat3);
+    globalParameter_->SetValue(particleName_, "Scale Max", parameters_.scaleDist.max);
+    globalParameter_->SetValue(particleName_, "Scale Min", parameters_.scaleDist.min);
+    globalParameter_->SetValue(particleName_, "ScaleV3 Max", parameters_.scaleDistV3.max);
+    globalParameter_->SetValue(particleName_, "ScaleV3 Min", parameters_.scaleDistV3.min);
 
     // Rotate
-    globalParameter_->SetValue(particleName_, "Rotate Base", parameters_.baseRotate, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->SetValue(particleName_, "Rotate Max", parameters_.rotateDist.max, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->SetValue(particleName_, "Rotate Min", parameters_.rotateDist.min, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->SetValue(particleName_, "RotateSpeed Max", parameters_.rotateSpeedDist.max, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->SetValue(particleName_, "RotateSpeed Min", parameters_.rotateSpeedDist.min, GlobalParameter::WidgetType::DragFloat3);
+    globalParameter_->SetValue(particleName_, "Rotate Base", parameters_.baseRotate);
+    globalParameter_->SetValue(particleName_, "Rotate Max", parameters_.rotateDist.max);
+    globalParameter_->SetValue(particleName_, "Rotate Min", parameters_.rotateDist.min);
+    globalParameter_->SetValue(particleName_, "RotateSpeed Max", parameters_.rotateSpeedDist.max);
+    globalParameter_->SetValue(particleName_, "RotateSpeed Min", parameters_.rotateSpeedDist.min);
 
     // Velocity
-    globalParameter_->SetValue(particleName_, "Speed Max", parameters_.speedDist.max, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->SetValue(particleName_, "Speed Min", parameters_.speedDist.min, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->SetValue(particleName_, "Direction Max", parameters_.directionDist.max, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->SetValue(particleName_, "Direction Min", parameters_.directionDist.min, GlobalParameter::WidgetType::DragFloat3);
+    globalParameter_->SetValue(particleName_, "Speed Max", parameters_.speedDist.max);
+    globalParameter_->SetValue(particleName_, "Speed Min", parameters_.speedDist.min);
+    globalParameter_->SetValue(particleName_, "Direction Max", parameters_.directionDist.max);
+    globalParameter_->SetValue(particleName_, "Direction Min", parameters_.directionDist.min);
 
     // Color
-    globalParameter_->SetValue(particleName_, "BaseColor", parameters_.baseColor, GlobalParameter::WidgetType::ColorEdit4);
-    globalParameter_->SetValue(particleName_, "Color Max", parameters_.colorDist.max, GlobalParameter::WidgetType::ColorEdit4);
-    globalParameter_->SetValue(particleName_, "Color Min", parameters_.colorDist.min, GlobalParameter::WidgetType::ColorEdit4);
+    globalParameter_->SetValue(particleName_, "BaseColor", parameters_.baseColor);
+    globalParameter_->SetValue(particleName_, "Color Max", parameters_.colorDist.max);
+    globalParameter_->SetValue(particleName_, "Color Min", parameters_.colorDist.min);
 
     // その他
-    globalParameter_->SetValue(particleName_, "IntervalTime", intervalTime_, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->SetValue(particleName_, "Gravity", parameters_.gravity, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->SetValue(particleName_, "LifeTime", parameters_.lifeTime, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->SetValue(particleName_, "Particle Count", particleCount, GlobalParameter::WidgetType::SliderInt);
+    globalParameter_->SetValue(particleName_, "IntervalTime", intervalTime_);
+    globalParameter_->SetValue(particleName_, "Gravity", parameters_.gravity);
+    globalParameter_->SetValue(particleName_, "LifeTime", parameters_.lifeTime);
+    globalParameter_->SetValue(particleName_, "Particle Count", particleCount_);
     /// frag
-    globalParameter_->SetValue(particleName_, "isScalerScale", parameters_.isScalerScale, GlobalParameter::WidgetType::Checkbox);
-    globalParameter_->SetValue(particleName_, "preBillBordType_", preBillBordType_, GlobalParameter::WidgetType::SliderInt);
-    globalParameter_->SetValue(particleName_, "isRotateforDirection", parameters_.isRotateforDirection, GlobalParameter::WidgetType::Checkbox);
-    globalParameter_->SetValue(particleName_, "isBillBord", groupParamaters_.isBillBord, GlobalParameter::WidgetType::Checkbox);
-    globalParameter_->SetValue(particleName_, "AdaptRotateIsX", groupParamaters_.adaptRotate_.isX_, GlobalParameter::WidgetType::Checkbox);
-    globalParameter_->SetValue(particleName_, "AdaptRotateIsY", groupParamaters_.adaptRotate_.isY_, GlobalParameter::WidgetType::Checkbox);
-    globalParameter_->SetValue(particleName_, "AdaptRotateIsZ", groupParamaters_.adaptRotate_.isZ_, GlobalParameter::WidgetType::Checkbox);
-    globalParameter_->SetValue(particleName_, "isShot", preIsShot_, GlobalParameter::WidgetType::Checkbox);
-    globalParameter_->SetValue(particleName_, "isAlphaNoMove", groupParamaters_.isAlphaNoMove, GlobalParameter::WidgetType::Checkbox);
+    globalParameter_->SetValue(particleName_, "isScalerScale", parameters_.isScalerScale);
+    globalParameter_->SetValue(particleName_, "isRotateforDirection", parameters_.isRotateforDirection);
+    globalParameter_->SetValue(particleName_, "isBillBord", groupParamaters_.isBillBord);
+    globalParameter_->SetValue(particleName_, "AdaptRotateIsX", groupParamaters_.adaptRotate_.isX);
+    globalParameter_->SetValue(particleName_, "AdaptRotateIsY", groupParamaters_.adaptRotate_.isY);
+    globalParameter_->SetValue(particleName_, "AdaptRotateIsZ", groupParamaters_.adaptRotate_.isZ);
+    globalParameter_->SetValue(particleName_, "isShot", isShot_);
+    globalParameter_->SetValue(particleName_, "isAlphaNoMove", groupParamaters_.isAlphaNoMove);
 
     // easeParm
-    globalParameter_->SetValue(particleName_, "scaleEaseParm.isScaleEase", parameters_.scaleEaseParm.isScaleEase, GlobalParameter::WidgetType::Checkbox);
-    globalParameter_->SetValue(particleName_, "scaleEaseParm.maxTime", parameters_.scaleEaseParm.maxTime, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->SetValue(particleName_, "scaleEaseParm.easeTypeInt", parameters_.scaleEaseParm.easeTypeInt, GlobalParameter::WidgetType::SliderInt);
-    globalParameter_->SetValue(particleName_, "scaleEaseParm.endValueF.max", parameters_.scaleEaseParm.endValueF.max, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->SetValue(particleName_, "scaleEaseParm.endValueF.min", parameters_.scaleEaseParm.endValueF.min, GlobalParameter::WidgetType::DragFloat);
-    globalParameter_->SetValue(particleName_, "scaleEaseParm.endValueV3.max", parameters_.scaleEaseParm.endValueV3.max, GlobalParameter::WidgetType::DragFloat3);
-    globalParameter_->SetValue(particleName_, "scaleEaseParm.endValueV3.min", parameters_.scaleEaseParm.endValueV3.min, GlobalParameter::WidgetType::DragFloat3);
+    globalParameter_->SetValue(particleName_, "scaleEaseParm.isScaleEase", parameters_.scaleEaseParm.isScaleEase);
+    globalParameter_->SetValue(particleName_, "scaleEaseParm.maxTime", parameters_.scaleEaseParm.maxTime);
+    globalParameter_->SetValue(particleName_, "scaleEaseParm.easeTypeInt", parameters_.scaleEaseParm.easeTypeInt);
+    globalParameter_->SetValue(particleName_, "scaleEaseParm.endValueF.max", parameters_.scaleEaseParm.endValueF.max);
+    globalParameter_->SetValue(particleName_, "scaleEaseParm.endValueF.min", parameters_.scaleEaseParm.endValueF.min);
+    globalParameter_->SetValue(particleName_, "scaleEaseParm.endValueV3.max", parameters_.scaleEaseParm.endValueV3.max);
+    globalParameter_->SetValue(particleName_, "scaleEaseParm.endValueV3.min", parameters_.scaleEaseParm.endValueV3.min);
+
+    //
+    globalParameter_->SetValue(particleName_, "preBillBordType_", billBordType_);
+    globalParameter_->SetValue(particleName_, "blendMode", blendMode_);
 
     // テクスチャ
     globalParameter_->SetValue(particleName_, "selectedTexturePath_", selectedTexturePath_, GlobalParameter::WidgetType::NONE);
@@ -217,17 +225,17 @@ void ParticleParameter::ApplyGlobalParameter(const std::string& particleName) {
     intervalTime_        = globalParameter_->GetValue<float>(particleName, "IntervalTime");
     parameters_.gravity  = globalParameter_->GetValue<float>(particleName, "Gravity");
     parameters_.lifeTime = globalParameter_->GetValue<float>(particleName, "LifeTime");
-    particleCount        = globalParameter_->GetValue<int32_t>(particleName, "Particle Count");
+    particleCount_       = globalParameter_->GetValue<int32_t>(particleName, "Particle Count");
 
-    parameters_.isScalerScale          = globalParameter_->GetValue<bool>(particleName, "isScalerScale");
-    parameters_.isRotateforDirection   = globalParameter_->GetValue<bool>(particleName, "isRotateforDirection");
-    preBillBordType_                   = globalParameter_->GetValue<int32_t>(particleName, "preBillBordType_");
-    groupParamaters_.isBillBord        = globalParameter_->GetValue<bool>(particleName, "isBillBord");
-    groupParamaters_.adaptRotate_.isX_ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsX");
-    groupParamaters_.adaptRotate_.isY_ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsY");
-    groupParamaters_.adaptRotate_.isZ_ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsZ");
-    preIsShot_                         = globalParameter_->GetValue<bool>(particleName, "isShot");
-    groupParamaters_.isAlphaNoMove     = globalParameter_->GetValue<bool>(particleName, "isAlphaNoMove");
+    /// frag
+    parameters_.isScalerScale         = globalParameter_->GetValue<bool>(particleName, "isScalerScale");
+    parameters_.isRotateforDirection  = globalParameter_->GetValue<bool>(particleName, "isRotateforDirection");
+    groupParamaters_.isBillBord       = globalParameter_->GetValue<bool>(particleName, "isBillBord");
+    groupParamaters_.adaptRotate_.isX = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsX");
+    groupParamaters_.adaptRotate_.isY = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsY");
+    groupParamaters_.adaptRotate_.isZ = globalParameter_->GetValue<bool>(particleName, "AdaptRotateIsZ");
+    isShot_                           = globalParameter_->GetValue<bool>(particleName, "isShot");
+    groupParamaters_.isAlphaNoMove    = globalParameter_->GetValue<bool>(particleName, "isAlphaNoMove");
 
     /// easeParm
     parameters_.scaleEaseParm.isScaleEase    = globalParameter_->GetValue<bool>(particleName, "scaleEaseParm.isScaleEase");
@@ -238,15 +246,17 @@ void ParticleParameter::ApplyGlobalParameter(const std::string& particleName) {
     parameters_.scaleEaseParm.endValueV3.max = globalParameter_->GetValue<Vector3>(particleName, "scaleEaseParm.endValueV3.max");
     parameters_.scaleEaseParm.endValueV3.min = globalParameter_->GetValue<Vector3>(particleName, "scaleEaseParm.endValueV3.min");
 
+    /// mode setting
+    billBordType_ = globalParameter_->GetValue<int32_t>(particleName, "preBillBordType_");
+    blendMode_    = globalParameter_->GetValue<int32_t>(particleName, "blendMode");
+
+    // texture
     selectedTexturePath_ = globalParameter_->GetValue<std::string>(particleName, "selectedTexturePath_");
+}
+
+void ParticleParameter::AdaptTexture() {
     if (selectedTexturePath_ == "")
         return;
     // テクスチャのハンドルを取得
-    ParticleManager::GetInstance()->SetTextureHandle(particleName_, TextureManager::GetInstance()->LoadTexture(selectedTexturePath_));
-}
-
-void ParticleParameter::ApplyTexture(const std::string& texturename) {
-    // テクスチャ
-    selectedTexturePath_ = textureFilePath_ + "/" + texturename + ".png";
     ParticleManager::GetInstance()->SetTextureHandle(particleName_, TextureManager::GetInstance()->LoadTexture(selectedTexturePath_));
 }

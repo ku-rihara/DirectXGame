@@ -21,9 +21,6 @@ void TitleScene::Init() {
 
 	BaseScene::Init();
 
-	//uint32_t t = TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
-	//uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
-
 	///パーティクルデータの読み込みと、モデルの読み込み
 	EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticlePrimitive("CenterStarEffect",PrimitiveType::Plane, 100));
     EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticlePrimitive("StarEffect", PrimitiveType::Plane, 100));

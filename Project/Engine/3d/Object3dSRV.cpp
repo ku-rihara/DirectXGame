@@ -21,7 +21,7 @@ Object3dSRV* Object3dSRV::CreateModel(
     return instance;
 }
 
-void Object3dSRV::UpdateTransform(const WorldTransform::BillboardType& axis, std::optional<const ViewProjection*> viewProjection) {
+void Object3dSRV::UpdateTransform(const BillboardType& axis, std::optional<const ViewProjection*> viewProjection) {
     for (std::list<WorldTransform>::iterator particleIterator = particles_.begin();
         particleIterator != particles_.end(); ++particleIterator) {
 
