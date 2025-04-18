@@ -21,8 +21,10 @@ public:
     ///==========================================================
 
     void Init(DirectXCommon* directXCommon, const uint32_t& vertexNum);
+    void SetIndexData(const uint32_t* indices, uint32_t indexCount);
     void DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, Material material, std::optional<uint32_t> textureHandle);
     void DebugImGui();
+
 
 private:
     ///==========================================================
@@ -33,6 +35,8 @@ private:
 
     D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
     D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
+    uint32_t indexNum_;
+
 
     // Resource data
     Material material_;

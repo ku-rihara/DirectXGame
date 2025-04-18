@@ -19,8 +19,28 @@ void Mesh::Init(DirectXCommon* directXCommon, const uint32_t& vertexNum) {
     vertexBufferView_.StrideInBytes = sizeof(VertexData);
     // 書き込むためのアドレスを取得
     vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate_));
-
+    
     defaultTextureHandle_ = TextureManager::GetInstance()->LoadTexture("resources/Texture/default.png");
+}
+
+void Mesh::SetIndexData(const uint32_t* indices, uint32_t indexCount) {
+    indexNum_ = indexCount;
+
+    // インデックスバッファを作成
+    indexResource_ = directXCommon_->CreateBufferResource(
+        directXCommon_->GetDevice(),
+        sizeof(uint32_t) * indexCount);
+
+    // インデックスバッファにデータを書き込む
+    uint32_t* mappedIndexData = nullptr;
+    indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&mappedIndexData));
+    memcpy(mappedIndexData, indices, sizeof(uint32_t) * indexCount);
+    indexResource_->Unmap(0, nullptr);
+
+    // インデックスバッファビューを設定
+    indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
+    indexBufferView_.SizeInBytes    = sizeof(uint32_t) * indexCount;
+    indexBufferView_.Format         = DXGI_FORMAT_R32_UINT;
 }
 
 void Mesh::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, Material material,
@@ -44,6 +64,6 @@ void Mesh::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDL
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(defaultTextureHandle_));
     }
 
-    commandList->DrawInstanced(UINT(vertexNum_), instanceNum, 0, 0);
+    commandList->DrawInstanced(vertexNum_, instanceNum, 0, 0);
     
 }
