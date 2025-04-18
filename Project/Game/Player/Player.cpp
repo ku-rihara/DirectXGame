@@ -749,6 +749,10 @@ void Player::HeadLightSetting() {
 	}
 }
 
+///===================================================================================================================
+///　Particle And Effect
+///==================================================================================================================
+
 void Player::InitParticleEffect(ParticleEffect& effect, const std::string& name, const std::string& modelName, const uint32_t& textureHandle, const int32_t& maxnum) {
 	effect.name = name;
 	effect.emitter.reset(ParticleEmitter::CreateParticle(name, modelName, ".obj", maxnum));
@@ -757,21 +761,17 @@ void Player::InitParticleEffect(ParticleEffect& effect, const std::string& name,
 
 void  Player::ParticleInit() {
 	//texture
-	cirlceTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
-	uint32_t crackTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
-	uint32_t starHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Star.png");
-	uint32_t startFrameHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/CircleFrame.png");
+    uint32_t crackTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
 	uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
 
+	//debri
 	InitParticleEffect(debriParticle_[0], "DebriName", "debri", defaultHandle, 900);
 	debriParticle_[0].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
 
 	//star
-	InitParticleEffect(starEffect_[0], "StarEffect", "plane", starHandle, 10);
-	InitParticleEffect(starEffect_[1], "CenterStarEffect", "plane", cirlceTexture_, 10);
-	InitParticleEffect(starEffect_[2], "StarFrame", "plane", startFrameHandle, 10);
-	starEffect_[0].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
-	starEffect_[2].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
+	starEffect_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("CenterStarEffect",PrimitiveType::Plane, 100));
+    starEffect_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarEffect", PrimitiveType::Plane, 100));
+    starEffect_[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarFrame", PrimitiveType::Plane, 100));
 	for (uint32_t i = 0; i < starEffect_.size(); i++) {
 		starEffect_[i].emitter->SetFollowingPos(&transform_.translation_);
 	}
