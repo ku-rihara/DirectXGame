@@ -29,6 +29,8 @@ PlayerRoot ::~PlayerRoot() {
 //更新
 void PlayerRoot::Update() {
 
+	
+
 
 		if ((Input::IsPressPad(0, XINPUT_GAMEPAD_Y))) {
 			pPlayer_->Move(pPlayer_->GetParamater().moveSpeed *2.4f);
@@ -37,8 +39,6 @@ void PlayerRoot::Update() {
 			pPlayer_->Move(pPlayer_->GetParamater().moveSpeed);
 		}
 	
-	
-
 	//　ジャンプに切り替え
 	if (Input::GetInstance()->PushKey(DIK_J)) {
 		pPlayer_->ChangeBehavior(std::make_unique<PlayerJump>(pPlayer_));

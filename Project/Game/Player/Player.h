@@ -54,6 +54,13 @@ private:
 		float gravity;
 		float fallSpeedLimit;
 	};
+
+	struct ComboParm {
+        float waitTime;
+        float attackEaseMax;
+        float attackReach;
+    };
+
 	///Paramater構造体
 	struct PlayerParams {
 		Vector3 startPos_;
@@ -73,18 +80,12 @@ private:
 		float attackFloatEaseT;
 	};
 
-	struct ComboParm {
-		float waitTime;
-		float attackEaseMax;
-		float attackReach;
-	};
-
 	struct ParticleEffect {
 		std::string name;
 		std::unique_ptr<ParticleEmitter>emitter;
 	};
 
-private: ///*other class
+private: 
 
 	/// グローバルなパラメータ
 	GlobalParameter* globalParameter_;            /// グローバルパラメータ
@@ -102,7 +103,7 @@ private: ///*other class
 	std::array<ParticleEffect, 3> starEffect_;
 
 	/// other class
-	LockOn* pLockOn_;       /// LockOnクラス
+	LockOn* pLockOn_;           /// LockOnクラス
 	GameCamera* pGameCamera_;   /// ゲームカメラポインタ
 	std::unique_ptr<PlayerHandLeft>    leftHand_;      /// 左手
 	std::unique_ptr<PlayerHandRight>   rightHand_;     /// 右手
@@ -154,11 +155,11 @@ public:
 	void EffectDraw(const ViewProjection& viewProjection);
 
 	///* 移動
-	void    Move(const float& speed);                     /// 移動
-	bool    GetIsMoving();                                /// 動かしてるかフラグ
-	void    MoveToLimit();                                /// 移動制限
-	Vector3 GetInputDirecton();                           /// 入力による速度
-	void    UpdateMatrix();                               ///　行列更新
+	void    Move(const float& speed);  /// 移動
+	bool    GetIsMoving();             /// 動かしてるかフラグ
+	void    MoveToLimit();             /// 移動制限
+	Vector3 GetInputDirecton();        /// 入力による速度
+	void    UpdateMatrix();            ///　行列更新
 
 	//* ジャンプ                             
 	void Jump(float& speed, const float& fallSpeedLimit, const float& gravity);                              /// ジャンプ

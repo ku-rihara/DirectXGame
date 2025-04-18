@@ -21,11 +21,6 @@ EnemyRoot::EnemyRoot(BaseEnemy* boss)
 	
 
 	//パラメータ初期化
-	chaseSpeedNormal_ = 0.2f;
-	waveAttackStartPos_ = 25.0f;/// ボス
-	normalAttackStartPos_ = 7.0f;
-	attackCoolTime_ = 1.0f;
-
 	pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2(0, 0));
 	pBaseEnemy_->GetFindSprite()->SetScale(Vector2(0, 0));
 	spriteEase_.maxTime = 1.0f;

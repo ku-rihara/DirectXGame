@@ -20,6 +20,12 @@ class GameCamera;
 class EnemyManager;
 class BaseEnemy : public BaseObject,public AABBCollider {
 public:
+
+	enum class Type {
+        NORMAL,
+        STRONG,
+    };
+
 	struct Paramater {
 		float chaseDistance;
 		float chaseSpeed;
@@ -38,13 +44,7 @@ public:
 		float burstTime;
 		float blowGravity;
 	};
-	enum class Type {
-		NORMAL,
-		STRONG,
-	};
-
-
-
+	
 private:
 	int deathSound_;
 	int thurstSound_;
@@ -93,13 +93,15 @@ public:
 	virtual void Draw(const ViewProjection& viewProjection);
 	virtual void SpriteDraw(const ViewProjection& viewProjection);
 
+	/// Rendition Init
 	void DamageRenditionInit();
 	void ThrustRenditionInit();
 	void DeathRenditionInit();
+    void FallEffectInit(const Vector3& pos);
+    void RotateInit();
+	// I
 	void FallEffectUpdate();
-	void FallEffectInit(const Vector3& pos);
-	void RotateInit();
-
+	
 	/// jump
 	void Jump(float& speed, const float& fallSpeedLimit,const float& gravity);
 	void Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump);
@@ -125,9 +127,9 @@ public:
 	void OnCollisionStay ([[maybe_unused]] BaseCollider* other)override;
 	Vector3 GetCollisionPos() const override;
 	
-	///========================================================================================
+	/// ========================================================================================
 	///  getter method
-	///========================================================================================
+	/// ========================================================================================
 	bool           GetIsDeath()         const   { return isdeath_; }
 	Type           GetType()            const   { return type_; }
 	Paramater      GetParamater()       const   { return paramater_; }
@@ -135,9 +137,9 @@ public:
 	GameCamera*    GetGameCamera()              { return pGameCamera_; }
 	FindSprite*    GetFindSprite()              { return findSprite_.get(); }
 	NotFindSprite* GetNotFindSprite()           { return notFindSprite_.get(); }
-	///========================================================================================
+	/// ========================================================================================
 	///  setter method
-	///========================================================================================
+	/// ========================================================================================
 	void SetPlayer     (Player* plyaer);
 	void SetGameCamera (GameCamera* gamecamera);
 	void SetManager(EnemyManager* manager);
