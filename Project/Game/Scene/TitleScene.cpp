@@ -48,6 +48,9 @@ void TitleScene::Update() {
 		EnemydamageEffect_[i]->EditorUpdate();
 		EnemydamageEffect_[i]->Emit();
 	}
+   /* EnemydamageEffect_[0]->Update();
+    EnemydamageEffect_[0]->EditorUpdate();
+    EnemydamageEffect_[0]->Emit();*/
 	
 
 	ParticleManager::GetInstance()->Update();
