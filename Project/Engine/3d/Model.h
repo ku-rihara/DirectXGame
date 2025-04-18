@@ -87,7 +87,7 @@ public:
 		Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material,
 		std::optional<uint32_t> textureHandle = std::nullopt);	/// モデル描画
 	
-	void DrawParticle(
+	void DrawInstancing(
 		const uint32_t instanceNum,D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, 
 		Material material,
 		std::optional<uint32_t> textureHandle = std::nullopt);/// モデルバーティクル

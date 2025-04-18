@@ -6,7 +6,6 @@
 #include<list>
 
 class SrvManager;
-enum class WorldTransform::BillboardType;
 class Object3dSRV :public BaseObject3d {
 public:
 	
@@ -51,7 +50,7 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void UpdateTransform(const WorldTransform::BillboardType& axis,std::optional<const ViewProjection*>viewProjection=std::nullopt);
+	void UpdateTransform(const BillboardType& axis,std::optional<const ViewProjection*>viewProjection=std::nullopt);
 	/// <summary>
 	/// 描画
 	/// </summary>

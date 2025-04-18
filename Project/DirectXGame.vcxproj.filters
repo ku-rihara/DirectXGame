@@ -88,26 +88,14 @@
     <Filter Include="MyEngine\.cpp\utility">
       <UniqueIdentifier>{84912fec-8032-437b-8169-b12e5883cda4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.cpp\utility\Particle">
-      <UniqueIdentifier>{e160a169-d446-4008-85cf-77b40545199e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.cpp\utility\Debug">
       <UniqueIdentifier>{8c4bbc4a-e367-4978-b4c5-734f1ee6cb61}</UniqueIdentifier>
     </Filter>
     <Filter Include="MyEngine\.h\utility">
       <UniqueIdentifier>{ba7b0919-2c62-43e1-b233-9024bf672fdf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.h\utility\Particle">
-      <UniqueIdentifier>{4b1e989d-a14e-4aab-8692-e2fbb2059019}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.h\utility\Debug">
       <UniqueIdentifier>{20818b80-a58e-4c65-84c7-f8fe2b0bdb85}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.cpp\utility\Editor">
-      <UniqueIdentifier>{38b63eec-6feb-456d-8ec6-809cc5cedf01}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.h\utility\Editor">
-      <UniqueIdentifier>{fd8669ab-e586-4603-8989-fde63074b7f4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Ground">
       <UniqueIdentifier>{1d7f274d-8636-4850-a0ef-f6132e04c95b}</UniqueIdentifier>
@@ -130,14 +118,29 @@
     <Filter Include="Game\Plane">
       <UniqueIdentifier>{70c3c5e1-9bef-4a27-b4f2-dba2a4e9ab55}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player">
-      <UniqueIdentifier>{7a5d0742-9ae4-4f8d-8b0f-ed52a7cb2b1e}</UniqueIdentifier>
+    <Filter Include="MyEngine\.h\utility\RailEditor">
+      <UniqueIdentifier>{fd8669ab-e586-4603-8989-fde63074b7f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Command">
-      <UniqueIdentifier>{80d7340e-c7af-4924-a46d-e60c47a2e253}</UniqueIdentifier>
+    <Filter Include="MyEngine\.cpp\utility\RailEditor">
+      <UniqueIdentifier>{38b63eec-6feb-456d-8ec6-809cc5cedf01}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\InputHandle">
-      <UniqueIdentifier>{34fd79ed-48b1-448b-8fd4-1bac5846aa2c}</UniqueIdentifier>
+    <Filter Include="MyEngine\.cpp\utility\ParticleEditor">
+      <UniqueIdentifier>{e160a169-d446-4008-85cf-77b40545199e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\ParticleEditor">
+      <UniqueIdentifier>{4b1e989d-a14e-4aab-8692-e2fbb2059019}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\ParameterEditor">
+      <UniqueIdentifier>{c77b02e3-7e6e-47c2-96b6-027952dccbc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\ParameterEditor">
+      <UniqueIdentifier>{308716b1-61b9-4593-8d69-0efe690d1ff1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Primitive">
+      <UniqueIdentifier>{a660c6f0-a988-46d1-bca0-d2fc5408ee78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Primitive">
+      <UniqueIdentifier>{0015d049-85db-4bcb-ab82-220bbf98f1a9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -146,9 +149,6 @@
     </ClCompile>
     <ClCompile Include="Engine\2d\Sprite.cpp">
       <Filter>MyEngine\.cpp\2d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\Mesh.cpp">
-      <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\Model.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
@@ -259,26 +259,11 @@
     <ClCompile Include="Engine\base\SrvManager.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\Particle\ParticleCommon.cpp">
-      <Filter>MyEngine\.cpp\utility\Particle</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp">
       <Filter>MyEngine\.cpp\utility\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\Particle\ParticleManager.cpp">
-      <Filter>MyEngine\.cpp\utility\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\Particle\ParticleEmitter.cpp">
-      <Filter>MyEngine\.cpp\utility\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\Editor\GlobalParameter.cpp">
-      <Filter>MyEngine\.cpp\utility\Editor</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\3d\Object3dSRV.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\Editor\ControlPosManager.cpp">
-      <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
     <ClCompile Include="Game\Ground\Ground.cpp">
       <Filter>Game\Ground</Filter>
@@ -294,12 +279,6 @@
     </ClCompile>
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp">
       <Filter>Game\Scene\Factory</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\Editor\RailManager.cpp">
-      <Filter>MyEngine\.cpp\utility\Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\Editor\Rail.cpp">
-      <Filter>MyEngine\.cpp\utility\Editor</Filter>
     </ClCompile>
     <ClCompile Include="math\Shake.cpp">
       <Filter>liberary\.cpp</Filter>
@@ -360,6 +339,39 @@
     </ClCompile>
     <ClCompile Include="Engine\base\CopyImageRenderer.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\RailEditor\Rail.cpp">
+      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\RailEditor\RailManager.cpp">
+      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\RailEditor\ControlPosManager.cpp">
+      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ParticleEditor\ParticleEmitter.cpp">
+      <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ParticleEditor\ParticleManager.cpp">
+      <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ParticleEditor\ParticleCommon.cpp">
+      <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ParameterEditor\GlobalParameter.cpp">
+      <Filter>MyEngine\.cpp\utility\ParameterEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ParticleEditor\ParticleParameter.cpp">
+      <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Primitive\PrimitivePlane.cpp">
+      <Filter>MyEngine\.cpp\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Primitive\IPrimitive.cpp">
+      <Filter>MyEngine\.cpp\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\Mesh.cpp">
+      <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -513,26 +525,11 @@
     <ClInclude Include="Engine\base\SrvManager.h">
       <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\Particle\ParticleCommon.h">
-      <Filter>MyEngine\.h\utility\Particle</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h">
       <Filter>MyEngine\.h\utility\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\Particle\ParticleManager.h">
-      <Filter>MyEngine\.h\utility\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\Particle\ParticleEmitter.h">
-      <Filter>MyEngine\.h\utility\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\Editor\GlobalParameter.h">
-      <Filter>MyEngine\.h\utility\Editor</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\3d\Object3dSRV.h">
       <Filter>MyEngine\.h\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\Editor\ControlPosManager.h">
-      <Filter>MyEngine\.h\utility\Editor</Filter>
     </ClInclude>
     <ClInclude Include="Game\Ground\Ground.h">
       <Filter>Game\Ground</Filter>
@@ -551,12 +548,6 @@
     </ClInclude>
     <ClInclude Include="Game\Scene\Factory\SceneFactory.h">
       <Filter>Game\Scene\Factory</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\Editor\RailManager.h">
-      <Filter>MyEngine\.h\utility\Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\Editor\Rail.h">
-      <Filter>MyEngine\.h\utility\Editor</Filter>
     </ClInclude>
     <ClInclude Include="math\Shake.h">
       <Filter>liberary\.h</Filter>
@@ -614,6 +605,36 @@
     </ClInclude>
     <ClInclude Include="Engine\base\CopyImageRenderer.h">
       <Filter>MyEngine\.h\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\RailEditor\Rail.h">
+      <Filter>MyEngine\.h\utility\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\RailEditor\RailManager.h">
+      <Filter>MyEngine\.h\utility\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\RailEditor\ControlPosManager.h">
+      <Filter>MyEngine\.h\utility\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ParticleEditor\ParticleManager.h">
+      <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ParticleEditor\ParticleCommon.h">
+      <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ParticleEditor\ParticleEmitter.h">
+      <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ParameterEditor\GlobalParameter.h">
+      <Filter>MyEngine\.h\utility\ParameterEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ParticleEditor\ParticleParameter.h">
+      <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\PrimitivePlane.h">
+      <Filter>MyEngine\.h\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\IPrimitive.h">
+      <Filter>MyEngine\.h\Primitive</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

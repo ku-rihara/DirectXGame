@@ -2,30 +2,38 @@
 #include"Vector3.h"
 #include"ViewProjection.h"
 #include"Matrix4x4.h"
+#include"Quaternion.h"
 #include <wrl.h>
 #include <d3d12.h>
 #include<list>
+
 // 定数バッファ用データ構造体
 struct ConstBufferDataWorldTransform {
 	Matrix4x4 matWorld; // ローカル → ワールド変換行列
 };
+
+enum class BillboardType {
+    XYZ, // xyz
+    X, // x
+    Y, // y
+    Z, // z
+};
+
+struct AdaptRotate {
+    bool isX;
+    bool isY;
+    bool isZ;
+};
+
 /// <summary>
 /// ワールド変換データ
 /// </summary>
 class WorldTransform{
 public:
 
-	enum class BillboardType {
-		XYZ, //xyz
-		X, //x
-	    Y, //y
-		Z, //z
-	};
-
-	struct AdaptRotate {
-		bool isX_;
-		bool isY_;
-		bool isZ_;
+	enum class RotateOder {
+		XYZ,
+		Quaternion,
 	};
 
 public:
@@ -36,10 +44,12 @@ public:
 	Vector3 rotation_ = {};
 	//ローカル座標
 	Vector3 translation_ = {};
+	Quaternion quaternion_ = {};
 	//ローカル→ワールド変換行列
 	Matrix4x4 matWorld_;
 	//親となるワールド変換へのポインタ
 	const WorldTransform* parent_ = nullptr;
+	RotateOder rotateOder_ = RotateOder::XYZ;
 	
 private:
 	Matrix4x4 billboardMatrix_;
@@ -80,6 +90,8 @@ public:
 	/// 行列の更新
 	/// </summary>
 	void UpdateMatrix();
+
+	void UpdateAffineMatrix();
 
 	void SetParent(const WorldTransform* parent);
 

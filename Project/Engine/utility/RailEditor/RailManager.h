@@ -9,8 +9,8 @@
 #include "3d/WorldTransform.h"
 #include "3d/Object3d.h"
 
-#include"utility/Editor/Rail.h"
-#include"utility/Editor/ControlPosManager.h"
+#include"utility/RailEditor/Rail.h"
+#include"utility/RailEditor/ControlPosManager.h"
 
 class SrvManager;
 class RailManager {

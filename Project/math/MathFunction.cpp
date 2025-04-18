@@ -1,4 +1,5 @@
 #include "MathFunction.h"
+#include"3d/ViewProjection.h"
 #include <cmath>
 #include<numbers>
 #include<assert.h>
@@ -198,3 +199,24 @@ float LerpShortAngle(float a, float b, float t) {
 	return a + diff * t;
 }
  
+Vector3 DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view) {
+
+    // ベクトル正規化
+    Vector3 rdirection = direction.Normalize();
+
+    // カメラの回転を反映した回転行列を作成
+    Matrix4x4 rotateCameraMatrix = MakeRotateMatrix(Vector3(-view.rotation_.x, -view.rotation_.y, -view.rotation_.z));
+    rdirection                   = TransformNormal(rdirection, rotateCameraMatrix);
+
+    // 基準ベクトル(上方向)をカメラの回転で変換
+    Vector3 up = {0.0f, 1.0f, 0.0f};
+    up         = TransformNormal(up, rotateCameraMatrix);
+
+    // 方向変換行列を作成
+    Matrix4x4 dToDMatrix = DirectionToDirection(up, rdirection);
+
+    // 方向変換行列からオイラー角を抽出
+    Vector3 angle = ExtractEulerAngles(dToDMatrix);
+
+    return angle;
+}

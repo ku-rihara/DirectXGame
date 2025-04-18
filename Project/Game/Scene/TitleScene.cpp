@@ -5,7 +5,7 @@
 
 #include "base/TextureManager.h"
 //class
-#include"utility/Particle/ParticleManager.h"
+#include"utility/ParticleEditor/ParticleManager.h"
 
 //math
 #include"Frame/Frame.h"
@@ -21,23 +21,26 @@ void TitleScene::Init() {
 
 	BaseScene::Init();
 
-	//uint32_t t = TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
-	uint32_t circleHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
-	//uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
-	//uint32_t starHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/star.png");
-	//uint32_t starFrameHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circleFrame.png");
-
-	EnemydamageEffect_.reset(ParticleEmitter::CreateParticle("EnemyDamage", "Plane", ".obj", 800));
-	EnemydamageEffect_->SetTextureHandle(circleHandle);
+	///パーティクルデータの読み込みと、モデルの読み込み
+	EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticlePrimitive("CenterStarEffect",PrimitiveType::Plane, 100));
+    EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticlePrimitive("StarEffect", PrimitiveType::Plane, 100));
+    EnemydamageEffect_[2].reset(ParticleEmitter::CreateParticlePrimitive("StarFrame", PrimitiveType::Plane, 100));
 
 	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
 void TitleScene::Update() {
 
-	EnemydamageEffect_->Update();
-	EnemydamageEffect_->EditorUpdate();
-	EnemydamageEffect_->Emit();
+	/// 
+	for (int i = 0; i < EnemydamageEffect_.size(); i++) {
+		EnemydamageEffect_[i]->Update();
+		EnemydamageEffect_[i]->EditorUpdate();
+		EnemydamageEffect_[i]->Emit();
+	}
+   /* EnemydamageEffect_[0]->Update();
+    EnemydamageEffect_[0]->EditorUpdate();
+    EnemydamageEffect_[0]->Emit();*/
+	
 
 	ParticleManager::GetInstance()->Update();
 
