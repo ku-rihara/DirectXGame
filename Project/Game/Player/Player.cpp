@@ -753,61 +753,31 @@ void Player::HeadLightSetting() {
 ///　Particle And Effect
 ///==================================================================================================================
 
-void Player::InitParticleEffect(ParticleEffect& effect, const std::string& name, const std::string& modelName, const uint32_t& textureHandle, const int32_t& maxnum) {
-	effect.name = name;
-	effect.emitter.reset(ParticleEmitter::CreateParticle(name, modelName, ".obj", maxnum));
-	effect.emitter->SetTextureHandle(textureHandle);
-}
-
 void  Player::ParticleInit() {
-	//texture
-    uint32_t crackTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
-	uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
 
 	//debri
-	InitParticleEffect(debriParticle_[0], "DebriName", "debri", defaultHandle, 900);
-	debriParticle_[0].emitter->SetBlendMode(BlendMode::None);
-
+    debriParticle_[0].emitter.reset(ParticleEmitter::CreateParticle("DebriParticle", "debri",".obj" ,100));
+	
 	//star
-	starEffect_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("CenterStarEffect",PrimitiveType::Plane, 100));
-    starEffect_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarEffect", PrimitiveType::Plane, 100));
-    starEffect_[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarFrame", PrimitiveType::Plane, 100));
+	starEffect_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("CenterStarEffect",PrimitiveType::Plane, 30));
+    starEffect_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarEffect", PrimitiveType::Plane, 30));
+    starEffect_[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarFrame", PrimitiveType::Plane, 30));
+
 	for (uint32_t i = 0; i < starEffect_.size(); i++) {
 		starEffect_[i].emitter->SetFollowingPos(&transform_.translation_);
 	}
 
 	// crack
-	fallCrack_.reset(ParticleEmitter::CreateParticle("Crack", "Plane", ".obj", 30));
-	fallCrack_->SetTextureHandle(crackTexture_);
-	fallCrack_->SetBlendMode(BlendMode::None);
+    fallCrack_.reset(ParticleEmitter::CreateParticlePrimitive("Crack", PrimitiveType::Plane, 30));
 }
 
 
-void Player::FallParticleEmit() {
+void Player::DebriParticleEmit() {
 	//ガレキパーティクル
 	for (uint32_t i = 0; i < debriParticle_.size(); i++) {
 		debriParticle_[i].emitter->Emit();
 	}
 	fallCrack_->Emit();
-}
-
-void Player::ParticleUpdate() {
-	//ガレキパーティクル
-	for (uint32_t i = 0; i < debriParticle_.size(); i++) {
-		debriParticle_[i].emitter->SetTargetPosition(GetWorldPosition());
-		debriParticle_[i].emitter->Update();
-		debriParticle_[i].emitter->EditorUpdate();
-	}
-
-	//星パーティクル
-	for (uint32_t i = 0; i < starEffect_.size(); i++) {
-		starEffect_[i].emitter->Update();
-		starEffect_[i].emitter->EditorUpdate();
-	}
-
-	fallCrack_->SetTargetPosition(Vector3(GetWorldPosition().x, 0.0f, GetWorldPosition().z));
-	fallCrack_->Update();
-	fallCrack_->EditorUpdate();
 }
 
 
@@ -825,6 +795,24 @@ void Player::FallEffectInit(const Vector3& pos) {
 	effect->Init(pos);
 	effects_.push_back(std::move(effect));
 }
+
+void Player::ParticleUpdate() {
+    // ガレキパーティクル
+    for (uint32_t i = 0; i < debriParticle_.size(); i++) {
+        debriParticle_[i].emitter->SetTargetPosition(GetWorldPosition());
+        debriParticle_[i].emitter->Update();
+        debriParticle_[i].emitter->EditorUpdate();
+    }
+
+    // 星パーティクル
+    for (uint32_t i = 0; i < starEffect_.size(); i++) {
+        starEffect_[i].emitter->Update();
+    }
+
+    fallCrack_->SetTargetPosition(Vector3(GetWorldPosition().x, 0.0f, GetWorldPosition().z));
+    fallCrack_->Update();
+}
+
 
 
 void Player::FallEffectUpdate() {

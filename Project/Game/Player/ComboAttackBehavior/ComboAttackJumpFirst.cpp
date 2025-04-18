@@ -85,7 +85,7 @@ void ComboAttackJumpFirst::Update() {
 		pPlayer_->GetLeftHand()->SetWorldPositionY(fallInitPosLHand_);
 		pPlayer_->GetRightHand()->SetWorldPositionY(fallInitPosRHand_);
 		pPlayer_->SetWorldPositionY(Player::InitY_);
-		pPlayer_->FallParticleEmit();
+		pPlayer_->DebriParticleEmit();
 		pPlayer_->FallEffectInit(pPlayer_->GetWorldPosition());
 		pPlayer_->GetGameCamera()->ChangeShakeMode();
 		pPlayer_->FallSound();

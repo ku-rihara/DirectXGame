@@ -99,6 +99,7 @@
             0.0,
             0.0
         ],
+        "blendMode": 1,
         "isAlphaNoMove": true,
         "isBillBord": false,
         "isMoveForRail": false,
@@ -121,6 +122,7 @@
             0.0
         ],
         "scaleEaseParm.isScaleEase": false,
-        "scaleEaseParm.maxTime": 1.059999942779541
+        "scaleEaseParm.maxTime": 1.059999942779541,
+        "selectedTexturePath_": "Resources/texture/Crack.png"
     }
 }

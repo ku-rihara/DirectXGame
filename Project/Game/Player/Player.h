@@ -171,7 +171,7 @@ public:
 	void ChangeCombBoRoot();
 
 	//* エフェクト
-	void FallParticleEmit();
+	void DebriParticleEmit();
 	void FallEffectUpdate();
 	void StartEffectEmit();
 	void FallEffectInit(const Vector3& pos);
