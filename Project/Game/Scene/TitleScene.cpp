@@ -24,18 +24,10 @@ void TitleScene::Init() {
 	//uint32_t t = TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
 	//uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
 
-	///テクスチャロード
-	uint32_t circleHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
-	uint32_t starHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/star.png");
-	uint32_t starFrameHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circleFrame.png");
-
 	///パーティクルデータの読み込みと、モデルの読み込み
-	EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticlePrimitive("CenterStarEffect",PrimitiveType::Plane, 800));
-	EnemydamageEffect_[0]->SetTextureHandle(circleHandle);
-	EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticle("StarEffect", "Plane", ".obj", 800));
-	EnemydamageEffect_[1]->SetTextureHandle(starHandle);
-	EnemydamageEffect_[2].reset(ParticleEmitter::CreateParticle("StarFrame", "Plane", ".obj", 800));
-	EnemydamageEffect_[2]->SetTextureHandle(starFrameHandle);
+	EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticlePrimitive("CenterStarEffect",PrimitiveType::Plane, 100));
+    EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticlePrimitive("StarEffect", PrimitiveType::Plane, 100));
+    EnemydamageEffect_[2].reset(ParticleEmitter::CreateParticlePrimitive("StarFrame", PrimitiveType::Plane, 100));
 
 	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
