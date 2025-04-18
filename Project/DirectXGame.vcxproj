@@ -68,8 +68,6 @@
     <ClCompile Include="Game\Ground\Ground.cpp" />
     <ClCompile Include="Game\MonsterBall\MonsterBall.cpp" />
     <ClCompile Include="Game\Plane\Plane.cpp" />
-    <ClCompile Include="Game\InputHandle\InputHandle.cpp" />
-    <ClCompile Include="Game\Player\Player.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
@@ -155,8 +153,6 @@
     <ClInclude Include="Game\Ground\Ground.h" />
     <ClInclude Include="Game\MonsterBall\MonsterBall.h" />
     <ClInclude Include="Game\Plane\Plane.h" />
-    <ClInclude Include="Game\InputHandle\InputHandle.h" />
-    <ClInclude Include="Game\Player\Player.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
     <ClInclude Include="Game\Scene\Factory\AbstractSceneFactory.h" />
     <ClInclude Include="Game\Scene\Factory\SceneFactory.h" />

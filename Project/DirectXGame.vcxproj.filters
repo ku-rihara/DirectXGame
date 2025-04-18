@@ -322,15 +322,6 @@
     <ClCompile Include="Engine\Function\GetFile.cpp">
       <Filter>MyEngine\.cpp\function</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\Player.cpp">
-      <Filter>Game\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Command\Command.cpp">
-      <Filter>Game\Command</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\InputHandle\InputHandle.cpp">
-      <Filter>Game\InputHandle</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\input\GamePad.cpp">
       <Filter>MyEngine\.cpp\input</Filter>
     </ClCompile>
@@ -590,15 +581,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Function\GetFile.h">
       <Filter>MyEngine\.h\function</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\Player.h">
-      <Filter>Game\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Command\Command.h">
-      <Filter>Game\Command</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\InputHandle\InputHandle.h">
-      <Filter>Game\InputHandle</Filter>
     </ClInclude>
     <ClInclude Include="Engine\input\GamePad.h">
       <Filter>MyEngine\.h\input</Filter>
