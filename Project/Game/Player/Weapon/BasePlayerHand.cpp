@@ -127,8 +127,8 @@ void BasePlayerHand::SetParent(WorldTransform* parent) {
 }
 
 void BasePlayerHand::SetBlendModeSub() {
-	emitter_->SetBlendMode(ParticleCommon::BlendMode::Subtractive);
+	emitter_->SetBlendMode(BlendMode::Subtractive);
 }
 void BasePlayerHand::SetBlendModeAdd() {
-	emitter_->SetBlendMode(ParticleCommon::BlendMode::Add);
+	emitter_->SetBlendMode(BlendMode::Add);
 }

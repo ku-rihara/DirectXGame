@@ -1,13 +1,17 @@
 #pragma once
 
-#include "MinMax.h"
+// 3d
 #include "3d/ViewProjection.h"
+#include "MinMax.h"
+// editor
 #include "utility/ParameterEditor/GlobalParameter.h"
-#include "utility/RailEditor/RailManager.h"
 #include "utility/ParticleEditor/ParticleCommon.h"
+#include "utility/RailEditor/RailManager.h"
+// int32_t
+#include <cstdint>
+// std
 #include <string>
 #include <vector>
-#include <cstdint>
 
 class ParticleParameter {
 public:
@@ -19,12 +23,12 @@ public:
     };
 
     struct GroupParamaters {
-        ParticleCommon::BlendMode blendMode;
+        BlendMode blendMode;
         bool isBillBord;
         bool isShot;
         bool isAlphaNoMove;
-        WorldTransform::BillboardType  billBordType;
-        WorldTransform::AdaptRotate adaptRotate_;
+        BillboardType billBordType;
+        AdaptRotate adaptRotate_;
     };
 
     struct EaseParm {
@@ -39,66 +43,78 @@ public:
     struct Parameters {
         const WorldTransform* parentTransform = nullptr;
         Vector3 targetPos;
-        const Vector3* followingPos_ = nullptr;
         Vector3 emitPos;
-        V3MinMax positionDist;
-        bool isScalerScale;
-        EaseParm scaleEaseParm;
-        FMinMax scaleDist;
-        V3MinMax scaleDistV3;
-        FMinMax speedDist;
-        V3MinMax directionDist;
+        Vector3 baseRotate;
         Vector4 baseColor;
+        V3MinMax scaleDistV3;
+        V3MinMax positionDist;
+        V3MinMax directionDist;
+        V3MinMax rotateDist;
+        V3MinMax rotateSpeedDist;
+        FMinMax scaleDist;
+        FMinMax speedDist;
         V4MinMax colorDist;
         float lifeTime;
         float gravity;
-        Vector3 baseRotate;
-        V3MinMax rotateDist;
-        V3MinMax rotateSpeedDist;
+        bool isScalerScale;
         bool isRotateforDirection;
+        EaseParm scaleEaseParm;
+        const Vector3* followingPos_ = nullptr;
     };
 
 protected:
-    std::string particleName_;
+    /// parameters
     Parameters parameters_;
     GroupParamaters groupParamaters_;
-    std::string folderName_ = "Particle";
-	std::string textureFilePath_ = "Resources/texture";
     GlobalParameter* globalParameter_;
-    int preBillBordType_;
-    bool preIsShot_;
-    float intervalTime_;
-    int32_t particleCount;
 
+    ///* setting
+    // type
+    int32_t billBordType_;
+    int32_t blendMode_;
+    // isShot
+    bool isShot_;
+    // Time
+    float intervalTime_;
+    // Count
+    int32_t particleCount_;
+
+    // file
+    std::string particleName_;
+    const std::string folderName_      = "Particle";
+    const std::string textureFilePath_ = "Resources/texture";
     std::string selectedTexturePath_;
 
 public:
-	ParticleParameter() = default;
-    
+    ParticleParameter()          = default;
     virtual ~ParticleParameter() = default;
 
+    // init
     virtual void Init();
+    void ParameterInit();
 
-    //パラメータのリセット
-    void ResetParameters();
+    // Adapt Texture
+    void AdaptTexture();
 
+    // Parameter Edit
+    virtual void ParmLoadForImGui();
+    virtual void ParmSaveForImGui();
+    virtual void AddParmGroup();
+    virtual void SetValues();
+    virtual void ApplyGlobalParameter(const std::string& particleName);
    
-    virtual  void ParmLoadForImGui(); // ロード
-    virtual  void ParmSaveForImGui(); // セーブ
-    void AddParmGroup();              // グループを追加
-   virtual  void SetValues();                 // グループに値をセット
-   virtual  void ApplyGlobalParameter(const std::string& particleName);  // ImGuiからパラメータを得る
-  virtual  void ApplyTexture(const std::string& texturename);
-   
-   
-    //getter
-    std::string GetParticleName()const { return particleName_; }
-    int GetPreBillBordType()const { return preBillBordType_; }
-    bool GetPreIsShot()const { return preIsShot_; }
+    /// =============================================================================
+    /// getter method
+    /// =============================================================================
+    std::string GetParticleName() const { return particleName_; }
+    int GetPreBillBordType() const { return billBordType_; }
+    bool GetPreIsShot() const { return isShot_; }
 
-    //setter
+    /// =============================================================================
+    /// setter method
+    /// =============================================================================
     void SetParameter(const Parameters& param) { parameters_ = param; }
     void SetGroupParameter(const GroupParamaters& groupParam) { groupParamaters_ = groupParam; }
-    void SetPreBillBordType(const int& preBillBordType) { preBillBordType_ = preBillBordType; }
-    void SetPreIsShot(const bool& preIsShot) { preIsShot_ = preIsShot; }
+    void SetPreBillBordType(const int& preBillBordType) { billBordType_ = preBillBordType; }
+    void SetPreIsShot(const bool& preIsShot) { isShot_ = preIsShot; }
 };

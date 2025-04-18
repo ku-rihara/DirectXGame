@@ -89,6 +89,7 @@
         ],
         "Speed Max": 0.0,
         "Speed Min": 0.0,
+        "blendMode": 1,
         "isAlphaNoMove": false,
         "isBillBord": true,
         "isMoveForRail": false,

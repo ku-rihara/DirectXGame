@@ -94,13 +94,13 @@ void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection,
         break;
     }
 
-    if (!adaptRotate.isX_) {
+    if (!adaptRotate.isX) {
         rotation_.x = 0.0f;
     }
-    if (!adaptRotate.isY_) {
+    if (!adaptRotate.isY) {
         rotation_.y = 0.0f;
     }
-    if (!adaptRotate.isZ_) {
+    if (!adaptRotate.isZ) {
         rotation_.z = 0.0f;
     }
 

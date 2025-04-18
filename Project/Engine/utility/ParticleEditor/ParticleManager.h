@@ -20,7 +20,6 @@
 #include <unordered_map>
 #include <memory>
 
-enum class BlendMode;
 class ParticleCommon;
 struct ParticleEmitter::GroupParamaters;
 struct ParticleEmitter::Parameters;
@@ -82,8 +81,7 @@ public:
     void Init(SrvManager* srvManager);
     void Update();
     void Draw(const ViewProjection& viewProjection);
-    Vector3 DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view);
-
+   
     // モデル、リソース作成(グループ作成)
     void CreateParticleGroup(const std::string name, const std::string modelFilePath, const std::string& extension, const uint32_t& maxnum);
     void CreatePrimitiveParticle(const std::string& name, PrimitiveType type, const uint32_t& maxnum);

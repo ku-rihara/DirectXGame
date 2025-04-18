@@ -766,7 +766,7 @@ void  Player::ParticleInit() {
 
 	//debri
 	InitParticleEffect(debriParticle_[0], "DebriName", "debri", defaultHandle, 900);
-	debriParticle_[0].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
+	debriParticle_[0].emitter->SetBlendMode(BlendMode::None);
 
 	//star
 	starEffect_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("CenterStarEffect",PrimitiveType::Plane, 100));
@@ -779,7 +779,7 @@ void  Player::ParticleInit() {
 	// crack
 	fallCrack_.reset(ParticleEmitter::CreateParticle("Crack", "Plane", ".obj", 30));
 	fallCrack_->SetTextureHandle(crackTexture_);
-	fallCrack_->SetBlendMode(ParticleCommon::BlendMode::None);
+	fallCrack_->SetBlendMode(BlendMode::None);
 }
 
 

@@ -6,28 +6,30 @@
 #include <wrl.h>
 #include <d3d12.h>
 #include<list>
+
 // 定数バッファ用データ構造体
 struct ConstBufferDataWorldTransform {
 	Matrix4x4 matWorld; // ローカル → ワールド変換行列
 };
+
+enum class BillboardType {
+    XYZ, // xyz
+    X, // x
+    Y, // y
+    Z, // z
+};
+
+struct AdaptRotate {
+    bool isX;
+    bool isY;
+    bool isZ;
+};
+
 /// <summary>
 /// ワールド変換データ
 /// </summary>
-class WorldTransform {
+class WorldTransform{
 public:
-
-	enum class BillboardType {
-		XYZ, //xyz
-		X, //x
-		Y, //y
-		Z, //z
-	};
-
-	struct AdaptRotate {
-		bool isX_;
-		bool isY_;
-		bool isZ_;
-	};
 
 	enum class RotateOder {
 		XYZ,

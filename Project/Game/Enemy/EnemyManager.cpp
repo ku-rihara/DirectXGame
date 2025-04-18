@@ -391,19 +391,19 @@ void EnemyManager::ParticleInit() {
 
 	/// death
 	InitParticleEffect(deathParticle_[0], "EnemyDeathSmoke", "Plane", boalHandle, 900);
-	deathParticle_[0].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
+	deathParticle_[0].emitter->SetBlendMode(BlendMode::None);
 	InitParticleEffect(deathParticle_[1], "EnemyDeathFireSmoke", "Plane", circleHandle, 900);
 	InitParticleEffect(deathParticle_[2], "EnemyDeathSpark", "Plane", circleHandle, 900);
 	InitParticleEffect(deathParticle_[3], "EnemyDeathMiniSpark", "Plane", circleHandle, 900);
 
 	//
 	InitParticleEffect(debriParticle_[0], "DebriName", "debri", defaultHandle, 500);
-	debriParticle_[0].emitter->SetBlendMode(ParticleCommon::BlendMode::None);
+	debriParticle_[0].emitter->SetBlendMode(BlendMode::None);
 
 	// crack
 	fallCrack_.reset(ParticleEmitter::CreateParticle("Crack", "Plane", ".obj", 30));
 	fallCrack_->SetTextureHandle(crackTexture_);
-	fallCrack_->SetBlendMode(ParticleCommon::BlendMode::None);
+	fallCrack_->SetBlendMode(BlendMode::None);
 
 	
 
