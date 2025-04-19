@@ -22,8 +22,8 @@ void TitleScene::Init() {
 	BaseScene::Init();
 
 	///パーティクルデータの読み込みと、モデルの読み込み
-	EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticlePrimitive("CenterStarEffect",PrimitiveType::Plane, 100));
-    EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticlePrimitive("StarEffect", PrimitiveType::Plane, 100));
+	EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticlePrimitive("HitEffectCenter",PrimitiveType::Plane, 100));
+    EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticlePrimitive("HitEffect", PrimitiveType::Plane, 100));
     EnemydamageEffect_[2].reset(ParticleEmitter::CreateParticlePrimitive("StarFrame", PrimitiveType::Plane, 100));
 
 	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);

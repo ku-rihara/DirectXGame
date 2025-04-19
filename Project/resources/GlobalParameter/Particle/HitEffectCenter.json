@@ -1,0 +1,130 @@
+{
+    "HitEffectCenter": {
+        "AdaptRotateIsX": false,
+        "AdaptRotateIsY": false,
+        "AdaptRotateIsZ": true,
+        "BaseColor": [
+            0.813725471496582,
+            0.5897632241249084,
+            0.48265090584754944,
+            0.0
+        ],
+        "Color Max": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Color Min": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Direction Max": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Direction Min": [
+            -1.0,
+            -1.0,
+            0.0
+        ],
+        "Gravity": 0.0,
+        "IntervalTime": 0.8600000143051147,
+        "LifeTime": 0.6000000238418579,
+        "Particle Count": 1,
+        "Position Base": [
+            9.0,
+            0.0,
+            0.0
+        ],
+        "Position Max": [
+            1.2000000476837158,
+            1.100000023841858,
+            1.399999976158142
+        ],
+        "Position Min": [
+            -1.100000023841858,
+            -1.0,
+            -1.100000023841858
+        ],
+        "Rotate Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale Max": 5.0,
+        "Scale Min": 5.0,
+        "ScaleV3 Max": [
+            7.0,
+            7.0,
+            5.0
+        ],
+        "ScaleV3 Min": [
+            7.0,
+            7.0,
+            5.0
+        ],
+        "Speed Max": 0.0,
+        "Speed Min": 0.0,
+        "UV IsRoop": false,
+        "UV NumOfFrame": 10,
+        "UV Pos": [
+            0.0,
+            0.0
+        ],
+        "UV Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "UV ScroolSpeed": 0.03999999910593033,
+        "UV isScrool": true,
+        "UV isScroolEachPixel": false,
+        "blendMode": 0,
+        "isAlphaNoMove": true,
+        "isBillBord": true,
+        "isRotateforDirection": true,
+        "isScalerScale": false,
+        "isShot": false,
+        "preBillBordType_": 0,
+        "scaleEaseParm.easeTypeInt": 2,
+        "scaleEaseParm.endValueF.max": 0.0,
+        "scaleEaseParm.endValueF.min": 0.0,
+        "scaleEaseParm.endValueV3.max": [
+            9.0,
+            9.0,
+            1.0
+        ],
+        "scaleEaseParm.endValueV3.min": [
+            9.0,
+            9.0,
+            1.0
+        ],
+        "scaleEaseParm.isScaleEase": true,
+        "scaleEaseParm.maxTime": 0.3799999952316284,
+        "selectedTexturePath_": "Resources/texture/HitEffectCenter.png"
+    }
+}

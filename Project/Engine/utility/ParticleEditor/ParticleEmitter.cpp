@@ -153,6 +153,22 @@ void ParticleEmitter::EditorUpdate() {
         ImGui::DragFloat3("Rotate Speed Min", &parameters_.rotateSpeedDist.min.x, 0.1f, 0, 720);
     }
 
+    if (ImGui::CollapsingHeader("UV Parameters")) {
+        ImGui::SeparatorText("UV Position:");
+        ImGui::DragFloat2("UV_Pos", &parameters_.uvParm.pos.x, 0.01f);
+
+        ImGui::SeparatorText("UV Rotation:");
+        ImGui::DragFloat3("UV_Rotate", &parameters_.uvParm.rotate.x, 0.1f);
+
+        ImGui::SeparatorText("UV Animation:");
+        ImGui::InputInt("Num of Frames", &parameters_.uvParm.numOfFrame);
+        ImGui::DragFloat("Scrool Speed", &parameters_.uvParm.frameScroolSpeed, 0.01f);
+        ImGui::Checkbox("Is Roop", &parameters_.uvParm.isRoop);
+        ImGui::Checkbox("Is ScroolEachPixel", &parameters_.uvParm.isScroolEachPixel);
+        ImGui::Checkbox("Is Scrool", &parameters_.uvParm.isScrool);
+    }
+
+
     // その他のパラメータ
     if (ImGui::CollapsingHeader("etcParamater")) {
         ImGui::DragFloat("IntervalTime", &intervalTime_, 0.01f, 0.01f, 100.0f);
