@@ -4,9 +4,9 @@
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": true,
         "BaseColor": [
-            0.813725471496582,
-            0.5897632241249084,
-            0.48265090584754944,
+            0.8529411554336548,
+            0.45229488611221313,
+            0.09616494178771973,
             0.0
         ],
         "Color Max": [
@@ -33,10 +33,10 @@
         ],
         "Gravity": 0.0,
         "IntervalTime": 0.8600000143051147,
-        "LifeTime": 0.6000000238418579,
-        "Particle Count": 1,
+        "LifeTime": 0.8700000047683716,
+        "Particle Count": 7,
         "Position Base": [
-            9.0,
+            0.0,
             0.0,
             0.0
         ],
@@ -100,7 +100,7 @@
             0.0,
             0.0
         ],
-        "UV ScroolSpeed": 0.03999999910593033,
+        "UV ScroolSpeed": 0.029999999329447746,
         "UV isScrool": true,
         "UV isScroolEachPixel": false,
         "blendMode": 0,

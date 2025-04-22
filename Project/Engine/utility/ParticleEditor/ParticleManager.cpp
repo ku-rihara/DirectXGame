@@ -431,9 +431,11 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
     ///------------------------------------------------------------------------
     /// UVTransform
     ///------------------------------------------------------------------------
-
+    float frameWidth = 1.0f;
     // 各フレームのUV幅（例：10フレームなら0.1f）
-    const float frameWidth   = 1.0f / float(paramaters.uvParm.numOfFrame);
+    if (paramaters.uvParm.numOfFrame != 0) {
+        frameWidth = 1.0f / float(paramaters.uvParm.numOfFrame);
+    }
     const float stopPosition = 1.0f - frameWidth;
 
     // UV位置（開始オフセット）

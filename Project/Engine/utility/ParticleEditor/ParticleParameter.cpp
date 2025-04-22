@@ -19,6 +19,7 @@ void ParticleParameter::ParameterInit() {
     particleCount_                   = 0;
     intervalTime_                    = 1.0f;
     groupParamaters_.isBillBord      = true;
+    parameters_.uvParm.numOfFrame    = 1;
     selectedTexturePath_             = "";
 }
 

@@ -143,9 +143,9 @@ void ParticleEmitter::EditorUpdate() {
     // Rotate
     if (ImGui::CollapsingHeader("Rotate(Degree)")) {
 
-        ImGui::DragFloat3("BaseRotate", &parameters_.baseRotate.x, 0.1f, 0, 360);
-        ImGui::DragFloat3("Rotate Max", &parameters_.rotateDist.max.x, 0.1f, 0, 360);
-        ImGui::DragFloat3("Rotate Min", &parameters_.rotateDist.min.x, 0.1f, 0, 360);
+        ImGui::DragFloat3("BaseRotate", &parameters_.baseRotate.x, 0.1f, -360, 360);
+        ImGui::DragFloat3("Rotate Max", &parameters_.rotateDist.max.x, 0.1f, -360, 360);
+        ImGui::DragFloat3("Rotate Min", &parameters_.rotateDist.min.x, 0.1f, -360, 360);
     }
 
     if (ImGui::CollapsingHeader("Rotate Speed(Degree)")) {
