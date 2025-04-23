@@ -387,7 +387,10 @@ void EnemyManager::ParticleInit() {
 	uint32_t crackTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
 
 	//damage
-	InitParticleEffect(damageParticle[0], "EnemyDamage", "Plane", circleHandle, 900);
+    damageEffect[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffectCenter", PrimitiveType::Plane, 100));
+    damageEffect[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffect", PrimitiveType::Plane, 100));
+    damageEffect[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitBlow", PrimitiveType::Plane, 100));
+    damageEffect[3].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffectStar", PrimitiveType::Plane, 100));
 
 	/// death
 	InitParticleEffect(deathParticle_[0], "EnemyDeathSmoke", "Plane", boalHandle, 900);
@@ -420,9 +423,9 @@ void EnemyManager::InitParticleEffect(ParticleEffect& effect, const std::string&
 }
 
 void EnemyManager::DamageEmit(const Vector3& pos) {
-	for (uint32_t i = 0; i < damageParticle.size(); i++) {
-		damageParticle[i].emitter->SetTargetPosition(pos);
-		damageParticle[i].emitter->Emit();
+	for (uint32_t i = 0; i < damageEffect.size(); i++) {
+		damageEffect[i].emitter->SetTargetPosition(pos);
+		damageEffect[i].emitter->Emit();
 
 	}
 }
@@ -448,9 +451,9 @@ void EnemyManager::DeathEmit(const Vector3&pos) {
 
 void EnemyManager::ParticleUpdate() {
 	// 死亡パーティクル
-	for (uint32_t i = 0; i < damageParticle.size(); i++) {
+	for (uint32_t i = 0; i < damageEffect.size(); i++) {
 	
-		damageParticle[i].emitter->Update();
+		damageEffect[i].emitter->Update();
 	}
 
 	fallCrack_->Update();

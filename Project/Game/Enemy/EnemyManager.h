@@ -58,7 +58,7 @@ private:
 	/// Particle
 	std::array<ParticleEffect, 4>deathParticle_;
 	std::array<ParticleEffect, 1>debriParticle_;
-	std::array<ParticleEffect, 1>damageParticle;
+	std::array<ParticleEffect, 4>damageEffect;
 	std::unique_ptr<ParticleEmitter>fallCrack_;
 public:
 
