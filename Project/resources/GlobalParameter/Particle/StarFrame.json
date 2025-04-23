@@ -33,12 +33,12 @@
         ],
         "Gravity": 0.0,
         "IntervalTime": 1.0,
-        "LifeTime": 0.6200000047683716,
+        "LifeTime": 0.4000000059604645,
         "Particle Count": 1,
         "Position Base": [
             0.0,
             3.0,
-            -5.0
+            1.0
         ],
         "Position Max": [
             0.0,
@@ -89,6 +89,21 @@
         ],
         "Speed Max": 0.0,
         "Speed Min": 0.0,
+        "UV IsRoop": false,
+        "UV NumOfFrame": 1,
+        "UV Pos": [
+            0.0,
+            0.0
+        ],
+        "UV Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "UV ScroolSpeed": 0.0,
+        "UV isScrool": false,
+        "UV isScroolEachPixel": false,
+        "blendMode": 0,
         "isAlphaNoMove": false,
         "isBillBord": true,
         "isMoveForRail": false,
@@ -98,8 +113,8 @@
         "moveSpeed": 0.0,
         "preBillBordType_": 0,
         "scaleEaseParm.easeTypeInt": 3,
-        "scaleEaseParm.endValueF.max": 6.0,
-        "scaleEaseParm.endValueF.min": 6.0,
+        "scaleEaseParm.endValueF.max": 9.0,
+        "scaleEaseParm.endValueF.min": 9.0,
         "scaleEaseParm.endValueV3.max": [
             0.0,
             0.0,
@@ -111,7 +126,7 @@
             0.0
         ],
         "scaleEaseParm.isScaleEase": true,
-        "scaleEaseParm.maxTime": 0.5600000023841858,
+        "scaleEaseParm.maxTime": 0.4399999976158142,
         "selectedTexturePath_": "Resources/texture/CircleFrame.png"
     }
 }

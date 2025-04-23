@@ -759,7 +759,7 @@ void  Player::ParticleInit() {
     debriParticle_[0].emitter.reset(ParticleEmitter::CreateParticle("DebriParticle", "debri",".obj" ,100));
 	
 	//star
-	starEffect_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("CenterStarEffect",PrimitiveType::Plane, 30));
+	starEffect_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarCenterLight",PrimitiveType::Plane, 30));
     starEffect_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarEffect", PrimitiveType::Plane, 30));
     starEffect_[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarFrame", PrimitiveType::Plane, 30));
 
