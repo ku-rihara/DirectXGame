@@ -13,7 +13,7 @@
 class TitleScene :public BaseScene {
 private:
 	
-	std::array<std::unique_ptr<ParticleEmitter>,4>EnemydamageEffect_;
+	std::array<std::unique_ptr<ParticleEmitter>,3>EnemydamageEffect_;
 
 	
 public:
