@@ -19,7 +19,7 @@ public:
         INSINE,
         OUTSINE,
         OUTBACK,
-        OUTQUINT,
+        OUTQUINT, 
     };
 
     struct GroupParamaters {
