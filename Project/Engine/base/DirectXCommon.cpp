@@ -703,7 +703,9 @@ DirectXCommon::CreateRenderTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> 
 		&clearValue_,
 		IID_PPV_ARGS(&resource)
 	);
-	assert(SUCCEEDED(hr));
+    if (FAILED(hr)) {
+        throw std::runtime_error("Failed to map constant buffer.");
+    }
 	return resource;
 }
 
