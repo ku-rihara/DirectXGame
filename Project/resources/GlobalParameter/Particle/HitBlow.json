@@ -1,12 +1,12 @@
 {
     "HitBlow": {
         "AdaptRotateIsX": false,
-        "AdaptRotateIsY": true,
-        "AdaptRotateIsZ": false,
+        "AdaptRotateIsY": false,
+        "AdaptRotateIsZ": true,
         "BaseColor": [
-            1.0,
-            1.0,
-            1.0,
+            0.8627451062202454,
+            0.8148562908172607,
+            0.6301422715187073,
             0.0
         ],
         "Color Max": [
@@ -33,7 +33,7 @@
         ],
         "Gravity": 0.0,
         "IntervalTime": 0.8700000047683716,
-        "LifeTime": 0.15000000596046448,
+        "LifeTime": 0.11999999731779099,
         "Particle Count": 1,
         "Position Base": [
             0.0,
@@ -68,12 +68,12 @@
         "RotateSpeed Max": [
             0.0,
             0.0,
-            0.0
+            55.0
         ],
         "RotateSpeed Min": [
             0.0,
             0.0,
-            0.0
+            55.0
         ],
         "Scale Max": 4.0,
         "Scale Min": 4.0,
@@ -108,11 +108,11 @@
         "isBillBord": true,
         "isRotateforDirection": false,
         "isScalerScale": true,
-        "isShot": false,
+        "isShot": true,
         "preBillBordType_": 0,
         "scaleEaseParm.easeTypeInt": 0,
-        "scaleEaseParm.endValueF.max": 44.0,
-        "scaleEaseParm.endValueF.min": 44.0,
+        "scaleEaseParm.endValueF.max": 22.0,
+        "scaleEaseParm.endValueF.min": 22.0,
         "scaleEaseParm.endValueV3.max": [
             0.0,
             0.0,

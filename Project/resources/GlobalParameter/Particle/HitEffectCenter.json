@@ -108,7 +108,7 @@
         "isBillBord": true,
         "isRotateforDirection": true,
         "isScalerScale": false,
-        "isShot": false,
+        "isShot": true,
         "preBillBordType_": 0,
         "scaleEaseParm.easeTypeInt": 2,
         "scaleEaseParm.endValueF.max": 0.0,
