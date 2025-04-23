@@ -4,9 +4,9 @@
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": true,
         "BaseColor": [
-            0.1660899519920349,
-            0.7058823108673096,
-            0.18196609616279602,
+            0.5701836943626404,
+            0.6519607901573181,
+            0.09587655961513519,
             0.0
         ],
         "Color Max": [
@@ -38,7 +38,7 @@
         "Position Base": [
             0.0,
             3.0,
-            1.0
+            -2.0
         ],
         "Position Max": [
             0.0,
@@ -75,8 +75,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 14.0,
-        "Scale Min": 14.0,
+        "Scale Max": 11.0,
+        "Scale Min": 11.0,
         "ScaleV3 Max": [
             0.0,
             0.0,
