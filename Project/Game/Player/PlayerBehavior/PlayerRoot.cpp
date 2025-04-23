@@ -76,8 +76,6 @@ void PlayerRoot::MoveAnimation() {
         moveEase_.time   = 0.0f;
         waitEase_.time   = 0.0f;
         moveEase_.maxTime  = 0.4f;
-        moveEase_.amplitude  = 0.4f;
-        moveEase_.period  = 0.2f;
       
         animationStep_   = AnimationStep::UPDATE;
         break;
@@ -93,8 +91,8 @@ void PlayerRoot::MoveAnimation() {
             animationStep_ = AnimationStep::COOLING;
         }
 
-        pPlayer_->SetScale(EaseAmplitudeScale<Vector3>(Vector3::UnitVector(), moveEase_.time, moveEase_.maxTime, moveEase_.amplitude, moveEase_.period));
-
+         pPlayer_->SetScaleY(
+            EaseInCubic<float>(Vector3::UnitVector().y,Vector3::UnitVector().y - 0.1f, moveEase_.time, moveEase_.maxTime));
         break;
     case AnimationStep::COOLING:
         ///============================================================================
@@ -135,7 +133,7 @@ void PlayerRoot::WaitAnimation() {
     }
 
     pPlayer_->SetScale(
-        EaseOutBack<Vector3>(Vector3::UnitVector(), {Vector3::UnitVector().x - 0.1f, Vector3::UnitVector().y - 0.1f, Vector3::UnitVector().z - 0.1f}, waitEase_.time, waitEase_.maxTime));
+        EaseInCubic<Vector3>(Vector3::UnitVector(), {Vector3::UnitVector().x - 0.1f, Vector3::UnitVector().y - 0.1f, Vector3::UnitVector().z - 0.1f}, waitEase_.time, waitEase_.maxTime));
 }
 
 void  PlayerRoot::Debug() {
