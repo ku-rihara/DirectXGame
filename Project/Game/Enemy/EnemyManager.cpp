@@ -422,11 +422,10 @@ void EnemyManager::InitParticleEffect(ParticleEffect& effect, const std::string&
 	effect.emitter->SetTextureHandle(textureHandle);
 }
 
-void EnemyManager::DamageEmit(const Vector3& pos) {
+void EnemyManager::DamageEffectShot(const Vector3& pos) {
 	for (uint32_t i = 0; i < damageEffect.size(); i++) {
 		damageEffect[i].emitter->SetTargetPosition(pos);
 		damageEffect[i].emitter->Emit();
-
 	}
 }
 

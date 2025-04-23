@@ -94,7 +94,7 @@ public:
 	///-------------------------------------------------------------------------------------
 	// ヘルパー関数: ParticleEffect を初期化する
 	void InitParticleEffect(ParticleEffect& effect, const std::string& name, const std::string& modelName, const uint32_t& textureHandle, const int32_t& maxnum);
-	void DamageEmit(const Vector3& pos);
+	void DamageEffectShot(const Vector3& pos);
 	void ThrustEmit(const Vector3& pos);
 	void DeathEmit(const Vector3& pos);
 	void ParticleUpdate();

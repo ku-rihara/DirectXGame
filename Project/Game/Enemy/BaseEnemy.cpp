@@ -306,7 +306,7 @@ void BaseEnemy::DamageForPar(const float& par) {
 
 void BaseEnemy::DamageRenditionInit() {
 
-	pEnemyManager_->DamageEmit(GetWorldPosition());
+	pEnemyManager_->DamageEffectShot(GetWorldPosition());
 }
 
 void BaseEnemy::ThrustRenditionInit() {
