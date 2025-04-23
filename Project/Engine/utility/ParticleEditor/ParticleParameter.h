@@ -19,7 +19,7 @@ public:
         INSINE,
         OUTSINE,
         OUTBACK,
-        OUTQUINT,
+        OUTQUINT, 
     };
 
     struct GroupParamaters {
@@ -38,6 +38,16 @@ public:
         int easeTypeInt;
         FMinMax endValueF;
         V3MinMax endValueV3;
+    };
+
+    struct UVParm {
+        Vector2 pos;
+        Vector3 rotate;
+        int32_t numOfFrame;
+        float frameScroolSpeed;
+        bool isScroolEachPixel;
+        bool isRoop;
+        bool isScrool;
     };
 
     struct Parameters {
@@ -59,6 +69,7 @@ public:
         bool isScalerScale;
         bool isRotateforDirection;
         EaseParm scaleEaseParm;
+        UVParm uvParm;
         const Vector3* followingPos_ = nullptr;
     };
 

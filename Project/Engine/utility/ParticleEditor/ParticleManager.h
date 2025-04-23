@@ -36,21 +36,34 @@ private:
         Vector3 easeEndScale;
         ParticleEmitter::EaseParm easeparm;
     };
+    struct UVTnfo {
+        Vector3 pos;
+        Vector3 scale;
+        Vector3 rotate;
+        float frameDistance_;
+        float frameScroolSpeed;
+        float uvStopPos_;
+        float currentScroolTime;
+        bool isScroolEachPixel;
+        bool isScrool;
+        bool isRoop;
+    };
 
     struct Particle {
         float lifeTime_;
         float currentTime_;
         float gravity_;
+        float speed_;
+        float easeTime;
         Vector3 offSet;
-        const Vector3* followPos = nullptr;
         Vector3 direction_;
         Vector3 velocity_;
-        float speed_;
         Vector3 rotateSpeed_;
         Vector4 color_;
+        const Vector3* followPos = nullptr;
         WorldTransform worldTransform_;
         ScaleInFo scaleInfo;
-        float easeTime;
+        UVTnfo uvInfo_;
     };
 
     struct AccelerationField { /// 　加速フィールド
@@ -63,13 +76,13 @@ private:
         Model* model = nullptr;
         std::unique_ptr<IPrimitive> primitive_=nullptr;
         Material material;
-        std::list<Particle> particles;
+        uint32_t instanceNum;
         uint32_t srvIndex;
+        uint32_t textureHandle;
+        ParticleFprGPU* instancingData;
+        std::list<Particle> particles;
         ParticleEmitter::GroupParamaters parm;
         Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
-        uint32_t instanceNum;
-        ParticleFprGPU* instancingData;
-        uint32_t textureHandle;
     };
 
 public:
@@ -77,9 +90,13 @@ public:
     /// public method
     ///============================================================
 
-    // 初期化、更新、描画
+    // 初期化、
     void Init(SrvManager* srvManager);
+    void ResetInstancingData(const std::string& name);
+
+    //更新、描画
     void Update();
+    void UpdateUV(UVTnfo& uvInfo, float deltaTime);
     void Draw(const ViewProjection& viewProjection);
    
     // モデル、リソース作成(グループ作成)

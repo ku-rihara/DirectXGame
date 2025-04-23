@@ -143,15 +143,31 @@ void ParticleEmitter::EditorUpdate() {
     // Rotate
     if (ImGui::CollapsingHeader("Rotate(Degree)")) {
 
-        ImGui::DragFloat3("BaseRotate", &parameters_.baseRotate.x, 0.1f, 0, 360);
-        ImGui::DragFloat3("Rotate Max", &parameters_.rotateDist.max.x, 0.1f, 0, 360);
-        ImGui::DragFloat3("Rotate Min", &parameters_.rotateDist.min.x, 0.1f, 0, 360);
+        ImGui::DragFloat3("BaseRotate", &parameters_.baseRotate.x, 0.1f, -360, 360);
+        ImGui::DragFloat3("Rotate Max", &parameters_.rotateDist.max.x, 0.1f, -360, 360);
+        ImGui::DragFloat3("Rotate Min", &parameters_.rotateDist.min.x, 0.1f, -360, 360);
     }
 
     if (ImGui::CollapsingHeader("Rotate Speed(Degree)")) {
         ImGui::DragFloat3("Rotate Speed Max", &parameters_.rotateSpeedDist.max.x, 0.1f, 0, 720);
         ImGui::DragFloat3("Rotate Speed Min", &parameters_.rotateSpeedDist.min.x, 0.1f, 0, 720);
     }
+
+    if (ImGui::CollapsingHeader("UV Parameters")) {
+        ImGui::SeparatorText("UV Position:");
+        ImGui::DragFloat2("UV_Pos", &parameters_.uvParm.pos.x, 0.01f);
+
+        ImGui::SeparatorText("UV Rotation:");
+        ImGui::DragFloat3("UV_Rotate", &parameters_.uvParm.rotate.x, 0.1f);
+
+        ImGui::SeparatorText("UV Animation:");
+        ImGui::InputInt("Num of Frames", &parameters_.uvParm.numOfFrame);
+        ImGui::DragFloat("Scrool Speed", &parameters_.uvParm.frameScroolSpeed, 0.01f);
+        ImGui::Checkbox("Is Roop", &parameters_.uvParm.isRoop);
+        ImGui::Checkbox("Is ScroolEachPixel", &parameters_.uvParm.isScroolEachPixel);
+        ImGui::Checkbox("Is Scrool", &parameters_.uvParm.isScrool);
+    }
+
 
     // その他のパラメータ
     if (ImGui::CollapsingHeader("etcParamater")) {
