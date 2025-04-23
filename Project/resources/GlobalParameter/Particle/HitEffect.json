@@ -78,12 +78,12 @@
         "Scale Max": 5.0,
         "Scale Min": 5.0,
         "ScaleV3 Max": [
-            10.0,
+            6.0,
             5.0,
             5.0
         ],
         "ScaleV3 Min": [
-            10.0,
+            6.0,
             5.0,
             5.0
         ],
@@ -108,18 +108,18 @@
         "isBillBord": true,
         "isRotateforDirection": true,
         "isScalerScale": false,
-        "isShot": true,
+        "isShot": false,
         "preBillBordType_": 0,
         "scaleEaseParm.easeTypeInt": 0,
         "scaleEaseParm.endValueF.max": 0.0,
         "scaleEaseParm.endValueF.min": 0.0,
         "scaleEaseParm.endValueV3.max": [
-            10.0,
+            6.0,
             0.30000001192092896,
             1.0
         ],
         "scaleEaseParm.endValueV3.min": [
-            10.0,
+            6.0,
             0.20000000298023224,
             1.0
         ],

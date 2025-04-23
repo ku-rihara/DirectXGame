@@ -78,14 +78,14 @@
         "Scale Max": 5.0,
         "Scale Min": 5.0,
         "ScaleV3 Max": [
-            7.0,
-            7.0,
-            5.0
+            4.0,
+            4.0,
+            1.0
         ],
         "ScaleV3 Min": [
-            7.0,
-            7.0,
-            5.0
+            4.0,
+            4.0,
+            1.0
         ],
         "Speed Max": 0.0,
         "Speed Min": 0.0,
@@ -108,23 +108,23 @@
         "isBillBord": true,
         "isRotateforDirection": true,
         "isScalerScale": false,
-        "isShot": true,
+        "isShot": false,
         "preBillBordType_": 0,
         "scaleEaseParm.easeTypeInt": 2,
         "scaleEaseParm.endValueF.max": 0.0,
         "scaleEaseParm.endValueF.min": 0.0,
         "scaleEaseParm.endValueV3.max": [
-            9.0,
-            9.0,
+            7.0,
+            7.0,
             1.0
         ],
         "scaleEaseParm.endValueV3.min": [
-            9.0,
-            9.0,
+            7.0,
+            7.0,
             1.0
         ],
         "scaleEaseParm.isScaleEase": true,
-        "scaleEaseParm.maxTime": 0.3799999952316284,
+        "scaleEaseParm.maxTime": 0.25,
         "selectedTexturePath_": "Resources/texture/HitEffectCenter.png"
     }
 }
