@@ -389,7 +389,7 @@ void EnemyManager::ParticleInit() {
 	//damage
     damageEffect[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffectCenter", PrimitiveType::Plane, 100));
     damageEffect[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffect", PrimitiveType::Plane, 100));
-    damageEffect[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitBlow", PrimitiveType::Plane, 100));
+    damageEffect[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffectWing", PrimitiveType::Plane, 100));
     damageEffect[3].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffectStar", PrimitiveType::Plane, 100));
 
 	/// death
