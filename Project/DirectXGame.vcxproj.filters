@@ -259,6 +259,9 @@
     <Filter Include="MyEngine\.h\Primitive">
       <UniqueIdentifier>{0015d049-85db-4bcb-ab82-220bbf98f1a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソースファイル\Offscreen">
+      <UniqueIdentifier>{523d5f3c-8798-4769-923d-6c87d48cc99f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1101,8 +1104,8 @@
     <None Include="resources\Shader\Sprite.hlsli">
       <Filter>リソースファイル</Filter>
     </None>
-    <None Include="resources\Shader\Fullscreen.hlsli">
-      <Filter>リソースファイル</Filter>
+    <None Include="resources\Shader\OffScreen\Fullscreen.hlsli">
+      <Filter>リソースファイル\Offscreen</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1124,11 +1127,11 @@
     <FxCompile Include="resources\Shader\Sprite.VS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
-    <FxCompile Include="resources\Shader\Fullscreen.VS.hlsl">
-      <Filter>リソースファイル</Filter>
+    <FxCompile Include="resources\Shader\OffScreen\Fullscreen.PS.hlsl">
+      <Filter>リソースファイル\Offscreen</Filter>
     </FxCompile>
-    <FxCompile Include="resources\Shader\Fullscreen.PS.hlsl">
-      <Filter>リソースファイル</Filter>
+    <FxCompile Include="resources\Shader\OffScreen\Fullscreen.VS.hlsl">
+      <Filter>リソースファイル\Offscreen</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
