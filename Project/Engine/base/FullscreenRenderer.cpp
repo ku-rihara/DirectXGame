@@ -22,11 +22,11 @@ void CopyImageRenderer::CreateGraphicsPipeline() {
     CreateRootSignature();
 
     //Shaderをコンパイルする
-    vertexShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/Fullscreen.VS.hlsl",
+    vertexShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/OffScreen/Fullscreen.VS.hlsl",
         L"vs_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
     assert(vertexShaderBlob_ != nullptr);
 
-    pixelShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/Fullscreen.PS.hlsl",
+    pixelShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/OffScreen/Fullscreen.PS.hlsl",
         L"ps_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
     assert(pixelShaderBlob_ != nullptr);
 
