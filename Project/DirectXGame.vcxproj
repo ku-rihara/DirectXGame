@@ -23,7 +23,7 @@
     <ClCompile Include="Engine\3d\ViewProjection.cpp" />
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
-    <ClCompile Include="Engine\base\CopyImageRenderer.cpp" />
+    <ClCompile Include="Engine\base\FullscreenRenderer.cpp" />
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\base\Keta.cpp" />
     <ClCompile Include="Engine\base\Material.cpp" />
@@ -99,7 +99,7 @@
     <ClInclude Include="Engine\3d\ViewProjection.h" />
     <ClInclude Include="Engine\3d\WorldTransform.h" />
     <ClInclude Include="Engine\audio\Audio.h" />
-    <ClInclude Include="Engine\base\CopyImageRenderer.h" />
+    <ClInclude Include="Engine\base\FullscreenRenderer.h" />
     <ClInclude Include="Engine\base\DirectXCommon.h" />
     <ClInclude Include="Engine\base\Keta.h" />
     <ClInclude Include="Engine\base\Material.h" />
@@ -182,7 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
-    <None Include="resources\Shader\CopyImage.hlsli">
+    <None Include="resources\Shader\Fullscreen.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
@@ -200,11 +200,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="resources\Shader\CopyImage.PS.hlsl">
+    <FxCompile Include="resources\Shader\Fullscreen.PS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="resources\Shader\CopyImage.VS.hlsl">
+    <FxCompile Include="resources\Shader\Fullscreen.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

@@ -1,4 +1,4 @@
-#include "CopyImageRenderer.h"
+#include "FullscreenRenderer.h"
 #include "DirectXCommon.h"
 #include "function/Log.h"
 #include <cassert>
@@ -22,11 +22,11 @@ void CopyImageRenderer::CreateGraphicsPipeline() {
     CreateRootSignature();
 
     //Shaderをコンパイルする
-    vertexShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/CopyImage.VS.hlsl",
+    vertexShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/Fullscreen.VS.hlsl",
         L"vs_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
     assert(vertexShaderBlob_ != nullptr);
 
-    pixelShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/CopyImage.PS.hlsl",
+    pixelShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/Fullscreen.PS.hlsl",
         L"ps_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
     assert(pixelShaderBlob_ != nullptr);
 

@@ -328,7 +328,7 @@
     <ClCompile Include="math\Vector2.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\CopyImageRenderer.cpp">
+    <ClCompile Include="Engine\base\FullscreenRenderer.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
     <ClCompile Include="Engine\utility\RailEditor\Rail.cpp">
@@ -585,7 +585,7 @@
     <ClInclude Include="Engine\input\GamePad.h">
       <Filter>MyEngine\.h\input</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\CopyImageRenderer.h">
+    <ClInclude Include="Engine\base\FullscreenRenderer.h">
       <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
     <ClInclude Include="Engine\utility\RailEditor\Rail.h">
@@ -630,7 +630,7 @@
     <None Include="resources\Shader\Sprite.hlsli">
       <Filter>リソースファイル</Filter>
     </None>
-    <None Include="resources\Shader\CopyImage.hlsli">
+    <None Include="resources\Shader\Fullscreen.hlsli">
       <Filter>リソースファイル</Filter>
     </None>
   </ItemGroup>
@@ -653,10 +653,10 @@
     <FxCompile Include="resources\Shader\Sprite.VS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
-    <FxCompile Include="resources\Shader\CopyImage.VS.hlsl">
+    <FxCompile Include="resources\Shader\Fullscreen.VS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
-    <FxCompile Include="resources\Shader\CopyImage.PS.hlsl">
+    <FxCompile Include="resources\Shader\Fullscreen.PS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
   </ItemGroup>
