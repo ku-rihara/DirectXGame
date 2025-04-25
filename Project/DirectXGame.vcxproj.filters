@@ -662,5 +662,14 @@
     <FxCompile Include="resources\Shader\OffScreen\Fullscreen.VS.hlsl">
       <Filter>リソースファイル\OffScreen</Filter>
     </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\Grayscale.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\Vignette.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\GaussianFilter.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
