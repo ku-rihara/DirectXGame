@@ -1,12 +1,12 @@
 {
-    "CenterStarEffect": {
+    "StarCenterLight": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": true,
         "BaseColor": [
-            0.8529411554336548,
-            0.6119138598442078,
-            0.2675893008708954,
+            0.7843137383460999,
+            0.498224675655365,
+            0.3421761095523834,
             0.0
         ],
         "Color Max": [
@@ -33,12 +33,12 @@
         ],
         "Gravity": 0.0,
         "IntervalTime": 1.0,
-        "LifeTime": 1.0299999713897705,
+        "LifeTime": 0.9800000190734863,
         "Particle Count": 1,
         "Position Base": [
             0.0,
             3.0,
-            -5.0
+            -2.0
         ],
         "Position Max": [
             0.0,
@@ -75,8 +75,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 13.0,
-        "Scale Min": 13.0,
+        "Scale Max": 12.0,
+        "Scale Min": 12.0,
         "ScaleV3 Max": [
             0.0,
             0.0,
@@ -89,6 +89,21 @@
         ],
         "Speed Max": 0.0,
         "Speed Min": 0.0,
+        "UV IsRoop": false,
+        "UV NumOfFrame": 1,
+        "UV Pos": [
+            0.0,
+            0.0
+        ],
+        "UV Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "UV ScroolSpeed": 0.0,
+        "UV isScrool": false,
+        "UV isScroolEachPixel": false,
+        "blendMode": 0,
         "isAlphaNoMove": false,
         "isBillBord": true,
         "isMoveForRail": false,
@@ -111,7 +126,7 @@
             0.0
         ],
         "scaleEaseParm.isScaleEase": true,
-        "scaleEaseParm.maxTime": 1.0,
+        "scaleEaseParm.maxTime": 1.0399999618530273,
         "selectedTexturePath_": "Resources/texture/circle.png"
     }
 }

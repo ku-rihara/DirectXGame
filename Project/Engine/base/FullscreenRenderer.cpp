@@ -1,4 +1,4 @@
-#include "CopyImageRenderer.h"
+#include "FullscreenRenderer.h"
 #include "DirectXCommon.h"
 #include "function/Log.h"
 #include <cassert>
@@ -12,6 +12,7 @@ CopyImageRenderer* CopyImageRenderer::GetInstance() {
 
 void CopyImageRenderer::Init(DirectXCommon* dxCommon) {
     dxCommon_ = dxCommon;
+
     CreateGraphicsPipeline();
 }
 
@@ -22,13 +23,13 @@ void CopyImageRenderer::CreateGraphicsPipeline() {
     CreateRootSignature();
 
     //Shaderをコンパイルする
-    vertexShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/CopyImage.VS.hlsl",
+    vertexShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/OffScreen/Fullscreen.VS.hlsl",
         L"vs_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
     assert(vertexShaderBlob_ != nullptr);
 
-    pixelShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/CopyImage.PS.hlsl",
+    pixelShaderBlob_[static_cast<int>(OffScreenMode::NONE)] = dxCommon_->CompileShader(L"resources/Shader/OffScreen/Fullscreen.PS.hlsl",
         L"ps_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
-    assert(pixelShaderBlob_ != nullptr);
+    assert(pixelShaderBlob_[static_cast<int>(OffScreenMode::NONE)] != nullptr);
 
    
     D3D12_INPUT_LAYOUT_DESC inputLayoutDesc = {};
@@ -40,7 +41,7 @@ void CopyImageRenderer::CreateGraphicsPipeline() {
     D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
     psoDesc.pRootSignature = rootSignature_.Get();
     psoDesc.VS = { vertexShaderBlob_->GetBufferPointer(), vertexShaderBlob_->GetBufferSize() };
-    psoDesc.PS = { pixelShaderBlob_->GetBufferPointer(), pixelShaderBlob_->GetBufferSize() };
+    psoDesc.PS                                 = {pixelShaderBlob_[static_cast<int>(OffScreenMode::NONE)]->GetBufferPointer(), pixelShaderBlob_[static_cast<int>(OffScreenMode::NONE)]->GetBufferSize()};
     psoDesc.InputLayout = inputLayoutDesc;
     psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
     psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT); // RasterizerState;

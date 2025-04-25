@@ -1,12 +1,12 @@
 {
-    "StarEffect": {
+    "HitBlow": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": true,
         "BaseColor": [
-            1.0,
-            1.0,
-            1.0,
+            0.8627451062202454,
+            0.8148562908172607,
+            0.6301422715187073,
             0.0
         ],
         "Color Max": [
@@ -32,13 +32,13 @@
             0.0
         ],
         "Gravity": 0.0,
-        "IntervalTime": 1.0,
-        "LifeTime": 1.0299999713897705,
+        "IntervalTime": 0.8700000047683716,
+        "LifeTime": 0.11999999731779099,
         "Particle Count": 1,
         "Position Base": [
             0.0,
-            3.0,
-            -2.0
+            0.0,
+            0.0
         ],
         "Position Max": [
             0.0,
@@ -52,31 +52,31 @@
         ],
         "Rotate Base": [
             0.0,
-            0.0,
-            25.299999237060547
+            27.700000762939453,
+            0.0
         ],
         "Rotate Max": [
             0.0,
             0.0,
-            20.0
+            0.0
         ],
         "Rotate Min": [
             0.0,
             0.0,
-            200.0
+            0.0
         ],
         "RotateSpeed Max": [
             0.0,
             0.0,
-            16.0
+            55.0
         ],
         "RotateSpeed Min": [
             0.0,
             0.0,
-            16.0
+            55.0
         ],
-        "Scale Max": 7.0,
-        "Scale Min": 7.0,
+        "Scale Max": 4.0,
+        "Scale Min": 4.0,
         "ScaleV3 Max": [
             0.0,
             0.0,
@@ -103,18 +103,16 @@
         "UV ScroolSpeed": 0.0,
         "UV isScrool": false,
         "UV isScroolEachPixel": false,
-        "blendMode": 1,
+        "blendMode": 0,
         "isAlphaNoMove": false,
         "isBillBord": true,
-        "isMoveForRail": false,
         "isRotateforDirection": false,
         "isScalerScale": true,
         "isShot": false,
-        "moveSpeed": 0.0,
         "preBillBordType_": 0,
-        "scaleEaseParm.easeTypeInt": 2,
-        "scaleEaseParm.endValueF.max": 0.0,
-        "scaleEaseParm.endValueF.min": 0.0,
+        "scaleEaseParm.easeTypeInt": 0,
+        "scaleEaseParm.endValueF.max": 20.0,
+        "scaleEaseParm.endValueF.min": 20.0,
         "scaleEaseParm.endValueV3.max": [
             0.0,
             0.0,
@@ -126,7 +124,7 @@
             0.0
         ],
         "scaleEaseParm.isScaleEase": true,
-        "scaleEaseParm.maxTime": 1.0,
-        "selectedTexturePath_": "Resources/texture/star.png"
+        "scaleEaseParm.maxTime": 0.10000000149011612,
+        "selectedTexturePath_": "Resources/texture/effectblow.png"
     }
 }

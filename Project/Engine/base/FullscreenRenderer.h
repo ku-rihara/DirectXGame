@@ -5,6 +5,18 @@
 #include <dxcapi.h>
 #include <d3dcommon.h>
 
+#include<array>
+#include <string>
+#include <cstdint>
+
+enum class OffScreenMode {
+    NONE,
+    GRAY,
+    VIGNETTE,
+    GAUS,
+    COUNT,
+};
+
 class DirectXCommon;
 class CopyImageRenderer {
 private:
@@ -14,7 +26,9 @@ private:
     Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState_;
     Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;
     Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob_;
-    Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob_;
+
+    std::array<Microsoft::WRL::ComPtr<IDxcBlob>, static_cast<int>(OffScreenMode::COUNT)> pixelShaderBlob_;
+  
     // シリアライズしてルートシグネチャを作成
     Microsoft::WRL::ComPtr<ID3DBlob> signatureBlob_;
     Microsoft::WRL::ComPtr<ID3DBlob> errorBlob_;

@@ -4,9 +4,10 @@
 
 
 struct ParticleFprGPU {
-	Matrix4x4 WVP;
-	Matrix4x4 World;
-	Matrix4x4 WorldInverseTranspose;
-	Vector4 color;
+    Matrix4x4 WVP;
+    Matrix4x4 World;
+    Matrix4x4 WorldInverseTranspose;
+    Matrix4x4 UVTransform;
+    Vector4 color;
 };
 

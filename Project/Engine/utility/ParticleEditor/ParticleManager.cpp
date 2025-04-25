@@ -12,9 +12,9 @@
 #include "MathFunction.h"
 #include "random.h"
 // std
+#include <algorithm>
 #include <cassert>
 #include <string>
-
 ParticleManager* ParticleManager::GetInstance() {
     static ParticleManager instance;
     return &instance;
@@ -79,6 +79,12 @@ void ParticleManager::Update() {
             }
 
             ///------------------------------------------------------------------------
+            /// UV更新
+            ///------------------------------------------------------------------------
+            if (it->uvInfo_.isScrool) {
+                UpdateUV(it->uvInfo_, Frame::DeltaTime());
+            }
+            ///------------------------------------------------------------------------
             /// ビルボードまたは通常の行列更新
             ///------------------------------------------------------------------------
 
@@ -117,11 +123,18 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
                 continue;
             }
 
+            // WVP適応
             instancingData[instanceIndex].World                 = it->worldTransform_.matWorld_;
             instancingData[instanceIndex].WVP                   = it->worldTransform_.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
             instancingData[instanceIndex].WorldInverseTranspose = Inverse(Transpose(it->worldTransform_.matWorld_));
 
+            /// Alpha適応
             AlphaAdapt(instancingData[instanceIndex], *it, group);
+
+            ///==========================================================================================
+            //  UVTransform
+            ///==========================================================================================
+            instancingData[instanceIndex].UVTransform = MakeAffineMatrix(it->uvInfo_.scale, it->uvInfo_.rotate, it->uvInfo_.pos);
 
             ++instanceIndex;
             ++it;
@@ -137,6 +150,32 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
             } else if (group.primitive_->GetMesh()) {
                 group.primitive_->GetMesh()->DrawInstancing(instanceIndex, pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
                     group.material, group.textureHandle);
+            }
+        }
+    }
+}
+
+void ParticleManager::UpdateUV(UVTnfo& uvInfo, float deltaTime) {
+    if (uvInfo.isScroolEachPixel) {
+        // 毎フレーム、速度に応じて移動
+        uvInfo.pos.x += uvInfo.frameScroolSpeed * deltaTime;
+
+        if (!uvInfo.isRoop) {
+            // 停止位置を上限にする
+            uvInfo.pos.x = std::min(uvInfo.pos.x, uvInfo.uvStopPos_);
+        }
+    } else {
+        // コマ送り制御
+        uvInfo.currentScroolTime += deltaTime;
+
+        // フレームごとの更新タイミングに達したら
+        if (uvInfo.currentScroolTime >= uvInfo.frameScroolSpeed) {
+            uvInfo.currentScroolTime = 0.0f; // リセット
+            uvInfo.pos.x += uvInfo.frameDistance_;
+
+            if (!uvInfo.isRoop) {
+                // 停止位置に達したらストップ
+                uvInfo.pos.x = std::min(uvInfo.pos.x, uvInfo.uvStopPos_);
             }
         }
     }
@@ -232,11 +271,8 @@ void ParticleManager::CreateInstancingResource(const std::string& name, const ui
 
     particleGroups_[name].instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&particleGroups_[name].instancingData));
 
-    for (uint32_t index = 0; index < particleGroups_[name].instanceNum; ++index) {
-        particleGroups_[name].instancingData[index].WVP   = MakeIdentity4x4();
-        particleGroups_[name].instancingData[index].World = MakeIdentity4x4();
-        particleGroups_[name].instancingData[index].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-    }
+    // インスタンシングデータリセット
+    ResetInstancingData(name);
 
     // SRV確保
     particleGroups_[name].srvIndex = pSrvManager_->Allocate();
@@ -393,6 +429,35 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
     particle.color_ = paramaters.baseColor + randomColor;
 
     ///------------------------------------------------------------------------
+    /// UVTransform
+    ///------------------------------------------------------------------------
+    float frameWidth = 1.0f;
+    // 各フレームのUV幅（例：10フレームなら0.1f）
+    if (paramaters.uvParm.numOfFrame != 0) {
+        frameWidth = 1.0f / float(paramaters.uvParm.numOfFrame);
+    }
+    const float stopPosition = 1.0f - frameWidth;
+
+    // UV位置（開始オフセット）
+    particle.uvInfo_.pos    = Vector3(paramaters.uvParm.pos.x, paramaters.uvParm.pos.y, 1.0f);
+    particle.uvInfo_.rotate = paramaters.uvParm.rotate;
+
+    // スケーリングとフレーム情報
+    particle.uvInfo_.scale            = Vector3(frameWidth, 1.0f, 1.0f);
+    particle.uvInfo_.frameDistance_   = frameWidth;
+    particle.uvInfo_.frameScroolSpeed = paramaters.uvParm.frameScroolSpeed;
+    particle.uvInfo_.uvStopPos_       = stopPosition;
+
+    // スクロール設定
+    particle.uvInfo_.isScroolEachPixel = paramaters.uvParm.isScroolEachPixel;
+    particle.uvInfo_.isRoop            = paramaters.uvParm.isRoop;
+    particle.uvInfo_.isScrool          = paramaters.uvParm.isScrool;
+
+    // 時間初期化
+    particle.uvInfo_.currentScroolTime = 0.0f;
+
+
+    ///------------------------------------------------------------------------
     /// 重力
     ///------------------------------------------------------------------------
     particle.gravity_ = paramaters.gravity;
@@ -410,7 +475,7 @@ void ParticleManager::Emit(
     assert(particleGroups_.find(name) != particleGroups_.end() && "Error: Not Find ParticleGroup");
 
     // 指定されたパーティクルグループを取得
-    ParticleGroup& particleGroup     = particleGroups_[name];
+    ParticleGroup& particleGroup = particleGroups_[name];
     particleGroup.parm           = groupParamaters;
 
     // 生成、グループ追加
@@ -423,6 +488,7 @@ void ParticleManager::Emit(
     particleGroup.particles.splice(particleGroup.particles.end(), particles);
 }
 
+/// Reset
 void ParticleManager::ResetAllParticles() {
     for (auto& groupPair : particleGroups_) {
         ParticleGroup& group = groupPair.second;
@@ -432,21 +498,32 @@ void ParticleManager::ResetAllParticles() {
 
         // インスタンシングデータをリセット
         for (uint32_t index = 0; index < group.instanceNum; ++index) {
-            group.instancingData[index].WVP   = MakeIdentity4x4();
-            group.instancingData[index].World = MakeIdentity4x4();
-            group.instancingData[index].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+            group.instancingData[index].WVP         = MakeIdentity4x4();
+            group.instancingData[index].World       = MakeIdentity4x4();
+            group.instancingData[index].color       = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+            group.instancingData[index].UVTransform = MakeIdentity4x4();
         }
     }
 }
 
+void ParticleManager::ResetInstancingData(const std::string& name) {
+    for (uint32_t index = 0; index < particleGroups_[name].instanceNum; ++index) {
+        particleGroups_[name].instancingData[index].WVP         = MakeIdentity4x4();
+        particleGroups_[name].instancingData[index].World       = MakeIdentity4x4();
+        particleGroups_[name].instancingData[index].color       = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+        particleGroups_[name].instancingData[index].UVTransform = MakeIdentity4x4();
+    }
+}
 
 ///=================================================================================================
 /// parm Adapt
 ///=================================================================================================
 void ParticleManager::AlphaAdapt(ParticleFprGPU& data, const Particle& parm, const ParticleGroup& group) {
     data.color = parm.color_;
-    if (group.parm.isAlphaNoMove)
+    if (group.parm.isAlphaNoMove) {
+        data.color.w = 1.0f;
         return;
+    }
     data.color.w = 1.0f - (parm.currentTime_ / parm.lifeTime_);
 }
 

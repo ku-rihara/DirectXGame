@@ -142,6 +142,9 @@
     <Filter Include="MyEngine\.h\Primitive">
       <UniqueIdentifier>{0015d049-85db-4bcb-ab82-220bbf98f1a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソースファイル\OffScreen">
+      <UniqueIdentifier>{3bf652c4-db9d-4e96-aa0f-177270e2226e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -328,7 +331,7 @@
     <ClCompile Include="math\Vector2.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\CopyImageRenderer.cpp">
+    <ClCompile Include="Engine\base\FullscreenRenderer.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
     <ClCompile Include="Engine\utility\RailEditor\Rail.cpp">
@@ -585,7 +588,7 @@
     <ClInclude Include="Engine\input\GamePad.h">
       <Filter>MyEngine\.h\input</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\CopyImageRenderer.h">
+    <ClInclude Include="Engine\base\FullscreenRenderer.h">
       <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
     <ClInclude Include="Engine\utility\RailEditor\Rail.h">
@@ -630,8 +633,8 @@
     <None Include="resources\Shader\Sprite.hlsli">
       <Filter>リソースファイル</Filter>
     </None>
-    <None Include="resources\Shader\CopyImage.hlsli">
-      <Filter>リソースファイル</Filter>
+    <None Include="resources\Shader\OffScreen\Fullscreen.hlsli">
+      <Filter>リソースファイル\OffScreen</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -653,11 +656,20 @@
     <FxCompile Include="resources\Shader\Sprite.VS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
-    <FxCompile Include="resources\Shader\CopyImage.VS.hlsl">
-      <Filter>リソースファイル</Filter>
+    <FxCompile Include="resources\Shader\OffScreen\Fullscreen.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
     </FxCompile>
-    <FxCompile Include="resources\Shader\CopyImage.PS.hlsl">
-      <Filter>リソースファイル</Filter>
+    <FxCompile Include="resources\Shader\OffScreen\Fullscreen.VS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\Grayscale.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\Vignette.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\GaussianFilter.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

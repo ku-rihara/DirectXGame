@@ -8,17 +8,18 @@
 
 void ParticleParameter::ParameterInit() {
 
-    particleCount_                   = 0;
+    parameters_.targetPos            = {0.0f, 0.0f, 0.0f};
     parameters_.lifeTime             = 0.0f;
     parameters_.gravity              = 0.0f;
     parameters_.baseColor            = {0.0f, 0.0f, 0.0f, 0.0f};
     parameters_.colorDist.min        = {0.0f, 0.0f, 0.0f, 0.0f};
     parameters_.colorDist.max        = {0.0f, 0.0f, 0.0f, 0.0f};
-    intervalTime_                    = 1.0f;
-    parameters_.targetPos            = {0.0f, 0.0f, 0.0f};
-    groupParamaters_.isBillBord      = true;
     parameters_.isScalerScale        = true;
     parameters_.isRotateforDirection = false;
+    particleCount_                   = 0;
+    intervalTime_                    = 1.0f;
+    groupParamaters_.isBillBord      = true;
+    parameters_.uvParm.numOfFrame    = 1;
     selectedTexturePath_             = "";
 }
 
@@ -83,6 +84,15 @@ void ParticleParameter::AddParmGroup() {
     globalParameter_->AddItem(particleName_, "RotateSpeed Max", parameters_.rotateSpeedDist.max);
     globalParameter_->AddItem(particleName_, "RotateSpeed Min", parameters_.rotateSpeedDist.min);
 
+    // UV
+    globalParameter_->AddItem(particleName_, "UV Pos", parameters_.uvParm.pos);
+    globalParameter_->AddItem(particleName_, "UV Rotate", parameters_.uvParm.rotate);
+    globalParameter_->AddItem(particleName_, "UV NumOfFrame", parameters_.uvParm.numOfFrame);
+    globalParameter_->AddItem(particleName_, "UV ScroolSpeed", parameters_.uvParm.frameScroolSpeed);
+    globalParameter_->AddItem(particleName_, "UV IsRoop", parameters_.uvParm.isRoop);
+    globalParameter_->AddItem(particleName_, "UV isScroolEachPixel", parameters_.uvParm.isScroolEachPixel);
+    globalParameter_->AddItem(particleName_, "UV isScrool", parameters_.uvParm.isScrool);
+
     // Velocity
     globalParameter_->AddItem(particleName_, "Speed Max", parameters_.speedDist.max);
     globalParameter_->AddItem(particleName_, "Speed Min", parameters_.speedDist.min);
@@ -146,6 +156,15 @@ void ParticleParameter::SetValues() {
     globalParameter_->SetValue(particleName_, "RotateSpeed Max", parameters_.rotateSpeedDist.max);
     globalParameter_->SetValue(particleName_, "RotateSpeed Min", parameters_.rotateSpeedDist.min);
 
+    // UV
+    globalParameter_->SetValue(particleName_, "UV Pos", parameters_.uvParm.pos);
+    globalParameter_->SetValue(particleName_, "UV Rotate", parameters_.uvParm.rotate);
+    globalParameter_->SetValue(particleName_, "UV NumOfFrame", parameters_.uvParm.numOfFrame);
+    globalParameter_->SetValue(particleName_, "UV ScroolSpeed", parameters_.uvParm.frameScroolSpeed);
+    globalParameter_->SetValue(particleName_, "UV IsRoop", parameters_.uvParm.isRoop);
+    globalParameter_->SetValue(particleName_, "UV isScroolEachPixel", parameters_.uvParm.isScroolEachPixel);
+    globalParameter_->SetValue(particleName_, "UV isScrool", parameters_.uvParm.isScrool);
+
     // Velocity
     globalParameter_->SetValue(particleName_, "Speed Max", parameters_.speedDist.max);
     globalParameter_->SetValue(particleName_, "Speed Min", parameters_.speedDist.min);
@@ -205,6 +224,15 @@ void ParticleParameter::ApplyGlobalParameter(const std::string& particleName) {
     parameters_.baseRotate     = globalParameter_->GetValue<Vector3>(particleName, "Rotate Base");
     parameters_.rotateDist.min = globalParameter_->GetValue<Vector3>(particleName, "Rotate Min");
     parameters_.rotateDist.max = globalParameter_->GetValue<Vector3>(particleName, "Rotate Max");
+
+    /// UV
+    parameters_.uvParm.pos               = globalParameter_->GetValue<Vector2>(particleName_, "UV Pos");
+    parameters_.uvParm.rotate            = globalParameter_->GetValue<Vector3>(particleName_, "UV Rotate");
+    parameters_.uvParm.numOfFrame        = globalParameter_->GetValue<int32_t>(particleName_, "UV NumOfFrame");
+    parameters_.uvParm.frameScroolSpeed  = globalParameter_->GetValue<float>(particleName_, "UV ScroolSpeed");
+    parameters_.uvParm.isRoop            = globalParameter_->GetValue<bool>(particleName_, "UV IsRoop");
+    parameters_.uvParm.isScroolEachPixel = globalParameter_->GetValue<bool>(particleName_, "UV isScroolEachPixel");
+    parameters_.uvParm.isScrool          = globalParameter_->GetValue<bool>(particleName_, "UV isScrool");
 
     // Rotate Speed
     parameters_.rotateSpeedDist.min = globalParameter_->GetValue<Vector3>(particleName, "RotateSpeed Min");

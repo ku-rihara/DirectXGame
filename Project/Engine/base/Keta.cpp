@@ -12,7 +12,7 @@
 #include "Object3DCommon.h"
 #include "SpriteCommon.h"
 #include "SrvManager.h"
-#include"CopyImageRenderer.h"
+#include"FullscreenRenderer.h"
 
 /// audio,input
 #include "audio/Audio.h"
