@@ -367,6 +367,9 @@
     <ClCompile Include="Engine\3d\Mesh.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp">
+      <Filter>MyEngine\.cpp\Primitive</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -619,6 +622,9 @@
       <Filter>MyEngine\.h\Primitive</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Primitive\IPrimitive.h">
+      <Filter>MyEngine\.h\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\PrimitiveRing.h">
       <Filter>MyEngine\.h\Primitive</Filter>
     </ClInclude>
   </ItemGroup>

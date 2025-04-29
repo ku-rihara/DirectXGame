@@ -27,7 +27,7 @@ void KTFramework::Run() {
 
 		Keta::PreDraw(); /// 描画前処理
 
-		DrawImGuietc(); /// 描画
+		DarwOffscreen(); /// 描画
 
         Keta::EndFrame(); /// フレームの終了
     }
