@@ -53,11 +53,12 @@ void KTGame::Draw() {
 
 }
 
-void KTGame::DrawImGuietc() {
+void KTGame::DarwOffscreen() {
 
 	/// commandList取得
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 
+	CopyImageRenderer::GetInstance()->DrawImGui(); 
 	CopyImageRenderer::GetInstance()->Draw(commandList);/// 画像コピー描画
 	
 }

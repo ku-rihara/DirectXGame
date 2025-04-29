@@ -1,13 +1,12 @@
 #pragma once
 
-#include <wrl.h>
-#include <d3d12.h>
-#include <dxcapi.h>
-#include <d3dcommon.h>
-
-#include<array>
-#include <string>
+#include <array>
 #include <cstdint>
+#include <d3d12.h>
+#include <d3dcommon.h>
+#include <dxcapi.h>
+#include <string>
+#include <wrl.h>
 
 enum class OffScreenMode {
     NONE,
@@ -18,20 +17,24 @@ enum class OffScreenMode {
 };
 
 class DirectXCommon;
+
 class CopyImageRenderer {
 private:
-   
     DirectXCommon* dxCommon_ = nullptr;
     D3D12_STATIC_SAMPLER_DESC staticSamplers_[1];
-    Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState_;
+   /* Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState_;*/
     Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;
     Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob_;
 
-    std::array<Microsoft::WRL::ComPtr<IDxcBlob>, static_cast<int>(OffScreenMode::COUNT)> pixelShaderBlob_;
-  
-    // シリアライズしてルートシグネチャを作成
+    std::array<Microsoft::WRL::ComPtr<IDxcBlob>, static_cast<size_t>(OffScreenMode::COUNT)> pixelShaderBlob_;
+    std::array<std::wstring, static_cast<size_t>(OffScreenMode::COUNT)> psFiles_;
+    std::array<Microsoft::WRL::ComPtr<ID3D12PipelineState>, static_cast<size_t>(OffScreenMode::COUNT)> pipelineStates_;
+
     Microsoft::WRL::ComPtr<ID3DBlob> signatureBlob_;
     Microsoft::WRL::ComPtr<ID3DBlob> errorBlob_;
+
+    OffScreenMode currentMode_ = OffScreenMode::NONE; 
+
 private:
     void CreateGraphicsPipeline();
     void CreateRootSignature();
@@ -41,7 +44,5 @@ public:
 
     void Init(DirectXCommon* dxCommon);
     void Draw(ID3D12GraphicsCommandList* commandList);
-
-
-
+    void DrawImGui();
 };

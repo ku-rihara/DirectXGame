@@ -2,7 +2,7 @@
 
 #include"Primitive/IPrimitive.h"
 
-class PrimitivePlane:
+class PrimitiveRing:
 	public IPrimitive{
 public:
 
@@ -10,6 +10,8 @@ public:
 	void Create() override;
 	
 private:
+
+
 
 };
 

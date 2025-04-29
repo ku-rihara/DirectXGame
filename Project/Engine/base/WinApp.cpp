@@ -83,7 +83,7 @@ int WinApp::ProcessMessage() {
 	MSG msg{};//メッセージ
 
 	//Windowにメッセージが来てたら最優先で処理させる
-	if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {// メッセージがあるか
+	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {// メッセージがあるか
 		TranslateMessage(&msg);// キー入力メッセージの処理
 		DispatchMessage(&msg); // ウィンドウプロシージャにメッセージを送る
 	}
