@@ -661,6 +661,9 @@
     <ClCompile Include="Engine\3d\Mesh.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp">
+      <Filter>MyEngine\.cpp\Primitive</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1092,6 +1095,9 @@
     <ClInclude Include="Engine\Primitive\IPrimitive.h">
       <Filter>MyEngine\.h\Primitive</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Primitive\PrimitiveRing.h">
+      <Filter>MyEngine\.h\Primitive</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -1132,6 +1138,15 @@
     </FxCompile>
     <FxCompile Include="resources\Shader\OffScreen\Fullscreen.VS.hlsl">
       <Filter>リソースファイル\Offscreen</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\Grayscale.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\Vignette.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\GaussianFilter.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

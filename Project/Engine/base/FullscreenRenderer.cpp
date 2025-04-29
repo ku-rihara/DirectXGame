@@ -4,6 +4,7 @@
 #include <cassert>
 #include <wrl/client.h>
 #include <d3dx12.h>
+#include <imgui.h> 
 
 CopyImageRenderer* CopyImageRenderer::GetInstance() {
     static CopyImageRenderer instance;
@@ -12,47 +13,48 @@ CopyImageRenderer* CopyImageRenderer::GetInstance() {
 
 void CopyImageRenderer::Init(DirectXCommon* dxCommon) {
     dxCommon_ = dxCommon;
+
+      psFiles_ = {
+        L"resources/Shader/OffScreen/Fullscreen.PS.hlsl",
+        L"resources/Shader/OffScreen/Grayscale.PS.hlsl",
+        L"resources/Shader/OffScreen/Vignette.PS.hlsl",
+        L"resources/Shader/OffScreen/GaussianFilter.PS.hlsl"};
+
     CreateGraphicsPipeline();
 }
 
 void CopyImageRenderer::CreateGraphicsPipeline() {
     HRESULT hr = 0;
    
-    // ルートシグネチャ作成
-    CreateRootSignature();
+     CreateRootSignature();
 
-    //Shaderをコンパイルする
-    vertexShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/OffScreen/Fullscreen.VS.hlsl",
+    vertexShaderBlob_ = dxCommon_->CompileShader(
+        L"resources/Shader/OffScreen/Fullscreen.VS.hlsl",
         L"vs_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
-    assert(vertexShaderBlob_ != nullptr);
-
-    pixelShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/OffScreen/Fullscreen.PS.hlsl",
-        L"ps_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
-    assert(pixelShaderBlob_ != nullptr);
 
    
-    D3D12_INPUT_LAYOUT_DESC inputLayoutDesc = {};
-    inputLayoutDesc.pInputElementDescs = nullptr;
-    inputLayoutDesc.NumElements = 0;
 
+    for (size_t i = 0; i < psFiles_.size(); ++i) {
+        pixelShaderBlob_[i] = dxCommon_->CompileShader(
+            psFiles_[i].c_str(), L"ps_6_0",
+            dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
 
-    // グラフィックスパイプラインの設定
-    D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
-    psoDesc.pRootSignature = rootSignature_.Get();
-    psoDesc.VS = { vertexShaderBlob_->GetBufferPointer(), vertexShaderBlob_->GetBufferSize() };
-    psoDesc.PS = { pixelShaderBlob_->GetBufferPointer(), pixelShaderBlob_->GetBufferSize() };
-    psoDesc.InputLayout = inputLayoutDesc;
-    psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-    psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT); // RasterizerState;
-    psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-    psoDesc.NumRenderTargets = 1;
-    psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-    psoDesc.SampleDesc.Count = 1;
-    psoDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
+        D3D12_GRAPHICS_PIPELINE_STATE_DESC desc{};
+        desc.pRootSignature        = rootSignature_.Get();
+        desc.VS                    = {vertexShaderBlob_->GetBufferPointer(), vertexShaderBlob_->GetBufferSize()};
+        desc.PS                    = {pixelShaderBlob_[i]->GetBufferPointer(), pixelShaderBlob_[i]->GetBufferSize()};
+        desc.BlendState            = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+        desc.RasterizerState       = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+        desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+        desc.InputLayout           = {nullptr, 0};
+        desc.NumRenderTargets      = 1;
+        desc.RTVFormats[0]         = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+        desc.SampleDesc.Count      = 1;
+        desc.SampleMask            = D3D12_DEFAULT_SAMPLE_MASK;
 
-  
-    hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pipelineState_));
-    assert(SUCCEEDED(hr));
+         hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&pipelineStates_[i]));
+        assert(SUCCEEDED(hr));
+    }
 }
 
 void CopyImageRenderer::CreateRootSignature() {
@@ -104,7 +106,7 @@ void CopyImageRenderer::CreateRootSignature() {
 
 
 void CopyImageRenderer::Draw(ID3D12GraphicsCommandList* commandList) {
-    commandList->SetPipelineState(pipelineState_.Get());
+    commandList->SetPipelineState(pipelineStates_[static_cast<size_t>(currentMode_)].Get());
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
    
     // **プリミティブトポロジーを設定**
@@ -112,4 +114,15 @@ void CopyImageRenderer::Draw(ID3D12GraphicsCommandList* commandList) {
     // テクスチャリソースを設定（インデックス0のパラメータに割り当て）
     commandList->SetGraphicsRootDescriptorTable(0, dxCommon_->GetRenderTextureGPUSrvHandle());
     commandList->DrawInstanced(3, 1, 0, 0);
+}
+
+void CopyImageRenderer::DrawImGui() {
+    if (ImGui::Begin("CopyImageRenderer")) {
+        const char* modeNames[] = {"None", "Gray", "Vignette", "Gaus"};
+        int mode                = static_cast<int>(currentMode_);
+        if (ImGui::Combo("OffScreenMode", &mode, modeNames, IM_ARRAYSIZE(modeNames))) {
+            currentMode_ = static_cast<OffScreenMode>(mode);
+        }
+    }
+    ImGui::End();
 }
