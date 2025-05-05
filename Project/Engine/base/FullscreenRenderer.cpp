@@ -6,12 +6,12 @@
 #include <d3dx12.h>
 #include <imgui.h> 
 
-CopyImageRenderer* CopyImageRenderer::GetInstance() {
-    static CopyImageRenderer instance;
+FullScreenRenderer* FullScreenRenderer::GetInstance() {
+    static FullScreenRenderer instance;
     return &instance;
 }
 
-void CopyImageRenderer::Init(DirectXCommon* dxCommon) {
+void FullScreenRenderer::Init(DirectXCommon* dxCommon) {
     dxCommon_ = dxCommon;
 
       psFiles_ = {
@@ -23,7 +23,7 @@ void CopyImageRenderer::Init(DirectXCommon* dxCommon) {
     CreateGraphicsPipeline();
 }
 
-void CopyImageRenderer::CreateGraphicsPipeline() {
+void FullScreenRenderer::CreateGraphicsPipeline() {
     HRESULT hr = 0;
    
      CreateRootSignature();
@@ -57,7 +57,7 @@ void CopyImageRenderer::CreateGraphicsPipeline() {
     }
 }
 
-void CopyImageRenderer::CreateRootSignature() {
+void FullScreenRenderer::CreateRootSignature() {
     HRESULT hr = 0;
     //RootSignatureを作成
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -105,7 +105,7 @@ void CopyImageRenderer::CreateRootSignature() {
 }
 
 
-void CopyImageRenderer::Draw(ID3D12GraphicsCommandList* commandList) {
+void FullScreenRenderer::Draw(ID3D12GraphicsCommandList* commandList) {
     commandList->SetPipelineState(pipelineStates_[static_cast<size_t>(currentMode_)].Get());
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
    
@@ -116,7 +116,7 @@ void CopyImageRenderer::Draw(ID3D12GraphicsCommandList* commandList) {
     commandList->DrawInstanced(3, 1, 0, 0);
 }
 
-void CopyImageRenderer::DrawImGui() {
+void FullScreenRenderer::DrawImGui() {
     if (ImGui::Begin("CopyImageRenderer")) {
         const char* modeNames[] = {"None", "Gray", "Vignette", "Gaus"};
         int mode                = static_cast<int>(currentMode_);
