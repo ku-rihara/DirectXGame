@@ -18,7 +18,7 @@ enum class OffScreenMode {
 
 class DirectXCommon;
 
-class CopyImageRenderer {
+class FullScreenRenderer {
 private:
     DirectXCommon* dxCommon_ = nullptr;
     D3D12_STATIC_SAMPLER_DESC staticSamplers_[1];
@@ -40,7 +40,7 @@ private:
     void CreateRootSignature();
 
 public:
-    static CopyImageRenderer* GetInstance();
+    static FullScreenRenderer* GetInstance();
 
     void Init(DirectXCommon* dxCommon);
     void Draw(ID3D12GraphicsCommandList* commandList);
