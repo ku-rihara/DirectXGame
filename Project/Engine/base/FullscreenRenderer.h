@@ -18,7 +18,7 @@ enum class OffScreenMode {
 
 class DirectXCommon;
 
-class FullScreenRenderer {
+class FullscreenRenderer {
 private:
     DirectXCommon* dxCommon_ = nullptr;
     D3D12_STATIC_SAMPLER_DESC staticSamplers_[1];
@@ -40,9 +40,12 @@ private:
     void CreateRootSignature();
 
 public:
-    static FullScreenRenderer* GetInstance();
+    static FullscreenRenderer* GetInstance();
 
     void Init(DirectXCommon* dxCommon);
     void Draw(ID3D12GraphicsCommandList* commandList);
     void DrawImGui();
+
+
+    void SetOffScreenMode(const OffScreenMode& mode) { currentMode_ = mode; }
 };
