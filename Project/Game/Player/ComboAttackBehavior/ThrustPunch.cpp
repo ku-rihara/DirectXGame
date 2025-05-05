@@ -1,19 +1,22 @@
 /// behavior
-#include"ComboAttackFirst.h"
+#include"RightJobPunch.h"
 #include"ComboAttackRoot.h"
-#include"ComboAttackForth.h"
+#include"ThrustPunch.h"
 #include"ComboAttackJumpFirst.h"
 
 /// objs
 #include"Player/Player.h"
 #include"GameCamera/GameCamera.h"
 
+// offscreen
+#include"base/FullscreenRenderer.h"
+
 /// frame
 #include"Frame/Frame.h"
 
 //初期化
-ComboAttackForth::ComboAttackForth(Player* player)
-	: BaseComboAattackBehavior("ComboAttackForth", player) {
+ThrustPunch::ThrustPunch(Player* player)
+	: BaseComboAattackBehavior("ThrustPunch", player) {
 
 	///---------------------------------------------------------
 	/// 変数初期化
@@ -52,12 +55,12 @@ ComboAttackForth::ComboAttackForth(Player* player)
 	//pPlayer_->SoundPunch();
 }
 
-ComboAttackForth::~ComboAttackForth() {
+ThrustPunch::~ThrustPunch() {
 
 }
 
 //更新
-void ComboAttackForth::Update() {
+void ThrustPunch::Update() {
 	BaseComboAattackBehavior::RotateMotionUpdate(GetRotateValueAnti(), GetRotateValue(), false);
 
 	ChangeSlow();
@@ -185,14 +188,15 @@ void ComboAttackForth::Update() {
 
 }
 
-void ComboAttackForth::Debug() {
+void ThrustPunch::Debug() {
 
 }
 
-void ComboAttackForth::ChangeSlow() {
+void ThrustPunch::ChangeSlow() {
 	//デルタタイムスケール小さく
 	if (collisionBox_->GetIsSlow() && !istimeSlow_) {
 		Frame::SetTimeScale(0.001f);
+        FullscreenRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::GRAY);
 		pPlayer_->SoundStrongPunch();
 		pPlayer_->GetGameCamera()->ChangeZoomInOut();
 		istimeSlow_ = true;
@@ -205,11 +209,12 @@ void ComboAttackForth::ChangeSlow() {
 			/// スケール変化
 			BaseComboAattackBehavior::ScalingEaseUpdate();
 			Frame::SetTimeScale(1.0f);
+            FullscreenRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::NONE);
 		}
 	}
 }
 
-void ComboAttackForth::ThrustCollisionSet() {
+void ThrustPunch::ThrustCollisionSet() {
 	collisionBox_->Init();
 	collisionBox_->SetSize(Vector3::UnitVector() * 5.5f);// 当たり判定サイズ
 	Vector3 tforwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());

@@ -5,7 +5,7 @@
 #include"CollisionBox/AttackCollisionBox.h"
 
 class RailManager;
-class ComboAttackHalfThird : public BaseComboAattackBehavior {
+class JumpRush : public BaseComboAattackBehavior {
 private:
 	enum class Order {
 		CALUCRATION,
@@ -30,8 +30,8 @@ private:
 
 public:
 	//コンストラクタ
-	ComboAttackHalfThird(Player* boss);
-	~ComboAttackHalfThird();
+	JumpRush(Player* boss);
+	~JumpRush();
 
 	/// 更新、デバッグ
 	void Update()override;

@@ -5,7 +5,7 @@
 #include"CollisionBox/AttackCollisionBox.h"
 #include"utility/RailEditor/RailManager.h"
 
-class ComboAttackForth : public BaseComboAattackBehavior {
+class ThrustPunch : public BaseComboAattackBehavior {
 private:
 	///　振る舞いオーダー
 	enum class Order {
@@ -44,8 +44,8 @@ private:
 public:
 
 	//コンストラクタ
-	ComboAttackForth(Player* boss);
-	~ComboAttackForth();
+	ThrustPunch(Player* boss);
+	~ThrustPunch();
 
 	/// 更新、デバッグ
 	void Update()override;

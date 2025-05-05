@@ -1,6 +1,6 @@
 /// behavior
-#include"ComboAttackFirst.h"
-#include"ComboAttackSecond.h"
+#include"RightJobPunch.h"
+#include"LeftJobPunch.h"
 #include"ComboAttackRoot.h"
 
 /// objs
@@ -17,8 +17,8 @@
 #include<imgui.h>
 
 //初期化
-ComboAttackFirst::ComboAttackFirst(Player* player)
-	: BaseComboAattackBehavior("ComboAttackFirst", player) {
+RightJobPunch::RightJobPunch(Player* player)
+	: BaseComboAattackBehavior("RightJobPunch", player) {
 
 	///---------------------------------------------------------
 	/// 変数初期化
@@ -48,12 +48,12 @@ ComboAttackFirst::ComboAttackFirst(Player* player)
 	order_ = Order::RUSH;
 }
 
-ComboAttackFirst::~ComboAttackFirst() {
+RightJobPunch::~RightJobPunch() {
 
 }
 
 //更新
-void ComboAttackFirst::Update() {
+void RightJobPunch::Update() {
 
 	//　モーション
 	BaseComboAattackBehavior::RotateMotionUpdate(0,GetRotateValue(), false);
@@ -164,13 +164,13 @@ void ComboAttackFirst::Update() {
 			/// ボタンで次のコンボ
 			BaseComboAattackBehavior::PreOderNextComboForButton();
 			if (isNextCombo_) {
-				BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackSecond>(pPlayer_));
+				BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<LeftJobPunch>(pPlayer_));
 			}
 		}
 	}
 }
 
-void ComboAttackFirst::ChangeSpeedForLockOn() {
+void RightJobPunch::ChangeSpeedForLockOn() {
 	// ターゲット追い越し防止
 	if (!(pPlayer_->GetLockOn() &&
 		pPlayer_->GetLockOn()->GetEnemyTarget())) {
@@ -197,6 +197,6 @@ void ComboAttackFirst::ChangeSpeedForLockOn() {
 }
 
 
-void  ComboAttackFirst::Debug() {
-	ImGui::Text("ComboAttackFirst");
+void  RightJobPunch::Debug() {
+	ImGui::Text("RightJobPunch");
 }

@@ -4,7 +4,7 @@
 #include"Easing.h"
 #include"CollisionBox/AttackCollisionBox.h"
 
-class ComboAttackFirst : public BaseComboAattackBehavior {
+class RightJobPunch : public BaseComboAattackBehavior {
 private:
 	enum class Order{
 		RUSH,
@@ -40,8 +40,8 @@ private:
 
 public:
 	//コンストラクタ
-	ComboAttackFirst(Player* boss);
-	~ComboAttackFirst();
+	RightJobPunch(Player* boss);
+	~RightJobPunch();
 
 	/// 更新、デバッグ
 	void Update()override;

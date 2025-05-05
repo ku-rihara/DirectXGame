@@ -397,7 +397,7 @@
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp">
       <Filter>Game\Scene\Factory</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackThird.cpp">
+    <ClCompile Include="Game\Player\ComboAttackBehavior\RoringUpper.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClCompile>
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp">
@@ -406,7 +406,7 @@
     <ClCompile Include="Game\CollisionBox\AttackCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackForth.cpp">
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ThrustPunch.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\HPBar\EnemyHPBar.cpp">
@@ -502,13 +502,13 @@
     <ClCompile Include="Game\UI\HowToOperate.cpp">
       <Filter>Game\UI\HowToOperate</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackFirst.cpp">
+    <ClCompile Include="Game\Player\ComboAttackBehavior\RightJobPunch.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackJumpFirst.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.cpp">
+    <ClCompile Include="Game\Player\ComboAttackBehavior\LeftJobPunch.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp">
@@ -616,7 +616,7 @@
     <ClCompile Include="Game\Enemy\Behavior\EnemyUpperDamage.cpp">
       <Filter>Game\Enemy\Behevior\Damage</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackHalfThird.cpp">
+    <ClCompile Include="Game\Player\ComboAttackBehavior\JumpRush.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClCompile>
     <ClCompile Include="Game\Effect\StarEffect.cpp">
@@ -837,7 +837,7 @@
     <ClInclude Include="Game\Scene\Factory\SceneFactory.h">
       <Filter>Game\Scene\Factory</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackThird.h">
+    <ClInclude Include="Game\Player\ComboAttackBehavior\RoringUpper.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClInclude>
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h">
@@ -846,7 +846,7 @@
     <ClInclude Include="Game\CollisionBox\AttackCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackForth.h">
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ThrustPunch.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\HPBar\EnemyHPBar.h">
@@ -942,13 +942,10 @@
     <ClInclude Include="Game\UI\HowToOperate.h">
       <Filter>Game\UI\HowToOperate</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackFirst.h">
-      <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackJumpFirst.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackSecond.h">
+    <ClInclude Include="Game\Player\ComboAttackBehavior\LeftJobPunch.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h">
@@ -1053,7 +1050,7 @@
     <ClInclude Include="Game\Enemy\Behavior\EnemyUpperDamage.h">
       <Filter>Game\Enemy\Behevior\Damage</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackHalfThird.h">
+    <ClInclude Include="Game\Player\ComboAttackBehavior\JumpRush.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClInclude>
     <ClInclude Include="Game\Effect\StarEffect.h">
@@ -1097,6 +1094,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Primitive\PrimitiveRing.h">
       <Filter>MyEngine\.h\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\RightJobPunch.h">
+      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

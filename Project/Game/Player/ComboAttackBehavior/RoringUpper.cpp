@@ -1,8 +1,8 @@
 /// behavior
-#include"ComboAttackThird.h"
-#include"ComboAttackHalfThird.h"
+#include"RoringUpper.h"
+#include"JumpRush.h"
 #include"ComboAttackRoot.h"
-#include"ComboAttackForth.h"
+#include"ThrustPunch.h"
 #include<numbers>
 /// objs
 #include"Player/Player.h"
@@ -14,8 +14,8 @@
 #include"Frame/Frame.h"
 
 //初期化
-ComboAttackThird::ComboAttackThird(Player* player)
-	: BaseComboAattackBehavior("ComboAttackThird", player) {
+RoringUpper::RoringUpper(Player* player)
+	: BaseComboAattackBehavior("RoringUpper", player) {
 
 	///---------------------------------------------------------
 	/// 変数初期化
@@ -61,12 +61,12 @@ ComboAttackThird::ComboAttackThird(Player* player)
 
 }
 
-ComboAttackThird::~ComboAttackThird() {
+RoringUpper::~RoringUpper() {
 
 }
 
 //更新
-void ComboAttackThird::Update() {
+void RoringUpper::Update() {
 
 	BaseComboAattackBehavior::ScalingEaseUpdate();
 	// 向き変更
@@ -133,7 +133,7 @@ void ComboAttackThird::Update() {
 			/// ボタンで次のコンボ
 			BaseComboAattackBehavior::PreOderNextComboForButton();
 			if (isNextCombo_) {
-				BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackHalfThird>(pPlayer_));
+				BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<JumpRush>(pPlayer_));
 			}
 		}
 
@@ -148,11 +148,11 @@ void ComboAttackThird::Update() {
 
 }
 
-void ComboAttackThird::Debug() {
+void RoringUpper::Debug() {
 
 }
 
-void ComboAttackThird::CollisionInit() {
+void RoringUpper::CollisionInit() {
 	collisionBox_ = std::make_unique<AttackCollisionBox>();
 	collisionBox_->Init();
 	collisionBox_->attackType_ = AttackCollisionBox::AttackType::UPPER;
@@ -161,13 +161,13 @@ void ComboAttackThird::CollisionInit() {
 	collisionBox_->IsAdapt(false);
 }
 
-void ComboAttackThird::RailInit() {
+void RoringUpper::RailInit() {
 	railManager_ = pPlayer_->GetRightHand()->GetThreeComboRailManager();
 	railManager_->SetRailMoveTime(0.0f);
 	railManager_->SetIsRoop(false);
 }
 
-void ComboAttackThird::HitStopUpdate() {
+void RoringUpper::HitStopUpdate() {
 	//デルタタイムスケール小さく
 	if (collisionBox_->GetIsHitStop() && !isHitStop_) {
 		pPlayer_->StartEffectEmit();
@@ -176,7 +176,7 @@ void ComboAttackThird::HitStopUpdate() {
 
 }
 
-void ComboAttackThird::AnimationMove() {
+void RoringUpper::AnimationMove() {
 	/// minを返す
 	backlashEase_.time = std::min(backlashEase_.time, backlashEase_.maxTime);
 	railManager_->SetRailMoveTime(std::min(railManager_->GetRailMoveTime(), 1.0f));
@@ -196,7 +196,7 @@ void ComboAttackThird::AnimationMove() {
 	pPlayer_->Jump(jumpPower_, fallSpeedLimit_, gravity_);
 }
 
-void ComboAttackThird::ChangeOrder() {
+void RoringUpper::ChangeOrder() {
 	if (isHitStop_) {
 		order_ = Order::WAIT;
 	} else {

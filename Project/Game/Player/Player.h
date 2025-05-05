@@ -15,7 +15,7 @@
 #include"utility/ParticleEditor/ParticleEmitter.h"
 
 /// behavior
-#include"ComboAttackBehavior/ComboAttackFirst.h"
+#include"ComboAttackBehavior/RightJobPunch.h"
 #include"PlayerBehavior/BasePlayerBehavior.h"
 #include"TitleBehavior/BaseTitleBehavior.h"
 

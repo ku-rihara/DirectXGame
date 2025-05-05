@@ -1,8 +1,8 @@
 /// behavior
-#include"ComboAttackFirst.h"
-#include"ComboAttackSecond.h"
+#include"RightJobPunch.h"
+#include"LeftJobPunch.h"
 #include"ComboAttackRoot.h"
-#include"ComboAttackThird.h"
+#include"RoringUpper.h"
 
 /// objs
 #include"Player/Player.h"
@@ -14,8 +14,8 @@
 #include"Frame/Frame.h"
 
 //初期化
-ComboAttackSecond::ComboAttackSecond(Player* player)
-	: BaseComboAattackBehavior("ComboAttackSecond", player) {
+LeftJobPunch::LeftJobPunch(Player* player)
+	: BaseComboAattackBehavior("LeftJobPunch", player) {
 
 	///---------------------------------------------------------
 	/// 変数初期化
@@ -46,12 +46,12 @@ ComboAttackSecond::ComboAttackSecond(Player* player)
 	order_ = Order::PUNCH;
 }
 
-ComboAttackSecond::~ComboAttackSecond() {
+LeftJobPunch::~LeftJobPunch() {
 
 }
 
 //更新
-void ComboAttackSecond::Update() {
+void LeftJobPunch::Update() {
 
 	//　モーション
 	BaseComboAattackBehavior::RotateMotionUpdate(0, GetRotateValue(), true);
@@ -127,7 +127,7 @@ void ComboAttackSecond::Update() {
 		{
 			BaseComboAattackBehavior::PreOderNextComboForButton();
 			if (isNextCombo_) {
-				BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackThird>(pPlayer_));
+				BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<RoringUpper>(pPlayer_));
 			}
 		}
 		break;
@@ -135,6 +135,6 @@ void ComboAttackSecond::Update() {
 
 }
 
-void ComboAttackSecond::Debug() {
+void LeftJobPunch::Debug() {
 
 }

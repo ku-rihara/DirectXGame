@@ -1,7 +1,7 @@
 /// behavior
-#include"ComboAttackHalfThird.h"
+#include"JumpRush.h"
 #include"ComboAttackRoot.h"
-#include"ComboAttackForth.h"
+#include"ThrustPunch.h"
 #include<numbers>
 /// objs
 #include"Player/Player.h"
@@ -13,8 +13,8 @@
 #include"Frame/Frame.h"
 
 //初期化
-ComboAttackHalfThird::ComboAttackHalfThird(Player* player)
-	: BaseComboAattackBehavior("ComboAttackHalfThird", player) {
+JumpRush::JumpRush(Player* player)
+	: BaseComboAattackBehavior("JumpRush", player) {
 
 	///---------------------------------------------------------
 	/// 変数初期化
@@ -35,12 +35,12 @@ ComboAttackHalfThird::ComboAttackHalfThird(Player* player)
 
 }
 
-ComboAttackHalfThird::~ComboAttackHalfThird() {
+JumpRush::~JumpRush() {
 
 }
 
 //更新
-void ComboAttackHalfThird::Update() {
+void JumpRush::Update() {
 	BaseComboAattackBehavior::RotateMotionUpdate(0, GetRotateValueAnti(), true);
 	BaseComboAattackBehavior::ScalingEaseUpdate();
 	
@@ -81,14 +81,14 @@ void ComboAttackHalfThird::Update() {
 		break;
 
 	case Order::NEXTBEHAVIOR:
-		pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackForth>(pPlayer_));
+		pPlayer_->ChangeComboBehavior(std::make_unique<ThrustPunch>(pPlayer_));
 		
 		break;
 	}
 
 }
 
-void ComboAttackHalfThird::Debug() {
+void JumpRush::Debug() {
 
 }
 

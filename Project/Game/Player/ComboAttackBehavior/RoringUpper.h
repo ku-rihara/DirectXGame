@@ -5,7 +5,7 @@
 #include"CollisionBox/AttackCollisionBox.h"
 
 class RailManager;
-class ComboAttackThird : public BaseComboAattackBehavior {
+class RoringUpper : public BaseComboAattackBehavior {
 private:
 	enum class Order {
 		UPPER,
@@ -49,8 +49,8 @@ private:
 
 public:
 	//コンストラクタ
-	ComboAttackThird(Player* boss);
-	~ComboAttackThird();
+	RoringUpper(Player* boss);
+	~RoringUpper();
 
 	/// 更新、デバッグ
 	void Update()override;

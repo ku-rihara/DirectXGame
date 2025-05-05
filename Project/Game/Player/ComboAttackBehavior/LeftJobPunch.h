@@ -4,7 +4,7 @@
 #include"Easing.h"
 #include"CollisionBox/AttackCollisionBox.h"
 
-class ComboAttackSecond : public BaseComboAattackBehavior {
+class LeftJobPunch : public BaseComboAattackBehavior {
 private:
 	///　振る舞いオーダー
 	enum class Order {
@@ -37,8 +37,8 @@ private:
 public:
 
 	//コンストラクタ
-	ComboAttackSecond(Player* boss);
-	~ComboAttackSecond();
+	LeftJobPunch(Player* boss);
+	~LeftJobPunch();
 
 	/// 更新、デバッグ
 	void Update()override;
