@@ -61,8 +61,8 @@ void KTGame::DarwOffscreen() {
 	/// commandList取得
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 
-	FullScreenRenderer::GetInstance()->DrawImGui(); 
-	FullScreenRenderer::GetInstance()->Draw(commandList);/// 画像コピー描画
+	FullscreenRenderer::GetInstance()->DrawImGui(); 
+	FullscreenRenderer::GetInstance()->Draw(commandList);/// 画像コピー描画
 	
 }
 

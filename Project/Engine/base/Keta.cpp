@@ -39,7 +39,7 @@ Object3DCommon* Keta::object3DCommon_ = nullptr;
 ModelManager* Keta::modelManager_ = nullptr;
 ParticleCommon* Keta::particleCommon_ = nullptr;
 SrvManager* Keta::srvManager_ = nullptr;
-FullScreenRenderer* Keta::copyImageRenderer_ = nullptr;
+FullscreenRenderer* Keta::copyImageRenderer_ = nullptr;
 Audio* Keta::audio_ = nullptr;
 Input* Keta::input_ = nullptr;
 
@@ -69,7 +69,7 @@ void Keta::Initialize(const char* title, int width, int height) {
     object3DCommon_ = Object3DCommon::GetInstance();
     object3DCommon_->Init(directXCommon_);
 
-	copyImageRenderer_ = FullScreenRenderer::GetInstance();
+	copyImageRenderer_ = FullscreenRenderer::GetInstance();
 	copyImageRenderer_->Init(directXCommon_);
 
     // ParticleCommon

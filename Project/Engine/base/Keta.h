@@ -13,7 +13,7 @@ class ParticleCommon;
 class SrvManager;
 class Audio;
 class Input;
-class FullScreenRenderer;
+class FullscreenRenderer;
 
 class Keta {
 
@@ -33,7 +33,7 @@ private:
     static SrvManager* srvManager_;
     static Audio* audio_;
     static Input* input_;
-	static FullScreenRenderer* copyImageRenderer_;
+	static FullscreenRenderer* copyImageRenderer_;
 
 public:
 
