@@ -4,7 +4,7 @@
 #include"Easing.h"
 
 
-class TitleThirdPunch : public BaseTitleBehavior {
+class TitleLeftPunch : public BaseTitleBehavior {
 private:
 	///　振る舞いオーダー
 	enum class Order {
@@ -33,8 +33,8 @@ private:
 public:
 
 	//コンストラクタ
-	TitleThirdPunch(Player* boss);
-	~TitleThirdPunch();
+	TitleLeftPunch(Player* boss);
+	~TitleLeftPunch();
 
 	/// 更新、デバッグ
 	void Update()override;

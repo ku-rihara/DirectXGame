@@ -412,14 +412,11 @@
     <ClCompile Include="Game\Enemy\HPBar\EnemyHPBar.cpp">
       <Filter>Game\Enemy\HPBsr</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackJumpSecond.cpp">
+    <ClCompile Include="Game\Player\ComboAttackBehavior\RushAttack.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\StrongEnemy.cpp">
       <Filter>Game\Enemy\core</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Effect\Effect.cpp">
-      <Filter>Game\Effect</Filter>
     </ClCompile>
     <ClCompile Include="math\Shake.cpp">
       <Filter>liberary\.cpp</Filter>
@@ -469,10 +466,10 @@
     <ClCompile Include="Game\Player\TitleBehavior\TitleFirstFall.cpp">
       <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\TitleBehavior\TitleSecondPunch.cpp">
+    <ClCompile Include="Game\Player\TitleBehavior\TitleRightPunch.cpp">
       <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\TitleBehavior\TitleThirdPunch.cpp">
+    <ClCompile Include="Game\Player\TitleBehavior\TitleLeftPunch.cpp">
       <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\TitleBehavior\TitleWait.cpp">
@@ -505,7 +502,7 @@
     <ClCompile Include="Game\Player\ComboAttackBehavior\RightJobPunch.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackJumpFirst.cpp">
+    <ClCompile Include="Game\Player\ComboAttackBehavior\FallAttack.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\LeftJobPunch.cpp">
@@ -523,7 +520,7 @@
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerJump.cpp">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\PlayerBehavior\PlayerRoot.cpp">
+    <ClCompile Include="Game\Player\PlayerBehavior\PlayerMove.cpp">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\Player.cpp">
@@ -663,6 +660,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp">
       <Filter>MyEngine\.cpp\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Effect\ImpactEffect.cpp">
+      <Filter>Game\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -852,13 +852,13 @@
     <ClInclude Include="Game\Enemy\HPBar\EnemyHPBar.h">
       <Filter>Game\Enemy\HPBsr</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackJumpSecond.h">
+    <ClInclude Include="Game\Player\ComboAttackBehavior\RushAttack.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\StrongEnemy.h">
       <Filter>Game\Enemy\core</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Effect\Effect.h">
+    <ClInclude Include="Game\Effect\ImpactEffect.h">
       <Filter>Game\Effect</Filter>
     </ClInclude>
     <ClInclude Include="math\Shake.h">
@@ -909,10 +909,10 @@
     <ClInclude Include="Game\Player\TitleBehavior\TitleFirstFall.h">
       <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\TitleBehavior\TitleSecondPunch.h">
+    <ClInclude Include="Game\Player\TitleBehavior\TitleRightPunch.h">
       <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\TitleBehavior\TitleThirdPunch.h">
+    <ClInclude Include="Game\Player\TitleBehavior\TitleLeftPunch.h">
       <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\TitleBehavior\TitleWait.h">
@@ -942,7 +942,7 @@
     <ClInclude Include="Game\UI\HowToOperate.h">
       <Filter>Game\UI\HowToOperate</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackJumpFirst.h">
+    <ClInclude Include="Game\Player\ComboAttackBehavior\FallAttack.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\LeftJobPunch.h">
@@ -960,7 +960,7 @@
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerJump.h">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\PlayerBehavior\PlayerRoot.h">
+    <ClInclude Include="Game\Player\PlayerBehavior\PlayerMove.h">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\Weapon\PlayerHandRight.h">

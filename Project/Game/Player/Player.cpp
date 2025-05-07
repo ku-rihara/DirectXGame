@@ -6,6 +6,8 @@
 
 /// frame
 #include"Frame/Frame.h"
+
+// light
 #include"Lighrt/Light.h"
 #include"Lighrt/SpotLightManager.h"
 #include"Lighrt/AmbientLight.h"
@@ -15,16 +17,12 @@
 /// object
 #include"Field/Field.h"
 #include"LockOn/LockOn.h"
-#include"Enemy/BaseEnemy.h"
 #include"CollisionBox/EnemyCollisionBox.h"
-#include"base/TextureManager.h"
-#include"utility/ParticleEditor/ParticleCommon.h"
 
 /// behavior
-#include"PlayerBehavior/PlayerRoot.h"
-#include"PlayerBehavior/PlayerJump.h"
+#include"PlayerBehavior/PlayerMove.h"
 #include"ComboAttackBehavior/ComboAttackRoot.h"
-#include"ComboAttackBehavior/ComboAttackJumpSecond.h"
+#include"ComboAttackBehavior/RushAttack.h"
 #include"TitleBehavior/TitleFirstFall.h"
 
 /// imgui
@@ -88,7 +86,7 @@ void Player::Init() {
 	starSound_ = Audio::GetInstance()->LoadWave("Resources/starEffect.wav");
 
 	/// 通常モードから
-	ChangeBehavior(std::make_unique<PlayerRoot>(this));
+	ChangeBehavior(std::make_unique<PlayerMove>(this));
 	ChangeComboBehavior(std::make_unique<ComboAttackRoot>(this));
 	HeadLightSetting();
 }
@@ -149,7 +147,7 @@ void Player::Draw(const ViewProjection& viewProjection) {
 void Player::EffectDraw(const ViewProjection& viewProjection) {
 	// 各エフェクトを更新
 	effects_.reverse();
-	for (std::unique_ptr<Effect>& effect : effects_) {
+    for (std::unique_ptr<ImpactEffect>& effect : effects_) {
 		if (effect) {
 			effect->Draw(viewProjection);
 		}
@@ -657,7 +655,7 @@ void Player::UpdateMatrix() {
 
 void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-	if (dynamic_cast<ComboAttackJumpSecond*>(comboBehavior_.get()))return;
+	if (dynamic_cast<RushAttack*>(comboBehavior_.get()))return;
 
 	if (EnemyCollisionBox* enemy = dynamic_cast<EnemyCollisionBox*>(other)) {
 		// 敵の中心座標を取得
@@ -790,7 +788,7 @@ void Player::StartEffectEmit() {
 }
 
 void Player::FallEffectInit(const Vector3& pos) {
-	std::unique_ptr<Effect> effect = std::make_unique<Effect>();
+    std::unique_ptr<ImpactEffect> effect = std::make_unique<ImpactEffect>();
 
 	effect->Init(pos);
 	effects_.push_back(std::move(effect));
@@ -817,14 +815,14 @@ void Player::ParticleUpdate() {
 
 void Player::FallEffectUpdate() {
 	// 各エフェクトを更新
-	for (std::unique_ptr<Effect>& effect : effects_) {
+    for (std::unique_ptr<ImpactEffect>& effect : effects_) {
 		if (effect) {
 			effect->Update();
 		}
 	}
 
 	// 完了したエフェクトを消す
-	effects_.erase(std::remove_if(effects_.begin(), effects_.end(), [](const std::unique_ptr<Effect>& effect) { return effect->IsFinished(); }), effects_.end());
+    effects_.erase(std::remove_if(effects_.begin(), effects_.end(), [](const std::unique_ptr<ImpactEffect>& effect) { return effect->IsFinished(); }), effects_.end());
 }
 
 /// <summary>

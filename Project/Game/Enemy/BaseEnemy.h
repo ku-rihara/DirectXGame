@@ -10,7 +10,7 @@
 #include"Behavior/BaseEnemyBehavior.h"
 #include"Behavior/BaseEnemyMoveBehavior.h"
 #include"Enemy/HPBar/EnemyHPBar.h"
-#include"Effect/Effect.h"
+#include"Effect/ImpactEffect.h"
 
 #include"IsFindSprite/FindSprite.h"
 #include"IsFindSprite/NotFindSprite.h"
@@ -66,9 +66,12 @@ protected:
 	bool isdeath_;
 	float hp_;
 	float HPMax_;
+    float damageParm_;
+
 	Vector2 hpbarSize_;
+
 	std::unique_ptr<EnemyHPBar>hpbar_;
-	float damageParm_;
+
 
 	WorldTransform bodyTransform_;
 	std::unique_ptr<Object3d>bodyObj_;
@@ -77,7 +80,8 @@ protected:
 	std::unique_ptr<BaseEnemyBehavior>damageBehavior_ = nullptr;
 	std::unique_ptr<BaseEnemyMoveBehavior>moveBehavior_ = nullptr;
 	
-	std::list<std::unique_ptr<Effect>> effects_;
+	std::list<std::unique_ptr<ImpactEffect>> effects_;
+
 public:
 	static Vector3 InitScale_;
 public:

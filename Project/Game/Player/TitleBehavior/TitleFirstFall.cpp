@@ -1,8 +1,8 @@
 /// behavior
 #include"TitleFirstFall.h"
-#include"TitleSecondPunch.h"
+#include"TitleRightPunch.h"
 
-#include"Player/PlayerBehavior/PlayerRoot.h"
+#include"Player/PlayerBehavior/PlayerMove.h"
 
 /// Player
 #include"Player/Player.h"
@@ -119,7 +119,7 @@ void TitleFirstFall::Update() {
 		}
 		break;
 	case STEP::RETURNROOT:
-		pPlayer_->ChangeTitleBehavior(std::make_unique<TitleSecondPunch>(pPlayer_));
+		pPlayer_->ChangeTitleBehavior(std::make_unique<TitleRightPunch>(pPlayer_));
 		break;
 	default:
 		break;

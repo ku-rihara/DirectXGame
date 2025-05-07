@@ -2,7 +2,7 @@
 #include"RightJobPunch.h"
 #include"ComboAttackRoot.h"
 #include"ThrustPunch.h"
-#include"ComboAttackJumpFirst.h"
+#include"FallAttack.h"
 
 /// objs
 #include"Player/Player.h"
@@ -182,7 +182,7 @@ void ThrustPunch::Update() {
 		else {
 			/// ボタンで次のコンボ
 			BaseComboAattackBehavior::PreOderNextComboForButton();
-			BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackJumpFirst>(pPlayer_));
+			BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<FallAttack>(pPlayer_));
 		}
 	}
 

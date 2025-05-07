@@ -4,7 +4,7 @@
 
 //object
 #include"BaseObject/BaseObject.h"
-#include"Effect/Effect.h"
+#include"Effect/ImpactEffect.h"
 
 /// Weapon
 #include"Weapon/PlayerHandLeft.h"
@@ -109,7 +109,7 @@ private:
 	std::unique_ptr<PlayerHandRight>   rightHand_;     /// 右手
 	std::unique_ptr<Object3d>          headObj_;       /// 頭
 	WorldTransform                     headTransform_; /// 頭トランスフォーム
-	std::list<std::unique_ptr<Effect>> effects_;       /// エフェクト
+    std::list<std::unique_ptr<ImpactEffect>> effects_; /// エフェクト
 
 
 private:

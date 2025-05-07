@@ -1,5 +1,5 @@
 /// behavior
-#include"TitleThirdPunch.h"
+#include"TitleLeftPunch.h"
 #include"TitleWait.h"
 
 /// objs
@@ -12,8 +12,8 @@
 #include"Frame/Frame.h"
 
 //初期化
-TitleThirdPunch::TitleThirdPunch(Player* player)
-	: BaseTitleBehavior("TitleThirdPunch", player) {
+TitleLeftPunch::TitleLeftPunch(Player* player)
+	: BaseTitleBehavior("TitleLeftPunch", player) {
 
 	///---------------------------------------------------------
 	/// 変数初期化
@@ -37,12 +37,12 @@ TitleThirdPunch::TitleThirdPunch(Player* player)
 	order_ = Order::PUNCH;
 }
 
-TitleThirdPunch::~TitleThirdPunch() {
+TitleLeftPunch::~TitleLeftPunch() {
 
 }
 
 //更新
-void TitleThirdPunch::Update() {
+void TitleLeftPunch::Update() {
 
 	/// スケール変化
 	startEasing_.time += Frame::DeltaTimeRate();
@@ -113,6 +113,6 @@ void TitleThirdPunch::Update() {
 
 }
 
-void TitleThirdPunch::Debug() {
+void TitleLeftPunch::Debug() {
 
 }

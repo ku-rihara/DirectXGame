@@ -4,7 +4,7 @@
 #include"CollisionBox/AttackCollisionBox.h"
 #include"Easing.h"
 
-class ComboAttackJumpFirst : public BaseComboAattackBehavior {
+class FallAttack : public BaseComboAattackBehavior {
 
 	enum class STEP {
 		FALL,
@@ -43,8 +43,8 @@ private:
 
 public:
 	//コンストラクタ
-	ComboAttackJumpFirst(Player* boss);
-	~ComboAttackJumpFirst();
+	FallAttack(Player* boss);
+	~FallAttack();
 
 	void Update()override;
 

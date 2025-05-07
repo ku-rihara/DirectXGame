@@ -5,7 +5,7 @@
 #include"CollisionBox/AttackCollisionBox.h"
 #include"utility/ParticleEditor/ParticleEmitter.h"
 
-class ComboAttackJumpSecond : public BaseComboAattackBehavior {
+class RushAttack : public BaseComboAattackBehavior {
 	enum class STEP {
 		RUSH,
 		WAIT,
@@ -38,8 +38,8 @@ private:
 
 public:
 	//コンストラクタ
-	ComboAttackJumpSecond(Player* boss);
-	~ComboAttackJumpSecond();
+	RushAttack(Player* boss);
+	~RushAttack();
 
 	void Update()override;
 

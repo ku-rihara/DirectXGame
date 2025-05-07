@@ -1,5 +1,5 @@
 /// behavior
-#include"ComboAttackJumpSecond.h"
+#include"RushAttack.h"
 #include"ComboAttackRoot.h"
 
 /// Player
@@ -9,8 +9,8 @@
 #include"Frame/Frame.h"
 
 //初期化
-ComboAttackJumpSecond::ComboAttackJumpSecond(Player* player)
-	: BaseComboAattackBehavior("ComboAttackJumpSecond", player) {
+RushAttack::RushAttack(Player* player)
+	: BaseComboAattackBehavior("RushAttack", player) {
 
 	///---------------------------------------------------------
 	/// 変数初期化
@@ -46,12 +46,12 @@ ComboAttackJumpSecond::ComboAttackJumpSecond(Player* player)
 
 }
 
-ComboAttackJumpSecond::~ComboAttackJumpSecond() {
+RushAttack::~RushAttack() {
 
 }
 
 //更新
-void ComboAttackJumpSecond::Update() {
+void RushAttack::Update() {
 	switch (step_)
 	{
 
@@ -116,6 +116,6 @@ void ComboAttackJumpSecond::Update() {
 }
 
 
-void  ComboAttackJumpSecond::Debug() {
-	ImGui::Text("ComboAttackJumpSecond");
+void  RushAttack::Debug() {
+	ImGui::Text("RushAttack");
 }

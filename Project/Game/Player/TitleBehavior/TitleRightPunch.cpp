@@ -1,6 +1,6 @@
-/// behavior
-#include"TitleSecondPunch.h"
-#include"TitleThirdPunch.h"
+/// behaviorTitleRightPunch
+#include"TitleRightPunch.h"
+#include"TitleLeftPunch.h"
 /// objs
 #include"Player/Player.h"
 #include"LockOn/LockOn.h"
@@ -14,8 +14,8 @@
 #include<imgui.h>
 
 //初期化
-TitleSecondPunch::TitleSecondPunch(Player* player)
-	: BaseTitleBehavior("TitleSecondPunch", player) {
+TitleRightPunch::TitleRightPunch(Player* player)
+	: BaseTitleBehavior("TitleRightPunch", player) {
 
 	///---------------------------------------------------------
 	/// 変数初期化
@@ -39,12 +39,12 @@ TitleSecondPunch::TitleSecondPunch(Player* player)
 	order_ = Order::RUSH;
 }
 
-TitleSecondPunch::~TitleSecondPunch() {
+TitleRightPunch::~TitleRightPunch() {
 
 }
 
 //更新
-void TitleSecondPunch::Update() {
+void TitleRightPunch::Update() {
 	/// スケール変化
 	startEasing_.time += Frame::DeltaTimeRate();
 	startEasing_.time = std::min(startEasing_.time, startEasing_.maxTime);
@@ -133,13 +133,13 @@ void TitleSecondPunch::Update() {
 
 		/// コンボ途切れ
 		if (waitTine_ >= pPlayer_->GetNormalComboParm(Player::ComboNum::FIRST).waitTime) {
-			pPlayer_->ChangeTitleBehavior(std::make_unique<TitleThirdPunch>(pPlayer_));
+			pPlayer_->ChangeTitleBehavior(std::make_unique<TitleLeftPunch>(pPlayer_));
 		}
 	}
 }
 
 
-void  TitleSecondPunch::Debug() {
-	ImGui::Text("TitleSecondPunch");
+void  TitleRightPunch::Debug() {
+	ImGui::Text("TitleRightPunch");
 }
 

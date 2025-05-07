@@ -4,7 +4,7 @@
 #include"Easing.h"
 
 
-class TitleSecondPunch : public BaseTitleBehavior {
+class TitleRightPunch : public BaseTitleBehavior {
 private:
 	enum class Order{
 		RUSH,
@@ -37,8 +37,8 @@ private:
 
 public:
 	//コンストラクタ
-	TitleSecondPunch(Player* boss);
-	~TitleSecondPunch();
+	TitleRightPunch(Player* boss);
+	~TitleRightPunch();
 
 	/// 更新、デバッグ
 	void Update()override;

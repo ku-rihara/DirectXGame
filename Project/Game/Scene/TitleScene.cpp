@@ -5,7 +5,7 @@
 #include"Manager/SceneManager.h"
 #include"utility/ParticleEditor/ParticleManager.h"
 #include"utility/ParticleEditor/ParticleCommon.h"
-#include"Player/TitleBehavior/TitleSecondPunch.h"
+#include"Player/TitleBehavior/TitleRightPunch.h"
 
 #include "base/TextureManager.h"
 #include"Frame/Frame.h"
@@ -74,7 +74,7 @@ void TitleScene::Update() {
 	field_->Update();
 	skydome_->Update();
 
-	if (dynamic_cast<TitleSecondPunch*>(player_->GetTitleBehavior())) {
+	if (dynamic_cast<TitleRightPunch*>(player_->GetTitleBehavior())) {
 		if (!isFontUpdate_) {
 			isFontUpdate_ = true;
 		}

@@ -3,7 +3,7 @@
 #include"BasePlayerBehavior.h"
 #include"Easing.h"
 
-class PlayerRoot : public BasePlayerBehavior {
+class PlayerMove : public BasePlayerBehavior {
 private:
 	enum class AnimationStep {
 		INIT,
@@ -28,8 +28,8 @@ private:
 	
 public:
 	//コンストラクタ
-	PlayerRoot(Player* boss);
-	~PlayerRoot();
+	PlayerMove(Player* boss);
+	~PlayerMove();
 
 	void MoveAnimation();
     void WaitAnimation();

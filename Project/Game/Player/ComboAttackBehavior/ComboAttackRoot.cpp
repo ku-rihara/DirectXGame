@@ -1,7 +1,7 @@
 /// Combobehavior
 #include"ComboAttackRoot.h"
 #include"RightJobPunch.h"
-#include"ComboAttackJumpFirst.h"
+#include"FallAttack.h"
 
 #include"Player/PlayerBehavior/PlayerJump.h"
 #include"JoyState/JoyState.h"
@@ -53,7 +53,7 @@ void ComboAttackRoot::Update() {
 		/// ジャンプ攻撃
 		BaseComboAattackBehavior::PreOderNextComboForButton();
 		if (!isNextCombo_) break;
-		BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackJumpFirst>(pPlayer_));
+		BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<FallAttack>(pPlayer_));
 
 		break;
 	default:

@@ -138,7 +138,7 @@ void BaseEnemy::Draw(const ViewProjection& viewProjection) {
 
 	// 各エフェクトを更新
 	effects_.reverse();
-	for (std::unique_ptr<Effect>& effect : effects_) {
+    for (std::unique_ptr<ImpactEffect>& effect : effects_) {
 		if (effect) {
 			effect->Draw(viewProjection);
 		}
@@ -270,8 +270,13 @@ void BaseEnemy::ChangeMoveBehavior(std::unique_ptr<BaseEnemyMoveBehavior>behavio
 }
 
 void BaseEnemy::BehaviorChangeDeath() {
-	if (hp_ > 0) return;
-	if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())|| dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get()))return;
+    if (hp_ > 0) {
+        return;
+    }
+    if (dynamic_cast<EnemyDeath*>(damageBehavior_.get()) || dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) {
+        return;
+	};
+
 	isCollision_ = false;
 	collisionBox_->SetIsCollision(false);
 	ChangeBehavior(std::make_unique<EnemyDeath>(this));
@@ -322,7 +327,7 @@ void BaseEnemy::DeathRenditionInit() {
 }
 
 void BaseEnemy::FallEffectInit(const Vector3& pos) {
-	std::unique_ptr<Effect> effect = std::make_unique<Effect>();
+    std::unique_ptr<ImpactEffect> effect = std::make_unique<ImpactEffect>();
 
 	effect->Init(pos);
 	effects_.push_back(std::move(effect));
@@ -333,13 +338,13 @@ void BaseEnemy::FallEffectInit(const Vector3& pos) {
 
 void BaseEnemy::FallEffectUpdate() {
 	// 各エフェクトを更新
-	for (std::unique_ptr<Effect>& effect : effects_) {
+    for (std::unique_ptr<ImpactEffect>& effect : effects_) {
 		if (effect) {
 			effect->Update();
 		}
 	}
 	// 完了したエフェクトを消す
-	effects_.erase(std::remove_if(effects_.begin(), effects_.end(), [](const std::unique_ptr<Effect>& effect) { return effect->IsFinished(); }), effects_.end());
+    effects_.erase(std::remove_if(effects_.begin(), effects_.end(), [](const std::unique_ptr<ImpactEffect>& effect) { return effect->IsFinished(); }), effects_.end());
 }
 
 

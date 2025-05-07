@@ -1,6 +1,6 @@
 /// behavior
 #include"PlayerJump.h"
-#include"PlayerRoot.h"
+#include"PlayerMove.h"
 
 /// boss
 #include"Player/Player.h"
@@ -31,7 +31,7 @@ void PlayerJump::Update() {
 	pPlayer_->Jump(speed_,pPlayer_->GetParamater().normalJump.fallSpeedLimit,pPlayer_->GetParamater().normalJump.gravity);
 	
 	if (pPlayer_->GetTransform().translation_.y > Player::InitY_) return;
-	pPlayer_->ChangeBehavior(std::make_unique<PlayerRoot>(pPlayer_));
+	pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
 
 }
 

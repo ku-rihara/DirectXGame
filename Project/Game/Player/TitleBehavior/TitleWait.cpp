@@ -1,8 +1,8 @@
 /// behavior
 #include"TitleWait.h"
-#include"TitleSecondPunch.h"
+#include"TitleRightPunch.h"
 
-#include"Player/PlayerBehavior/PlayerRoot.h"
+#include"Player/PlayerBehavior/PlayerMove.h"
 
 /// Player
 #include"Player/Player.h"

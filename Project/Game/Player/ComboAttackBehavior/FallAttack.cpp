@@ -1,8 +1,8 @@
 /// behavior
-#include"ComboAttackJumpFirst.h"
-#include"ComboAttackJumpSecond.h"
+#include"FallAttack.h"
+#include"RushAttack.h"
 #include"ComboAttackRoot.h"
-#include"Player/PlayerBehavior/PlayerRoot.h"
+#include"Player/PlayerBehavior/PlayerMove.h"
 
 /// Player
 #include"Player/Player.h"
@@ -12,8 +12,8 @@
 #include"Frame/Frame.h"
 
 //初期化
-ComboAttackJumpFirst::ComboAttackJumpFirst(Player* player)
-	: BaseComboAattackBehavior("ComboAttackJumpFirst",player) {
+FallAttack::FallAttack(Player* player)
+	: BaseComboAattackBehavior("FallAttack",player) {
 
 	///---------------------------------------------------------
 	/// 変数初期化
@@ -50,15 +50,15 @@ ComboAttackJumpFirst::ComboAttackJumpFirst(Player* player)
 	fallInitPosLHand_= pPlayer_->GetLeftHand()->GetTransform().translation_.y;
 	fallInitPosRHand_= pPlayer_->GetRightHand()->GetTransform().translation_.y;
 
-	pPlayer_->ChangeBehavior(std::make_unique<PlayerRoot>(pPlayer_));
+	pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
 }
 
-ComboAttackJumpFirst::~ComboAttackJumpFirst() {
+FallAttack::~FallAttack() {
 
 }
 
 //更新
-void ComboAttackJumpFirst::Update() {
+void FallAttack::Update() {
 	switch (step_)
 	{
 	case STEP::FALL:
@@ -140,7 +140,7 @@ void ComboAttackJumpFirst::Update() {
 		}
 		else {
 			BaseComboAattackBehavior::PreOderNextComboForButton();//次のコンボに移行可能
-			BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackJumpSecond>(pPlayer_));
+			BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<RushAttack>(pPlayer_));
 		}
 		break;
 	case STEP::RETURNROOT:
@@ -153,6 +153,6 @@ void ComboAttackJumpFirst::Update() {
 }
 
 
-void  ComboAttackJumpFirst::Debug() {
-	ImGui::Text("ComboAttackJumpFirst");
+void  FallAttack::Debug() {
+	ImGui::Text("FallAttack");
 }

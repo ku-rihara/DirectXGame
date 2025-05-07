@@ -1,5 +1,5 @@
 /// behavior
-#include"PlayerRoot.h"
+#include"PlayerMove.h"
 #include"PlayerJump.h"
 
 /// boss
@@ -12,8 +12,8 @@
 #include<imgui.h>
 
 //初期化
-PlayerRoot::PlayerRoot(Player* boss)
-	: BasePlayerBehavior("PlayerRoot", boss) {
+PlayerMove::PlayerMove(Player* boss)
+	: BasePlayerBehavior("PlayerMove", boss) {
 
     
 
@@ -27,12 +27,12 @@ PlayerRoot::PlayerRoot(Player* boss)
 	animationStep_ = AnimationStep::INIT;
 }
 
-PlayerRoot ::~PlayerRoot() {
+PlayerMove ::~PlayerMove() {
 
 }
 
 //更新
-void PlayerRoot::Update() {
+void PlayerMove::Update() {
 
     // アニメーション
 	MoveAnimation();
@@ -55,7 +55,7 @@ void PlayerRoot::Update() {
 	}
 }
 
-void PlayerRoot::JumpForJoyState() {
+void PlayerMove::JumpForJoyState() {
 	
 	if (!(Input::IsTriggerPad(0, XINPUT_GAMEPAD_A))) return;
 
@@ -63,7 +63,7 @@ void PlayerRoot::JumpForJoyState() {
 		
 }
 
-void PlayerRoot::MoveAnimation() {
+void PlayerMove::MoveAnimation() {
     if (!pPlayer_->GetIsMoving())
         return;
 
@@ -110,7 +110,7 @@ void PlayerRoot::MoveAnimation() {
 
 }
 
-void PlayerRoot::WaitAnimation() {
+void PlayerMove::WaitAnimation() {
 
      if (pPlayer_->GetIsMoving())
         return;
@@ -136,7 +136,7 @@ void PlayerRoot::WaitAnimation() {
         EaseInCubic<Vector3>(Vector3::UnitVector(), {Vector3::UnitVector().x - 0.1f, Vector3::UnitVector().y - 0.1f, Vector3::UnitVector().z - 0.1f}, waitEase_.time, waitEase_.maxTime));
 }
 
-void  PlayerRoot::Debug() {
+void  PlayerMove::Debug() {
 	ImGui::Text("Root");
 	
 }
