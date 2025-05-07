@@ -157,9 +157,6 @@
     <Filter Include="Game\IsFindSprite">
       <UniqueIdentifier>{27dc28c0-6ee7-4d37-a63d-89c6f21a24ce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\UI\TitleFont">
-      <UniqueIdentifier>{26f2b0d5-af5f-4226-8a18-93999703de7c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\MonsterBall">
       <UniqueIdentifier>{0fe76578-dd93-4ebc-a7b1-ff86299b8b82}</UniqueIdentifier>
     </Filter>
@@ -261,6 +258,9 @@
     </Filter>
     <Filter Include="リソースファイル\Offscreen">
       <UniqueIdentifier>{523d5f3c-8798-4769-923d-6c87d48cc99f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\UI\TitleRogo">
+      <UniqueIdentifier>{26f2b0d5-af5f-4226-8a18-93999703de7c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -493,8 +493,8 @@
     <ClCompile Include="Game\SkyDome\SkyDome.cpp">
       <Filter>Game\SkyDome</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\TitleFont.cpp">
-      <Filter>Game\UI\TitleFont</Filter>
+    <ClCompile Include="Game\UI\TitleRogo.cpp">
+      <Filter>Game\UI\TitleRogo</Filter>
     </ClCompile>
     <ClCompile Include="Game\UI\HowToOperate.cpp">
       <Filter>Game\UI\HowToOperate</Filter>
@@ -936,8 +936,8 @@
     <ClInclude Include="Game\SkyDome\SkyDome.h">
       <Filter>Game\SkyDome</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\TitleFont.h">
-      <Filter>Game\UI\TitleFont</Filter>
+    <ClInclude Include="Game\UI\TitleRogo.h">
+      <Filter>Game\UI\TitleRogo</Filter>
     </ClInclude>
     <ClInclude Include="Game\UI\HowToOperate.h">
       <Filter>Game\UI\HowToOperate</Filter>

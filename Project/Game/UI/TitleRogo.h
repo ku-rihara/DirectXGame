@@ -4,7 +4,7 @@
 #include <memory>
 #include"Easing.h"
 
-class TitleFont {
+class TitleRogo {
 private:
 	enum class Step{
 		PUNCH,

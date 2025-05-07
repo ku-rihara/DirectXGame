@@ -32,7 +32,7 @@ void TitleScene::Init() {
 	field_ = std::make_unique<Field>();
 	player_ = std::make_unique<Player>();
 	skydome_ = std::make_unique<Skydome>();
-	titleFont_ = std::make_unique<TitleFont>();
+    titleRogo_ = std::make_unique<TitleRogo>();
 
 
 	///=======================================================================================
@@ -41,7 +41,7 @@ void TitleScene::Init() {
 	field_->Init();
 	skydome_->Init();
 	player_->Init();
-	titleFont_->Init();
+	titleRogo_->Init();
 		
 	alpha_ = 0.0f;
 	
@@ -80,7 +80,7 @@ void TitleScene::Update() {
 		}
 	}
 	if (isFontUpdate_) {
-		titleFont_->Update();
+		titleRogo_->Update();
 	}
 
 	ParticleManager::GetInstance()->Update();
@@ -136,7 +136,7 @@ void TitleScene::ModelDraw() {
    /// スプライト描画
    /// ===================================================
 void TitleScene::SpriteDraw() {
-	titleFont_->Draw();
+	titleRogo_->Draw();
 
 	screenSprite_->Draw();
 }
@@ -146,7 +146,7 @@ void TitleScene::Debug() {
 	ImGui::Begin("Camera");
 	ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
 	ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
-	titleFont_->Debug();
+	titleRogo_->Debug();
 	Light::GetInstance()->DebugImGui();
 	/*player_->AdjustParm();*/
 	ImGui::End();

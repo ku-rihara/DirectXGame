@@ -1,10 +1,10 @@
-#include "TitleFont.h"
+#include "TitleRogo.h"
 #include"Frame/Frame.h"
 #include"base/TextureManager.h"
 #include<imgui.h>
 
 
-void TitleFont::Init() {
+void TitleRogo::Init() {
 	uint32_t phandle=TextureManager::GetInstance()->LoadTexture("Resources/Texture/TitleFontPunch.png");
 	uint32_t rhandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/TitleFontRush.png");
 	uint32_t bhandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/StartBottomA.png");
@@ -35,10 +35,10 @@ void TitleFont::Init() {
 	step_ = Step::PUNCH;
 }
 
-void TitleFont::Update() {
+void TitleRogo::Update() {
 	switch (step_)
 	{
-	case TitleFont::Step::PUNCH:
+	case TitleRogo::Step::PUNCH:
 		///----------------------------------------------------
 		/// パンチ
 		///----------------------------------------------------
@@ -51,7 +51,7 @@ void TitleFont::Update() {
 		step_ = Step::RUSH;
 		
 		break;
-	case TitleFont::Step::RUSH:
+	case TitleRogo::Step::RUSH:
 		///----------------------------------------------------
 		/// ラッシュ
 		///----------------------------------------------------
@@ -63,7 +63,7 @@ void TitleFont::Update() {
 		rushSprite_->SetScale(initScale_);
 		step_ = Step::BOTTON;
 		break;
-	case TitleFont::Step::BOTTON:
+	case TitleRogo::Step::BOTTON:
 		///----------------------------------------------------
 		/// ボタン
 		///----------------------------------------------------
@@ -75,7 +75,7 @@ void TitleFont::Update() {
 		bottomSprite_->SetScale(initScale_);
 		step_ = Step::BOTTONPOST;
 		break;
-	case TitleFont::Step::BOTTONPOST:
+	case TitleRogo::Step::BOTTONPOST:
 		///----------------------------------------------------
 		/// パンチ
 		///----------------------------------------------------
@@ -89,14 +89,14 @@ void TitleFont::Update() {
 	bottomSprite_->SetPosition(bottonPosition_);
 }
 
-void TitleFont::Draw() {
+void TitleRogo::Draw() {
 	
 	punchSprite_->Draw();
 	rushSprite_->Draw();
 	bottomSprite_->Draw();
 }
 
-void TitleFont::Debug() {
+void TitleRogo::Debug() {
 	ImGui::SeparatorText("SpriteText");
 	ImGui::DragFloat2("punchPosition_", &punchPosition_.x, 0.1f);
 	ImGui::DragFloat2("rushPosition_", &rushPosition_.x, 0.1f);
