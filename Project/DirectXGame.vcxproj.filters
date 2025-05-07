@@ -145,6 +145,12 @@
     <Filter Include="リソースファイル\OffScreen">
       <UniqueIdentifier>{3bf652c4-db9d-4e96-aa0f-177270e2226e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\utility\EasingAnimation">
+      <UniqueIdentifier>{407ebb1a-3954-4162-b7ea-af0d1db90731}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\EasingAnimation">
+      <UniqueIdentifier>{fd45ac81-3519-4403-ad3b-c42be8a0eed2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -369,6 +375,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp">
       <Filter>MyEngine\.cpp\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\EaseingAnimation\EasingAnimation.cpp">
+      <Filter>MyEngine\.cpp\utility\EasingAnimation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -626,6 +635,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Primitive\PrimitiveRing.h">
       <Filter>MyEngine\.h\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\EaseingAnimation\EasingAnimation.h">
+      <Filter>MyEngine\.h\utility\EasingAnimation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
