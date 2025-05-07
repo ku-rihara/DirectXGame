@@ -55,9 +55,11 @@
     <ClCompile Include="Engine\Lighrt\SpotLight.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLightManager.cpp" />
     <ClCompile Include="Engine\Primitive\IPrimitive.cpp" />
+    <ClCompile Include="Engine\Primitive\PrimitiveCylinder.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitivePlane.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp" />
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
+    <ClCompile Include="Engine\utility\EaseingAnimation\EasingAnimation.cpp" />
     <ClCompile Include="Engine\utility\ParameterEditor\GlobalParameter.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleCommon.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleEmitter.cpp" />
@@ -192,6 +194,7 @@
     <ClInclude Include="Engine\Lighrt\SpotLight.h" />
     <ClInclude Include="Engine\Lighrt\SpotLightManager.h" />
     <ClInclude Include="Engine\Primitive\IPrimitive.h" />
+    <ClInclude Include="Engine\Primitive\PrimitiveCylinder.h" />
     <ClInclude Include="Engine\Primitive\PrimitivePlane.h" />
     <ClInclude Include="Engine\Primitive\PrimitiveRing.h" />
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h" />
@@ -203,6 +206,7 @@
     <ClInclude Include="Engine\struct\TransformationMatrix.h" />
     <ClInclude Include="Engine\struct\VertexData.h" />
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h" />
+    <ClInclude Include="Engine\utility\EaseingAnimation\EasingAnimation.h" />
     <ClInclude Include="Engine\utility\ParameterEditor\GlobalParameter.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleCommon.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleEmitter.h" />
@@ -341,6 +345,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="resources\Shader\OffScreen\Grayscale.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\RadialBlur.PS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

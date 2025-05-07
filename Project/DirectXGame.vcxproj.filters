@@ -262,6 +262,12 @@
     <Filter Include="Game\Player\Parts">
       <UniqueIdentifier>{f3bc0200-2166-4ea3-88ff-c1d3bbfce8e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\utility\EasingAnimation">
+      <UniqueIdentifier>{407ebb1a-3954-4162-b7ea-af0d1db90731}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\EasingAnimation">
+      <UniqueIdentifier>{fd45ac81-3519-4403-ad3b-c42be8a0eed2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -644,6 +650,12 @@
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp">
+      <Filter>MyEngine\.cpp\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\EaseingAnimation\EasingAnimation.cpp">
+      <Filter>MyEngine\.cpp\utility\EasingAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Primitive\PrimitiveCylinder.cpp">
       <Filter>MyEngine\.cpp\Primitive</Filter>
     </ClCompile>
     <ClCompile Include="Game\Effect\ImpactEffect.cpp">
@@ -1080,6 +1092,12 @@
     <ClInclude Include="Engine\Primitive\PrimitiveRing.h">
       <Filter>MyEngine\.h\Primitive</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\utility\EaseingAnimation\EasingAnimation.h">
+      <Filter>MyEngine\.h\utility\EasingAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\PrimitiveCylinder.h">
+      <Filter>MyEngine\.h\Primitive</Filter>
+    </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\RightJobPunch.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClInclude>
@@ -1146,6 +1164,9 @@
       <Filter>リソースファイル\OffScreen</Filter>
     </FxCompile>
     <FxCompile Include="resources\Shader\OffScreen\GaussianFilter.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\RadialBlur.PS.hlsl">
       <Filter>リソースファイル\OffScreen</Filter>
     </FxCompile>
   </ItemGroup>
