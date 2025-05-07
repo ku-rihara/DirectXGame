@@ -154,17 +154,11 @@
     <Filter Include="MyEngine\.cpp\Light">
       <UniqueIdentifier>{5396bc61-e016-4b3e-8707-c28cc9c03b94}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\IsFindSprite">
-      <UniqueIdentifier>{27dc28c0-6ee7-4d37-a63d-89c6f21a24ce}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\MonsterBall">
       <UniqueIdentifier>{0fe76578-dd93-4ebc-a7b1-ff86299b8b82}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Player">
       <UniqueIdentifier>{17bc6e81-f103-4b8a-895b-a16298dcba9e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Player\Weapon">
-      <UniqueIdentifier>{ea7b30de-436e-4b71-9943-2e80e0085740}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Player\Behavior">
       <UniqueIdentifier>{fa87dd0d-508a-4164-9fe9-b239a2dc26e5}</UniqueIdentifier>
@@ -261,6 +255,12 @@
     </Filter>
     <Filter Include="Game\UI\TitleRogo">
       <UniqueIdentifier>{26f2b0d5-af5f-4226-8a18-93999703de7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\SearchingSprite">
+      <UniqueIdentifier>{cbcd6471-36ea-4075-8b41-9533db6e6f52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Parts">
+      <UniqueIdentifier>{f3bc0200-2166-4ea3-88ff-c1d3bbfce8e3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -457,12 +457,6 @@
     <ClCompile Include="Engine\Lighrt\SpotLightManager.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\IsFindSprite\FindSprite.cpp">
-      <Filter>Game\IsFindSprite</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\IsFindSprite\NotFindSprite.cpp">
-      <Filter>Game\IsFindSprite</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\TitleBehavior\TitleFirstFall.cpp">
       <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClCompile>
@@ -511,12 +505,6 @@
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\Weapon\PlayerHandLeft.cpp">
-      <Filter>Game\Player\Weapon</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\Weapon\PlayerHandRight.cpp">
-      <Filter>Game\Player\Weapon</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerJump.cpp">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
     </ClCompile>
@@ -531,9 +519,6 @@
     </ClCompile>
     <ClCompile Include="Game\BaseObject\BaseObject.cpp">
       <Filter>Game\BaseObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\Weapon\BasePlayerHand.cpp">
-      <Filter>Game\Player\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="Game\Field\Field.cpp">
       <Filter>Game\Field</Filter>
@@ -663,6 +648,21 @@
     </ClCompile>
     <ClCompile Include="Game\Effect\ImpactEffect.cpp">
       <Filter>Game\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\SearchingSprite\FindSprite.cpp">
+      <Filter>Game\Enemy\SearchingSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\SearchingSprite\NotFindSprite.cpp">
+      <Filter>Game\Enemy\SearchingSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Parts\BasePlayerHand.cpp">
+      <Filter>Game\Player\Parts</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Parts\PlayerHandLeft.cpp">
+      <Filter>Game\Player\Parts</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\Parts\PlayerHandRight.cpp">
+      <Filter>Game\Player\Parts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -900,12 +900,6 @@
     <ClInclude Include="Engine\Lighrt\SpotLightManager.h">
       <Filter>MyEngine\.h\Light</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\IsFindSprite\FindSprite.h">
-      <Filter>Game\IsFindSprite</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\IsFindSprite\NotFindSprite.h">
-      <Filter>Game\IsFindSprite</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\TitleBehavior\TitleFirstFall.h">
       <Filter>Game\Player\Behavior\TitleBehavior</Filter>
     </ClInclude>
@@ -951,20 +945,11 @@
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\Weapon\BasePlayerHand.h">
-      <Filter>Game\Player\Weapon</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\Weapon\PlayerHandLeft.h">
-      <Filter>Game\Player\Weapon</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerJump.h">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerMove.h">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\Weapon\PlayerHandRight.h">
-      <Filter>Game\Player\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\Player.h">
       <Filter>Game\Player\core</Filter>
@@ -1097,6 +1082,21 @@
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\RightJobPunch.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\SearchingSprite\FindSprite.h">
+      <Filter>Game\Enemy\SearchingSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\SearchingSprite\NotFindSprite.h">
+      <Filter>Game\Enemy\SearchingSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Parts\BasePlayerHand.h">
+      <Filter>Game\Player\Parts</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Parts\PlayerHandLeft.h">
+      <Filter>Game\Player\Parts</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\Parts\PlayerHandRight.h">
+      <Filter>Game\Player\Parts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

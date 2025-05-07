@@ -6,9 +6,9 @@
 #include"BaseObject/BaseObject.h"
 #include"Effect/ImpactEffect.h"
 
-/// Weapon
-#include"Weapon/PlayerHandLeft.h"
-#include"Weapon/PlayerHandRight.h"
+/// Parts
+#include"Parts/PlayerHandLeft.h"
+#include"Parts/PlayerHandRight.h"
 
 /// utility
 #include"utility/ParameterEditor/GlobalParameter.h"

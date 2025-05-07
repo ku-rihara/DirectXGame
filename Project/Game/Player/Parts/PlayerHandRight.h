@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include"Player/Weapon/BasePlayerHand.h"
+#include"Player/Parts/BasePlayerHand.h"
 
 
 class PlayerHandRight:public BasePlayerHand {

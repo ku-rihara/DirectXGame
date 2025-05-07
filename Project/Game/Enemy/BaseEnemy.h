@@ -12,8 +12,8 @@
 #include"Enemy/HPBar/EnemyHPBar.h"
 #include"Effect/ImpactEffect.h"
 
-#include"IsFindSprite/FindSprite.h"
-#include"IsFindSprite/NotFindSprite.h"
+#include"SearchingSprite/FindSprite.h"
+#include"SearchingSprite/NotFindSprite.h"
 
 class Player;
 class GameCamera;

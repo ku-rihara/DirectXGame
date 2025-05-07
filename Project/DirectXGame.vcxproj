@@ -87,9 +87,9 @@
     <ClCompile Include="Game\Enemy\Behavior\EnemyUpperDamage.cpp" />
     <ClCompile Include="Game\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Enemy\HPBar\EnemyHPBar.cpp" />
-    <ClCompile Include="Game\Enemy\IsFindSprite\FindSprite.cpp" />
-    <ClCompile Include="Game\Enemy\IsFindSprite\NotFindSprite.cpp" />
     <ClCompile Include="Game\Enemy\NormalEnemy.cpp" />
+    <ClCompile Include="Game\Enemy\SearchingSprite\FindSprite.cpp" />
+    <ClCompile Include="Game\Enemy\SearchingSprite\NotFindSprite.cpp" />
     <ClCompile Include="Game\Enemy\Spawner\EnemySpawner.cpp" />
     <ClCompile Include="Game\Enemy\StrongEnemy.cpp" />
     <ClCompile Include="Game\Field\Field.cpp" />
@@ -112,6 +112,9 @@
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\LeftJobPunch.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\RoringUpper.cpp" />
+    <ClCompile Include="Game\Player\Parts\BasePlayerHand.cpp" />
+    <ClCompile Include="Game\Player\Parts\PlayerHandLeft.cpp" />
+    <ClCompile Include="Game\Player\Parts\PlayerHandRight.cpp" />
     <ClCompile Include="Game\Player\Player.cpp" />
     <ClCompile Include="Game\Player\PlayerBehavior\BasePlayerBehavior.cpp" />
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerJump.cpp" />
@@ -121,9 +124,6 @@
     <ClCompile Include="Game\Player\TitleBehavior\TitleRightPunch.cpp" />
     <ClCompile Include="Game\Player\TitleBehavior\TitleLeftPunch.cpp" />
     <ClCompile Include="Game\Player\TitleBehavior\TitleWait.cpp" />
-    <ClCompile Include="Game\Player\Weapon\BasePlayerHand.cpp" />
-    <ClCompile Include="Game\Player\Weapon\PlayerHandLeft.cpp" />
-    <ClCompile Include="Game\Player\Weapon\PlayerHandRight.cpp" />
     <ClCompile Include="Game\MonsterBall\MonsterBall.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp" />
@@ -232,9 +232,9 @@
     <ClInclude Include="Game\Enemy\Behavior\EnemyUpperDamage.h" />
     <ClInclude Include="Game\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Enemy\HPBar\EnemyHPBar.h" />
-    <ClInclude Include="Game\Enemy\IsFindSprite\FindSprite.h" />
-    <ClInclude Include="Game\Enemy\IsFindSprite\NotFindSprite.h" />
     <ClInclude Include="Game\Enemy\NormalEnemy.h" />
+    <ClInclude Include="Game\Enemy\SearchingSprite\FindSprite.h" />
+    <ClInclude Include="Game\Enemy\SearchingSprite\NotFindSprite.h" />
     <ClInclude Include="Game\Enemy\Spawner\EnemySpawner.h" />
     <ClInclude Include="Game\Enemy\StrongEnemy.h" />
     <ClInclude Include="Game\Field\Field.h" />
@@ -257,6 +257,9 @@
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\LeftJobPunch.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\RoringUpper.h" />
+    <ClInclude Include="Game\Player\Parts\BasePlayerHand.h" />
+    <ClInclude Include="Game\Player\Parts\PlayerHandLeft.h" />
+    <ClInclude Include="Game\Player\Parts\PlayerHandRight.h" />
     <ClInclude Include="Game\Player\Player.h" />
     <ClInclude Include="Game\Player\PlayerBehavior\BasePlayerBehavior.h" />
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerJump.h" />
@@ -266,9 +269,6 @@
     <ClInclude Include="Game\Player\TitleBehavior\TitleRightPunch.h" />
     <ClInclude Include="Game\Player\TitleBehavior\TitleLeftPunch.h" />
     <ClInclude Include="Game\Player\TitleBehavior\TitleWait.h" />
-    <ClInclude Include="Game\Player\Weapon\BasePlayerHand.h" />
-    <ClInclude Include="Game\Player\Weapon\PlayerHandLeft.h" />
-    <ClInclude Include="Game\Player\Weapon\PlayerHandRight.h" />
     <ClInclude Include="Game\MonsterBall\MonsterBall.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
     <ClInclude Include="Game\Scene\Factory\AbstractSceneFactory.h" />
