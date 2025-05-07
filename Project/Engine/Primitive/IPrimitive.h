@@ -5,7 +5,7 @@
 enum class PrimitiveType {
     Plane,
     Sphere,
-    Cube,
+    Cylinder,
     Ring
 };
 

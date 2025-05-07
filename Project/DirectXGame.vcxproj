@@ -55,6 +55,7 @@
     <ClCompile Include="Engine\Lighrt\SpotLight.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLightManager.cpp" />
     <ClCompile Include="Engine\Primitive\IPrimitive.cpp" />
+    <ClCompile Include="Engine\Primitive\PrimitiveCylinder.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitivePlane.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp" />
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
@@ -134,6 +135,7 @@
     <ClInclude Include="Engine\Lighrt\SpotLight.h" />
     <ClInclude Include="Engine\Lighrt\SpotLightManager.h" />
     <ClInclude Include="Engine\Primitive\IPrimitive.h" />
+    <ClInclude Include="Engine\Primitive\PrimitiveCylinder.h" />
     <ClInclude Include="Engine\Primitive\PrimitivePlane.h" />
     <ClInclude Include="Engine\Primitive\PrimitiveRing.h" />
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h" />

@@ -379,6 +379,9 @@
     <ClCompile Include="Engine\utility\EaseingAnimation\EasingAnimation.cpp">
       <Filter>MyEngine\.cpp\utility\EasingAnimation</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Primitive\PrimitiveCylinder.cpp">
+      <Filter>MyEngine\.cpp\Primitive</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -638,6 +641,9 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\EaseingAnimation\EasingAnimation.h">
       <Filter>MyEngine\.h\utility\EasingAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Primitive\PrimitiveCylinder.h">
+      <Filter>MyEngine\.h\Primitive</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
