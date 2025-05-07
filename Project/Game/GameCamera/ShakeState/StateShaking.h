@@ -3,7 +3,7 @@
 #include "BaseShakeState.h"
 #include"Easing.h"
 
-class ShakeStateMove: public BaseShakeState {
+class StateShaking: public BaseShakeState {
 private:
 	enum class Step {
 		SHAKE,
@@ -20,8 +20,8 @@ private:
 public:
 
 	//コンストラクタ
-	ShakeStateMove(GameCamera* camera);
-	~ShakeStateMove();
+	StateShaking(GameCamera* camera);
+	~StateShaking();
 
 	void Update()override;
 

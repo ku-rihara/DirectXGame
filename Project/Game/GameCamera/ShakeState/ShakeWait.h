@@ -3,7 +3,7 @@
 #include "BaseShakeState.h"
 #include"Easing.h"
 
-class ShakeStateRoot : public BaseShakeState {
+class ShakeWait : public BaseShakeState {
 private:
 
 	/// ===================================================
@@ -13,8 +13,8 @@ private:
 public:
 
 	//コンストラクタ
-	ShakeStateRoot(GameCamera* camera);
-	~ShakeStateRoot();
+	ShakeWait(GameCamera* camera);
+	~ShakeWait();
 
 	void Update()override;
 

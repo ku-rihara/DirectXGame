@@ -1,5 +1,5 @@
 /// behavior
-#include"ShakeStateRoot.h"
+#include"ShakeWait.h"
 /// boss
 #include"GameCamera/GameCamera.h"
 /// frame
@@ -8,8 +8,8 @@
 
 
 //初期化
-ShakeStateRoot::ShakeStateRoot(GameCamera* gameCamera)
-	: BaseShakeState("ShakeStateRoot", gameCamera) {
+ShakeWait::ShakeWait(GameCamera* gameCamera)
+	: BaseShakeState("ShakeWait", gameCamera) {
 
 	/// ===================================================
 	/// 変数初期化
@@ -17,16 +17,16 @@ ShakeStateRoot::ShakeStateRoot(GameCamera* gameCamera)
 	
 }
 
-ShakeStateRoot ::~ShakeStateRoot() {
+ShakeWait ::~ShakeWait() {
 
 }
 
 //更新
-void ShakeStateRoot::Update() {
+void ShakeWait::Update() {
 	
 }
 
 
-void  ShakeStateRoot::Debug() {
-	ImGui::Text("ShakeStateRoot");
+void  ShakeWait::Debug() {
+	ImGui::Text("ShakeWait");
 }

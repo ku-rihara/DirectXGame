@@ -11,8 +11,8 @@
 #include"Behavior/GameCameraRoot.h"
 #include"Behavior/GameCameraZoomInOut.h"
 
-#include"ShakeState/ShakeStateMove.h"
-#include"ShakeState/ShakeStateRoot.h"
+#include"ShakeState/StateShaking.h"
+#include"ShakeState/ShakeWait.h"
 /// std
 #include<numbers>
 #include<imgui.h>
@@ -31,7 +31,7 @@ void GameCamera::Init() {
 	offset_ = paramater_.firstOffset_;
 
 	ChangeBehavior(std::make_unique<GameCameraRoot>(this));
-	ChangeShakeState(std::make_unique<ShakeStateRoot>(this));
+	ChangeShakeState(std::make_unique<ShakeWait>(this));
 }
 
 void GameCamera::Update() {
@@ -216,8 +216,8 @@ void  GameCamera::ChangeShakeState(std::unique_ptr<BaseShakeState>behavior) {
 
 void GameCamera::ChangeShakeMode() {
 
-	if (!dynamic_cast<ShakeStateRoot*>(shakeState_.get()))return;
-	ChangeShakeState(std::make_unique<ShakeStateMove>(this));
+	if (!dynamic_cast<ShakeWait*>(shakeState_.get()))return;
+	ChangeShakeState(std::make_unique<StateShaking>(this));
 }
 
 void GameCamera::ChangeZoomInOut() {

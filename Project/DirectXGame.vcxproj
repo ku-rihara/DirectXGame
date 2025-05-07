@@ -99,8 +99,8 @@
     <ClCompile Include="Game\GameCamera\Behavior\GameCameraZoomInOut.cpp" />
     <ClCompile Include="Game\GameCamera\GameCamera.cpp" />
     <ClCompile Include="Game\GameCamera\ShakeState\BaseShakeState.cpp" />
-    <ClCompile Include="Game\GameCamera\ShakeState\ShakeStateMove.cpp" />
-    <ClCompile Include="Game\GameCamera\ShakeState\ShakeStateRoot.cpp" />
+    <ClCompile Include="Game\GameCamera\ShakeState\StateShaking.cpp" />
+    <ClCompile Include="Game\GameCamera\ShakeState\ShakeWait.cpp" />
     <ClCompile Include="Game\JoyState\JoyState.cpp" />
     <ClCompile Include="Game\LockOn\LockOn.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp" />
@@ -244,8 +244,8 @@
     <ClInclude Include="Game\GameCamera\Behavior\GameCameraZoomInOut.h" />
     <ClInclude Include="Game\GameCamera\GameCamera.h" />
     <ClInclude Include="Game\GameCamera\ShakeState\BaseShakeState.h" />
-    <ClInclude Include="Game\GameCamera\ShakeState\ShakeStateMove.h" />
-    <ClInclude Include="Game\GameCamera\ShakeState\ShakeStateRoot.h" />
+    <ClInclude Include="Game\GameCamera\ShakeState\StateShaking.h" />
+    <ClInclude Include="Game\GameCamera\ShakeState\ShakeWait.h" />
     <ClInclude Include="Game\JoyState\JoyState.h" />
     <ClInclude Include="Game\LockOn\LockOn.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h" />

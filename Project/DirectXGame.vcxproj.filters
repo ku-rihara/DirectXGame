@@ -568,10 +568,10 @@
     <ClCompile Include="Game\GameCamera\ShakeState\BaseShakeState.cpp">
       <Filter>Game\GameCamera\ShakeState</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameCamera\ShakeState\ShakeStateRoot.cpp">
+    <ClCompile Include="Game\GameCamera\ShakeState\ShakeWait.cpp">
       <Filter>Game\GameCamera\ShakeState</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameCamera\ShakeState\ShakeStateMove.cpp">
+    <ClCompile Include="Game\GameCamera\ShakeState\StateShaking.cpp">
       <Filter>Game\GameCamera\ShakeState</Filter>
     </ClCompile>
     <ClCompile Include="Game\GameCamera\Behavior\GameCameraBacklash.cpp">
@@ -1005,10 +1005,10 @@
     <ClInclude Include="Game\GameCamera\ShakeState\BaseShakeState.h">
       <Filter>Game\GameCamera\ShakeState</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameCamera\ShakeState\ShakeStateRoot.h">
+    <ClInclude Include="Game\GameCamera\ShakeState\ShakeWait.h">
       <Filter>Game\GameCamera\ShakeState</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameCamera\ShakeState\ShakeStateMove.h">
+    <ClInclude Include="Game\GameCamera\ShakeState\StateShaking.h">
       <Filter>Game\GameCamera\ShakeState</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameCamera\Behavior\GameCameraBacklash.h">
