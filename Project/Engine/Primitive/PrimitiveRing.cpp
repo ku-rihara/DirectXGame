@@ -9,7 +9,7 @@ void PrimitiveRing::Init() {
 
 void PrimitiveRing::Create() {
   
- /*   const float kOuterRadius = 1.0f;
+  /*  const float kOuterRadius = 1.0f;
     const float kInnerRadius = 0.2f;
     const float radianPerDivide = 2.0f * std::numbers::pi_v<float> / float(vertexNum_);
 

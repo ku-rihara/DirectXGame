@@ -13,6 +13,7 @@ enum class OffScreenMode {
     GRAY,
     VIGNETTE,
     GAUS,
+   /* RADIALBLUR,*/
     COUNT,
 };
 
