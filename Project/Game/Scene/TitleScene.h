@@ -24,7 +24,7 @@ private:
 	std::unique_ptr<Skydome> skydome_ = nullptr;
     std::unique_ptr<TitleRogo> titleRogo_ = nullptr;
 
-	bool isFontUpdate_;
+	bool isTitleRogoUpdate;
 	bool isFinished_;
 	float alpha_;
 public:

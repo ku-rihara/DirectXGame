@@ -75,11 +75,11 @@ void TitleScene::Update() {
 	skydome_->Update();
 
 	if (dynamic_cast<TitleRightPunch*>(player_->GetTitleBehavior())) {
-		if (!isFontUpdate_) {
-			isFontUpdate_ = true;
+		if (!isTitleRogoUpdate) {
+			isTitleRogoUpdate = true;
 		}
 	}
-	if (isFontUpdate_) {
+	if (isTitleRogoUpdate) {
 		titleRogo_->Update();
 	}
 
