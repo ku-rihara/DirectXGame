@@ -14,6 +14,7 @@ class SrvManager;
 class Audio;
 class Input;
 class FullscreenRenderer;
+class SkyBoxRenderer;
 
 class Keta {
 
@@ -33,6 +34,7 @@ private:
     static SrvManager* srvManager_;
     static Audio* audio_;
     static Input* input_;
+    static SkyBoxRenderer* skyBoxRenderer_;
 	static FullscreenRenderer* copyImageRenderer_;
 
 public:

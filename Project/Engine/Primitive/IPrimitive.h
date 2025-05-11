@@ -1,6 +1,12 @@
 #pragma once
-#include<memory>
+#include <d3d12.h>
 #include <cstdint>
+#include <memory>
+#include <wrl.h>
+
+#include "struct/TransformationMatrix.h"
+#include"3d/WorldTransform.h"
+#include <optional>
 
 enum class PrimitiveType {
     Plane,
@@ -12,19 +18,34 @@ enum class PrimitiveType {
 class Mesh;
 class IPrimitive {
 public:
-
-    IPrimitive()=default;
-    virtual ~IPrimitive()=default;
+    IPrimitive()          = default;
+    virtual ~IPrimitive() = default;
 
     virtual void Init();
     virtual void Create() = 0;
+    virtual void CreateWVPResource();
+    virtual void Draw(
+        const WorldTransform& worldTransform, 
+        const ViewProjection& viewProjection, 
+        std::optional<uint32_t> textureHandle=std::nullopt
+    );
 
 protected:
-	 std::unique_ptr<Mesh>mesh_ = nullptr;
-     uint32_t vertexNum_;
+    std::unique_ptr<Mesh> mesh_ = nullptr;
+    uint32_t vertexNum_;
+
+     Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_; // wvpリソース
+    TransformationMatrix* wvpDate_;
 
 public:
    
-
-      Mesh* GetMesh() const { return mesh_.get(); }
+    ///==========================================================
+    /// getter method
+    ///==========================================================
+    Mesh* GetMesh() const { return mesh_.get(); }
+    ///==========================================================
+    /// setter method
+    ///==========================================================
+    void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
+    void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
 };

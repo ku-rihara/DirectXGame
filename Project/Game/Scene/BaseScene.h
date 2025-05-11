@@ -54,7 +54,7 @@ public:
 	/// </summary>
 	virtual	void ModelDraw() = 0;
 	virtual	void SpriteDraw() = 0;
-	/*virtual	void ParticleDraw() = 0;*/
+	virtual	void SkyBoxDraw() = 0;
 
 	/// <summary>
 	/// デバッグ表示

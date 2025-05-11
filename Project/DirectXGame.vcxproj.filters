@@ -676,6 +676,12 @@
     <ClCompile Include="Game\Player\Parts\PlayerHandRight.cpp">
       <Filter>Game\Player\Parts</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Primitive\PrimitiveBox.cpp">
+      <Filter>MyEngine\.cpp\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\SkyBoxRenderer.cpp">
+      <Filter>MyEngine\.cpp\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1116,6 +1122,12 @@
     <ClInclude Include="Game\Player\Parts\PlayerHandRight.h">
       <Filter>Game\Player\Parts</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Primitive\PrimitiveBox.h">
+      <Filter>MyEngine\.h\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\SkyBoxRenderer.h">
+      <Filter>MyEngine\.h\base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -1130,6 +1142,9 @@
     </None>
     <None Include="resources\Shader\OffScreen\Fullscreen.hlsli">
       <Filter>リソースファイル\Offscreen</Filter>
+    </None>
+    <None Include="resources\Shader\SkyBox.hlsli">
+      <Filter>リソースファイル</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1168,6 +1183,12 @@
     </FxCompile>
     <FxCompile Include="resources\Shader\OffScreen\RadialBlur.PS.hlsl">
       <Filter>リソースファイル\OffScreen</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\SkyBox.PS.hlsl">
+      <Filter>リソースファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\SkyBox.VS.hlsl">
+      <Filter>リソースファイル</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
