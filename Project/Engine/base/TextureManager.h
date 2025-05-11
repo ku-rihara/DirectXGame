@@ -23,6 +23,7 @@ private:
 
 	std::unordered_map <std::string,TextureData> textureDatas_;
 
+  /*  D3D12_GPU_DESCRIPTOR_HANDLE skyBoxHandle_;*/
 	/// ohter class
 	SrvManager* pSrvManager_;
 
@@ -80,6 +81,7 @@ public:
 	const DirectX::TexMetadata& GetMetaData(uint32_t textureIndex);
 	uint32_t GetSrvIndex(const std::string& filePath);
 	D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandleGPU(const std::string& filePath);
+   /* D3D12_GPU_DESCRIPTOR_HANDLE GetSkyBoxTexture() const {  return skyBoxHandle_;}*/
 
 	/// <summary>
 	/// 終了

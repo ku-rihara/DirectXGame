@@ -5,7 +5,7 @@
 
 void PrimitiveBox::Init() {
     vertexNum_ = 24;
-    
+
     IPrimitive::Init();
 }
 
@@ -42,7 +42,7 @@ void PrimitiveBox::Create() {
     mesh_->SetVertexPositionData(22, Vector4(-1.0f, -1.0f, -1.0f, 1.0f));
     mesh_->SetVertexPositionData(23, Vector4(1.0f, -1.0f, -1.0f, 1.0f));
 
-  // 各面の三角形インデックス（内向き）
+    // 各面の三角形インデックス（内向き）
     uint32_t indices[] = {
         // 右面
         0, 1, 2, 2, 1, 3,
@@ -59,7 +59,6 @@ void PrimitiveBox::Create() {
 
     // インデックスをセット
     mesh_->SetIndexData(indices, static_cast<uint32_t>(std::size(indices)));
-   
 }
 
 void PrimitiveBox::SetTexture(const std::string& name) {

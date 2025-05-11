@@ -88,6 +88,8 @@ struct AmbientLight
 // 環境ライトの定数バッファ
 ConstantBuffer<AmbientLight> gAmbientLight : register(b6);
 
+TextureCube<float4> gEnvironmentTexture : register(t1);
+
 PixelShaderOutput main(VertexShaderOutput input)
 {
     float3 diffuseDirectionalLight; //拡散反射
@@ -105,6 +107,10 @@ PixelShaderOutput main(VertexShaderOutput input)
     float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
     float NdotL = 0.0f;
     float cos = 0.0f;
+    
+    float3 cameraToPosition = normalize(input.worldPosition - gCamera.worldPosition);
+    float3 reflectedVector = reflect(cameraToPosition, normalize(input.normal));
+    float4 envionmentColor = gEnvironmentTexture.Sample(gSampler, reflectedVector);
    
     // 環境ライトの初期化
     float3 ambientColor = float3(0.0f, 0.0f, 0.0f);
@@ -298,6 +304,8 @@ PixelShaderOutput main(VertexShaderOutput input)
     { //ライティングなし
         output.color = gMaterial.color * textureColor;
     }
+    
+    output.color.rgb += envionmentColor.rgb;
     
      //textureのα値が0の時にPixelを破棄
     if (textureColor.a == 0.0)
