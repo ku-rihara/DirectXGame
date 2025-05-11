@@ -34,3 +34,12 @@ void PrimitivePlane::Create() {
 
    
 }
+
+
+void PrimitivePlane::SetTexture(const std::string& name) {
+    IPrimitive::SetTexture(name);
+}
+
+void PrimitivePlane::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
+    IPrimitive::Draw(worldTransform, viewProjection, textureHandle);
+}

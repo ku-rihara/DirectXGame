@@ -35,6 +35,7 @@ private:
 public://メンバ関数
 	//共通描画処理
 	void PreDraw(ID3D12GraphicsCommandList* commandList);
+    void SetPiplelineState(ID3D12GraphicsCommandList* commandList);
 	//初期化
 	void Init(DirectXCommon* dxCommon);
 

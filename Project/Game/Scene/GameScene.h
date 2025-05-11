@@ -7,8 +7,11 @@
 #include"Ground/Ground.h"
 #include"MonsterBall/MonsterBall.h"
 #include"Plane/Plane.h"
+#include"SkyBox/SkyBox.h"
 // emitter
 #include"utility/ParticleEditor/ParticleEmitter.h"
+
+#include"SkyBox/SkyBox.h"
 
 
 /// <summary>
@@ -25,6 +28,8 @@ private:
 	std::unique_ptr<Ground> ground_ = nullptr;
 	std::unique_ptr<MonsterBall> monsterBall_ = nullptr;
 	std::unique_ptr<Plane> plane_ = nullptr;
+    std::unique_ptr<SkyBox> skuBox_           = nullptr;
+	
 
 public:
 	

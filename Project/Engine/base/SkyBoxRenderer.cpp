@@ -167,4 +167,9 @@ void SkyBoxRenderer::CreateRootSignature() {
 void SkyBoxRenderer::PreDraw(ID3D12GraphicsCommandList* commandList) {
     // RootSignatureを設定
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
+    commandList->SetPipelineState(pipelineState_.Get());
+}
+
+void SkyBoxRenderer::SetPiplelineState(ID3D12GraphicsCommandList* commandList) {
+    commandList->SetPipelineState(pipelineState_.Get());
 }

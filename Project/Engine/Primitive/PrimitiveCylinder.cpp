@@ -48,3 +48,11 @@ void PrimitiveCylinder::Create() {
         mesh_->SetVertexNormData(index + 5, Vector3(-sinNext, 0.0f, cosNext));
     }
 }
+
+void PrimitiveCylinder::SetTexture(const std::string& name) {
+    IPrimitive::SetTexture(name);
+}
+
+void PrimitiveCylinder::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
+    IPrimitive::Draw(worldTransform, viewProjection, textureHandle);
+}

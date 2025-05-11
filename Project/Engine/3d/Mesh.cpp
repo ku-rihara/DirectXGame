@@ -53,7 +53,7 @@ void Mesh::CreateVertexResource() {
 }
 
 
-void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, std::optional<uint32_t> textureHandle) {
+void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource,Material material, std::optional<uint32_t> textureHandle) {
 
     auto commandList = directXCommon_->GetCommandList();
     /*materialDate_->color = color.;*/
@@ -65,7 +65,7 @@ void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, std::optiona
     // 形状を設定
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
- /*   material.SetCommandList(commandList);*/
+    material.SetCommandList(commandList);
 
     commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 
