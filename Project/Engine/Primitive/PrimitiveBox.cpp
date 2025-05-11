@@ -1,9 +1,11 @@
-#include "3d/Mesh.h"
 #include "PrimitiveBox.h"
+#include "3d/Mesh.h"
+#include "base/SkyBoxRenderer.h"
 #include <numbers>
 
 void PrimitiveBox::Init() {
-    vertexNum_ = 11;
+    vertexNum_ = 24;
+
     IPrimitive::Init();
 }
 
@@ -39,4 +41,31 @@ void PrimitiveBox::Create() {
     mesh_->SetVertexPositionData(21, Vector4(1.0f, -1.0f, 1.0f, 1.0f));
     mesh_->SetVertexPositionData(22, Vector4(-1.0f, -1.0f, -1.0f, 1.0f));
     mesh_->SetVertexPositionData(23, Vector4(1.0f, -1.0f, -1.0f, 1.0f));
+
+    // 各面の三角形インデックス（内向き）
+    uint32_t indices[] = {
+        // 右面
+        0, 1, 2, 2, 1, 3,
+        // 左面
+        4, 5, 6, 6, 5, 7,
+        // 前面
+        8, 9, 10, 10, 9, 11,
+        // 背面
+        12, 13, 14, 14, 13, 15,
+        // 上面
+        16, 17, 18, 18, 17, 19,
+        // 下面
+        20, 21, 22, 22, 21, 23};
+
+    // インデックスをセット
+    mesh_->SetIndexData(indices, static_cast<uint32_t>(std::size(indices)));
+}
+
+void PrimitiveBox::SetTexture(const std::string& name) {
+    IPrimitive::SetTexture(name);
+}
+
+void PrimitiveBox::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
+    /*SkyBoxRenderer::GetInstance()->SetPiplelineState();*/
+    IPrimitive::Draw(worldTransform, viewProjection, textureHandle);
 }

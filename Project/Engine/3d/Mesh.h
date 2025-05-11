@@ -25,7 +25,7 @@ public:
     void DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, Material material, std::optional<uint32_t> textureHandle);
     void DebugImGui();
 
-    void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, std::optional<uint32_t> textureHandle = std::nullopt);
+    void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, std::optional<uint32_t> textureHandle = std::nullopt);
 
     void SetTexture(const std::string& name);
 

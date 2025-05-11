@@ -51,4 +51,7 @@ public:
     void DebugImGui();
 
 
+    public:
+    void SetShininess(const float& shiniess) { materialData_->shininess = shiniess; }
+
 };

@@ -146,6 +146,7 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
         srvDesc.TextureCube.MostDetailedMip     = 0;
         srvDesc.TextureCube.MipLevels           = UINT_MAX;
         srvDesc.TextureCube.ResourceMinLODClamp = 0.0f;
+       /* skyBoxHandle_                           = textureData.srvGPUHandle;*/
     } else {
         // Texture 2dの設定
         srvDesc.ViewDimension       = D3D12_SRV_DIMENSION_TEXTURE2D;

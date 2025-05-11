@@ -35,3 +35,12 @@ void PrimitiveRing::Create() {
         mesh_->SetVertexTexcoordData(index + 3, Vector2(uNext, 1.0f));
     }
 }
+
+
+void PrimitiveRing::SetTexture(const std::string& name) {
+    IPrimitive::SetTexture(name);
+}
+
+void PrimitiveRing::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
+    IPrimitive::Draw(worldTransform, viewProjection, textureHandle);
+}

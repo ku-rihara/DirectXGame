@@ -41,5 +41,5 @@ void DirectionalLight::DebugImGui() {
 }
 
 void  DirectionalLight::SetLightCommand(ID3D12GraphicsCommandList* commandList) {
-    commandList->SetGraphicsRootConstantBufferView(3, lightResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(4, lightResource_->GetGPUVirtualAddress());
 }

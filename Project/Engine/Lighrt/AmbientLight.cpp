@@ -42,5 +42,5 @@ void AmbientLight::DebugImGui(){
 }
 
 void  AmbientLight::SetLightCommand(ID3D12GraphicsCommandList* commandList) {
-    commandList->SetGraphicsRootConstantBufferView(8, lightResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(9, lightResource_->GetGPUVirtualAddress());
 }

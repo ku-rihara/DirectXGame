@@ -59,5 +59,5 @@ void AreaLight::SetPosition(const Vector3& pos) {
 // ライトデータをコマンドリストに設定
 void AreaLight::SetLightCommand(ID3D12GraphicsCommandList* commandList, const int& index) {
     index; // 使用しないが引数として保持
-    commandList->SetGraphicsRootConstantBufferView(7, lightResource_->GetGPUVirtualAddress()); // 定数バッファのビューを設定
+    commandList->SetGraphicsRootConstantBufferView(8, lightResource_->GetGPUVirtualAddress()); // 定数バッファのビューを設定
 }

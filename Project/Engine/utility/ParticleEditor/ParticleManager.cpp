@@ -226,7 +226,7 @@ void ParticleManager::CreatePrimitiveParticle(const std::string& name, Primitive
 
     // プリミティブの初期化と作成
     particleGroups_[name].primitive_->Init();
-    particleGroups_[name].primitive_->Create();
+   /* particleGroups_[name].primitive_->Create();*/
 
     // インスタンシングリソースとマテリアルリソースを作成
     CreateInstancingResource(name, maxnum);

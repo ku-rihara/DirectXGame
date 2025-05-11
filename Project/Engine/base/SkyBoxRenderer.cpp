@@ -1,6 +1,7 @@
 #include "SkyBoxRenderer.h"
 // Function
 #include "function/Log.h"
+#include"TextureManager.h"
 #include <cassert>
 #include <string>
 
@@ -15,6 +16,8 @@ void SkyBoxRenderer::Init(DirectXCommon* dxCommon) {
     dxCommon_ = dxCommon;
     // グラフィックスパイプラインの生成
     CreateGraphicsPipeline();
+
+    environmentalMapTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/rostock_laage_airport_4k.dds");
 }
 
 void SkyBoxRenderer::CreateGraphicsPipeline() {
@@ -167,4 +170,13 @@ void SkyBoxRenderer::CreateRootSignature() {
 void SkyBoxRenderer::PreDraw(ID3D12GraphicsCommandList* commandList) {
     // RootSignatureを設定
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
+    commandList->SetPipelineState(pipelineState_.Get());
 }
+
+void SkyBoxRenderer::SetPiplelineState(ID3D12GraphicsCommandList* commandList) {
+    commandList->SetPipelineState(pipelineState_.Get());
+}
+
+void SkyBoxRenderer::SetEnvironmentalMapTextureHandle(const std::string& texture) {
+    environmentalMapTextureHandle_ = TextureManager::GetInstance()->LoadTexture(texture);
+ }

@@ -4,18 +4,22 @@
 #include <memory>
 #include <wrl.h>
 
+// transform 
 #include "struct/TransformationMatrix.h"
 #include"3d/WorldTransform.h"
+#include "3d/Mesh.h"
+
 #include <optional>
+#include<string>
 
 enum class PrimitiveType {
     Plane,
     Sphere,
     Cylinder,
-    Ring
+    Ring,
+    Box
 };
 
-class Mesh;
 class IPrimitive {
 public:
     IPrimitive()          = default;
@@ -23,16 +27,22 @@ public:
 
     virtual void Init();
     virtual void Create() = 0;
-    virtual void CreateWVPResource();
     virtual void Draw(
         const WorldTransform& worldTransform, 
         const ViewProjection& viewProjection, 
         std::optional<uint32_t> textureHandle=std::nullopt
     );
 
+    virtual void SetTexture(const std::string& name);
+
+      void CreateWVPResource();
+     void CreateMaterialResource();
+
 protected:
     std::unique_ptr<Mesh> mesh_ = nullptr;
     uint32_t vertexNum_;
+    uint32_t indexNum_;
+    Material material_;
 
      Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_; // wvpリソース
     TransformationMatrix* wvpDate_;

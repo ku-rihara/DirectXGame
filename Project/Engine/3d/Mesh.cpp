@@ -16,6 +16,7 @@ void Mesh::Init(DirectXCommon* directXCommon, const uint32_t& vertexNum) {
 void Mesh::SetIndexData(const uint32_t* indices, uint32_t indexCount) {
     indexNum_ = indexCount;
 
+
     // インデックスバッファを作成
     indexResource_ = directXCommon_->CreateBufferResource(
         directXCommon_->GetDevice(),
@@ -53,20 +54,14 @@ void Mesh::CreateVertexResource() {
 }
 
 
-void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, std::optional<uint32_t> textureHandle) {
-
+void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, std::optional<uint32_t> textureHandle) {
     auto commandList = directXCommon_->GetCommandList();
-    /*materialDate_->color = color.;*/
 
-    // 頂点バッファとインデックスバッファの設定
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
-    // commandList->IASetIndexBuffer(&indexBufferView_);  // IBV
-
-    // 形状を設定
+    commandList->IASetIndexBuffer(&indexBufferView_);
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
- /*   material.SetCommandList(commandList);*/
-
+    material.SetCommandList(commandList);
     commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 
     if (textureHandle.has_value()) {
@@ -74,10 +69,9 @@ void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, std::optiona
     } else {
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
     }
-  /*  Light::GetInstance()->SetLightCommands(commandList);*/
 
-    // 描画コール
-    commandList->DrawInstanced(vertexNum_, 1, 0, 0);
+    // インデックス数に基づいて描画
+    commandList->DrawIndexedInstanced(indexNum_, 1, 0, 0, 0);
 }
 
 void Mesh::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, Material material,

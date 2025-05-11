@@ -1,13 +1,13 @@
 #include"IPrimitive.h"
-#include"3d/Mesh.h"
 #include"base/DirectXCommon.h"
 
 void IPrimitive::Init() {
 
     mesh_ = std::make_unique<Mesh>();
+    CreateWVPResource();
+    CreateMaterialResource();
     mesh_->Init(DirectXCommon::GetInstance(), vertexNum_);
-
-
+    Create();
 }
 
 ///============================================================
@@ -37,5 +37,15 @@ void IPrimitive::Draw(const WorldTransform& worldTransform, const ViewProjection
     wvpDate_->WVP                   = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
     wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
     
-    mesh_->Draw(wvpResource_, textureHandle);
+    mesh_->Draw(wvpResource_, material_, textureHandle);
 }
+
+void IPrimitive::SetTexture(const std::string& name) {
+    mesh_->SetTexture(name);
+}
+
+ void IPrimitive::CreateMaterialResource() {
+    material_.CreateMaterialResource(DirectXCommon::GetInstance());
+     material_.SetShininess(1.0f);
+
+ }

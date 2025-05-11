@@ -13,6 +13,8 @@
 #include"UI/HowToOperate.h"
 #include"Enemy/Spawner/EnemySpawner.h"
 
+#include"SkyBox/SkyBox.h"
+
 
 /// <summary>
 /// ゲームシーン

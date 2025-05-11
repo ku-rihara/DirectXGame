@@ -12,7 +12,6 @@
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
-
 }
 
 void GameScene::Init() {
@@ -168,8 +167,8 @@ void GameScene::ModelDraw() {
 /// SkyBox描画
 /// ===================================================
 void GameScene::SkyBoxDraw() {
+    skuBox_->Draw(viewProjection_);
 }
-
 
 /// ======================================================
 /// スプライト描画
@@ -201,13 +200,11 @@ void GameScene::Debug() {
 #endif
 }
 
-
 // ビュープロジェクション更新
 void GameScene::ViewProjectionUpdate() {
 	BaseScene::ViewProjectionUpdate();
 	
 }
-
 
 void GameScene::ViewProssess() {
 	viewProjection_.matView_ = gamecamera_->GetViewProjection().matView_;
