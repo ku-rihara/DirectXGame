@@ -46,5 +46,6 @@ void IPrimitive::SetTexture(const std::string& name) {
 
  void IPrimitive::CreateMaterialResource() {
     material_.CreateMaterialResource(DirectXCommon::GetInstance());
+     material_.SetShininess(1.0f);
 
  }

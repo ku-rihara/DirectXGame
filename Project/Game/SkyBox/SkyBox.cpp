@@ -12,9 +12,8 @@ void SkyBox::Init() {
     primitiveBox_->Init();
     primitiveBox_->SetTexture("Resources/Texture/rostock_laage_airport_4k.dds");
 	transform_.Init();
-	transform_.translation_.y = -5.0f;
-	transform_.translation_.z = -14.0f;
-	transform_.scale_ = {1, 1, 1};
+
+	transform_.scale_ = {20, 20, 20};
 
 }
 

@@ -41,6 +41,7 @@ public:
 protected:
     std::unique_ptr<Mesh> mesh_ = nullptr;
     uint32_t vertexNum_;
+    uint32_t indexNum_;
     Material material_;
 
      Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_; // wvpリソース
