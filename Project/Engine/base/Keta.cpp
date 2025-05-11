@@ -100,8 +100,6 @@ void Keta::Initialize(const char* title, int width, int height) {
     imguiManager_ = ImGuiManager::GetInstance();
     imguiManager_->Init(winApp_.get(), directXCommon_, srvManager_);
 
-
-
     // Input
     input_ = Input::GetInstance();
     input_->Init(winApp_->GetHInstaice(), winApp_->GetHwnd());

@@ -100,7 +100,9 @@ private:
 	uint32_t cirlceTexture_;
 	std::unique_ptr<ParticleEmitter>fallCrack_;
 	std::array<ParticleEffect,1> debriParticle_;
+    std::array<ParticleEffect, 1> rushParticle_;
 	std::array<ParticleEffect, 3> starEffect_;
+   
 
 	/// other class
 	LockOn* pLockOn_;           /// LockOnクラス
@@ -172,20 +174,18 @@ public:
 	void ChangeCombBoRoot();
 
 	//* エフェクト
+    void ParticleInit();
+    void FallEffectInit(const Vector3& pos);
+
 	void DebriParticleEmit();
 	void FallEffectUpdate();
 	void StartEffectEmit();
-	void FallEffectInit(const Vector3& pos);
 	void ParticleUpdate();
-	void ParticleInit();
+    void RushParticleUdate();
 
 	///* 向き
 	void FaceToTarget();
 	void AdaptRotate();
-
-	// ヘルパー関数: ParticleEffect を初期化する
-	void InitParticleEffect(ParticleEffect& effect, const std::string& name, const std::string& modelName, const uint32_t& textureHandle,  const int32_t& maxnum);
-
 
 	/// ====================================================================
 	/// Editor

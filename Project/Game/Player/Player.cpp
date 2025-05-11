@@ -1,453 +1,437 @@
 #include "Player.h"
-#include"audio/Audio.h"
+#include "audio/Audio.h"
 
 /// input
-#include"JoyState/JoyState.h"
+#include "JoyState/JoyState.h"
 
 /// frame
-#include"Frame/Frame.h"
+#include "Frame/Frame.h"
 
 // light
-#include"Lighrt/Light.h"
-#include"Lighrt/SpotLightManager.h"
-#include"Lighrt/AmbientLight.h"
+#include "Lighrt/AmbientLight.h"
+#include "Lighrt/Light.h"
+#include "Lighrt/SpotLightManager.h"
 /// math
-#include"MathFunction.h"
+#include "MathFunction.h"
 
 /// object
-#include"Field/Field.h"
-#include"LockOn/LockOn.h"
-#include"CollisionBox/EnemyCollisionBox.h"
+#include "CollisionBox/EnemyCollisionBox.h"
+#include "Field/Field.h"
+#include "LockOn/LockOn.h"
 
 /// behavior
-#include"PlayerBehavior/PlayerMove.h"
-#include"ComboAttackBehavior/ComboAttackRoot.h"
-#include"ComboAttackBehavior/RushAttack.h"
-#include"TitleBehavior/TitleFirstFall.h"
+#include "ComboAttackBehavior/ComboAttackRoot.h"
+#include "ComboAttackBehavior/RushAttack.h"
+#include "PlayerBehavior/PlayerMove.h"
+#include "TitleBehavior/TitleFirstFall.h"
 
 /// imgui
-#include<imgui.h>
+#include <imgui.h>
 
 ///=========================================================
-///　static 変数初期化
+/// 　static 変数初期化
 ///==========================================================
 float Player::InitY_ = 0.0f;
 
 Player::Player() {}
 
 ///=========================================================
-///　初期化
+/// 　初期化
 ///==========================================================
 void Player::Init() {
 
-	///* model生成
-	BaseObject::Init();	// 基底クラスの初期化 
-	BaseObject::CreateModel("Player", ".obj");/// モデルセット
+    ///* model生成
+    BaseObject::Init(); // 基底クラスの初期化
+    BaseObject::CreateModel("Player", ".obj"); /// モデルセット
 
-	
-	//* particle
-	ParticleInit();
-	
+    //* particle
+    ParticleInit();
 
-	///* グローバルパラメータ
-	globalParameter_ = GlobalParameter::GetInstance();
-	globalParameter_->CreateGroup(groupName_, false);
-	AddParmGroup();
-	ApplyGlobalParameter();
+    ///* グローバルパラメータ
+    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_->CreateGroup(groupName_, false);
+    AddParmGroup();
+    ApplyGlobalParameter();
 
-	///* 武器生成
-	leftHand_ = std::make_unique<PlayerHandLeft>();
-	rightHand_ = std::make_unique<PlayerHandRight>();
-	headObj_.reset(Object3d::CreateModel("Player", ".obj"));
-	headObj_->material_.materialData_->enableLighting = 7;
+    ///* 武器生成
+    leftHand_  = std::make_unique<PlayerHandLeft>();
+    rightHand_ = std::make_unique<PlayerHandRight>();
+    headObj_.reset(Object3d::CreateModel("Player", ".obj"));
+    headObj_->material_.materialData_->enableLighting = 7;
 
+    // トランスフォーム初期化
+    headTransform_.Init();
+    leftHand_->Init();
+    rightHand_->Init();
 
-	// トランスフォーム初期化
-	headTransform_.Init();
-	leftHand_->Init();
-	rightHand_->Init();
+    ///* ペアレント
+    headTransform_.SetParent(&transform_);
+    leftHand_->SetParent(&transform_);
+    rightHand_->SetParent(&transform_);
 
-	///* ペアレント
-	headTransform_.SetParent(&transform_);
-	leftHand_->SetParent(&transform_);
-	rightHand_->SetParent(&transform_);
+    /// レールペアレント
+    rightHand_->SetRailParent(&transform_);
+    leftHand_->SetRailParent(&transform_);
 
-	/// レールペアレント
-	rightHand_->SetRailParent(&transform_);
-	leftHand_->SetRailParent(&transform_);
+    // パラメータセット
+    transform_.translation_ = playerParams_.startPos_;
 
-	//パラメータセット
-	transform_.translation_ = playerParams_.startPos_;
+    // 音
+    punchSoundID_ = Audio::GetInstance()->LoadWave("Resources/punchAir.wav");
+    strongPunch_  = Audio::GetInstance()->LoadWave("Resources/StrongPunch.wav");
+    fallSound_    = Audio::GetInstance()->LoadWave("Resources/PlayerFall.wav");
+    starSound_    = Audio::GetInstance()->LoadWave("Resources/starEffect.wav");
 
-	// 音
-	punchSoundID_ = Audio::GetInstance()->LoadWave("Resources/punchAir.wav");
-	strongPunch_ = Audio::GetInstance()->LoadWave("Resources/StrongPunch.wav");
-	fallSound_ = Audio::GetInstance()->LoadWave("Resources/PlayerFall.wav");
-	starSound_ = Audio::GetInstance()->LoadWave("Resources/starEffect.wav");
-
-	/// 通常モードから
-	ChangeBehavior(std::make_unique<PlayerMove>(this));
-	ChangeComboBehavior(std::make_unique<ComboAttackRoot>(this));
-	HeadLightSetting();
+    /// 通常モードから
+    ChangeBehavior(std::make_unique<PlayerMove>(this));
+    ChangeComboBehavior(std::make_unique<ComboAttackRoot>(this));
+    HeadLightSetting();
 }
 
 ///=========================================================
-///　更新
+/// 　更新
 ///==========================================================
 void Player::Update() {
-	prePos_ = GetWorldPosition();// 前フレームの座標
-	//ライト
-	HeadLightSetting();
+    prePos_ = GetWorldPosition(); // 前フレームの座標
+    // ライト
+    HeadLightSetting();
 
-	/// 振る舞い処理(コンボ攻撃中は中止)
-	if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
-		behavior_->Update();
-	}
+    /// 振る舞い処理(コンボ攻撃中は中止)
+    if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
+        behavior_->Update();
+    }
 
-	///Particle
-	ParticleUpdate();
+    /// Particle
+    ParticleUpdate();
 
-	//ライト位置セット
-	SetLightPos();
+    // ライト位置セット
+    SetLightPos();
 
-	comboBehavior_->Update();	  ///　コンボ攻撃攻撃
-	MoveToLimit();                ///　移動制限
-	FallEffectUpdate();
+    comboBehavior_->Update(); /// 　コンボ攻撃攻撃
+    MoveToLimit(); /// 　移動制限
+    FallEffectUpdate();
 
-	UpdateMatrix();
+    UpdateMatrix();
 }
 
 // タイトル更新
 void Player::TitleUpdate() {
-	
-	///Particle
-	ParticleUpdate();
 
-	//エフェクト
-	FallEffectUpdate();
+    /// Particle
+    ParticleUpdate();
 
-	//ライト位置セット
-	SetLightPos();
-	
-	titleBehavior_->Update();
-	/// 行列更新
-	UpdateMatrix();
+    // エフェクト
+    FallEffectUpdate();
+
+    // ライト位置セット
+    SetLightPos();
+
+    titleBehavior_->Update();
+    /// 行列更新
+    UpdateMatrix();
 }
 
 ///=========================================================
-///　描画
+/// 　描画
 ///==========================================================
 void Player::Draw(const ViewProjection& viewProjection) {
 
-	headObj_->Draw(headTransform_, viewProjection);
-	leftHand_->Draw(viewProjection);
-	rightHand_->Draw(viewProjection);
+    headObj_->Draw(headTransform_, viewProjection);
+    leftHand_->Draw(viewProjection);
+    rightHand_->Draw(viewProjection);
 }
 
 void Player::EffectDraw(const ViewProjection& viewProjection) {
-	// 各エフェクトを更新
-	effects_.reverse();
+    // 各エフェクトを更新
+    effects_.reverse();
     for (std::unique_ptr<ImpactEffect>& effect : effects_) {
-		if (effect) {
-			effect->Draw(viewProjection);
-		}
-	}
-	effects_.reverse();
+        if (effect) {
+            effect->Draw(viewProjection);
+        }
+    }
+    effects_.reverse();
 }
-
-
 
 ///=========================================================
 /// 移動の入力処理
 ///==========================================================
 Vector3 Player::GetInputDirecton() {
 
-	Vector3 velocity = { 0.0f, 0.0f, 0.0f };
-	Input* input = Input::GetInstance();
+    Vector3 velocity = {0.0f, 0.0f, 0.0f};
+    Input* input     = Input::GetInstance();
 
-	// キーボード入力
-	if (input->PushKey(DIK_W)) {
-		velocity.z += 1.0f;  // 前進
-	}
-	if (input->PushKey(DIK_S)) {
-		velocity.z -= 1.0f;  // 後退
-	}
-	if (input->PushKey(DIK_A)) {
-		velocity.x -= 1.0f;  // 左移動
-	}
-	if (input->PushKey(DIK_D)) {
-		velocity.x += 1.0f;  // 右移動
-	}
+    // キーボード入力
+    if (input->PushKey(DIK_W)) {
+        velocity.z += 1.0f; // 前進
+    }
+    if (input->PushKey(DIK_S)) {
+        velocity.z -= 1.0f; // 後退
+    }
+    if (input->PushKey(DIK_A)) {
+        velocity.x -= 1.0f; // 左移動
+    }
+    if (input->PushKey(DIK_D)) {
+        velocity.x += 1.0f; // 右移動
+    }
 
-	// ジョイスティック入力
-	Vector2 stickInput = Input::GetPadStick(0, 0); 
-	velocity.x += stickInput.x;
-	velocity.z += stickInput.y;
+    // ジョイスティック入力
+    Vector2 stickInput = Input::GetPadStick(0, 0);
+    velocity.x += stickInput.x;
+    velocity.z += stickInput.y;
 
-	return velocity;
+    return velocity;
 }
-
 
 ///=========================================================
 /// 移動
 ///==========================================================
 void Player::Move(const float& speed) {
 
-	/// Inuputから速度代入
-	direction_ = GetInputDirecton();
+    /// Inuputから速度代入
+    direction_ = GetInputDirecton();
 
-	/// 移動処理
-	if (GetIsMoving()) {
-		// 移動量に速さを反映
-		direction_ = Vector3::Normalize(direction_) * (speed)*Frame::DeltaTimeRate();
-		// 移動ベクトルをカメラの角度だけ回転する
-		Matrix4x4 rotateMatrix = MakeRotateYMatrix(viewProjection_->rotation_.y);
-		direction_ = TransformNormal(direction_, rotateMatrix);
-		// 移動
-		transform_.translation_ += direction_;
-		// 目標角度
-		objectiveAngle_ = std::atan2(direction_.x, direction_.z);
-		// 最短角度補間
-		if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
-			AdaptRotate();//回転適応
-		}
-		FaceToTarget();
-	} else {
-		FaceToTarget();// ターゲットを向くか
-	}
+    /// 移動処理
+    if (GetIsMoving()) {
+        // 移動量に速さを反映
+        direction_ = Vector3::Normalize(direction_) * (speed)*Frame::DeltaTimeRate();
+        // 移動ベクトルをカメラの角度だけ回転する
+        Matrix4x4 rotateMatrix = MakeRotateYMatrix(viewProjection_->rotation_.y);
+        direction_             = TransformNormal(direction_, rotateMatrix);
+        // 移動
+        transform_.translation_ += direction_;
+        // 目標角度
+        objectiveAngle_ = std::atan2(direction_.x, direction_.z);
+        // 最短角度補間
+        if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
+            AdaptRotate(); // 回転適応
+        }
+        FaceToTarget();
+    } else {
+        FaceToTarget(); // ターゲットを向くか
+    }
 }
 
 void Player::FaceToTarget() {
-	if (pLockOn_ && pLockOn_->GetEnemyTarget()) {
-		Vector3 differectialVector = pLockOn_->GetTargetPosition() - GetWorldPosition();
+    if (pLockOn_ && pLockOn_->GetEnemyTarget()) {
+        Vector3 differectialVector = pLockOn_->GetTargetPosition() - GetWorldPosition();
 
-		// Y軸周り角度(θy)
-		transform_.rotation_.y = std::atan2(differectialVector.x, differectialVector.z);
-	}
+        // Y軸周り角度(θy)
+        transform_.rotation_.y = std::atan2(differectialVector.x, differectialVector.z);
+    }
 }
 
 void Player::AdaptRotate() {
-	transform_.rotation_.y = LerpShortAngle(transform_.rotation_.y, objectiveAngle_, 0.3f);
-
+    transform_.rotation_.y = LerpShortAngle(transform_.rotation_.y, objectiveAngle_, 0.3f);
 }
 
 ///=========================================================
 /// 動いているか
 ///==========================================================
 bool Player::GetIsMoving() {
-	Input* input = Input::GetInstance();
-	bool isMoving = false;
-	const float thresholdValue = 0.3f;
-	Vector3 keyboardVelocity = { 0.0f, 0.0f, 0.0f };
+    Input* input               = Input::GetInstance();
+    bool isMoving              = false;
+    const float thresholdValue = 0.3f;
+    Vector3 keyboardVelocity   = {0.0f, 0.0f, 0.0f};
 
-	//---------------------------------------------------------------------
-	// keyboard
-	//---------------------------------------------------------------------
-	if (input->PushKey(DIK_W) || input->PushKey(DIK_A) || input->PushKey(DIK_S) || input->PushKey(DIK_D)) {
-		// キーボード入力
-		if (input->PushKey(DIK_W)) {
-			keyboardVelocity.z += 1.0f;  // 前進
-		}
-		if (input->PushKey(DIK_S)) {
-			keyboardVelocity.z -= 1.0f;  // 後退
-		}
-		if (input->PushKey(DIK_A)) {
-			keyboardVelocity.x -= 1.0f;  // 左移動
-		}
-		if (input->PushKey(DIK_D)) {
-			keyboardVelocity.x += 1.0f;  // 右移動
-		}
+    //---------------------------------------------------------------------
+    // keyboard
+    //---------------------------------------------------------------------
+    if (input->PushKey(DIK_W) || input->PushKey(DIK_A) || input->PushKey(DIK_S) || input->PushKey(DIK_D)) {
+        // キーボード入力
+        if (input->PushKey(DIK_W)) {
+            keyboardVelocity.z += 1.0f; // 前進
+        }
+        if (input->PushKey(DIK_S)) {
+            keyboardVelocity.z -= 1.0f; // 後退
+        }
+        if (input->PushKey(DIK_A)) {
+            keyboardVelocity.x -= 1.0f; // 左移動
+        }
+        if (input->PushKey(DIK_D)) {
+            keyboardVelocity.x += 1.0f; // 右移動
+        }
 
-		if (keyboardVelocity.Length() > 0) {
-			isMoving = true;
-		}
-	} else {
-		//----------------------------------------------------------
-		// JoyStick
-		//----------------------------------------------------------
-		Vector2 stickInput = Input::GetPadStick(0, 0); 
+        if (keyboardVelocity.Length() > 0) {
+            isMoving = true;
+        }
+    } else {
+        //----------------------------------------------------------
+        // JoyStick
+        //----------------------------------------------------------
+        Vector2 stickInput = Input::GetPadStick(0, 0);
 
-		if (stickInput.Length() > thresholdValue) {
-			isMoving = true;
-		}
-	}
+        if (stickInput.Length() > thresholdValue) {
+            isMoving = true;
+        }
+    }
 
-	return isMoving;
+    return isMoving;
 }
 
-
 ///=========================================================
-///　移動制限
+/// 　移動制限
 ///==========================================================
 void Player::MoveToLimit() {
 
-	// フィールドの中心とスケールを取得
-	Vector3 fieldCenter = { 0.0f, 0.0f, 0.0f }; // フィールド中心 
-	Vector3 fieldScale = Field::baseScale_;     // フィールドのスケール
+    // フィールドの中心とスケールを取得
+    Vector3 fieldCenter = {0.0f, 0.0f, 0.0f}; // フィールド中心
+    Vector3 fieldScale  = Field::baseScale_; // フィールドのスケール
 
-	// プレイヤーのスケールを考慮した半径
-	float radiusX = fieldScale.x - transform_.scale_.x;
-	float radiusZ = fieldScale.z - transform_.scale_.z;
+    // プレイヤーのスケールを考慮した半径
+    float radiusX = fieldScale.x - transform_.scale_.x;
+    float radiusZ = fieldScale.z - transform_.scale_.z;
 
-	// 現在位置が範囲内かチェック
-	bool insideX = std::abs(transform_.translation_.x - fieldCenter.x) <= radiusX;
-	bool insideZ = std::abs(transform_.translation_.z - fieldCenter.z) <= radiusZ;
+    // 現在位置が範囲内かチェック
+    bool insideX = std::abs(transform_.translation_.x - fieldCenter.x) <= radiusX;
+    bool insideZ = std::abs(transform_.translation_.z - fieldCenter.z) <= radiusZ;
 
-	///--------------------------------------------------------------------------------
-	///範囲外なら戻す
-	///--------------------------------------------------------------------------------
+    ///--------------------------------------------------------------------------------
+    /// 範囲外なら戻す
+    ///--------------------------------------------------------------------------------
 
-	if (!insideX) {/// X座標
-		transform_.translation_.x = std::clamp(
-			transform_.translation_.x,
-			fieldCenter.x - radiusX,
-			fieldCenter.x + radiusX
-		);
-	}
+    if (!insideX) { /// X座標
+        transform_.translation_.x = std::clamp(
+            transform_.translation_.x,
+            fieldCenter.x - radiusX,
+            fieldCenter.x + radiusX);
+    }
 
-	if (!insideZ) {/// Z座標
-		transform_.translation_.z = std::clamp(
-			transform_.translation_.z,
-			fieldCenter.z - radiusZ,
-			fieldCenter.z + radiusZ
-		);
-	}
+    if (!insideZ) { /// Z座標
+        transform_.translation_.z = std::clamp(
+            transform_.translation_.z,
+            fieldCenter.z - radiusZ,
+            fieldCenter.z + radiusZ);
+    }
 
-	// 範囲外の反発処理
-	if (!insideX || !insideZ) {
-		Vector3 directionToCenter = (fieldCenter - transform_.translation_).Normalize();
-		transform_.translation_.x += directionToCenter.x * 0.1f; // 軽く押し戻す
-		transform_.translation_.z += directionToCenter.z * 0.1f; // 軽く押し戻す
-	}
+    // 範囲外の反発処理
+    if (!insideX || !insideZ) {
+        Vector3 directionToCenter = (fieldCenter - transform_.translation_).Normalize();
+        transform_.translation_.x += directionToCenter.x * 0.1f; // 軽く押し戻す
+        transform_.translation_.z += directionToCenter.z * 0.1f; // 軽く押し戻す
+    }
 }
-
 
 /// ===================================================
 ///   Jump
 /// ===================================================
 void Player::Jump(float& speed, const float& fallSpeedLimit, const float& gravity) {
-	// 移動
-	transform_.translation_.y += speed * Frame::DeltaTimeRate();
-	Fall(speed, fallSpeedLimit, gravity, true);
-
+    // 移動
+    transform_.translation_.y += speed * Frame::DeltaTimeRate();
+    Fall(speed, fallSpeedLimit, gravity, true);
 }
 
 ///=========================================================
-///　落ちる
+/// 　落ちる
 ///==========================================================
 void Player::Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump) {
 
-	if (!isJump) {
-		// 移動
-		transform_.translation_.y += speed * Frame::DeltaTimeRate();
-	}
+    if (!isJump) {
+        // 移動
+        transform_.translation_.y += speed * Frame::DeltaTimeRate();
+    }
 
-	// 加速する
-	speed = max(speed - (gravity * Frame::DeltaTimeRate()), -fallSpeedLimit);
+    // 加速する
+    speed = max(speed - (gravity * Frame::DeltaTimeRate()), -fallSpeedLimit);
 
-	// 着地
-	if (transform_.translation_.y <= Player::InitY_) {
-		transform_.translation_.y = Player::InitY_;
-		speed = 0.0f;
-
-	}
+    // 着地
+    if (transform_.translation_.y <= Player::InitY_) {
+        transform_.translation_.y = Player::InitY_;
+        speed                     = 0.0f;
+    }
 }
-
 
 ///=========================================================
 /// パラメータ調整
 ///==========================================================
 void Player::AdjustParm() {
-	SetValues();
+    SetValues();
 #ifdef _DEBUG
-	if (ImGui::CollapsingHeader("Player")) {
+    if (ImGui::CollapsingHeader("Player")) {
 
-		/// 位置
-		ImGui::SeparatorText("Transform");
-		ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
+        /// 位置
+        ImGui::SeparatorText("Transform");
+        ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
 
-		///　Floatのパラメータ
-		ImGui::SeparatorText("FloatParamater");
-		ImGui::SeparatorText("Normal");
-		ImGui::DragFloat("jumpSpeed", &playerParams_.normalJump.jumpSpeed, 0.01f);
-		ImGui::DragFloat("MoveSpeed", &playerParams_.moveSpeed, 0.01f);
-		ImGui::DragFloat("Gravity", &playerParams_.normalJump.gravity, 0.01f);
-		ImGui::DragFloat("FallSpeed", &playerParams_.fallSpeed, 0.01f);
-		ImGui::DragFloat("fallSpeedLimit", &playerParams_.normalJump.fallSpeedLimit, 0.1f);
-		ImGui::SeparatorText("FurstPunch");
-		ImGui::DragFloat("rushDistance", &playerParams_.rushDistance, 0.01f);
-		ImGui::DragFloat("rushEaseMax", &playerParams_.rushEaseMax, 0.01f, 0);
-		ImGui::SliderAngle("attackRotate", &playerParams_.attackRotate, 0, 720);
-		ImGui::SliderAngle("attackRotateAnit", &playerParams_.attackRotateAnit, -360, 720);
-		ImGui::DragFloat("attackRotateEaseT", &playerParams_.attackRotateEaseT, 0.01f);
-		ImGui::DragFloat("attackFloatEaseT", &playerParams_.attackFloatEaseT, 0.01f);
-		ImGui::DragFloat("attackFloatValue", &playerParams_.attackFloatValue, 0.01f);
-		ImGui::SeparatorText("Upper");
-		ImGui::DragFloat("BackLashEaseTime", &playerParams_.upperParm.BackLashEaseTime, 0.01f);
-		ImGui::DragFloat("BackLashValue", &playerParams_.upperParm.BackLashValue, 0.01f);
-		ImGui::DragFloat("jumpPowerU", &playerParams_.upperJump.jumpSpeed, 0.01f);
-		ImGui::DragFloat("gravityU", &playerParams_.upperJump.gravity, 0.01f);
-		ImGui::DragFloat("fallSpeedLimitU", &playerParams_.upperJump.fallSpeedLimit, 0.01f);
-		ImGui::DragFloat("UpperPosY", &playerParams_.upperPosY, 0.1f);
-		ImGui::SeparatorText("Bound");
-		ImGui::DragFloat("jumpPowerB", &playerParams_.bountJump.jumpSpeed, 0.01f);
-		ImGui::DragFloat("gravityB", &playerParams_.bountJump.gravity, 0.01f);
-		ImGui::DragFloat("fallSpeedLimitB", &playerParams_.bountJump.fallSpeedLimit, 0.01f);
+        /// 　Floatのパラメータ
+        ImGui::SeparatorText("FloatParamater");
+        ImGui::SeparatorText("Normal");
+        ImGui::DragFloat("jumpSpeed", &playerParams_.normalJump.jumpSpeed, 0.01f);
+        ImGui::DragFloat("MoveSpeed", &playerParams_.moveSpeed, 0.01f);
+        ImGui::DragFloat("Gravity", &playerParams_.normalJump.gravity, 0.01f);
+        ImGui::DragFloat("FallSpeed", &playerParams_.fallSpeed, 0.01f);
+        ImGui::DragFloat("fallSpeedLimit", &playerParams_.normalJump.fallSpeedLimit, 0.1f);
+        ImGui::SeparatorText("FurstPunch");
+        ImGui::DragFloat("rushDistance", &playerParams_.rushDistance, 0.01f);
+        ImGui::DragFloat("rushEaseMax", &playerParams_.rushEaseMax, 0.01f, 0);
+        ImGui::SliderAngle("attackRotate", &playerParams_.attackRotate, 0, 720);
+        ImGui::SliderAngle("attackRotateAnit", &playerParams_.attackRotateAnit, -360, 720);
+        ImGui::DragFloat("attackRotateEaseT", &playerParams_.attackRotateEaseT, 0.01f);
+        ImGui::DragFloat("attackFloatEaseT", &playerParams_.attackFloatEaseT, 0.01f);
+        ImGui::DragFloat("attackFloatValue", &playerParams_.attackFloatValue, 0.01f);
+        ImGui::SeparatorText("Upper");
+        ImGui::DragFloat("BackLashEaseTime", &playerParams_.upperParm.BackLashEaseTime, 0.01f);
+        ImGui::DragFloat("BackLashValue", &playerParams_.upperParm.BackLashValue, 0.01f);
+        ImGui::DragFloat("jumpPowerU", &playerParams_.upperJump.jumpSpeed, 0.01f);
+        ImGui::DragFloat("gravityU", &playerParams_.upperJump.gravity, 0.01f);
+        ImGui::DragFloat("fallSpeedLimitU", &playerParams_.upperJump.fallSpeedLimit, 0.01f);
+        ImGui::DragFloat("UpperPosY", &playerParams_.upperPosY, 0.1f);
+        ImGui::SeparatorText("Bound");
+        ImGui::DragFloat("jumpPowerB", &playerParams_.bountJump.jumpSpeed, 0.01f);
+        ImGui::DragFloat("gravityB", &playerParams_.bountJump.gravity, 0.01f);
+        ImGui::DragFloat("fallSpeedLimitB", &playerParams_.bountJump.fallSpeedLimit, 0.01f);
 
-		/// コンボパラメータ
-		if (ImGui::CollapsingHeader("NormalCombo")) {
-			ImGui::SeparatorText("FirstCombo");   /// 1コンボ目
+        /// コンボパラメータ
+        if (ImGui::CollapsingHeader("NormalCombo")) {
+            ImGui::SeparatorText("FirstCombo"); /// 1コンボ目
 
-			ImGui::DragFloat("PTime1", &normalComboParms_[0].waitTime, 0.01f);
-			ImGui::DragFloat("PunchEaseMax1", &normalComboParms_[0].attackEaseMax, 0.01f);
-			ImGui::DragFloat("PunchReach1", &normalComboParms_[0].attackReach, 0.01f);
+            ImGui::DragFloat("PTime1", &normalComboParms_[0].waitTime, 0.01f);
+            ImGui::DragFloat("PunchEaseMax1", &normalComboParms_[0].attackEaseMax, 0.01f);
+            ImGui::DragFloat("PunchReach1", &normalComboParms_[0].attackReach, 0.01f);
 
-			ImGui::SeparatorText("SecondCombo");  /// 2コンボ目
+            ImGui::SeparatorText("SecondCombo"); /// 2コンボ目
 
-			ImGui::DragFloat("PTime2", &normalComboParms_[1].waitTime, 0.01f);
-			ImGui::DragFloat("PunchEaseMax2", &normalComboParms_[1].attackEaseMax, 0.01f);
-			ImGui::DragFloat("PunchReach2", &normalComboParms_[1].attackReach, 0.01f);
+            ImGui::DragFloat("PTime2", &normalComboParms_[1].waitTime, 0.01f);
+            ImGui::DragFloat("PunchEaseMax2", &normalComboParms_[1].attackEaseMax, 0.01f);
+            ImGui::DragFloat("PunchReach2", &normalComboParms_[1].attackReach, 0.01f);
 
-			ImGui::SeparatorText("ThirdCombo");   /// 3コンボ目
+            ImGui::SeparatorText("ThirdCombo"); /// 3コンボ目
 
-			ImGui::DragFloat("PTime3", &normalComboParms_[2].waitTime, 0.01f);
-			ImGui::DragFloat("PunchEaseMax3", &normalComboParms_[2].attackEaseMax, 0.01f);
+            ImGui::DragFloat("PTime3", &normalComboParms_[2].waitTime, 0.01f);
+            ImGui::DragFloat("PunchEaseMax3", &normalComboParms_[2].attackEaseMax, 0.01f);
 
-			ImGui::SeparatorText("ForthCombo");   /// 4コンボ目
+            ImGui::SeparatorText("ForthCombo"); /// 4コンボ目
 
-			ImGui::DragFloat("PTime4", &normalComboParms_[3].waitTime, 0.01f);
-		}
+            ImGui::DragFloat("PTime4", &normalComboParms_[3].waitTime, 0.01f);
+        }
 
-		if (ImGui::CollapsingHeader("JumpCombo")) {
-			ImGui::SeparatorText("FirstCombo");   /// 1コンボ目
+        if (ImGui::CollapsingHeader("JumpCombo")) {
+            ImGui::SeparatorText("FirstCombo"); /// 1コンボ目
 
-			ImGui::DragFloat("JPTime1", &jumpComboParms_[0].waitTime, 0.01f);
+            ImGui::DragFloat("JPTime1", &jumpComboParms_[0].waitTime, 0.01f);
 
-			ImGui::DragFloat("JPunchEaseMax1", &jumpComboParms_[0].attackEaseMax, 0.01f);
+            ImGui::DragFloat("JPunchEaseMax1", &jumpComboParms_[0].attackEaseMax, 0.01f);
 
-			ImGui::SeparatorText("SecondCombo");   /// 2コンボ目
+            ImGui::SeparatorText("SecondCombo"); /// 2コンボ目
 
-			ImGui::DragFloat("JPTime2", &jumpComboParms_[1].waitTime, 0.01f);
-			ImGui::DragFloat("JPunchEaseMax2", &jumpComboParms_[1].attackEaseMax, 0.01f);
-			ImGui::DragFloat("JPunchReach2", &jumpComboParms_[1].attackReach, 0.01f);
-		}
+            ImGui::DragFloat("JPTime2", &jumpComboParms_[1].waitTime, 0.01f);
+            ImGui::DragFloat("JPunchEaseMax2", &jumpComboParms_[1].attackEaseMax, 0.01f);
+            ImGui::DragFloat("JPunchReach2", &jumpComboParms_[1].attackReach, 0.01f);
+        }
 
-		/// セーブとロード
-		globalParameter_->ParmSaveForImGui(groupName_);
-		ParmLoadForImGui();
-	}
+        /// セーブとロード
+        globalParameter_->ParmSaveForImGui(groupName_);
+        ParmLoadForImGui();
+    }
 
-	/// 手のパラメータ調整
-	leftHand_->AdjustParm();
-	rightHand_->AdjustParm();
+    /// 手のパラメータ調整
+    leftHand_->AdjustParm();
+    rightHand_->AdjustParm();
 
 #endif // _DEBUG
 }
 
-
-
 void Player::SetGameCamera(GameCamera* gamecamera) {
-	pGameCamera_ = gamecamera;
+    pGameCamera_ = gamecamera;
 }
 
 ///==============================================================================
@@ -455,27 +439,26 @@ void Player::SetGameCamera(GameCamera* gamecamera) {
 ///===============================================================================
 
 void Player::SetLockOn(LockOn* lockon) {
-	pLockOn_ = lockon;
+    pLockOn_ = lockon;
 }
-
 
 ///==============================================================================
-///振る舞い切り替え
+/// 振る舞い切り替え
 ///===============================================================================
-void Player::ChangeBehavior(std::unique_ptr<BasePlayerBehavior>behavior) {
-	//引数で受け取った状態を次の状態としてセット
-	behavior_ = std::move(behavior);
+void Player::ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior) {
+    // 引数で受け取った状態を次の状態としてセット
+    behavior_ = std::move(behavior);
 }
-void Player::ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior>behavior) {
-	//引数で受け取った状態を次の状態としてセット
-	comboBehavior_ = std::move(behavior);
+void Player::ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior> behavior) {
+    // 引数で受け取った状態を次の状態としてセット
+    comboBehavior_ = std::move(behavior);
 }
 
-void Player::ChangeTitleBehavior(std::unique_ptr<BaseTitleBehavior>behavior) {
-	titleBehavior_ = std::move(behavior);
+void Player::ChangeTitleBehavior(std::unique_ptr<BaseTitleBehavior> behavior) {
+    titleBehavior_ = std::move(behavior);
 }
 void Player::ChangeCombBoRoot() {
-	ChangeComboBehavior(std::make_unique<ComboAttackRoot>(this));
+    ChangeComboBehavior(std::make_unique<ComboAttackRoot>(this));
 }
 
 ///=================================================================================
@@ -483,170 +466,163 @@ void Player::ChangeCombBoRoot() {
 ///=================================================================================
 void Player::ParmLoadForImGui() {
 
-	// ロードボタン
-	if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
+    // ロードボタン
+    if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
 
-		globalParameter_->LoadFile(groupName_);
-		// セーブ完了メッセージ
-		ImGui::Text("Load Successful: %s", groupName_.c_str());
-		ApplyGlobalParameter();
-	}
+        globalParameter_->LoadFile(groupName_);
+        // セーブ完了メッセージ
+        ImGui::Text("Load Successful: %s", groupName_.c_str());
+        ApplyGlobalParameter();
+    }
 }
 
-
 ///=================================================================================
-///パラメータをグループに追加
+/// パラメータをグループに追加
 ///=================================================================================
 void Player::AddParmGroup() {
 
-	globalParameter_->AddItem(groupName_, "Translate", playerParams_.startPos_);
-	globalParameter_->AddItem(groupName_, "JumpSpeed", playerParams_.normalJump.jumpSpeed);
-	globalParameter_->AddItem(groupName_, "rushDistance", playerParams_.rushDistance);
-	globalParameter_->AddItem(groupName_, "rushEaseMax", playerParams_.rushEaseMax);
-	globalParameter_->AddItem(groupName_, "UpperPosY", playerParams_.upperPosY);
-	globalParameter_->AddItem(groupName_, "MoveSpeed", playerParams_.moveSpeed);
-	globalParameter_->AddItem(groupName_, "Gravity", playerParams_.normalJump.gravity);
-	globalParameter_->AddItem(groupName_, "FallSpeed", playerParams_.fallSpeed);
-	globalParameter_->AddItem(groupName_, "FallSpeedLimit", playerParams_.normalJump.fallSpeedLimit);
-	globalParameter_->AddItem(groupName_, "attackRotate", playerParams_.attackRotate);
-	globalParameter_->AddItem(groupName_, "attackRotateEaseT", playerParams_.attackRotateEaseT);
-	globalParameter_->AddItem(groupName_, "attackFloatEaseT_", playerParams_.attackFloatEaseT);
-	globalParameter_->AddItem(groupName_, "attackFloatValue_", playerParams_.attackFloatValue);
-	globalParameter_->AddItem(groupName_, "upperBackLashEaseTime_", playerParams_.upperParm.BackLashEaseTime);
-	globalParameter_->AddItem(groupName_, "upperBackLashValue_", playerParams_.upperParm.BackLashValue);
-	globalParameter_->AddItem(groupName_, "jumpPowerU", playerParams_.upperJump.jumpSpeed);
-	globalParameter_->AddItem(groupName_, "gravityU", playerParams_.upperJump.gravity);
-	globalParameter_->AddItem(groupName_, "fallSpeedLimitU", playerParams_.upperJump.fallSpeedLimit);
-	globalParameter_->AddItem(groupName_, "jumpSpeedB", playerParams_.bountJump.jumpSpeed);
-	globalParameter_->AddItem(groupName_, "gravityB", playerParams_.bountJump.gravity);
-	globalParameter_->AddItem(groupName_, "fallSpeedLimitB", playerParams_.bountJump.fallSpeedLimit);
-	globalParameter_->AddItem(groupName_, "attackRotateAnit", playerParams_.attackRotateAnit);
+    globalParameter_->AddItem(groupName_, "Translate", playerParams_.startPos_);
+    globalParameter_->AddItem(groupName_, "JumpSpeed", playerParams_.normalJump.jumpSpeed);
+    globalParameter_->AddItem(groupName_, "rushDistance", playerParams_.rushDistance);
+    globalParameter_->AddItem(groupName_, "rushEaseMax", playerParams_.rushEaseMax);
+    globalParameter_->AddItem(groupName_, "UpperPosY", playerParams_.upperPosY);
+    globalParameter_->AddItem(groupName_, "MoveSpeed", playerParams_.moveSpeed);
+    globalParameter_->AddItem(groupName_, "Gravity", playerParams_.normalJump.gravity);
+    globalParameter_->AddItem(groupName_, "FallSpeed", playerParams_.fallSpeed);
+    globalParameter_->AddItem(groupName_, "FallSpeedLimit", playerParams_.normalJump.fallSpeedLimit);
+    globalParameter_->AddItem(groupName_, "attackRotate", playerParams_.attackRotate);
+    globalParameter_->AddItem(groupName_, "attackRotateEaseT", playerParams_.attackRotateEaseT);
+    globalParameter_->AddItem(groupName_, "attackFloatEaseT_", playerParams_.attackFloatEaseT);
+    globalParameter_->AddItem(groupName_, "attackFloatValue_", playerParams_.attackFloatValue);
+    globalParameter_->AddItem(groupName_, "upperBackLashEaseTime_", playerParams_.upperParm.BackLashEaseTime);
+    globalParameter_->AddItem(groupName_, "upperBackLashValue_", playerParams_.upperParm.BackLashValue);
+    globalParameter_->AddItem(groupName_, "jumpPowerU", playerParams_.upperJump.jumpSpeed);
+    globalParameter_->AddItem(groupName_, "gravityU", playerParams_.upperJump.gravity);
+    globalParameter_->AddItem(groupName_, "fallSpeedLimitU", playerParams_.upperJump.fallSpeedLimit);
+    globalParameter_->AddItem(groupName_, "jumpSpeedB", playerParams_.bountJump.jumpSpeed);
+    globalParameter_->AddItem(groupName_, "gravityB", playerParams_.bountJump.gravity);
+    globalParameter_->AddItem(groupName_, "fallSpeedLimitB", playerParams_.bountJump.fallSpeedLimit);
+    globalParameter_->AddItem(groupName_, "attackRotateAnit", playerParams_.attackRotateAnit);
 
+    /// コンボ持続時間
+    for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
+        globalParameter_->AddItem(groupName_, "NComboPTime" + std::to_string(int(i + 1)), normalComboParms_[i].waitTime);
+        globalParameter_->AddItem(groupName_, "NComboPunchEaseTime" + std::to_string(int(i + 1)), normalComboParms_[i].attackEaseMax);
+        globalParameter_->AddItem(groupName_, "NComboPunchReach" + std::to_string(int(i + 1)), normalComboParms_[i].attackReach);
+    }
 
-	/// コンボ持続時間
-	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
-		globalParameter_->AddItem(groupName_, "NComboPTime" + std::to_string(int(i + 1)), normalComboParms_[i].waitTime);
-		globalParameter_->AddItem(groupName_, "NComboPunchEaseTime" + std::to_string(int(i + 1)), normalComboParms_[i].attackEaseMax);
-		globalParameter_->AddItem(groupName_, "NComboPunchReach" + std::to_string(int(i + 1)), normalComboParms_[i].attackReach);
-	}
-
-	/// コンボ持続時間(ジャンプ)
-	for (uint32_t i = 0; i < jumpComboParms_.size(); ++i) {
-		globalParameter_->AddItem(groupName_, "JComboPTime" + std::to_string(int(i + 1)), normalComboParms_[i].waitTime);
-		globalParameter_->AddItem(groupName_, "JComboPunchEaseTime" + std::to_string(int(i + 1)), normalComboParms_[i].attackEaseMax);
-		globalParameter_->AddItem(groupName_, "JComboPunchReach" + std::to_string(int(i + 1)), normalComboParms_[i].attackReach);
-	}
+    /// コンボ持続時間(ジャンプ)
+    for (uint32_t i = 0; i < jumpComboParms_.size(); ++i) {
+        globalParameter_->AddItem(groupName_, "JComboPTime" + std::to_string(int(i + 1)), normalComboParms_[i].waitTime);
+        globalParameter_->AddItem(groupName_, "JComboPunchEaseTime" + std::to_string(int(i + 1)), normalComboParms_[i].attackEaseMax);
+        globalParameter_->AddItem(groupName_, "JComboPunchReach" + std::to_string(int(i + 1)), normalComboParms_[i].attackReach);
+    }
 }
 
-
 ///=================================================================================
-///パラメータをグループに追加
+/// パラメータをグループに追加
 ///=================================================================================
 void Player::SetValues() {
 
-	globalParameter_->SetValue(groupName_, "Translate", playerParams_.startPos_);
-	globalParameter_->SetValue(groupName_, "JumpSpeed", playerParams_.normalJump.jumpSpeed);
-	globalParameter_->SetValue(groupName_, "rushDistance", playerParams_.rushDistance);
-	globalParameter_->SetValue(groupName_, "rushEaseMax", playerParams_.rushEaseMax);
-	globalParameter_->SetValue(groupName_, "UpperPosY", playerParams_.upperPosY);
-	globalParameter_->SetValue(groupName_, "MoveSpeed", playerParams_.moveSpeed);
-	globalParameter_->SetValue(groupName_, "Gravity", playerParams_.normalJump.gravity);
-	globalParameter_->SetValue(groupName_, "FallSpeed", playerParams_.fallSpeed);
-	globalParameter_->SetValue(groupName_, "FallSpeedLimit", playerParams_.normalJump.fallSpeedLimit);
-	globalParameter_->SetValue(groupName_, "attackRotate", playerParams_.attackRotate);
-	globalParameter_->SetValue(groupName_, "attackRotateEaseT", playerParams_.attackRotateEaseT);
-	globalParameter_->SetValue(groupName_, "attackFloatEaseT_", playerParams_.attackFloatEaseT);
-	globalParameter_->SetValue(groupName_, "attackFloatValue_", playerParams_.attackFloatValue);
-	globalParameter_->SetValue(groupName_, "upperBackLashEaseTime_", playerParams_.upperParm.BackLashEaseTime);
-	globalParameter_->SetValue(groupName_, "upperBackLashValue_", playerParams_.upperParm.BackLashValue);
-	globalParameter_->SetValue(groupName_, "jumpPowerU", playerParams_.upperJump.jumpSpeed);
-	globalParameter_->SetValue(groupName_, "gravityU", playerParams_.upperJump.gravity);
-	globalParameter_->SetValue(groupName_, "fallSpeedLimitU", playerParams_.upperJump.fallSpeedLimit);
-	globalParameter_->SetValue(groupName_, "jumpSpeedB", playerParams_.bountJump.jumpSpeed);
-	globalParameter_->SetValue(groupName_, "gravityB", playerParams_.bountJump.gravity);
-	globalParameter_->SetValue(groupName_, "fallSpeedLimitB", playerParams_.bountJump.fallSpeedLimit);
-	globalParameter_->SetValue(groupName_, "attackRotateAnit", playerParams_.attackRotateAnit);
+    globalParameter_->SetValue(groupName_, "Translate", playerParams_.startPos_);
+    globalParameter_->SetValue(groupName_, "JumpSpeed", playerParams_.normalJump.jumpSpeed);
+    globalParameter_->SetValue(groupName_, "rushDistance", playerParams_.rushDistance);
+    globalParameter_->SetValue(groupName_, "rushEaseMax", playerParams_.rushEaseMax);
+    globalParameter_->SetValue(groupName_, "UpperPosY", playerParams_.upperPosY);
+    globalParameter_->SetValue(groupName_, "MoveSpeed", playerParams_.moveSpeed);
+    globalParameter_->SetValue(groupName_, "Gravity", playerParams_.normalJump.gravity);
+    globalParameter_->SetValue(groupName_, "FallSpeed", playerParams_.fallSpeed);
+    globalParameter_->SetValue(groupName_, "FallSpeedLimit", playerParams_.normalJump.fallSpeedLimit);
+    globalParameter_->SetValue(groupName_, "attackRotate", playerParams_.attackRotate);
+    globalParameter_->SetValue(groupName_, "attackRotateEaseT", playerParams_.attackRotateEaseT);
+    globalParameter_->SetValue(groupName_, "attackFloatEaseT_", playerParams_.attackFloatEaseT);
+    globalParameter_->SetValue(groupName_, "attackFloatValue_", playerParams_.attackFloatValue);
+    globalParameter_->SetValue(groupName_, "upperBackLashEaseTime_", playerParams_.upperParm.BackLashEaseTime);
+    globalParameter_->SetValue(groupName_, "upperBackLashValue_", playerParams_.upperParm.BackLashValue);
+    globalParameter_->SetValue(groupName_, "jumpPowerU", playerParams_.upperJump.jumpSpeed);
+    globalParameter_->SetValue(groupName_, "gravityU", playerParams_.upperJump.gravity);
+    globalParameter_->SetValue(groupName_, "fallSpeedLimitU", playerParams_.upperJump.fallSpeedLimit);
+    globalParameter_->SetValue(groupName_, "jumpSpeedB", playerParams_.bountJump.jumpSpeed);
+    globalParameter_->SetValue(groupName_, "gravityB", playerParams_.bountJump.gravity);
+    globalParameter_->SetValue(groupName_, "fallSpeedLimitB", playerParams_.bountJump.fallSpeedLimit);
+    globalParameter_->SetValue(groupName_, "attackRotateAnit", playerParams_.attackRotateAnit);
 
+    /// コンボ持続時間
+    for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
+        globalParameter_->SetValue(groupName_, "NComboPTime" + std::to_string(int(i + 1)), normalComboParms_[i].waitTime);
+        globalParameter_->SetValue(groupName_, "NComboPunchEaseTime" + std::to_string(int(i + 1)), normalComboParms_[i].attackEaseMax);
+        globalParameter_->SetValue(groupName_, "NComboPunchReach" + std::to_string(int(i + 1)), normalComboParms_[i].attackReach);
+    }
 
-	/// コンボ持続時間
-	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
-		globalParameter_->SetValue(groupName_, "NComboPTime" + std::to_string(int(i + 1)), normalComboParms_[i].waitTime);
-		globalParameter_->SetValue(groupName_, "NComboPunchEaseTime" + std::to_string(int(i + 1)), normalComboParms_[i].attackEaseMax);
-		globalParameter_->SetValue(groupName_, "NComboPunchReach" + std::to_string(int(i + 1)), normalComboParms_[i].attackReach);
-	}
-
-	/// コンボ持続時間(ジャンプ)
-	for (uint32_t i = 0; i < jumpComboParms_.size(); ++i) {
-		globalParameter_->SetValue(groupName_, "JComboPTime" + std::to_string(int(i + 1)), jumpComboParms_[i].waitTime);
-		globalParameter_->SetValue(groupName_, "JComboPunchEaseTime" + std::to_string(int(i + 1)), jumpComboParms_[i].attackEaseMax);
-		globalParameter_->SetValue(groupName_, "JComboPunchReach" + std::to_string(int(i + 1)), jumpComboParms_[i].attackReach);
-	}
+    /// コンボ持続時間(ジャンプ)
+    for (uint32_t i = 0; i < jumpComboParms_.size(); ++i) {
+        globalParameter_->SetValue(groupName_, "JComboPTime" + std::to_string(int(i + 1)), jumpComboParms_[i].waitTime);
+        globalParameter_->SetValue(groupName_, "JComboPunchEaseTime" + std::to_string(int(i + 1)), jumpComboParms_[i].attackEaseMax);
+        globalParameter_->SetValue(groupName_, "JComboPunchReach" + std::to_string(int(i + 1)), jumpComboParms_[i].attackReach);
+    }
 }
-
 
 ///=====================================================
 ///  ImGuiからパラメータを得る
-///===================================================== 
+///=====================================================
 void Player::ApplyGlobalParameter() {
 
-	playerParams_.startPos_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
-	playerParams_.normalJump.jumpSpeed = globalParameter_->GetValue<float>(groupName_, "JumpSpeed");
-	playerParams_.rushDistance = globalParameter_->GetValue<float>(groupName_, "rushDistance");
-	playerParams_.rushEaseMax = globalParameter_->GetValue<float>(groupName_, "rushEaseMax");
-	playerParams_.upperPosY = globalParameter_->GetValue<float>(groupName_, "UpperPosY");
-	playerParams_.moveSpeed = globalParameter_->GetValue<float>(groupName_, "MoveSpeed");
-	playerParams_.normalJump.gravity = globalParameter_->GetValue<float>(groupName_, "Gravity");
-	playerParams_.fallSpeed = globalParameter_->GetValue<float>(groupName_, "FallSpeed");
-	playerParams_.normalJump.fallSpeedLimit = globalParameter_->GetValue<float>(groupName_, "FallSpeedLimit");
-	playerParams_.attackRotateEaseT = globalParameter_->GetValue<float>(groupName_, "attackRotateEaseT");
-	playerParams_.attackRotate = globalParameter_->GetValue<float>(groupName_, "attackRotate");
-	playerParams_.attackFloatEaseT = globalParameter_->GetValue<float>(groupName_, "attackFloatEaseT_");
-	playerParams_.attackFloatValue = globalParameter_->GetValue<float>(groupName_, "attackFloatValue_");
-	playerParams_.attackRotateAnit = globalParameter_->GetValue<float>(groupName_, "attackRotateAnit");
+    playerParams_.startPos_                 = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
+    playerParams_.normalJump.jumpSpeed      = globalParameter_->GetValue<float>(groupName_, "JumpSpeed");
+    playerParams_.rushDistance              = globalParameter_->GetValue<float>(groupName_, "rushDistance");
+    playerParams_.rushEaseMax               = globalParameter_->GetValue<float>(groupName_, "rushEaseMax");
+    playerParams_.upperPosY                 = globalParameter_->GetValue<float>(groupName_, "UpperPosY");
+    playerParams_.moveSpeed                 = globalParameter_->GetValue<float>(groupName_, "MoveSpeed");
+    playerParams_.normalJump.gravity        = globalParameter_->GetValue<float>(groupName_, "Gravity");
+    playerParams_.fallSpeed                 = globalParameter_->GetValue<float>(groupName_, "FallSpeed");
+    playerParams_.normalJump.fallSpeedLimit = globalParameter_->GetValue<float>(groupName_, "FallSpeedLimit");
+    playerParams_.attackRotateEaseT         = globalParameter_->GetValue<float>(groupName_, "attackRotateEaseT");
+    playerParams_.attackRotate              = globalParameter_->GetValue<float>(groupName_, "attackRotate");
+    playerParams_.attackFloatEaseT          = globalParameter_->GetValue<float>(groupName_, "attackFloatEaseT_");
+    playerParams_.attackFloatValue          = globalParameter_->GetValue<float>(groupName_, "attackFloatValue_");
+    playerParams_.attackRotateAnit          = globalParameter_->GetValue<float>(groupName_, "attackRotateAnit");
 
-	playerParams_.upperParm.BackLashValue = globalParameter_->GetValue<float>(groupName_, "upperBackLashValue_");
-	playerParams_.upperParm.BackLashEaseTime = globalParameter_->GetValue<float>(groupName_, "upperBackLashEaseTime_");
-	playerParams_.upperJump.jumpSpeed = globalParameter_->GetValue<float>(groupName_, "jumpPowerU");
+    playerParams_.upperParm.BackLashValue    = globalParameter_->GetValue<float>(groupName_, "upperBackLashValue_");
+    playerParams_.upperParm.BackLashEaseTime = globalParameter_->GetValue<float>(groupName_, "upperBackLashEaseTime_");
+    playerParams_.upperJump.jumpSpeed        = globalParameter_->GetValue<float>(groupName_, "jumpPowerU");
 
-	playerParams_.bountJump.fallSpeedLimit = globalParameter_->GetValue<float>(groupName_, "fallSpeedLimitB");
-	playerParams_.bountJump.gravity = globalParameter_->GetValue<float>(groupName_, "gravityB");
-	playerParams_.bountJump.jumpSpeed = globalParameter_->GetValue<float>(groupName_, "jumpSpeedB");
+    playerParams_.bountJump.fallSpeedLimit = globalParameter_->GetValue<float>(groupName_, "fallSpeedLimitB");
+    playerParams_.bountJump.gravity        = globalParameter_->GetValue<float>(groupName_, "gravityB");
+    playerParams_.bountJump.jumpSpeed      = globalParameter_->GetValue<float>(groupName_, "jumpSpeedB");
 
-	playerParams_.upperJump.fallSpeedLimit = globalParameter_->GetValue<float>(groupName_, "fallSpeedLimitU");
-	playerParams_.upperJump.gravity = globalParameter_->GetValue<float>(groupName_, "gravityU");
-	playerParams_.upperJump.jumpSpeed = globalParameter_->GetValue<float>(groupName_, "jumpPowerU");
+    playerParams_.upperJump.fallSpeedLimit = globalParameter_->GetValue<float>(groupName_, "fallSpeedLimitU");
+    playerParams_.upperJump.gravity        = globalParameter_->GetValue<float>(groupName_, "gravityU");
+    playerParams_.upperJump.jumpSpeed      = globalParameter_->GetValue<float>(groupName_, "jumpPowerU");
 
+    /// コンボ持続時間
+    for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
+        normalComboParms_[i].waitTime      = globalParameter_->GetValue<float>(groupName_, "NComboPTime" + std::to_string(int(i + 1)));
+        normalComboParms_[i].attackEaseMax = globalParameter_->GetValue<float>(groupName_, "NComboPunchEaseTime" + std::to_string(int(i + 1)));
+        normalComboParms_[i].attackReach   = globalParameter_->GetValue<float>(groupName_, "NComboPunchReach" + std::to_string(int(i + 1)));
+    }
 
-	/// コンボ持続時間
-	for (uint32_t i = 0; i < normalComboParms_.size(); ++i) {
-		normalComboParms_[i].waitTime = globalParameter_->GetValue<float>(groupName_, "NComboPTime" + std::to_string(int(i + 1)));
-		normalComboParms_[i].attackEaseMax = globalParameter_->GetValue<float>(groupName_, "NComboPunchEaseTime" + std::to_string(int(i + 1)));
-		normalComboParms_[i].attackReach = globalParameter_->GetValue<float>(groupName_, "NComboPunchReach" + std::to_string(int(i + 1)));
-	}
-
-	/// コンボ持続時間
-	for (uint32_t i = 0; i < jumpComboParms_.size(); ++i) {
-		jumpComboParms_[i].waitTime = globalParameter_->GetValue<float>(groupName_, "JComboPTime" + std::to_string(int(i + 1)));
-		jumpComboParms_[i].attackEaseMax = globalParameter_->GetValue<float>(groupName_, "JComboPunchEaseTime" + std::to_string(int(i + 1)));
-		jumpComboParms_[i].attackReach = globalParameter_->GetValue<float>(groupName_, "JComboPunchReach" + std::to_string(int(i + 1)));
-	}
+    /// コンボ持続時間
+    for (uint32_t i = 0; i < jumpComboParms_.size(); ++i) {
+        jumpComboParms_[i].waitTime      = globalParameter_->GetValue<float>(groupName_, "JComboPTime" + std::to_string(int(i + 1)));
+        jumpComboParms_[i].attackEaseMax = globalParameter_->GetValue<float>(groupName_, "JComboPunchEaseTime" + std::to_string(int(i + 1)));
+        jumpComboParms_[i].attackReach   = globalParameter_->GetValue<float>(groupName_, "JComboPunchReach" + std::to_string(int(i + 1)));
+    }
 }
 
 /// =========================================================================================
 /// getter method
 /// =========================================================================================
 
-
 void Player::SetTitleBehavior() {
-	ChangeTitleBehavior(std::make_unique<TitleFirstFall>(this));
+    ChangeTitleBehavior(std::make_unique<TitleFirstFall>(this));
 }
 
 void Player::UpdateMatrix() {
-	/// 行列更新
-	headTransform_.UpdateMatrix();
-	leftHand_->Update();
-	rightHand_->Update();
-	BaseObject::Update();
+    /// 行列更新
+    headTransform_.UpdateMatrix();
+    leftHand_->Update();
+    rightHand_->Update();
+    BaseObject::Update();
 }
 
 ///==============================================================================
@@ -655,143 +631,143 @@ void Player::UpdateMatrix() {
 
 void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-	if (dynamic_cast<RushAttack*>(comboBehavior_.get()))return;
+    if (dynamic_cast<RushAttack*>(comboBehavior_.get()))
+        return;
 
-	if (EnemyCollisionBox* enemy = dynamic_cast<EnemyCollisionBox*>(other)) {
-		// 敵の中心座標を取得
-		const Vector3& enemyPosition = enemy->GetCollisionPos();
+    if (EnemyCollisionBox* enemy = dynamic_cast<EnemyCollisionBox*>(other)) {
+        // 敵の中心座標を取得
+        const Vector3& enemyPosition = enemy->GetCollisionPos();
 
-		// プレイヤーと敵の位置の差分ベクトルを計算
-		Vector3 delta = transform_.translation_ - enemyPosition;
+        // プレイヤーと敵の位置の差分ベクトルを計算
+        Vector3 delta = transform_.translation_ - enemyPosition;
 
-		// スケール取得
-		Vector3 enemyScale = enemy->GetCollisonScale();
-		Vector3 myScale = GetCollisonScale();
+        // スケール取得
+        Vector3 enemyScale = enemy->GetCollisonScale();
+        Vector3 myScale    = GetCollisonScale();
 
-		// 押し出す距離の計算
-		float pushDistanceX = (enemyScale.x + myScale.x) / 2.0f + 0.1f;
-		float pushDistanceZ = (enemyScale.z + myScale.z) / 2.0f + 0.1f;
+        // 押し出す距離の計算
+        float pushDistanceX = (enemyScale.x + myScale.x) / 2.0f + 0.1f;
+        float pushDistanceZ = (enemyScale.z + myScale.z) / 2.0f + 0.1f;
 
-		// 実際の押し戻し距離を計算
-		float pushAmountX = pushDistanceX - std::abs(delta.x);
-		float pushAmountZ = pushDistanceZ - std::abs(delta.z);
+        // 実際の押し戻し距離を計算
+        float pushAmountX = pushDistanceX - std::abs(delta.x);
+        float pushAmountZ = pushDistanceZ - std::abs(delta.z);
 
-		// ワープを防ぐために0以下の値を無効化
-		pushAmountX = max(0.0f, pushAmountX);
-		pushAmountZ = max(0.0f, pushAmountZ);
+        // ワープを防ぐために0以下の値を無効化
+        pushAmountX = max(0.0f, pushAmountX);
+        pushAmountZ = max(0.0f, pushAmountZ);
 
-		// 押し戻し方向
-		Vector3 pushDirection = { 0, 0, 0 };
-		float pushDistance = 0.0f;
+        // 押し戻し方向
+        Vector3 pushDirection = {0, 0, 0};
+        float pushDistance    = 0.0f;
 
-		if (pushAmountX > 0.0f && pushAmountZ > 0.0f) {
-			// XとZ両方めり込んでいる場合
-			if (pushAmountX > pushAmountZ) {
-				pushDistance = pushAmountX;
-				pushDirection = { delta.x > 0 ? 1.0f : -1.0f, 0, 0 };
-			} else {
-				pushDistance = pushAmountZ;
-				pushDirection = { 0, 0, delta.z > 0 ? 1.0f : -1.0f };
-			}
-			/// それぞれ片方ずるめり込んでいる
-		} else if (pushAmountX > 0.0f) {
-			pushDistance = pushAmountX;
-			pushDirection = { delta.x > 0 ? 1.0f : -1.0f, 0, 0 };
-		} else if (pushAmountZ > 0.0f) {
-			pushDistance = pushAmountZ;
-			pushDirection = { 0, 0, delta.z > 0 ? 1.0f : -1.0f };
-		}
+        if (pushAmountX > 0.0f && pushAmountZ > 0.0f) {
+            // XとZ両方めり込んでいる場合
+            if (pushAmountX > pushAmountZ) {
+                pushDistance  = pushAmountX;
+                pushDirection = {delta.x > 0 ? 1.0f : -1.0f, 0, 0};
+            } else {
+                pushDistance  = pushAmountZ;
+                pushDirection = {0, 0, delta.z > 0 ? 1.0f : -1.0f};
+            }
+            /// それぞれ片方ずるめり込んでいる
+        } else if (pushAmountX > 0.0f) {
+            pushDistance  = pushAmountX;
+            pushDirection = {delta.x > 0 ? 1.0f : -1.0f, 0, 0};
+        } else if (pushAmountZ > 0.0f) {
+            pushDistance  = pushAmountZ;
+            pushDirection = {0, 0, delta.z > 0 ? 1.0f : -1.0f};
+        }
 
-		// ワープを防ぐため、最大移動量を制限
-		 float MAX_PUSH_DISTANCE = 0.5f;
-		pushDistance = std::min(pushDistance, MAX_PUSH_DISTANCE);
+        // ワープを防ぐため、最大移動量を制限
+        float MAX_PUSH_DISTANCE = 0.5f;
+        pushDistance            = std::min(pushDistance, MAX_PUSH_DISTANCE);
 
-		// 実際に押し戻す
-		if (pushDistance > 0.0f) {
-			transform_.translation_ += pushDirection * pushDistance;
-		}
-	}
+        // 実際に押し戻す
+        if (pushDistance > 0.0f) {
+            transform_.translation_ += pushDirection * pushDistance;
+        }
+    }
 }
 
-
 Vector3 Player::GetCollisionPos() const {
-	// ローカル座標でのオフセット
-	const Vector3 offset = { 0.0f, 1.5f, 0.0f };
-	// ワールド座標に変換
-	Vector3 worldPos = MatrixTransform(offset, transform_.matWorld_);
-	return worldPos;
+    // ローカル座標でのオフセット
+    const Vector3 offset = {0.0f, 1.5f, 0.0f};
+    // ワールド座標に変換
+    Vector3 worldPos = MatrixTransform(offset, transform_.matWorld_);
+    return worldPos;
 }
 
 void Player::SetRotateInit() {
-	headTransform_.rotation_ = { 0,0,0 };
-	headTransform_.translation_.y = 0.0f;
+    headTransform_.rotation_      = {0, 0, 0};
+    headTransform_.translation_.y = 0.0f;
 }
-
 
 /// =======================================================================================
 /// Rendition
 /// =======================================================================================
 void Player::SetLightPos() {
-	// ライト位置
-	Light::GetInstance()->GetSpotLightManager()->GetSpotLight(0)->SetPosition(Vector3(
-		transform_.translation_.x,
-		transform_.translation_.y + 5.0f,
-		transform_.translation_.z));
+    // ライト位置
+    Light::GetInstance()->GetSpotLightManager()->GetSpotLight(0)->SetPosition(Vector3(
+        transform_.translation_.x,
+        transform_.translation_.y + 5.0f,
+        transform_.translation_.z));
 }
 
 void Player::HeadLightSetting() {
-	if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
-		Light::GetInstance()->GetAmbientLight()->SetIntensity(0.0f);
-	} else {
-		Light::GetInstance()->GetAmbientLight()->SetIntensity(0.9f);
-	}
+    if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
+        Light::GetInstance()->GetAmbientLight()->SetIntensity(0.0f);
+    } else {
+        Light::GetInstance()->GetAmbientLight()->SetIntensity(0.9f);
+    }
 }
 
 ///===================================================================================================================
-///　Particle And Effect
+/// 　Particle And Effect
 ///==================================================================================================================
 
-void  Player::ParticleInit() {
+void Player::ParticleInit() {
 
-	//debri
-    debriParticle_[0].emitter.reset(ParticleEmitter::CreateParticle("DebriParticle", "debri",".obj" ,100));
-	
-	//star
-	starEffect_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarCenterLight",PrimitiveType::Plane, 30));
+    // debri
+    debriParticle_[0].emitter.reset(ParticleEmitter::CreateParticle("DebriParticle", "debri", ".obj", 100));
+
+    // star
+    starEffect_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarCenterLight", PrimitiveType::Plane, 30));
     starEffect_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarEffect", PrimitiveType::Plane, 30));
     starEffect_[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarFrame", PrimitiveType::Plane, 30));
 
-	for (uint32_t i = 0; i < starEffect_.size(); i++) {
-		starEffect_[i].emitter->SetFollowingPos(&transform_.translation_);
-	}
+    for (uint32_t i = 0; i < starEffect_.size(); i++) {
+        starEffect_[i].emitter->SetFollowingPos(&transform_.translation_);
+    }
 
-	// crack
+    // crack
     fallCrack_.reset(ParticleEmitter::CreateParticlePrimitive("Crack", PrimitiveType::Plane, 30));
-}
 
+    rushParticle_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("rushParticle", PrimitiveType::Plane, 800));
+    rushParticle_[0].emitter->SetTextureHandle(GetCircleTexture());
+}
 
 void Player::DebriParticleEmit() {
-	//ガレキパーティクル
-	for (uint32_t i = 0; i < debriParticle_.size(); i++) {
-		debriParticle_[i].emitter->Emit();
-	}
-	fallCrack_->Emit();
+    // ガレキパーティクル
+    for (uint32_t i = 0; i < debriParticle_.size(); i++) {
+        debriParticle_[i].emitter->Emit();
+    }
+    fallCrack_->Emit();
 }
 
-
 void Player::StartEffectEmit() {
-	//星パーティクル
-	for (uint32_t i = 0; i < starEffect_.size(); i++) {
-		starEffect_[i].emitter->Emit();
-	}
-	Audio::GetInstance()->PlayWave(starSound_, 0.5f);
+    // 星パーティクル
+    for (uint32_t i = 0; i < starEffect_.size(); i++) {
+        starEffect_[i].emitter->Emit();
+    }
+    Audio::GetInstance()->PlayWave(starSound_, 0.5f);
 }
 
 void Player::FallEffectInit(const Vector3& pos) {
     std::unique_ptr<ImpactEffect> effect = std::make_unique<ImpactEffect>();
 
-	effect->Init(pos);
-	effects_.push_back(std::move(effect));
+    effect->Init(pos);
+    effects_.push_back(std::move(effect));
 }
 
 void Player::ParticleUpdate() {
@@ -811,30 +787,34 @@ void Player::ParticleUpdate() {
     fallCrack_->Update();
 }
 
-
-
 void Player::FallEffectUpdate() {
-	// 各エフェクトを更新
+    // 各エフェクトを更新
     for (std::unique_ptr<ImpactEffect>& effect : effects_) {
-		if (effect) {
-			effect->Update();
-		}
-	}
+        if (effect) {
+            effect->Update();
+        }
+    }
 
-	// 完了したエフェクトを消す
+    // 完了したエフェクトを消す
     effects_.erase(std::remove_if(effects_.begin(), effects_.end(), [](const std::unique_ptr<ImpactEffect>& effect) { return effect->IsFinished(); }), effects_.end());
 }
 
+
+void Player::RushParticleUdate() {
+    rushParticle_[0].emitter->SetTargetPosition(GetWorldPosition());
+    rushParticle_[0].emitter->Update();
+    rushParticle_[0].emitter->EditorUpdate();
+    rushParticle_[0].emitter->Emit();
+}
 /// <summary>
 /// Sound
 /// </summary>
 void Player::SoundPunch() {
-	Audio::GetInstance()->PlayWave(punchSoundID_, 0.5f);
+    Audio::GetInstance()->PlayWave(punchSoundID_, 0.5f);
 }
 void Player::SoundStrongPunch() {
-	Audio::GetInstance()->PlayWave(strongPunch_, 0.5f);
+    Audio::GetInstance()->PlayWave(strongPunch_, 0.5f);
 }
 void Player::FallSound() {
-	Audio::GetInstance()->PlayWave(fallSound_, 0.2f);
+    Audio::GetInstance()->PlayWave(fallSound_, 0.2f);
 }
-

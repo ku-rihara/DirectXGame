@@ -167,7 +167,7 @@ void GameScene::ModelDraw() {
 /// SkyBox描画
 /// ===================================================
 void GameScene::SkyBoxDraw() {
-    skuBox_->Draw(viewProjection_);
+ 
 }
 
 /// ======================================================

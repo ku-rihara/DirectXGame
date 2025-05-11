@@ -38,9 +38,6 @@ RushAttack::RushAttack(Player* player)
 	
 	rushEaseTime_ = 0.0f;
 
-	emitter_.reset(ParticleEmitter::CreateParticle("rushParticle", "Plane", ".obj", 800));
-	emitter_->SetTextureHandle(pPlayer_->GetCircleTexture());
-
 
 	step_ = STEP::RUSH; // 突進
 
@@ -59,10 +56,7 @@ void RushAttack::Update() {
 		///---------------------------------------------------------
 		/// 着地
 		///---------------------------------------------------------
-		emitter_->SetTargetPosition(pPlayer_->GetWorldPosition());
-		emitter_->Update();
-		emitter_->EditorUpdate();
-		emitter_->Emit();
+        pPlayer_->RushParticleUdate();
 
 		handMoveEasing_.time += Frame::DeltaTimeRate();
 		rushEaseTime_ += Frame::DeltaTimeRate();

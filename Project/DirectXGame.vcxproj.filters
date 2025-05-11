@@ -268,9 +268,6 @@
     <Filter Include="MyEngine\.h\utility\EasingAnimation">
       <UniqueIdentifier>{fd45ac81-3519-4403-ad3b-c42be8a0eed2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\SkyBox">
-      <UniqueIdentifier>{3d0b4b8b-8120-4479-a6ad-221fde23fe75}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -684,9 +681,6 @@
     </ClCompile>
     <ClCompile Include="Engine\base\SkyBoxRenderer.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\SkyBox\SkyBox.cpp">
-      <Filter>Game\SkyBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1133,9 +1127,6 @@
     </ClInclude>
     <ClInclude Include="Engine\base\SkyBoxRenderer.h">
       <Filter>MyEngine\.h\base</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\SkyBox\SkyBox.h">
-      <Filter>Game\SkyBox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
