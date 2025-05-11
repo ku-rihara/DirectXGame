@@ -32,10 +32,5 @@ void PrimitivePlane::Create() {
     mesh_->SetVertexTexcoordData(5, Vector2(1.0f, 1.0f));
     mesh_->SetVertexNormData(5, Vector3(0.0f, 0.0f, -1.0f));
 
-    //// インデックスデータの設定
-    //uint32_t indices[] = {
-    //    0, 1, 2, // 左下の三角形
-    //    2, 1, 3 // 右上の三角形
-    //};
-    //mesh_->SetIndexData(indices, 6); // インデックスバッファを設定
+   
 }

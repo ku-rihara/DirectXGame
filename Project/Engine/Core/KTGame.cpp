@@ -1,8 +1,9 @@
 #include "KTGame.h"
-#include"utility/ParticleEditor/ParticleCommon.h"
 /// Scene
 #include "Scene/Factory/SceneFactory.h"
 #include"base/FullscreenRenderer.h"
+//renderer
+#include"base/SkyBoxRenderer.h"
 
 // =============================================================
 // 初期化処理
@@ -36,12 +37,16 @@ void KTGame::Draw() {
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 
 	// --------------------------------------------------------------------------
+    /// SkyBox描画
+    // --------------------------------------------------------------------------
+    SkyBoxRenderer::GetInstance()->PreDraw(commandList);
+    pSceneManager_->SkyBoxDraw(); /// ゲームシーン描画
+	// --------------------------------------------------------------------------
 	/// モデル描画
 	// --------------------------------------------------------------------------
 	Model::PreDraw(commandList);
 
 	pSceneManager_->ModelDraw();/// ゲームシーン描画
-
 	collisionManager_->Draw(pSceneManager_->GetScene()->GetViewProjection());	/// コリジョン描画
 
 	// --------------------------------------------------------------------------

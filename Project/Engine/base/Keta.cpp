@@ -13,6 +13,7 @@
 #include "SpriteCommon.h"
 #include "SrvManager.h"
 #include"FullscreenRenderer.h"
+#include"SkyBoxRenderer.h"
 
 /// audio,input
 #include "audio/Audio.h"
@@ -40,6 +41,7 @@ ModelManager* Keta::modelManager_ = nullptr;
 ParticleCommon* Keta::particleCommon_ = nullptr;
 SrvManager* Keta::srvManager_ = nullptr;
 FullscreenRenderer* Keta::copyImageRenderer_ = nullptr;
+SkyBoxRenderer* Keta::skyBoxRenderer_        = nullptr;
 Audio* Keta::audio_ = nullptr;
 Input* Keta::input_ = nullptr;
 
@@ -69,6 +71,11 @@ void Keta::Initialize(const char* title, int width, int height) {
     object3DCommon_ = Object3DCommon::GetInstance();
     object3DCommon_->Init(directXCommon_);
 
+    //
+    skyBoxRenderer_ = SkyBoxRenderer::GetInstance();
+    skyBoxRenderer_->Init(directXCommon_);
+
+    //FullScreen Renderer
 	copyImageRenderer_ = FullscreenRenderer::GetInstance();
 	copyImageRenderer_->Init(directXCommon_);
 

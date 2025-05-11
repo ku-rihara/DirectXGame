@@ -19,9 +19,6 @@ private:
 
 	uint32_t useIndex_ = 0;//次に使用するインデックス
 
-	/*/// structreBuffer
-	D3D12_CPU_DESCRIPTOR_HANDLE  instancingSrvHandleCPU_;
-	D3D12_GPU_DESCRIPTOR_HANDLE  instancingSrvHandleGPU_;*/
 	//リソースとデータ
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> instancingResources_;
 
