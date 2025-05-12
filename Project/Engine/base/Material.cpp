@@ -3,9 +3,6 @@
 #include <imgui.h>
 #include <cassert>
 
-Material::Material()
-    : materialData_(nullptr) {  // materialData_の初期化
-}
 
 void Material::CreateMaterialResource(DirectXCommon* dxCommon) {
     assert(dxCommon);

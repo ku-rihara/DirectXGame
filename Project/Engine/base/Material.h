@@ -30,7 +30,7 @@ private:
 
 public:
     // GPUに送るマテリアルデータの実体
-    MaterialStructure* materialData_;
+    MaterialStructure* materialData_=nullptr;
 
 private:
     // GPUリソースへのポインタ
@@ -38,7 +38,8 @@ private:
 
 public:
     // コンストラクタ
-    Material();
+    Material()=default;
+    ~Material() = default;
 
     // マテリアルのリソースを作成する関数
     void CreateMaterialResource(DirectXCommon* dxCommon);
