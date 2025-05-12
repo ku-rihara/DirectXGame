@@ -3,7 +3,6 @@
 #include <dxgi1_6.h>
 #include <wrl.h>
 // data
-#include "struct/TransformationMatrix.h"
 #include "struct/VertexData.h"
 
 #include "base/Material.h"
@@ -21,10 +20,14 @@ public:
     ///==========================================================
 
     void Init(DirectXCommon* directXCommon, const uint32_t& vertexNum);
+    void CreateVertexResource();
     void SetIndexData(const uint32_t* indices, uint32_t indexCount);
     void DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, Material material, std::optional<uint32_t> textureHandle);
     void DebugImGui();
 
+    void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, std::optional<uint32_t> textureHandle = std::nullopt);
+
+    void SetTexture(const std::string& name);
 
 private:
     ///==========================================================
@@ -37,21 +40,18 @@ private:
     D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
     uint32_t indexNum_;
 
-
     // Resource data
     Material material_;
     Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_; // 頂点リソース
-    Microsoft::WRL::ComPtr<ID3D12Resource> wvpResouce_; // wvpリソース
     Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_; // indexリソース
 
     // Transform データ
-    TransformationMatrix* wvpDate_;
     VertexData* vertexDate_ = nullptr;
 
     // 頂点数
     uint32_t vertexNum_;
 
-    uint32_t defaultTextureHandle_;
+    uint32_t textureHandle_;
 
 public:
     ///==========================================================
@@ -61,8 +61,6 @@ public:
     ///==========================================================
     /// setter method
     ///==========================================================
-    void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
-    void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
 
     // vertexData
     void SetVertexPositionData(const uint32_t index, const Vector4& pos) { vertexDate_[index].position = pos; }

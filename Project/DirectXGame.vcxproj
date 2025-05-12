@@ -28,6 +28,7 @@
     <ClCompile Include="Engine\base\Keta.cpp" />
     <ClCompile Include="Engine\base\Material.cpp" />
     <ClCompile Include="Engine\base\Object3DCommon.cpp" />
+    <ClCompile Include="Engine\base\SkyBoxRenderer.cpp" />
     <ClCompile Include="Engine\base\SpriteCommon.cpp" />
     <ClCompile Include="Engine\base\SpriteMaterial.cpp" />
     <ClCompile Include="Engine\base\SrvManager.cpp" />
@@ -55,9 +56,12 @@
     <ClCompile Include="Engine\Lighrt\SpotLight.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLightManager.cpp" />
     <ClCompile Include="Engine\Primitive\IPrimitive.cpp" />
+    <ClCompile Include="Engine\Primitive\PrimitiveBox.cpp" />
+    <ClCompile Include="Engine\Primitive\PrimitiveCylinder.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitivePlane.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp" />
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
+    <ClCompile Include="Engine\utility\EaseingAnimation\EasingAnimation.cpp" />
     <ClCompile Include="Engine\utility\ParameterEditor\GlobalParameter.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleCommon.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleEmitter.cpp" />
@@ -74,6 +78,7 @@
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="Game\Scene\Manager\SceneManager.cpp" />
     <ClCompile Include="Game\Scene\TitleScene.cpp" />
+    <ClCompile Include="Game\SkyBox\SkyBox.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\Box.cpp" />
     <ClCompile Include="math\Easing.cpp" />
@@ -105,6 +110,7 @@
     <ClInclude Include="Engine\base\Keta.h" />
     <ClInclude Include="Engine\base\Material.h" />
     <ClInclude Include="Engine\base\Object3DCommon.h" />
+    <ClInclude Include="Engine\base\SkyBoxRenderer.h" />
     <ClInclude Include="Engine\base\SpriteCommon.h" />
     <ClInclude Include="Engine\base\SpriteMaterial.h" />
     <ClInclude Include="Engine\base\SrvManager.h" />
@@ -133,6 +139,8 @@
     <ClInclude Include="Engine\Lighrt\SpotLight.h" />
     <ClInclude Include="Engine\Lighrt\SpotLightManager.h" />
     <ClInclude Include="Engine\Primitive\IPrimitive.h" />
+    <ClInclude Include="Engine\Primitive\PrimitiveBox.h" />
+    <ClInclude Include="Engine\Primitive\PrimitiveCylinder.h" />
     <ClInclude Include="Engine\Primitive\PrimitivePlane.h" />
     <ClInclude Include="Engine\Primitive\PrimitiveRing.h" />
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h" />
@@ -144,6 +152,7 @@
     <ClInclude Include="Engine\struct\TransformationMatrix.h" />
     <ClInclude Include="Engine\struct\VertexData.h" />
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h" />
+    <ClInclude Include="Engine\utility\EaseingAnimation\EasingAnimation.h" />
     <ClInclude Include="Engine\utility\ParameterEditor\GlobalParameter.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleCommon.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleEmitter.h" />
@@ -161,6 +170,7 @@
     <ClInclude Include="Game\Scene\GameScene.h" />
     <ClInclude Include="Game\Scene\Manager\SceneManager.h" />
     <ClInclude Include="Game\Scene\TitleScene.h" />
+    <ClInclude Include="Game\SkyBox\SkyBox.h" />
     <ClInclude Include="math\Box.h" />
     <ClInclude Include="math\Easing.h" />
     <ClInclude Include="math\MathFunction.h" />
@@ -196,6 +206,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="resources\Shader\SkyBox.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
     <None Include="resources\Shader\Sprite.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -226,6 +240,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\RadialBlur.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="resources\Shader\OffScreen\Vignette.PS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -235,6 +253,14 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="resources\Shader\Particle.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\SkyBox.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\SkyBox.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

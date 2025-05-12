@@ -19,6 +19,7 @@ public:
 
     // 更新、描画
     void Update();
+    void SkyBoxDraw();
     void ModelDraw();
     void SpriteDraw();
  /*   void ParticleDraw();*/

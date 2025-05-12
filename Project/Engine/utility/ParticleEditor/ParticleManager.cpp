@@ -4,6 +4,7 @@
 #include "ParticleCommon.h"
 // Primitive
 #include "Primitive/PrimitivePlane.h"
+#include"Primitive/PrimitiveRing.h"
 // frame
 #include "Frame/Frame.h"
 // Function
@@ -12,7 +13,6 @@
 #include "MathFunction.h"
 #include "random.h"
 // std
-#include <algorithm>
 #include <cassert>
 #include <string>
 ParticleManager* ParticleManager::GetInstance() {
@@ -213,19 +213,20 @@ void ParticleManager::CreatePrimitiveParticle(const std::string& name, Primitive
     // グループを追加
     particleGroups_[name] = ParticleGroup();
 
+   //createPrimitive
     switch (type) {
     case PrimitiveType::Plane:
         particleGroups_[name].primitive_ = std::make_unique<PrimitivePlane>();
         break;
-    // 他のプリミティブを追加する場合はここに記述
-    default:
-        assert(false && "Unsupported PrimitiveType");
-        return;
+    case PrimitiveType::Ring:
+        particleGroups_[name].primitive_ = std::make_unique<PrimitiveRing>();
+        break;
+
     }
 
     // プリミティブの初期化と作成
     particleGroups_[name].primitive_->Init();
-    particleGroups_[name].primitive_->Create();
+   /* particleGroups_[name].primitive_->Create();*/
 
     // インスタンシングリソースとマテリアルリソースを作成
     CreateInstancingResource(name, maxnum);

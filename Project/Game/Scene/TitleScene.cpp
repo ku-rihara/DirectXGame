@@ -1,101 +1,95 @@
-///scene
-#include"Manager/SceneManager.h"
+/// scene
 #include "TitleScene.h"
 #include "GameScene.h"
+#include "Manager/SceneManager.h"
 
 #include "base/TextureManager.h"
-//class
-#include"utility/ParticleEditor/ParticleManager.h"
+// class
+#include "utility/ParticleEditor/ParticleManager.h"
 
-//math
-#include"Frame/Frame.h"
-#include<imgui.h>
+// math
+#include "Frame/Frame.h"
+#include <imgui.h>
 
 TitleScene::TitleScene() {}
 
 TitleScene::~TitleScene() {
-
 }
 
 void TitleScene::Init() {
 
-	BaseScene::Init();
+    BaseScene::Init();
 
-	///パーティクルデータの読み込みと、モデルの読み込み
-	EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticlePrimitive("StarFrame",PrimitiveType::Plane, 100));
+    /// パーティクルデータの読み込みと、モデルの読み込み
+    EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticlePrimitive("StarFrame", PrimitiveType::Plane, 100));
     EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticlePrimitive("StarEffect", PrimitiveType::Plane, 100));
     EnemydamageEffect_[2].reset(ParticleEmitter::CreateParticlePrimitive("StarCenterLight", PrimitiveType::Plane, 100));
-  	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
+    ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
 void TitleScene::Update() {
 
-	/// 
-	for (int i = 0; i < EnemydamageEffect_.size(); i++) {
-		EnemydamageEffect_[i]->Update();
-		EnemydamageEffect_[i]->EditorUpdate();
-		EnemydamageEffect_[i]->Emit();
-	}
-   /* EnemydamageEffect_[0]->Update();
-    EnemydamageEffect_[0]->EditorUpdate();
-    EnemydamageEffect_[0]->Emit();*/
-	
+    ///
+    for (int i = 0; i < EnemydamageEffect_.size(); i++) {
+        EnemydamageEffect_[i]->Update();
+        EnemydamageEffect_[i]->EditorUpdate();
+        EnemydamageEffect_[i]->Emit();
+    }
+    /* EnemydamageEffect_[0]->Update();
+     EnemydamageEffect_[0]->EditorUpdate();
+     EnemydamageEffect_[0]->Emit();*/
 
-	ParticleManager::GetInstance()->Update();
+    ParticleManager::GetInstance()->Update();
 
-	Debug();
-	ViewProjectionUpdate();
+    Debug();
+    ViewProjectionUpdate();
 
-	if (input_->TrrigerKey(DIK_RETURN)) {
+    if (input_->TrrigerKey(DIK_RETURN)) {
 
-		SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
-	}
+        SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+    }
 }
 
 /// ===================================================
 /// モデル描画
 /// ===================================================
 void TitleScene::ModelDraw() {
-	/// commandList取得
-	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
-	Model::PreDraw(commandList);
+    /// commandList取得
+    ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+    Model::PreDraw(commandList);
 
-	//debriEmitter_->DebugDraw(viewProjection_);
-	//debriEmitter_->RailDraw(viewProjection_);
-	ParticleManager::GetInstance()->Draw(viewProjection_);
-
+    // debriEmitter_->DebugDraw(viewProjection_);
+    // debriEmitter_->RailDraw(viewProjection_);
+    ParticleManager::GetInstance()->Draw(viewProjection_);
 }
 
-   /// ===================================================
-   /// パーティクル描画
-   /// ===================================================
-//void TitleScene::ParticleDraw() {
-//	
-//}
+/// ===================================================
+/// SkyBox描画
+/// ===================================================
+void TitleScene::SkyBoxDraw() {
+
+ }
 
 /// ===================================================
-   /// スプライト描画
-   /// ===================================================
+/// スプライト描画
+/// ===================================================
 void TitleScene::SpriteDraw() {
-
 }
 
 void TitleScene::Debug() {
 #ifdef _DEBUG
-	ImGui::Begin("Camera");
-	ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
-	ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
-	ImGui::End();
+    ImGui::Begin("Camera");
+    ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
+    ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
+    ImGui::End();
 #endif
 }
 
-
 // ビュープロジェクション更新
 void TitleScene::ViewProjectionUpdate() {
-	BaseScene::ViewProjectionUpdate();
+    BaseScene::ViewProjectionUpdate();
 }
 
-
 void TitleScene::ViewProssess() {
-	viewProjection_.UpdateMatrix();
+    viewProjection_.UpdateMatrix();
 }

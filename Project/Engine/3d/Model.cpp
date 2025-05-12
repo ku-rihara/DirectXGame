@@ -6,6 +6,7 @@
 // class
 #include "base/Object3DCommon.h"
 #include "base/TextureManager.h"
+#include"base/SkyBoxRenderer.h"
 #include "Lighrt/Light.h"
 
 namespace {
@@ -125,13 +126,11 @@ void Model::CreateModel(const std::string& ModelName, const std::string& extensi
     // 書き込むためのアドレスを取得
     vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate));
     std::memcpy(vertexDate, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
-    
 }
-
 
 void Model::DebugImGui() {
 #ifdef _DEBUG
-   
+
 #endif
 }
 
@@ -156,6 +155,10 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material ma
     } else {
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
     }
+   
+    uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
+    commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
+
     Light::GetInstance()->SetLightCommands(commandList);
 
     // 描画コール

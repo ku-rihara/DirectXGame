@@ -46,5 +46,5 @@ void SpotLight::SetPosition(const Vector3& pos) {
 
 void  SpotLight::SetLightCommand(ID3D12GraphicsCommandList* commandList,const int&index) {
     index;
-    commandList->SetGraphicsRootConstantBufferView(6, lightResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(7, lightResource_->GetGPUVirtualAddress());
 }

@@ -60,7 +60,7 @@ ID3D12Resource* Light::GetCameraForGPUResources() const {
 
 void  Light::SetLightCommands(ID3D12GraphicsCommandList* commandList) {
 	directionalLight_->SetLightCommand(commandList);
-	commandList->SetGraphicsRootConstantBufferView(4, cameraForGPUResource_->GetGPUVirtualAddress());
+	commandList->SetGraphicsRootConstantBufferView(5, cameraForGPUResource_->GetGPUVirtualAddress());
 	pointLightManager_->SetLightCommand(commandList);
 	spotLightManager_->SetLightCommand(commandList);
 	areaLightManager_->SetLightCommand(commandList);

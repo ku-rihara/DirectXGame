@@ -1,9 +1,9 @@
 #pragma once
+#include "Matrix4x4.h"
 #include "Vector4.h"
-#include"Matrix4x4.h"
+#include <d3d12.h>
 #include <string>
 #include <wrl.h>
-#include <d3d12.h>
 
 class DirectXCommon;
 
@@ -15,21 +15,21 @@ private:
         float padding[3];
         Matrix4x4 uvMatrix;
         float shininess;
+        float environmentCoefficient;
     };
-   
+
 public:
     // GPUに送るマテリアルデータの実体
-    MaterialStructure* materialData_;
-   
+    MaterialStructure* materialData_=nullptr;
+
 private:
     // GPUリソースへのポインタ
     Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 
-
 public:
-
     // コンストラクタ
-    Material();
+    Material()=default;
+    ~Material() = default;
 
     // マテリアルのリソースを作成する関数
     void CreateMaterialResource(DirectXCommon* dxCommon);
@@ -42,5 +42,7 @@ public:
 
     void DebugImGui();
 
-
+public:
+    void SetShininess(const float& shiniess) { materialData_->shininess = shiniess; }
+    void SetEnvironmentCoefficient(const float& environmentCoefficient) { materialData_->environmentCoefficient = environmentCoefficient; }
 };
