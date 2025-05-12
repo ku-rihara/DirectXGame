@@ -7,13 +7,13 @@ std::list<BaseCollider*> CollisionManager::baseColliders_;
 void CollisionManager::Init() { 
 
 
-	//JSON関連****************************************************************
+	//Parameter関連****************************************************************
 	globalParameter_ = GlobalParameter::GetInstance();
 	const char* groupName = "CollisionManager";
 
 	// グループを追加
 	globalParameter_->CreateGroup(groupName,false);
-	globalParameter_->AddSeparatorText("AA");
+	globalParameter_->AddSeparatorText("Collider");
 	globalParameter_->AddItem(groupName, "isColliderVisible", isColliderVisible_, GlobalParameter::WidgetType::Checkbox);
 	globalParameter_->AddTreePoP();
 }
@@ -173,8 +173,7 @@ void CollisionManager::CheckAllCollisions() {
 
 void CollisionManager::ApplyGlobalParameter() {
 	
-	GlobalParameter* globalParameter = GlobalParameter::GetInstance();
 	const char* groupName = "CollisionManager";
 
-	isColliderVisible_ = globalParameter->GetValue<bool>(groupName, "isColliderVisible");
+	isColliderVisible_ = globalParameter_->GetValue<bool>(groupName, "isColliderVisible");
 }
