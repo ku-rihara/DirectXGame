@@ -21,6 +21,7 @@ void Material::CreateMaterialResource(DirectXCommon* dxCommon) {
     materialData_->shininess = 12.5f;
     materialData_->uvMatrix = MakeIdentity4x4();
     materialData_->enableLighting = 2;
+    materialData_->environmentCoefficient = 0.0f;
 }
 
 void Material::UpdateMaterialData(const Vector4& Color) {
@@ -37,6 +38,7 @@ void Material::DebugImGui() {
 #ifdef _DEBUG
     ImGui::ColorEdit4("Color", reinterpret_cast<float*>(&materialData_->color));  // materialData_のcolorを使用
     ImGui::DragFloat("Shininess", &materialData_->shininess, 0.01f);  // materialData_のshininessを使用
+    ImGui::DragFloat("environmentCoefficient", &materialData_->environmentCoefficient, 0.01f); // materialData_のenvironmentCoefficientを使用
     const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert", "Specular Reflection",
                                     "PointLight", "SpotLight","AreaLight","Ambient" };
     ImGui::Combo("Lighting Mode", &materialData_->enableLighting, lightingModes, IM_ARRAYSIZE(lightingModes));  // materialData_のenableLightingを使用
