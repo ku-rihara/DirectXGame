@@ -17,7 +17,7 @@ void SkyBoxRenderer::Init(DirectXCommon* dxCommon) {
     // グラフィックスパイプラインの生成
     CreateGraphicsPipeline();
 
-    environmentalMapTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/rostock_laage_airport_4k.dds");
+    environmentalMapTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/output.dds");
 }
 
 void SkyBoxRenderer::CreateGraphicsPipeline() {

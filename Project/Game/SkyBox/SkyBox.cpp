@@ -10,7 +10,7 @@ SkyBox::~SkyBox() {}
 void SkyBox::Init() {
     primitiveBox_ = std::make_unique<PrimitiveBox>();
     primitiveBox_->Init();
-    primitiveBox_->SetTexture("Resources/Texture/rostock_laage_airport_4k.dds");
+    primitiveBox_->SetTexture("Resources/Texture/output.dds");
 	transform_.Init();
 
 	transform_.scale_ = {20, 20, 20};
