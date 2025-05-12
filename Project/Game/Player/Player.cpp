@@ -116,7 +116,7 @@ void Player::Update() {
 
 // タイトル更新
 void Player::TitleUpdate() {
-
+    
     /// Particle
     ParticleUpdate();
 
@@ -744,7 +744,7 @@ void Player::ParticleInit() {
     fallCrack_.reset(ParticleEmitter::CreateParticlePrimitive("Crack", PrimitiveType::Plane, 30));
 
     rushParticle_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("rushParticle", PrimitiveType::Plane, 800));
-    rushParticle_[0].emitter->SetTextureHandle(GetCircleTexture());
+   
 }
 
 void Player::DebriParticleEmit() {

@@ -67,6 +67,11 @@ void Keta::Initialize(const char* title, int width, int height) {
 
 	directXCommon_->CreateRnderSrvHandle();
 
+     // ImGuiManager
+    imguiManager_ = ImGuiManager::GetInstance();
+    imguiManager_->Init(winApp_.get(), directXCommon_, srvManager_);
+
+
     // TextureManager
     textureManager_ = TextureManager::GetInstance();
     textureManager_->Init(directXCommon_, srvManager_);
@@ -95,10 +100,6 @@ void Keta::Initialize(const char* title, int width, int height) {
     // ModelManager
     modelManager_ = ModelManager::GetInstance();
     modelManager_->Initialize(directXCommon_);
-
-    // ImGuiManager
-    imguiManager_ = ImGuiManager::GetInstance();
-    imguiManager_->Init(winApp_.get(), directXCommon_, srvManager_);
 
     // Input
     input_ = Input::GetInstance();

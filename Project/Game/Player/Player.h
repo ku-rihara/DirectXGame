@@ -219,7 +219,6 @@ public:
 	PlayerParams           GetParamater()    const { return playerParams_; }
 	BasePlayerBehavior* GetBehavior()        const { return behavior_.get(); }
 	BaseTitleBehavior*  GetTitleBehavior()   const { return titleBehavior_.get(); }
-	uint32_t            GetCircleTexture()   const { return cirlceTexture_; }
 	/// =========================================================================================
 	/// setter
 	/// =========================================================================================
