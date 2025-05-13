@@ -806,6 +806,7 @@ void Player::RushParticleUdate() {
     rushParticle_[0].emitter->EditorUpdate();
     rushParticle_[0].emitter->Emit();
 }
+
 /// <summary>
 /// Sound
 /// </summary>

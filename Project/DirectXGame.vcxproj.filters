@@ -607,9 +607,6 @@
     <ClCompile Include="Game\Player\ComboAttackBehavior\JumpRush.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Effect\StarEffect.cpp">
-      <Filter>Game\Effect</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Enemy\Spawner\EnemySpawner.cpp">
       <Filter>Game\Enemy\Spawner</Filter>
     </ClCompile>
@@ -1055,9 +1052,6 @@
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\JumpRush.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Effect\StarEffect.h">
-      <Filter>Game\Effect</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Spawner\EnemySpawner.h">
       <Filter>Game\Enemy\Spawner</Filter>

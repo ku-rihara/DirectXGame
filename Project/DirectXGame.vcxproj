@@ -75,7 +75,6 @@
     <ClCompile Include="Game\CollisionBox\AttackCollisionBox.cpp" />
     <ClCompile Include="Game\CollisionBox\EnemyCollisionBox.cpp" />
     <ClCompile Include="Game\Effect\ImpactEffect.cpp" />
-    <ClCompile Include="Game\Effect\StarEffect.cpp" />
     <ClCompile Include="Game\Enemy\BaseEnemy.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\BaseEnemyBehavior.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\BaseEnemyMoveBehavior.cpp" />
@@ -224,7 +223,6 @@
     <ClInclude Include="Game\CollisionBox\AttackCollisionBox.h" />
     <ClInclude Include="Game\CollisionBox\EnemyCollisionBox.h" />
     <ClInclude Include="Game\Effect\ImpactEffect.h" />
-    <ClInclude Include="Game\Effect\StarEffect.h" />
     <ClInclude Include="Game\Enemy\BaseEnemy.h" />
     <ClInclude Include="Game\Enemy\Behavior\BaseEnemyBehavior.h" />
     <ClInclude Include="Game\Enemy\Behavior\BaseEnemyMoveBehavior.h" />
