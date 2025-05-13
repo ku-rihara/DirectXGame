@@ -28,9 +28,6 @@
 /// imgui
 #include <imgui.h>
 
-///=========================================================
-/// 　static 変数初期化
-///==========================================================
 float Player::InitY_ = 0.0f;
 
 Player::Player() {}
@@ -115,7 +112,7 @@ void Player::Update() {
 
 // タイトル更新
 void Player::TitleUpdate() {
-    
+
     /// Particle
     ParticleUpdate();
 
@@ -333,8 +330,8 @@ void Player::Fall(float& speed, const float& fallSpeedLimit, const float& gravit
     speed = max(speed - (gravity * Frame::DeltaTimeRate()), -fallSpeedLimit);
 
     // 着地
-    if (transform_.translation_.y <= Player::InitY_) {
-        transform_.translation_.y = Player::InitY_;
+    if (transform_.translation_.y <= playerParams_.startPos_.y) {
+        transform_.translation_.y = playerParams_.startPos_.y;
         speed                     = 0.0f;
     }
 }
@@ -349,7 +346,7 @@ void Player::AdjustParm() {
 
         /// 位置
         ImGui::SeparatorText("Transform");
-        ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
+        ImGui::DragFloat3("Position", &playerParams_.startPos_.x, 0.1f);
 
         /// 　Floatのパラメータ
         ImGui::SeparatorText("FloatParamater");
@@ -364,11 +361,10 @@ void Player::AdjustParm() {
         ImGui::DragFloat("rushEaseMax", &playerParams_.rushEaseMax, 0.01f, 0);
         ImGui::SliderAngle("attackRotate", &playerParams_.attackRotate, 0, 720);
         ImGui::SliderAngle("attackRotateAnit", &playerParams_.attackRotateAnit, -360, 720);
-        ImGui::DragFloat("attackRotateEaseT", &playerParams_.attackRotateEaseT, 0.01f);
-        ImGui::DragFloat("attackFloatEaseT", &playerParams_.attackFloatEaseT, 0.01f);
+       
         ImGui::DragFloat("attackFloatValue", &playerParams_.attackFloatValue, 0.01f);
         ImGui::SeparatorText("Upper");
-        ImGui::DragFloat("BackLashEaseTime", &playerParams_.upperParm.BackLashEaseTime, 0.01f);
+       
         ImGui::DragFloat("BackLashValue", &playerParams_.upperParm.BackLashValue, 0.01f);
         ImGui::DragFloat("jumpPowerU", &playerParams_.upperJump.jumpSpeed, 0.01f);
         ImGui::DragFloat("gravityU", &playerParams_.upperJump.gravity, 0.01f);
@@ -378,6 +374,10 @@ void Player::AdjustParm() {
         ImGui::DragFloat("jumpPowerB", &playerParams_.bountJump.jumpSpeed, 0.01f);
         ImGui::DragFloat("gravityB", &playerParams_.bountJump.gravity, 0.01f);
         ImGui::DragFloat("fallSpeedLimitB", &playerParams_.bountJump.fallSpeedLimit, 0.01f);
+        ImGui::SeparatorText("EasingTime");
+        ImGui::DragFloat("BackLashEaseTime", &playerParams_.upperParm.BackLashEaseTime, 0.01f);
+         ImGui::DragFloat("attackRotateEaseT", &playerParams_.attackRotateEaseT, 0.01f);
+        ImGui::DragFloat("attackFloatEaseT", &playerParams_.attackFloatEaseT, 0.01f);
 
         /// コンボパラメータ
         if (ImGui::CollapsingHeader("NormalCombo")) {
@@ -483,17 +483,13 @@ void Player::AddParmGroup() {
     globalParameter_->AddItem(groupName_, "Translate", playerParams_.startPos_);
     globalParameter_->AddItem(groupName_, "JumpSpeed", playerParams_.normalJump.jumpSpeed);
     globalParameter_->AddItem(groupName_, "rushDistance", playerParams_.rushDistance);
-    globalParameter_->AddItem(groupName_, "rushEaseMax", playerParams_.rushEaseMax);
     globalParameter_->AddItem(groupName_, "UpperPosY", playerParams_.upperPosY);
     globalParameter_->AddItem(groupName_, "MoveSpeed", playerParams_.moveSpeed);
     globalParameter_->AddItem(groupName_, "Gravity", playerParams_.normalJump.gravity);
     globalParameter_->AddItem(groupName_, "FallSpeed", playerParams_.fallSpeed);
     globalParameter_->AddItem(groupName_, "FallSpeedLimit", playerParams_.normalJump.fallSpeedLimit);
     globalParameter_->AddItem(groupName_, "attackRotate", playerParams_.attackRotate);
-    globalParameter_->AddItem(groupName_, "attackRotateEaseT", playerParams_.attackRotateEaseT);
-    globalParameter_->AddItem(groupName_, "attackFloatEaseT_", playerParams_.attackFloatEaseT);
     globalParameter_->AddItem(groupName_, "attackFloatValue_", playerParams_.attackFloatValue);
-    globalParameter_->AddItem(groupName_, "upperBackLashEaseTime_", playerParams_.upperParm.BackLashEaseTime);
     globalParameter_->AddItem(groupName_, "upperBackLashValue_", playerParams_.upperParm.BackLashValue);
     globalParameter_->AddItem(groupName_, "jumpPowerU", playerParams_.upperJump.jumpSpeed);
     globalParameter_->AddItem(groupName_, "gravityU", playerParams_.upperJump.gravity);
@@ -516,6 +512,11 @@ void Player::AddParmGroup() {
         globalParameter_->AddItem(groupName_, "JComboPunchEaseTime" + std::to_string(int(i + 1)), normalComboParms_[i].attackEaseMax);
         globalParameter_->AddItem(groupName_, "JComboPunchReach" + std::to_string(int(i + 1)), normalComboParms_[i].attackReach);
     }
+
+    globalParameter_->AddItem(groupName_, "rushEaseMax", playerParams_.rushEaseMax);
+    globalParameter_->AddItem(groupName_, "upperBackLashEaseTime_", playerParams_.upperParm.BackLashEaseTime);
+    globalParameter_->AddItem(groupName_, "attackRotateEaseT", playerParams_.attackRotateEaseT);
+    globalParameter_->AddItem(groupName_, "attackFloatEaseT_", playerParams_.attackFloatEaseT);
 }
 
 ///=================================================================================
@@ -526,17 +527,13 @@ void Player::SetValues() {
     globalParameter_->SetValue(groupName_, "Translate", playerParams_.startPos_);
     globalParameter_->SetValue(groupName_, "JumpSpeed", playerParams_.normalJump.jumpSpeed);
     globalParameter_->SetValue(groupName_, "rushDistance", playerParams_.rushDistance);
-    globalParameter_->SetValue(groupName_, "rushEaseMax", playerParams_.rushEaseMax);
     globalParameter_->SetValue(groupName_, "UpperPosY", playerParams_.upperPosY);
     globalParameter_->SetValue(groupName_, "MoveSpeed", playerParams_.moveSpeed);
     globalParameter_->SetValue(groupName_, "Gravity", playerParams_.normalJump.gravity);
     globalParameter_->SetValue(groupName_, "FallSpeed", playerParams_.fallSpeed);
     globalParameter_->SetValue(groupName_, "FallSpeedLimit", playerParams_.normalJump.fallSpeedLimit);
     globalParameter_->SetValue(groupName_, "attackRotate", playerParams_.attackRotate);
-    globalParameter_->SetValue(groupName_, "attackRotateEaseT", playerParams_.attackRotateEaseT);
-    globalParameter_->SetValue(groupName_, "attackFloatEaseT_", playerParams_.attackFloatEaseT);
     globalParameter_->SetValue(groupName_, "attackFloatValue_", playerParams_.attackFloatValue);
-    globalParameter_->SetValue(groupName_, "upperBackLashEaseTime_", playerParams_.upperParm.BackLashEaseTime);
     globalParameter_->SetValue(groupName_, "upperBackLashValue_", playerParams_.upperParm.BackLashValue);
     globalParameter_->SetValue(groupName_, "jumpPowerU", playerParams_.upperJump.jumpSpeed);
     globalParameter_->SetValue(groupName_, "gravityU", playerParams_.upperJump.gravity);
@@ -555,10 +552,15 @@ void Player::SetValues() {
 
     /// コンボ持続時間(ジャンプ)
     for (uint32_t i = 0; i < jumpComboParms_.size(); ++i) {
-        globalParameter_->SetValue(groupName_, "JComboPTime" + std::to_string(int(i + 1)), jumpComboParms_[i].waitTime);
-        globalParameter_->SetValue(groupName_, "JComboPunchEaseTime" + std::to_string(int(i + 1)), jumpComboParms_[i].attackEaseMax);
-        globalParameter_->SetValue(groupName_, "JComboPunchReach" + std::to_string(int(i + 1)), jumpComboParms_[i].attackReach);
+        globalParameter_->SetValue(groupName_, "JComboPTime" + std::to_string(int(i + 1)), normalComboParms_[i].waitTime);
+        globalParameter_->SetValue(groupName_, "JComboPunchEaseTime" + std::to_string(int(i + 1)), normalComboParms_[i].attackEaseMax);
+        globalParameter_->SetValue(groupName_, "JComboPunchReach" + std::to_string(int(i + 1)), normalComboParms_[i].attackReach);
     }
+
+    globalParameter_->SetValue(groupName_, "rushEaseMax", playerParams_.rushEaseMax);
+    globalParameter_->SetValue(groupName_, "upperBackLashEaseTime_", playerParams_.upperParm.BackLashEaseTime);
+    globalParameter_->SetValue(groupName_, "attackRotateEaseT", playerParams_.attackRotateEaseT);
+    globalParameter_->SetValue(groupName_, "attackFloatEaseT_", playerParams_.attackFloatEaseT);
 }
 
 ///=====================================================
@@ -743,7 +745,6 @@ void Player::ParticleInit() {
     fallCrack_.reset(ParticleEmitter::CreateParticlePrimitive("Crack", PrimitiveType::Plane, 30));
 
     rushParticle_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("rushParticle", PrimitiveType::Plane, 800));
-   
 }
 
 void Player::DebriParticleEmit() {
@@ -797,7 +798,6 @@ void Player::FallEffectUpdate() {
     // 完了したエフェクトを消す
     effects_.erase(std::remove_if(effects_.begin(), effects_.end(), [](const std::unique_ptr<ImpactEffect>& effect) { return effect->IsFinished(); }), effects_.end());
 }
-
 
 void Player::RushParticleUdate() {
     rushParticle_[0].emitter->SetTargetPosition(GetWorldPosition());

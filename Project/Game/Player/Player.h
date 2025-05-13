@@ -49,6 +49,7 @@ private:
 		float BackLashValue;
 		float BackLashEaseTime;
 	};
+
 	struct JumpParm {
 		float jumpSpeed;
 		float gravity;
@@ -57,15 +58,14 @@ private:
 
 	struct ComboParm {
         float waitTime;
-        float attackEaseMax;
         float attackReach;
+        float attackEaseMax;
     };
 
 	///Paramater構造体
 	struct PlayerParams {
 		Vector3 startPos_;
 		float rushDistance;
-		float rushEaseMax;
 		float upperPosY;
 		UpperParm upperParm;
 		JumpParm normalJump;
@@ -75,8 +75,9 @@ private:
 		float fallSpeed;
 		float attackRotate;
 		float attackRotateAnit;
-		float attackRotateEaseT;
 		float attackFloatValue;
+        float rushEaseMax;
+        float attackRotateEaseT;
 		float attackFloatEaseT;
 	};
 
@@ -123,7 +124,7 @@ private:
 	float   objectiveAngle_;                     /// 目標角度
 	Vector3 direction_;                          /// 速度
 	Vector3 prePos_;                             /// 移動前座標
-
+ 
 	///* コンボパラメータ
 	std::array<ComboParm, 4>normalComboParms_;
 	std::array<ComboParm, 2>jumpComboParms_;

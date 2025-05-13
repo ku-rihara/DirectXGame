@@ -75,7 +75,7 @@ void FallAttack::Update() {
 
 		/// プレイヤーが落ちる
 		pPlayer_->SetWorldPositionY(
-			EaseInSine(playerInitPosY_, Player::InitY_, fallEaseT_, pPlayer_->GetJumpComboParm(Player::ComboNum::FIRST).attackEaseMax)
+            EaseInSine(playerInitPosY_, pPlayer_->GetParamater().startPos_.y, fallEaseT_, pPlayer_->GetJumpComboParm(Player::ComboNum::FIRST).attackEaseMax)
 			);
 
 		/// 着地の瞬間
@@ -84,7 +84,7 @@ void FallAttack::Update() {
 		pPlayer_->SetRotation(initRotate_);
 		pPlayer_->GetLeftHand()->SetWorldPositionY(fallInitPosLHand_);
 		pPlayer_->GetRightHand()->SetWorldPositionY(fallInitPosRHand_);
-		pPlayer_->SetWorldPositionY(Player::InitY_);
+		pPlayer_->SetWorldPositionY(pPlayer_->GetParamater().startPos_.y);
 		pPlayer_->DebriParticleEmit();
 		pPlayer_->FallEffectInit(pPlayer_->GetWorldPosition());
 		pPlayer_->GetGameCamera()->ChangeShakeMode();
@@ -131,7 +131,7 @@ void FallAttack::Update() {
 		///---------------------------------------------------------
 	case STEP::WAIT:
 		
-		pPlayer_->SetWorldPositionY(Player::InitY_);
+		pPlayer_->SetWorldPositionY(pPlayer_->GetParamater().startPos_.y);
 		collisionBox_->IsAdapt(false);
 		waitTime_ += Frame::DeltaTime();
 		
