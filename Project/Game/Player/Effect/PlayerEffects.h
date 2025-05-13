@@ -3,11 +3,12 @@
 #include "3d/ViewProjection.h"
 
 /// utility
+#include "Effect/ImpactEffect.h"
 #include "utility/ParticleEditor/ParticleEmitter.h"
-#include"Effect/ImpactEffect.h"
 
 /// std
 #include <array>
+#include <cstdint>
 #include <memory>
 #include <string>
 
@@ -22,13 +23,16 @@ private:
     /// ===================================================
     /// private variaus
     /// ===================================================
-     
+
     std::unique_ptr<ParticleEmitter> fallCrack_;
     std::array<ParticleEffect, 1> debriParticle_;
     std::array<ParticleEffect, 1> rushParticle_;
     std::array<ParticleEffect, 3> starEffect_;
 
-      std::list<std::unique_ptr<ImpactEffect>> effects_; /// エフェクト
+    std::list<std::unique_ptr<ImpactEffect>> effects_; /// エフェクト
+
+    int32_t starSound_;
+
 public:
     PlayerEffects();
 
@@ -41,7 +45,6 @@ public:
     void Update();
     void Draw(const ViewProjection& viewProjection);
 
-  
     void FallEffectInit(const Vector3& pos);
 
     void DebriParticleEmit();

@@ -1,5 +1,5 @@
 #include "PlayerEffects.h"
-
+#include"audio/Audio.h"
 
 PlayerEffects::PlayerEffects() {}
 
@@ -7,6 +7,8 @@ PlayerEffects::PlayerEffects() {}
 /// 　初期化
 ///==========================================================
 void PlayerEffects::Init(const Vector3& position) {
+
+     starSound_ = Audio::GetInstance()->LoadWave("Resources/starEffect.wav");
   
     // debri
     debriParticle_[0].emitter.reset(ParticleEmitter::CreateParticle("DebriParticle", "debri", ".obj", 100));
@@ -59,7 +61,7 @@ void PlayerEffects::StartEffectEmit() {
     for (uint32_t i = 0; i < starEffect_.size(); i++) {
         starEffect_[i].emitter->Emit();
     }
-    /*  Audio::GetInstance()->PlayWave(starSound_, 0.5f);*/
+      Audio::GetInstance()->PlayWave(starSound_, 0.5f);
 }
 
 void PlayerEffects::FallEffectInit(const Vector3& pos) {

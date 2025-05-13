@@ -80,7 +80,6 @@ void Player::Init() {
     punchSoundID_ = Audio::GetInstance()->LoadWave("Resources/punchAir.wav");
     strongPunch_  = Audio::GetInstance()->LoadWave("Resources/StrongPunch.wav");
     fallSound_    = Audio::GetInstance()->LoadWave("Resources/PlayerFall.wav");
-    starSound_    = Audio::GetInstance()->LoadWave("Resources/starEffect.wav");
 
     /// 通常モードから
     ChangeBehavior(std::make_unique<PlayerMove>(this));
