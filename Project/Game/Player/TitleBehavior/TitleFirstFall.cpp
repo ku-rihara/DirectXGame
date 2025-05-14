@@ -76,8 +76,7 @@ void TitleFirstFall::Update() {
 		pPlayer_->GetLeftHand()->SetWorldPositionY(fallInitPosLHand_);
 		pPlayer_->GetRightHand()->SetWorldPositionY(fallInitPosRHand_);
         pPlayer_->SetWorldPositionY(pPlayer_->GetParamater().startPos_.y);
-		pPlayer_->DebriParticleEmit();
-		pPlayer_->FallEffectInit(pPlayer_->GetWorldPosition());
+        pPlayer_->GetEffects()->FallEffectRenditionInit(pPlayer_->GetWorldPosition());
 		step_ = STEP::LANDING;
 
 		break;

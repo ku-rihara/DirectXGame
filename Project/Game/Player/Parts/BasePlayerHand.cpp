@@ -44,9 +44,7 @@ void BasePlayerHand::Update() {
 ///==========================================================
 void BasePlayerHand::Draw(const ViewProjection& viewProjection) {
 	BaseObject::Draw(viewProjection);
-	
 }
-
 
 ///=================================================================================
 /// ロード

@@ -42,23 +42,15 @@ public:
 
     ///* 初期化、更新、描画
     void Init(const Vector3& position);
-    void Update();
+    void Update(const Vector3& position);
     void Draw(const ViewProjection& viewProjection);
 
-    void FallEffectInit(const Vector3& pos);
-
-    void DebriParticleEmit();
-    void FallEffectUpdate();
-    void StartEffectEmit();
-    void ParticleUpdate(const Vector3& position);
-    void RushParticleUdate(const Vector3& position);
+    void SpecialAttackRenditionInit();
+    void FallEffectRenditionInit(const Vector3& pos);
+    void RushAttackEmit();
 
     /// ====================================================================
     /// Editor
-    /// ====================================================================
-
-    /// ====================================================================
-    /// Collision
     /// ====================================================================
 
     /// =========================================================================================

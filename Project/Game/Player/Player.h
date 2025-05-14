@@ -5,6 +5,7 @@
 //object
 #include"BaseObject/BaseObject.h"
 #include"Effect/ImpactEffect.h"
+#include"Effect/PlayerEffects.h"
 
 /// Parts
 #include"Parts/PlayerHandLeft.h"
@@ -96,21 +97,17 @@ private:
 	std::unique_ptr<BaseTitleBehavior>titleBehavior_ = nullptr;
 
 	/// Particle
-	uint32_t cirlceTexture_;
-	std::unique_ptr<ParticleEmitter>fallCrack_;
-	std::array<ParticleEffect, 1> debriParticle_;
-    std::array<ParticleEffect, 1> rushParticle_;
-	std::array<ParticleEffect, 3> starEffect_;
+    std::unique_ptr<PlayerEffects> effects_;
    
 
 	/// other class
-	LockOn* pLockOn_;           /// LockOnクラス
-	GameCamera* pGameCamera_;   /// ゲームカメラポインタ
+	LockOn* pLockOn_;                                  /// LockOnクラス
+	GameCamera* pGameCamera_;                          /// ゲームカメラポインタ
 	std::unique_ptr<PlayerHandLeft>    leftHand_;      /// 左手
 	std::unique_ptr<PlayerHandRight>   rightHand_;     /// 右手
 	std::unique_ptr<Object3d>          headObj_;       /// 頭
 	WorldTransform                     headTransform_; /// 頭トランスフォーム
-    std::list<std::unique_ptr<ImpactEffect>> effects_; /// エフェクト
+   /* std::list<std::unique_ptr<ImpactEffect>> effects_; /// エフェクト*/
 
 
 private:
@@ -119,9 +116,9 @@ private:
 	/// ===================================================
 
 	/// move
-	float   objectiveAngle_;                     /// 目標角度
-	Vector3 direction_;                          /// 速度
-	Vector3 prePos_;                             /// 移動前座標
+	float   objectiveAngle_;    /// 目標角度
+	Vector3 direction_;         /// 速度
+	Vector3 prePos_;            /// 移動前座標
  
 	///* コンボパラメータ
 	std::array<ComboParm, 4>normalComboParms_;
@@ -173,15 +170,6 @@ public:
 	void ChangeTitleBehavior(std::unique_ptr<BaseTitleBehavior>behavior);
 	void ChangeCombBoRoot();
 
-	//* エフェクト
-    void ParticleInit();
-    void FallEffectInit(const Vector3& pos);
-
-	void DebriParticleEmit();
-	void FallEffectUpdate();
-	void StartEffectEmit();
-	void ParticleUpdate();
-    void RushParticleUdate();
 
 	///* 向き
 	void FaceToTarget();
@@ -214,11 +202,12 @@ public:
 	/// =========================================================================================
 	PlayerHandLeft*     GetLeftHand()        const { return leftHand_.get(); }
 	PlayerHandRight*    GetRightHand()       const { return rightHand_.get(); }
+    BasePlayerBehavior* GetBehavior()        const { return behavior_.get(); }
+    BaseTitleBehavior*  GetTitleBehavior()   const { return titleBehavior_.get(); }
+    PlayerEffects*      GetEffects()   const { return effects_.get(); } 
 	LockOn*             GetLockOn()          const { return pLockOn_; }
 	GameCamera*         GetGameCamera()      const { return pGameCamera_; }
-	PlayerParams           GetParamater()    const { return playerParams_; }
-	BasePlayerBehavior* GetBehavior()        const { return behavior_.get(); }
-	BaseTitleBehavior*  GetTitleBehavior()   const { return titleBehavior_.get(); }
+	PlayerParams        GetParamater()       const { return playerParams_; }
 	/// =========================================================================================
 	/// setter
 	/// =========================================================================================

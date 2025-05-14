@@ -40,7 +40,8 @@ void Player::Init() {
     BaseObject::CreateModel("Player", ".obj"); /// モデルセット
 
     //* particle
-    ParticleInit();
+    effects_ = std::make_unique<PlayerEffects>();
+    effects_->Init(GetWorldPosition());
 
     ///* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
@@ -96,14 +97,13 @@ void Player::Update() {
     }
 
     /// Particle
-    ParticleUpdate();
-
+    effects_->Update(GetWorldPosition());
+   
     // ライト位置セット
     SetLightPos();
 
     comboBehavior_->Update(); /// 　コンボ攻撃攻撃
     MoveToLimit(); /// 　移動制限
-    FallEffectUpdate();
 
     UpdateMatrix();
 }
@@ -112,10 +112,8 @@ void Player::Update() {
 void Player::TitleUpdate() {
 
     /// Particle
-    ParticleUpdate();
+    effects_->Update(GetWorldPosition());
 
-    // エフェクト
-    FallEffectUpdate();
 
     // ライト位置セット
     SetLightPos();
@@ -136,14 +134,7 @@ void Player::Draw(const ViewProjection& viewProjection) {
 }
 
 void Player::EffectDraw(const ViewProjection& viewProjection) {
-    // 各エフェクトを更新
-    effects_.reverse();
-    for (std::unique_ptr<ImpactEffect>& effect : effects_) {
-        if (effect) {
-            effect->Draw(viewProjection);
-        }
-    }
-    effects_.reverse();
+    effects_->Draw(viewProjection);
 }
 
 ///=========================================================
@@ -721,88 +712,6 @@ void Player::HeadLightSetting() {
     }
 }
 
-///===================================================================================================================
-/// 　Particle And Effect
-///==================================================================================================================
-
-void Player::ParticleInit() {
-
-    // debri
-    debriParticle_[0].emitter.reset(ParticleEmitter::CreateParticle("DebriParticle", "debri", ".obj", 100));
-
-    // star
-    starEffect_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarCenterLight", PrimitiveType::Plane, 30));
-    starEffect_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarEffect", PrimitiveType::Plane, 30));
-    starEffect_[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarFrame", PrimitiveType::Plane, 30));
-
-    for (uint32_t i = 0; i < starEffect_.size(); i++) {
-        starEffect_[i].emitter->SetFollowingPos(&transform_.translation_);
-    }
-
-    // crack
-    fallCrack_.reset(ParticleEmitter::CreateParticlePrimitive("Crack", PrimitiveType::Plane, 30));
-
-    rushParticle_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("rushParticle", PrimitiveType::Plane, 800));
-}
-
-void Player::DebriParticleEmit() {
-    // ガレキパーティクル
-    for (uint32_t i = 0; i < debriParticle_.size(); i++) {
-        debriParticle_[i].emitter->Emit();
-    }
-    fallCrack_->Emit();
-}
-
-void Player::StartEffectEmit() {
-    // 星パーティクル
-    for (uint32_t i = 0; i < starEffect_.size(); i++) {
-        starEffect_[i].emitter->Emit();
-    }
-    Audio::GetInstance()->PlayWave(starSound_, 0.5f);
-}
-
-void Player::FallEffectInit(const Vector3& pos) {
-    std::unique_ptr<ImpactEffect> effect = std::make_unique<ImpactEffect>();
-
-    effect->Init(pos);
-    effects_.push_back(std::move(effect));
-}
-
-void Player::ParticleUpdate() {
-    // ガレキパーティクル
-    for (uint32_t i = 0; i < debriParticle_.size(); i++) {
-        debriParticle_[i].emitter->SetTargetPosition(GetWorldPosition());
-        debriParticle_[i].emitter->Update();
-        debriParticle_[i].emitter->EditorUpdate();
-    }
-
-    // 星パーティクル
-    for (uint32_t i = 0; i < starEffect_.size(); i++) {
-        starEffect_[i].emitter->Update();
-    }
-
-    fallCrack_->SetTargetPosition(Vector3(GetWorldPosition().x, 0.0f, GetWorldPosition().z));
-    fallCrack_->Update();
-}
-
-void Player::FallEffectUpdate() {
-    // 各エフェクトを更新
-    for (std::unique_ptr<ImpactEffect>& effect : effects_) {
-        if (effect) {
-            effect->Update();
-        }
-    }
-
-    // 完了したエフェクトを消す
-    effects_.erase(std::remove_if(effects_.begin(), effects_.end(), [](const std::unique_ptr<ImpactEffect>& effect) { return effect->IsFinished(); }), effects_.end());
-}
-
-void Player::RushParticleUdate() {
-    rushParticle_[0].emitter->SetTargetPosition(GetWorldPosition());
-    rushParticle_[0].emitter->Update();
-    rushParticle_[0].emitter->EditorUpdate();
-    rushParticle_[0].emitter->Emit();
-}
 
 
 void Player::SoundPunch() {

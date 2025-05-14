@@ -171,7 +171,7 @@ void RoringUpper::RailInit() {
 void RoringUpper::HitStopUpdate() {
 	//デルタタイムスケール小さく
 	if (collisionBox_->GetIsHitStop() && !isHitStop_) {
-		pPlayer_->StartEffectEmit();
+		pPlayer_->GetEffects()->SpecialAttackRenditionInit();
 		isHitStop_ = true;
 	}
 

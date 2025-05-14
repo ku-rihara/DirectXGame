@@ -85,8 +85,9 @@ void FallAttack::Update() {
 		pPlayer_->GetLeftHand()->SetWorldPositionY(fallInitPosLHand_);
 		pPlayer_->GetRightHand()->SetWorldPositionY(fallInitPosRHand_);
 		pPlayer_->SetWorldPositionY(pPlayer_->GetParamater().startPos_.y);
-		pPlayer_->DebriParticleEmit();
-		pPlayer_->FallEffectInit(pPlayer_->GetWorldPosition());
+
+		pPlayer_->GetEffects()->FallEffectRenditionInit(pPlayer_->GetWorldPosition());
+
 		pPlayer_->GetGameCamera()->ChangeShakeMode();
 		pPlayer_->FallSound();
 		step_ = STEP::LANDING;

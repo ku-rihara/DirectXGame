@@ -56,7 +56,7 @@ void RushAttack::Update() {
 		///---------------------------------------------------------
 		/// 着地
 		///---------------------------------------------------------
-        pPlayer_->RushParticleUdate();
+        pPlayer_->GetEffects()->RushAttackEmit();
 
 		handMoveEasing_.time += Frame::DeltaTimeRate();
 		rushEaseTime_ += Frame::DeltaTimeRate();
