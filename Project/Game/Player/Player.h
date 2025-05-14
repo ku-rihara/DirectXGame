@@ -27,9 +27,7 @@
 #include <memory>
 #include<string>
 
-/// <summary>
-/// プレイヤークラス
-/// </summary>
+
 class LockOn;
 class GameCamera;
 class Player : public BaseObject, public AABBCollider {
@@ -100,7 +98,7 @@ private:
 	/// Particle
 	uint32_t cirlceTexture_;
 	std::unique_ptr<ParticleEmitter>fallCrack_;
-	std::array<ParticleEffect,1> debriParticle_;
+	std::array<ParticleEffect, 1> debriParticle_;
     std::array<ParticleEffect, 1> rushParticle_;
 	std::array<ParticleEffect, 3> starEffect_;
    
@@ -143,7 +141,6 @@ private:
 	PlayerParams playerParams_;
 
 public:
-	static float InitY_;
 	Player();
 
 	/// ===================================================
@@ -163,6 +160,8 @@ public:
 	void    MoveToLimit();             /// 移動制限
 	Vector3 GetInputDirecton();        /// 入力による速度
 	void    UpdateMatrix();            ///　行列更新
+
+	void PositionYReset();
 
 	//* ジャンプ                             
 	void Jump(float& speed, const float& fallSpeedLimit, const float& gravity);                              /// ジャンプ

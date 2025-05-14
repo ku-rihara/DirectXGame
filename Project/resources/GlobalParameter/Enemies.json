@@ -24,6 +24,16 @@
         "hitbackRotateTime2": 0.5400000214576721,
         "hitbackRotateValue1": 0.5934119820594788,
         "hitbackRotateValue2": 0.6632251143455505,
+        "initScale1": [
+            1.399999976158142,
+            1.399999976158142,
+            1.399999976158142
+        ],
+        "initScale2": [
+            1.399999976158142,
+            1.399999976158142,
+            1.399999976158142
+        ],
         "thrustRotateSpeed1": 43.560001373291016,
         "thrustRotateSpeed2": 20.0,
         "upperFallSpeedLimit1": 1.2000000476837158,

@@ -122,7 +122,7 @@ void FallAttack::Update() {
 		pPlayer_->Jump(boundSpeed_, boundFallSpeedLimit_, gravity_);
 
 	// 次の振る舞い
-		if (pPlayer_->GetTransform().translation_.y > pPlayer_->InitY_) break;
+		if (pPlayer_->GetTransform().translation_.y > pPlayer_->GetParamater().startPos_.y) break;
 		pPlayer_->SetRotation(initRotate_);
 		step_ = STEP::WAIT;
 		break;

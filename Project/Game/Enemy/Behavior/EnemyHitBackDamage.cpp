@@ -27,7 +27,7 @@ EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
 	///
 	pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2(0, 0));
 	pBaseEnemy_->GetFindSprite()->SetScale(Vector2(1, 1));
-	pBaseEnemy_->SetScale(BaseEnemy::InitScale_);
+    pBaseEnemy_->SetScale(pBaseEnemy_->GetParamater().initScale_);
 
 	/// hitbackMove
 	archingbackEase_.time = 0.0f;

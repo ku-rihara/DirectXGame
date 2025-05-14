@@ -28,8 +28,6 @@
 /// imgui
 #include <imgui.h>
 
-float Player::InitY_ = 0.0f;
-
 Player::Player() {}
 
 ///=========================================================
@@ -806,9 +804,7 @@ void Player::RushParticleUdate() {
     rushParticle_[0].emitter->Emit();
 }
 
-/// <summary>
-/// Sound
-/// </summary>
+
 void Player::SoundPunch() {
     Audio::GetInstance()->PlayWave(punchSoundID_, 0.5f);
 }
@@ -817,4 +813,8 @@ void Player::SoundStrongPunch() {
 }
 void Player::FallSound() {
     Audio::GetInstance()->PlayWave(fallSound_, 0.2f);
+}
+
+void Player::PositionYReset() {
+    transform_.translation_.y = playerParams_.startPos_.y;
 }

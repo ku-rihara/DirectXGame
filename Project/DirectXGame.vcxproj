@@ -83,7 +83,7 @@
     <ClCompile Include="Game\Enemy\Behavior\EnemyDamageRoot.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyDeath.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyHitBackDamage.cpp" />
-    <ClCompile Include="Game\Enemy\Behavior\EnemyRoot.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\EnemyWait.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemySpawn.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyStopDamage.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\EnemyThrustDamage.cpp" />
@@ -233,7 +233,7 @@
     <ClInclude Include="Game\Enemy\Behavior\EnemyDamageRoot.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyDeath.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyHitBackDamage.h" />
-    <ClInclude Include="Game\Enemy\Behavior\EnemyRoot.h" />
+    <ClInclude Include="Game\Enemy\Behavior\EnemyWait.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemySpawn.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyStopDamage.h" />
     <ClInclude Include="Game\Enemy\Behavior\EnemyThrustDamage.h" />

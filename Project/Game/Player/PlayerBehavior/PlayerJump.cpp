@@ -30,7 +30,7 @@ void PlayerJump::Update() {
 	pPlayer_->Move(pPlayer_->GetParamater().moveSpeed);
 	pPlayer_->Jump(speed_,pPlayer_->GetParamater().normalJump.fallSpeedLimit,pPlayer_->GetParamater().normalJump.gravity);
 	
-	if (pPlayer_->GetTransform().translation_.y > Player::InitY_) return;
+	if (pPlayer_->GetTransform().translation_.y > pPlayer_->GetParamater().startPos_.y) return;
 	pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
 
 }

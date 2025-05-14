@@ -7,7 +7,7 @@ class EnemySpawn : public BaseEnemyMoveBehavior {
 private:
 	enum class Step {
 		SPAWN,
-		ROOT,
+		ChangeNextBehavior,
 	};
 private:
 	Step step_;

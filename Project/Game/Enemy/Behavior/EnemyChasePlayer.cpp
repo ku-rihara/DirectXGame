@@ -1,7 +1,7 @@
 
 /// behavior
 #include "EnemyChasePlayer.h"
-#include "EnemyRoot.h"
+#include "EnemyWait.h"
 
 /// math
 #include "MathFunction.h"
@@ -42,13 +42,15 @@ EnemyChasePlayer::~EnemyChasePlayer() {
 
 void EnemyChasePlayer::Update() {
 
+    // Sherching Sprite Easing
     spriteEase_.time += Frame::DeltaTime();
     spriteEase_.time = std::min(spriteEase_.time, spriteEase_.maxTime);
-    pBaseEnemy_->GetFindSprite()->SetScale(EaseOutBack(Vector2(0, 0), Vector2(1, 1), spriteEase_.time, spriteEase_.maxTime));
+    pBaseEnemy_->GetFindSprite()->SetScale(EaseOutBack(Vector2::ZeroVector(), Vector2::UnitVector(), spriteEase_.time, spriteEase_.maxTime));
 
+    // Enemy AmplitudeScaling
     scaleEase_.time += Frame::DeltaTime();
     scaleEase_.time = std::min(scaleEase_.time, scaleEase_.maxTime);
-    pBaseEnemy_->SetScale(EaseAmplitudeScale(BaseEnemy::InitScale_, scaleEase_.time, scaleEase_.maxTime, scaleEase_.amplitude, scaleEase_.period));
+    pBaseEnemy_->SetScale(EaseAmplitudeScale(pBaseEnemy_->GetParamater().initScale_, scaleEase_.time, scaleEase_.maxTime, scaleEase_.amplitude, scaleEase_.period));
 
     // ターゲットへのベクトル
     Vector3 direction = pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());
@@ -58,7 +60,7 @@ void EnemyChasePlayer::Update() {
 
     // 　一定距離で見失う
     if (distance_ > pBaseEnemy_->GetParamater().chaseDistance) {
-        pBaseEnemy_->ChangeMoveBehavior(std::make_unique<EnemyRoot>(pBaseEnemy_));
+        pBaseEnemy_->ChangeMoveBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
         return;
     }
 

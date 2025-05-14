@@ -104,10 +104,11 @@ void RoringUpper::Update() {
 		AnimationMove();
 
 		// 終了時の処理
-		if (pPlayer_->GetTransform().translation_.y >pPlayer_->InitY_) break;
+        if (pPlayer_->GetTransform().translation_.y > pPlayer_->GetParamater().startPos_.y)
+            break;
 		
 		Frame::SetTimeScale(1.0f);
-		pPlayer_->SetWorldPositionY(pPlayer_->InitY_);
+        pPlayer_->PositionYReset();
 		railManager_->SetRailMoveTime(0.0f);
 		pPlayer_->GetRightHand()->RailThreeComboUpdate(0.0f);
 

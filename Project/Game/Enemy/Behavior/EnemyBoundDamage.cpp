@@ -19,9 +19,9 @@ EnemyBoundDamage::EnemyBoundDamage(BaseEnemy* boss)
 	fallSpeedLimit_ = 5.2f * kFrame_;
 
 	pBaseEnemy_->DamageRenditionInit();
-	pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2(0, 0));
-	pBaseEnemy_->GetFindSprite()->SetScale(Vector2(1, 1));
-	pBaseEnemy_->SetScale(BaseEnemy::InitScale_);
+	pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2::ZeroVector());
+	pBaseEnemy_->GetFindSprite()->SetScale(Vector2::UnitVector());
+    pBaseEnemy_->ScaleReset();
 	pBaseEnemy_->ThrustRenditionInit();
 	step_ = Step::BOUND; /// ステップ初期化
 }

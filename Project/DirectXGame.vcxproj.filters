@@ -442,7 +442,7 @@
     <ClCompile Include="math\Quaternion.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyRoot.cpp">
+    <ClCompile Include="Game\Enemy\Behavior\EnemyWait.cpp">
       <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\EnemyChasePlayer.cpp">
@@ -900,7 +900,7 @@
     <ClInclude Include="math\Quaternion.h">
       <Filter>liberary\.h</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyRoot.h">
+    <ClInclude Include="Game\Enemy\Behavior\EnemyWait.h">
       <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\EnemyChasePlayer.h">

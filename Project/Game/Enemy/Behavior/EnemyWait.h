@@ -3,7 +3,7 @@
 #include"BaseEnemyMoveBehavior.h"
 #include"Easing.h"
 
-class EnemyRoot : public BaseEnemyMoveBehavior {
+class EnemyWait : public BaseEnemyMoveBehavior {
 private:
 	
 
@@ -15,8 +15,8 @@ private:
 
 public:
 	//コンストラクタ
-	EnemyRoot(BaseEnemy* boss);
-	~EnemyRoot();
+	EnemyWait(BaseEnemy* boss);
+	~EnemyWait();
 
 
 	void Update()override;

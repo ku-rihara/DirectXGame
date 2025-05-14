@@ -38,28 +38,28 @@ private:
 	std::unique_ptr<BaseGameCameraBehavior>behavior_;
 	std::unique_ptr<BaseShakeState>shakeState_;
 	
-	const   WorldTransform* target_ = nullptr;                 /// 追従対象
-	Vector3 stickInput_;                                       /// スティック入力ベクトル
-	Vector3 interTarget_ = {};                                 /// 
-	float   destinationAngleY_;                                /// Y軸回転
-	int     viewMoveTime_;                                     /// カメラ移動時間
-
-	Vector3 shakePos_;
-	float   rotate_;                                           /// 回転
-
-	Paramater paramater_;
-	
-	Vector3 offset_;                                           /// オフセット
+	const   WorldTransform* target_ = nullptr; /// 追従対象
+	Vector3 stickInput_;                       /// スティック入力ベクトル
+	Vector3 interTarget_ = {};                 /// 
+	float   destinationAngleY_;                /// Y軸回転
+	int     viewMoveTime_;                     /// カメラ移動時間
+											   
+	Vector3 shakePos_;						   
+	float   rotate_;                           /// 回転
+											   
+	Paramater paramater_;					   
+											   
+	Vector3 offset_;                           /// オフセット
 
 public:
 	/// ===================================================
 	/// public method
 	/// ===================================================
-	void Init();                                              /// 初期化
-	void Update();                                            /// 更新
-	void MoveUpdate();                                        /// カメラ移動更新
-	void Reset();                                             /// リセット
-	void GetIsCameraMove();                                   /// カメラ動いているか
+	void Init();              /// 初期化
+	void Update();            /// 更新
+	void MoveUpdate();        /// カメラ移動更新
+	void Reset();             /// リセット
+	void GetIsCameraMove();   /// カメラ動いているか判定
 
 	void Debug();
 

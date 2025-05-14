@@ -1,6 +1,6 @@
 
 /// behavior
-#include"EnemyRoot.h"
+#include"EnemyWait.h"
 #include"EnemySpawn.h"
 
 /// math
@@ -29,22 +29,35 @@ EnemySpawn::~EnemySpawn() {
 void EnemySpawn::Update() {
 	switch (step_)
 	{
+		///------------------------------------------------------------------
+		/// 敵の生成アニメーション
+		///------------------------------------------------------------------
 	case EnemySpawn::Step::SPAWN:
 
+		// time 加算
 		spawnEasing_.time += Frame::DeltaTime();
 
+		// イージング適応
 		pBaseEnemy_->SetScale(
-			EaseOutBack(Vector3::ZeroVector(), BaseEnemy::InitScale_,
+            EaseOutBack(Vector3::ZeroVector(), pBaseEnemy_->GetParamater().initScale_,
 				spawnEasing_.time, spawnEasing_.maxTime)
 		);
 
-		if (spawnEasing_.time < spawnEasing_.maxTime)break;
+		// timeがmaxになるまで早期リターン
+        if (spawnEasing_.time < spawnEasing_.maxTime) {
+            break;
+        }
+
+        // 終了処理
 		spawnEasing_.time = spawnEasing_.maxTime;
-		step_ = Step::ROOT;
+		step_ = Step::ChangeNextBehavior; // 次のステップ
 
 		break;
-	case EnemySpawn::Step::ROOT:
-		pBaseEnemy_->ChangeMoveBehavior(std::make_unique<EnemyRoot>(pBaseEnemy_));
+        ///------------------------------------------------------------------
+        ///  移動Behaviorに切り替え
+        ///------------------------------------------------------------------
+	case EnemySpawn::Step::ChangeNextBehavior:
+		pBaseEnemy_->ChangeMoveBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
 		break;
 	default:
 		break;

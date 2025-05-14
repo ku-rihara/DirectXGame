@@ -27,6 +27,7 @@ public:
     };
 
 	struct Paramater {
+        Vector3 initScale_;
 		float chaseDistance;
 		float chaseSpeed;
 		float basePosY;
@@ -83,7 +84,7 @@ protected:
 	std::list<std::unique_ptr<ImpactEffect>> effects_;
 
 public:
-	static Vector3 InitScale_;
+	/*static Vector3 InitScale_;*/
 public:
 	BaseEnemy();
 
@@ -101,6 +102,7 @@ public:
 	void DamageRenditionInit();
 	void ThrustRenditionInit();
 	void DeathRenditionInit();
+    void ScaleReset();
     void FallEffectInit(const Vector3& pos);
     void RotateInit();
 	// I

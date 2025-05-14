@@ -1,6 +1,6 @@
 
 /// behavior
-#include"EnemyRoot.h"
+#include"EnemyWait.h"
 #include"EnemyChasePlayer.h"
 
 /// math
@@ -16,8 +16,8 @@
 #include<cmath> 
 
 //初期化
-EnemyRoot::EnemyRoot(BaseEnemy* boss)
-	: BaseEnemyMoveBehavior("EnemyRoot", boss) {
+EnemyWait::EnemyWait(BaseEnemy* boss)
+	: BaseEnemyMoveBehavior("EnemyWait", boss) {
 	
 
 	//パラメータ初期化
@@ -29,11 +29,11 @@ EnemyRoot::EnemyRoot(BaseEnemy* boss)
 	isChase_ = true;//	デバッグ用
 }
 
-EnemyRoot::~EnemyRoot() {
+EnemyWait::~EnemyWait() {
 
 }
 
-void EnemyRoot::Update() {
+void EnemyWait::Update() {
 
 	spriteEase_.time += Frame::DeltaTime();
 	spriteEase_.time = std::min(spriteEase_.time, spriteEase_.maxTime);
@@ -63,7 +63,7 @@ void EnemyRoot::Update() {
 
 }
 
-void EnemyRoot::Debug() {
+void EnemyWait::Debug() {
 	
 		
 }

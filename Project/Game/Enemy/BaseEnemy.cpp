@@ -24,7 +24,7 @@
 ///　static 変数初期化
 ///==========================================================
 
-Vector3 BaseEnemy::InitScale_ = Vector3::UnitVector() * 1.4f;
+//Vector3 BaseEnemy::InitScale_ = Vector3::UnitVector() * 1.4f;
 
 BaseEnemy::BaseEnemy() {
 
@@ -372,8 +372,8 @@ void BaseEnemy::Fall(float& speed, const float& fallSpeedLimit, const float& gra
 	speed = max(speed - (gravity * Frame::DeltaTimeRate()), -fallSpeedLimit);
 
 	// 着地
-	if (transform_.translation_.y <= Player::InitY_) {
-		transform_.translation_.y = Player::InitY_;
+	if (transform_.translation_.y <= paramater_.basePosY) {
+        transform_.translation_.y = paramater_.basePosY;
 		speed = 0.0f;
 		
 	}
@@ -403,4 +403,6 @@ void BaseEnemy::RotateInit() {
 	bodyTransform_.rotation_ = { 0.0f,0.0f,0.0f };
 }
 
-
+void BaseEnemy::ScaleReset() {
+    transform_.scale_ = paramater_.initScale_;
+}
