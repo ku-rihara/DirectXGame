@@ -38,12 +38,12 @@ RoringUpper::RoringUpper(Player* player)
 	RailInit();
 
 	//backlash
-	backlashPos_ = initPos_ + (forwardDirection_*-pPlayer_->GetParamater().upperParm.BackLashValue);
-	backlashEase_.maxTime = pPlayer_->GetParamater().upperParm.BackLashEaseTime;
+	backlashPos_ = initPos_ + (forwardDirection_*-pPlayerParameter_->GetParamaters().upperParm.BackLashValue);
+	backlashEase_.maxTime = pPlayerParameter_->GetParamaters().upperParm.BackLashEaseTime;
 
-	jumpPower_ = pPlayer_->GetParamater().upperJump.jumpSpeed * 60.0f;//1.4
-	gravity_ = pPlayer_->GetParamater().upperJump.gravity * 60.0f;//8.8
-	fallSpeedLimit_ = pPlayer_->GetParamater().upperJump.fallSpeedLimit * 60.0f;//5.2
+	jumpPower_ = pPlayerParameter_->GetParamaters().upperJump.jumpSpeed * 60.0f;//1.4
+	gravity_ = pPlayerParameter_->GetParamaters().upperJump.gravity * 60.0f;//8.8
+	fallSpeedLimit_ = pPlayerParameter_->GetParamaters().upperJump.fallSpeedLimit * 60.0f;//5.2
 
 	//　モーション
 	BaseComboAattackBehavior::AnimationInit();
@@ -70,7 +70,7 @@ void RoringUpper::Update() {
 
 	BaseComboAattackBehavior::ScalingEaseUpdate();
 	// 向き変更
-	pPlayer_->Move(pPlayer_->GetParamater().moveSpeed);
+	pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
 
 	// ヒットストップ
 	HitStopUpdate();
@@ -104,7 +104,7 @@ void RoringUpper::Update() {
 		AnimationMove();
 
 		// 終了時の処理
-        if (pPlayer_->GetTransform().translation_.y > pPlayer_->GetParamater().startPos_.y)
+        if (pPlayer_->GetTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y)
             break;
 		
 		Frame::SetTimeScale(1.0f);
@@ -124,7 +124,7 @@ void RoringUpper::Update() {
 		waitTine_ += Frame::DeltaTime();
 
 		/// コンボ途切れ
-		if (waitTine_ >= pPlayer_->GetNormalComboParm(Player::ComboNum::THIRD).waitTime) {
+		if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(Player::ComboNum::THIRD).waitTime) {
 			
 			order_ = Order::END;
 		}

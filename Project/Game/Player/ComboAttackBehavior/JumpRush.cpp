@@ -15,7 +15,7 @@
 //初期化
 JumpRush::JumpRush(Player* player)
 	: BaseComboAattackBehavior("JumpRush", player) {
-
+	
 	///---------------------------------------------------------
 	/// 変数初期化
 	///---------------------------------------------------------
@@ -23,7 +23,7 @@ JumpRush::JumpRush(Player* player)
 	
 	/// parm
 	assaultEase_.time = 0.0f;
-	assaultEase_.maxTime = pPlayer_->GetNormalComboParm(Player::ComboNum::THIRD).attackEaseMax;
+	assaultEase_.maxTime = pPlayerParameter_->GetNormalComboParm(Player::ComboNum::THIRD).attackEaseMax;
 
 
 	//　モーション
@@ -54,7 +54,7 @@ void JumpRush::Update() {
 		initPos_ = pPlayer_->GetWorldPosition();
 		forwardDirection_ = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
 
-		frontPos_ = initPos_ + (forwardDirection_* pPlayer_->GetParamater().upperParm.BackLashValue);
+		frontPos_ = initPos_ + (forwardDirection_* pPlayerParameter_->GetParamaters().upperParm.BackLashValue);
 		
 		order_ = Order::RUSH;
 		break;
@@ -68,7 +68,7 @@ void JumpRush::Update() {
 
 		//Y
 		pPlayer_->SetWorldPositionY(
-			EaseInSine(initPos_.y, initPos_.y + pPlayer_->GetParamater().upperPosY, assaultEase_.time, assaultEase_.maxTime));
+			EaseInSine(initPos_.y, initPos_.y + pPlayerParameter_->GetParamaters().upperPosY, assaultEase_.time, assaultEase_.maxTime));
 
 		//前進
 		preWorldPos_ = EaseInCubic(initPos_, frontPos_, assaultEase_.time, assaultEase_.maxTime);

@@ -30,7 +30,7 @@ private:
 
 public:
 	//コンストラクタ
-	JumpRush(Player* boss);
+    JumpRush(Player* player);
 	~JumpRush();
 
 	/// 更新、デバッグ

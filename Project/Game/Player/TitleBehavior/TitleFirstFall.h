@@ -42,7 +42,7 @@ private:
 
 public:
 	//コンストラクタ
-	TitleFirstFall(Player* boss);
+    TitleFirstFall(Player* player);
 	~TitleFirstFall();
 
 	void Update()override;

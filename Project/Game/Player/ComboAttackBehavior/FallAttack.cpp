@@ -23,9 +23,9 @@ FallAttack::FallAttack(Player* player)
 
 	fallRotateY_ = 0.0f;
 
-	boundSpeed_ = pPlayer_->GetParamater().bountJump.jumpSpeed*60.0f;//1.4
-	gravity_ = pPlayer_->GetParamater().bountJump.gravity * 60.0f;//8.8
-	boundFallSpeedLimit_ = pPlayer_->GetParamater().bountJump.fallSpeedLimit * 60.0f;//5.2
+	boundSpeed_ = pPlayerParameter_->GetParamaters().bountJump.jumpSpeed*60.0f;//1.4
+	gravity_ = pPlayerParameter_->GetParamaters().bountJump.gravity * 60.0f;//8.8
+	boundFallSpeedLimit_ = pPlayerParameter_->GetParamaters().bountJump.fallSpeedLimit * 60.0f;//5.2
 	rotateXSpeed_ = 11.0f;
 	rotateYSpeed_ = 20.0f;
 
@@ -75,7 +75,7 @@ void FallAttack::Update() {
 
 		/// プレイヤーが落ちる
 		pPlayer_->SetWorldPositionY(
-            EaseInSine(playerInitPosY_, pPlayer_->GetParamater().startPos_.y, fallEaseT_, pPlayer_->GetJumpComboParm(Player::ComboNum::FIRST).attackEaseMax)
+            EaseInSine(playerInitPosY_, pPlayerParameter_->GetParamaters().startPos_.y, fallEaseT_, pPlayer_->GetJumpComboParm(Player::ComboNum::FIRST).attackEaseMax)
 			);
 
 		/// 着地の瞬間
@@ -84,7 +84,7 @@ void FallAttack::Update() {
 		pPlayer_->SetRotation(initRotate_);
 		pPlayer_->GetLeftHand()->SetWorldPositionY(fallInitPosLHand_);
 		pPlayer_->GetRightHand()->SetWorldPositionY(fallInitPosRHand_);
-		pPlayer_->SetWorldPositionY(pPlayer_->GetParamater().startPos_.y);
+		pPlayer_->SetWorldPositionY(pPlayerParameter_->GetParamaters().startPos_.y);
 
 		pPlayer_->GetEffects()->FallEffectRenditionInit(pPlayer_->GetWorldPosition());
 
@@ -123,7 +123,7 @@ void FallAttack::Update() {
 		pPlayer_->Jump(boundSpeed_, boundFallSpeedLimit_, gravity_);
 
 	// 次の振る舞い
-		if (pPlayer_->GetTransform().translation_.y > pPlayer_->GetParamater().startPos_.y) break;
+		if (pPlayer_->GetTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) break;
 		pPlayer_->SetRotation(initRotate_);
 		step_ = STEP::WAIT;
 		break;
@@ -132,7 +132,7 @@ void FallAttack::Update() {
 		///---------------------------------------------------------
 	case STEP::WAIT:
 		
-		pPlayer_->SetWorldPositionY(pPlayer_->GetParamater().startPos_.y);
+		pPlayer_->SetWorldPositionY(pPlayerParameter_->GetParamaters().startPos_.y);
 		collisionBox_->IsAdapt(false);
 		waitTime_ += Frame::DeltaTime();
 		

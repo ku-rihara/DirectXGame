@@ -38,7 +38,7 @@ RightJobPunch::RightJobPunch(Player* player)
 	/// parm
 	rushEase_.time = 0.0f;
 	punchEase_.time = 0.0f;
-	speed_ = pPlayer_->GetParamater().rushDistance;
+	speed_ = pPlayerParameter_->GetParamaters().rushDistance;
 	waitTine_ = 0.0f;
 
 	//　モーション
@@ -63,7 +63,7 @@ void RightJobPunch::Update() {
 	BaseComboAattackBehavior::ScalingEaseUpdate();
 
 	// 攻撃中の移動
-	pPlayer_->Move(pPlayer_->GetParamater().moveSpeed);
+	pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
 
 
 	switch (order_) {
@@ -82,15 +82,15 @@ void RightJobPunch::Update() {
 
 		// 突進の動き
 		pPlayer_->SetWorldPosition(
-			EaseInSine(initPos_, rushPos_, rushEase_.time, pPlayer_->GetParamater().rushEaseMax));
+			EaseInSine(initPos_, rushPos_, rushEase_.time, pPlayerParameter_->GetParamaters().rushEaseMax));
 
 		/// パンチオーダーに移行
-		if (rushEase_.time >= pPlayer_->GetParamater().rushEaseMax) {
-			rushEase_.time = pPlayer_->GetParamater().rushEaseMax;
+		if (rushEase_.time >= pPlayerParameter_->GetParamaters().rushEaseMax) {
+			rushEase_.time = pPlayerParameter_->GetParamaters().rushEaseMax;
 
 			/// パンチ座標セット
 			rHandStartPos_ = pPlayer_->GetRightHand()->GetTransform().translation_;
-			rHandTargetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayer_->GetNormalComboParm(Player::ComboNum::FIRST).attackReach;
+			rHandTargetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayerParameter_->GetNormalComboParm(Player::ComboNum::FIRST).attackReach;
 			//音
 			pPlayer_->SoundPunch();
 			order_ = Order::PUNCH;
@@ -109,15 +109,15 @@ void RightJobPunch::Update() {
 
 		/// 拳を突き出す
 		punchPosition_ =
-			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayer_->GetNormalComboParm(Player::ComboNum::FIRST).attackEaseMax);
+			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(Player::ComboNum::FIRST).attackEaseMax);
 
 
 		// ハンドのローカル座標を更新
 		pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
 
 		// イージング終了時の処理
-		if (punchEase_.time >= pPlayer_->GetNormalComboParm(Player::ComboNum::FIRST).attackEaseMax) {
-			punchEase_.time = pPlayer_->GetNormalComboParm(Player::ComboNum::FIRST).attackEaseMax;
+		if (punchEase_.time >= pPlayerParameter_->GetNormalComboParm(Player::ComboNum::FIRST).attackEaseMax) {
+			punchEase_.time = pPlayerParameter_->GetNormalComboParm(Player::ComboNum::FIRST).attackEaseMax;
 			order_ = Order::BACKPUNCH;
 		}
 
@@ -139,7 +139,7 @@ void RightJobPunch::Update() {
 		punchEase_.time -= Frame::DeltaTimeRate();
 
 		punchPosition_ =
-			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayer_->GetNormalComboParm(Player::ComboNum::FIRST).attackEaseMax);
+			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(Player::ComboNum::FIRST).attackEaseMax);
 
 		// ハンドのローカル座標を更新
 		pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
@@ -156,7 +156,7 @@ void RightJobPunch::Update() {
 		pPlayer_->AdaptRotate();
 
 		/// コンボ途切れ
-		if (waitTine_ >= pPlayer_->GetNormalComboParm(Player::ComboNum::FIRST).waitTime) {
+		if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(Player::ComboNum::FIRST).waitTime) {
 			
 			pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
 		}

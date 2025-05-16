@@ -38,7 +38,7 @@ private:
 
 public:
 	//コンストラクタ
-	RushAttack(Player* boss);
+    RushAttack(Player* player);
 	~RushAttack();
 
 	void Update()override;

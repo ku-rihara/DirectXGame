@@ -37,7 +37,7 @@ private:
 public:
 
 	//コンストラクタ
-	LeftJobPunch(Player* boss);
+    LeftJobPunch(Player* player);
 	~LeftJobPunch();
 
 	/// 更新、デバッグ

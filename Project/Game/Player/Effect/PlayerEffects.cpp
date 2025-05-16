@@ -1,7 +1,6 @@
 #include "PlayerEffects.h"
 #include "audio/Audio.h"
 
-PlayerEffects::PlayerEffects() {}
 
 ///=========================================================
 /// 　初期化

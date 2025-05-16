@@ -14,7 +14,13 @@ void SpecialAttackGauge::Update() {
 
 
 }
+
 void SpecialAttackGauge::SpriteDraw() {
 
+	gaugeFrameSprite_->Draw();
+    gaugeSprite_->Draw();
+}
+
+void SpecialAttackGauge::AddGauge() {
 
 }

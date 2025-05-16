@@ -17,7 +17,7 @@ PlayerJump::PlayerJump(Player* player)
 	///変数初期化
 	/// ===================================================
 
-	speed_ = pPlayer_->GetParamater().normalJump.jumpSpeed;
+	speed_ = pPlayerParameter_->GetParamaters().normalJump.jumpSpeed;
 	
 }
 
@@ -27,10 +27,13 @@ PlayerJump ::~PlayerJump() {
 
 //更新
 void PlayerJump::Update() {
-	pPlayer_->Move(pPlayer_->GetParamater().moveSpeed);
-	pPlayer_->Jump(speed_,pPlayer_->GetParamater().normalJump.fallSpeedLimit,pPlayer_->GetParamater().normalJump.gravity);
+    pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+    pPlayer_->Jump(speed_, pPlayerParameter_->GetParamaters().normalJump.fallSpeedLimit, pPlayerParameter_->GetParamaters().normalJump.gravity);
 	
-	if (pPlayer_->GetTransform().translation_.y > pPlayer_->GetParamater().startPos_.y) return;
+	if (pPlayer_->GetTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {
+        return;
+    }
+
 	pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
 
 }

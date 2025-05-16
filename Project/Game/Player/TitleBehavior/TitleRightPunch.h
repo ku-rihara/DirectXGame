@@ -37,7 +37,7 @@ private:
 
 public:
 	//コンストラクタ
-	TitleRightPunch(Player* boss);
+    TitleRightPunch(Player* player);
 	~TitleRightPunch();
 
 	/// 更新、デバッグ

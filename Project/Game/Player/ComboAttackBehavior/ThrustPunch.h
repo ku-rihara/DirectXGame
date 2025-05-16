@@ -44,7 +44,7 @@ private:
 public:
 
 	//コンストラクタ
-	ThrustPunch(Player* boss);
+    ThrustPunch(Player* player);
 	~ThrustPunch();
 
 	/// 更新、デバッグ

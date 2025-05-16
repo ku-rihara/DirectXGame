@@ -9,48 +9,26 @@
 #include <array>
 #include <string>
 
-class PlayerParameter {
 
-public:
-    enum class ComboNum {
-        FIRST,
-        SECOND,
-        THIRD,
-        FORTH,
-    };
+  struct UpperParm {
+    float BackLashValue;
+    float BackLashEaseTime;
+};
 
-private:
-    struct UpperParm {
-        float BackLashValue;
-        float BackLashEaseTime;
-    };
+struct JumpParm {
+    float jumpSpeed;
+    float gravity;
+    float fallSpeedLimit;
+};
 
-    struct JumpParm {
-        float jumpSpeed;
-        float gravity;
-        float fallSpeedLimit;
-    };
+struct ComboParm {
+    float waitTime;
+    float attackReach;
+    float attackEaseMax;
+};
 
-    struct ComboParm {
-        float waitTime;
-        float attackReach;
-        float attackEaseMax;
-    };
-
-private:
-    /// グローバルなパラメータ
-    GlobalParameter* globalParameter_; /// グローバルパラメータ
-    const std::string groupName_ = "Player"; /// グループ名
-
-private:
-    /// ===================================================
-    /// private variaus
-    /// ===================================================
-
-    ///* コンボパラメータ
-    std::array<ComboParm, 4> normalComboParms_;
-    std::array<ComboParm, 2> jumpComboParms_;
- 
+/// Paramater構造体
+struct Parameters {
     Vector3 startPos_;
     float rushDistance;
     float upperPosY;
@@ -66,7 +44,35 @@ private:
     float rushEaseMax;
     float attackRotateEaseT;
     float attackFloatEaseT;
-    
+};
+
+class PlayerParameter {
+
+public:
+    enum class ComboNum {
+        FIRST,
+        SECOND,
+        THIRD,
+        FORTH,
+    };
+
+private:
+  
+private:
+    /// グローバルなパラメータ
+    GlobalParameter* globalParameter_; /// グローバルパラメータ
+    const std::string groupName_ = "Player"; /// グループ名
+
+private:
+    /// ===================================================
+    /// private variaus
+    /// ===================================================
+
+    ///* コンボパラメータ
+    std::array<ComboParm, 4> normalComboParms_;
+    std::array<ComboParm, 2> jumpComboParms_;
+    Parameters playerParams_;
+
 public:
     PlayerParameter();
 
@@ -74,10 +80,9 @@ public:
     ///  public method
     /// ===================================================
 
-    ///* 初期化、更新、描画
+    ///* 初期化
     void Init();
-    void Update();
-
+   
     /// ====================================================================
     /// Editor
     /// ====================================================================
@@ -90,7 +95,7 @@ public:
     /// =========================================================================================
     /// getter
     /// =========================================================================================
-   /* Parameters GetParamater() const { return playerParams_; }*/
+    Parameters GetParamaters() const { return playerParams_; }
     ComboParm GetNormalComboParm(const ComboNum& index) const { return normalComboParms_[static_cast<int>(index)]; }
     ComboParm GetJumpComboParm(const ComboNum& index) const { return jumpComboParms_[static_cast<int>(index)]; }
 

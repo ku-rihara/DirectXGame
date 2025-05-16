@@ -23,7 +23,7 @@ private:
 
 public:
 	//コンストラクタ
-	TitleWait(Player* boss);
+    TitleWait(Player* player);
 	~TitleWait();
 
 	void Update()override;

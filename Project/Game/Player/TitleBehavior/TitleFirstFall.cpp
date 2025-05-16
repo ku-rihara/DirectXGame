@@ -66,7 +66,7 @@ void TitleFirstFall::Update() {
 
 		/// プレイヤーが落ちる
 		pPlayer_->SetWorldPositionY(
-            EaseInSine(playerInitPosY_, pPlayer_->GetParamater().startPos_.y, fallEaseT_, fallSpeed_)
+            EaseInSine(playerInitPosY_, pPlayerParameter_->GetParamaters().startPos_.y, fallEaseT_, fallSpeed_)
 			);
 
 		/// 着地の瞬間
@@ -75,7 +75,7 @@ void TitleFirstFall::Update() {
 		pPlayer_->SetRotation(initRotate_);
 		pPlayer_->GetLeftHand()->SetWorldPositionY(fallInitPosLHand_);
 		pPlayer_->GetRightHand()->SetWorldPositionY(fallInitPosRHand_);
-        pPlayer_->SetWorldPositionY(pPlayer_->GetParamater().startPos_.y);
+        pPlayer_->SetWorldPositionY(pPlayerParameter_->GetParamaters().startPos_.y);
         pPlayer_->GetEffects()->FallEffectRenditionInit(pPlayer_->GetWorldPosition());
 		step_ = STEP::LANDING;
 
@@ -101,10 +101,10 @@ void TitleFirstFall::Update() {
 		boundSpeed_ = max(boundSpeed_ - (gravity_ * Frame::DeltaTimeRate()), boundFallSpeedLimit_);
 
 	// 次の振る舞い
-        if (pPlayer_->GetTransform().translation_.y > pPlayer_->GetParamater().startPos_.y)
+        if (pPlayer_->GetTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y)
             break;
 		pPlayer_->SetRotation(initRotate_);
-        pPlayer_->SetWorldPositionY(pPlayer_->GetParamater().startPos_.y);
+        pPlayer_->SetWorldPositionY(pPlayerParameter_->GetParamaters().startPos_.y);
 		step_ = STEP::WAIT;
 		break;
 	case STEP::WAIT:

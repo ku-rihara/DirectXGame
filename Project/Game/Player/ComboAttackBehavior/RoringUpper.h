@@ -49,7 +49,7 @@ private:
 
 public:
 	//コンストラクタ
-	RoringUpper(Player* boss);
+    RoringUpper(Player* player);
 	~RoringUpper();
 
 	/// 更新、デバッグ

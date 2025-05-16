@@ -43,7 +43,7 @@ private:
 
 public:
 	//コンストラクタ
-	FallAttack(Player* boss);
+	FallAttack(Player* player);
 	~FallAttack();
 
 	void Update()override;

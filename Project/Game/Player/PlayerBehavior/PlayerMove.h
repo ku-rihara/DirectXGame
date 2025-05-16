@@ -28,7 +28,7 @@ private:
 	
 public:
 	//コンストラクタ
-	PlayerMove(Player* boss);
+    PlayerMove(Player* player);
 	~PlayerMove();
 
 	void MoveAnimation();

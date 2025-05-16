@@ -12,7 +12,7 @@ private:
 
 public:
 	//コンストラクタ
-	PlayerJump(Player* boss);
+    PlayerJump(Player* player);
 	~PlayerJump();
 
 	void Update()override;

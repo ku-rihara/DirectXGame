@@ -12,8 +12,8 @@
 #include<imgui.h>
 
 //初期化
-PlayerMove::PlayerMove(Player* boss)
-	: BasePlayerBehavior("PlayerMove", boss) {
+PlayerMove::PlayerMove(Player* player)
+	: BasePlayerBehavior("PlayerMove", player) {
 
     
 
@@ -22,7 +22,7 @@ PlayerMove::PlayerMove(Player* boss)
 	/// ===================================================
      waitEase_.maxTime = 0.4f;
     easeDirection_ = 1.0f;
-	speed_ = pPlayer_->GetParamater().moveSpeed;
+	speed_ = pPlayerParameter_->GetParamaters().moveSpeed;
 
 	animationStep_ = AnimationStep::INIT;
 }
@@ -40,10 +40,10 @@ void PlayerMove::Update() {
 
 
 		if ((Input::IsPressPad(0, XINPUT_GAMEPAD_Y))) {
-			pPlayer_->Move(pPlayer_->GetParamater().moveSpeed *2.4f);
+			pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed *2.4f);
 		}
 		else {
-			pPlayer_->Move(pPlayer_->GetParamater().moveSpeed);
+			pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
 		}
 	
 	//　ジャンプに切り替え

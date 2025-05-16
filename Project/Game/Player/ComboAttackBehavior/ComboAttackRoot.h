@@ -20,7 +20,7 @@ private:
 
 public:
 	//コンストラクタ
-	ComboAttackRoot(Player* boss);
+    ComboAttackRoot(Player* player);
 	~ComboAttackRoot();
 
 	void Update()override;

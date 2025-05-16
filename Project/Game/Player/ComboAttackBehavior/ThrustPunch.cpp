@@ -164,11 +164,11 @@ void ThrustPunch::Update() {
     case Order::WAIT:
 
         waitTine_ += Frame::DeltaTimeRate();
-        pPlayer_->Fall(fallInitSpeed_, pPlayer_->GetParamater().normalJump.fallSpeedLimit, pPlayer_->GetParamater().normalJump.gravity);
+        pPlayer_->Fall(fallInitSpeed_, pPlayerParameter_->GetParamaters().normalJump.fallSpeedLimit, pPlayerParameter_->GetParamaters().normalJump.gravity);
         pPlayer_->SetHeadScale(Vector3::UnitVector());
-        if (pPlayer_->GetWorldPosition().y <= pPlayer_->GetParamater().startPos_.y) {
+        if (pPlayer_->GetWorldPosition().y <= pPlayerParameter_->GetParamaters().startPos_.y) {
             pPlayer_->PositionYReset();
-            if (waitTine_ >= pPlayer_->GetNormalComboParm(Player::ComboNum::FORTH).waitTime) {
+            if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(Player::ComboNum::FORTH).waitTime) {
 
                 Frame::SetTimeScale(1.0f);
                 pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));

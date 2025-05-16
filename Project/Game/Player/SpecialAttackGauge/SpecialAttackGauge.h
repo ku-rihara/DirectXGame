@@ -12,7 +12,11 @@ public:
     void Update();
     void SpriteDraw();
 
+    /// parm Edit
+    
+  
     //加算システム
+    void AddGauge();
 
 private:
 

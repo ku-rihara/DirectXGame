@@ -23,7 +23,7 @@ private:
     /// ===================================================
     /// private variaus
     /// ===================================================
-
+  
     std::unique_ptr<ParticleEmitter> fallCrack_;
     std::array<ParticleEffect, 1> debriParticle_;
     std::array<ParticleEffect, 1> rushParticle_;
@@ -34,8 +34,8 @@ private:
     int32_t starSound_;
 
 public:
-    PlayerEffects();
-
+    PlayerEffects()=default;
+    ~PlayerEffects() = default;
     /// ===================================================
     ///  public method
     /// ===================================================

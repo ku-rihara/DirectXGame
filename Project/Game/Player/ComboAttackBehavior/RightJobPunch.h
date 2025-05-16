@@ -40,7 +40,7 @@ private:
 
 public:
 	//コンストラクタ
-	RightJobPunch(Player* boss);
+    RightJobPunch(Player* player);
 	~RightJobPunch();
 
 	/// 更新、デバッグ
