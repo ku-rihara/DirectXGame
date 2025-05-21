@@ -19,7 +19,7 @@ public:
         INSINE,
         OUTSINE,
         OUTBACK,
-        OUTQUINT, 
+        OUTQUINT,
     };
 
     struct GroupParamaters {
@@ -32,26 +32,29 @@ public:
     };
 
     struct EaseParm {
-        bool isScaleEase;
         float maxTime;
-        EaseType easeType;
+        bool isScaleEase;
         int easeTypeInt;
+        EaseType easeType;
         FMinMax endValueF;
         V3MinMax endValueV3;
     };
 
     struct UVParm {
-        Vector2 pos;
-        Vector3 rotate;
-        int32_t numOfFrame;
         float frameScroolSpeed;
         bool isScroolEachPixel;
         bool isRoop;
         bool isScrool;
+        bool isFlipX;
+        bool isFlipY;
+        Vector2 pos;
+        Vector3 rotate;
+        int32_t numOfFrame;
     };
 
     struct Parameters {
         const WorldTransform* parentTransform = nullptr;
+        const Vector3* followingPos_          = nullptr;
         Vector3 targetPos;
         Vector3 emitPos;
         Vector3 baseRotate;
@@ -70,8 +73,25 @@ public:
         bool isRotateforDirection;
         EaseParm scaleEaseParm;
         UVParm uvParm;
-        const Vector3* followingPos_ = nullptr;
     };
+
+public:
+    ParticleParameter()          = default;
+    virtual ~ParticleParameter() = default;
+
+    // init
+    virtual void Init();
+    void ParameterInit();
+
+    // Adapt Texture
+    void AdaptTexture();
+
+    // Parameter Edit
+    virtual void ParmLoadForImGui();
+    virtual void ParmSaveForImGui();
+    virtual void AddParmGroup();
+    virtual void SetValues();
+    virtual void ApplyGlobalParameter(const std::string& particleName);
 
 protected:
     /// parameters
@@ -97,23 +117,6 @@ protected:
     std::string selectedTexturePath_;
 
 public:
-    ParticleParameter()          = default;
-    virtual ~ParticleParameter() = default;
-
-    // init
-    virtual void Init();
-    void ParameterInit();
-
-    // Adapt Texture
-    void AdaptTexture();
-
-    // Parameter Edit
-    virtual void ParmLoadForImGui();
-    virtual void ParmSaveForImGui();
-    virtual void AddParmGroup();
-    virtual void SetValues();
-    virtual void ApplyGlobalParameter(const std::string& particleName);
-   
     /// =============================================================================
     /// getter method
     /// =============================================================================

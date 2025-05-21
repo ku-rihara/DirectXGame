@@ -2,9 +2,7 @@
 #include "3d/ModelManager.h"
 #include "base/TextureManager.h"
 #include "ParticleCommon.h"
-// Primitive
-#include "Primitive/PrimitivePlane.h"
-#include"Primitive/PrimitiveRing.h"
+
 // frame
 #include "Frame/Frame.h"
 // Function
@@ -12,6 +10,10 @@
 #include "Function/GetFile.h"
 #include "MathFunction.h"
 #include "random.h"
+// Primitive
+#include "Primitive/PrimitivePlane.h"
+#include"Primitive/PrimitiveRing.h"
+#include"Primitive/PrimitiveCylinder.h"
 // std
 #include <cassert>
 #include <string>
@@ -135,6 +137,8 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
             //  UVTransform
             ///==========================================================================================
             instancingData[instanceIndex].UVTransform = MakeAffineMatrix(it->uvInfo_.scale, it->uvInfo_.rotate, it->uvInfo_.pos);
+            instancingData[instanceIndex].isFlipX     = it->uvInfo_.isFlipX;
+            instancingData[instanceIndex].isFlipY     = it->uvInfo_.isFlipY;
 
             ++instanceIndex;
             ++it;
@@ -221,12 +225,14 @@ void ParticleManager::CreatePrimitiveParticle(const std::string& name, Primitive
     case PrimitiveType::Ring:
         particleGroups_[name].primitive_ = std::make_unique<PrimitiveRing>();
         break;
+    case PrimitiveType::Cylinder:
+        particleGroups_[name].primitive_ = std::make_unique<PrimitiveCylinder>();
+        break;
 
     }
 
     // プリミティブの初期化と作成
     particleGroups_[name].primitive_->Init();
-   /* particleGroups_[name].primitive_->Create();*/
 
     // インスタンシングリソースとマテリアルリソースを作成
     CreateInstancingResource(name, maxnum);
@@ -453,6 +459,10 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
     particle.uvInfo_.isScroolEachPixel = paramaters.uvParm.isScroolEachPixel;
     particle.uvInfo_.isRoop            = paramaters.uvParm.isRoop;
     particle.uvInfo_.isScrool          = paramaters.uvParm.isScrool;
+
+    // IsFlip
+    particle.uvInfo_.isFlipX = paramaters.uvParm.isFlipX;
+    particle.uvInfo_.isFlipY = paramaters.uvParm.isFlipY;
 
     // 時間初期化
     particle.uvInfo_.currentScroolTime = 0.0f;

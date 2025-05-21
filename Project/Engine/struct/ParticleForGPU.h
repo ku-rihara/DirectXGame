@@ -9,5 +9,7 @@ struct ParticleFprGPU {
     Matrix4x4 WorldInverseTranspose;
     Matrix4x4 UVTransform;
     Vector4 color;
+    bool isFlipX;
+    bool isFlipY;
 };
 
