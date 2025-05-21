@@ -46,15 +46,16 @@ struct Parameters {
     float attackFloatEaseT;
 };
 
+  enum  ComboNum {
+    FIRST,
+    SECOND,
+    THIRD,
+    FORTH,
+};
+
+
 class PlayerParameter {
 
-public:
-    enum class ComboNum {
-        FIRST,
-        SECOND,
-        THIRD,
-        FORTH,
-    };
 
 private:
   

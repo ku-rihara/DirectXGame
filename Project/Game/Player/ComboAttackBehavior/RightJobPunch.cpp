@@ -90,7 +90,7 @@ void RightJobPunch::Update() {
 
 			/// パンチ座標セット
 			rHandStartPos_ = pPlayer_->GetRightHand()->GetTransform().translation_;
-			rHandTargetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayerParameter_->GetNormalComboParm(Player::ComboNum::FIRST).attackReach;
+			rHandTargetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayerParameter_->GetNormalComboParm(FIRST).attackReach;
 			//音
 			pPlayer_->SoundPunch();
 			order_ = Order::PUNCH;
@@ -109,15 +109,15 @@ void RightJobPunch::Update() {
 
 		/// 拳を突き出す
 		punchPosition_ =
-			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(Player::ComboNum::FIRST).attackEaseMax);
+			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(FIRST).attackEaseMax);
 
 
 		// ハンドのローカル座標を更新
 		pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
 
 		// イージング終了時の処理
-		if (punchEase_.time >= pPlayerParameter_->GetNormalComboParm(Player::ComboNum::FIRST).attackEaseMax) {
-			punchEase_.time = pPlayerParameter_->GetNormalComboParm(Player::ComboNum::FIRST).attackEaseMax;
+		if (punchEase_.time >= pPlayerParameter_->GetNormalComboParm(FIRST).attackEaseMax) {
+			punchEase_.time = pPlayerParameter_->GetNormalComboParm(FIRST).attackEaseMax;
 			order_ = Order::BACKPUNCH;
 		}
 
@@ -139,7 +139,7 @@ void RightJobPunch::Update() {
 		punchEase_.time -= Frame::DeltaTimeRate();
 
 		punchPosition_ =
-			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(Player::ComboNum::FIRST).attackEaseMax);
+			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(FIRST).attackEaseMax);
 
 		// ハンドのローカル座標を更新
 		pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
@@ -156,7 +156,7 @@ void RightJobPunch::Update() {
 		pPlayer_->AdaptRotate();
 
 		/// コンボ途切れ
-		if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(Player::ComboNum::FIRST).waitTime) {
+		if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(FIRST).waitTime) {
 			
 			pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
 		}

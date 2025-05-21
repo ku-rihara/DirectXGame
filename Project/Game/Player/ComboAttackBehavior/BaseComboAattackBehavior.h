@@ -28,8 +28,8 @@ protected:
     Easing floatEase_;
 
 public:
-    BaseComboAattackBehavior(const std::string& name, Player* player)
-        : name_(name), pPlayer_(player), pPlayerParameter_(player->GetParamater()) {}
+    BaseComboAattackBehavior(const std::string& name, Player* player);
+       
     
     virtual ~BaseComboAattackBehavior() {}
 

@@ -17,8 +17,8 @@ protected:
 
 public:
    
-    BaseTitleBehavior(const std::string& name, Player* player)
-        : name_(name), pPlayer_(player), pPlayerParameter_(player->GetParamater()) {}
+    BaseTitleBehavior(const std::string& name, Player* player);
+
 	virtual ~BaseTitleBehavior() {}
 	
 	virtual void Update()=0;   /// 更新

@@ -14,8 +14,7 @@ protected:
 
 public :
 
-    BasePlayerBehavior(const std::string& name, Player* player) 
-        : name_(name), pPlayer_(player), pPlayerParameter_(player->GetParamater()) {}
+    BasePlayerBehavior(const std::string& name, Player* player);
 
     virtual ~BasePlayerBehavior() {}
 

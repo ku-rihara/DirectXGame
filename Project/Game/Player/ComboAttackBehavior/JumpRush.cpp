@@ -23,7 +23,7 @@ JumpRush::JumpRush(Player* player)
 	
 	/// parm
 	assaultEase_.time = 0.0f;
-	assaultEase_.maxTime = pPlayerParameter_->GetNormalComboParm(Player::ComboNum::THIRD).attackEaseMax;
+	assaultEase_.maxTime = pPlayerParameter_->GetNormalComboParm(THIRD).attackEaseMax;
 
 
 	//　モーション

@@ -124,7 +124,7 @@ void RoringUpper::Update() {
 		waitTine_ += Frame::DeltaTime();
 
 		/// コンボ途切れ
-		if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(Player::ComboNum::THIRD).waitTime) {
+		if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(THIRD).waitTime) {
 			
 			order_ = Order::END;
 		}

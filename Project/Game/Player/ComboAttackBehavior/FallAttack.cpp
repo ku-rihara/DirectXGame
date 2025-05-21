@@ -75,11 +75,11 @@ void FallAttack::Update() {
 
 		/// プレイヤーが落ちる
 		pPlayer_->SetWorldPositionY(
-            EaseInSine(playerInitPosY_, pPlayerParameter_->GetParamaters().startPos_.y, fallEaseT_, pPlayer_->GetJumpComboParm(Player::ComboNum::FIRST).attackEaseMax)
+            EaseInSine(playerInitPosY_, pPlayerParameter_->GetParamaters().startPos_.y, fallEaseT_, pPlayerParameter_->GetJumpComboParm(FIRST).attackEaseMax)
 			);
 
 		/// 着地の瞬間
-		if (fallEaseT_ < pPlayer_->GetJumpComboParm(Player::ComboNum::FIRST).attackEaseMax)break;
+		if (fallEaseT_ < pPlayerParameter_->GetJumpComboParm(FIRST).attackEaseMax)break;
 
 		pPlayer_->SetRotation(initRotate_);
 		pPlayer_->GetLeftHand()->SetWorldPositionY(fallInitPosLHand_);
@@ -136,7 +136,7 @@ void FallAttack::Update() {
 		collisionBox_->IsAdapt(false);
 		waitTime_ += Frame::DeltaTime();
 		
-		if (waitTime_ >= pPlayer_->GetJumpComboParm(Player::ComboNum::FIRST).waitTime) {
+		if (waitTime_ >= pPlayerParameter_->GetJumpComboParm(FIRST).waitTime) {
 			step_ = STEP::RETURNROOT;
 		}
 		else {

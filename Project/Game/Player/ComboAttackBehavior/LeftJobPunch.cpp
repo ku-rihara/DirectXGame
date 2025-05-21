@@ -36,7 +36,7 @@ LeftJobPunch::LeftJobPunch(Player* player)
 
 	/// パンチ座標セット
 	lHandStartPos_ = pPlayer_->GetLeftHand()->GetTransform().translation_;
-    lHandTargetPos_ = pPlayer_->GetLeftHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayerParameter_->GetNormalComboParm(Player::ComboNum::SECOND).attackReach;
+    lHandTargetPos_ = pPlayer_->GetLeftHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayerParameter_->GetNormalComboParm(SECOND).attackReach;
 
 	//　モーション
 	BaseComboAattackBehavior::AnimationInit();
@@ -74,15 +74,15 @@ void LeftJobPunch::Update() {
 
 		/// 拳を突き出す
 		punchPosition_ =
-            EaseInSine(lHandStartPos_, lHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(Player::ComboNum::SECOND).attackEaseMax);
+            EaseInSine(lHandStartPos_, lHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(SECOND).attackEaseMax);
 
 
 		// ハンドのローカル座標を更新
 		pPlayer_->GetLeftHand()->SetWorldPosition(punchPosition_);
 
 		// イージング終了時の処理
-        if (punchEase_.time >= pPlayerParameter_->GetNormalComboParm(Player::ComboNum::SECOND).attackEaseMax) {
-            punchEase_.time = pPlayerParameter_->GetNormalComboParm(Player::ComboNum::SECOND).attackEaseMax;
+        if (punchEase_.time >= pPlayerParameter_->GetNormalComboParm(SECOND).attackEaseMax) {
+            punchEase_.time = pPlayerParameter_->GetNormalComboParm(SECOND).attackEaseMax;
 			order_ = Order::BACKPUNCH;
 		}
 		collisionBox_->SetPosition(pPlayer_->GetLeftHand()->GetWorldPosition());
@@ -99,7 +99,7 @@ void LeftJobPunch::Update() {
 		punchEase_.time -= Frame::DeltaTimeRate();
 
 		punchPosition_ =
-			EaseInSine(lHandStartPos_, lHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(Player::ComboNum::SECOND).attackEaseMax);
+			EaseInSine(lHandStartPos_, lHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(SECOND).attackEaseMax);
 
 		// ハンドのローカル座標を更新
 		pPlayer_->GetLeftHand()->SetWorldPosition(punchPosition_);
@@ -119,7 +119,7 @@ void LeftJobPunch::Update() {
 		pPlayer_->AdaptRotate();
 
 		/// コンボ途切れ
-		if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(Player::ComboNum::SECOND).waitTime) {
+		if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(SECOND).waitTime) {
 		
 			pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
 		}

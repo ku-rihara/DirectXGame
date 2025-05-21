@@ -168,7 +168,7 @@ void ThrustPunch::Update() {
         pPlayer_->SetHeadScale(Vector3::UnitVector());
         if (pPlayer_->GetWorldPosition().y <= pPlayerParameter_->GetParamaters().startPos_.y) {
             pPlayer_->PositionYReset();
-            if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(Player::ComboNum::FORTH).waitTime) {
+            if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(FORTH).waitTime) {
 
                 Frame::SetTimeScale(1.0f);
                 pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));

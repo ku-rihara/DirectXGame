@@ -64,15 +64,15 @@ void TitleLeftPunch::Update() {
 
 		/// 拳を突き出す
 		punchPosition_ =
-			EaseInSine(lHandStartPos_, lHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(Player::ComboNum::SECOND).attackEaseMax);
+			EaseInSine(lHandStartPos_, lHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(SECOND).attackEaseMax);
 
 
 		// ハンドのローカル座標を更新
 		pPlayer_->GetLeftHand()->SetWorldPosition(punchPosition_);
 
 		// イージング終了時の処理
-		if (punchEase_.time >= pPlayerParameter_->GetNormalComboParm(Player::ComboNum::SECOND).attackEaseMax) {
-			punchEase_.time = pPlayerParameter_->GetNormalComboParm(Player::ComboNum::SECOND).attackEaseMax;
+		if (punchEase_.time >= pPlayerParameter_->GetNormalComboParm(SECOND).attackEaseMax) {
+			punchEase_.time = pPlayerParameter_->GetNormalComboParm(SECOND).attackEaseMax;
 			order_ = Order::BACKPUNCH;
 		}
 		
@@ -87,7 +87,7 @@ void TitleLeftPunch::Update() {
 		punchEase_.time -= Frame::DeltaTimeRate();
 
 		punchPosition_ =
-			EaseInSine(lHandStartPos_, lHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(Player::ComboNum::SECOND).attackEaseMax);
+			EaseInSine(lHandStartPos_, lHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(SECOND).attackEaseMax);
 
 		// ハンドのローカル座標を更新
 		pPlayer_->GetLeftHand()->SetWorldPosition(punchPosition_);
@@ -104,7 +104,7 @@ void TitleLeftPunch::Update() {
 		waitTine_ += Frame::DeltaTime();
 
 		/// コンボ途切れ
-		if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(Player::ComboNum::SECOND).waitTime) {
+		if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(SECOND).waitTime) {
 			pPlayer_->ChangeTitleBehavior(std::make_unique<TitleWait>(pPlayer_));
 		}
 

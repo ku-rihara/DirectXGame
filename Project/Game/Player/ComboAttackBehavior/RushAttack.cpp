@@ -34,7 +34,7 @@ RushAttack::RushAttack(Player* player)
 	pPlayer_->FaceToTarget();
 	initPos_ = pPlayer_->GetWorldPosition();
 	direction_ = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
-	rushTargetPos_ = initPos_ + (direction_ * pPlayer_->GetJumpComboParm(Player::ComboNum::SECOND).attackReach);
+	rushTargetPos_ = initPos_ + (direction_ * pPlayerParameter_->GetJumpComboParm(SECOND).attackReach);
 	
 	rushEaseTime_ = 0.0f;
 
@@ -74,7 +74,7 @@ void RushAttack::Update() {
 
 		/// 突進
 		pPlayer_->SetWorldPosition(
-			EaseOutQuart(initPos_, rushTargetPos_, rushEaseTime_, pPlayer_->GetJumpComboParm(Player::ComboNum::SECOND).attackEaseMax)
+			EaseOutQuart(initPos_, rushTargetPos_, rushEaseTime_, pPlayerParameter_->GetJumpComboParm(SECOND).attackEaseMax)
 		);
 
 		/// 当たり判定座標
@@ -83,7 +83,7 @@ void RushAttack::Update() {
 		collisionBox_->Update();
 
 		// 早期break
-		if (rushEaseTime_ < pPlayer_->GetJumpComboParm(Player::ComboNum::SECOND).attackEaseMax)break;
+		if (rushEaseTime_ < pPlayerParameter_->GetJumpComboParm(SECOND).attackEaseMax)break;
 		pPlayer_->GetRightHand()->SetWorldPosition(initRHandPos_);
 		pPlayer_->GetLeftHand()->SetWorldPosition(initLHandPos_);
 		step_ = STEP::WAIT;
@@ -95,7 +95,7 @@ void RushAttack::Update() {
 		///---------------------------------------------------------
 		collisionBox_->IsAdapt(false);
 		waitTime_ += Frame::DeltaTime();
-		if (waitTime_ < pPlayer_->GetJumpComboParm(Player::ComboNum::SECOND).waitTime)break;
+		if (waitTime_ < pPlayerParameter_->GetJumpComboParm(SECOND).waitTime)break;
 		step_ = STEP::RETURNROOT;
 		break;
 
