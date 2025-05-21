@@ -83,7 +83,9 @@ void RushAttack::Update() {
 		collisionBox_->Update();
 
 		// 早期break
-		if (rushEaseTime_ < pPlayerParameter_->GetJumpComboParm(SECOND).attackEaseMax)break;
+        if (rushEaseTime_ < pPlayerParameter_->GetJumpComboParm(SECOND).attackEaseMax) {
+            break;
+        };
 		pPlayer_->GetRightHand()->SetWorldPosition(initRHandPos_);
 		pPlayer_->GetLeftHand()->SetWorldPosition(initLHandPos_);
 		step_ = STEP::WAIT;
@@ -95,7 +97,9 @@ void RushAttack::Update() {
 		///---------------------------------------------------------
 		collisionBox_->IsAdapt(false);
 		waitTime_ += Frame::DeltaTime();
-		if (waitTime_ < pPlayerParameter_->GetJumpComboParm(SECOND).waitTime)break;
+        if (waitTime_ < pPlayerParameter_->GetJumpComboParm(SECOND).waitTime) {
+            break;
+        }
 		step_ = STEP::RETURNROOT;
 		break;
 

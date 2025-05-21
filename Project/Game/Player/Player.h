@@ -16,7 +16,6 @@
 #include "utility/ParticleEditor/ParticleEmitter.h"
 
 /// behavior
-#include "ComboAttackBehavior/RightJobPunch.h"
 #include "PlayerBehavior/BasePlayerBehavior.h"
 #include "TitleBehavior/BaseTitleBehavior.h"
 
@@ -24,10 +23,10 @@
 #include "Collider/AABBCollider.h"
 
 /// std
-#include <array>
 #include <memory>
 #include <string>
 
+class SpecialAttackGauge;
 class LockOn;
 class GameCamera;
 class Player : public BaseObject, public AABBCollider {
