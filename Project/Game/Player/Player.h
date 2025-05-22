@@ -18,6 +18,7 @@
 /// behavior
 #include "PlayerBehavior/BasePlayerBehavior.h"
 #include "TitleBehavior/BaseTitleBehavior.h"
+#include "ComboAttackBehavior/BaseComboAattackBehavior.h"
 
 /// collider
 #include "Collider/AABBCollider.h"
@@ -25,6 +26,7 @@
 /// std
 #include <memory>
 #include <string>
+
 
 class SpecialAttackGauge;
 class LockOn;
