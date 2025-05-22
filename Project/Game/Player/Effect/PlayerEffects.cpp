@@ -13,9 +13,9 @@ void PlayerEffects::Init(const Vector3& position) {
     debriParticle_[0].emitter.reset(ParticleEmitter::CreateParticle("DebriParticle", "debri", ".obj", 100));
 
     // star
-    starEffect_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarCenterLight", PrimitiveType::Plane, 30));
-    starEffect_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarEffect", PrimitiveType::Plane, 30));
-    starEffect_[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarFrame", PrimitiveType::Plane, 30));
+    starEffect_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarCenterLight", PrimitiveType::Plane, 100));
+    starEffect_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarEffect", PrimitiveType::Plane, 100));
+    starEffect_[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarFrame", PrimitiveType::Plane, 100));
 
     for (uint32_t i = 0; i < starEffect_.size(); i++) {
         starEffect_[i].emitter->SetFollowingPos(&position);
@@ -40,6 +40,7 @@ void PlayerEffects::Update(const Vector3& position) {
 
     // 星パーティクル
     for (uint32_t i = 0; i < starEffect_.size(); i++) {
+        starEffect_[i].emitter->SetTargetPosition(position);
         starEffect_[i].emitter->Update();
     }
 
