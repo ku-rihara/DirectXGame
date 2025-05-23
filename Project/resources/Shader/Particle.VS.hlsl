@@ -5,12 +5,11 @@ struct ParticleForGPU
     float4x4 WVP;
     float4x4 World;
     float4x4 WorldInverseTranspose;
-    float4x4 UVTransform; 
+    float4x4 UVTransform;
     float4 color;
-    bool isFlipX;
-    bool isFlipY;
+    uint isFlipX;
+    uint isFlipY;
 };
-
 StructuredBuffer<ParticleForGPU> gParticle : register(t0);
 
 VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID)
@@ -18,12 +17,13 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
     VertexShaderOutput output;
     
     float2 texcoord = input.texcoord;
-    
-    if (gParticle[instanceID].isFlipX == true)
+
+    // Flip 処理
+    if (gParticle[instanceID].isFlipX != 0)
     {
         texcoord.x = 1.0f - texcoord.x;
     }
-    if (gParticle[instanceID].isFlipY==true)
+    if (gParticle[instanceID].isFlipY != 0)
     {
         texcoord.y = 1.0f - texcoord.y;
     }

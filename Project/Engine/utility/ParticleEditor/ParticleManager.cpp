@@ -137,8 +137,13 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
             //  UVTransform
             ///==========================================================================================
             instancingData[instanceIndex].UVTransform = MakeAffineMatrix(it->uvInfo_.scale, it->uvInfo_.rotate, it->uvInfo_.pos);
-            instancingData[instanceIndex].isFlipX     = it->uvInfo_.isFlipX;
-            instancingData[instanceIndex].isFlipY     = it->uvInfo_.isFlipY;
+
+            if (it->uvInfo_.isFlipX) {
+                instancingData[instanceIndex].isFlipX = true;
+            }
+            if (it->uvInfo_.isFlipY) {
+                instancingData[instanceIndex].isFlipY = true;
+            }
 
             ++instanceIndex;
             ++it;
