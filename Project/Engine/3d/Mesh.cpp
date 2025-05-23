@@ -95,5 +95,6 @@ void Mesh::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDL
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
     }
 
-    commandList->DrawInstanced(vertexNum_, instanceNum, 0, 0);
+    // インデックス描画
+    commandList->DrawIndexedInstanced(indexNum_, instanceNum, 0, 0, 0);
 }

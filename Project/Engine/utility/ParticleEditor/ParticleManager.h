@@ -47,6 +47,8 @@ private:
         bool isScroolEachPixel;
         bool isScrool;
         bool isRoop;
+        bool isFlipX;
+        bool isFlipY;
     };
 
     struct Particle {
