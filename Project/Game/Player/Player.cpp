@@ -38,7 +38,7 @@ void Player::Init() {
 
     //* particle
     effects_ = std::make_unique<PlayerEffects>();
-    effects_->Init(GetWorldPosition());
+    effects_->Init(transform_.translation_);
 
     ///* グローバルパラメータ
     parameters_ = std::make_unique<PlayerParameter>();

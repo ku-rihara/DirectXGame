@@ -40,7 +40,6 @@ void PlayerEffects::Update(const Vector3& position) {
 
     // 星パーティクル
     for (uint32_t i = 0; i < starEffect_.size(); i++) {
-        starEffect_[i].emitter->SetTargetPosition(position);
         starEffect_[i].emitter->Update();
     }
 
