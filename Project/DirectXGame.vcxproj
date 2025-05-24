@@ -136,6 +136,7 @@
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="Game\Scene\Manager\SceneManager.cpp" />
     <ClCompile Include="Game\Scene\TitleScene.cpp" />
+    <ClCompile Include="Game\SkyBox\SkyBox.cpp" />
     <ClCompile Include="Game\SkyDome\SkyDome.cpp" />
     <ClCompile Include="Game\UI\HowToOperate.cpp" />
     <ClCompile Include="Game\UI\TitleRogo.cpp" />
@@ -288,6 +289,7 @@
     <ClInclude Include="Game\Scene\GameScene.h" />
     <ClInclude Include="Game\Scene\Manager\SceneManager.h" />
     <ClInclude Include="Game\Scene\TitleScene.h" />
+    <ClInclude Include="Game\SkyBox\SkyBox.h" />
     <ClInclude Include="Game\SkyDome\SkyDome.h" />
     <ClInclude Include="Game\UI\HowToOperate.h" />
     <ClInclude Include="Game\UI\TitleRogo.h" />

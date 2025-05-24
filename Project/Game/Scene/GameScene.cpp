@@ -32,6 +32,7 @@ void GameScene::Init() {
 	enemySpawner_ = std::make_unique<EnemySpawner>();
 	skydome_= std::make_unique<Skydome>();
 	howToOperate_ = std::make_unique<HowToOperate>();
+    skyBox_       = std::make_unique<SkyBox>();
 
 	///=======================================================================================
 	/// 初期化
@@ -40,11 +41,12 @@ void GameScene::Init() {
 	skydome_->Init();
 	player_->Init();
 	lockOn_->Init();
+    skyBox_->Init();
 	enemyManager_->Init();
 	enemySpawner_->Init();
 	gamecamera_->Init();
 	howToOperate_->Init();
-	viewProjection_.Init();//ビュープロジェクション
+	viewProjection_.Init();
 
 	///=======================================================================================
 	/// セット
@@ -92,6 +94,7 @@ void GameScene::Update() {
 	//各クラス更新
 	player_->Update();
 	skydome_->Update();
+    skyBox_->Update();
 	howToOperate_->Update();
 	field_->Update();
 	enemySpawner_->Update();
@@ -150,7 +153,7 @@ void GameScene::ModelDraw() {
 	/// commandList取得
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 	Model::PreDraw(commandList);
-		skydome_->Draw(viewProjection_);
+		/*skydome_->Draw(viewProjection_);*/
 		field_->Draw(viewProjection_);
 		player_->Draw(viewProjection_);
 		enemyManager_->Draw(viewProjection_);
@@ -167,7 +170,7 @@ void GameScene::ModelDraw() {
 /// SkyBox描画
 /// ===================================================
 void GameScene::SkyBoxDraw() {
- 
+    skyBox_->Draw(viewProjection_);
 }
 
 /// ======================================================

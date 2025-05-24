@@ -1,82 +1,80 @@
 #pragma once
 
 /// base
-#include"BaseScene.h"
+#include "BaseScene.h"
 
-//object
-#include"Field/Field.h"
-#include"SkyDome/SkyDome.h"
-#include"Player/Player.h"
-#include"LockOn/LockOn.h"
-#include"GameCamera/GameCamera.h"
-#include"Enemy/EnemyManager.h"
-#include"UI/HowToOperate.h"
-#include"Enemy/Spawner/EnemySpawner.h"
+// object
+#include "Enemy/EnemyManager.h"
+#include "Enemy/Spawner/EnemySpawner.h"
+#include "Field/Field.h"
+#include "GameCamera/GameCamera.h"
+#include "LockOn/LockOn.h"
+#include "Player/Player.h"
+#include "SkyDome/SkyDome.h"
+#include "UI/HowToOperate.h"
 
-#include"SkyBox/SkyBox.h"
-
+#include "SkyBox/SkyBox.h"
 
 /// <summary>
 /// ゲームシーン
 /// </summary>
-class GameScene:public BaseScene {
+class GameScene : public BaseScene {
 private:
+    ///========================================================
+    /// Private variants
+    ///========================================================
 
-	///========================================================
-	/// Private variants
-	///========================================================
+    ///* objects
+    std::unique_ptr<GameCamera> gamecamera_     = nullptr;
+    std::unique_ptr<Field> field_               = nullptr;
+    std::unique_ptr<LockOn> lockOn_             = nullptr;
+    std::unique_ptr<Player> player_             = nullptr;
+    std::unique_ptr<Skydome> skydome_           = nullptr;
+    std::unique_ptr<SkyBox> skyBox_             = nullptr;
+    std::unique_ptr<EnemyManager> enemyManager_ = nullptr;
+    std::unique_ptr<EnemySpawner> enemySpawner_ = nullptr;
+    std::unique_ptr<HowToOperate> howToOperate_ = nullptr;
 
-	///* objects
-	std::unique_ptr<GameCamera> gamecamera_ = nullptr;
-	std::unique_ptr<Field> field_ = nullptr;
-	std::unique_ptr<LockOn> lockOn_ = nullptr;
-	std::unique_ptr<Player> player_ = nullptr;
-	std::unique_ptr<Skydome> skydome_ = nullptr;
-	std::unique_ptr<EnemyManager>enemyManager_ = nullptr;
-	std::unique_ptr<EnemySpawner>enemySpawner_ = nullptr;
-	std::unique_ptr<HowToOperate>howToOperate_ = nullptr;
-	
-	bool isDraw = true;
+    bool isDraw = true;
 
-	Vector3 lightPos_;
+    Vector3 lightPos_;
 
-	uint32_t defaultHandle_;
-	uint32_t circleHandle_;
-	uint32_t uv_;
+    uint32_t defaultHandle_;
+    uint32_t circleHandle_;
+    uint32_t uv_;
 
-	bool isfirstChange_;
-	float alpha_;
-	int shandle_;
-	std::unique_ptr<Sprite>screenSprite_;
+    bool isfirstChange_;
+    float alpha_;
+    int shandle_;
+    std::unique_ptr<Sprite> screenSprite_;
 
-	int chandle_;
-	Easing cease_;
-	std::unique_ptr<Sprite>cSprite_;
-	bool isend_;
+    int chandle_;
+    Easing cease_;
+    std::unique_ptr<Sprite> cSprite_;
+    bool isend_;
 
 public:
-	
-	///========================================================
-	/// Constralt destract
-	///========================================================
-	GameScene();
-	~GameScene()override;
+    ///========================================================
+    /// Constralt destract
+    ///========================================================
+    GameScene();
+    ~GameScene() override;
 
-	///========================================================
-	/// private method
-	///========================================================
-	
-	/// 初期化、更新、描画
-	void Init()override;
-	void Update()override;
-	void ModelDraw()override;
-	void SpriteDraw()override;
+    ///========================================================
+    /// private method
+    ///========================================================
+
+    /// 初期化、更新、描画
+    void Init() override;
+    void Update() override;
+    void ModelDraw() override;
+    void SpriteDraw() override;
     void SkyBoxDraw() override;
 
-	void Debug()override;/// debug
-	void ViewProjectionUpdate()override;
-	void ViewProssess()override;
+    void Debug() override; /// debug
+    void ViewProjectionUpdate() override;
+    void ViewProssess() override;
 
-	void ChangeForJoyState();
-	/*const ViewProjection& GetViewProjection()const { return viewProjection_; }*/
+    void ChangeForJoyState();
+    /*const ViewProjection& GetViewProjection()const { return viewProjection_; }*/
 };

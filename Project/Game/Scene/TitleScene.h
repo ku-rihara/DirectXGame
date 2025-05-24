@@ -7,6 +7,7 @@
 #include"Player/Player.h"
 #include"Field/Field.h"
 #include"SkyDome/SkyDome.h"
+#include"SkyBox/SkyBox.h"
 #include"UI/TitleRogo.h"
 
 /// <summary>
@@ -22,6 +23,7 @@ private:
 	std::unique_ptr<Player>player_ = nullptr;
 	std::unique_ptr<Field>field_ = nullptr;
 	std::unique_ptr<Skydome> skydome_ = nullptr;
+    std::unique_ptr<SkyBox> skyBox_      = nullptr;
     std::unique_ptr<TitleRogo> titleRogo_ = nullptr;
 
 	bool isTitleRogoUpdate;

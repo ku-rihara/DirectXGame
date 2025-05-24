@@ -32,13 +32,14 @@ void TitleScene::Init() {
 	player_ = std::make_unique<Player>();
 	skydome_ = std::make_unique<Skydome>();
     titleRogo_ = std::make_unique<TitleRogo>();
-
+    skyBox_ = std::make_unique<SkyBox>();
 
 	///=======================================================================================
 	/// 初期化
 	///=======================================================================================
 	field_->Init();
 	skydome_->Init();
+    skyBox_->Init();
 	player_->Init();
 	titleRogo_->Init();
 		
@@ -71,6 +72,7 @@ void TitleScene::Update() {
 
 	player_->TitleUpdate();
 	field_->Update();
+    skyBox_->Update();
 	skydome_->Update();
 
 	if (dynamic_cast<TitleRightPunch*>(player_->GetTitleBehavior())) {
@@ -122,7 +124,7 @@ void TitleScene::ModelDraw() {
 
 	
 	Model::PreDraw(commandList);
-	skydome_->Draw(viewProjection_);
+	//skydome_->Draw(viewProjection_);
 	field_->Draw(viewProjection_);
 	player_->Draw(viewProjection_);
 
@@ -135,6 +137,7 @@ void TitleScene::ModelDraw() {
 /// SkyBox描画
 /// ===================================================
 void TitleScene::SkyBoxDraw() {
+    skyBox_->Draw(viewProjection_);
 }
 
 

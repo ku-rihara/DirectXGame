@@ -16,6 +16,7 @@ void Field::Init() {
 	transform_.Init();
 	transform_.scale_ = {1,1,1};
 	obj3d_->material_.materialData_->enableLighting = 5;
+    obj3d_->material_.SetEnvironmentCoefficient(0.35f);
 }
 
 void Field::Update() {

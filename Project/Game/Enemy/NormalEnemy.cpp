@@ -11,6 +11,7 @@ void NormalEnemy::Init(const Vector3& spownPos) {
 	bodyObj_.reset(Object3d::CreateModel("NormalEnemy", ".obj"));
 	bodyTransform_.Init();
 	bodyTransform_.SetParent(&transform_);
+   
 }
 
 ///========================================================

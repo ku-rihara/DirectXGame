@@ -35,7 +35,7 @@ void Player::Init() {
     ///* model生成
     BaseObject::Init(); // 基底クラスの初期化
     BaseObject::CreateModel("Player", ".obj"); /// モデルセット
-
+  
     //* particle
     effects_ = std::make_unique<PlayerEffects>();
     effects_->Init(transform_.translation_);
@@ -49,6 +49,8 @@ void Player::Init() {
     rightHand_ = std::make_unique<PlayerHandRight>();
     headObj_.reset(Object3d::CreateModel("Player", ".obj"));
     headObj_->material_.materialData_->enableLighting = 7;
+    headObj_->material_.SetEnvironmentCoefficient(0.05f);
+
 
     // トランスフォーム初期化
     headTransform_.Init();

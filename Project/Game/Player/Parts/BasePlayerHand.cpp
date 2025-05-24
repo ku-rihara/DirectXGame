@@ -22,6 +22,8 @@ void BasePlayerHand::Init() {
 	emitter_.reset(ParticleEmitter::CreateParticlePrimitive(groupName_,PrimitiveType::Plane,300));
 	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
 	emitter_->SetTextureHandle(handle);
+
+	obj3d_->material_.SetEnvironmentCoefficient(0.15f);
 	
 }
 

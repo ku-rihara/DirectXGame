@@ -13,7 +13,7 @@ void SkyBox::Init() {
     primitiveBox_->SetTexture("Resources/Texture/output.dds");
 	transform_.Init();
 
-	transform_.scale_ = {20, 20, 20};
+	transform_.scale_ = {200, 200, 200};
 
 }
 

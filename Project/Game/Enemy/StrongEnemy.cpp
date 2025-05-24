@@ -9,6 +9,7 @@ void StrongEnemy::Init(const Vector3& spownPos) {
 	bodyObj_.reset(Object3d::CreateModel("StrongEnemy", ".obj"));
 	bodyTransform_.Init();
 	bodyTransform_.SetParent(&transform_);
+    
 }
 
 ///========================================================
