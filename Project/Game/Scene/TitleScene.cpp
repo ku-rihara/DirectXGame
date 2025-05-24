@@ -21,9 +21,9 @@ void TitleScene::Init() {
     BaseScene::Init();
 
     /// パーティクルデータの読み込みと、モデルの読み込み
-    EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticlePrimitive("StarCenterLight", PrimitiveType::Plane, 100));
-    EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticlePrimitive("StarEffect", PrimitiveType::Plane, 100));
-    EnemydamageEffect_[2].reset(ParticleEmitter::CreateParticlePrimitive("StarFrame", PrimitiveType::Plane, 100));
+    EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticlePrimitive("CylinderParticle", PrimitiveType::Cylinder, 100));
+    EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticlePrimitive("RingParticl", PrimitiveType::Ring, 100));
+    EnemydamageEffect_[2].reset(ParticleEmitter::CreateParticlePrimitive("PlaneParticl", PrimitiveType::Plane, 100));
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
@@ -33,9 +33,7 @@ void TitleScene::Update() {
     for (int i = 0; i < EnemydamageEffect_.size(); i++) {
         EnemydamageEffect_[i]->Update();
         EnemydamageEffect_[i]->EditorUpdate();
-        if (Input::GetInstance()->TrrigerKey(DIK_G)) {
-            EnemydamageEffect_[i]->Emit();
-        }
+        EnemydamageEffect_[i]->Emit();
     }
     /* EnemydamageEffect_[0]->Update();
      EnemydamageEffect_[0]->EditorUpdate();
@@ -69,8 +67,7 @@ void TitleScene::ModelDraw() {
 /// SkyBox描画
 /// ===================================================
 void TitleScene::SkyBoxDraw() {
-
- }
+}
 
 /// ===================================================
 /// スプライト描画
