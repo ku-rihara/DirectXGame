@@ -1,5 +1,5 @@
 {
-    "CylinderParticle3": {
+    "RingParticl": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": false,
@@ -36,7 +36,7 @@
         "LifeTime": 0.699999988079071,
         "Particle Count": 1,
         "Position Base": [
-            15.800000190734863,
+            20.799999237060547,
             0.0,
             0.0
         ],
@@ -89,7 +89,7 @@
         ],
         "Speed Max": 0.0,
         "Speed Min": 0.0,
-        "UV IsRoop": true,
+        "UV IsRoop": false,
         "UV NumOfFrame": 1,
         "UV Pos": [
             0.0,
@@ -100,11 +100,11 @@
             0.0,
             0.0
         ],
-        "UV ScroolSpeed": 0.9900000095367432,
+        "UV ScroolSpeed": 0.0,
         "UV isFlipX": false,
         "UV isFlipY": false,
-        "UV isScrool": true,
-        "UV isScroolEachPixel": true,
+        "UV isScrool": false,
+        "UV isScroolEachPixel": false,
         "blendMode": 0,
         "isAlphaNoMove": false,
         "isBillBord": true,

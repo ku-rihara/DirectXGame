@@ -179,10 +179,10 @@ Vector3 WorldTransform::GetLocalPos() const {
 
 void WorldTransform::UpdateAffineMatrix() {
     switch (rotateOder_) {
-    case WorldTransform::RotateOder::XYZ:
+    case RotateOder::XYZ:
         matWorld_ = MakeAffineMatrix(scale_, rotation_, translation_);
         break;
-    case WorldTransform::RotateOder::Quaternion:
+    case RotateOder::Quaternion:
         quaternion_.Normalize();
         matWorld_ = MakeScaleMatrix(scale_) * MakeRotateMatrixFromQuaternion(quaternion_) * MakeTranslateMatrix(translation_);
 
