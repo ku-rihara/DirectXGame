@@ -1,0 +1,132 @@
+{
+    "NormalEnemySpawnSpark": {
+        "AdaptRotateIsX": false,
+        "AdaptRotateIsY": false,
+        "AdaptRotateIsZ": false,
+        "BaseColor": [
+            0.8480392098426819,
+            0.2821906805038452,
+            0.10808344930410385,
+            0.0
+        ],
+        "Color Max": [
+            0.1568627506494522,
+            0.01568627543747425,
+            0.0117647061124444,
+            0.0
+        ],
+        "Color Min": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Direction Max": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "Direction Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Gravity": 0.0,
+        "IntervalTime": 1.0,
+        "LifeTime": 0.7699999809265137,
+        "Particle Count": 41,
+        "Position Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Position Max": [
+            4.5,
+            3.0,
+            3.299999952316284
+        ],
+        "Position Min": [
+            -4.5,
+            -2.0,
+            -3.799999952316284
+        ],
+        "Rotate Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale Max": 2.0,
+        "Scale Min": 2.0,
+        "ScaleV3 Max": [
+            0.5,
+            3.0,
+            2.0
+        ],
+        "ScaleV3 Min": [
+            0.10000000149011612,
+            2.0,
+            2.0
+        ],
+        "Speed Max": 10.100000381469727,
+        "Speed Min": 10.0,
+        "UV IsRoop": false,
+        "UV NumOfFrame": 1,
+        "UV Pos": [
+            0.0,
+            0.0
+        ],
+        "UV Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "UV ScroolSpeed": 0.0,
+        "UV isFlipX": false,
+        "UV isFlipY": false,
+        "UV isScrool": false,
+        "UV isScroolEachPixel": false,
+        "blendMode": 0,
+        "isAlphaNoMove": false,
+        "isBillBord": true,
+        "isRotateforDirection": false,
+        "isScalerScale": false,
+        "isShot": true,
+        "preBillBordType_": 0,
+        "scaleEaseParm.easeTypeInt": 0,
+        "scaleEaseParm.endValueF.max": 0.0,
+        "scaleEaseParm.endValueF.min": 0.0,
+        "scaleEaseParm.endValueV3.max": [
+            0.0,
+            1.0,
+            2.0
+        ],
+        "scaleEaseParm.endValueV3.min": [
+            0.0,
+            1.0,
+            2.0
+        ],
+        "scaleEaseParm.isScaleEase": true,
+        "scaleEaseParm.maxTime": 0.46000000834465027,
+        "selectedTexturePath_": "Resources/texture/circle.png"
+    }
+}
