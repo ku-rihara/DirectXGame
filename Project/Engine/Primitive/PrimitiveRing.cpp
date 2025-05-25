@@ -11,7 +11,7 @@ void PrimitiveRing::Init() {
 void PrimitiveRing::Create() {
     const float kOuterRadius    = 1.0f;
     const float kInnerRadius    = 0.2f;
-    const float radianPerDivide = 2.0f * std::numbers::pi_v<float> / float(vertexNum_);
+    const float radianPerDivide = (2.0f* std::numbers::pi_v<float>) / float(vertexNum_);
 
     for (uint32_t index = 0; index < vertexNum_; ++index) {
         float sin     = std::sin(index * radianPerDivide);
@@ -21,7 +21,7 @@ void PrimitiveRing::Create() {
         float u       = float(index) / float(vertexNum_);
         float uNext   = float(index + 1) / float(vertexNum_);
 
-        uint32_t baseIndex = index * 4;
+        uint32_t baseIndex = index * 3;
 
         mesh_->SetVertexPositionData(baseIndex + 0, Vector4(-sin * kOuterRadius, cos * kOuterRadius, 0.0f, 1.0f));
         mesh_->SetVertexTexcoordData(baseIndex + 0, Vector2(u, 0.0f));
@@ -36,19 +36,10 @@ void PrimitiveRing::Create() {
         mesh_->SetVertexTexcoordData(baseIndex + 3, Vector2(uNext, 1.0f));
     }
 
-    // indexデータ生成（三角形2枚）
-    std::vector<uint32_t> indices(vertexNum_ * 6); // 1分割につき三角形2枚 = 6 indices
+    // indexデータ生成
+    std::vector<uint32_t> indices(vertexNum_);
     for (uint32_t i = 0; i < vertexNum_; ++i) {
-        uint32_t baseIndex = i * 4;
-        uint32_t idx       = i * 6;
-
-        indices[idx + 0] = baseIndex + 0;
-        indices[idx + 1] = baseIndex + 1;
-        indices[idx + 2] = baseIndex + 2;
-
-        indices[idx + 3] = baseIndex + 2;
-        indices[idx + 4] = baseIndex + 1;
-        indices[idx + 5] = baseIndex + 3;
+        indices[i] = i;
     }
     mesh_->SetIndexData(indices.data(), static_cast<uint32_t>(indices.size()));
 }

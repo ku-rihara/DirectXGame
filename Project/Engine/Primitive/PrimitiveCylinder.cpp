@@ -4,7 +4,7 @@
 #include <vector>
 
 void PrimitiveCylinder::Init() {
-    vertexNum_ = 32;
+    vertexNum_ = 32*6;
     IPrimitive::Init();
 }
 
@@ -12,7 +12,7 @@ void PrimitiveCylinder::Create() {
     const float kTopRadius      = 1.0f;
     const float kBottomRadius   = 1.0f;
     const float kHeight         = 3.0f;
-    const float radianPerDivide = 2.0f * std::numbers::pi_v<float> / float(vertexNum_);
+    const float radianPerDivide = (12.0f * std::numbers::pi_v<float>) / float(vertexNum_);
 
     for (uint32_t index = 0; index < vertexNum_; ++index) {
         float sin     = std::sin(index * radianPerDivide);
@@ -51,8 +51,8 @@ void PrimitiveCylinder::Create() {
     }
 
     // indexデータ生成
-    std::vector<uint32_t> indices(vertexNum_ * 6);
-    for (uint32_t i = 0; i < vertexNum_ * 6; ++i) {
+    std::vector<uint32_t> indices(vertexNum_);
+    for (uint32_t i = 0; i < vertexNum_; ++i) {
         indices[i] = i;
     }
     mesh_->SetIndexData(indices.data(), static_cast<uint32_t>(indices.size()));

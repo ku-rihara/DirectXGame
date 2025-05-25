@@ -1,12 +1,12 @@
 {
-    "RingParticl": {
+    "NormalEnemySpawnCircle": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": false,
         "BaseColor": [
-            1.0,
-            1.0,
-            1.0,
+            0.08780274540185928,
+            0.8529411554336548,
+            0.8529411554336548,
             0.0
         ],
         "Color Max": [
@@ -34,9 +34,9 @@
         "Gravity": 0.0,
         "IntervalTime": 1.0,
         "LifeTime": 0.699999988079071,
-        "Particle Count": 1,
+        "Particle Count": 7,
         "Position Base": [
-            20.799999237060547,
+            0.0,
             0.0,
             0.0
         ],
@@ -75,8 +75,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 5.0,
-        "Scale Min": 5.0,
+        "Scale Max": 0.0,
+        "Scale Min": 0.0,
         "ScaleV3 Max": [
             0.0,
             0.0,
@@ -100,33 +100,33 @@
             0.0,
             0.0
         ],
-        "UV ScroolSpeed": 1.4700000286102295,
+        "UV ScroolSpeed": 0.11999999731779099,
         "UV isFlipX": false,
-        "UV isFlipY": false,
+        "UV isFlipY": true,
         "UV isScrool": true,
         "UV isScroolEachPixel": true,
         "blendMode": 0,
         "isAlphaNoMove": false,
         "isBillBord": true,
         "isRotateforDirection": false,
-        "isScalerScale": true,
-        "isShot": false,
+        "isScalerScale": false,
+        "isShot": true,
         "preBillBordType_": 0,
-        "scaleEaseParm.easeTypeInt": 0,
-        "scaleEaseParm.endValueF.max": 0.0,
-        "scaleEaseParm.endValueF.min": 0.0,
+        "scaleEaseParm.easeTypeInt": 3,
+        "scaleEaseParm.endValueF.max": 4.0,
+        "scaleEaseParm.endValueF.min": 4.0,
         "scaleEaseParm.endValueV3.max": [
-            0.0,
-            0.0,
-            0.0
+            5.0,
+            3.0,
+            5.0
         ],
         "scaleEaseParm.endValueV3.min": [
-            0.0,
-            0.0,
-            0.0
+            5.0,
+            3.0,
+            5.0
         ],
-        "scaleEaseParm.isScaleEase": false,
-        "scaleEaseParm.maxTime": 0.0,
+        "scaleEaseParm.isScaleEase": true,
+        "scaleEaseParm.maxTime": 0.46000000834465027,
         "selectedTexturePath_": "Resources/texture/gradationLine.png"
     }
 }
