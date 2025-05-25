@@ -20,7 +20,6 @@ EnemySpawn::EnemySpawn(BaseEnemy* boss)
 	spawnEasing_.time = 0.0f;
 	spawnEasing_.maxTime = 0.8f;
 
-	pBaseEnemy_->SpawnRenditionInit();
 
 }
 
@@ -31,6 +30,14 @@ EnemySpawn::~EnemySpawn() {
 void EnemySpawn::Update() {
 	switch (step_)
 	{
+        ///------------------------------------------------------------------
+        /// 敵の生成アニメーション
+        ///------------------------------------------------------------------
+    case EnemySpawn::Step::EFFECTEMIT:
+        pBaseEnemy_->SpawnRenditionInit();
+       
+				step_ = Step::SPAWN; // 次のステップ
+        break;
 		///------------------------------------------------------------------
 		/// 敵の生成アニメーション
 		///------------------------------------------------------------------

@@ -6,6 +6,7 @@
 class EnemySpawn : public BaseEnemyMoveBehavior {
 private:
 	enum class Step {
+		EFFECTEMIT,
 		SPAWN,
 		ChangeNextBehavior,
 	};
