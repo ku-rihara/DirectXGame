@@ -116,14 +116,14 @@
         "scaleEaseParm.endValueF.max": 4.0,
         "scaleEaseParm.endValueF.min": 4.0,
         "scaleEaseParm.endValueV3.max": [
-            7.0,
-            3.0,
-            7.0
+            5.5,
+            1.0,
+            5.5
         ],
         "scaleEaseParm.endValueV3.min": [
-            7.0,
-            3.0,
-            7.0
+            5.5,
+            1.0,
+            5.5
         ],
         "scaleEaseParm.isScaleEase": true,
         "scaleEaseParm.maxTime": 0.46000000834465027,

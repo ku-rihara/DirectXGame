@@ -41,12 +41,12 @@
             0.0
         ],
         "Position Max": [
-            6.0,
+            5.400000095367432,
             3.0,
             5.599999904632568
         ],
         "Position Min": [
-            -6.300000190734863,
+            -5.300000190734863,
             -2.0,
             -5.199999809265137
         ],
@@ -117,12 +117,12 @@
         "scaleEaseParm.endValueF.min": 0.0,
         "scaleEaseParm.endValueV3.max": [
             0.0,
-            1.0,
+            1.5,
             2.0
         ],
         "scaleEaseParm.endValueV3.min": [
             0.0,
-            1.0,
+            1.5,
             2.0
         ],
         "scaleEaseParm.isScaleEase": true,
