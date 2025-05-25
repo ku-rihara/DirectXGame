@@ -33,7 +33,7 @@
         ],
         "Gravity": 0.0,
         "IntervalTime": 1.0,
-        "LifeTime": 1.0,
+        "LifeTime": 1.5499999523162842,
         "Particle Count": 1,
         "Position Base": [
             0.5,
@@ -57,12 +57,12 @@
         ],
         "Rotate Max": [
             0.0,
-            0.0,
+            179.1999969482422,
             0.0
         ],
         "Rotate Min": [
             0.0,
-            0.0,
+            -151.89999389648438,
             0.0
         ],
         "RotateSpeed Max": [
@@ -89,6 +89,22 @@
         ],
         "Speed Max": 0.0,
         "Speed Min": 0.0,
+        "UV IsRoop": false,
+        "UV NumOfFrame": 1,
+        "UV Pos": [
+            0.0,
+            0.0
+        ],
+        "UV Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "UV ScroolSpeed": 0.0,
+        "UV isFlipX": false,
+        "UV isFlipY": false,
+        "UV isScrool": false,
+        "UV isScroolEachPixel": false,
         "Velocity Max": [
             0.0,
             0.0,
@@ -100,7 +116,7 @@
             0.0
         ],
         "blendMode": 1,
-        "isAlphaNoMove": true,
+        "isAlphaNoMove": false,
         "isBillBord": false,
         "isMoveForRail": false,
         "isRotateforDirection": false,

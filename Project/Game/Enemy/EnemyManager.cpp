@@ -461,17 +461,18 @@ void EnemyManager::ParticleUpdate() {
     // スポーンパーティクル
     for (uint32_t i = 0; i < spawnEffectNormal_.size(); i++) {
         spawnEffectNormal_[i].emitter->Update();
-        spawnEffectNormal_[i].emitter->EditorUpdate();
+      
     }
 
      // スポーンパーティクル(strong)
     for (uint32_t i = 0; i < spawnEffectStrong_.size(); i++) {
         spawnEffectStrong_[i].emitter->Update();
-        spawnEffectStrong_[i].emitter->EditorUpdate();
+       
     }
 
     //ヒビ
     fallCrack_->Update();
+    fallCrack_->EditorUpdate();
 
     // 死亡パーティクル
     for (uint32_t i = 0; i < deathParticle_.size(); i++) {
