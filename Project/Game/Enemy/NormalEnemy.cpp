@@ -50,6 +50,6 @@ void NormalEnemy::SpriteDraw(const ViewProjection& viewProjection) {
 
 void NormalEnemy::SpawnRenditionInit() {
     // ガレキパーティクル
-    pEnemyManager_->SpawnEmitByNormalEnemy(GetWorldPosition());
+    pEnemyManager_->SpawnEmitByNormalEnemy(transform_.translation_);
     /* Audio::GetInstance()->PlayWave(thurstSound_, 0.2f);*/
 }

@@ -49,6 +49,6 @@ void StrongEnemy::SpriteDraw(const ViewProjection& viewProjection) {
 
 void StrongEnemy::SpawnRenditionInit() {
     // ガレキパーティクル
-    pEnemyManager_->SpawnEmitByStrongEnemy(GetWorldPosition());
+    pEnemyManager_->SpawnEmitByStrongEnemy(transform_.translation_);
    /* Audio::GetInstance()->PlayWave(thurstSound_, 0.2f);*/
 }

@@ -34,8 +34,7 @@ void EnemyManager::Init() {
 }
 
 void EnemyManager::FSpawn() {
-    SpawnEnemy("NormalEnemy", Vector3{-30, 0, 40});
-    SpawnEnemy("StrongEnemy", Vector3{30, 0, 40});
+  
 }
 
 ///========================================================================================

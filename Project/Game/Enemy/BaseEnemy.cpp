@@ -80,8 +80,6 @@ void BaseEnemy::Update() {
 	}
 	damageBehavior_->Update();
 
-
-	
 	FallEffectUpdate();
 
 	BehaviorChangeDeath();
