@@ -55,10 +55,10 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
     }
 
     // 位置初期化とlistに追加
-    enemy->Init(position);
     enemy->SetPlayer(pPlayer_); // プレイヤーセット
     enemy->SetGameCamera(pGameCamera_);
     enemy->SetManager(this);
+    enemy->Init(position);
     enemies_.push_back(std::move(enemy));
 }
 
@@ -385,6 +385,13 @@ void EnemyManager::ParticleInit() {
     //
     InitParticleEffect(debriParticle_[0], "DebriName", "debri", defaultHandle, 500);
     debriParticle_[0].emitter->SetBlendMode(BlendMode::None);
+
+    // EnemySpawn
+    spawnEffectNormal_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("NormalEnemySpawnCircle", PrimitiveType::Cylinder, 200));
+    spawnEffectNormal_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("NormalEnemySpawnSpark", PrimitiveType::Plane, 500));
+    spawnEffectStrong_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StrongEnemySpawnCircle", PrimitiveType::Cylinder, 200));
+    spawnEffectStrong_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StrongEnemySpawnSpark", PrimitiveType::Plane, 500));
+
 
     // crack
     fallCrack_.reset(ParticleEmitter::CreateParticle("Crack", "Plane", ".obj", 30));

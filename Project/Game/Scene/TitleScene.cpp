@@ -52,7 +52,6 @@ void TitleScene::Init() {
 	screenSprite_.reset(Sprite::Create(shandle_, Vector2(0, 0), Vector4(1, 1, 1, alpha_)));
 	
 	player_->SetTitleBehavior();
-
 	player_->SetWorldPositionY(30.0f);
 
 	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
@@ -66,7 +65,6 @@ void TitleScene::Init() {
 }
 
 void TitleScene::Update() {
-	
 	
 	screenSprite_->SetAlpha(alpha_);
 
@@ -108,7 +106,9 @@ void TitleScene::Update() {
 
 void TitleScene::ChangeForJoyState() {
 	
-	if (!((Input::IsTriggerPad(0, XINPUT_GAMEPAD_A)))) return;
+	if (!((Input::IsTriggerPad(0, XINPUT_GAMEPAD_A)))) {
+        return;
+    }
 
 	isFinished_ = true;
 
