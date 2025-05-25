@@ -4,9 +4,9 @@
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": false,
         "BaseColor": [
-            0.8529411554336548,
-            0.20032313466072083,
             0.08780274540185928,
+            0.8529411554336548,
+            0.8529411554336548,
             0.0
         ],
         "Color Max": [
@@ -110,7 +110,7 @@
         "isBillBord": true,
         "isRotateforDirection": false,
         "isScalerScale": false,
-        "isShot": false,
+        "isShot": true,
         "preBillBordType_": 0,
         "scaleEaseParm.easeTypeInt": 3,
         "scaleEaseParm.endValueF.max": 4.0,

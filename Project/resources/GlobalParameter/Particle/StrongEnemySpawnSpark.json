@@ -1,12 +1,12 @@
 {
-    "NormalEnemySpawnSpark": {
+    "StrongEnemySpawnSpark": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": false,
         "BaseColor": [
             0.10808344930410385,
-            0.8262759447097778,
             0.8480392098426819,
+            0.1298466920852661,
             0.0
         ],
         "Color Max": [
