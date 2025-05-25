@@ -107,7 +107,7 @@
         "UV isScroolEachPixel": false,
         "blendMode": 0,
         "isAlphaNoMove": false,
-        "isBillBord": false,
+        "isBillBord": true,
         "isRotateforDirection": false,
         "isScalerScale": false,
         "isShot": true,

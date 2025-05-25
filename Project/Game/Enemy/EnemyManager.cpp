@@ -448,6 +448,7 @@ void EnemyManager::SpawnEmitByStrongEnemy(const Vector3& pos) {
     for (uint32_t i = 0; i < spawnEffectStrong_.size(); i++) {
         spawnEffectStrong_[i].emitter->SetTargetPosition(pos);
         spawnEffectStrong_[i].emitter->Emit();
+
     }
  }
     
@@ -465,6 +466,7 @@ void EnemyManager::ParticleUpdate() {
      // スポーンパーティクル(strong)
     for (uint32_t i = 0; i < spawnEffectStrong_.size(); i++) {
         spawnEffectStrong_[i].emitter->Update();
+     
     }
 
     //ヒビ
