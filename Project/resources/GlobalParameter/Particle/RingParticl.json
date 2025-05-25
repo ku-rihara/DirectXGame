@@ -89,7 +89,7 @@
         ],
         "Speed Max": 0.0,
         "Speed Min": 0.0,
-        "UV IsRoop": false,
+        "UV IsRoop": true,
         "UV NumOfFrame": 1,
         "UV Pos": [
             0.0,
@@ -100,11 +100,11 @@
             0.0,
             0.0
         ],
-        "UV ScroolSpeed": 0.0,
+        "UV ScroolSpeed": 1.4700000286102295,
         "UV isFlipX": false,
         "UV isFlipY": false,
-        "UV isScrool": false,
-        "UV isScroolEachPixel": false,
+        "UV isScrool": true,
+        "UV isScroolEachPixel": true,
         "blendMode": 0,
         "isAlphaNoMove": false,
         "isBillBord": true,
