@@ -41,14 +41,14 @@
             0.0
         ],
         "Position Max": [
-            4.5,
+            6.0,
             3.0,
-            3.299999952316284
+            7.0
         ],
         "Position Min": [
-            -4.5,
+            -6.300000190734863,
             -2.0,
-            -3.799999952316284
+            -5.199999809265137
         ],
         "Rotate Base": [
             0.0,
@@ -87,8 +87,8 @@
             2.0,
             2.0
         ],
-        "Speed Max": 10.100000381469727,
-        "Speed Min": 10.0,
+        "Speed Max": 18.899999618530273,
+        "Speed Min": 18.700000762939453,
         "UV IsRoop": false,
         "UV NumOfFrame": 1,
         "UV Pos": [
@@ -107,7 +107,7 @@
         "UV isScroolEachPixel": false,
         "blendMode": 0,
         "isAlphaNoMove": false,
-        "isBillBord": true,
+        "isBillBord": false,
         "isRotateforDirection": false,
         "isScalerScale": false,
         "isShot": true,

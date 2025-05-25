@@ -21,8 +21,8 @@ void TitleScene::Init() {
     BaseScene::Init();
 
     /// パーティクルデータの読み込みと、モデルの読み込み
-    EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticlePrimitive("StrongEnemySpawnCircle", PrimitiveType::Cylinder, 200));
-    EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticlePrimitive("StrongEnemySpawnSpark", PrimitiveType::Plane, 500));
+    EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticlePrimitive("NormalEnemySpawnCircle", PrimitiveType::Cylinder, 200));
+    EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticlePrimitive("NormalEnemySpawnSpark", PrimitiveType::Plane, 500));
     EnemydamageEffect_[2].reset(ParticleEmitter::CreateParticlePrimitive("PlaneParticl", PrimitiveType::Plane, 100));
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
