@@ -1,4 +1,6 @@
 #include "NormalEnemy.h"
+#include"Enemy/EnemyManager.h"
+#include"audio/Audio.h"
 
 ///========================================================
 ///  初期化
@@ -10,8 +12,7 @@ void NormalEnemy::Init(const Vector3& spownPos) {
 	damageParm_ = 30.0f;
 	bodyObj_.reset(Object3d::CreateModel("NormalEnemy", ".obj"));
 	bodyTransform_.Init();
-	bodyTransform_.SetParent(&transform_);
-   
+	bodyTransform_.SetParent(&transform_);  
 }
 
 ///========================================================
@@ -45,4 +46,10 @@ void NormalEnemy::DisplaySprite(const ViewProjection& viewProjection) {
 ///========================================================
 void NormalEnemy::SpriteDraw(const ViewProjection& viewProjection) {
 	BaseEnemy::SpriteDraw(viewProjection);
+}
+
+void NormalEnemy::SpawnRenditionInit() {
+    // ガレキパーティクル
+    pEnemyManager_->SpawnEmitByNormalEnemy(GetWorldPosition());
+    /* Audio::GetInstance()->PlayWave(thurstSound_, 0.2f);*/
 }

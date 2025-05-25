@@ -331,8 +331,6 @@ void BaseEnemy::FallEffectInit(const Vector3& pos) {
 
 	effect->Init(pos);
 	effects_.push_back(std::move(effect));
-
-	
 }
 
 

@@ -1,4 +1,6 @@
 #include "StrongEnemy.h"
+#include"Enemy/EnemyManager.h"
+#include"audio/Audio.h"
 
 ///========================================================
 ///  初期化
@@ -42,4 +44,11 @@ void StrongEnemy::DisplaySprite(const ViewProjection& viewProjection) {
 ///========================================================
 void StrongEnemy::SpriteDraw(const ViewProjection& viewProjection) {
 	BaseEnemy::SpriteDraw(viewProjection);
+}
+
+
+void StrongEnemy::SpawnRenditionInit() {
+    // ガレキパーティクル
+    pEnemyManager_->SpawnEmitByStrongEnemy(GetWorldPosition());
+   /* Audio::GetInstance()->PlayWave(thurstSound_, 0.2f);*/
 }

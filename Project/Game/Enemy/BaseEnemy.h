@@ -98,10 +98,13 @@ public:
 	virtual void Draw(const ViewProjection& viewProjection);
 	virtual void SpriteDraw(const ViewProjection& viewProjection);
 
+
 	/// Rendition Init
 	void DamageRenditionInit();
 	void ThrustRenditionInit();
 	void DeathRenditionInit();
+    virtual void SpawnRenditionInit() = 0;
+
     void ScaleReset();
     void FallEffectInit(const Vector3& pos);
     void RotateInit();

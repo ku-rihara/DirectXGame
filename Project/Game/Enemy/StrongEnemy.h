@@ -30,5 +30,5 @@ public:
 	/// Hpバー処理
 	void DisplaySprite(const ViewProjection& viewProjection)override;
 	
-	
+	  void SpawnRenditionInit() override;
 };

@@ -20,6 +20,8 @@ EnemySpawn::EnemySpawn(BaseEnemy* boss)
 	spawnEasing_.time = 0.0f;
 	spawnEasing_.maxTime = 0.8f;
 
+	pBaseEnemy_->SpawnRenditionInit();
+
 }
 
 EnemySpawn::~EnemySpawn() {

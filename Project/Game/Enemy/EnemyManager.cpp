@@ -427,13 +427,41 @@ void EnemyManager::DeathEmit(const Vector3& pos) {
     }
 }
 
-void EnemyManager::ParticleUpdate() {
-    // 死亡パーティクル
-    for (uint32_t i = 0; i < damageEffect.size(); i++) {
 
+void EnemyManager::SpawnEmitByNormalEnemy(const Vector3& pos) {
+    // ガレキパーティクル
+    for (uint32_t i = 0; i < spawnEffectNormal_.size(); i++) {
+        spawnEffectNormal_[i].emitter->SetTargetPosition(pos);
+        spawnEffectNormal_[i].emitter->Emit();
+    }
+   
+}
+
+void EnemyManager::SpawnEmitByStrongEnemy(const Vector3& pos) {
+    // ガレキパーティクル
+    for (uint32_t i = 0; i < spawnEffectStrong_.size(); i++) {
+        spawnEffectStrong_[i].emitter->SetTargetPosition(pos);
+        spawnEffectStrong_[i].emitter->Emit();
+    }
+ }
+    
+void EnemyManager::ParticleUpdate() {
+    // ダメージパーティクル
+    for (uint32_t i = 0; i < damageEffect.size(); i++) {
         damageEffect[i].emitter->Update();
     }
 
+    // スポーンパーティクル
+    for (uint32_t i = 0; i < spawnEffectNormal_.size(); i++) {
+        spawnEffectNormal_[i].emitter->Update();
+    }
+
+     // スポーンパーティクル(strong)
+    for (uint32_t i = 0; i < spawnEffectStrong_.size(); i++) {
+        spawnEffectStrong_[i].emitter->Update();
+    }
+
+    //ヒビ
     fallCrack_->Update();
 
     // 死亡パーティクル
@@ -443,7 +471,6 @@ void EnemyManager::ParticleUpdate() {
 
     // ガレキパーティクル
     for (uint32_t i = 0; i < debriParticle_.size(); i++) {
-
         debriParticle_[i].emitter->Update();
     }
 }
