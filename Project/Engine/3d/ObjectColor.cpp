@@ -34,9 +34,13 @@ void ObjectColor::CreateConstBuffer() {
 void ObjectColor::Map() {
     // 定数バッファのマッピング
     HRESULT result = constBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&constMap_));
+    assert(SUCCEEDED(result));
+
     if (FAILED(result)) {
-        throw std::runtime_error("Failed to map constant buffer.");
+        OutputDebugStringA("ConstBuffer Map failed.\n");
+        // 必要に応じて return や throw
     }
+
     // 初期色の転送
     constMap_->color_ = color_;
 }

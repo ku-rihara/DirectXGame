@@ -38,7 +38,8 @@ void WorldTransform::Map() {
     D3D12_RANGE readRange = {};
     HRESULT hr            = constBuffer_->Map(0, &readRange, reinterpret_cast<void**>(&constMap));
     if (FAILED(hr)) {
-        throw std::runtime_error("Failed to map constant buffer.");
+        // エラー処理（ログ出力など）を入れるか、最低限参照する
+        OutputDebugStringA("ConstBuffer Map failed.\n");
     }
 }
 
