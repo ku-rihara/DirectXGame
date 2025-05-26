@@ -37,7 +37,10 @@ void WorldTransform::Map() {
     // 定数バッファのマッピング
     D3D12_RANGE readRange = {};
     HRESULT hr            = constBuffer_->Map(0, &readRange, reinterpret_cast<void**>(&constMap));
-    assert(SUCCEEDED(hr));
+    if (FAILED(hr)) {
+        // エラー処理（ログ出力など）を入れるか、最低限参照する
+        OutputDebugStringA("ConstBuffer Map failed.\n");
+    }
 }
 
 void WorldTransform::TransferMatrix() {
