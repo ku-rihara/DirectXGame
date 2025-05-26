@@ -8,6 +8,7 @@
 
 void ParticleParameter::ParameterInit() {
 
+    // パラメータ初期化
     parameters_.targetPos            = {0.0f, 0.0f, 0.0f};
     parameters_.lifeTime             = 0.0f;
     parameters_.gravity              = 0.0f;
@@ -15,6 +16,7 @@ void ParticleParameter::ParameterInit() {
     parameters_.colorDist.min        = {0.0f, 0.0f, 0.0f, 0.0f};
     parameters_.colorDist.max        = {0.0f, 0.0f, 0.0f, 0.0f};
     parameters_.isScalerScale        = true;
+    parameters_.isFloatVelocity      = true;
     parameters_.isRotateforDirection = false;
     particleCount_                   = 0;
     intervalTime_                    = 1.0f;
@@ -98,8 +100,11 @@ void ParticleParameter::AddParmGroup() {
     // Velocity
     globalParameter_->AddItem(particleName_, "Speed Max", parameters_.speedDist.max);
     globalParameter_->AddItem(particleName_, "Speed Min", parameters_.speedDist.min);
+    globalParameter_->AddItem(particleName_, "SpeedV3 Max", parameters_.velocityDistV3.max);
+    globalParameter_->AddItem(particleName_, "SpeedV3 Min", parameters_.velocityDistV3.min);
     globalParameter_->AddItem(particleName_, "Direction Max", parameters_.directionDist.max);
     globalParameter_->AddItem(particleName_, "Direction Min", parameters_.directionDist.min);
+    globalParameter_->AddItem(particleName_, "isFloatVelocity", parameters_.isFloatVelocity);
 
     // Color
     globalParameter_->AddItem(particleName_, "BaseColor", parameters_.baseColor);
@@ -172,8 +177,11 @@ void ParticleParameter::SetValues() {
     // Velocity
     globalParameter_->SetValue(particleName_, "Speed Max", parameters_.speedDist.max);
     globalParameter_->SetValue(particleName_, "Speed Min", parameters_.speedDist.min);
+    globalParameter_->SetValue(particleName_, "SpeedV3 Max", parameters_.velocityDistV3.max);
+    globalParameter_->SetValue(particleName_, "SpeedV3 Min", parameters_.velocityDistV3.min);
     globalParameter_->SetValue(particleName_, "Direction Max", parameters_.directionDist.max);
     globalParameter_->SetValue(particleName_, "Direction Min", parameters_.directionDist.min);
+    globalParameter_->SetValue(particleName_, "isFloatVelocity", parameters_.isFloatVelocity);
 
     // Color
     globalParameter_->SetValue(particleName_, "BaseColor", parameters_.baseColor);
@@ -247,8 +255,11 @@ void ParticleParameter::ApplyGlobalParameter(const std::string& particleName) {
     // Velocity
     parameters_.speedDist.min     = globalParameter_->GetValue<float>(particleName, "Speed Min");
     parameters_.speedDist.max     = globalParameter_->GetValue<float>(particleName, "Speed Max");
+    parameters_.velocityDistV3.min   = globalParameter_->GetValue<Vector3>(particleName, "SpeedV3 Max");
+    parameters_.velocityDistV3.max   = globalParameter_->GetValue<Vector3>(particleName, "SpeedV3 Min");
     parameters_.directionDist.min = globalParameter_->GetValue<Vector3>(particleName, "Direction Min");
     parameters_.directionDist.max = globalParameter_->GetValue<Vector3>(particleName, "Direction Max");
+    parameters_.isFloatVelocity   = globalParameter_->GetValue<bool>(particleName_, "isFloatVelocity");
 
     // Color
     parameters_.baseColor     = globalParameter_->GetValue<Vector4>(particleName, "BaseColor");

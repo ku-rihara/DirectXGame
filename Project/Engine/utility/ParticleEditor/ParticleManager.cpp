@@ -11,9 +11,9 @@
 #include "MathFunction.h"
 #include "random.h"
 // Primitive
+#include "Primitive/PrimitiveCylinder.h"
 #include "Primitive/PrimitivePlane.h"
-#include"Primitive/PrimitiveRing.h"
-#include"Primitive/PrimitiveCylinder.h"
+#include "Primitive/PrimitiveRing.h"
 // std
 #include <cassert>
 #include <string>
@@ -73,12 +73,23 @@ void ParticleManager::Update() {
             ///------------------------------------------------------------------------
             /// 変位更新
             ///------------------------------------------------------------------------
+            ///------------------------------------------------------------------------
+            /// 変位更新
+            ///------------------------------------------------------------------------
             if (it->followPos) {
                 it->worldTransform_.translation_ = *it->followPos + it->offSet;
             } else {
                 it->worldTransform_.translation_.y += it->velocity_.y * Frame::DeltaTime();
-                it->worldTransform_.translation_ += it->direction_ * it->speed_ * Frame::DeltaTime();
+
+                if (it->isFloatVelocity) {
+                    // 通常：方向ベクトル × スカラー速度
+                    it->worldTransform_.translation_ += it->direction_ * it->speed_ * Frame::DeltaTime();
+                } else {
+                    // ベクトル速度そのまま適用
+                    it->worldTransform_.translation_ += it->speedV3 * Frame::DeltaTime();
+                }
             }
+
 
             ///------------------------------------------------------------------------
             /// UV更新
@@ -222,7 +233,7 @@ void ParticleManager::CreatePrimitiveParticle(const std::string& name, Primitive
     // グループを追加
     particleGroups_[name] = ParticleGroup();
 
-   //createPrimitive
+    // createPrimitive
     switch (type) {
     case PrimitiveType::Plane:
         particleGroups_[name].primitive_ = std::make_unique<PrimitivePlane>();
@@ -233,7 +244,6 @@ void ParticleManager::CreatePrimitiveParticle(const std::string& name, Primitive
     case PrimitiveType::Cylinder:
         particleGroups_[name].primitive_ = std::make_unique<PrimitiveCylinder>();
         break;
-
     }
 
     // プリミティブの初期化と作成
@@ -338,21 +348,39 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
     /// 速度、向き
     ///------------------------------------------------------------------------
 
-    /// random
-    Vector3 direction = {
-        Random::Range(paramaters.directionDist.min.x, paramaters.directionDist.max.x),
-        Random::Range(paramaters.directionDist.min.y, paramaters.directionDist.max.y),
-        Random::Range(paramaters.directionDist.min.z, paramaters.directionDist.max.z)};
+    if (paramaters.isFloatVelocity) {
+        // ランダムな方向ベクトルを生成
+        Vector3 direction = {
+            Random::Range(paramaters.directionDist.min.x, paramaters.directionDist.max.x),
+            Random::Range(paramaters.directionDist.min.y, paramaters.directionDist.max.y),
+            Random::Range(paramaters.directionDist.min.z, paramaters.directionDist.max.z)};
 
-    float speed = {Random::Range(paramaters.speedDist.min, paramaters.speedDist.max)};
+        direction = direction.Normalize();
 
-    // get camera rotate Matrix
-    Matrix4x4 cameraRotationMatrix = MakeRotateMatrix(viewProjection_->rotation_);
+        // スピード（float）を生成
+        float speed = Random::Range(paramaters.speedDist.min, paramaters.speedDist.max);
 
-    // adapt
-    direction           = direction.Normalize();
-    particle.direction_ = TransformNormal(direction, cameraRotationMatrix);
-    particle.speed_     = speed;
+        // カメラ回転を適用
+        Matrix4x4 cameraRotationMatrix = MakeRotateMatrix(viewProjection_->rotation_);
+        particle.direction_            = TransformNormal(direction, cameraRotationMatrix);
+        particle.speed_                = speed;
+
+    } else {
+        // 速度ベクトル(Vector3)を直接指定
+        Vector3 velocity = {
+            Random::Range(paramaters.velocityDistV3.min.x, paramaters.velocityDistV3.max.x),
+            Random::Range(paramaters.velocityDistV3.min.y, paramaters.velocityDistV3.max.y),
+            Random::Range(paramaters.velocityDistV3.min.z, paramaters.velocityDistV3.max.z)};
+
+        // カメラ回転を適用
+        Matrix4x4 cameraRotationMatrix = MakeRotateMatrix(viewProjection_->rotation_);
+        velocity                       = TransformNormal(velocity, cameraRotationMatrix);
+
+        particle.direction_ = velocity;
+        particle.speedV3    = velocity;
+    }
+    // frag adapt
+    particle.isFloatVelocity = paramaters.isFloatVelocity;
 
     ///------------------------------------------------------------------------
     /// 回転
@@ -471,7 +499,6 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 
     // 時間初期化
     particle.uvInfo_.currentScroolTime = 0.0f;
-
 
     ///------------------------------------------------------------------------
     /// 重力

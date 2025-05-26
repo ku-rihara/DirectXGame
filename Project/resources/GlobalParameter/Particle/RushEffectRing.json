@@ -1,0 +1,143 @@
+{
+    "RushEffectRing": {
+        "AdaptRotateIsX": true,
+        "AdaptRotateIsY": true,
+        "AdaptRotateIsZ": false,
+        "BaseColor": [
+            0.03171858936548233,
+            0.6470588445663452,
+            0.5565675497055054,
+            0.0
+        ],
+        "Color Max": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Color Min": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Direction Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Direction Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Gravity": 0.0,
+        "IntervalTime": 1.0,
+        "LifeTime": 0.5899999737739563,
+        "Particle Count": 9,
+        "Position Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Position Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Position Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Base": [
+            30.0,
+            30.0,
+            0.0
+        ],
+        "Rotate Max": [
+            120.0,
+            120.0,
+            0.0
+        ],
+        "Rotate Min": [
+            -120.0,
+            -120.0,
+            0.0
+        ],
+        "RotateSpeed Max": [
+            4.699999809265137,
+            4.400000095367432,
+            0.0
+        ],
+        "RotateSpeed Min": [
+            1.0,
+            1.0,
+            0.0
+        ],
+        "Scale Max": 2.0,
+        "Scale Min": 1.5,
+        "ScaleV3 Max": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "ScaleV3 Min": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Speed Max": 0.0,
+        "Speed Min": 0.0,
+        "SpeedV3 Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "SpeedV3 Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "UV IsRoop": true,
+        "UV NumOfFrame": 1,
+        "UV Pos": [
+            0.0,
+            0.0
+        ],
+        "UV Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "UV ScroolSpeed": 0.8500000238418579,
+        "UV isFlipX": false,
+        "UV isFlipY": false,
+        "UV isScrool": true,
+        "UV isScroolEachPixel": true,
+        "blendMode": 0,
+        "isAlphaNoMove": false,
+        "isBillBord": true,
+        "isFloatVelocity": true,
+        "isRotateforDirection": false,
+        "isScalerScale": true,
+        "isShot": true,
+        "preBillBordType_": 2,
+        "scaleEaseParm.easeTypeInt": 0,
+        "scaleEaseParm.endValueF.max": 1.5,
+        "scaleEaseParm.endValueF.min": 3.0,
+        "scaleEaseParm.endValueV3.max": [
+            2.0,
+            2.0,
+            2.0
+        ],
+        "scaleEaseParm.endValueV3.min": [
+            1.2000000476837158,
+            1.2000000476837158,
+            1.0
+        ],
+        "scaleEaseParm.isScaleEase": true,
+        "scaleEaseParm.maxTime": 0.23999999463558197,
+        "selectedTexturePath_": "Resources/texture/gradationLine.png"
+    }
+}
