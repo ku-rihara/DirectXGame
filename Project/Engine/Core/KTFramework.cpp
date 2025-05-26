@@ -61,7 +61,7 @@ void KTFramework::Update() {
     pSceneManager_->Update();
     /// 当たり判定
     collisionManager_->Update();
-}
+}                                 
 
 // ========================================================
 // 解放
