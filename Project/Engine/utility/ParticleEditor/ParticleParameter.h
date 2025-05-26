@@ -64,11 +64,13 @@ public:
         V3MinMax directionDist;
         V3MinMax rotateDist;
         V3MinMax rotateSpeedDist;
+        V3MinMax velocityDistV3;
         FMinMax scaleDist;
         FMinMax speedDist;
         V4MinMax colorDist;
         float lifeTime;
         float gravity;
+        bool isFloatVelocity;
         bool isScalerScale;
         bool isRotateforDirection;
         EaseParm scaleEaseParm;

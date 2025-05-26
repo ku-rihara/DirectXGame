@@ -4,14 +4,14 @@
 #include <vector>
 
 void PrimitiveRing::Init() {
-    vertexNum_ = 32;
+    vertexNum_ = 32*6;
     IPrimitive::Init();
 }
 
 void PrimitiveRing::Create() {
     const float kOuterRadius    = 1.0f;
     const float kInnerRadius    = 0.2f;
-    const float radianPerDivide = (2.0f* std::numbers::pi_v<float>) / float(vertexNum_);
+    const float radianPerDivide = (12.0f* std::numbers::pi_v<float>) / float(vertexNum_);
 
     for (uint32_t index = 0; index < vertexNum_; ++index) {
         float sin     = std::sin(index * radianPerDivide);

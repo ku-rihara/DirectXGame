@@ -57,8 +57,10 @@ private:
         float gravity_;
         float speed_;
         float easeTime;
+        bool isFloatVelocity;
         Vector3 offSet;
         Vector3 direction_;
+        Vector3 speedV3;
         Vector3 velocity_;
         Vector3 rotateSpeed_;
         Vector4 color_;

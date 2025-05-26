@@ -126,10 +126,17 @@ void ParticleEmitter::EditorUpdate() {
 
     // Velocity
     if (ImGui::CollapsingHeader("Velocity")) {
-        ImGui::SeparatorText("Velocity Range:");
-        ImGui::DragFloat("Velocity Max", &parameters_.speedDist.max, 0.1f);
-        ImGui::DragFloat("Velocity Min", &parameters_.speedDist.min, 0.1f);
-
+        ImGui::Checkbox("IsFloatVelocity", &parameters_.isFloatVelocity);
+        if (parameters_.isFloatVelocity) {
+            ImGui::SeparatorText("Velocity Range:");
+            ImGui::DragFloat("Velocity Max", &parameters_.speedDist.max, 0.1f);
+            ImGui::DragFloat("Velocity Min", &parameters_.speedDist.min, 0.1f);
+        } else {
+            ImGui::SeparatorText("V3 VelocityRange");
+            ImGui::DragFloat3("VelocityV3 Max", reinterpret_cast<float*>(&parameters_.velocityDistV3.max), 0.1f);
+            ImGui::DragFloat3("VelocityV3 Min", reinterpret_cast<float*>(&parameters_.velocityDistV3.min), 0.1f);
+        }
+     
         ImGui::SeparatorText("Direction Range:");
         ImGui::DragFloat3("Direction Max", &parameters_.directionDist.max.x, 0.01f, -1.0f, 1.0f);
         ImGui::DragFloat3("Direction Min", &parameters_.directionDist.min.x, 0.01f, -1.0f, 1.0f);
