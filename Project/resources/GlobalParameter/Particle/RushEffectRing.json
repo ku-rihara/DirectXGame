@@ -75,8 +75,8 @@
             1.0,
             0.0
         ],
-        "Scale Max": 2.0,
-        "Scale Min": 1.5,
+        "Scale Max": 5.0,
+        "Scale Min": 4.5,
         "ScaleV3 Max": [
             1.0,
             1.0,
@@ -124,8 +124,8 @@
         "isShot": true,
         "preBillBordType_": 2,
         "scaleEaseParm.easeTypeInt": 0,
-        "scaleEaseParm.endValueF.max": 1.5,
-        "scaleEaseParm.endValueF.min": 3.0,
+        "scaleEaseParm.endValueF.max": 4.5,
+        "scaleEaseParm.endValueF.min": 6.0,
         "scaleEaseParm.endValueV3.max": [
             2.0,
             2.0,

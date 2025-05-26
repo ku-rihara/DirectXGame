@@ -57,6 +57,7 @@ void PlayerEffects::Update(const Vector3& position) {
 
     // rush ring
     rushRingEffect_[0].emitter->Update();
+    rushRingEffect_[0].emitter->EditorUpdate();
 
      // Fall Effect Update
     for (std::unique_ptr<ImpactEffect>& effect : effects_) {
