@@ -598,7 +598,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(Micro
         // Releaseビルドでも descriptorHeap が null で返るようにする
         return nullptr;
     }
-
+  
     return result.Get();
 }
 
