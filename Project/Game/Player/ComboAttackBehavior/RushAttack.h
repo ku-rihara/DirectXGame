@@ -7,6 +7,7 @@
 
 class RushAttack : public BaseComboAattackBehavior {
 	enum class STEP {
+		EMIT,
 		RUSH,
 		WAIT,
 		RETURNROOT,

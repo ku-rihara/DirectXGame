@@ -21,6 +21,9 @@ void PlayerEffects::Init(const Vector3& position) {
         starEffect_[i].emitter->SetFollowingPos(&position);
     }
 
+    rushRingEffect_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("RushEffectRing", PrimitiveType::Ring, 200));
+    rushRingEffect_[0].emitter->SetFollowingPos(&position);
+
     // crack
     fallCrack_.reset(ParticleEmitter::CreateParticlePrimitive("Crack", PrimitiveType::Plane, 30));
 
@@ -51,6 +54,9 @@ void PlayerEffects::Update(const Vector3& position) {
     rushParticle_[0].emitter->SetTargetPosition(position);
     rushParticle_[0].emitter->Update();
     rushParticle_[0].emitter->EditorUpdate();
+
+    // rush ring
+    rushRingEffect_[0].emitter->Update();
 
      // Fall Effect Update
     for (std::unique_ptr<ImpactEffect>& effect : effects_) {
@@ -92,6 +98,10 @@ void PlayerEffects::SpecialAttackRenditionInit() {
 
 void PlayerEffects::RushAttackEmit() {
     rushParticle_[0].emitter->Emit();
+}
+
+void PlayerEffects::RushAttackRingEffectEmit() {
+    rushRingEffect_[0].emitter->Emit();
 }
 
 void PlayerEffects::FallEffectRenditionInit(const Vector3& pos) {

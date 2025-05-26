@@ -27,6 +27,7 @@ private:
     std::unique_ptr<ParticleEmitter> fallCrack_;
     std::array<ParticleEffect, 1> debriParticle_;
     std::array<ParticleEffect, 1> rushParticle_;
+    std::array<ParticleEffect, 1> rushRingEffect_;
     std::array<ParticleEffect, 3> starEffect_;
 
     std::list<std::unique_ptr<ImpactEffect>> effects_; /// エフェクト
@@ -48,6 +49,7 @@ public:
     void SpecialAttackRenditionInit();
     void FallEffectRenditionInit(const Vector3& pos);
     void RushAttackEmit();
+    void RushAttackRingEffectEmit();
 
     /// ====================================================================
     /// Editor
