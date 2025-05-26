@@ -60,10 +60,16 @@ void SceneManager::ChangeScene(const std::string& scenemane) {
 	assert(sceneFactory_);
 	assert(!nextScene_);
 
+	if (scene_) {
+        // 現在のシーンを終了
+        scene_.reset();
+    }
+
 	// 次のシーンを生成
 	nextScene_ = std::unique_ptr<BaseScene>(sceneFactory_->CreateScene(scenemane));
 	scene_ = std::move(nextScene_);
 	scene_->Init();
+  
 	//パーティクルリセット
 	ParticleManager::GetInstance()->ResetAllParticles();
 	
