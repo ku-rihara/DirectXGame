@@ -109,6 +109,7 @@ void KTFramework::AllLoad() {
     TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
     TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
     TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/smoke.png");
     TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
     Audio::GetInstance()->LoadWave("./Resources/EnemyDeath.wav");
     Audio::GetInstance()->LoadWave("./Resources/Enemythurst.wav");

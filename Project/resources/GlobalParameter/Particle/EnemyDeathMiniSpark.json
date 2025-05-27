@@ -4,9 +4,9 @@
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": true,
         "BaseColor": [
-            0.9215686321258545,
-            0.3450980484485626,
-            0.3176470696926117,
+            0.8088235259056091,
+            0.45432186126708984,
+            0.05550751835107803,
             1.0
         ],
         "Color Max": [
@@ -34,7 +34,7 @@
         "Gravity": 0.0,
         "IntervalTime": 1.0,
         "LifeTime": 0.28999999165534973,
-        "Particle Count": 35,
+        "Particle Count": 40,
         "Position Base": [
             0.0,
             0.0,
@@ -75,8 +75,8 @@
             0.0,
             0.0
         ],
-        "Scale Max": 2.0,
-        "Scale Min": 2.0,
+        "Scale Max": 3.0,
+        "Scale Min": 3.0,
         "ScaleV3 Max": [
             2.0,
             2.0,
@@ -89,8 +89,36 @@
         ],
         "Speed Max": 30.899999618530273,
         "Speed Min": 20.5,
+        "SpeedV3 Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "SpeedV3 Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "UV IsRoop": false,
+        "UV NumOfFrame": 1,
+        "UV Pos": [
+            0.0,
+            0.0
+        ],
+        "UV Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "UV ScroolSpeed": 0.0,
+        "UV isFlipX": false,
+        "UV isFlipY": false,
+        "UV isScrool": false,
+        "UV isScroolEachPixel": false,
+        "blendMode": 0,
         "isAlphaNoMove": false,
         "isBillBord": true,
+        "isFloatVelocity": true,
         "isMoveForRail": false,
         "isRotateforDirection": true,
         "isScalerScale": true,
@@ -111,6 +139,7 @@
             0.0
         ],
         "scaleEaseParm.isScaleEase": true,
-        "scaleEaseParm.maxTime": 0.27000001072883606
+        "scaleEaseParm.maxTime": 0.27000001072883606,
+        "selectedTexturePath_": "resources/Texture/uvChecker.png"
     }
 }

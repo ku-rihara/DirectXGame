@@ -34,7 +34,7 @@
         "Gravity": 0.0,
         "IntervalTime": 1.0,
         "LifeTime": 0.7699999809265137,
-        "Particle Count": 41,
+        "Particle Count": 55,
         "Position Base": [
             0.0,
             0.0,
@@ -88,7 +88,17 @@
             2.0
         ],
         "Speed Max": 18.899999618530273,
-        "Speed Min": 18.700000762939453,
+        "Speed Min": 16.299999237060547,
+        "SpeedV3 Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "SpeedV3 Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "UV IsRoop": false,
         "UV NumOfFrame": 1,
         "UV Pos": [
@@ -108,6 +118,7 @@
         "blendMode": 0,
         "isAlphaNoMove": false,
         "isBillBord": true,
+        "isFloatVelocity": true,
         "isRotateforDirection": false,
         "isScalerScale": false,
         "isShot": true,

@@ -365,7 +365,7 @@ void EnemyManager::AdjustParm() {
 void EnemyManager::ParticleInit() {
     uint32_t circleHandle  = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
     uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
-    uint32_t boalHandle    = TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
+    uint32_t boalHandle    = TextureManager::GetInstance()->LoadTexture("Resources/Texture/smoke.png");
     uint32_t crackTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
 
     // damage
@@ -461,13 +461,14 @@ void EnemyManager::ParticleUpdate() {
     // スポーンパーティクル
     for (uint32_t i = 0; i < spawnEffectNormal_.size(); i++) {
         spawnEffectNormal_[i].emitter->Update();
+       /* spawnEffectNormal_[i].emitter->EditorUpdate();*/
       
     }
 
      // スポーンパーティクル(strong)
     for (uint32_t i = 0; i < spawnEffectStrong_.size(); i++) {
         spawnEffectStrong_[i].emitter->Update();
-       
+      /*  spawnEffectStrong_[i].emitter->EditorUpdate();*/
     }
 
     //ヒビ
@@ -477,6 +478,7 @@ void EnemyManager::ParticleUpdate() {
     // 死亡パーティクル
     for (uint32_t i = 0; i < deathParticle_.size(); i++) {
         deathParticle_[i].emitter->Update();
+        deathParticle_[i].emitter->EditorUpdate();
     }
 
     // ガレキパーティクル

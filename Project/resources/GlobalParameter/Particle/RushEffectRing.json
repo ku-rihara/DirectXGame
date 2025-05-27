@@ -4,9 +4,9 @@
         "AdaptRotateIsY": true,
         "AdaptRotateIsZ": false,
         "BaseColor": [
-            0.03171858936548233,
-            0.6470588445663452,
-            0.5565675497055054,
+            0.0481545552611351,
+            0.5466960072517395,
+            0.8186274766921997,
             0.0
         ],
         "Color Max": [
@@ -75,8 +75,8 @@
             1.0,
             0.0
         ],
-        "Scale Max": 5.0,
-        "Scale Min": 4.5,
+        "Scale Max": 6.0,
+        "Scale Min": 5.5,
         "ScaleV3 Max": [
             1.0,
             1.0,
@@ -124,8 +124,8 @@
         "isShot": true,
         "preBillBordType_": 2,
         "scaleEaseParm.easeTypeInt": 0,
-        "scaleEaseParm.endValueF.max": 4.5,
-        "scaleEaseParm.endValueF.min": 6.0,
+        "scaleEaseParm.endValueF.max": 5.5,
+        "scaleEaseParm.endValueF.min": 7.0,
         "scaleEaseParm.endValueV3.max": [
             2.0,
             2.0,
@@ -137,7 +137,7 @@
             1.0
         ],
         "scaleEaseParm.isScaleEase": true,
-        "scaleEaseParm.maxTime": 0.23999999463558197,
+        "scaleEaseParm.maxTime": 0.25999999046325684,
         "selectedTexturePath_": "Resources/texture/gradationLine.png"
     }
 }
