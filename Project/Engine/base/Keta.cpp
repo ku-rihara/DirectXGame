@@ -162,7 +162,7 @@ void Keta::Finalize() {
     CoUninitialize();
     audio_->Finalize();
     textureManager_->Finalize();
-    directXCommon_->ReleaseObject();
+    directXCommon_->Finalize();
     modelManager_->Finalize();
 
 #ifdef _DEBUG

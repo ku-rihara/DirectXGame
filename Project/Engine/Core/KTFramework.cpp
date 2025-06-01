@@ -1,6 +1,7 @@
 #include "KTFramework.h"
 /// base
 #include "base/Keta.h"
+#include"Dx/DxReleaseChecker.h"
 /// imgui
 #include <imgui.h>
 #include "utility/ParameterEditor/GlobalParameter.h"
@@ -38,6 +39,7 @@ void KTFramework::Run() {
 // 初期化
 // ========================================================
 void KTFramework::Init() {
+    
     /// ウィンドウ初期化
     Keta::Initialize(kWindowTitle, 1280, 720);
 
