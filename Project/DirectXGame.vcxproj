@@ -40,6 +40,7 @@
     <ClCompile Include="Engine\Collider\OBBCollider.cpp" />
     <ClCompile Include="Engine\Core\KTFramework.cpp" />
     <ClCompile Include="Engine\Core\KTGame.cpp" />
+    <ClCompile Include="Engine\Dx\DxReleaseChecker.cpp" />
     <ClCompile Include="Engine\Frame\Frame.cpp" />
     <ClCompile Include="Engine\Function\Convert.cpp" />
     <ClCompile Include="Engine\Function\GetFile.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Engine\Collider\OBBCollider.h" />
     <ClInclude Include="Engine\Core\KTFramework.h" />
     <ClInclude Include="Engine\Core\KTGame.h" />
+    <ClInclude Include="Engine\Dx\DxReleaseChecker.h" />
     <ClInclude Include="Engine\Frame\Frame.h" />
     <ClInclude Include="Engine\Function\Convert.h" />
     <ClInclude Include="Engine\Function\GetFile.h" />

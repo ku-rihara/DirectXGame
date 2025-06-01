@@ -280,6 +280,12 @@
     <Filter Include="Game\SkyBox">
       <UniqueIdentifier>{37d72426-8966-414e-a747-609fe8e27581}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\Dx">
+      <UniqueIdentifier>{34ce3bfb-c05b-4164-b44d-fc55288d76bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Dx">
+      <UniqueIdentifier>{5c4df9ce-5898-4e5a-904d-92a5d05b34f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -702,6 +708,9 @@
     </ClCompile>
     <ClCompile Include="Game\SkyBox\SkyBox.cpp">
       <Filter>Game\SkyBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Dx\DxReleaseChecker.cpp">
+      <Filter>MyEngine\.cpp\Dx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1157,6 +1166,9 @@
     </ClInclude>
     <ClInclude Include="Game\SkyBox\SkyBox.h">
       <Filter>Game\SkyBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Dx\DxReleaseChecker.h">
+      <Filter>MyEngine\.h\Dx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

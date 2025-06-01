@@ -30,9 +30,6 @@ DirectXCommon* DirectXCommon::GetInstance() {
     return &instance;
 }
 
-// void Log(const std::string& message) {
-//	OutputDebugStringA(message.c_str());
-// }
 
 ///==========================================================
 ///  シェーダーコンパイル
@@ -528,7 +525,7 @@ void DirectXCommon::commandExecution(Microsoft::WRL::ComPtr<ID3D12Resource>& int
 ///==========================================================
 /// 　オブジェクト解放
 ///==========================================================
-void DirectXCommon::ReleaseObject() {
+void DirectXCommon::Finalize() {
     device_.Reset();
     commandAllocator_.Reset();
     CloseWindow(winApp_->GetHwnd());
