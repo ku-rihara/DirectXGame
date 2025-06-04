@@ -10,6 +10,7 @@ void SpecialAttackGauge::Init() {
 	gaugeFrameSprite_.reset(Sprite::Create(gaugeFrameHandle, Vector2::UnitVector(), Vector4::kWHITE()));
     gaugeSprite_.reset(Sprite::Create(gaugeHandle, Vector2::UnitVector(), Vector4::kWHITE()));
 }
+
 void SpecialAttackGauge::Update() {
 
 

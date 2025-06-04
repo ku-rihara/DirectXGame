@@ -712,6 +712,9 @@
     <ClCompile Include="Engine\Dx\DirectXCommon.cpp">
       <Filter>MyEngine\.cpp\Dx</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\RoolingPunchAttack.cpp">
+      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1169,6 +1172,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Dx\DirectXCommon.h">
       <Filter>MyEngine\.h\Dx</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\RoolingPunchAttack.h">
+      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
