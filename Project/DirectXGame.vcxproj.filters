@@ -186,7 +186,7 @@
     <ClCompile Include="Engine\3d\ModelManager.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\Keta.cpp">
+    <ClCompile Include="Engine\base\MyEngine.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Object3DCommon.cpp">
@@ -456,7 +456,7 @@
     <ClInclude Include="Engine\audio\Audio.h">
       <Filter>MyEngine\.h\audio</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\Keta.h">
+    <ClInclude Include="Engine\base\MyEngine.h">
       <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Object3DCommon.h">

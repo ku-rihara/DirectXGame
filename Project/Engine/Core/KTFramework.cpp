@@ -1,6 +1,6 @@
 #include "KTFramework.h"
 /// base
-#include "base/Keta.h"
+#include "base/MyEngine.h"
 #include"Dx/DxReleaseChecker.h"
 /// imgui
 #include <imgui.h>
@@ -17,20 +17,20 @@ void KTFramework::Run() {
     Init(); /// 初期化
 
     // ウィンドウのxボタンが押されるまでループ
-    while (Keta::ProcessMessage() == 0) {
-        Keta::BeginFrame(); /// フレームの開始
+    while (MyEngine::ProcessMessage() == 0) {
+        MyEngine::BeginFrame(); /// フレームの開始
 
         Update(); /// 更新
 
-		Keta::PreRenderTexture(); /// 描画前処理
+		MyEngine::PreRenderTexture(); /// 描画前処理
 
         Draw(); /// 描画
 
-		Keta::PreDraw(); /// 描画前処理
+		MyEngine::PreDraw(); /// 描画前処理
 
 		DarwOffscreen(); /// 描画
 
-        Keta::EndFrame(); /// フレームの終了
+        MyEngine::EndFrame(); /// フレームの終了
     }
     Finalize();
 }
@@ -41,7 +41,7 @@ void KTFramework::Run() {
 void KTFramework::Init() {
     
     /// ウィンドウ初期化
-    Keta::Initialize(kWindowTitle, 1280, 720);
+    MyEngine::Initialize(kWindowTitle, 1280, 720);
 
     // グローバル変数の読み込み
     GlobalParameter::GetInstance()->LoadFiles();
@@ -70,7 +70,7 @@ void KTFramework::Update() {
 // ========================================================
 void KTFramework::Finalize() {
     // ライブラリの終了
-    Keta::Finalize();
+    MyEngine::Finalize();
 }
 
 // ========================================================

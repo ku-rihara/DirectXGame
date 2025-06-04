@@ -16,7 +16,7 @@ class Input;
 class FullscreenRenderer;
 class SkyBoxRenderer;
 
-class Keta {
+class MyEngine {
 
 private:
   

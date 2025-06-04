@@ -24,7 +24,7 @@
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
     <ClCompile Include="Engine\base\FullscreenRenderer.cpp" />
-    <ClCompile Include="Engine\base\Keta.cpp" />
+    <ClCompile Include="Engine\base\MyEngine.cpp" />
     <ClCompile Include="Engine\base\Material.cpp" />
     <ClCompile Include="Engine\base\Object3DCommon.cpp" />
     <ClCompile Include="Engine\base\SkyBoxRenderer.cpp" />
@@ -107,7 +107,7 @@
     <ClInclude Include="Engine\3d\WorldTransform.h" />
     <ClInclude Include="Engine\audio\Audio.h" />
     <ClInclude Include="Engine\base\FullscreenRenderer.h" />
-    <ClInclude Include="Engine\base\Keta.h" />
+    <ClInclude Include="Engine\base\MyEngine.h" />
     <ClInclude Include="Engine\base\Material.h" />
     <ClInclude Include="Engine\base\Object3DCommon.h" />
     <ClInclude Include="Engine\base\SkyBoxRenderer.h" />

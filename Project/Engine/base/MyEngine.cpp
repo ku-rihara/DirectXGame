@@ -1,4 +1,4 @@
-#include "Keta.h"
+#include "MyEngine.h"
 /// 2d
 #include "2d/ImGuiManager.h"
 
@@ -31,25 +31,25 @@
 #include <string>
 
 // 静的メンバ変数の定義
-std::unique_ptr<WinApp> Keta::winApp_ = nullptr;
-DirectXCommon* Keta::directXCommon_ = nullptr;
-ImGuiManager* Keta::imguiManager_ = nullptr;
-TextureManager* Keta::textureManager_ = nullptr;
-SpriteCommon* Keta::spriteCommon_ = nullptr;
-Object3DCommon* Keta::object3DCommon_ = nullptr;
-ModelManager* Keta::modelManager_ = nullptr;
-ParticleCommon* Keta::particleCommon_ = nullptr;
-SrvManager* Keta::srvManager_ = nullptr;
-FullscreenRenderer* Keta::copyImageRenderer_ = nullptr;
-SkyBoxRenderer* Keta::skyBoxRenderer_        = nullptr;
-Audio* Keta::audio_ = nullptr;
-Input* Keta::input_ = nullptr;
+std::unique_ptr<WinApp> MyEngine::winApp_ = nullptr;
+DirectXCommon* MyEngine::directXCommon_ = nullptr;
+ImGuiManager* MyEngine::imguiManager_ = nullptr;
+TextureManager* MyEngine::textureManager_ = nullptr;
+SpriteCommon* MyEngine::spriteCommon_ = nullptr;
+Object3DCommon* MyEngine::object3DCommon_ = nullptr;
+ModelManager* MyEngine::modelManager_ = nullptr;
+ParticleCommon* MyEngine::particleCommon_ = nullptr;
+SrvManager* MyEngine::srvManager_ = nullptr;
+FullscreenRenderer* MyEngine::copyImageRenderer_ = nullptr;
+SkyBoxRenderer* MyEngine::skyBoxRenderer_        = nullptr;
+Audio* MyEngine::audio_ = nullptr;
+Input* MyEngine::input_ = nullptr;
 
 
  ///=======================================================================
  ///初期化
  ///========================================================================
-void Keta::Initialize(const char* title, int width, int height) {
+void MyEngine::Initialize(const char* title, int width, int height) {
     // ゲームウィンドウの作成
     std::string windowTitle = std::string(title);
     auto&& titleString = ConvertString(windowTitle);
@@ -114,14 +114,14 @@ void Keta::Initialize(const char* title, int width, int height) {
 ///=======================================================================
 ///　メッセージが無ければループする
 ///========================================================================
-int Keta::ProcessMessage() {
+int MyEngine::ProcessMessage() {
     return winApp_->ProcessMessage();
 }
 
 ///=======================================================================
 ///フレーム開始処理
 ///========================================================================
-void Keta::BeginFrame() {
+void MyEngine::BeginFrame() {
 #ifdef _DEBUG
     imguiManager_->Begin();  /// imGui begin
 #endif
@@ -131,12 +131,12 @@ void Keta::BeginFrame() {
 ///=======================================================================
 ///　描画前処理
 ///========================================================================
-void Keta::PreRenderTexture() {
+void MyEngine::PreRenderTexture() {
     directXCommon_->PreRenderTexture();
     srvManager_->PreDraw(); 
 }
 
-void Keta::PreDraw() {
+void MyEngine::PreDraw() {
     directXCommon_->PreDraw();
     directXCommon_->DepthBarrierTransition();
 }
@@ -144,7 +144,7 @@ void Keta::PreDraw() {
 ///=======================================================================
 ///　フレーム終わり処理
 ///========================================================================
-void Keta::EndFrame() {
+void MyEngine::EndFrame() {
 #ifdef _DEBUG
 
 	imguiManager_->preDrawa();
@@ -157,7 +157,7 @@ void Keta::EndFrame() {
 ///=======================================================================
 ///解放
 ///========================================================================
-void Keta::Finalize() {
+void MyEngine::Finalize() {
 
     CoUninitialize();
     audio_->Finalize();
