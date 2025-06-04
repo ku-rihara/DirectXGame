@@ -1,5 +1,5 @@
 #include"BaseObject3d.h"
-#include"base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include"ModelManager.h"
 
 void BaseObject3d::DebugImgui() {

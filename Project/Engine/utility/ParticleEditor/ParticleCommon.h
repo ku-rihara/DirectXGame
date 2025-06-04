@@ -1,14 +1,7 @@
 #pragma once
-#include"base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include"base/SrvManager.h"
-
-  enum class BlendMode {
-    Add,
-    None,
-    Multiply,
-    Subtractive,
-    Screen,
-};
+#include "base/Material.h"
 
 
 class ParticleCommon {

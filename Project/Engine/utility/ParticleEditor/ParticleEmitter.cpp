@@ -207,7 +207,7 @@ void ParticleEmitter::EditorUpdate() {
     /// blend mode
     if (ImGui::CollapsingHeader("BlendMode")) {
 
-        const char* blendModeItems[] = {"Add", "None", "Multiply", "Subtractive", "Screen"}; // ビルボードの種類
+        const char* blendModeItems[] = { "None","Add","Multiply", "Subtractive", "Screen"}; // BlendMode
         // ビルボードの種類を選択するコンボボックス
         if (ImGui::Combo("Blend Mode", &blendMode_, blendModeItems, IM_ARRAYSIZE(blendModeItems))) {
             // 選択した値を反映

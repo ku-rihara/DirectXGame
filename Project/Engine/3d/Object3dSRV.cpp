@@ -1,5 +1,5 @@
 #include "Object3dSRV.h"
-#include "base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include "base/SrvManager.h"
 #include "ModelManager.h"
 

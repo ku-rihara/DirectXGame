@@ -1,5 +1,5 @@
 #pragma once
-#include "base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include "base/Material.h"
 #include "base/SrvManager.h"
 

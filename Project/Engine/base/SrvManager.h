@@ -1,7 +1,7 @@
 #pragma once
 
 /// base
-#include"base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 
 ///SRV管理
 class SrvManager {

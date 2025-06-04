@@ -5,7 +5,7 @@
 #include "PointLightManager.h"
 #include "SpotLightManager.h"
 #include"AreaLightManager.h"
-#include "base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include <imgui.h>
 #include <vector>
 

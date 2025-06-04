@@ -1,5 +1,5 @@
 #include "base/WinApp.h"
-#include "base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include "2d/ImGuiManager.h"
 #include"base/SrvManager.h"
 

@@ -1,11 +1,10 @@
 // Gamepad.cpp
 #include "Gamepad.h"
 #include <cmath>
-#include <algorithm>
-#include <assert.h>
-#include<vector>
+
 
 bool Gamepad::Init(Microsoft::WRL::ComPtr<IDirectInput8> directInput, DWORD padNo) {
+    directInput;
 	padNo_ = padNo;
 	// XInput デバイスとして初期化を試みる
 	XINPUT_STATE state;
@@ -20,23 +19,7 @@ bool Gamepad::Init(Microsoft::WRL::ComPtr<IDirectInput8> directInput, DWORD padN
 		return true;
 	}
 
-	//// DirectInput デバイスとして初期化を試みる
-	//for (int i = 0; i < 256; i++) {
-	//	DIDEVICEINSTANCE deviceInstance;
-	//	deviceInstance.dwSize = sizeof(deviceInstance);
-	//	HRESULT result = directInput->EnumDevices(DI8DEVCLASS_GAMECTRL,
-	//		[](LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef) -> BOOL {
-	//			std::vector<DIDEVICEINSTANCE>* deviceInstances = static_cast<std::vector<DIDEVICEINSTANCE>*>(pvRef);
-	//			deviceInstances->push_back(*lpddi);
-	//			return DIENUM_CONTINUE;
-	//		},
-	//		&deviceInstance, DIEDFL_ALLDEVICES);
-
-	//	if (FAILED(result)) {
-	//		return false;
-	//	}
-	//}
-
+	
 	return false;
 }
 
@@ -50,8 +33,7 @@ void Gamepad::Update() {
 			state_.xi = state;
 		}
 	} else if (type_ == PadType::DirectInput) {
-		// DirectInput の更新処理
-		// TODO: DirectInput の更新処理を実装
+	
 	}
 }
 
@@ -59,7 +41,7 @@ bool Gamepad::IsPressButton(int32_t buttonNumber) const {
 	if (type_ == PadType::XInput) {
 		return (state_.xi.Gamepad.wButtons &  buttonNumber) != 0;
 	} else if (type_ == PadType::DirectInput) {
-		// TODO: DirectInput のボタン入力処理を実装
+	
 		return false;
 	}
 	return false;
@@ -72,7 +54,7 @@ bool Gamepad::IsTriggerButton(int32_t buttonNumber) const {
 
 		return current && !previous;
 	} else if (type_ == PadType::DirectInput) {
-		// TODO: DirectInput のボタン入力処理を実装
+		
 		return false;
 	}
 	return false;

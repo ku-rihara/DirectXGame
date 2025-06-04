@@ -1,5 +1,5 @@
 #include "DirectionalLight.h"
-#include "base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include <imgui.h>
 #include "Vector3.h"
 #include "Vector4.h"

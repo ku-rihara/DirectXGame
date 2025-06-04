@@ -1,5 +1,5 @@
 #include"IPrimitive.h"
-#include"base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 
 void IPrimitive::Init() {
 

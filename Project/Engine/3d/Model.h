@@ -12,7 +12,7 @@
 #include"struct/ModelData.h"
 
 #include"base/Material.h"
-#include"base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 
 //3Dモデル共通部
 class ModelCommon {

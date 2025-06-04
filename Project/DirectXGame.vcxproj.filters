@@ -186,9 +186,6 @@
     <ClCompile Include="Engine\3d\ModelManager.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\DirectXCommon.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\base\Keta.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
@@ -403,6 +400,9 @@
     <ClCompile Include="Engine\Dx\DxReleaseChecker.cpp">
       <Filter>MyEngine\.cpp\Dx</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Dx\DirectXCommon.cpp">
+      <Filter>MyEngine\.cpp\Dx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -455,9 +455,6 @@
     </ClInclude>
     <ClInclude Include="Engine\audio\Audio.h">
       <Filter>MyEngine\.h\audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\DirectXCommon.h">
-      <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Keta.h">
       <Filter>MyEngine\.h\base</Filter>
@@ -676,6 +673,9 @@
       <Filter>Game\SkyBox</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Dx\DxReleaseChecker.h">
+      <Filter>MyEngine\.h\Dx</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Dx\DirectXCommon.h">
       <Filter>MyEngine\.h\Dx</Filter>
     </ClInclude>
   </ItemGroup>
