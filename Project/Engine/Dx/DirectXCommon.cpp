@@ -19,11 +19,7 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
 
-namespace {
-ImGuiManager* imguiManager_;
-TextureManager* textureManager_;
-SrvManager* srvManager_;
-}
+
 
 DirectXCommon* DirectXCommon::GetInstance() {
     static DirectXCommon instance;

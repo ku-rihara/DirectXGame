@@ -62,8 +62,7 @@ void TitleScene::ModelDraw() {
     ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
     Model::PreDraw(commandList);
     plane_->Draw(viewProjection_);
-    // debriEmitter_->DebugDraw(viewProjection_);
-    // debriEmitter_->RailDraw(viewProjection_);
+
     ParticleManager::GetInstance()->Draw(viewProjection_);
 }
 
