@@ -15,11 +15,16 @@
 
 
 
-
+class ImGuiManager;
+class TextureManager;
 class SrvManager;
 class DirectXCommon {
-private://メンバ変数
+private:
+     ImGuiManager* imguiManager_;
+     TextureManager* textureManager_;
+     SrvManager* srvManager_;
 
+private:
 	//ウィンドウズアプリケーション管理
 	WinApp* winApp_;
 

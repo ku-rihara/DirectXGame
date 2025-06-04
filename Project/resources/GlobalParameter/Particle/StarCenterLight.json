@@ -89,6 +89,16 @@
         ],
         "Speed Max": 0.0,
         "Speed Min": 0.0,
+        "SpeedV3 Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "SpeedV3 Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "UV IsRoop": false,
         "UV NumOfFrame": 1,
         "UV Pos": [
@@ -101,11 +111,14 @@
             0.0
         ],
         "UV ScroolSpeed": 0.0,
+        "UV isFlipX": false,
+        "UV isFlipY": false,
         "UV isScrool": false,
         "UV isScroolEachPixel": false,
         "blendMode": 1,
         "isAlphaNoMove": false,
         "isBillBord": true,
+        "isFloatVelocity": true,
         "isMoveForRail": false,
         "isRotateforDirection": false,
         "isScalerScale": true,
