@@ -1,5 +1,5 @@
 #include "FullscreenRenderer.h"
-#include "DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include "function/Log.h"
 #include <cassert>
 #include <d3dx12.h>

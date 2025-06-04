@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 
 class SpriteCommon {
 private://メンバ変数

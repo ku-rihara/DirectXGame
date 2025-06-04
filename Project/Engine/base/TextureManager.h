@@ -3,7 +3,7 @@
 #include <string>
 #include<d3d12.h>
 #include<DirectXTex.h>
-#include"DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 /// std
 #include<unordered_map>
 

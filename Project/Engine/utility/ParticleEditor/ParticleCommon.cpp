@@ -1,6 +1,7 @@
 #include"ParticleCommon.h"
 //Function
 #include"function/Log.h"
+#include"base/Material.h"
 #include<cassert>
 #include<string>
 
@@ -224,12 +225,12 @@ void ParticleCommon::PreDraw(ID3D12GraphicsCommandList* commandList, BlendMode b
 	commandList->SetGraphicsRootSignature(rootSignature_.Get());
 
 	switch (blendMode) {
-	case BlendMode::Add:
-		commandList->SetPipelineState(graphicsPipelineStateAdd_.Get());
-		break;
 	case BlendMode::None:
 		commandList->SetPipelineState(graphicsPipelineStateNone_.Get());
 		break;
+    case BlendMode::Add:
+        commandList->SetPipelineState(graphicsPipelineStateAdd_.Get());
+        break;
 	case BlendMode::Multiply:
 		commandList->SetPipelineState(graphicsPipelineStateMultiply_.Get());
 		break;

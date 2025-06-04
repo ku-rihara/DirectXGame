@@ -1,5 +1,5 @@
 #include "ViewProjection.h"
-#include"base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include <DirectXMath.h>
 #include<assert.h>
 

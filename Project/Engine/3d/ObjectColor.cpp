@@ -1,5 +1,5 @@
 #include "ObjectColor.h"
-#include "base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include <cassert>
 #include <intsafe.h>
 

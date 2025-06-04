@@ -1,7 +1,7 @@
 #include "DirectXCommon.h"
 #include "2d/ImGuiManager.h"
-#include "SrvManager.h"
-#include "TextureManager.h"
+#include "base/SrvManager.h"
+#include "base/TextureManager.h"
 
 // function
 #include "Frame/Frame.h"
@@ -14,10 +14,10 @@
 #include <d3d12.h>
 #include <imgui_impl_dx12.h>
 
-#pragma comment(lib, "d3d12.lib")
-#pragma comment(lib, "dxgi.lib")
-#pragma comment(lib, "dxguid.lib")
-#pragma comment(lib, "dxcompiler.lib")
+#pragma comment(lib,"d3d12.lib")
+#pragma comment(lib,"dxgi.lib")
+#pragma comment(lib,"dxguid.lib")
+#pragma comment(lib,"dxcompiler.lib")
 
 namespace {
 ImGuiManager* imguiManager_;
@@ -29,7 +29,6 @@ DirectXCommon* DirectXCommon::GetInstance() {
     static DirectXCommon instance;
     return &instance;
 }
-
 
 ///==========================================================
 ///  シェーダーコンパイル

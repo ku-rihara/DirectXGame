@@ -24,7 +24,6 @@
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
     <ClCompile Include="Engine\base\FullscreenRenderer.cpp" />
-    <ClCompile Include="Engine\base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\base\Keta.cpp" />
     <ClCompile Include="Engine\base\Material.cpp" />
     <ClCompile Include="Engine\base\Object3DCommon.cpp" />
@@ -40,6 +39,7 @@
     <ClCompile Include="Engine\Collider\OBBCollider.cpp" />
     <ClCompile Include="Engine\Core\KTFramework.cpp" />
     <ClCompile Include="Engine\Core\KTGame.cpp" />
+    <ClCompile Include="Engine\Dx\DirectXCommon.cpp" />
     <ClCompile Include="Engine\Dx\DxReleaseChecker.cpp" />
     <ClCompile Include="Engine\Frame\Frame.cpp" />
     <ClCompile Include="Engine\Function\Convert.cpp" />
@@ -168,7 +168,6 @@
     <ClInclude Include="Engine\3d\WorldTransform.h" />
     <ClInclude Include="Engine\audio\Audio.h" />
     <ClInclude Include="Engine\base\FullscreenRenderer.h" />
-    <ClInclude Include="Engine\base\DirectXCommon.h" />
     <ClInclude Include="Engine\base\Keta.h" />
     <ClInclude Include="Engine\base\Material.h" />
     <ClInclude Include="Engine\base\Object3DCommon.h" />
@@ -184,6 +183,7 @@
     <ClInclude Include="Engine\Collider\OBBCollider.h" />
     <ClInclude Include="Engine\Core\KTFramework.h" />
     <ClInclude Include="Engine\Core\KTGame.h" />
+    <ClInclude Include="Engine\Dx\DirectXCommon.h" />
     <ClInclude Include="Engine\Dx\DxReleaseChecker.h" />
     <ClInclude Include="Engine\Frame\Frame.h" />
     <ClInclude Include="Engine\Function\Convert.h" />

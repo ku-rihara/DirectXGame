@@ -8,7 +8,7 @@
 /// base
 #include "TextureManager.h"
 #include "WinApp.h"
-#include "DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include "Object3DCommon.h"
 #include "SpriteCommon.h"
 #include "SrvManager.h"

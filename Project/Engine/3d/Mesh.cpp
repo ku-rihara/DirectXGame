@@ -1,5 +1,5 @@
 #include "Mesh.h"
-#include "base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include "base/TextureManager.h"
 
 void Mesh::Init(DirectXCommon* directXCommon, const uint32_t& vertexNum) {

@@ -5,8 +5,15 @@
 #include <string>
 #include <wrl.h>
 
-class DirectXCommon;
+ enum class BlendMode {
+    None,
+    Add,
+    Multiply,
+    Subtractive,
+    Screen,
+};
 
+class DirectXCommon;
 class Material {
 public:
     enum LightGroup {
