@@ -11,9 +11,6 @@
 #include <fstream>
 #include <imgui.h>
 
-EnemyManager::EnemyManager() {
-}
-
 ///========================================================================================
 ///  初期化
 ///========================================================================================
@@ -34,7 +31,6 @@ void EnemyManager::Init() {
 }
 
 void EnemyManager::FSpawn() {
-  
 }
 
 ///========================================================================================
@@ -226,133 +222,44 @@ void EnemyManager::ApplyGlobalParameter() {
     }
 }
 
-///==========================================================
-/// パラメータ調整
-///==========================================================
+void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
+
+    ImGui::DragFloat3("initScale", &paramaters_[static_cast<size_t>(type)].initScale_.x, 0.01f);
+    ImGui::DragFloat("ChaseSpeed", &paramaters_[static_cast<size_t>(type)].chaseSpeed, 0.01f);
+    ImGui::DragFloat("ChaseDistance", &paramaters_[static_cast<size_t>(type)].chaseDistance, 0.01f);
+    ImGui::DragFloat("basePosY", &paramaters_[static_cast<size_t>(type)].basePosY, 0.01f);
+    ImGui::DragFloat("thrustRotateSpeed", &paramaters_[static_cast<size_t>(type)].thrustRotateSpeed, 0.01f);
+    ImGui::DragFloat("upperGravity", &paramaters_[static_cast<size_t>(type)].upperGravity, 0.01f);
+    ImGui::DragFloat("upperJumpPowe", &paramaters_[static_cast<size_t>(type)].upperJumpPower, 0.01f);
+    ImGui::DragFloat("upperFallSpeedLimit", &paramaters_[static_cast<size_t>(type)].upperFallSpeedLimit, 0.01f);
+    ImGui::SliderAngle("hitbackRotateValue", &paramaters_[static_cast<size_t>(type)].archingbackValue, -360.0f, 720.0f);
+    ImGui::DragFloat("hitbackRotateBackRatio", &paramaters_[static_cast<size_t>(type)].archingbackRatio, 0.01f);
+    ImGui::DragFloat("hitbackRotateTime", &paramaters_[static_cast<size_t>(type)].archingbackTime, 0.01f);
+    ImGui::DragFloat("blowValue", &paramaters_[static_cast<size_t>(type)].blowValue, 0.01f);
+    ImGui::DragFloat("blowValueY", &paramaters_[static_cast<size_t>(type)].blowValueY, 0.01f);
+    ImGui::DragFloat("blowRotateSpeed", &paramaters_[static_cast<size_t>(type)].blowRotateSpeed, 0.01f);
+    ImGui::DragFloat("burstTime", &paramaters_[static_cast<size_t>(type)].burstTime, 0.01f);
+    ImGui::DragFloat("blowGravity", &paramaters_[static_cast<size_t>(type)].blowGravity, 0.01f);
+    ImGui::DragFloat("blowTime", &paramaters_[static_cast<size_t>(type)].blowTime, 0.01f);
+}
+
 void EnemyManager::AdjustParm() {
     SetValues();
 #ifdef _DEBUG
 
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
-        ///---------------------------------------------------------
-        /// 通常敵
-        ///----------------------------------------------------------
 
-        ImGui::SeparatorText(enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].c_str());
-        ImGui::PushID(enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].c_str());
+        for (size_t i = 0; i < static_cast<size_t>(BaseEnemy::Type::COUNT); ++i) {
+            BaseEnemy::Type type = static_cast<BaseEnemy::Type>(i);
+            ImGui::SeparatorText(enemyTypes_[i].c_str());
+            ImGui::PushID(enemyTypes_[i].c_str());
 
-        ImGui::DragFloat3("initScale", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].initScale_.x,
-            0.01f);
+            DrawEnemyParamUI(type);
 
-        ImGui::DragFloat("ChaseSpeed", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].chaseSpeed,
-            0.01f);
+            ImGui::PopID();
+        }
 
-        ImGui::DragFloat("ChaseDistance", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].chaseDistance,
-            0.01f);
-
-        ImGui::DragFloat("basePosY", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].basePosY,
-            0.01f);
-
-        ImGui::DragFloat("thrustRotateSpeed", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].thrustRotateSpeed,
-            0.01f);
-
-        ImGui::DragFloat("upperGravity", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].upperGravity,
-            0.01f);
-
-        ImGui::DragFloat("upperJumpPowe", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].upperJumpPower,
-            0.01f);
-
-        ImGui::DragFloat("upperFallSpeedLimit", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].upperFallSpeedLimit,
-            0.01f);
-
-        ImGui::SliderAngle("hitbackRotateValue", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].archingbackValue, -360.0f, 720.0f);
-
-        ImGui::DragFloat("hitbackRotateBackRatio", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].archingbackRatio,
-            0.01f);
-
-        ImGui::DragFloat("hitbackRotateTime", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].archingbackTime,
-            0.01f);
-
-        ImGui::DragFloat("blowValue", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].blowValue,
-            0.01f);
-
-        ImGui::DragFloat("blowValueY", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].blowValueY,
-            0.01f);
-
-        ImGui::DragFloat("blowRotateSpeed", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].blowRotateSpeed,
-            0.01f);
-
-        ImGui::DragFloat("burstTime", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].burstTime,
-            0.01f);
-
-        ImGui::DragFloat("blowGravity", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].blowGravity,
-            0.01f);
-
-        ImGui::DragFloat("blowTime", &paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)].blowTime,
-            0.01f);
-
-        ImGui::PopID();
-
-        ///---------------------------------------------------------
-        /// ストロングな敵
-        ///----------------------------------------------------------
-
-        ImGui::SeparatorText(enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)].c_str());
-        ImGui::PushID(enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)].c_str());
-
-        ImGui::DragFloat3("initScale", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].initScale_.x,
-            0.01f);
-
-        ImGui::DragFloat("ChaseSpeed", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].chaseSpeed,
-            0.01f);
-
-        ImGui::DragFloat("ChaseDistance", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].chaseDistance,
-            0.01f);
-
-        ImGui::DragFloat("basePosY", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].basePosY,
-            0.01f);
-
-        ImGui::DragFloat("thrustRotateSpeed", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].thrustRotateSpeed,
-            0.01f);
-
-        ImGui::DragFloat("upperGravity", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].upperGravity,
-            0.01f);
-
-        ImGui::DragFloat("upperJumpPowe", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].upperJumpPower,
-            0.01f);
-
-        ImGui::DragFloat("upperFallSpeedLimit", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].upperFallSpeedLimit,
-            0.01f);
-
-        ImGui::SliderAngle("hitbackRotateValue", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].archingbackValue, -360.0f, 720.0f);
-
-        ImGui::DragFloat("hitbackRotateBackRatio", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].archingbackRatio,
-            0.01f);
-
-        ImGui::DragFloat("hitbackRotateTime", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].archingbackTime,
-            0.01f);
-
-        ImGui::DragFloat("blowValue", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].blowValue,
-            0.01f);
-
-        ImGui::DragFloat("blowValueY", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].blowValueY,
-            0.01f);
-
-        ImGui::DragFloat("blowRotateSpeed", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].blowRotateSpeed,
-            0.01f);
-
-        ImGui::DragFloat("burstTime", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].burstTime,
-            0.01f);
-
-        ImGui::DragFloat("blowGravity", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].blowGravity,
-            0.01f);
-
-        ImGui::DragFloat("blowTime", &paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)].blowTime,
-            0.01f);
-
-        ImGui::PopID();
-        /// セーブとロード
         globalParameter_->ParmSaveForImGui(groupName_);
         ParmLoadForImGui();
 
@@ -362,11 +269,11 @@ void EnemyManager::AdjustParm() {
 #endif // _DEBUG
 }
 
+///---------------------------------------------------------
+/// Particle Init
+///----------------------------------------------------------
 void EnemyManager::ParticleInit() {
-    uint32_t circleHandle  = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
-    uint32_t defaultHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
-    uint32_t boalHandle    = TextureManager::GetInstance()->LoadTexture("Resources/Texture/smoke.png");
-    uint32_t crackTexture_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
+
 
     // damage
     damageEffect[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffectCenter", PrimitiveType::Plane, 300));
@@ -375,38 +282,29 @@ void EnemyManager::ParticleInit() {
     damageEffect[3].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffectStar", PrimitiveType::Plane, 300));
 
     /// death
-    InitParticleEffect(deathParticle_[0], "EnemyDeathSmoke", "Plane", boalHandle, 900);
-    deathParticle_[0].emitter->SetBlendMode(BlendMode::None);
-    InitParticleEffect(deathParticle_[1], "EnemyDeathFireSmoke", "Plane", circleHandle, 900);
-    InitParticleEffect(deathParticle_[2], "EnemyDeathSpark", "Plane", circleHandle, 900);
-    InitParticleEffect(deathParticle_[3], "EnemyDeathMiniSpark", "Plane", circleHandle, 900);
+    deathParticle_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("EnemyDeathSmoke", PrimitiveType::Plane, 900));
+    deathParticle_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("EnemyDeathFireSmoke", PrimitiveType::Plane, 900));
+    deathParticle_[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("EnemyDeathSpark", PrimitiveType::Plane, 900));
+    deathParticle_[3].emitter.reset(ParticleEmitter::CreateParticlePrimitive("EnemyDeathMiniSpark", PrimitiveType::Plane, 900));
 
-    //
-    InitParticleEffect(debriParticle_[0], "DebriName", "debri", defaultHandle, 500);
-    debriParticle_[0].emitter->SetBlendMode(BlendMode::None);
+    // debri
+    debriParticle_[0].emitter.reset(ParticleEmitter::CreateParticle("DebriName", "debri", ".obj", 500));
 
     // EnemySpawn
     spawnEffectNormal_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("NormalEnemySpawnCircle", PrimitiveType::Cylinder, 200));
     spawnEffectNormal_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("NormalEnemySpawnSpark", PrimitiveType::Plane, 500));
+
     spawnEffectStrong_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StrongEnemySpawnCircle", PrimitiveType::Cylinder, 200));
     spawnEffectStrong_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StrongEnemySpawnSpark", PrimitiveType::Plane, 500));
 
-
     // crack
-    fallCrack_.reset(ParticleEmitter::CreateParticle("Crack", "Plane", ".obj", 30));
-    fallCrack_->SetTextureHandle(crackTexture_);
-    fallCrack_->SetBlendMode(BlendMode::None);
+    fallCrack_.reset(ParticleEmitter::CreateParticlePrimitive("Crack", PrimitiveType::Plane, 30));
+
 }
 
-///---------------------------------------------------------
-/// Particle
-///----------------------------------------------------------
-
-void EnemyManager::InitParticleEffect(ParticleEffect& effect, const std::string& name, const std::string& modelName, const uint32_t& textureHandle, const int32_t& maxnum) {
-    effect.name = name;
-    effect.emitter.reset(ParticleEmitter::CreateParticle(name, modelName, ".obj", maxnum));
-    effect.emitter->SetTextureHandle(textureHandle);
-}
+///----------------------------------------------------------------------
+/// Emitt Init
+///----------------------------------------------------------------------
 
 void EnemyManager::DamageEffectShot(const Vector3& pos) {
     for (uint32_t i = 0; i < damageEffect.size(); i++) {
@@ -433,14 +331,12 @@ void EnemyManager::DeathEmit(const Vector3& pos) {
     }
 }
 
-
 void EnemyManager::SpawnEmitByNormalEnemy(const Vector3& pos) {
     // ガレキパーティクル
     for (uint32_t i = 0; i < spawnEffectNormal_.size(); i++) {
         spawnEffectNormal_[i].emitter->SetTargetPosition(pos);
         spawnEffectNormal_[i].emitter->Emit();
     }
-   
 }
 
 void EnemyManager::SpawnEmitByStrongEnemy(const Vector3& pos) {
@@ -448,10 +344,12 @@ void EnemyManager::SpawnEmitByStrongEnemy(const Vector3& pos) {
     for (uint32_t i = 0; i < spawnEffectStrong_.size(); i++) {
         spawnEffectStrong_[i].emitter->SetTargetPosition(pos);
         spawnEffectStrong_[i].emitter->Emit();
-
     }
- }
-    
+}
+
+///---------------------------------------------------------
+/// Particle Update
+///----------------------------------------------------------
 void EnemyManager::ParticleUpdate() {
     // ダメージパーティクル
     for (uint32_t i = 0; i < damageEffect.size(); i++) {
@@ -461,24 +359,20 @@ void EnemyManager::ParticleUpdate() {
     // スポーンパーティクル
     for (uint32_t i = 0; i < spawnEffectNormal_.size(); i++) {
         spawnEffectNormal_[i].emitter->Update();
-       /* spawnEffectNormal_[i].emitter->EditorUpdate();*/
-      
     }
 
-     // スポーンパーティクル(strong)
+    // スポーンパーティクル(strong)
     for (uint32_t i = 0; i < spawnEffectStrong_.size(); i++) {
         spawnEffectStrong_[i].emitter->Update();
-      /*  spawnEffectStrong_[i].emitter->EditorUpdate();*/
     }
 
-    //ヒビ
+    // ヒビ
     fallCrack_->Update();
-    fallCrack_->EditorUpdate();
-
+  
     // 死亡パーティクル
     for (uint32_t i = 0; i < deathParticle_.size(); i++) {
         deathParticle_[i].emitter->Update();
-        deathParticle_[i].emitter->EditorUpdate();
+      
     }
 
     // ガレキパーティクル

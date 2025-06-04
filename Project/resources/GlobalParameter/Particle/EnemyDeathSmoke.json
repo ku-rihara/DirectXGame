@@ -125,7 +125,7 @@
             -1.0,
             -1.0
         ],
-        "blendMode": 1,
+        "blendMode": 0,
         "isAlphaNoMove": false,
         "isBillBord": true,
         "isFloatVelocity": true,
@@ -150,6 +150,6 @@
         ],
         "scaleEaseParm.isScaleEase": true,
         "scaleEaseParm.maxTime": 1.1799999475479126,
-        "selectedTexturePath_": "resources/Texture/uvChecker.png"
+        "selectedTexturePath_": "Resources/texture/smoke.png"
     }
 }

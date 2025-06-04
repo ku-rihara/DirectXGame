@@ -89,6 +89,32 @@
         ],
         "Speed Max": 31.700000762939453,
         "Speed Min": 30.799999237060547,
+        "SpeedV3 Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "SpeedV3 Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "UV IsRoop": false,
+        "UV NumOfFrame": 1,
+        "UV Pos": [
+            0.0,
+            0.0
+        ],
+        "UV Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "UV ScroolSpeed": 0.0,
+        "UV isFlipX": false,
+        "UV isFlipY": false,
+        "UV isScrool": false,
+        "UV isScroolEachPixel": false,
         "Velocity Max": [
             17.0,
             17.0,
@@ -99,8 +125,10 @@
             17.0,
             0.0
         ],
+        "blendMode": 1,
         "isAlphaNoMove": false,
         "isBillBord": true,
+        "isFloatVelocity": true,
         "isMoveForRail": false,
         "isRotateforDirection": true,
         "isScalerScale": false,
@@ -122,6 +150,7 @@
             0.0
         ],
         "scaleEaseParm.isScaleEase": true,
-        "scaleEaseParm.maxTime": 0.20000000298023224
+        "scaleEaseParm.maxTime": 0.20000000298023224,
+        "selectedTexturePath_": "Resources/texture/smoke.png"
     }
 }

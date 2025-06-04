@@ -24,6 +24,7 @@ public:
 	enum class Type {
         NORMAL,
         STRONG,
+		COUNT,
     };
 
 	struct Paramater {

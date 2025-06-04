@@ -89,7 +89,7 @@
     ],
     "Speed Max": 100.0999984741211,
     "Speed Min": 99.30000305175781,
-    "blendMode": 1,
+    "blendMode": 0,
     "isAlphaNoMove": true,
     "isBillBord": false,
     "isMoveForRail": false,

@@ -18,6 +18,7 @@ struct BaseEnemy::Paramater;
 class Player;
 class LockOn;
 class GameCamera;
+
 class EnemyManager {
 private:
 	struct ParticleEffect {
@@ -32,8 +33,8 @@ private:
 	///========================================================
 
     /// グローバルなパラメータ
-	GlobalParameter* globalParameter_;            /// グローバルパラメータ
-	const std::string groupName_ = "Enemies";      /// グループ名
+	GlobalParameter* globalParameter_;            
+	const std::string groupName_ = "Enemies";     
 	std::array<BaseEnemy::Paramater,2> paramaters_;
 
 	// ohter class
@@ -69,7 +70,7 @@ public:
 	///========================================================
 
 	// コンストラクタ
-	EnemyManager();
+	EnemyManager()=default;
 
 	// 初期化
 	void Init();
@@ -94,8 +95,6 @@ public:
 	///-------------------------------------------------------------------------------------
 	///Particle
 	///-------------------------------------------------------------------------------------
-	// ヘルパー関数: ParticleEffect を初期化する
-	void InitParticleEffect(ParticleEffect& effect, const std::string& name, const std::string& modelName, const uint32_t& textureHandle, const int32_t& maxnum);
 	void DamageEffectShot(const Vector3& pos);
 	void ThrustEmit(const Vector3& pos);
 	void DeathEmit(const Vector3& pos);
@@ -110,6 +109,7 @@ public:
 	void SetValues();
 	void ApplyGlobalParameter();
 	void AdjustParm();
+    void DrawEnemyParamUI(BaseEnemy::Type type);
 
 	///========================================================
    /// getter method
