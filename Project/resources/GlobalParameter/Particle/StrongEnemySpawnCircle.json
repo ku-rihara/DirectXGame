@@ -105,7 +105,7 @@
         "UV isFlipY": true,
         "UV isScrool": true,
         "UV isScroolEachPixel": true,
-        "blendMode": 0,
+        "blendMode": 1,
         "isAlphaNoMove": false,
         "isBillBord": false,
         "isRotateforDirection": false,

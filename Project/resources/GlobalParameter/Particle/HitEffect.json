@@ -103,7 +103,7 @@
     "UV ScroolSpeed": 0.03999999910593033,
     "UV isScrool": true,
     "UV isScroolEachPixel": false,
-    "blendMode": 0,
+    "blendMode": 1,
     "isAlphaNoMove": true,
     "isBillBord": true,
     "isRotateforDirection": true,

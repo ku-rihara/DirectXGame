@@ -125,7 +125,7 @@
             2.700000047683716,
             -1.100000023841858
         ],
-        "blendMode": 0,
+        "blendMode": 1,
         "isAlphaNoMove": false,
         "isBillBord": true,
         "isMoveForRail": false,

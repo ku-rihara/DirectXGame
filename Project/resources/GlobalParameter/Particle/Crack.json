@@ -115,7 +115,7 @@
             0.0,
             0.0
         ],
-        "blendMode": 1,
+        "blendMode": 0,
         "isAlphaNoMove": false,
         "isBillBord": false,
         "isMoveForRail": false,

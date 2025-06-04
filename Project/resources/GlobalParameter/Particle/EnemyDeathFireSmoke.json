@@ -125,7 +125,7 @@
             -0.5,
             -0.5
         ],
-        "blendMode": 0,
+        "blendMode": 1,
         "isAlphaNoMove": false,
         "isBillBord": true,
         "isFloatVelocity": true,
