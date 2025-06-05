@@ -1,15 +1,37 @@
 #include "KTFramework.h"
-/// base
-#include "base/MyEngine.h"
+
+//dx
 #include"Dx/DxReleaseChecker.h"
-/// imgui
-#include <imgui.h>
+
+/// utility
 #include "utility/ParameterEditor/GlobalParameter.h"
-#include"3d/ModelManager.h"
 
 #include "Frame/Frame.h"
+/// imgui
+#include <imgui.h>
 
-const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ_パンチラッシュ!";
+const char kWindowTitle[] = "LE3A_11_クリハラ_ケイタ";
+
+
+
+// ========================================================
+// 初期化
+// ========================================================
+void KTFramework::Init() {
+
+    engineCore_ = std::make_unique<EngineCore>();
+
+    /// ウィンドウ初期化
+    engineCore_->Initialize(kWindowTitle, 1280, 720);
+
+    // グローバル変数の読み込み
+    GlobalParameter::GetInstance()->LoadFiles();
+
+    // コリジョン
+    collisionManager_ = std::make_unique<CollisionManager>();
+    collisionManager_->Init();
+}
+
 
 // ========================================================
 // 実行
@@ -18,40 +40,22 @@ void KTFramework::Run() {
     Init(); /// 初期化
 
     // ウィンドウのxボタンが押されるまでループ
-    while (MyEngine::ProcessMessage() == 0) {
-        MyEngine::BeginFrame(); /// フレームの開始
+    while (engineCore_->ProcessMessage() == 0) {
+        engineCore_->BeginFrame(); /// フレームの開始
 
         Update(); /// 更新
 
-		MyEngine::PreRenderTexture(); /// 描画前処理
+		engineCore_->PreRenderTexture(); /// 描画前処理
 
         Draw(); /// 描画
 
-		MyEngine::PreDraw(); /// 描画前処理
+		engineCore_->PreDraw(); /// 描画前処理
 
 		DarwOffscreen(); /// 描画
 
-        MyEngine::EndFrame(); /// フレームの終了
+        engineCore_->EndFrame(); /// フレームの終了
     }
     Finalize();
-}
-
-// ========================================================
-// 初期化
-// ========================================================
-void KTFramework::Init() {
-    
-    /// ウィンドウ初期化
-    MyEngine::Initialize(kWindowTitle, 1280, 720);
-
-     AllLoad();
-
-    // グローバル変数の読み込み
-    GlobalParameter::GetInstance()->LoadFiles();
-
-    // コリジョン
-    collisionManager_ = std::make_unique<CollisionManager>();
-    collisionManager_->Init();
 }
 
 // ========================================================
@@ -73,7 +77,7 @@ void KTFramework::Update() {
 // ========================================================
 void KTFramework::Finalize() {
     // ライブラリの終了
-    MyEngine::Finalize();
+    engineCore_->Finalize();
 }
 
 // ========================================================
@@ -105,15 +109,4 @@ void KTFramework::DisplayFPS(){
 
 	ImGui::End();
 #endif 
-}
-
-void KTFramework::AllLoad() {
-    TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/boal.png");
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/smoke.png");
-    TextureManager::GetInstance()->LoadTexture("Resources/Texture/Crack.png");
-    Audio::GetInstance()->LoadWave("./Resources/EnemyDeath.wav");
-    Audio::GetInstance()->LoadWave("./Resources/Enemythurst.wav");
-    ModelManager::GetInstance()->LoadModel("debri",".obj");
 }

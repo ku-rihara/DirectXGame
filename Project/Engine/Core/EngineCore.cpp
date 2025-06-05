@@ -1,4 +1,4 @@
-#include "MyEngine.h"
+#include "EngineCore.h"
 /// 2d
 #include "2d/ImGuiManager.h"
 
@@ -6,14 +6,14 @@
 #include "3d/ModelManager.h"
 
 /// base
-#include "TextureManager.h"
-#include "WinApp.h"
-#include"Dx/DirectXCommon.h"
-#include "Object3DCommon.h"
-#include "SpriteCommon.h"
-#include "SrvManager.h"
-#include"FullscreenRenderer.h"
-#include"SkyBoxRenderer.h"
+#include "Dx/DirectXCommon.h"
+#include "base/FullscreenRenderer.h"
+#include "base/Object3DCommon.h"
+#include "base/SkyBoxRenderer.h"
+#include "base/SpriteCommon.h"
+#include "base/SrvManager.h"
+#include "base/TextureManager.h"
+#include "base/WinApp.h"
 
 /// audio,input
 #include "audio/Audio.h"
@@ -24,36 +24,21 @@
 #include "utility/ParticleEditor/ParticleManager.h"
 
 /// imgui,function
-#include <imgui_impl_dx12.h>
 #include "function/Convert.h"
+#include <imgui_impl_dx12.h>
 
 /// std
 #include <string>
 
-// 静的メンバ変数の定義
-std::unique_ptr<WinApp> MyEngine::winApp_ = nullptr;
-DirectXCommon* MyEngine::directXCommon_ = nullptr;
-ImGuiManager* MyEngine::imguiManager_ = nullptr;
-TextureManager* MyEngine::textureManager_ = nullptr;
-SpriteCommon* MyEngine::spriteCommon_ = nullptr;
-Object3DCommon* MyEngine::object3DCommon_ = nullptr;
-ModelManager* MyEngine::modelManager_ = nullptr;
-ParticleCommon* MyEngine::particleCommon_ = nullptr;
-SrvManager* MyEngine::srvManager_ = nullptr;
-FullscreenRenderer* MyEngine::copyImageRenderer_ = nullptr;
-SkyBoxRenderer* MyEngine::skyBoxRenderer_        = nullptr;
-Audio* MyEngine::audio_ = nullptr;
-Input* MyEngine::input_ = nullptr;
 
-
- ///=======================================================================
- ///初期化
- ///========================================================================
-void MyEngine::Initialize(const char* title, int width, int height) {
+///=======================================================================
+/// 初期化
+///========================================================================
+void EngineCore::Initialize(const char* title, int width, int height) {
     // ゲームウィンドウの作成
     std::string windowTitle = std::string(title);
-    auto&& titleString = ConvertString(windowTitle);
-    winApp_ = std::make_unique<WinApp>();
+    auto&& titleString      = ConvertString(windowTitle);
+    winApp_                 = std::make_unique<WinApp>();
     winApp_->MakeWindow(titleString.c_str(), width, height);
 
     // DirectX初期化
@@ -65,12 +50,7 @@ void MyEngine::Initialize(const char* title, int width, int height) {
     srvManager_ = SrvManager::GetInstance();
     srvManager_->Init(directXCommon_);
 
-	directXCommon_->CreateRnderSrvHandle();
-
-     // ImGuiManager
-    imguiManager_ = ImGuiManager::GetInstance();
-    imguiManager_->Init(winApp_.get(), directXCommon_, srvManager_);
-
+    directXCommon_->CreateRnderSrvHandle();
 
     // TextureManager
     textureManager_ = TextureManager::GetInstance();
@@ -84,9 +64,9 @@ void MyEngine::Initialize(const char* title, int width, int height) {
     skyBoxRenderer_ = SkyBoxRenderer::GetInstance();
     skyBoxRenderer_->Init(directXCommon_);
 
-    //FullScreen Renderer
-	copyImageRenderer_ = FullscreenRenderer::GetInstance();
-	copyImageRenderer_->Init(directXCommon_);
+    // FullScreen Renderer
+    copyImageRenderer_ = FullscreenRenderer::GetInstance();
+    copyImageRenderer_->Init(directXCommon_);
 
     // ParticleCommon
     particleCommon_ = ParticleCommon::GetInstance();
@@ -101,6 +81,10 @@ void MyEngine::Initialize(const char* title, int width, int height) {
     modelManager_ = ModelManager::GetInstance();
     modelManager_->Initialize(directXCommon_);
 
+    // ImGuiManager
+    imguiManager_ = ImGuiManager::GetInstance();
+    imguiManager_->Init(winApp_.get(), directXCommon_, srvManager_);
+
     // Input
     input_ = Input::GetInstance();
     input_->Init(winApp_->GetHInstaice(), winApp_->GetHwnd());
@@ -111,52 +95,52 @@ void MyEngine::Initialize(const char* title, int width, int height) {
 }
 
 ///=======================================================================
-///　メッセージが無ければループする
+/// 　メッセージが無ければループする
 ///========================================================================
-int MyEngine::ProcessMessage() {
+int EngineCore::ProcessMessage() {
     return winApp_->ProcessMessage();
 }
 
 ///=======================================================================
-///フレーム開始処理
+/// フレーム開始処理
 ///========================================================================
-void MyEngine::BeginFrame() {
+void EngineCore::BeginFrame() {
 #ifdef _DEBUG
-    imguiManager_->Begin();  /// imGui begin
+    imguiManager_->Begin(); /// imGui begin
 #endif
     input_->Update();
 }
 
 ///=======================================================================
-///　描画前処理
+/// 　描画前処理
 ///========================================================================
-void MyEngine::PreRenderTexture() {
+void EngineCore::PreRenderTexture() {
     directXCommon_->PreRenderTexture();
-    srvManager_->PreDraw(); 
+    srvManager_->PreDraw();
 }
 
-void MyEngine::PreDraw() {
+void EngineCore::PreDraw() {
     directXCommon_->PreDraw();
     directXCommon_->DepthBarrierTransition();
 }
 
 ///=======================================================================
-///　フレーム終わり処理
+/// 　フレーム終わり処理
 ///========================================================================
-void MyEngine::EndFrame() {
+void EngineCore::EndFrame() {
 #ifdef _DEBUG
 
-	imguiManager_->preDrawa();
-	imguiManager_->Draw();  
+    imguiManager_->preDrawa();
+    imguiManager_->Draw();
 #endif
 
     directXCommon_->PostDraw();
 }
 
 ///=======================================================================
-///解放
+/// 解放
 ///========================================================================
-void MyEngine::Finalize() {
+void EngineCore::Finalize() {
 
     CoUninitialize();
     audio_->Finalize();
@@ -167,5 +151,4 @@ void MyEngine::Finalize() {
 #ifdef _DEBUG
     imguiManager_->Finalizer();
 #endif
-
 }
