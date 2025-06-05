@@ -6,7 +6,6 @@
 #include "3d/ModelManager.h"
 
 /// base
-#include "Dx/DirectXCommon.h"
 #include "base/FullscreenRenderer.h"
 #include "base/Object3DCommon.h"
 #include "base/SkyBoxRenderer.h"
@@ -14,6 +13,7 @@
 #include "base/SrvManager.h"
 #include "base/TextureManager.h"
 #include "base/WinApp.h"
+#include "Dx/DirectXCommon.h"
 
 /// audio,input
 #include "audio/Audio.h"
@@ -29,7 +29,6 @@
 
 /// std
 #include <string>
-
 
 ///=======================================================================
 /// 初期化
@@ -51,11 +50,6 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     srvManager_->Init(directXCommon_);
 
     directXCommon_->CreateRnderSrvHandle();
-
-     // ImGuiManager
-    imguiManager_ = ImGuiManager::GetInstance();
-    imguiManager_->Init(winApp_.get(), directXCommon_, srvManager_);
-
 
     // TextureManager
     textureManager_ = TextureManager::GetInstance();
@@ -90,8 +84,6 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     imguiManager_ = ImGuiManager::GetInstance();
     imguiManager_->Init(winApp_.get(), directXCommon_, srvManager_);
 
-
-
     // Input
     input_ = Input::GetInstance();
     input_->Init(winApp_->GetHInstaice(), winApp_->GetHwnd());
@@ -106,7 +98,7 @@ void EngineCore::Initialize(const char* title, int width, int height) {
 ///========================================================================
 int EngineCore::ProcessMessage() {
     return winApp_->ProcessMessage();
-} 
+}
 
 ///=======================================================================
 /// フレーム開始処理
@@ -117,7 +109,6 @@ void EngineCore::BeginFrame() {
 #endif
     input_->Update();
 }
-
 
 ///=======================================================================
 /// 　描画前処理
