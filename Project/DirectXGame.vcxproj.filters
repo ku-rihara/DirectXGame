@@ -312,9 +312,6 @@
     <ClCompile Include="Engine\3d\ModelManager.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\MyEngine.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\base\Object3DCommon.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
@@ -715,6 +712,9 @@
     <ClCompile Include="Game\Player\ComboAttackBehavior\RoolingPunchAttack.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Core\EngineCore.cpp">
+      <Filter>MyEngine\.cpp\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -767,9 +767,6 @@
     </ClInclude>
     <ClInclude Include="Engine\audio\Audio.h">
       <Filter>MyEngine\.h\audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\MyEngine.h">
-      <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Object3DCommon.h">
       <Filter>MyEngine\.h\base</Filter>
@@ -1175,6 +1172,9 @@
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\RoolingPunchAttack.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\EngineCore.h">
+      <Filter>MyEngine\.h\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
