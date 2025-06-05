@@ -1,11 +1,12 @@
 #pragma once
 #include "Scene/Manager/SceneManager.h"
 #include "Scene/Factory/AbstractSceneFactory.h"
-
-///utility
+//utility
 #include "Collider/CollisionManager.h"
+#include "EngineCore.h"
 /// std
 #include <memory>
+
 
 // ゲーム全体
 class KTFramework {
@@ -19,6 +20,7 @@ protected:
    ///=======================================================
     std::unique_ptr<AbstractSceneFactory> sceneFactory_;
     std::unique_ptr<CollisionManager> collisionManager_;
+    std::unique_ptr<EngineCore> engineCore_;
 
 public:
 

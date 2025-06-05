@@ -4,6 +4,8 @@
 #include"base/FullscreenRenderer.h"
 //renderer
 #include"base/SkyBoxRenderer.h"
+//utility
+#include "Collider/CollisionManager.h"
 
 // =============================================================
 // 初期化処理
