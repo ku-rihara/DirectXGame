@@ -61,16 +61,16 @@ void Combo::BindParams() {
 /////=====================================================
 /////  ロード
 /////=====================================================
-//void Combo::ParamLoadForImGui() {
-//
-//    // ロードボタン
-//    if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
-//
-//        globalParameter_->LoadFile(groupName_);
-//        // セーブ完了メッセージ
-//        ImGui::Text("Load Successful: %s", groupName_.c_str());
-//    }
-//}
+void Combo::ParamLoadForImGui() {
+
+    // ロードボタン
+    if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
+
+        globalParameter_->LoadFile(groupName_);
+        // セーブ完了メッセージ
+        ImGui::Text("Load Successful: %s", groupName_.c_str());
+    }
+}
 //
 /////=====================================================
 /////  パラメータをグループに追加
