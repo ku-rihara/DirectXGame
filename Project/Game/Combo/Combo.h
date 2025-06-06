@@ -22,9 +22,9 @@ public:
     /// Editor
     ///-------------------------------------------------------------------------------------
     void ParamLoadForImGui();
-    void AddParmGroup();
+  /*  void AddParmGroup();
     void SetValues();
-    void ApplyGlobalParameter();
+    void ApplyGlobalParameter();*/
     void AdjustParm();
 
     // new 

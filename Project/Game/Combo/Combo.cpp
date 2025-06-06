@@ -21,43 +21,7 @@ void Combo::Update() {
 void Combo::Draw() {
 }
 
-///=====================================================
-///  ロード
-///=====================================================
-void Combo::ParamLoadForImGui() {
 
-    // ロードボタン
-    if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
-
-        globalParameter_->LoadFile(groupName_);
-        // セーブ完了メッセージ
-        ImGui::Text("Load Successful: %s", groupName_.c_str());
-        ApplyGlobalParameter();
-    }
-}
-
-///=====================================================
-///  パラメータをグループに追加
-///=====================================================
-void Combo::AddParmGroup() {
-    globalParameter_->AddItem(groupName_, "comboTimeMax_", comboTimeMax_);
-    globalParameter_->AddItem(groupName_, "comboTimeMax_", comboTimeMax_);
-}
-///=====================================================
-/// パラメータ値セット
-///=====================================================
-void Combo::SetValues() {
-
-    globalParameter_->SetValue(groupName_, "comboTimeMax_", comboTimeMax_);
-}
-
-///=====================================================
-///  ImGuiからパラメータを得る
-///=====================================================
-void Combo::ApplyGlobalParameter() {
-    // paramCombies_ から値を取得
-    comboTimeMax_ = globalParameter_->GetValue<float>(groupName_, "comboTimeMax_");
-}
 
 ///=========================================================
 /// パラメータ調整
@@ -92,3 +56,41 @@ void Combo::BindParams() {
     globalParameter_->Bind(groupName_, "Scaling Ease amplitude", &scalingEasing_.amplitude);
     globalParameter_->Bind(groupName_, "Scaling Ease period", &scalingEasing_.period);
 }
+
+
+/////=====================================================
+/////  ロード
+/////=====================================================
+//void Combo::ParamLoadForImGui() {
+//
+//    // ロードボタン
+//    if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
+//
+//        globalParameter_->LoadFile(groupName_);
+//        // セーブ完了メッセージ
+//        ImGui::Text("Load Successful: %s", groupName_.c_str());
+//    }
+//}
+//
+/////=====================================================
+/////  パラメータをグループに追加
+/////=====================================================
+//void Combo::AddParmGroup() {
+//    globalParameter_->AddItem(groupName_, "comboTimeMax_", comboTimeMax_);
+//    globalParameter_->AddItem(groupName_, "comboTimeMax_", comboTimeMax_);
+//}
+/////=====================================================
+///// パラメータ値セット
+/////=====================================================
+//void Combo::SetValues() {
+//
+//    globalParameter_->SetValue(groupName_, "comboTimeMax_", comboTimeMax_);
+//}
+//
+/////=====================================================
+/////  ImGuiからパラメータを得る
+/////=====================================================
+//void Combo::ApplyGlobalParameter() {
+//    // paramCombies_ から値を取得
+//    comboTimeMax_ = globalParameter_->GetValue<float>(groupName_, "comboTimeMax_");
+//}
