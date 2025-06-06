@@ -89,8 +89,8 @@ public:
     void AdaptTexture();
 
     // Parameter Edit
-    virtual void ParmLoadForImGui();
-    virtual void ParmSaveForImGui();
+    virtual void ParamLoadForImGui();
+    virtual void ParamSaveForImGui();
     virtual void AddParmGroup();
     virtual void SetValues();
     virtual void ApplyGlobalParameter(const std::string& particleName);

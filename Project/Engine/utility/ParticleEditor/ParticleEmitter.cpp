@@ -229,8 +229,8 @@ void ParticleEmitter::EditorUpdate() {
     // パーティクル切り替え
     ParticleChange();
 
-    ParmSaveForImGui();
-    ParmLoadForImGui();
+    ParamSaveForImGui();
+    ParamLoadForImGui();
 
     ImGui::PopID();
     ImGui::End();
@@ -375,12 +375,12 @@ void ParticleEmitter::ApplyTexture(const std::string& texturename) {
 /// Prameter Edit Function
 ///=================================================================================
 
-void ParticleEmitter::ParmSaveForImGui() {
-    ParticleParameter::ParmSaveForImGui();
+void ParticleEmitter::ParamSaveForImGui() {
+    ParticleParameter::ParamSaveForImGui();
 }
 
-void ParticleEmitter::ParmLoadForImGui() {
-    ParticleParameter::ParmLoadForImGui();
+void ParticleEmitter::ParamLoadForImGui() {
+    ParticleParameter::ParamLoadForImGui();
 }
 void ParticleEmitter::ApplyGlobalParameter(const std::string& particleName) {
     ParticleParameter::ApplyGlobalParameter(particleName);

@@ -104,8 +104,8 @@ void PlayerParameter::AdjustParm() {
         }
 
         /// セーブとロード
-        globalParameter_->ParmSaveForImGui(groupName_);
-        ParmLoadForImGui();
+        globalParameter_->ParamSaveForImGui(groupName_);
+        ParamLoadForImGui();
     }
 
   /*  /// 手のパラメータ調整
@@ -118,7 +118,7 @@ void PlayerParameter::AdjustParm() {
 ///=================================================================================
 /// ロード
 ///=================================================================================
-void PlayerParameter::ParmLoadForImGui() {
+void PlayerParameter::ParamLoadForImGui() {
 
     // ロードボタン
     if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {

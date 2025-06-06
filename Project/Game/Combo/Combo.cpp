@@ -21,7 +21,7 @@ void Combo::Draw() {
 ///=====================================================
 ///  ロード
 ///=====================================================
-void Combo::ParmLoadForImGui() {
+void Combo::ParamLoadForImGui() {
 
     // ロードボタン
     if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
@@ -75,8 +75,8 @@ void Combo::AdjustParm() {
         ImGui::DragFloat("Scaling Ease period", &scalingEasing_.period, 0.01f);
 
         /// セーブとロード
-        globalParameter_->ParmSaveForImGui(groupName_);
-        ParmLoadForImGui();
+        globalParameter_->ParamSaveForImGui(groupName_);
+        ParamLoadForImGui();
         ImGui::PopID();
     }
 

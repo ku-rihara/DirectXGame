@@ -5,15 +5,21 @@
 #include "Vector3.h"
 #include "Vector4.h"
 /// std
+#include <functional>
 #include <json.hpp>
 #include <map>
 #include <stack>
 #include <string>
 #include <variant>
+#include <vector>
 
 class GlobalParameter {
 
 public:
+    ///=================================================================================
+    /// WitgetType
+    ///=================================================================================
+
     enum class WidgetType {
         NONE,
         SliderInt,
@@ -26,18 +32,32 @@ public:
         SlideAngle,
     };
 
-    // 描画設定用の構造体
-    struct DrawSettings {
+    ///=================================================================================
+    /// Draw Settings
+    ///=================================================================================
 
-        WidgetType widgetType; // 使用するImGuiウィジェットの種類
-        float minValue = 0.0f; // 最小値
-        float maxValue = 100.0f; // 最大値
-        std::string treeNodeLabel; // TreeNodeの場合のラベル
+    struct DrawSettings {
+        WidgetType widgetType;
+        float minValue = 0.0f;
+        float maxValue = 100.0f;
+        std::string treeNodeLabel;
     };
 
 private:
+    ///=================================================================================
+    /// BoundItem
+    ///=================================================================================
 
-    /// 格納できる複数の値の型を定義
+    struct BoundItem {
+        std::function<void()> pullFromUI;
+        std::function<void()> pushToUI;
+    };
+
+private:
+    ///=================================================================================
+    /// public type
+    ///==================================================================================
+
     using Item = std::variant<int32_t, uint32_t, float, Vector2, Vector3, Vector4, bool, std::string>;
 
     using Parameter = std::pair<Item, DrawSettings>; // 値と描画設定をペアにする
@@ -65,10 +85,6 @@ public:
     // ツリーのノードを閉じる
     void AddTreePoP();
 
-    void DrawGroup(Group& group);
-
-    void DrawWidget(const std::string& itemName, Item& item, const DrawSettings& drawSettings);
-
     // 値を設定する
     template <typename T>
     void SetValue(const std::string& groupName, const std::string& key, T value, WidgetType widgetType = WidgetType::NONE);
@@ -81,15 +97,20 @@ public:
     template <typename T>
     T GetValue(const std::string& groupName, const std::string& key) const;
 
+    // draw
+    void DrawGroup(Group& group);
+    void DrawWidget(const std::string& itemName, Item& item, const DrawSettings& drawSettings);
+
     template <typename T>
     void Bind(const std::string& group, const std::string& key, T* variable, WidgetType widgetType = WidgetType::DragFloat);
 
-    void SyncAll(); // ImGui更新前 or 後に呼ぶと、変数 <-> GUI の双方向更新をする
+    void SyncAll();
+
     // ------------------------------------------------------------------------------
     // ファイルへの保存・読み込み
     // ------------------------------------------------------------------------------
 
-    void ParmSaveForImGui(const std::string& groupName);
+    void ParamSaveForImGui(const std::string& groupName);
 
     // すべてのグループのデータをファイルから読み込む
     void LoadFiles();
@@ -99,7 +120,7 @@ public:
     void SaveFile(const std::string& groupName, const std::string& fileName = "");
 
 private:
-    void ParmLoadForImGui(const std::string& groupName);
+    void ParamLoadForImGui(const std::string& groupName);
 
 private:
     ///=================================================================================
@@ -107,13 +128,15 @@ private:
     ///=================================================================================
 
     // グループ名(キー)とグループのデータ
-    std::unordered_map<std::string, Group> datas_;
+    std::unordered_map<std::string, Group> dates_;
 
     // 値が変更されたかどうかのフラグ
     std::unordered_map<std::string, bool> isValueChanged_;
 
     /// グループごとの可視性フラグを管理
     std::unordered_map<std::string, bool> visibilityFlags_;
+
+    std::unordered_map<std::string, std::vector<BoundItem>> bindings_;
 
     // データを保存する際のディレクトリパス
     const std::string kDirectoryPath = "Resources/GlobalParameter/";

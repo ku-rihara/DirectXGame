@@ -43,7 +43,7 @@ public:
 	///-------------------------------------------------------------------------------------
 	///Editor
 	///-------------------------------------------------------------------------------------
-	void ParmLoadForImGui();
+	void ParamLoadForImGui();
 	void AddParmGroup();
 	void SetValues();
 	void ApplyGlobalParameter();

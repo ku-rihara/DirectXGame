@@ -51,7 +51,7 @@ void BasePlayerHand::Draw(const ViewProjection& viewProjection) {
 ///=================================================================================
 /// ロード
 ///=================================================================================
-void BasePlayerHand::ParmLoadForImGui() {
+void BasePlayerHand::ParamLoadForImGui() {
 
 	// ロードボタン
 	if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
@@ -111,8 +111,8 @@ void BasePlayerHand::ApplyGlobalParameter() {
 ///=====================================================
 void BasePlayerHand::SaveAndLoad() {
 
-	globalParameter_->ParmSaveForImGui(groupName_);
-	ParmLoadForImGui();
+	globalParameter_->ParamSaveForImGui(groupName_);
+	ParamLoadForImGui();
 }
 
 void BasePlayerHand::AjustParmBase() {

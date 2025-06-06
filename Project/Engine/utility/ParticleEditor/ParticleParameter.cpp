@@ -47,7 +47,7 @@ void ParticleParameter::Init() {
     parameters_.scaleEaseParm.easeType = static_cast<EaseType>(parameters_.scaleEaseParm.easeTypeInt);
 }
 
-void ParticleParameter::ParmLoadForImGui() {
+void ParticleParameter::ParamLoadForImGui() {
     // ロードボタン
     if (ImGui::Button(std::format("Load {}", particleName_).c_str())) {
         globalParameter_->LoadFile(particleName_, folderName_);
@@ -57,7 +57,7 @@ void ParticleParameter::ParmLoadForImGui() {
     }
 }
 
-void ParticleParameter::ParmSaveForImGui() {
+void ParticleParameter::ParamSaveForImGui() {
     // 保存ボタン
     if (ImGui::Button(std::format("Save {}", particleName_).c_str())) {
         globalParameter_->SaveFile(particleName_, folderName_);

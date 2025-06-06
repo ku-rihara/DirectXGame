@@ -58,8 +58,8 @@ public:
 		const std::function<void(const std::string&)>& onApply);
 
 	// load save
-	void  ParmSaveForImGui()override;
-	void  ParmLoadForImGui()override;
+	void  ParamSaveForImGui()override;
+	void  ParamLoadForImGui()override;
 	void ApplyGlobalParameter(const std::string& particleName)override;
 	void ApplyTexture(const std::string& texturename);
 	void SetValues()override;

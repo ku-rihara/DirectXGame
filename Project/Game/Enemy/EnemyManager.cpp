@@ -132,7 +132,7 @@ void EnemyManager::SetGameCamera(GameCamera* gamecamera) {
 ///=================================================================================
 /// ロード
 ///=================================================================================
-void EnemyManager::ParmLoadForImGui() {
+void EnemyManager::ParamLoadForImGui() {
 
     /// ロードボタン
     if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
@@ -260,8 +260,8 @@ void EnemyManager::AdjustParm() {
             ImGui::PopID();
         }
 
-        globalParameter_->ParmSaveForImGui(groupName_);
-        ParmLoadForImGui();
+        globalParameter_->ParamSaveForImGui(groupName_);
+        ParamLoadForImGui();
 
         ImGui::PopID();
     }
