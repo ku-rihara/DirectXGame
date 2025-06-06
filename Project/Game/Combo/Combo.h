@@ -21,13 +21,7 @@ public:
     ///-------------------------------------------------------------------------------------
     /// Editor
     ///-------------------------------------------------------------------------------------
-    void ParamLoadForImGui();
- /*   void AddParmGroup();*/
-    void SetValues();
-   /* void ApplyGlobalParameter();*/
     void AdjustParm();
-
-    // new 
     void BindParams();
 
 private:
@@ -39,7 +33,6 @@ private:
     int32_t comboCount_; /// コンボ数
     float comboTimeMax_; /// コンボ時間の最大値
 
-    ///* Reaction parameter *//
     Easing scalingEasing_;
 
     ///* Sprite *//
