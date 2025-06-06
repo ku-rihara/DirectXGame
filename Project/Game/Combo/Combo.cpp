@@ -1,10 +1,14 @@
 #include "Combo.h"
 #include "Easing.h"
-#include "Frame/Frame.h"
-#include "MathFunction.h"
+#include"base/TextureManager.h"
 #include <imgui.h>
+#include <cstdint>
 
 void Combo::Init() {
+    //int32_t textureId = TextureManager::GetInstance()->LoadTexture();
+
+    //// Sprite create
+    //sprite_.reset(Sprite::Create())
 
     ///* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
