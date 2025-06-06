@@ -1,13 +1,13 @@
 #include "GameScene.h"
-#include"Scene/Manager/SceneManager.h"
-#include"utility/ParticleEditor/ParticleManager.h"
+#include "Scene/Manager/SceneManager.h"
+#include "utility/ParticleEditor/ParticleManager.h"
 // base
 #include "base/TextureManager.h"
-//math
-#include<imgui.h>
-#include"Lighrt/Light.h"
-#include"Frame/Frame.h"
-#include"JoyState/JoyState.h"
+// math
+#include "Frame/Frame.h"
+#include "JoyState/JoyState.h"
+#include "Lighrt/Light.h"
+#include <imgui.h>
 
 GameScene::GameScene() {}
 
@@ -15,155 +15,150 @@ GameScene::~GameScene() {
 }
 
 void GameScene::Init() {
-	//// グローバル変数の読み込み
-	GlobalParameter::GetInstance()->LoadFiles();
-	BaseScene::Init();
-	
+    //// グローバル変数の読み込み
+    GlobalParameter::GetInstance()->LoadFiles();
+    BaseScene::Init();
 
-	///=======================================================================================
-	/// 生成
-	///=======================================================================================
-	
-	field_ = std::make_unique<Field>();
-	lockOn_ = std::make_unique<LockOn>();
-	player_ = std::make_unique<Player>();
-	gamecamera_ = std::make_unique<GameCamera>();
-	enemyManager_ = std::make_unique<EnemyManager>();
-	enemySpawner_ = std::make_unique<EnemySpawner>();
-	skydome_= std::make_unique<Skydome>();
-	howToOperate_ = std::make_unique<HowToOperate>();
+    ///=======================================================================================
+    /// 生成
+    ///=======================================================================================
+
+    field_        = std::make_unique<Field>();
+    lockOn_       = std::make_unique<LockOn>();
+    player_       = std::make_unique<Player>();
+    gamecamera_   = std::make_unique<GameCamera>();
+    enemyManager_ = std::make_unique<EnemyManager>();
+    enemySpawner_ = std::make_unique<EnemySpawner>();
+    skydome_      = std::make_unique<Skydome>();
+    howToOperate_ = std::make_unique<HowToOperate>();
     skyBox_       = std::make_unique<SkyBox>();
+    combo_        = std::make_unique<Combo>();
 
-	///=======================================================================================
-	/// 初期化
-	///=======================================================================================
-	field_->Init();
-	skydome_->Init();
-	player_->Init();
-	lockOn_->Init();
+    ///=======================================================================================
+    /// 初期化
+    ///=======================================================================================
+    field_->Init();
+    skydome_->Init();
+    player_->Init();
+    lockOn_->Init();
     skyBox_->Init();
-	enemyManager_->Init();
-	enemySpawner_->Init();
-	gamecamera_->Init();
-	howToOperate_->Init();
-	viewProjection_.Init();
+    combo_->Init();
+    enemyManager_->Init();
+    enemySpawner_->Init();
+    gamecamera_->Init();
+    howToOperate_->Init();
+    viewProjection_.Init();
 
-	///=======================================================================================
-	/// セット
-	///=======================================================================================
-	gamecamera_->SetTarget(&player_->GetTransform());
-	enemyManager_->SetPlayer(player_.get());
-	enemyManager_->SetGameCamera(gamecamera_.get());
-	enemyManager_->SetLockon(lockOn_.get());
-	player_->SetViewProjection(&viewProjection_); 
-	player_->SetLockOn(lockOn_.get());
-	player_->SetGameCamera(gamecamera_.get());
-	enemySpawner_->SetEnemyManager(enemyManager_.get());
+    ///=======================================================================================
+    /// セット
+    ///=======================================================================================
+    gamecamera_->SetTarget(&player_->GetTransform());
+    enemyManager_->SetPlayer(player_.get());
+    enemyManager_->SetGameCamera(gamecamera_.get());
+    enemyManager_->SetLockon(lockOn_.get());
+    player_->SetViewProjection(&viewProjection_);
+    player_->SetLockOn(lockOn_.get());
+    player_->SetGameCamera(gamecamera_.get());
+    enemySpawner_->SetEnemyManager(enemyManager_.get());
 
-	enemyManager_->FSpawn();
+    enemyManager_->FSpawn();
 
-	isfirstChange_ = false;
-	alpha_ = 2.5f;
-	shandle_ = TextureManager::GetInstance()->LoadTexture("./resources/Texture/screenChange.png");
-	screenSprite_.reset(Sprite::Create(shandle_, Vector2(0, 0), Vector4(1, 1, 1, alpha_)));
+    isfirstChange_ = false;
+    alpha_         = 2.5f;
+    shandle_       = TextureManager::GetInstance()->LoadTexture("./resources/Texture/screenChange.png");
+    screenSprite_.reset(Sprite::Create(shandle_, Vector2(0, 0), Vector4(1, 1, 1, alpha_)));
 
-	cease_.time = 0.0f;
-	cease_.maxTime = 0.5f;
-	chandle_ = TextureManager::GetInstance()->LoadTexture("./resources/Texture/Clear.png");
-	cSprite_.reset(Sprite::Create(chandle_, Vector2(0, -720), Vector4(1, 1, 1, 1.0f)));
+    cease_.time    = 0.0f;
+    cease_.maxTime = 0.5f;
+    chandle_       = TextureManager::GetInstance()->LoadTexture("./resources/Texture/Clear.png");
+    cSprite_.reset(Sprite::Create(chandle_, Vector2(0, -720), Vector4(1, 1, 1, 1.0f)));
 
-	ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
+    ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
 void GameScene::Update() {
 
-	screenSprite_->SetAlpha(alpha_);
+    screenSprite_->SetAlpha(alpha_);
 
-	if (!isfirstChange_) {
-		alpha_ -= Frame::DeltaTime();
-		if (alpha_ <= 0.0f) {
-			alpha_ = 0.0f;
-			isfirstChange_ = true;
-		}
-	}
+    if (!isfirstChange_) {
+        alpha_ -= Frame::DeltaTime();
+        if (alpha_ <= 0.0f) {
+            alpha_         = 0.0f;
+            isfirstChange_ = true;
+        }
+    }
 
-	/// debugcamera
-	debugCamera_->Update();
-	Debug();
-	
-	//各クラス更新
-	player_->Update();
-	skydome_->Update();
+    /// debugcamera
+    debugCamera_->Update();
+    Debug();
+
+    // 各クラス更新
+    player_->Update();
+    skydome_->Update();
     skyBox_->Update();
-	howToOperate_->Update();
-	field_->Update();
-	enemySpawner_->Update();
-	enemyManager_->Update();
-	gamecamera_->Update();
+    howToOperate_->Update();
+    field_->Update();
+    enemySpawner_->Update();
+    enemyManager_->Update();
+    gamecamera_->Update();
 
-	//
-	enemyManager_->HpBarUpdate(viewProjection_);
-	lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
+    //
+    enemyManager_->HpBarUpdate(viewProjection_);
+    lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
 
+    /// パーティクル更新
+    ParticleManager::GetInstance()->Update();
+    ViewProjectionUpdate();
 
-	/// パーティクル更新
-	ParticleManager::GetInstance()->Update();
-	ViewProjectionUpdate();
+    /// クリア
+    if (enemyManager_->GetCread() && enemySpawner_->GetIsAllSpawn()) {
+        cease_.time += Frame::DeltaTime();
 
-	/// クリア
-	if (enemyManager_->GetCread()&&enemySpawner_->GetIsAllSpawn()) {
-		cease_.time += Frame::DeltaTime();
-	
-		if (cease_.time >= cease_.maxTime) {
-			cease_.time = cease_.maxTime;
-			cSprite_->SetPosition(Vector2(0, 0));
-		
-			//　ジャンプに切り替え
-			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-				isend_ = true;
-			}
-			else {
-				ChangeForJoyState();//コントローラジャンプ
-			}
+        if (cease_.time >= cease_.maxTime) {
+            cease_.time = cease_.maxTime;
+            cSprite_->SetPosition(Vector2(0, 0));
 
-		}
-		else {
-			cSprite_->SetPosition(Vector2(0, EaseInCubic(-720.0f, 0.0f, cease_.time, cease_.maxTime)));
+            // 　ジャンプに切り替え
+            if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+                isend_ = true;
+            } else {
+                ChangeForJoyState(); // コントローラジャンプ
+            }
 
-		}
-	}
-	if (isend_) {
-		alpha_ += Frame::DeltaTime();
-		if (alpha_ >= 1.2f) {
-			alpha_ = 1.0f;
-			SceneManager::GetInstance()->ChangeScene("TITLE");
-		}
-	}
+        } else {
+            cSprite_->SetPosition(Vector2(0, EaseInCubic(-720.0f, 0.0f, cease_.time, cease_.maxTime)));
+        }
+    }
+    if (isend_) {
+        alpha_ += Frame::DeltaTime();
+        if (alpha_ >= 1.2f) {
+            alpha_ = 1.0f;
+            SceneManager::GetInstance()->ChangeScene("TITLE");
+        }
+    }
 
-	///// タイトルに戻る
-	//if (input_->TrrigerKey(DIK_RETURN)) {
-	//	SceneManager::GetInstance()->ChangeScene("TITLE");
-	//}
+    ///// タイトルに戻る
+    // if (input_->TrrigerKey(DIK_RETURN)) {
+    //	SceneManager::GetInstance()->ChangeScene("TITLE");
+    // }
 }
 
 /// ===================================================
 /// モデル描画
 /// ===================================================
 void GameScene::ModelDraw() {
-	/// commandList取得
-	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
-	Model::PreDraw(commandList);
-		/*skydome_->Draw(viewProjection_);*/
-		field_->Draw(viewProjection_);
-		player_->Draw(viewProjection_);
-		enemyManager_->Draw(viewProjection_);
+    /// commandList取得
+    ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+    Model::PreDraw(commandList);
+    /*skydome_->Draw(viewProjection_);*/
+    field_->Draw(viewProjection_);
+    player_->Draw(viewProjection_);
+    enemyManager_->Draw(viewProjection_);
 
-	
-		ParticleManager::GetInstance()->Draw(viewProjection_);
+    ParticleManager::GetInstance()->Draw(viewProjection_);
 
-		Model::PreDraw(commandList);
-		player_->EffectDraw(viewProjection_);
-
+    Model::PreDraw(commandList);
+    player_->EffectDraw(viewProjection_);
 }
 
 /// ===================================================
@@ -177,51 +172,49 @@ void GameScene::SkyBoxDraw() {
 /// スプライト描画
 /// ======================================================
 void GameScene::SpriteDraw() {
-	enemyManager_->SpriteDraw(viewProjection_);
-	lockOn_->Draw();
-	howToOperate_->Draw();
-	cSprite_->Draw();
-	screenSprite_->Draw();
+    enemyManager_->SpriteDraw(viewProjection_);
+    lockOn_->Draw();
+    howToOperate_->Draw();
+    cSprite_->Draw();
+    screenSprite_->Draw();
 }
 
 void GameScene::Debug() {
 #ifdef _DEBUG
-	ImGui::Begin("Camera");
-	gamecamera_->Debug();
-	gamecamera_->AdjustParm();
-	ImGui::End();
+    ImGui::Begin("Camera");
+    gamecamera_->Debug();
+    gamecamera_->AdjustParm();
+    ImGui::End();
 
-	enemySpawner_->ImGuiUpdate();
-	Light::GetInstance()->DebugImGui();
-	howToOperate_->Debug();
-	
+    enemySpawner_->ImGuiUpdate();
+    Light::GetInstance()->DebugImGui();
+    howToOperate_->Debug();
 
-	ImGui::Begin("ParameterEditor");
-	player_->AdjustParm();
-	enemyManager_->AdjustParm();
-	ImGui::End();
+    ImGui::Begin("ParameterEditor");
+    player_->AdjustParm();
+    enemyManager_->AdjustParm();
+    combo_->AdjustParm();
+    ImGui::End();
 #endif
 }
 
 // ビュープロジェクション更新
 void GameScene::ViewProjectionUpdate() {
-	BaseScene::ViewProjectionUpdate();
-	
+    BaseScene::ViewProjectionUpdate();
 }
 
 void GameScene::ViewProssess() {
-	viewProjection_.matView_ = gamecamera_->GetViewProjection().matView_;
-	viewProjection_.matProjection_ = gamecamera_->GetViewProjection().matProjection_;
-	viewProjection_.cameraMatrix_ = gamecamera_->GetViewProjection().cameraMatrix_;
-	viewProjection_.rotation_ = gamecamera_->GetViewProjection().rotation_;
-	viewProjection_.TransferMatrix();
-	
+    viewProjection_.matView_       = gamecamera_->GetViewProjection().matView_;
+    viewProjection_.matProjection_ = gamecamera_->GetViewProjection().matProjection_;
+    viewProjection_.cameraMatrix_  = gamecamera_->GetViewProjection().cameraMatrix_;
+    viewProjection_.rotation_      = gamecamera_->GetViewProjection().rotation_;
+    viewProjection_.TransferMatrix();
 }
 
-void  GameScene::ChangeForJoyState() {
-	
-	if (!((Input::IsTriggerPad(0, XINPUT_GAMEPAD_A)))) return;
+void GameScene::ChangeForJoyState() {
 
-	isend_ = true;
+    if (!((Input::IsTriggerPad(0, XINPUT_GAMEPAD_A))))
+        return;
 
+    isend_ = true;
 }
