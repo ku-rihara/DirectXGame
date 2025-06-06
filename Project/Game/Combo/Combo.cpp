@@ -9,8 +9,7 @@ void Combo::Init() {
     ///* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    AddParmGroup();
-    ApplyGlobalParameter();
+    BindParams();
 }
 
 void Combo::Update() {
@@ -60,25 +59,33 @@ void Combo::ApplyGlobalParameter() {
 /// パラメータ調整
 ///==========================================================
 void Combo::AdjustParm() {
-    SetValues();
 #ifdef _DEBUG
-
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
-        ImGui::SeparatorText("Combo Parameter"); // combo パラメータ
-        ImGui::DragFloat("Combo Time Max", &comboTimeMax_, 0.01f);
+        ImGui::SeparatorText("Combo Parameter");
+        ImGui::DragFloat("Combo Time Max", &comboTimeMax_, 0.01f); // UIで即編集
 
-        ImGui::SeparatorText("Easing Parameter"); // Easing パラメータ
+        ImGui::SeparatorText("Easing Parameter");
         ImGui::DragFloat("Scaling Ease max", &scalingEasing_.maxTime, 0.01f);
         ImGui::DragFloat("Scaling Ease amplitude", &scalingEasing_.amplitude, 0.01f);
         ImGui::DragFloat("Scaling Ease period", &scalingEasing_.period, 0.01f);
 
-        /// セーブとロード
+        // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
         ParamLoadForImGui();
+
         ImGui::PopID();
     }
-
 #endif // _DEBUG
+}
+
+
+void Combo::BindParams() {
+    globalParameter_->Bind(groupName_, "comboTimeMax_", &comboTimeMax_);
+
+    // Easingパラメータもついでにバインド
+    globalParameter_->Bind(groupName_, "Scaling Ease max", &scalingEasing_.maxTime);
+    globalParameter_->Bind(groupName_, "Scaling Ease amplitude", &scalingEasing_.amplitude);
+    globalParameter_->Bind(groupName_, "Scaling Ease period", &scalingEasing_.period);
 }

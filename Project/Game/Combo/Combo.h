@@ -27,6 +27,9 @@ public:
     void ApplyGlobalParameter();
     void AdjustParm();
 
+    // new 
+    void BindParams();
+
 private:
     GlobalParameter* globalParameter_; /// グローバルパラメータ
     const std::string groupName_ = "Combo"; /// グループ名
