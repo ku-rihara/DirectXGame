@@ -100,7 +100,7 @@ void Player::Update() {
     SetLightPos();
 
     comboBehavior_->Update(); /// 　コンボ攻撃攻撃
-    MoveToLimit(); /// 　移動制限
+    MoveToLimit();            /// 　移動制限
 
     UpdateMatrix();
 }
