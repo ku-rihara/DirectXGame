@@ -137,11 +137,11 @@ void GlobalParameter::SetValue(const std::string& groupName, const std::string& 
         } else {
             throw std::runtime_error("Type mismatch for key: " + key);
         }
-        //if (!isLoading_) {
-        //    // 描画設定の更新
-        //    existingSettings.widgetType    = widgetType;
-        //    existingSettings.treeNodeLabel = treeNodeLabel;
-        //}
+        // if (!isLoading_) {
+        //     // 描画設定の更新
+        //     existingSettings.widgetType    = widgetType;
+        //     existingSettings.treeNodeLabel = treeNodeLabel;
+        // }
     } else {
         // 新規の場合、値と設定を追加
 
@@ -312,7 +312,7 @@ void GlobalParameter::LoadFiles() {
 }
 
 void GlobalParameter::LoadFile(const std::string& groupName, const std::string& folderName) {
-  
+
     std::string filePath = kDirectoryPath + folderName + "/" + groupName + ".json";
     std::ifstream ifs(filePath);
     if (ifs.fail()) {
@@ -373,7 +373,6 @@ void GlobalParameter::LoadFile(const std::string& groupName, const std::string& 
             SetValue(groupName, itemName, value, WidgetType::NONE);
         }
     }
-  
 }
 
 void GlobalParameter::ParamSaveForImGui(const std::string& groupName) {
@@ -418,12 +417,11 @@ void GlobalParameter::Bind(const std::string& group, const std::string& key, T* 
 void GlobalParameter::SyncAll() {
     for (auto& [group, items] : bindings_) {
         for (auto& item : items) {
-            item.pushToUI(); 
-            item.pullFromUI(); 
+            item.pushToUI();
+            item.pullFromUI();
         }
     }
 }
-
 
 template void GlobalParameter::SetValue<int>(const std::string& groupName, const std::string& key, int value, WidgetType widgetType);
 template void GlobalParameter::SetValue<uint32_t>(const std::string& groupName, const std::string& key, uint32_t value, WidgetType widgetType);
@@ -451,3 +449,12 @@ template Vector3 GlobalParameter::GetValue<Vector3>(const std::string& groupName
 template Vector4 GlobalParameter::GetValue<Vector4>(const std::string& groupName, const std::string& key) const;
 template bool GlobalParameter::GetValue<bool>(const std::string& groupName, const std::string& key) const;
 template std::string GlobalParameter::GetValue<std::string>(const std::string& groupName, const std::string& key) const;
+
+template int32_t GlobalParameter::Bind<int32_t>(const std::string& group, const std::string& key, int32_t* variable, WidgetType widgetType);
+template uint32_t GlobalParameter::Bind<uint32_t>(const std::string& groupName, const std::string& key);
+template float GlobalParameter::Bind<float>(const std::string& groupName, const std::string& key);
+template Vector2 GlobalParameter::Bind<Vector2>(const std::string& groupName, const std::string& key);
+template Vector3 GlobalParameter::Bind<Vector3>(const std::string& groupName, const std::string& key);
+template Vector4 GlobalParameter::Bind<Vector4>(const std::string& groupName, const std::string& key);
+template bool GlobalParameter::Bind<bool>(const std::string& groupName, const std::string& key);
+template std::string GlobalParameter::Bind<std::string>(const std::string& groupName, const std::string& key);

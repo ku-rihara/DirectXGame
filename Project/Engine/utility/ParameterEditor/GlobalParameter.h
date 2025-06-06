@@ -102,7 +102,7 @@ public:
     void DrawWidget(const std::string& itemName, Item& item, const DrawSettings& drawSettings);
 
     template <typename T>
-    void Bind(const std::string& group, const std::string& key, T* variable, WidgetType widgetType = WidgetType::DragFloat);
+    void Bind(const std::string& group, const std::string& key, T* variable, WidgetType widgetType = WidgetType::NONE);
 
     void SyncAll();
 
