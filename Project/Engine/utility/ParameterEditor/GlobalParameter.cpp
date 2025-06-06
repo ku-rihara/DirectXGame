@@ -13,7 +13,7 @@ GlobalParameter* GlobalParameter::GetInstance() {
 /// 指定したグループ名のグループを作成し、表示フラグを設定。
 /// =====================================================================================
 void GlobalParameter::CreateGroup(const std::string& groupName, const bool& isVisible) {
-    datas_[groupName]; // グループを作成
+    dates_[groupName]; // グループを作成
     visibilityFlags_[groupName] = isVisible; // 表示フラグを設定
 }
 
@@ -30,7 +30,7 @@ void GlobalParameter::Update() {
     }
 
     // 各グループの順番通りに処理
-    for (auto& [groupName, group] : datas_) {
+    for (auto& [groupName, group] : dates_) {
         // 表示フラグがオフの場合スキップ
         if (!visibilityFlags_[groupName]) {
             continue;
@@ -60,8 +60,8 @@ void GlobalParameter::Update() {
             }
 
             // セーブ・ロード
-            ParmSaveForImGui(groupName);
-            ParmLoadForImGui(groupName);
+            ParamSaveForImGui(groupName);
+            ParamLoadForImGui(groupName);
         }
 
         // グループ間に区切りを挿入
@@ -122,7 +122,7 @@ void GlobalParameter::DrawWidget(const std::string& itemName, Item& item, const 
 ///=============================================================================
 template <typename T>
 void GlobalParameter::SetValue(const std::string& groupName, const std::string& key, T value, WidgetType widgetType) {
-    Group& group = datas_[groupName]; // グループ取得または作成
+    Group& group = dates_[groupName]; // グループ取得または作成
 
     // 現在のツリーノードがスタックにある場合、そのラベルを取得
     std::string treeNodeLabel = treeNodeStack_.empty() ? "" : treeNodeStack_.top();
@@ -158,7 +158,7 @@ void GlobalParameter::SetValue(const std::string& groupName, const std::string& 
 ///=============================================================================
 template <typename T>
 void GlobalParameter::AddItem(const std::string& groupName, const std::string& key, T defaultValue, WidgetType widgetType) {
-    Group& group = datas_[groupName];
+    Group& group = dates_[groupName];
 
     // 既存データの確認
     auto it = group.find(key);
@@ -189,10 +189,10 @@ void GlobalParameter::AddItem(const std::string& groupName, const std::string& k
 ///=============================================================================
 template <typename T>
 T GlobalParameter::GetValue(const std::string& groupName, const std::string& key) const {
-    auto itGroup = datas_.find(groupName);
-    assert(itGroup != datas_.end());
+    auto itGroup = dates_.find(groupName);
+    assert(itGroup != dates_.end());
 
-    const Group& group = datas_.at(groupName);
+    const Group& group = dates_.at(groupName);
     auto itItem        = group.find(key);
     assert(itItem != group.end());
 
@@ -214,8 +214,8 @@ void GlobalParameter::AddTreePoP() {
 //==============================================================================
 
 void GlobalParameter::SaveFile(const std::string& groupName, const std::string& folderName) {
-    auto itGroup = datas_.find(groupName);
-    assert(itGroup != datas_.end());
+    auto itGroup = dates_.find(groupName);
+    assert(itGroup != dates_.end());
 
     json root;
     for (auto& [itemName, item] : itGroup->second) {
@@ -376,7 +376,7 @@ void GlobalParameter::LoadFile(const std::string& groupName, const std::string& 
   
 }
 
-void GlobalParameter::ParmSaveForImGui(const std::string& groupName) {
+void GlobalParameter::ParamSaveForImGui(const std::string& groupName) {
     // 保存ボタン
     if (ImGui::Button(std::format("Save {}", groupName).c_str())) {
         SaveFile(groupName);
@@ -386,7 +386,7 @@ void GlobalParameter::ParmSaveForImGui(const std::string& groupName) {
     }
 }
 
-void GlobalParameter::ParmLoadForImGui(const std::string& groupName) {
+void GlobalParameter::ParamLoadForImGui(const std::string& groupName) {
     // ロードボタン
     if (ImGui::Button(std::format("Load {}", groupName).c_str())) {
         LoadFile(groupName);
@@ -394,6 +394,36 @@ void GlobalParameter::ParmLoadForImGui(const std::string& groupName) {
         ImGui::Text("Load Successful: %s", groupName.c_str());
     }
 }
+
+template <typename T>
+void GlobalParameter::Bind(const std::string& group, const std::string& key, T* variable, WidgetType widgetType) {
+    // ImGuiで使うためにAddItem
+    AddItem(group, key, *variable, widgetType);
+
+    BoundItem item;
+
+    // UI→変数
+    item.pullFromUI = [=]() {
+        *variable = GetValue<T>(group, key);
+    };
+
+    // 変数→UI
+    item.pushToUI = [=]() {
+        SetValue<T>(group, key, *variable, widgetType);
+    };
+
+    bindings_[group].emplace_back(std::move(item));
+}
+
+void GlobalParameter::SyncAll() {
+    for (auto& [group, items] : bindings_) {
+        for (auto& item : items) {
+            item.pushToUI(); 
+            item.pullFromUI(); 
+        }
+    }
+}
+
 
 template void GlobalParameter::SetValue<int>(const std::string& groupName, const std::string& key, int value, WidgetType widgetType);
 template void GlobalParameter::SetValue<uint32_t>(const std::string& groupName, const std::string& key, uint32_t value, WidgetType widgetType);
