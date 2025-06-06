@@ -49,8 +49,8 @@ private:
     ///=================================================================================
 
     struct BoundItem {
-        std::function<void()> pullFromUI;
-        std::function<void()> pushToUI;
+        std::function<void()> pullVariant;
+        std::function<void()> pushVariant;
     };
 
 private:
@@ -98,13 +98,13 @@ public:
     T GetValue(const std::string& groupName, const std::string& key) const;
 
     // draw
-    void DrawGroup(Group& group);
     void DrawWidget(const std::string& itemName, Item& item, const DrawSettings& drawSettings);
 
     template <typename T>
     void Bind(const std::string& group, const std::string& key, T* variable, WidgetType widgetType = WidgetType::NONE);
 
     void SyncAll();
+    void SyncGroupFromUI(const std::string& group);
 
     // ------------------------------------------------------------------------------
     // ファイルへの保存・読み込み
@@ -119,8 +119,10 @@ public:
     void LoadFile(const std::string& groupName, const std::string& fileName = "");
     void SaveFile(const std::string& groupName, const std::string& fileName = "");
 
+     void ParamLoadForImGui(const std::string& groupName);
+
 private:
-    void ParamLoadForImGui(const std::string& groupName);
+   
 
 private:
     ///=================================================================================
@@ -130,11 +132,9 @@ private:
     // グループ名(キー)とグループのデータ
     std::unordered_map<std::string, Group> dates_;
 
-    // 値が変更されたかどうかのフラグ
-    std::unordered_map<std::string, bool> isValueChanged_;
-
     /// グループごとの可視性フラグを管理
     std::unordered_map<std::string, bool> visibilityFlags_;
+
 
     std::unordered_map<std::string, std::vector<BoundItem>> bindings_;
 

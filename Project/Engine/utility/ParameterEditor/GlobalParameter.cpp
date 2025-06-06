@@ -309,6 +309,7 @@ void GlobalParameter::LoadFiles() {
             LoadFile(fileName, folderName);
         }
     }
+   
 }
 
 void GlobalParameter::LoadFile(const std::string& groupName, const std::string& folderName) {
@@ -391,6 +392,7 @@ void GlobalParameter::ParamLoadForImGui(const std::string& groupName) {
         LoadFile(groupName);
         // セーブ完了メッセージ
         ImGui::Text("Load Successful: %s", groupName.c_str());
+        SyncGroupFromUI(groupName);
     }
 }
 
@@ -401,27 +403,38 @@ void GlobalParameter::Bind(const std::string& group, const std::string& key, T* 
 
     BoundItem item;
 
-    // UI→変数
-    item.pullFromUI = [=]() {
+    // 変数取得
+    item.pullVariant = [=]() {
         *variable = GetValue<T>(group, key);
     };
 
-    // 変数→UI
-    item.pushToUI = [=]() {
+    // 変数セット
+    item.pushVariant = [=]() {
         SetValue<T>(group, key, *variable, widgetType);
     };
+   
 
     bindings_[group].emplace_back(std::move(item));
 }
 
+//
 void GlobalParameter::SyncAll() {
     for (auto& [group, items] : bindings_) {
         for (auto& item : items) {
-            item.pushToUI();
-            item.pullFromUI();
+            item.pushVariant();
         }
     }
 }
+
+void GlobalParameter::SyncGroupFromUI(const std::string& group) {
+    auto it = bindings_.find(group);
+    if (it != bindings_.end()) {
+        for (auto& item : it->second) {
+            item.pullVariant();
+        }
+    }
+}
+
 
 template void GlobalParameter::SetValue<int>(const std::string& groupName, const std::string& key, int value, WidgetType widgetType);
 template void GlobalParameter::SetValue<uint32_t>(const std::string& groupName, const std::string& key, uint32_t value, WidgetType widgetType);
