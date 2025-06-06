@@ -63,10 +63,10 @@ void Combo::AdjustParm() {
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
-        ImGui::SeparatorText("Combo Parameter");
-        ImGui::DragFloat("Combo Time Max", &comboTimeMax_, 0.01f); // UIで即編集
+        ImGui::SeparatorText("Combo Parameter"); // combo パラメータ
+        ImGui::DragFloat("Combo Time Max", &comboTimeMax_, 0.01f);
 
-        ImGui::SeparatorText("Easing Parameter");
+        ImGui::SeparatorText("Easing Parameter"); // Easing パラメータ
         ImGui::DragFloat("Scaling Ease max", &scalingEasing_.maxTime, 0.01f);
         ImGui::DragFloat("Scaling Ease amplitude", &scalingEasing_.amplitude, 0.01f);
         ImGui::DragFloat("Scaling Ease period", &scalingEasing_.period, 0.01f);
@@ -79,7 +79,6 @@ void Combo::AdjustParm() {
     }
 #endif // _DEBUG
 }
-
 
 void Combo::BindParams() {
     globalParameter_->Bind(groupName_, "comboTimeMax_", &comboTimeMax_);
