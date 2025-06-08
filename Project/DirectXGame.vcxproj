@@ -76,6 +76,8 @@
     <ClCompile Include="Game\CollisionBox\AttackCollisionBox.cpp" />
     <ClCompile Include="Game\CollisionBox\EnemyCollisionBox.cpp" />
     <ClCompile Include="Game\Combo\Combo.cpp" />
+    <ClCompile Include="Game\Combo\ComboUI.cpp" />
+    <ClCompile Include="Game\Combo\ComboUIController.cpp" />
     <ClCompile Include="Game\Effect\ImpactEffect.cpp" />
     <ClCompile Include="Game\Enemy\BaseEnemy.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\BaseEnemyBehavior.cpp" />
@@ -231,6 +233,8 @@
     <ClInclude Include="Game\CollisionBox\AttackCollisionBox.h" />
     <ClInclude Include="Game\CollisionBox\EnemyCollisionBox.h" />
     <ClInclude Include="Game\Combo\Combo.h" />
+    <ClInclude Include="Game\Combo\ComboUI.h" />
+    <ClInclude Include="Game\Combo\ComboUIController.h" />
     <ClInclude Include="Game\Effect\ImpactEffect.h" />
     <ClInclude Include="Game\Enemy\BaseEnemy.h" />
     <ClInclude Include="Game\Enemy\Behavior\BaseEnemyBehavior.h" />

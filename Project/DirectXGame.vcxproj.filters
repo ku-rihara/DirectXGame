@@ -721,6 +721,12 @@
     <ClCompile Include="Game\Combo\Combo.cpp">
       <Filter>Game\Combo</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Combo\ComboUIController.cpp">
+      <Filter>Game\Combo</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Combo\ComboUI.cpp">
+      <Filter>Game\Combo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1183,6 +1189,12 @@
       <Filter>MyEngine\.h\Core</Filter>
     </ClInclude>
     <ClInclude Include="Game\Combo\Combo.h">
+      <Filter>Game\Combo</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Combo\ComboUIController.h">
+      <Filter>Game\Combo</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Combo\ComboUI.h">
       <Filter>Game\Combo</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,10 +1,14 @@
-#include "Combo.h"
+#include "ComboUI.h"
 #include "Easing.h"
 #include"base/TextureManager.h"
 #include <imgui.h>
 #include <cstdint>
 
-void Combo::Init() {
+void ComboUI::Init() {
+    //int32_t textureId = TextureManager::GetInstance()->LoadTexture();
+
+    //// Sprite create
+    //sprite_.reset(Sprite::Create())
 
     ///* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
@@ -13,9 +17,9 @@ void Combo::Init() {
     globalParameter_->SyncGroupFromUI(groupName_);
 }
 
-void Combo::Update() {
+void ComboUI::Update() {
 }
-void Combo::Draw() {
+void ComboUI::Draw() {
 }
 
 
@@ -23,16 +27,11 @@ void Combo::Draw() {
 ///=========================================================
 /// パラメータ調整
 ///==========================================================
-void Combo::AdjustParm() {
+void ComboUI::AdjustParm() {
    
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
-        ImGui::PushID(groupName_.c_str());
-
-        ImGui::SeparatorText("Combo Parameter"); // combo パラメータ
-        ImGui::DragFloat("Combo Time Max", &comboTimeMax_, 0.01f);
-
-     
+      
 
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
@@ -43,9 +42,8 @@ void Combo::AdjustParm() {
 #endif // _DEBUG
 }
 
-void Combo::BindParams() {
-    globalParameter_->Bind(groupName_, "comboTimeMax_", &comboTimeMax_);
-
+void ComboUI::BindParams() {
+  
 }
 
 

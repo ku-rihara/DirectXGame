@@ -5,6 +5,7 @@
 
 // object
 #include "Combo/Combo.h"
+#include "Combo/ComboUIController.h"
 #include "Enemy/EnemyManager.h"
 #include "Enemy/Spawner/EnemySpawner.h"
 #include "Field/Field.h"
@@ -26,16 +27,17 @@ private:
     ///========================================================
 
     ///* objects
-    std::unique_ptr<GameCamera> gamecamera_     = nullptr;
-    std::unique_ptr<Field> field_               = nullptr;
-    std::unique_ptr<LockOn> lockOn_             = nullptr;
-    std::unique_ptr<Player> player_             = nullptr;
-    std::unique_ptr<Skydome> skydome_           = nullptr;
-    std::unique_ptr<SkyBox> skyBox_             = nullptr;
-    std::unique_ptr<EnemyManager> enemyManager_ = nullptr;
-    std::unique_ptr<EnemySpawner> enemySpawner_ = nullptr;
-    std::unique_ptr<HowToOperate> howToOperate_ = nullptr;
-    std::unique_ptr<Combo> combo_               = nullptr;
+    std::unique_ptr<GameCamera> gamecamera_               = nullptr;
+    std::unique_ptr<Field> field_                         = nullptr;
+    std::unique_ptr<LockOn> lockOn_                       = nullptr;
+    std::unique_ptr<Player> player_                       = nullptr;
+    std::unique_ptr<Skydome> skydome_                     = nullptr;
+    std::unique_ptr<SkyBox> skyBox_                       = nullptr;
+    std::unique_ptr<EnemyManager> enemyManager_           = nullptr;
+    std::unique_ptr<EnemySpawner> enemySpawner_           = nullptr;
+    std::unique_ptr<HowToOperate> howToOperate_           = nullptr;
+    std::unique_ptr<Combo> combo_                         = nullptr;
+    std::unique_ptr<ComboUIController> comboUIController_ = nullptr;
 
     bool isDraw = true;
 

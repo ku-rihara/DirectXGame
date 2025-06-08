@@ -7,11 +7,11 @@
 #include <cstdint>
 #include <memory>
 
-class Combo {
+class ComboUIController {
 
 public:
-    Combo()  = default;
-    ~Combo() = default;
+    ComboUIController() = default;
+    ~ComboUIController() = default;
 
     // init update draw
     void Init();
@@ -26,12 +26,11 @@ public:
 
 private:
     GlobalParameter* globalParameter_; /// グローバルパラメータ
-    const std::string groupName_ = "Combo"; /// グループ名
+    const std::string groupName_ = "ComboUI"; /// グループ名
 
     ///* parameter *//
-    float comboTime_; /// コンボ時間
-    int32_t comboCount_; /// コンボ数
-    float comboTimeMax_; /// コンボ時間の最大値
+    Easing scalingEasing_;
 
-   
+    ///* Sprite *//
+    std::unique_ptr<Sprite> sprite_;
 };
