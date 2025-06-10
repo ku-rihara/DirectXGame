@@ -63,7 +63,7 @@ void EnemyThrustDamage::Update() {
 
 		/// 吹っ飛ぶ距離を計算
 		backPos_ = initPos_ + (direction_ * -speed_);
-		backPos_.y = pBaseEnemy_->GetParamater().basePosY;
+		backPos_.y = pBaseEnemy_->GetParameter().basePosY;
 
 		step_ = Step::HITBACK;
 		break;
@@ -78,7 +78,7 @@ void EnemyThrustDamage::Update() {
 		pBaseEnemy_->SetRotationY(LerpShortAngle(pBaseEnemy_->GetTransform().rotation_.y, objectiveAngle_, 0.5f));
 		easing_.time += Frame::DeltaTimeRate();
 
-		rotate_ += pBaseEnemy_->GetParamater().thrustRotateSpeed * Frame::DeltaTimeRate();
+		rotate_ += pBaseEnemy_->GetParameter().thrustRotateSpeed * Frame::DeltaTimeRate();
 		pBaseEnemy_->SetBodyRotateX(rotate_);
 
 		/// イージングでヒットバックする
@@ -100,7 +100,7 @@ void EnemyThrustDamage::Update() {
 		pBaseEnemy_->FallEffectInit(pBaseEnemy_->GetWorldPosition());
 		pBaseEnemy_->RotateInit();
 		pBaseEnemy_->SetBodyColor(Vector4(1.0f, 1, 1, 1.0f));
-		pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetParamater().basePosY);
+		pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetParameter().basePosY);
 		pBaseEnemy_->GetGameCamera()->ChangeShakeMode();
 		pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyBoundDamage>(pBaseEnemy_));
 		break;

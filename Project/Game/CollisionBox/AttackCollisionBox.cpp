@@ -1,68 +1,102 @@
-#include"AttackCollisionBox.h"
-#include"Enemy/BaseEnemy.h"
-#include<imgui.h>
+#include "AttackCollisionBox.h"
+// enemy
+#include "Enemy/BaseEnemy.h"
+#include <imgui.h>
+/// behavior
+//#include "Enemy/Behavior/EnemyBoundDamage.h"
+//#include "Enemy/Behavior/EnemyDamageRoot.h"
+//#include "Enemy/Behavior/EnemyHitBackDamage.h"
+//#include "Enemy/Behavior/EnemyStopDamage.h"
+//#include "Enemy/Behavior/EnemyThrustDamage.h"
+//#include "Enemy/Behavior/EnemyUpperDamage.h"
 
 void AttackCollisionBox::Init() {
-	/*tagList_[static_cast<size_t>(AttackType::NORMAL)] = "Normal";
-	tagList_[static_cast<size_t>(AttackType::FALL)] = "Fall";
-	tagList_[static_cast<size_t>(AttackType::RUSH)] = "Rush";
-	tagList_[static_cast<size_t>(AttackType::THRUST)] = "Thrust";
-	tagList_[static_cast<size_t>(AttackType::STOPPER)] = "Stopper";
-	tagList_[static_cast<size_t>(AttackType::UPPER)] = "Upper";*/
-	BaseAABBCollisionBox::Init();
+
+    BaseAABBCollisionBox::Init();
 }
 
 void AttackCollisionBox::Update() {
-	BaseAABBCollisionBox::Update();
+    BaseAABBCollisionBox::Update();
 }
 
 void AttackCollisionBox::Draw() {
-	BaseAABBCollisionBox::Draw();
+    BaseAABBCollisionBox::Draw();
 }
 
 Vector3 AttackCollisionBox::GetCollisionPos() const {
-	return BaseAABBCollisionBox::GetCollisionPos();
+    return BaseAABBCollisionBox::GetCollisionPos();
 }
 
 void AttackCollisionBox::SetSize(const Vector3& size) {
-	BaseAABBCollisionBox::SetSize(size);
+    BaseAABBCollisionBox::SetSize(size);
 }
 
 void AttackCollisionBox::SetPosition(const Vector3& position) {
-	BaseAABBCollisionBox::SetPosition(position);
+    BaseAABBCollisionBox::SetPosition(position);
 }
 
 void AttackCollisionBox::SetOffset(const Vector3& offset) {
-	BaseAABBCollisionBox::SetOffset(offset);
+    BaseAABBCollisionBox::SetOffset(offset);
 }
 
 void AttackCollisionBox::IsAdapt(bool is) {
-	BaseAABBCollisionBox::IsAdapt(is);
+    BaseAABBCollisionBox::IsAdapt(is);
+}
+
+void AttackCollisionBox::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
+    if (dynamic_cast<BaseEnemy*>(other)) {
+        switch (attackType_) {
+            /// -----------------------------------------------------------------------
+            /// AttackCollisionBox::AttackType::NORMAL
+            /// -----------------------------------------------------------------------
+        case AttackCollisionBox::AttackType::NORMAL:
+
+            break;
+        }
+    }
 }
 
 void AttackCollisionBox::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
-	if (dynamic_cast<BaseEnemy*>(other)) {
-		switch (attackType_)
-		{
-		case AttackCollisionBox::AttackType::NORMAL:
-			break;
-		case AttackCollisionBox::AttackType::FALL:
-			break;
-		case AttackCollisionBox::AttackType::RUSH:
-			break;
-		case AttackCollisionBox::AttackType::STOPPER:
-			break;
-		case AttackCollisionBox::AttackType::THRUST:
-			isSlow_ = true;
-			break;
-		case AttackCollisionBox::AttackType::UPPER:
-			isHitStop_ = true;
-			break;
-		case AttackCollisionBox::AttackType::COUNT:
-			break;
-		default:
-			break;
-		}
-		
-	}
+    if (dynamic_cast<BaseEnemy*>(other)) {
+        switch (attackType_) {
+
+            /// -----------------------------------------------------------------------
+            /// AttackCollisionBox::AttackType::FALL
+            /// -----------------------------------------------------------------------
+        case AttackCollisionBox::AttackType::FALL:
+          
+            break;
+            /// -----------------------------------------------------------------------
+            /// AttackCollisionBox::AttackType::RUSH
+            /// -----------------------------------------------------------------------
+        case AttackCollisionBox::AttackType::RUSH:
+           
+            break;
+            /// -----------------------------------------------------------------------
+            /// AttackCollisionBox::AttackType::STOPPER
+            /// -----------------------------------------------------------------------
+        case AttackCollisionBox::AttackType::STOPPER:
+
+            break;
+            /// -----------------------------------------------------------------------
+            /// AttackCollisionBox::AttackType::THRUST
+            /// -----------------------------------------------------------------------
+        case AttackCollisionBox::AttackType::THRUST:
+            isSlow_ = true;
+            break;
+            /// -----------------------------------------------------------------------
+            /// AttackCollisionBox::AttackType::UPPER
+            /// -----------------------------------------------------------------------
+        case AttackCollisionBox::AttackType::UPPER:
+            isHitStop_ = true;
+            break;
+            /// -----------------------------------------------------------------------
+            /// AttackCollisionBox::AttackType::COUNT
+            /// -----------------------------------------------------------------------
+        case AttackCollisionBox::AttackType::COUNT:
+            break;
+        default:
+            break;
+        }
+    }
 }

@@ -38,6 +38,7 @@ void GameScene::Init() {
     ///=======================================================================================
     /// 初期化
     ///=======================================================================================
+   
     field_->Init();
     skydome_->Init();
     player_->Init();
@@ -56,12 +57,14 @@ void GameScene::Init() {
     ///=======================================================================================
     gamecamera_->SetTarget(&player_->GetTransform());
     enemyManager_->SetPlayer(player_.get());
+    enemyManager_->SetCombo(combo_.get());
     enemyManager_->SetGameCamera(gamecamera_.get());
     enemyManager_->SetLockon(lockOn_.get());
     player_->SetViewProjection(&viewProjection_);
     player_->SetLockOn(lockOn_.get());
     player_->SetGameCamera(gamecamera_.get());
     enemySpawner_->SetEnemyManager(enemyManager_.get());
+    comboUIController_->SetCombo(combo_.get());
 
     enemyManager_->FSpawn();
 
@@ -186,7 +189,7 @@ void GameScene::Debug() {
 #ifdef _DEBUG
     ImGui::Begin("Camera");
     gamecamera_->Debug();
-    gamecamera_->AdjustParm();
+    gamecamera_->AdjustParam();
     ImGui::End();
 
     enemySpawner_->ImGuiUpdate();
@@ -194,9 +197,10 @@ void GameScene::Debug() {
     howToOperate_->Debug();
 
     ImGui::Begin("ParameterEditor");
-    player_->AdjustParm();
-    enemyManager_->AdjustParm();
-    combo_->AdjustParm();
+    player_->AdjustParam();
+    enemyManager_->AdjustParam();
+    combo_->AdjustParam();
+    comboUIController_->AdjustParam();
     ImGui::End();
 #endif
 }

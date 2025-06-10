@@ -35,8 +35,8 @@ void EnemyStopDamage::Update() {
 	speed_ = max(speed_ - (4.8f * Frame::DeltaTimeRate()),-1.3f);
 	
 	// 着地
-	if (pBaseEnemy_->GetTransform().translation_.y > pBaseEnemy_->GetParamater().basePosY) return;
-	pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetParamater().basePosY);
+	if (pBaseEnemy_->GetTransform().translation_.y > pBaseEnemy_->GetParameter().basePosY) return;
+	pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetParameter().basePosY);
 
 	/// -------------------------------------------------------
 	/// 追従に戻す

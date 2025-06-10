@@ -81,7 +81,7 @@ public:
 	void AddParmGroup();
 	void SetValues();
 	void ApplyGlobalParameter();
-	void AdjustParm();
+	void AdjustParam();
 
 	/// ===================================================
 	/// getter

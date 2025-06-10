@@ -27,12 +27,12 @@ EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
 	///
 	pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2(0, 0));
 	pBaseEnemy_->GetFindSprite()->SetScale(Vector2(1, 1));
-    pBaseEnemy_->SetScale(pBaseEnemy_->GetParamater().initScale_);
+    pBaseEnemy_->SetScale(pBaseEnemy_->GetParameter().initScale_);
 
 	/// hitbackMove
 	archingbackEase_.time = 0.0f;
-	archingbackEase_.maxTime=pBaseEnemy_->GetParamater().archingbackTime;
-	archingbackEase_.backRatio= pBaseEnemy_->GetParamater().archingbackRatio;
+	archingbackEase_.maxTime=pBaseEnemy_->GetParameter().archingbackTime;
+	archingbackEase_.backRatio= pBaseEnemy_->GetParameter().archingbackRatio;
 
 	step_ = Step::DIRECTIONSET; /// ステップ初期化
 }
@@ -70,7 +70,7 @@ void EnemyHitBackDamage::Update() {
 		easing_.time += Frame::DeltaTimeRate();
 		archingbackEase_.time += Frame::DeltaTimeRate();
 		//のけぞり
-		preRotate_ = Back::OutCircZero(0.0f, pBaseEnemy_->GetParamater().archingbackValue, archingbackEase_.time, archingbackEase_.maxTime,archingbackEase_.backRatio);
+		preRotate_ = Back::OutCircZero(0.0f, pBaseEnemy_->GetParameter().archingbackValue, archingbackEase_.time, archingbackEase_.maxTime,archingbackEase_.backRatio);
 		//のけぞり適応
 		pBaseEnemy_->SetBodyRotateX(preRotate_);
 

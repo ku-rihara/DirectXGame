@@ -324,7 +324,7 @@ void Player::Fall(float& speed, const float& fallSpeedLimit, const float& gravit
 ///=========================================================
 /// パラメータ調整
 ///==========================================================
-void Player::AdjustParm() {
+void Player::AdjustParam() {
     parameters_->SetValues();
 #ifdef _DEBUG
 

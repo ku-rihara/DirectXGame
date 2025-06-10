@@ -3,14 +3,17 @@
 #include "2d/Sprite.h"
 #include "Easing.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
-//std
+// std
+#include <array>
 #include <cstdint>
 #include <memory>
 
+class ComboUI;
+class Combo;
 class ComboUIController {
 
 public:
-    ComboUIController() = default;
+    ComboUIController()  = default;
     ~ComboUIController() = default;
 
     // init update draw
@@ -18,11 +21,17 @@ public:
     void Update();
     void Draw();
 
+    // easing
+    void ScalingEasing();
+
     ///-------------------------------------------------------------------------------------
     /// Editor
     ///-------------------------------------------------------------------------------------
-    void AdjustParm();
+    void AdjustParam();
     void BindParams();
+
+private:
+    Combo* pCombo_;
 
 private:
     GlobalParameter* globalParameter_; /// グローバルパラメータ
@@ -30,7 +39,14 @@ private:
 
     ///* parameter *//
     Easing scalingEasing_;
+    Vector2 baseScale_;
+    Vector2 amplitudeScale_;
 
-    ///* Sprite *//
-    std::unique_ptr<Sprite> sprite_;
+    ///* Variants *//
+    std::array<std::unique_ptr<ComboUI>, 3> comboSprites_; /// コンボスプライト
+
+public:// acceccer
+
+    ///* Setter *//
+    void SetCombo(Combo* combo);
 };

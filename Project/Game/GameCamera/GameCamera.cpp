@@ -176,7 +176,7 @@ void GameCamera::ApplyGlobalParameter() {
 
 }
 
-void GameCamera::AdjustParm() {
+void GameCamera::AdjustParam() {
 	SetValues();
 #ifdef _DEBUG
 

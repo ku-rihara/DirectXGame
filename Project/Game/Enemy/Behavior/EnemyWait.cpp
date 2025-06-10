@@ -46,7 +46,7 @@ void EnemyWait::Update() {
 		distance_ = std::sqrt(direction.x * direction.x + direction.z * direction.z);
 
 		// 近すぎる場合は追従を停止して攻撃
-		if (distance_ < pBaseEnemy_->GetParamater().chaseDistance) {
+		if (distance_ < pBaseEnemy_->GetParameter().chaseDistance) {
 			pBaseEnemy_->ChangeMoveBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
 			return;
 		}

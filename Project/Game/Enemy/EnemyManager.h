@@ -17,6 +17,7 @@ enum class Type;
 struct BaseEnemy::Paramater;
 class Player;
 class LockOn;
+class Combo;
 class GameCamera;
 
 class EnemyManager {
@@ -41,6 +42,7 @@ private:
 	Player* pPlayer_;
 	LockOn* pLockOn_;
 	GameCamera* pGameCamera_;
+    Combo* pCombo_;
 
 	///* 敵リスト
 	std::list<std::unique_ptr<BaseEnemy>> enemies_;
@@ -105,10 +107,10 @@ public:
 	///Editor
 	///-------------------------------------------------------------------------------------
 	void ParamLoadForImGui();
-	void AddParmGroup();
+	void AddParamGroup();
 	void SetValues();
 	void ApplyGlobalParameter();
-	void AdjustParm();
+	void AdjustParam();
     void DrawEnemyParamUI(BaseEnemy::Type type);
 
 	///========================================================
@@ -121,6 +123,7 @@ public:
 	void SetPlayer(Player* plyaer);
 	void SetLockon(LockOn* lockOn);
 	void SetGameCamera(GameCamera* gamecamera);
+    void SetCombo(Combo* combo);
 
 	// フェーズの切り替え
 	void SetPhase(int phase);

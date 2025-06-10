@@ -3,7 +3,7 @@
 #include "2d/Sprite.h"
 #include "Easing.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
-//std
+// std
 #include <cstdint>
 #include <memory>
 
@@ -21,7 +21,7 @@ public:
     ///-------------------------------------------------------------------------------------
     /// Editor
     ///-------------------------------------------------------------------------------------
-    void AdjustParm();
+    void AdjustParam();
     void BindParams();
 
 private:
@@ -33,5 +33,9 @@ private:
     int32_t comboCount_; /// コンボ数
     float comboTimeMax_; /// コンボ時間の最大値
 
-   
+public:// accessor
+
+    //* Getter*//
+    int32_t GetComboCount() const { return comboCount_; }
+
 };

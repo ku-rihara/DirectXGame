@@ -50,7 +50,7 @@ void EnemyChasePlayer::Update() {
     // Enemy AmplitudeScaling
     scaleEase_.time += Frame::DeltaTime();
     scaleEase_.time = std::min(scaleEase_.time, scaleEase_.maxTime);
-    pBaseEnemy_->SetScale(EaseAmplitudeScale(pBaseEnemy_->GetParamater().initScale_, scaleEase_.time, scaleEase_.maxTime, scaleEase_.amplitude, scaleEase_.period));
+    pBaseEnemy_->SetScale(EaseAmplitudeScale(pBaseEnemy_->GetParameter().initScale_, scaleEase_.time, scaleEase_.maxTime, scaleEase_.amplitude, scaleEase_.period));
 
     // ターゲットへのベクトル
     Vector3 direction = pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());
@@ -59,7 +59,7 @@ void EnemyChasePlayer::Update() {
     distance_ = std::sqrt(direction.x * direction.x + direction.z * direction.z);
 
     // 　一定距離で見失う
-    if (distance_ > pBaseEnemy_->GetParamater().chaseDistance) {
+    if (distance_ > pBaseEnemy_->GetParameter().chaseDistance) {
         pBaseEnemy_->ChangeMoveBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
         return;
     }
@@ -74,7 +74,7 @@ void EnemyChasePlayer::Update() {
     direction.Normalize();
 
     /// 変位加算
-    pBaseEnemy_->AddPosition(direction * (pBaseEnemy_->GetParamater().chaseSpeed * Frame::DeltaTime()));
+    pBaseEnemy_->AddPosition(direction * (pBaseEnemy_->GetParameter().chaseSpeed * Frame::DeltaTime()));
 
     // 目標角度を計算
     float objectiveAngle = std::atan2(-direction.x, -direction.z);

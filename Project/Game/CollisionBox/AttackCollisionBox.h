@@ -25,6 +25,7 @@ public:
 	void Update()override;
 	void Draw()override;
 
+	void OnCollisionEnter([[maybe_unused]] BaseCollider* other) override;
 	void OnCollisionStay([[maybe_unused]] BaseCollider* other)override;
 
 	 void IsAdapt(bool is)override;

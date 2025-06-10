@@ -15,9 +15,9 @@ EnemyUpperDamage::EnemyUpperDamage(BaseEnemy* boss)
 	: BaseEnemyBehavior("EnemyUpperDamage", boss) {
 
 	
-	speed_ = pBaseEnemy_->GetParamater().upperJumpPower *60.0f; //1.35
-	gravity_ = pBaseEnemy_->GetParamater().upperGravity * 60.0f;//3.5
-	kFallSpeedLimit_ = pBaseEnemy_->GetParamater().upperFallSpeedLimit*60.0f;//1.2f
+	speed_ = pBaseEnemy_->GetParameter().upperJumpPower *60.0f; //1.35
+	gravity_ = pBaseEnemy_->GetParameter().upperGravity * 60.0f;//3.5
+	kFallSpeedLimit_ = pBaseEnemy_->GetParameter().upperFallSpeedLimit*60.0f;//1.2f
 	fallSpeedLimit_ = -0.0f;
 	stopTime_ = 0.0f;
 	kStopTime_ = 0.3f;
@@ -50,7 +50,7 @@ void EnemyUpperDamage::Update() {
 		// 最短角度補間でプレイヤーの回転を更新
 		pBaseEnemy_->SetRotationY(LerpShortAngle(pBaseEnemy_->GetTransform().rotation_.y, objectiveAngle_, 0.5f));
 
-		rotate_ += pBaseEnemy_->GetParamater().thrustRotateSpeed * Frame::DeltaTimeRate();
+		rotate_ += pBaseEnemy_->GetParameter().thrustRotateSpeed * Frame::DeltaTimeRate();
 		pBaseEnemy_->SetBodyRotateX(rotate_);
 
 		pBaseEnemy_->Jump(speed_, fallSpeedLimit_, gravity_);
@@ -64,9 +64,9 @@ void EnemyUpperDamage::Update() {
 		
 
 		// 着地
-		if (pBaseEnemy_->GetTransform().translation_.y > pBaseEnemy_->GetParamater().basePosY) break;
+		if (pBaseEnemy_->GetTransform().translation_.y > pBaseEnemy_->GetParameter().basePosY) break;
 		// 追従に戻す
-			pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetParamater().basePosY);
+			pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetParameter().basePosY);
 			step_ = Step::RETUNROOT;
 		
 		break;

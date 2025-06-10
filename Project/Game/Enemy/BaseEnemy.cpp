@@ -10,14 +10,14 @@
 #include"Behavior/EnemyDeath.h"
 #include"Enemy/EnemyManager.h"
 
+#include"Combo/Combo.h"
+
 /// collisionBox
 #include"CollisionBox/AttackCollisionBox.h"
 
 #include"Matrix4x4.h"
 #include"Player/Player.h"
-#include"base/TextureManager.h"
 #include"Frame/Frame.h"
-#include"utility/ParticleEditor/ParticleCommon.h"
 #include"audio/Audio.h"
 
 ///=========================================================
@@ -187,7 +187,9 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 			///------------------------------------------------------------------
 		case AttackCollisionBox::AttackType::UPPER:
 
-			if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) break;
+			if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
+                break;
+            }
 
 			DamageForPar(damageParm_);
 			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
@@ -198,7 +200,9 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 			/// ストッパー
 			///------------------------------------------------------------------
 		case AttackCollisionBox::AttackType::STOPPER:
-			if (dynamic_cast<EnemyStopDamage*>(damageBehavior_.get())) break;
+            if (dynamic_cast<EnemyStopDamage*>(damageBehavior_.get())) {
+                break;
+            }
 
 			DamageForPar(damageParm_);
 			ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
@@ -208,7 +212,9 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 			/// 突き飛ばし	
 			///------------------------------------------------------------------
 		case AttackCollisionBox::AttackType::THRUST:
-			if (dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) break;
+            if (dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) {
+                break;
+            }
 
 			DamageForPar(damageParm_*2.0f);
 			ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
@@ -219,7 +225,9 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 			/// 落下攻撃
 			///------------------------------------------------------------------
 		case AttackCollisionBox::AttackType::FALL:
-			if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) break;
+            if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
+                break;
+            }
 
 			DamageForPar(damageParm_);
 			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
@@ -232,7 +240,9 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 			/// ストッパー
 			///------------------------------------------------------------------
 		case AttackCollisionBox::AttackType::RUSH:
-			if (dynamic_cast<EnemyBoundDamage*>(damageBehavior_.get())) break;
+            if (dynamic_cast<EnemyBoundDamage*>(damageBehavior_.get())) {
+                break;
+            }
 
 			DamageForPar(damageParm_);
 			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
@@ -383,11 +393,16 @@ void  BaseEnemy::SetManager(EnemyManager* manager) {
 	pEnemyManager_ = manager;
 }
 
+void BaseEnemy::SetCombo(Combo* manager) {
+    pCombo_ = manager;
+}
+
+
 void BaseEnemy::BackToDamageRoot() {
 	ChangeBehavior(std::make_unique<EnemyDamageRoot>(this));/// 追っかけ
 }
 
-void BaseEnemy::SetParamater(const Type& type, const Paramater& paramater) {
+void BaseEnemy::SetParameter(const Type& type, const Paramater& paramater) {
 	type_ = type;
 	paramater_ = paramater;
 }

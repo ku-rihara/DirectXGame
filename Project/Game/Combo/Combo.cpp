@@ -23,7 +23,7 @@ void Combo::Draw() {
 ///=========================================================
 /// パラメータ調整
 ///==========================================================
-void Combo::AdjustParm() {
+void Combo::AdjustParam() {
    
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader(groupName_.c_str())) {

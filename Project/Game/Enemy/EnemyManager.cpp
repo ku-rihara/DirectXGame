@@ -6,6 +6,7 @@
 
 #include "Frame/Frame.h"
 #include "LockOn/LockOn.h"
+#include"Combo/Combo.h"
 
 #include <format>
 #include <fstream>
@@ -24,7 +25,7 @@ void EnemyManager::Init() {
     ///* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    AddParmGroup();
+    AddParamGroup();
     ApplyGlobalParameter();
 
     ParticleInit(); /// パーティクル初期化
@@ -42,17 +43,18 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
 
     if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]) { // 通常敵
         enemy = std::make_unique<NormalEnemy>();
-        enemy->SetParamater(BaseEnemy::Type::NORMAL, paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
+        enemy->SetParameter(BaseEnemy::Type::NORMAL, paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
     }
     if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)]) { // 通常敵
         enemy = std::make_unique<StrongEnemy>();
-        enemy->SetParamater(BaseEnemy::Type::STRONG, paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+        enemy->SetParameter(BaseEnemy::Type::STRONG, paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
     }
 
     // 位置初期化とlistに追加
     enemy->SetPlayer(pPlayer_); // プレイヤーセット
     enemy->SetGameCamera(pGameCamera_);
     enemy->SetManager(this);
+    enemy->SetCombo(pCombo_);
     enemy->Init(position);
     enemies_.push_back(std::move(enemy));
 }
@@ -67,9 +69,9 @@ void EnemyManager::Update() {
     for (auto it = enemies_.begin(); it != enemies_.end();) {
 
         if ((*it)->GetType() == BaseEnemy::Type::NORMAL) {
-            (*it)->SetParamater(BaseEnemy::Type::NORMAL, paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
+            (*it)->SetParameter(BaseEnemy::Type::NORMAL, paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
         } else if ((*it)->GetType() == BaseEnemy::Type::STRONG) {
-            (*it)->SetParamater(BaseEnemy::Type::STRONG, paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+            (*it)->SetParameter(BaseEnemy::Type::STRONG, paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
         }
 
         (*it)->Update(); // 更新
@@ -120,6 +122,10 @@ void EnemyManager::SetPlayer(Player* player) {
 void EnemyManager::SetLockon(LockOn* lockOn) {
     pLockOn_ = lockOn;
 }
+void EnemyManager::SetCombo(Combo* lockOn) {
+    pCombo_ = lockOn;
+}
+
 
 void EnemyManager::GetIsEnemiesCleared() {
     areAllEnemiesCleared_ = enemies_.empty(); // 現在の敵リストが空かを確認
@@ -147,7 +153,7 @@ void EnemyManager::ParamLoadForImGui() {
 ///=================================================================================
 /// パラメータをグループに追加
 ///=================================================================================
-void EnemyManager::AddParmGroup() {
+void EnemyManager::AddParamGroup() {
 
     for (uint32_t i = 0; i < paramaters_.size(); ++i) {
         globalParameter_->AddItem(groupName_, "chaseDistance" + std::to_string(int(i + 1)), paramaters_[i].chaseDistance);
@@ -243,7 +249,7 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::DragFloat("blowTime", &paramaters_[static_cast<size_t>(type)].blowTime, 0.01f);
 }
 
-void EnemyManager::AdjustParm() {
+void EnemyManager::AdjustParam() {
     SetValues();
 #ifdef _DEBUG
 

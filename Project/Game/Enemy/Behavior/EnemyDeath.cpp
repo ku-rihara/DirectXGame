@@ -17,8 +17,8 @@ EnemyDeath::EnemyDeath(BaseEnemy* boss)
 	rotate_ = 0.0f;
 	blowTime_ = 0.0f;
 	savePos_ = pBaseEnemy_->GetWorldPosition();
-	blowJumpValue_ = pBaseEnemy_->GetParamater().blowValueY;
-	gravity_ = pBaseEnemy_->GetParamater().blowGravity;//3.5
+	blowJumpValue_ = pBaseEnemy_->GetParameter().blowValueY;
+	gravity_ = pBaseEnemy_->GetParameter().blowGravity;//3.5
 	kFallSpeedLimit_=60.0f;
 	step_ = Step::DIRECTIONSET;
 }
@@ -37,9 +37,9 @@ void EnemyDeath::Update() {
 	case Step::DIRECTIONSET:
 		AngleCaluclation();
 		blowPower_ = Vector3(
-			direction_.x * -pBaseEnemy_->GetParamater().blowValue*Frame::DeltaTimeRate(),
+			direction_.x * -pBaseEnemy_->GetParameter().blowValue*Frame::DeltaTimeRate(),
 			0.0f,
-			direction_.z * -pBaseEnemy_->GetParamater().blowValue * Frame::DeltaTimeRate());
+			direction_.z * -pBaseEnemy_->GetParameter().blowValue * Frame::DeltaTimeRate());
 		step_ = Step::BLOW;
 		break;
 
@@ -52,7 +52,7 @@ void EnemyDeath::Update() {
 	
 
 		// 吹っ飛び回転
-		rotate_ += pBaseEnemy_->GetParamater().blowRotateSpeed*Frame::DeltaTimeRate();
+		rotate_ += pBaseEnemy_->GetParameter().blowRotateSpeed*Frame::DeltaTimeRate();
 		pBaseEnemy_->SetRotationX(rotate_);
 
 		// 吹っ飛び適応
@@ -60,7 +60,7 @@ void EnemyDeath::Update() {
 			pBaseEnemy_->Jump(blowJumpValue_, kFallSpeedLimit_, gravity_);
 
 
-		if (burstTime_ < pBaseEnemy_->GetParamater().burstTime)break;
+		if (burstTime_ < pBaseEnemy_->GetParameter().burstTime)break;
 		step_ = Step::BURST;
 		break;
 	

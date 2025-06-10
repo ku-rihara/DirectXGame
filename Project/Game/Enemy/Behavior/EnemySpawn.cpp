@@ -48,7 +48,7 @@ void EnemySpawn::Update() {
 
 		// イージング適応
 		pBaseEnemy_->SetScale(
-            EaseOutBack(Vector3::ZeroVector(), pBaseEnemy_->GetParamater().initScale_,
+            EaseOutBack(Vector3::ZeroVector(), pBaseEnemy_->GetParameter().initScale_,
 				spawnEasing_.time, spawnEasing_.maxTime)
 		);
 
