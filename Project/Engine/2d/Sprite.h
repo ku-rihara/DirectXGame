@@ -34,9 +34,6 @@ public:
 	/// flip
 	bool isFlipX_ = false;/// FlipX
 	bool isFlipY_ = false;/// FlipY
-
-	float alpha_;
-
 private:
 	Vector2 textureAdjustSize_;/// テクスチャサイズ
 
@@ -90,7 +87,7 @@ public:
 	const Vector2& GetTextureLeftTop()const { return textureLeftTop_; }
 	const bool& GetIsFlipX()const { return isFlipX_; }
 	const bool& GetIsFlipY()const { return isFlipY_; }
-	const float& GetAlpha()const { return alpha_; }
+
 	///=========================================================================================
    ///  setter
    ///=========================================================================================
@@ -101,7 +98,8 @@ public:
 	void SetIsFlipX(const bool& isFlip) { isFlipX_ = isFlip; }
 	void SetIsFlipY(const bool& isFlip) { isFlipY_ = isFlip; }
 
-    void SetColor(const Vector4& color) { material_.materialData_->color=color; }
+    void SetColor(const Vector3& color);
+    void SetAlpha(const float& alpha);
 
 	void SetTransformationMatrixDataSprite(Matrix4x4 date) { wvpData_->WVP = date; }
 	void SetWorldMatrixDataSprite(Matrix4x4 date) { wvpData_->World = date; }
