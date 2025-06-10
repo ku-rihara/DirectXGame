@@ -77,9 +77,6 @@ public:
 	//スプライトセット
 	void SetScale(const Vector2& scale);
 
-	//UVセット
-	void SetUVTransform();
-
 #ifdef _DEBUG
 	void DebugImGui();
 #endif
@@ -97,17 +94,18 @@ public:
 	///=========================================================================================
    ///  setter
    ///=========================================================================================
-	void SetAnchorPoint(const Vector2& anchorPoint) { this->anchorPoint_ = anchorPoint; }
-	void SetTextureSize(const Vector2& size) { this->textureSize_ = size; }
-	void SetTextureLeftTop(const Vector2& leftTop) { this->textureLeftTop_ = leftTop; }
+	void SetAnchorPoint(const Vector2& anchorPoint) { anchorPoint_ = anchorPoint; }
+	void SetTextureSize(const Vector2& size) { textureSize_ = size; }
+	void SetTextureLeftTop(const Vector2& leftTop) { textureLeftTop_ = leftTop; }
 
-	void SetIsFlipX(const bool& isFlip) { this->isFlipX_ = isFlip; }
-	void SetIsFlipY(const bool& isFlip) { this->isFlipY_ = isFlip; }
+	void SetIsFlipX(const bool& isFlip) { isFlipX_ = isFlip; }
+	void SetIsFlipY(const bool& isFlip) { isFlipY_ = isFlip; }
 
-	void SetAlpha(const float& alpha);
+    void SetColor(const Vector4& color) { material_.materialData_->color=color; }
 
-	void SetTransformationMatrixDataSprite(Matrix4x4 date) { this->wvpData_->WVP = date; }
-	void SetWorldMatrixDataSprite(Matrix4x4 date) { this->wvpData_->World = date; }
-	void SetUVTransformSprite(Matrix4x4 matrix) { this->material_.materialData_->uvTransform = matrix; }
+	void SetTransformationMatrixDataSprite(Matrix4x4 date) { wvpData_->WVP = date; }
+	void SetWorldMatrixDataSprite(Matrix4x4 date) { wvpData_->World = date; }
+
+    void SetUVTranslate(const Vector2& pos) { uvTransform_.pos = pos; }
 };
 

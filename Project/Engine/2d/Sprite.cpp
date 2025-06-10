@@ -65,7 +65,6 @@ void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position
 	material_.CreateMaterialResource(directXCommon);
 	//Lightingを無効
 	material_.materialData_->color = color;
-	alpha_ = color.w;
 	//UVTransformは単位行列を書き込んでおく
 	material_.materialData_->uvTransform = MakeIdentity4x4();
 	uvTransform_.scale = { 1,1 };
@@ -189,15 +188,6 @@ void Sprite::Draw() {
 }
 
 
-
-void Sprite::SetUVTransform() {
-
-	////UVTransform
-	//Matrix4x4 uvTransformMatrix = MakeScaleMatrix(Vector3{uvTransform.scale.x,uvTransform.scale.y,1.0f});
-	//uvTransformMatrix = (uvTransformMatrix * MakeRotateZMatrix(uvTransform.rotate.z));
-	//uvTransformMatrix = (uvTransformMatrix * MakeTranslateMatrix(Vector3{ uvTransform.pos.x,uvTransform.pos.y,1.0f }));
-	//material_.materialData_->uvTransform = uvTransformMatrix;
-}
 void Sprite::SetPosition(const Vector2& pos) {
 
 	transform_.translate.x = pos.x;
@@ -216,10 +206,3 @@ void  Sprite::PreDraw(ID3D12GraphicsCommandList* commandList) {
 	SpriteCommon::GetInstance()->PreDraw(commandList);
 }
 
-
-
-void Sprite::SetAlpha(const float& alpha) {
-	alpha_ = alpha;
-	material_.materialData_->color.w = alpha;
-
-}
