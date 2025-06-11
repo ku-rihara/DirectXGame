@@ -19,10 +19,21 @@ void GameScene::Init() {
     GlobalParameter::GetInstance()->LoadFiles();
     BaseScene::Init();
 
-    ///=======================================================================================
+     ///=======================================================================================
     /// 生成
     ///=======================================================================================
-    
+
+    field_             = std::make_unique<Field>();
+    lockOn_            = std::make_unique<LockOn>();
+    player_            = std::make_unique<Player>();
+    gamecamera_        = std::make_unique<GameCamera>();
+    enemyManager_      = std::make_unique<EnemyManager>();
+    enemySpawner_      = std::make_unique<EnemySpawner>();
+    skydome_           = std::make_unique<Skydome>();
+    howToOperate_      = std::make_unique<HowToOperate>();
+    skyBox_            = std::make_unique<SkyBox>();
+    combo_             = std::make_unique<Combo>();
+    comboUIController_ = std::make_unique<ComboUIController>();
     ///=======================================================================================
     /// 初期化
     ///=======================================================================================
