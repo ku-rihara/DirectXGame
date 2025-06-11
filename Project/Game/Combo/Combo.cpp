@@ -54,5 +54,6 @@ void Combo::BindParams() {
 
 
 void Combo::ComboCountUP() {
-
+    uiController_->ChangeCountUPAnimation();
+    comboCount_++;
  }

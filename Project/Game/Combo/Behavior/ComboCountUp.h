@@ -19,6 +19,8 @@ public:
     void Update() override;
     void Debug() override;
 
+    void ScalingEasing();
+
 private:
 
     /// ===================================================

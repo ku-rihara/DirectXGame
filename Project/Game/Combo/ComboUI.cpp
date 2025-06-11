@@ -8,6 +8,7 @@ void ComboUI::Init() {
 
     /// Sprite create
     sprite_.reset(Sprite::Create(textureId, Vector2::UnitVector(), Vector4::kWHITE()));
+  
 
     ///* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();

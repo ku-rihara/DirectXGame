@@ -1,7 +1,8 @@
 #include "ComboUIController.h"
 #include "Frame/Frame.h"
 // behavior
-#include"Behavior/ComboCountUp.h"
+#include "Behavior/ComboCountUp.h"
+#include"Behavior/ComboWait.h"
 #include <cstdint>
 #include <imgui.h>
 
@@ -19,12 +20,20 @@ void ComboUIController::Init() {
     globalParameter_->SyncGroupFromUI(groupName_);
 }
 
-void ComboUIController::Update(const int32_t&comboNum) {
+void ComboUIController::Update(const int32_t& comboNum) {
+
+    behavior_->Update();
+
+    // 各桁のuvを更新
     for (int32_t i = 0; i < comboSprites_.size(); ++i) {
         comboSprites_[i]->CalculateNumber(comboNum);
     }
 }
+
 void ComboUIController::Draw() {
+    for (int32_t i = 0; i < comboSprites_.size(); ++i) {
+        comboSprites_[i]->Draw();
+    }
 }
 
 void ComboUIController::ScalingEasing() {
@@ -38,6 +47,7 @@ void ComboUIController::ScalingEasing() {
 
     scalingEasing_.time = scalingEasing_.maxTime;
     baseScale_          = amplitudeScale_;
+    ChangeBehavior(std::make_unique<ComboWait>(this));
 }
 
 ///=========================================================
@@ -64,7 +74,7 @@ void ComboUIController::AdjustParam() {
         ImGui::PopID();
     }
 
-    /// 
+    ///
     for (int32_t i = 0; i < comboSprites_.size(); ++i) {
         comboSprites_[i]->AdjustParam();
     }
@@ -90,4 +100,4 @@ void ComboUIController::ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> beha
 
 void ComboUIController::ChangeCountUPAnimation() {
     ChangeBehavior(std::make_unique<ComboCountUP>(this));
- }
+}
