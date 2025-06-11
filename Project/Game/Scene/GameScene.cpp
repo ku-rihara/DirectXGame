@@ -102,6 +102,7 @@ void GameScene::Update() {
     field_->Update();
     enemySpawner_->Update();
     enemyManager_->Update();
+    combo_->Update();
     gamecamera_->Update();
   
     //
@@ -179,6 +180,7 @@ void GameScene::SpriteDraw() {
     howToOperate_->Draw();
     cSprite_->Draw();
     screenSprite_->Draw();
+    combo_->Draw();
 }
 
 void GameScene::Debug() {

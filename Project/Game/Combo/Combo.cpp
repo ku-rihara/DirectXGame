@@ -42,9 +42,9 @@ void Combo::AdjustParam() {
         ImGui::PopID();
     }
 
-    uiController_->AdjustParam();
-
 #endif // _DEBUG
+
+     uiController_->AdjustParam();
 }
 
 void Combo::BindParams() {

@@ -11,6 +11,11 @@
 #include <memory>
 
 class ComboUIController {
+private:
+    struct ScalingParameter {
+        Easing scalingEasing;
+        Vector2 amplitudeScale;
+    };
 
 public:
     ComboUIController()  = default;
@@ -23,6 +28,7 @@ public:
 
     // easing
     void ScalingEasing();
+    void ScalingInit();
     // behavior
     void ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> behavior);
     void ChangeCountUPAnimation();
@@ -37,8 +43,7 @@ private:
     const std::string groupName_ = "ComboUI"; /// グループ名
 
     ///* parameter *//
-    Easing scalingEasing_;
-    Vector2 amplitudeScale_;
+    ScalingParameter parameter_;
 
     ///* Variants *//
     Vector2 baseScale_;
@@ -48,9 +53,11 @@ private:
     std::unique_ptr<BaseComboUIBehavior> behavior_;
 
 public: // acceccer
+    
+    ///* getter *//
+    const ScalingParameter& GetScalingParameter() const { return parameter_; }
 
-   /* const Parameter& GetParameter() const { return parameter_; }
-
-    void SetBasePosition(const Vector2& pos) {*/
+    ///* setter *//
+    void SetBaseScale(const Vector2& pos) { baseScale_ = pos; }
  
 };

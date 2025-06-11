@@ -3,25 +3,26 @@
 #include <cstdint>
 #include <imgui.h>
 
-void ComboUI::Init() {
+void ComboUI::Init(const ComboDigit& digit) {
     int32_t textureId = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Number/Numbers.png");
 
     /// Sprite create
     sprite_.reset(Sprite::Create(textureId, Vector2::UnitVector(), Vector4::kWHITE()));
-  
+    sprite_->SetUVScale(Vector2(0.1f, 1.0f)); 
+    sprite_->SetAnchorPoint(Vector2(0.5f, 0.5f));
 
-    ///* グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
-    globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
-    globalParameter_->SyncGroupFromUI(groupName_);
+    CreateGroupName(digit);
+
 }
 
-void ComboUI::Update() {
+void ComboUI::Update(const Vector2& scale) {
     sprite_->SetPosition(position_);
+    sprite_->SetScale(Vector2(scale.x * 0.1f, scale.y));
+
     sprite_->SetUVTranslate(Vector2(uvPosX_, 0.0f));
 }
 void ComboUI::Draw() {
+    sprite_->Draw();
 }
 
 ///=========================================================
@@ -31,6 +32,7 @@ void ComboUI::AdjustParam() {
 
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
+        ImGui::PushID(groupName_.c_str());
 
         ImGui::DragFloat2("position", &position_.x, 0.01f);
 
@@ -73,3 +75,25 @@ void ComboUI::CalculateNumber(const int32_t& value) {
     uvPosX_ = static_cast<float>(valueForDigit_) * 0.1f;
 }
 
+void ComboUI::CreateGroupName(const ComboDigit& digit) {
+    switch (digit) {
+    case ComboDigit::ONE:
+        groupName_ = "ComboUI_OneDigit";
+        break;
+
+    case ComboDigit::TWO:
+        groupName_ = "ComboUI_TwoDigit";
+        break;
+
+    case ComboDigit::THREE:
+        groupName_ = "ComboUI_ThreeDigit";
+        break;
+   
+    }
+    comboDigit_ = digit;
+      ///* グローバルパラメータ
+    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_->CreateGroup(groupName_, false);
+    BindParams();
+    globalParameter_->SyncGroupFromUI(groupName_);
+ }

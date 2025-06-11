@@ -11,21 +11,28 @@ void ComboUIController::Init() {
     // Ui生成
     for (int32_t i = 0; i < comboSprites_.size(); ++i) {
         comboSprites_[i] = std::make_unique<ComboUI>();
+        comboSprites_[i]->Init(static_cast<ComboUI::ComboDigit>(i));
     }
+
+    // scale init
+     ScalingInit();
 
     ///* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();
     globalParameter_->SyncGroupFromUI(groupName_);
+
+    ChangeBehavior(std::make_unique<ComboWait>(this));
 }
 
 void ComboUIController::Update(const int32_t& comboNum) {
 
     behavior_->Update();
-
+  
     // 各桁のuvを更新
     for (int32_t i = 0; i < comboSprites_.size(); ++i) {
+        comboSprites_[i]->Update(baseScale_);
         comboSprites_[i]->CalculateNumber(comboNum);
     }
 }
@@ -37,16 +44,16 @@ void ComboUIController::Draw() {
 }
 
 void ComboUIController::ScalingEasing() {
-    scalingEasing_.time += Frame::DeltaTimeRate();
+    parameter_.scalingEasing.time += Frame::DeltaTimeRate();
 
-    baseScale_ = EaseAmplitudeScale(amplitudeScale_, scalingEasing_.time, scalingEasing_.maxTime, scalingEasing_.amplitude, scalingEasing_.period);
+    baseScale_ = EaseAmplitudeScale(parameter_.amplitudeScale, parameter_.scalingEasing.time, parameter_.scalingEasing.maxTime, parameter_.scalingEasing.amplitude, parameter_.scalingEasing.period);
 
-    if (scalingEasing_.time < scalingEasing_.maxTime) {
+    if (parameter_.scalingEasing.time < parameter_.scalingEasing.maxTime) {
         return;
     }
 
-    scalingEasing_.time = scalingEasing_.maxTime;
-    baseScale_          = amplitudeScale_;
+    parameter_.scalingEasing.time = parameter_.scalingEasing.maxTime;
+    baseScale_                    = parameter_.amplitudeScale;
     ChangeBehavior(std::make_unique<ComboWait>(this));
 }
 
@@ -56,16 +63,17 @@ void ComboUIController::ScalingEasing() {
 void ComboUIController::AdjustParam() {
 
 #ifdef _DEBUG
+
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
         ImGui::SeparatorText("Parameter"); //  パラメータ
-        ImGui::DragFloat2("amplitudeScale_", &amplitudeScale_.x, 0.01f);
+        ImGui::DragFloat2("amplitudeScale_", &parameter_.amplitudeScale.x, 0.01f);
 
         ImGui::SeparatorText("Easing Parameter"); // Easing パラメータ
-        ImGui::DragFloat("Scaling Ease max", &scalingEasing_.maxTime, 0.01f);
-        ImGui::DragFloat("Scaling Ease amplitude", &scalingEasing_.amplitude, 0.01f);
-        ImGui::DragFloat("Scaling Ease period", &scalingEasing_.period, 0.01f);
+        ImGui::DragFloat("Scaling Ease max", &parameter_.scalingEasing.maxTime, 0.01f);
+        ImGui::DragFloat("Scaling Ease amplitude", &parameter_.scalingEasing.amplitude, 0.01f);
+        ImGui::DragFloat("Scaling Ease period", &parameter_.scalingEasing.period, 0.01f);
 
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
@@ -73,13 +81,14 @@ void ComboUIController::AdjustParam() {
 
         ImGui::PopID();
     }
+#endif // _DEBUG
 
-    ///
+     ///
     for (int32_t i = 0; i < comboSprites_.size(); ++i) {
         comboSprites_[i]->AdjustParam();
     }
 
-#endif // _DEBUG
+
 }
 
 ///=========================================================
@@ -87,11 +96,11 @@ void ComboUIController::AdjustParam() {
 ///==========================================================
 void ComboUIController::BindParams() {
 
-    globalParameter_->Bind(groupName_, "Scaling Ease max", &scalingEasing_.maxTime);
-    globalParameter_->Bind(groupName_, "Scaling Ease amplitude", &scalingEasing_.amplitude);
-    globalParameter_->Bind(groupName_, "Scaling Ease period", &scalingEasing_.period);
+    globalParameter_->Bind(groupName_, "Scaling Ease max", &parameter_.scalingEasing.maxTime);
+    globalParameter_->Bind(groupName_, "Scaling Ease amplitude", &parameter_.scalingEasing.amplitude);
+    globalParameter_->Bind(groupName_, "Scaling Ease period", &parameter_.scalingEasing.period);
 
-    globalParameter_->Bind(groupName_, "amplitudeScale_", &amplitudeScale_);
+    globalParameter_->Bind(groupName_, "amplitudeScale_", &parameter_.amplitudeScale);
 }
 
 void ComboUIController::ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> behavior) {
@@ -101,3 +110,8 @@ void ComboUIController::ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> beha
 void ComboUIController::ChangeCountUPAnimation() {
     ChangeBehavior(std::make_unique<ComboCountUP>(this));
 }
+
+void ComboUIController::ScalingInit() {
+    baseScale_ = parameter_.amplitudeScale;
+    parameter_.scalingEasing.time = 0.0f;
+ }

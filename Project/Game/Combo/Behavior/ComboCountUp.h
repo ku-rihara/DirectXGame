@@ -5,10 +5,10 @@
 
 class ComboCountUP : public BaseComboUIBehavior {
 private:
-
     enum class AnimationStep {
         INIT,
         UPDATE,
+        END,
     };
 
 public:
@@ -22,11 +22,13 @@ public:
     void ScalingEasing();
 
 private:
-
     /// ===================================================
-    /// private varians
+    /// private variables
     /// ===================================================
 
     AnimationStep animationStep_;
 
+    Easing scalingEasing_;
+    Vector2 amplitudeScale_;
+    Vector2 baseScale_;
 };

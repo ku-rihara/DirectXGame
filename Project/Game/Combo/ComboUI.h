@@ -13,6 +13,7 @@ public:
         ONE,
         TWO,
         THREE,
+        Count,
     };
 
 public:
@@ -20,12 +21,12 @@ public:
     ~ComboUI() = default;
 
     // init update draw
-    void Init();
-    void Update();
+    void Init(const ComboDigit& digit);
+    void Update(const Vector2& scale);
     void Draw();
 
     void CalculateNumber(const int32_t& value);
-
+    void CreateGroupName(const ComboDigit&digit);
    
     ///-------------------------------------------------------------------------------------
     /// Editor
@@ -36,13 +37,14 @@ public:
 private:
     ///* globalParameter *//
     GlobalParameter* globalParameter_; /// グローバルパラメータ
-    const std::string groupName_ = "ComboUI"; /// グループ名
+    std::string groupName_; /// グループ名
 
     ///* parameter *//
     ComboDigit comboDigit_ = ComboDigit::ONE; /// コンボの桁数
     Vector2 position_;
     int32_t valueForDigit_;
     float uvPosX_;
+    float uvScaleOffset_;
 
     ///* Sprite *//
     std::unique_ptr<Sprite> sprite_;
