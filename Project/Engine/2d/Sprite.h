@@ -105,5 +105,6 @@ public:
 	void SetWorldMatrixDataSprite(Matrix4x4 date) { wvpData_->World = date; }
 
     void SetUVTranslate(const Vector2& pos) { uvTransform_.pos = pos; }
+    void SetUVScale(const Vector2& scale) { uvTransform_.scale = scale; }
 };
 
