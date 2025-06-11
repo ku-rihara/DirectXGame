@@ -19,7 +19,7 @@ void GameScene::Init() {
     GlobalParameter::GetInstance()->LoadFiles();
     BaseScene::Init();
 
-     ///=======================================================================================
+    ///=======================================================================================
     /// 生成
     ///=======================================================================================
 
@@ -34,10 +34,11 @@ void GameScene::Init() {
     skyBox_            = std::make_unique<SkyBox>();
     combo_             = std::make_unique<Combo>();
     comboUIController_ = std::make_unique<ComboUIController>();
+
     ///=======================================================================================
     /// 初期化
     ///=======================================================================================
-   
+
     field_->Init();
     skydome_->Init();
     player_->Init();
@@ -162,7 +163,8 @@ void GameScene::ModelDraw() {
 
     ParticleManager::GetInstance()->Draw(viewProjection_);
 
- 
+    Model::PreDraw(commandList);
+    player_->EffectDraw(viewProjection_);
 }
 
 /// ===================================================
