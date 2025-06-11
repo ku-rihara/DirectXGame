@@ -38,7 +38,7 @@ void PutObjForBlender::LoadJsonFile(const std::string& _fileName) {
     assert(name.compare("scene") == 0);
 
     // レベルデータ格納用インスタンスを生成
-    levelData_ = new LevelData();
+    levelData_ = std::make_unique<LevelData>();
 
     //"object"の全オブジェクトを走査
     for (nlohmann::json& object : jsonData["objects"]) {
@@ -88,11 +88,29 @@ void PutObjForBlender::LoadJsonFile(const std::string& _fileName) {
         //    }
         //}
     }
+}
 
-   //// レベルデータからオブジェクトを生成、配置
-   // for (auto& objectData : levelData_->objects) {
-   //     objectData.object3d=Object3d::CreateModel(objectData.fileName);
-   //     levelData_->objects.push_back(objectData);
-   // }
-   
+void PutObjForBlender::PutObject() {
+    assert(levelData_); // LoadJsonFile 呼び出し前提
+
+    for (auto& objectData : levelData_->objects) {
+        objectData.object3d.reset(Object3d::CreateModel(objectData.fileName));
+        assert(objectData.object3d);      
+    }
+}
+
+void PutObjForBlender::DrawObject(LevelData::ObjectData& objectData, const ViewProjection& viewProjection) {
+    if (objectData.object3d) {
+        objectData.worldTransform.UpdateMatrix();
+        objectData.object3d->Draw(objectData.worldTransform, viewProjection);
+    }
+}
+
+void PutObjForBlender::DrawAll(const ViewProjection& viewProjection) {
+    if (!levelData_)
+        return;
+
+    for (auto& obj : levelData_->objects) {
+        DrawObject(obj, viewProjection);
+    }
 }

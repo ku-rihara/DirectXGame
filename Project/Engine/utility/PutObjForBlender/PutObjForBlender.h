@@ -3,7 +3,7 @@
 #include <vector>
 #include"3d/object3d.h"
 #include"3d/WorldTransform.h"
-#include "Vector3.h"
+#include <list>
 
 class PutObjForBlender {
 public:
@@ -13,7 +13,8 @@ public:
         struct ObjectData {
             std::string fileName;
            WorldTransform worldTransform; 
-           Object3d* object3d;
+           std::unique_ptr<Object3d> object3d;
+           std::list<ObjectData> children;
         };
         //オブジェクトのコンテナ
         std::vector<ObjectData>objects;
@@ -23,13 +24,18 @@ public:
     PutObjForBlender()  = default;
     ~PutObjForBlender() = default;
 
-    // json file load
+    // functions
     void LoadJsonFile(const std::string& name);
+    void PutObject();
+    void DrawAll(const ViewProjection& viewProjection);
+
+private:
+    void DrawObject(LevelData::ObjectData& objectData, const ViewProjection& viewProjection);
 
 private:
     const std::string directoryPath_ = "Resources/BlenderObjectPos/";
     std::string fileName_;
-    LevelData* levelData_;
+    std::unique_ptr<LevelData> levelData_;
 
 public:
 };
