@@ -89,5 +89,5 @@ void ComboUIController::ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> beha
 }
 
 void ComboUIController::ChangeCountUPAnimation() {
-    ChangeBehavior(std::make_unique<ComboCountUp>(this));
+    ChangeBehavior(std::make_unique<ComboCountUP>(this));
  }
