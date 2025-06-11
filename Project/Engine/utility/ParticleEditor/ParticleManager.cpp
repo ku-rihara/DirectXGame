@@ -204,7 +204,7 @@ void ParticleManager::UpdateUV(UVTnfo& uvInfo, float deltaTime) {
 ///============================================================
 void ParticleManager::CreateParticleGroup(
     const std::string name, const std::string modelFilePath,
-    const std::string& extension, const uint32_t& maxnum) {
+    const uint32_t& maxnum) {
     if (particleGroups_.contains(name)) {
         return;
     }
@@ -213,8 +213,8 @@ void ParticleManager::CreateParticleGroup(
     particleGroups_[name] = ParticleGroup();
 
     /// モデル
-    ModelManager::GetInstance()->LoadModel(modelFilePath, extension);
-    SetModel(name, modelFilePath, extension);
+    ModelManager::GetInstance()->LoadModel(modelFilePath);
+    SetModel(name, modelFilePath);
 
     /// リソース作成
     CreateInstancingResource(name, maxnum); // インスタンシング
@@ -265,11 +265,11 @@ void ParticleManager::SetTextureHandle(const std::string name, const uint32_t& h
 /// モデルセット
 ///============================================================
 
-void ParticleManager::SetModel(const std::string& name, const std::string& modelName, const std::string& extension) {
+void ParticleManager::SetModel(const std::string& name, const std::string& modelName) {
 
     // モデルを検索してセット
-    ModelManager::GetInstance()->LoadModel(modelName, extension);
-    particleGroups_[name].model         = (ModelManager::GetInstance()->FindModel(modelName, extension));
+    ModelManager::GetInstance()->LoadModel(modelName);
+    particleGroups_[name].model         = (ModelManager::GetInstance()->FindModel(modelName));
     particleGroups_[name].textureHandle = TextureManager::GetInstance()->LoadTexture(
         particleGroups_[name].model->GetModelData().material.textureFilePath);
 }

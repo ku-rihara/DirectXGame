@@ -104,10 +104,10 @@ public:
     void Draw(const ViewProjection& viewProjection);
    
     // モデル、リソース作成(グループ作成)
-    void CreateParticleGroup(const std::string name, const std::string modelFilePath, const std::string& extension, const uint32_t& maxnum);
+    void CreateParticleGroup(const std::string name, const std::string modelFilePath, const uint32_t& maxnum);
     void CreatePrimitiveParticle(const std::string& name, PrimitiveType type, const uint32_t& maxnum);
 
-    void SetModel(const std::string& name, const std::string& modelName, const std::string& extension);
+    void SetModel(const std::string& name, const std::string& modelName);
     void CreateMaterialResource(const std::string& name);
     void CreateInstancingResource(const std::string& name, const uint32_t& instanceNum);
 

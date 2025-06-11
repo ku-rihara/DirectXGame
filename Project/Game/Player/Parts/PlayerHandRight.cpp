@@ -14,7 +14,7 @@ void PlayerHandRight::Init() {
 	threeComboName_ = "ThreeComboRail";
 	forthComboName_ = "StopPunchRail";
 
-	BaseObject::CreateModel("RHand",".obj");/// モデルセット
+	BaseObject::CreateModel("RHand.obj");/// モデルセット
 	BasePlayerHand::Init();	
 
 	/// rail

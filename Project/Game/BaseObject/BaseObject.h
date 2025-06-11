@@ -37,7 +37,7 @@ public:
 	virtual void Draw(const ViewProjection& viewProjection);
 	
 	virtual void CreateModel(
-		const std::string& modelname, const std::string& name);
+		const std::string& modelname);
 
 	// 中心座標取得
 	virtual Vector3 GetWorldPosition() const;

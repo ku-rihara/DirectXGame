@@ -10,7 +10,7 @@ void NormalEnemy::Init(const Vector3& spownPos) {
 	///// モデルセット
 	//BaseObject::CreateModel("NormalEnemy", ".obj");
 	damageParm_ = 30.0f;
-	bodyObj_.reset(Object3d::CreateModel("NormalEnemy", ".obj"));
+    bodyObj_.reset(Object3d::CreateModel("NormalEnemy.obj"));
 	bodyTransform_.Init();
 	bodyTransform_.SetParent(&transform_);  
 }

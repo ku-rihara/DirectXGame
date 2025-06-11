@@ -68,6 +68,7 @@
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleManager.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleParameter.cpp" />
+    <ClCompile Include="Engine\utility\PutObjForBlender\PutObjForBlender.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\ControlPosManager.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\Rail.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\RailManager.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleEmitter.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleManager.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleParameter.h" />
+    <ClInclude Include="Engine\utility\PutObjForBlender\PutObjForBlender.h" />
     <ClInclude Include="Engine\utility\RailEditor\ControlPosManager.h" />
     <ClInclude Include="Engine\utility\RailEditor\Rail.h" />
     <ClInclude Include="Engine\utility\RailEditor\RailManager.h" />

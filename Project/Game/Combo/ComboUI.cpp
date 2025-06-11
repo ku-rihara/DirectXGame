@@ -18,7 +18,7 @@ void ComboUI::Init() {
 
 void ComboUI::Update() {
      sprite_->SetPosition(position_);
-    sprite_->SetUVTransform();
+    sprite_->SetUVTranslate(Vector2(uvPosX_,0.0f));
 }
 void ComboUI::Draw() {
 }

@@ -10,7 +10,7 @@ Field::~Field() {}
 
 void Field::Init() {
 
-    obj3d_.reset(Object3d::CreateModel("Field", ".obj"));
+    obj3d_.reset(Object3d::CreateModel("Field.obj"));
 
     transform_.Init();
     transform_.scale_                               = {1, 1, 1};

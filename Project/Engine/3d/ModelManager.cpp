@@ -16,16 +16,16 @@ void ModelManager::Initialize(DirectXCommon* dxCommon) {
     modelCommon->Init(dxCommon);
 }
 
-Model* ModelManager::LoadModel(const std::string& modelName, const std::string& extension) {
+Model* ModelManager::LoadModel(const std::string& modelName) {
     // 読み込み済みモデルを検索
-    if (models_.contains(modelName + extension)) {
+    if (models_.contains(modelName)) {
         // 読み込み済みなら早期リターン
         return nullptr;
     }
     Model* model = new Model();
-    model->CreateModel(modelName, extension);
+    model->CreateModel(modelName);
     // モデルをmapコンテナに格納する
-    models_.insert(std::make_pair(modelName + extension, std::move(model)));
+    models_.insert(std::make_pair(modelName, std::move(model)));
 
     return model;
 }
@@ -42,11 +42,11 @@ Model* ModelManager::LoadModel(const std::string& modelName, const std::string& 
 //    //models_.insert(std::make_pair(modelName + extension, std::move(model)));
 //}
 
-Model* ModelManager::FindModel(const std::string& modelName, const std::string& extension) {
+Model* ModelManager::FindModel(const std::string& modelName) {
     // 読み込み済モデルを検索
-    if (models_.contains(modelName + extension)) {
+    if (models_.contains(modelName)) {
         // 読み込み済モデルをreturn 
-        return models_.at(modelName + extension).get();
+        return models_.at(modelName).get();
     }
     // ファイル名一致なし
     return nullptr;

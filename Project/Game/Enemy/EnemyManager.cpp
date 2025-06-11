@@ -294,7 +294,7 @@ void EnemyManager::ParticleInit() {
     deathParticle_[3].emitter.reset(ParticleEmitter::CreateParticlePrimitive("EnemyDeathMiniSpark", PrimitiveType::Plane, 900));
 
     // debri
-    debriParticle_[0].emitter.reset(ParticleEmitter::CreateParticle("DebriName", "debri", ".obj", 500));
+    debriParticle_[0].emitter.reset(ParticleEmitter::CreateParticle("DebriName", "debri.obj", 500));
 
     // EnemySpawn
     spawnEffectNormal_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("NormalEnemySpawnCircle", PrimitiveType::Cylinder, 200));

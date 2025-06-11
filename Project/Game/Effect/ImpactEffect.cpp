@@ -11,7 +11,7 @@ ImpactEffect::~ImpactEffect() {
 }
 
 void ImpactEffect::Init(const Vector3& Pos) { 
-	obj3d_.reset(Object3d::CreateModel("DamageEffect",".obj"));
+	obj3d_.reset(Object3d::CreateModel("DamageEffect.obj"));
 	worldTransform_.Init();
 	worldTransform_.translation_ = Pos;
 	easeT_ = 0.0f;

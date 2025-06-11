@@ -10,7 +10,7 @@ void PlayerEffects::Init(const Vector3& position) {
     starSound_ = Audio::GetInstance()->LoadWave("Resources/starEffect.wav");
 
     // debri
-    debriParticle_[0].emitter.reset(ParticleEmitter::CreateParticle("DebriParticle", "debri", ".obj", 100));
+    debriParticle_[0].emitter.reset(ParticleEmitter::CreateParticle("DebriParticle", "debri.obj", 100));
 
     // star
     starEffect_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarCenterLight", PrimitiveType::Plane, 100));

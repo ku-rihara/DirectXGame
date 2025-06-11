@@ -11,11 +11,11 @@ Object3d::~Object3d() {
 ///============================================================
 /// モデル作成
 ///============================================================
-Object3d* Object3d::CreateModel(const std::string& instanceName, const std::string& extension) {
+Object3d* Object3d::CreateModel(const std::string& instanceName) {
     // 新しいModelインスタンスを作成
     Object3d* object3d = new Object3d();
-    ModelManager::GetInstance()->LoadModel(instanceName, extension);
-    object3d->SetModel(instanceName, extension);
+    ModelManager::GetInstance()->LoadModel(instanceName);
+    object3d->SetModel(instanceName);
     object3d->CreateWVPResource();
     object3d->CreateMaterialResource();
     return object3d;

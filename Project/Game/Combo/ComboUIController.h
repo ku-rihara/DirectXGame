@@ -3,12 +3,12 @@
 #include "2d/Sprite.h"
 #include "Easing.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
+#include "ComboUI.h"
 // std
 #include <array>
 #include <cstdint>
 #include <memory>
 
-class ComboUI;
 class Combo;
 class ComboUIController {
 

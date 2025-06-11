@@ -8,7 +8,7 @@ MonsterBall::MonsterBall() {}
 MonsterBall::~MonsterBall() {}
 
 void MonsterBall::Init() {
-	objct3D_.reset(Object3d::CreateModel("DebugSphere",".obj"));
+    objct3D_.reset(Object3d::CreateModel("DebugSphere.obj"));
 	transform_.Init();
 	transform_.translation_.y = -5.0f;
 	transform_.translation_.z = -14.0f;

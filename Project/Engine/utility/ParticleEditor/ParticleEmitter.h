@@ -36,7 +36,7 @@ public:
 	//Create
 	static ParticleEmitter* CreateParticle(
 		const std::string& name, const std::string& modelFilePath,
-		const std::string& extension, const int32_t& maxnum);
+		 const int32_t& maxnum);
 
 	static ParticleEmitter* CreateParticlePrimitive(
         const std::string& name, const PrimitiveType&primitiveType, const int32_t& maxnum);
