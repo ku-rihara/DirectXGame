@@ -40,10 +40,10 @@ public:
 	void Initialize(DirectXCommon* dxCommon);
 
 	/// モデルファイル読み込み
-	static Model* LoadModel(const std::string& modelName, const std::string& extension);
+	static Model* LoadModel(const std::string& modelName);
 
 	/// モデルの検索
-	Model* FindModel(const std::string& modelName, const std::string& extension);
+	Model* FindModel(const std::string& modelName);
 
 	// 終了
 	void Finalize();

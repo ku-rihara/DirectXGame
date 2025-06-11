@@ -320,3 +320,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Project/Engine/base/DirectXCommon.cpp

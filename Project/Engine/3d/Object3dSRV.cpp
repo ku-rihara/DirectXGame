@@ -1,10 +1,10 @@
 #include "Object3dSRV.h"
-#include "base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include "base/SrvManager.h"
 #include "ModelManager.h"
 
 Object3dSRV* Object3dSRV::CreateModel(
-    const std::string& instanceName, const std::string& extension,
+    const std::string& instanceName,
     const uint32_t& instanceNum, SrvManager* srvManager) {
     // インスタンスの生成
     Object3dSRV* instance  = new Object3dSRV();
@@ -12,8 +12,8 @@ Object3dSRV* Object3dSRV::CreateModel(
     instance->instanceMax_ = instanceNum;
 
     // 必要な初期化処理を追加
-    ModelManager::GetInstance()->LoadModel(instanceName, extension);
-    instance->SetModel(instanceName, extension);
+    ModelManager::GetInstance()->LoadModel(instanceName);
+    instance->SetModel(instanceName);
     instance->CreateInstancingResource(instanceNum);
     instance->CreateMaterialResource();
     instance->Clear();

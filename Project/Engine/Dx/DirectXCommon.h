@@ -11,12 +11,20 @@
 #include<format>
 #include<chrono>
 //class
-#include"WinApp.h"
+#include"base/WinApp.h"
 
+
+
+class ImGuiManager;
+class TextureManager;
 class SrvManager;
 class DirectXCommon {
-private://メンバ変数
+private:
+     ImGuiManager* imguiManager_;
+     TextureManager* textureManager_;
+     SrvManager* srvManager_;
 
+private:
 	//ウィンドウズアプリケーション管理
 	WinApp* winApp_;
 
@@ -55,7 +63,7 @@ private://メンバ変数
 	Microsoft::WRL::ComPtr<ID3D12Resource>renderTextureResource_;
 	D3D12_CPU_DESCRIPTOR_HANDLE renderTextureCPUSrvHandle_;
 	D3D12_GPU_DESCRIPTOR_HANDLE renderTextureGPUSrvHandle_;
-	D3D12_RESOURCE_STATES renderTextureCurrentState_ = D3D12_RESOURCE_STATE_RENDER_TARGET; // 初期状態
+	D3D12_RESOURCE_STATES renderTextureCurrentState_ = D3D12_RESOURCE_STATE_RENDER_TARGET; 
 	D3D12_CLEAR_VALUE clearValue_;
 	///===================================
 	///フェンス生成関連
@@ -137,37 +145,15 @@ public:
 
 	//シングルトンインスタンスの取得
 	static DirectXCommon* GetInstance();
-	/// <summary>
-	/// 初期化
-	/// </summary>	
+
 	void Init(WinApp* win, int32_t backBufferWidth = WinApp::kWindowWidth, int32_t backBufferHeight = WinApp::kWindowHeight);
 
-	/// <summary>
-	//レンダリングパイプライン
-	/// </summary>	
-	void CreateGraphicPipelene();//レンダリングパイプライン
 
-	/// <summary>
-	//画面のクリア
-	/// </summary>	
-	void PreDraw();
-
-	/// <summary>
-	/// 深度バッファのクリア
-	/// </summary>
-	void ClearDepthBuffer();
-
-	/// <summary>
-	//コマンドのキック
-	/// </summary>	
+	void CreateGraphicPipelene();
+	void PreDraw();	
+	void ClearDepthBuffer();	
 	void PostDraw();
-
-	/// <summary>
-	//オブジェクトのリリース
-	/// </summary>	
-	void ReleaseObject();
-
-	//void CreateReleaseCheck();
+	void Finalize();
 
 	//リソースの作成
 	Microsoft::WRL::ComPtr < ID3D12Resource>CreateBufferResource(Microsoft::WRL::ComPtr<ID3D12Device>  device, size_t sizeInBytes);
@@ -183,7 +169,7 @@ public:
 		IDxcCompiler3* dxcCompiler,
 		IDxcIncludeHandler* includeHandler);
 
-	void commandExecution(Microsoft::WRL::ComPtr < ID3D12Resource>& intermediateResource);
+	void commandExecution(Microsoft::WRL::ComPtr <ID3D12Resource>& intermediateResource);
 
 	//DescriptorHeapの作成
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> CreateDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device>  device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);

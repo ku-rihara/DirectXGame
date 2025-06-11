@@ -1,5 +1,5 @@
 #include "FullscreenRenderer.h"
-#include "DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include "function/Log.h"
 #include <cassert>
 #include <d3dx12.h>
@@ -112,6 +112,8 @@ void FullscreenRenderer::Draw(ID3D12GraphicsCommandList* commandList) {
 }
 
 void FullscreenRenderer::DrawImGui() {
+#ifdef DEBUG
+
     if (ImGui::Begin("CopyImageRenderer")) {
         const char* modeNames[] = {"None", "Gray", "Vignette", "Gaus"/*, "RadialBlur"*/};
         int mode                = static_cast<int>(currentMode_);
@@ -120,4 +122,5 @@ void FullscreenRenderer::DrawImGui() {
         }
     }
     ImGui::End();
+#endif // DEBUG
 }

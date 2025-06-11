@@ -31,12 +31,8 @@ private:
 public:
 	Gamepad() = default;
 	~Gamepad() = default;
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	/// <param name="directInput"></param>
-	/// <param name="padNo"></param>
-	/// <returns>初期化できたかどうか</returns>
+	
+
 	bool Init(Microsoft::WRL::ComPtr<IDirectInput8> directInput, DWORD padNo);
 	void Update();
 

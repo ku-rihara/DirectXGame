@@ -24,8 +24,6 @@
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
     <ClCompile Include="Engine\base\FullscreenRenderer.cpp" />
-    <ClCompile Include="Engine\base\DirectXCommon.cpp" />
-    <ClCompile Include="Engine\base\Keta.cpp" />
     <ClCompile Include="Engine\base\Material.cpp" />
     <ClCompile Include="Engine\base\Object3DCommon.cpp" />
     <ClCompile Include="Engine\base\SkyBoxRenderer.cpp" />
@@ -38,8 +36,11 @@
     <ClCompile Include="Engine\Collider\BaseCollider.cpp" />
     <ClCompile Include="Engine\Collider\CollisionManager.cpp" />
     <ClCompile Include="Engine\Collider\OBBCollider.cpp" />
+    <ClCompile Include="Engine\Core\EngineCore.cpp" />
     <ClCompile Include="Engine\Core\KTFramework.cpp" />
     <ClCompile Include="Engine\Core\KTGame.cpp" />
+    <ClCompile Include="Engine\Dx\DirectXCommon.cpp" />
+    <ClCompile Include="Engine\Dx\DxReleaseChecker.cpp" />
     <ClCompile Include="Engine\Frame\Frame.cpp" />
     <ClCompile Include="Engine\Function\Convert.cpp" />
     <ClCompile Include="Engine\Function\GetFile.cpp" />
@@ -67,6 +68,7 @@
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleManager.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleParameter.cpp" />
+    <ClCompile Include="Engine\utility\PutObjForBlender\PutObjForBlender.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\ControlPosManager.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\Rail.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\RailManager.cpp" />
@@ -106,8 +108,6 @@
     <ClInclude Include="Engine\3d\WorldTransform.h" />
     <ClInclude Include="Engine\audio\Audio.h" />
     <ClInclude Include="Engine\base\FullscreenRenderer.h" />
-    <ClInclude Include="Engine\base\DirectXCommon.h" />
-    <ClInclude Include="Engine\base\Keta.h" />
     <ClInclude Include="Engine\base\Material.h" />
     <ClInclude Include="Engine\base\Object3DCommon.h" />
     <ClInclude Include="Engine\base\SkyBoxRenderer.h" />
@@ -120,8 +120,11 @@
     <ClInclude Include="Engine\Collider\BaseCollider.h" />
     <ClInclude Include="Engine\Collider\CollisionManager.h" />
     <ClInclude Include="Engine\Collider\OBBCollider.h" />
+    <ClInclude Include="Engine\Core\EngineCore.h" />
     <ClInclude Include="Engine\Core\KTFramework.h" />
     <ClInclude Include="Engine\Core\KTGame.h" />
+    <ClInclude Include="Engine\Dx\DirectXCommon.h" />
+    <ClInclude Include="Engine\Dx\DxReleaseChecker.h" />
     <ClInclude Include="Engine\Frame\Frame.h" />
     <ClInclude Include="Engine\Function\Convert.h" />
     <ClInclude Include="Engine\Function\GetFile.h" />
@@ -158,6 +161,7 @@
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleEmitter.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleManager.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleParameter.h" />
+    <ClInclude Include="Engine\utility\PutObjForBlender\PutObjForBlender.h" />
     <ClInclude Include="Engine\utility\RailEditor\ControlPosManager.h" />
     <ClInclude Include="Engine\utility\RailEditor\Rail.h" />
     <ClInclude Include="Engine\utility\RailEditor\RailManager.h" />
@@ -344,7 +348,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)\d
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>

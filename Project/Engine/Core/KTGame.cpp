@@ -4,6 +4,8 @@
 #include"base/FullscreenRenderer.h"
 //renderer
 #include"base/SkyBoxRenderer.h"
+//utility
+#include "Collider/CollisionManager.h"
 
 // =============================================================
 // 初期化処理
@@ -18,7 +20,7 @@ void KTGame::Init() {
 	pSceneManager_ = SceneManager::GetInstance();
 	pSceneManager_->SetSceneFactory(sceneFactory_.get());
 	pSceneManager_->ChangeScene("TITLE");
-	pSceneManager_->ChangeScene("GAMEPLAY");
+	/*pSceneManager_->ChangeScene("GAMEPLAY");*/
 }
 
 // =============================================================

@@ -4,6 +4,7 @@
 #include <cassert>
 #include <string>
 
+
 Object3DCommon* Object3DCommon::GetInstance() {
     static Object3DCommon instance;
     return &instance;
@@ -229,11 +230,12 @@ void Object3DCommon::PreDraw(ID3D12GraphicsCommandList* commandList) {
 }
 void Object3DCommon::PreBlendSet(ID3D12GraphicsCommandList* commandList, BlendMode blendMode) {
     switch (blendMode) {
-    case BlendMode::Add:
-        commandList->SetPipelineState(graphicsPipelineStateAdd_.Get());
-        break;
     case BlendMode::None:
         commandList->SetPipelineState(graphicsPipelineStateNone_.Get());
         break;
+    case BlendMode::Add:
+        commandList->SetPipelineState(graphicsPipelineStateAdd_.Get());
+        break;
+    
     }
 }

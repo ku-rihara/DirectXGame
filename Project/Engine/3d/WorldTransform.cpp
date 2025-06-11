@@ -1,5 +1,5 @@
 #include "WorldTransform.h"
-#include "base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include <assert.h>
 #include <numbers>
 
@@ -37,7 +37,10 @@ void WorldTransform::Map() {
     // 定数バッファのマッピング
     D3D12_RANGE readRange = {};
     HRESULT hr            = constBuffer_->Map(0, &readRange, reinterpret_cast<void**>(&constMap));
-    assert(SUCCEEDED(hr));
+    if (FAILED(hr)) {
+        // エラー処理（ログ出力など）を入れるか、最低限参照する
+        OutputDebugStringA("ConstBuffer Map failed.\n");
+    }
 }
 
 void WorldTransform::TransferMatrix() {
@@ -177,10 +180,10 @@ Vector3 WorldTransform::GetLocalPos() const {
 
 void WorldTransform::UpdateAffineMatrix() {
     switch (rotateOder_) {
-    case WorldTransform::RotateOder::XYZ:
+    case RotateOder::XYZ:
         matWorld_ = MakeAffineMatrix(scale_, rotation_, translation_);
         break;
-    case WorldTransform::RotateOder::Quaternion:
+    case RotateOder::Quaternion:
         quaternion_.Normalize();
         matWorld_ = MakeScaleMatrix(scale_) * MakeRotateMatrixFromQuaternion(quaternion_) * MakeTranslateMatrix(translation_);
 

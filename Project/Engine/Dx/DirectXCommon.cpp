@@ -1,7 +1,7 @@
 #include "DirectXCommon.h"
 #include "2d/ImGuiManager.h"
-#include "SrvManager.h"
-#include "TextureManager.h"
+#include "base/SrvManager.h"
+#include "base/TextureManager.h"
 
 // function
 #include "Frame/Frame.h"
@@ -14,25 +14,17 @@
 #include <d3d12.h>
 #include <imgui_impl_dx12.h>
 
-#pragma comment(lib, "d3d12.lib")
-#pragma comment(lib, "dxgi.lib")
-#pragma comment(lib, "dxguid.lib")
-#pragma comment(lib, "dxcompiler.lib")
+#pragma comment(lib,"d3d12.lib")
+#pragma comment(lib,"dxgi.lib")
+#pragma comment(lib,"dxguid.lib")
+#pragma comment(lib,"dxcompiler.lib")
 
-namespace {
-ImGuiManager* imguiManager_;
-TextureManager* textureManager_;
-SrvManager* srvManager_;
-}
+
 
 DirectXCommon* DirectXCommon::GetInstance() {
     static DirectXCommon instance;
     return &instance;
 }
-
-// void Log(const std::string& message) {
-//	OutputDebugStringA(message.c_str());
-// }
 
 ///==========================================================
 ///  シェーダーコンパイル
@@ -528,7 +520,7 @@ void DirectXCommon::commandExecution(Microsoft::WRL::ComPtr<ID3D12Resource>& int
 ///==========================================================
 /// 　オブジェクト解放
 ///==========================================================
-void DirectXCommon::ReleaseObject() {
+void DirectXCommon::Finalize() {
     device_.Reset();
     commandAllocator_.Reset();
     CloseWindow(winApp_->GetHwnd());
@@ -559,7 +551,11 @@ Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DirectXCommon::CreateDescriptorHeap
     DescriptorHeapDesc.Flags          = shaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
     HRESULT hr                        = device->CreateDescriptorHeap(&DescriptorHeapDesc, IID_PPV_ARGS(&descriptorHeap));
     // ディスクリプタヒープが作れなかったので起動出来ない
-    assert(SUCCEEDED(hr));
+    if (FAILED(hr)) {
+        OutputDebugStringA("Failed to create descriptor heap.\n");
+        // Releaseビルドでも descriptorHeap が null で返るようにする
+        return nullptr;
+    }
     return descriptorHeap.Get();
 }
 
@@ -585,9 +581,15 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(Micro
     vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
     // 実際に頂点リソースを作る
     Microsoft::WRL::ComPtr<ID3D12Resource> result = nullptr;
-    hr                                            = device->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE,
-                                                   &vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&result));
-    assert(SUCCEEDED(hr));
+
+    hr = device->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE,
+        &vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&result));
+
+    if (FAILED(hr)) {
+        OutputDebugStringA("Failed to create bufferResource heap.\n");
+        // Releaseビルドでも descriptorHeap が null で返るようにする
+        return nullptr;
+    }
 
     return result.Get();
 }
@@ -625,7 +627,12 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateDepthStencilTextureR
         D3D12_RESOURCE_STATE_DEPTH_WRITE, // 深度値を書き込む状態にしておく
         &depthClearValue, // Clear最適値
         IID_PPV_ARGS(&resource)); // 作成するResourceポインタへのポインタ
-    assert(SUCCEEDED(hr));
+
+    if (FAILED(hr)) {
+        OutputDebugStringA("Failed to create depth senthil resource heap.\n");
+        // Releaseビルドでも descriptorHeap が null で返るようにする
+        return nullptr;
+    }
     return resource.Get();
 }
 
@@ -691,7 +698,12 @@ DirectXCommon::CreateRenderTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> 
         D3D12_RESOURCE_STATE_RENDER_TARGET,
         &clearValue_,
         IID_PPV_ARGS(&resource));
-    assert(SUCCEEDED(hr));
+
+    if (FAILED(hr)) {
+        OutputDebugStringA("Failed to createRender Texture Resource heap.\n");
+        // Releaseビルドでも descriptorHeap が null で返るようにする
+        return nullptr;
+    }
     return resource;
 }
 
@@ -702,11 +714,11 @@ void DirectXCommon::CreateRnderSrvHandle() {
     renderTextureGPUSrvHandle_ = srvManager_->GetGPUDescriptorHandle(srvIndex);
     renderTextureCPUSrvHandle_ = srvManager_->GetCPUDescriptorHandle(srvIndex);
 
-    //SRVの設定
+    // SRVの設定
     D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-    srvDesc.Format              = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-    srvDesc.Texture2D.MipLevels = 1;
-    srvDesc.ViewDimension       = D3D12_SRV_DIMENSION_TEXTURE2D;
+    srvDesc.Format                  = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+    srvDesc.Texture2D.MipLevels     = 1;
+    srvDesc.ViewDimension           = D3D12_SRV_DIMENSION_TEXTURE2D;
     srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
     /// Srvの生成

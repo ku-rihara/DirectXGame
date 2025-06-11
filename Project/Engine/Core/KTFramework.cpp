@@ -1,13 +1,37 @@
 #include "KTFramework.h"
-/// base
-#include "base/Keta.h"
-/// imgui
-#include <imgui.h>
+
+//dx
+#include"Dx/DxReleaseChecker.h"
+
+/// utility
 #include "utility/ParameterEditor/GlobalParameter.h"
 
 #include "Frame/Frame.h"
+/// imgui
+#include <imgui.h>
 
-const char kWindowTitle[] = "LE2A_11_クリハラ_ケイタ";
+const char kWindowTitle[] = "LE3A_11_クリハラ_ケイタ";
+
+
+
+// ========================================================
+// 初期化
+// ========================================================
+void KTFramework::Init() {
+
+    engineCore_ = std::make_unique<EngineCore>();
+
+    /// ウィンドウ初期化
+    engineCore_->Initialize(kWindowTitle, 1280, 720);
+
+    // グローバル変数の読み込み
+    GlobalParameter::GetInstance()->LoadFiles();
+
+    // コリジョン
+    collisionManager_ = std::make_unique<CollisionManager>();
+    collisionManager_->Init();
+}
+
 
 // ========================================================
 // 実行
@@ -16,37 +40,22 @@ void KTFramework::Run() {
     Init(); /// 初期化
 
     // ウィンドウのxボタンが押されるまでループ
-    while (Keta::ProcessMessage() == 0) {
-        Keta::BeginFrame(); /// フレームの開始
+    while (engineCore_->ProcessMessage() == 0) {
+        engineCore_->BeginFrame(); /// フレームの開始
 
         Update(); /// 更新
 
-		Keta::PreRenderTexture(); /// 描画前処理
+		engineCore_->PreRenderTexture(); /// 描画前処理
 
         Draw(); /// 描画
 
-		Keta::PreDraw(); /// 描画前処理
+		engineCore_->PreDraw(); /// 描画前処理
 
 		DarwOffscreen(); /// 描画
 
-        Keta::EndFrame(); /// フレームの終了
+        engineCore_->EndFrame(); /// フレームの終了
     }
     Finalize();
-}
-
-// ========================================================
-// 初期化
-// ========================================================
-void KTFramework::Init() {
-    /// ウィンドウ初期化
-    Keta::Initialize(kWindowTitle, 1280, 720);
-
-    // グローバル変数の読み込み
-    GlobalParameter::GetInstance()->LoadFiles();
-
-    // コリジョン
-    collisionManager_ = std::make_unique<CollisionManager>();
-    collisionManager_->Init();
 }
 
 // ========================================================
@@ -57,18 +66,19 @@ void KTFramework::Update() {
     DisplayFPS();
     /// グローバル変数の更新
     GlobalParameter::GetInstance()->Update();
+    GlobalParameter::GetInstance()->SyncAll();
     /// ゲームシーンの毎フレーム処理
     pSceneManager_->Update();
     /// 当たり判定
     collisionManager_->Update();
-}
+}                                 
 
 // ========================================================
 // 解放
 // ========================================================
 void KTFramework::Finalize() {
     // ライブラリの終了
-    Keta::Finalize();
+    engineCore_->Finalize();
 }
 
 // ========================================================

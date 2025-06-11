@@ -25,16 +25,16 @@ struct AdaptRotate {
     bool isZ;
 };
 
+enum class RotateOder {
+    XYZ,
+    Quaternion,
+};
+
 /// <summary>
 /// ワールド変換データ
 /// </summary>
 class WorldTransform{
-public:
 
-	enum class RotateOder {
-		XYZ,
-		Quaternion,
-	};
 
 public:
 	

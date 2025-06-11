@@ -13,7 +13,7 @@ OBBCollider::~OBBCollider() {
 
 
 void OBBCollider::Init() {
-    cObject3d_.reset(Object3d::CreateModel("DebugCube", ".obj"));
+    cObject3d_.reset(Object3d::CreateModel("DebugCube.obj"));
     cTransform_.Init();
     obb_.size = { 1.5f,1.5f,1.5f };
 }

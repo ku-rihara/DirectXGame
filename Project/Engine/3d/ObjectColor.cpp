@@ -1,5 +1,5 @@
 #include "ObjectColor.h"
-#include "base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include <cassert>
 
 // 初期化
@@ -34,6 +34,11 @@ void ObjectColor::Map() {
     // 定数バッファのマッピング
     HRESULT result = constBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&constMap_));
     assert(SUCCEEDED(result));
+
+    if (FAILED(result)) {
+        OutputDebugStringA("ConstBuffer Map failed.\n");
+        // 必要に応じて return や throw
+    }
 
     // 初期色の転送
     constMap_->color_ = color_;

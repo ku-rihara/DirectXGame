@@ -13,7 +13,7 @@ AABBCollider::~AABBCollider() {
 
 void AABBCollider::Init() {
     // モデル作成（デバッグ用の可視化）
-    cObject3d_.reset(Object3d::CreateModel("DebugCube", ".obj"));
+    cObject3d_.reset(Object3d::CreateModel("DebugCube.obj"));
     cTransform_.Init();
 }
 

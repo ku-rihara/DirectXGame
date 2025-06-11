@@ -1,5 +1,5 @@
 #include "SpriteMaterial.h"
-#include "DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include <imgui.h>
 #include <cassert>
 

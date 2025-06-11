@@ -3,14 +3,15 @@
 #include "Scene/BaseScene.h"
 #include "Scene/Factory/AbstractSceneFactory.h"
 #include <memory> // unique_ptr
+#include <type_traits>
 
 /// <summary>
 /// シーン管理
 /// </summary>
 class SceneManager {
 private:
-    std::unique_ptr<BaseScene> scene_;             
-    std::unique_ptr<BaseScene> nextScene_;         
+    std::unique_ptr<BaseScene> scene_ = nullptr;           
+    std::unique_ptr<BaseScene> nextScene_ = nullptr;         
     AbstractSceneFactory* sceneFactory_ = nullptr; 
 
 public:

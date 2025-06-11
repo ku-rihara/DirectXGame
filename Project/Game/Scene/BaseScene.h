@@ -1,7 +1,7 @@
 #pragma once
 
 //DirectX
-#include "base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include"base/TextureManager.h"
 
 //Transform

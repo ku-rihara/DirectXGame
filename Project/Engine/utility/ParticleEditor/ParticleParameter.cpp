@@ -8,6 +8,7 @@
 
 void ParticleParameter::ParameterInit() {
 
+    // パラメータ初期化
     parameters_.targetPos            = {0.0f, 0.0f, 0.0f};
     parameters_.lifeTime             = 0.0f;
     parameters_.gravity              = 0.0f;
@@ -15,12 +16,13 @@ void ParticleParameter::ParameterInit() {
     parameters_.colorDist.min        = {0.0f, 0.0f, 0.0f, 0.0f};
     parameters_.colorDist.max        = {0.0f, 0.0f, 0.0f, 0.0f};
     parameters_.isScalerScale        = true;
+    parameters_.isFloatVelocity      = true;
     parameters_.isRotateforDirection = false;
     particleCount_                   = 0;
     intervalTime_                    = 1.0f;
     groupParamaters_.isBillBord      = true;
     parameters_.uvParm.numOfFrame    = 1;
-    selectedTexturePath_             = "";
+    selectedTexturePath_             = "resources/Texture/uvChecker.png";
 }
 
 void ParticleParameter::Init() {
@@ -92,12 +94,17 @@ void ParticleParameter::AddParmGroup() {
     globalParameter_->AddItem(particleName_, "UV IsRoop", parameters_.uvParm.isRoop);
     globalParameter_->AddItem(particleName_, "UV isScroolEachPixel", parameters_.uvParm.isScroolEachPixel);
     globalParameter_->AddItem(particleName_, "UV isScrool", parameters_.uvParm.isScrool);
+    globalParameter_->AddItem(particleName_, "UV isFlipX", parameters_.uvParm.isFlipX);
+    globalParameter_->AddItem(particleName_, "UV isFlipY", parameters_.uvParm.isFlipY);
 
     // Velocity
     globalParameter_->AddItem(particleName_, "Speed Max", parameters_.speedDist.max);
     globalParameter_->AddItem(particleName_, "Speed Min", parameters_.speedDist.min);
+    globalParameter_->AddItem(particleName_, "SpeedV3 Max", parameters_.velocityDistV3.max);
+    globalParameter_->AddItem(particleName_, "SpeedV3 Min", parameters_.velocityDistV3.min);
     globalParameter_->AddItem(particleName_, "Direction Max", parameters_.directionDist.max);
     globalParameter_->AddItem(particleName_, "Direction Min", parameters_.directionDist.min);
+    globalParameter_->AddItem(particleName_, "isFloatVelocity", parameters_.isFloatVelocity);
 
     // Color
     globalParameter_->AddItem(particleName_, "BaseColor", parameters_.baseColor);
@@ -164,12 +171,17 @@ void ParticleParameter::SetValues() {
     globalParameter_->SetValue(particleName_, "UV IsRoop", parameters_.uvParm.isRoop);
     globalParameter_->SetValue(particleName_, "UV isScroolEachPixel", parameters_.uvParm.isScroolEachPixel);
     globalParameter_->SetValue(particleName_, "UV isScrool", parameters_.uvParm.isScrool);
+    globalParameter_->SetValue(particleName_, "UV isFlipX", parameters_.uvParm.isFlipX);
+    globalParameter_->SetValue(particleName_, "UV isFlipY", parameters_.uvParm.isFlipY);
 
     // Velocity
     globalParameter_->SetValue(particleName_, "Speed Max", parameters_.speedDist.max);
     globalParameter_->SetValue(particleName_, "Speed Min", parameters_.speedDist.min);
+    globalParameter_->SetValue(particleName_, "SpeedV3 Max", parameters_.velocityDistV3.max);
+    globalParameter_->SetValue(particleName_, "SpeedV3 Min", parameters_.velocityDistV3.min);
     globalParameter_->SetValue(particleName_, "Direction Max", parameters_.directionDist.max);
     globalParameter_->SetValue(particleName_, "Direction Min", parameters_.directionDist.min);
+    globalParameter_->SetValue(particleName_, "isFloatVelocity", parameters_.isFloatVelocity);
 
     // Color
     globalParameter_->SetValue(particleName_, "BaseColor", parameters_.baseColor);
@@ -233,6 +245,8 @@ void ParticleParameter::ApplyGlobalParameter(const std::string& particleName) {
     parameters_.uvParm.isRoop            = globalParameter_->GetValue<bool>(particleName_, "UV IsRoop");
     parameters_.uvParm.isScroolEachPixel = globalParameter_->GetValue<bool>(particleName_, "UV isScroolEachPixel");
     parameters_.uvParm.isScrool          = globalParameter_->GetValue<bool>(particleName_, "UV isScrool");
+    parameters_.uvParm.isFlipX           = globalParameter_->GetValue<bool>(particleName_, "UV isFlipX");
+    parameters_.uvParm.isFlipY           = globalParameter_->GetValue<bool>(particleName_, "UV isFlipY");
 
     // Rotate Speed
     parameters_.rotateSpeedDist.min = globalParameter_->GetValue<Vector3>(particleName, "RotateSpeed Min");
@@ -241,8 +255,11 @@ void ParticleParameter::ApplyGlobalParameter(const std::string& particleName) {
     // Velocity
     parameters_.speedDist.min     = globalParameter_->GetValue<float>(particleName, "Speed Min");
     parameters_.speedDist.max     = globalParameter_->GetValue<float>(particleName, "Speed Max");
+    parameters_.velocityDistV3.min   = globalParameter_->GetValue<Vector3>(particleName, "SpeedV3 Max");
+    parameters_.velocityDistV3.max   = globalParameter_->GetValue<Vector3>(particleName, "SpeedV3 Min");
     parameters_.directionDist.min = globalParameter_->GetValue<Vector3>(particleName, "Direction Min");
     parameters_.directionDist.max = globalParameter_->GetValue<Vector3>(particleName, "Direction Max");
+    parameters_.isFloatVelocity   = globalParameter_->GetValue<bool>(particleName_, "isFloatVelocity");
 
     // Color
     parameters_.baseColor     = globalParameter_->GetValue<Vector4>(particleName, "BaseColor");
@@ -283,8 +300,9 @@ void ParticleParameter::ApplyGlobalParameter(const std::string& particleName) {
 }
 
 void ParticleParameter::AdaptTexture() {
-    if (selectedTexturePath_ == "")
+    if (selectedTexturePath_ == "") {
         return;
+    }
     // テクスチャのハンドルを取得
     ParticleManager::GetInstance()->SetTextureHandle(particleName_, TextureManager::GetInstance()->LoadTexture(selectedTexturePath_));
 }

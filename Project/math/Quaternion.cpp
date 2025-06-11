@@ -76,7 +76,7 @@ Quaternion Quaternion::Inverse()const {
 }
 
 // 任意回転を表すQuaternionの生成
-Quaternion Quaternion::MakeRotateAxisAngleQuaternion(const Vector3& axis, const float& angle) {
+Quaternion Quaternion::MakeRotateAxisAngle(const Vector3& axis, const float& angle) {
     // 正規化された軸を使用
     Vector3 normalizedAxis = (axis).Normalize();
     float halfAngle = angle / 2.0f;

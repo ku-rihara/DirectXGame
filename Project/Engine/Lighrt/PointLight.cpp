@@ -1,5 +1,5 @@
 #include "PointLight.h"
-#include "base/DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include <imgui.h>
 
 PointLight::PointLight()

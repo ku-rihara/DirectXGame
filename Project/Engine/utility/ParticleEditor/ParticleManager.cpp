@@ -2,9 +2,7 @@
 #include "3d/ModelManager.h"
 #include "base/TextureManager.h"
 #include "ParticleCommon.h"
-// Primitive
-#include "Primitive/PrimitivePlane.h"
-#include"Primitive/PrimitiveRing.h"
+
 // frame
 #include "Frame/Frame.h"
 // Function
@@ -12,6 +10,10 @@
 #include "Function/GetFile.h"
 #include "MathFunction.h"
 #include "random.h"
+// Primitive
+#include "Primitive/PrimitiveCylinder.h"
+#include "Primitive/PrimitivePlane.h"
+#include "Primitive/PrimitiveRing.h"
 // std
 #include <cassert>
 #include <string>
@@ -71,12 +73,23 @@ void ParticleManager::Update() {
             ///------------------------------------------------------------------------
             /// 変位更新
             ///------------------------------------------------------------------------
+            ///------------------------------------------------------------------------
+            /// 変位更新
+            ///------------------------------------------------------------------------
             if (it->followPos) {
                 it->worldTransform_.translation_ = *it->followPos + it->offSet;
             } else {
                 it->worldTransform_.translation_.y += it->velocity_.y * Frame::DeltaTime();
-                it->worldTransform_.translation_ += it->direction_ * it->speed_ * Frame::DeltaTime();
+
+                if (it->isFloatVelocity) {
+                    // 通常：方向ベクトル × スカラー速度
+                    it->worldTransform_.translation_ += it->direction_ * it->speed_ * Frame::DeltaTime();
+                } else {
+                    // ベクトル速度そのまま適用
+                    it->worldTransform_.translation_ += it->speedV3 * Frame::DeltaTime();
+                }
             }
+
 
             ///------------------------------------------------------------------------
             /// UV更新
@@ -136,6 +149,13 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
             ///==========================================================================================
             instancingData[instanceIndex].UVTransform = MakeAffineMatrix(it->uvInfo_.scale, it->uvInfo_.rotate, it->uvInfo_.pos);
 
+            if (it->uvInfo_.isFlipX) {
+                instancingData[instanceIndex].isFlipX = true;
+            }
+            if (it->uvInfo_.isFlipY) {
+                instancingData[instanceIndex].isFlipY = true;
+            }
+
             ++instanceIndex;
             ++it;
         }
@@ -186,7 +206,7 @@ void ParticleManager::UpdateUV(UVTnfo& uvInfo, float deltaTime) {
 ///============================================================
 void ParticleManager::CreateParticleGroup(
     const std::string name, const std::string modelFilePath,
-    const std::string& extension, const uint32_t& maxnum) {
+    const uint32_t& maxnum) {
     if (particleGroups_.contains(name)) {
         return;
     }
@@ -195,8 +215,8 @@ void ParticleManager::CreateParticleGroup(
     particleGroups_[name] = ParticleGroup();
 
     /// モデル
-    ModelManager::GetInstance()->LoadModel(modelFilePath, extension);
-    SetModel(name, modelFilePath, extension);
+    ModelManager::GetInstance()->LoadModel(modelFilePath);
+    SetModel(name, modelFilePath);
 
     /// リソース作成
     CreateInstancingResource(name, maxnum); // インスタンシング
@@ -213,7 +233,7 @@ void ParticleManager::CreatePrimitiveParticle(const std::string& name, Primitive
     // グループを追加
     particleGroups_[name] = ParticleGroup();
 
-   //createPrimitive
+    // createPrimitive
     switch (type) {
     case PrimitiveType::Plane:
         particleGroups_[name].primitive_ = std::make_unique<PrimitivePlane>();
@@ -221,12 +241,13 @@ void ParticleManager::CreatePrimitiveParticle(const std::string& name, Primitive
     case PrimitiveType::Ring:
         particleGroups_[name].primitive_ = std::make_unique<PrimitiveRing>();
         break;
-
+    case PrimitiveType::Cylinder:
+        particleGroups_[name].primitive_ = std::make_unique<PrimitiveCylinder>();
+        break;
     }
 
     // プリミティブの初期化と作成
     particleGroups_[name].primitive_->Init();
-   /* particleGroups_[name].primitive_->Create();*/
 
     // インスタンシングリソースとマテリアルリソースを作成
     CreateInstancingResource(name, maxnum);
@@ -246,11 +267,11 @@ void ParticleManager::SetTextureHandle(const std::string name, const uint32_t& h
 /// モデルセット
 ///============================================================
 
-void ParticleManager::SetModel(const std::string& name, const std::string& modelName, const std::string& extension) {
+void ParticleManager::SetModel(const std::string& name, const std::string& modelName) {
 
     // モデルを検索してセット
-    ModelManager::GetInstance()->LoadModel(modelName, extension);
-    particleGroups_[name].model         = (ModelManager::GetInstance()->FindModel(modelName, extension));
+    ModelManager::GetInstance()->LoadModel(modelName);
+    particleGroups_[name].model         = (ModelManager::GetInstance()->FindModel(modelName));
     particleGroups_[name].textureHandle = TextureManager::GetInstance()->LoadTexture(
         particleGroups_[name].model->GetModelData().material.textureFilePath);
 }
@@ -327,21 +348,39 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
     /// 速度、向き
     ///------------------------------------------------------------------------
 
-    /// random
-    Vector3 direction = {
-        Random::Range(paramaters.directionDist.min.x, paramaters.directionDist.max.x),
-        Random::Range(paramaters.directionDist.min.y, paramaters.directionDist.max.y),
-        Random::Range(paramaters.directionDist.min.z, paramaters.directionDist.max.z)};
+    if (paramaters.isFloatVelocity) {
+        // ランダムな方向ベクトルを生成
+        Vector3 direction = {
+            Random::Range(paramaters.directionDist.min.x, paramaters.directionDist.max.x),
+            Random::Range(paramaters.directionDist.min.y, paramaters.directionDist.max.y),
+            Random::Range(paramaters.directionDist.min.z, paramaters.directionDist.max.z)};
 
-    float speed = {Random::Range(paramaters.speedDist.min, paramaters.speedDist.max)};
+        direction = direction.Normalize();
 
-    // get camera rotate Matrix
-    Matrix4x4 cameraRotationMatrix = MakeRotateMatrix(viewProjection_->rotation_);
+        // スピード（float）を生成
+        float speed = Random::Range(paramaters.speedDist.min, paramaters.speedDist.max);
 
-    // adapt
-    direction           = direction.Normalize();
-    particle.direction_ = TransformNormal(direction, cameraRotationMatrix);
-    particle.speed_     = speed;
+        // カメラ回転を適用
+        Matrix4x4 cameraRotationMatrix = MakeRotateMatrix(viewProjection_->rotation_);
+        particle.direction_            = TransformNormal(direction, cameraRotationMatrix);
+        particle.speed_                = speed;
+
+    } else {
+        // 速度ベクトル(Vector3)を直接指定
+        Vector3 velocity = {
+            Random::Range(paramaters.velocityDistV3.min.x, paramaters.velocityDistV3.max.x),
+            Random::Range(paramaters.velocityDistV3.min.y, paramaters.velocityDistV3.max.y),
+            Random::Range(paramaters.velocityDistV3.min.z, paramaters.velocityDistV3.max.z)};
+
+        // カメラ回転を適用
+        Matrix4x4 cameraRotationMatrix = MakeRotateMatrix(viewProjection_->rotation_);
+        velocity                       = TransformNormal(velocity, cameraRotationMatrix);
+
+        particle.direction_ = velocity;
+        particle.speedV3    = velocity;
+    }
+    // frag adapt
+    particle.isFloatVelocity = paramaters.isFloatVelocity;
 
     ///------------------------------------------------------------------------
     /// 回転
@@ -454,9 +493,12 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
     particle.uvInfo_.isRoop            = paramaters.uvParm.isRoop;
     particle.uvInfo_.isScrool          = paramaters.uvParm.isScrool;
 
+    // IsFlip
+    particle.uvInfo_.isFlipX = paramaters.uvParm.isFlipX;
+    particle.uvInfo_.isFlipY = paramaters.uvParm.isFlipY;
+
     // 時間初期化
     particle.uvInfo_.currentScroolTime = 0.0f;
-
 
     ///------------------------------------------------------------------------
     /// 重力

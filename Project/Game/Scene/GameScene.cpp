@@ -23,11 +23,14 @@ void GameScene::Init() {
     monsterBall_ = std::make_unique<MonsterBall>();
     plane_       = std::make_unique<Plane>();
     skuBox_      = std::make_unique<SkyBox>();
+    putObjForBlender = std::make_unique<PutObjForBlender>();
 
     monsterBall_->Init();
     ground_->Init();
     plane_->Init();
     skuBox_->Init();
+    putObjForBlender->LoadJsonFile("scene.json");
+    putObjForBlender->PutObject();
 
     isDebugCameraActive_ = true;
 }
@@ -59,6 +62,7 @@ void GameScene::ModelDraw() {
     ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
     Model::PreDraw(commandList);
 
+     putObjForBlender->DrawAll(viewProjection_);
     ground_->Draw(viewProjection_);
     plane_->Draw(viewProjection_);
     monsterBall_->Draw(viewProjection_);

@@ -1,0 +1,132 @@
+{
+    "NormalEnemySpawnCircle": {
+        "AdaptRotateIsX": false,
+        "AdaptRotateIsY": false,
+        "AdaptRotateIsZ": false,
+        "BaseColor": [
+            0.08780274540185928,
+            0.8529411554336548,
+            0.8529411554336548,
+            0.0
+        ],
+        "Color Max": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Color Min": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Direction Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Direction Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Gravity": 0.0,
+        "IntervalTime": 1.0,
+        "LifeTime": 0.699999988079071,
+        "Particle Count": 7,
+        "Position Base": [
+            0.0,
+            -0.5,
+            0.0
+        ],
+        "Position Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Position Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale Max": 0.0,
+        "Scale Min": 0.0,
+        "ScaleV3 Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "ScaleV3 Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Speed Max": 0.0,
+        "Speed Min": 0.0,
+        "UV IsRoop": true,
+        "UV NumOfFrame": 1,
+        "UV Pos": [
+            0.0,
+            0.0
+        ],
+        "UV Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "UV ScroolSpeed": 0.11999999731779099,
+        "UV isFlipX": false,
+        "UV isFlipY": true,
+        "UV isScrool": true,
+        "UV isScroolEachPixel": true,
+        "blendMode": 0,
+        "isAlphaNoMove": false,
+        "isBillBord": false,
+        "isRotateforDirection": false,
+        "isScalerScale": false,
+        "isShot": true,
+        "preBillBordType_": 0,
+        "scaleEaseParm.easeTypeInt": 3,
+        "scaleEaseParm.endValueF.max": 4.0,
+        "scaleEaseParm.endValueF.min": 4.0,
+        "scaleEaseParm.endValueV3.max": [
+            7.0,
+            3.0,
+            7.0
+        ],
+        "scaleEaseParm.endValueV3.min": [
+            7.0,
+            3.0,
+            7.0
+        ],
+        "scaleEaseParm.isScaleEase": true,
+        "scaleEaseParm.maxTime": 0.46000000834465027,
+        "selectedTexturePath_": "Resources/texture/gradationLine.png"
+    }
+}

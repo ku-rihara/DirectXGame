@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
 #include <cstdint>
 #include <string>
 

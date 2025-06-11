@@ -6,8 +6,6 @@
 #include "Function/GetFile.h"
 #include "ParticleCommon.h"
 #include "ParticleManager.h"
-
-#include <format>
 #include <imgui.h>
 
 ParticleEmitter::ParticleEmitter() {
@@ -16,13 +14,12 @@ ParticleEmitter::ParticleEmitter() {
 ///=================================================================================
 /// パーティクル作成
 ///=================================================================================
-ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const std::string& modelFilePath,
-    const std::string& extension, const int32_t& maxnum) {
+ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const std::string& modelFilePath, const int32_t& maxnum) {
 
     auto emitter           = std::make_unique<ParticleEmitter>();
     emitter->particleName_ = name;
 
-    ParticleManager::GetInstance()->CreateParticleGroup(emitter->particleName_, modelFilePath, extension, maxnum);
+    ParticleManager::GetInstance()->CreateParticleGroup(emitter->particleName_, modelFilePath, maxnum);
     emitter->Init();
     return emitter.release();
 }
@@ -52,7 +49,7 @@ void ParticleEmitter::Init() {
     railManager_->Init(particleName_);
 
     /// 発生位置可視化オブジェ
-    obj3d_.reset(Object3d::CreateModel("DebugCube", ".obj"));
+    obj3d_.reset(Object3d::CreateModel("DebugCube.obj"));
     emitBoxTransform_.Init();
 }
 
@@ -74,7 +71,7 @@ void ParticleEmitter::Emit() {
 
         ParticleManager::GetInstance()->Emit(
             particleName_, parameters_, groupParamaters_, particleCount_);
-        currentTime_ = 0.0f; // 時間を戻す
+            currentTime_ = 0.0f;
     }
 }
 
@@ -128,10 +125,17 @@ void ParticleEmitter::EditorUpdate() {
 
     // Velocity
     if (ImGui::CollapsingHeader("Velocity")) {
-        ImGui::SeparatorText("Velocity Range:");
-        ImGui::DragFloat("Velocity Max", &parameters_.speedDist.max, 0.1f);
-        ImGui::DragFloat("Velocity Min", &parameters_.speedDist.min, 0.1f);
-
+        ImGui::Checkbox("IsFloatVelocity", &parameters_.isFloatVelocity);
+        if (parameters_.isFloatVelocity) {
+            ImGui::SeparatorText("Velocity Range:");
+            ImGui::DragFloat("Velocity Max", &parameters_.speedDist.max, 0.1f);
+            ImGui::DragFloat("Velocity Min", &parameters_.speedDist.min, 0.1f);
+        } else {
+            ImGui::SeparatorText("V3 VelocityRange");
+            ImGui::DragFloat3("VelocityV3 Max", reinterpret_cast<float*>(&parameters_.velocityDistV3.max), 0.1f);
+            ImGui::DragFloat3("VelocityV3 Min", reinterpret_cast<float*>(&parameters_.velocityDistV3.min), 0.1f);
+        }
+     
         ImGui::SeparatorText("Direction Range:");
         ImGui::DragFloat3("Direction Max", &parameters_.directionDist.max.x, 0.01f, -1.0f, 1.0f);
         ImGui::DragFloat3("Direction Min", &parameters_.directionDist.min.x, 0.01f, -1.0f, 1.0f);
@@ -153,6 +157,7 @@ void ParticleEmitter::EditorUpdate() {
         ImGui::DragFloat3("Rotate Speed Min", &parameters_.rotateSpeedDist.min.x, 0.1f, 0, 720);
     }
 
+    // UV Scroll
     if (ImGui::CollapsingHeader("UV Parameters")) {
         ImGui::SeparatorText("UV Position:");
         ImGui::DragFloat2("UV_Pos", &parameters_.uvParm.pos.x, 0.01f);
@@ -166,8 +171,9 @@ void ParticleEmitter::EditorUpdate() {
         ImGui::Checkbox("Is Roop", &parameters_.uvParm.isRoop);
         ImGui::Checkbox("Is ScroolEachPixel", &parameters_.uvParm.isScroolEachPixel);
         ImGui::Checkbox("Is Scrool", &parameters_.uvParm.isScrool);
+        ImGui::Checkbox("Is IsFlipX", &parameters_.uvParm.isFlipX);
+        ImGui::Checkbox("Is IsFlipY", &parameters_.uvParm.isFlipY);
     }
-
 
     // その他のパラメータ
     if (ImGui::CollapsingHeader("etcParamater")) {
@@ -177,10 +183,9 @@ void ParticleEmitter::EditorUpdate() {
         ImGui::SliderInt("Particle Count", &particleCount_, 1, 100);
     }
 
-    // チェックが有効なら、BillboardType の設定を表示
+    // Billbord
     if (ImGui::CollapsingHeader("BillBoard")) {
 
-        // IsBillBoard のチェックボックス
         ImGui::Checkbox("IsBillBoard", &groupParamaters_.isBillBord);
 
         ImGui::SeparatorText("IsRotateAdapt");
@@ -191,16 +196,17 @@ void ParticleEmitter::EditorUpdate() {
         ImGui::SeparatorText("BillBordType");
 
         const char* billBordItems[] = {"XYZ", "X", "Y", "Z"}; // ビルボードの種類
-        // ビルボードの種類を選択するコンボボックス
+
         if (ImGui::Combo("Billboard Type", &billBordType_, billBordItems, IM_ARRAYSIZE(billBordItems))) {
-            // 選択した値を反映
+
             groupParamaters_.billBordType = static_cast<BillboardType>(billBordType_);
         }
     }
 
+    /// blend mode
     if (ImGui::CollapsingHeader("BlendMode")) {
 
-        const char* blendModeItems[] = {"Add", "None", "Multiply", "Subtractive", "Screen"}; // ビルボードの種類
+        const char* blendModeItems[] = { "None","Add","Multiply", "Subtractive", "Screen"}; // BlendMode
         // ビルボードの種類を選択するコンボボックス
         if (ImGui::Combo("Blend Mode", &blendMode_, blendModeItems, IM_ARRAYSIZE(blendModeItems))) {
             // 選択した値を反映
@@ -208,7 +214,7 @@ void ParticleEmitter::EditorUpdate() {
         }
     }
 
-    // その他のパラメータ
+    // frag setting
     if (ImGui::CollapsingHeader("Frag")) {
 
         // IsRotateforDirection のチェックボックス
@@ -229,35 +235,6 @@ void ParticleEmitter::EditorUpdate() {
     ImGui::End();
 #endif // _DEBUG
 }
-
-void ParticleEmitter::UpdateEmitTransform() {
-    emitBoxTransform_.translation_ = parameters_.emitPos;
-    // スケールを範囲の大きさで設定
-    emitBoxTransform_.scale_ = {
-        parameters_.positionDist.max.x - parameters_.positionDist.min.x,
-        parameters_.positionDist.max.y - parameters_.positionDist.min.y,
-        parameters_.positionDist.max.z - parameters_.positionDist.min.z};
-    railManager_->SetScale(emitBoxTransform_.scale_);
-
-    emitBoxTransform_.UpdateMatrix();
-}
-
-void ParticleEmitter::RailDraw(const ViewProjection& viewProjection) {
-    viewProjection;
-    /*railManager_->RailDraw(viewProjection);*/
-}
-void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
-#ifdef _DEBUG
-
-    if (isMoveForRail_) { // レールに沿うエミット位置
-        railManager_->Draw(viewProjection);
-
-    } else { // レールに沿わないエミット位置
-        obj3d_->Draw(emitBoxTransform_, viewProjection);
-    }
-#endif // _DEBUG
-}
-
 void ParticleEmitter::ScaleParmEditor() {
     // Scale
     if (ImGui::CollapsingHeader("Scale")) {
@@ -294,13 +271,43 @@ void ParticleEmitter::ScaleParmEditor() {
             ImGui::SeparatorText("EaseType");
             // イージング種類
             const char* easeItems[] = {"InSine", "OutSine", "OutBack", "OutQuint"};
-            // ビルボードの種類を選択するコンボボックス
+          
             if (ImGui::Combo("Easing Type", &parameters_.scaleEaseParm.easeTypeInt, easeItems, IM_ARRAYSIZE(easeItems))) {
-                // 選択した値を反映
+                
                 parameters_.scaleEaseParm.easeType = static_cast<EaseType>(parameters_.scaleEaseParm.easeTypeInt);
             }
         }
     }
+}
+
+
+void ParticleEmitter::UpdateEmitTransform() {
+    emitBoxTransform_.translation_ = parameters_.emitPos;
+    // スケールを範囲の大きさで設定
+    emitBoxTransform_.scale_ = {
+        parameters_.positionDist.max.x - parameters_.positionDist.min.x,
+        parameters_.positionDist.max.y - parameters_.positionDist.min.y,
+        parameters_.positionDist.max.z - parameters_.positionDist.min.z};
+    railManager_->SetScale(emitBoxTransform_.scale_);
+
+    emitBoxTransform_.UpdateMatrix();
+}
+
+void ParticleEmitter::RailDraw(const ViewProjection& viewProjection) {
+    viewProjection;
+    /*railManager_->RailDraw(viewProjection);*/
+}
+void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
+    viewProjection;
+#ifdef _DEBUG
+
+    if (isMoveForRail_) { // レールに沿うエミット位置
+        railManager_->Draw(viewProjection);
+
+    } else { // レールに沿わないエミット位置
+        obj3d_->Draw(emitBoxTransform_, viewProjection);
+    }
+#endif // _DEBUG
 }
 
 // ImGuiファイル項目選択
@@ -364,7 +371,7 @@ void ParticleEmitter::ApplyTexture(const std::string& texturename) {
 }
 
 ///=================================================================================
-/// override function
+/// Prameter Edit Function
 ///=================================================================================
 
 void ParticleEmitter::ParmSaveForImGui() {

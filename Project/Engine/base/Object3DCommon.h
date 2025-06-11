@@ -1,14 +1,10 @@
 #pragma once
 
-#include"DirectXCommon.h"
+#include"Dx/DirectXCommon.h"
+#include "Material.h"
 
 
 class Object3DCommon {
-public:
-	enum class BlendMode {
-		Add,
-		None,
-	};
 private://メンバ変数
 
 	DirectXCommon* dxCommon_;
