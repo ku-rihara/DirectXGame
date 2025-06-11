@@ -45,7 +45,7 @@ public:
 	/// <param name="dist"></param>
 	/// <returns></returns>
 	static Object3dSRV* CreateModel(
-		const std::string& instanceName, const std::string& extension, 
+		const std::string& instanceName, 
 		const uint32_t& instanceNum, SrvManager*srvManager );
 	/// <summary>
 	/// 更新

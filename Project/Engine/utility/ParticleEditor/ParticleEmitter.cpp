@@ -14,13 +14,12 @@ ParticleEmitter::ParticleEmitter() {
 ///=================================================================================
 /// パーティクル作成
 ///=================================================================================
-ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const std::string& modelFilePath,
-    const std::string& extension, const int32_t& maxnum) {
+ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const std::string& modelFilePath, const int32_t& maxnum) {
 
     auto emitter           = std::make_unique<ParticleEmitter>();
     emitter->particleName_ = name;
 
-    ParticleManager::GetInstance()->CreateParticleGroup(emitter->particleName_, modelFilePath, extension, maxnum);
+    ParticleManager::GetInstance()->CreateParticleGroup(emitter->particleName_, modelFilePath, maxnum);
     emitter->Init();
     return emitter.release();
 }
@@ -50,7 +49,7 @@ void ParticleEmitter::Init() {
     railManager_->Init(particleName_);
 
     /// 発生位置可視化オブジェ
-    obj3d_.reset(Object3d::CreateModel("DebugCube", ".obj"));
+    obj3d_.reset(Object3d::CreateModel("DebugCube.obj"));
     emitBoxTransform_.Init();
 }
 

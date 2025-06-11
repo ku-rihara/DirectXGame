@@ -29,7 +29,7 @@ public:
 	///============================================================
 	
 	/// モデル作成
-	static Object3d* CreateModel(const std::string& instanceName, const std::string& extension);
+	static Object3d* CreateModel(const std::string& instanceName);
 
 	/// 初期化、更新、描画
 	void Init();

@@ -5,9 +5,10 @@
 //
 // class
 #include "base/Object3DCommon.h"
+#include "base/SkyBoxRenderer.h"
 #include "base/TextureManager.h"
-#include"base/SkyBoxRenderer.h"
 #include "Lighrt/Light.h"
+#include <filesystem>
 
 namespace {
 DirectXCommon* directXCommon = DirectXCommon::GetInstance();
@@ -101,31 +102,33 @@ Node Model::ReadNode(aiNode* node) {
     return result;
 }
 
-void Model::CreateModel(const std::string& ModelName, const std::string& extension) {
+void Model::CreateModel(const std::string& ModelFileName) {
+    std::filesystem::path path(ModelFileName);
+    std::string extension = path.extension().string();
+    std::string stemName  = path.stem().string();
+
     if (extension == ".gltf") {
         isFileGltf_ = true;
-        modelData_  = LoadModelGltf(modelPath_ + ModelName, ModelName + extension);
+        modelData_  = LoadModelGltf(modelPath_ + stemName, ModelFileName);
     } else {
-        modelData_ = LoadModelFile(modelPath_ + ModelName, ModelName + extension);
+        modelData_ = LoadModelFile(modelPath_ + stemName, ModelFileName);
     }
+
     textureManager_ = TextureManager::GetInstance();
     textureHandle_  = textureManager_->LoadTexture(modelData_.material.textureFilePath);
 
-    // 頂点リソースをつくる
-    vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), (sizeof(VertexData) * modelData_.vertices.size()));
-    // 頂点バッファビューを作成する
-    vertexBufferView_ = {};
-    // リソースの先頭アドレスから使う
+    vertexResource_ = directXCommon->CreateBufferResource(
+        directXCommon->GetDevice(),
+        static_cast<UINT>(sizeof(VertexData) * modelData_.vertices.size()));
+
+    vertexBufferView_                = {};
     vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
-    // 使用するリソースのサイズは頂点のサイズ
-    vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
-    // 頂点当たりのサイズ
-    vertexBufferView_.StrideInBytes = sizeof(VertexData);
-    // 頂点リソースにデータを書き込む
-    VertexData* vertexDate = nullptr;
-    // 書き込むためのアドレスを取得
-    vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate));
-    std::memcpy(vertexDate, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
+    vertexBufferView_.SizeInBytes    = static_cast<UINT>(sizeof(VertexData) * modelData_.vertices.size());
+    vertexBufferView_.StrideInBytes  = sizeof(VertexData);
+
+    VertexData* vertexData = nullptr;
+    vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
+    std::memcpy(vertexData, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
 }
 
 void Model::DebugImGui() {
@@ -155,7 +158,7 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material ma
     } else {
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
     }
-   
+
     uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
     commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
 

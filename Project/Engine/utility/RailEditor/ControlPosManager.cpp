@@ -34,7 +34,7 @@ void ControlPosManager::AddPoint(const Vector3& position) {
 	transforms_.push_back(std::move(newTransform));
 
 	std::unique_ptr<Object3d> obj3d;
-	obj3d.reset(Object3d::CreateModel("DebugSphere", ".obj"));
+	obj3d.reset(Object3d::CreateModel("DebugSphere.obj"));
 	obj3ds_.push_back(std::move(obj3d));
 }
 

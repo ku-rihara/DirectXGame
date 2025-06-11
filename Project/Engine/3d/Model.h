@@ -66,7 +66,7 @@ public:
     ///============================================================	
 	
 	/// モデル作成
-	void CreateModel(const std::string& ModelName, const std::string& extension);
+    void CreateModel(const std::string& ModelFileName);
 
 	/// モデルロード
 	ModelData LoadModelFile(const std::string& directoryPath, const std::string& filename);

@@ -24,7 +24,7 @@ void RailManager::Init(const std::string& groupName) {
     rail_.Init(5);
 
     /// 現在位置モデル
-    obj3D_.reset(Object3d::CreateModel("DebugCube", ".obj"));
+    obj3D_.reset(Object3d::CreateModel("DebugCube.obj"));
 
     /// 制御点マネージャー
     emitControlPosManager_ = std::make_unique<ControlPosManager>();

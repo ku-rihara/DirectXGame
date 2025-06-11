@@ -8,10 +8,10 @@ void BaseObject3d::DebugImgui() {
 #endif
 }
 
-void BaseObject3d::SetModel(const std::string& modelName, const std::string& extension) {
+void BaseObject3d::SetModel(const std::string& modelName) {
 
 	//モデルを検索してセット
-	model_=(ModelManager::GetInstance()->FindModel(modelName, extension));
+	model_=(ModelManager::GetInstance()->FindModel(modelName));
 }
 
 void BaseObject3d::CreateMaterialResource() {

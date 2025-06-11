@@ -160,6 +160,12 @@
     <Filter Include="MyEngine\.h\Dx">
       <UniqueIdentifier>{5c4df9ce-5898-4e5a-904d-92a5d05b34f1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\utility\PutObjForBlender">
+      <UniqueIdentifier>{5a7933a1-28a8-444f-a670-3cdef98bd738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\PutObjForBlender">
+      <UniqueIdentifier>{62c9232b-f990-4975-bd38-e118668e5483}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -402,6 +408,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Core\EngineCore.cpp">
       <Filter>MyEngine\.cpp\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\PutObjForBlender\PutObjForBlender.cpp">
+      <Filter>MyEngine\.cpp\utility\PutObjForBlender</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -677,6 +686,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Core\EngineCore.h">
       <Filter>MyEngine\.h\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\PutObjForBlender\PutObjForBlender.h">
+      <Filter>MyEngine\.h\utility\PutObjForBlender</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -34,5 +34,5 @@ public:
 
 	void SetModel(Model* model) {this->model_ = model;}
 	void SetBlendMode(BlendMode mode) { blendMode = mode; }
-	void SetModel(const std::string& modelName, const std::string& extension);
+	void SetModel(const std::string& modelName);
 };
