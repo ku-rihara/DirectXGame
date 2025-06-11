@@ -21,7 +21,31 @@
                     1.0
                 ]
             },
-            "file_name": "axis.obj"
+            "file_name": "axis.obj",
+            "children": [
+                {
+                    "type": "MESH",
+                    "name": "Cube.002",
+                    "transform": {
+                        "translation": [
+                            -7.115602493286133,
+                            0.0,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "file_name": "axis.obj"
+                }
+            ]
         },
         {
             "type": "LIGHT",

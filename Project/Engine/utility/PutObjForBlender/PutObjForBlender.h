@@ -4,6 +4,7 @@
 #include"3d/object3d.h"
 #include"3d/WorldTransform.h"
 #include <list>
+#include <json.hpp>
 
 class PutObjForBlender {
 public:
@@ -29,6 +30,8 @@ public:
     void PutObject();
     void DrawAll(const ViewProjection& viewProjection);
 
+    void ConvertJSONToObjects(const nlohmann::json& object);
+
 private:
     void DrawObject(LevelData::ObjectData& objectData, const ViewProjection& viewProjection);
 
@@ -36,6 +39,9 @@ private:
     const std::string directoryPath_ = "Resources/BlenderObjectPos/";
     std::string fileName_;
     std::unique_ptr<LevelData> levelData_;
+  
+    // jsonデータ
+    nlohmann::json jsonData_;
 
 public:
 };
