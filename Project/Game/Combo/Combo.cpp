@@ -1,10 +1,11 @@
 #include "Combo.h"
-#include "Easing.h"
-#include"base/TextureManager.h"
 #include <imgui.h>
-#include <cstdint>
+
 
 void Combo::Init() {
+
+    uiController_ = std::make_unique<ComboUIController>();
+    uiController_->Init();
 
     ///* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
@@ -14,11 +15,13 @@ void Combo::Init() {
 }
 
 void Combo::Update() {
+    //コンボカウント
+    uiController_->Update(comboCount_);
 }
+
 void Combo::Draw() {
+    uiController_->Draw();
 }
-
-
 
 ///=========================================================
 /// パラメータ調整
@@ -32,14 +35,15 @@ void Combo::AdjustParam() {
         ImGui::SeparatorText("Combo Parameter"); // combo パラメータ
         ImGui::DragFloat("Combo Time Max", &comboTimeMax_, 0.01f);
 
-     
-
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
        
         ImGui::PopID();
     }
+
+    uiController_->AdjustParam();
+
 #endif // _DEBUG
 }
 
@@ -49,3 +53,6 @@ void Combo::BindParams() {
 }
 
 
+void Combo::ComboCountUP() {
+
+ }

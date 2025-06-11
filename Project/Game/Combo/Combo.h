@@ -1,8 +1,8 @@
 #pragma once
 
 #include "2d/Sprite.h"
-#include "Easing.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
+#include "Combo/ComboUIController.h"
 // std
 #include <cstdint>
 #include <memory>
@@ -18,6 +18,8 @@ public:
     void Update();
     void Draw();
 
+    void ComboCountUP(); /// コンボ数を増やす
+
     ///-------------------------------------------------------------------------------------
     /// Editor
     ///-------------------------------------------------------------------------------------
@@ -25,6 +27,10 @@ public:
     void BindParams();
 
 private:
+
+    // ui controller
+    std::unique_ptr<ComboUIController> uiController_; /// UIコントローラ
+
     GlobalParameter* globalParameter_; /// グローバルパラメータ
     const std::string groupName_ = "Combo"; /// グループ名
 

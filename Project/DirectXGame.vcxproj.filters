@@ -295,6 +295,9 @@
     <Filter Include="MyEngine\.h\utility\PutObjForBlender">
       <UniqueIdentifier>{62c9232b-f990-4975-bd38-e118668e5483}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Combo\UIBehavior">
+      <UniqueIdentifier>{6482a217-db8f-4dd2-9188-4fd6fb9978b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -735,6 +738,15 @@
     </ClCompile>
     <ClCompile Include="Engine\utility\PutObjForBlender\PutObjForBlender.cpp">
       <Filter>MyEngine\.cpp\utility\PutObjForBlender</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Combo\Behavior\BaseComboUIBehavior.cpp">
+      <Filter>Game\Combo\UIBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Combo\Behavior\ComboCountUp.cpp">
+      <Filter>Game\Combo\UIBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Combo\Behavior\ComboWait.cpp">
+      <Filter>Game\Combo\UIBehavior</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1208,6 +1220,15 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\PutObjForBlender\PutObjForBlender.h">
       <Filter>MyEngine\.h\utility\PutObjForBlender</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Combo\Behavior\BaseComboUIBehavior.h">
+      <Filter>Game\Combo\UIBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Combo\Behavior\ComboCountUp.h">
+      <Filter>Game\Combo\UIBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Combo\Behavior\ComboWait.h">
+      <Filter>Game\Combo\UIBehavior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

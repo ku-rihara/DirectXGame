@@ -17,8 +17,8 @@ void ComboUI::Init() {
 }
 
 void ComboUI::Update() {
-     sprite_->SetPosition(position_);
-    sprite_->SetUVTranslate(Vector2(uvPosX_,0.0f));
+    sprite_->SetPosition(position_);
+    sprite_->SetUVTranslate(Vector2(uvPosX_, 0.0f));
 }
 void ComboUI::Draw() {
 }
@@ -71,3 +71,4 @@ void ComboUI::CalculateNumber(const int32_t& value) {
     // UV座標のX位置を計算
     uvPosX_ = static_cast<float>(valueForDigit_) * 0.1f;
 }
+

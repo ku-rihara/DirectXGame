@@ -33,8 +33,7 @@ void GameScene::Init() {
     howToOperate_      = std::make_unique<HowToOperate>();
     skyBox_            = std::make_unique<SkyBox>();
     combo_             = std::make_unique<Combo>();
-    comboUIController_ = std::make_unique<ComboUIController>();
-
+  
     ///=======================================================================================
     /// 初期化
     ///=======================================================================================
@@ -45,7 +44,6 @@ void GameScene::Init() {
     lockOn_->Init();
     skyBox_->Init();
     combo_->Init();
-    comboUIController_->Init();
     enemyManager_->Init();
     enemySpawner_->Init();
     gamecamera_->Init();
@@ -64,8 +62,7 @@ void GameScene::Init() {
     player_->SetLockOn(lockOn_.get());
     player_->SetGameCamera(gamecamera_.get());
     enemySpawner_->SetEnemyManager(enemyManager_.get());
-    comboUIController_->SetCombo(combo_.get());
-
+  
     enemyManager_->FSpawn();
 
     isfirstChange_ = false;
@@ -106,8 +103,7 @@ void GameScene::Update() {
     enemySpawner_->Update();
     enemyManager_->Update();
     gamecamera_->Update();
-    comboUIController_->Update();
-
+  
     //
     enemyManager_->HpBarUpdate(viewProjection_);
     lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
@@ -200,7 +196,7 @@ void GameScene::Debug() {
     player_->AdjustParam();
     enemyManager_->AdjustParam();
     combo_->AdjustParam();
-    comboUIController_->AdjustParam();
+  
     ImGui::End();
 #endif
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -76,6 +76,9 @@
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp" />
     <ClCompile Include="Game\CollisionBox\AttackCollisionBox.cpp" />
     <ClCompile Include="Game\CollisionBox\EnemyCollisionBox.cpp" />
+    <ClCompile Include="Game\Combo\Behavior\BaseComboUIBehavior.cpp" />
+    <ClCompile Include="Game\Combo\Behavior\ComboCountUp.cpp" />
+    <ClCompile Include="Game\Combo\Behavior\ComboWait.cpp" />
     <ClCompile Include="Game\Combo\Combo.cpp" />
     <ClCompile Include="Game\Combo\ComboUI.cpp" />
     <ClCompile Include="Game\Combo\ComboUIController.cpp" />
@@ -234,6 +237,9 @@
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h" />
     <ClInclude Include="Game\CollisionBox\AttackCollisionBox.h" />
     <ClInclude Include="Game\CollisionBox\EnemyCollisionBox.h" />
+    <ClInclude Include="Game\Combo\Behavior\BaseComboUIBehavior.h" />
+    <ClInclude Include="Game\Combo\Behavior\ComboCountUp.h" />
+    <ClInclude Include="Game\Combo\Behavior\ComboWait.h" />
     <ClInclude Include="Game\Combo\Combo.h" />
     <ClInclude Include="Game\Combo\ComboUI.h" />
     <ClInclude Include="Game\Combo\ComboUIController.h" />

@@ -2,6 +2,7 @@
 
 #include "2d/Sprite.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
+
 // std
 #include <cstdint>
 #include <memory>
@@ -24,6 +25,8 @@ public:
     void Draw();
 
     void CalculateNumber(const int32_t& value);
+
+   
     ///-------------------------------------------------------------------------------------
     /// Editor
     ///-------------------------------------------------------------------------------------
@@ -43,7 +46,6 @@ private:
 
     ///* Sprite *//
     std::unique_ptr<Sprite> sprite_;
-
 
 public: // accessors
 

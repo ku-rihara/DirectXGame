@@ -1,7 +1,7 @@
 #include "ComboUIController.h"
-#include "base/TextureManager.h"
-#include "Combo.h"
 #include "Frame/Frame.h"
+// behavior
+#include"Behavior/ComboCountUp.h"
 #include <cstdint>
 #include <imgui.h>
 
@@ -19,9 +19,9 @@ void ComboUIController::Init() {
     globalParameter_->SyncGroupFromUI(groupName_);
 }
 
-void ComboUIController::Update() {
+void ComboUIController::Update(const int32_t&comboNum) {
     for (int32_t i = 0; i < comboSprites_.size(); ++i) {
-        comboSprites_[i]->CalculateNumber(pCombo_->GetComboCount());
+        comboSprites_[i]->CalculateNumber(comboNum);
     }
 }
 void ComboUIController::Draw() {
@@ -84,6 +84,10 @@ void ComboUIController::BindParams() {
     globalParameter_->Bind(groupName_, "amplitudeScale_", &amplitudeScale_);
 }
 
-void ComboUIController::SetCombo(Combo* combo) {
-    pCombo_ = combo;
+void ComboUIController::ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> behavior) {
+    behavior_ = std::move(behavior);
 }
+
+void ComboUIController::ChangeCountUPAnimation() {
+    ChangeBehavior(std::make_unique<ComboCountUp>(this));
+ }

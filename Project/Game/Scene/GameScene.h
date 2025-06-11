@@ -5,7 +5,6 @@
 
 // object
 #include "Combo/Combo.h"
-#include "Combo/ComboUIController.h"
 #include "Enemy/EnemyManager.h"
 #include "Enemy/Spawner/EnemySpawner.h"
 #include "Field/Field.h"
@@ -37,8 +36,7 @@ private:
     std::unique_ptr<EnemySpawner> enemySpawner_           = nullptr;
     std::unique_ptr<HowToOperate> howToOperate_           = nullptr;
     std::unique_ptr<Combo> combo_                         = nullptr;
-    std::unique_ptr<ComboUIController> comboUIController_ = nullptr;
-
+ 
     bool isDraw = true;
 
     Vector3 lightPos_;
