@@ -899,9 +899,6 @@ template Vector3 EaseOutQuart<Vector3>(const Vector3& start, const Vector3& end,
 template Vector2 EaseOutQuart<Vector2>(const Vector2& start, const Vector2& end, float x, float totalx);
 template float EaseOutQuart<float>(const float& start, const float& end, float x, float totalx);
 
-// バウンス補助関数
-float BounceEaseOut(float x);
-
 template Vector3 EaseInBounce<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseInBounce<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
 template float EaseInBounce<float>(const float& start, const float& end, float x, float totalX);
@@ -933,96 +930,96 @@ namespace Back {
 	template Vector3 InSineZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito);
 
 	template float OutSineZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 OutSineZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 OutSineZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 OutSineZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 OutSineZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float InOutSineZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InOutSineZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InOutSineZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 InOutSineZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 InOutSineZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float InQuadZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InQuadZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InQuadZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 InQuadZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 InQuadZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float OutQuadZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 OutQuadZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 OutQuadZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 OutQuadZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 OutQuadZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float InOutQuadZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InOutQuadZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InOutQuadZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 InOutQuadZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 InOutQuadZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float InCubicZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InCubicZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InCubicZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 InCubicZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 InCubicZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float OutCubicZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 OutCubicZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 OutCubicZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 OutCubicZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 OutCubicZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float InOutCubicZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InOutCubicZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InOutCubicZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 InOutCubicZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 InOutCubicZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float InQuartZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InQuartZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InQuartZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 InQuartZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 InQuartZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float OutQuartZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 OutQuartZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 OutQuartZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 OutQuartZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 OutQuartZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float InOutQuartZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InOutQuartZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InOutQuartZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 InOutQuartZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 InOutQuartZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float InQuintZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InQuintZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InQuintZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 InQuintZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 InQuintZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float OutQuintZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 OutQuintZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 OutQuintZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 OutQuintZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 OutQuintZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float InOutQuintZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InOutQuintZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InOutQuintZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 InOutQuintZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 InOutQuintZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float InExpoZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InExpoZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InExpoZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 InExpoZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 InExpoZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float OutExpoZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 OutExpoZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 OutExpoZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 OutExpoZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 OutExpoZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float InOutExpoZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InOutExpoZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InOutExpoZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 InOutExpoZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 InOutExpoZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float InCircZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InCircZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InCircZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 InCircZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 InCircZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float OutCircZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 OutCircZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 OutCircZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 OutCircZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 OutCircZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float InOutCircZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InOutCircZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InOutCircZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 InOutCircZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); 
+	template Vector3 InOutCircZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); 
 
 	template float InBackZero(const float& start, const float& end, float t, float totaltime, float s, float backRaito);
-	template Vector2 InBackZero(const Vector2& start, const Vector2& end, float t, float totaltime, float s, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InBackZero(const Vector3& start, const Vector3& end, float t, float totaltime, float s, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 InBackZero(const Vector2& start, const Vector2& end, float t, float totaltime, float s, float backRaito); 
+	template Vector3 InBackZero(const Vector3& start, const Vector3& end, float t, float totaltime, float s, float backRaito); 
 
 	template float OutBackZero(const float& start, const float& end, float t, float totaltime, float s, float backRaito);
-	template Vector2 OutBackZero(const Vector2& start, const Vector2& end, float t, float totaltime, float s, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 OutBackZero(const Vector3& start, const Vector3& end, float t, float totaltime, float s, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 OutBackZero(const Vector2& start, const Vector2& end, float t, float totaltime, float s, float backRaito); 
+	template Vector3 OutBackZero(const Vector3& start, const Vector3& end, float t, float totaltime, float s, float backRaito); 
 
 	template float InOutBackZero(const float& start, const float& end, float t, float totaltime, float s, float backRaito);
-	template Vector2 InOutBackZero(const Vector2& start, const Vector2& end, float t, float totaltime, float s, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InOutBackZero(const Vector3& start, const Vector3& end, float t, float totaltime, float s, float backRaito); //Vector3に対する特殊化（必要に応じて）
+	template Vector2 InOutBackZero(const Vector2& start, const Vector2& end, float t, float totaltime, float s, float backRaito); 
+	template Vector3 InOutBackZero(const Vector3& start, const Vector3& end, float t, float totaltime, float s, float backRaito); 
 
 
 }
