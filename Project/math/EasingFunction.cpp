@@ -1,5 +1,5 @@
 
-#include "Easing.h"
+#include "EasingFunction.h"
 #include"MathFunction.h"
 ///std
 #include<numbers>
