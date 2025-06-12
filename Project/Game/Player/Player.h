@@ -38,49 +38,6 @@ private:
         std::unique_ptr<ParticleEmitter> emitter;
     };
 
-private:
-    /// グローバルなパラメータ
-    GlobalParameter* globalParameter_; /// グローバルパラメータ
-    const std::string groupName_ = "Player"; /// グループ名
-
-    /// behavior
-    std::unique_ptr<BasePlayerBehavior> behavior_            = nullptr;
-    std::unique_ptr<BaseComboAattackBehavior> comboBehavior_ = nullptr;
-    std::unique_ptr<BaseTitleBehavior> titleBehavior_        = nullptr;
-
-    /// Particle
-    std::unique_ptr<PlayerEffects> effects_;
-
-    ///parameter
-    std::unique_ptr<PlayerParameter> parameters_;
-
-    /// other class
-    LockOn* pLockOn_;                                /// LockOnクラス
-    GameCamera* pGameCamera_;                        /// ゲームカメラポインタ
-    std::unique_ptr<PlayerHandLeft> leftHand_;       /// 左手
-    std::unique_ptr<PlayerHandRight> rightHand_;     /// 右手
-    std::unique_ptr<Object3d> headObj_;              /// 頭
-    WorldTransform headTransform_;                   /// 頭トランスフォーム
-   
-private:
-    /// ===================================================
-    /// private variaus
-    /// ===================================================
-
-    /// move
-    float objectiveAngle_; /// 目標角度
-    Vector3 direction_;    /// 速度
-    Vector3 prePos_;       /// 移動前座標
-
-    // カメラのビュープロジェクション
-    const ViewProjection* viewProjection_ = nullptr;
-
-    /// sound
-    int punchSoundID_;
-    int strongPunch_;
-    int fallSound_;
-    int starSound_;
-
 public:
     Player();
 
@@ -97,10 +54,10 @@ public:
 
     ///* 移動
     void Move(const float& speed); /// 移動
-    bool GetIsMoving(); /// 動かしてるかフラグ
-    void MoveToLimit(); /// 移動制限
-    Vector3 GetInputDirecton(); /// 入力による速度
-    void UpdateMatrix(); /// 　行列更新
+    bool GetIsMoving();            /// 動かしてるかフラグ
+    void MoveToLimit();            /// 移動制限
+    Vector3 GetInputDirecton();    /// 入力による速度
+    void UpdateMatrix();           /// 　行列更新
 
     void PositionYReset();
 
@@ -137,6 +94,52 @@ public:
     void SoundStrongPunch();
     void FallSound();
 
+private:
+    /// グローバルなパラメータ
+    GlobalParameter* globalParameter_; /// グローバルパラメータ
+    const std::string groupName_ = "Player"; /// グループ名
+
+    /// behavior
+    std::unique_ptr<BasePlayerBehavior> behavior_            = nullptr;
+    std::unique_ptr<BaseComboAattackBehavior> comboBehavior_ = nullptr;
+    std::unique_ptr<BaseTitleBehavior> titleBehavior_        = nullptr;
+
+    /// Particle
+    std::unique_ptr<PlayerEffects> effects_;
+
+    /// parameter
+    std::unique_ptr<PlayerParameter> parameters_;
+
+    /// other class
+    LockOn* pLockOn_; /// LockOnクラス
+    GameCamera* pGameCamera_; /// ゲームカメラポインタ
+    std::unique_ptr<PlayerHandLeft> leftHand_; /// 左手
+    std::unique_ptr<PlayerHandRight> rightHand_; /// 右手
+    std::unique_ptr<Object3d> headObj_; /// 頭
+    WorldTransform headTransform_; /// 頭トランスフォーム
+
+private:
+    /// ===================================================
+    /// private variables
+    /// ===================================================
+
+    /// move
+    float objectiveAngle_; /// 目標角度
+    Vector3 direction_; /// 速度
+    Vector3 prePos_; /// 移動前座標
+    float moveSpeed_; /// 移動速度
+
+    // カメラのビュープロジェクション
+    const ViewProjection* viewProjection_ = nullptr;
+
+    /// sound
+    int punchSoundID_;
+    int strongPunch_;
+    int fallSound_;
+    int starSound_;
+
+public:
+
     /// =========================================================================================
     /// getter
     /// =========================================================================================
@@ -148,7 +151,7 @@ public:
     LockOn* GetLockOn() const { return pLockOn_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
     PlayerParameter* GetParamater() const { return parameters_.get(); }
-
+    float GetMoveSpeed() const { return moveSpeed_; }
     /// =========================================================================================
     /// setter
     /// =========================================================================================

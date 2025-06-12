@@ -65,6 +65,6 @@ void Combo::ComboTimerDecrement() {
     comboTime_ -= Frame::DeltaTimeRate();
     if (comboTime_ < 0.0f) {
         comboTime_ = 0.0f;
-        comboCount_ = 0; // コンボタイマーが切れたらコンボカウントをリセット
+        comboCount_ = 0; 
     }
 }

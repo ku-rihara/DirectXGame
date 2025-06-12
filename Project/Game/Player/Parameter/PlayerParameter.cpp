@@ -25,7 +25,7 @@ void PlayerParameter::Init() {
 ///=========================================================
 /// パラメータ調整
 ///==========================================================
-void PlayerParameter::AdjustParm() {
+void PlayerParameter::AdjustParam() {
     SetValues();
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader("Player")) {

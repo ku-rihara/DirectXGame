@@ -9,8 +9,7 @@
 #include <array>
 #include <string>
 
-
-  struct UpperParm {
+struct UpperParm {
     float BackLashValue;
     float BackLashEaseTime;
 };
@@ -46,19 +45,16 @@ struct Parameters {
     float attackFloatEaseT;
 };
 
-  enum  ComboNum {
+enum ComboNum {
     FIRST,
     SECOND,
     THIRD,
     FORTH,
 };
 
-
 class PlayerParameter {
 
-
 private:
-  
 private:
     /// グローバルなパラメータ
     GlobalParameter* globalParameter_; /// グローバルパラメータ
@@ -83,7 +79,7 @@ public:
 
     ///* 初期化
     void Init();
-   
+
     /// ====================================================================
     /// Editor
     /// ====================================================================
@@ -91,7 +87,7 @@ public:
     void AddParmGroup();
     void SetValues();
     void ApplyGlobalParameter();
-    void AdjustParm();
+    void AdjustParam();
 
     /// =========================================================================================
     /// getter
@@ -103,5 +99,4 @@ public:
     /// =========================================================================================
     /// setter
     /// =========================================================================================
-
 };

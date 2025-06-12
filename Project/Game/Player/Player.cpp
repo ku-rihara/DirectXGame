@@ -329,7 +329,7 @@ void Player::AdjustParam() {
 #ifdef _DEBUG
 
     // プレイヤーのパラメータ
-    parameters_->AdjustParm();
+    parameters_->AdjustParam();
     /// 手のパラメータ調整
     leftHand_->AdjustParm();
     rightHand_->AdjustParm();
