@@ -65,8 +65,6 @@ class Easing {
 public:
     Easing() = default;
 
-  
-
     // 時間を進めて値を更新
     void Update(float deltaTime) {
         if (!isRunning_ || isFinished_) {
