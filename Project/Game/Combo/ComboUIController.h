@@ -47,7 +47,8 @@ private:
 
     ///* Variants *//
     Vector2 baseScale_;
-    std::array<std::unique_ptr<ComboUI>, 3> comboSprites_; /// コンボスプライト
+    float alpha_;
+    std::array<std::unique_ptr<ComboUI>, 3> comboSprites_;
 
     ///* behavior *//
     std::unique_ptr<BaseComboUIBehavior> behavior_;

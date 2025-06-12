@@ -27,6 +27,7 @@ public:
 
     void CalculateNumber(const int32_t& value);
     void CreateGroupName(const ComboDigit&digit);
+    void CheckIsVisible();
    
     ///-------------------------------------------------------------------------------------
     /// Editor
@@ -45,6 +46,9 @@ private:
     int32_t valueForDigit_;
     float uvPosX_;
     float uvScaleOffset_;
+
+    //* variables *//
+    bool isVisible_; /// 表示状態
 
     ///* Sprite *//
     std::unique_ptr<Sprite> sprite_;

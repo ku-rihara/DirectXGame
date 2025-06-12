@@ -23,17 +23,18 @@ void GameScene::Init() {
     /// 生成
     ///=======================================================================================
 
-    field_             = std::make_unique<Field>();
-    lockOn_            = std::make_unique<LockOn>();
-    player_            = std::make_unique<Player>();
-    gamecamera_        = std::make_unique<GameCamera>();
-    enemyManager_      = std::make_unique<EnemyManager>();
-    enemySpawner_      = std::make_unique<EnemySpawner>();
-    skydome_           = std::make_unique<Skydome>();
-    howToOperate_      = std::make_unique<HowToOperate>();
-    skyBox_            = std::make_unique<SkyBox>();
-    combo_             = std::make_unique<Combo>();
-  
+    field_            = std::make_unique<Field>();
+    lockOn_           = std::make_unique<LockOn>();
+    player_           = std::make_unique<Player>();
+    gamecamera_       = std::make_unique<GameCamera>();
+    enemyManager_     = std::make_unique<EnemyManager>();
+    enemySpawner_     = std::make_unique<EnemySpawner>();
+    skydome_          = std::make_unique<Skydome>();
+    howToOperate_     = std::make_unique<HowToOperate>();
+    skyBox_           = std::make_unique<SkyBox>();
+    combo_            = std::make_unique<Combo>();
+    putObjForBlender_ = std::make_unique<PutObjForBlender>();
+
     ///=======================================================================================
     /// 初期化
     ///=======================================================================================
@@ -50,6 +51,9 @@ void GameScene::Init() {
     howToOperate_->Init();
     viewProjection_.Init();
 
+    putObjForBlender_->LoadJsonFile("scene.json");
+    putObjForBlender_->PutObject();
+
     ///=======================================================================================
     /// セット
     ///=======================================================================================
@@ -62,7 +66,7 @@ void GameScene::Init() {
     player_->SetLockOn(lockOn_.get());
     player_->SetGameCamera(gamecamera_.get());
     enemySpawner_->SetEnemyManager(enemyManager_.get());
-  
+
     enemyManager_->FSpawn();
 
     isfirstChange_ = false;
@@ -104,7 +108,7 @@ void GameScene::Update() {
     enemyManager_->Update();
     combo_->Update();
     gamecamera_->Update();
-  
+
     //
     enemyManager_->HpBarUpdate(viewProjection_);
     lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
@@ -153,7 +157,9 @@ void GameScene::ModelDraw() {
     /// commandList取得
     ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
     Model::PreDraw(commandList);
-    /*skydome_->Draw(viewProjection_);*/
+
+    putObjForBlender_->DrawAll(viewProjection_);
+
     field_->Draw(viewProjection_);
     player_->Draw(viewProjection_);
     enemyManager_->Draw(viewProjection_);
@@ -178,9 +184,9 @@ void GameScene::SpriteDraw() {
     enemyManager_->SpriteDraw(viewProjection_);
     lockOn_->Draw();
     howToOperate_->Draw();
+    combo_->Draw();
     cSprite_->Draw();
     screenSprite_->Draw();
-    combo_->Draw();
 }
 
 void GameScene::Debug() {
@@ -198,7 +204,7 @@ void GameScene::Debug() {
     player_->AdjustParam();
     enemyManager_->AdjustParam();
     combo_->AdjustParam();
-  
+
     ImGui::End();
 #endif
 }

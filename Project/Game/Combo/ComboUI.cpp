@@ -4,15 +4,17 @@
 #include <imgui.h>
 
 void ComboUI::Init(const ComboDigit& digit) {
+
     int32_t textureId = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Number/Numbers.png");
 
     /// Sprite create
     sprite_.reset(Sprite::Create(textureId, Vector2::UnitVector(), Vector4::kWHITE()));
-    sprite_->SetUVScale(Vector2(0.1f, 1.0f)); 
+    sprite_->SetUVScale(Vector2(0.1f, 1.0f));
     sprite_->SetAnchorPoint(Vector2(0.5f, 0.5f));
 
     CreateGroupName(digit);
 
+    isVisible_ = true;
 }
 
 void ComboUI::Update(const Vector2& scale) {
@@ -22,6 +24,10 @@ void ComboUI::Update(const Vector2& scale) {
     sprite_->SetUVTranslate(Vector2(uvPosX_, 0.0f));
 }
 void ComboUI::Draw() {
+    if (!isVisible_) {
+        return; // 0の場合は描画しない
+    }
+
     sprite_->Draw();
 }
 
@@ -56,16 +62,31 @@ void ComboUI::CalculateNumber(const int32_t& value) {
     case ComboDigit::ONE:
         // 小数点以下第1位を取得
         valueForDigit_ = static_cast<int32_t>(value) % 10;
+        if (value == 0) {
+            isVisible_ = false;
+        } else {
+            isVisible_ = true;
+        }
         break;
 
     case ComboDigit::TWO:
         // 整数部の第2位を取得
         valueForDigit_ = (static_cast<int32_t>(value) / 10) % 10;
+        if (value < 10) {
+            isVisible_ = false;
+        } else {
+            isVisible_ = true;
+        }
         break;
 
     case ComboDigit::THREE:
         // 整数部の第2位を取得
         valueForDigit_ = (static_cast<int32_t>(value) / 100) % 10;
+        if (value < 100) {
+            isVisible_ = false;
+        } else {
+            isVisible_ = true;
+        }
         break;
     default:
         valueForDigit_ = 0;
@@ -88,12 +109,11 @@ void ComboUI::CreateGroupName(const ComboDigit& digit) {
     case ComboDigit::THREE:
         groupName_ = "ComboUI_ThreeDigit";
         break;
-   
     }
     comboDigit_ = digit;
-      ///* グローバルパラメータ
+    ///* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();
     globalParameter_->SyncGroupFromUI(groupName_);
- }
+}

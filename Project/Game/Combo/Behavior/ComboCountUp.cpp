@@ -62,7 +62,7 @@ void ComboCountUP::Debug() {
 }
 
 void ComboCountUP::ScalingEasing() {
-    scalingEasing_.time += Frame::DeltaTimeRate();
+    scalingEasing_.time += Frame::DeltaTime();
 
     // base Scaleの更新
     baseScale_ = EaseAmplitudeScale(

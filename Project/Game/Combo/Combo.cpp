@@ -4,14 +4,14 @@
 
 void Combo::Init() {
 
-    uiController_ = std::make_unique<ComboUIController>();
-    uiController_->Init();
-
     ///* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();
     globalParameter_->SyncGroupFromUI(groupName_);
+
+    uiController_ = std::make_unique<ComboUIController>();
+    uiController_->Init();
 }
 
 void Combo::Update() {

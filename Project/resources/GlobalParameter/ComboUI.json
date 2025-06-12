@@ -1,11 +1,11 @@
 {
     "ComboUI": {
-        "Scaling Ease amplitude": 0.5,
+        "Scaling Ease amplitude": 0.9800000190734863,
         "Scaling Ease max": 0.699999988079071,
         "Scaling Ease period": 0.20000000298023224,
         "amplitudeScale_": [
-            1.0,
-            1.0
+            3.0,
+            3.0
         ]
     }
 }

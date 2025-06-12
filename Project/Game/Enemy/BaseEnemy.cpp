@@ -1,5 +1,6 @@
 #include "BaseEnemy.h"
-// bvehaivor
+
+// behavior
 #include"Behavior/EnemySpawn.h"
 #include"Behavior/EnemyHitBackDamage.h"
 #include"Behavior/EnemyUpperDamage.h"
@@ -169,6 +170,7 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 		case AttackCollisionBox::AttackType::NORMAL:
 
 			DamageForPar(damageParm_);
+            pCombo_->ComboCountUP(); // コンボカウントアップ
 			ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
 
 		}
@@ -192,6 +194,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             }
 
 			DamageForPar(damageParm_);
+            pCombo_->ComboCountUP(); // コンボカウントアップ
 			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 
 
@@ -205,6 +208,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             }
 
 			DamageForPar(damageParm_);
+            pCombo_->ComboCountUP(); // コンボカウントアップ
 			ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
 
 			break;
@@ -217,6 +221,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             }
 
 			DamageForPar(damageParm_*2.0f);
+            pCombo_->ComboCountUP(); // コンボカウントアップ
 			ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
 
 
@@ -230,6 +235,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             }
 
 			DamageForPar(damageParm_);
+            pCombo_->ComboCountUP(); // コンボカウントアップ
 			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 
 
@@ -245,6 +251,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             }
 
 			DamageForPar(damageParm_);
+            pCombo_->ComboCountUP(); // コンボカウントアップ
 			ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 
 			break;

@@ -8,21 +8,21 @@
 
 void ComboUIController::Init() {
 
-    // Ui生成
-    for (int32_t i = 0; i < comboSprites_.size(); ++i) {
-        comboSprites_[i] = std::make_unique<ComboUI>();
-        comboSprites_[i]->Init(static_cast<ComboUI::ComboDigit>(i));
-    }
-
-    // scale init
-     ScalingInit();
-
     ///* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();
     globalParameter_->SyncGroupFromUI(groupName_);
 
+    // Ui生成
+    for (int32_t i = 0; i < comboSprites_.size(); ++i) {
+        comboSprites_[i] = std::make_unique<ComboUI>();
+        comboSprites_[i]->Init(static_cast<ComboUI::ComboDigit>(i));
+    }
+
+
+     // scale init
+    ScalingInit();
     ChangeBehavior(std::make_unique<ComboWait>(this));
 }
 
