@@ -6,7 +6,7 @@
 // frame
 #include "Frame/Frame.h"
 // Function
-#include "Easing.h"
+#include "EasingFunction.h"
 #include "Function/GetFile.h"
 #include "MathFunction.h"
 #include "random.h"

@@ -385,7 +385,7 @@
       <Filter>MyEngine\.cpp\Frame</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="math\Easing.cpp">
+    <ClCompile Include="math\EasingFunction.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Collider\AABBCollider.cpp">
@@ -870,7 +870,7 @@
     <ClInclude Include="Game\Scene\GameScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="math\Easing.h">
+    <ClInclude Include="math\EasingFunction.h">
       <Filter>liberary\.h</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Collider\OBBCollider.h">
