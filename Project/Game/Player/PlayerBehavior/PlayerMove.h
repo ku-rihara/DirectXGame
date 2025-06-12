@@ -1,7 +1,7 @@
 #pragma once
 
 #include"BasePlayerBehavior.h"
-#include"Easing.h"
+#include"EasingFunction.h"
 
 class PlayerMove : public BasePlayerBehavior {
 private:

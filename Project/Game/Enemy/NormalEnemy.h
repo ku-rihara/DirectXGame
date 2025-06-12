@@ -2,7 +2,7 @@
 #include <list>
 #include <memory>
 // Function
-#include "Easing.h"
+#include"EasingFunction.h"
 // class
 #include "BaseEnemy.h"
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include"BaseEnemyBehavior.h"
-#include"Easing.h"
+#include"EasingFunction.h"
 
 class EnemyThrustDamage : public BaseEnemyBehavior {
 private:

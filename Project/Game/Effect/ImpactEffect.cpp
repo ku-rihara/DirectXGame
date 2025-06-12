@@ -1,5 +1,5 @@
 #include "ImpactEffect.h"
-#include"Easing.h"
+#include"EasingFunction.h"
 #include"MathFunction.h"
 #include"Frame/Frame.h"
 

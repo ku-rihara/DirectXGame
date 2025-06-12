@@ -2,7 +2,7 @@
 
 #include"BaseComboAattackBehavior.h"
 #include"CollisionBox/AttackCollisionBox.h"
-#include"Easing.h"
+#include"EasingFunction.h"
 
 class FallAttack : public BaseComboAattackBehavior {
 

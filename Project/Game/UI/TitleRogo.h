@@ -2,7 +2,7 @@
 #include "2d/Sprite.h"
 #include "Vector2.h"
 #include <memory>
-#include"Easing.h"
+#include"EasingFunction.h"
 
 class TitleRogo {
 private:

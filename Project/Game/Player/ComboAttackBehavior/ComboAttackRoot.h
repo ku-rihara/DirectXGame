@@ -1,7 +1,7 @@
 #pragma once
 
 #include"BaseComboAattackBehavior.h"
-#include"Easing.h"
+#include"EasingFunction.h"
 
 class ComboAttackRoot : public BaseComboAattackBehavior {
 

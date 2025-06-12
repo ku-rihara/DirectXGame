@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseGameCameraBehavior.h"
-#include"Easing.h"
+#include"EasingFunction.h"
 
 class GameCameraZoomInOut : public BaseGameCameraBehavior {
 private:
