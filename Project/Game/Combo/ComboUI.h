@@ -22,12 +22,12 @@ public:
 
     // init update draw
     void Init(const ComboDigit& digit);
-    void Update(const Vector2& scale);
+    void Update(const Vector2& scale, const float& alpha);
     void Draw();
 
     void CalculateNumber(const int32_t& value);
     void CreateGroupName(const ComboDigit&digit);
-    void CheckIsVisible();
+  
    
     ///-------------------------------------------------------------------------------------
     /// Editor

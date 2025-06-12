@@ -17,10 +17,10 @@ void ComboUI::Init(const ComboDigit& digit) {
     isVisible_ = true;
 }
 
-void ComboUI::Update(const Vector2& scale) {
+void ComboUI::Update(const Vector2& scale,const float &alpha) {
     sprite_->SetPosition(position_);
+    sprite_->SetAlpha(alpha);
     sprite_->SetScale(Vector2(scale.x * 0.1f, scale.y));
-
     sprite_->SetUVTranslate(Vector2(uvPosX_, 0.0f));
 }
 void ComboUI::Draw() {

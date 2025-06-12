@@ -1,6 +1,6 @@
 #include "Combo.h"
+#include "Frame/Frame.h"
 #include <imgui.h>
-
 
 void Combo::Init() {
 
@@ -15,8 +15,12 @@ void Combo::Init() {
 }
 
 void Combo::Update() {
-    //コンボカウント
+    // コンボカウント
     uiController_->Update(comboCount_);
+    // コンボタイマーの更新
+    ComboTimerDecrement();
+    // コンボタイマーによるアルファの調整
+    uiController_->AlphaAdaptForTime(comboTime_,comboTimeMax_);
 }
 
 void Combo::Draw() {
@@ -27,7 +31,7 @@ void Combo::Draw() {
 /// パラメータ調整
 ///==========================================================
 void Combo::AdjustParam() {
-   
+
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
@@ -38,22 +42,29 @@ void Combo::AdjustParam() {
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
-       
+
         ImGui::PopID();
     }
 
 #endif // _DEBUG
 
-     uiController_->AdjustParam();
+    uiController_->AdjustParam();
 }
 
 void Combo::BindParams() {
     globalParameter_->Bind(groupName_, "comboTimeMax_", &comboTimeMax_);
-
 }
-
 
 void Combo::ComboCountUP() {
     uiController_->ChangeCountUPAnimation();
     comboCount_++;
- }
+    comboTime_ = comboTimeMax_;
+}
+
+void Combo::ComboTimerDecrement() {
+    comboTime_ -= Frame::DeltaTimeRate();
+    if (comboTime_ < 0.0f) {
+        comboTime_ = 0.0f;
+        comboCount_ = 0; // コンボタイマーが切れたらコンボカウントをリセット
+    }
+}

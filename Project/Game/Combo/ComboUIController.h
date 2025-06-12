@@ -26,6 +26,8 @@ public:
     void Update(const int32_t& comboNum);
     void Draw();
 
+    void AlphaAdaptForTime(const float& comboTime, const float& comboMaxTime);
+
     // easing
     void ScalingEasing();
     void ScalingInit();

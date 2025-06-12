@@ -19,6 +19,7 @@ public:
     void Draw();
 
     void ComboCountUP(); /// コンボ数を増やす
+    void ComboTimerDecrement();
 
     ///-------------------------------------------------------------------------------------
     /// Editor

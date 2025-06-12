@@ -2,7 +2,7 @@
 #include "Frame/Frame.h"
 // behavior
 #include "Behavior/ComboCountUp.h"
-#include"Behavior/ComboWait.h"
+#include "Behavior/ComboWait.h"
 #include <cstdint>
 #include <imgui.h>
 
@@ -20,8 +20,7 @@ void ComboUIController::Init() {
         comboSprites_[i]->Init(static_cast<ComboUI::ComboDigit>(i));
     }
 
-
-     // scale init
+    // scale init
     ScalingInit();
     ChangeBehavior(std::make_unique<ComboWait>(this));
 }
@@ -29,10 +28,10 @@ void ComboUIController::Init() {
 void ComboUIController::Update(const int32_t& comboNum) {
 
     behavior_->Update();
-  
+
     // 各桁のuvを更新
     for (int32_t i = 0; i < comboSprites_.size(); ++i) {
-        comboSprites_[i]->Update(baseScale_);
+        comboSprites_[i]->Update(baseScale_, alpha_);
         comboSprites_[i]->CalculateNumber(comboNum);
     }
 }
@@ -55,6 +54,16 @@ void ComboUIController::ScalingEasing() {
     parameter_.scalingEasing.time = parameter_.scalingEasing.maxTime;
     baseScale_                    = parameter_.amplitudeScale;
     ChangeBehavior(std::make_unique<ComboWait>(this));
+}
+
+void ComboUIController::ScalingInit() {
+    baseScale_                    = parameter_.amplitudeScale;
+    parameter_.scalingEasing.time = 0.0f;
+}
+
+void ComboUIController::AlphaAdaptForTime(const float& comboTime, const float& comboMaxTime) {
+
+    alpha_ = std::clamp(comboTime / comboMaxTime, 0.0f, 1.0f);
 }
 
 ///=========================================================
@@ -83,12 +92,10 @@ void ComboUIController::AdjustParam() {
     }
 #endif // _DEBUG
 
-     ///
+    ///
     for (int32_t i = 0; i < comboSprites_.size(); ++i) {
         comboSprites_[i]->AdjustParam();
     }
-
-
 }
 
 ///=========================================================
@@ -110,8 +117,3 @@ void ComboUIController::ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> beha
 void ComboUIController::ChangeCountUPAnimation() {
     ChangeBehavior(std::make_unique<ComboCountUP>(this));
 }
-
-void ComboUIController::ScalingInit() {
-    baseScale_ = parameter_.amplitudeScale;
-    parameter_.scalingEasing.time = 0.0f;
- }
