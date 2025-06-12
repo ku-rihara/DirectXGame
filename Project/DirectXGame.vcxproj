@@ -83,6 +83,7 @@
     <ClCompile Include="Game\SkyBox\SkyBox.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\Box.cpp" />
+    <ClCompile Include="math\Easing.cpp" />
     <ClCompile Include="math\EasingFunction.cpp" />
     <ClCompile Include="math\MathFunction.cpp" />
     <ClCompile Include="math\Matrix3x3.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Game\Scene\TitleScene.h" />
     <ClInclude Include="Game\SkyBox\SkyBox.h" />
     <ClInclude Include="math\Box.h" />
+    <ClInclude Include="math\Easing.h" />
     <ClInclude Include="math\EasingFunction.h" />
     <ClInclude Include="math\MathFunction.h" />
     <ClInclude Include="math\Matrix3x3.h" />

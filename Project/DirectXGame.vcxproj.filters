@@ -412,6 +412,9 @@
     <ClCompile Include="Engine\utility\PutObjForBlender\PutObjForBlender.cpp">
       <Filter>MyEngine\.cpp\utility\PutObjForBlender</Filter>
     </ClCompile>
+    <ClCompile Include="math\Easing.cpp">
+      <Filter>liberary\.cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -689,6 +692,9 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\PutObjForBlender\PutObjForBlender.h">
       <Filter>MyEngine\.h\utility\PutObjForBlender</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Easing.h">
+      <Filter>liberary\.h</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
