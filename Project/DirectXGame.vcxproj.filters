@@ -748,6 +748,9 @@
     <ClCompile Include="Game\Combo\Behavior\ComboWait.cpp">
       <Filter>Game\Combo\UIBehavior</Filter>
     </ClCompile>
+    <ClCompile Include="math\Easing.cpp">
+      <Filter>liberary\.cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1229,6 +1232,9 @@
     </ClInclude>
     <ClInclude Include="Game\Combo\Behavior\ComboWait.h">
       <Filter>Game\Combo\UIBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Easing.h">
+      <Filter>liberary\.h</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
