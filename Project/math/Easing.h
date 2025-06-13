@@ -1,7 +1,6 @@
 #pragma once
 #include "EasingFunction.h"
 
-// EasingTypeの完全版
 enum class EasingType {
 
     // 通常イージング
@@ -60,22 +59,58 @@ enum class EasingType {
     BackInOutCircZero,
 };
 
+enum class EasingFinishValueType {
+    Start, // 開始値
+    End,   // 終了値
+};
+
 template <typename T>
 class Easing {
 public:
     Easing() = default;
 
+    void Reset() {
+        isRunning_   = false;
+        isFinished_  = false;
+        currentTime_ = 0.0f;
+    }
+
+    // normal Easing
+    void SettingValue(const EasingType& easeType, const T& startValue, const T& endValue, const float& maxTime) {
+        maxTime_ = maxTime;
+        type_    = easeType;
+        startValue_ = startValue;
+        endValue_   = endValue;
+    }
+
+    // back Easing
+    void SettingValue(const EasingType& easeType, const T& startValue, const T& endValue, const float& maxTime, const float& backRate) {
+        maxTime_   = maxTime;
+        backRatio_ = backRate;
+        type_      = easeType;
+        startValue_ = startValue;
+        endValue_   = endValue;
+    }
+
+    // amplitude Easing
+    void SettingValue(const EasingType& easeType, const T& startValue, const T& endValue, const float& maxTime, const float& amplitude, const float& period) {
+        maxTime_   = maxTime;
+        amplitude_ = amplitude;
+        period_    = period;
+        type_      = easeType;
+        startValue_ = startValue;
+        endValue_   = endValue;
+    }
+
     // 時間を進めて値を更新
     void Update(float deltaTime) {
-        if (!isRunning_ || isFinished_) {
+        if (/*!isRunning_ || */ isFinished_) {
             return;
         }
 
         currentTime_ += deltaTime;
         if (currentTime_ >= maxTime_) {
-            currentTime_ = maxTime_;
-            isFinished_  = true;
-            isRunning_   = false;
+            FinishBehavior();
         }
 
         CalculateValue();
@@ -147,7 +182,7 @@ private:
             *currentValue_ = EaseOutQuart(startValue_, endValue_, currentTime_, maxTime_);
             break;
         case EasingType::InOutQuart:
-        /*    currentValue_ = EaseInOutQuart(startValue_, endValue_, currentTime_, maxTime_);*/
+            /*    currentValue_ = EaseInOutQuart(startValue_, endValue_, currentTime_, maxTime_);*/
             break;
         case EasingType::InBack:
             *currentValue_ = EaseInBack(startValue_, endValue_, currentTime_, maxTime_);
@@ -237,16 +272,32 @@ private:
         case EasingType::BackInOutCircZero:
             *currentValue_ = Back::InOutCircZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
             break;
-       
+        }
+    }
+
+    void FinishBehavior() {
+        currentTime_ = maxTime_;
+        isFinished_  = true;
+
+        switch (finishValueType_) {
+        case EasingFinishValueType::Start:
+            *currentValue_ = startValue_;
+            break;
+        case EasingFinishValueType::End:
+            *currentValue_ = endValue_;
+            break;
+        default:
+            break;
         }
     }
 
 public:
     // メンバ変数
     EasingType type_;
+    EasingFinishValueType finishValueType_ = EasingFinishValueType::End;
     T startValue_;
     T endValue_;
-    T *currentValue_;
+    T* currentValue_;
 
     float maxTime_     = 0.0f;
     float currentTime_ = 0.0f;
@@ -260,9 +311,17 @@ public:
     float backRatio_ = 0.0f;
 
 public:
+    /// -------------------------------------------------------------------------
+    /// Getter methods
+    /// -------------------------------------------------------------------------
     const T& GetValue() const { return *currentValue_; }
     bool IsFinished() const { return isFinished_; }
     bool IsRunning() const { return isRunning_; }
 
-    void SetCurrentValue(T* value) { currentValue_ = value; }
+    /// -------------------------------------------------------------------------
+    /// Setter methods
+    /// -------------------------------------------------------------------------
+    void SetAdaptValue(T* value) { currentValue_ = value; }
+    void SetValue(const T& value) { *currentValue_ = value; }
+    void SetFinishValueType(const EasingFinishValueType& type) { finishValueType_ = type; }
 };
