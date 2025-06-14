@@ -62,7 +62,8 @@
     <ClCompile Include="Engine\Primitive\PrimitivePlane.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp" />
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
-    <ClCompile Include="Engine\utility\EaseingAnimation\EasingAnimation.cpp" />
+    <ClCompile Include="Engine\utility\EasingCreator\EasingCreator.cpp" />
+    <ClCompile Include="Engine\utility\EasingCreator\EasingParameterData.cpp" />
     <ClCompile Include="Engine\utility\ParameterEditor\GlobalParameter.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleCommon.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleEmitter.cpp" />
@@ -156,7 +157,8 @@
     <ClInclude Include="Engine\struct\TransformationMatrix.h" />
     <ClInclude Include="Engine\struct\VertexData.h" />
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h" />
-    <ClInclude Include="Engine\utility\EaseingAnimation\EasingAnimation.h" />
+    <ClInclude Include="Engine\utility\EasingCreator\EasingCreator.h" />
+    <ClInclude Include="Engine\utility\EasingCreator\EasingParameterData.h" />
     <ClInclude Include="Engine\utility\ParameterEditor\GlobalParameter.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleCommon.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleEmitter.h" />
