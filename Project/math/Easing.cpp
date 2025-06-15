@@ -42,8 +42,22 @@ void Easing<T>::ApplyFromJson(const nlohmann::json& easingJson) {
     EasingParameter<T> param;
     param.type       = static_cast<EasingType>(easingJson.at("type").get<int>());
     param.finishType = static_cast<EasingFinishValueType>(easingJson.at("finishType").get<int>());
-    param.startValue = easingJson.at("startValue").get<T>();
-    param.endValue   = easingJson.at("endValue").get<T>();
+
+    if constexpr (std::is_same_v<T, Vector2>) {
+        const auto& sv   = easingJson.at("startValue");
+        const auto& ev   = easingJson.at("endValue");
+        param.startValue = Vector2{sv[0].get<float>(), sv[1].get<float>()};
+        param.endValue   = Vector2{ev[0].get<float>(), ev[1].get<float>()};
+    } else if constexpr (std::is_same_v<T, Vector3>) {
+        const auto& sv   = easingJson.at("startValue");
+        const auto& ev   = easingJson.at("endValue");
+        param.startValue = Vector3{sv[0].get<float>(), sv[1].get<float>(), sv[2].get<float>()};
+        param.endValue   = Vector3{ev[0].get<float>(), ev[1].get<float>(), ev[2].get<float>()};
+    } else {
+        param.startValue = easingJson.at("startValue").get<T>();
+        param.endValue   = easingJson.at("endValue").get<T>();
+    }
+
     param.maxTime    = easingJson.at("maxTime").get<float>();
     param.amplitude  = easingJson.value("amplitude", 0.0f);
     param.period     = easingJson.value("period", 0.0f);
