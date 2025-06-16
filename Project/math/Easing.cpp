@@ -1,4 +1,7 @@
 #include "Easing.h"
+#include "Function/GetFile.h"
+#include<imGui.h>
+#include <fstream>
 
 template <typename T>
 void Easing<T>::Reset() {
@@ -38,7 +41,17 @@ void Easing<T>::SettingValue(const EasingType& easeType, const T& startValue, co
 }
 
 template <typename T>
-void Easing<T>::ApplyFromJson(const nlohmann::json& easingJson) {
+void Easing<T>::ApplyFromJson(const std::string& fileName) {
+    // JSONファイルを読み込む
+    std::ifstream ifs(fileName);
+    if (!ifs.is_open()) {
+      
+        return;
+    }
+
+      nlohmann::json easingJson;
+    ifs >> easingJson;
+
     EasingParameter<T> param;
     param.type       = static_cast<EasingType>(easingJson.at("type").get<int>());
     param.finishType = static_cast<EasingFinishValueType>(easingJson.at("finishType").get<int>());
@@ -58,10 +71,10 @@ void Easing<T>::ApplyFromJson(const nlohmann::json& easingJson) {
         param.endValue   = easingJson.at("endValue").get<T>();
     }
 
-    param.maxTime    = easingJson.at("maxTime").get<float>();
-    param.amplitude  = easingJson.value("amplitude", 0.0f);
-    param.period     = easingJson.value("period", 0.0f);
-    param.backRatio  = easingJson.value("backRatio", 0.0f);
+    param.maxTime   = easingJson.at("maxTime").get<float>();
+    param.amplitude = easingJson.value("amplitude", 0.0f);
+    param.period    = easingJson.value("period", 0.0f);
+    param.backRatio = easingJson.value("backRatio", 0.0f);
 
     finishValueType_ = param.finishType;
     switch (param.type) {
@@ -97,6 +110,29 @@ void Easing<T>::ApplyFromJson(const nlohmann::json& easingJson) {
     }
 }
 
+template <typename T>
+void Easing<T>::ApplyForImGui() {
+    easingFiles_ = GetFileNamesForDyrectry(FilePath_);
+
+    if (easingFiles_.empty()) {
+        return;
+    }
+
+    // Cスタイル文字列に変換（ImGui::Combo用）
+    std::vector<const char*> fileNamesCStr;
+    for (const auto& name : easingFiles_) {
+        fileNamesCStr.push_back(name.c_str());
+    }
+
+    // Combo UI表示
+    if (ImGui::Combo("Easing Preset", &selectedFileIndex_, fileNamesCStr.data(), static_cast<int>(fileNamesCStr.size()))) {
+        // 選択されたファイルのフルパスを作成
+        const std::string selectedFile = FilePath_ + "/" + easingFiles_[selectedFileIndex_];
+
+       
+        ApplyFromJson(selectedFile);
+    }
+}
 // 時間を進めて値を更新
 template <typename T>
 void Easing<T>::Update(float deltaTime) {

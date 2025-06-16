@@ -1,6 +1,9 @@
 #pragma once
 #include "EasingFunction.h"
 #include "utility/EasingCreator/EasingCreator.h"
+#include <string>
+#include <vector>
+#include <cstdint>
 
 template <typename T>
 class Easing {
@@ -16,7 +19,8 @@ public:
     // amplitude Easing
     void SettingValue(const EasingType& easeType, const T& startValue, const T& endValue, const float& maxTime, const float& amplitude, const float& period);
 
-    void ApplyFromJson(const nlohmann::json& easingJson);
+    void ApplyFromJson(const std::string& fileName);
+    void ApplyForImGui();
 
     // 時間を進めて値を更新
     void Update(float deltaTime);
@@ -45,6 +49,11 @@ public:
     float amplitude_ = 0.0f;
     float period_    = 0.0f;
     float backRatio_ = 0.0f;
+
+private:
+   int32_t selectedFileIndex_;
+    std::vector<std::string> easingFiles_;
+    const std::string FilePath_ = "Resources/Easing";
 
 public:
     /// -------------------------------------------------------------------------

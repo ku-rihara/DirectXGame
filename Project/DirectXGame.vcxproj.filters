@@ -418,6 +418,9 @@
     <ClCompile Include="Engine\utility\EasingCreator\EasingCreator.cpp">
       <Filter>MyEngine\.cpp\utility\EasingCreator</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Scene\EditorScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -701,6 +704,9 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\EasingCreator\EasingCreator.h">
       <Filter>MyEngine\.h\utility\EasingCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\EditorScene.h">
+      <Filter>Game\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
