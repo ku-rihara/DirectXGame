@@ -62,7 +62,8 @@
     <ClCompile Include="Engine\Primitive\PrimitivePlane.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp" />
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
-    <ClCompile Include="Engine\utility\EaseingAnimation\EasingAnimation.cpp" />
+    <ClCompile Include="Engine\utility\EasingCreator\EasingCreator.cpp" />
+    <ClCompile Include="Engine\utility\EasingCreator\EasingParameterData.cpp" />
     <ClCompile Include="Engine\utility\ParameterEditor\GlobalParameter.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleCommon.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleEmitter.cpp" />
@@ -141,6 +142,7 @@
     <ClCompile Include="Game\Player\TitleBehavior\TitleWait.cpp" />
     <ClCompile Include="Game\MonsterBall\MonsterBall.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
+    <ClCompile Include="Game\Scene\EditorScene.cpp" />
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
     <ClCompile Include="Game\Scene\Manager\SceneManager.cpp" />
@@ -224,7 +226,8 @@
     <ClInclude Include="Engine\struct\TransformationMatrix.h" />
     <ClInclude Include="Engine\struct\VertexData.h" />
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h" />
-    <ClInclude Include="Engine\utility\EaseingAnimation\EasingAnimation.h" />
+    <ClInclude Include="Engine\utility\EasingCreator\EasingCreator.h" />
+    <ClInclude Include="Engine\utility\EasingCreator\EasingParameterData.h" />
     <ClInclude Include="Engine\utility\ParameterEditor\GlobalParameter.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleCommon.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleEmitter.h" />
@@ -303,6 +306,7 @@
     <ClInclude Include="Game\Player\TitleBehavior\TitleWait.h" />
     <ClInclude Include="Game\MonsterBall\MonsterBall.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
+    <ClInclude Include="Game\Scene\EditorScene.h" />
     <ClInclude Include="Game\Scene\Factory\AbstractSceneFactory.h" />
     <ClInclude Include="Game\Scene\Factory\SceneFactory.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />

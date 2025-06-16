@@ -673,9 +673,6 @@
     <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp">
       <Filter>MyEngine\.cpp\Primitive</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\EaseingAnimation\EasingAnimation.cpp">
-      <Filter>MyEngine\.cpp\utility\EasingAnimation</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Primitive\PrimitiveCylinder.cpp">
       <Filter>MyEngine\.cpp\Primitive</Filter>
     </ClCompile>
@@ -750,6 +747,15 @@
     </ClCompile>
     <ClCompile Include="math\Easing.cpp">
       <Filter>liberary\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\EasingCreator\EasingParameterData.cpp">
+      <Filter>MyEngine\.cpp\utility\EasingCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\EasingCreator\EasingCreator.cpp">
+      <Filter>MyEngine\.cpp\utility\EasingCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\EditorScene.cpp">
+      <Filter>Game\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1158,9 +1164,6 @@
     <ClInclude Include="Engine\Primitive\PrimitiveRing.h">
       <Filter>MyEngine\.h\Primitive</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\EaseingAnimation\EasingAnimation.h">
-      <Filter>MyEngine\.h\utility\EasingAnimation</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Primitive\PrimitiveCylinder.h">
       <Filter>MyEngine\.h\Primitive</Filter>
     </ClInclude>
@@ -1235,6 +1238,15 @@
     </ClInclude>
     <ClInclude Include="math\Easing.h">
       <Filter>liberary\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\EasingCreator\EasingParameterData.h">
+      <Filter>MyEngine\.h\utility\EasingCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\EasingCreator\EasingCreator.h">
+      <Filter>MyEngine\.h\utility\EasingCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\EditorScene.h">
+      <Filter>Game\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

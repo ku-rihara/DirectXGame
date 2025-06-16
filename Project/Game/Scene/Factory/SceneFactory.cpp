@@ -1,6 +1,7 @@
 #include"SceneFactory.h"
 #include"Scene/TitleScene.h"
 #include"Scene/GameScene.h"
+#include"Scene/EditorScene.h"
 
 BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
 	// 次のシーンを生成
@@ -11,7 +12,9 @@ BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
 	}
 	else if (sceneName == "GAMEPLAY") {
 		newScene = new GameScene();
-	}
+	} else if (sceneName == "EDITOR") {
+        newScene = new EditorScene();
+    }
 
 	return newScene;
 }
