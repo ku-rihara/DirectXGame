@@ -1,7 +1,7 @@
 #include "Easing.h"
 #include "Function/GetFile.h"
-#include<imGui.h>
 #include <fstream>
+#include <imGui.h>
 
 template <typename T>
 void Easing<T>::Reset() {
@@ -45,11 +45,11 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
     // JSONファイルを読み込む
     std::ifstream ifs(fileName);
     if (!ifs.is_open()) {
-      
+
         return;
     }
 
-      nlohmann::json easingJson;
+    nlohmann::json easingJson;
     ifs >> easingJson;
 
     EasingParameter<T> param;
@@ -112,13 +112,19 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
 
 template <typename T>
 void Easing<T>::ApplyForImGui() {
-    easingFiles_ = GetFileNamesForDyrectry(FilePath_);
+
+    if constexpr (std::is_same_v<T, float>) {
+        easingFiles_ = GetFileNamesForDyrectry(FilePath_ + "float");
+    } else if constexpr (std::is_same_v<T, Vector2>) {
+        easingFiles_ = GetFileNamesForDyrectry(FilePath_ + "Vector2");
+    } else if constexpr (std::is_same_v<T, Vector3>) {
+        easingFiles_ = GetFileNamesForDyrectry(FilePath_ + "Vector3");
+    }
 
     if (easingFiles_.empty()) {
         return;
     }
 
-    // Cスタイル文字列に変換（ImGui::Combo用）
     std::vector<const char*> fileNamesCStr;
     for (const auto& name : easingFiles_) {
         fileNamesCStr.push_back(name.c_str());
@@ -129,7 +135,6 @@ void Easing<T>::ApplyForImGui() {
         // 選択されたファイルのフルパスを作成
         const std::string selectedFile = FilePath_ + "/" + easingFiles_[selectedFileIndex_];
 
-       
         ApplyFromJson(selectedFile);
     }
 }

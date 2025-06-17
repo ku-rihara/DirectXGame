@@ -6,19 +6,44 @@
 #include <imgui.h>
 
 template <typename T>
-void EasingCreator<T>::LoadFromFile(const std::string& path) {
-    std::ifstream ifs(path);
-    nlohmann::json j;
-    ifs >> j;
-    FromJson(j);
+void EasingCreator<T>::LoadParameter(const std::string& path) {
+    presets_.clear();
+
+    for (const auto& entry: std::filesystem::directory_iterator(path)) {
+        // JSONファイルのみを対象とする
+        if (!entry.is_regular_file() || entry.path().extension() != ".json") {
+            continue;
+        }
+
+        // JSONファイルを読み込む
+        std::ifstream ifs(entry.path());
+        if (!ifs.is_open()) {
+            continue; 
+        }
+        nlohmann::json j;
+        ifs >> j;
+        FromJson(j);
+    }
 }
 
 template <typename T>
-void EasingCreator<T>::SaveToFile(const std::string& path) const {
-    std::ofstream ofs(path);
-    nlohmann::json j;
-    ToJson(j);
-    ofs << j.dump(4);
+void EasingCreator<T>::SaveParameter(const std::string& path) const {
+    std::filesystem::create_directories(path); // ディレクトリがなければ作成
+
+    for (const auto& pair : presets_) {
+        const std::string& name         = pair.first;
+      
+        nlohmann::json paramJson;
+        ToJson(paramJson);
+
+        std::filesystem::path filepath = std::filesystem::path(path) / (name + ".json");
+        std::ofstream ofs(filepath);
+        if (ofs.is_open()) {
+            nlohmann::json singlePresetJson;
+            singlePresetJson[name] = paramJson;
+            ofs << singlePresetJson.dump(4);
+        }
+    }
 }
 
 template <typename T>
@@ -78,7 +103,6 @@ void EasingCreator<T>::ToJson(nlohmann::json& j) const {
 
 template <typename T>
 void EasingCreator<T>::FromJson(const nlohmann::json& j) {
-    presets_.clear();
     for (auto it = j.begin(); it != j.end(); ++it) {
         EasingParameter<T> param;
         param.type       = static_cast<EasingType>(it.value().at("type").get<int>());
@@ -106,6 +130,7 @@ void EasingCreator<T>::FromJson(const nlohmann::json& j) {
         presets_[it.key()] = param;
     }
 }
+
 
 template <typename T>
 void EasingCreator<T>::Edit() {
@@ -195,10 +220,10 @@ void EasingCreator<T>::Edit() {
 
     ImGui::Separator();
 
-    if (ImGui::Button("Clear All Presets")) {
+   /* if (ImGui::Button("Clear All Presets")) {
         Clear();
         selectedName_.clear();
-    }
+    }*/
 }
 
 template <typename T>

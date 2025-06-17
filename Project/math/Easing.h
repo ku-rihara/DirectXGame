@@ -53,7 +53,7 @@ public:
 private:
    int32_t selectedFileIndex_;
     std::vector<std::string> easingFiles_;
-    const std::string FilePath_ = "Resources/Easing";
+    const std::string FilePath_ = "Resources/EasingParameter/";
 
 public:
     /// -------------------------------------------------------------------------

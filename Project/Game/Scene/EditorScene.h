@@ -3,16 +3,20 @@
 ///baseScene
 #include"BaseScene.h"
 
-#include"Plane/Plane.h"
+#include"Easing.h"
 #include"utility/ParticleEditor/ParticleEmitter.h"
-#include<string>
-#include<array>
+#include"utility/EasingCreator/EasingCreator.h"
+#include "MonsterBall/MonsterBall.h"
+#include <memory>
 /// <summary>
 /// EditorScene
 /// </summary>
 class EditorScene :public BaseScene {
 private:
-	
+
+ 
+    std::unique_ptr<MonsterBall> easingTestObject_;
+    EasingCreator<Vector3> easingCreator_;
 
 public:
 	///========================================================

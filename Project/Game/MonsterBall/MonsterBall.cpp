@@ -30,6 +30,8 @@ void MonsterBall::Update() {
         easing_.Reset();
 	}
 
+	easing_.ApplyForImGui();
+
 	ScaleEasing();
 
 	transform_.UpdateMatrix();
