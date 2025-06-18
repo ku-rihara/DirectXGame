@@ -6,7 +6,7 @@
 #include"Easing.h"
 #include"utility/ParticleEditor/ParticleEmitter.h"
 #include"utility/EasingCreator/Easingeditor.h"
-#include "MonsterBall/MonsterBall.h"
+#include "EasingTestObj/EasingTestObj.h"
 #include <memory>
 /// <summary>
 /// EditorScene
@@ -15,7 +15,7 @@ class EditorScene :public BaseScene {
 private:
 
  
-    std::unique_ptr<MonsterBall> easingTestObject_;
+    std::unique_ptr<EasingTestObj> easingTestObject_;
     EasingEditor easingEditor_;
 
 public:

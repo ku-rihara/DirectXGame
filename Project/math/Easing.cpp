@@ -10,34 +10,20 @@ void Easing<T>::Reset() {
     currentTime_ = 0.0f;
 }
 
-// normal Easing
 template <typename T>
-void Easing<T>::SettingValue(const EasingType& easeType, const T& startValue, const T& endValue, const float& maxTime) {
-    maxTime_    = maxTime;
-    type_       = easeType;
-    startValue_ = startValue;
-    endValue_   = endValue;
-}
+void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
 
-// back Easing
-template <typename T>
-void Easing<T>::SettingValue(const EasingType& easeType, const T& startValue, const T& endValue, const float& maxTime, const float& backRate) {
-    maxTime_    = maxTime;
-    backRatio_  = backRate;
-    type_       = easeType;
-    startValue_ = startValue;
-    endValue_   = endValue;
-}
+    type_                 = easingParam.type;
+    adaptFloatAxisType_   = easingParam.adaptFloatAxisType;
+    adaptVector2AxisType_ = easingParam.adaptVector2AxisType;
+    finishValueType_      = easingParam.finishType;
 
-// amplitude Easing
-template <typename T>
-void Easing<T>::SettingValue(const EasingType& easeType, const T& startValue, const T& endValue, const float& maxTime, const float& amplitude, const float& period) {
-    maxTime_    = maxTime;
-    amplitude_  = amplitude;
-    period_     = period;
-    type_       = easeType;
-    startValue_ = startValue;
-    endValue_   = endValue;
+    maxTime_    = easingParam.maxTime;
+    startValue_ = easingParam.startValue;
+    endValue_   = easingParam.endValue;
+    amplitude_  = easingParam.amplitude;
+    period_     = easingParam.period;
+    backRatio_  = easingParam.backRatio;
 }
 
 template <typename T>
@@ -56,17 +42,22 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
     param.type       = static_cast<EasingType>(easingJson.at("type").get<int>());
     param.finishType = static_cast<EasingFinishValueType>(easingJson.at("finishType").get<int>());
 
-    if constexpr (std::is_same_v<T, Vector2>) {
-        const auto& sv   = easingJson.at("startValue");
-        const auto& ev   = easingJson.at("endValue");
-        param.startValue = Vector2{sv[0].get<float>(), sv[1].get<float>()};
-        param.endValue   = Vector2{ev[0].get<float>(), ev[1].get<float>()};
-    } else if constexpr (std::is_same_v<T, Vector3>) {
+    if constexpr (std::is_same_v<T, Vector3>) {
+
         const auto& sv   = easingJson.at("startValue");
         const auto& ev   = easingJson.at("endValue");
         param.startValue = Vector3{sv[0].get<float>(), sv[1].get<float>(), sv[2].get<float>()};
         param.endValue   = Vector3{ev[0].get<float>(), ev[1].get<float>(), ev[2].get<float>()};
-    } else {
+
+    } else if constexpr (std::is_same_v<T, Vector2>) {
+
+        const auto& sv   = easingJson.at("startValue");
+        const auto& ev   = easingJson.at("endValue");
+        param.startValue = Vector2{sv[0].get<float>(), sv[1].get<float>()};
+        param.endValue   = Vector2{ev[0].get<float>(), ev[1].get<float>()};
+
+    } else if constexpr (std::is_same_v<T, float>) {
+
         param.startValue = easingJson.at("startValue").get<T>();
         param.endValue   = easingJson.at("endValue").get<T>();
     }
@@ -77,37 +68,8 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
     param.backRatio = easingJson.value("backRatio", 0.0f);
 
     finishValueType_ = param.finishType;
-    switch (param.type) {
-    case EasingType::SquishyScaling:
-        SettingValue(param.type, param.startValue, param.endValue, param.maxTime, param.amplitude, param.period);
-        break;
-    case EasingType::BackInSineZero:
-    case EasingType::BackOutSineZero:
-    case EasingType::BackInOutSineZero:
-    case EasingType::BackInQuadZero:
-    case EasingType::BackOutQuadZero:
-    case EasingType::BackInOutQuadZero:
-    case EasingType::BackInCubicZero:
-    case EasingType::BackOutCubicZero:
-    case EasingType::BackInOutCubicZero:
-    case EasingType::BackInQuartZero:
-    case EasingType::BackOutQuartZero:
-    case EasingType::BackInOutQuartZero:
-    case EasingType::BackInQuintZero:
-    case EasingType::BackOutQuintZero:
-    case EasingType::BackInOutQuintZero:
-    case EasingType::BackInExpoZero:
-    case EasingType::BackOutExpoZero:
-    case EasingType::BackInOutExpoZero:
-    case EasingType::BackInCircZero:
-    case EasingType::BackOutCircZero:
-    case EasingType::BackInOutCircZero:
-        SettingValue(param.type, param.startValue, param.endValue, param.maxTime, param.backRatio);
-        break;
-    default:
-        SettingValue(param.type, param.startValue, param.endValue, param.maxTime);
-        break;
-    }
+
+    SettingValue(param.type);
 }
 
 template <typename T>
@@ -157,7 +119,7 @@ template <typename T>
 void Easing<T>::CalculateValue() {
 
     switch (type_) {
-    // --- 標準イージング ---
+
     case EasingType::InSine:
         *currentValue_ = EaseInSine(startValue_, endValue_, currentTime_, maxTime_);
         break;
@@ -326,6 +288,68 @@ void Easing<T>::Easing::FinishBehavior() {
     default:
         break;
     }
+}
+template <typename T>
+void Easing<T>::Easing::SetAdaptValue(T* value) {
+    currentValue_ = value;
+}
+
+template <>
+void Easing<float>::SetAdaptValue(Vector2* value) {
+    switch (adaptFloatAxisType_) {
+    case AdaptFloatAxisType::X:
+        currentValue_ = &value->x;
+        break;
+    case AdaptFloatAxisType::Y:
+        currentValue_ = &value->y;
+        break;
+    default:
+        currentValue_ = &value->x;
+        break;
+    }
+}
+
+template <>
+void Easing<float>::SetAdaptValue(Vector3* value) {
+    switch (adaptFloatAxisType_) {
+    case AdaptFloatAxisType::X:
+        currentValue_ = &value->x;
+        break;
+    case AdaptFloatAxisType::Y:
+        currentValue_ = &value->y;
+        break;
+    case AdaptFloatAxisType::Z:
+        currentValue_ = &value->z;
+        break;
+    default:
+        currentValue_ = &value->x;
+        break;
+    }
+}
+
+template <>
+void Easing<Vector2>::SetAdaptValue(Vector3* value) {
+    switch (adaptVector2AxisType_) {
+    case AdaptVector2AxisType::XY:
+        vector2Proxy_ = std::make_unique<XYProxy>(&value);
+        break;
+    case AdaptVector2AxisType::XZ:
+        vector2Proxy_ = std::make_unique<XZProxy>(&value);
+        break;
+    case AdaptVector2AxisType::YZ:
+        vector2Proxy_ = std::make_unique<YZProxy>(&value);
+        break;
+    default:
+        vector2Proxy_ = std::make_unique<XYProxy>(&value);
+        break;
+    }
+
+    currentValue_ = &vector2Proxy_->Get();
+}
+
+template <typename T>
+void Easing<T>::Easing::SetValue(const T& value) {
+    *currentValue_ = value;
 }
 
 template class Easing<float>;

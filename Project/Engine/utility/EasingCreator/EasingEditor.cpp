@@ -1,7 +1,7 @@
 #include "EasingEditor.h"
 #include <imgui.h>
 #include <format>
-#include<Windows.h>
+#include "base/WinApp.h"
 
 void EasingEditor::Init() {
     floatPath_ = kDirectoryPath_ + "float";

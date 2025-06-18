@@ -19,7 +19,7 @@ EditorScene::~EditorScene() {
 void EditorScene::Init() {
 
     BaseScene::Init();
-    easingTestObject_ = std::make_unique<MonsterBall>();
+    easingTestObject_ = std::make_unique<EasingTestObj>();
     easingTestObject_->Init();
 
     easingEditor_.Init();

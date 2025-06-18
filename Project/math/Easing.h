@@ -1,9 +1,11 @@
 #pragma once
 #include "EasingFunction.h"
 #include "utility/EasingCreator/EasingCreator.h"
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <cstdint>
+#include <memory>
+#include "Vector2Proxy.h"
 
 template <typename T>
 class Easing {
@@ -12,18 +14,23 @@ public:
 
     void Reset();
 
-    // normal Easing
-    void SettingValue(const EasingType& easeType, const T& startValue, const T& endValue, const float& maxTime);
-    // back Easing
-    void SettingValue(const EasingType& easeType, const T& startValue, const T& endValue, const float& maxTime, const float& backRate);
-    // amplitude Easing
-    void SettingValue(const EasingType& easeType, const T& startValue, const T& endValue, const float& maxTime, const float& amplitude, const float& period);
+    //  Easing setting
+    void SettingValue(const EasingParameter<T>& easingParam);
 
+    // 適応
     void ApplyFromJson(const std::string& fileName);
     void ApplyForImGui();
 
-    // 時間を進めて値を更新
+    // イージング更新
     void Update(float deltaTime);
+
+    // 変数に適応
+   void SetAdaptValue(T* value);
+   void SetAdaptValue(Vector2* value);
+   void SetAdaptValue(Vector3* value);
+   
+
+    void SetValue(const T& value);
 
 private:
     // イージング計算
@@ -33,8 +40,12 @@ private:
 
 public:
     // メンバ変数
-    EasingType type_;
+    EasingType type_                       = EasingType::InSine;
     EasingFinishValueType finishValueType_ = EasingFinishValueType::End;
+
+    AdaptFloatAxisType adaptFloatAxisType_     = AdaptFloatAxisType::X;
+    AdaptVector2AxisType adaptVector2AxisType_ = AdaptVector2AxisType::XY;
+
     T startValue_;
     T endValue_;
     T* currentValue_;
@@ -51,9 +62,10 @@ public:
     float backRatio_ = 0.0f;
 
 private:
-   int32_t selectedFileIndex_;
+    int32_t selectedFileIndex_;
     std::vector<std::string> easingFiles_;
     const std::string FilePath_ = "Resources/EasingParameter/";
+    std::unique_ptr<IVector2Proxy> vector2Proxy_;
 
 public:
     /// -------------------------------------------------------------------------
@@ -66,7 +78,6 @@ public:
     /// -------------------------------------------------------------------------
     /// Setter methods
     /// -------------------------------------------------------------------------
-    void SetAdaptValue(T* value) { currentValue_ = value; }
-    void SetValue(const T& value) { *currentValue_ = value; }
+
     void SetFinishValueType(const EasingFinishValueType& type) { finishValueType_ = type; }
 };

@@ -17,6 +17,7 @@ public:
     void SaveAll();
 
 private:
+
     enum class TabType {
         Float,
         Vector2,
@@ -31,7 +32,7 @@ private:
     std ::string vec2Path_;
     std ::string vec3Path_;
 
-    EasingCreator<float> fEasingCreator_;
+    EasingCreator<float>   fEasingCreator_;
     EasingCreator<Vector2> vec2EasingCreator_;
     EasingCreator<Vector3> vec3EasingCreator_;
 };

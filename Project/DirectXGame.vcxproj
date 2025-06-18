@@ -74,6 +74,7 @@
     <ClCompile Include="Engine\utility\RailEditor\ControlPosManager.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\Rail.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\RailManager.cpp" />
+    <ClCompile Include="Game\EasingTestObj\EasingTestObj.cpp" />
     <ClCompile Include="Game\Ground\Ground.cpp" />
     <ClCompile Include="Game\MonsterBall\MonsterBall.cpp" />
     <ClCompile Include="Game\Plane\Plane.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="Engine\utility\RailEditor\ControlPosManager.h" />
     <ClInclude Include="Engine\utility\RailEditor\Rail.h" />
     <ClInclude Include="Engine\utility\RailEditor\RailManager.h" />
+    <ClInclude Include="Game\EasingTestObj\EasingTestObj.h" />
     <ClInclude Include="Game\Ground\Ground.h" />
     <ClInclude Include="Game\MonsterBall\MonsterBall.h" />
     <ClInclude Include="Game\Plane\Plane.h" />
@@ -193,6 +195,7 @@
     <ClInclude Include="math\random.h" />
     <ClInclude Include="math\Shake.h" />
     <ClInclude Include="math\Vector2.h" />
+    <ClInclude Include="math\Vector2Proxy.h" />
     <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="math\Vector4.h" />
   </ItemGroup>

@@ -66,6 +66,20 @@ enum class EasingFinishValueType {
     COUNT,
 };
 
+enum class AdaptFloatAxisType {
+    X, // X軸
+    Y, // Y軸
+    Z, // Z軸
+    COUNT,
+};
+
+enum class AdaptVector2AxisType {
+    XY,
+    XZ,
+    YZ,
+    COUNT,
+};
+
 constexpr std::array<const char*, static_cast<int>(EasingType::COUNT)> EasingTypeLabels = {
     "InSine", "OutSine", "InOutSine",
     "InQuint", "OutQuint", "InOutQuint",
@@ -83,18 +97,37 @@ constexpr std::array<const char*, static_cast<int>(EasingType::COUNT)> EasingTyp
     "BackInQuartZero", "BackOutQuartZero", "BackInOutQuartZero",
     "BackInQuintZero", "BackOutQuintZero", "BackInOutQuintZero",
     "BackInExpoZero", "BackOutExpoZero", "BackInOutExpoZero",
-    "BackInCircZero", "BackOutCircZero", "BackInOutCircZero"
+    "BackInCircZero", "BackOutCircZero", "BackInOutCircZero"};
+
+constexpr std::array<const char*, static_cast<int>(AdaptFloatAxisType::COUNT)> AdaptFloatAxisTypeLabels = {
+    "X",
+    "Y",
+    "Z",
 };
 
+constexpr std::array<const char*, static_cast<int>(AdaptVector2AxisType::COUNT)> AdaptVector2AxisTypeLabels = {
+    "XY",
+    "XZ",
+    "YZ",
+};
+
+
 constexpr const char* FinishTypeLabels[] = {
-    "Start", "End"};
+    "Start", "End"
+};
 
 template <typename T>
 struct EasingParameter {
-    EasingType type;
+
+    EasingType type=EasingType::InSine;
     EasingFinishValueType finishType = EasingFinishValueType::End;
+
+    AdaptFloatAxisType adaptFloatAxisType_=AdaptFloatAxisType::X;
+    AdaptVector2AxisType adaptVec2AxisType_=AdaptVector2AxisType::XY;
+
     T startValue;
     T endValue;
+
     float maxTime   = 0.0f;
     float amplitude = 0.0f;
     float period    = 0.0f;

@@ -81,15 +81,22 @@ void EasingCreator<T>::ToJson(nlohmann::json& j) const {
     for (const auto& [name, param] : presets_) {
         auto& jsonParam = j[name];
 
-        if constexpr (std::is_same_v<T, Vector2>) {
-            jsonParam["startValue"] = {param.startValue.x, param.startValue.y};
-            jsonParam["endValue"]   = {param.endValue.x, param.endValue.y};
-        } else if constexpr (std::is_same_v<T, Vector3>) {
+        if constexpr (std::is_same_v<T, Vector3>) {
+
             jsonParam["startValue"] = {param.startValue.x, param.startValue.y, param.startValue.z};
             jsonParam["endValue"]   = {param.endValue.x, param.endValue.y, param.endValue.z};
-        } else {
-            jsonParam["startValue"] = param.startValue;
-            jsonParam["endValue"]   = param.endValue;
+
+        } else if constexpr (std::is_same_v<T, Vector2>) {
+
+            jsonParam["startValue"]        = {param.startValue.x, param.startValue.y};
+            jsonParam["endValue"]          = {param.endValue.x, param.endValue.y};
+            jsonParam["adaptVec2AxisType"] = static_cast<int>(param.adaptVec2AxisType_);
+
+        } else if constexpr (std::is_same_v<T, float>) {
+
+            jsonParam["startValue"]         = param.startValue;
+            jsonParam["endValue"]           = param.endValue;
+            jsonParam["adaptFloatAxisType"] = static_cast<int>(param.adaptFloatAxisType_);
         }
 
         jsonParam["type"]       = static_cast<int>(param.type);
@@ -100,7 +107,6 @@ void EasingCreator<T>::ToJson(nlohmann::json& j) const {
         jsonParam["backRatio"]  = param.backRatio;
     }
 }
-
 
 template <typename T>
 void EasingCreator<T>::FromJson(const nlohmann::json& j) {
@@ -121,32 +127,33 @@ void EasingCreator<T>::FromJson(const nlohmann::json& j) {
             param.period     = val.value("period", 0.0f);
             param.backRatio  = val.value("backRatio", 0.0f);
 
-            if constexpr (std::is_same_v<T, Vector2>) {
-                auto sv = val["startValue"];
-                auto ev = val["endValue"];
-                /*if (sv.size() < 2 || ev.size() < 2) {
-                    continue;
-                }*/
-                param.startValue = Vector2{sv[0], sv[1]};
-                param.endValue   = Vector2{ev[0], ev[1]};
-            } else if constexpr (std::is_same_v<T, Vector3>) {
-                auto sv = val["startValue"];
-                auto ev = val["endValue"];
-               /* if (sv.size() < 3 || ev.size() < 3) {
-                    continue;
-                }*/
+            if constexpr (std::is_same_v<T, Vector3>) {
+
+                auto sv          = val["startValue"];
+                auto ev          = val["endValue"];
                 param.startValue = Vector3{sv[0], sv[1], sv[2]};
                 param.endValue   = Vector3{ev[0], ev[1], ev[2]};
-            } else {
-                param.startValue = val["startValue"].get<T>();
-                param.endValue   = val["endValue"].get<T>();
+
+            } else if constexpr (std::is_same_v<T, Vector2>) {
+
+                auto sv                  = val["startValue"];
+                auto ev                  = val["endValue"];
+                param.startValue         = Vector2{sv[0], sv[1]};
+                param.endValue           = Vector2{ev[0], ev[1]};
+                param.adaptVec2AxisType_ = static_cast<AdaptVector2AxisType>(val.value("adaptVec2AxisType", 0));
+
+            } else if constexpr (std::is_same_v<T, float>) {
+
+                param.startValue          = val["startValue"].get<T>();
+                param.endValue            = val["endValue"].get<T>();
+                param.adaptFloatAxisType_ = static_cast<AdaptFloatAxisType>(val.value("adaptFloatAxisType", 0));
+
             }
 
             presets_[inner.key()] = param;
         }
     }
 }
-
 
 template <typename T>
 void EasingCreator<T>::Edit() {
@@ -191,42 +198,64 @@ void EasingCreator<T>::Edit() {
     if (!selectedName_.empty() && presets_.count(selectedName_)) {
         ImGui::Text("Edit Preset: %s", selectedName_.c_str());
 
+        // Remane
         if (ImGui::InputText("Rename", renameBuf_, sizeof(renameBuf_))) {}
         if (std::string(renameBuf_) != selectedName_ && ImGui::Button("Apply Rename")) {
             RenamePreset(selectedName_, renameBuf_);
             selectedName_ = renameBuf_;
         }
 
+        // イージングパラメータ
         ImGui::DragFloat("Max Time", &editingParam_.maxTime, 0.01f);
         ImGui::DragFloat("Amplitude", &editingParam_.amplitude, 0.01f);
         ImGui::DragFloat("Period", &editingParam_.period, 0.01f);
         ImGui::DragFloat("Back Ratio", &editingParam_.backRatio, 0.01f);
 
-        if constexpr (std::is_same_v<T, float>) {
+        int adaptFloatAxisType = static_cast<int>(editingParam_.adaptFloatAxisType_);
+        int adaptVec2AxisType  = static_cast<int>(editingParam_.adaptVec2AxisType_);
+
+        // スタート、終了位置の入力
+        if constexpr (std::is_same_v<T, float>) { // float
             ImGui::DragFloat("Start Value", &editingParam_.startValue, 0.01f);
             ImGui::DragFloat("End Value", &editingParam_.endValue, 0.01f);
-        } else if constexpr (std::is_same_v<T, Vector2>) {
+
+            // 軸のタイプの選択(float)
+            if (ImGui::Combo("AdaptAxis Type", &adaptFloatAxisType, AdaptFloatAxisTypeLabels.data(), static_cast<int>(AdaptFloatAxisTypeLabels.size()))) {
+                editingParam_.adaptFloatAxisType_ = static_cast<AdaptFloatAxisType>(adaptFloatAxisType);
+            }
+
+        } else if constexpr (std::is_same_v<T, Vector2>) { // vec2
             ImGui::DragFloat2("Start Value", &editingParam_.startValue.x, 0.01f);
             ImGui::DragFloat2("End Value", &editingParam_.endValue.x, 0.01f);
-        } else if constexpr (std::is_same_v<T, Vector3>) {
+
+            // 軸のタイプの選択(Vector2)
+            if (ImGui::Combo("AdaptAxis Type", &adaptVec2AxisType, AdaptVector2AxisTypeLabels.data(), static_cast<int>(AdaptVector2AxisTypeLabels.size()))) {
+                editingParam_.adaptVec2AxisType_ = static_cast<AdaptVector2AxisType>(adaptVec2AxisType);
+            }
+
+        } else if constexpr (std::is_same_v<T, Vector3>) { // vec3
             ImGui::DragFloat3("Start Value", &editingParam_.startValue.x, 0.01f);
             ImGui::DragFloat3("End Value", &editingParam_.endValue.x, 0.01f);
         }
 
+        // イージングタイプの設定
         int easingType = static_cast<int>(editingParam_.type);
         if (ImGui::Combo("Easing Type", &easingType, EasingTypeLabels.data(), static_cast<int>(EasingTypeLabels.size()))) {
             editingParam_.type = static_cast<EasingType>(easingType);
         }
 
+        // 終了時の値を設定
         int finishType = static_cast<int>(editingParam_.finishType);
         if (ImGui::Combo("Finish Type", &finishType, FinishTypeLabels, static_cast<int>(EasingFinishValueType::COUNT))) {
             editingParam_.finishType = static_cast<EasingFinishValueType>(finishType);
         }
 
+        // 適応
         if (ImGui::Button("Apply Edit")) {
             EditPreset(selectedName_, editingParam_);
         }
 
+        // 削除ボタン
         ImGui::SameLine();
         if (ImGui::Button("Delete Preset")) {
             RemovePreset(selectedName_);
@@ -239,7 +268,7 @@ void EasingCreator<T>::Edit() {
     /* if (ImGui::Button("Clear All Presets")) {
          Clear();
          selectedName_.clear();
-     }*/
+    }*/
 }
 
 template <typename T>
