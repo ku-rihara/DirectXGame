@@ -145,12 +145,6 @@
     <Filter Include="リソースファイル\OffScreen">
       <UniqueIdentifier>{3bf652c4-db9d-4e96-aa0f-177270e2226e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.cpp\utility\EasingAnimation">
-      <UniqueIdentifier>{407ebb1a-3954-4162-b7ea-af0d1db90731}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.h\utility\EasingAnimation">
-      <UniqueIdentifier>{fd45ac81-3519-4403-ad3b-c42be8a0eed2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\SkyBox">
       <UniqueIdentifier>{3d0b4b8b-8120-4479-a6ad-221fde23fe75}</UniqueIdentifier>
     </Filter>
@@ -165,6 +159,15 @@
     </Filter>
     <Filter Include="MyEngine\.h\utility\PutObjForBlender">
       <UniqueIdentifier>{62c9232b-f990-4975-bd38-e118668e5483}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\EasingCreator">
+      <UniqueIdentifier>{407ebb1a-3954-4162-b7ea-af0d1db90731}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\EasingCreator">
+      <UniqueIdentifier>{fd45ac81-3519-4403-ad3b-c42be8a0eed2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\EasingTestObj">
+      <UniqueIdentifier>{96300e85-6295-42ec-a337-bdd4de702a7c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -253,7 +256,7 @@
       <Filter>MyEngine\.cpp\Frame</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="math\Easing.cpp">
+    <ClCompile Include="math\EasingFunction.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Collider\AABBCollider.cpp">
@@ -385,9 +388,6 @@
     <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp">
       <Filter>MyEngine\.cpp\Primitive</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\EaseingAnimation\EasingAnimation.cpp">
-      <Filter>MyEngine\.cpp\utility\EasingAnimation</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Primitive\PrimitiveCylinder.cpp">
       <Filter>MyEngine\.cpp\Primitive</Filter>
     </ClCompile>
@@ -411,6 +411,24 @@
     </ClCompile>
     <ClCompile Include="Engine\utility\PutObjForBlender\PutObjForBlender.cpp">
       <Filter>MyEngine\.cpp\utility\PutObjForBlender</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Easing.cpp">
+      <Filter>liberary\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\EasingCreator\EasingParameterData.cpp">
+      <Filter>MyEngine\.cpp\utility\EasingCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\EasingCreator\EasingCreator.cpp">
+      <Filter>MyEngine\.cpp\utility\EasingCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\EditorScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\EasingCreator\EasingEditor.cpp">
+      <Filter>MyEngine\.cpp\utility\EasingCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\EasingTestObj\EasingTestObj.cpp">
+      <Filter>Game\EasingTestObj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -534,7 +552,7 @@
     <ClInclude Include="Game\Scene\GameScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="math\Easing.h">
+    <ClInclude Include="math\EasingFunction.h">
       <Filter>liberary\.h</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Collider\OBBCollider.h">
@@ -663,9 +681,6 @@
     <ClInclude Include="Engine\Primitive\PrimitiveRing.h">
       <Filter>MyEngine\.h\Primitive</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\EaseingAnimation\EasingAnimation.h">
-      <Filter>MyEngine\.h\utility\EasingAnimation</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Primitive\PrimitiveCylinder.h">
       <Filter>MyEngine\.h\Primitive</Filter>
     </ClInclude>
@@ -689,6 +704,27 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\PutObjForBlender\PutObjForBlender.h">
       <Filter>MyEngine\.h\utility\PutObjForBlender</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Easing.h">
+      <Filter>liberary\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\EasingCreator\EasingParameterData.h">
+      <Filter>MyEngine\.h\utility\EasingCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\EasingCreator\EasingCreator.h">
+      <Filter>MyEngine\.h\utility\EasingCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\EditorScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\EasingCreator\EasingEditor.h">
+      <Filter>MyEngine\.h\utility\EasingCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\EasingTestObj\EasingTestObj.h">
+      <Filter>Game\EasingTestObj</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Vector2Proxy.h">
+      <Filter>liberary\.h</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

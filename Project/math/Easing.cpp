@@ -1,1028 +1,357 @@
-
 #include "Easing.h"
-#include"MathFunction.h"
-///std
-#include<numbers>
-#include <cmath>
+#include "Function/GetFile.h"
+#include <fstream>
+#include <imGui.h>
 
-
-
-float EaseInElasticAmplitude(float t, const float& totaltime, const float& amplitude, const float& period) {
-
-	if (t <= 0.0f) {
-		return 0.0f;
-	}
-	if (t >= totaltime) {
-		return 0.0f;
-	}
-	float s = period / (2.0f * std::numbers::pi_v<float>) * std::asinf(1.0f);
-	t /= totaltime;
-
-	return -amplitude * std::powf(2.0f, 10.0f * (t - 1.0f)) * std::sinf((t - 1.0f - s) * (2.0f * std::numbers::pi_v<float>) / period);
+template <typename T>
+void Easing<T>::Reset() {
+    isRunning_   = false;
+    isFinished_  = false;
+    currentTime_ = 0.0f;
 }
 
-float EaseOutElasticAmplitude(float t, float totaltime, float amplitude, float period) {
-	if (t <= 0.0f)
-		return 0.0f;
-	if (t >= totaltime)
-		return 0.0f;
+template <typename T>
+void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
 
-	float s = period / (2.0f * std::numbers::pi_v<float>) * std::asin(1.0f);
-	t /= totaltime;
+    type_                 = easingParam.type;
+    adaptFloatAxisType_   = easingParam.adaptFloatAxisType;
+    adaptVector2AxisType_ = easingParam.adaptVector2AxisType;
+    finishValueType_      = easingParam.finishType;
 
-	return amplitude * std::pow(2.0f, -10.0f * t) * std::sin((t - s) * (2.0f * std::numbers::pi_v<float>) / period);
+    maxTime_    = easingParam.maxTime;
+    startValue_ = easingParam.startValue;
+    endValue_   = easingParam.endValue;
+    amplitude_  = easingParam.amplitude;
+    period_     = easingParam.period;
+    backRatio_  = easingParam.backRatio;
 }
 
-float EaseInOutElasticAmplitude(float t, float totaltime, float amplitude, float period) {
-	if (t <= 0.0f)
-		return 0.0f;
-	if (t >= totaltime)
-		return 0.0f;
+template <typename T>
+void Easing<T>::ApplyFromJson(const std::string& fileName) {
+    // JSONファイルを読み込む
+    std::ifstream ifs(fileName);
+    if (!ifs.is_open()) {
 
-	float backPoint = 0.5f;
-	t /= totaltime;
+        return;
+    }
 
-	if (t < backPoint) {
-		return EaseOutElasticAmplitude(t, totaltime, amplitude, period);
-	} else {
+    nlohmann::json easingJson;
+    ifs >> easingJson;
 
-		return EaseInElasticAmplitude(t - backPoint, totaltime - backPoint, amplitude, period);
-	}
+    EasingParameter<T> param;
+    param.type       = static_cast<EasingType>(easingJson.at("type").get<int>());
+    param.finishType = static_cast<EasingFinishValueType>(easingJson.at("finishType").get<int>());
+
+    if constexpr (std::is_same_v<T, Vector3>) {
+
+        const auto& sv   = easingJson.at("startValue");
+        const auto& ev   = easingJson.at("endValue");
+        param.startValue = Vector3{sv[0].get<float>(), sv[1].get<float>(), sv[2].get<float>()};
+        param.endValue   = Vector3{ev[0].get<float>(), ev[1].get<float>(), ev[2].get<float>()};
+
+    } else if constexpr (std::is_same_v<T, Vector2>) {
+
+        const auto& sv   = easingJson.at("startValue");
+        const auto& ev   = easingJson.at("endValue");
+        param.startValue = Vector2{sv[0].get<float>(), sv[1].get<float>()};
+        param.endValue   = Vector2{ev[0].get<float>(), ev[1].get<float>()};
+
+    } else if constexpr (std::is_same_v<T, float>) {
+
+        param.startValue = easingJson.at("startValue").get<T>();
+        param.endValue   = easingJson.at("endValue").get<T>();
+    }
+
+    param.maxTime   = easingJson.at("maxTime").get<float>();
+    param.amplitude = easingJson.value("amplitude", 0.0f);
+    param.period    = easingJson.value("period", 0.0f);
+    param.backRatio = easingJson.value("backRatio", 0.0f);
+
+    finishValueType_ = param.finishType;
+
+    SettingValue(param.type);
 }
 
-template<typename T> T EaseAmplitudeScale(const T& initScale, const float& easeT, const float& totalTime, const float& amplitude, const float& period) {
-	T newScale = initScale; // T型のnewScaleを宣言
+template <typename T>
+void Easing<T>::ApplyForImGui() {
 
-	if constexpr (std::is_same<T, float>::value) {
-		newScale = initScale + -EaseOutElasticAmplitude(easeT, totalTime, amplitude, period);
-	} else if constexpr (std::is_same<T, Vector2>::value) {
-		newScale.x = initScale.x + -EaseOutElasticAmplitude(easeT, totalTime, amplitude, period);
-		newScale.y = initScale.y + EaseOutElasticAmplitude(easeT, totalTime, amplitude, period);
-	} else if constexpr (std::is_same<T, Vector3>::value) {
-		newScale.x = initScale.x + -EaseOutElasticAmplitude(easeT, totalTime, amplitude, period);
-		newScale.y = initScale.y + EaseOutElasticAmplitude(easeT, totalTime, amplitude, period);
-		newScale.z = initScale.z + -EaseOutElasticAmplitude(easeT, totalTime, amplitude, period);
-	}
+    if constexpr (std::is_same_v<T, float>) {
+        easingFiles_ = GetFileNamesForDyrectry(FilePath_ + "float");
+    } else if constexpr (std::is_same_v<T, Vector2>) {
+        easingFiles_ = GetFileNamesForDyrectry(FilePath_ + "Vector2");
+    } else if constexpr (std::is_same_v<T, Vector3>) {
+        easingFiles_ = GetFileNamesForDyrectry(FilePath_ + "Vector3");
+    }
 
-	return newScale;
+    if (easingFiles_.empty()) {
+        return;
+    }
+
+    std::vector<const char*> fileNamesCStr;
+    for (const auto& name : easingFiles_) {
+        fileNamesCStr.push_back(name.c_str());
+    }
+
+    // Combo UI表示
+    if (ImGui::Combo("Easing Preset", &selectedFileIndex_, fileNamesCStr.data(), static_cast<int>(fileNamesCStr.size()))) {
+        // 選択されたファイルのフルパスを作成
+        const std::string selectedFile = FilePath_ + "/" + easingFiles_[selectedFileIndex_];
+
+        ApplyFromJson(selectedFile);
+    }
+}
+// 時間を進めて値を更新
+template <typename T>
+void Easing<T>::Update(float deltaTime) {
+    if (/*!isRunning_ || */ isFinished_) {
+        return;
+    }
+
+    currentTime_ += deltaTime;
+    if (currentTime_ >= maxTime_) {
+        FinishBehavior();
+    }
+
+    CalculateValue();
 }
 
-// EaseInSine 関数
-template<typename T> T EaseInSine(const T& start, const T& end, float x, float totalX) {
-	float t = x / totalX;
-	float easeT = 1.0f - std::cosf((t * std::numbers::pi_v<float>) / 2.0f);
-	return Lerp(start, end, easeT);
+template <typename T>
+void Easing<T>::CalculateValue() {
+
+    switch (type_) {
+
+    case EasingType::InSine:
+        *currentValue_ = EaseInSine(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::OutSine:
+        *currentValue_ = EaseOutSine(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::InOutSine:
+        *currentValue_ = EaseInOutSine(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::InQuint:
+        *currentValue_ = EaseInQuint(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::OutQuint:
+        *currentValue_ = EaseOutQuint(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::InOutQuint:
+        *currentValue_ = EaseInOutQuint(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::InCirc:
+        *currentValue_ = EaseInCirc(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::OutCirc:
+        *currentValue_ = EaseOutCirc(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::InOutCirc:
+        *currentValue_ = EaseInOutCirc(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::InExpo:
+        *currentValue_ = EaseInExpo(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::OutExpo:
+        *currentValue_ = EaseOutExpo(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::InOutExpo:
+        *currentValue_ = EaseInOutExpo(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::InCubic:
+        *currentValue_ = EaseInCubic(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::OutCubic:
+        *currentValue_ = EaseOutCubic(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::InOutCubic:
+        *currentValue_ = EaseInOutCubic(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::InQuad:
+        *currentValue_ = EaseInQuad(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::OutQuad:
+        *currentValue_ = EaseOutQuad(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::InOutQuad:
+        *currentValue_ = EaseInOutQuad(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::InQuart:
+        *currentValue_ = EaseInQuart(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::OutQuart:
+        *currentValue_ = EaseOutQuart(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::InOutQuart:
+        /*    currentValue_ = EaseInOutQuart(startValue_, endValue_, currentTime_, maxTime_);*/
+        break;
+    case EasingType::InBack:
+        *currentValue_ = EaseInBack(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::OutBack:
+        *currentValue_ = EaseOutBack(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::InOutBack:
+        *currentValue_ = EaseInOutBack(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::InBounce:
+        *currentValue_ = EaseInBounce(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::OutBounce:
+        *currentValue_ = EaseOutBounce(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+    case EasingType::InOutBounce:
+        *currentValue_ = EaseInOutBounce(startValue_, endValue_, currentTime_, maxTime_);
+        break;
+
+    //  特殊イージング
+    case EasingType::SquishyScaling:
+        *currentValue_ = EaseAmplitudeScale(startValue_, currentTime_, maxTime_, amplitude_, period_);
+        break;
+
+    //  Back
+    case EasingType::BackInSineZero:
+        *currentValue_ = Back::InSineZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackOutSineZero:
+        *currentValue_ = Back::OutSineZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackInOutSineZero:
+        *currentValue_ = Back::InOutSineZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackInQuadZero:
+        *currentValue_ = Back::InQuadZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackOutQuadZero:
+        *currentValue_ = Back::OutQuadZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackInOutQuadZero:
+        *currentValue_ = Back::InOutQuadZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackInCubicZero:
+        *currentValue_ = Back::InCubicZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackOutCubicZero:
+        *currentValue_ = Back::OutCubicZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackInOutCubicZero:
+        *currentValue_ = Back::InOutCubicZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackInQuartZero:
+        *currentValue_ = Back::InQuartZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackOutQuartZero:
+        *currentValue_ = Back::OutQuartZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackInOutQuartZero:
+        *currentValue_ = Back::InOutQuartZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackInQuintZero:
+        *currentValue_ = Back::InQuintZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackOutQuintZero:
+        *currentValue_ = Back::OutQuintZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackInOutQuintZero:
+        *currentValue_ = Back::InOutQuintZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackInExpoZero:
+        *currentValue_ = Back::InExpoZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackOutExpoZero:
+        *currentValue_ = Back::OutExpoZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackInOutExpoZero:
+        *currentValue_ = Back::InOutExpoZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackInCircZero:
+        *currentValue_ = Back::InCircZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackOutCircZero:
+        *currentValue_ = Back::OutCircZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    case EasingType::BackInOutCircZero:
+        *currentValue_ = Back::InOutCircZero(startValue_, endValue_, currentTime_, maxTime_, backRatio_);
+        break;
+    }
+}
+template <typename T>
+void Easing<T>::Easing::FinishBehavior() {
+    currentTime_ = maxTime_;
+    isFinished_  = true;
+
+    switch (finishValueType_) {
+    case EasingFinishValueType::Start:
+        *currentValue_ = startValue_;
+        break;
+    case EasingFinishValueType::End:
+        *currentValue_ = endValue_;
+        break;
+    default:
+        break;
+    }
+}
+template <typename T>
+void Easing<T>::Easing::SetAdaptValue(T* value) {
+    currentValue_ = value;
 }
 
-// EaseOutSine 関数
-template<typename T> T EaseOutSine(const T& start, const T& end, float x, float totalX) {
-	float t = x / totalX;
-	float easeT = std::sinf((t * std::numbers::pi_v<float>) / 2.0f);
-	return Lerp(start, end, easeT);
+template <>
+void Easing<float>::SetAdaptValue(Vector2* value) {
+    switch (adaptFloatAxisType_) {
+    case AdaptFloatAxisType::X:
+        currentValue_ = &value->x;
+        break;
+    case AdaptFloatAxisType::Y:
+        currentValue_ = &value->y;
+        break;
+    default:
+        currentValue_ = &value->x;
+        break;
+    }
 }
 
-// EaseInOutSine 関数
-template<typename T> T EaseInOutSine(const T& start, const T& end, float x, float totalX) {
-	float t = x / (totalX / 2.0f);
-	float easeT = 0.5f * (1.0f - std::cosf(t * std::numbers::pi_v<float>));
-	return Lerp(start, end, easeT);
+template <>
+void Easing<float>::SetAdaptValue(Vector3* value) {
+    switch (adaptFloatAxisType_) {
+    case AdaptFloatAxisType::X:
+        currentValue_ = &value->x;
+        break;
+    case AdaptFloatAxisType::Y:
+        currentValue_ = &value->y;
+        break;
+    case AdaptFloatAxisType::Z:
+        currentValue_ = &value->z;
+        break;
+    default:
+        currentValue_ = &value->x;
+        break;
+    }
 }
 
-// EaseInQuint 関数
-template<typename T> T EaseInQuint(const T& start, const T& end, float x, float totalX) {
-	float t = x / totalX;
-	float easeT = t * t * t * t * t;
-	return Lerp(start, end, easeT);
+template <>
+void Easing<Vector2>::SetAdaptValue(Vector3* value) {
+    switch (adaptVector2AxisType_) {
+    case AdaptVector2AxisType::XY:
+        vector2Proxy_ = std::make_unique<XYProxy>(&value);
+        break;
+    case AdaptVector2AxisType::XZ:
+        vector2Proxy_ = std::make_unique<XZProxy>(&value);
+        break;
+    case AdaptVector2AxisType::YZ:
+        vector2Proxy_ = std::make_unique<YZProxy>(&value);
+        break;
+    default:
+        vector2Proxy_ = std::make_unique<XYProxy>(&value);
+        break;
+    }
+
+    currentValue_ = &vector2Proxy_->Get();
 }
 
-// EaseOutQuint 関数
-template<typename T> T EaseOutQuint(const T& start, const T& end, float x, float totalX) {
-	float t = x / totalX;
-	float easeT = 1.0f - std::powf(1.0f - t, 5);
-	return Lerp(start, end, easeT);
+template <typename T>
+void Easing<T>::Easing::SetValue(const T& value) {
+    *currentValue_ = value;
 }
 
-// EaseInOutQuint 関数
-template<typename T> T EaseInOutQuint(const T& start, const T& end, float x, float totalX) {
-	float t = x / (totalX / 2.0f);
-	float easeT;
-	if (t < 1.0f) {
-		easeT = 0.5f * t * t * t * t * t;
-	} else {
-		t -= 2.0f;
-		easeT = 0.5f * (std::powf(t, 5) + 2.0f);
-	}
-	return Lerp(start, end, easeT);
-}
-
-// EaseInCirc 関数
-template<typename T> T EaseInCirc(const T& start, const T& end, float x, float totalX) {
-	float t = x / totalX;
-	float easeT = 1.0f - std::sqrtf(1.0f - std::powf(t, 2));
-	return Lerp(start, end, easeT);
-}
-
-// EaseOutCirc 関数
-template<typename T> T EaseOutCirc(const T& start, const T& end, float x, float totalX) {
-	float t = x / totalX;
-	float easeT = std::sqrtf(1.0f - std::powf(t - 1.0f, 2));
-	return Lerp(start, end, easeT);
-}
-
-// EaseInOutCirc 関数
-template<typename T> T EaseInOutCirc(const T& start, const T& end, float x, float totalX) {
-	float t = x / (totalX / 2.0f);
-	float easeT;
-	if (t < 1.0f) {
-		easeT = -0.5f * (std::sqrtf(1.0f - std::powf(t, 2)) - 1.0f);
-	} else {
-		t -= 2.0f;
-		easeT = 0.5f * (std::sqrtf(1.0f - std::powf(t, 2)) + 1.0f);
-	}
-	return Lerp(start, end, easeT);
-}
-
-// EaseInExpo 関数
-template<typename T> T EaseInExpo(const T& start, const T& end, float x, float totalX) {
-	float t = x / totalX;
-	float easeT = (t == 0.0f) ? 0.0f : std::powf(2.0f, 10.0f * (t - 1.0f));
-	return Lerp(start, end, easeT);
-}
-
-// EaseOutExpo 関数
-template<typename T> T EaseOutExpo(const T& start, const T& end, float x, float totalX) {
-	float t = x / totalX;
-	float easeT = (t == 1.0f) ? 1.0f : 1.0f - std::powf(2.0f, -10.0f * t);
-	return Lerp(start, end, easeT);
-}
-
-// EaseInOutExpo 関数
-template<typename T> T EaseInOutExpo(const T& start, const T& end, float x, float totalX) {
-	float t = x / (totalX / 2.0f);
-	float easeT;
-	if (t < 1.0f) {
-		easeT = 0.5f * std::powf(2.0f, 10.0f * (t - 1.0f));
-	} else {
-		t -= 1.0f;
-		easeT = 0.5f * (2.0f - std::powf(2.0f, -10.0f * t));
-	}
-	return Lerp(start, end, easeT);
-}
-
-// EaseInCubic 関数
-template<typename T> T EaseInCubic(const T& start, const T& end, float x, float totalX) {
-	float t = x / totalX;
-	float easeT = t * t * t;
-	return Lerp(start, end, easeT);
-}
-
-// EaseOutCubic 関数
-template<typename T> T EaseOutCubic(const T& start, const T& end, float x, float totalX) {
-	float t = x / totalX;
-	float easeT = 1.0f - std::powf(1.0f - t, 3);
-	return Lerp(start, end, easeT);
-}
-
-// EaseInOutCubic 関数
-template<typename T> T EaseInOutCubic(const T& start, const T& end, float x, float totalX) {
-	float t = x / (totalX / 2.0f);
-	float easeT;
-	if (t < 1.0f) {
-		easeT = 0.5f * t * t * t;
-	} else {
-		t -= 2.0f;
-		easeT = 0.5f * (std::powf(t, 3) + 2.0f);
-	}
-	return Lerp(start, end, easeT);
-}
-
-// EaseInQuad 関数
-template<typename T> T EaseInQuad(const T& start, const T& end, float x, float totalX) {
-	float t = x / totalX;
-	float easeT = t * t;
-	return Lerp(start, end, easeT);
-}
-
-// EaseOutQuad 関数
-template<typename T> T EaseOutQuad(const T& start, const T& end, float x, float totalX) {
-	float t = x / totalX;
-	float easeT = 1.0f - (1.0f - t) * (1.0f - t);
-	return Lerp(start, end, easeT);
-}
-
-// EaseInOutQuad 関数
-template<typename T> T EaseInOutQuad(const T& start, const T& end, float x, float totalX) {
-	float t = x / (totalX / 2.0f);
-	float easeT;
-	if (t < 1.0f) {
-		easeT = 0.5f * t * t;
-	} else {
-		t -= 1.0f;
-		easeT = -0.5f * (t * (t - 2.0f) - 1.0f);
-	}
-	return Lerp(start, end, easeT);
-}
-
-// EaseInQuart 関数
-template<typename T> T EaseInQuart(const T& start, const T& end, float x, float totalX) {
-	float t = x / totalX;
-	float easeT = t * t * t * t;
-	return Lerp(start, end, easeT);
-}
-
-// EaseOutQuart 関数
-template<typename T> T EaseOutQuart(const T& start, const T& end, float x, float totalX) {
-	float t = x / totalX;
-	float easeT = 1.0f - std::powf(1.0f - t, 4);
-	return Lerp(start, end, easeT);
-}
-
-// EaseInOutQuart 関数
-template<typename T> T EaseInOutQuart(const T& start, const T& end, float x, float totalX) {
-	float t = x / (totalX / 2.0f);
-	float easeT;
-	if (t < 1.0f) {
-		easeT = 0.5f * t * t * t * t;
-	} else {
-		t -= 2.0f;
-		easeT = -0.5f * (std::powf(t, 4) - 2.0f);
-	}
-	return Lerp(start, end, easeT);
-}
-
-/// EaseInBack
-template<typename T>
-T EaseInBack(const T& start, const T& end, float x, float totalX) {
-	const float s = 1.70158f;
-	float t = x / totalX;
-	float easeT = t * t * ((s + 1) * t - s);
-	return Lerp(start, end, easeT);
-}
-
-/// EaseOutBack
-template<typename T>
-T EaseOutBack(const T& start, const T& end, float x, float totalX) {
-	const float s = 1.70158f;
-	float t = x / totalX - 1;
-	float easeT = (t * t * ((s + 1) * t + s)) + 1;
-	return Lerp(start, end, easeT);
-}
-
-
-/// EaseInOutBack
-template<typename T>
-T EaseInOutBack(const T& start, const T& end, float x, float totalX) {
-	const float s = 1.70158f * 1.525f;
-	float t = x / (totalX / 2.0f);
-	float easeT;
-
-	if (t < 1) {
-		easeT = 0.5f * (t * t * ((s + 1) * t - s));
-	} else {
-		t -= 2;
-		easeT = 0.5f * ((t * t * ((s + 1) * t + s)) + 2);
-	}
-
-	return Lerp(start, end, easeT);
-}
-
-
-//バウンス補助関数
-float BounceEaseOut(float x) {
-
-	const float n1 = 7.5625f;
-	const float d1 = 2.75f;
-	float easeT = 0.0f;
-
-	if (x < 1.0f / d1) {
-		easeT = n1 * x * x;
-	} else if (x < 2.0f / d1) {
-		x -= 1.5f / d1;
-		easeT = n1 * x * x + 0.75f;
-	} else if (x < 2.5f / d1) {
-		x -= 2.25f / d1;
-		easeT = n1 * x * x + 0.9375f;
-	} else {
-		x -= 2.625f / d1;
-		easeT = n1 * x * x + 0.984375f;
-	}
-	return easeT;
-}
-
-// EaseInBounce 関数
-template<typename T> T EaseInBounce(const T& start, const T& end, float x, float totalX) {
-	float t = 1.0f - (x / totalX);
-	float easeT = 1.0f - BounceEaseOut(t);
-	return Lerp(start, end, easeT);
-}
-
-// EaseOutBounce 関数
-template<typename T> T EaseOutBounce(const T& start, const T& end, float x, float totalX) {
-	float t = x / totalX;
-	float easeT = BounceEaseOut(t);
-	return Lerp(start, end, easeT);
-}
-
-// EaseInOutBounce 関数
-template<typename T> T EaseInOutBounce(const T& start, const T& end, float x, float totalX) {
-	float t = x / (totalX / 2.0f);
-	float easeT;
-	if (t < 1.0f) {
-		easeT = 0.5f * (1.0f - BounceEaseOut(1.0f - t));
-	} else {
-		t -= 1.0f;
-		easeT = 0.5f * BounceEaseOut(t) + 0.5f;
-	}
-	return Lerp(start, end, easeT);
-}
-namespace Back {
-
-	template<typename T> T Lerp(const T& start, const T& end, float t)
-	{
-		return start + (end - start) * t;
-	}
-
-	template<typename T> T  InSineZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			return Lerp(start, end, sinf((t / backPoint) * std::numbers::pi_v<float> *0.5f));
-		} else
-		{
-			return Lerp(end, start, 1.0f - cosf(((t - backPoint) / (totaltime - backPoint)) * std::numbers::pi_v<float> *0.5f));
-		}
-	}
-
-	template<typename T> T OutSineZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			return Lerp(start, end, 1.0f - cosf((t / backPoint) * std::numbers::pi_v<float> *0.5f));
-		} else
-		{
-			return Lerp(end, start, sinf(((t - backPoint) / (totaltime - backPoint)) * std::numbers::pi_v<float> *0.5f));
-		}
-	}
-
-	template<typename T> T InOutSineZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			return Lerp(start, end, -0.5f * (cosf(std::numbers::pi_v<float> *(t / backPoint)) - 1.0f));
-		} else
-		{
-			return Lerp(end, start, 0.5f * (1.0f - cosf(std::numbers::pi_v<float> *((t - backPoint) / (totaltime - backPoint)))));
-		}
-	}
-
-	template<typename T> T InQuadZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / backPoint;
-			return Lerp(start, end, normalizedTime * normalizedTime);
-		} else
-		{
-			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
-			return Lerp(end, start, -normalizedTime * (normalizedTime - 2));
-		}
-	}
-
-	template<typename T> T OutQuadZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / backPoint;
-			return Lerp(start, end, -normalizedTime * (normalizedTime - 2));
-		} else
-		{
-			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
-			return Lerp(end, start, normalizedTime * normalizedTime);
-		}
-	}
-
-	template<typename T> T InOutQuadZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / (backPoint * 0.5f);
-			if (normalizedTime < 1) return Lerp(start, end, 0.5f * normalizedTime * normalizedTime);
-			normalizedTime--;
-			return Lerp(start, end, -0.5f * (normalizedTime * (normalizedTime - 2) - 1));
-		} else
-		{
-			float normalizedTime = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
-			if (normalizedTime < 1) return Lerp(end, start, 0.5f * normalizedTime * normalizedTime);
-			normalizedTime--;
-			return Lerp(end, start, -0.5f * (normalizedTime * (normalizedTime - 2) - 1));
-		}
-	}
-
-	template<typename T> T InCubicZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / backPoint;
-			return Lerp(start, end, normalizedTime * normalizedTime * normalizedTime);
-		} else
-		{
-			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
-			normalizedTime--;
-			return Lerp(end, start, normalizedTime * normalizedTime * normalizedTime + 1);
-		}
-	}
-
-	template<typename T> T OutCubicZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / backPoint;
-			normalizedTime--;
-			return Lerp(start, end, normalizedTime * normalizedTime * normalizedTime + 1);
-		} else
-		{
-			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
-			return Lerp(end, start, normalizedTime * normalizedTime * normalizedTime);
-		}
-	}
-
-	template<typename T> T InOutCubicZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / (backPoint * 0.5f);
-			if (normalizedTime < 1) return Lerp(start, end, 0.5f * normalizedTime * normalizedTime * normalizedTime);
-			normalizedTime -= 2;
-			return Lerp(start, end, 0.5f * (normalizedTime * normalizedTime * normalizedTime + 2));
-		} else
-		{
-			float normalizedTime = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
-			if (normalizedTime < 1) return Lerp(end, start, 0.5f * normalizedTime * normalizedTime * normalizedTime);
-			normalizedTime -= 2;
-			return Lerp(end, start, 0.5f * (normalizedTime * normalizedTime * normalizedTime + 2));
-		}
-	}
-
-	template<typename T> T InQuartZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / backPoint;
-			return Lerp(start, end, normalizedTime * normalizedTime * normalizedTime * normalizedTime);
-		} else
-		{
-			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
-			normalizedTime--;
-			return Lerp(end, start, -(normalizedTime * normalizedTime * normalizedTime * normalizedTime - 1));
-		}
-	}
-
-	template<typename T> T OutQuartZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / backPoint;
-			normalizedTime--;
-			return Lerp(start, end, -(normalizedTime * normalizedTime * normalizedTime * normalizedTime - 1));
-		} else
-		{
-			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
-			return Lerp(end, start, normalizedTime * normalizedTime * normalizedTime * normalizedTime);
-		}
-	}
-
-	template<typename T> T InOutQuartZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / (backPoint * 0.5f);
-			if (normalizedTime < 1) return Lerp(start, end, 0.5f * normalizedTime * normalizedTime * normalizedTime * normalizedTime);
-			normalizedTime -= 2;
-			return Lerp(start, end, -0.5f * (normalizedTime * normalizedTime * normalizedTime * normalizedTime - 2));
-		} else
-		{
-			float normalizedTime = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
-			if (normalizedTime < 1) return Lerp(end, start, 0.5f * normalizedTime * normalizedTime * normalizedTime * normalizedTime);
-			normalizedTime -= 2;
-			return Lerp(end, start, -0.5f * (normalizedTime * normalizedTime * normalizedTime * normalizedTime - 2));
-		}
-	}
-
-	template<typename T> T InQuintZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / backPoint;
-			return Lerp(start, end, normalizedTime * normalizedTime * normalizedTime * normalizedTime * normalizedTime);
-		} else
-		{
-			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
-			normalizedTime--;
-			return Lerp(end, start, normalizedTime * normalizedTime * normalizedTime * normalizedTime * normalizedTime + 1);
-		}
-	}
-
-	template<typename T> T OutQuintZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / backPoint;
-			normalizedTime--;
-			return Lerp(start, end, normalizedTime * normalizedTime * normalizedTime * normalizedTime * normalizedTime + 1);
-		} else
-		{
-			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
-			return Lerp(end, start, normalizedTime * normalizedTime * normalizedTime * normalizedTime * normalizedTime);
-		}
-	}
-
-	template<typename T> T InOutQuintZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / (backPoint * 0.5f);
-			if (normalizedTime < 1) return Lerp(start, end, 0.5f * normalizedTime * normalizedTime * normalizedTime * normalizedTime * normalizedTime);
-			normalizedTime -= 2;
-			return Lerp(start, end, 0.5f * (normalizedTime * normalizedTime * normalizedTime * normalizedTime * normalizedTime + 2));
-		} else
-		{
-			float normalizedTime = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
-			if (normalizedTime < 1) return Lerp(end, start, 0.5f * normalizedTime * normalizedTime * normalizedTime * normalizedTime * normalizedTime);
-			normalizedTime -= 2;
-			return Lerp(end, start, 0.5f * (normalizedTime * normalizedTime * normalizedTime * normalizedTime * normalizedTime + 2));
-		}
-	}
-
-	template<typename T> T InExpoZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / backPoint;
-			return Lerp(start, end, (normalizedTime == 0) ? 0 : powf(2, 10 * (normalizedTime - 1)));
-		} else
-		{
-			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
-			return Lerp(end, start, (normalizedTime == 1) ? 1 : (-powf(2, -10 * normalizedTime) + 1));
-		}
-	}
-
-	template<typename T> T OutExpoZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / backPoint;
-			return Lerp(start, end, (normalizedTime == 1) ? 1 : (-powf(2, -10 * normalizedTime) + 1));
-		} else
-		{
-			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
-			return Lerp(end, start, (normalizedTime == 0) ? 0 : powf(2, 10 * (normalizedTime - 1)));
-		}
-	}
-
-	template<typename T> T InOutExpoZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / (backPoint * 0.5f);
-			if (normalizedTime == 0) return start;
-			if (normalizedTime == 2) return end;
-			if (normalizedTime < 1) return Lerp(start, end, 0.5f * powf(2, 10 * (normalizedTime - 1)));
-			normalizedTime--;
-			return Lerp(start, end, 0.5f * (-powf(2, -10 * normalizedTime) + 2));
-		} else
-		{
-			float normalizedTime = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
-			if (normalizedTime == 0) return end;
-			if (normalizedTime == 2) return start;
-			if (normalizedTime < 1) return Lerp(end, start, 0.5f * powf(2, 10 * (normalizedTime - 1)));
-			normalizedTime--;
-			return Lerp(end, start, 0.5f * (-powf(2, -10 * normalizedTime) + 2));
-		}
-	}
-
-	template<typename T> T InCircZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / backPoint;
-			return Lerp(start, end, -(sqrtf(1 - normalizedTime * normalizedTime) - 1));
-		} else
-		{
-			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
-			normalizedTime--;
-			return Lerp(end, start, sqrtf(1 - normalizedTime * normalizedTime));
-		}
-	}
-
-	template<typename T> T OutCircZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / backPoint;
-			normalizedTime--;
-			return Lerp(start, end, sqrtf(1 - normalizedTime * normalizedTime));
-		} else
-		{
-			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
-			return Lerp(end, start, -(sqrtf(1 - normalizedTime * normalizedTime) - 1));
-		}
-	}
-
-	template<typename T> T InOutCircZero(const T& start, const T& end, float t, float totaltime, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / (backPoint * 0.5f);
-			if (normalizedTime < 1) return Lerp(start, end, -0.5f * (sqrtf(1 - normalizedTime * normalizedTime) - 1));
-			normalizedTime -= 2;
-			return Lerp(start, end, 0.5f * (sqrtf(1 - normalizedTime * normalizedTime) + 1));
-		} else
-		{
-			float normalizedTime = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
-			if (normalizedTime < 1) return Lerp(end, start, -0.5f * (sqrtf(1 - normalizedTime * normalizedTime) - 1));
-			normalizedTime -= 2;
-			return Lerp(end, start, 0.5f * (sqrtf(1 - normalizedTime * normalizedTime) + 1));
-		}
-	}
-
-	template<typename T> T InBackZero(const T& start, const T& end, float t, float totaltime, float s, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / backPoint;
-			return Lerp(start, end, normalizedTime * normalizedTime * ((s + 1) * normalizedTime - s));
-		} else
-		{
-			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
-			normalizedTime--;
-			return Lerp(end, start, normalizedTime * normalizedTime * ((s + 1) * normalizedTime + s) + 1);
-		}
-	}
-
-	template<typename T> T OutBackZero(const T& start, const T& end, float t, float totaltime, float s, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / backPoint;
-			normalizedTime--;
-			return Lerp(start, end, normalizedTime * normalizedTime * ((s + 1) * normalizedTime + s) + 1);
-		} else
-		{
-			float normalizedTime = (t - backPoint) / (totaltime - backPoint);
-			return Lerp(end, start, normalizedTime * normalizedTime * ((s + 1) * normalizedTime - s));
-		}
-	}
-
-	template<typename T> T InOutBackZero(const T& start, const T& end, float t, float totaltime, float s, float backRaito)
-	{
-		if (t <= 0.0f) return start;
-		if (t >= totaltime) return start;
-
-		float backPoint = totaltime * backRaito;
-		float s_modified = s * 1.525f;
-
-		if (t < backPoint)
-		{
-			float normalizedTime = t / (backPoint * 0.5f);
-			if (normalizedTime < 1) return Lerp(start, end, 0.5f * (normalizedTime * normalizedTime * ((s_modified + 1) * normalizedTime - s_modified)));
-			normalizedTime -= 2;
-			return Lerp(start, end, 0.5f * (normalizedTime * normalizedTime * ((s_modified + 1) * normalizedTime + s_modified) + 2));
-		} else
-		{
-			float normalizedTime = (t - backPoint) / ((totaltime - backPoint) * 0.5f);
-			if (normalizedTime < 1) return Lerp(end, start, 0.5f * (normalizedTime * normalizedTime * ((s_modified + 1) * normalizedTime - s_modified)));
-			normalizedTime -= 2;
-			return Lerp(end, start, 0.5f * (normalizedTime * normalizedTime * ((s_modified + 1) * normalizedTime + s_modified) + 2));
-		}
-	}
-}
-// ぷにぷに
-template Vector3 EaseAmplitudeScale<Vector3>(const Vector3& initScale, const float& easeT, const float& easeTime, const float& amplitude, const float& period);
-template Vector2 EaseAmplitudeScale<Vector2>(const Vector2& initScale, const float& easeT, const float& easeTime, const float& amplitude, const float& period);
-template float EaseAmplitudeScale<float>(const float& initScale, const float& easeT, const float& easeTime, const float& amplitude, const float& period);
-//*******************************************************************************************************************************************************************
-// Sine**************************************************************************************************************************************************************
-//*******************************************************************************************************************************************************************
-
-template Vector3 EaseInSine<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseInSine<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseInSine<float>(const float& start, const float& end, float x, float totalX);
-
-template Vector3 EaseOutSine<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseOutSine<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseOutSine<float>(const float& start, const float& end, float x, float totalX);
-
-template Vector3 EaseInOutSine<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseInOutSine<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseInOutSine<float>(const float& start, const float& end, float x, float totalX);
-
-template Vector3 EaseInQuint<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseInQuint<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseInQuint<float>(const float& start, const float& end, float x, float totalX);
-
-template Vector3 EaseOutQuint<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseOutQuint<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseOutQuint<float>(const float& start, const float& end, float x, float totalX);
-
-template Vector3 EaseInOutQuint<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseInOutQuint<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseInOutQuint<float>(const float& start, const float& end, float x, float totalX);
-
-template Vector3 EaseInCirc<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseInCirc<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseInCirc<float>(const float& start, const float& end, float x, float totalX);
-
-template Vector3 EaseOutCirc<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseOutCirc<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseOutCirc<float>(const float& start, const float& end, float x, float totalX);
-
-template Vector3 EaseInOutCirc<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseInOutCirc<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseInOutCirc<float>(const float& start, const float& end, float x, float totalX);
-
-template Vector3 EaseInExpo<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseInExpo<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseInExpo<float>(const float& start, const float& end, float x, float totalX);
-
-template Vector3 EaseOutExpo<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseOutExpo<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseOutExpo<float>(const float& start, const float& end, float x, float totalX);
-
-template Vector3 EaseInOutExpo<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseInOutExpo<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseInOutExpo<float>(const float& start, const float& end, float x, float totalX);
-
-template Vector3 EaseOutCubic<Vector3>(const Vector3& start, const Vector3& end, float x, float totalx);
-template Vector2 EaseOutCubic<Vector2>(const Vector2& start, const Vector2& end, float x, float totalx);
-template float EaseOutCubic<float>(const float& start, const float& end, float x, float totalx);
-
-template Vector3 EaseInCubic<Vector3>(const Vector3& start, const Vector3& end, float x, float totalx);
-template Vector2 EaseInCubic<Vector2>(const Vector2& start, const Vector2& end, float x, float totalx);
-template float EaseInCubic<float>(const float& start, const float& end, float x, float totalx);
-
-template Vector3 EaseInOutCubic<Vector3>(const Vector3& start, const Vector3& end, float x, float totalx);
-template Vector2 EaseInOutCubic<Vector2>(const Vector2& start, const Vector2& end, float x, float totalx);
-template float EaseInOutCubic<float>(const float& start, const float& end, float x, float totalx);
-
-template Vector3 EaseInQuad<Vector3>(const Vector3& start, const Vector3& end, float x, float totalx);
-template Vector2 EaseInQuad<Vector2>(const Vector2& start, const Vector2& end, float x, float totalx);
-template float EaseInQuad<float>(const float& start, const float& end, float x, float totalx);
-
-template Vector3 EaseOutQuad<Vector3>(const Vector3& start, const Vector3& end, float x, float totalx);
-template Vector2 EaseOutQuad<Vector2>(const Vector2& start, const Vector2& end, float x, float totalx);
-template float EaseOutQuad<float>(const float& start, const float& end, float x, float totalx);
-
-template Vector3 EaseInOutQuad<Vector3>(const Vector3& start, const Vector3& end, float x, float totalx);
-template Vector2 EaseInOutQuad<Vector2>(const Vector2& start, const Vector2& end, float x, float totalx);
-template float EaseInOutQuad<float>(const float& start, const float& end, float x, float totalx);
-
-template Vector3 EaseInQuart<Vector3>(const Vector3& start, const Vector3& end, float x, float totalx);
-template Vector2 EaseInQuart<Vector2>(const Vector2& start, const Vector2& end, float x, float totalx);
-template float EaseInQuart<float>(const float& start, const float& end, float x, float totalx);
-
-template Vector3 EaseOutQuart<Vector3>(const Vector3& start, const Vector3& end, float x, float totalx);
-template Vector2 EaseOutQuart<Vector2>(const Vector2& start, const Vector2& end, float x, float totalx);
-template float EaseOutQuart<float>(const float& start, const float& end, float x, float totalx);
-
-// バウンス補助関数
-float BounceEaseOut(float x);
-
-template Vector3 EaseInBounce<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseInBounce<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseInBounce<float>(const float& start, const float& end, float x, float totalX);
-
-template Vector3 EaseOutBounce<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseOutBounce<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseOutBounce<float>(const float& start, const float& end, float x, float totalX);
-
-template Vector3 EaseInOutBounce<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseInOutBounce<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseInOutBounce<float>(const float& start, const float& end, float x, float totalX);
-
-template Vector3 EaseInBack(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseInBack(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseInBack(const float& start, const float& end, float x, float totalX);
-
-template Vector3 EaseOutBack(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseOutBack(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseOutBack(const float& start, const float& end, float x, float totalX);
-
-template Vector3 EaseInOutBack(const Vector3& start, const Vector3& end, float x, float totalX);
-template Vector2 EaseInOutBack(const Vector2& start, const Vector2& end, float x, float totalX);
-template float EaseInOutBack(const float& start, const float& end, float x, float totalX);
-
-namespace Back {
-
-	template float InSineZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InSineZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito);
-	template Vector3 InSineZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito);
-
-	template float OutSineZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 OutSineZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 OutSineZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float InOutSineZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InOutSineZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InOutSineZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float InQuadZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InQuadZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InQuadZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float OutQuadZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 OutQuadZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 OutQuadZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float InOutQuadZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InOutQuadZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InOutQuadZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float InCubicZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InCubicZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InCubicZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float OutCubicZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 OutCubicZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 OutCubicZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float InOutCubicZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InOutCubicZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InOutCubicZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float InQuartZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InQuartZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InQuartZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float OutQuartZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 OutQuartZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 OutQuartZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float InOutQuartZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InOutQuartZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InOutQuartZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float InQuintZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InQuintZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InQuintZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float OutQuintZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 OutQuintZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 OutQuintZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float InOutQuintZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InOutQuintZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InOutQuintZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float InExpoZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InExpoZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InExpoZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float OutExpoZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 OutExpoZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 OutExpoZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float InOutExpoZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InOutExpoZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InOutExpoZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float InCircZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InCircZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InCircZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float OutCircZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 OutCircZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 OutCircZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float InOutCircZero(const float& start, const float& end, float t, float totaltime, float backRaito);
-	template Vector2 InOutCircZero(const Vector2& start, const Vector2& end, float t, float totaltime, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InOutCircZero(const Vector3& start, const Vector3& end, float t, float totaltime, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float InBackZero(const float& start, const float& end, float t, float totaltime, float s, float backRaito);
-	template Vector2 InBackZero(const Vector2& start, const Vector2& end, float t, float totaltime, float s, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InBackZero(const Vector3& start, const Vector3& end, float t, float totaltime, float s, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float OutBackZero(const float& start, const float& end, float t, float totaltime, float s, float backRaito);
-	template Vector2 OutBackZero(const Vector2& start, const Vector2& end, float t, float totaltime, float s, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 OutBackZero(const Vector3& start, const Vector3& end, float t, float totaltime, float s, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-	template float InOutBackZero(const float& start, const float& end, float t, float totaltime, float s, float backRaito);
-	template Vector2 InOutBackZero(const Vector2& start, const Vector2& end, float t, float totaltime, float s, float backRaito); // Vector2型に対する特殊化（必要に応じて）
-	template Vector3 InOutBackZero(const Vector3& start, const Vector3& end, float t, float totaltime, float s, float backRaito); //Vector3に対する特殊化（必要に応じて）
-
-
-}
+template class Easing<float>;
+template class Easing<Vector2>;
+template class Easing<Vector3>;

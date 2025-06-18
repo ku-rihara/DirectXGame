@@ -1,6 +1,7 @@
 #include "SceneManager.h"
 #include"utility/ParticleEditor/ParticleManager.h"
 #include"utility/ParameterEditor/GlobalParameter.h"
+#include"input/Input.h"
 #include <cassert>
 
 // シングルトンインスタンスの取得
@@ -18,11 +19,10 @@ SceneManager::~SceneManager() {
 ///==============================================
 void SceneManager::Update() {
 
-	//// 次のシーンが設定されている場合
-	//if (nextScene_) {
-	//	scene_ = std::move(nextScene_);
-	//	scene_->Init();
-	//}
+	// 次のシーンが設定されている場合
+    if (Input::GetInstance()->PushKey(DIK_E) && Input::GetInstance()->PushKey(DIK_ESCAPE)) {
+        ChangeScene("EDITOR");
+	}
 
 	// 現在のシーンを更新
 	if (scene_) {
