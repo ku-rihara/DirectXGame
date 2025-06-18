@@ -295,7 +295,8 @@ void Easing<T>::Easing::SetAdaptValue(T* value) {
 }
 
 template <>
-void Easing<float>::SetAdaptValue(Vector2* value) {
+template <>
+void Easing<float>::SetAdaptValue<float>(Vector2* value) {
     switch (adaptFloatAxisType_) {
     case AdaptFloatAxisType::X:
         currentValue_ = &value->x;
@@ -310,7 +311,8 @@ void Easing<float>::SetAdaptValue(Vector2* value) {
 }
 
 template <>
-void Easing<float>::SetAdaptValue(Vector3* value) {
+template <>
+void Easing<float>::SetAdaptValue<float>(Vector3* value) {
     switch (adaptFloatAxisType_) {
     case AdaptFloatAxisType::X:
         currentValue_ = &value->x;
@@ -328,7 +330,8 @@ void Easing<float>::SetAdaptValue(Vector3* value) {
 }
 
 template <>
-void Easing<Vector2>::SetAdaptValue(Vector3* value) {
+template <>
+void Easing<Vector2>::SetAdaptValue<Vector2>(Vector3* value) {
     switch (adaptVector2AxisType_) {
     case AdaptVector2AxisType::XY:
         vector2Proxy_ = std::make_unique<XYProxy>(&value);
