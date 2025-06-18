@@ -1,10 +1,14 @@
 #include "EasingEditor.h"
 #include <imgui.h>
+#include <format>
+#include<Windows.h>
 
 void EasingEditor::Init() {
     floatPath_ = kDirectoryPath_ + "float";
     vec2Path_  = kDirectoryPath_ + "vector2";
     vec3Path_  = kDirectoryPath_ + "vector3";
+
+    LoadAll();
 }
 
 void EasingEditor::LoadAll() {
@@ -15,9 +19,9 @@ void EasingEditor::LoadAll() {
 }
 
 void EasingEditor::SaveAll() {
-    /*   fEasingCreator_.SaveAll(baseDir_ + "/float");
-       vec2EasingCreator_.SaveAll(baseDir_ + "/vector2");
-       vec3EasingCreator_.SaveAll(baseDir_ + "/vector3");*/
+    fEasingCreator_.SaveParameter(floatPath_);
+    vec2EasingCreator_.SaveParameter(vec2Path_);
+    vec3EasingCreator_.SaveParameter(vec3Path_);
 }
 
 void EasingEditor::Edit() {
@@ -44,6 +48,9 @@ void EasingEditor::Edit() {
 
     if (ImGui::Button("Save All")) {
         SaveAll();
+        std::string filename = "EasingFile"; // 保存したファイル名をここに入れる
+        std::string message  = std::format("{}.json saved.", filename);
+        MessageBoxA(nullptr, message.c_str(), "EasingEditor", 0);
     }
 
     ImGui::End();

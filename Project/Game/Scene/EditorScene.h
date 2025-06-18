@@ -5,7 +5,7 @@
 
 #include"Easing.h"
 #include"utility/ParticleEditor/ParticleEmitter.h"
-#include"utility/EasingCreator/EasingCreator.h"
+#include"utility/EasingCreator/Easingeditor.h"
 #include "MonsterBall/MonsterBall.h"
 #include <memory>
 /// <summary>
@@ -16,7 +16,7 @@ private:
 
  
     std::unique_ptr<MonsterBall> easingTestObject_;
-    EasingCreator<Vector3> easingCreator_;
+    EasingEditor easingEditor_;
 
 public:
 	///========================================================

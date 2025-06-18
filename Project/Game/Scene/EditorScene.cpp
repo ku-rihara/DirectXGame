@@ -21,10 +21,13 @@ void EditorScene::Init() {
     BaseScene::Init();
     easingTestObject_ = std::make_unique<MonsterBall>();
     easingTestObject_->Init();
+
+    easingEditor_.Init();
 }
 
 void EditorScene::Update() {
-
+    
+     easingEditor_.Edit();
     easingTestObject_->Update();
 
     ParticleManager::GetInstance()->Update();

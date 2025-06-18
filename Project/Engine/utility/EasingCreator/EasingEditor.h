@@ -24,7 +24,7 @@ private:
     };
 
 private:
-    const std ::string kDirectoryPath_ = "Resources/EasingParameter";
+    const std ::string kDirectoryPath_ = "Resources/EasingParameter/";
     TabType currentTab_                = TabType::Float;
 
     std ::string floatPath_;
