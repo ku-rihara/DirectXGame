@@ -1,11 +1,13 @@
 #pragma once
 #include "EasingFunction.h"
 #include "utility/EasingCreator/EasingCreator.h"
+#include "Vector2Proxy.h"
+//std
 #include <cstdint>
 #include <string>
 #include <vector>
 #include <memory>
-#include "Vector2Proxy.h"
+#include <type_traits>
 
 template <typename T>
 class Easing {
@@ -26,8 +28,18 @@ public:
 
     // 変数に適応
    void SetAdaptValue(T* value);
-   void SetAdaptValue(Vector2* value);
-   void SetAdaptValue(Vector3* value);
+
+    template <typename U = T>
+    typename std::enable_if_t<std::is_same_v<U, float>, void>
+    SetAdaptValue(Vector2* value);
+
+    template <typename U = T>
+    typename std::enable_if_t<std::is_same_v<U, float>, void>
+    SetAdaptValue(Vector3* value);
+
+    template <typename U = T>
+    typename std::enable_if_t<std::is_same_v<U, Vector2>, void>
+    SetAdaptValue(Vector3* value);
    
 
     void SetValue(const T& value);
