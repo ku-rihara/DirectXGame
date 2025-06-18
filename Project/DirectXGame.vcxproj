@@ -96,6 +96,7 @@
     <ClCompile Include="math\random.cpp" />
     <ClCompile Include="math\Shake.cpp" />
     <ClCompile Include="math\Vector2.cpp" />
+    <ClCompile Include="math\Vector2Proxy.cpp" />
     <ClCompile Include="math\Vector3.cpp" />
     <ClCompile Include="math\Vector4.cpp" />
   </ItemGroup>

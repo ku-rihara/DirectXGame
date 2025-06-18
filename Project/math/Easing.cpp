@@ -15,7 +15,7 @@ void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
 
     type_                 = easingParam.type;
     adaptFloatAxisType_   = easingParam.adaptFloatAxisType;
-    adaptVector2AxisType_ = easingParam.adaptVector2AxisType;
+    adaptVector2AxisType_ = easingParam.adaptVec2AxisType;
     finishValueType_      = easingParam.finishType;
 
     maxTime_    = easingParam.maxTime;
@@ -69,7 +69,7 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
 
     finishValueType_ = param.finishType;
 
-    SettingValue(param.type);
+    SettingValue(param);
 }
 
 template <typename T>
@@ -334,22 +334,24 @@ template <>
 void Easing<Vector2>::SetAdaptValue<Vector2>(Vector3* value) {
     switch (adaptVector2AxisType_) {
     case AdaptVector2AxisType::XY:
-        vector2Proxy_ = std::make_unique<XYProxy>(&value);
+        vector2Proxy_ = std::make_unique<XYProxy>(value);
+      
         break;
     case AdaptVector2AxisType::XZ:
-        vector2Proxy_ = std::make_unique<XZProxy>(&value);
+        vector2Proxy_ = std::make_unique<XZProxy>(value);
+      
         break;
     case AdaptVector2AxisType::YZ:
-        vector2Proxy_ = std::make_unique<YZProxy>(&value);
+        vector2Proxy_ = std::make_unique<YZProxy>(value);
+    
         break;
     default:
-        vector2Proxy_ = std::make_unique<XYProxy>(&value);
+        vector2Proxy_ = std::make_unique<XYProxy>(value);
+      
         break;
     }
-
     currentValue_ = &vector2Proxy_->Get();
 }
-
 template <typename T>
 void Easing<T>::Easing::SetValue(const T& value) {
     *currentValue_ = value;

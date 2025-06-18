@@ -90,13 +90,13 @@ void EasingCreator<T>::ToJson(nlohmann::json& j) const {
 
             jsonParam["startValue"]        = {param.startValue.x, param.startValue.y};
             jsonParam["endValue"]          = {param.endValue.x, param.endValue.y};
-            jsonParam["adaptVec2AxisType"] = static_cast<int>(param.adaptVec2AxisType_);
+            jsonParam["adaptVec2AxisType"] = static_cast<int>(param.adaptVec2AxisType);
 
         } else if constexpr (std::is_same_v<T, float>) {
 
             jsonParam["startValue"]         = param.startValue;
             jsonParam["endValue"]           = param.endValue;
-            jsonParam["adaptFloatAxisType"] = static_cast<int>(param.adaptFloatAxisType_);
+            jsonParam["adaptFloatAxisType"] = static_cast<int>(param.adaptFloatAxisType);
         }
 
         jsonParam["type"]       = static_cast<int>(param.type);
@@ -140,13 +140,13 @@ void EasingCreator<T>::FromJson(const nlohmann::json& j) {
                 auto ev                  = val["endValue"];
                 param.startValue         = Vector2{sv[0], sv[1]};
                 param.endValue           = Vector2{ev[0], ev[1]};
-                param.adaptVec2AxisType_ = static_cast<AdaptVector2AxisType>(val.value("adaptVec2AxisType", 0));
+                param.adaptVec2AxisType = static_cast<AdaptVector2AxisType>(val.value("adaptVec2AxisType", 0));
 
             } else if constexpr (std::is_same_v<T, float>) {
 
                 param.startValue          = val["startValue"].get<T>();
                 param.endValue            = val["endValue"].get<T>();
-                param.adaptFloatAxisType_ = static_cast<AdaptFloatAxisType>(val.value("adaptFloatAxisType", 0));
+                param.adaptFloatAxisType = static_cast<AdaptFloatAxisType>(val.value("adaptFloatAxisType", 0));
 
             }
 
@@ -198,7 +198,7 @@ void EasingCreator<T>::Edit() {
     if (!selectedName_.empty() && presets_.count(selectedName_)) {
         ImGui::Text("Edit Preset: %s", selectedName_.c_str());
 
-        // Remane
+        // Rename
         if (ImGui::InputText("Rename", renameBuf_, sizeof(renameBuf_))) {}
         if (std::string(renameBuf_) != selectedName_ && ImGui::Button("Apply Rename")) {
             RenamePreset(selectedName_, renameBuf_);
@@ -211,8 +211,8 @@ void EasingCreator<T>::Edit() {
         ImGui::DragFloat("Period", &editingParam_.period, 0.01f);
         ImGui::DragFloat("Back Ratio", &editingParam_.backRatio, 0.01f);
 
-        int adaptFloatAxisType = static_cast<int>(editingParam_.adaptFloatAxisType_);
-        int adaptVec2AxisType  = static_cast<int>(editingParam_.adaptVec2AxisType_);
+        int adaptFloatAxisType = static_cast<int>(editingParam_.adaptFloatAxisType);
+        int adaptVec2AxisType  = static_cast<int>(editingParam_.adaptVec2AxisType);
 
         // スタート、終了位置の入力
         if constexpr (std::is_same_v<T, float>) { // float
@@ -221,7 +221,7 @@ void EasingCreator<T>::Edit() {
 
             // 軸のタイプの選択(float)
             if (ImGui::Combo("AdaptAxis Type", &adaptFloatAxisType, AdaptFloatAxisTypeLabels.data(), static_cast<int>(AdaptFloatAxisTypeLabels.size()))) {
-                editingParam_.adaptFloatAxisType_ = static_cast<AdaptFloatAxisType>(adaptFloatAxisType);
+                editingParam_.adaptFloatAxisType = static_cast<AdaptFloatAxisType>(adaptFloatAxisType);
             }
 
         } else if constexpr (std::is_same_v<T, Vector2>) { // vec2
@@ -230,7 +230,7 @@ void EasingCreator<T>::Edit() {
 
             // 軸のタイプの選択(Vector2)
             if (ImGui::Combo("AdaptAxis Type", &adaptVec2AxisType, AdaptVector2AxisTypeLabels.data(), static_cast<int>(AdaptVector2AxisTypeLabels.size()))) {
-                editingParam_.adaptVec2AxisType_ = static_cast<AdaptVector2AxisType>(adaptVec2AxisType);
+                editingParam_.adaptVec2AxisType = static_cast<AdaptVector2AxisType>(adaptVec2AxisType);
             }
 
         } else if constexpr (std::is_same_v<T, Vector3>) { // vec3
@@ -246,7 +246,7 @@ void EasingCreator<T>::Edit() {
 
         // 終了時の値を設定
         int finishType = static_cast<int>(editingParam_.finishType);
-        if (ImGui::Combo("Finish Type", &finishType, FinishTypeLabels, static_cast<int>(EasingFinishValueType::COUNT))) {
+        if (ImGui::Combo("Finish Type", &finishType, FinishTypeLabels.data(), static_cast<int>(FinishTypeLabels.size()))) {
             editingParam_.finishType = static_cast<EasingFinishValueType>(finishType);
         }
 

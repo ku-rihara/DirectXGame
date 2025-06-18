@@ -48,7 +48,7 @@ void EasingEditor::Edit() {
 
     if (ImGui::Button("Save All")) {
         SaveAll();
-        std::string filename = "EasingFile"; // 保存したファイル名をここに入れる
+        std::string filename = "EasingFile";
         std::string message  = std::format("{}.json saved.", filename);
         MessageBoxA(nullptr, message.c_str(), "EasingEditor", 0);
     }
