@@ -26,46 +26,51 @@ void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
     backRatio_  = easingParam.backRatio;
 }
 
+
 template <typename T>
 void Easing<T>::ApplyFromJson(const std::string& fileName) {
-    // JSONファイルを読み込む
     std::ifstream ifs(fileName);
     if (!ifs.is_open()) {
-
+    
         return;
     }
 
     nlohmann::json easingJson;
     ifs >> easingJson;
 
+    // "test" キーの中身を取得（なければ return）
+    if (!easingJson.contains("test")) {
+     
+        return;
+    }
+
+    const auto& inner = easingJson.at("test");
+
     EasingParameter<T> param;
-    param.type       = static_cast<EasingType>(easingJson.at("type").get<int>());
-    param.finishType = static_cast<EasingFinishValueType>(easingJson.at("finishType").get<int>());
+    param.type       = static_cast<EasingType>(inner.at("type").get<int>());
+    param.finishType = static_cast<EasingFinishValueType>(inner.at("finishType").get<int>());
 
     if constexpr (std::is_same_v<T, Vector3>) {
-
-        const auto& sv   = easingJson.at("startValue");
-        const auto& ev   = easingJson.at("endValue");
+        const auto& sv   = inner.at("startValue");
+        const auto& ev   = inner.at("endValue");
         param.startValue = Vector3{sv[0].get<float>(), sv[1].get<float>(), sv[2].get<float>()};
         param.endValue   = Vector3{ev[0].get<float>(), ev[1].get<float>(), ev[2].get<float>()};
 
     } else if constexpr (std::is_same_v<T, Vector2>) {
-
-        const auto& sv   = easingJson.at("startValue");
-        const auto& ev   = easingJson.at("endValue");
+        const auto& sv   = inner.at("startValue");
+        const auto& ev   = inner.at("endValue");
         param.startValue = Vector2{sv[0].get<float>(), sv[1].get<float>()};
         param.endValue   = Vector2{ev[0].get<float>(), ev[1].get<float>()};
 
     } else if constexpr (std::is_same_v<T, float>) {
-
-        param.startValue = easingJson.at("startValue").get<T>();
-        param.endValue   = easingJson.at("endValue").get<T>();
+        param.startValue = inner.at("startValue").get<float>();
+        param.endValue   = inner.at("endValue").get<float>();
     }
 
-    param.maxTime   = easingJson.at("maxTime").get<float>();
-    param.amplitude = easingJson.value("amplitude", 0.0f);
-    param.period    = easingJson.value("period", 0.0f);
-    param.backRatio = easingJson.value("backRatio", 0.0f);
+    param.maxTime   = inner.at("maxTime").get<float>();
+    param.amplitude = inner.value("amplitude", 0.0f);
+    param.period    = inner.value("period", 0.0f);
+    param.backRatio = inner.value("backRatio", 0.0f);
 
     finishValueType_ = param.finishType;
 
@@ -76,12 +81,16 @@ template <typename T>
 void Easing<T>::ApplyForImGui() {
 
     if constexpr (std::is_same_v<T, float>) {
-        easingFiles_ = GetFileNamesForDyrectry(FilePath_ + "float");
+        filePathForType_ = "float";
+
     } else if constexpr (std::is_same_v<T, Vector2>) {
-        easingFiles_ = GetFileNamesForDyrectry(FilePath_ + "Vector2");
+        filePathForType_ = "Vector2";
+
     } else if constexpr (std::is_same_v<T, Vector3>) {
-        easingFiles_ = GetFileNamesForDyrectry(FilePath_ + "Vector3");
+        filePathForType_ = "Vector3";
     }
+
+    easingFiles_ = GetFileNamesForDyrectry(FilePath_ + filePathForType_);
 
     if (easingFiles_.empty()) {
         return;
@@ -91,14 +100,17 @@ void Easing<T>::ApplyForImGui() {
     for (const auto& name : easingFiles_) {
         fileNamesCStr.push_back(name.c_str());
     }
+#ifdef _DEBUG
 
     // Combo UI表示
-    if (ImGui::Combo("Easing Preset", &selectedFileIndex_, fileNamesCStr.data(), static_cast<int>(fileNamesCStr.size()))) {
-        // 選択されたファイルのフルパスを作成
-        const std::string selectedFile = FilePath_ + "/" + easingFiles_[selectedFileIndex_];
+    ImGui::Combo("Easing Preset", &selectedFileIndex_, fileNamesCStr.data(), static_cast<int>(fileNamesCStr.size()));
 
-        ApplyFromJson(selectedFile);
+    if (ImGui::Button("Apply")) {
+        // 選択されたファイルのフルパスを作成
+        const std::string selectedFile = FilePath_ + filePathForType_ + "/" + easingFiles_[selectedFileIndex_];
+        ApplyFromJson(selectedFile +".json");
     }
+#endif // _DEBUG
 }
 // 時間を進めて値を更新
 template <typename T>
@@ -335,19 +347,19 @@ void Easing<Vector2>::SetAdaptValue<Vector2>(Vector3* value) {
     switch (adaptVector2AxisType_) {
     case AdaptVector2AxisType::XY:
         vector2Proxy_ = std::make_unique<XYProxy>(value);
-      
+
         break;
     case AdaptVector2AxisType::XZ:
         vector2Proxy_ = std::make_unique<XZProxy>(value);
-      
+
         break;
     case AdaptVector2AxisType::YZ:
         vector2Proxy_ = std::make_unique<YZProxy>(value);
-    
+
         break;
     default:
         vector2Proxy_ = std::make_unique<XYProxy>(value);
-      
+
         break;
     }
     currentValue_ = &vector2Proxy_->Get();

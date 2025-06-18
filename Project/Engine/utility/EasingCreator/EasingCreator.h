@@ -17,7 +17,7 @@ public:
 
     const std::unordered_map<std::string, EasingParameter<T>>& GetPresets() const { return presets_; }
 
-    void ToJson(nlohmann::json& j) const;
+    void ToJson(nlohmann::json& j, const std::string& name, const EasingParameter<T>& param) const;
     void FromJson(const nlohmann::json& j);
 
     void Clear(); // 新規作成相当

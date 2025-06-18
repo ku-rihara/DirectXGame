@@ -72,6 +72,8 @@ void EditorScene::Debug() {
     ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
     ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
     ImGui::End();
+
+    easingTestObject_->Debug();
 #endif
 }
 

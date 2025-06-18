@@ -33,8 +33,6 @@ void EasingTestObj::Update() {
         easing_.Reset();
 	}
 
-	easing_.ApplyForImGui();
-
 	ScaleEasing();
 
 	transform_.UpdateMatrix();
@@ -46,7 +44,7 @@ void EasingTestObj::Draw(ViewProjection& viewProjection) {
 
 void EasingTestObj::Debug() {
 #ifdef _DEBUG
-	
+    easing_.ApplyForImGui();
 #endif // _DEBUG
 }
 

@@ -77,6 +77,7 @@ private:
     int32_t selectedFileIndex_;
     std::vector<std::string> easingFiles_;
     const std::string FilePath_ = "Resources/EasingParameter/";
+    std::string filePathForType_;
     std::unique_ptr<IVector2Proxy> vector2Proxy_;
 
 public:
