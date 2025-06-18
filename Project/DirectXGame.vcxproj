@@ -63,6 +63,7 @@
     <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp" />
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
     <ClCompile Include="Engine\utility\EasingCreator\EasingCreator.cpp" />
+    <ClCompile Include="Engine\utility\EasingCreator\EasingEditor.cpp" />
     <ClCompile Include="Engine\utility\EasingCreator\EasingParameterData.cpp" />
     <ClCompile Include="Engine\utility\ParameterEditor\GlobalParameter.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleCommon.cpp" />
@@ -227,6 +228,7 @@
     <ClInclude Include="Engine\struct\VertexData.h" />
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h" />
     <ClInclude Include="Engine\utility\EasingCreator\EasingCreator.h" />
+    <ClInclude Include="Engine\utility\EasingCreator\EasingEditor.h" />
     <ClInclude Include="Engine\utility\EasingCreator\EasingParameterData.h" />
     <ClInclude Include="Engine\utility\ParameterEditor\GlobalParameter.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleCommon.h" />
@@ -327,6 +329,7 @@
     <ClInclude Include="math\random.h" />
     <ClInclude Include="math\Shake.h" />
     <ClInclude Include="math\Vector2.h" />
+    <ClInclude Include="math\Vector2Proxy.h" />
     <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="math\Vector4.h" />
   </ItemGroup>

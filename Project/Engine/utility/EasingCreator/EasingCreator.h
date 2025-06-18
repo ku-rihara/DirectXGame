@@ -7,8 +7,8 @@
 template <typename T>
 class EasingCreator {
 public:
-    void LoadFromFile(const std::string& path);
-    void SaveToFile(const std::string& path) const;
+    void LoadParameter(const std::string& path);
+    void SaveParameter(const std::string& path) const;
 
     void AddPreset(const std::string& name, const EasingParameter<T>& param);
     void RemovePreset(const std::string& name);
@@ -25,7 +25,7 @@ public:
     void Edit();
 
 private:
-    const std ::string kDirectoryPath_ = "Resources/EasingParameter";
+  
     std::unordered_map<std::string, EasingParameter<T>> presets_;
 
      // UI状態管理用

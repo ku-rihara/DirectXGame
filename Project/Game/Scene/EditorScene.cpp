@@ -19,11 +19,17 @@ EditorScene::~EditorScene() {
 void EditorScene::Init() {
 
     BaseScene::Init();
-   
+    easingTestObject_ = std::make_unique<EasingTestObj>();
+    easingTestObject_->Init();
+
+    easingEditor_.Init();
 }
 
 void EditorScene::Update() {
-   
+    
+     easingEditor_.Edit();
+    easingTestObject_->Update();
+
     ParticleManager::GetInstance()->Update();
 
     Debug();
@@ -42,7 +48,9 @@ void EditorScene::ModelDraw() {
     /// commandList取得
     ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
     Model::PreDraw(commandList);
-  
+
+     easingTestObject_->Draw(viewProjection_);
+
     ParticleManager::GetInstance()->Draw(viewProjection_);
 }
 

@@ -17,7 +17,7 @@ void MonsterBall::Init() {
 	transform_.scale_ = {1, 1, 1};
 
 	// イージングセッティング
-	easing_.SettingValue(EasingType::OutBack, Vector3::ZeroVector(), Vector3::UnitVector(), 0.5f);
+	//easing_.SettingValue(EasingType::OutBack, Vector3::ZeroVector(), Vector3::UnitVector(), 0.5f);
     easing_.SetAdaptValue(&transform_.scale_);
 	
 	objct3D_->material_.materialData_->enableLighting = 3;
@@ -29,6 +29,8 @@ void MonsterBall::Update() {
 	if (Input::GetInstance()->TrrigerKey(DIK_U)) {
         easing_.Reset();
 	}
+
+	easing_.ApplyForImGui();
 
 	ScaleEasing();
 

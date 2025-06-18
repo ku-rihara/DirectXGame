@@ -757,6 +757,12 @@
     <ClCompile Include="Engine\utility\EasingCreator\EasingParameterData.cpp">
       <Filter>MyEngine\.cpp\utility\EasingCreator</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\utility\EasingCreator\EasingEditor.cpp">
+      <Filter>MyEngine\.cpp\utility\EasingCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\EasingTestObj\EasingTestObj.cpp">
+      <Filter>Game\EasingTestObj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
