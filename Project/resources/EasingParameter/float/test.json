@@ -1,14 +1,13 @@
 {
     "test": {
-        "test": {
-            "amplitude": 2.0,
-            "backRatio": 2.0,
-            "endValue": 9.0,
-            "finishType": 1,
-            "maxTime": 1.0,
-            "period": 0.20000000298023224,
-            "startValue": 0.0,
-            "type": 12
-        }
+        "adaptFloatAxisType": 0,
+        "amplitude": 0.0,
+        "backRatio": 0.0,
+        "endValue": -107374176.0,
+        "finishType": 1,
+        "maxTime": 0.0,
+        "period": 0.0,
+        "startValue": -107374176.0,
+        "type": 0
     }
 }
