@@ -85,6 +85,7 @@ void EasingEditor::UpdatePreview() {
         v3Target_->SettingValue(vec3EasingCreator_.GetAllPresets().at(autoPresetName_));
     }
 }
+
 // 明示的インスタンス化をここで行う
 template void EasingEditor::SetAutoApplyTarget<float>(Easing<float>*, const std::string&);
 template void EasingEditor::SetAutoApplyTarget<Vector2>(Easing<Vector2>*, const std::string&);
