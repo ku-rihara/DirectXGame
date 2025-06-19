@@ -38,13 +38,13 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
     nlohmann::json easingJson;
     ifs >> easingJson;
 
-    // "test" キーの中身を取得（なければ return）
-    if (!easingJson.contains("test")) {
-     
+ 
+    if (easingJson.empty()) {
         return;
     }
 
-    const auto& inner = easingJson.at("test");
+    const auto& inner = easingJson.begin().value(); 
+
 
     EasingParameter<T> param;
     param.type       = static_cast<EasingType>(inner.at("type").get<int>());
