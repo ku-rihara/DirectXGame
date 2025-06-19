@@ -14,6 +14,8 @@ class Easing {
 public:
     Easing() = default;
 
+    void Init(const std::string &name);
+
     void Reset();
 
     //  Easing setting
@@ -24,6 +26,9 @@ public:
     void ApplyForImGui();
     void FilePathChangeForType();
 
+    void SaveAppliedJsonFileName();
+    void LoadAndApplyFromSavedJson();
+   
     // イージング更新
     void Update(float deltaTime);
 
@@ -77,9 +82,13 @@ public:
 private:
     int32_t selectedFileIndex_;
     std::vector<std::string> easingFiles_;
+
     const std::string FilePath_ = "Resources/EasingParameter/";
+    std::string currentAppliedFileName_;
     std::string filePathForType_;
     std::string currentSelectedFileName_;
+    std::string easingName_;
+
     std::unique_ptr<IVector2Proxy> vector2Proxy_;
 
 public:
@@ -89,6 +98,7 @@ public:
     const T& GetValue() const { return *currentValue_; }
     bool IsFinished() const { return isFinished_; }
     bool IsRunning() const { return isRunning_; }
+    std::string GetCurrentAppliedFileName() const { return currentAppliedFileName_; }
 
     /// -------------------------------------------------------------------------
     /// Setter methods

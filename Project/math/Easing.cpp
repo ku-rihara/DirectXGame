@@ -2,6 +2,14 @@
 #include "Function/GetFile.h"
 #include <fstream>
 #include <imGui.h>
+#include<Windows.h>
+
+template <typename T>
+void Easing<T>::Init(const std::string& name) {
+ 
+    easingName_ = name;
+    LoadAndApplyFromSavedJson();
+}
 
 template <typename T>
 void Easing<T>::Reset() {
@@ -26,15 +34,60 @@ void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
     backRatio_  = easingParam.backRatio;
 }
 
+// Easing.cpp に追加する実装
+template <typename T>
+void Easing<T>::SaveAppliedJsonFileName() {
+    if (currentAppliedFileName_.empty()) {
+        return;
+    }
+
+    FilePathChangeForType();
+
+    std::string savePath = FilePath_ + "/" + easingName_ + ".json";
+
+    nlohmann::json saveJson;
+    saveJson["appliedFileName"] = currentAppliedFileName_;
+    saveJson["type"]            = filePathForType_;
+   
+    std::ofstream ofs(savePath);
+    if (ofs.is_open()) {
+        ofs << saveJson.dump(4);
+        ofs.close();
+    }
+}
+
+template <typename T>
+void Easing<T>::LoadAndApplyFromSavedJson() {
+    FilePathChangeForType();
+
+    std::string savePath = FilePath_ + "/" + easingName_ + ".json";
+
+    std::ifstream ifs(savePath);
+    if (!ifs.is_open()) {
+        return;
+    }
+
+    nlohmann::json saveJson;
+    ifs >> saveJson;
+
+    if (saveJson.contains("appliedFileName")) {
+        std::string savedFileName = saveJson["appliedFileName"].get<std::string>();
+        if (!savedFileName.empty()) {
+            // 保存されていたJSONファイルを適用
+            ApplyFromJson(savedFileName);
+        }
+    }
+}
+
+
 template <typename T>
 void Easing<T>::ApplyFromJson(const std::string& fileName) {
     FilePathChangeForType();
 
-   currentSelectedFileName_= FilePath_ + filePathForType_ + "/" + fileName;
-     
+    currentSelectedFileName_ = FilePath_ + filePathForType_ + "/" + fileName;
+
     std::ifstream ifs(currentSelectedFileName_);
     if (!ifs.is_open()) {
-
         return;
     }
 
@@ -76,11 +129,13 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
     finishValueType_ = param.finishType;
 
     SettingValue(param);
+
+    currentAppliedFileName_ = fileName;
 }
 
+// ApplyForImGui関数も修正
 template <typename T>
 void Easing<T>::ApplyForImGui() {
-
     FilePathChangeForType();
 
     easingFiles_ = GetFileNamesForDyrectry(FilePath_ + filePathForType_);
@@ -95,16 +150,40 @@ void Easing<T>::ApplyForImGui() {
     }
 #ifdef _DEBUG
 
-    // Combo UI表示
-    ImGui::Combo("Easing Preset", &selectedFileIndex_, fileNamesCStr.data(), static_cast<int>(fileNamesCStr.size()));
+    // 現在適用されているファイル名を表示
+    if (!currentAppliedFileName_.empty()) {
+        ImGui::Text("Currently Applied: %s", currentAppliedFileName_.c_str());
+    }
 
-    if (ImGui::Button("Apply")) {
-        // 選択されたファイルのフルパスを作成
-        const std::string selectedFile = easingFiles_[selectedFileIndex_];
-        ApplyFromJson(selectedFile + ".json");
+   // Combo UI表示（選択で自動適用）
+    if (ImGui::Combo("Easing Preset", &selectedFileIndex_, fileNamesCStr.data(), static_cast<int>(fileNamesCStr.size()))) {
+        // Comboで選択が変更された時
+        const std::string selectedFile = easingFiles_[selectedFileIndex_] + ".json";
+
+        // 同じファイルが既に適用されている場合はスキップ
+        if (currentAppliedFileName_ == selectedFile) {
+            return;
+        }
+
+        // 選択されたファイルを適用
+        ApplyFromJson(selectedFile);
+    }
+
+    // ロード
+    if (ImGui::Button("Load")) {
+        LoadAndApplyFromSavedJson();
+    }
+
+    // 保存
+    if (ImGui::Button("Save")) {
+        SaveAppliedJsonFileName();
+        std::string filename = "EasingAdaptFile";
+        std::string message  = std::format("{}.json saved.", filename);
+        MessageBoxA(nullptr, message.c_str(), "Easing", 0);
     }
 #endif // _DEBUG
 }
+
 // 時間を進めて値を更新
 template <typename T>
 void Easing<T>::Update(float deltaTime) {
@@ -118,7 +197,6 @@ void Easing<T>::Update(float deltaTime) {
     if (currentTime_ >= maxTime_) {
         FinishBehavior();
     }
-
 }
 
 template <typename T>

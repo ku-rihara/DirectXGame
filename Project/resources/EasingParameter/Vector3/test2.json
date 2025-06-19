@@ -1,6 +1,6 @@
 {
     "test2": {
-        "amplitude": 2.0,
+        "amplitude": 3.0,
         "backRatio": 0.0,
         "endValue": [
             1.0,
@@ -11,9 +11,9 @@
         "maxTime": 0.7400000095367432,
         "period": 0.20000000298023224,
         "startValue": [
-            5.0,
-            5.0,
-            5.0
+            6.0,
+            6.0,
+            6.0
         ],
         "type": 27
     }

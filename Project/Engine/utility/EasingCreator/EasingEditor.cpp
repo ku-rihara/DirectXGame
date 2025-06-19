@@ -1,5 +1,5 @@
 #include "EasingEditor.h"
-#include "base/WinApp.h"
+#include<Windows.h>
 #include <format>
 #include <imgui.h>
 
@@ -52,7 +52,7 @@ void EasingEditor::Edit() {
         std::string message  = std::format("{}.json saved.", filename);
         MessageBoxA(nullptr, message.c_str(), "EasingEditor", 0);
     }
-  
+
     if (ImGui::Button("Load All")) {
         LoadAll();
     }
@@ -65,16 +65,10 @@ void EasingEditor::SetAutoApplyTarget(Easing<T>* easing, const std::string& pres
     autoPresetName_ = presetName;
 
     if constexpr (std::is_same_v<T, float>) {
-        fTarget_  = easing;
-        v2Target_ = nullptr;
-        v3Target_ = nullptr;
+        fTarget_ = easing;
     } else if constexpr (std::is_same_v<T, Vector2>) {
-        fTarget_  = nullptr;
         v2Target_ = easing;
-        v3Target_ = nullptr;
     } else if constexpr (std::is_same_v<T, Vector3>) {
-        fTarget_  = nullptr;
-        v2Target_ = nullptr;
         v3Target_ = easing;
     }
 }
