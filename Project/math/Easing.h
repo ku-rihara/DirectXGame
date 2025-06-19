@@ -2,19 +2,19 @@
 #include "EasingFunction.h"
 #include "utility/EasingCreator/EasingCreator.h"
 #include "Vector2Proxy.h"
-//std
+// std
 #include <cstdint>
-#include <string>
-#include <vector>
 #include <memory>
+#include <string>
 #include <type_traits>
+#include <vector>
 
 template <typename T>
 class Easing {
 public:
     Easing() = default;
 
-    void Init(const std::string &name);
+    void Init(const std::string& name);
 
     void Reset();
 
@@ -28,12 +28,13 @@ public:
 
     void SaveAppliedJsonFileName();
     void LoadAndApplyFromSavedJson();
-   
+    void ChangeAdaptAxis();
+
     // イージング更新
     void Update(float deltaTime);
 
     // 変数に適応
-   void SetAdaptValue(T* value);
+    void SetAdaptValue(T* value);
 
     template <typename U = T>
     typename std::enable_if_t<std::is_same_v<U, float>, void>
@@ -46,7 +47,6 @@ public:
     template <typename U = T>
     typename std::enable_if_t<std::is_same_v<U, Vector2>, void>
     SetAdaptValue(Vector3* value);
-   
 
     void SetValue(const T& value);
 
@@ -81,6 +81,9 @@ public:
 
 private:
     int32_t selectedFileIndex_;
+    AdaptVector2AxisType oldTypeVector2_;
+    AdaptFloatAxisType oldTypeFloat_;
+
     std::vector<std::string> easingFiles_;
 
     const std::string FilePath_ = "Resources/EasingParameter/";
@@ -89,6 +92,8 @@ private:
     std::string currentSelectedFileName_;
     std::string easingName_;
 
+    Vector2* adaptTargetVec2_ = nullptr;
+    Vector3* adaptTargetVec3_ = nullptr;
     std::unique_ptr<IVector2Proxy> vector2Proxy_;
 
 public:

@@ -17,7 +17,7 @@ private:
 	// モデル
 	std::unique_ptr<Object3d> object3D_=nullptr;
 
-	Easing<Vector3> easing_;
+	Easing<Vector2> easing_;
 	
 public:
     EasingTestObj();
