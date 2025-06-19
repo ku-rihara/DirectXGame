@@ -22,6 +22,7 @@ public:
     // 適応
     void ApplyFromJson(const std::string& fileName);
     void ApplyForImGui();
+    void FilePathChangeForType();
 
     // イージング更新
     void Update(float deltaTime);
@@ -78,6 +79,7 @@ private:
     std::vector<std::string> easingFiles_;
     const std::string FilePath_ = "Resources/EasingParameter/";
     std::string filePathForType_;
+    std::string currentSelectedFileName_;
     std::unique_ptr<IVector2Proxy> vector2Proxy_;
 
 public:

@@ -16,11 +16,7 @@ void EasingTestObj::Init() {
 	transform_.translation_.z = -24.0f;
 	transform_.scale_ = {1, 1, 1};
 
-
-
-	// イージングセッティング
-	//easing_.SettingValue(EasingType::OutBack, Vector3::ZeroVector(), Vector3::UnitVector(), 0.5f);
- 
+    easing_.ApplyFromJson("test.json");
     easing_.SetAdaptValue(&transform_.scale_);
 	
 	object3D_->material_.materialData_->enableLighting = 3;

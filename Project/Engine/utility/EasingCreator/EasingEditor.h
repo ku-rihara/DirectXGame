@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Easing.h"
 #include "EasingCreator.h"
 #include "Vector2.h"
 #include "Vector3.h"
@@ -16,8 +17,11 @@ public:
     void LoadAll();
     void SaveAll();
 
-private:
+    template <typename T>
+    void SetAutoApplyTarget(Easing<T>* easing, const std::string& presetName);
+    void UpdatePreview();
 
+private:
     enum class TabType {
         Float,
         Vector2,
@@ -32,7 +36,13 @@ private:
     std ::string vec2Path_;
     std ::string vec3Path_;
 
-    EasingCreator<float>   fEasingCreator_;
+      std::string autoPresetName_;
+
+    EasingCreator<float> fEasingCreator_;
     EasingCreator<Vector2> vec2EasingCreator_;
     EasingCreator<Vector3> vec3EasingCreator_;
+
+    Easing<float>* fTarget_    = nullptr;
+    Easing<Vector2>* v2Target_ = nullptr;
+    Easing<Vector3>* v3Target_ = nullptr;
 };

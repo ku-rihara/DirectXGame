@@ -26,25 +26,26 @@ void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
     backRatio_  = easingParam.backRatio;
 }
 
-
 template <typename T>
 void Easing<T>::ApplyFromJson(const std::string& fileName) {
-    std::ifstream ifs(fileName);
+    FilePathChangeForType();
+
+   currentSelectedFileName_= FilePath_ + filePathForType_ + "/" + fileName;
+     
+    std::ifstream ifs(currentSelectedFileName_);
     if (!ifs.is_open()) {
-    
+
         return;
     }
 
     nlohmann::json easingJson;
     ifs >> easingJson;
 
- 
     if (easingJson.empty()) {
         return;
     }
 
-    const auto& inner = easingJson.begin().value(); 
-
+    const auto& inner = easingJson.begin().value();
 
     EasingParameter<T> param;
     param.type       = static_cast<EasingType>(inner.at("type").get<int>());
@@ -80,15 +81,7 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
 template <typename T>
 void Easing<T>::ApplyForImGui() {
 
-    if constexpr (std::is_same_v<T, float>) {
-        filePathForType_ = "float";
-
-    } else if constexpr (std::is_same_v<T, Vector2>) {
-        filePathForType_ = "Vector2";
-
-    } else if constexpr (std::is_same_v<T, Vector3>) {
-        filePathForType_ = "Vector3";
-    }
+    FilePathChangeForType();
 
     easingFiles_ = GetFileNamesForDyrectry(FilePath_ + filePathForType_);
 
@@ -107,8 +100,8 @@ void Easing<T>::ApplyForImGui() {
 
     if (ImGui::Button("Apply")) {
         // 選択されたファイルのフルパスを作成
-        const std::string selectedFile = FilePath_ + filePathForType_ + "/" + easingFiles_[selectedFileIndex_];
-        ApplyFromJson(selectedFile +".json");
+        const std::string selectedFile = easingFiles_[selectedFileIndex_];
+        ApplyFromJson(selectedFile + ".json");
     }
 #endif // _DEBUG
 }
@@ -120,11 +113,25 @@ void Easing<T>::Update(float deltaTime) {
     }
 
     currentTime_ += deltaTime;
+    CalculateValue();
+
     if (currentTime_ >= maxTime_) {
         FinishBehavior();
     }
 
-    CalculateValue();
+}
+
+template <typename T>
+void Easing<T>::FilePathChangeForType() {
+    if constexpr (std::is_same_v<T, float>) {
+        filePathForType_ = "float";
+
+    } else if constexpr (std::is_same_v<T, Vector2>) {
+        filePathForType_ = "Vector2";
+
+    } else if constexpr (std::is_same_v<T, Vector3>) {
+        filePathForType_ = "Vector3";
+    }
 }
 
 template <typename T>

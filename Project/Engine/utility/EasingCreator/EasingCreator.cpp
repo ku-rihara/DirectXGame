@@ -176,12 +176,12 @@ void EasingCreator<T>::Edit() {
     if (!selectedName_.empty() && presets_.count(selectedName_)) {
         ImGui::Text("Edit Preset: %s", selectedName_.c_str());
 
-        // Rename
-        if (ImGui::InputText("Rename", renameBuf_, sizeof(renameBuf_))) {}
-        if (std::string(renameBuf_) != selectedName_ && ImGui::Button("Apply Rename")) {
-            RenamePreset(selectedName_, renameBuf_);
-            selectedName_ = renameBuf_;
-        }
+        //// Rename
+        //if (ImGui::InputText("Rename", renameBuf_, sizeof(renameBuf_))) {}
+        //if (std::string(renameBuf_) != selectedName_ && ImGui::Button("Apply Rename")) {
+        //    RenamePreset(selectedName_, renameBuf_);
+        //    selectedName_ = renameBuf_;
+        //}
 
         // イージングパラメータ
         ImGui::DragFloat("Max Time", &editingParam_.maxTime, 0.01f);
