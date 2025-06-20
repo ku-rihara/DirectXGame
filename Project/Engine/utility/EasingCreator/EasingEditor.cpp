@@ -1,7 +1,7 @@
 #include "EasingEditor.h"
-#include<Windows.h>
 #include <format>
 #include <imgui.h>
+#include <Windows.h>
 
 void EasingEditor::Init() {
     floatPath_ = kDirectoryPath_ + "float";
@@ -57,36 +57,29 @@ void EasingEditor::Edit() {
         LoadAll();
     }
 
+    if (currentTab_ == TabType::Float) {
+
+        // 即時反映
+        if (fTarget_ && !fTarget_->GetCurrentAppliedFileName().empty()) {
+            if (const auto* param = fEasingCreator_.GetEditingParam(fTarget_->GetCurrentAppliedFileName())) {
+                fTarget_->SettingValue(*param);
+            }
+        }
+    } else if (currentTab_ == TabType::Vector2) {
+
+        if (v2Target_ && !v2Target_->GetCurrentAppliedFileName().empty()) {
+            if (const auto* param = vec2EasingCreator_.GetEditingParam(v2Target_->GetCurrentAppliedFileName())) {
+                v2Target_->SettingValue(*param);
+            }
+        }
+    } else if (currentTab_ == TabType::Vector3) {
+
+        if (v3Target_ && !v3Target_->GetCurrentAppliedFileName().empty()) {
+            if (const auto* param = vec3EasingCreator_.GetEditingParam(v3Target_->GetCurrentAppliedFileName())) {
+                v3Target_->SettingValue(*param);
+            }
+        }
+    }
+
     ImGui::End();
 }
-
-template <typename T>
-void EasingEditor::SetAutoApplyTarget(Easing<T>* easing, const std::string& presetName) {
-    autoPresetName_ = presetName;
-
-    if constexpr (std::is_same_v<T, float>) {
-        fTarget_ = easing;
-    } else if constexpr (std::is_same_v<T, Vector2>) {
-        v2Target_ = easing;
-    } else if constexpr (std::is_same_v<T, Vector3>) {
-        v3Target_ = easing;
-    }
-}
-
-void EasingEditor::UpdatePreview() {
-    if (autoPresetName_.empty())
-        return;
-
-    if (fTarget_ && fEasingCreator_.GetAllPresets().count(autoPresetName_)) {
-        fTarget_->SettingValue(fEasingCreator_.GetAllPresets().at(autoPresetName_));
-    } else if (v2Target_ && vec2EasingCreator_.GetAllPresets().count(autoPresetName_)) {
-        v2Target_->SettingValue(vec2EasingCreator_.GetAllPresets().at(autoPresetName_));
-    } else if (v3Target_ && vec3EasingCreator_.GetAllPresets().count(autoPresetName_)) {
-        v3Target_->SettingValue(vec3EasingCreator_.GetAllPresets().at(autoPresetName_));
-    }
-}
-
-// 明示的インスタンス化をここで行う
-template void EasingEditor::SetAutoApplyTarget<float>(Easing<float>*, const std::string&);
-template void EasingEditor::SetAutoApplyTarget<Vector2>(Easing<Vector2>*, const std::string&);
-template void EasingEditor::SetAutoApplyTarget<Vector3>(Easing<Vector3>*, const std::string&);

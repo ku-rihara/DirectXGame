@@ -1,5 +1,6 @@
 #include "Easing.h"
 #include "Function/GetFile.h"
+#include "utility/EasingCreator/EasingCreator.h"
 #include <fstream>
 #include <imGui.h>
 #include <Windows.h>
@@ -97,7 +98,7 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
         return;
     }
 
-     // 以前の値を保存
+    // 以前の値を保存
     oldTypeVector2_ = adaptVector2AxisType_;
     oldTypeFloat_   = adaptFloatAxisType_;
 
@@ -151,7 +152,6 @@ template <typename T>
 void Easing<T>::ChangeAdaptAxis() {
 
     if constexpr (std::is_same_v<T, Vector2>) {
-      
 
         // 適応するVector2の軸が変わった場合、値を更新
         if (oldTypeVector2_ != adaptVector2AxisType_ && adaptTargetVec3_) {
@@ -159,7 +159,7 @@ void Easing<T>::ChangeAdaptAxis() {
         }
 
     } else if constexpr (std::is_same_v<T, float>) {
-     
+
         // 適応するfloatの軸が変わった場合、値を更新
         if (oldTypeFloat_ != adaptFloatAxisType_) {
 
@@ -501,6 +501,23 @@ template <typename T>
 void Easing<T>::Easing::SetValue(const T& value) {
     *currentValue_ = value;
 }
+
+
+//template <typename T>
+//void Easing<T>::Easing::SetEditor(EasingEditor* editor) {
+//     editor_ = editor;
+//
+//     if constexpr (std::is_same_v<T, float>) {
+//         creator_ = editor->GetCreator<EasingCreator<float>>();
+//
+//     } else if constexpr (std::is_same_v<T, Vector2>) {
+//         filePathForType_ = "Vector2";
+//
+//     } else if constexpr (std::is_same_v<T, Vector3>) {
+//         filePathForType_ = "Vector3";
+//     }
+//    
+// }
 
 template class Easing<float>;
 template class Easing<Vector2>;

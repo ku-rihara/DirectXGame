@@ -20,8 +20,9 @@ public:
     void ToJson(nlohmann::json& j, const std::string& name, const EasingParameter<T>& param) const;
     void FromJson(const nlohmann::json& j);
 
-    void Clear(); // 新規作成相当
+   const EasingParameter<T>* GetEditingParam(const std::string& name) const;
 
+    void Clear(); 
     void Edit();
 
 private:
