@@ -2,41 +2,54 @@
 #include "Vector2.h"
 #include "Vector3.h"
 
-struct IVector2Proxy {
-    virtual Vector2 Get() const        = 0;
-    virtual void Set(const Vector2& v) = 0;
-    virtual ~IVector2Proxy()           = default;
+class IVector2Proxy {
+public:
+    virtual ~IVector2Proxy() = default;
+
+    virtual Vector2& Get()             = 0;
+    virtual const Vector2& Get() const = 0;
+    virtual void Update()              = 0; // Vector3からVector2に値を同期
+    virtual void Apply()               = 0; // Vector2からVector3に値を適用
 };
 
-struct XYProxy : public IVector2Proxy {
-    float& x;
-    float& y;
-    XYProxy(Vector3& vec) : x(vec.x), y(vec.y) {}
-    Vector2 Get() const override { return Vector2(x, y); }
-    void Set(const Vector2& v) override {
-        x = v.x;
-        y = v.y;
-    }
+// XY軸プロキシ
+class XYProxy : public IVector2Proxy {
+public:
+    explicit XYProxy(Vector3* target);
+    Vector2& Get() override;
+    const Vector2& Get() const override;
+    void Update() override;
+    void Apply() override;
+
+private:
+    Vector3* target_;
+    Vector2 proxy_;
 };
 
-struct XZProxy : public IVector2Proxy {
-    float& x;
-    float& z;
-    XZProxy(Vector3& vec) : x(vec.x), z(vec.z) {}
-    Vector2 Get() const override { return Vector2(x, z); }
-    void Set(const Vector2& v) override {
-        x = v.x;
-        z = v.y;
-    }
+// XZ軸プロキシ
+class XZProxy : public IVector2Proxy {
+public:
+    explicit XZProxy(Vector3* target);
+    Vector2& Get() override;
+    const Vector2& Get() const override;
+    void Update() override;
+    void Apply() override;
+
+private:
+    Vector3* target_;
+    Vector2 proxy_;
 };
 
-struct YZProxy : public IVector2Proxy {
-    float& y;
-    float& z;
-    YZProxy(Vector3& vec) : y(vec.y), z(vec.z) {}
-    Vector2 Get() const override { return Vector2(y, z); }
-    void Set(const Vector2& v) override {
-        y = v.x;
-        z = v.y;
-    }
+// YZ軸プロキシ
+class YZProxy : public IVector2Proxy {
+public:
+    explicit YZProxy(Vector3* target);
+    Vector2& Get() override;
+    const Vector2& Get() const override;
+    void Update() override;
+    void Apply() override;
+
+private:
+    Vector3* target_;
+    Vector2 proxy_;
 };

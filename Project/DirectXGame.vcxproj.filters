@@ -760,6 +760,9 @@
     <ClCompile Include="Engine\utility\EasingCreator\EasingEditor.cpp">
       <Filter>MyEngine\.cpp\utility\EasingCreator</Filter>
     </ClCompile>
+    <ClCompile Include="math\Vector2Proxy.cpp">
+      <Filter>liberary\.cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">

@@ -111,8 +111,7 @@ constexpr std::array<const char*, static_cast<int>(AdaptVector2AxisType::COUNT)>
     "YZ",
 };
 
-
-constexpr const char* FinishTypeLabels[] = {
+constexpr std::array<const char*, static_cast<int>(AdaptVector2AxisType::COUNT)> FinishTypeLabels = {
     "Start", "End"
 };
 
@@ -122,8 +121,8 @@ struct EasingParameter {
     EasingType type=EasingType::InSine;
     EasingFinishValueType finishType = EasingFinishValueType::End;
 
-    AdaptFloatAxisType adaptFloatAxisType_=AdaptFloatAxisType::X;
-    AdaptVector2AxisType adaptVec2AxisType_=AdaptVector2AxisType::XY;
+    AdaptFloatAxisType adaptFloatAxisType=AdaptFloatAxisType::X;
+    AdaptVector2AxisType adaptVec2AxisType=AdaptVector2AxisType::XY;
 
     T startValue;
     T endValue;
