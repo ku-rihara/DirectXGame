@@ -29,7 +29,7 @@ void EasingCreator<T>::LoadParameter(const std::string& path) {
 template <typename T>
 void EasingCreator<T>::SaveParameter(const std::string& path) const {
     std::filesystem::create_directories(path);
-
+   
     for (const auto& [name, param] : presets_) {
         nlohmann::json singlePresetJson;
         ToJson(singlePresetJson, name, param); 

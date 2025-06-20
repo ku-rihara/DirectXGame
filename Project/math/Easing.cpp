@@ -43,7 +43,7 @@ void Easing<T>::SaveAppliedJsonFileName() {
 
     FilePathChangeForType();
 
-    std::string savePath = FilePath_ + "/" + easingName_ + filePathForType_ + ".json";
+    std::string savePath = FilePath_ + easingName_ + filePathForType_ + ".json";
 
     nlohmann::json saveJson;
     saveJson["appliedFileName"] = currentAppliedFileName_;
@@ -60,7 +60,7 @@ template <typename T>
 void Easing<T>::LoadAndApplyFromSavedJson() {
     FilePathChangeForType();
 
-    std::string savePath = FilePath_ + "/" + easingName_ + filePathForType_ + ".json";
+    std::string savePath = FilePath_ + easingName_ + filePathForType_ + ".json";
 
     std::ifstream ifs(savePath);
     if (!ifs.is_open()) {
