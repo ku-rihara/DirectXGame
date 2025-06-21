@@ -239,6 +239,9 @@ void Easing<T>::Update(float deltaTime) {
 
     if (currentTime_ >= maxTime_) {
         FinishBehavior();
+        if(onFinishCallback_) {
+            onFinishCallback_();
+        }
     }
 }
 

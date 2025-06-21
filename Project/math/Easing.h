@@ -8,6 +8,7 @@
 #include <string>
 #include <type_traits>
 #include <vector>
+#include <functional>
 
 //template <typename T>
 //class EasingCreator;
@@ -99,8 +100,7 @@ private:
     Vector3* adaptTargetVec3_ = nullptr;
     std::unique_ptr<IVector2Proxy> vector2Proxy_;
 
-   /* const EasingCreator<T>* creator_ = nullptr;
-    EasingEditor* editor_            = nullptr;*/
+  std::function<void()> onFinishCallback_;
 
 public:
     /// -------------------------------------------------------------------------
@@ -116,4 +116,5 @@ public:
     /// -------------------------------------------------------------------------
   /*  void SetEditor(EasingEditor* editor);*/
     void SetFinishValueType(const EasingFinishValueType& type) { finishValueType_ = type; }
+    void SetOnFinishCallback(const std::function<void()>& callback) { onFinishCallback_ = callback; }
 };

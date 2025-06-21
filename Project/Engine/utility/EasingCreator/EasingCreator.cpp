@@ -24,6 +24,15 @@ void EasingCreator<T>::LoadParameter(const std::string& path) {
         ifs >> j;
         FromJson(j);
     }
+    
+    if (!selectedName_.empty()) {
+        auto it = presets_.find(selectedName_);
+        if (it != presets_.end()) {
+            editingParam_ = it->second;
+        } else {
+            selectedName_.clear();
+        }
+    }
 }
 
 template <typename T>
@@ -41,6 +50,7 @@ void EasingCreator<T>::SaveParameter(const std::string& path) const {
         }
     }
 }
+
 template <typename T>
 void EasingCreator<T>::AddPreset(const std::string& name, const EasingParameter<T>& param) {
     presets_[name] = param;
@@ -130,6 +140,7 @@ void EasingCreator<T>::FromJson(const nlohmann::json& j) {
         }
 
         presets_[inner.key()] = param;
+      
     }
 }
 
@@ -176,13 +187,7 @@ void EasingCreator<T>::Edit() {
     if (!selectedName_.empty() && presets_.count(selectedName_)) {
         ImGui::Text("Edit Preset: %s", selectedName_.c_str());
 
-        //// Rename
-        // if (ImGui::InputText("Rename", renameBuf_, sizeof(renameBuf_))) {}
-        // if (std::string(renameBuf_) != selectedName_ && ImGui::Button("Apply Rename")) {
-        //     RenamePreset(selectedName_, renameBuf_);
-        //     selectedName_ = renameBuf_;
-        // }
-
+       
         // イージングパラメータ
         ImGui::DragFloat("Max Time", &editingParam_.maxTime, 0.01f);
         ImGui::DragFloat("Amplitude", &editingParam_.amplitude, 0.01f);
@@ -239,11 +244,6 @@ void EasingCreator<T>::Edit() {
     }
 
     ImGui::Separator();
-
-    /* if (ImGui::Button("Clear All Presets")) {
-         Clear();
-         selectedName_.clear();
-    }*/
 }
 
 template <typename T>

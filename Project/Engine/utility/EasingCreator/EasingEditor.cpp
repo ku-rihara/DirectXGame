@@ -46,17 +46,47 @@ void EasingEditor::Edit() {
         ImGui::EndTabBar();
     }
 
-    if (ImGui::Button("Save All")) {
-        SaveAll();
-        std::string filename = "EasingFile";
-        std::string message  = std::format("{}.json saved.", filename);
-        MessageBoxA(nullptr, message.c_str(), "EasingEditor", 0);
+    switch (currentTab_) {
+    case EasingEditor::TabType::Float:
+        //  Save  
+        if (ImGui::Button("Save Float")) {
+            fEasingCreator_.SaveParameter(floatPath_);
+            MessageBoxA(nullptr, "float.json saved.", "EasingEditor", 0);
+        }
+        // load 
+         if (ImGui::Button("Load Float")) {
+            fEasingCreator_.LoadParameter(floatPath_);
+        }
+        break;
+    case EasingEditor::TabType::Vector2:
+     
+          //  Save  
+        if (ImGui::Button("Save Vector2")) {
+            vec2EasingCreator_.SaveParameter(vec2Path_);
+            MessageBoxA(nullptr, "vector2.json saved.", "EasingEditor", 0);
+        }
+        // load 
+        if (ImGui::Button("Load Vector2")) {
+            vec2EasingCreator_.LoadParameter(vec2Path_);
+        }
+        break;
+    case EasingEditor::TabType::Vector3:
+         //  Save  
+        if (ImGui::Button("Save Vector3")) {
+            vec3EasingCreator_.SaveParameter(vec3Path_);
+            MessageBoxA(nullptr, "vector3.json saved.", "EasingEditor", 0);
+        }
+        // load 
+        if (ImGui::Button("Load Vector3")) {
+            vec3EasingCreator_.LoadParameter(vec3Path_);
+        }
+
+        break;
+    default:
+        break;
     }
 
-    if (ImGui::Button("Load All")) {
-        LoadAll();
-    }
-
+  
     if (currentTab_ == TabType::Float) {
 
         // 即時反映
