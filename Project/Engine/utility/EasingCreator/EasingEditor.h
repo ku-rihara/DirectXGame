@@ -17,10 +17,6 @@ public:
     void LoadAll();
     void SaveAll();
 
-    template <typename T>
-    void SetAutoApplyTarget(Easing<T>* easing, const std::string& presetName);
-    void UpdatePreview();
-
 private:
     enum class TabType {
         Float,
@@ -36,7 +32,7 @@ private:
     std ::string vec2Path_;
     std ::string vec3Path_;
 
-      std::string autoPresetName_;
+    std::string autoPresetName_;
 
     EasingCreator<float> fEasingCreator_;
     EasingCreator<Vector2> vec2EasingCreator_;
@@ -45,4 +41,9 @@ private:
     Easing<float>* fTarget_    = nullptr;
     Easing<Vector2>* v2Target_ = nullptr;
     Easing<Vector3>* v3Target_ = nullptr;
+
+public:
+    void SetFloatTarget(Easing<float>* target) { fTarget_ = target; }
+    void SetVector2Target(Easing<Vector2>* target) { v2Target_ = target; }
+    void SetVector3Target(Easing<Vector3>* target) { v3Target_ = target; }
 };

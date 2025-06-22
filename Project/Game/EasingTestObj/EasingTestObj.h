@@ -27,6 +27,7 @@ public:
 	void Draw(ViewProjection& viewProjection);
 
 	void Debug();
-
 	void ScaleEasing();
+
+	 Easing<Vector2>& GetEasingData()  { return easing_; }
 };

@@ -1,14 +1,18 @@
 #pragma once
 #include "EasingFunction.h"
-#include "utility/EasingCreator/EasingCreator.h"
 #include "Vector2Proxy.h"
+#include "utility/EasingCreator/EasingParameterData.h"
 // std
 #include <cstdint>
 #include <memory>
 #include <string>
 #include <type_traits>
 #include <vector>
+#include <functional>
 
+//template <typename T>
+//class EasingCreator;
+//class EasingEditor;
 template <typename T>
 class Easing {
 public:
@@ -96,6 +100,8 @@ private:
     Vector3* adaptTargetVec3_ = nullptr;
     std::unique_ptr<IVector2Proxy> vector2Proxy_;
 
+  std::function<void()> onFinishCallback_;
+
 public:
     /// -------------------------------------------------------------------------
     /// Getter methods
@@ -108,6 +114,7 @@ public:
     /// -------------------------------------------------------------------------
     /// Setter methods
     /// -------------------------------------------------------------------------
-
+  /*  void SetEditor(EasingEditor* editor);*/
     void SetFinishValueType(const EasingFinishValueType& type) { finishValueType_ = type; }
+    void SetOnFinishCallback(const std::function<void()>& callback) { onFinishCallback_ = callback; }
 };
