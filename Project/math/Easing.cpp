@@ -15,7 +15,7 @@ void Easing<T>::Init(const std::string& name) {
 
 template <typename T>
 void Easing<T>::Reset() {
-    isRunning_   = false;
+
     isFinished_  = false;
     currentTime_ = 0.0f;
 }
@@ -239,7 +239,7 @@ void Easing<T>::Update(float deltaTime) {
 
     if (currentTime_ >= maxTime_) {
         FinishBehavior();
-        if(onFinishCallback_) {
+        if (onFinishCallback_) {
             onFinishCallback_();
         }
     }
@@ -501,26 +501,25 @@ void Easing<Vector2>::SetAdaptValue<Vector2>(Vector3* value) {
 }
 
 template <typename T>
-void Easing<T>::Easing::SetValue(const T& value) {
+void Easing<T>::Easing::SetCurrentValue(const T& value) {
     *currentValue_ = value;
 }
 
-
-//template <typename T>
-//void Easing<T>::Easing::SetEditor(EasingEditor* editor) {
-//     editor_ = editor;
+// template <typename T>
+// void Easing<T>::Easing::SetEditor(EasingEditor* editor) {
+//      editor_ = editor;
 //
-//     if constexpr (std::is_same_v<T, float>) {
-//         creator_ = editor->GetCreator<EasingCreator<float>>();
+//      if constexpr (std::is_same_v<T, float>) {
+//          creator_ = editor->GetCreator<EasingCreator<float>>();
 //
-//     } else if constexpr (std::is_same_v<T, Vector2>) {
-//         filePathForType_ = "Vector2";
+//      } else if constexpr (std::is_same_v<T, Vector2>) {
+//          filePathForType_ = "Vector2";
 //
-//     } else if constexpr (std::is_same_v<T, Vector3>) {
-//         filePathForType_ = "Vector3";
-//     }
-//    
-// }
+//      } else if constexpr (std::is_same_v<T, Vector3>) {
+//          filePathForType_ = "Vector3";
+//      }
+//
+//  }
 
 template class Easing<float>;
 template class Easing<Vector2>;
