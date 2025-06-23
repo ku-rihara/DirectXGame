@@ -2,6 +2,7 @@
 
 #include "BaseGameCameraBehavior.h"
 #include"EasingFunction.h"
+#include"Easing.h"
 
 class GameCameraBackLash : public BaseGameCameraBehavior {
 private:
@@ -13,7 +14,9 @@ private:
 	///private varians
 	/// ===================================================
 	Step step_;
-	Easing ease_;
+	Easingw<Vector3> ease_;
+    Vector3 tempOffset_;
+
 public:
 
 	//コンストラクタ

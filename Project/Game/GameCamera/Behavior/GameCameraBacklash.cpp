@@ -16,9 +16,16 @@ GameCameraBackLash::GameCameraBackLash(GameCamera* gameCamera)
 	///変数初期化
 	/// ===================================================
 	
-	ease_.time = 0.0f;
-	ease_.maxTime = pGameCamera_->GetParamater().backLashTime_;
-	ease_.backRatio = pGameCamera_->GetParamater().backLashRatio_;
+	ease_.Init("CameraZoomOut");
+  /*  ease_.ApplyFromJson("CameraZoomOut.json");
+    ease_.SaveAppliedJsonFileName();*/
+    ease_.SetAdaptValue(&tempOffset_);
+
+	ease_.SetOnFinishCallback([this] {
+        pGameCamera_->SetOffSet(tempOffset_);
+        step_ = Step::RETURNROOT;
+    });
+
 	step_ = Step::OUTIN;
 }
 
@@ -36,17 +43,8 @@ void GameCameraBackLash::Update() {
 	/// カメラ移動
 	/// --------------------------------------------------------------------
 	case GameCameraBackLash::Step::OUTIN:
-		ease_.time += Frame::DeltaTimeRate();
-
-		/// いージんぐ適応
-		pGameCamera_->SetOffSet(Back::OutCircZero(pGameCamera_->GetParamater().firstOffset_, pGameCamera_->GetParamater().backLashOffset_,
-			ease_.time, ease_.maxTime, ease_.backRatio));
-
-		// next
-		if (ease_.time < ease_.maxTime)break;
-		pGameCamera_->SetOffSet(pGameCamera_->GetParamater().firstOffset_);
-		ease_.time = ease_.maxTime;
-		step_ = Step::RETURNROOT;
+        ease_.Update(Frame::DeltaTimeRate());
+        pGameCamera_->SetOffSet(tempOffset_);
 		break;
 		/// --------------------------------------------------------------------
 		/// カメラ移動

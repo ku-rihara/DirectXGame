@@ -2,6 +2,7 @@
 
 #include "BaseGameCameraBehavior.h"
 #include"EasingFunction.h"
+#include "Easing.h"
 
 class GameCameraZoomInOut : public BaseGameCameraBehavior {
 private:
@@ -18,11 +19,14 @@ private:
 	float shakeT_;
 	float shakeTMax_;
 
-	Easing inEase_;
+	
 	Easing outEase_;
 	float waitTime_;
 	float kWaitTime_;
 	float timeOffset_;
+
+	Easingw<Vector3> inEase_;
+    Vector3 tempinOffset_;
 
 public:
 

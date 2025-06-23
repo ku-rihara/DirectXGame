@@ -30,6 +30,7 @@ void BaseComboAattackBehavior::ChangeNextCombo(std::unique_ptr<BaseComboAattackB
 }
 
 void BaseComboAattackBehavior::AnimationInit() {
+
     // rotate
     rotateEaseT_     = 0.0f;
     tempRotateValue_ = 0.0f;

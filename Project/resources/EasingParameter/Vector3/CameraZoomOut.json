@@ -1,0 +1,20 @@
+{
+    "CameraZoomOut": {
+        "amplitude": 0.0,
+        "backRatio": 0.5799999833106995,
+        "endValue": [
+            5.0,
+            29.299999237060547,
+            -63.70000076293945
+        ],
+        "finishType": 0,
+        "maxTime": 0.5799999833106995,
+        "period": 0.0,
+        "startValue": [
+            5.0,
+            13.0,
+            -29.0
+        ],
+        "type": 47
+    }
+}
