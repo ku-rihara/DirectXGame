@@ -298,6 +298,9 @@
     <Filter Include="MyEngine\.cpp\utility\EasingCreator">
       <UniqueIdentifier>{407ebb1a-3954-4162-b7ea-af0d1db90731}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\EasingTestObj">
+      <UniqueIdentifier>{a383ecc6-f375-4bf7-9b58-7f4ba9f98f42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -762,6 +765,9 @@
     </ClCompile>
     <ClCompile Include="math\Vector2Proxy.cpp">
       <Filter>liberary\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\EasingTestObj\EasingTestObj.cpp">
+      <Filter>Game\EasingTestObj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1259,6 +1265,9 @@
     </ClInclude>
     <ClInclude Include="math\Vector2Proxy.h">
       <Filter>liberary\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\EasingTestObj\EasingTestObj.h">
+      <Filter>Game\EasingTestObj</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,7 +6,7 @@
 #include <Windows.h>
 
 template <typename T>
-void Easing<T>::Init(const std::string& name) {
+void Easingw<T>::Init(const std::string& name) {
     FilePathChangeForType();
     easingFiles_ = GetFileNamesForDyrectry(FilePath_ + filePathForType_);
     easingName_  = name;
@@ -14,14 +14,14 @@ void Easing<T>::Init(const std::string& name) {
 }
 
 template <typename T>
-void Easing<T>::Reset() {
+void Easingw<T>::Reset() {
     isRunning_   = false;
     isFinished_  = false;
     currentTime_ = 0.0f;
 }
 
 template <typename T>
-void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
+void Easingw<T>::SettingValue(const EasingParameter<T>& easingParam) {
 
     type_                 = easingParam.type;
     adaptFloatAxisType_   = easingParam.adaptFloatAxisType;
@@ -37,7 +37,7 @@ void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
 }
 
 template <typename T>
-void Easing<T>::SaveAppliedJsonFileName() {
+void Easingw<T>::SaveAppliedJsonFileName() {
     if (currentAppliedFileName_.empty()) {
         return;
     }
@@ -58,7 +58,7 @@ void Easing<T>::SaveAppliedJsonFileName() {
 }
 
 template <typename T>
-void Easing<T>::LoadAndApplyFromSavedJson() {
+void Easingw<T>::LoadAndApplyFromSavedJson() {
     FilePathChangeForType();
 
     std::string savePath = FilePath_ + easingName_ + filePathForType_ + ".json";
@@ -81,7 +81,7 @@ void Easing<T>::LoadAndApplyFromSavedJson() {
 }
 
 template <typename T>
-void Easing<T>::ApplyFromJson(const std::string& fileName) {
+void Easingw<T>::ApplyFromJson(const std::string& fileName) {
     FilePathChangeForType();
 
     currentSelectedFileName_ = FilePath_ + filePathForType_ + "/" + fileName;
@@ -149,7 +149,7 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
 }
 
 template <typename T>
-void Easing<T>::ChangeAdaptAxis() {
+void Easingw<T>::ChangeAdaptAxis() {
 
     if constexpr (std::is_same_v<T, Vector2>) {
 
@@ -174,7 +174,7 @@ void Easing<T>::ChangeAdaptAxis() {
 }
 
 template <typename T>
-void Easing<T>::ApplyForImGui() {
+void Easingw<T>::ApplyForImGui() {
     FilePathChangeForType();
 
     easingFiles_ = GetFileNamesForDyrectry(FilePath_ + filePathForType_);
@@ -224,7 +224,7 @@ void Easing<T>::ApplyForImGui() {
 
 // 時間を進めて値を更新
 template <typename T>
-void Easing<T>::Update(float deltaTime) {
+void Easingw<T>::Update(float deltaTime) {
     if (/*!isRunning_ || */ isFinished_) {
         return;
     }
@@ -246,7 +246,7 @@ void Easing<T>::Update(float deltaTime) {
 }
 
 template <typename T>
-void Easing<T>::FilePathChangeForType() {
+void Easingw<T>::FilePathChangeForType() {
     if constexpr (std::is_same_v<T, float>) {
         filePathForType_ = "float";
 
@@ -259,7 +259,7 @@ void Easing<T>::FilePathChangeForType() {
 }
 
 template <typename T>
-void Easing<T>::CalculateValue() {
+void Easingw<T>::CalculateValue() {
 
     switch (type_) {
 
@@ -417,7 +417,7 @@ void Easing<T>::CalculateValue() {
     }
 }
 template <typename T>
-void Easing<T>::Easing::FinishBehavior() {
+void Easingw<T>::Easingw::FinishBehavior() {
     currentTime_ = maxTime_;
     isFinished_  = true;
 
@@ -433,13 +433,13 @@ void Easing<T>::Easing::FinishBehavior() {
     }
 }
 template <typename T>
-void Easing<T>::Easing::SetAdaptValue(T* value) {
+void Easingw<T>::Easingw::SetAdaptValue(T* value) {
     currentValue_ = value;
 }
 
 template <>
 template <>
-void Easing<float>::SetAdaptValue<float>(Vector2* value) {
+void Easingw<float>::SetAdaptValue<float>(Vector2* value) {
     adaptTargetVec2_ = value;
     switch (adaptFloatAxisType_) {
     case AdaptFloatAxisType::X:
@@ -456,7 +456,7 @@ void Easing<float>::SetAdaptValue<float>(Vector2* value) {
 
 template <>
 template <>
-void Easing<float>::SetAdaptValue<float>(Vector3* value) {
+void Easingw<float>::SetAdaptValue<float>(Vector3* value) {
     adaptTargetVec3_ = value;
     switch (adaptFloatAxisType_) {
     case AdaptFloatAxisType::X:
@@ -476,7 +476,7 @@ void Easing<float>::SetAdaptValue<float>(Vector3* value) {
 
 template <>
 template <>
-void Easing<Vector2>::SetAdaptValue<Vector2>(Vector3* value) {
+void Easingw<Vector2>::SetAdaptValue<Vector2>(Vector3* value) {
     adaptTargetVec3_ = value;
 
     switch (adaptVector2AxisType_) {
@@ -501,7 +501,7 @@ void Easing<Vector2>::SetAdaptValue<Vector2>(Vector3* value) {
 }
 
 template <typename T>
-void Easing<T>::Easing::SetValue(const T& value) {
+void Easingw<T>::Easingw::SetValue(const T& value) {
     *currentValue_ = value;
 }
 
@@ -522,6 +522,6 @@ void Easing<T>::Easing::SetValue(const T& value) {
 //    
 // }
 
-template class Easing<float>;
-template class Easing<Vector2>;
-template class Easing<Vector3>;
+template class Easingw<float>;
+template class Easingw<Vector2>;
+template class Easingw<Vector3>;
