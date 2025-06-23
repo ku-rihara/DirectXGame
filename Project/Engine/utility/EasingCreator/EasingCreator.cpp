@@ -1,6 +1,7 @@
 #include "EasingCreator.h"
 #include "vector2.h"
 #include "vector3.h"
+#include"MathFunction.h"
 #include <fstream>
 #include <imgui.h>
 #include <type_traits>
@@ -85,6 +86,8 @@ template <typename T>
 void EasingCreator<T>::ToJson(nlohmann::json& j, const std::string& name, const EasingParameter<T>& param) const {
     auto& jsonParam = j[name];
 
+
+
     if constexpr (std::is_same_v<T, Vector3>) {
         jsonParam["startValue"] = {param.startValue.x, param.startValue.y, param.startValue.z};
         jsonParam["endValue"]   = {param.endValue.x, param.endValue.y, param.endValue.z};
@@ -93,6 +96,7 @@ void EasingCreator<T>::ToJson(nlohmann::json& j, const std::string& name, const 
         jsonParam["endValue"]          = {param.endValue.x, param.endValue.y};
         jsonParam["adaptVec2AxisType"] = static_cast<int>(param.adaptVec2AxisType);
     } else if constexpr (std::is_same_v<T, float>) {
+
         jsonParam["startValue"]         = param.startValue;
         jsonParam["endValue"]           = param.endValue;
         jsonParam["adaptFloatAxisType"] = static_cast<int>(param.adaptFloatAxisType);
@@ -198,11 +202,14 @@ void EasingCreator<T>::Edit() {
         int adaptVec2AxisType  = static_cast<int>(editingParam_.adaptVec2AxisType);
 
         // スタート、終了位置の入力
-        if constexpr (std::is_same_v<T, float>) { // float
+        if constexpr (std::is_same_v<T, float>) {
             ImGui::DragFloat("Start Value", &editingParam_.startValue, 0.01f);
             ImGui::DragFloat("End Value", &editingParam_.endValue, 0.01f);
+            if (ImGui::Button("Change Radian")) {
+                editingParam_.startValue = toRadian(editingParam_.startValue);
+                editingParam_.endValue   = toRadian(editingParam_.endValue);
+            }
 
-            // 軸のタイプの選択(float)
             if (ImGui::Combo("AdaptAxis Type", &adaptFloatAxisType, AdaptFloatAxisTypeLabels.data(), static_cast<int>(AdaptFloatAxisTypeLabels.size()))) {
                 editingParam_.adaptFloatAxisType = static_cast<AdaptFloatAxisType>(adaptFloatAxisType);
             }

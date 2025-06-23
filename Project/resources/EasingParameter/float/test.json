@@ -3,11 +3,11 @@
         "adaptFloatAxisType": 0,
         "amplitude": 0.0,
         "backRatio": 0.0,
-        "endValue": -107374176.0,
+        "endValue": 6.2831854820251465,
         "finishType": 1,
         "maxTime": 0.0,
         "period": 0.0,
-        "startValue": -107374176.0,
+        "startValue": 0.0,
         "type": 0
     }
 }
