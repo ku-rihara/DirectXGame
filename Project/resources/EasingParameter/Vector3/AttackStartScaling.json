@@ -1,0 +1,20 @@
+{
+    "AttackStartScaling": {
+        "amplitude": 1.5,
+        "backRatio": 0.0,
+        "endValue": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "finishType": 0,
+        "maxTime": 0.699999988079071,
+        "period": 0.20000000298023224,
+        "startValue": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "type": 27
+    }
+}

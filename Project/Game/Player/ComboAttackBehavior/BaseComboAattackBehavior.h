@@ -1,6 +1,6 @@
 #pragma once
 
-#include"EasingFunction.h"
+#include"Easing.h"
 #include <memory>
 #include <string>
 
@@ -13,7 +13,7 @@ protected:
     PlayerParameter* pPlayerParameter_ = nullptr;
 
     bool isNextCombo_;
-    Easing startEasing_;
+    Easingw<float> startEasing_;
 
     /// motion
     float rotateValue_;
@@ -25,7 +25,7 @@ protected:
     float floatValue_;
     float tempFloatValue_;
 
-    Easing floatEase_;
+   Easingw<float> floatEase_;
 
 public:
     BaseComboAattackBehavior(const std::string& name, Player* player);
