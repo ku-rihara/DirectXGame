@@ -38,12 +38,12 @@ private:
     EasingCreator<Vector2> vec2EasingCreator_;
     EasingCreator<Vector3> vec3EasingCreator_;
 
-    Easingw<float>* fTarget_    = nullptr;
-    Easingw<Vector2>* v2Target_ = nullptr;
-    Easingw<Vector3>* v3Target_ = nullptr;
+    Easing<float>* fTarget_    = nullptr;
+    Easing<Vector2>* v2Target_ = nullptr;
+    Easing<Vector3>* v3Target_ = nullptr;
 
 public:
-    void SetFloatTarget(Easingw<float>* target) { fTarget_ = target; }
-    void SetVector2Target(Easingw<Vector2>* target) { v2Target_ = target; }
-    void SetVector3Target(Easingw<Vector3>* target) { v3Target_ = target; }
+    void SetFloatTarget(Easing<float>* target) { fTarget_ = target; }
+    void SetVector2Target(Easing<Vector2>* target) { v2Target_ = target; }
+    void SetVector3Target(Easing<Vector3>* target) { v3Target_ = target; }
 };

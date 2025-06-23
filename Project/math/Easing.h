@@ -17,9 +17,9 @@
 
 
 template <typename T>
-class Easingw {
+class Easing {
 public:
-    Easingw() = default;
+    Easing() = default;
 
     void Init(const std::string& name);
 
