@@ -20,20 +20,25 @@ public:
     void ToJson(nlohmann::json& j, const std::string& name, const EasingParameter<T>& param) const;
     void FromJson(const nlohmann::json& j);
 
-   const EasingParameter<T>* GetEditingParam(const std::string& name) const;
+    const EasingParameter<T>* GetEditingParam(const std::string& name) const;
 
-    void Clear(); 
+    void Clear();
     void Edit();
 
+    void SaveSelectedParameter() ;
+    void LoadSelectedParameter() ;
+    void AdaptEditorParam();
+
 private:
-  
     std::unordered_map<std::string, EasingParameter<T>> presets_;
 
-     // UI状態管理用
+    // UI状態管理用
     std::string selectedName_;
     std::string newPresetName_;
     EasingParameter<T> editingParam_;
     char renameBuf_[128]{};
+
+    const std ::string kDirectoryPath_ = "Resources/EasingParameter/";
 
 public:
     void SetAllPresets(const std::unordered_map<std::string, EasingParameter<T>>& newPresets);
