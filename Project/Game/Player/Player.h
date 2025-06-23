@@ -5,7 +5,7 @@
 // object
 #include "BaseObject/BaseObject.h"
 #include "Effect/PlayerEffects.h"
-#include"Parameter/PlayerParameter.h"
+#include "Parameter/PlayerParameter.h"
 
 /// Parts
 #include "Parts/PlayerHandLeft.h"
@@ -16,9 +16,9 @@
 #include "utility/ParticleEditor/ParticleEmitter.h"
 
 /// behavior
+#include "ComboAttackBehavior/BaseComboAattackBehavior.h"
 #include "PlayerBehavior/BasePlayerBehavior.h"
 #include "TitleBehavior/BaseTitleBehavior.h"
-#include "ComboAttackBehavior/BaseComboAattackBehavior.h"
 
 /// collider
 #include "Collider/AABBCollider.h"
@@ -26,7 +26,6 @@
 /// std
 #include <memory>
 #include <string>
-
 
 class SpecialAttackGauge;
 class LockOn;
@@ -54,10 +53,10 @@ public:
 
     ///* 移動
     void Move(const float& speed); /// 移動
-    bool GetIsMoving();            /// 動かしてるかフラグ
-    void MoveToLimit();            /// 移動制限
-    Vector3 GetInputDirecton();    /// 入力による速度
-    void UpdateMatrix();           /// 　行列更新
+    bool GetIsMoving(); /// 動かしてるかフラグ
+    void MoveToLimit(); /// 移動制限
+    Vector3 GetInputDirecton(); /// 入力による速度
+    void UpdateMatrix(); /// 　行列更新
 
     void PositionYReset();
 
@@ -139,7 +138,6 @@ private:
     int starSound_;
 
 public:
-
     /// =========================================================================================
     /// getter
     /// =========================================================================================
@@ -152,7 +150,7 @@ public:
     GameCamera* GetGameCamera() const { return pGameCamera_; }
     PlayerParameter* GetParameter() const { return parameters_.get(); }
     float GetMoveSpeed() const { return moveSpeed_; }
-  Vector3 GetHeadScale() const { return headTransform_.scale_; }
+  
     /// =========================================================================================
     /// setter
     /// =========================================================================================
@@ -164,8 +162,9 @@ public:
     void SetLightPos();
     void HeadLightSetting();
 
+    void SetHeadScale(const Vector3& scale) { headTransform_.scale_ = scale; }
     void SetHeadPosY(const float& posy) { headTransform_.translation_.y = posy; }
     void SetHeadRotateX(const float& zrotate) { headTransform_.rotation_.x = zrotate; }
     void SetHeadRotateY(const float& zrotate) { headTransform_.rotation_.y = zrotate; }
-    void SetHeadScale(const Vector3& scale) { headTransform_.scale_ = scale; }
+   
 };

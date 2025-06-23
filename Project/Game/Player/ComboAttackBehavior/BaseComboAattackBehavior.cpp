@@ -4,8 +4,8 @@
 #include "Player/Player.h"
 
 BaseComboAattackBehavior::BaseComboAattackBehavior(const std::string& name, Player* player) {
-    name_ = name;
-    pPlayer_ = player;
+    name_             = name;
+    pPlayer_          = player;
     pPlayerParameter_ = player->GetParameter();
 }
 
@@ -38,51 +38,64 @@ void BaseComboAattackBehavior::AnimationInit() {
     rotateValueAnti_ = pPlayerParameter_->GetParamaters().attackRotateAnit;
 
     // scaling
-  
-    pPlayer_->SetHeadScale(Vector3::UnitVector());
+
     startEasing_.Init("AttackStart");
     startEasing_.ApplyFromJson("AttackStartScaling.json");
     startEasing_.SaveAppliedJsonFileName();
-    startEasing_.SetAdaptValue(&pPlayer_->GetHeadScale());
-   /* startEasing_.time      = 0.0f;
-    startEasing_.maxTime   = 0.7f;
-    startEasing_.amplitude = 1.5f;
-    startEasing_.period    = 0.2f;*/
+    startEasing_.SetAdaptValue(&tempScaleValue_);
+    tempScaleValue_ = Vector3::UnitVector();
 
-
-    floatEase_.Init("AttackFloating");
+    rotateEasing_.Init("AttackFloating");
+    rotateEasing_.ApplyFromJson("AttackStartScaling.json");
+    rotateEasing_.SaveAppliedJsonFileName();
+    rotateEasing_.SetAdaptValue(&tempRotateValue_);
 
     /// floatmotion
     /*floatEase_.time      = 0.0f;
     floatEase_.backRatio = 0.8f;
     floatEase_.maxTime   = pPlayerParameter_->GetParamaters().attackFloatEaseT;*/
-    floatValue_          = pPlayerParameter_->GetParamaters().attackFloatValue;
-    tempFloatValue_      = 0.0f;
+    /*  floatValue_     = pPlayerParameter_->GetParamaters().attackFloatValue;
+      tempFloatValue_ = 0.0f;*/
 
-    rotateEasing_.Init("AttackRotate");
+    floatEase_.Init("AttackRotate");
+    floatEase_.ApplyFromJson("AttackStartScaling.json");
+    floatEase_.SaveAppliedJsonFileName();
+    floatEase_.SetAdaptValue(&tempFloatValue_);
+
+    floatEase_.SetOnFinishCallback([this] {
+        floatEase_.SetCurrentValue(0.0f);
+    });
 }
 
 void BaseComboAattackBehavior::ScalingEaseUpdate() {
     startEasing_.Update(Frame::DeltaTimeRate());
+    pPlayer_->SetScale(tempScaleValue_);
 }
 
 void BaseComboAattackBehavior::RotateMotionUpdate(const float& start, const float& end, const bool& isClockwise) {
-    start;
-    end;
-    isClockwise;
 
     if (isClockwise) {
-     
+        rotateEasing_.SetStartValue(start);
+        rotateEasing_.SetEndValue(-end);
+    } else {
+        rotateEasing_.SetStartValue(start);
+        rotateEasing_.SetEndValue(end);
     }
 
+    rotateEasing_.Update(Frame::DeltaTimeRate());
+    pPlayer_->SetRotationY(tempRotateValue_);
 }
 
 void BaseComboAattackBehavior::FloatAnimationUpdate() {
-   /* floatEase_.time += Frame::DeltaTimeRate();
-    tempFloatValue_ = Back::OutQuintZero(0.0f, floatValue_, floatEase_.time, floatEase_.maxTime, floatEase_.backRatio);
+
+    floatEase_.Update(Frame::DeltaTimeRate());
     pPlayer_->SetHeadPosY(tempFloatValue_);
-    if (floatEase_.time < floatEase_.maxTime)
-        return;
-    floatEase_.time = floatEase_.maxTime;
-    pPlayer_->SetHeadPosY(0.0f);*/
+
+    /* floatEase_.time += Frame::DeltaTimeRate();
+     tempFloatValue_ = Back::OutQuintZero(0.0f, floatValue_, floatEase_.time, floatEase_.maxTime, floatEase_.backRatio);
+     pPlayer_->SetHeadPosY(tempFloatValue_);
+     if (floatEase_.time < floatEase_.maxTime)
+         return;
+     floatEase_.time = floatEase_.maxTime;
+     pPlayer_->SetHeadPosY(0.0f);*/
 }

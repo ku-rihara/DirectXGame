@@ -1,0 +1,13 @@
+{
+    "AttackFloating": {
+        "adaptFloatAxisType": 1,
+        "amplitude": 0.0,
+        "backRatio": 0.800000011920929,
+        "endValue": 2.0,
+        "finishType": 0,
+        "maxTime": 0.49000000953674316,
+        "period": 0.0,
+        "startValue": 0.0,
+        "type": 41
+    }
+}

@@ -14,9 +14,9 @@
 // class EasingCreator;
 // class EasingEditor;
 template <typename T>
-class Easing {
+class Easingw {
 public:
-    Easing() = default;
+    Easingw() = default;
 
     void Init(const std::string& name);
 
