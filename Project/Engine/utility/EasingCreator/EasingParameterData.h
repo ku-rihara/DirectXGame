@@ -131,6 +131,4 @@ struct EasingParameter {
     float amplitude = 0.0f;
     float period    = 0.0f;
     float backRatio = 0.0f;
-
-     bool isRotate = false;
 };

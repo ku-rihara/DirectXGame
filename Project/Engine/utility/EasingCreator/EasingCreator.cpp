@@ -97,15 +97,8 @@ void EasingCreator<T>::ToJson(nlohmann::json& j, const std::string& name, const 
         jsonParam["adaptVec2AxisType"] = static_cast<int>(param.adaptVec2AxisType);
     } else if constexpr (std::is_same_v<T, float>) {
 
-         float startVal = param.startValue;
-        float endVal   = param.endValue;
-        if (param.isRotate) {
-            startVal = toRadian(startVal);
-            endVal   = toRadian(endVal);
-        }
-
-        jsonParam["startValue"]         = startVal;
-        jsonParam["endValue"]           = endVal;
+        jsonParam["startValue"]         = param.startValue;
+        jsonParam["endValue"]           = param.endValue;
         jsonParam["adaptFloatAxisType"] = static_cast<int>(param.adaptFloatAxisType);
     }
 
@@ -212,7 +205,10 @@ void EasingCreator<T>::Edit() {
         if constexpr (std::is_same_v<T, float>) {
             ImGui::DragFloat("Start Value", &editingParam_.startValue, 0.01f);
             ImGui::DragFloat("End Value", &editingParam_.endValue, 0.01f);
-            ImGui::Checkbox("Is Rotate (Degrees)", &editingParam_.isRotate);
+            if (ImGui::Button("Change Radian")) {
+                editingParam_.startValue = toRadian(editingParam_.startValue);
+                editingParam_.endValue   = toRadian(editingParam_.endValue);
+            }
 
             if (ImGui::Combo("AdaptAxis Type", &adaptFloatAxisType, AdaptFloatAxisTypeLabels.data(), static_cast<int>(AdaptFloatAxisTypeLabels.size()))) {
                 editingParam_.adaptFloatAxisType = static_cast<AdaptFloatAxisType>(adaptFloatAxisType);
