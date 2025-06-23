@@ -40,26 +40,13 @@ void BaseComboAattackBehavior::AnimationInit() {
     // scaling
 
     startEasing_.Init("AttackStart");
-    startEasing_.ApplyFromJson("AttackStartScaling.json");
-    startEasing_.SaveAppliedJsonFileName();
     startEasing_.SetAdaptValue(&tempScaleValue_);
     tempScaleValue_ = Vector3::UnitVector();
 
     rotateEasing_.Init("AttackFloating");
-    rotateEasing_.ApplyFromJson("AttackStartScaling.json");
-    rotateEasing_.SaveAppliedJsonFileName();
     rotateEasing_.SetAdaptValue(&tempRotateValue_);
 
-    /// floatmotion
-    /*floatEase_.time      = 0.0f;
-    floatEase_.backRatio = 0.8f;
-    floatEase_.maxTime   = pPlayerParameter_->GetParamaters().attackFloatEaseT;*/
-    /*  floatValue_     = pPlayerParameter_->GetParamaters().attackFloatValue;
-      tempFloatValue_ = 0.0f;*/
-
     floatEase_.Init("AttackRotate");
-    floatEase_.ApplyFromJson("AttackStartScaling.json");
-    floatEase_.SaveAppliedJsonFileName();
     floatEase_.SetAdaptValue(&tempFloatValue_);
 
     floatEase_.SetOnFinishCallback([this] {
@@ -90,12 +77,4 @@ void BaseComboAattackBehavior::FloatAnimationUpdate() {
 
     floatEase_.Update(Frame::DeltaTimeRate());
     pPlayer_->SetHeadPosY(tempFloatValue_);
-
-    /* floatEase_.time += Frame::DeltaTimeRate();
-     tempFloatValue_ = Back::OutQuintZero(0.0f, floatValue_, floatEase_.time, floatEase_.maxTime, floatEase_.backRatio);
-     pPlayer_->SetHeadPosY(tempFloatValue_);
-     if (floatEase_.time < floatEase_.maxTime)
-         return;
-     floatEase_.time = floatEase_.maxTime;
-     pPlayer_->SetHeadPosY(0.0f);*/
 }
