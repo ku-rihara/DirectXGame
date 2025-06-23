@@ -6,7 +6,7 @@
 BaseComboAattackBehavior::BaseComboAattackBehavior(const std::string& name, Player* player) {
     name_ = name;
     pPlayer_ = player;
-    pPlayerParameter_ = player->GetParamater();
+    pPlayerParameter_ = player->GetParameter();
 }
 
 ///  コンボ移動フラグ処理
@@ -40,10 +40,17 @@ void BaseComboAattackBehavior::AnimationInit() {
     // scaling
   
     pPlayer_->SetHeadScale(Vector3::UnitVector());
+    startEasing_.Init("AttackStart");
+    startEasing_.ApplyFromJson("AttackStartScaling.json");
+    startEasing_.SaveAppliedJsonFileName();
+    startEasing_.SetAdaptValue(&pPlayer_->GetHeadScale());
    /* startEasing_.time      = 0.0f;
     startEasing_.maxTime   = 0.7f;
     startEasing_.amplitude = 1.5f;
     startEasing_.period    = 0.2f;*/
+
+
+    floatEase_.Init("AttackFloating");
 
     /// floatmotion
     /*floatEase_.time      = 0.0f;
@@ -51,25 +58,23 @@ void BaseComboAattackBehavior::AnimationInit() {
     floatEase_.maxTime   = pPlayerParameter_->GetParamaters().attackFloatEaseT;*/
     floatValue_          = pPlayerParameter_->GetParamaters().attackFloatValue;
     tempFloatValue_      = 0.0f;
+
+    rotateEasing_.Init("AttackRotate");
 }
 
 void BaseComboAattackBehavior::ScalingEaseUpdate() {
-   /* startEasing_.time += Frame::DeltaTimeRate();
-    startEasing_.time = std::min(startEasing_.time, startEasing_.maxTime);
-    pPlayer_->SetHeadScale(EaseAmplitudeScale(Vector3::UnitVector(), startEasing_.time, startEasing_.maxTime,
-        startEasing_.amplitude, startEasing_.period));*/
+    startEasing_.Update(Frame::DeltaTimeRate());
 }
 
 void BaseComboAattackBehavior::RotateMotionUpdate(const float& start, const float& end, const bool& isClockwise) {
-  /*  rotateEaseT_ += Frame::DeltaTimeRate();
-    float plus = isClockwise ? 1.0f : -1.0f;
+    start;
+    end;
+    isClockwise;
 
-    tempRotateValue_ = EaseInSine(start, end * plus, rotateEaseT_, pPlayerParameter_->GetParamaters().attackRotateEaseT);
-    pPlayer_->SetHeadRotateY(tempRotateValue_);
+    if (isClockwise) {
+     
+    }
 
-    if (rotateEaseT_ < pPlayerParameter_->GetParamaters().attackRotateEaseT)
-        return;
-    rotateEaseT_ = pPlayerParameter_->GetParamaters().attackRotateEaseT;*/
 }
 
 void BaseComboAattackBehavior::FloatAnimationUpdate() {

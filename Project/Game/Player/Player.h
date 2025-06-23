@@ -150,8 +150,9 @@ public:
     PlayerEffects* GetEffects() const { return effects_.get(); }
     LockOn* GetLockOn() const { return pLockOn_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
-    PlayerParameter* GetParamater() const { return parameters_.get(); }
+    PlayerParameter* GetParameter() const { return parameters_.get(); }
     float GetMoveSpeed() const { return moveSpeed_; }
+  Vector3 GetHeadScale() const { return headTransform_.scale_; }
     /// =========================================================================================
     /// setter
     /// =========================================================================================

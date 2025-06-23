@@ -1,6 +1,6 @@
 #pragma once
 
-#include"Easing.h"
+#include "Easing.h"
 #include <memory>
 #include <string>
 
@@ -25,12 +25,12 @@ protected:
     float floatValue_;
     float tempFloatValue_;
 
-   Easing<float> floatEase_;
+    Easing<float> rotateEasing_;
+    Easing<float> floatEase_;
 
 public:
     BaseComboAattackBehavior(const std::string& name, Player* player);
-       
-    
+
     virtual ~BaseComboAattackBehavior() {}
 
     virtual void Update() = 0; /// 更新

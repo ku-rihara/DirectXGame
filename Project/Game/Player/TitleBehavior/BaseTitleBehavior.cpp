@@ -4,5 +4,5 @@
 BaseTitleBehavior::BaseTitleBehavior(const std::string& name, Player* player) {
     name_             = name;
     pPlayer_          = player;
-    pPlayerParameter_ = player->GetParamater();
+    pPlayerParameter_ = player->GetParameter();
 }
