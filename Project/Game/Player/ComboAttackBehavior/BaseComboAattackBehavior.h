@@ -13,7 +13,7 @@ protected:
     PlayerParameter* pPlayerParameter_ = nullptr;
 
     bool isNextCombo_;
-    Easing<Vector3> startEasing_;
+    Easingw<Vector3> startEasing_;
     Vector3 tempScaleValue_;
 
     /// motion
@@ -26,8 +26,8 @@ protected:
     float floatValue_;
     float tempFloatValue_;
 
-    Easing<float> rotateEasing_;
-    Easing<float> floatEase_;
+    Easingw<float> rotateEasing_;
+    Easingw<float> floatEase_;
 
 public:
     BaseComboAattackBehavior(const std::string& name, Player* player);

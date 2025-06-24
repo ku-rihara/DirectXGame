@@ -22,11 +22,13 @@ GameCameraZoomInOut::GameCameraZoomInOut(GameCamera* gameCamera)
     inEase_.ApplyFromJson("ZoomIn.json");
     inEase_.SaveAppliedJsonFileName();
     inEase_.SetAdaptValue(&tempinOffset_);
+    inEase_.Reset();
 
 	outEase_.Init("CameraZoomOut");
     outEase_.ApplyFromJson("ZoomOut.json");
     outEase_.SaveAppliedJsonFileName();
     outEase_.SetAdaptValue(&tempinOffset_);
+    outEase_.Reset();
 
     inEase_.SetOnFinishCallback([this]() {
 		pGameCamera_->SetOffSet(pGameCamera_->GetParamater().zoomOffset_);
@@ -34,7 +36,7 @@ GameCameraZoomInOut::GameCameraZoomInOut(GameCamera* gameCamera)
     });
 
 	 inEase_.SetOnWaitEndCallback([this]() {
-        waitTime_ = kWaitTime_;
+       /* waitTime_ = kWaitTime_;*/
         shakeT_   = 0.0f;
         pGameCamera_->SetShakePos(Vector3::ZeroVector());
         step_ = Step::ZOOMOUT;
@@ -42,15 +44,10 @@ GameCameraZoomInOut::GameCameraZoomInOut(GameCamera* gameCamera)
     });
 
 	 outEase_.SetOnFinishCallback([this]() {
-         saveOffset_ = pGameCamera_->GetOffset();
+         saveOffset_ = tempinOffset_;
          step_       = Step::RETURNROOT;
      });
 
-	 
-	 /*inEase_.maxTime = 0.2f;*/
-	 /*outEase_.maxTime = 0.2f;
-	 kWaitTime_ = 0.2f;
-	 timeOffset_ = 0.01f;*/
 	 saveOffset_ = {};
 
 	 shakeTMax_ = kWaitTime_+ 0.2f+0.2f;
@@ -74,6 +71,7 @@ void GameCameraZoomInOut::Update() {
 	case Step::ZOOMIN:
 		ShakeUpdate();
         inEase_.Update(Frame::DeltaTime());
+        inEase_.UpdateWait(Frame::DeltaTime());
         pGameCamera_->SetOffSet(tempinOffset_);
 
 		
@@ -83,7 +81,7 @@ void GameCameraZoomInOut::Update() {
 		/// アウト
 		///---------------------------------------------------------
 	case Step::ZOOMOUT:
-        outEase_.Update(Frame::DeltaTime());
+        outEase_.Update(Frame::DeltaTimeRate());
         pGameCamera_->SetOffSet(tempinOffset_);
 
 		break;

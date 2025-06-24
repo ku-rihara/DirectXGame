@@ -14,7 +14,7 @@ private:
 	///private varians
 	/// ===================================================
 	Step step_;
-	Easing<Vector3> ease_;
+	Easingw<Vector3> ease_;
     Vector3 tempOffset_;
 
 public:
