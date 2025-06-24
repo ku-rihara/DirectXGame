@@ -8,7 +8,6 @@ class GameCameraZoomInOut : public BaseGameCameraBehavior {
 private:
 	enum class Step {
 		ZOOMIN,
-		WAIT,
 		ZOOMOUT,
 		RETURNROOT,
 	};
@@ -19,13 +18,13 @@ private:
 	float shakeT_;
 	float shakeTMax_;
 
-	
-	Easing outEase_;
+
 	float waitTime_;
 	float kWaitTime_;
 	float timeOffset_;
 
 	Easing<Vector3> inEase_;
+    Easing<Vector3> outEase_;
     Vector3 tempinOffset_;
 
 public:

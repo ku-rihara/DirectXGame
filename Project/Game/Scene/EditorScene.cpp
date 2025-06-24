@@ -24,7 +24,7 @@ void EditorScene::Init() {
 
     easingEditor_.Init();
 
-    easingEditor_.SetVector2Target(&easingTestObject_->GetEasingData());
+    easingEditor_.SetVector3Target(&easingTestObject_->GetEasingData());
 }
 
 void EditorScene::Update() {

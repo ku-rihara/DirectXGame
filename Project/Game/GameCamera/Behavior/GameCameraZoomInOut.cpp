@@ -22,15 +22,35 @@ GameCameraZoomInOut::GameCameraZoomInOut(GameCamera* gameCamera)
     inEase_.ApplyFromJson("ZoomIn.json");
     inEase_.SaveAppliedJsonFileName();
     inEase_.SetAdaptValue(&tempinOffset_);
+
+	outEase_.Init("CameraZoomOut");
+    outEase_.ApplyFromJson("ZoomOut.json");
+    outEase_.SaveAppliedJsonFileName();
+    outEase_.SetAdaptValue(&tempinOffset_);
+
     inEase_.SetOnFinishCallback([this]() {
 		pGameCamera_->SetOffSet(pGameCamera_->GetParamater().zoomOffset_);
-        step_ = Step::WAIT;
+ 
     });
+
+	 inEase_.SetOnWaitEndCallback([this]() {
+        waitTime_ = kWaitTime_;
+        shakeT_   = 0.0f;
+        pGameCamera_->SetShakePos(Vector3::ZeroVector());
+        step_ = Step::ZOOMOUT;
+ 
+    });
+
+	 outEase_.SetOnFinishCallback([this]() {
+         saveOffset_ = pGameCamera_->GetOffset();
+         step_       = Step::RETURNROOT;
+     });
+
 	 
 	 /*inEase_.maxTime = 0.2f;*/
-	 outEase_.maxTime = 0.2f;
+	 /*outEase_.maxTime = 0.2f;
 	 kWaitTime_ = 0.2f;
-	 timeOffset_ = 0.01f;
+	 timeOffset_ = 0.01f;*/
 	 saveOffset_ = {};
 
 	 shakeTMax_ = kWaitTime_+ 0.2f+0.2f;
@@ -58,36 +78,13 @@ void GameCameraZoomInOut::Update() {
 
 		
 		break;
-		/// --------------------------------------------------------
-		/// イン
-		///---------------------------------------------------------
-	case Step::WAIT:
-		ShakeUpdate();
-		waitTime_ += Frame::DeltaTime();
-
-		// next
-		if (waitTime_ < kWaitTime_)break;
-		waitTime_ = kWaitTime_;
-		shakeT_ = 0.0f;
-		pGameCamera_->SetShakePos(Vector3::ZeroVector());
-		step_ = Step::ZOOMOUT;
-
-		break;
+		
 		/// ------------------------------------------------------
 		/// アウト
 		///---------------------------------------------------------
 	case Step::ZOOMOUT:
-		outEase_.time += Frame::DeltaTime();
-
-		/// いージんぐ適応
-		pGameCamera_->SetOffSet(EaseInCubic(pGameCamera_->GetParamater().zoomOffset_, pGameCamera_->GetParamater().firstOffset_,
-			outEase_.time, outEase_.maxTime));
-
-		// next
-		if (outEase_.time < outEase_.maxTime- timeOffset_)break;
-		saveOffset_ = pGameCamera_->GetOffset();
-		step_ = Step::RETURNROOT;
-	
+        outEase_.Update(Frame::DeltaTime());
+        pGameCamera_->SetOffSet(tempinOffset_);
 
 		break;
 		/// ------------------------------------------------------
