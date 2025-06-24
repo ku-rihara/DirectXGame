@@ -25,7 +25,7 @@ private:
 	float kWaitTime_;
 	float timeOffset_;
 
-	Easingw<Vector3> inEase_;
+	Easing<Vector3> inEase_;
     Vector3 tempinOffset_;
 
 public:
