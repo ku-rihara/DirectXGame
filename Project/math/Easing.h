@@ -82,6 +82,12 @@ private:
     float period_    = 0.0f;
     float backRatio_ = 0.0f;
 
+    //etc
+    float waitTimeMax_ = 0.0f;
+    float finishTimeOffset_=0.0f;
+
+    float waitTime_ = 0.0f; // 待機時間
+
 private:
     int32_t selectedFileIndex_;
     AdaptVector2AxisType oldTypeVector2_;
@@ -100,6 +106,7 @@ private:
     std::unique_ptr<IVector2Proxy> vector2Proxy_;
 
     std::function<void()> onFinishCallback_;
+    std::function<void()> onWaitEndCallback_;
 
 public:
     /// -------------------------------------------------------------------------
@@ -115,6 +122,7 @@ public:
     /*  void SetEditor(EasingEditor* editor);*/
     void SetFinishValueType(const EasingFinishValueType& type) { finishValueType_ = type; }
     void SetOnFinishCallback(const std::function<void()>& callback) { onFinishCallback_ = callback; }
+    void SetOnWaitEndCallback(const std::function<void()>& callback) { onWaitEndCallback_ = callback; }
     void SetStartValue(const T& value) { startValue_ = value; }
     void SetEndValue(const T& value) { endValue_ = value; }
     void SetCurrentValue(const T& value);

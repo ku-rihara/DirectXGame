@@ -18,6 +18,7 @@ void Easing<T>::Reset() {
 
     isFinished_  = false;
     currentTime_ = 0.0f;
+    waitTimeMax_ = 0.0f;
 }
 
 template <typename T>
@@ -34,6 +35,9 @@ void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
     amplitude_  = easingParam.amplitude;
     period_     = easingParam.period;
     backRatio_  = easingParam.backRatio;
+
+    waitTimeMax_      = easingParam.waitTime;
+    finishTimeOffset_ = easingParam.finishOffsetTime;
 }
 
 template <typename T>
@@ -133,6 +137,9 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
     param.amplitude = inner.value("amplitude", 0.0f);
     param.period    = inner.value("period", 0.0f);
     param.backRatio = inner.value("backRatio", 0.0f);
+
+    param.finishOffsetTime = inner.value("finishOffsetTime", 0.0f);
+    param.waitTime         = inner.value("waitTime", 0.0f);
 
     // paramの値をセット
     SettingValue(param);
@@ -237,11 +244,26 @@ void Easing<T>::Update(float deltaTime) {
         vector2Proxy_->Apply();
     }
 
-    if (currentTime_ >= maxTime_) {
-        FinishBehavior();
-        if (onFinishCallback_) {
-            onFinishCallback_();
-        }
+    //  終了時間を過ぎたら終了処理
+    if (currentTime_ < maxTime_-finishTimeOffset_) {
+        return;
+    }
+
+    FinishBehavior();
+
+    if (onFinishCallback_) { // Easing終了時のコールバック
+        onFinishCallback_();
+    }
+
+    // 待機時間の加算
+    waitTime_ += deltaTime;
+
+    if (waitTime_ < waitTimeMax_) {
+        return;
+    }
+
+    if (onWaitEndCallback_) { // 待機終了時のコールバック
+        onWaitEndCallback_();
     }
 }
 
