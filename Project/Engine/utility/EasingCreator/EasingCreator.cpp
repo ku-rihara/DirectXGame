@@ -172,7 +172,7 @@ void EasingCreator<T>::ToJson(nlohmann::json& j, const std::string& name, const 
     jsonParam["backRatio"]  = param.backRatio;
 
     jsonParam["finishOffsetTime"]    = param.finishOffsetTime;
-    jsonParam["waitTime"] = param.waitTime;
+    jsonParam["waitTime"] = param.waitTimeMax;
 }
 
 template <typename T>
@@ -191,7 +191,7 @@ void EasingCreator<T>::FromJson(const nlohmann::json& j) {
         param.period     = val.value("period", 0.0f);
         param.backRatio  = val.value("backRatio", 0.0f);
         param.finishOffsetTime = val.value("finishOffsetTime", 0.0f);
-        param.waitTime         = val.value("waitTime", 0.0f);
+        param.waitTimeMax         = val.value("waitTime", 0.0f);
 
         if constexpr (std::is_same_v<T, Vector3>) {
             auto sv          = val["startValue"];
@@ -306,7 +306,7 @@ void EasingCreator<T>::Edit() {
         }
 
         ImGui::Separator();
-        ImGui::DragFloat("WaitTime", &editingParam_.waitTime, 0.01f);
+        ImGui::DragFloat("WaitTime", &editingParam_.waitTimeMax, 0.01f);
         ImGui::DragFloat("FinishOffsetTime", &editingParam_.finishOffsetTime, 0.01f);
 
         EditPreset(selectedName_, editingParam_);
