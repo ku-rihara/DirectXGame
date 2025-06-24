@@ -132,6 +132,6 @@ struct EasingParameter {
     float period    = 0.0f;
     float backRatio = 0.0f;
 
-    float waitTime     = 0.0f;
+    float waitTimeMax     = 0.0f;
     float finishOffsetTime = 0.0f;
 };

@@ -18,7 +18,7 @@ void Easing<T>::Reset() {
 
     isFinished_  = false;
     currentTime_ = 0.0f;
-    waitTimeMax_ = 0.0f;
+    waitTime_    = 0.0f;
 }
 
 template <typename T>
@@ -36,7 +36,7 @@ void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
     period_     = easingParam.period;
     backRatio_  = easingParam.backRatio;
 
-    waitTimeMax_      = easingParam.waitTime;
+    waitTimeMax_      = easingParam.waitTimeMax;
     finishTimeOffset_ = easingParam.finishOffsetTime;
 }
 
@@ -139,7 +139,7 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
     param.backRatio = inner.value("backRatio", 0.0f);
 
     param.finishOffsetTime = inner.value("finishOffsetTime", 0.0f);
-    param.waitTime         = inner.value("waitTime", 0.0f);
+    param.waitTimeMax         = inner.value("waitTime", 0.0f);
 
     // paramの値をセット
     SettingValue(param);
