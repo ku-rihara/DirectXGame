@@ -36,8 +36,7 @@ GameCameraZoomInOut::GameCameraZoomInOut(GameCamera* gameCamera)
     });
 
 	 inEase_.SetOnWaitEndCallback([this]() {
-       /* waitTime_ = kWaitTime_;*/
-        shakeT_   = 0.0f;
+        shakeT_ = 0.0f;
         pGameCamera_->SetShakePos(Vector3::ZeroVector());
         step_ = Step::ZOOMOUT;
  
@@ -81,7 +80,7 @@ void GameCameraZoomInOut::Update() {
 		/// アウト
 		///---------------------------------------------------------
 	case Step::ZOOMOUT:
-        outEase_.Update(Frame::DeltaTimeRate());
+        outEase_.Update(Frame::DeltaTime());
         pGameCamera_->SetOffSet(tempinOffset_);
 
 		break;

@@ -16,9 +16,9 @@ GameCameraBackLash::GameCameraBackLash(GameCamera* gameCamera)
 	///変数初期化
 	/// ===================================================
 	
-	ease_.Init("CameraZoomOut");
-  /*  ease_.ApplyFromJson("CameraZoomOut.json");
-    ease_.SaveAppliedJsonFileName();*/
+	ease_.Init("CameraBackLash");
+    ease_.ApplyFromJson("CameraZoomOut.json");
+    ease_.SaveAppliedJsonFileName();
     ease_.SetAdaptValue(&tempOffset_);
 
 	ease_.SetOnFinishCallback([this] {

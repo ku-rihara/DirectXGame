@@ -19,7 +19,6 @@ protected:
     /// motion
     float rotateValue_;
     float rotateValueAnti_;
-    float rotateEaseT_;
     float tempRotateValue_;
 
     /// floatMotion

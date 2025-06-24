@@ -32,7 +32,7 @@ void BaseComboAattackBehavior::ChangeNextCombo(std::unique_ptr<BaseComboAattackB
 void BaseComboAattackBehavior::AnimationInit() {
 
     // rotate
-    rotateEaseT_     = 0.0f;
+  
     tempRotateValue_ = 0.0f;
     pPlayer_->SetRotateInit();
     rotateValue_     = pPlayerParameter_->GetParamaters().attackRotate;
@@ -53,6 +53,7 @@ void BaseComboAattackBehavior::AnimationInit() {
     floatEase_.SetOnFinishCallback([this] {
         floatEase_.SetCurrentValue(0.0f);
     });
+    
 }
 
 void BaseComboAattackBehavior::ScalingEaseUpdate() {
