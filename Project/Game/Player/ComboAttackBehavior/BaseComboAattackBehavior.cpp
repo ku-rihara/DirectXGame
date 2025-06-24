@@ -53,6 +53,10 @@ void BaseComboAattackBehavior::AnimationInit() {
     floatEase_.SetOnFinishCallback([this] {
         floatEase_.SetCurrentValue(0.0f);
     });
+
+     rotateEasing_.SetOnFinishCallback([this] {
+        pPlayer_->SetRotationY(tempRotateValue_);
+    });
     
 }
 
