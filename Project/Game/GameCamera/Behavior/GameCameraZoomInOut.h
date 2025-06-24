@@ -23,8 +23,8 @@ private:
 	float kWaitTime_;
 	float timeOffset_;
 
-	Easing<Vector3> inEase_;
-    Easing<Vector3> outEase_;
+	Easingw<Vector3> inEase_;
+    Easingw<Vector3> outEase_;
     Vector3 tempinOffset_;
   /*  Vector3 tempOutOffset_;*/
 

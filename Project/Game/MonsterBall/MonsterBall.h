@@ -11,7 +11,7 @@ private:
 	// モデル
 	std::unique_ptr<Object3d> objct3D_=nullptr;
 
-	Easing<Vector3> easing_;
+	Easingw<Vector3> easing_;
 	
 public:
 	MonsterBall();
