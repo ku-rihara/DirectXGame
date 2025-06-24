@@ -44,10 +44,10 @@ void BaseComboAattackBehavior::AnimationInit() {
     startEasing_.SetAdaptValue(&tempScaleValue_);
     tempScaleValue_ = Vector3::UnitVector();
 
-    rotateEasing_.Init("AttackFloating");
+    rotateEasing_.Init("AttackRotate");
     rotateEasing_.SetAdaptValue(&tempRotateValue_);
-
-    floatEase_.Init("AttackRotate");
+    
+    floatEase_.Init("AttackFloating");
     floatEase_.SetAdaptValue(&tempFloatValue_);
 
     floatEase_.SetOnFinishCallback([this] {
@@ -76,7 +76,7 @@ void BaseComboAattackBehavior::RotateMotionUpdate(const float& start, const floa
     }
 
     rotateEasing_.Update(Frame::DeltaTimeRate());
-    pPlayer_->SetRotationY(tempRotateValue_);
+    pPlayer_->SetHeadRotateY(tempRotateValue_);
 }
 
 void BaseComboAattackBehavior::FloatAnimationUpdate() {
