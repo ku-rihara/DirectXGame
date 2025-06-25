@@ -15,13 +15,18 @@ ComboCountUP::ComboCountUP(ComboUIController* uiController)
 
     pUIController_->ScalingInit();
 
-    // パラメータ初期化
-    scalingEasing_.time      = 0.0f;
-    scalingEasing_.maxTime   = pUIController_->GetScalingParameter().scalingEasing.maxTime;
-    scalingEasing_.amplitude = pUIController_->GetScalingParameter().scalingEasing.amplitude;
-    scalingEasing_.period    = pUIController_->GetScalingParameter().scalingEasing.period;
-    amplitudeScale_          = pUIController_->GetScalingParameter().amplitudeScale;
+    scalingEasing_.Init("ComboUIScaling");
+    scalingEasing_.ApplyFromJson("ComboUIScale.json");
+    scalingEasing_.SaveAppliedJsonFileName();
+    scalingEasing_.SetAdaptValue(&baseScale_);
+    scalingEasing_.Reset();
 
+    scalingEasing_.SetOnFinishCallback([this]() {
+        pUIController_->SetBaseScale(baseScale_);
+        animationStep_ = AnimationStep::END;
+    });
+
+  
     // 　step
     animationStep_ = AnimationStep::INIT;
 }
@@ -43,7 +48,8 @@ void ComboCountUP::Update() {
         /// 更新
         ///-----------------------------------------------------------------------
     case ComboCountUP::AnimationStep::UPDATE:
-        ScalingEasing();
+        scalingEasing_.Update(Frame::DeltaTime());
+        pUIController_->SetBaseScale(baseScale_);
         break;
         ///-----------------------------------------------------------------------
         /// 終了
@@ -61,26 +67,3 @@ void ComboCountUP::Debug() {
     ImGui::Text("ComboCountUP");
 }
 
-void ComboCountUP::ScalingEasing() {
-    scalingEasing_.time += Frame::DeltaTime();
-
-    // base Scaleの更新
-    baseScale_ = EaseAmplitudeScale(
-        amplitudeScale_, scalingEasing_.time,
-        scalingEasing_.maxTime, scalingEasing_.amplitude,
-        scalingEasing_.period);
-
-    // base Scaleの適応
-    pUIController_->SetBaseScale(baseScale_);
-
-    if (scalingEasing_.time < scalingEasing_.maxTime) {
-        return;
-    }
-
-    scalingEasing_.time = scalingEasing_.maxTime;
-    baseScale_          = amplitudeScale_;
-    // base Scaleの適応
-    pUIController_->SetBaseScale(baseScale_);
-
-    animationStep_ = AnimationStep::END;
-}

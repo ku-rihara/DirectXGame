@@ -62,8 +62,8 @@ void PlayerParameter::AdjustParam() {
         ImGui::DragFloat("fallSpeedLimitB", &playerParams_.bountJump.fallSpeedLimit, 0.01f);
         ImGui::SeparatorText("EasingTime");
         ImGui::DragFloat("BackLashEaseTime", &playerParams_.upperParm.BackLashEaseTime, 0.01f);
-        ImGui::DragFloat("attackRotateEaseT", &playerParams_.attackRotateEaseT, 0.01f);
-        ImGui::DragFloat("attackFloatEaseT", &playerParams_.attackFloatEaseT, 0.01f);
+      /*  ImGui::DragFloat("attackRotateEaseT", &playerParams_.attackRotateEaseT, 0.01f);
+        ImGui::DragFloat("attackFloatEaseT", &playerParams_.attackFloatEaseT, 0.01f);*/
 
         /// コンボパラメータ
         if (ImGui::CollapsingHeader("NormalCombo")) {
@@ -170,8 +170,8 @@ void PlayerParameter::AddParmGroup() {
 
     globalParameter_->AddItem(groupName_, "rushEaseMax", playerParams_.rushEaseMax);
     globalParameter_->AddItem(groupName_, "upperBackLashEaseTime_", playerParams_.upperParm.BackLashEaseTime);
-    globalParameter_->AddItem(groupName_, "attackRotateEaseT", playerParams_.attackRotateEaseT);
-    globalParameter_->AddItem(groupName_, "attackFloatEaseT_", playerParams_.attackFloatEaseT);
+  /*  globalParameter_->AddItem(groupName_, "attackRotateEaseT", playerParams_.attackRotateEaseT);
+    globalParameter_->AddItem(groupName_, "attackFloatEaseT_", playerParams_.attackFloatEaseT);*/
 }
 
 ///=================================================================================
@@ -214,8 +214,8 @@ void PlayerParameter::SetValues() {
 
     globalParameter_->SetValue(groupName_, "rushEaseMax", playerParams_.rushEaseMax);
     globalParameter_->SetValue(groupName_, "upperBackLashEaseTime_", playerParams_.upperParm.BackLashEaseTime);
-    globalParameter_->SetValue(groupName_, "attackRotateEaseT", playerParams_.attackRotateEaseT);
-    globalParameter_->SetValue(groupName_, "attackFloatEaseT_", playerParams_.attackFloatEaseT);
+   /* globalParameter_->SetValue(groupName_, "attackRotateEaseT", playerParams_.attackRotateEaseT);
+    globalParameter_->SetValue(groupName_, "attackFloatEaseT_", playerParams_.attackFloatEaseT);*/
 }
 
 ///=====================================================
@@ -232,9 +232,9 @@ void PlayerParameter::ApplyGlobalParameter() {
     playerParams_.normalJump.gravity        = globalParameter_->GetValue<float>(groupName_, "Gravity");
     playerParams_.fallSpeed                 = globalParameter_->GetValue<float>(groupName_, "FallSpeed");
     playerParams_.normalJump.fallSpeedLimit = globalParameter_->GetValue<float>(groupName_, "FallSpeedLimit");
-    playerParams_.attackRotateEaseT         = globalParameter_->GetValue<float>(groupName_, "attackRotateEaseT");
+   /* playerParams_.attackRotateEaseT         = globalParameter_->GetValue<float>(groupName_, "attackRotateEaseT");*/
     playerParams_.attackRotate              = globalParameter_->GetValue<float>(groupName_, "attackRotate");
-    playerParams_.attackFloatEaseT          = globalParameter_->GetValue<float>(groupName_, "attackFloatEaseT_");
+   /* playerParams_.attackFloatEaseT          = globalParameter_->GetValue<float>(groupName_, "attackFloatEaseT_");*/
     playerParams_.attackFloatValue          = globalParameter_->GetValue<float>(groupName_, "attackFloatValue_");
     playerParams_.attackRotateAnit          = globalParameter_->GetValue<float>(groupName_, "attackRotateAnit");
 

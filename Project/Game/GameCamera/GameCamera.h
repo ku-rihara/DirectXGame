@@ -14,13 +14,10 @@ class GameCamera {
 public:
  
 	struct Paramater {
-		Vector3 zoomOffset_;
 		Vector3 firstOffset_;
 		float   firstRotate_;
 		float   zoomRotate_;
 		float   backLashTime_;
-		float   backLashRatio_;
-		Vector3 backLashOffset_;
 	};
 
 private:
@@ -76,11 +73,8 @@ public:
 
 	///-------------------------------------------------------------------------------------
 ///Editor
-///-------------------------------------------------------------------------------------
-	void ParamLoadForImGui();
-	void AddParmGroup();
-	void SetValues();
-	void ApplyGlobalParameter();
+///------------------------------------------------------------------------------------
+    void BindParams();
 	void AdjustParam();
 
 	/// ===================================================

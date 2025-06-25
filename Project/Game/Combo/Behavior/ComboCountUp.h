@@ -2,6 +2,7 @@
 
 #include "BaseComboUIBehavior.h"
 #include"EasingFunction.h"
+#include"Easing.h"
 
 class ComboCountUP : public BaseComboUIBehavior {
 private:
@@ -19,8 +20,7 @@ public:
     void Update() override;
     void Debug() override;
 
-    void ScalingEasing();
-
+ 
 private:
     /// ===================================================
     /// private variables
@@ -28,7 +28,7 @@ private:
 
     AnimationStep animationStep_;
 
-    Easing scalingEasing_;
-    Vector2 amplitudeScale_;
+    Easingw<Vector2> scalingEasing_;
+   /* Vector2 amplitudeScale_;*/
     Vector2 baseScale_;
 };

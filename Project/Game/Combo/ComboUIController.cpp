@@ -77,12 +77,7 @@ void ComboUIController::AdjustParam() {
         ImGui::PushID(groupName_.c_str());
 
         ImGui::SeparatorText("Parameter"); //  パラメータ
-        ImGui::DragFloat2("amplitudeScale_", &parameter_.amplitudeScale.x, 0.01f);
-
-        ImGui::SeparatorText("Easing Parameter"); // Easing パラメータ
-        ImGui::DragFloat("Scaling Ease max", &parameter_.scalingEasing.maxTime, 0.01f);
-        ImGui::DragFloat("Scaling Ease amplitude", &parameter_.scalingEasing.amplitude, 0.01f);
-        ImGui::DragFloat("Scaling Ease period", &parameter_.scalingEasing.period, 0.01f);
+       
 
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
@@ -103,11 +98,7 @@ void ComboUIController::AdjustParam() {
 ///==========================================================
 void ComboUIController::BindParams() {
 
-    globalParameter_->Bind(groupName_, "Scaling Ease max", &parameter_.scalingEasing.maxTime);
-    globalParameter_->Bind(groupName_, "Scaling Ease amplitude", &parameter_.scalingEasing.amplitude);
-    globalParameter_->Bind(groupName_, "Scaling Ease period", &parameter_.scalingEasing.period);
-
-    globalParameter_->Bind(groupName_, "amplitudeScale_", &parameter_.amplitudeScale);
+   
 }
 
 void ComboUIController::ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> behavior) {

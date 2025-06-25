@@ -1,0 +1,21 @@
+{
+    "ComboUIScale": {
+        "adaptVec2AxisType": 0,
+        "amplitude": 0.9800000190734863,
+        "backRatio": 0.0,
+        "endValue": [
+            3.0,
+            3.0
+        ],
+        "finishOffsetTime": 0.0,
+        "finishType": 0,
+        "maxTime": 0.699999988079071,
+        "period": 0.20000000298023224,
+        "startValue": [
+            3.0,
+            3.0
+        ],
+        "type": 27,
+        "waitTime": 0.0
+    }
+}

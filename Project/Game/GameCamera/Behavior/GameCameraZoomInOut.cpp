@@ -30,10 +30,7 @@ GameCameraZoomInOut::GameCameraZoomInOut(GameCamera* gameCamera)
     outEase_.SetAdaptValue(&tempinOffset_);
     outEase_.Reset();
 
-    inEase_.SetOnFinishCallback([this]() {
-		pGameCamera_->SetOffSet(pGameCamera_->GetParamater().zoomOffset_);
- 
-    });
+   
 
 	 inEase_.SetOnWaitEndCallback([this]() {
         shakeT_ = 0.0f;

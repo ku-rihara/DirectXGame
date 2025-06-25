@@ -41,8 +41,6 @@ struct Parameters {
     float attackRotateAnit;
     float attackFloatValue;
     float rushEaseMax;
-    float attackRotateEaseT;
-    float attackFloatEaseT;
 };
 
 enum ComboNum {

@@ -22,10 +22,10 @@ void GameCamera::Init() {
 	viewprojection_.Init();
 
 	///* グローバルパラメータ
-	globalParameter_ = GlobalParameter::GetInstance();
-	globalParameter_->CreateGroup(groupName_, false);
-	AddParmGroup();
-	ApplyGlobalParameter();
+    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_->CreateGroup(groupName_, false);
+    BindParams();
+    globalParameter_->SyncGroupFromUI(groupName_);
 
 	rotate_ = paramater_.firstRotate_;
 	offset_ = paramater_.firstOffset_;
@@ -129,73 +129,32 @@ Vector3 GameCamera::OffsetCalc(const Vector3& offset) const {
 
 
 // ================================= Paramater Edit ================================= //
-void GameCamera::ParamLoadForImGui() {
 
-	// ロードボタン
-	if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
 
-		globalParameter_->LoadFile(groupName_);
-		// セーブ完了メッセージ
-		ImGui::Text("Load Successful: %s", groupName_.c_str());
-		ApplyGlobalParameter();
-	}
+void GameCamera::BindParams() {
+    globalParameter_->Bind(groupName_, "firstRotate_", &paramater_.firstRotate_);
+    globalParameter_->Bind(groupName_, "zoomORotate_", &paramater_.zoomRotate_);
+    globalParameter_->Bind(groupName_, "backLashTime_", &paramater_.backLashTime_);
+    globalParameter_->Bind(groupName_, "firstOffset_", &paramater_.firstOffset_);
 }
 
-
-void GameCamera::AddParmGroup() {
-	globalParameter_->AddItem(groupName_, "zoomOffset_", paramater_.zoomOffset_);
-	globalParameter_->AddItem(groupName_, "firstRotate_", paramater_.firstRotate_);
-	globalParameter_->AddItem(groupName_, "firstOffset_", paramater_.firstOffset_);
-	globalParameter_->AddItem(groupName_, "zoomORotate_", paramater_.zoomRotate_);
-	globalParameter_->AddItem(groupName_, "backLashOffset_", paramater_.backLashOffset_);
-	globalParameter_->AddItem(groupName_, "backLashTime_", paramater_.backLashTime_);
-	globalParameter_->AddItem(groupName_, "backLashRatio_", paramater_.backLashRatio_);
-
-}
-
-void GameCamera::SetValues() {
-	globalParameter_->SetValue(groupName_, "zoomOffset_", paramater_.zoomOffset_);
-	globalParameter_->SetValue(groupName_, "firstRotate_", paramater_.firstRotate_);
-	globalParameter_->SetValue(groupName_, "firstOffset_", paramater_.firstOffset_);
-	globalParameter_->SetValue(groupName_, "zoomORotate_", paramater_.zoomRotate_);
-	globalParameter_->SetValue(groupName_, "backLashOffset_", paramater_.backLashOffset_);
-	globalParameter_->SetValue(groupName_, "backLashTime_", paramater_.backLashTime_);
-	globalParameter_->SetValue(groupName_, "backLashRatio_", paramater_.backLashRatio_);
-
-}
-
-void GameCamera::ApplyGlobalParameter() {
-	// paramCombies_ から値を取得
-	paramater_.zoomOffset_ = globalParameter_->GetValue<Vector3>(groupName_, "zoomOffset_");
-	paramater_.firstOffset_ = globalParameter_->GetValue<Vector3>(groupName_, "firstOffset_");
-	paramater_.firstRotate_ = globalParameter_->GetValue<float>(groupName_, "firstRotate_");
-	paramater_.zoomRotate_ = globalParameter_->GetValue<float>(groupName_, "zoomORotate_");
-	paramater_.backLashOffset_ = globalParameter_->GetValue<Vector3>(groupName_, "backLashOffset_");
-	paramater_.backLashTime_ = globalParameter_->GetValue<float>(groupName_, "backLashTime_");
-	paramater_.backLashRatio_ = globalParameter_->GetValue<float>(groupName_, "backLashRatio_");
-
-}
 
 void GameCamera::AdjustParam() {
-	SetValues();
 #ifdef _DEBUG
 
 	if (ImGui::CollapsingHeader(groupName_.c_str())) {
 		ImGui::PushID(groupName_.c_str());
 
-		/// 変数の調整
-		ImGui::DragFloat3("Zoom Offset", &paramater_.zoomOffset_.x, 0.1f);
-		ImGui::DragFloat3("First Offset", &paramater_.firstOffset_.x, 0.1f);
+		/// 変数の調整		
 		ImGui::SliderAngle("First Rotate", &paramater_.firstRotate_, 0, 1000);
 		ImGui::SliderAngle("Zoom Rotate", &paramater_.zoomRotate_, 0, 1000);
 		ImGui::DragFloat("Backlash Time", &paramater_.backLashTime_, 0.01f);
-		ImGui::DragFloat("backLash Ratio", &paramater_.backLashRatio_, 0.01f);
-		ImGui::DragFloat3("Backlash Offset", &paramater_.backLashOffset_.x, 0.1f);
-
+        ImGui::DragFloat3("firstOffset", &paramater_.firstOffset_.x, 0.01f);
+		
 
 		/// セーブとロード
 		globalParameter_->ParamSaveForImGui(groupName_);
-		ParamLoadForImGui();
+        globalParameter_->ParamLoadForImGui(groupName_);
 		ImGui::PopID();
 	}
 
