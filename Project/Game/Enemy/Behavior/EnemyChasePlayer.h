@@ -18,8 +18,6 @@ private:
 
 	bool isChase_;
 
-	
-
 	Easingw<Vector2> spriteEasing_;
     Easingw<Vector3> scaleEasing_;
 

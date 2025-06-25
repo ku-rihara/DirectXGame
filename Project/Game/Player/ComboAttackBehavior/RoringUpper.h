@@ -3,9 +3,28 @@
 #include"BaseComboAattackBehavior.h"
 #include"EasingFunction.h"
 #include"CollisionBox/AttackCollisionBox.h"
+#include"Easing.h"
 
 class RailManager;
 class RoringUpper : public BaseComboAattackBehavior {
+
+public:
+    // コンストラクタ
+    RoringUpper(Player* player);
+    ~RoringUpper();
+
+    /// 更新、デバッグ
+    void Update() override;
+    void Debug() override;
+
+    void CollisionInit();
+    void RailInit();
+    void HitStopUpdate();
+    void ChangeOrder();
+    void AnimationMove();
+
+	void EasingInit();
+
 private:
 	enum class Order {
 		UPPER,
@@ -15,7 +34,7 @@ private:
 private:
 
 	/// ===================================================
-	///private varians
+	/// private varians
 	/// ===================================================
 
 	Order order_;               /// 振る舞い順序
@@ -27,38 +46,26 @@ private:
 	Vector3 forwardDirection_;
 
 	/// パンチ
-	Easing punchEase_;
-	float upperJumpEaseT_;
+  /*  Easingw<Vector3> punchEase_;*/
 	float waitTine_;          /// 次コンボまでの待機時間
 	Vector3 initPos_;
 
 	///反動
-	float xRotate_;
 	float jumpPower_;
 	float gravity_;
 	float fallSpeedLimit_;
-	Vector3 preWorldPos_;
+	Vector3 tempWorldPos_;
 	Vector3 backlashPos_;
-	Easing backlashEase_;
+	Easingw<Vector3> backlashEase_;
 
+	Easingw<float> rotateEase_; 
+	float xRotate_;
+	
 	//hitstop
 	bool isHitStop_;
 	float hitStopTime_;
 	float kHitStopTime_;
 
+	float collisionAdaptTime_;
 
-public:
-	//コンストラクタ
-    RoringUpper(Player* player);
-	~RoringUpper();
-
-	/// 更新、デバッグ
-	void Update()override;
-	void Debug()override;
-
-	void CollisionInit();
-	void RailInit();
-	void HitStopUpdate();
-	void ChangeOrder();
-	void AnimationMove();
 };

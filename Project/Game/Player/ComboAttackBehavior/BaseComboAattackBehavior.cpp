@@ -62,7 +62,7 @@ void BaseComboAattackBehavior::AnimationInit() {
 
 void BaseComboAattackBehavior::ScalingEaseUpdate() {
     startEasing_.Update(Frame::DeltaTimeRate());
-    pPlayer_->SetScale(tempScaleValue_);
+    pPlayer_->SetHeadScale(tempScaleValue_);
 }
 
 void BaseComboAattackBehavior::RotateMotionUpdate(const float& start, const float& end, const bool& isClockwise) {
