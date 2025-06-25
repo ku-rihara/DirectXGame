@@ -1,145 +1,113 @@
 /// behaviorTitleRightPunch
-#include"TitleRightPunch.h"
-#include"TitleLeftPunch.h"
+#include "TitleRightPunch.h"
+#include "TitleLeftPunch.h"
 /// objs
-#include"Player/Player.h"
-#include"LockOn/LockOn.h"
+#include "LockOn/LockOn.h"
+#include "Player/Player.h"
 
 /// input
-#include"input/Input.h"
+#include "input/Input.h"
 
 /// frame
-#include"Frame/Frame.h"
+#include "Frame/Frame.h"
 
-#include<imgui.h>
+#include <imgui.h>
 
-//初期化
+// 初期化
 TitleRightPunch::TitleRightPunch(Player* player)
-	: BaseTitleBehavior("TitleRightPunch", player) {
+    : BaseTitleBehavior("TitleRightPunch", player) {
 
-	///---------------------------------------------------------
-	/// 変数初期化
-	///---------------------------------------------------------
+    ///---------------------------------------------------------
+    /// 変数初期化
+    ///---------------------------------------------------------
 
-	///　突進の動き
-	initPos_ = pPlayer_->GetWorldPosition();
-	forwardDirection_ = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
 
-	/// parm
-	rushEase_.time = 0.0f;
-	punchEase_.time = 0.0f;
-	waitTine_ = 0.0f;
-	
-	///land
-	startEasing_.maxTime = 0.5f;
-	startEasing_.amplitude = 0.6f;
-	startEasing_.period = 0.2f;
+    waitTine_       = 0.0f;
 
-	// 振る舞い順序初期化
-	order_ = Order::RUSH;
+    /// land
+    startEasing_.maxTime   = 0.5f;
+    startEasing_.amplitude = 0.6f;
+    startEasing_.period    = 0.2f;
+
+    rHandStartPos_  = pPlayer_->GetRightHand()->GetTransform().translation_;
+    rHandTargetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward()) * 2.0f;
+
+    EasingInit();
+
+    // 振る舞い順序初期化
+    order_ = Order::PUNCH;
 }
 
 TitleRightPunch::~TitleRightPunch() {
-
 }
 
-//更新
+// 更新
 void TitleRightPunch::Update() {
-	/// スケール変化
-	startEasing_.time += Frame::DeltaTimeRate();
-	startEasing_.time = std::min(startEasing_.time, startEasing_.maxTime);
-	pPlayer_->SetScale(EaseAmplitudeScale(Vector3::UnitVector(), startEasing_.time, startEasing_.maxTime,
-		startEasing_.amplitude, startEasing_.period));
+    /// スケール変化
+    scalingEase_.Update(Frame::DeltaTimeRate());
+    pPlayer_->SetScale(tempScale_);
 
+    switch (order_) {
 
-	switch (order_) {
+    case Order::PUNCH:
+        ///----------------------------------------------------
+        /// パンチ
+        ///----------------------------------------------------
 
-	case Order::RUSH:
+         punchEase_.Update(Frame::DeltaTimeRate());
+        pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
 
-		
-		///----------------------------------------------------
-		/// 突進
-		///----------------------------------------------------
+       
+        break;
 
+    case Order::BACKPUNCH:
+        ///----------------------------------------------------
+        /// バックパンチ
+        ///----------------------------------------------------
+        backPunchEase_.Update(Frame::DeltaTimeRate());
+        pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
+       
+        break;
 
-		rushPos_ = initPos_ + (forwardDirection_ * 0.0f); // 突進座標を決める
+    case Order::WAIT:
+        waitTine_ += Frame::DeltaTime();
 
-		rushEase_.time += Frame::DeltaTimeRate();
-
-		// 突進の動き
-		pPlayer_->SetWorldPosition(
-			EaseInSine(initPos_, rushPos_, rushEase_.time, pPlayerParameter_->GetParamaters().rushEaseMax));
-
-		/// パンチオーダーに移行
-		if (rushEase_.time >= pPlayerParameter_->GetParamaters().rushEaseMax) {
-			rushEase_.time =  pPlayerParameter_->GetParamaters().rushEaseMax;
-
-			/// パンチ座標セット
-			rHandStartPos_ = pPlayer_->GetRightHand()->GetTransform().translation_;
-			rHandTargetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward()) * 2.0f;
-
-			order_ = Order::PUNCH;
-		}
-
-		break;
-
-	case Order::PUNCH:
-		///----------------------------------------------------
-		/// パンチ
-		///----------------------------------------------------
-
-	
-		punchEase_.time += Frame::DeltaTimeRate();
-
-		/// 拳を突き出す
-		punchPosition_ =
-			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(FIRST).attackEaseMax);
-
-
-		// ハンドのローカル座標を更新
-		pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
-
-		// イージング終了時の処理
-		if (punchEase_.time >= pPlayerParameter_->GetNormalComboParm(FIRST).attackEaseMax) {
-			punchEase_.time = pPlayerParameter_->GetNormalComboParm(FIRST).attackEaseMax;
-			order_ = Order::BACKPUNCH;
-		}
-
-
-		break;
-
-	case Order::BACKPUNCH:
-		///----------------------------------------------------
-		/// バックパンチ
-		///----------------------------------------------------
-
-		punchEase_.time -= Frame::DeltaTimeRate();
-
-		punchPosition_ =
-			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(FIRST).attackEaseMax);
-
-		// ハンドのローカル座標を更新
-		pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
-
-		// イージング終了時の処理
-		if (punchEase_.time <= 0.0f) {
-			punchEase_.time = 0.0f;
-			order_ = Order::WAIT;
-		}
-		break;
-
-	case Order::WAIT:
-		waitTine_ += Frame::DeltaTime();
-
-		/// コンボ途切れ
-		if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(FIRST).waitTime) {
-			pPlayer_->ChangeTitleBehavior(std::make_unique<TitleLeftPunch>(pPlayer_));
-		}
-	}
+        /// コンボ途切れ
+        if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(FIRST).waitTime) {
+            pPlayer_->ChangeTitleBehavior(std::make_unique<TitleLeftPunch>(pPlayer_));
+        }
+    }
 }
 
+void TitleRightPunch::EasingInit() {
+    scalingEase_.Init("TitleScaling");
+    scalingEase_.SetAdaptValue(&tempScale_);
+    scalingEase_.Reset();
 
-void  TitleRightPunch::Debug() {
-	ImGui::Text("TitleRightPunch");
+    punchEase_.Init("PlayerRightPunch");
+    punchEase_.SetAdaptValue(&punchPosition_);
+    punchEase_.Reset();
+
+    punchEase_.SetOnFinishCallback([this]() {
+        order_ = Order::BACKPUNCH;
+    });
+
+    backPunchEase_.Init("PlayerRightBackPunch");
+    backPunchEase_.SetAdaptValue(&punchPosition_);
+    backPunchEase_.Reset();
+
+    backPunchEase_.SetOnFinishCallback([this]() {
+        order_ = Order::WAIT;
+    });
+
+    // start end Value Set
+    punchEase_.SetStartValue(rHandStartPos_);
+    punchEase_.SetEndValue(rHandTargetPos_);
+
+    backPunchEase_.SetStartValue(rHandTargetPos_);
+    backPunchEase_.SetEndValue(rHandStartPos_);
 }
 
+void TitleRightPunch::Debug() {
+    ImGui::Text("TitleRightPunch");
+}

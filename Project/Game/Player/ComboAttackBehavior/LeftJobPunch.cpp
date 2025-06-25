@@ -21,9 +21,7 @@ LeftJobPunch::LeftJobPunch(Player* player)
     /// 変数初期化
     ///---------------------------------------------------------
 
-    /// ease parm
-    EasingInit();
-
+   
     waitTine_ = 0.0f;
 
     /// collisionBox
@@ -33,12 +31,8 @@ LeftJobPunch::LeftJobPunch(Player* player)
     lHandStartPos_  = pPlayer_->GetLeftHand()->GetTransform().translation_;
     lHandTargetPos_ = pPlayer_->GetLeftHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayerParameter_->GetNormalComboParm(SECOND).attackReach;
 
-    // start end Value Set
-    punchEase_.SetStartValue(lHandStartPos_);
-    punchEase_.SetEndValue(lHandTargetPos_);
-
-    backPunchEase_.SetStartValue(lHandTargetPos_);
-    backPunchEase_.SetEndValue(lHandStartPos_);
+     /// ease parm
+    EasingInit();
 
     // 　モーション
     BaseComboAattackBehavior::AnimationInit();
@@ -127,6 +121,14 @@ void LeftJobPunch::EasingInit() {
     backPunchEase_.SetOnFinishCallback([this]() {
         order_ = Order::WAIT;
     });
+
+
+     // start end Value Set
+    punchEase_.SetStartValue(lHandStartPos_);
+    punchEase_.SetEndValue(lHandTargetPos_);
+
+    backPunchEase_.SetStartValue(lHandTargetPos_);
+    backPunchEase_.SetEndValue(lHandStartPos_);
 }
 
 void LeftJobPunch::CollisionBoxInit() {
