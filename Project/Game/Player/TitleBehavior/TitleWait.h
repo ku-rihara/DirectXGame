@@ -1,7 +1,7 @@
 #pragma once
 
 #include"BaseTitleBehavior.h"
-#include"EasingFunction.h"
+#include"Easing.h"
 
 class TitleWait : public BaseTitleBehavior {
 
@@ -16,8 +16,8 @@ private:
 	///private varians
 	/// ===================================================
 	STEP  step_;
-	Easing pressEase_;
-	Easing restEase_;
+	Easing<float> pressEase_;
+    float tempScaleY_;
 	float  pressScale_;
 	float waitTime_;
 

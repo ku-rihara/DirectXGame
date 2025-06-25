@@ -49,10 +49,10 @@ private:
 	float gravity_;
 
 	float tempWorldPosY_;
-    Easingw<float> fallEase_;
+    Easing<float> fallEase_;
 
 	Vector3 tempLandScale_;
-	Easingw<Vector3> landScaleEasing_;
+	Easing<Vector3> landScaleEasing_;
 
 	std::unique_ptr<AttackCollisionBox>collisionBox_;
 

@@ -26,10 +26,10 @@ private:
     Vector3 preWorldPos_;
     Vector3 frontPos_;
 
-	Easingw<float> assaultJumpEase_;
+	Easing<float> assaultJumpEase_;
     float tempPositionY_;
 
-	Easingw<Vector3> assaultEase_;
+	Easing<Vector3> assaultEase_;
     Vector3 tempPosition_;
 
 public:

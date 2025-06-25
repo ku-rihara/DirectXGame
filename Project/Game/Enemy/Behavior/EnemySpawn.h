@@ -21,7 +21,7 @@ private:
 	};
 private:
 	Step step_;
-	Easingw<Vector3> spawnEasing_;
+	Easing<Vector3> spawnEasing_;
     Vector3 tempEnemyScale_;
 	
 

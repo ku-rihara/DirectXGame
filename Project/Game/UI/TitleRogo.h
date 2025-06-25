@@ -26,9 +26,9 @@ private:
 	std::unique_ptr<Sprite> rushSprite_;
 	std::unique_ptr<Sprite> bottomSprite_;
 
-	Easingw<Vector2> punchEase_;
-	Easingw<Vector2> rushEase_;
-	Easingw<Vector2> bottomEase_;
+	Easing<Vector2> punchEase_;
+	Easing<Vector2> rushEase_;
+	Easing<Vector2> bottomEase_;
 	
 	Vector2 punchSpriteScale_;
     Vector2 rushSpriteScale_;

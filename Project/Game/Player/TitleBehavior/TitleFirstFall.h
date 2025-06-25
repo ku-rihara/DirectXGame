@@ -43,9 +43,9 @@ private:
 	float rotateYSpeed_;
 	float gravity_;
 
-	Easingw<Vector3> landScaleEasing_;
+	Easing<Vector3> landScaleEasing_;
     Vector3 tempScale_;
-    Easingw<float> fallEase_;
+    Easing<float> fallEase_;
     float tempPosY_;
 
 	//float fallSpeed_;

@@ -12,7 +12,7 @@ private:
 
 	bool isChase_;
 
-	Easingw<Vector2> spriteEase_;
+	Easing<Vector2> spriteEase_;
     Vector2 tempSpriteScale_;
 
 public:

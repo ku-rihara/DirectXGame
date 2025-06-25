@@ -42,9 +42,9 @@ private:
 	Vector3 targetLPos_;
 	Vector3 rushTargetPos_;
 
-	Easingw<Vector3> handRMoveEase_;
-    Easingw<Vector3> handLMoveEase_;
-    Easingw<Vector3> rushEase_;
+	Easing<Vector3> handRMoveEase_;
+    Easing<Vector3> handLMoveEase_;
+    Easing<Vector3> rushEase_;
     Vector3 tempRHandPos_;
     Vector3 tempLHandPos_;
     Vector3 tempRushPos_;

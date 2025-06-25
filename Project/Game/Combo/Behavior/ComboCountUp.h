@@ -28,7 +28,7 @@ private:
 
     AnimationStep animationStep_;
 
-    Easingw<Vector2> scalingEasing_;
+    Easing<Vector2> scalingEasing_;
    /* Vector2 amplitudeScale_;*/
     Vector2 baseScale_;
 };

@@ -46,7 +46,7 @@ private:
 	Vector3 forwardDirection_;
 
 	/// パンチ
-  /*  Easingw<Vector3> punchEase_;*/
+  /*  Easing<Vector3> punchEase_;*/
 	float waitTine_;          /// 次コンボまでの待機時間
 	Vector3 initPos_;
 
@@ -56,9 +56,9 @@ private:
 	float fallSpeedLimit_;
 	Vector3 tempWorldPos_;
 	Vector3 backlashPos_;
-	Easingw<Vector3> backlashEase_;
+	Easing<Vector3> backlashEase_;
 
-	Easingw<float> rotateEase_; 
+	Easing<float> rotateEase_; 
 	float xRotate_;
 	
 	//hitstop

@@ -43,10 +43,10 @@ private:
     float speed_;
 
     /// パンチ
-    Easingw<Vector3> rushEase_;
+    Easing<Vector3> rushEase_;
     Vector3 tempRushPos_; 
-    Easingw<Vector3> punchEase_; /// パンチイージング
-    Easingw<Vector3> backPunchEase_; /// パンチイージング
+    Easing<Vector3> punchEase_; /// パンチイージング
+    Easing<Vector3> backPunchEase_; /// パンチイージング
 
     Vector3 rHandStartPos_; /// ハンドスタート座標
     Vector3 rHandTargetPos_; /// ハンドターゲット座標

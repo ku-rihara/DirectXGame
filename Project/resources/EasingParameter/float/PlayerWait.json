@@ -1,0 +1,15 @@
+{
+    "PlayerWait": {
+        "adaptFloatAxisType": 1,
+        "amplitude": 0.0,
+        "backRatio": 0.75,
+        "endValue": 0.8500000238418579,
+        "finishOffsetTime": 0.0,
+        "finishType": 0,
+        "maxTime": 0.44999998807907104,
+        "period": 0.0,
+        "startValue": 1.0,
+        "type": 34,
+        "waitTime": 0.2199999988079071
+    }
+}

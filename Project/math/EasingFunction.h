@@ -2,13 +2,13 @@
 #include "Vector2.h"
 #include "Vector3.h"
 
-struct Easing {
-    float time      = 0.0f;
-    float maxTime   = 0.0f;
-    float amplitude = 0.0f;
-    float period    = 0.0f;
-    float backRatio = 0.0f;
-};
+//struct Easing {
+//    float time      = 0.0f;
+//    float maxTime   = 0.0f;
+//    float amplitude = 0.0f;
+//    float period    = 0.0f;
+//    float backRatio = 0.0f;
+//};
 //float Lerp(const float& start, const float& end, float t);
 //
 //Vector3 Lerp(const Vector3& start, const Vector3& end, float t);

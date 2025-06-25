@@ -19,9 +19,21 @@ TitleWait::TitleWait(Player* player)
 	/// 変数初期化
 	///---------------------------------------------------------
 
-	pressEase_.maxTime = 0.3f;
+	/*pressEase_.maxTime = 0.3f;
 	restEase_.maxTime = 0.25f;
-	pressScale_ = 0.85f;
+	pressScale_ = 0.85f;*/
+
+	pressEase_.Init("TitleWait");
+    pressEase_.ApplyFromJson("TitleWait.json");
+    pressEase_.SaveAppliedJsonFileName();
+    pressEase_.SetAdaptValue(&tempScaleY_);
+    pressEase_.Reset();
+
+    pressEase_.SetOnWaitEndCallback([this]() {
+        pressEase_.Reset();
+    });
+
+
 	step_ = STEP::PRESS; // 落ちる
 }
 
@@ -37,27 +49,17 @@ void TitleWait::Update() {
 		///-------------------------------------------------------------------------------------------------
 		///潰れる
 		/// -----------------------------------------------------------------------------------------------
-		pressEase_.time += Frame::DeltaTime();
-		pPlayer_->SetScaleY(EaseOutQuart(1.0f, pressScale_, pressEase_.time, pressEase_.maxTime));
-
-		/// 次のステップ
-		if (pressEase_.time < pressEase_.maxTime)break;
-		pPlayer_->SetScaleY(pressScale_);
-		pressEase_.time = 0.0f;
-		step_ = STEP::RESTORATIVE;
+        pressEase_.Update(Frame::DeltaTimeRate());
+        pressEase_.UpdateWait(Frame::DeltaTimeRate());
+        pPlayer_->SetScaleY(tempScaleY_);
+		
 
 		break;
 	case TitleWait::STEP::RESTORATIVE:
 		///-------------------------------------------------------------------------------------------------
 		///戻る
 		/// -----------------------------------------------------------------------------------------------
-		restEase_.time += Frame::DeltaTime();
-		pPlayer_->SetScaleY(EaseInQuart(pressScale_, 1.0f, restEase_.time, restEase_.maxTime));
-
-		/// 次のステップ
-		if (restEase_.time < restEase_.maxTime)break;
-		pPlayer_->SetScaleY(1.0f);
-		restEase_.time = 0.0f;
+		
 
 		step_ = STEP::PRESS;
 		break;

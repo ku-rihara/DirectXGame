@@ -35,9 +35,9 @@ private:
 	Vector3 rHandTargetPos_;   /// ハンドターゲット座標
 	Vector3 punchPosition_;
 
-	Easingw<Vector3> scalingEase_;
-    Easingw<Vector3> punchEase_;
-    Easingw<Vector3> backPunchEase_;
+	Easing<Vector3> scalingEase_;
+    Easing<Vector3> punchEase_;
+    Easing<Vector3> backPunchEase_;
 
     Vector3 tempScale_;
 	
