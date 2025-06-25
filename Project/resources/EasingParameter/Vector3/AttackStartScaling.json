@@ -7,6 +7,7 @@
             1.0,
             1.0
         ],
+        "finishOffsetTime": 0.0,
         "finishType": 0,
         "maxTime": 0.699999988079071,
         "period": 0.20000000298023224,
@@ -15,6 +16,7 @@
             1.0,
             1.0
         ],
-        "type": 27
+        "type": 27,
+        "waitTime": 0.0
     }
 }

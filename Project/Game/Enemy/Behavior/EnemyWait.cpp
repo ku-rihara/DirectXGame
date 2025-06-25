@@ -25,16 +25,13 @@ EnemyWait::EnemyWait(BaseEnemy* boss)
 	pBaseEnemy_->GetFindSprite()->SetScale(Vector2(0, 0));
 
 	spriteEase_.Init("EnemyOverLookSprite");
-    spriteEase_.ApplyFromJson("EnemyOverLookSpriteScaling.json");
-    spriteEase_.SaveAppliedJsonFileName();
+    /*spriteEase_.ApplyFromJson("EnemyOverLookSpriteScaling.json");
+    spriteEase_.SaveAppliedJsonFileName();*/
     spriteEase_.SetAdaptValue(&tempSpriteScale_);
     spriteEase_.Reset();
 
-    
-	/*spriteEase_.maxTime = 1.0f;
-	spriteEase_.time = 0.0f;*/
 
-	isChase_ = true;//	デバッグ用
+	isChase_ = true;
 }
 
 EnemyWait::~EnemyWait() {

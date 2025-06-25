@@ -1,52 +1,56 @@
 #pragma once
 
-#include"BaseComboAattackBehavior.h"
-#include"EasingFunction.h"
-#include"CollisionBox/AttackCollisionBox.h"
+#include "BaseComboAattackBehavior.h"
+#include "CollisionBox/AttackCollisionBox.h"
+#include "EasingFunction.h"
 
 class RightJobPunch : public BaseComboAattackBehavior {
-private:
-	enum class Order{
-		RUSH,
-		PUNCH,
-		BACKPUNCH,
-		WAIT,
-	};
-private:
-	
-	/// ===================================================
-	///private varians
-	/// ===================================================
-
-	Order order_;                /// 振る舞い順序
-
-	// collision
-	std::unique_ptr<AttackCollisionBox>collisionBox_;
-
-	/// 突進
-	Vector3 initPos_;            /// スタート座標
-	Vector3 rushPos_;            /// 突進座標
-	Vector3 forwardDirection_;   /// 向き
-	float speed_;
-	Easing rushEase_;
-
-	/// パンチ
-	Easing  punchEase_;
-	Vector3 rHandStartPos_;    /// ハンドスタート座標
-	Vector3 rHandTargetPos_;   /// ハンドターゲット座標
-	Vector3 punchPosition_;
-	
-	float waitTine_;          /// 次コンボまでの待機時間
-
 public:
-	//コンストラクタ
+    // コンストラクタ
     RightJobPunch(Player* player);
-	~RightJobPunch();
+    ~RightJobPunch();
 
-	/// 更新、デバッグ
-	void Update()override;
-	void Debug()override;
-	
+    /// 更新、デバッグ
+    void Update() override;
+    void Debug() override;
+    void CollisionBoxInit();
+    void EasingInit();
 
-	void ChangeSpeedForLockOn();
+    void ChangeSpeedForLockOn();
+
+private:
+    enum class Order {
+        RUSH,
+        PUNCH,
+        BACKPUNCH,
+        WAIT,
+    };
+
+private:
+    /// ===================================================
+    /// private varians
+    /// ===================================================
+
+    Order order_; /// 振る舞い順序
+
+    // collision
+    std::unique_ptr<AttackCollisionBox> collisionBox_;
+
+    /// 突進
+    Vector3 initPos_; /// スタート座標
+    Vector3 rushPos_; /// 突進座標
+    Vector3 forwardDirection_; /// 向き
+    float speed_;
+
+    /// パンチ
+    Easingw<Vector3> rushEase_;
+    Vector3 tempRushPos_; 
+    Easingw<Vector3> punchEase_; /// パンチイージング
+    Easingw<Vector3> backPunchEase_; /// パンチイージング
+
+    Vector3 rHandStartPos_; /// ハンドスタート座標
+    Vector3 rHandTargetPos_; /// ハンドターゲット座標
+    Vector3 punchPosition_;
+
+    float waitTine_; /// 次コンボまでの待機時間
 };

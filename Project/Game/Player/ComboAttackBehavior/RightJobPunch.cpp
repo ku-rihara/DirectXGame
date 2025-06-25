@@ -1,202 +1,209 @@
 /// behavior
-#include"RightJobPunch.h"
-#include"LeftJobPunch.h"
-#include"ComboAttackRoot.h"
+#include "RightJobPunch.h"
+#include "ComboAttackRoot.h"
+#include "LeftJobPunch.h"
 
 /// objs
-#include"Player/Player.h"
-#include"LockOn/LockOn.h"
-#include"MathFunction.h"
+#include "LockOn/LockOn.h"
+#include "MathFunction.h"
+#include "Player/Player.h"
 
 /// input
-#include"input/Input.h"
+#include "input/Input.h"
 
 /// frame
-#include"Frame/Frame.h"
+#include "Frame/Frame.h"
 
-#include<imgui.h>
+#include <imgui.h>
 
-//初期化
+// 初期化
 RightJobPunch::RightJobPunch(Player* player)
-	: BaseComboAattackBehavior("RightJobPunch", player) {
+    : BaseComboAattackBehavior("RightJobPunch", player) {
 
-	///---------------------------------------------------------
-	/// 変数初期化
-	///---------------------------------------------------------
+    ///---------------------------------------------------------
+    /// 変数初期化
+    ///---------------------------------------------------------
 
-	///　突進の動き
-	initPos_ = pPlayer_->GetWorldPosition();
-	forwardDirection_ = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
+    /// parm
+    speed_    = pPlayerParameter_->GetParamaters().rushDistance;
+    waitTine_ = 0.0f;
 
-	/// collisionBox
-	collisionBox_ = std::make_unique<AttackCollisionBox>();
-	collisionBox_->Init();
-	collisionBox_->attackType_ = AttackCollisionBox::AttackType::NORMAL;
-	collisionBox_->SetSize(Vector3::UnitVector()*2.5f);// 当たり判定サイズ
-	collisionBox_->IsAdapt(false);
+    /// 　突進の動き
+    initPos_          = pPlayer_->GetWorldPosition();
+    forwardDirection_ = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
+    rushPos_          = initPos_ + (forwardDirection_ * speed_); // 突進座標を決める
 
-	/// parm
-	rushEase_.time = 0.0f;
-	punchEase_.time = 0.0f;
-	speed_ = pPlayerParameter_->GetParamaters().rushDistance;
-	waitTine_ = 0.0f;
+    /// collisionBox
+    CollisionBoxInit();
 
-	//　モーション
-	BaseComboAattackBehavior::AnimationInit();
-	
-	// 振る舞い順序初期化
-	order_ = Order::RUSH;
+    EasingInit();
+
+    // 　モーション
+    BaseComboAattackBehavior::AnimationInit();
+
+    // 振る舞い順序初期化
+    order_ = Order::RUSH;
 }
 
 RightJobPunch::~RightJobPunch() {
-
 }
 
-//更新
+// 更新
 void RightJobPunch::Update() {
 
-	//　モーション
-	BaseComboAattackBehavior::RotateMotionUpdate(0,GetRotateValue(), false);
-	BaseComboAattackBehavior::FloatAnimationUpdate();
+    // 　モーション
+    BaseComboAattackBehavior::RotateMotionUpdate(0, GetRotateValue(), false);
+    BaseComboAattackBehavior::FloatAnimationUpdate();
 
-	/// スケール変化
-	BaseComboAattackBehavior::ScalingEaseUpdate();
+    /// スケール変化
+    BaseComboAattackBehavior::ScalingEaseUpdate();
 
-	// 攻撃中の移動
-	pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+    // 攻撃中の移動
+    pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
 
+    switch (order_) {
 
-	switch (order_) {
+    case Order::RUSH:
 
-	case Order::RUSH:
-	
-		///-----------------------------------------------------------------------------
-		/// 突進
-		///------------------------------------------------------------------------------
+        ///-----------------------------------------------------------------------------
+        /// 突進
+        ///------------------------------------------------------------------------------
 
-		ChangeSpeedForLockOn();// ロックオンによる突進スピードの変化
+        ChangeSpeedForLockOn(); // ロックオンによる突進スピードの変化
 
-		rushPos_ = initPos_ + (forwardDirection_ * speed_); // 突進座標を決める
+        rushEase_.Update(Frame::DeltaTimeRate());
+        pPlayer_->SetWorldPosition(tempRushPos_);
 
-		rushEase_.time += Frame::DeltaTimeRate();
+        break;
 
-		// 突進の動き
-		pPlayer_->SetWorldPosition(
-			EaseInSine(initPos_, rushPos_, rushEase_.time, pPlayerParameter_->GetParamaters().rushEaseMax));
+    case Order::PUNCH:
+        ///----------------------------------------------------
+        /// パンチ
+        ///----------------------------------------------------
 
-		/// パンチオーダーに移行
-		if (rushEase_.time >= pPlayerParameter_->GetParamaters().rushEaseMax) {
-			rushEase_.time = pPlayerParameter_->GetParamaters().rushEaseMax;
+        collisionBox_->IsAdapt(true);
+        /// パンチイージング更新
+        punchEase_.Update(Frame::DeltaTimeRate());
+        pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
 
-			/// パンチ座標セット
-			rHandStartPos_ = pPlayer_->GetRightHand()->GetTransform().translation_;
-			rHandTargetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayerParameter_->GetNormalComboParm(FIRST).attackReach;
-			//音
-			pPlayer_->SoundPunch();
-			order_ = Order::PUNCH;
-		}
+        /// 当たり判定座標
+        collisionBox_->SetPosition(pPlayer_->GetRightHand()->GetWorldPosition());
+        collisionBox_->SetOffset(forwardDirection_ * 1.0f);
+        collisionBox_->Update();
 
-		break;
+        break;
 
-	case Order::PUNCH:
-		///----------------------------------------------------
-		/// パンチ
-		///----------------------------------------------------
+    case Order::BACKPUNCH:
+        ///----------------------------------------------------
+        /// バックパンチ
+        ///----------------------------------------------------
+        BaseComboAattackBehavior::PreOderNextComboForButton();
+        pPlayer_->AdaptRotate();
+        collisionBox_->IsAdapt(false);
 
-		collisionBox_->IsAdapt(true);
-		
-		punchEase_.time += Frame::DeltaTimeRate();
+        /// バックパンチイージング更新
+        backPunchEase_.Update(Frame::DeltaTimeRate());
+        pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
 
-		/// 拳を突き出す
-		punchPosition_ =
-			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(FIRST).attackEaseMax);
+        break;
 
+    case Order::WAIT:
+        waitTine_ += Frame::DeltaTime();
+        pPlayer_->AdaptRotate();
 
-		// ハンドのローカル座標を更新
-		pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
+        /// コンボ途切れ
+        if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(FIRST).waitTime) {
 
-		// イージング終了時の処理
-		if (punchEase_.time >= pPlayerParameter_->GetNormalComboParm(FIRST).attackEaseMax) {
-			punchEase_.time = pPlayerParameter_->GetNormalComboParm(FIRST).attackEaseMax;
-			order_ = Order::BACKPUNCH;
-		}
+            pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
+        } else {
+            /// ボタンで次のコンボ
+            BaseComboAattackBehavior::PreOderNextComboForButton();
+            if (isNextCombo_) {
+                BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<LeftJobPunch>(pPlayer_));
+            }
+        }
+    }
+}
 
-		/// 当たり判定座標
-		collisionBox_->SetPosition(pPlayer_->GetRightHand()->GetWorldPosition());
-		collisionBox_->SetOffset(forwardDirection_ * 1.0f);
-		collisionBox_->Update();
+void RightJobPunch::EasingInit() {
 
-		break;
+    // punch Rush
+    rushEase_.Init("PlayerPunchRush");
+    rushEase_.SetAdaptValue(&tempRushPos_);
+    rushEase_.Reset();
 
-	case Order::BACKPUNCH:
-		///----------------------------------------------------
-		/// バックパンチ
-		///----------------------------------------------------
-		BaseComboAattackBehavior::PreOderNextComboForButton();
-		pPlayer_->AdaptRotate();
-		collisionBox_->IsAdapt(false);
+    rushEase_.SetStartValue(initPos_);
+    rushEase_.SetEndValue(rushPos_);
 
-		punchEase_.time -= Frame::DeltaTimeRate();
+    rushEase_.SetOnFinishCallback([this]() {
+        rHandStartPos_  = pPlayer_->GetRightHand()->GetTransform().translation_;
+        rHandTargetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayerParameter_->GetNormalComboParm(FIRST).attackReach;
 
-		punchPosition_ =
-			EaseInSine(rHandStartPos_, rHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(FIRST).attackEaseMax);
+        // ease start end Set
+        punchEase_.SetStartValue(rHandStartPos_);
+        punchEase_.SetEndValue(rHandTargetPos_);
 
-		// ハンドのローカル座標を更新
-		pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
+        backPunchEase_.SetStartValue(rHandTargetPos_);
+        backPunchEase_.SetEndValue(rHandStartPos_);
 
-		// イージング終了時の処理
-		if (punchEase_.time > 0.0f) break;
-			punchEase_.time = 0.0f;
-			order_ = Order::WAIT;
-		
-		break;
+        // 音
+        pPlayer_->SoundPunch();
+        order_ = Order::PUNCH;
+    });
 
-	case Order::WAIT:
-		waitTine_ += Frame::DeltaTime();
-		pPlayer_->AdaptRotate();
+    // Punch
+    punchEase_.Init("PlayerRightPunch");
+    punchEase_.SetAdaptValue(&punchPosition_);
+    punchEase_.Reset();
 
-		/// コンボ途切れ
-		if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(FIRST).waitTime) {
-			
-			pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
-		}
-		else {
-			/// ボタンで次のコンボ
-			BaseComboAattackBehavior::PreOderNextComboForButton();
-			if (isNextCombo_) {
-				BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<LeftJobPunch>(pPlayer_));
-			}
-		}
-	}
+    punchEase_.SetOnFinishCallback([this]() {
+        collisionBox_->IsAdapt(false);
+        order_ = Order::BACKPUNCH;
+    });
+
+    // backPunch
+    backPunchEase_.Init("PlayerRightBackPunch");
+    backPunchEase_.SetAdaptValue(&punchPosition_);
+    backPunchEase_.Reset();
+
+    backPunchEase_.SetOnFinishCallback([this]() {
+        order_ = Order::WAIT;
+    });
+}
+
+void RightJobPunch::CollisionBoxInit() {
+    collisionBox_ = std::make_unique<AttackCollisionBox>();
+    collisionBox_->Init();
+    collisionBox_->attackType_ = AttackCollisionBox::AttackType::NORMAL;
+    collisionBox_->SetSize(Vector3::UnitVector() * 2.5f); // 当たり判定サイズ
+    collisionBox_->IsAdapt(false);
 }
 
 void RightJobPunch::ChangeSpeedForLockOn() {
-	// ターゲット追い越し防止
-	if (!(pPlayer_->GetLockOn() &&
-		pPlayer_->GetLockOn()->GetEnemyTarget())) {
-		return;
-	}
+    // ターゲット追い越し防止
+    if (!(pPlayer_->GetLockOn() && pPlayer_->GetLockOn()->GetEnemyTarget())) {
+        return;
+    }
 
-	Vector3 differectialVector = pPlayer_->GetLockOn()->GetTargetPosition() - pPlayer_->GetWorldPosition();
-	// 距離
-	float distance = differectialVector.Length();
-	// 距離しきい値
-	const float threshold = 2.2f;
+    Vector3 differectialVector = pPlayer_->GetLockOn()->GetTargetPosition() - pPlayer_->GetWorldPosition();
+    // 距離
+    float distance = differectialVector.Length();
+    // 距離しきい値
+    const float threshold = 2.2f;
 
-	// しきい値より離れていない場合は終了
-	if (distance <= threshold) {
-		return;
-	}
+    // しきい値より離れていない場合は終了
+    if (distance <= threshold) {
+        return;
+    }
 
-	// Y軸回り角度
-	pPlayer_->SetRotationY(std::atan2(differectialVector.x, differectialVector.z));
-	// しきい値を超える速さなら補正する
-	if (speed_ > distance - threshold) {
-		speed_ = distance - threshold;
-	}
+    // Y軸回り角度
+    pPlayer_->SetRotationY(std::atan2(differectialVector.x, differectialVector.z));
+    // しきい値を超える速さなら補正する
+    if (speed_ > distance - threshold) {
+        speed_ = distance - threshold;
+    }
 }
 
-
-void  RightJobPunch::Debug() {
-	ImGui::Text("RightJobPunch");
+void RightJobPunch::Debug() {
+    ImGui::Text("RightJobPunch");
 }

@@ -1,140 +1,143 @@
 /// behavior
-#include"RightJobPunch.h"
-#include"LeftJobPunch.h"
-#include"ComboAttackRoot.h"
-#include"RoringUpper.h"
+#include "LeftJobPunch.h"
+#include "ComboAttackRoot.h"
+#include "RightJobPunch.h"
+#include "RoringUpper.h"
 
 /// objs
-#include"Player/Player.h"
+#include "Player/Player.h"
 
 /// input
-#include"JoyState/JoyState.h"
+#include "JoyState/JoyState.h"
 
 /// frame
-#include"Frame/Frame.h"
+#include "Frame/Frame.h"
 
-//初期化
+// 初期化
 LeftJobPunch::LeftJobPunch(Player* player)
-	: BaseComboAattackBehavior("LeftJobPunch", player) {
+    : BaseComboAattackBehavior("LeftJobPunch", player) {
 
-	///---------------------------------------------------------
-	/// 変数初期化
-	///---------------------------------------------------------
+    ///---------------------------------------------------------
+    /// 変数初期化
+    ///---------------------------------------------------------
 
-	/// parm
-	punchEase_.time = 0.0f;
-	waitTine_ = 0.0f;
+    /// ease parm
+    EasingInit();
 
-	/// collisionBox
-	collisionBox_ = std::make_unique<AttackCollisionBox>();
-	collisionBox_->Init();
-	collisionBox_->attackType_ = AttackCollisionBox::AttackType::NORMAL;
-	collisionBox_->SetSize(Vector3::UnitVector() * 2.5f);// 当たり判定サイズ
-	Vector3 forwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
-	collisionBox_->SetOffset(forwardDirection * 1.0f);
-	collisionBox_->IsAdapt(false);
+    waitTine_ = 0.0f;
 
-	/// パンチ座標セット
-	lHandStartPos_ = pPlayer_->GetLeftHand()->GetTransform().translation_;
+    /// collisionBox
+    CollisionBoxInit();
+
+    /// パンチ座標セット
+    lHandStartPos_  = pPlayer_->GetLeftHand()->GetTransform().translation_;
     lHandTargetPos_ = pPlayer_->GetLeftHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayerParameter_->GetNormalComboParm(SECOND).attackReach;
 
-	//　モーション
-	BaseComboAattackBehavior::AnimationInit();
+    // start end Value Set
+    punchEase_.SetStartValue(lHandStartPos_);
+    punchEase_.SetEndValue(lHandTargetPos_);
 
-	pPlayer_->SoundPunch();
-	// 振る舞い順序初期化
-	order_ = Order::PUNCH;
+    backPunchEase_.SetStartValue(lHandTargetPos_);
+    backPunchEase_.SetEndValue(lHandStartPos_);
+
+    // 　モーション
+    BaseComboAattackBehavior::AnimationInit();
+
+    pPlayer_->SoundPunch();
+    // 振る舞い順序初期化
+    order_ = Order::PUNCH;
 }
 
 LeftJobPunch::~LeftJobPunch() {
-
 }
 
-//更新
+// 更新
 void LeftJobPunch::Update() {
 
-	//　モーション
-	BaseComboAattackBehavior::RotateMotionUpdate(0, GetRotateValue(), true);
-	BaseComboAattackBehavior::FloatAnimationUpdate();
-	/// スケール変化
-	BaseComboAattackBehavior::ScalingEaseUpdate();
+    // 　モーション
+    BaseComboAattackBehavior::RotateMotionUpdate(0, GetRotateValue(), true);
+    BaseComboAattackBehavior::FloatAnimationUpdate();
+    /// スケール変化
+    BaseComboAattackBehavior::ScalingEaseUpdate();
 
-	pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+    pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
 
+    switch (order_) {
 
-	switch (order_) {
+    case Order::PUNCH:
 
-	case Order::PUNCH:
+        ///----------------------------------------------------
+        /// パンチ
+        ///----------------------------------------------------
+        collisionBox_->IsAdapt(true);
+        /// パンチイージング更新
+        punchEase_.Update(Frame::DeltaTimeRate());
+        pPlayer_->GetLeftHand()->SetWorldPosition(punchPosition_);
+       
 
-		///----------------------------------------------------
-		/// パンチ
-		///----------------------------------------------------
-		collisionBox_->IsAdapt(true);
-		punchEase_.time += Frame::DeltaTimeRate();
+        collisionBox_->SetPosition(pPlayer_->GetLeftHand()->GetWorldPosition());
+        collisionBox_->Update();
 
-		/// 拳を突き出す
-		punchPosition_ =
-            EaseInSine(lHandStartPos_, lHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(SECOND).attackEaseMax);
+        break;
 
+    case Order::BACKPUNCH:
+        ///----------------------------------------------------
+        /// バックパンチ
+        ///----------------------------------------------------
+        pPlayer_->AdaptRotate();
 
-		// ハンドのローカル座標を更新
-		pPlayer_->GetLeftHand()->SetWorldPosition(punchPosition_);
+        /// バックパンチイージング更新
+        backPunchEase_.Update(Frame::DeltaTimeRate());
+        pPlayer_->GetLeftHand()->SetWorldPosition(punchPosition_);
+      
+        break;
 
-		// イージング終了時の処理
-        if (punchEase_.time >= pPlayerParameter_->GetNormalComboParm(SECOND).attackEaseMax) {
-            punchEase_.time = pPlayerParameter_->GetNormalComboParm(SECOND).attackEaseMax;
-			order_ = Order::BACKPUNCH;
-		}
-		collisionBox_->SetPosition(pPlayer_->GetLeftHand()->GetWorldPosition());
-		collisionBox_->Update();
+    case Order::WAIT:
+        waitTine_ += Frame::DeltaTime();
+        pPlayer_->AdaptRotate();
 
-		break;
+        /// コンボ途切れ
+        if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(SECOND).waitTime) {
 
-	case Order::BACKPUNCH:
-		///----------------------------------------------------
-		/// バックパンチ
-		///----------------------------------------------------
-		collisionBox_->IsAdapt(false);
-		pPlayer_->AdaptRotate();
-		punchEase_.time -= Frame::DeltaTimeRate();
+            pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
+        } else {
+            BaseComboAattackBehavior::PreOderNextComboForButton();
+            if (isNextCombo_) {
+                BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<RoringUpper>(pPlayer_));
+            }
+        }
+        break;
+    }
+}
 
-		punchPosition_ =
-			EaseInSine(lHandStartPos_, lHandTargetPos_, punchEase_.time, pPlayerParameter_->GetNormalComboParm(SECOND).attackEaseMax);
+void LeftJobPunch::EasingInit() {
+    punchEase_.Init("PlayerLeftPunch");
+    punchEase_.SetAdaptValue(&punchPosition_);
+    punchEase_.Reset();
 
-		// ハンドのローカル座標を更新
-		pPlayer_->GetLeftHand()->SetWorldPosition(punchPosition_);
+    punchEase_.SetOnFinishCallback([this]() {
+        collisionBox_->IsAdapt(false);
+        order_ = Order::BACKPUNCH;
+    });
 
-		/// ボタンで次のコンボ
-		BaseComboAattackBehavior::PreOderNextComboForButton();//コントローラジャンプ	
+    backPunchEase_.Init("PlayerLeftBackPunch");
+    backPunchEase_.SetAdaptValue(&punchPosition_);
+    backPunchEase_.Reset();
 
-		// イージング終了時の処理
-		if (punchEase_.time > 0.0f) break;
-			punchEase_.time = 0.0f;
-			order_ = Order::WAIT;
-		
-		break;
+    backPunchEase_.SetOnFinishCallback([this]() {
+        order_ = Order::WAIT;
+    });
+}
 
-	case Order::WAIT:
-		waitTine_ += Frame::DeltaTime();
-		pPlayer_->AdaptRotate();
-
-		/// コンボ途切れ
-		if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(SECOND).waitTime) {
-		
-			pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
-		}
-		else 
-		{
-			BaseComboAattackBehavior::PreOderNextComboForButton();
-			if (isNextCombo_) {
-				BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<RoringUpper>(pPlayer_));
-			}
-		}
-		break;
-	}
-
+void LeftJobPunch::CollisionBoxInit() {
+    collisionBox_ = std::make_unique<AttackCollisionBox>();
+    collisionBox_->Init();
+    collisionBox_->attackType_ = AttackCollisionBox::AttackType::NORMAL;
+    collisionBox_->SetSize(Vector3::UnitVector() * 2.5f); // 当たり判定サイズ
+    Vector3 forwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
+    collisionBox_->SetOffset(forwardDirection * 1.0f);
+    collisionBox_->IsAdapt(false);
 }
 
 void LeftJobPunch::Debug() {
-
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include"BaseComboAattackBehavior.h"
-#include"EasingFunction.h"
+#include"Easing.h"
 #include"CollisionBox/AttackCollisionBox.h"
 
 class RailManager;
@@ -22,11 +22,15 @@ private:
 
 	Vector3 forwardDirection_;
 
-	Easing assaultEase_;
 	Vector3 initPos_;
-	Vector3 preWorldPos_;
-	Vector3 frontPos_;
+    Vector3 preWorldPos_;
+    Vector3 frontPos_;
 
+	Easingw<float> assaultJumpEase_;
+    float tempPositionY_;
+
+	Easingw<Vector3> assaultEase_;
+    Vector3 tempPosition_;
 
 public:
 	//コンストラクタ

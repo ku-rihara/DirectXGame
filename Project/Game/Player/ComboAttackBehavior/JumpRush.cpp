@@ -20,10 +20,22 @@ JumpRush::JumpRush(Player* player)
 	/// 変数初期化
 	///---------------------------------------------------------
 
-	
 	/// parm
-	assaultEase_.time = 0.0f;
-	assaultEase_.maxTime = pPlayerParameter_->GetNormalComboParm(THIRD).attackEaseMax;
+	/*assaultEase_.time = 0.0f;
+	assaultEase_.maxTime = pPlayerParameter_->GetNormalComboParm(THIRD).attackEaseMax;*/
+
+	assaultJumpEase_.Init("PlayerAssaultJump");
+    assaultJumpEase_.SetAdaptValue(&tempPositionY_);
+    assaultJumpEase_.Reset();
+
+
+	assaultEase_.Init("PlayerAssault");
+    assaultEase_.SetAdaptValue(&tempPosition_);
+    assaultEase_.Reset();
+
+    assaultEase_.SetOnFinishCallback([this]() {
+        order_ = Order::NEXTBEHAVIOR;
+    });
 
 
 	//　モーション
@@ -31,8 +43,6 @@ JumpRush::JumpRush(Player* player)
 
 	// 振る舞い順序初期化
 	order_ = Order::CALUCRATION;
-
-
 }
 
 JumpRush::~JumpRush() {
@@ -56,6 +66,13 @@ void JumpRush::Update() {
 
 		frontPos_ = initPos_ + (forwardDirection_* pPlayerParameter_->GetParamaters().upperParm.BackLashValue);
 		
+		//easing set
+        assaultJumpEase_.SetStartValue(initPos_.y);
+        assaultJumpEase_.SetEndValue(initPos_.y + pPlayerParameter_->GetParamaters().upperPosY);
+
+		assaultEase_.SetStartValue(initPos_);
+        assaultEase_.SetEndValue(frontPos_);
+
 		order_ = Order::RUSH;
 		break;
 
@@ -63,20 +80,12 @@ void JumpRush::Update() {
 		/// 待機
 		///----------------------------------------------------
 	case Order::RUSH:
-		assaultEase_.time += Frame::DeltaTimeRate();
-		assaultEase_.time = std::min(assaultEase_.time, assaultEase_.maxTime);
+        assaultJumpEase_.Update(Frame::DeltaTimeRate());
+        pPlayer_->SetWorldPositionY(tempPositionY_);
 
-		//Y
-		pPlayer_->SetWorldPositionY(
-			EaseInSine(initPos_.y, initPos_.y + pPlayerParameter_->GetParamaters().upperPosY, assaultEase_.time, assaultEase_.maxTime));
-
-		//前進
-		preWorldPos_ = EaseInCubic(initPos_, frontPos_, assaultEase_.time, assaultEase_.maxTime);
-		pPlayer_->SetWorldPositionX(preWorldPos_.x);
-		pPlayer_->SetWorldPositionZ(preWorldPos_.z);
-
-		if (assaultEase_.time < assaultEase_.maxTime)break;
-		order_ = Order::NEXTBEHAVIOR;
+		assaultEase_.Update(Frame::DeltaTimeRate());
+        pPlayer_->SetWorldPositionX(tempPosition_.x);
+        pPlayer_->SetWorldPositionZ(tempPosition_.z);
 
 		break;
 
