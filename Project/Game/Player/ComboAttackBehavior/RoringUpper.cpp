@@ -197,13 +197,11 @@ void RoringUpper::AnimationMove() {
 
     // バック
     backlashEase_.Update(Frame::DeltaTimeRate());
-    /*  preWorldPos_ = EaseInCubic(initPos_, backlashPos_, backlashEase_.time, backlashEase_.maxTime);*/
     pPlayer_->SetWorldPositionX(tempWorldPos_.x);
     pPlayer_->SetWorldPositionZ(tempWorldPos_.z);
 
     // 回転
     rotateEase_.Update(Frame::DeltaTimeRate());
-    /*xRotate_ = EaseOutCubic(0.0f, -std::numbers::pi_v<float>*2.0f, backlashEase_.time, backlashEase_.maxTime);*/
     pPlayer_->SetHeadRotateX(xRotate_);
 
     pPlayer_->Jump(jumpPower_, fallSpeedLimit_, gravity_);

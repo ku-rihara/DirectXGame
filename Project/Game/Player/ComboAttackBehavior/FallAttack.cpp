@@ -30,25 +30,17 @@ FallAttack::FallAttack(Player* player)
 	rotateYSpeed_ = 20.0f;
 
 	/// collisionBox
-	collisionBox_ = std::make_unique<AttackCollisionBox>();
-	collisionBox_->Init();
-	collisionBox_->attackType_ = AttackCollisionBox::AttackType::FALL;
-	collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
-	collisionBox_->SetSize(Vector3(4.5f,2.0f,4.5f));// 当たり判定サイズ
-	collisionBox_->Update();
-	collisionBox_->IsAdapt(false);
+    CollisionInit();
 
 	initRotate_ = pPlayer_->GetTransform().rotation_;
 
-	///land
-	landScaleEasing_.maxTime = 0.5f;
-	landScaleEasing_.amplitude = 0.6f;
-	landScaleEasing_.period = 0.2f;
 
 	// ハンド初期化
 	playerInitPosY_ = pPlayer_->GetWorldPosition().y;
 	fallInitPosLHand_= pPlayer_->GetLeftHand()->GetTransform().translation_.y;
 	fallInitPosRHand_= pPlayer_->GetRightHand()->GetTransform().translation_.y;
+
+	EasingInit();
 
 	pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
 }
@@ -66,32 +58,17 @@ void FallAttack::Update() {
 	///落ちる
 	///---------------------------------------------------------
 
-		fallEaseT_ += Frame::DeltaTimeRate();
-		fallRotateY_ += Frame::DeltaTimeRate()* rotateYSpeed_;
-	
+	/*	fallEaseT_ += Frame::DeltaTimeRate();*/
+		
 		pPlayer_->GetLeftHand()->SetWorldPositionY(0.2f);
 		pPlayer_->GetRightHand()->SetWorldPositionY(0.2f);
+
+		fallRotateY_ += Frame::DeltaTimeRate() * rotateYSpeed_;
 		pPlayer_->SetRotationY(fallRotateY_);
 
-		/// プレイヤーが落ちる
-		pPlayer_->SetWorldPositionY(
-            EaseInSine(playerInitPosY_, pPlayerParameter_->GetParamaters().startPos_.y, fallEaseT_, pPlayerParameter_->GetJumpComboParm(FIRST).attackEaseMax)
-			);
-
-		/// 着地の瞬間
-		if (fallEaseT_ < pPlayerParameter_->GetJumpComboParm(FIRST).attackEaseMax)break;
-
-		pPlayer_->SetRotation(initRotate_);
-		pPlayer_->GetLeftHand()->SetWorldPositionY(fallInitPosLHand_);
-		pPlayer_->GetRightHand()->SetWorldPositionY(fallInitPosRHand_);
-		pPlayer_->SetWorldPositionY(pPlayerParameter_->GetParamaters().startPos_.y);
-
-		pPlayer_->GetEffects()->FallEffectRenditionInit(pPlayer_->GetWorldPosition());
-
-		pPlayer_->GetGameCamera()->ChangeShakeMode();
-		pPlayer_->FallSound();
-		step_ = STEP::LANDING;
-
+		fallEase_.Update(Frame::DeltaTimeRate());
+        pPlayer_->SetWorldPositionY(tempWorldPosY_);
+		
 		break;
 	case STEP::LANDING:
 	///---------------------------------------------------------
@@ -101,12 +78,11 @@ void FallAttack::Update() {
 		BaseComboAattackBehavior::PreOderNextComboForButton();//次のコンボに移行可能
 
 		/// スケール変化
-		landScaleEasing_.time += Frame::DeltaTimeRate();
-		landScaleEasing_.time = std::min(landScaleEasing_.time, landScaleEasing_.maxTime);
-		pPlayer_->SetScale(EaseAmplitudeScale(Vector3::UnitVector(), landScaleEasing_.time, landScaleEasing_.maxTime,
-			                                  landScaleEasing_.amplitude, landScaleEasing_.period));
-
-		if (landScaleEasing_.time <= 0.15f) {
+        landScaleEasing_.Update(Frame::DeltaTimeRate());
+        pPlayer_->SetScale(tempLandScale_);
+	
+        
+		if (landScaleEasing_.GetCurrentEaseTime() <= 0.15f) {
 			/// 当たり判定座標
 			collisionBox_->IsAdapt(true);
 			collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
@@ -123,7 +99,9 @@ void FallAttack::Update() {
 		pPlayer_->Jump(boundSpeed_, boundFallSpeedLimit_, gravity_);
 
 	// 次の振る舞い
-		if (pPlayer_->GetTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) break;
+        if (pPlayer_->GetTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {
+            break;
+        }
 		pPlayer_->SetRotation(initRotate_);
 		step_ = STEP::WAIT;
 		break;
@@ -151,6 +129,50 @@ void FallAttack::Update() {
 		break;
 	}
 	
+}
+
+void FallAttack::EasingInit() {
+
+	landScaleEasing_.Init("PlayerLandScaling");
+    landScaleEasing_.ApplyFromJson("PlayerLandScaling.json");
+    landScaleEasing_.SaveAppliedJsonFileName();
+    landScaleEasing_.SetAdaptValue(&tempLandScale_);
+    landScaleEasing_.Reset();
+
+  
+	fallEase_.Init("PlayerFallAttack");
+    fallEase_.ApplyFromJson("PlayerFallAttack.json");
+    fallEase_.SaveAppliedJsonFileName();
+    fallEase_.SetAdaptValue(&tempWorldPosY_);
+    fallEase_.Reset();
+
+	fallEase_.SetStartValue(playerInitPosY_);
+    fallEase_.SetEndValue(pPlayerParameter_->GetParamaters().startPos_.y);
+
+    fallEase_.SetOnFinishCallback([this]() {
+
+        pPlayer_->SetRotation(initRotate_);
+        pPlayer_->GetLeftHand()->SetWorldPositionY(fallInitPosLHand_);
+        pPlayer_->GetRightHand()->SetWorldPositionY(fallInitPosRHand_);
+        pPlayer_->SetWorldPositionY(pPlayerParameter_->GetParamaters().startPos_.y);
+
+        pPlayer_->GetEffects()->FallEffectRenditionInit(pPlayer_->GetWorldPosition());
+
+        pPlayer_->GetGameCamera()->ChangeShakeMode();
+        pPlayer_->FallSound();
+        step_ = STEP::LANDING;
+        
+    });
+}
+
+void FallAttack::CollisionInit() {
+    collisionBox_ = std::make_unique<AttackCollisionBox>();
+    collisionBox_->Init();
+    collisionBox_->attackType_ = AttackCollisionBox::AttackType::FALL;
+    collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+    collisionBox_->SetSize(Vector3(4.5f, 2.0f, 4.5f)); // 当たり判定サイズ
+    collisionBox_->Update();
+    collisionBox_->IsAdapt(false);
 }
 
 

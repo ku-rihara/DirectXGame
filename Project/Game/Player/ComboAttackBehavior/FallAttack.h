@@ -3,9 +3,21 @@
 #include"BaseComboAattackBehavior.h"
 #include"CollisionBox/AttackCollisionBox.h"
 #include"EasingFunction.h"
+#include"Easing.h"
 
 class FallAttack : public BaseComboAattackBehavior {
+public:
+    // コンストラクタ
+    FallAttack(Player* player);
+    ~FallAttack();
 
+    void Update() override;
+    void Debug() override;
+
+	void CollisionInit();
+    void EasingInit();
+
+private:
 	enum class STEP {
 		FALL,
 		LANDING,
@@ -24,7 +36,7 @@ private:
 	float fallInitPosLHand_;
 	float fallInitPosRHand_;
 	float playerInitPosY_;
-	float fallEaseT_;
+	/*float fallEaseT_;*/
 	float fallRotateY_;
 
 	///landing
@@ -35,19 +47,14 @@ private:
 	float rotateXSpeed_;
 	float rotateYSpeed_;
 	float gravity_;
-	Easing landScaleEasing_;
+
+	float tempWorldPosY_;
+    Easingw<float> fallEase_;
+
+	Vector3 tempLandScale_;
+	Easingw<Vector3> landScaleEasing_;
 
 	std::unique_ptr<AttackCollisionBox>collisionBox_;
 
 	float waitTime_;
-
-public:
-	//コンストラクタ
-	FallAttack(Player* player);
-	~FallAttack();
-
-	void Update()override;
-
-	void Debug()override;
-
 };
