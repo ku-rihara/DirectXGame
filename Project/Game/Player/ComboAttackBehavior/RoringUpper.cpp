@@ -49,7 +49,7 @@ RoringUpper::RoringUpper(Player* player)
     BaseComboAattackBehavior::AnimationInit();
 
     // hitstop
-    kHitStopTime_ = 0.1f;
+ /*   kHitStopTime_ = 0.1f;*/
     isHitStop_    = false;
 
     // 音
@@ -160,11 +160,14 @@ void RoringUpper::CollisionInit() {
 }
 
 void RoringUpper::EasingInit() {
-    backlashEase_.Init("backLashEase");
-    backlashEase_.ApplyFromJson("backLashEase.json");
+    backlashEase_.Init("UpperBackLash");
+    backlashEase_.ApplyFromJson("UpperBackLash.json");
     backlashEase_.SaveAppliedJsonFileName();
     backlashEase_.SetAdaptValue(&tempWorldPos_);
     backlashEase_.Reset();
+
+    backlashEase_.SetStartValue(initPos_);
+    backlashEase_.SetEndValue(backlashPos_);
 
     rotateEase_.Init("upperRotate");
     rotateEase_.ApplyFromJson("upperRotate.json");
@@ -189,16 +192,17 @@ void RoringUpper::HitStopUpdate() {
 
 void RoringUpper::AnimationMove() {
     /// minを返す
-    /*backlashEase_.time = std::min(backlashEase_.time, backlashEase_.maxTime);*/
     railManager_->SetRailMoveTime(std::min(railManager_->GetRailMoveTime(), 1.0f));
     pPlayer_->GetRightHand()->RailThreeComboUpdate(pPlayer_->GetRightHand()->GetRailRunSpeedThree());
 
     // バック
-    backlashEase_
+    backlashEase_.Update(Frame::DeltaTimeRate());
+    /*  preWorldPos_ = EaseInCubic(initPos_, backlashPos_, backlashEase_.time, backlashEase_.maxTime);*/
     pPlayer_->SetWorldPositionX(tempWorldPos_.x);
     pPlayer_->SetWorldPositionZ(tempWorldPos_.z);
 
     // 回転
+    rotateEase_.Update(Frame::DeltaTimeRate());
     /*xRotate_ = EaseOutCubic(0.0f, -std::numbers::pi_v<float>*2.0f, backlashEase_.time, backlashEase_.maxTime);*/
     pPlayer_->SetHeadRotateX(xRotate_);
 

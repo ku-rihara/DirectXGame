@@ -63,8 +63,8 @@ private:
 	
 	//hitstop
 	bool isHitStop_;
-	float hitStopTime_;
-	float kHitStopTime_;
+	/*float hitStopTime_;
+	float kHitStopTime_;*/
 
 	float collisionAdaptTime_;
 
