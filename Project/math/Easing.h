@@ -116,7 +116,7 @@ public:
     const T& GetValue() const { return *currentValue_; }
     bool IsFinished() const { return isFinished_; }
     std::string GetCurrentAppliedFileName() const { return currentAppliedFileName_; }
-
+    float GetCurrentEaseTime() const { return currentTime_; }
     /// -------------------------------------------------------------------------
     /// Setter methods
     /// -------------------------------------------------------------------------
