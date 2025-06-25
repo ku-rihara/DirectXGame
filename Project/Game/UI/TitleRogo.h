@@ -2,7 +2,8 @@
 #include "2d/Sprite.h"
 #include "Vector2.h"
 #include <memory>
-#include"EasingFunction.h"
+
+#include"Easing.h"
 
 class TitleRogo {
 private:
@@ -10,12 +11,11 @@ private:
 		PUNCH,
 		RUSH,
 		BOTTON,
-		BOTTONPOST,
+		END,
 	};
 
 	Step step_;
-	Vector2 initScale_;
-	// 座標
+// 座標
 	Vector2 punchPosition_;
 	Vector2 rushPosition_;
 	Vector2 bottonPosition_;
@@ -26,10 +26,13 @@ private:
 	std::unique_ptr<Sprite> rushSprite_;
 	std::unique_ptr<Sprite> bottomSprite_;
 
-	Easing punchEase_;
-	Easing rushEase_;
-	Easing bottomEase_;
-	Easing bottomPostEase_;
+	Easingw<Vector2> punchEase_;
+	Easingw<Vector2> rushEase_;
+	Easingw<Vector2> bottomEase_;
+	
+	Vector2 punchSpriteScale_;
+    Vector2 rushSpriteScale_;
+    Vector2 bottomSpriteScale_;
 
 public:
 	// 初期化
@@ -39,5 +42,7 @@ public:
 	// 描画
 	void Draw();
 	void Debug();
+
+	void EasingSet();
 
 };
