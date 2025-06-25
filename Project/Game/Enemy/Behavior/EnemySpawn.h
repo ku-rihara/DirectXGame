@@ -2,8 +2,17 @@
 
 #include"BaseEnemyMoveBehavior.h"
 #include"EasingFunction.h"
+#include"Easing.h"
 
 class EnemySpawn : public BaseEnemyMoveBehavior {
+public:
+    // コンストラクタ
+    EnemySpawn(BaseEnemy* boss);
+    ~EnemySpawn();
+
+    void Update() override;
+    void Debug() override;
+
 private:
 	enum class Step {
 		EFFECTEMIT,
@@ -12,15 +21,8 @@ private:
 	};
 private:
 	Step step_;
-	Easing spawnEasing_;
-
-public:
-	//コンストラクタ
-	EnemySpawn(BaseEnemy* boss);
-	~EnemySpawn();
-
-
-	void Update()override;
-	void Debug()override;
+	Easingw<Vector3> spawnEasing_;
+    Vector3 tempEnemyScale_;
+	
 
 };

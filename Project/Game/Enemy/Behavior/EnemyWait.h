@@ -2,6 +2,7 @@
 
 #include"BaseEnemyMoveBehavior.h"
 #include"EasingFunction.h"
+#include"Easing.h"
 
 class EnemyWait : public BaseEnemyMoveBehavior {
 private:
@@ -11,7 +12,8 @@ private:
 
 	bool isChase_;
 
-	Easing spriteEase_;
+	Easingw<Vector2> spriteEase_;
+    Vector2 tempSpriteScale_;
 
 public:
 	//コンストラクタ

@@ -23,8 +23,16 @@ EnemyWait::EnemyWait(BaseEnemy* boss)
 	//パラメータ初期化
 	pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2(0, 0));
 	pBaseEnemy_->GetFindSprite()->SetScale(Vector2(0, 0));
-	spriteEase_.maxTime = 1.0f;
-	spriteEase_.time = 0.0f;
+
+	spriteEase_.Init("EnemyOverLookSprite");
+    spriteEase_.ApplyFromJson("EnemyOverLookSpriteScaling.json");
+    spriteEase_.SaveAppliedJsonFileName();
+    spriteEase_.SetAdaptValue(&tempSpriteScale_);
+    spriteEase_.Reset();
+
+    
+	/*spriteEase_.maxTime = 1.0f;
+	spriteEase_.time = 0.0f;*/
 
 	isChase_ = true;//	デバッグ用
 }
@@ -35,9 +43,8 @@ EnemyWait::~EnemyWait() {
 
 void EnemyWait::Update() {
 
-	spriteEase_.time += Frame::DeltaTime();
-	spriteEase_.time = std::min(spriteEase_.time, spriteEase_.maxTime);
-	pBaseEnemy_->GetNotFindSprite()->SetScale(EaseOutBack(Vector2(0,0), Vector2(1, 1), spriteEase_.time, spriteEase_.maxTime));
+	spriteEase_.Update(Frame::DeltaTimeRate());
+	pBaseEnemy_->GetNotFindSprite()->SetScale(tempSpriteScale_);
 	
 		// ターゲットへのベクトル
 		Vector3 direction =pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());

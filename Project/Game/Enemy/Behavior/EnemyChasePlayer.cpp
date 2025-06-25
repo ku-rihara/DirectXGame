@@ -19,20 +19,19 @@
 EnemyChasePlayer::EnemyChasePlayer(BaseEnemy* boss)
     : BaseEnemyMoveBehavior("EnemyChasePlayer", boss) {
 
-    // パラメータ初期化
-    waveAttackStartPos_   = 25.0f; /// ボス
-    normalAttackStartPos_ = 7.0f;
-    attackCoolTime_       = 1.0f;
-
+  
     pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2(0, 0));
     pBaseEnemy_->GetFindSprite()->SetScale(Vector2(0, 0));
-    spriteEase_.maxTime = 0.5f;
-    spriteEase_.time    = 0.0f;
 
-    scaleEase_.time      = 0.0f;
-    scaleEase_.maxTime   = 0.6f;
-    scaleEase_.amplitude = 1.5f;
-    scaleEase_.period    = 0.2f;
+    spriteEasing_.Init("EnemyFindSprite");
+    spriteEasing_.SetAdaptValue(&tempSpriteScale_);
+    spriteEasing_.Reset();
+
+    scaleEasing_.Init("EnemyFindScaling");
+    scaleEasing_.ApplyFromJson("EnemyFindScaling.json");
+    scaleEasing_.SaveAppliedJsonFileName();
+    scaleEasing_.SetAdaptValue(&tempEnemyScale_);
+    scaleEasing_.Reset();
 
     isChase_ = true; //	デバッグ用
 }
@@ -42,15 +41,13 @@ EnemyChasePlayer::~EnemyChasePlayer() {
 
 void EnemyChasePlayer::Update() {
 
-    // Sherching Sprite Easing
-    spriteEase_.time += Frame::DeltaTime();
-    spriteEase_.time = std::min(spriteEase_.time, spriteEase_.maxTime);
-    pBaseEnemy_->GetFindSprite()->SetScale(EaseOutBack(Vector2::ZeroVector(), Vector2::UnitVector(), spriteEase_.time, spriteEase_.maxTime));
+    spriteEasing_.Update(Frame::DeltaTimeRate());
+    pBaseEnemy_->GetFindSprite()->SetScale(tempSpriteScale_);
 
     // Enemy AmplitudeScaling
-    scaleEase_.time += Frame::DeltaTime();
-    scaleEase_.time = std::min(scaleEase_.time, scaleEase_.maxTime);
-    pBaseEnemy_->SetScale(EaseAmplitudeScale(pBaseEnemy_->GetParameter().initScale_, scaleEase_.time, scaleEase_.maxTime, scaleEase_.amplitude, scaleEase_.period));
+    scaleEasing_.Update(Frame::DeltaTimeRate());
+    pBaseEnemy_->SetScale(tempEnemyScale_);
+  
 
     // ターゲットへのベクトル
     Vector3 direction = pBaseEnemy_->GetDirectionToTarget(pBaseEnemy_->GetPlayer()->GetWorldPosition());
