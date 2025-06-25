@@ -1,0 +1,22 @@
+{
+    "TitleLandScaleing": {
+        "amplitude": 0.6000000238418579,
+        "backRatio": 0.0,
+        "endValue": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "finishOffsetTime": 0.0,
+        "finishType": 0,
+        "maxTime": 0.5,
+        "period": 0.20000000298023224,
+        "startValue": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "type": 27,
+        "waitTime": 0.0
+    }
+}

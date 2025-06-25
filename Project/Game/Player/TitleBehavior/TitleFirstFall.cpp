@@ -22,7 +22,7 @@ TitleFirstFall::TitleFirstFall(Player* player)
 	step_ = STEP::FALL; // 落ちる
 
 	fallRotateY_ = 0.0f;
-	fallSpeed_ = 0.2f;
+	/*fallSpeed_ = 0.2f;*/
 
 	boundSpeed_ = 1.4f;
 	gravity_ = 8.8f;
@@ -33,12 +33,14 @@ TitleFirstFall::TitleFirstFall(Player* player)
 	initRotate_ = pPlayer_->GetTransform().rotation_;
 
 	///land
-	landScaleEasing_.maxTime = 0.5f;
+	/*landScaleEasing_.maxTime = 0.5f;
 	landScaleEasing_.amplitude = 0.6f;
-	landScaleEasing_.period = 0.2f;
+	landScaleEasing_.period = 0.2f;*/
+
+	EasingInit();
 
 	// ハンド初期化
-	playerInitPosY_ = 10.0f;
+	
 	fallInitPosLHand_= pPlayer_->GetLeftHand()->GetTransform().translation_.y;
 	fallInitPosRHand_= pPlayer_->GetRightHand()->GetTransform().translation_.y;
 
@@ -56,28 +58,14 @@ void TitleFirstFall::Update() {
 	///---------------------------------------------------------
 	///落ちる
 	///---------------------------------------------------------
-		if (Frame::DeltaTimeRate() > 2)break;
-		fallEaseT_ += Frame::DeltaTimeRate();
+        if (Frame::DeltaTimeRate() > 2.0f) {
+            break;
+        }
+        fallEase_.Update(Frame::DeltaTimeRate());
+        pPlayer_->SetWorldPositionY(tempPosY_);
+
 		fallRotateY_ += Frame::DeltaTimeRate()* rotateYSpeed_;
 	
-		pPlayer_->GetLeftHand()->SetWorldPositionY(0.2f);
-		pPlayer_->GetRightHand()->SetWorldPositionY(0.2f);
-		pPlayer_->SetRotationY(fallRotateY_);
-
-		/// プレイヤーが落ちる
-		pPlayer_->SetWorldPositionY(
-            EaseInSine(playerInitPosY_, pPlayerParameter_->GetParamaters().startPos_.y, fallEaseT_, fallSpeed_)
-			);
-
-		/// 着地の瞬間
-		if (fallEaseT_ < fallSpeed_)break;
-
-		pPlayer_->SetRotation(initRotate_);
-		pPlayer_->GetLeftHand()->SetWorldPositionY(fallInitPosLHand_);
-		pPlayer_->GetRightHand()->SetWorldPositionY(fallInitPosRHand_);
-        pPlayer_->SetWorldPositionY(pPlayerParameter_->GetParamaters().startPos_.y);
-        pPlayer_->GetEffects()->FallEffectRenditionInit(pPlayer_->GetWorldPosition());
-		step_ = STEP::LANDING;
 
 		break;
 	case STEP::LANDING:
@@ -86,11 +74,9 @@ void TitleFirstFall::Update() {
 	///---------------------------------------------------------
 	   
 		/// スケール変化
-		landScaleEasing_.time += Frame::DeltaTimeRate();
-		landScaleEasing_.time = std::min(landScaleEasing_.time, landScaleEasing_.maxTime);
-		pPlayer_->SetScale(EaseAmplitudeScale(Vector3::UnitVector(), landScaleEasing_.time, landScaleEasing_.maxTime,
-			                                  landScaleEasing_.amplitude, landScaleEasing_.period));
-
+    landScaleEasing_.Update(Frame::DeltaTimeRate());
+    pPlayer_->SetScale(tempScale_);
+		
 		// 回転する
 		landRotateX_ += Frame::DeltaTimeRate() * rotateXSpeed_;
 		pPlayer_->SetRotationX(landRotateX_);
@@ -101,8 +87,10 @@ void TitleFirstFall::Update() {
 		boundSpeed_ = max(boundSpeed_ - (gravity_ * Frame::DeltaTimeRate()), boundFallSpeedLimit_);
 
 	// 次の振る舞い
-        if (pPlayer_->GetTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y)
+        if (pPlayer_->GetTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {
             break;
+        }
+
 		pPlayer_->SetRotation(initRotate_);
         pPlayer_->SetWorldPositionY(pPlayerParameter_->GetParamaters().startPos_.y);
 		step_ = STEP::WAIT;
@@ -126,6 +114,33 @@ void TitleFirstFall::Update() {
 	}
 	
 }
+
+void TitleFirstFall::EasingInit() {
+    landScaleEasing_.Init("TitleLandScaleing");
+    landScaleEasing_.ApplyFromJson("TitleLandScaleing.json");
+    landScaleEasing_.SaveAppliedJsonFileName();
+    landScaleEasing_.SetAdaptValue(&tempScale_);
+    landScaleEasing_.Reset();
+
+    landScaleEasing_.SetOnFinishCallback([this]() {
+       
+    });
+
+	fallEase_.Init("TitleFall");
+    fallEase_.ApplyFromJson("TitleFall.json");
+    fallEase_.SaveAppliedJsonFileName();
+    fallEase_.SetAdaptValue(&tempPosY_);
+    fallEase_.Reset();
+
+    fallEase_.SetOnFinishCallback([this]() {
+        pPlayer_->SetRotation(initRotate_);
+        pPlayer_->GetLeftHand()->SetWorldPositionY(fallInitPosLHand_);
+        pPlayer_->GetRightHand()->SetWorldPositionY(fallInitPosRHand_);
+        pPlayer_->SetWorldPositionY(pPlayerParameter_->GetParamaters().startPos_.y);
+        pPlayer_->GetEffects()->FallEffectRenditionInit(pPlayer_->GetWorldPosition());
+        step_ = STEP::LANDING;
+    });
+  }
 
 
 void  TitleFirstFall::Debug() {

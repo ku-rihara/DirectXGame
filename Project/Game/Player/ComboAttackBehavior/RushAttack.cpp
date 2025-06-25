@@ -15,7 +15,7 @@ RushAttack::RushAttack(Player* player)
     ///---------------------------------------------------------
     /// 変数初期化
     ///---------------------------------------------------------
-    handMoveEasing_.maxTime = 0.2f;
+    /*  handMoveEasing_.maxTime = 0.2f;*/
 
     /// 初期化座標とターゲット座標
     initRHandPos_ = pPlayer_->GetRightHand()->GetTransform().translation_;
@@ -23,20 +23,14 @@ RushAttack::RushAttack(Player* player)
     targetRPos_   = initRHandPos_ + (Vector3::ToForward() * 2.0f);
     targetLPos_   = initLHandPos_ + (Vector3::ToForward() * 2.0f);
 
-    collisionBox_ = std::make_unique<AttackCollisionBox>();
-    collisionBox_->Init();
-    collisionBox_->attackType_ = AttackCollisionBox::AttackType::RUSH;
-    collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
-    collisionBox_->SetSize(Vector3(2.0f, 2.0f, 2.0f)); // 当たり判定サイズ
-    collisionBox_->Update();
-    collisionBox_->IsAdapt(false);
+    CollisionInit();
 
     pPlayer_->FaceToTarget();
     initPos_       = pPlayer_->GetWorldPosition();
     direction_     = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
     rushTargetPos_ = initPos_ + (direction_ * pPlayerParameter_->GetJumpComboParm(SECOND).attackReach);
 
-    rushEaseTime_ = 0.0f;
+    EasingInit();
 
     step_ = STEP::EMIT; // 突進
 }
@@ -48,8 +42,7 @@ RushAttack::~RushAttack() {
 void RushAttack::Update() {
     switch (step_) {
 
-        
-         ///---------------------------------------------------------
+        ///---------------------------------------------------------
         /// エフェクト発射
         ///---------------------------------------------------------
     case STEP::EMIT:
@@ -58,48 +51,37 @@ void RushAttack::Update() {
 
         break;
 
-         ///---------------------------------------------------------
+        ///---------------------------------------------------------
         /// 突撃
         ///---------------------------------------------------------
     case STEP::RUSH:
-       
+
         pPlayer_->GetEffects()->RushAttackEmit();
 
-        handMoveEasing_.time += Frame::DeltaTimeRate();
-        rushEaseTime_ += Frame::DeltaTimeRate();
+        // Rhand
+        handRMoveEase_.Update(Frame::DeltaTimeRate());
+        pPlayer_->GetRightHand()->SetWorldPosition(tempRHandPos_);
 
-        /// ハンド
-        handMoveEasing_.time = std::min(handMoveEasing_.time, handMoveEasing_.maxTime);
+        // Lhand
+        handLMoveEase_.Update(Frame::DeltaTimeRate());
+        pPlayer_->GetLeftHand()->SetWorldPosition(tempLHandPos_);
 
-        pPlayer_->GetRightHand()->SetWorldPosition(
-            EaseInExpo(initRHandPos_, targetRPos_, handMoveEasing_.time, handMoveEasing_.maxTime));
+        // rush
+        rushEase_.Update(Frame::DeltaTimeRate());
+        pPlayer_->SetWorldPosition(tempRushPos_);
 
-        pPlayer_->GetLeftHand()->SetWorldPosition(
-            EaseInExpo(initLHandPos_, targetLPos_, handMoveEasing_.time, handMoveEasing_.maxTime));
-
-        /// 突進
-        pPlayer_->SetWorldPosition(
-            EaseOutQuart(initPos_, rushTargetPos_, rushEaseTime_, pPlayerParameter_->GetJumpComboParm(SECOND).attackEaseMax));
-
+       
         /// 当たり判定座標
         collisionBox_->IsAdapt(true);
         collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
         collisionBox_->Update();
-
-        // 早期break
-        if (rushEaseTime_ < pPlayerParameter_->GetJumpComboParm(SECOND).attackEaseMax) {
-            break;
-        };
-        pPlayer_->GetRightHand()->SetWorldPosition(initRHandPos_);
-        pPlayer_->GetLeftHand()->SetWorldPosition(initLHandPos_);
-        step_ = STEP::WAIT;
 
         break;
         ///---------------------------------------------------------
         /// 待機
         ///---------------------------------------------------------
     case STEP::WAIT:
-        
+
         collisionBox_->IsAdapt(false);
         waitTime_ += Frame::DeltaTime();
         if (waitTime_ < pPlayerParameter_->GetJumpComboParm(SECOND).waitTime) {
@@ -115,6 +97,52 @@ void RushAttack::Update() {
     default:
         break;
     }
+}
+
+void RushAttack::CollisionInit() {
+    collisionBox_ = std::make_unique<AttackCollisionBox>();
+    collisionBox_->Init();
+    collisionBox_->attackType_ = AttackCollisionBox::AttackType::RUSH;
+    collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+    collisionBox_->SetSize(Vector3(2.0f, 2.0f, 2.0f)); // 当たり判定サイズ
+    collisionBox_->Update();
+    collisionBox_->IsAdapt(false);
+}
+void RushAttack::EasingInit() {
+    handRMoveEase_.Init("RHandMove");
+    handRMoveEase_.SetAdaptValue(&tempRHandPos_);
+    handRMoveEase_.Reset();
+
+    handRMoveEase_.SetStartValue(initRHandPos_);
+  /*  handRMoveEase_.SetEndValue(targetRPos_);*/
+
+    handRMoveEase_.SetOnFinishCallback([this]() {
+
+    });
+
+    handLMoveEase_.Init("LHandMove");
+    handLMoveEase_.SetAdaptValue(&tempLHandPos_);
+    handLMoveEase_.Reset();
+
+    handLMoveEase_.SetStartValue(initLHandPos_);
+  /*  handLMoveEase_.SetEndValue(targetLPos_);*/
+
+    handLMoveEase_.SetOnFinishCallback([this]() {
+
+    });
+
+    rushEase_.Init("rushAttack");
+    rushEase_.SetAdaptValue(&tempRushPos_);
+    rushEase_.Reset();
+
+    rushEase_.SetStartValue(initPos_);
+    rushEase_.SetEndValue(rushTargetPos_);
+
+    rushEase_.SetOnFinishCallback([this]() {
+        pPlayer_->GetRightHand()->SetWorldPosition(initRHandPos_);
+        pPlayer_->GetLeftHand()->SetWorldPosition(initLHandPos_);
+        step_ = STEP::WAIT;
+    });
 }
 
 void RushAttack::Debug() {
