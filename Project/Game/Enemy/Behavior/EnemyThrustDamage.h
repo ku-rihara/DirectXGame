@@ -21,7 +21,7 @@ private:
 	float speed_;
 	Vector3 direction_;
 
-	Easing easing_;
+	/*Easing easing_;*/
 
 	float hitStopTime_;
 	float kHitStopTime_;

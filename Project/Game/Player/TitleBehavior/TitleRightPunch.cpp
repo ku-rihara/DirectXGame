@@ -25,9 +25,9 @@ TitleRightPunch::TitleRightPunch(Player* player)
     waitTine_       = 0.0f;
 
     /// land
-    startEasing_.maxTime   = 0.5f;
+   /* startEasing_.maxTime   = 0.5f;
     startEasing_.amplitude = 0.6f;
-    startEasing_.period    = 0.2f;
+    startEasing_.period    = 0.2f;*/
 
     rHandStartPos_  = pPlayer_->GetRightHand()->GetTransform().translation_;
     rHandTargetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward()) * 2.0f;

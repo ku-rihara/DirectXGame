@@ -22,8 +22,8 @@ EnemyThrustDamage::EnemyThrustDamage(BaseEnemy* boss)
 	// 赤色
 	pBaseEnemy_->SetBodyColor(Vector4(0.9f, 0, 0, 0.9f));
 
-	easing_.time = 0.0f;
-	easing_.maxTime = 0.15f;
+	/*easing_.time = 0.0f;
+	easing_.maxTime = 0.15f;*/
 
 	hitStopTime_ = 0.0f;
 	kHitStopTime_ = 0.05f;
@@ -76,20 +76,20 @@ void EnemyThrustDamage::Update() {
 
 		// 最短角度補間でプレイヤーの回転を更新
 		pBaseEnemy_->SetRotationY(LerpShortAngle(pBaseEnemy_->GetTransform().rotation_.y, objectiveAngle_, 0.5f));
-		easing_.time += Frame::DeltaTimeRate();
+	/*	easing_.time += Frame::DeltaTimeRate();*/
 
 		rotate_ += pBaseEnemy_->GetParameter().thrustRotateSpeed * Frame::DeltaTimeRate();
 		pBaseEnemy_->SetBodyRotateX(rotate_);
 
 		/// イージングでヒットバックする
-		pBaseEnemy_->SetWorldPosition(
+		/*pBaseEnemy_->SetWorldPosition(
 			EaseInSine(initPos_, backPos_, easing_.time, easing_.maxTime)
-		);
+		);*/
 
 
 		//次のステップ	
-		if (easing_.time < easing_.maxTime) break;
-		easing_.time = easing_.maxTime;
+		/*if (easing_.time < easing_.maxTime) break;
+		easing_.time = easing_.maxTime;*/
 		step_ = Step::NEXTBEHAVIOR;
 
 		break;

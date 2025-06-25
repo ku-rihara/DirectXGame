@@ -25,7 +25,7 @@ private:
     std::unique_ptr<AttackCollisionBox> collisionBox_;
 
     /// パンチ
-    Easing punchEase_; /// パンチイージング
+   /* Easing punchEase_; /// パンチイージング*/
 
     Vector3 lHandStartPos_;
     Vector3 lHandTargetPos_;

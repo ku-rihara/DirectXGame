@@ -43,7 +43,7 @@ void ComboUIController::Draw() {
 }
 
 void ComboUIController::ScalingEasing() {
-    parameter_.scalingEasing.time += Frame::DeltaTimeRate();
+   /* parameter_.scalingEasing.time += Frame::DeltaTimeRate();
 
     baseScale_ = EaseAmplitudeScale(parameter_.amplitudeScale, parameter_.scalingEasing.time, parameter_.scalingEasing.maxTime, parameter_.scalingEasing.amplitude, parameter_.scalingEasing.period);
 
@@ -53,12 +53,12 @@ void ComboUIController::ScalingEasing() {
 
     parameter_.scalingEasing.time = parameter_.scalingEasing.maxTime;
     baseScale_                    = parameter_.amplitudeScale;
-    ChangeBehavior(std::make_unique<ComboWait>(this));
+    ChangeBehavior(std::make_unique<ComboWait>(this));*/
 }
 
 void ComboUIController::ScalingInit() {
-    baseScale_                    = parameter_.amplitudeScale;
-    parameter_.scalingEasing.time = 0.0f;
+  /*  baseScale_                    = parameter_.amplitudeScale;
+    parameter_.scalingEasing.time = 0.0f;*/
 }
 
 void ComboUIController::AlphaAdaptForTime(const float& comboTime, const float& comboMaxTime) {

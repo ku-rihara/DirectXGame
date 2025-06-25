@@ -55,7 +55,7 @@ private:
     std::unique_ptr<Sprite> screenSprite_;
 
     int chandle_;
-    Easing cease_;
+  /*  Easing cease_;*/
     std::unique_ptr<Sprite> cSprite_;
     bool isend_;
 

@@ -19,8 +19,8 @@ EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
 	// 赤色
 	pBaseEnemy_->SetBodyColor(Vector4(0.9f, 0, 0, 0.9f));
 
-	easing_.time = 0.0f;
-	easing_.maxTime = 0.2f;
+	/*easing_.time = 0.0f;
+	easing_.maxTime = 0.2f;*/
 
 	pBaseEnemy_->DamageRenditionInit();
 
@@ -30,9 +30,9 @@ EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
     pBaseEnemy_->SetScale(pBaseEnemy_->GetParameter().initScale_);
 
 	/// hitbackMove
-	archingbackEase_.time = 0.0f;
-	archingbackEase_.maxTime=pBaseEnemy_->GetParameter().archingbackTime;
-	archingbackEase_.backRatio= pBaseEnemy_->GetParameter().archingbackRatio;
+	//archingbackEase_.time = 0.0f;
+	//archingbackEase_.maxTime=pBaseEnemy_->GetParameter().archingbackTime;
+	//archingbackEase_.backRatio= pBaseEnemy_->GetParameter().archingbackRatio;
 
 	step_ = Step::DIRECTIONSET; /// ステップ初期化
 }
@@ -67,24 +67,24 @@ void EnemyHitBackDamage::Update() {
 		pBaseEnemy_->SetRotationY(LerpShortAngle(pBaseEnemy_->GetTransform().rotation_.y, objectiveAngle_, 0.5f));
 
 		// タイム更新
-		easing_.time += Frame::DeltaTimeRate();
-		archingbackEase_.time += Frame::DeltaTimeRate();
-		//のけぞり
-		preRotate_ = Back::OutCircZero(0.0f, pBaseEnemy_->GetParameter().archingbackValue, archingbackEase_.time, archingbackEase_.maxTime,archingbackEase_.backRatio);
+		//easing_.time += Frame::DeltaTimeRate();
+		//archingbackEase_.time += Frame::DeltaTimeRate();
+		////のけぞり
+		//preRotate_ = Back::OutCircZero(0.0f, pBaseEnemy_->GetParameter().archingbackValue, archingbackEase_.time, archingbackEase_.maxTime,archingbackEase_.backRatio);
 		//のけぞり適応
 		pBaseEnemy_->SetBodyRotateX(preRotate_);
 
-		easing_.time = std::min(easing_.time, easing_.maxTime);
-		/// イージングでヒットバックする
-		pBaseEnemy_->SetWorldPosition(
-			EaseInSine(initPos_, backPos_, easing_.time, easing_.maxTime)
-		);
+		//easing_.time = std::min(easing_.time, easing_.maxTime);
+		///// イージングでヒットバックする
+		//pBaseEnemy_->SetWorldPosition(
+		//	EaseInSine(initPos_, backPos_, easing_.time, easing_.maxTime)
+		//);
 
 
-		//次のステップ	
-		if (archingbackEase_.time < archingbackEase_.maxTime) break;
-			archingbackEase_.time = archingbackEase_.maxTime;
-			step_ = Step::RETUNROOT;
+		////次のステップ	
+		//if (archingbackEase_.time < archingbackEase_.maxTime) break;
+		//	archingbackEase_.time = archingbackEase_.maxTime;
+		//	step_ = Step::RETUNROOT;
 		
 
 		break;

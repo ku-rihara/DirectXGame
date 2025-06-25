@@ -15,7 +15,7 @@ private:
 	Step step_;
 	float shakeT_;
 	float shakeTMax_;
-	Easing shakeEase_;
+	//Easing shakeEase_;
 
 public:
 

@@ -13,7 +13,6 @@
 class ComboUIController {
 private:
     struct ScalingParameter {
-        Easing scalingEasing;
         Vector2 amplitudeScale;
     };
 

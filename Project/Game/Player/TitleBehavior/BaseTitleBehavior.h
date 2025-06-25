@@ -13,7 +13,7 @@ protected:
     PlayerParameter* pPlayerParameter_ = nullptr;
 
 	bool isNextCombo_;
-	Easing startEasing_;
+	/*Easing startEasing_;*/
 
 public:
    

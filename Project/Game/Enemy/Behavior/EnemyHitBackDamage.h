@@ -19,10 +19,10 @@ private:
 	float speed_;
 	
 	//hitbackmove
-	Easing archingbackEase_;
+	/*Easing archingbackEase_;*/
 	float preRotate_;
 
-	Easing easing_;
+	/*Easing easing_;*/
 
 public:
 	//コンストラクタ
