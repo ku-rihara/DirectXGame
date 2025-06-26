@@ -139,7 +139,7 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
     param.backRatio = inner.value("backRatio", 0.0f);
 
     param.finishOffsetTime = inner.value("finishOffsetTime", 0.0f);
-    param.waitTimeMax         = inner.value("waitTime", 0.0f);
+    param.waitTimeMax      = inner.value("waitTime", 0.0f);
 
     // paramの値をセット
     SettingValue(param);
@@ -243,7 +243,7 @@ void Easing<T>::Update(float deltaTime) {
     }
 
     //  終了時間を過ぎたら終了処理
-    if (currentTime_ < maxTime_-finishTimeOffset_) {
+    if (currentTime_ < maxTime_ - finishTimeOffset_) {
         return;
     }
 
@@ -263,8 +263,6 @@ void Easing<T>::Update(float deltaTime) {
     if (onWaitEndCallback_) { // 待機終了時のコールバック
         onWaitEndCallback_();
     }
-
- 
 }
 
 

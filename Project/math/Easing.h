@@ -32,7 +32,7 @@ public:
 
     // イージング更新
     void Update(float deltaTime);
-
+   
     // 変数に適応
     void SetAdaptValue(T* value);
 
