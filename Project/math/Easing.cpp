@@ -525,21 +525,6 @@ void Easing<T>::Easing::SetCurrentValue(const T& value) {
     *currentValue_ = value;
 }
 
-// template <typename T>
-// void Easing<T>::Easing::SetEditor(EasingEditor* editor) {
-//      editor_ = editor;
-//
-//      if constexpr (std::is_same_v<T, float>) {
-//          creator_ = editor->GetCreator<EasingCreator<float>>();
-//
-//      } else if constexpr (std::is_same_v<T, Vector2>) {
-//          filePathForType_ = "Vector2";
-//
-//      } else if constexpr (std::is_same_v<T, Vector3>) {
-//          filePathForType_ = "Vector3";
-//      }
-//
-//  }
 
 template class Easing<float>;
 template class Easing<Vector2>;
