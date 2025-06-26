@@ -67,7 +67,7 @@ void GameCameraZoomInOut::Update() {
 	case Step::ZOOMIN:
 		ShakeUpdate();
         inEase_.Update(Frame::DeltaTime());
-        inEase_.UpdateWait(Frame::DeltaTime());
+      /*  inEase_.UpdateWait(Frame::DeltaTime());*/
         pGameCamera_->SetOffSet(tempinOffset_);
 
 		

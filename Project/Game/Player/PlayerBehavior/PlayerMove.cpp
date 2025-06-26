@@ -122,7 +122,7 @@ void PlayerMove::WaitAnimation() {
     /// 待機アニメーション
     ///============================================================================
     waitEase_.Update(Frame::DeltaTimeRate());
-    waitEase_.UpdateWait(Frame::DeltaTimeRate());
+   /* waitEase_.UpdateWait(Frame::DeltaTimeRate());*/
     pPlayer_->SetScaleY(tempWaitScaleY_);
     
 }

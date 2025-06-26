@@ -74,7 +74,24 @@ void GameScene::Init() {
     shandle_       = TextureManager::GetInstance()->LoadTexture("./resources/Texture/screenChange.png");
     screenSprite_.reset(Sprite::Create(shandle_, Vector2(0, 0), Vector4(1, 1, 1, alpha_)));
 
-    /*cease_.time    = 0.0f;
+    finishSpriteEase_.Init("finishSpriteTest");
+    finishSpriteEase_.ApplyFromJson("finishSpriteTest.json");
+    finishSpriteEase_.SaveAppliedJsonFileName();
+    finishSpriteEase_.SetAdaptValue(&tempSpritePos_);
+    finishSpriteEase_.Reset();
+
+    finishSpriteEase_.SetOnFinishCallback([this]() {
+      /*  cSprite_->SetPosition(Vector2(0, 0));*/
+
+        // 　ジャンプに切り替え
+        if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+            isend_ = true;
+        } else {
+            ChangeForJoyState();
+        }
+    });
+
+  /*  cease_.time    = 0.0f;
     cease_.maxTime = 0.5f;*/
     chandle_       = TextureManager::GetInstance()->LoadTexture("./resources/Texture/Clear.png");
     cSprite_.reset(Sprite::Create(chandle_, Vector2(0, -720), Vector4(1, 1, 1, 1.0f)));
@@ -119,22 +136,8 @@ void GameScene::Update() {
 
     /// クリア
     if (enemyManager_->GetCread() && enemySpawner_->GetIsAllSpawn()) {
-      /*  cease_.time += Frame::DeltaTime();*/
-
-      /*  if (cease_.time >= cease_.maxTime) {*/
-           /* cease_.time = cease_.maxTime;*/
-            cSprite_->SetPosition(Vector2(0, 0));
-
-            // 　ジャンプに切り替え
-            if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-                isend_ = true;
-            } else {
-                ChangeForJoyState(); // コントローラジャンプ
-            }
-
-      /*  } else {*/
-            cSprite_->SetPosition(Vector2(0, EaseInCubic(-720.0f, 0.0f, 0,0/*cease_.time, cease_.maxTime*/)));
-       // }
+        finishSpriteEase_.Update(Frame::DeltaTime());
+        cSprite_->SetPosition(tempSpritePos_);
     }
     if (isend_) {
         alpha_ += Frame::DeltaTime();

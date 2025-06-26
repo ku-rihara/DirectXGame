@@ -29,8 +29,6 @@ EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
 	pBaseEnemy_->GetFindSprite()->SetScale(Vector2(1, 1));
     pBaseEnemy_->SetScale(pBaseEnemy_->GetParameter().initScale_);
 
-
-
 	archingRotateEase_.Init("EnemyArchingRotate");
     archingRotateEase_.ApplyFromJson("EnemyArchingRotate.json");
     archingRotateEase_.SaveAppliedJsonFileName();

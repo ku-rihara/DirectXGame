@@ -50,7 +50,7 @@ void TitleWait::Update() {
 		///潰れる
 		/// -----------------------------------------------------------------------------------------------
         pressEase_.Update(Frame::DeltaTimeRate());
-        pressEase_.UpdateWait(Frame::DeltaTimeRate());
+       /* pressEase_.UpdateWait(Frame::DeltaTimeRate());*/
         pPlayer_->SetScaleY(tempScaleY_);
 		
 

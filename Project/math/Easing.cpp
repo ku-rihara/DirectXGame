@@ -232,11 +232,9 @@ void Easing<T>::ApplyForImGui() {
 // 時間を進めて値を更新
 template <typename T>
 void Easing<T>::Update(float deltaTime) {
-    if (isFinished_) {
-        return;
+    if (!isFinished_) {
+        currentTime_ += deltaTime;
     }
-
-    currentTime_ += deltaTime;
 
     CalculateValue();
 
@@ -255,14 +253,6 @@ void Easing<T>::Update(float deltaTime) {
         onFinishCallback_();
     }
 
- 
-}
-template <typename T>
-void Easing<T>::UpdateWait(float deltaTime) {
-    //  終了時間を過ぎたら終了処理
-    if (currentTime_ < maxTime_ - finishTimeOffset_) {
-        return;
-    }
     // 待機時間の加算
     waitTime_ += deltaTime;
 
@@ -273,7 +263,10 @@ void Easing<T>::UpdateWait(float deltaTime) {
     if (onWaitEndCallback_) { // 待機終了時のコールバック
         onWaitEndCallback_();
     }
-  }
+
+ 
+}
+
 
 template <typename T>
   void Easing<T>::FilePathChangeForType() {
