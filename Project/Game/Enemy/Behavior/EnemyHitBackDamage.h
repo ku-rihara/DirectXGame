@@ -1,7 +1,7 @@
 #pragma once
 
 #include"BaseEnemyBehavior.h"
-#include"EasingFunction.h"
+#include"Easing.h"
 
 class EnemyHitBackDamage : public BaseEnemyBehavior {
 private:
@@ -19,8 +19,11 @@ private:
 	float speed_;
 	
 	//hitbackmove
-	/*Easing archingbackEase_;*/
-	float preRotate_;
+	Easing<float> archingRotateEase_;
+    float tempArchingRotateX_;
+
+	Easing<Vector3> archingPosEase_;
+    Vector3 tempArchingPos_;
 
 	/*Easing easing_;*/
 

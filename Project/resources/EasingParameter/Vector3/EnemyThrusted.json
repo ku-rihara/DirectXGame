@@ -1,0 +1,22 @@
+{
+    "EnemyThrusted": {
+        "amplitude": 0.0,
+        "backRatio": 0.0,
+        "endValue": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "finishOffsetTime": 0.0,
+        "finishType": 1,
+        "maxTime": 0.15000000596046448,
+        "period": 0.0,
+        "startValue": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "type": 0,
+        "waitTime": 0.0
+    }
+}

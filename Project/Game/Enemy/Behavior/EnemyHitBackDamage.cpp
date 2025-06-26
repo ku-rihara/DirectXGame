@@ -29,10 +29,25 @@ EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
 	pBaseEnemy_->GetFindSprite()->SetScale(Vector2(1, 1));
     pBaseEnemy_->SetScale(pBaseEnemy_->GetParameter().initScale_);
 
-	/// hitbackMove
-	//archingbackEase_.time = 0.0f;
-	//archingbackEase_.maxTime=pBaseEnemy_->GetParameter().archingbackTime;
-	//archingbackEase_.backRatio= pBaseEnemy_->GetParameter().archingbackRatio;
+
+
+	archingRotateEase_.Init("EnemyArchingRotate");
+    archingRotateEase_.ApplyFromJson("EnemyArchingRotate.json");
+    archingRotateEase_.SaveAppliedJsonFileName();
+    archingRotateEase_.SetAdaptValue(&tempArchingRotateX_);
+    archingRotateEase_.Reset();
+
+   
+	archingPosEase_.Init("EnemyArchingPos");
+    archingPosEase_.ApplyFromJson("EnemyArchingPos.json");
+    archingPosEase_.SaveAppliedJsonFileName();
+    archingPosEase_.SetAdaptValue(&tempArchingPos_);
+    archingPosEase_.Reset();
+
+    archingRotateEase_.SetOnFinishCallback([this]() {
+        step_ = Step::RETUNROOT;
+    });
+
 
 	step_ = Step::DIRECTIONSET; /// ステップ初期化
 }
@@ -55,6 +70,9 @@ void EnemyHitBackDamage::Update() {
 		/// 吹っ飛ぶ距離を計算
 		backPos_ = initPos_ + (direction_ * -speed_);
 
+		archingPosEase_.SetStartValue(initPos_);
+        archingPosEase_.SetEndValue(backPos_);
+
 		step_ = Step::HITBACK;
 		break;
 
@@ -66,26 +84,13 @@ void EnemyHitBackDamage::Update() {
 		// 最短角度補間でプレイヤーの回転を更新
 		pBaseEnemy_->SetRotationY(LerpShortAngle(pBaseEnemy_->GetTransform().rotation_.y, objectiveAngle_, 0.5f));
 
-		// タイム更新
-		//easing_.time += Frame::DeltaTimeRate();
-		//archingbackEase_.time += Frame::DeltaTimeRate();
-		////のけぞり
-		//preRotate_ = Back::OutCircZero(0.0f, pBaseEnemy_->GetParameter().archingbackValue, archingbackEase_.time, archingbackEase_.maxTime,archingbackEase_.backRatio);
-		//のけぞり適応
-		pBaseEnemy_->SetBodyRotateX(preRotate_);
-
-		//easing_.time = std::min(easing_.time, easing_.maxTime);
-		///// イージングでヒットバックする
-		//pBaseEnemy_->SetWorldPosition(
-		//	EaseInSine(initPos_, backPos_, easing_.time, easing_.maxTime)
-		//);
-
-
-		////次のステップ	
-		//if (archingbackEase_.time < archingbackEase_.maxTime) break;
-		//	archingbackEase_.time = archingbackEase_.maxTime;
-		//	step_ = Step::RETUNROOT;
 		
+		//のけぞり適応
+        archingRotateEase_.Update(Frame::DeltaTimeRate());
+		pBaseEnemy_->SetBodyRotateX(tempArchingRotateX_);
+
+		 archingPosEase_.Update(Frame::DeltaTimeRate());
+        pBaseEnemy_->SetWorldPosition(tempArchingPos_);
 
 		break;
 	/// -------------------------------------------------------

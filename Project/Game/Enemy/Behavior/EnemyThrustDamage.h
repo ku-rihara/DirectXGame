@@ -1,7 +1,7 @@
 #pragma once
 
 #include"BaseEnemyBehavior.h"
-#include"EasingFunction.h"
+#include"Easing.h"
 
 class EnemyThrustDamage : public BaseEnemyBehavior {
 private:
@@ -21,7 +21,8 @@ private:
 	float speed_;
 	Vector3 direction_;
 
-	/*Easing easing_;*/
+	Easing<Vector3> easing_;
+    Vector3 tempPos_;
 
 	float hitStopTime_;
 	float kHitStopTime_;

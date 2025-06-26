@@ -22,6 +22,17 @@ EnemyThrustDamage::EnemyThrustDamage(BaseEnemy* boss)
 	// 赤色
 	pBaseEnemy_->SetBodyColor(Vector4(0.9f, 0, 0, 0.9f));
 
+	easing_.Init("EnemyThrusted");
+    easing_.ApplyFromJson("EnemyThrusted.json");
+    easing_.SaveAppliedJsonFileName();
+    easing_.SetAdaptValue(&tempPos_);
+    easing_.Reset();
+
+    easing_.SetOnFinishCallback([this]() {
+        step_ = Step::NEXTBEHAVIOR;
+    });
+
+
 	/*easing_.time = 0.0f;
 	easing_.maxTime = 0.15f;*/
 
@@ -65,6 +76,9 @@ void EnemyThrustDamage::Update() {
 		backPos_ = initPos_ + (direction_ * -speed_);
 		backPos_.y = pBaseEnemy_->GetParameter().basePosY;
 
+		easing_.SetStartValue(initPos_);
+        easing_.SetEndValue(backPos_);
+
 		step_ = Step::HITBACK;
 		break;
 
@@ -81,16 +95,10 @@ void EnemyThrustDamage::Update() {
 		rotate_ += pBaseEnemy_->GetParameter().thrustRotateSpeed * Frame::DeltaTimeRate();
 		pBaseEnemy_->SetBodyRotateX(rotate_);
 
-		/// イージングでヒットバックする
-		/*pBaseEnemy_->SetWorldPosition(
-			EaseInSine(initPos_, backPos_, easing_.time, easing_.maxTime)
-		);*/
+		easing_.Update(Frame::DeltaTimeRate());
+		pBaseEnemy_->SetWorldPosition(tempPos_);
 
-
-		//次のステップ	
-		/*if (easing_.time < easing_.maxTime) break;
-		easing_.time = easing_.maxTime;*/
-		step_ = Step::NEXTBEHAVIOR;
+	
 
 		break;
 	case Step::NEXTBEHAVIOR:
