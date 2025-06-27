@@ -51,7 +51,7 @@ void GameScene::Init() {
     howToOperate_->Init();
     viewProjection_.Init();
 
-    putObjForBlender_->LoadJsonFile("scene.json");
+    putObjForBlender_->LoadJsonFile("gameScene.json");
     putObjForBlender_->PutObject();
 
     ///=======================================================================================
