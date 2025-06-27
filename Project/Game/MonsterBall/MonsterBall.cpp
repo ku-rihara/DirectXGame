@@ -10,7 +10,7 @@ MonsterBall::MonsterBall() {}
 MonsterBall::~MonsterBall() {}
 
 void MonsterBall::Init() {
-    objct3D_.reset(Object3d::CreateModel("AudienceSeats.obj"));
+    objct3D_.reset(Object3d::CreateModel("FieldFence.obj"));
 	transform_.Init();
 	transform_.translation_.y = -5.0f;
 	transform_.translation_.z = -14.0f;
