@@ -25,6 +25,8 @@ void EasingEditor::SaveAll() {
 }
 
 void EasingEditor::Edit() {
+#ifdef _DEBUG
+
     ImGui::Begin("Easing Editor");
 
     if (ImGui::BeginTabBar("EasingTabs")) {
@@ -112,4 +114,5 @@ void EasingEditor::Edit() {
     }
 
     ImGui::End();
+#endif // _DEBUG
 }
