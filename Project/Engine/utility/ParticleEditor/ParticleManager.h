@@ -138,7 +138,7 @@ private:
 
     /// Particle File
     std::vector<std::string> particleFiles_; // パーティクルのファイル達
-    const std::string dyrectry_ = "./Resources/GlobalParameter/Particle";
+    const std::string dyrectry_ = "Resources/GlobalParameter/Particle";
 
 public:
     std::unordered_map<std::string, ParticleGroup> particleGroups_;

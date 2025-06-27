@@ -55,7 +55,7 @@ private:
 
     std::string selectedEnemyType_;
 
-    const std::string directrypath_ = "./resources/EnemyParamater/";// path
+    const std::string directrypath_ = "Resources/EnemyParamater/";// path
     const std::string filename_ = "PoPData.json";// name
 public:
     // コンストラクタ

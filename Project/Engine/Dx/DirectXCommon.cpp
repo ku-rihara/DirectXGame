@@ -19,8 +19,6 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
 
-
-
 DirectXCommon* DirectXCommon::GetInstance() {
     static DirectXCommon instance;
     return &instance;
@@ -358,7 +356,6 @@ void DirectXCommon::dxcCompilerInit() {
 ///==========================================================
 void DirectXCommon::CreateGraphicPipelene() {
 
-    //
     // ビューポート
     // クライアント領域のサイズと一緒にして画面全体に表示
     viewport_.Width    = WinApp::kWindowWidth;

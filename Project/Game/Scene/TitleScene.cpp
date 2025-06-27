@@ -48,7 +48,7 @@ void TitleScene::Init() {
 	viewProjection_.translation_ = { 7.8f,3.6f,8.3f };
 	viewProjection_.rotation_.y= 3.8f;
 
-	shandle_ = TextureManager::GetInstance()->LoadTexture("./resources/Texture/screenChange.png");
+	shandle_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/screenChange.png");
 	screenSprite_.reset(Sprite::Create(shandle_, Vector2(0, 0), Vector4(1, 1, 1, alpha_)));
 	
 	player_->SetTitleBehavior();
@@ -59,7 +59,7 @@ void TitleScene::Init() {
 	/*/// particleD
 	damageName_ = "DamageParticle";
 	damageEmitter_.reset(ParticleEmitter::CreateParticle(damageName_, "Plane", ".obj", 300, false));
-	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
+	uint32_t handle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
 	damageEmitter_->SetTextureHandle(handle);
 	*/
 }

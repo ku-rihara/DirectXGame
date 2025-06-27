@@ -66,14 +66,15 @@ void GameScene::Init() {
     player_->SetLockOn(lockOn_.get());
     player_->SetGameCamera(gamecamera_.get());
     enemySpawner_->SetEnemyManager(enemyManager_.get());
+  
 
     enemyManager_->FSpawn();
 
     isfirstChange_ = false;
     alpha_         = 2.5f;
-    shandle_       = TextureManager::GetInstance()->LoadTexture("./resources/Texture/screenChange.png");
+    shandle_       = TextureManager::GetInstance()->LoadTexture("Resources/Texture/screenChange.png");
     screenSprite_.reset(Sprite::Create(shandle_, Vector2(0, 0), Vector4(1, 1, 1, alpha_)));
-
+    
     finishSpriteEase_.Init("finishSpriteTest");
     finishSpriteEase_.ApplyFromJson("finishSpriteTest.json");
     finishSpriteEase_.SaveAppliedJsonFileName();
@@ -93,7 +94,7 @@ void GameScene::Init() {
 
   /*  cease_.time    = 0.0f;
     cease_.maxTime = 0.5f;*/
-    chandle_       = TextureManager::GetInstance()->LoadTexture("./resources/Texture/Clear.png");
+    chandle_       = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Clear.png");
     cSprite_.reset(Sprite::Create(chandle_, Vector2(0, -720), Vector4(1, 1, 1, 1.0f)));
 
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
@@ -111,7 +112,7 @@ void GameScene::Update() {
         }
     }
 
-    /// debugcamera
+    // debugCamera
     debugCamera_->Update();
     Debug();
 

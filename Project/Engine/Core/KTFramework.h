@@ -39,4 +39,6 @@ public:
     void AllLoad();
 
     void Run(); /// 実行
+
+    void LoadAllTexture();
 };

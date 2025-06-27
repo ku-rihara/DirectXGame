@@ -42,7 +42,7 @@ private:
 
 	///テクスチャ
 	TextureManager* textureManager_ = nullptr;
-	uint32_t textureHandle_;
+    D3D12_GPU_DESCRIPTOR_HANDLE textureHandle_;
 	ModelData modelData_;
 	
 	/// GPUHandle,BufferView
@@ -56,8 +56,10 @@ private:
 
 	bool isFileGltf_;// gitfファイルかのフラグ
 
-	std::string modelPath_ = "./Resources/Model/";
-	std::string texturePath_ = "./Resources/Texture/";
+	std::string modelPath_ = "Resources/Model/";
+	std::string texturePath_ = "Resources/Texture/";
+
+	 
 
 public:
 

@@ -20,7 +20,7 @@ void BasePlayerHand::Init() {
 	obj3d_->material_.materialData_->enableLighting = 2;
 
 	emitter_.reset(ParticleEmitter::CreateParticlePrimitive(groupName_,PrimitiveType::Plane,300));
-	uint32_t handle = TextureManager::GetInstance()->LoadTexture("./resources/Texture/circle.png");
+	uint32_t handle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
 	emitter_->SetTextureHandle(handle);
 
 	obj3d_->material_.SetEnvironmentCoefficient(0.15f);

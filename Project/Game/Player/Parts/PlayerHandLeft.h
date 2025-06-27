@@ -17,7 +17,8 @@ private:
 	std::unique_ptr<RailManager>trustRailManager_;
 	
 public:
-	PlayerHandLeft();
+    PlayerHandLeft()  = default;
+    ~PlayerHandLeft()=default;
 	///===========================================
 	/// public method
 	///=============================================

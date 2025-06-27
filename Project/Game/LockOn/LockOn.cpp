@@ -11,7 +11,7 @@
 //初期化
 void LockOn::Init() {
 	//スプライトの読み込みと作成
-	int TextureHandle = TextureManager::GetInstance()->LoadTexture("./Resources/Texture/anchorPoint.png");
+	int TextureHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/anchorPoint.png");
 	lockOnMark_.reset(Sprite::Create(TextureHandle, Vector2{ 640, 320 }, Vector4(1, 1, 1, 1)));
 	lockOnMark_->SetAnchorPoint(Vector2(0.5f,0.5f));
 

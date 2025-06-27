@@ -9,6 +9,7 @@
 #include "Frame/Frame.h"
 /// imgui
 #include <imgui.h>
+#include "base/TextureManager.h"
 
 const char kWindowTitle[] = "LE3A_11_クリハラ_ケイタ";
 
@@ -23,6 +24,8 @@ void KTFramework::Init() {
 
     /// ウィンドウ初期化
     engineCore_->Initialize(kWindowTitle, 1280, 720);
+
+    LoadAllTexture();
 
     // グローバル変数の読み込み
     GlobalParameter::GetInstance()->LoadFiles();
@@ -110,4 +113,17 @@ void KTFramework::DisplayFPS(){
 
 	ImGui::End();
 #endif 
+}
+
+void KTFramework::LoadAllTexture() {
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/uvChecker.png");
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/smoke.png");
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/star.png");
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/HitEffectCenter.png");
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/hitEffect.png");
+    TextureManager::GetInstance()->LoadTexture("Resources/Texture/HowToOperate.png");
+    TextureManager::GetInstance()->LoadTexture("Resources/Model/AudienceSeats/audienceSeats.png");
+    TextureManager::GetInstance()->LoadTexture("Resources/Model/FieldFence/FieldFence.png");
+    TextureManager::GetInstance()->LoadTexture("Resources/Model/FieldSide/SideFiend.png");
 }

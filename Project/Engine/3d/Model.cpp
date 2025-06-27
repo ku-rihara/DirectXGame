@@ -115,7 +115,8 @@ void Model::CreateModel(const std::string& ModelFileName) {
     }
 
     textureManager_ = TextureManager::GetInstance();
-    textureHandle_  = textureManager_->LoadTexture(modelData_.material.textureFilePath);
+  /*  textureHandle_  = textureManager_->LoadTexture(modelData_.material.textureFilePath);*/
+    textureHandle_  = textureManager_->GetTextureHandle(textureManager_->LoadTexture(modelData_.material.textureFilePath));
 
     vertexResource_ = directXCommon->CreateBufferResource(
         directXCommon->GetDevice(),
@@ -156,7 +157,7 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material ma
     if (textureHandle.has_value()) {
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
     } else {
-        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
+        commandList->SetGraphicsRootDescriptorTable(2, textureHandle_);
     }
 
     uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
@@ -185,7 +186,7 @@ void Model::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HAND
     if (textureHandle.has_value()) {
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
     } else {
-        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
+        commandList->SetGraphicsRootDescriptorTable(2, textureHandle_);
     }
 
     commandList->DrawInstanced(UINT(modelData_.vertices.size()), instanceNum, 0, 0);

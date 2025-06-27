@@ -24,7 +24,8 @@ private:
 	
 	
 public:
-	PlayerHandRight();
+    PlayerHandRight()  = default;
+    ~PlayerHandRight()=default;
 	///===========================================
 	/// public method
 	///=============================================
