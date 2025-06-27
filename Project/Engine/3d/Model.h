@@ -56,8 +56,8 @@ private:
 
 	bool isFileGltf_;// gitfファイルかのフラグ
 
-	std::string modelPath_ = "./Resources/Model/";
-	std::string texturePath_ = "./Resources/Texture/";
+	std::string modelPath_ = "Resources/Model/";
+	std::string texturePath_ = "Resources/Texture/";
 
 public:
 
