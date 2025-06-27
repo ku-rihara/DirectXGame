@@ -10,7 +10,7 @@ MonsterBall::MonsterBall() {}
 MonsterBall::~MonsterBall() {}
 
 void MonsterBall::Init() {
-    objct3D_.reset(Object3d::CreateModel("DebugSphere.obj"));
+    objct3D_.reset(Object3d::CreateModel("AudienceSeats.obj"));
 	transform_.Init();
 	transform_.translation_.y = -5.0f;
 	transform_.translation_.z = -14.0f;
@@ -26,13 +26,8 @@ void MonsterBall::Init() {
 
 void MonsterBall::Update() {
 
-	if (Input::GetInstance()->TrrigerKey(DIK_U)) {
-        easing_.Reset();
-	}
+	
 
-	easing_.ApplyForImGui();
-
-	ScaleEasing();
 
 	transform_.UpdateMatrix();
 }

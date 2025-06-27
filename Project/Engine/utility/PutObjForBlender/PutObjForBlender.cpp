@@ -1,4 +1,5 @@
 #include "PutObjForBlender.h"
+#include"mathFunction.h"
 #include "3d/Model.h"
 #include <cassert>
 #include <fstream>
@@ -71,9 +72,9 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
         objectData.worldTransform.translation_.z = (float)transform["translation"][1];
 
         // 回転角
-        objectData.worldTransform.rotation_.x = -(float)transform["rotation"][0];
-        objectData.worldTransform.rotation_.y = -(float)transform["rotation"][2];
-        objectData.worldTransform.rotation_.z = -(float)transform["rotation"][1];
+        objectData.worldTransform.rotation_.x = -toRadian((float)transform["rotation"][0]);
+        objectData.worldTransform.rotation_.y = -toRadian((float)transform["rotation"][2]);
+        objectData.worldTransform.rotation_.z = -toRadian((float)transform["rotation"][1]);
 
         // スケーリング
         objectData.worldTransform.scale_.x = (float)transform["scaling"][0];
