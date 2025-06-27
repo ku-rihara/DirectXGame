@@ -88,7 +88,10 @@ Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::CreateTextureResource(Mic
         D3D12_RESOURCE_STATE_COPY_DEST,
         nullptr,
         IID_PPV_ARGS(&resource));
-    assert(SUCCEEDED(hr));
+    if (FAILED(hr)) {
+        assert(hr);
+        return nullptr;
+    }
     return resource.Get();
 }
 
