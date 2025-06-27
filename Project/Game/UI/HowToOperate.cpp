@@ -6,7 +6,7 @@
 void HowToOperate::Init() {
 	uint32_t handle=TextureManager::GetInstance()->LoadTexture("Resources/Texture/HowToOperate.png");
 	
-	sprite_.reset(Sprite::Create(handle, {}, { 1,1,1,1 }));
+ 	sprite_.reset(Sprite::Create(handle, {}, { 1,1,1,1 }));
 	sprite_->anchorPoint_ = { 0.5f,0.5f };
 	position_ = { 1033,509 };
 }
