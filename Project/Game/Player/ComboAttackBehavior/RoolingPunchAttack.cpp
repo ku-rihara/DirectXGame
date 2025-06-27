@@ -1,6 +1,6 @@
 /// behavior
 #include "RoolingPunchAttack.h"
-#include "RightJobPunch.h"
+#include "ComboAttackRoot.h"
 
 /// objs
 #include "Player/Player.h"
@@ -25,7 +25,10 @@ RoolingPunchAttack::~RoolingPunchAttack() {
 
 // 更新
 void RoolingPunchAttack::Update() {
-
+    BaseComboAattackBehavior::PreOderNextComboForButton();
+    if (isNextCombo_) {
+        BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<ComboAttackRoot>(pPlayer_));
+    }
     switch (order_) {
 
         ///----------------------------------------------------------------------
@@ -43,6 +46,24 @@ void RoolingPunchAttack::Update() {
         /// 待機
         /// ---------------------------------------------------------------------
     case RoolingPunchAttack::Order::WAIT:
+    
+       /* waitTine_ += Frame::DeltaTime();
+
+        /// コンボ途切れ
+        if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(THIRD).waitTime) {
+
+            order_ = Order::END;
+        }
+
+        else {
+            /// ボタンで次のコンボ
+            BaseComboAattackBehavior::PreOderNextComboForButton();
+            if (isNextCombo_) {
+                BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<JumpRush>(pPlayer_));
+            }
+        }*/
+
+        break;
         break;
         ///----------------------------------------------------------------------
         /// 終了処理

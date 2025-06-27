@@ -64,7 +64,7 @@ void JumpRush::Update() {
 		initPos_ = pPlayer_->GetWorldPosition();
 		forwardDirection_ = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
 
-		frontPos_ = initPos_ + (forwardDirection_* pPlayerParameter_->GetParamaters().upperParm.BackLashValue);
+		frontPos_ = initPos_ + (forwardDirection_* pPlayerParameter_->GetParamaters().upperParam.BackLashValue);
 		
 		//easing set
         assaultJumpEase_.SetStartValue(initPos_.y);

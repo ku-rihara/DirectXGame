@@ -9,38 +9,36 @@
 #include <array>
 #include <string>
 
-struct UpperParm {
+struct UpperParam {
     float BackLashValue;
-    float BackLashEaseTime;
+    float chargeTime;
 };
 
-struct JumpParm {
+struct JumpParam {
     float jumpSpeed;
     float gravity;
     float fallSpeedLimit;
 };
 
-struct ComboParm {
+struct ComboParam {
     float waitTime;
     float attackReach;
-    float attackEaseMax;
 };
 
-/// Paramater構造体
+/// Parameter構造体
 struct Parameters {
     Vector3 startPos_;
     float rushDistance;
     float upperPosY;
-    UpperParm upperParm;
-    JumpParm normalJump;
-    JumpParm bountJump;
-    JumpParm upperJump;
+    UpperParam upperParam;
+    JumpParam normalJump;
+    JumpParam boundJump;
+    JumpParam upperJump;
     float moveSpeed;
     float fallSpeed;
     float attackRotate;
     float attackRotateAnit;
     float attackFloatValue;
-    float rushEaseMax;
 };
 
 enum ComboNum {
@@ -60,12 +58,12 @@ private:
 
 private:
     /// ===================================================
-    /// private variaus
+    /// private variable
     /// ===================================================
 
     ///* コンボパラメータ
-    std::array<ComboParm, 4> normalComboParms_;
-    std::array<ComboParm, 2> jumpComboParms_;
+    std::array<ComboParam, 4> normalComboParams_;
+    std::array<ComboParam, 2> jumpComboParams_;
     Parameters playerParams_;
 
 public:
@@ -81,18 +79,15 @@ public:
     /// ====================================================================
     /// Editor
     /// ====================================================================
-    void ParamLoadForImGui();
-    void AddParmGroup();
-    void SetValues();
-    void ApplyGlobalParameter();
+    void BindParams();
     void AdjustParam();
 
     /// =========================================================================================
     /// getter
     /// =========================================================================================
     Parameters GetParamaters() const { return playerParams_; }
-    ComboParm GetNormalComboParm(const ComboNum& index) const { return normalComboParms_[static_cast<int>(index)]; }
-    ComboParm GetJumpComboParm(const ComboNum& index) const { return jumpComboParms_[static_cast<int>(index)]; }
+    ComboParam GetNormalComboParm(const ComboNum& index) const { return normalComboParams_[static_cast<int>(index)]; }
+    ComboParam GetJumpComboParm(const ComboNum& index) const { return jumpComboParams_[static_cast<int>(index)]; }
 
     /// =========================================================================================
     /// setter

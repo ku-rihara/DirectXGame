@@ -34,6 +34,7 @@ void GameScene::Init() {
     skyBox_           = std::make_unique<SkyBox>();
     combo_            = std::make_unique<Combo>();
     putObjForBlender_ = std::make_unique<PutObjForBlender>();
+    comboCreate_      = std::make_unique<ComboCreateEditor>();
 
     ///=======================================================================================
     /// 初期化

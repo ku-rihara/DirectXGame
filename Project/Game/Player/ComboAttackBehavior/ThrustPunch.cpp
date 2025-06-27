@@ -166,6 +166,7 @@ void ThrustPunch::Update() {
         waitTine_ += Frame::DeltaTimeRate();
         pPlayer_->Fall(fallInitSpeed_, pPlayerParameter_->GetParamaters().normalJump.fallSpeedLimit, pPlayerParameter_->GetParamaters().normalJump.gravity);
         pPlayer_->SetHeadScale(Vector3::UnitVector());
+
         if (pPlayer_->GetWorldPosition().y <= pPlayerParameter_->GetParamaters().startPos_.y) {
             pPlayer_->PositionYReset();
             if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(FORTH).waitTime) {

@@ -23,9 +23,9 @@ FallAttack::FallAttack(Player* player)
 
 	fallRotateY_ = 0.0f;
 
-	boundSpeed_ = pPlayerParameter_->GetParamaters().bountJump.jumpSpeed*60.0f;//1.4
-	gravity_ = pPlayerParameter_->GetParamaters().bountJump.gravity * 60.0f;//8.8
-	boundFallSpeedLimit_ = pPlayerParameter_->GetParamaters().bountJump.fallSpeedLimit * 60.0f;//5.2
+	boundSpeed_ = pPlayerParameter_->GetParamaters().boundJump.jumpSpeed*60.0f;//1.4
+	gravity_ = pPlayerParameter_->GetParamaters().boundJump.gravity * 60.0f;//8.8
+	boundFallSpeedLimit_ = pPlayerParameter_->GetParamaters().boundJump.fallSpeedLimit * 60.0f;//5.2
 	rotateXSpeed_ = 11.0f;
 	rotateYSpeed_ = 20.0f;
 

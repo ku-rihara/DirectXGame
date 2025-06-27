@@ -36,7 +36,7 @@ RoringUpper::RoringUpper(Player* player)
     RailInit();
 
     // backlash
-    backlashPos_ = initPos_ + (forwardDirection_ * -pPlayerParameter_->GetParamaters().upperParm.BackLashValue);
+    backlashPos_ = initPos_ + (forwardDirection_ * -pPlayerParameter_->GetParamaters().upperParam.BackLashValue);
     /*backlashEase_.maxTime = pPlayerParameter_->GetParamaters().upperParm.BackLashEaseTime;*/
 
     EasingInit();//イージング初期化

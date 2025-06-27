@@ -53,12 +53,13 @@ public:
 
     ///* 移動
     void Move(const float& speed); /// 移動
-    bool GetIsMoving(); /// 動かしてるかフラグ
-    void MoveToLimit(); /// 移動制限
-    Vector3 GetInputDirecton(); /// 入力による速度
-    void UpdateMatrix(); /// 　行列更新
+    bool GetIsMoving();            /// 動かしてるかフラグ
+    void MoveToLimit();            /// 移動制限
+    Vector3 GetInputDirection();   /// 入力による速度
+    void UpdateMatrix();           /// 行列更新
 
     void PositionYReset();
+    void AttackPowerCharge();
 
     //* ジャンプ
     void Jump(float& speed, const float& fallSpeedLimit, const float& gravity); /// ジャンプ
@@ -73,6 +74,8 @@ public:
     ///* 向き
     void FaceToTarget();
     void AdaptRotate();
+
+    bool IsChargeMax() const;
 
     /// ====================================================================
     /// Editor
@@ -128,6 +131,9 @@ private:
     Vector3 prePos_; /// 移動前座標
     float moveSpeed_; /// 移動速度
 
+    // attackCharge
+    float currentUpperChargeTime_;
+
     // カメラのビュープロジェクション
     const ViewProjection* viewProjection_ = nullptr;
 
@@ -150,7 +156,7 @@ public:
     GameCamera* GetGameCamera() const { return pGameCamera_; }
     PlayerParameter* GetParameter() const { return parameters_.get(); }
     float GetMoveSpeed() const { return moveSpeed_; }
-  
+
     /// =========================================================================================
     /// setter
     /// =========================================================================================
@@ -166,5 +172,4 @@ public:
     void SetHeadPosY(const float& posy) { headTransform_.translation_.y = posy; }
     void SetHeadRotateX(const float& zrotate) { headTransform_.rotation_.x = zrotate; }
     void SetHeadRotateY(const float& zrotate) { headTransform_.rotation_.y = zrotate; }
-   
 };

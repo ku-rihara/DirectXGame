@@ -145,8 +145,8 @@ void Gamepad::SetDeadZone(int32_t deadZoneL, int32_t deadZoneR) {
 void Gamepad::SetVibration(float leftVelocity, float rightVelocity) {
 	if (type_ == PadType::XInput) {
 		XINPUT_VIBRATION vibration;
-		vibration.wLeftMotorSpeed = static_cast<WORD>(leftVelocity * 65535.0f); // 0.0f〜1.0fの範囲を0〜65535に変換
-		vibration.wRightMotorSpeed = static_cast<WORD>(rightVelocity * 65535.0f); // 0.0f〜1.0fの範囲を0〜65535に変換
+		vibration.wLeftMotorSpeed = static_cast<WORD>(leftVelocity * 65535.0f);
+		vibration.wRightMotorSpeed = static_cast<WORD>(rightVelocity * 65535.0f); 
 		XInputSetState(padNo_, &vibration);
 	} else if (type_ == PadType::DirectInput) {
 		// TODO: DirectInput の振動処理を実装

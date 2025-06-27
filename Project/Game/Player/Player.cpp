@@ -21,6 +21,7 @@
 
 /// behavior
 #include "ComboAttackBehavior/ComboAttackRoot.h"
+#include "ComboAttackBehavior/RoringUpper.h"
 #include "ComboAttackBehavior/RushAttack.h"
 #include "PlayerBehavior/PlayerMove.h"
 #include "TitleBehavior/TitleFirstFall.h"
@@ -35,7 +36,7 @@ void Player::Init() {
     ///* model生成
     BaseObject::Init(); // 基底クラスの初期化
     BaseObject::CreateModel("Player.obj"); /// モデルセット
-  
+
     //* particle
     effects_ = std::make_unique<PlayerEffects>();
     effects_->Init(transform_.translation_);
@@ -50,7 +51,6 @@ void Player::Init() {
     headObj_.reset(Object3d::CreateModel("Player.obj"));
     headObj_->material_.materialData_->enableLighting = 7;
     headObj_->material_.SetEnvironmentCoefficient(0.05f);
-
 
     // トランスフォーム初期化
     headTransform_.Init();
@@ -100,7 +100,8 @@ void Player::Update() {
     SetLightPos();
 
     comboBehavior_->Update(); /// 　コンボ攻撃攻撃
-    MoveToLimit();            /// 　移動制限
+    AttackPowerCharge(); // チャージアタック
+    MoveToLimit(); /// 　移動制限
 
     UpdateMatrix();
 }
@@ -136,7 +137,7 @@ void Player::EffectDraw(const ViewProjection& viewProjection) {
 ///=========================================================
 /// 移動の入力処理
 ///==========================================================
-Vector3 Player::GetInputDirecton() {
+Vector3 Player::GetInputDirection() {
 
     Vector3 velocity = {0.0f, 0.0f, 0.0f};
     Input* input     = Input::GetInstance();
@@ -168,8 +169,8 @@ Vector3 Player::GetInputDirecton() {
 ///==========================================================
 void Player::Move(const float& speed) {
 
-    /// Inuputから速度代入
-    direction_ = GetInputDirecton();
+    /// Inputから速度代入
+    direction_ = GetInputDirection();
 
     /// 移動処理
     if (GetIsMoving()) {
@@ -189,6 +190,33 @@ void Player::Move(const float& speed) {
         FaceToTarget();
     } else {
         FaceToTarget(); // ターゲットを向くか
+    }
+}
+
+void Player::AttackPowerCharge() {
+    Input* input = Input::GetInstance();
+
+    if (dynamic_cast<RoringUpper*>(comboBehavior_.get())) {
+        return;
+    }
+
+    // チャージタイム加算
+    if (input->PushKey(DIK_H) || Input::IsPressPad(0, XINPUT_GAMEPAD_X)) {
+        currentUpperChargeTime_ += Frame::DeltaTimeRate();
+
+    } else if (input->ReleaseKey(DIK_H)) {// チャージ途中切れ
+        currentUpperChargeTime_ = 0.0f;
+    }
+
+    // チャージMax
+    if (!IsChargeMax()) {
+        return;
+    }
+
+    // リリースでアッパー攻撃
+    if (input->ReleaseKey(DIK_H)) {
+        currentUpperChargeTime_ = 0.0f;
+        ChangeComboBehavior(std::make_unique<RoringUpper>(this));
     }
 }
 
@@ -325,7 +353,6 @@ void Player::Fall(float& speed, const float& fallSpeedLimit, const float& gravit
 /// パラメータ調整
 ///==========================================================
 void Player::AdjustParam() {
-    parameters_->SetValues();
 #ifdef _DEBUG
 
     // プレイヤーのパラメータ
@@ -369,7 +396,7 @@ void Player::ChangeCombBoRoot() {
 }
 
 /// =========================================================================================
-/// getter method
+/// setter method
 /// =========================================================================================
 
 void Player::SetTitleBehavior() {
@@ -463,7 +490,14 @@ void Player::SetRotateInit() {
 }
 
 /// =======================================================================================
-/// Rendition
+/// Frag
+/// =======================================================================================
+bool Player::IsChargeMax() const {
+    return currentUpperChargeTime_ >= parameters_->GetParamaters().upperParam.chargeTime;
+}
+
+/// =======================================================================================
+/// Light,Punch
 /// =======================================================================================
 void Player::SetLightPos() {
     // ライト位置

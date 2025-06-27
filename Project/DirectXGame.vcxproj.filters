@@ -301,6 +301,9 @@
     <Filter Include="Game\EasingTestObj">
       <UniqueIdentifier>{a383ecc6-f375-4bf7-9b58-7f4ba9f98f42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\ComboCreate">
+      <UniqueIdentifier>{84b3c227-9d01-4f00-aa9d-03f155fdbb2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -768,6 +771,9 @@
     </ClCompile>
     <ClCompile Include="Game\EasingTestObj\EasingTestObj.cpp">
       <Filter>Game\EasingTestObj</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ComboCreate\ComboCreateEditor.cpp">
+      <Filter>Game\ComboCreate</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1268,6 +1274,9 @@
     </ClInclude>
     <ClInclude Include="Game\EasingTestObj\EasingTestObj.h">
       <Filter>Game\EasingTestObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ComboCreate\ComboCreateEditor.h">
+      <Filter>Game\ComboCreate</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

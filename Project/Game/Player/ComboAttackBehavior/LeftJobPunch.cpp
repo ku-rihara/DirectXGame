@@ -2,6 +2,7 @@
 #include "LeftJobPunch.h"
 #include "ComboAttackRoot.h"
 #include "RightJobPunch.h"
+#include "RoolingPunchAttack.h"
 #include "RoringUpper.h"
 
 /// objs
@@ -20,7 +21,6 @@ LeftJobPunch::LeftJobPunch(Player* player)
     ///---------------------------------------------------------
     /// 変数初期化
     ///---------------------------------------------------------
-
    
     waitTine_ = 0.0f;
 
@@ -31,7 +31,7 @@ LeftJobPunch::LeftJobPunch(Player* player)
     lHandStartPos_  = pPlayer_->GetLeftHand()->GetTransform().translation_;
     lHandTargetPos_ = pPlayer_->GetLeftHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayerParameter_->GetNormalComboParm(SECOND).attackReach;
 
-     /// ease parm
+    // ease parm
     EasingInit();
 
     // 　モーション
