@@ -26,7 +26,6 @@
 #include "PlayerBehavior/PlayerMove.h"
 #include "TitleBehavior/TitleFirstFall.h"
 
-Player::Player() {}
 
 ///=========================================================
 /// 　初期化
@@ -204,7 +203,7 @@ void Player::AttackPowerCharge() {
     if (input->PushKey(DIK_H) || Input::IsPressPad(0, XINPUT_GAMEPAD_X)) {
         currentUpperChargeTime_ += Frame::DeltaTimeRate();
 
-    } else if (input->ReleaseKey(DIK_H)) {// チャージ途中切れ
+    } else if (input->ReleaseKey(DIK_H) && !IsChargeMax()) { // チャージ途中切れ
         currentUpperChargeTime_ = 0.0f;
     }
 

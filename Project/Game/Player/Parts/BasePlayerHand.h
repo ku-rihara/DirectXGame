@@ -28,7 +28,7 @@ protected:
 	float railRunSpeedForth_;
 
 public:
-	/*virtual ~BasePlayerHand() = default;*/
+    virtual ~BasePlayerHand() = default;
 	///============================================
 	/// public method
 	///=============================================
