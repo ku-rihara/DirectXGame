@@ -91,7 +91,7 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
         objectData.worldTransform.UpdateMatrix();
 
         if (object.contains("emitters") && object["emitters"].is_array()) {
-           
+
             if (!object["emitters"].empty()) {
                 for (const auto& emitter : object["emitters"]) {
 
@@ -105,7 +105,7 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
 
                         //  エミッターを追加
                         objectData.emitters.emplace_back(
-                        ParticleEmitter::CreateParticlePrimitive(name, primitiveType, 300));
+                            ParticleEmitter::CreateParticlePrimitive(name, primitiveType, 300));
                     }
                 }
             }
@@ -116,8 +116,6 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
         }
     }
 
-   
-
     // 子要素があるなら再帰呼び出し
     if (object.contains("children") && object["children"].is_array()) {
         for (const auto& child : object["children"]) {
@@ -125,6 +123,24 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
         }
     }
 }
+
+void PutObjForBlender::EmitterAllUpdate() {
+
+    for (auto& objectData : levelData_->objects) {
+        for (std::unique_ptr<ParticleEmitter>& emitter: objectData.emitters) {
+            emitter->Update();
+        }     
+    }
+}
+
+void PutObjForBlender::EmitAll() {
+    for (auto& objectData : levelData_->objects) {
+        for (std::unique_ptr<ParticleEmitter>& emitter : objectData.emitters) {
+            emitter->Emit();
+        }
+    }
+}
+
 void PutObjForBlender::PutObject() {
     assert(levelData_); // LoadJsonFile 呼び出し前提
 

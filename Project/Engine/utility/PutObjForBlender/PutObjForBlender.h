@@ -34,6 +34,9 @@ public:
     void PutObject();
     void DrawAll(const ViewProjection& viewProjection);
 
+    void EmitterAllUpdate();
+    void EmitAll();
+
     void ConvertJSONToObjects(const nlohmann::json& object);
     PrimitiveType StringToPrimitiveType(const std::string& typeStr);
 
