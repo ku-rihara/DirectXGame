@@ -115,5 +115,5 @@ void ComboUI::CreateGroupName(const ComboDigit& digit) {
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();
-    globalParameter_->SyncGroupFromUI(groupName_);
+    globalParameter_->SyncParamForGroup(groupName_);
 }

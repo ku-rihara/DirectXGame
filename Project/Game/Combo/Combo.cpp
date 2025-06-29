@@ -8,7 +8,7 @@ void Combo::Init() {
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();
-    globalParameter_->SyncGroupFromUI(groupName_);
+    globalParameter_->SyncParamForGroup(groupName_);
 
     uiController_ = std::make_unique<ComboUIController>();
     uiController_->Init();

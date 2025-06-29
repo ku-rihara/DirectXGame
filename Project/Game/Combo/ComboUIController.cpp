@@ -12,7 +12,7 @@ void ComboUIController::Init() {
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();
-    globalParameter_->SyncGroupFromUI(groupName_);
+    globalParameter_->SyncParamForGroup(groupName_);
 
     // Ui生成
     for (int32_t i = 0; i < comboSprites_.size(); ++i) {
