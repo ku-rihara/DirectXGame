@@ -22,6 +22,7 @@
     <ClCompile Include="Engine\3d\ObjectColor.cpp" />
     <ClCompile Include="Engine\3d\ViewProjection.cpp" />
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
+    <ClCompile Include="Engine\Animation\ModelAnimation.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
     <ClCompile Include="Engine\base\FullscreenRenderer.cpp" />
     <ClCompile Include="Engine\base\Material.cpp" />
@@ -112,6 +113,8 @@
     <ClInclude Include="Engine\3d\ObjectColor.h" />
     <ClInclude Include="Engine\3d\ViewProjection.h" />
     <ClInclude Include="Engine\3d\WorldTransform.h" />
+    <ClInclude Include="Engine\Animation\AnimationData.h" />
+    <ClInclude Include="Engine\Animation\ModelAnimation.h" />
     <ClInclude Include="Engine\audio\Audio.h" />
     <ClInclude Include="Engine\base\FullscreenRenderer.h" />
     <ClInclude Include="Engine\base\Material.h" />

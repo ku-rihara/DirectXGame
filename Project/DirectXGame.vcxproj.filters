@@ -169,6 +169,12 @@
     <Filter Include="Game\EasingTestObj">
       <UniqueIdentifier>{96300e85-6295-42ec-a337-bdd4de702a7c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\Animation">
+      <UniqueIdentifier>{f84405b2-ba15-4fcd-9d2f-c731c2e277d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Animation">
+      <UniqueIdentifier>{f713b9a0-da3f-43be-b0fa-f9350a0b4541}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -432,6 +438,9 @@
     </ClCompile>
     <ClCompile Include="math\Vector2Proxy.cpp">
       <Filter>liberary\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Animation\ModelAnimation.cpp">
+      <Filter>MyEngine\.cpp\Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -728,6 +737,12 @@
     </ClInclude>
     <ClInclude Include="math\Vector2Proxy.h">
       <Filter>liberary\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Animation\AnimationData.h">
+      <Filter>MyEngine\.h\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Animation\ModelAnimation.h">
+      <Filter>MyEngine\.h\Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

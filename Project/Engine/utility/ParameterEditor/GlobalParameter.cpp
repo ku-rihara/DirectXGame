@@ -375,23 +375,23 @@ void GlobalParameter::LoadFile(const std::string& groupName, const std::string& 
     }
 }
 
-void GlobalParameter::ParamSaveForImGui(const std::string& groupName) {
+void GlobalParameter::ParamSaveForImGui(const std::string& groupName, const std::string& folderName) {
     // 保存ボタン
     if (ImGui::Button(std::format("Save {}", groupName).c_str())) {
-        SaveFile(groupName);
+        SaveFile(groupName, folderName);
         // セーブ完了メッセージ
         std::string message = std::format("{}.json saved.", groupName);
         MessageBoxA(nullptr, message.c_str(), "GlobalParameter", 0);
     }
 }
 
-void GlobalParameter::ParamLoadForImGui(const std::string& groupName) {
+void GlobalParameter::ParamLoadForImGui(const std::string& groupName, const std::string& folderName) {
     // ロードボタン
     if (ImGui::Button(std::format("Load {}", groupName).c_str())) {
-        LoadFile(groupName);
+        LoadFile(groupName, folderName);
         // セーブ完了メッセージ
         ImGui::Text("Load Successful: %s", groupName.c_str());
-        SyncGroupFromUI(groupName);
+        SyncParamForGroup(groupName);
     }
 }
 
@@ -424,7 +424,7 @@ void GlobalParameter::SyncAll() {
     }
 }
 
-void GlobalParameter::SyncGroupFromUI(const std::string& group) {
+void GlobalParameter::SyncParamForGroup(const std::string& group) {
     auto it = bindings_.find(group);
     if (it != bindings_.end()) {
         for (auto& item : it->second) {
