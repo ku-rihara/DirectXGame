@@ -72,5 +72,7 @@ void SceneManager::ChangeScene(const std::string& scenemane) {
   
 	//パーティクルリセット
 	ParticleManager::GetInstance()->ResetAllParticles();
-	
+	//// グローバル変数の読み込み
+    GlobalParameter::GetInstance()->BindResetAll();
+	GlobalParameter::GetInstance()->LoadFiles();
 }

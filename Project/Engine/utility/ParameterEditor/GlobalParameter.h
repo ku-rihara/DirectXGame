@@ -102,6 +102,7 @@ public:
 
     template <typename T>
     void Bind(const std::string& group, const std::string& key, T* variable, WidgetType widgetType = WidgetType::NONE);
+    void BindResetAll();
 
     void SyncAll();
     void SyncParamForGroup(const std::string& group);
