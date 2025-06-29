@@ -105,7 +105,7 @@ int EngineCore::ProcessMessage() {
 ///========================================================================
 void EngineCore::BeginFrame() {
 #ifdef _DEBUG
-    imguiManager_->Begin(); /// imGui begin
+    imguiManager_->Begin(); // imGui begin
 #endif
     input_->Update();
 }

@@ -88,18 +88,26 @@ public:
     // Adapt Texture
     void AdaptTexture();
 
-    // Parameter Edit
-    virtual void ParamLoadForImGui();
-    virtual void ParamSaveForImGui();
-    virtual void AddParmGroup();
-    virtual void SetValues();
-    virtual void ApplyGlobalParameter(const std::string& particleName);
+    ///-------------------------------------------------------------------------------------
+    /// Editor
+    ///-------------------------------------------------------------------------------------
+    void BindParams();
+    virtual void EditorUpdate();
+
+    void ParticleChange();
+    void ScaleParmEditor();
+    void ImGuiTextureSelection();
+    void ApplyTexture(const std::string& textureName);
+    void DisplayFileSelection(const std::string& header, const std::vector<std::string>& filenames, int& selectedIndex,
+        const std::function<void(const std::string&)>& onApply);
 
 protected:
     /// parameters
     Parameters parameters_;
     GroupParamaters groupParamaters_;
     GlobalParameter* globalParameter_;
+
+    std::unique_ptr<RailManager> railManager_;
 
     ///* setting
     // type
@@ -111,6 +119,9 @@ protected:
     float intervalTime_;
     // Count
     int32_t particleCount_;
+
+    bool isMoveForRail_;
+    float moveSpeed_;
 
     // file
     std::string particleName_;

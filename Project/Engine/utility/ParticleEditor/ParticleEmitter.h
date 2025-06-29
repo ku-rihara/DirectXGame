@@ -22,9 +22,8 @@ private:
 	std::unique_ptr<Object3d> obj3d_;
 	WorldTransform emitBoxTransform_;
 
-	bool isMoveForRail_;
-	float moveSpeed_;
-	std::unique_ptr<RailManager> railManager_;
+
+	
 
 	std::string editorMessage_;
 
@@ -51,20 +50,8 @@ public:
 	void DebugDraw(const ViewProjection& viewProjection);
 
 	/// editor
-	void EditorUpdate();
-	void ParticleChange();
-	void ScaleParmEditor();
-	void DisplayFileSelection(const std::string& header, const std::vector<std::string>& filenames, int& selectedIndex,
-		const std::function<void(const std::string&)>& onApply);
-
-	// load save
-	void  ParamSaveForImGui()override;
-	void  ParamLoadForImGui()override;
-	void ApplyGlobalParameter(const std::string& particleName)override;
-	void ApplyTexture(const std::string& texturename);
-	void SetValues()override;
-	void ImGuiTextureSelection();
-
+	void EditorUpdate()override;
+	
 
 	///=================================================================================
 	/// getter method

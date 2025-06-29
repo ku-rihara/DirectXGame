@@ -1,10 +1,7 @@
 // ParticleEmitter.cpp
 
 #include "ParticleEmitter.h"
-#include "base/TextureManager.h"
 #include "Frame/Frame.h"
-#include "Function/GetFile.h"
-#include "ParticleCommon.h"
 #include "ParticleManager.h"
 #include <imgui.h>
 
@@ -46,7 +43,7 @@ void ParticleEmitter::Init() {
 
     // レールマネージャー
     railManager_ = std::make_unique<RailManager>();
-    railManager_->Init(particleName_);
+    railManager_->Init(particleName_ + "Emit");
 
     /// 発生位置可視化オブジェ
     obj3d_.reset(Object3d::CreateModel("DebugCube.obj"));
@@ -81,65 +78,14 @@ void ParticleEmitter::Update() {
 
     UpdateEmitTransform();
 
-    SetValues();
+   /* SetValues();*/
 }
 
-///=================================================================================
-/// Editor 更新
-///=================================================================================
 void ParticleEmitter::EditorUpdate() {
-#ifdef _DEBUG
+    ParticleParameter::EditorUpdate();
+}
 
-    ImGui::Begin(particleName_.c_str());
-    ImGui::PushID(particleName_.c_str());
 
-    // Color
-    if (ImGui::CollapsingHeader("Color")) {
-        ImGui::SeparatorText("Base Color:");
-        ImGui::ColorEdit4("Base", &parameters_.baseColor.x);
-
-        ImGui::SeparatorText("Color Range:");
-        ImGui::ColorEdit4("Max", &parameters_.colorDist.max.x);
-        ImGui::ColorEdit4("Min", &parameters_.colorDist.min.x);
-    }
-
-    /// rail
-    if (ImGui::CollapsingHeader("MoveForRail")) {
-        ImGui::SeparatorText("Paramater");
-        ImGui::Checkbox("isMoveForRail", &isMoveForRail_);
-        ImGui::DragFloat("moveSpeed", &moveSpeed_, 0.001f);
-
-        ImGui::SeparatorText("ControlPoints:");
-        railManager_->ImGuiEdit();
-    }
-
-    // Position
-    if (ImGui::CollapsingHeader("Position")) {
-        ImGui::SeparatorText("Position Base:");
-        ImGui::DragFloat3("Base", &parameters_.emitPos.x, 0.1f);
-
-        ImGui::SeparatorText("Position Range:");
-        ImGui::DragFloat3("Position Max", &parameters_.positionDist.max.x, 0.1f);
-        ImGui::DragFloat3("Position Min", &parameters_.positionDist.min.x, 0.1f);
-    }
-
-    // Velocity
-    if (ImGui::CollapsingHeader("Velocity")) {
-        ImGui::Checkbox("IsFloatVelocity", &parameters_.isFloatVelocity);
-        if (parameters_.isFloatVelocity) {
-            ImGui::SeparatorText("Velocity Range:");
-            ImGui::DragFloat("Velocity Max", &parameters_.speedDist.max, 0.1f);
-            ImGui::DragFloat("Velocity Min", &parameters_.speedDist.min, 0.1f);
-        } else {
-            ImGui::SeparatorText("V3 VelocityRange");
-            ImGui::DragFloat3("VelocityV3 Max", reinterpret_cast<float*>(&parameters_.velocityDistV3.max), 0.1f);
-            ImGui::DragFloat3("VelocityV3 Min", reinterpret_cast<float*>(&parameters_.velocityDistV3.min), 0.1f);
-        }
-     
-        ImGui::SeparatorText("Direction Range:");
-        ImGui::DragFloat3("Direction Max", &parameters_.directionDist.max.x, 0.01f, -1.0f, 1.0f);
-        ImGui::DragFloat3("Direction Min", &parameters_.directionDist.min.x, 0.01f, -1.0f, 1.0f);
-    }
 
     // scale Parm
     ScaleParmEditor();
@@ -310,51 +256,6 @@ void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
 #endif // _DEBUG
 }
 
-// ImGuiファイル項目選択
-void ParticleEmitter::DisplayFileSelection(const std::string& header, const std::vector<std::string>& filenames, int& selectedIndex, const std::function<void(const std::string&)>& onApply) {
-    if (!filenames.empty()) {
-        std::vector<const char*> names;
-        for (const auto& file : filenames) {
-            names.push_back(file.c_str());
-        }
-
-        if (ImGui::CollapsingHeader(header.c_str())) {
-            // リストボックスの表示
-            ImGui::ListBox(header.c_str(), &selectedIndex, names.data(), static_cast<int>(names.size()));
-
-            // 適用ボタン
-            if (ImGui::Button(("Apply:" + header).c_str())) {
-                onApply(filenames[selectedIndex]);
-            }
-        }
-    } else {
-        ImGui::Text("No %s files found.", header.c_str());
-    }
-}
-
-// Particleファイル選択
-void ParticleEmitter::ParticleChange() {
-    static int selectedIndex           = 0; // 現在選択中のインデックス
-    std::vector<std::string> filenames = ParticleManager::GetInstance()->GetParticleFiles();
-
-    DisplayFileSelection("SelectParticle", filenames, selectedIndex, [this](const std::string& selectedFile) {
-        ApplyGlobalParameter(selectedFile);
-        globalParameter_->LoadFile(selectedFile, folderName_);
-        ImGui::Text("Load Successful: %s", (folderName_ + selectedFile).c_str());
-    });
-}
-
-/// texture選択
-void ParticleEmitter::ImGuiTextureSelection() {
-    static int selectedIndex           = 0; // 現在選択中のインデックス
-    std::vector<std::string> filenames = GetFileNamesForDyrectry(textureFilePath_);
-
-    DisplayFileSelection("SelectTexture", filenames, selectedIndex, [this](const std::string& selectedFile) {
-        ApplyTexture(selectedFile);
-
-        ImGui::Text("Texture Applied: %s", selectedFile.c_str());
-    });
-}
 
 ///=================================================================================
 /// テクスチャ切り替え
