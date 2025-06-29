@@ -259,6 +259,7 @@ void GlobalParameter::SaveFile(const std::string& groupName, const std::string& 
 }
 
 void GlobalParameter::LoadFiles() {
+
     std::filesystem::path dir(kDirectoryPath);
     if (!std::filesystem::exists(dir))
         return;
@@ -431,6 +432,10 @@ void GlobalParameter::SyncParamForGroup(const std::string& group) {
             item.pullVariant();
         }
     }
+}
+
+void GlobalParameter::BindResetAll() {
+    bindings_.clear();
 }
 
 template void GlobalParameter::SetValue<int>(const std::string& groupName, const std::string& key, int value, WidgetType widgetType);
