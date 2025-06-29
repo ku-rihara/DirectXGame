@@ -47,6 +47,13 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
 
     assert(object.contains("type"));
 
+    if (object["isDisable"].contains("isDisable")) {
+        bool disabled = object["isDisable"].get<bool>();
+        if (disabled) {
+            return;
+        }
+    }
+
     // 種別を取得
     std::string type = object["type"].get<std::string>();
 
