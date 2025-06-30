@@ -3,6 +3,7 @@
 #include "mathFunction.h"
 #include <cassert>
 #include <fstream>
+#include <unordered_set>
 
 void PutObjForBlender::LoadJsonFile(const std::string& _fileName) {
     fileName_ = _fileName;
@@ -105,7 +106,7 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
 
                         //  エミッターを追加
                         objectData.emitters.emplace_back(
-                            ParticleEmitter::CreateParticlePrimitive(name, primitiveType, 400));
+                            ParticleEmitter::CreateParticlePrimitive(name, primitiveType, 500));
                     }
                 }
             }
@@ -150,12 +151,24 @@ void PutObjForBlender::StartRailEmitAll() {
 }
 
 void PutObjForBlender::EmitterAllEdit() {
+    std::unordered_set<std::string> processedParticleNames;
+
     for (auto& objectData : levelData_->objects) {
         for (std::unique_ptr<ParticleEmitter>& emitter : objectData.emitters) {
+            const std::string& name = emitter->GetParticleName(); // ParticleNameを取得
+
+            // 既に処理済みならスキップ
+            if (processedParticleNames.count(name) > 0) {
+                continue;
+            }
+
+            // 未処理なら処理して、記録に追加
             emitter->EditorUpdate();
+            processedParticleNames.insert(name);
         }
     }
-  }
+}
+
 
 void PutObjForBlender::PutObject() {
     assert(levelData_); // LoadJsonFile 呼び出し前提

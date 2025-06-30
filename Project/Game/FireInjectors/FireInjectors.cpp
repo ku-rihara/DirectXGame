@@ -20,6 +20,7 @@ void FireInjectors::Init() {
 void FireInjectors::Update() {
     putObjForBlender_->EmitterAllUpdate();
     putObjForBlender_->EmitAll();
+    putObjForBlender_->EmitterAllEdit();
 
     if (pCombo_->GetComboCount() == 0) {
         hasFiredThisCombo_ = false;
