@@ -36,6 +36,7 @@ public:
 
     void EmitterAllUpdate();
     void EmitAll();
+    void StartRailEmitAll();
 
     void ConvertJSONToObjects(const nlohmann::json& object);
     PrimitiveType StringToPrimitiveType(const std::string& typeStr);

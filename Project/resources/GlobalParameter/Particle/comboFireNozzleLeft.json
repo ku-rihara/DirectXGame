@@ -1,12 +1,12 @@
 {
-    "fire1": {
+    "comboFireNozzleLeft": {
         "AdaptRotateIsX": false,
         "AdaptRotateIsY": false,
         "AdaptRotateIsZ": false,
         "BaseColor": [
-            1.0,
-            1.0,
-            1.0,
+            0.8823529481887817,
+            0.5622837543487549,
+            0.5622837543487549,
             0.0
         ],
         "Color Max": [
@@ -22,23 +22,23 @@
             0.0
         ],
         "Direction Max": [
-            -0.23899999260902405,
+            0.39100000262260437,
             1.0,
             0.0
         ],
         "Direction Min": [
-            0.3490000069141388,
-            1.0,
+            -0.3409999907016754,
+            0.6800000071525574,
             0.0
         ],
         "Gravity": 0.0,
-        "IntervalTime": 0.10999999940395355,
-        "LifeTime": 0.23999999463558197,
-        "Particle Count": 11,
+        "IntervalTime": 0.0,
+        "LifeTime": 0.14000000059604645,
+        "Particle Count": 1,
         "Position Base": [
-            0.0,
-            22.852664947509766,
-            0.0
+            -6.000000476837158,
+            25.0,
+            1.2964019333594479e-06
         ],
         "Position Max": [
             0.0,
@@ -78,25 +78,25 @@
         "Scale Max": 15.0,
         "Scale Min": 15.0,
         "ScaleV3 Max": [
-            13.0,
-            15.0,
+            8.0,
+            8.0,
             0.0
         ],
         "ScaleV3 Min": [
-            13.0,
-            15.0,
+            8.0,
+            8.0,
             0.0
         ],
         "Speed Max": 51.099998474121094,
         "Speed Min": 0.0,
         "SpeedV3 Max": [
-            -4.0,
-            2.5999999046325684,
+            1.0,
+            3.0,
             0.0
         ],
         "SpeedV3 Min": [
-            4.0,
-            60.900001525878906,
+            -1.0,
+            2.0,
             0.0
         ],
         "UV IsRoop": false,
@@ -124,9 +124,9 @@
         "isRotateforDirection": false,
         "isScalerScale": false,
         "isShot": false,
-        "moveSpeed": 55.0,
+        "moveSpeed": 91.0,
         "preBillBordType_": 0,
-        "scaleEaseParm.easeTypeInt": 0,
+        "scaleEaseParm.easeTypeInt": 3,
         "scaleEaseParm.endValueF.max": 1.7999999523162842,
         "scaleEaseParm.endValueF.min": 1.2999999523162842,
         "scaleEaseParm.endValueV3.max": [
@@ -140,7 +140,7 @@
             0.0
         ],
         "scaleEaseParm.isScaleEase": true,
-        "scaleEaseParm.maxTime": 0.3199999928474426,
+        "scaleEaseParm.maxTime": 0.36000001430511475,
         "selectedTexturePath_": "Resources/texture/fire.png"
     }
 }

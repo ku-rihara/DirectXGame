@@ -141,6 +141,14 @@ void PutObjForBlender::EmitAll() {
     }
 }
 
+void PutObjForBlender::StartRailEmitAll() {
+    for (auto& objectData : levelData_->objects) {
+        for (std::unique_ptr<ParticleEmitter>& emitter : objectData.emitters) {
+            emitter->StartRailEmit();
+        }
+    }
+ }
+
 void PutObjForBlender::PutObject() {
     assert(levelData_); // LoadJsonFile 呼び出し前提
 

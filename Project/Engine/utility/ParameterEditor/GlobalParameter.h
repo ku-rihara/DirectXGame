@@ -103,6 +103,7 @@ public:
     template <typename T>
     void Bind(const std::string& group, const std::string& key, T* variable, WidgetType widgetType = WidgetType::NONE);
     void BindResetAll();
+    void CopyGroup(const std::string& fromGroup, const std::string& toGroup);
 
     void SyncAll();
     void SyncParamForGroup(const std::string& group);

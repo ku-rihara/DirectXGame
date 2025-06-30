@@ -359,8 +359,8 @@ void ParticleParameter::ParticleChange() {
     std::vector<std::string> filenames = ParticleManager::GetInstance()->GetParticleFiles();
 
     DisplayFileSelection("SelectParticle", filenames, selectedIndex, [this](const std::string& selectedFile) {
-        globalParameter_->SyncParamForGroup(selectedFile);
-        globalParameter_->LoadFile(selectedFile, folderName_);
+        globalParameter_->CopyGroup(selectedFile, particleName_);
+        globalParameter_->SyncParamForGroup(particleName_);
       /*  ApplyGlobalParameter(selectedFile);
         globalParameter_->LoadFile(selectedFile, folderName_);*/
         ImGui::Text("Load Successful: %s", (folderName_ + selectedFile).c_str());
