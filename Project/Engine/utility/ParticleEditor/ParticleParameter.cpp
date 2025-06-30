@@ -110,7 +110,8 @@ void ParticleParameter::BindParams() {
     globalParameter_->Bind(particleName_, "isShot", &isShot_);
     globalParameter_->Bind(particleName_, "isAlphaNoMove", &groupParamaters_.isAlphaNoMove);
 
-     globalParameter_->Bind(particleName_, "isMoveForRail", &isMoveForRail_);
+     globalParameter_->Bind(particleName_, "isRailRoop", &isRailRoop_);
+    globalParameter_->Bind(particleName_, "isMoveForRail", &isMoveForRail_);
     globalParameter_->Bind(particleName_, "moveSpeed", &moveSpeed_);
 
 
@@ -154,6 +155,7 @@ void ParticleParameter::EditorUpdate() {
     /// rail
     if (ImGui::CollapsingHeader("MoveForRail")) {
         ImGui::SeparatorText("Paramater");
+        ImGui::Checkbox("isRailRoop", &isRailRoop_);
         ImGui::Checkbox("isMoveForRail", &isMoveForRail_);
         ImGui::DragFloat("moveSpeed", &moveSpeed_, 0.1f);
 
@@ -283,6 +285,7 @@ void ParticleParameter::EditorUpdate() {
     ImGui::End();
 #endif // _DEBUG
 }
+
 void ParticleParameter::ScaleParmEditor() {
     // Scale
     if (ImGui::CollapsingHeader("Scale")) {

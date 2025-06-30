@@ -58,6 +58,11 @@ void ParticleEmitter::Emit() {
     // 　発生座標のパターン切り替え
     if (isMoveForRail_) {
         parameters_.emitPos = railManager_->GetWorldTransform().GetWorldPos();
+
+        if (!isStartRailMove_) {
+            return;
+        }
+
     } else {
         parameters_.emitPos = parameters_.emitPos;
     }
@@ -68,24 +73,44 @@ void ParticleEmitter::Emit() {
 
         ParticleManager::GetInstance()->Emit(
             particleName_, parameters_, groupParamaters_, particleCount_);
-            currentTime_ = 0.0f;
+        currentTime_ = 0.0f;
     }
 }
 
 void ParticleEmitter::Update() {
-    // レール更新
-    railManager_->Update(moveSpeed_);
 
+    RailMoveUpdate();
     UpdateEmitTransform();
 
-   /* SetValues();*/
+    /* SetValues();*/
+}
+
+void ParticleEmitter::RailMoveUpdate() {
+    // レール更新
+    if (!isStartRailMove_) {
+        return;
+    }
+    railManager_->Update(moveSpeed_);
+
+    if (railManager_->GetRailMoveTime() < 1.0f) {
+        return;
+    }
+
+    if (!isRailRoop_) {
+     isStartRailMove_ = false;
+    }
 }
 
 void ParticleEmitter::EditorUpdate() {
     ParticleParameter::EditorUpdate();
 }
 
+void ParticleEmitter::StartRailEmit() {
 
+    isStartRailMove_ = true;
+    railManager_->SetRailMoveTime(0.0f);
+    railManager_->SetIsRoop(isRailRoop_);
+}
 
 void ParticleEmitter::UpdateEmitTransform() {
     emitBoxTransform_.translation_ = parameters_.emitPos;
@@ -116,7 +141,6 @@ void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
 #endif // _DEBUG
 }
 
-
 ///=================================================================================
 /// テクスチャ切り替え
 ///=================================================================================
@@ -124,7 +148,6 @@ void ParticleEmitter::SetTextureHandle(const uint32_t& handle) {
     ParticleManager::GetInstance()->SetTextureHandle(particleName_, handle);
     // SetSelectedTexturePath(handle); // 選択されたテクスチャハンドルを更新
 }
-
 
 /// =======================================================================================
 /// setter method

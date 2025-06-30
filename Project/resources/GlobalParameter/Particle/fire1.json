@@ -120,6 +120,7 @@
         "isBillBord": true,
         "isFloatVelocity": false,
         "isMoveForRail": true,
+        "isRailRoop": false,
         "isRotateforDirection": false,
         "isScalerScale": false,
         "isShot": false,

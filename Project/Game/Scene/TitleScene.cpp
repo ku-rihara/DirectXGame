@@ -35,9 +35,11 @@ void TitleScene::Update() {
     for (int i = 0; i < EnemydamageEffect_.size(); i++) {
         EnemydamageEffect_[i]->Update();
         EnemydamageEffect_[i]->EditorUpdate();
-      /*  if (Input::GetInstance()->TrrigerKey(DIK_O)) {*/
-            EnemydamageEffect_[i]->Emit();
-        
+        EnemydamageEffect_[i]->Emit();
+
+        if (Input::GetInstance()->TrrigerKey(DIK_O)) {
+            EnemydamageEffect_[i]->StartRailEmit();
+        }
     }
     /* EnemydamageEffect_[0]->Update();
      EnemydamageEffect_[0]->EditorUpdate();
