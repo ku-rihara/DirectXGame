@@ -1,4 +1,5 @@
 #include "FireInjectors.h"
+#include"Combo/Combo.h"
 #include"Input/Input.h"
 #include <imgui.h>
 
@@ -20,9 +21,22 @@ void FireInjectors::Update() {
     putObjForBlender_->EmitterAllUpdate();
     putObjForBlender_->EmitAll();
 
-    if (Input::GetInstance()->TrrigerKey(DIK_T)) {
-        putObjForBlender_->StartRailEmitAll();
+    if (pCombo_->GetComboCount() == 0) {
+        hasFiredThisCombo_ = false;
+        return;
     }
+
+     // 発射条件
+    if ((pCombo_->GetComboCount() % fireShotComboNum_ == 0) && !hasFiredThisCombo_) {
+        putObjForBlender_->StartRailEmitAll();
+        hasFiredThisCombo_ = true;
+    }
+
+    // 発射条件を外れたら再び許可
+    if ((pCombo_->GetComboCount() % fireShotComboNum_) != 0) {
+        hasFiredThisCombo_ = false;
+    }
+    
 }
 
 

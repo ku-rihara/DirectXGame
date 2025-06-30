@@ -28,6 +28,7 @@ private:
     Combo* pCombo_;
 
     int32_t fireShotComboNum_;
+    bool hasFiredThisCombo_ = false;
 
 public:
     void SetCombo(Combo* combo);
