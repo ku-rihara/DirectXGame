@@ -1,5 +1,6 @@
 #include "FireInjectors.h"
 #include"Combo/Combo.h"
+#include"Frame/Frame.h"
 #include"Input/Input.h"
 #include <imgui.h>
 
@@ -33,13 +34,14 @@ void FireInjectors::Update() {
     for (int i = prevComboCount_ + 1; i <= currentCombo; ++i) {
         if (i % fireShotComboNum_ == 0) {
             putObjForBlender_->StartRailEmitAll();
+            putObjForBlender_->EasingAllReset();
             break;
         }
     }
 
     prevComboCount_ = currentCombo;
 
-  
+  putObjForBlender_->EasingAllUpdate(Frame::DeltaTimeRate());
     
 }
 

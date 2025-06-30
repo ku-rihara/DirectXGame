@@ -106,7 +106,7 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
 
                         //  エミッターを追加
                         objectData.emitters.emplace_back(
-                            ParticleEmitter::CreateParticlePrimitive(name, primitiveType, 300));
+                            ParticleEmitter::CreateParticlePrimitive(name, primitiveType, 1600));
                     }
                 }
             }
@@ -117,7 +117,7 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
         }
 
         // easing
-         if (object.contains("easing_filename")) {
+        if (object.contains("easing_filename")) {
             // ファイル名
             std::string easingFilename = object["easing_filename"].get<std::string>();
             objectData.easing.ApplyFromJson(easingFilename);
@@ -135,9 +135,9 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
 void PutObjForBlender::EmitterAllUpdate() {
 
     for (auto& objectData : levelData_->objects) {
-        for (std::unique_ptr<ParticleEmitter>& emitter: objectData.emitters) {
+        for (std::unique_ptr<ParticleEmitter>& emitter : objectData.emitters) {
             emitter->Update();
-        }     
+        }
     }
 }
 
@@ -157,10 +157,10 @@ void PutObjForBlender::StartRailEmitAll() {
     }
 }
 
- // easing
+// easing
 void PutObjForBlender::EasingAllReset() {
-    for (auto& objectData : levelData_->objects) {      
-           objectData.easing.Reset();      
+    for (auto& objectData : levelData_->objects) {
+        objectData.easing.Reset();
     }
 }
 void PutObjForBlender::EasingAllUpdate(const float& deltaTime) {
@@ -214,16 +214,20 @@ void PutObjForBlender::DrawAll(const ViewProjection& viewProjection) {
 }
 
 PrimitiveType PutObjForBlender::StringToPrimitiveType(const std::string& typeStr) {
-    if (typeStr == "Plane")
+    if (typeStr == "Plane") {
         return PrimitiveType::Plane;
-    if (typeStr == "Sphere")
+    }
+    if (typeStr == "Sphere") {
         return PrimitiveType::Sphere;
-    if (typeStr == "Cylinder")
+    }
+    if (typeStr == "Cylinder") {
         return PrimitiveType::Cylinder;
-    if (typeStr == "Ring")
+    }
+    if (typeStr == "Ring") {
         return PrimitiveType::Ring;
-    if (typeStr == "Box")
+    }
+    if (typeStr == "Box") {
         return PrimitiveType::Box;
-    assert(0 && "Unknown PrimitiveType");
-    return PrimitiveType::Box;
+    }
+    return PrimitiveType::Plane;
 }
