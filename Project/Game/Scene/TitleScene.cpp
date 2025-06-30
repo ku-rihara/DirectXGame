@@ -32,6 +32,7 @@ void TitleScene::Init() {
 	skydome_ = std::make_unique<Skydome>();
     titleRogo_ = std::make_unique<TitleRogo>();
     skyBox_ = std::make_unique<SkyBox>();
+    putObjForBlender_ = std::make_unique<PutObjForBlender>();
 
 	///=======================================================================================
 	/// 初期化
@@ -41,6 +42,8 @@ void TitleScene::Init() {
     skyBox_->Init();
 	player_->Init();
 	titleRogo_->Init();
+    putObjForBlender_->LoadJsonFile("gameScene.json");
+    putObjForBlender_->PutObject();
 		
 	alpha_ = 0.0f;
 	
@@ -123,7 +126,7 @@ void TitleScene::ModelDraw() {
 
 	
 	Model::PreDraw(commandList);
-	//skydome_->Draw(viewProjection_);
+    putObjForBlender_->DrawAll(viewProjection_);
 	field_->Draw(viewProjection_);
 	player_->Draw(viewProjection_);
 

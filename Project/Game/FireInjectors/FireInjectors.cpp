@@ -34,14 +34,14 @@ void FireInjectors::Update() {
     for (int i = prevComboCount_ + 1; i <= currentCombo; ++i) {
         if (i % fireShotComboNum_ == 0) {
             putObjForBlender_->StartRailEmitAll();
-            putObjForBlender_->EasingAllReset();
+          /*  putObjForBlender_->EasingAllReset();*/
             break;
         }
     }
 
     prevComboCount_ = currentCombo;
 
-  putObjForBlender_->EasingAllUpdate(Frame::DeltaTimeRate());
+ /* putObjForBlender_->EasingAllUpdate(Frame::DeltaTimeRate());*/
   
 }
 
