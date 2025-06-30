@@ -115,6 +115,13 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
                 emitter->SetTargetPosition(objectData.worldTransform.GetWorldPos());
             }
         }
+
+        // easing
+         if (object.contains("easing_filename")) {
+            // ファイル名
+            std::string easingFilename = object["easing_filename"].get<std::string>();
+            objectData.easing.ApplyFromJson(easingFilename);
+        }
     }
 
     // 子要素があるなら再帰呼び出し
@@ -147,6 +154,18 @@ void PutObjForBlender::StartRailEmitAll() {
         for (std::unique_ptr<ParticleEmitter>& emitter : objectData.emitters) {
             emitter->StartRailEmit();
         }
+    }
+}
+
+ // easing
+void PutObjForBlender::EasingAllReset() {
+    for (auto& objectData : levelData_->objects) {      
+           objectData.easing.Reset();      
+    }
+}
+void PutObjForBlender::EasingAllUpdate(const float& deltaTime) {
+    for (auto& objectData : levelData_->objects) {
+        objectData.easing.Update(deltaTime);
     }
 }
 

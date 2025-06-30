@@ -34,10 +34,15 @@ public:
     void PutObject();
     void DrawAll(const ViewProjection& viewProjection);
 
+    // emit
     void EmitterAllUpdate();
     void EmitAll();
     void StartRailEmitAll();
     void EmitterAllEdit();
+
+    // easing
+    void EasingAllReset();
+    void EasingAllUpdate(const float&deltaTime);
 
     void ConvertJSONToObjects(const nlohmann::json& object);
     PrimitiveType StringToPrimitiveType(const std::string& typeStr);
