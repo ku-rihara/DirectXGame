@@ -30,7 +30,8 @@ private:
     int32_t fireShotComboNum_;
 
       int prevComboCount_     = 0;
-    bool hasFiredThisCombo_ = false;
+  
+    bool isEasing_;
 
 public:
     void SetCombo(Combo* combo);

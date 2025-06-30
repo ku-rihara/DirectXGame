@@ -25,7 +25,6 @@ void FireInjectors::Update() {
     const int currentCombo = pCombo_->GetComboCount();
 
     if (currentCombo == 0) {
-        hasFiredThisCombo_ = false;
         prevComboCount_    = 0;
         return;
     }
@@ -39,6 +38,8 @@ void FireInjectors::Update() {
     }
 
     prevComboCount_ = currentCombo;
+
+  
     
 }
 
