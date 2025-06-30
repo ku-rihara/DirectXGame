@@ -310,6 +310,9 @@
     <Filter Include="MyEngine\.h\Animation">
       <UniqueIdentifier>{f713b9a0-da3f-43be-b0fa-f9350a0b4541}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\FireInjectors">
+      <UniqueIdentifier>{0b7b5e54-0d48-470f-91bf-bfc9c50b2e86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -783,6 +786,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Animation\ModelAnimation.cpp">
       <Filter>MyEngine\.cpp\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\FireInjectors\FireInjectors.cpp">
+      <Filter>Game\FireInjectors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1292,6 +1298,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Animation\ModelAnimation.h">
       <Filter>MyEngine\.h\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\FireInjectors\FireInjectors.h">
+      <Filter>Game\FireInjectors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

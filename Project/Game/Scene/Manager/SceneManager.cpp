@@ -64,7 +64,9 @@ void SceneManager::ChangeScene(const std::string& scenemane) {
         // 現在のシーンを終了
         scene_.reset();
     }
-
+    //// グローバル変数の読み込み
+    GlobalParameter::GetInstance()->BindResetAll();
+    GlobalParameter::GetInstance()->LoadFiles();
 	// 次のシーンを生成
 	nextScene_ = std::unique_ptr<BaseScene>(sceneFactory_->CreateScene(scenemane));
 	scene_ = std::move(nextScene_);
@@ -72,7 +74,4 @@ void SceneManager::ChangeScene(const std::string& scenemane) {
   
 	//パーティクルリセット
 	ParticleManager::GetInstance()->ResetAllParticles();
-	//// グローバル変数の読み込み
-    GlobalParameter::GetInstance()->BindResetAll();
-	GlobalParameter::GetInstance()->LoadFiles();
 }

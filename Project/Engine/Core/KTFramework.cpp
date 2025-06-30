@@ -124,6 +124,5 @@ void KTFramework::LoadAllTexture() {
     TextureManager::GetInstance()->LoadTexture("Resources/Texture/hitEffect.png");
     TextureManager::GetInstance()->LoadTexture("Resources/Texture/HowToOperate.png");
     TextureManager::GetInstance()->LoadTexture("Resources/Model/AudienceSeats/audienceSeats.png");
-    TextureManager::GetInstance()->LoadTexture("Resources/Model/FieldFence/FieldFence.png");
     TextureManager::GetInstance()->LoadTexture("Resources/Model/FieldSide/SideFiend.png");
 }

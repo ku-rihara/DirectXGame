@@ -1,0 +1,479 @@
+{
+    "name": "scene",
+    "objects": [
+        {
+            "type": "LIGHT",
+            "name": "Light",
+            "transform": {
+                "translation": [
+                    -7.957993507385254,
+                    47.70909881591797,
+                    8.392168998718262
+                ],
+                "rotation": [
+                    37.261051177978516,
+                    3.163706064224243,
+                    106.93632507324219
+                ],
+                "scaling": [
+                    2.0835955142974854,
+                    2.7713353633880615,
+                    2.696988582611084
+                ]
+            }
+        },
+        {
+            "type": "CAMERA",
+            "name": "Camera",
+            "transform": {
+                "translation": [
+                    -0.6246070861816406,
+                    33.02084732055664,
+                    6.514531135559082
+                ],
+                "rotation": [
+                    63.559295654296875,
+                    1.5625435025867773e-06,
+                    46.69194412231445
+                ],
+                "scaling": [
+                    2.565101385116577,
+                    2.418213367462158,
+                    2.8594412803649902
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "square.001_Cube.001",
+            "transform": {
+                "translation": [
+                    79.34648132324219,
+                    -45.0,
+                    5.110796928405762
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "FireInjector.obj",
+            "emitters": [
+                {
+                    "particle_name": "comboFireCenter",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleLeft",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleRigth",
+                    "primitive_type": "PLANE"
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "square.001_Cube.002",
+            "transform": {
+                "translation": [
+                    79.34648132324219,
+                    45.0,
+                    5.110796928405762
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "FireInjector.obj",
+            "emitters": [
+                {
+                    "particle_name": "comboFireCenter",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleLeft",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleRigth",
+                    "primitive_type": "PLANE"
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "square.001_Cube.003",
+            "transform": {
+                "translation": [
+                    79.34649658203125,
+                    0.0,
+                    5.110796928405762
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "FireInjector.obj",
+            "emitters": [
+                {
+                    "particle_name": "comboFireCenter",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleLeft",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleRigth",
+                    "primitive_type": "PLANE"
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "square.001_Cube.007",
+            "transform": {
+                "translation": [
+                    -46.530006408691406,
+                    82.1075439453125,
+                    5.110796928405762
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "FireInjector.obj",
+            "emitters": [
+                {
+                    "particle_name": "comboFireCenter",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleLeft",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleRigth",
+                    "primitive_type": "PLANE"
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "square.001_Cube.008",
+            "transform": {
+                "translation": [
+                    -0.3274650573730469,
+                    82.1075439453125,
+                    5.110796928405762
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "FireInjector.obj",
+            "emitters": [
+                {
+                    "particle_name": "comboFireCenter",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleLeft",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleRigth",
+                    "primitive_type": "PLANE"
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "square.001_Cube.009",
+            "transform": {
+                "translation": [
+                    43.97041702270508,
+                    82.1075439453125,
+                    5.110796928405762
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "FireInjector.obj",
+            "emitters": [
+                {
+                    "particle_name": "comboFireCenter",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleLeft",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleRigth",
+                    "primitive_type": "PLANE"
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "square.001_Cube.004",
+            "transform": {
+                "translation": [
+                    -82.81535339355469,
+                    0.0,
+                    5.110796928405762
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "FireInjector.obj",
+            "emitters": [
+                {
+                    "particle_name": "comboFireCenter",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleLeft",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleRigth",
+                    "primitive_type": "PLANE"
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "square.001_Cube.005",
+            "transform": {
+                "translation": [
+                    -82.81536865234375,
+                    45.0,
+                    5.110796928405762
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "FireInjector.obj",
+            "emitters": [
+                {
+                    "particle_name": "comboFireCenter",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleLeft",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleRigth",
+                    "primitive_type": "PLANE"
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "square.001_Cube.006",
+            "transform": {
+                "translation": [
+                    -82.81536865234375,
+                    -45.0,
+                    5.110796928405762
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "FireInjector.obj",
+            "emitters": [
+                {
+                    "particle_name": "comboFireCenter",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleLeft",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleRigth",
+                    "primitive_type": "PLANE"
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "square.001_Cube.010",
+            "transform": {
+                "translation": [
+                    43.97041702270508,
+                    -80.6666488647461,
+                    5.110796928405762
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "FireInjector.obj",
+            "emitters": [
+                {
+                    "particle_name": "comboFireCenter",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleLeft",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleRigth",
+                    "primitive_type": "PLANE"
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "square.001_Cube.011",
+            "transform": {
+                "translation": [
+                    -0.3274650573730469,
+                    -80.6666488647461,
+                    5.110796928405762
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "FireInjector.obj",
+            "emitters": [
+                {
+                    "particle_name": "comboFireCenter",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleLeft",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleRigth",
+                    "primitive_type": "PLANE"
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "square.001_Cube.012",
+            "transform": {
+                "translation": [
+                    -46.530006408691406,
+                    -80.6666488647461,
+                    5.110796928405762
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "FireInjector.obj",
+            "emitters": [
+                {
+                    "particle_name": "comboFireCenter",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleLeft",
+                    "primitive_type": "PLANE"
+                },
+                {
+                    "particle_name": "comboFireNozzleRigth",
+                    "primitive_type": "PLANE"
+                }
+            ]
+        }
+    ]
+}

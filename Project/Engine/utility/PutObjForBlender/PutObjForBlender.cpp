@@ -1,6 +1,6 @@
 #include "PutObjForBlender.h"
-#include"mathFunction.h"
 #include "3d/Model.h"
+#include "mathFunction.h"
 #include <cassert>
 #include <fstream>
 
@@ -37,7 +37,7 @@ void PutObjForBlender::LoadJsonFile(const std::string& _fileName) {
     // レベルデータ格納用インスタンスを生成
     levelData_ = std::make_unique<LevelData>();
 
-    //全オブジェクトを走査
+    // 全オブジェクトを走査
     for (const auto& object : jsonData_["objects"]) {
         ConvertJSONToObjects(object);
     }
@@ -47,7 +47,7 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
 
     assert(object.contains("type"));
 
-    if (object["isDisable"].contains("isDisable")) {
+    if (object.contains("isDisable")) {
         bool disabled = object["isDisable"].get<bool>();
         if (disabled) {
             return;
@@ -87,6 +87,33 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
         objectData.worldTransform.scale_.x = (float)transform["scaling"][0];
         objectData.worldTransform.scale_.y = (float)transform["scaling"][2];
         objectData.worldTransform.scale_.z = (float)transform["scaling"][1];
+
+        objectData.worldTransform.UpdateMatrix();
+
+        if (object.contains("emitters") && object["emitters"].is_array()) {
+
+            if (!object["emitters"].empty()) {
+                for (const auto& emitter : object["emitters"]) {
+
+                    if (emitter.contains("particle_name") && emitter.contains("primitive_type")) {
+
+                        std::string name             = emitter["particle_name"].get<std::string>();
+                        std::string primitiveTypeStr = emitter["primitive_type"].get<std::string>();
+
+                        //  PrimitiveType変換
+                        PrimitiveType primitiveType = StringToPrimitiveType(primitiveTypeStr);
+
+                        //  エミッターを追加
+                        objectData.emitters.emplace_back(
+                            ParticleEmitter::CreateParticlePrimitive(name, primitiveType, 300));
+                    }
+                }
+            }
+            // Emitter位置をオブジェクトに
+            for (std::unique_ptr<ParticleEmitter>& emitter : objectData.emitters) {
+                emitter->SetTargetPosition(objectData.worldTransform.GetWorldPos());
+            }
+        }
     }
 
     // 子要素があるなら再帰呼び出し
@@ -96,6 +123,32 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
         }
     }
 }
+
+void PutObjForBlender::EmitterAllUpdate() {
+
+    for (auto& objectData : levelData_->objects) {
+        for (std::unique_ptr<ParticleEmitter>& emitter: objectData.emitters) {
+            emitter->Update();
+        }     
+    }
+}
+
+void PutObjForBlender::EmitAll() {
+    for (auto& objectData : levelData_->objects) {
+        for (std::unique_ptr<ParticleEmitter>& emitter : objectData.emitters) {
+            emitter->Emit();
+        }
+    }
+}
+
+void PutObjForBlender::StartRailEmitAll() {
+    for (auto& objectData : levelData_->objects) {
+        for (std::unique_ptr<ParticleEmitter>& emitter : objectData.emitters) {
+            emitter->StartRailEmit();
+        }
+    }
+ }
+
 void PutObjForBlender::PutObject() {
     assert(levelData_); // LoadJsonFile 呼び出し前提
 
@@ -118,5 +171,25 @@ void PutObjForBlender::DrawAll(const ViewProjection& viewProjection) {
 
     for (auto& obj : levelData_->objects) {
         DrawObject(obj, viewProjection);
+    }
+}
+
+PrimitiveType PutObjForBlender::StringToPrimitiveType(const std::string& typeStr) {
+    if (typeStr == "Plane") {
+        return PrimitiveType::Plane;
+    }
+    if (typeStr == "Sphere") {
+        return PrimitiveType::Sphere;
+    }
+    if (typeStr == "Cylinder") {
+        return PrimitiveType::Cylinder;
+    }
+    if (typeStr == "Ring") {
+        return PrimitiveType::Ring;
+    }
+    if (typeStr == "Box") {
+        return PrimitiveType::Box;
+    } else {
+        return PrimitiveType::Plane;
     }
 }

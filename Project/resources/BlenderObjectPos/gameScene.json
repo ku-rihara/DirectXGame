@@ -133,28 +133,6 @@
         },
         {
             "type": "MESH",
-            "name": "objfence.246",
-            "transform": {
-                "translation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    105.30316925048828,
-                    101.40791320800781,
-                    107.86892700195312
-                ]
-            },
-            "file_name": "FieldFence.obj"
-        },
-        {
-            "type": "MESH",
             "name": "Rope_2_Cylinder.005",
             "transform": {
                 "translation": [
@@ -174,6 +152,29 @@
                 ]
             },
             "file_name": "FieldSide.obj"
+        },
+        {
+            "type": "MESH",
+            "name": "平面",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    90.00000762939453,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isDisable": true,
+            "file_name": "ground.obj"
         }
     ]
 }

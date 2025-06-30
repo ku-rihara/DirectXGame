@@ -35,6 +35,7 @@ void GameScene::Init() {
     combo_            = std::make_unique<Combo>();
     putObjForBlender_ = std::make_unique<PutObjForBlender>();
     comboCreate_      = std::make_unique<ComboCreateEditor>();
+    fireInjectors_      = std::make_unique<FireInjectors>();
 
     ///=======================================================================================
     /// 初期化
@@ -48,6 +49,7 @@ void GameScene::Init() {
     combo_->Init();
     enemyManager_->Init();
     enemySpawner_->Init();
+    fireInjectors_->Init();
     gamecamera_->Init();
     howToOperate_->Init();
     viewProjection_.Init();
@@ -67,7 +69,7 @@ void GameScene::Init() {
     player_->SetLockOn(lockOn_.get());
     player_->SetGameCamera(gamecamera_.get());
     enemySpawner_->SetEnemyManager(enemyManager_.get());
-  
+    fireInjectors_->SetCombo(combo_.get());
 
     enemyManager_->FSpawn();
 
@@ -126,6 +128,7 @@ void GameScene::Update() {
     enemySpawner_->Update();
     enemyManager_->Update();
     combo_->Update();
+    fireInjectors_->Update();
     gamecamera_->Update();
 
     //
@@ -164,10 +167,12 @@ void GameScene::ModelDraw() {
     Model::PreDraw(commandList);
 
     putObjForBlender_->DrawAll(viewProjection_);
+    fireInjectors_->Draw(viewProjection_);
 
     field_->Draw(viewProjection_);
     player_->Draw(viewProjection_);
     enemyManager_->Draw(viewProjection_);
+
 
     ParticleManager::GetInstance()->Draw(viewProjection_);
 
@@ -209,6 +214,7 @@ void GameScene::Debug() {
     player_->AdjustParam();
     enemyManager_->AdjustParam();
     combo_->AdjustParam();
+    fireInjectors_->AdjustParam();
 
     ImGui::End();
 #endif

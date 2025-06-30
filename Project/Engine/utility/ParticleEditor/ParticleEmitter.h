@@ -22,7 +22,8 @@ private:
 	std::unique_ptr<Object3d> obj3d_;
 	WorldTransform emitBoxTransform_;
 
-
+	bool isStartRailMove_;
+    
 	
 
 	std::string editorMessage_;
@@ -44,6 +45,8 @@ public:
 	void Init();
 
 	void Emit();
+    void StartRailEmit();
+
 	void UpdateEmitTransform();
 	void Update();
 	void RailDraw(const ViewProjection& viewProjection);
@@ -52,7 +55,10 @@ public:
 	/// editor
 	void EditorUpdate()override;
 	
+	private:
+    void RailMoveUpdate();
 
+    public:
 	///=================================================================================
 	/// getter method
 	///=================================================================================

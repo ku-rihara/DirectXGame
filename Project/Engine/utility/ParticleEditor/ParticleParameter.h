@@ -121,6 +121,7 @@ protected:
     int32_t particleCount_;
 
     bool isMoveForRail_;
+    bool isRailRoop_;
     float moveSpeed_;
 
     // file

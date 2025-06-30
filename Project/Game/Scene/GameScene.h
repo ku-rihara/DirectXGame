@@ -9,14 +9,14 @@
 #include "Enemy/EnemyManager.h"
 #include "Enemy/Spawner/EnemySpawner.h"
 #include "Field/Field.h"
+#include "FireInjectors/FireInjectors.h"
 #include "GameCamera/GameCamera.h"
 #include "LockOn/LockOn.h"
 #include "Player/Player.h"
+#include "SkyBox/SkyBox.h"
 #include "SkyDome/SkyDome.h"
 #include "UI/HowToOperate.h"
 #include "utility/PutObjForBlender/PutObjForBlender.h"
-
-#include "SkyBox/SkyBox.h"
 
 /// <summary>
 /// ゲームシーン
@@ -39,6 +39,7 @@ private:
     std::unique_ptr<HowToOperate> howToOperate_     = nullptr;
     std::unique_ptr<Combo> combo_                   = nullptr;
     std::unique_ptr<ComboCreateEditor> comboCreate_ = nullptr;
+    std::unique_ptr<FireInjectors> fireInjectors_   = nullptr;
 
     std::unique_ptr<PutObjForBlender> putObjForBlender_ = nullptr;
 

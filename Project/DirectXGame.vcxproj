@@ -109,6 +109,7 @@
     <ClCompile Include="Game\Enemy\Spawner\EnemySpawner.cpp" />
     <ClCompile Include="Game\Enemy\StrongEnemy.cpp" />
     <ClCompile Include="Game\Field\Field.cpp" />
+    <ClCompile Include="Game\FireInjectors\FireInjectors.cpp" />
     <ClCompile Include="Game\GameCamera\Behavior\BaseGameCameraBehavior.cpp" />
     <ClCompile Include="Game\GameCamera\Behavior\GameCameraBacklash.cpp" />
     <ClCompile Include="Game\GameCamera\Behavior\GameCameraRoot.cpp" />
@@ -279,6 +280,7 @@
     <ClInclude Include="Game\Enemy\Spawner\EnemySpawner.h" />
     <ClInclude Include="Game\Enemy\StrongEnemy.h" />
     <ClInclude Include="Game\Field\Field.h" />
+    <ClInclude Include="Game\FireInjectors\FireInjectors.h" />
     <ClInclude Include="Game\GameCamera\Behavior\BaseGameCameraBehavior.h" />
     <ClInclude Include="Game\GameCamera\Behavior\GameCameraBacklash.h" />
     <ClInclude Include="Game\GameCamera\Behavior\GameCameraRoot.h" />
