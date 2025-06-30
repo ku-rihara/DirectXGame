@@ -28,6 +28,8 @@ private:
     Combo* pCombo_;
 
     int32_t fireShotComboNum_;
+
+      int prevComboCount_     = 0;
     bool hasFiredThisCombo_ = false;
 
 public:

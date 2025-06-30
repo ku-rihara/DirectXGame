@@ -22,21 +22,23 @@ void FireInjectors::Update() {
     putObjForBlender_->EmitAll();
     putObjForBlender_->EmitterAllEdit();
 
-    if (pCombo_->GetComboCount() == 0) {
+    const int currentCombo = pCombo_->GetComboCount();
+
+    if (currentCombo == 0) {
         hasFiredThisCombo_ = false;
+        prevComboCount_    = 0;
         return;
     }
 
-     // 発射条件
-    if ((pCombo_->GetComboCount() % fireShotComboNum_ == 0) && !hasFiredThisCombo_) {
-        putObjForBlender_->StartRailEmitAll();
-        hasFiredThisCombo_ = true;
+    // コンボが一気に飛んだ場合も検出できるように
+    for (int i = prevComboCount_ + 1; i <= currentCombo; ++i) {
+        if (i % fireShotComboNum_ == 0) {
+            putObjForBlender_->StartRailEmitAll();
+            break;
+        }
     }
 
-    // 発射条件を外れたら再び許可
-    if ((pCombo_->GetComboCount() % fireShotComboNum_) != 0) {
-        hasFiredThisCombo_ = false;
-    }
+    prevComboCount_ = currentCombo;
     
 }
 
