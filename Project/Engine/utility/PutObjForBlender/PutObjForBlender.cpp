@@ -105,7 +105,7 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
 
                         //  エミッターを追加
                         objectData.emitters.emplace_back(
-                            ParticleEmitter::CreateParticlePrimitive(name, primitiveType, 300));
+                            ParticleEmitter::CreateParticlePrimitive(name, primitiveType, 400));
                     }
                 }
             }
