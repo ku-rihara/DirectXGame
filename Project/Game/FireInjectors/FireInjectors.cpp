@@ -42,7 +42,7 @@ void FireInjectors::Update() {
     prevComboCount_ = currentCombo;
 
   putObjForBlender_->EasingAllUpdate(Frame::DeltaTimeRate());
-    
+  
 }
 
 

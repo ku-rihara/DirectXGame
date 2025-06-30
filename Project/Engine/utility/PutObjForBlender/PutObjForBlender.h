@@ -1,28 +1,30 @@
 #pragma once
+#include "3d/object3d.h"
+#include "3d/WorldTransform.h"
+#include "Easing.h"
+#include "utility/ParticleEditor/ParticleEmitter.h"
+#include <json.hpp>
+#include <list>
 #include <string>
 #include <vector>
-#include"3d/object3d.h"
-#include"3d/WorldTransform.h"
-#include"Easing.h"
-#include"utility/ParticleEditor/ParticleEmitter.h"
-#include <list>
-#include <json.hpp>
 
 class PutObjForBlender {
 public:
     // レベルデータ
     struct LevelData {
-        //オブジェクト1個分のデータ
+        // オブジェクト1個分のデータ
         struct ObjectData {
             std::string fileName;
-           WorldTransform worldTransform; 
-           std::unique_ptr<Object3d> object3d;
-           std::list<ObjectData> children;
-           Easing<Vector3> easing;
-           std::vector<std::unique_ptr<ParticleEmitter>> emitters;
+            WorldTransform worldTransform;
+            std::unique_ptr<Object3d> object3d;
+            std::list<ObjectData> children;
+            Easing<Vector3> easing;
+            std::vector<std::unique_ptr<ParticleEmitter>> emitters;
+            Vector3 tempEasingValue; 
+            std::string strType; 
         };
-        //オブジェクトのコンテナ
-        std::vector<ObjectData>objects;
+        // オブジェクトのコンテナ
+        std::vector<ObjectData> objects;
     };
 
 public:
@@ -42,10 +44,12 @@ public:
 
     // easing
     void EasingAllReset();
-    void EasingAllUpdate(const float&deltaTime);
+    void EasingAllUpdate(const float& deltaTime);
 
     void ConvertJSONToObjects(const nlohmann::json& object);
     PrimitiveType StringToPrimitiveType(const std::string& typeStr);
+
+    void ApplyEasingToTransform(LevelData::ObjectData& objectData);
 
 private:
     void DrawObject(LevelData::ObjectData& objectData, const ViewProjection& viewProjection);
@@ -54,7 +58,7 @@ private:
     const std::string directoryPath_ = "Resources/BlenderObjectPos/";
     std::string fileName_;
     std::unique_ptr<LevelData> levelData_;
-  
+
     // jsonデータ
     nlohmann::json jsonData_;
 
