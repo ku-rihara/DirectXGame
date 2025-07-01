@@ -116,27 +116,11 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
             }
         }
 
-       // easing
-        if (object.contains("easing_filename")) {
+        // easing
+         if (object.contains("easing_filename")) {
+            // ファイル名
             std::string easingFilename = object["easing_filename"].get<std::string>();
             objectData.easing.ApplyFromJson(easingFilename);
-            objectData.easing.Reset();
-        }
-
-        if (object.contains("str_type")) {
-            objectData.strType = object["str_type"].get<std::string>();
-
-            // 初期値を設定
-            if (objectData.strType == "S") {
-                objectData.tempEasingValue = objectData.worldTransform.scale_;
-                objectData.easing.SetAdaptValue(&objectData.tempEasingValue);
-            } else if (objectData.strType == "T") {
-                objectData.tempEasingValue = objectData.worldTransform.translation_;
-                objectData.easing.SetAdaptValue(&objectData.tempEasingValue);
-            } else if (objectData.strType == "R") {
-                objectData.tempEasingValue = objectData.worldTransform.rotation_;
-                objectData.easing.SetAdaptValue(&objectData.tempEasingValue);
-            }
         }
     }
 
@@ -151,9 +135,9 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
 void PutObjForBlender::EmitterAllUpdate() {
 
     for (auto& objectData : levelData_->objects) {
-        for (std::unique_ptr<ParticleEmitter>& emitter : objectData.emitters) {
+        for (std::unique_ptr<ParticleEmitter>& emitter: objectData.emitters) {
             emitter->Update();
-        }
+        }     
     }
 }
 
@@ -173,34 +157,15 @@ void PutObjForBlender::StartRailEmitAll() {
     }
 }
 
-// 更新関数を修正
+ // easing
+void PutObjForBlender::EasingAllReset() {
+    for (auto& objectData : levelData_->objects) {      
+           objectData.easing.Reset();      
+    }
+}
 void PutObjForBlender::EasingAllUpdate(const float& deltaTime) {
     for (auto& objectData : levelData_->objects) {
-        // イージング更新
         objectData.easing.Update(deltaTime);
-
-        // 仮の値からWorldTransformに適用
-        ApplyEasingToTransform(objectData);
-    }
-}
-
-// 適用関数（structから分離）
-void PutObjForBlender::ApplyEasingToTransform(LevelData::ObjectData& objectData) {
-    if (objectData.strType == "S") {
-        objectData.worldTransform.scale_ = objectData.tempEasingValue;
-    } else if (objectData.strType == "T") {
-        objectData.worldTransform.translation_ = objectData.tempEasingValue;
-    } else if (objectData.strType == "R") {
-        objectData.worldTransform.rotation_ = objectData.tempEasingValue;
-    }
-    objectData.worldTransform.UpdateMatrix();
-}
-
-
-// easing
-void PutObjForBlender::EasingAllReset() {
-    for (auto& objectData : levelData_->objects) {
-        objectData.easing.Reset();
     }
 }
 
@@ -222,6 +187,7 @@ void PutObjForBlender::EmitterAllEdit() {
         }
     }
 }
+
 
 void PutObjForBlender::PutObject() {
     assert(levelData_); // LoadJsonFile 呼び出し前提
@@ -263,6 +229,7 @@ PrimitiveType PutObjForBlender::StringToPrimitiveType(const std::string& typeStr
     }
     if (typeStr == "Box") {
         return PrimitiveType::Box;
+    } else {
+        return PrimitiveType::Plane;
     }
-    return PrimitiveType::Plane;
 }
