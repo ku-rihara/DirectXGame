@@ -29,7 +29,7 @@ void GameScene::Init() {
     ground_->Init();
     plane_->Init();
     skuBox_->Init();
-    putObjForBlender->LoadJsonFile("scene.json");
+    putObjForBlender->LoadJsonFile("gamescene.json");
     putObjForBlender->PutObject();
 
     isDebugCameraActive_ = true;

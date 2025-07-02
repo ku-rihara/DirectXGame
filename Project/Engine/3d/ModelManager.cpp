@@ -1,7 +1,7 @@
 #include "ModelManager.h"
 
 ModelManager* ModelManager::instance_ = nullptr;
-std::map<std::string, std::unique_ptr<Model>> ModelManager::models_; // staticな変数として定義
+std::map<std::string, std::unique_ptr<Model>> ModelManager::models_;
 
 // シングルトンインスタンス取得
 ModelManager* ModelManager::GetInstance() {

@@ -259,6 +259,7 @@ void GlobalParameter::SaveFile(const std::string& groupName, const std::string& 
 }
 
 void GlobalParameter::LoadFiles() {
+
     std::filesystem::path dir(kDirectoryPath);
     if (!std::filesystem::exists(dir))
         return;
@@ -375,23 +376,58 @@ void GlobalParameter::LoadFile(const std::string& groupName, const std::string& 
     }
 }
 
-void GlobalParameter::ParamSaveForImGui(const std::string& groupName) {
+void GlobalParameter::CopyGroup(const std::string& fromGroup, const std::string& toGroup) {
+    auto it = dates_.find(fromGroup);
+    if (it == dates_.end())
+        return;
+
+    Group& sourceGroup = it->second;
+    Group& destGroup   = dates_[toGroup]; 
+
+    for (const auto& [key, valueAndSettings] : sourceGroup) {
+        const auto& variant  = valueAndSettings.first;
+        const auto& settings = valueAndSettings.second;
+
+        // コピー
+        if (std::holds_alternative<int32_t>(variant)) {
+            destGroup[key] = {std::get<int32_t>(variant), settings};
+        } else if (std::holds_alternative<uint32_t>(variant)) {
+            destGroup[key] = {std::get<uint32_t>(variant), settings};
+        } else if (std::holds_alternative<float>(variant)) {
+            destGroup[key] = {std::get<float>(variant), settings};
+        } else if (std::holds_alternative<Vector2>(variant)) {
+            destGroup[key] = {std::get<Vector2>(variant), settings};
+        } else if (std::holds_alternative<Vector3>(variant)) {
+            destGroup[key] = {std::get<Vector3>(variant), settings};
+        } else if (std::holds_alternative<Vector4>(variant)) {
+            destGroup[key] = {std::get<Vector4>(variant), settings};
+        } else if (std::holds_alternative<bool>(variant)) {
+            destGroup[key] = {std::get<bool>(variant), settings};
+        } else if (std::holds_alternative<std::string>(variant)) {
+            destGroup[key] = {std::get<std::string>(variant), settings};
+        }
+       
+    }
+
+}
+
+void GlobalParameter::ParamSaveForImGui(const std::string& groupName, const std::string& folderName) {
     // 保存ボタン
     if (ImGui::Button(std::format("Save {}", groupName).c_str())) {
-        SaveFile(groupName);
+        SaveFile(groupName, folderName);
         // セーブ完了メッセージ
         std::string message = std::format("{}.json saved.", groupName);
         MessageBoxA(nullptr, message.c_str(), "GlobalParameter", 0);
     }
 }
 
-void GlobalParameter::ParamLoadForImGui(const std::string& groupName) {
+void GlobalParameter::ParamLoadForImGui(const std::string& groupName, const std::string& folderName) {
     // ロードボタン
     if (ImGui::Button(std::format("Load {}", groupName).c_str())) {
-        LoadFile(groupName);
+        LoadFile(groupName, folderName);
         // セーブ完了メッセージ
         ImGui::Text("Load Successful: %s", groupName.c_str());
-        SyncGroupFromUI(groupName);
+        SyncParamForGroup(groupName);
     }
 }
 
@@ -424,13 +460,17 @@ void GlobalParameter::SyncAll() {
     }
 }
 
-void GlobalParameter::SyncGroupFromUI(const std::string& group) {
+void GlobalParameter::SyncParamForGroup(const std::string& group) {
     auto it = bindings_.find(group);
     if (it != bindings_.end()) {
         for (auto& item : it->second) {
             item.pullVariant();
         }
     }
+}
+
+void GlobalParameter::BindResetAll() {
+    bindings_.clear();
 }
 
 template void GlobalParameter::SetValue<int>(const std::string& groupName, const std::string& key, int value, WidgetType widgetType);

@@ -3,6 +3,8 @@
 #include <vector>
 #include"3d/object3d.h"
 #include"3d/WorldTransform.h"
+#include"Easing.h"
+#include"utility/ParticleEditor/ParticleEmitter.h"
 #include <list>
 #include <json.hpp>
 
@@ -16,6 +18,8 @@ public:
            WorldTransform worldTransform; 
            std::unique_ptr<Object3d> object3d;
            std::list<ObjectData> children;
+           Easing<Vector3> easing;
+           std::vector<std::unique_ptr<ParticleEmitter>> emitters;
         };
         //オブジェクトのコンテナ
         std::vector<ObjectData>objects;
@@ -30,7 +34,18 @@ public:
     void PutObject();
     void DrawAll(const ViewProjection& viewProjection);
 
+    // emit
+    void EmitterAllUpdate();
+    void EmitAll();
+    void StartRailEmitAll();
+    void EmitterAllEdit();
+
+    // easing
+    void EasingAllReset();
+    void EasingAllUpdate(const float&deltaTime);
+
     void ConvertJSONToObjects(const nlohmann::json& object);
+    PrimitiveType StringToPrimitiveType(const std::string& typeStr);
 
 private:
     void DrawObject(LevelData::ObjectData& objectData, const ViewProjection& viewProjection);

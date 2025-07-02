@@ -102,16 +102,17 @@ public:
 
     template <typename T>
     void Bind(const std::string& group, const std::string& key, T* variable, WidgetType widgetType = WidgetType::NONE);
+    void BindResetAll();
+    void CopyGroup(const std::string& fromGroup, const std::string& toGroup);
 
     void SyncAll();
-    void SyncGroupFromUI(const std::string& group);
+    void SyncParamForGroup(const std::string& group);
 
     // ------------------------------------------------------------------------------
     // ファイルへの保存・読み込み
     // ------------------------------------------------------------------------------
 
-    void ParamSaveForImGui(const std::string& groupName);
-
+   
     // すべてのグループのデータをファイルから読み込む
     void LoadFiles();
 
@@ -119,7 +120,8 @@ public:
     void LoadFile(const std::string& groupName, const std::string& fileName = "");
     void SaveFile(const std::string& groupName, const std::string& fileName = "");
 
-    void ParamLoadForImGui(const std::string& groupName);
+     void ParamSaveForImGui(const std::string& groupName, const std::string& fileName = "");
+    void ParamLoadForImGui(const std::string& groupName, const std::string& fileName = "");
 
 private:
 private:

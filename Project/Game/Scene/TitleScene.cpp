@@ -23,9 +23,9 @@ void TitleScene::Init() {
     plane_->Init();
 
     /// パーティクルデータの読み込みと、モデルの読み込み
-    EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticlePrimitive("StarCenterLight", PrimitiveType::Plane, 200));
-    EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticlePrimitive("StarEffect", PrimitiveType::Plane, 500));
-    EnemydamageEffect_[2].reset(ParticleEmitter::CreateParticlePrimitive("StarFrame", PrimitiveType::Plane, 100));
+    EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticlePrimitive("comboFireNozzleLeft", PrimitiveType::Plane, 500));
+    EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticlePrimitive("comboFireCenter", PrimitiveType::Plane, 500));
+    EnemydamageEffect_[2].reset(ParticleEmitter::CreateParticlePrimitive("comboFireNozzleRigth", PrimitiveType::Plane, 500));
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
@@ -35,8 +35,10 @@ void TitleScene::Update() {
     for (int i = 0; i < EnemydamageEffect_.size(); i++) {
         EnemydamageEffect_[i]->Update();
         EnemydamageEffect_[i]->EditorUpdate();
+        EnemydamageEffect_[i]->Emit();
+
         if (Input::GetInstance()->TrrigerKey(DIK_O)) {
-            EnemydamageEffect_[i]->Emit();
+            EnemydamageEffect_[i]->StartRailEmit();
         }
     }
     /* EnemydamageEffect_[0]->Update();
@@ -62,7 +64,7 @@ void TitleScene::ModelDraw() {
     ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
     Model::PreDraw(commandList);
     plane_->Draw(viewProjection_);
-
+    EnemydamageEffect_[0]->DebugDraw(viewProjection_);
     ParticleManager::GetInstance()->Draw(viewProjection_);
 }
 

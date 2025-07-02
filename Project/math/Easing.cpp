@@ -15,9 +15,10 @@ void Easing<T>::Init(const std::string& name) {
 
 template <typename T>
 void Easing<T>::Reset() {
-    isRunning_   = false;
+
     isFinished_  = false;
     currentTime_ = 0.0f;
+    waitTime_    = 0.0f;
 }
 
 template <typename T>
@@ -34,6 +35,9 @@ void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
     amplitude_  = easingParam.amplitude;
     period_     = easingParam.period;
     backRatio_  = easingParam.backRatio;
+
+    waitTimeMax_      = easingParam.waitTimeMax;
+    finishTimeOffset_ = easingParam.finishOffsetTime;
 }
 
 template <typename T>
@@ -134,6 +138,9 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
     param.period    = inner.value("period", 0.0f);
     param.backRatio = inner.value("backRatio", 0.0f);
 
+    param.finishOffsetTime = inner.value("finishOffsetTime", 0.0f);
+    param.waitTimeMax      = inner.value("waitTime", 0.0f);
+
     // paramの値をセット
     SettingValue(param);
 
@@ -225,11 +232,9 @@ void Easing<T>::ApplyForImGui() {
 // 時間を進めて値を更新
 template <typename T>
 void Easing<T>::Update(float deltaTime) {
-    if (/*!isRunning_ || */ isFinished_) {
-        return;
+    if (!isFinished_) {
+        currentTime_ += deltaTime;
     }
-
-    currentTime_ += deltaTime;
 
     CalculateValue();
 
@@ -237,11 +242,26 @@ void Easing<T>::Update(float deltaTime) {
         vector2Proxy_->Apply();
     }
 
-    if (currentTime_ >= maxTime_) {
-        FinishBehavior();
-        if(onFinishCallback_) {
-            onFinishCallback_();
-        }
+    //  終了時間を過ぎたら終了処理
+    if (currentTime_ < maxTime_ - finishTimeOffset_) {
+        return;
+    }
+
+    FinishBehavior();
+
+    if (onFinishCallback_) { // Easing終了時のコールバック
+        onFinishCallback_();
+    }
+
+    // 待機時間の加算
+    waitTime_ += deltaTime;
+
+    if (waitTime_ < waitTimeMax_) {
+        return;
+    }
+
+    if (onWaitEndCallback_) { // 待機終了時のコールバック
+        onWaitEndCallback_();
     }
 }
 
@@ -501,26 +521,10 @@ void Easing<Vector2>::SetAdaptValue<Vector2>(Vector3* value) {
 }
 
 template <typename T>
-void Easing<T>::Easing::SetValue(const T& value) {
+void Easing<T>::Easing::SetCurrentValue(const T& value) {
     *currentValue_ = value;
 }
 
-
-//template <typename T>
-//void Easing<T>::Easing::SetEditor(EasingEditor* editor) {
-//     editor_ = editor;
-//
-//     if constexpr (std::is_same_v<T, float>) {
-//         creator_ = editor->GetCreator<EasingCreator<float>>();
-//
-//     } else if constexpr (std::is_same_v<T, Vector2>) {
-//         filePathForType_ = "Vector2";
-//
-//     } else if constexpr (std::is_same_v<T, Vector3>) {
-//         filePathForType_ = "Vector3";
-//     }
-//    
-// }
 
 template class Easing<float>;
 template class Easing<Vector2>;

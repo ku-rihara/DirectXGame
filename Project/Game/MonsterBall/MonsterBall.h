@@ -1,5 +1,6 @@
 #pragma once
 #include "3d/Object3d.h"
+#include"Animation/ModelAnimation.h"
 #include "3d/WorldTransform.h"
 #include"Easing.h"
 class MonsterBall {
@@ -9,7 +10,7 @@ private:
 	// ワールド変換データ
 	WorldTransform transform_;
 	// モデル
-	std::unique_ptr<Object3d> objct3D_=nullptr;
+	std::unique_ptr<ModelAnimation> modelAnimation_=nullptr;
 
 	Easing<Vector3> easing_;
 	

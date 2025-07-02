@@ -1,0 +1,146 @@
+{
+    "comboFireCenter": {
+        "AdaptRotateIsX": false,
+        "AdaptRotateIsY": false,
+        "AdaptRotateIsZ": false,
+        "BaseColor": [
+            0.8823529481887817,
+            0.5622837543487549,
+            0.5622837543487549,
+            0.0
+        ],
+        "Color Max": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Color Min": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Direction Max": [
+            0.39100000262260437,
+            1.0,
+            0.0
+        ],
+        "Direction Min": [
+            -0.3409999907016754,
+            1.0,
+            0.0
+        ],
+        "Gravity": 0.0,
+        "IntervalTime": 0.10999999940395355,
+        "LifeTime": 0.3799999952316284,
+        "Particle Count": 39,
+        "Position Base": [
+            0.0,
+            40.80000305175781,
+            0.0
+        ],
+        "Position Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Position Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Base": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotate Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "RotateSpeed Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale Max": 15.0,
+        "Scale Min": 15.0,
+        "ScaleV3 Max": [
+            18.0,
+            20.0,
+            0.0
+        ],
+        "ScaleV3 Min": [
+            18.0,
+            20.0,
+            0.0
+        ],
+        "Speed Max": 51.099998474121094,
+        "Speed Min": 0.0,
+        "SpeedV3 Max": [
+            4.0,
+            45.900001525878906,
+            0.0
+        ],
+        "SpeedV3 Min": [
+            -4.0,
+            2.0,
+            0.0
+        ],
+        "UV IsRoop": false,
+        "UV NumOfFrame": 1,
+        "UV Pos": [
+            0.0,
+            0.0
+        ],
+        "UV Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "UV ScroolSpeed": 0.0,
+        "UV isFlipX": false,
+        "UV isFlipY": false,
+        "UV isScrool": false,
+        "UV isScroolEachPixel": false,
+        "blendMode": 1,
+        "isAlphaNoMove": true,
+        "isBillBord": true,
+        "isFloatVelocity": false,
+        "isMoveForRail": true,
+        "isRailRoop": false,
+        "isRotateforDirection": false,
+        "isScalerScale": false,
+        "isShot": false,
+        "moveSpeed": 86.80000305175781,
+        "preBillBordType_": 0,
+        "scaleEaseParm.easeTypeInt": 0,
+        "scaleEaseParm.endValueF.max": 1.7999999523162842,
+        "scaleEaseParm.endValueF.min": 1.2999999523162842,
+        "scaleEaseParm.endValueV3.max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "scaleEaseParm.endValueV3.min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "scaleEaseParm.isScaleEase": true,
+        "scaleEaseParm.maxTime": 0.36000001430511475,
+        "selectedTexturePath_": "Resources/texture/fire.png"
+    }
+}

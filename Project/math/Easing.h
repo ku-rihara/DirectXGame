@@ -1,18 +1,18 @@
 #pragma once
 #include "EasingFunction.h"
-#include "Vector2Proxy.h"
 #include "utility/EasingCreator/EasingParameterData.h"
+#include "Vector2Proxy.h"
 // std
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <string>
 #include <type_traits>
 #include <vector>
-#include <functional>
 
-//template <typename T>
-//class EasingCreator;
-//class EasingEditor;
+// template <typename T>
+// class EasingCreator;
+// class EasingEditor;
 template <typename T>
 class Easing {
 public:
@@ -28,15 +28,13 @@ public:
     // 適応
     void ApplyFromJson(const std::string& fileName);
     void ApplyForImGui();
-    void FilePathChangeForType();
 
     void SaveAppliedJsonFileName();
     void LoadAndApplyFromSavedJson();
-    void ChangeAdaptAxis();
 
     // イージング更新
     void Update(float deltaTime);
-
+   
     // 変数に適応
     void SetAdaptValue(T* value);
 
@@ -52,15 +50,17 @@ public:
     typename std::enable_if_t<std::is_same_v<U, Vector2>, void>
     SetAdaptValue(Vector3* value);
 
-    void SetValue(const T& value);
-
 private:
     // イージング計算
     void CalculateValue();
     // 終了処理
     void FinishBehavior();
 
-public:
+    void ChangeAdaptAxis();
+
+    void FilePathChangeForType();
+
+private:
     // メンバ変数
     EasingType type_                       = EasingType::InSine;
     EasingFinishValueType finishValueType_ = EasingFinishValueType::End;
@@ -75,13 +75,18 @@ public:
     float maxTime_     = 0.0f;
     float currentTime_ = 0.0f;
 
-    bool isRunning_  = false;
     bool isFinished_ = false;
 
     // amplitude用Parameter
     float amplitude_ = 0.0f;
     float period_    = 0.0f;
     float backRatio_ = 0.0f;
+
+    //etc
+    float waitTimeMax_ = 0.0f;
+    float finishTimeOffset_=0.0f;
+
+    float waitTime_ = 0.0f; // 待機時間
 
 private:
     int32_t selectedFileIndex_;
@@ -100,7 +105,8 @@ private:
     Vector3* adaptTargetVec3_ = nullptr;
     std::unique_ptr<IVector2Proxy> vector2Proxy_;
 
-  std::function<void()> onFinishCallback_;
+    std::function<void()> onFinishCallback_;
+    std::function<void()> onWaitEndCallback_;
 
 public:
     /// -------------------------------------------------------------------------
@@ -108,13 +114,16 @@ public:
     /// -------------------------------------------------------------------------
     const T& GetValue() const { return *currentValue_; }
     bool IsFinished() const { return isFinished_; }
-    bool IsRunning() const { return isRunning_; }
     std::string GetCurrentAppliedFileName() const { return currentAppliedFileName_; }
-
+    float GetCurrentEaseTime() const { return currentTime_; }
     /// -------------------------------------------------------------------------
     /// Setter methods
     /// -------------------------------------------------------------------------
-  /*  void SetEditor(EasingEditor* editor);*/
+    /*  void SetEditor(EasingEditor* editor);*/
     void SetFinishValueType(const EasingFinishValueType& type) { finishValueType_ = type; }
     void SetOnFinishCallback(const std::function<void()>& callback) { onFinishCallback_ = callback; }
+    void SetOnWaitEndCallback(const std::function<void()>& callback) { onWaitEndCallback_ = callback; }
+    void SetStartValue(const T& value) { startValue_ = value; }
+    void SetEndValue(const T& value) { endValue_ = value; }
+    void SetCurrentValue(const T& value);
 };

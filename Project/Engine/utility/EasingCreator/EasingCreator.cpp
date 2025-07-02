@@ -1,8 +1,10 @@
 #include "EasingCreator.h"
+#include "MathFunction.h"
 #include "vector2.h"
 #include "vector3.h"
 #include <fstream>
 #include <imgui.h>
+#include<Windows.h>
 #include <type_traits>
 
 template <typename T>
@@ -24,15 +26,8 @@ void EasingCreator<T>::LoadParameter(const std::string& path) {
         ifs >> j;
         FromJson(j);
     }
-    
-    if (!selectedName_.empty()) {
-        auto it = presets_.find(selectedName_);
-        if (it != presets_.end()) {
-            editingParam_ = it->second;
-        } else {
-            selectedName_.clear();
-        }
-    }
+
+    AdaptEditorParam();
 }
 
 template <typename T>
@@ -50,6 +45,76 @@ void EasingCreator<T>::SaveParameter(const std::string& path) const {
         }
     }
 }
+
+
+template <typename T>
+void EasingCreator<T>::LoadSelectedParameter() {
+    std::string path;
+
+    if (selectedName_.empty()) {
+        return;
+    }
+
+    if constexpr (std::is_same_v<T, float>) {
+        path = kDirectoryPath_ + "float";
+    } else if constexpr (std::is_same_v<T, Vector2>) {
+        path = kDirectoryPath_ + "vector2";
+    } else if constexpr (std::is_same_v<T, Vector3>) {
+        path = kDirectoryPath_ + "vector3";
+    }
+
+    std::filesystem::path filepath = std::filesystem::path(path) / (selectedName_ + ".json");
+    std::ifstream ifs(filepath);
+    if (ifs.is_open()) {
+        nlohmann::json j;
+        ifs >> j;
+        FromJson(j); 
+        AdaptEditorParam(); 
+    }
+}
+
+template <typename T>
+void EasingCreator<T>::SaveSelectedParameter() {
+    std::string path;
+
+    if (selectedName_.empty() || presets_.count(selectedName_) == 0) {
+        return;
+    }
+
+    if constexpr (std::is_same_v<T, float>) {
+        path = kDirectoryPath_ + "float";
+    } else if constexpr (std::is_same_v<T, Vector2>) {
+        path = kDirectoryPath_ + "vector2";
+    } else if constexpr (std::is_same_v<T, Vector3>) {
+        path = kDirectoryPath_ + "vector3";
+    }
+
+    std::filesystem::create_directories(path);
+    std::filesystem::path filepath = std::filesystem::path(path) / (selectedName_ + ".json");
+
+    std::ofstream ofs(filepath);
+    if (ofs.is_open()) {
+        nlohmann::json j;
+        ToJson(j, selectedName_, presets_.at(selectedName_));
+        ofs << j.dump(4);
+    }
+
+    AdaptEditorParam(); // 編集用パラメータ反映
+}
+
+
+template <typename T>
+void EasingCreator<T>::AdaptEditorParam() {
+    if (!selectedName_.empty()) {
+        auto it = presets_.find(selectedName_);
+        if (it != presets_.end()) {
+            editingParam_ = it->second;
+        } else {
+            selectedName_.clear();
+        }
+    }
+}
+
 
 template <typename T>
 void EasingCreator<T>::AddPreset(const std::string& name, const EasingParameter<T>& param) {
@@ -93,6 +158,7 @@ void EasingCreator<T>::ToJson(nlohmann::json& j, const std::string& name, const 
         jsonParam["endValue"]          = {param.endValue.x, param.endValue.y};
         jsonParam["adaptVec2AxisType"] = static_cast<int>(param.adaptVec2AxisType);
     } else if constexpr (std::is_same_v<T, float>) {
+
         jsonParam["startValue"]         = param.startValue;
         jsonParam["endValue"]           = param.endValue;
         jsonParam["adaptFloatAxisType"] = static_cast<int>(param.adaptFloatAxisType);
@@ -104,6 +170,9 @@ void EasingCreator<T>::ToJson(nlohmann::json& j, const std::string& name, const 
     jsonParam["amplitude"]  = param.amplitude;
     jsonParam["period"]     = param.period;
     jsonParam["backRatio"]  = param.backRatio;
+
+    jsonParam["finishOffsetTime"]    = param.finishOffsetTime;
+    jsonParam["waitTime"] = param.waitTimeMax;
 }
 
 template <typename T>
@@ -121,6 +190,8 @@ void EasingCreator<T>::FromJson(const nlohmann::json& j) {
         param.amplitude  = val.value("amplitude", 0.0f);
         param.period     = val.value("period", 0.0f);
         param.backRatio  = val.value("backRatio", 0.0f);
+        param.finishOffsetTime = val.value("finishOffsetTime", 0.0f);
+        param.waitTimeMax         = val.value("waitTime", 0.0f);
 
         if constexpr (std::is_same_v<T, Vector3>) {
             auto sv          = val["startValue"];
@@ -140,7 +211,6 @@ void EasingCreator<T>::FromJson(const nlohmann::json& j) {
         }
 
         presets_[inner.key()] = param;
-      
     }
 }
 
@@ -187,7 +257,6 @@ void EasingCreator<T>::Edit() {
     if (!selectedName_.empty() && presets_.count(selectedName_)) {
         ImGui::Text("Edit Preset: %s", selectedName_.c_str());
 
-       
         // イージングパラメータ
         ImGui::DragFloat("Max Time", &editingParam_.maxTime, 0.01f);
         ImGui::DragFloat("Amplitude", &editingParam_.amplitude, 0.01f);
@@ -198,11 +267,14 @@ void EasingCreator<T>::Edit() {
         int adaptVec2AxisType  = static_cast<int>(editingParam_.adaptVec2AxisType);
 
         // スタート、終了位置の入力
-        if constexpr (std::is_same_v<T, float>) { // float
+        if constexpr (std::is_same_v<T, float>) {
             ImGui::DragFloat("Start Value", &editingParam_.startValue, 0.01f);
             ImGui::DragFloat("End Value", &editingParam_.endValue, 0.01f);
+            if (ImGui::Button("Change Radian")) {
+                editingParam_.startValue = toRadian(editingParam_.startValue);
+                editingParam_.endValue   = toRadian(editingParam_.endValue);
+            }
 
-            // 軸のタイプの選択(float)
             if (ImGui::Combo("AdaptAxis Type", &adaptFloatAxisType, AdaptFloatAxisTypeLabels.data(), static_cast<int>(AdaptFloatAxisTypeLabels.size()))) {
                 editingParam_.adaptFloatAxisType = static_cast<AdaptFloatAxisType>(adaptFloatAxisType);
             }
@@ -233,6 +305,10 @@ void EasingCreator<T>::Edit() {
             editingParam_.finishType = static_cast<EasingFinishValueType>(finishType);
         }
 
+        ImGui::Separator();
+        ImGui::DragFloat("WaitTime", &editingParam_.waitTimeMax, 0.01f);
+        ImGui::DragFloat("FinishOffsetTime", &editingParam_.finishOffsetTime, 0.01f);
+
         EditPreset(selectedName_, editingParam_);
 
         // 削除ボタン
@@ -241,9 +317,21 @@ void EasingCreator<T>::Edit() {
             RemovePreset(selectedName_);
             selectedName_.clear();
         }
+
+        if (ImGui::Button("Save This File")) {
+            SaveSelectedParameter();
+            MessageBoxA(nullptr, "json saved.", "EasingEditor", 0);
+        }
+
+        ImGui::SameLine();
+
+        if (ImGui::Button("Load This File")) {
+            LoadSelectedParameter();
+        }
     }
 
     ImGui::Separator();
+   
 }
 
 template <typename T>
