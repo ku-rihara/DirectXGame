@@ -87,6 +87,7 @@ ModelData Model::LoadModelGltf(const std::string& directoryPath, const std::stri
     modelData.rootNode   = ReadNode(scene->mRootNode);
     return modelData;
 }
+
 Node Model::ReadNode(aiNode* node) {
     Node result;
     aiMatrix4x4 aiLocalMatrix = node->mTransformation; // nodeのlocalMatrix
