@@ -11,6 +11,7 @@
 //struct
 #include"struct/ModelData.h"
 
+
 #include"base/Material.h"
 #include"Dx/DirectXCommon.h"
 
@@ -77,7 +78,7 @@ public:
 
 
 	Node ReadNode(aiNode* node);
-	void DebugImGui();// デバッグ表示
+  	void DebugImGui();// デバッグ表示
 
 	///============================================================
 	/// Draw method

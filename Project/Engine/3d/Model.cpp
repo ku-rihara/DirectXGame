@@ -89,19 +89,31 @@ ModelData Model::LoadModelGltf(const std::string& directoryPath, const std::stri
 }
 
 Node Model::ReadNode(aiNode* node) {
+    aiVector3D scale, translate;
+    aiQuaternion rotate;
     Node result;
-    aiMatrix4x4 aiLocalMatrix = node->mTransformation; // nodeのlocalMatrix
-    aiLocalMatrix.Transpose(); // 転置
-    result.localMatrix.m[0][0] = aiLocalMatrix[0][0]; // 他の要素も同様に
 
-    result.name = node->mName.C_Str(); // Node名を格納
-    result.cihldren.resize(node->mNumChildren); // 子供の数だけ確保
-    for (uint32_t childIndex = 0; childIndex < node->mNumChildren; ++childIndex) {
-        // 再帰的に読んで階層構造を作っていく
-        result.cihldren[childIndex] = ReadNode(node->mChildren[childIndex]);
-    }
-    return result;
+    node->mTransformation.Decompose(scale, rotate, translate);
+    result.transform.scale     = {scale.x, scale.y, scale.z};
+    result.transform.rotate    = {rotate.x, -rotate.y, -rotate.z, rotate.w};
+    result.transform.translate = {-translate.x, translate.y, translate.z};
+    result.localMatrix         = MakeAffineMatrixQuaternion(result.transform.scale, result.transform.rotate, result.transform.translate);
+    result.name                = node->mName.C_Str(); // Node名を格納
+
+     //Node result;
+     //aiMatrix4x4 aiLocalMatrix = node->mTransformation; // nodeのlocalMatrix
+     //aiLocalMatrix.Transpose(); // 転置
+     //result.localMatrix.m[0][0] = aiLocalMatrix[0][0]; // 他の要素も同様に
+
+    
+     result.cihldren.resize(node->mNumChildren); // 子供の数だけ確保
+     for (uint32_t childIndex = 0; childIndex < node->mNumChildren; ++childIndex) {
+         // 再帰的に読んで階層構造を作っていく
+         result.cihldren[childIndex] = ReadNode(node->mChildren[childIndex]);
+     }
+     return result;
 }
+
 
 void Model::CreateModel(const std::string& ModelFileName) {
     std::filesystem::path path(ModelFileName);

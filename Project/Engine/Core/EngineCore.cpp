@@ -6,14 +6,15 @@
 #include "3d/ModelManager.h"
 
 /// base
-#include "Dx/DirectXCommon.h"
 #include "base/FullscreenRenderer.h"
+#include "base/Line3dCommon.h"
 #include "base/Object3DCommon.h"
 #include "base/SkyBoxRenderer.h"
 #include "base/SpriteCommon.h"
 #include "base/SrvManager.h"
 #include "base/TextureManager.h"
 #include "base/WinApp.h"
+#include "Dx/DirectXCommon.h"
 
 /// audio,input
 #include "audio/Audio.h"
@@ -29,7 +30,6 @@
 
 /// std
 #include <string>
-
 
 ///=======================================================================
 /// 初期化
@@ -76,6 +76,9 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     // SpriteCommon
     spriteCommon_ = SpriteCommon::GetInstance();
     spriteCommon_->Init(directXCommon_);
+
+    line3DCommon_ = Line3DCommon::GetInstance();
+    line3DCommon_->Init(directXCommon_);
 
     // ModelManager
     modelManager_ = ModelManager::GetInstance();
