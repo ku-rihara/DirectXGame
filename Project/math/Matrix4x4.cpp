@@ -207,6 +207,7 @@ Vector4 TransformMatrix(const Vector4& vector, const Matrix4x4& matrix) {
     return result;
 }
 
+
 Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
 
     Vector3 result{
@@ -216,6 +217,8 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
     };
     return result;
 }
+
+
 
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3 translate) {
     Matrix4x4 scaleMatrix;
@@ -431,6 +434,8 @@ Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to) {
 
     return MakeRotateAxisAngle(axis, angle);
 }
+
+
 
 Vector3 ExtractEulerAngles(const Matrix4x4& rotationMatrix) {
     Vector3 eulerAngles;

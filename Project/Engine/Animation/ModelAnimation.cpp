@@ -105,6 +105,7 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
 
 void ModelAnimation::Update(const float& deltaTime) {
     animationTime_ += deltaTime;
+    animationTime_ = std::fmod(animationTime_, animation_.duration);
 
     for (Joint& joint : skeleton_.joints) {
         // 対象のJointのAnimationがあれば、値の運用を行う
@@ -125,7 +126,7 @@ void ModelAnimation::Update(const float& deltaTime) {
             joint.skeletonSpaceMatrix = joint.localMatrix;
         }
     }
-
+   
     /* animationTime_                   = std::fmod(animationTime_, animation_.duration);
      NodeAnimation& rootNodeAnimation = animation_.nodeAnimations[object3d_->GetModel()->GetModelData().rootNode.name];
 
