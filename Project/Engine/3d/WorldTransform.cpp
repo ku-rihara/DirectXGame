@@ -174,7 +174,7 @@ Vector3 WorldTransform::GetLocalPos() const {
     Vector3 worldPos = GetWorldPos();
 
     // 親の逆行列を使ってローカル座標を計算
-    Vector3 localPos = MatrixTransform(worldPos, parentInverse);
+    Vector3 localPos = TransformMatrix(worldPos, parentInverse);
     return localPos;
 }
 
@@ -185,7 +185,7 @@ void WorldTransform::UpdateAffineMatrix() {
         break;
     case RotateOder::Quaternion:
         quaternion_.Normalize();
-        matWorld_ = MakeScaleMatrix(scale_) * MakeRotateMatrixFromQuaternion(quaternion_) * MakeTranslateMatrix(translation_);
+        matWorld_ =MakeAffineMatrixQuaternion(scale_,quaternion_,translation_);
 
         break;
     default:

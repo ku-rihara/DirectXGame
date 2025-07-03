@@ -61,11 +61,11 @@ Vector3 Mouse::GetMousePos3D(const ViewProjection& viewprojection, float depthFa
 
     // 逆射影行列を使ってクリップ空間からビュー空間へ変換
     Matrix4x4 invProj = Inverse(viewprojection.matProjection_);
-    Vector3 viewPos = MatrixTransform(clipPos, invProj);
+    Vector3 viewPos = TransformMatrix(clipPos, invProj);
 
     // ビュー空間からワールド空間へ変換
     Matrix4x4 invView = Inverse(viewprojection.matView_);
-    Vector3 worldPos = MatrixTransform(viewPos, invView);
+    Vector3 worldPos = TransformMatrix(viewPos, invView);
 
     // ブロックサイズに基づいてスナップ処理を適用
     if (blockSize > 0.0f) {

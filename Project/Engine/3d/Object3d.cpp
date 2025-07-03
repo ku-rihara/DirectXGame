@@ -50,6 +50,7 @@ void Object3d::Draw(const WorldTransform& worldTransform, const ViewProjection& 
     //	wvpDate_->WorldInverseTranspose = Inverse(Transpose(model_->GetModelData().rootNode.localMatrix * wvpDate_->World));
     // }
     // else {//.objファイルの場合
+    /*model_->GetModelData().rootNode.localMatrix**/
     wvpDate_->World                 = worldTransform.matWorld_;
     wvpDate_->WVP                   = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
     wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));

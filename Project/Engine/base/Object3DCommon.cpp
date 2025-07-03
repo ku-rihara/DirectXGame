@@ -228,6 +228,7 @@ void Object3DCommon::PreDraw(ID3D12GraphicsCommandList* commandList) {
     // RootSignatureを設定
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
 }
+
 void Object3DCommon::PreBlendSet(ID3D12GraphicsCommandList* commandList, BlendMode blendMode) {
     switch (blendMode) {
     case BlendMode::None:

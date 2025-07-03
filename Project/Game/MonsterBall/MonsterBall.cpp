@@ -11,7 +11,7 @@ MonsterBall::~MonsterBall() {}
 
 void MonsterBall::Init() {
     modelAnimation_ = std::make_unique<ModelAnimation>();
-    modelAnimation_->Create("AnimatedCube.gltf");
+    modelAnimation_->Create("simpleSkin.gltf");
 
 	transform_.Init();
 	transform_.translation_.y = -5.0f;
@@ -35,7 +35,7 @@ void MonsterBall::Update() {
 }
 
 void MonsterBall::Draw(ViewProjection& viewProjection) {
-    modelAnimation_->Draw(viewProjection);
+    modelAnimation_->DebugDraw(viewProjection);
 }
 
 void  MonsterBall::Debug() {
