@@ -22,6 +22,10 @@ public:
     void Init();
     void SetLine(const Vector3& start, const Vector3& end, const Vector4& color);
     void Draw(ID3D12GraphicsCommandList* commandList, const ViewProjection& viewProj);
+ 
+    //球の描画
+    void DrawSphereWireframe(const Vector3& center, float radius, const Vector4& color);
+
     void Reset();
 
 private:
