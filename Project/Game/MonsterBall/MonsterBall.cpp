@@ -10,7 +10,9 @@ MonsterBall::MonsterBall() {}
 MonsterBall::~MonsterBall() {}
 
 void MonsterBall::Init() {
-    objct3D_.reset(Object3d::CreateModel("FieldFence.obj"));
+    modelAnimation_ = std::make_unique<ModelAnimation>();
+    modelAnimation_->Create("simpleSkin.gltf");
+
 	transform_.Init();
 	transform_.translation_.y = -5.0f;
 	transform_.translation_.z = -14.0f;
@@ -20,20 +22,20 @@ void MonsterBall::Init() {
 	//easing_.SettingValue(EasingType::OutBack, Vector3::ZeroVector(), Vector3::UnitVector(), 0.5f);
     easing_.SetAdaptValue(&transform_.scale_);
 	
-	objct3D_->material_.materialData_->enableLighting = 3;
+	/*objct3D_->material_.materialData_->enableLighting = 3;*/
   
 }
 
 void MonsterBall::Update() {
-
 	
+	modelAnimation_->Update(Frame::DeltaTime());
 
 
 	transform_.UpdateMatrix();
 }
 
 void MonsterBall::Draw(ViewProjection& viewProjection) {
-	objct3D_->Draw(transform_, viewProjection); 
+    modelAnimation_->DebugDraw(viewProjection);
 }
 
 void  MonsterBall::Debug() {
@@ -42,7 +44,7 @@ void  MonsterBall::Debug() {
 		ImGui::PushID("MonsterBall");
 		ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
 		ImGui::DragFloat3("Scale", &transform_.scale_.x, 0.1f);
-		objct3D_->material_.DebugImGui();
+	/*	objct3D_->material_.DebugImGui();*/
 		ImGui::PopID();
 	}
 #endif // _DEBUG

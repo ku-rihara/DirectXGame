@@ -1,7 +1,7 @@
 #include "ModelManager.h"
 
 ModelManager* ModelManager::instance_ = nullptr;
-std::map<std::string, std::unique_ptr<Model>> ModelManager::models_; // staticな変数として定義
+std::map<std::string, std::unique_ptr<Model>> ModelManager::models_;
 
 // シングルトンインスタンス取得
 ModelManager* ModelManager::GetInstance() {
@@ -30,17 +30,6 @@ Model* ModelManager::LoadModel(const std::string& modelName) {
     return model;
 }
 
-//void ModelManager::LoadModelParticle(const std::string& modelName, const std::string& extension) {
-//    //// 読み込み済みモデルを検索
-//    //if (models_.contains(modelName + extension)) {
-//    //    // 読み込み済みなら早期リターン
-//    //    return;
-//    //}
-//    //std::unique_ptr<Model> model = std::make_unique<Model>();
-//    //model->CreateModel(modelName, extension);
-//    //// モデルをmapコンテナに格納する
-//    //models_.insert(std::make_pair(modelName + extension, std::move(model)));
-//}
 
 Model* ModelManager::FindModel(const std::string& modelName) {
     // 読み込み済モデルを検索
@@ -59,3 +48,16 @@ void ModelManager::Finalize() {
     delete instance_;
     instance_ = nullptr; // インスタンスをnullptrにする
 }
+
+
+// void ModelManager::LoadModelParticle(const std::string& modelName, const std::string& extension) {
+//     //// 読み込み済みモデルを検索
+//     //if (models_.contains(modelName + extension)) {
+//     //    // 読み込み済みなら早期リターン
+//     //    return;
+//     //}
+//     //std::unique_ptr<Model> model = std::make_unique<Model>();
+//     //model->CreateModel(modelName, extension);
+//     //// モデルをmapコンテナに格納する
+//     //models_.insert(std::make_pair(modelName + extension, std::move(model)));
+// }

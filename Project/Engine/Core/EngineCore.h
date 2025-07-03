@@ -15,6 +15,7 @@ class Audio;
 class Input;
 class FullscreenRenderer;
 class SkyBoxRenderer;
+class Line3DCommon;
 
 class EngineCore {
 public:
@@ -62,4 +63,5 @@ public:
      Input* input_;
      SkyBoxRenderer* skyBoxRenderer_;
      FullscreenRenderer* copyImageRenderer_;
+     Line3DCommon* line3DCommon_;
 };

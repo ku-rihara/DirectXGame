@@ -790,6 +790,12 @@
     <ClCompile Include="Game\FireInjectors\FireInjectors.cpp">
       <Filter>Game\FireInjectors</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\base\Line3dCommon.cpp">
+      <Filter>MyEngine\.cpp\base</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\Line3d.cpp">
+      <Filter>MyEngine\.cpp\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1302,6 +1308,15 @@
     <ClInclude Include="Game\FireInjectors\FireInjectors.h">
       <Filter>Game\FireInjectors</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Animation\SkeletonData.h">
+      <Filter>MyEngine\.h\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\Line3dCommon.h">
+      <Filter>MyEngine\.h\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\Line3d.h">
+      <Filter>MyEngine\.h\3d</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -1318,6 +1333,9 @@
       <Filter>リソースファイル\Offscreen</Filter>
     </None>
     <None Include="resources\Shader\SkyBox.hlsli">
+      <Filter>リソースファイル</Filter>
+    </None>
+    <None Include="resources\Shader\Line3D.hlsli">
       <Filter>リソースファイル</Filter>
     </None>
   </ItemGroup>
@@ -1362,6 +1380,12 @@
       <Filter>リソースファイル</Filter>
     </FxCompile>
     <FxCompile Include="resources\Shader\SkyBox.VS.hlsl">
+      <Filter>リソースファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Line3D.PS.hlsl">
+      <Filter>リソースファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Line3D.VS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
   </ItemGroup>

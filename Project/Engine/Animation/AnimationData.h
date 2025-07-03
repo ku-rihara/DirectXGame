@@ -8,11 +8,11 @@
 
 template<typename tValue>
 struct Keyframe {
-    time;
+    float time;
     tValue value;
 };
 using KeyframeVector3=Keyframe<Vector3>;
-using KeyframeVector3=Keyframe<Quaternion>;
+using KeyframeQuaternion=Keyframe<Quaternion>;
 
 template<typename tValue>
 struct AnimationCurve {

@@ -98,7 +98,7 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
 
                     if (emitter.contains("particle_name") && emitter.contains("primitive_type")) {
 
-                        std::string name             = emitter["particle_name"].get<std::string>();
+                        std::string name = emitter["particle_name"].get<std::string>();
                         std::string primitiveTypeStr = emitter["primitive_type"].get<std::string>();
 
                         //  PrimitiveType変換
@@ -117,7 +117,7 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
         }
 
         // easing
-         if (object.contains("easing_filename")) {
+        if (object.contains("easing_filename")) {
             // ファイル名
             std::string easingFilename = object["easing_filename"].get<std::string>();
             objectData.easing.ApplyFromJson(easingFilename);
@@ -135,9 +135,9 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
 void PutObjForBlender::EmitterAllUpdate() {
 
     for (auto& objectData : levelData_->objects) {
-        for (std::unique_ptr<ParticleEmitter>& emitter: objectData.emitters) {
+        for (std::unique_ptr<ParticleEmitter>& emitter : objectData.emitters) {
             emitter->Update();
-        }     
+        }
     }
 }
 
@@ -157,10 +157,10 @@ void PutObjForBlender::StartRailEmitAll() {
     }
 }
 
- // easing
+// easing
 void PutObjForBlender::EasingAllReset() {
-    for (auto& objectData : levelData_->objects) {      
-           objectData.easing.Reset();      
+    for (auto& objectData : levelData_->objects) {
+        objectData.easing.Reset();
     }
 }
 void PutObjForBlender::EasingAllUpdate(const float& deltaTime) {

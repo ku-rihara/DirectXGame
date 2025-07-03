@@ -7,6 +7,7 @@
 
 /// base
 #include "base/FullscreenRenderer.h"
+#include "base/Line3dCommon.h"
 #include "base/Object3DCommon.h"
 #include "base/SkyBoxRenderer.h"
 #include "base/SpriteCommon.h"
@@ -75,6 +76,9 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     // SpriteCommon
     spriteCommon_ = SpriteCommon::GetInstance();
     spriteCommon_->Init(directXCommon_);
+
+    line3DCommon_ = Line3DCommon::GetInstance();
+    line3DCommon_->Init(directXCommon_);
 
     // ModelManager
     modelManager_ = ModelManager::GetInstance();
