@@ -16,7 +16,7 @@ void ModelAnimation::Create(const std::string& fileName) {
     animation_ = LoadAnimationFile(fileName);
     worldTransform_.Init();
     worldTransform_.rotateOder_ = RotateOder::Quaternion;
-   
+
     skeleton_ = CreateSkeleton(object3d_->GetModel()->GetModelData().rootNode);
 
     line3dDrawer_.Init();
@@ -105,6 +105,7 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
 
 void ModelAnimation::Update(const float& deltaTime) {
     animationTime_ += deltaTime;
+    animationTime_ = std::fmod(animationTime_, animation_.duration);
 
     for (Joint& joint : skeleton_.joints) {
         // 対象のJointのAnimationがあれば、値の運用を行う
@@ -125,15 +126,15 @@ void ModelAnimation::Update(const float& deltaTime) {
             joint.skeletonSpaceMatrix = joint.localMatrix;
         }
     }
+   
+    /* animationTime_                   = std::fmod(animationTime_, animation_.duration);
+     NodeAnimation& rootNodeAnimation = animation_.nodeAnimations[object3d_->GetModel()->GetModelData().rootNode.name];
 
-   /* animationTime_                   = std::fmod(animationTime_, animation_.duration);
-    NodeAnimation& rootNodeAnimation = animation_.nodeAnimations[object3d_->GetModel()->GetModelData().rootNode.name];
+     worldTransform_.translation_ = CalculateValue(rootNodeAnimation.translate.keyframes, animationTime_);
+     worldTransform_.quaternion_  = CalculateValueQuaternion(rootNodeAnimation.rotate.keyframes, animationTime_);
+     worldTransform_.scale_       = CalculateValue(rootNodeAnimation.scale.keyframes, animationTime_);
 
-    worldTransform_.translation_ = CalculateValue(rootNodeAnimation.translate.keyframes, animationTime_);
-    worldTransform_.quaternion_  = CalculateValueQuaternion(rootNodeAnimation.rotate.keyframes, animationTime_);
-    worldTransform_.scale_       = CalculateValue(rootNodeAnimation.scale.keyframes, animationTime_);
-
-    worldTransform_.UpdateMatrix();*/
+     worldTransform_.UpdateMatrix();*/
 }
 
 void ModelAnimation::Draw(const ViewProjection& viewProjection) {
@@ -143,7 +144,7 @@ void ModelAnimation::Draw(const ViewProjection& viewProjection) {
 void ModelAnimation::DebugDraw(const ViewProjection& viewProjection) {
     for (const Joint& joint : skeleton_.joints) {
         if (!joint.parent.has_value()) {
-            continue; 
+            continue;
         }
 
         const Joint& parentJoint = skeleton_.joints[*joint.parent];
@@ -154,10 +155,14 @@ void ModelAnimation::DebugDraw(const ViewProjection& viewProjection) {
 
         // Line描画
         line3dDrawer_.SetLine(parentPos, childPos, Vector4::kWHITE());
+
+        // Joint描画
+        line3dDrawer_.DrawSphereWireframe(parentPos, 0.1f, Vector4::kWHITE());
+        line3dDrawer_.DrawSphereWireframe(childPos, 0.1f, Vector4::kWHITE());
+
         line3dDrawer_.Draw(DirectXCommon::GetInstance()->GetCommandList(), viewProjection);
     }
 }
-
 
 Vector3 ModelAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time) {
     assert(!keyframe.empty());

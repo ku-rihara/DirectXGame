@@ -43,14 +43,15 @@ private:
 
 	///テクスチャ
 	TextureManager* textureManager_ = nullptr;
-    D3D12_GPU_DESCRIPTOR_HANDLE textureHandle_;
+    DirectXCommon* dxCommon_=nullptr;
+	uint32_t textureHandle_;
 	ModelData modelData_;
 	
 	/// GPUHandle,BufferView
 	D3D12_GPU_DESCRIPTOR_HANDLE handle_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
-
+   
 	/// リソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>vertexResource_; //頂点リソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>indexResource_; //indexリソース

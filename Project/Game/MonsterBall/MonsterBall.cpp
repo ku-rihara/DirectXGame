@@ -11,7 +11,7 @@ MonsterBall::~MonsterBall() {}
 
 void MonsterBall::Init() {
     modelAnimation_ = std::make_unique<ModelAnimation>();
-    modelAnimation_->Create("simpleSkin.gltf");
+    modelAnimation_->Create("SneakWalk.gltf");
 
 	transform_.Init();
 	transform_.translation_.y = -5.0f;
