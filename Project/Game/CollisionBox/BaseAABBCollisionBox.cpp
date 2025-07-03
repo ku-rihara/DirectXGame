@@ -16,7 +16,7 @@ void BaseAABBCollisionBox::Draw() {
 Vector3 BaseAABBCollisionBox::GetCollisionPos() const {
 
 	// ワールド座標に変換
-	Vector3 worldPos = MatrixTransform(offset_, transform_.matWorld_);
+	Vector3 worldPos = TransformMatrix(offset_, transform_.matWorld_);
 	return worldPos;
 }
 

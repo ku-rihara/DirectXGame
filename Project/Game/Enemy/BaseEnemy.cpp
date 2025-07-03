@@ -265,7 +265,7 @@ Vector3 BaseEnemy::GetCollisionPos() const {
 	// ローカル座標でのオフセット
 	const Vector3 offset = { 0.0f, 0.0f, 0.0f };
 	// ワールド座標に変換
-	Vector3 worldPos = MatrixTransform(offset, transform_.matWorld_);
+	Vector3 worldPos = TransformMatrix(offset, transform_.matWorld_);
 	return worldPos;
 }
 
@@ -303,7 +303,7 @@ bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
 	// 敵のロックオン座標を取得
 	Vector3 positionWorld = GetWorldPosition();
 	// ワールド→ビュー座標系
-	positionView = MatrixTransform(positionWorld, viewProjection.matView_);
+	positionView = TransformMatrix(positionWorld, viewProjection.matView_);
 	// 距離条件チェック
 	if (0.0f <= positionView.z && positionView.z <= 1280.0f) {
 		// カメラ前方との角度を計算

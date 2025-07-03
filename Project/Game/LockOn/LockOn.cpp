@@ -123,7 +123,7 @@ bool LockOn::IsTargetRange(const BaseEnemy& enemy, const ViewProjection& viewPro
 	// 敵のロックオン座標を取得
 	Vector3 positionWorld = enemy.GetWorldPosition();
 	// ワールド→ビュー座標系
-	positionView = MatrixTransform(positionWorld, viewProjection.matView_);
+	positionView = TransformMatrix(positionWorld, viewProjection.matView_);
 	// 距離条件チェック
 	if (minDistance_ <= positionView.z && positionView.z <= maxDistance_) {
 		// カメラ前方との角度を計算
