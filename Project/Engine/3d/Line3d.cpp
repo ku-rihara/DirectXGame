@@ -5,6 +5,9 @@
 #include <cassert>
 #include <cstring>
 #include <d3dx12.h>
+#include <cmath>
+#include <numbers>
+#include <cstdint>
 
 // 初期化
 void Line3D::Init() {
@@ -73,6 +76,46 @@ void Line3D::Draw(ID3D12GraphicsCommandList* commandList, const ViewProjection& 
 
     Object3DCommon::GetInstance()->PreDraw(commandList);
 }
+
+void Line3D::DrawSphereWireframe(const Vector3& center, float radius, const Vector4& color) {
+    const int32_t latMax = 8;
+    const int32_t lonMax = 8;
+
+    using std::numbers::pi_v;
+    const float PI = pi_v<float>;
+
+    // 緯度方向（Y軸を中心に）+Zから-Zへ
+    for (int32_t lat = 0; lat <= latMax; ++lat) {
+        float theta1 = PI * (float)(lat) / (float)latMax;
+        float theta2 = PI * (float)(lat + 1) / (float)latMax;
+
+        for (int32_t lon = 0; lon < lonMax; ++lon) {
+            float phi1 = 2.0f * PI * (float)(lon) / (float)lonMax;
+            float phi2 = 2.0f * PI * (float)(lon + 1) / (float)lonMax;
+
+            Vector3 p1 = {
+                radius * std::sin(theta1) * std::cos(phi1),
+                radius * std::cos(theta1),
+                radius * std::sin(theta1) * std::sin(phi1),
+            };
+            Vector3 p2 = {
+                radius * std::sin(theta1) * std::cos(phi2),
+                radius * std::cos(theta1),
+                radius * std::sin(theta1) * std::sin(phi2),
+            };
+            Vector3 p3 = {
+                radius * std::sin(theta2) * std::cos(phi1),
+                radius * std::cos(theta2),
+                radius * std::sin(theta2) * std::sin(phi1),
+            };
+
+            // 中心にオフセットして線追加
+            SetLine(center + p1, center + p2, color);
+            SetLine(center + p1, center + p3, color);
+        }
+    }
+}
+
 
 void Line3D::Reset() {
     currentLineCount_ = 0;
