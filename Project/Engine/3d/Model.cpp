@@ -137,8 +137,7 @@ void Model::CreateModel(const std::string& ModelFileName) {
     }
 
     textureManager_ = TextureManager::GetInstance();
-  /*  textureHandle_  = textureManager_->LoadTexture(modelData_.material.textureFilePath);*/
-    textureHandle_  = textureManager_->GetTextureHandle(textureManager_->LoadTexture(modelData_.material.textureFilePath));
+    textureHandle_  = textureManager_->LoadTexture(modelData_.material.textureFilePath);
 
     dxCommon_ = DirectXCommon::GetInstance();
 
@@ -156,7 +155,7 @@ void Model::CreateModel(const std::string& ModelFileName) {
     std::memcpy(vertexData, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
 
     // indexResource の作成
-    indexResource_                  = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), static_cast<UINT>(sizeof(uint32_t) * modelData_.indices.size()));
+    indexResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), static_cast<UINT>(sizeof(uint32_t) * modelData_.indices.size()));
 
     indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
     indexBufferView_.SizeInBytes    = static_cast<UINT>(sizeof(uint32_t) * modelData_.indices.size());
@@ -165,7 +164,6 @@ void Model::CreateModel(const std::string& ModelFileName) {
     uint32_t* indexData = nullptr;
     indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData));
     std::memcpy(indexData, modelData_.indices.data(), sizeof(uint32_t) * modelData_.indices.size());
-   
 }
 
 void Model::DebugImGui() {
@@ -193,7 +191,7 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material ma
     if (textureHandle.has_value()) {
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
     } else {
-        commandList->SetGraphicsRootDescriptorTable(2, textureHandle_);
+        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
     }
 
     uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
@@ -222,7 +220,7 @@ void Model::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HAND
     if (textureHandle.has_value()) {
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
     } else {
-        commandList->SetGraphicsRootDescriptorTable(2, textureHandle_);
+        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
     }
 
     commandList->DrawInstanced(UINT(modelData_.vertices.size()), instanceNum, 0, 0);
