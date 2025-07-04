@@ -26,14 +26,15 @@ uint32_t RtvManager::Allocate() {
 
     assert(IsAbleSecure());
 
-    // return する番号を一旦記録
-    int index = useIndex_;
+    static bool isFirst = true;
 
-    // 次回の為に番号を1進める
-    useIndex_++;
+    if (isFirst) {
+        isFirst = false;
+        return useIndex_;
+    }
 
-    // 上で記録した番号をreturn
-    return index;
+    useIndex_++; // 2回目以降に加算
+    return useIndex_;
 }
 
 bool RtvManager::IsAbleSecure() {

@@ -308,7 +308,37 @@ void DirectXCommon::CreateRenderTargetView() {
     UINT index = rtvManager_->Allocate();
     rtvHandles_[2] = rtvManager_->GetCPUDescriptorHandle(index);
     rtvManager_->CreateRTV(index, renderTextureResource_.Get(), &rtvDesc);
-  
+    //// ディスクリプタヒープの生成
+    //rtvDescriptorHeap_ = CreateDescriptorHeap(GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 3, false);
+
+    //// SwapChainからResourceを引っ張ってくる
+    //for (int i = 0; i < 2; i++) {
+    //    swapChainResources_[i] = nullptr;
+    //    hr_                    = swapChain_->GetBuffer(i, IID_PPV_ARGS(&swapChainResources_[i]));
+    //    // うまく取得できなければ起動できない
+    //    assert(SUCCEEDED(hr_));
+    //}
+
+    //// RTVの設定
+    //rtvDesc_.Format        = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; // 出力結果をSRGBに変換して書き込む
+    //rtvDesc_.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D; // 2dテクスチャとして書き込む
+
+    //// まず1つ目を作る。1つ目は最初のところに作る。作る場所をこちらで指定してあげる必要がある
+    //rtvHandles_[0] = GetCPUDescriptorHandle(rtvDescriptorHeap_, descriptorSizeRTV_, 0);
+    //rtvHandles_[1] = GetCPUDescriptorHandle(rtvDescriptorHeap_, descriptorSizeRTV_, 1);
+    //rtvHandles_[2] = GetCPUDescriptorHandle(rtvDescriptorHeap_, descriptorSizeRTV_, 2);
+
+    //GetDevice()->CreateRenderTargetView(swapChainResources_[0].Get(), &rtvDesc_, rtvHandles_[0]);
+    //GetDevice()->CreateRenderTargetView(swapChainResources_[1].Get(), &rtvDesc_, rtvHandles_[1]);
+
+    //// 3
+    //const Vector4 color = {0.1f, 0.1f, 0.1f, 1.0f};
+
+    //renderTextureResource_ = CreateRenderTextureResource(
+    //    device_, WinApp::kWindowWidth, WinApp::kWindowHeight,
+    //    DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, color);
+
+    //device_->CreateRenderTargetView(renderTextureResource_.Get(), &rtvDesc_, rtvHandles_[2]);
 }
 
 
