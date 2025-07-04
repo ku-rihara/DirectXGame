@@ -15,6 +15,7 @@
 #include "base/TextureManager.h"
 #include "base/WinApp.h"
 #include "Dx/DirectXCommon.h"
+#include"base/RtvManager.h"
 
 /// audio,input
 #include "audio/Audio.h"
@@ -44,8 +45,12 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     // DirectX初期化
     directXCommon_ = DirectXCommon::GetInstance();
     directXCommon_->Init(winApp_.get(), width, height);
-    directXCommon_->CreateGraphicPipelene();
 
+    rtvManager_ = RtvManager::GetInstance();
+    rtvManager_->Init(directXCommon_);
+
+    directXCommon_->InitRenderingResources();
+  
     // srvManager
     srvManager_ = SrvManager::GetInstance();
     srvManager_->Init(directXCommon_);

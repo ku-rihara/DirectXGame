@@ -1,4 +1,5 @@
 #include "ModelAnimation.h"
+#include "base/SrvManager.h"
 #include "MathFunction.h"
 
 #include <cassert>
@@ -10,6 +11,9 @@
 #include <assimp/scene.h>
 #include <filesystem>
 #include <fstream>
+#include <cstring>
+#include <algorithm>
+#include <Matrix4x4.h>
 
 void ModelAnimation::Create(const std::string& fileName) {
     object3d_.reset(Object3d::CreateModel(fileName));
@@ -32,6 +36,57 @@ Skeleton ModelAnimation::CreateSkeleton(const Node& rootNode) {
     }
 
     return skeleton;
+}
+
+SkinCluster ModelAnimation::CreateSkinCluster(uint32_t descriptorSize, ModelData& modelData) {
+    descriptorSize;
+    SkinCluster skinCluster;
+    DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+
+    // palette用のResourceを確保
+    skinCluster.paletteResource = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(WellForGPU) * skeleton_.joints.size());
+    WellForGPU* mappedPalette   = nullptr;
+    skinCluster.paletteResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedPalette));
+    skinCluster.mappedPalette = {mappedPalette, skeleton_.joints.size()}; // spanを使ってアクセスするように
+
+    uint32_t srvIndex = SrvManager::GetInstance()->Allocate();
+    skinCluster.paletteSrvHandle.first  = SrvManager::GetInstance()->GetCPUDescriptorHandle(srvIndex);
+    skinCluster.paletteSrvHandle.second = SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex);
+
+    //palette用のSrvを作成
+    SrvManager::GetInstance()->CreateSRVforStructuredBuffer(
+        srvIndex,skinCluster.paletteResource.Get(),UINT(skeleton_.joints.size()),sizeof(WellForGPU));
+
+    //influence用のResourceを作成
+    skinCluster.influenceResource = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(VertexInfluence) * modelData.vertices.size());
+    VertexInfluence* mappedInfluence = nullptr;
+    skinCluster.influenceResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedInfluence));
+    std::memset(mappedInfluence, 0, sizeof(VertexInfluence) * modelData.vertices.size());//0埋め,weightを0にしておく
+    skinCluster.mappedInfluence = {mappedInfluence,modelData.vertices.size()};
+
+    //influence用のVBVを作成
+    skinCluster.inverseBindPoseMatrices.resize(skeleton_.joints.size());
+    std::generate(skinCluster.inverseBindPoseMatrices.begin(), skinCluster.inverseBindPoseMatrices.end(), MakeIdentity4x4);
+
+    for (const auto& jointWeight : modelData.skinClusterData) {
+        auto it = skeleton_.jointMap.find(jointWeight.first);
+        if (it == skeleton_.jointMap.end()) {
+            continue;
+        }
+        skinCluster.inverseBindPoseMatrices[(*it).second] = jointWeight.second.inverseBindPoseMatrix;
+        for (const auto& vertexWeight : jointWeight.second.vertexWeights) {
+            auto& currentInfluence = skinCluster.mappedInfluence[vertexWeight.vertexIndex];
+            for (uint32_t index = 0; index < kNumMaxInfluence; ++index) {
+                if (currentInfluence.weights[index] == 0.0f) {
+                    currentInfluence.weights[index] = vertexWeight.weight;
+                    currentInfluence.jointIndices[index] = (*it).second;
+                    break;
+                }
+            }
+        }
+    }
+
+    return skinCluster;
 }
 
 int32_t ModelAnimation::CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints) {
@@ -126,7 +181,7 @@ void ModelAnimation::Update(const float& deltaTime) {
             joint.skeletonSpaceMatrix = joint.localMatrix;
         }
     }
-   
+
     /* animationTime_                   = std::fmod(animationTime_, animation_.duration);
      NodeAnimation& rootNodeAnimation = animation_.nodeAnimations[object3d_->GetModel()->GetModelData().rootNode.name];
 

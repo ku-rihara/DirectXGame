@@ -75,6 +75,9 @@ void Line3DCommon::CreateGraphicsPipeline() {
 
     HRESULT hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&graphicsPipelineState_));
     assert(SUCCEEDED(hr));
+    if (FAILED(hr)) {
+        return;
+    }
 }
 
 void Line3DCommon::CreateRootSignature() {

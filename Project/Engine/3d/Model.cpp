@@ -53,6 +53,28 @@ ModelData Model::LoadModelFile(const std::string& directoryPath, const std::stri
                 modelData.indices.push_back(vertexIndex);
             }
 
+            //for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
+            //    aiBone* bone                     = mesh->mBones[boneIndex];
+            //    std::string jointName            = bone->mName.C_Str();
+            //    JointWeightData& jointWeightData = modelData.skinClusterData[jointName];
+
+            //    aiMatrix4x4 bindPoseMatrixAssimp = bone->mOffsetMatrix.Inverse();
+            //    aiVector3D scale, translate;
+            //    aiQuaternion rotate;
+            //    bindPoseMatrixAssimp.Decompose(scale, rotate, translate);
+            //    //affine
+            //    Matrix4x4 bindPoseMatrix = MakeAffineMatrixQuaternion(
+            //        Vector3(scale.x, scale.y, scale.z),
+            //        Quaternion(rotate.x, -rotate.y, -rotate.z, rotate.w),
+            //        Vector3(-translate.x, translate.y, translate.z));
+
+            //    jointWeightData.inverseBindPoseMatrix = Inverse(bindPoseMatrix);
+
+            //    for (uint32_t weightIndex = 0; weightIndex < bone->mNumWeights; ++weightIndex) {
+            //        jointWeightData.vertexWeights.push_back({bone->mWeights[weightIndex].mWeight, bone->mWeights[weightIndex].mVertexId});
+            //    }
+            //}
+
             //// vertexを解析
             // for (uint32_t element = 0; element < face.mNumIndices; ++element) {
             //     uint32_t vertexIndex = face.mIndices[element];
@@ -155,7 +177,7 @@ void Model::CreateModel(const std::string& ModelFileName) {
     std::memcpy(vertexData, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
 
     // indexResource の作成
-    indexResource_                  = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), static_cast<UINT>(sizeof(uint32_t) * modelData_.indices.size()));
+    indexResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), static_cast<UINT>(sizeof(uint32_t) * modelData_.indices.size()));
 
     indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
     indexBufferView_.SizeInBytes    = static_cast<UINT>(sizeof(uint32_t) * modelData_.indices.size());
@@ -164,7 +186,6 @@ void Model::CreateModel(const std::string& ModelFileName) {
     uint32_t* indexData = nullptr;
     indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData));
     std::memcpy(indexData, modelData_.indices.data(), sizeof(uint32_t) * modelData_.indices.size());
-   
 }
 
 void Model::DebugImGui() {

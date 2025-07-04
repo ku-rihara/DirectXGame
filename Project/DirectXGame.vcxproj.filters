@@ -448,6 +448,9 @@
     <ClCompile Include="Engine\3d\Line3d.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\base\RtvManager.cpp">
+      <Filter>MyEngine\.cpp\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -758,6 +761,12 @@
     </ClInclude>
     <ClInclude Include="Engine\3d\Line3d.h">
       <Filter>MyEngine\.h\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Animation\SkinCluster.h">
+      <Filter>MyEngine\.h\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\RtvManager.h">
+      <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

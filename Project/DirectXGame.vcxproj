@@ -29,6 +29,7 @@
     <ClCompile Include="Engine\base\Line3dCommon.cpp" />
     <ClCompile Include="Engine\base\Material.cpp" />
     <ClCompile Include="Engine\base\Object3DCommon.cpp" />
+    <ClCompile Include="Engine\base\RtvManager.cpp" />
     <ClCompile Include="Engine\base\SkyBoxRenderer.cpp" />
     <ClCompile Include="Engine\base\SpriteCommon.cpp" />
     <ClCompile Include="Engine\base\SpriteMaterial.cpp" />
@@ -119,11 +120,13 @@
     <ClInclude Include="Engine\Animation\AnimationData.h" />
     <ClInclude Include="Engine\Animation\ModelAnimation.h" />
     <ClInclude Include="Engine\Animation\SkeletonData.h" />
+    <ClInclude Include="Engine\Animation\SkinCluster.h" />
     <ClInclude Include="Engine\audio\Audio.h" />
     <ClInclude Include="Engine\base\FullscreenRenderer.h" />
     <ClInclude Include="Engine\base\Line3dCommon.h" />
     <ClInclude Include="Engine\base\Material.h" />
     <ClInclude Include="Engine\base\Object3DCommon.h" />
+    <ClInclude Include="Engine\base\RtvManager.h" />
     <ClInclude Include="Engine\base\SkyBoxRenderer.h" />
     <ClInclude Include="Engine\base\SpriteCommon.h" />
     <ClInclude Include="Engine\base\SpriteMaterial.h" />

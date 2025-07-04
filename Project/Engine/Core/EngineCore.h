@@ -16,6 +16,7 @@ class Input;
 class FullscreenRenderer;
 class SkyBoxRenderer;
 class Line3DCommon;
+class RtvManager;
 
 class EngineCore {
 public:
@@ -64,4 +65,5 @@ public:
      SkyBoxRenderer* skyBoxRenderer_;
      FullscreenRenderer* copyImageRenderer_;
      Line3DCommon* line3DCommon_;
+     RtvManager* rtvManager_;
 };
