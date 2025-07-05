@@ -1,5 +1,6 @@
 #include "RtvManager.h"
 #include <cassert>
+#include <d3d12.h>
 
 // 最大SRV数の定義
 const uint32_t RtvManager::kMaxCount = 3;

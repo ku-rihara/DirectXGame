@@ -85,6 +85,7 @@ private:
 
     uint32_t descriptorSizeDSV_;
 
+
     // バリア
     D3D12_RESOURCE_BARRIER barrier_{};
     UINT backBufferIndex_;

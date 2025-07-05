@@ -2,7 +2,7 @@
 
 /// base
 #include "Dx/DirectXCommon.h"
-#include <d3d12.h>
+
 
 /// SRV管理
 class RtvManager {
