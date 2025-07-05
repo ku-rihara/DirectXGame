@@ -2,6 +2,7 @@
 
 /// base
 #include "Dx/DirectXCommon.h"
+#include <d3d12.h>
 
 /// SRV管理
 class RtvManager {
@@ -30,13 +31,10 @@ public:
     bool IsAbleSecure();
 
     /// GPU、CPUデスクリプタハンドル取得
-    D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(uint32_t index);
-
-     // RTVハンドル取得
-    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(UINT index) const;
+    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(uint32_t index);
 
     // RTV作成
-    void CreateRTV(UINT index, ID3D12Resource* resource, const D3D12_RENDER_TARGET_VIEW_DESC* desc = nullptr);
+    void CreateRTV(uint32_t index, ID3D12Resource* resource, D3D12_RENDER_TARGET_VIEW_DESC* desc);
 
 
 private:
