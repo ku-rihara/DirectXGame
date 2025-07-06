@@ -1,16 +1,16 @@
-#include "Object3DCommon.h"
+#include "Object3DPiprline.h"
 // Function
 #include "function/Log.h"
 #include <cassert>
 #include <string>
 
 
-Object3DCommon* Object3DCommon::GetInstance() {
-    static Object3DCommon instance;
+Object3DPiprline* Object3DPiprline::GetInstance() {
+    static Object3DPiprline instance;
     return &instance;
 }
 
-void Object3DCommon::Init(DirectXCommon* dxCommon) {
+void Object3DPiprline::Init(DirectXCommon* dxCommon) {
 
     // 引数で受けとる
     dxCommon_ = dxCommon;
@@ -18,7 +18,7 @@ void Object3DCommon::Init(DirectXCommon* dxCommon) {
     CreateGraphicsPipeline();
 }
 
-void Object3DCommon::CreateGraphicsPipeline() {
+void Object3DPiprline::CreateGraphicsPipeline() {
 
     HRESULT hr = 0;
 
@@ -54,18 +54,7 @@ void Object3DCommon::CreateGraphicsPipeline() {
     inputLayoutDesc.pInputElementDescs = inputElementDescs;
     inputLayoutDesc.NumElements        = _countof(inputElementDescs);
 
-    ////BlendStateの設定
-    // D3D12_BLEND_DESC blendDesc{};
-    ////すべての色要素を書き込む
-    // blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-    // blendDesc.RenderTarget[0].BlendEnable = TRUE;
-    // blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
-    // blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-    // blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
-    // blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-    // blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-    // blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
-
+   
     // ADD ブレンド設定
     D3D12_BLEND_DESC blendDescAdd                      = {};
     blendDescAdd.RenderTarget[0].BlendEnable           = TRUE;
@@ -138,7 +127,7 @@ void Object3DCommon::CreateGraphicsPipeline() {
     CreatePSO(blendDescNone, graphicsPipelineStateNone_);
 }
 
-void Object3DCommon::CreateRootSignature() {
+void Object3DPiprline::CreateRootSignature() {
     HRESULT hr = 0;
     // RootSignatureを作成
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -224,12 +213,12 @@ void Object3DCommon::CreateRootSignature() {
     assert(SUCCEEDED(hr));
 }
 
-void Object3DCommon::PreDraw(ID3D12GraphicsCommandList* commandList) {
+void Object3DPiprline::PreDraw(ID3D12GraphicsCommandList* commandList) {
     // RootSignatureを設定
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
 }
 
-void Object3DCommon::PreBlendSet(ID3D12GraphicsCommandList* commandList, BlendMode blendMode) {
+void Object3DPiprline::PreBlendSet(ID3D12GraphicsCommandList* commandList, BlendMode blendMode) {
     switch (blendMode) {
     case BlendMode::None:
         commandList->SetPipelineState(graphicsPipelineStateNone_.Get());

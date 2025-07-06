@@ -1,4 +1,5 @@
 #include"SrvManager.h"
+#include <cassert>
 
 // 最大SRV数の定義
 const uint32_t SrvManager::kMaxCount = 1024*6;
@@ -16,7 +17,7 @@ void SrvManager::Init(DirectXCommon* dxCommon) {
 	this->dxCommon_ = dxCommon;
 
 	// でスクリプタヒープ生成
-	descriptorHeap_ = dxCommon_->CreateDescriptorHeap(dxCommon_->GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, kMaxCount, true);
+	descriptorHeap_ = dxCommon_->InitializeDescriptorHeap(dxCommon_->GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, kMaxCount, true);
 	/// デスクリプタ一個分のサイズを取得して記録
 	descriptorSize_ = dxCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
@@ -26,6 +27,8 @@ void SrvManager::Init(DirectXCommon* dxCommon) {
   ///アロケータ
   ///=========================================
 uint32_t  SrvManager::Allocate() {
+
+	assert(IsAbleSecure());
 
 	// return する番号を一旦記録
 	int index = useIndex_;

@@ -1,18 +1,18 @@
-#include "Line3DCommon.h"
+#include "Line3DPipeline.h"
 #include "Dx/DirectXCommon.h"
 #include <cassert>
 
-Line3DCommon* Line3DCommon::GetInstance() {
-    static Line3DCommon instance;
+Line3DPipeline* Line3DPipeline::GetInstance() {
+    static Line3DPipeline instance;
     return &instance;
 }
 
-void Line3DCommon::Init(DirectXCommon* dxCommon) {
+void Line3DPipeline::Init(DirectXCommon* dxCommon) {
     dxCommon_ = dxCommon;
     CreateGraphicsPipeline();
 }
 
-void Line3DCommon::CreateGraphicsPipeline() {
+void Line3DPipeline::CreateGraphicsPipeline() {
 
     CreateRootSignature();
 
@@ -75,9 +75,12 @@ void Line3DCommon::CreateGraphicsPipeline() {
 
     HRESULT hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&graphicsPipelineState_));
     assert(SUCCEEDED(hr));
+    if (FAILED(hr)) {
+        return;
+    }
 }
 
-void Line3DCommon::CreateRootSignature() {
+void Line3DPipeline::CreateRootSignature() {
     HRESULT hr = 0;
 
     D3D12_ROOT_SIGNATURE_DESC desc{};
@@ -99,7 +102,7 @@ void Line3DCommon::CreateRootSignature() {
     assert(SUCCEEDED(hr));
 }
 
-void Line3DCommon::PreDraw(ID3D12GraphicsCommandList* commandList) {
+void Line3DPipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
     commandList->SetPipelineState(graphicsPipelineState_.Get());
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);

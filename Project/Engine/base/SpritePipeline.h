@@ -2,7 +2,7 @@
 
 #include"Dx/DirectXCommon.h"
 
-class SpriteCommon {
+class SpritePipeline {
 private://メンバ変数
 
     DirectXCommon* dxCommon_;
@@ -34,7 +34,7 @@ public://メンバ関数
     // 初期化
     void Init(DirectXCommon* dxCommon);
 
-    static SpriteCommon* GetInstance();
+    static SpritePipeline* GetInstance();
 
     // getter
     DirectXCommon* GetDxCommon() const { return dxCommon_; }

@@ -8,15 +8,15 @@
 
 class DirectXCommon;
 
-class Line3DCommon {
+class Line3DPipeline {
 public:
-    static Line3DCommon* GetInstance();
+    static Line3DPipeline* GetInstance();
 
     void Init(DirectXCommon* dxCommon);
     void PreDraw(ID3D12GraphicsCommandList* commandList);
 
 private:
-    Line3DCommon() = default;
+    Line3DPipeline() = default;
     void CreateRootSignature();
     void CreateGraphicsPipeline();
 

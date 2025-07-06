@@ -4,7 +4,7 @@
 #include "Material.h"
 
 
-class Object3DCommon {
+class Object3DPiprline {
 private://メンバ変数
 
 	DirectXCommon* dxCommon_;
@@ -39,7 +39,7 @@ public://メンバ関数
 	//初期化
 	void Init(DirectXCommon* dxCommon);
 
-	static	Object3DCommon* GetInstance();
+	static	Object3DPiprline* GetInstance();
 
 	//getter
 	DirectXCommon* GetDxCommon()const {	return dxCommon_ ;}

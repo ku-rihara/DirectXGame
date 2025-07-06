@@ -26,11 +26,12 @@
     <ClCompile Include="Engine\Animation\ModelAnimation.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
     <ClCompile Include="Engine\base\FullscreenRenderer.cpp" />
-    <ClCompile Include="Engine\base\Line3dCommon.cpp" />
+    <ClCompile Include="Engine\base\Line3DPipeline.cpp" />
     <ClCompile Include="Engine\base\Material.cpp" />
-    <ClCompile Include="Engine\base\Object3DCommon.cpp" />
+    <ClCompile Include="Engine\base\Object3DPiprline.cpp" />
+    <ClCompile Include="Engine\base\RtvManager.cpp" />
     <ClCompile Include="Engine\base\SkyBoxRenderer.cpp" />
-    <ClCompile Include="Engine\base\SpriteCommon.cpp" />
+    <ClCompile Include="Engine\base\SpritePipeline.cpp" />
     <ClCompile Include="Engine\base\SpriteMaterial.cpp" />
     <ClCompile Include="Engine\base\SrvManager.cpp" />
     <ClCompile Include="Engine\base\TextureManager.cpp" />
@@ -189,13 +190,15 @@
     <ClInclude Include="Engine\Animation\AnimationData.h" />
     <ClInclude Include="Engine\Animation\ModelAnimation.h" />
     <ClInclude Include="Engine\Animation\SkeletonData.h" />
+    <ClInclude Include="Engine\Animation\SkinCluster.h" />
     <ClInclude Include="Engine\audio\Audio.h" />
     <ClInclude Include="Engine\base\FullscreenRenderer.h" />
-    <ClInclude Include="Engine\base\Line3dCommon.h" />
+    <ClInclude Include="Engine\base\Line3DPipeline.h" />
     <ClInclude Include="Engine\base\Material.h" />
-    <ClInclude Include="Engine\base\Object3DCommon.h" />
+    <ClInclude Include="Engine\base\Object3DPiprline.h" />
+    <ClInclude Include="Engine\base\RtvManager.h" />
     <ClInclude Include="Engine\base\SkyBoxRenderer.h" />
-    <ClInclude Include="Engine\base\SpriteCommon.h" />
+    <ClInclude Include="Engine\base\SpritePipeline.h" />
     <ClInclude Include="Engine\base\SpriteMaterial.h" />
     <ClInclude Include="Engine\base\SrvManager.h" />
     <ClInclude Include="Engine\base\TextureManager.h" />
@@ -374,6 +377,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="resources\Shader\SkinningObject3d.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
     <None Include="resources\Shader\SkyBox.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -429,6 +436,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="resources\Shader\Particle.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\SkinningObject3d.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

@@ -7,14 +7,15 @@
 
 /// base
 #include "base/FullscreenRenderer.h"
-#include "base/Line3dCommon.h"
-#include "base/Object3DCommon.h"
+#include "base/Line3DPipeline.h"
+#include "base/Object3DPiprline.h"
 #include "base/SkyBoxRenderer.h"
-#include "base/SpriteCommon.h"
+#include "base/SpritePipeline.h"
 #include "base/SrvManager.h"
 #include "base/TextureManager.h"
 #include "base/WinApp.h"
 #include "Dx/DirectXCommon.h"
+#include"base/RtvManager.h"
 
 /// audio,input
 #include "audio/Audio.h"
@@ -44,8 +45,12 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     // DirectX初期化
     directXCommon_ = DirectXCommon::GetInstance();
     directXCommon_->Init(winApp_.get(), width, height);
-    directXCommon_->CreateGraphicPipelene();
 
+    rtvManager_ = RtvManager::GetInstance();
+    rtvManager_->Init(directXCommon_);
+
+    directXCommon_->InitRenderingResources();
+  
     // srvManager
     srvManager_ = SrvManager::GetInstance();
     srvManager_->Init(directXCommon_);
@@ -56,9 +61,9 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     textureManager_ = TextureManager::GetInstance();
     textureManager_->Init(directXCommon_, srvManager_);
 
-    // Object3DCommon
-    object3DCommon_ = Object3DCommon::GetInstance();
-    object3DCommon_->Init(directXCommon_);
+    // Object3DPipeline
+    Object3DPiprline_ = Object3DPiprline::GetInstance();
+    Object3DPiprline_->Init(directXCommon_);
 
     //
     skyBoxRenderer_ = SkyBoxRenderer::GetInstance();
@@ -73,12 +78,12 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     particleCommon_->Init(directXCommon_);
     ParticleManager::GetInstance()->Init(srvManager_);
 
-    // SpriteCommon
-    spriteCommon_ = SpriteCommon::GetInstance();
-    spriteCommon_->Init(directXCommon_);
+    // SpritePipeline
+    SpritePipeline_ = SpritePipeline::GetInstance();
+    SpritePipeline_->Init(directXCommon_);
 
-    line3DCommon_ = Line3DCommon::GetInstance();
-    line3DCommon_->Init(directXCommon_);
+    Line3DPipeline_ = Line3DPipeline::GetInstance();
+    Line3DPipeline_->Init(directXCommon_);
 
     // ModelManager
     modelManager_ = ModelManager::GetInstance();

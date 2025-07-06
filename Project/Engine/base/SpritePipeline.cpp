@@ -1,21 +1,21 @@
-#include "SpriteCommon.h"
+#include "SpritePipeline.h"
 #include "function/Log.h"
 #include <cassert>
 #include <string>
 
-SpriteCommon* SpriteCommon::GetInstance() {
-    static SpriteCommon instance;
+SpritePipeline* SpritePipeline::GetInstance() {
+    static SpritePipeline instance;
     return &instance;
 }
 
-void SpriteCommon::Init(DirectXCommon* dxCommon) {
+void SpritePipeline::Init(DirectXCommon* dxCommon) {
     // 引数で受け取る
     dxCommon_ = dxCommon;
     // グラフィックスパイプラインの生成
     CreateGraphicsPipeline();
 }
 
-void SpriteCommon::CreateGraphicsPipeline() {
+void SpritePipeline::CreateGraphicsPipeline() {
     HRESULT hr = 0;
 
     staticSamplers_[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR; // バイリニアフィルタ
@@ -113,7 +113,7 @@ void SpriteCommon::CreateGraphicsPipeline() {
     assert(SUCCEEDED(hr));
 }
 
-void SpriteCommon::CreateRootSignature() {
+void SpritePipeline::CreateRootSignature() {
     HRESULT hr = 0;
 
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -158,7 +158,7 @@ void SpriteCommon::CreateRootSignature() {
     assert(SUCCEEDED(hr));
 }
 
-void SpriteCommon::PreDraw(ID3D12GraphicsCommandList* commandList) {
+void SpritePipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
     // パイプラインの設定 (Sprite用)
     commandList->SetPipelineState(graphicsPipelineState_.Get());
     commandList->SetGraphicsRootSignature(rootSignature_.Get());

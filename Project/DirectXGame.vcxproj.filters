@@ -339,9 +339,6 @@
     <ClCompile Include="Engine\3d\ModelManager.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\Object3DCommon.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\base\TextureManager.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
@@ -388,9 +385,6 @@
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Material.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\SpriteCommon.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\SpriteMaterial.cpp">
@@ -790,11 +784,20 @@
     <ClCompile Include="Game\FireInjectors\FireInjectors.cpp">
       <Filter>Game\FireInjectors</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\Line3dCommon.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\3d\Line3d.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\Line3DPipeline.cpp">
+      <Filter>MyEngine\.cpp\base</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\SpritePipeline.cpp">
+      <Filter>MyEngine\.cpp\base</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\RtvManager.cpp">
+      <Filter>MyEngine\.cpp\base</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\Object3DPiprline.cpp">
+      <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -849,9 +852,6 @@
     <ClInclude Include="Engine\audio\Audio.h">
       <Filter>MyEngine\.h\audio</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\Object3DCommon.h">
-      <Filter>MyEngine\.h\base</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\base\TextureManager.h">
       <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
@@ -904,9 +904,6 @@
       <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Material.h">
-      <Filter>MyEngine\.h\base</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\SpriteCommon.h">
       <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\SpriteMaterial.h">
@@ -1311,11 +1308,23 @@
     <ClInclude Include="Engine\Animation\SkeletonData.h">
       <Filter>MyEngine\.h\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\Line3dCommon.h">
-      <Filter>MyEngine\.h\base</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\3d\Line3d.h">
       <Filter>MyEngine\.h\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\Object3DPiprline.h">
+      <Filter>MyEngine\.h\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\Line3DPipeline.h">
+      <Filter>MyEngine\.h\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\RtvManager.h">
+      <Filter>MyEngine\.h\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\SpritePipeline.h">
+      <Filter>MyEngine\.h\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Animation\SkinCluster.h">
+      <Filter>MyEngine\.h\Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1336,6 +1345,9 @@
       <Filter>リソースファイル</Filter>
     </None>
     <None Include="resources\Shader\Line3D.hlsli">
+      <Filter>リソースファイル</Filter>
+    </None>
+    <None Include="resources\Shader\SkinningObject3d.hlsli">
       <Filter>リソースファイル</Filter>
     </None>
   </ItemGroup>
@@ -1386,6 +1398,9 @@
       <Filter>リソースファイル</Filter>
     </FxCompile>
     <FxCompile Include="resources\Shader\Line3D.VS.hlsl">
+      <Filter>リソースファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\SkinningObject3d.VS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
   </ItemGroup>

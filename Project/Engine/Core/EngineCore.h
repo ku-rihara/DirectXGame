@@ -6,8 +6,8 @@ class WinApp;
 class DirectXCommon;
 class ImGuiManager;
 class TextureManager;
-class SpriteCommon;
-class Object3DCommon;
+class SpritePipeline;
+class Object3DPiprline;
 class ModelManager;
 class ParticleCommon;
 class SrvManager;
@@ -15,7 +15,8 @@ class Audio;
 class Input;
 class FullscreenRenderer;
 class SkyBoxRenderer;
-class Line3DCommon;
+class Line3DPipeline;
+class RtvManager;
 
 class EngineCore {
 public:
@@ -54,8 +55,8 @@ public:
      DirectXCommon* directXCommon_;
      ImGuiManager* imguiManager_;
      TextureManager* textureManager_;
-     SpriteCommon* spriteCommon_;
-     Object3DCommon* object3DCommon_;
+     SpritePipeline* SpritePipeline_;
+     Object3DPiprline* Object3DPiprline_;
      ModelManager* modelManager_;
      ParticleCommon* particleCommon_;
      SrvManager* srvManager_;
@@ -63,5 +64,6 @@ public:
      Input* input_;
      SkyBoxRenderer* skyBoxRenderer_;
      FullscreenRenderer* copyImageRenderer_;
-     Line3DCommon* line3DCommon_;
+     Line3DPipeline* Line3DPipeline_;
+     RtvManager* rtvManager_;
 };

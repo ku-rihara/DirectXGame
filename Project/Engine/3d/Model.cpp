@@ -4,7 +4,7 @@
 #include <assimp/postprocess.h>
 //
 // class
-#include "base/Object3DCommon.h"
+#include "base/Object3DPiprline.h"
 #include "base/SkyBoxRenderer.h"
 #include "base/TextureManager.h"
 #include "Lighrt/Light.h"
@@ -52,6 +52,28 @@ ModelData Model::LoadModelFile(const std::string& directoryPath, const std::stri
                 uint32_t vertexIndex = face.mIndices[element];
                 modelData.indices.push_back(vertexIndex);
             }
+
+            //for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
+            //    aiBone* bone                     = mesh->mBones[boneIndex];
+            //    std::string jointName            = bone->mName.C_Str();
+            //    JointWeightData& jointWeightData = modelData.skinClusterData[jointName];
+
+            //    aiMatrix4x4 bindPoseMatrixAssimp = bone->mOffsetMatrix.Inverse();
+            //    aiVector3D scale, translate;
+            //    aiQuaternion rotate;
+            //    bindPoseMatrixAssimp.Decompose(scale, rotate, translate);
+            //    //affine
+            //    Matrix4x4 bindPoseMatrix = MakeAffineMatrixQuaternion(
+            //        Vector3(scale.x, scale.y, scale.z),
+            //        Quaternion(rotate.x, -rotate.y, -rotate.z, rotate.w),
+            //        Vector3(-translate.x, translate.y, translate.z));
+
+            //    jointWeightData.inverseBindPoseMatrix = Inverse(bindPoseMatrix);
+
+            //    for (uint32_t weightIndex = 0; weightIndex < bone->mNumWeights; ++weightIndex) {
+            //        jointWeightData.vertexWeights.push_back({bone->mWeights[weightIndex].mWeight, bone->mWeights[weightIndex].mVertexId});
+            //    }
+            //}
 
             //// vertexを解析
             // for (uint32_t element = 0; element < face.mNumIndices; ++element) {
@@ -227,5 +249,5 @@ void Model::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HAND
 }
 
 void Model::PreDraw(ID3D12GraphicsCommandList* commandList) {
-    Object3DCommon::GetInstance()->PreDraw(commandList);
+    Object3DPiprline::GetInstance()->PreDraw(commandList);
 }

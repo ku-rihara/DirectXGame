@@ -5,10 +5,13 @@
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
 
+#include"3d/Line3d.h"
+
+//data
 #include"Animation/SkeletonData.h"
 #include "AnimationData.h"
 #include "struct/ModelData.h"
-#include"3d/Line3d.h"
+#include"Animation/SkinCluster.h"
 
 #include <memory>
 #include <vector>
@@ -20,7 +23,7 @@ public:
     Animation LoadAnimationFile(const std::string& fileName);
     Skeleton CreateSkeleton(const Node& rootNode);
     int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
-
+    SkinCluster CreateSkinCluster(uint32_t descriptorSize,ModelData&modelData);
 
     void Create(const std::string& fileName);
     void Update(const float& deltaTime);

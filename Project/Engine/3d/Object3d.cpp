@@ -56,7 +56,7 @@ void Object3d::Draw(const WorldTransform& worldTransform, const ViewProjection& 
     wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
     /*}*/
 
-    Object3DCommon::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
+    Object3DPiprline::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
     model_->Draw(wvpResource_, material_, textureHandle);
 }
 
