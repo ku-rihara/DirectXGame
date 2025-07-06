@@ -1,6 +1,6 @@
 #include "Line3D.h"
-#include "base/Line3DCommon.h"
-#include "base/Object3dCommon.h"
+#include "base/Line3DPipeline.h"
+#include "base/Object3DPiprline.h"
 #include "Dx/DirectXCommon.h"
 #include <cassert>
 #include <cstring>
@@ -62,7 +62,7 @@ void Line3D::Draw(ID3D12GraphicsCommandList* commandList, const ViewProjection& 
         return;
     }
 
-    Line3DCommon::GetInstance()->PreDraw(commandList);
+    Line3DPipeline::GetInstance()->PreDraw(commandList);
 
     // 転送
     std::memcpy(vertexData_, vertices_.data(), sizeof(Vertex) * currentLineCount_ * kVerticesPerLine_);
@@ -74,7 +74,7 @@ void Line3D::Draw(ID3D12GraphicsCommandList* commandList, const ViewProjection& 
 
     Reset();
 
-    Object3DCommon::GetInstance()->PreDraw(commandList);
+    Object3DPiprline::GetInstance()->PreDraw(commandList);
 }
 
 void Line3D::DrawSphereWireframe(const Vector3& center, float radius, const Vector4& color) {

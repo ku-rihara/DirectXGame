@@ -4,7 +4,7 @@
 #include <assimp/postprocess.h>
 //
 // class
-#include "base/Object3DCommon.h"
+#include "base/Object3DPiprline.h"
 #include "base/SkyBoxRenderer.h"
 #include "base/TextureManager.h"
 #include "Lighrt/Light.h"
@@ -249,5 +249,5 @@ void Model::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HAND
 }
 
 void Model::PreDraw(ID3D12GraphicsCommandList* commandList) {
-    Object3DCommon::GetInstance()->PreDraw(commandList);
+    Object3DPiprline::GetInstance()->PreDraw(commandList);
 }
