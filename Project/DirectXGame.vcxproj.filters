@@ -789,6 +789,9 @@
     <None Include="resources\Shader\Line3D.hlsli">
       <Filter>リソースファイル</Filter>
     </None>
+    <None Include="resources\Shader\SkinningObject3d.hlsli">
+      <Filter>リソースファイル</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\Shader\Object3d.PS.hlsl">
@@ -837,6 +840,9 @@
       <Filter>リソースファイル</Filter>
     </FxCompile>
     <FxCompile Include="resources\Shader\Line3D.VS.hlsl">
+      <Filter>リソースファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\SkinningObject3d.VS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
   </ItemGroup>
