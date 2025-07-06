@@ -26,12 +26,9 @@
     <ClCompile Include="Engine\Animation\ModelAnimation.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
     <ClCompile Include="Engine\base\FullscreenRenderer.cpp" />
-    <ClCompile Include="Engine\base\Line3DPipeline.cpp" />
     <ClCompile Include="Engine\base\Material.cpp" />
-    <ClCompile Include="Engine\base\Object3DPiprline.cpp" />
     <ClCompile Include="Engine\base\RtvManager.cpp" />
     <ClCompile Include="Engine\base\SkyBoxRenderer.cpp" />
-    <ClCompile Include="Engine\base\SpritePipeline.cpp" />
     <ClCompile Include="Engine\base\SpriteMaterial.cpp" />
     <ClCompile Include="Engine\base\SrvManager.cpp" />
     <ClCompile Include="Engine\base\TextureManager.cpp" />
@@ -60,6 +57,11 @@
     <ClCompile Include="Engine\Lighrt\PointLightManager.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLight.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLightManager.cpp" />
+    <ClCompile Include="Engine\Pipeline\Line3DPipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\Object3DPiprline.cpp" />
+    <ClCompile Include="Engine\Pipeline\ParticlePipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\SkinningObject3DPipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\SpritePipeline.cpp" />
     <ClCompile Include="Engine\Primitive\IPrimitive.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitiveBox.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitiveCylinder.cpp" />
@@ -70,7 +72,6 @@
     <ClCompile Include="Engine\utility\EasingCreator\EasingEditor.cpp" />
     <ClCompile Include="Engine\utility\EasingCreator\EasingParameterData.cpp" />
     <ClCompile Include="Engine\utility\ParameterEditor\GlobalParameter.cpp" />
-    <ClCompile Include="Engine\utility\ParticleEditor\ParticleCommon.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleManager.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleParameter.cpp" />
@@ -123,12 +124,9 @@
     <ClInclude Include="Engine\Animation\SkinCluster.h" />
     <ClInclude Include="Engine\audio\Audio.h" />
     <ClInclude Include="Engine\base\FullscreenRenderer.h" />
-    <ClInclude Include="Engine\base\Line3DPipeline.h" />
     <ClInclude Include="Engine\base\Material.h" />
-    <ClInclude Include="Engine\base\Object3DPiprline.h" />
     <ClInclude Include="Engine\base\RtvManager.h" />
     <ClInclude Include="Engine\base\SkyBoxRenderer.h" />
-    <ClInclude Include="Engine\base\SpritePipeline.h" />
     <ClInclude Include="Engine\base\SpriteMaterial.h" />
     <ClInclude Include="Engine\base\SrvManager.h" />
     <ClInclude Include="Engine\base\TextureManager.h" />
@@ -158,6 +156,11 @@
     <ClInclude Include="Engine\Lighrt\PointLightManager.h" />
     <ClInclude Include="Engine\Lighrt\SpotLight.h" />
     <ClInclude Include="Engine\Lighrt\SpotLightManager.h" />
+    <ClInclude Include="Engine\Pipeline\Line3DPipeline.h" />
+    <ClInclude Include="Engine\Pipeline\Object3DPiprline.h" />
+    <ClInclude Include="Engine\Pipeline\ParticlePipeline.h" />
+    <ClInclude Include="Engine\Pipeline\SkinningObject3DPipeline.h" />
+    <ClInclude Include="Engine\Pipeline\SpritePipeline.h" />
     <ClInclude Include="Engine\Primitive\IPrimitive.h" />
     <ClInclude Include="Engine\Primitive\PrimitiveBox.h" />
     <ClInclude Include="Engine\Primitive\PrimitiveCylinder.h" />
@@ -176,7 +179,6 @@
     <ClInclude Include="Engine\utility\EasingCreator\EasingEditor.h" />
     <ClInclude Include="Engine\utility\EasingCreator\EasingParameterData.h" />
     <ClInclude Include="Engine\utility\ParameterEditor\GlobalParameter.h" />
-    <ClInclude Include="Engine\utility\ParticleEditor\ParticleCommon.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleEmitter.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleManager.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleParameter.h" />

@@ -2,7 +2,7 @@
 
 #include "3d/ViewProjection.h"
 #include "utility/RailEditor/RailManager.h"
-#include "utility/ParticleEditor/ParticleCommon.h"
+#include"Pipeline/ParticlePipeline.h"
 
 /// primitive
 #include "Primitive/IPrimitive.h"

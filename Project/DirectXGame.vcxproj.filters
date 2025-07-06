@@ -175,6 +175,12 @@
     <Filter Include="MyEngine\.h\Animation">
       <UniqueIdentifier>{f713b9a0-da3f-43be-b0fa-f9350a0b4541}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\Pileline">
+      <UniqueIdentifier>{5eb1bdab-ff68-4792-ac57-ea6c03c5d934}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Pipeline">
+      <UniqueIdentifier>{e76999fe-1cc2-4cd6-af36-5b79ea707f3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -200,9 +206,6 @@
     </ClCompile>
     <ClCompile Include="Engine\3d\ModelManager.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\Object3DPiprline.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\TextureManager.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
@@ -250,9 +253,6 @@
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\Material.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\SpritePipeline.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\SpriteMaterial.cpp">
@@ -373,9 +373,6 @@
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleManager.cpp">
       <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\ParticleEditor\ParticleCommon.cpp">
-      <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\utility\ParameterEditor\GlobalParameter.cpp">
       <Filter>MyEngine\.cpp\utility\ParameterEditor</Filter>
     </ClCompile>
@@ -442,14 +439,26 @@
     <ClCompile Include="Engine\Animation\ModelAnimation.cpp">
       <Filter>MyEngine\.cpp\Animation</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\Line3DPipeline.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\3d\Line3d.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\RtvManager.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\ParticlePipeline.cpp">
+      <Filter>MyEngine\.cpp\Pileline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\Line3DPipeline.cpp">
+      <Filter>MyEngine\.cpp\Pileline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\Object3DPiprline.cpp">
+      <Filter>MyEngine\.cpp\Pileline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\SkinningObject3DPipeline.cpp">
+      <Filter>MyEngine\.cpp\Pileline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\SpritePipeline.cpp">
+      <Filter>MyEngine\.cpp\Pileline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -504,9 +513,6 @@
     <ClInclude Include="Engine\audio\Audio.h">
       <Filter>MyEngine\.h\audio</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\Object3DPiprline.h">
-      <Filter>MyEngine\.h\base</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\base\TextureManager.h">
       <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
@@ -559,9 +565,6 @@
       <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Material.h">
-      <Filter>MyEngine\.h\base</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\SpritePipeline.h">
       <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\SpriteMaterial.h">
@@ -681,9 +684,6 @@
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleManager.h">
       <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\ParticleEditor\ParticleCommon.h">
-      <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleEmitter.h">
       <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
     </ClInclude>
@@ -756,9 +756,6 @@
     <ClInclude Include="Engine\Animation\SkeletonData.h">
       <Filter>MyEngine\.h\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\Line3DPipeline.h">
-      <Filter>MyEngine\.h\base</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\3d\Line3d.h">
       <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
@@ -767,6 +764,21 @@
     </ClInclude>
     <ClInclude Include="Engine\base\RtvManager.h">
       <Filter>MyEngine\.h\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\SpritePipeline.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\Line3DPipeline.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\Object3DPiprline.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\ParticlePipeline.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\SkinningObject3DPipeline.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

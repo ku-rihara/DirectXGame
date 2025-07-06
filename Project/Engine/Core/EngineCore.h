@@ -9,7 +9,7 @@ class TextureManager;
 class SpritePipeline;
 class Object3DPiprline;
 class ModelManager;
-class ParticleCommon;
+class ParticlePipeline;
 class SrvManager;
 class Audio;
 class Input;
@@ -58,7 +58,7 @@ public:
      SpritePipeline* SpritePipeline_;
      Object3DPiprline* Object3DPiprline_;
      ModelManager* modelManager_;
-     ParticleCommon* particleCommon_;
+     ParticlePipeline* ParticlePipeline_;
      SrvManager* srvManager_;
      Audio* audio_;
      Input* input_;

@@ -4,7 +4,7 @@
 #include "base/Material.h"
 
 
-class ParticleCommon {
+class ParticlePipeline {
 public:
   
 private:
@@ -47,7 +47,7 @@ private:
 
 public:
 	
-	static	ParticleCommon* GetInstance();
+	static	ParticlePipeline* GetInstance();
 
 	///==============================================
 	///public method

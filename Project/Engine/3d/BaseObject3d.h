@@ -1,6 +1,6 @@
 #pragma once
 #include "base/Material.h"
-#include "base/Object3DPiprline.h"
+#include "Pipeline/Object3DPiprline.h"
 #include "Model.h"
 
 class BaseObject3d {
