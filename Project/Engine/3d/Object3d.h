@@ -2,7 +2,7 @@
 
 #include"BaseObject3d.h"
 #include"ObjectColor.h"
-//#include"base/Material.h"
+#include"Animation/SkinCluster.h"
 
 #include"3d/WorldTransform.h"
 #include"struct/TransformationMatrix.h"
@@ -36,6 +36,10 @@ public:
 	void ColorUpdate();
 	void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt);
 	void Draw(const Vector3& position, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt);
+
+	// アニメーション描画
+    void DrawAnimation(const WorldTransform& worldTransform, const ViewProjection& viewProjection, D3D12_VERTEX_BUFFER_VIEW& bufferView, std::optional<uint32_t> textureHandle = std::nullopt);
+
 
 	void DebugImgui()override;//デバッグ表示
 	void CreateWVPResource();//WVPリソース作成

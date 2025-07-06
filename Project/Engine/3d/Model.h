@@ -11,6 +11,7 @@
 //struct
 #include"struct/ModelData.h"
 
+#include "Animation/SkinCluster.h"
 
 #include"base/Material.h"
 #include"Dx/DirectXCommon.h"
@@ -89,6 +90,10 @@ public:
 		Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material,
 		std::optional<uint32_t> textureHandle = std::nullopt);	/// モデル描画
 	
+	void DrawAnimation(
+        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material,
+        D3D12_VERTEX_BUFFER_VIEW& bufferView, std::optional<uint32_t> textureHandle = std::nullopt); /// モデル描画
+
 	void DrawInstancing(
 		const uint32_t instanceNum,D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, 
 		Material material,
@@ -97,7 +102,7 @@ public:
 	///============================================================
 	/// getter method
 	///============================================================	
-	ModelData GetModelData()const { return modelData_; }
+	ModelData GetModelData() { return modelData_; }
 	bool GetIsFileGltf()const { return isFileGltf_; }
 };
 

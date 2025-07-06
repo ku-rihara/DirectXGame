@@ -17,6 +17,7 @@ class FullscreenRenderer;
 class SkyBoxRenderer;
 class Line3DPipeline;
 class RtvManager;
+class SkinningObject3DPipeline;
 
 class EngineCore {
 public:
@@ -66,4 +67,5 @@ public:
      FullscreenRenderer* copyImageRenderer_;
      Line3DPipeline* Line3DPipeline_;
      RtvManager* rtvManager_;
+     SkinningObject3DPipeline* skinningObject3DPipeline_;
 };

@@ -35,7 +35,7 @@ void MonsterBall::Update() {
 }
 
 void MonsterBall::Draw(ViewProjection& viewProjection) {
-    modelAnimation_->DebugDraw(viewProjection);
+    modelAnimation_->Draw(viewProjection);
 }
 
 void  MonsterBall::Debug() {

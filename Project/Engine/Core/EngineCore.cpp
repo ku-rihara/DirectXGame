@@ -7,15 +7,16 @@
 
 /// base
 #include "base/FullscreenRenderer.h"
-#include "Pipeline/Line3DPipeline.h"
-#include "Pipeline/Object3DPiprline.h"
+#include "base/RtvManager.h"
 #include "base/SkyBoxRenderer.h"
-#include "Pipeline/SpritePipeline.h"
 #include "base/SrvManager.h"
 #include "base/TextureManager.h"
 #include "base/WinApp.h"
 #include "Dx/DirectXCommon.h"
-#include"base/RtvManager.h"
+#include "Pipeline/Line3DPipeline.h"
+#include "Pipeline/Object3DPiprline.h"
+#include "Pipeline/SkinningObject3DPipeline.h"
+#include "Pipeline/SpritePipeline.h"
 
 /// audio,input
 #include "audio/Audio.h"
@@ -50,7 +51,7 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     rtvManager_->Init(directXCommon_);
 
     directXCommon_->InitRenderingResources();
-  
+
     // srvManager
     srvManager_ = SrvManager::GetInstance();
     srvManager_->Init(directXCommon_);
@@ -64,6 +65,9 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     // Object3DPipeline
     Object3DPiprline_ = Object3DPiprline::GetInstance();
     Object3DPiprline_->Init(directXCommon_);
+
+    skinningObject3DPipeline_ = SkinningObject3DPipeline::GetInstance();
+    skinningObject3DPipeline_->Init(directXCommon_);
 
     //
     skyBoxRenderer_ = SkyBoxRenderer::GetInstance();

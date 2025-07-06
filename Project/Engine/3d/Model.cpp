@@ -198,7 +198,7 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material ma
 
     auto commandList = dxCommon_->GetCommandList();
     /*materialDate_->color = color.;*/
-
+ 
     // 頂点バッファとインデックスバッファの設定
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
     commandList->IASetIndexBuffer(&indexBufferView_); // IBV
@@ -222,6 +222,45 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material ma
     Light::GetInstance()->SetLightCommands(commandList);
 
     // 描画コール
+    commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
+}
+
+void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, D3D12_VERTEX_BUFFER_VIEW& bufferView, std::optional<uint32_t> textureHandle) {
+
+   auto commandList = dxCommon_->GetCommandList();
+
+    D3D12_VERTEX_BUFFER_VIEW vbvs[2] = {
+        vertexBufferView_, // 頂点データ
+        bufferView // インフルエンス
+    };
+
+    // 頂点バッファとインデックスバッファの設定
+    commandList->IASetIndexBuffer(&indexBufferView_);
+    commandList->IASetVertexBuffers(0, 2, vbvs);
+    commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+    material.SetCommandList(commandList);
+
+    // 定数バッファ（WVPなど）
+    commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
+
+    // テクスチャ
+    if (textureHandle.has_value()) {
+        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
+    } else {
+        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
+    }
+
+    // 環境マップ
+    uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
+    commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
+   
+    commandList->SetGraphicsRootDescriptorTable(4);
+
+    // ライト
+    Light::GetInstance()->SetLightCommands(commandList);
+
+    // 描画
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
 }
 
