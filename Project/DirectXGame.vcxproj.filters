@@ -313,6 +313,12 @@
     <Filter Include="Game\FireInjectors">
       <UniqueIdentifier>{0b7b5e54-0d48-470f-91bf-bfc9c50b2e86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\Pipeline">
+      <UniqueIdentifier>{2d147451-6345-4e6b-b8ac-bfea1e2c4367}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Pipeline">
+      <UniqueIdentifier>{fb35dccb-ddef-41e1-bed8-659a307f0c10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -655,9 +661,6 @@
     <ClCompile Include="Engine\utility\RailEditor\RailManager.cpp">
       <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\ParticleEditor\ParticleCommon.cpp">
-      <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleEmitter.cpp">
       <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
     </ClCompile>
@@ -787,17 +790,23 @@
     <ClCompile Include="Engine\3d\Line3d.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\Line3DPipeline.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\SpritePipeline.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\base\RtvManager.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\Object3DPiprline.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
+    <ClCompile Include="Engine\Pipeline\Line3DPipeline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\Object3DPiprline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\ParticlePipeline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\SkinningObject3DPipeline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\SpritePipeline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1182,9 +1191,6 @@
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleManager.h">
       <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\ParticleEditor\ParticleCommon.h">
-      <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\utility\ParameterEditor\GlobalParameter.h">
       <Filter>MyEngine\.h\utility\ParameterEditor</Filter>
     </ClInclude>
@@ -1311,20 +1317,26 @@
     <ClInclude Include="Engine\3d\Line3d.h">
       <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\Object3DPiprline.h">
-      <Filter>MyEngine\.h\base</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\Line3DPipeline.h">
-      <Filter>MyEngine\.h\base</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\base\RtvManager.h">
-      <Filter>MyEngine\.h\base</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\SpritePipeline.h">
       <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Animation\SkinCluster.h">
       <Filter>MyEngine\.h\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\Line3DPipeline.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\Object3DPiprline.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\ParticlePipeline.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\SkinningObject3DPipeline.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\SpritePipeline.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
