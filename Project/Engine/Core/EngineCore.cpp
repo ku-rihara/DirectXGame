@@ -7,10 +7,10 @@
 
 /// base
 #include "base/FullscreenRenderer.h"
-#include "base/Line3DPipeline.h"
-#include "base/Object3DPiprline.h"
+#include "Pipeline/Line3DPipeline.h"
+#include "Pipeline/Object3DPiprline.h"
 #include "base/SkyBoxRenderer.h"
-#include "base/SpritePipeline.h"
+#include "Pipeline/SpritePipeline.h"
 #include "base/SrvManager.h"
 #include "base/TextureManager.h"
 #include "base/WinApp.h"
@@ -22,7 +22,7 @@
 #include "input/Input.h"
 
 /// utility
-#include "utility/ParticleEditor/ParticleCommon.h"
+#include "Pipeline/ParticlePipeline.h"
 #include "utility/ParticleEditor/ParticleManager.h"
 
 /// imgui,function
@@ -73,9 +73,9 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     copyImageRenderer_ = FullscreenRenderer::GetInstance();
     copyImageRenderer_->Init(directXCommon_);
 
-    // ParticleCommon
-    particleCommon_ = ParticleCommon::GetInstance();
-    particleCommon_->Init(directXCommon_);
+    // ParticlePipeline
+    ParticlePipeline_ = ParticlePipeline::GetInstance();
+    ParticlePipeline_->Init(directXCommon_);
     ParticleManager::GetInstance()->Init(srvManager_);
 
     // SpritePipeline

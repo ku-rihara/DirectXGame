@@ -1,10 +1,10 @@
 #pragma once
 
 #include"Dx/DirectXCommon.h"
-#include "Material.h"
+#include "base/Material.h"
 
 
-class Object3DPiprline {
+class SkinningObject3DPipeline {
 private://メンバ変数
 
 	DirectXCommon* dxCommon_;
@@ -39,7 +39,7 @@ public://メンバ関数
 	//初期化
 	void Init(DirectXCommon* dxCommon);
 
-	static	Object3DPiprline* GetInstance();
+	static SkinningObject3DPipeline* GetInstance();
 
 	//getter
 	DirectXCommon* GetDxCommon()const {	return dxCommon_ ;}

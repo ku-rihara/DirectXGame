@@ -1,4 +1,4 @@
-#include"ParticleCommon.h"
+#include"ParticlePipeline.h"
 //Function
 #include"function/Log.h"
 #include"base/Material.h"
@@ -6,13 +6,13 @@
 #include<string>
 
 
-ParticleCommon* ParticleCommon::GetInstance() {
-	static ParticleCommon instance;
+ParticlePipeline* ParticlePipeline::GetInstance() {
+	static ParticlePipeline instance;
 	return &instance;
 }
 
 
-void ParticleCommon::Init(DirectXCommon* dxCommon) {
+void ParticlePipeline::Init(DirectXCommon* dxCommon) {
 
 	//引数で受けとる
 	pDxCommon_ = dxCommon;
@@ -23,7 +23,7 @@ void ParticleCommon::Init(DirectXCommon* dxCommon) {
 
 }
 
-void ParticleCommon::CreateGraphicsPipeline() {
+void ParticlePipeline::CreateGraphicsPipeline() {
 
 	HRESULT hr = 0;
 
@@ -172,7 +172,7 @@ void ParticleCommon::CreateGraphicsPipeline() {
 
 }
 
-void ParticleCommon::CreateRootSignature() {
+void ParticlePipeline::CreateRootSignature() {
 	HRESULT hr = 0;
 
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -221,7 +221,7 @@ void ParticleCommon::CreateRootSignature() {
 
 }
 
-void ParticleCommon::PreDraw(ID3D12GraphicsCommandList* commandList, BlendMode blendMode) {
+void ParticlePipeline::PreDraw(ID3D12GraphicsCommandList* commandList, BlendMode blendMode) {
 	commandList->SetGraphicsRootSignature(rootSignature_.Get());
 
 	switch (blendMode) {

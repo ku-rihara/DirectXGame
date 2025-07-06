@@ -4,7 +4,7 @@
 #include <assimp/postprocess.h>
 //
 // class
-#include "base/Object3DPiprline.h"
+#include "Pipeline/Object3DPiprline.h"
 #include "base/SkyBoxRenderer.h"
 #include "base/TextureManager.h"
 #include "Lighrt/Light.h"

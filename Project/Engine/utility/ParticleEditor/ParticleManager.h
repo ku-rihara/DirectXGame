@@ -20,7 +20,7 @@
 #include <unordered_map>
 #include <memory>
 
-class ParticleCommon;
+//class ParticlePipeline;
 struct ParticleEmitter::GroupParamaters;
 struct ParticleEmitter::Parameters;
 struct ParticleEmitter::EaseParm;
@@ -132,7 +132,7 @@ private:
 
     // other class
     SrvManager* pSrvManager_;
-    ParticleCommon* pParticleCommon_;
+   /* ParticlePipeline* pParticleCommon_;*/
     AccelerationField accelerationField_;
     const ViewProjection* viewProjection_;
 
