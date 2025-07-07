@@ -7,7 +7,7 @@
 //3D
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
-#include "3d/Object3d.h"
+#include "3d/Line3D.h"
 
 #include"utility/RailEditor/Rail.h"
 #include"utility/RailEditor/ControlPosManager.h"
@@ -37,14 +37,14 @@ private:
     Vector3 scale_;
     bool isRoop_;
 
-    std::unique_ptr<Object3d>obj3D_;
+    Line3D lineDrawer_;
 
 public:
     //Function
     void Init(const std::string& groupName);
     void Update(const float& speed, const PositionMode& mode = PositionMode::WORLD, const Vector3& dirention = { 1.0f, 1.0f, 1.0f });
 
-    void Draw(const ViewProjection& viewProjection);
+    void Draw(const ViewProjection& viewProjection,const Vector3&size=Vector3(0.1f,0.1f,0.1f));
     void RailDraw(const ViewProjection& viewProjection);
     void RoopOrStop();
 

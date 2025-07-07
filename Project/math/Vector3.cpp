@@ -4,11 +4,68 @@
 
 const float kColumnWidth = 60;
 
+// 二項演算子
+Vector3 Vector3::operator+(const Vector3& obj) const {
+    return {x + obj.x, y + obj.y, z + obj.z};
+}
+
+Vector3 Vector3::operator-(const Vector3& obj) const {
+    return {x - obj.x, y - obj.y, z - obj.z};
+}
+
+Vector3 Vector3::operator*(const Vector3& obj) const {
+    return {x * obj.x, y * obj.y, z * obj.z};
+}
+
+Vector3 Vector3::operator*(const float& scalar) const {
+    return {x * scalar, y * scalar, z * scalar};
+}
+
+Vector3 Vector3::operator/(const Vector3& obj) const {
+    return {x / obj.x, y / obj.y, z / obj.z};
+}
+
+Vector3 Vector3::operator/(const float& scalar) const {
+    return {x / scalar, y / scalar, z / scalar};
+}
+
+
+Vector3 Vector3::operator-() const {
+    return {-x, -y, -z};
+}
+
+void Vector3::operator+=(const Vector3& obj) {
+    x += obj.x;
+    y += obj.y;
+    z += obj.z;
+}
+
+void Vector3::operator+=(const float& scalar) {
+    x += scalar;
+    y += scalar;
+    z += scalar;
+}
+
+void Vector3::operator-=(const Vector3& obj) {
+    x -= obj.x;
+    y -= obj.y;
+    z -= obj.z;
+}
+
+// 比較演算子
+bool operator!=(const Vector3& lhs, const Vector3& rhs) {
+    return lhs.x != rhs.x || lhs.y != rhs.y || lhs.z != rhs.z;
+}
+
+// スカラー,ベクトル
+Vector3 operator*(const float& scalar, const Vector3& vec) {
+    return {vec.x * scalar, vec.y * scalar, vec.z * scalar};
+}
+
 //内積
 float Vector3::Dot(const Vector3& v1, const Vector3& v2) {
 	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
-
 
 
 //正規化
