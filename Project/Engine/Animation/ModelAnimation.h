@@ -27,20 +27,22 @@ public:
 
     void Create(const std::string& fileName);
     void Update(const float& deltaTime);
-    void Draw(const ViewProjection& viewProjection);
+    void Draw(const  WorldTransform& transform,const ViewProjection& viewProjection);
 
-    void DebugDraw(const ViewProjection& viewProjection);
+    void DebugDraw(const WorldTransform& transform,const ViewProjection& viewProjection);
 
     Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time);
     Quaternion CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time);
 
+//public:
+//    WorldTransform worldTransform_;
 private:
     Animation animation_;
     Skeleton skeleton_;
     Joint joint_;
     SkinCluster skinCluster_;
 
-    WorldTransform worldTransform_;
+    
     std::unique_ptr<Object3d> object3d_;
 
     Line3D line3dDrawer_;

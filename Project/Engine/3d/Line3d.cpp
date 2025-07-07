@@ -15,10 +15,8 @@ void Line3D::Init() {
     HRESULT hr;
 
     kMaxVertices_ = kMaxLines_ * kVerticesPerLine_;
-    // 頂点配列の確保
-    vertices_.resize(kMaxVertices_);
 
-    UINT bufferSize = static_cast<UINT>(sizeof(Vertex) * vertices_.size());
+    UINT bufferSize = static_cast<UINT>(sizeof(Vertex) * kMaxVertices_);
 
     D3D12_HEAP_PROPERTIES heapProps = {D3D12_HEAP_TYPE_UPLOAD};
     D3D12_RESOURCE_DESC vbDesc      = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
@@ -36,23 +34,29 @@ void Line3D::Init() {
     vertexBufferView_.SizeInBytes    = static_cast<UINT>(bufferSize);
     vertexBufferView_.StrideInBytes  = sizeof(Vertex);
 
+    // ★ Mapして保持（vectorは使わない）
     vertexBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 
+    // 定数バッファ
     constantBufferResource_ = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(CBuffer));
-    cBufferData_            = nullptr;
     constantBufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&cBufferData_));
     cBufferData_->viewProjection = MakeIdentity4x4();
 
     Reset();
 }
 
+
 void Line3D::SetLine(const Vector3& start, const Vector3& end, const Vector4& color) {
     if (currentLineCount_ >= kMaxLines_) {
         return;
     }
 
-    vertices_[currentLineCount_ * 2]     = {start, color};
-    vertices_[currentLineCount_ * 2 + 1] = {end, color};
+    size_t index = currentLineCount_ * 2;
+
+   
+    vertexData_[index]     = {start, color};
+    vertexData_[index + 1] = {end, color};
+
     currentLineCount_++;
 }
 
@@ -65,7 +69,6 @@ void Line3D::Draw(ID3D12GraphicsCommandList* commandList, const ViewProjection& 
     Line3DPipeline::GetInstance()->PreDraw(commandList);
 
     // 転送
-    std::memcpy(vertexData_, vertices_.data(), sizeof(Vertex) * currentLineCount_ * kVerticesPerLine_);
     *cBufferData_ = {viewProj.matView_ * viewProj.matProjection_};
 
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
@@ -115,6 +118,37 @@ void Line3D::DrawSphereWireframe(const Vector3& center, float radius, const Vect
         }
     }
 }
+
+void Line3D::DrawCubeWireframe(const Vector3& center, float size, const Vector4& color) {
+    const float half = size * 0.5f;
+
+    // 8頂点定義
+    Vector3 vertices[8] = {
+        center + Vector3(-half, -half, -half), 
+        center + Vector3(half, -half, -half), 
+        center + Vector3(half, half, -half), 
+        center + Vector3(-half, half, -half),
+        center + Vector3(-half, -half, half), 
+        center + Vector3(half, -half, half), 
+        center + Vector3(half, half, half), 
+        center + Vector3(-half, half, half), 
+    };
+
+    // 12本のラインの両端インデックス
+    int indices[][2] = {
+        {0, 1}, {1, 2}, {2, 3}, {3, 0}, // 奥の面
+        {4, 5}, {5, 6}, {6, 7}, {7, 4}, // 手前の面
+        {0, 4}, {1, 5}, {2, 6}, {3, 7}, // 側面
+    };
+
+    // 各ラインを描画
+    for (int i = 0; i < 12; ++i) {
+        int startIdx = indices[i][0];
+        int endIdx   = indices[i][1];
+        SetLine(vertices[startIdx], vertices[endIdx], color);
+    }
+}
+
 
 
 void Line3D::Reset() {

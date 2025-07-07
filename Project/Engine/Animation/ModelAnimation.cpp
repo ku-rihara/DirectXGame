@@ -1,8 +1,8 @@
 #include "ModelAnimation.h"
 #include "base/SrvManager.h"
 #include "MathFunction.h"
-#include "Pipeline/SkinningObject3DPipeline.h"
 #include "Pipeline/Object3DPiprline.h"
+#include "Pipeline/SkinningObject3DPipeline.h"
 
 #include <cassert>
 #include <cmath>
@@ -21,8 +21,6 @@
 void ModelAnimation::Create(const std::string& fileName) {
     object3d_.reset(Object3d::CreateModel(fileName));
     animation_ = LoadAnimationFile(fileName);
-    worldTransform_.Init();
-    worldTransform_.rotateOder_ = RotateOder::Quaternion;
 
     skeleton_ = CreateSkeleton(object3d_->GetModel()->GetModelData().rootNode);
 
@@ -31,7 +29,6 @@ void ModelAnimation::Create(const std::string& fileName) {
 
     line3dDrawer_.Init();
 }
-
 
 Skeleton ModelAnimation::CreateSkeleton(const Node& rootNode) {
     Skeleton skeleton;
@@ -195,12 +192,12 @@ void ModelAnimation::Update(const float& deltaTime) {
         }
     }
 
-    //SkinClusterの更新
+    // SkinClusterの更新
     for (size_t jointIndex = 0; jointIndex < skeleton_.joints.size(); ++jointIndex) {
         assert(jointIndex < skinCluster_.inverseBindPoseMatrices.size());
-        skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix=
+        skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix =
             skinCluster_.inverseBindPoseMatrices[jointIndex] * skeleton_.joints[jointIndex].skeletonSpaceMatrix;
-        skinCluster_.mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix=
+        skinCluster_.mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix =
             Inverse(Transpose(skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix));
     }
 
@@ -209,38 +206,35 @@ void ModelAnimation::Update(const float& deltaTime) {
 
      worldTransform_.translation_ = CalculateValue(rootNodeAnimation.translate.keyframes, animationTime_);
      worldTransform_.quaternion_  = CalculateValueQuaternion(rootNodeAnimation.rotate.keyframes, animationTime_);
-     worldTransform_.scale_       = CalculateValue(rootNodeAnimation.scale.keyframes, animationTime_);
+     worldTransform_.scale_       = CalculateValue(rootNodeAnimation.scale.keyframes, animationTime_);*/
 
-     worldTransform_.UpdateMatrix();*/
+    /* worldTransform_.UpdateMatrix();*/
 }
 
-void ModelAnimation::Draw(const ViewProjection& viewProjection) {
+void ModelAnimation::Draw(const WorldTransform& transform, const ViewProjection& viewProjection) {
     SkinningObject3DPipeline::GetInstance()->PreDraw(DirectXCommon::GetInstance()->GetCommandList());
-    object3d_->DrawAnimation(worldTransform_, viewProjection, skinCluster_);
+    object3d_->DrawAnimation(transform, viewProjection, skinCluster_);
     Object3DPiprline::GetInstance()->PreDraw(DirectXCommon::GetInstance()->GetCommandList());
 }
 
-void ModelAnimation::DebugDraw(const ViewProjection& viewProjection) {
+void ModelAnimation::DebugDraw(const WorldTransform& transform, const ViewProjection& viewProjection) {
+
     for (const Joint& joint : skeleton_.joints) {
-        if (!joint.parent.has_value()) {
-            continue;
+       
+        //
+        Vector3 jointPos = TransformMatrix(transform.GetWorldPos(), joint.skeletonSpaceMatrix);
+        line3dDrawer_.DrawCubeWireframe(jointPos, 0.01f, Vector4::kWHITE());
+
+        // Line描画 
+        if (joint.parent) {
+            const Joint& parentJoint = skeleton_.joints[*joint.parent];
+            Vector3 parentPos = TransformMatrix(transform.GetWorldPos(), parentJoint.skeletonSpaceMatrix);
+            line3dDrawer_.SetLine(jointPos, parentPos, Vector4::kWHITE());
         }
-
-        const Joint& parentJoint = skeleton_.joints[*joint.parent];
-
-        // 親と子の位置取得
-        Vector3 parentPos = TransformMatrix(Vector3::UnitVector(), parentJoint.skeletonSpaceMatrix);
-        Vector3 childPos  = TransformMatrix(Vector3::UnitVector(), joint.skeletonSpaceMatrix);
-
-        // Line描画
-        line3dDrawer_.SetLine(parentPos, childPos, Vector4::kWHITE());
-
-        // Joint描画
-        line3dDrawer_.DrawSphereWireframe(parentPos, 0.1f, Vector4::kWHITE());
-        line3dDrawer_.DrawSphereWireframe(childPos, 0.1f, Vector4::kWHITE());
-
-        line3dDrawer_.Draw(DirectXCommon::GetInstance()->GetCommandList(), viewProjection);
+        
     }
+    // Joint描画
+    line3dDrawer_.Draw(DirectXCommon::GetInstance()->GetCommandList(),viewProjection);
 }
 
 Vector3 ModelAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time) {
