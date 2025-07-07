@@ -1,6 +1,6 @@
 #include "Object3d.h"
 #include "ModelManager.h"
-
+#include "Pipeline/SkinningObject3DPipeline.h"
 // #include"struct/ModelData.h"
 
 Object3d::Object3d() {
@@ -60,6 +60,7 @@ void Object3d::Draw(const WorldTransform& worldTransform, const ViewProjection& 
     model_->Draw(wvpResource_, material_, textureHandle);
 }
 
+
 ///============================================================
 /// 描画 (Vector3)
 ///============================================================
@@ -88,6 +89,33 @@ void Object3d::Draw(const Vector3& position, const ViewProjection& viewProjectio
         model_->Draw(wvpResource_, material_, textureHandle);
     }
 }
+
+///============================================================
+/// 描画
+///============================================================
+void Object3d::DrawAnimation(const WorldTransform& worldTransform, const ViewProjection& viewProjection, SkinCluster skinCluster, std::optional<uint32_t> textureHandle) {
+    if (!model_)
+        return;
+
+    ColorUpdate();
+
+    //// WVP行列の計算
+    // if (model_->GetIsFileGltf()) {//.gltfファイルの場合
+    //	wvpDate_->WVP = model_->GetModelData().rootNode.localMatrix * worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+    //	wvpDate_->WorldInverseTranspose = Inverse(Transpose(model_->GetModelData().rootNode.localMatrix * wvpDate_->World));
+    // }
+    // else {//.objファイルの場合
+    /*model_->GetModelData().rootNode.localMatrix**/
+    wvpDate_->World                 = worldTransform.matWorld_;
+    wvpDate_->WVP                   = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+    wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
+    /*}*/
+
+    SkinningObject3DPipeline::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
+    model_->DrawAnimation(wvpResource_, material_, skinCluster, textureHandle);
+}
+
+
 
 ///============================================================
 /// デバッグ表示

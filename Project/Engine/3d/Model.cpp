@@ -4,10 +4,10 @@
 #include <assimp/postprocess.h>
 //
 // class
-#include "Pipeline/Object3DPiprline.h"
 #include "base/SkyBoxRenderer.h"
 #include "base/TextureManager.h"
 #include "Lighrt/Light.h"
+#include "Pipeline/Object3DPiprline.h"
 #include <filesystem>
 
 void ModelCommon::Init(DirectXCommon* dxCommon) {
@@ -43,7 +43,8 @@ ModelData Model::LoadModelFile(const std::string& directoryPath, const std::stri
             modelData.vertices[vertexIndex].texcoord = {texcoord.x, texcoord.y};
         }
 
-        // meshの中身faceの解析
+
+          // meshの中身faceの解析
         for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
             aiFace& face = mesh->mFaces[faceIndex];
             assert(face.mNumIndices = 3); // 三角形のみサポート
@@ -52,48 +53,36 @@ ModelData Model::LoadModelFile(const std::string& directoryPath, const std::stri
                 uint32_t vertexIndex = face.mIndices[element];
                 modelData.indices.push_back(vertexIndex);
             }
-
-            //for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
-            //    aiBone* bone                     = mesh->mBones[boneIndex];
-            //    std::string jointName            = bone->mName.C_Str();
-            //    JointWeightData& jointWeightData = modelData.skinClusterData[jointName];
-
-            //    aiMatrix4x4 bindPoseMatrixAssimp = bone->mOffsetMatrix.Inverse();
-            //    aiVector3D scale, translate;
-            //    aiQuaternion rotate;
-            //    bindPoseMatrixAssimp.Decompose(scale, rotate, translate);
-            //    //affine
-            //    Matrix4x4 bindPoseMatrix = MakeAffineMatrixQuaternion(
-            //        Vector3(scale.x, scale.y, scale.z),
-            //        Quaternion(rotate.x, -rotate.y, -rotate.z, rotate.w),
-            //        Vector3(-translate.x, translate.y, translate.z));
-
-            //    jointWeightData.inverseBindPoseMatrix = Inverse(bindPoseMatrix);
-
-            //    for (uint32_t weightIndex = 0; weightIndex < bone->mNumWeights; ++weightIndex) {
-            //        jointWeightData.vertexWeights.push_back({bone->mWeights[weightIndex].mWeight, bone->mWeights[weightIndex].mVertexId});
-            //    }
-            //}
-
-            //// vertexを解析
-            // for (uint32_t element = 0; element < face.mNumIndices; ++element) {
-            //     uint32_t vertexIndex = face.mIndices[element];
-            //     aiVector3D& position = mesh->mVertices[vertexIndex];
-            //     aiVector3D& normal   = mesh->mNormals[vertexIndex];
-            //     aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
-            //     VertexData vertex;
-            //     vertex.position = {position.x, position.y, position.z, 1.0f};
-            //     vertex.normal   = {normal.x, normal.y, normal.z};
-            //     if (mesh->HasTextureCoords(0)) {
-            //         vertex.texcoord = {texcoord.x, texcoord.y};
-            //     }
-            //     // 右手→左手に変換する
-            //     vertex.position.x *= -1.0f;
-            //     vertex.normal.x *= -1.0f;
-            //     modelData.vertices.push_back(vertex);
-            // }
         }
+
+
+        for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
+            aiBone* bone                     = mesh->mBones[boneIndex];
+            std::string jointName            = bone->mName.C_Str();
+            JointWeightData& jointWeightData = modelData.skinClusterData[jointName];
+
+            aiMatrix4x4 bindPoseMatrixAssimp = bone->mOffsetMatrix.Inverse();
+            aiVector3D scale, translate;
+            aiQuaternion rotate;
+            bindPoseMatrixAssimp.Decompose(scale, rotate, translate);
+            // affine
+            Matrix4x4 bindPoseMatrix = MakeAffineMatrixQuaternion(
+                Vector3(scale.x, scale.y, scale.z),
+                Quaternion(rotate.x, -rotate.y, -rotate.z, rotate.w),
+                Vector3(-translate.x, translate.y, translate.z));
+
+            jointWeightData.inverseBindPoseMatrix = Inverse(bindPoseMatrix);
+
+            for (uint32_t weightIndex = 0; weightIndex < bone->mNumWeights; ++weightIndex) {
+                jointWeightData.vertexWeights.push_back(
+                    {bone->mWeights[weightIndex].mWeight,
+                        bone->mWeights[weightIndex].mVertexId});
+            }
+        }
+
+      
     }
+
     // Materialを解析
     for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; ++materialIndex) {
         aiMaterial* material = scene->mMaterials[materialIndex];
@@ -222,6 +211,45 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material ma
     Light::GetInstance()->SetLightCommands(commandList);
 
     // 描画コール
+    commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
+}
+
+void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, SkinCluster skinCluster, std::optional<uint32_t> textureHandle) {
+
+    auto commandList = dxCommon_->GetCommandList();
+
+    D3D12_VERTEX_BUFFER_VIEW vbvs[2] = {
+        vertexBufferView_, // 頂点データ
+        skinCluster.influenceBufferView // インフルエンス
+    };
+
+    // 頂点バッファとインデックスバッファの設定
+    commandList->IASetIndexBuffer(&indexBufferView_);
+    commandList->IASetVertexBuffers(0, 2, vbvs);
+    commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+    material.SetCommandList(commandList);
+
+    // 定数バッファ（WVPなど）
+    commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
+
+    // テクスチャ
+    if (textureHandle.has_value()) {
+        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
+    } else {
+        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
+    }
+
+    // 環境マップ
+    uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
+    commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
+
+    commandList->SetGraphicsRootDescriptorTable(10, skinCluster.paletteSrvHandle.second);
+
+    // ライト
+    Light::GetInstance()->SetLightCommands(commandList);
+
+    // 描画
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
 }
 

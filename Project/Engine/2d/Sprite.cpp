@@ -1,5 +1,5 @@
 #include "Sprite.h"
-#include "base/SpritePipeline.h"
+#include "Pipeline/SpritePipeline.h"
 #include "base/TextureManager.h"
 #include "Dx/DirectXCommon.h"
 #include <imgui.h>

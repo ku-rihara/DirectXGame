@@ -34,7 +34,7 @@ void SkinningObject3DPipeline::CreateGraphicsPipeline() {
     CreateRootSignature();
 
     // InputLayoutの設定を行う
-    D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
+    D3D12_INPUT_ELEMENT_DESC inputElementDescs[5] = {};
     inputElementDescs[0].SemanticName             = "POSITION";
     inputElementDescs[0].SemanticIndex            = 0;
     inputElementDescs[0].Format                   = DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -49,6 +49,18 @@ void SkinningObject3DPipeline::CreateGraphicsPipeline() {
     inputElementDescs[2].SemanticIndex     = 0;
     inputElementDescs[2].Format            = DXGI_FORMAT_R32G32B32_FLOAT;
     inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+
+    inputElementDescs[3].SemanticName      = "WEIGHT";
+    inputElementDescs[3].SemanticIndex     = 0;
+    inputElementDescs[3].Format            = DXGI_FORMAT_R32G32B32A32_FLOAT;
+    inputElementDescs[3].InputSlot         = 1;
+    inputElementDescs[3].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+
+    inputElementDescs[4].SemanticName      = "INDEX";
+    inputElementDescs[4].SemanticIndex     = 0;
+    inputElementDescs[4].Format            = DXGI_FORMAT_R32G32B32A32_SINT;
+    inputElementDescs[4].InputSlot         = 1;
+    inputElementDescs[4].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
     D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
     inputLayoutDesc.pInputElementDescs = inputElementDescs;
@@ -93,7 +105,7 @@ void SkinningObject3DPipeline::CreateGraphicsPipeline() {
     depthStencilDesc_.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
     // Shaderをコンパイルする
-    vertexShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/Object3d.VS.hlsl",
+    vertexShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/SkinningObject3d.VS.hlsl",
         L"vs_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
     assert(vertexShaderBlob_ != nullptr);
 
@@ -129,47 +141,60 @@ void SkinningObject3DPipeline::CreateGraphicsPipeline() {
 
 void SkinningObject3DPipeline::CreateRootSignature() {
     HRESULT hr = 0;
+
     // RootSignatureを作成
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
     descriptionRootSignature.Flags             = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
     descriptionRootSignature.pStaticSamplers   = staticSamplers_;
     descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers_);
 
-    D3D12_DESCRIPTOR_RANGE descriptorRange[2]            = {};
-    descriptorRange[0].BaseShaderRegister                = 0; // 0から始まる
-    descriptorRange[0].NumDescriptors                    = 1; // 数は1つ
-    descriptorRange[0].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; // SRVを使う
-    descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND; // Offsetを自動計算
+    // DescriptorRangeを設定
+    D3D12_DESCRIPTOR_RANGE descriptorRange[3] = {};
 
-    descriptorRange[1].BaseShaderRegister                = 1; // 1から始まる
-    descriptorRange[1].NumDescriptors                    = 1; // 数は1つ
-    descriptorRange[1].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; // SRVを使う
-    descriptorRange[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND; // Offsetを自動計算
+    // StructuredBuffer用 (t0) - gMatrixPalette
+    descriptorRange[0].BaseShaderRegister                = 0;
+    descriptorRange[0].NumDescriptors                    = 1;
+    descriptorRange[0].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
+    // Texture2D用 (t0) - gTexture 
+    descriptorRange[1].BaseShaderRegister                = 0;
+    descriptorRange[1].NumDescriptors                    = 1;
+    descriptorRange[1].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorRange[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+    // TextureCube用 (t1) - gEnvironmentTexture
+    descriptorRange[2].BaseShaderRegister                = 1;
+    descriptorRange[2].NumDescriptors                    = 1;
+    descriptorRange[2].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorRange[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
     // RootParameterを作成
-    D3D12_ROOT_PARAMETER rootParameters[10]      = {};
-    rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
-    rootParameters[0].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL; // PxelShaderを使う
-    rootParameters[0].Descriptor.ShaderRegister = 0; // レジスタ番号0とバインド
+    D3D12_ROOT_PARAMETER rootParameters[11] = {};
 
-    rootParameters[1].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
-    rootParameters[1].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX; // VertexShaderを使う
-    rootParameters[1].Descriptor.ShaderRegister = 0; // レジスタ番号0とバインド
+    // 0: Material (b0, Pixel Shader)
+    rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[0].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[0].Descriptor.ShaderRegister = 0;
 
-      // TextureCube（PixelShader）→ t0（DescriptorTable）
-    rootParameters[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE; // DescriptorTableを使う
-    rootParameters[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
-    rootParameters[2].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
+    // 1: TransformationMatrix (b0, Vertex Shader)
+    rootParameters[1].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[1].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
+    rootParameters[1].Descriptor.ShaderRegister = 0;
+
+    // 3: Texture2D gTexture (t0, Pixel Shader)
+    rootParameters[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[2].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
     rootParameters[2].DescriptorTable.NumDescriptorRanges = 1;
 
-     // TextureCube（PixelShader）→ t1（DescriptorTable）
+    // 4: TextureCube gEnvironmentTexture (t1, Pixel Shader)
     rootParameters[3].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[3].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[3].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
+    rootParameters[3].DescriptorTable.pDescriptorRanges   = &descriptorRange[2];
     rootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
 
-    // Lambart
+   // Lambart
     rootParameters[4].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[4].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[4].Descriptor.ShaderRegister = 1;
@@ -195,8 +220,15 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     rootParameters[9].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[9].Descriptor.ShaderRegister = 6;
 
-    descriptionRootSignature.pParameters   = rootParameters; // ルートパラメーターの配列
-    descriptionRootSignature.NumParameters = _countof(rootParameters); // 配列の長さ
+     // 2: StructuredBuffer gMatrixPalette (t0, Vertex Shader)
+    rootParameters[10].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[10].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_VERTEX;
+    rootParameters[10].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
+    rootParameters[10].DescriptorTable.NumDescriptorRanges = 1;
+
+
+    descriptionRootSignature.pParameters   = rootParameters;
+    descriptionRootSignature.NumParameters = _countof(rootParameters);
 
     // Object*************************************************************************************************************************
     // シリアライズしてバイナリにする

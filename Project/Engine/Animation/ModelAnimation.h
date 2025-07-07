@@ -23,7 +23,7 @@ public:
     Animation LoadAnimationFile(const std::string& fileName);
     Skeleton CreateSkeleton(const Node& rootNode);
     int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
-    SkinCluster CreateSkinCluster(uint32_t descriptorSize,ModelData&modelData);
+    SkinCluster CreateSkinCluster(ModelData&modelData);
 
     void Create(const std::string& fileName);
     void Update(const float& deltaTime);
@@ -38,6 +38,7 @@ private:
     Animation animation_;
     Skeleton skeleton_;
     Joint joint_;
+    SkinCluster skinCluster_;
 
     WorldTransform worldTransform_;
     std::unique_ptr<Object3d> object3d_;

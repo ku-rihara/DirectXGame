@@ -1,6 +1,6 @@
 #include "Line3D.h"
-#include "base/Line3DPipeline.h"
-#include "base/Object3DPiprline.h"
+#include "Pipeline/Line3DPipeline.h"
+#include "Pipeline/Object3DPiprline.h"
 #include "Dx/DirectXCommon.h"
 #include <cassert>
 #include <cstring>
