@@ -11,12 +11,20 @@ MonsterBall::~MonsterBall() {}
 
 void MonsterBall::Init() {
     modelAnimation_ = std::make_unique<ModelAnimation>();
-    modelAnimation_->Create("simpleSkin.gltf");
+    modelAnimation_->Create("SneakWalk.gltf");
+
+    modelAnimation2_ = std::make_unique<ModelAnimation>();
+    modelAnimation2_->Create("walk.gltf");
 
     transform_.Init();
     transform_.translation_.y = -5.0f;
     transform_.translation_.z = -14.0f;
     transform_.scale_         = {1, 1, 1};
+
+    transform2_.Init();
+    transform2_.translation_.y = -5.0f;
+    transform2_.translation_.z = -14.0f;
+    transform2_.scale_         = {1, 1, 1};
 
     // イージングセッティング
     easing_.SetAdaptValue(&transform_.scale_);
@@ -25,14 +33,19 @@ void MonsterBall::Init() {
 void MonsterBall::Update() {
     if (Input::GetInstance()->PushKey(DIK_E)) {
         modelAnimation_->Update(Frame::DeltaTime());
+        modelAnimation2_->Update(Frame::DeltaTime());
     }
 
     transform_.UpdateMatrix();
+    transform2_.UpdateMatrix();
 }
 
 void MonsterBall::Draw(ViewProjection& viewProjection) {
     modelAnimation_->Draw(transform_, viewProjection);
     modelAnimation_->DebugDraw(transform_, viewProjection);
+
+    modelAnimation2_->Draw(transform2_, viewProjection);
+    modelAnimation2_->DebugDraw(transform2_, viewProjection);
 }
 
 void MonsterBall::Debug() {
