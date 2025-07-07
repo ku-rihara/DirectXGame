@@ -15,10 +15,10 @@ void WorldTransform::Init() {
     rotation_    = {}; // ローカル回転角
     translation_ = {}; // ローカル座標
 
-    // 定数バッファの生成
-    CreateConstantBuffer();
-    // マッピング
-    Map();
+    //// 定数バッファの生成
+    //CreateConstantBuffer();
+    //// マッピング
+    //Map();
     // 行列の更新
     UpdateMatrix();
 }
