@@ -12,8 +12,8 @@ AABBCollider::~AABBCollider() {
 }
 
 void AABBCollider::Init() {
-    // モデル作成（デバッグ用の可視化）
-    cObject3d_.reset(Object3d::CreateModel("DebugCube.obj"));
+   
+   debugLine_.Init(24);
     cTransform_.Init();
 }
 
@@ -27,7 +27,8 @@ void AABBCollider::UpdateWorldTransform() {
 }
 
 void AABBCollider::DrawDebugCube(const ViewProjection& viewProjection) {
-    BaseCollider::DrawDebugCube(viewProjection);
+    debugLine_.DrawCubeWireframe(cTransform_.GetWorldPos(), cTransform_.scale_, lineColor_);
+    debugLine_.Draw(viewProjection);
 }
 
 Vector3 AABBCollider::GetCollisionPos() const {

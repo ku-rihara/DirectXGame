@@ -24,7 +24,8 @@ void RailManager::Init(const std::string& groupName) {
     rail_.Init(5);
 
     /// 現在位置モデル
-    obj3D_.reset(Object3d::CreateModel("DebugCube.obj"));
+   /* obj3D_.reset(Object3d::CreateModel("DebugCube.obj"));*/
+    lineDrawer_.Init(24);
 
     /// 制御点マネージャー
     emitControlPosManager_ = std::make_unique<ControlPosManager>();
@@ -112,8 +113,9 @@ void RailManager::RoopOrStop() {
 ///=====================================================
 /// 現在位置描画
 ///=====================================================
-void RailManager::Draw(const ViewProjection& viewProjection) {
-    obj3D_->Draw(worldTransform_, viewProjection);
+void RailManager::Draw(const ViewProjection& viewProjection, const Vector3& size) {
+    lineDrawer_.DrawCubeWireframe(worldTransform_.GetWorldPos(), size, Vector4::kWHITE());
+    lineDrawer_.Draw(viewProjection);
     emitControlPosManager_->Draw(viewProjection);
 }
 

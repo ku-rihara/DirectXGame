@@ -23,6 +23,7 @@ public:
     void Init() override;
     void UpdateWorldTransform()override;
     void DrawDebugCube(const ViewProjection& viewProjection)override;
+    void DrawOBBLine(const OBB& obb, const Vector4& color);
   
     virtual Vector3 GetCollisionPos() const override;
     virtual Vector3 GetRotate() const;

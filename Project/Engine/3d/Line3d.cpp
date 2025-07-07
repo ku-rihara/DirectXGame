@@ -10,11 +10,12 @@
 #include <cstdint>
 
 // 初期化
-void Line3D::Init() {
+void Line3D::Init(const size_t& lineMaxNum) {
     auto dxCommon = DirectXCommon::GetInstance();
     HRESULT hr;
 
-    kMaxVertices_ = kMaxLines_ * kVerticesPerLine_;
+    maxLines_     = lineMaxNum;
+    kMaxVertices_ = maxLines_ * kVerticesPerLine_;
 
     UINT bufferSize = static_cast<UINT>(sizeof(Vertex) * kMaxVertices_);
 
@@ -47,7 +48,7 @@ void Line3D::Init() {
 
 
 void Line3D::SetLine(const Vector3& start, const Vector3& end, const Vector4& color) {
-    if (currentLineCount_ >= kMaxLines_) {
+    if (currentLineCount_ >= maxLines_) {
         return;
     }
 
@@ -61,10 +62,12 @@ void Line3D::SetLine(const Vector3& start, const Vector3& end, const Vector4& co
 }
 
 // 描画
-void Line3D::Draw(ID3D12GraphicsCommandList* commandList, const ViewProjection& viewProj) {
+void Line3D::Draw(const ViewProjection& viewProj) {
     if (currentLineCount_ == 0) {
         return;
     }
+
+    auto commandList = DirectXCommon::GetInstance()->GetCommandList();
 
     Line3DPipeline::GetInstance()->PreDraw(commandList);
 
@@ -119,23 +122,23 @@ void Line3D::DrawSphereWireframe(const Vector3& center, float radius, const Vect
     }
 }
 
-void Line3D::DrawCubeWireframe(const Vector3& center, float size, const Vector4& color) {
-    const float half = size * 0.5f;
+void Line3D::DrawCubeWireframe(const Vector3& center, const Vector3& size, const Vector4& color) {
+    Vector3 half = size * 0.5f;
 
-    // 8頂点定義
+    // 8頂点定義（ローカル空間にオフセット）
     Vector3 vertices[8] = {
-        center + Vector3(-half, -half, -half), 
-        center + Vector3(half, -half, -half), 
-        center + Vector3(half, half, -half), 
-        center + Vector3(-half, half, -half),
-        center + Vector3(-half, -half, half), 
-        center + Vector3(half, -half, half), 
-        center + Vector3(half, half, half), 
-        center + Vector3(-half, half, half), 
+        center + Vector3(-half.x, -half.y, -half.z),
+        center + Vector3(half.x, -half.y, -half.z),
+        center + Vector3(half.x, half.y, -half.z),
+        center + Vector3(-half.x, half.y, -half.z),
+        center + Vector3(-half.x, -half.y, half.z),
+        center + Vector3(half.x, -half.y, half.z),
+        center + Vector3(half.x, half.y, half.z),
+        center + Vector3(-half.x, half.y, half.z),
     };
 
     // 12本のラインの両端インデックス
-    int indices[][2] = {
+    int indices[12][2] = {
         {0, 1}, {1, 2}, {2, 3}, {3, 0}, // 奥の面
         {4, 5}, {5, 6}, {6, 7}, {7, 4}, // 手前の面
         {0, 4}, {1, 5}, {2, 6}, {3, 7}, // 側面
@@ -148,6 +151,7 @@ void Line3D::DrawCubeWireframe(const Vector3& center, float size, const Vector4&
         SetLine(vertices[startIdx], vertices[endIdx], color);
     }
 }
+
 
 
 

@@ -12,49 +12,25 @@ public:
 	Vector3() : x(0), y(0), z(0) {}
 	Vector3(float numX, float numY, float numZ) : x(numX), y(numY), z(numZ) {}
 
-	// 演算子のオーバーロードをinline化
-	inline Vector3 operator+(const Vector3& obj) const {
-		return { x + obj.x, y + obj.y, z + obj.z };
-	}
+     // 演算子オーバーロード
+    Vector3 operator+(const Vector3& obj) const;
+    Vector3 operator-(const Vector3& obj) const;
+    Vector3 operator*(const Vector3& obj) const;
+    Vector3 operator*(const float& scalar) const;
+    Vector3 operator/(const Vector3& obj) const;
+    Vector3 operator/(const float& scalar) const;
+    Vector3 operator*(const Matrix4x4& obj) const;
+    Vector3 operator-() const; 
 
-	inline Vector3 operator-(const Vector3& obj) const {
-		return { x - obj.x, y - obj.y, z - obj.z };
-	}
+    void operator+=(const Vector3& obj);
+    void operator+=(const float& scalar);
+    void operator-=(const Vector3& obj);
 
-	inline Vector3 operator*(const Vector3& obj) const {
-		return { x * obj.x, y * obj.y, z * obj.z };
-	}
+    // 比較
+    friend bool operator!=(const Vector3& lhs, const Vector3& rhs);
 
-	inline Vector3 operator*(const float& scalar) const {
-		return { x * scalar, y * scalar, z * scalar };
-	}
-
-	Vector3 operator*(const Matrix4x4& obj) const;
-
-	inline Vector3 operator/(const Vector3& obj) const {
-		return { x / obj.x, y / obj.y, z / obj.z };
-	}
-
-	inline Vector3 operator/(const float& scalar) const {
-		return { x / scalar, y / scalar, z / scalar };
-	}
-
-	inline void operator+=(const Vector3& obj) {
-		x += obj.x; y += obj.y; z += obj.z;
-	}
-
-	inline void operator+=(const float& scalar) {
-		x += scalar; y += scalar; z += scalar;
-	}
-
-	inline void operator-=(const Vector3& obj) {
-		x -= obj.x; y -= obj.y; z -= obj.z;
-	}
-
-	friend inline bool operator!=(const Vector3& lhs, const Vector3& rhs) {
-		return lhs.x != rhs.x || lhs.y != rhs.y || lhs.z != rhs.z;
-	}
-
+    // スカラー,ベクトル
+    friend Vector3 operator*(const float& scalar, const Vector3& vec);
 
 	// 静的メソッドの宣言
 	static Vector3 Normalize(const Vector3& v);
@@ -76,7 +52,7 @@ public:
 	float Length()const;
 };
 
-// スカラーとベクトルの掛け算をフレンドとして定義
-inline Vector3 operator*(const float& scalar, const Vector3& vec) {
-	return { vec.x * scalar, vec.y * scalar, vec.z * scalar };
-}
+
+//inline Vector3 operator*(const float& scalar, const Vector3& vec) {
+//	return { vec.x * scalar, vec.y * scalar, vec.z * scalar };
+//}

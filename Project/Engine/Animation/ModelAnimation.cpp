@@ -27,7 +27,7 @@ void ModelAnimation::Create(const std::string& fileName) {
     ModelData modelData = object3d_->GetModel()->GetModelData();
     skinCluster_        = CreateSkinCluster(modelData);
 
-    line3dDrawer_.Init();
+    line3dDrawer_.Init(5120);
 }
 
 Skeleton ModelAnimation::CreateSkeleton(const Node& rootNode) {
@@ -223,7 +223,7 @@ void ModelAnimation::DebugDraw(const WorldTransform& transform, const ViewProjec
        
         //
         Vector3 jointPos = TransformMatrix(transform.GetWorldPos(), joint.skeletonSpaceMatrix);
-        line3dDrawer_.DrawCubeWireframe(jointPos, 0.01f, Vector4::kWHITE());
+        line3dDrawer_.DrawCubeWireframe(jointPos, Vector3(0.01f, 0.01f, 0.01f), Vector4::kWHITE());
 
         // Line描画 
         if (joint.parent) {
@@ -234,7 +234,7 @@ void ModelAnimation::DebugDraw(const WorldTransform& transform, const ViewProjec
         
     }
     // Joint描画
-    line3dDrawer_.Draw(DirectXCommon::GetInstance()->GetCommandList(),viewProjection);
+    line3dDrawer_.Draw(viewProjection);
 }
 
 Vector3 ModelAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time) {

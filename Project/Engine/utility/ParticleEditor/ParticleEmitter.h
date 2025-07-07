@@ -6,7 +6,7 @@
 
 /// primitive
 #include "Primitive/IPrimitive.h"
-#include"3d/Mesh.h"
+#include"3d/Line3D.h"
 
 #include "ParticleParameter.h"
 #include <string>
@@ -19,13 +19,12 @@ private:
 	float currentTime_;
 
 
-	std::unique_ptr<Object3d> obj3d_;
+	/*std::unique_ptr<Object3d> obj3d_;*/
+    Line3D debugLine_;
 	WorldTransform emitBoxTransform_;
 
 	bool isStartRailMove_;
     
-	
-
 	std::string editorMessage_;
 
 public:
