@@ -15,7 +15,9 @@ public:
 	// 乗算
 	Quaternion operator*(const Quaternion& obj) const;
 	Quaternion operator*(float scalar) const;
+    friend Quaternion operator*(float scalar, const Quaternion& q);
 	Quaternion operator+ (const Quaternion& obj)const;
+    Quaternion operator-() const;
 
 	static Quaternion Identity();//単位
 	static Quaternion MakeRotateAxisAngle(const Vector3& axis, const float& angle);//任意回転を表すQuaternionの生成

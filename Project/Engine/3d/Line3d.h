@@ -25,6 +25,7 @@ public:
  
     //球の描画
     void DrawSphereWireframe(const Vector3& center, float radius, const Vector4& color);
+    void DrawCubeWireframe(const Vector3& center, float size, const Vector4& color);
 
     void Reset();
 

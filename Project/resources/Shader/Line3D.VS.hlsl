@@ -1,24 +1,18 @@
-cbuffer ViewProjection : register(b0)
+#include"Line3D.hlsli"
+
+struct ViewProjection
 {
-    matrix viewProj;
+    matrix viewProject;
 };
 
-struct VSInput
-{
-    float3 pos : POSITION;
-    float4 color : COLOR;
-};
+ConstantBuffer<ViewProjection> gViewProjection : register(b0);
 
-struct PSInput
-{
-    float4 svpos : SV_POSITION;
-    float4 color : COLOR;
-};
 
-PSInput main(VSInput input)
+
+VSOutPut main(VSInput input)
 {
-    PSInput output;
-    output.svpos = mul(float4(input.pos, 1.0f), viewProj);
+    VSOutPut output;
+    output.pos = mul(input.pos, gViewProjection.viewProject);
     output.color = input.color;
     return output;
 }
