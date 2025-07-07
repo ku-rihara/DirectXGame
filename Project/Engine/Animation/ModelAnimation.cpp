@@ -216,7 +216,7 @@ void ModelAnimation::Update(const float& deltaTime) {
 
 void ModelAnimation::Draw(const ViewProjection& viewProjection) {
     SkinningObject3DPipeline::GetInstance()->PreDraw(DirectXCommon::GetInstance()->GetCommandList());
-    object3d_->DrawAnimation(worldTransform_, viewProjection, skinCluster_.influenceBufferView);
+    object3d_->DrawAnimation(worldTransform_, viewProjection, skinCluster_);
     Object3DPiprline::GetInstance()->PreDraw(DirectXCommon::GetInstance()->GetCommandList());
 }
 

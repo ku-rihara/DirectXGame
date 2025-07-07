@@ -38,7 +38,7 @@ public:
 	void Draw(const Vector3& position, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt);
 
 	// アニメーション描画
-    void DrawAnimation(const WorldTransform& worldTransform, const ViewProjection& viewProjection, D3D12_VERTEX_BUFFER_VIEW& bufferView, std::optional<uint32_t> textureHandle = std::nullopt);
+    void DrawAnimation(const WorldTransform& worldTransform, const ViewProjection& viewProjection, SkinCluster bufferView, std::optional<uint32_t> textureHandle = std::nullopt);
 
 
 	void DebugImgui()override;//デバッグ表示

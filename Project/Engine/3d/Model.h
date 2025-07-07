@@ -92,7 +92,7 @@ public:
 	
 	void DrawAnimation(
         Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material,
-        D3D12_VERTEX_BUFFER_VIEW& bufferView, std::optional<uint32_t> textureHandle = std::nullopt); /// モデル描画
+        SkinCluster skinCluster, std::optional<uint32_t> textureHandle = std::nullopt); /// モデル描画
 
 	void DrawInstancing(
 		const uint32_t instanceNum,D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, 

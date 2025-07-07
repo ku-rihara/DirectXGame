@@ -182,49 +182,50 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     rootParameters[1].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
     rootParameters[1].Descriptor.ShaderRegister = 0;
 
-    // 2: StructuredBuffer gMatrixPalette (t0, Vertex Shader)
+    // 3: Texture2D gTexture (t0, Pixel Shader)
     rootParameters[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_VERTEX;
-    rootParameters[2].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
+    rootParameters[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[2].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
     rootParameters[2].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 3: Texture2D gTexture (t0, Pixel Shader)
+    // 4: TextureCube gEnvironmentTexture (t1, Pixel Shader)
     rootParameters[3].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[3].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[3].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
+    rootParameters[3].DescriptorTable.pDescriptorRanges   = &descriptorRange[2];
     rootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 4: TextureCube gEnvironmentTexture (t1, Pixel Shader)
-    rootParameters[4].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[4].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[4].DescriptorTable.pDescriptorRanges   = &descriptorRange[2];
-    rootParameters[4].DescriptorTable.NumDescriptorRanges = 1;
-
    // Lambart
+    rootParameters[4].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[4].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[4].Descriptor.ShaderRegister = 1;
+    // Half Lambart
     rootParameters[5].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[5].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[5].Descriptor.ShaderRegister = 1;
-    // Half Lambart
+    rootParameters[5].Descriptor.ShaderRegister = 2;
+    // PointLight
     rootParameters[6].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[6].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[6].Descriptor.ShaderRegister = 2;
-    // PointLight
+    rootParameters[6].Descriptor.ShaderRegister = 3;
+    // SpotLight
     rootParameters[7].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[7].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[7].Descriptor.ShaderRegister = 3;
-    // SpotLight
+    rootParameters[7].Descriptor.ShaderRegister = 4;
+    // AreaLight
     rootParameters[8].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[8].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[8].Descriptor.ShaderRegister = 4;
-    // AreaLight
-    rootParameters[9].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[9].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[9].Descriptor.ShaderRegister = 5;
+    rootParameters[8].Descriptor.ShaderRegister = 5;
 
     // AreaLight8
-    rootParameters[10].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[10].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[10].Descriptor.ShaderRegister = 6;
+    rootParameters[9].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[9].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[9].Descriptor.ShaderRegister = 6;
+
+     // 2: StructuredBuffer gMatrixPalette (t0, Vertex Shader)
+    rootParameters[10].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[10].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_VERTEX;
+    rootParameters[10].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
+    rootParameters[10].DescriptorTable.NumDescriptorRanges = 1;
+
 
     descriptionRootSignature.pParameters   = rootParameters;
     descriptionRootSignature.NumParameters = _countof(rootParameters);

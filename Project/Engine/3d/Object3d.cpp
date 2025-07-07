@@ -93,7 +93,7 @@ void Object3d::Draw(const Vector3& position, const ViewProjection& viewProjectio
 ///============================================================
 /// 描画
 ///============================================================
-void Object3d::DrawAnimation(const WorldTransform& worldTransform, const ViewProjection& viewProjection, D3D12_VERTEX_BUFFER_VIEW& bufferView, std::optional<uint32_t> textureHandle) {
+void Object3d::DrawAnimation(const WorldTransform& worldTransform, const ViewProjection& viewProjection, SkinCluster skinCluster, std::optional<uint32_t> textureHandle) {
     if (!model_)
         return;
 
@@ -112,7 +112,7 @@ void Object3d::DrawAnimation(const WorldTransform& worldTransform, const ViewPro
     /*}*/
 
     SkinningObject3DPipeline::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
-    model_->DrawAnimation(wvpResource_, material_, bufferView,textureHandle);
+    model_->DrawAnimation(wvpResource_, material_, skinCluster, textureHandle);
 }
 
 
