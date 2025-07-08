@@ -1,99 +1,97 @@
-// EnemySpawner.h
 #pragma once
 
 #include "Enemy/BaseEnemy.h"
+#include <array>
+#include <cstdint>
+#include <json.hpp>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <vector>
-#include <map>
-#include <json.hpp>
 
 class EnemyManager;
 class EnemySpawner {
 private:
-    using json = nlohmann::json;
-
-    struct SpownEnemy {
-        std::string enemyType;    // 敵の種類
-        Vector3 position;         // 敵の座標
+    // スポーンポイント構造体
+    struct SpawnPoint {
+        std::string name;
+        int32_t groupId;
+        float spawnTime;
+        Vector3 position;
+        Vector3 rotation;
+        Vector3 scale;
+        std::string enemyType;
+        float spawnOffset;
+        bool hasSpawned = false;
     };
 
-    struct EnemyGroup {
-        std::vector<SpownEnemy> spownEnemies; // 敵グループのリスト
-        float spownTime;                 // グループ生成間隔
-        bool isSpowned;
+    // グループ情報構造体
+    struct SpawnGroup {
+        int32_t id;
+        float spawnTime;
+        int32_t objectCount;
+        bool isActive        = false;
+        bool isCompleted     = false;
+        int32_t spawnedCount = 0;
+        int32_t aliveCount   = 0;
+        float groupStartTime = 0.0f;
     };
 
-    struct Wave {
-        float startTime;                   // Waveの開始時間（フェーズ内の相対時間）
-        std::vector<EnemyGroup> groups;    // Wave内で発生する敵の情報
-    };
-
-    struct Phase {
-        std::vector<Wave> waves; // フェーズ内のWaveリスト
-    };
-
-private:
-  
-    // 敵の種類リスト
-    std::vector<std::string> enemyTypes_ = { "NormalEnemy", "StrongEnemy" };
-
-private:
-
-    EnemyManager* pEnemyManager_ = nullptr;
-
-    std::map<int, Phase> phases_;   // フェーズ番号をキーとしたフェーズマップ
-    int   currentPhase_;            // 現在のフェーズ
-    float currentTime_;             // 現在のフェーズ内の経過時間
-    int   currentWave_;
-
-    bool isAllSpawn_; // 敵がすべていなくなったことを示すフラグ
-
-    ///* EditorModeセット
-    void SetEditorMode(bool isEditorMode);
-    bool isEditorMode_ = false;
-
-    std::string selectedEnemyType_;
-
-    const std::string directrypath_ = "Resources/EnemyParamater/";// path
-    const std::string filename_ = "PoPData.json";// name
 public:
-    // コンストラクタ
-    EnemySpawner();
+    EnemySpawner()  = default;
+    ~EnemySpawner() = default;
 
-    // 初期化
-    void Init();
-    void Update();
+    // JSONデータから初期化
+    void Init(const std::string& jsonData);
 
+    // 更新処理
+    void Update(float deltaTime);
+
+    // 敵が倒されたときの通知
+    void OnEnemyDestroyed(int groupId);
+
+   
     ///=======================================================================================
     /// Editor method
     ///=======================================================================================
-    void CheckWaveCompletion();
-	void CheckAllSpowned();
+    void ParseJsonData(const std::string& jsonData);
+    void SettingGroupSpawnPos();
+    void UpdateCurrentGroup();
+    void SpawnEnemiesInGroup(SpawnGroup& group);
+    bool IsGroupCompleted(int groupId) const;
+    void ActivateNextGroup();
 
-    // JSONのロード
-    void LoadEnemyPoPData();
+private:
+    using json = nlohmann::json;
+    json jsonData_;
 
-    // ImGuiによる設定
-    void ImGuiUpdate();
+private:
+    // 敵の種類リスト
+    std::array<std::string,2> enemyTypes_ = {"NormalEnemy", "StrongEnemy"};
+    std::vector<SpawnPoint> spawnPoints_;
+    std::vector<SpawnGroup> spawnGroups_;
+    std::unordered_map<int, std::vector<SpawnPoint*>> groupSpawnPoints_;
 
-    // セーブとロード
-    void SaveAndLoad();
-    void SaveEnemyPoPData();
-    
+    float currentTime_;
+    int currentGroupIndex_;
+    bool isSystemActive_;
+
+private:
+    EnemyManager* pEnemyManager_ = nullptr;
+
+    const std::string directrypath_ = "Resources/EnemyParamater/"; // path
+ 
+    public:
     ///=======================================================================================
     /// getter method
     ///=======================================================================================
-    bool GetIsAllSpawn() const { return isAllSpawn_; }
+    bool IsActive() const { return isSystemActive_; }
+    int GetCurrentGroupIndex() const { return currentGroupIndex_; }
+    int GetTotalGroups() const { return static_cast<int>(spawnGroups_.size()); }
+
 
     ///=======================================================================================
-   /// setter method
-   ///=======================================================================================
+    /// setter method
+    ///=======================================================================================
     void SetEnemyManager(EnemyManager* enemyManager);
-
-private:
-      // JSON のロード補助関数
-    void LoadPhase(Phase& phase, const json& phaseData);
-    void LoadSpawn(EnemyGroup& spawn, const json& spawnData);
-
 };

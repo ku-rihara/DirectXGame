@@ -48,7 +48,7 @@ void GameScene::Init() {
     skyBox_->Init();
     combo_->Init();
     enemyManager_->Init();
-    enemySpawner_->Init();
+    enemySpawner_->Init("enemySpawner.json");
     fireInjectors_->Init();
     gamecamera_->Init();
     howToOperate_->Init();
@@ -125,7 +125,7 @@ void GameScene::Update() {
     skyBox_->Update();
     howToOperate_->Update();
     field_->Update();
-    enemySpawner_->Update();
+    enemySpawner_->Update(Frame::DeltaTimeRate());
     enemyManager_->Update();
     combo_->Update();
     fireInjectors_->Update();
@@ -140,7 +140,7 @@ void GameScene::Update() {
     ViewProjectionUpdate();
 
     /// クリア
-    if (enemyManager_->GetCread() && enemySpawner_->GetIsAllSpawn()) {
+    if (enemyManager_->GetCread()/* && enemySpawner_->getos()*/) {
         finishSpriteEase_.Update(Frame::DeltaTime());
         cSprite_->SetPosition(tempSpritePos_);
     }
@@ -206,7 +206,7 @@ void GameScene::Debug() {
     gamecamera_->AdjustParam();
     ImGui::End();
 
-    enemySpawner_->ImGuiUpdate();
+    
     Light::GetInstance()->DebugImGui();
     howToOperate_->Debug();
 

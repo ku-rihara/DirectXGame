@@ -1,0 +1,879 @@
+{
+  "groups": [
+    {
+      "id": 0,
+      "spawn_time": 0.7000000476837158,
+      "object_count": 5
+    },
+    {
+      "id": 1,
+      "spawn_time": 1.2999999523162842,
+      "object_count": 7
+    },
+    {
+      "id": 2,
+      "spawn_time": 1.5999999046325684,
+      "object_count": 10
+    }
+  ],
+  "spawn_points": [
+    {
+      "name": "NormalEnemySpawn",
+      "group_id": 0,
+      "spawnTime": 0.7000000476837158,
+      "position": [
+        -11.942499160766602,
+        31.585058212280273,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          -11.942499160766602,
+          31.585058212280273,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.0
+    },
+    {
+      "name": "NormalEnemySpawn.001",
+      "group_id": 0,
+      "spawnTime": 0.7000000476837158,
+      "position": [
+        0.085540771484375,
+        31.585058212280273,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          0.085540771484375,
+          31.585058212280273,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.0
+    },
+    {
+      "name": "NormalEnemySpawn.002",
+      "group_id": 0,
+      "spawnTime": 0.7000000476837158,
+      "position": [
+        12.688720703125,
+        31.585058212280273,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          12.688720703125,
+          31.585058212280273,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.0
+    },
+    {
+      "name": "NormalEnemySpawn.003",
+      "group_id": 1,
+      "spawnTime": 1.2999999523162842,
+      "position": [
+        -30.27480697631836,
+        36.55479049682617,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          -30.27480697631836,
+          36.55479049682617,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.0
+    },
+    {
+      "name": "NormalEnemySpawn.004",
+      "group_id": 1,
+      "spawnTime": 1.3999999538064003,
+      "position": [
+        -20.563913345336914,
+        45.51425552368164,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          -20.563913345336914,
+          45.51425552368164,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.10000000149011612
+    },
+    {
+      "name": "NormalEnemySpawn.005",
+      "group_id": 1,
+      "spawnTime": 1.4999999552965164,
+      "position": [
+        -10.007434844970703,
+        52.16524887084961,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          -10.007434844970703,
+          52.16524887084961,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "NormalEnemy",
+      "spawn_offset": 0.20000000298023224
+    },
+    {
+      "name": "StrongEnemySpawn",
+      "group_id": 0,
+      "spawnTime": 1.1000000536441803,
+      "position": [
+        -5.347129821777344,
+        47.35047149658203,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          -5.347129821777344,
+          47.35047149658203,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "StrongEnemy",
+      "spawn_offset": 0.4000000059604645
+    },
+    {
+      "name": "StrongEnemySpawn.001",
+      "group_id": 0,
+      "spawnTime": 1.1000000536441803,
+      "position": [
+        6.744119644165039,
+        47.35047149658203,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          6.744119644165039,
+          47.35047149658203,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "StrongEnemy",
+      "spawn_offset": 0.4000000059604645
+    },
+    {
+      "name": "StrongEnemySpawn.002",
+      "group_id": 1,
+      "spawnTime": 1.2999999523162842,
+      "position": [
+        30.56055450439453,
+        34.980224609375,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          30.56055450439453,
+          34.980224609375,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "StrongEnemy",
+      "spawn_offset": 0.0
+    },
+    {
+      "name": "StrongEnemySpawn.003",
+      "group_id": 1,
+      "spawnTime": 1.3999999538064003,
+      "position": [
+        20.47670555114746,
+        44.47307205200195,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          20.47670555114746,
+          44.47307205200195,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "StrongEnemy",
+      "spawn_offset": 0.10000000149011612
+    },
+    {
+      "name": "StrongEnemySpawn.004",
+      "group_id": 1,
+      "spawnTime": 1.9999999403953552,
+      "position": [
+        8.145729064941406,
+        52.43397903442383,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          8.145729064941406,
+          52.43397903442383,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "StrongEnemy",
+      "spawn_offset": 0.699999988079071
+    },
+    {
+      "name": "StrongEnemySpawn.005",
+      "group_id": 1,
+      "spawnTime": 1.4999999552965164,
+      "position": [
+        -0.03874778747558594,
+        61.80177688598633,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          -0.03874778747558594,
+          61.80177688598633,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "StrongEnemy",
+      "spawn_offset": 0.20000000298023224
+    },
+    {
+      "name": "StrongEnemySpawn.006",
+      "group_id": 2,
+      "spawnTime": 1.5999999046325684,
+      "position": [
+        27.562118530273438,
+        48.30057144165039,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          27.562118530273438,
+          48.30057144165039,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "StrongEnemy",
+      "spawn_offset": 0.0
+    },
+    {
+      "name": "StrongEnemySpawn.007",
+      "group_id": 2,
+      "spawnTime": 2.4999998807907104,
+      "position": [
+        -30.123851776123047,
+        48.30057144165039,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          -30.123851776123047,
+          48.30057144165039,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "StrongEnemy",
+      "spawn_offset": 0.8999999761581421
+    },
+    {
+      "name": "StrongEnemySpawn.008",
+      "group_id": 2,
+      "spawnTime": 2.4999998807907104,
+      "position": [
+        -30.123851776123047,
+        41.77949142456055,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          -30.123851776123047,
+          41.77949142456055,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "StrongEnemy",
+      "spawn_offset": 0.8999999761581421
+    },
+    {
+      "name": "StrongEnemySpawn.009",
+      "group_id": 2,
+      "spawnTime": 2.4999998807907104,
+      "position": [
+        26.983470916748047,
+        41.77949142456055,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          26.983470916748047,
+          41.77949142456055,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "StrongEnemy",
+      "spawn_offset": 0.8999999761581421
+    },
+    {
+      "name": "StrongEnemySpawn.010",
+      "group_id": 2,
+      "spawnTime": 2.5999999046325684,
+      "position": [
+        -30.123851776123047,
+        34.4337272644043,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          -30.123851776123047,
+          34.4337272644043,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "StrongEnemy",
+      "spawn_offset": 1.0
+    },
+    {
+      "name": "StrongEnemySpawn.011",
+      "group_id": 2,
+      "spawnTime": 2.5999999046325684,
+      "position": [
+        27.215591430664062,
+        34.4337272644043,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          27.215591430664062,
+          34.4337272644043,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "StrongEnemy",
+      "spawn_offset": 1.0
+    },
+    {
+      "name": "StrongEnemySpawn.012",
+      "group_id": 2,
+      "spawnTime": 2.6999999284744263,
+      "position": [
+        27.215591430664062,
+        26.871719360351562,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          27.215591430664062,
+          26.871719360351562,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "StrongEnemy",
+      "spawn_offset": 1.100000023841858
+    },
+    {
+      "name": "StrongEnemySpawn.013",
+      "group_id": 2,
+      "spawnTime": 2.6999999284744263,
+      "position": [
+        -30.123851776123047,
+        26.871719360351562,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          -30.123851776123047,
+          26.871719360351562,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "StrongEnemy",
+      "spawn_offset": 1.100000023841858
+    },
+    {
+      "name": "StrongEnemySpawn.014",
+      "group_id": 2,
+      "spawnTime": 2.799999952316284,
+      "position": [
+        -30.123851776123047,
+        20.46535301208496,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          -30.123851776123047,
+          20.46535301208496,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "StrongEnemy",
+      "spawn_offset": 1.2000000476837158
+    },
+    {
+      "name": "StrongEnemySpawn.015",
+      "group_id": 2,
+      "spawnTime": 2.799999952316284,
+      "position": [
+        27.215591430664062,
+        20.46535301208496,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scaling": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "transform": {
+        "translation": [
+          27.215591430664062,
+          20.46535301208496,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "scaling": [
+          1.5,
+          1.5,
+          1.5
+        ]
+      },
+      "enemy_type": "StrongEnemy",
+      "spawn_offset": 1.2000000476837158
+    }
+  ]
+}
