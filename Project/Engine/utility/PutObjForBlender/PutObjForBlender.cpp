@@ -165,7 +165,7 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
                 std::string filename = file["filename"].get<std::string>();
                 std::string srtType  = file["srt_type"].get<std::string>();
 
-                // SRTタイプに応じて適切なステップに追加
+                // SRTタイプそれぞれステップに追加
                 if (srtType == "Scale") {
                     objectData.scalingEasing[groupId].AddStep(filename, &objectData.preScale);
                     objectData.scalingEasing[groupId].SetBaseValue(objectData.preScale);

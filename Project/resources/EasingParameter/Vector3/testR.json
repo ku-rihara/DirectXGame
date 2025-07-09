@@ -1,23 +1,23 @@
 {
-    "test2": {
-        "StartTimeOffset": 0.0,
+    "testR": {
+        "StartTimeOffset": 1.0,
         "amplitude": 0.0,
         "backRatio": 0.0,
         "endValue": [
-            6.179999828338623,
             0.0,
+            6.2831854820251465,
             0.0
         ],
         "finishOffsetTime": 0.0,
-        "finishType": 0,
-        "maxTime": 0.8299999833106995,
-        "period": 0.30000001192092896,
+        "finishType": 1,
+        "maxTime": 0.699999988079071,
+        "period": 0.0,
         "startValue": [
             0.0,
             0.0,
             0.0
         ],
-        "type": 38,
+        "type": 0,
         "waitTime": 0.0
     }
 }

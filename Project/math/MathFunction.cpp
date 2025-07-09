@@ -155,33 +155,6 @@ Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t) {
 	return CatmullRomInterpolation(p0, p1, p2, p3, t_2);
 }
 
-// 度数をラジアンに変換する関数
-float toRadian(float degrees) {
-	return degrees * (std::numbers::pi_v<float> / 180.0f);  
-}
-
-// ラジアンを度数に変換する関数
-float toDegree(float radians) {
-	return radians * (180.0f / std::numbers::pi_v<float>);
-}
-
-// 度数をラジアンに変換する関数
-Vector3 toRadian(const Vector3& degrees) {
-	return
-	{ degrees.x * (std::numbers::pi_v<float> / 180.0f),
-	  degrees.y * (std::numbers::pi_v<float> / 180.0f),
-	  degrees.z * (std::numbers::pi_v<float> / 180.0f), 
-	};
-}
-
-// ラジアンを度数に変換する関数
-Vector3 toDegree(const Vector3& radians) {
-	return 
-	  { radians.x * (180.0f / std::numbers::pi_v<float>),
-		radians.y * (180.0f / std::numbers::pi_v<float>),
-		radians.z * (180.0f / std::numbers::pi_v<float>),
-	};
-}
 
 float LerpShortAngle(float a, float b, float t) {
 	// 角度差分を求める
@@ -219,4 +192,42 @@ Vector3 DirectionToEulerAngles(const Vector3& direction, const ViewProjection& v
     Vector3 angle = ExtractEulerAngles(dToDMatrix);
 
     return angle;
+}
+
+
+// float
+float toRadian(float degrees) {
+    return degrees * (std::numbers::pi_v<float> / 180.0f);
+}
+
+float toDegree(float radians) {
+    return radians * (180.0f / std::numbers::pi_v<float>);
+}
+
+// Vector2
+Vector2 toRadian(const Vector2& degrees) {
+    return {
+        degrees.x * (std::numbers::pi_v<float> / 180.0f),
+        degrees.y * (std::numbers::pi_v<float> / 180.0f)};
+}
+
+Vector2 toDegree(const Vector2& radians) {
+    return {
+        radians.x * (180.0f / std::numbers::pi_v<float>),
+        radians.y * (180.0f / std::numbers::pi_v<float>)};
+}
+
+// Vector3
+Vector3 toRadian(const Vector3& degrees) {
+    return {
+        degrees.x * (std::numbers::pi_v<float> / 180.0f),
+        degrees.y * (std::numbers::pi_v<float> / 180.0f),
+        degrees.z * (std::numbers::pi_v<float> / 180.0f)};
+}
+
+Vector3 toDegree(const Vector3& radians) {
+    return {
+        radians.x * (180.0f / std::numbers::pi_v<float>),
+        radians.y * (180.0f / std::numbers::pi_v<float>),
+        radians.z * (180.0f / std::numbers::pi_v<float>)};
 }
