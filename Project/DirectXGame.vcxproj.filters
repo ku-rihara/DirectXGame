@@ -1341,6 +1341,9 @@
     <ClInclude Include="Engine\Pipeline\SpritePipeline.h">
       <Filter>MyEngine\.h\Pipeline</Filter>
     </ClInclude>
+    <ClInclude Include="math\EasingSequence.h">
+      <Filter>liberary\.h</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
