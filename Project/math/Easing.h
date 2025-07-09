@@ -58,6 +58,8 @@ private:
 
     void FilePathChangeForType();
 
+    bool IsEasingStarted() const;
+
 private:
     // メンバ変数
     EasingType type_                       = EasingType::InSine;
@@ -68,6 +70,7 @@ private:
 
     T startValue_;
     T endValue_;
+    T baseValue_; 
     T* currentValue_;
 
     float maxTime_     = 0.0f;
@@ -82,9 +85,11 @@ private:
 
     //etc
     float waitTimeMax_ = 0.0f;
+    float startTimeOffset_  = 0.0f;
     float finishTimeOffset_=0.0f;
 
     float waitTime_ = 0.0f; // 待機時間
+    float currentStartTimeOffset_ = 0.0f;
 
 private:
     int32_t selectedFileIndex_;
@@ -124,4 +129,5 @@ public:
     void SetStartValue(const T& value) { startValue_ = value; }
     void SetEndValue(const T& value) { endValue_ = value; }
     void SetCurrentValue(const T& value);
+    void SetBaseValue(const T& value) { baseValue_ = value; }
 };

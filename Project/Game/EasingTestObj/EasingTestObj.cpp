@@ -16,9 +16,12 @@ void EasingTestObj::Init() {
     transform_.translation_.z = -24.0f;
     transform_.scale_         = {1, 1, 1};
 
-
     easing_.Init("testEasing");
     easing_.SetAdaptValue(&transform_.scale_);
+
+   /* easingSequence_.AddStep("test3.json", &transform_.scale_);
+    easingSequence_.AddStep("test2.json", &transform_.translation_);*/
+
     object3D_->material_.materialData_->enableLighting = 3;
 }
 
@@ -26,6 +29,7 @@ void EasingTestObj::Update() {
 
     if (Input::GetInstance()->TrrigerKey(DIK_U)) {
         easing_.Reset();
+     /*   easingSequence_.Reset();*/
     }
 
     ScaleEasing();
@@ -45,4 +49,5 @@ void EasingTestObj::Debug() {
 
 void EasingTestObj::ScaleEasing() {
     easing_.Update(Frame::DeltaTime());
+  /*  easingSequence_.Update(Frame::DeltaTime());*/
 }

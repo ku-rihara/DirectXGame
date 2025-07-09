@@ -808,6 +808,9 @@
     <ClCompile Include="Engine\Pipeline\SpritePipeline.cpp">
       <Filter>MyEngine\.cpp\Pipeline</Filter>
     </ClCompile>
+    <ClCompile Include="math\EasingSequence.cpp">
+      <Filter>liberary\.cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
