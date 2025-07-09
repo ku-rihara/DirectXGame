@@ -235,6 +235,10 @@ void PutObjForBlender::EasingAllReset() {
         for (auto& easingSequence : objectData.translationEasing) {
             easingSequence.Reset();
         }
+        for (int32_t i = 0; i < objectData.isAdaptEasing.size(); ++i) {
+           
+            AdaptEasing(objectData, i);
+        }
     }
     currentTime_ = 0.0f;
 }

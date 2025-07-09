@@ -31,7 +31,7 @@ void GameScene::Init() {
     skuBox_->Init();
     putObjForBlender->LoadJsonFile("gameScene.json");
     putObjForBlender->PutObject();
-    putObjForBlender->EasingUpdateSelectGroup(0.0f, 0);
+    putObjForBlender->EasingAllReset();
 
     isDebugCameraActive_ = true;
 }
