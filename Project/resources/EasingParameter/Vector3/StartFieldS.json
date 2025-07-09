@@ -1,10 +1,9 @@
 {
-<<<<<<<< HEAD:Project/resources/EasingParameter/Vector3/SpawnScaling.json
+
     "SpawnScaling": {
-========
+
     "StartFieldS": {
         "StartTimeOffset": 0.0,
->>>>>>>> CG3:Project/resources/EasingParameter/Vector3/StartFieldS.json
         "amplitude": 0.0,
         "backRatio": 0.0,
         "endValue": [
