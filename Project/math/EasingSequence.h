@@ -21,5 +21,8 @@ private:
 
 public:
     const Easing<T>* GetCurrentEasing() const;
+    void SetBaseValue(T value);
+
+
   
 };

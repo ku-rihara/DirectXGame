@@ -70,6 +70,7 @@ private:
 
     T startValue_;
     T endValue_;
+    T baseValue_; 
     T* currentValue_;
 
     float maxTime_     = 0.0f;
@@ -126,4 +127,5 @@ public:
     void SetStartValue(const T& value) { startValue_ = value; }
     void SetEndValue(const T& value) { endValue_ = value; }
     void SetCurrentValue(const T& value);
+    void SetBaseValue(const T& value) { baseValue_ = value; }
 };

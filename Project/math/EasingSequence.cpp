@@ -54,6 +54,13 @@ const Easing<T>* EasingSequence<T>::GetCurrentEasing() const {
     return nullptr;
 }
 
+template <typename T>
+void EasingSequence<T>::SetBaseValue(T value) {
+    for (auto& step : steps_) {
+        step->SetBaseValue(value);
+    }
+ }
+
 template class EasingSequence<float>;
 template class EasingSequence<Vector2>;
 template class EasingSequence<Vector3>;
