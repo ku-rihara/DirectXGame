@@ -460,6 +460,9 @@
     <ClCompile Include="Engine\Pipeline\SpritePipeline.cpp">
       <Filter>MyEngine\.cpp\Pileline</Filter>
     </ClCompile>
+    <ClCompile Include="math\EasingSequence.cpp">
+      <Filter>liberary\.cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -779,6 +782,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Pipeline\SkinningObject3DPipeline.h">
       <Filter>MyEngine\.h\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="math\EasingSequence.h">
+      <Filter>liberary\.h</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
