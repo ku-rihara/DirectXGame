@@ -190,7 +190,7 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
                     objectData.isAdaptEasing[groupId][static_cast<int>(EasingAdaptTransform::Rotate)] = true;
                 } else if (srtType == "Transform") {
                     objectData.translationEasing[groupId].AddStep(filename, &objectData.preTranslation);
-                    objectData.translationEasing[groupId].SetBaseValue(objectData.worldTransform.translation_);
+                    objectData.translationEasing[groupId].SetBaseValue(objectData.worldTransform.GetWorldPos());
                     objectData.isAdaptEasing[groupId][static_cast<int>(EasingAdaptTransform::Translate)] = true;
                 }
             }
