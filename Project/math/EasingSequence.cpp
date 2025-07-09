@@ -29,7 +29,7 @@ void EasingSequence<T>::Reset() {
     for (auto& step : steps_) {
         step->Reset();
     }
-  /*  finished_ = false;*/
+ 
 }
 
 template <typename T>
