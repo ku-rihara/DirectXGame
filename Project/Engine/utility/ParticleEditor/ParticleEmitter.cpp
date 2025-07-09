@@ -5,8 +5,6 @@
 #include "ParticleManager.h"
 #include <imgui.h>
 
-ParticleEmitter::ParticleEmitter() {
-}
 
 ///=================================================================================
 /// パーティクル作成
@@ -147,7 +145,6 @@ void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
 ///=================================================================================
 void ParticleEmitter::SetTextureHandle(const uint32_t& handle) {
     ParticleManager::GetInstance()->SetTextureHandle(particleName_, handle);
-    // SetSelectedTexturePath(handle); // 選択されたテクスチャハンドルを更新
 }
 
 /// =======================================================================================

@@ -71,7 +71,7 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
             objectData.fileName = object["file_name"].get<std::string>();
         }
 
-        // トランスフォームのパラメータ読み込み
+        ///------------------------------Transform------------------------------
         const nlohmann::json& transform = object["transform"];
         objectData.worldTransform.Init();
         // 平行移動
@@ -91,6 +91,7 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
 
         objectData.worldTransform.UpdateMatrix();
 
+        ///------------------------------Emitter------------------------------
         if (object.contains("emitters") && object["emitters"].is_array()) {
 
             if (!object["emitters"].empty()) {
@@ -116,11 +117,9 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
             }
         }
 
-        // easing
-        if (object.contains("easing_filename")) {
-            // ファイル名
-            std::string easingFilename = object["easing_filename"].get<std::string>();
-            objectData.easing.ApplyFromJson(easingFilename);
+        ///------------------------------Easing------------------------------
+        if (object.contains("easing_groups") && object["easing_groups"].is_array()) {
+            LoadEasingGroups(object["easing_groups"], objectData);
         }
     }
 
@@ -128,6 +127,65 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
     if (object.contains("children") && object["children"].is_array()) {
         for (const auto& child : object["children"]) {
             ConvertJSONToObjects(child);
+        }
+    }
+}
+
+void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, LevelData::ObjectData& objectData) {
+    for (const auto& group : easingGroups) {
+
+        // グループIDとステップがあるかチェック
+        if (!group.contains("group_id") || !group.contains("steps")) {
+            continue;
+        }
+
+        int32_t groupId = group["group_id"].get<int32_t>();
+
+        // グループの数に合わせて配列を増やす
+        if (objectData.scalingEasing.size() <= groupId) {
+            objectData.scalingEasing.resize(groupId + 1);
+            objectData.rotationEasing.resize(groupId + 1);
+            objectData.translationEasing.resize(groupId + 1);
+            objectData.isAdaptEasing.resize(groupId + 1);
+        }
+
+         // Adaptフラグの初期化
+        for (int32_t i = int32_t(objectData.isAdaptEasing.size() - (groupId + 1 - objectData.isAdaptEasing.size()));
+            i < objectData.isAdaptEasing.size(); ++i) {
+            objectData.isAdaptEasing[i].fill(false);
+        }
+
+        // ステップを走査
+        for (const auto& step : group["steps"]) {
+
+            // ステップ番号とファイルがあるかチェック
+            if (!step.contains("step_number") || !step.contains("files")) {
+                continue;
+            }
+
+            // ファイル情報を走査
+            for (const auto& file : step["files"]) {
+                if (!file.contains("filename") || !file.contains("srt_type")) {
+                    continue;
+                }
+
+                std::string filename = file["filename"].get<std::string>();
+                std::string srtType  = file["srt_type"].get<std::string>();
+
+                // SRTタイプそれぞれステップに追加
+                if (srtType == "Scale") {
+                    objectData.scalingEasing[groupId].AddStep(filename, &objectData.preScale);
+                    objectData.isAdaptEasing[groupId][static_cast<int>(EasingAdaptTransform::Scale)] = true;
+                } else if (srtType == "Rotation") {
+                    objectData.rotationEasing[groupId].AddStep(filename, &objectData.preRotation);
+                    objectData.rotationEasing[groupId].SetBaseValue(objectData.worldTransform.rotation_);
+                    objectData.isAdaptEasing[groupId][static_cast<int>(EasingAdaptTransform::Rotate)] = true;
+                } else if (srtType == "Transform") {
+                    objectData.translationEasing[groupId].AddStep(filename, &objectData.preTranslation);
+                    objectData.translationEasing[groupId].SetBaseValue(objectData.worldTransform.translation_);
+                    objectData.isAdaptEasing[groupId][static_cast<int>(EasingAdaptTransform::Translate)] = true;
+                }
+            }
         }
     }
 }
@@ -160,13 +218,55 @@ void PutObjForBlender::StartRailEmitAll() {
 // easing
 void PutObjForBlender::EasingAllReset() {
     for (auto& objectData : levelData_->objects) {
-        objectData.easing.Reset();
+        for (auto& easingSequence : objectData.scalingEasing) {
+            easingSequence.Reset();
+        }
+        for (auto& easingSequence : objectData.rotationEasing) {
+            easingSequence.Reset();
+        }
+        for (auto& easingSequence : objectData.translationEasing) {
+            easingSequence.Reset();
+        }
     }
 }
-void PutObjForBlender::EasingAllUpdate(const float& deltaTime) {
+void PutObjForBlender::EasingUpdateSelectGroup(const float& deltaTime, const int32_t& groupNum) {
     for (auto& objectData : levelData_->objects) {
-        objectData.easing.Update(deltaTime);
+        // 指定されたグループのイージングを更新
+        if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Scale)) {
+            objectData.scalingEasing[groupNum].Update(deltaTime);
+        }
+        if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Rotate)) {
+            objectData.rotationEasing[groupNum].Update(deltaTime);
+        }
+        if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Translate)) {
+            objectData.translationEasing[groupNum].Update(deltaTime);
+        }
+
+        // PreValueをWorldTransformに適用
+        AdaptEasing(objectData,groupNum);
     }
+}
+
+void PutObjForBlender::AdaptEasing(LevelData::ObjectData& objectData, const int32_t& groupNum) {
+    // PreValueの値をWorldTransformに適用
+     
+    //scale
+    if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Scale)) {
+        objectData.worldTransform.scale_ = objectData.preScale;
+    }
+
+    // rotate
+    if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Rotate)) {
+        objectData.worldTransform.rotation_ = objectData.preRotation;
+    }
+
+    // translate
+    if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Translate)) {
+        objectData.worldTransform.translation_ = objectData.preTranslation;
+    }
+
+    // 変更を反映
+    objectData.worldTransform.UpdateMatrix();
 }
 
 void PutObjForBlender::EmitterAllEdit() {
@@ -212,6 +312,13 @@ void PutObjForBlender::DrawAll(const ViewProjection& viewProjection) {
     for (auto& obj : levelData_->objects) {
         DrawObject(obj, viewProjection);
     }
+}
+
+bool PutObjForBlender::IsAdaptEasing(const LevelData::ObjectData& objectData, int32_t groupNum, EasingAdaptTransform type) {
+    if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.isAdaptEasing.size())) {
+        return false;
+    }
+    return objectData.isAdaptEasing[groupNum][static_cast<int32_t>(type)];
 }
 
 PrimitiveType PutObjForBlender::StringToPrimitiveType(const std::string& typeStr) {

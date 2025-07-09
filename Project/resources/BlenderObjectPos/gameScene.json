@@ -163,7 +163,7 @@
                     0.0
                 ],
                 "rotation": [
-                    90.00000762939453,
+                    0.0,
                     -0.0,
                     0.0
                 ],
@@ -173,8 +173,77 @@
                     1.0
                 ]
             },
-            "isDisable": true,
-            "file_name": "ground.obj"
+            "isDisable": false,
+            "file_name": "ground.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "testS.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "testR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "testT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "LIGHT",
+            "name": "Light.001",
+            "transform": {
+                "translation": [
+                    -7.957993507385254,
+                    47.70909881591797,
+                    8.392168998718262
+                ],
+                "rotation": [
+                    37.261051177978516,
+                    3.163706064224243,
+                    106.93632507324219
+                ],
+                "scaling": [
+                    2.0835955142974854,
+                    2.7713353633880615,
+                    2.696988582611084
+                ]
+            }
+        },
+        {
+            "type": "CAMERA",
+            "name": "Camera.001",
+            "transform": {
+                "translation": [
+                    -0.6246070861816406,
+                    33.02084732055664,
+                    6.514531135559082
+                ],
+                "rotation": [
+                    63.559295654296875,
+                    1.5625435025867773e-06,
+                    46.69194412231445
+                ],
+                "scaling": [
+                    2.565101385116577,
+                    2.418213367462158,
+                    2.8594412803649902
+                ]
+            }
         }
     ]
 }

@@ -29,7 +29,7 @@ private:
 
 public:
 	// コンストラクタ
-	ParticleEmitter();
+	ParticleEmitter()=default;
 	~ParticleEmitter() override = default;
 
 	//Create
