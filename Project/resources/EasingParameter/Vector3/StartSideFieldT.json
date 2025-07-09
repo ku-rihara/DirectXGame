@@ -1,23 +1,23 @@
 {
-    "SpawnScaling": {
-        "StartTimeOffset": 0.0,
+    "StartSideFieldT": {
+        "StartTimeOffset": 0.10000000149011612,
         "amplitude": 0.0,
         "backRatio": 0.0,
         "endValue": [
-            1.399999976158142,
-            1.399999976158142,
-            1.399999976158142
-        ],
-        "finishOffsetTime": 0.0,
-        "finishType": 1,
-        "maxTime": 0.5,
-        "period": 0.0,
-        "startValue": [
             0.0,
             0.0,
             0.0
         ],
-        "type": 22,
+        "finishOffsetTime": 0.0,
+        "finishType": 1,
+        "maxTime": 1.5,
+        "period": 0.0,
+        "startValue": [
+            0.0,
+            14.489999771118164,
+            0.0
+        ],
+        "type": 25,
         "waitTime": 0.0
     }
 }

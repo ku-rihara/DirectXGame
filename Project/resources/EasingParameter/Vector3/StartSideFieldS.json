@@ -1,16 +1,16 @@
 {
-    "SpawnScaling": {
+    "StartSideFieldS": {
         "StartTimeOffset": 0.0,
         "amplitude": 0.0,
         "backRatio": 0.0,
         "endValue": [
-            1.399999976158142,
-            1.399999976158142,
-            1.399999976158142
+            1.0,
+            1.0,
+            1.0
         ],
         "finishOffsetTime": 0.0,
         "finishType": 1,
-        "maxTime": 0.5,
+        "maxTime": 0.800000011920929,
         "period": 0.0,
         "startValue": [
             0.0,
