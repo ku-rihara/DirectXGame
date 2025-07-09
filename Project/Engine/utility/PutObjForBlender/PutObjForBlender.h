@@ -19,8 +19,13 @@ public:
            WorldTransform worldTransform; 
            std::unique_ptr<Object3d> object3d;
            std::list<ObjectData> children;
-           std::vector<EasingSequence<Vector3>> easing;
+           std::vector<EasingSequence<Vector3>> scalingEasing;
+           std::vector<EasingSequence<Vector3>> rotationEasing;
+           std::vector<EasingSequence<Vector3>> translationEasing;
            std::vector<std::unique_ptr<ParticleEmitter>> emitters;
+           Vector3 preScale;
+           Vector3 preRotation;
+           Vector3 preTranslation;
         };
         //オブジェクトのコンテナ
         std::vector<ObjectData>objects;
@@ -44,12 +49,15 @@ public:
     // easing
     void EasingAllReset();
     void EasingUpdateSelectGroup(const float&deltaTime,const int32_t& groupNum);
+  
 
     void ConvertJSONToObjects(const nlohmann::json& object);
     PrimitiveType StringToPrimitiveType(const std::string& typeStr);
 
 private:
     void DrawObject(LevelData::ObjectData& objectData, const ViewProjection& viewProjection);
+    void AdaptEasing(LevelData::ObjectData& objectData);
+    void LoadEasingGroups(const nlohmann::json& easingGroups, LevelData::ObjectData& objectData);
 
 private:
     const std::string directoryPath_ = "Resources/BlenderObjectPos/";
