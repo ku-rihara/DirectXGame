@@ -71,7 +71,7 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
             objectData.fileName = object["file_name"].get<std::string>();
         }
 
-        // トランスフォームのパラメータ読み込み
+        ///------------------------------Transform------------------------------
         const nlohmann::json& transform = object["transform"];
         objectData.worldTransform.Init();
         // 平行移動
@@ -91,6 +91,8 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
 
         objectData.worldTransform.UpdateMatrix();
 
+       
+        ///------------------------------Emitter------------------------------
         if (object.contains("emitters") && object["emitters"].is_array()) {
 
             if (!object["emitters"].empty()) {
@@ -116,11 +118,9 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
             }
         }
 
-        // easing
-        if (object.contains("easing_filename")) {
-            // ファイル名
-            std::string easingFilename = object["easing_filename"].get<std::string>();
-            objectData.easing.ApplyFromJson(easingFilename);
+        ///------------------------------Easing------------------------------
+        if (object.contains("emitters") && object["emitters"].is_array()) {
+           
         }
     }
 
@@ -160,12 +160,14 @@ void PutObjForBlender::StartRailEmitAll() {
 // easing
 void PutObjForBlender::EasingAllReset() {
     for (auto& objectData : levelData_->objects) {
-        objectData.easing.Reset();
+        for (EasingSequence<Vector3>& easing : objectData.easing) {
+            easing.Reset();
+        }
     }
 }
-void PutObjForBlender::EasingAllUpdate(const float& deltaTime) {
+void PutObjForBlender::EasingUpdateSelectGroup(const float& deltaTime, const int32_t& groupNum) {
     for (auto& objectData : levelData_->objects) {
-        objectData.easing.Update(deltaTime);
+        objectData.easing[groupNum].Update(deltaTime);
     }
 }
 
