@@ -432,7 +432,7 @@ void DirectXCommon::PreDraw() {
 void DirectXCommon::DepthBarrierTransition() {
 
     // PutTransitionBarrier(depthStencilResource_.Get(),
-    //	 D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+    //	 D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D63D12_RESOURCE_STATE_DEPTH_WRITE);
 }
 
 void DirectXCommon::PostDraw() {
