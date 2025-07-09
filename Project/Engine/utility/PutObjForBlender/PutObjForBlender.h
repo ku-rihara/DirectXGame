@@ -35,6 +35,7 @@ public:
            Vector3 preRotation;
            Vector3 preTranslation;
            std::vector<std::array<bool, 3>> isAdaptEasing;
+           std::vector<float> easingStartTimes; 
         };
         //オブジェクトのコンテナ
         std::vector<ObjectData>objects;
@@ -73,6 +74,7 @@ private:
     const std::string directoryPath_ = "Resources/BlenderObjectPos/";
     std::string fileName_;
     std::unique_ptr<LevelData> levelData_;
+    float currentTime_ = 0.0f;
   
     // jsonデータ
     nlohmann::json jsonData_;
