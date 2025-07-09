@@ -20,6 +20,7 @@ void Easing<T>::Reset() {
     currentTime_ = 0.0f;
     waitTime_    = 0.0f;
     currentStartTimeOffset_ = 0.0f;
+    CalculateValue();
 }
 
 template <typename T>
@@ -278,6 +279,12 @@ void Easing<T>::Update(float deltaTime) {
         onWaitEndCallback_();
     }
 }
+
+template <typename T>
+void Easing<T>::ResetStartValue() {
+    currentTime_ = 0.0f;
+    CalculateValue();
+  }
 
 template <typename T>
 void Easing<T>::FilePathChangeForType() {
