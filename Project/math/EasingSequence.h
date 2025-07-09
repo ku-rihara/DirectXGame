@@ -17,7 +17,6 @@ public:
 private:
     std::vector<std::unique_ptr<Easing<T>>> steps_;
     size_t currentStep_ = 0;
-   /* bool finished_      = false;*/
 
 public:
     const Easing<T>* GetCurrentEasing() const;

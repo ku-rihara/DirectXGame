@@ -19,6 +19,7 @@ void Easing<T>::Reset() {
     isFinished_  = false;
     currentTime_ = 0.0f;
     waitTime_    = 0.0f;
+    currentStartTimeOffset_ = 0.0f;
 }
 
 template <typename T>
@@ -38,6 +39,8 @@ void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
 
     waitTimeMax_      = easingParam.waitTimeMax;
     finishTimeOffset_ = easingParam.finishOffsetTime;
+
+    startTimeOffset_ = easingParam.startTimeOffset;
 }
 
 template <typename T>
@@ -141,6 +144,10 @@ void Easing<T>::ApplyFromJson(const std::string& fileName) {
     param.finishOffsetTime = inner.value("finishOffsetTime", 0.0f);
     param.waitTimeMax      = inner.value("waitTime", 0.0f);
 
+    if (inner.contains("StartTimeOffset")) {
+        param.startTimeOffset = inner.value("StartTimeOffset", 0.0f);
+    }
+
     // paramの値をセット
     SettingValue(param);
 
@@ -232,6 +239,13 @@ void Easing<T>::ApplyForImGui() {
 // 時間を進めて値を更新
 template <typename T>
 void Easing<T>::Update(float deltaTime) {
+
+    currentStartTimeOffset_ += deltaTime;
+
+    if (!IsEasingStarted()) {
+        return;
+    }
+
     if (!isFinished_) {
         currentTime_ += deltaTime;
     }
@@ -527,7 +541,10 @@ template <typename T>
 void Easing<T>::Easing::SetCurrentValue(const T& value) {
     *currentValue_ = value;
 }
-
+template <typename T>
+bool Easing<T>::IsEasingStarted() const {
+    return currentStartTimeOffset_ >= startTimeOffset_;
+}
 
 template class Easing<float>;
 template class Easing<Vector2>;

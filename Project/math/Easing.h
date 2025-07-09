@@ -10,9 +10,7 @@
 #include <type_traits>
 #include <vector>
 
-// template <typename T>
-// class EasingCreator;
-// class EasingEditor;
+
 template <typename T>
 class Easing {
 public:
@@ -60,6 +58,8 @@ private:
 
     void FilePathChangeForType();
 
+    bool IsEasingStarted() const;
+
 private:
     // メンバ変数
     EasingType type_                       = EasingType::InSine;
@@ -85,9 +85,11 @@ private:
 
     //etc
     float waitTimeMax_ = 0.0f;
+    float startTimeOffset_  = 0.0f;
     float finishTimeOffset_=0.0f;
 
     float waitTime_ = 0.0f; // 待機時間
+    float currentStartTimeOffset_ = 0.0f;
 
 private:
     int32_t selectedFileIndex_;

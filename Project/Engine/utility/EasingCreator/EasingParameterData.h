@@ -134,4 +134,6 @@ struct EasingParameter {
 
     float waitTimeMax     = 0.0f;
     float finishOffsetTime = 0.0f;
+
+    float startTimeOffset = 0.0f;
 };
