@@ -130,6 +130,9 @@ void GameScene::Update() {
     combo_->Update();
     fireInjectors_->Update();
     gamecamera_->Update();
+    if (isfirstChange_) {
+        gameBackGroundObject_->Update();
+    }
 
     //
     enemyManager_->HpBarUpdate(viewProjection_);
