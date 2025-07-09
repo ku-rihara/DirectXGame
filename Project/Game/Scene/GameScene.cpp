@@ -23,19 +23,19 @@ void GameScene::Init() {
     /// 生成
     ///=======================================================================================
 
-    field_            = std::make_unique<Field>();
-    lockOn_           = std::make_unique<LockOn>();
-    player_           = std::make_unique<Player>();
-    gamecamera_       = std::make_unique<GameCamera>();
-    enemyManager_     = std::make_unique<EnemyManager>();
-    enemySpawner_     = std::make_unique<EnemySpawner>();
-    skydome_          = std::make_unique<Skydome>();
-    howToOperate_     = std::make_unique<HowToOperate>();
-    skyBox_           = std::make_unique<SkyBox>();
-    combo_            = std::make_unique<Combo>();
-    putObjForBlender_ = std::make_unique<PutObjForBlender>();
-    comboCreate_      = std::make_unique<ComboCreateEditor>();
-    fireInjectors_      = std::make_unique<FireInjectors>();
+    field_                = std::make_unique<Field>();
+    lockOn_               = std::make_unique<LockOn>();
+    player_               = std::make_unique<Player>();
+    gamecamera_           = std::make_unique<GameCamera>();
+    enemyManager_         = std::make_unique<EnemyManager>();
+    enemySpawner_         = std::make_unique<EnemySpawner>();
+    skydome_              = std::make_unique<Skydome>();
+    howToOperate_         = std::make_unique<HowToOperate>();
+    skyBox_               = std::make_unique<SkyBox>();
+    combo_                = std::make_unique<Combo>();
+    gameBackGroundObject_ = std::make_unique<GameBackGroundObject>();
+    comboCreate_          = std::make_unique<ComboCreateEditor>();
+    fireInjectors_        = std::make_unique<FireInjectors>();
 
     ///=======================================================================================
     /// 初期化
@@ -54,8 +54,7 @@ void GameScene::Init() {
     howToOperate_->Init();
     viewProjection_.Init();
 
-    putObjForBlender_->LoadJsonFile("gameScene.json");
-    putObjForBlender_->PutObject();
+    gameBackGroundObject_->Init("gameScene.json");
 
     ///=======================================================================================
     /// セット
@@ -65,6 +64,7 @@ void GameScene::Init() {
     enemyManager_->SetCombo(combo_.get());
     enemyManager_->SetGameCamera(gamecamera_.get());
     enemyManager_->SetLockon(lockOn_.get());
+    enemyManager_->SetEnemySpawner(enemySpawner_.get());
     player_->SetViewProjection(&viewProjection_);
     player_->SetLockOn(lockOn_.get());
     player_->SetGameCamera(gamecamera_.get());
@@ -77,7 +77,7 @@ void GameScene::Init() {
     alpha_         = 2.5f;
     shandle_       = TextureManager::GetInstance()->LoadTexture("Resources/Texture/screenChange.png");
     screenSprite_.reset(Sprite::Create(shandle_, Vector2(0, 0), Vector4(1, 1, 1, alpha_)));
-    
+
     finishSpriteEase_.Init("finishSpriteTest");
     finishSpriteEase_.ApplyFromJson("finishSpriteTest.json");
     finishSpriteEase_.SaveAppliedJsonFileName();
@@ -85,7 +85,7 @@ void GameScene::Init() {
     finishSpriteEase_.Reset();
 
     finishSpriteEase_.SetOnFinishCallback([this]() {
-      /*  cSprite_->SetPosition(Vector2(0, 0));*/
+        /*  cSprite_->SetPosition(Vector2(0, 0));*/
 
         // 　ジャンプに切り替え
         if (Input::GetInstance()->PushKey(DIK_SPACE)) {
@@ -95,9 +95,9 @@ void GameScene::Init() {
         }
     });
 
-  /*  cease_.time    = 0.0f;
-    cease_.maxTime = 0.5f;*/
-    chandle_       = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Clear.png");
+    /*  cease_.time    = 0.0f;
+      cease_.maxTime = 0.5f;*/
+    chandle_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Clear.png");
     cSprite_.reset(Sprite::Create(chandle_, Vector2(0, -720), Vector4(1, 1, 1, 1.0f)));
 
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
@@ -140,7 +140,7 @@ void GameScene::Update() {
     ViewProjectionUpdate();
 
     /// クリア
-    if (enemyManager_->GetCread()/* && enemySpawner_->getos()*/) {
+    if (enemyManager_->GetCread()&&enemySpawner_->GetAllGroupsCompleted()) {
         finishSpriteEase_.Update(Frame::DeltaTime());
         cSprite_->SetPosition(tempSpritePos_);
     }
@@ -166,13 +166,12 @@ void GameScene::ModelDraw() {
     ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
     Model::PreDraw(commandList);
 
-    putObjForBlender_->DrawAll(viewProjection_);
+    gameBackGroundObject_->Draw(viewProjection_);
     fireInjectors_->Draw(viewProjection_);
 
-    field_->Draw(viewProjection_);
+  /*  field_->Draw(viewProjection_);*/
     player_->Draw(viewProjection_);
     enemyManager_->Draw(viewProjection_);
-
 
     ParticleManager::GetInstance()->Draw(viewProjection_);
 
@@ -206,7 +205,6 @@ void GameScene::Debug() {
     gamecamera_->AdjustParam();
     ImGui::End();
 
-    
     Light::GetInstance()->DebugImGui();
     howToOperate_->Debug();
 

@@ -19,7 +19,7 @@ class Player;
 class LockOn;
 class Combo;
 class GameCamera;
-
+class EnemySpawner;
 class EnemyManager {
 private:
 	struct ParticleEffect {
@@ -43,6 +43,7 @@ private:
 	LockOn* pLockOn_;
 	GameCamera* pGameCamera_;
     Combo* pCombo_;
+    EnemySpawner* pEnemySpawner_;
 
 	///* 敵リスト
 	std::list<std::unique_ptr<BaseEnemy>> enemies_;
@@ -82,7 +83,7 @@ public:
 	void GetIsEnemiesCleared();
 
 	// 敵の生成
-	void SpawnEnemy(const std::string& enemyType, const Vector3& position);
+    void SpawnEnemy(const std::string& enemyType, const Vector3& position, const int32_t& groupID);
 
 	// 更新処理
 	void Update();
@@ -124,6 +125,7 @@ public:
 	void SetLockon(LockOn* lockOn);
 	void SetGameCamera(GameCamera* gamecamera);
     void SetCombo(Combo* combo);
+    void SetEnemySpawner(EnemySpawner* enemySpawner);
 
 	// フェーズの切り替え
 	void SetPhase(int phase);

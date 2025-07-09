@@ -75,11 +75,12 @@ private:
     float currentTime_;
     int currentGroupIndex_;
     bool isSystemActive_;
+    bool allGroupsCompleted_;
 
 private:
     EnemyManager* pEnemyManager_ = nullptr;
 
-    const std::string directrypath_ = "Resources/EnemyParamater/"; // path
+    const std::string directoryPath_ = "Resources/EnemyParamater/"; // path
  
     public:
     ///=======================================================================================
@@ -88,7 +89,7 @@ private:
     bool IsActive() const { return isSystemActive_; }
     int GetCurrentGroupIndex() const { return currentGroupIndex_; }
     int GetTotalGroups() const { return static_cast<int>(spawnGroups_.size()); }
-
+    bool GetAllGroupsCompleted() const { return allGroupsCompleted_; }
 
     ///=======================================================================================
     /// setter method

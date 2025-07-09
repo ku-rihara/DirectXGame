@@ -12,7 +12,7 @@ void EnemySpawner::Init(const std::string& jsonData) {
 }
 
 void EnemySpawner::ParseJsonData(const std::string& filename) {
-    const std::string fullPath = directrypath_ + filename;
+    const std::string fullPath = directoryPath_ + filename;
 
     std::ifstream ifs(fullPath);
     if (!ifs.is_open()) {
@@ -123,7 +123,7 @@ void EnemySpawner::SpawnEnemiesInGroup(SpawnGroup& group) {
             if (groupElapsedTime >= adjustedSpawnTime) {
                 // 敵をスポーン
                 if (pEnemyManager_) {
-                    pEnemyManager_->SpawnEnemy(spawn->enemyType, spawn->position);
+                    pEnemyManager_->SpawnEnemy(spawn->enemyType, spawn->position,spawn->groupId);
                 }
 
                 spawn->hasSpawned = true;
@@ -146,7 +146,8 @@ void EnemySpawner::ActivateNextGroup() {
     currentGroupIndex_++;
     if (currentGroupIndex_ >= spawnGroups_.size()) {
         // 全てのグループが完了
-        isSystemActive_ = false;
+        isSystemActive_     = false;
+        allGroupsCompleted_ = true;
     }
 }
 

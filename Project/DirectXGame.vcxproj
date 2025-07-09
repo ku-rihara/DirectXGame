@@ -80,6 +80,7 @@
     <ClCompile Include="Engine\utility\RailEditor\Rail.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\RailManager.cpp" />
     <ClCompile Include="Game\BackGroundObject\BaseBackGroundObject.cpp" />
+    <ClCompile Include="Game\BackGroundObject\GameBackGroundObject.cpp" />
     <ClCompile Include="Game\BaseObject\BaseObject.cpp" />
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp" />
     <ClCompile Include="Game\CollisionBox\AttackCollisionBox.cpp" />
@@ -259,6 +260,7 @@
     <ClInclude Include="Engine\utility\RailEditor\Rail.h" />
     <ClInclude Include="Engine\utility\RailEditor\RailManager.h" />
     <ClInclude Include="Game\BackGroundObject\BaseBackGroundObject.h" />
+    <ClInclude Include="Game\BackGroundObject\GameBackGroundObject.h" />
     <ClInclude Include="Game\BaseObject\BaseObject.h" />
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h" />
     <ClInclude Include="Game\CollisionBox\AttackCollisionBox.h" />

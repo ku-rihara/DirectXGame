@@ -4,6 +4,7 @@
 #include "BaseScene.h"
 
 // object
+#include "BackGroundObject/GameBackGroundObject.h"
 #include "Combo/Combo.h"
 #include "ComboCreate/ComboCreateEditor.h"
 #include "Enemy/EnemyManager.h"
@@ -16,7 +17,6 @@
 #include "SkyBox/SkyBox.h"
 #include "SkyDome/SkyDome.h"
 #include "UI/HowToOperate.h"
-#include "utility/PutObjForBlender/PutObjForBlender.h"
 
 /// <summary>
 /// ゲームシーン
@@ -28,20 +28,19 @@ private:
     ///========================================================
 
     ///* objects
-    std::unique_ptr<GameCamera> gamecamera_         = nullptr;
-    std::unique_ptr<Field> field_                   = nullptr;
-    std::unique_ptr<LockOn> lockOn_                 = nullptr;
-    std::unique_ptr<Player> player_                 = nullptr;
-    std::unique_ptr<Skydome> skydome_               = nullptr;
-    std::unique_ptr<SkyBox> skyBox_                 = nullptr;
-    std::unique_ptr<EnemyManager> enemyManager_     = nullptr;
-    std::unique_ptr<EnemySpawner> enemySpawner_     = nullptr;
-    std::unique_ptr<HowToOperate> howToOperate_     = nullptr;
-    std::unique_ptr<Combo> combo_                   = nullptr;
-    std::unique_ptr<ComboCreateEditor> comboCreate_ = nullptr;
-    std::unique_ptr<FireInjectors> fireInjectors_   = nullptr;
-
-    std::unique_ptr<PutObjForBlender> putObjForBlender_ = nullptr;
+    std::unique_ptr<GameCamera> gamecamera_                     = nullptr;
+    std::unique_ptr<Field> field_                               = nullptr;
+    std::unique_ptr<LockOn> lockOn_                             = nullptr;
+    std::unique_ptr<Player> player_                             = nullptr;
+    std::unique_ptr<Skydome> skydome_                           = nullptr;
+    std::unique_ptr<SkyBox> skyBox_                             = nullptr;
+    std::unique_ptr<EnemyManager> enemyManager_                 = nullptr;
+    std::unique_ptr<EnemySpawner> enemySpawner_                 = nullptr;
+    std::unique_ptr<HowToOperate> howToOperate_                 = nullptr;
+    std::unique_ptr<Combo> combo_                               = nullptr;
+    std::unique_ptr<ComboCreateEditor> comboCreate_             = nullptr;
+    std::unique_ptr<FireInjectors> fireInjectors_               = nullptr;
+    std::unique_ptr<GameBackGroundObject> gameBackGroundObject_ = nullptr;
 
     bool isDraw = true;
 

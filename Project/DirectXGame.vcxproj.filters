@@ -817,6 +817,9 @@
     <ClCompile Include="Game\BackGroundObject\BaseBackGroundObject.cpp">
       <Filter>Game\BackGroundObject</Filter>
     </ClCompile>
+    <ClCompile Include="Game\BackGroundObject\GameBackGroundObject.cpp">
+      <Filter>Game\BackGroundObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1351,6 +1354,9 @@
       <Filter>liberary\.h</Filter>
     </ClInclude>
     <ClInclude Include="Game\BackGroundObject\BaseBackGroundObject.h">
+      <Filter>Game\BackGroundObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BackGroundObject\GameBackGroundObject.h">
       <Filter>Game\BackGroundObject</Filter>
     </ClInclude>
   </ItemGroup>

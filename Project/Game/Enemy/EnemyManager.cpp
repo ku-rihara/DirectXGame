@@ -4,9 +4,10 @@
 #include "NormalEnemy.h"
 #include "StrongEnemy.h"
 
+#include "Combo/Combo.h"
 #include "Frame/Frame.h"
 #include "LockOn/LockOn.h"
-#include"Combo/Combo.h"
+#include "Spawner/EnemySpawner.h"
 
 #include <format>
 #include <fstream>
@@ -37,7 +38,7 @@ void EnemyManager::FSpawn() {
 ///========================================================================================
 ///  敵の生成
 ///========================================================================================
-void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& position) {
+void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& position, const int32_t& groupID) {
 
     std::unique_ptr<BaseEnemy> enemy;
 
@@ -55,6 +56,7 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
     enemy->SetGameCamera(pGameCamera_);
     enemy->SetManager(this);
     enemy->SetCombo(pCombo_);
+    enemy->SetGroupId(groupID);
     enemy->Init(position);
     enemies_.push_back(std::move(enemy));
 }
@@ -77,6 +79,11 @@ void EnemyManager::Update() {
         (*it)->Update(); // 更新
 
         if ((*it)->GetIsDeath()) {
+
+            if (pEnemySpawner_) {
+                pEnemySpawner_->OnEnemyDestroyed((*it)->GetGroupId());
+            }
+
             pLockOn_->OnEnemyDestroyed((*it).get());
             it = enemies_.erase(it); // 削除して次の要素を指すイテレータを取得
             GetIsEnemiesCleared(); // フラグを更新
@@ -114,25 +121,6 @@ void EnemyManager::SpriteDraw(const ViewProjection& viewProjection) {
     for (auto it = enemies_.begin(); it != enemies_.end(); ++it) {
         (*it)->SpriteDraw(viewProjection);
     }
-}
-
-void EnemyManager::SetPlayer(Player* player) {
-    pPlayer_ = player;
-}
-void EnemyManager::SetLockon(LockOn* lockOn) {
-    pLockOn_ = lockOn;
-}
-void EnemyManager::SetCombo(Combo* lockOn) {
-    pCombo_ = lockOn;
-}
-
-
-void EnemyManager::GetIsEnemiesCleared() {
-    areAllEnemiesCleared_ = enemies_.empty(); // 現在の敵リストが空かを確認
-}
-
-void EnemyManager::SetGameCamera(GameCamera* gamecamera) {
-    pGameCamera_ = gamecamera;
 }
 
 ///=================================================================================
@@ -280,7 +268,6 @@ void EnemyManager::AdjustParam() {
 ///----------------------------------------------------------
 void EnemyManager::ParticleInit() {
 
-
     // damage
     damageEffect[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffectCenter", PrimitiveType::Plane, 300));
     damageEffect[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffect", PrimitiveType::Plane, 300));
@@ -305,7 +292,6 @@ void EnemyManager::ParticleInit() {
 
     // crack
     fallCrack_.reset(ParticleEmitter::CreateParticlePrimitive("Crack", PrimitiveType::Plane, 30));
-
 }
 
 ///----------------------------------------------------------------------
@@ -374,15 +360,36 @@ void EnemyManager::ParticleUpdate() {
 
     // ヒビ
     fallCrack_->Update();
-  
+
     // 死亡パーティクル
     for (uint32_t i = 0; i < deathParticle_.size(); i++) {
         deathParticle_[i].emitter->Update();
-      
     }
 
     // ガレキパーティクル
     for (uint32_t i = 0; i < debriParticle_.size(); i++) {
         debriParticle_[i].emitter->Update();
     }
+}
+
+void EnemyManager::SetPlayer(Player* player) {
+    pPlayer_ = player;
+}
+void EnemyManager::SetLockon(LockOn* lockOn) {
+    pLockOn_ = lockOn;
+}
+void EnemyManager::SetCombo(Combo* lockOn) {
+    pCombo_ = lockOn;
+}
+
+void EnemyManager::GetIsEnemiesCleared() {
+    areAllEnemiesCleared_ = enemies_.empty(); // 現在の敵リストが空かを確認
+}
+
+void EnemyManager::SetGameCamera(GameCamera* gamecamera) {
+    pGameCamera_ = gamecamera;
+}
+
+void EnemyManager::SetEnemySpawner(EnemySpawner* enemySpawner) {
+    pEnemySpawner_ = enemySpawner;
 }

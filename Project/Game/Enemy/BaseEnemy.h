@@ -14,6 +14,7 @@
 
 #include "SearchingSprite/FindSprite.h"
 #include "SearchingSprite/NotFindSprite.h"
+#include <cstdint>
 
 class Player;
 class GameCamera;
@@ -50,6 +51,7 @@ public:
 private:
     int deathSound_;
     int thurstSound_;
+    int32_t groupId_;
 
 protected:
     Type type_;
@@ -145,6 +147,7 @@ public:
     BaseEnemyBehavior* GetDamageBehavior() const { return damageBehavior_.get(); }
     FindSprite* GetFindSprite() { return findSprite_.get(); }
     NotFindSprite* GetNotFindSprite() { return notFindSprite_.get(); }
+    int32_t GetGroupId() const { return groupId_; }
     /// ========================================================================================
     ///  setter method
     /// ========================================================================================
@@ -156,6 +159,8 @@ public:
     void SetBodyRotateX(const float& r) { bodyTransform_.rotation_.x = r; }
     void SetBodyColor(const Vector4& color);
     void SetIsDeath(const bool& is) { isdeath_ = is; }
+    void SetGroupId(int groupId) { groupId_ = groupId; }
+  
 
 private:
     bool IsInView(const ViewProjection& viewProjection) const;
