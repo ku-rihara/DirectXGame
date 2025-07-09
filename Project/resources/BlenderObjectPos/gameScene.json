@@ -174,7 +174,7 @@
                 ]
             },
             "isDisable": false,
-            "file_name": "ground.obj",
+            "file_name": "Field.obj",
             "easing_groups": [
                 {
                     "group_id": 0,
@@ -184,22 +184,23 @@
                             "files": [
                                 {
                                     "file_index": 1,
-                                    "filename": "testS.json",
+                                    "filename": "StartFieldS",
                                     "srt_type": "Scale"
                                 },
                                 {
                                     "file_index": 2,
-                                    "filename": "testR.json",
+                                    "filename": "StartFieldR",
                                     "srt_type": "Rotation"
                                 },
                                 {
                                     "file_index": 3,
-                                    "filename": "testT.json",
+                                    "filename": "StartFieldT",
                                     "srt_type": "Transform"
                                 }
                             ]
                         }
-                    ]
+                    ],
+                    "start_time": 0.800000011920929
                 }
             ]
         },
