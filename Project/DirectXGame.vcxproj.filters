@@ -319,6 +319,9 @@
     <Filter Include="MyEngine\.h\Pipeline">
       <UniqueIdentifier>{fb35dccb-ddef-41e1-bed8-659a307f0c10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\BackGroundObject">
+      <UniqueIdentifier>{9c8a0421-d9ab-4941-8ba6-eff9ec6458cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -810,6 +813,9 @@
     </ClCompile>
     <ClCompile Include="math\EasingSequence.cpp">
       <Filter>liberary\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BackGroundObject\BaseBackGroundObject.cpp">
+      <Filter>Game\BackGroundObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1343,6 +1349,9 @@
     </ClInclude>
     <ClInclude Include="math\EasingSequence.h">
       <Filter>liberary\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BackGroundObject\BaseBackGroundObject.h">
+      <Filter>Game\BackGroundObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
