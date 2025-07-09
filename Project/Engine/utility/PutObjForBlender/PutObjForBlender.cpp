@@ -147,6 +147,7 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
             objectData.rotationEasing.resize(groupId + 1);
             objectData.translationEasing.resize(groupId + 1);
             objectData.isAdaptEasing.resize(groupId + 1);
+            objectData.easingStartTimes.resize(groupId + 1, 0.0f);
         }
 
          // Adaptフラグの初期化
@@ -154,6 +155,13 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
             i < objectData.isAdaptEasing.size(); ++i) {
             objectData.isAdaptEasing[i].fill(false);
         }
+
+        // start_timeを取得
+        float startTime = 0.0f;
+        if (group.contains("start_time")) {
+            startTime = group["start_time"].get<float>();
+        }
+        objectData.easingStartTimes[groupId] = startTime;
 
         // ステップを走査
         for (const auto& step : group["steps"]) {
@@ -228,9 +236,23 @@ void PutObjForBlender::EasingAllReset() {
             easingSequence.Reset();
         }
     }
+    currentTime_ = 0.0f;
 }
 void PutObjForBlender::EasingUpdateSelectGroup(const float& deltaTime, const int32_t& groupNum) {
+    // 現在時間を自動的に加算
+    currentTime_ += deltaTime;
+
     for (auto& objectData : levelData_->objects) {
+        // 指定されたグループが存在するかチェック
+        if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.easingStartTimes.size())) {
+            continue;
+        }
+
+        // 開始時間を超えるまではreturn
+        if (currentTime_ < objectData.easingStartTimes[groupNum]) {
+            continue;
+        }
+
         // 指定されたグループのイージングを更新
         if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Scale)) {
             objectData.scalingEasing[groupNum].Update(deltaTime);
@@ -243,7 +265,7 @@ void PutObjForBlender::EasingUpdateSelectGroup(const float& deltaTime, const int
         }
 
         // PreValueをWorldTransformに適用
-        AdaptEasing(objectData,groupNum);
+        AdaptEasing(objectData, groupNum);
     }
 }
 
