@@ -8,8 +8,16 @@
 #include <list>
 #include <json.hpp>
 #include <cstdint>
+#include <array>
 
 class PutObjForBlender {
+private:
+    enum class EasingAdaptTransform {
+    Scale,
+    Rotate,
+    Translate
+    };
+
 public:
     // レベルデータ
     struct LevelData {
@@ -26,6 +34,7 @@ public:
            Vector3 preScale;
            Vector3 preRotation;
            Vector3 preTranslation;
+           std::vector<std::array<bool, 3>> isAdaptEasing;
         };
         //オブジェクトのコンテナ
         std::vector<ObjectData>objects;
@@ -56,8 +65,9 @@ public:
 
 private:
     void DrawObject(LevelData::ObjectData& objectData, const ViewProjection& viewProjection);
-    void AdaptEasing(LevelData::ObjectData& objectData);
+    void AdaptEasing(LevelData::ObjectData& objectData, const int32_t& groupNum);
     void LoadEasingGroups(const nlohmann::json& easingGroups, LevelData::ObjectData& objectData);
+    bool IsAdaptEasing(const LevelData::ObjectData& objectData, int32_t groupNum, EasingAdaptTransform type);
 
 private:
     const std::string directoryPath_ = "Resources/BlenderObjectPos/";
