@@ -1,7 +1,7 @@
 #include "ParticleManager.h"
 #include "3d/ModelManager.h"
 #include "base/TextureManager.h"
-#include "ParticleCommon.h"
+#include "Pipeline/ParticlePipeline.h"
 
 // frame
 #include "Frame/Frame.h"
@@ -27,7 +27,7 @@ ParticleManager* ParticleManager::GetInstance() {
 ///============================================================
 void ParticleManager::Init(SrvManager* srvManager) {
     pSrvManager_     = srvManager;
-    pParticleCommon_ = ParticleCommon::GetInstance();
+  
     SetAllParticleFile();
 }
 
@@ -161,7 +161,7 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
         }
 
         if (instanceIndex > 0) {
-            ParticleCommon::GetInstance()->PreDraw(commandList, group.parm.blendMode);
+            ParticlePipeline::GetInstance()->PreDraw(commandList, group.parm.blendMode);
             // モデル描画
             if (group.model) {
                 group.model->DrawInstancing(instanceIndex, pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),

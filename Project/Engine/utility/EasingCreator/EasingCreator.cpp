@@ -173,6 +173,8 @@ void EasingCreator<T>::ToJson(nlohmann::json& j, const std::string& name, const 
 
     jsonParam["finishOffsetTime"]    = param.finishOffsetTime;
     jsonParam["waitTime"] = param.waitTimeMax;
+    jsonParam["StartTimeOffset"]     = param.startTimeOffset;
+
 }
 
 template <typename T>
@@ -182,7 +184,7 @@ void EasingCreator<T>::FromJson(const nlohmann::json& j) {
 
         if (!val.contains("type") || !val.contains("startValue") || !val.contains("endValue"))
             continue;
-
+        
         EasingParameter<T> param;
         param.type       = static_cast<EasingType>(val["type"].get<int>());
         param.finishType = static_cast<EasingFinishValueType>(val["finishType"].get<int>());
@@ -192,6 +194,10 @@ void EasingCreator<T>::FromJson(const nlohmann::json& j) {
         param.backRatio  = val.value("backRatio", 0.0f);
         param.finishOffsetTime = val.value("finishOffsetTime", 0.0f);
         param.waitTimeMax         = val.value("waitTime", 0.0f);
+
+        if (val.contains("StartTimeOffset")) {
+            param.startTimeOffset = val.value("StartTimeOffset", 0.0f);
+        }
 
         if constexpr (std::is_same_v<T, Vector3>) {
             auto sv          = val["startValue"];
@@ -306,6 +312,7 @@ void EasingCreator<T>::Edit() {
         }
 
         ImGui::Separator();
+        ImGui::DragFloat("StartTimeOffset", &editingParam_.startTimeOffset, 0.01f);
         ImGui::DragFloat("WaitTime", &editingParam_.waitTimeMax, 0.01f);
         ImGui::DragFloat("FinishOffsetTime", &editingParam_.finishOffsetTime, 0.01f);
 

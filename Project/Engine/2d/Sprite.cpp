@@ -1,5 +1,5 @@
 #include "Sprite.h"
-#include "base/SpriteCommon.h"
+#include "Pipeline/SpritePipeline.h"
 #include "base/TextureManager.h"
 #include "Dx/DirectXCommon.h"
 #include <imgui.h>
@@ -201,7 +201,7 @@ void Sprite::SetScale(const Vector2& scale) {
 }
 
 void Sprite::PreDraw(ID3D12GraphicsCommandList* commandList) {
-    SpriteCommon::GetInstance()->PreDraw(commandList);
+    SpritePipeline::GetInstance()->PreDraw(commandList);
 }
 
 void Sprite::SetColor(const Vector3& color) {

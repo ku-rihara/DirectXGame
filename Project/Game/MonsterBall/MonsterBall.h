@@ -9,9 +9,10 @@ public:
 private:
 	// ワールド変換データ
 	WorldTransform transform_;
+    WorldTransform transform2_;
 	// モデル
 	std::unique_ptr<ModelAnimation> modelAnimation_=nullptr;
-
+    std::unique_ptr<ModelAnimation> modelAnimation2_ = nullptr;
 	Easing<Vector3> easing_;
 	
 public:

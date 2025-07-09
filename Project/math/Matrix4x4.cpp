@@ -236,6 +236,7 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 }
 
 Matrix4x4 MakeAffineMatrixQuaternion(const Vector3& scale, const Quaternion& rotate, const Vector3 translate) {
+    //Quaternion nRotate = rotate.Normalize(); // Quaternionを正規化
     return MakeScaleMatrix(scale) * MakeRotateMatrixFromQuaternion(rotate) * MakeTranslateMatrix(translate);
 }
 
@@ -351,7 +352,7 @@ Vector3 ScreenTransform(Vector3 worldPos, const ViewProjection& viewProjection) 
     return TransformMatrix(worldPos, matViewProjectionViewport);
 }
 
-// 行列の特定の行（0, 1, 2のいずれか）を正規化し、新しい行列を返す
+
 Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, int row) {
     Matrix4x4 result = matrix; // 元の行列をコピー
 
@@ -469,17 +470,17 @@ Matrix4x4 MakeRotateMatrixFromQuaternion(const Quaternion& q) {
     Matrix4x4 matrix;
 
     matrix.m[0][0] = 1.0f - 2.0f * (y * y + z * z);
-    matrix.m[0][1] = 2.0f * (x * y - w * z);
-    matrix.m[0][2] = 2.0f * (x * z + w * y);
+    matrix.m[0][1] = 2.0f * (x * y + w * z);
+    matrix.m[0][2] = 2.0f * (x * z - w * y);
     matrix.m[0][3] = 0.0f;
 
-    matrix.m[1][0] = 2.0f * (x * y + w * z);
+    matrix.m[1][0] = 2.0f * (x * y - w * z);
     matrix.m[1][1] = 1.0f - 2.0f * (x * x + z * z);
-    matrix.m[1][2] = 2.0f * (y * z - w * x);
+    matrix.m[1][2] = 2.0f * (y * z + w * x);
     matrix.m[1][3] = 0.0f;
 
-    matrix.m[2][0] = 2.0f * (x * z - w * y);
-    matrix.m[2][1] = 2.0f * (y * z + w * x);
+    matrix.m[2][0] = 2.0f * (x * z + w * y);
+    matrix.m[2][1] = 2.0f * (y * z - w * x);
     matrix.m[2][2] = 1.0f - 2.0f * (x * x + y * y);
     matrix.m[2][3] = 0.0f;
 

@@ -5,8 +5,6 @@
 #include "ParticleManager.h"
 #include <imgui.h>
 
-ParticleEmitter::ParticleEmitter() {
-}
 
 ///=================================================================================
 /// パーティクル作成
@@ -46,7 +44,8 @@ void ParticleEmitter::Init() {
     railManager_->Init(particleName_ + "Emit");
 
     /// 発生位置可視化オブジェ
-    obj3d_.reset(Object3d::CreateModel("DebugCube.obj"));
+  /*  obj3d_.reset(Object3d::CreateModel("DebugCube.obj"));*/
+    debugLine_.Init(24); 
     emitBoxTransform_.Init();
 }
 
@@ -119,8 +118,7 @@ void ParticleEmitter::UpdateEmitTransform() {
         parameters_.positionDist.max.x - parameters_.positionDist.min.x,
         parameters_.positionDist.max.y - parameters_.positionDist.min.y,
         parameters_.positionDist.max.z - parameters_.positionDist.min.z};
-    railManager_->SetScale(emitBoxTransform_.scale_);
-
+   
     emitBoxTransform_.UpdateMatrix();
 }
 
@@ -133,10 +131,11 @@ void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
 #ifdef _DEBUG
 
     if (isMoveForRail_) { // レールに沿うエミット位置
-        railManager_->Draw(viewProjection);
+        railManager_->Draw(viewProjection, emitBoxTransform_.scale_);
 
     } else { // レールに沿わないエミット位置
-        obj3d_->Draw(emitBoxTransform_, viewProjection);
+        debugLine_.DrawCubeWireframe(emitBoxTransform_.GetWorldPos(), emitBoxTransform_.scale_,Vector4::kWHITE());
+        debugLine_.Draw(viewProjection);
     }
 #endif // _DEBUG
 }
@@ -146,7 +145,6 @@ void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
 ///=================================================================================
 void ParticleEmitter::SetTextureHandle(const uint32_t& handle) {
     ParticleManager::GetInstance()->SetTextureHandle(particleName_, handle);
-    // SetSelectedTexturePath(handle); // 選択されたテクスチャハンドルを更新
 }
 
 /// =======================================================================================

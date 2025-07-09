@@ -19,17 +19,18 @@ struct CBuffer {
 
 class Line3D {
 public:
-    void Init();
+    void Init(const size_t& lineMaxNum);
     void SetLine(const Vector3& start, const Vector3& end, const Vector4& color);
-    void Draw(ID3D12GraphicsCommandList* commandList, const ViewProjection& viewProj);
- 
-    //球の描画
+    void Draw( const ViewProjection& viewProj);
+
+    // 球の描画
     void DrawSphereWireframe(const Vector3& center, float radius, const Vector4& color);
+    void DrawCubeWireframe(const Vector3& center, const Vector3& size, const Vector4& color);
 
     void Reset();
 
 private:
-    const size_t kMaxLines_        = 5120;
+    size_t maxLines_;
     const size_t kVerticesPerLine_ = 2;
     size_t kMaxVertices_;
 

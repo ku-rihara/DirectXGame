@@ -26,11 +26,9 @@
     <ClCompile Include="Engine\Animation\ModelAnimation.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
     <ClCompile Include="Engine\base\FullscreenRenderer.cpp" />
-    <ClCompile Include="Engine\base\Line3dCommon.cpp" />
     <ClCompile Include="Engine\base\Material.cpp" />
-    <ClCompile Include="Engine\base\Object3DCommon.cpp" />
+    <ClCompile Include="Engine\base\RtvManager.cpp" />
     <ClCompile Include="Engine\base\SkyBoxRenderer.cpp" />
-    <ClCompile Include="Engine\base\SpriteCommon.cpp" />
     <ClCompile Include="Engine\base\SpriteMaterial.cpp" />
     <ClCompile Include="Engine\base\SrvManager.cpp" />
     <ClCompile Include="Engine\base\TextureManager.cpp" />
@@ -59,6 +57,11 @@
     <ClCompile Include="Engine\Lighrt\PointLightManager.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLight.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLightManager.cpp" />
+    <ClCompile Include="Engine\Pipeline\Line3DPipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\Object3DPiprline.cpp" />
+    <ClCompile Include="Engine\Pipeline\ParticlePipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\SkinningObject3DPipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\SpritePipeline.cpp" />
     <ClCompile Include="Engine\Primitive\IPrimitive.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitiveBox.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitiveCylinder.cpp" />
@@ -69,7 +72,6 @@
     <ClCompile Include="Engine\utility\EasingCreator\EasingEditor.cpp" />
     <ClCompile Include="Engine\utility\EasingCreator\EasingParameterData.cpp" />
     <ClCompile Include="Engine\utility\ParameterEditor\GlobalParameter.cpp" />
-    <ClCompile Include="Engine\utility\ParticleEditor\ParticleCommon.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleManager.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleParameter.cpp" />
@@ -92,6 +94,7 @@
     <ClCompile Include="math\Box.cpp" />
     <ClCompile Include="math\Easing.cpp" />
     <ClCompile Include="math\EasingFunction.cpp" />
+    <ClCompile Include="math\EasingSequence.cpp" />
     <ClCompile Include="math\MathFunction.cpp" />
     <ClCompile Include="math\Matrix3x3.cpp" />
     <ClCompile Include="math\Matrix4x4.cpp" />
@@ -119,13 +122,12 @@
     <ClInclude Include="Engine\Animation\AnimationData.h" />
     <ClInclude Include="Engine\Animation\ModelAnimation.h" />
     <ClInclude Include="Engine\Animation\SkeletonData.h" />
+    <ClInclude Include="Engine\Animation\SkinCluster.h" />
     <ClInclude Include="Engine\audio\Audio.h" />
     <ClInclude Include="Engine\base\FullscreenRenderer.h" />
-    <ClInclude Include="Engine\base\Line3dCommon.h" />
     <ClInclude Include="Engine\base\Material.h" />
-    <ClInclude Include="Engine\base\Object3DCommon.h" />
+    <ClInclude Include="Engine\base\RtvManager.h" />
     <ClInclude Include="Engine\base\SkyBoxRenderer.h" />
-    <ClInclude Include="Engine\base\SpriteCommon.h" />
     <ClInclude Include="Engine\base\SpriteMaterial.h" />
     <ClInclude Include="Engine\base\SrvManager.h" />
     <ClInclude Include="Engine\base\TextureManager.h" />
@@ -155,6 +157,11 @@
     <ClInclude Include="Engine\Lighrt\PointLightManager.h" />
     <ClInclude Include="Engine\Lighrt\SpotLight.h" />
     <ClInclude Include="Engine\Lighrt\SpotLightManager.h" />
+    <ClInclude Include="Engine\Pipeline\Line3DPipeline.h" />
+    <ClInclude Include="Engine\Pipeline\Object3DPiprline.h" />
+    <ClInclude Include="Engine\Pipeline\ParticlePipeline.h" />
+    <ClInclude Include="Engine\Pipeline\SkinningObject3DPipeline.h" />
+    <ClInclude Include="Engine\Pipeline\SpritePipeline.h" />
     <ClInclude Include="Engine\Primitive\IPrimitive.h" />
     <ClInclude Include="Engine\Primitive\PrimitiveBox.h" />
     <ClInclude Include="Engine\Primitive\PrimitiveCylinder.h" />
@@ -173,7 +180,6 @@
     <ClInclude Include="Engine\utility\EasingCreator\EasingEditor.h" />
     <ClInclude Include="Engine\utility\EasingCreator\EasingParameterData.h" />
     <ClInclude Include="Engine\utility\ParameterEditor\GlobalParameter.h" />
-    <ClInclude Include="Engine\utility\ParticleEditor\ParticleCommon.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleEmitter.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleManager.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleParameter.h" />
@@ -196,6 +202,7 @@
     <ClInclude Include="math\Box.h" />
     <ClInclude Include="math\Easing.h" />
     <ClInclude Include="math\EasingFunction.h" />
+    <ClInclude Include="math\EasingSequence.h" />
     <ClInclude Include="math\MathFunction.h" />
     <ClInclude Include="math\Matrix3x3.h" />
     <ClInclude Include="math\Matrix4x4.h" />
@@ -231,6 +238,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
     <None Include="resources\Shader\Particle.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="resources\Shader\SkinningObject3d.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
@@ -289,6 +300,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="resources\Shader\Particle.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\SkinningObject3d.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

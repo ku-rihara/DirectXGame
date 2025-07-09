@@ -3,10 +3,11 @@
 #include <vector>
 #include"3d/object3d.h"
 #include"3d/WorldTransform.h"
-#include"Easing.h"
+#include"EasingSequence.h"
 #include"utility/ParticleEditor/ParticleEmitter.h"
 #include <list>
 #include <json.hpp>
+#include <cstdint>
 
 class PutObjForBlender {
 public:
@@ -18,7 +19,7 @@ public:
            WorldTransform worldTransform; 
            std::unique_ptr<Object3d> object3d;
            std::list<ObjectData> children;
-           Easing<Vector3> easing;
+           std::vector<EasingSequence<Vector3>> easing;
            std::vector<std::unique_ptr<ParticleEmitter>> emitters;
         };
         //オブジェクトのコンテナ
@@ -42,7 +43,7 @@ public:
 
     // easing
     void EasingAllReset();
-    void EasingAllUpdate(const float&deltaTime);
+    void EasingUpdateSelectGroup(const float&deltaTime,const int32_t& groupNum);
 
     void ConvertJSONToObjects(const nlohmann::json& object);
     PrimitiveType StringToPrimitiveType(const std::string& typeStr);

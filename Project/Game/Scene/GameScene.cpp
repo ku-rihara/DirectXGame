@@ -19,10 +19,10 @@ void GameScene::Init() {
 
     BaseScene::Init();
 
-    ground_      = std::make_unique<Ground>();
-    monsterBall_ = std::make_unique<MonsterBall>();
-    plane_       = std::make_unique<Plane>();
-    skuBox_      = std::make_unique<SkyBox>();
+    ground_          = std::make_unique<Ground>();
+    monsterBall_     = std::make_unique<MonsterBall>();
+    plane_           = std::make_unique<Plane>();
+    skuBox_          = std::make_unique<SkyBox>();
     putObjForBlender = std::make_unique<PutObjForBlender>();
 
     monsterBall_->Init();
