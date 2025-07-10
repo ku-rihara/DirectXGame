@@ -432,7 +432,7 @@ void DirectXCommon::PreDraw() {
 void DirectXCommon::DepthBarrierTransition() {
 
     // PutTransitionBarrier(depthStencilResource_.Get(),
-    //	 D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+    //	 D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D63D12_RESOURCE_STATE_DEPTH_WRITE);
 }
 
 void DirectXCommon::PostDraw() {
@@ -513,8 +513,28 @@ void DirectXCommon::commandExecution(Microsoft::WRL::ComPtr<ID3D12Resource>& int
 /// 　オブジェクト解放
 ///==========================================================
 void DirectXCommon::Finalize() {
-    device_.Reset();
+    dxcCompiler_->Release();
+    dxcUtils_->Release();
+
+ 
+    for (int i = 0; i < 2; i++) {
+        swapChainResources_[i].Reset();
+    }
+
+    renderTextureResource_.Reset();
+    depthStencilResource_.Reset();
+    dsvDescriptorHeap_.Reset();
+    swapChain_.Reset();
+
+    // コマンド関連リソース解放
+    commandList_.Reset();
     commandAllocator_.Reset();
+    commandQueue_.Reset();
+
+    fence_.Reset();
+    useAdapter_.Reset();
+    dxgiFactory_.Reset();
+    device_.Reset();
     CloseWindow(winApp_->GetHwnd());
 }
 

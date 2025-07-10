@@ -58,9 +58,9 @@
                     0.0
                 ],
                 "scaling": [
-                    6.384038925170898,
-                    2.6767146587371826,
-                    3.134685754776001
+                    1.0,
+                    1.0,
+                    1.0
                 ]
             },
             "file_name": "AudienceSeats.obj"
@@ -80,9 +80,9 @@
                     -179.99998474121094
                 ],
                 "scaling": [
-                    6.384038925170898,
-                    2.6767146587371826,
-                    3.134685754776001
+                    1.0,
+                    1.0,
+                    1.0
                 ]
             },
             "file_name": "AudienceSeats.obj"
@@ -102,9 +102,9 @@
                     90.00000762939453
                 ],
                 "scaling": [
-                    6.384038925170898,
-                    2.6767146587371826,
-                    3.134685754776001
+                    1.0,
+                    1.0,
+                    1.0
                 ]
             },
             "file_name": "AudienceSeats.obj"
@@ -124,34 +124,12 @@
                     -90.00000762939453
                 ],
                 "scaling": [
-                    6.384038925170898,
-                    2.6767146587371826,
-                    3.134685754776001
+                    1.0,
+                    1.0,
+                    1.0
                 ]
             },
             "file_name": "AudienceSeats.obj"
-        },
-        {
-            "type": "MESH",
-            "name": "objfence.246",
-            "transform": {
-                "translation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    105.30316925048828,
-                    101.40791320800781,
-                    107.86892700195312
-                ]
-            },
-            "file_name": "FieldFence.obj"
         },
         {
             "type": "MESH",
@@ -160,7 +138,7 @@
                 "translation": [
                     0.0,
                     0.0,
-                    -6.9662370681762695
+                    0.0
                 ],
                 "rotation": [
                     0.0,
@@ -168,12 +146,40 @@
                     0.0
                 ],
                 "scaling": [
-                    11.778387069702148,
-                    11.909592628479004,
-                    5.080944061279297
+                    1.0,
+                    1.0,
+                    1.0
                 ]
             },
-            "file_name": "FieldSide.obj"
+            "file_name": "FieldSide.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StartSideFieldS.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StartSideFieldR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StartSideFieldT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 1.5
+                }
+            ]
         },
         {
             "type": "MESH",
@@ -185,7 +191,7 @@
                     0.0
                 ],
                 "rotation": [
-                    90.00000762939453,
+                    0.0,
                     -0.0,
                     0.0
                 ],
@@ -195,8 +201,78 @@
                     1.0
                 ]
             },
-            "isDisable": true,
-            "file_name": "ground.obj"
+            "isDisable": false,
+            "file_name": "Field.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StartFieldS.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StartFieldR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StartFieldT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.800000011920929
+                }
+            ]
+        },
+        {
+            "type": "LIGHT",
+            "name": "Light.001",
+            "transform": {
+                "translation": [
+                    -7.957993507385254,
+                    47.70909881591797,
+                    8.392168998718262
+                ],
+                "rotation": [
+                    37.261051177978516,
+                    3.163706064224243,
+                    106.93632507324219
+                ],
+                "scaling": [
+                    2.0835955142974854,
+                    2.7713353633880615,
+                    2.696988582611084
+                ]
+            }
+        },
+        {
+            "type": "CAMERA",
+            "name": "Camera.001",
+            "transform": {
+                "translation": [
+                    -0.6246070861816406,
+                    33.02084732055664,
+                    6.514531135559082
+                ],
+                "rotation": [
+                    63.559295654296875,
+                    1.5625435025867773e-06,
+                    46.69194412231445
+                ],
+                "scaling": [
+                    2.565101385116577,
+                    2.418213367462158,
+                    2.8594412803649902
+                ]
+            }
         }
     ]
 }

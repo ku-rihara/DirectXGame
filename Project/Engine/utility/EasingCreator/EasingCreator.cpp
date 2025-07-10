@@ -226,7 +226,7 @@ void EasingCreator<T>::Edit() {
     ImGui::Separator();
 
     //  プリセット一覧
-    if (ImGui::BeginListBox("Preset List")) {
+    if (ImGui::BeginListBox("Easing List")) {
         for (const auto& [name, param] : presets_) {
             const bool isSelected = (selectedName_ == name);
             if (ImGui::Selectable(name.c_str(), isSelected)) {
@@ -243,11 +243,11 @@ void EasingCreator<T>::Edit() {
     char newBuf[128];
     strncpy_s(newBuf, newPresetName_.c_str(), sizeof(newBuf));
     newBuf[sizeof(newBuf) - 1] = '\0';
-    if (ImGui::InputText("New Preset Name", newBuf, sizeof(newBuf))) {
+    if (ImGui::InputText("New Easing Name", newBuf, sizeof(newBuf))) {
         newPresetName_ = newBuf;
     }
 
-    if (ImGui::Button("Add New Preset") && !newPresetName_.empty()) {
+    if (ImGui::Button("Add New Easing") && !newPresetName_.empty()) {
         EasingParameter<T> defaultParam;
         AddPreset(newPresetName_, defaultParam);
         selectedName_ = newPresetName_;
@@ -261,7 +261,7 @@ void EasingCreator<T>::Edit() {
 
     //  編集 UI
     if (!selectedName_.empty() && presets_.count(selectedName_)) {
-        ImGui::Text("Edit Preset: %s", selectedName_.c_str());
+        ImGui::Text("Edit Easing: %s", selectedName_.c_str());
 
         // イージングパラメータ
         ImGui::DragFloat("Max Time", &editingParam_.maxTime, 0.01f);
@@ -276,10 +276,6 @@ void EasingCreator<T>::Edit() {
         if constexpr (std::is_same_v<T, float>) {
             ImGui::DragFloat("Start Value", &editingParam_.startValue, 0.01f);
             ImGui::DragFloat("End Value", &editingParam_.endValue, 0.01f);
-            if (ImGui::Button("Change Radian")) {
-                editingParam_.startValue = toRadian(editingParam_.startValue);
-                editingParam_.endValue   = toRadian(editingParam_.endValue);
-            }
 
             if (ImGui::Combo("AdaptAxis Type", &adaptFloatAxisType, AdaptFloatAxisTypeLabels.data(), static_cast<int>(AdaptFloatAxisTypeLabels.size()))) {
                 editingParam_.adaptFloatAxisType = static_cast<AdaptFloatAxisType>(adaptFloatAxisType);
@@ -288,7 +284,7 @@ void EasingCreator<T>::Edit() {
         } else if constexpr (std::is_same_v<T, Vector2>) { // vec2
             ImGui::DragFloat2("Start Value", &editingParam_.startValue.x, 0.01f);
             ImGui::DragFloat2("End Value", &editingParam_.endValue.x, 0.01f);
-
+           
             // 軸のタイプの選択(Vector2)
             if (ImGui::Combo("AdaptAxis Type", &adaptVec2AxisType, AdaptVector2AxisTypeLabels.data(), static_cast<int>(AdaptVector2AxisTypeLabels.size()))) {
                 editingParam_.adaptVec2AxisType = static_cast<AdaptVector2AxisType>(adaptVec2AxisType);
@@ -297,6 +293,11 @@ void EasingCreator<T>::Edit() {
         } else if constexpr (std::is_same_v<T, Vector3>) { // vec3
             ImGui::DragFloat3("Start Value", &editingParam_.startValue.x, 0.01f);
             ImGui::DragFloat3("End Value", &editingParam_.endValue.x, 0.01f);
+        }
+
+         if (ImGui::Button("Change Radian")) {
+            editingParam_.startValue = toRadian(editingParam_.startValue);
+            editingParam_.endValue   = toRadian(editingParam_.endValue);
         }
 
         // イージングタイプの設定

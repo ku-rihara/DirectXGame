@@ -20,6 +20,7 @@ void Easing<T>::Reset() {
     currentTime_ = 0.0f;
     waitTime_    = 0.0f;
     currentStartTimeOffset_ = 0.0f;
+    CalculateValue();
 }
 
 template <typename T>
@@ -280,6 +281,12 @@ void Easing<T>::Update(float deltaTime) {
 }
 
 template <typename T>
+void Easing<T>::ResetStartValue() {
+    currentTime_ = 0.0f;
+    CalculateValue();
+  }
+
+template <typename T>
 void Easing<T>::FilePathChangeForType() {
     if constexpr (std::is_same_v<T, float>) {
         filePathForType_ = "float";
@@ -460,10 +467,10 @@ void Easing<T>::Easing::FinishBehavior() {
 
     switch (finishValueType_) {
     case EasingFinishValueType::Start:
-        *currentValue_ = startValue_;
+        *currentValue_ = startValue_+baseValue_;
         break;
     case EasingFinishValueType::End:
-        *currentValue_ = endValue_;
+        *currentValue_ = endValue_ + baseValue_;
         break;
     default:
         break;

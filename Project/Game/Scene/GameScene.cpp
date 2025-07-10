@@ -29,8 +29,9 @@ void GameScene::Init() {
     ground_->Init();
     plane_->Init();
     skuBox_->Init();
-    putObjForBlender->LoadJsonFile("gamescene.json");
+    putObjForBlender->LoadJsonFile("game.json");
     putObjForBlender->PutObject();
+    putObjForBlender->EasingAllReset();
 
     isDebugCameraActive_ = true;
 }
@@ -46,6 +47,11 @@ void GameScene::Update() {
     monsterBall_->Update();
     plane_->Update();
     skuBox_->Update();
+
+    if (Input::GetInstance()->PushKey(DIK_G)) {
+
+        putObjForBlender->EasingUpdateSelectGroup(Frame::DeltaTime(), 0);
+    }
 
     ViewProjectionUpdate();
 

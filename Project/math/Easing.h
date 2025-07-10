@@ -19,6 +19,7 @@ public:
     void Init(const std::string& name);
 
     void Reset();
+    void ResetStartValue();
 
     //  Easing setting
     void SettingValue(const EasingParameter<T>& easingParam);
