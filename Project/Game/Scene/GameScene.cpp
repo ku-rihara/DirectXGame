@@ -29,7 +29,7 @@ void GameScene::Init() {
     ground_->Init();
     plane_->Init();
     skuBox_->Init();
-    putObjForBlender->LoadJsonFile("gameScene.json");
+    putObjForBlender->LoadJsonFile("game.json");
     putObjForBlender->PutObject();
     putObjForBlender->EasingAllReset();
 
