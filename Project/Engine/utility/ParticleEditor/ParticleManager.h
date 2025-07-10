@@ -20,7 +20,6 @@
 #include <unordered_map>
 #include <memory>
 
-//class ParticlePipeline;
 struct ParticleEmitter::GroupParamaters;
 struct ParticleEmitter::Parameters;
 struct ParticleEmitter::EaseParm;
@@ -34,9 +33,9 @@ private:
     struct ScaleInFo {
         Vector3 tempScaleV3;
         Vector3 easeEndScale;
-        ParticleEmitter::EaseParm easeparm;
+        ParticleEmitter::EaseParm easeParam;
     };
-    struct UVTnfo {
+    struct UVInfo {
         Vector3 pos;
         Vector3 scale;
         Vector3 rotate;
@@ -67,7 +66,7 @@ private:
         const Vector3* followPos = nullptr;
         WorldTransform worldTransform_;
         ScaleInFo scaleInfo;
-        UVTnfo uvInfo_;
+        UVInfo uvInfo_;
     };
 
     struct AccelerationField { /// 　加速フィールド
@@ -85,7 +84,7 @@ private:
         uint32_t textureHandle;
         ParticleFprGPU* instancingData;
         std::list<Particle> particles;
-        ParticleEmitter::GroupParamaters parm;
+        ParticleEmitter::GroupParamaters param;
         Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
     };
 
@@ -93,14 +92,16 @@ public:
     ///============================================================
     /// public method
     ///============================================================
+    ParticleManager() = default;
+    ~ParticleManager() = default;
 
-    // 初期化、
+    // 初期化
     void Init(SrvManager* srvManager);
     void ResetInstancingData(const std::string& name);
 
     //更新、描画
     void Update();
-    void UpdateUV(UVTnfo& uvInfo, float deltaTime);
+    void UpdateUV(UVInfo& uvInfo, float deltaTime);
     void Draw(const ViewProjection& viewProjection);
    
     // モデル、リソース作成(グループ作成)
@@ -118,7 +119,7 @@ public:
         const ParticleEmitter::GroupParamaters& groupParamaters, const int32_t& count);
 
     ///============================================================
-    /// parm Adapt
+    /// param Adapt
     ///============================================================
     void AlphaAdapt(ParticleFprGPU& data, const Particle& parm, const ParticleGroup& group);
     Vector3 ScaleAdapt(const float& time, const ScaleInFo& parm);
@@ -132,7 +133,6 @@ private:
 
     // other class
     SrvManager* pSrvManager_;
-   /* ParticlePipeline* pParticleCommon_;*/
     AccelerationField accelerationField_;
     const ViewProjection* viewProjection_;
 

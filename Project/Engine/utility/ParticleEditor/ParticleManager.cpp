@@ -55,7 +55,7 @@ void ParticleManager::Update() {
             /// スケール変更
             ///------------------------------------------------------------------------
             (*it).easeTime += Frame::DeltaTimeRate();
-            (*it).easeTime               = std::min((*it).easeTime, (*it).scaleInfo.easeparm.maxTime);
+            (*it).easeTime               = std::min((*it).easeTime, (*it).scaleInfo.easeParam.maxTime);
             (*it).worldTransform_.scale_ = ScaleAdapt((*it).easeTime, (*it).scaleInfo);
 
             ///------------------------------------------------------------------------
@@ -101,9 +101,9 @@ void ParticleManager::Update() {
             /// ビルボードまたは通常の行列更新
             ///------------------------------------------------------------------------
 
-            if (group.parm.isBillBord) {
+            if (group.param.isBillBord) {
 
-                it->worldTransform_.BillboardUpdateMatrix(*viewProjection_, group.parm.billBordType, group.parm.adaptRotate_);
+                it->worldTransform_.BillboardUpdateMatrix(*viewProjection_, group.param.billBordType, group.param.adaptRotate_);
             } else {
                 it->worldTransform_.UpdateMatrix();
             }
@@ -161,7 +161,7 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
         }
 
         if (instanceIndex > 0) {
-            ParticlePipeline::GetInstance()->PreDraw(commandList, group.parm.blendMode);
+            ParticlePipeline::GetInstance()->PreDraw(commandList, group.param.blendMode);
             // モデル描画
             if (group.model) {
                 group.model->DrawInstancing(instanceIndex, pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
@@ -175,7 +175,7 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
     }
 }
 
-void ParticleManager::UpdateUV(UVTnfo& uvInfo, float deltaTime) {
+void ParticleManager::UpdateUV(UVInfo& uvInfo, float deltaTime) {
     if (uvInfo.isScroolEachPixel) {
         // 毎フレーム、速度に応じて移動
         uvInfo.pos.x += uvInfo.frameScroolSpeed * deltaTime;
@@ -450,9 +450,9 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 
     // EaseParm Adapt
     particle.easeTime                       = 0.0f;
-    particle.scaleInfo.easeparm.isScaleEase = paramaters.scaleEaseParm.isScaleEase;
-    particle.scaleInfo.easeparm.maxTime     = paramaters.scaleEaseParm.maxTime;
-    particle.scaleInfo.easeparm.easeType    = paramaters.scaleEaseParm.easeType;
+    particle.scaleInfo.easeParam.isScaleEase = paramaters.scaleEaseParm.isScaleEase;
+    particle.scaleInfo.easeParam.maxTime     = paramaters.scaleEaseParm.maxTime;
+    particle.scaleInfo.easeParam.easeType    = paramaters.scaleEaseParm.easeType;
 
     ///------------------------------------------------------------------------
     /// 色
@@ -519,7 +519,7 @@ void ParticleManager::Emit(
 
     // 指定されたパーティクルグループを取得
     ParticleGroup& particleGroup = particleGroups_[name];
-    particleGroup.parm           = groupParamaters;
+    particleGroup.param           = groupParamaters;
 
     // 生成、グループ追加
     std::list<Particle> particles;
@@ -563,7 +563,7 @@ void ParticleManager::ResetInstancingData(const std::string& name) {
 ///=================================================================================================
 void ParticleManager::AlphaAdapt(ParticleFprGPU& data, const Particle& parm, const ParticleGroup& group) {
     data.color = parm.color_;
-    if (group.parm.isAlphaNoMove) {
+    if (group.param.isAlphaNoMove) {
         data.color.w = 1.0f;
         return;
     }
@@ -572,12 +572,12 @@ void ParticleManager::AlphaAdapt(ParticleFprGPU& data, const Particle& parm, con
 
 Vector3 ParticleManager::ScaleAdapt(const float& time, const ScaleInFo& info) {
 
-    if (!info.easeparm.isScaleEase) {
+    if (!info.easeParam.isScaleEase) {
         return info.tempScaleV3;
     }
 
-    return EaseAdapt(info.easeparm.easeType, info.tempScaleV3, info.easeEndScale,
-        time, info.easeparm.maxTime);
+    return EaseAdapt(info.easeParam.easeType, info.tempScaleV3, info.easeEndScale,
+        time, info.easeParam.maxTime);
 }
 
 Vector3 ParticleManager::EaseAdapt(const ParticleEmitter::EaseType& easetype,
