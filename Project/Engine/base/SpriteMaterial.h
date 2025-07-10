@@ -8,39 +8,11 @@
 class DirectXCommon;
 
 class SpriteMaterial {
-private:
- 
-    struct MaterialSprite {
-        Vector4 color;
-        Matrix4x4 uvTransform;
-       /* float padding[3];*/
-    };
-
-private:
-
-    ///===================================
-   ///private variant
-   ///===================================
-
-    // GPUリソースへのポインタ
-    Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
-
 public:
+    SpriteMaterial();
+    ~SpriteMaterial()=default;
 
-    ///===================================
-    ///public variant
-    ///===================================
-  
-    MaterialSprite* materialData_;
  
-public:
- 
-    SpriteMaterial(); // コンストラクタ
-
-   ///===================================
-  ///public method
-  ///===================================
-
     /// マテリアルのリソースを作成する関数
     void CreateMaterialResource(DirectXCommon* dxCommon);
     /// マテリアルのデータを更新する関数
@@ -48,9 +20,24 @@ public:
     /// シェーダーにデータを送る関数
     void SetCommandList(ID3D12GraphicsCommandList* commandList);
 
-#ifdef _DEBUG
-    // デバッグ用ImGuiでの表示
     void DebugImGui();
-#endif
+
+private:
+ 
+    struct MaterialSprite {
+        Vector4 color;
+        Matrix4x4 uvTransform;
+    };
+
+private:
+
+    // GPUリソースへのポインタ
+    Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
+
+public:
+    MaterialSprite* materialData_;
+ 
+
+
 
 };

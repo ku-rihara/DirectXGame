@@ -4,15 +4,7 @@
 #include "Vector3.h"
 #include "Vector4.h"
 
-DirectionalLight::DirectionalLight()
-{
-    lightResource_ = nullptr;
-    lightData_ = nullptr;
-}
-DirectionalLight::~DirectionalLight()
-{
-    
-}
+
 void DirectionalLight::Init(ID3D12Device* device) {
     lightResource_ = DirectXCommon::GetInstance()->CreateBufferResource(device, sizeof(DirectionalLightData));
     lightData_ = nullptr;

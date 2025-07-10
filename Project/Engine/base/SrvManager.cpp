@@ -6,7 +6,7 @@ const uint32_t SrvManager::kMaxCount = 1024*6;
 
 // シングルトンインスタンスの取得
 SrvManager* SrvManager::GetInstance() {
-	static SrvManager instance; // 静的インスタンス
+	static SrvManager instance; 
 	return &instance;
 }
 

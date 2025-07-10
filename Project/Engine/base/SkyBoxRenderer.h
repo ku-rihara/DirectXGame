@@ -5,11 +5,29 @@
 #include <string>
 
 class SkyBoxRenderer {
+public: 
+    SkyBoxRenderer() = default;
+    ~SkyBoxRenderer() = default;
 
-private: // メンバ変数
+    // 共通描画処理
+    void PreDraw(ID3D12GraphicsCommandList* commandList);
+    void SetPiplelineState(ID3D12GraphicsCommandList* commandList);
+    // 初期化
+    void Init(DirectXCommon* dxCommon);
+
+    static SkyBoxRenderer* GetInstance();
+
+    // rootSignature
+    ID3D12RootSignature* GetRootSignature() const { return rootSignature_.Get(); }
+    uint32_t GetEnvironmentalMapTextureHandle() const { return environmentalMapTextureHandle_; }
+
+    void SetEnvironmentalMapTextureHandle(const std::string& texture);
+
+private:
     DirectXCommon* dxCommon_;
 
-private: // メンバ関数
+private: 
+
     D3D12_STATIC_SAMPLER_DESC staticSamplers_[1];
     // グラフィックパイプライン関連
     // object
@@ -32,18 +50,5 @@ private:
     // グラフィックスパイプラインの生成
     void CreateGraphicsPipeline();
 
-public: // メンバ関数
-    // 共通描画処理
-    void PreDraw(ID3D12GraphicsCommandList* commandList);
-    void SetPiplelineState(ID3D12GraphicsCommandList* commandList);
-    // 初期化
-    void Init(DirectXCommon* dxCommon);
 
-    static SkyBoxRenderer* GetInstance();
-
-    // rootSignature
-    ID3D12RootSignature* GetRootSignature() const { return rootSignature_.Get(); }
-    uint32_t GetEnvironmentalMapTextureHandle() const { return environmentalMapTextureHandle_; }
-
-    void SetEnvironmentalMapTextureHandle(const std::string& texture);
 };

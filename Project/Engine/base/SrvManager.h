@@ -5,15 +5,10 @@
 
 /// SRV管理
 class SrvManager {
-
-private:
+public:
     SrvManager()  = default;
     ~SrvManager() = default;
 
-    SrvManager(const SrvManager&)            = delete;
-    SrvManager& operator=(const SrvManager&) = delete;
-
-public:
     static SrvManager* GetInstance();
 
     ///===================================================================

@@ -18,6 +18,9 @@ public:
     /// 静的メンバ関数
     /// ========================================================
 
+    Frame() = default;
+    ~Frame() = default;
+
     static void Init();
     static void Update();
     static float DeltaTime();

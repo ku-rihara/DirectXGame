@@ -7,6 +7,9 @@
 template <typename T>
 class EasingCreator {
 public:
+    EasingCreator() = default;
+    ~EasingCreator() = default;
+
     void LoadParameter(const std::string& path);
     void SaveParameter(const std::string& path) const;
 
@@ -25,8 +28,8 @@ public:
     void Clear();
     void Edit();
 
-    void SaveSelectedParameter() ;
-    void LoadSelectedParameter() ;
+    void SaveSelectedParameter();
+    void LoadSelectedParameter();
     void AdaptEditorParam();
 
 private:

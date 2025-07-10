@@ -19,8 +19,8 @@ private:
     PointLightData* lightData_;
 
 public:
-    PointLight();
-    ~PointLight();
+    PointLight()=default;
+    ~PointLight() = default;
 
     void Init(ID3D12Device* device);
     void SetLightCommand(ID3D12GraphicsCommandList* commandList, const int& index);

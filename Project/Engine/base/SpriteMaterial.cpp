@@ -4,7 +4,7 @@
 #include <cassert>
 
 SpriteMaterial::SpriteMaterial()
-    : materialData_(nullptr) {  // materialData_の初期化
+    : materialData_(nullptr) {  
    
 }
 
@@ -18,7 +18,7 @@ void SpriteMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
     materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 
     // 初期値をセット
-    materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);  // 初期値を直接ここで設定
+    materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f); 
     materialData_->uvTransform = MakeIdentity4x4();
 
 }
@@ -32,8 +32,10 @@ void SpriteMaterial::SetCommandList(ID3D12GraphicsCommandList* commandList) {
     commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 }
 
-#ifdef _DEBUG
+
 void SpriteMaterial::DebugImGui() {
+#ifdef _DEBUG
     ImGui::ColorEdit4("Color", reinterpret_cast<float*>(&materialData_->color));  // materialData_のcolorを使用
-}
 #endif
+}
+

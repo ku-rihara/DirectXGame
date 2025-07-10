@@ -4,15 +4,7 @@
 #include "Vector3.h"
 #include "Vector4.h"
 
-AmbientLight::AmbientLight()
-{
-    lightResource_ = nullptr;
-    lightData_ = nullptr;
-}
-AmbientLight::~AmbientLight()
-{
-   
-}
+
 void AmbientLight::Init(ID3D12Device* device) {
     lightResource_ = DirectXCommon::GetInstance()->CreateBufferResource(device, sizeof(AmbientLightData));
     lightData_ = nullptr;

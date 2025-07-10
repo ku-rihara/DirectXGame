@@ -3,11 +3,6 @@
 #include <assert.h>
 #include <numbers>
 
-WorldTransform::WorldTransform() {
-}
-
-WorldTransform::~WorldTransform() {
-}
 
 void WorldTransform::Init() {
 
