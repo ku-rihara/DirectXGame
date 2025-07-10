@@ -20,7 +20,8 @@ void DebugCamera::Init() {
     // ビュープロジェクションの初期化
     viewProjection_.Init();
     // カメラの初期位置を設定
-    viewProjection_.translation_ = {0, -5, -distance_};
+ /*   viewProjection_.translation_ = {0, -5, -distance_};*/
+    viewProjection_.translation_ = {7, 104, -301};
     viewProjection_.rotation_    = {0, 0, 0};
     matRot_                      = MakeIdentity4x4();
     yaw_                         = 0.0f;
