@@ -16,7 +16,7 @@ void ModelCommon::Init(DirectXCommon* dxCommon) {
 }
 
 Model::~Model() {
-    Finalize();
+  
 }
 
 ModelData Model::LoadModelFile(const std::string& directoryPath, const std::string& filename) {
@@ -280,11 +280,5 @@ void Model::PreDraw(ID3D12GraphicsCommandList* commandList) {
 }
 
 void Model::Finalize() {
-    // リソースの解放
-    if (vertexResource_) {
-        vertexResource_.Reset();
-    }
-    if (indexResource_) {
-        indexResource_.Reset();
-    }
+   
 }

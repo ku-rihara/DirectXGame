@@ -8,15 +8,9 @@
 #include <d3dx12.h>
 #include <vector>
 
-// descriptorHeapIndex_ の初期化
-uint32_t TextureManager::kSRVIndexTop = 1;
 
 TextureManager* TextureManager::instance = nullptr;
 
-namespace {
-DirectXCommon* directXCommon_;
-ImGuiManager* imguiManager_;
-}
 // インスタンス取得
 TextureManager* TextureManager::GetInstance() {
     if (instance == nullptr) {
@@ -177,11 +171,6 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
     return textureData.index;
 }
 
-void TextureManager::Finalize() {
-    delete instance;
-    instance = nullptr;
-}
-
 const DirectX::TexMetadata& TextureManager::GetMetaData(uint32_t textureIndex) {
     // 範囲外チェック
     assert(textureIndex < textureDatas_.size());
@@ -226,4 +215,11 @@ D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetSrvHandleGPU(const std::string& f
 
     // ハンドルを返す
     return GetTextureHandle(index);
+}
+
+void TextureManager::Finalize() {
+    delete instance;
+    instance       = nullptr;
+    directXCommon_ = nullptr;
+    pSrvManager_   = nullptr;
 }
