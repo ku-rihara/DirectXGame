@@ -5,10 +5,15 @@
 class KTGame :public KTFramework {
 
 
-	///======================================
-    ///public method
-    ///======================================
+	
 public:
+
+	KTGame() = default;
+    ~KTGame() = default;
+
+	///======================================
+    /// public method
+    ///======================================
 	 void Init()override;
 	 void Update()override;
 	 void Draw()override;

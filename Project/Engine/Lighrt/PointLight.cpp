@@ -2,14 +2,6 @@
 #include"Dx/DirectXCommon.h"
 #include <imgui.h>
 
-PointLight::PointLight()
-{
-    lightResource_ = nullptr;
-    lightData_ = nullptr;
-}
-PointLight::~PointLight()
-{
-}
 
 void PointLight::Init(ID3D12Device* device) {
     lightResource_ = DirectXCommon::GetInstance()->CreateBufferResource(device, sizeof(PointLightData));

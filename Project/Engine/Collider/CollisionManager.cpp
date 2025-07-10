@@ -1,4 +1,7 @@
 #include "CollisionManager.h"
+
+#include "Collider/AABBCollider.h"
+#include "Collider/OBBCollider.h"
 #include "Box.h"
 
 // 静的メンバ変数の初期化

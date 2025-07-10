@@ -1,8 +1,8 @@
 #pragma once
 #include <d3d12.h>
-#include <wrl.h>
 #include <d3dcommon.h>
-#include<dxcapi.h>
+#include <dxcapi.h>
+#include <wrl.h>
 
 // class
 
@@ -10,13 +10,15 @@ class DirectXCommon;
 
 class Line3DPipeline {
 public:
+    Line3DPipeline()  = default;
+    ~Line3DPipeline() = default;
+
     static Line3DPipeline* GetInstance();
 
     void Init(DirectXCommon* dxCommon);
     void PreDraw(ID3D12GraphicsCommandList* commandList);
 
 private:
-    Line3DPipeline() = default;
     void CreateRootSignature();
     void CreateGraphicsPipeline();
 

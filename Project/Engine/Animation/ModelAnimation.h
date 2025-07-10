@@ -20,6 +20,10 @@
 
 class ModelAnimation {
 public:
+
+    ModelAnimation() = default;
+    ~ModelAnimation() = default;
+
     Animation LoadAnimationFile(const std::string& fileName);
     Skeleton CreateSkeleton(const Node& rootNode);
     int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
@@ -34,8 +38,6 @@ public:
     Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time);
     Quaternion CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time);
 
-//public:
-//    WorldTransform worldTransform_;
 private:
     Animation animation_;
     Skeleton skeleton_;

@@ -7,6 +7,9 @@ class PointLightManager {
 private:
     std::vector<std::unique_ptr<PointLight>> pointLights_;
 public:
+
+    PointLightManager() = default;
+    ~PointLightManager() = default;
        ///=========================================================================================
       ///  public  method
       ///=========================================================================================

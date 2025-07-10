@@ -6,7 +6,7 @@
 #include<unordered_map>
 #include <vector>
 #include <chrono>
-#include <unordered_map>
+
 class Audio {
 private:
 	//XAudio2のインスタンス
@@ -15,11 +15,14 @@ private:
 	std::vector<SoundData> soundDatas_;
 	std::unordered_map<std::string, int> soundIndexMap_;
 
-	std::unordered_map<int, std::chrono::steady_clock::time_point> lastPlayTimes_; // 直前の再生時間を記録
+	std::unordered_map<int, std::chrono::steady_clock::time_point> lastPlayTimes_;
 
 
 public:
 	static Audio* GetInstance();
+
+	Audio() = default;
+    ~Audio() = default;
 
 	void Init();
 	int LoadWave(const std::string& filename);
@@ -30,8 +33,3 @@ public:
 	IXAudio2* GetXAudio2()const { return xAudio2_.Get(); }
 };
 
-
-//SoundData SoundLoadWave(const char* filename);
-//void SoundUnload(SoundData* soundData);
-//void SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData);
-//void Finalizer();

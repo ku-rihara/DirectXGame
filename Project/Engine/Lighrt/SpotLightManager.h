@@ -7,6 +7,10 @@ class SpotLightManager {
 private:
 	std::vector<std::unique_ptr<SpotLight>> spotLights_;
 public:
+
+	SpotLightManager() = default;
+    ~SpotLightManager() = default;
+
 	///=========================================================================================
 	///  public  method
 	///=========================================================================================

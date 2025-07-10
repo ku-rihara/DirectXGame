@@ -16,7 +16,7 @@ void ModelCommon::Init(DirectXCommon* dxCommon) {
 }
 
 Model::~Model() {
-  
+    Finalize();
 }
 
 ModelData Model::LoadModelFile(const std::string& directoryPath, const std::string& filename) {
@@ -280,5 +280,6 @@ void Model::PreDraw(ID3D12GraphicsCommandList* commandList) {
 }
 
 void Model::Finalize() {
-   
+    dxCommon_ = nullptr;
+    textureManager_ = nullptr;
 }

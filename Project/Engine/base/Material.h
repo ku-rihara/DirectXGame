@@ -5,7 +5,7 @@
 #include <string>
 #include <wrl.h>
 
- enum class BlendMode {
+enum class BlendMode {
     None,
     Add,
     Multiply,
@@ -15,27 +15,9 @@
 
 class DirectXCommon;
 class Material {
-private:
-    struct MaterialStructure {
-        Vector4 color;
-        int32_t enableLighting;
-        float padding[3];
-        Matrix4x4 uvMatrix;
-        float shininess;
-        float environmentCoefficient;
-    };
-
-public:
-    // GPUに送るマテリアルデータの実体
-    MaterialStructure* materialData_=nullptr;
-
-private:
-    // GPUリソースへのポインタ
-    Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
-
 public:
     // コンストラクタ
-    Material()=default;
+    Material()  = default;
     ~Material() = default;
 
     // マテリアルのリソースを作成する関数
@@ -48,6 +30,24 @@ public:
     void SetCommandList(ID3D12GraphicsCommandList* commandList);
 
     void DebugImGui();
+
+private:
+    struct MaterialStructure {
+        Vector4 color;
+        int32_t enableLighting;
+        float padding[3];
+        Matrix4x4 uvMatrix;
+        float shininess;
+        float environmentCoefficient;
+    };
+
+public:
+    // GPUに送るマテリアルデータの実体
+    MaterialStructure* materialData_ = nullptr;
+
+private:
+    // GPUリソースへのポインタ
+    Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 
 public:
     void SetShininess(const float& shiniess) { materialData_->shininess = shiniess; }

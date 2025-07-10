@@ -82,6 +82,7 @@ private:
     /// テクスチャ
     TextureManager* textureManager_ = nullptr;
     DirectXCommon* dxCommon_        = nullptr;
+
     uint32_t textureHandle_;
     ModelData modelData_;
 

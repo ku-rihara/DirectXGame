@@ -19,7 +19,7 @@ Sprite* Sprite::Create(const uint32_t& textureHandle, const Vector2& position, c
 void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position, const Vector4& color) {
     // テクスチャ
     texture_      = TextureManager::GetInstance()->GetTextureHandle(textureHandle);
-    textuerIndex_ = textureHandle;
+    textureIndex_ = textureHandle;
 
     // Sprite用の頂点リソースを作る
     vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(VertexData) * 4);
@@ -96,9 +96,8 @@ void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position
     textureSize_ = textureAdjustSize_;
 }
 
-#ifdef _DEBUG
 void Sprite::DebugImGui() {
-
+#ifdef _DEBUG
     ImGui::ColorEdit4(" Color", (float*)&material_.materialData_->color);
     if (ImGui::TreeNode("Transform")) {
         ImGui::DragFloat3(" pos", &transform_.translate.x);
@@ -114,8 +113,9 @@ void Sprite::DebugImGui() {
 
         ImGui::TreePop();
     }
-}
 #endif
+}
+
 
 void Sprite::Draw() {
 

@@ -5,18 +5,6 @@
 #include <imgui.h>
 #include <numbers>
 
-// コンストラクタ
-AreaLight::AreaLight()
-{
-    lightResource_ = nullptr;
-    lightData_ = nullptr;
-}
-
-// デストラクタ
-AreaLight::~AreaLight()
-{
-   
-}
 
 // 初期化
 void AreaLight::Init(ID3D12Device* device) {

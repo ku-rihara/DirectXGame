@@ -36,8 +36,8 @@ enum class RotateOder {
 class WorldTransform {
 
 public:
-    WorldTransform();
-    ~WorldTransform();
+    WorldTransform()  = default;
+    ~WorldTransform() = default;
 
     void Init();
 
@@ -45,7 +45,6 @@ public:
     void Map();
 
     void UpdateMatrix();
-  
 
     Vector3 LookAt(const Vector3& direction) const;
 
@@ -54,7 +53,7 @@ public:
 private:
     void TransferMatrix();
     void UpdateAffineMatrix();
-   
+
 public:
     // ローカルスケール
     Vector3 scale_ = {1, 1, 1};
@@ -87,7 +86,6 @@ public:
     Vector3 GetLocalPos() const;
     Vector3 GetWorldPos() const;
 
-   
     /// 定数バッファの取得
     const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return constBuffer_; }
 
@@ -103,8 +101,7 @@ public:
         return Vector3(matWorld_.m[0][2], matWorld_.m[1][2], matWorld_.m[2][2]);
     }
 
-
-    public:
+public:
     // ムーブコンストラクタを追加
     WorldTransform(WorldTransform&& other) noexcept
         : scale_(std::move(other.scale_)),
