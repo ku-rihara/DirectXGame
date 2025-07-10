@@ -280,7 +280,6 @@ void Easing<T>::Update(float deltaTime) {
     }
 }
 
-
 template <typename T>
 void Easing<T>::ResetStartValue() {
     currentTime_ = 0.0f;

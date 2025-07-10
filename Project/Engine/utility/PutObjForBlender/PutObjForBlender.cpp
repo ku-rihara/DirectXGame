@@ -333,7 +333,7 @@ void PutObjForBlender::EmitterAllEdit() {
                 continue;
             }
 
-            // 未処理なら処理して、記録に追加
+          
             emitter->EditorUpdate();
             processedParticleNames.insert(name);
         }
