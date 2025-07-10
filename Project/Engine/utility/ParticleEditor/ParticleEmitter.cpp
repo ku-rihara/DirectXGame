@@ -1,5 +1,3 @@
-// ParticleEmitter.cpp
-
 #include "ParticleEmitter.h"
 #include "Frame/Frame.h"
 #include "ParticleManager.h"
