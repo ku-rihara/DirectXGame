@@ -54,7 +54,7 @@ void GameScene::Init() {
     howToOperate_->Init();
     viewProjection_.Init();
 
-    gameBackGroundObject_->Init("gameScene.json");
+    gameBackGroundObject_->Init("game.json");
 
     ///=======================================================================================
     /// セット
