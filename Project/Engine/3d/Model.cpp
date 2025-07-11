@@ -40,11 +40,16 @@ ModelData Model::LoadModelFile(const std::string& directoryPath, const std::stri
         for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) {
             aiVector3D& position = mesh->mVertices[vertexIndex];
             aiVector3D& normal   = mesh->mNormals[vertexIndex];
-            aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
 
             modelData.vertices[vertexIndex].position = {-position.x, position.y, position.z, 1.0f};
             modelData.vertices[vertexIndex].normal   = {-normal.x, normal.y, normal.z};
-            modelData.vertices[vertexIndex].texcoord = {texcoord.x, texcoord.y};
+
+            if (mesh->HasTextureCoords(0)) {
+                aiVector3D& texcoord                     = mesh->mTextureCoords[0][vertexIndex];
+                modelData.vertices[vertexIndex].texcoord = {texcoord.x, texcoord.y};
+            } else {
+                modelData.vertices[vertexIndex].texcoord = {0.0f, 0.0f}; // デフォルトのUV
+            }
         }
 
         // meshの中身faceの解析

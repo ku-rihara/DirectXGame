@@ -29,9 +29,10 @@ public:
     SkinCluster CreateSkinCluster(ModelData& modelData);
 
     void Create(const std::string& fileName);
+    void AddAnimation(const std::string& fileName);
+
     void Update(const float& deltaTime);
     void Draw(const ViewProjection& viewProjection);
-
     void DebugDraw(const ViewProjection& viewProjection);
 
     Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time);
@@ -41,7 +42,8 @@ public:
     WorldTransform transform_;
 
 private:
-    Animation animation_;
+    std::vector<Animation> animations_;
+    int32_t currentAnimationIndex_;
     Skeleton skeleton_;
     Joint joint_;
     SkinCluster skinCluster_;

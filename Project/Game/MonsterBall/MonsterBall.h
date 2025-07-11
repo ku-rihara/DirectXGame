@@ -9,7 +9,8 @@ public:
 private:
 	// ワールド変換データ
 	WorldTransform transform_;
-    WorldTransform transform2_;
+    std::unique_ptr<Object3d> obj3D_;
+  
 	// モデル
 	std::unique_ptr<ModelAnimation> modelAnimation_=nullptr;
     std::unique_ptr<ModelAnimation> modelAnimation2_ = nullptr;

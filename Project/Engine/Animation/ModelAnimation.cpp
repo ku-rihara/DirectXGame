@@ -20,7 +20,7 @@
 
 void ModelAnimation::Create(const std::string& fileName) {
     object3d_.reset(Object3d::CreateModel(fileName));
-    animation_ = LoadAnimationFile(fileName);
+    animations_.push_back(LoadAnimationFile(fileName));
 
     skeleton_ = CreateSkeleton(object3d_->GetModel()->GetModelData().rootNode);
 
@@ -28,8 +28,13 @@ void ModelAnimation::Create(const std::string& fileName) {
     skinCluster_        = CreateSkinCluster(modelData);
 
     transform_.Init();
-
     line3dDrawer_.Init(5120);
+
+    currentAnimationIndex_ = 0;
+}
+
+void ModelAnimation::AddAnimation(const std::string& fileName) {
+    animations_.push_back(LoadAnimationFile(fileName));
 }
 
 Skeleton ModelAnimation::CreateSkeleton(const Node& rootNode) {
@@ -126,8 +131,9 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
 
     std::filesystem::path path(fileName);
     std::string stemName = path.stem().string();
-
     std::string filePath = directoryPath_ + stemName + "/" + fileName;
+
+    animation.name = stemName;
 
     const aiScene* scene = importer.ReadFile(filePath.c_str(), 0);
     assert(scene->mNumAnimations != 0); // アニメーションがない
@@ -172,11 +178,11 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
 
 void ModelAnimation::Update(const float& deltaTime) {
     animationTime_ += deltaTime;
-    animationTime_ = std::fmod(animationTime_, animation_.duration);
+    animationTime_ = std::fmod(animationTime_, animations_[currentAnimationIndex_].duration);
 
     for (Joint& joint : skeleton_.joints) {
         // 対象のJointのAnimationがあれば、値の運用を行う
-        if (auto it = animation_.nodeAnimations.find(joint.name); it != animation_.nodeAnimations.end()) {
+        if (auto it = animations_[currentAnimationIndex_].nodeAnimations.find(joint.name); it != animations_[currentAnimationIndex_].nodeAnimations.end()) {
             const NodeAnimation& rootNodeAnimation = (*it).second;
             joint.transform.translate              = CalculateValue(rootNodeAnimation.translate.keyframes, animationTime_);
             joint.transform.rotate                 = CalculateValueQuaternion(rootNodeAnimation.rotate.keyframes, animationTime_);
