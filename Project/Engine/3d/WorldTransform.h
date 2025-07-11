@@ -3,8 +3,10 @@
 #include "Quaternion.h"
 #include "Vector3.h"
 #include "ViewProjection.h"
+#include <cstdint>
 #include <d3d12.h>
 #include <list>
+#include <string>
 #include <wrl.h>
 #include <cstdint>
 #include <string>

@@ -215,18 +215,17 @@ void ModelAnimation::Draw(const ViewProjection& viewProjection) {
 void ModelAnimation::DebugDraw( const ViewProjection& viewProjection) {
 
     for (const Joint& joint : skeleton_.joints) {
-       
+
         //
         Vector3 jointPos = TransformMatrix(transform_.GetWorldPos(), joint.skeletonSpaceMatrix);
         line3dDrawer_.DrawCubeWireframe(jointPos, Vector3(0.01f, 0.01f, 0.01f), Vector4::kWHITE());
 
-        // Line描画 
+        // Line描画
         if (joint.parent) {
             const Joint& parentJoint = skeleton_.joints[*joint.parent];
             Vector3 parentPos        = TransformMatrix(transform_.GetWorldPos(), parentJoint.skeletonSpaceMatrix);
             line3dDrawer_.SetLine(jointPos, parentPos, Vector4::kWHITE());
         }
-        
     }
     // Joint描画
     line3dDrawer_.Draw(viewProjection);
