@@ -6,6 +6,8 @@
 #include <d3d12.h>
 #include <list>
 #include <wrl.h>
+#include <cstdint>
+#include <string>
 
 // 定数バッファ用データ構造体
 struct ConstBufferDataWorldTransform {
@@ -30,9 +32,7 @@ enum class RotateOder {
     Quaternion,
 };
 
-/// <summary>
-/// ワールド変換データ
-/// </summary>
+class ModelAnimation;
 class WorldTransform {
 
 public:
@@ -53,22 +53,32 @@ public:
 private:
     void TransferMatrix();
     void UpdateAffineMatrix();
-
+    void ClearParentJoint();
+    void UpdateMatrixWithJoint();
+    bool HasParentJoint() const;
+  
 public:
-    // ローカルスケール
+    //SRT,Q
     Vector3 scale_ = {1, 1, 1};
-    // ローカル回転角
     Vector3 rotation_ = {};
-    // ローカル座標
     Vector3 translation_   = {};
     Quaternion quaternion_ = {};
-    // ローカル→ワールド変換行列
+   
+    // matrix
     Matrix4x4 matWorld_;
-    // 親となるワールド変換へのポインタ
+
     const WorldTransform* parent_ = nullptr;
     RotateOder rotateOder_        = RotateOder::XYZ;
 
+    
+
 private:
+
+    // animation parent
+    const ModelAnimation* parentAnimation_ = nullptr;
+    int32_t parentJointIndex_              = -1;
+    std::string parentJointName_; 
+
     Matrix4x4 billboardMatrix_;
     Matrix4x4 backToFrontMatrix_;
 
@@ -82,6 +92,7 @@ private:
 
 public:
     void SetParent(const WorldTransform* parent);
+    void SetParentJoint(const ModelAnimation* animation, const std::string& jointName);
 
     Vector3 GetLocalPos() const;
     Vector3 GetWorldPos() const;
@@ -101,8 +112,9 @@ public:
         return Vector3(matWorld_.m[0][2], matWorld_.m[1][2], matWorld_.m[2][2]);
     }
 
+
 public:
-    // ムーブコンストラクタを追加
+    // ムーブコンストラクタ
     WorldTransform(WorldTransform&& other) noexcept
         : scale_(std::move(other.scale_)),
           rotation_(std::move(other.rotation_)),
@@ -113,11 +125,11 @@ public:
           backToFrontMatrix_(std::move(other.backToFrontMatrix_)),
           constBuffer_(std::move(other.constBuffer_)),
           constMap(other.constMap) {
-        // ムーブ後に other を初期化（必要に応じて）
-        other.constMap = nullptr; // など
+      
+        other.constMap = nullptr; 
     }
 
-    // ムーブ代入演算子を追加
+    // ムーブ代入演算子
     WorldTransform& operator=(WorldTransform&& other) noexcept {
         if (this != &other) {
             scale_             = std::move(other.scale_);
@@ -130,8 +142,8 @@ public:
             constBuffer_       = std::move(other.constBuffer_);
             constMap           = other.constMap;
 
-            // ムーブ後に other を初期化
-            other.constMap = nullptr; // など
+   
+            other.constMap = nullptr; 
         }
         return *this;
     }
