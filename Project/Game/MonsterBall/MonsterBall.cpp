@@ -38,7 +38,7 @@ void MonsterBall::Init() {
 void MonsterBall::Update() {
     if (Input::GetInstance()->PushKey(DIK_E)) {
         modelAnimation_->Update(Frame::DeltaTime());
-        modelAnimation2_->Update(Frame::DeltaTime());
+     
     }
 
     if (Input::GetInstance()->PushKey(DIK_X)) {
