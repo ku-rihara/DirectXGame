@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 
+class ModelAnimation;
 class ParticleEmitter : public ParticleParameter {
 
 public:
@@ -40,6 +41,8 @@ public:
 
     /// editor
     void EditorUpdate() override;
+
+    void SetParentJoint(const ModelAnimation* modelAnimation, const std::string& name);
 
 private:
     void RailMoveUpdate();

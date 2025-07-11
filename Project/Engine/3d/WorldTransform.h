@@ -115,14 +115,22 @@ public:
         : scale_(std::move(other.scale_)),
           rotation_(std::move(other.rotation_)),
           translation_(std::move(other.translation_)),
+          quaternion_(std::move(other.quaternion_)),
           matWorld_(std::move(other.matWorld_)),
           parent_(other.parent_),
+          rotateOder_(other.rotateOder_),
+          parentAnimation_(other.parentAnimation_),
+          parentJointIndex_(other.parentJointIndex_),
+          parentJointName_(std::move(other.parentJointName_)),
           billboardMatrix_(std::move(other.billboardMatrix_)),
           backToFrontMatrix_(std::move(other.backToFrontMatrix_)),
           constBuffer_(std::move(other.constBuffer_)),
           constMap(other.constMap) {
 
-        other.constMap = nullptr;
+        other.constMap          = nullptr;
+        other.parentAnimation_  = nullptr;
+        other.parentJointIndex_ = -1;
+        other.parentJointName_.clear();
     }
 
     // ムーブ代入演算子
@@ -131,14 +139,22 @@ public:
             scale_             = std::move(other.scale_);
             rotation_          = std::move(other.rotation_);
             translation_       = std::move(other.translation_);
+            quaternion_        = std::move(other.quaternion_);
             matWorld_          = std::move(other.matWorld_);
             parent_            = other.parent_;
+            rotateOder_        = other.rotateOder_;
+            parentAnimation_   = other.parentAnimation_;
+            parentJointIndex_  = other.parentJointIndex_;
+            parentJointName_   = std::move(other.parentJointName_);
             billboardMatrix_   = std::move(other.billboardMatrix_);
             backToFrontMatrix_ = std::move(other.backToFrontMatrix_);
             constBuffer_       = std::move(other.constBuffer_);
             constMap           = other.constMap;
 
-            other.constMap = nullptr;
+            other.constMap          = nullptr;
+            other.parentAnimation_  = nullptr;
+            other.parentJointIndex_ = -1;
+            other.parentJointName_.clear();
         }
         return *this;
     }

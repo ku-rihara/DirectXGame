@@ -341,6 +341,7 @@ void ModelAnimation::ChangeAnimation(const std::string& animationName) {
             // 前のアニメーションの時間を保存
             preAnimationTime_ = animationTime_;
 
+            //切り替え変数リセット
             animationTime_         = 0.0f;
             currentTransitionTime_ = 0.0f;
             isChange_              = true;

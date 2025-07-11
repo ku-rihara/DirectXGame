@@ -12,10 +12,10 @@ MonsterBall::~MonsterBall() {}
 void MonsterBall::Init() {
 
     transform_.Init();
-    obj3D_.reset(Object3d::CreateModel("Suzanne.obj"));
+    obj3D_.reset(Object3d::CreateModel("WalkAnimation.gltf"));
 
     modelAnimation_ = std::make_unique<ModelAnimation>();
-    modelAnimation_->Create("SneakWalk.gltf");
+    modelAnimation_->Create("WalkAnimation.gltf");
     modelAnimation_->Add("walk.gltf");
 
     modelAnimation2_ = std::make_unique<ModelAnimation>();
@@ -29,10 +29,12 @@ void MonsterBall::Init() {
     modelAnimation2_->transform_.translation_.z = -14.0f;
     modelAnimation2_->transform_.scale_         = {1, 1, 1};
 
+    emitter_.reset(ParticleEmitter::CreateParticlePrimitive("jointTest", PrimitiveType::Plane, 300));
+    emitter_->SetParentJoint(modelAnimation_.get(), "mixamorig:RightHand");
     // イージングセッティング
     easing_.SetAdaptValue(&transform_.scale_);
 
-    transform_.SetParentJoint(modelAnimation_.get(), "mixamorig:LeftHand");
+    transform_.SetParentJoint(modelAnimation_.get(), "mixamorig:RightHand");
 }
 
 void MonsterBall::Update() {
@@ -44,6 +46,10 @@ void MonsterBall::Update() {
     if (Input::GetInstance()->TrrigerKey(DIK_X)) {
         modelAnimation_->ChangeAnimation("walk");
     }
+
+    emitter_->Update();
+    emitter_->Emit();
+    emitter_->EditorUpdate();
 
     transform_.UpdateMatrix();
 }

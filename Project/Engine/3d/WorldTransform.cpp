@@ -120,8 +120,11 @@ void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection,
     // ワールド行列を計算
     matWorld_ = scaleMatrix * billboardMatrix_ * translateMatrix;
 
-    // parent update
-    if (parent_) {
+    if (HasParentJoint()) {
+        UpdateMatrixWithJoint();
+    }
+    // 通常のparent
+    else if (parent_) {
         matWorld_ *= parent_->matWorld_;
     }
 
@@ -223,7 +226,6 @@ void WorldTransform::ClearParentJoint() {
     UpdateMatrix();
 }
 
-// Joint親子関係を考慮した行列更新
 void WorldTransform::UpdateMatrixWithJoint() {
     if (!HasParentJoint()) {
         return;

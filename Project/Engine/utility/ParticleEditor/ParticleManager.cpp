@@ -2,7 +2,7 @@
 #include "3d/ModelManager.h"
 #include "base/TextureManager.h"
 #include "Pipeline/ParticlePipeline.h"
-
+#include"Animation/ModelAnimation.h"
 // frame
 #include "Frame/Frame.h"
 // Function
@@ -326,6 +326,10 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
         particle.worldTransform_.parent_ = paramaters.parentTransform;
     }
 
+    if (paramaters.jointParent.animation) {
+        particle.worldTransform_.SetParentJoint(paramaters.jointParent.animation, paramaters.jointParent.name);
+    }
+
     if (paramaters.followingPos_) {
         particle.followPos = paramaters.followingPos_;
     }
@@ -342,6 +346,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 
     /// adapt
     particle.worldTransform_.translation_ = paramaters.targetPos + paramaters.emitPos + randomTranslate;
+    // fllow pos用
     particle.offSet                       = paramaters.targetPos + paramaters.emitPos + randomTranslate;
 
     ///------------------------------------------------------------------------

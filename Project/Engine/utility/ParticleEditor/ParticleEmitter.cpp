@@ -167,3 +167,9 @@ void ParticleEmitter::SetParentTransform(const WorldTransform* transform) {
 void ParticleEmitter::SetFollowingPos(const Vector3* pos) {
     parameters_.followingPos_ = pos;
 }
+
+
+void ParticleEmitter::SetParentJoint(const ModelAnimation* modelAnimation,const std::string& name) {
+    parameters_.jointParent.animation = modelAnimation;
+    parameters_.jointParent.name           = name;
+ }
