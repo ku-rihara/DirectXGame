@@ -27,6 +27,8 @@ void ModelAnimation::Create(const std::string& fileName) {
     ModelData modelData = object3d_->GetModel()->GetModelData();
     skinCluster_        = CreateSkinCluster(modelData);
 
+    transform_.Init();
+
     line3dDrawer_.Init(5120);
 }
 
@@ -201,37 +203,29 @@ void ModelAnimation::Update(const float& deltaTime) {
             Inverse(Transpose(skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix));
     }
 
-    /* animationTime_                   = std::fmod(animationTime_, animation_.duration);
-     NodeAnimation& rootNodeAnimation = animation_.nodeAnimations[object3d_->GetModel()->GetModelData().rootNode.name];
-
-     worldTransform_.translation_ = CalculateValue(rootNodeAnimation.translate.keyframes, animationTime_);
-     worldTransform_.quaternion_  = CalculateValueQuaternion(rootNodeAnimation.rotate.keyframes, animationTime_);
-     worldTransform_.scale_       = CalculateValue(rootNodeAnimation.scale.keyframes, animationTime_);*/
-
-    /* worldTransform_.UpdateMatrix();*/
+    transform_.UpdateMatrix();
 }
 
-void ModelAnimation::Draw(const WorldTransform& transform, const ViewProjection& viewProjection) {
+void ModelAnimation::Draw(const ViewProjection& viewProjection) {
     SkinningObject3DPipeline::GetInstance()->PreDraw(DirectXCommon::GetInstance()->GetCommandList());
-    object3d_->DrawAnimation(transform, viewProjection, skinCluster_);
+    object3d_->DrawAnimation(transform_, viewProjection, skinCluster_);
     Object3DPiprline::GetInstance()->PreDraw(DirectXCommon::GetInstance()->GetCommandList());
 }
 
-void ModelAnimation::DebugDraw(const WorldTransform& transform, const ViewProjection& viewProjection) {
+void ModelAnimation::DebugDraw(const ViewProjection& viewProjection) {
 
     for (const Joint& joint : skeleton_.joints) {
-       
+
         //
-        Vector3 jointPos = TransformMatrix(transform.GetWorldPos(), joint.skeletonSpaceMatrix);
+        Vector3 jointPos = TransformMatrix(transform_.GetWorldPos(), joint.skeletonSpaceMatrix);
         line3dDrawer_.DrawCubeWireframe(jointPos, Vector3(0.01f, 0.01f, 0.01f), Vector4::kWHITE());
 
-        // Line描画 
+        // Line描画
         if (joint.parent) {
             const Joint& parentJoint = skeleton_.joints[*joint.parent];
-            Vector3 parentPos = TransformMatrix(transform.GetWorldPos(), parentJoint.skeletonSpaceMatrix);
+            Vector3 parentPos        = TransformMatrix(transform_.GetWorldPos(), parentJoint.skeletonSpaceMatrix);
             line3dDrawer_.SetLine(jointPos, parentPos, Vector4::kWHITE());
         }
-        
     }
     // Joint描画
     line3dDrawer_.Draw(viewProjection);
@@ -267,4 +261,12 @@ Quaternion ModelAnimation::CalculateValueQuaternion(const std::vector<KeyframeQu
         }
     }
     return (*keyframe.rbegin()).value;
+}
+
+const Joint* ModelAnimation::GetJoint(const std::string& name) const {
+    auto it = skeleton_.jointMap.find(name);
+    if (it != skeleton_.jointMap.end()) {
+        return &skeleton_.joints[it->second];
+    }
+    return nullptr;
 }
