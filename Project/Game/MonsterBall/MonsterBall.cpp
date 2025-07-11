@@ -16,6 +16,7 @@ void MonsterBall::Init() {
 
     modelAnimation_ = std::make_unique<ModelAnimation>();
     modelAnimation_->Create("SneakWalk.gltf");
+    modelAnimation_->Add("walk.gltf");
 
     modelAnimation2_ = std::make_unique<ModelAnimation>();
     modelAnimation2_->Create("walk.gltf");
@@ -40,8 +41,11 @@ void MonsterBall::Update() {
         modelAnimation2_->Update(Frame::DeltaTime());
     }
 
+    if (Input::GetInstance()->PushKey(DIK_X)) {
+        modelAnimation_->ChangeAnimation("walk");
+    }
+
     transform_.UpdateMatrix();
-  
 }
 
 void MonsterBall::Draw(ViewProjection& viewProjection) {
@@ -62,7 +66,7 @@ void MonsterBall::Debug() {
         ImGui::DragFloat3("R", &modelAnimation_->transform_.rotation_.x, 0.1f);
         ImGui::DragFloat3("Scale", &modelAnimation_->transform_.scale_.x, 0.1f);
 
-         ImGui::DragFloat3("MPosition", &transform_.translation_.x, 0.1f);
+        ImGui::DragFloat3("MPosition", &transform_.translation_.x, 0.1f);
         ImGui::DragFloat3("MR", &transform_.rotation_.x, 0.1f);
         ImGui::DragFloat3("MScale", &transform_.scale_.x, 0.1f);
         /*	objct3D_->material_.DebugImGui();*/

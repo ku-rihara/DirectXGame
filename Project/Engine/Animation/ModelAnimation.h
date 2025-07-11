@@ -29,7 +29,9 @@ public:
     SkinCluster CreateSkinCluster(ModelData& modelData);
 
     void Create(const std::string& fileName);
-    void AddAnimation(const std::string& fileName);
+    void Add(const std::string& fileName);
+
+    void ChangeAnimation(const std::string& animationName);
 
     void Update(const float& deltaTime);
     void Draw(const ViewProjection& viewProjection);

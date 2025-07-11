@@ -33,7 +33,7 @@ void ModelAnimation::Create(const std::string& fileName) {
     currentAnimationIndex_ = 0;
 }
 
-void ModelAnimation::AddAnimation(const std::string& fileName) {
+void ModelAnimation::Add(const std::string& fileName) {
     animations_.push_back(LoadAnimationFile(fileName));
 }
 
@@ -149,7 +149,7 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
         for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumPositionKeys; ++keyIndex) {
             aiVectorKey& keyAssimp = nodeAnimationAssimp->mPositionKeys[keyIndex];
             KeyframeVector3 keyframe;
-            keyframe.time  = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond); // ここも秒に変換
+            keyframe.time  = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond);
             keyframe.value = {-keyAssimp.mValue.x, keyAssimp.mValue.y, keyAssimp.mValue.z}; // 右手➩左手
             nodeAnimation.translate.keyframes.push_back(keyframe);
         }
@@ -158,7 +158,7 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
         for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumRotationKeys; ++keyIndex) {
             aiQuatKey& keyAssimp = nodeAnimationAssimp->mRotationKeys[keyIndex];
             KeyframeQuaternion keyframe;
-            keyframe.time  = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond); // ここも秒に変換
+            keyframe.time  = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond);
             keyframe.value = {keyAssimp.mValue.x, -keyAssimp.mValue.y, -keyAssimp.mValue.z, keyAssimp.mValue.w}; // 右手➩左手
             nodeAnimation.rotate.keyframes.push_back(keyframe);
         }
@@ -167,7 +167,7 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
         for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumScalingKeys; ++keyIndex) {
             aiVectorKey& keyAssimp = nodeAnimationAssimp->mScalingKeys[keyIndex];
             KeyframeVector3 keyframe;
-            keyframe.time  = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond); // ここも秒に変換
+            keyframe.time  = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond);
             keyframe.value = {keyAssimp.mValue.x, keyAssimp.mValue.y, keyAssimp.mValue.z};
             nodeAnimation.scale.keyframes.push_back(keyframe);
         }
@@ -275,4 +275,15 @@ const Joint* ModelAnimation::GetJoint(const std::string& name) const {
         return &skeleton_.joints[it->second];
     }
     return nullptr;
+}
+
+void ModelAnimation::ChangeAnimation(const std::string& animationName) {
+
+    //nameからIndex取得
+    for (int32_t i = 0; i < animations_.size(); ++i) {
+        if (animations_[i].name == animationName) {
+            currentAnimationIndex_ = i;
+        }
+    }
+
 }
