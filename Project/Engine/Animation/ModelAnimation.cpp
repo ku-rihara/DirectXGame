@@ -217,48 +217,52 @@ void ModelAnimation::Update(const float& deltaTime) {
 }
 
 void ModelAnimation::AnimationTransition(const float& deltaTime) {
-
     // 補間タイム加算
     currentTransitionTime_ += deltaTime;
+    preAnimationTime_ += deltaTime;
     currentTransitionTime_ = std::min(currentTransitionTime_, 1.0f);
 
+    // 前のアニメーションタイム
+    float preTime = std::fmod(preAnimationTime_, animations_[preAnimationIndex_].duration);
+
     for (Joint& joint : skeleton_.joints) {
-
-        Vector3 fromTranslate = joint.transform.translate;
-        Quaternion fromRotate = joint.transform.rotate;
-        Vector3 fromScale     = joint.transform.scale;
-
-        if (auto it = animations_[preAnimationIndex_].nodeAnimations.find(joint.name); it != animations_[preAnimationIndex_].nodeAnimations.end()) {
-            const NodeAnimation& rootNodeAnimation = (*it).second;
-            // fromValue 更新
-            fromTranslate = CalculateValue(rootNodeAnimation.translate.keyframes, animationTime_);
-            fromRotate    = CalculateValueQuaternion(rootNodeAnimation.rotate.keyframes, animationTime_);
-            fromScale     = CalculateValue(rootNodeAnimation.scale.keyframes, animationTime_);
-        }
 
         Vector3 toTranslate = joint.transform.translate;
         Quaternion toRotate = joint.transform.rotate;
         Vector3 toScale     = joint.transform.scale;
 
+        // 現在のアニメーションから目標値を取得
         if (auto it = animations_[currentAnimationIndex_].nodeAnimations.find(joint.name); it != animations_[currentAnimationIndex_].nodeAnimations.end()) {
-            const NodeAnimation& rootNodeAnimation = (*it).second;
-            // ToValue 更新
-            toTranslate = CalculateValue(rootNodeAnimation.translate.keyframes, animationTime_);
-            toRotate    = CalculateValueQuaternion(rootNodeAnimation.rotate.keyframes, animationTime_);
-            toScale     = CalculateValue(rootNodeAnimation.scale.keyframes, animationTime_);
+            const NodeAnimation& currentNodeAnimation = (*it).second;
+
+            toTranslate = CalculateValue(currentNodeAnimation.translate.keyframes, animationTime_);
+            toRotate    = CalculateValueQuaternion(currentNodeAnimation.rotate.keyframes, animationTime_);
+            toScale     = CalculateValue(currentNodeAnimation.scale.keyframes, animationTime_);
         }
 
-        // 適応
-        joint.transform.translate = Lerp(fromTranslate, toTranslate, currentTransitionTime_);
-        joint.transform.rotate    = Quaternion::Slerp(fromRotate, toRotate, currentTransitionTime_);
-        joint.transform.scale     = Lerp(fromScale, toScale, currentTransitionTime_);
-    }
-    // 補間終了
-    if (currentTransitionTime_ < 1.0f) {
-        return;
+        // 前のアニメーションから開始値を取得
+        if (auto it = animations_[preAnimationIndex_].nodeAnimations.find(joint.name); it != animations_[preAnimationIndex_].nodeAnimations.end()) {
+            const NodeAnimation& preNodeAnimation = (*it).second;
+
+            Vector3 fromTranslate = joint.transform.translate;
+            Quaternion fromRotate = joint.transform.rotate;
+            Vector3 fromScale     = joint.transform.scale;
+
+            fromTranslate = CalculateValue(preNodeAnimation.translate.keyframes, preTime);
+            fromRotate    = CalculateValueQuaternion(preNodeAnimation.rotate.keyframes, preTime);
+            fromScale     = CalculateValue(preNodeAnimation.scale.keyframes, preTime);
+
+            // 補間適用
+            joint.transform.translate = Lerp(fromTranslate, toTranslate, currentTransitionTime_);
+            joint.transform.scale     = Lerp(fromScale, toScale, currentTransitionTime_);
+            joint.transform.rotate    = Quaternion::Slerp(fromRotate, toRotate, currentTransitionTime_);
+        } 
     }
 
-    TransitionFinish();
+    // 補間終了判定
+    if (currentTransitionTime_ >= 1.0f) {
+        TransitionFinish();
+    }
 }
 
 void ModelAnimation::Draw(const ViewProjection& viewProjection) {
@@ -327,14 +331,21 @@ const Joint* ModelAnimation::GetJoint(const std::string& name) const {
 }
 
 void ModelAnimation::ChangeAnimation(const std::string& animationName) {
-
     // nameからIndex取得
     for (int32_t i = 0; i < animations_.size(); ++i) {
+
         if (animations_[i].name == animationName) {
             preAnimationIndex_     = currentAnimationIndex_;
             currentAnimationIndex_ = i;
+
+            // 前のアニメーションの時間を保存
+            preAnimationTime_ = animationTime_;
+
+            animationTime_         = 0.0f;
             currentTransitionTime_ = 0.0f;
             isChange_              = true;
+
+            return;
         }
     }
 }

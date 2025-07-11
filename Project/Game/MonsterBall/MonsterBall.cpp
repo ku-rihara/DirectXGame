@@ -41,7 +41,7 @@ void MonsterBall::Update() {
      
     }
 
-    if (Input::GetInstance()->PushKey(DIK_X)) {
+    if (Input::GetInstance()->TrrigerKey(DIK_X)) {
         modelAnimation_->ChangeAnimation("walk");
     }
 

@@ -64,6 +64,7 @@ private:
     int32_t preAnimationIndex_     = 0;
     int32_t currentAnimationIndex_ = 0;
     float currentTransitionTime_   = 0.0f;
+    float preAnimationTime_        = 0.0f;
     bool isChange_                 = false;
 
 public:
