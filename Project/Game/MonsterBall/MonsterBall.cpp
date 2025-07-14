@@ -16,10 +16,10 @@ void MonsterBall::Init() {
 
     modelAnimation_ = std::make_unique<ModelAnimation>();
     modelAnimation_->Create("WalkAnimation.gltf");
-    modelAnimation_->Add("WaitAnimation.gltf");
+    modelAnimation_->Add("Walk.gltf");
 
     modelAnimation2_ = std::make_unique<ModelAnimation>();
-    modelAnimation2_->Create("WaitAnimation.gltf");
+    modelAnimation2_->Create("Walk.gltf");
 
     modelAnimation_->transform_.translation_.y = -5.0f;
     modelAnimation_->transform_.translation_.z = -14.0f;
@@ -34,7 +34,11 @@ void MonsterBall::Init() {
     // イージングセッティング
     easing_.SetAdaptValue(&transform_.scale_);
 
-    transform_.SetParentJoint(modelAnimation_.get(), "mixamorig:RightHand");
+    transform_.SetParentJoint(modelAnimation_.get(), "mixamorig:LeftHand");
+
+    transform_.scale_={33, 33, 33};
+    modelAnimation_->transform_.rotation_.y = 3.14f;
+
 }
 
 void MonsterBall::Update() {
@@ -48,6 +52,12 @@ void MonsterBall::Update() {
     emitter_->EditorUpdate();
 
     transform_.UpdateMatrix();
+
+       if (!((Input::IsTriggerPad(0, XINPUT_GAMEPAD_A)))) {
+
+        return;
+    }
+       modelAnimation_->ChangeAnimation("Walk");
 }
 
 void MonsterBall::Draw(ViewProjection& viewProjection) {
@@ -127,7 +137,7 @@ void MonsterBall::Move(const float& speed) {
         Matrix4x4 rotateMatrix = MakeIdentity4x4();
         direction_             = TransformNormal(direction_, rotateMatrix);
         // 移動
-        transform_.translation_ += direction_;
+        modelAnimation_->transform_.translation_ += direction_;
         // 目標角度
         objectiveAngle_ = std::atan2(direction_.x, direction_.z);
     }
@@ -187,36 +197,36 @@ void MonsterBall::MoveToLimit() {
     Vector3 fieldScale  = {330.0f, 330.0f, 330.0f}; // フィールド中心; // フィールドのスケール
 
     // プレイヤーのスケールを考慮した半径
-    float radiusX = fieldScale.x - transform_.scale_.x;
-    float radiusZ = fieldScale.z - transform_.scale_.z;
+    float radiusX = fieldScale.x - modelAnimation_->transform_.scale_.x;
+    float radiusZ = fieldScale.z - modelAnimation_->transform_.scale_.z;
 
     // 現在位置が範囲内かチェック
-    bool insideX = std::abs(transform_.translation_.x - fieldCenter.x) <= radiusX;
-    bool insideZ = std::abs(transform_.translation_.z - fieldCenter.z) <= radiusZ;
+    bool insideX = std::abs(modelAnimation_->transform_.translation_.x - fieldCenter.x) <= radiusX;
+    bool insideZ = std::abs(modelAnimation_->transform_.translation_.z - fieldCenter.z) <= radiusZ;
 
     ///--------------------------------------------------------------------------------
     /// 範囲外なら戻す
     ///--------------------------------------------------------------------------------
 
     if (!insideX) { /// X座標
-        transform_.translation_.x = std::clamp(
-            transform_.translation_.x,
+        modelAnimation_->transform_.translation_.x = std::clamp(
+            modelAnimation_->transform_.translation_.x,
             fieldCenter.x - radiusX,
             fieldCenter.x + radiusX);
     }
 
     if (!insideZ) { /// Z座標
-        transform_.translation_.z = std::clamp(
-            transform_.translation_.z,
+        modelAnimation_->transform_.translation_.z = std::clamp(
+            modelAnimation_->transform_.translation_.z,
             fieldCenter.z - radiusZ,
             fieldCenter.z + radiusZ);
     }
 
     // 範囲外の反発処理
     if (!insideX || !insideZ) {
-        Vector3 directionToCenter = (fieldCenter - transform_.translation_).Normalize();
-        transform_.translation_.x += directionToCenter.x * 0.1f; // 軽く押し戻す
-        transform_.translation_.z += directionToCenter.z * 0.1f; // 軽く押し戻す
+        Vector3 directionToCenter = (fieldCenter - modelAnimation_->transform_.translation_).Normalize();
+        modelAnimation_->transform_.translation_.x += directionToCenter.x * 0.1f; // 軽く押し戻す
+        modelAnimation_->transform_.translation_.z += directionToCenter.z * 0.1f; // 軽く押し戻す
     }
 }
 
@@ -225,7 +235,7 @@ void MonsterBall::MoveToLimit() {
 /// ===================================================
 void MonsterBall::Jump(float& speed, const float& fallSpeedLimit, const float& gravity) {
     // 移動
-    transform_.translation_.y += speed * Frame::DeltaTimeRate();
+    modelAnimation_->transform_.translation_.y += speed * Frame::DeltaTimeRate();
     Fall(speed, fallSpeedLimit, gravity, true);
 }
 
@@ -236,15 +246,15 @@ void MonsterBall::Fall(float& speed, const float& fallSpeedLimit, const float& g
 
     if (!isJump) {
         // 移動
-        transform_.translation_.y += speed * Frame::DeltaTimeRate();
+        modelAnimation_->transform_.translation_.y += speed * Frame::DeltaTimeRate();
     }
 
     // 加速する
     speed = max(speed - (gravity * Frame::DeltaTimeRate()), -fallSpeedLimit);
 
     // 着地
-    if (transform_.translation_.y <= 0) {
-        transform_.translation_.y = 0;
+    if (modelAnimation_->transform_.translation_.y <= 0) {
+        modelAnimation_->transform_.translation_.y = 0;
         speed                     = 0.0f;
     }
 }

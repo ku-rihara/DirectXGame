@@ -213,7 +213,7 @@ Vector3 WorldTransform::GetWorldPos() const {
     return Vector3(
         matWorld_.m[3][0], // X成分
         matWorld_.m[3][1], // Y成分
-        matWorld_.m[3][2] // Z成分
+        matWorld_.m[3][2]  // Z成分
     );
 }
 
