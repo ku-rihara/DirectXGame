@@ -9,9 +9,9 @@ class DebugCamera {
 
 public:
     DebugCamera(int window_width, int window_height);
+    ~DebugCamera() = default;
 
     void Init();
-
     void Update();
 
     /// <summary>
@@ -21,6 +21,9 @@ public:
     void SetAspectRatio(float value) { viewProjection_.aspectRatio_ = value; }
     void SetNearZ(float value) { viewProjection_.nearZ_ = value; }
     void SetFarZ(float value) { viewProjection_.farZ_ = value; }
+
+private:
+    void UpdateMatrix();
 
 private: 
     /// --------------------------------------------------------------------------
@@ -41,12 +44,7 @@ private:
     // アクティブ化
     bool isActive_;
 
-private:
-    void UpdateMatrix();
-
-public:
    
-
 public: // acsesser
     const ViewProjection& GetViewProjection() { return viewProjection_; }
     void SetIsActive(bool is) { isActive_ = is; }

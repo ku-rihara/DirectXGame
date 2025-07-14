@@ -19,6 +19,22 @@ public:
         WORLD,
         LOCAL,
     };
+
+public:
+
+    RailManager() = default;
+    ~RailManager() = default;
+
+    // Function
+    void Init(const std::string& groupName);
+    void Update(const float& speed, const PositionMode& mode = PositionMode::WORLD, const Vector3& dirention = {1.0f, 1.0f, 1.0f});
+
+    void Draw(const ViewProjection& viewProjection, const Vector3& size = Vector3(0.1f, 0.1f, 0.1f));
+    void RailDraw(const ViewProjection& viewProjection);
+    void RoopOrStop();
+
+    void ImGuiEdit();
+
 private:
     ///name
     std::string groupName_;
@@ -40,18 +56,6 @@ private:
     Line3D lineDrawer_;
 
 public:
-    //Function
-    void Init(const std::string& groupName);
-    void Update(const float& speed, const PositionMode& mode = PositionMode::WORLD, const Vector3& dirention = { 1.0f, 1.0f, 1.0f });
-
-    void Draw(const ViewProjection& viewProjection,const Vector3&size=Vector3(0.1f,0.1f,0.1f));
-    void RailDraw(const ViewProjection& viewProjection);
-    void RoopOrStop();
-
-    void ImGuiEdit();
-
-    /*  Vector3 RotateVectorAroundAxis(const Vector3& vec, const Vector3& axis, float angle);*/
-
      ///=====================================================
      /// getter method
      ///=====================================================
@@ -71,9 +75,7 @@ public:
     void SetRailMoveTime(const float& t) { railMoveTime_ = t; }
     void SetIsRoop(const bool& is) { isRoop_ = is; }
 
-    /// <summary>
-   /// プロジェクション行列計算用のメンバ設定関数群
-   /// </summary>
+
     void SetFovAngleY(float value) { viewProjection_.fovAngleY_ = value; }
     void SetAspectRatio(float value) { viewProjection_.aspectRatio_ = value; }
     void SetNearZ(float value) { viewProjection_.nearZ_ = value; }

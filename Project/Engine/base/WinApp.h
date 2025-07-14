@@ -1,40 +1,39 @@
 #pragma once
 
-#include<wrl.h>
-#include<Windows.h>
-#include<cstdint>
-#include<d3d12.h>
+#include <cstdint>
+#include <d3d12.h>
+#include <Windows.h>
+#include <wrl.h>
 
 class WinApp {
-public://静的メンバ変数
 
-	static const int kWindowWidth = 1280;//横幅
-	static const int kWindowHeight = 720;//縦幅
+public:
 
-	//ウィンドウクラス名
-	static const wchar_t kWindowClassName[];
+    WinApp() = default;
+    ~WinApp() = default;
 
-private://メンバ変数
-	WNDCLASS wc_{};
-	HWND hwnd_;
-	Microsoft::WRL::ComPtr<ID3D12Debug1> debugController_;
+    // ウィンドウプロシージャ
+    static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
-public://メンバ関数
+    // ゲームウィンドウの作成
+    void MakeWindow(const wchar_t* title = L"DirectXGame", int32_t clientWidth = kWindowWidth, int32_t clientHeight = kWindowHeight);
 
-	//// シングルトンインスタンスの取得
-	//static WinApp* GetInstance();
+    int ProcessMessage();
 
-	// ウィンドウプロシージャ
-	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+    // getter
+    HWND GetHwnd() const { return hwnd_; }
+    HINSTANCE GetHInstaice() const { return wc_.hInstance; }
+    ID3D12Debug1* GetDebugController() const { return debugController_.Get(); }
 
-	// ゲームウィンドウの作成
-	void MakeWindow(const wchar_t* title = L"DirectXGame", int32_t clientWidth = kWindowWidth, int32_t clientHeight = kWindowHeight);
+public: // 静的メンバ変数
+    static const int kWindowWidth  = 1280; // 横幅
+    static const int kWindowHeight = 720; // 縦幅
 
-	int ProcessMessage();
+    // ウィンドウクラス名
+    static const wchar_t kWindowClassName[];
 
-	//getter
-	HWND GetHwnd() const { return hwnd_; }
-	HINSTANCE GetHInstaice()const { return wc_.hInstance; }
-	ID3D12Debug1* GetDebugController()const { return debugController_.Get(); }
+private: // メンバ変数
+    WNDCLASS wc_{};
+    HWND hwnd_;
+    Microsoft::WRL::ComPtr<ID3D12Debug1> debugController_;
 };
-

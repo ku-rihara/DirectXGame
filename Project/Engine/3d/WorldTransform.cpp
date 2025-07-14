@@ -1,25 +1,20 @@
 #include "WorldTransform.h"
-#include"Dx/DirectXCommon.h"
+#include "Animation/ModelAnimation.h"
+#include "Dx/DirectXCommon.h"
 #include <assert.h>
 #include <numbers>
 
-WorldTransform::WorldTransform() {
-}
-
-WorldTransform::~WorldTransform() {
-}
-
 void WorldTransform::Init() {
 
-    scale_       = {1, 1, 1}; // ローカルスケール
-    rotation_    = {}; // ローカル回転角
-    translation_ = {}; // ローカル座標
+    scale_       = {1, 1, 1};
+    rotation_    = {};
+    translation_ = {};
 
     //// 定数バッファの生成
-    //CreateConstantBuffer();
+    // CreateConstantBuffer();
     //// マッピング
-    //Map();
-    // 行列の更新
+    // Map();
+    //  行列の更新
     UpdateMatrix();
 }
 
@@ -38,30 +33,34 @@ void WorldTransform::Map() {
     D3D12_RANGE readRange = {};
     HRESULT hr            = constBuffer_->Map(0, &readRange, reinterpret_cast<void**>(&constMap));
     if (FAILED(hr)) {
-        // エラー処理（ログ出力など）を入れるか、最低限参照する
+        // エラー処理
         OutputDebugStringA("ConstBuffer Map failed.\n");
     }
 }
 
 void WorldTransform::TransferMatrix() {
-    // 定数バッファに行列データを転送する
+
     if (constMap) {
         constMap->matWorld = matWorld_;
     }
 }
 
 void WorldTransform::UpdateMatrix() {
-
-    // スケール、回転、平行移動を合成して行列を計算する
+    // SRT更新
     UpdateAffineMatrix();
-    // 親子関係があれば親のワールド行列を掛ける
-    if (parent_) {
+
+    // JointParent
+    if (HasParentJoint()) {
+        UpdateMatrixWithJoint();
+    }
+    // 通常のparent
+    else if (parent_) {
         matWorld_ *= parent_->matWorld_;
     }
+
     // 定数バッファに転送する
     TransferMatrix();
 }
-
 void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis, const AdaptRotate& adaptRotate) {
     // スケール、回転、平行移動行列を計算
     Matrix4x4 scaleMatrix     = MakeScaleMatrix(scale_);
@@ -78,13 +77,13 @@ void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection,
     // ビルボード行列の計算
     switch (billboardAxis) {
     case BillboardType::XYZ:
-        // 完全なビルボード（カメラの回転を全適用）
+        // 全ビルボード
         billboardMatrix_ = cameraMatrix;
 
         break;
 
     case BillboardType::Y: {
-        // Y軸ビルボード（XZ平面でカメラの方向を向く）
+        // Y軸ビルボード
         float angleY     = std::atan2(toCamera.x, toCamera.z);
         billboardMatrix_ = MakeRotateYMatrix(angleY);
 
@@ -110,19 +109,22 @@ void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection,
     // X/Z軸の回転を適用
     Matrix4x4 xzRotationMatrix = MakeRotateMatrix(rotation_);
 
-    // ビルボード行列に適用（Y軸回転 → X/Z軸回転の順）
+    // ビルボード行列計算
     billboardMatrix_ = xzRotationMatrix * billboardMatrix_;
 
-    // ビルボード行列の平行移動成分をクリア
+    // 平行移動成分をクリア
     billboardMatrix_.m[3][0] = 0.0f;
     billboardMatrix_.m[3][1] = 0.0f;
     billboardMatrix_.m[3][2] = 0.0f;
 
-    // 最終的なワールド行列を計算
+    // ワールド行列を計算
     matWorld_ = scaleMatrix * billboardMatrix_ * translateMatrix;
 
-    // 親子関係があれば親のワールド行列を掛ける
-    if (parent_) {
+    if (HasParentJoint()) {
+        UpdateMatrixWithJoint();
+    }
+    // 通常のparent
+    else if (parent_) {
         matWorld_ *= parent_->matWorld_;
     }
 
@@ -147,22 +149,10 @@ Vector3 WorldTransform::LookAt(const Vector3& direction) const {
 }
 
 ///=====================================================
-/// WorldPos取得
-///=====================================================
-Vector3 WorldTransform::GetWorldPos() const {
-
-    return Vector3(
-        matWorld_.m[3][0], // X成分
-        matWorld_.m[3][1], // Y成分
-        matWorld_.m[3][2]  // Z成分
-    );
-}
-
-///=====================================================
 /// ローカル座標取得
 ///=====================================================
 Vector3 WorldTransform::GetLocalPos() const {
-    // 親が設定されていない場合はワールド座標をそのまま返す
+    //
     if (parent_ == nullptr) {
         return GetWorldPos();
     }
@@ -185,10 +175,81 @@ void WorldTransform::UpdateAffineMatrix() {
         break;
     case RotateOder::Quaternion:
         quaternion_.Normalize();
-        matWorld_ =MakeAffineMatrixQuaternion(scale_,quaternion_,translation_);
+        matWorld_ = MakeAffineMatrixQuaternion(scale_, quaternion_, translation_);
 
         break;
     default:
         break;
     }
+}
+
+void WorldTransform::SetParentJoint(const ModelAnimation* animation, const std::string& jointName) {
+    if (!animation || jointName.empty()) {
+        ClearParentJoint();
+        return;
+    }
+
+    const auto& skeleton = animation->GetSkeleton();
+
+    // Joint名からインデックスを検索
+    auto it = skeleton.jointMap.find(jointName);
+    if (it == skeleton.jointMap.end()) {
+        ClearParentJoint();
+        return;
+    }
+
+    parentAnimation_  = animation;
+    parentJointIndex_ = it->second;
+    parentJointName_  = skeleton.joints[parentJointIndex_].name;
+
+    parent_ = nullptr;
+}
+
+///=====================================================
+/// WorldPos取得
+///=====================================================
+Vector3 WorldTransform::GetWorldPos() const {
+
+    return Vector3(
+        matWorld_.m[3][0], // X成分
+        matWorld_.m[3][1], // Y成分
+        matWorld_.m[3][2]  // Z成分
+    );
+}
+
+void WorldTransform::ClearParentJoint() {
+    parentAnimation_  = nullptr;
+    parentJointIndex_ = -1;
+    parentJointName_.clear();
+
+    // 行列を更新
+    UpdateMatrix();
+}
+
+void WorldTransform::UpdateMatrixWithJoint() {
+    if (!HasParentJoint()) {
+        return;
+    }
+
+    const auto& skeleton = parentAnimation_->GetSkeleton();
+
+    //
+    if (parentJointIndex_ < 0 || parentJointIndex_ >= static_cast<int32_t>(skeleton.joints.size())) {
+
+        return;
+    }
+
+    // 親JointのskeletonSpaceMatrix取得
+    const Joint& parentJoint    = skeleton.joints[parentJointIndex_];
+    Matrix4x4 parentJointMatrix = parentJoint.skeletonSpaceMatrix;
+
+    // WorldTransform
+    Matrix4x4 animationWorldMatrix = parentAnimation_->GetWorldTransform().matWorld_;
+    parentJointMatrix              = parentJointMatrix * animationWorldMatrix;
+
+    matWorld_ *= parentJointMatrix;
+}
+
+bool WorldTransform::HasParentJoint() const {
+    return parentAnimation_ != nullptr && parentJointIndex_ != -1;
 }

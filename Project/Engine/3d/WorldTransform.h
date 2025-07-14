@@ -3,8 +3,10 @@
 #include "Quaternion.h"
 #include "Vector3.h"
 #include "ViewProjection.h"
+#include <cstdint>
 #include <d3d12.h>
 #include <list>
+#include <string>
 #include <wrl.h>
 
 // 定数バッファ用データ構造体
@@ -30,14 +32,12 @@ enum class RotateOder {
     Quaternion,
 };
 
-/// <summary>
-/// ワールド変換データ
-/// </summary>
+class ModelAnimation;
 class WorldTransform {
 
 public:
-    WorldTransform();
-    ~WorldTransform();
+    WorldTransform()  = default;
+    ~WorldTransform() = default;
 
     void Init();
 
@@ -45,7 +45,6 @@ public:
     void Map();
 
     void UpdateMatrix();
-  
 
     Vector3 LookAt(const Vector3& direction) const;
 
@@ -54,22 +53,29 @@ public:
 private:
     void TransferMatrix();
     void UpdateAffineMatrix();
-   
+    void ClearParentJoint();
+    void UpdateMatrixWithJoint();
+    bool HasParentJoint() const;
+
 public:
-    // ローカルスケール
-    Vector3 scale_ = {1, 1, 1};
-    // ローカル回転角
-    Vector3 rotation_ = {};
-    // ローカル座標
+    // SRT,Q
+    Vector3 scale_         = {1, 1, 1};
+    Vector3 rotation_      = {};
     Vector3 translation_   = {};
     Quaternion quaternion_ = {};
-    // ローカル→ワールド変換行列
+
+    // matrix
     Matrix4x4 matWorld_;
-    // 親となるワールド変換へのポインタ
+
     const WorldTransform* parent_ = nullptr;
     RotateOder rotateOder_        = RotateOder::XYZ;
 
 private:
+    // animation parent
+    const ModelAnimation* parentAnimation_ = nullptr;
+    int32_t parentJointIndex_              = -1;
+    std::string parentJointName_;
+
     Matrix4x4 billboardMatrix_;
     Matrix4x4 backToFrontMatrix_;
 
@@ -83,11 +89,11 @@ private:
 
 public:
     void SetParent(const WorldTransform* parent);
+    void SetParentJoint(const ModelAnimation* animation, const std::string& jointName);
 
     Vector3 GetLocalPos() const;
     Vector3 GetWorldPos() const;
 
-   
     /// 定数バッファの取得
     const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return constBuffer_; }
 
@@ -103,38 +109,52 @@ public:
         return Vector3(matWorld_.m[0][2], matWorld_.m[1][2], matWorld_.m[2][2]);
     }
 
-
-    public:
-    // ムーブコンストラクタを追加
+public:
+    // ムーブコンストラクタ
     WorldTransform(WorldTransform&& other) noexcept
         : scale_(std::move(other.scale_)),
           rotation_(std::move(other.rotation_)),
           translation_(std::move(other.translation_)),
+          quaternion_(std::move(other.quaternion_)),
           matWorld_(std::move(other.matWorld_)),
           parent_(other.parent_),
+          rotateOder_(other.rotateOder_),
+          parentAnimation_(other.parentAnimation_),
+          parentJointIndex_(other.parentJointIndex_),
+          parentJointName_(std::move(other.parentJointName_)),
           billboardMatrix_(std::move(other.billboardMatrix_)),
           backToFrontMatrix_(std::move(other.backToFrontMatrix_)),
           constBuffer_(std::move(other.constBuffer_)),
           constMap(other.constMap) {
-        // ムーブ後に other を初期化（必要に応じて）
-        other.constMap = nullptr; // など
+
+        other.constMap          = nullptr;
+        other.parentAnimation_  = nullptr;
+        other.parentJointIndex_ = -1;
+        other.parentJointName_.clear();
     }
 
-    // ムーブ代入演算子を追加
+    // ムーブ代入演算子
     WorldTransform& operator=(WorldTransform&& other) noexcept {
         if (this != &other) {
             scale_             = std::move(other.scale_);
             rotation_          = std::move(other.rotation_);
             translation_       = std::move(other.translation_);
+            quaternion_        = std::move(other.quaternion_);
             matWorld_          = std::move(other.matWorld_);
             parent_            = other.parent_;
+            rotateOder_        = other.rotateOder_;
+            parentAnimation_   = other.parentAnimation_;
+            parentJointIndex_  = other.parentJointIndex_;
+            parentJointName_   = std::move(other.parentJointName_);
             billboardMatrix_   = std::move(other.billboardMatrix_);
             backToFrontMatrix_ = std::move(other.backToFrontMatrix_);
             constBuffer_       = std::move(other.constBuffer_);
             constMap           = other.constMap;
 
-            // ムーブ後に other を初期化
-            other.constMap = nullptr; // など
+            other.constMap          = nullptr;
+            other.parentAnimation_  = nullptr;
+            other.parentJointIndex_ = -1;
+            other.parentJointName_.clear();
         }
         return *this;
     }

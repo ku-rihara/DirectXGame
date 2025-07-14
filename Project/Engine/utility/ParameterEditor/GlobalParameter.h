@@ -54,9 +54,8 @@ private:
     };
 
 private:
-    ///=================================================================================
-    /// public type
-    ///==================================================================================
+    
+    /// usisng
 
     using Item = std::variant<int32_t, uint32_t, float, Vector2, Vector3, Vector4, bool, std::string>;
 
@@ -68,12 +67,14 @@ private:
 
 public:
     static GlobalParameter* GetInstance();
+    GlobalParameter() = default;
+    ~GlobalParameter() = default;
 
     ///=================================================================================
     /// public method
     ///=================================================================================
 
-    /// 　　更新
+    /// 更新
     void Update();
 
     // 新しいグループを作成
@@ -112,7 +113,6 @@ public:
     // ファイルへの保存・読み込み
     // ------------------------------------------------------------------------------
 
-   
     // すべてのグループのデータをファイルから読み込む
     void LoadFiles();
 
@@ -120,10 +120,9 @@ public:
     void LoadFile(const std::string& groupName, const std::string& fileName = "");
     void SaveFile(const std::string& groupName, const std::string& fileName = "");
 
-     void ParamSaveForImGui(const std::string& groupName, const std::string& fileName = "");
+    void ParamSaveForImGui(const std::string& groupName, const std::string& fileName = "");
     void ParamLoadForImGui(const std::string& groupName, const std::string& fileName = "");
 
-private:
 private:
     ///=================================================================================
     /// private variant

@@ -34,11 +34,12 @@ void GameScene::Init() {
     putObjForBlender->EasingAllReset();
 
     isDebugCameraActive_ = true;
+    ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
 void GameScene::Update() {
 
-    /// debugcamera
+    /// debugCamera
     debugCamera_->Update();
     Debug();
 
@@ -48,16 +49,16 @@ void GameScene::Update() {
     plane_->Update();
     skuBox_->Update();
 
-    if (Input::GetInstance()->PushKey(DIK_G)) {
+    putObjForBlender->EasingUpdateSelectGroup(Frame::DeltaTime(), 0);
 
-        putObjForBlender->EasingUpdateSelectGroup(Frame::DeltaTime(), 0);
-    }
-
+    // viewProjection 更新
     ViewProjectionUpdate();
 
     if (input_->TrrigerKey(DIK_RETURN)) {
         SceneManager::GetInstance()->ChangeScene("TITLE");
     }
+
+    ParticleManager::GetInstance()->Update();
 }
 
 /// ===================================================
@@ -72,6 +73,8 @@ void GameScene::ModelDraw() {
     ground_->Draw(viewProjection_);
     plane_->Draw(viewProjection_);
     monsterBall_->Draw(viewProjection_);
+
+    ParticleManager::GetInstance()->Draw(viewProjection_);
 }
 
 /// ===================================================

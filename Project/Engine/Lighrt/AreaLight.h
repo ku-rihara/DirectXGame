@@ -5,16 +5,16 @@
 #include "Vector4.h"
 
 struct AreaLightData {
-    Vector4 color;       // 16バイト
-    Vector3 position;    // 12バイト
-    float padding1;      // アライメント用パディング
-    Vector3 normal;      // 12バイト
-    float intensity;     // 4バイト
-    float width;         // 4バイト
-    float height;        // 4バイト
-    float decay;         // 4バイト
-    Vector3 up;          // 12バイト
-    float padding2;      // アライメント用パディング
+    Vector4 color;      
+    Vector3 position;   
+    float padding1;     
+    Vector3 normal;     
+    float intensity;    
+    float width;        
+    float height;       
+    float decay;        
+    Vector3 up;         
+    float padding2;     
 };
 
 
@@ -24,8 +24,8 @@ private:
     AreaLightData* lightData_;
 
 public:
-    AreaLight();
-    ~AreaLight();
+    AreaLight()=default;
+    ~AreaLight() = default;
     void SetLightCommand(ID3D12GraphicsCommandList* commandList, const int& index);
 
     void Init(ID3D12Device* device);

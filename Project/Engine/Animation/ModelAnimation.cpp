@@ -20,14 +20,19 @@
 
 void ModelAnimation::Create(const std::string& fileName) {
     object3d_.reset(Object3d::CreateModel(fileName));
-    animation_ = LoadAnimationFile(fileName);
+    animations_.push_back(LoadAnimationFile(fileName));
 
     skeleton_ = CreateSkeleton(object3d_->GetModel()->GetModelData().rootNode);
 
     ModelData modelData = object3d_->GetModel()->GetModelData();
     skinCluster_        = CreateSkinCluster(modelData);
 
+    transform_.Init();
     line3dDrawer_.Init(5120);
+}
+
+void ModelAnimation::Add(const std::string& fileName) {
+    animations_.push_back(LoadAnimationFile(fileName));
 }
 
 Skeleton ModelAnimation::CreateSkeleton(const Node& rootNode) {
@@ -124,8 +129,9 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
 
     std::filesystem::path path(fileName);
     std::string stemName = path.stem().string();
-
     std::string filePath = directoryPath_ + stemName + "/" + fileName;
+
+    animation.name = stemName;
 
     const aiScene* scene = importer.ReadFile(filePath.c_str(), 0);
     assert(scene->mNumAnimations != 0); // アニメーションがない
@@ -141,7 +147,7 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
         for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumPositionKeys; ++keyIndex) {
             aiVectorKey& keyAssimp = nodeAnimationAssimp->mPositionKeys[keyIndex];
             KeyframeVector3 keyframe;
-            keyframe.time  = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond); // ここも秒に変換
+            keyframe.time  = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond);
             keyframe.value = {-keyAssimp.mValue.x, keyAssimp.mValue.y, keyAssimp.mValue.z}; // 右手➩左手
             nodeAnimation.translate.keyframes.push_back(keyframe);
         }
@@ -150,7 +156,7 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
         for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumRotationKeys; ++keyIndex) {
             aiQuatKey& keyAssimp = nodeAnimationAssimp->mRotationKeys[keyIndex];
             KeyframeQuaternion keyframe;
-            keyframe.time  = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond); // ここも秒に変換
+            keyframe.time  = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond);
             keyframe.value = {keyAssimp.mValue.x, -keyAssimp.mValue.y, -keyAssimp.mValue.z, keyAssimp.mValue.w}; // 右手➩左手
             nodeAnimation.rotate.keyframes.push_back(keyframe);
         }
@@ -159,7 +165,7 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
         for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumScalingKeys; ++keyIndex) {
             aiVectorKey& keyAssimp = nodeAnimationAssimp->mScalingKeys[keyIndex];
             KeyframeVector3 keyframe;
-            keyframe.time  = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond); // ここも秒に変換
+            keyframe.time  = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond);
             keyframe.value = {keyAssimp.mValue.x, keyAssimp.mValue.y, keyAssimp.mValue.z};
             nodeAnimation.scale.keyframes.push_back(keyframe);
         }
@@ -170,15 +176,21 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
 
 void ModelAnimation::Update(const float& deltaTime) {
     animationTime_ += deltaTime;
-    animationTime_ = std::fmod(animationTime_, animation_.duration);
+    animationTime_ = std::fmod(animationTime_, animations_[currentAnimationIndex_].duration);
 
-    for (Joint& joint : skeleton_.joints) {
-        // 対象のJointのAnimationがあれば、値の運用を行う
-        if (auto it = animation_.nodeAnimations.find(joint.name); it != animation_.nodeAnimations.end()) {
-            const NodeAnimation& rootNodeAnimation = (*it).second;
-            joint.transform.translate              = CalculateValue(rootNodeAnimation.translate.keyframes, animationTime_);
-            joint.transform.rotate                 = CalculateValueQuaternion(rootNodeAnimation.rotate.keyframes, animationTime_);
-            joint.transform.scale                  = CalculateValue(rootNodeAnimation.scale.keyframes, animationTime_);
+    if (isChange_) {
+
+        AnimationTransition(deltaTime);
+    } else {
+        for (Joint& joint : skeleton_.joints) {
+
+            // 対象のJointのAnimationがあれば、値の運用を行う
+            if (auto it = animations_[currentAnimationIndex_].nodeAnimations.find(joint.name); it != animations_[currentAnimationIndex_].nodeAnimations.end()) {
+                const NodeAnimation& rootNodeAnimation = (*it).second;
+                joint.transform.translate              = CalculateValue(rootNodeAnimation.translate.keyframes, animationTime_);
+                joint.transform.rotate                 = CalculateValueQuaternion(rootNodeAnimation.rotate.keyframes, animationTime_);
+                joint.transform.scale                  = CalculateValue(rootNodeAnimation.scale.keyframes, animationTime_);
+            }
         }
     }
 
@@ -201,37 +213,78 @@ void ModelAnimation::Update(const float& deltaTime) {
             Inverse(Transpose(skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix));
     }
 
-    /* animationTime_                   = std::fmod(animationTime_, animation_.duration);
-     NodeAnimation& rootNodeAnimation = animation_.nodeAnimations[object3d_->GetModel()->GetModelData().rootNode.name];
-
-     worldTransform_.translation_ = CalculateValue(rootNodeAnimation.translate.keyframes, animationTime_);
-     worldTransform_.quaternion_  = CalculateValueQuaternion(rootNodeAnimation.rotate.keyframes, animationTime_);
-     worldTransform_.scale_       = CalculateValue(rootNodeAnimation.scale.keyframes, animationTime_);*/
-
-    /* worldTransform_.UpdateMatrix();*/
+    transform_.UpdateMatrix();
 }
 
-void ModelAnimation::Draw(const WorldTransform& transform, const ViewProjection& viewProjection) {
+void ModelAnimation::AnimationTransition(const float& deltaTime) {
+    // 補間タイム加算
+    currentTransitionTime_ += deltaTime;
+    preAnimationTime_ += deltaTime;
+    currentTransitionTime_ = std::min(currentTransitionTime_, 1.0f);
+
+    // 前のアニメーションタイム
+    float preTime = std::fmod(preAnimationTime_, animations_[preAnimationIndex_].duration);
+
+    for (Joint& joint : skeleton_.joints) {
+
+        Vector3 toTranslate = joint.transform.translate;
+        Quaternion toRotate = joint.transform.rotate;
+        Vector3 toScale     = joint.transform.scale;
+
+        // 現在のアニメーションから目標値を取得
+        if (auto it = animations_[currentAnimationIndex_].nodeAnimations.find(joint.name); it != animations_[currentAnimationIndex_].nodeAnimations.end()) {
+            const NodeAnimation& currentNodeAnimation = (*it).second;
+
+            toTranslate = CalculateValue(currentNodeAnimation.translate.keyframes, animationTime_);
+            toRotate    = CalculateValueQuaternion(currentNodeAnimation.rotate.keyframes, animationTime_);
+            toScale     = CalculateValue(currentNodeAnimation.scale.keyframes, animationTime_);
+        }
+
+        // 前のアニメーションから開始値を取得
+        if (auto it = animations_[preAnimationIndex_].nodeAnimations.find(joint.name); it != animations_[preAnimationIndex_].nodeAnimations.end()) {
+            const NodeAnimation& preNodeAnimation = (*it).second;
+
+            Vector3 fromTranslate = joint.transform.translate;
+            Quaternion fromRotate = joint.transform.rotate;
+            Vector3 fromScale     = joint.transform.scale;
+
+            fromTranslate = CalculateValue(preNodeAnimation.translate.keyframes, preTime);
+            fromRotate    = CalculateValueQuaternion(preNodeAnimation.rotate.keyframes, preTime);
+            fromScale     = CalculateValue(preNodeAnimation.scale.keyframes, preTime);
+
+            // 補間適用
+            joint.transform.translate = Lerp(fromTranslate, toTranslate, currentTransitionTime_);
+            joint.transform.scale     = Lerp(fromScale, toScale, currentTransitionTime_);
+            joint.transform.rotate    = Quaternion::Slerp(fromRotate, toRotate, currentTransitionTime_);
+        } 
+    }
+
+    // 補間終了判定
+    if (currentTransitionTime_ >= 1.0f) {
+        TransitionFinish();
+    }
+}
+
+void ModelAnimation::Draw(const ViewProjection& viewProjection) {
     SkinningObject3DPipeline::GetInstance()->PreDraw(DirectXCommon::GetInstance()->GetCommandList());
-    object3d_->DrawAnimation(transform, viewProjection, skinCluster_);
+    object3d_->DrawAnimation(transform_, viewProjection, skinCluster_);
     Object3DPiprline::GetInstance()->PreDraw(DirectXCommon::GetInstance()->GetCommandList());
 }
 
-void ModelAnimation::DebugDraw(const WorldTransform& transform, const ViewProjection& viewProjection) {
+void ModelAnimation::DebugDraw(const ViewProjection& viewProjection) {
 
     for (const Joint& joint : skeleton_.joints) {
-       
+
         //
-        Vector3 jointPos = TransformMatrix(transform.GetWorldPos(), joint.skeletonSpaceMatrix);
+        Vector3 jointPos = TransformMatrix(transform_.GetWorldPos(), joint.skeletonSpaceMatrix);
         line3dDrawer_.DrawCubeWireframe(jointPos, Vector3(0.01f, 0.01f, 0.01f), Vector4::kWHITE());
 
-        // Line描画 
+        // Line描画
         if (joint.parent) {
             const Joint& parentJoint = skeleton_.joints[*joint.parent];
-            Vector3 parentPos = TransformMatrix(transform.GetWorldPos(), parentJoint.skeletonSpaceMatrix);
+            Vector3 parentPos        = TransformMatrix(transform_.GetWorldPos(), parentJoint.skeletonSpaceMatrix);
             line3dDrawer_.SetLine(jointPos, parentPos, Vector4::kWHITE());
         }
-        
     }
     // Joint描画
     line3dDrawer_.Draw(viewProjection);
@@ -267,4 +320,38 @@ Quaternion ModelAnimation::CalculateValueQuaternion(const std::vector<KeyframeQu
         }
     }
     return (*keyframe.rbegin()).value;
+}
+
+const Joint* ModelAnimation::GetJoint(const std::string& name) const {
+    auto it = skeleton_.jointMap.find(name);
+    if (it != skeleton_.jointMap.end()) {
+        return &skeleton_.joints[it->second];
+    }
+    return nullptr;
+}
+
+void ModelAnimation::ChangeAnimation(const std::string& animationName) {
+    // nameからIndex取得
+    for (int32_t i = 0; i < animations_.size(); ++i) {
+
+        if (animations_[i].name == animationName) {
+            preAnimationIndex_     = currentAnimationIndex_;
+            currentAnimationIndex_ = i;
+
+            // 前のアニメーションの時間を保存
+            preAnimationTime_ = animationTime_;
+
+            //切り替え変数リセット
+            animationTime_         = 0.0f;
+            currentTransitionTime_ = 0.0f;
+            isChange_              = true;
+
+            return;
+        }
+    }
+}
+
+void ModelAnimation::TransitionFinish() {
+    currentTransitionTime_ = 0.0f;
+    isChange_              = false;
 }

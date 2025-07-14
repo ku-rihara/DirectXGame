@@ -15,6 +15,10 @@ void ModelCommon::Init(DirectXCommon* dxCommon) {
     Light::GetInstance()->Init(dxCommon_->GetDevice());
 }
 
+Model::~Model() {
+    Finalize();
+}
+
 ModelData Model::LoadModelFile(const std::string& directoryPath, const std::string& filename) {
     ModelData modelData; // 構築するModelData
     std::vector<Vector4> positions; // 位置
@@ -36,15 +40,19 @@ ModelData Model::LoadModelFile(const std::string& directoryPath, const std::stri
         for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) {
             aiVector3D& position = mesh->mVertices[vertexIndex];
             aiVector3D& normal   = mesh->mNormals[vertexIndex];
-            aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
 
             modelData.vertices[vertexIndex].position = {-position.x, position.y, position.z, 1.0f};
             modelData.vertices[vertexIndex].normal   = {-normal.x, normal.y, normal.z};
-            modelData.vertices[vertexIndex].texcoord = {texcoord.x, texcoord.y};
+
+            if (mesh->HasTextureCoords(0)) {
+                aiVector3D& texcoord                     = mesh->mTextureCoords[0][vertexIndex];
+                modelData.vertices[vertexIndex].texcoord = {texcoord.x, texcoord.y};
+            } else {
+                modelData.vertices[vertexIndex].texcoord = {0.0f, 0.0f}; // デフォルトのUV
+            }
         }
 
-
-          // meshの中身faceの解析
+        // meshの中身faceの解析
         for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
             aiFace& face = mesh->mFaces[faceIndex];
             assert(face.mNumIndices = 3); // 三角形のみサポート
@@ -54,7 +62,6 @@ ModelData Model::LoadModelFile(const std::string& directoryPath, const std::stri
                 modelData.indices.push_back(vertexIndex);
             }
         }
-
 
         for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
             aiBone* bone                     = mesh->mBones[boneIndex];
@@ -79,8 +86,6 @@ ModelData Model::LoadModelFile(const std::string& directoryPath, const std::stri
                         bone->mWeights[weightIndex].mVertexId});
             }
         }
-
-      
     }
 
     // Materialを解析
@@ -277,4 +282,9 @@ void Model::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HAND
 
 void Model::PreDraw(ID3D12GraphicsCommandList* commandList) {
     Object3DPiprline::GetInstance()->PreDraw(commandList);
+}
+
+void Model::Finalize() {
+    dxCommon_ = nullptr;
+    textureManager_ = nullptr;
 }

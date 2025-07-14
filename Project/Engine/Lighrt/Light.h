@@ -11,7 +11,7 @@ struct CameraForGPU {
     Vector3 worldPosition_;
 };
 
-// Forward Declarations
+//前方宣言
 class DirectionalLight;
 class PointLightManager;
 class SpotLightManager;
@@ -20,7 +20,7 @@ class AmbientLight;
 
 class Light {
 private:
-    // 各ライトマネージャークラスのインスタンスを持つ
+    
     std::unique_ptr<DirectionalLight> directionalLight_;
     std::unique_ptr<PointLightManager> pointLightManager_;
     std::unique_ptr<SpotLightManager> spotLightManager_;
@@ -33,10 +33,14 @@ private:
 
 public:
     static Light* GetInstance();
+
+    Light() = default;
+    ~Light() = default;
+
     void Init(ID3D12Device* device);
     void DebugImGui();
 
-    // Getter for CameraForGPU resource
+    //
     ID3D12Resource* GetCameraForGPUResource() const;
     // 各ライトのリソースをまとめて取得
     void SetLightCommands(ID3D12GraphicsCommandList* commandList);

@@ -3,15 +3,6 @@
 #include <imgui.h>
 #include <numbers>
 
-SpotLight::SpotLight()
-{
-    lightResource_ = nullptr;
-    lightData_ = nullptr;
-}
-SpotLight::~SpotLight()
-{
-   
-}
 
 void SpotLight::Init(ID3D12Device* device) {
     lightResource_ = DirectXCommon::GetInstance()->CreateBufferResource(device, sizeof(SpotLightData));

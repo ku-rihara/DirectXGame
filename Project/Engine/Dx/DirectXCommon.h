@@ -26,7 +26,6 @@ private:
     WinApp* winApp_                 = nullptr;
 
 private:
-
     ///===========================================================================
     /// デバイス関連
     ///===========================================================================
@@ -85,7 +84,6 @@ private:
 
     uint32_t descriptorSizeDSV_;
 
-
     // バリア
     D3D12_RESOURCE_BARRIER barrier_{};
     UINT backBufferIndex_;
@@ -94,40 +92,20 @@ private:
     ///==========================================================
     /// Private method
     ///==========================================================
-
-    /// <summary>
+    ///
     /// DXGIデバイス初期化
-    /// </summary>
     void DXGIDeviceInit();
-
-    /// <summary>
     /// コマンド関連初期化
-    /// </summary>
     void CommandInit();
-
-    /// <summary>
     /// スワップチェーンの生成
-    /// </summary>
     void CreateSwapChain();
-
-    /// <summary>
     /// レンダーターゲットビューの生成
-    /// </summary>
     void CreateRenderTargetView();
-
-    /// <summary>
     /// 深度バッファ生成
-    /// </summary>
     void CreateDepthBuffer();
-
-    /// <summary>
     /// フェンスの生成
-    /// </summary>
     void CreateFence();
-
-    /// <summary>
     /// dxcCompilerの初期化
-    /// </summary>
     void dxcCompilerInit();
 
     Microsoft::WRL::ComPtr<ID3D12Resource> CreateDepthStencilTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> device, int32_t width, int32_t height);
@@ -142,6 +120,9 @@ public:
 
     // シングルトンインスタンスの取得
     static DirectXCommon* GetInstance();
+
+    DirectXCommon()  = default;
+    ~DirectXCommon() = default;
 
     void Init(WinApp* win, int32_t backBufferWidth = WinApp::kWindowWidth, int32_t backBufferHeight = WinApp::kWindowHeight);
     void InitRenderingResources();
@@ -204,7 +185,5 @@ public:
     IDxcUtils* GetDxcUtils() const { return dxcUtils_; }
     IDxcCompiler3* GetDxcCompiler() const { return dxcCompiler_; }
     IDxcIncludeHandler* GetIncludeHandler() const { return includeHandler_; }
-    /* ID3D12DescriptorHeap* GetDescriptorHeap() const { return rtvDescriptorHeap_.Get(); }*/
-    /*uint32_t GetDescriptorSizeRTV()const { descriptorSizeRTV_; }*/
     uint32_t GetDescriptorSizeDSV() const { return descriptorSizeDSV_; }
 };

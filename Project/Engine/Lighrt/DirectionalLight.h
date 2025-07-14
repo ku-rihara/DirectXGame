@@ -1,8 +1,8 @@
 #pragma once
-#include <wrl.h>
+#include "Vector3.h"
+#include "Vector4.h"
 #include <d3d12.h>
-#include"Vector3.h"
-#include"Vector4.h"
+#include <wrl.h>
 
 struct DirectionalLightData {
     Vector4 color; // ライトの色
@@ -16,8 +16,8 @@ private:
     DirectionalLightData* lightData_;
 
 public:
-    DirectionalLight();
-    ~DirectionalLight();
+    DirectionalLight()  = default;
+    ~DirectionalLight() = default;
 
     void Init(ID3D12Device* device);
     ID3D12Resource* GetLightResource() const { return lightResource_.Get(); }
@@ -28,5 +28,4 @@ public:
     void DebugImGui();
 
     void SetLightCommand(ID3D12GraphicsCommandList* commandList);
-  
 };

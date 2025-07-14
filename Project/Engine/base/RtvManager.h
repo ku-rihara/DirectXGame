@@ -3,19 +3,12 @@
 /// base
 #include "Dx/DirectXCommon.h"
 
-
 /// SRV管理
 class RtvManager {
-private:
-  
+public:
     RtvManager()  = default;
     ~RtvManager() = default;
 
-    RtvManager(const RtvManager&)            = delete;
-    RtvManager& operator=(const RtvManager&) = delete;
-
-public:
-   
     static RtvManager* GetInstance();
 
     ///===================================================================
@@ -36,9 +29,7 @@ public:
     // RTV作成
     void CreateRTV(uint32_t index, ID3D12Resource* resource, D3D12_RENDER_TARGET_VIEW_DESC* desc);
 
-
 private:
-
     ///=========================================
     /// private variant
     ///=========================================
@@ -54,7 +45,6 @@ private:
 public:
     // 最大SRV数
     static const uint32_t kMaxCount;
-
 
 public:
     ///===================================================================

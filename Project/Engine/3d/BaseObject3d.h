@@ -20,10 +20,10 @@ public:
     ///  public method
     ///========================================================================================
 
-    // デバッグ表示
+    BaseObject3d() = default;
+    virtual ~BaseObject3d() = default;
+    
     virtual void DebugImgui();
-
-    // マテリアルリソース作成
     virtual void CreateMaterialResource();
 
     ///========================================================================================
