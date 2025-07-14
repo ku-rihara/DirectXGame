@@ -2,6 +2,7 @@
 #include "base/TextureManager.h"
 // class
 #include "utility/ParticleEditor/ParticleManager.h"
+#include "base/FullScreenRenderer.h"
 
 // math
 #include "Frame/Frame.h"
@@ -43,6 +44,7 @@ void GameScene::Update() {
     debugCamera_->Update();
     Debug();
 
+   
     // 各クラス更新
     ground_->Update();
     monsterBall_->Update();
@@ -99,6 +101,7 @@ void GameScene::Debug() {
     monsterBall_->Debug();
     plane_->Debug();
     skuBox_->Debug();
+
     ImGui::End();
 
 #endif

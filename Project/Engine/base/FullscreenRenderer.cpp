@@ -18,9 +18,9 @@ void FullscreenRenderer::Init(DirectXCommon* dxCommon) {
         L"resources/Shader/OffScreen/Fullscreen.PS.hlsl",
         L"resources/Shader/OffScreen/Grayscale.PS.hlsl",
         L"resources/Shader/OffScreen/Vignette.PS.hlsl",
-        L"resources/Shader/OffScreen/GaussianFilter.PS.hlsl"
-        /*L"resources/Shader/OffScreen/RadialBlur.PS.hlsl"*/};
-
+        L"resources/Shader/OffScreen/GaussianFilter.PS.hlsl",
+        L"resources/Shader/OffScreen/BoxFilter.PS.hlsl",
+    };
     CreateGraphicsPipeline();
 }
 
@@ -62,14 +62,14 @@ void FullscreenRenderer::CreateRootSignature() {
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
     descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
-    // **ディスクリプタレンジ (SRV)**
+    // ディスクリプタレンジ 
     D3D12_DESCRIPTOR_RANGE descriptorRange[1]            = {};
     descriptorRange[0].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; // SRV (テクスチャ) 用
     descriptorRange[0].NumDescriptors                    = 1; // 1つのテクスチャ
     descriptorRange[0].BaseShaderRegister                = 0; // `t0` に対応
     descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-    // **ルートパラメータ**
+    // ルートパラメータ
     D3D12_ROOT_PARAMETER rootParameters[1]                = {};
     rootParameters[0].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[0].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
@@ -104,7 +104,7 @@ void FullscreenRenderer::Draw(ID3D12GraphicsCommandList* commandList) {
     commandList->SetPipelineState(pipelineStates_[static_cast<size_t>(currentMode_)].Get());
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
 
-    // **プリミティブトポロジーを設定**
+    // プリミティブトポロジーを設定
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     // テクスチャリソースを設定（インデックス0のパラメータに割り当て）
     commandList->SetGraphicsRootDescriptorTable(0, dxCommon_->GetRenderTextureGPUSrvHandle());
@@ -112,10 +112,10 @@ void FullscreenRenderer::Draw(ID3D12GraphicsCommandList* commandList) {
 }
 
 void FullscreenRenderer::DrawImGui() {
-#ifdef DEBUG
+#ifdef _DEBUG
 
     if (ImGui::Begin("CopyImageRenderer")) {
-        const char* modeNames[] = {"None", "Gray", "Vignette", "Gaus"/*, "RadialBlur"*/};
+        const char* modeNames[] = {"None", "Gray", "Vignette", "Gaus","BoxFilter"};
         int mode                = static_cast<int>(currentMode_);
         if (ImGui::Combo("OffScreenMode", &mode, modeNames, IM_ARRAYSIZE(modeNames))) {
             currentMode_ = static_cast<OffScreenMode>(mode);
