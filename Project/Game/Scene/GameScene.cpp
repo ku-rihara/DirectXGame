@@ -119,6 +119,7 @@ void GameScene::Update() {
     debugCamera_->Update();
     Debug();
 
+   
     // 各クラス更新
     player_->Update();
     skydome_->Update();

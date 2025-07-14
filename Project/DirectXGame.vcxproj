@@ -24,7 +24,6 @@
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\Animation\ModelAnimation.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
-    <ClCompile Include="Engine\base\FullscreenRenderer.cpp" />
     <ClCompile Include="Engine\base\Material.cpp" />
     <ClCompile Include="Engine\base\RtvManager.cpp" />
     <ClCompile Include="Engine\base\SkyBoxRenderer.cpp" />
@@ -56,6 +55,14 @@
     <ClCompile Include="Engine\Lighrt\PointLightManager.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLight.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLightManager.cpp" />
+    <ClCompile Include="Engine\OffScreen\BaseOffScreen.cpp" />
+    <ClCompile Include="Engine\OffScreen\BoxFilter.cpp" />
+    <ClCompile Include="Engine\OffScreen\GaussianFilter.cpp" />
+    <ClCompile Include="Engine\OffScreen\GrayScale.cpp" />
+    <ClCompile Include="Engine\OffScreen\NormalScreen.cpp" />
+    <ClCompile Include="Engine\OffScreen\OffScreenRenderer.cpp" />
+    <ClCompile Include="Engine\OffScreen\RadialBlur.cpp" />
+    <ClCompile Include="Engine\OffScreen\Vignette.cpp" />
     <ClCompile Include="Engine\Pipeline\Line3DPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Object3DPiprline.cpp" />
     <ClCompile Include="Engine\Pipeline\ParticlePipeline.cpp" />
@@ -194,7 +201,6 @@
     <ClInclude Include="Engine\Animation\SkeletonData.h" />
     <ClInclude Include="Engine\Animation\SkinCluster.h" />
     <ClInclude Include="Engine\audio\Audio.h" />
-    <ClInclude Include="Engine\base\FullscreenRenderer.h" />
     <ClInclude Include="Engine\base\Material.h" />
     <ClInclude Include="Engine\base\RtvManager.h" />
     <ClInclude Include="Engine\base\SkyBoxRenderer.h" />
@@ -227,6 +233,13 @@
     <ClInclude Include="Engine\Lighrt\PointLightManager.h" />
     <ClInclude Include="Engine\Lighrt\SpotLight.h" />
     <ClInclude Include="Engine\Lighrt\SpotLightManager.h" />
+    <ClInclude Include="Engine\OffScreen\BaseOffScreen.h" />
+    <ClInclude Include="Engine\OffScreen\BoxFilter.h" />
+    <ClInclude Include="Engine\OffScreen\GrayScale.h" />
+    <ClInclude Include="Engine\OffScreen\NormalScreen.h" />
+    <ClInclude Include="Engine\OffScreen\OffScreenRenderer.h" />
+    <ClInclude Include="Engine\OffScreen\RadialBlur.h" />
+    <ClInclude Include="Engine\OffScreen\Vignette.h" />
     <ClInclude Include="Engine\Pipeline\Line3DPipeline.h" />
     <ClInclude Include="Engine\Pipeline\Object3DPiprline.h" />
     <ClInclude Include="Engine\Pipeline\ParticlePipeline.h" />
@@ -410,6 +423,14 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="resources\Shader\Object3d.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\BoxFilter.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\Dissolve.PS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

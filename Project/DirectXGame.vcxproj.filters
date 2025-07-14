@@ -322,6 +322,12 @@
     <Filter Include="Game\BackGroundObject">
       <UniqueIdentifier>{9c8a0421-d9ab-4941-8ba6-eff9ec6458cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\OffScreen">
+      <UniqueIdentifier>{e38b2556-769e-4783-b129-5409cf0747e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\OffScreen">
+      <UniqueIdentifier>{0e04b71b-66a2-4664-b8b2-e3e21a1ebbb6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1435,6 +1441,12 @@
     </FxCompile>
     <FxCompile Include="resources\Shader\SkinningObject3d.VS.hlsl">
       <Filter>リソースファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\BoxFilter.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\Dissolve.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

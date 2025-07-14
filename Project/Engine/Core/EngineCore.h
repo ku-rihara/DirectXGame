@@ -13,7 +13,7 @@ class ParticlePipeline;
 class SrvManager;
 class Audio;
 class Input;
-class FullscreenRenderer;
+class OffScreenRenderer;
 class SkyBoxRenderer;
 class Line3DPipeline;
 class RtvManager;
@@ -64,8 +64,8 @@ public:
      Audio* audio_;
      Input* input_;
      SkyBoxRenderer* skyBoxRenderer_;
-     FullscreenRenderer* copyImageRenderer_;
      Line3DPipeline* Line3DPipeline_;
      RtvManager* rtvManager_;
      SkinningObject3DPipeline* skinningObject3DPipeline_;
+     OffScreenRenderer* offScreenRenderer_;
 };
