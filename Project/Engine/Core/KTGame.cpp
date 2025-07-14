@@ -1,7 +1,7 @@
 #include "KTGame.h"
 /// Scene
 #include "Scene/Factory/SceneFactory.h"
-#include"base/FullscreenRenderer.h"
+#include"OffScreen/OffScreenRenderer.h"
 //renderer
 #include"base/SkyBoxRenderer.h"
 //utility
@@ -42,21 +42,24 @@ void KTGame::Draw() {
     /// SkyBox描画
     // --------------------------------------------------------------------------
     SkyBoxRenderer::GetInstance()->PreDraw(commandList);
-    pSceneManager_->SkyBoxDraw(); /// ゲームシーン描画
+    /// ゲームシーン描画
+    pSceneManager_->SkyBoxDraw(); 
 	// --------------------------------------------------------------------------
 	/// モデル描画
 	// --------------------------------------------------------------------------
 	Model::PreDraw(commandList);
-
-	pSceneManager_->ModelDraw();/// ゲームシーン描画
-	collisionManager_->Draw(pSceneManager_->GetScene()->GetViewProjection());	/// コリジョン描画
+    /// ゲームシーン描画
+	pSceneManager_->ModelDraw();
+    /// コリジョン描画
+	collisionManager_->Draw(pSceneManager_->GetScene()->GetViewProjection());	
 
 	// --------------------------------------------------------------------------
 	/// スプライト描画
 	// --------------------------------------------------------------------------
 	Sprite::PreDraw(commandList);
 
-	pSceneManager_->SpriteDraw();/// ゲームシーン描画
+	/// ゲームシーン描画
+	pSceneManager_->SpriteDraw();
 
 }
 
@@ -65,8 +68,8 @@ void KTGame::DarwOffscreen() {
 	/// commandList取得
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 
-	FullscreenRenderer::GetInstance()->DrawImGui(); 
-	FullscreenRenderer::GetInstance()->Draw(commandList);/// 画像コピー描画
+	OffScreenRenderer::GetInstance()->DrawImGui(); 
+	OffScreenRenderer::GetInstance()->Draw(commandList);
 	
 }
 

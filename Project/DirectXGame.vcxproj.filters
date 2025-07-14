@@ -181,6 +181,12 @@
     <Filter Include="MyEngine\.h\Pipeline">
       <UniqueIdentifier>{e76999fe-1cc2-4cd6-af36-5b79ea707f3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\OffScreen">
+      <UniqueIdentifier>{e38b2556-769e-4783-b129-5409cf0747e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\OffScreen">
+      <UniqueIdentifier>{0e04b71b-66a2-4664-b8b2-e3e21a1ebbb6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -352,9 +358,6 @@
     <ClCompile Include="math\Vector2.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\FullscreenRenderer.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\utility\RailEditor\Rail.cpp">
       <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
     </ClCompile>
@@ -459,6 +462,30 @@
     </ClCompile>
     <ClCompile Include="math\EasingSequence.cpp">
       <Filter>liberary\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OffScreen\BaseOffScreen.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OffScreen\OffScreenRenderer.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OffScreen\NormalScreen.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OffScreen\GrayScale.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OffScreen\Vignette.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OffScreen\RadialBlur.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OffScreen\GaussianFilter.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OffScreen\BoxFilter.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -666,9 +693,6 @@
     <ClInclude Include="Engine\input\GamePad.h">
       <Filter>MyEngine\.h\input</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\FullscreenRenderer.h">
-      <Filter>MyEngine\.h\base</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\utility\RailEditor\Rail.h">
       <Filter>MyEngine\.h\utility\RailEditor</Filter>
     </ClInclude>
@@ -780,6 +804,27 @@
     <ClInclude Include="math\EasingSequence.h">
       <Filter>liberary\.h</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\OffScreen\BaseOffScreen.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OffScreen\OffScreenRenderer.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OffScreen\Vignette.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OffScreen\GrayScale.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OffScreen\NormalScreen.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OffScreen\RadialBlur.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OffScreen\BoxFilter.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -858,6 +903,9 @@
       <Filter>リソースファイル</Filter>
     </FxCompile>
     <FxCompile Include="resources\Shader\OffScreen\BoxFilter.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\Dissolve.PS.hlsl">
       <Filter>リソースファイル\OffScreen</Filter>
     </FxCompile>
   </ItemGroup>
