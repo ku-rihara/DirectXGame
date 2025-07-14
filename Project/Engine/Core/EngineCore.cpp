@@ -6,7 +6,6 @@
 #include "3d/ModelManager.h"
 
 /// base
-#include "base/FullscreenRenderer.h"
 #include "base/RtvManager.h"
 #include "base/SkyBoxRenderer.h"
 #include "base/SrvManager.h"
@@ -17,6 +16,7 @@
 #include "Pipeline/Object3DPiprline.h"
 #include "Pipeline/SkinningObject3DPipeline.h"
 #include "Pipeline/SpritePipeline.h"
+#include"OffScreen/OffScreenRenderer.h"
 
 /// audio,input
 #include "audio/Audio.h"
@@ -73,9 +73,9 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     skyBoxRenderer_ = SkyBoxRenderer::GetInstance();
     skyBoxRenderer_->Init(directXCommon_);
 
-    // FullScreen Renderer
-    copyImageRenderer_ = FullscreenRenderer::GetInstance();
-    copyImageRenderer_->Init(directXCommon_);
+    // OffScreen Renderer
+    offScreenRenderer_ = OffScreenRenderer::GetInstance();
+    offScreenRenderer_->Init(directXCommon_);
 
     // ParticlePipeline
     ParticlePipeline_ = ParticlePipeline::GetInstance();
