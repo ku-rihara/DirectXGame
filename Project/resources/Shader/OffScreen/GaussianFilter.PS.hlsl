@@ -25,12 +25,7 @@ PixelShaderOutPut main(VertexShaderOutput input)
     //kenrnelを求める。weightは後で使う
     float weight = 0.0f;
     float kernel3x3[3][3];
-    float2 kIndex3x3[3][3] =
-    {
-        { float2(-1, -1), float2(-1, 0), float2(-1, 1) },
-        { float2(0, -1), float2(0, 0), float2(0, 1) },
-        { float2(1, -1), float2(1, 0), float2(1, 1) }
-    };
+   
     for (int x = 0; x < 3; ++x)
     {
         for (int y = 0; y < 3; ++y)

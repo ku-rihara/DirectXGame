@@ -857,5 +857,8 @@
     <FxCompile Include="resources\Shader\SkinningObject3d.VS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\BoxFilter.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

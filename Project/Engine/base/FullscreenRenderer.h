@@ -13,7 +13,7 @@ enum class OffScreenMode {
     GRAY,
     VIGNETTE,
     GAUS,
-   /* RADIALBLUR,*/
+    BOXFILTER,
     COUNT,
 };
 
@@ -26,9 +26,7 @@ private:
 
 public:
 
-    FullscreenRenderer() = default;
     ~FullscreenRenderer() = default;
-
     static FullscreenRenderer* GetInstance();
 
     void Init(DirectXCommon* dxCommon);
@@ -50,6 +48,5 @@ private:
     Microsoft::WRL::ComPtr<ID3DBlob> signatureBlob_;
     Microsoft::WRL::ComPtr<ID3DBlob> errorBlob_;
 
-    OffScreenMode currentMode_ = OffScreenMode::NONE; 
-
+    OffScreenMode currentMode_ = OffScreenMode::NONE;
 };
