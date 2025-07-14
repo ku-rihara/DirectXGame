@@ -20,6 +20,7 @@ void FullscreenRenderer::Init(DirectXCommon* dxCommon) {
         L"resources/Shader/OffScreen/Vignette.PS.hlsl",
         L"resources/Shader/OffScreen/GaussianFilter.PS.hlsl",
         L"resources/Shader/OffScreen/BoxFilter.PS.hlsl",
+        L"resources/Shader/OffScreen/RadialBlur.PS.hlsl",
     };
     CreateGraphicsPipeline();
 }
@@ -115,7 +116,7 @@ void FullscreenRenderer::DrawImGui() {
 #ifdef _DEBUG
 
     if (ImGui::Begin("CopyImageRenderer")) {
-        const char* modeNames[] = {"None", "Gray", "Vignette", "Gaus","BoxFilter"};
+        const char* modeNames[] = {"None", "Gray", "Vignette", "Gaus", "BoxFilter", "RadiauBlur"};
         int mode                = static_cast<int>(currentMode_);
         if (ImGui::Combo("OffScreenMode", &mode, modeNames, IM_ARRAYSIZE(modeNames))) {
             currentMode_ = static_cast<OffScreenMode>(mode);
