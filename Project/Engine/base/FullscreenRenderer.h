@@ -14,6 +14,7 @@ enum class OffScreenMode {
     VIGNETTE,
     GAUS,
     BOXFILTER,
+    RADIALBLUR,
     COUNT,
 };
 
