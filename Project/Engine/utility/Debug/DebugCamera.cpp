@@ -1,16 +1,14 @@
 #include "DebugCamera.h"
 #include <numbers>
 
-// カメラ注視点までの距離の初期化
 const float DebugCamera::distance_ = 23.0f;
 
 DebugCamera::DebugCamera(int window_width, int window_height) {
-    // Inputクラスのインスタンスを取得（仮）
+ 
     input_ = Input::GetInstance();
     // ビュープロジェクションの初期化
     viewProjection_.Init();
     matRot_ = MakeIdentity4x4();
-    // ビュープロジェクションのパラメータを設定
     SetAspectRatio(static_cast<float>(window_width) / window_height);
     // 初期行列の更新
     UpdateMatrix();
@@ -53,11 +51,11 @@ void DebugCamera::Update() {
         yaw_ += mouseMove.lX * 0.005f;
         pitch_ += mouseMove.lY * 0.005f;
 
-        // ピッチ角の制限（-89度〜+89度）- ジンバルロックを防ぐため90度より少し小さく制限
-        const float maxPitch = std::numbers::pi_v<float> / 2.0f - 0.01f; // 約89度
+      
+        const float maxPitch = std::numbers::pi_v<float> / 2.0f - 0.01f; 
         pitch_               = std::fmax(std::fmin(pitch_, maxPitch), -maxPitch);
 
-        // Yaw角を0-2πの範囲に正規化（オプション）
+      
         if (yaw_ > std::numbers::pi_v<float> * 2.0f) {
             yaw_ -= std::numbers::pi_v<float> * 2.0f;
         }
@@ -65,10 +63,10 @@ void DebugCamera::Update() {
             yaw_ += std::numbers::pi_v<float> * 2.0f;
         }
 
-        // 回転行列の更新 - 順序を変更してより安定した回転を実現
+        //
         Matrix4x4 rotY = MakeRotateYMatrix(yaw_);
         Matrix4x4 rotX = MakeRotateXMatrix(pitch_);
-        matRot_        = rotY * rotX; // Yaw → Pitch の順序で適用
+        matRot_        = rotY * rotX; 
     }
 
     UpdateMatrix();

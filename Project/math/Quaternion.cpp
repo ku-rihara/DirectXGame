@@ -8,7 +8,7 @@ Quaternion Quaternion::operator-() const {
     return Quaternion(-x, -y, -z, -w);
 }
 
-// クォータニオンの乗算
+
 Quaternion Quaternion::operator*(const Quaternion& obj) const {
     return Quaternion(
         w * obj.x + x * obj.w + y * obj.z - z * obj.y,
@@ -20,7 +20,6 @@ Quaternion Quaternion::operator*(const Quaternion& obj) const {
 Quaternion Quaternion::operator*(float scalar) const {
     Quaternion result;
 
-    // クォータニオンの各成分にスカラーを掛ける
     result.w = this->w * scalar;
     result.x = this->x * scalar;
     result.y = this->y * scalar;
@@ -42,36 +41,30 @@ Quaternion Quaternion::operator+(const Quaternion& obj) const {
         w + obj.w);
 }
 
-// 單位Quaternionの生成
 Quaternion Quaternion::Identity() {
     return Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-// 共装Quaternionを返す
 Quaternion Quaternion::Conjugate() const {
     return Quaternion(-x, -y, -z, w);
 }
 
-// ノルム(長さの等価)
 float Quaternion::Norm() const {
     return std::sqrt(x * x + y * y + z * z + w * w);
 }
 
-// 正規化(ノルムを一にする)
+
 Quaternion Quaternion::Normalize() const {
     float norm = Norm();
     if (norm == 0) {
-        // ノルムが0の場合は、Identityを返す
         return Identity();
     }
     return Quaternion(x / norm, y / norm, z / norm, w / norm);
 }
 
-// 逆Quaternionを返す
 Quaternion Quaternion::Inverse() const {
     float norm = Norm();
     if (norm == 0) {
-        // 逆が存在しない場合はIdentity
         return Identity();
     }
     Quaternion conjugate = Conjugate();
@@ -79,7 +72,7 @@ Quaternion Quaternion::Inverse() const {
     return Quaternion(conjugate.x / normSquared, conjugate.y / normSquared, conjugate.z / normSquared, conjugate.w / normSquared);
 }
 
-// 任意回転を表すQuaternionの生成
+
 Quaternion Quaternion::MakeRotateAxisAngle(const Vector3& axis, const float& angle) {
     // 正規化された軸を使用
     Vector3 normalizedAxis = (axis).Normalize();
@@ -93,7 +86,6 @@ Quaternion Quaternion::MakeRotateAxisAngle(const Vector3& axis, const float& ang
         std::cos(halfAngle));
 }
 
-// ベクトルをQuaternionで回転させた結果のベクトルを求める
 Vector3 Quaternion::RotateVector(const Vector3& vector) {
     Quaternion vectorQuat(vector.x, vector.y, vector.z, 0.0f);
     Quaternion inverseQuat = this->Inverse();
@@ -101,26 +93,23 @@ Vector3 Quaternion::RotateVector(const Vector3& vector) {
     // 回転の計算
     Quaternion rotatedQuat = (*this) * vectorQuat * inverseQuat;
 
-    // 回転後のベクトルを返す
     return Vector3(rotatedQuat.x, rotatedQuat.y, rotatedQuat.z);
 }
 
-// ドット積の計算
+
 float Quaternion::Dot(const Quaternion& q1, const Quaternion& q2) {
     return q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.w * q2.w;
 }
 
-// QuaternionのLerp関数
-Quaternion Quaternion::Lerp(const Quaternion& start, const Quaternion& end, float t) {
-    // 線形補間を実行
-    Quaternion result = (start * (1.0f - t)) + (end * t);
 
-    // 結果を正規化して返す（回転なので正規化は重要）
+Quaternion Quaternion::Lerp(const Quaternion& start, const Quaternion& end, const float& t) {
+ 
+    Quaternion result = (start * (1.0f - t)) + (end * t);
     return (result).Normalize();
 }
 
-// Slerp関数（最短距離で補間）
-Quaternion Quaternion::Slerp(const Quaternion& start, Quaternion end, float t) {
+
+Quaternion Quaternion::Slerp(const Quaternion& start, Quaternion end, const float& t) {
 
     float dot = Quaternion::Dot(start, end);
 
@@ -132,7 +121,7 @@ Quaternion Quaternion::Slerp(const Quaternion& start, Quaternion end, float t) {
 
     const float DOT_THRESHOLD = 0.9995f;
     if (dot > DOT_THRESHOLD) {
-        return Lerp(start, end, t); // 線形補間にフォールバック
+        return Lerp(start, end, t); 
     }
 
     float theta_0 = std::acos(dot);

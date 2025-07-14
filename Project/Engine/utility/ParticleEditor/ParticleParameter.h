@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 
+class ModelAnimation;
 class ParticleParameter {
 public:
     enum class EaseType {
@@ -52,6 +53,11 @@ public:
         int32_t numOfFrame;
     };
 
+    struct JointParent {
+        std::string name;
+        const ModelAnimation* animation = nullptr;
+    };
+
     struct Parameters {
         const WorldTransform* parentTransform = nullptr;
         const Vector3* followingPos_          = nullptr;
@@ -75,6 +81,7 @@ public:
         bool isRotateforDirection;
         EaseParm scaleEaseParm;
         UVParm uvParm;
+        JointParent jointParent;
     };
 
 public:

@@ -10,11 +10,18 @@ MonsterBall::MonsterBall() {}
 MonsterBall::~MonsterBall() {}
 
 void MonsterBall::Init() {
+
+    // Animation test
+
+    transform_.Init();
+    obj3D_.reset(Object3d::CreateModel("suzanne.obj"));
+
     modelAnimation_ = std::make_unique<ModelAnimation>();
-    modelAnimation_->Create("SneakWalk.gltf");
+    modelAnimation_->Create("WalkAnimation.gltf");
+    modelAnimation_->Add("Walk.gltf");
 
     modelAnimation2_ = std::make_unique<ModelAnimation>();
-    modelAnimation2_->Create("walk.gltf");
+    modelAnimation2_->Create("Walk.gltf");
 
   
     modelAnimation_->transform_.translation_.y = -5.0f;
@@ -26,18 +33,25 @@ void MonsterBall::Init() {
     modelAnimation2_->transform_.translation_.z = -14.0f;
     modelAnimation2_->transform_.scale_         = {1, 1, 1};
 
-    // イージングセッティング
-    easing_.SetAdaptValue(&transform_.scale_);
+    emitter_.reset(ParticleEmitter::CreateParticlePrimitive("jointTest", PrimitiveType::Plane, 300));
+
+    emitter_->SetParentJoint(modelAnimation_.get(), "mixamorig:RightHand");
+    transform_.SetParentJoint(modelAnimation_.get(), "mixamorig:LeftHand");
+
+    transform_.scale_={33, 33, 33};
+    modelAnimation_->transform_.rotation_.y = 3.14f;
+
 }
 
 void MonsterBall::Update() {
-    if (Input::GetInstance()->PushKey(DIK_E)) {
-        modelAnimation_->Update(Frame::DeltaTime());
-        modelAnimation2_->Update(Frame::DeltaTime());
-    }
+
+    modelAnimation_->Update(Frame::DeltaTime());
+
+    emitter_->Update();
+    emitter_->Emit();
+    emitter_->EditorUpdate();
 
     transform_.UpdateMatrix();
-    transform2_.UpdateMatrix();
 }
 
 void MonsterBall::Draw(ViewProjection& viewProjection) {
@@ -59,8 +73,4 @@ void MonsterBall::Debug() {
         ImGui::PopID();
     }
 #endif // _DEBUG
-}
-
-void MonsterBall::ScaleEasing() {
-    easing_.Update(Frame::DeltaTime());
 }

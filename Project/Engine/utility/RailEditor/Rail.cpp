@@ -3,11 +3,7 @@
 #include "base/SrvManager.h"
 
 void Rail::Init(size_t numObjects) {
-  
     numObjects;
-    //// レールオブジェクト（インスタンス用）の初期化
-    //railObject_.reset(Object3dSRV::CreateModel("EditorRail", ".obj", uint32_t(numObjects), srvManager));
-    //railTransforms_.resize(numObjects); // 必要なインスタンス分だけ確保
 }
 
 void Rail::Update(const std::vector<Vector3>& controlPos) {

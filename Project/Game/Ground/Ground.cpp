@@ -16,9 +16,7 @@ void Ground::Init() {
 	objct3D_.reset(Object3d::CreateModel("Ground",".obj"));
 	transform_.Init();
 	transform_.translation_.y = -10.0f;
-	transform_.scale_ = {1, 1, 1};
-	
-  
+	transform_.scale_ = {1, 1, 1};  
 }
 
 ///========================================================

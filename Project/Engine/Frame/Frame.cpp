@@ -16,7 +16,7 @@ void Frame::Init() {
 }
 
 void Frame::Update() {
-    FixFPS(); // FPS制御を実行
+    FixFPS(); 
 
     // 経過時間（秒）を計算
     auto currentTime = std::chrono::steady_clock::now();
@@ -27,7 +27,7 @@ void Frame::Update() {
 }
 
 float Frame::DeltaTime() {
-    return deltaTime_; // 経過時間を返す
+    return deltaTime_; 
 }
 
 float Frame::DeltaTimeRate() {
@@ -49,7 +49,7 @@ void Frame::FixFPS() {
     if (elapsed < kMinCheckTime) {
         // 1/60秒経過するまで微小なスリープを繰り返す
         while (std::chrono::steady_clock::now() - reference_ < kMinTime) {
-            std::this_thread::sleep_for(std::chrono::microseconds(1)); // 1マイクロ秒スリープ
+            std::this_thread::sleep_for(std::chrono::microseconds(1)); 
         }
     }
 
@@ -60,7 +60,7 @@ void Frame::FixFPS() {
 
 void Frame::SetTimeScale(float scale) {
     if (scale < 0.0f) {
-        scale = 0.0f; // 負の値を防ぐ
+        scale = 0.0f; 
     }
     timeScale_ = scale;
 }

@@ -1,28 +1,38 @@
 #pragma once
 #include "3d/Object3d.h"
-#include"Animation/ModelAnimation.h"
 #include "3d/WorldTransform.h"
-#include"Easing.h"
+#include "Animation/ModelAnimation.h"
+#include "Easing.h"
+#include "utility/ParticleEditor/ParticleEmitter.h"
 class MonsterBall {
 public:
-
 private:
-	// ワールド変換データ
-	WorldTransform transform_;
-    WorldTransform transform2_;
-	// モデル
-	std::unique_ptr<ModelAnimation> modelAnimation_=nullptr;
+    // ワールド変換データ
+    WorldTransform transform_;
+    std::unique_ptr<Object3d> obj3D_;
+
+    // モデル
+    std::unique_ptr<ModelAnimation> modelAnimation_  = nullptr;
     std::unique_ptr<ModelAnimation> modelAnimation2_ = nullptr;
-	Easing<Vector3> easing_;
-	
+    Easing<Vector3> easing_;
+    std::unique_ptr<ParticleEmitter> emitter_;
+
+    ViewProjection* viewProjection_ = nullptr;
+    std::unique_ptr<ParticleParameter> parameters_;
+
+    Vector3 direction_;
+    float objectiveAngle_ = 0.0f;
+    float speed_;
+
 public:
-	MonsterBall();
-	~MonsterBall();
-	void Init();
-	void Update();
-	void Draw(ViewProjection& viewProjection);
+    MonsterBall();
+    ~MonsterBall();
 
-	void Debug();
+    void Init();
+    void Update();
+    void Draw(ViewProjection& viewProjection);
 
-	void ScaleEasing();
+    void Debug();
+    void ScaleEasing();
+
 };
