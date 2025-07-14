@@ -27,22 +27,12 @@ private:
 public:
     MonsterBall();
     ~MonsterBall();
+
     void Init();
     void Update();
     void Draw(ViewProjection& viewProjection);
 
     void Debug();
-
     void ScaleEasing();
 
-    void Move(const float& speed);
-    void Jump(float& speed, const float& fallSpeedLimit, const float& gravity);
-    void Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump);
-    void MoveToLimit();
-    bool GetIsMoving();
-
-private:
-    Vector3 GetInputDirection();
-    void FaceToTarget();
-    void AdaptRotate();
 };

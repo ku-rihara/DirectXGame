@@ -39,7 +39,7 @@ void GameScene::Init() {
 
 void GameScene::Update() {
 
-    /// debugcamera
+    /// debugCamera
     debugCamera_->Update();
     Debug();
 
@@ -49,18 +49,16 @@ void GameScene::Update() {
     plane_->Update();
     skuBox_->Update();
 
-    if (Input::GetInstance()->PushKey(DIK_G)) {
+    putObjForBlender->EasingUpdateSelectGroup(Frame::DeltaTime(), 0);
 
-        putObjForBlender->EasingUpdateSelectGroup(Frame::DeltaTime(), 0);
-    }
-
+    // viewProjection 更新
     ViewProjectionUpdate();
 
     if (input_->TrrigerKey(DIK_RETURN)) {
         SceneManager::GetInstance()->ChangeScene("TITLE");
     }
 
-     ParticleManager::GetInstance()->Update();
+    ParticleManager::GetInstance()->Update();
 }
 
 /// ===================================================

@@ -5,7 +5,7 @@
 #include <memory>
 #include "Vector3.h"
 #include "3d/WorldTransform.h"
-#include "3d/Object3dSRV.h"
+
 
 class Rail {
 private:
@@ -13,7 +13,6 @@ private:
     std::vector<Vector3> controlPosies_;                // 制御点
     std::vector<Vector3> pointsDrawing_;                // 補間された描画点
     float totalRailLength_ = 0.0f;                      // レールの全体長
-    std::unique_ptr<Object3dSRV> railObject_;           // レールオブジェクト (SRVで管理)
     std::list<WorldTransform> railTransforms_;          // レールインスタンス用の変換データ
 
 public:

@@ -289,9 +289,6 @@
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp">
       <Filter>MyEngine\.cpp\utility\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Object3dSRV.cpp">
-      <Filter>MyEngine\.cpp\3d</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Ground\Ground.cpp">
       <Filter>Game\Ground</Filter>
     </ClCompile>
@@ -605,9 +602,6 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h">
       <Filter>MyEngine\.h\utility\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\Object3dSRV.h">
-      <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
     <ClInclude Include="Game\Ground\Ground.h">
       <Filter>Game\Ground</Filter>
