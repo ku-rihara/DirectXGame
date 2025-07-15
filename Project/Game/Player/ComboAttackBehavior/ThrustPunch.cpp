@@ -9,7 +9,7 @@
 #include "Player/Player.h"
 
 // offscreen
-#include "base/FullscreenRenderer.h"
+#include "OffScreen/OffScreenRenderer.h"
 
 /// frame
 #include "Frame/Frame.h"
@@ -189,7 +189,7 @@ void ThrustPunch::ChangeSlow() {
     // デルタタイムスケール小さく
     if (collisionBox_->GetIsSlow() && !istimeSlow_) {
         Frame::SetTimeScale(0.001f);
-        FullscreenRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::GRAY);
+        OffScreenRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::GRAY);
         pPlayer_->SoundStrongPunch();
         pPlayer_->GetGameCamera()->ChangeZoomInOut();
         istimeSlow_ = true;
@@ -202,7 +202,7 @@ void ThrustPunch::ChangeSlow() {
             /// スケール変化
             BaseComboAattackBehavior::ScalingEaseUpdate();
             Frame::SetTimeScale(1.0f);
-            FullscreenRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::NONE);
+            OffScreenRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::NONE);
         }
     }
 }

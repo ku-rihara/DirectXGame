@@ -436,9 +436,6 @@
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp">
       <Filter>MyEngine\.cpp\utility\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Object3dSRV.cpp">
-      <Filter>MyEngine\.cpp\3d</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Scene\TitleScene.cpp">
       <Filter>Game\Scene</Filter>
     </ClCompile>
@@ -658,9 +655,6 @@
     <ClCompile Include="Game\Enemy\Spawner\EnemySpawner.cpp">
       <Filter>Game\Enemy\Spawner</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\FullscreenRenderer.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\utility\RailEditor\ControlPosManager.cpp">
       <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
     </ClCompile>
@@ -826,6 +820,30 @@
     <ClCompile Include="Game\BackGroundObject\GameBackGroundObject.cpp">
       <Filter>Game\BackGroundObject</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\OffScreen\BaseOffScreen.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OffScreen\BoxFilter.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OffScreen\GaussianFilter.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OffScreen\GrayScale.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OffScreen\NormalScreen.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OffScreen\OffScreenRenderer.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OffScreen\RadialBlur.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OffScreen\Vignette.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -968,9 +986,6 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h">
       <Filter>MyEngine\.h\utility\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\Object3dSRV.h">
-      <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\TitleScene.h">
       <Filter>Game\Scene</Filter>
@@ -1191,9 +1206,6 @@
     <ClInclude Include="Game\Enemy\Spawner\EnemySpawner.h">
       <Filter>Game\Enemy\Spawner</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\FullscreenRenderer.h">
-      <Filter>MyEngine\.h\base</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\utility\RailEditor\Rail.h">
       <Filter>MyEngine\.h\utility\RailEditor</Filter>
     </ClInclude>
@@ -1364,6 +1376,27 @@
     </ClInclude>
     <ClInclude Include="Game\BackGroundObject\GameBackGroundObject.h">
       <Filter>Game\BackGroundObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OffScreen\BaseOffScreen.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OffScreen\BoxFilter.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OffScreen\GrayScale.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OffScreen\NormalScreen.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OffScreen\RadialBlur.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OffScreen\OffScreenRenderer.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OffScreen\Vignette.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
