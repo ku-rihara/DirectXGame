@@ -2,7 +2,7 @@
 #include "base/TextureManager.h"
 // class
 #include "utility/ParticleEditor/ParticleManager.h"
-#include "base/FullScreenRenderer.h"
+
 
 // math
 #include "Frame/Frame.h"
