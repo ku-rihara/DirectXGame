@@ -220,7 +220,7 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     rootParameters[9].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[9].Descriptor.ShaderRegister = 6;
 
-     // 2: StructuredBuffer gMatrixPalette (t0, Vertex Shader)
+     //  StructuredBuffer gMatrixPalette 
     rootParameters[10].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[10].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_VERTEX;
     rootParameters[10].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];

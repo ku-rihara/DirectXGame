@@ -328,6 +328,9 @@
     <Filter Include="MyEngine\.h\OffScreen">
       <UniqueIdentifier>{0e04b71b-66a2-4664-b8b2-e3e21a1ebbb6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソースファイル\Lighting">
+      <UniqueIdentifier>{d46e4630-16da-4bbb-b721-ea22f9c06320}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1421,6 +1424,24 @@
     </None>
     <None Include="resources\Shader\SkinningObject3d.hlsli">
       <Filter>リソースファイル</Filter>
+    </None>
+    <None Include="resources\Shader\Lighting\AreaLight.hlsli">
+      <Filter>リソースファイル\Lighting</Filter>
+    </None>
+    <None Include="resources\Shader\Lighting\DirectionalLight.hlsli">
+      <Filter>リソースファイル\Lighting</Filter>
+    </None>
+    <None Include="resources\Shader\Lighting\PointLight.hlsli">
+      <Filter>リソースファイル\Lighting</Filter>
+    </None>
+    <None Include="resources\Shader\Lighting\SpotLight.hlsli">
+      <Filter>リソースファイル\Lighting</Filter>
+    </None>
+    <None Include="resources\Shader\Lighting\AmbientLight.hlsli">
+      <Filter>リソースファイル\Lighting</Filter>
+    </None>
+    <None Include="resources\Shader\Lighting\Light.hlsli">
+      <Filter>リソースファイル\Lighting</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
