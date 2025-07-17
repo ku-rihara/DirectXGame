@@ -53,8 +53,9 @@ PixelShaderOutput main(VertexShaderOutput input)
     float3 reflectedVector = CalculateReflectionVector(toEye, input.normal);
     float4 environmentColor = gEnvironmentTexture.Sample(gSampler, reflectedVector);
 
-    // 基本色
+    // 基本色（テクスチャカラーベース）
     float3 baseColor = gMaterial.color.rgb * textureColor.rgb;
+    
 
     // ライティング計算
     LightingResult lightingResult = (LightingResult) 0;
@@ -66,47 +67,54 @@ PixelShaderOutput main(VertexShaderOutput input)
         {
             lightingResult.diffuse += CalculateDirectionalLightDiffuse(gDirectionalLight, input.normal, gMaterial.color.rgb, textureColor.rgb);
             lightingResult.specular += CalculateDirectionalLightSpecular(gDirectionalLight, input.normal, toEye, gMaterial.shininess);
+            output.color.rgb = CombineLightingResults(lightingResult);
         }
         // halfLambert
-        if (gMaterial.enableLighting == 2)
+        else if (gMaterial.enableLighting == 2)
         {
             lightingResult.diffuse += CalculateDirectionalLightDiffuse(gDirectionalLight, input.normal, gMaterial.color.rgb, textureColor.rgb);
             lightingResult.specular += CalculateDirectionalLightSpecular(gDirectionalLight, input.normal, toEye, gMaterial.shininess);
+            output.color.rgb = CombineLightingResults(lightingResult);
         }
-          // 鏡面反射
-        if (gMaterial.enableLighting == 3)
+        // 鏡面反射
+        else if (gMaterial.enableLighting == 3)
         {
             lightingResult.diffuse += CalculateDirectionalLightDiffuse(gDirectionalLight, input.normal, gMaterial.color.rgb, textureColor.rgb);
             lightingResult.specular += CalculateDirectionalLightSpecular(gDirectionalLight, input.normal, toEye, gMaterial.shininess);
+            output.color.rgb = CombineLightingResults(lightingResult);
         }
-
-           // ポイントライト
-        if (gMaterial.enableLighting == 4)
+        // ポイントライト
+        else if (gMaterial.enableLighting == 4)
         {
             lightingResult.diffuse += CalculatePointLightDiffuse(gPointLight, input.worldPosition, input.normal, gMaterial.color.rgb, textureColor.rgb);
             lightingResult.specular += CalculatePointLightSpecular(gPointLight, input.worldPosition, input.normal, toEye, gMaterial.shininess);
+            output.color.rgb = CombineLightingResults(lightingResult);
         }
-
-          // スポットライト
-        if (gMaterial.enableLighting == 5)
+        // スポットライト
+        else if (gMaterial.enableLighting == 5)
         {
             lightingResult.diffuse += CalculateSpotLightDiffuse(gSpotLight, input.worldPosition, input.normal, gMaterial.color.rgb, textureColor.rgb);
             lightingResult.specular += CalculateSpotLightSpecular(gSpotLight, input.worldPosition, input.normal, toEye, gMaterial.shininess);
+            output.color.rgb = CombineLightingResults(lightingResult);
         }
-
-          // エリアライト
-        if (gMaterial.enableLighting == 6)
+        // エリアライト
+        else if (gMaterial.enableLighting == 6)
         {
             lightingResult.diffuse += CalculateAreaLightDiffuse(gAreaLight, input.worldPosition, input.normal, gMaterial.color.rgb, textureColor.rgb);
             lightingResult.specular += CalculateAreaLightSpecular(gAreaLight, input.worldPosition, input.normal, toEye, gMaterial.shininess);
+            output.color.rgb = CombineLightingResults(lightingResult);
         }
-            // 環境ライト
-        if (gMaterial.enableLighting == 7)
+        // 環境ライト
+        else if (gMaterial.enableLighting == 7)
         {
-            lightingResult.ambient = CalculateAmbientLight(gAmbientLight, gMaterial.color.rgb, textureColor.rgb);
+            // 環境ライトの計算
+            output.color.rgb = CalculateAmbientLight(gAmbientLight, gMaterial.color.rgb, textureColor.rgb);
+            
+            // 方向ライトの計算も追加
+            float3 diffuseDirectionalLight = CalculateDirectionalLightDiffuse(gDirectionalLight, input.normal, gMaterial.color.rgb, textureColor.rgb);
+            float3 specularDirectionalLight = CalculateDirectionalLightSpecular(gDirectionalLight, input.normal, toEye, gMaterial.shininess);
+            output.color.rgb += diffuseDirectionalLight + specularDirectionalLight;
         }
-          // ライティング結果を合成
-        output.color.rgb = CombineLightingResults(lightingResult);
     }
     else
     {
@@ -118,8 +126,7 @@ PixelShaderOutput main(VertexShaderOutput input)
 
     output.color.a = gMaterial.color.a * textureColor.a;
 
-
-      //textureのα値が0の時にPixelを破棄
+    //textureのα値が0の時にPixelを破棄
     if (textureColor.a == 0.0)
     {
         discard;
@@ -136,6 +143,5 @@ PixelShaderOutput main(VertexShaderOutput input)
         discard;
     }
     
-
     return output;
 }
