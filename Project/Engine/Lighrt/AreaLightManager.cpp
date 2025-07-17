@@ -35,12 +35,12 @@ void AreaLightManager::SetLightCommand(ID3D12GraphicsCommandList* commandList) {
 
 void AreaLightManager::DebugImGui() {
 
-    if (ImGui::CollapsingHeader("AreaLight")) {   /// AreaLight
-        // const auto& に変更
+    if (ImGui::CollapsingHeader("AreaLight")) {  
+        
         const auto& areaLights = GetLights();
         for (size_t i = 0; i < areaLights.size(); ++i) {
             if (ImGui::TreeNode(("AreaLight" + std::to_string(i)).c_str())) {
-                //ポインタでアクセスするように変更
+            
                 areaLights[i]->DebugImGui();
                 ImGui::TreePop();
             }

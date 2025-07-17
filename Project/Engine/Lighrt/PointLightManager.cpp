@@ -33,12 +33,12 @@ void PointLightManager::SetLightCommand(ID3D12GraphicsCommandList* commandList) 
 
 void PointLightManager::DebugImGui(){
 
-    if (ImGui::CollapsingHeader("PointLights")) { /// point
-        // const auto& に変更
+    if (ImGui::CollapsingHeader("PointLights")) {
+       
         const auto& pointLights = GetLights();
         for (size_t i = 0; i < pointLights.size(); ++i) {
             if (ImGui::TreeNode(("PointLight" + std::to_string(i)).c_str())) {
-                //ポインタでアクセスするように変更
+             
                 pointLights[i]->DebugImGui();
                 ImGui::TreePop();
             }
