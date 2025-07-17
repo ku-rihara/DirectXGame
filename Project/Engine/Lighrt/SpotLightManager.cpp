@@ -34,12 +34,12 @@ void SpotLightManager::SetLightCommand(ID3D12GraphicsCommandList* commandList) {
 
 void SpotLightManager::DebugImGui() {
 
-    if (ImGui::CollapsingHeader("SpotLights")) {/// spot
-        // const auto& に変更
+    if (ImGui::CollapsingHeader("SpotLights")) {
+      
         const auto& spotLights = GetLights();
         for (size_t i = 0; i < spotLights.size(); ++i) {
             if (ImGui::TreeNode(("SpotLight" + std::to_string(i)).c_str())) {
-                //ポインタでアクセスするように変更
+               
                 spotLights[i]->DebugImGui();
                 ImGui::TreePop();
             }
