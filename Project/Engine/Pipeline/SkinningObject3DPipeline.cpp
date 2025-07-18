@@ -149,7 +149,7 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers_);
 
     // DescriptorRangeを設定
-    D3D12_DESCRIPTOR_RANGE descriptorRange[3] = {};
+    D3D12_DESCRIPTOR_RANGE descriptorRange[5] = {};
 
     // StructuredBuffer用 (t0) - gMatrixPalette
     descriptorRange[0].BaseShaderRegister                = 0;
@@ -168,6 +168,18 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     descriptorRange[2].NumDescriptors                    = 1;
     descriptorRange[2].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
     descriptorRange[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+     // ポイントライトのStructuredBuffer (t2)
+    descriptorRange[3].BaseShaderRegister                = 2;
+    descriptorRange[3].NumDescriptors                    = 1;
+    descriptorRange[3].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorRange[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+    // スポットライトのStructuredBuffer (t3)
+    descriptorRange[4].BaseShaderRegister                = 3;
+    descriptorRange[4].NumDescriptors                    = 1;
+    descriptorRange[4].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorRange[4].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
     // RootParameterを作成
     D3D12_ROOT_PARAMETER rootParameters[11] = {};
@@ -202,14 +214,17 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     rootParameters[5].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[5].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[5].Descriptor.ShaderRegister = 2;
-    // PointLight
-    rootParameters[6].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[6].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[6].Descriptor.ShaderRegister = 3;
-    // SpotLight
-    rootParameters[7].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[7].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[7].Descriptor.ShaderRegister = 4;
+    // 6: PointLights 
+    rootParameters[6].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[6].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[6].DescriptorTable.pDescriptorRanges   = &descriptorRange[3];
+    rootParameters[6].DescriptorTable.NumDescriptorRanges = 1;
+
+    // 7: SpotLights 
+    rootParameters[7].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[7].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[7].DescriptorTable.pDescriptorRanges   = &descriptorRange[4];
+    rootParameters[7].DescriptorTable.NumDescriptorRanges = 1;
     // AreaLight
     rootParameters[8].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[8].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;

@@ -39,6 +39,8 @@ private:
         Matrix4x4 uvMatrix;
         float shininess;
         float environmentCoefficient;
+        int pointLightCount;
+        int spotLightCount;
     };
 
 public:
