@@ -1,10 +1,8 @@
 #include "EngineCore.h"
 /// 2d
 #include "2d/ImGuiManager.h"
-
 /// 3d
 #include "3d/ModelManager.h"
-
 /// base
 #include "base/RtvManager.h"
 #include "base/SkyBoxRenderer.h"
@@ -12,24 +10,21 @@
 #include "base/TextureManager.h"
 #include "base/WinApp.h"
 #include "Dx/DirectXCommon.h"
+#include "Lighrt/Light.h"
+#include "OffScreen/OffScreenRenderer.h"
 #include "Pipeline/Line3DPipeline.h"
 #include "Pipeline/Object3DPiprline.h"
 #include "Pipeline/SkinningObject3DPipeline.h"
 #include "Pipeline/SpritePipeline.h"
-#include"OffScreen/OffScreenRenderer.h"
-
 /// audio,input
 #include "audio/Audio.h"
 #include "input/Input.h"
-
 /// utility
 #include "Pipeline/ParticlePipeline.h"
 #include "utility/ParticleEditor/ParticleManager.h"
-
-/// imgui,function
+/// imGui,function
 #include "function/Convert.h"
 #include <imgui_impl_dx12.h>
-
 /// std
 #include <string>
 
@@ -93,6 +88,9 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     modelManager_ = ModelManager::GetInstance();
     modelManager_->Initialize(directXCommon_);
 
+    light_ = Light::GetInstance();
+    light_->Init(directXCommon_);
+
     // ImGuiManager
     imguiManager_ = ImGuiManager::GetInstance();
     imguiManager_->Init(winApp_.get(), directXCommon_, srvManager_);
@@ -118,7 +116,7 @@ int EngineCore::ProcessMessage() {
 ///========================================================================
 void EngineCore::BeginFrame() {
 #ifdef _DEBUG
-    imguiManager_->Begin(); // imGui begin
+    imguiManager_->Begin();
 #endif
     input_->Update();
 }

@@ -1,4 +1,3 @@
-// Light.cpp
 #include "Light.h"
 #include "AmbientLight.h"
 #include "AreaLightManager.h"
@@ -7,62 +6,95 @@
 #include "PointLightManager.h"
 #include "SpotLightManager.h"
 #include <imgui.h>
-#include <vector>
 
-// Light クラスの実装
 Light* Light::GetInstance() {
     static Light instance;
     return &instance;
 }
 
-void Light::Init(ID3D12Device* device) {
-    directionalLight_ = std::make_unique<DirectionalLight>();
-    directionalLight_->Init(device);
+void Light::Init(DirectXCommon* dxCommon) {
 
-    // 虚面反射-----------------------------------------------------------------------------------------------------------------
-    cameraForGPUResource_ = DirectXCommon::GetInstance()->CreateBufferResource(device, sizeof(CameraForGPU));
+    dxCommon_ = dxCommon;
+
+    // 鏡面反射
+    cameraForGPUResource_ = DirectXCommon::GetInstance()->CreateBufferResource(dxCommon_->GetDevice(), sizeof(CameraForGPU));
     // データを書き込む
     cameraForGPUData_ = nullptr;
     cameraForGPUResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraForGPUData_));
 
+    // ライトカウント
+    lightCountResource_ = DirectXCommon::GetInstance()->CreateBufferResource(dxCommon_->GetDevice(), sizeof(LightCountData));
+    // データを書き込む
+    lightCountData_ = nullptr;
+    lightCountResource_->Map(0, nullptr, reinterpret_cast<void**>(&lightCountData_));
+
+    // 全ライト初期化
+    InitAllLights();
+}
+
+void Light::InitAllLights() {
+
+    directionalLight_ = std::make_unique<DirectionalLight>();
+    directionalLight_->Init(dxCommon_->GetDevice());
+
     pointLightManager_ = std::make_unique<PointLightManager>();
-    pointLightManager_->Init(device); // 初期化を追加
+    pointLightManager_->Init(dxCommon_->GetDevice()); // 初期化を追加
 
     spotLightManager_ = std::make_unique<SpotLightManager>();
-    spotLightManager_->Init(device); // 初期化を追加
+    spotLightManager_->Init(dxCommon_->GetDevice()); // 初期化を追加
 
     areaLightManager_ = std::make_unique<AreaLightManager>();
     ambientLight_     = std::make_unique<AmbientLight>();
-    ambientLight_->Init(device);
+    ambientLight_->Init(dxCommon_->GetDevice());
 
-    // 初期ライトを一つ追加
-    pointLightManager_->Add(device);
-    spotLightManager_->Add(device);
-    areaLightManager_->Add(device);
+    AddSpotLight();
+    AddPointLight();
+    areaLightManager_->Add(dxCommon_->GetDevice());
 }
 
 void Light::DebugImGui() {
     ImGui::Begin("Light");
+
+    // ライトカウント
+    ImGui::SeparatorText("Count");
+    if (ImGui::CollapsingHeader("LightCount")) {
+        ImGui::SeparatorText("ADD");
+        if (ImGui::Button("Add Point Light")) {
+            AddPointLight();
+        }
+        if (ImGui::Button("Add Spot  Light")) {
+            AddSpotLight();
+        }
+
+         /*ImGui::SeparatorText("Remove");
+        if (ImGui::Button("Remove Point Light")) {
+            RemovePointLight();
+        }
+        if (ImGui::Button("Remove Spot  Light")) {
+            RemoveSpotLight();
+        }*/
+
+        // ライト数の表示
+        ImGui::Text("Light Point Count: %zu", pointLightManager_->GetLightCount());
+        ImGui::Text("Light Spot  Count: %zu", spotLightManager_->GetLightCount());
+    }
+
+    ImGui::SeparatorText("Paramater");
+
     ImGui::DragFloat3("WorldCamera", (float*)&cameraForGPUData_->worldPosition_, 0.01f);
     directionalLight_->DebugImGui();
     pointLightManager_->DebugImGui();
     spotLightManager_->DebugImGui();
     areaLightManager_->DebugImGui();
     ambientLight_->DebugImGui();
+
     ImGui::End();
-}
-
-ID3D12Resource* Light::GetDirectionalLightResource() const {
-    return directionalLight_->GetLightResource();
-}
-
-ID3D12Resource* Light::GetCameraForGPUResources() const {
-    return cameraForGPUResource_.Get();
 }
 
 void Light::SetLightCommands(ID3D12GraphicsCommandList* commandList) {
     directionalLight_->SetLightCommand(commandList);
     commandList->SetGraphicsRootConstantBufferView(5, cameraForGPUResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(10, lightCountResource_->GetGPUVirtualAddress());
     pointLightManager_->SetLightCommand(commandList);
     spotLightManager_->SetLightCommand(commandList);
     areaLightManager_->SetLightCommand(commandList);
@@ -73,6 +105,20 @@ void Light::SetWorldCameraPos(const Vector3& pos) {
     cameraForGPUData_->worldPosition_ = pos;
 }
 
-ID3D12Resource* Light::GetCameraForGPUResource() const {
-    return cameraForGPUResource_.Get();
+void Light::AddSpotLight() {
+    spotLightManager_->Add(dxCommon_->GetDevice());
+    lightCountData_->spotLightCount = int(spotLightManager_->GetLightCount());
+}
+void Light::AddPointLight() {
+    pointLightManager_->Add(dxCommon_->GetDevice());
+    lightCountData_->pointLightCount = int(pointLightManager_->GetLightCount());
+}
+
+void Light::RemoveSpotLight(const int&num) {
+    pointLightManager_->Remove(num);
+    lightCountData_->pointLightCount = int(pointLightManager_->GetLightCount());
+}
+void Light::RemovePointLight(const int& num) {
+    pointLightManager_->Remove(num);
+    lightCountData_->pointLightCount = int(pointLightManager_->GetLightCount());
 }

@@ -32,20 +32,18 @@ public:
     void DebugImGui();
 
 private:
-    struct MaterialStructure {
+    struct MaterialData {
         Vector4 color;
         int32_t enableLighting;
         float padding[3];
         Matrix4x4 uvMatrix;
         float shininess;
         float environmentCoefficient;
-        int pointLightCount;
-        int spotLightCount;
     };
 
 public:
     // GPUに送るマテリアルデータの実体
-    MaterialStructure* materialData_ = nullptr;
+    MaterialData* materialData_ = nullptr;
 
 private:
     // GPUリソースへのポインタ

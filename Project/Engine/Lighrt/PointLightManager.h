@@ -20,10 +20,10 @@ public:
     ///  public  method
     ///=========================================================================================
 
-    void Init(ID3D12Device* device); // 初期化メソッドを追加
+    void Init(ID3D12Device* device);
     void Add(ID3D12Device* device);
     void Remove(int index);
-    void UpdateStructuredBuffer(); // Structured Bufferの更新
+    void UpdateStructuredBuffer();
 
     void DebugImGui();
     std::vector<PointLight*> GetLights();

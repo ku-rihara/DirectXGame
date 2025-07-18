@@ -5,10 +5,10 @@
 #include <string>
 
 void SpotLightManager::Init(ID3D12Device* device) {
-    // 最大ライト数を仮定（必要に応じて調整）
-    const uint32_t maxLights = 32;
+    // 最大ライト数を仮定
+    const size_t maxLights = 32;
 
-    // Structured Buffer用のリソースを作成
+    // リソースを作成
     structuredBufferResource_ = DirectXCommon::GetInstance()->CreateBufferResource(
         device, sizeof(SpotLightData) * maxLights);
 
@@ -16,10 +16,10 @@ void SpotLightManager::Init(ID3D12Device* device) {
     structuredBufferData_ = nullptr;
     structuredBufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&structuredBufferData_));
 
-    // SRVManagerからインデックスを取得
+    // インデックスを取得
     srvIndex_ = SrvManager::GetInstance()->Allocate();
 
-    // Structured Buffer用のSRVを作成
+    // SRVを作成
     SrvManager::GetInstance()->CreateSRVforStructuredBuffer(
         srvIndex_,
         structuredBufferResource_.Get(),
@@ -32,7 +32,7 @@ void SpotLightManager::Add(ID3D12Device* device) {
     newLight->Init(device);
     spotLights_.push_back(std::move(newLight));
 
-    // Structured Bufferを更新
+    
     UpdateStructuredBuffer();
 }
 
@@ -40,7 +40,6 @@ void SpotLightManager::Remove(int index) {
     if (index >= 0 && index < spotLights_.size()) {
         spotLights_.erase(spotLights_.begin() + index);
 
-        // Structured Bufferを更新
         UpdateStructuredBuffer();
     }
 }
@@ -64,10 +63,8 @@ void SpotLightManager::SetLightCommand(ID3D12GraphicsCommandList* commandList) {
     // Structured Bufferを更新
     UpdateStructuredBuffer();
 
-    // SRVを設定（ルートパラメータのインデックスは適切に調整してください）
-    commandList->SetGraphicsRootDescriptorTable(
-        7, // ルートパラメータのインデックス
-        SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_));
+    // SRVを設定
+    commandList->SetGraphicsRootDescriptorTable(7,SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_));
 }
 
 void SpotLightManager::DebugImGui() {
@@ -79,11 +76,5 @@ void SpotLightManager::DebugImGui() {
                 ImGui::TreePop();
             }
         }
-        if (ImGui::Button("Add Spot Light")) {
-            Add(DirectXCommon::GetInstance()->GetDevice());
-        }
-
-        // ライト数の表示
-        ImGui::Text("Light Count: %zu", spotLights.size());
     }
 }

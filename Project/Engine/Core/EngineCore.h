@@ -18,6 +18,7 @@ class SkyBoxRenderer;
 class Line3DPipeline;
 class RtvManager;
 class SkinningObject3DPipeline;
+class Light;
 
 class EngineCore {
 public:
@@ -68,4 +69,5 @@ public:
      RtvManager* rtvManager_;
      SkinningObject3DPipeline* skinningObject3DPipeline_;
      OffScreenRenderer* offScreenRenderer_;
+     Light* light_;
 };

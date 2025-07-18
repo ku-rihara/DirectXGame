@@ -8,13 +8,13 @@ void Material::CreateMaterialResource(DirectXCommon* dxCommon) {
     assert(dxCommon);
 
     // マテリアルリソース作成
-    materialResource_ = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(MaterialStructure)); 
+    materialResource_ = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(MaterialData)); 
 
     // マテリアルデータへのポインタ取得
     materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 
     // 初期値をセット
-    materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);  // 初期値を直接ここで設定
+    materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);  
     materialData_->shininess = 9.5f;
     materialData_->uvMatrix = MakeIdentity4x4();
     materialData_->enableLighting = 1;
@@ -34,8 +34,6 @@ void Material::SetCommandList(ID3D12GraphicsCommandList* commandList) {
 void Material::DebugImGui() {
 #ifdef _DEBUG
     ImGui::ColorEdit4("Color", reinterpret_cast<float*>(&materialData_->color)); 
-    ImGui::InputInt("PointNum", &materialData_->pointLightCount);
-    ImGui::InputInt("SpotNum", &materialData_->spotLightCount);
     ImGui::DragFloat("Shininess", &materialData_->shininess, 0.01f);  
     ImGui::DragFloat("environmentCoefficient", &materialData_->environmentCoefficient, 0.01f); 
     const char* lightingModes[] = { "No Lighting", "Lambert", "Half Lambert", "Specular Reflection",

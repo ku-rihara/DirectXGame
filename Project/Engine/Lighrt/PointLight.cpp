@@ -23,7 +23,3 @@ void PointLight::SetPosition(const Vector3& pos) {
     lightData_->position = pos;
 }
 
-void  PointLight::SetLightCommand(ID3D12GraphicsCommandList* commandList, const int& index) {
-    index;
-    commandList->SetGraphicsRootConstantBufferView(6, lightResource_->GetGPUVirtualAddress());
-}

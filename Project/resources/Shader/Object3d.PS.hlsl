@@ -11,8 +11,6 @@ struct Material
     float4x4 uvTransform;
     float shininess;
     float environmentCoefficient;
-    int pointLightCount;
-    int spotLightCount;
 };
 
 struct PixelShaderOutput
@@ -25,30 +23,25 @@ struct Camera
     float3 worldPosition;
 };
 
-//struct LightCounts
-//{
-//    int pointLightCount;
-//    int spotLightCount;
-//};
-
-//鏡面反射
-ConstantBuffer<Camera> gCamera : register(b2);
-
-ConstantBuffer<Material> gMaterial : register(b0);
+struct LightCountData
+{
+    int pointLightCount;
+    int spotLightCount;
+};
 
 // 各種ライトの構造体と定数バッファ
+ConstantBuffer<Material> gMaterial : register(b0);
 ConstantBuffer<DirectionalLight> gDirectionalLight : register(b1);
-//ConstantBuffer<PointLight> gPointLight : register(b3);
-//ConstantBuffer<SpotLight> gSpotLight : register(b4);
-ConstantBuffer<AreaLight> gAreaLight : register(b5);
-ConstantBuffer<AmbientLight> gAmbientLight : register(b6);
+ConstantBuffer<Camera> gCamera : register(b2);
+ConstantBuffer<AreaLight> gAreaLight : register(b3);
+ConstantBuffer<AmbientLight> gAmbientLight : register(b4);
+ConstantBuffer<LightCountData> gLightCountData : register(b5);
 
 TextureCube<float4> gEnvironmentTexture : register(t1);
-
 StructuredBuffer<PointLight> gPointLights : register(t2);
 StructuredBuffer<SpotLight> gSpotLights : register(t3);
 
-//ConstantBuffer<LightCounts> gLightCounts : register(b7);
+
 
 PixelShaderOutput main(VertexShaderOutput input)
 {
@@ -100,7 +93,7 @@ PixelShaderOutput main(VertexShaderOutput input)
         // ポイントライト
         else if (gMaterial.enableLighting == 4)
         {
-            for (int i = 0; i < gMaterial.pointLightCount; ++i)
+            for (int i = 0; i < gLightCountData.pointLightCount; ++i)
             {
                 lightingResult.diffuse += CalculatePointLightDiffuse(gPointLights[i], input.worldPosition, input.normal, gMaterial.color.rgb, textureColor.rgb);
                 lightingResult.specular += CalculatePointLightSpecular(gPointLights[i], input.worldPosition, input.normal, toEye, gMaterial.shininess);
@@ -110,7 +103,7 @@ PixelShaderOutput main(VertexShaderOutput input)
         // スポットライト
         else if (gMaterial.enableLighting == 5)
         {
-            for (int i = 0; i < gMaterial.spotLightCount; ++i)
+            for (int i = 0; i < gLightCountData.spotLightCount; ++i)
             {
                 lightingResult.diffuse += CalculateSpotLightDiffuse(gSpotLights[i], input.worldPosition, input.normal, gMaterial.color.rgb, textureColor.rgb);
                 lightingResult.specular += CalculateSpotLightSpecular(gSpotLights[i], input.worldPosition, input.normal, toEye, gMaterial.shininess);

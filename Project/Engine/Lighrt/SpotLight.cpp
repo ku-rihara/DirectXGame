@@ -1,8 +1,6 @@
 #include "SpotLight.h"
 #include"Dx/DirectXCommon.h"
 #include <imgui.h>
-#include <numbers>
-
 
 void SpotLight::Init(ID3D12Device* device) {
     lightResource_ = DirectXCommon::GetInstance()->CreateBufferResource(device, sizeof(SpotLightData));
@@ -35,7 +33,3 @@ void SpotLight::SetPosition(const Vector3& pos) {
     lightData_->position = pos;
 }
 
-void  SpotLight::SetLightCommand(ID3D12GraphicsCommandList* commandList,const int&index) {
-    index;
-    commandList->SetGraphicsRootConstantBufferView(7, lightResource_->GetGPUVirtualAddress());
-}
