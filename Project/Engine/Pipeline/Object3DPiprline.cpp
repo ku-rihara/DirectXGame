@@ -66,11 +66,11 @@ void Object3DPiprline::CreateGraphicsPipeline() {
     blendDescAdd.RenderTarget[0].BlendOpAlpha          = D3D12_BLEND_OP_ADD;
     blendDescAdd.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
-    // BlendMode::None のブレンド設定を透明度対応に変更
+    // BlendMode None
     D3D12_BLEND_DESC blendDescNone                      = {};
-    blendDescNone.RenderTarget[0].BlendEnable           = TRUE; // ブレンドを有効化
+    blendDescNone.RenderTarget[0].BlendEnable           = TRUE; 
     blendDescNone.RenderTarget[0].SrcBlend              = D3D12_BLEND_SRC_ALPHA;
-    blendDescNone.RenderTarget[0].DestBlend             = D3D12_BLEND_INV_SRC_ALPHA; // 1 - SrcAlpha
+    blendDescNone.RenderTarget[0].DestBlend             = D3D12_BLEND_INV_SRC_ALPHA; 
     blendDescNone.RenderTarget[0].BlendOp               = D3D12_BLEND_OP_ADD;
     blendDescNone.RenderTarget[0].SrcBlendAlpha         = D3D12_BLEND_ONE;
     blendDescNone.RenderTarget[0].DestBlendAlpha        = D3D12_BLEND_ZERO;
@@ -135,20 +135,36 @@ void Object3DPiprline::CreateRootSignature() {
     descriptionRootSignature.pStaticSamplers   = staticSamplers_;
     descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers_);
 
-    D3D12_DESCRIPTOR_RANGE descriptorRange[2]            = {};
-    descriptorRange[0].BaseShaderRegister                = 0; // 0から始まる
-    descriptorRange[0].NumDescriptors                    = 1; // 数は1つ
-    descriptorRange[0].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; // SRVを使う
-    descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND; // Offsetを自動計算
+     // DescriptorRangeの設定
+    D3D12_DESCRIPTOR_RANGE descriptorRange[4] = {};
 
-    descriptorRange[1].BaseShaderRegister                = 1; // 1から始まる
-    descriptorRange[1].NumDescriptors                    = 1; // 数は1つ
-    descriptorRange[1].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; // SRVを使う
-    descriptorRange[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND; // Offsetを自動計算
+    // テクスチャ (t0)
+    descriptorRange[0].BaseShaderRegister                = 0;
+    descriptorRange[0].NumDescriptors                    = 1;
+    descriptorRange[0].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+    // 環境テクスチャ (t1)
+    descriptorRange[1].BaseShaderRegister                = 1;
+    descriptorRange[1].NumDescriptors                    = 1;
+    descriptorRange[1].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorRange[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+    // ポイントライト(t2)
+    descriptorRange[2].BaseShaderRegister                = 2;
+    descriptorRange[2].NumDescriptors                    = 1;
+    descriptorRange[2].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorRange[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+    // スポットライト(t3)
+    descriptorRange[3].BaseShaderRegister                = 3;
+    descriptorRange[3].NumDescriptors                    = 1;
+    descriptorRange[3].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorRange[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 
     // RootParameterを作成
-    D3D12_ROOT_PARAMETER rootParameters[10]      = {};
+    D3D12_ROOT_PARAMETER rootParameters[11]      = {};
     rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
     rootParameters[0].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL; // PxelShaderを使う
     rootParameters[0].Descriptor.ShaderRegister = 0; // レジスタ番号0とバインド
@@ -157,43 +173,54 @@ void Object3DPiprline::CreateRootSignature() {
     rootParameters[1].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX; // VertexShaderを使う
     rootParameters[1].Descriptor.ShaderRegister = 0; // レジスタ番号0とバインド
 
-      // TextureCube（PixelShader）→ t0（DescriptorTable）
+     // TextureCube（PixelShader）→ t0（DescriptorTable）
     rootParameters[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE; // DescriptorTableを使う
     rootParameters[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
     rootParameters[2].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
     rootParameters[2].DescriptorTable.NumDescriptorRanges = 1;
 
-     // TextureCube（PixelShader）→ t1（DescriptorTable）
+    // TextureCube（PixelShader）→ t1（DescriptorTable）
     rootParameters[3].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[3].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[3].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
     rootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
 
-    // Lambart
+    //4 Lambart
     rootParameters[4].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[4].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[4].Descriptor.ShaderRegister = 1;
-    // Half Lambart
+
+    //5 Half Lambart
     rootParameters[5].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[5].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[5].Descriptor.ShaderRegister = 2;
-    // PointLight
-    rootParameters[6].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[6].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[6].Descriptor.ShaderRegister = 3;
-    // SpotLight
-    rootParameters[7].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[7].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[7].Descriptor.ShaderRegister = 4;
-    // AreaLight
+
+    // 6: PointLights 
+    rootParameters[6].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[6].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[6].DescriptorTable.pDescriptorRanges   = &descriptorRange[2];
+    rootParameters[6].DescriptorTable.NumDescriptorRanges = 1;
+
+    // 7: SpotLights 
+    rootParameters[7].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[7].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[7].DescriptorTable.pDescriptorRanges   = &descriptorRange[3];
+    rootParameters[7].DescriptorTable.NumDescriptorRanges = 1;
+
+    // 8 AreaLight
     rootParameters[8].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[8].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[8].Descriptor.ShaderRegister = 5;
+    rootParameters[8].Descriptor.ShaderRegister = 3;
 
-    // AreaLight8
+    //9  ambientLight
     rootParameters[9].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[9].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[9].Descriptor.ShaderRegister = 6;
+    rootParameters[9].Descriptor.ShaderRegister = 4;
+
+    // 10 lightCount
+    rootParameters[10].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[10].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[10].Descriptor.ShaderRegister = 5;
 
     descriptionRootSignature.pParameters   = rootParameters; // ルートパラメーターの配列
     descriptionRootSignature.NumParameters = _countof(rootParameters); // 配列の長さ
