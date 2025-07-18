@@ -4,7 +4,6 @@
 #include <cassert>
 #include <string>
 
-
 Object3DPiprline* Object3DPiprline::GetInstance() {
     static Object3DPiprline instance;
     return &instance;
@@ -54,7 +53,6 @@ void Object3DPiprline::CreateGraphicsPipeline() {
     inputLayoutDesc.pInputElementDescs = inputElementDescs;
     inputLayoutDesc.NumElements        = _countof(inputElementDescs);
 
-   
     // ADD ブレンド設定
     D3D12_BLEND_DESC blendDescAdd                      = {};
     blendDescAdd.RenderTarget[0].BlendEnable           = TRUE;
@@ -68,9 +66,9 @@ void Object3DPiprline::CreateGraphicsPipeline() {
 
     // BlendMode None
     D3D12_BLEND_DESC blendDescNone                      = {};
-    blendDescNone.RenderTarget[0].BlendEnable           = TRUE; 
+    blendDescNone.RenderTarget[0].BlendEnable           = TRUE;
     blendDescNone.RenderTarget[0].SrcBlend              = D3D12_BLEND_SRC_ALPHA;
-    blendDescNone.RenderTarget[0].DestBlend             = D3D12_BLEND_INV_SRC_ALPHA; 
+    blendDescNone.RenderTarget[0].DestBlend             = D3D12_BLEND_INV_SRC_ALPHA;
     blendDescNone.RenderTarget[0].BlendOp               = D3D12_BLEND_OP_ADD;
     blendDescNone.RenderTarget[0].SrcBlendAlpha         = D3D12_BLEND_ONE;
     blendDescNone.RenderTarget[0].DestBlendAlpha        = D3D12_BLEND_ZERO;
@@ -135,7 +133,7 @@ void Object3DPiprline::CreateRootSignature() {
     descriptionRootSignature.pStaticSamplers   = staticSamplers_;
     descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers_);
 
-     // DescriptorRangeの設定
+    // DescriptorRangeの設定
     D3D12_DESCRIPTOR_RANGE descriptorRange[4] = {};
 
     // テクスチャ (t0)
@@ -162,62 +160,64 @@ void Object3DPiprline::CreateRootSignature() {
     descriptorRange[3].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
     descriptorRange[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-
     // RootParameterを作成
-    D3D12_ROOT_PARAMETER rootParameters[11]      = {};
+    D3D12_ROOT_PARAMETER rootParameters[11] = {};
+
+    // 0: Material
     rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
     rootParameters[0].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL; // PxelShaderを使う
     rootParameters[0].Descriptor.ShaderRegister = 0; // レジスタ番号0とバインド
 
+    // 1: TransformationMatrix
     rootParameters[1].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
     rootParameters[1].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX; // VertexShaderを使う
     rootParameters[1].Descriptor.ShaderRegister = 0; // レジスタ番号0とバインド
 
-     // TextureCube（PixelShader）→ t0（DescriptorTable）
+    // 2: Texture2D
     rootParameters[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE; // DescriptorTableを使う
     rootParameters[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
     rootParameters[2].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
     rootParameters[2].DescriptorTable.NumDescriptorRanges = 1;
 
-    // TextureCube（PixelShader）→ t1（DescriptorTable）
+    // 3: TextureCube
     rootParameters[3].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[3].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[3].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
     rootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
 
-    //4 Lambart
+    // 4: Lambert
     rootParameters[4].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[4].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[4].Descriptor.ShaderRegister = 1;
 
-    //5 Half Lambart
+    // 5: Half Lambert
     rootParameters[5].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[5].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[5].Descriptor.ShaderRegister = 2;
 
-    // 6: PointLights 
+    // 6: PointLights
     rootParameters[6].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[6].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[6].DescriptorTable.pDescriptorRanges   = &descriptorRange[2];
     rootParameters[6].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 7: SpotLights 
+    // 7: SpotLights
     rootParameters[7].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[7].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[7].DescriptorTable.pDescriptorRanges   = &descriptorRange[3];
     rootParameters[7].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 8 AreaLight
+    // 8: AreaLight
     rootParameters[8].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[8].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[8].Descriptor.ShaderRegister = 3;
 
-    //9  ambientLight
+    // 9: ambientLight
     rootParameters[9].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[9].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[9].Descriptor.ShaderRegister = 4;
 
-    // 10 lightCount
+    // 10: lightCount
     rootParameters[10].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[10].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[10].Descriptor.ShaderRegister = 5;
@@ -253,6 +253,5 @@ void Object3DPiprline::PreBlendSet(ID3D12GraphicsCommandList* commandList, Blend
     case BlendMode::Add:
         commandList->SetPipelineState(graphicsPipelineStateAdd_.Get());
         break;
-    
     }
 }
