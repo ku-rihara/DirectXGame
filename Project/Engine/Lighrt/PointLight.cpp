@@ -16,7 +16,7 @@ void PointLight::Init(ID3D12Device* device) {
 void PointLight::DebugImGui() {
     ImGui::ColorEdit4("Color", (float*)&lightData_->color);
     ImGui::DragFloat3("Pos", (float*)&lightData_->position, 0.01f);
-    ImGui::DragFloat("intenesity", (float*)&lightData_->intenesity, 0.01f);
+    ImGui::DragFloat("intensity", (float*)&lightData_->intenesity, 0.01f);
     ImGui::DragFloat("radius", (float*)&lightData_->radius, 0.01f);
     ImGui::DragFloat("decay", (float*)&lightData_->decay, 0.01f);
 }
