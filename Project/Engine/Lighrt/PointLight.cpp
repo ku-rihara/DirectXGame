@@ -7,6 +7,8 @@ void PointLight::Init(ID3D12Device* device) {
     lightResource_ = DirectXCommon::GetInstance()->CreateBufferResource(device, sizeof(PointLightData));
     lightData_ = nullptr;
     lightResource_->Map(0, nullptr, reinterpret_cast<void**>(&lightData_));
+    lightData_->radius     = 1.0f;
+    lightData_->decay      = 0.1f;
     lightData_->intenesity = 1.0f;
     lightData_->position.y = 2.0f;
 }
