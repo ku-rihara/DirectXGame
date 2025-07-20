@@ -1,5 +1,6 @@
 #include "object3d.hlsli"
 #include "Lighting/Light.hlsli"
+#include"Lighting/ShadowCalc.hlsli"
 
 Texture2D<float4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
@@ -36,6 +37,7 @@ ConstantBuffer<Camera> gCamera : register(b2);
 ConstantBuffer<AreaLight> gAreaLight : register(b3);
 ConstantBuffer<AmbientLight> gAmbientLight : register(b4);
 ConstantBuffer<LightCountData> gLightCountData : register(b5);
+ConstantBuffer<LightViewProjection> gLightViewProjection : register(b6);
 
 TextureCube<float4> gEnvironmentTexture : register(t1);
 StructuredBuffer<PointLight> gPointLights : register(t2);
@@ -123,10 +125,18 @@ PixelShaderOutput main(VertexShaderOutput input)
             // 環境ライトの計算
             output.color.rgb = CalculateAmbientLight(gAmbientLight, gMaterial.color.rgb, textureColor.rgb);
             
-            // 方向ライトの計算も追加
+            
             float3 diffuseDirectionalLight = CalculateDirectionalLightDiffuse(gDirectionalLight, input.normal, gMaterial.color.rgb, textureColor.rgb);
             float3 specularDirectionalLight = CalculateDirectionalLightSpecular(gDirectionalLight, input.normal, toEye, gMaterial.shininess);
             output.color.rgb += diffuseDirectionalLight + specularDirectionalLight;
+        }
+        //
+        else if (gMaterial.enableLighting == 8)
+        {
+            float shadowFactor = CalculateShadow(float4(input.worldPosition, 1.0f), gLightViewProjection);
+            float3 baseColor = gMaterial.color.rgb * textureColor.rgb;
+
+            output.color.rgb = baseColor * shadowFactor;
         }
     }
     else

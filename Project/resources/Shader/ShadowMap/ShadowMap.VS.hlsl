@@ -1,20 +1,21 @@
-#include "Sprite.hlsli"
+#include"ShadowMap.hlsli"
 
-struct Sprite
+struct WorldMatrix
 {
-    float4x4 WVP;
     float4x4 World;
 };
 
-ConstantBuffer<Sprite> gSprite : register(b0);
+ConstantBuffer<WorldMatrix> gWorldMatrix : register(b0);
+ConstantBuffer<LightMatrix> gLightMatrix : register(b1);
 
-VertexShaderOutput main(VertexShaderInput input)
-{
+
+VertexShaderOutput main(VertexShaderInput input){
     VertexShaderOutput output;
-    
-    output.position = mul(input.position, gSprite.WVP);
-    output.texcoord = input.texcoord;
-    output.normal = normalize(mul(input.normal, (float3x3) gSprite.World));
+
+    float4 worldPos = mul(float4(input.position, 1.0f), gWorldMatrix.World);
+
+    // ライト視点のViewProjectionで変換
+    output.position = mul(worldPos, gLightMatrix.lightViewProjection);
 
     return output;
 }
