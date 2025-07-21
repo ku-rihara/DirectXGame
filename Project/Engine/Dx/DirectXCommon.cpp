@@ -204,7 +204,9 @@ Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DirectXCommon::InitializeDescriptor
     return descriptorHeap;
 }
 
-void DirectXCommon::PreRenderTexture() {}
+void DirectXCommon::PreRenderTexture() {
+   
+}
 
 void DirectXCommon::DepthBarrierTransition() {}
 

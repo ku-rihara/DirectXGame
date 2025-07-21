@@ -4,6 +4,7 @@
 #include "Dx/DirectXCommon.h"
 #include <d3dcommon.h>
 #include <dxcapi.h>
+#include <wrl/client.h>
 
 class Object3DPiprline {
 public:

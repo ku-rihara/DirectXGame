@@ -1,9 +1,9 @@
 #pragma once
 
 #include <memory>
-
-class WinApp;
+#include "base/WinApp.h"
 class DirectXCommon;
+class WinApp;
 class ImGuiManager;
 class TextureManager;
 class SpritePipeline;

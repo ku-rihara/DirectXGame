@@ -1,8 +1,8 @@
 #include "Sprite.h"
-#include"base/WinApp.h"
 #include "Pipeline/SpritePipeline.h"
 #include "base/TextureManager.h"
 #include "Dx/DirectXCommon.h"
+#include"base/WinApp.h"
 #include <imgui.h>
 
 namespace {

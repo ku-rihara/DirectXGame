@@ -8,7 +8,6 @@
 #include "base/SkyBoxRenderer.h"
 #include "base/SrvManager.h"
 #include "base/TextureManager.h"
-#include "base/WinApp.h"
 #include "Dx/DirectXCommon.h"
 #include "Lighrt/Light.h"
 #include "OffScreen/OffScreenRenderer.h"

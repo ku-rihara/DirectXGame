@@ -4,6 +4,7 @@
 #include "Dx/DirectXCommon.h"
 #include <dxcapi.h>
 #include <d3dcommon.h>
+#include <wrl/client.h>
 
 class SkinningObject3DPipeline {
 
