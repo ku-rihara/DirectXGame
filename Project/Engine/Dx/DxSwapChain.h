@@ -1,11 +1,11 @@
 #pragma once
 
+#include <array>
+#include <cstdint>
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <wrl.h>
 #include <wrl/client.h>
-#include <cstdint>
-
 
 class RtvManager;
 class WinApp;
@@ -19,12 +19,16 @@ public:
     void Init(
         Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory,
         Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue,
-        WinApp* winApp,int32_t backBufferWidth,int32_t backBufferHeight);
+        WinApp* winApp, int32_t backBufferWidth, int32_t backBufferHeight);
 
     // RTV作成
     void CreateRenderTargetViews(RtvManager* rtvManager);
     // プレゼント
-    void Present() { swapChain_->Present(1, 0); }
+    void Present();
+
+    // リソース状態管理
+    void UpdateResourceState(UINT index, D3D12_RESOURCE_STATES state);
+    D3D12_RESOURCE_STATES GetResourceState(UINT index) const;
 
     // 終了処理
     void Finalize();
@@ -36,8 +40,10 @@ private:
     D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_;
     HRESULT hr_;
 
+    // リソース状態の追跡
+    std::array<D3D12_RESOURCE_STATES, 2> resourceStates_;
+
 public:
-   
     Microsoft::WRL::ComPtr<IDXGISwapChain4> GetSwapChain() const { return swapChain_; }
     Microsoft::WRL::ComPtr<ID3D12Resource> GetSwapChainResource(int index) const {
         return resources_[index];

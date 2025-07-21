@@ -28,6 +28,9 @@ void DxSwapChain::Init(
         nullptr,
         reinterpret_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
     assert(SUCCEEDED(hr_));
+
+    resourceStates_[0] = D3D12_RESOURCE_STATE_PRESENT;
+    resourceStates_[1] = D3D12_RESOURCE_STATE_PRESENT;
 }
 
 void DxSwapChain::CreateRenderTargetViews(RtvManager* rtvManager) {
@@ -48,6 +51,26 @@ void DxSwapChain::CreateRenderTargetViews(RtvManager* rtvManager) {
     rtvManager->CreateRTV(1, resources_[1].Get(), &rtvDesc_);
 }
 
+void DxSwapChain::Present() {
+    swapChain_->Present(1, 0);
+    // Present後、現在のバックバッファはPRESENT状態になる
+    UpdateResourceState(GetCurrentBackBufferIndex(), D3D12_RESOURCE_STATE_PRESENT);
+}
+
+ // リソース状態管理
+void DxSwapChain::UpdateResourceState(UINT index, D3D12_RESOURCE_STATES state) {
+    if (index < 2) {
+        resourceStates_[index] = state;
+    }
+}
+
+D3D12_RESOURCE_STATES DxSwapChain::GetResourceState(UINT index) const {
+    if (index < 2) {
+        return resourceStates_[index];
+    } else {
+        return D3D12_RESOURCE_STATE_PRESENT;
+    }
+}
 void DxSwapChain::Finalize() {
     for (int i = 0; i < 2; i++) {
         if (resources_[i]) {

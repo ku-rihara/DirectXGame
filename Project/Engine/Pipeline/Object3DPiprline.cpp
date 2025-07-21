@@ -106,7 +106,7 @@ void Object3DPiprline::CreateGraphicsPipeline() {
     pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Object3d.PS.hlsl",L"ps_6_0");
 
     // PSO作成用関数
-    auto CreatePSO = [&](D3D12_BLEND_DESC& blendDesc, Microsoft::WRL::ComPtr<ID3D12PipelineState>& pso) {
+     auto CreatePSO = [&](D3D12_BLEND_DESC& blendDesc, Microsoft::WRL::ComPtr<ID3D12PipelineState>& pso) {
         D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc = {};
         graphicsPipelineStateDesc.pRootSignature                     = rootSignature_.Get();
         graphicsPipelineStateDesc.InputLayout                        = inputLayoutDesc;
