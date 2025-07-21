@@ -19,6 +19,8 @@ void DxRenderTarget::Init(
     backBufferHeight_ = height;
     backBufferWidth_  = width;
 
+    clearColor_ = Vector4(0.2f, 0.2f, 0.2f, 1.0f);
+
     // DSVのデスクリプタサイズを取得
     descriptorSizeDSV_ = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 
@@ -32,6 +34,9 @@ void DxRenderTarget::Init(
 
     // SRVハンドルの作成
     CreateSrvHandle();
+
+    // ビューポートとシザー矩形の初期化
+    SetupViewportAndScissor();
 
     // 初期状態をRENDER_TARGETに設定
     renderTextureCurrentState_ = D3D12_RESOURCE_STATE_RENDER_TARGET;
@@ -90,14 +95,6 @@ void DxRenderTarget::CreateSrvHandle() {
         srvDesc);
 }
 
-///==========================================================
-/// 終了処理
-///==========================================================
-void DxRenderTarget::Finalize() {
-    renderTextureResource_.Reset();
-    depthStencilResource_.Reset();
-    dsvDescriptorHeap_.Reset();
-}
 
 ///==========================================================
 /// レンダーテクスチャリソース作成
@@ -273,34 +270,39 @@ void DxRenderTarget::PutTransitionBarrier(ID3D12Resource* pResource, D3D12_RESOU
 }
 
 void DxRenderTarget::PreDraw() {
+    // これから書き込むバックバッファのインデックスを取得
+    backBufferIndex_ = dxSwapChain_->GetCurrentBackBufferIndex();
 
-    // コマンド実行前のバリア
-    D3D12_RESOURCE_BARRIER barrier{};
-    barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-    barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-    barrier.Transition.pResource   = dxSwapChain_->GetSwapChainResource(dxSwapChain_->GetCurrentBackBufferIndex()).Get();
-    barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-    barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-    barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_RENDER_TARGET;
-    dxCommand_->GetCommandList()->ResourceBarrier(1, &barrier);
+    // 現在の状態がすでにPIXEL_SHADER_RESOURCEでない場合のみ遷移
+    if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE) {
+        PutTransitionBarrier(renderTextureResource_.Get(),renderTextureCurrentState_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+    }
 
-    // ビューポートとシザー矩形の設定
-    dxCommand_->GetCommandList()->RSSetViewports(1, &viewport_);
-    dxCommand_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
+    /*PutTransitionBarrier(renderTextureResource_.Get(),
+        D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_GENERIC_READ);*/
 
-    // レンダーターゲットを設定
-    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(dxSwapChain_->GetCurrentBackBufferIndex());
-    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+    // SwapChain をレンダーターゲットとして使用するためのバリア
+    PutTransitionBarrier(dxSwapChain_->GetSwapChainResource(backBufferIndex_).Get(),
+        D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+    // 描画先のRTVとDSVを設定する (SwapChain)
+    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(backBufferIndex_);
+    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart(); // 深度ステンシルビュー
 
     dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
-
-    // 指定した色で画面全体をクリアする
-    float clearColor[] = {0.2f, 0.2f, 0.2f, 1.0f}; // 黒
-    dxCommand_->GetCommandList()->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
-    ClearDepthBuffer();
+    // レンダーターゲットと深度ステンシルビューをクリア
+    dxCommand_->GetCommandList()->ClearRenderTargetView(rtvHandle, clearValue_.Color, 0, nullptr);
+    // ビューポートとシザー矩形を設定
+    dxCommand_->GetCommandList()->RSSetViewports(1, &viewport_);
+    dxCommand_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
 }
-
 
 void DxRenderTarget::PostDrawTransitionBarrier() {
     PutTransitionBarrier(dxSwapChain_->GetSwapChainResource(dxSwapChain_->GetCurrentBackBufferIndex()).Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+}
+
+void DxRenderTarget::Finalize() {
+    renderTextureResource_.Reset();
+    depthStencilResource_.Reset();
+    dsvDescriptorHeap_.Reset();
 }

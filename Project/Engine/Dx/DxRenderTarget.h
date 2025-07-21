@@ -69,6 +69,8 @@ private:
     D3D12_CLEAR_VALUE clearValue_;
     D3D12_RESOURCE_STATES renderTextureCurrentState_ = D3D12_RESOURCE_STATE_RENDER_TARGET;
 
+   UINT backBufferIndex_;
+
     // ビューポート・シザー矩形
     D3D12_VIEWPORT viewport_{};
     D3D12_RECT scissorRect_{};
