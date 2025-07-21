@@ -2,6 +2,7 @@
 // Function
 #include "function/Log.h"
 #include"TextureManager.h"
+#include"Dx/DxCompiler.h"
 #include <cassert>
 #include <string>
 
@@ -85,13 +86,10 @@ void SkyBoxRenderer::CreateGraphicsPipeline() {
     depthStencilDesc_.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
     // Shaderをコンパイルする
-    vertexShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/SkyBox.VS.hlsl",
-        L"vs_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
+    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/SkyBox.VS.hlsl",L"vs_6_0");
     assert(vertexShaderBlob_ != nullptr);
 
-    pixelShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/SkyBox.PS.hlsl",
-        L"ps_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
-    assert(pixelShaderBlob_ != nullptr);
+    pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/SkyBox.PS.hlsl",L"ps_6_0");
 
     // PSO作成用関数
     D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc = {};

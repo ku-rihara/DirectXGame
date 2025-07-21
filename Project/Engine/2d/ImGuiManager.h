@@ -7,8 +7,6 @@ class DirectXCommon;
 class SrvManager;
 class ImGuiManager {
 public:
-
-    ImGuiManager() = default;
     ~ImGuiManager() = default;
 
     static ImGuiManager* GetInstance();
@@ -20,7 +18,7 @@ public:
     void Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srvManager); // 初期化
 
     void Begin(); // 開始
-    void preDrawa(); // 終わり
+    void preDraw(); // 終わり
     void Finalizer(); // 解放
     void Draw();
 

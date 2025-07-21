@@ -190,6 +190,15 @@
     <Filter Include="リソースファイル\Lighting">
       <UniqueIdentifier>{d46e4630-16da-4bbb-b721-ea22f9c06320}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソースファイル\ShadowMap">
+      <UniqueIdentifier>{94a13b1b-2318-4ca0-b545-9919bc8fb376}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\ShadowMap">
+      <UniqueIdentifier>{894a6aae-3db2-473e-b754-d02e1b291d06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\ShadowMap">
+      <UniqueIdentifier>{be7dc1d9-2066-4322-9d22-0b7e1ff7be19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -489,6 +498,24 @@
     </ClCompile>
     <ClCompile Include="Engine\OffScreen\BoxFilter.cpp">
       <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\ShadowMapPipeline.cpp">
+      <Filter>MyEngine\.cpp\Pileline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Dx\DxCommand.cpp">
+      <Filter>MyEngine\.cpp\Dx</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Dx\DxSwapChain.cpp">
+      <Filter>MyEngine\.cpp\Dx</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Dx\DxRenderTarget.cpp">
+      <Filter>MyEngine\.cpp\Dx</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Dx\DxCompiler.cpp">
+      <Filter>MyEngine\.cpp\Dx</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Dx\DxDevice.cpp">
+      <Filter>MyEngine\.cpp\Dx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -828,6 +855,27 @@
     <ClInclude Include="Engine\OffScreen\BoxFilter.h">
       <Filter>MyEngine\.h\OffScreen</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Pipeline\ShadowMapPipeline.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ShadowMap\ShadowMapData.h">
+      <Filter>MyEngine\.h\ShadowMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Dx\DxSwapChain.h">
+      <Filter>MyEngine\.h\Dx</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Dx\DxRenderTarget.h">
+      <Filter>MyEngine\.h\Dx</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Dx\DxCompiler.h">
+      <Filter>MyEngine\.h\Dx</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Dx\DxDevice.h">
+      <Filter>MyEngine\.h\Dx</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Dx\DxCommand.h">
+      <Filter>MyEngine\.h\Dx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -868,6 +916,12 @@
       <Filter>リソースファイル\Lighting</Filter>
     </None>
     <None Include="resources\Shader\Lighting\Light.hlsli">
+      <Filter>リソースファイル\Lighting</Filter>
+    </None>
+    <None Include="resources\Shader\ShadowMap\ShadowMap.hlsli">
+      <Filter>リソースファイル\ShadowMap</Filter>
+    </None>
+    <None Include="resources\Shader\Lighting\ShadowCalc.hlsli">
       <Filter>リソースファイル\Lighting</Filter>
     </None>
   </ItemGroup>
@@ -928,6 +982,12 @@
     </FxCompile>
     <FxCompile Include="resources\Shader\OffScreen\Dissolve.PS.hlsl">
       <Filter>リソースファイル\OffScreen</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\ShadowMap\ShadowMap.PS.hlsl">
+      <Filter>リソースファイル\ShadowMap</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\ShadowMap\ShadowMap.VS.hlsl">
+      <Filter>リソースファイル\ShadowMap</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

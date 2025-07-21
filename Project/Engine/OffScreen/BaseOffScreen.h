@@ -5,6 +5,7 @@
 #include <dxcapi.h>
 #include <string>
 #include <wrl.h>
+#include <wrl/client.h>
 
 class DirectXCommon;
 

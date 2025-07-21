@@ -1,5 +1,4 @@
 #pragma once
-#include "Dx/DirectXCommon.h"
 #include <d3d12.h>
 #include <DirectXTex.h>
 #include <string>
@@ -7,6 +6,7 @@
 /// std
 #include <unordered_map>
 
+class DirectXCommon;
 class SrvManager;
 class TextureManager {
 private:

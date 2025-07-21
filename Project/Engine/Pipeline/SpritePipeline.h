@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Dx/DirectXCommon.h"
+#include <dxcapi.h>
 
 class SpritePipeline {
 public:

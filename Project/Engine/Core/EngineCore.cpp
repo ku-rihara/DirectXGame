@@ -8,12 +8,12 @@
 #include "base/SkyBoxRenderer.h"
 #include "base/SrvManager.h"
 #include "base/TextureManager.h"
-#include "base/WinApp.h"
 #include "Dx/DirectXCommon.h"
 #include "Lighrt/Light.h"
 #include "OffScreen/OffScreenRenderer.h"
 #include "Pipeline/Line3DPipeline.h"
 #include "Pipeline/Object3DPiprline.h"
+#include "Pipeline/ShadowMapPipeline.h"
 #include "Pipeline/SkinningObject3DPipeline.h"
 #include "Pipeline/SpritePipeline.h"
 /// audio,input
@@ -35,6 +35,7 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     // ゲームウィンドウの作成
     std::string windowTitle = std::string(title);
     auto&& titleString      = ConvertString(windowTitle);
+
     winApp_                 = std::make_unique<WinApp>();
     winApp_->MakeWindow(titleString.c_str(), width, height);
 
@@ -42,16 +43,15 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     directXCommon_ = DirectXCommon::GetInstance();
     directXCommon_->Init(winApp_.get(), width, height);
 
+    // rtvManager
     rtvManager_ = RtvManager::GetInstance();
     rtvManager_->Init(directXCommon_);
 
-    directXCommon_->InitRenderingResources();
-
-    // srvManager
+     // srvManager
     srvManager_ = SrvManager::GetInstance();
     srvManager_->Init(directXCommon_);
 
-    directXCommon_->CreateRnderSrvHandle();
+    directXCommon_->InitRenderingResources();
 
     // TextureManager
     textureManager_ = TextureManager::GetInstance();
@@ -83,6 +83,9 @@ void EngineCore::Initialize(const char* title, int width, int height) {
 
     Line3DPipeline_ = Line3DPipeline::GetInstance();
     Line3DPipeline_->Init(directXCommon_);
+
+    shadowMapPipeline_ = ShadowMapPipeline::GetInstance();
+    shadowMapPipeline_->Init(directXCommon_);
 
     // ModelManager
     modelManager_ = ModelManager::GetInstance();
@@ -140,7 +143,7 @@ void EngineCore::PreDraw() {
 void EngineCore::EndFrame() {
 #ifdef _DEBUG
 
-    imguiManager_->preDrawa();
+    imguiManager_->preDraw();
     imguiManager_->Draw();
 #endif
 
