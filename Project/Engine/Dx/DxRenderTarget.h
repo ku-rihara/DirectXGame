@@ -25,6 +25,7 @@ public:
     void SetupViewportAndScissor();
     void PreDraw();
     void ClearDepthBuffer();
+    void PutTransitionBarrier(ID3D12Resource* pResource, D3D12_RESOURCE_STATES Before, D3D12_RESOURCE_STATES After);
 
     // SRVハンドル作成
     void CreateSrvHandle();

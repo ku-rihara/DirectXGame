@@ -28,7 +28,6 @@ void DirectXCommon::Init(WinApp* win, int32_t backBufferWidth, int32_t backBuffe
 
     // DirectXクラス群の初期化
     InitDxClasses();
-    SetupViewportAndScissor();
 }
 
 void DirectXCommon::InitDxClasses() {
@@ -52,13 +51,14 @@ void DirectXCommon::InitRenderingResources() {
     dxRenderTarget_->Init(dxDevice_->GetDevice(), rtvManager_, srvManager_, dxCommand_.get(), dxSwapChain_.get(), backBufferWidth_, backBufferHeight_);
 }
 
-void DirectXCommon::CreateGraphicPipeline() {}
-
 
 void DirectXCommon::PreDraw() {
     dxRenderTarget_->PreDraw();
 }
 
+void DirectXCommon::PreRenderTexture() {
+    dxRenderTarget_->PreRenderTexture();
+}
 
 void DirectXCommon::PostDraw() {
     // コマンド実行後のバリア
@@ -81,7 +81,6 @@ void DirectXCommon::PostDraw() {
     dxCommand_->WaitForGPU();
     dxCommand_->ResetCommand();
 }
-
 
 Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(Microsoft::WRL::ComPtr<ID3D12Device> device, size_t sizeInBytes) {
     //  リソース設定
@@ -147,17 +146,6 @@ Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DirectXCommon::InitializeDescriptor
 }
 
 void DirectXCommon::DepthBarrierTransition() {}
-
-void DirectXCommon::PutTransitionBarrier(ID3D12Resource* pResource, D3D12_RESOURCE_STATES Before, D3D12_RESOURCE_STATES After) {
-    D3D12_RESOURCE_BARRIER BarrierDesc{};
-    BarrierDesc.Transition.pResource   = pResource;
-    BarrierDesc.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-    BarrierDesc.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-    BarrierDesc.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-    BarrierDesc.Transition.StateBefore = Before;
-    BarrierDesc.Transition.StateAfter  = After;
-    dxCommand_->GetCommandList()->ResourceBarrier(1, &BarrierDesc);
-}
 
 D3D12_CPU_DESCRIPTOR_HANDLE DirectXCommon::GetCPUDescriptorHandle(
     Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap,

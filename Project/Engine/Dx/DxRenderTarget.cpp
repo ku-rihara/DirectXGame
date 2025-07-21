@@ -237,10 +237,9 @@ void DxRenderTarget::PreRenderTexture() {
 
     // 現在の状態がすでにRENDER_TARGETでない場合のみ遷移
     if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_RENDER_TARGET) {
-        PutTransitionBarrier(renderTextureResource_.Get(),
-            renderTextureCurrentState_, D3D12_RESOURCE_STATE_RENDER_TARGET);
-        renderTextureCurrentState_ = D3D12_RESOURCE_STATE_RENDER_TARGET;
+        PutTransitionBarrier(renderTextureResource_.Get(),renderTextureCurrentState_, D3D12_RESOURCE_STATE_RENDER_TARGET);
     }
+
     D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(2);
 
     dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
@@ -266,4 +265,22 @@ void DxRenderTarget::SetupViewportAndScissor() {
     scissorRect_.right  = int32_t(backBufferWidth_);
     scissorRect_.top    = 0;
     scissorRect_.bottom = int32_t(backBufferHeight_);
+}
+
+void DxRenderTarget::PutTransitionBarrier(ID3D12Resource* pResource, D3D12_RESOURCE_STATES Before, D3D12_RESOURCE_STATES After) {
+    D3D12_RESOURCE_BARRIER barrier{};
+    // 今回のバリアはTransition
+    barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+    // Noneにしておく
+    barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+    // バリアを張る対象のリソース。現在のバックバッファに対して行う
+    barrier.Transition.pResource = pResource;
+    // 遷移前(現在)のResourceState
+    barrier.Transition.StateBefore = Before;
+    // 遷移後のResourceState
+    barrier.Transition.StateAfter = After;
+    // TransitionBarrierを張る
+    dxCommand_->GetCommandList()->ResourceBarrier(1, &barrier);
+
+    renderTextureCurrentState_ = After;
 }

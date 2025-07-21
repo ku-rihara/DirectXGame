@@ -44,7 +44,6 @@ public:
     void Init(WinApp* win, int32_t backBufferWidth = 1280, int32_t backBufferHeight = 720);
     void InitRenderingResources();
 
-    void CreateGraphicPipeline();
     void PreDraw();
     void ClearDepthBuffer();
     void PostDraw();
@@ -63,8 +62,7 @@ public:
     /// レンダーテクスチャ関連
     void PreRenderTexture();
     void DepthBarrierTransition();
-    void PutTransitionBarrier(ID3D12Resource* pResource, D3D12_RESOURCE_STATES Before, D3D12_RESOURCE_STATES After);
-
+   
 private:
     ImGuiManager* imguiManager_     = nullptr;
     TextureManager* textureManager_ = nullptr;
