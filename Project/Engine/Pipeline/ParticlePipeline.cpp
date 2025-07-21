@@ -1,4 +1,5 @@
 #include"ParticlePipeline.h"
+#include"Dx/DxCompiler.h"
 //Function
 #include"function/Log.h"
 #include"base/Material.h"
@@ -134,12 +135,10 @@ void ParticlePipeline::CreateGraphicsPipeline() {
 	depthStencilDesc_.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
 	//ShaderをコンパイルするParticle
-	vertexShaderBlob_ = pDxCommon_->CompileShader(L"resources/Shader/Particle.VS.hlsl",
-		L"vs_6_0", pDxCommon_->GetDxcUtils(), pDxCommon_->GetDxcCompiler(), pDxCommon_->GetIncludeHandler());
+    vertexShaderBlob_ = pDxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Particle.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob_ != nullptr);
 
-	pixelShaderBlob_ = pDxCommon_->CompileShader(L"resources/Shader/Particle.PS.hlsl",
-		L"ps_6_0", pDxCommon_->GetDxcUtils(), pDxCommon_->GetDxcCompiler(), pDxCommon_->GetIncludeHandler());
+	pixelShaderBlob_ = pDxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Particle.PS.hlsl",L"ps_6_0");
 	assert(pixelShaderBlob_ != nullptr);
 
 	// PSO作成用関数

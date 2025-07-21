@@ -1,9 +1,9 @@
 #pragma once
 
 #include <memory>
-
-class WinApp;
+#include "base/WinApp.h"
 class DirectXCommon;
+class WinApp;
 class ImGuiManager;
 class TextureManager;
 class SpritePipeline;
@@ -18,6 +18,8 @@ class SkyBoxRenderer;
 class Line3DPipeline;
 class RtvManager;
 class SkinningObject3DPipeline;
+class Light;
+class ShadowMapPipeline;
 
 class EngineCore {
 public:
@@ -68,4 +70,6 @@ public:
      RtvManager* rtvManager_;
      SkinningObject3DPipeline* skinningObject3DPipeline_;
      OffScreenRenderer* offScreenRenderer_;
+     Light* light_;
+     ShadowMapPipeline* shadowMapPipeline_;
 };

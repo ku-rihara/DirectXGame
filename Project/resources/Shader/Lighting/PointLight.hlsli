@@ -1,11 +1,11 @@
 
 struct PointLight
 {
-    float4 color; //ライトの色
-    float3 position; //ライトの位置
+    float4 color;     //ライトの色
+    float3 position;  //ライトの位置
     float intenesity; //輝度
-    float radius; //ライトの幅
-    float decay; //減衰率
+    float radius;     //ライトの幅
+    float decay;      //減衰率
 };
 
 // ポイントライトの減衰計算

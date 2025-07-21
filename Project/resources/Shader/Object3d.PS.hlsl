@@ -1,5 +1,6 @@
 #include "object3d.hlsli"
 #include "Lighting/Light.hlsli"
+#include"Lighting/ShadowCalc.hlsli"
 
 Texture2D<float4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
@@ -17,23 +18,31 @@ struct PixelShaderOutput
 {
     float4 color : SV_TARGET0;
 };
+
 struct Camera
 {
     float3 worldPosition;
 };
-//鏡面反射
-ConstantBuffer<Camera> gCamera : register(b2);
 
-ConstantBuffer<Material> gMaterial : register(b0);
+struct LightCountData
+{
+    int pointLightCount;
+    int spotLightCount;
+};
 
 // 各種ライトの構造体と定数バッファ
+ConstantBuffer<Material> gMaterial : register(b0);
 ConstantBuffer<DirectionalLight> gDirectionalLight : register(b1);
-ConstantBuffer<PointLight> gPointLight : register(b3);
-ConstantBuffer<SpotLight> gSpotLight : register(b4);
-ConstantBuffer<AreaLight> gAreaLight : register(b5);
-ConstantBuffer<AmbientLight> gAmbientLight : register(b6);
+ConstantBuffer<Camera> gCamera : register(b2);
+ConstantBuffer<AreaLight> gAreaLight : register(b3);
+ConstantBuffer<AmbientLight> gAmbientLight : register(b4);
+ConstantBuffer<LightCountData> gLightCountData : register(b5);
+ConstantBuffer<LightViewProjection> gLightViewProjection : register(b6);
 
 TextureCube<float4> gEnvironmentTexture : register(t1);
+StructuredBuffer<PointLight> gPointLights : register(t2);
+StructuredBuffer<SpotLight> gSpotLights : register(t3);
+
 
 
 PixelShaderOutput main(VertexShaderOutput input)
@@ -86,15 +95,21 @@ PixelShaderOutput main(VertexShaderOutput input)
         // ポイントライト
         else if (gMaterial.enableLighting == 4)
         {
-            lightingResult.diffuse += CalculatePointLightDiffuse(gPointLight, input.worldPosition, input.normal, gMaterial.color.rgb, textureColor.rgb);
-            lightingResult.specular += CalculatePointLightSpecular(gPointLight, input.worldPosition, input.normal, toEye, gMaterial.shininess);
+            for (int i = 0; i < gLightCountData.pointLightCount; ++i)
+            {
+                lightingResult.diffuse += CalculatePointLightDiffuse(gPointLights[i], input.worldPosition, input.normal, gMaterial.color.rgb, textureColor.rgb);
+                lightingResult.specular += CalculatePointLightSpecular(gPointLights[i], input.worldPosition, input.normal, toEye, gMaterial.shininess);
+            }
             output.color.rgb = CombineLightingResults(lightingResult);
         }
         // スポットライト
         else if (gMaterial.enableLighting == 5)
         {
-            lightingResult.diffuse += CalculateSpotLightDiffuse(gSpotLight, input.worldPosition, input.normal, gMaterial.color.rgb, textureColor.rgb);
-            lightingResult.specular += CalculateSpotLightSpecular(gSpotLight, input.worldPosition, input.normal, toEye, gMaterial.shininess);
+            for (int i = 0; i < gLightCountData.spotLightCount; ++i)
+            {
+                lightingResult.diffuse += CalculateSpotLightDiffuse(gSpotLights[i], input.worldPosition, input.normal, gMaterial.color.rgb, textureColor.rgb);
+                lightingResult.specular += CalculateSpotLightSpecular(gSpotLights[i], input.worldPosition, input.normal, toEye, gMaterial.shininess);
+            }
             output.color.rgb = CombineLightingResults(lightingResult);
         }
         // エリアライト
@@ -110,10 +125,18 @@ PixelShaderOutput main(VertexShaderOutput input)
             // 環境ライトの計算
             output.color.rgb = CalculateAmbientLight(gAmbientLight, gMaterial.color.rgb, textureColor.rgb);
             
-            // 方向ライトの計算も追加
+            
             float3 diffuseDirectionalLight = CalculateDirectionalLightDiffuse(gDirectionalLight, input.normal, gMaterial.color.rgb, textureColor.rgb);
             float3 specularDirectionalLight = CalculateDirectionalLightSpecular(gDirectionalLight, input.normal, toEye, gMaterial.shininess);
             output.color.rgb += diffuseDirectionalLight + specularDirectionalLight;
+        }
+        //
+        else if (gMaterial.enableLighting == 8)
+        {
+            float shadowFactor = CalculateShadow(float4(input.worldPosition, 1.0f), gLightViewProjection);
+            float3 baseColor = gMaterial.color.rgb * textureColor.rgb;
+
+            output.color.rgb = baseColor * shadowFactor;
         }
     }
     else

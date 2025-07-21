@@ -1,5 +1,6 @@
 #include "BaseOffScreen.h"
 #include "Dx/DirectXCommon.h"
+#include"Dx/DxCompiler.h"
 #include "function/Log.h"
 #include <cassert>
 #include <d3dx12.h>
@@ -16,14 +17,9 @@ void BaseOffScreen::CreateGraphicsPipeline() {
     CreateRootSignature();
 
     // vs
-    vertexShaderBlob_ = dxCommon_->CompileShader(
-        vsName_, L"vs_6_0", dxCommon_->GetDxcUtils(),
-        dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
-
+    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(vsName_, L"vs_6_0");
     // ps
-    pixelShaderBlob_ = dxCommon_->CompileShader(
-        psName_, L"ps_6_0", dxCommon_->GetDxcUtils(), 
-        dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
+    pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(psName_, L"ps_6_0");
 
     D3D12_GRAPHICS_PIPELINE_STATE_DESC desc{};
     desc.pRootSignature        = rootSignature_.Get();

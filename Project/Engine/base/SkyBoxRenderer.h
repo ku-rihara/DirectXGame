@@ -3,6 +3,7 @@
 #include"Dx/DirectXCommon.h"
 #include <cstdint>
 #include <string>
+#include <dxcapi.h>
 
 class SkyBoxRenderer {
 public: 
@@ -26,8 +27,8 @@ public:
 private:
     DirectXCommon* dxCommon_;
 
-private: 
-
+private:
+   
     D3D12_STATIC_SAMPLER_DESC staticSamplers_[1];
     // グラフィックパイプライン関連
     // object

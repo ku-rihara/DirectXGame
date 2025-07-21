@@ -10,7 +10,6 @@ struct PointLightData {
     float intenesity; // 輝度
     float radius;     // ライトの幅
     float decay;      // 減衰率
-    float padding[2];
 };
 
 class PointLight {
@@ -23,8 +22,7 @@ public:
     ~PointLight() = default;
 
     void Init(ID3D12Device* device);
-    void SetLightCommand(ID3D12GraphicsCommandList* commandList, const int& index);
-
+   
     ID3D12Resource* GetLightResource() const { return lightResource_.Get(); }
 
     void SetPosition(const Vector3& pos);

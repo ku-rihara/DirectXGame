@@ -46,7 +46,7 @@ void AreaLightManager::DebugImGui() {
             }
         }
         if (ImGui::Button("Add Area Light")) {
-            Add(DirectXCommon::GetInstance()->GetDevice());
+            Add(DirectXCommon::GetInstance()->GetDevice().Get());
         }
     }
 }

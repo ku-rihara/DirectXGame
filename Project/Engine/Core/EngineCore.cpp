@@ -1,35 +1,30 @@
 #include "EngineCore.h"
 /// 2d
 #include "2d/ImGuiManager.h"
-
 /// 3d
 #include "3d/ModelManager.h"
-
 /// base
 #include "base/RtvManager.h"
 #include "base/SkyBoxRenderer.h"
 #include "base/SrvManager.h"
 #include "base/TextureManager.h"
-#include "base/WinApp.h"
 #include "Dx/DirectXCommon.h"
+#include "Lighrt/Light.h"
+#include "OffScreen/OffScreenRenderer.h"
 #include "Pipeline/Line3DPipeline.h"
 #include "Pipeline/Object3DPiprline.h"
+#include "Pipeline/ShadowMapPipeline.h"
 #include "Pipeline/SkinningObject3DPipeline.h"
 #include "Pipeline/SpritePipeline.h"
-#include"OffScreen/OffScreenRenderer.h"
-
 /// audio,input
 #include "audio/Audio.h"
 #include "input/Input.h"
-
 /// utility
 #include "Pipeline/ParticlePipeline.h"
 #include "utility/ParticleEditor/ParticleManager.h"
-
-/// imgui,function
+/// imGui,function
 #include "function/Convert.h"
 #include <imgui_impl_dx12.h>
-
 /// std
 #include <string>
 
@@ -40,6 +35,7 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     // ゲームウィンドウの作成
     std::string windowTitle = std::string(title);
     auto&& titleString      = ConvertString(windowTitle);
+
     winApp_                 = std::make_unique<WinApp>();
     winApp_->MakeWindow(titleString.c_str(), width, height);
 
@@ -47,16 +43,15 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     directXCommon_ = DirectXCommon::GetInstance();
     directXCommon_->Init(winApp_.get(), width, height);
 
+    // rtvManager
     rtvManager_ = RtvManager::GetInstance();
     rtvManager_->Init(directXCommon_);
 
-    directXCommon_->InitRenderingResources();
-
-    // srvManager
+     // srvManager
     srvManager_ = SrvManager::GetInstance();
     srvManager_->Init(directXCommon_);
 
-    directXCommon_->CreateRnderSrvHandle();
+    directXCommon_->InitRenderingResources();
 
     // TextureManager
     textureManager_ = TextureManager::GetInstance();
@@ -89,9 +84,15 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     Line3DPipeline_ = Line3DPipeline::GetInstance();
     Line3DPipeline_->Init(directXCommon_);
 
+    shadowMapPipeline_ = ShadowMapPipeline::GetInstance();
+    shadowMapPipeline_->Init(directXCommon_);
+
     // ModelManager
     modelManager_ = ModelManager::GetInstance();
     modelManager_->Initialize(directXCommon_);
+
+    light_ = Light::GetInstance();
+    light_->Init(directXCommon_);
 
     // ImGuiManager
     imguiManager_ = ImGuiManager::GetInstance();
@@ -118,7 +119,7 @@ int EngineCore::ProcessMessage() {
 ///========================================================================
 void EngineCore::BeginFrame() {
 #ifdef _DEBUG
-    imguiManager_->Begin(); // imGui begin
+    imguiManager_->Begin();
 #endif
     input_->Update();
 }
@@ -142,7 +143,7 @@ void EngineCore::PreDraw() {
 void EngineCore::EndFrame() {
 #ifdef _DEBUG
 
-    imguiManager_->preDrawa();
+    imguiManager_->preDraw();
     imguiManager_->Draw();
 #endif
 

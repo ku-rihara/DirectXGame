@@ -12,7 +12,6 @@
 
 void ModelCommon::Init(DirectXCommon* dxCommon) {
     dxCommon_ = dxCommon;
-    Light::GetInstance()->Init(dxCommon_->GetDevice());
 }
 
 Model::~Model() {
@@ -235,7 +234,7 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Ma
 
     material.SetCommandList(commandList);
 
-    // 定数バッファ（WVPなど）
+    // 定数バッファ
     commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 
     // テクスチャ
@@ -248,7 +247,7 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Ma
     // 環境マップ
     uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
     commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
-    commandList->SetGraphicsRootDescriptorTable(10, skinCluster.paletteSrvHandle.second);
+    commandList->SetGraphicsRootDescriptorTable(13, skinCluster.paletteSrvHandle.second);
 
     // ライト
     Light::GetInstance()->SetLightCommands(commandList);

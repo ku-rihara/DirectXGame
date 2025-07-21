@@ -2,6 +2,7 @@
 
 /// base
 #include "Dx/DirectXCommon.h"
+#include <vector>
 
 /// SRV管理
 class SrvManager {
