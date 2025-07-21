@@ -79,7 +79,7 @@ void DxDevice::SetupDebugLayer() {
 }
 
 void DxDevice::Finalize() {
-  /*  if (device_) {
+    if (device_) {
         device_.Reset();
     }
     if (useAdapter_) {
@@ -87,5 +87,5 @@ void DxDevice::Finalize() {
     }
     if (dxgiFactory_) {
         dxgiFactory_.Reset();
-    }*/
+    }
 }

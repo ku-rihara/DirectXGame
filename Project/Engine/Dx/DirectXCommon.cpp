@@ -2,7 +2,7 @@
 #include "base/RtvManager.h"
 #include "base/SrvManager.h"
 #include "base/WinApp.h"
-#include"Frame/Frame.h"
+#include "Frame/Frame.h"
 // dx
 #include "DxCommand.h"
 #include "DxCompiler.h"
@@ -53,7 +53,6 @@ void DirectXCommon::InitRenderingResources() {
     dxSwapChain_->CreateRenderTargetViews(rtvManager_);
     dxRenderTarget_->Init(dxDevice_->GetDevice(), rtvManager_, srvManager_, dxCommand_.get(), dxSwapChain_.get(), backBufferWidth_, backBufferHeight_);
 }
-
 
 void DirectXCommon::PreDraw() {
     dxRenderTarget_->PreDraw();
@@ -116,7 +115,6 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(Micro
     return resource;
 }
 
-
 Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DirectXCommon::InitializeDescriptorHeap(
     Microsoft::WRL::ComPtr<ID3D12Device> device,
     D3D12_DESCRIPTOR_HEAP_TYPE heapType,
@@ -176,11 +174,11 @@ D3D12_CPU_DESCRIPTOR_HANDLE DirectXCommon::GetRenderTextureCPUSrvHandle() const 
 
 void DirectXCommon::Finalize() {
 
-    dxRenderTarget_->Finalize();
-    dxSwapChain_->Finalize();
+    dxCompiler_->Finalize();
     dxCommand_->Finalize();
     dxDevice_->Finalize();
-    dxCompiler_->Finalize();
+    dxSwapChain_->Finalize();
+    dxRenderTarget_->Finalize();
 
     CloseWindow(winApp_->GetHwnd());
 }

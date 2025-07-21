@@ -79,7 +79,7 @@ Microsoft::WRL::ComPtr<IDxcBlob> DxCompiler::CompileShader(
 }
 
 void DxCompiler::Finalize() {
-   /* if (dxcCompiler_) {
+    if (dxcCompiler_) {
         dxcCompiler_.Reset();
     }
     if (dxcUtils_) {
@@ -87,5 +87,5 @@ void DxCompiler::Finalize() {
     }
     if (includeHandler_) {
         includeHandler_.Reset();
-    }*/
+    }
 }

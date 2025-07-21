@@ -70,7 +70,5 @@ void DxCommand::Finalize() {
     if (fence_) {
         fence_.Reset();
     }
-    if (fenceEvent_) {
-        CloseHandle(fenceEvent_);
-    }
+ 
 }

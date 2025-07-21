@@ -94,9 +94,9 @@ void DxRenderTarget::CreateSrvHandle() {
 /// 終了処理
 ///==========================================================
 void DxRenderTarget::Finalize() {
-   /* renderTextureResource_.Reset();
+    renderTextureResource_.Reset();
     depthStencilResource_.Reset();
-    dsvDescriptorHeap_.Reset();*/
+    dsvDescriptorHeap_.Reset();
 }
 
 ///==========================================================
