@@ -49,12 +49,12 @@ void DxSwapChain::CreateRenderTargetViews(RtvManager* rtvManager) {
 }
 
 void DxSwapChain::Finalize() {
-   /* for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         if (resources_[i]) {
             resources_[i].Reset();
         }
     }
     if (swapChain_) {
         swapChain_.Reset();
-    }*/
+    }
 }

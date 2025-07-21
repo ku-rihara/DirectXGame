@@ -52,8 +52,6 @@ public:
     // リソースの作成
     Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(Microsoft::WRL::ComPtr<ID3D12Device> device, size_t sizeInBytes);
 
-    void commandExecution(Microsoft::WRL::ComPtr<ID3D12Resource>& intermediateResource);
-
     // DescriptorHeapの作成
     Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> InitializeDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device> device,
         D3D12_DESCRIPTOR_HEAP_TYPE heapType,UINT numDescriptors,bool shaderVisible);

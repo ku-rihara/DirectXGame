@@ -181,4 +181,6 @@ void DirectXCommon::Finalize() {
     dxCommand_->Finalize();
     dxDevice_->Finalize();
     dxCompiler_->Finalize();
+
+    CloseWindow(winApp_->GetHwnd());
 }
