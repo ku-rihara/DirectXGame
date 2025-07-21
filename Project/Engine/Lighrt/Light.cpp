@@ -35,21 +35,21 @@ void Light::Init(DirectXCommon* dxCommon) {
 void Light::InitAllLights() {
 
     directionalLight_ = std::make_unique<DirectionalLight>();
-    directionalLight_->Init(dxCommon_->GetDevice());
+    directionalLight_->Init(dxCommon_->GetDevice().Get());
 
     pointLightManager_ = std::make_unique<PointLightManager>();
-    pointLightManager_->Init(dxCommon_->GetDevice()); // 初期化を追加
+    pointLightManager_->Init(dxCommon_->GetDevice().Get()); // 初期化を追加
 
     spotLightManager_ = std::make_unique<SpotLightManager>();
-    spotLightManager_->Init(dxCommon_->GetDevice()); // 初期化を追加
+    spotLightManager_->Init(dxCommon_->GetDevice().Get()); // 初期化を追加
 
     areaLightManager_ = std::make_unique<AreaLightManager>();
     ambientLight_     = std::make_unique<AmbientLight>();
-    ambientLight_->Init(dxCommon_->GetDevice());
+    ambientLight_->Init(dxCommon_->GetDevice().Get());
 
     AddSpotLight();
     AddPointLight();
-    areaLightManager_->Add(dxCommon_->GetDevice());
+    areaLightManager_->Add(dxCommon_->GetDevice().Get());
 }
 
 void Light::DebugImGui() {
@@ -106,11 +106,11 @@ void Light::SetWorldCameraPos(const Vector3& pos) {
 }
 
 void Light::AddSpotLight() {
-    spotLightManager_->Add(dxCommon_->GetDevice());
+    spotLightManager_->Add(dxCommon_->GetDevice().Get());
     lightCountData_->spotLightCount = int(spotLightManager_->GetLightCount());
 }
 void Light::AddPointLight() {
-    pointLightManager_->Add(dxCommon_->GetDevice());
+    pointLightManager_->Add(dxCommon_->GetDevice().Get());
     lightCountData_->pointLightCount = int(pointLightManager_->GetLightCount());
 }
 

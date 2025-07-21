@@ -2,6 +2,8 @@
 #include "base/Material.h"
 #include "base/SrvManager.h"
 #include "Dx/DirectXCommon.h"
+#include <d3dcommon.h>
+#include <dxcapi.h>
 
 class ParticlePipeline {
 public:

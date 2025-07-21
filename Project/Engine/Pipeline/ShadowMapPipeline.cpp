@@ -1,4 +1,5 @@
 #include "ShadowMapPipeline.h"
+#include"Dx/DxCompiler.h"
 // Function
 #include "function/Log.h"
 #include <cassert>
@@ -48,15 +49,13 @@ void ShadowMapPipeline::CreateGraphicsPipeline() {
     depthStencilDesc_.DepthFunc      = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
     // 頂点シェーダー
-    vertexShaderBlob_ = dxCommon_->CompileShader(
-        L"resources/Shader/ShadowMap/ShadowMap.VS.hlsl",
-        L"vs_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
+    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(
+        L"resources/Shader/ShadowMap/ShadowMap.VS.hlsl",L"vs_6_0");
     assert(vertexShaderBlob_ != nullptr);
 
     // ピクセルシェーダー
-    pixelShaderBlob_ = dxCommon_->CompileShader(
-        L"resources/Shader/ShadowMap/ShadowMap.PS.hlsl",
-        L"ps_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
+    pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(
+        L"resources/Shader/ShadowMap/ShadowMap.PS.hlsl",L"ps_6_0");
     assert(pixelShaderBlob_ != nullptr);
 
     D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineDesc               = {};
@@ -96,6 +95,8 @@ void ShadowMapPipeline::CreateRootSignature() {
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature = {};
     descriptionRootSignature.pParameters               = rootParams; // ルートパラメーターの配列
     descriptionRootSignature.NumParameters             = _countof(rootParams); // 配列の長さ
+    // Add the required flag for input assembler
+    descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
     hr = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
     if (FAILED(hr)) {
@@ -106,7 +107,6 @@ void ShadowMapPipeline::CreateRootSignature() {
     hr = dxCommon_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(), signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
     assert(SUCCEEDED(hr));
 }
-
 void ShadowMapPipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
     // RootSignatureを設定
     commandList->SetGraphicsRootSignature(rootSignature_.Get());

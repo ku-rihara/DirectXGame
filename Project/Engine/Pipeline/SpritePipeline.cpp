@@ -1,4 +1,5 @@
 #include "SpritePipeline.h"
+#include"Dx/DxCompiler.h"
 #include "function/Log.h"
 #include <cassert>
 #include <string>
@@ -83,12 +84,10 @@ void SpritePipeline::CreateGraphicsPipeline() {
     depthStencilDesc_.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
     // Shaderをコンパイルする ()
-    vertexShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/Sprite.VS.hlsl",
-        L"vs_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
+    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Sprite.VS.hlsl",L"vs_6_0");
     assert(vertexShaderBlob_ != nullptr);
 
-    pixelShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/Sprite.PS.hlsl",
-        L"ps_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
+    pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Sprite.PS.hlsl",L"ps_6_0");
     assert(pixelShaderBlob_ != nullptr);
 
     // PSOを生成 (用)

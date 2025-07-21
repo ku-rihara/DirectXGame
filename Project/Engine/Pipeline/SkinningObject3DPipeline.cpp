@@ -1,4 +1,5 @@
 #include "SkinningObject3DPipeline.h"
+#include"Dx/DxCompiler.h"
 // Function
 #include "function/Log.h"
 #include <cassert>
@@ -112,12 +113,10 @@ void SkinningObject3DPipeline::CreateGraphicsPipeline() {
     depthStencilDesc_.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
     // Shaderをコンパイルする
-    vertexShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/SkinningObject3d.VS.hlsl",
-        L"vs_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
+    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/SkinningObject3d.VS.hlsl",L"vs_6_0");
     assert(vertexShaderBlob_ != nullptr);
 
-    pixelShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/Object3d.PS.hlsl",
-        L"ps_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
+    pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Object3d.PS.hlsl",L"ps_6_0");
     assert(pixelShaderBlob_ != nullptr);
 
     // PSO作成用関数

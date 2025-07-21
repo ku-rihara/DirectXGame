@@ -2,6 +2,8 @@
 
 #include "base/Material.h"
 #include "Dx/DirectXCommon.h"
+#include <d3dcommon.h>
+#include <dxcapi.h>
 
 class Object3DPiprline {
 public:

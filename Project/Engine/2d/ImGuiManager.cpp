@@ -1,5 +1,6 @@
 #include "base/WinApp.h"
 #include"Dx/DirectXCommon.h"
+#include"Dx/DxSwapChain.h"
 #include "2d/ImGuiManager.h"
 #include"base/SrvManager.h"
 
@@ -45,9 +46,9 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
 
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(winApp->GetHwnd());
-	ImGui_ImplDX12_Init(dxCommon_->GetDevice(), 
-		dxCommon_->GetSwapChainDesc().BufferCount, dxCommon_->GetRtvDesc().Format,
-		srvHeap_.Get(),
+
+	ImGui_ImplDX12_Init(dxCommon_->GetDevice().Get(), dxCommon_->GetDxSwapChain()->GetDesc().BufferCount, 
+		dxCommon_->GetDxSwapChain()->GetRTVDesc().Format,srvHeap_.Get(),
 		srvHeap_->GetCPUDescriptorHandleForHeapStart(),
 		srvHeap_->GetGPUDescriptorHandleForHeapStart());
 #endif
@@ -69,7 +70,7 @@ void ImGuiManager::Begin() {
 ///===========================================================
 /// 終わり
 ///===========================================================
-void ImGuiManager::preDrawa() {
+void ImGuiManager::preDraw() {
 #ifdef _DEBUG
 
 	ImGui::Render();

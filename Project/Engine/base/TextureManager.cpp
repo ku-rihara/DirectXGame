@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <d3dx12.h>
 #include <vector>
+#include <stdexcept>
 
 
 TextureManager* TextureManager::instance = nullptr;

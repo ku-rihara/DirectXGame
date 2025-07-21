@@ -39,7 +39,12 @@
     <ClCompile Include="Engine\Core\KTFramework.cpp" />
     <ClCompile Include="Engine\Core\KTGame.cpp" />
     <ClCompile Include="Engine\Dx\DirectXCommon.cpp" />
+    <ClCompile Include="Engine\Dx\DxCommand.cpp" />
+    <ClCompile Include="Engine\Dx\DxCompiler.cpp" />
+    <ClCompile Include="Engine\Dx\DxDevice.cpp" />
     <ClCompile Include="Engine\Dx\DxReleaseChecker.cpp" />
+    <ClCompile Include="Engine\Dx\DxRenderTarget.cpp" />
+    <ClCompile Include="Engine\Dx\DxSwapChain.cpp" />
     <ClCompile Include="Engine\Frame\Frame.cpp" />
     <ClCompile Include="Engine\Function\Convert.cpp" />
     <ClCompile Include="Engine\Function\GetFile.cpp" />
@@ -145,7 +150,12 @@
     <ClInclude Include="Engine\Core\KTFramework.h" />
     <ClInclude Include="Engine\Core\KTGame.h" />
     <ClInclude Include="Engine\Dx\DirectXCommon.h" />
+    <ClInclude Include="Engine\Dx\DxCommand.h" />
+    <ClInclude Include="Engine\Dx\DxCompiler.h" />
+    <ClInclude Include="Engine\Dx\DxDevice.h" />
     <ClInclude Include="Engine\Dx\DxReleaseChecker.h" />
+    <ClInclude Include="Engine\Dx\DxRenderTarget.h" />
+    <ClInclude Include="Engine\Dx\DxSwapChain.h" />
     <ClInclude Include="Engine\Frame\Frame.h" />
     <ClInclude Include="Engine\Function\Convert.h" />
     <ClInclude Include="Engine\Function\GetFile.h" />

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Dx/DirectXCommon.h"
+#include <d3dcommon.h>
+#include <dxcapi.h>
 
 class ShadowMapPipeline {
 public:

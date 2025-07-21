@@ -2,6 +2,8 @@
 
 #include "base/Material.h"
 #include "Dx/DirectXCommon.h"
+#include <dxcapi.h>
+#include <d3dcommon.h>
 
 class SkinningObject3DPipeline {
 

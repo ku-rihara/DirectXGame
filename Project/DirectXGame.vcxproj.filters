@@ -502,6 +502,21 @@
     <ClCompile Include="Engine\Pipeline\ShadowMapPipeline.cpp">
       <Filter>MyEngine\.cpp\Pileline</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Dx\DxCommand.cpp">
+      <Filter>MyEngine\.cpp\Dx</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Dx\DxSwapChain.cpp">
+      <Filter>MyEngine\.cpp\Dx</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Dx\DxRenderTarget.cpp">
+      <Filter>MyEngine\.cpp\Dx</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Dx\DxCompiler.cpp">
+      <Filter>MyEngine\.cpp\Dx</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Dx\DxDevice.cpp">
+      <Filter>MyEngine\.cpp\Dx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -845,6 +860,21 @@
     </ClInclude>
     <ClInclude Include="Engine\ShadowMap\ShadowMapData.h">
       <Filter>MyEngine\.h\ShadowMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Dx\DxSwapChain.h">
+      <Filter>MyEngine\.h\Dx</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Dx\DxRenderTarget.h">
+      <Filter>MyEngine\.h\Dx</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Dx\DxCompiler.h">
+      <Filter>MyEngine\.h\Dx</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Dx\DxDevice.h">
+      <Filter>MyEngine\.h\Dx</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Dx\DxCommand.h">
+      <Filter>MyEngine\.h\Dx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

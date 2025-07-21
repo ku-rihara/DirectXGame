@@ -1,5 +1,6 @@
 #include "Line3DPipeline.h"
 #include "Dx/DirectXCommon.h"
+#include"Dx/DxCompiler.h"
 #include <cassert>
 
 Line3DPipeline* Line3DPipeline::GetInstance() {
@@ -33,11 +34,9 @@ void Line3DPipeline::CreateGraphicsPipeline() {
     inputLayoutDesc.pInputElementDescs = inputElementDescs;
     inputLayoutDesc.NumElements        = _countof(inputElementDescs);
 
-    vertexShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/Line3D.VS.hlsl",
-        L"vs_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
+    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Line3D.VS.hlsl",L"vs_6_0");
 
-    pixelShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/Line3D.PS.hlsl",
-        L"ps_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
+    pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Line3D.PS.hlsl",L"ps_6_0");
 
     D3D12_BLEND_DESC blendDesc{};
     blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;

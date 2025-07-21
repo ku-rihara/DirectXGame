@@ -1,4 +1,5 @@
 #include "Object3DPiprline.h"
+#include"Dx/DxCompiler.h"
 // Function
 #include "function/Log.h"
 #include <cassert>
@@ -100,13 +101,9 @@ void Object3DPiprline::CreateGraphicsPipeline() {
     depthStencilDesc_.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
     // Shaderをコンパイルする
-    vertexShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/Object3d.VS.hlsl",
-        L"vs_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
-    assert(vertexShaderBlob_ != nullptr);
+    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Object3d.VS.hlsl",L"vs_6_0");
 
-    pixelShaderBlob_ = dxCommon_->CompileShader(L"resources/Shader/Object3d.PS.hlsl",
-        L"ps_6_0", dxCommon_->GetDxcUtils(), dxCommon_->GetDxcCompiler(), dxCommon_->GetIncludeHandler());
-    assert(pixelShaderBlob_ != nullptr);
+    pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Object3d.PS.hlsl",L"ps_6_0");
 
     // PSO作成用関数
     auto CreatePSO = [&](D3D12_BLEND_DESC& blendDesc, Microsoft::WRL::ComPtr<ID3D12PipelineState>& pso) {
