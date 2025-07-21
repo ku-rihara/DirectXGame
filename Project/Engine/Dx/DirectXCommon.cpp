@@ -2,6 +2,7 @@
 #include "base/RtvManager.h"
 #include "base/SrvManager.h"
 #include "base/WinApp.h"
+#include"Frame/Frame.h"
 // dx
 #include "DxCommand.h"
 #include "DxCompiler.h"
@@ -25,6 +26,8 @@ void DirectXCommon::Init(WinApp* win, int32_t backBufferWidth, int32_t backBuffe
 
     srvManager_ = SrvManager::GetInstance();
     rtvManager_ = RtvManager::GetInstance();
+
+    Frame::Init();
 
     // DirectXクラス群の初期化
     InitDxClasses();
@@ -79,6 +82,7 @@ void DirectXCommon::PostDraw() {
 
     // コマンドの初期化
     dxCommand_->WaitForGPU();
+    Frame::Update();
     dxCommand_->ResetCommand();
 }
 
@@ -113,15 +117,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(Micro
 }
 
 void DirectXCommon::commandExecution(Microsoft::WRL::ComPtr<ID3D12Resource>& intermediateResource) {
-    // GPUに転送するために、リソースバリアを設定
-    D3D12_RESOURCE_BARRIER barrierDesc{};
-    barrierDesc.Transition.pResource   = intermediateResource.Get();
-    barrierDesc.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-    barrierDesc.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-    barrierDesc.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-    barrierDesc.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
-    barrierDesc.Transition.StateAfter  = D3D12_RESOURCE_STATE_GENERIC_READ;
-    dxCommand_->GetCommandList()->ResourceBarrier(1, &barrierDesc);
+   
 }
 
 Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DirectXCommon::InitializeDescriptorHeap(
