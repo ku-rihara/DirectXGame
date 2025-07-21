@@ -63,15 +63,8 @@ void DirectXCommon::PreRenderTexture() {
 }
 
 void DirectXCommon::PostDraw() {
-    // コマンド実行後のバリア
-    D3D12_RESOURCE_BARRIER barrier{};
-    barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-    barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-    barrier.Transition.pResource   = dxSwapChain_->GetSwapChainResource(dxSwapChain_->GetCurrentBackBufferIndex()).Get();
-    barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-    barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-    barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_PRESENT;
-    dxCommand_->GetCommandList()->ResourceBarrier(1, &barrier);
+    // TransitionBarrierを張る
+    dxRenderTarget_->PostDrawTransitionBarrier();
 
     // 命令のクローズ
     dxCommand_->ExecuteCommand();

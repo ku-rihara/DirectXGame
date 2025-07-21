@@ -21,14 +21,18 @@ public:
 
     // 深度バッファ作成
     void CreateDepthBuffer(Microsoft::WRL::ComPtr<ID3D12Device> device);
-    void PreRenderTexture();
+
     void SetupViewportAndScissor();
-    void PreDraw();
     void ClearDepthBuffer();
-    void CreateRenderTextureRTV();
+
     void PutTransitionBarrier(ID3D12Resource* pResource, D3D12_RESOURCE_STATES Before, D3D12_RESOURCE_STATES After);
 
+    void PreRenderTexture();
+    void PreDraw();
+    void PostDrawTransitionBarrier();
+
     // SRVハンドル作成
+    void CreateRenderTextureRTV();
     void CreateSrvHandle();
 
     // リソース状態管理
@@ -76,7 +80,7 @@ private:
     Vector4 clearColor_;
     UINT descriptorSizeDSV_;
 
-     uint32_t renderTextureRtvIndex_;
+    uint32_t renderTextureRtvIndex_;
 
 public:
     Microsoft::WRL::ComPtr<ID3D12Resource> GetRenderTextureResource() const { return renderTextureResource_; }

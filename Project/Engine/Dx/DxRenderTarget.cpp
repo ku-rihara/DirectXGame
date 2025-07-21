@@ -212,33 +212,6 @@ Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DxRenderTarget::InitializeDescripto
     return descriptorHeap;
 }
 
-void DxRenderTarget::PreDraw() {
-
-    // コマンド実行前のバリア
-    D3D12_RESOURCE_BARRIER barrier{};
-    barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-    barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-    barrier.Transition.pResource   = dxSwapChain_->GetSwapChainResource(dxSwapChain_->GetCurrentBackBufferIndex()).Get();
-    barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-    barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-    barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_RENDER_TARGET;
-    dxCommand_->GetCommandList()->ResourceBarrier(1, &barrier);
-
-    // ビューポートとシザー矩形の設定
-    dxCommand_->GetCommandList()->RSSetViewports(1, &viewport_);
-    dxCommand_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
-
-    // レンダーターゲットを設定
-    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(dxSwapChain_->GetCurrentBackBufferIndex());
-    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
-
-    dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
-
-    // 指定した色で画面全体をクリアする
-    float clearColor[] = {0.2f, 0.2f, 0.2f, 1.0f}; // 黒
-    dxCommand_->GetCommandList()->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
-    ClearDepthBuffer();
-}
 
 void DxRenderTarget::ClearDepthBuffer() {
     D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
@@ -253,7 +226,7 @@ void DxRenderTarget::PreRenderTexture() {
         PutTransitionBarrier(renderTextureResource_.Get(), renderTextureCurrentState_, D3D12_RESOURCE_STATE_RENDER_TARGET);
     }
 
-    // Use the properly allocated RTV handle instead of hardcoded index 2
+    // 
     D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(renderTextureRtvIndex_);
 
     dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
@@ -297,4 +270,37 @@ void DxRenderTarget::PutTransitionBarrier(ID3D12Resource* pResource, D3D12_RESOU
     dxCommand_->GetCommandList()->ResourceBarrier(1, &barrier);
 
     renderTextureCurrentState_ = After;
+}
+
+void DxRenderTarget::PreDraw() {
+
+    // コマンド実行前のバリア
+    D3D12_RESOURCE_BARRIER barrier{};
+    barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+    barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+    barrier.Transition.pResource   = dxSwapChain_->GetSwapChainResource(dxSwapChain_->GetCurrentBackBufferIndex()).Get();
+    barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+    barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+    barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_RENDER_TARGET;
+    dxCommand_->GetCommandList()->ResourceBarrier(1, &barrier);
+
+    // ビューポートとシザー矩形の設定
+    dxCommand_->GetCommandList()->RSSetViewports(1, &viewport_);
+    dxCommand_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
+
+    // レンダーターゲットを設定
+    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(dxSwapChain_->GetCurrentBackBufferIndex());
+    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+
+    dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
+
+    // 指定した色で画面全体をクリアする
+    float clearColor[] = {0.2f, 0.2f, 0.2f, 1.0f}; // 黒
+    dxCommand_->GetCommandList()->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+    ClearDepthBuffer();
+}
+
+
+void DxRenderTarget::PostDrawTransitionBarrier() {
+    PutTransitionBarrier(dxSwapChain_->GetSwapChainResource(dxSwapChain_->GetCurrentBackBufferIndex()).Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 }
