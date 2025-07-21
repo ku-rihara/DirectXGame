@@ -116,9 +116,6 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(Micro
     return resource;
 }
 
-void DirectXCommon::commandExecution(Microsoft::WRL::ComPtr<ID3D12Resource>& intermediateResource) {
-   
-}
 
 Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DirectXCommon::InitializeDescriptorHeap(
     Microsoft::WRL::ComPtr<ID3D12Device> device,

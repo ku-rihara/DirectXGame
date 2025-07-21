@@ -25,6 +25,7 @@ public:
     void SetupViewportAndScissor();
     void PreDraw();
     void ClearDepthBuffer();
+    void CreateRenderTextureRTV();
     void PutTransitionBarrier(ID3D12Resource* pResource, D3D12_RESOURCE_STATES Before, D3D12_RESOURCE_STATES After);
 
     // SRVハンドル作成
@@ -74,6 +75,8 @@ private:
 
     Vector4 clearColor_;
     UINT descriptorSizeDSV_;
+
+     uint32_t renderTextureRtvIndex_;
 
 public:
     Microsoft::WRL::ComPtr<ID3D12Resource> GetRenderTextureResource() const { return renderTextureResource_; }

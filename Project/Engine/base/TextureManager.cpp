@@ -1,14 +1,14 @@
 #include "base/TextureManager.h"
 #include "2d/ImGuiManager.h"
+#include "Dx/DxCommand.h"
 /// srv
 #include "SrvManager.h"
 // function
 #include "function/Convert.h"
 #include <cstdlib>
 #include <d3dx12.h>
-#include <vector>
 #include <stdexcept>
-
+#include <vector>
 
 TextureManager* TextureManager::instance = nullptr;
 
@@ -83,6 +83,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::CreateTextureResource(Mic
         D3D12_RESOURCE_STATE_COPY_DEST,
         nullptr,
         IID_PPV_ARGS(&resource));
+
     if (FAILED(hr)) {
         assert(hr);
         return nullptr;
@@ -144,7 +145,7 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
         srvDesc.TextureCube.MostDetailedMip     = 0;
         srvDesc.TextureCube.MipLevels           = UINT_MAX;
         srvDesc.TextureCube.ResourceMinLODClamp = 0.0f;
-       /* skyBoxHandle_                           = textureData.srvGPUHandle;*/
+        /* skyBoxHandle_                           = textureData.srvGPUHandle;*/
     } else {
         // Texture 2dの設定
         srvDesc.ViewDimension       = D3D12_SRV_DIMENSION_TEXTURE2D;
@@ -165,7 +166,9 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
         directXCommon_->GetCommandList());
 
     // コマンド実行
-    directXCommon_->commandExecution(intermediateResource);
+    directXCommon_->GetDxCommand()->ExecuteCommand();
+    directXCommon_->GetDxCommand()->WaitForGPU();
+    directXCommon_->GetDxCommand()->ResetCommand();
 
     // 新しく読み込んだテクスチャのインデックスを設定し、返す
     textureData.index = static_cast<uint32_t>(textureDatas_.size() - 1);

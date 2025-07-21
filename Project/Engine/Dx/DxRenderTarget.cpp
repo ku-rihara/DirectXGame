@@ -28,11 +28,24 @@ void DxRenderTarget::Init(
     // 深度バッファの作成
     CreateDepthBuffer(device);
 
+    CreateRenderTextureRTV();
+
     // SRVハンドルの作成
     CreateSrvHandle();
 
     // 初期状態をRENDER_TARGETに設定
     renderTextureCurrentState_ = D3D12_RESOURCE_STATE_RENDER_TARGET;
+}
+
+void DxRenderTarget::CreateRenderTextureRTV() {
+
+    renderTextureRtvIndex_ = 2;
+
+    D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+    rtvDesc.Format        = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+    rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+
+    rtvManager_->CreateRTV(renderTextureRtvIndex_, renderTextureResource_.Get(), &rtvDesc);
 }
 
 ///==========================================================
@@ -81,9 +94,9 @@ void DxRenderTarget::CreateSrvHandle() {
 /// 終了処理
 ///==========================================================
 void DxRenderTarget::Finalize() {
-    renderTextureResource_.Reset();
+   /* renderTextureResource_.Reset();
     depthStencilResource_.Reset();
-    dsvDescriptorHeap_.Reset();
+    dsvDescriptorHeap_.Reset();*/
 }
 
 ///==========================================================
@@ -237,10 +250,11 @@ void DxRenderTarget::PreRenderTexture() {
 
     // 現在の状態がすでにRENDER_TARGETでない場合のみ遷移
     if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_RENDER_TARGET) {
-        PutTransitionBarrier(renderTextureResource_.Get(),renderTextureCurrentState_, D3D12_RESOURCE_STATE_RENDER_TARGET);
+        PutTransitionBarrier(renderTextureResource_.Get(), renderTextureCurrentState_, D3D12_RESOURCE_STATE_RENDER_TARGET);
     }
 
-    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(2);
+    // Use the properly allocated RTV handle instead of hardcoded index 2
+    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(renderTextureRtvIndex_);
 
     dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
     // レンダーターゲットと深度ステンシルビューをクリア

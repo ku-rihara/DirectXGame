@@ -70,15 +70,6 @@ void DxCommand::Finalize() {
     if (fence_) {
         fence_.Reset();
     }
-    if (commandList_) {
-        commandList_.Reset();
-    }
-    if (commandAllocator_) {
-        commandAllocator_.Reset();
-    }
-    if (commandQueue_) {
-        commandQueue_.Reset();
-    }
     if (fenceEvent_) {
         CloseHandle(fenceEvent_);
     }
