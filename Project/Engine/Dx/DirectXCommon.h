@@ -20,34 +20,6 @@ class DxCompiler;
 
 class DirectXCommon {
 private:
- 
-
-    ImGuiManager* imguiManager_     = nullptr;
-    TextureManager* textureManager_ = nullptr;
-    SrvManager* srvManager_         = nullptr;
-    RtvManager* rtvManager_         = nullptr;
-    WinApp* winApp_                 = nullptr;
-
-    // DirectXクラス群
-    std::unique_ptr<DxDevice> dxDevice_;
-    std::unique_ptr<DxCommand> dxCommand_;
-    std::unique_ptr<DxSwapChain> dxSwapChain_;
-    std::unique_ptr<DxRenderTarget> dxRenderTarget_;
-    std::unique_ptr<DxCompiler> dxCompiler_;
-
-    ///===========================================================================
-    /// バックバッファ関連
-    ///===========================================================================
-    uint32_t backBufferWidth_;
-    uint32_t backBufferHeight_;
-
-    ///===========================================================================
-    /// ビューポート・シザー矩形
-    ///===========================================================================
-    D3D12_VIEWPORT viewport_{};
-    D3D12_RECT scissorRect_{};
-
-private:
     ///==========================================================
     /// Private method
     ///==========================================================
@@ -94,10 +66,37 @@ public:
     /// レンダーテクスチャ関連
     void PreRenderTexture();
     void DepthBarrierTransition();
-
-public:
     void PutTransitionBarrier(ID3D12Resource* pResource, D3D12_RESOURCE_STATES Before, D3D12_RESOURCE_STATES After);
 
+private:
+    ImGuiManager* imguiManager_     = nullptr;
+    TextureManager* textureManager_ = nullptr;
+    SrvManager* srvManager_         = nullptr;
+    RtvManager* rtvManager_         = nullptr;
+    WinApp* winApp_                 = nullptr;
+
+    // DirectXクラス群
+    std::unique_ptr<DxDevice> dxDevice_;
+    std::unique_ptr<DxCommand> dxCommand_;
+    std::unique_ptr<DxSwapChain> dxSwapChain_;
+    std::unique_ptr<DxRenderTarget> dxRenderTarget_;
+    std::unique_ptr<DxCompiler> dxCompiler_;
+
+    ///===========================================================================
+    /// バックバッファ関連
+    ///===========================================================================
+    uint32_t backBufferWidth_;
+    uint32_t backBufferHeight_;
+
+    ///===========================================================================
+    /// ビューポート・シザー矩形
+    ///===========================================================================
+    D3D12_VIEWPORT viewport_{};
+    D3D12_RECT scissorRect_{};
+
+    Vector4 clearColor_;
+
+public:
     ///==========================================================
     /// getter method
     ///==========================================================
@@ -119,7 +118,6 @@ public:
     DxRenderTarget* GetDxRenderTarget() const { return dxRenderTarget_.get(); }
     DxCompiler* GetDxCompiler() const { return dxCompiler_.get(); }
 
- 
     Microsoft::WRL::ComPtr<ID3D12Device> GetDevice() const;
     ID3D12GraphicsCommandList* GetCommandList() const;
 

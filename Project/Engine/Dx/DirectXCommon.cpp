@@ -55,9 +55,8 @@ void DirectXCommon::InitDxClasses() {
 void DirectXCommon::InitRenderingResources() {
 
     dxSwapChain_->CreateRenderTargetViews(rtvManager_);
-
-    Vector4 clearColor = {0.2f, 0.2f, 0.2f, 1.0f};
-    dxRenderTarget_->Init(dxDevice_->GetDevice(), rtvManager_, srvManager_, backBufferWidth_, backBufferHeight_, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor);
+     clearColor_ = {0.2f, 0.2f, 0.2f, 1.0f};
+    dxRenderTarget_->Init(dxDevice_->GetDevice(), rtvManager_, srvManager_, backBufferWidth_, backBufferHeight_, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor_);
 }
 
 void DirectXCommon::CreateGraphicPipeline() {}
@@ -205,23 +204,23 @@ Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DirectXCommon::InitializeDescriptor
 }
 
 void DirectXCommon::PreRenderTexture() {
-    //D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dxRenderTarget_->GetDsvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
 
-    //// 現在の状態がすでにRENDER_TARGETでない場合のみ遷移
-    //if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_RENDER_TARGET) {
-    //    PutTransitionBarrier(renderTextureResource_.Get(),
-    //        renderTextureCurrentState_, D3D12_RESOURCE_STATE_RENDER_TARGET);
-    //    renderTextureCurrentState_ = D3D12_RESOURCE_STATE_RENDER_TARGET;
-    //}
-    //D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(2);
+    // 現在の状態がすでにRENDER_TARGETでない場合のみ遷移
+    if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_RENDER_TARGET) {
+        PutTransitionBarrier(renderTextureResource_.Get(),
+            renderTextureCurrentState_, D3D12_RESOURCE_STATE_RENDER_TARGET);
+        renderTextureCurrentState_ = D3D12_RESOURCE_STATE_RENDER_TARGET;
+    }
+    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(2);
 
-    //commandList_->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
-    //// レンダーターゲットと深度ステンシルビューをクリア
-    //commandList_->ClearRenderTargetView(rtvHandle, clearValue_.Color, 0, nullptr);
-    //commandList_->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
-    //// ビューポートとシザー矩形を設定
-    //commandList_->RSSetViewports(1, &viewport_);
-    //commandList_->RSSetScissorRects(1, &scissorRect_);
+    dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
+    // レンダーターゲットと深度ステンシルビューをクリア
+    dxCommand_->GetCommandList()->ClearRenderTargetView(rtvHandle, clearValue_.Color, 0, nullptr);
+    dxCommand_->GetCommandList()->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+    // ビューポートとシザー矩形を設定
+    dxCommand_->GetCommandList()->RSSetViewports(1, &viewport_);
+    dxCommand_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
 }
 
 void DirectXCommon::DepthBarrierTransition() {}
