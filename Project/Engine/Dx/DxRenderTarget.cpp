@@ -272,7 +272,6 @@ void DxRenderTarget::PreDraw() {
     // これから書き込むバックバッファのインデックスを取得
     backBufferIndex_ = dxSwapChain_->GetCurrentBackBufferIndex();
 
-    // **修正**: レンダーテクスチャの状態遷移を適切に管理
     // レンダーテクスチャをSRVとして使用するため、PIXEL_SHADER_RESOURCEに遷移
     if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE) {
         PutTransitionBarrier(renderTextureResource_.Get(), renderTextureCurrentState_,
