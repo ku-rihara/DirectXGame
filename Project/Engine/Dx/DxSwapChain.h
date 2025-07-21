@@ -30,12 +30,16 @@ public:
     void UpdateResourceState(UINT index, D3D12_RESOURCE_STATES state);
     D3D12_RESOURCE_STATES GetResourceState(UINT index) const;
 
+    // GPU同期
+    void WaitForGPU();
+
     // 終了処理
     void Finalize();
 
 private:
     Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain_;
     Microsoft::WRL::ComPtr<ID3D12Resource> resources_[2];
+    Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue_; 
     DXGI_SWAP_CHAIN_DESC1 desc_;
     D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_;
     HRESULT hr_;

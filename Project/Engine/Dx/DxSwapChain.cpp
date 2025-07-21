@@ -1,6 +1,6 @@
 #include "DxSwapChain.h"
-#include "base/WinApp.h"
 #include "base/RtvManager.h"
+#include "base/WinApp.h"
 #include <cassert>
 
 void DxSwapChain::Init(
@@ -9,6 +9,8 @@ void DxSwapChain::Init(
     WinApp* winApp,
     int32_t backBufferWidth,
     int32_t backBufferHeight) {
+
+    commandQueue_ = commandQueue;
 
     // スワップチェーン設定
     desc_.Width            = backBufferWidth;
@@ -38,7 +40,7 @@ void DxSwapChain::CreateRenderTargetViews(RtvManager* rtvManager) {
     // SwapChainからResourceを取得
     for (int i = 0; i < 2; i++) {
         resources_[i] = nullptr;
-        hr_                    = swapChain_->GetBuffer(i, IID_PPV_ARGS(&resources_[i]));
+        hr_           = swapChain_->GetBuffer(i, IID_PPV_ARGS(&resources_[i]));
         assert(SUCCEEDED(hr_));
     }
 
@@ -57,7 +59,7 @@ void DxSwapChain::Present() {
     UpdateResourceState(GetCurrentBackBufferIndex(), D3D12_RESOURCE_STATE_PRESENT);
 }
 
- // リソース状態管理
+// リソース状態管理
 void DxSwapChain::UpdateResourceState(UINT index, D3D12_RESOURCE_STATES state) {
     if (index < 2) {
         resourceStates_[index] = state;
@@ -71,7 +73,50 @@ D3D12_RESOURCE_STATES DxSwapChain::GetResourceState(UINT index) const {
         return D3D12_RESOURCE_STATE_PRESENT;
     }
 }
+
+void DxSwapChain::WaitForGPU() {
+    if (!commandQueue_) {
+        return;
+    }
+
+ 
+    Microsoft::WRL::ComPtr<ID3D12Fence> fence;
+    UINT64 fenceValue = 1;
+
+   
+    Microsoft::WRL::ComPtr<ID3D12Device> device;
+    hr_ = commandQueue_->GetDevice(IID_PPV_ARGS(&device));
+    if (FAILED(hr_)) {
+        return;
+    }
+
+    hr_ = device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
+    if (FAILED(hr_)) {
+        return;
+    }
+
+   
+    hr_ = commandQueue_->Signal(fence.Get(), fenceValue);
+    if (FAILED(hr_)) {
+        return;
+    }
+
+    if (fence->GetCompletedValue() < fenceValue) {
+        HANDLE fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+        if (fenceEvent != nullptr) {
+            hr_ = fence->SetEventOnCompletion(fenceValue, fenceEvent);
+            if (SUCCEEDED(hr_)) {
+                WaitForSingleObject(fenceEvent, INFINITE);
+            }
+            CloseHandle(fenceEvent);
+        }
+    }
+}
+
 void DxSwapChain::Finalize() {
+  
+    WaitForGPU();
+
     for (int i = 0; i < 2; i++) {
         if (resources_[i]) {
             resources_[i].Reset();
@@ -80,4 +125,6 @@ void DxSwapChain::Finalize() {
     if (swapChain_) {
         swapChain_.Reset();
     }
+
+    commandQueue_.Reset();
 }

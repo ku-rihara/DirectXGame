@@ -70,5 +70,5 @@ void DxCommand::Finalize() {
     if (fence_) {
         fence_.Reset();
     }
- 
+    commandQueue_.Reset();
 }
