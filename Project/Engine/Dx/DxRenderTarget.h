@@ -26,6 +26,7 @@ public:
 
     // 深度バッファ作成
     void CreateDepthBuffer(Microsoft::WRL::ComPtr<ID3D12Device> device, uint32_t width, uint32_t height);
+    void PreRenderTexture();
 
     // SRVハンドル作成
     void CreateSrvHandle();

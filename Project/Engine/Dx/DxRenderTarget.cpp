@@ -203,3 +203,7 @@ Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DxRenderTarget::InitializeDescripto
     }
     return descriptorHeap;
 }
+
+void DxRenderTarget::PreRenderTexture() {
+   
+}
