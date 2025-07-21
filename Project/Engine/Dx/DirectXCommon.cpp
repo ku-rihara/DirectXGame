@@ -1,8 +1,6 @@
 #include "DirectXCommon.h"
-#include "2d/ImGuiManager.h"
 #include "base/RtvManager.h"
 #include "base/SrvManager.h"
-#include "base/TextureManager.h"
 #include "base/WinApp.h"
 // dx
 #include "DxCommand.h"
@@ -10,10 +8,6 @@
 #include "DxDevice.h"
 #include "DxRenderTarget.h"
 #include "DxSwapChain.h"
-
-#include "Vector4.h"
-#include <chrono>
-
 #include <cassert>
 
 #pragma comment(lib, "dxguid.lib")
@@ -55,59 +49,16 @@ void DirectXCommon::InitDxClasses() {
 void DirectXCommon::InitRenderingResources() {
 
     dxSwapChain_->CreateRenderTargetViews(rtvManager_);
-     clearColor_ = {0.2f, 0.2f, 0.2f, 1.0f};
-    dxRenderTarget_->Init(dxDevice_->GetDevice(), rtvManager_, srvManager_, backBufferWidth_, backBufferHeight_, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor_);
+    dxRenderTarget_->Init(dxDevice_->GetDevice(), rtvManager_, srvManager_, dxCommand_.get(), dxSwapChain_.get(), backBufferWidth_, backBufferHeight_);
 }
 
 void DirectXCommon::CreateGraphicPipeline() {}
 
-void DirectXCommon::SetupViewportAndScissor() {
-    // ビューポート設定
-    viewport_.Width    = float(backBufferWidth_);
-    viewport_.Height   = float(backBufferHeight_);
-    viewport_.TopLeftX = 0;
-    viewport_.TopLeftY = 0;
-    viewport_.MinDepth = 0.0f;
-    viewport_.MaxDepth = 1.0f;
-
-    // シザー矩形
-    scissorRect_.left   = 0;
-    scissorRect_.right  = int32_t(backBufferWidth_);
-    scissorRect_.top    = 0;
-    scissorRect_.bottom = int32_t(backBufferHeight_);
-}
 
 void DirectXCommon::PreDraw() {
-    // コマンド実行前のバリア
-    D3D12_RESOURCE_BARRIER barrier{};
-    barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-    barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-    barrier.Transition.pResource   = dxSwapChain_->GetSwapChainResource(dxSwapChain_->GetCurrentBackBufferIndex()).Get();
-    barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-    barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-    barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_RENDER_TARGET;
-    dxCommand_->GetCommandList()->ResourceBarrier(1, &barrier);
-
-    // ビューポートとシザー矩形の設定
-    dxCommand_->GetCommandList()->RSSetViewports(1, &viewport_);
-    dxCommand_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
-
-    // レンダーターゲットを設定
-    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(dxSwapChain_->GetCurrentBackBufferIndex());
-    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dxRenderTarget_->GetDsvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
-
-    dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
-
-    // 指定した色で画面全体をクリアする
-    float clearColor[] = {0.2f, 0.2f, 0.2f, 1.0f}; // 黒
-    dxCommand_->GetCommandList()->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
-    ClearDepthBuffer();
+    dxRenderTarget_->PreDraw();
 }
 
-void DirectXCommon::ClearDepthBuffer() {
-    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dxRenderTarget_->GetDsvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
-    dxCommand_->GetCommandList()->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
-}
 
 void DirectXCommon::PostDraw() {
     // コマンド実行後のバリア
@@ -131,14 +82,6 @@ void DirectXCommon::PostDraw() {
     dxCommand_->ResetCommand();
 }
 
-void DirectXCommon::Finalize() {
-
-    dxRenderTarget_->Finalize();
-    dxSwapChain_->Finalize();
-    dxCommand_->Finalize();
-    dxDevice_->Finalize();
-    dxCompiler_->Finalize();
-}
 
 Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(Microsoft::WRL::ComPtr<ID3D12Device> device, size_t sizeInBytes) {
     //  リソース設定
@@ -203,26 +146,6 @@ Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DirectXCommon::InitializeDescriptor
     return descriptorHeap;
 }
 
-void DirectXCommon::PreRenderTexture() {
-    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dxRenderTarget_->GetDsvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
-
-    // 現在の状態がすでにRENDER_TARGETでない場合のみ遷移
-    if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_RENDER_TARGET) {
-        PutTransitionBarrier(renderTextureResource_.Get(),
-            renderTextureCurrentState_, D3D12_RESOURCE_STATE_RENDER_TARGET);
-        renderTextureCurrentState_ = D3D12_RESOURCE_STATE_RENDER_TARGET;
-    }
-    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(2);
-
-    dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
-    // レンダーターゲットと深度ステンシルビューをクリア
-    dxCommand_->GetCommandList()->ClearRenderTargetView(rtvHandle, clearValue_.Color, 0, nullptr);
-    dxCommand_->GetCommandList()->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
-    // ビューポートとシザー矩形を設定
-    dxCommand_->GetCommandList()->RSSetViewports(1, &viewport_);
-    dxCommand_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
-}
-
 void DirectXCommon::DepthBarrierTransition() {}
 
 void DirectXCommon::PutTransitionBarrier(ID3D12Resource* pResource, D3D12_RESOURCE_STATES Before, D3D12_RESOURCE_STATES After) {
@@ -268,4 +191,13 @@ D3D12_GPU_DESCRIPTOR_HANDLE DirectXCommon::GetRenderTextureGPUSrvHandle() const 
 
 D3D12_CPU_DESCRIPTOR_HANDLE DirectXCommon::GetRenderTextureCPUSrvHandle() const {
     return dxRenderTarget_->GetRenderTextureCPUSrvHandle();
+}
+
+void DirectXCommon::Finalize() {
+
+    dxRenderTarget_->Finalize();
+    dxSwapChain_->Finalize();
+    dxCommand_->Finalize();
+    dxDevice_->Finalize();
+    dxCompiler_->Finalize();
 }

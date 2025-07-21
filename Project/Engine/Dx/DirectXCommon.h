@@ -56,11 +56,8 @@ public:
     void commandExecution(Microsoft::WRL::ComPtr<ID3D12Resource>& intermediateResource);
 
     // DescriptorHeapの作成
-    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> InitializeDescriptorHeap(
-        Microsoft::WRL::ComPtr<ID3D12Device> device,
-        D3D12_DESCRIPTOR_HEAP_TYPE heapType,
-        UINT numDescriptors,
-        bool shaderVisible);
+    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> InitializeDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device> device,
+        D3D12_DESCRIPTOR_HEAP_TYPE heapType,UINT numDescriptors,bool shaderVisible);
 
 public:
     /// レンダーテクスチャ関連
@@ -88,29 +85,14 @@ private:
     uint32_t backBufferWidth_;
     uint32_t backBufferHeight_;
 
-    ///===========================================================================
-    /// ビューポート・シザー矩形
-    ///===========================================================================
-    D3D12_VIEWPORT viewport_{};
-    D3D12_RECT scissorRect_{};
-
-    Vector4 clearColor_;
-
 public:
     ///==========================================================
     /// getter method
     ///==========================================================
 
     /// ディスクリプタハンドル取得
-    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(
-        Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap,
-        uint32_t descriptorSize,
-        uint32_t index);
-
-    D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(
-        Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap,
-        uint32_t descriptorSize,
-        uint32_t index);
+    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap,uint32_t descriptorSize,uint32_t index);
+    D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap,uint32_t descriptorSize,uint32_t index);
 
     DxDevice* GetDxDevice() const { return dxDevice_.get(); }
     DxCommand* GetDxCommand() const { return dxCommand_.get(); }
