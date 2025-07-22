@@ -31,15 +31,6 @@ void SkinningObject3DPipeline::CreateGraphicsPipeline() {
     staticSamplers_[0].ShaderRegister   = 0; // レジスタ番号０
     staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // pxelShaderで使う
 
-    staticSamplers_[1].Filter           = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-    staticSamplers_[1].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
-    staticSamplers_[1].AddressV         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
-    staticSamplers_[1].AddressW         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
-    staticSamplers_[1].ComparisonFunc   = D3D12_COMPARISON_FUNC_NEVER;
-    staticSamplers_[1].MaxLOD           = D3D12_FLOAT32_MAX;
-    staticSamplers_[1].ShaderRegister   = 4; // レジスタ番号4 (s4)
-    staticSamplers_[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-
     CreateRootSignature();
 
     // InputLayoutの設定を行う
@@ -113,10 +104,10 @@ void SkinningObject3DPipeline::CreateGraphicsPipeline() {
     depthStencilDesc_.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
     // Shaderをコンパイルする
-    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/SkinningObject3d.VS.hlsl",L"vs_6_0");
+    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/SkinningObject3d.VS.hlsl", L"vs_6_0");
     assert(vertexShaderBlob_ != nullptr);
 
-    pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Object3d.PS.hlsl",L"ps_6_0");
+    pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Object3d.PS.hlsl", L"ps_6_0");
     assert(pixelShaderBlob_ != nullptr);
 
     // PSO作成用関数
@@ -155,7 +146,7 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers_);
 
     // DescriptorRangeを設定
-    D3D12_DESCRIPTOR_RANGE descriptorRange[6] = {};
+    D3D12_DESCRIPTOR_RANGE descriptorRange[5] = {};
 
     // StructuredBuffer用 (t0)
     descriptorRange[0].BaseShaderRegister                = 0;
@@ -181,20 +172,14 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     descriptorRange[3].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
     descriptorRange[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-    // スポットライトの(t3)
+    // スポットライト(t3)
     descriptorRange[4].BaseShaderRegister                = 3;
     descriptorRange[4].NumDescriptors                    = 1;
     descriptorRange[4].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
     descriptorRange[4].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-    // シャドウマップ (t4)
-    descriptorRange[5].BaseShaderRegister                = 4;
-    descriptorRange[5].NumDescriptors                    = 1;
-    descriptorRange[5].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-    descriptorRange[5].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
     // RootParameterを作成
-    D3D12_ROOT_PARAMETER rootParameters[14] = {};
+    D3D12_ROOT_PARAMETER rootParameters[12] = {};
 
     // 0: Material
     rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
@@ -206,13 +191,13 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     rootParameters[1].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
     rootParameters[1].Descriptor.ShaderRegister = 0;
 
-    // 2: Texture2D 
+    // 2: Texture2D
     rootParameters[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[2].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
     rootParameters[2].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 3: TextureCube 
+    // 3: TextureCube
     rootParameters[3].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[3].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[3].DescriptorTable.pDescriptorRanges   = &descriptorRange[2];
@@ -255,22 +240,11 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     rootParameters[10].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[10].Descriptor.ShaderRegister = 5;
 
-     // 11: LightViewProjection
-    rootParameters[11].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[11].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[11].Descriptor.ShaderRegister = 6;
-
-    // 12: Shadow Map 
-    rootParameters[12].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[12].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[12].DescriptorTable.pDescriptorRanges   = &descriptorRange[5];
-    rootParameters[12].DescriptorTable.NumDescriptorRanges = 1;
-
-    // 11: gMatrixPalette
-    rootParameters[13].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[13].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_VERTEX;
-    rootParameters[13].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
-    rootParameters[13].DescriptorTable.NumDescriptorRanges = 1;
+    // 11:   gMatrixPalette
+    rootParameters[11].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[11].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_VERTEX;
+    rootParameters[11].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
+    rootParameters[11].DescriptorTable.NumDescriptorRanges = 1;
 
     descriptionRootSignature.pParameters   = rootParameters;
     descriptionRootSignature.NumParameters = _countof(rootParameters);
