@@ -1,12 +1,16 @@
 #pragma once
 
 #include "BaseOffScreen.h"
-#include"Vector2.h"
+#include"Matrix4x4.h"
 #include <d3d12.h>
 #include <wrl/client.h>
 
 struct OutLineParamData {
     float wightRate;
+};
+
+struct OutLineMaterial {
+    Matrix4x4 viewProjectionInverse;
 };
 
 class Outline : public BaseOffScreen {
@@ -27,5 +31,7 @@ public:
 
 private:
     Microsoft::WRL::ComPtr<ID3D12Resource> uvStepResource_;
+    Microsoft::WRL::ComPtr<ID3D12Resource> outlineMaterialResource_;
     OutLineParamData* uvStepData_;
+    OutLineMaterial* outlineMaterialData_;
 };

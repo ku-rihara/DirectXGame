@@ -1001,5 +1001,8 @@
     <FxCompile Include="resources\Shader\OffScreen\LuminanceBasedOutline.PS.hlsl">
       <Filter>リソースファイル\OffScreen</Filter>
     </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\DepthBasedOutline.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

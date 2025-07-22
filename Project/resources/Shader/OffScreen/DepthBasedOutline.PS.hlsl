@@ -2,10 +2,17 @@
 
 Texture2D<float4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
+Texture2D<float> gDepthTexture : register(t1);
+SamplerState gSamplerPoint : register(s1);
 
 struct OutLineParams
 {
     float wightRate;
+};
+
+struct OutLineMaterial
+{
+    float4x4 projectionInverse;
 };
 
 struct PixelShaderOutPut
@@ -15,6 +22,7 @@ struct PixelShaderOutPut
 };
 
 ConstantBuffer<OutLineParams> gOutLineParams : register(b0);
+ConstantBuffer<OutLineMaterial> gOutLineMaterial : register(b1);
 
 static const float kPrewittHorizontalKernel[3][3] =
 {
@@ -48,19 +56,21 @@ PixelShaderOutPut main(VertexShaderOutput input)
         for (int y = 0; y < 3; ++y)
         {
             float2 texcoord = input.texcoord + kIndex3x3[x][y] * uvStepSize;
-            float3 fetchColor = gTexture.Sample(gSampler, texcoord).rgb;
-            float luminance = Luminance(fetchColor);
-            difference.x += luminance * kPrewittHorizontalKernel[x][y];
-            difference.y += luminance * kPrewittVerticalKernel[x][y];
+            float ndcDepth = gDepthTexture.Sample(gSamplerPoint, texcoord);
+            float4 viewSpace = mul(float4(0.0f, 0.0f, ndcDepth, 1.0f), gOutLineMaterial.projectionInverse);
+            float viewZ = viewSpace.z * rcp(viewSpace.w);
+            difference.x += viewZ * kPrewittHorizontalKernel[x][y];
+            difference.y += viewZ * kPrewittVerticalKernel[x][y];
+            
         }
 
     }
 
     float weight = length(difference);
-    weight = saturate(weight*gOutLineParams.wightRate);
+    weight = saturate(weight * gOutLineParams.wightRate);
     
     PixelShaderOutPut output;
-    output.color.rgb = (1.0f - weight) * gTexture.Sample(gSampler,input.texcoord).rgb;
+    output.color.rgb = (1.0f - weight) * gTexture.Sample(gSampler, input.texcoord).rgb;
     output.color.a = 1.0f;
     
     return output;
