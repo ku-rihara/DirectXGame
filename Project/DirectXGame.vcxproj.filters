@@ -930,9 +930,6 @@
     <None Include="resources\Shader\ShadowMap\ShadowMap.hlsli">
       <Filter>リソースファイル\ShadowMap</Filter>
     </None>
-    <None Include="resources\Shader\Lighting\ShadowCalc.hlsli">
-      <Filter>リソースファイル\Lighting</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\Shader\Object3d.PS.hlsl">
