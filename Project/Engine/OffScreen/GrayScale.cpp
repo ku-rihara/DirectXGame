@@ -1,4 +1,5 @@
 #include "GrayScale.h"
+#include"Dx/DxRenderTarget.h"
 #include "Dx/DirectXCommon.h"
 
 void GrayScale::Init(DirectXCommon* dxCommon) {
@@ -22,7 +23,13 @@ void GrayScale::SetDrawState(ID3D12GraphicsCommandList* commandList) {
 
 void GrayScale::CreateConstantBuffer() {
 }
-void GrayScale::SetCommand([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
+void GrayScale::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
+    // プリミティブトポロジーを設定
+    commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    // テクスチャリソースを設定
+    commandList->SetGraphicsRootDescriptorTable(0, dxCommon_->GetDxRenderTarget()->GetRenderTextureGPUSrvHandle());
+
+    commandList->DrawInstanced(3, 1, 0, 0);
 }
 
 

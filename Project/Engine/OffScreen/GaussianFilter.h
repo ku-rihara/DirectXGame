@@ -16,7 +16,7 @@ public:
     void SetDrawState(ID3D12GraphicsCommandList* commandList) override;
 
     void CreateConstantBuffer() override;
-    void SetCommand([[maybe_unused]] ID3D12GraphicsCommandList* commandList) override;
+    void Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) override;
     void DebugParamImGui() override;
 
 private:

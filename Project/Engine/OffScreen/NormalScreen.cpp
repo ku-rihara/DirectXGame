@@ -1,4 +1,5 @@
 #include "NormalScreen.h"
+#include"Dx/DxRenderTarget.h"
 #include"Dx/DirectXCommon.h"
 
 
@@ -23,7 +24,13 @@ void NormalScreen::SetDrawState(ID3D12GraphicsCommandList* commandList) {
 
 void NormalScreen::CreateConstantBuffer() {
 }
-void NormalScreen::SetCommand([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
+void NormalScreen::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
+    // プリミティブトポロジーを設定
+    commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    // テクスチャリソースを設定
+    commandList->SetGraphicsRootDescriptorTable(0, dxCommon_->GetDxRenderTarget()->GetRenderTextureGPUSrvHandle());
+
+    commandList->DrawInstanced(3, 1, 0, 0);
 }
 
 

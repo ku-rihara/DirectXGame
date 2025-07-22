@@ -1,4 +1,5 @@
 #include "BaseScene.h"
+#include"OffScreen/OffScreenRenderer.h"
 #include"Lighrt/Light.h"
 #include<imgui.h>
 
@@ -16,6 +17,9 @@ void BaseScene::Init() {
 	//ビュープロジェクション
 	viewProjection_.Init();
 	viewProjection_.translation_ = { 0,-6.2f,-109.0f };
+
+	//offscreenカメラセット
+    OffScreenRenderer::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
 void BaseScene::Debug() {

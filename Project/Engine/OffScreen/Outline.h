@@ -1,7 +1,8 @@
+
 #pragma once
 
 #include "BaseOffScreen.h"
-#include"Matrix4x4.h"
+#include "Matrix4x4.h"
 #include <d3d12.h>
 #include <wrl/client.h>
 
@@ -10,7 +11,7 @@ struct OutLineParamData {
 };
 
 struct OutLineMaterial {
-    Matrix4x4 viewProjectionInverse;
+    Matrix4x4 projectionInverse;
 };
 
 class Outline : public BaseOffScreen {
@@ -19,14 +20,14 @@ private:
     void CreateRootSignature() override;
 
 public:
-    Outline()             = default;
+    Outline()           = default;
     ~Outline() override = default;
 
     void Init(DirectXCommon* dxCommon) override;
     void SetDrawState(ID3D12GraphicsCommandList* commandList) override;
 
     void CreateConstantBuffer() override;
-    void SetCommand([[maybe_unused]] ID3D12GraphicsCommandList* commandList) override;
+    void Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) override;
     void DebugParamImGui() override;
 
 private:
@@ -34,4 +35,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D12Resource> outlineMaterialResource_;
     OutLineParamData* uvStepData_;
     OutLineMaterial* outlineMaterialData_;
+
+    D3D12_STATIC_SAMPLER_DESC staticSamplersOutLine_[2];
+
 };

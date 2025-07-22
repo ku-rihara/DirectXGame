@@ -89,3 +89,6 @@ void BaseOffScreen::SetDrawState(ID3D12GraphicsCommandList* commandList) {
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
  }
 
+void BaseOffScreen::SetViewProjection(const ViewProjection* viewProjection) {
+     viewProjection_ = viewProjection;
+ }

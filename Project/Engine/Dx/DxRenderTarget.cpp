@@ -40,6 +40,7 @@ void DxRenderTarget::Init(
 
     // 初期状態をRENDER_TARGETに設定
     renderTextureCurrentState_ = D3D12_RESOURCE_STATE_RENDER_TARGET;
+    depthCurrentState_         = D3D12_RESOURCE_STATE_DEPTH_WRITE;
 }
 
 void DxRenderTarget::CreateRenderTextureRTV() {
@@ -88,10 +89,20 @@ void DxRenderTarget::CreateSrvHandle() {
     srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
     /// Srvの生成
-    srvManager_->CreateSRVforTexture2D(
-        srvIndex,
-        renderTextureResource_.Get(),
-        srvDesc);
+    srvManager_->CreateSRVforTexture2D(srvIndex, renderTextureResource_.Get(), srvDesc);
+
+    uint32_t depthIndex = srvManager_->Allocate();
+
+    depthTextureGPUSrvHandle_ = srvManager_->GetGPUDescriptorHandle(depthIndex);
+    depthTextureCPUSrvHandle_ = srvManager_->GetCPUDescriptorHandle(depthIndex);
+
+    D3D12_SHADER_RESOURCE_VIEW_DESC depthTextureSrvDesc{};
+    depthTextureSrvDesc.Format                  = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+    depthTextureSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+    depthTextureSrvDesc.ViewDimension           = D3D12_SRV_DIMENSION_TEXTURE2D;
+    depthTextureSrvDesc.Texture2D.MipLevels     = 1;
+
+    srvManager_->CreateSRVforTexture2D(depthIndex, depthStencilResource_.Get(), depthTextureSrvDesc);
 }
 
 ///==========================================================
@@ -215,7 +226,7 @@ void DxRenderTarget::ClearDepthBuffer() {
 void DxRenderTarget::PreRenderTexture() {
     D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
 
-    // 現在の状態がすでにRENDER_TARGETでない場合のみ遷移
+    // 遷移
     if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_RENDER_TARGET) {
         PutTransitionBarrier(renderTextureResource_.Get(), renderTextureCurrentState_, D3D12_RESOURCE_STATE_RENDER_TARGET);
     }
@@ -229,6 +240,59 @@ void DxRenderTarget::PreRenderTexture() {
     // ビューポートとシザー矩形を設定
     dxCommand_->GetCommandList()->RSSetViewports(1, &viewport_);
     dxCommand_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
+}
+
+void DxRenderTarget::PreDraw() {
+    // これから書き込むバックバッファのインデックスを取得
+    backBufferIndex_ = dxSwapChain_->GetCurrentBackBufferIndex();
+
+    // 深度バッファをDEPTH_WRITE状態に遷移
+    if (depthCurrentState_ != D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE) {
+        PutTransitionBarrier(depthStencilResource_.Get(), depthCurrentState_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+    }
+
+    // PIXEL_SHADER_RESOURCEに遷移
+    if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE) {
+        PutTransitionBarrier(renderTextureResource_.Get(), renderTextureCurrentState_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+    }
+
+    // SwapChainリソースの現在の状態を取得
+    D3D12_RESOURCE_STATES currentSwapChainState = dxSwapChain_->GetResourceState(backBufferIndex_);
+
+    // SwapChainリソースをRENDER_TARGET状態に遷移
+    if (currentSwapChainState != D3D12_RESOURCE_STATE_RENDER_TARGET) {
+        PutTransitionBarrier(dxSwapChain_->GetSwapChainResource(backBufferIndex_).Get(), currentSwapChainState, D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+        // SwapChainの状態を更新
+        dxSwapChain_->UpdateResourceState(backBufferIndex_, D3D12_RESOURCE_STATE_RENDER_TARGET);
+    }
+
+    // 描画先のRTVとDSVを設定する
+    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(backBufferIndex_);
+    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+
+    dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
+    // レンダーターゲットと深度ステンシルビューをクリア
+    dxCommand_->GetCommandList()->ClearRenderTargetView(rtvHandle, clearValue_.Color, 0, nullptr);
+
+    // ビューポートとシザー矩形を設定
+    dxCommand_->GetCommandList()->RSSetViewports(1, &viewport_);
+    dxCommand_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
+}
+
+void DxRenderTarget::PostDrawTransitionBarrier() {
+    UINT currentIndex = dxSwapChain_->GetCurrentBackBufferIndex();
+
+    // 深度バッファの状態遷移
+    if (depthCurrentState_ != D3D12_RESOURCE_STATE_DEPTH_WRITE) {
+        PutTransitionBarrier(depthStencilResource_.Get(), depthCurrentState_, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+    }
+
+    // SwapChainリソースをPRESENT状態に遷移
+    PutTransitionBarrier(dxSwapChain_->GetSwapChainResource(currentIndex).Get(),
+        D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+
+    dxSwapChain_->UpdateResourceState(currentIndex, D3D12_RESOURCE_STATE_PRESENT);
 }
 
 void DxRenderTarget::SetupViewportAndScissor() {
@@ -255,63 +319,19 @@ void DxRenderTarget::PutTransitionBarrier(ID3D12Resource* pResource, D3D12_RESOU
     barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
     // バリアを張る対象のリソース。現在のバックバッファに対して行う
     barrier.Transition.pResource = pResource;
-    // 遷移前(現在)のResourceState
+    // 遷移前のResourceState
     barrier.Transition.StateBefore = Before;
     // 遷移後のResourceState
     barrier.Transition.StateAfter = After;
     // TransitionBarrierを張る
     dxCommand_->GetCommandList()->ResourceBarrier(1, &barrier);
 
-    // レンダーテクスチャの状態更新
+    // リソースの状態更新
     if (pResource == renderTextureResource_.Get()) {
         renderTextureCurrentState_ = After;
+    } else if (pResource == depthStencilResource_.Get()) {
+        depthCurrentState_ = After;
     }
-}
-
-void DxRenderTarget::PreDraw() {
-    // これから書き込むバックバッファのインデックスを取得
-    backBufferIndex_ = dxSwapChain_->GetCurrentBackBufferIndex();
-
-    // レンダーテクスチャをSRVとして使用するため、PIXEL_SHADER_RESOURCEに遷移
-    if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE) {
-        PutTransitionBarrier(renderTextureResource_.Get(), renderTextureCurrentState_,
-            D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-    }
-
-    // SwapChainリソースの現在の状態を取得
-    D3D12_RESOURCE_STATES currentSwapChainState = dxSwapChain_->GetResourceState(backBufferIndex_);
-
-    // SwapChainリソースをRENDER_TARGET状態に遷移
-    if (currentSwapChainState != D3D12_RESOURCE_STATE_RENDER_TARGET) {
-        PutTransitionBarrier(dxSwapChain_->GetSwapChainResource(backBufferIndex_).Get(),
-            currentSwapChainState,
-            D3D12_RESOURCE_STATE_RENDER_TARGET);
-
-        // SwapChainの状態を更新
-        dxSwapChain_->UpdateResourceState(backBufferIndex_, D3D12_RESOURCE_STATE_RENDER_TARGET);
-    }
-
-    // 描画先のRTVとDSVを設定する
-    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(backBufferIndex_);
-    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
-
-    dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
-    // レンダーターゲットと深度ステンシルビューをクリア
-    dxCommand_->GetCommandList()->ClearRenderTargetView(rtvHandle, clearValue_.Color, 0, nullptr);
-    // ビューポートとシザー矩形を設定
-    dxCommand_->GetCommandList()->RSSetViewports(1, &viewport_);
-    dxCommand_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
-}
-
-void DxRenderTarget::PostDrawTransitionBarrier() {
-    UINT currentIndex = dxSwapChain_->GetCurrentBackBufferIndex();
-
-    // SwapChainリソースをPRESENT状態に遷移
-    PutTransitionBarrier(dxSwapChain_->GetSwapChainResource(currentIndex).Get(),
-        D3D12_RESOURCE_STATE_RENDER_TARGET,
-        D3D12_RESOURCE_STATE_PRESENT);
-
-    dxSwapChain_->UpdateResourceState(currentIndex, D3D12_RESOURCE_STATE_PRESENT);
 }
 
 void DxRenderTarget::Finalize() {

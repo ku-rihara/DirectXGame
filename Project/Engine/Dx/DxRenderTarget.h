@@ -66,8 +66,13 @@ private:
 
     D3D12_GPU_DESCRIPTOR_HANDLE renderTextureGPUSrvHandle_;
     D3D12_CPU_DESCRIPTOR_HANDLE renderTextureCPUSrvHandle_;
+
+    D3D12_GPU_DESCRIPTOR_HANDLE depthTextureGPUSrvHandle_;
+    D3D12_CPU_DESCRIPTOR_HANDLE depthTextureCPUSrvHandle_;
+
     D3D12_CLEAR_VALUE clearValue_;
-    D3D12_RESOURCE_STATES renderTextureCurrentState_ = D3D12_RESOURCE_STATE_RENDER_TARGET;
+    D3D12_RESOURCE_STATES renderTextureCurrentState_;
+    D3D12_RESOURCE_STATES depthCurrentState_;
 
    UINT backBufferIndex_;
 
@@ -90,6 +95,8 @@ public:
     Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetDsvDescriptorHeap() const { return dsvDescriptorHeap_; }
     D3D12_GPU_DESCRIPTOR_HANDLE GetRenderTextureGPUSrvHandle() const { return renderTextureGPUSrvHandle_; }
     D3D12_CPU_DESCRIPTOR_HANDLE GetRenderTextureCPUSrvHandle() const { return renderTextureCPUSrvHandle_; }
+    D3D12_CPU_DESCRIPTOR_HANDLE GetDepthTextureCPUSrvHandle() const { return depthTextureCPUSrvHandle_; }
+    D3D12_GPU_DESCRIPTOR_HANDLE GetDepthTextureGPUSrvHandle() const { return depthTextureGPUSrvHandle_; }
     D3D12_CLEAR_VALUE GetClearValue() const { return clearValue_; }
     UINT GetDescriptorSizeDSV() const { return descriptorSizeDSV_; }
 };
