@@ -19,3 +19,12 @@ void GrayScale::CreateRootSignature() {
 void GrayScale::SetDrawState(ID3D12GraphicsCommandList* commandList) {
     BaseOffScreen::SetDrawState(commandList);
 }
+
+void GrayScale::CreateConstantBuffer() {
+}
+void GrayScale::SetCommand([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
+}
+
+
+void GrayScale::DebugParamImGui() {
+}

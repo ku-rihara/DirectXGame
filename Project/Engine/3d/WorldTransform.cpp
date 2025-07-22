@@ -10,39 +10,12 @@ void WorldTransform::Init() {
     rotation_    = {};
     translation_ = {};
 
-    //// 定数バッファの生成
-    // CreateConstantBuffer();
-    //// マッピング
-    // Map();
     //  行列の更新
     UpdateMatrix();
 }
 
-void WorldTransform::CreateConstantBuffer() {
-    // デバイスの取得
-    Microsoft::WRL::ComPtr<ID3D12Device> device = DirectXCommon::GetInstance()->GetDevice();
-    // 定数バッファのサイズを計算
-    const UINT bufferSize = sizeof(ConstBufferDataWorldTransform);
-
-    // 定数バッファを生成
-    constBuffer_ = DirectXCommon::GetInstance()->CreateBufferResource(device, bufferSize);
-}
-
-void WorldTransform::Map() {
-    // 定数バッファのマッピング
-    D3D12_RANGE readRange = {};
-    HRESULT hr            = constBuffer_->Map(0, &readRange, reinterpret_cast<void**>(&constMap));
-    if (FAILED(hr)) {
-        // エラー処理
-        OutputDebugStringA("ConstBuffer Map failed.\n");
-    }
-}
-
 void WorldTransform::TransferMatrix() {
 
-    if (constMap) {
-        constMap->matWorld = matWorld_;
-    }
 }
 
 void WorldTransform::UpdateMatrix() {

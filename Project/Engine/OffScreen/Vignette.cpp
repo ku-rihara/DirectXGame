@@ -1,5 +1,5 @@
-#include "Dx/DirectXCommon.h"
 #include "Vignette.h"
+#include "Dx/DirectXCommon.h"
 
 void Vignette::Init(DirectXCommon* dxCommon) {
 
@@ -18,4 +18,14 @@ void Vignette::CreateRootSignature() {
 
 void Vignette::SetDrawState(ID3D12GraphicsCommandList* commandList) {
     BaseOffScreen::SetDrawState(commandList);
+}
+
+void Vignette::CreateConstantBuffer() {
+
+}
+void Vignette::SetCommand([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
+}
+
+
+void Vignette::DebugParamImGui() {
 }

@@ -66,6 +66,7 @@
     <ClCompile Include="Engine\OffScreen\GrayScale.cpp" />
     <ClCompile Include="Engine\OffScreen\NormalScreen.cpp" />
     <ClCompile Include="Engine\OffScreen\OffScreenRenderer.cpp" />
+    <ClCompile Include="Engine\OffScreen\Outline.cpp" />
     <ClCompile Include="Engine\OffScreen\RadialBlur.cpp" />
     <ClCompile Include="Engine\OffScreen\Vignette.cpp" />
     <ClCompile Include="Engine\Pipeline\Line3DPipeline.cpp" />
@@ -174,9 +175,11 @@
     <ClInclude Include="Engine\Lighrt\SpotLightManager.h" />
     <ClInclude Include="Engine\OffScreen\BaseOffScreen.h" />
     <ClInclude Include="Engine\OffScreen\BoxFilter.h" />
+    <ClInclude Include="Engine\OffScreen\GaussianFilter.h" />
     <ClInclude Include="Engine\OffScreen\GrayScale.h" />
     <ClInclude Include="Engine\OffScreen\NormalScreen.h" />
     <ClInclude Include="Engine\OffScreen\OffScreenRenderer.h" />
+    <ClInclude Include="Engine\OffScreen\Outline.h" />
     <ClInclude Include="Engine\OffScreen\RadialBlur.h" />
     <ClInclude Include="Engine\OffScreen\Vignette.h" />
     <ClInclude Include="Engine\Pipeline\Line3DPipeline.h" />
@@ -348,6 +351,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="resources\Shader\OffScreen\Grayscale.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\LuminanceBasedOutline.PS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

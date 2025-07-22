@@ -15,5 +15,9 @@ public:
     void Init(DirectXCommon* dxCommon) override;
     void SetDrawState(ID3D12GraphicsCommandList* commandList) override;
 
+    void CreateConstantBuffer() override;
+    void SetCommand([[maybe_unused]] ID3D12GraphicsCommandList* commandList) override;
+    void DebugParamImGui() override;
+
 private:
 };

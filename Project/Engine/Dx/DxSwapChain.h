@@ -36,6 +36,8 @@ public:
     // 終了処理
     void Finalize();
 
+public:
+   
 private:
     Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain_;
     Microsoft::WRL::ComPtr<ID3D12Resource> resources_[2];

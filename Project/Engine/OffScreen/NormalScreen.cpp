@@ -20,3 +20,12 @@ void NormalScreen::CreateRootSignature() {
 void NormalScreen::SetDrawState(ID3D12GraphicsCommandList* commandList) {
     BaseOffScreen::SetDrawState(commandList);
 }
+
+void NormalScreen::CreateConstantBuffer() {
+}
+void NormalScreen::SetCommand([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
+}
+
+
+void NormalScreen::DebugParamImGui() {
+}

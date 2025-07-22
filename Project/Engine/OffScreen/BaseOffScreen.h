@@ -21,6 +21,10 @@ public:
     virtual void Init(DirectXCommon* dxCommon);
     virtual void SetDrawState(ID3D12GraphicsCommandList* commandList);
 
+    virtual void SetCommand([[maybe_unused]] ID3D12GraphicsCommandList* commandList) = 0;
+    virtual void CreateConstantBuffer() = 0;
+    virtual void DebugParamImGui()      = 0;
+
 protected:
     DirectXCommon* dxCommon_ = nullptr;
 
