@@ -98,7 +98,4 @@ public:
 
     Microsoft::WRL::ComPtr<ID3D12Device> GetDevice() const;
     ID3D12GraphicsCommandList* GetCommandList() const;
-
-    D3D12_GPU_DESCRIPTOR_HANDLE GetRenderTextureGPUSrvHandle() const;
-    D3D12_CPU_DESCRIPTOR_HANDLE GetRenderTextureCPUSrvHandle() const;
 };

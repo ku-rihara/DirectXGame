@@ -1,9 +1,8 @@
 #pragma once
 
 #include "Vector4.h"
-/// <summary>
-/// 4x4行列
-/// </summary>
+
+
 class Vector3;
 class Quaternion;
 class ViewProjection;

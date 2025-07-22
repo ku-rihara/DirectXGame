@@ -8,6 +8,7 @@
 #include <wrl/client.h>
 
 class DirectXCommon;
+class ViewProjection;
 
 class BaseOffScreen {
 protected:
@@ -21,12 +22,13 @@ public:
     virtual void Init(DirectXCommon* dxCommon);
     virtual void SetDrawState(ID3D12GraphicsCommandList* commandList);
 
-    virtual void SetCommand([[maybe_unused]] ID3D12GraphicsCommandList* commandList) = 0;
-    virtual void CreateConstantBuffer() = 0;
-    virtual void DebugParamImGui()      = 0;
+    virtual void Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) = 0;
+    virtual void CreateConstantBuffer()                                        = 0;
+    virtual void DebugParamImGui()                                             = 0;
 
 protected:
     DirectXCommon* dxCommon_ = nullptr;
+    const ViewProjection* viewProjection_;
 
     D3D12_STATIC_SAMPLER_DESC staticSamplers_[1];
     Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;
@@ -40,4 +42,7 @@ protected:
 
     std::wstring psName_ = L"resources/Shader/OffScreen/Fullscreen.PS.hlsl";
     std::wstring vsName_ = L"resources/Shader/OffScreen/Fullscreen.VS.hlsl";
+
+public:
+    void SetViewProjection(const ViewProjection* viewProjection);
 };

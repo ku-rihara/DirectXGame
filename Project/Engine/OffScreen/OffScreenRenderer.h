@@ -3,7 +3,7 @@
 #include <array>
 #include <d3d12.h>
 #include <memory>
-
+class ViewProjection;
 enum class OffScreenMode {
     NONE,
     GRAY,
@@ -29,7 +29,11 @@ public:
     void SetOffScreenMode(const OffScreenMode& mode) { currentMode_ = mode; }
 
 private:
+    const ViewProjection* viewProjection_;
     DirectXCommon* dxCommon_ = nullptr;
     OffScreenMode currentMode_ = OffScreenMode::NONE;
     std::array<std::unique_ptr<BaseOffScreen>, static_cast<size_t>(OffScreenMode::COUNT)> effects_;
+
+public:
+    void SetViewProjection(const ViewProjection* viewProjection);
 };

@@ -156,13 +156,6 @@ ID3D12GraphicsCommandList* DirectXCommon::GetCommandList() const {
     return dxCommand_->GetCommandList().Get();
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE DirectXCommon::GetRenderTextureGPUSrvHandle() const {
-    return dxRenderTarget_->GetRenderTextureGPUSrvHandle();
-}
-
-D3D12_CPU_DESCRIPTOR_HANDLE DirectXCommon::GetRenderTextureCPUSrvHandle() const {
-    return dxRenderTarget_->GetRenderTextureCPUSrvHandle();
-}
 
 void DirectXCommon::Finalize() {
 

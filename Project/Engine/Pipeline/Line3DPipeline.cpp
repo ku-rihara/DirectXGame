@@ -24,7 +24,6 @@ void Line3DPipeline::CreateGraphicsPipeline() {
     inputElementDescs[0].Format                   = DXGI_FORMAT_R32G32B32_FLOAT;
     inputElementDescs[0].AlignedByteOffset        = D3D12_APPEND_ALIGNED_ELEMENT;
 
-    // 修正後
     inputElementDescs[1].SemanticName      = "COLOR";
     inputElementDescs[1].SemanticIndex     = 0;
     inputElementDescs[1].Format            = DXGI_FORMAT_R32G32B32A32_FLOAT;

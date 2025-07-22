@@ -37,16 +37,8 @@ void OffScreenRenderer::Init(DirectXCommon* dxCommon) {
 
 void OffScreenRenderer::Draw(ID3D12GraphicsCommandList* commandList) {
     effects_[static_cast<size_t>(currentMode_)]->SetDrawState(commandList);
-    // プリミティブトポロジーを設定
-    commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-    // テクスチャリソースを設定
-    commandList->SetGraphicsRootDescriptorTable(0, dxCommon_->GetRenderTextureGPUSrvHandle());
-
     // 各OffScreenコマンド
-    effects_[static_cast<size_t>(currentMode_)]->SetCommand(commandList);
-
-    commandList->DrawInstanced(3, 1, 0, 0);
+    effects_[static_cast<size_t>(currentMode_)]->Draw(commandList);
 }
 
 void OffScreenRenderer::DrawImGui() {
@@ -59,6 +51,14 @@ void OffScreenRenderer::DrawImGui() {
             currentMode_ = static_cast<OffScreenMode>(mode);
         }
     }
+    effects_[static_cast<size_t>(currentMode_)]->DebugParamImGui();
     ImGui::End();
 #endif
 }
+
+void OffScreenRenderer::SetViewProjection(const ViewProjection* viewProjection) {
+    viewProjection_ = viewProjection;
+    for (size_t i = 0; i < effects_.size(); ++i) {
+        effects_[i]->SetViewProjection(viewProjection_);
+    }
+ }
