@@ -1,9 +1,8 @@
 #include "Outline.h"
+#include "base/WinApp.h"
 #include "Dx/DirectXCommon.h"
-#include"base/WinApp.h"
 #include "function/Log.h"
 #include <cassert>
-
 
 void Outline::Init(DirectXCommon* dxCommon) {
 
@@ -17,6 +16,7 @@ void Outline::CreateGraphicsPipeline() {
 }
 
 void Outline::CreateRootSignature() {
+
     HRESULT hr = 0;
     // RootSignatureを作成
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -39,11 +39,11 @@ void Outline::CreateRootSignature() {
     rootParameters[1].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[1].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[1].Descriptor.ShaderRegister = 0;
-    descriptionRootSignature.pParameters        = rootParameters; // ルートパラメータ配列へのポインタ
-    descriptionRootSignature.NumParameters      = _countof(rootParameters); // 配列の長さ
 
+    descriptionRootSignature.pParameters   = rootParameters; // ルートパラメータ配列へのポインタ
+    descriptionRootSignature.NumParameters = _countof(rootParameters); // 配列の長さ
+    descriptionRootSignature.pStaticSamplers   = staticSamplers_;
     descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers_);
-
     hr = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
     if (FAILED(hr)) {
         Log(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
@@ -75,8 +75,8 @@ void Outline::CreateConstantBuffer() {
 }
 
 void Outline::SetCommand([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
+    commandList->SetGraphicsRootConstantBufferView(1, uvStepResource_->GetGPUVirtualAddress());
 }
-
 
 void Outline::DebugParamImGui() {
 }
