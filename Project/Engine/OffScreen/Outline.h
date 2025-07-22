@@ -5,8 +5,8 @@
 #include <d3d12.h>
 #include <wrl/client.h>
 
-struct UVStepData {
-    Vector2 size;
+struct OutLineParamData {
+    float wightRate;
 };
 
 class Outline : public BaseOffScreen {
@@ -27,5 +27,5 @@ public:
 
 private:
     Microsoft::WRL::ComPtr<ID3D12Resource> uvStepResource_;
-    UVStepData* uvStepData_;
+    OutLineParamData* uvStepData_;
 };

@@ -1,5 +1,4 @@
 #include "Outline.h"
-#include "base/WinApp.h"
 #include "Dx/DirectXCommon.h"
 #include "function/Log.h"
 #include <cassert>
@@ -61,7 +60,7 @@ void Outline::SetDrawState(ID3D12GraphicsCommandList* commandList) {
 void Outline::CreateConstantBuffer() {
 
     // 定数バッファを生成
-    uvStepResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(UVStepData));
+    uvStepResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(OutLineParamData));
 
     // 定数バッファのマッピング
     D3D12_RANGE readRange = {};
@@ -71,7 +70,7 @@ void Outline::CreateConstantBuffer() {
         OutputDebugStringA("ConstBuffer Map failed.\n");
     }
 
-    uvStepData_->size = {WinApp::kWindowWidth, WinApp::kWindowHeight};
+    uvStepData_->wightRate = 6.0f;
 }
 
 void Outline::SetCommand([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
