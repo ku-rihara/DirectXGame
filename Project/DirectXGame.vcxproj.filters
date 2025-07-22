@@ -856,9 +856,6 @@
     <ClCompile Include="Engine\OffScreen\Vignette.cpp">
       <Filter>MyEngine\.cpp\OffScreen</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Pipeline\ShadowMapPipeline.cpp">
-      <Filter>MyEngine\.cpp\Pileline</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Dx\DxCommand.cpp">
       <Filter>MyEngine\.cpp\Dx</Filter>
     </ClCompile>
@@ -876,6 +873,9 @@
     </ClCompile>
     <ClCompile Include="Engine\OffScreen\Outline.cpp">
       <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\ShadowMapPipeline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1502,9 +1502,6 @@
     </None>
     <None Include="resources\Shader\ShadowMap\ShadowMap.hlsli">
       <Filter>リソースファイル\ShadowMap</Filter>
-    </None>
-    <None Include="resources\Shader\Lighting\ShadowCalc.hlsli">
-      <Filter>リソースファイル\Lighting</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
