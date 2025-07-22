@@ -874,6 +874,9 @@
     <ClCompile Include="Engine\Dx\DxDevice.cpp">
       <Filter>MyEngine\.cpp\Dx</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\OffScreen\Outline.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1449,6 +1452,12 @@
     <ClInclude Include="Engine\Dx\DxCommand.h">
       <Filter>MyEngine\.h\Dx</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\OffScreen\GaussianFilter.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OffScreen\Outline.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -1561,6 +1570,12 @@
     </FxCompile>
     <FxCompile Include="resources\Shader\ShadowMap\ShadowMap.VS.hlsl">
       <Filter>リソースファイル\ShadowMap</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\LuminanceBasedOutline.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\DepthBasedOutline.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

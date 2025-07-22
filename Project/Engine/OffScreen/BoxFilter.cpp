@@ -19,3 +19,13 @@ void BoxFilter::CreateRootSignature() {
 void BoxFilter::SetDrawState(ID3D12GraphicsCommandList* commandList) {
     BaseOffScreen::SetDrawState(commandList);
 }
+
+void BoxFilter::CreateConstantBuffer() {
+}
+void BoxFilter::SetCommand([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
+
+}
+
+void BoxFilter::DebugParamImGui() {
+
+ }

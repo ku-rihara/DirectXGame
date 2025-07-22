@@ -19,3 +19,12 @@ void RadialBlur::CreateRootSignature() {
 void RadialBlur::SetDrawState(ID3D12GraphicsCommandList* commandList) {
     BaseOffScreen::SetDrawState(commandList);
 }
+
+void RadialBlur::CreateConstantBuffer() {
+}
+void RadialBlur::SetCommand([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
+}
+
+
+void RadialBlur::DebugParamImGui() {
+}

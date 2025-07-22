@@ -43,9 +43,6 @@ public:
 
     void Init();
 
-    void CreateConstantBuffer();
-    void Map();
-
     void UpdateMatrix();
 
     Vector3 LookAt(const Vector3& direction) const;
@@ -84,10 +81,6 @@ private:
     Matrix4x4 billboardMatrix_;
     Matrix4x4 backToFrontMatrix_;
 
-    // 定数バッファ
-    Microsoft::WRL::ComPtr<ID3D12Resource> constBuffer_;
-    // マッピング済みアドレス
-    ConstBufferDataWorldTransform* constMap = nullptr;
     // コピー禁止
     WorldTransform(const WorldTransform&)            = delete;
     WorldTransform& operator=(const WorldTransform&) = delete;
@@ -98,9 +91,6 @@ public:
 
     Vector3 GetLocalPos() const;
     Vector3 GetWorldPos() const;
-
-    /// 定数バッファの取得
-    const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return constBuffer_; }
 
     Vector3 GetRightVector() const {
         return Vector3(matWorld_.m[0][0], matWorld_.m[1][0], matWorld_.m[2][0]);
@@ -129,11 +119,8 @@ public:
           parentJointIndex_(other.parentJointIndex_),
           parentJointName_(std::move(other.parentJointName_)),
           billboardMatrix_(std::move(other.billboardMatrix_)),
-          backToFrontMatrix_(std::move(other.backToFrontMatrix_)),
-          constBuffer_(std::move(other.constBuffer_)),
-          constMap(other.constMap) {
+          backToFrontMatrix_(std::move(other.backToFrontMatrix_)) {
 
-        other.constMap          = nullptr;
         other.parentAnimation_  = nullptr;
         other.parentJointIndex_ = -1;
         other.parentJointName_.clear();
@@ -154,10 +141,7 @@ public:
             parentJointName_   = std::move(other.parentJointName_);
             billboardMatrix_   = std::move(other.billboardMatrix_);
             backToFrontMatrix_ = std::move(other.backToFrontMatrix_);
-            constBuffer_       = std::move(other.constBuffer_);
-            constMap           = other.constMap;
-
-            other.constMap          = nullptr;
+          
             other.parentAnimation_  = nullptr;
             other.parentJointIndex_ = -1;
             other.parentJointName_.clear();

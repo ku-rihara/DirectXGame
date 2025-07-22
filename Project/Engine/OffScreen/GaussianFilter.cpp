@@ -19,3 +19,12 @@ void GaussianFilter::CreateRootSignature() {
 void GaussianFilter::SetDrawState(ID3D12GraphicsCommandList* commandList) {
     BaseOffScreen::SetDrawState(commandList);
 }
+
+void GaussianFilter::CreateConstantBuffer() {
+}
+void GaussianFilter::SetCommand([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
+}
+
+
+void GaussianFilter::DebugParamImGui() {
+}
