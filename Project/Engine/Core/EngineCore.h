@@ -19,7 +19,6 @@ class Line3DPipeline;
 class RtvManager;
 class SkinningObject3DPipeline;
 class Light;
-class ShadowMapPipeline;
 
 class EngineCore {
 public:
@@ -71,5 +70,4 @@ public:
      SkinningObject3DPipeline* skinningObject3DPipeline_;
      OffScreenRenderer* offScreenRenderer_;
      Light* light_;
-     ShadowMapPipeline* shadowMapPipeline_;
 };

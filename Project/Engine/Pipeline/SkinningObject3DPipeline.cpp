@@ -179,7 +179,7 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     descriptorRange[4].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
     // RootParameterを作成
-    D3D12_ROOT_PARAMETER rootParameters[12] = {};
+    D3D12_ROOT_PARAMETER rootParameters[14] = {};
 
     // 0: Material
     rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
@@ -240,11 +240,22 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     rootParameters[10].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[10].Descriptor.ShaderRegister = 5;
 
+     // 11: shadowData
+    rootParameters[11].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[11].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[11].Descriptor.ShaderRegister = 6;
+
+    // 11: shadowVertexData
+    rootParameters[12].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[12].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
+    rootParameters[12].Descriptor.ShaderRegister = 1;
+
+
     // 11:   gMatrixPalette
-    rootParameters[11].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[11].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_VERTEX;
-    rootParameters[11].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
-    rootParameters[11].DescriptorTable.NumDescriptorRanges = 1;
+    rootParameters[13].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[13].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_VERTEX;
+    rootParameters[13].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
+    rootParameters[13].DescriptorTable.NumDescriptorRanges = 1;
 
     descriptionRootSignature.pParameters   = rootParameters;
     descriptionRootSignature.NumParameters = _countof(rootParameters);

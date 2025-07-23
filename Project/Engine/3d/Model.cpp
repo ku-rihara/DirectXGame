@@ -187,7 +187,7 @@ void Model::DebugImGui() {
 #endif
 }
 
-void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, std::optional<uint32_t> textureHandle) {
+void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Microsoft::WRL::ComPtr<ID3D12Resource> shadowVResource, Material material, std::optional<uint32_t> textureHandle) {
 
     auto commandList = dxCommon_->GetCommandList();
     /*materialDate_->color = color.;*/
@@ -214,11 +214,14 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material ma
 
     Light::GetInstance()->SetLightCommands(commandList);
 
+    //shadow
+    commandList->SetGraphicsRootConstantBufferView(12, shadowVResource->GetGPUVirtualAddress());
+  
     // 描画コール
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
 }
 
-void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, SkinCluster skinCluster, std::optional<uint32_t> textureHandle) {
+void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Microsoft::WRL::ComPtr<ID3D12Resource> shadowVResource, Material material, SkinCluster skinCluster, std::optional<uint32_t> textureHandle) {
 
     auto commandList = dxCommon_->GetCommandList();
 
@@ -247,10 +250,13 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Ma
     // 環境マップ
     uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
     commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
-    commandList->SetGraphicsRootDescriptorTable(11, skinCluster.paletteSrvHandle.second);
+    commandList->SetGraphicsRootDescriptorTable(13, skinCluster.paletteSrvHandle.second);
 
     // ライト
     Light::GetInstance()->SetLightCommands(commandList);
+
+     // shadow
+    commandList->SetGraphicsRootConstantBufferView(12, shadowVResource->GetGPUVirtualAddress());
 
     // 描画
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);

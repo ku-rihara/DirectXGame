@@ -72,7 +72,6 @@
     <ClCompile Include="Engine\Pipeline\Line3DPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Object3DPiprline.cpp" />
     <ClCompile Include="Engine\Pipeline\ParticlePipeline.cpp" />
-    <ClCompile Include="Engine\Pipeline\ShadowMapPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\SkinningObject3DPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\SpritePipeline.cpp" />
     <ClCompile Include="Engine\Primitive\IPrimitive.cpp" />
@@ -80,6 +79,7 @@
     <ClCompile Include="Engine\Primitive\PrimitiveCylinder.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitivePlane.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp" />
+    <ClCompile Include="Engine\ShadowMap\ShadowMap.cpp" />
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
     <ClCompile Include="Engine\utility\EasingCreator\EasingCreator.cpp" />
     <ClCompile Include="Engine\utility\EasingCreator\EasingEditor.cpp" />
@@ -257,7 +257,6 @@
     <ClInclude Include="Engine\Pipeline\Line3DPipeline.h" />
     <ClInclude Include="Engine\Pipeline\Object3DPiprline.h" />
     <ClInclude Include="Engine\Pipeline\ParticlePipeline.h" />
-    <ClInclude Include="Engine\Pipeline\ShadowMapPipeline.h" />
     <ClInclude Include="Engine\Pipeline\SkinningObject3DPipeline.h" />
     <ClInclude Include="Engine\Pipeline\SpritePipeline.h" />
     <ClInclude Include="Engine\Primitive\IPrimitive.h" />
@@ -265,6 +264,7 @@
     <ClInclude Include="Engine\Primitive\PrimitiveCylinder.h" />
     <ClInclude Include="Engine\Primitive\PrimitivePlane.h" />
     <ClInclude Include="Engine\Primitive\PrimitiveRing.h" />
+    <ClInclude Include="Engine\ShadowMap\ShadowMap.h" />
     <ClInclude Include="Engine\ShadowMap\ShadowMapData.h" />
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h" />
     <ClInclude Include="Engine\struct\MaterialData.h" />
@@ -515,14 +515,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="resources\Shader\Particle.VS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\ShadowMap\ShadowMap.PS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\ShadowMap\ShadowMap.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

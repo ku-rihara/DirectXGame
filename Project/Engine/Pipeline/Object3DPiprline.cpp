@@ -157,7 +157,7 @@ void Object3DPiprline::CreateRootSignature() {
     descriptorRange[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
     // RootParameterを作成
-    D3D12_ROOT_PARAMETER rootParameters[11] = {};
+    D3D12_ROOT_PARAMETER rootParameters[13] = {};
 
     // 0: Material
     rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
@@ -217,6 +217,16 @@ void Object3DPiprline::CreateRootSignature() {
     rootParameters[10].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[10].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[10].Descriptor.ShaderRegister = 5;
+
+    // 11: shadowData
+    rootParameters[11].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[11].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[11].Descriptor.ShaderRegister = 6;
+
+    // 11: shadowVertexData
+    rootParameters[12].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[12].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
+    rootParameters[12].Descriptor.ShaderRegister = 1;
 
     descriptionRootSignature.pParameters   = rootParameters; // ルートパラメーターの配列
     descriptionRootSignature.NumParameters = _countof(rootParameters); // 配列の長さ

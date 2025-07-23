@@ -21,6 +21,7 @@ public:
 
     void Init(ID3D12Device* device);
     ID3D12Resource* GetLightResource() const { return lightResource_.Get(); }
+    Vector3 GetDirection() const { return lightData_->direction; }
 
     void SetDirection(const Vector3& direction);
     void SetColor(const Vector4& color);

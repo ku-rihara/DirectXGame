@@ -1458,6 +1458,9 @@
     <ClInclude Include="Engine\OffScreen\Outline.h">
       <Filter>MyEngine\.h\OffScreen</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\ShadowMap\ShadowMap.h">
+      <Filter>MyEngine\.h\ShadowMap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -1561,12 +1564,6 @@
     </FxCompile>
     <FxCompile Include="resources\Shader\OffScreen\Dissolve.PS.hlsl">
       <Filter>リソースファイル\OffScreen</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\ShadowMap\ShadowMap.PS.hlsl">
-      <Filter>リソースファイル\ShadowMap</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\ShadowMap\ShadowMap.VS.hlsl">
-      <Filter>リソースファイル\ShadowMap</Filter>
     </FxCompile>
     <FxCompile Include="resources\Shader\OffScreen\LuminanceBasedOutline.PS.hlsl">
       <Filter>リソースファイル\OffScreen</Filter>

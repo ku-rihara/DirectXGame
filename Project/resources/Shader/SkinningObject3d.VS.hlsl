@@ -1,4 +1,5 @@
 #include"SkinningObject3d.hlsli"
+#include"ShadowMap/ShadowMap.hlsli"
 
 struct TransformationMatrix
 {
@@ -8,6 +9,8 @@ struct TransformationMatrix
 };
 
 ConstantBuffer<TransformationMatrix> gTransformationMatrix : register(b0);
+ConstantBuffer<ShadowVertexBuffer> gShadowVertexBuffer : register(b1);
+
 
 struct Well
 {
@@ -43,7 +46,7 @@ Skinned Skinning(VertexShaderInput input)
     return skinned;
 }
 
-VertexShaderOutput main(VertexShaderInput input)
+VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID)
 {
     VertexShaderOutput output;
     Skinned skinned = Skinning(input); //Skining処理
@@ -52,6 +55,13 @@ VertexShaderOutput main(VertexShaderInput input)
     output.worldPosition = mul(skinned.position, gTransformationMatrix.World).xyz;
     output.texcoord = input.texcoord;
     output.normal = normalize(mul(skinned.normal, (float3x3)gTransformationMatrix.WorldInverseTranspose));
+    output.instanceID = instanceID;
+    
+    if (output.instanceID == 1)
+    {
+        
+    }
    
+    
     return output;
 }
