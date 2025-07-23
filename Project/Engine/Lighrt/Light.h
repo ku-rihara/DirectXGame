@@ -1,17 +1,23 @@
 #pragma once
+#include <d3d12.h>
 #include <memory>
-#include<wrl.h>
-#include<d3d12.h>
-#include<dxgi1_6.h>
-#include <vector>
-//struct
-#include"Vector3.h"
+#include <wrl.h>
+// struct
+#include "Vector3.h"
+#include "utility/ParameterEditor/GlobalParameter.h"
+#include <string>
+#include <cstdint>
 
 struct CameraForGPU {
     Vector3 worldPosition_;
 };
 
-//前方宣言
+struct LightCountData {
+    int pointLightCount;
+    int spotLightCount;
+};
+
+// 前方宣言
 class DirectionalLight;
 class PointLightManager;
 class SpotLightManager;
@@ -20,41 +26,56 @@ class AmbientLight;
 class DirectXCommon;
 
 class Light {
-private:
-    DirectXCommon* dxCommon_;
-
-    std::unique_ptr<DirectionalLight> directionalLight_;
-    std::unique_ptr<PointLightManager> pointLightManager_;
-    std::unique_ptr<SpotLightManager> spotLightManager_;
-    std::unique_ptr<AreaLightManager>areaLightManager_;
-    std::unique_ptr<AmbientLight>ambientLight_;
-    //虚面反射
-    Microsoft::WRL::ComPtr<ID3D12Resource> cameraForGPUResource_;
-    //鏡面反射用データ
-    CameraForGPU* cameraForGPUData_;
-
 public:
     static Light* GetInstance();
-
-    Light() = default;
     ~Light() = default;
 
     void Init(DirectXCommon* dxCommon);
+    void Update();
+    void InitAllLights();
     void DebugImGui();
 
     //
-    ID3D12Resource* GetCameraForGPUResource() const;
-    // 各ライトのリソースをまとめて取得
-    void SetLightCommands(ID3D12GraphicsCommandList* commandList);
+    void AddSpotLight();
+    void AddPointLight();
 
-    // 各ライトのリソースを取得する関数
-    ID3D12Resource* GetDirectionalLightResource() const;
-    ID3D12Resource* GetCameraForGPUResources() const;
+    void RemoveSpotLight(const int& num);
+    void RemovePointLight(const int& num);
 
-    void SetWorldCameraPos(const Vector3& pos);
+    void BindParams();
 
-    // ライトマネージャーを取得するためのメソッド
+private:
+    DirectXCommon* dxCommon_;
+    GlobalParameter* globalParameter_; 
+    const std::string groupName_ = "LightCount";
+
+    int32_t spotLightCoutMax_;
+    int32_t current;
+
+    // Lights
+    std::unique_ptr<DirectionalLight> directionalLight_;
+    std::unique_ptr<PointLightManager> pointLightManager_;
+    std::unique_ptr<SpotLightManager> spotLightManager_;
+    std::unique_ptr<AreaLightManager> areaLightManager_;
+    std::unique_ptr<AmbientLight> ambientLight_;
+
+    // 鏡面反射
+    Microsoft::WRL::ComPtr<ID3D12Resource> cameraForGPUResource_;
+    CameraForGPU* cameraForGPUData_;
+
+    // LightsData
+    Microsoft::WRL::ComPtr<ID3D12Resource> lightCountResource_;
+    LightCountData* lightCountData_;
+
+public:
+    // getter
     PointLightManager* GetPointLightManager() { return pointLightManager_.get(); }
     SpotLightManager* GetSpotLightManager() { return spotLightManager_.get(); }
     AmbientLight* GetAmbientLight() { return ambientLight_.get(); }
+    DirectionalLight* GetDirectionalLight() { return directionalLight_.get(); }
+    Vector3 GetWorldCameraPos() const { return cameraForGPUData_->worldPosition_; }
+
+    // setter
+    void SetLightCommands(ID3D12GraphicsCommandList* commandList);
+    void SetWorldCameraPos(const Vector3& pos);
 };

@@ -21,11 +21,11 @@ void KTFramework::Init() {
 
     engineCore_ = std::make_unique<EngineCore>();
 
-    /// ウィンドウ初期化
-    engineCore_->Initialize(kWindowTitle, 1280, 720);
-
-    // グローバル変数の読み込み
+     // グローバル変数の読み込み
     GlobalParameter::GetInstance()->LoadFiles();
+
+    /// エンジン初期化
+    engineCore_->Initialize(kWindowTitle, 1280, 720);
 
     // コリジョン
     collisionManager_ = std::make_unique<CollisionManager>();

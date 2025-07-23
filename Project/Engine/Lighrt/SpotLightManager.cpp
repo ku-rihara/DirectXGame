@@ -35,6 +35,7 @@ void SpotLightManager::Update() {
 
 void SpotLightManager::Add(ID3D12Device* device, const int32_t number) {
     auto newLight = std::make_unique<SpotLight>();
+
     newLight->Init(device, groupName_ +std::to_string(number).c_str());
     spotLights_.push_back(std::move(newLight));
    
@@ -72,12 +73,12 @@ void SpotLightManager::SetLightCommand(ID3D12GraphicsCommandList* commandList) {
     commandList->SetGraphicsRootDescriptorTable(7,SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_));
 }
 
-void SpotLightManager::DebugImGui() {
+void SpotLightManager::AdJustParams() {
     if (ImGui::CollapsingHeader("SpotLights")) {
         const auto& spotLights = GetLights();
         for (size_t i = 0; i < spotLights.size(); ++i) {
             if (ImGui::TreeNode(("SpotLight" + std::to_string(i)).c_str())) {
-                spotLights[i]->DebugImGui();
+                spotLights[i]->AdjustParam();
                 ImGui::TreePop();
             }
         }

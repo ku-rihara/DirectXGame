@@ -20,7 +20,7 @@ public:
     void Remove(int index);
     void UpdateStructuredBuffer();
 
-    void DebugImGui();
+    void AdJustParams();
     void SetLightCommand(ID3D12GraphicsCommandList* commandList);
    
 

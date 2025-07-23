@@ -12,15 +12,6 @@ void SpotLight::Init(ID3D12Device* device, const std::string& groupName) {
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();
     globalParameter_->SyncParamForGroup(groupName_);
-
-    lightData_->color           = {0.8235f, 0.5882f, 0.2078f, 1.0f};
-    lightData_->position        = {2.3f, 5.0f, 0.0f};
-    lightData_->distance        = 7.0f;
-    lightData_->direction       = Vector3::Normalize({0.0f, -1.0f, 0.0f});
-    lightData_->intensity       = 5.0f;
-    lightData_->decay           = 0.05f;
-    lightData_->cosAngle        = 0.5f;
-    lightData_->cosFalloffStart = 1.5f;
 }
 
 void SpotLight::Update() {
@@ -34,6 +25,7 @@ void SpotLight::DebugImGui() {
 }
 
 void SpotLight::BindParams() {
+    lightData_->decay = max(lightData_->decay,0.1f);
     globalParameter_->Bind(groupName_, "Color", &lightData_->color);
     globalParameter_->Bind(groupName_, "Pos", &tempPos_);
     globalParameter_->Bind(groupName_, "Direction", &lightData_->direction);
