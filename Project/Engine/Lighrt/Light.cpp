@@ -66,13 +66,13 @@ void Light::DebugImGui() {
             AddSpotLight();
         }
 
-         /*ImGui::SeparatorText("Remove");
-        if (ImGui::Button("Remove Point Light")) {
-            RemovePointLight();
-        }
-        if (ImGui::Button("Remove Spot  Light")) {
-            RemoveSpotLight();
-        }*/
+        /*ImGui::SeparatorText("Remove");
+       if (ImGui::Button("Remove Point Light")) {
+           RemovePointLight();
+       }
+       if (ImGui::Button("Remove Spot  Light")) {
+           RemoveSpotLight();
+       }*/
 
         // ライト数の表示
         ImGui::Text("Light Point Count: %zu", pointLightManager_->GetLightCount());
@@ -114,7 +114,7 @@ void Light::AddPointLight() {
     lightCountData_->pointLightCount = int(pointLightManager_->GetLightCount());
 }
 
-void Light::RemoveSpotLight(const int&num) {
+void Light::RemoveSpotLight(const int& num) {
     pointLightManager_->Remove(num);
     lightCountData_->pointLightCount = int(pointLightManager_->GetLightCount());
 }

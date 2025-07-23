@@ -27,12 +27,17 @@ void SpotLightManager::Init(ID3D12Device* device) {
         sizeof(SpotLightData));
 }
 
-void SpotLightManager::Add(ID3D12Device* device) {
-    auto newLight = std::make_unique<SpotLight>();
-    newLight->Init(device);
-    spotLights_.push_back(std::move(newLight));
+void SpotLightManager::Update() {
+    for (const auto& light : spotLights_) {
+        light->Update();
+    }
+}
 
-    
+void SpotLightManager::Add(ID3D12Device* device, const int32_t number) {
+    auto newLight = std::make_unique<SpotLight>();
+    newLight->Init(device, groupName_ +std::to_string(number).c_str());
+    spotLights_.push_back(std::move(newLight));
+   
     UpdateStructuredBuffer();
 }
 
