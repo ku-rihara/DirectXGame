@@ -118,6 +118,7 @@ void EngineCore::BeginFrame() {
     imguiManager_->Begin();
 #endif
     input_->Update();
+    light_->Update();
 }
 
 ///=======================================================================

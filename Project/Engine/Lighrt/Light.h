@@ -4,6 +4,9 @@
 #include <wrl.h>
 // struct
 #include "Vector3.h"
+#include "utility/ParameterEditor/GlobalParameter.h"
+#include <string>
+#include <cstdint>
 
 struct CameraForGPU {
     Vector3 worldPosition_;
@@ -28,6 +31,7 @@ public:
     ~Light() = default;
 
     void Init(DirectXCommon* dxCommon);
+    void Update();
     void InitAllLights();
     void DebugImGui();
 
@@ -38,8 +42,16 @@ public:
     void RemoveSpotLight(const int& num);
     void RemovePointLight(const int& num);
 
+    void BindParams();
+
 private:
     DirectXCommon* dxCommon_;
+    GlobalParameter* globalParameter_; 
+    const std::string groupName_ = "LightCount";
+
+    int32_t spotLightCoutMax_;
+    int32_t current;
+
     // Lights
     std::unique_ptr<DirectionalLight> directionalLight_;
     std::unique_ptr<PointLightManager> pointLightManager_;

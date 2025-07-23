@@ -16,6 +16,12 @@ void Light::Init(DirectXCommon* dxCommon) {
 
     dxCommon_ = dxCommon;
 
+    ///* グローバルパラメータ
+    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_->CreateGroup(groupName_, false);
+    BindParams();
+    globalParameter_->SyncParamForGroup(groupName_);
+
     // 鏡面反射
     cameraForGPUResource_ = DirectXCommon::GetInstance()->CreateBufferResource(dxCommon_->GetDevice(), sizeof(CameraForGPU));
     // データを書き込む
@@ -30,6 +36,11 @@ void Light::Init(DirectXCommon* dxCommon) {
 
     // 全ライト初期化
     InitAllLights();
+}
+
+void Light::Update() {
+    spotLightManager_->Update();
+    spotLightCoutMax_ = int32_t(spotLightManager_->GetLightCount());
 }
 
 void Light::InitAllLights() {
@@ -47,7 +58,10 @@ void Light::InitAllLights() {
     ambientLight_     = std::make_unique<AmbientLight>();
     ambientLight_->Init(dxCommon_->GetDevice().Get());
 
-    AddSpotLight();
+    for (int32_t i = 0; i < spotLightCoutMax_; ++i) {
+        AddSpotLight();
+    }
+
     AddPointLight();
     areaLightManager_->Add(dxCommon_->GetDevice().Get());
 }
@@ -66,17 +80,20 @@ void Light::DebugImGui() {
             AddSpotLight();
         }
 
-         /*ImGui::SeparatorText("Remove");
-        if (ImGui::Button("Remove Point Light")) {
-            RemovePointLight();
-        }
-        if (ImGui::Button("Remove Spot  Light")) {
-            RemoveSpotLight();
-        }*/
+        /*ImGui::SeparatorText("Remove");
+       if (ImGui::Button("Remove Point Light")) {
+           RemovePointLight();
+       }
+       if (ImGui::Button("Remove Spot  Light")) {
+           RemoveSpotLight();
+       }*/
 
         // ライト数の表示
         ImGui::Text("Light Point Count: %zu", pointLightManager_->GetLightCount());
-        ImGui::Text("Light Spot  Count: %zu", spotLightManager_->GetLightCount());
+        ImGui::Text("Light Spot  Count: %zu", spotLightCoutMax_);
+
+        globalParameter_->ParamSaveForImGui(groupName_);
+        globalParameter_->ParamLoadForImGui(groupName_);
     }
 
     ImGui::SeparatorText("Paramater");
@@ -84,11 +101,15 @@ void Light::DebugImGui() {
     ImGui::DragFloat3("WorldCamera", (float*)&cameraForGPUData_->worldPosition_, 0.01f);
     directionalLight_->DebugImGui();
     pointLightManager_->DebugImGui();
-    spotLightManager_->DebugImGui();
+    spotLightManager_->AdJustParams();
     areaLightManager_->DebugImGui();
     ambientLight_->DebugImGui();
 
     ImGui::End();
+}
+
+void Light::BindParams() {
+    globalParameter_->Bind(groupName_,"spotLightCoutMax", &spotLightCoutMax_);
 }
 
 void Light::SetLightCommands(ID3D12GraphicsCommandList* commandList) {
@@ -106,15 +127,17 @@ void Light::SetWorldCameraPos(const Vector3& pos) {
 }
 
 void Light::AddSpotLight() {
-    spotLightManager_->Add(dxCommon_->GetDevice().Get());
-    lightCountData_->spotLightCount = int(spotLightManager_->GetLightCount());
+    spotLightManager_->Add(dxCommon_->GetDevice().Get(), int32_t(spotLightManager_->GetLightCount()));
+
+    // データを合わせる
+    lightCountData_->spotLightCount = int(spotLightCoutMax_);
 }
 void Light::AddPointLight() {
     pointLightManager_->Add(dxCommon_->GetDevice().Get());
     lightCountData_->pointLightCount = int(pointLightManager_->GetLightCount());
 }
 
-void Light::RemoveSpotLight(const int&num) {
+void Light::RemoveSpotLight(const int& num) {
     pointLightManager_->Remove(num);
     lightCountData_->pointLightCount = int(pointLightManager_->GetLightCount());
 }

@@ -30,6 +30,9 @@ void KTFramework::Init() {
     // グローバル変数の読み込み
     GlobalParameter::GetInstance()->LoadFiles();
 
+    /// エンジン初期化
+    engineCore_->Initialize(kWindowTitle, 1280, 720);
+
     // コリジョン
     collisionManager_ = std::make_unique<CollisionManager>();
     collisionManager_->Init();
