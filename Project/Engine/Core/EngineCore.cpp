@@ -13,7 +13,6 @@
 #include "OffScreen/OffScreenRenderer.h"
 #include "Pipeline/Line3DPipeline.h"
 #include "Pipeline/Object3DPiprline.h"
-#include "Pipeline/ShadowMapPipeline.h"
 #include "Pipeline/SkinningObject3DPipeline.h"
 #include "Pipeline/SpritePipeline.h"
 /// audio,input
@@ -83,9 +82,6 @@ void EngineCore::Initialize(const char* title, int width, int height) {
 
     Line3DPipeline_ = Line3DPipeline::GetInstance();
     Line3DPipeline_->Init(directXCommon_);
-
-    shadowMapPipeline_ = ShadowMapPipeline::GetInstance();
-    shadowMapPipeline_->Init(directXCommon_);
 
     // ModelManager
     modelManager_ = ModelManager::GetInstance();

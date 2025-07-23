@@ -457,9 +457,6 @@
     <ClCompile Include="Engine\base\RtvManager.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Pipeline\ParticlePipeline.cpp">
-      <Filter>MyEngine\.cpp\Pileline</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Pipeline\Line3DPipeline.cpp">
       <Filter>MyEngine\.cpp\Pileline</Filter>
     </ClCompile>
@@ -499,9 +496,6 @@
     <ClCompile Include="Engine\OffScreen\BoxFilter.cpp">
       <Filter>MyEngine\.cpp\OffScreen</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Pipeline\ShadowMapPipeline.cpp">
-      <Filter>MyEngine\.cpp\Pileline</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Dx\DxCommand.cpp">
       <Filter>MyEngine\.cpp\Dx</Filter>
     </ClCompile>
@@ -519,6 +513,12 @@
     </ClCompile>
     <ClCompile Include="Engine\OffScreen\Outline.cpp">
       <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\ShadowMap\ShadowMap.cpp">
+      <Filter>MyEngine\.cpp\ShadowMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\ParticlePipeline.cpp">
+      <Filter>MyEngine\.cpp\Pileline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -858,9 +858,6 @@
     <ClInclude Include="Engine\OffScreen\BoxFilter.h">
       <Filter>MyEngine\.h\OffScreen</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Pipeline\ShadowMapPipeline.h">
-      <Filter>MyEngine\.h\Pipeline</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\ShadowMap\ShadowMapData.h">
       <Filter>MyEngine\.h\ShadowMap</Filter>
     </ClInclude>
@@ -884,6 +881,9 @@
     </ClInclude>
     <ClInclude Include="Engine\OffScreen\Outline.h">
       <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ShadowMap\ShadowMap.h">
+      <Filter>MyEngine\.h\ShadowMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -988,12 +988,6 @@
     </FxCompile>
     <FxCompile Include="resources\Shader\OffScreen\Dissolve.PS.hlsl">
       <Filter>リソースファイル\OffScreen</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\ShadowMap\ShadowMap.PS.hlsl">
-      <Filter>リソースファイル\ShadowMap</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\ShadowMap\ShadowMap.VS.hlsl">
-      <Filter>リソースファイル\ShadowMap</Filter>
     </FxCompile>
     <FxCompile Include="resources\Shader\OffScreen\LuminanceBasedOutline.PS.hlsl">
       <Filter>リソースファイル\OffScreen</Filter>

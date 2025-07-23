@@ -17,6 +17,7 @@ Object3d* Object3d::CreateModel(const std::string& instanceName) {
     ModelManager::GetInstance()->LoadModel(instanceName);
     object3d->SetModel(instanceName);
     object3d->CreateWVPResource();
+    object3d->CreateShadowMap();
     object3d->CreateMaterialResource();
     return object3d;
 }
@@ -54,12 +55,14 @@ void Object3d::Draw(const WorldTransform& worldTransform, const ViewProjection& 
     wvpDate_->World                 = worldTransform.matWorld_;
     wvpDate_->WVP                   = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
     wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
+
+    /*  shadowMap_->SetVertexMatrix(())*/
     /*}*/
 
     Object3DPiprline::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
-    model_->Draw(wvpResource_, material_, textureHandle);
-}
 
+    model_->Draw(wvpResource_, shadowMap_->GetVertexResource(), material_, textureHandle);
+}
 
 ///============================================================
 /// 描画 (Vector3)
@@ -86,7 +89,7 @@ void Object3d::Draw(const Vector3& position, const ViewProjection& viewProjectio
         }
 
         // モデル描画
-        model_->Draw(wvpResource_, material_, textureHandle);
+        model_->Draw(wvpResource_, shadowMap_->GetVertexResource(), material_, textureHandle);
     }
 }
 
@@ -112,10 +115,8 @@ void Object3d::DrawAnimation(const WorldTransform& worldTransform, const ViewPro
     /*}*/
 
     SkinningObject3DPipeline::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
-    model_->DrawAnimation(wvpResource_, material_, skinCluster, textureHandle);
+    model_->DrawAnimation(wvpResource_, shadowMap_->GetVertexResource(), material_, skinCluster, textureHandle);
 }
-
-
 
 ///============================================================
 /// デバッグ表示
@@ -138,6 +139,11 @@ void Object3d::CreateWVPResource() {
     wvpDate_->WVP                   = MakeIdentity4x4();
     wvpDate_->World                 = MakeIdentity4x4();
     wvpDate_->WorldInverseTranspose = MakeIdentity4x4();
+}
+
+void Object3d::CreateShadowMap() {
+    shadowMap_ = std::make_unique<ShadowMap>();
+    shadowMap_->Init(DirectXCommon::GetInstance());
 }
 
 ///============================================================

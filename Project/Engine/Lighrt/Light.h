@@ -60,6 +60,8 @@ public:
     PointLightManager* GetPointLightManager() { return pointLightManager_.get(); }
     SpotLightManager* GetSpotLightManager() { return spotLightManager_.get(); }
     AmbientLight* GetAmbientLight() { return ambientLight_.get(); }
+    DirectionalLight* GetDirectionalLight() { return directionalLight_.get(); }
+    Vector3 GetWorldCameraPos() const { return cameraForGPUData_->worldPosition_; }
 
     // setter
     void SetLightCommands(ID3D12GraphicsCommandList* commandList);
