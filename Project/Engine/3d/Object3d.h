@@ -43,10 +43,13 @@ public:
     // アニメーション描画
     void DrawAnimation(const WorldTransform& worldTransform, const ViewProjection& viewProjection, SkinCluster bufferView, std::optional<uint32_t> textureHandle = std::nullopt);
 
-    void DebugImgui() override; // デバッグ表示
-    void CreateWVPResource(); // WVPリソース作成
+    void DebugImgui() override;
+    void CreateWVPResource();
     void CreateShadowMap();
-    void CreateMaterialResource() override; // マテリアルリソース作成
+    void CreateMaterialResource() override;
+
+    void CreateShadowMatrix();
+    Matrix4x4 MakeShadowMatrix(const Vector4& planeNormal, const Vector3& lightDirection);
 
     ///============================================================
     /// setter method

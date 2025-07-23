@@ -170,38 +170,9 @@ PixelShaderOutput main(VertexShaderOutput input)
     }
     else
     {
-        output.color = float4(0.0, 0.0, 1.0, 1.0);
+        output.color = float4(0.0, 0.0, 0.0, 1.0);
     }
-    //else if (input.instanceID == 1)
-    //{
-     
-    //    // シンプルな影色を設定
-    //    output.color = gShadowData.shadowColor;
-        
-    //    // 影の強度を適用
-    //    output.color.rgb *= gShadowData.shadowIntensity;
-        
-    //    // 影の方向に基づいた減衰（オプション）
-    //    float3 shadowFactor = saturate(dot(input.normal, -gShadowData.shadowDirection));
-    //    output.color.rgb *= shadowFactor;
-        
-    //    // テクスチャのアルファ値をチェック（影も元のアルファに従う）
-    //    float4 transformedUV = mul(float4(input.texcoord, 0.0f, 1.0f), gMaterial.uvTransform);
-    //    float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
-        
-    //    if (textureColor.a == 0.0 || textureColor.a <= 0.5)
-    //    {
-    //        discard;
-    //    }
-        
-    //    // 影のアルファ値を設定
-    //    output.color.a = gShadowData.shadowColor.a * textureColor.a;
-    //}
-    //else
-    //{
-    //    // 想定外のInstanceIDの場合はピンク色で警告
-    //    output.color = float4(1.0, 0.0, 1.0, 1.0);
-    //}
+   
     
     return output;
 }

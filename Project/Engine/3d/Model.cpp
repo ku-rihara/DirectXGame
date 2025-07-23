@@ -218,7 +218,7 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Microsoft::
     commandList->SetGraphicsRootConstantBufferView(12, shadowVResource->GetGPUVirtualAddress());
   
     // 描画コール
-    commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
+    commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 2, 0, 0, 0);
 }
 
 void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Microsoft::WRL::ComPtr<ID3D12Resource> shadowVResource, Material material, SkinCluster skinCluster, std::optional<uint32_t> textureHandle) {
@@ -259,7 +259,7 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Mi
     commandList->SetGraphicsRootConstantBufferView(12, shadowVResource->GetGPUVirtualAddress());
 
     // 描画
-    commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
+    commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 2, 0, 0, 0);
 }
 
 void Model::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, Material material,

@@ -74,7 +74,7 @@ void GameScene::ModelDraw() {
     putObjForBlender->DrawAll(viewProjection_);
     ground_->Draw(viewProjection_);
     plane_->Draw(viewProjection_);
-    monsterBall_->Draw(viewProjection_);
+   /* monsterBall_->Draw(viewProjection_);*/
 
     ParticleManager::GetInstance()->Draw(viewProjection_);
 }

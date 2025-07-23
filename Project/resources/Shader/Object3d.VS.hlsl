@@ -23,7 +23,7 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
     
     if (output.instanceID == 1)
     {
-        
+        output.position = mul(gShadowVertexBuffer.shadowMatrix, output.position);
     }
     
     return output;

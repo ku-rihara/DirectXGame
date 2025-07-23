@@ -18,7 +18,7 @@ private:
 	// モデル
 	std::unique_ptr<Object3d> object3D_=nullptr;
 
-	Easing<Vector2> easing_;
+	Easing<Vector3> easing_;
 
 	EasingSequence<Vector3> easingSequence_;
 	
@@ -32,5 +32,5 @@ public:
 	void Debug();
 	void ScaleEasing();
 
-	 Easing<Vector2>& GetEasingData()  { return easing_; }
+	 Easing<Vector3>& GetEasingData()  { return easing_; }
 };
