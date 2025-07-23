@@ -874,8 +874,8 @@
     <ClCompile Include="Engine\OffScreen\Outline.cpp">
       <Filter>MyEngine\.cpp\OffScreen</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Pipeline\ShadowMapPipeline.cpp">
-      <Filter>MyEngine\.cpp\Pipeline</Filter>
+    <ClCompile Include="Engine\ShadowMap\ShadowMap.cpp">
+      <Filter>MyEngine\.cpp\ShadowMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1430,9 +1430,6 @@
     </ClInclude>
     <ClInclude Include="Engine\OffScreen\Vignette.h">
       <Filter>MyEngine\.h\OffScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Pipeline\ShadowMapPipeline.h">
-      <Filter>MyEngine\.h\Pipeline</Filter>
     </ClInclude>
     <ClInclude Include="Engine\ShadowMap\ShadowMapData.h">
       <Filter>MyEngine\.h\ShadowMap</Filter>
