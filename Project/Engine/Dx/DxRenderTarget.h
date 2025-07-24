@@ -7,6 +7,7 @@
 
 class RtvManager;
 class SrvManager;
+class DsvManager;
 class DxCommand;
 class DxSwapChain;
 
@@ -45,6 +46,8 @@ public:
 private:
     RtvManager* rtvManager_   = nullptr;
     SrvManager* srvManager_   = nullptr;
+    DsvManager* dsvManager_   = nullptr;
+
     DxCommand* dxCommand_     = nullptr;
     DxSwapChain* dxSwapChain_ = nullptr;
 
@@ -74,7 +77,7 @@ private:
     D3D12_RESOURCE_STATES renderTextureCurrentState_;
     D3D12_RESOURCE_STATES depthCurrentState_;
 
-   UINT backBufferIndex_;
+    UINT backBufferIndex_;
 
     // ビューポート・シザー矩形
     D3D12_VIEWPORT viewport_{};
@@ -89,9 +92,11 @@ private:
 
     uint32_t renderTextureRtvIndex_;
 
+       uint32_t depthStencilIndex_ = 0;  
+
 public:
     Microsoft::WRL::ComPtr<ID3D12Resource> GetRenderTextureResource() const { return renderTextureResource_; }
-    Microsoft::WRL::ComPtr<ID3D12Resource> GetDepthStencilResource() const { return depthStencilResource_; }
+    ID3D12Resource* GetDepthStencilResource() { return depthStencilResource_.Get(); }
     Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetDsvDescriptorHeap() const { return dsvDescriptorHeap_; }
     D3D12_GPU_DESCRIPTOR_HANDLE GetRenderTextureGPUSrvHandle() const { return renderTextureGPUSrvHandle_; }
     D3D12_CPU_DESCRIPTOR_HANDLE GetRenderTextureCPUSrvHandle() const { return renderTextureCPUSrvHandle_; }

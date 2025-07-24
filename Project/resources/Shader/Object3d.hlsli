@@ -4,7 +4,7 @@ struct VertexShaderOutput
     float2 texcoord : TEXCOORD0;
     float3 normal : NORMAL0;
     float3 worldPosition : POSITION0;
-    uint instanceID : SV_InstanceID;
+    float4 lightSpacePosition : POSITION1;
 };
 
 struct VertexShaderInput

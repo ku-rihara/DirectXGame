@@ -11,21 +11,8 @@
 
 class Object3d : public BaseObject3d {
 public:
-    ObjectColor objColor_;
-
-private:
-    ///============================================================
-    /// private variant
-    ///============================================================
-
-    // wvpリソース
-    Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
-    TransformationMatrix* wvpDate_;
-    std::unique_ptr<ShadowMap> shadowMap_;
-
-public:
-    Object3d();
-    ~Object3d();
+    Object3d()  = default;
+    ~Object3d() = default;
 
     ///============================================================
     /// public method
@@ -48,12 +35,28 @@ public:
     void CreateShadowMap();
     void CreateMaterialResource() override;
 
-    void CreateShadowMatrix();
-    Matrix4x4 MakeShadowMatrix(const Vector4& planeNormal, const Vector3& lightDirection);
+private:
+
+    void ShadowDraw();
+
+public:
+    ObjectColor objColor_;
+
+private:
+    ///============================================================
+    /// private variant
+    ///============================================================
+
+    // wvpリソース
+    Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
+    TransformationMatrix* wvpDate_;
+    std::unique_ptr<ShadowMap> shadowMap_;
+    bool isShadow_ = false;
 
     ///============================================================
     /// setter method
     ///============================================================
     void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
     void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
+    void SetIsShadow(const bool& is) { isShadow_ = is; }
 };

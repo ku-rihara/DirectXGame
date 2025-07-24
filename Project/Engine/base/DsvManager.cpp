@@ -1,30 +1,30 @@
-#include "RtvManager.h"
+#include "DsvManager.h"
 #include <cassert>
 #include <d3d12.h>
 
 // 最大RTV数の定義
-const uint32_t RtvManager::kMaxCount = 3;
+const uint32_t DsvManager::kMaxCount = 1;
 
 // シングルトンインスタンスの取得
-RtvManager* RtvManager::GetInstance() {
-    static RtvManager instance; 
+DsvManager* DsvManager::GetInstance() {
+    static DsvManager instance;
     return &instance;
 }
 
 ///=========================================
 /// 初期化
 ///=========================================
-void RtvManager::Init(DirectXCommon* directXCommon) {
+void DsvManager::Init(DirectXCommon* directXCommon) {
     dxCommon_       = directXCommon;
-    descriptorHeap_ = dxCommon_->InitializeDescriptorHeap(dxCommon_->GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV, kMaxCount, false);
-    descriptorSize_ = dxCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+    descriptorHeap_ = dxCommon_->InitializeDescriptorHeap(dxCommon_->GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_DSV, kMaxCount, false);
+    descriptorSize_ = dxCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
     useIndex_       = 0;
 }
 
 ///=========================================
 /// アロケータ
 ///=========================================
-uint32_t RtvManager::Allocate() {
+uint32_t DsvManager::Allocate() {
 
     assert(IsAbleSecure());
 
@@ -39,22 +39,21 @@ uint32_t RtvManager::Allocate() {
     return useIndex_;
 }
 
-bool RtvManager::IsAbleSecure() {
-    if (useIndex_ >= RtvManager::kMaxCount) {
+bool DsvManager::IsAbleSecure() {
+    if (useIndex_ >= DsvManager::kMaxCount) {
         return false;
     } else {
         return true;
     }
 }
 
-
-D3D12_CPU_DESCRIPTOR_HANDLE RtvManager::GetCPUDescriptorHandle(uint32_t index) {
+D3D12_CPU_DESCRIPTOR_HANDLE DsvManager::GetCPUDescriptorHandle(uint32_t index) {
     D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap_->GetCPUDescriptorHandleForHeapStart();
     handleCPU.ptr += (descriptorSize_ * index);
     return handleCPU;
 }
 
-void RtvManager::CreateRTV(uint32_t index, ID3D12Resource* resource, D3D12_RENDER_TARGET_VIEW_DESC* desc) {
+void DsvManager::CreateDSV(uint32_t index, ID3D12Resource* resource, D3D12_DEPTH_STENCIL_VIEW_DESC* desc) {
 
-    dxCommon_->GetDevice()->CreateRenderTargetView(resource, desc, GetCPUDescriptorHandle(index));
+    dxCommon_->GetDevice()->CreateDepthStencilView(resource, desc, GetCPUDescriptorHandle(index));
 }

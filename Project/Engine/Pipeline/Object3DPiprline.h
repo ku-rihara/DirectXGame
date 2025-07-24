@@ -29,7 +29,7 @@ private: // メンバ変数
     DirectXCommon* dxCommon_;
 
 private: // メンバ関数
-    D3D12_STATIC_SAMPLER_DESC staticSamplers_[1];
+    D3D12_STATIC_SAMPLER_DESC staticSamplers_[2];
     // グラフィックパイプライン関連
     // object
     Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;

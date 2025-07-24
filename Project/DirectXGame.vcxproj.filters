@@ -520,6 +520,9 @@
     <ClCompile Include="Engine\Pipeline\ParticlePipeline.cpp">
       <Filter>MyEngine\.cpp\Pileline</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\base\DsvManager.cpp">
+      <Filter>MyEngine\.cpp\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -884,6 +887,9 @@
     </ClInclude>
     <ClInclude Include="Engine\ShadowMap\ShadowMap.h">
       <Filter>MyEngine\.h\ShadowMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\DsvManager.h">
+      <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

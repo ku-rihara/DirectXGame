@@ -35,6 +35,8 @@ public:
 };
 
 class TextureManager;
+class ShadowMap;
+
 class Model {
 
 public:
@@ -62,11 +64,11 @@ public:
     ///============================================================
 
     void Draw(
-        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Microsoft::WRL::ComPtr<ID3D12Resource> shadowVResource, Material material,
+        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap&shadowMap, Material material,
         std::optional<uint32_t> textureHandle = std::nullopt); /// モデル描画
 
     void DrawAnimation(
-        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Microsoft::WRL::ComPtr<ID3D12Resource> shadowVResource, Material material,
+        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, Material material,
         SkinCluster skinCluster, std::optional<uint32_t> textureHandle = std::nullopt); /// モデル描画
 
     void DrawInstancing(

@@ -19,6 +19,7 @@ class Line3DPipeline;
 class RtvManager;
 class SkinningObject3DPipeline;
 class Light;
+class DsvManager;
 
 class EngineCore {
 public:
@@ -70,4 +71,5 @@ public:
      SkinningObject3DPipeline* skinningObject3DPipeline_;
      OffScreenRenderer* offScreenRenderer_;
      Light* light_;
+     DsvManager* dsvManager_;
 };

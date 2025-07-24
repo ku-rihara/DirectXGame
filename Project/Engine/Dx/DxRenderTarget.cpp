@@ -1,6 +1,7 @@
 #include "DxRenderTarget.h"
 #include "base/RtvManager.h"
 #include "base/SrvManager.h"
+#include"base/DsvManager.h"
 #include "DxCommand.h"
 #include "DxSwapChain.h"
 #include <cassert>
@@ -15,6 +16,8 @@ void DxRenderTarget::Init(
     srvManager_  = srvManager;
     dxCommand_   = dxCommand;
     dxSwapChain_ = dxSwapChain;
+
+    dsvManager_ = DsvManager::GetInstance();
 
     backBufferHeight_ = height;
     backBufferWidth_  = width;
@@ -45,7 +48,7 @@ void DxRenderTarget::Init(
 
 void DxRenderTarget::CreateRenderTextureRTV() {
 
-    renderTextureRtvIndex_ = 2;
+    renderTextureRtvIndex_ = rtvManager_->Allocate();
 
     D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
     rtvDesc.Format        = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
@@ -61,7 +64,9 @@ void DxRenderTarget::CreateDepthBuffer(Microsoft::WRL::ComPtr<ID3D12Device> devi
     // 深度ステンシルリソース作成
     depthStencilResource_ = CreateDepthStencilTextureResource(device, backBufferWidth_, backBufferHeight_);
 
-    dsvDescriptorHeap_ = InitializeDescriptorHeap(device, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
+    depthStencilIndex_ = dsvManager_->Allocate();
+
+   /* dsvDescriptorHeap_ = InitializeDescriptorHeap(device, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);*/
 
     // DSVの設定
     D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
@@ -69,7 +74,8 @@ void DxRenderTarget::CreateDepthBuffer(Microsoft::WRL::ComPtr<ID3D12Device> devi
     dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D; // 2dTexture
 
     // DSVHeapの先頭にDSVを作る
-    device->CreateDepthStencilView(depthStencilResource_.Get(), &dsvDesc, dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart());
+    dsvManager_->CreateDSV(depthStencilIndex_, depthStencilResource_.Get(),&dsvDesc);
+   /* device->CreateDepthStencilView(depthStencilResource_.Get(), &dsvDesc, dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart());*/
 }
 
 ///==========================================================
@@ -219,12 +225,12 @@ Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DxRenderTarget::InitializeDescripto
 }
 
 void DxRenderTarget::ClearDepthBuffer() {
-    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvManager_->GetCPUDescriptorHandle(depthStencilIndex_);
     dxCommand_->GetCommandList()->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 }
 
 void DxRenderTarget::PreRenderTexture() {
-    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvManager_->GetCPUDescriptorHandle(depthStencilIndex_);
 
     // 遷移
     if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_RENDER_TARGET) {
@@ -269,7 +275,7 @@ void DxRenderTarget::PreDraw() {
 
     // 描画先のRTVとDSVを設定する
     D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(backBufferIndex_);
-    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvManager_->GetCPUDescriptorHandle(depthStencilIndex_);
 
     dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
     // レンダーターゲットと深度ステンシルビューをクリア

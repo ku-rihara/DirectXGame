@@ -24,6 +24,7 @@
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\Animation\ModelAnimation.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
+    <ClCompile Include="Engine\base\DsvManager.cpp" />
     <ClCompile Include="Engine\base\Material.cpp" />
     <ClCompile Include="Engine\base\RtvManager.cpp" />
     <ClCompile Include="Engine\base\SkyBoxRenderer.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="Engine\Animation\SkeletonData.h" />
     <ClInclude Include="Engine\Animation\SkinCluster.h" />
     <ClInclude Include="Engine\audio\Audio.h" />
+    <ClInclude Include="Engine\base\DsvManager.h" />
     <ClInclude Include="Engine\base\Material.h" />
     <ClInclude Include="Engine\base\RtvManager.h" />
     <ClInclude Include="Engine\base\SkyBoxRenderer.h" />
