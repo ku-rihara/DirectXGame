@@ -71,7 +71,7 @@ void GameScene::ModelDraw() {
     ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
     Model::PreDraw(commandList);
 
-    putObjForBlender->DrawAll(viewProjection_);
+   /* putObjForBlender->DrawAll(viewProjection_);*/
     ground_->Draw(viewProjection_);
     plane_->Draw(viewProjection_);
    /* monsterBall_->Draw(viewProjection_);*/
