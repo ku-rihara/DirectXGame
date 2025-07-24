@@ -523,6 +523,9 @@
     <ClCompile Include="Engine\base\DsvManager.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Dx\DxDepthBuffer.cpp">
+      <Filter>MyEngine\.cpp\Dx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -890,6 +893,9 @@
     </ClInclude>
     <ClInclude Include="Engine\base\DsvManager.h">
       <Filter>MyEngine\.h\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Dx\DxDepthBuffer.h">
+      <Filter>MyEngine\.h\Dx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,7 @@
 #include "DxDevice.h"
 #include "DxRenderTarget.h"
 #include "DxSwapChain.h"
+#include "DxDepthBuffer.h"
 #include <cassert>
 
 #pragma comment(lib, "dxguid.lib")
@@ -39,6 +40,7 @@ void DirectXCommon::InitDxClasses() {
     dxSwapChain_    = std::make_unique<DxSwapChain>();
     dxRenderTarget_ = std::make_unique<DxRenderTarget>();
     dxCompiler_     = std::make_unique<DxCompiler>();
+    depthBuffer_    = std::make_unique<DxDepthBuffer>();
 
     // 各Dxクラス初期化
     dxDevice_->Init();
@@ -51,7 +53,7 @@ void DirectXCommon::InitDxClasses() {
 void DirectXCommon::InitRenderingResources() {
 
     dxSwapChain_->CreateRenderTargetViews(rtvManager_);
-    dxRenderTarget_->Init(dxDevice_->GetDevice(), rtvManager_, srvManager_, dxCommand_.get(), dxSwapChain_.get(), backBufferWidth_, backBufferHeight_);
+    dxRenderTarget_->Init(dxDevice_->GetDevice(),depthBuffer_.get(), rtvManager_, srvManager_, dxCommand_.get(), dxSwapChain_.get(), backBufferWidth_, backBufferHeight_);
 }
 
 void DirectXCommon::PreDraw() {
@@ -153,7 +155,7 @@ Microsoft::WRL::ComPtr<ID3D12Device> DirectXCommon::GetDevice() const {
 }
 
 ID3D12GraphicsCommandList* DirectXCommon::GetCommandList() const {
-    return dxCommand_->GetCommandList().Get();
+    return dxCommand_->GetCommandList();
 }
 
 

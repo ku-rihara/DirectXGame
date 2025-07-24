@@ -3,6 +3,7 @@
 #include "Dx/DirectXCommon.h"
 #include "Dx/DxCompiler.h"
 #include "Dx/DxRenderTarget.h"
+#include"Dx/DxDepthBuffer.h"
 #include "function/Log.h"
 #include <cassert>
 #include <d3dx12.h>
@@ -157,7 +158,7 @@ void Outline::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
     commandList->SetGraphicsRootDescriptorTable(0, dxCommon_->GetDxRenderTarget()->GetRenderTextureGPUSrvHandle());
 
     // depthテクスチャ (t1)
-    commandList->SetGraphicsRootDescriptorTable(1, dxCommon_->GetDxRenderTarget()->GetDepthTextureGPUSrvHandle());
+    commandList->SetGraphicsRootDescriptorTable(1, dxCommon_->GetDepthBuffer()->GetDepthSrvGPUHandle());
 
     // b0: OutLineParams
     commandList->SetGraphicsRootConstantBufferView(2, uvStepResource_->GetGPUVirtualAddress());

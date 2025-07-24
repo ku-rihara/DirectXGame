@@ -1,53 +1,55 @@
 #include "DxRenderTarget.h"
+#include "base/DsvManager.h"
 #include "base/RtvManager.h"
 #include "base/SrvManager.h"
-#include"base/DsvManager.h"
 #include "DxCommand.h"
 #include "DxSwapChain.h"
+#include"DxDepthBuffer.h"
 #include <cassert>
 
 ///==========================================================
 /// 初期化
 ///==========================================================
 void DxRenderTarget::Init(
-    Microsoft::WRL::ComPtr<ID3D12Device> device, RtvManager* rtvManager, SrvManager* srvManager, DxCommand* dxCommand, DxSwapChain* dxSwapChain, uint32_t width, uint32_t height) {
+    Microsoft::WRL::ComPtr<ID3D12Device> device, DxDepthBuffer*depthBuffer, RtvManager* rtvManager, SrvManager* srvManager,
+    DxCommand* dxCommand, DxSwapChain* dxSwapChain, uint32_t width, uint32_t height) {
 
     rtvManager_  = rtvManager;
     srvManager_  = srvManager;
     dxCommand_   = dxCommand;
     dxSwapChain_ = dxSwapChain;
 
-    dsvManager_ = DsvManager::GetInstance();
-
     backBufferHeight_ = height;
     backBufferWidth_  = width;
 
+    depthBuffer_ = depthBuffer;
+
     clearColor_ = Vector4(0.2f, 0.2f, 0.2f, 1.0f);
 
-    // DSVのデスクリプタサイズを取得
-    descriptorSizeDSV_ = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
-
     // レンダーテクスチャリソースの作成
-    renderTextureResource_ = CreateRenderTextureResource(device, backBufferWidth_, backBufferHeight_, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor_);
+    renderTextureResource_ = CreateRenderTextureResource(device, backBufferWidth_, backBufferHeight_,
+        DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor_);
 
-    // 深度バッファの作成
-    CreateDepthBuffer(device);
+    // 深度バッファの初期化
+    depthBuffer_->Init(device, DsvManager::GetInstance(), srvManager_, backBufferWidth_, backBufferHeight_);
 
+    // レンダーテクスチャのRTV作成
     CreateRenderTextureRTV();
 
-    // SRVハンドルの作成
-    CreateSrvHandle();
+    // レンダーテクスチャのSRV作成
+    CreateRenderTextureSRV();
 
     // ビューポートとシザー矩形の初期化
     SetupViewportAndScissor();
 
     // 初期状態をRENDER_TARGETに設定
     renderTextureCurrentState_ = D3D12_RESOURCE_STATE_RENDER_TARGET;
-    depthCurrentState_         = D3D12_RESOURCE_STATE_DEPTH_WRITE;
 }
 
+///==========================================================
+/// レンダーテクスチャRTV作成
+///==========================================================
 void DxRenderTarget::CreateRenderTextureRTV() {
-
     renderTextureRtvIndex_ = rtvManager_->Allocate();
 
     D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
@@ -58,30 +60,9 @@ void DxRenderTarget::CreateRenderTextureRTV() {
 }
 
 ///==========================================================
-/// 深度バッファ作成
+/// レンダーテクスチャSRV作成
 ///==========================================================
-void DxRenderTarget::CreateDepthBuffer(Microsoft::WRL::ComPtr<ID3D12Device> device) {
-    // 深度ステンシルリソース作成
-    depthStencilResource_ = CreateDepthStencilTextureResource(device, backBufferWidth_, backBufferHeight_);
-
-    depthStencilIndex_ = dsvManager_->Allocate();
-
-   /* dsvDescriptorHeap_ = InitializeDescriptorHeap(device, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);*/
-
-    // DSVの設定
-    D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
-    dsvDesc.Format        = DXGI_FORMAT_D24_UNORM_S8_UINT; // Format。基本的にはResourceに合わせる
-    dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D; // 2dTexture
-
-    // DSVHeapの先頭にDSVを作る
-    dsvManager_->CreateDSV(depthStencilIndex_, depthStencilResource_.Get(),&dsvDesc);
-   /* device->CreateDepthStencilView(depthStencilResource_.Get(), &dsvDesc, dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart());*/
-}
-
-///==========================================================
-/// SRVハンドル作成
-///==========================================================
-void DxRenderTarget::CreateSrvHandle() {
+void DxRenderTarget::CreateRenderTextureSRV() {
     uint32_t srvIndex = srvManager_->Allocate();
 
     renderTextureGPUSrvHandle_ = srvManager_->GetGPUDescriptorHandle(srvIndex);
@@ -94,36 +75,24 @@ void DxRenderTarget::CreateSrvHandle() {
     srvDesc.ViewDimension           = D3D12_SRV_DIMENSION_TEXTURE2D;
     srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
-    /// Srvの生成
+    // SRV生成
     srvManager_->CreateSRVforTexture2D(srvIndex, renderTextureResource_.Get(), srvDesc);
-
-    uint32_t depthIndex = srvManager_->Allocate();
-
-    depthTextureGPUSrvHandle_ = srvManager_->GetGPUDescriptorHandle(depthIndex);
-    depthTextureCPUSrvHandle_ = srvManager_->GetCPUDescriptorHandle(depthIndex);
-
-    D3D12_SHADER_RESOURCE_VIEW_DESC depthTextureSrvDesc{};
-    depthTextureSrvDesc.Format                  = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-    depthTextureSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-    depthTextureSrvDesc.ViewDimension           = D3D12_SRV_DIMENSION_TEXTURE2D;
-    depthTextureSrvDesc.Texture2D.MipLevels     = 1;
-
-    srvManager_->CreateSRVforTexture2D(depthIndex, depthStencilResource_.Get(), depthTextureSrvDesc);
 }
 
 ///==========================================================
 /// レンダーテクスチャリソース作成
 ///==========================================================
 Microsoft::WRL::ComPtr<ID3D12Resource> DxRenderTarget::CreateRenderTextureResource(
-    Microsoft::WRL::ComPtr<ID3D12Device> device, uint32_t width, uint32_t height, DXGI_FORMAT format, const Vector4& clearColor) {
+    Microsoft::WRL::ComPtr<ID3D12Device> device, uint32_t width, uint32_t height,
+    DXGI_FORMAT format, const Vector4& clearColor) {
 
-    // 1. metadataを基にResourceの設定
+    // リソース設定
     D3D12_RESOURCE_DESC resourceDesc{};
-    resourceDesc.Dimension          = D3D12_RESOURCE_DIMENSION_TEXTURE2D; // 2Dテクスチャ
+    resourceDesc.Dimension          = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
     resourceDesc.Width              = width;
     resourceDesc.Height             = height;
-    resourceDesc.DepthOrArraySize   = 1; // 必須
-    resourceDesc.MipLevels          = 1; // 最低1は必要
+    resourceDesc.DepthOrArraySize   = 1;
+    resourceDesc.MipLevels          = 1;
     resourceDesc.Format             = format;
     resourceDesc.SampleDesc.Count   = 1;
     resourceDesc.SampleDesc.Quality = 0;
@@ -136,11 +105,11 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DxRenderTarget::CreateRenderTextureResour
     clearValue_.Color[2] = clearColor.z;
     clearValue_.Color[3] = clearColor.w;
 
-    // 2. 利用するHeapの設定
+    // ヒープ設定
     D3D12_HEAP_PROPERTIES heapProperties{};
     heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
 
-    // 3. Resourceを生成してreturnする
+    // リソース生成
     Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr;
     HRESULT hr                                      = device->CreateCommittedResource(
         &heapProperties,
@@ -151,115 +120,55 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DxRenderTarget::CreateRenderTextureResour
         IID_PPV_ARGS(&resource));
 
     if (FAILED(hr)) {
-        OutputDebugStringA("Failed to createRender Texture Resource heap.\n");
+        OutputDebugStringA("Failed to create render texture resource heap.\n");
         return nullptr;
     }
     return resource;
 }
 
 ///==========================================================
-/// 深度ステンシルテクスチャリソース作成
+/// レンダーテクスチャへの描画準備
 ///==========================================================
-Microsoft::WRL::ComPtr<ID3D12Resource> DxRenderTarget::CreateDepthStencilTextureResource(
-    Microsoft::WRL::ComPtr<ID3D12Device> device, int32_t width, int32_t height) {
-
-    // 生成するResourceの設定
-    D3D12_RESOURCE_DESC resourceDesc{};
-    resourceDesc.Width            = width;
-    resourceDesc.Height           = height;
-    resourceDesc.MipLevels        = 1;
-    resourceDesc.DepthOrArraySize = 1;
-    resourceDesc.Format           = DXGI_FORMAT_D24_UNORM_S8_UINT;
-    resourceDesc.SampleDesc.Count = 1;
-    resourceDesc.Dimension        = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-    resourceDesc.Flags            = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
-
-    // 利用するHeapの設定
-    D3D12_HEAP_PROPERTIES heapProperties{};
-    heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT; // VRAM上に作る
-
-    // 深度値のクリア設定
-    D3D12_CLEAR_VALUE depthClearValue{};
-    depthClearValue.DepthStencil.Depth = 1.0f; // 1.0f(最大値)でクリア
-    depthClearValue.Format             = DXGI_FORMAT_D24_UNORM_S8_UINT;
-
-    // Resoureceの生成
-    Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr;
-    HRESULT hr                                      = device->CreateCommittedResource(
-        &heapProperties,
-        D3D12_HEAP_FLAG_NONE,
-        &resourceDesc,
-        D3D12_RESOURCE_STATE_DEPTH_WRITE,
-        &depthClearValue,
-        IID_PPV_ARGS(&resource));
-
-    if (FAILED(hr)) {
-        OutputDebugStringA("Failed to create depth senthil resource heap.\n");
-        return nullptr;
-    }
-    return resource.Get();
-}
-
-///==========================================================
-/// ディスクリプタヒープ初期化
-///==========================================================
-Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DxRenderTarget::InitializeDescriptorHeap(
-    Microsoft::WRL::ComPtr<ID3D12Device> device,
-    D3D12_DESCRIPTOR_HEAP_TYPE heapType,
-    UINT numDescriptors,
-    bool shaderVisible) {
-
-    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap = nullptr;
-    D3D12_DESCRIPTOR_HEAP_DESC DescriptorHeapDesc{};
-    DescriptorHeapDesc.Type           = heapType; // レンダーターゲットビュー用
-    DescriptorHeapDesc.NumDescriptors = numDescriptors; // 指定された数
-    DescriptorHeapDesc.Flags          = shaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-    HRESULT hr                        = device->CreateDescriptorHeap(&DescriptorHeapDesc, IID_PPV_ARGS(&descriptorHeap));
-
-    // ディスクリプタヒープが作れなかったので起動出来ない
-    if (FAILED(hr)) {
-        OutputDebugStringA("Failed to create descriptor heap.\n");
-        return nullptr;
-    }
-    return descriptorHeap;
-}
-
-void DxRenderTarget::ClearDepthBuffer() {
-    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvManager_->GetCPUDescriptorHandle(depthStencilIndex_);
-    dxCommand_->GetCommandList()->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
-}
-
 void DxRenderTarget::PreRenderTexture() {
-    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvManager_->GetCPUDescriptorHandle(depthStencilIndex_);
-
-    // 遷移
+    // レンダーテクスチャをRENDER_TARGET状態に遷移
     if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_RENDER_TARGET) {
-        PutTransitionBarrier(renderTextureResource_.Get(), renderTextureCurrentState_, D3D12_RESOURCE_STATE_RENDER_TARGET);
+        PutTransitionBarrier(renderTextureResource_.Get(), renderTextureCurrentState_,
+            D3D12_RESOURCE_STATE_RENDER_TARGET);
     }
 
-    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(renderTextureRtvIndex_);
+    // 深度バッファをDEPTH_WRITE状態に遷移
+    depthBuffer_->TransitionState(dxCommand_->GetCommandList(), D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
+    // レンダーターゲットと深度ステンシルビューのハンドル取得
+    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(renderTextureRtvIndex_);
+    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = depthBuffer_->GetDsvHandle();
+
+    // レンダーターゲット設定
     dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
+
     // レンダーターゲットと深度ステンシルビューをクリア
     dxCommand_->GetCommandList()->ClearRenderTargetView(rtvHandle, clearValue_.Color, 0, nullptr);
-    dxCommand_->GetCommandList()->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+    depthBuffer_->Clear(dxCommand_->GetCommandList());
+
     // ビューポートとシザー矩形を設定
     dxCommand_->GetCommandList()->RSSetViewports(1, &viewport_);
     dxCommand_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
 }
 
+///==========================================================
+/// メイン描画準備
+///==========================================================
 void DxRenderTarget::PreDraw() {
-    // これから書き込むバックバッファのインデックスを取得
+    // バックバッファのインデックス取得
     backBufferIndex_ = dxSwapChain_->GetCurrentBackBufferIndex();
 
-    // 深度バッファをDEPTH_WRITE状態に遷移
-    if (depthCurrentState_ != D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE) {
-        PutTransitionBarrier(depthStencilResource_.Get(), depthCurrentState_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-    }
+    // 深度バッファをシェーダーリソース状態に遷移
+    depthBuffer_->TransitionState(dxCommand_->GetCommandList(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
-    // PIXEL_SHADER_RESOURCEに遷移
+    // レンダーテクスチャをシェーダーリソース状態に遷移
     if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE) {
-        PutTransitionBarrier(renderTextureResource_.Get(), renderTextureCurrentState_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+        PutTransitionBarrier(renderTextureResource_.Get(), renderTextureCurrentState_,
+            D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
     }
 
     // SwapChainリソースの現在の状態を取得
@@ -267,18 +176,19 @@ void DxRenderTarget::PreDraw() {
 
     // SwapChainリソースをRENDER_TARGET状態に遷移
     if (currentSwapChainState != D3D12_RESOURCE_STATE_RENDER_TARGET) {
-        PutTransitionBarrier(dxSwapChain_->GetSwapChainResource(backBufferIndex_).Get(), currentSwapChainState, D3D12_RESOURCE_STATE_RENDER_TARGET);
-
-        // SwapChainの状態を更新
+        PutTransitionBarrier(dxSwapChain_->GetSwapChainResource(backBufferIndex_).Get(),
+            currentSwapChainState, D3D12_RESOURCE_STATE_RENDER_TARGET);
         dxSwapChain_->UpdateResourceState(backBufferIndex_, D3D12_RESOURCE_STATE_RENDER_TARGET);
     }
 
-    // 描画先のRTVとDSVを設定する
+    // レンダーターゲットと深度ステンシルビューのハンドル取得
     D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(backBufferIndex_);
-    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvManager_->GetCPUDescriptorHandle(depthStencilIndex_);
+    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = depthBuffer_->GetDsvHandle();
 
+    // レンダーターゲット設定
     dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
-    // レンダーターゲットと深度ステンシルビューをクリア
+
+    // レンダーターゲットをクリア
     dxCommand_->GetCommandList()->ClearRenderTargetView(rtvHandle, clearValue_.Color, 0, nullptr);
 
     // ビューポートとシザー矩形を設定
@@ -286,13 +196,14 @@ void DxRenderTarget::PreDraw() {
     dxCommand_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
 }
 
+///==========================================================
+/// 描画後の状態遷移
+///==========================================================
 void DxRenderTarget::PostDrawTransitionBarrier() {
     UINT currentIndex = dxSwapChain_->GetCurrentBackBufferIndex();
 
-    // 深度バッファの状態遷移
-    if (depthCurrentState_ != D3D12_RESOURCE_STATE_DEPTH_WRITE) {
-        PutTransitionBarrier(depthStencilResource_.Get(), depthCurrentState_, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-    }
+    // 深度バッファをDEPTH_WRITE状態に遷移
+    depthBuffer_->TransitionState(dxCommand_->GetCommandList(), D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
     // SwapChainリソースをPRESENT状態に遷移
     PutTransitionBarrier(dxSwapChain_->GetSwapChainResource(currentIndex).Get(),
@@ -301,6 +212,9 @@ void DxRenderTarget::PostDrawTransitionBarrier() {
     dxSwapChain_->UpdateResourceState(currentIndex, D3D12_RESOURCE_STATE_PRESENT);
 }
 
+///==========================================================
+/// ビューポートとシザー矩形設定
+///==========================================================
 void DxRenderTarget::SetupViewportAndScissor() {
     // ビューポート設定
     viewport_.Width    = float(backBufferWidth_);
@@ -317,31 +231,30 @@ void DxRenderTarget::SetupViewportAndScissor() {
     scissorRect_.bottom = int32_t(backBufferHeight_);
 }
 
-void DxRenderTarget::PutTransitionBarrier(ID3D12Resource* pResource, D3D12_RESOURCE_STATES Before, D3D12_RESOURCE_STATES After) {
+///==========================================================
+/// リソース状態遷移バリア
+///==========================================================
+void DxRenderTarget::PutTransitionBarrier(ID3D12Resource* pResource,
+    D3D12_RESOURCE_STATES Before, D3D12_RESOURCE_STATES After) {
+
     D3D12_RESOURCE_BARRIER barrier{};
-    // 今回のバリアはTransition
-    barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-    // Noneにしておく
-    barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-    // バリアを張る対象のリソース。現在のバックバッファに対して行う
-    barrier.Transition.pResource = pResource;
-    // 遷移前のResourceState
+    barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+    barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+    barrier.Transition.pResource   = pResource;
     barrier.Transition.StateBefore = Before;
-    // 遷移後のResourceState
-    barrier.Transition.StateAfter = After;
-    // TransitionBarrierを張る
+    barrier.Transition.StateAfter  = After;
+
     dxCommand_->GetCommandList()->ResourceBarrier(1, &barrier);
 
-    // リソースの状態更新
+    // レンダーテクスチャの状態更新
     if (pResource == renderTextureResource_.Get()) {
         renderTextureCurrentState_ = After;
-    } else if (pResource == depthStencilResource_.Get()) {
-        depthCurrentState_ = After;
     }
 }
 
+///==========================================================
+/// 終了処理
+///==========================================================
 void DxRenderTarget::Finalize() {
     renderTextureResource_.Reset();
-    depthStencilResource_.Reset();
-    dsvDescriptorHeap_.Reset();
 }

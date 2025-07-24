@@ -42,6 +42,7 @@
     <ClCompile Include="Engine\Dx\DirectXCommon.cpp" />
     <ClCompile Include="Engine\Dx\DxCommand.cpp" />
     <ClCompile Include="Engine\Dx\DxCompiler.cpp" />
+    <ClCompile Include="Engine\Dx\DxDepthBuffer.cpp" />
     <ClCompile Include="Engine\Dx\DxDevice.cpp" />
     <ClCompile Include="Engine\Dx\DxReleaseChecker.cpp" />
     <ClCompile Include="Engine\Dx\DxRenderTarget.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Engine\Dx\DirectXCommon.h" />
     <ClInclude Include="Engine\Dx\DxCommand.h" />
     <ClInclude Include="Engine\Dx\DxCompiler.h" />
+    <ClInclude Include="Engine\Dx\DxDepthBuffer.h" />
     <ClInclude Include="Engine\Dx\DxDevice.h" />
     <ClInclude Include="Engine\Dx\DxReleaseChecker.h" />
     <ClInclude Include="Engine\Dx\DxRenderTarget.h" />

@@ -211,7 +211,6 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Shado
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
     }
 
-    commandList->SetGraphicsRootDescriptorTable(11, shadowMap.GetGPUHandle());
 
     uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
     commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
@@ -219,6 +218,7 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Shado
     Light::GetInstance()->SetLightCommands(commandList);
 
     //shadow
+    commandList->SetGraphicsRootDescriptorTable(11, shadowMap.GetGPUHandle());
     commandList->SetGraphicsRootConstantBufferView(12, shadowMap.GetVertexResource()->GetGPUVirtualAddress());
   
     // 描画コール

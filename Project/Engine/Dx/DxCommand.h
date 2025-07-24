@@ -38,8 +38,7 @@ private:
     HRESULT hr_;
 
 public:
-  
     Microsoft::WRL::ComPtr<ID3D12CommandQueue> GetCommandQueue() const { return commandQueue_; }
-    Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> GetCommandList() const { return commandList_; }
+    ID3D12GraphicsCommandList* GetCommandList() const { return commandList_.Get(); }
     Microsoft::WRL::ComPtr<ID3D12CommandAllocator> GetCommandAllocator() const { return commandAllocator_; }
 };

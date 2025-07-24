@@ -1,7 +1,7 @@
 #include "ShadowMap.h"
 #include "base/SrvManager.h"
 #include "Dx/DirectXCommon.h"
-#include"Dx/DxRenderTarget.h"
+#include"Dx/DxDepthBuffer.h"
 #include "Lighrt/DirectionalLight.h"
 #include "Lighrt/Light.h"
 
@@ -42,7 +42,7 @@ void ShadowMap::CreateSRVHandle() {
     depthTextureSrvDesc.ViewDimension           = D3D12_SRV_DIMENSION_TEXTURE2D;
     depthTextureSrvDesc.Texture2D.MipLevels     = 1;
 
-    srvManager_->CreateSRVforTexture2D(depthIndex,dxCommon_->GetDxRenderTarget()->GetDepthStencilResource(), depthTextureSrvDesc);
+    srvManager_->CreateSRVforTexture2D(depthIndex, dxCommon_->GetDepthBuffer()->GetDepthStencilResource(), depthTextureSrvDesc);
 }
 
 void ShadowMap::UpdateLightMatrix() {
