@@ -1,12 +1,8 @@
 #include "LuminanceBasedOutline.h"
-#include "3d/ViewProjection.h"
 #include "Dx/DirectXCommon.h"
-#include "Dx/DxCompiler.h"
-#include "Dx/DxDepthBuffer.h"
 #include "Dx/DxRenderTarget.h"
 #include "function/Log.h"
 #include <cassert>
-#include <d3dx12.h>
 #include <imgui.h>
 
 void LuminanceBasedOutline::Init(DirectXCommon* dxCommon) {
