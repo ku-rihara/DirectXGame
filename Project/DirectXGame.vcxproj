@@ -24,6 +24,7 @@
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\Animation\ModelAnimation.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
+    <ClCompile Include="Engine\base\DsvManager.cpp" />
     <ClCompile Include="Engine\base\Material.cpp" />
     <ClCompile Include="Engine\base\RtvManager.cpp" />
     <ClCompile Include="Engine\base\SkyBoxRenderer.cpp" />
@@ -41,6 +42,7 @@
     <ClCompile Include="Engine\Dx\DirectXCommon.cpp" />
     <ClCompile Include="Engine\Dx\DxCommand.cpp" />
     <ClCompile Include="Engine\Dx\DxCompiler.cpp" />
+    <ClCompile Include="Engine\Dx\DxDepthBuffer.cpp" />
     <ClCompile Include="Engine\Dx\DxDevice.cpp" />
     <ClCompile Include="Engine\Dx\DxReleaseChecker.cpp" />
     <ClCompile Include="Engine\Dx\DxRenderTarget.cpp" />
@@ -67,6 +69,7 @@
     <ClCompile Include="Engine\OffScreen\NormalScreen.cpp" />
     <ClCompile Include="Engine\OffScreen\OffScreenRenderer.cpp" />
     <ClCompile Include="Engine\OffScreen\Outline.cpp" />
+    <ClCompile Include="Engine\OffScreen\LuminanceBasedOutline.cpp" />
     <ClCompile Include="Engine\OffScreen\RadialBlur.cpp" />
     <ClCompile Include="Engine\OffScreen\Vignette.cpp" />
     <ClCompile Include="Engine\Pipeline\Line3DPipeline.cpp" />
@@ -208,6 +211,7 @@
     <ClInclude Include="Engine\Animation\SkeletonData.h" />
     <ClInclude Include="Engine\Animation\SkinCluster.h" />
     <ClInclude Include="Engine\audio\Audio.h" />
+    <ClInclude Include="Engine\base\DsvManager.h" />
     <ClInclude Include="Engine\base\Material.h" />
     <ClInclude Include="Engine\base\RtvManager.h" />
     <ClInclude Include="Engine\base\SkyBoxRenderer.h" />
@@ -225,6 +229,7 @@
     <ClInclude Include="Engine\Dx\DirectXCommon.h" />
     <ClInclude Include="Engine\Dx\DxCommand.h" />
     <ClInclude Include="Engine\Dx\DxCompiler.h" />
+    <ClInclude Include="Engine\Dx\DxDepthBuffer.h" />
     <ClInclude Include="Engine\Dx\DxDevice.h" />
     <ClInclude Include="Engine\Dx\DxReleaseChecker.h" />
     <ClInclude Include="Engine\Dx\DxRenderTarget.h" />
@@ -252,6 +257,7 @@
     <ClInclude Include="Engine\OffScreen\NormalScreen.h" />
     <ClInclude Include="Engine\OffScreen\OffScreenRenderer.h" />
     <ClInclude Include="Engine\OffScreen\Outline.h" />
+    <ClInclude Include="Engine\OffScreen\LuminanceBasedOutline.h" />
     <ClInclude Include="Engine\OffScreen\RadialBlur.h" />
     <ClInclude Include="Engine\OffScreen\Vignette.h" />
     <ClInclude Include="Engine\Pipeline\Line3DPipeline.h" />

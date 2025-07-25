@@ -877,6 +877,15 @@
     <ClCompile Include="Engine\ShadowMap\ShadowMap.cpp">
       <Filter>MyEngine\.cpp\ShadowMap</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\base\DsvManager.cpp">
+      <Filter>MyEngine\.cpp\base</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Dx\DxDepthBuffer.cpp">
+      <Filter>MyEngine\.cpp\Dx</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OffScreen\LuminanceBasedOutline.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1457,6 +1466,15 @@
     </ClInclude>
     <ClInclude Include="Engine\ShadowMap\ShadowMap.h">
       <Filter>MyEngine\.h\ShadowMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\DsvManager.h">
+      <Filter>MyEngine\.h\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Dx\DxDepthBuffer.h">
+      <Filter>MyEngine\.h\Dx</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OffScreen\LuminanceBasedOutline.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

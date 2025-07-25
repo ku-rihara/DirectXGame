@@ -10,7 +10,7 @@ Plane::~Plane() {}
 void Plane::Init() {
 
 	/// .obj
-	objct3D_.reset(Object3d::CreateModel("Plane.obj"));
+	objct3D_.reset(Object3d::CreateModel("Suzanne.obj"));
 	transform_.Init();
 	transform_.translation_ = {-2.3f,-4.5f,-16.5f};
 	transform_.scale_ = {1, 1, 1};

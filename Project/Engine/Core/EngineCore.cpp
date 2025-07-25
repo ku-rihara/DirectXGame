@@ -15,6 +15,7 @@
 #include "Pipeline/Object3DPiprline.h"
 #include "Pipeline/SkinningObject3DPipeline.h"
 #include "Pipeline/SpritePipeline.h"
+#include"base/DsvManager.h"
 /// audio,input
 #include "audio/Audio.h"
 #include "input/Input.h"
@@ -49,6 +50,9 @@ void EngineCore::Initialize(const char* title, int width, int height) {
      // srvManager
     srvManager_ = SrvManager::GetInstance();
     srvManager_->Init(directXCommon_);
+
+    dsvManager_ = DsvManager::GetInstance();
+    dsvManager_->Init(directXCommon_);
 
     directXCommon_->InitRenderingResources();
 

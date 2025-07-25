@@ -2,12 +2,12 @@
 #include <cassert>
 #include <d3d12.h>
 
-// 最大SRV数の定義
+// 最大RTV数の定義
 const uint32_t RtvManager::kMaxCount = 3;
 
 // シングルトンインスタンスの取得
 RtvManager* RtvManager::GetInstance() {
-    static RtvManager instance; // 静的インスタンス
+    static RtvManager instance; 
     return &instance;
 }
 
@@ -32,7 +32,7 @@ uint32_t RtvManager::Allocate() {
 
     if (isFirst) {
         isFirst = false;
-        return useIndex_;
+        return 0;
     }
 
     useIndex_++; // 2回目以降に加算
@@ -47,14 +47,6 @@ bool RtvManager::IsAbleSecure() {
     }
 }
 
-///==========================================
-/// 描画前処理
-///==========================================
-void RtvManager::PreDraw() {
-    // コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
-    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeaps[] = {descriptorHeap_.Get()};
-    dxCommon_->GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps->GetAddressOf());
-}
 
 D3D12_CPU_DESCRIPTOR_HANDLE RtvManager::GetCPUDescriptorHandle(uint32_t index) {
     D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap_->GetCPUDescriptorHandleForHeapStart();

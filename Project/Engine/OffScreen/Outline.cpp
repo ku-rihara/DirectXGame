@@ -3,6 +3,7 @@
 #include "Dx/DirectXCommon.h"
 #include "Dx/DxCompiler.h"
 #include "Dx/DxRenderTarget.h"
+#include"Dx/DxDepthBuffer.h"
 #include "function/Log.h"
 #include <cassert>
 #include <d3dx12.h>
@@ -128,8 +129,8 @@ void Outline::CreateConstantBuffer() {
     HRESULT hr;
 
     // param (b0)
-    uvStepResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(OutLineParamData));
-    hr              = uvStepResource_->Map(0, &readRange, reinterpret_cast<void**>(&uvStepData_));
+    paramDataResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(OutLineParamData));
+    hr              = paramDataResource_->Map(0, &readRange, reinterpret_cast<void**>(&paramData_));
     if (FAILED(hr)) {
         // エラー処理
         OutputDebugStringA("ConstBuffer Map failed.\n");
@@ -144,7 +145,7 @@ void Outline::CreateConstantBuffer() {
     }
 
     outlineMaterialData_->projectionInverse = MakeIdentity4x4();
-    uvStepData_->wightRate                  = 0.2f;
+    paramData_->wightRate                  = 0.2f;
 }
 
 void Outline::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
@@ -157,10 +158,10 @@ void Outline::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
     commandList->SetGraphicsRootDescriptorTable(0, dxCommon_->GetDxRenderTarget()->GetRenderTextureGPUSrvHandle());
 
     // depthテクスチャ (t1)
-    commandList->SetGraphicsRootDescriptorTable(1, dxCommon_->GetDxRenderTarget()->GetDepthTextureGPUSrvHandle());
+    commandList->SetGraphicsRootDescriptorTable(1, dxCommon_->GetDepthBuffer()->GetDepthSrvGPUHandle());
 
     // b0: OutLineParams
-    commandList->SetGraphicsRootConstantBufferView(2, uvStepResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(2, paramDataResource_->GetGPUVirtualAddress());
 
     // b1: OutLineMaterial
     commandList->SetGraphicsRootConstantBufferView(3, outlineMaterialResource_->GetGPUVirtualAddress());
@@ -171,7 +172,7 @@ void Outline::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
 void Outline::DebugParamImGui() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader("Outline")) {
-        ImGui::DragFloat("widthRate", &uvStepData_->wightRate, 0.01f);
+        ImGui::DragFloat("widthRate", &paramData_->wightRate, 0.01f);
     }
 #endif
 }

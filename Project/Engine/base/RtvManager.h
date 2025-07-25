@@ -19,8 +19,6 @@ public:
     // アロケータ
     uint32_t Allocate();
 
-    // 描画前処理
-    void PreDraw();
     bool IsAbleSecure();
 
     /// GPU、CPUデスクリプタハンドル取得

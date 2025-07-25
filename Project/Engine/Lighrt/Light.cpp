@@ -58,7 +58,7 @@ void Light::InitAllLights() {
     ambientLight_     = std::make_unique<AmbientLight>();
     ambientLight_->Init(dxCommon_->GetDevice().Get());
 
-    for (int32_t i = 0; i < spotLightCoutMax_; ++i) {
+    for (int32_t i = 0; i < 5; ++i) {
         AddSpotLight();
     }
 
