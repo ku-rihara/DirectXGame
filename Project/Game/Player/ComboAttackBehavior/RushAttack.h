@@ -52,6 +52,9 @@ private:
 	std::unique_ptr<AttackCollisionBox>collisionBox_;
 	std::unique_ptr<ParticleEmitter>emitter_;
 
+	Easing<float> rushBlurEase_;
+    float tempBlurParam_;
+
 	///wait
 	float waitTime_;
 

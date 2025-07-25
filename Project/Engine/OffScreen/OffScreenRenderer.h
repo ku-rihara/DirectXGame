@@ -1,8 +1,11 @@
 #pragma once
-#include"BaseOffScreen.h"
+#include "BaseOffScreen.h"
 #include <array>
 #include <d3d12.h>
 #include <memory>
+#include "RadialBlur.h"
+#include "GrayScale.h"
+#include "Vignette.h"
 class ViewProjection;
 enum class OffScreenMode {
     NONE,
@@ -33,10 +36,37 @@ public:
 
 private:
     const ViewProjection* viewProjection_;
-    DirectXCommon* dxCommon_ = nullptr;
+    DirectXCommon* dxCommon_   = nullptr;
     OffScreenMode currentMode_ = OffScreenMode::NONE;
     std::array<std::unique_ptr<BaseOffScreen>, static_cast<size_t>(OffScreenMode::COUNT)> effects_;
 
 public:
     void SetViewProjection(const ViewProjection* viewProjection);
+    BaseOffScreen* GetEffect(OffScreenMode mode);
+
+     // テンプレート版の型安全な取得関数
+    template <typename T>
+    T* GetEffect(OffScreenMode mode) {
+        BaseOffScreen* effect = GetEffect(mode);
+        return dynamic_cast<T*>(effect);
+    }
+
+    // 現在のモードの効果を型安全に取得
+    template <typename T>
+    T* GetCurrentEffect() {
+        return GetEffect<T>(currentMode_);
+    }
+
+    // 特定の効果専用の便利関数
+    RadialBlur* GetRadialBlur() {
+        return GetEffect<RadialBlur>(OffScreenMode::RADIALBLUR);
+    }
+
+    GrayScale* GetGrayScale() {
+        return GetEffect<GrayScale>(OffScreenMode::GRAY);
+    }
+
+    Vignette* GetVignette() {
+        return GetEffect<Vignette>(OffScreenMode::VIGNETTE);
+    }
 };

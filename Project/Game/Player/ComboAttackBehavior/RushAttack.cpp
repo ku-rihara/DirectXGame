@@ -6,6 +6,8 @@
 #include "Player/Player.h"
 
 #include "Frame/Frame.h"
+#include "OffScreen/OffScreenRenderer.h"
+#include "OffScreen/RadialBlur.h"
 #include <imgui.h>
 
 // 初期化
@@ -31,6 +33,17 @@ RushAttack::RushAttack(Player* player)
     rushTargetPos_ = initPos_ + (direction_ * pPlayerParameter_->GetJumpComboParm(SECOND).attackReach);
 
     EasingInit();
+
+    OffScreenRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::RADIALBLUR);
+    rushBlurEase_.Init("RushEffect");
+    rushBlurEase_.ApplyFromJson("RushBlur.json");
+    rushBlurEase_.SaveAppliedJsonFileName();
+    rushBlurEase_.SetAdaptValue(&tempBlurParam_);
+    rushBlurEase_.Reset();
+
+    rushBlurEase_.SetOnWaitEndCallback([this]() {
+        OffScreenRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::NONE);
+    });
 
     step_ = STEP::EMIT; // 突進
 }
@@ -58,6 +71,9 @@ void RushAttack::Update() {
 
         pPlayer_->GetEffects()->RushAttackEmit();
 
+        rushBlurEase_.Update(Frame::DeltaTimeRate());
+        OffScreenRenderer::GetInstance()->GetRadialBlur()->SetBlurWidth(tempBlurParam_);
+
         // Rhand
         handRMoveEase_.Update(Frame::DeltaTimeRate());
         pPlayer_->GetRightHand()->SetWorldPosition(tempRHandPos_);
@@ -70,7 +86,6 @@ void RushAttack::Update() {
         rushEase_.Update(Frame::DeltaTimeRate());
         pPlayer_->SetWorldPosition(tempRushPos_);
 
-       
         /// 当たり判定座標
         collisionBox_->IsAdapt(true);
         collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
@@ -81,6 +96,8 @@ void RushAttack::Update() {
         /// 待機
         ///---------------------------------------------------------
     case STEP::WAIT:
+
+        OffScreenRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::NONE);
 
         collisionBox_->IsAdapt(false);
         waitTime_ += Frame::DeltaTime();
@@ -114,7 +131,7 @@ void RushAttack::EasingInit() {
     handRMoveEase_.Reset();
 
     handRMoveEase_.SetStartValue(initRHandPos_);
-  /*  handRMoveEase_.SetEndValue(targetRPos_);*/
+    /*  handRMoveEase_.SetEndValue(targetRPos_);*/
 
     handRMoveEase_.SetOnFinishCallback([this]() {
 
@@ -125,7 +142,7 @@ void RushAttack::EasingInit() {
     handLMoveEase_.Reset();
 
     handLMoveEase_.SetStartValue(initLHandPos_);
-  /*  handLMoveEase_.SetEndValue(targetLPos_);*/
+    /*  handLMoveEase_.SetEndValue(targetLPos_);*/
 
     handLMoveEase_.SetOnFinishCallback([this]() {
 

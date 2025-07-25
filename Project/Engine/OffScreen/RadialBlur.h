@@ -30,4 +30,18 @@ public:
 private:
     Microsoft::WRL::ComPtr<ID3D12Resource> paramDataResource_;
     ParamData* paramData_;
+
+public:
+   
+    void SetCenter(const Vector2& center) {
+        if (paramData_) {
+            paramData_->center = center;
+        }
+    }
+
+    void SetBlurWidth(float blurWidth) {
+        if (paramData_) {
+            paramData_->blurWidth = blurWidth;
+        }
+    }
 };

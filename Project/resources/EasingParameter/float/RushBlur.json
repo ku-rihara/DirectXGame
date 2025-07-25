@@ -1,0 +1,16 @@
+{
+    "RushBlur": {
+        "StartTimeOffset": 0.0,
+        "adaptFloatAxisType": 0,
+        "amplitude": 0.0,
+        "backRatio": 0.2199999988079071,
+        "endValue": 0.05000000074505806,
+        "finishOffsetTime": 0.0,
+        "finishType": 0,
+        "maxTime": 0.5699999928474426,
+        "period": 0.0,
+        "startValue": 0.0,
+        "type": 37,
+        "waitTime": 0.0
+    }
+}
