@@ -9,7 +9,7 @@ struct TransformationMatrix
 };
 
 ConstantBuffer<TransformationMatrix> gTransformationMatrix : register(b0);
-ConstantBuffer<ShadowVertexBuffer> gShadowVertexBuffer : register(b1);
+ConstantBuffer<ShadowTransformBuffer> gShadowTransformBuffer : register(b1);
 
 
 struct Well
@@ -46,7 +46,7 @@ Skinned Skinning(VertexShaderInput input)
     return skinned;
 }
 
-VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID)
+VertexShaderOutput main(VertexShaderInput input)
 {
     VertexShaderOutput output;
     Skinned skinned = Skinning(input); //Skining処理
@@ -55,13 +55,9 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
     output.worldPosition = mul(skinned.position, gTransformationMatrix.World).xyz;
     output.texcoord = input.texcoord;
     output.normal = normalize(mul(skinned.normal, (float3x3)gTransformationMatrix.WorldInverseTranspose));
-    output.instanceID = instanceID;
-    
-    if (output.instanceID == 1)
-    {
-        
-    }
    
+    float4 worldPosition = mul(input.position, gTransformationMatrix.World);
+    output.lightSpacePosition = mul(worldPosition, gShadowTransformBuffer.lightCamera);
     
     return output;
 }

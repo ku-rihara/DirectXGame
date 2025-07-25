@@ -7,7 +7,9 @@
 #include "base/SkyBoxRenderer.h"
 #include "base/TextureManager.h"
 #include "Lighrt/Light.h"
+#include"ShadowMap/ShadowMap.h"
 #include "Pipeline/Object3DPiprline.h"
+#include"Dx/DxRenderTarget.h"
 #include <filesystem>
 
 void ModelCommon::Init(DirectXCommon* dxCommon) {
@@ -187,7 +189,7 @@ void Model::DebugImGui() {
 #endif
 }
 
-void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Microsoft::WRL::ComPtr<ID3D12Resource> shadowVResource, Material material, std::optional<uint32_t> textureHandle) {
+void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, Material material, std::optional<uint32_t> textureHandle) {
 
     auto commandList = dxCommon_->GetCommandList();
     /*materialDate_->color = color.;*/
@@ -202,12 +204,13 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Microsoft::
     material.SetCommandList(commandList);
 
     commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
-
+   
     if (textureHandle.has_value()) {
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
     } else {
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
     }
+
 
     uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
     commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
@@ -215,13 +218,14 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Microsoft::
     Light::GetInstance()->SetLightCommands(commandList);
 
     //shadow
-    commandList->SetGraphicsRootConstantBufferView(12, shadowVResource->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootDescriptorTable(11, shadowMap.GetGPUHandle());
+    commandList->SetGraphicsRootConstantBufferView(12, shadowMap.GetVertexResource()->GetGPUVirtualAddress());
   
     // 描画コール
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
 }
 
-void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Microsoft::WRL::ComPtr<ID3D12Resource> shadowVResource, Material material, SkinCluster skinCluster, std::optional<uint32_t> textureHandle) {
+void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, Material material, SkinCluster skinCluster, std::optional<uint32_t> textureHandle) {
 
     auto commandList = dxCommon_->GetCommandList();
 
@@ -256,7 +260,7 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Mi
     Light::GetInstance()->SetLightCommands(commandList);
 
      // shadow
-    commandList->SetGraphicsRootConstantBufferView(12, shadowVResource->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(12, shadowMap.GetVertexResource()->GetGPUVirtualAddress());
 
     // 描画
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);

@@ -1,12 +1,9 @@
 #include "Object3d.h"
+#include "Lighrt/DirectionalLight.h"
+#include "Lighrt/Light.h"
 #include "ModelManager.h"
 #include "Pipeline/SkinningObject3DPipeline.h"
 // #include"struct/ModelData.h"
-
-Object3d::Object3d() {
-}
-Object3d::~Object3d() {
-}
 
 ///============================================================
 /// モデル作成
@@ -45,23 +42,17 @@ void Object3d::Draw(const WorldTransform& worldTransform, const ViewProjection& 
 
     ColorUpdate();
 
-    //// WVP行列の計算
-    // if (model_->GetIsFileGltf()) {//.gltfファイルの場合
-    //	wvpDate_->WVP = model_->GetModelData().rootNode.localMatrix * worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
-    //	wvpDate_->WorldInverseTranspose = Inverse(Transpose(model_->GetModelData().rootNode.localMatrix * wvpDate_->World));
-    // }
-    // else {//.objファイルの場合
-    /*model_->GetModelData().rootNode.localMatrix**/
+    // WVP行列の計算
     wvpDate_->World                 = worldTransform.matWorld_;
     wvpDate_->WVP                   = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
     wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
 
-    /*  shadowMap_->SetVertexMatrix(())*/
-    /*}*/
+    // 影の更新
+    shadowMap_->UpdateLightMatrix();
 
     Object3DPiprline::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
 
-    model_->Draw(wvpResource_, shadowMap_->GetVertexResource(), material_, textureHandle);
+    model_->Draw(wvpResource_, *shadowMap_, material_, textureHandle);
 }
 
 ///============================================================
@@ -70,12 +61,12 @@ void Object3d::Draw(const WorldTransform& worldTransform, const ViewProjection& 
 
 void Object3d::Draw(const Vector3& position, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
     if (model_) {
-        // 一時的なワールドトランスフォームを構築
+
         WorldTransform tempTransform;
-        tempTransform.translation_ = position; // 渡された位置を設定
-        tempTransform.scale_       = {1.0f, 1.0f, 1.0f}; // スケールはデフォルト値 (必要に応じて変更可能)
-        tempTransform.rotation_    = {0.0f, 0.0f, 0.0f}; // 回転もデフォルト値
-        tempTransform.UpdateMatrix(); // ワールド行列を更新
+        tempTransform.translation_ = position;
+        tempTransform.scale_       = {1.0f, 1.0f, 1.0f};
+        tempTransform.rotation_    = {0.0f, 0.0f, 0.0f};
+        tempTransform.UpdateMatrix();
 
         // WVP行列の計算
         if (model_->GetIsFileGltf()) { // .gltfファイルの場合
@@ -89,7 +80,7 @@ void Object3d::Draw(const Vector3& position, const ViewProjection& viewProjectio
         }
 
         // モデル描画
-        model_->Draw(wvpResource_, shadowMap_->GetVertexResource(), material_, textureHandle);
+        model_->Draw(wvpResource_, *shadowMap_, material_, textureHandle);
     }
 }
 
@@ -102,20 +93,27 @@ void Object3d::DrawAnimation(const WorldTransform& worldTransform, const ViewPro
 
     ColorUpdate();
 
-    //// WVP行列の計算
-    // if (model_->GetIsFileGltf()) {//.gltfファイルの場合
-    //	wvpDate_->WVP = model_->GetModelData().rootNode.localMatrix * worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
-    //	wvpDate_->WorldInverseTranspose = Inverse(Transpose(model_->GetModelData().rootNode.localMatrix * wvpDate_->World));
-    // }
-    // else {//.objファイルの場合
-    /*model_->GetModelData().rootNode.localMatrix**/
     wvpDate_->World                 = worldTransform.matWorld_;
     wvpDate_->WVP                   = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
     wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
     /*}*/
 
+    // 影の更新
+    shadowMap_->UpdateLightMatrix();
+
     SkinningObject3DPipeline::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
-    model_->DrawAnimation(wvpResource_, shadowMap_->GetVertexResource(), material_, skinCluster, textureHandle);
+    model_->DrawAnimation(wvpResource_, *shadowMap_, material_, skinCluster, textureHandle);
+
+    ShadowDraw();
+}
+
+void Object3d::ShadowDraw() {
+
+    if (!isShadow_) {
+        return;
+    }
+
+   /* shadowMap_->Draw();*/
 }
 
 ///============================================================

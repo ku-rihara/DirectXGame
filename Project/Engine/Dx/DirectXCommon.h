@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include <wrl/client.h>
 
+
 // 前方宣言
 class ImGuiManager;
 class TextureManager;
@@ -17,6 +18,7 @@ class DxCommand;
 class DxSwapChain;
 class DxRenderTarget;
 class DxCompiler;
+class DxDepthBuffer;
 
 class DirectXCommon {
 private:
@@ -74,6 +76,7 @@ private:
     std::unique_ptr<DxSwapChain> dxSwapChain_;
     std::unique_ptr<DxRenderTarget> dxRenderTarget_;
     std::unique_ptr<DxCompiler> dxCompiler_;
+    std::unique_ptr<DxDepthBuffer> depthBuffer_;
 
     ///===========================================================================
     /// バックバッファ関連
@@ -95,6 +98,7 @@ public:
     DxSwapChain* GetDxSwapChain() const { return dxSwapChain_.get(); }
     DxRenderTarget* GetDxRenderTarget() const { return dxRenderTarget_.get(); }
     DxCompiler* GetDxCompiler() const { return dxCompiler_.get(); }
+    DxDepthBuffer* GetDepthBuffer() const { return depthBuffer_.get(); }
 
     Microsoft::WRL::ComPtr<ID3D12Device> GetDevice() const;
     ID3D12GraphicsCommandList* GetCommandList() const;

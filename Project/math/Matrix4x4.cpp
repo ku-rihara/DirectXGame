@@ -491,3 +491,33 @@ Matrix4x4 MakeRotateMatrixFromQuaternion(const Quaternion& q) {
 
     return matrix;
 }
+
+Matrix4x4 MakeRootAtMatrix(const Vector3& eye, const Vector3& target, const Vector3& up) {
+    Vector3 zAxis = (target - eye).Normalize(); // 視線方向 (前方向)
+    Vector3 xAxis = Vector3::Cross(up, zAxis).Normalize(); // 右方向
+    Vector3 yAxis = Vector3::Cross(zAxis, xAxis); // 上方向（正規直交化済）
+
+    Matrix4x4 result = {};
+
+    result.m[0][0] = xAxis.x;
+    result.m[0][1] = xAxis.y;
+    result.m[0][2] = xAxis.z;
+    result.m[0][3] = -Vector3::Dot(xAxis, eye);
+
+    result.m[1][0] = yAxis.x;
+    result.m[1][1] = yAxis.y;
+    result.m[1][2] = yAxis.z;
+    result.m[1][3] = -Vector3::Dot(yAxis, eye);
+
+    result.m[2][0] = zAxis.x;
+    result.m[2][1] = zAxis.y;
+    result.m[2][2] = zAxis.z;
+    result.m[2][3] = -Vector3::Dot(zAxis, eye);
+
+    result.m[3][0] = 0.0f;
+    result.m[3][1] = 0.0f;
+    result.m[3][2] = 0.0f;
+    result.m[3][3] = 1.0f;
+
+    return result;
+}

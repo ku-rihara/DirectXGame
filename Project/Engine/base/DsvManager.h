@@ -4,12 +4,12 @@
 #include "Dx/DirectXCommon.h"
 
 /// SRV管理
-class RtvManager {
+class DsvManager {
 public:
-    RtvManager()  = default;
-    ~RtvManager() = default;
+    DsvManager()  = default;
+    ~DsvManager() = default;
 
-    static RtvManager* GetInstance();
+    static DsvManager* GetInstance();
 
     ///===================================================================
     /// public method
@@ -25,7 +25,7 @@ public:
     D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(uint32_t index);
 
     // RTV作成
-    void CreateRTV(uint32_t index, ID3D12Resource* resource, D3D12_RENDER_TARGET_VIEW_DESC* desc);
+    void CreateDSV(uint32_t index, ID3D12Resource* resource, D3D12_DEPTH_STENCIL_VIEW_DESC* desc);
 
 private:
     ///=========================================

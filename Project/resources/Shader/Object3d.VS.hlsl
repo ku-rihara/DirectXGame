@@ -9,22 +9,18 @@ struct TransformationMatrix
 };
 
 ConstantBuffer<TransformationMatrix> gTransformationMatrix : register(b0);
-ConstantBuffer<ShadowVertexBuffer> gShadowVertexBuffer : register(b1);
+ConstantBuffer<ShadowTransformBuffer> gShadowTransformBuffer : register(b1);
 
 
-VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID)
+VertexShaderOutput main(VertexShaderInput input)
 {
     VertexShaderOutput output;
     output.normal = normalize(mul(input.normal, (float3x3) gTransformationMatrix.WorldInverseTranspose));
     output.position = mul(input.position, gTransformationMatrix.WVP);
     output.worldPosition = mul(input.position, gTransformationMatrix.World).xyz;
     output.texcoord = input.texcoord;
-    output.instanceID = instanceID; 
     
-    if (output.instanceID == 1)
-    {
-        
-    }
-    
+    float4 worldPosition = mul(input.position, gTransformationMatrix.World);
+    output.lightSpacePosition = mul(worldPosition, gShadowTransformBuffer.lightCamera);
     return output;
 }

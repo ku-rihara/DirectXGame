@@ -1,5 +1,5 @@
 #include "SkinningObject3DPipeline.h"
-#include"Dx/DxCompiler.h"
+#include "Dx/DxCompiler.h"
 // Function
 #include "function/Log.h"
 #include <cassert>
@@ -22,6 +22,7 @@ void SkinningObject3DPipeline::CreateGraphicsPipeline() {
 
     HRESULT hr = 0;
 
+    // 通常のサンプラー
     staticSamplers_[0].Filter           = D3D12_FILTER_MIN_MAG_MIP_LINEAR; // バイリニアフィルタ
     staticSamplers_[0].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_WRAP; // 0~1の範囲外をリピート
     staticSamplers_[0].AddressV         = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
@@ -30,6 +31,17 @@ void SkinningObject3DPipeline::CreateGraphicsPipeline() {
     staticSamplers_[0].MaxLOD           = D3D12_FLOAT32_MAX; // ありったけのMipMapを使う
     staticSamplers_[0].ShaderRegister   = 0; // レジスタ番号０
     staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // pxelShaderで使う
+
+    // シャドウマップ用比較サンプラー
+    staticSamplers_[1].Filter           = D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
+    staticSamplers_[1].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+    staticSamplers_[1].AddressV         = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+    staticSamplers_[1].AddressW         = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+    staticSamplers_[1].BorderColor      = D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE;
+    staticSamplers_[1].ComparisonFunc   = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+    staticSamplers_[1].MaxLOD           = D3D12_FLOAT32_MAX;
+    staticSamplers_[1].ShaderRegister   = 1; // レジスタ番号1
+    staticSamplers_[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
     CreateRootSignature();
 
@@ -146,7 +158,7 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers_);
 
     // DescriptorRangeを設定
-    D3D12_DESCRIPTOR_RANGE descriptorRange[5] = {};
+    D3D12_DESCRIPTOR_RANGE descriptorRange[6] = {};
 
     // StructuredBuffer用 (t0)
     descriptorRange[0].BaseShaderRegister                = 0;
@@ -177,6 +189,12 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     descriptorRange[4].NumDescriptors                    = 1;
     descriptorRange[4].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
     descriptorRange[4].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+    // シャドウマップ (t4)
+    descriptorRange[5].BaseShaderRegister                = 4;
+    descriptorRange[5].NumDescriptors                    = 1;
+    descriptorRange[5].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorRange[5].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
     // RootParameterを作成
     D3D12_ROOT_PARAMETER rootParameters[14] = {};
@@ -240,18 +258,18 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     rootParameters[10].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[10].Descriptor.ShaderRegister = 5;
 
-     // 11: shadowData
-    rootParameters[11].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[11].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[11].Descriptor.ShaderRegister = 6;
+    // 11: ShadowMap
+    rootParameters[11].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[11].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[11].DescriptorTable.pDescriptorRanges   = &descriptorRange[5];
+    rootParameters[11].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 11: shadowVertexData
+    // 12: ShadowTransformBuffer
     rootParameters[12].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[12].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
     rootParameters[12].Descriptor.ShaderRegister = 1;
 
-
-    // 11:   gMatrixPalette
+    // 11:gMatrixPalette
     rootParameters[13].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[13].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_VERTEX;
     rootParameters[13].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];

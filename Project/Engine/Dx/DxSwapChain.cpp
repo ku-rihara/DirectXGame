@@ -46,9 +46,9 @@ void DxSwapChain::CreateRenderTargetViews(RtvManager* rtvManager) {
     rtvDesc_.Format        = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
     rtvDesc_.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
-    // RTVを作成
-    rtvManager->CreateRTV(0, resources_[0].Get(), &rtvDesc_);
-    rtvManager->CreateRTV(1, resources_[1].Get(), &rtvDesc_);
+    // RTVを作成   
+    rtvManager->CreateRTV(rtvManager->Allocate(), resources_[0].Get(), &rtvDesc_);
+    rtvManager->CreateRTV(rtvManager->Allocate(), resources_[1].Get(), &rtvDesc_);
 }
 
 void DxSwapChain::Present() {
