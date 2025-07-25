@@ -1,51 +1,52 @@
 #include "BasePlayerHand.h"
 
 /// imgui
-#include<imgui.h>
-#include"base/TextureManager.h"
+#include "base/TextureManager.h"
+#include <imgui.h>
 ///=========================================================
-///　初期化
+/// 　初期化
 ///==========================================================
 void BasePlayerHand::Init() {
 
-	BaseObject::Init();
+    BaseObject::Init();
 
-	///* グローバルパラメータ
-	globalParameter_ = GlobalParameter::GetInstance();
-	globalParameter_->CreateGroup(groupName_, false);
-	AddParmGroup();
-	ApplyGlobalParameter();
+    ///* グローバルパラメータ
+    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_->CreateGroup(groupName_, false);
+    AddParmGroup();
+    ApplyGlobalParameter();
 
-	transform_.scale_ = { 2,2,2 };
-	obj3d_->material_.materialData_->enableLighting = 2;
+    transform_.scale_                               = {2, 2, 2};
+    obj3d_->material_.materialData_->enableLighting = 2;
 
-	emitter_.reset(ParticleEmitter::CreateParticlePrimitive(groupName_,PrimitiveType::Plane,300));
-	uint32_t handle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
-	emitter_->SetTextureHandle(handle);
+    emitter_.reset(ParticleEmitter::CreateParticlePrimitive(groupName_, PrimitiveType::Plane, 300));
+    uint32_t handle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
+    emitter_->SetTextureHandle(handle);
 
-	obj3d_->material_.SetEnvironmentCoefficient(0.15f);
-	
+    obj3d_->material_.SetEnvironmentCoefficient(0.15f);
+
+  
 }
 
 ///=========================================================
-///　更新
+/// 　更新
 ///==========================================================
 void BasePlayerHand::Update() {
 
-	// エミッター更新
-	emitter_->SetTargetPosition(GetWorldPosition());
-	emitter_->Update();
-	emitter_->EditorUpdate();
-	emitter_->Emit();
+    // エミッター更新
+    emitter_->SetTargetPosition(GetWorldPosition());
+    emitter_->Update();
+    emitter_->EditorUpdate();
+    emitter_->Emit();
 
-	BaseObject::Update();
+    BaseObject::Update();
 }
 
 ///============================================================
-///　描画
+/// 　描画
 ///==========================================================
 void BasePlayerHand::Draw(const ViewProjection& viewProjection) {
-	BaseObject::Draw(viewProjection);
+    BaseObject::Draw(viewProjection);
 }
 
 ///=================================================================================
@@ -53,57 +54,52 @@ void BasePlayerHand::Draw(const ViewProjection& viewProjection) {
 ///=================================================================================
 void BasePlayerHand::ParamLoadForImGui() {
 
-	// ロードボタン
-	if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
+    // ロードボタン
+    if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
 
-		globalParameter_->LoadFile(groupName_);
-		// セーブ完了メッセージ
-		ImGui::Text("Load Successful: %s", groupName_.c_str());
-		ApplyGlobalParameter();
-	}
+        globalParameter_->LoadFile(groupName_);
+        // セーブ完了メッセージ
+        ImGui::Text("Load Successful: %s", groupName_.c_str());
+        ApplyGlobalParameter();
+    }
 }
 
-
 ///=================================================================================
-///パラメータをグループに追加
+/// パラメータをグループに追加
 ///=================================================================================
 void BasePlayerHand::AddParmGroup() {
-	globalParameter_->CreateGroup(groupName_, false);
+    globalParameter_->CreateGroup(groupName_, false);
 
-	// Position
-	//globalParameter_->AddSeparatorText("Position");
-	globalParameter_->AddItem(groupName_, "Translate", transform_.translation_);
-	globalParameter_->AddItem(groupName_, "RailRunSpeed", railRunSpeedThree_);
-	globalParameter_->AddItem(groupName_, "RailRunSpeedF", railRunSpeedForth_);
-
+    // Position
+    // globalParameter_->AddSeparatorText("Position");
+    globalParameter_->AddItem(groupName_, "Translate", transform_.translation_);
+    globalParameter_->AddItem(groupName_, "RailRunSpeed", railRunSpeedThree_);
+    globalParameter_->AddItem(groupName_, "RailRunSpeedF", railRunSpeedForth_);
 }
 
-
 ///=================================================================================
-///パラメータをグループに追加
+/// パラメータをグループに追加
 ///=================================================================================
 void BasePlayerHand::SetValues() {
 
-	// グループを追加(GlobalParamaterで表示はしない)
-	globalParameter_->CreateGroup(groupName_, false);
+    // グループを追加
+    globalParameter_->CreateGroup(groupName_, false);
 
-	// Position
-	//globalParameter_->AddSeparatorText("Position");
-	globalParameter_->SetValue(groupName_, "Translate", transform_.translation_);
-	globalParameter_->SetValue(groupName_, "RailRunSpeed", railRunSpeedThree_);
-	globalParameter_->SetValue(groupName_, "RailRunSpeedF", railRunSpeedForth_);
-
+    // Position
+    // globalParameter_->AddSeparatorText("Position");
+    globalParameter_->SetValue(groupName_, "Translate", transform_.translation_);
+    globalParameter_->SetValue(groupName_, "RailRunSpeed", railRunSpeedThree_);
+    globalParameter_->SetValue(groupName_, "RailRunSpeedF", railRunSpeedForth_);
 }
-
 
 ///=====================================================
 ///  ImGuiからパラメータを得る
-///===================================================== 
+///=====================================================
 void BasePlayerHand::ApplyGlobalParameter() {
-	// Position
-	transform_.translation_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
-	railRunSpeedThree_ = globalParameter_->GetValue<float>(groupName_, "RailRunSpeed");
-	railRunSpeedForth_ = globalParameter_->GetValue<float>(groupName_, "RailRunSpeedF");
+    // Position
+    transform_.translation_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
+    railRunSpeedThree_      = globalParameter_->GetValue<float>(groupName_, "RailRunSpeed");
+    railRunSpeedForth_      = globalParameter_->GetValue<float>(groupName_, "RailRunSpeedF");
 }
 
 ///=====================================================
@@ -111,24 +107,30 @@ void BasePlayerHand::ApplyGlobalParameter() {
 ///=====================================================
 void BasePlayerHand::SaveAndLoad() {
 
-	globalParameter_->ParamSaveForImGui(groupName_);
-	ParamLoadForImGui();
+    globalParameter_->ParamSaveForImGui(groupName_);
+    ParamLoadForImGui();
+}
+void BasePlayerHand::DissolveAdapt(const float& dissolve) {
+    obj3d_->material_.SetDissolveEdgeColor(Vector3(0.6706f, 0.8824f, 0.9804f));
+    obj3d_->material_.SetDissolveEdgeWidth(0.05f);
+    obj3d_->material_.SetEnableDissolve(true);
+    obj3d_->material_.SetDissolveThreshold(dissolve);
 }
 
 void BasePlayerHand::AjustParmBase() {
-	ImGui::SeparatorText("Param");
-	ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
-	ImGui::DragFloat("RailRunSpeedThree", &railRunSpeedThree_, 0.01f);
-	ImGui::DragFloat("RailRunSpeedForth", &railRunSpeedForth_, 0.01f);
+    ImGui::SeparatorText("Param");
+    ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
+    ImGui::DragFloat("RailRunSpeedThree", &railRunSpeedThree_, 0.01f);
+    ImGui::DragFloat("RailRunSpeedForth", &railRunSpeedForth_, 0.01f);
 }
 
 void BasePlayerHand::SetParent(WorldTransform* parent) {
-	transform_.parent_ = parent;
+    transform_.parent_ = parent;
 }
 
 void BasePlayerHand::SetBlendModeSub() {
-	emitter_->SetBlendMode(BlendMode::Subtractive);
+    emitter_->SetBlendMode(BlendMode::Subtractive);
 }
 void BasePlayerHand::SetBlendModeAdd() {
-	emitter_->SetBlendMode(BlendMode::Add);
+    emitter_->SetBlendMode(BlendMode::Add);
 }

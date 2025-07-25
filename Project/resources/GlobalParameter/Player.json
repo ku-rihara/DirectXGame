@@ -43,6 +43,7 @@
         "jumpSpeedB": 1.399999976158142,
         "rushDistance": 2.2799999713897705,
         "rushEaseMax": 0.05000000074505806,
+        "spawnParamWaitTime": 2.069999933242798,
         "upperBackLashEaseTime_": 0.3400000035762787,
         "upperBackLashValue_": 2.890000104904175
     }

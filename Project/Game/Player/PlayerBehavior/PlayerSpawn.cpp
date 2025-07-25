@@ -1,6 +1,6 @@
 /// behavior
 #include "PlayerSpawn.h"
-#include "PlayerJump.h"
+#include "PlayerMove.h"
 
 /// boss
 #include "Player/Player.h"
@@ -27,9 +27,19 @@ PlayerSpawn::PlayerSpawn(Player* player)
         waitEase_.Reset();
     });
 
+    spawnEase_.Init("Spawn");
+    spawnEase_.ApplyFromJson("SpawnDissolve.json");
+    spawnEase_.SaveAppliedJsonFileName();
+    spawnEase_.SetAdaptValue(&tempDessolve_);
+    spawnEase_.Reset();
+
+    spawnEase_.SetOnWaitEndCallback([this]() {
+        step_ = Step::END;
+    });
+
     speed_ = pPlayerParameter_->GetParamaters().moveSpeed;
 
-    animationStep_ = AnimationStep::INIT;
+    step_ = Step::WAIT;
 }
 
 PlayerSpawn ::~PlayerSpawn() {
@@ -38,11 +48,44 @@ PlayerSpawn ::~PlayerSpawn() {
 // 更新
 void PlayerSpawn::Update() {
 
-    waitEase_.Update(Frame::DeltaTimeRate());
-    pPlayer_->SetScaleY(tempWaitScaleY_);
-   
-}
+    switch (step_) {
 
+        ///================================================================
+        ///
+        ///================================================================
+    case PlayerSpawn::Step::WAIT:
+
+         pPlayer_->DissolveUpdate(1.0f);
+        pPlayer_->GetLeftHand()->DissolveAdapt(1.0f);
+        pPlayer_->GetRightHand()->DissolveAdapt(1.0f);
+        startWaitTime_ += Frame::DeltaTime();
+        if (startWaitTime_ < pPlayerParameter_->GetParamaters().spawnParam.waitTime_) {
+            break;
+        }
+       
+        step_ = Step::SPAWN;
+        break;
+
+        ///================================================================
+        ///
+        ///================================================================
+    case PlayerSpawn::Step::SPAWN:
+        spawnEase_.Update(Frame::DeltaTimeRate());
+        pPlayer_->DissolveUpdate(tempDessolve_);
+        pPlayer_->GetLeftHand()->DissolveAdapt(tempDessolve_);
+        pPlayer_->GetRightHand()->DissolveAdapt(tempDessolve_);
+        break;
+
+        ///================================================================
+        ///
+        ///================================================================
+    case PlayerSpawn::Step::END:
+        pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
+        break;
+    default:
+        break;
+    }
+}
 
 void PlayerSpawn::Debug() {
     ImGui::Text("spawn");

@@ -33,6 +33,9 @@ void PlayerParameter::AdjustParam() {
         ImGui::SeparatorText("Transform");
         ImGui::DragFloat3("Position", &playerParams_.startPos_.x, 0.1f);
 
+         ImGui::SeparatorText("SpawnParam");
+        ImGui::DragFloat("spawnParamWaitTime", &playerParams_.spawnParam.waitTime_, 0.01f);
+
         /// 　Floatのパラメータ
         ImGui::SeparatorText("FloatParamater");
         ImGui::SeparatorText("Normal");
@@ -125,7 +128,7 @@ void PlayerParameter::BindParams() {
     globalParameter_->Bind(groupName_, "fallSpeedLimitB", &playerParams_.boundJump.fallSpeedLimit);
     globalParameter_->Bind(groupName_, "gravityB", &playerParams_.boundJump.gravity);
     globalParameter_->Bind(groupName_, "jumpSpeedB", &playerParams_.boundJump.jumpSpeed);
-
+    
     globalParameter_->Bind(groupName_, "fallSpeedLimitU", &playerParams_.upperJump.fallSpeedLimit);
     globalParameter_->Bind(groupName_, "gravityU", &playerParams_.upperJump.gravity);
     globalParameter_->Bind(groupName_, "jumpPowerU", &playerParams_.upperJump.jumpSpeed);
@@ -142,4 +145,6 @@ void PlayerParameter::BindParams() {
         globalParameter_->Bind(groupName_, "JComboPTime" + std::to_string(int(i + 1)), &jumpComboParams_[i].waitTime);
          globalParameter_->Bind(groupName_, "JComboPunchReach" + std::to_string(int(i + 1)), &jumpComboParams_[i].attackReach);
     }
+
+    globalParameter_->Bind(groupName_, "spawnParamWaitTime", &playerParams_.spawnParam.waitTime_);
 }

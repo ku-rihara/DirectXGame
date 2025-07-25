@@ -24,6 +24,7 @@
 #include "ComboAttackBehavior/RoringUpper.h"
 #include "ComboAttackBehavior/RushAttack.h"
 #include "PlayerBehavior/PlayerMove.h"
+#include"PlayerBehavior/PlayerSpawn.h"
 #include "TitleBehavior/TitleFirstFall.h"
 
 
@@ -74,7 +75,7 @@ void Player::Init() {
     fallSound_    = Audio::GetInstance()->LoadWave("Resources/PlayerFall.wav");
 
     /// 通常モードから
-    ChangeBehavior(std::make_unique<PlayerMove>(this));
+    ChangeBehavior(std::make_unique<PlayerSpawn>(this));
     ChangeComboBehavior(std::make_unique<ComboAttackRoot>(this));
     HeadLightSetting();
 }
@@ -474,6 +475,13 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
         }
     }
 }
+
+void Player::DissolveUpdate(const float&dissolve) {
+    headObj_->material_.SetDissolveEdgeColor(Vector3(0.6706f, 0.8824f, 0.9804f));
+    headObj_->material_.SetDissolveEdgeWidth(0.09f);
+    headObj_->material_.SetEnableDissolve(true);
+    headObj_->material_.SetDissolveThreshold(dissolve);
+ }
 
 Vector3 Player::GetCollisionPos() const {
     // ローカル座標でのオフセット

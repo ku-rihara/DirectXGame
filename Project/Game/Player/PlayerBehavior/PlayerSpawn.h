@@ -12,8 +12,8 @@ public:
     void Update() override;
     void Debug() override;
 private:
-    enum class AnimationStep {
-        INIT,
+    enum class Step {
+        WAIT,
         SPAWN,
         END,     
     };
@@ -22,8 +22,13 @@ private:
     /// ===================================================
     /// private variable
     /// ===================================================
+    /// 
+    
+    float startWaitTime_;
+    Easing<float> spawnEase_;
+    float tempDessolve_;
 
-    AnimationStep animationStep_;
+    Step step_;
     float speed_;
 
     float animationCollTime_;

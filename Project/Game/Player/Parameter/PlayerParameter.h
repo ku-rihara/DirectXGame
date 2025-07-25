@@ -25,6 +25,10 @@ struct ComboParam {
     float attackReach;
 };
 
+struct SpawnParam {
+    float waitTime_;
+};
+
 /// Parameter構造体
 struct Parameters {
     Vector3 startPos_;
@@ -34,6 +38,7 @@ struct Parameters {
     JumpParam normalJump;
     JumpParam boundJump;
     JumpParam upperJump;
+    SpawnParam spawnParam;
     float moveSpeed;
     float fallSpeed;
     float attackRotate;

@@ -895,6 +895,9 @@
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerSpawn.cpp">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\base\MeshMaterial.cpp">
+      <Filter>MyEngine\.cpp\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1493,6 +1496,9 @@
     </ClInclude>
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerSpawn.h">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\MeshMaterial.h">
+      <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -54,7 +54,7 @@ void Mesh::CreateVertexResource() {
 }
 
 
-void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, std::optional<uint32_t> textureHandle) {
+void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, MeshMaterial material, std::optional<uint32_t> textureHandle) {
     auto commandList = directXCommon_->GetCommandList();
 
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
@@ -74,7 +74,8 @@ void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material mat
     commandList->DrawIndexedInstanced(indexNum_, 1, 0, 0, 0);
 }
 
-void Mesh::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, Material material,
+
+void Mesh::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, MeshMaterial material,
     std::optional<uint32_t> textureHandle) {
 
     auto commandList = directXCommon_->GetCommandList();
@@ -98,3 +99,4 @@ void Mesh::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDL
     // インデックス描画
     commandList->DrawIndexedInstanced(indexNum_, instanceNum, 0, 0, 0);
 }
+

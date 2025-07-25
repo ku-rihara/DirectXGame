@@ -66,6 +66,5 @@ void PrimitiveBox::SetTexture(const std::string& name) {
 }
 
 void PrimitiveBox::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
-    /*SkyBoxRenderer::GetInstance()->SetPiplelineState();*/
     IPrimitive::Draw(worldTransform, viewProjection, textureHandle);
 }

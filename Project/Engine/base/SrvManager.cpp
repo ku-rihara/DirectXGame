@@ -57,8 +57,6 @@ void SrvManager::PreDraw() {
 	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeaps[] = {descriptorHeap_.Get()};
 	dxCommon_->GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps->GetAddressOf());
-
-
 }
 
 ///=========================================

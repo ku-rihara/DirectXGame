@@ -15,8 +15,8 @@ protected:
 	///=============================================
 
     /// グローバルなパラメータ
-	GlobalParameter* globalParameter_;            /// グローバルパラメータ
-	std::string groupName_;                       /// グループ名
+	GlobalParameter* globalParameter_;           
+	std::string groupName_;                      
 
 	// エミッター
 	std::unique_ptr<ParticleEmitter>emitter_;
@@ -39,6 +39,8 @@ public:
 	virtual void Draw(const ViewProjection& viewprojection);
 
 	virtual void AdjustParm() = 0;
+
+	virtual void DissolveAdapt(const float& dissolve);
 
 	///-------------------------------------------------------------------------------------
 	///Editor

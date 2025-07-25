@@ -1,5 +1,6 @@
 {
     "PlayerWait": {
+        "StartTimeOffset": 0.0,
         "adaptFloatAxisType": 1,
         "amplitude": 0.0,
         "backRatio": 0.75,

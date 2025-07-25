@@ -5,7 +5,7 @@
 // data
 #include "struct/VertexData.h"
 
-#include "base/Material.h"
+#include "base/MeshMaterial.h"
 #include <cstdint>
 #include <optional>
 
@@ -22,11 +22,11 @@ public:
     void Init(DirectXCommon* directXCommon, const uint32_t& vertexNum);
     void CreateVertexResource();
     void SetIndexData(const uint32_t* indices, uint32_t indexCount);
-    void DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, Material material, std::optional<uint32_t> textureHandle);
+    void DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, MeshMaterial material, std::optional<uint32_t> textureHandle);
     void DebugImGui();
 
-    void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, std::optional<uint32_t> textureHandle = std::nullopt);
-
+    void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, MeshMaterial material, std::optional<uint32_t> textureHandle = std::nullopt);
+   
     void SetTexture(const std::string& name);
 
 private:
@@ -41,7 +41,6 @@ private:
     uint32_t indexNum_;
 
     // Resource data
-    Material material_;
     Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_; // 頂点リソース
     Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_; // indexリソース
 

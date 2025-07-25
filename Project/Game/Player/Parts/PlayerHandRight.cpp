@@ -64,6 +64,10 @@ void PlayerHandRight::AdjustParm() {
 	}
 }
 
+void PlayerHandRight::DissolveAdapt(const float& dissolve) {
+    BasePlayerHand::DissolveAdapt(dissolve);
+}
+
 ///=====================================================
 ///  セーブロード
 ///=====================================================

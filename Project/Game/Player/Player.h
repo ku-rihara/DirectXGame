@@ -61,6 +61,8 @@ public:
     void PositionYReset();
     void AttackPowerCharge();
 
+    void DissolveUpdate(const float& dissolve);
+
     //* ジャンプ
     void Jump(float& speed, const float& fallSpeedLimit, const float& gravity); /// ジャンプ
     void Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump = false); /// 落ちる

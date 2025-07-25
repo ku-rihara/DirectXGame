@@ -39,6 +39,8 @@ public:
 	void AdjustParm()override;
 	void SaveAndLoad()override;
 
+	virtual void DissolveAdapt(const float& dissolve);
+
 	///===========================================
 	/// getter method
 	///=============================================
