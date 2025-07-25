@@ -159,9 +159,9 @@ PixelShaderOutput main(VertexShaderOutput input)
         discard;
     }
     
-    //影の計算、適応
-    float shadow = CalculateShadow(input.lightSpacePosition, gShadowMap, gShadowSampler);
-    output.color.rgb *= shadow;
+    ////影の計算、適応
+    //float shadow = CalculateShadow(input.lightSpacePosition, gShadowMap, gShadowSampler);
+    //output.color.rgb *= shadow;
     
     return output;
 }
