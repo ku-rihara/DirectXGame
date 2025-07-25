@@ -254,7 +254,7 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, co
     // 環境マップ
     uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
     commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
-    commandList->SetGraphicsRootDescriptorTable(13, skinCluster.paletteSrvHandle.second);
+    commandList->SetGraphicsRootDescriptorTable(14, skinCluster.paletteSrvHandle.second);
 
     // ライト
     Light::GetInstance()->SetLightCommands(commandList);

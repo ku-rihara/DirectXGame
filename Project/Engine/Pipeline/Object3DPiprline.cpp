@@ -142,7 +142,7 @@ void Object3DPiprline::CreateRootSignature() {
     descriptionRootSignature.NumStaticSamplers = 2; // 通常サンプラーとシャドウサンプラーの2個
 
     // DescriptorRangeの設定
-    D3D12_DESCRIPTOR_RANGE descriptorRange[5] = {};
+    D3D12_DESCRIPTOR_RANGE descriptorRange[6] = {};
 
     // テクスチャ (t0)
     descriptorRange[0].BaseShaderRegister                = 0;
@@ -174,8 +174,14 @@ void Object3DPiprline::CreateRootSignature() {
     descriptorRange[4].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
     descriptorRange[4].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
+     // dissolve (t5)
+    descriptorRange[5].BaseShaderRegister                = 5;
+    descriptorRange[5].NumDescriptors                    = 1;
+    descriptorRange[5].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorRange[5].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
     // RootParameterを作成
-    D3D12_ROOT_PARAMETER rootParameters[13] = {};
+    D3D12_ROOT_PARAMETER rootParameters[14] = {};
 
     // 0: Material
     rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
@@ -246,6 +252,13 @@ void Object3DPiprline::CreateRootSignature() {
     rootParameters[12].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[12].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
     rootParameters[12].Descriptor.ShaderRegister = 1;
+
+      // 13: dissolve
+    rootParameters[13].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[13].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[13].DescriptorTable.pDescriptorRanges   = &descriptorRange[5];
+    rootParameters[13].DescriptorTable.NumDescriptorRanges = 1;
+
 
     descriptionRootSignature.pParameters   = rootParameters; // ルートパラメーターの配列
     descriptionRootSignature.NumParameters = _countof(rootParameters); // 配列の長さ

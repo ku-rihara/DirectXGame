@@ -1,5 +1,6 @@
 #pragma once
 #include "Matrix4x4.h"
+#include "Vector3.h"
 #include "Vector4.h"
 #include <d3d12.h>
 #include <string>
@@ -14,6 +15,7 @@ enum class BlendMode {
 };
 
 class DirectXCommon;
+
 class Material {
 public:
     // コンストラクタ
@@ -29,6 +31,8 @@ public:
     // シェーダーにデータを送る関数
     void SetCommandList(ID3D12GraphicsCommandList* commandList);
 
+    void SetDissolveNoizeTexture(const std::string&name);
+
     void DebugImGui();
 
 private:
@@ -39,17 +43,35 @@ private:
         Matrix4x4 uvMatrix;
         float shininess;
         float environmentCoefficient;
+
+        float dissolveThreshold;
+        Vector3 dissolveEdgeColor;
+        float dissolveEdgeWidth;
+        int32_t enableDissolve;
+        float padding2[3]; 
     };
 
 public:
-    // GPUに送るマテリアルデータの実体
-    MaterialData* materialData_ = nullptr;
 
+    MaterialData* materialData_ = nullptr;
 private:
     // GPUリソースへのポインタ
     Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
+    int32_t dissolveTextureIndex_;
 
 public:
-    void SetShininess(const float& shiniess) { materialData_->shininess = shiniess; }
+   
+    void SetShininess(const float& shininess) { materialData_->shininess = shininess; }
     void SetEnvironmentCoefficient(const float& environmentCoefficient) { materialData_->environmentCoefficient = environmentCoefficient; }
+
+    // Dissolve
+    void SetDissolveThreshold(const float& threshold) { materialData_->dissolveThreshold = threshold; }
+    void SetDissolveEdgeColor(const Vector3& color) { materialData_->dissolveEdgeColor = color; }
+    void SetDissolveEdgeWidth(const float& width) { materialData_->dissolveEdgeWidth = width; }
+    void SetEnableDissolve(bool enable) { materialData_->enableDissolve = enable ? 1 : 0; }
+
+    float GetDissolveThreshold() const { return materialData_->dissolveThreshold; }
+    Vector3 GetDissolveEdgeColor() const { return materialData_->dissolveEdgeColor; }
+    float GetDissolveEdgeWidth() const { return materialData_->dissolveEdgeWidth; }
+    bool IsDissolveEnabled() const { return materialData_->enableDissolve != 0; }
 };

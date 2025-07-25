@@ -2,8 +2,15 @@
 #include "Lighting/Light.hlsli"
 #include"ShadowMap/ShadowMap.hlsli"
 
-Texture2D<float4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
+SamplerComparisonState gShadowSampler : register(s1);
+
+Texture2D<float4> gTexture : register(t0);
+TextureCube<float4> gEnvironmentTexture : register(t1);
+StructuredBuffer<PointLight> gPointLights : register(t2);
+StructuredBuffer<SpotLight> gSpotLights : register(t3);
+Texture2D<float> gShadowMap : register(t4);
+Texture2D<float> gMaskTexture : register(t5);
 
 struct Material
 {
@@ -12,6 +19,10 @@ struct Material
     float4x4 uvTransform;
     float shininess;
     float environmentCoefficient;
+    float dissolveThreshold;
+    float3 dissolveEdgeColor;
+    float dissolveEdgeWidth;
+    int enableDissolve;
 };
 
 struct PixelShaderOutput
@@ -39,14 +50,6 @@ ConstantBuffer<AreaLight> gAreaLight : register(b3);
 ConstantBuffer<AmbientLight> gAmbientLight : register(b4);
 ConstantBuffer<LightCountData> gLightCountData : register(b5);
 
-TextureCube<float4> gEnvironmentTexture : register(t1);
-StructuredBuffer<PointLight> gPointLights : register(t2);
-StructuredBuffer<SpotLight> gSpotLights : register(t3);
-//shadowMap
-Texture2D<float> gShadowMap : register(t4);
-SamplerComparisonState gShadowSampler : register(s1);
-
-
 
 PixelShaderOutput main(VertexShaderOutput input)
 {
@@ -57,6 +60,23 @@ PixelShaderOutput main(VertexShaderOutput input)
 
         // テクスチャカラー
     float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
+    
+    // Dissolve処理
+    if (gMaterial.enableDissolve != 0)
+    {
+        float mask = gMaskTexture.Sample(gSampler, transformedUV.xy);
+        
+        // マスクの値がthreshold以下の場合はdiscard
+        if (mask <= gMaterial.dissolveThreshold)
+        {
+            discard;
+        }
+        
+        // エッジ効果の計算
+        float edge = 1.0f - smoothstep(gMaterial.dissolveThreshold,
+                                      gMaterial.dissolveThreshold + gMaterial.dissolveEdgeWidth,
+                                      mask);
+    }
 
         // カメラからピクセルへの方向ベクトル
     float3 toEye = CalculateViewDirection(gCamera.worldPosition, input.worldPosition);
@@ -139,6 +159,16 @@ PixelShaderOutput main(VertexShaderOutput input)
 
         // 環境マッピングの適用
     output.color.rgb += environmentColor.rgb * gMaterial.environmentCoefficient;
+    
+    // Dissolveエッジ効果の適用
+    if (gMaterial.enableDissolve != 0)
+    {
+        float mask = gMaskTexture.Sample(gSampler, transformedUV.xy);
+        float edge = 1.0f - smoothstep(gMaterial.dissolveThreshold,
+                                      gMaterial.dissolveThreshold + gMaterial.dissolveEdgeWidth,
+                                      mask);
+        output.color.rgb += edge * gMaterial.dissolveEdgeColor;
+    }
 
     output.color.a = gMaterial.color.a * textureColor.a;
 

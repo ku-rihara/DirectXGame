@@ -26,6 +26,7 @@ public:
     void DebugImGui();
 
     void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, std::optional<uint32_t> textureHandle = std::nullopt);
+    void DrawBox(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, std::optional<uint32_t> textureHandle = std::nullopt);
 
     void SetTexture(const std::string& name);
 
