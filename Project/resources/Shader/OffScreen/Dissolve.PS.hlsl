@@ -12,6 +12,7 @@ struct PixelShaderOutPut
 struct ParamData
 {
     float thresholdValue;
+    float3 color;
 };
 
 ConstantBuffer<ParamData> gParamData:register(b0);
@@ -27,7 +28,9 @@ PixelShaderOutPut main(VertexShaderOutput input)
         discard;
     }
     
+    float edge = 1.0f - smoothstep(gParamData.thresholdValue, gParamData.thresholdValue+0.03f, mask);
     output.color = gTexture.Sample(gSampler, input.texcoord);
+    output.color.rgb += edge * gParamData.color;
     
     return output;
 }

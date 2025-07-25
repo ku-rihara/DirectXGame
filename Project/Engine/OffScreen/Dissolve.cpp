@@ -88,6 +88,7 @@ void Dissolve::CreateConstantBuffer() {
     }
 
     paramData_->thresholdValue = 0.0f;
+    paramData_->color          = {1.0f, 0.4f, 0.3f};
 }
 void Dissolve::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
 
@@ -107,6 +108,7 @@ void Dissolve::DebugParamImGui() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader("Dissolve")) {
         ImGui::DragFloat("thresholdValue", &paramData_->thresholdValue, 0.01f);
+        ImGui::ColorEdit3("color", &paramData_->color.x);
     }
 #endif // _DEBUG
 }
