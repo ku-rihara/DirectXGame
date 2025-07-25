@@ -892,6 +892,9 @@
     <ClCompile Include="Engine\OffScreen\Dissolve.cpp">
       <Filter>MyEngine\.cpp\OffScreen</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player\PlayerBehavior\PlayerSpawn.cpp">
+      <Filter>Game\Player\Behavior\NormalBehavior</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1487,6 +1490,9 @@
     </ClInclude>
     <ClInclude Include="Engine\OffScreen\Dissolve.h">
       <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\PlayerBehavior\PlayerSpawn.h">
+      <Filter>Game\Player\Behavior\NormalBehavior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
