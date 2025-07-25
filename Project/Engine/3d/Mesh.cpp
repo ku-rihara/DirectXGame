@@ -54,7 +54,7 @@ void Mesh::CreateVertexResource() {
 }
 
 
-void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, std::optional<uint32_t> textureHandle) {
+void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, MeshMaterial material, std::optional<uint32_t> textureHandle) {
     auto commandList = directXCommon_->GetCommandList();
 
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
@@ -75,7 +75,7 @@ void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material mat
 }
 
 
-void Mesh::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, Material material,
+void Mesh::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, MeshMaterial material,
     std::optional<uint32_t> textureHandle) {
 
     auto commandList = directXCommon_->GetCommandList();
@@ -100,23 +100,3 @@ void Mesh::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDL
     commandList->DrawIndexedInstanced(indexNum_, instanceNum, 0, 0, 0);
 }
 
-
-void Mesh::DrawBox(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, Material material, std::optional<uint32_t> textureHandle) {
-    auto commandList = directXCommon_->GetCommandList();
-
-    commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
-    commandList->IASetIndexBuffer(&indexBufferView_);
-    commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-    material.SetCommandList(commandList);
-    commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
-
-    if (textureHandle.has_value()) {
-        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
-    } else {
-        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
-    }
-
-    // インデックス数に基づいて描画
-    commandList->DrawIndexedInstanced(indexNum_, 1, 0, 0, 0);
-}

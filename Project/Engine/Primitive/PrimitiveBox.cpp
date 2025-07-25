@@ -66,29 +66,5 @@ void PrimitiveBox::SetTexture(const std::string& name) {
 }
 
 void PrimitiveBox::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
-    if (!mesh_) {
-        return;
-    }
-
-    wvpDate_->World                 = worldTransform.matWorld_;
-    wvpDate_->WVP                   = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
-    wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
-
-   auto commandList = directXCommon_->GetCommandList();
-
-    commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
-    commandList->IASetIndexBuffer(&indexBufferView_);
-    commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-    material.SetCommandList(commandList);
-    commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
-
-    if (textureHandle.has_value()) {
-        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
-    } else {
-        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
-    }
-
-    // インデックス数に基づいて描画
-    commandList->DrawIndexedInstanced(indexNum_, 1, 0, 0, 0);
+    IPrimitive::Draw(worldTransform, viewProjection, textureHandle);
 }

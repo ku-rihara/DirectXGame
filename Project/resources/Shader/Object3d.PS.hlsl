@@ -12,17 +12,19 @@ StructuredBuffer<SpotLight> gSpotLights : register(t3);
 Texture2D<float> gShadowMap : register(t4);
 Texture2D<float> gMaskTexture : register(t5);
 
+
 struct Material
 {
     float4 color;
-    int enableLighting;
-    float4x4 uvTransform;
+    int enableLighting; 
+ 
+    float4x4 uvTransform; 
     float shininess;
-    float environmentCoefficient;
-    float dissolveThreshold;
+    float environmentCoefficient; 
+    float dissolveThreshold; 
+    float dissolveEdgeWidth; 
     float3 dissolveEdgeColor;
-    float dissolveEdgeWidth;
-    int enableDissolve;
+    int enableDissolve; 
 };
 
 struct PixelShaderOutput

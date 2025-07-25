@@ -27,6 +27,7 @@
     <ClCompile Include="Engine\base\DsvManager.cpp" />
     <ClCompile Include="Engine\base\Material.cpp" />
     <ClCompile Include="Engine\base\RtvManager.cpp" />
+    <ClCompile Include="Engine\base\MeshMaterial.cpp" />
     <ClCompile Include="Engine\base\SkyBoxRenderer.cpp" />
     <ClCompile Include="Engine\base\SpriteMaterial.cpp" />
     <ClCompile Include="Engine\base\SrvManager.cpp" />
@@ -144,6 +145,7 @@
     <ClInclude Include="Engine\base\DsvManager.h" />
     <ClInclude Include="Engine\base\Material.h" />
     <ClInclude Include="Engine\base\RtvManager.h" />
+    <ClInclude Include="Engine\base\MeshMaterial.h" />
     <ClInclude Include="Engine\base\SkyBoxRenderer.h" />
     <ClInclude Include="Engine\base\SpriteMaterial.h" />
     <ClInclude Include="Engine\base\SrvManager.h" />

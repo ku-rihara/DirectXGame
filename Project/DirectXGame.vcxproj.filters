@@ -535,6 +535,9 @@
     <ClCompile Include="Engine\OffScreen\Dissolve.cpp">
       <Filter>MyEngine\.cpp\OffScreen</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\base\MeshMaterial.cpp">
+      <Filter>MyEngine\.cpp\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -914,6 +917,9 @@
     </ClInclude>
     <ClInclude Include="Engine\OffScreen\Dissolve.h">
       <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\MeshMaterial.h">
+      <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

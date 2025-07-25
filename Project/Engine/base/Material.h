@@ -39,16 +39,14 @@ private:
     struct MaterialData {
         Vector4 color;
         int32_t enableLighting;
-        float padding[3];
-        Matrix4x4 uvMatrix;
+        float padding1[3]; 
+        Matrix4x4 uvTransform; 
         float shininess;
         float environmentCoefficient;
-
         float dissolveThreshold;
-        Vector3 dissolveEdgeColor;
         float dissolveEdgeWidth;
+        Vector3 dissolveEdgeColor; 
         int32_t enableDissolve;
-        float padding2[3]; 
     };
 
 public:

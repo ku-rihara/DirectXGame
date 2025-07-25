@@ -78,7 +78,7 @@ private:
     struct ParticleGroup { /// パーティクルグループ
         Model* model = nullptr;
         std::unique_ptr<IPrimitive> primitive_=nullptr;
-        Material material;
+        MeshMaterial meshMaterial;
         uint32_t instanceNum;
         uint32_t srvIndex;
         uint32_t textureHandle;

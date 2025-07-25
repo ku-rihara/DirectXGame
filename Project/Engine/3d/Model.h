@@ -14,6 +14,7 @@
 
 #include "base/Material.h"
 #include "Dx/DirectXCommon.h"
+#include "base/MeshMaterial.h"
 
 // 3Dモデル共通部
 class ModelCommon {
@@ -73,7 +74,7 @@ public:
 
     void DrawInstancing(
         const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle,
-        Material material,
+        MeshMaterial material,
         std::optional<uint32_t> textureHandle = std::nullopt); /// モデルバーティクル
 
 private:
