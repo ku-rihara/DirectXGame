@@ -886,6 +886,9 @@
     <ClCompile Include="Engine\OffScreen\LuminanceBasedOutline.cpp">
       <Filter>MyEngine\.cpp\OffScreen</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\OffScreen\RandomNoize.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1476,6 +1479,9 @@
     <ClInclude Include="Engine\OffScreen\LuminanceBasedOutline.h">
       <Filter>MyEngine\.h\OffScreen</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\OffScreen\RandomNoize.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -1584,6 +1590,9 @@
       <Filter>リソースファイル\OffScreen</Filter>
     </FxCompile>
     <FxCompile Include="resources\Shader\OffScreen\DepthBasedOutline.PS.hlsl">
+      <Filter>リソースファイル\OffScreen</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\OffScreen\Random.PS.hlsl">
       <Filter>リソースファイル\OffScreen</Filter>
     </FxCompile>
   </ItemGroup>

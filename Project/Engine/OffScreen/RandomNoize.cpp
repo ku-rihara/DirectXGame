@@ -1,22 +1,23 @@
+#include "RandomNoize.h"
 #include "Dx/DirectXCommon.h"
 #include"Dx/DxRenderTarget.h"
-#include "RadialBlur.h"
 #include "Function/Log.h"
+#include"Frame/Frame.h"
 #include<imgui.h>
 #include<cassert>
 
-void RadialBlur::Init(DirectXCommon* dxCommon) {
+void RandomNoize::Init(DirectXCommon* dxCommon) {
 
     vsName_ = L"resources/Shader/OffScreen/Fullscreen.VS.hlsl";
-    psName_ = L"resources/Shader/OffScreen/RadialBlur.PS.hlsl";
+    psName_ = L"resources/Shader/OffScreen/Random.PS.hlsl";
     BaseOffScreen::Init(dxCommon);
 }
 
-void RadialBlur::CreateGraphicsPipeline() {
+void RandomNoize::CreateGraphicsPipeline() {
     BaseOffScreen::CreateGraphicsPipeline();
 }
 
-void RadialBlur::CreateRootSignature() {
+void RandomNoize::CreateRootSignature() {
     HRESULT hr = 0;
     // RootSignatureを作成
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -42,7 +43,6 @@ void RadialBlur::CreateRootSignature() {
     rootParameters[1].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[1].Descriptor.ShaderRegister = 0;
 
-
     descriptionRootSignature.pParameters       = rootParameters;
     descriptionRootSignature.NumParameters     = _countof(rootParameters);
     descriptionRootSignature.pStaticSamplers   = staticSamplers_;
@@ -58,44 +58,37 @@ void RadialBlur::CreateRootSignature() {
     assert(SUCCEEDED(hr));
 }
 
-void RadialBlur::SetDrawState(ID3D12GraphicsCommandList* commandList) {
+void RandomNoize::SetDrawState(ID3D12GraphicsCommandList* commandList) {
     BaseOffScreen::SetDrawState(commandList);
 }
 
-void RadialBlur::CreateConstantBuffer() {
+void RandomNoize::CreateConstantBuffer() {
     D3D12_RANGE readRange = {};
     HRESULT hr;
 
     // param (b0)
-    paramDataResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(BlurParamData));
+    paramDataResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(RandomNoize));
     hr                 = paramDataResource_->Map(0, &readRange, reinterpret_cast<void**>(&paramData_));
     if (FAILED(hr)) {
         // エラー処理
         OutputDebugStringA("ConstBuffer Map failed.\n");
     }
 
-    paramData_->center = Vector2(0.5f, 0.5f);
-    paramData_->blurWidth = 0.01f;
+    paramData_->time = 1.0f;
 }
-void RadialBlur::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
 
-      // プリミティブトポロジーを設定
+void RandomNoize::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
+    paramData_->time += Frame::DeltaTime();
+    // プリミティブトポロジーを設定
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     // テクスチャリソースを設定
     commandList->SetGraphicsRootDescriptorTable(0, dxCommon_->GetDxRenderTarget()->GetRenderTextureGPUSrvHandle());
-
-    //b0:param
+    // b0:param
     commandList->SetGraphicsRootConstantBufferView(1, paramDataResource_->GetGPUVirtualAddress());
 
     commandList->DrawInstanced(3, 1, 0, 0);
 }
 
+void RandomNoize::DebugParamImGui() {
 
-void RadialBlur::DebugParamImGui() {
-#ifdef _DEBUG
-    if (ImGui::CollapsingHeader("RadialBlur")) {
-        ImGui::DragFloat2("center", &paramData_->center.x, 0.01f);
-        ImGui::DragFloat("blurWidth", &paramData_->blurWidth, 0.01f);
-    }
-#endif // _DEBUG
-}
+ }
