@@ -27,7 +27,7 @@ bool IsCollision(const OBB& obb1, const OBB& obb2) {
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			faceNormalAndCross[crossIndex] = Vector3::Cross(obb1.orientations[i], obb2.orientations[j]);
-			if (crossIndex < 14) {//6から14まで増やす
+			if (crossIndex < 14) {
 				crossIndex++;
 			}
 		}
@@ -65,19 +65,19 @@ bool IsCollision(const OBB& obb1, const OBB& obb2) {
 
 // OBBとAABBの当たり判定
 bool IsCollision(const OBB& obb, const AABB& aabb) {
-    Vector3 faceNormalAndCross[15]; // OBBの軸3つ + AABBの軸3つ + 交差ベクトル9つ
-    int crossIndex = 6;             // 交差ベクトルは6から開始
+    Vector3 faceNormalAndCross[15]; 
+    int crossIndex = 6;             
 
-    // OBBの軸を追加
+    // OBBの軸
     for (int i = 0; i < 3; i++) {
         faceNormalAndCross[i] = obb.orientations[i];
     }
-    // AABBの軸（ワールド軸）を追加
+    // AABBの軸
     faceNormalAndCross[3] = Vector3(1, 0, 0);  // X軸
     faceNormalAndCross[4] = Vector3(0, 1, 0);  // Y軸
     faceNormalAndCross[5] = Vector3(0, 0, 1);  // Z軸
 
-    // 各軸間のクロス積を追加
+    // 各軸間のクロス積
     for (int i = 0; i < 3; i++) {
         for (int j = 3; j < 6; j++) {
             faceNormalAndCross[crossIndex] = Vector3::Cross(obb.orientations[i], faceNormalAndCross[j]);
