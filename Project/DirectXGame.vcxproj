@@ -69,6 +69,7 @@
     <ClCompile Include="Engine\OffScreen\NormalScreen.cpp" />
     <ClCompile Include="Engine\OffScreen\OffScreenRenderer.cpp" />
     <ClCompile Include="Engine\OffScreen\Outline.cpp" />
+    <ClCompile Include="Engine\OffScreen\LuminanceBasedOutline.cpp" />
     <ClCompile Include="Engine\OffScreen\RadialBlur.cpp" />
     <ClCompile Include="Engine\OffScreen\Vignette.cpp" />
     <ClCompile Include="Engine\Pipeline\Line3DPipeline.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="Engine\OffScreen\NormalScreen.h" />
     <ClInclude Include="Engine\OffScreen\OffScreenRenderer.h" />
     <ClInclude Include="Engine\OffScreen\Outline.h" />
+    <ClInclude Include="Engine\OffScreen\LuminanceBasedOutline.h" />
     <ClInclude Include="Engine\OffScreen\RadialBlur.h" />
     <ClInclude Include="Engine\OffScreen\Vignette.h" />
     <ClInclude Include="Engine\Pipeline\Line3DPipeline.h" />
