@@ -2,8 +2,16 @@
 
 #include "BaseOffScreen.h"
 #include <d3d12.h>
+#include "Vector2.h"
+#include <wrl/client.h>
 
 class RadialBlur : public BaseOffScreen {
+public:
+    struct BlurParamData {
+        Vector2 center;
+        float blurWidth;
+    };
+
 private:
     void CreateGraphicsPipeline() override;
     void CreateRootSignature() override;
@@ -20,4 +28,6 @@ public:
     void DebugParamImGui() override;
 
 private:
+    Microsoft::WRL::ComPtr<ID3D12Resource> paramDataResource_;
+    BlurParamData* paramData_;
 };
