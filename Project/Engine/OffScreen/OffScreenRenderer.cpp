@@ -68,3 +68,13 @@ void OffScreenRenderer::SetViewProjection(const ViewProjection* viewProjection) 
         effects_[i]->SetViewProjection(viewProjection_);
     }
 }
+
+// 指定したモードの効果を取得
+BaseOffScreen* OffScreenRenderer::GetEffect(OffScreenMode mode) {
+    size_t index = static_cast<size_t>(mode);
+    if (index >= effects_.size()) {
+        return nullptr;
+    }
+    return effects_[index].get();
+}
+
