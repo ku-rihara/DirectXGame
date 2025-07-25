@@ -6,14 +6,10 @@
 #include <wrl/client.h>
 
 
-class Outline : public BaseOffScreen {
+class LuminanceBasedOutline : public BaseOffScreen {
 public:
     struct OutLineParamData {
         float wightRate;
-    };
-
-    struct OutLineMaterial {
-        Matrix4x4 projectionInverse;
     };
 
 private:
@@ -21,8 +17,8 @@ private:
     void CreateRootSignature() override;
 
 public:
-    Outline()           = default;
-    ~Outline() override = default;
+    LuminanceBasedOutline() = default;
+    ~LuminanceBasedOutline() override = default;
 
     void Init(DirectXCommon* dxCommon) override;
     void SetDrawState(ID3D12GraphicsCommandList* commandList) override;
@@ -33,10 +29,7 @@ public:
 
 private:
     Microsoft::WRL::ComPtr<ID3D12Resource> paramDataResource_;
-    Microsoft::WRL::ComPtr<ID3D12Resource> outlineMaterialResource_;
     OutLineParamData* paramData_;
-    OutLineMaterial* outlineMaterialData_;
 
-    D3D12_STATIC_SAMPLER_DESC staticSamplersOutLine_[2];
 
 };
