@@ -7,8 +7,14 @@ Texture2D<float> gMaskTexture : register(t1);
 struct PixelShaderOutPut
 {
     float4 color : SV_TARGET0;
-    
 };
+
+struct ParamData
+{
+    float thresholdValue;
+};
+
+ConstantBuffer<ParamData> gParamData:register(b0);
 
 PixelShaderOutPut main(VertexShaderOutput input)
 {
@@ -16,7 +22,7 @@ PixelShaderOutPut main(VertexShaderOutput input)
   
     float mask = gMaskTexture.Sample(gSampler, input.texcoord);
     //maskの値が0.5以下の場合はdiscard
-    if (mask <= 0.5f)
+    if (mask <= gParamData.thresholdValue)
     {
         discard;
     }

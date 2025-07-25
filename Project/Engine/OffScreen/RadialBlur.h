@@ -7,7 +7,7 @@
 
 class RadialBlur : public BaseOffScreen {
 public:
-    struct BlurParamData {
+    struct ParamData {
         Vector2 center;
         float blurWidth;
     };
@@ -29,5 +29,5 @@ public:
 
 private:
     Microsoft::WRL::ComPtr<ID3D12Resource> paramDataResource_;
-    BlurParamData* paramData_;
+    ParamData* paramData_;
 };

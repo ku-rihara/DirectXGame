@@ -1,19 +1,14 @@
 #pragma once
 
 #include "BaseOffScreen.h"
-#include "Matrix4x4.h"
 #include <d3d12.h>
 #include <wrl/client.h>
+#include <string>
 
-
-class Outline : public BaseOffScreen {
+class Dissolve : public BaseOffScreen {
 public:
     struct ParamData {
-        float wightRate;
-    };
-
-    struct OutLineMaterial {
-        Matrix4x4 projectionInverse;
+        float thresholdValue;
     };
 
 private:
@@ -21,8 +16,8 @@ private:
     void CreateRootSignature() override;
 
 public:
-    Outline()           = default;
-    ~Outline() override = default;
+    Dissolve()             = default;
+    ~Dissolve() override = default;
 
     void Init(DirectXCommon* dxCommon) override;
     void SetDrawState(ID3D12GraphicsCommandList* commandList) override;
@@ -33,10 +28,7 @@ public:
 
 private:
     Microsoft::WRL::ComPtr<ID3D12Resource> paramDataResource_;
-    Microsoft::WRL::ComPtr<ID3D12Resource> outlineMaterialResource_;
     ParamData* paramData_;
-    OutLineMaterial* outlineMaterialData_;
-
-    D3D12_STATIC_SAMPLER_DESC staticSamplersOutLine_[2];
-
+    std::string maskTextureName_;
+    uint32_t textureIndex_;
 };

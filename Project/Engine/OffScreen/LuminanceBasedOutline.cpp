@@ -70,7 +70,7 @@ void LuminanceBasedOutline::CreateConstantBuffer() {
     HRESULT hr;
 
     // param (b0)
-    paramDataResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(OutLineParamData));
+    paramDataResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(ParamData));
     hr                 = paramDataResource_->Map(0, &readRange, reinterpret_cast<void**>(&paramData_));
     if (FAILED(hr)) {
         // エラー処理

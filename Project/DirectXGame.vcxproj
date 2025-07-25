@@ -64,6 +64,7 @@
     <ClCompile Include="Engine\Lighrt\SpotLightManager.cpp" />
     <ClCompile Include="Engine\OffScreen\BaseOffScreen.cpp" />
     <ClCompile Include="Engine\OffScreen\BoxFilter.cpp" />
+    <ClCompile Include="Engine\OffScreen\Dissolve.cpp" />
     <ClCompile Include="Engine\OffScreen\GaussianFilter.cpp" />
     <ClCompile Include="Engine\OffScreen\GrayScale.cpp" />
     <ClCompile Include="Engine\OffScreen\NormalScreen.cpp" />
@@ -253,6 +254,7 @@
     <ClInclude Include="Engine\Lighrt\SpotLightManager.h" />
     <ClInclude Include="Engine\OffScreen\BaseOffScreen.h" />
     <ClInclude Include="Engine\OffScreen\BoxFilter.h" />
+    <ClInclude Include="Engine\OffScreen\Dissolve.h" />
     <ClInclude Include="Engine\OffScreen\GaussianFilter.h" />
     <ClInclude Include="Engine\OffScreen\GrayScale.h" />
     <ClInclude Include="Engine\OffScreen\NormalScreen.h" />
