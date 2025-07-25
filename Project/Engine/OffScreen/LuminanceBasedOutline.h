@@ -8,7 +8,7 @@
 
 class LuminanceBasedOutline : public BaseOffScreen {
 public:
-    struct OutLineParamData {
+    struct ParamData {
         float wightRate;
     };
 
@@ -29,7 +29,7 @@ public:
 
 private:
     Microsoft::WRL::ComPtr<ID3D12Resource> paramDataResource_;
-    OutLineParamData* paramData_;
+    ParamData* paramData_;
 
 
 };

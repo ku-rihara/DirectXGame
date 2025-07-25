@@ -68,17 +68,16 @@ void Outline::CreateRootSignature() {
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
     descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
-    D3D12_DESCRIPTOR_RANGE descriptorRangeColor[1]            = {};
-    descriptorRangeColor[0].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-    descriptorRangeColor[0].NumDescriptors                    = 1;
-    descriptorRangeColor[0].BaseShaderRegister                = 0; // t0
-    descriptorRangeColor[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+    D3D12_DESCRIPTOR_RANGE descriptorRange[2]            = {};
+    descriptorRange[0].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorRange[0].NumDescriptors                    = 1;
+    descriptorRange[0].BaseShaderRegister                = 0; // t0
+    descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-    D3D12_DESCRIPTOR_RANGE descriptorRangeDepth[1]            = {};
-    descriptorRangeDepth[0].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-    descriptorRangeDepth[0].NumDescriptors                    = 1;
-    descriptorRangeDepth[0].BaseShaderRegister                = 1; // t1
-    descriptorRangeDepth[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+    descriptorRange[1].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorRange[1].NumDescriptors                    = 1;
+    descriptorRange[1].BaseShaderRegister                = 1; // t1
+    descriptorRange[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
     // ルートパラメータ
     D3D12_ROOT_PARAMETER rootParameters[4] = {};
@@ -86,14 +85,14 @@ void Outline::CreateRootSignature() {
     // color
     rootParameters[0].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[0].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[0].DescriptorTable.pDescriptorRanges   = descriptorRangeColor;
-    rootParameters[0].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeColor);
+    rootParameters[0].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
+    rootParameters[0].DescriptorTable.NumDescriptorRanges = 1;
 
     // depth
     rootParameters[1].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[1].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[1].DescriptorTable.pDescriptorRanges   = descriptorRangeDepth;
-    rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeDepth);
+    rootParameters[1].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
+    rootParameters[1].DescriptorTable.NumDescriptorRanges = 1;
 
     // 定数バッファ
     rootParameters[2].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
@@ -129,7 +128,7 @@ void Outline::CreateConstantBuffer() {
     HRESULT hr;
 
     // param (b0)
-    paramDataResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(OutLineParamData));
+    paramDataResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(ParamData));
     hr              = paramDataResource_->Map(0, &readRange, reinterpret_cast<void**>(&paramData_));
     if (FAILED(hr)) {
         // エラー処理

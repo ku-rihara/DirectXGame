@@ -532,6 +532,9 @@
     <ClCompile Include="Engine\OffScreen\RandomNoize.cpp">
       <Filter>MyEngine\.cpp\OffScreen</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\OffScreen\Dissolve.cpp">
+      <Filter>MyEngine\.cpp\OffScreen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -907,6 +910,9 @@
       <Filter>MyEngine\.h\OffScreen</Filter>
     </ClInclude>
     <ClInclude Include="Engine\OffScreen\RandomNoize.h">
+      <Filter>MyEngine\.h\OffScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OffScreen\Dissolve.h">
       <Filter>MyEngine\.h\OffScreen</Filter>
     </ClInclude>
   </ItemGroup>

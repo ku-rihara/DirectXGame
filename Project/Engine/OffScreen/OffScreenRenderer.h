@@ -12,6 +12,7 @@ enum class OffScreenMode {
     BOXFILTER,
     RADIALBLUR,
     RANDOMNOIZE,
+    DISSOLVE,
     OUTLINE,
     LUMINANCEOUTLINE,
     COUNT,
