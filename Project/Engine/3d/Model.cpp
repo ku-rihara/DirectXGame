@@ -189,7 +189,7 @@ void Model::DebugImGui() {
 #endif
 }
 
-void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, Material material, std::optional<uint32_t> textureHandle) {
+void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material, std::optional<uint32_t> textureHandle) {
 
     auto commandList = dxCommon_->GetCommandList();
     /*materialDate_->color = color.;*/
@@ -225,7 +225,7 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Shado
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
 }
 
-void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, Material material, SkinCluster skinCluster, std::optional<uint32_t> textureHandle) {
+void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material, SkinCluster skinCluster, std::optional<uint32_t> textureHandle) {
 
     auto commandList = dxCommon_->GetCommandList();
 

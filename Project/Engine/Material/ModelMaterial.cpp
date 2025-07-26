@@ -1,10 +1,10 @@
-#include "Material.h"
+#include "ModelMaterial.h"
 #include "base/TextureManager.h"
 #include "Dx/DirectXCommon.h"
 #include <cassert>
 #include <imgui.h>
 
-void Material::CreateMaterialResource(DirectXCommon* dxCommon) {
+void ModelMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
     assert(dxCommon);
 
     // マテリアルリソース作成
@@ -29,21 +29,21 @@ void Material::CreateMaterialResource(DirectXCommon* dxCommon) {
     dissolveTextureIndex_ = TextureManager::GetInstance()->LoadTexture("Resources/EngineTexture/noise0.png");
 }
 
-void Material::SetDissolveNoizeTexture(const std::string& name) {
+void ModelMaterial::SetDissolveNoizeTexture(const std::string& name) {
     dissolveTextureIndex_ = TextureManager::GetInstance()->LoadTexture(name);
 }
 
-void Material::UpdateMaterialData(const Vector4& Color) {
+void ModelMaterial::UpdateMaterialData(const Vector4& Color) {
     materialData_->color = Color;
 }
 
-void Material::SetCommandList(ID3D12GraphicsCommandList* commandList) {
+void ModelMaterial::SetCommandList(ID3D12GraphicsCommandList* commandList) {
     // シェーダーにマテリアルデータを送る
     commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
     commandList->SetGraphicsRootDescriptorTable(13, TextureManager::GetInstance()->GetTextureHandle(dissolveTextureIndex_));
 }
 
-void Material::DebugImGui() {
+void ModelMaterial::DebugImGui() {
 #ifdef _DEBUG
     ImGui::ColorEdit4("Color", reinterpret_cast<float*>(&materialData_->color));
     ImGui::DragFloat("Shininess", &materialData_->shininess, 0.01f);

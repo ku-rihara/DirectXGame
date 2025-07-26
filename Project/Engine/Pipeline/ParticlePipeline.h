@@ -1,5 +1,5 @@
 #pragma once
-#include "Material/Material.h"
+#include "Material/ModelMaterial.h"
 #include "base/SrvManager.h"
 #include "Dx/DirectXCommon.h"
 #include <d3dcommon.h>

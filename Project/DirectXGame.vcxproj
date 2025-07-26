@@ -62,7 +62,7 @@
     <ClCompile Include="Engine\Lighrt\SpotLight.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLightManager.cpp" />
     <ClCompile Include="Engine\Material\BaseMaterial.cpp" />
-    <ClCompile Include="Engine\Material\Material.cpp" />
+    <ClCompile Include="Engine\Material\ModelMaterial.cpp" />
     <ClCompile Include="Engine\Material\MeshMaterial.cpp" />
     <ClCompile Include="Engine\Material\ParticleMaterial.cpp" />
     <ClCompile Include="Engine\Material\SkyBoxMaterial.cpp" />
@@ -257,7 +257,7 @@
     <ClInclude Include="Engine\Lighrt\SpotLight.h" />
     <ClInclude Include="Engine\Lighrt\SpotLightManager.h" />
     <ClInclude Include="Engine\Material\BaseMaterial.h" />
-    <ClInclude Include="Engine\Material\Material.h" />
+    <ClInclude Include="Engine\Material\ModelMaterial.h" />
     <ClInclude Include="Engine\Material\MeshMaterial.h" />
     <ClInclude Include="Engine\Material\ParticleMaterial.h" />
     <ClInclude Include="Engine\Material\SkyBoxMaterial.h" />

@@ -898,8 +898,20 @@
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerSpawn.cpp">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\MeshMaterial.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
+    <ClCompile Include="Engine\Material\BaseMaterial.cpp">
+      <Filter>MyEngine\.cpp\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Material\MeshMaterial.cpp">
+      <Filter>MyEngine\.cpp\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Material\ModelMaterial.cpp">
+      <Filter>MyEngine\.cpp\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Material\ParticleMaterial.cpp">
+      <Filter>MyEngine\.cpp\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Material\SkyBoxMaterial.cpp">
+      <Filter>MyEngine\.cpp\Material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1497,8 +1509,20 @@
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerSpawn.h">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\MeshMaterial.h">
-      <Filter>MyEngine\.h\base</Filter>
+    <ClInclude Include="Engine\Material\ParticleMaterial.h">
+      <Filter>MyEngine\.h\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Material\SkyBoxMaterial.h">
+      <Filter>MyEngine\.h\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Material\ModelMaterial.h">
+      <Filter>MyEngine\.h\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Material\MeshMaterial.h">
+      <Filter>MyEngine\.h\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Material\BaseMaterial.h">
+      <Filter>MyEngine\.h\Material</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
