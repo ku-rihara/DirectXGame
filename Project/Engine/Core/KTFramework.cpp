@@ -51,7 +51,7 @@ void KTFramework::Run() {
 
 		engineCore_->PreDraw(); /// 描画前処理
 
-		DarwOffscreen(); /// 描画
+		DrawPostEffect(); /// 描画
 
         engineCore_->EndFrame(); /// フレームの終了
     }

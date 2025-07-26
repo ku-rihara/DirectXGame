@@ -10,7 +10,7 @@
 #include "base/TextureManager.h"
 #include "Dx/DirectXCommon.h"
 #include "Lighrt/Light.h"
-#include "OffScreen/OffScreenRenderer.h"
+#include "PostEffect/PostEffectRenderer.h"
 #include "Pipeline/Line3DPipeline.h"
 #include "Pipeline/Object3DPiprline.h"
 #include "Pipeline/SkinningObject3DPipeline.h"
@@ -72,8 +72,8 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     skyBoxRenderer_->Init(directXCommon_);
 
     // OffScreen Renderer
-    offScreenRenderer_ = OffScreenRenderer::GetInstance();
-    offScreenRenderer_->Init(directXCommon_);
+    PostEffectRenderer_ = PostEffectRenderer::GetInstance();
+    PostEffectRenderer_->Init(directXCommon_);
 
     // ParticlePipeline
     ParticlePipeline_ = ParticlePipeline::GetInstance();

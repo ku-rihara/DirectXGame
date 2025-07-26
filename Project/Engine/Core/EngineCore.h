@@ -13,7 +13,7 @@ class ParticlePipeline;
 class SrvManager;
 class Audio;
 class Input;
-class OffScreenRenderer;
+class PostEffectRenderer;
 class SkyBoxRenderer;
 class Line3DPipeline;
 class RtvManager;
@@ -69,7 +69,7 @@ public:
      Line3DPipeline* Line3DPipeline_;
      RtvManager* rtvManager_;
      SkinningObject3DPipeline* skinningObject3DPipeline_;
-     OffScreenRenderer* offScreenRenderer_;
+     PostEffectRenderer* PostEffectRenderer_;
      Light* light_;
      DsvManager* dsvManager_;
 };

@@ -1,22 +1,22 @@
-#include "LuminanceBasedOutline.h"
 #include "Dx/DirectXCommon.h"
-#include "Dx/DxRenderTarget.h"
+#include"Dx/DxRenderTarget.h"
+#include "GaussianFilter.h"
 #include "function/Log.h"
 #include <cassert>
+#include <d3dx12.h>
 #include <imgui.h>
 
-void LuminanceBasedOutline::Init(DirectXCommon* dxCommon) {
+void GaussianFilter::Init(DirectXCommon* dxCommon) {
 
-    vsName_ = L"resources/Shader/OffScreen/Fullscreen.VS.hlsl";
-    psName_ = L"resources/Shader/OffScreen/LuminanceBasedOutline.PS.hlsl";
-    BaseOffScreen::Init(dxCommon);
+    vsName_ = L"resources/Shader/PostEffect/Fullscreen.VS.hlsl";
+    psName_ = L"resources/Shader/PostEffect/GaussianFilter.PS.hlsl";
+    BasePostEffect::Init(dxCommon);
 }
 
-void LuminanceBasedOutline::CreateGraphicsPipeline() {
-    BaseOffScreen::CreateGraphicsPipeline();
+void GaussianFilter::CreateGraphicsPipeline() {
+    BasePostEffect::CreateGraphicsPipeline();
 }
-
-void LuminanceBasedOutline::CreateRootSignature() {
+void GaussianFilter::CreateRootSignature() {
     HRESULT hr = 0;
     // RootSignatureを作成
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -57,11 +57,11 @@ void LuminanceBasedOutline::CreateRootSignature() {
     assert(SUCCEEDED(hr));
 }
 
-void LuminanceBasedOutline::SetDrawState(ID3D12GraphicsCommandList* commandList) {
-    BaseOffScreen::SetDrawState(commandList);
+void GaussianFilter::SetDrawState(ID3D12GraphicsCommandList* commandList) {
+    BasePostEffect::SetDrawState(commandList);
 }
 
-void LuminanceBasedOutline::CreateConstantBuffer() {
+void GaussianFilter::CreateConstantBuffer() {
     D3D12_RANGE readRange = {};
     HRESULT hr;
 
@@ -73,26 +73,25 @@ void LuminanceBasedOutline::CreateConstantBuffer() {
         OutputDebugStringA("ConstBuffer Map failed.\n");
     }
 
-    paramData_->wightRate = 6.0f;
+    paramData_->sigma = 2.0f;
 }
+void GaussianFilter::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
 
-void LuminanceBasedOutline::Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) {
     // プリミティブトポロジーを設定
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-    // colorテクスチャ (t0)
+    // テクスチャリソースを設定
     commandList->SetGraphicsRootDescriptorTable(0, dxCommon_->GetDxRenderTarget()->GetRenderTextureGPUSrvHandle());
 
-    // b0: OutLineParams
+    // b0:param
     commandList->SetGraphicsRootConstantBufferView(1, paramDataResource_->GetGPUVirtualAddress());
 
     commandList->DrawInstanced(3, 1, 0, 0);
 }
 
-void LuminanceBasedOutline::DebugParamImGui() {
+void GaussianFilter::DebugParamImGui() {
 #ifdef _DEBUG
-    if (ImGui::CollapsingHeader("LuminanceBasedOutline")) {
-        ImGui::DragFloat("widthRate", &paramData_->wightRate, 0.01f);
+    if (ImGui::CollapsingHeader("GaussianFilter")) {
+        ImGui::DragFloat("sigma", &paramData_->sigma, 0.01f);
     }
-#endif
+#endif // _DEBUG
 }

@@ -1,16 +1,16 @@
 #pragma once
 
-#include "BaseOffScreen.h"
+#include "BasePostEffect.h"
 #include <d3d12.h>
 
-class Vignette : public BaseOffScreen {
+class NormalScreen : public BasePostEffect {
 private:
     void CreateGraphicsPipeline() override;
     void CreateRootSignature() override;
 
 public:
-    Vignette()           = default;
-    ~Vignette() override = default;
+    NormalScreen()           = default;
+    ~NormalScreen() override = default;
 
     void Init(DirectXCommon* dxCommon) override;
     void SetDrawState(ID3D12GraphicsCommandList* commandList) override;

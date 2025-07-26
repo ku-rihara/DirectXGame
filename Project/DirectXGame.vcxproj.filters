@@ -142,9 +142,6 @@
     <Filter Include="MyEngine\.h\Primitive">
       <UniqueIdentifier>{0015d049-85db-4bcb-ab82-220bbf98f1a9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="リソースファイル\OffScreen">
-      <UniqueIdentifier>{3bf652c4-db9d-4e96-aa0f-177270e2226e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\SkyBox">
       <UniqueIdentifier>{3d0b4b8b-8120-4479-a6ad-221fde23fe75}</UniqueIdentifier>
     </Filter>
@@ -181,12 +178,6 @@
     <Filter Include="MyEngine\.h\Pipeline">
       <UniqueIdentifier>{e76999fe-1cc2-4cd6-af36-5b79ea707f3e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.cpp\OffScreen">
-      <UniqueIdentifier>{e38b2556-769e-4783-b129-5409cf0747e8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.h\OffScreen">
-      <UniqueIdentifier>{0e04b71b-66a2-4664-b8b2-e3e21a1ebbb6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="リソースファイル\Lighting">
       <UniqueIdentifier>{d46e4630-16da-4bbb-b721-ea22f9c06320}</UniqueIdentifier>
     </Filter>
@@ -204,6 +195,15 @@
     </Filter>
     <Filter Include="MyEngine\.h\Material">
       <UniqueIdentifier>{ac3b0ce8-5003-4ba0-ade7-feb53bf1b6c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\PostEffect">
+      <UniqueIdentifier>{e38b2556-769e-4783-b129-5409cf0747e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソースファイル\PostEffect">
+      <UniqueIdentifier>{3bf652c4-db9d-4e96-aa0f-177270e2226e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\PostEffect">
+      <UniqueIdentifier>{0e04b71b-66a2-4664-b8b2-e3e21a1ebbb6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -475,30 +475,6 @@
     <ClCompile Include="math\EasingSequence.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\OffScreen\BaseOffScreen.cpp">
-      <Filter>MyEngine\.cpp\OffScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\OffScreen\OffScreenRenderer.cpp">
-      <Filter>MyEngine\.cpp\OffScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\OffScreen\NormalScreen.cpp">
-      <Filter>MyEngine\.cpp\OffScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\OffScreen\GrayScale.cpp">
-      <Filter>MyEngine\.cpp\OffScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\OffScreen\Vignette.cpp">
-      <Filter>MyEngine\.cpp\OffScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\OffScreen\RadialBlur.cpp">
-      <Filter>MyEngine\.cpp\OffScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\OffScreen\GaussianFilter.cpp">
-      <Filter>MyEngine\.cpp\OffScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\OffScreen\BoxFilter.cpp">
-      <Filter>MyEngine\.cpp\OffScreen</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Dx\DxCommand.cpp">
       <Filter>MyEngine\.cpp\Dx</Filter>
     </ClCompile>
@@ -514,9 +490,6 @@
     <ClCompile Include="Engine\Dx\DxDevice.cpp">
       <Filter>MyEngine\.cpp\Dx</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\OffScreen\Outline.cpp">
-      <Filter>MyEngine\.cpp\OffScreen</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\ShadowMap\ShadowMap.cpp">
       <Filter>MyEngine\.cpp\ShadowMap</Filter>
     </ClCompile>
@@ -528,15 +501,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Dx\DxDepthBuffer.cpp">
       <Filter>MyEngine\.cpp\Dx</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\OffScreen\LuminanceBasedOutline.cpp">
-      <Filter>MyEngine\.cpp\OffScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\OffScreen\RandomNoize.cpp">
-      <Filter>MyEngine\.cpp\OffScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\OffScreen\Dissolve.cpp">
-      <Filter>MyEngine\.cpp\OffScreen</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Material\ModelMaterial.cpp">
       <Filter>MyEngine\.cpp\Material</Filter>
@@ -552,6 +516,42 @@
     </ClCompile>
     <ClCompile Include="Engine\Material\BaseMaterial.cpp">
       <Filter>MyEngine\.cpp\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\NormalScreen.cpp">
+      <Filter>MyEngine\.cpp\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\Outline.cpp">
+      <Filter>MyEngine\.cpp\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\PostEffectRenderer.cpp">
+      <Filter>MyEngine\.cpp\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\RadialBlur.cpp">
+      <Filter>MyEngine\.cpp\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\RandomNoize.cpp">
+      <Filter>MyEngine\.cpp\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\Vignette.cpp">
+      <Filter>MyEngine\.cpp\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\BasePostEffect.cpp">
+      <Filter>MyEngine\.cpp\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\BoxFilter.cpp">
+      <Filter>MyEngine\.cpp\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\Dissolve.cpp">
+      <Filter>MyEngine\.cpp\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\GaussianFilter.cpp">
+      <Filter>MyEngine\.cpp\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\GrayScale.cpp">
+      <Filter>MyEngine\.cpp\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\LuminanceBasedOutline.cpp">
+      <Filter>MyEngine\.cpp\PostEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -867,27 +867,6 @@
     <ClInclude Include="math\EasingSequence.h">
       <Filter>liberary\.h</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\OffScreen\BaseOffScreen.h">
-      <Filter>MyEngine\.h\OffScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\OffScreen\OffScreenRenderer.h">
-      <Filter>MyEngine\.h\OffScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\OffScreen\Vignette.h">
-      <Filter>MyEngine\.h\OffScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\OffScreen\GrayScale.h">
-      <Filter>MyEngine\.h\OffScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\OffScreen\NormalScreen.h">
-      <Filter>MyEngine\.h\OffScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\OffScreen\RadialBlur.h">
-      <Filter>MyEngine\.h\OffScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\OffScreen\BoxFilter.h">
-      <Filter>MyEngine\.h\OffScreen</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\ShadowMap\ShadowMapData.h">
       <Filter>MyEngine\.h\ShadowMap</Filter>
     </ClInclude>
@@ -906,12 +885,6 @@
     <ClInclude Include="Engine\Dx\DxCommand.h">
       <Filter>MyEngine\.h\Dx</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\OffScreen\GaussianFilter.h">
-      <Filter>MyEngine\.h\OffScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\OffScreen\Outline.h">
-      <Filter>MyEngine\.h\OffScreen</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\ShadowMap\ShadowMap.h">
       <Filter>MyEngine\.h\ShadowMap</Filter>
     </ClInclude>
@@ -920,15 +893,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Dx\DxDepthBuffer.h">
       <Filter>MyEngine\.h\Dx</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\OffScreen\LuminanceBasedOutline.h">
-      <Filter>MyEngine\.h\OffScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\OffScreen\RandomNoize.h">
-      <Filter>MyEngine\.h\OffScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\OffScreen\Dissolve.h">
-      <Filter>MyEngine\.h\OffScreen</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Material\MeshMaterial.h">
       <Filter>MyEngine\.h\Material</Filter>
@@ -945,6 +909,42 @@
     <ClInclude Include="Engine\Material\SkyBoxMaterial.h">
       <Filter>MyEngine\.h\Material</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PostEffect\RandomNoize.h">
+      <Filter>MyEngine\.h\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\Vignette.h">
+      <Filter>MyEngine\.h\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\BasePostEffect.h">
+      <Filter>MyEngine\.h\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\BoxFilter.h">
+      <Filter>MyEngine\.h\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\Dissolve.h">
+      <Filter>MyEngine\.h\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\GaussianFilter.h">
+      <Filter>MyEngine\.h\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\GrayScale.h">
+      <Filter>MyEngine\.h\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\LuminanceBasedOutline.h">
+      <Filter>MyEngine\.h\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\NormalScreen.h">
+      <Filter>MyEngine\.h\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\Outline.h">
+      <Filter>MyEngine\.h\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\PostEffectRenderer.h">
+      <Filter>MyEngine\.h\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\RadialBlur.h">
+      <Filter>MyEngine\.h\PostEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -956,9 +956,6 @@
     </None>
     <None Include="resources\Shader\Sprite.hlsli">
       <Filter>リソースファイル</Filter>
-    </None>
-    <None Include="resources\Shader\OffScreen\Fullscreen.hlsli">
-      <Filter>リソースファイル\OffScreen</Filter>
     </None>
     <None Include="resources\Shader\SkyBox.hlsli">
       <Filter>リソースファイル</Filter>
@@ -990,6 +987,9 @@
     <None Include="resources\Shader\ShadowMap\ShadowMap.hlsli">
       <Filter>リソースファイル\ShadowMap</Filter>
     </None>
+    <None Include="resources\Shader\PostEffect\Fullscreen.hlsli">
+      <Filter>リソースファイル\PostEffect</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\Shader\Object3d.PS.hlsl">
@@ -1010,24 +1010,6 @@
     <FxCompile Include="resources\Shader\Sprite.VS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\Fullscreen.PS.hlsl">
-      <Filter>リソースファイル\OffScreen</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\Fullscreen.VS.hlsl">
-      <Filter>リソースファイル\OffScreen</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\Grayscale.PS.hlsl">
-      <Filter>リソースファイル\OffScreen</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\Vignette.PS.hlsl">
-      <Filter>リソースファイル\OffScreen</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\GaussianFilter.PS.hlsl">
-      <Filter>リソースファイル\OffScreen</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\RadialBlur.PS.hlsl">
-      <Filter>リソースファイル\OffScreen</Filter>
-    </FxCompile>
     <FxCompile Include="resources\Shader\SkyBox.PS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
@@ -1043,20 +1025,38 @@
     <FxCompile Include="resources\Shader\SkinningObject3d.VS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\BoxFilter.PS.hlsl">
-      <Filter>リソースファイル\OffScreen</Filter>
+    <FxCompile Include="resources\Shader\PostEffect\Random.PS.hlsl">
+      <Filter>リソースファイル\PostEffect</Filter>
     </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\Dissolve.PS.hlsl">
-      <Filter>リソースファイル\OffScreen</Filter>
+    <FxCompile Include="resources\Shader\PostEffect\Vignette.PS.hlsl">
+      <Filter>リソースファイル\PostEffect</Filter>
     </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\LuminanceBasedOutline.PS.hlsl">
-      <Filter>リソースファイル\OffScreen</Filter>
+    <FxCompile Include="resources\Shader\PostEffect\BoxFilter.PS.hlsl">
+      <Filter>リソースファイル\PostEffect</Filter>
     </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\DepthBasedOutline.PS.hlsl">
-      <Filter>リソースファイル\OffScreen</Filter>
+    <FxCompile Include="resources\Shader\PostEffect\DepthBasedOutline.PS.hlsl">
+      <Filter>リソースファイル\PostEffect</Filter>
     </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\Random.PS.hlsl">
-      <Filter>リソースファイル\OffScreen</Filter>
+    <FxCompile Include="resources\Shader\PostEffect\Dissolve.PS.hlsl">
+      <Filter>リソースファイル\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\PostEffect\Fullscreen.PS.hlsl">
+      <Filter>リソースファイル\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\PostEffect\Fullscreen.VS.hlsl">
+      <Filter>リソースファイル\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\PostEffect\GaussianFilter.PS.hlsl">
+      <Filter>リソースファイル\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\PostEffect\Grayscale.PS.hlsl">
+      <Filter>リソースファイル\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\PostEffect\LuminanceBasedOutline.PS.hlsl">
+      <Filter>リソースファイル\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\PostEffect\RadialBlur.PS.hlsl">
+      <Filter>リソースファイル\PostEffect</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

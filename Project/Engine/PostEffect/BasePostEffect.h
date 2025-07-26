@@ -10,14 +10,14 @@
 class DirectXCommon;
 class ViewProjection;
 
-class BaseOffScreen {
+class BasePostEffect {
 protected:
     virtual void CreateGraphicsPipeline();
     virtual void CreateRootSignature();
 
 public:
-    BaseOffScreen()          = default;
-    virtual ~BaseOffScreen() = default;
+    BasePostEffect()          = default;
+    virtual ~BasePostEffect() = default;
 
     virtual void Init(DirectXCommon* dxCommon);
     virtual void SetDrawState(ID3D12GraphicsCommandList* commandList);
@@ -40,8 +40,8 @@ protected:
     Microsoft::WRL::ComPtr<ID3DBlob> signatureBlob_;
     Microsoft::WRL::ComPtr<ID3DBlob> errorBlob_;
 
-    std::wstring psName_ = L"resources/Shader/OffScreen/Fullscreen.PS.hlsl";
-    std::wstring vsName_ = L"resources/Shader/OffScreen/Fullscreen.VS.hlsl";
+    std::wstring psName_ = L"resources/Shader/PostEffect/Fullscreen.PS.hlsl";
+    std::wstring vsName_ = L"resources/Shader/PostEffect/Fullscreen.VS.hlsl";
 
 public:
     void SetViewProjection(const ViewProjection* viewProjection);

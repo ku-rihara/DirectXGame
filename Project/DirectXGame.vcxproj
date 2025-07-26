@@ -66,23 +66,23 @@
     <ClCompile Include="Engine\Material\MeshMaterial.cpp" />
     <ClCompile Include="Engine\Material\ParticleMaterial.cpp" />
     <ClCompile Include="Engine\Material\SkyBoxMaterial.cpp" />
-    <ClCompile Include="Engine\OffScreen\BaseOffScreen.cpp" />
-    <ClCompile Include="Engine\OffScreen\BoxFilter.cpp" />
-    <ClCompile Include="Engine\OffScreen\Dissolve.cpp" />
-    <ClCompile Include="Engine\OffScreen\GaussianFilter.cpp" />
-    <ClCompile Include="Engine\OffScreen\GrayScale.cpp" />
-    <ClCompile Include="Engine\OffScreen\NormalScreen.cpp" />
-    <ClCompile Include="Engine\OffScreen\OffScreenRenderer.cpp" />
-    <ClCompile Include="Engine\OffScreen\Outline.cpp" />
-    <ClCompile Include="Engine\OffScreen\LuminanceBasedOutline.cpp" />
-    <ClCompile Include="Engine\OffScreen\RadialBlur.cpp" />
-    <ClCompile Include="Engine\OffScreen\RandomNoize.cpp" />
-    <ClCompile Include="Engine\OffScreen\Vignette.cpp" />
     <ClCompile Include="Engine\Pipeline\Line3DPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Object3DPiprline.cpp" />
     <ClCompile Include="Engine\Pipeline\ParticlePipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\SkinningObject3DPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\SpritePipeline.cpp" />
+    <ClCompile Include="Engine\PostEffect\BasePostEffect.cpp" />
+    <ClCompile Include="Engine\PostEffect\BoxFilter.cpp" />
+    <ClCompile Include="Engine\PostEffect\Dissolve.cpp" />
+    <ClCompile Include="Engine\PostEffect\GaussianFilter.cpp" />
+    <ClCompile Include="Engine\PostEffect\GrayScale.cpp" />
+    <ClCompile Include="Engine\PostEffect\LuminanceBasedOutline.cpp" />
+    <ClCompile Include="Engine\PostEffect\NormalScreen.cpp" />
+    <ClCompile Include="Engine\PostEffect\Outline.cpp" />
+    <ClCompile Include="Engine\PostEffect\PostEffectRenderer.cpp" />
+    <ClCompile Include="Engine\PostEffect\RadialBlur.cpp" />
+    <ClCompile Include="Engine\PostEffect\RandomNoize.cpp" />
+    <ClCompile Include="Engine\PostEffect\Vignette.cpp" />
     <ClCompile Include="Engine\Primitive\IPrimitive.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitiveBox.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitiveCylinder.cpp" />
@@ -188,23 +188,23 @@
     <ClInclude Include="Engine\Material\MeshMaterial.h" />
     <ClInclude Include="Engine\Material\ParticleMaterial.h" />
     <ClInclude Include="Engine\Material\SkyBoxMaterial.h" />
-    <ClInclude Include="Engine\OffScreen\BaseOffScreen.h" />
-    <ClInclude Include="Engine\OffScreen\BoxFilter.h" />
-    <ClInclude Include="Engine\OffScreen\Dissolve.h" />
-    <ClInclude Include="Engine\OffScreen\GaussianFilter.h" />
-    <ClInclude Include="Engine\OffScreen\GrayScale.h" />
-    <ClInclude Include="Engine\OffScreen\NormalScreen.h" />
-    <ClInclude Include="Engine\OffScreen\OffScreenRenderer.h" />
-    <ClInclude Include="Engine\OffScreen\Outline.h" />
-    <ClInclude Include="Engine\OffScreen\LuminanceBasedOutline.h" />
-    <ClInclude Include="Engine\OffScreen\RadialBlur.h" />
-    <ClInclude Include="Engine\OffScreen\RandomNoize.h" />
-    <ClInclude Include="Engine\OffScreen\Vignette.h" />
     <ClInclude Include="Engine\Pipeline\Line3DPipeline.h" />
     <ClInclude Include="Engine\Pipeline\Object3DPiprline.h" />
     <ClInclude Include="Engine\Pipeline\ParticlePipeline.h" />
     <ClInclude Include="Engine\Pipeline\SkinningObject3DPipeline.h" />
     <ClInclude Include="Engine\Pipeline\SpritePipeline.h" />
+    <ClInclude Include="Engine\PostEffect\BasePostEffect.h" />
+    <ClInclude Include="Engine\PostEffect\BoxFilter.h" />
+    <ClInclude Include="Engine\PostEffect\Dissolve.h" />
+    <ClInclude Include="Engine\PostEffect\GaussianFilter.h" />
+    <ClInclude Include="Engine\PostEffect\GrayScale.h" />
+    <ClInclude Include="Engine\PostEffect\LuminanceBasedOutline.h" />
+    <ClInclude Include="Engine\PostEffect\NormalScreen.h" />
+    <ClInclude Include="Engine\PostEffect\Outline.h" />
+    <ClInclude Include="Engine\PostEffect\PostEffectRenderer.h" />
+    <ClInclude Include="Engine\PostEffect\RadialBlur.h" />
+    <ClInclude Include="Engine\PostEffect\RandomNoize.h" />
+    <ClInclude Include="Engine\PostEffect\Vignette.h" />
     <ClInclude Include="Engine\Primitive\IPrimitive.h" />
     <ClInclude Include="Engine\Primitive\PrimitiveBox.h" />
     <ClInclude Include="Engine\Primitive\PrimitiveCylinder.h" />
@@ -302,11 +302,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
-    <None Include="resources\Shader\OffScreen\Fullscreen.hlsli">
+    <None Include="resources\Shader\Particle.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
-    <None Include="resources\Shader\Particle.hlsli">
+    <None Include="resources\Shader\PostEffect\Fullscreen.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
@@ -344,55 +344,55 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\BoxFilter.PS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\DepthBasedOutline.PS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\Dissolve.PS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\Fullscreen.PS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\Fullscreen.VS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\GaussianFilter.PS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\Grayscale.PS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\LuminanceBasedOutline.PS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\RadialBlur.PS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\Random.PS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\OffScreen\Vignette.PS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
     <FxCompile Include="resources\Shader\Particle.PS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="resources\Shader\Particle.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\PostEffect\BoxFilter.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\PostEffect\DepthBasedOutline.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\PostEffect\Dissolve.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\PostEffect\Fullscreen.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\PostEffect\Fullscreen.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\PostEffect\GaussianFilter.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\PostEffect\Grayscale.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\PostEffect\LuminanceBasedOutline.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\PostEffect\RadialBlur.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\PostEffect\Random.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\PostEffect\Vignette.PS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

@@ -4,21 +4,21 @@
 
 void GrayScale::Init(DirectXCommon* dxCommon) {
 
-    vsName_ = L"resources/Shader/OffScreen/Fullscreen.VS.hlsl";
-    psName_ = L"resources/Shader/OffScreen/Grayscale.PS.hlsl";
-    BaseOffScreen::Init(dxCommon);
+    vsName_ = L"resources/Shader/PostEffect/Fullscreen.VS.hlsl";
+    psName_ = L"resources/Shader/PostEffect/Grayscale.PS.hlsl";
+    BasePostEffect::Init(dxCommon);
 }
 
 void GrayScale::CreateGraphicsPipeline() {
-    BaseOffScreen::CreateGraphicsPipeline();
+    BasePostEffect::CreateGraphicsPipeline();
 }
 
 void GrayScale::CreateRootSignature() {
-    BaseOffScreen::CreateRootSignature();
+    BasePostEffect::CreateRootSignature();
 }
 
 void GrayScale::SetDrawState(ID3D12GraphicsCommandList* commandList) {
-    BaseOffScreen::SetDrawState(commandList);
+    BasePostEffect::SetDrawState(commandList);
 }
 
 void GrayScale::CreateConstantBuffer() {

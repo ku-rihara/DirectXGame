@@ -1,21 +1,16 @@
 #pragma once
 
-#include "BaseOffScreen.h"
+#include "BasePostEffect.h"
 #include <d3d12.h>
 
-class RandomNoize : public BaseOffScreen {
-public:
-    struct RandomParamData {
-        float time;
-    };
-
+class Vignette : public BasePostEffect {
 private:
     void CreateGraphicsPipeline() override;
     void CreateRootSignature() override;
 
 public:
-    RandomNoize()           = default;
-    ~RandomNoize() override = default;
+    Vignette()           = default;
+    ~Vignette() override = default;
 
     void Init(DirectXCommon* dxCommon) override;
     void SetDrawState(ID3D12GraphicsCommandList* commandList) override;
@@ -25,6 +20,4 @@ public:
     void DebugParamImGui() override;
 
 private:
-    Microsoft::WRL::ComPtr<ID3D12Resource> paramDataResource_;
-    RandomParamData* paramData_;
 };

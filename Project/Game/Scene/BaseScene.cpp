@@ -1,5 +1,5 @@
 #include "BaseScene.h"
-#include"OffScreen/OffScreenRenderer.h"
+#include"PostEffect/PostEffectRenderer.h"
 #include"Lighrt/Light.h"
 #include<imgui.h>
 
@@ -19,7 +19,7 @@ void BaseScene::Init() {
 	viewProjection_.translation_ = { 0,-6.2f,-109.0f };
 
 	//offscreenカメラセット
-    OffScreenRenderer::GetInstance()->SetViewProjection(&viewProjection_);
+    PostEffectRenderer::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
 void BaseScene::Debug() {
