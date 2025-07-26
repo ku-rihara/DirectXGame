@@ -6,8 +6,8 @@
 #include "Player/Player.h"
 
 #include "Frame/Frame.h"
-#include "OffScreen/OffScreenRenderer.h"
-#include "OffScreen/RadialBlur.h"
+#include "PostEffect/PostEffectRenderer.h"
+#include "PostEffect/RadialBlur.h"
 #include <imgui.h>
 
 // 初期化
@@ -34,7 +34,7 @@ RushAttack::RushAttack(Player* player)
 
     EasingInit();
 
-    OffScreenRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::RADIALBLUR);
+    PostEffectRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::RADIALBLUR);
     rushBlurEase_.Init("RushEffect");
     rushBlurEase_.ApplyFromJson("RushBlur.json");
     rushBlurEase_.SaveAppliedJsonFileName();
@@ -42,7 +42,7 @@ RushAttack::RushAttack(Player* player)
     rushBlurEase_.Reset();
 
     rushBlurEase_.SetOnWaitEndCallback([this]() {
-        OffScreenRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::NONE);
+        PostEffectRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::NONE);
     });
 
     step_ = STEP::EMIT; // 突進
@@ -72,7 +72,7 @@ void RushAttack::Update() {
         pPlayer_->GetEffects()->RushAttackEmit();
 
         rushBlurEase_.Update(Frame::DeltaTimeRate());
-        OffScreenRenderer::GetInstance()->GetRadialBlur()->SetBlurWidth(tempBlurParam_);
+        PostEffectRenderer::GetInstance()->GetRadialBlur()->SetBlurWidth(tempBlurParam_);
 
         // Rhand
         handRMoveEase_.Update(Frame::DeltaTimeRate());
@@ -97,7 +97,7 @@ void RushAttack::Update() {
         ///---------------------------------------------------------
     case STEP::WAIT:
 
-        OffScreenRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::NONE);
+        PostEffectRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::NONE);
 
         collisionBox_->IsAdapt(false);
         waitTime_ += Frame::DeltaTime();
