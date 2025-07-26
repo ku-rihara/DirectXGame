@@ -32,7 +32,7 @@ public:
     void Draw(ID3D12GraphicsCommandList* commandList);
     void DrawImGui();
 
-    void SetOffScreenMode(const PostEffectMode& mode) { currentMode_ = mode; }
+    void SetPostEffectMode(const PostEffectMode& mode) { currentMode_ = mode; }
 
 private:
     const ViewProjection* viewProjection_;
