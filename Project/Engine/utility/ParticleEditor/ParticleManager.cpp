@@ -163,11 +163,11 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
             // モデル描画
             if (group.model) {
                 group.model->DrawInstancing(instanceIndex, pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
-                    group.meshMaterial, group.textureHandle);
+                    group.material, group.textureHandle);
                 // メッシュ描画
             } else if (group.primitive_->GetMesh()) {
                 group.primitive_->GetMesh()->DrawInstancing(instanceIndex, pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
-                    group.meshMaterial, group.textureHandle);
+                    group.material, group.textureHandle);
             }
         }
     }
@@ -275,7 +275,7 @@ void ParticleManager::SetModel(const std::string& name, const std::string& model
 }
 
 void ParticleManager::CreateMaterialResource(const std::string& name) {
-    particleGroups_[name].meshMaterial.CreateMaterialResource(DirectXCommon::GetInstance());
+    particleGroups_[name].material.CreateMaterialResource(DirectXCommon::GetInstance());
 }
 
 ///============================================================

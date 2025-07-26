@@ -2,7 +2,7 @@
 #include"Dx/DxCompiler.h"
 //Function
 #include"function/Log.h"
-#include"base/Material.h"
+#include"Material/Material.h"
 #include<cassert>
 #include<string>
 

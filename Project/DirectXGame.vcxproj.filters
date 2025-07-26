@@ -340,6 +340,12 @@
     <Filter Include="MyEngine\.h\ShadowMap">
       <UniqueIdentifier>{be7dc1d9-2066-4322-9d22-0b7e1ff7be19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\Material">
+      <UniqueIdentifier>{7779383f-1ab1-4d1c-8bef-41c69101e697}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Material">
+      <UniqueIdentifier>{ac3b0ce8-5003-4ba0-ade7-feb53bf1b6c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -410,9 +416,6 @@
     </ClCompile>
     <ClCompile Include="Engine\3d\ObjectColor.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\Material.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\SpriteMaterial.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
@@ -1001,9 +1004,6 @@
     </ClInclude>
     <ClInclude Include="Engine\3d\ObjectColor.h">
       <Filter>MyEngine\.h\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\Material.h">
-      <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\SpriteMaterial.h">
       <Filter>MyEngine\.h\base</Filter>

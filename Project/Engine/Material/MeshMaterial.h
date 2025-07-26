@@ -1,28 +1,29 @@
 #pragma once
+#include "BaseMaterial.h"
 #include "Matrix4x4.h"
 #include "Vector4.h"
 #include <d3d12.h>
 #include <string>
 #include <wrl.h>
 
-
 class DirectXCommon;
-class MeshMaterial {
+
+class MeshMaterial : public BaseMaterial {
 public:
     // コンストラクタ
-    MeshMaterial() = default;
+    MeshMaterial()  = default;
     ~MeshMaterial() = default;
 
     // マテリアルのリソースを作成する関数
-    void CreateMaterialResource(DirectXCommon* dxCommon);
+    void CreateMaterialResource(DirectXCommon* dxCommon) override;
 
     // マテリアルのデータを更新する関数
-    void UpdateMaterialData(const Vector4& Color);
+    void UpdateMaterialData(const Vector4& Color) override;
 
     // シェーダーにデータを送る関数
-    void SetCommandList(ID3D12GraphicsCommandList* commandList);
+    void SetCommandList(ID3D12GraphicsCommandList* commandList) override;
 
-    void DebugImGui();
+    void DebugImGui() override;
 
 private:
     struct MaterialData {
@@ -38,11 +39,7 @@ public:
     // GPUに送るマテリアルデータの実体
     MaterialData* materialData_ = nullptr;
 
-private:
-    // GPUリソースへのポインタ
-    Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
-
 public:
-    void SetShininess(const float& shiniess) { materialData_->shininess = shiniess; }
-    void SetEnvironmentCoefficient(const float& environmentCoefficient) { materialData_->environmentCoefficient = environmentCoefficient; }
+    void SetShininess(const float& shininess) override { materialData_->shininess = shininess; }
+    void SetEnvironmentCoefficient(const float& environmentCoefficient) override { materialData_->environmentCoefficient = environmentCoefficient; }
 };

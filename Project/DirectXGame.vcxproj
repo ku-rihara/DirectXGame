@@ -25,9 +25,7 @@
     <ClCompile Include="Engine\Animation\ModelAnimation.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
     <ClCompile Include="Engine\base\DsvManager.cpp" />
-    <ClCompile Include="Engine\base\Material.cpp" />
     <ClCompile Include="Engine\base\RtvManager.cpp" />
-    <ClCompile Include="Engine\base\MeshMaterial.cpp" />
     <ClCompile Include="Engine\base\SkyBoxRenderer.cpp" />
     <ClCompile Include="Engine\base\SpriteMaterial.cpp" />
     <ClCompile Include="Engine\base\SrvManager.cpp" />
@@ -63,6 +61,11 @@
     <ClCompile Include="Engine\Lighrt\PointLightManager.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLight.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLightManager.cpp" />
+    <ClCompile Include="Engine\Material\BaseMaterial.cpp" />
+    <ClCompile Include="Engine\Material\Material.cpp" />
+    <ClCompile Include="Engine\Material\MeshMaterial.cpp" />
+    <ClCompile Include="Engine\Material\ParticleMaterial.cpp" />
+    <ClCompile Include="Engine\Material\SkyBoxMaterial.cpp" />
     <ClCompile Include="Engine\OffScreen\BaseOffScreen.cpp" />
     <ClCompile Include="Engine\OffScreen\BoxFilter.cpp" />
     <ClCompile Include="Engine\OffScreen\Dissolve.cpp" />
@@ -216,9 +219,7 @@
     <ClInclude Include="Engine\Animation\SkinCluster.h" />
     <ClInclude Include="Engine\audio\Audio.h" />
     <ClInclude Include="Engine\base\DsvManager.h" />
-    <ClInclude Include="Engine\base\Material.h" />
     <ClInclude Include="Engine\base\RtvManager.h" />
-    <ClInclude Include="Engine\base\MeshMaterial.h" />
     <ClInclude Include="Engine\base\SkyBoxRenderer.h" />
     <ClInclude Include="Engine\base\SpriteMaterial.h" />
     <ClInclude Include="Engine\base\SrvManager.h" />
@@ -255,6 +256,11 @@
     <ClInclude Include="Engine\Lighrt\PointLightManager.h" />
     <ClInclude Include="Engine\Lighrt\SpotLight.h" />
     <ClInclude Include="Engine\Lighrt\SpotLightManager.h" />
+    <ClInclude Include="Engine\Material\BaseMaterial.h" />
+    <ClInclude Include="Engine\Material\Material.h" />
+    <ClInclude Include="Engine\Material\MeshMaterial.h" />
+    <ClInclude Include="Engine\Material\ParticleMaterial.h" />
+    <ClInclude Include="Engine\Material\SkyBoxMaterial.h" />
     <ClInclude Include="Engine\OffScreen\BaseOffScreen.h" />
     <ClInclude Include="Engine\OffScreen\BoxFilter.h" />
     <ClInclude Include="Engine\OffScreen\Dissolve.h" />

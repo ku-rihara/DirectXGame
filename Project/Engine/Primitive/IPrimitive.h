@@ -44,7 +44,7 @@ protected:
     uint32_t indexNum_;
     MeshMaterial material_;
 
-     Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_; // wvpリソース
+     Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
     TransformationMatrix* wvpDate_;
 
 public:

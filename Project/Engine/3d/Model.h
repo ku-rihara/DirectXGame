@@ -12,9 +12,9 @@
 
 #include "Animation/SkinCluster.h"
 
-#include "base/Material.h"
+#include "Material/Material.h"
 #include "Dx/DirectXCommon.h"
-#include "base/MeshMaterial.h"
+#include "Material/ParticleMaterial.h"
 
 // 3Dモデル共通部
 class ModelCommon {
@@ -76,7 +76,7 @@ public:
 
     void DrawInstancing(
         const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle,
-        MeshMaterial material,
+        ParticleMaterial material,
         std::optional<uint32_t> textureHandle = std::nullopt); /// モデルバーティクル
 
 private:
