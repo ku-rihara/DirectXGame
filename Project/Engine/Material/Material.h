@@ -1,4 +1,5 @@
 #pragma once
+#include "BaseMaterial.h"
 #include "Matrix4x4.h"
 #include "Vector3.h"
 #include "Vector4.h"
@@ -16,51 +17,48 @@ enum class BlendMode {
 
 class DirectXCommon;
 
-class Material {
+class Material : public BaseMaterial {
 public:
     // コンストラクタ
     Material()  = default;
     ~Material() = default;
 
     // マテリアルのリソースを作成する関数
-    void CreateMaterialResource(DirectXCommon* dxCommon);
+    void CreateMaterialResource(DirectXCommon* dxCommon) override;
 
     // マテリアルのデータを更新する関数
-    void UpdateMaterialData(const Vector4& Color);
+    void UpdateMaterialData(const Vector4& Color) override;
 
     // シェーダーにデータを送る関数
-    void SetCommandList(ID3D12GraphicsCommandList* commandList);
+    void SetCommandList(ID3D12GraphicsCommandList* commandList) override;
 
-    void SetDissolveNoizeTexture(const std::string&name);
+    void SetDissolveNoizeTexture(const std::string& name);
 
-    void DebugImGui();
+    void DebugImGui() override;
 
 private:
     struct MaterialData {
         Vector4 color;
         int32_t enableLighting;
-        float padding1[3]; 
-        Matrix4x4 uvTransform; 
+        float padding1[3];
+        Matrix4x4 uvTransform;
         float shininess;
         float environmentCoefficient;
         float dissolveThreshold;
         float dissolveEdgeWidth;
-        Vector3 dissolveEdgeColor; 
+        Vector3 dissolveEdgeColor;
         int32_t enableDissolve;
     };
 
 public:
-
     MaterialData* materialData_ = nullptr;
+
 private:
-    // GPUリソースへのポインタ
-    Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
     int32_t dissolveTextureIndex_;
 
 public:
-   
-    void SetShininess(const float& shininess) { materialData_->shininess = shininess; }
-    void SetEnvironmentCoefficient(const float& environmentCoefficient) { materialData_->environmentCoefficient = environmentCoefficient; }
+    void SetShininess(const float& shininess) override { materialData_->shininess = shininess; }
+    void SetEnvironmentCoefficient(const float& environmentCoefficient) override { materialData_->environmentCoefficient = environmentCoefficient; }
 
     // Dissolve
     void SetDissolveThreshold(const float& threshold) { materialData_->dissolveThreshold = threshold; }

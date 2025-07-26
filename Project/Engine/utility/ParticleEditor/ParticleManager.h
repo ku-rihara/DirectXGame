@@ -1,6 +1,6 @@
 #pragma once
 #include"Dx/DirectXCommon.h"
-#include "base/Material.h"
+#include "Material/ParticleMaterial.h"
 #include "base/SrvManager.h"
 
 #include "3d/Object3d.h"
@@ -78,7 +78,7 @@ private:
     struct ParticleGroup { /// パーティクルグループ
         Model* model = nullptr;
         std::unique_ptr<IPrimitive> primitive_=nullptr;
-        MeshMaterial meshMaterial;
+        ParticleMaterial material;
         uint32_t instanceNum;
         uint32_t srvIndex;
         uint32_t textureHandle;

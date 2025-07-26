@@ -199,6 +199,12 @@
     <Filter Include="MyEngine\.h\ShadowMap">
       <UniqueIdentifier>{be7dc1d9-2066-4322-9d22-0b7e1ff7be19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\Material">
+      <UniqueIdentifier>{7779383f-1ab1-4d1c-8bef-41c69101e697}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Material">
+      <UniqueIdentifier>{ac3b0ce8-5003-4ba0-ade7-feb53bf1b6c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -269,9 +275,6 @@
     </ClCompile>
     <ClCompile Include="Engine\3d\ObjectColor.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\Material.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\SpriteMaterial.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
@@ -535,8 +538,20 @@
     <ClCompile Include="Engine\OffScreen\Dissolve.cpp">
       <Filter>MyEngine\.cpp\OffScreen</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\MeshMaterial.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
+    <ClCompile Include="Engine\Material\Material.cpp">
+      <Filter>MyEngine\.cpp\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Material\MeshMaterial.cpp">
+      <Filter>MyEngine\.cpp\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Material\ParticleMaterial.cpp">
+      <Filter>MyEngine\.cpp\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Material\SkyBoxMaterial.cpp">
+      <Filter>MyEngine\.cpp\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Material\BaseMaterial.cpp">
+      <Filter>MyEngine\.cpp\Material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -641,9 +656,6 @@
     </ClInclude>
     <ClInclude Include="Engine\3d\ObjectColor.h">
       <Filter>MyEngine\.h\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\Material.h">
-      <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\SpriteMaterial.h">
       <Filter>MyEngine\.h\base</Filter>
@@ -918,8 +930,20 @@
     <ClInclude Include="Engine\OffScreen\Dissolve.h">
       <Filter>MyEngine\.h\OffScreen</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\MeshMaterial.h">
-      <Filter>MyEngine\.h\base</Filter>
+    <ClInclude Include="Engine\Material\MeshMaterial.h">
+      <Filter>MyEngine\.h\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Material\Material.h">
+      <Filter>MyEngine\.h\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Material\BaseMaterial.h">
+      <Filter>MyEngine\.h\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Material\ParticleMaterial.h">
+      <Filter>MyEngine\.h\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Material\SkyBoxMaterial.h">
+      <Filter>MyEngine\.h\Material</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
