@@ -7,7 +7,7 @@
 #include "GrayScale.h"
 #include "Vignette.h"
 class ViewProjection;
-enum class OffScreenMode {
+enum class PostEffectMode {
     NONE,
     GRAY,
     VIGNETTE,
@@ -32,21 +32,21 @@ public:
     void Draw(ID3D12GraphicsCommandList* commandList);
     void DrawImGui();
 
-    void SetOffScreenMode(const OffScreenMode& mode) { currentMode_ = mode; }
+    void SetOffScreenMode(const PostEffectMode& mode) { currentMode_ = mode; }
 
 private:
     const ViewProjection* viewProjection_;
     DirectXCommon* dxCommon_   = nullptr;
-    OffScreenMode currentMode_ = OffScreenMode::NONE;
-    std::array<std::unique_ptr<BasePostEffect>, static_cast<size_t>(OffScreenMode::COUNT)> effects_;
+    PostEffectMode currentMode_ = PostEffectMode::NONE;
+    std::array<std::unique_ptr<BasePostEffect>, static_cast<size_t>(PostEffectMode::COUNT)> effects_;
 
 public:
     void SetViewProjection(const ViewProjection* viewProjection);
-    BasePostEffect* GetEffect(OffScreenMode mode);
+    BasePostEffect* GetEffect(PostEffectMode mode);
 
      // テンプレート版の型安全な取得関数
     template <typename T>
-    T* GetEffect(OffScreenMode mode) {
+    T* GetEffect(PostEffectMode mode) {
         BasePostEffect* effect = GetEffect(mode);
         return dynamic_cast<T*>(effect);
     }
@@ -59,14 +59,14 @@ public:
 
     // 特定の効果専用の便利関数
     RadialBlur* GetRadialBlur() {
-        return GetEffect<RadialBlur>(OffScreenMode::RADIALBLUR);
+        return GetEffect<RadialBlur>(PostEffectMode::RADIALBLUR);
     }
 
     GrayScale* GetGrayScale() {
-        return GetEffect<GrayScale>(OffScreenMode::GRAY);
+        return GetEffect<GrayScale>(PostEffectMode::GRAY);
     }
 
     Vignette* GetVignette() {
-        return GetEffect<Vignette>(OffScreenMode::VIGNETTE);
+        return GetEffect<Vignette>(PostEffectMode::VIGNETTE);
     }
 };
