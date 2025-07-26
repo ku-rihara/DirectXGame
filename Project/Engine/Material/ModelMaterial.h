@@ -17,11 +17,11 @@ enum class BlendMode {
 
 class DirectXCommon;
 
-class Material : public BaseMaterial {
+class ModelMaterial : public BaseMaterial {
 public:
     // コンストラクタ
-    Material()  = default;
-    ~Material() = default;
+    ModelMaterial()  = default;
+    ~ModelMaterial() = default;
 
     // マテリアルのリソースを作成する関数
     void CreateMaterialResource(DirectXCommon* dxCommon) override;

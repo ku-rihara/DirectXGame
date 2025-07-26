@@ -1,11 +1,11 @@
 #pragma once
-#include "Material/Material.h"
+#include "Material/ModelMaterial.h"
 #include "Pipeline/Object3DPiprline.h"
 #include "Model.h"
 
 class BaseObject3d {
 public:
-    Material material_;
+    ModelMaterial material_;
 
 protected:
     ///========================================================================================

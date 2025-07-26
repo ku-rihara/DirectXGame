@@ -12,7 +12,7 @@
 
 #include "Animation/SkinCluster.h"
 
-#include "Material/Material.h"
+#include "Material/ModelMaterial.h"
 #include "Dx/DirectXCommon.h"
 #include "Material/ParticleMaterial.h"
 
@@ -65,11 +65,11 @@ public:
     ///============================================================
 
     void Draw(
-        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap&shadowMap, Material material,
+        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap&shadowMap, ModelMaterial material,
         std::optional<uint32_t> textureHandle = std::nullopt); /// モデル描画
 
     void DrawAnimation(
-        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, Material material,
+        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material,
         SkinCluster skinCluster, std::optional<uint32_t> textureHandle = std::nullopt); /// モデル描画
 
     void DrawInstancing(

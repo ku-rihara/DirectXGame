@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Material/Material.h"
+#include "Material/ModelMaterial.h"
 #include "Dx/DirectXCommon.h"
 #include <d3dcommon.h>
 #include <dxcapi.h>

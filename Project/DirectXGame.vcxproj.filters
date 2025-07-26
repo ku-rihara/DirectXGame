@@ -538,7 +538,7 @@
     <ClCompile Include="Engine\OffScreen\Dissolve.cpp">
       <Filter>MyEngine\.cpp\OffScreen</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Material\Material.cpp">
+    <ClCompile Include="Engine\Material\ModelMaterial.cpp">
       <Filter>MyEngine\.cpp\Material</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Material\MeshMaterial.cpp">
@@ -933,7 +933,7 @@
     <ClInclude Include="Engine\Material\MeshMaterial.h">
       <Filter>MyEngine\.h\Material</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Material\Material.h">
+    <ClInclude Include="Engine\Material\ModelMaterial.h">
       <Filter>MyEngine\.h\Material</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Material\BaseMaterial.h">
