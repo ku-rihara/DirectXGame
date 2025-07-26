@@ -1,21 +1,16 @@
 #pragma once
 
-#include "BaseOffScreen.h"
+#include "BasePostEffect.h"
 #include <d3d12.h>
 
-class GaussianFilter : public BaseOffScreen {
-public:
-    struct ParamData {
-        float sigma;
-    };
-
+class BoxFilter : public BasePostEffect {
 private:
     void CreateGraphicsPipeline() override;
     void CreateRootSignature() override;
 
 public:
-    GaussianFilter()           = default;
-    ~GaussianFilter() override = default;
+    BoxFilter()           = default;
+    ~BoxFilter() override = default;
 
     void Init(DirectXCommon* dxCommon) override;
     void SetDrawState(ID3D12GraphicsCommandList* commandList) override;
@@ -25,7 +20,4 @@ public:
     void DebugParamImGui() override;
 
 private:
-    Microsoft::WRL::ComPtr<ID3D12Resource> paramDataResource_;
-    ParamData* paramData_;
-
 };

@@ -1,7 +1,7 @@
 #include "KTGame.h"
 /// Scene
 #include "Scene/Factory/SceneFactory.h"
-#include"OffScreen/OffScreenRenderer.h"
+#include"PostEffect/PostEffectRenderer.h"
 //renderer
 #include"base/SkyBoxRenderer.h"
 //utility
@@ -65,13 +65,13 @@ void KTGame::Draw() {
 
 }
 
-void KTGame::DarwOffscreen() {
+void KTGame::DrawPostEffect() {
 
 	/// commandList取得
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 
-	OffScreenRenderer::GetInstance()->DrawImGui(); 
-	OffScreenRenderer::GetInstance()->Draw(commandList);
+	PostEffectRenderer::GetInstance()->DrawImGui(); 
+	PostEffectRenderer::GetInstance()->Draw(commandList);
 	
 }
 

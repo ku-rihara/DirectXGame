@@ -1,4 +1,4 @@
-#include "BaseOffScreen.h"
+#include "BasePostEffect.h"
 #include "Dx/DirectXCommon.h"
 #include"Dx/DxCompiler.h"
 #include "function/Log.h"
@@ -6,13 +6,13 @@
 #include <d3dx12.h>
 #include <wrl/client.h>
 
-void BaseOffScreen::Init(DirectXCommon* dxCommon) {
+void BasePostEffect::Init(DirectXCommon* dxCommon) {
     dxCommon_ = dxCommon;
     CreateGraphicsPipeline();
     CreateConstantBuffer();
 }
 
-void BaseOffScreen::CreateGraphicsPipeline() {
+void BasePostEffect::CreateGraphicsPipeline() {
     HRESULT hr = 0;
 
      // Smplerの設定
@@ -49,7 +49,7 @@ void BaseOffScreen::CreateGraphicsPipeline() {
     assert(SUCCEEDED(hr));
 }
 
-void BaseOffScreen::CreateRootSignature() {
+void BasePostEffect::CreateRootSignature() {
     HRESULT hr = 0;
     // RootSignatureを作成
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -84,11 +84,11 @@ void BaseOffScreen::CreateRootSignature() {
     assert(SUCCEEDED(hr));
 }
 
-void BaseOffScreen::SetDrawState(ID3D12GraphicsCommandList* commandList) {
+void BasePostEffect::SetDrawState(ID3D12GraphicsCommandList* commandList) {
     commandList->SetPipelineState(pipelineStates_.Get());
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
  }
 
-void BaseOffScreen::SetViewProjection(const ViewProjection* viewProjection) {
+void BasePostEffect::SetViewProjection(const ViewProjection* viewProjection) {
      viewProjection_ = viewProjection;
  }

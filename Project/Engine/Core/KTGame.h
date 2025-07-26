@@ -17,6 +17,6 @@ public:
 	 void Init()override;
 	 void Update()override;
 	 void Draw()override;
-	 void DarwOffscreen()override;
+	 void DrawPostEffect()override;
 	 void Finalize()override;
 };

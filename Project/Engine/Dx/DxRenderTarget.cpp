@@ -126,91 +126,115 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DxRenderTarget::CreateRenderTextureResour
     return resource;
 }
 
-///==========================================================
-/// レンダーテクスチャへの描画準備
-///==========================================================
+
 void DxRenderTarget::PreRenderTexture() {
-    // レンダーテクスチャをRENDER_TARGET状態に遷移
+
+    // ========================================
+    // 1. レンダーテクスチャをRENDER_TARGET状態に遷移
+    // ========================================
     if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_RENDER_TARGET) {
         PutTransitionBarrier(renderTextureResource_.Get(), renderTextureCurrentState_,
             D3D12_RESOURCE_STATE_RENDER_TARGET);
     }
 
-    // 深度バッファをDEPTH_WRITE状態に遷移
+    // ========================================
+    // 2. 深度バッファをDEPTH_WRITE状態に遷移
+    // ========================================
     depthBuffer_->TransitionState(dxCommand_->GetCommandList(), D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
-    // レンダーターゲットと深度ステンシルビューのハンドル取得
+    // ========================================
+    // 3. レンダーターゲット設定
+    // ========================================
     D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(renderTextureRtvIndex_);
     D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = depthBuffer_->GetDsvHandle();
 
-    // レンダーターゲット設定
     dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
 
-    // レンダーターゲットと深度ステンシルビューをクリア
+    // ========================================
+    // 4. クリア処理
+    // ========================================
     dxCommand_->GetCommandList()->ClearRenderTargetView(rtvHandle, clearValue_.Color, 0, nullptr);
     depthBuffer_->Clear(dxCommand_->GetCommandList());
 
-    // ビューポートとシザー矩形を設定
+    // ========================================
+    // 5. ビューポート・シザー設定
+    // ========================================
     dxCommand_->GetCommandList()->RSSetViewports(1, &viewport_);
     dxCommand_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
 }
 
-///==========================================================
-/// メイン描画準備
-///==========================================================
 void DxRenderTarget::PreDraw() {
-    // バックバッファのインデックス取得
-    backBufferIndex_ = dxSwapChain_->GetCurrentBackBufferIndex();
 
-    // 深度バッファをシェーダーリソース状態に遷移
-    depthBuffer_->TransitionState(dxCommand_->GetCommandList(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+    // =============================================
+    // 1. オフスクリーンリソースをシェーダーリソース状態に遷移
+    // ==============================================
 
-    // レンダーテクスチャをシェーダーリソース状態に遷移
+    // レンダーテクスチャをシェーダーリソースに変更
     if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE) {
         PutTransitionBarrier(renderTextureResource_.Get(), renderTextureCurrentState_,
             D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
     }
 
-    // SwapChainリソースの現在の状態を取得
+    // 深度バッファをシェーダーリソースに変更
+    depthBuffer_->TransitionState(dxCommand_->GetCommandList(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+
+    // ========================================
+    // 2. バックバッファをレンダーターゲット状態に遷移
+    // ========================================
+    backBufferIndex_                            = dxSwapChain_->GetCurrentBackBufferIndex();
     D3D12_RESOURCE_STATES currentSwapChainState = dxSwapChain_->GetResourceState(backBufferIndex_);
 
-    // SwapChainリソースをRENDER_TARGET状態に遷移
     if (currentSwapChainState != D3D12_RESOURCE_STATE_RENDER_TARGET) {
         PutTransitionBarrier(dxSwapChain_->GetSwapChainResource(backBufferIndex_).Get(),
             currentSwapChainState, D3D12_RESOURCE_STATE_RENDER_TARGET);
         dxSwapChain_->UpdateResourceState(backBufferIndex_, D3D12_RESOURCE_STATE_RENDER_TARGET);
     }
 
-    // レンダーターゲットと深度ステンシルビューのハンドル取得
+    // ========================================
+    // 3. バックバッファをレンダーターゲットに設定
+    // ========================================
     D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(backBufferIndex_);
-    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = depthBuffer_->GetDsvHandle();
 
-    // レンダーターゲット設定
-    dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
+    dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
 
-    // レンダーターゲットをクリア
+    // ========================================
+    // 4. バックバッファをクリア
+    // ========================================
     dxCommand_->GetCommandList()->ClearRenderTargetView(rtvHandle, clearValue_.Color, 0, nullptr);
 
-    // ビューポートとシザー矩形を設定
+    // ========================================
+    // 5. ビューポート・シザー設定
+    // ========================================
     dxCommand_->GetCommandList()->RSSetViewports(1, &viewport_);
     dxCommand_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
 }
 
 ///==========================================================
-/// 描画後の状態遷移
+/// 描画終了後のバリア設定
 ///==========================================================
 void DxRenderTarget::PostDrawTransitionBarrier() {
     UINT currentIndex = dxSwapChain_->GetCurrentBackBufferIndex();
 
-    // 深度バッファをDEPTH_WRITE状態に遷移
-    depthBuffer_->TransitionState(dxCommand_->GetCommandList(), D3D12_RESOURCE_STATE_DEPTH_WRITE);
-
-    // SwapChainリソースをPRESENT状態に遷移
+    // ========================================
+    // 1. バックバッファをPRESENT状態に遷移
+    // ========================================
     PutTransitionBarrier(dxSwapChain_->GetSwapChainResource(currentIndex).Get(),
         D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-
     dxSwapChain_->UpdateResourceState(currentIndex, D3D12_RESOURCE_STATE_PRESENT);
+
+    // ========================================
+    // 2. オフスクリーンリソースを次フレーム用に準備
+    // ========================================
+
+    if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_RENDER_TARGET) {
+        PutTransitionBarrier(renderTextureResource_.Get(), renderTextureCurrentState_,
+            D3D12_RESOURCE_STATE_RENDER_TARGET);
+    }
+
+    // 深度バッファを次フレーム用に準備
+    depthBuffer_->TransitionState(dxCommand_->GetCommandList(), D3D12_RESOURCE_STATE_DEPTH_WRITE);
 }
+
 
 ///==========================================================
 /// ビューポートとシザー矩形設定

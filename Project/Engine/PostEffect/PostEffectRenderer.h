@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseOffScreen.h"
+#include "BasePostEffect.h"
 #include <array>
 #include <d3d12.h>
 #include <memory>
@@ -23,10 +23,10 @@ enum class OffScreenMode {
 
 class DirectXCommon;
 
-class OffScreenRenderer {
+class PostEffectRenderer {
 public:
-    ~OffScreenRenderer() = default;
-    static OffScreenRenderer* GetInstance();
+    ~PostEffectRenderer() = default;
+    static PostEffectRenderer* GetInstance();
 
     void Init(DirectXCommon* dxCommon);
     void Draw(ID3D12GraphicsCommandList* commandList);
@@ -38,16 +38,16 @@ private:
     const ViewProjection* viewProjection_;
     DirectXCommon* dxCommon_   = nullptr;
     OffScreenMode currentMode_ = OffScreenMode::NONE;
-    std::array<std::unique_ptr<BaseOffScreen>, static_cast<size_t>(OffScreenMode::COUNT)> effects_;
+    std::array<std::unique_ptr<BasePostEffect>, static_cast<size_t>(OffScreenMode::COUNT)> effects_;
 
 public:
     void SetViewProjection(const ViewProjection* viewProjection);
-    BaseOffScreen* GetEffect(OffScreenMode mode);
+    BasePostEffect* GetEffect(OffScreenMode mode);
 
      // テンプレート版の型安全な取得関数
     template <typename T>
     T* GetEffect(OffScreenMode mode) {
-        BaseOffScreen* effect = GetEffect(mode);
+        BasePostEffect* effect = GetEffect(mode);
         return dynamic_cast<T*>(effect);
     }
 

@@ -1,15 +1,19 @@
 #pragma once
 
-#include "BaseOffScreen.h"
+#include "BasePostEffect.h"
+#include "Matrix4x4.h"
 #include <d3d12.h>
-#include "Vector2.h"
 #include <wrl/client.h>
 
-class RadialBlur : public BaseOffScreen {
+
+class Outline : public BasePostEffect {
 public:
     struct ParamData {
-        Vector2 center;
-        float blurWidth;
+        float wightRate;
+    };
+
+    struct OutLineMaterial {
+        Matrix4x4 projectionInverse;
     };
 
 private:
@@ -17,8 +21,8 @@ private:
     void CreateRootSignature() override;
 
 public:
-    RadialBlur()           = default;
-    ~RadialBlur() override = default;
+    Outline()           = default;
+    ~Outline() override = default;
 
     void Init(DirectXCommon* dxCommon) override;
     void SetDrawState(ID3D12GraphicsCommandList* commandList) override;
@@ -29,19 +33,10 @@ public:
 
 private:
     Microsoft::WRL::ComPtr<ID3D12Resource> paramDataResource_;
+    Microsoft::WRL::ComPtr<ID3D12Resource> outlineMaterialResource_;
     ParamData* paramData_;
+    OutLineMaterial* outlineMaterialData_;
 
-public:
-   
-    void SetCenter(const Vector2& center) {
-        if (paramData_) {
-            paramData_->center = center;
-        }
-    }
+    D3D12_STATIC_SAMPLER_DESC staticSamplersOutLine_[2];
 
-    void SetBlurWidth(float blurWidth) {
-        if (paramData_) {
-            paramData_->blurWidth = blurWidth;
-        }
-    }
 };

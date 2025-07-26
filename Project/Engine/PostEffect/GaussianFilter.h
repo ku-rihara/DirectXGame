@@ -1,15 +1,12 @@
 #pragma once
 
-#include "BaseOffScreen.h"
-#include "Matrix4x4.h"
+#include "BasePostEffect.h"
 #include <d3d12.h>
-#include <wrl/client.h>
 
-
-class LuminanceBasedOutline : public BaseOffScreen {
+class GaussianFilter : public BasePostEffect {
 public:
     struct ParamData {
-        float wightRate;
+        float sigma;
     };
 
 private:
@@ -17,8 +14,8 @@ private:
     void CreateRootSignature() override;
 
 public:
-    LuminanceBasedOutline() = default;
-    ~LuminanceBasedOutline() override = default;
+    GaussianFilter()           = default;
+    ~GaussianFilter() override = default;
 
     void Init(DirectXCommon* dxCommon) override;
     void SetDrawState(ID3D12GraphicsCommandList* commandList) override;
@@ -30,6 +27,5 @@ public:
 private:
     Microsoft::WRL::ComPtr<ID3D12Resource> paramDataResource_;
     ParamData* paramData_;
-
 
 };

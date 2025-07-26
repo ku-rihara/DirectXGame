@@ -8,15 +8,15 @@
 
 void Dissolve::Init(DirectXCommon* dxCommon) {
 
-    vsName_ = L"resources/Shader/OffScreen/Fullscreen.VS.hlsl";
-    psName_ = L"resources/Shader/OffScreen/Dissolve.PS.hlsl";
-    BaseOffScreen::Init(dxCommon);
+    vsName_ = L"resources/Shader/PostEffect/Fullscreen.VS.hlsl";
+    psName_ = L"resources/Shader/PostEffect/Dissolve.PS.hlsl";
+    BasePostEffect::Init(dxCommon);
 
     textureIndex_ = TextureManager::GetInstance()->LoadTexture("Resources/EngineTexture/noise0.png");
 }
 
 void Dissolve::CreateGraphicsPipeline() {
-    BaseOffScreen::CreateGraphicsPipeline();
+    BasePostEffect::CreateGraphicsPipeline();
 }
 
 void Dissolve::CreateRootSignature() {
@@ -72,7 +72,7 @@ void Dissolve::CreateRootSignature() {
 }
 
 void Dissolve::SetDrawState(ID3D12GraphicsCommandList* commandList) {
-    BaseOffScreen::SetDrawState(commandList);
+    BasePostEffect::SetDrawState(commandList);
 }
 
 void Dissolve::CreateConstantBuffer() {

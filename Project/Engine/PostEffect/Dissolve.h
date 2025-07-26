@@ -1,12 +1,12 @@
 #pragma once
 
-#include "BaseOffScreen.h"
+#include "BasePostEffect.h"
 #include"Vector3.h"
 #include <d3d12.h>
 #include <wrl/client.h>
 #include <string>
 
-class Dissolve : public BaseOffScreen {
+class Dissolve : public BasePostEffect {
 public:
     struct ParamData {
         float thresholdValue;

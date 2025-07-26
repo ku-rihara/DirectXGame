@@ -1,4 +1,4 @@
-#include "OffScreenRenderer.h"
+#include "PostEffectRenderer.h"
 #include "Dx/DirectXCommon.h"
 
 #include "BoxFilter.h"
@@ -14,12 +14,12 @@
 
 #include <imgui.h>
 
-OffScreenRenderer* OffScreenRenderer::GetInstance() {
-    static OffScreenRenderer instance;
+PostEffectRenderer* PostEffectRenderer::GetInstance() {
+    static PostEffectRenderer instance;
     return &instance;
 }
 
-void OffScreenRenderer::Init(DirectXCommon* dxCommon) {
+void PostEffectRenderer::Init(DirectXCommon* dxCommon) {
     dxCommon_    = dxCommon;
     currentMode_ = OffScreenMode::NONE;
 
@@ -41,13 +41,13 @@ void OffScreenRenderer::Init(DirectXCommon* dxCommon) {
     }
 }
 
-void OffScreenRenderer::Draw(ID3D12GraphicsCommandList* commandList) {
+void PostEffectRenderer::Draw(ID3D12GraphicsCommandList* commandList) {
     effects_[static_cast<size_t>(currentMode_)]->SetDrawState(commandList);
     // 各OffScreenコマンド
     effects_[static_cast<size_t>(currentMode_)]->Draw(commandList);
 }
 
-void OffScreenRenderer::DrawImGui() {
+void PostEffectRenderer::DrawImGui() {
 #ifdef _DEBUG
 
     if (ImGui::Begin("CopyImageRenderer")) {
@@ -62,7 +62,7 @@ void OffScreenRenderer::DrawImGui() {
 #endif
 }
 
-void OffScreenRenderer::SetViewProjection(const ViewProjection* viewProjection) {
+void PostEffectRenderer::SetViewProjection(const ViewProjection* viewProjection) {
     viewProjection_ = viewProjection;
     for (size_t i = 0; i < effects_.size(); ++i) {
         effects_[i]->SetViewProjection(viewProjection_);
@@ -70,7 +70,7 @@ void OffScreenRenderer::SetViewProjection(const ViewProjection* viewProjection) 
 }
 
 // 指定したモードの効果を取得
-BaseOffScreen* OffScreenRenderer::GetEffect(OffScreenMode mode) {
+BasePostEffect* PostEffectRenderer::GetEffect(OffScreenMode mode) {
     size_t index = static_cast<size_t>(mode);
     if (index >= effects_.size()) {
         return nullptr;

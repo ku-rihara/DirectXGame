@@ -5,21 +5,21 @@
 
 void NormalScreen::Init(DirectXCommon* dxCommon) {
     
-    vsName_ = L"resources/Shader/OffScreen/Fullscreen.VS.hlsl";
-    psName_ = L"resources/Shader/OffScreen/Fullscreen.PS.hlsl";
-    BaseOffScreen::Init(dxCommon);
+    vsName_ = L"resources/Shader/PostEffect/Fullscreen.VS.hlsl";
+    psName_ = L"resources/Shader/PostEffect/Fullscreen.PS.hlsl";
+    BasePostEffect::Init(dxCommon);
 }
 
 void NormalScreen::CreateGraphicsPipeline() {
-    BaseOffScreen::CreateGraphicsPipeline();
+    BasePostEffect::CreateGraphicsPipeline();
 }
 
 void NormalScreen::CreateRootSignature() {
-    BaseOffScreen::CreateRootSignature();
+    BasePostEffect::CreateRootSignature();
 }
 
 void NormalScreen::SetDrawState(ID3D12GraphicsCommandList* commandList) {
-    BaseOffScreen::SetDrawState(commandList);
+    BasePostEffect::SetDrawState(commandList);
 }
 
 void NormalScreen::CreateConstantBuffer() {

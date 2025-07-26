@@ -32,7 +32,7 @@ public:
     virtual void Init();
     virtual void Update();
     virtual void Draw() = 0;
-	virtual void DarwOffscreen() = 0;  
+	virtual void DrawPostEffect() = 0;  
     virtual void Finalize();
 
     void DisplayFPS(); /// FPS表示

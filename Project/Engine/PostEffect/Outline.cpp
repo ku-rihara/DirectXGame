@@ -11,9 +11,9 @@
 
 void Outline::Init(DirectXCommon* dxCommon) {
 
-    vsName_ = L"resources/Shader/OffScreen/Fullscreen.VS.hlsl";
-    psName_ = L"resources/Shader/OffScreen/DepthBasedOutline.PS.hlsl";
-    BaseOffScreen::Init(dxCommon);
+    vsName_ = L"resources/Shader/PostEffect/Fullscreen.VS.hlsl";
+    psName_ = L"resources/Shader/PostEffect/DepthBasedOutline.PS.hlsl";
+    BasePostEffect::Init(dxCommon);
 }
 
 void Outline::CreateGraphicsPipeline() {
@@ -120,7 +120,7 @@ void Outline::CreateRootSignature() {
 }
 
 void Outline::SetDrawState(ID3D12GraphicsCommandList* commandList) {
-    BaseOffScreen::SetDrawState(commandList);
+    BasePostEffect::SetDrawState(commandList);
 }
 
 void Outline::CreateConstantBuffer() {

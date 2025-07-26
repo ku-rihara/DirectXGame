@@ -1,16 +1,16 @@
 #pragma once
 
-#include "BaseOffScreen.h"
+#include "BasePostEffect.h"
 #include <d3d12.h>
 
-class BoxFilter : public BaseOffScreen {
+class GrayScale : public BasePostEffect {
 private:
     void CreateGraphicsPipeline() override;
     void CreateRootSignature() override;
 
 public:
-    BoxFilter()           = default;
-    ~BoxFilter() override = default;
+    GrayScale()           = default;
+    ~GrayScale() override = default;
 
     void Init(DirectXCommon* dxCommon) override;
     void SetDrawState(ID3D12GraphicsCommandList* commandList) override;
