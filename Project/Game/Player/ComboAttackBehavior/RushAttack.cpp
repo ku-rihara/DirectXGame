@@ -34,7 +34,7 @@ RushAttack::RushAttack(Player* player)
 
     EasingInit();
 
-    PostEffectRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::RADIALBLUR);
+    PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::RADIALBLUR);
     rushBlurEase_.Init("RushEffect");
     rushBlurEase_.ApplyFromJson("RushBlur.json");
     rushBlurEase_.SaveAppliedJsonFileName();
@@ -42,7 +42,7 @@ RushAttack::RushAttack(Player* player)
     rushBlurEase_.Reset();
 
     rushBlurEase_.SetOnWaitEndCallback([this]() {
-        PostEffectRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::NONE);
+        PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::NONE);
     });
 
     step_ = STEP::EMIT; // 突進
@@ -97,7 +97,7 @@ void RushAttack::Update() {
         ///---------------------------------------------------------
     case STEP::WAIT:
 
-        PostEffectRenderer::GetInstance()->SetOffScreenMode(OffScreenMode::NONE);
+        PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::NONE);
 
         collisionBox_->IsAdapt(false);
         waitTime_ += Frame::DeltaTime();
