@@ -81,4 +81,5 @@ public:
     uint32_t GetShadowMapWidth() const { return shadowMapWidth_; }
     uint32_t GetShadowMapHeight() const { return shadowMapHeight_; }
     D3D12_RESOURCE_STATES GetCurrentState() const { return currentShadowMapState_; }
+    
 };

@@ -164,7 +164,7 @@ void ShadowMap::PreDraw() {
     // シャドウマップ専用のパイプラインを設定
     pipeline_->PreDraw(commandList);
 
-    // シャドウマップリソースの状態遷移（状態管理を使用）
+    // シャドウマップリソースの状態遷移
     TransitionResourceState(commandList, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
     // レンダーターゲットの設定

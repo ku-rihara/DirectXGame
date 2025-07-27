@@ -47,7 +47,9 @@ void KTFramework::Run() {
         Update(); /// 更新
 
         ShadowMap::GetInstance()->PreDraw();
+        ShadowMap::GetInstance()->UpdateLightMatrix();
 
+          ShadowMap::GetInstance()->PostDraw();
        
 
 		engineCore_->PreRenderTexture(); /// 描画前処理
