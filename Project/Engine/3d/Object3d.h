@@ -50,7 +50,7 @@ private:
     // wvpリソース
     Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
     TransformationMatrix* wvpDate_;
-    std::unique_ptr<ShadowMap> shadowMap_;
+    ShadowMap* shadowMap_;
     bool isShadow_ = false;
 
     ///============================================================

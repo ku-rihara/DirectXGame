@@ -553,6 +553,9 @@
     <ClCompile Include="Engine\PostEffect\LuminanceBasedOutline.cpp">
       <Filter>MyEngine\.cpp\PostEffect</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Pipeline\ShadowMapPipeline.cpp">
+      <Filter>MyEngine\.cpp\Pileline</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -944,6 +947,9 @@
     </ClInclude>
     <ClInclude Include="Engine\PostEffect\RadialBlur.h">
       <Filter>MyEngine\.h\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\ShadowMapPipeline.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

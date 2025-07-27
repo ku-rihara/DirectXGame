@@ -41,15 +41,15 @@ void Object3d::Draw(const WorldTransform& worldTransform, const ViewProjection& 
         return;
 
     ColorUpdate();
-
+    shadowMap_->UpdateLightMatrix();
+ 
     // WVP行列の計算
     wvpDate_->World                 = worldTransform.matWorld_;
     wvpDate_->WVP                   = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
     wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
 
     // 影の更新
-    shadowMap_->UpdateLightMatrix();
-
+  
     Object3DPiprline::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
 
     model_->Draw(wvpResource_, *shadowMap_, material_, textureHandle);
@@ -98,9 +98,6 @@ void Object3d::DrawAnimation(const WorldTransform& worldTransform, const ViewPro
     wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
     /*}*/
 
-    // 影の更新
-    shadowMap_->UpdateLightMatrix();
-
     SkinningObject3DPipeline::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
     model_->DrawAnimation(wvpResource_, *shadowMap_, material_, skinCluster, textureHandle);
 
@@ -140,8 +137,8 @@ void Object3d::CreateWVPResource() {
 }
 
 void Object3d::CreateShadowMap() {
-    shadowMap_ = std::make_unique<ShadowMap>();
-    shadowMap_->Init(DirectXCommon::GetInstance());
+    shadowMap_ = ShadowMap::GetInstance();
+
 }
 
 ///============================================================

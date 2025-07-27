@@ -20,6 +20,7 @@ class RtvManager;
 class SkinningObject3DPipeline;
 class Light;
 class DsvManager;
+class ShadowMap;
 
 class EngineCore {
 public:
@@ -41,6 +42,7 @@ public:
     // フレーム開始処理
      void BeginFrame();
 
+     void PreSrvDraw();
      void PreRenderTexture();
      void PreDraw();
 
@@ -72,4 +74,5 @@ public:
      PostEffectRenderer* PostEffectRenderer_;
      Light* light_;
      DsvManager* dsvManager_;
+     ShadowMap* shadowMap_;
 };

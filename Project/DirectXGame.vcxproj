@@ -69,6 +69,7 @@
     <ClCompile Include="Engine\Pipeline\Line3DPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Object3DPiprline.cpp" />
     <ClCompile Include="Engine\Pipeline\ParticlePipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\ShadowMapPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\SkinningObject3DPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\SpritePipeline.cpp" />
     <ClCompile Include="Engine\PostEffect\BasePostEffect.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="Engine\Pipeline\Line3DPipeline.h" />
     <ClInclude Include="Engine\Pipeline\Object3DPiprline.h" />
     <ClInclude Include="Engine\Pipeline\ParticlePipeline.h" />
+    <ClInclude Include="Engine\Pipeline\ShadowMapPipeline.h" />
     <ClInclude Include="Engine\Pipeline\SkinningObject3DPipeline.h" />
     <ClInclude Include="Engine\Pipeline\SpritePipeline.h" />
     <ClInclude Include="Engine\PostEffect\BasePostEffect.h" />

@@ -218,7 +218,7 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Shado
     Light::GetInstance()->SetLightCommands(commandList);
 
     //shadowTexture
-    commandList->SetGraphicsRootDescriptorTable(11, shadowMap.GetGPUHandle());
+    commandList->SetGraphicsRootDescriptorTable(11, shadowMap.GetShadowMapSrvGPUHandle());
   
     // 描画コール
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
@@ -259,7 +259,7 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, co
     Light::GetInstance()->SetLightCommands(commandList);
 
      // shadowTexture
-    commandList->SetGraphicsRootDescriptorTable(11, shadowMap.GetGPUHandle());
+    commandList->SetGraphicsRootDescriptorTable(11, shadowMap.GetShadowMapSrvGPUHandle());
 
     // 描画
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
