@@ -40,7 +40,7 @@ void ModelMaterial::UpdateMaterialData(const Vector4& Color) {
 void ModelMaterial::SetCommandList(ID3D12GraphicsCommandList* commandList) {
     // シェーダーにマテリアルデータを送る
     commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-    commandList->SetGraphicsRootDescriptorTable(13, TextureManager::GetInstance()->GetTextureHandle(dissolveTextureIndex_));
+    commandList->SetGraphicsRootDescriptorTable(12, TextureManager::GetInstance()->GetTextureHandle(dissolveTextureIndex_));
 }
 
 void ModelMaterial::DebugImGui() {

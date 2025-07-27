@@ -217,9 +217,8 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Shado
 
     Light::GetInstance()->SetLightCommands(commandList);
 
-    //shadow
+    //shadowTexture
     commandList->SetGraphicsRootDescriptorTable(11, shadowMap.GetGPUHandle());
-    commandList->SetGraphicsRootConstantBufferView(12, shadowMap.GetVertexResource()->GetGPUVirtualAddress());
   
     // 描画コール
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
@@ -254,13 +253,13 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, co
     // 環境マップ
     uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
     commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
-    commandList->SetGraphicsRootDescriptorTable(14, skinCluster.paletteSrvHandle.second);
+    commandList->SetGraphicsRootDescriptorTable(13, skinCluster.paletteSrvHandle.second);
 
     // ライト
     Light::GetInstance()->SetLightCommands(commandList);
 
-     // shadow
-    commandList->SetGraphicsRootConstantBufferView(12, shadowMap.GetVertexResource()->GetGPUVirtualAddress());
+     // shadowTexture
+    commandList->SetGraphicsRootDescriptorTable(11, shadowMap.GetGPUHandle());
 
     // 描画
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);

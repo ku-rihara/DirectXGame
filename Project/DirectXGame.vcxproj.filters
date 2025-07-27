@@ -1058,5 +1058,11 @@
     <FxCompile Include="resources\Shader\PostEffect\RadialBlur.PS.hlsl">
       <Filter>リソースファイル\PostEffect</Filter>
     </FxCompile>
+    <FxCompile Include="resources\Shader\ShadowMap\ShadowMap.PS.hlsl">
+      <Filter>リソースファイル\ShadowMap</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\ShadowMap\ShadowMap.VS.hlsl">
+      <Filter>リソースファイル\ShadowMap</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

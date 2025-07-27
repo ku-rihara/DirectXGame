@@ -181,7 +181,7 @@ void Object3DPiprline::CreateRootSignature() {
     descriptorRange[5].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
     // RootParameterを作成
-    D3D12_ROOT_PARAMETER rootParameters[14] = {};
+    D3D12_ROOT_PARAMETER rootParameters[13] = {};
 
     // 0: Material
     rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV; // CBVを使う
@@ -248,16 +248,11 @@ void Object3DPiprline::CreateRootSignature() {
     rootParameters[11].DescriptorTable.pDescriptorRanges   = &descriptorRange[4];
     rootParameters[11].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 12: ShadowTransformBuffer 
-    rootParameters[12].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[12].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
-    rootParameters[12].Descriptor.ShaderRegister = 1;
-
-      // 13: dissolve
-    rootParameters[13].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[13].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[13].DescriptorTable.pDescriptorRanges   = &descriptorRange[5];
-    rootParameters[13].DescriptorTable.NumDescriptorRanges = 1;
+      // 12: dissolve
+    rootParameters[12].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[12].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[12].DescriptorTable.pDescriptorRanges   = &descriptorRange[5];
+    rootParameters[12].DescriptorTable.NumDescriptorRanges = 1;
 
 
     descriptionRootSignature.pParameters   = rootParameters; // ルートパラメーターの配列

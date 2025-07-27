@@ -7,6 +7,7 @@
 #include "GrayScale.h"
 #include "Vignette.h"
 class ViewProjection;
+
 enum class PostEffectMode {
     NONE,
     GRAY,
