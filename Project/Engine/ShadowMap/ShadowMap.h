@@ -2,7 +2,9 @@
 
 #include "ShadowMapData.h"
 #include <d3d12.h>
+#include <functional>
 #include <memory>
+#include <vector>
 #include <wrl/client.h>
 
 class SrvManager;
@@ -30,7 +32,6 @@ public:
 
     void PreDraw();
     void PostDraw();
-    void Draw();
 
     void Finalize();
 
@@ -68,8 +69,13 @@ private:
     D3D12_GPU_DESCRIPTOR_HANDLE depthTextureGPUSrvHandle_;
     D3D12_CPU_DESCRIPTOR_HANDLE depthTextureCPUSrvHandle_;
 
+    // ワールド行列用の定数バッファリソース
+    Microsoft::WRL::ComPtr<ID3D12Resource> worldMatrixResource_;
+    Matrix4x4* worldMatrixData_;
+
     // リソース状態遷移用のヘルパー関数を追加
     void TransitionResourceState(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES newState);
+    void CreateWorldMatrixResource();
 
 public:
     // Getter methods
@@ -81,5 +87,4 @@ public:
     uint32_t GetShadowMapWidth() const { return shadowMapWidth_; }
     uint32_t GetShadowMapHeight() const { return shadowMapHeight_; }
     D3D12_RESOURCE_STATES GetCurrentState() const { return currentShadowMapState_; }
-    
 };

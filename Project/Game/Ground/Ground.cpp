@@ -23,6 +23,11 @@ void Ground::Draw(ViewProjection& viewProjection) {
 	objct3D_->Draw(transform_, viewProjection); 
 }
 
+void Ground::Draws(ViewProjection& viewProjection) {
+    viewProjection;
+    objct3D_->ShadowDraw();
+}
+
 void  Ground::Debug() {
 #ifdef _DEBUG
 

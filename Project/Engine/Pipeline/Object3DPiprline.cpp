@@ -22,7 +22,7 @@ void Object3DPiprline::CreateGraphicsPipeline() {
 
     HRESULT hr = 0;
 
-    // 通常のサンプラー 
+    // 通常のサンプラー
     staticSamplers_[0].Filter           = D3D12_FILTER_MIN_MAG_MIP_LINEAR; // バイリニアフィルタ
     staticSamplers_[0].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_WRAP; // 0~1の範囲外をリピート
     staticSamplers_[0].AddressV         = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
@@ -33,15 +33,16 @@ void Object3DPiprline::CreateGraphicsPipeline() {
     staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // pxelShaderで使う
 
     // シャドウマップ用比較サンプラー
-    staticSamplers_[1].Filter           = D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
-    staticSamplers_[1].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-    staticSamplers_[1].AddressV         = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-    staticSamplers_[1].AddressW         = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+    staticSamplers_[1].Filter           = D3D12_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+    staticSamplers_[1].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+    staticSamplers_[1].AddressV         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+    staticSamplers_[1].AddressW         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
     staticSamplers_[1].BorderColor      = D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE;
     staticSamplers_[1].ComparisonFunc   = D3D12_COMPARISON_FUNC_LESS_EQUAL;
     staticSamplers_[1].MaxLOD           = D3D12_FLOAT32_MAX;
     staticSamplers_[1].ShaderRegister   = 1; // レジスタ番号1
     staticSamplers_[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+    staticSamplers_[1].MaxAnisotropy    = 1;
 
     CreateRootSignature();
 
@@ -174,7 +175,7 @@ void Object3DPiprline::CreateRootSignature() {
     descriptorRange[4].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
     descriptorRange[4].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-     // dissolve (t5)
+    // dissolve (t5)
     descriptorRange[5].BaseShaderRegister                = 5;
     descriptorRange[5].NumDescriptors                    = 1;
     descriptorRange[5].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
@@ -248,17 +249,16 @@ void Object3DPiprline::CreateRootSignature() {
     rootParameters[11].DescriptorTable.pDescriptorRanges   = &descriptorRange[4];
     rootParameters[11].DescriptorTable.NumDescriptorRanges = 1;
 
-     // 12: lightTransform
+    // 12: lightTransform
     rootParameters[12].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[12].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
     rootParameters[12].Descriptor.ShaderRegister = 1;
 
-      // 13: dissolve
+    // 13: dissolve
     rootParameters[13].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[13].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[13].DescriptorTable.pDescriptorRanges   = &descriptorRange[5];
     rootParameters[13].DescriptorTable.NumDescriptorRanges = 1;
-
 
     descriptionRootSignature.pParameters   = rootParameters; // ルートパラメーターの配列
     descriptionRootSignature.NumParameters = _countof(rootParameters); // 配列の長さ

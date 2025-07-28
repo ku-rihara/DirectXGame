@@ -42,6 +42,13 @@ void Plane::Draw(ViewProjection& viewProjection) {
 	gobjct3D_->Draw(gtransform_, viewProjection);
 }
 
+void Plane::Draws(ViewProjection& viewProjection) {
+    viewProjection;
+    objct3D_->ShadowDraw();
+    gobjct3D_->ShadowDraw();
+}
+
+
 void  Plane::Debug() {
 #ifdef _DEBUG
 	/// .obj

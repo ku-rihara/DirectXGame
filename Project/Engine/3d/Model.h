@@ -77,6 +77,8 @@ public:
         ParticleMaterial material,
         std::optional<uint32_t> textureHandle = std::nullopt); /// モデルバーティクル
 
+    void DrawForShadowMap(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap);
+
 private:
     ///============================================================
     /// private variants

@@ -1,4 +1,6 @@
 #include "ShadowMap.h"
+#include "3d/Model.h"
+#include "3d/WorldTransform.h"
 #include "base/DsvManager.h"
 #include "base/SrvManager.h"
 #include "base/WinApp.h"
@@ -60,6 +62,16 @@ void ShadowMap::CreateConstantBuffer() {
     transformData_->lightCamera    = MakeIdentity4x4();
     transformData_->cameraPosition = Vector3::ZeroVector();
     transformData_->lightDirection = Vector4::ZeroVector();
+
+    // world
+    worldMatrixResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(Matrix4x4));
+    hr                   = worldMatrixResource_->Map(0, &readRange, reinterpret_cast<void**>(&worldMatrixData_));
+    if (FAILED(hr)) {
+        OutputDebugStringA("ShadowMap WorldMatrix Map failed.\n");
+    }
+
+    // 初期化
+    *worldMatrixData_ = MakeIdentity4x4();
 }
 
 void ShadowMap::CreateShadowMapResource(uint32_t width, uint32_t height) {
@@ -185,10 +197,15 @@ void ShadowMap::PostDraw() {
     TransitionResourceState(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 }
 
+
 void ShadowMap::Finalize() {
     if (vertexResource_) {
         vertexResource_->Unmap(0, nullptr);
         vertexResource_.Reset();
+    }
+    if (worldMatrixResource_) {
+        worldMatrixResource_->Unmap(0, nullptr);
+        worldMatrixResource_.Reset();
     }
     if (shadowMapResource_) {
         shadowMapResource_.Reset();

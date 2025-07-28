@@ -1,8 +1,8 @@
 #include "KTFramework.h"
 
-//dx
-#include"Dx/DxReleaseChecker.h"
-#include"ShadowMap/ShadowMap.h"
+// dx
+#include "Dx/DxReleaseChecker.h"
+#include "ShadowMap/ShadowMap.h"
 
 /// utility
 #include "utility/ParameterEditor/GlobalParameter.h"
@@ -13,8 +13,6 @@
 
 const char kWindowTitle[] = "LE3A_11_クリハラ_ケイタ";
 
-
-
 // ========================================================
 // 初期化
 // ========================================================
@@ -22,7 +20,7 @@ void KTFramework::Init() {
 
     engineCore_ = std::make_unique<EngineCore>();
 
-     // グローバル変数の読み込み
+    // グローバル変数の読み込み
     GlobalParameter::GetInstance()->LoadFiles();
 
     /// エンジン初期化
@@ -32,7 +30,6 @@ void KTFramework::Init() {
     collisionManager_ = std::make_unique<CollisionManager>();
     collisionManager_->Init();
 }
-
 
 // ========================================================
 // 実行
@@ -48,17 +45,16 @@ void KTFramework::Run() {
 
         ShadowMap::GetInstance()->PreDraw();
         ShadowMap::GetInstance()->UpdateLightMatrix();
+        DrawShadow();
+        ShadowMap::GetInstance()->PostDraw();
 
-          ShadowMap::GetInstance()->PostDraw();
-       
-
-		engineCore_->PreRenderTexture(); /// 描画前処理
+        engineCore_->PreRenderTexture(); /// 描画前処理
 
         Draw(); /// 描画
 
-		engineCore_->PreDraw(); /// 描画前処理
+        engineCore_->PreDraw(); /// 描画前処理
 
-		DrawPostEffect(); /// 描画
+        DrawPostEffect(); /// 描画
 
         engineCore_->EndFrame(); /// フレームの終了
     }
@@ -78,7 +74,7 @@ void KTFramework::Update() {
     pSceneManager_->Update();
     /// 当たり判定
     collisionManager_->Update();
-}                                 
+}
 
 // ========================================================
 // 解放
@@ -91,30 +87,30 @@ void KTFramework::Finalize() {
 // ========================================================
 // FPS表示
 // ========================================================
-void KTFramework::DisplayFPS(){
+void KTFramework::DisplayFPS() {
 
 #ifdef _DEBUG
-	ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO& io = ImGui::GetIO();
 
-	// 位置
-	ImGui::SetNextWindowPos(ImVec2(1230, 0), ImGuiCond_Always);
-	ImGui::SetNextWindowBgAlpha(0.0f); // 背景を完全透明に設定
+    // 位置
+    ImGui::SetNextWindowPos(ImVec2(1230, 0), ImGuiCond_Always);
+    ImGui::SetNextWindowBgAlpha(0.0f); // 背景を完全透明に設定
 
-	// ウィンドウフラグを設定
-	ImGui::Begin("FPS Overlay", nullptr,
-		ImGuiWindowFlags_NoTitleBar |         // タイトルバーを非表示
-		ImGuiWindowFlags_NoResize |          // リサイズを禁止
-		ImGuiWindowFlags_NoMove |            // ウィンドウの移動を禁止
-		ImGuiWindowFlags_NoScrollbar |       // スクロールバーを非表示
-		ImGuiWindowFlags_NoCollapse |        // 折りたたみボタンを非表示
-		ImGuiWindowFlags_AlwaysAutoResize |  // 必要なサイズに自動調整
-		ImGuiWindowFlags_NoBackground        // 背景を非表示
-	);
+    // ウィンドウフラグを設定
+    ImGui::Begin("FPS Overlay", nullptr,
+        ImGuiWindowFlags_NoTitleBar | // タイトルバーを非表示
+            ImGuiWindowFlags_NoResize | // リサイズを禁止
+            ImGuiWindowFlags_NoMove | // ウィンドウの移動を禁止
+            ImGuiWindowFlags_NoScrollbar | // スクロールバーを非表示
+            ImGuiWindowFlags_NoCollapse | // 折りたたみボタンを非表示
+            ImGuiWindowFlags_AlwaysAutoResize | // 必要なサイズに自動調整
+            ImGuiWindowFlags_NoBackground // 背景を非表示
+    );
 
-	ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(100, 255, 100, 255));/// 色設定（緑）
-	ImGui::Text("%.1f", io.Framerate);
-	ImGui::PopStyleColor();
+    ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(100, 255, 100, 255)); /// 色設定（緑）
+    ImGui::Text("%.1f", io.Framerate);
+    ImGui::PopStyleColor();
 
-	ImGui::End();
-#endif 
+    ImGui::End();
+#endif
 }

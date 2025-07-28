@@ -80,6 +80,13 @@ void TitleScene::SkyBoxDraw() {
 void TitleScene::SpriteDraw() {
 }
 
+/// ===================================================
+/// 影
+/// ===================================================
+void TitleScene::DrawShadow() {
+}
+
+
 void TitleScene::Debug() {
 #ifdef _DEBUG
     ImGui::Begin("Camera");

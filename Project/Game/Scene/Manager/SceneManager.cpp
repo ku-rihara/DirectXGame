@@ -53,6 +53,13 @@ void SceneManager::SkyBoxDraw() {
         scene_->SkyBoxDraw();
     }
  }
+
+void SceneManager::DrawShadow() {
+     if (scene_) {
+         scene_->DrawShadow();
+     }
+ }
+
 ///==============================================
 /// シーン切り替え
 ///==============================================

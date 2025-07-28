@@ -90,7 +90,18 @@ void GameScene::SkyBoxDraw() {
 /// スプライト描画
 /// ======================================================
 void GameScene::SpriteDraw() {
+   
+  
 }
+
+/// ======================================================
+/// 影
+/// ======================================================
+void GameScene::DrawShadow() {
+    ground_->Draws(viewProjection_);
+    plane_->Draws(viewProjection_);
+}
+
 
 void GameScene::Debug() {
 #ifdef _DEBUG
