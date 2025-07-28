@@ -8,3 +8,7 @@ struct ShadowTransformData {
     Vector4 lightDirection;
     Vector3 cameraPosition;
 };
+
+struct WorldMatrixData {
+    Matrix4x4 world_;
+};

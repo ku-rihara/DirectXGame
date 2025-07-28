@@ -25,7 +25,7 @@ void Ground::Draw(ViewProjection& viewProjection) {
 
 void Ground::Draws(ViewProjection& viewProjection) {
     viewProjection;
-    objct3D_->ShadowDraw();
+    objct3D_->ShadowDraw(transform_,viewProjection);
 }
 
 void  Ground::Debug() {

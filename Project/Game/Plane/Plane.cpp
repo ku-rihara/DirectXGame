@@ -44,8 +44,8 @@ void Plane::Draw(ViewProjection& viewProjection) {
 
 void Plane::Draws(ViewProjection& viewProjection) {
     viewProjection;
-    objct3D_->ShadowDraw();
-    gobjct3D_->ShadowDraw();
+    objct3D_->ShadowDraw(transform_, viewProjection);
+    gobjct3D_->ShadowDraw(gtransform_, viewProjection);
 }
 
 

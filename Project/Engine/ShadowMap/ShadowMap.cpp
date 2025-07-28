@@ -9,6 +9,7 @@
 #include "Lighrt/DirectionalLight.h"
 #include "Lighrt/Light.h"
 #include "Pipeline/ShadowMapPipeline.h"
+#include <imgui.h>
 
 ShadowMap* ShadowMap::GetInstance() {
     static ShadowMap instance;
@@ -21,9 +22,9 @@ void ShadowMap::Init(DirectXCommon* dxCommon) {
     dsvManager_ = DsvManager::GetInstance();
     pipeline_   = std::make_unique<ShadowMapPipeline>();
 
-    shadowMapWidth_  = 2048; // 高解像度のシャドウマップ
+    shadowMapWidth_  = 2048;
     shadowMapHeight_ = 2048;
-    lightDistance_   = 50.0f;
+    lightDistance_   = 1.0f;
 
     // パイプライン初期化
     pipeline_->Init(dxCommon_);
@@ -64,18 +65,18 @@ void ShadowMap::CreateConstantBuffer() {
     transformData_->lightDirection = Vector4::ZeroVector();
 
     // world
-    worldMatrixResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(Matrix4x4));
+    worldMatrixResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(WorldMatrixData));
     hr                   = worldMatrixResource_->Map(0, &readRange, reinterpret_cast<void**>(&worldMatrixData_));
     if (FAILED(hr)) {
         OutputDebugStringA("ShadowMap WorldMatrix Map failed.\n");
     }
 
     // 初期化
-    *worldMatrixData_ = MakeIdentity4x4();
+    worldMatrixData_->world_ = MakeIdentity4x4();
 }
 
 void ShadowMap::CreateShadowMapResource(uint32_t width, uint32_t height) {
-    // リソース設定
+    // デプスバッファのみでシャドウマップを実装
     D3D12_RESOURCE_DESC resourceDesc{};
     resourceDesc.Dimension          = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
     resourceDesc.Width              = width;
@@ -103,7 +104,7 @@ void ShadowMap::CreateShadowMapResource(uint32_t width, uint32_t height) {
         &heapProperties,
         D3D12_HEAP_FLAG_NONE,
         &resourceDesc,
-        D3D12_RESOURCE_STATE_DEPTH_WRITE, // 初期状態を明確に設定
+        D3D12_RESOURCE_STATE_DEPTH_WRITE,
         &clearValue,
         IID_PPV_ARGS(&shadowMapResource_));
 
@@ -142,20 +143,40 @@ void ShadowMap::CreateDSVHandle() {
 }
 
 void ShadowMap::UpdateLightMatrix() {
-    // ライトの情報を取得
-    Vector3 lightDir = Light::GetInstance()->GetDirectionalLight()->GetDirection();
-    Vector3 lightPos = Vector3(0, lightDistance_, 0) - lightDir * lightDistance_;
+    // カメラの設定値（元のコードの _eye, _target, _up に相当）
+    Vector3 eye(0.0f, 15.0f, -25.0f);
+    Vector3 target(0.0f, 10.0f, 0.0f);
+    Vector3 up(0.0f, 1.0f, 0.0f);
 
-    // ライトのビュー行列とプロジェクション行列
-    Matrix4x4 lightViewMatrix       = MakeRootAtMatrix(lightPos, Vector3::ZeroVector(), Vector3::ToUp());
-    Matrix4x4 lightProjectionMatrix = MakeOrthographicMatrix(-40.0f, 40.0f, -40.0f, 40.0f, 1.0f, 100.0f);
+    // カメラ位置を設定
+    transformData_->cameraPosition = eye;
 
-    // 定数バッファの更新
-    transformData_->cameraPosition = Light::GetInstance()->GetWorldCameraPos();
-    transformData_->lightCamera    = lightViewMatrix * lightProjectionMatrix;
-    transformData_->lightDirection = Vector4(lightDir.x, lightDir.y, lightDir.z, 0.0f);
+    // ライトの方向ベクトル（正規化済み）
+    Vector3 lightDirection=Light::GetInstance()->GetDirectionalLight()->GetDirection();
+    lightDirection                 = (lightDirection).Normalize();
+    transformData_->lightDirection = Vector4(lightDirection.x, lightDirection.y, lightDirection.z, 0.0f);
+
+    // カメラアーム長（視点から注視点の長さ）を計算
+    Vector3 armVector = target - eye;
+    float armLength   =(armVector).Length();
+
+    // ライト位置を計算
+    // target + normalize(lightDirection) * armLength
+    Vector3 lightPos = target + lightDirection * armLength;
+
+    // ライトカメラのビュー行列を作成
+    Matrix4x4 lightView = MakeRootAtMatrix(lightPos, target, up);
+
+    // 正射影行列を作成（40x40の範囲、near=1.0f, far=100.0f）
+    Matrix4x4 lightProjection = MakeOrthographicMatrix(
+        -20.0f, 20.0f, // left, right (40/2 = 20)
+        20.0f, -20.0f, // top, bottom
+        1.0f, 100.0f // near, far
+    );
+
+    // ライトカメラ行列（ビュー行列 × 投影行列）を設定
+    transformData_->lightCamera = lightView * lightProjection;
 }
-
 void ShadowMap::TransitionResourceState(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES newState) {
     if (currentShadowMapState_ != newState) {
         D3D12_RESOURCE_BARRIER barrier{};
@@ -179,7 +200,7 @@ void ShadowMap::PreDraw() {
     // シャドウマップリソースの状態遷移
     TransitionResourceState(commandList, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
-    // レンダーターゲットの設定
+    // デプスバッファのみを設定
     commandList->OMSetRenderTargets(0, nullptr, FALSE, &shadowMapDsvHandle_);
 
     // 深度バッファのクリア
@@ -189,14 +210,35 @@ void ShadowMap::PreDraw() {
     commandList->RSSetViewports(1, &shadowMapViewport_);
     commandList->RSSetScissorRects(1, &shadowMapScissorRect_);
 }
-
 void ShadowMap::PostDraw() {
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
-    // シャドウマップリソースの状態遷移（シェーダーリソースに戻す）
+    // シャドウマップリソースの状態遷移
     TransitionResourceState(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 }
 
+void ShadowMap::DebugImGui() {
+    if (ImGui::TreeNode("ShadowMap Debug")) {
+        ImGui::DragFloat("Light Distance", &lightDistance_, 1.0f, 1.0f, 100.0f);
+
+        Vector3 lightDir = Light::GetInstance()->GetDirectionalLight()->GetDirection();
+        ImGui::Text("Light Direction: (%.2f, %.2f, %.2f)", lightDir.x, lightDir.y, lightDir.z);
+
+        Vector3 lightPos = Vector3::ZeroVector() - lightDir * lightDistance_;
+        ImGui::Text("Light Position: (%.2f, %.2f, %.2f)", lightPos.x, lightPos.y, lightPos.z);
+
+        // 投影行列のパラメータ調整
+        static float orthoSize = 40.0f;
+        static float nearPlane = 1.0f;
+        static float farPlane  = 100.0f;
+
+        if (ImGui::DragFloat("Ortho Size", &orthoSize, 1.0f, 5.0f, 100.0f)) {
+            // 投影行列を再計算
+        }
+
+        ImGui::TreePop();
+    }
+}
 
 void ShadowMap::Finalize() {
     if (vertexResource_) {

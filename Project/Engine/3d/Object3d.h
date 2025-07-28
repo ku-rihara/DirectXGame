@@ -33,7 +33,7 @@ public:
     void CreateWVPResource();
     void CreateShadowMap();
     void CreateMaterialResource() override;
-    void ShadowDraw();
+    void ShadowDraw(const WorldTransform& worldTransform, const ViewProjection& viewProjection);
 
 private:
 

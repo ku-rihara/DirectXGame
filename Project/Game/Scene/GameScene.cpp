@@ -9,6 +9,8 @@
 #include "Lighrt/Light.h"
 #include "Scene/Manager/SceneManager.h"
 
+#include"ShadowMap/ShadowMap.h"
+
 #include <imgui.h>
 
 GameScene::GameScene() {}
@@ -112,6 +114,7 @@ void GameScene::Debug() {
     monsterBall_->Debug();
     plane_->Debug();
     skuBox_->Debug();
+    ShadowMap::GetInstance()->DebugImGui();
 
     ImGui::End();
 

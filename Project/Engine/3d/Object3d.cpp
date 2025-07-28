@@ -48,8 +48,6 @@ void Object3d::Draw(const WorldTransform& worldTransform, const ViewProjection& 
     wvpDate_->WVP                   = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
     wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
 
-    // 影の更新
-
     Object3DPiprline::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
 
     model_->Draw(wvpResource_, *shadowMap_, material_, textureHandle);
@@ -72,20 +70,19 @@ void Object3d::DrawAnimation(const WorldTransform& worldTransform, const ViewPro
     SkinningObject3DPipeline::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
     model_->DrawAnimation(wvpResource_, *shadowMap_, material_, skinCluster, textureHandle);
 
-    ShadowDraw();
 }
 
-void Object3d::ShadowDraw() {
-
-    /* if (!isShadow_) {
-         return;
-     }*/
-
+void Object3d::ShadowDraw(const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
     if (!model_) {
         return;
     }
+    viewProjection;
+    // ワールド行列のみを設定
+    wvpDate_->World = worldTransform.matWorld_;
+    wvpDate_->WVP                   = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+    wvpDate_->WorldInverseTranspose = MakeIdentity4x4();
 
-    // モデルの影描画を呼び出し
+    shadowMap_->SetWorldMatrix(worldTransform.matWorld_);
     model_->DrawForShadowMap(wvpResource_, *shadowMap_);
 }
 

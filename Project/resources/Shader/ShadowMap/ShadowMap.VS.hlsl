@@ -25,11 +25,11 @@ ShadowVertexOutput main(ShadowVertexInput input)
 {
     ShadowVertexOutput output;
     
-    // ワールド座標に変換
-    float4 worldPosition = mul(input.position, gShadowTransformMatrix.World);
+      // ワールド座標に変換
+    float4 worldPos = mul(gShadowTransformMatrix.World, input.position);
     
-    // ライト視点でのクリップ座標に変換
-    output.position = mul(worldPosition, gShadowTransformBuffer.lightCamera);
+    // ライトカメラ座標系に変換
+    output.position = mul(gShadowTransformBuffer.lightCamera, worldPos);
     
     return output;
 }

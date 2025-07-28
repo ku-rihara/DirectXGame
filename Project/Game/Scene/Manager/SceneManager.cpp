@@ -6,12 +6,12 @@
 
 // シングルトンインスタンスの取得
 SceneManager* SceneManager::GetInstance() {
-	static SceneManager instance; // 静的インスタンス
+	static SceneManager instance; 
 	return &instance;
 }
 
 SceneManager::~SceneManager() {
-	// unique_ptrによる自動解放
+	
 }
 
 ///==============================================

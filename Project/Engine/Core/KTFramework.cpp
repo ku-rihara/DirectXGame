@@ -43,8 +43,8 @@ void KTFramework::Run() {
 
         Update(); /// 更新
 
-        ShadowMap::GetInstance()->PreDraw();
         ShadowMap::GetInstance()->UpdateLightMatrix();
+        ShadowMap::GetInstance()->PreDraw();
         DrawShadow();
         ShadowMap::GetInstance()->PostDraw();
 
