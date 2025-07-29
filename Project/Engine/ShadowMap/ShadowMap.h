@@ -14,6 +14,7 @@ class SrvManager;
 class DsvManager;
 class ShadowMapPipeline;
 class DirectXCommon;
+class ViewProjection;
 
 class ShadowMap {
 private:
@@ -41,6 +42,8 @@ public:
     void DebugImGui();
 
 private:
+    Vector3 GetLightDirectionAndPosition();
+    void SetLightOrientation(const Vector3& lightDirection);
     void TransitionResourceState(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES newState);
 
 private:
@@ -79,6 +82,9 @@ private:
 
     Vector4 lightDirection_;
     Vector3 cameraPosition_;
+
+    std::unique_ptr<ViewProjection> lightViewProjection_;
+    Vector3 targetPos_;
 
 public:
     // Getter methods

@@ -303,7 +303,7 @@ void Model::DrawForShadowMap(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource,
     commandList->SetGraphicsRootConstantBufferView(1, shadowMap.GetVertexResource()->GetGPUVirtualAddress());
 
     // 描画コール
-    commandList->DrawIndexedInstanced(static_cast<UINT>(modelData_.indices.size()), 1, 0, 0, 0);
+    commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
 }
 
 void Model::PreDraw(ID3D12GraphicsCommandList* commandList) {

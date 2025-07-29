@@ -1,5 +1,6 @@
 #include "ShadowMap.h"
 #include "3d/Model.h"
+#include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
 #include "base/DsvManager.h"
 #include "base/SrvManager.h"
@@ -25,6 +26,11 @@ void ShadowMap::Init(DirectXCommon* dxCommon) {
     shadowMapWidth_  = 1024;
     shadowMapHeight_ = 1024;
     lightDistance_   = 1.0f;
+    targetPos_       = Vector3::ZeroVector();
+
+    lightViewProjection_ = std::make_unique<ViewProjection>();
+    lightViewProjection_->Init();
+    lightViewProjection_->translation_ = Vector3::ZeroVector();
 
     // パイプライン初期化
     pipeline_->Init(dxCommon_);
@@ -130,36 +136,29 @@ void ShadowMap::CreateDSVHandle() {
 }
 
 void ShadowMap::UpdateLightMatrix() {
-    Vector3 target(0.0f, 0.0f, 0.0f);
-    Vector3 up(0.0f, 1.0f, 0.0f);
+    // ライト情報の取得と位置計算
+    Vector3 lightDirection = GetLightDirectionAndPosition();
 
-    // ライトの方向ベクトル
+    // ライトの向きを設定
+    SetLightOrientation(lightDirection);
+
+    // ViewProjectionの行列を更新
+    lightViewProjection_->UpdateMatrix();
+    transformData_->lightCamera = lightViewProjection_->matView_ * lightViewProjection_->matProjection_;
+}
+
+Vector3 ShadowMap::GetLightDirectionAndPosition() {
+    // ライトの方向ベクトルを取得・正規化
     Vector3 lightDirection = Light::GetInstance()->GetDirectionalLight()->GetDirection();
     lightDirection         = lightDirection.Normalize();
     lightDirection_        = Vector4(lightDirection.x, lightDirection.y, lightDirection.z, 0.0f);
 
-    // カメラアーム（シーンの中心からカメラまでの距離）
-    Vector3 armVector = target - cameraPosition_;
-    float armLength   = armVector.Length();
-    armLength;
-  
+    // ライト位置を計算して設定
+    lightViewProjection_->translation_ = targetPos_ - lightDirection * lightDistance_;
 
-    // ライト位置を計算（ライト方向の逆方向に配置）
-     Vector3 lightPos = target - lightDirection * lightDistance_;
-
-    // ライトカメラのビュー行列を作成
-    Matrix4x4 lightView =MakeRootAtMatrix(lightPos, target, up);
-
-    // 正射影行列を作成（シーン全体を含むサイズに調整）
-    float orthoSize           = 30.0f; 
-    float nearPlane           = 1.0f;
-    float farPlane            = 100.0f;
-    Matrix4x4 lightProjection = MakeOrthographicMatrix(
-        -orthoSize, orthoSize, orthoSize, -orthoSize, nearPlane, farPlane);
-
-    // ライトカメラ行列（ビュー行列 × プロジェクション行列）
-    transformData_->lightCamera = lightView * lightProjection;
+    return lightDirection;
 }
+
 void ShadowMap::TransitionResourceState(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES newState) {
     if (currentShadowMapState_ != newState) {
         D3D12_RESOURCE_BARRIER barrier{};
@@ -173,6 +172,17 @@ void ShadowMap::TransitionResourceState(ID3D12GraphicsCommandList* commandList, 
         currentShadowMapState_ = newState;
     }
 }
+
+void ShadowMap::SetLightOrientation(const Vector3& lightDirection) {
+    // ライトがターゲットを向くための回転を計算
+    Vector3 forward = (targetPos_ - lightViewProjection_->translation_).Normalize();
+
+    lightDirection;
+    lightViewProjection_->rotation_.y = atan2f(forward.x, forward.z);
+    lightViewProjection_->rotation_.x = -asinf(forward.y);
+    lightViewProjection_->rotation_.z = 0.0f;
+}
+
 
 void ShadowMap::PreDraw() {
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
@@ -205,7 +215,7 @@ void ShadowMap::DebugImGui() {
     if (ImGui::TreeNode("ShadowMap Debug")) {
         ImGui::DragFloat3("CameraPos", &cameraPosition_.x, 1.0f, 1.0f, 100.0f);
         ImGui::DragFloat("lightDistance", &lightDistance_, 1.0f, 1.0f, 100.0f);
-      
+
         ImGui::TreePop();
     }
 }

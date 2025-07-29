@@ -77,10 +77,7 @@ void Object3d::ShadowDraw(const WorldTransform& worldTransform, const ViewProjec
         return;
     }
     viewProjection;
-    // ワールド
-    wvpDate_->World                 = worldTransform.matWorld_;
-    wvpDate_->WVP                   = MakeIdentity4x4(); // シャドウマップでは使用しない
-    wvpDate_->WorldInverseTranspose = MakeIdentity4x4();
+    worldTransform;
 
     model_->DrawForShadowMap(wvpResource_, *shadowMap_);
 }
