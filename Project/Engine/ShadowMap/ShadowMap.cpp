@@ -2,6 +2,7 @@
 #include "3d/Model.h"
 #include "3d/WorldTransform.h"
 #include "base/DsvManager.h"
+#include "base/RtvManager.h"
 #include "base/SrvManager.h"
 #include "base/WinApp.h"
 #include "Dx/DirectXCommon.h"
@@ -33,6 +34,7 @@ void ShadowMap::Init(DirectXCommon* dxCommon) {
     CreateConstantBuffer();
     CreateShadowMapResource(shadowMapWidth_, shadowMapHeight_);
     CreateSRVHandle();
+    CreateRTVHandle();
     CreateDSVHandle();
 
     // ビューポートとシザー矩形の設定
@@ -74,8 +76,45 @@ void ShadowMap::CreateConstantBuffer() {
     // 初期化
     worldMatrixData_->world_ = MakeIdentity4x4();
 }
-
+// ShadowMap.cpp の CreateShadowMapResource() を更新
 void ShadowMap::CreateShadowMapResource(uint32_t width, uint32_t height) {
+    // ★デバッグ用にカラーバッファも作成
+    // カラーバッファリソース作成
+    D3D12_RESOURCE_DESC colorResourceDesc{};
+    colorResourceDesc.Dimension          = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+    colorResourceDesc.Width              = width;
+    colorResourceDesc.Height             = height;
+    colorResourceDesc.DepthOrArraySize   = 1;
+    colorResourceDesc.MipLevels          = 1;
+    colorResourceDesc.Format             = DXGI_FORMAT_R8G8B8A8_UNORM;
+    colorResourceDesc.SampleDesc.Count   = 1;
+    colorResourceDesc.SampleDesc.Quality = 0;
+    colorResourceDesc.Layout             = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+    colorResourceDesc.Flags              = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
+
+    D3D12_CLEAR_VALUE colorClearValue{};
+    colorClearValue.Format   = DXGI_FORMAT_R8G8B8A8_UNORM;
+    colorClearValue.Color[0] = 0.0f; // R
+    colorClearValue.Color[1] = 0.0f; // G
+    colorClearValue.Color[2] = 0.0f; // B
+    colorClearValue.Color[3] = 1.0f; // A
+
+    D3D12_HEAP_PROPERTIES heapProperties{};
+    heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
+
+    // ★カラーバッファリソース生成
+    HRESULT hr = dxCommon_->GetDevice()->CreateCommittedResource(
+        &heapProperties,
+        D3D12_HEAP_FLAG_NONE,
+        &colorResourceDesc,
+        D3D12_RESOURCE_STATE_RENDER_TARGET,
+        &colorClearValue,
+        IID_PPV_ARGS(&shadowMapColorResource_));
+
+    if (FAILED(hr)) {
+        OutputDebugStringA("Failed to create shadow map color resource.\n");
+    }
+
     // デプスバッファのみでシャドウマップを実装
     D3D12_RESOURCE_DESC resourceDesc{};
     resourceDesc.Dimension          = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
@@ -95,12 +134,8 @@ void ShadowMap::CreateShadowMapResource(uint32_t width, uint32_t height) {
     clearValue.DepthStencil.Depth   = 1.0f;
     clearValue.DepthStencil.Stencil = 0;
 
-    // ヒープ設定
-    D3D12_HEAP_PROPERTIES heapProperties{};
-    heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
-
     // シャドウマップリソース生成
-    HRESULT hr = dxCommon_->GetDevice()->CreateCommittedResource(
+    hr = dxCommon_->GetDevice()->CreateCommittedResource(
         &heapProperties,
         D3D12_HEAP_FLAG_NONE,
         &resourceDesc,
@@ -143,38 +178,37 @@ void ShadowMap::CreateDSVHandle() {
 }
 
 void ShadowMap::UpdateLightMatrix() {
-    // カメラの設定値（元のコードの _eye, _target, _up に相当）
-    Vector3 eye(0.0f, 15.0f, -25.0f);
+    /* Light::GetInstance()->GetWorldCameraPos()*/
+    // カメラの設定値
+    Vector3 eye(0.0f, 20.0f, -25.0f);
     Vector3 target(0.0f, 10.0f, 0.0f);
     Vector3 up(0.0f, 1.0f, 0.0f);
 
     // カメラ位置を設定
     transformData_->cameraPosition = eye;
 
-    // ライトの方向ベクトル（正規化済み）
-    Vector3 lightDirection=Light::GetInstance()->GetDirectionalLight()->GetDirection();
+    // ライトの方向ベクトル
+    Vector3 lightDirection         = Light::GetInstance()->GetDirectionalLight()->GetDirection();
     lightDirection                 = (lightDirection).Normalize();
     transformData_->lightDirection = Vector4(lightDirection.x, lightDirection.y, lightDirection.z, 0.0f);
 
-    // カメラアーム長（視点から注視点の長さ）を計算
+    // カメラアーム
     Vector3 armVector = target - eye;
-    float armLength   =(armVector).Length();
+    float armLength   = (armVector).Length();
 
     // ライト位置を計算
-    // target + normalize(lightDirection) * armLength
     Vector3 lightPos = target + lightDirection * armLength;
 
     // ライトカメラのビュー行列を作成
     Matrix4x4 lightView = MakeRootAtMatrix(lightPos, target, up);
 
-    // 正射影行列を作成（40x40の範囲、near=1.0f, far=100.0f）
+    // 正射影行列を作成
     Matrix4x4 lightProjection = MakeOrthographicMatrix(
-        -20.0f, 20.0f, // left, right (40/2 = 20)
-        20.0f, -20.0f, // top, bottom
-        1.0f, 100.0f // near, far
-    );
+        -20.0f, 20.0f,
+        20.0f, -20.0f,
+        1.0f, 100.0f);
 
-    // ライトカメラ行列（ビュー行列 × 投影行列）を設定
+    // ライトカメラ行列
     transformData_->lightCamera = lightView * lightProjection;
 }
 void ShadowMap::TransitionResourceState(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES newState) {
@@ -190,7 +224,17 @@ void ShadowMap::TransitionResourceState(ID3D12GraphicsCommandList* commandList, 
         currentShadowMapState_ = newState;
     }
 }
+void ShadowMap::CreateRTVHandle() {
 
+    shadowMapRtvIndex_  = RtvManager::GetInstance()->Allocate();
+    shadowMapRtvHandle_ = RtvManager::GetInstance()->GetCPUDescriptorHandle(shadowMapRtvIndex_);
+
+    D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+    rtvDesc.Format        = DXGI_FORMAT_R8G8B8A8_UNORM;
+    rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+
+    RtvManager::GetInstance()->CreateRTV(shadowMapRtvIndex_, shadowMapColorResource_.Get(), &rtvDesc);
+}
 void ShadowMap::PreDraw() {
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
@@ -200,10 +244,13 @@ void ShadowMap::PreDraw() {
     // シャドウマップリソースの状態遷移
     TransitionResourceState(commandList, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
-    // デプスバッファのみを設定
-    commandList->OMSetRenderTargets(0, nullptr, FALSE, &shadowMapDsvHandle_);
+    // ★デバッグ用：カラーバッファとデプスバッファの両方を設定
+    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = shadowMapRtvHandle_;
+    commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, &shadowMapDsvHandle_);
 
-    // 深度バッファのクリア
+    // ★カラーバッファとデプスバッファをクリア
+    float clearColor[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+    commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
     commandList->ClearDepthStencilView(shadowMapDsvHandle_, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
     // ビューポートとシザー矩形の設定

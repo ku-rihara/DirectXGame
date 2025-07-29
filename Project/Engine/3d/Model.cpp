@@ -296,7 +296,7 @@ void Model::DrawForShadowMap(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource,
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
     commandList->IASetIndexBuffer(&indexBufferView_);
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
+    wvpResource;
     // b0: ワールド行列
     commandList->SetGraphicsRootConstantBufferView(0, wvpResource->GetGPUVirtualAddress());
     // b1: ライト行列

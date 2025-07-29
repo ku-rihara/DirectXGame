@@ -38,6 +38,8 @@ public:
 
     void DebugImGui();
 
+    void CreateRTVHandle();
+
 private:
     DirectXCommon* dxCommon_;
     SrvManager* srvManager_;
@@ -77,10 +79,15 @@ private:
     WorldMatrixData* worldMatrixData_;
 
     void TransitionResourceState(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES newState);
+    // ShadowMap.h のprivateメンバーに追加
+    Microsoft::WRL::ComPtr<ID3D12Resource> shadowMapColorResource_;
+    D3D12_CPU_DESCRIPTOR_HANDLE shadowMapRtvHandle_;
+    uint32_t shadowMapRtvIndex_;
 
 public:
     // Getter methods
     ID3D12Resource* GetVertexResource() const { return vertexResource_.Get(); }
+    ID3D12Resource* GetWorldMatrixResource() const { return worldMatrixResource_.Get(); }
     ID3D12Resource* GetShadowMapResource() const { return shadowMapResource_.Get(); }
     D3D12_GPU_DESCRIPTOR_HANDLE GetShadowMapSrvGPUHandle() const { return shadowMapSrvGPUHandle_; }
     D3D12_CPU_DESCRIPTOR_HANDLE GetShadowMapDsvHandle() const { return shadowMapDsvHandle_; }
