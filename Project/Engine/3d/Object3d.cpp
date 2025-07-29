@@ -77,12 +77,16 @@ void Object3d::ShadowDraw(const WorldTransform& worldTransform, const ViewProjec
         return;
     }
     viewProjection;
+    // シャドウマップ生成時は通常のビュープロジェクション行列は使わない
     // ワールド行列のみを設定
     wvpDate_->World = worldTransform.matWorld_;
-    wvpDate_->WVP                   = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+    // WVPは使わないが、シェーダーで参照される可能性があるので単位行列を設定
+    wvpDate_->WVP                   = MakeIdentity4x4();
     wvpDate_->WorldInverseTranspose = MakeIdentity4x4();
 
-    shadowMap_->SetWorldMatrix(worldTransform.matWorld_);
+    // シャドウマップにワールド行列は不要（ライトカメラ行列のみ使用）
+    // shadowMap_->SetWorldMatrix(worldTransform.matWorld_); // この行は削除
+
     model_->DrawForShadowMap(wvpResource_, *shadowMap_);
 }
 

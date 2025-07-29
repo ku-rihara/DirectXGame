@@ -20,7 +20,7 @@ void ShadowMapPipeline::Init(DirectXCommon* dxCommon) {
 void ShadowMapPipeline::CreateGraphicsPipeline() {
     HRESULT hr = 0;
 
-    // Sampler 設定（この段階では未使用なので削除も可）
+    // Sampler 設定
     staticSamplers_[0].Filter           = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
     staticSamplers_[0].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
     staticSamplers_[0].AddressV         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
@@ -32,13 +32,23 @@ void ShadowMapPipeline::CreateGraphicsPipeline() {
 
     CreateRootSignature();
 
-    D3D12_INPUT_ELEMENT_DESC inputElementDescs[1] = {};
+    D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
     inputElementDescs[0].SemanticName             = "POSITION";
     inputElementDescs[0].SemanticIndex            = 0;
     inputElementDescs[0].Format                   = DXGI_FORMAT_R32G32B32_FLOAT;
     inputElementDescs[0].InputSlot                = 0;
     inputElementDescs[0].AlignedByteOffset        = D3D12_APPEND_ALIGNED_ELEMENT;
     inputElementDescs[0].InputSlotClass           = D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;
+
+    inputElementDescs[1].SemanticName      = "TEXCOORD";
+    inputElementDescs[1].SemanticIndex     = 0;
+    inputElementDescs[1].Format            = DXGI_FORMAT_R32G32_FLOAT;
+    inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+
+    inputElementDescs[2].SemanticName      = "NORMAL";
+    inputElementDescs[2].SemanticIndex     = 0;
+    inputElementDescs[2].Format            = DXGI_FORMAT_R32G32B32_FLOAT;
+    inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
     D3D12_INPUT_LAYOUT_DESC inputLayoutDesc = {};
     inputLayoutDesc.pInputElementDescs      = inputElementDescs;
@@ -49,34 +59,23 @@ void ShadowMapPipeline::CreateGraphicsPipeline() {
     depthStencilDesc_.DepthFunc      = D3D12_COMPARISON_FUNC_LESS_EQUAL;
     depthStencilDesc_.StencilEnable  = false;
 
-    // 頂点シェーダーコンパイル
     vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/ShadowMap/ShadowMap.VS.hlsl", L"vs_6_0");
     assert(vertexShaderBlob_ != nullptr);
 
-    // ★デバッグ用ピクセルシェーダーをコンパイル
-    pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/ShadowMap/ShadowMap.PS.hlsl", L"ps_6_0");
-    assert(pixelShaderBlob_ != nullptr);
-
-    // ★BlendStateを適切に設定
-    D3D12_BLEND_DESC blendDesc                      = {};
-    blendDesc.AlphaToCoverageEnable                 = false;
-    blendDesc.IndependentBlendEnable                = false;
-    blendDesc.RenderTarget[0].BlendEnable           = false;
-    blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+    pixelShaderBlob_ = nullptr;
 
     D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineDesc = {};
     pipelineDesc.pRootSignature                     = rootSignature_.Get();
     pipelineDesc.InputLayout                        = inputLayoutDesc;
     pipelineDesc.VS                                 = {vertexShaderBlob_->GetBufferPointer(), vertexShaderBlob_->GetBufferSize()};
-    pipelineDesc.PS                                 = {pixelShaderBlob_->GetBufferPointer(), pixelShaderBlob_->GetBufferSize()}; // ★PSを設定
+    pipelineDesc.PS                                 = {}; // 空にする
     pipelineDesc.RasterizerState.FillMode           = D3D12_FILL_MODE_SOLID;
     pipelineDesc.RasterizerState.CullMode           = D3D12_CULL_MODE_BACK;
     pipelineDesc.RasterizerState.DepthClipEnable    = true;
 
     pipelineDesc.DepthStencilState     = depthStencilDesc_;
-    pipelineDesc.BlendState            = blendDesc; // ★BlendStateを設定
-    pipelineDesc.NumRenderTargets      = 1; // ★カラー出力ありに変更
-    pipelineDesc.RTVFormats[0]         = DXGI_FORMAT_R8G8B8A8_UNORM; // ★カラーフォーマット設定
+    pipelineDesc.BlendState            = {}; // 不要なBlendStateを初期化
+    pipelineDesc.NumRenderTargets      = 0; // カラーバッファ出力なし
     pipelineDesc.DSVFormat             = DXGI_FORMAT_D32_FLOAT; // 深度のみ
     pipelineDesc.SampleMask            = D3D12_DEFAULT_SAMPLE_MASK;
     pipelineDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
@@ -85,6 +84,7 @@ void ShadowMapPipeline::CreateGraphicsPipeline() {
     hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&pipelineDesc, IID_PPV_ARGS(&pipelineState_));
     assert(SUCCEEDED(hr));
 }
+
 void ShadowMapPipeline::CreateRootSignature() {
     HRESULT hr = 0;
 
@@ -103,7 +103,7 @@ void ShadowMapPipeline::CreateRootSignature() {
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature = {};
     descriptionRootSignature.pParameters               = rootParams; // ルートパラメーターの配列
     descriptionRootSignature.NumParameters             = _countof(rootParams); // 配列の長さ
-    descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+    descriptionRootSignature.Flags                     = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
     hr = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
     if (FAILED(hr)) {

@@ -3,10 +3,12 @@
 #include "ShadowMapData.h"
 #include <d3d12.h>
 #include <functional>
+#include <Matrix4x4.h>
 #include <memory>
 #include <vector>
 #include <wrl/client.h>
-#include <Matrix4x4.h>
+#include "Vector4.h"
+#include "Vector3.h"
 
 class SrvManager;
 class DsvManager;
@@ -38,7 +40,8 @@ public:
 
     void DebugImGui();
 
-    void CreateRTVHandle();
+private:
+    void TransitionResourceState(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES newState);
 
 private:
     DirectXCommon* dxCommon_;
@@ -74,20 +77,12 @@ private:
     D3D12_GPU_DESCRIPTOR_HANDLE depthTextureGPUSrvHandle_;
     D3D12_CPU_DESCRIPTOR_HANDLE depthTextureCPUSrvHandle_;
 
-    // ワールド行列用の定数バッファリソース
-    Microsoft::WRL::ComPtr<ID3D12Resource> worldMatrixResource_;
-    WorldMatrixData* worldMatrixData_;
-
-    void TransitionResourceState(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES newState);
-    // ShadowMap.h のprivateメンバーに追加
-    Microsoft::WRL::ComPtr<ID3D12Resource> shadowMapColorResource_;
-    D3D12_CPU_DESCRIPTOR_HANDLE shadowMapRtvHandle_;
-    uint32_t shadowMapRtvIndex_;
+    Vector4 lightDirection_;
+    Vector3 cameraPosition_;
 
 public:
     // Getter methods
     ID3D12Resource* GetVertexResource() const { return vertexResource_.Get(); }
-    ID3D12Resource* GetWorldMatrixResource() const { return worldMatrixResource_.Get(); }
     ID3D12Resource* GetShadowMapResource() const { return shadowMapResource_.Get(); }
     D3D12_GPU_DESCRIPTOR_HANDLE GetShadowMapSrvGPUHandle() const { return shadowMapSrvGPUHandle_; }
     D3D12_CPU_DESCRIPTOR_HANDLE GetShadowMapDsvHandle() const { return shadowMapDsvHandle_; }
@@ -95,6 +90,5 @@ public:
     uint32_t GetShadowMapWidth() const { return shadowMapWidth_; }
     uint32_t GetShadowMapHeight() const { return shadowMapHeight_; }
     D3D12_RESOURCE_STATES GetCurrentState() const { return currentShadowMapState_; }
-    void SetWorldMatrix(Matrix4x4 m) { worldMatrixData_->world_ = m; }
     void SetLightCameraMatrix(Matrix4x4 m) { transformData_->lightCamera = m; }
 };

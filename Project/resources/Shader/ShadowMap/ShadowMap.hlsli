@@ -2,8 +2,6 @@
 struct ShadowTransformBuffer
 {
     float4x4 lightCamera;
-    float4 lightDirection;
-    float3 cameraPosition;
 };
 
 float CalculateShadow(float4 lightSpacePosition, Texture2D<float> ShadowMap, SamplerComparisonState shadowSampler)

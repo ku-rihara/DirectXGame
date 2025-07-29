@@ -19,7 +19,9 @@ VertexShaderOutput main(VertexShaderInput input)
     output.worldPosition = mul(input.position, gTransformationMatrix.World).xyz;
     output.texcoord = input.texcoord;
     
-    output.tpos = mul(gShadowTransformBuffer.lightCamera, output.position);
+    // 影用の座標計算を修正
+    float4 worldPos = mul(input.position, gTransformationMatrix.World);
+    output.tpos = mul(worldPos, gShadowTransformBuffer.lightCamera);
     
     return output;
 }

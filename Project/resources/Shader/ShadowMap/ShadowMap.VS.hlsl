@@ -21,7 +21,6 @@ struct TransformationMatrix
     float4x4 WorldInverseTranspose;
 };
 
-
 ConstantBuffer<TransformationMatrix> gTransformationMatrix : register(b0);
 ConstantBuffer<ShadowTransformBuffer> gShadowTransformBuffer : register(b1);
 
@@ -29,11 +28,11 @@ ShadowVertexOutput main(ShadowVertexInput input)
 {
     ShadowVertexOutput output;
     
-      // ワールド座標に変換
-    float4 worldPos = mul(input.position,gTransformationMatrix.World);
+    // ワールド座標に変換
+    float4 worldPos = mul(input.position, gTransformationMatrix.World);
     
     // ライトカメラ座標系に変換
     output.position = mul(worldPos, gShadowTransformBuffer.lightCamera);
-    
+  
     return output;
 }
