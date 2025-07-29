@@ -20,25 +20,24 @@ void ShadowMapPipeline::Init(DirectXCommon* dxCommon) {
 void ShadowMapPipeline::CreateGraphicsPipeline() {
     HRESULT hr = 0;
 
-    // Sampler 設定（この段階では未使用なので削除も可）
-    staticSamplers_[0].Filter           = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-    staticSamplers_[0].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
-    staticSamplers_[0].AddressV         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
-    staticSamplers_[0].AddressW         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
-    staticSamplers_[0].ComparisonFunc   = D3D12_COMPARISON_FUNC_LESS_EQUAL;
-    staticSamplers_[0].MaxLOD           = D3D12_FLOAT32_MAX;
-    staticSamplers_[0].ShaderRegister   = 0;
-    staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+    //// Sampler 設定（この段階では未使用なので削除も可）
+    //staticSamplers_[0].Filter           = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+    //staticSamplers_[0].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+    //staticSamplers_[0].AddressV         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+    //staticSamplers_[0].AddressW         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+    //staticSamplers_[0].ComparisonFunc   = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+    //staticSamplers_[0].MaxLOD           = D3D12_FLOAT32_MAX;
+    //staticSamplers_[0].ShaderRegister   = 0;
+    //staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
     CreateRootSignature();
 
+   // InputLayoutの設定を行う
     D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
     inputElementDescs[0].SemanticName             = "POSITION";
     inputElementDescs[0].SemanticIndex            = 0;
-    inputElementDescs[0].Format                   = DXGI_FORMAT_R32G32B32_FLOAT;
-    inputElementDescs[0].InputSlot                = 0;
+    inputElementDescs[0].Format                   = DXGI_FORMAT_R32G32B32A32_FLOAT;
     inputElementDescs[0].AlignedByteOffset        = D3D12_APPEND_ALIGNED_ELEMENT;
-    inputElementDescs[0].InputSlotClass           = D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;
 
     inputElementDescs[1].SemanticName      = "TEXCOORD";
     inputElementDescs[1].SemanticIndex     = 0;
@@ -105,6 +104,9 @@ void ShadowMapPipeline::CreateRootSignature() {
     descriptionRootSignature.pParameters               = rootParams; // ルートパラメーターの配列
     descriptionRootSignature.NumParameters             = _countof(rootParams); // 配列の長さ
     descriptionRootSignature.Flags                     = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+
+    descriptionRootSignature.NumStaticSamplers = 0;
+    descriptionRootSignature.pStaticSamplers   = nullptr;
 
     hr = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
     if (FAILED(hr)) {

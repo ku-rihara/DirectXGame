@@ -52,8 +52,8 @@ void Plane::Draws(ViewProjection& viewProjection) {
 void  Plane::Debug() {
 #ifdef _DEBUG
 	/// .obj
-    if (ImGui::CollapsingHeader("Plane")) {
-		ImGui::PushID("Plane");
+    if (ImGui::CollapsingHeader("Suzanne")) {
+		ImGui::PushID("Suzanne");
 		ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
 		ImGui::DragFloat3("Scale", &transform_.scale_.x, 0.1f);
 		objct3D_->material_.DebugImGui();
@@ -61,8 +61,8 @@ void  Plane::Debug() {
     }
 
 	/// .gltf
-	if (ImGui::CollapsingHeader("PlaneGltf")) {
-		ImGui::PushID("PlaneGltf");
+	if (ImGui::CollapsingHeader("Monster")) {
+		ImGui::PushID("Monster");
 		ImGui::DragFloat3("Position", &gtransform_.translation_.x, 0.1f);
 		ImGui::DragFloat3("Scale", &gtransform_.scale_.x, 0.1f);
 		gobjct3D_->material_.DebugImGui();

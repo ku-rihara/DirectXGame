@@ -3,7 +3,6 @@
 // class
 #include "utility/ParticleEditor/ParticleManager.h"
 
-
 // math
 #include "Frame/Frame.h"
 #include "Lighrt/Light.h"
