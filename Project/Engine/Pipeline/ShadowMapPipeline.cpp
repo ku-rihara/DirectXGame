@@ -20,7 +20,7 @@ void ShadowMapPipeline::Init(DirectXCommon* dxCommon) {
 void ShadowMapPipeline::CreateGraphicsPipeline() {
     HRESULT hr = 0;
 
-    // Sampler 設定
+    // Sampler 設定（この段階では未使用なので削除も可）
     staticSamplers_[0].Filter           = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
     staticSamplers_[0].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
     staticSamplers_[0].AddressV         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
@@ -56,7 +56,7 @@ void ShadowMapPipeline::CreateGraphicsPipeline() {
 
     depthStencilDesc_.DepthEnable    = true;
     depthStencilDesc_.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-    depthStencilDesc_.DepthFunc      = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+    depthStencilDesc_.DepthFunc      = D3D12_COMPARISON_FUNC_LESS;
     depthStencilDesc_.StencilEnable  = false;
 
     vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/ShadowMap/ShadowMap.VS.hlsl", L"vs_6_0");
@@ -76,6 +76,7 @@ void ShadowMapPipeline::CreateGraphicsPipeline() {
     pipelineDesc.DepthStencilState     = depthStencilDesc_;
     pipelineDesc.BlendState            = {}; // 不要なBlendStateを初期化
     pipelineDesc.NumRenderTargets      = 0; // カラーバッファ出力なし
+    pipelineDesc.RTVFormats[0]         = DXGI_FORMAT_UNKNOWN;
     pipelineDesc.DSVFormat             = DXGI_FORMAT_D32_FLOAT; // 深度のみ
     pipelineDesc.SampleMask            = D3D12_DEFAULT_SAMPLE_MASK;
     pipelineDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;

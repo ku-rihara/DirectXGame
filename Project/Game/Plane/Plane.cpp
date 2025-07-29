@@ -12,18 +12,18 @@ void Plane::Init() {
 	/// .obj
 	objct3D_.reset(Object3d::CreateModel("Suzanne.obj"));
 	transform_.Init();
-	transform_.translation_ = {-2.3f,-4.5f,-16.5f};
+	transform_.translation_ = {-0.0f,1.5f,-0.0f};
 	transform_.scale_ = {1, 1, 1};
 
 	/// .gltf
-	gobjct3D_.reset(Object3d::CreateModel("Plane.gltf"));
+	gobjct3D_.reset(Object3d::CreateModel("MonsterBall.obj"));
 	gtransform_.Init();
-	gtransform_.translation_ = { 2.3f,-4.5f,-16.5f };
+    gtransform_.translation_ = {5.0f, 1.5f, -0.0f};
 	gtransform_.scale_ = { 1, 1, 1 };
 	
 	/// rotate
 	transform_.rotation_ .y= 3.14f;
-	gtransform_.rotation_.y = 3.14f;
+	/*gtransform_.rotation_.y = 3.14f;*/
 
 	/// lighting
 	objct3D_->material_.materialData_->enableLighting = 0;

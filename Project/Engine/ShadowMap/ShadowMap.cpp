@@ -2,7 +2,6 @@
 #include "3d/Model.h"
 #include "3d/WorldTransform.h"
 #include "base/DsvManager.h"
-#include "base/RtvManager.h"
 #include "base/SrvManager.h"
 #include "base/WinApp.h"
 #include "Dx/DirectXCommon.h"
@@ -23,8 +22,8 @@ void ShadowMap::Init(DirectXCommon* dxCommon) {
     dsvManager_ = DsvManager::GetInstance();
     pipeline_   = std::make_unique<ShadowMapPipeline>();
 
-    shadowMapWidth_  = 512;
-    shadowMapHeight_ = 512;
+    shadowMapWidth_  = 1024;
+    shadowMapHeight_ = 1024;
     lightDistance_   = 1.0f;
 
     // パイプライン初期化
@@ -131,7 +130,7 @@ void ShadowMap::CreateDSVHandle() {
 }
 
 void ShadowMap::UpdateLightMatrix() {
-    Vector3 target(0.0f, 10.0f, 0.0f);
+    Vector3 target(0.0f, 0.0f, 0.0f);
     Vector3 up(0.0f, 1.0f, 0.0f);
 
     // ライトの方向ベクトル
