@@ -41,8 +41,7 @@ void Object3d::Draw(const WorldTransform& worldTransform, const ViewProjection& 
         return;
 
     ColorUpdate();
-    shadowMap_->UpdateLightMatrix();
-
+  
     // WVP行列の計算
     wvpDate_->World                 = worldTransform.matWorld_;
     wvpDate_->WVP                   = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;

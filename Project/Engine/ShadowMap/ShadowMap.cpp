@@ -25,12 +25,13 @@ void ShadowMap::Init(DirectXCommon* dxCommon) {
 
     shadowMapWidth_  = 1024;
     shadowMapHeight_ = 1024;
-    lightDistance_   = 15.0f;
+    lightDistance_   = 6.0f;
     targetPos_       = Vector3::ZeroVector();
 
     lightViewProjection_ = std::make_unique<ViewProjection>();
     lightViewProjection_->Init();
     lightViewProjection_->translation_ = Vector3::ZeroVector();
+    lightViewProjection_->projectionType_ = ViewProjection::ProjectionType::ORTHOGRAPHIC;
 
     // パイプライン初期化
     pipeline_->Init(dxCommon_);
@@ -213,7 +214,7 @@ void ShadowMap::PostDraw() {
 
 void ShadowMap::DebugImGui() {
     if (ImGui::TreeNode("ShadowMap Debug")) {
-        ImGui::DragFloat3("CameraPos", &cameraPosition_.x, 1.0f, 1.0f, 100.0f);
+        ImGui::DragFloat3("CameraPos", &targetPos_.x, 1.0f, 1.0f, 100.0f);
         ImGui::DragFloat("lightDistance", &lightDistance_, 1.0f, 1.0f, 100.0f);
 
         ImGui::TreePop();

@@ -13,6 +13,12 @@ struct ConstBufferDataViewProjection {
 
 class ViewProjection {
 public:
+    enum class ProjectionType {
+        PERSPECTIVE, // 透視投影
+        ORTHOGRAPHIC // 平行投影
+    };
+
+public:
     ViewProjection()  = default;
     ~ViewProjection() = default;
 
@@ -41,6 +47,12 @@ public:
     float aspectRatio_ = (float)16 / 9;
     float nearZ_       = 0.1f;
     float farZ_        = 1000.0f;
+
+    ProjectionType projectionType_ = ProjectionType::PERSPECTIVE;
+
+    // 平行投影用パラメータ
+    float orthoWidth_  = 20.0f;
+    float orthoHeight_ = 20.0f;
 
     // matrix
     Matrix4x4 matView_;
