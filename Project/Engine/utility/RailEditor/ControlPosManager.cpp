@@ -94,8 +94,6 @@ void ControlPosManager::LoadFromFile(const std::string& filename) {
 /// ImGuiでの処理
 ///=====================================================
 void ControlPosManager::ImGuiUpdate(const std::string& filename) {
-	// 色を緑系統に変更
-	//ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));      // 通常時の色（緑色）
 	
 	// 一意のスコープIDを設定
 	ImGui::PushID(filename.c_str());
@@ -106,16 +104,15 @@ void ControlPosManager::ImGuiUpdate(const std::string& filename) {
 		ImGui::SeparatorText("Current Positions");
 		for (size_t i = 0; i < movePosies_.size(); ++i) {
 			// 各制御点の表示と調整機能
-			ImGui::PushID(static_cast<int>(i)); // 一意のIDを設定
+			ImGui::PushID(static_cast<int>(i)); 
 			if (ImGui::DragFloat3("Edit Position", &movePosies_[i].x, 0.1f)) {
-				// 座標を調節
-				// 変更した場合、必要ならここで何かのイベントを呼び出せる
+				
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Remove")) {
 				RemovePoint(i);
 			}
-			ImGui::PopID(); // IDスコープを終了
+			ImGui::PopID();
 		}
 
 		// 座標追加用
@@ -150,8 +147,7 @@ void ControlPosManager::ImGuiUpdate(const std::string& filename) {
 
 	ImGui::PopID();
 
-	// 色のリセットをヘッダー処理終了後に行う
-	//ImGui::PopStyleColor();
+	
 }
 
 
@@ -160,7 +156,7 @@ void ControlPosManager::Draw(const ViewProjection& viewProjection) {
 	for (size_t i = 0; i < transforms_.size(); ++i) {
 		// 各制御点に対応するObject3dを描画
 		if (i < obj3ds_.size()) {
-			obj3ds_[i]->Draw(transforms_[i], viewProjection);  // 各制御点の位置を描画
+			obj3ds_[i]->Draw(transforms_[i], viewProjection);  
 		}
 	}
 }

@@ -148,7 +148,7 @@ void ShadowMap::UpdateLightMatrix() {
 }
 
 Vector3 ShadowMap::GetLightDirectionAndPosition() {
-    // ライトの方向ベクトルを取得・正規化
+    // ライトの方向ベクトルを取得
     Vector3 lightDirection = Light::GetInstance()->GetDirectionalLight()->GetDirection();
     lightDirection         = lightDirection.Normalize();
     lightDirection_        = Vector4(lightDirection.x, lightDirection.y, lightDirection.z, 0.0f);

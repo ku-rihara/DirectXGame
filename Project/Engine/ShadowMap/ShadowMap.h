@@ -60,7 +60,7 @@ private:
     uint32_t shadowMapDsvIndex_;
     uint32_t shadowMapSrvIndex_;
 
-    // リソース状態管理を追加
+    // リソース状態管理
     D3D12_RESOURCE_STATES currentShadowMapState_;
 
     // シャドウマップのサイズ
