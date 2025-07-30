@@ -130,6 +130,10 @@ void Player::Draw(const ViewProjection& viewProjection) {
     rightHand_->Draw(viewProjection);
 }
 
+void Player::ShadowDrawTest(const ViewProjection& viewProjection) {
+    headObj_->ShadowDraw(headTransform_, viewProjection);
+  }
+
 void Player::EffectDraw(const ViewProjection& viewProjection) {
     effects_->Draw(viewProjection);
 }

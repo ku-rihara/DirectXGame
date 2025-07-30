@@ -4,18 +4,19 @@
 /// 3d
 #include "3d/ModelManager.h"
 /// base
+#include "base/DsvManager.h"
 #include "base/RtvManager.h"
 #include "base/SkyBoxRenderer.h"
 #include "base/SrvManager.h"
 #include "base/TextureManager.h"
 #include "Dx/DirectXCommon.h"
 #include "Lighrt/Light.h"
-#include "PostEffect/PostEffectRenderer.h"
 #include "Pipeline/Line3DPipeline.h"
 #include "Pipeline/Object3DPiprline.h"
 #include "Pipeline/SkinningObject3DPipeline.h"
 #include "Pipeline/SpritePipeline.h"
-#include"base/DsvManager.h"
+#include "PostEffect/PostEffectRenderer.h"
+#include"ShadowMap/ShadowMap.h"
 /// audio,input
 #include "audio/Audio.h"
 #include "input/Input.h"
@@ -36,7 +37,7 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     std::string windowTitle = std::string(title);
     auto&& titleString      = ConvertString(windowTitle);
 
-    winApp_                 = std::make_unique<WinApp>();
+    winApp_ = std::make_unique<WinApp>();
     winApp_->MakeWindow(titleString.c_str(), width, height);
 
     // DirectX初期化
@@ -47,7 +48,7 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     rtvManager_ = RtvManager::GetInstance();
     rtvManager_->Init(directXCommon_);
 
-     // srvManager
+    // srvManager
     srvManager_ = SrvManager::GetInstance();
     srvManager_->Init(directXCommon_);
 
@@ -67,9 +68,12 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     skinningObject3DPipeline_ = SkinningObject3DPipeline::GetInstance();
     skinningObject3DPipeline_->Init(directXCommon_);
 
-    //
+    // skybox
     skyBoxRenderer_ = SkyBoxRenderer::GetInstance();
     skyBoxRenderer_->Init(directXCommon_);
+
+    shadowMap_ = ShadowMap::GetInstance();
+    shadowMap_->Init(directXCommon_);
 
     // OffScreen Renderer
     PostEffectRenderer_ = PostEffectRenderer::GetInstance();
@@ -128,6 +132,7 @@ void EngineCore::BeginFrame() {
 ///=======================================================================
 /// 　描画前処理
 ///========================================================================
+
 void EngineCore::PreRenderTexture() {
     directXCommon_->PreRenderTexture();
     srvManager_->PreDraw();

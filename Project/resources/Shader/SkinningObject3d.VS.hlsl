@@ -1,6 +1,5 @@
 #include"SkinningObject3d.hlsli"
 #include"ShadowMap/ShadowMap.hlsli"
-
 struct TransformationMatrix
 {
     float4x4 WVP;
@@ -10,7 +9,6 @@ struct TransformationMatrix
 
 ConstantBuffer<TransformationMatrix> gTransformationMatrix : register(b0);
 ConstantBuffer<ShadowTransformBuffer> gShadowTransformBuffer : register(b1);
-
 
 struct Well
 {
@@ -55,9 +53,8 @@ VertexShaderOutput main(VertexShaderInput input)
     output.worldPosition = mul(skinned.position, gTransformationMatrix.World).xyz;
     output.texcoord = input.texcoord;
     output.normal = normalize(mul(skinned.normal, (float3x3)gTransformationMatrix.WorldInverseTranspose));
-   
-    float4 worldPosition = mul(input.position, gTransformationMatrix.World);
-    output.lightSpacePosition = mul(worldPosition, gShadowTransformBuffer.lightCamera);
+    
+    output.tpos = mul(gShadowTransformBuffer.lightCamera, output.position);
     
     return output;
 }

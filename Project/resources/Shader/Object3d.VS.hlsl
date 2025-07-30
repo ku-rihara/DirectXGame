@@ -11,7 +11,6 @@ struct TransformationMatrix
 ConstantBuffer<TransformationMatrix> gTransformationMatrix : register(b0);
 ConstantBuffer<ShadowTransformBuffer> gShadowTransformBuffer : register(b1);
 
-
 VertexShaderOutput main(VertexShaderInput input)
 {
     VertexShaderOutput output;
@@ -20,7 +19,9 @@ VertexShaderOutput main(VertexShaderInput input)
     output.worldPosition = mul(input.position, gTransformationMatrix.World).xyz;
     output.texcoord = input.texcoord;
     
-    float4 worldPosition = mul(input.position, gTransformationMatrix.World);
-    output.lightSpacePosition = mul(worldPosition, gShadowTransformBuffer.lightCamera);
+    // 影用の座標計算を修正
+    float4 worldPos = mul(input.position, gTransformationMatrix.World);
+    output.tpos = mul(worldPos, gShadowTransformBuffer.lightCamera);
+    
     return output;
 }

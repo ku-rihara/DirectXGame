@@ -32,3 +32,7 @@ void Field::Update() {
 void Field::Draw(ViewProjection& viewProjection) {
     obj3d_->Draw(transform_, viewProjection);
 }
+
+void Field::ShadowDrawTest(ViewProjection& viewProjection) {
+    obj3d_->ShadowDraw(transform_, viewProjection);
+ }

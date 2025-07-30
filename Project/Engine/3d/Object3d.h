@@ -25,8 +25,7 @@ public:
     void Init();
     void ColorUpdate();
     void Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt);
-    void Draw(const Vector3& position, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle = std::nullopt);
-
+   
     // アニメーション描画
     void DrawAnimation(const WorldTransform& worldTransform, const ViewProjection& viewProjection, SkinCluster bufferView, std::optional<uint32_t> textureHandle = std::nullopt);
 
@@ -34,10 +33,10 @@ public:
     void CreateWVPResource();
     void CreateShadowMap();
     void CreateMaterialResource() override;
+    void ShadowDraw(const WorldTransform& worldTransform, const ViewProjection& viewProjection);
 
 private:
 
-    void ShadowDraw();
 
 public:
     ObjectColor objColor_;
@@ -50,7 +49,7 @@ private:
     // wvpリソース
     Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
     TransformationMatrix* wvpDate_;
-    std::unique_ptr<ShadowMap> shadowMap_;
+    ShadowMap* shadowMap_;
     bool isShadow_ = false;
 
     ///============================================================

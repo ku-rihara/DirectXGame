@@ -41,47 +41,16 @@ void Object3d::Draw(const WorldTransform& worldTransform, const ViewProjection& 
         return;
 
     ColorUpdate();
+    shadowMap_->UpdateLightMatrix();
 
     // WVP行列の計算
     wvpDate_->World                 = worldTransform.matWorld_;
     wvpDate_->WVP                   = worldTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
     wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
 
-    // 影の更新
-    shadowMap_->UpdateLightMatrix();
-
     Object3DPiprline::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
 
     model_->Draw(wvpResource_, *shadowMap_, material_, textureHandle);
-}
-
-///============================================================
-/// 描画 (Vector3)
-///============================================================
-
-void Object3d::Draw(const Vector3& position, const ViewProjection& viewProjection, std::optional<uint32_t> textureHandle) {
-    if (model_) {
-
-        WorldTransform tempTransform;
-        tempTransform.translation_ = position;
-        tempTransform.scale_       = {1.0f, 1.0f, 1.0f};
-        tempTransform.rotation_    = {0.0f, 0.0f, 0.0f};
-        tempTransform.UpdateMatrix();
-
-        // WVP行列の計算
-        if (model_->GetIsFileGltf()) { // .gltfファイルの場合
-            wvpDate_->World                 = tempTransform.matWorld_;
-            wvpDate_->WVP                   = model_->GetModelData().rootNode.localMatrix * tempTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
-            wvpDate_->WorldInverseTranspose = Inverse(Transpose(model_->GetModelData().rootNode.localMatrix * wvpDate_->World));
-        } else { // .objファイルの場合
-            wvpDate_->World                 = tempTransform.matWorld_;
-            wvpDate_->WVP                   = tempTransform.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
-            wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
-        }
-
-        // モデル描画
-        model_->Draw(wvpResource_, *shadowMap_, material_, textureHandle);
-    }
 }
 
 ///============================================================
@@ -98,22 +67,19 @@ void Object3d::DrawAnimation(const WorldTransform& worldTransform, const ViewPro
     wvpDate_->WorldInverseTranspose = Inverse(Transpose(wvpDate_->World));
     /*}*/
 
-    // 影の更新
-    shadowMap_->UpdateLightMatrix();
-
     SkinningObject3DPipeline::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
     model_->DrawAnimation(wvpResource_, *shadowMap_, material_, skinCluster, textureHandle);
 
-    ShadowDraw();
 }
 
-void Object3d::ShadowDraw() {
-
-    if (!isShadow_) {
+void Object3d::ShadowDraw(const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
+    if (!model_) {
         return;
     }
+    viewProjection;
+    worldTransform;
 
-   /* shadowMap_->Draw();*/
+    model_->DrawForShadowMap(wvpResource_, *shadowMap_);
 }
 
 ///============================================================
@@ -140,8 +106,7 @@ void Object3d::CreateWVPResource() {
 }
 
 void Object3d::CreateShadowMap() {
-    shadowMap_ = std::make_unique<ShadowMap>();
-    shadowMap_->Init(DirectXCommon::GetInstance());
+    shadowMap_ = ShadowMap::GetInstance();
 }
 
 ///============================================================

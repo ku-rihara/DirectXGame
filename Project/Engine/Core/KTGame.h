@@ -18,5 +18,6 @@ public:
 	 void Update()override;
 	 void Draw()override;
 	 void DrawPostEffect()override;
+     void DrawShadow() override; 
 	 void Finalize()override;
 };

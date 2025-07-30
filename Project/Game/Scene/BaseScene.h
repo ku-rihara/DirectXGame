@@ -34,7 +34,7 @@ protected:
 public:
 
 	///========================================================
-	/// Constralt destract
+	/// Constract destract
 	///========================================================
 	BaseScene() = default;
 	virtual ~BaseScene() = default;
@@ -55,6 +55,7 @@ public:
 	virtual	void ModelDraw() = 0;
 	virtual	void SpriteDraw() = 0;
 	virtual	void SkyBoxDraw() = 0;
+    virtual void DrawShadow() = 0;
 
 	/// <summary>
 	/// デバッグ表示

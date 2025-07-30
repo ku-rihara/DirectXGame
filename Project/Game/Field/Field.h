@@ -27,4 +27,5 @@ public:
 	void Init();
 	void Update();
 	void Draw(ViewProjection& viewProjection);
+    void ShadowDrawTest(ViewProjection& viewProjection);
 };

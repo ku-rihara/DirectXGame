@@ -2,6 +2,9 @@
 
 // dx
 #include "Dx/DxReleaseChecker.h"
+// dx
+#include "Dx/DxReleaseChecker.h"
+#include "ShadowMap/ShadowMap.h"
 
 /// utility
 #include "utility/ParameterEditor/GlobalParameter.h"
@@ -45,13 +48,19 @@ void KTFramework::Run() {
 
         Update(); /// 更新
 
+        //影描画
+        ShadowMap::GetInstance()->UpdateLightMatrix();
+        ShadowMap::GetInstance()->PreDraw();
+        DrawShadow();
+        ShadowMap::GetInstance()->PostDraw();
+
         engineCore_->PreRenderTexture(); /// 描画前処理
 
         Draw(); /// 描画
 
         engineCore_->PreDraw(); /// 描画前処理
 
-		DrawPostEffect(); /// 描画
+        DrawPostEffect(); /// 描画
 
         engineCore_->EndFrame(); /// フレームの終了
     }

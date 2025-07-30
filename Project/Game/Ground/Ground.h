@@ -17,6 +17,7 @@ public:
 	void Init();
 	void Update();
 	void Draw(ViewProjection& viewProjection);
+    void Draws(ViewProjection& viewProjection);
 
 	void Debug();
 };

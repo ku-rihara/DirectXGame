@@ -15,7 +15,7 @@ void Ground::Init() {
 
 	objct3D_.reset(Object3d::CreateModel("Ground",".obj"));
 	transform_.Init();
-	transform_.translation_.y = -10.0f;
+	transform_.translation_.y = -1.0f;
 	transform_.scale_ = {1, 1, 1};  
 }
 
@@ -32,6 +32,11 @@ void Ground::Update() {
 ///========================================================
 void Ground::Draw(ViewProjection& viewProjection) {
 	objct3D_->Draw(transform_, viewProjection); 
+}
+
+void Ground::Draws(ViewProjection& viewProjection) {
+    viewProjection;
+    objct3D_->ShadowDraw(transform_,viewProjection);
 }
 
 void  Ground::Debug() {

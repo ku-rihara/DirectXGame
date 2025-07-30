@@ -16,15 +16,15 @@ Texture2D<float> gMaskTexture : register(t5);
 struct Material
 {
     float4 color;
-    int enableLighting; 
+    int enableLighting;
  
-    float4x4 uvTransform; 
+    float4x4 uvTransform;
     float shininess;
-    float environmentCoefficient; 
-    float dissolveThreshold; 
-    float dissolveEdgeWidth; 
+    float environmentCoefficient;
+    float dissolveThreshold;
+    float dissolveEdgeWidth;
     float3 dissolveEdgeColor;
-    int enableDissolve; 
+    int enableDissolve;
 };
 
 struct PixelShaderOutput
@@ -191,9 +191,15 @@ PixelShaderOutput main(VertexShaderOutput input)
         discard;
     }
     
-    ////影の計算、適応
-    //float shadow = CalculateShadow(input.lightSpacePosition, gShadowMap, gShadowSampler);
-    //output.color.rgb *= shadow;
+   // 影の計算、適用
+    float3 posFromLightVP = input.tpos.xyz / input.tpos.w;
+    float2 shadowUV = (posFromLightVP.xy + float2(1, -1)) * float2(0.5f, -0.5f);
+    
+    float depthFromLight = gShadowMap.SampleCmp(gShadowSampler, shadowUV, posFromLightVP.z - 0.005f);
+    
+    float shadowWeight = lerp(0.5f, 1.0f, depthFromLight);
+    
+    output.color.rgb *= shadowWeight;
     
     return output;
 }

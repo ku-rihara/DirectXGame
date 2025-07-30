@@ -49,6 +49,7 @@ public:
     void Update() override;
     void TitleUpdate();
     void Draw(const ViewProjection& viewProjection) override;
+    void ShadowDrawTest(const ViewProjection& viewProjection);
     void EffectDraw(const ViewProjection& viewProjection);
 
     ///* 移動

@@ -33,15 +33,16 @@ void SkinningObject3DPipeline::CreateGraphicsPipeline() {
     staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // pxelShaderで使う
 
     // シャドウマップ用比較サンプラー
-    staticSamplers_[1].Filter           = D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
-    staticSamplers_[1].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-    staticSamplers_[1].AddressV         = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-    staticSamplers_[1].AddressW         = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+    staticSamplers_[1].Filter           = D3D12_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+    staticSamplers_[1].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+    staticSamplers_[1].AddressV         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+    staticSamplers_[1].AddressW         = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
     staticSamplers_[1].BorderColor      = D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE;
     staticSamplers_[1].ComparisonFunc   = D3D12_COMPARISON_FUNC_LESS_EQUAL;
     staticSamplers_[1].MaxLOD           = D3D12_FLOAT32_MAX;
     staticSamplers_[1].ShaderRegister   = 1; // レジスタ番号1
     staticSamplers_[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+    staticSamplers_[1].MaxAnisotropy    = 1;
 
     CreateRootSignature();
 
@@ -271,7 +272,7 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     rootParameters[11].DescriptorTable.pDescriptorRanges   = &descriptorRange[5];
     rootParameters[11].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 12: ShadowTransformBuffer
+       // 12: lightTransform
     rootParameters[12].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[12].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
     rootParameters[12].Descriptor.ShaderRegister = 1;

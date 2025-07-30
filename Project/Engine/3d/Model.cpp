@@ -6,10 +6,10 @@
 // class
 #include "base/SkyBoxRenderer.h"
 #include "base/TextureManager.h"
+#include "Dx/DxRenderTarget.h"
 #include "Lighrt/Light.h"
-#include"ShadowMap/ShadowMap.h"
 #include "Pipeline/Object3DPiprline.h"
-#include"Dx/DxRenderTarget.h"
+#include "ShadowMap/ShadowMap.h"
 #include <filesystem>
 
 void ModelCommon::Init(DirectXCommon* dxCommon) {
@@ -204,23 +204,22 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Shado
     material.SetCommandList(commandList);
 
     commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
-   
+
     if (textureHandle.has_value()) {
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
     } else {
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
     }
 
-
     uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
     commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
 
     Light::GetInstance()->SetLightCommands(commandList);
 
-    //shadow
-    commandList->SetGraphicsRootDescriptorTable(11, shadowMap.GetGPUHandle());
+    // shadowTexture
+    commandList->SetGraphicsRootDescriptorTable(11, shadowMap.GetShadowMapSrvGPUHandle());
     commandList->SetGraphicsRootConstantBufferView(12, shadowMap.GetVertexResource()->GetGPUVirtualAddress());
-  
+
     // 描画コール
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
 }
@@ -259,7 +258,8 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, co
     // ライト
     Light::GetInstance()->SetLightCommands(commandList);
 
-     // shadow
+    // shadowTexture
+    commandList->SetGraphicsRootDescriptorTable(11, shadowMap.GetShadowMapSrvGPUHandle());
     commandList->SetGraphicsRootConstantBufferView(12, shadowMap.GetVertexResource()->GetGPUVirtualAddress());
 
     // 描画
@@ -289,11 +289,28 @@ void Model::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HAND
     commandList->DrawInstanced(UINT(modelData_.vertices.size()), instanceNum, 0, 0);
 }
 
+void Model::DrawForShadowMap(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap) {
+    auto commandList = DirectXCommon::GetInstance()->GetCommandList();
+
+    // 頂点バッファとインデックスバッファの設定
+    commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
+    commandList->IASetIndexBuffer(&indexBufferView_);
+    commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    
+    // b0: ワールド行列
+    commandList->SetGraphicsRootConstantBufferView(0, wvpResource->GetGPUVirtualAddress());
+    // b1: ライト行列
+    commandList->SetGraphicsRootConstantBufferView(1, shadowMap.GetVertexResource()->GetGPUVirtualAddress());
+
+    // 描画コール
+    commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
+}
+
 void Model::PreDraw(ID3D12GraphicsCommandList* commandList) {
     Object3DPiprline::GetInstance()->PreDraw(commandList);
 }
 
 void Model::Finalize() {
-    dxCommon_ = nullptr;
+    dxCommon_       = nullptr;
     textureManager_ = nullptr;
 }

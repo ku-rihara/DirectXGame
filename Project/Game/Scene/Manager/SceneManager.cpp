@@ -6,12 +6,12 @@
 
 // シングルトンインスタンスの取得
 SceneManager* SceneManager::GetInstance() {
-	static SceneManager instance; // 静的インスタンス
+	static SceneManager instance; 
 	return &instance;
 }
 
 SceneManager::~SceneManager() {
-	// unique_ptrによる自動解放
+	
 }
 
 ///==============================================
@@ -53,6 +53,13 @@ void SceneManager::SkyBoxDraw() {
         scene_->SkyBoxDraw();
     }
  }
+
+void SceneManager::DrawShadow() {
+     if (scene_) {
+         scene_->DrawShadow();
+     }
+ }
+
 ///==============================================
 /// シーン切り替え
 ///==============================================

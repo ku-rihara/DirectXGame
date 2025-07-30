@@ -35,6 +35,7 @@ public:
 	void ModelDraw()override;
 	void SpriteDraw()override;
     void SkyBoxDraw() override;
+    void DrawShadow() override;
 
 	void Debug()override;/// debug
 	void ViewProjectionUpdate()override;

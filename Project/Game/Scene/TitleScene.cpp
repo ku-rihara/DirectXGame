@@ -152,6 +152,13 @@ void TitleScene::SpriteDraw() {
 	screenSprite_->Draw();
 }
 
+/// ===================================================
+/// 影
+/// ===================================================
+void TitleScene::DrawShadow() {
+}
+
+
 void TitleScene::Debug() {
 #ifdef _DEBUG
 	ImGui::Begin("Camera");

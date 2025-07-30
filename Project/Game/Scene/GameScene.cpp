@@ -202,6 +202,15 @@ void GameScene::SpriteDraw() {
     screenSprite_->Draw();
 }
 
+/// ======================================================
+/// 影
+/// ======================================================
+void GameScene::DrawShadow() {
+    player_->ShadowDrawTest(viewProjection_);
+    field_->ShadowDrawTest(viewProjection_);
+}
+
+
 void GameScene::Debug() {
 #ifdef _DEBUG
     ImGui::Begin("Camera");
@@ -217,6 +226,8 @@ void GameScene::Debug() {
     enemyManager_->AdjustParam();
     combo_->AdjustParam();
     fireInjectors_->AdjustParam();
+
+    ShadowMap::GetInstance()->DebugImGui();
 
     ImGui::End();
 #endif

@@ -68,6 +68,13 @@ void EditorScene::SkyBoxDraw() {
 void EditorScene::SpriteDraw() {
 }
 
+/// ===================================================
+/// 影
+/// ===================================================
+void EditorScene::DrawShadow() {
+}
+
+
 void EditorScene::Debug() {
 #ifdef _DEBUG
     ImGui::Begin("Camera");

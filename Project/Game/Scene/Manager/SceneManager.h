@@ -23,6 +23,7 @@ public:
     void SkyBoxDraw();
     void ModelDraw();
     void SpriteDraw();
+    void DrawShadow();
  /*   void ParticleDraw();*/
 
     void ChangeScene(const std::string& scenemane);
