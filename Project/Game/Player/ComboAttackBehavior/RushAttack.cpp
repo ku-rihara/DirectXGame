@@ -34,7 +34,7 @@ RushAttack::RushAttack(Player* player)
 
     EasingInit();
 
-    PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::RADIALBLUR);
+ 
     rushBlurEase_.Init("RushEffect");
     rushBlurEase_.ApplyFromJson("RushBlur.json");
     rushBlurEase_.SaveAppliedJsonFileName();
@@ -59,6 +59,7 @@ void RushAttack::Update() {
         /// エフェクト発射
         ///---------------------------------------------------------
     case STEP::EMIT:
+        PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::RADIALBLUR);
         pPlayer_->GetEffects()->RushAttackRingEffectEmit();
         step_ = STEP::RUSH;
 
