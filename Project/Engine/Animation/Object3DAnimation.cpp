@@ -7,22 +7,15 @@
 #include <algorithm>
 #include <cassert>
 
-///============================================================
-/// 初期化
-///============================================================
-void Object3DAnimation::Init() {
-    transform_.Init();
-    line3dDrawer_.Init(5120);
-}
 
-Object3DAnimation* Object3DAnimation::CreateAnimationModel(const std::string& fileName) {
-    Object3DAnimation* animationObj = new Object3DAnimation();
+Object3DAnimation* Object3DAnimation::CreateModel(const std::string& fileName) {
+    std::unique_ptr<Object3DAnimation> animationObj = std::make_unique<Object3DAnimation>();
     animationObj->Create(fileName);
 
-    // AnimationRegistryに自動登録
-    AnimationRegistry::GetInstance()->RegisterAnimation(animationObj);
+    // AnimationRegistryに登録
+    AnimationRegistry::GetInstance()->RegisterAnimation(animationObj.get());
 
-    return animationObj;
+    return animationObj.release();
 }
 
 
@@ -57,6 +50,16 @@ void Object3DAnimation::Create(const std::string& fileName) {
 
     Init();
 }
+
+
+///============================================================
+/// 初期化
+///============================================================
+void Object3DAnimation::Init() {
+    transform_.Init();
+    line3dDrawer_.Init(5120);
+}
+
 
 ///============================================================
 /// アニメーション追加

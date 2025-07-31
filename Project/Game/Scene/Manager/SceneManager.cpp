@@ -2,6 +2,7 @@
 #include"utility/ParticleEditor/ParticleManager.h"
 #include"utility/ParameterEditor/GlobalParameter.h"
 #include"3d/Object3DRegistry.h"
+#include"Animation/AnimationRegistry.h"
 #include"input/Input.h"
 #include <cassert>
 
@@ -72,6 +73,10 @@ void SceneManager::ChangeScene(const std::string& scenemane) {
         // 現在のシーンを終了
         scene_.reset();
     }
+    
+	Object3DRegistry::GetInstance()->Clear();
+    AnimationRegistry::GetInstance()->Clear();
+
     //// グローバル変数の読み込み
     GlobalParameter::GetInstance()->BindResetAll();
     GlobalParameter::GetInstance()->LoadFiles();

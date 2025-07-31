@@ -18,15 +18,15 @@ public:
     Object3DAnimation() = default;
     ~Object3DAnimation() = default;
 
-  
-
     /// ============================================================
     /// public methods
     /// ============================================================
+   
+    /// モデル作成
+    static Object3DAnimation* CreateModel(const std::string& instanceName);
 
     // 初期化・リソース作成
     void Init();
-    void Create(const std::string& fileName);
     void Add(const std::string& fileName);
 
     // アニメーション制御
@@ -41,7 +41,10 @@ public:
     void DebugDraw(const ViewProjection& viewProjection);
     void DebugImgui() override;
 
-    // 計算メソッド
+   
+
+private:
+    void Create(const std::string& fileName);
     Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time);
     Quaternion CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time);
 

@@ -16,12 +16,11 @@ void MonsterBall::Init() {
     transform_.Init();
     obj3D_.reset(Object3d::CreateModel("suzanne.obj"));
 
-    modelAnimation_ = std::make_unique<Object3DAnimation>();
-    modelAnimation_->Create("WalkAnimation.gltf");
+    modelAnimation_.reset(Object3DAnimation::CreateModel("WalkAnimation.gltf"));
     modelAnimation_->Add("Walk.gltf");
 
-    modelAnimation2_ = std::make_unique<Object3DAnimation>();
-    modelAnimation2_->Create("Walk.gltf");
+      modelAnimation2_.reset(Object3DAnimation::CreateModel("Walk.gltf"));
+   
 
     modelAnimation_->transform_.translation_.y = -5.0f;
     modelAnimation_->transform_.translation_.z = -14.0f;

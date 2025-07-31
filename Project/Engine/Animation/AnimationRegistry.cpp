@@ -25,9 +25,7 @@ void AnimationRegistry::RegisterAnimation(Object3DAnimation* animation) {
 /// 登録解除
 ///============================================================
 void AnimationRegistry::UnregisterAnimation(Object3DAnimation* animation) {
-    if (animation != nullptr) {
-        animations_.erase(animation);
-    }
+    animation;
 }
 
 ///============================================================
