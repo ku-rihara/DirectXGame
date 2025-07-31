@@ -556,6 +556,15 @@
     <ClCompile Include="Engine\Pipeline\ShadowMapPipeline.cpp">
       <Filter>MyEngine\.cpp\Pileline</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3d\Object3DRegistry.cpp">
+      <Filter>MyEngine\.cpp\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Animation\AnimationRegistry.cpp">
+      <Filter>MyEngine\.cpp\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Animation\Object3DAnimation.cpp">
+      <Filter>MyEngine\.cpp\Animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -950,6 +959,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Pipeline\ShadowMapPipeline.h">
       <Filter>MyEngine\.h\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\Object3DRegistry.h">
+      <Filter>MyEngine\.h\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Animation\Object3DAnimation.h">
+      <Filter>MyEngine\.h\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Animation\AnimationRegistry.h">
+      <Filter>MyEngine\.h\Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

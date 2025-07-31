@@ -5,6 +5,8 @@
 
 #include "base/TextureManager.h"
 // class
+#include "3d/Object3DRegistry.h"
+#include "Pipeline/Object3DPiprline.h"
 #include "utility/ParticleEditor/ParticleManager.h"
 
 // math
@@ -49,9 +51,8 @@ void EditorScene::Update() {
 void EditorScene::ModelDraw() {
     /// commandList取得
     ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
-    Model::PreDraw(commandList);
-
-     easingTestObject_->Draw(viewProjection_);
+    Object3DPiprline::GetInstance()->PreDraw(commandList);
+    Object3DRegistry::GetInstance()->DrawAll(viewProjection_);
 
     ParticleManager::GetInstance()->Draw(viewProjection_);
 }

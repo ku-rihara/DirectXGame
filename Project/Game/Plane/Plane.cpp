@@ -37,16 +37,16 @@ void Plane::Update() {
 	gtransform_.UpdateMatrix();
 }
 
-void Plane::Draw(ViewProjection& viewProjection) {
-	objct3D_->Draw(transform_, viewProjection); 
-	gobjct3D_->Draw(gtransform_, viewProjection);
-}
-
-void Plane::Draws(ViewProjection& viewProjection) {
-    viewProjection;
-    objct3D_->ShadowDraw(transform_, viewProjection);
-    gobjct3D_->ShadowDraw(gtransform_, viewProjection);
-}
+//void Plane::Draw(ViewProjection& viewProjection) {
+//	objct3D_->Draw(transform_, viewProjection); 
+//	gobjct3D_->Draw(gtransform_, viewProjection);
+//}
+//
+//void Plane::Draws(ViewProjection& viewProjection) {
+//    viewProjection;
+//    objct3D_->ShadowDraw(transform_, viewProjection);
+//    gobjct3D_->ShadowDraw(gtransform_, viewProjection);
+//}
 
 
 void  Plane::Debug() {

@@ -1,6 +1,7 @@
 #include "SceneManager.h"
 #include"utility/ParticleEditor/ParticleManager.h"
 #include"utility/ParameterEditor/GlobalParameter.h"
+#include"3d/Object3DRegistry.h"
 #include"input/Input.h"
 #include <cassert>
 
@@ -74,6 +75,7 @@ void SceneManager::ChangeScene(const std::string& scenemane) {
     //// グローバル変数の読み込み
     GlobalParameter::GetInstance()->BindResetAll();
     GlobalParameter::GetInstance()->LoadFiles();
+
 	// 次のシーンを生成
 	nextScene_ = std::unique_ptr<BaseScene>(sceneFactory_->CreateScene(scenemane));
 	scene_ = std::move(nextScene_);

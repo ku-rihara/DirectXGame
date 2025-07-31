@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include "base/TextureManager.h"
 // class
+#include "3d/Object3DRegistry.h"
 #include "utility/ParticleEditor/ParticleManager.h"
 
 // math
@@ -8,7 +9,8 @@
 #include "Lighrt/Light.h"
 #include "Scene/Manager/SceneManager.h"
 
-#include"ShadowMap/ShadowMap.h"
+#include "Pipeline/Object3DPiprline.h"
+#include "ShadowMap/ShadowMap.h"
 
 #include <imgui.h>
 
@@ -45,7 +47,6 @@ void GameScene::Update() {
     debugCamera_->Update();
     Debug();
 
-   
     // 各クラス更新
     ground_->Update();
     monsterBall_->Update();
@@ -70,12 +71,11 @@ void GameScene::Update() {
 void GameScene::ModelDraw() {
     /// commandList取得
     ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
-    Model::PreDraw(commandList);
+    Object3DPiprline::GetInstance()->PreDraw(commandList);
 
-   /* putObjForBlender->DrawAll(viewProjection_);*/
-    ground_->Draw(viewProjection_);
-    plane_->Draw(viewProjection_);
-   /* monsterBall_->Draw(viewProjection_);*/
+    /* ground_->Draw(viewProjection_);
+     plane_->Draw(viewProjection_);*/
+    Object3DRegistry::GetInstance()->DrawAll(viewProjection_);
 
     ParticleManager::GetInstance()->Draw(viewProjection_);
 }
@@ -91,18 +91,14 @@ void GameScene::SkyBoxDraw() {
 /// スプライト描画
 /// ======================================================
 void GameScene::SpriteDraw() {
-   
-  
 }
 
 /// ======================================================
-/// 影
+/// 影描画
 /// ======================================================
 void GameScene::DrawShadow() {
-    ground_->Draws(viewProjection_);
-    plane_->Draws(viewProjection_);
+    Object3DRegistry::GetInstance()->DrawAllShadow(viewProjection_);
 }
-
 
 void GameScene::Debug() {
 #ifdef _DEBUG

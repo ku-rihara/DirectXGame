@@ -19,14 +19,6 @@ void Ground::Update() {
 	transform_.UpdateMatrix();
 }
 
-void Ground::Draw(ViewProjection& viewProjection) {
-	objct3D_->Draw(transform_, viewProjection); 
-}
-
-void Ground::Draws(ViewProjection& viewProjection) {
-    viewProjection;
-    objct3D_->ShadowDraw(transform_,viewProjection);
-}
 
 void  Ground::Debug() {
 #ifdef _DEBUG

@@ -6,9 +6,9 @@
 
 // 定数バッファ用データ構造体
 struct ConstBufferDataViewProjection {
-    Matrix4x4 view; // ビュー変換行列
-    Matrix4x4 projection; // プロジェクション変換行列
-    Vector3 cameraPos; // カメラ座標
+    Matrix4x4 view; 
+    Matrix4x4 projection; 
+    Vector3 cameraPos; 
 };
 
 class ViewProjection {
@@ -51,8 +51,8 @@ public:
     ProjectionType projectionType_ = ProjectionType::PERSPECTIVE;
 
     // 平行投影用パラメータ
-    float orthoWidth_  = 20.0f;
-    float orthoHeight_ = 20.0f;
+    float orthoWidth_  = 40.0f;
+    float orthoHeight_ = 40.0f;
 
     // matrix
     Matrix4x4 matView_;

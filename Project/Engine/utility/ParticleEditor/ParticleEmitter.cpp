@@ -169,7 +169,7 @@ void ParticleEmitter::SetFollowingPos(const Vector3* pos) {
 }
 
 
-void ParticleEmitter::SetParentJoint(const ModelAnimation* modelAnimation,const std::string& name) {
+void ParticleEmitter::SetParentJoint(const Object3DAnimation* modelAnimation, const std::string& name) {
     parameters_.jointParent.animation = modelAnimation;
     parameters_.jointParent.name           = name;
  }

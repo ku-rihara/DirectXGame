@@ -2,6 +2,7 @@
 /// Scene
 #include "PostEffect/PostEffectRenderer.h"
 #include "Scene/Factory/SceneFactory.h"
+#include"Pipeline/Object3DPiprline.h"
 // renderer
 #include "base/SkyBoxRenderer.h"
 // utility
@@ -47,7 +48,7 @@ void KTGame::Draw() {
     // --------------------------------------------------------------------------
     /// モデル描画
     // --------------------------------------------------------------------------
-    Model::PreDraw(commandList);
+    Object3DPiprline::GetInstance()->PreDraw(commandList);
     /// ゲームシーン描画
     pSceneManager_->ModelDraw();
     /// コリジョン描画

@@ -38,7 +38,8 @@ void EasingTestObj::Update() {
 }
 
 void EasingTestObj::Draw(ViewProjection& viewProjection) {
-    object3D_->Draw(transform_, viewProjection);
+    viewProjection;
+   /* object3D_->Draw(transform_, viewProjection);*/
 }
 
 void EasingTestObj::Debug() {

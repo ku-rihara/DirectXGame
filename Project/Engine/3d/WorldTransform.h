@@ -32,7 +32,7 @@ enum class RotateOder {
     Quaternion,
 };
 
-class ModelAnimation;
+class Object3DAnimation;
 class WorldTransform {
 
 public:
@@ -69,7 +69,7 @@ public:
 
 private:
     // animation parent
-    const ModelAnimation* parentAnimation_ = nullptr;
+    const Object3DAnimation* parentAnimation_ = nullptr;
     int32_t parentJointIndex_              = -1;
     std::string parentJointName_;
 
@@ -82,7 +82,7 @@ private:
 
 public:
     void SetParent(const WorldTransform* parent);
-    void SetParentJoint(const ModelAnimation* animation, const std::string& jointName);
+    void SetParentJoint(const Object3DAnimation* animation, const std::string& jointName);
 
     Vector3 GetLocalPos() const;
     Vector3 GetWorldPos() const;

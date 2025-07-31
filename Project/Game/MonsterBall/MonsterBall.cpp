@@ -16,11 +16,11 @@ void MonsterBall::Init() {
     transform_.Init();
     obj3D_.reset(Object3d::CreateModel("suzanne.obj"));
 
-    modelAnimation_ = std::make_unique<ModelAnimation>();
+    modelAnimation_ = std::make_unique<Object3DAnimation>();
     modelAnimation_->Create("WalkAnimation.gltf");
     modelAnimation_->Add("Walk.gltf");
 
-    modelAnimation2_ = std::make_unique<ModelAnimation>();
+    modelAnimation2_ = std::make_unique<Object3DAnimation>();
     modelAnimation2_->Create("Walk.gltf");
 
     modelAnimation_->transform_.translation_.y = -5.0f;
@@ -49,17 +49,19 @@ void MonsterBall::Update() {
     emitter_->Emit();
     emitter_->EditorUpdate();
 
+
     transform_.UpdateMatrix();
 }
 
 void MonsterBall::Draw(ViewProjection& viewProjection) {
-    modelAnimation_->Draw(viewProjection);
+    viewProjection;
+  /*  modelAnimation_->Draw(viewProjection);
     modelAnimation_->DebugDraw(viewProjection);
 
     modelAnimation2_->Draw(viewProjection);
     modelAnimation2_->DebugDraw(viewProjection);
 
-    obj3D_->Draw(transform_, viewProjection);
+    obj3D_->Draw(transform_, viewProjection);*/
 }
 
 void MonsterBall::Debug() {
