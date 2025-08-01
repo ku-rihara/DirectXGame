@@ -1,8 +1,6 @@
 #include "ModelAnimation.h"
 #include "base/SrvManager.h"
 #include "MathFunction.h"
-#include "Pipeline/Object3DPiprline.h"
-#include "Pipeline/SkinningObject3DPipeline.h"
 
 #include <cassert>
 #include <cmath>
@@ -18,22 +16,6 @@
 #include <Matrix4x4.h>
 #include <struct/ModelData.h>
 
-void ModelAnimation::Create(const std::string& fileName) {
-    object3d_.reset(Object3d::CreateModel(fileName));
-    animations_.push_back(LoadAnimationFile(fileName));
-
-    skeleton_ = CreateSkeleton(object3d_->GetModel()->GetModelData().rootNode);
-
-    ModelData modelData = object3d_->GetModel()->GetModelData();
-    skinCluster_        = CreateSkinCluster(modelData);
-
-    transform_.Init();
-    line3dDrawer_.Init(5120);
-}
-
-void ModelAnimation::Add(const std::string& fileName) {
-    animations_.push_back(LoadAnimationFile(fileName));
-}
 
 Skeleton ModelAnimation::CreateSkeleton(const Node& rootNode) {
     Skeleton skeleton;
@@ -47,16 +29,16 @@ Skeleton ModelAnimation::CreateSkeleton(const Node& rootNode) {
     return skeleton;
 }
 
-SkinCluster ModelAnimation::CreateSkinCluster(ModelData& modelData) {
+SkinCluster ModelAnimation::CreateSkinCluster(ModelData& modelData, const Skeleton& skeleton) {
 
     SkinCluster skinCluster;
     DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
     // palette用のResourceを確保
-    skinCluster.paletteResource = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(WellForGPU) * skeleton_.joints.size());
+    skinCluster.paletteResource = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(WellForGPU) * skeleton.joints.size());
     WellForGPU* mappedPalette   = nullptr;
     skinCluster.paletteResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedPalette));
-    skinCluster.mappedPalette = {mappedPalette, skeleton_.joints.size()}; // spanを使ってアクセスするように
+    skinCluster.mappedPalette = {mappedPalette, skeleton.joints.size()}; // spanを使ってアクセスするように
 
     uint32_t srvIndex                   = SrvManager::GetInstance()->Allocate();
     skinCluster.paletteSrvHandle.first  = SrvManager::GetInstance()->GetCPUDescriptorHandle(srvIndex);
@@ -64,7 +46,7 @@ SkinCluster ModelAnimation::CreateSkinCluster(ModelData& modelData) {
 
     // palette用のSrvを作成
     SrvManager::GetInstance()->CreateSRVforStructuredBuffer(
-        srvIndex, skinCluster.paletteResource.Get(), UINT(skeleton_.joints.size()), sizeof(WellForGPU));
+        srvIndex, skinCluster.paletteResource.Get(), UINT(skeleton.joints.size()), sizeof(WellForGPU));
 
     // influence用のResourceを作成
     skinCluster.influenceResource    = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(VertexInfluence) * modelData.vertices.size());
@@ -79,12 +61,12 @@ SkinCluster ModelAnimation::CreateSkinCluster(ModelData& modelData) {
     skinCluster.influenceBufferView.StrideInBytes  = sizeof(VertexInfluence);
 
     // influence用のVBVを作成
-    skinCluster.inverseBindPoseMatrices.resize(skeleton_.joints.size());
+    skinCluster.inverseBindPoseMatrices.resize(skeleton.joints.size());
     std::generate(skinCluster.inverseBindPoseMatrices.begin(), skinCluster.inverseBindPoseMatrices.end(), MakeIdentity4x4);
 
     for (const auto& jointWeight : modelData.skinClusterData) {
-        auto it = skeleton_.jointMap.find(jointWeight.first);
-        if (it == skeleton_.jointMap.end()) {
+        auto it = skeleton.jointMap.find(jointWeight.first);
+        if (it == skeleton.jointMap.end()) {
             continue;
         }
 
@@ -174,122 +156,6 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
     return animation;
 }
 
-void ModelAnimation::Update(const float& deltaTime) {
-    animationTime_ += deltaTime;
-    animationTime_ = std::fmod(animationTime_, animations_[currentAnimationIndex_].duration);
-
-    if (isChange_) {
-
-        AnimationTransition(deltaTime);
-    } else {
-        for (Joint& joint : skeleton_.joints) {
-
-            // 対象のJointのAnimationがあれば、値の運用を行う
-            if (auto it = animations_[currentAnimationIndex_].nodeAnimations.find(joint.name); it != animations_[currentAnimationIndex_].nodeAnimations.end()) {
-                const NodeAnimation& rootNodeAnimation = (*it).second;
-                joint.transform.translate              = CalculateValue(rootNodeAnimation.translate.keyframes, animationTime_);
-                joint.transform.rotate                 = CalculateValueQuaternion(rootNodeAnimation.rotate.keyframes, animationTime_);
-                joint.transform.scale                  = CalculateValue(rootNodeAnimation.scale.keyframes, animationTime_);
-            }
-        }
-    }
-
-    // 全てのJointを更新
-    for (Joint& joint : skeleton_.joints) {
-        joint.localMatrix = MakeAffineMatrixQuaternion(joint.transform.scale, joint.transform.rotate, joint.transform.translate);
-        if (joint.parent) {
-            joint.skeletonSpaceMatrix = joint.localMatrix * skeleton_.joints[*joint.parent].skeletonSpaceMatrix;
-        } else {
-            joint.skeletonSpaceMatrix = joint.localMatrix;
-        }
-    }
-
-    // SkinClusterの更新
-    for (size_t jointIndex = 0; jointIndex < skeleton_.joints.size(); ++jointIndex) {
-        assert(jointIndex < skinCluster_.inverseBindPoseMatrices.size());
-        skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix =
-            skinCluster_.inverseBindPoseMatrices[jointIndex] * skeleton_.joints[jointIndex].skeletonSpaceMatrix;
-        skinCluster_.mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix =
-            Inverse(Transpose(skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix));
-    }
-
-    transform_.UpdateMatrix();
-}
-
-void ModelAnimation::AnimationTransition(const float& deltaTime) {
-    // 補間タイム加算
-    currentTransitionTime_ += deltaTime;
-    preAnimationTime_ += deltaTime;
-    currentTransitionTime_ = std::min(currentTransitionTime_, 1.0f);
-
-    // 前のアニメーションタイム
-    float preTime = std::fmod(preAnimationTime_, animations_[preAnimationIndex_].duration);
-
-    for (Joint& joint : skeleton_.joints) {
-
-        Vector3 toTranslate = joint.transform.translate;
-        Quaternion toRotate = joint.transform.rotate;
-        Vector3 toScale     = joint.transform.scale;
-
-        // 現在のアニメーションから目標値を取得
-        if (auto it = animations_[currentAnimationIndex_].nodeAnimations.find(joint.name); it != animations_[currentAnimationIndex_].nodeAnimations.end()) {
-            const NodeAnimation& currentNodeAnimation = (*it).second;
-
-            toTranslate = CalculateValue(currentNodeAnimation.translate.keyframes, animationTime_);
-            toRotate    = CalculateValueQuaternion(currentNodeAnimation.rotate.keyframes, animationTime_);
-            toScale     = CalculateValue(currentNodeAnimation.scale.keyframes, animationTime_);
-        }
-
-        // 前のアニメーションから開始値を取得
-        if (auto it = animations_[preAnimationIndex_].nodeAnimations.find(joint.name); it != animations_[preAnimationIndex_].nodeAnimations.end()) {
-            const NodeAnimation& preNodeAnimation = (*it).second;
-
-            Vector3 fromTranslate = joint.transform.translate;
-            Quaternion fromRotate = joint.transform.rotate;
-            Vector3 fromScale     = joint.transform.scale;
-
-            fromTranslate = CalculateValue(preNodeAnimation.translate.keyframes, preTime);
-            fromRotate    = CalculateValueQuaternion(preNodeAnimation.rotate.keyframes, preTime);
-            fromScale     = CalculateValue(preNodeAnimation.scale.keyframes, preTime);
-
-            // 補間適用
-            joint.transform.translate = Lerp(fromTranslate, toTranslate, currentTransitionTime_);
-            joint.transform.scale     = Lerp(fromScale, toScale, currentTransitionTime_);
-            joint.transform.rotate    = Quaternion::Slerp(fromRotate, toRotate, currentTransitionTime_);
-        } 
-    }
-
-    // 補間終了判定
-    if (currentTransitionTime_ >= 1.0f) {
-        TransitionFinish();
-    }
-}
-
-void ModelAnimation::Draw(const ViewProjection& viewProjection) {
-    SkinningObject3DPipeline::GetInstance()->PreDraw(DirectXCommon::GetInstance()->GetCommandList());
-    object3d_->DrawAnimation(transform_, viewProjection, skinCluster_);
-    Object3DPiprline::GetInstance()->PreDraw(DirectXCommon::GetInstance()->GetCommandList());
-}
-
-void ModelAnimation::DebugDraw( const ViewProjection& viewProjection) {
-
-    for (const Joint& joint : skeleton_.joints) {
-
-        //
-        Vector3 jointPos = TransformMatrix(transform_.GetWorldPos(), joint.skeletonSpaceMatrix);
-        line3dDrawer_.DrawCubeWireframe(jointPos, Vector3(0.01f, 0.01f, 0.01f), Vector4::kWHITE());
-
-        // Line描画
-        if (joint.parent) {
-            const Joint& parentJoint = skeleton_.joints[*joint.parent];
-            Vector3 parentPos        = TransformMatrix(transform_.GetWorldPos(), parentJoint.skeletonSpaceMatrix);
-            line3dDrawer_.SetLine(jointPos, parentPos, Vector4::kWHITE());
-        }
-    }
-    // Joint描画
-    line3dDrawer_.Draw(viewProjection);
-}
-
 Vector3 ModelAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time) {
     assert(!keyframe.empty());
     if (keyframe.size() == 1 || time <= keyframe[0].time) {
@@ -320,39 +186,4 @@ Quaternion ModelAnimation::CalculateValueQuaternion(const std::vector<KeyframeQu
         }
     }
     return (*keyframe.rbegin()).value;
-}
-
-
- const Joint* ModelAnimation::GetJoint(const std::string& name) const {
-    auto it = skeleton_.jointMap.find(name);
-    if (it != skeleton_.jointMap.end()) {
-        return &skeleton_.joints[it->second];
-    }
-    return nullptr;
-}
-
-void ModelAnimation::ChangeAnimation(const std::string& animationName) {
-    // nameからIndex取得
-    for (int32_t i = 0; i < animations_.size(); ++i) {
-
-        if (animations_[i].name == animationName) {
-            preAnimationIndex_     = currentAnimationIndex_;
-            currentAnimationIndex_ = i;
-
-            // 前のアニメーションの時間を保存
-            preAnimationTime_ = animationTime_;
-
-            //切り替え変数リセット
-            animationTime_         = 0.0f;
-            currentTransitionTime_ = 0.0f;
-            isChange_              = true;
-
-            return;
-        }
-    }
-}
-
-void ModelAnimation::TransitionFinish() {
-    currentTransitionTime_ = 0.0f;
-    isChange_              = false;
 }

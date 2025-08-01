@@ -48,16 +48,3 @@ void ModelManager::Finalize() {
     delete instance_;
     instance_ = nullptr; // インスタンスをnullptrにする
 }
-
-
-// void ModelManager::LoadModelParticle(const std::string& modelName, const std::string& extension) {
-//     //// 読み込み済みモデルを検索
-//     //if (models_.contains(modelName + extension)) {
-//     //    // 読み込み済みなら早期リターン
-//     //    return;
-//     //}
-//     //std::unique_ptr<Model> model = std::make_unique<Model>();
-//     //model->CreateModel(modelName, extension);
-//     //// モデルをmapコンテナに格納する
-//     //models_.insert(std::make_pair(modelName + extension, std::move(model)));
-// }

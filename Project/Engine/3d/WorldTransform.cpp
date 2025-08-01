@@ -1,5 +1,5 @@
 #include "WorldTransform.h"
-#include "Animation/ModelAnimation.h"
+#include "Animation/Object3DAnimation.h"
 #include "Dx/DirectXCommon.h"
 #include <assert.h>
 #include <numbers>
@@ -157,7 +157,7 @@ void WorldTransform::UpdateAffineMatrix() {
     }
 }
 
-void WorldTransform::SetParentJoint(const ModelAnimation* animation, const std::string& jointName) {
+void WorldTransform::SetParentJoint(const Object3DAnimation* animation, const std::string& jointName) {
     if (!animation || jointName.empty()) {
         ClearParentJoint();
         return;
@@ -218,7 +218,7 @@ void WorldTransform::UpdateMatrixWithJoint() {
     Matrix4x4 parentJointMatrix = parentJoint.skeletonSpaceMatrix;
 
     // WorldTransform
-    Matrix4x4 animationWorldMatrix = parentAnimation_->GetWorldTransform().matWorld_;
+    Matrix4x4 animationWorldMatrix = parentAnimation_->transform_.matWorld_;
     parentJointMatrix              = parentJointMatrix * animationWorldMatrix;
 
     matWorld_ *= parentJointMatrix;

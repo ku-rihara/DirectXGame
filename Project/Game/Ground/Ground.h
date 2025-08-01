@@ -3,21 +3,16 @@
 #include "3d/WorldTransform.h"
 class Ground {
 public:
-
 private:
-	// ワールド変換データ
-	WorldTransform transform_;
-	// モデル
-	std::unique_ptr<Object3d> objct3D_=nullptr;
+    // ワールド変換データ
+    WorldTransform transform_;
+    // モデル
+    std::unique_ptr<Object3d> objct3D_ = nullptr;
 
-	
 public:
-	Ground();
-	~Ground();
-	void Init();
-	void Update();
-	void Draw(ViewProjection& viewProjection);
-    void Draws(ViewProjection& viewProjection);
-
-	void Debug();
+    Ground();
+    ~Ground();
+    void Init();
+    void Update();
+    void Debug();
 };

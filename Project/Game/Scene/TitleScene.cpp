@@ -158,7 +158,6 @@ void TitleScene::SpriteDraw() {
 void TitleScene::DrawShadow() {
 }
 
-
 void TitleScene::Debug() {
 #ifdef _DEBUG
 	ImGui::Begin("Camera");

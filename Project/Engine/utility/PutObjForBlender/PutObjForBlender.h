@@ -25,7 +25,7 @@ public:
         // オブジェクト1個分のデータ
         struct ObjectData {
             std::string fileName;
-            WorldTransform worldTransform;
+          /*  WorldTransform worldTransform;*/
             std::unique_ptr<Object3d> object3d;
             std::list<ObjectData> children;
             std::vector<std::unique_ptr<EasingSequence<Vector3>>> scalingEasing;

@@ -55,9 +55,6 @@ public:
     ModelData LoadModelFile(const std::string& directoryPath, const std::string& filename);
     ModelData LoadModelGltf(const std::string& directoryPath, const std::string& filename);
 
-    /// 描画前処理
-    static void PreDraw(ID3D12GraphicsCommandList* commandList);
-
     Node ReadNode(aiNode* node);
     void DebugImGui();
     void Finalize();

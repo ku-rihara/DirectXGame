@@ -71,25 +71,27 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
             objectData.fileName = object["file_name"].get<std::string>();
         }
 
+        objectData.object3d.reset(Object3d::CreateModel(objectData.fileName));
+
         ///------------------------------Transform------------------------------
         const nlohmann::json& transform = object["transform"];
-        objectData.worldTransform.Init();
+        objectData.object3d->transform_.Init();
         // 平行移動
-        objectData.worldTransform.translation_.x = (float)transform["translation"][0];
-        objectData.worldTransform.translation_.y = (float)transform["translation"][2];
-        objectData.worldTransform.translation_.z = (float)transform["translation"][1];
+        objectData.object3d->transform_.translation_.x = (float)transform["translation"][0];
+        objectData.object3d->transform_.translation_.y = (float)transform["translation"][2];
+        objectData.object3d->transform_.translation_.z = (float)transform["translation"][1];
 
         // 回転角
-        objectData.worldTransform.rotation_.x = -toRadian((float)transform["rotation"][0]);
-        objectData.worldTransform.rotation_.y = -toRadian((float)transform["rotation"][2]);
-        objectData.worldTransform.rotation_.z = -toRadian((float)transform["rotation"][1]);
+        objectData.object3d->transform_.rotation_.x = -toRadian((float)transform["rotation"][0]);
+        objectData.object3d->transform_.rotation_.y = -toRadian((float)transform["rotation"][2]);
+        objectData.object3d->transform_.rotation_.z = -toRadian((float)transform["rotation"][1]);
 
         // スケーリング
-        objectData.worldTransform.scale_.x = (float)transform["scaling"][0];
-        objectData.worldTransform.scale_.y = (float)transform["scaling"][2];
-        objectData.worldTransform.scale_.z = (float)transform["scaling"][1];
+        objectData.object3d->transform_.scale_.x = (float)transform["scaling"][0];
+        objectData.object3d->transform_.scale_.y = (float)transform["scaling"][2];
+        objectData.object3d->transform_.scale_.z = (float)transform["scaling"][1];
 
-        objectData.worldTransform.UpdateMatrix();
+        objectData.object3d->transform_.UpdateMatrix();
 
         ///------------------------------Emitter------------------------------
         if (object.contains("emitters") && object["emitters"].is_array()) {
@@ -113,7 +115,7 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
             }
             // Emitter位置をオブジェクトに
             for (std::unique_ptr<ParticleEmitter>& emitter : objectData.emitters) {
-                emitter->SetTargetPosition(objectData.worldTransform.GetWorldPos());
+                emitter->SetTargetPosition(objectData.object3d->transform_.GetWorldPos());
             }
         }
 
@@ -201,12 +203,12 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
                 } else if (srtType == "Rotation") {
 
                     objectData.rotationEasing[groupId]->AddStep(filename, &objectData.preRotation[groupId]);
-                    objectData.rotationEasing[groupId]->SetBaseValue(objectData.worldTransform.rotation_);
+                    objectData.rotationEasing[groupId]->SetBaseValue(objectData.object3d->transform_.rotation_);
                     objectData.isAdaptEasing[groupId][static_cast<int>(EasingAdaptTransform::Rotate)] = true;
                 } else if (srtType == "Transform") {
 
                     objectData.translationEasing[groupId]->AddStep(filename, &objectData.preTranslation[groupId]);
-                    objectData.translationEasing[groupId]->SetBaseValue(objectData.worldTransform.GetWorldPos());
+                    objectData.translationEasing[groupId]->SetBaseValue(objectData.object3d->transform_.GetWorldPos());
                     objectData.isAdaptEasing[groupId][static_cast<int>(EasingAdaptTransform::Translate)] = true;
                 }
             }
@@ -303,21 +305,21 @@ void PutObjForBlender::AdaptEasing(LevelData::ObjectData& objectData, const int3
 
     // scale
     if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Scale)) {
-        objectData.worldTransform.scale_ = objectData.preScale[groupNum];
+        objectData.object3d->transform_.scale_ = objectData.preScale[groupNum];
     }
 
     // rotate
     if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Rotate)) {
-        objectData.worldTransform.rotation_ = objectData.preRotation[groupNum];
+        objectData.object3d->transform_.rotation_ = objectData.preRotation[groupNum];
     }
 
     // translate
     if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Translate)) {
-        objectData.worldTransform.translation_ = objectData.preTranslation[groupNum];
+        objectData.object3d->transform_.translation_ = objectData.preTranslation[groupNum];
     }
 
     // 変更を反映
-    objectData.worldTransform.UpdateMatrix();
+    objectData.object3d->Update();
 }
 
 void PutObjForBlender::EmitterAllEdit() {
@@ -332,7 +334,6 @@ void PutObjForBlender::EmitterAllEdit() {
                 continue;
             }
 
-          
             emitter->EditorUpdate();
             processedParticleNames.insert(name);
         }
@@ -340,18 +341,18 @@ void PutObjForBlender::EmitterAllEdit() {
 }
 
 void PutObjForBlender::PutObject() {
-    assert(levelData_);
+    /*  assert(levelData_);
 
-    for (auto& objectData : levelData_->objects) {
-        objectData.object3d.reset(Object3d::CreateModel(objectData.fileName));
-        assert(objectData.object3d);
-    }
+      for (auto& objectData : levelData_->objects) {
+          objectData.object3d.reset(Object3d::CreateModel(objectData.fileName));
+          assert(objectData.object3d);
+      }*/
 }
 
 void PutObjForBlender::DrawObject(LevelData::ObjectData& objectData, const ViewProjection& viewProjection) {
     if (objectData.object3d) {
-        objectData.worldTransform.UpdateMatrix();
-        objectData.object3d->Draw(objectData.worldTransform, viewProjection);
+        objectData.object3d->transform_.UpdateMatrix();
+        objectData.object3d->Draw(viewProjection);
     }
 }
 

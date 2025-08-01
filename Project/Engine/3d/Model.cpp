@@ -8,7 +8,6 @@
 #include "base/TextureManager.h"
 #include "Dx/DxRenderTarget.h"
 #include "Lighrt/Light.h"
-#include "Pipeline/Object3DPiprline.h"
 #include "ShadowMap/ShadowMap.h"
 #include <filesystem>
 
@@ -127,11 +126,6 @@ Node Model::ReadNode(aiNode* node) {
     result.transform.translate = {-translate.x, translate.y, translate.z};
     result.localMatrix         = MakeAffineMatrixQuaternion(result.transform.scale, result.transform.rotate, result.transform.translate);
     result.name                = node->mName.C_Str(); // Node名を格納
-
-    // Node result;
-    // aiMatrix4x4 aiLocalMatrix = node->mTransformation; // nodeのlocalMatrix
-    // aiLocalMatrix.Transpose(); // 転置
-    // result.localMatrix.m[0][0] = aiLocalMatrix[0][0]; // 他の要素も同様に
 
     result.cihldren.resize(node->mNumChildren); // 子供の数だけ確保
     for (uint32_t childIndex = 0; childIndex < node->mNumChildren; ++childIndex) {
@@ -304,10 +298,6 @@ void Model::DrawForShadowMap(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource,
 
     // 描画コール
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
-}
-
-void Model::PreDraw(ID3D12GraphicsCommandList* commandList) {
-    Object3DPiprline::GetInstance()->PreDraw(commandList);
 }
 
 void Model::Finalize() {

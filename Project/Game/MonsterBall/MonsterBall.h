@@ -1,7 +1,7 @@
 #pragma once
 #include "3d/Object3d.h"
 #include "3d/WorldTransform.h"
-#include "Animation/ModelAnimation.h"
+#include "Animation/Object3DAnimation.h"
 #include "Easing.h"
 #include "utility/ParticleEditor/ParticleEmitter.h"
 class MonsterBall {
@@ -12,8 +12,8 @@ private:
     std::unique_ptr<Object3d> obj3D_;
 
     // モデル
-    std::unique_ptr<ModelAnimation> modelAnimation_  = nullptr;
-    std::unique_ptr<ModelAnimation> modelAnimation2_ = nullptr;
+    std::unique_ptr<Object3DAnimation> modelAnimation_  = nullptr;
+    std::unique_ptr<Object3DAnimation> modelAnimation2_ = nullptr;
     Easing<Vector3> easing_;
     std::unique_ptr<ParticleEmitter> emitter_;
 

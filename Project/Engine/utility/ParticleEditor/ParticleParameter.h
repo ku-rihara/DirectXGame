@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-class ModelAnimation;
+class Object3DAnimation;
 class ParticleParameter {
 public:
     enum class EaseType {
@@ -55,7 +55,7 @@ public:
 
     struct JointParent {
         std::string name;
-        const ModelAnimation* animation = nullptr;
+        const Object3DAnimation* animation = nullptr;
     };
 
     struct Parameters {

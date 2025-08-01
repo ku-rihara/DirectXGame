@@ -21,8 +21,8 @@ public:
 	~Plane();
 	void Init();
 	void Update();
-	void Draw(ViewProjection& viewProjection);
-    void Draws(ViewProjection& viewProjection);
+	/*void Draw(ViewProjection& viewProjection);
+    void Draws(ViewProjection& viewProjection);*/
 
 	void Debug();
 };

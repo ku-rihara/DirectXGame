@@ -14,6 +14,7 @@
     <ClCompile Include="Engine\2d\ImGuiManager.cpp" />
     <ClCompile Include="Engine\2d\Sprite.cpp" />
     <ClCompile Include="Engine\3d\BaseObject3d.cpp" />
+    <ClCompile Include="Engine\3d\Object3DRegistry.cpp" />
     <ClCompile Include="Engine\3d\Line3d.cpp" />
     <ClCompile Include="Engine\3d\Mesh.cpp" />
     <ClCompile Include="Engine\3d\Model.cpp" />
@@ -22,7 +23,9 @@
     <ClCompile Include="Engine\3d\ObjectColor.cpp" />
     <ClCompile Include="Engine\3d\ViewProjection.cpp" />
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
+    <ClCompile Include="Engine\Animation\AnimationRegistry.cpp" />
     <ClCompile Include="Engine\Animation\ModelAnimation.cpp" />
+    <ClCompile Include="Engine\Animation\Object3DAnimation.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
     <ClCompile Include="Engine\base\DsvManager.cpp" />
     <ClCompile Include="Engine\base\RtvManager.cpp" />
@@ -206,6 +209,7 @@
     <ClInclude Include="Engine\2d\ImGuiManager.h" />
     <ClInclude Include="Engine\2d\Sprite.h" />
     <ClInclude Include="Engine\3d\BaseObject3d.h" />
+    <ClInclude Include="Engine\3d\Object3DRegistry.h" />
     <ClInclude Include="Engine\3d\Line3d.h" />
     <ClInclude Include="Engine\3d\Mesh.h" />
     <ClInclude Include="Engine\3d\Model.h" />
@@ -215,7 +219,9 @@
     <ClInclude Include="Engine\3d\ViewProjection.h" />
     <ClInclude Include="Engine\3d\WorldTransform.h" />
     <ClInclude Include="Engine\Animation\AnimationData.h" />
+    <ClInclude Include="Engine\Animation\AnimationRegistry.h" />
     <ClInclude Include="Engine\Animation\ModelAnimation.h" />
+    <ClInclude Include="Engine\Animation\Object3DAnimation.h" />
     <ClInclude Include="Engine\Animation\SkeletonData.h" />
     <ClInclude Include="Engine\Animation\SkinCluster.h" />
     <ClInclude Include="Engine\audio\Audio.h" />

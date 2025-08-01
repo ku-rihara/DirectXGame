@@ -119,7 +119,6 @@ void GameScene::Update() {
     debugCamera_->Update();
     Debug();
 
-   
     // 各クラス更新
     player_->Update();
     skydome_->Update();
@@ -168,7 +167,7 @@ void GameScene::Update() {
 void GameScene::ModelDraw() {
     /// commandList取得
     ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
-    Model::PreDraw(commandList);
+    Object3DPiprline::GetInstance()->PreDraw(commandList);
 
     gameBackGroundObject_->Draw(viewProjection_);
     fireInjectors_->Draw(viewProjection_);
@@ -203,13 +202,12 @@ void GameScene::SpriteDraw() {
 }
 
 /// ======================================================
-/// 影
+/// 影描画
 /// ======================================================
 void GameScene::DrawShadow() {
     player_->ShadowDrawTest(viewProjection_);
     field_->ShadowDrawTest(viewProjection_);
 }
-
 
 void GameScene::Debug() {
 #ifdef _DEBUG
