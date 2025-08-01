@@ -20,11 +20,9 @@ void RailManager::Init(const std::string& groupName) {
     worldTransform_.UpdateMatrix();
     viewProjection_.UpdateMatrix();
     isRoop_ = true;
-    // レールの初期化（オブジェクト数を指定）
+    // レールの初期化
     rail_.Init(5);
-
-    /// 現在位置モデル
-   /* obj3D_.reset(Object3d::CreateModel("DebugCube.obj"));*/
+ 
     lineDrawer_.Init(24);
 
     /// 制御点マネージャー
@@ -81,21 +79,9 @@ void RailManager::Update(const float& speed, const PositionMode& mode, const Vec
     // interpolatedPosのY成分にもオフセットを加える
     interpolatedPos.y += offsetY;
 
-    //// カメラの進行方向を計算
-    //Vector3 forward = pointsDrawing[cameraIndex + 1] - pointsDrawing[cameraIndex];
-    //forward = Vector3::Normalize(forward);
-
-    //// 目標回転角度を求めて補間
-    //float targetRotateY = std::atan2(forward.x, forward.z);
-    //float targetRotateX = std::atan2(-forward.y, std::sqrt(forward.x * forward.x + forward.z * forward.z));
-
-    //// 緩やかな回転補間
-    //cameraRotate_.y += (targetRotateY - cameraRotate_.y) * 0.1f;
-    //cameraRotate_.x += (targetRotateX - cameraRotate_.x) * 0.1f;
-
     // 行列の更新
     worldTransform_.matWorld_ = MakeAffineMatrix(scale_, cameraRotate_, interpolatedPos);
-    /*viewProjection_.matView_ = Inverse(worldTransform_.matWorld_);*/
+   
 }
 
 void RailManager::RoopOrStop() {
@@ -144,10 +130,3 @@ Vector3 RailManager::GetPositionOnRail() const {
     return  worldTransform_.GetWorldPos();
 }
 
-/////=====================================================
-///// ローカル座標取得
-/////=====================================================
-//Vector3 RailManager::GetLocalPos() const {
-//    return  worldTransform_.GetLocalPos();
-//}
-//
