@@ -20,7 +20,7 @@ void RailManager::Init(const std::string& groupName) {
     worldTransform_.UpdateMatrix();
     viewProjection_.UpdateMatrix();
     isRoop_ = true;
-    // レールの初期化（オブジェクト数を指定）
+    // レールの初期化
     rail_.Init(5);
 
     /// 現在位置モデル

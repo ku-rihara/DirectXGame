@@ -2,14 +2,13 @@
 
 #include "3d/ViewProjection.h"
 // function
-#include"EasingFunction.h"
+#include "EasingFunction.h"
 // class
 #include "BaseObject/BaseObject.h"
 #include "Behavior/BaseEnemyBehavior.h"
 #include "Behavior/BaseEnemyMoveBehavior.h"
 #include "Collider/AABBCollider.h"
 #include "CollisionBox/EnemyCollisionBox.h"
-#include "Effect/ImpactEffect.h"
 #include "Enemy/HPBar/EnemyHPBar.h"
 
 #include "SearchingSprite/FindSprite.h"
@@ -76,19 +75,16 @@ protected:
 
     std::unique_ptr<EnemyHPBar> hpbar_;
 
-    WorldTransform bodyTransform_;
-    std::unique_ptr<Object3d> bodyObj_;
+    /*std::unique_ptr<Object3d> bodyObj_;*/
 
     /// behavior
     std::unique_ptr<BaseEnemyBehavior> damageBehavior_   = nullptr;
     std::unique_ptr<BaseEnemyMoveBehavior> moveBehavior_ = nullptr;
 
-    std::list<std::unique_ptr<ImpactEffect>> effects_;
-
 public:
-    /*static Vector3 InitScale_;*/
 public:
-    BaseEnemy();
+    BaseEnemy()          = default;
+    virtual ~BaseEnemy() = default;
 
     ///========================================================================================
     ///  public method
@@ -156,11 +152,10 @@ public:
     void SetManager(EnemyManager* manager);
     void SetCombo(Combo* combo);
     void SetParameter(const Type& type, const Paramater& paramater);
-    void SetBodyRotateX(const float& r) { bodyTransform_.rotation_.x = r; }
+    void SetBodyRotateX(const float& r) { obj3d_->transform_.rotation_.x = r; }
     void SetBodyColor(const Vector4& color);
     void SetIsDeath(const bool& is) { isdeath_ = is; }
     void SetGroupId(int groupId) { groupId_ = groupId; }
-  
 
 private:
     bool IsInView(const ViewProjection& viewProjection) const;

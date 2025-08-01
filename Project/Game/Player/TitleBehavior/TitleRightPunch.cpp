@@ -29,8 +29,8 @@ TitleRightPunch::TitleRightPunch(Player* player)
     startEasing_.amplitude = 0.6f;
     startEasing_.period    = 0.2f;*/
 
-    rHandStartPos_  = pPlayer_->GetRightHand()->GetTransform().translation_;
-    rHandTargetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward()) * 2.0f;
+    rHandStartPos_  = pPlayer_->GetRightHand()->GetObjTransform().translation_;
+    rHandTargetPos_ = pPlayer_->GetRightHand()->GetObjTransform().LookAt(Vector3::ToForward()) * 2.0f;
 
     EasingInit();
 
@@ -55,7 +55,7 @@ void TitleRightPunch::Update() {
         ///----------------------------------------------------
 
          punchEase_.Update(Frame::DeltaTimeRate());
-        pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
+        pPlayer_->GetRightHand()->SetObjTranslate(punchPosition_);
 
        
         break;
@@ -65,7 +65,7 @@ void TitleRightPunch::Update() {
         /// バックパンチ
         ///----------------------------------------------------
         backPunchEase_.Update(Frame::DeltaTimeRate());
-        pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
+        pPlayer_->GetRightHand()->SetObjTranslate(punchPosition_);
        
         break;
 

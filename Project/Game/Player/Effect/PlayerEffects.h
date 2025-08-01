@@ -30,8 +30,6 @@ private:
     std::array<ParticleEffect, 1> rushRingEffect_;
     std::array<ParticleEffect, 3> starEffect_;
 
-    std::list<std::unique_ptr<ImpactEffect>> effects_; /// エフェクト
-
     int32_t starSound_;
 
 public:
@@ -47,7 +45,7 @@ public:
     void Draw(const ViewProjection& viewProjection);
 
     void SpecialAttackRenditionInit();
-    void FallEffectRenditionInit(const Vector3& pos);
+    void FallEffectRenditionInit();
     void RushAttackEmit();
     void RushAttackRingEffectEmit();
 

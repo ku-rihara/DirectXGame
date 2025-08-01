@@ -24,22 +24,19 @@
 #include "ComboAttackBehavior/RoringUpper.h"
 #include "ComboAttackBehavior/RushAttack.h"
 #include "PlayerBehavior/PlayerMove.h"
-#include"PlayerBehavior/PlayerSpawn.h"
+#include "PlayerBehavior/PlayerSpawn.h"
 #include "TitleBehavior/TitleFirstFall.h"
-
 
 ///=========================================================
 /// 　初期化
 ///==========================================================
 void Player::Init() {
 
-    ///* model生成
-    BaseObject::Init(); // 基底クラスの初期化
-    BaseObject::CreateModel("Player.obj"); /// モデルセット
+      BaseObject::Init();
 
     //* particle
     effects_ = std::make_unique<PlayerEffects>();
-    effects_->Init(transform_.translation_);
+    effects_->Init(baseTransform_.translation_);
 
     ///* グローバルパラメータ
     parameters_ = std::make_unique<PlayerParameter>();
@@ -48,26 +45,27 @@ void Player::Init() {
     ///* 武器生成
     leftHand_  = std::make_unique<PlayerHandLeft>();
     rightHand_ = std::make_unique<PlayerHandRight>();
-    headObj_.reset(Object3d::CreateModel("Player.obj"));
-    headObj_->material_.materialData_->enableLighting = 7;
-    headObj_->material_.SetEnvironmentCoefficient(0.05f);
+
+    obj3d_.reset(Object3d::CreateModel("Player.obj"));
+    obj3d_->material_.materialData_->enableLighting = 7;
+    obj3d_->material_.SetEnvironmentCoefficient(0.05f);
 
     // トランスフォーム初期化
-    headTransform_.Init();
+    obj3d_->transform_.Init();
     leftHand_->Init();
     rightHand_->Init();
 
     ///* ペアレント
-    headTransform_.SetParent(&transform_);
-    leftHand_->SetParent(&transform_);
-    rightHand_->SetParent(&transform_);
+    obj3d_->transform_.SetParent(&baseTransform_);
+    leftHand_->SetParent(&baseTransform_);
+    rightHand_->SetParent(&baseTransform_);
 
     /// レールペアレント
-    rightHand_->SetRailParent(&transform_);
-    leftHand_->SetRailParent(&transform_);
+    rightHand_->SetRailParent(&baseTransform_);
+    leftHand_->SetRailParent(&baseTransform_);
 
     // パラメータセット
-    transform_.translation_ = parameters_->GetParamaters().startPos_;
+    baseTransform_.translation_ = parameters_->GetParamaters().startPos_;
 
     // 音
     punchSoundID_ = Audio::GetInstance()->LoadWave("Resources/punchAir.wav");
@@ -120,20 +118,6 @@ void Player::TitleUpdate() {
     UpdateMatrix();
 }
 
-///=========================================================
-/// 　描画
-///==========================================================
-void Player::Draw(const ViewProjection& viewProjection) {
-
-    headObj_->Draw(headTransform_, viewProjection);
-    leftHand_->Draw(viewProjection);
-    rightHand_->Draw(viewProjection);
-}
-
-void Player::ShadowDrawTest(const ViewProjection& viewProjection) {
-    headObj_->ShadowDraw(headTransform_, viewProjection);
-  }
-
 void Player::EffectDraw(const ViewProjection& viewProjection) {
     effects_->Draw(viewProjection);
 }
@@ -184,7 +168,7 @@ void Player::Move(const float& speed) {
         Matrix4x4 rotateMatrix = MakeRotateYMatrix(viewProjection_->rotation_.y);
         direction_             = TransformNormal(direction_, rotateMatrix);
         // 移動
-        transform_.translation_ += direction_;
+        baseTransform_.translation_ += direction_;
         // 目標角度
         objectiveAngle_ = std::atan2(direction_.x, direction_.z);
         // 最短角度補間
@@ -229,12 +213,12 @@ void Player::FaceToTarget() {
         Vector3 differectialVector = pLockOn_->GetTargetPosition() - GetWorldPosition();
 
         // Y軸周り角度(θy)
-        transform_.rotation_.y = std::atan2(differectialVector.x, differectialVector.z);
+        baseTransform_.rotation_.y = std::atan2(differectialVector.x, differectialVector.z);
     }
 }
 
 void Player::AdaptRotate() {
-    transform_.rotation_.y = LerpShortAngle(transform_.rotation_.y, objectiveAngle_, 0.3f);
+    baseTransform_.rotation_.y = LerpShortAngle(baseTransform_.rotation_.y, objectiveAngle_, 0.3f);
 }
 
 ///=========================================================
@@ -291,36 +275,36 @@ void Player::MoveToLimit() {
     Vector3 fieldScale  = Field::baseScale_; // フィールドのスケール
 
     // プレイヤーのスケールを考慮した半径
-    float radiusX = fieldScale.x - transform_.scale_.x;
-    float radiusZ = fieldScale.z - transform_.scale_.z;
+    float radiusX = fieldScale.x - baseTransform_.scale_.x;
+    float radiusZ = fieldScale.z - baseTransform_.scale_.z;
 
     // 現在位置が範囲内かチェック
-    bool insideX = std::abs(transform_.translation_.x - fieldCenter.x) <= radiusX;
-    bool insideZ = std::abs(transform_.translation_.z - fieldCenter.z) <= radiusZ;
+    bool insideX = std::abs(baseTransform_.translation_.x - fieldCenter.x) <= radiusX;
+    bool insideZ = std::abs(baseTransform_.translation_.z - fieldCenter.z) <= radiusZ;
 
     ///--------------------------------------------------------------------------------
     /// 範囲外なら戻す
     ///--------------------------------------------------------------------------------
 
     if (!insideX) { /// X座標
-        transform_.translation_.x = std::clamp(
-            transform_.translation_.x,
+        baseTransform_.translation_.x = std::clamp(
+            baseTransform_.translation_.x,
             fieldCenter.x - radiusX,
             fieldCenter.x + radiusX);
     }
 
     if (!insideZ) { /// Z座標
-        transform_.translation_.z = std::clamp(
-            transform_.translation_.z,
+        baseTransform_.translation_.z = std::clamp(
+            baseTransform_.translation_.z,
             fieldCenter.z - radiusZ,
             fieldCenter.z + radiusZ);
     }
 
     // 範囲外の反発処理
     if (!insideX || !insideZ) {
-        Vector3 directionToCenter = (fieldCenter - transform_.translation_).Normalize();
-        transform_.translation_.x += directionToCenter.x * 0.1f; // 軽く押し戻す
-        transform_.translation_.z += directionToCenter.z * 0.1f; // 軽く押し戻す
+        Vector3 directionToCenter = (fieldCenter - baseTransform_.translation_).Normalize();
+        baseTransform_.translation_.x += directionToCenter.x * 0.1f; // 軽く押し戻す
+        baseTransform_.translation_.z += directionToCenter.z * 0.1f; // 軽く押し戻す
     }
 }
 
@@ -329,7 +313,7 @@ void Player::MoveToLimit() {
 /// ===================================================
 void Player::Jump(float& speed, const float& fallSpeedLimit, const float& gravity) {
     // 移動
-    transform_.translation_.y += speed * Frame::DeltaTimeRate();
+    baseTransform_.translation_.y += speed * Frame::DeltaTimeRate();
     Fall(speed, fallSpeedLimit, gravity, true);
 }
 
@@ -340,15 +324,15 @@ void Player::Fall(float& speed, const float& fallSpeedLimit, const float& gravit
 
     if (!isJump) {
         // 移動
-        transform_.translation_.y += speed * Frame::DeltaTimeRate();
+        baseTransform_.translation_.y += speed * Frame::DeltaTimeRate();
     }
 
     // 加速する
     speed = max(speed - (gravity * Frame::DeltaTimeRate()), -fallSpeedLimit);
 
     // 着地
-    if (transform_.translation_.y <= parameters_->GetParamaters().startPos_.y) {
-        transform_.translation_.y = parameters_->GetParamaters().startPos_.y;
+    if (baseTransform_.translation_.y <= parameters_->GetParamaters().startPos_.y) {
+        baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
         speed                     = 0.0f;
     }
 }
@@ -409,7 +393,6 @@ void Player::SetTitleBehavior() {
 
 void Player::UpdateMatrix() {
     /// 行列更新
-    headTransform_.UpdateMatrix();
     leftHand_->Update();
     rightHand_->Update();
     BaseObject::Update();
@@ -429,7 +412,7 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
         const Vector3& enemyPosition = enemy->GetCollisionPos();
 
         // プレイヤーと敵の位置の差分ベクトルを計算
-        Vector3 delta = transform_.translation_ - enemyPosition;
+        Vector3 delta = baseTransform_.translation_ - enemyPosition;
 
         // スケール取得
         Vector3 enemyScale = enemy->GetCollisonScale();
@@ -475,29 +458,29 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
         // 実際に押し戻す
         if (pushDistance > 0.0f) {
-            transform_.translation_ += pushDirection * pushDistance;
+            baseTransform_.translation_ += pushDirection * pushDistance;
         }
     }
 }
 
-void Player::DissolveUpdate(const float&dissolve) {
-    headObj_->material_.SetDissolveEdgeColor(Vector3(0.6706f, 0.8824f, 0.9804f));
-    headObj_->material_.SetDissolveEdgeWidth(0.09f);
-    headObj_->material_.SetEnableDissolve(true);
-    headObj_->material_.SetDissolveThreshold(dissolve);
- }
+void Player::DissolveUpdate(const float& dissolve) {
+    obj3d_->material_.SetDissolveEdgeColor(Vector3(0.6706f, 0.8824f, 0.9804f));
+    obj3d_->material_.SetDissolveEdgeWidth(0.09f);
+    obj3d_->material_.SetEnableDissolve(true);
+    obj3d_->material_.SetDissolveThreshold(dissolve);
+}
 
 Vector3 Player::GetCollisionPos() const {
     // ローカル座標でのオフセット
     const Vector3 offset = {0.0f, 1.5f, 0.0f};
     // ワールド座標に変換
-    Vector3 worldPos = TransformMatrix(offset, transform_.matWorld_);
+    Vector3 worldPos = TransformMatrix(offset, baseTransform_.matWorld_);
     return worldPos;
 }
 
 void Player::SetRotateInit() {
-    headTransform_.rotation_      = {0, 0, 0};
-    headTransform_.translation_.y = 0.0f;
+    obj3d_->transform_.rotation_      = {0, 0, 0};
+    obj3d_->transform_.translation_.y = 0.0f;
 }
 
 /// =======================================================================================
@@ -513,9 +496,9 @@ bool Player::IsChargeMax() const {
 void Player::SetLightPos() {
     // ライト位置
     Light::GetInstance()->GetSpotLightManager()->GetSpotLight(0)->SetPosition(Vector3(
-        transform_.translation_.x,
-        transform_.translation_.y + 5.0f,
-        transform_.translation_.z));
+        baseTransform_.translation_.x,
+        baseTransform_.translation_.y + 5.0f,
+        baseTransform_.translation_.z));
 }
 
 void Player::HeadLightSetting() {
@@ -537,5 +520,5 @@ void Player::FallSound() {
 }
 
 void Player::PositionYReset() {
-    transform_.translation_.y = parameters_->GetParamaters().startPos_.y;
+    baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
 }

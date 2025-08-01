@@ -85,8 +85,8 @@ void EnemyManager::Update() {
             }
 
             pLockOn_->OnEnemyDestroyed((*it).get());
-            it = enemies_.erase(it); // 削除して次の要素を指すイテレータを取得
-            GetIsEnemiesCleared(); // フラグを更新
+            it = enemies_.erase(it);
+            GetIsEnemiesCleared(); 
         } else {
             ++it; // 削除しない場合はイテレータを進める
         }
@@ -102,15 +102,6 @@ void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
     for (auto it = enemies_.begin(); it != enemies_.end();) {
         (*it)->DisplaySprite(viewProjection); // 更新
         ++it;
-    }
-}
-
-///========================================================================================
-///  描画処理
-///========================================================================================
-void EnemyManager::Draw(const ViewProjection& viewProjection) {
-    for (auto it = enemies_.begin(); it != enemies_.end(); ++it) {
-        (*it)->Draw(viewProjection);
     }
 }
 

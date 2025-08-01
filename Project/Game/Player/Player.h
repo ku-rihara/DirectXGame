@@ -39,7 +39,7 @@ private:
 
 public:
     Player()  = default;
-    ~Player()=default;
+    ~Player() = default;
     /// ===================================================
     ///  public method
     /// ===================================================
@@ -48,16 +48,14 @@ public:
     void Init() override;
     void Update() override;
     void TitleUpdate();
-    void Draw(const ViewProjection& viewProjection) override;
-    void ShadowDrawTest(const ViewProjection& viewProjection);
     void EffectDraw(const ViewProjection& viewProjection);
 
     ///* 移動
     void Move(const float& speed); /// 移動
-    bool GetIsMoving();            /// 動かしてるかフラグ
-    void MoveToLimit();            /// 移動制限
-    Vector3 GetInputDirection();   /// 入力による速度
-    void UpdateMatrix();           /// 行列更新
+    bool GetIsMoving(); /// 動かしてるかフラグ
+    void MoveToLimit(); /// 移動制限
+    Vector3 GetInputDirection(); /// 入力による速度
+    void UpdateMatrix(); /// 行列更新
 
     void PositionYReset();
     void AttackPowerCharge();
@@ -101,8 +99,8 @@ public:
 
 private:
     /// グローバルなパラメータ
-    GlobalParameter* globalParameter_; /// グローバルパラメータ
-    const std::string groupName_ = "Player"; /// グループ名
+    GlobalParameter* globalParameter_; // グローバルパラメータ
+    const std::string groupName_ = "Player"; // グループ名
 
     /// behavior
     std::unique_ptr<BasePlayerBehavior> behavior_            = nullptr;
@@ -120,8 +118,6 @@ private:
     GameCamera* pGameCamera_; /// ゲームカメラポインタ
     std::unique_ptr<PlayerHandLeft> leftHand_; /// 左手
     std::unique_ptr<PlayerHandRight> rightHand_; /// 右手
-    std::unique_ptr<Object3d> headObj_; /// 頭
-    WorldTransform headTransform_; /// 頭トランスフォーム
 
 private:
     /// ===================================================
@@ -171,8 +167,8 @@ public:
     void SetLightPos();
     void HeadLightSetting();
 
-    void SetHeadScale(const Vector3& scale) { headTransform_.scale_ = scale; }
-    void SetHeadPosY(const float& posy) { headTransform_.translation_.y = posy; }
-    void SetHeadRotateX(const float& zrotate) { headTransform_.rotation_.x = zrotate; }
-    void SetHeadRotateY(const float& zrotate) { headTransform_.rotation_.y = zrotate; }
+    void SetHeadScale(const Vector3& scale) { obj3d_->transform_.scale_ = scale; }
+    void SetHeadPosY(const float& posy) { obj3d_->transform_.translation_.y = posy; }
+    void SetHeadRotateX(const float& zrotate) { obj3d_->transform_.rotation_.x = zrotate; }
+    void SetHeadRotateY(const float& zrotate) { obj3d_->transform_.rotation_.y = zrotate; }
 };

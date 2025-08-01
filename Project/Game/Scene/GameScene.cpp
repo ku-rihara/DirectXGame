@@ -1,11 +1,11 @@
 #include "GameScene.h"
+#include "3d/Object3DRegistry.h"
 #include "Scene/Manager/SceneManager.h"
 #include "utility/ParticleEditor/ParticleManager.h"
 // base
 #include "base/TextureManager.h"
 // math
 #include "Frame/Frame.h"
-#include "JoyState/JoyState.h"
 #include "Lighrt/Light.h"
 #include <imgui.h>
 
@@ -41,8 +41,6 @@ void GameScene::Init() {
     /// 初期化
     ///=======================================================================================
 
-    field_->Init();
-    skydome_->Init();
     player_->Init();
     lockOn_->Init();
     skyBox_->Init();
@@ -85,8 +83,6 @@ void GameScene::Init() {
     finishSpriteEase_.Reset();
 
     finishSpriteEase_.SetOnFinishCallback([this]() {
-        /*  cSprite_->SetPosition(Vector2(0, 0));*/
-
         // 　ジャンプに切り替え
         if (Input::GetInstance()->PushKey(DIK_SPACE)) {
             isend_ = true;
@@ -95,8 +91,6 @@ void GameScene::Init() {
         }
     });
 
-    /*  cease_.time    = 0.0f;
-      cease_.maxTime = 0.5f;*/
     chandle_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Clear.png");
     cSprite_.reset(Sprite::Create(chandle_, Vector2(0, -720), Vector4(1, 1, 1, 1.0f)));
 
@@ -119,12 +113,12 @@ void GameScene::Update() {
     debugCamera_->Update();
     Debug();
 
+    Object3DRegistry::GetInstance()->UpdateAll();
+
     // 各クラス更新
     player_->Update();
-    skydome_->Update();
     skyBox_->Update();
     howToOperate_->Update();
-    field_->Update();
     enemySpawner_->Update(Frame::DeltaTimeRate());
     enemyManager_->Update();
     combo_->Update();
@@ -134,7 +128,6 @@ void GameScene::Update() {
         gameBackGroundObject_->Update();
     }
 
-    //
     enemyManager_->HpBarUpdate(viewProjection_);
     lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
 
@@ -143,7 +136,7 @@ void GameScene::Update() {
     ViewProjectionUpdate();
 
     /// クリア
-    if (enemyManager_->GetCread()&&enemySpawner_->GetAllGroupsCompleted()) {
+    if (enemyManager_->GetCread() && enemySpawner_->GetAllGroupsCompleted()) {
         finishSpriteEase_.Update(Frame::DeltaTime());
         cSprite_->SetPosition(tempSpritePos_);
     }
@@ -154,32 +147,15 @@ void GameScene::Update() {
             SceneManager::GetInstance()->ChangeScene("TITLE");
         }
     }
-
-    ///// タイトルに戻る
-    // if (input_->TrrigerKey(DIK_RETURN)) {
-    //	SceneManager::GetInstance()->ChangeScene("TITLE");
-    // }
 }
 
 /// ===================================================
 /// モデル描画
 /// ===================================================
 void GameScene::ModelDraw() {
-    /// commandList取得
-    ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
-    Object3DPiprline::GetInstance()->PreDraw(commandList);
 
-    gameBackGroundObject_->Draw(viewProjection_);
-    fireInjectors_->Draw(viewProjection_);
-
-  /*  field_->Draw(viewProjection_);*/
-    player_->Draw(viewProjection_);
-    enemyManager_->Draw(viewProjection_);
-
+    Object3DRegistry::GetInstance()->DrawAll(viewProjection_);
     ParticleManager::GetInstance()->Draw(viewProjection_);
-
-    Model::PreDraw(commandList);
-    player_->EffectDraw(viewProjection_);
 }
 
 /// ===================================================
@@ -205,8 +181,7 @@ void GameScene::SpriteDraw() {
 /// 影描画
 /// ======================================================
 void GameScene::DrawShadow() {
-    player_->ShadowDrawTest(viewProjection_);
-    field_->ShadowDrawTest(viewProjection_);
+    Object3DRegistry::GetInstance()->DrawAllShadow(viewProjection_);
 }
 
 void GameScene::Debug() {

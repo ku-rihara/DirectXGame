@@ -1,5 +1,6 @@
 #include "Object3DRegistry.h"
 #include "3d/Object3d.h"
+#include"Pipeline/Object3DPiprline.h"
 #include <algorithm>
 #include <imgui.h>
 
@@ -36,6 +37,7 @@ void Object3DRegistry::UpdateAll() {
 /// 全オブジェクトの描画
 ///============================================================
 void Object3DRegistry::DrawAll(const ViewProjection& viewProjection) {
+    Object3DPiprline::GetInstance()->PreDraw(DirectXCommon::GetInstance()->GetCommandList());
     for (Object3d* obj : objects_) {
         if (obj != nullptr) {
             obj->Draw(viewProjection);

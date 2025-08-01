@@ -156,7 +156,7 @@ void FallAttack::EasingInit() {
         pPlayer_->GetRightHand()->SetWorldPositionY(fallInitPosRHand_);
         pPlayer_->SetWorldPositionY(pPlayerParameter_->GetParamaters().startPos_.y);
 
-        pPlayer_->GetEffects()->FallEffectRenditionInit(pPlayer_->GetWorldPosition());
+        pPlayer_->GetEffects()->FallEffectRenditionInit();
 
         pPlayer_->GetGameCamera()->ChangeShakeMode();
         pPlayer_->FallSound();

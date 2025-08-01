@@ -11,11 +11,15 @@ void PlayerHandLeft::Init() {
     groupName_     = "LeftHand";
     railGroupName_ = "ThrustRail";
 
-    BaseObject::CreateModel("LHand.obj"); /// モデルセット
-    BasePlayerHand::Init();
+    obj3d_.reset(Object3d::CreateModel("LHand.obj"));
+    obj3d_->transform_.scale_                       = {2, 2, 2};
+    obj3d_->material_.materialData_->enableLighting = 2;
+    obj3d_->material_.SetEnvironmentCoefficient(0.15f);
 
     trustRailManager_ = std::make_unique<RailManager>();
     trustRailManager_->Init(railGroupName_);
+
+    BasePlayerHand::Init();
 }
 
 ///=========================================================
@@ -29,14 +33,7 @@ void PlayerHandLeft::Update() {
 void PlayerHandLeft::RailForthComboUpdate(const float& speed) {
     /// 突き飛ばしコンボレール更新
     trustRailManager_->Update(speed, RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
-    SetWorldPosition(trustRailManager_->GetPositionOnRail());
-}
-
-///=========================================================
-/// 　描画
-///==========================================================
-void PlayerHandLeft::Draw(const ViewProjection& viewProjection) {
-    BasePlayerHand::Draw(viewProjection);
+    obj3d_->transform_.translation_ = (trustRailManager_->GetPositionOnRail());
 }
 
 ///=====================================================
@@ -44,7 +41,7 @@ void PlayerHandLeft::Draw(const ViewProjection& viewProjection) {
 ///=====================================================
 void PlayerHandLeft::AdjustParm() {
 
-    BasePlayerHand::SetValues(); /// setvalue
+    BasePlayerHand::SetValues();
 
     if (ImGui::CollapsingHeader("LeftHand")) {
         ImGui::PushID("LeftHand");

@@ -2,7 +2,7 @@
 #include <list>
 #include <memory>
 // Function
-#include"EasingFunction.h"
+#include "EasingFunction.h"
 // class
 #include "BaseEnemy.h"
 
@@ -10,9 +10,9 @@
 /// 敵クラス
 /// </summary>
 class NormalEnemy : public BaseEnemy {
-private:
-private:
 public:
+    NormalEnemy()           = default;
+    ~NormalEnemy() override = default;
     ///========================================================================================
     ///  public method
     ///========================================================================================
@@ -27,4 +27,7 @@ public:
     void DisplaySprite(const ViewProjection& viewProjection) override;
 
     void SpawnRenditionInit() override;
+
+private:
+private:
 };

@@ -1,46 +1,41 @@
 #pragma once
 
+#include "Player/Parts/BasePlayerHand.h"
 
-#include"Player/Parts/BasePlayerHand.h"
-
-
-class PlayerHandLeft:public BasePlayerHand {
+class PlayerHandLeft : public BasePlayerHand {
 private:
-	
 private:
+    ///===========================================
+    /// private variant
+    ///=============================================
 
-	///===========================================
-	/// private variant
-	///=============================================
-	
-	std::string railGroupName_;
-	std::unique_ptr<RailManager>trustRailManager_;
-	
+    std::string railGroupName_;
+    std::unique_ptr<RailManager> trustRailManager_;
+
 public:
     PlayerHandLeft()  = default;
-    ~PlayerHandLeft()=default;
-	///===========================================
-	/// public method
-	///=============================================
+    ~PlayerHandLeft() = default;
+    ///===========================================
+    /// public method
+    ///=============================================
 
-	void Init()override;
-	void Update()override;
-	void Draw(const ViewProjection& viewprojection)override;
+    void Init() override;
+    void Update() override;
 
-	void RailForthComboUpdate(const float& speed);
-	 void AdjustParm()override;
-	 void SaveAndLoad()override;
+    void RailForthComboUpdate(const float& speed);
+    void AdjustParm() override;
+    void SaveAndLoad() override;
 
-	  void DissolveAdapt(const float& dissolve)override;
+    void DissolveAdapt(const float& dissolve) override;
 
-	 ///===========================================
-	/// getter method
-	///=============================================
-	 RailManager* GetThrustRailManager() { return trustRailManager_.get(); }
+    ///===========================================
+    /// getter method
+    ///=============================================
+    RailManager* GetThrustRailManager() { return trustRailManager_.get(); }
 
-	 ///===========================================
-	/// setter method
-	///=============================================
-	 void SetRailParent(WorldTransform* parent)override;
-	  void SetParent(WorldTransform* parent)override;
+    ///===========================================
+    /// setter method
+    ///=============================================
+    void SetRailParent(WorldTransform* parent) override;
+    void SetParent(WorldTransform* parent) override;
 };

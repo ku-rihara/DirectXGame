@@ -84,10 +84,10 @@ void RightJobPunch::Update() {
         collisionBox_->IsAdapt(true);
         /// パンチイージング更新
         punchEase_.Update(Frame::DeltaTimeRate());
-        pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
+        pPlayer_->GetRightHand()->SetObjTranslate(punchPosition_);
 
         /// 当たり判定座標
-        collisionBox_->SetPosition(pPlayer_->GetRightHand()->GetWorldPosition());
+        collisionBox_->SetPosition(pPlayer_->GetRightHand()->GetObjTransform().GetWorldPos());
         collisionBox_->SetOffset(forwardDirection_ * 1.0f);
         collisionBox_->Update();
 
@@ -103,7 +103,7 @@ void RightJobPunch::Update() {
 
         /// バックパンチイージング更新
         backPunchEase_.Update(Frame::DeltaTimeRate());
-        pPlayer_->GetRightHand()->SetWorldPosition(punchPosition_);
+        pPlayer_->GetRightHand()->SetObjTranslate(punchPosition_);
 
         break;
 
@@ -136,8 +136,8 @@ void RightJobPunch::EasingInit() {
     rushEase_.SetEndValue(rushPos_);
 
     rushEase_.SetOnFinishCallback([this]() {
-        rHandStartPos_  = pPlayer_->GetRightHand()->GetTransform().translation_;
-        rHandTargetPos_ = pPlayer_->GetRightHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayerParameter_->GetNormalComboParm(FIRST).attackReach;
+        rHandStartPos_  = pPlayer_->GetRightHand()->GetObjTransform().translation_;
+        rHandTargetPos_ = pPlayer_->GetRightHand()->GetObjTransform().LookAt(Vector3::ToForward()) * pPlayerParameter_->GetNormalComboParm(FIRST).attackReach;
 
         // ease start end Set
         punchEase_.SetStartValue(rHandStartPos_);

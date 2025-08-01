@@ -24,8 +24,8 @@ TitleLeftPunch::TitleLeftPunch(Player* player)
     waitTine_       = 0.0f;
 
     /// パンチ座標セット
-    lHandStartPos_  = pPlayer_->GetLeftHand()->GetTransform().translation_;
-    lHandTargetPos_ = pPlayer_->GetLeftHand()->GetTransform().LookAt(Vector3::ToForward()) * 2.0f;
+    lHandStartPos_  = pPlayer_->GetLeftHand()->GetObjTransform().translation_;
+    lHandTargetPos_ = pPlayer_->GetLeftHand()->GetObjTransform().LookAt(Vector3::ToForward()) * 2.0f;
 
     /// land
   
@@ -54,7 +54,7 @@ void TitleLeftPunch::Update() {
         ///----------------------------------------------------
 
       punchEase_.Update(Frame::DeltaTimeRate());
-        pPlayer_->GetLeftHand()->SetWorldPosition(punchPosition_);
+        pPlayer_->GetLeftHand()->SetObjTranslate(punchPosition_);
 
         break;
 
@@ -65,7 +65,7 @@ void TitleLeftPunch::Update() {
 
       /*  punchEase_.time -= Frame::DeltaTimeRate();*/
         backPunchEase_.Update(Frame::DeltaTimeRate());
-        pPlayer_->GetLeftHand()->SetWorldPosition(punchPosition_);
+        pPlayer_->GetLeftHand()->SetObjTranslate(punchPosition_);
       
         break;
 

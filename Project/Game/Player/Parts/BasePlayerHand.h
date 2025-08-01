@@ -35,8 +35,6 @@ public:
 
 	virtual void Init();
 	virtual void Update();
-	
-	virtual void Draw(const ViewProjection& viewprojection);
 
 	virtual void AdjustParm() = 0;
 
@@ -53,18 +51,20 @@ public:
 
 	virtual void SaveAndLoad();
 
-	///============================================
+	///========================================================
 	/// getter method
-	///=============================================
+    ///========================================================
 	Vector3 GetDirection()const { return direction_; }
+    const WorldTransform& GetObjTransform() const { return obj3d_->transform_; }
 	float GetRailRunSpeedThree()const { return railRunSpeedThree_; }
 	float GetRailRunSpeedForth()const { return railRunSpeedForth_; }
 
-	///============================================
+	///========================================================
 	/// setter method
-	///=============================================
+    ///========================================================
 	virtual void SetRailParent(WorldTransform* parent)=0;
 	virtual void SetParent(WorldTransform* parent);
 	void SetBlendModeSub();
 	void SetBlendModeAdd();
+    void SetObjTranslate(const Vector3& pos) { obj3d_->transform_.translation_ = pos; }
 };

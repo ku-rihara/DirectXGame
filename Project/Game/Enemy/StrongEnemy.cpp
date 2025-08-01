@@ -8,10 +8,9 @@
 void StrongEnemy::Init(const Vector3& spownPos) {
 	BaseEnemy::Init(spownPos);
 	damageParm_ = 20.0f;
-    bodyObj_.reset(Object3d::CreateModel("StrongEnemy.obj"));
-	bodyTransform_.Init();
-	bodyTransform_.SetParent(&transform_);
-    
+    obj3d_.reset(Object3d::CreateModel("StrongEnemy.obj"));
+	obj3d_->transform_.Init();
+	obj3d_->transform_.SetParent(&baseTransform_);   
 }
 
 ///========================================================
@@ -20,7 +19,6 @@ void StrongEnemy::Init(const Vector3& spownPos) {
 
 void StrongEnemy::Update() {
 	BaseEnemy::Update();
-	bodyTransform_.UpdateMatrix();
 }
 
 ///========================================================
@@ -28,8 +26,7 @@ void StrongEnemy::Update() {
 ///========================================================
 
 void StrongEnemy::Draw(const ViewProjection& viewProjection) {
-	BaseEnemy::Draw(viewProjection);
-	bodyObj_->Draw(bodyTransform_, viewProjection);
+    viewProjection;
 }
 
 ///========================================================
@@ -49,6 +46,6 @@ void StrongEnemy::SpriteDraw(const ViewProjection& viewProjection) {
 
 void StrongEnemy::SpawnRenditionInit() {
     // ガレキパーティクル
-    pEnemyManager_->SpawnEmitByStrongEnemy(transform_.translation_);
+    pEnemyManager_->SpawnEmitByStrongEnemy(baseTransform_.translation_);
    /* Audio::GetInstance()->PlayWave(thurstSound_, 0.2f);*/
 }

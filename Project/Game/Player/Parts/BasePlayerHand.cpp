@@ -8,24 +8,15 @@
 ///==========================================================
 void BasePlayerHand::Init() {
 
-    BaseObject::Init();
-
-    ///* グローバルパラメータ
+    // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
     AddParmGroup();
     ApplyGlobalParameter();
 
-    transform_.scale_                               = {2, 2, 2};
-    obj3d_->material_.materialData_->enableLighting = 2;
-
     emitter_.reset(ParticleEmitter::CreateParticlePrimitive(groupName_, PrimitiveType::Plane, 300));
     uint32_t handle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
     emitter_->SetTextureHandle(handle);
-
-    obj3d_->material_.SetEnvironmentCoefficient(0.15f);
-
-  
 }
 
 ///=========================================================
@@ -34,19 +25,12 @@ void BasePlayerHand::Init() {
 void BasePlayerHand::Update() {
 
     // エミッター更新
-    emitter_->SetTargetPosition(GetWorldPosition());
+    emitter_->SetTargetPosition(obj3d_->transform_.GetWorldPos());
     emitter_->Update();
     emitter_->EditorUpdate();
     emitter_->Emit();
 
     BaseObject::Update();
-}
-
-///============================================================
-/// 　描画
-///==========================================================
-void BasePlayerHand::Draw(const ViewProjection& viewProjection) {
-    BaseObject::Draw(viewProjection);
 }
 
 ///=================================================================================
@@ -72,7 +56,7 @@ void BasePlayerHand::AddParmGroup() {
 
     // Position
     // globalParameter_->AddSeparatorText("Position");
-    globalParameter_->AddItem(groupName_, "Translate", transform_.translation_);
+    globalParameter_->AddItem(groupName_, "Translate", obj3d_->transform_.translation_);
     globalParameter_->AddItem(groupName_, "RailRunSpeed", railRunSpeedThree_);
     globalParameter_->AddItem(groupName_, "RailRunSpeedF", railRunSpeedForth_);
 }
@@ -87,7 +71,7 @@ void BasePlayerHand::SetValues() {
 
     // Position
     // globalParameter_->AddSeparatorText("Position");
-    globalParameter_->SetValue(groupName_, "Translate", transform_.translation_);
+    globalParameter_->SetValue(groupName_, "Translate", obj3d_->transform_.translation_);
     globalParameter_->SetValue(groupName_, "RailRunSpeed", railRunSpeedThree_);
     globalParameter_->SetValue(groupName_, "RailRunSpeedF", railRunSpeedForth_);
 }
@@ -97,9 +81,9 @@ void BasePlayerHand::SetValues() {
 ///=====================================================
 void BasePlayerHand::ApplyGlobalParameter() {
     // Position
-    transform_.translation_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
-    railRunSpeedThree_      = globalParameter_->GetValue<float>(groupName_, "RailRunSpeed");
-    railRunSpeedForth_      = globalParameter_->GetValue<float>(groupName_, "RailRunSpeedF");
+    obj3d_->transform_.translation_ = globalParameter_->GetValue<Vector3>(groupName_, "Translate");
+    railRunSpeedThree_              = globalParameter_->GetValue<float>(groupName_, "RailRunSpeed");
+    railRunSpeedForth_              = globalParameter_->GetValue<float>(groupName_, "RailRunSpeedF");
 }
 
 ///=====================================================
@@ -119,13 +103,13 @@ void BasePlayerHand::DissolveAdapt(const float& dissolve) {
 
 void BasePlayerHand::AjustParmBase() {
     ImGui::SeparatorText("Param");
-    ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
+    ImGui::DragFloat3("Position", &obj3d_->transform_.translation_.x, 0.1f);
     ImGui::DragFloat("RailRunSpeedThree", &railRunSpeedThree_, 0.01f);
     ImGui::DragFloat("RailRunSpeedForth", &railRunSpeedForth_, 0.01f);
 }
 
 void BasePlayerHand::SetParent(WorldTransform* parent) {
-    transform_.parent_ = parent;
+    obj3d_->transform_.parent_ = parent;
 }
 
 void BasePlayerHand::SetBlendModeSub() {

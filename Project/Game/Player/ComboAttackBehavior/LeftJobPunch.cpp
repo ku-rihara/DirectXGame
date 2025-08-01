@@ -1,16 +1,10 @@
 /// behavior
 #include "LeftJobPunch.h"
 #include "ComboAttackRoot.h"
-#include "RightJobPunch.h"
-#include "RoolingPunchAttack.h"
 #include "RoringUpper.h"
 
 /// objs
 #include "Player/Player.h"
-
-/// input
-#include "JoyState/JoyState.h"
-
 /// frame
 #include "Frame/Frame.h"
 
@@ -28,8 +22,8 @@ LeftJobPunch::LeftJobPunch(Player* player)
     CollisionBoxInit();
 
     /// パンチ座標セット
-    lHandStartPos_  = pPlayer_->GetLeftHand()->GetTransform().translation_;
-    lHandTargetPos_ = pPlayer_->GetLeftHand()->GetTransform().LookAt(Vector3::ToForward()) * pPlayerParameter_->GetNormalComboParm(SECOND).attackReach;
+    lHandStartPos_  = pPlayer_->GetLeftHand()->GetObjTransform().translation_;
+    lHandTargetPos_ = pPlayer_->GetLeftHand()->GetObjTransform().LookAt(Vector3::ToForward()) * pPlayerParameter_->GetNormalComboParm(SECOND).attackReach;
 
     // ease parm
     EasingInit();
@@ -66,10 +60,10 @@ void LeftJobPunch::Update() {
         collisionBox_->IsAdapt(true);
         /// パンチイージング更新
         punchEase_.Update(Frame::DeltaTimeRate());
-        pPlayer_->GetLeftHand()->SetWorldPosition(punchPosition_);
+        pPlayer_->GetLeftHand()->SetObjTranslate(punchPosition_);
        
 
-        collisionBox_->SetPosition(pPlayer_->GetLeftHand()->GetWorldPosition());
+        collisionBox_->SetPosition(pPlayer_->GetLeftHand()->GetObjTransform().GetWorldPos());
         collisionBox_->Update();
 
         break;
@@ -82,7 +76,7 @@ void LeftJobPunch::Update() {
 
         /// バックパンチイージング更新
         backPunchEase_.Update(Frame::DeltaTimeRate());
-        pPlayer_->GetLeftHand()->SetWorldPosition(punchPosition_);
+        pPlayer_->GetLeftHand()->SetObjTranslate(punchPosition_);
       
         break;
 

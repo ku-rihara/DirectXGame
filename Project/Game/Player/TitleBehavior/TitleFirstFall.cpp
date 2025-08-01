@@ -137,7 +137,7 @@ void TitleFirstFall::EasingInit() {
         pPlayer_->GetLeftHand()->SetWorldPositionY(fallInitPosLHand_);
         pPlayer_->GetRightHand()->SetWorldPositionY(fallInitPosRHand_);
         pPlayer_->SetWorldPositionY(pPlayerParameter_->GetParamaters().startPos_.y);
-        pPlayer_->GetEffects()->FallEffectRenditionInit(pPlayer_->GetWorldPosition());
+        pPlayer_->GetEffects()->FallEffectRenditionInit();
         step_ = STEP::LANDING;
     });
   }

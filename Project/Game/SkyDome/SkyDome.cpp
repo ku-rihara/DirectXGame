@@ -14,7 +14,3 @@ void Skydome::Init() {
 void Skydome::Update() {
 	transform_.UpdateMatrix();
 }
-
-void Skydome::Draw(ViewProjection& viewProjection) {
-	obj3D_->Draw(transform_, viewProjection);
-}

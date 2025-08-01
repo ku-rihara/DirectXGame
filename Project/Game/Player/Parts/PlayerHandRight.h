@@ -32,7 +32,6 @@ public:
 
 	void Init()override;
 	void Update()override;
-	void Draw(const ViewProjection& viewprojection)override;
 
 	void RailThreeComboUpdate(const float& speed);
 	void RailForthComboUpdate(const float& speed);

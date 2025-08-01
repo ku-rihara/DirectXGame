@@ -59,32 +59,13 @@ void PlayerEffects::Update(const Vector3& position) {
     rushRingEffect_[0].emitter->Update();
     rushRingEffect_[0].emitter->EditorUpdate();
 
-     // Fall Effect Update
-    for (std::unique_ptr<ImpactEffect>& effect : effects_) {
-        if (effect) {
-            effect->Update();
-        }
-    }
-
-    // 完了したエフェクトを消す
-    effects_.erase(std::remove_if(effects_.begin(), effects_.end(), [](const std::unique_ptr<ImpactEffect>& effect) {
-        return effect->IsFinished();
-    }),
-        effects_.end());
 }
 
 ///=========================================================
 /// 　描画
 ///==========================================================
 void PlayerEffects::Draw(const ViewProjection& viewProjection) {
-    // 各エフェクトを更新
-    effects_.reverse();
-    for (std::unique_ptr<ImpactEffect>& effect : effects_) {
-        if (effect) {
-            effect->Draw(viewProjection);
-        }
-    }
-    effects_.reverse();
+    viewProjection;
 }
 
 
@@ -105,16 +86,10 @@ void PlayerEffects::RushAttackRingEffectEmit() {
     rushRingEffect_[0].emitter->Emit();
 }
 
-void PlayerEffects::FallEffectRenditionInit(const Vector3& pos) {
-   
+void PlayerEffects::FallEffectRenditionInit() {
     // ガレキパーティクル
     for (uint32_t i = 0; i < debriParticle_.size(); i++) {
         debriParticle_[i].emitter->Emit();
     }
     fallCrack_->Emit();
-
-    // impact effect
-    std::unique_ptr<ImpactEffect> effect = std::make_unique<ImpactEffect>();
-    effect->Init(pos);
-    effects_.push_back(std::move(effect));
 }
