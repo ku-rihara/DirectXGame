@@ -36,7 +36,7 @@ public:
 
 private:
     AnimationRegistry()  = default;
-    ~AnimationRegistry() = default;
+    ~AnimationRegistry();
 
     /// コピー禁止
     AnimationRegistry(const AnimationRegistry&)            = delete;
@@ -45,8 +45,8 @@ private:
     /// ============================================================
     /// private members
     /// ============================================================
-
-
+private:
     std::unordered_set<Object3DAnimation*> animations_;
     static AnimationRegistry* instance_;
+    static bool isDestroyed_;
 };

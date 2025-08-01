@@ -3,14 +3,37 @@
 #include <algorithm>
 #include <imgui.h>
 
+bool AnimationRegistry::isDestroyed_ = false;
+
 ///============================================================
-/// シングルトン
+/// デストラクタ
+///============================================================
+AnimationRegistry::~AnimationRegistry() {
+    isDestroyed_ = true;
+    animations_.clear();
+}
+
+///============================================================
+/// シングルトンインスタンス取得
 ///============================================================
 AnimationRegistry* AnimationRegistry::GetInstance() {
     static AnimationRegistry instance;
+    static bool isAlive = true;
+
+    // アプリケーション終了処理中かチェック
+    if (!isAlive) {
+        return nullptr;
+    }
+
+    // 初回呼び出し時にatexit登録
+    static bool registered = false;
+    if (!registered) {
+        std::atexit([]() { isAlive = false; });
+        registered = true;
+    }
+
     return &instance;
 }
-
 
 ///============================================================
 /// 登録
@@ -25,15 +48,18 @@ void AnimationRegistry::RegisterAnimation(Object3DAnimation* animation) {
 /// 登録解除
 ///============================================================
 void AnimationRegistry::UnregisterAnimation(Object3DAnimation* animation) {
-    animation;
+    if (animation != nullptr) {
+        animations_.erase(animation);
+    }
 }
 
 ///============================================================
 /// 更新
 ///============================================================
 void AnimationRegistry::UpdateAll(const float& deltaTime) {
+
     for (Object3DAnimation* animation : animations_) {
-        if (animation != nullptr) {
+        if (animation != nullptr && animations_.find(animation) != animations_.end()) {
             animation->Update(deltaTime);
         }
     }
@@ -44,7 +70,7 @@ void AnimationRegistry::UpdateAll(const float& deltaTime) {
 ///============================================================
 void AnimationRegistry::DrawAll(const ViewProjection& viewProjection) {
     for (Object3DAnimation* animation : animations_) {
-        if (animation != nullptr) {
+        if (animation != nullptr && animations_.find(animation) != animations_.end()) {
             animation->Draw(viewProjection);
         }
     }
@@ -55,7 +81,7 @@ void AnimationRegistry::DrawAll(const ViewProjection& viewProjection) {
 ///============================================================
 void AnimationRegistry::DrawAllShadow(const ViewProjection& viewProjection) {
     for (Object3DAnimation* animation : animations_) {
-        if (animation != nullptr) {
+        if (animation != nullptr && animations_.find(animation) != animations_.end()) {
             animation->DrawShadow(viewProjection);
         }
     }
@@ -96,8 +122,6 @@ void AnimationRegistry::DebugImGui() {
 
                 if (ImGui::CollapsingHeader(("Animation " + std::to_string(index)).c_str())) {
                     ImGui::Text("Animation Address: %p", static_cast<void*>(animation));
-
-                   
                 }
 
                 ImGui::PopID();
