@@ -74,7 +74,7 @@ void ViewProjection::UpdateProjectionMatrix() {
         matProjection_ = MakePerspectiveFovMatrix(fovAngleY_, aspectRatio_, nearZ_, farZ_);
     } else {
         // 平行投影
-        matProjection_ = MakeOrthographicMatrix(-orthoWidth_ / 2, orthoHeight_ / 2,orthoWidth_ / 2, -orthoHeight_ / 2,nearZ_, farZ_);
+        matProjection_ = MakeOrthographicMatrix(-orthoWidth_ / 2, orthoHeight_ / 2,orthoWidth_ / 2, -orthoHeight_ / 2,0.0f, 100.0f);
     }
 }
 

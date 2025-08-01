@@ -102,7 +102,6 @@ void RailManager::RoopOrStop() {
 void RailManager::Draw(const ViewProjection& viewProjection, const Vector3& size) {
     lineDrawer_.DrawCubeWireframe(worldTransform_.GetWorldPos(), size, Vector4::kWHITE());
     lineDrawer_.Draw(viewProjection);
-    emitControlPosManager_->Draw(viewProjection);
 }
 
 ///=====================================================
