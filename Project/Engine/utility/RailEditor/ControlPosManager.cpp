@@ -6,14 +6,16 @@
 void ControlPosManager::Init() {
 }
 
-void ControlPosManager::Update(const Vector3& Direction) {
+void ControlPosManager::Update(const Vector3& Direction,const bool&isDraw) {
 
     for (size_t i = 0; i < movePosies_.size(); ++i) {
-        transforms_[i].translation_ = movePosies_[i] * Direction;
+        obj3ds_[i]->transform_.translation_ = movePosies_[i] * Direction;
     }
 
-    for (auto& transform : transforms_) {
-        transform.UpdateMatrix();
+    for (size_t i = 0; i < transforms_.size(); ++i) {
+        if (i < obj3ds_.size()) {
+            obj3ds_[i]->SetIsDraw(isDraw);
+        }
     }
 }
 
@@ -146,16 +148,6 @@ void ControlPosManager::ImGuiUpdate(const std::string& filename) {
 
     // 色のリセットをヘッダー処理終了後に行う
     ImGui::PopStyleColor();
-}
-
-void ControlPosManager::Draw(const ViewProjection& viewProjection) {
-    viewProjection;
-    // for (size_t i = 0; i < transforms_.size(); ++i) {
-    //	// 各制御点に対応するObject3dを描画
-    //	if (i < obj3ds_.size()) {
-    //		obj3ds_[i]->Draw(transforms_[i], viewProjection);  // 各制御点の位置を描画
-    //	}
-    // }
 }
 
 std::vector<Vector3> ControlPosManager::GetWorldPositions() const {
