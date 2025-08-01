@@ -54,8 +54,8 @@ void  Plane::Debug() {
 	/// .obj
     if (ImGui::CollapsingHeader("Suzanne")) {
 		ImGui::PushID("Suzanne");
-		ImGui::DragFloat3("Position", &transform_.translation_.x, 0.1f);
-		ImGui::DragFloat3("Scale", &transform_.scale_.x, 0.1f);
+        ImGui::DragFloat3("Position", &objct3D_->transform_.translation_.x, 0.1f);
+        ImGui::DragFloat3("Scale", &objct3D_->transform_.scale_.x, 0.1f);
 		objct3D_->material_.DebugImGui();
 		ImGui::PopID();
     }
@@ -63,8 +63,8 @@ void  Plane::Debug() {
 	/// .gltf
 	if (ImGui::CollapsingHeader("Monster")) {
 		ImGui::PushID("Monster");
-		ImGui::DragFloat3("Position", &gtransform_.translation_.x, 0.1f);
-		ImGui::DragFloat3("Scale", &gtransform_.scale_.x, 0.1f);
+        ImGui::DragFloat3("Position", &gobjct3D_->transform_.translation_.x, 0.1f);
+        ImGui::DragFloat3("Scale", &gobjct3D_->transform_.scale_.x, 0.1f);
 		gobjct3D_->material_.DebugImGui();
 		ImGui::PopID();
 	}

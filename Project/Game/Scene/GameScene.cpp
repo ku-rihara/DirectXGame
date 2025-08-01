@@ -10,6 +10,7 @@
 #include "Scene/Manager/SceneManager.h"
 
 #include "Pipeline/Object3DPiprline.h"
+#include"Animation/AnimationRegistry.h"
 #include "ShadowMap/ShadowMap.h"
 
 #include <imgui.h>
@@ -53,6 +54,9 @@ void GameScene::Update() {
     plane_->Update();
     skuBox_->Update();
 
+    Object3DRegistry::GetInstance()->UpdateAll();
+    AnimationRegistry::GetInstance()->UpdateAll(Frame::DeltaTimeRate());
+    
     putObjForBlender->EasingUpdateSelectGroup(Frame::DeltaTime(), 0);
 
     // viewProjection 更新
@@ -76,7 +80,7 @@ void GameScene::ModelDraw() {
     /* ground_->Draw(viewProjection_);
      plane_->Draw(viewProjection_);*/
     Object3DRegistry::GetInstance()->DrawAll(viewProjection_);
-
+  
     ParticleManager::GetInstance()->Draw(viewProjection_);
 }
 

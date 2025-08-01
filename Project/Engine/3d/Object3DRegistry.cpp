@@ -25,7 +25,11 @@ void Object3DRegistry::RegisterObject(Object3d* object) {
 /// 全オブジェクトの更新
 ///============================================================
 void Object3DRegistry::UpdateAll() {
-  
+    for (Object3d* obj : objects_) {
+        if (obj != nullptr) {
+            obj->Update();
+        }
+    }
 }
 
 ///============================================================

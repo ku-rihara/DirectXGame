@@ -1,4 +1,5 @@
 #include "Object3DAnimation.h"
+#include "3d/ModelManager.h"
 #include "AnimationRegistry.h"
 #include "base/SrvManager.h"
 #include "MathFunction.h"
@@ -6,7 +7,6 @@
 #include "Pipeline/SkinningObject3DPipeline.h"
 #include <algorithm>
 #include <cassert>
-
 
 Object3DAnimation* Object3DAnimation::CreateModel(const std::string& fileName) {
     std::unique_ptr<Object3DAnimation> animationObj = std::make_unique<Object3DAnimation>();
@@ -18,7 +18,6 @@ Object3DAnimation* Object3DAnimation::CreateModel(const std::string& fileName) {
     return animationObj.release();
 }
 
-
 ///============================================================
 /// 作成
 ///============================================================
@@ -27,6 +26,7 @@ void Object3DAnimation::Create(const std::string& fileName) {
     modelAnimation_ = std::make_unique<ModelAnimation>();
 
     // Object3Dの作成とモデル設定
+    ModelManager::GetInstance()->LoadModel(fileName);
     SetModel(fileName);
 
     // アニメーションデータの読み込み
@@ -46,11 +46,8 @@ void Object3DAnimation::Create(const std::string& fileName) {
     CreateMaterialResource();
     CreateShadowMap();
 
-    AnimationRegistry::GetInstance()->RegisterAnimation(this);
-
     Init();
 }
-
 
 ///============================================================
 /// 初期化
@@ -59,7 +56,6 @@ void Object3DAnimation::Init() {
     transform_.Init();
     line3dDrawer_.Init(5120);
 }
-
 
 ///============================================================
 /// アニメーション追加

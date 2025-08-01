@@ -19,8 +19,7 @@ void MonsterBall::Init() {
     modelAnimation_.reset(Object3DAnimation::CreateModel("WalkAnimation.gltf"));
     modelAnimation_->Add("Walk.gltf");
 
-      modelAnimation2_.reset(Object3DAnimation::CreateModel("Walk.gltf"));
-   
+    modelAnimation2_.reset(Object3DAnimation::CreateModel("Walk.gltf"));
 
     modelAnimation_->transform_.translation_.y = -5.0f;
     modelAnimation_->transform_.translation_.z = -14.0f;
@@ -33,11 +32,10 @@ void MonsterBall::Init() {
     emitter_.reset(ParticleEmitter::CreateParticlePrimitive("jointTest", PrimitiveType::Plane, 300));
 
     emitter_->SetParentJoint(modelAnimation_.get(), "mixamorig:RightHand");
-    transform_.SetParentJoint(modelAnimation_.get(), "mixamorig:LeftHand");
+    obj3D_->transform_.SetParentJoint(modelAnimation_.get(), "mixamorig:LeftHand");
 
-    transform_.scale_={33, 33, 33};
+    obj3D_->transform_.scale_               = {33, 33, 33};
     modelAnimation_->transform_.rotation_.y = 3.14f;
-
 }
 
 void MonsterBall::Update() {
@@ -48,19 +46,18 @@ void MonsterBall::Update() {
     emitter_->Emit();
     emitter_->EditorUpdate();
 
-
     transform_.UpdateMatrix();
 }
 
 void MonsterBall::Draw(ViewProjection& viewProjection) {
     viewProjection;
-  /*  modelAnimation_->Draw(viewProjection);
-    modelAnimation_->DebugDraw(viewProjection);
+    /*  modelAnimation_->Draw(viewProjection);
+      modelAnimation_->DebugDraw(viewProjection);
 
-    modelAnimation2_->Draw(viewProjection);
-    modelAnimation2_->DebugDraw(viewProjection);
+      modelAnimation2_->Draw(viewProjection);
+      modelAnimation2_->DebugDraw(viewProjection);
 
-    obj3D_->Draw(transform_, viewProjection);*/
+      obj3D_->Draw(transform_, viewProjection);*/
 }
 
 void MonsterBall::Debug() {
@@ -71,9 +68,9 @@ void MonsterBall::Debug() {
         ImGui::DragFloat3("R", &modelAnimation_->transform_.rotation_.x, 0.1f);
         ImGui::DragFloat3("Scale", &modelAnimation_->transform_.scale_.x, 0.1f);
 
-        ImGui::DragFloat3("MPosition", &transform_.translation_.x, 0.1f);
-        ImGui::DragFloat3("MR", &transform_.rotation_.x, 0.1f);
-        ImGui::DragFloat3("MScale", &transform_.scale_.x, 0.1f);
+        ImGui::DragFloat3("MPosition", &obj3D_->transform_.translation_.x, 0.1f);
+        ImGui::DragFloat3("MR", &obj3D_->transform_.rotation_.x, 0.1f);
+        ImGui::DragFloat3("MScale", &obj3D_->transform_.scale_.x, 0.1f);
         /*	objct3D_->material_.DebugImGui();*/
         ImGui::PopID();
     }
