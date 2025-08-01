@@ -1,6 +1,6 @@
 #include "Object3DRegistry.h"
 #include "3d/Object3d.h"
-#include"Pipeline/Object3DPiprline.h"
+#include "Pipeline/Object3DPiprline.h"
 #include <algorithm>
 #include <imgui.h>
 
@@ -12,7 +12,6 @@ Object3DRegistry* Object3DRegistry::GetInstance() {
     return &instance;
 }
 
-
 ///============================================================
 /// オブジェクト登録
 ///============================================================
@@ -22,12 +21,20 @@ void Object3DRegistry::RegisterObject(Object3d* object) {
     }
 }
 
+void Object3DRegistry::UnregisterObject(Object3d* object) {
+    if (object != nullptr) {
+        objects_.erase(object);
+    }
+}
+
 ///============================================================
 /// 全オブジェクトの更新
 ///============================================================
 void Object3DRegistry::UpdateAll() {
-    for (Object3d* obj : objects_) {
-        if (obj != nullptr) {
+
+    auto objectsCopy = objects_;
+    for (Object3d* obj : objectsCopy) {
+        if (obj != nullptr && objects_.find(obj) != objects_.end()) {
             obj->Update();
         }
     }
@@ -38,8 +45,10 @@ void Object3DRegistry::UpdateAll() {
 ///============================================================
 void Object3DRegistry::DrawAll(const ViewProjection& viewProjection) {
     Object3DPiprline::GetInstance()->PreDraw(DirectXCommon::GetInstance()->GetCommandList());
-    for (Object3d* obj : objects_) {
-        if (obj != nullptr) {
+
+    auto objectsCopy = objects_;
+    for (Object3d* obj : objectsCopy) {
+        if (obj != nullptr && objects_.find(obj) != objects_.end()) {
             obj->Draw(viewProjection);
         }
     }
@@ -49,8 +58,9 @@ void Object3DRegistry::DrawAll(const ViewProjection& viewProjection) {
 /// 全オブジェクトのシャドウ描画
 ///============================================================
 void Object3DRegistry::DrawAllShadow(const ViewProjection& viewProjection) {
-    for (Object3d* obj : objects_) {
-        if (obj != nullptr) {
+    auto objectsCopy = objects_;
+    for (Object3d* obj : objectsCopy) {
+        if (obj != nullptr && objects_.find(obj) != objects_.end()) {
             obj->ShadowDraw(viewProjection);
         }
     }
