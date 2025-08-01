@@ -3,12 +3,17 @@
 #include "Object3DRegistry.h"
 #include "Pipeline/Object3DPiprline.h"
 
+Object3d::~Object3d() {
+    if (Object3DRegistry::GetInstance()) {
+        Object3DRegistry::GetInstance()->UnregisterObject(this);
+    }
+}
 ///============================================================
 /// モデル作成
 ///============================================================
 Object3d* Object3d::CreateModel(const std::string& instanceName) {
     // 新しいModelインスタンスを作成
-    std::unique_ptr<Object3d> object3d =std::make_unique<Object3d>();
+    std::unique_ptr<Object3d> object3d = std::make_unique<Object3d>();
     ModelManager::GetInstance()->LoadModel(instanceName);
     object3d->transform_.Init();
     object3d->SetModel(instanceName);
@@ -46,7 +51,6 @@ void Object3d::Draw(const ViewProjection& viewProjection) {
     model_->Draw(wvpResource_, *shadowMap_, material_);
 }
 
-
 void Object3d::ShadowDraw(const ViewProjection& viewProjection) {
     if (!model_) {
         return;
@@ -64,7 +68,6 @@ void Object3d::ShadowDraw(const ViewProjection& viewProjection) {
 void Object3d::DebugImgui() {
     BaseObject3d::DebugImgui();
 }
-
 
 ///============================================================
 /// WVP更新
@@ -86,7 +89,6 @@ void Object3d::CreateMaterialResource() {
 void Object3d::CreateWVPResource() {
     BaseObject3d::CreateWVPResource();
 }
-
 
 void Object3d::CreateShadowMap() {
     BaseObject3d::CreateShadowMap();

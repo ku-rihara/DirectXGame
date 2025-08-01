@@ -34,7 +34,7 @@ public:
 
 private:
     Object3DRegistry()  = default;
-    ~Object3DRegistry() = default;
+    ~Object3DRegistry();
 
     /// コピー禁止
     Object3DRegistry(const Object3DRegistry&)            = delete;
@@ -43,6 +43,8 @@ private:
     /// ============================================================
     /// private members
     /// ============================================================
+private:
+    static bool isDestroyed_;
 
     std::unordered_set<Object3d*> objects_;
     static Object3DRegistry* instance_;

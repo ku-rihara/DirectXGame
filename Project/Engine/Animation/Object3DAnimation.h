@@ -16,7 +16,7 @@
 class Object3DAnimation : public BaseObject3d {
 public:
     Object3DAnimation() = default;
-    ~Object3DAnimation() = default;
+    ~Object3DAnimation()override;
 
     /// ============================================================
     /// public methods

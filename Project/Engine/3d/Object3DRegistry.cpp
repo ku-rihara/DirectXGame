@@ -1,14 +1,38 @@
 #include "Object3DRegistry.h"
 #include "3d/Object3d.h"
 #include "Pipeline/Object3DPiprline.h"
-#include <algorithm>
 #include <imgui.h>
+#include <cstdlib>
+
+bool Object3DRegistry::isDestroyed_ = false;
+
+///============================================================
+/// デストラクタ
+///============================================================
+Object3DRegistry::~Object3DRegistry() {
+    isDestroyed_ = true;
+    objects_.clear();
+}
 
 ///============================================================
 /// シングルトンインスタンス取得
 ///============================================================
 Object3DRegistry* Object3DRegistry::GetInstance() {
     static Object3DRegistry instance;
+    static bool isAlive = true;
+
+    // アプリケーション終了処理中かチェック
+    if (!isAlive) {
+        return nullptr;
+    }
+
+    // 初回呼び出し時にatexit登録
+    static bool registered = false;
+    if (!registered) {
+        std::atexit([]() { isAlive = false; });
+        registered = true;
+    }
+
     return &instance;
 }
 
