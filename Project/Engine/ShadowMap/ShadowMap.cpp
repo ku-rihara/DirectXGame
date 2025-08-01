@@ -214,7 +214,7 @@ void ShadowMap::PostDraw() {
 
 void ShadowMap::DebugImGui() {
     if (ImGui::TreeNode("ShadowMap Debug")) {
-        ImGui::DragFloat3("CameraPos", &targetPos_.x, 1.0f, 1.0f, 100.0f);
+        ImGui::DragFloat3("targetPos", &targetPos_.x,0.5f);
         ImGui::DragFloat("lightDistance", &lightDistance_, 1.0f, 1.0f, 100.0f);
 
         ImGui::TreePop();
