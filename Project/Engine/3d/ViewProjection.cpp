@@ -74,12 +74,12 @@ void ViewProjection::UpdateProjectionMatrix() {
         matProjection_ = MakePerspectiveFovMatrix(fovAngleY_, aspectRatio_, nearZ_, farZ_);
     } else {
         // 平行投影
-        matProjection_ = MakeOrthographicMatrix(-orthoWidth_ / 2, orthoHeight_ / 2,orthoWidth_ / 2, -orthoHeight_ / 2,0.0f, 100.0f);
+        matProjection_ = MakeOrthographicMatrix(-orthoWidth_ / 2, orthoHeight_ / 2,orthoWidth_ / 2, -orthoHeight_ / 2,1.0f, 100.0f);
     }
 }
 
 Vector3 ViewProjection::GetWorldPos() const {
-    // カメラ行列(cameraMatrix_)の位置成分を取得する
+ 
     return Vector3(
         cameraMatrix_.m[3][0], // X成分
         cameraMatrix_.m[3][1], // Y成分
