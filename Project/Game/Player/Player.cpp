@@ -55,7 +55,7 @@ void Player::Init() {
     leftHand_->Init();
     rightHand_->Init();
 
-    ///* ペアレント
+    // ペアレント
     obj3d_->transform_.SetParent(&baseTransform_);
     leftHand_->SetParent(&baseTransform_);
     rightHand_->SetParent(&baseTransform_);

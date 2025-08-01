@@ -913,9 +913,6 @@
     <ClCompile Include="Engine\PostEffect\Vignette.cpp">
       <Filter>MyEngine\.cpp\PostEffect</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Pipeline\ShadowMapPipeline.cpp">
-      <Filter>MyEngine\.cpp\Pileline</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\3d\Object3DRegistry.cpp">
       <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
@@ -924,6 +921,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Animation\Object3DAnimation.cpp">
       <Filter>MyEngine\.cpp\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\ShadowMapPipeline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

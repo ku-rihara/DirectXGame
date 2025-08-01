@@ -136,6 +136,7 @@ void TitleScene::SpriteDraw() {
 /// 影
 /// ===================================================
 void TitleScene::DrawShadow() {
+    Object3DRegistry::GetInstance()->DrawAllShadow(viewProjection_);
 }
 
 void TitleScene::Debug() {
