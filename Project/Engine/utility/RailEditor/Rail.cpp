@@ -11,7 +11,7 @@ void Rail::Update(const std::vector<Vector3>& controlPos) {
     pointsDrawing_.clear();
     totalRailLength_ = 0.0f;
 
-    // レールの描画点を生成（Catmull-Rom補間を使用）
+    // レールの描画点を生成
     for (size_t i = 0; i <= IndexCount_; ++i) {
         float t = static_cast<float>(i) / IndexCount_;
         Vector3 pos = CatmullRomPosition(controlPosies_, t);
@@ -68,13 +68,10 @@ Vector3 Rail::GetPositionOnRail(float progress) const {
         }
         accumulatedDistance += segmentLength;
     }
-    return pointsDrawing_.back(); // 最終位置（進行度が1.0fの時）
+    return pointsDrawing_.back(); 
 }
 
 void Rail::Draw(const ViewProjection& viewProjection) {
     viewProjection;
-    //if (railObject_) {
-    //    // railTransforms_を渡して描画
-    //    railObject_->Draw(railTransforms_, viewProjection);
-    //}
+  
 }

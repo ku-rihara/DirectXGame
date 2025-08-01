@@ -34,9 +34,8 @@ public:
     ///=====================================================
 
     void Init();
-    void Update(const Vector3& Direction = {1.0f, 1.0f, 1.0f});
-    void Draw(const ViewProjection& viewProjection);
-
+    void Update(const Vector3& Direction = {1.0f, 1.0f, 1.0f},const bool&isDraw=false);
+  
     void SetParent(WorldTransform* parent);
 
     // 座標管理
