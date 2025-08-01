@@ -23,9 +23,9 @@ void ShadowMap::Init(DirectXCommon* dxCommon) {
     dsvManager_ = DsvManager::GetInstance();
     pipeline_   = std::make_unique<ShadowMapPipeline>();
 
-    shadowMapWidth_  = 1024;
-    shadowMapHeight_ = 1024;
-    lightDistance_   = 6.0f;
+    shadowMapWidth_  = 2024;
+    shadowMapHeight_ = 2024;
+    lightDistance_   = 50.0f;
     targetPos_       = Vector3::ZeroVector();
 
     lightViewProjection_ = std::make_unique<ViewProjection>();

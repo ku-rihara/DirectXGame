@@ -51,8 +51,8 @@ public:
     ProjectionType projectionType_ = ProjectionType::PERSPECTIVE;
 
     // 平行投影用パラメータ
-    float orthoWidth_  = 40.0f;
-    float orthoHeight_ = 40.0f;
+    float orthoWidth_  = 150.0f;
+    float orthoHeight_ = 150.0f;
 
     // matrix
     Matrix4x4 matView_;
