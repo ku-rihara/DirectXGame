@@ -14,16 +14,6 @@ Object3DRegistry::~Object3DRegistry() {
     objects_.clear();
 }
 
-bool Object3DRegistry::isDestroyed_ = false;
-
-///============================================================
-/// デストラクタ
-///============================================================
-Object3DRegistry::~Object3DRegistry() {
-    isDestroyed_ = true;
-    objects_.clear();
-}
-
 
 ///============================================================
 /// シングルトンインスタンス取得
