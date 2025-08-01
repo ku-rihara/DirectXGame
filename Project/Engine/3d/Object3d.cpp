@@ -41,7 +41,7 @@ void Object3d::Update() {
 /// 描画
 ///============================================================
 void Object3d::Draw(const ViewProjection& viewProjection) {
-    if (!model_) {
+    if (!model_||!isDraw_) {
         return;
     }
 
@@ -52,7 +52,7 @@ void Object3d::Draw(const ViewProjection& viewProjection) {
 }
 
 void Object3d::ShadowDraw(const ViewProjection& viewProjection) {
-    if (!model_) {
+    if (!model_ || !isDraw_) {
         return;
     }
 
