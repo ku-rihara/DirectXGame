@@ -37,6 +37,7 @@ protected:
     TransformationMatrix* wvpDate_;
     ShadowMap* shadowMap_;
     bool isShadow_ = false;
+    bool isDraw_   = true;
 
     Model* model_       = nullptr;
     BlendMode blendMode = BlendMode::None;
@@ -50,11 +51,11 @@ public:
     ///========================================================================================
     ///  setter method
     ///========================================================================================
-
-    void SetModel(Model* model) { this->model_ = model; }
+    void SetIsDraw(const bool& is) { isDraw_ = is; }
+    void SetModel(Model* model) { model_ = model; }
     void SetBlendMode(BlendMode mode) { blendMode = mode; }
     void SetModel(const std::string& modelName);
-    void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
+    void SetwvpDate(Matrix4x4 date) {wvpDate_->WVP = date; }
     void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
     void SetIsShadow(const bool& is) { isShadow_ = is; }
 };
