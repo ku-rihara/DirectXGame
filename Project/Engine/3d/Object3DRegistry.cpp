@@ -1,8 +1,18 @@
 #include "Object3DRegistry.h"
 #include "3d/Object3d.h"
 #include "Pipeline/Object3DPiprline.h"
-#include <algorithm>
 #include <imgui.h>
+#include <cstdlib>
+
+bool Object3DRegistry::isDestroyed_ = false;
+
+///============================================================
+/// デストラクタ
+///============================================================
+Object3DRegistry::~Object3DRegistry() {
+    isDestroyed_ = true;
+    objects_.clear();
+}
 
 bool Object3DRegistry::isDestroyed_ = false;
 

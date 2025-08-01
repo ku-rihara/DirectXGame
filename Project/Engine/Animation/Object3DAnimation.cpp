@@ -8,6 +8,12 @@
 #include <algorithm>
 #include <cassert>
 
+Object3DAnimation::~Object3DAnimation() {
+    if (AnimationRegistry::GetInstance()) {
+        AnimationRegistry::GetInstance()->UnregisterAnimation(this);
+    }
+}
+
 Object3DAnimation* Object3DAnimation::CreateModel(const std::string& fileName) {
     std::unique_ptr<Object3DAnimation> animationObj = std::make_unique<Object3DAnimation>();
     animationObj->Create(fileName);
