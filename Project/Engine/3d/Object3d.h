@@ -4,7 +4,7 @@
 class Object3d : public BaseObject3d {
 public:
     Object3d()  = default;
-    ~Object3d() = default;
+    ~Object3d()override;
 
     /// ============================================================
     /// public method
