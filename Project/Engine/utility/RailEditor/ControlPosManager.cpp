@@ -6,7 +6,7 @@
 void ControlPosManager::Init() {
 }
 
-void ControlPosManager::Update(const Vector3& Direction,const bool&isDraw) {
+void ControlPosManager::Update(const Vector3& Direction, const bool& isDraw) {
 
     for (size_t i = 0; i < movePosies_.size(); ++i) {
         obj3ds_[i]->transform_.translation_ = movePosies_[i] * Direction;
@@ -153,8 +153,8 @@ void ControlPosManager::ImGuiUpdate(const std::string& filename) {
 std::vector<Vector3> ControlPosManager::GetWorldPositions() const {
     std::vector<Vector3> positions;
 
-    for (const auto& transform : transforms_) {
-        positions.push_back(transform.GetWorldPos());
+   for (auto& obj : obj3ds_) {
+        positions.push_back(obj->transform_.GetWorldPos());
     }
     return positions;
 }
@@ -162,8 +162,8 @@ std::vector<Vector3> ControlPosManager::GetWorldPositions() const {
 std::vector<Vector3> ControlPosManager::GetLocalPositions() const {
     std::vector<Vector3> positions;
 
-    for (const auto& transform : transforms_) {
-        positions.push_back(transform.GetLocalPos());
+    for (auto& obj : obj3ds_) {
+        positions.push_back(obj->transform_.GetLocalPos());
     }
     return positions;
 }
