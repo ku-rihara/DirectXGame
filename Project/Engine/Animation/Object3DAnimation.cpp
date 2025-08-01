@@ -253,8 +253,9 @@ void Object3DAnimation::TransitionFinish() {
 /// 描画
 ///============================================================
 void Object3DAnimation::Draw(const ViewProjection& viewProjection) {
-    if (!model_)
+    if (!model_ || !isDraw_) {
         return;
+    }
 
     // WVPデータ更新
     UpdateWVPData(viewProjection);
@@ -273,8 +274,9 @@ void Object3DAnimation::Draw(const ViewProjection& viewProjection) {
 /// シャドウ描画
 ///=====================================================================
 void Object3DAnimation::DrawShadow(const ViewProjection& viewProjection) {
-    if (!model_)
+    if (!model_ || !isDraw_) {
         return;
+    }
 
     // WVPデータ更新
     UpdateWVPData(viewProjection);
