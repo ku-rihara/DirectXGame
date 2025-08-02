@@ -113,8 +113,6 @@ void GameScene::Update() {
     debugCamera_->Update();
     Debug();
 
-    Object3DRegistry::GetInstance()->UpdateAll();
-
     // 各クラス更新
     player_->Update();
     skyBox_->Update();
@@ -130,6 +128,9 @@ void GameScene::Update() {
 
     enemyManager_->HpBarUpdate(viewProjection_);
     lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
+
+    
+    Object3DRegistry::GetInstance()->UpdateAll();
 
     /// パーティクル更新
     ParticleManager::GetInstance()->Update();

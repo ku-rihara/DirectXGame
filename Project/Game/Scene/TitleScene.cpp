@@ -37,7 +37,6 @@ void TitleScene::Init() {
     /// 初期化
     ///=======================================================================================
     field_->Init();
-    skydome_->Init();
     skyBox_->Init();
     player_->Init();
     titleRogo_->Init();
@@ -65,8 +64,7 @@ void TitleScene::Update() {
     player_->TitleUpdate();
     field_->Update();
     skyBox_->Update();
-    skydome_->Update();
-
+    
     if (dynamic_cast<TitleRightPunch*>(player_->GetTitleBehavior())) {
         if (!isTitleRogoUpdate) {
             isTitleRogoUpdate = true;
