@@ -48,7 +48,7 @@ void Player::Init() {
 
     obj3d_.reset(Object3d::CreateModel("Player.obj"));
     obj3d_->material_.materialData_->enableLighting = 7;
-    obj3d_->material_.SetEnvironmentCoefficient(0.65f);
+    obj3d_->material_.SetEnvironmentCoefficient(0.05f);
 
     // トランスフォーム初期化
     obj3d_->transform_.Init();

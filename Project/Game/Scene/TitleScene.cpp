@@ -10,7 +10,6 @@
 #include "Frame/Frame.h"
 
 // math
-
 #include <imgui.h>
 
 TitleScene::TitleScene() {}
