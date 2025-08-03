@@ -23,6 +23,8 @@ private:
     Vector3 tempAddPosition_; // ImGuiで座標を一時入力する変数
     WorldTransform* parentTransform_;
 
+    bool isDraw_=false;
+
     const std::string dyrectrypath_ = "Resources/ControlPoint/";
 
 public:
@@ -54,4 +56,6 @@ public:
     ///=====================================================
     std::vector<Vector3> GetWorldPositions() const;
     std::vector<Vector3> GetLocalPositions() const;
+
+    void SetIsDraw(const bool& is) {  isDraw_ = is; }
 };

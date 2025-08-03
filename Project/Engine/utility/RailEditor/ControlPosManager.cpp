@@ -34,6 +34,7 @@ void ControlPosManager::AddPoint(const Vector3& position) {
 
     std::unique_ptr<Object3d> obj3d;
     obj3d.reset(Object3d::CreateModel("DebugSphere.obj"));
+    obj3d->SetIsDraw(isDraw_);
     obj3ds_.push_back(std::move(obj3d));
 }
 
