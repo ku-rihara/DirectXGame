@@ -6,9 +6,6 @@
 // class
 #include "BaseEnemy.h"
 
-/// <summary>
-/// 敵クラス
-/// </summary>
 class StrongEnemy : public BaseEnemy {
 public:
     StrongEnemy()           = default;

@@ -54,8 +54,8 @@ void BaseEnemy::Init(const Vector3& spownPos) {
     deathSound_  = Audio::GetInstance()->LoadWave("Resources/EnemyDeath.wav");
     thurstSound_ = Audio::GetInstance()->LoadWave("Resources/Enemythurst.wav");
 
-    ChangeBehavior(std::make_unique<EnemyDamageRoot>(this)); /// 振る舞い初期化
-    ChangeMoveBehavior(std::make_unique<EnemySpawn>(this)); /// 振る舞い初期化
+    ChangeBehavior(std::make_unique<EnemyDamageRoot>(this));
+    ChangeMoveBehavior(std::make_unique<EnemySpawn>(this)); 
 }
 
 ///========================================================
