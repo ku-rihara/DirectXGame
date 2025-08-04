@@ -55,7 +55,6 @@ void BasePlayerHand::AddParmGroup() {
     globalParameter_->CreateGroup(groupName_, false);
 
     // Position
-    // globalParameter_->AddSeparatorText("Position");
     globalParameter_->AddItem(groupName_, "Translate", obj3d_->transform_.translation_);
     globalParameter_->AddItem(groupName_, "RailRunSpeed", railRunSpeedThree_);
     globalParameter_->AddItem(groupName_, "RailRunSpeedF", railRunSpeedForth_);
@@ -70,7 +69,6 @@ void BasePlayerHand::SetValues() {
     globalParameter_->CreateGroup(groupName_, false);
 
     // Position
-    // globalParameter_->AddSeparatorText("Position");
     globalParameter_->SetValue(groupName_, "Translate", obj3d_->transform_.translation_);
     globalParameter_->SetValue(groupName_, "RailRunSpeed", railRunSpeedThree_);
     globalParameter_->SetValue(groupName_, "RailRunSpeedF", railRunSpeedForth_);

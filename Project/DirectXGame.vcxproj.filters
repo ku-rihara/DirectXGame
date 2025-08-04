@@ -106,9 +106,6 @@
     <Filter Include="Game\BaseObject">
       <UniqueIdentifier>{832ab39a-2d4b-4fe4-8856-94b07328ddf2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\JoyState">
-      <UniqueIdentifier>{5ee7ea7f-09f5-48ab-b7fa-ce64d4d89f8a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Field">
       <UniqueIdentifier>{dadd7790-843c-4680-92b4-e67a4786f1af}</UniqueIdentifier>
     </Filter>
@@ -135,9 +132,6 @@
     </Filter>
     <Filter Include="Game\Enemy\HPBsr">
       <UniqueIdentifier>{c80a07fc-a6fa-4934-a64f-d533cf749ad6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Effect">
-      <UniqueIdentifier>{a3d6f1f9-88f4-4eb5-8164-d190b53188e7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\UI">
       <UniqueIdentifier>{87049752-476b-4d24-840f-3b5ba8a3170f}</UniqueIdentifier>
@@ -589,9 +583,6 @@
     <ClCompile Include="Game\Field\Field.cpp">
       <Filter>Game\Field</Filter>
     </ClCompile>
-    <ClCompile Include="Game\JoyState\JoyState.cpp">
-      <Filter>Game\JoyState</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GameCamera\GameCamera.cpp">
       <Filter>Game\GameCamera</Filter>
     </ClCompile>
@@ -705,9 +696,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Primitive\PrimitiveCylinder.cpp">
       <Filter>MyEngine\.cpp\Primitive</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Effect\ImpactEffect.cpp">
-      <Filter>Game\Effect</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\SearchingSprite\FindSprite.cpp">
       <Filter>Game\Enemy\SearchingSprite</Filter>
@@ -1101,9 +1089,6 @@
     <ClInclude Include="Game\Enemy\StrongEnemy.h">
       <Filter>Game\Enemy\core</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Effect\ImpactEffect.h">
-      <Filter>Game\Effect</Filter>
-    </ClInclude>
     <ClInclude Include="math\Shake.h">
       <Filter>liberary\.h</Filter>
     </ClInclude>
@@ -1205,9 +1190,6 @@
     </ClInclude>
     <ClInclude Include="Game\Field\Field.h">
       <Filter>Game\Field</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\JoyState\JoyState.h">
-      <Filter>Game\JoyState</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameCamera\GameCamera.h">
       <Filter>Game\GameCamera</Filter>

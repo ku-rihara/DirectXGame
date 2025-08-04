@@ -2,7 +2,7 @@
 #include "audio/Audio.h"
 
 /// input
-#include "JoyState/JoyState.h"
+#include "input/Input.h"
 
 /// frame
 #include "Frame/Frame.h"
@@ -10,7 +10,6 @@
 // light
 #include "Lighrt/AmbientLight.h"
 #include "Lighrt/Light.h"
-#include "Lighrt/SpotLightManager.h"
 /// math
 #include "MathFunction.h"
 
@@ -32,7 +31,7 @@
 ///==========================================================
 void Player::Init() {
 
-      BaseObject::Init();
+    BaseObject::Init();
 
     //* particle
     effects_ = std::make_unique<PlayerEffects>();
@@ -94,12 +93,9 @@ void Player::Update() {
     /// Particle
     effects_->Update(GetWorldPosition());
 
-    // ライト位置セット
-    SetLightPos();
-
-    comboBehavior_->Update(); /// 　コンボ攻撃攻撃
-    AttackPowerCharge(); // チャージアタック
-    MoveToLimit(); /// 　移動制限
+    comboBehavior_->Update(); // 　コンボ攻撃攻撃
+    AttackPowerCharge();      // チャージアタック
+    MoveToLimit();            // 　移動制限
 
     UpdateMatrix();
 }
@@ -109,9 +105,6 @@ void Player::TitleUpdate() {
 
     /// Particle
     effects_->Update(GetWorldPosition());
-
-    // ライト位置セット
-    SetLightPos();
 
     titleBehavior_->Update();
     /// 行列更新
@@ -161,7 +154,7 @@ void Player::Move(const float& speed) {
     direction_ = GetInputDirection();
 
     /// 移動処理
-    if (GetIsMoving()) {
+    if (CheckIsMoving()) {
         // 移動量に速さを反映
         direction_ = Vector3::Normalize(direction_) * (speed)*Frame::DeltaTimeRate();
         // 移動ベクトルをカメラの角度だけ回転する
@@ -192,12 +185,12 @@ void Player::AttackPowerCharge() {
     if (input->PushKey(DIK_H) || Input::IsPressPad(0, XINPUT_GAMEPAD_X)) {
         currentUpperChargeTime_ += Frame::DeltaTimeRate();
 
-    } else if (input->ReleaseKey(DIK_H) && !IsChargeMax()) { // チャージ途中切れ
+    } else if (input->ReleaseKey(DIK_H) && !CheckIsChargeMax()) { // チャージ途中切れ
         currentUpperChargeTime_ = 0.0f;
     }
 
     // チャージMax
-    if (!IsChargeMax()) {
+    if (!CheckIsChargeMax()) {
         return;
     }
 
@@ -224,7 +217,7 @@ void Player::AdaptRotate() {
 ///=========================================================
 /// 動いているか
 ///==========================================================
-bool Player::GetIsMoving() {
+bool Player::CheckIsMoving() {
     Input* input               = Input::GetInstance();
     bool isMoving              = false;
     const float thresholdValue = 0.3f;
@@ -333,7 +326,7 @@ void Player::Fall(float& speed, const float& fallSpeedLimit, const float& gravit
     // 着地
     if (baseTransform_.translation_.y <= parameters_->GetParamaters().startPos_.y) {
         baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
-        speed                     = 0.0f;
+        speed                         = 0.0f;
     }
 }
 
@@ -486,19 +479,8 @@ void Player::SetRotateInit() {
 /// =======================================================================================
 /// Frag
 /// =======================================================================================
-bool Player::IsChargeMax() const {
+bool Player::CheckIsChargeMax() const {
     return currentUpperChargeTime_ >= parameters_->GetParamaters().upperParam.chargeTime;
-}
-
-/// =======================================================================================
-/// Light,Punch
-/// =======================================================================================
-void Player::SetLightPos() {
-    // ライト位置
-    Light::GetInstance()->GetSpotLightManager()->GetSpotLight(0)->SetPosition(Vector3(
-        baseTransform_.translation_.x,
-        baseTransform_.translation_.y + 5.0f,
-        baseTransform_.translation_.z));
 }
 
 void Player::HeadLightSetting() {

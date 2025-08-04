@@ -3,7 +3,6 @@
 #include "3d/ViewProjection.h"
 
 /// utility
-#include "Effect/ImpactEffect.h"
 #include "utility/ParticleEditor/ParticleEmitter.h"
 
 /// std

@@ -6,7 +6,7 @@
 #include "Player/Player.h"
 
 /// input
-#include "JoyState/JoyState.h"
+#include"input/Input.h"
 
 /// frame
 #include "Frame/Frame.h"

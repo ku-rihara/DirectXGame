@@ -4,7 +4,7 @@
 //math
 #include "Matrix4x4.h"
 //input
-#include"JoyState/JoyState.h"
+#include"input/Input.h"
 //class
 #include"LockOn/LockOn.h"
 // behavior
@@ -74,7 +74,7 @@ void GameCamera::MoveUpdate() {
 		destinationAngleY_ += stickInput.x * rotateSpeed;
 	}
 
-	// リセット操作: Rキーまたは右スティック押し込みでリセット
+	// reset
 	if (input->TrrigerKey(DIK_R) || Input::IsTriggerPad(0, XINPUT_GAMEPAD_RIGHT_THUMB)) {
 		Reset();
 	}

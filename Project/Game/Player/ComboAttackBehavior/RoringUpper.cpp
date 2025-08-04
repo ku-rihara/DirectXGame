@@ -8,7 +8,7 @@
 #include "Player/Player.h"
 
 // input
-#include "JoyState/JoyState.h"
+#include"input/Input.h"
 
 /// math
 #include "Frame/Frame.h"

@@ -1,5 +1,5 @@
 #include "LockOn.h"
-#include "JoyState/JoyState.h"
+#include"input/Input.h"
 #include "Matrix4x4.h"
 #include "base/TextureManager.h"
 //function

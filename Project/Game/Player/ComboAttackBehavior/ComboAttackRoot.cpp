@@ -4,7 +4,7 @@
 #include"FallAttack.h"
 
 #include"Player/PlayerBehavior/PlayerJump.h"
-#include"JoyState/JoyState.h"
+#include"input/Input.h"
 
 /// Player
 #include"Player/Player.h"

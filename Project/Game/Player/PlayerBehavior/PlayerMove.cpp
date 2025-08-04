@@ -7,7 +7,7 @@
 /// frame
 #include "Frame/Frame.h"
 /// inupt
-#include "JoyState/JoyState.h"
+#include"input/Input.h"
 /// imgui
 #include <imgui.h>
 
@@ -69,7 +69,7 @@ void PlayerMove::JumpForJoyState() {
 }
 
 void PlayerMove::MoveAnimation() {
-    if (!pPlayer_->GetIsMoving())
+    if (!pPlayer_->CheckIsMoving())
         return;
 
     // switch (animationStep_) {
@@ -115,7 +115,7 @@ void PlayerMove::MoveAnimation() {
 
 void PlayerMove::WaitAnimation() {
 
-    if (pPlayer_->GetIsMoving())
+    if (pPlayer_->CheckIsMoving())
         return;
 
     ///============================================================================

@@ -6,7 +6,7 @@
 #include "Player/Player.h"
 
 /// input
-#include "JoyState/JoyState.h"
+#include"input/Input.h"
 
 /// frame
 #include "Frame/Frame.h"
@@ -63,7 +63,6 @@ void TitleLeftPunch::Update() {
         /// バックパンチ
         ///----------------------------------------------------
 
-      /*  punchEase_.time -= Frame::DeltaTimeRate();*/
         backPunchEase_.Update(Frame::DeltaTimeRate());
         pPlayer_->GetLeftHand()->SetObjTranslate(punchPosition_);
       

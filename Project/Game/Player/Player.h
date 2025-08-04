@@ -31,7 +31,7 @@ class SpecialAttackGauge;
 class LockOn;
 class GameCamera;
 class Player : public BaseObject, public AABBCollider {
-private:
+private://struct
     struct ParticleEffect {
         std::string name;
         std::unique_ptr<ParticleEmitter> emitter;
@@ -44,99 +44,89 @@ public:
     ///  public method
     /// ===================================================
 
-    ///* 初期化、更新、描画
+    // 初期化、更新、描画
     void Init() override;
     void Update() override;
     void TitleUpdate();
     void EffectDraw(const ViewProjection& viewProjection);
 
-    ///* 移動
-    void Move(const float& speed); /// 移動
-    bool GetIsMoving(); /// 動かしてるかフラグ
-    void MoveToLimit(); /// 移動制限
-    Vector3 GetInputDirection(); /// 入力による速度
-    void UpdateMatrix(); /// 行列更新
+    // 移動
+    void Move(const float& speed); // 移動
+    bool CheckIsMoving(); // 動かしてるかフラグ
+    void MoveToLimit(); // 移動制限
+    Vector3 GetInputDirection(); // 入力による速度
+    void UpdateMatrix(); // 行列更新
 
     void PositionYReset();
     void AttackPowerCharge();
 
     void DissolveUpdate(const float& dissolve);
 
-    //* ジャンプ
+    // ジャンプ
     void Jump(float& speed, const float& fallSpeedLimit, const float& gravity); /// ジャンプ
     void Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump = false); /// 落ちる
 
-    ///* 振る舞い切り替え
+    // 振る舞い切り替え
     void ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior);
     void ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior> behavior);
     void ChangeTitleBehavior(std::unique_ptr<BaseTitleBehavior> behavior);
     void ChangeCombBoRoot();
 
-    ///* 向き
+    // 向き
     void FaceToTarget();
     void AdaptRotate();
 
-    bool IsChargeMax() const;
+    // chargeCheck
+    bool CheckIsChargeMax() const;
 
-    /// ====================================================================
-    /// Editor
-    /// ====================================================================
-
+    // ParamEdit
     void AdjustParam();
 
-    /// ====================================================================
-    /// Collision
-    /// ====================================================================
+    // collision
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
     Vector3 GetCollisionPos() const override;
 
-    /// <summary>
-    /// sound
-    /// </summary>
+    // sound
     void SoundPunch();
     void SoundStrongPunch();
     void FallSound();
 
-private:
-    /// グローバルなパラメータ
-    GlobalParameter* globalParameter_; // グローバルパラメータ
-    const std::string groupName_ = "Player"; // グループ名
+private:// class
+
+    GlobalParameter* globalParameter_;
+    const std::string groupName_ = "Player";
+
+    /// other class
+    LockOn* pLockOn_;
+    GameCamera* pGameCamera_;
+    const ViewProjection* viewProjection_ = nullptr;
+
+    std::unique_ptr<PlayerHandLeft> leftHand_;
+    std::unique_ptr<PlayerHandRight> rightHand_;
+    std::unique_ptr<PlayerEffects> effects_;
+    std::unique_ptr<PlayerParameter> parameters_;
 
     /// behavior
     std::unique_ptr<BasePlayerBehavior> behavior_            = nullptr;
     std::unique_ptr<BaseComboAattackBehavior> comboBehavior_ = nullptr;
     std::unique_ptr<BaseTitleBehavior> titleBehavior_        = nullptr;
 
-    /// Particle
-    std::unique_ptr<PlayerEffects> effects_;
-
-    /// parameter
-    std::unique_ptr<PlayerParameter> parameters_;
-
-    /// other class
-    LockOn* pLockOn_; /// LockOnクラス
-    GameCamera* pGameCamera_; /// ゲームカメラポインタ
-    std::unique_ptr<PlayerHandLeft> leftHand_; /// 左手
-    std::unique_ptr<PlayerHandRight> rightHand_; /// 右手
-
 private:
+
     /// ===================================================
     /// private variables
     /// ===================================================
-
-    /// move
+    
+    // move
     float objectiveAngle_; /// 目標角度
-    Vector3 direction_; /// 速度
-    Vector3 prePos_; /// 移動前座標
-    float moveSpeed_; /// 移動速度
+    Vector3 direction_;    /// 速度
+    Vector3 prePos_;       /// 移動前座標
+    float moveSpeed_;      /// 移動速度
 
     // attackCharge
     float currentUpperChargeTime_;
 
-    // カメラのビュープロジェクション
-    const ViewProjection* viewProjection_ = nullptr;
-
-    /// sound
+    // sound
     int punchSoundID_;
     int strongPunch_;
     int fallSound_;
@@ -164,7 +154,6 @@ public:
     void SetGameCamera(GameCamera* gamecamera);
     void SetTitleBehavior();
     void SetRotateInit();
-    void SetLightPos();
     void HeadLightSetting();
 
     void SetHeadScale(const Vector3& scale) { obj3d_->transform_.scale_ = scale; }

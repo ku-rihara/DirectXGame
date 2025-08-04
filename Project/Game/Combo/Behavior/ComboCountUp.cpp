@@ -5,7 +5,7 @@
 /// frame
 #include "Frame/Frame.h"
 /// inupt
-#include "JoyState/JoyState.h"
+#include"input/Input.h"
 /// imgui
 #include <imgui.h>
 

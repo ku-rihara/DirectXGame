@@ -1,7 +1,7 @@
 #include "BaseComboAattackBehavior.h"
 #include "Frame/Frame.h"
-#include "JoyState/JoyState.h"
 #include "Player/Player.h"
+#include"input/Input.h"
 
 BaseComboAattackBehavior::BaseComboAattackBehavior(const std::string& name, Player* player) {
     name_             = name;
