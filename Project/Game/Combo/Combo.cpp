@@ -4,7 +4,7 @@
 
 void Combo::Init() {
 
-    ///* グローバルパラメータ
+    // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();

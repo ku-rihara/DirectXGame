@@ -20,7 +20,6 @@ public:
     // 初期化、更新、描画
     void Init(const Vector3& spownPos) override;
     void Update() override;
-    void Draw(const ViewProjection& viewProjection) override;
     void SpriteDraw(const ViewProjection& viewProjection) override;
 
     /// Hpバー処理

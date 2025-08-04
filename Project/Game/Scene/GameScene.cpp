@@ -9,10 +9,6 @@
 #include "Lighrt/Light.h"
 #include <imgui.h>
 
-GameScene::GameScene() {}
-
-GameScene::~GameScene() {
-}
 
 void GameScene::Init() {
     //// グローバル変数の読み込み
@@ -26,10 +22,10 @@ void GameScene::Init() {
     field_                = std::make_unique<Field>();
     lockOn_               = std::make_unique<LockOn>();
     player_               = std::make_unique<Player>();
-    gamecamera_           = std::make_unique<GameCamera>();
+    gameCamera_           = std::make_unique<GameCamera>();
     enemyManager_         = std::make_unique<EnemyManager>();
     enemySpawner_         = std::make_unique<EnemySpawner>();
-    skydome_              = std::make_unique<Skydome>();
+    skyDome_              = std::make_unique<Skydome>();
     howToOperate_         = std::make_unique<HowToOperate>();
     skyBox_               = std::make_unique<SkyBox>();
     combo_                = std::make_unique<Combo>();
@@ -48,7 +44,7 @@ void GameScene::Init() {
     enemyManager_->Init();
     enemySpawner_->Init("enemySpawner.json");
     fireInjectors_->Init();
-    gamecamera_->Init();
+    gameCamera_->Init();
     howToOperate_->Init();
     viewProjection_.Init();
 
@@ -57,19 +53,17 @@ void GameScene::Init() {
     ///=======================================================================================
     /// セット
     ///=======================================================================================
-    gamecamera_->SetTarget(&player_->GetTransform());
+    gameCamera_->SetTarget(&player_->GetTransform());
     enemyManager_->SetPlayer(player_.get());
     enemyManager_->SetCombo(combo_.get());
-    enemyManager_->SetGameCamera(gamecamera_.get());
-    enemyManager_->SetLockon(lockOn_.get());
+    enemyManager_->SetGameCamera(gameCamera_.get());
+    enemyManager_->SetLockOn(lockOn_.get());
     enemyManager_->SetEnemySpawner(enemySpawner_.get());
     player_->SetViewProjection(&viewProjection_);
     player_->SetLockOn(lockOn_.get());
-    player_->SetGameCamera(gamecamera_.get());
+    player_->SetGameCamera(gameCamera_.get());
     enemySpawner_->SetEnemyManager(enemyManager_.get());
     fireInjectors_->SetCombo(combo_.get());
-
-    enemyManager_->FSpawn();
 
     isfirstChange_ = false;
     alpha_         = 2.5f;
@@ -121,7 +115,7 @@ void GameScene::Update() {
     enemyManager_->Update();
     combo_->Update();
     fireInjectors_->Update();
-    gamecamera_->Update();
+    gameCamera_->Update();
     if (isfirstChange_) {
         gameBackGroundObject_->Update();
     }
@@ -137,7 +131,7 @@ void GameScene::Update() {
     ViewProjectionUpdate();
 
     /// クリア
-    if (enemyManager_->GetCread() && enemySpawner_->GetAllGroupsCompleted()) {
+    if (enemyManager_->GetIsAllCleared() && enemySpawner_->GetAllGroupsCompleted()) {
         finishSpriteEase_.Update(Frame::DeltaTime());
         cSprite_->SetPosition(tempSpritePos_);
     }
@@ -188,8 +182,8 @@ void GameScene::DrawShadow() {
 void GameScene::Debug() {
 #ifdef _DEBUG
     ImGui::Begin("Camera");
-    gamecamera_->Debug();
-    gamecamera_->AdjustParam();
+    gameCamera_->Debug();
+    gameCamera_->AdjustParam();
     ImGui::End();
 
     Light::GetInstance()->DebugImGui();
@@ -213,17 +207,18 @@ void GameScene::ViewProjectionUpdate() {
 }
 
 void GameScene::ViewProssess() {
-    viewProjection_.matView_       = gamecamera_->GetViewProjection().matView_;
-    viewProjection_.matProjection_ = gamecamera_->GetViewProjection().matProjection_;
-    viewProjection_.cameraMatrix_  = gamecamera_->GetViewProjection().cameraMatrix_;
-    viewProjection_.rotation_      = gamecamera_->GetViewProjection().rotation_;
+    viewProjection_.matView_       = gameCamera_->GetViewProjection().matView_;
+    viewProjection_.matProjection_ = gameCamera_->GetViewProjection().matProjection_;
+    viewProjection_.cameraMatrix_  = gameCamera_->GetViewProjection().cameraMatrix_;
+    viewProjection_.rotation_      = gameCamera_->GetViewProjection().rotation_;
     viewProjection_.TransferMatrix();
 }
 
 void GameScene::ChangeForJoyState() {
 
-    if (!((Input::IsTriggerPad(0, XINPUT_GAMEPAD_A))))
+    if (!((Input::IsTriggerPad(0, XINPUT_GAMEPAD_A)))) {
         return;
+    }
 
     isend_ = true;
 }

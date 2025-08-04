@@ -1,7 +1,5 @@
 #pragma once
 
-#include "3d/ViewProjection.h"
-
 /// utility
 #include "utility/ParameterEditor/GlobalParameter.h"
 
@@ -54,39 +52,34 @@ enum ComboNum {
 };
 
 class PlayerParameter {
+public:
+    PlayerParameter()  = default;
+    ~PlayerParameter() = default;
+
+    /// ===================================================
+    ///  public method
+    /// ===================================================
+    // 初期化
+    void Init();
+
+    void BindParams();
+    void AdjustParam();
 
 private:
-private:
-    /// グローバルなパラメータ
-    GlobalParameter* globalParameter_; /// グローバルパラメータ
-    const std::string groupName_ = "Player"; /// グループ名
+    GlobalParameter* globalParameter_;
+    const std::string groupName_ = "Player";
 
 private:
     /// ===================================================
     /// private variable
     /// ===================================================
 
-    ///* コンボパラメータ
+    // コンボパラメータ
     std::array<ComboParam, 4> normalComboParams_;
     std::array<ComboParam, 2> jumpComboParams_;
     Parameters playerParams_;
 
 public:
-    PlayerParameter();
-
-    /// ===================================================
-    ///  public method
-    /// ===================================================
-
-    ///* 初期化
-    void Init();
-
-    /// ====================================================================
-    /// Editor
-    /// ====================================================================
-    void BindParams();
-    void AdjustParam();
-
     /// =========================================================================================
     /// getter
     /// =========================================================================================

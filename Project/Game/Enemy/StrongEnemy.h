@@ -1,6 +1,4 @@
 #pragma once
-#include <list>
-#include <memory>
 // Function
 #include "EasingFunction.h"
 // class
@@ -17,12 +15,10 @@ public:
     // 初期化、更新、描画
     void Init(const Vector3& spownPos) override;
     void Update() override;
-    void Draw(const ViewProjection& viewProjection) override;
     void SpriteDraw(const ViewProjection& viewProjection) override;
 
     /// Hpバー処理
     void DisplaySprite(const ViewProjection& viewProjection) override;
-
     void SpawnRenditionInit() override;
 
 private:

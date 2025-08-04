@@ -29,13 +29,13 @@ void BaseEnemy::Init(const Vector3& spownPos) {
     // HP
     HPMax_     = 105.0f;
     hp_        = HPMax_;
-    hpbarSize_ = {HPMax_, 90};
-    hpbar_     = std::make_unique<EnemyHPBar>();
-    hpbar_->Init(hpbarSize_);
+    hpBarSize_ = {HPMax_, 90};
+    hpBar_     = std::make_unique<EnemyHPBar>();
+    hpBar_->Init(hpBarSize_);
 
     /// transform
     baseTransform_.translation_   = spownPos;
-    baseTransform_.translation_.y = paramater_.basePosY;
+    baseTransform_.translation_.y = parameter_.basePosY;
     baseTransform_.scale_         = Vector3::ZeroVector();
 
     /// collision
@@ -54,8 +54,9 @@ void BaseEnemy::Init(const Vector3& spownPos) {
     deathSound_  = Audio::GetInstance()->LoadWave("Resources/EnemyDeath.wav");
     thurstSound_ = Audio::GetInstance()->LoadWave("Resources/Enemythurst.wav");
 
+    // 振る舞い初期化
     ChangeBehavior(std::make_unique<EnemyDamageRoot>(this));
-    ChangeMoveBehavior(std::make_unique<EnemySpawn>(this)); 
+    ChangeMoveBehavior(std::make_unique<EnemySpawn>(this));
 }
 
 ///========================================================
@@ -69,7 +70,6 @@ void BaseEnemy::Update() {
 
     damageBehavior_->Update();
 
-    FallEffectUpdate();
     BehaviorChangeDeath();
 
     collisionBox_->SetPosition(GetWorldPosition());
@@ -87,11 +87,11 @@ void BaseEnemy::DisplaySprite(const ViewProjection& viewProjection) {
     // Hpバーの座標確定
     Vector2 hpBarPosition = positionScreenV2;
     // Hpバーのサイズ
-    hpbar_->SetSize(hpbarSize_);
+    hpBar_->SetSize(hpBarSize_);
     // HPBarスプライト
-    hpbar_->SetPosition(hpBarPosition);
+    hpBar_->SetPosition(hpBarPosition);
     // Hpバー更新
-    hpbar_->Update(int(hp_));
+    hpBar_->Update(int(hp_));
 
     Vector2 findPos(positionScreen.x, positionScreen.y - 100.0f);
 
@@ -118,21 +118,6 @@ Vector3 BaseEnemy::GetDirectionToTarget(const Vector3& target) {
 }
 
 ///========================================================
-/// 描画
-///========================================================
-void BaseEnemy::Draw(const ViewProjection& viewProjection) {
-    viewProjection;
-    //// 各エフェクトを更新
-    // effects_.reverse();
-    //   for (std::unique_ptr<ImpactEffect>& effect : effects_) {
-    //	if (effect) {
-    //		effect->Draw(viewProjection);
-    //	}
-    //}
-    // effects_.reverse();
-}
-
-///========================================================
 /// Sprite描画
 ///========================================================
 void BaseEnemy::SpriteDraw(const ViewProjection& viewProjection) {
@@ -140,7 +125,7 @@ void BaseEnemy::SpriteDraw(const ViewProjection& viewProjection) {
     if (IsInView(viewProjection)) {
         findSprite_->Draw();
         notFindSprite_->Draw();
-        hpbar_->Draw();
+        hpBar_->Draw();
     }
 }
 
@@ -154,7 +139,7 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
             ///------------------------------------------------------------------
         case AttackCollisionBox::AttackType::NORMAL:
 
-            DamageForPar(damageParm_);
+            DamageForPar(damageParam_);
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
         }
@@ -176,7 +161,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
                 break;
             }
 
-            DamageForPar(damageParm_);
+            DamageForPar(damageParam_);
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 
@@ -189,7 +174,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
                 break;
             }
 
-            DamageForPar(damageParm_);
+            DamageForPar(damageParam_);
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
 
@@ -202,7 +187,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
                 break;
             }
 
-            DamageForPar(damageParm_ * 2.0f);
+            DamageForPar(damageParam_ * 2.0f);
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
 
@@ -215,7 +200,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
                 break;
             }
 
-            DamageForPar(damageParm_);
+            DamageForPar(damageParam_);
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 
@@ -230,7 +215,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
                 break;
             }
 
-            DamageForPar(damageParm_);
+            DamageForPar(damageParam_);
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 
@@ -275,67 +260,41 @@ void BaseEnemy::BehaviorChangeDeath() {
     ChangeBehavior(std::make_unique<EnemyDeath>(this));
 }
 
-// 視界にいるか
 bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
     Vector3 positionView = {};
     // 敵のロックオン座標を取得
     Vector3 positionWorld = GetWorldPosition();
-    // ワールド→ビュー座標系
+   
     positionView = TransformMatrix(positionWorld, viewProjection.matView_);
     // 距離条件チェック
     if (0.0f <= positionView.z && positionView.z <= 1280.0f) {
-        // カメラ前方との角度を計算
         float actTangent = std::atan2(std::sqrt(positionView.x * positionView.x + positionView.y * positionView.y), positionView.z);
 
-        // 角度条件チェック（コーンに収まっているか）
-        return (std::fabsf(actTangent) <= std::fabsf(180 * 3.14f));
+        // コーンに収まっているか
+        return (std::fabsf(actTangent) <= std::fabsf(180.0f * 3.14f));
     }
     return false;
 }
 
-// 割合によるダメージ
 void BaseEnemy::DamageForPar(const float& par) {
 
-    // 割合によるインクる面とする値を決める
     float decrementSize = HPMax_ * (par / 100.0f);
-    // HP減少
     hp_ -= decrementSize;
 }
 
 void BaseEnemy::DamageRenditionInit() {
-
     pEnemyManager_->DamageEffectShot(GetWorldPosition());
 }
 
 void BaseEnemy::ThrustRenditionInit() {
     // ガレキパーティクル
     pEnemyManager_->ThrustEmit(GetWorldPosition());
-
     Audio::GetInstance()->PlayWave(thurstSound_, 0.2f);
 }
 
 void BaseEnemy::DeathRenditionInit() {
     pEnemyManager_->DeathEmit(GetWorldPosition());
     Audio::GetInstance()->PlayWave(deathSound_, 0.5f);
-}
-
-void BaseEnemy::FallEffectInit(const Vector3& pos) {
-    pos;
-    /*  std::unique_ptr<ImpactEffect> effect = std::make_unique<ImpactEffect>();
-
-      effect->Init(pos);
-      effects_.push_back(std::move(effect));*/
-}
-
-void BaseEnemy::FallEffectUpdate() {
-    //// 各エフェクトを更新
-    //   for (std::unique_ptr<ImpactEffect>& effect : effects_) {
-    //	if (effect) {
-    //		effect->Update();
-    //	}
-    //}
-    //// 完了したエフェクトを消す
-    //   effects_.erase(std::remove_if(effects_.begin(), effects_.end(), [](const std::unique_ptr<ImpactEffect>& effect) { return effect->IsFinished(); }), effects_.end());
 }
 
 /// ===================================================
@@ -361,8 +320,8 @@ void BaseEnemy::Fall(float& speed, const float& fallSpeedLimit, const float& gra
     speed = max(speed - (gravity * Frame::DeltaTimeRate()), -fallSpeedLimit);
 
     // 着地
-    if (baseTransform_.translation_.y <= paramater_.basePosY) {
-        baseTransform_.translation_.y = paramater_.basePosY;
+    if (baseTransform_.translation_.y <= parameter_.basePosY) {
+        baseTransform_.translation_.y = parameter_.basePosY;
         speed                         = 0.0f;
     }
 }
@@ -383,9 +342,9 @@ void BaseEnemy::BackToDamageRoot() {
     ChangeBehavior(std::make_unique<EnemyDamageRoot>(this)); /// 追っかけ
 }
 
-void BaseEnemy::SetParameter(const Type& type, const Paramater& paramater) {
+void BaseEnemy::SetParameter(const Type& type, const Parameter& paramater) {
     type_      = type;
-    paramater_ = paramater;
+    parameter_ = paramater;
 }
 void BaseEnemy::SetBodyColor(const Vector4& color) {
     obj3d_->objColor_.SetColor(color);
@@ -396,5 +355,5 @@ void BaseEnemy::RotateInit() {
 }
 
 void BaseEnemy::ScaleReset() {
-    baseTransform_.scale_ = paramater_.initScale_;
+    baseTransform_.scale_ = parameter_.initScale_;
 }

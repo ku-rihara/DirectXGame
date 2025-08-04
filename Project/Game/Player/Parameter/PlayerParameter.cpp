@@ -1,10 +1,6 @@
 #include "PlayerParameter.h"
-/// frame
-#include "Frame/Frame.h"
-/// imgui
+// imGui
 #include <imgui.h>
-
-PlayerParameter::PlayerParameter() {}
 
 ///=========================================================
 /// 　初期化
@@ -17,10 +13,6 @@ void PlayerParameter::Init() {
     BindParams();
     globalParameter_->SyncParamForGroup(groupName_);
 }
-
-///=========================================================
-/// 　更新
-///==========================================================
 
 ///=========================================================
 /// パラメータ調整

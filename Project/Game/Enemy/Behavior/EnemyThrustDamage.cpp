@@ -104,8 +104,7 @@ void EnemyThrustDamage::Update() {
 	case Step::NEXTBEHAVIOR:
 		/// ------------------------------------------------------
 		/// 次の振る舞い
-		///---------------------------------------------------------
-		pBaseEnemy_->FallEffectInit(pBaseEnemy_->GetWorldPosition());
+		///-------------------------------------------------------
 		pBaseEnemy_->RotateInit();
 		pBaseEnemy_->SetBodyColor(Vector4(1.0f, 1, 1, 1.0f));
 		pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetParameter().basePosY);

@@ -8,7 +8,7 @@
 void NormalEnemy::Init(const Vector3& spownPos) {
 	BaseEnemy::Init(spownPos);
 	// モデルセット
-	damageParm_ = 30.0f;
+	damageParam_ = 30.0f;
     obj3d_.reset(Object3d::CreateModel("NormalEnemy.obj"));
     obj3d_->transform_.Init();
     obj3d_->transform_.SetParent(&baseTransform_);
@@ -23,15 +23,6 @@ void NormalEnemy::Update() {
 	BaseEnemy::Update();
 }
 
-///========================================================
-/// 描画
-///========================================================
-
-void NormalEnemy::Draw(const ViewProjection& viewProjection) {
-    viewProjection;
-	//BaseEnemy::Draw(viewProjection);
-	//bodyObj_->Draw(bodyTransform_, viewProjection);
-}
 
 ///========================================================
 /// HpBar表示

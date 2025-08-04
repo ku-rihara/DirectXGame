@@ -4,31 +4,33 @@
 #include <memory>
 
 class EnemyHPBar {
+public:
+    EnemyHPBar()  = default;
+    ~EnemyHPBar() = default;
+
+    // 初期化、更新、描画
+    void Init(const Vector2& size);
+    void Update(int hp);
+    void Draw();
+
 private:
-	// 座標
-	Vector2 position_;
-	// サイズ
-	Vector2 size_;
-	// スプライト
-	std::unique_ptr<Sprite> sprite_;
-	std::unique_ptr<Sprite> hpSprite_;
 
-	bool isSpowned_ = false;
+    // スプライト
+    std::unique_ptr<Sprite> sprite_;
+    std::unique_ptr<Sprite> hpSprite_;
 
-	float alpha_;
+    // parameter
+    bool isSpawned_ = false;
+    float alpha_;
+    Vector2 size_;
+    Vector2 position_;
 
 public:
-	// 初期化
-	void Init(const Vector2& size);
-	// 更新
-	void Update(int hp);
-	// 描画
-	void Draw();
-	//getter
-	bool GetIsSpowned() const { return isSpowned_; }
-	// setter
-	void SetPosition(Vector2 pos) { position_ = pos; }
-	void SetSize(Vector2 size) { size_ = size; }
-	void SetIsSpowned(bool is) { isSpowned_ = is; }
-	void SetAlpha(float a) { alpha_ = a; }
+    // getter
+    bool GetIsSpawned() const { return isSpawned_; }
+    // setter
+    void SetPosition(Vector2 pos) { position_ = pos; }
+    void SetSize(Vector2 size) { size_ = size; }
+    void SetIsSpawned(bool is) { isSpawned_ = is; }
+    void SetAlpha(float a) { alpha_ = a; }
 };

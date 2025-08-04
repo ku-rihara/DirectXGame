@@ -27,7 +27,7 @@ public:
         COUNT,
     };
 
-    struct Paramater {
+    struct Parameter {
         Vector3 initScale_;
         float chaseDistance;
         float chaseSpeed;
@@ -36,9 +36,9 @@ public:
         float upperGravity;
         float upperFallSpeedLimit;
         float upperJumpPower;
-        float archingbackValue;
-        float archingbackRatio;
-        float archingbackTime;
+        float archingBackValue;
+        float archingBackRate;
+        float archingBackTime;
         float blowValue;
         float blowValueY;
         float blowTime;
@@ -53,8 +53,9 @@ private:
     int32_t groupId_;
 
 protected:
+    // structure
     Type type_;
-    Paramater paramater_;
+    Parameter parameter_;
 
     /// other class
     Player* pPlayer_;
@@ -65,23 +66,19 @@ protected:
     std::unique_ptr<FindSprite> findSprite_;
     std::unique_ptr<NotFindSprite> notFindSprite_;
     std::unique_ptr<EnemyCollisionBox> collisionBox_;
+    std::unique_ptr<EnemyHPBar> hpBar_;
 
-    bool isdeath_;
+    // parameter
+    bool isDeath_;
     float hp_;
     float HPMax_;
-    float damageParm_;
-
-    Vector2 hpbarSize_;
-
-    std::unique_ptr<EnemyHPBar> hpbar_;
-
-    /*std::unique_ptr<Object3d> bodyObj_;*/
+    float damageParam_;
+    Vector2 hpBarSize_;
 
     /// behavior
     std::unique_ptr<BaseEnemyBehavior> damageBehavior_   = nullptr;
     std::unique_ptr<BaseEnemyMoveBehavior> moveBehavior_ = nullptr;
 
-public:
 public:
     BaseEnemy()          = default;
     virtual ~BaseEnemy() = default;
@@ -93,7 +90,6 @@ public:
     /// 初期化、更新、描画
     virtual void Init(const Vector3& spownPos);
     virtual void Update();
-    virtual void Draw(const ViewProjection& viewProjection);
     virtual void SpriteDraw(const ViewProjection& viewProjection);
     virtual void DisplaySprite(const ViewProjection& viewProjection);
 
@@ -104,10 +100,7 @@ public:
     virtual void SpawnRenditionInit() = 0;
 
     void ScaleReset();
-    void FallEffectInit(const Vector3& pos);
     void RotateInit();
-    // I
-    void FallEffectUpdate();
 
     /// jump
     void Jump(float& speed, const float& fallSpeedLimit, const float& gravity);
@@ -117,7 +110,6 @@ public:
 
     void DamageForPar(const float& par);
 
-    /// Hpバー処理
 
     /// Behavior
     void ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior);
@@ -135,9 +127,9 @@ public:
     /// ========================================================================================
     ///  getter method
     /// ========================================================================================
-    bool GetIsDeath() const { return isdeath_; }
+    bool GetIsDeath() const { return isDeath_; }
     Type GetType() const { return type_; }
-    Paramater GetParameter() const { return paramater_; }
+    Parameter GetParameter() const { return parameter_; }
     Player* GetPlayer() { return pPlayer_; }
     GameCamera* GetGameCamera() { return pGameCamera_; }
     BaseEnemyBehavior* GetDamageBehavior() const { return damageBehavior_.get(); }
@@ -151,10 +143,10 @@ public:
     void SetGameCamera(GameCamera* gamecamera);
     void SetManager(EnemyManager* manager);
     void SetCombo(Combo* combo);
-    void SetParameter(const Type& type, const Paramater& paramater);
+    void SetParameter(const Type& type, const Parameter& paramater);
     void SetBodyRotateX(const float& r) { obj3d_->transform_.rotation_.x = r; }
     void SetBodyColor(const Vector4& color);
-    void SetIsDeath(const bool& is) { isdeath_ = is; }
+    void SetIsDeath(const bool& is) { isDeath_ = is; }
     void SetGroupId(int groupId) { groupId_ = groupId; }
 
 private:

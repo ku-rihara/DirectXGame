@@ -13,7 +13,7 @@ class LockOn;
 class GameCamera {
 public:
  
-	struct Paramater {
+	struct Parameter {
 		Vector3 firstOffset_;
 		float   firstRotate_;
 		float   zoomRotate_;
@@ -44,7 +44,7 @@ private:
 	Vector3 shakePos_;						   
 	float   rotate_;                           /// 回転
 											   
-	Paramater paramater_;					   
+	Parameter paramater_;					   
 											   
 	Vector3 offset_;                           /// オフセット
 
@@ -83,7 +83,7 @@ public:
 	const ViewProjection& GetViewProjection() { return viewprojection_; }
 	Vector3 GetTargetPos()const;
 	Vector3 GetOffset()const { return offset_; };
-	Paramater GetParamater()const { return paramater_; }
+	Parameter GetParamater()const { return paramater_; }
 	/// ===================================================
 	/// setter
 	/// ===================================================

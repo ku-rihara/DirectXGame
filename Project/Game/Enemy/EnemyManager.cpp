@@ -1,16 +1,11 @@
-
 #include "EnemyManager.h"
-#include "base/TextureManager.h"
 #include "NormalEnemy.h"
 #include "StrongEnemy.h"
 
 #include "Combo/Combo.h"
-#include "Frame/Frame.h"
 #include "LockOn/LockOn.h"
 #include "Spawner/EnemySpawner.h"
 
-#include <format>
-#include <fstream>
 #include <imgui.h>
 
 ///========================================================================================
@@ -19,20 +14,16 @@
 
 void EnemyManager::Init() {
     selectedEnemyType_ = "NormalEnemy";
-    spownPosition_     = {};
+    spawnPosition_     = {};
 
-    spownNum_ = 1;
-
-    ///* グローバルパラメータ
+    /// グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    AddParamGroup();
-    ApplyGlobalParameter();
+    BindParams();
+    globalParameter_->SyncParamForGroup(groupName_);
 
-    ParticleInit(); /// パーティクル初期化
-}
-
-void EnemyManager::FSpawn() {
+    /// パーティクル初期化
+    ParticleInit(); 
 }
 
 ///========================================================================================
@@ -44,15 +35,15 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
 
     if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]) { // 通常敵
         enemy = std::make_unique<NormalEnemy>();
-        enemy->SetParameter(BaseEnemy::Type::NORMAL, paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
+        enemy->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
     }
     if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)]) { // 通常敵
         enemy = std::make_unique<StrongEnemy>();
-        enemy->SetParameter(BaseEnemy::Type::STRONG, paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+        enemy->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
     }
 
-    // 位置初期化とlistに追加
-    enemy->SetPlayer(pPlayer_); // プレイヤーセット
+    // 初期化とlistに追加
+    enemy->SetPlayer(pPlayer_); 
     enemy->SetGameCamera(pGameCamera_);
     enemy->SetManager(this);
     enemy->SetCombo(pCombo_);
@@ -66,19 +57,17 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
 ///========================================================================================
 void EnemyManager::Update() {
 
-    // SpawnUpdate(); // スポーン更新
-
     for (auto it = enemies_.begin(); it != enemies_.end();) {
 
         if ((*it)->GetType() == BaseEnemy::Type::NORMAL) {
-            (*it)->SetParameter(BaseEnemy::Type::NORMAL, paramaters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
+            (*it)->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
         } else if ((*it)->GetType() == BaseEnemy::Type::STRONG) {
-            (*it)->SetParameter(BaseEnemy::Type::STRONG, paramaters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+            (*it)->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
         }
 
         (*it)->Update(); // 更新
 
-        if ((*it)->GetIsDeath()) {
+        if ((*it)->GetIsDeath()) {//死亡処理
 
             if (pEnemySpawner_) {
                 pEnemySpawner_->OnEnemyDestroyed((*it)->GetGroupId());
@@ -86,19 +75,16 @@ void EnemyManager::Update() {
 
             pLockOn_->OnEnemyDestroyed((*it).get());
             it = enemies_.erase(it);
-            GetIsEnemiesCleared(); 
+            CheckIsEnemiesCleared();
         } else {
-            ++it; // 削除しない場合はイテレータを進める
+            ++it;
         }
     }
     ParticleUpdate(); // パーティクル更新
 }
 
 void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
-    // if (isEditorMode_) {
-    //	return; // エディタモード中は停止
-    // }
-
+    
     for (auto it = enemies_.begin(); it != enemies_.end();) {
         (*it)->DisplaySprite(viewProjection); // 更新
         ++it;
@@ -115,121 +101,53 @@ void EnemyManager::SpriteDraw(const ViewProjection& viewProjection) {
 }
 
 ///=================================================================================
-/// ロード
-///=================================================================================
-void EnemyManager::ParamLoadForImGui() {
-
-    /// ロードボタン
-    if (ImGui::Button(std::format("Load {}", groupName_).c_str())) {
-
-        globalParameter_->LoadFile(groupName_);
-        /// セーブ完了メッセージ
-        ImGui::Text("Load Successful: %s", groupName_.c_str());
-        ApplyGlobalParameter();
-    }
-}
-
-///=================================================================================
 /// パラメータをグループに追加
 ///=================================================================================
-void EnemyManager::AddParamGroup() {
+void EnemyManager::BindParams() {
 
-    for (uint32_t i = 0; i < paramaters_.size(); ++i) {
-        globalParameter_->AddItem(groupName_, "chaseDistance" + std::to_string(int(i + 1)), paramaters_[i].chaseDistance);
-        globalParameter_->AddItem(groupName_, "chaseSpeed" + std::to_string(int(i + 1)), paramaters_[i].chaseSpeed);
-        globalParameter_->AddItem(groupName_, "basePosY_" + std::to_string(int(i + 1)), paramaters_[i].basePosY);
-        globalParameter_->AddItem(groupName_, "thrustRotateSpeed" + std::to_string(int(i + 1)), paramaters_[i].thrustRotateSpeed);
-        globalParameter_->AddItem(groupName_, "upperGravity" + std::to_string(int(i + 1)), paramaters_[i].upperGravity);
-        globalParameter_->AddItem(groupName_, "upperJumpPower" + std::to_string(int(i + 1)), paramaters_[i].upperJumpPower);
-        globalParameter_->AddItem(groupName_, "upperFallSpeedLimit" + std::to_string(int(i + 1)), paramaters_[i].upperFallSpeedLimit);
-        globalParameter_->AddItem(groupName_, "hitbackRotateTime" + std::to_string(int(i + 1)), paramaters_[i].archingbackTime);
-        globalParameter_->AddItem(groupName_, "hitbackRotateValue" + std::to_string(int(i + 1)), paramaters_[i].archingbackValue);
-        globalParameter_->AddItem(groupName_, "hitbackRotateBackRatio" + std::to_string(int(i + 1)), paramaters_[i].archingbackRatio);
-        globalParameter_->AddItem(groupName_, "blowValue_" + std::to_string(int(i + 1)), paramaters_[i].blowValue);
-        globalParameter_->AddItem(groupName_, "blowValueY_" + std::to_string(int(i + 1)), paramaters_[i].blowValueY);
-        globalParameter_->AddItem(groupName_, "blowTime" + std::to_string(int(i + 1)), paramaters_[i].blowTime);
-        globalParameter_->AddItem(groupName_, "blowRotateSpeed" + std::to_string(int(i + 1)), paramaters_[i].blowRotateSpeed);
-        globalParameter_->AddItem(groupName_, "burstTime" + std::to_string(int(i + 1)), paramaters_[i].burstTime);
-        globalParameter_->AddItem(groupName_, "blowGravity" + std::to_string(int(i + 1)), paramaters_[i].blowGravity);
-        globalParameter_->AddItem(groupName_, "initScale" + std::to_string(int(i + 1)), paramaters_[i].initScale_);
-    }
-}
-
-///=================================================================================
-/// パラメータをグループに追加
-///=================================================================================
-void EnemyManager::SetValues() {
-
-    for (uint32_t i = 0; i < paramaters_.size(); ++i) {
-        globalParameter_->SetValue(groupName_, "chaseDistance" + std::to_string(int(i + 1)), paramaters_[i].chaseDistance);
-        globalParameter_->SetValue(groupName_, "chaseSpeed" + std::to_string(int(i + 1)), paramaters_[i].chaseSpeed);
-        globalParameter_->SetValue(groupName_, "basePosY_" + std::to_string(int(i + 1)), paramaters_[i].basePosY);
-        globalParameter_->SetValue(groupName_, "thrustRotateSpeed" + std::to_string(int(i + 1)), paramaters_[i].thrustRotateSpeed);
-        globalParameter_->SetValue(groupName_, "upperGravity" + std::to_string(int(i + 1)), paramaters_[i].upperGravity);
-        globalParameter_->SetValue(groupName_, "upperJumpPower" + std::to_string(int(i + 1)), paramaters_[i].upperJumpPower);
-        globalParameter_->SetValue(groupName_, "upperFallSpeedLimit" + std::to_string(int(i + 1)), paramaters_[i].upperFallSpeedLimit);
-        globalParameter_->SetValue(groupName_, "hitbackRotateTime" + std::to_string(int(i + 1)), paramaters_[i].archingbackTime);
-        globalParameter_->SetValue(groupName_, "hitbackRotateValue" + std::to_string(int(i + 1)), paramaters_[i].archingbackValue);
-        globalParameter_->SetValue(groupName_, "hitbackRotateBackRatio" + std::to_string(int(i + 1)), paramaters_[i].archingbackRatio);
-        globalParameter_->SetValue(groupName_, "blowValue_" + std::to_string(int(i + 1)), paramaters_[i].blowValue);
-        globalParameter_->SetValue(groupName_, "blowValueY_" + std::to_string(int(i + 1)), paramaters_[i].blowValueY);
-        globalParameter_->SetValue(groupName_, "blowTime" + std::to_string(int(i + 1)), paramaters_[i].blowTime);
-        globalParameter_->SetValue(groupName_, "blowRotateSpeed" + std::to_string(int(i + 1)), paramaters_[i].blowRotateSpeed);
-        globalParameter_->SetValue(groupName_, "burstTime" + std::to_string(int(i + 1)), paramaters_[i].burstTime);
-        globalParameter_->SetValue(groupName_, "blowGravity" + std::to_string(int(i + 1)), paramaters_[i].blowGravity);
-        globalParameter_->SetValue(groupName_, "initScale" + std::to_string(int(i + 1)), paramaters_[i].initScale_);
-    }
-}
-
-///=====================================================
-///  ImGuiからパラメータを得る
-///=====================================================
-void EnemyManager::ApplyGlobalParameter() {
-    /// パラメータ
-    for (uint32_t i = 0; i < paramaters_.size(); ++i) {
-        paramaters_[i].chaseDistance       = globalParameter_->GetValue<float>(groupName_, "chaseDistance" + std::to_string(int(i + 1)));
-        paramaters_[i].chaseSpeed          = globalParameter_->GetValue<float>(groupName_, "chaseSpeed" + std::to_string(int(i + 1)));
-        paramaters_[i].basePosY            = globalParameter_->GetValue<float>(groupName_, "basePosY_" + std::to_string(int(i + 1)));
-        paramaters_[i].thrustRotateSpeed   = globalParameter_->GetValue<float>(groupName_, "thrustRotateSpeed" + std::to_string(int(i + 1)));
-        paramaters_[i].upperGravity        = globalParameter_->GetValue<float>(groupName_, "upperGravity" + std::to_string(int(i + 1)));
-        paramaters_[i].upperJumpPower      = globalParameter_->GetValue<float>(groupName_, "upperJumpPower" + std::to_string(int(i + 1)));
-        paramaters_[i].upperFallSpeedLimit = globalParameter_->GetValue<float>(groupName_, "upperFallSpeedLimit" + std::to_string(int(i + 1)));
-        paramaters_[i].archingbackValue    = globalParameter_->GetValue<float>(groupName_, "hitbackRotateValue" + std::to_string(int(i + 1)));
-        paramaters_[i].archingbackRatio    = globalParameter_->GetValue<float>(groupName_, "hitbackRotateBackRatio" + std::to_string(int(i + 1)));
-        paramaters_[i].archingbackTime     = globalParameter_->GetValue<float>(groupName_, "hitbackRotateTime" + std::to_string(int(i + 1)));
-        paramaters_[i].blowValue           = globalParameter_->GetValue<float>(groupName_, "blowValue_" + std::to_string(int(i + 1)));
-        paramaters_[i].blowValueY          = globalParameter_->GetValue<float>(groupName_, "blowValueY_" + std::to_string(int(i + 1)));
-        paramaters_[i].blowTime            = globalParameter_->GetValue<float>(groupName_, "blowTime" + std::to_string(int(i + 1)));
-        paramaters_[i].blowRotateSpeed     = globalParameter_->GetValue<float>(groupName_, "blowRotateSpeed" + std::to_string(int(i + 1)));
-        paramaters_[i].blowGravity         = globalParameter_->GetValue<float>(groupName_, "blowGravity" + std::to_string(int(i + 1)));
-        paramaters_[i].burstTime           = globalParameter_->GetValue<float>(groupName_, "burstTime" + std::to_string(int(i + 1)));
-        paramaters_[i].initScale_          = globalParameter_->GetValue<Vector3>(groupName_, "initScale" + std::to_string(int(i + 1)));
+    for (uint32_t i = 0; i < parameters_.size(); ++i) {
+        globalParameter_->Bind(groupName_, "chaseDistance" + std::to_string(int(i + 1)), &parameters_[i].chaseDistance);
+        globalParameter_->Bind(groupName_, "chaseSpeed" + std::to_string(int(i + 1)), &parameters_[i].chaseSpeed);
+        globalParameter_->Bind(groupName_, "basePosY_" + std::to_string(int(i + 1)), &parameters_[i].basePosY);
+        globalParameter_->Bind(groupName_, "thrustRotateSpeed" + std::to_string(int(i + 1)), &parameters_[i].thrustRotateSpeed);
+        globalParameter_->Bind(groupName_, "upperGravity" + std::to_string(int(i + 1)), &parameters_[i].upperGravity);
+        globalParameter_->Bind(groupName_, "upperJumpPower" + std::to_string(int(i + 1)), &parameters_[i].upperJumpPower);
+        globalParameter_->Bind(groupName_, "upperFallSpeedLimit" + std::to_string(int(i + 1)), &parameters_[i].upperFallSpeedLimit);
+        globalParameter_->Bind(groupName_, "hitbackRotateTime" + std::to_string(int(i + 1)), &parameters_[i].archingBackTime);
+        globalParameter_->Bind(groupName_, "hitbackRotateValue" + std::to_string(int(i + 1)), &parameters_[i].archingBackValue);
+        globalParameter_->Bind(groupName_, "hitbackRotateBackRatio" + std::to_string(int(i + 1)), &parameters_[i].archingBackRate);
+        globalParameter_->Bind(groupName_, "blowValue_" + std::to_string(int(i + 1)), &parameters_[i].blowValue);
+        globalParameter_->Bind(groupName_, "blowValueY_" + std::to_string(int(i + 1)), &parameters_[i].blowValueY);
+        globalParameter_->Bind(groupName_, "blowTime" + std::to_string(int(i + 1)), &parameters_[i].blowTime);
+        globalParameter_->Bind(groupName_, "blowRotateSpeed" + std::to_string(int(i + 1)), &parameters_[i].blowRotateSpeed);
+        globalParameter_->Bind(groupName_, "burstTime" + std::to_string(int(i + 1)), &parameters_[i].burstTime);
+        globalParameter_->Bind(groupName_, "blowGravity" + std::to_string(int(i + 1)), &parameters_[i].blowGravity);
+        globalParameter_->Bind(groupName_, "initScale" + std::to_string(int(i + 1)), &parameters_[i].initScale_);
     }
 }
 
 void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
 
-    ImGui::DragFloat3("initScale", &paramaters_[static_cast<size_t>(type)].initScale_.x, 0.01f);
-    ImGui::DragFloat("ChaseSpeed", &paramaters_[static_cast<size_t>(type)].chaseSpeed, 0.01f);
-    ImGui::DragFloat("ChaseDistance", &paramaters_[static_cast<size_t>(type)].chaseDistance, 0.01f);
-    ImGui::DragFloat("basePosY", &paramaters_[static_cast<size_t>(type)].basePosY, 0.01f);
-    ImGui::DragFloat("thrustRotateSpeed", &paramaters_[static_cast<size_t>(type)].thrustRotateSpeed, 0.01f);
-    ImGui::DragFloat("upperGravity", &paramaters_[static_cast<size_t>(type)].upperGravity, 0.01f);
-    ImGui::DragFloat("upperJumpPowe", &paramaters_[static_cast<size_t>(type)].upperJumpPower, 0.01f);
-    ImGui::DragFloat("upperFallSpeedLimit", &paramaters_[static_cast<size_t>(type)].upperFallSpeedLimit, 0.01f);
-    ImGui::SliderAngle("hitbackRotateValue", &paramaters_[static_cast<size_t>(type)].archingbackValue, -360.0f, 720.0f);
-    ImGui::DragFloat("hitbackRotateBackRatio", &paramaters_[static_cast<size_t>(type)].archingbackRatio, 0.01f);
-    ImGui::DragFloat("hitbackRotateTime", &paramaters_[static_cast<size_t>(type)].archingbackTime, 0.01f);
-    ImGui::DragFloat("blowValue", &paramaters_[static_cast<size_t>(type)].blowValue, 0.01f);
-    ImGui::DragFloat("blowValueY", &paramaters_[static_cast<size_t>(type)].blowValueY, 0.01f);
-    ImGui::DragFloat("blowRotateSpeed", &paramaters_[static_cast<size_t>(type)].blowRotateSpeed, 0.01f);
-    ImGui::DragFloat("burstTime", &paramaters_[static_cast<size_t>(type)].burstTime, 0.01f);
-    ImGui::DragFloat("blowGravity", &paramaters_[static_cast<size_t>(type)].blowGravity, 0.01f);
-    ImGui::DragFloat("blowTime", &paramaters_[static_cast<size_t>(type)].blowTime, 0.01f);
+    ImGui::DragFloat3("initScale", &parameters_[static_cast<size_t>(type)].initScale_.x, 0.01f);
+    ImGui::DragFloat("ChaseSpeed", &parameters_[static_cast<size_t>(type)].chaseSpeed, 0.01f);
+    ImGui::DragFloat("ChaseDistance", &parameters_[static_cast<size_t>(type)].chaseDistance, 0.01f);
+    ImGui::DragFloat("basePosY", &parameters_[static_cast<size_t>(type)].basePosY, 0.01f);
+    ImGui::DragFloat("thrustRotateSpeed", &parameters_[static_cast<size_t>(type)].thrustRotateSpeed, 0.01f);
+    ImGui::DragFloat("upperGravity", &parameters_[static_cast<size_t>(type)].upperGravity, 0.01f);
+    ImGui::DragFloat("upperJumpPowe", &parameters_[static_cast<size_t>(type)].upperJumpPower, 0.01f);
+    ImGui::DragFloat("upperFallSpeedLimit", &parameters_[static_cast<size_t>(type)].upperFallSpeedLimit, 0.01f);
+    ImGui::SliderAngle("hitbackRotateValue", &parameters_[static_cast<size_t>(type)].archingBackValue, -360.0f, 720.0f);
+    ImGui::DragFloat("hitbackRotateBackRatio", &parameters_[static_cast<size_t>(type)].archingBackRate, 0.01f);
+    ImGui::DragFloat("hitbackRotateTime", &parameters_[static_cast<size_t>(type)].archingBackTime, 0.01f);
+    ImGui::DragFloat("blowValue", &parameters_[static_cast<size_t>(type)].blowValue, 0.01f);
+    ImGui::DragFloat("blowValueY", &parameters_[static_cast<size_t>(type)].blowValueY, 0.01f);
+    ImGui::DragFloat("blowRotateSpeed", &parameters_[static_cast<size_t>(type)].blowRotateSpeed, 0.01f);
+    ImGui::DragFloat("burstTime", &parameters_[static_cast<size_t>(type)].burstTime, 0.01f);
+    ImGui::DragFloat("blowGravity", &parameters_[static_cast<size_t>(type)].blowGravity, 0.01f);
+    ImGui::DragFloat("blowTime", &parameters_[static_cast<size_t>(type)].blowTime, 0.01f);
 }
 
 void EnemyManager::AdjustParam() {
-    SetValues();
 #ifdef _DEBUG
 
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
@@ -246,12 +164,12 @@ void EnemyManager::AdjustParam() {
         }
 
         globalParameter_->ParamSaveForImGui(groupName_);
-        ParamLoadForImGui();
+        globalParameter_->ParamLoadForImGui(groupName_);
 
         ImGui::PopID();
     }
 
-#endif // _DEBUG
+#endif
 }
 
 ///---------------------------------------------------------
@@ -363,24 +281,28 @@ void EnemyManager::ParticleUpdate() {
     }
 }
 
+///------------------------------------------------------------------------------------------------
+/// クラスセット
+///------------------------------------------------------------------------------------------------
+
 void EnemyManager::SetPlayer(Player* player) {
     pPlayer_ = player;
 }
-void EnemyManager::SetLockon(LockOn* lockOn) {
+void EnemyManager::SetLockOn(LockOn* lockOn) {
     pLockOn_ = lockOn;
 }
 void EnemyManager::SetCombo(Combo* lockOn) {
     pCombo_ = lockOn;
 }
 
-void EnemyManager::GetIsEnemiesCleared() {
-    areAllEnemiesCleared_ = enemies_.empty(); // 現在の敵リストが空かを確認
-}
-
-void EnemyManager::SetGameCamera(GameCamera* gamecamera) {
-    pGameCamera_ = gamecamera;
+void EnemyManager::SetGameCamera(GameCamera* gameCamera) {
+    pGameCamera_ = gameCamera;
 }
 
 void EnemyManager::SetEnemySpawner(EnemySpawner* enemySpawner) {
     pEnemySpawner_ = enemySpawner;
+}
+
+void EnemyManager::CheckIsEnemiesCleared() {
+    areAllEnemiesCleared_ = enemies_.empty();
 }

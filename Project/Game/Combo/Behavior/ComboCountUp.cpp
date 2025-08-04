@@ -13,11 +13,8 @@
 ComboCountUP::ComboCountUP(ComboUIController* uiController)
     : BaseComboUIBehavior("ComboCountUP", uiController) {
 
-    pUIController_->ScalingInit();
-
+    // easing 初期化
     scalingEasing_.Init("ComboUIScaling");
-    scalingEasing_.ApplyFromJson("ComboUIScale.json");
-    scalingEasing_.SaveAppliedJsonFileName();
     scalingEasing_.SetAdaptValue(&baseScale_);
     scalingEasing_.Reset();
 

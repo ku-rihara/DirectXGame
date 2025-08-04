@@ -8,7 +8,7 @@
 
 void ComboUIController::Init() {
 
-    ///* グローバルパラメータ
+    // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();
@@ -20,8 +20,6 @@ void ComboUIController::Init() {
         comboSprites_[i]->Init(static_cast<ComboUI::ComboDigit>(i));
     }
 
-    // scale init
-    ScalingInit();
     ChangeBehavior(std::make_unique<ComboWait>(this));
 }
 
@@ -42,25 +40,6 @@ void ComboUIController::Draw() {
     }
 }
 
-void ComboUIController::ScalingEasing() {
-   /* parameter_.scalingEasing.time += Frame::DeltaTimeRate();
-
-    baseScale_ = EaseAmplitudeScale(parameter_.amplitudeScale, parameter_.scalingEasing.time, parameter_.scalingEasing.maxTime, parameter_.scalingEasing.amplitude, parameter_.scalingEasing.period);
-
-    if (parameter_.scalingEasing.time < parameter_.scalingEasing.maxTime) {
-        return;
-    }
-
-    parameter_.scalingEasing.time = parameter_.scalingEasing.maxTime;
-    baseScale_                    = parameter_.amplitudeScale;
-    ChangeBehavior(std::make_unique<ComboWait>(this));*/
-}
-
-void ComboUIController::ScalingInit() {
-  /*  baseScale_                    = parameter_.amplitudeScale;
-    parameter_.scalingEasing.time = 0.0f;*/
-}
-
 void ComboUIController::AlphaAdaptForTime(const float& comboTime, const float& comboMaxTime) {
 
     alpha_ = std::clamp(comboTime / comboMaxTime, 0.0f, 1.0f);
@@ -70,14 +49,12 @@ void ComboUIController::AlphaAdaptForTime(const float& comboTime, const float& c
 /// パラメータ調整
 ///==========================================================
 void ComboUIController::AdjustParam() {
-
 #ifdef _DEBUG
 
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
-        ImGui::SeparatorText("Parameter"); //  パラメータ
-       
+        ImGui::SeparatorText("Parameter"); // パラメータ
 
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
@@ -85,20 +62,18 @@ void ComboUIController::AdjustParam() {
 
         ImGui::PopID();
     }
-#endif // _DEBUG
 
-    ///
     for (int32_t i = 0; i < comboSprites_.size(); ++i) {
         comboSprites_[i]->AdjustParam();
     }
+
+#endif
 }
 
 ///=========================================================
 /// パラメータBind
 ///==========================================================
 void ComboUIController::BindParams() {
-
-   
 }
 
 void ComboUIController::ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> behavior) {

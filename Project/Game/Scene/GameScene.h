@@ -22,22 +22,44 @@
 /// ゲームシーン
 /// </summary>
 class GameScene : public BaseScene {
+public:
+    GameScene()           = default;
+    ~GameScene() override = default;
+
+    ///========================================================
+    /// private method
+    ///========================================================
+
+    /// 初期化、更新、描画
+    void Init() override;
+    void Update() override;
+    void ModelDraw() override;
+    void SpriteDraw() override;
+    void SkyBoxDraw() override;
+    void DrawShadow() override;
+
+    void Debug() override;
+    void ViewProjectionUpdate() override;
+    void ViewProssess() override;
+
+    void ChangeForJoyState();
+
 private:
     ///========================================================
     /// Private variants
     ///========================================================
 
     ///* objects
-    std::unique_ptr<GameCamera> gamecamera_                     = nullptr;
+    std::unique_ptr<GameCamera> gameCamera_                     = nullptr;
     std::unique_ptr<Field> field_                               = nullptr;
     std::unique_ptr<LockOn> lockOn_                             = nullptr;
     std::unique_ptr<Player> player_                             = nullptr;
-    std::unique_ptr<Skydome> skydome_                           = nullptr;
+    std::unique_ptr<Skydome> skyDome_                           = nullptr;
     std::unique_ptr<SkyBox> skyBox_                             = nullptr;
+    std::unique_ptr<Combo> combo_                               = nullptr;
     std::unique_ptr<EnemyManager> enemyManager_                 = nullptr;
     std::unique_ptr<EnemySpawner> enemySpawner_                 = nullptr;
     std::unique_ptr<HowToOperate> howToOperate_                 = nullptr;
-    std::unique_ptr<Combo> combo_                               = nullptr;
     std::unique_ptr<ComboCreateEditor> comboCreate_             = nullptr;
     std::unique_ptr<FireInjectors> fireInjectors_               = nullptr;
     std::unique_ptr<GameBackGroundObject> gameBackGroundObject_ = nullptr;
@@ -60,31 +82,4 @@ private:
     Vector2 tempSpritePos_;
     std::unique_ptr<Sprite> cSprite_;
     bool isend_;
-
-public:
-    ///========================================================
-    /// Constralt destract
-    ///========================================================
-    GameScene();
-    ~GameScene() override;
-
-    ///========================================================
-    /// private method
-    ///========================================================
-
-    /// 初期化、更新、描画
-    void Init() override;
-    void Update() override;
-    void ModelDraw() override;
-    void SpriteDraw() override;
-    void SkyBoxDraw() override;
-    void DrawShadow() override;
-
-
-    void Debug() override; /// debug
-    void ViewProjectionUpdate() override;
-    void ViewProssess() override;
-
-    void ChangeForJoyState();
-    /*const ViewProjection& GetViewProjection()const { return viewProjection_; }*/
 };

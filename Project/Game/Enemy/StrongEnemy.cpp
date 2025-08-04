@@ -7,7 +7,7 @@
 ///========================================================
 void StrongEnemy::Init(const Vector3& spownPos) {
 	BaseEnemy::Init(spownPos);
-	damageParm_ = 20.0f;
+	damageParam_ = 20.0f;
     obj3d_.reset(Object3d::CreateModel("StrongEnemy.obj"));
 	obj3d_->transform_.Init();
 	obj3d_->transform_.SetParent(&baseTransform_);   
@@ -20,14 +20,6 @@ void StrongEnemy::Init(const Vector3& spownPos) {
 
 void StrongEnemy::Update() {
 	BaseEnemy::Update();
-}
-
-///========================================================
-/// 描画
-///========================================================
-
-void StrongEnemy::Draw(const ViewProjection& viewProjection) {
-    viewProjection;
 }
 
 ///========================================================

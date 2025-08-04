@@ -11,7 +11,7 @@
 
 class EnemyManager;
 class EnemySpawner {
-private:
+private:// struct
     // スポーンポイント構造体
     struct SpawnPoint {
         std::string name;
@@ -28,12 +28,12 @@ private:
     // グループ情報構造体
     struct SpawnGroup {
         int32_t id;
-        float spawnTime;
         int32_t objectCount;
-        bool isActive        = false;
-        bool isCompleted     = false;
         int32_t spawnedCount = 0;
         int32_t aliveCount   = 0;
+        bool isActive        = false;
+        bool isCompleted     = false;
+        float spawnTime;
         float groupStartTime = 0.0f;
     };
 
@@ -50,7 +50,6 @@ public:
     // 敵が倒されたときの通知
     void OnEnemyDestroyed(int groupId);
 
-   
     ///=======================================================================================
     /// Editor method
     ///=======================================================================================
@@ -67,7 +66,7 @@ private:
 
 private:
     // 敵の種類リスト
-    std::array<std::string,2> enemyTypes_ = {"NormalEnemy", "StrongEnemy"};
+    std::array<std::string, 2> enemyTypes_ = {"NormalEnemy", "StrongEnemy"};
     std::vector<SpawnPoint> spawnPoints_;
     std::vector<SpawnGroup> spawnGroups_;
     std::unordered_map<int, std::vector<SpawnPoint*>> groupSpawnPoints_;
@@ -79,10 +78,9 @@ private:
 
 private:
     EnemyManager* pEnemyManager_ = nullptr;
+    const std::string directoryPath_ = "Resources/EnemyParameter/";
 
-    const std::string directoryPath_ = "Resources/EnemyParamater/"; // path
- 
-    public:
+public:
     ///=======================================================================================
     /// getter method
     ///=======================================================================================

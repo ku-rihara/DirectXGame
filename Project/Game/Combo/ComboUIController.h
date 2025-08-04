@@ -27,9 +27,6 @@ public:
 
     void AlphaAdaptForTime(const float& comboTime, const float& comboMaxTime);
 
-    // easing
-    void ScalingEasing();
-    void ScalingInit();
     // behavior
     void ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> behavior);
     void ChangeCountUPAnimation();
@@ -40,21 +37,21 @@ public:
     void BindParams();
 
 private:
-    GlobalParameter* globalParameter_; /// グローバルパラメータ
-    const std::string groupName_ = "ComboUI"; /// グループ名
+    GlobalParameter* globalParameter_;        // グローバルパラメータ
+    const std::string groupName_ = "ComboUI"; // グループ名
 
-    ///* parameter *//
+    // parameter 
     ScalingParameter parameter_;
 
-    ///* Variants *//
+    // Variants 
     Vector2 baseScale_;
-    float alpha_;
     std::array<std::unique_ptr<ComboUI>, 3> comboSprites_;
+    float alpha_;
 
-    ///* behavior *//
+    // behavior 
     std::unique_ptr<BaseComboUIBehavior> behavior_;
 
-public: // acceccer
+public:
     
     ///* getter *//
     const ScalingParameter& GetScalingParameter() const { return parameter_; }

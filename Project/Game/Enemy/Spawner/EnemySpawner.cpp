@@ -1,14 +1,12 @@
-// 実装部分
 #include "EnemySpawner.h"
 #include "Enemy/EnemyManager.h"
 #include "MathFunction.h"
-#include <fstream>
 #include <cassert>
+#include <fstream>
 
 void EnemySpawner::Init(const std::string& jsonData) {
     ParseJsonData(jsonData);
     SettingGroupSpawnPos();
-    /* ResetSystem();*/
 }
 
 void EnemySpawner::ParseJsonData(const std::string& filename) {
@@ -19,7 +17,7 @@ void EnemySpawner::ParseJsonData(const std::string& filename) {
         return;
     }
 
-    // jsonData_ に読み込み
+    // jsonData_に読み込み
     ifs >> jsonData_;
 
     assert(jsonData_.is_object());
@@ -44,21 +42,25 @@ void EnemySpawner::ParseJsonData(const std::string& filename) {
         spawn.groupId   = spawnData["group_id"];
         spawn.spawnTime = spawnData["spawnTime"];
 
-        // 修正：配列インデックスでアクセス
+        // pos
         spawn.position.x = (float)spawnData["position"][0];
         spawn.position.y = (float)spawnData["position"][2];
         spawn.position.z = (float)spawnData["position"][1];
 
+        // rotate
         spawn.rotation.x = -toRadian((float)spawnData["rotation"][0]);
-        spawn.rotation.y = -toRadian((float)spawnData["rotation"][2]); 
+        spawn.rotation.y = -toRadian((float)spawnData["rotation"][2]);
         spawn.rotation.z = -toRadian((float)spawnData["rotation"][1]);
 
+        // scale
         spawn.scale.x = (float)spawnData["scaling"][0];
-        spawn.scale.y = (float)spawnData["scaling"][2]; 
+        spawn.scale.y = (float)spawnData["scaling"][2];
         spawn.scale.z = (float)spawnData["scaling"][1];
 
-        spawn.enemyType   = spawnData["enemy_type"]; 
+        // etcParams
+        spawn.enemyType   = spawnData["enemy_type"];
         spawn.spawnOffset = spawnData["spawn_offset"];
+        
         spawnPoints_.push_back(spawn);
     }
 }
@@ -72,7 +74,6 @@ void EnemySpawner::SettingGroupSpawnPos() {
 }
 
 void EnemySpawner::Update(float deltaTime) {
-   
 
     currentTime_ += deltaTime;
 
@@ -84,14 +85,14 @@ void EnemySpawner::Update(float deltaTime) {
 void EnemySpawner::UpdateCurrentGroup() {
     SpawnGroup& currentGroup = spawnGroups_[currentGroupIndex_];
 
-    // 現在のグループがまだアクティブでない場合、前のグループの完了を確認
+    // 進行中グループの確認
     if (!currentGroup.isActive) {
         if (currentGroupIndex_ == 0) {
             // 最初のグループは即座にアクティブ
             currentGroup.isActive       = true;
             currentGroup.groupStartTime = currentTime_;
         } else {
-            // 前のグループが完了している場合のみアクティブ化
+            // 前のグループの全滅を確認
             if (spawnGroups_[currentGroupIndex_ - 1].isCompleted) {
                 currentGroup.isActive       = true;
                 currentGroup.groupStartTime = currentTime_;
@@ -99,11 +100,11 @@ void EnemySpawner::UpdateCurrentGroup() {
         }
     }
 
-    // アクティブなグループの敵をスポーン
+    // 進行中グループの敵をスポーン
     if (currentGroup.isActive && !currentGroup.isCompleted) {
         SpawnEnemiesInGroup(currentGroup);
 
-        // グループが完了したかチェック
+        // グループが全滅したかチェック
         if (IsGroupCompleted(currentGroup.id)) {
             currentGroup.isCompleted = true;
             ActivateNextGroup();
@@ -123,7 +124,7 @@ void EnemySpawner::SpawnEnemiesInGroup(SpawnGroup& group) {
             if (groupElapsedTime >= adjustedSpawnTime) {
                 // 敵をスポーン
                 if (pEnemyManager_) {
-                    pEnemyManager_->SpawnEnemy(spawn->enemyType, spawn->position,spawn->groupId);
+                    pEnemyManager_->SpawnEnemy(spawn->enemyType, spawn->position, spawn->groupId);
                 }
 
                 spawn->hasSpawned = true;
@@ -137,7 +138,7 @@ void EnemySpawner::SpawnEnemiesInGroup(SpawnGroup& group) {
 bool EnemySpawner::IsGroupCompleted(int groupId) const {
     if (groupId >= 0 && groupId < spawnGroups_.size()) {
         const SpawnGroup& group = spawnGroups_[groupId];
-        return group.aliveCount == 0 && group.spawnedCount == group.objectCount;
+        return (group.aliveCount == 0 && group.spawnedCount == group.objectCount);
     }
     return false;
 }
@@ -145,7 +146,7 @@ bool EnemySpawner::IsGroupCompleted(int groupId) const {
 void EnemySpawner::ActivateNextGroup() {
     currentGroupIndex_++;
     if (currentGroupIndex_ >= spawnGroups_.size()) {
-        // 全てのグループが完了
+        // 全てのグループが全滅
         isSystemActive_     = false;
         allGroupsCompleted_ = true;
     }
