@@ -340,15 +340,6 @@ void PutObjForBlender::EmitterAllEdit() {
     }
 }
 
-void PutObjForBlender::PutObject() {
-    /*  assert(levelData_);
-
-      for (auto& objectData : levelData_->objects) {
-          objectData.object3d.reset(Object3d::CreateModel(objectData.fileName));
-          assert(objectData.object3d);
-      }*/
-}
-
 void PutObjForBlender::DrawObject(LevelData::ObjectData& objectData, const ViewProjection& viewProjection) {
     if (objectData.object3d) {
         objectData.object3d->transform_.UpdateMatrix();

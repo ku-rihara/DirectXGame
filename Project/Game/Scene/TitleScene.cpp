@@ -40,8 +40,7 @@ void TitleScene::Init() {
     player_->Init();
     titleRogo_->Init();
     putObjForBlender_->LoadJsonFile("gameScene.json");
-    putObjForBlender_->PutObject();
-
+   
     alpha_ = 0.0f;
 
     viewProjection_.translation_ = {7.8f, 3.6f, 8.3f};

@@ -1,5 +1,4 @@
 #pragma once
-#include "EasingFunction.h"
 #include "utility/EasingCreator/EasingParameterData.h"
 #include "Vector2Proxy.h"
 // std
@@ -10,14 +9,17 @@
 #include <type_traits>
 #include <vector>
 
-
 template <typename T>
 class Easing {
 public:
-    Easing() = default;
+    Easing()  = default;
+    ~Easing() = default;
+
+    /// =========================================================================
+    /// Public Methods
+    /// =========================================================================
 
     void Init(const std::string& name);
-
     void Reset();
     void ResetStartValue();
 
@@ -33,10 +35,11 @@ public:
 
     // イージング更新
     void Update(float deltaTime);
-   
+
     // 変数に適応
     void SetAdaptValue(T* value);
 
+    // 軸の適応
     template <typename U = T>
     typename std::enable_if_t<std::is_same_v<U, float>, void>
     SetAdaptValue(Vector2* value);
@@ -50,65 +53,68 @@ public:
     SetAdaptValue(Vector3* value);
 
 private:
-    // イージング計算
+    /// =========================================================================
+    /// Private Methods
+    /// =========================================================================
+
     void CalculateValue();
-    // 終了処理
     void FinishBehavior();
-
     void ChangeAdaptAxis();
-
     void FilePathChangeForType();
-
     bool IsEasingStarted() const;
 
 private:
-    // メンバ変数
+    // イージング初期化パラメータ
     EasingType type_                       = EasingType::InSine;
     EasingFinishValueType finishValueType_ = EasingFinishValueType::End;
 
     AdaptFloatAxisType adaptFloatAxisType_     = AdaptFloatAxisType::X;
     AdaptVector2AxisType adaptVector2AxisType_ = AdaptVector2AxisType::XY;
 
+private:
+    // イージングの値
     T startValue_;
     T endValue_;
-    T baseValue_; 
+    T baseValue_;
     T* currentValue_;
 
+    // タイム
     float maxTime_     = 0.0f;
     float currentTime_ = 0.0f;
+    float waitTimeMax_ = 0.0f;
+    float waitTime_    = 0.0f;
 
-    bool isFinished_ = false;
+    // オフセット
+    float startTimeOffset_        = 0.0f;
+    float finishTimeOffset_       = 0.0f;
+    float currentStartTimeOffset_ = 0.0f;
 
     // amplitude用Parameter
     float amplitude_ = 0.0f;
     float period_    = 0.0f;
     float backRatio_ = 0.0f;
 
-    //etc
-    float waitTimeMax_ = 0.0f;
-    float startTimeOffset_  = 0.0f;
-    float finishTimeOffset_=0.0f;
-
-    float waitTime_ = 0.0f; // 待機時間
-    float currentStartTimeOffset_ = 0.0f;
+    float easingSpeedRate_ = 1.0f;
+    bool isFinished_       = false;
 
 private:
-    int32_t selectedFileIndex_;
-    AdaptVector2AxisType oldTypeVector2_;
-    AdaptFloatAxisType oldTypeFloat_;
-
-    std::vector<std::string> easingFiles_;
-
+    // ファイル
     const std::string FilePath_ = "Resources/EasingParameter/";
+    int32_t selectedFileIndex_;
+    std::vector<std::string> easingFiles_;
     std::string currentAppliedFileName_;
     std::string filePathForType_;
     std::string currentSelectedFileName_;
     std::string easingName_;
 
+    // 軸
+    AdaptVector2AxisType oldTypeVector2_;
+    AdaptFloatAxisType oldTypeFloat_;
     Vector2* adaptTargetVec2_ = nullptr;
     Vector3* adaptTargetVec3_ = nullptr;
     std::unique_ptr<IVector2Proxy> vector2Proxy_;
 
+    // コールバック関数
     std::function<void()> onFinishCallback_;
     std::function<void()> onWaitEndCallback_;
 
@@ -123,7 +129,6 @@ public:
     /// -------------------------------------------------------------------------
     /// Setter methods
     /// -------------------------------------------------------------------------
-    /*  void SetEditor(EasingEditor* editor);*/
     void SetFinishValueType(const EasingFinishValueType& type) { finishValueType_ = type; }
     void SetOnFinishCallback(const std::function<void()>& callback) { onFinishCallback_ = callback; }
     void SetOnWaitEndCallback(const std::function<void()>& callback) { onWaitEndCallback_ = callback; }
@@ -131,4 +136,5 @@ public:
     void SetEndValue(const T& value) { endValue_ = value; }
     void SetCurrentValue(const T& value);
     void SetBaseValue(const T& value) { baseValue_ = value; }
+    void SetEasingSpeedRate(const float& rate) { easingSpeedRate_ = rate; }
 };

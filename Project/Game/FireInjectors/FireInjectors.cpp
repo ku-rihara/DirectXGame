@@ -7,8 +7,7 @@ void FireInjectors::Init() {
     putObjForBlender_ = std::make_unique<PutObjForBlender>();
 
     putObjForBlender_->LoadJsonFile("FireInjectors.json");
-    putObjForBlender_->PutObject();
-
+   
      // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);

@@ -7,6 +7,8 @@
 
 template <typename T>
 void Easing<T>::Init(const std::string& name) {
+
+    // 初期化、ファイル読み込み
     FilePathChangeForType();
     easingFiles_ = GetFileNamesForDyrectry(FilePath_ + filePathForType_);
     easingName_  = name;
@@ -16,6 +18,7 @@ void Easing<T>::Init(const std::string& name) {
 template <typename T>
 void Easing<T>::Reset() {
 
+    //　パラメータリセット
     isFinished_  = false;
     currentTime_ = 0.0f;
     waitTime_    = 0.0f;
@@ -25,6 +28,8 @@ void Easing<T>::Reset() {
 
 template <typename T>
 void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
+
+    // イージングのパラメータをセット
 
     type_                 = easingParam.type;
     adaptFloatAxisType_   = easingParam.adaptFloatAxisType;
@@ -248,7 +253,7 @@ void Easing<T>::Update(float deltaTime) {
     }
 
     if (!isFinished_) {
-        currentTime_ += deltaTime;
+        currentTime_ += deltaTime*easingSpeedRate_;
     }
 
     CalculateValue();
