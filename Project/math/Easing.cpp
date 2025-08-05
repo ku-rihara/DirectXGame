@@ -1,6 +1,7 @@
 #include "Easing.h"
 #include "Function/GetFile.h"
 #include "utility/EasingCreator/EasingCreator.h"
+#include"EasingFunction.h"
 #include <fstream>
 #include <imGui.h>
 #include <Windows.h>
