@@ -35,7 +35,6 @@ void GameScene::Init() {
     plane_->Init();
     skuBox_->Init();
     putObjForBlender->LoadJsonFile("game.json");
-    putObjForBlender->PutObject();
     putObjForBlender->EasingAllReset();
 
     isDebugCameraActive_ = true;

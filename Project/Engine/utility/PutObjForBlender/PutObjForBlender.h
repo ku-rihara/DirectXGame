@@ -25,7 +25,6 @@ public:
         // オブジェクト1個分のデータ
         struct ObjectData {
             std::string fileName;
-          /*  WorldTransform worldTransform;*/
             std::unique_ptr<Object3d> object3d;
             std::list<ObjectData> children;
             std::vector<std::unique_ptr<EasingSequence<Vector3>>> scalingEasing;
@@ -47,7 +46,6 @@ public:
     ~PutObjForBlender() = default;
     // functions
     void LoadJsonFile(const std::string& name);
-    void PutObject();
     void DrawAll(const ViewProjection& viewProjection);
     // emit
     void EmitterAllUpdate();
