@@ -94,7 +94,6 @@ private:
     float period_    = 0.0f;
     float backRatio_ = 0.0f;
 
-    float easingSpeedRate_ = 1.0f;
     bool isFinished_       = false;
 
 private:
@@ -136,5 +135,4 @@ public:
     void SetEndValue(const T& value) { endValue_ = value; }
     void SetCurrentValue(const T& value);
     void SetBaseValue(const T& value) { baseValue_ = value; }
-    void SetEasingSpeedRate(const float& rate) { easingSpeedRate_ = rate; }
 };
