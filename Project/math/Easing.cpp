@@ -254,7 +254,7 @@ void Easing<T>::Update(float deltaTime) {
     }
 
     if (!isFinished_) {
-        currentTime_ += deltaTime*easingSpeedRate_;
+        currentTime_ += deltaTime;
     }
 
     CalculateValue();
