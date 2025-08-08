@@ -340,6 +340,9 @@
     <Filter Include="MyEngine\.h\PostEffect">
       <UniqueIdentifier>{0e04b71b-66a2-4664-b8b2-e3e21a1ebbb6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\ComboScene">
+      <UniqueIdentifier>{38a10d10-b231-4bc9-bf94-53dd26410c5b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -912,6 +915,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Pipeline\ShadowMapPipeline.cpp">
       <Filter>MyEngine\.cpp\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ComboScene\ComboScene.cpp">
+      <Filter>Game\ComboScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1529,6 +1535,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Animation\AnimationRegistry.h">
       <Filter>MyEngine\.h\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ComboScene\ComboScene.h">
+      <Filter>Game\ComboScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

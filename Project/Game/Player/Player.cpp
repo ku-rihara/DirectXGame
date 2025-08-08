@@ -94,8 +94,8 @@ void Player::Update() {
     effects_->Update(GetWorldPosition());
 
     comboBehavior_->Update(); // 　コンボ攻撃攻撃
-    AttackPowerCharge();      // チャージアタック
-    MoveToLimit();            // 　移動制限
+    AttackPowerCharge(); // チャージアタック
+    MoveToLimit(); // 　移動制限
 
     UpdateMatrix();
 }
@@ -345,17 +345,6 @@ void Player::AdjustParam() {
 #endif // _DEBUG
 }
 
-void Player::SetGameCamera(GameCamera* gamecamera) {
-    pGameCamera_ = gamecamera;
-}
-
-///==============================================================================
-/// Class Set
-///===============================================================================
-
-void Player::SetLockOn(LockOn* lockon) {
-    pLockOn_ = lockon;
-}
 
 ///==============================================================================
 /// 振る舞い切り替え
@@ -463,6 +452,29 @@ void Player::DissolveUpdate(const float& dissolve) {
     obj3d_->material_.SetDissolveThreshold(dissolve);
 }
 
+float Player::GetAttackValue(AttackValueMode attackValueMode) {
+    float attackValue = 0.0f;
+
+    switch (attackValueMode) {
+        /// ---------------------------------------------------------------------------------------
+        /// アタックスピード
+        ///----------------------------------------------------------------------------------------
+    case Player::AttackValueMode::AttackSpeed:
+        attackValue = parameters_->GetParamaters().AttackValueForLevel.speed[pCombo_->GetCurrentLevel()];
+        break;
+        /// ---------------------------------------------------------------------------------------
+        /// アタックパワー
+        ///----------------------------------------------------------------------------------------
+    case Player::AttackValueMode::AttackPower:
+        attackValue = parameters_->GetParamaters().AttackValueForLevel.power[pCombo_->GetCurrentLevel()];
+        break;
+    default:
+        break;
+    }
+    //値を返す
+    return attackValue;
+}
+
 Vector3 Player::GetCollisionPos() const {
     // ローカル座標でのオフセット
     const Vector3 offset = {0.0f, 1.5f, 0.0f};
@@ -471,18 +483,9 @@ Vector3 Player::GetCollisionPos() const {
     return worldPos;
 }
 
-void Player::SetRotateInit() {
-    obj3d_->transform_.rotation_      = {0, 0, 0};
-    obj3d_->transform_.translation_.y = 0.0f;
-}
-
 /// =======================================================================================
-/// Frag
+/// SetValue
 /// =======================================================================================
-bool Player::CheckIsChargeMax() const {
-    return currentUpperChargeTime_ >= parameters_->GetParamaters().upperParam.chargeTime;
-}
-
 void Player::HeadLightSetting() {
     if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
         Light::GetInstance()->GetAmbientLight()->SetIntensity(0.0f);
@@ -491,6 +494,34 @@ void Player::HeadLightSetting() {
     }
 }
 
+void Player::SetRotateInit() {
+    obj3d_->transform_.rotation_      = {0, 0, 0};
+    obj3d_->transform_.translation_.y = 0.0f;
+}
+
+void Player::PositionYReset() {
+    baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
+}
+
+///==============================================================================
+/// Class Set
+///===============================================================================
+
+void Player::SetLockOn(LockOn* lockon) {
+    pLockOn_ = lockon;
+}
+
+void Player::SetCombo(Combo* combo) {
+    pCombo_ = combo;
+}
+
+void Player::SetGameCamera(GameCamera* gamecamera) {
+    pGameCamera_ = gamecamera;
+}
+
+/// =======================================================================================
+/// Sound
+/// =======================================================================================
 void Player::SoundPunch() {
     Audio::GetInstance()->PlayWave(punchSoundID_, 0.5f);
 }
@@ -501,6 +532,6 @@ void Player::FallSound() {
     Audio::GetInstance()->PlayWave(fallSound_, 0.2f);
 }
 
-void Player::PositionYReset() {
-    baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
+bool Player::CheckIsChargeMax() const {
+    return currentUpperChargeTime_ >= parameters_->GetParamaters().upperParam.chargeTime;
 }

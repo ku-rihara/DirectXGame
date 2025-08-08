@@ -20,7 +20,7 @@ void Combo::Update() {
     // コンボタイマーの更新
     ComboTimerDecrement();
     // コンボタイマーによるアルファの調整
-    uiController_->AlphaAdaptForTime(comboTime_,comboTimeMax_);
+    uiController_->AlphaAdaptForTime(comboTime_, comboTimeMax_);
 }
 
 void Combo::Draw() {
@@ -36,8 +36,11 @@ void Combo::AdjustParam() {
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
-        ImGui::SeparatorText("Combo Parameter"); // combo パラメータ
+        ImGui::SeparatorText("Combo Parameter");
         ImGui::DragFloat("Combo Time Max", &comboTimeMax_, 0.01f);
+        for (int32_t i = 0; i < kComboLevel; ++i) {
+            ImGui::InputInt(("LevelUpComboNum" + std::to_string(int(i + 1))).c_str(), &LevelUpNum[i]);
+        }
 
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
@@ -53,6 +56,9 @@ void Combo::AdjustParam() {
 
 void Combo::BindParams() {
     globalParameter_->Bind(groupName_, "comboTimeMax_", &comboTimeMax_);
+    for (int32_t i = 0; i < kComboLevel; ++i) {
+        globalParameter_->Bind(groupName_, "LevelUpComboNum" + std::to_string(int(i + 1)), &LevelUpNum[i]);
+    }
 }
 
 void Combo::ComboCountUP() {
@@ -61,11 +67,23 @@ void Combo::ComboCountUP() {
     comboTime_ = comboTimeMax_;
 }
 
+void Combo::LevelUp() {
+    if (currentLevel_ >= kComboLevel - 1) {
+        return;
+    }
+    currentLevel_++; // レベルアップ
+}
+
 void Combo::ComboTimerDecrement() {
     comboTime_ -= Frame::DeltaTimeRate();
-    if (comboTime_ < 0.0f) {
-        comboTime_ = 0.0f;
-        comboCount_ = 0; 
+    if (comboTime_ < 0.0f && !isReset_) {
+        isReset_ = true;
     }
 }
 
+void Combo::Reset() {
+    comboTime_  = 0.0f;
+    comboCount_ = 0;
+    currentLevel_ = 0;
+    isReset_    = false;
+}

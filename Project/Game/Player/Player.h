@@ -31,10 +31,17 @@ class SpecialAttackGauge;
 class LockOn;
 class GameCamera;
 class Player : public BaseObject, public AABBCollider {
-private://struct
+
+private: // struct
     struct ParticleEffect {
         std::string name;
         std::unique_ptr<ParticleEmitter> emitter;
+    };
+
+private:
+    enum class AttackValueMode {
+        AttackSpeed,
+        AttackPower,
     };
 
 public:
@@ -86,19 +93,22 @@ public:
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
     Vector3 GetCollisionPos() const override;
 
+    float GetAttackValue(AttackValueMode attackValueMode);
+
     // sound
     void SoundPunch();
     void SoundStrongPunch();
     void FallSound();
 
-private:// class
-
+private: // class
     GlobalParameter* globalParameter_;
     const std::string groupName_ = "Player";
 
     /// other class
-    LockOn* pLockOn_;
-    GameCamera* pGameCamera_;
+    LockOn* pLockOn_         = nullptr;
+    GameCamera* pGameCamera_ = nullptr;
+    Combo* pCombo_           = nullptr;
+
     const ViewProjection* viewProjection_ = nullptr;
 
     std::unique_ptr<PlayerHandLeft> leftHand_;
@@ -112,16 +122,15 @@ private:// class
     std::unique_ptr<BaseTitleBehavior> titleBehavior_        = nullptr;
 
 private:
-
     /// ===================================================
     /// private variables
     /// ===================================================
-    
+
     // move
     float objectiveAngle_; /// 目標角度
-    Vector3 direction_;    /// 速度
-    Vector3 prePos_;       /// 移動前座標
-    float moveSpeed_;      /// 移動速度
+    Vector3 direction_; /// 速度
+    Vector3 prePos_; /// 移動前座標
+    float moveSpeed_; /// 移動速度
 
     // attackCharge
     float currentUpperChargeTime_;
@@ -152,6 +161,7 @@ public:
     void SetViewProjection(const ViewProjection* viewProjection) { viewProjection_ = viewProjection; }
     void SetLockOn(LockOn* lockon);
     void SetGameCamera(GameCamera* gamecamera);
+    void SetCombo(Combo* combo);
     void SetTitleBehavior();
     void SetRotateInit();
     void HeadLightSetting();

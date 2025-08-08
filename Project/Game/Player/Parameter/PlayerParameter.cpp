@@ -2,19 +2,19 @@
 // imGui
 #include <imgui.h>
 
-///=========================================================
+///==========================================================
 /// 　初期化
 ///==========================================================
 void PlayerParameter::Init() {
 
-    ///* グローバルパラメータ
+    // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
-///=========================================================
+///==========================================================
 /// パラメータ調整
 ///==========================================================
 void PlayerParameter::AdjustParam() {
@@ -25,7 +25,7 @@ void PlayerParameter::AdjustParam() {
         ImGui::SeparatorText("Transform");
         ImGui::DragFloat3("Position", &playerParams_.startPos_.x, 0.1f);
 
-         ImGui::SeparatorText("SpawnParam");
+        ImGui::SeparatorText("SpawnParam");
         ImGui::DragFloat("spawnParamWaitTime", &playerParams_.spawnParam.waitTime_, 0.01f);
 
         /// 　Floatのパラメータ
@@ -55,8 +55,15 @@ void PlayerParameter::AdjustParam() {
         ImGui::DragFloat("gravityB", &playerParams_.boundJump.gravity, 0.01f);
         ImGui::DragFloat("fallSpeedLimitB", &playerParams_.boundJump.fallSpeedLimit, 0.01f);
 
+        // attackLevel Values
+        for (int32_t i = 0; i < kComboLevel; ++i) {
+            ImGui::SeparatorText(("AttackValue" + std::to_string(int(i + 1))).c_str());
+            ImGui::DragFloat(("AttackSpeedForLevel" + std::to_string(int(i + 1))).c_str(), &playerParams_.AttackValueForLevel.speed[i], 0.01f);
+            ImGui::DragFloat(("attackPowerForLevel" + std::to_string(int(i + 1))).c_str(), &playerParams_.AttackValueForLevel.power[i], 0.01f);
+        }
+
         ImGui::SeparatorText("EasingTime");
-      
+
         /// コンボパラメータ
         if (ImGui::CollapsingHeader("NormalCombo")) {
             ImGui::SeparatorText("FirstCombo"); /// 1コンボ目
@@ -120,22 +127,27 @@ void PlayerParameter::BindParams() {
     globalParameter_->Bind(groupName_, "fallSpeedLimitB", &playerParams_.boundJump.fallSpeedLimit);
     globalParameter_->Bind(groupName_, "gravityB", &playerParams_.boundJump.gravity);
     globalParameter_->Bind(groupName_, "jumpSpeedB", &playerParams_.boundJump.jumpSpeed);
-    
+
     globalParameter_->Bind(groupName_, "fallSpeedLimitU", &playerParams_.upperJump.fallSpeedLimit);
     globalParameter_->Bind(groupName_, "gravityU", &playerParams_.upperJump.gravity);
     globalParameter_->Bind(groupName_, "jumpPowerU", &playerParams_.upperJump.jumpSpeed);
     globalParameter_->Bind(groupName_, "UpperChargeTime", &playerParams_.upperParam.chargeTime);
 
-    /// コンボ持続時間
-    for (uint32_t i = 0; i < normalComboParams_.size(); ++i) {
-        globalParameter_->Bind(groupName_, "NComboPTime" + std::to_string(int(i + 1)), &normalComboParams_[i].waitTime);
-         globalParameter_->Bind(groupName_, "NComboPunchReach" + std::to_string(int(i + 1)), &normalComboParams_[i].attackReach);
+    for (int32_t i = 0; i < kComboLevel; ++i) {
+        globalParameter_->Bind(groupName_, "AttackSpeedForLevel" + std::to_string(int(i + 1)), &playerParams_.AttackValueForLevel.speed[i]);
+        globalParameter_->Bind(groupName_, "attackPowerForLevel" + std::to_string(int(i + 1)), &playerParams_.AttackValueForLevel.power[i]);
     }
 
     /// コンボ持続時間
-    for (uint32_t i = 0; i < jumpComboParams_.size(); ++i) {
+    for (int32_t i = 0; i < normalComboParams_.size(); ++i) {
+        globalParameter_->Bind(groupName_, "NComboPTime" + std::to_string(int(i + 1)), &normalComboParams_[i].waitTime);
+        globalParameter_->Bind(groupName_, "NComboPunchReach" + std::to_string(int(i + 1)), &normalComboParams_[i].attackReach);
+    }
+
+    /// コンボ持続時間
+    for (int32_t i = 0; i < jumpComboParams_.size(); ++i) {
         globalParameter_->Bind(groupName_, "JComboPTime" + std::to_string(int(i + 1)), &jumpComboParams_[i].waitTime);
-         globalParameter_->Bind(groupName_, "JComboPunchReach" + std::to_string(int(i + 1)), &jumpComboParams_[i].attackReach);
+        globalParameter_->Bind(groupName_, "JComboPunchReach" + std::to_string(int(i + 1)), &jumpComboParams_[i].attackReach);
     }
 
     globalParameter_->Bind(groupName_, "spawnParamWaitTime", &playerParams_.spawnParam.waitTime_);

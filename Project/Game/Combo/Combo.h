@@ -6,6 +6,8 @@
 #include <cstdint>
 #include <memory>
 
+constexpr int32_t kComboLevel = 5;
+
 class Combo {
 public:
     Combo()  = default;
@@ -18,6 +20,8 @@ public:
 
     void ComboCountUP();
     void ComboTimerDecrement();
+    void LevelUp();
+    void Reset();
 
     ///-------------------------------------------------------------------------------------
     /// Editor
@@ -30,16 +34,23 @@ private:
     // UIコントローラ
     std::unique_ptr<ComboUIController> uiController_; 
 
-    GlobalParameter* globalParameter_; // グローバルパラメータ
-    const std::string groupName_ = "Combo"; // グループ名
+    GlobalParameter* globalParameter_;
+    const std::string groupName_ = "Combo";
 
     // parameter
-    float comboTime_;    // コンボ時間
-    int32_t comboCount_; // コンボ数
-    float comboTimeMax_; // コンボ時間の最大値
+    float comboTime_;    
+    int32_t comboCount_; 
+    float comboTimeMax_; 
+    int32_t LevelUpNum[kComboLevel];
+    int32_t currentLevel_;
+
+    bool isReset_=false;
 
 public: // accessor
 
     // Getter
     int32_t GetComboCount() const { return comboCount_; }
+    int32_t GetCurrentLevel() const { return currentLevel_; }
+    int32_t GetLevelUPNum  (const int32_t& level) const{ return LevelUpNum[level]; }
+    bool GetIsReset() const { return isReset_; }
 };

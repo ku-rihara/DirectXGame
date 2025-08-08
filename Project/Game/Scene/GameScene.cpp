@@ -32,6 +32,7 @@ void GameScene::Init() {
     gameBackGroundObject_ = std::make_unique<GameBackGroundObject>();
     comboCreate_          = std::make_unique<ComboCreateEditor>();
     fireInjectors_        = std::make_unique<FireInjectors>();
+    comboScene_           = std::make_unique<ComboScene>();
 
     ///=======================================================================================
     /// 初期化
@@ -46,13 +47,14 @@ void GameScene::Init() {
     fireInjectors_->Init();
     gameCamera_->Init();
     howToOperate_->Init();
+    comboScene_->Init();
     viewProjection_.Init();
 
     gameBackGroundObject_->Init("game.json");
 
-    ///=======================================================================================
+    ///---------------------------------------------------------------------------------------
     /// セット
-    ///=======================================================================================
+    ///---------------------------------------------------------------------------------------
     gameCamera_->SetTarget(&player_->GetTransform());
     enemyManager_->SetPlayer(player_.get());
     enemyManager_->SetCombo(combo_.get());
@@ -62,8 +64,13 @@ void GameScene::Init() {
     player_->SetViewProjection(&viewProjection_);
     player_->SetLockOn(lockOn_.get());
     player_->SetGameCamera(gameCamera_.get());
+    player_->SetCombo(combo_.get());
     enemySpawner_->SetEnemyManager(enemyManager_.get());
     fireInjectors_->SetCombo(combo_.get());
+
+    //comboScene
+    comboScene_->SetPlayer(player_.get());
+    comboScene_->SetCombo(combo_.get());
 
     isfirstChange_ = false;
     alpha_         = 2.5f;
@@ -108,6 +115,7 @@ void GameScene::Update() {
     Debug();
 
     // 各クラス更新
+    comboScene_->Update();
     player_->Update();
     skyBox_->Update();
     howToOperate_->Update();

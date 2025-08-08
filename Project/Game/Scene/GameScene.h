@@ -7,6 +7,7 @@
 #include "BackGroundObject/GameBackGroundObject.h"
 #include "Combo/Combo.h"
 #include "ComboCreate/ComboCreateEditor.h"
+#include "ComboScene/ComboScene.h"
 #include "Enemy/EnemyManager.h"
 #include "Enemy/Spawner/EnemySpawner.h"
 #include "Field/Field.h"
@@ -63,6 +64,7 @@ private:
     std::unique_ptr<ComboCreateEditor> comboCreate_             = nullptr;
     std::unique_ptr<FireInjectors> fireInjectors_               = nullptr;
     std::unique_ptr<GameBackGroundObject> gameBackGroundObject_ = nullptr;
+    std::unique_ptr<ComboScene> comboScene_                     = nullptr;
 
     bool isDraw = true;
 
