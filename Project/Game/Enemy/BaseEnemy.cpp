@@ -14,7 +14,7 @@
 #include "Combo/Combo.h"
 
 /// collisionBox
-#include "CollisionBox/AttackCollisionBox.h"
+#include "CollisionBox/PlayerAttackController.h"
 
 #include "audio/Audio.h"
 #include "Frame/Frame.h"
@@ -131,15 +131,15 @@ void BaseEnemy::SpriteDraw(const ViewProjection& viewProjection) {
 
 void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
     // 普通のパンチに攻撃されたら
-    if (AttackCollisionBox* attackCollisionBox = dynamic_cast<AttackCollisionBox*>(other)) {
+    if (PlayerAttackController* PlayerAttackController = dynamic_cast<PlayerAttackController*>(other)) {
 
-        switch (attackCollisionBox->attackType_) {
+        switch (PlayerAttackController->attackType_) {
             ///------------------------------------------------------------------
             /// 通常
             ///------------------------------------------------------------------
-        case AttackCollisionBox::AttackType::NORMAL:
+        case PlayerAttackController::AttackType::NORMAL:
 
-            DamageForPar(damageParam_);
+            TakeDamageForPer();
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
         }
@@ -148,20 +148,20 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 
 void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     // 普通のパンチに攻撃されたら
-    if (AttackCollisionBox* attackCollisionBox = dynamic_cast<AttackCollisionBox*>(other)) {
+    if (PlayerAttackController* attackController = dynamic_cast<PlayerAttackController*>(other)) {
 
-        switch (attackCollisionBox->attackType_) {
+        switch (attackController->attackType_) {
 
             ///------------------------------------------------------------------
             /// アッパー
             ///------------------------------------------------------------------
-        case AttackCollisionBox::AttackType::UPPER:
+        case PlayerAttackController::AttackType::UPPER:
 
             if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
                 break;
             }
 
-            DamageForPar(damageParam_);
+            TakeDamageForPer();
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 
@@ -169,12 +169,12 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             ///------------------------------------------------------------------
             /// ストッパー
             ///------------------------------------------------------------------
-        case AttackCollisionBox::AttackType::STOPPER:
+        case PlayerAttackController::AttackType::STOPPER:
             if (dynamic_cast<EnemyStopDamage*>(damageBehavior_.get())) {
                 break;
             }
 
-            DamageForPar(damageParam_);
+            TakeDamageForPer();
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
 
@@ -182,12 +182,12 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             ///------------------------------------------------------------------
             /// 突き飛ばし
             ///------------------------------------------------------------------
-        case AttackCollisionBox::AttackType::THRUST:
+        case PlayerAttackController::AttackType::THRUST:
             if (dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) {
                 break;
             }
 
-            DamageForPar(damageParam_ * 2.0f);
+            TakeDamageForPer();
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
 
@@ -195,12 +195,12 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             ///------------------------------------------------------------------
             /// 落下攻撃
             ///------------------------------------------------------------------
-        case AttackCollisionBox::AttackType::FALL:
+        case PlayerAttackController::AttackType::FALL:
             if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
                 break;
             }
 
-            DamageForPar(damageParam_);
+            TakeDamageForPer();
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 
@@ -210,12 +210,12 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             ///------------------------------------------------------------------
             /// ストッパー
             ///------------------------------------------------------------------
-        case AttackCollisionBox::AttackType::RUSH:
+        case PlayerAttackController::AttackType::RUSH:
             if (dynamic_cast<EnemyBoundDamage*>(damageBehavior_.get())) {
                 break;
             }
 
-            DamageForPar(damageParam_);
+            TakeDamageForPer();
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 
@@ -228,7 +228,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
 Vector3 BaseEnemy::GetCollisionPos() const {
     // ローカル座標でのオフセット
-    const Vector3 offset = {0.0f, 0.0f, 0.0f};
+    const Vector3 offset = Vector3::ZeroVector();
     // ワールド座標に変換
     Vector3 worldPos = TransformMatrix(offset, baseTransform_.matWorld_);
     return worldPos;
@@ -276,9 +276,9 @@ bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
     return false;
 }
 
-void BaseEnemy::DamageForPar(const float& par) {
+void BaseEnemy::TakeDamageForPer(const float& par) {
 
-    float decrementSize = HPMax_ * (par / 100.0f);
+    float decrementSize = HPMax_ * (par * 0.01f);//(per/100);
     hp_ -= decrementSize;
 }
 

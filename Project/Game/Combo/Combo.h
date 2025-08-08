@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <memory>
 
-constexpr int32_t kComboLevel = 5;
+ constexpr int32_t kComboLevel = 5;
 
 class Combo {
 public:

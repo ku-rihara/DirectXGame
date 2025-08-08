@@ -118,9 +118,9 @@ void RushAttack::Update() {
 }
 
 void RushAttack::CollisionInit() {
-    collisionBox_ = std::make_unique<AttackCollisionBox>();
+    collisionBox_ = std::make_unique<PlayerAttackController>();
     collisionBox_->Init();
-    collisionBox_->attackType_ = AttackCollisionBox::AttackType::RUSH;
+    collisionBox_->attackType_ = PlayerAttackController::AttackType::RUSH;
     collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
     collisionBox_->SetSize(Vector3(2.0f, 2.0f, 2.0f)); // 当たり判定サイズ
     collisionBox_->Update();

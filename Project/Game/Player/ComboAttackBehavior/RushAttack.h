@@ -2,7 +2,7 @@
 
 #include"BaseComboAattackBehavior.h"
 #include"EasingFunction.h"
-#include"CollisionBox/AttackCollisionBox.h"
+#include"CollisionBox/PlayerAttackController.h"
 #include"utility/ParticleEditor/ParticleEmitter.h"
 #include"Easing.h"
 
@@ -49,7 +49,7 @@ private:
     Vector3 tempLHandPos_;
     Vector3 tempRushPos_;
 
-	std::unique_ptr<AttackCollisionBox>collisionBox_;
+	std::unique_ptr<PlayerAttackController>collisionBox_;
 	std::unique_ptr<ParticleEmitter>emitter_;
 
 	Easing<float> rushBlurEase_;

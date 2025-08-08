@@ -45,9 +45,14 @@ void Player::Init() {
     leftHand_  = std::make_unique<PlayerHandLeft>();
     rightHand_ = std::make_unique<PlayerHandRight>();
 
+    // Playerのモデル
     obj3d_.reset(Object3d::CreateModel("Player.obj"));
     obj3d_->material_.materialData_->enableLighting = 7;
     obj3d_->material_.SetEnvironmentCoefficient(0.05f);
+
+    // Playerの攻撃コントローラー
+    attackController_ = std::make_unique<PlayerAttackController>();
+    attackController_->Init();
 
     // トランスフォーム初期化
     obj3d_->transform_.Init();

@@ -26,7 +26,7 @@ ThrustPunch::ThrustPunch(Player* player)
     pPlayer_->SetHeadRotateX(0.0f);
 
     /// collision
-    collisionBox_ = std::make_unique<AttackCollisionBox>();
+    collisionBox_ = std::make_unique<PlayerAttackController>();
 
     stopRailManager_ = pPlayer_->GetRightHand()->GetStopRailManager();
     stopRailManager_->SetIsRoop(false);
@@ -112,7 +112,7 @@ void ThrustPunch::Update() {
         stopRailManager_->SetRailMoveTime(0.0f);
         pPlayer_->GetRightHand()->RailForthComboUpdate(0.0f);
         collisionBox_->IsAdapt(true);
-        collisionBox_->attackType_ = AttackCollisionBox::AttackType::THRUST;
+        collisionBox_->attackType_ = PlayerAttackController::AttackType::THRUST;
         // 音
         pPlayer_->SoundPunch();
         order_ = Order::LPUNCH;
@@ -215,5 +215,5 @@ void ThrustPunch::ThrustCollisionSet() {
     collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
     collisionBox_->Update();
     collisionBox_->IsAdapt(true);
-    collisionBox_->attackType_ = AttackCollisionBox::AttackType::THRUST;
+    collisionBox_->attackType_ = PlayerAttackController::AttackType::THRUST;
 }

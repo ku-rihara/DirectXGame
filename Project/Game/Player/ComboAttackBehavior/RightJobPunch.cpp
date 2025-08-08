@@ -172,9 +172,9 @@ void RightJobPunch::EasingInit() {
 }
 
 void RightJobPunch::CollisionBoxInit() {
-    collisionBox_ = std::make_unique<AttackCollisionBox>();
+    collisionBox_ = std::make_unique<PlayerAttackController>();
     collisionBox_->Init();
-    collisionBox_->attackType_ = AttackCollisionBox::AttackType::NORMAL;
+    collisionBox_->attackType_ = PlayerAttackController::AttackType::NORMAL;
     collisionBox_->SetSize(Vector3::UnitVector() * 2.5f); // 当たり判定サイズ
     collisionBox_->IsAdapt(false);
 }

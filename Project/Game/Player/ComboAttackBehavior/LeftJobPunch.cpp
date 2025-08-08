@@ -126,9 +126,9 @@ void LeftJobPunch::EasingInit() {
 }
 
 void LeftJobPunch::CollisionBoxInit() {
-    collisionBox_ = std::make_unique<AttackCollisionBox>();
+    collisionBox_ = std::make_unique<PlayerAttackController>();
     collisionBox_->Init();
-    collisionBox_->attackType_ = AttackCollisionBox::AttackType::NORMAL;
+    collisionBox_->attackType_ = PlayerAttackController::AttackType::NORMAL;
     collisionBox_->SetSize(Vector3::UnitVector() * 2.5f); // 当たり判定サイズ
     Vector3 forwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
     collisionBox_->SetOffset(forwardDirection * 1.0f);

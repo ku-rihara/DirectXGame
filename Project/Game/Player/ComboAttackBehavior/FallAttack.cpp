@@ -166,9 +166,9 @@ void FallAttack::EasingInit() {
 }
 
 void FallAttack::CollisionInit() {
-    collisionBox_ = std::make_unique<AttackCollisionBox>();
+    collisionBox_ = std::make_unique<PlayerAttackController>();
     collisionBox_->Init();
-    collisionBox_->attackType_ = AttackCollisionBox::AttackType::FALL;
+    collisionBox_->attackType_ = PlayerAttackController::AttackType::FALL;
     collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
     collisionBox_->SetSize(Vector3(4.5f, 2.0f, 4.5f)); // 当たり判定サイズ
     collisionBox_->Update();

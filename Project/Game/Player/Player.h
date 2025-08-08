@@ -6,6 +6,7 @@
 #include "BaseObject/BaseObject.h"
 #include "Effect/PlayerEffects.h"
 #include "Parameter/PlayerParameter.h"
+#include"CollisionBox/PlayerAttackController.h"
 
 /// Parts
 #include "Parts/PlayerHandLeft.h"
@@ -115,7 +116,8 @@ private: // class
     std::unique_ptr<PlayerHandRight> rightHand_;
     std::unique_ptr<PlayerEffects> effects_;
     std::unique_ptr<PlayerParameter> parameters_;
-
+    std::unique_ptr<PlayerAttackController> attackController_;
+    
     /// behavior
     std::unique_ptr<BasePlayerBehavior> behavior_            = nullptr;
     std::unique_ptr<BaseComboAattackBehavior> comboBehavior_ = nullptr;

@@ -2,7 +2,7 @@
 
 #include"BaseComboAattackBehavior.h"
 #include"EasingFunction.h"
-#include"CollisionBox/AttackCollisionBox.h"
+#include"CollisionBox/PlayerAttackController.h"
 #include"Easing.h"
 
 class RailManager;
@@ -39,7 +39,7 @@ private:
 
 	Order order_;               /// 振る舞い順序
 	RailManager* railManager_;
-	std::unique_ptr<AttackCollisionBox>collisionBox_;
+	std::unique_ptr<PlayerAttackController>collisionBox_;
     float kCollisionAliveTime_;
 	float fallInitSpeed_;
 	float collisionSize_;

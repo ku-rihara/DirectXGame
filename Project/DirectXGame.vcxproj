@@ -109,7 +109,7 @@
     <ClCompile Include="Game\BackGroundObject\GameBackGroundObject.cpp" />
     <ClCompile Include="Game\BaseObject\BaseObject.cpp" />
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp" />
-    <ClCompile Include="Game\CollisionBox\AttackCollisionBox.cpp" />
+    <ClCompile Include="Game\CollisionBox\PlayerAttackController.cpp" />
     <ClCompile Include="Game\CollisionBox\EnemyCollisionBox.cpp" />
     <ClCompile Include="Game\ComboCreate\ComboCreateEditor.cpp" />
     <ClCompile Include="Game\ComboScene\ComboScene.cpp" />
@@ -316,7 +316,7 @@
     <ClInclude Include="Game\BackGroundObject\GameBackGroundObject.h" />
     <ClInclude Include="Game\BaseObject\BaseObject.h" />
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h" />
-    <ClInclude Include="Game\CollisionBox\AttackCollisionBox.h" />
+    <ClInclude Include="Game\CollisionBox\PlayerAttackController.h" />
     <ClInclude Include="Game\CollisionBox\EnemyCollisionBox.h" />
     <ClInclude Include="Game\ComboCreate\ComboCreateEditor.h" />
     <ClInclude Include="Game\ComboScene\ComboScene.h" />

@@ -2,7 +2,7 @@
 
 #include"BaseComboAattackBehavior.h"
 #include"EasingFunction.h"
-#include"CollisionBox/AttackCollisionBox.h"
+#include"CollisionBox/PlayerAttackController.h"
 #include"utility/RailEditor/RailManager.h"
 
 class ThrustPunch : public BaseComboAattackBehavior {
@@ -37,7 +37,7 @@ private:
 	bool istimeSlow_;
 
 	// collision
-	std::unique_ptr<AttackCollisionBox>collisionBox_;
+    std::unique_ptr<PlayerAttackController> collisionBox_;
 	
 	float waitTine_;          /// 次コンボまでの待機時間
 

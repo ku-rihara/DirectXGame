@@ -151,9 +151,9 @@ void RoringUpper::Debug() {
 }
 
 void RoringUpper::CollisionInit() {
-    collisionBox_ = std::make_unique<AttackCollisionBox>();
+    collisionBox_ = std::make_unique<PlayerAttackController>();
     collisionBox_->Init();
-    collisionBox_->attackType_ = AttackCollisionBox::AttackType::UPPER;
+    collisionBox_->attackType_ = PlayerAttackController::AttackType::UPPER;
     collisionBox_->SetSize(Vector3::UnitVector() * collisionSize_); // 当たり判定サイズ
     collisionBox_->SetOffset(forwardDirection_ * 3.0f);
     collisionBox_->IsAdapt(false);

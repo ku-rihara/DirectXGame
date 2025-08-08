@@ -2,11 +2,13 @@
 
 #include"Collider/AABBCollider.h"
 #include"3d/WorldTransform.h"
-#include"utility/ParameterEditor/GlobalParameter.h"
 #include<string>
 
 class BaseAABBCollisionBox :public AABBCollider {
 public:
+
+    BaseAABBCollisionBox() = default;
+    virtual ~BaseAABBCollisionBox() = default;
 
     /// ====================================================
     ///  public method
@@ -24,10 +26,6 @@ public:
     virtual void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 
 protected:
-	/// *TODO 
-	/// Imguiで編集できるエディターを作成
-
-	GlobalParameter* globalParamater_;
 
 	//transform,offset
 	WorldTransform transform_;

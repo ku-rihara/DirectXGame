@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseComboAattackBehavior.h"
-#include "CollisionBox/AttackCollisionBox.h"
+#include "CollisionBox/PlayerAttackController.h"
 #include "Easing.h"
 #include "EasingFunction.h"
 
@@ -33,7 +33,7 @@ private:
     Order order_; /// 振る舞い順序
 
     // collision
-    std::unique_ptr<AttackCollisionBox> collisionBox_;
+    std::unique_ptr<PlayerAttackController> collisionBox_;
 
     /// パンチ
     Easing<Vector3> punchEase_; /// パンチイージング

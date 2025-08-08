@@ -1,7 +1,7 @@
 #pragma once
 
 #include"BaseComboAattackBehavior.h"
-#include"CollisionBox/AttackCollisionBox.h"
+#include"CollisionBox/PlayerAttackController.h"
 #include"EasingFunction.h"
 #include"Easing.h"
 
@@ -54,7 +54,7 @@ private:
 	Vector3 tempLandScale_;
 	Easing<Vector3> landScaleEasing_;
 
-	std::unique_ptr<AttackCollisionBox>collisionBox_;
+	std::unique_ptr<PlayerAttackController>collisionBox_;
 
 	float waitTime_;
 };

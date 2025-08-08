@@ -55,12 +55,6 @@ void PlayerParameter::AdjustParam() {
         ImGui::DragFloat("gravityB", &playerParams_.boundJump.gravity, 0.01f);
         ImGui::DragFloat("fallSpeedLimitB", &playerParams_.boundJump.fallSpeedLimit, 0.01f);
 
-        // attackLevel Values
-        for (int32_t i = 0; i < kComboLevel; ++i) {
-            ImGui::SeparatorText(("AttackValue" + std::to_string(int(i + 1))).c_str());
-            ImGui::DragFloat(("AttackSpeedForLevel" + std::to_string(int(i + 1))).c_str(), &playerParams_.AttackValueForLevel.speed[i], 0.01f);
-            ImGui::DragFloat(("attackPowerForLevel" + std::to_string(int(i + 1))).c_str(), &playerParams_.AttackValueForLevel.power[i], 0.01f);
-        }
 
         ImGui::SeparatorText("EasingTime");
 
@@ -133,10 +127,7 @@ void PlayerParameter::BindParams() {
     globalParameter_->Bind(groupName_, "jumpPowerU", &playerParams_.upperJump.jumpSpeed);
     globalParameter_->Bind(groupName_, "UpperChargeTime", &playerParams_.upperParam.chargeTime);
 
-    for (int32_t i = 0; i < kComboLevel; ++i) {
-        globalParameter_->Bind(groupName_, "AttackSpeedForLevel" + std::to_string(int(i + 1)), &playerParams_.AttackValueForLevel.speed[i]);
-        globalParameter_->Bind(groupName_, "attackPowerForLevel" + std::to_string(int(i + 1)), &playerParams_.AttackValueForLevel.power[i]);
-    }
+   
 
     /// コンボ持続時間
     for (int32_t i = 0; i < normalComboParams_.size(); ++i) {

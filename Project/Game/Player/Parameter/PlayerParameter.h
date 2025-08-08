@@ -1,7 +1,6 @@
 #pragma once
 
 /// utility
-#include "Combo/Combo.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
 
 /// std
@@ -29,11 +28,6 @@ struct SpawnParam {
     float waitTime_;
 };
 
-struct AttackValueForLevel {
-    float speed[kComboLevel];
-    float power[kComboLevel];
-};
-
 /// Parameter構造体
 struct Parameters {
     Vector3 startPos_;
@@ -49,7 +43,6 @@ struct Parameters {
     float attackRotate;
     float attackRotateAnit;
     float attackFloatValue;
-    AttackValueForLevel AttackValueForLevel;
 };
 
 enum ComboNum {

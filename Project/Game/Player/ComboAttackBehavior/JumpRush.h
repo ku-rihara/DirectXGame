@@ -2,7 +2,7 @@
 
 #include"BaseComboAattackBehavior.h"
 #include"Easing.h"
-#include"CollisionBox/AttackCollisionBox.h"
+#include"CollisionBox/PlayerAttackController.h"
 
 class RailManager;
 class JumpRush : public BaseComboAattackBehavior {

@@ -72,7 +72,6 @@ protected:
     bool isDeath_;
     float hp_;
     float HPMax_;
-    float damageParam_;
     Vector2 hpBarSize_;
 
     /// behavior
@@ -108,7 +107,7 @@ public:
 
     Vector3 GetDirectionToTarget(const Vector3& target);
 
-    void DamageForPar(const float& par);
+    void TakeDamageForPer(const float& par);
 
 
     /// Behavior
