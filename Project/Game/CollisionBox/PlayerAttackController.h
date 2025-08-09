@@ -6,6 +6,7 @@
 #include <array>
 #include <string>
 
+class Combo;
 class PlayerAttackController : public BaseAABBCollisionBox {
 public:
     enum class AttackType {
@@ -18,10 +19,22 @@ public:
         COUNT,
     };
 
+private:
+    enum class AttackValueMode {
+        AttackSpeed,
+        AttackPower,
+    };
+
 public:
     struct AttackValueForLevel {
-        float speed[kComboLevel];
-        float power[kComboLevel];
+        float speed;
+        float power;
+    };
+
+    struct ColliderParameter {
+        Vector3 size;
+        float offsetValue;
+        float aliveTime;
     };
 
 public:
@@ -31,6 +44,12 @@ public:
     void Init() override;
     void Update() override;
     void Draw() override;
+
+    void SetPlayerBaseTransform(const WorldTransform* playerBaseTransform);
+    void SetParentTransform(WorldTransform* transform) override;
+
+    void ChangeAttackType(AttackType attackType);
+    float GetAttackValue(AttackValueMode attackValueMode);
 
     void OnCollisionEnter([[maybe_unused]] BaseCollider* other) override;
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
@@ -45,11 +64,18 @@ private:
     GlobalParameter* globalParameter_;
     const std::string groupName_ = "PlayerAttack";
 
+    const WorldTransform* playerBaseTransform_ = nullptr;
+    Combo* pCombo_;
+
     // 状態
     bool isSlow_;
     bool isHitStop_;
 
-    AttackValueForLevel attackValueForLevel_;
+    // レベルごとの攻撃パラメータ
+    std::array<AttackValueForLevel, kComboLevel> attackValueForLevel_;
+
+    // 各攻撃のColliderパラメータ
+    std::array<ColliderParameter, static_cast<size_t>(AttackType::COUNT)> collisionParam_;
 
 public:
     AttackType attackType_;
@@ -66,4 +92,5 @@ public: // accessor
     void SetOffset(const Vector3& offset) override;
     void SetIsSlow(const bool& is) { isSlow_ = is; }
     void SetIsHitStop(const bool& is) { isHitStop_ = is; }
+    void SetCombo(Combo* combo);
 };

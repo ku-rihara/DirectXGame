@@ -81,7 +81,7 @@ void RightJobPunch::Update() {
         /// パンチ
         ///----------------------------------------------------
 
-        collisionBox_->IsAdapt(true);
+        pPlayer_->GetAttackController()->IsAdapt(true);
         /// パンチイージング更新
         punchEase_.Update(Frame::DeltaTimeRate());
         pPlayer_->GetRightHand()->SetObjTranslate(punchPosition_);
@@ -157,7 +157,7 @@ void RightJobPunch::EasingInit() {
     punchEase_.Reset();
 
     punchEase_.SetOnFinishCallback([this]() {
-        collisionBox_->IsAdapt(false);
+        pPlayer_->GetAttackController()->IsAdapt(false);
         order_ = Order::BACKPUNCH;
     });
 
@@ -172,11 +172,11 @@ void RightJobPunch::EasingInit() {
 }
 
 void RightJobPunch::CollisionBoxInit() {
-    collisionBox_ = std::make_unique<PlayerAttackController>();
-    collisionBox_->Init();
-    collisionBox_->attackType_ = PlayerAttackController::AttackType::NORMAL;
-    collisionBox_->SetSize(Vector3::UnitVector() * 2.5f); // 当たり判定サイズ
-    collisionBox_->IsAdapt(false);
+    //collisionBox_ = std::make_unique<PlayerAttackController>();
+    //collisionBox_->Init();
+    //collisionBox_->attackType_ = PlayerAttackController::AttackType::NORMAL;
+    //collisionBox_->SetSize(Vector3::UnitVector() * 2.5f); // 当たり判定サイズ
+    pPlayer_->GetAttackController()->IsAdapt(false);
 }
 
 void RightJobPunch::ChangeSpeedForLockOn() {

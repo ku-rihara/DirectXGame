@@ -50,9 +50,10 @@ void Player::Init() {
     obj3d_->material_.materialData_->enableLighting = 7;
     obj3d_->material_.SetEnvironmentCoefficient(0.05f);
 
-    // Playerの攻撃コントローラー
+    // Playerの攻撃クラス
     attackController_ = std::make_unique<PlayerAttackController>();
     attackController_->Init();
+    attackController_->SetPlayerBaseTransform(&baseTransform_);
 
     // トランスフォーム初期化
     obj3d_->transform_.Init();
@@ -90,6 +91,9 @@ void Player::Update() {
     // ライト
     HeadLightSetting();
 
+    //攻撃更新
+    attackController_->Update();
+
     /// 振る舞い処理(コンボ攻撃中は中止)
     if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
         behavior_->Update();
@@ -98,9 +102,9 @@ void Player::Update() {
     /// Particle
     effects_->Update(GetWorldPosition());
 
-    comboBehavior_->Update(); // 　コンボ攻撃攻撃
-    AttackPowerCharge(); // チャージアタック
-    MoveToLimit(); // 　移動制限
+    comboBehavior_->Update(); // コンボ攻撃攻撃
+    AttackPowerCharge();      // チャージアタック
+    MoveToLimit();            // 移動制限
 
     UpdateMatrix();
 }
@@ -457,28 +461,6 @@ void Player::DissolveUpdate(const float& dissolve) {
     obj3d_->material_.SetDissolveThreshold(dissolve);
 }
 
-float Player::GetAttackValue(AttackValueMode attackValueMode) {
-    float attackValue = 0.0f;
-
-    switch (attackValueMode) {
-        /// ---------------------------------------------------------------------------------------
-        /// アタックスピード
-        ///----------------------------------------------------------------------------------------
-    case Player::AttackValueMode::AttackSpeed:
-        attackValue = parameters_->GetParamaters().AttackValueForLevel.speed[pCombo_->GetCurrentLevel()];
-        break;
-        /// ---------------------------------------------------------------------------------------
-        /// アタックパワー
-        ///----------------------------------------------------------------------------------------
-    case Player::AttackValueMode::AttackPower:
-        attackValue = parameters_->GetParamaters().AttackValueForLevel.power[pCombo_->GetCurrentLevel()];
-        break;
-    default:
-        break;
-    }
-    //値を返す
-    return attackValue;
-}
 
 Vector3 Player::GetCollisionPos() const {
     // ローカル座標でのオフセット
@@ -518,6 +500,7 @@ void Player::SetLockOn(LockOn* lockon) {
 
 void Player::SetCombo(Combo* combo) {
     pCombo_ = combo;
+    attackController_->SetCombo(combo);
 }
 
 void Player::SetGameCamera(GameCamera* gamecamera) {

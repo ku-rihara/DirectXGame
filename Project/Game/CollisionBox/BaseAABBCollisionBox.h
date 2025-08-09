@@ -19,6 +19,7 @@ public:
     virtual void Draw();
 
     virtual void IsAdapt(bool is);
+    virtual void SetParentTransform(WorldTransform* transform);
    
 
     // Collision発生時のコールバック関数

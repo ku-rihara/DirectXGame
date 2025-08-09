@@ -86,19 +86,16 @@ void RoringUpper::Update() {
         collisionAdaptTime_ += Frame::DeltaTimeRate();
         /*backlashEase_.time += Frame::DeltaTimeRate();*/
 
-        collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+        pPlayer_->GetAttackController()->SetPosition(pPlayer_->GetWorldPosition());
 
         // 0.3秒で当たり判定消す
         if (collisionAdaptTime_ >= kCollisionAliveTime_) {
-            collisionBox_->IsAdapt(false);
+            pPlayer_->GetAttackController()->IsAdapt(false);
             /// ボタンで次のコンボ
             BaseComboAattackBehavior::PreOderNextComboForButton();
         } else {
-            collisionBox_->IsAdapt(true);
+            pPlayer_->GetAttackController()->IsAdapt(true);
         }
-
-        /// コリジョンボックス更新
-        collisionBox_->Update();
 
         // プレイヤーのモーション
         AnimationMove();
@@ -151,12 +148,12 @@ void RoringUpper::Debug() {
 }
 
 void RoringUpper::CollisionInit() {
-    collisionBox_ = std::make_unique<PlayerAttackController>();
-    collisionBox_->Init();
-    collisionBox_->attackType_ = PlayerAttackController::AttackType::UPPER;
-    collisionBox_->SetSize(Vector3::UnitVector() * collisionSize_); // 当たり判定サイズ
-    collisionBox_->SetOffset(forwardDirection_ * 3.0f);
-    collisionBox_->IsAdapt(false);
+    //collisionBox_ = std::make_unique<PlayerAttackController>();
+    //collisionBox_->Init();
+    //collisionBox_->attackType_ = PlayerAttackController::AttackType::UPPER;
+    //collisionBox_->SetSize(Vector3::UnitVector() * collisionSize_); // 当たり判定サイズ
+    //collisionBox_->SetOffset(forwardDirection_ * 3.0f);
+    pPlayer_->GetAttackController()->IsAdapt(false);
 }
 
 void RoringUpper::EasingInit() {
@@ -184,7 +181,7 @@ void RoringUpper::RailInit() {
 
 void RoringUpper::HitStopUpdate() {
     // デルタタイムスケール小さく
-    if (collisionBox_->GetIsHitStop() && !isHitStop_) {
+    if (pPlayer_->GetAttackController()->GetIsHitStop() && !isHitStop_) {
         pPlayer_->GetEffects()->SpecialAttackRenditionInit();
         isHitStop_ = true;
     }

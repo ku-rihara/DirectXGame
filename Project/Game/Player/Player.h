@@ -31,18 +31,13 @@
 class SpecialAttackGauge;
 class LockOn;
 class GameCamera;
+class Combo;
 class Player : public BaseObject, public AABBCollider {
 
 private: // struct
     struct ParticleEffect {
         std::string name;
         std::unique_ptr<ParticleEmitter> emitter;
-    };
-
-private:
-    enum class AttackValueMode {
-        AttackSpeed,
-        AttackPower,
     };
 
 public:
@@ -94,8 +89,7 @@ public:
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
     Vector3 GetCollisionPos() const override;
 
-    float GetAttackValue(AttackValueMode attackValueMode);
-
+  
     // sound
     void SoundPunch();
     void SoundStrongPunch();
@@ -155,6 +149,7 @@ public:
     LockOn* GetLockOn() const { return pLockOn_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
     PlayerParameter* GetParameter() const { return parameters_.get(); }
+    PlayerAttackController* GetAttackController() const { return attackController_.get(); }
     float GetMoveSpeed() const { return moveSpeed_; }
 
     /// =========================================================================================

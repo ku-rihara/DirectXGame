@@ -39,7 +39,7 @@ private:
 
 	Order order_;               /// 振る舞い順序
 	RailManager* railManager_;
-	std::unique_ptr<PlayerAttackController>collisionBox_;
+	/*std::unique_ptr<PlayerAttackController>collisionBox_;*/
     float kCollisionAliveTime_;
 	float fallInitSpeed_;
 	float collisionSize_;

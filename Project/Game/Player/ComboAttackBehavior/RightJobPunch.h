@@ -34,7 +34,7 @@ private:
     Order order_; /// 振る舞い順序
 
     // collision
-    std::unique_ptr<PlayerAttackController> collisionBox_;
+   /* std::unique_ptr<PlayerAttackController> collisionBox_;*/
 
     /// 突進
     Vector3 initPos_; /// スタート座標
