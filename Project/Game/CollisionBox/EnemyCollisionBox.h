@@ -27,10 +27,7 @@ public:
     /// setter method
     ///------------------------------------------------------------------------------
 
-    void IsAdapt(bool is)override;
-    void SetSize(const Vector3& size)override;
-    void SetPosition(const Vector3& position)override;
-    void SetOffset(const Vector3& offset)override;
+   
 
     ///------------------------------------------------------------------------------
     /// setter method

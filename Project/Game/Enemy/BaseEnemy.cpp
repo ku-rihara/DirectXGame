@@ -42,7 +42,7 @@ void BaseEnemy::Init(const Vector3& spownPos) {
     collisionBox_ = std::make_unique<EnemyCollisionBox>();
     collisionBox_->Init();
     collisionBox_->SetSize(Vector3(3.2f, 3.2f, 3.2f));
-    collisionBox_->IsAdapt(true);
+   
 
     findSprite_    = std::make_unique<FindSprite>();
     notFindSprite_ = std::make_unique<NotFindSprite>();
@@ -130,16 +130,18 @@ void BaseEnemy::SpriteDraw(const ViewProjection& viewProjection) {
 }
 
 void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
-    // 普通のパンチに攻撃されたら
-    if (PlayerAttackController* PlayerAttackController = dynamic_cast<PlayerAttackController*>(other)) {
 
-        switch (PlayerAttackController->attackType_) {
+      PlayerAttackController::AttackValueMode playerAttackMode = PlayerAttackController::AttackValueMode::AttackPower;
+    // 普通のパンチに攻撃されたら
+      if (PlayerAttackController* attackController = dynamic_cast<PlayerAttackController*>(other)) {
+
+        switch (attackController->attackType_) {
             ///------------------------------------------------------------------
             /// 通常
             ///------------------------------------------------------------------
         case PlayerAttackController::AttackType::NORMAL:
 
-            TakeDamageForPer();
+            TakeDamageForPer(attackController->GetAttackValue(playerAttackMode));
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
         }
@@ -147,7 +149,9 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 }
 
 void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
-    // 普通のパンチに攻撃されたら
+
+    PlayerAttackController::AttackValueMode playerAttackMode = PlayerAttackController::AttackValueMode::AttackPower;
+
     if (PlayerAttackController* attackController = dynamic_cast<PlayerAttackController*>(other)) {
 
         switch (attackController->attackType_) {
@@ -161,7 +165,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
                 break;
             }
 
-            TakeDamageForPer();
+            TakeDamageForPer(attackController->GetAttackValue(playerAttackMode));
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 
@@ -174,7 +178,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
                 break;
             }
 
-            TakeDamageForPer();
+            TakeDamageForPer(attackController->GetAttackValue(playerAttackMode));
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
 
@@ -187,7 +191,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
                 break;
             }
 
-            TakeDamageForPer();
+            TakeDamageForPer(attackController->GetAttackValue(playerAttackMode));
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
 
@@ -200,7 +204,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
                 break;
             }
 
-            TakeDamageForPer();
+            TakeDamageForPer(attackController->GetAttackValue(playerAttackMode));
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 
@@ -215,7 +219,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
                 break;
             }
 
-            TakeDamageForPer();
+            TakeDamageForPer(attackController->GetAttackValue(playerAttackMode));
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 
@@ -264,7 +268,7 @@ bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
     Vector3 positionView = {};
     // 敵のロックオン座標を取得
     Vector3 positionWorld = GetWorldPosition();
-   
+
     positionView = TransformMatrix(positionWorld, viewProjection.matView_);
     // 距離条件チェック
     if (0.0f <= positionView.z && positionView.z <= 1280.0f) {
@@ -278,7 +282,7 @@ bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
 
 void BaseEnemy::TakeDamageForPer(const float& par) {
 
-    float decrementSize = HPMax_ * (par * 0.01f);//(per/100);
+    float decrementSize = HPMax_ * (par * 0.01f); //(per/100);
     hp_ -= decrementSize;
 }
 

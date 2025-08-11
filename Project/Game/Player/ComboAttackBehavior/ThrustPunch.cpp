@@ -68,7 +68,7 @@ void ThrustPunch::Update() {
         ///----------------------------------------------------
         firstWaitTime_ += Frame::DeltaTime();
         if (firstWaitTime_ >= firstWaitTimeMax_) {
-            collisionBox_->IsAdapt(true);
+            collisionBox_->SetIsAdapt(true);
             pPlayer_->SoundPunch();
             order_ = Order::RPUNCH;
         }
@@ -92,7 +92,7 @@ void ThrustPunch::Update() {
         stopRailManager_->SetRailMoveTime(1.0f);
         pPlayer_->GetRightHand()->RailForthComboUpdate(0.0f);
 
-        collisionBox_->IsAdapt(false);
+        collisionBox_->SetIsAdapt(false);
         order_ = Order::RBACKPUNCH;
 
         break;
@@ -111,7 +111,7 @@ void ThrustPunch::Update() {
 
         stopRailManager_->SetRailMoveTime(0.0f);
         pPlayer_->GetRightHand()->RailForthComboUpdate(0.0f);
-        collisionBox_->IsAdapt(true);
+        collisionBox_->SetIsAdapt(true);
         collisionBox_->attackType_ = PlayerAttackController::AttackType::THRUST;
         // 音
         pPlayer_->SoundPunch();
@@ -135,7 +135,7 @@ void ThrustPunch::Update() {
         thrustRailManager_->SetRailMoveTime(1.0f);
         pPlayer_->GetLeftHand()->RailForthComboUpdate(0.0f);
         order_ = Order::LBACKPUNCH;
-        collisionBox_->IsAdapt(false);
+        collisionBox_->SetIsAdapt(false);
 
         break;
 
@@ -214,6 +214,6 @@ void ThrustPunch::ThrustCollisionSet() {
     collisionBox_->SetOffset(tforwardDirection * 3.0f);
     collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
     collisionBox_->Update();
-    collisionBox_->IsAdapt(true);
+    collisionBox_->SetIsAdapt(true);
     collisionBox_->attackType_ = PlayerAttackController::AttackType::THRUST;
 }

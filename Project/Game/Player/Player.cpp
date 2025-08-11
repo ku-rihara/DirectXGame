@@ -347,7 +347,9 @@ void Player::AdjustParam() {
 
     // プレイヤーのパラメータ
     parameters_->AdjustParam();
-    /// 手のパラメータ調整
+    // 攻撃パラメータ
+    attackController_->AdjustParam();
+    // パーツのパラメータ
     leftHand_->AdjustParm();
     rightHand_->AdjustParm();
 

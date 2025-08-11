@@ -90,11 +90,11 @@ void RoringUpper::Update() {
 
         // 0.3秒で当たり判定消す
         if (collisionAdaptTime_ >= kCollisionAliveTime_) {
-            pPlayer_->GetAttackController()->IsAdapt(false);
+            pPlayer_->GetAttackController()->SetIsAdapt(false);
             /// ボタンで次のコンボ
             BaseComboAattackBehavior::PreOderNextComboForButton();
         } else {
-            pPlayer_->GetAttackController()->IsAdapt(true);
+            pPlayer_->GetAttackController()->SetIsAdapt(true);
         }
 
         // プレイヤーのモーション
@@ -153,7 +153,7 @@ void RoringUpper::CollisionInit() {
     //collisionBox_->attackType_ = PlayerAttackController::AttackType::UPPER;
     //collisionBox_->SetSize(Vector3::UnitVector() * collisionSize_); // 当たり判定サイズ
     //collisionBox_->SetOffset(forwardDirection_ * 3.0f);
-    pPlayer_->GetAttackController()->IsAdapt(false);
+    pPlayer_->GetAttackController()->SetIsAdapt(false);
 }
 
 void RoringUpper::EasingInit() {

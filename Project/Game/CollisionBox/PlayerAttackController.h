@@ -19,7 +19,6 @@ public:
         COUNT,
     };
 
-private:
     enum class AttackValueMode {
         AttackSpeed,
         AttackPower,
@@ -34,7 +33,7 @@ public:
     struct ColliderParameter {
         Vector3 size;
         float offsetValue;
-        float aliveTime;
+        float adaptTime;
     };
 
 public:
@@ -44,6 +43,8 @@ public:
     void Init() override;
     void Update() override;
     void Draw() override;
+
+    void TimerUpdate(const float& deltaTime);
 
     void SetPlayerBaseTransform(const WorldTransform* playerBaseTransform);
     void SetParentTransform(WorldTransform* transform) override;
@@ -64,12 +65,13 @@ private:
     GlobalParameter* globalParameter_;
     const std::string groupName_ = "PlayerAttack";
 
-    const WorldTransform* playerBaseTransform_ = nullptr;
+    const WorldTransform* baseTransform_ = nullptr;
     Combo* pCombo_;
 
     // 状態
     bool isSlow_;
     bool isHitStop_;
+    float adaptTimer_;
 
     // レベルごとの攻撃パラメータ
     std::array<AttackValueForLevel, kComboLevel> attackValueForLevel_;
@@ -86,10 +88,6 @@ public: // accessor
     bool GetIsHitStop() const { return isHitStop_; }
     AttackType GetTagList() const { return attackType_; }
 
-    void IsAdapt(bool is) override;
-    void SetSize(const Vector3& size) override;
-    void SetPosition(const Vector3& position) override;
-    void SetOffset(const Vector3& offset) override;
     void SetIsSlow(const bool& is) { isSlow_ = is; }
     void SetIsHitStop(const bool& is) { isHitStop_ = is; }
     void SetCombo(Combo* combo);

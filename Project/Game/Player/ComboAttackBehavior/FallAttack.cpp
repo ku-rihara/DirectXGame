@@ -84,12 +84,12 @@ void FallAttack::Update() {
         
 		if (landScaleEasing_.GetCurrentEaseTime() <= 0.15f) {
 			/// 当たり判定座標
-			collisionBox_->IsAdapt(true);
+			collisionBox_->SetIsAdapt(true);
 			collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
 			collisionBox_->Update();
 		}
 		else {
-			collisionBox_->IsAdapt(false);
+			collisionBox_->SetIsAdapt(false);
 		}
 
 		// 回転する
@@ -111,7 +111,7 @@ void FallAttack::Update() {
 	case STEP::WAIT:
 		
 		pPlayer_->SetWorldPositionY(pPlayerParameter_->GetParamaters().startPos_.y);
-		collisionBox_->IsAdapt(false);
+		collisionBox_->SetIsAdapt(false);
 		waitTime_ += Frame::DeltaTime();
 		
 		if (waitTime_ >= pPlayerParameter_->GetJumpComboParm(FIRST).waitTime) {
@@ -172,7 +172,7 @@ void FallAttack::CollisionInit() {
     collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
     collisionBox_->SetSize(Vector3(4.5f, 2.0f, 4.5f)); // 当たり判定サイズ
     collisionBox_->Update();
-    collisionBox_->IsAdapt(false);
+    collisionBox_->SetIsAdapt(false);
 }
 
 

@@ -1,13 +1,12 @@
 #pragma once
 
-#include"Collider/AABBCollider.h"
-#include"3d/WorldTransform.h"
-#include<string>
+#include "3d/WorldTransform.h"
+#include "Collider/AABBCollider.h"
+#include <string>
 
-class BaseAABBCollisionBox :public AABBCollider {
+class BaseAABBCollisionBox : public AABBCollider {
 public:
-
-    BaseAABBCollisionBox() = default;
+    BaseAABBCollisionBox()          = default;
     virtual ~BaseAABBCollisionBox() = default;
 
     /// ====================================================
@@ -18,32 +17,31 @@ public:
     virtual void Update();
     virtual void Draw();
 
-    virtual void IsAdapt(bool is);
-    virtual void SetParentTransform(WorldTransform* transform);
    
+    virtual void SetParentTransform(WorldTransform* transform);
 
-    // Collision発生時のコールバック関数
+    // コールバック関数
     virtual void OnCollisionEnter([[maybe_unused]] BaseCollider* other) override;
     virtual void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 
 protected:
-
-	//transform,offset
-	WorldTransform transform_;
-	Vector3 offset_;
-
-    //生存時間
-	float aliveTime_;
-public:
-	std::string tag_;
+    // transform,offset
+    WorldTransform transform_;
+    Vector3 offset_;
+    Vector3 size_;
+    bool isCollision_ = true;
 
 public:
-	/// getter
-	virtual Vector3 GetCollisionPos() const override;
-	std::string GetTag()const { return tag_; }
+    std::string tag_;
+
+public:
+    /// getter
+    virtual Vector3 GetCollisionPos() const override;
+    std::string GetTag() const { return tag_; }
 
     /// setter
-	virtual void SetSize(const Vector3& size);
-    virtual void SetPosition(const Vector3& position);
-    virtual void SetOffset(const Vector3& offset);
+    void SetIsCollision(const bool& is) { isCollision_ = is; } 
+    void SetSize(const Vector3& size) { size_ = size; }
+    void SetPosition(const Vector3& position) { transform_.translation_ = position; }
+    void SetOffset(const Vector3& offset) { offset_ = offset;}
 };

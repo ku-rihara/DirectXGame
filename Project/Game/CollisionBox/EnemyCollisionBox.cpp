@@ -17,22 +17,6 @@ Vector3 EnemyCollisionBox::GetCollisionPos() const {
 	return BaseAABBCollisionBox::GetCollisionPos();
 }
 
-void EnemyCollisionBox::SetSize(const Vector3& size) {
-	BaseAABBCollisionBox::SetSize(size);
-}
-
-void EnemyCollisionBox::SetPosition(const Vector3& position) {
-	BaseAABBCollisionBox::SetPosition(position);
-}
-
-void EnemyCollisionBox::SetOffset(const Vector3& offset) {
-	BaseAABBCollisionBox::SetOffset(offset);
-}
-
-void EnemyCollisionBox::IsAdapt(bool is) {
-	BaseAABBCollisionBox::IsAdapt(is);
-}
-
 void EnemyCollisionBox::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 
 }

@@ -1,4 +1,5 @@
 #include "PlayerAttackController.h"
+#include "Frame/Frame.h"
 // enemy
 #include "Enemy/BaseEnemy.h"
 #include <imgui.h>
@@ -10,6 +11,8 @@ void PlayerAttackController::Init() {
     BindParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
+    SetIsCollision(false);
+
     BaseAABBCollisionBox::Init();
 }
 
@@ -17,11 +20,42 @@ void PlayerAttackController::Update() {
 
     // 攻撃タイプのColliderパラメータ
     SetSize(collisionParam_[static_cast<size_t>(attackType_)].size);
+
+    // タイム更新
+    TimerUpdate(Frame::DeltaTime());
+
+    // transformの更新
     BaseAABBCollisionBox::Update();
 }
 
 void PlayerAttackController::Draw() {
     BaseAABBCollisionBox::Draw();
+}
+
+void PlayerAttackController::TimerUpdate(const float& deltaTime) {
+    if (!isCollision_) {
+        return;
+    }
+    // タイマー更新
+    adaptTimer_ -= deltaTime;
+
+    if (adaptTimer_ <= 0.0f) {
+        SetIsCollision(false);
+    }
+}
+
+void PlayerAttackController::ChangeAttackType(AttackType attackType) {
+    attackType_ = attackType;
+
+    // offset
+    float offSetValue = collisionParam_[static_cast<size_t>(attackType_)].offsetValue;
+    SetOffset(baseTransform_->GetForwardVector() * offSetValue);
+
+    // time
+    adaptTimer_ = collisionParam_[static_cast<size_t>(attackType_)].adaptTime;
+
+    // isCollision
+    SetIsCollision(true);
 }
 
 ///==========================================================
@@ -37,7 +71,7 @@ void PlayerAttackController::BindParams() {
     for (int32_t i = 0; i < collisionParam_.size(); ++i) {
         globalParameter_->Bind(groupName_, "offsetValue" + std::to_string(int(i + 1)), &collisionParam_[i].offsetValue);
         globalParameter_->Bind(groupName_, "ColliderSize" + std::to_string(int(i + 1)), &collisionParam_[i].size);
-        globalParameter_->Bind(groupName_, "aliveTime" + std::to_string(int(i + 1)), &collisionParam_[i].aliveTime);
+        globalParameter_->Bind(groupName_, "adaptTime" + std::to_string(int(i + 1)), &collisionParam_[i].adaptTime);
     }
 }
 
@@ -61,7 +95,7 @@ void PlayerAttackController::AdjustParam() {
             ImGui::SeparatorText(("ColliderParameter" + std::to_string(int(i + 1))).c_str());
             ImGui::DragFloat3(("CollisionSize" + std::to_string(int(i + 1))).c_str(), &collisionParam_[i].size.x, 0.01f);
             ImGui::DragFloat(("offsetValue" + std::to_string(int(i + 1))).c_str(), &collisionParam_[i].offsetValue, 0.01f);
-            ImGui::DragFloat(("aliveTime" + std::to_string(int(i + 1))).c_str(), &collisionParam_[i].aliveTime, 0.01f);
+            ImGui::DragFloat(("adaptTime" + std::to_string(int(i + 1))).c_str(), &collisionParam_[i].adaptTime, 0.01f);
         }
 
         // セーブ・ロード
@@ -158,35 +192,14 @@ void PlayerAttackController::SetCombo(Combo* combo) {
     pCombo_ = combo;
 }
 
-void PlayerAttackController::ChangeAttackType(AttackType attackType) {
-    attackType_ = attackType;
-}
-
 void PlayerAttackController::SetPlayerBaseTransform(const WorldTransform* playerBaseTransform) {
-    playerBaseTransform_ = playerBaseTransform;
+    baseTransform_ = playerBaseTransform;
 }
 
 Vector3 PlayerAttackController::GetCollisionPos() const {
     return BaseAABBCollisionBox::GetCollisionPos();
 }
 
-void PlayerAttackController::SetSize(const Vector3& size) {
-    BaseAABBCollisionBox::SetSize(size);
-}
-
-void PlayerAttackController::SetPosition(const Vector3& position) {
-    BaseAABBCollisionBox::SetPosition(position);
-}
-
-void PlayerAttackController::SetOffset(const Vector3& offset) {
-    BaseAABBCollisionBox::SetOffset(offset);
-}
-
-void PlayerAttackController::IsAdapt(bool is) {
-    BaseAABBCollisionBox::IsAdapt(is);
-}
-
 void PlayerAttackController::SetParentTransform(WorldTransform* transform) {
     BaseAABBCollisionBox::SetParentTransform(transform);
 }
-

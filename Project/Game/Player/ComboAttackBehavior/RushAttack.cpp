@@ -88,7 +88,7 @@ void RushAttack::Update() {
         pPlayer_->SetWorldPosition(tempRushPos_);
 
         /// 当たり判定座標
-        collisionBox_->IsAdapt(true);
+        collisionBox_->SetIsAdapt(true);
         collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
         collisionBox_->Update();
 
@@ -100,7 +100,7 @@ void RushAttack::Update() {
 
         PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::NONE);
 
-        collisionBox_->IsAdapt(false);
+        collisionBox_->SetIsAdapt(false);
         waitTime_ += Frame::DeltaTime();
         if (waitTime_ < pPlayerParameter_->GetJumpComboParm(SECOND).waitTime) {
             break;
@@ -124,7 +124,7 @@ void RushAttack::CollisionInit() {
     collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
     collisionBox_->SetSize(Vector3(2.0f, 2.0f, 2.0f)); // 当たり判定サイズ
     collisionBox_->Update();
-    collisionBox_->IsAdapt(false);
+    collisionBox_->SetIsAdapt(false);
 }
 void RushAttack::EasingInit() {
     handRMoveEase_.Init("RHandMove");
