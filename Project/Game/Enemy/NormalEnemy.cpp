@@ -8,7 +8,7 @@
 void NormalEnemy::Init(const Vector3& spownPos) {
 	BaseEnemy::Init(spownPos);
 	// モデルセット
-	damageParam_ = 30.0f;
+	/*damageParam_ = 30.0f;*/
     obj3d_.reset(Object3d::CreateModel("NormalEnemy.obj"));
     obj3d_->transform_.Init();
     obj3d_->transform_.SetParent(&baseTransform_);

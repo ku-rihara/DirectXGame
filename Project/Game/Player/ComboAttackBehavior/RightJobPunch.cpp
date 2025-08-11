@@ -33,8 +33,8 @@ RightJobPunch::RightJobPunch(Player* player)
     forwardDirection_ = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
     rushPos_          = initPos_ + (forwardDirection_ * speed_); // 突進座標を決める
 
-    /// collisionBox
-    CollisionBoxInit();
+     /// collisionType
+    pPlayer_->GetAttackController()->ChangeAttackType(PlayerAttackController::AttackType::NORMAL);
 
     EasingInit();
 
@@ -81,15 +81,12 @@ void RightJobPunch::Update() {
         /// パンチ
         ///----------------------------------------------------
 
-        pPlayer_->GetAttackController()->SetIsAdapt(true);
         /// パンチイージング更新
         punchEase_.Update(Frame::DeltaTimeRate());
         pPlayer_->GetRightHand()->SetObjTranslate(punchPosition_);
 
         /// 当たり判定座標
-        collisionBox_->SetPosition(pPlayer_->GetRightHand()->GetObjTransform().GetWorldPos());
-        collisionBox_->SetOffset(forwardDirection_ * 1.0f);
-        collisionBox_->Update();
+        pPlayer_->GetAttackController()->SetPosition(pPlayer_->GetRightHand()->GetObjTransform().GetWorldPos());
 
         break;
 
@@ -99,8 +96,7 @@ void RightJobPunch::Update() {
         ///----------------------------------------------------
         BaseComboAattackBehavior::PreOderNextComboForButton();
         pPlayer_->AdaptRotate();
-        collisionBox_->IsAdapt(false);
-
+      
         /// バックパンチイージング更新
         backPunchEase_.Update(Frame::DeltaTimeRate());
         pPlayer_->GetRightHand()->SetObjTranslate(punchPosition_);
@@ -157,7 +153,6 @@ void RightJobPunch::EasingInit() {
     punchEase_.Reset();
 
     punchEase_.SetOnFinishCallback([this]() {
-        pPlayer_->GetAttackController()->SetIsAdapt(false);
         order_ = Order::BACKPUNCH;
     });
 
@@ -176,7 +171,7 @@ void RightJobPunch::CollisionBoxInit() {
     //collisionBox_->Init();
     //collisionBox_->attackType_ = PlayerAttackController::AttackType::NORMAL;
     //collisionBox_->SetSize(Vector3::UnitVector() * 2.5f); // 当たり判定サイズ
-    pPlayer_->GetAttackController()->SetIsAdapt(false);
+  
 }
 
 void RightJobPunch::ChangeSpeedForLockOn() {

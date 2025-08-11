@@ -8,9 +8,10 @@
 #include "Player/Player.h"
 
 // input
-#include"input/Input.h"
+#include "input/Input.h"
 
 /// math
+#include "CollisionBox/PlayerAttackController.h"
 #include "Frame/Frame.h"
 
 // 初期化
@@ -26,20 +27,18 @@ RoringUpper::RoringUpper(Player* player)
 
     /// parm
     waitTine_            = 0.0f;
-    collisionSize_       = 4.5f;
     kCollisionAliveTime_ = 0.3f;
 
     /// collisionBox
-    CollisionInit();
+    pPlayer_->GetAttackController()->ChangeAttackType(PlayerAttackController::AttackType::UPPER);
 
     // rail
     RailInit();
 
     // backlash
     backlashPos_ = initPos_ + (forwardDirection_ * -pPlayerParameter_->GetParamaters().upperParam.BackLashValue);
-    /*backlashEase_.maxTime = pPlayerParameter_->GetParamaters().upperParm.BackLashEaseTime;*/
-
-    EasingInit();//イージング初期化
+   
+    EasingInit(); // イージング初期化
 
     jumpPower_      = pPlayerParameter_->GetParamaters().upperJump.jumpSpeed * 60.0f; // 1.4
     gravity_        = pPlayerParameter_->GetParamaters().upperJump.gravity * 60.0f; // 8.8
@@ -49,8 +48,8 @@ RoringUpper::RoringUpper(Player* player)
     BaseComboAattackBehavior::AnimationInit();
 
     // hitstop
- /*   kHitStopTime_ = 0.1f;*/
-    isHitStop_    = false;
+    /*   kHitStopTime_ = 0.1f;*/
+    isHitStop_ = false;
 
     // 音
     pPlayer_->SoundPunch();
@@ -90,11 +89,9 @@ void RoringUpper::Update() {
 
         // 0.3秒で当たり判定消す
         if (collisionAdaptTime_ >= kCollisionAliveTime_) {
-            pPlayer_->GetAttackController()->SetIsAdapt(false);
-            /// ボタンで次のコンボ
+
+            // ボタンで次のコンボ
             BaseComboAattackBehavior::PreOderNextComboForButton();
-        } else {
-            pPlayer_->GetAttackController()->SetIsAdapt(true);
         }
 
         // プレイヤーのモーション
@@ -148,12 +145,12 @@ void RoringUpper::Debug() {
 }
 
 void RoringUpper::CollisionInit() {
-    //collisionBox_ = std::make_unique<PlayerAttackController>();
-    //collisionBox_->Init();
-    //collisionBox_->attackType_ = PlayerAttackController::AttackType::UPPER;
-    //collisionBox_->SetSize(Vector3::UnitVector() * collisionSize_); // 当たり判定サイズ
-    //collisionBox_->SetOffset(forwardDirection_ * 3.0f);
-    pPlayer_->GetAttackController()->SetIsAdapt(false);
+    // collisionBox_ = std::make_unique<PlayerAttackController>();
+    // collisionBox_->Init();
+    // collisionBox_->attackType_ = PlayerAttackController::AttackType::UPPER;
+    // collisionBox_->SetSize(Vector3::UnitVector() * collisionSize_); // 当たり判定サイズ
+    // collisionBox_->SetOffset(forwardDirection_ * 3.0f);
+    /* pPlayer_->GetAttackController()->SetIsAdapt(false);*/
 }
 
 void RoringUpper::EasingInit() {

@@ -107,7 +107,7 @@ public:
 
     Vector3 GetDirectionToTarget(const Vector3& target);
 
-    void TakeDamageForPer(const float& par);
+    void TakeDamage(const float& par);
 
 
     /// Behavior

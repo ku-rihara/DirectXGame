@@ -20,6 +20,7 @@ public:
 private:
 	enum class STEP {
 		FALL,
+        FALLFINISH,
 		LANDING,
 		WAIT,
 		RETURNROOT,
@@ -53,8 +54,5 @@ private:
 
 	Vector3 tempLandScale_;
 	Easing<Vector3> landScaleEasing_;
-
-	std::unique_ptr<PlayerAttackController>collisionBox_;
-
 	float waitTime_;
 };

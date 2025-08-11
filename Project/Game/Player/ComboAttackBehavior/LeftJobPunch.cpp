@@ -18,8 +18,8 @@ LeftJobPunch::LeftJobPunch(Player* player)
    
     waitTine_ = 0.0f;
 
-    /// collisionBox
-    CollisionBoxInit();
+    /// collisionType
+    pPlayer_->GetAttackController()->ChangeAttackType(PlayerAttackController::AttackType::NORMAL);
 
     /// パンチ座標セット
     lHandStartPos_  = pPlayer_->GetLeftHand()->GetObjTransform().translation_;
@@ -57,7 +57,7 @@ void LeftJobPunch::Update() {
         ///----------------------------------------------------
         /// パンチ
         ///----------------------------------------------------
-        pPlayer_->GetAttackController()->SetIsAdapt(true);
+        
         /// パンチイージング更新
         punchEase_.Update(Frame::DeltaTimeRate());
         pPlayer_->GetLeftHand()->SetObjTranslate(punchPosition_);
@@ -103,7 +103,6 @@ void LeftJobPunch::EasingInit() {
     punchEase_.Reset();
 
     punchEase_.SetOnFinishCallback([this]() {
-        pPlayer_->GetAttackController()->SetIsAdapt(false);
         order_ = Order::BACKPUNCH;
     });
 

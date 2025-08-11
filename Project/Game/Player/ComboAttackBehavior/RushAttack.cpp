@@ -4,6 +4,7 @@
 
 /// Player
 #include "Player/Player.h"
+#include "CollisionBox/PlayerAttackController.h"
 
 #include "Frame/Frame.h"
 #include "PostEffect/PostEffectRenderer.h"
@@ -45,7 +46,7 @@ RushAttack::RushAttack(Player* player)
         PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::NONE);
     });
 
-    step_ = STEP::EMIT; // 突進
+    step_ = STEP::START; // 突進
 }
 
 RushAttack::~RushAttack() {
@@ -56,11 +57,16 @@ void RushAttack::Update() {
     switch (step_) {
 
         ///---------------------------------------------------------
-        /// エフェクト発射
+        /// 開始
         ///---------------------------------------------------------
-    case STEP::EMIT:
+    case STEP::START:
+        //エフェクト初期化
         PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::RADIALBLUR);
         pPlayer_->GetEffects()->RushAttackRingEffectEmit();
+
+        //攻撃タイプ変更
+        pPlayer_->GetAttackController()->ChangeAttackType(PlayerAttackController::AttackType::RUSH);
+
         step_ = STEP::RUSH;
 
         break;
@@ -75,11 +81,11 @@ void RushAttack::Update() {
         rushBlurEase_.Update(Frame::DeltaTimeRate());
         PostEffectRenderer::GetInstance()->GetRadialBlur()->SetBlurWidth(tempBlurParam_);
 
-        // Rhand
+        // RHand
         handRMoveEase_.Update(Frame::DeltaTimeRate());
         pPlayer_->GetRightHand()->SetWorldPosition(tempRHandPos_);
 
-        // Lhand
+        // LHand
         handLMoveEase_.Update(Frame::DeltaTimeRate());
         pPlayer_->GetLeftHand()->SetWorldPosition(tempLHandPos_);
 
@@ -88,9 +94,9 @@ void RushAttack::Update() {
         pPlayer_->SetWorldPosition(tempRushPos_);
 
         /// 当たり判定座標
-        collisionBox_->SetIsAdapt(true);
-        collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
-        collisionBox_->Update();
+      
+        pPlayer_->GetAttackController()->SetPosition(pPlayer_->GetWorldPosition());
+        
 
         break;
         ///---------------------------------------------------------
@@ -100,7 +106,6 @@ void RushAttack::Update() {
 
         PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::NONE);
 
-        collisionBox_->SetIsAdapt(false);
         waitTime_ += Frame::DeltaTime();
         if (waitTime_ < pPlayerParameter_->GetJumpComboParm(SECOND).waitTime) {
             break;
@@ -118,13 +123,13 @@ void RushAttack::Update() {
 }
 
 void RushAttack::CollisionInit() {
-    collisionBox_ = std::make_unique<PlayerAttackController>();
-    collisionBox_->Init();
-    collisionBox_->attackType_ = PlayerAttackController::AttackType::RUSH;
-    collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
-    collisionBox_->SetSize(Vector3(2.0f, 2.0f, 2.0f)); // 当たり判定サイズ
-    collisionBox_->Update();
-    collisionBox_->SetIsAdapt(false);
+    //collisionBox_ = std::make_unique<PlayerAttackController>();
+    //collisionBox_->Init();
+    //collisionBox_->attackType_ = PlayerAttackController::AttackType::RUSH;
+    //collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+    //collisionBox_->SetSize(Vector3(2.0f, 2.0f, 2.0f)); // 当たり判定サイズ
+    //collisionBox_->Update();
+    //collisionBox_->SetIsAdapt(false);
 }
 void RushAttack::EasingInit() {
     handRMoveEase_.Init("RHandMove");
@@ -132,8 +137,7 @@ void RushAttack::EasingInit() {
     handRMoveEase_.Reset();
 
     handRMoveEase_.SetStartValue(initRHandPos_);
-    /*  handRMoveEase_.SetEndValue(targetRPos_);*/
-
+   
     handRMoveEase_.SetOnFinishCallback([this]() {
 
     });
@@ -143,8 +147,7 @@ void RushAttack::EasingInit() {
     handLMoveEase_.Reset();
 
     handLMoveEase_.SetStartValue(initLHandPos_);
-    /*  handLMoveEase_.SetEndValue(targetLPos_);*/
-
+  
     handLMoveEase_.SetOnFinishCallback([this]() {
 
     });

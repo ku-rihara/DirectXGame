@@ -9,9 +9,7 @@ class ThrustPunch : public BaseComboAattackBehavior {
 private:
 	///　振る舞いオーダー
 	enum class Order {
-		FIRSTWAIT,
-		RPUNCH,
-		RBACKPUNCH,
+		START,
 		LPUNCH,
 		LBACKPUNCH,
 		WAIT,
@@ -36,8 +34,7 @@ private:
 	float kTimeDownTime_;
 	bool istimeSlow_;
 
-	// collision
-    std::unique_ptr<PlayerAttackController> collisionBox_;
+	
 	
 	float waitTine_;          /// 次コンボまでの待機時間
 

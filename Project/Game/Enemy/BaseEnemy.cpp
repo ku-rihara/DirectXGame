@@ -141,7 +141,7 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
             ///------------------------------------------------------------------
         case PlayerAttackController::AttackType::NORMAL:
 
-            TakeDamageForPer(attackController->GetAttackValue(playerAttackMode));
+            TakeDamage(attackController->GetAttackValue(playerAttackMode));
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
         }
@@ -165,24 +165,12 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
                 break;
             }
 
-            TakeDamageForPer(attackController->GetAttackValue(playerAttackMode));
+            TakeDamage(attackController->GetAttackValue(playerAttackMode));
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 
             break;
-            ///------------------------------------------------------------------
-            /// ストッパー
-            ///------------------------------------------------------------------
-        case PlayerAttackController::AttackType::STOPPER:
-            if (dynamic_cast<EnemyStopDamage*>(damageBehavior_.get())) {
-                break;
-            }
-
-            TakeDamageForPer(attackController->GetAttackValue(playerAttackMode));
-            pCombo_->ComboCountUP(); // コンボカウントアップ
-            ChangeBehavior(std::make_unique<EnemyStopDamage>(this));
-
-            break;
+           
             ///------------------------------------------------------------------
             /// 突き飛ばし
             ///------------------------------------------------------------------
@@ -191,7 +179,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
                 break;
             }
 
-            TakeDamageForPer(attackController->GetAttackValue(playerAttackMode));
+            TakeDamage(attackController->GetAttackValue(playerAttackMode));
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
 
@@ -204,7 +192,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
                 break;
             }
 
-            TakeDamageForPer(attackController->GetAttackValue(playerAttackMode));
+            TakeDamage(attackController->GetAttackValue(playerAttackMode));
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 
@@ -219,7 +207,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
                 break;
             }
 
-            TakeDamageForPer(attackController->GetAttackValue(playerAttackMode));
+            TakeDamage(attackController->GetAttackValue(playerAttackMode));
             pCombo_->ComboCountUP(); // コンボカウントアップ
             ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
 
@@ -280,10 +268,14 @@ bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
     return false;
 }
 
-void BaseEnemy::TakeDamageForPer(const float& par) {
+void BaseEnemy::TakeDamage(const float& damageValue) {
 
-    float decrementSize = HPMax_ * (par * 0.01f); //(per/100);
-    hp_ -= decrementSize;
+    //float decrementSize = HPMax_ * (par * 0.01f); //(per/100);
+    hp_ -= damageValue;
+
+    if (hp_ < 0.0f) {
+        hp_ = 0.0f;
+    }
 }
 
 void BaseEnemy::DamageRenditionInit() {

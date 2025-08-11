@@ -49,7 +49,7 @@ void PlayerAttackController::ChangeAttackType(AttackType attackType) {
 
     // offset
     float offSetValue = collisionParam_[static_cast<size_t>(attackType_)].offsetValue;
-    SetOffset(baseTransform_->GetForwardVector() * offSetValue);
+    SetOffset(baseTransform_->LookAt(Vector3::ToForward()) * offSetValue);
 
     // time
     adaptTimer_ = collisionParam_[static_cast<size_t>(attackType_)].adaptTime;
@@ -69,9 +69,10 @@ void PlayerAttackController::BindParams() {
     }
 
     for (int32_t i = 0; i < collisionParam_.size(); ++i) {
-        globalParameter_->Bind(groupName_, "offsetValue" + std::to_string(int(i + 1)), &collisionParam_[i].offsetValue);
-        globalParameter_->Bind(groupName_, "ColliderSize" + std::to_string(int(i + 1)), &collisionParam_[i].size);
-        globalParameter_->Bind(groupName_, "adaptTime" + std::to_string(int(i + 1)), &collisionParam_[i].adaptTime);
+        std::string attackTypeName = GetAttackTypeName(static_cast<AttackType>(i));
+        globalParameter_->Bind(groupName_, "offsetValue_" + attackTypeName, &collisionParam_[i].offsetValue);
+        globalParameter_->Bind(groupName_, "ColliderSize_" + attackTypeName, &collisionParam_[i].size);
+        globalParameter_->Bind(groupName_, "adaptTime_" +attackTypeName, &collisionParam_[i].adaptTime);
     }
 }
 
@@ -92,7 +93,8 @@ void PlayerAttackController::AdjustParam() {
         }
 
         for (int32_t i = 0; i < collisionParam_.size(); ++i) {
-            ImGui::SeparatorText(("ColliderParameter" + std::to_string(int(i + 1))).c_str());
+            ImGui::SeparatorText(("ColliderParameter_" + GetAttackTypeName(static_cast<AttackType>(i))).c_str());
+
             ImGui::DragFloat3(("CollisionSize" + std::to_string(int(i + 1))).c_str(), &collisionParam_[i].size.x, 0.01f);
             ImGui::DragFloat(("offsetValue" + std::to_string(int(i + 1))).c_str(), &collisionParam_[i].offsetValue, 0.01f);
             ImGui::DragFloat(("adaptTime" + std::to_string(int(i + 1))).c_str(), &collisionParam_[i].adaptTime, 0.01f);
@@ -105,6 +107,24 @@ void PlayerAttackController::AdjustParam() {
         ImGui::PopID();
     }
 #endif // _DEBUG
+}
+
+// AttackTypeを文字列に変換する関数
+std::string PlayerAttackController::GetAttackTypeName(AttackType type) {
+    switch (type) {
+    case AttackType::NORMAL:
+        return "NORMAL";
+    case AttackType::UPPER:
+        return "UPPER";
+    case AttackType::THRUST:
+        return "THRUST";
+    case AttackType::FALL:
+        return "FALL";
+    case AttackType::RUSH:
+        return "RUSH";
+    default:
+        return "UNKNOWN";
+    }
 }
 
 float PlayerAttackController::GetAttackValue(AttackValueMode attackValueMode) {
@@ -159,12 +179,7 @@ void PlayerAttackController::OnCollisionStay([[maybe_unused]] BaseCollider* othe
         case PlayerAttackController::AttackType::RUSH:
 
             break;
-            /// -----------------------------------------------------------------------
-            /// PlayerAttackController::AttackType::STOPPER
-            /// -----------------------------------------------------------------------
-        case PlayerAttackController::AttackType::STOPPER:
-
-            break;
+          
             /// -----------------------------------------------------------------------
             /// PlayerAttackController::AttackType::THRUST
             /// -----------------------------------------------------------------------

@@ -11,11 +11,10 @@ class PlayerAttackController : public BaseAABBCollisionBox {
 public:
     enum class AttackType {
         NORMAL,
+        UPPER,
+        THRUST,
         FALL,
         RUSH,
-        STOPPER,
-        THRUST,
-        UPPER,
         COUNT,
     };
 
@@ -51,6 +50,9 @@ public:
 
     void ChangeAttackType(AttackType attackType);
     float GetAttackValue(AttackValueMode attackValueMode);
+
+    // AttackTypeを文字列に変換
+    std::string GetAttackTypeName(AttackType type);
 
     void OnCollisionEnter([[maybe_unused]] BaseCollider* other) override;
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;

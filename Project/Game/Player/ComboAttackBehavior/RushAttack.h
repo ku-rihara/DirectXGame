@@ -8,7 +8,7 @@
 
 class RushAttack : public BaseComboAattackBehavior {
 	enum class STEP {
-		EMIT,
+		START,
 		RUSH,
 		WAIT,
 		RETURNROOT,
@@ -49,7 +49,6 @@ private:
     Vector3 tempLHandPos_;
     Vector3 tempRushPos_;
 
-	std::unique_ptr<PlayerAttackController>collisionBox_;
 	std::unique_ptr<ParticleEmitter>emitter_;
 
 	Easing<float> rushBlurEase_;

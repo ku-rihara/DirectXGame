@@ -37,17 +37,16 @@ private:
 	/// private varians
 	/// ===================================================
 
-	Order order_;               /// 振る舞い順序
+	Order order_;              
 	RailManager* railManager_;
-	/*std::unique_ptr<PlayerAttackController>collisionBox_;*/
+	
     float kCollisionAliveTime_;
 	float fallInitSpeed_;
-	float collisionSize_;
 	Vector3 forwardDirection_;
 
 	/// パンチ
-  /*  Easing<Vector3> punchEase_;*/
-	float waitTine_;          /// 次コンボまでの待機時間
+  
+	float waitTine_;         
 	Vector3 initPos_;
 
 	///反動
@@ -63,8 +62,7 @@ private:
 	
 	//hitstop
 	bool isHitStop_;
-	/*float hitStopTime_;
-	float kHitStopTime_;*/
+	
 
 	float collisionAdaptTime_;
 

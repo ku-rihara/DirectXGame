@@ -25,9 +25,6 @@ ThrustPunch::ThrustPunch(Player* player)
     firstWaitTimeMax_ = 0.2f;
     pPlayer_->SetHeadRotateX(0.0f);
 
-    /// collision
-    collisionBox_ = std::make_unique<PlayerAttackController>();
-
     stopRailManager_ = pPlayer_->GetRightHand()->GetStopRailManager();
     stopRailManager_->SetIsRoop(false);
 
@@ -35,13 +32,12 @@ ThrustPunch::ThrustPunch(Player* player)
     thrustRailManager_->SetIsRoop(false);
 
     BaseComboAattackBehavior::AnimationInit();
-    ThrustCollisionSet();
-
+  
     kTimeDownTime_ = 0.65f;
     timeDownTime_  = 0.0f;
     istimeSlow_    = false;
 
-    order_         = Order::LPUNCH; // 振る舞い順序初期化
+    order_         = Order::START; // 振る舞い順序初期化
     fallInitSpeed_ = 0.0f;
 
     stopRailManager_->SetRailMoveTime(0.0f);
@@ -61,73 +57,25 @@ void ThrustPunch::Update() {
     ChangeSlow();
 
     switch (order_) {
-    case Order::FIRSTWAIT:
+        ///-----------------------------------------------------------------------------------------------------
+        /// 攻撃開始処理
+        ///-----------------------------------------------------------------------------------------------------
+    case Order::START:
+       
+        pPlayer_->GetAttackController()->ChangeAttackType(PlayerAttackController::AttackType::THRUST);
+        pPlayer_->GetAttackController()->SetPosition(pPlayer_->GetWorldPosition());
 
-        ///----------------------------------------------------
-        /// 最初の硬直
-        ///----------------------------------------------------
-        firstWaitTime_ += Frame::DeltaTime();
-        if (firstWaitTime_ >= firstWaitTimeMax_) {
-            collisionBox_->SetIsAdapt(true);
-            pPlayer_->SoundPunch();
-            order_ = Order::RPUNCH;
-        }
-        break;
-
-    case Order::RPUNCH:
-        ///----------------------------------------------------
-        /// 右パンチ
-        ///----------------------------------------------------
-
-        // レール更新と座標反映
-        pPlayer_->GetRightHand()->RailForthComboUpdate(pPlayer_->GetRightHand()->GetRailRunSpeedForth());
-
-        /*	collisionBox_->SetPosition(pPlayer_->GetRightHand()->GetWorldPosition());*/
-        collisionBox_->Update();
-
-        // イージング終了時の処理
-        if (stopRailManager_->GetRailMoveTime() < 1.0f)
-            break;
-
-        stopRailManager_->SetRailMoveTime(1.0f);
-        pPlayer_->GetRightHand()->RailForthComboUpdate(0.0f);
-
-        collisionBox_->SetIsAdapt(false);
-        order_ = Order::RBACKPUNCH;
-
-        break;
-
-    case Order::RBACKPUNCH:
-        ///----------------------------------------------------
-        /// 右パンチ(戻る)
-        ///----------------------------------------------------
-
-        // レール更新と座標反映
-        pPlayer_->GetRightHand()->RailForthComboUpdate(-pPlayer_->GetRightHand()->GetRailRunSpeedForth());
-
-        // イージング終了時の処理
-        if (stopRailManager_->GetRailMoveTime() > 0.0f)
-            break;
-
-        stopRailManager_->SetRailMoveTime(0.0f);
-        pPlayer_->GetRightHand()->RailForthComboUpdate(0.0f);
-        collisionBox_->SetIsAdapt(true);
-        collisionBox_->attackType_ = PlayerAttackController::AttackType::THRUST;
-        // 音
-        pPlayer_->SoundPunch();
         order_ = Order::LPUNCH;
-        break;
 
-    case Order::LPUNCH:
-        ///----------------------------------------------------
+        break;
+        ///-----------------------------------------------------------------------------------------------------
         /// 左パンチ
-        ///----------------------------------------------------
+        ///-----------------------------------------------------------------------------------------------------
+    case Order::LPUNCH:
 
         // レール更新と座標反映
         pPlayer_->GetLeftHand()->RailForthComboUpdate(pPlayer_->GetLeftHand()->GetRailRunSpeedForth());
-        /*collisionBox_->SetPosition(pPlayer_->GetWorldPosition());*/
-        collisionBox_->Update();
-
+       
         // イージング終了時の処理
         if (thrustRailManager_->GetRailMoveTime() < 1.0f)
             break;
@@ -135,14 +83,13 @@ void ThrustPunch::Update() {
         thrustRailManager_->SetRailMoveTime(1.0f);
         pPlayer_->GetLeftHand()->RailForthComboUpdate(0.0f);
         order_ = Order::LBACKPUNCH;
-        collisionBox_->SetIsAdapt(false);
 
         break;
 
-    case Order::LBACKPUNCH:
-        ///----------------------------------------------------
+        ///-----------------------------------------------------------------------------------------------------
         /// 左パンチ(戻る)
-        ///----------------------------------------------------
+        ///-----------------------------------------------------------------------------------------------------
+    case Order::LBACKPUNCH:
 
         // レール更新と座標反映
         pPlayer_->GetLeftHand()->RailForthComboUpdate(-pPlayer_->GetLeftHand()->GetRailRunSpeedForth());
@@ -161,6 +108,9 @@ void ThrustPunch::Update() {
 
         break;
 
+        ///-----------------------------------------------------------------------------------------------------
+        /// 待機
+        ///-----------------------------------------------------------------------------------------------------
     case Order::WAIT:
 
         waitTine_ += Frame::DeltaTimeRate();
@@ -187,7 +137,7 @@ void ThrustPunch::Debug() {
 
 void ThrustPunch::ChangeSlow() {
     // デルタタイムスケール小さく
-    if (collisionBox_->GetIsSlow() && !istimeSlow_) {
+    if (pPlayer_->GetAttackController()->GetIsSlow() && !istimeSlow_) {
         Frame::SetTimeScale(0.001f);
         PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::GRAY);
         pPlayer_->SoundStrongPunch();
@@ -208,12 +158,12 @@ void ThrustPunch::ChangeSlow() {
 }
 
 void ThrustPunch::ThrustCollisionSet() {
-    collisionBox_->Init();
-    collisionBox_->SetSize(Vector3::UnitVector() * 5.5f); // 当たり判定サイズ
-    Vector3 tforwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
-    collisionBox_->SetOffset(tforwardDirection * 3.0f);
-    collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
-    collisionBox_->Update();
-    collisionBox_->SetIsAdapt(true);
-    collisionBox_->attackType_ = PlayerAttackController::AttackType::THRUST;
+    // collisionBox_->Init();
+    // collisionBox_->SetSize(Vector3::UnitVector() * 5.5f); // 当たり判定サイズ
+    // Vector3 tforwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
+    // collisionBox_->SetOffset(tforwardDirection * 3.0f);
+    // collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
+    // collisionBox_->Update();
+    // collisionBox_->SetIsAdapt(true);
+    // collisionBox_->attackType_ = PlayerAttackController::AttackType::THRUST;
 }
