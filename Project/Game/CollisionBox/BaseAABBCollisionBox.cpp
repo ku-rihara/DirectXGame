@@ -8,7 +8,7 @@ void BaseAABBCollisionBox::Init() {
 void BaseAABBCollisionBox::Update() {
 
      SetCollisionScale(size_);
-    SetIsCollision(isCollision_);
+    SetIsAdaptCollision(isCollision_);
     transform_.UpdateMatrix();
 }
 void BaseAABBCollisionBox::Draw() {

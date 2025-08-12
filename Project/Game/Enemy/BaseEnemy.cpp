@@ -247,7 +247,7 @@ void BaseEnemy::BehaviorChangeDeath() {
         return;
     };
 
-    isCollision_ = false;
+    isAdaptCollision = false;
     collisionBox_->SetIsCollision(false);
     ChangeBehavior(std::make_unique<EnemyDeath>(this));
 }
