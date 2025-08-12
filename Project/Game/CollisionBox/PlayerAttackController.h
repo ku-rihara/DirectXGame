@@ -18,21 +18,17 @@ public:
         COUNT,
     };
 
-    enum class AttackValueMode {
-        AttackSpeed,
-        AttackPower,
-    };
-
 public:
     struct AttackValueForLevel {
-        float speed;
-        float power;
+        float speedRate;
+        float powerRate;
     };
 
-    struct ColliderParameter {
-        Vector3 size;
-        float offsetValue;
+    struct AttackParameter {
+        Vector3 collisionSize;
+        float collisionOffsetValue;
         float adaptTime;
+        float power;
     };
 
 public:
@@ -49,7 +45,10 @@ public:
     void SetParentTransform(WorldTransform* transform) override;
 
     void ChangeAttackType(AttackType attackType);
-    float GetAttackValue(AttackValueMode attackValueMode);
+
+    //attackValue
+    float GetAttackPower();
+    float GetAttackSpeed();
 
     // AttackTypeを文字列に変換
     std::string GetAttackTypeName(AttackType type);
@@ -79,7 +78,7 @@ private:
     std::array<AttackValueForLevel, kComboLevel> attackValueForLevel_;
 
     // 各攻撃のColliderパラメータ
-    std::array<ColliderParameter, static_cast<size_t>(AttackType::COUNT)> collisionParam_;
+    std::array<AttackParameter, static_cast<size_t>(AttackType::COUNT)> attackParam_;
 
 public:
     AttackType attackType_;

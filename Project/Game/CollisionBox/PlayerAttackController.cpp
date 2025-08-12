@@ -19,7 +19,7 @@ void PlayerAttackController::Init() {
 void PlayerAttackController::Update() {
 
     // 攻撃タイプのColliderパラメータ
-    SetSize(collisionParam_[static_cast<size_t>(attackType_)].size);
+    SetSize(attackParam_[static_cast<size_t>(attackType_)].collisionSize);
 
     // タイム更新
     TimerUpdate(Frame::DeltaTime());
@@ -48,11 +48,11 @@ void PlayerAttackController::ChangeAttackType(AttackType attackType) {
     attackType_ = attackType;
 
     // offset
-    float offSetValue = collisionParam_[static_cast<size_t>(attackType_)].offsetValue;
+    float offSetValue = attackParam_[static_cast<size_t>(attackType_)].collisionOffsetValue;
     SetOffset(baseTransform_->LookAt(Vector3::ToForward()) * offSetValue);
 
     // time
-    adaptTimer_ = collisionParam_[static_cast<size_t>(attackType_)].adaptTime;
+    adaptTimer_ = attackParam_[static_cast<size_t>(attackType_)].adaptTime;
 
     // isCollision
     SetIsCollision(true);
@@ -64,15 +64,16 @@ void PlayerAttackController::ChangeAttackType(AttackType attackType) {
 void PlayerAttackController::BindParams() {
 
     for (int32_t i = 0; i < kComboLevel; ++i) {
-        globalParameter_->Bind(groupName_, "AttackSpeedForLevel" + std::to_string(int(i + 1)), &attackValueForLevel_[i].speed);
-        globalParameter_->Bind(groupName_, "attackPowerForLevel" + std::to_string(int(i + 1)), &attackValueForLevel_[i].power);
+        globalParameter_->Bind(groupName_, "AttackSpeedRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].speedRate);
+        globalParameter_->Bind(groupName_, "AttackPowerRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].powerRate);
     }
 
-    for (int32_t i = 0; i < collisionParam_.size(); ++i) {
+    for (int32_t i = 0; i < attackParam_.size(); ++i) {
         std::string attackTypeName = GetAttackTypeName(static_cast<AttackType>(i));
-        globalParameter_->Bind(groupName_, "offsetValue_" + attackTypeName, &collisionParam_[i].offsetValue);
-        globalParameter_->Bind(groupName_, "ColliderSize_" + attackTypeName, &collisionParam_[i].size);
-        globalParameter_->Bind(groupName_, "adaptTime_" +attackTypeName, &collisionParam_[i].adaptTime);
+        globalParameter_->Bind(groupName_, "offsetValue_" + attackTypeName, &attackParam_[i].collisionOffsetValue);
+        globalParameter_->Bind(groupName_, "ColliderSize_" + attackTypeName, &attackParam_[i].collisionSize);
+        globalParameter_->Bind(groupName_, "adaptTime_" + attackTypeName, &attackParam_[i].adaptTime);
+        globalParameter_->Bind(groupName_, "power_" + attackTypeName, &attackParam_[i].power);
     }
 }
 
@@ -88,16 +89,17 @@ void PlayerAttackController::AdjustParam() {
         // attackLevel Values
         for (int32_t i = 0; i < kComboLevel; ++i) {
             ImGui::SeparatorText(("AttackValue" + std::to_string(int(i + 1))).c_str());
-            ImGui::DragFloat(("AttackSpeedForLevel" + std::to_string(int(i + 1))).c_str(), &attackValueForLevel_[i].speed, 0.01f);
-            ImGui::DragFloat(("attackPowerForLevel" + std::to_string(int(i + 1))).c_str(), &attackValueForLevel_[i].power, 0.01f);
+            ImGui::DragFloat(("AttackSpeedRate" + std::to_string(int(i + 1))).c_str(), &attackValueForLevel_[i].speedRate, 0.01f);
+            ImGui::DragFloat(("attackPowerRate" + std::to_string(int(i + 1))).c_str(), &attackValueForLevel_[i].powerRate, 0.01f);
         }
 
-        for (int32_t i = 0; i < collisionParam_.size(); ++i) {
-            ImGui::SeparatorText(("ColliderParameter_" + GetAttackTypeName(static_cast<AttackType>(i))).c_str());
+        for (int32_t i = 0; i < attackParam_.size(); ++i) {
+            ImGui::SeparatorText(("AttackParameter" + GetAttackTypeName(static_cast<AttackType>(i))).c_str());
 
-            ImGui::DragFloat3(("CollisionSize" + std::to_string(int(i + 1))).c_str(), &collisionParam_[i].size.x, 0.01f);
-            ImGui::DragFloat(("offsetValue" + std::to_string(int(i + 1))).c_str(), &collisionParam_[i].offsetValue, 0.01f);
-            ImGui::DragFloat(("adaptTime" + std::to_string(int(i + 1))).c_str(), &collisionParam_[i].adaptTime, 0.01f);
+            ImGui::DragFloat3(("CollisionSize" + std::to_string(int(i + 1))).c_str(), &attackParam_[i].collisionSize.x, 0.01f);
+            ImGui::DragFloat(("offsetValue" + std::to_string(int(i + 1))).c_str(), &attackParam_[i].collisionOffsetValue, 0.01f);
+            ImGui::DragFloat(("adaptTime" + std::to_string(int(i + 1))).c_str(), &attackParam_[i].adaptTime, 0.01f);
+            ImGui::DragFloat(("power" + std::to_string(int(i + 1))).c_str(), &attackParam_[i].power, 0.01f);
         }
 
         // セーブ・ロード
@@ -127,27 +129,20 @@ std::string PlayerAttackController::GetAttackTypeName(AttackType type) {
     }
 }
 
-float PlayerAttackController::GetAttackValue(AttackValueMode attackValueMode) {
-    float attackValue = 0.0f;
+float PlayerAttackController::GetAttackPower() {
 
-    switch (attackValueMode) {
-        /// ---------------------------------------------------------------------------------------
-        /// アタックスピード
-        ///----------------------------------------------------------------------------------------
-    case PlayerAttackController::AttackValueMode::AttackSpeed:
-        attackValue = attackValueForLevel_[pCombo_->GetCurrentLevel()].speed;
-        break;
-        /// ---------------------------------------------------------------------------------------
-        /// アタックパワー
-        ///----------------------------------------------------------------------------------------
-    case PlayerAttackController::AttackValueMode::AttackPower:
-        attackValue = attackValueForLevel_[pCombo_->GetCurrentLevel()].power;
-        break;
-    default:
-        break;
-    }
-    // 値を返す
-    return attackValue;
+    // 攻撃力と上昇値を取得
+    float value = attackParam_[static_cast<size_t>(attackType_)].power;
+    float rate  = attackValueForLevel_[pCombo_->GetCurrentLevel()].powerRate;
+
+    // 実際の攻撃力
+    float result = value * rate;
+
+    return result;
+}
+
+float PlayerAttackController::GetAttackSpeed() {
+    return attackValueForLevel_[pCombo_->GetCurrentLevel()].speedRate;
 }
 
 void PlayerAttackController::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
@@ -179,7 +174,7 @@ void PlayerAttackController::OnCollisionStay([[maybe_unused]] BaseCollider* othe
         case PlayerAttackController::AttackType::RUSH:
 
             break;
-          
+
             /// -----------------------------------------------------------------------
             /// PlayerAttackController::AttackType::THRUST
             /// -----------------------------------------------------------------------

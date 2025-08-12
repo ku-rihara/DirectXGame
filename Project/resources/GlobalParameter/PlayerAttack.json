@@ -1,10 +1,15 @@
 {
     "PlayerAttack": {
-        "AttackSpeedForLevel1": 0.03999999910593033,
-        "AttackSpeedForLevel2": 0.0,
-        "AttackSpeedForLevel3": 0.0,
-        "AttackSpeedForLevel4": 0.0,
-        "AttackSpeedForLevel5": 0.0,
+        "AttackPowerRate1": 1.0,
+        "AttackPowerRate2": 1.2000000476837158,
+        "AttackPowerRate3": 1.5,
+        "AttackPowerRate4": 1.7000000476837158,
+        "AttackPowerRate5": 2.0,
+        "AttackSpeedRate1": 1.0,
+        "AttackSpeedRate2": 1.0,
+        "AttackSpeedRate3": 1.0,
+        "AttackSpeedRate4": 1.0,
+        "AttackSpeedRate5": 1.0,
         "ColliderSize_FALL": [
             4.5,
             2.0,
@@ -35,15 +40,16 @@
         "adaptTime_RUSH": 0.800000011920929,
         "adaptTime_THRUST": 0.20000000298023224,
         "adaptTime_UPPER": 0.30000001192092896,
-        "attackPowerForLevel1": 0.0,
-        "attackPowerForLevel2": 0.0,
-        "attackPowerForLevel3": 0.0,
-        "attackPowerForLevel4": 0.0,
         "attackPowerForLevel5": 0.0,
         "offsetValue_FALL": 0.0,
         "offsetValue_NORMAL": 1.0,
         "offsetValue_RUSH": 0.0,
         "offsetValue_THRUST": 3.0,
-        "offsetValue_UPPER": 3.0
+        "offsetValue_UPPER": 3.0,
+        "power_FALL": 10.0,
+        "power_NORMAL": 10.0,
+        "power_RUSH": 20.0,
+        "power_THRUST": 30.0,
+        "power_UPPER": 10.0
     }
 }
