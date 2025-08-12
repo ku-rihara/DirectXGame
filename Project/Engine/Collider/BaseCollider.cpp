@@ -12,7 +12,7 @@ Vector3 BaseCollider::GetCollisionPos() const {
 }
 
 void BaseCollider::ReverseNormalColor() {
-    if (!isCollision_) {
+    if (!isAdaptCollision) {
         lineColor_ = (Vector4(1, 1, 1, 0.1f));
     } else {
         lineColor_ = (Vector4(1, 1, 1, 1.0f));

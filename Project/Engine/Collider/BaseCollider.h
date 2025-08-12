@@ -17,7 +17,7 @@ protected:
     Line3D debugLine_;                     // デバッグ表示用Line
     Vector4 lineColor_ = Vector4::kWHITE(); // デバッグ表示用のラインカラー
 
-   bool isCollision_=true;
+   bool isAdaptCollision=true;
 public:
     BaseCollider() = default;
     virtual ~BaseCollider() = default;
@@ -43,11 +43,11 @@ public:
    /// ===================================================
     uint32_t GetTypeID() const { return typeID_; }
     bool GetIsColliding() const { return isColliding_; }
-    bool GetIsCollision()const { return isCollision_; }
+    bool GetIsCollision()const { return isAdaptCollision; }
     /// ===================================================
     /// setter  methods
     /// ===================================================
     void SetTypeID(uint32_t typeID) { typeID_ = typeID; }
     void SetColliding(bool colliding) { isColliding_ = colliding; }
-    void SetIsCollision(bool is) { isCollision_ = is; }
+    void SetIsAdaptCollision(bool is) { isAdaptCollision = is; }
 };
