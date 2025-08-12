@@ -24,7 +24,7 @@ void PlayerAttackController::Update() {
     // タイム更新
     TimerUpdate(Frame::DeltaTime());
 
-    // transformの更新
+    // baseの更新
     BaseAABBCollisionBox::Update();
 }
 

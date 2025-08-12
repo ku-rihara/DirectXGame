@@ -107,7 +107,7 @@ void RoringUpper::Update() {
         pPlayer_->GetRightHand()->RailThreeComboUpdate(0.0f);
 
         ChangeOrder();
-
+  
         break;
 
         ///----------------------------------------------------
