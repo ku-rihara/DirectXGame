@@ -27,7 +27,7 @@ void Combo::Draw() {
     uiController_->Draw();
 }
 
-///=========================================================
+///==========================================================
 /// パラメータ調整
 ///==========================================================
 void Combo::AdjustParam() {
@@ -76,14 +76,20 @@ void Combo::LevelUp() {
 
 void Combo::ComboTimerDecrement() {
     comboTime_ -= Frame::DeltaTimeRate();
+
+    //コンボが途切れたらリセット
+    if (comboCount_ == 0) {
+        return;
+    }
+
     if (comboTime_ < 0.0f && !isReset_) {
         isReset_ = true;
     }
 }
 
 void Combo::Reset() {
-    comboTime_  = 0.0f;
-    comboCount_ = 0;
+    comboTime_    = 0.0f;
+    comboCount_   = 0;
     currentLevel_ = 0;
-    isReset_    = false;
+    isReset_      = false;
 }

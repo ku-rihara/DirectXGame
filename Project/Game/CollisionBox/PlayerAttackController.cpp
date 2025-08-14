@@ -141,8 +141,11 @@ float PlayerAttackController::GetAttackPower() {
     return result;
 }
 
-float PlayerAttackController::GetAttackSpeed() {
-    return attackValueForLevel_[pCombo_->GetCurrentLevel()].speedRate;
+float PlayerAttackController::GetAttackSpeed(const float& baseTime) {
+
+    float result = baseTime * attackValueForLevel_[pCombo_->GetCurrentLevel()].speedRate;
+
+    return result;
 }
 
 void PlayerAttackController::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
@@ -196,6 +199,11 @@ void PlayerAttackController::OnCollisionStay([[maybe_unused]] BaseCollider* othe
             break;
         }
     }
+}
+
+void PlayerAttackController::ResetComboEffect() {
+    isSlow_    = false;
+    isHitStop_ = false;
 }
 
 void PlayerAttackController::SetCombo(Combo* combo) {

@@ -47,8 +47,7 @@ RoringUpper::RoringUpper(Player* player)
     // 　モーション
     BaseComboAattackBehavior::AnimationInit();
 
-    // hitstop
-    /*   kHitStopTime_ = 0.1f;*/
+    // hitStop
     isHitStop_ = false;
 
     // 音
@@ -59,6 +58,8 @@ RoringUpper::RoringUpper(Player* player)
     fallInitSpeed_ = 0.0f;
 
     collisionAdaptTime_ = 0.0f;
+
+    pPlayer_->GetAttackController()->ResetComboEffect();
 }
 
 RoringUpper::~RoringUpper() {
@@ -83,13 +84,11 @@ void RoringUpper::Update() {
 
         // タイム加算
         collisionAdaptTime_ += Frame::DeltaTimeRate();
-        /*backlashEase_.time += Frame::DeltaTimeRate();*/
-
+       
         pPlayer_->GetAttackController()->SetPosition(pPlayer_->GetWorldPosition());
 
-        // 0.3秒で当たり判定消す
+       
         if (collisionAdaptTime_ >= kCollisionAliveTime_) {
-
             // ボタンで次のコンボ
             BaseComboAattackBehavior::PreOderNextComboForButton();
         }
@@ -98,9 +97,9 @@ void RoringUpper::Update() {
         AnimationMove();
 
         // 終了時の処理
-        if (pPlayer_->GetTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y)
+        if (pPlayer_->GetTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {
             break;
-
+        }
         Frame::SetTimeScale(1.0f);
         pPlayer_->PositionYReset();
         railManager_->SetRailMoveTime(0.0f);
@@ -117,14 +116,13 @@ void RoringUpper::Update() {
 
         waitTine_ += Frame::DeltaTime();
 
-        /// コンボ途切れ
+        // コンボ途切れ
         if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(THIRD).waitTime) {
-
             order_ = Order::END;
         }
 
         else {
-            /// ボタンで次のコンボ
+            // ボタンで次のコンボ
             BaseComboAattackBehavior::PreOderNextComboForButton();
             if (isNextCombo_) {
                 BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<JumpRush>(pPlayer_));
@@ -145,12 +143,7 @@ void RoringUpper::Debug() {
 }
 
 void RoringUpper::CollisionInit() {
-    // collisionBox_ = std::make_unique<PlayerAttackController>();
-    // collisionBox_->Init();
-    // collisionBox_->attackType_ = PlayerAttackController::AttackType::UPPER;
-    // collisionBox_->SetSize(Vector3::UnitVector() * collisionSize_); // 当たり判定サイズ
-    // collisionBox_->SetOffset(forwardDirection_ * 3.0f);
-    /* pPlayer_->GetAttackController()->SetIsAdapt(false);*/
+
 }
 
 void RoringUpper::EasingInit() {
@@ -187,8 +180,8 @@ void RoringUpper::HitStopUpdate() {
 void RoringUpper::AnimationMove() {
     /// minを返す
     railManager_->SetRailMoveTime(std::min(railManager_->GetRailMoveTime(), 1.0f));
-    pPlayer_->GetRightHand()->RailThreeComboUpdate(pPlayer_->GetRightHand()->GetRailRunSpeedThree());
-
+    pPlayer_->GetRightHand()->RailThreeComboUpdate(pPlayer_->GetAttackController()->GetAttackSpeed(pPlayer_->GetRightHand()->GetRailRunSpeedThree()));
+  
     // バック
     backlashEase_.Update(Frame::DeltaTimeRate());
     pPlayer_->SetWorldPositionX(tempWorldPos_.x);

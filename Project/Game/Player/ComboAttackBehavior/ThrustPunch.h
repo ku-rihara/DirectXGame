@@ -20,7 +20,7 @@ private:
 	///private varians
 	/// ===================================================
 
-	Order order_;                /// 振る舞い順序
+	Order order_;               
 
 	RailManager* stopRailManager_;
 	RailManager* thrustRailManager_;
@@ -36,7 +36,7 @@ private:
 
 	
 	
-	float waitTine_;          /// 次コンボまでの待機時間
+	float waitTine_;        
 
 public:
 
@@ -49,5 +49,5 @@ public:
 	void Debug()override;
 	void ChangeSlow();
 
-	void ThrustCollisionSet();
+
 };

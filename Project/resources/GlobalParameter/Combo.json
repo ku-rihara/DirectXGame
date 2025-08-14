@@ -1,5 +1,10 @@
 {
     "Combo": {
+        "LevelUpComboNum1": 0,
+        "LevelUpComboNum2": 5,
+        "LevelUpComboNum3": 10,
+        "LevelUpComboNum4": 15,
+        "LevelUpComboNum5": 20,
         "Scaling Ease amplitude": 1.590000033378601,
         "Scaling Ease max": 0.0,
         "Scaling Ease period": 0.0,

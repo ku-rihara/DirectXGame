@@ -38,9 +38,9 @@ public:
     void Init() override;
     void Update() override;
     void Draw() override;
-
     void TimerUpdate(const float& deltaTime);
 
+    // transformSet
     void SetPlayerBaseTransform(const WorldTransform* playerBaseTransform);
     void SetParentTransform(WorldTransform* transform) override;
 
@@ -48,10 +48,12 @@ public:
 
     //attackValue
     float GetAttackPower();
-    float GetAttackSpeed();
+    float GetAttackSpeed(const float& baseTime);
 
     // AttackTypeを文字列に変換
     std::string GetAttackTypeName(AttackType type);
+
+    void ResetComboEffect();
 
     void OnCollisionEnter([[maybe_unused]] BaseCollider* other) override;
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;

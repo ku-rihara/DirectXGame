@@ -43,8 +43,7 @@ ThrustPunch::ThrustPunch(Player* player)
     stopRailManager_->SetRailMoveTime(0.0f);
     pPlayer_->GetRightHand()->RailForthComboUpdate(0.0f);
 
-    ////音
-    // pPlayer_->SoundPunch();
+   pPlayer_->GetAttackController()->ResetComboEffect();
 }
 
 ThrustPunch::~ThrustPunch() {
@@ -74,11 +73,12 @@ void ThrustPunch::Update() {
     case Order::LPUNCH:
 
         // レール更新と座標反映
-        pPlayer_->GetLeftHand()->RailForthComboUpdate(pPlayer_->GetLeftHand()->GetRailRunSpeedForth());
+        pPlayer_->GetLeftHand()->RailForthComboUpdate(pPlayer_->GetAttackController()->GetAttackSpeed(pPlayer_->GetLeftHand()->GetRailRunSpeedForth()));
        
         // イージング終了時の処理
-        if (thrustRailManager_->GetRailMoveTime() < 1.0f)
+        if (thrustRailManager_->GetRailMoveTime() < 1.0f) {
             break;
+        }
 
         thrustRailManager_->SetRailMoveTime(1.0f);
         pPlayer_->GetLeftHand()->RailForthComboUpdate(0.0f);
@@ -92,7 +92,7 @@ void ThrustPunch::Update() {
     case Order::LBACKPUNCH:
 
         // レール更新と座標反映
-        pPlayer_->GetLeftHand()->RailForthComboUpdate(-pPlayer_->GetLeftHand()->GetRailRunSpeedForth());
+        pPlayer_->GetLeftHand()->RailForthComboUpdate(pPlayer_->GetAttackController()->GetAttackSpeed(-pPlayer_->GetLeftHand()->GetRailRunSpeedForth()));
 
         /// コンボ先行予約
         BaseComboAattackBehavior::PreOderNextComboForButton();
@@ -155,15 +155,4 @@ void ThrustPunch::ChangeSlow() {
             PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::NONE);
         }
     }
-}
-
-void ThrustPunch::ThrustCollisionSet() {
-    // collisionBox_->Init();
-    // collisionBox_->SetSize(Vector3::UnitVector() * 5.5f); // 当たり判定サイズ
-    // Vector3 tforwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
-    // collisionBox_->SetOffset(tforwardDirection * 3.0f);
-    // collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
-    // collisionBox_->Update();
-    // collisionBox_->SetIsAdapt(true);
-    // collisionBox_->attackType_ = PlayerAttackController::AttackType::THRUST;
 }

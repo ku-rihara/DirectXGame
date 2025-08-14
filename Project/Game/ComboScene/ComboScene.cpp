@@ -5,6 +5,7 @@
 
 void ComboScene::Init() {
     // 初期化処理
+    state_ = State::CHECK;
 }
 
 void ComboScene::Update() {
