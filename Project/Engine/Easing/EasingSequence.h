@@ -21,10 +21,12 @@ public:
     const IEasingStep* GetCurrentStep() const;
     IEasingStep* GetCurrentStep();
 
-    inline size_t GetCurrentIndex() const { return currentStep_; }
-    inline size_t GetStepCount() const { return steps_.size(); }
+    size_t GetCurrentIndex() const { return currentStep_; }
+    size_t GetStepCount() const { return steps_.size(); }
+    void SetLoop(bool loop) { loop_ = loop; }
 
 private:
     std::vector<std::unique_ptr<IEasingStep>> steps_;
     size_t currentStep_ = 0;
+    bool loop_          = false;
 };

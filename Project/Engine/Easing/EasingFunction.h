@@ -2,7 +2,20 @@
 #include "Vector2.h"
 #include "Vector3.h"
 
-
+struct Easingw {
+    float time      = 0.0f;
+    float maxTime   = 0.0f;
+    float amplitude = 0.0f;
+    float period    = 0.0f;
+    float backRatio = 0.0f;
+};
+//float Lerp(const float& start, const float& end, float t);
+//
+//Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
+//
+//Vector2 Lerp(const Vector2& start, const Vector2& end, float t);
+//
+//Vector3 SLerp(const Vector3& start, const Vector3& end, float t);
 
 float EaseInElasticAmplitude(float t, const float& totaltime, const float& amplitude, const float& period);
 

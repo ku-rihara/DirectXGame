@@ -5,17 +5,37 @@ void EasingSequence::AddStep(const std::string& name, T* adaptValue) {
     auto step = std::make_unique<EasingStep<T>>();
     step->ApplyFromJson(name);
     step->SetAdaptValue(adaptValue);
+    step->Update(0.0f);
 
-    step->SetOnWaitEndCallback([this]() {
+    // Add時に startValue を反映
+    if (adaptValue) {
+        *adaptValue = step->GetValue();
+    }
+
+    step->SetOnWaitEndCallback([this, adaptValue]() {
+        if (steps_.empty()) {
+            return;
+        }
+
         if (currentStep_ + 1 < steps_.size()) {
             ++currentStep_;
-            steps_[currentStep_]->Reset();
+        } else if (loop_) {
+            currentStep_ = 0; // ループ有効時のみ先頭へ
+        } else {
+            return; // ループなしで最後のステップなら何もしない
+        }
+
+        steps_[currentStep_]->Reset();
+
+        if (adaptValue) {
+            if (auto* typed = dynamic_cast<EasingStep<T>*>(steps_[currentStep_].get())) {
+                *adaptValue = typed->GetValue();
+            }
         }
     });
 
     steps_.emplace_back(std::move(step));
 }
-
 template <typename T>
 void EasingSequence::AddStep(std::unique_ptr<Easing<T>> easing) {
     steps_.emplace_back(std::make_unique<EasingStep<T>>(std::move(easing)));
