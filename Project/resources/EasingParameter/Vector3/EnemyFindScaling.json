@@ -1,5 +1,6 @@
 {
     "EnemyFindScaling": {
+        "StartTimeOffset": 0.0,
         "amplitude": 1.5,
         "backRatio": 0.0,
         "endValue": [

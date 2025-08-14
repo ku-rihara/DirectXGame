@@ -158,13 +158,13 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
         // 各イージングシーケンスを初期化
         for (size_t i = 0; i < objectData.scalingEasing.size(); ++i) {
             if (!objectData.scalingEasing[i]) {
-                objectData.scalingEasing[i] = std::make_unique<EasingSequence<Vector3>>();
+                objectData.scalingEasing[i] = std::make_unique<EasingSequence>();
             }
             if (!objectData.rotationEasing[i]) {
-                objectData.rotationEasing[i] = std::make_unique<EasingSequence<Vector3>>();
+                objectData.rotationEasing[i] = std::make_unique<EasingSequence>();
             }
             if (!objectData.translationEasing[i]) {
-                objectData.translationEasing[i] = std::make_unique<EasingSequence<Vector3>>();
+                objectData.translationEasing[i] = std::make_unique<EasingSequence>();
             }
         }
 

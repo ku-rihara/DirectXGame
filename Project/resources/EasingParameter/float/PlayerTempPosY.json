@@ -1,22 +1,15 @@
 {
-    "RHandMove": {
+    "PlayerTempPosY": {
         "StartTimeOffset": 0.0,
+        "adaptFloatAxisType": 1,
         "amplitude": 0.0,
         "backRatio": 0.5,
-        "endValue": [
-            1.5,
-            0.0,
-            4.0
-        ],
+        "endValue": 0.8899999856948853,
         "finishOffsetTime": 0.0,
         "finishType": 0,
-        "maxTime": 0.5,
+        "maxTime": 0.30000001192092896,
         "period": 0.0,
-        "startValue": [
-            0.0,
-            0.0,
-            0.0
-        ],
+        "startValue": 0.0,
         "type": 46,
         "waitTime": 0.0
     }

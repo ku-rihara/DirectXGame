@@ -1,5 +1,6 @@
 {
     "FireInjectorScaling": {
+        "StartTimeOffset": 0.0,
         "amplitude": 0.0,
         "backRatio": 0.1599999964237213,
         "endValue": [

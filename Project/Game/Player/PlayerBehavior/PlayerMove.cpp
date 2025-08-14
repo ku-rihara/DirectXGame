@@ -28,12 +28,10 @@ PlayerMove::PlayerMove(Player* player)
     });
     
     // moveEase
-    moveEase_.Init("PlayerMove", "PlayerMoveScaleY.json");
-    moveEase_.SetAdaptValue(&tempWaitScaleY_);
-
-    moveEase_.SetOnWaitEndCallback([this]() {
-        moveEase_.Reset();
-    });
+    moveEase_ = std::make_unique<EasingSequence>();
+    moveEase_->AddStep("PlayerTempPosY.json", &tempPosY_);
+    moveEase_->AddStep("PlayerLandingScale.json", &tempScale_);
+    moveEase_->SetLoop(true);
 
     speed_ = pPlayerParameter_->GetParamaters().moveSpeed;
 
@@ -81,8 +79,9 @@ void PlayerMove::MoveAnimation() {
     ///============================================================================
     /// 移動アニメーション
     ///============================================================================
-    moveEase_.Update(Frame::DeltaTimeRate());
-    pPlayer_->SetScaleY(tempWaitScaleY_);
+    moveEase_->Update(Frame::DeltaTimeRate());
+    pPlayer_->SetHeadPosY(tempPosY_);
+    pPlayer_->SetHeadScale(tempScale_);
 }
 
 void PlayerMove::WaitAnimation() {

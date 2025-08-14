@@ -1,5 +1,6 @@
 {
     "CameraZoomOut": {
+        "StartTimeOffset": 0.0,
         "amplitude": 0.0,
         "backRatio": 0.5799999833106995,
         "endValue": [
