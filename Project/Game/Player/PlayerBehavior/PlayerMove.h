@@ -2,6 +2,7 @@
 
 #include"BasePlayerBehavior.h"
 #include"Easing/Easing.h"
+#include"Easing/EasingSequence.h"
 
 class PlayerMove : public BasePlayerBehavior {
 public:
@@ -34,9 +35,10 @@ private:
 
 	float animationCollTime_;
 	Easing<float> waitEase_;
-    Easing<float> moveEase_;
+    std::unique_ptr<EasingSequence> moveEase_;
     float tempWaitScaleY_;
     float moveEaseTime_;
-	
 
+    float tempPosY_ = 0.0f;
+    Vector3 tempScale_;
 };

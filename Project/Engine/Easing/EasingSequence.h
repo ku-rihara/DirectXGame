@@ -1,27 +1,32 @@
 #pragma once
-#include "Easing/Easing.h"
+#include "EasingStep.h"
+#include <cassert>
 #include <memory>
 #include <vector>
 
-template <typename T>
 class EasingSequence {
 public:
-    void AddStep(const std::string& name,T*adaptValue);
+    template <typename T>
+    void AddStep(const std::string& name, T* adaptValue);
+
+    template <typename T>
     void AddStep(std::unique_ptr<Easing<T>> easing);
 
     void Reset();
     void Update(float deltaTime);
 
-    const T& GetValue() const;
+    template <typename T>
+    void SetBaseValue(const T& value);
+
+    const IEasingStep* GetCurrentStep() const;
+    IEasingStep* GetCurrentStep();
+
+    size_t GetCurrentIndex() const { return currentStep_; }
+    size_t GetStepCount() const { return steps_.size(); }
+    void SetLoop(bool loop) { loop_ = loop; }
 
 private:
-    std::vector<std::unique_ptr<Easing<T>>> steps_;
+    std::vector<std::unique_ptr<IEasingStep>> steps_;
     size_t currentStep_ = 0;
-
-public:
-    const Easing<T>* GetCurrentEasing() const;
-    void SetBaseValue(T value);
-
-
-  
+    bool loop_          = false;
 };

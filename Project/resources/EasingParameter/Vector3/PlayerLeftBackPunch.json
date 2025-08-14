@@ -1,5 +1,6 @@
 {
     "PlayerLeftBackPunch": {
+        "StartTimeOffset": 0.0,
         "amplitude": 0.0,
         "backRatio": 0.0,
         "endValue": [

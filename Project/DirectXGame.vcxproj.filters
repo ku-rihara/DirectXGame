@@ -925,6 +925,9 @@
     <ClCompile Include="Engine\Easing\EasingSequence.cpp">
       <Filter>MyEngine\.cpp\Easing</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Easing\EasingStep.cpp">
+      <Filter>MyEngine\.cpp\Easing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1543,6 +1546,9 @@
       <Filter>MyEngine\.h\Easing</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Easing\EasingSequence.h">
+      <Filter>MyEngine\.h\Easing</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Easing\EasingStep.h">
       <Filter>MyEngine\.h\Easing</Filter>
     </ClInclude>
   </ItemGroup>
