@@ -13,8 +13,7 @@ private:
 	};
 
 private:
-	// ワールド変換データ
-	WorldTransform transform_;
+	
 	// モデル
 	std::unique_ptr<Object3d> object3D_=nullptr;
 
@@ -25,8 +24,7 @@ public:
     ~EasingTestObj();
 	void Init();
 	void Update();
-	void Draw(ViewProjection& viewProjection);
-
+	
 	void Debug();
 	void ScaleEasing();
 
