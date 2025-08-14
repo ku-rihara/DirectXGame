@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseShakeState.h"
-#include"EasingFunction.h"
+
 
 class ShakeWait : public BaseShakeState {
 private:

@@ -343,6 +343,12 @@
     <Filter Include="Game\ComboScene">
       <UniqueIdentifier>{38a10d10-b231-4bc9-bf94-53dd26410c5b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\Easing">
+      <UniqueIdentifier>{9e9bcedc-e4e5-4c3a-96e8-a00f997096a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Easing">
+      <UniqueIdentifier>{8f585426-d020-4a52-b5fe-ba4f621a60be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -421,9 +427,6 @@
       <Filter>MyEngine\.cpp\Frame</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="math\EasingFunction.cpp">
-      <Filter>liberary\.cpp</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Collider\AABBCollider.cpp">
       <Filter>MyEngine\.cpp\Collider</Filter>
     </ClCompile>
@@ -766,9 +769,6 @@
     <ClCompile Include="Game\Combo\Behavior\ComboWait.cpp">
       <Filter>Game\Combo\UIBehavior</Filter>
     </ClCompile>
-    <ClCompile Include="math\Easing.cpp">
-      <Filter>liberary\.cpp</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Scene\EditorScene.cpp">
       <Filter>Game\Scene</Filter>
     </ClCompile>
@@ -816,9 +816,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Pipeline\SpritePipeline.cpp">
       <Filter>MyEngine\.cpp\Pipeline</Filter>
-    </ClCompile>
-    <ClCompile Include="math\EasingSequence.cpp">
-      <Filter>liberary\.cpp</Filter>
     </ClCompile>
     <ClCompile Include="Game\BackGroundObject\BaseBackGroundObject.cpp">
       <Filter>Game\BackGroundObject</Filter>
@@ -918,6 +915,15 @@
     </ClCompile>
     <ClCompile Include="Game\ComboScene\ComboScene.cpp">
       <Filter>Game\ComboScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Easing\Easing.cpp">
+      <Filter>MyEngine\.cpp\Easing</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Easing\EasingFunction.cpp">
+      <Filter>MyEngine\.cpp\Easing</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Easing\EasingSequence.cpp">
+      <Filter>MyEngine\.cpp\Easing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1031,9 +1037,6 @@
     </ClInclude>
     <ClInclude Include="Game\Scene\GameScene.h">
       <Filter>Game\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="math\EasingFunction.h">
-      <Filter>liberary\.h</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Collider\OBBCollider.h">
       <Filter>MyEngine\.h\Collider</Filter>
@@ -1374,9 +1377,6 @@
     <ClInclude Include="Game\Combo\Behavior\ComboWait.h">
       <Filter>Game\Combo\UIBehavior</Filter>
     </ClInclude>
-    <ClInclude Include="math\Easing.h">
-      <Filter>liberary\.h</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Scene\EditorScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
@@ -1433,9 +1433,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Pipeline\SpritePipeline.h">
       <Filter>MyEngine\.h\Pipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="math\EasingSequence.h">
-      <Filter>liberary\.h</Filter>
     </ClInclude>
     <ClInclude Include="Game\BackGroundObject\BaseBackGroundObject.h">
       <Filter>Game\BackGroundObject</Filter>
@@ -1538,6 +1535,15 @@
     </ClInclude>
     <ClInclude Include="Game\ComboScene\ComboScene.h">
       <Filter>Game\ComboScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Easing\Easing.h">
+      <Filter>MyEngine\.h\Easing</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Easing\EasingFunction.h">
+      <Filter>MyEngine\.h\Easing</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Easing\EasingSequence.h">
+      <Filter>MyEngine\.h\Easing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

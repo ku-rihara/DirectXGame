@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ComboUI.h"
-#include"EasingFunction.h"
+
 #include "utility/ParameterEditor/GlobalParameter.h"
 // behavior
 #include "Behavior/BaseComboUIBehavior.h"

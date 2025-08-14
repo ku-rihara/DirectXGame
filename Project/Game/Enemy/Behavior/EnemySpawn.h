@@ -1,8 +1,8 @@
 #pragma once
 
 #include"BaseEnemyMoveBehavior.h"
-#include"EasingFunction.h"
-#include"Easing.h"
+
+#include"Easing/Easing.h"
 
 class EnemySpawn : public BaseEnemyMoveBehavior {
 public:

@@ -2,7 +2,7 @@
 
 #include "3d/ViewProjection.h"
 // function
-#include "EasingFunction.h"
+
 // class
 #include "BaseObject/BaseObject.h"
 #include "Behavior/BaseEnemyBehavior.h"

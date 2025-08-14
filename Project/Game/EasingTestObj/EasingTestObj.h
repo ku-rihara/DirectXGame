@@ -1,8 +1,8 @@
 #pragma once
 #include "3d/Object3d.h"
 #include "3d/WorldTransform.h"
-#include"Easing.h"
-#include"EasingSequence.h"
+#include"Easing/Easing.h"
+#include"Easing/EasingSequence.h"
 class EasingTestObj {
 private:
 

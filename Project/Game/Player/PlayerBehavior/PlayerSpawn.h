@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BasePlayerBehavior.h"
-#include "Easing.h"
+#include "Easing/Easing.h"
 
 class PlayerSpawn : public BasePlayerBehavior {
 public:

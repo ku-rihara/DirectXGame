@@ -2,7 +2,7 @@
 
 #include "BaseComboAattackBehavior.h"
 #include "CollisionBox/PlayerAttackController.h"
-#include "EasingFunction.h"
+
 
 class RightJobPunch : public BaseComboAattackBehavior {
 public:

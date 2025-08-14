@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Easing.h"
+#include "Easing/Easing.h"
 #include <memory>
 #include <string>
 

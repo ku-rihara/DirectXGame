@@ -1,5 +1,5 @@
 #include "Easing.h"
-#include "EasingFunction.h"
+#include "Easing/EasingFunction.h"
 #include "Function/GetFile.h"
 #include "utility/EasingCreator/EasingCreator.h"
 #include <fstream>

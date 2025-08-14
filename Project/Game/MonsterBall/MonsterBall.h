@@ -2,7 +2,7 @@
 #include "3d/Object3d.h"
 #include "3d/WorldTransform.h"
 #include "Animation/Object3DAnimation.h"
-#include "Easing.h"
+#include "Easing/Easing.h"
 #include "utility/ParticleEditor/ParticleEmitter.h"
 class MonsterBall {
 public:

@@ -1,7 +1,7 @@
 #pragma once
 
 #include"BaseTitleBehavior.h"
-#include"Easing.h"
+#include"Easing/Easing.h"
 
 
 class TitleRightPunch : public BaseTitleBehavior {
