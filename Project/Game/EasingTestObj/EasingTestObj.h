@@ -19,7 +19,7 @@ private:
 
 	Easing<Vector3> easing_;
 
-	EasingSequence<Vector3> easingSequence_;
+	
 	
 public:
     EasingTestObj();

@@ -1,66 +1,69 @@
-#pragma once
-
 #include "EasingSequence.h"
-#include<cassert>
 
 template <typename T>
-void EasingSequence<T>::AddStep(const std::string& name, T* adaptValue) {
-    steps_.emplace_back(std::make_unique<Easing<T>>());
-    steps_.back()->ApplyFromJson(name);
+void EasingSequence::AddStep(const std::string& name, T* adaptValue) {
+    auto step = std::make_unique<EasingStep<T>>();
+    step->ApplyFromJson(name);
+    step->SetAdaptValue(adaptValue);
 
-    steps_.back()->SetAdaptValue(adaptValue);
-
-    steps_.back()->SetOnWaitEndCallback([this]() {
+    step->SetOnWaitEndCallback([this]() {
         if (currentStep_ + 1 < steps_.size()) {
             ++currentStep_;
             steps_[currentStep_]->Reset();
         }
     });
+
+    steps_.emplace_back(std::move(step));
 }
 
 template <typename T>
-void EasingSequence<T>::AddStep(std::unique_ptr<Easing<T>> easing) {
-    steps_.emplace_back(std::move(easing));
+void EasingSequence::AddStep(std::unique_ptr<Easing<T>> easing) {
+    steps_.emplace_back(std::make_unique<EasingStep<T>>(std::move(easing)));
 }
 
-template <typename T>
-void EasingSequence<T>::Reset() {
+void EasingSequence::Reset() {
     currentStep_ = 0;
     for (auto& step : steps_) {
         step->Reset();
     }
- 
 }
 
-template <typename T>
-void EasingSequence<T>::Update(float deltaTime) {
+void EasingSequence::Update(float deltaTime) {
     if (steps_.empty()) {
         return;
     }
-    steps_[currentStep_]->Update(deltaTime);
+    auto* step = steps_[currentStep_].get();
+    step->Update(deltaTime);
 }
 
 template <typename T>
-const T& EasingSequence<T>::GetValue() const {
-    assert(!steps_.empty());
-    return steps_[currentStep_]->GetValue();
-}
-
-template <typename T>
-const Easing<T>* EasingSequence<T>::GetCurrentEasing() const {
-    if (currentStep_ < steps_.size()) {
-        return steps_[currentStep_].get();
+void EasingSequence::SetBaseValue(const T& value) {
+    for (auto& step : steps_) {
+        if (auto* typed = dynamic_cast<EasingStep<T>*>(step.get())) {
+            typed->SetBaseValue(value);
+        }
     }
+}
+
+const IEasingStep* EasingSequence::GetCurrentStep() const {
+    if (currentStep_ < steps_.size())
+        return steps_[currentStep_].get();
     return nullptr;
 }
 
-template <typename T>
-void EasingSequence<T>::SetBaseValue(T value) {
-    for (auto& step : steps_) {
-        step->SetBaseValue(value);
-    }
- }
+IEasingStep* EasingSequence::GetCurrentStep() {
+    if (currentStep_ < steps_.size())
+        return steps_[currentStep_].get();
+    return nullptr;
+}
 
-template class EasingSequence<float>;
-template class EasingSequence<Vector2>;
-template class EasingSequence<Vector3>;
+// 明示的インスタンス化
+template void EasingSequence::AddStep<float>(const std::string&, float*);
+template void EasingSequence::AddStep<Vector2>(const std::string&, Vector2*);
+template void EasingSequence::AddStep<Vector3>(const std::string&, Vector3*);
+template void EasingSequence::AddStep<float>(std::unique_ptr<Easing<float>>);
+template void EasingSequence::AddStep<Vector2>(std::unique_ptr<Easing<Vector2>>);
+template void EasingSequence::AddStep<Vector3>(std::unique_ptr<Easing<Vector3>>);
+template void EasingSequence::SetBaseValue<float>(const float&);
+template void EasingSequence::SetBaseValue<Vector2>(const Vector2&);
+template void EasingSequence::SetBaseValue<Vector3>(const Vector3&);

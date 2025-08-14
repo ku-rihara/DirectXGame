@@ -52,6 +52,7 @@
     <ClCompile Include="Engine\Easing\Easing.cpp" />
     <ClCompile Include="Engine\Easing\EasingFunction.cpp" />
     <ClCompile Include="Engine\Easing\EasingSequence.cpp" />
+    <ClCompile Include="Engine\Easing\EasingStep.cpp" />
     <ClCompile Include="Engine\Frame\Frame.cpp" />
     <ClCompile Include="Engine\Function\Convert.cpp" />
     <ClCompile Include="Engine\Function\GetFile.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="Engine\Easing\Easing.h" />
     <ClInclude Include="Engine\Easing\EasingFunction.h" />
     <ClInclude Include="Engine\Easing\EasingSequence.h" />
+    <ClInclude Include="Engine\Easing\EasingStep.h" />
     <ClInclude Include="Engine\Frame\Frame.h" />
     <ClInclude Include="Engine\Function\Convert.h" />
     <ClInclude Include="Engine\Function\GetFile.h" />

@@ -27,9 +27,9 @@ public:
             std::string fileName;
             std::unique_ptr<Object3d> object3d;
             std::list<ObjectData> children;
-            std::vector<std::unique_ptr<EasingSequence<Vector3>>> scalingEasing;
-            std::vector<std::unique_ptr<EasingSequence<Vector3>>> rotationEasing;
-            std::vector<std::unique_ptr<EasingSequence<Vector3>>> translationEasing;
+            std::vector<std::unique_ptr<EasingSequence>> scalingEasing;
+            std::vector<std::unique_ptr<EasingSequence>> rotationEasing;
+            std::vector<std::unique_ptr<EasingSequence>> translationEasing;
             std::vector<std::unique_ptr<ParticleEmitter>> emitters;
             std::vector<Vector3> preScale;
             std::vector<Vector3> preRotation;

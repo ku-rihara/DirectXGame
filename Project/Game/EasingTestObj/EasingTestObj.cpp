@@ -1,9 +1,7 @@
 #include "EasingTestObj.h"
-#include "assert.h"
 #include "Frame/Frame.h"
 #include "input/input.h"
-#include "Lighrt/Light.h"
-#include <imgui.h>
+
 
 EasingTestObj::EasingTestObj() {}
 
@@ -26,9 +24,7 @@ void EasingTestObj::Update() {
     if (Input::GetInstance()->TrrigerKey(DIK_U)) {
         easing_.Reset();
     }
-
     ScaleEasing();
-
 }
 
 
