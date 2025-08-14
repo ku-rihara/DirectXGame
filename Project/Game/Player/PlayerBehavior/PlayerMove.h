@@ -34,8 +34,8 @@ private:
 
 	float animationCollTime_;
 	Easing<float> waitEase_;
+    Easing<float> moveEase_;
     float tempWaitScaleY_;
-  /*  Easing moveEase_;*/
     float moveEaseTime_;
 	
 

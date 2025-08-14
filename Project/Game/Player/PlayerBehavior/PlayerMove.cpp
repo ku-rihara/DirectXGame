@@ -7,7 +7,7 @@
 /// frame
 #include "Frame/Frame.h"
 /// inupt
-#include"input/Input.h"
+#include "input/Input.h"
 /// imgui
 #include <imgui.h>
 
@@ -18,16 +18,22 @@ PlayerMove::PlayerMove(Player* player)
     /// ===================================================
     /// 変数初期化
     /// ===================================================
-    /*waitEase_.maxTime = 0.4f;
-   easeDirection_ = 1.0f;*/
 
+    // waitEase
     waitEase_.Init("PlayerWait");
     waitEase_.ApplyFromJson("PlayerWait.json");
-    waitEase_.SaveAppliedJsonFileName();
     waitEase_.SetAdaptValue(&tempWaitScaleY_);
-    waitEase_.Reset();
 
     waitEase_.SetOnWaitEndCallback([this]() {
+        waitEase_.Reset();
+    });
+    
+    // moveEase
+    moveEase_.Init("PlayerMove");
+    moveEase_.ApplyFromJson("PlayerMoveScaleY.json");
+    moveEase_.SetAdaptValue(&tempWaitScaleY_);
+
+    moveEase_.SetOnWaitEndCallback([this]() {
         waitEase_.Reset();
     });
 
@@ -62,69 +68,36 @@ void PlayerMove::Update() {
 
 void PlayerMove::JumpForJoyState() {
 
-    if (!(Input::IsTriggerPad(0, XINPUT_GAMEPAD_A)))
+    if (!(Input::IsTriggerPad(0, XINPUT_GAMEPAD_A))) {
         return;
+    }
 
     pPlayer_->ChangeBehavior(std::make_unique<PlayerJump>(pPlayer_));
 }
 
 void PlayerMove::MoveAnimation() {
-    if (!pPlayer_->CheckIsMoving())
+    if (!pPlayer_->CheckIsMoving()) {
         return;
+    }
 
-    // switch (animationStep_) {
-    // case AnimationStep::INIT:
-    //     ///============================================================================
-    //     /// 初期化
-    //     ///============================================================================
-    //     animationCollTime_ = 0.5f;
-    //    /* moveEase_.time   = 0.0f;
-    //     waitEase_.time   = 0.0f;
-    //     moveEase_.maxTime  = 0.4f;*/
-    //
-    //     animationStep_   = AnimationStep::UPDATE;
-    //     break;
-    // case AnimationStep::UPDATE:
-
-    //    ///============================================================================
-    //    /// アニメーション
-    //    ///============================================================================
-
-    //   /* moveEase_.time += Frame::DeltaTime();
-    //    if (moveEase_.time >= moveEase_.maxTime) {
-    //        moveEase_.time = 0.0f;
-    //        animationStep_ = AnimationStep::COOLING;
-    //    }*/
-
-    //     pPlayer_->SetScaleY(
-    //        EaseInCubic<float>(Vector3::UnitVector().y,Vector3::UnitVector().y - 0.1f, moveEase_.time, moveEase_.maxTime));
-    //    break;
-    // case AnimationStep::COOLING:
-    //    ///============================================================================
-    //    /// クールタイム
-    //    ///============================================================================
-
-    //    animationCollTime_ -= Frame::DeltaTime();
-    //    if (animationCollTime_ <= 0.0f) {
-    //        animationStep_ = AnimationStep::INIT;
-    //    }
-
-    //    break;
-    //}
+    ///============================================================================
+    /// 移動アニメーション
+    ///============================================================================
+    moveEase_.Update(Frame::DeltaTimeRate());
+    pPlayer_->SetScaleY(tempWaitScaleY_);
 }
 
 void PlayerMove::WaitAnimation() {
 
-    if (pPlayer_->CheckIsMoving())
+    if (pPlayer_->CheckIsMoving()) {
         return;
+    }
 
     ///============================================================================
     /// 待機アニメーション
     ///============================================================================
     waitEase_.Update(Frame::DeltaTimeRate());
-   /* waitEase_.UpdateWait(Frame::DeltaTimeRate());*/
     pPlayer_->SetScaleY(tempWaitScaleY_);
-    
 }
 
 void PlayerMove::Debug() {

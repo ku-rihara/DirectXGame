@@ -31,7 +31,7 @@ void PlayerJump::Update() {
     // ジャンプ処理
     pPlayer_->Jump(speed_, pPlayerParameter_->GetParamaters().normalJump.fallSpeedLimit, pPlayerParameter_->GetParamaters().normalJump.gravity);
 
-    // 着地によってbehavior戻す
+    // 着地、通常移動に戻る
     if (pPlayer_->GetTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {
         return;
     }
