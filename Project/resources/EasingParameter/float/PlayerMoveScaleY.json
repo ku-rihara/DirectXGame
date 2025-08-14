@@ -1,16 +1,16 @@
 {
     "PlayerMoveScaleY": {
-        "StartTimeOffset": 0.0,
+        "StartTimeOffset": 0.029999999329447746,
         "adaptFloatAxisType": 1,
         "amplitude": 0.0,
         "backRatio": 0.5,
-        "endValue": 0.800000011920929,
+        "endValue": 0.8999999761581421,
         "finishOffsetTime": 0.0,
         "finishType": 0,
-        "maxTime": 0.699999988079071,
+        "maxTime": 0.10999999940395355,
         "period": 0.0,
         "startValue": 1.0,
-        "type": 44,
+        "type": 46,
         "waitTime": 0.0
     }
 }

@@ -34,7 +34,7 @@ PlayerMove::PlayerMove(Player* player)
     moveEase_.SetAdaptValue(&tempWaitScaleY_);
 
     moveEase_.SetOnWaitEndCallback([this]() {
-        waitEase_.Reset();
+        moveEase_.Reset();
     });
 
     speed_ = pPlayerParameter_->GetParamaters().moveSpeed;
