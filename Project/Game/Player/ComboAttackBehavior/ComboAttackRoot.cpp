@@ -19,7 +19,7 @@ ComboAttackRoot::ComboAttackRoot(Player* player)
     /// 変数初期化
     ///---------------------------------------------------------
     pPlayer_->SetHeadScale(Vector3::UnitVector());
-    pPlayer_->SetRotateInit();
+    pPlayer_->RotateReset();
     attackPatern_ = AttackPatern::NORMAL;
 }
 

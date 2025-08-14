@@ -483,7 +483,7 @@ void Player::HeadLightSetting() {
     }
 }
 
-void Player::SetRotateInit() {
+void Player::RotateReset() {
     obj3d_->transform_.rotation_      = {0, 0, 0};
     obj3d_->transform_.translation_.y = 0.0f;
 }
