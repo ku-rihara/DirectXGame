@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Easing.h"
+#include "Easing/Easing.h"
 #include "EasingCreator.h"
 #include "Vector2.h"
 #include "Vector3.h"
