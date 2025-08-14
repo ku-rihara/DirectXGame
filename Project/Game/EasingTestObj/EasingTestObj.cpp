@@ -11,17 +11,13 @@ EasingTestObj::~EasingTestObj() {}
 
 void EasingTestObj::Init() {
     object3D_.reset(Object3d::CreateModel("DebugSphere.obj"));
-    transform_.Init();
-    transform_.translation_.y = -5.0f;
-    transform_.translation_.z = -24.0f;
-    transform_.scale_         = {1, 1, 1};
+    object3D_->transform_.Init();
+    object3D_->transform_.translation_.y = -5.0f;
+    object3D_->transform_.translation_.z = -24.0f;
+    object3D_->transform_.scale_         = {1, 1, 1};
 
     easing_.Init("testEasing");
-    easing_.SetAdaptValue(&transform_.scale_);
-
-   /* easingSequence_.AddStep("test3.json", &transform_.scale_);
-    easingSequence_.AddStep("test2.json", &transform_.translation_);*/
-
+    easing_.SetAdaptValue(&object3D_->transform_.scale_);
     object3D_->material_.materialData_->enableLighting = 3;
 }
 
@@ -29,18 +25,12 @@ void EasingTestObj::Update() {
 
     if (Input::GetInstance()->TrrigerKey(DIK_U)) {
         easing_.Reset();
-     /*   easingSequence_.Reset();*/
     }
 
     ScaleEasing();
 
-    transform_.UpdateMatrix();
 }
 
-void EasingTestObj::Draw(ViewProjection& viewProjection) {
-    viewProjection;
-   /* object3D_->Draw(transform_, viewProjection);*/
-}
 
 void EasingTestObj::Debug() {
 #ifdef _DEBUG
@@ -50,5 +40,4 @@ void EasingTestObj::Debug() {
 
 void EasingTestObj::ScaleEasing() {
     easing_.Update(Frame::DeltaTime());
-  /*  easingSequence_.Update(Frame::DeltaTime());*/
 }

@@ -99,6 +99,8 @@ private:
 private:
     // ファイル
     const std::string FilePath_ = "Resources/EasingParameter/";
+    const std::string adaptDataPath_ = "AdaptData/";
+        
     int32_t selectedFileIndex_;
     std::vector<std::string> easingFiles_;
     std::string currentAppliedFileName_;

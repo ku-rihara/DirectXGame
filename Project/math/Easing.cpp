@@ -1,7 +1,7 @@
 #include "Easing.h"
+#include "EasingFunction.h"
 #include "Function/GetFile.h"
 #include "utility/EasingCreator/EasingCreator.h"
-#include"EasingFunction.h"
 #include <fstream>
 #include <imGui.h>
 #include <Windows.h>
@@ -19,10 +19,10 @@ void Easing<T>::Init(const std::string& name) {
 template <typename T>
 void Easing<T>::Reset() {
 
-    //　パラメータリセット
-    isFinished_  = false;
-    currentTime_ = 0.0f;
-    waitTime_    = 0.0f;
+    // 　パラメータリセット
+    isFinished_             = false;
+    currentTime_            = 0.0f;
+    waitTime_               = 0.0f;
     currentStartTimeOffset_ = 0.0f;
     CalculateValue();
 }
@@ -58,7 +58,7 @@ void Easing<T>::SaveAppliedJsonFileName() {
 
     FilePathChangeForType();
 
-    std::string savePath = FilePath_ + easingName_ + filePathForType_ + ".json";
+    std::string savePath = FilePath_ + adaptDataPath_ + filePathForType_ + "/" + easingName_  +".json";
 
     nlohmann::json saveJson;
     saveJson["appliedFileName"] = currentAppliedFileName_;
@@ -75,7 +75,7 @@ template <typename T>
 void Easing<T>::LoadAndApplyFromSavedJson() {
     FilePathChangeForType();
 
-    std::string savePath = FilePath_ + easingName_ + filePathForType_ + ".json";
+    std::string savePath = FilePath_ + adaptDataPath_ + filePathForType_ + "/" + easingName_ + ".json";
 
     std::ifstream ifs(savePath);
     if (!ifs.is_open()) {
@@ -290,7 +290,7 @@ template <typename T>
 void Easing<T>::ResetStartValue() {
     currentTime_ = 0.0f;
     CalculateValue();
-  }
+}
 
 template <typename T>
 void Easing<T>::FilePathChangeForType() {
@@ -473,7 +473,7 @@ void Easing<T>::Easing::FinishBehavior() {
 
     switch (finishValueType_) {
     case EasingFinishValueType::Start:
-        *currentValue_ = startValue_+baseValue_;
+        *currentValue_ = startValue_ + baseValue_;
         break;
     case EasingFinishValueType::End:
         *currentValue_ = endValue_ + baseValue_;
