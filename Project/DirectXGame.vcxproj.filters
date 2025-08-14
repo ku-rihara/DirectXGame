@@ -205,6 +205,12 @@
     <Filter Include="MyEngine\.h\PostEffect">
       <UniqueIdentifier>{0e04b71b-66a2-4664-b8b2-e3e21a1ebbb6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\Easing">
+      <UniqueIdentifier>{3581332b-e060-496a-b36f-0aba5e0083dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Easing">
+      <UniqueIdentifier>{ce843212-e137-46ed-a1bf-e96161e40e87}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -283,9 +289,6 @@
       <Filter>MyEngine\.cpp\Frame</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="math\EasingFunction.cpp">
-      <Filter>liberary\.cpp</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Collider\AABBCollider.cpp">
       <Filter>MyEngine\.cpp\Collider</Filter>
     </ClCompile>
@@ -430,9 +433,6 @@
     <ClCompile Include="Engine\utility\PutObjForBlender\PutObjForBlender.cpp">
       <Filter>MyEngine\.cpp\utility\PutObjForBlender</Filter>
     </ClCompile>
-    <ClCompile Include="math\Easing.cpp">
-      <Filter>liberary\.cpp</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\utility\EasingCreator\EasingParameterData.cpp">
       <Filter>MyEngine\.cpp\utility\EasingCreator</Filter>
     </ClCompile>
@@ -471,9 +471,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Pipeline\SpritePipeline.cpp">
       <Filter>MyEngine\.cpp\Pileline</Filter>
-    </ClCompile>
-    <ClCompile Include="math\EasingSequence.cpp">
-      <Filter>liberary\.cpp</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Dx\DxCommand.cpp">
       <Filter>MyEngine\.cpp\Dx</Filter>
@@ -564,6 +561,15 @@
     </ClCompile>
     <ClCompile Include="Engine\Animation\Object3DAnimation.cpp">
       <Filter>MyEngine\.cpp\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Easing\EasingFunction.cpp">
+      <Filter>MyEngine\.cpp\Easing</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Easing\EasingSequence.cpp">
+      <Filter>MyEngine\.cpp\Easing</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Easing\Easing.cpp">
+      <Filter>MyEngine\.cpp\Easing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -677,9 +683,6 @@
     </ClInclude>
     <ClInclude Include="Game\Scene\GameScene.h">
       <Filter>Game\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="math\EasingFunction.h">
-      <Filter>liberary\.h</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Collider\OBBCollider.h">
       <Filter>MyEngine\.h\Collider</Filter>
@@ -822,9 +825,6 @@
     <ClInclude Include="Engine\utility\PutObjForBlender\PutObjForBlender.h">
       <Filter>MyEngine\.h\utility\PutObjForBlender</Filter>
     </ClInclude>
-    <ClInclude Include="math\Easing.h">
-      <Filter>liberary\.h</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\utility\EasingCreator\EasingParameterData.h">
       <Filter>MyEngine\.h\utility\EasingCreator</Filter>
     </ClInclude>
@@ -875,9 +875,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Pipeline\SkinningObject3DPipeline.h">
       <Filter>MyEngine\.h\Pipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="math\EasingSequence.h">
-      <Filter>liberary\.h</Filter>
     </ClInclude>
     <ClInclude Include="Engine\ShadowMap\ShadowMapData.h">
       <Filter>MyEngine\.h\ShadowMap</Filter>
@@ -968,6 +965,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Animation\AnimationRegistry.h">
       <Filter>MyEngine\.h\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Easing\EasingFunction.h">
+      <Filter>MyEngine\.h\Easing</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Easing\EasingSequence.h">
+      <Filter>MyEngine\.h\Easing</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Easing\Easing.h">
+      <Filter>MyEngine\.h\Easing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
