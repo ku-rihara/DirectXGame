@@ -160,7 +160,7 @@ public:
     void SetGameCamera(GameCamera* gamecamera);
     void SetCombo(Combo* combo);
     void SetTitleBehavior();
-    void SetRotateInit();
+    void RotateReset();
     void HeadLightSetting();
 
     void SetHeadScale(const Vector3& scale) { obj3d_->transform_.scale_ = scale; }

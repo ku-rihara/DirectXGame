@@ -49,6 +49,9 @@
     <ClCompile Include="Engine\Dx\DxReleaseChecker.cpp" />
     <ClCompile Include="Engine\Dx\DxRenderTarget.cpp" />
     <ClCompile Include="Engine\Dx\DxSwapChain.cpp" />
+    <ClCompile Include="Engine\Easing\Easing.cpp" />
+    <ClCompile Include="Engine\Easing\EasingFunction.cpp" />
+    <ClCompile Include="Engine\Easing\EasingSequence.cpp" />
     <ClCompile Include="Engine\Frame\Frame.cpp" />
     <ClCompile Include="Engine\Function\Convert.cpp" />
     <ClCompile Include="Engine\Function\GetFile.cpp" />
@@ -190,9 +193,6 @@
     <ClCompile Include="Game\UI\TitleRogo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\Box.cpp" />
-    <ClCompile Include="math\Easing.cpp" />
-    <ClCompile Include="math\EasingFunction.cpp" />
-    <ClCompile Include="math\EasingSequence.cpp" />
     <ClCompile Include="math\MathFunction.cpp" />
     <ClCompile Include="math\Matrix3x3.cpp" />
     <ClCompile Include="math\Matrix4x4.cpp" />
@@ -246,6 +246,9 @@
     <ClInclude Include="Engine\Dx\DxReleaseChecker.h" />
     <ClInclude Include="Engine\Dx\DxRenderTarget.h" />
     <ClInclude Include="Engine\Dx\DxSwapChain.h" />
+    <ClInclude Include="Engine\Easing\Easing.h" />
+    <ClInclude Include="Engine\Easing\EasingFunction.h" />
+    <ClInclude Include="Engine\Easing\EasingSequence.h" />
     <ClInclude Include="Engine\Frame\Frame.h" />
     <ClInclude Include="Engine\Function\Convert.h" />
     <ClInclude Include="Engine\Function\GetFile.h" />
@@ -397,9 +400,6 @@
     <ClInclude Include="Game\UI\HowToOperate.h" />
     <ClInclude Include="Game\UI\TitleRogo.h" />
     <ClInclude Include="math\Box.h" />
-    <ClInclude Include="math\Easing.h" />
-    <ClInclude Include="math\EasingFunction.h" />
-    <ClInclude Include="math\EasingSequence.h" />
     <ClInclude Include="math\MathFunction.h" />
     <ClInclude Include="math\Matrix3x3.h" />
     <ClInclude Include="math\Matrix4x4.h" />

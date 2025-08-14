@@ -3,7 +3,7 @@
 #include "Vector2.h"
 #include <memory>
 
-#include"Easing.h"
+#include"Easing/Easing.h"
 
 class TitleRogo {
 private:

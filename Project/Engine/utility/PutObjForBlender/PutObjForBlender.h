@@ -1,7 +1,7 @@
 #pragma once
 #include "3d/object3d.h"
 #include "3d/WorldTransform.h"
-#include "EasingSequence.h"
+#include "Easing/EasingSequence.h"
 #include "utility/ParticleEditor/ParticleEmitter.h"
 #include <array>
 #include <cstdint>

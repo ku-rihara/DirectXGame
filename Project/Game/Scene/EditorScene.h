@@ -3,7 +3,7 @@
 ///baseScene
 #include"BaseScene.h"
 
-#include"Easing.h"
+#include"Easing/Easing.h"
 #include"utility/ParticleEditor/ParticleEmitter.h"
 #include"utility/EasingCreator/Easingeditor.h"
 #include "EasingTestObj/EasingTestObj.h"

@@ -1,8 +1,8 @@
 #pragma once
 
 #include"BaseEnemyMoveBehavior.h"
-#include"EasingFunction.h"
-#include"Easing.h"
+
+#include"Easing/Easing.h"
 
 class EnemyWait : public BaseEnemyMoveBehavior {
 private:

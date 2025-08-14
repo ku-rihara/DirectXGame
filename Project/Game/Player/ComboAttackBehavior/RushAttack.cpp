@@ -18,8 +18,7 @@ RushAttack::RushAttack(Player* player)
     ///---------------------------------------------------------
     /// 変数初期化
     ///---------------------------------------------------------
-    /*  handMoveEasing_.maxTime = 0.2f;*/
-
+   
     /// 初期化座標とターゲット座標
     initRHandPos_ = pPlayer_->GetRightHand()->GetTransform().translation_;
     initLHandPos_ = pPlayer_->GetLeftHand()->GetTransform().translation_;
@@ -35,7 +34,8 @@ RushAttack::RushAttack(Player* player)
 
     EasingInit();
 
- 
+    pPlayer_->RotateReset();
+
     rushBlurEase_.Init("RushEffect");
     rushBlurEase_.ApplyFromJson("RushBlur.json");
     rushBlurEase_.SaveAppliedJsonFileName();

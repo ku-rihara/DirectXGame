@@ -19,7 +19,7 @@ public:
     /// Public Methods
     /// =========================================================================
 
-    void Init(const std::string& name);
+    void Init(const std::string& name, const std::string& adaptFile = "");
     void Reset();
     void ResetStartValue();
 

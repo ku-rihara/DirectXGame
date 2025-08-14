@@ -91,7 +91,7 @@ void Player::Update() {
     // ライト
     HeadLightSetting();
 
-    //攻撃更新
+    // 攻撃更新
     attackController_->Update();
 
     /// 振る舞い処理(コンボ攻撃中は中止)
@@ -103,8 +103,8 @@ void Player::Update() {
     effects_->Update(GetWorldPosition());
 
     comboBehavior_->Update(); // コンボ攻撃攻撃
-    AttackPowerCharge();      // チャージアタック
-    MoveToLimit();            // 移動制限
+    AttackPowerCharge(); // チャージアタック
+    MoveToLimit(); // 移動制限
 
     UpdateMatrix();
 }
@@ -334,8 +334,9 @@ void Player::Fall(float& speed, const float& fallSpeedLimit, const float& gravit
 
     // 着地
     if (baseTransform_.translation_.y <= parameters_->GetParamaters().startPos_.y) {
-        baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
+
         speed                         = 0.0f;
+        baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
     }
 }
 
@@ -355,7 +356,6 @@ void Player::AdjustParam() {
 
 #endif // _DEBUG
 }
-
 
 ///==============================================================================
 /// 振る舞い切り替え
@@ -463,7 +463,6 @@ void Player::DissolveUpdate(const float& dissolve) {
     obj3d_->material_.SetDissolveThreshold(dissolve);
 }
 
-
 Vector3 Player::GetCollisionPos() const {
     // ローカル座標でのオフセット
     const Vector3 offset = {0.0f, 1.5f, 0.0f};
@@ -483,7 +482,7 @@ void Player::HeadLightSetting() {
     }
 }
 
-void Player::SetRotateInit() {
+void Player::RotateReset() {
     obj3d_->transform_.rotation_      = {0, 0, 0};
     obj3d_->transform_.translation_.y = 0.0f;
 }

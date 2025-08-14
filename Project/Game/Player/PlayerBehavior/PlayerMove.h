@@ -1,7 +1,7 @@
 #pragma once
 
 #include"BasePlayerBehavior.h"
-#include"Easing.h"
+#include"Easing/Easing.h"
 
 class PlayerMove : public BasePlayerBehavior {
 public:
@@ -34,8 +34,8 @@ private:
 
 	float animationCollTime_;
 	Easing<float> waitEase_;
+    Easing<float> moveEase_;
     float tempWaitScaleY_;
-  /*  Easing moveEase_;*/
     float moveEaseTime_;
 	
 

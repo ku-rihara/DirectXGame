@@ -1,8 +1,8 @@
 #pragma once
 
 #include "BaseGameCameraBehavior.h"
-#include"EasingFunction.h"
-#include"Easing.h"
+
+#include"Easing/Easing.h"
 
 class GameCameraBackLash : public BaseGameCameraBehavior {
 private:

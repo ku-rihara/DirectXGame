@@ -2,8 +2,8 @@
 
 #include "BaseComboAattackBehavior.h"
 #include "CollisionBox/PlayerAttackController.h"
-#include "Easing.h"
-#include "EasingFunction.h"
+#include "Easing/Easing.h"
+#include "Easing/EasingFunction.h"
 
 class LeftJobPunch : public BaseComboAattackBehavior {
 public:

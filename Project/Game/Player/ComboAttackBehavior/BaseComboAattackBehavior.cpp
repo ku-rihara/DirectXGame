@@ -34,7 +34,7 @@ void BaseComboAattackBehavior::AnimationInit() {
     // rotate
   
     tempRotateValue_ = 0.0f;
-    pPlayer_->SetRotateInit();
+    pPlayer_->RotateReset();
     rotateValue_     = pPlayerParameter_->GetParamaters().attackRotate;
     rotateValueAnti_ = pPlayerParameter_->GetParamaters().attackRotateAnit;
 

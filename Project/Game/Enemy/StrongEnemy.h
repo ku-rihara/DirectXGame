@@ -1,6 +1,6 @@
 #pragma once
 // Function
-#include "EasingFunction.h"
+
 // class
 #include "BaseEnemy.h"
 

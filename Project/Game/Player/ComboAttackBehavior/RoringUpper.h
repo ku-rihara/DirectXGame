@@ -1,9 +1,9 @@
 #pragma once
 
 #include"BaseComboAattackBehavior.h"
-#include"EasingFunction.h"
+#include"Easing/EasingFunction.h"
 #include"CollisionBox/PlayerAttackController.h"
-#include"Easing.h"
+#include"Easing/Easing.h"
 
 class RailManager;
 class RoringUpper : public BaseComboAattackBehavior {
