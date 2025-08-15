@@ -38,8 +38,6 @@ void BaseComboAattackBehavior::Init() {
 
 void BaseComboAattackBehavior::AnimationInit() {
 
-   atkSpeed_ = pPlayer_->GetAttackController()->GetAttackSpeed(Frame::DeltaTimeRate());
-
     // rotate
     tempRotateValue_ = 0.0f;
     pPlayer_->RotateReset();
@@ -74,6 +72,7 @@ void BaseComboAattackBehavior::ScalingEaseUpdate() {
 }
 
 void BaseComboAattackBehavior::RotateMotionUpdate(const float& start, const float& end, const bool& isClockwise) {
+    atkSpeed_ = pPlayer_->GetAttackController()->GetAttackSpeed(Frame::DeltaTimeRate());
 
     if (isClockwise) {
         rotateEasing_.SetStartValue(start);
