@@ -28,6 +28,9 @@ void TitleScene::Init() {
     EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticlePrimitive("comboFireNozzleLeft", PrimitiveType::Plane, 500));
     EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticlePrimitive("comboFireCenter", PrimitiveType::Plane, 500));
     EnemydamageEffect_[2].reset(ParticleEmitter::CreateParticlePrimitive("comboFireNozzleRigth", PrimitiveType::Plane, 500));
+
+     afterGlowEffect_[0].reset(ParticleEmitter::CreateParticle("afterGlowEffect", "Suzanne.obj", 500));
+
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
@@ -43,9 +46,14 @@ void TitleScene::Update() {
             EnemydamageEffect_[i]->StartRailEmit();
         }
     }
-    /* EnemydamageEffect_[0]->Update();
-     EnemydamageEffect_[0]->EditorUpdate();
-     EnemydamageEffect_[0]->Emit();*/
+
+    for (int i = 0; i < afterGlowEffect_.size(); i++) {
+        afterGlowEffect_[i]->Update();
+        afterGlowEffect_[i]->EditorUpdate();
+        afterGlowEffect_[i]->Emit();
+
+        
+    }
 
     ParticleManager::GetInstance()->Update();
 
