@@ -20,9 +20,15 @@
 RightJobPunch::RightJobPunch(Player* player)
     : BaseComboAattackBehavior("RightJobPunch", player) {
 
-    ///---------------------------------------------------------
-    /// 変数初期化
-    ///---------------------------------------------------------
+    Init();
+}
+
+RightJobPunch::~RightJobPunch() {
+}
+
+void RightJobPunch::Init() {
+
+    BaseComboAattackBehavior::Init();
 
     /// parm
     speed_    = pPlayerParameter_->GetParamaters().rushDistance;
@@ -33,7 +39,7 @@ RightJobPunch::RightJobPunch(Player* player)
     forwardDirection_ = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
     rushPos_          = initPos_ + (forwardDirection_ * speed_); // 突進座標を決める
 
-     /// collisionType
+    /// collisionType
     pPlayer_->GetAttackController()->ChangeAttackType(PlayerAttackController::AttackType::NORMAL);
 
     EasingInit();
@@ -43,9 +49,6 @@ RightJobPunch::RightJobPunch(Player* player)
 
     // 振る舞い順序初期化
     order_ = Order::RUSH;
-}
-
-RightJobPunch::~RightJobPunch() {
 }
 
 // 更新
@@ -82,7 +85,7 @@ void RightJobPunch::Update() {
         ///----------------------------------------------------
 
         /// パンチイージング更新
-        punchEase_.Update(Frame::DeltaTimeRate());
+        punchEase_.Update(atkSpeed_);
         pPlayer_->GetRightHand()->SetObjTranslate(punchPosition_);
 
         /// 当たり判定座標
@@ -96,9 +99,9 @@ void RightJobPunch::Update() {
         ///----------------------------------------------------
         BaseComboAattackBehavior::PreOderNextComboForButton();
         pPlayer_->AdaptRotate();
-      
+
         /// バックパンチイージング更新
-        backPunchEase_.Update(Frame::DeltaTimeRate());
+        backPunchEase_.Update(atkSpeed_);
         pPlayer_->GetRightHand()->SetObjTranslate(punchPosition_);
 
         break;
@@ -167,11 +170,6 @@ void RightJobPunch::EasingInit() {
 }
 
 void RightJobPunch::CollisionBoxInit() {
-    //collisionBox_ = std::make_unique<PlayerAttackController>();
-    //collisionBox_->Init();
-    //collisionBox_->attackType_ = PlayerAttackController::AttackType::NORMAL;
-    //collisionBox_->SetSize(Vector3::UnitVector() * 2.5f); // 当たり判定サイズ
-  
 }
 
 void RightJobPunch::ChangeSpeedForLockOn() {

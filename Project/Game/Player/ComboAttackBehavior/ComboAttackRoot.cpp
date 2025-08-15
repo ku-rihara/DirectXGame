@@ -15,15 +15,18 @@
 ComboAttackRoot::ComboAttackRoot(Player* player)
     : BaseComboAattackBehavior("ComboAttackRoot", player) {
 
-    ///---------------------------------------------------------
-    /// 変数初期化
-    ///---------------------------------------------------------
-    pPlayer_->SetHeadScale(Vector3::UnitVector());
-    pPlayer_->RotateReset();
-    attackPatern_ = AttackPatern::NORMAL;
+    Init();
 }
 
 ComboAttackRoot ::~ComboAttackRoot() {
+}
+
+void ComboAttackRoot::Init() {
+
+  
+    pPlayer_->SetHeadScale(Vector3::UnitVector());
+    pPlayer_->RotateReset();
+    attackPatern_ = AttackPatern::NORMAL;
 }
 
 // 更新

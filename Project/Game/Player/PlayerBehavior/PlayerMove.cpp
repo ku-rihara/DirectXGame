@@ -29,7 +29,7 @@ PlayerMove::PlayerMove(Player* player)
     
     // moveEase
     moveEase_ = std::make_unique<EasingSequence>();
-    moveEase_->AddStep("PlayerTempPosY.json", &tempPosY_);
+    moveEase_->AddStep("PlayerMovePosY.json", &tempPosY_);
     moveEase_->AddStep("PlayerLandingScale.json", &tempScale_);
     moveEase_->SetLoop(true);
 

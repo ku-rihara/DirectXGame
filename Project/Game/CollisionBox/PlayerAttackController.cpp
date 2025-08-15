@@ -86,6 +86,8 @@ void PlayerAttackController::AdjustParam() {
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
+         ImGui::Text("CurrentLevel:%d", pCombo_->GetCurrentLevel());
+
         // attackLevel Values
         for (int32_t i = 0; i < kComboLevel; ++i) {
             ImGui::SeparatorText(("AttackValue" + std::to_string(int(i + 1))).c_str());
