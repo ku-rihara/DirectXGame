@@ -5,6 +5,7 @@ void EasingSequence::AddStep(const std::string& name, T* adaptValue) {
     auto step = std::make_unique<EasingStep<T>>();
     step->ApplyFromJson(name);
     step->SetAdaptValue(adaptValue);
+    step->Update(0.0f);
 
     // Add時に startValue を反映
     if (adaptValue) {
