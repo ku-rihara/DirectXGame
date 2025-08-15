@@ -1,11 +1,10 @@
 #include "PlayerEffects.h"
 #include "audio/Audio.h"
 
-
 ///=========================================================
 /// 　初期化
 ///==========================================================
-void PlayerEffects::Init(const Vector3& position) {
+void PlayerEffects::Init(WorldTransform* transform) {
 
     starSound_ = Audio::GetInstance()->LoadWave("Resources/starEffect.wav");
 
@@ -18,16 +17,19 @@ void PlayerEffects::Init(const Vector3& position) {
     starEffect_[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StarFrame", PrimitiveType::Plane, 100));
 
     for (uint32_t i = 0; i < starEffect_.size(); i++) {
-        starEffect_[i].emitter->SetFollowingPos(&position);
+        starEffect_[i].emitter->SetFollowingPos(&transform->translation_);
     }
 
     rushRingEffect_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("RushEffectRing", PrimitiveType::Ring, 200));
-    rushRingEffect_[0].emitter->SetFollowingPos(&position);
+    rushRingEffect_[0].emitter->SetFollowingPos(&transform->translation_);
 
     // crack
     fallCrack_.reset(ParticleEmitter::CreateParticlePrimitive("Crack", PrimitiveType::Plane, 30));
 
+    // rush
     rushParticle_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("rushParticle", PrimitiveType::Plane, 800));
+    afterGlowEffect_[0].emitter.reset(ParticleEmitter::CreateParticle("afterGlowEffect", "Player.obj", 100));
+   
 }
 
 ///=========================================================
@@ -59,15 +61,10 @@ void PlayerEffects::Update(const Vector3& position) {
     rushRingEffect_[0].emitter->Update();
     rushRingEffect_[0].emitter->EditorUpdate();
 
+     afterGlowEffect_[0].emitter->SetTargetPosition(position);
+    afterGlowEffect_[0].emitter->Update();
+     afterGlowEffect_[0].emitter->EditorUpdate();
 }
-
-///=========================================================
-/// 　描画
-///==========================================================
-void PlayerEffects::Draw(const ViewProjection& viewProjection) {
-    viewProjection;
-}
-
 
 void PlayerEffects::SpecialAttackRenditionInit() {
     // 星パーティクル
@@ -77,9 +74,9 @@ void PlayerEffects::SpecialAttackRenditionInit() {
     Audio::GetInstance()->PlayWave(starSound_, 0.5f);
 }
 
-
 void PlayerEffects::RushAttackEmit() {
     rushParticle_[0].emitter->Emit();
+    afterGlowEffect_[0].emitter->Emit();
 }
 
 void PlayerEffects::RushAttackRingEffectEmit() {

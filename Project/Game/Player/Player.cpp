@@ -35,7 +35,7 @@ void Player::Init() {
 
     //* particle
     effects_ = std::make_unique<PlayerEffects>();
-    effects_->Init(baseTransform_.translation_);
+    effects_->Init(&baseTransform_);
 
     ///* グローバルパラメータ
     parameters_ = std::make_unique<PlayerParameter>();
@@ -118,10 +118,6 @@ void Player::TitleUpdate() {
     titleBehavior_->Update();
     /// 行列更新
     UpdateMatrix();
-}
-
-void Player::EffectDraw(const ViewProjection& viewProjection) {
-    effects_->Draw(viewProjection);
 }
 
 ///=========================================================
