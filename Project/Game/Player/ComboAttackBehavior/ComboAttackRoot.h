@@ -23,11 +23,11 @@ public:
     ComboAttackRoot(Player* player);
 	~ComboAttackRoot();
 
+	void Init() override;
 	void Update()override;
 	void Debug()override;
 
 	void JudgeAttackPatern(); //攻撃パターンの判断　
 
-	void NormalAttackChangeForJoyStick();
-	void JumpAttackAttackChangeForJoyStick();
+
 };

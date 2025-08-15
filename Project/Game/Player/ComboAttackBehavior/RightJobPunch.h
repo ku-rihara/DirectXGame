@@ -11,6 +11,7 @@ public:
     ~RightJobPunch();
 
     /// 更新、デバッグ
+    void Init() override;
     void Update() override;
     void Debug() override;
     void CollisionBoxInit();
@@ -33,9 +34,7 @@ private:
 
     Order order_; /// 振る舞い順序
 
-    // collision
-   /* std::unique_ptr<PlayerAttackController> collisionBox_;*/
-
+  
     /// 突進
     Vector3 initPos_; /// スタート座標
     Vector3 rushPos_; /// 突進座標

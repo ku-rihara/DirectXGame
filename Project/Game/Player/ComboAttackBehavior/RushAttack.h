@@ -19,6 +19,7 @@ public:
     RushAttack(Player* player);
     ~RushAttack();
 
+	void Init() override;
     void Update() override;
     void Debug() override;
 

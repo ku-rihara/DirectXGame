@@ -7,6 +7,7 @@ BaseComboAattackBehavior::BaseComboAattackBehavior(const std::string& name, Play
     name_             = name;
     pPlayer_          = player;
     pPlayerParameter_ = player->GetParameter();
+  
 }
 
 ///  コンボ移動フラグ処理
@@ -15,8 +16,9 @@ void BaseComboAattackBehavior::PreOderNextComboForButton() {
     if (Input::GetInstance()->TrrigerKey(DIK_H)) {
         isNextCombo_ = true;
     } else {
-        if (!(Input::IsTriggerPad(0, XINPUT_GAMEPAD_X)))
+        if (!(Input::IsTriggerPad(0, XINPUT_GAMEPAD_X))) {
             return;
+        }
 
         isNextCombo_ = true;
     }
@@ -29,10 +31,16 @@ void BaseComboAattackBehavior::ChangeNextCombo(std::unique_ptr<BaseComboAattackB
     pPlayer_->ChangeComboBehavior(std::move(nextCombo));
 }
 
+
+void BaseComboAattackBehavior::Init() {
+    atkSpeed_ = pPlayer_->GetAttackController()->GetAttackSpeed(Frame::DeltaTimeRate());
+}
+
 void BaseComboAattackBehavior::AnimationInit() {
 
+   atkSpeed_ = pPlayer_->GetAttackController()->GetAttackSpeed(Frame::DeltaTimeRate());
+
     // rotate
-  
     tempRotateValue_ = 0.0f;
     pPlayer_->RotateReset();
     rotateValue_     = pPlayerParameter_->GetParamaters().attackRotate;
@@ -61,7 +69,7 @@ void BaseComboAattackBehavior::AnimationInit() {
 }
 
 void BaseComboAattackBehavior::ScalingEaseUpdate() {
-    startEasing_.Update(Frame::DeltaTimeRate());
+    startEasing_.Update(atkSpeed_);
     pPlayer_->SetHeadScale(tempScaleValue_);
 }
 
@@ -75,12 +83,12 @@ void BaseComboAattackBehavior::RotateMotionUpdate(const float& start, const floa
         rotateEasing_.SetEndValue(end);
     }
 
-    rotateEasing_.Update(Frame::DeltaTimeRate());
+    rotateEasing_.Update(atkSpeed_);
     pPlayer_->SetHeadRotateY(tempRotateValue_);
 }
 
 void BaseComboAattackBehavior::FloatAnimationUpdate() {
 
-    floatEase_.Update(Frame::DeltaTimeRate());
+    floatEase_.Update(atkSpeed_);
     pPlayer_->SetHeadPosY(tempFloatValue_);
 }

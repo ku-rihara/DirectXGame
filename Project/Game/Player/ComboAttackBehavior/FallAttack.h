@@ -11,6 +11,7 @@ public:
     FallAttack(Player* player);
     ~FallAttack();
 
+	void Init() override;	
     void Update() override;
     void Debug() override;
 

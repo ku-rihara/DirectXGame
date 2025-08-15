@@ -6,7 +6,7 @@
 #include "Player/Player.h"
 
 /// input
-#include"input/Input.h"
+#include "input/Input.h"
 
 /// frame
 #include "Frame/Frame.h"
@@ -15,9 +15,12 @@
 RoolingPunchAttack::RoolingPunchAttack(Player* player)
     : BaseComboAattackBehavior("RoolingPunchAttack", player) {
 
-    ///---------------------------------------------------------
-    /// 変数初期化
-    ///---------------------------------------------------------
+   Init();
+}
+
+void RoolingPunchAttack::Init() {
+
+    BaseComboAattackBehavior::Init();
 }
 
 RoolingPunchAttack::~RoolingPunchAttack() {
@@ -46,22 +49,22 @@ void RoolingPunchAttack::Update() {
         /// 待機
         /// ---------------------------------------------------------------------
     case RoolingPunchAttack::Order::WAIT:
-    
-       /* waitTine_ += Frame::DeltaTime();
 
-        /// コンボ途切れ
-        if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(THIRD).waitTime) {
+        /* waitTine_ += Frame::DeltaTime();
 
-            order_ = Order::END;
-        }
+         /// コンボ途切れ
+         if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(THIRD).waitTime) {
 
-        else {
-            /// ボタンで次のコンボ
-            BaseComboAattackBehavior::PreOderNextComboForButton();
-            if (isNextCombo_) {
-                BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<JumpRush>(pPlayer_));
-            }
-        }*/
+             order_ = Order::END;
+         }
+
+         else {
+             /// ボタンで次のコンボ
+             BaseComboAattackBehavior::PreOderNextComboForButton();
+             if (isNextCombo_) {
+                 BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<JumpRush>(pPlayer_));
+             }
+         }*/
 
         break;
         break;

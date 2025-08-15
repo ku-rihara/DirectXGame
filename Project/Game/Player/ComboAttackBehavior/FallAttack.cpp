@@ -16,9 +16,16 @@
 FallAttack::FallAttack(Player* player)
     : BaseComboAattackBehavior("FallAttack", player) {
 
-    ///---------------------------------------------------------
-    /// 変数初期化
-    ///---------------------------------------------------------
+    Init();
+}
+
+FallAttack::~FallAttack() {
+}
+
+
+void FallAttack::Init() {
+
+    BaseComboAattackBehavior::Init();
 
     step_ = STEP::FALL; // 落ちる
 
@@ -40,9 +47,6 @@ FallAttack::FallAttack(Player* player)
     EasingInit();
 
     pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
-}
-
-FallAttack::~FallAttack() {
 }
 
 // 更新
@@ -97,18 +101,9 @@ void FallAttack::Update() {
         BaseComboAattackBehavior::PreOderNextComboForButton(); // 次のコンボに移行可能
 
         /// スケール変化
-        landScaleEasing_.Update(Frame::DeltaTimeRate());
+        landScaleEasing_.Update( atkSpeed_);
         pPlayer_->SetScale(tempLandScale_);
         pPlayer_->GetAttackController()->SetPosition(pPlayer_->GetWorldPosition());
-
-        /* if (landScaleEasing_.GetCurrentEaseTime() <= 0.15f) {
-             /// 当たり判定座標
-             collisionBox_->SetIsAdapt(true);
-             pPlayer_->GetAttackController()->SetPosition(pPlayer_->GetWorldPosition());
-             collisionBox_->Update();
-         } else {
-             collisionBox_->SetIsAdapt(false);
-         }*/
 
         // 回転する
         landRotateX_ += Frame::DeltaTimeRate() * rotateXSpeed_;
@@ -170,13 +165,7 @@ void FallAttack::EasingInit() {
 }
 
 void FallAttack::CollisionInit() {
-    // collisionBox_ = std::make_unique<PlayerAttackController>();
-    // collisionBox_->Init();
-    // collisionBox_->attackType_ = PlayerAttackController::AttackType::FALL;
-    // collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
-    // collisionBox_->SetSize(Vector3(4.5f, 2.0f, 4.5f)); // 当たり判定サイズ
-    // collisionBox_->Update();
-    // collisionBox_->SetIsAdapt(false);
+  
 }
 
 void FallAttack::Debug() {

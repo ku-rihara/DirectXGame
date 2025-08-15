@@ -18,10 +18,16 @@
 ThrustPunch::ThrustPunch(Player* player)
     : BaseComboAattackBehavior("ThrustPunch", player) {
 
-    ///---------------------------------------------------------
-    /// 変数初期化
-    ///---------------------------------------------------------
+    Init();
+}
 
+ThrustPunch::~ThrustPunch() {
+}
+
+void ThrustPunch::Init() {
+
+    BaseComboAattackBehavior::Init();
+   
     firstWaitTimeMax_ = 0.2f;
     pPlayer_->SetHeadRotateX(0.0f);
 
@@ -32,7 +38,7 @@ ThrustPunch::ThrustPunch(Player* player)
     thrustRailManager_->SetIsRoop(false);
 
     BaseComboAattackBehavior::AnimationInit();
-  
+
     kTimeDownTime_ = 0.65f;
     timeDownTime_  = 0.0f;
     istimeSlow_    = false;
@@ -43,10 +49,7 @@ ThrustPunch::ThrustPunch(Player* player)
     stopRailManager_->SetRailMoveTime(0.0f);
     pPlayer_->GetRightHand()->RailForthComboUpdate(0.0f);
 
-   pPlayer_->GetAttackController()->ResetComboEffect();
-}
-
-ThrustPunch::~ThrustPunch() {
+    pPlayer_->GetAttackController()->ResetComboEffect();
 }
 
 // 更新

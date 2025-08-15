@@ -17,11 +17,16 @@
 // 初期化
 RoringUpper::RoringUpper(Player* player)
     : BaseComboAattackBehavior("RoringUpper", player) {
+    Init();
+}
 
-    ///---------------------------------------------------------
-    /// 変数初期化
-    ///---------------------------------------------------------
+RoringUpper::~RoringUpper() {
+}
 
+void RoringUpper::Init() {
+
+    BaseComboAattackBehavior::Init();
+   
     initPos_          = pPlayer_->GetWorldPosition();
     forwardDirection_ = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
 
@@ -37,7 +42,7 @@ RoringUpper::RoringUpper(Player* player)
 
     // backlash
     backlashPos_ = initPos_ + (forwardDirection_ * -pPlayerParameter_->GetParamaters().upperParam.BackLashValue);
-   
+
     EasingInit(); // イージング初期化
 
     jumpPower_      = pPlayerParameter_->GetParamaters().upperJump.jumpSpeed * 60.0f; // 1.4
@@ -60,9 +65,6 @@ RoringUpper::RoringUpper(Player* player)
     collisionAdaptTime_ = 0.0f;
 
     pPlayer_->GetAttackController()->ResetComboEffect();
-}
-
-RoringUpper::~RoringUpper() {
 }
 
 // 更新
@@ -183,12 +185,12 @@ void RoringUpper::AnimationMove() {
     pPlayer_->GetRightHand()->RailThreeComboUpdate(pPlayer_->GetAttackController()->GetAttackSpeed(pPlayer_->GetRightHand()->GetRailRunSpeedThree()));
   
     // バック
-    backlashEase_.Update(Frame::DeltaTimeRate());
+    backlashEase_.Update( atkSpeed_);
     pPlayer_->SetWorldPositionX(tempWorldPos_.x);
     pPlayer_->SetWorldPositionZ(tempWorldPos_.z);
 
     // 回転
-    rotateEase_.Update(Frame::DeltaTimeRate());
+    rotateEase_.Update( atkSpeed_);
     pPlayer_->SetHeadRotateX(xRotate_);
 
     pPlayer_->Jump(jumpPower_, fallSpeedLimit_, gravity_);

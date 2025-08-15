@@ -14,22 +14,24 @@
 
 //初期化
 JumpRush::JumpRush(Player* player)
-	: BaseComboAattackBehavior("JumpRush", player) {
-	
-	///---------------------------------------------------------
-	/// 変数初期化
-	///---------------------------------------------------------
+    : BaseComboAattackBehavior("JumpRush", player) {
 
-	/// parm
-	/*assaultEase_.time = 0.0f;
-	assaultEase_.maxTime = pPlayerParameter_->GetNormalComboParm(THIRD).attackEaseMax;*/
+    Init();
+}
 
-	assaultJumpEase_.Init("PlayerAssaultJump");
+JumpRush::~JumpRush() {
+
+}
+
+void JumpRush::Init() {
+
+    BaseComboAattackBehavior::Init();
+
+    assaultJumpEase_.Init("PlayerAssaultJump");
     assaultJumpEase_.SetAdaptValue(&tempPositionY_);
     assaultJumpEase_.Reset();
 
-
-	assaultEase_.Init("PlayerAssault");
+    assaultEase_.Init("PlayerAssault");
     assaultEase_.SetAdaptValue(&tempPosition_);
     assaultEase_.Reset();
 
@@ -37,16 +39,11 @@ JumpRush::JumpRush(Player* player)
         order_ = Order::NEXTBEHAVIOR;
     });
 
+    // 　モーション
+    BaseComboAattackBehavior::AnimationInit();
 
-	//　モーション
-	BaseComboAattackBehavior::AnimationInit();
-
-	// 振る舞い順序初期化
-	order_ = Order::CALUCRATION;
-}
-
-JumpRush::~JumpRush() {
-
+    // 振る舞い順序初期化
+    order_ = Order::CALUCRATION;
 }
 
 //更新
@@ -75,15 +72,15 @@ void JumpRush::Update() {
 
 		order_ = Order::RUSH;
 		break;
-
+   
 		///----------------------------------------------------
 		/// 待機
 		///----------------------------------------------------
 	case Order::RUSH:
-        assaultJumpEase_.Update(Frame::DeltaTimeRate());
+        assaultJumpEase_.Update( atkSpeed_);
         pPlayer_->SetWorldPositionY(tempPositionY_);
 
-		assaultEase_.Update(Frame::DeltaTimeRate());
+		assaultEase_.Update( atkSpeed_);
         pPlayer_->SetWorldPositionX(tempPosition_.x);
         pPlayer_->SetWorldPositionZ(tempPosition_.z);
 

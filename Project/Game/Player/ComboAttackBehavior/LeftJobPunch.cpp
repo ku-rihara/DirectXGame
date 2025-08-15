@@ -12,10 +12,16 @@
 LeftJobPunch::LeftJobPunch(Player* player)
     : BaseComboAattackBehavior("LeftJobPunch", player) {
 
-    ///---------------------------------------------------------
-    /// 変数初期化
-    ///---------------------------------------------------------
-   
+    Init();
+}
+
+LeftJobPunch::~LeftJobPunch() {
+}
+
+void LeftJobPunch::Init() {
+
+    BaseComboAattackBehavior::Init();
+
     waitTine_ = 0.0f;
 
     /// collisionType
@@ -34,9 +40,6 @@ LeftJobPunch::LeftJobPunch(Player* player)
     pPlayer_->SoundPunch();
     // 振る舞い順序初期化
     order_ = Order::PUNCH;
-}
-
-LeftJobPunch::~LeftJobPunch() {
 }
 
 // 更新
@@ -59,7 +62,7 @@ void LeftJobPunch::Update() {
         ///----------------------------------------------------
         
         /// パンチイージング更新
-        punchEase_.Update(Frame::DeltaTimeRate());
+        punchEase_.Update( atkSpeed_);
         pPlayer_->GetLeftHand()->SetObjTranslate(punchPosition_);
        
 
@@ -74,13 +77,13 @@ void LeftJobPunch::Update() {
         pPlayer_->AdaptRotate();
 
         /// バックパンチイージング更新
-        backPunchEase_.Update(Frame::DeltaTimeRate());
+        backPunchEase_.Update( atkSpeed_);
         pPlayer_->GetLeftHand()->SetObjTranslate(punchPosition_);
       
         break;
 
     case Order::WAIT:
-        waitTine_ += Frame::DeltaTime();
+        waitTine_ +=  atkSpeed_;
         pPlayer_->AdaptRotate();
 
         /// コンボ途切れ
@@ -125,11 +128,6 @@ void LeftJobPunch::EasingInit() {
 
 void LeftJobPunch::CollisionBoxInit() {
   
-    //collisionBox_->attackType_ = PlayerAttackController::AttackType::NORMAL;
-    ////collisionBox_->SetSize(Vector3::UnitVector() * 2.5f); // 当たり判定サイズ
-    //Vector3 forwardDirection = pPlayer_->GetTransform().LookAt(Vector3::ToForward());
-    //collisionBox_->SetOffset(forwardDirection * 1.0f);
-   /* collisionBox_->IsAdapt(false);*/
 }
 
 void LeftJobPunch::Debug() {

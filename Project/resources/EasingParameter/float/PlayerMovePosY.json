@@ -1,13 +1,13 @@
 {
-    "PlayerTempPosY": {
+    "PlayerMovePosY": {
         "StartTimeOffset": 0.0,
         "adaptFloatAxisType": 1,
         "amplitude": 0.0,
         "backRatio": 0.5,
-        "endValue": 0.8899999856948853,
+        "endValue": 1.2000000476837158,
         "finishOffsetTime": 0.0,
         "finishType": 0,
-        "maxTime": 0.30000001192092896,
+        "maxTime": 0.20000000298023224,
         "period": 0.0,
         "startValue": 0.0,
         "type": 46,

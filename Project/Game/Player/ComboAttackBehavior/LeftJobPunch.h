@@ -12,6 +12,7 @@ public:
     ~LeftJobPunch();
 
     /// 更新、デバッグ
+    void Init() override;
     void Update() override;
     void Debug() override;
     void CollisionBoxInit();

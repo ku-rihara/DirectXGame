@@ -14,11 +14,17 @@
 // 初期化
 RushAttack::RushAttack(Player* player)
     : BaseComboAattackBehavior("RushAttack", player) {
+    Init();
+  
+}
 
-    ///---------------------------------------------------------
-    /// 変数初期化
-    ///---------------------------------------------------------
-   
+RushAttack::~RushAttack() {
+}
+
+void RushAttack::Init() {
+
+    BaseComboAattackBehavior::Init();
+
     /// 初期化座標とターゲット座標
     initRHandPos_ = pPlayer_->GetRightHand()->GetTransform().translation_;
     initLHandPos_ = pPlayer_->GetLeftHand()->GetTransform().translation_;
@@ -36,20 +42,14 @@ RushAttack::RushAttack(Player* player)
 
     pPlayer_->RotateReset();
 
-    rushBlurEase_.Init("RushEffect");
-    rushBlurEase_.ApplyFromJson("RushBlur.json");
-    rushBlurEase_.SaveAppliedJsonFileName();
+    rushBlurEase_.Init("RushEffect", "RushBlur.json");
     rushBlurEase_.SetAdaptValue(&tempBlurParam_);
-    rushBlurEase_.Reset();
 
     rushBlurEase_.SetOnWaitEndCallback([this]() {
         PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::NONE);
     });
 
     step_ = STEP::START; // 突進
-}
-
-RushAttack::~RushAttack() {
 }
 
 // 更新
@@ -78,19 +78,19 @@ void RushAttack::Update() {
 
         pPlayer_->GetEffects()->RushAttackEmit();
 
-        rushBlurEase_.Update(Frame::DeltaTimeRate());
+        rushBlurEase_.Update( atkSpeed_);
         PostEffectRenderer::GetInstance()->GetRadialBlur()->SetBlurWidth(tempBlurParam_);
 
         // RHand
-        handRMoveEase_.Update(Frame::DeltaTimeRate());
+        handRMoveEase_.Update( atkSpeed_);
         pPlayer_->GetRightHand()->SetWorldPosition(tempRHandPos_);
 
         // LHand
-        handLMoveEase_.Update(Frame::DeltaTimeRate());
+        handLMoveEase_.Update( atkSpeed_);
         pPlayer_->GetLeftHand()->SetWorldPosition(tempLHandPos_);
 
         // rush
-        rushEase_.Update(Frame::DeltaTimeRate());
+        rushEase_.Update( atkSpeed_);
         pPlayer_->SetWorldPosition(tempRushPos_);
 
         /// 当たり判定座標
@@ -123,13 +123,7 @@ void RushAttack::Update() {
 }
 
 void RushAttack::CollisionInit() {
-    //collisionBox_ = std::make_unique<PlayerAttackController>();
-    //collisionBox_->Init();
-    //collisionBox_->attackType_ = PlayerAttackController::AttackType::RUSH;
-    //collisionBox_->SetPosition(pPlayer_->GetWorldPosition());
-    //collisionBox_->SetSize(Vector3(2.0f, 2.0f, 2.0f)); // 当たり判定サイズ
-    //collisionBox_->Update();
-    //collisionBox_->SetIsAdapt(false);
+   
 }
 void RushAttack::EasingInit() {
     handRMoveEase_.Init("RHandMove");
