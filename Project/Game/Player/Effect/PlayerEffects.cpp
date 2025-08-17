@@ -29,7 +29,6 @@ void PlayerEffects::Init(WorldTransform* transform) {
     // rush
     rushParticle_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("rushParticle", PrimitiveType::Plane, 800));
     afterGlowEffect_[0].emitter.reset(ParticleEmitter::CreateParticle("afterGlowEffect", "Player.obj", 100));
-   
 }
 
 ///=========================================================
@@ -61,9 +60,9 @@ void PlayerEffects::Update(const Vector3& position) {
     rushRingEffect_[0].emitter->Update();
     rushRingEffect_[0].emitter->EditorUpdate();
 
-     afterGlowEffect_[0].emitter->SetTargetPosition(position);
+    afterGlowEffect_[0].emitter->SetTargetPosition(position);
     afterGlowEffect_[0].emitter->Update();
-     afterGlowEffect_[0].emitter->EditorUpdate();
+    afterGlowEffect_[0].emitter->EditorUpdate();
 }
 
 void PlayerEffects::SpecialAttackRenditionInit() {
