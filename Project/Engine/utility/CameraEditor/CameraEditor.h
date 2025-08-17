@@ -5,9 +5,11 @@
 #include "Vector3.h"
 #include <functional>
 #include <memory>
-#include <json.hpp>
 #include <string>
 #include <vector>
+
+// 前方宣言
+class CameraAnimationSerializer;
 
 /// キーフレームデータ構造体
 struct CameraKeyFrame {
@@ -24,16 +26,14 @@ struct CameraKeyFrame {
 
 /// カメラアニメーションデータ
 struct CameraAnimation {
-    std::string name = "DefaultAnimation";
+    std::string name;
     std::vector<CameraKeyFrame> keyFrames;
     float totalDuration = 0.0f;
-    bool isLooping      = false;
 };
 
-/// カメラエディタークラス
 class CameraEditor {
 public:
-    CameraEditor()  = default;
+    CameraEditor();
     ~CameraEditor() = default;
 
     /// 初期化
@@ -48,15 +48,13 @@ public:
     /// アニメーション制御
     void PlayAnimation(const std::string& animationName);
     void StopAnimation();
-    void PauseAnimation();
-    void ResumeAnimation();
     void SetAnimationTime(float time);
 
     /// キーフレーム操作
     void AddKeyFrame(float timePoint);
-    void DeleteKeyFrame(int index);
-    void UpdateKeyFrameFromCurrentCamera(int index);
-    void ApplyKeyFrameToCamera(int index);
+    void DeleteKeyFrame(int32_t index);
+    void UpdateKeyFrameFromCurrentCamera(int32_t index);
+    void ApplyKeyFrameToCamera(int32_t index);
 
     /// アニメーション作成・編集
     void CreateNewAnimation(const std::string& name);
@@ -73,29 +71,18 @@ public:
     void SaveOriginalCameraParams();
     void RestoreOriginalCameraParams();
 
-    /// ゲッター
-    bool IsPlaying() const { return isPlaying_; }
-    bool IsPaused() const { return isPaused_; }
-    float GetCurrentAnimationTime() const { return currentTime_; }
-    const std::string& GetCurrentAnimationName() const { return currentAnimationName_; }
-
-    /// セッター
-    void SetOnAnimationFinishCallback(const std::function<void()>& callback) { onAnimationFinishCallback_ = callback; }
-    void SetOnKeyFrameReachedCallback(const std::function<void(int)>& callback) { onKeyFrameReachedCallback_ = callback; }
 
 private:
     /// プライベートメソッド
     void UpdateAnimation(float deltaTime);
     void InterpolateCamera(float time);
-    void SetupEasingForSegment(int fromKeyFrameIndex, int toKeyFrameIndex);
-    int FindKeyFrameIndexAtTime(float time);
+    void SetupEasingForSegment(int32_t fromKeyFrameIndex, int32_t toKeyFrameIndex);
+    int32_t FindKeyFrameIndexAtTime(float time);
     void SortKeyFramesByTime();
+    void RecalculateTotalDuration();
 
-    /// JSON関連
-    nlohmann::json KeyFrameToJson(const CameraKeyFrame& keyFrame);
-    CameraKeyFrame JsonToKeyFrame(const nlohmann::json& json);
-    nlohmann::json AnimationToJson(const CameraAnimation& animation);
-    CameraAnimation JsonToAnimation(const nlohmann::json& json);
+    /// 名前の重複チェック
+    std::string GenerateUniqueAnimationName(const std::string& baseName);
 
     /// ImGui描画関連
     void DrawAnimationControls();
@@ -113,11 +100,10 @@ private:
     /// アニメーション関連
     std::vector<CameraAnimation> animations_;
     std::string currentAnimationName_ = "";
-    int currentAnimationIndex_        = -1;
+    int32_t currentAnimationIndex_        = -1;
 
     /// 再生制御
     bool isPlaying_      = false;
-    bool isPaused_       = false;
     float currentTime_   = 0.0f;
     float playbackSpeed_ = 1.0f;
 
@@ -127,21 +113,35 @@ private:
     std::unique_ptr<Easing<float>> fovEasing_;
 
     /// 現在の補間セグメント
-    int currentFromKeyFrame_ = -1;
-    int currentToKeyFrame_   = -1;
+    int32_t currentFromKeyFrame_ = -1;
+    int32_t currentToKeyFrame_   = -1;
+
+    /// JSON保存・読み込み
+    std::unique_ptr<CameraAnimationSerializer> serializer_;
 
     /// ImGui用変数
-    int selectedKeyFrameIndex_        = -1;
+    int32_t selectedKeyFrameIndex_        = -1;
     char newAnimationNameBuffer_[256] = "NewAnimation";
-    char filePathBuffer_[512]         = "Resources/CameraAnimations/";
+    char filePathBuffer_[512]         = "Resources/CameraAnimation/";
 
     /// コールバック
     std::function<void()> onAnimationFinishCallback_;
-    std::function<void(int)> onKeyFrameReachedCallback_;
+    std::function<void(int32_t)> onKeyFrameReachedCallback_;
 
     /// プレビュー用
     bool isPreviewMode_ = false;
     Vector3 previewPosition_;
     Vector3 previewRotation_;
     float previewFov_;
+
+public:
+    /// getter
+    bool IsPlaying() const { return isPlaying_; }
+    float GetCurrentAnimationTime() const { return currentTime_; }
+    const std::string& GetCurrentAnimationName() const { return currentAnimationName_; }
+    const std::vector<CameraAnimation>& GetAnimations() const { return animations_; }
+
+    /// setter
+    void SetOnAnimationFinishCallback(const std::function<void()>& callback) { onAnimationFinishCallback_ = callback; }
+    void SetOnKeyFrameReachedCallback(const std::function<void(int32_t)>& callback) { onKeyFrameReachedCallback_ = callback; }
 };

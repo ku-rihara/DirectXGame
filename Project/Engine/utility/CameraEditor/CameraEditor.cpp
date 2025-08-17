@@ -1,17 +1,20 @@
 #include "CameraEditor.h"
+#include "CameraAnimationSerializer.h"
 #include <algorithm>
-#include <fstream>
 #include <imgui.h>
 #include <iostream>
 
 CameraEditor::CameraEditor() {
-    positionEasing_ = std::make_unique<Easing<Vector3>>();
-    rotationEasing_ = std::make_unique<Easing<Vector3>>();
-    fovEasing_      = std::make_unique<Easing<float>>();
 }
 
 void CameraEditor::Init(ViewProjection* viewProjection) {
     viewProjection_ = viewProjection;
+
+    // イージング生成
+    positionEasing_ = std::make_unique<Easing<Vector3>>();
+    rotationEasing_ = std::make_unique<Easing<Vector3>>();
+    fovEasing_      = std::make_unique<Easing<float>>();
+    serializer_     = std::make_unique<CameraAnimationSerializer>();
 
     // イージング初期化
     positionEasing_->Init("CameraPosition");
@@ -26,7 +29,7 @@ void CameraEditor::Init(ViewProjection* viewProjection) {
 }
 
 void CameraEditor::Update(float deltaTime) {
-    if (isPlaying_ && !isPaused_) {
+    if (isPlaying_) {
         UpdateAnimation(deltaTime * playbackSpeed_);
     }
 }
@@ -46,16 +49,13 @@ void CameraEditor::UpdateAnimation(float deltaTime) {
 
     // アニメーション終了チェック
     if (currentTime_ >= currentAnimation.totalDuration) {
-        if (currentAnimation.isLooping) {
-            currentTime_ = 0.0f;
-        } else {
-            currentTime_ = currentAnimation.totalDuration;
-            isPlaying_   = false;
-            if (onAnimationFinishCallback_) {
-                onAnimationFinishCallback_();
-            }
-            return;
+
+        currentTime_ = currentAnimation.totalDuration;
+        isPlaying_   = false;
+        if (onAnimationFinishCallback_) {
+            onAnimationFinishCallback_();
         }
+        return;
     }
 
     // カメラ補間
@@ -80,10 +80,10 @@ void CameraEditor::InterpolateCamera(float time) {
     }
 
     // 現在時間に対応するキーフレームを見つける
-    int fromIndex = -1;
-    int toIndex   = -1;
+    int32_t fromIndex = -1;
+    int32_t toIndex   = -1;
 
-    for (int i = 0; i < animation.keyFrames.size() - 1; ++i) {
+    for (int32_t i = 0; i < animation.keyFrames.size() - 1; ++i) {
         if (time >= animation.keyFrames[i].timePoint && time <= animation.keyFrames[i + 1].timePoint) {
             fromIndex = i;
             toIndex   = i + 1;
@@ -96,7 +96,7 @@ void CameraEditor::InterpolateCamera(float time) {
         if (time <= animation.keyFrames[0].timePoint) {
             fromIndex = toIndex = 0;
         } else {
-            fromIndex = toIndex = static_cast<int>(animation.keyFrames.size() - 1);
+            fromIndex = toIndex = static_cast<int32_t>(animation.keyFrames.size() - 1);
         }
     }
 
@@ -144,7 +144,7 @@ void CameraEditor::InterpolateCamera(float time) {
     }
 }
 
-void CameraEditor::SetupEasingForSegment(int fromKeyFrameIndex, int toKeyFrameIndex) {
+void CameraEditor::SetupEasingForSegment(int32_t fromKeyFrameIndex, int32_t toKeyFrameIndex) {
     if (currentAnimationIndex_ < 0 || fromKeyFrameIndex < 0 || toKeyFrameIndex < 0) {
         return;
     }
@@ -216,7 +216,7 @@ void CameraEditor::DrawImGui() {
 void CameraEditor::DrawAnimationControls() {
     // アニメーション選択
     if (ImGui::BeginCombo("Animation", currentAnimationName_.c_str())) {
-        for (int i = 0; i < animations_.size(); ++i) {
+        for (int32_t i = 0; i < animations_.size(); ++i) {
             bool isSelected = (currentAnimationName_ == animations_[i].name);
             if (ImGui::Selectable(animations_[i].name.c_str(), isSelected)) {
                 currentAnimationName_  = animations_[i].name;
@@ -240,15 +240,6 @@ void CameraEditor::DrawAnimationControls() {
         }
     }
 
-    ImGui::SameLine();
-    if (ImGui::Button(isPaused_ ? "Resume" : "Pause")) {
-        if (isPaused_) {
-            ResumeAnimation();
-        } else {
-            PauseAnimation();
-        }
-    }
-
     // タイムライン
     if (currentAnimationIndex_ >= 0) {
         auto& animation = animations_[currentAnimationIndex_];
@@ -257,7 +248,6 @@ void CameraEditor::DrawAnimationControls() {
         }
 
         ImGui::SliderFloat("Speed", &playbackSpeed_, 0.1f, 3.0f);
-        ImGui::Checkbox("Loop", &animation.isLooping);
     }
 
     // 新規アニメーション作成
@@ -288,7 +278,7 @@ void CameraEditor::DrawKeyFrameList() {
 
     // キーフレームリスト
     if (ImGui::BeginListBox("##keyframes")) {
-        for (int i = 0; i < animation.keyFrames.size(); ++i) {
+        for (int32_t i = 0; i < animation.keyFrames.size(); ++i) {
             auto& keyFrame  = animation.keyFrames[i];
             bool isSelected = (selectedKeyFrameIndex_ == i);
 
@@ -338,32 +328,28 @@ void CameraEditor::DrawKeyFrameEditor() {
     changed |= ImGui::SliderFloat("FOV", &keyFrame.fov, 0.1f, 3.14f);
 
     // イージングタイプ選択
-    int posEasingIndex = static_cast<int>(keyFrame.positionEasingType);
-    int rotEasingIndex = static_cast<int>(keyFrame.rotationEasingType);
-    int fovEasingIndex = static_cast<int>(keyFrame.fovEasingType);
+    int32_t posEasingIndex = static_cast<int32_t>(keyFrame.positionEasingType);
+    int32_t rotEasingIndex = static_cast<int32_t>(keyFrame.rotationEasingType);
+    int32_t fovEasingIndex = static_cast<int32_t>(keyFrame.fovEasingType);
 
-    if (ImGui::Combo("Position Easing", &posEasingIndex, EasingTypeLabels.data(), static_cast<int>(EasingType::COUNT))) {
+    if (ImGui::Combo("Position Easing", &posEasingIndex, EasingTypeLabels.data(), static_cast<int32_t>(EasingType::COUNT))) {
         keyFrame.positionEasingType = static_cast<EasingType>(posEasingIndex);
         changed                     = true;
     }
 
-    if (ImGui::Combo("Rotation Easing", &rotEasingIndex, EasingTypeLabels.data(), static_cast<int>(EasingType::COUNT))) {
+    if (ImGui::Combo("Rotation Easing", &rotEasingIndex, EasingTypeLabels.data(), static_cast<int32_t>(EasingType::COUNT))) {
         keyFrame.rotationEasingType = static_cast<EasingType>(rotEasingIndex);
         changed                     = true;
     }
 
-    if (ImGui::Combo("FOV Easing", &fovEasingIndex, EasingTypeLabels.data(), static_cast<int>(EasingType::COUNT))) {
+    if (ImGui::Combo("FOV Easing", &fovEasingIndex, EasingTypeLabels.data(), static_cast<int32_t>(EasingType::COUNT))) {
         keyFrame.fovEasingType = static_cast<EasingType>(fovEasingIndex);
         changed                = true;
     }
 
-  
     if (changed) {
         SortKeyFramesByTime();
-        // 総時間を再計算
-        if (!animation.keyFrames.empty()) {
-            animation.totalDuration = animation.keyFrames.back().timePoint;
-        }
+        RecalculateTotalDuration();
     }
 }
 
@@ -415,7 +401,6 @@ void CameraEditor::DrawCameraPreview() {
     ImGui::Text("FOV: %.3f", viewProjection_->fovAngleY_);
 }
 
-
 void CameraEditor::PlayAnimation(const std::string& animationName) {
     auto it = std::find_if(animations_.begin(), animations_.end(),
         [&animationName](const CameraAnimation& anim) {
@@ -424,10 +409,9 @@ void CameraEditor::PlayAnimation(const std::string& animationName) {
 
     if (it != animations_.end()) {
         currentAnimationName_  = animationName;
-        currentAnimationIndex_ = static_cast<int>(std::distance(animations_.begin(), it));
+        currentAnimationIndex_ = static_cast<int32_t>(std::distance(animations_.begin(), it));
         currentTime_           = 0.0f;
         isPlaying_             = true;
-        isPaused_              = false;
         currentFromKeyFrame_   = -1;
         currentToKeyFrame_     = -1;
     }
@@ -435,20 +419,9 @@ void CameraEditor::PlayAnimation(const std::string& animationName) {
 
 void CameraEditor::StopAnimation() {
     isPlaying_           = false;
-    isPaused_            = false;
     currentTime_         = 0.0f;
     currentFromKeyFrame_ = -1;
     currentToKeyFrame_   = -1;
-}
-
-void CameraEditor::PauseAnimation() {
-    if (isPlaying_) {
-        isPaused_ = true;
-    }
-}
-
-void CameraEditor::ResumeAnimation() {
-    isPaused_ = false;
 }
 
 void CameraEditor::SetAnimationTime(float time) {
@@ -473,31 +446,21 @@ void CameraEditor::AddKeyFrame(float timePoint) {
 
     animation.keyFrames.push_back(newKeyFrame);
     SortKeyFramesByTime();
-
-    // 総時間を更新
-    if (!animation.keyFrames.empty()) {
-        animation.totalDuration = animation.keyFrames.back().timePoint;
-    }
+    RecalculateTotalDuration();
 }
 
-void CameraEditor::DeleteKeyFrame(int index) {
+void CameraEditor::DeleteKeyFrame(int32_t index) {
     if (currentAnimationIndex_ < 0)
         return;
 
     auto& animation = animations_[currentAnimationIndex_];
     if (index >= 0 && index < animation.keyFrames.size()) {
         animation.keyFrames.erase(animation.keyFrames.begin() + index);
-
-        // 総時間を更新
-        if (!animation.keyFrames.empty()) {
-            animation.totalDuration = animation.keyFrames.back().timePoint;
-        } else {
-            animation.totalDuration = 0.0f;
-        }
+        RecalculateTotalDuration();
     }
 }
 
-void CameraEditor::UpdateKeyFrameFromCurrentCamera(int index) {
+void CameraEditor::UpdateKeyFrameFromCurrentCamera(int32_t index) {
     if (currentAnimationIndex_ < 0) {
         return;
     }
@@ -511,7 +474,7 @@ void CameraEditor::UpdateKeyFrameFromCurrentCamera(int index) {
     }
 }
 
-void CameraEditor::ApplyKeyFrameToCamera(int index) {
+void CameraEditor::ApplyKeyFrameToCamera(int32_t index) {
     if (currentAnimationIndex_ < 0) {
         return;
     }
@@ -527,213 +490,13 @@ void CameraEditor::ApplyKeyFrameToCamera(int index) {
 }
 
 void CameraEditor::CreateNewAnimation(const std::string& name) {
+    std::string uniqueName = GenerateUniqueAnimationName(name);
+
     CameraAnimation newAnimation;
-    newAnimation.name = name;
+    newAnimation.name = uniqueName;
     animations_.push_back(newAnimation);
-    currentAnimationName_  = name;
-    currentAnimationIndex_ = static_cast<int>(animations_.size() - 1);
-}
-
-void CameraEditor::SortKeyFramesByTime() {
-    if (currentAnimationIndex_ < 0)
-        return;
-
-    auto& animation = animations_[currentAnimationIndex_];
-    std::sort(animation.keyFrames.begin(), animation.keyFrames.end(),
-        [](const CameraKeyFrame& a, const CameraKeyFrame& b) {
-            return a.timePoint < b.timePoint;
-        });
-}
-
-void CameraEditor::SaveOriginalCameraParams() {
-    if (viewProjection_) {
-        originalCameraParams_ = *viewProjection_;
-        hasOriginalParams_    = true;
-    }
-}
-
-void CameraEditor::RestoreOriginalCameraParams() {
-    if (hasOriginalParams_ && viewProjection_) {
-        *viewProjection_ = originalCameraParams_;
-    }
-}
-
-
-void CameraEditor::SaveAnimationsToJson(const std::string& filePath) {
-    nlohmann::json json;
-    json["version"]    = "1.0";
-    json["animations"] = nlohmann::json::array();
-
-    for (const auto& animation : animations_) {
-        json["animations"].push_back(AnimationToJson(animation));
-    }
-
-    std::ofstream file(filePath);
-    if (file.is_open()) {
-        file << json.dump(4);
-        file.close();
-        std::cout << "Saved animations to: " << filePath << std::endl;
-    } else {
-        std::cerr << "Failed to save animations to: " << filePath << std::endl;
-    }
-}
-
-void CameraEditor::LoadAnimationsFromJson(const std::string& filePath) {
-    std::ifstream file(filePath);
-    if (!file.is_open()) {
-        std::cerr << "Failed to load animations from: " << filePath << std::endl;
-        return;
-    }
-
-    nlohmann::json json;
-    file >> json;
-    file.close();
-
-    if (!json.contains("animations")) {
-        std::cerr << "Invalid animation file format" << std::endl;
-        return;
-    }
-
-    animations_.clear();
-
-    for (const auto& animJson : json["animations"]) {
-        animations_.push_back(JsonToAnimation(animJson));
-    }
-
-    if (!animations_.empty()) {
-        currentAnimationName_  = animations_[0].name;
-        currentAnimationIndex_ = 0;
-    } else {
-        currentAnimationName_  = "";
-        currentAnimationIndex_ = -1;
-    }
-
-    StopAnimation();
-    std::cout << "Loaded animations from: " << filePath << std::endl;
-}
-
-void CameraEditor::ExportCurrentAnimationToJson(const std::string& filePath) {
-    if (currentAnimationIndex_ < 0) {
-        std::cerr << "No animation selected for export" << std::endl;
-        return;
-    }
-
-    nlohmann::json json = AnimationToJson(animations_[currentAnimationIndex_]);
-
-    std::ofstream file(filePath);
-    if (file.is_open()) {
-        file << json.dump(4);
-        file.close();
-        std::cout << "Exported animation to: " << filePath << std::endl;
-    } else {
-        std::cerr << "Failed to export animation to: " << filePath << std::endl;
-    }
-}
-
-void CameraEditor::ImportAnimationFromJson(const std::string& filePath) {
-    std::ifstream file(filePath);
-    if (!file.is_open()) {
-        std::cerr << "Failed to import animation from: " << filePath << std::endl;
-        return;
-    }
-
-    nlohmann::json json;
-    file >> json;
-    file.close();
-
-    CameraAnimation importedAnimation = JsonToAnimation(json);
-
-    // 名前の重複チェック
-    std::string originalName = importedAnimation.name;
-    int counter              = 1;
-    while (std::find_if(animations_.begin(), animations_.end(),
-               [&importedAnimation](const CameraAnimation& anim) {
-                   return anim.name == importedAnimation.name;
-               })
-           != animations_.end()) {
-        importedAnimation.name = originalName + "_" + std::to_string(counter);
-        counter++;
-    }
-
-    animations_.push_back(importedAnimation);
-    currentAnimationName_  = importedAnimation.name;
-    currentAnimationIndex_ = static_cast<int>(animations_.size() - 1);
-
-    std::cout << "Imported animation: " << importedAnimation.name << " from: " << filePath << std::endl;
-}
-
-nlohmann::json CameraEditor::KeyFrameToJson(const CameraKeyFrame& keyFrame) {
-    nlohmann::json json;
-    json["timePoint"]          = keyFrame.timePoint;
-    json["position"]           = {keyFrame.position.x, keyFrame.position.y, keyFrame.position.z};
-    json["rotation"]           = {keyFrame.rotation.x, keyFrame.rotation.y, keyFrame.rotation.z};
-    json["fov"]                = keyFrame.fov;
-    json["positionEasingType"] = static_cast<int>(keyFrame.positionEasingType);
-    json["rotationEasingType"] = static_cast<int>(keyFrame.rotationEasingType);
-    json["fovEasingType"]      = static_cast<int>(keyFrame.fovEasingType);
-    return json;
-}
-
-CameraKeyFrame CameraEditor::JsonToKeyFrame(const nlohmann::json& json) {
-    CameraKeyFrame keyFrame;
-    keyFrame.timePoint = json.value("timePoint", 0.0f);
-
-    if (json.contains("position") && json["position"].size() == 3) {
-        keyFrame.position.x = json["position"][0];
-        keyFrame.position.y = json["position"][1];
-        keyFrame.position.z = json["position"][2];
-    }
-
-    if (json.contains("rotation") && json["rotation"].size() == 3) {
-        keyFrame.rotation.x = json["rotation"][0];
-        keyFrame.rotation.y = json["rotation"][1];
-        keyFrame.rotation.z = json["rotation"][2];
-    }
-
-    keyFrame.fov                = json.value("fov", 45.0f * 3.141592654f / 180.0f);
-    keyFrame.positionEasingType = static_cast<EasingType>(json.value("positionEasingType", static_cast<int>(EasingType::InOutSine)));
-    keyFrame.rotationEasingType = static_cast<EasingType>(json.value("rotationEasingType", static_cast<int>(EasingType::InOutSine)));
-    keyFrame.fovEasingType      = static_cast<EasingType>(json.value("fovEasingType", static_cast<int>(EasingType::InOutSine)));
-  
-    return keyFrame;
-}
-
-nlohmann::json CameraEditor::AnimationToJson(const CameraAnimation& animation) {
-    nlohmann::json json;
-    json["name"]          = animation.name;
-    json["totalDuration"] = animation.totalDuration;
-    json["isLooping"]     = animation.isLooping;
-    json["keyFrames"]     = nlohmann::json::array();
-
-    for (const auto& keyFrame : animation.keyFrames) {
-        json["keyFrames"].push_back(KeyFrameToJson(keyFrame));
-    }
-
-    return json;
-}
-
-CameraAnimation CameraEditor::JsonToAnimation(const nlohmann::json& json) {
-    CameraAnimation animation;
-    animation.name          = json.value("name", "Unnamed");
-    animation.totalDuration = json.value("totalDuration", 0.0f);
-    animation.isLooping     = json.value("isLooping", false);
-
-    if (json.contains("keyFrames")) {
-        for (const auto& keyFrameJson : json["keyFrames"]) {
-            animation.keyFrames.push_back(JsonToKeyFrame(keyFrameJson));
-        }
-    }
-
-    // 総時間を再計算（安全のため）
-    if (!animation.keyFrames.empty()) {
-        std::sort(animation.keyFrames.begin(), animation.keyFrames.end(),
-            [](const CameraKeyFrame& a, const CameraKeyFrame& b) {
-                return a.timePoint < b.timePoint;
-            });
-        animation.totalDuration = animation.keyFrames.back().timePoint;
-    }
-
-    return animation;
+    currentAnimationName_  = uniqueName;
+    currentAnimationIndex_ = static_cast<int32_t>(animations_.size() - 1);
 }
 
 void CameraEditor::DuplicateAnimation(const std::string& sourceName, const std::string& newName) {
@@ -744,10 +507,10 @@ void CameraEditor::DuplicateAnimation(const std::string& sourceName, const std::
 
     if (it != animations_.end()) {
         CameraAnimation duplicated = *it;
-        duplicated.name            = newName;
+        duplicated.name            = GenerateUniqueAnimationName(newName);
         animations_.push_back(duplicated);
-        currentAnimationName_  = newName;
-        currentAnimationIndex_ = static_cast<int>(animations_.size() - 1);
+        currentAnimationName_  = duplicated.name;
+        currentAnimationIndex_ = static_cast<int32_t>(animations_.size() - 1);
     }
 }
 
@@ -772,4 +535,128 @@ void CameraEditor::DeleteAnimation(const std::string& name) {
             StopAnimation();
         }
     }
+}
+
+void CameraEditor::SaveAnimationsToJson(const std::string& filePath) {
+    if (serializer_->SaveAnimationsToJson(animations_, filePath)) {
+        std::cout << "Successfully saved animations to: " << filePath << std::endl;
+    } else {
+        std::cerr << "Failed to save animations: " << serializer_->GetLastErrorMessage() << std::endl;
+    }
+}
+
+void CameraEditor::LoadAnimationsFromJson(const std::string& filePath) {
+    std::vector<CameraAnimation> loadedAnimations;
+    if (serializer_->LoadAnimationsFromJson(filePath, loadedAnimations)) {
+        animations_ = std::move(loadedAnimations);
+
+        if (!animations_.empty()) {
+            currentAnimationName_  = animations_[0].name;
+            currentAnimationIndex_ = 0;
+        } else {
+            currentAnimationName_  = "";
+            currentAnimationIndex_ = -1;
+        }
+
+        StopAnimation();
+        std::cout << "Successfully loaded animations from: " << filePath << std::endl;
+    } else {
+        std::cerr << "Failed to load animations: " << serializer_->GetLastErrorMessage() << std::endl;
+    }
+}
+
+void CameraEditor::ExportCurrentAnimationToJson(const std::string& filePath) {
+    if (currentAnimationIndex_ < 0) {
+        std::cerr << "No animation selected for export" << std::endl;
+        return;
+    }
+
+    if (serializer_->ExportAnimationToJson(animations_[currentAnimationIndex_], filePath)) {
+        std::cout << "Successfully exported animation to: " << filePath << std::endl;
+    } else {
+        std::cerr << "Failed to export animation: " << serializer_->GetLastErrorMessage() << std::endl;
+    }
+}
+
+void CameraEditor::ImportAnimationFromJson(const std::string& filePath) {
+    CameraAnimation importedAnimation;
+    if (serializer_->ImportAnimationFromJson(filePath, importedAnimation)) {
+        // 名前の重複チェック
+        importedAnimation.name = GenerateUniqueAnimationName(importedAnimation.name);
+
+        animations_.push_back(importedAnimation);
+        currentAnimationName_  = importedAnimation.name;
+        currentAnimationIndex_ = static_cast<int32_t>(animations_.size() - 1);
+
+        std::cout << "Successfully imported animation: " << importedAnimation.name << " from: " << filePath << std::endl;
+    } else {
+        std::cerr << "Failed to import animation: " << serializer_->GetLastErrorMessage() << std::endl;
+    }
+}
+
+void CameraEditor::SaveOriginalCameraParams() {
+    if (viewProjection_) {
+        originalCameraParams_ = *viewProjection_;
+        hasOriginalParams_    = true;
+    }
+}
+
+void CameraEditor::RestoreOriginalCameraParams() {
+    if (hasOriginalParams_ && viewProjection_) {
+        *viewProjection_ = originalCameraParams_;
+    }
+}
+
+void CameraEditor::SortKeyFramesByTime() {
+    if (currentAnimationIndex_ < 0)
+        return;
+
+    auto& animation = animations_[currentAnimationIndex_];
+    std::sort(animation.keyFrames.begin(), animation.keyFrames.end(),
+        [](const CameraKeyFrame& a, const CameraKeyFrame& b) {
+            return a.timePoint < b.timePoint;
+        });
+}
+
+void CameraEditor::RecalculateTotalDuration() {
+    if (currentAnimationIndex_ < 0)
+        return;
+
+    auto& animation = animations_[currentAnimationIndex_];
+    if (!animation.keyFrames.empty()) {
+        animation.totalDuration = animation.keyFrames.back().timePoint;
+    } else {
+        animation.totalDuration = 0.0f;
+    }
+}
+
+std::string CameraEditor::GenerateUniqueAnimationName(const std::string& baseName) {
+    std::string uniqueName = baseName;
+    int32_t counter        = 1;
+
+    while (std::find_if(animations_.begin(), animations_.end(),
+               [&uniqueName](const CameraAnimation& anim) {
+                   return anim.name == uniqueName;
+               })
+           != animations_.end()) {
+        uniqueName = baseName + "_" + std::to_string(counter);
+        counter++;
+    }
+
+    return uniqueName;
+}
+
+int32_t CameraEditor::FindKeyFrameIndexAtTime(float time) {
+    if (currentAnimationIndex_ < 0)
+        return -1;
+
+    auto& animation = animations_[currentAnimationIndex_];
+
+    for (int32_t i = 0; i < animation.keyFrames.size(); ++i) {
+        if (std::abs(animation.keyFrames[i].timePoint - time) < 0.01f) {
+            return i;
+        }
+    }
+
+    return -1;
 }
