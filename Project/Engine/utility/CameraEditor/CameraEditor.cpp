@@ -1,662 +1,430 @@
 #include "CameraEditor.h"
-#include "CameraAnimationSerializer.h"
 #include <algorithm>
+#include <cmath>
 #include <imgui.h>
-#include <iostream>
 
-CameraEditor::CameraEditor() {
-}
+void CameraEditor::Init(const std::string& animationName) {
+    animationName_   = animationName;
+    globalParameter_ = GlobalParameter::GetInstance();
 
-void CameraEditor::Init(ViewProjection* viewProjection) {
-    viewProjection_ = viewProjection;
+    // メイングループの設定
+    groupName_ = "CameraEditor/" + animationName_;
+    globalParameter_->CreateGroup(groupName_, true);
 
-    // イージング生成
-    positionEasing_ = std::make_unique<Easing<Vector3>>();
-    rotationEasing_ = std::make_unique<Easing<Vector3>>();
-    fovEasing_      = std::make_unique<Easing<float>>();
-    serializer_     = std::make_unique<CameraAnimationSerializer>();
+    BindParams();
 
-    // イージング初期化
-    positionEasing_->Init("CameraPosition");
-    rotationEasing_->Init("CameraRotation");
-    fovEasing_->Init("CameraFOV");
+    // 初期設定とメイン設定を読み込み
+    LoadInitialSettings();
+    LoadAnimation();
 
-    // デフォルトアニメーション作成
-    CreateNewAnimation("DefaultAnimation");
+    // パラメータ同期
+    globalParameter_->SyncParamForGroup(groupName_);
 
-    // 現在のカメラパラメータを保存
-    SaveOriginalCameraParams();
+    // 初期値設定
+    currentPosition_ = initialSettings_.position;
+    currentRotation_ = initialSettings_.rotation;
+    currentFov_      = initialSettings_.fov;
+
+    // 復帰用イージング設定
+    returnPositionEase_.SetType(static_cast<EasingType>(initialSettings_.returnEaseType));
+    returnRotationEase_.SetType(static_cast<EasingType>(initialSettings_.returnEaseType));
+    returnFovEase_.SetType(static_cast<EasingType>(initialSettings_.returnEaseType));
+
+    returnPositionEase_.SetAdaptValue(&currentPosition_);
+    returnRotationEase_.SetAdaptValue(&currentRotation_);
+    returnFovEase_.SetAdaptValue(&currentFov_);
 }
 
 void CameraEditor::Update(float deltaTime) {
-    if (isPlaying_) {
-        UpdateAnimation(deltaTime * playbackSpeed_);
-    }
-}
-
-void CameraEditor::UpdateAnimation(float deltaTime) {
-    if (currentAnimationIndex_ < 0 || currentAnimationIndex_ >= animations_.size()) {
-        return;
-    }
-
-    auto& currentAnimation = animations_[currentAnimationIndex_];
-
-    if (currentAnimation.keyFrames.empty()) {
-        return;
-    }
-
-    currentTime_ += deltaTime;
-
-    // アニメーション終了チェック
-    if (currentTime_ >= currentAnimation.totalDuration) {
-
-        currentTime_ = currentAnimation.totalDuration;
-        isPlaying_   = false;
-        if (onAnimationFinishCallback_) {
-            onAnimationFinishCallback_();
-        }
-        return;
-    }
-
-    // カメラ補間
-    InterpolateCamera(currentTime_);
-}
-
-void CameraEditor::InterpolateCamera(float time) {
-    if (currentAnimationIndex_ < 0 || currentAnimationIndex_ >= animations_.size()) {
-        return;
-    }
-
-    auto& animation = animations_[currentAnimationIndex_];
-
-    if (animation.keyFrames.size() <= 1) {
-        if (!animation.keyFrames.empty()) {
-            auto& keyFrame                = animation.keyFrames[0];
-            viewProjection_->translation_ = keyFrame.position;
-            viewProjection_->rotation_    = keyFrame.rotation;
-            viewProjection_->fovAngleY_   = keyFrame.fov;
-        }
-        return;
-    }
-
-    // 現在時間に対応するキーフレームを見つける
-    int32_t fromIndex = -1;
-    int32_t toIndex   = -1;
-
-    for (int32_t i = 0; i < animation.keyFrames.size() - 1; ++i) {
-        if (time >= animation.keyFrames[i].timePoint && time <= animation.keyFrames[i + 1].timePoint) {
-            fromIndex = i;
-            toIndex   = i + 1;
-            break;
-        }
-    }
-
-    // 見つからない場合は最後のキーフレームを使用
-    if (fromIndex == -1) {
-        if (time <= animation.keyFrames[0].timePoint) {
-            fromIndex = toIndex = 0;
-        } else {
-            fromIndex = toIndex = static_cast<int32_t>(animation.keyFrames.size() - 1);
-        }
-    }
-
-    // 新しいセグメントに入った場合、イージングを設定
-    if (currentFromKeyFrame_ != fromIndex || currentToKeyFrame_ != toIndex) {
-        SetupEasingForSegment(fromIndex, toIndex);
-        currentFromKeyFrame_ = fromIndex;
-        currentToKeyFrame_   = toIndex;
-    }
-
-    if (fromIndex == toIndex) {
-        // 単一キーフレーム
-        auto& keyFrame                = animation.keyFrames[fromIndex];
-        viewProjection_->translation_ = keyFrame.position;
-        viewProjection_->rotation_    = keyFrame.rotation;
-        viewProjection_->fovAngleY_   = keyFrame.fov;
-    } else {
-        // 補間
-        auto& fromFrame = animation.keyFrames[fromIndex];
-        auto& toFrame   = animation.keyFrames[toIndex];
-
-        float segmentTime     = time - fromFrame.timePoint;
-        float segmentDuration = toFrame.timePoint - fromFrame.timePoint;
-
-        if (segmentDuration > 0.0f) {
-            float t = segmentTime / segmentDuration;
-
-            // イージングを使用して補間
-            positionEasing_->SetCurrentValue(Vector3(
-                fromFrame.position.x + (toFrame.position.x - fromFrame.position.x) * t,
-                fromFrame.position.y + (toFrame.position.y - fromFrame.position.y) * t,
-                fromFrame.position.z + (toFrame.position.z - fromFrame.position.z) * t));
-
-            rotationEasing_->SetCurrentValue(Vector3(
-                fromFrame.rotation.x + (toFrame.rotation.x - fromFrame.rotation.x) * t,
-                fromFrame.rotation.y + (toFrame.rotation.y - fromFrame.rotation.y) * t,
-                fromFrame.rotation.z + (toFrame.rotation.z - fromFrame.rotation.z) * t));
-
-            fovEasing_->SetCurrentValue(fromFrame.fov + (toFrame.fov - fromFrame.fov) * t);
-
-            viewProjection_->translation_ = positionEasing_->GetValue();
-            viewProjection_->rotation_    = rotationEasing_->GetValue();
-            viewProjection_->fovAngleY_   = fovEasing_->GetValue();
-        }
-    }
-}
-
-void CameraEditor::SetupEasingForSegment(int32_t fromKeyFrameIndex, int32_t toKeyFrameIndex) {
-    if (currentAnimationIndex_ < 0 || fromKeyFrameIndex < 0 || toKeyFrameIndex < 0) {
-        return;
-    }
-
-    auto& animation = animations_[currentAnimationIndex_];
-    if (fromKeyFrameIndex >= animation.keyFrames.size() || toKeyFrameIndex >= animation.keyFrames.size()) {
-        return;
-    }
-
-    auto& fromFrame = animation.keyFrames[fromKeyFrameIndex];
-    auto& toFrame   = animation.keyFrames[toKeyFrameIndex];
-
-    float duration = toFrame.timePoint - fromFrame.timePoint;
-
-    // Position Easing
-    EasingParameter<Vector3> posParam;
-    posParam.type       = fromFrame.positionEasingType;
-    posParam.startValue = fromFrame.position;
-    posParam.endValue   = toFrame.position;
-    posParam.maxTime    = duration;
-    posParam.finishType = EasingFinishValueType::End;
-
-    positionEasing_->SettingValue(posParam);
-    positionEasing_->SetAdaptValue(&viewProjection_->translation_);
-    positionEasing_->Reset();
-
-    // Rotation Easing
-    EasingParameter<Vector3> rotParam;
-    rotParam.type       = fromFrame.rotationEasingType;
-    rotParam.startValue = fromFrame.rotation;
-    rotParam.endValue   = toFrame.rotation;
-    rotParam.maxTime    = duration;
-    rotParam.finishType = EasingFinishValueType::End;
-
-    rotationEasing_->SettingValue(rotParam);
-    rotationEasing_->SetAdaptValue(&viewProjection_->rotation_);
-    rotationEasing_->Reset();
-
-    // FOV Easing
-    EasingParameter<float> fovParam;
-    fovParam.type       = fromFrame.fovEasingType;
-    fovParam.startValue = fromFrame.fov;
-    fovParam.endValue   = toFrame.fov;
-    fovParam.maxTime    = duration;
-    fovParam.finishType = EasingFinishValueType::End;
-
-    fovEasing_->SettingValue(fovParam);
-    fovEasing_->SetAdaptValue(&viewProjection_->fovAngleY_);
-    fovEasing_->Reset();
-}
-
-void CameraEditor::DrawImGui() {
-#ifdef _DEBUG
-    if (ImGui::Begin("Camera Editor")) {
-        DrawAnimationControls();
-        ImGui::Separator();
-        DrawKeyFrameList();
-        ImGui::Separator();
-        DrawKeyFrameEditor();
-        ImGui::Separator();
-        DrawFileOperations();
-        ImGui::Separator();
-        DrawCameraPreview();
-    }
-    ImGui::End();
-#endif
-}
-
-void CameraEditor::DrawAnimationControls() {
-    // アニメーション選択
-    if (ImGui::BeginCombo("Animation", currentAnimationName_.c_str())) {
-        for (int32_t i = 0; i < animations_.size(); ++i) {
-            bool isSelected = (currentAnimationName_ == animations_[i].name);
-            if (ImGui::Selectable(animations_[i].name.c_str(), isSelected)) {
-                currentAnimationName_  = animations_[i].name;
-                currentAnimationIndex_ = i;
-                StopAnimation();
-            }
-            if (isSelected) {
-                ImGui::SetItemDefaultFocus();
-            }
-        }
-        ImGui::EndCombo();
-    }
-
-    // 再生コントロール
-    ImGui::SameLine();
-    if (ImGui::Button(isPlaying_ ? "Stop" : "Play")) {
-        if (isPlaying_) {
-            StopAnimation();
-        } else {
-            PlayAnimation(currentAnimationName_);
-        }
-    }
-
-    // タイムライン
-    if (currentAnimationIndex_ >= 0) {
-        auto& animation = animations_[currentAnimationIndex_];
-        if (ImGui::SliderFloat("Time", &currentTime_, 0.0f, animation.totalDuration)) {
-            SetAnimationTime(currentTime_);
-        }
-
-        ImGui::SliderFloat("Speed", &playbackSpeed_, 0.1f, 3.0f);
-    }
-
-    // 新規アニメーション作成
-    ImGui::InputText("New Animation Name", newAnimationNameBuffer_, sizeof(newAnimationNameBuffer_));
-    ImGui::SameLine();
-    if (ImGui::Button("Create")) {
-        CreateNewAnimation(newAnimationNameBuffer_);
-        strcpy_s(newAnimationNameBuffer_, "NewAnimation");
-    }
-}
-
-void CameraEditor::DrawKeyFrameList() {
-    if (currentAnimationIndex_ < 0)
-        return;
-
-    auto& animation = animations_[currentAnimationIndex_];
-
-    ImGui::Text("KeyFrames:");
-
-    if (ImGui::Button("Add KeyFrame")) {
-        AddKeyFrame(currentTime_);
-    }
-
-    ImGui::SameLine();
-    if (ImGui::Button("Update from Current Camera") && selectedKeyFrameIndex_ >= 0) {
-        UpdateKeyFrameFromCurrentCamera(selectedKeyFrameIndex_);
-    }
-
-    // キーフレームリスト
-    if (ImGui::BeginListBox("##keyframes")) {
-        for (int32_t i = 0; i < animation.keyFrames.size(); ++i) {
-            auto& keyFrame  = animation.keyFrames[i];
-            bool isSelected = (selectedKeyFrameIndex_ == i);
-
-            char label[256];
-            sprintf_s(label, "KeyFrame %d: %.2fs", i, keyFrame.timePoint);
-
-            if (ImGui::Selectable(label, isSelected)) {
-                selectedKeyFrameIndex_ = i;
-            }
-
-            if (isSelected) {
-                ImGui::SetItemDefaultFocus();
-            }
-        }
-        ImGui::EndListBox();
-    }
-
-    if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < animation.keyFrames.size()) {
-        if (ImGui::Button("Delete Selected")) {
-            DeleteKeyFrame(selectedKeyFrameIndex_);
-            selectedKeyFrameIndex_ = -1;
-        }
-
-        ImGui::SameLine();
-        if (ImGui::Button("Apply to Camera")) {
-            ApplyKeyFrameToCamera(selectedKeyFrameIndex_);
-        }
-    }
-}
-
-void CameraEditor::DrawKeyFrameEditor() {
-    if (currentAnimationIndex_ < 0 || selectedKeyFrameIndex_ < 0)
-        return;
-
-    auto& animation = animations_[currentAnimationIndex_];
-    if (selectedKeyFrameIndex_ >= animation.keyFrames.size())
-        return;
-
-    auto& keyFrame = animation.keyFrames[selectedKeyFrameIndex_];
-
-    ImGui::Text("KeyFrame Editor:");
-
-    bool changed = false;
-    changed |= ImGui::DragFloat("Time Point", &keyFrame.timePoint, 0.1f, 0.0f, 999.0f);
-    changed |= ImGui::DragFloat3("Position", &keyFrame.position.x, 0.1f);
-    changed |= ImGui::DragFloat3("Rotation", &keyFrame.rotation.x, 0.01f);
-    changed |= ImGui::SliderFloat("FOV", &keyFrame.fov, 0.1f, 3.14f);
-
-    // イージングタイプ選択
-    int32_t posEasingIndex = static_cast<int32_t>(keyFrame.positionEasingType);
-    int32_t rotEasingIndex = static_cast<int32_t>(keyFrame.rotationEasingType);
-    int32_t fovEasingIndex = static_cast<int32_t>(keyFrame.fovEasingType);
-
-    if (ImGui::Combo("Position Easing", &posEasingIndex, EasingTypeLabels.data(), static_cast<int32_t>(EasingType::COUNT))) {
-        keyFrame.positionEasingType = static_cast<EasingType>(posEasingIndex);
-        changed                     = true;
-    }
-
-    if (ImGui::Combo("Rotation Easing", &rotEasingIndex, EasingTypeLabels.data(), static_cast<int32_t>(EasingType::COUNT))) {
-        keyFrame.rotationEasingType = static_cast<EasingType>(rotEasingIndex);
-        changed                     = true;
-    }
-
-    if (ImGui::Combo("FOV Easing", &fovEasingIndex, EasingTypeLabels.data(), static_cast<int32_t>(EasingType::COUNT))) {
-        keyFrame.fovEasingType = static_cast<EasingType>(fovEasingIndex);
-        changed                = true;
-    }
-
-    if (changed) {
-        SortKeyFramesByTime();
-        RecalculateTotalDuration();
-    }
-}
-
-void CameraEditor::DrawFileOperations() {
-    ImGui::Text("File Operations:");
-
-    ImGui::InputText("File Path", filePathBuffer_, sizeof(filePathBuffer_));
-
-    if (ImGui::Button("Save All Animations")) {
-        SaveAnimationsToJson(filePathBuffer_);
-    }
-
-    ImGui::SameLine();
-    if (ImGui::Button("Load Animations")) {
-        LoadAnimationsFromJson(filePathBuffer_);
-    }
-
-    if (ImGui::Button("Export Current Animation")) {
-        std::string path = std::string(filePathBuffer_) + currentAnimationName_ + ".json";
-        ExportCurrentAnimationToJson(path);
-    }
-
-    ImGui::SameLine();
-    if (ImGui::Button("Import Animation")) {
-        ImportAnimationFromJson(filePathBuffer_);
-    }
-}
-
-void CameraEditor::DrawCameraPreview() {
-    if (ImGui::Button("Save Original Camera")) {
-        SaveOriginalCameraParams();
-    }
-
-    ImGui::SameLine();
-    if (ImGui::Button("Restore Original Camera")) {
-        RestoreOriginalCameraParams();
-    }
-
-    // 現在のカメラパラメータ表示
-    ImGui::Text("Current Camera:");
-    ImGui::Text("Position: %.2f, %.2f, %.2f",
-        viewProjection_->translation_.x,
-        viewProjection_->translation_.y,
-        viewProjection_->translation_.z);
-    ImGui::Text("Rotation: %.3f, %.3f, %.3f",
-        viewProjection_->rotation_.x,
-        viewProjection_->rotation_.y,
-        viewProjection_->rotation_.z);
-    ImGui::Text("FOV: %.3f", viewProjection_->fovAngleY_);
-}
-
-void CameraEditor::PlayAnimation(const std::string& animationName) {
-    auto it = std::find_if(animations_.begin(), animations_.end(),
-        [&animationName](const CameraAnimation& anim) {
-            return anim.name == animationName;
-        });
-
-    if (it != animations_.end()) {
-        currentAnimationName_  = animationName;
-        currentAnimationIndex_ = static_cast<int32_t>(std::distance(animations_.begin(), it));
-        currentTime_           = 0.0f;
-        isPlaying_             = true;
-        currentFromKeyFrame_   = -1;
-        currentToKeyFrame_     = -1;
-    }
-}
-
-void CameraEditor::StopAnimation() {
-    isPlaying_           = false;
-    currentTime_         = 0.0f;
-    currentFromKeyFrame_ = -1;
-    currentToKeyFrame_   = -1;
-}
-
-void CameraEditor::SetAnimationTime(float time) {
-    currentTime_ = time;
-    if (!isPlaying_ && currentAnimationIndex_ >= 0) {
-        InterpolateCamera(currentTime_);
-    }
-}
-
-void CameraEditor::AddKeyFrame(float timePoint) {
-    if (currentAnimationIndex_ < 0) {
-        return;
-    }
-
-    auto& animation = animations_[currentAnimationIndex_];
-
-    CameraKeyFrame newKeyFrame;
-    newKeyFrame.timePoint = timePoint;
-    newKeyFrame.position  = viewProjection_->translation_;
-    newKeyFrame.rotation  = viewProjection_->rotation_;
-    newKeyFrame.fov       = viewProjection_->fovAngleY_;
-
-    animation.keyFrames.push_back(newKeyFrame);
-    SortKeyFramesByTime();
-    RecalculateTotalDuration();
-}
-
-void CameraEditor::DeleteKeyFrame(int32_t index) {
-    if (currentAnimationIndex_ < 0)
-        return;
-
-    auto& animation = animations_[currentAnimationIndex_];
-    if (index >= 0 && index < animation.keyFrames.size()) {
-        animation.keyFrames.erase(animation.keyFrames.begin() + index);
-        RecalculateTotalDuration();
-    }
-}
-
-void CameraEditor::UpdateKeyFrameFromCurrentCamera(int32_t index) {
-    if (currentAnimationIndex_ < 0) {
-        return;
-    }
-
-    auto& animation = animations_[currentAnimationIndex_];
-    if (index >= 0 && index < animation.keyFrames.size()) {
-        auto& keyFrame    = animation.keyFrames[index];
-        keyFrame.position = viewProjection_->translation_;
-        keyFrame.rotation = viewProjection_->rotation_;
-        keyFrame.fov      = viewProjection_->fovAngleY_;
-    }
-}
-
-void CameraEditor::ApplyKeyFrameToCamera(int32_t index) {
-    if (currentAnimationIndex_ < 0) {
-        return;
-    }
-
-    auto& animation = animations_[currentAnimationIndex_];
-    if (index >= 0 && index < animation.keyFrames.size()) {
-        auto& keyFrame                = animation.keyFrames[index];
-        viewProjection_->translation_ = keyFrame.position;
-        viewProjection_->rotation_    = keyFrame.rotation;
-        viewProjection_->fovAngleY_   = keyFrame.fov;
-        currentTime_                  = keyFrame.timePoint;
-    }
-}
-
-void CameraEditor::CreateNewAnimation(const std::string& name) {
-    std::string uniqueName = GenerateUniqueAnimationName(name);
-
-    CameraAnimation newAnimation;
-    newAnimation.name = uniqueName;
-    animations_.push_back(newAnimation);
-    currentAnimationName_  = uniqueName;
-    currentAnimationIndex_ = static_cast<int32_t>(animations_.size() - 1);
-}
-
-void CameraEditor::DuplicateAnimation(const std::string& sourceName, const std::string& newName) {
-    auto it = std::find_if(animations_.begin(), animations_.end(),
-        [&sourceName](const CameraAnimation& anim) {
-            return anim.name == sourceName;
-        });
-
-    if (it != animations_.end()) {
-        CameraAnimation duplicated = *it;
-        duplicated.name            = GenerateUniqueAnimationName(newName);
-        animations_.push_back(duplicated);
-        currentAnimationName_  = duplicated.name;
-        currentAnimationIndex_ = static_cast<int32_t>(animations_.size() - 1);
-    }
-}
-
-void CameraEditor::DeleteAnimation(const std::string& name) {
-    auto it = std::find_if(animations_.begin(), animations_.end(),
-        [&name](const CameraAnimation& anim) {
-            return anim.name == name;
-        });
-
-    if (it != animations_.end()) {
-        bool wasCurrent = (it->name == currentAnimationName_);
-        animations_.erase(it);
-
-        if (wasCurrent) {
-            if (!animations_.empty()) {
-                currentAnimationName_  = animations_[0].name;
-                currentAnimationIndex_ = 0;
+    // 再生中の更新
+    if (playState_ == PlayState::PLAYING) {
+        currentTime_ += deltaTime * playbackSpeed_;
+
+        // ループ処理
+        if (IsFinished()) {
+            if (loopAnimation_) {
+                currentTime_ = 0.0f;
             } else {
-                currentAnimationName_  = "";
-                currentAnimationIndex_ = -1;
+                Stop();
+                if (autoReturnToInitial_) {
+                    // 初期値復帰開始
+                    isReturningToInitial_ = true;
+                    returnTimer_          = 0.0f;
+                    returnStartPosition_  = currentPosition_;
+                    returnStartRotation_  = currentRotation_;
+                    returnStartFov_       = currentFov_;
+
+                    returnPositionEase_.SetMaxTime(initialSettings_.returnDuration);
+                    returnRotationEase_.SetMaxTime(initialSettings_.returnDuration);
+                    returnFovEase_.SetMaxTime(initialSettings_.returnDuration);
+
+                    returnPositionEase_.Start(returnStartPosition_, initialSettings_.position);
+                    returnRotationEase_.Start(returnStartRotation_, initialSettings_.rotation);
+                    returnFovEase_.Start(returnStartFov_, initialSettings_.fov);
+                }
+                return;
             }
-            StopAnimation();
-        }
-    }
-}
-
-void CameraEditor::SaveAnimationsToJson(const std::string& filePath) {
-    if (serializer_->SaveAnimationsToJson(animations_, filePath)) {
-        std::cout << "Successfully saved animations to: " << filePath << std::endl;
-    } else {
-        std::cerr << "Failed to save animations: " << serializer_->GetLastErrorMessage() << std::endl;
-    }
-}
-
-void CameraEditor::LoadAnimationsFromJson(const std::string& filePath) {
-    std::vector<CameraAnimation> loadedAnimations;
-    if (serializer_->LoadAnimationsFromJson(filePath, loadedAnimations)) {
-        animations_ = std::move(loadedAnimations);
-
-        if (!animations_.empty()) {
-            currentAnimationName_  = animations_[0].name;
-            currentAnimationIndex_ = 0;
-        } else {
-            currentAnimationName_  = "";
-            currentAnimationIndex_ = -1;
         }
 
-        StopAnimation();
-        std::cout << "Successfully loaded animations from: " << filePath << std::endl;
-    } else {
-        std::cerr << "Failed to load animations: " << serializer_->GetLastErrorMessage() << std::endl;
+        UpdateInterpolation();
+    }
+
+    // 初期値復帰処理
+    if (isReturningToInitial_) {
+        UpdateReturnToInitial(deltaTime);
+    }
+
+    // キーフレームの更新
+    for (auto& keyFrame : keyFrames_) {
+        keyFrame->Update(deltaTime);
     }
 }
 
-void CameraEditor::ExportCurrentAnimationToJson(const std::string& filePath) {
-    if (currentAnimationIndex_ < 0) {
-        std::cerr << "No animation selected for export" << std::endl;
+void CameraEditor::UpdateInterpolation() {
+    if (keyFrames_.empty()) {
         return;
     }
 
-    if (serializer_->ExportAnimationToJson(animations_[currentAnimationIndex_], filePath)) {
-        std::cout << "Successfully exported animation to: " << filePath << std::endl;
+    // キーフレームを時間順にソート
+    SortKeyFramesByTime();
+
+    // 現在時刻に対応するキーフレームを取得
+    auto [prevIndex, nextIndex] = GetSurroundingKeyFrames();
+
+    if (prevIndex == -1 && nextIndex == -1) {
+        // キーフレームなし
+        return;
+    } else if (prevIndex == -1) {
+        // 最初のキーフレーム前
+        currentPosition_ = initialSettings_.position;
+        currentRotation_ = initialSettings_.rotation;
+        currentFov_      = initialSettings_.fov;
+    } else if (nextIndex == -1) {
+        // 最後のキーフレーム後
+        // 最後のキーフレームの値を維持
+        // キーフレームから値を取得する必要があるが、CameraKeyFrameに getter がないため
+        // ここでは最後のキーフレームの値で固定
+    } else if (prevIndex == nextIndex) {
+        // キーフレーム上
+        // 同様にキーフレームの値を取得
     } else {
-        std::cerr << "Failed to export animation: " << serializer_->GetLastErrorMessage() << std::endl;
+        // 2つのキーフレーム間で補間
+        CalculateInterpolatedValues();
     }
 }
 
-void CameraEditor::ImportAnimationFromJson(const std::string& filePath) {
-    CameraAnimation importedAnimation;
-    if (serializer_->ImportAnimationFromJson(filePath, importedAnimation)) {
-        // 名前の重複チェック
-        importedAnimation.name = GenerateUniqueAnimationName(importedAnimation.name);
+void CameraEditor::UpdateReturnToInitial(float deltaTime) {
+    returnTimer_ += deltaTime;
 
-        animations_.push_back(importedAnimation);
-        currentAnimationName_  = importedAnimation.name;
-        currentAnimationIndex_ = static_cast<int32_t>(animations_.size() - 1);
+    returnPositionEase_.Update(deltaTime);
+    returnRotationEase_.Update(deltaTime);
+    returnFovEase_.Update(deltaTime);
 
-        std::cout << "Successfully imported animation: " << importedAnimation.name << " from: " << filePath << std::endl;
-    } else {
-        std::cerr << "Failed to import animation: " << serializer_->GetLastErrorMessage() << std::endl;
+    if (returnTimer_ >= initialSettings_.returnDuration) {
+        isReturningToInitial_ = false;
+        currentPosition_      = initialSettings_.position;
+        currentRotation_      = initialSettings_.rotation;
+        currentFov_           = initialSettings_.fov;
     }
 }
 
-void CameraEditor::SaveOriginalCameraParams() {
-    if (viewProjection_) {
-        originalCameraParams_ = *viewProjection_;
-        hasOriginalParams_    = true;
+void CameraEditor::ApplyToViewProjection(ViewProjection& viewProjection) {
+    // 位置設定
+    viewProjection.translation_ = currentPosition_;
+
+    // 回転をQuaternionに変換してから適用
+    // ただし、ViewProjectionはEuler角を使用しているため、直接設定
+    viewProjection.rotation_ = currentRotation_;
+
+    // FOV設定
+    viewProjection.fovAngleY_ = currentFov_;
+
+    // 行列更新
+    viewProjection.UpdateMatrix();
+}
+
+void CameraEditor::AddKeyFrame() {
+    int32_t newIndex = static_cast<int32_t>(keyFrames_.size());
+    auto newKeyFrame = std::make_unique<CameraKeyFrame>();
+    newKeyFrame->Init(animationName_, newIndex);
+
+    keyFrames_.push_back(std::move(newKeyFrame));
+    selectedKeyFrameIndex_ = newIndex;
+}
+
+void CameraEditor::RemoveKeyFrame(int32_t index) {
+    if (index >= 0 && index < static_cast<int32_t>(keyFrames_.size())) {
+        keyFrames_.erase(keyFrames_.begin() + index);
+
+        // 選択インデックスの調整
+        if (selectedKeyFrameIndex_ >= index) {
+            selectedKeyFrameIndex_--;
+            if (selectedKeyFrameIndex_ < 0 && !keyFrames_.empty()) {
+                selectedKeyFrameIndex_ = 0;
+            }
+        }
+
+        // インデックスの再設定
+        for (int32_t i = 0; i < static_cast<int32_t>(keyFrames_.size()); ++i) {
+            keyFrames_[i]->Init(animationName_, i);
+        }
     }
 }
 
-void CameraEditor::RestoreOriginalCameraParams() {
-    if (hasOriginalParams_ && viewProjection_) {
-        *viewProjection_ = originalCameraParams_;
+void CameraEditor::ClearAllKeyFrames() {
+    keyFrames_.clear();
+    selectedKeyFrameIndex_ = -1;
+}
+
+void CameraEditor::Play() {
+    playState_            = PlayState::PLAYING;
+    isReturningToInitial_ = false;
+}
+
+void CameraEditor::Stop() {
+    playState_            = PlayState::STOPPED;
+    isReturningToInitial_ = false;
+}
+
+void CameraEditor::Pause() {
+    if (playState_ == PlayState::PLAYING) {
+        playState_ = PlayState::PAUSED;
+    } else if (playState_ == PlayState::PAUSED) {
+        playState_ = PlayState::PLAYING;
     }
+}
+
+void CameraEditor::Reset() {
+    currentTime_          = 0.0f;
+    playState_            = PlayState::STOPPED;
+    isReturningToInitial_ = false;
+    currentPosition_      = initialSettings_.position;
+    currentRotation_      = initialSettings_.rotation;
+    currentFov_           = initialSettings_.fov;
+}
+
+void CameraEditor::SetCurrentTime(float time) {
+    currentTime_ = max(0.0f, std::min(time, GetTotalDuration()));
+    if (playState_ == PlayState::PLAYING || playState_ == PlayState::PAUSED) {
+        UpdateInterpolation();
+    }
+}
+
+float CameraEditor::GetTotalDuration() const {
+    float maxTime = 0.0f;
+    // 全キーフレームから最大時間を取得
+    // CameraKeyFrameに時間取得のgetterが必要
+    return maxTime;
+}
+
+bool CameraEditor::IsFinished() const {
+    return currentTime_ >= GetTotalDuration();
+}
+
+void CameraEditor::BindParams() {
+    // メイン設定
+    globalParameter_->Bind(groupName_, "playbackSpeed", &playbackSpeed_);
+    globalParameter_->Bind(groupName_, "loopAnimation", &loopAnimation_);
+    globalParameter_->Bind(groupName_, "autoReturnToInitial", &autoReturnToInitial_);
+    globalParameter_->Bind(groupName_, "newKeyFrameTime", &newKeyFrameTime_);
+    globalParameter_->Bind(groupName_, "returnDuration", &initialSettings_.returnDuration);
+    globalParameter_->Bind(groupName_, "returnEaseType", &initialSettings_.returnEaseType);
+
+    //// 初期設定
+    // std::string initialGroupName = groupName_ + "_Initial";
+    // globalParameter_->Bind(initialGroupName, "position", &initialSettings_.position);
+    // globalParameter_->Bind(initialGroupName, "rotation", &initialSettings_.rotation);
+    // globalParameter_->Bind(initialGroupName, "fov", &initialSettings_.fov);
+    // globalParameter_->Bind(initialGroupName, "returnDuration", &initialSettings_.returnDuration);
+    // globalParameter_->Bind(initialGroupName, "returnEaseType", &initialSettings_.returnEaseType);
+}
+
+void CameraEditor::SaveAnimation() {
+    globalParameter_->SaveFile(groupName_, "CameraAnimation");
+}
+
+void CameraEditor::LoadAnimation() {
+    globalParameter_->LoadFile(groupName_, "CameraAnimation");
+}
+
+void CameraEditor::SaveInitialSettings() {
+    std::string initialGroupName = groupName_ + "_Initial";
+    globalParameter_->SaveFile(initialGroupName, "CameraAnimation");
+}
+
+void CameraEditor::LoadInitialSettings() {
+    std::string initialGroupName = groupName_ + "_Initial";
+    globalParameter_->LoadFile(initialGroupName, "CameraAnimation");
+}
+
+void CameraEditor::AdjustParam() {
+#ifdef _DEBUG
+    if (ImGui::CollapsingHeader(("Camera Editor: " + animationName_).c_str())) {
+        ImGui::PushID(animationName_.c_str());
+
+        // セーブ・ロード
+        if (ImGui::Button("Save Animation")) {
+            SaveAnimation();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Load Animation")) {
+            LoadAnimation();
+        }
+
+        ImGui::Separator();
+
+        // アニメーション制御
+        if (showAnimationControls_) {
+            if (ImGui::CollapsingHeader("Animation Controls")) {
+                // 再生制御
+                if (ImGui::Button("Play"))
+                    Play();
+                ImGui::SameLine();
+                if (ImGui::Button("Stop"))
+                    Stop();
+                ImGui::SameLine();
+                if (ImGui::Button("Pause"))
+                    Pause();
+                ImGui::SameLine();
+                if (ImGui::Button("Reset"))
+                    Reset();
+
+                // 時間制御
+                float totalDuration = GetTotalDuration();
+                if (ImGui::SliderFloat("Current Time", &currentTime_, 0.0f, totalDuration)) {
+                    SetCurrentTime(currentTime_);
+                }
+
+                ImGui::DragFloat("Playback Speed", &playbackSpeed_, 0.1f, 0.1f, 5.0f);
+                ImGui::Checkbox("Loop Animation", &loopAnimation_);
+                ImGui::Checkbox("Auto Return to Initial", &autoReturnToInitial_);
+
+                // 状態表示
+                const char* stateText = "";
+                switch (playState_) {
+                case PlayState::STOPPED:
+                    stateText = "STOPPED";
+                    break;
+                case PlayState::PLAYING:
+                    stateText = "PLAYING";
+                    break;
+                case PlayState::PAUSED:
+                    stateText = "PAUSED";
+                    break;
+                }
+                ImGui::Text("State: %s", stateText);
+
+                if (isReturningToInitial_) {
+                    ImGui::Text("Returning to Initial (%.2f/%.2f)", returnTimer_, initialSettings_.returnDuration);
+                }
+            }
+        }
+
+        // 初期設定
+        if (ImGui::CollapsingHeader("Initial Settings")) {
+            if (ImGui::Button("Save Initial Settings")) {
+                SaveInitialSettings();
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Load Initial Settings")) {
+                LoadInitialSettings();
+            }
+
+            ImGui::DragFloat("Return Duration", &initialSettings_.returnDuration, 0.1f, 0.1f, 10.0f);
+
+            // イージングタイプ選択
+            int easeType = initialSettings_.returnEaseType;
+            if (ImGui::Combo("Return Ease Type", &easeType, EasingTypeLabels.data(), static_cast<int>(EasingTypeLabels.size()))) {
+                initialSettings_.returnEaseType = easeType;
+                returnPositionEase_.SetType(static_cast<EasingType>(easeType));
+                returnRotationEase_.SetType(static_cast<EasingType>(easeType));
+                returnFovEase_.SetType(static_cast<EasingType>(easeType));
+            }
+        }
+
+        // キーフレーム管理
+        if (ImGui::CollapsingHeader("KeyFrame Management")) {
+            ImGui::DragFloat("New KeyFrame Time", &newKeyFrameTime_, 0.1f, 0.0f, 1000.0f);
+            if (ImGui::Button("Add KeyFrame")) {
+                AddKeyFrame();
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Clear All KeyFrames")) {
+                ClearAllKeyFrames();
+            }
+
+            // キーフレームリスト
+            if (showKeyFrameList_) {
+                ImGui::Text("KeyFrames (%zu):", keyFrames_.size());
+                for (int32_t i = 0; i < static_cast<int32_t>(keyFrames_.size()); ++i) {
+                    ImGui::PushID(i);
+
+                    bool isSelected = (selectedKeyFrameIndex_ == i);
+                    if (ImGui::Selectable(("KeyFrame " + std::to_string(i)).c_str(), isSelected)) {
+                        selectedKeyFrameIndex_ = i;
+                    }
+
+                    ImGui::SameLine();
+                    if (ImGui::SmallButton("X")) {
+                        RemoveKeyFrame(i);
+                        ImGui::PopID();
+                        break;
+                    }
+
+                    ImGui::PopID();
+                }
+            }
+        }
+
+        // 選択されたキーフレームの調整
+        if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
+            keyFrames_[selectedKeyFrameIndex_]->AdjustParam();
+        }
+
+        // 現在の値表示
+        if (ImGui::CollapsingHeader("Current Values")) {
+            ImGui::Text("Position: (%.2f, %.2f, %.2f)", currentPosition_.x, currentPosition_.y, currentPosition_.z);
+            ImGui::Text("Rotation: (%.2f, %.2f, %.2f)", currentRotation_.x, currentRotation_.y, currentRotation_.z);
+            ImGui::Text("FOV: %.2f", currentFov_);
+        }
+
+        ImGui::PopID();
+    }
+#endif // _DEBUG
 }
 
 void CameraEditor::SortKeyFramesByTime() {
-    if (currentAnimationIndex_ < 0)
-        return;
-
-    auto& animation = animations_[currentAnimationIndex_];
-    std::sort(animation.keyFrames.begin(), animation.keyFrames.end(),
-        [](const CameraKeyFrame& a, const CameraKeyFrame& b) {
-            return a.timePoint < b.timePoint;
-        });
+    // CameraKeyFrameに時間取得のgetterが必要
+    // 今は仮実装
 }
 
-void CameraEditor::RecalculateTotalDuration() {
-    if (currentAnimationIndex_ < 0)
-        return;
-
-    auto& animation = animations_[currentAnimationIndex_];
-    if (!animation.keyFrames.empty()) {
-        animation.totalDuration = animation.keyFrames.back().timePoint;
-    } else {
-        animation.totalDuration = 0.0f;
-    }
+std::pair<int32_t, int32_t> CameraEditor::GetSurroundingKeyFrames() const {
+    // CameraKeyFrameの時間を取得して、currentTime_を囲むキーフレームを探す
+    // 今は仮実装
+    return {-1, -1};
 }
 
-std::string CameraEditor::GenerateUniqueAnimationName(const std::string& baseName) {
-    std::string uniqueName = baseName;
-    int32_t counter        = 1;
-
-    while (std::find_if(animations_.begin(), animations_.end(),
-               [&uniqueName](const CameraAnimation& anim) {
-                   return anim.name == uniqueName;
-               })
-           != animations_.end()) {
-        uniqueName = baseName + "_" + std::to_string(counter);
-        counter++;
-    }
-
-    return uniqueName;
+void CameraEditor::CalculateInterpolatedValues() {
+    // 2つのキーフレーム間での補間計算
+    // CameraKeyFrameから値を取得して補間する必要がある
 }
 
-int32_t CameraEditor::FindKeyFrameIndexAtTime(float time) {
-    if (currentAnimationIndex_ < 0)
-        return -1;
+Quaternion CameraEditor::EulerToQuaternion(const Vector3& euler) {
+    return Quaternion::MakeRotateAxisAngle({0, 1, 0}, euler.y) * Quaternion::MakeRotateAxisAngle({1, 0, 0}, euler.x) * Quaternion::MakeRotateAxisAngle({0, 0, 1}, euler.z);
+}
 
-    auto& animation = animations_[currentAnimationIndex_];
+Vector3 CameraEditor::QuaternionToEuler(const Quaternion& quaternion) {
+    // Quaternionからオイラー角への変換
+    float sinr_cosp = 2 * (quaternion.w * quaternion.x + quaternion.y * quaternion.z);
+    float cosr_cosp = 1 - 2 * (quaternion.x * quaternion.x + quaternion.y * quaternion.y);
+    float x         = std::atan2(sinr_cosp, cosr_cosp);
 
-    for (int32_t i = 0; i < animation.keyFrames.size(); ++i) {
-        if (std::abs(animation.keyFrames[i].timePoint - time) < 0.01f) {
-            return i;
-        }
-    }
+    float sinp = 2 * (quaternion.w * quaternion.y - quaternion.z * quaternion.x);
+    float y    = std::abs(sinp) >= 1 ? std::copysign(3.141592654f / 2, sinp) : std::asin(sinp);
 
-    return -1;
+    float siny_cosp = 2 * (quaternion.w * quaternion.z + quaternion.x * quaternion.y);
+    float cosy_cosp = 1 - 2 * (quaternion.y * quaternion.y + quaternion.z * quaternion.z);
+    float z         = std::atan2(siny_cosp, cosy_cosp);
+
+    return Vector3(x, y, z);
 }

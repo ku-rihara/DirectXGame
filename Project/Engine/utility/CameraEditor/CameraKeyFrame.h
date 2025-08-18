@@ -2,15 +2,17 @@
 #include "Easing/Easing.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
 #include "Vector3.h"
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <cstdint>
+
+
 class CameraKeyFrame {
 public:
     CameraKeyFrame()  = default;
     ~CameraKeyFrame() = default;
 
-    void Init();
+    void Init(const std::string& cameraAnimationName, const int32_t& keyNumber);
     void Update(float deltaTime);
 
     // paramEdit
@@ -20,12 +22,13 @@ public:
 
 private:
     GlobalParameter* globalParameter_;
-    const std::string groupName_;
+    std::string groupName_;
+    int32_t currentKeyFrameIndex = -1;
 
-    float timePoint  = 0.0f;
-    Vector3 position = {0.0f, 0.0f, 0.0f};
-    Vector3 rotation = {0.0f, 0.0f, 0.0f};
-    float fov        = 45.0f * 3.141592654f / 180.0f;
+    float timePoint_  = 0.0f;
+    Vector3 position_ = {0.0f, 0.0f, 0.0f};
+    Vector3 rotation_ = {0.0f, 0.0f, 0.0f};
+    float fov_        = 45.0f * 3.141592654f / 180.0f;
 
     // easing Type
     int32_t positionEaseType_ = 0;

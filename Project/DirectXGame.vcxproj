@@ -97,8 +97,6 @@
     <ClCompile Include="Engine\Primitive\PrimitivePlane.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp" />
     <ClCompile Include="Engine\ShadowMap\ShadowMap.cpp" />
-    <ClCompile Include="Engine\utility\CameraEditor\CameraAnimationData.cpp" />
-    <ClCompile Include="Engine\utility\CameraEditor\CameraAnimationSerializer.cpp" />
     <ClCompile Include="Engine\utility\CameraEditor\CameraEditor.cpp" />
     <ClCompile Include="Engine\utility\CameraEditor\CameraKeyFrame.cpp" />
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
@@ -237,8 +235,6 @@
     <ClInclude Include="Engine\struct\Transform.h" />
     <ClInclude Include="Engine\struct\TransformationMatrix.h" />
     <ClInclude Include="Engine\struct\VertexData.h" />
-    <ClInclude Include="Engine\utility\CameraEditor\CameraAnimationData.h" />
-    <ClInclude Include="Engine\utility\CameraEditor\CameraAnimationSerializer.h" />
     <ClInclude Include="Engine\utility\CameraEditor\CameraEditor.h" />
     <ClInclude Include="Engine\utility\CameraEditor\CameraKeyFrame.h" />
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h" />

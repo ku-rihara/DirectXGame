@@ -1,147 +1,137 @@
 #pragma once
 #include "3d/ViewProjection.h"
-#include "Easing/Easing.h"
-#include "utility/EasingCreator/EasingParameterData.h"
-#include "Vector3.h"
-#include <functional>
+#include "CameraKeyFrame.h"
+#include "Quaternion.h"
+#include "utility/ParameterEditor/GlobalParameter.h"
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <vector>
 
-// 前方宣言
-class CameraAnimationSerializer;
-
-/// キーフレームデータ構造体
-struct CameraKeyFrame {
-    float timePoint  = 0.0f;
-    Vector3 position = {0.0f, 0.0f, 0.0f};
-    Vector3 rotation = {0.0f, 0.0f, 0.0f};
-    float fov        = 45.0f * 3.141592654f / 180.0f;
-
-    // 次のキーフレームへの補間設定
-    EasingType positionEasingType = EasingType::InOutSine;
-    EasingType rotationEasingType = EasingType::InOutSine;
-    EasingType fovEasingType      = EasingType::InOutSine;
-};
-
-/// カメラアニメーションデータ
-struct CameraAnimation {
-    std::string name;
-    std::vector<CameraKeyFrame> keyFrames;
-    float totalDuration = 0.0f;
-};
-
 class CameraEditor {
 public:
-    CameraEditor();
+    enum class PlayState {
+        STOPPED,
+        PLAYING,
+        PAUSED
+    };
+
+    struct InitialSettings {
+        Vector3 position       = {0.0f, 0.0f, -10.0f};
+        Vector3 rotation       = {0.0f, 0.0f, 0.0f};
+        float fov              = 45.0f * 3.141592654f / 180.0f;
+        float returnDuration   = 1.0f; // 初期値に戻る時間
+        int32_t returnEaseType = 0; // 初期値に戻るイージング
+    };
+
+public:
+    CameraEditor()  = default;
     ~CameraEditor() = default;
 
     /// 初期化
-    void Init(ViewProjection* viewProjection);
+    void Init(const std::string& animationName);
 
     /// 更新
     void Update(float deltaTime);
 
-    /// ImGui描画
-    void DrawImGui();
+    /// ImGuiでの調整
+    void AdjustParam();
 
-    /// アニメーション制御
-    void PlayAnimation(const std::string& animationName);
-    void StopAnimation();
-    void SetAnimationTime(float time);
+    /// ViewProjectionへの適応
+    void ApplyToViewProjection(ViewProjection& viewProjection);
 
     /// キーフレーム操作
-    void AddKeyFrame(float timePoint);
-    void DeleteKeyFrame(int32_t index);
-    void UpdateKeyFrameFromCurrentCamera(int32_t index);
-    void ApplyKeyFrameToCamera(int32_t index);
-
-    /// アニメーション作成・編集
-    void CreateNewAnimation(const std::string& name);
-    void DuplicateAnimation(const std::string& sourceName, const std::string& newName);
-    void DeleteAnimation(const std::string& name);
-
-    /// JSON保存・読み込み
-    void SaveAnimationsToJson(const std::string& filePath);
-    void LoadAnimationsFromJson(const std::string& filePath);
-    void ExportCurrentAnimationToJson(const std::string& filePath);
-    void ImportAnimationFromJson(const std::string& filePath);
-
-    /// 元のカメラパラメータ
-    void SaveOriginalCameraParams();
-    void RestoreOriginalCameraParams();
-
-
-private:
-    /// プライベートメソッド
-    void UpdateAnimation(float deltaTime);
-    void InterpolateCamera(float time);
-    void SetupEasingForSegment(int32_t fromKeyFrameIndex, int32_t toKeyFrameIndex);
-    int32_t FindKeyFrameIndexAtTime(float time);
-    void SortKeyFramesByTime();
-    void RecalculateTotalDuration();
-
-    /// 名前の重複チェック
-    std::string GenerateUniqueAnimationName(const std::string& baseName);
-
-    /// ImGui描画関連
-    void DrawAnimationControls();
-    void DrawKeyFrameList();
-    void DrawKeyFrameEditor();
-    void DrawFileOperations();
-    void DrawCameraPreview();
-
-private:
-    /// カメラ関連
-    ViewProjection* viewProjection_ = nullptr;
-    ViewProjection originalCameraParams_;
-    bool hasOriginalParams_ = false;
-
-    /// アニメーション関連
-    std::vector<CameraAnimation> animations_;
-    std::string currentAnimationName_ = "";
-    int32_t currentAnimationIndex_        = -1;
+    void AddKeyFrame();
+    void RemoveKeyFrame(int32_t index);
+    void ClearAllKeyFrames();
 
     /// 再生制御
-    bool isPlaying_      = false;
-    float currentTime_   = 0.0f;
-    float playbackSpeed_ = 1.0f;
+    void Play();
+    void Stop();
+    void Pause();
+    void Reset();
 
-    /// イージング
-    std::unique_ptr<Easing<Vector3>> positionEasing_;
-    std::unique_ptr<Easing<Vector3>> rotationEasing_;
-    std::unique_ptr<Easing<float>> fovEasing_;
+    /// 設定の保存・読み込み
+    void SaveAnimation();
+    void LoadAnimation();
 
-    /// 現在の補間セグメント
-    int32_t currentFromKeyFrame_ = -1;
-    int32_t currentToKeyFrame_   = -1;
+    /// 初期設定の保存・読み込み
+    void SaveInitialSettings();
+    void LoadInitialSettings();
 
-    /// JSON保存・読み込み
-    std::unique_ptr<CameraAnimationSerializer> serializer_;
+private:
+    /// パラメータのバインド
+    void BindParams();
 
-    /// ImGui用変数
-    int32_t selectedKeyFrameIndex_        = -1;
-    char newAnimationNameBuffer_[256] = "NewAnimation";
-    char filePathBuffer_[512]         = "Resources/CameraAnimation/";
+    /// キーフレーム間の補間計算
+    void UpdateInterpolation();
 
-    /// コールバック
-    std::function<void()> onAnimationFinishCallback_;
-    std::function<void(int32_t)> onKeyFrameReachedCallback_;
+    /// 初期値への復帰処理
+    void UpdateReturnToInitial(float deltaTime);
 
-    /// プレビュー用
-    bool isPreviewMode_ = false;
-    Vector3 previewPosition_;
-    Vector3 previewRotation_;
-    float previewFov_;
+    /// 現在の補間値を計算
+    void CalculateInterpolatedValues();
+
+    /// キーフレームのソート（時間順）
+    void SortKeyFramesByTime();
+
+    /// 現在時刻に対応するキーフレームインデックスを取得
+    std::pair<int32_t, int32_t> GetSurroundingKeyFrames() const;
+
+    /// Quaternion変換
+    Quaternion EulerToQuaternion(const Vector3& euler);
+    Vector3 QuaternionToEuler(const Quaternion& quaternion);
+
+private:
+    // アニメーション名
+    std::string animationName_;
+
+    // GlobalParameter
+    GlobalParameter* globalParameter_;
+    std::string groupName_;
+
+    // キーフレーム
+    std::vector<std::unique_ptr<CameraKeyFrame>> keyFrames_;
+    int32_t selectedKeyFrameIndex_ = -1;
+
+    // 再生状態
+    PlayState playState_      = PlayState::STOPPED;
+    float currentTime_        = 0.0f;
+    bool loopAnimation_       = false;
+    bool autoReturnToInitial_ = true;
+
+    // 初期設定
+    InitialSettings initialSettings_;
+
+    // 初期値復帰用
+    bool isReturningToInitial_ = false;
+    float returnTimer_         = 0.0f;
+    Vector3 returnStartPosition_;
+    Vector3 returnStartRotation_;
+    float returnStartFov_;
+    Easing<Vector3> returnPositionEase_;
+    Easing<Vector3> returnRotationEase_;
+    Easing<float> returnFovEase_;
+
+    // 現在の補間値
+    Vector3 currentPosition_;
+    Vector3 currentRotation_;
+    float currentFov_;
+
+    // UI用パラメータ
+    float playbackSpeed_        = 1.0f;
+    bool showKeyFrameList_      = true;
+    bool showAnimationControls_ = true;
+    bool showInitialSettings_   = false;
+
+    // キーフレーム追加用の時間
+    float newKeyFrameTime_ = 0.0f;
 
 public:
-    /// getter
-    bool IsPlaying() const { return isPlaying_; }
-    float GetCurrentAnimationTime() const { return currentTime_; }
-    const std::string& GetCurrentAnimationName() const { return currentAnimationName_; }
-    const std::vector<CameraAnimation>& GetAnimations() const { return animations_; }
-
-    /// setter
-    void SetOnAnimationFinishCallback(const std::function<void()>& callback) { onAnimationFinishCallback_ = callback; }
-    void SetOnKeyFrameReachedCallback(const std::function<void(int32_t)>& callback) { onKeyFrameReachedCallback_ = callback; }
+    /// アニメーション制御
+    void SetCurrentTime(float time);
+    float GetCurrentTimer() const { return currentTime_; }
+    float GetTotalDuration() const;
+    bool IsPlaying() const { return playState_ == PlayState::PLAYING; }
+    bool IsFinished() const;
 };

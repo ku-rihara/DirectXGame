@@ -580,16 +580,10 @@
     <ClCompile Include="Engine\Easing\EasingStep.cpp">
       <Filter>MyEngine\.cpp\Easing</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\CameraEditor\CameraEditor.cpp">
-      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\CameraEditor\CameraAnimationSerializer.cpp">
-      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\CameraEditor\CameraAnimationData.cpp">
-      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\utility\CameraEditor\CameraKeyFrame.cpp">
+      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\CameraEditor\CameraEditor.cpp">
       <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
     </ClCompile>
   </ItemGroup>
@@ -999,16 +993,10 @@
     <ClInclude Include="Engine\Easing\EasingStep.h">
       <Filter>MyEngine\.h\Easing</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\CameraEditor\CameraEditor.h">
-      <Filter>MyEngine\.h\utility\CameraEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\CameraEditor\CameraAnimationSerializer.h">
-      <Filter>MyEngine\.h\utility\CameraEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\CameraEditor\CameraAnimationData.h">
-      <Filter>MyEngine\.h\utility\CameraEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\utility\CameraEditor\CameraKeyFrame.h">
+      <Filter>MyEngine\.h\utility\CameraEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\CameraEditor\CameraEditor.h">
       <Filter>MyEngine\.h\utility\CameraEditor</Filter>
     </ClInclude>
   </ItemGroup>
