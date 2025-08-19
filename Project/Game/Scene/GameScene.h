@@ -8,6 +8,7 @@
 #include "MonsterBall/MonsterBall.h"
 #include "Plane/Plane.h"
 #include "SkyBox/SkyBox.h"
+#include "utility/CameraEditor/CameraEditor.h"
 // emitter
 #include "utility/ParticleEditor/ParticleEmitter.h"
 
@@ -29,6 +30,7 @@ private:
     std::unique_ptr<Plane> plane_                      = nullptr;
     std::unique_ptr<SkyBox> skuBox_                    = nullptr;
     std::unique_ptr<PutObjForBlender> putObjForBlender = nullptr;
+    std::unique_ptr<CameraEditor> cameraEditor_        = nullptr;
 
 public:
     ///========================================================
@@ -48,7 +50,6 @@ public:
     void SpriteDraw() override;
     void SkyBoxDraw() override;
     void DrawShadow() override;
-
 
     void Debug() override; /// debug
     void ViewProjectionUpdate() override;

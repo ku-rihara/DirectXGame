@@ -9,8 +9,8 @@
 #include "Lighrt/Light.h"
 #include "Scene/Manager/SceneManager.h"
 
+#include "Animation/AnimationRegistry.h"
 #include "Pipeline/Object3DPiprline.h"
-#include"Animation/AnimationRegistry.h"
 #include "ShadowMap/ShadowMap.h"
 
 #include <imgui.h>
@@ -29,6 +29,7 @@ void GameScene::Init() {
     plane_           = std::make_unique<Plane>();
     skuBox_          = std::make_unique<SkyBox>();
     putObjForBlender = std::make_unique<PutObjForBlender>();
+    cameraEditor_    = std::make_unique<CameraEditor>();
 
     monsterBall_->Init();
     ground_->Init();
@@ -37,6 +38,7 @@ void GameScene::Init() {
     putObjForBlender->LoadJsonFile("game.json");
     putObjForBlender->EasingAllReset();
 
+  
     isDebugCameraActive_ = true;
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
@@ -49,13 +51,14 @@ void GameScene::Update() {
 
     // 各クラス更新
     ground_->Update();
+    cameraEditor_->Update(Frame::DeltaTime());
     monsterBall_->Update();
     plane_->Update();
     skuBox_->Update();
 
     Object3DRegistry::GetInstance()->UpdateAll();
     AnimationRegistry::GetInstance()->UpdateAll(Frame::DeltaTimeRate());
-    
+
     putObjForBlender->EasingUpdateSelectGroup(Frame::DeltaTime(), 0);
 
     // viewProjection 更新
@@ -79,7 +82,7 @@ void GameScene::ModelDraw() {
     /* ground_->Draw(viewProjection_);
      plane_->Draw(viewProjection_);*/
     Object3DRegistry::GetInstance()->DrawAll(viewProjection_);
-  
+
     ParticleManager::GetInstance()->Draw(viewProjection_);
 }
 
@@ -115,7 +118,7 @@ void GameScene::Debug() {
     ShadowMap::GetInstance()->DebugImGui();
 
     ImGui::End();
-
+    cameraEditor_->EditorUpdate();
 #endif
 }
 

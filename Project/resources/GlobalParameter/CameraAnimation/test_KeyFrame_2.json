@@ -1,0 +1,19 @@
+{
+    "test_KeyFrame_2": {
+        "fov": 0.0,
+        "fovEaseType": 0,
+        "position": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "positionEaseType": 0,
+        "rotation": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "rotationEaseType": 0,
+        "timePoint": 0.0
+    }
+}

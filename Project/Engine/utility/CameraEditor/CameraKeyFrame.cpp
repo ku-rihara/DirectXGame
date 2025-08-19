@@ -5,12 +5,19 @@ void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t&
     // グローバルパラメータ
     globalParameter_     = GlobalParameter::GetInstance();
     currentKeyFrameIndex = keyNumber;
-    groupName_           = "CameraAnimation/" + cameraAnimationName + "_KeyFrame_" + std::to_string(currentKeyFrameIndex);
+    groupName_           =  cameraAnimationName + "_KeyFrame_" + std::to_string(currentKeyFrameIndex);
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
-    // parameterをEasingに適応
+    // adapt
+    positionEase_.SetAdaptValue(&position_);
+    rotationEase_.SetAdaptValue(&rotation_);
+    fovEase_.SetAdaptValue(&fov_);
+}
+void CameraKeyFrame::Update(float deltaTime) {
+
+     // parameterをEasingに適応
     positionEase_.SetMaxTime(timePoint_);
     rotationEase_.SetMaxTime(timePoint_);
     fovEase_.SetMaxTime(timePoint_);
@@ -19,12 +26,6 @@ void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t&
     rotationEase_.SetType(static_cast<EasingType>(rotationEaseType_));
     fovEase_.SetType(static_cast<EasingType>(fovEaseType_));
 
-    // adapt
-    positionEase_.SetAdaptValue(&position_);
-    rotationEase_.SetAdaptValue(&rotation_);
-    fovEase_.SetAdaptValue(&fov_);
-}
-void CameraKeyFrame::Update(float deltaTime) {
     positionEase_.Update(deltaTime);
     rotationEase_.Update(deltaTime);
     fovEase_.Update(deltaTime);
@@ -47,8 +48,8 @@ void CameraKeyFrame::AdjustParam() {
         ImGui::PushID(groupName_.c_str());
 
         // セーブ・ロード
-        globalParameter_->ParamSaveForImGui(groupName_);
-        globalParameter_->ParamLoadForImGui(groupName_);
+        globalParameter_->ParamSaveForImGui(groupName_, "CameraAnimation");
+        globalParameter_->ParamLoadForImGui(groupName_, "CameraAnimation");
 
         ImGui::DragFloat("Time Point", &timePoint_, 0.01f, 0.0f, 9999.0f);
 
