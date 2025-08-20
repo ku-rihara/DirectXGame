@@ -52,6 +52,11 @@ public:
     typename std::enable_if_t<std::is_same_v<U, Vector2>, void>
     SetAdaptValue(Vector3* value);
 
+    // callbacks
+    void SetFinishValueType(const EasingFinishValueType& type) { finishValueType_ = type; }
+    void SetOnFinishCallback(const std::function<void()>& callback) { onFinishCallback_ = callback; }
+    void SetOnWaitEndCallback(const std::function<void()>& callback) { onWaitEndCallback_ = callback; }
+
 private:
     /// =========================================================================
     /// Private Methods
@@ -94,13 +99,13 @@ private:
     float period_    = 0.0f;
     float backRatio_ = 0.0f;
 
-    bool isFinished_       = false;
+    bool isFinished_ = false;
 
 private:
     // ファイル
-    const std::string FilePath_ = "Resources/EasingParameter/";
+    const std::string FilePath_      = "Resources/EasingParameter/";
     const std::string adaptDataPath_ = "AdaptData/";
-        
+
     int32_t selectedFileIndex_;
     std::vector<std::string> easingFiles_;
     std::string currentAppliedFileName_;
@@ -130,11 +135,10 @@ public:
     /// -------------------------------------------------------------------------
     /// Setter methods
     /// -------------------------------------------------------------------------
-    void SetFinishValueType(const EasingFinishValueType& type) { finishValueType_ = type; }
-    void SetOnFinishCallback(const std::function<void()>& callback) { onFinishCallback_ = callback; }
-    void SetOnWaitEndCallback(const std::function<void()>& callback) { onWaitEndCallback_ = callback; }
     void SetStartValue(const T& value) { startValue_ = value; }
     void SetEndValue(const T& value) { endValue_ = value; }
     void SetCurrentValue(const T& value);
     void SetBaseValue(const T& value) { baseValue_ = value; }
+    void SetType(const EasingType& type) { type_ = type; }
+    void SetMaxTime(const float& time) { maxTime_ = time; }
 };

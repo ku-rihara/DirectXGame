@@ -1,8 +1,8 @@
-// GlobalParameter.cpp
 #include "GlobalParameter.h"
 #include "base/WinApp.h"
 #include <fstream>
 #include <imgui.h>
+#include <iostream>
 
 GlobalParameter* GlobalParameter::GetInstance() {
     static GlobalParameter instance;
@@ -72,7 +72,7 @@ void GlobalParameter::Update() {
 #endif // _DEBUG
 }
 
-// 描画処理を分ける関数
+
 void GlobalParameter::DrawWidget(const std::string& itemName, Item& item, const DrawSettings& drawSettings) {
     std::visit([&](auto& value) {
         using T = std::decay_t<decltype(value)>;
@@ -116,6 +116,7 @@ void GlobalParameter::DrawWidget(const std::string& itemName, Item& item, const 
     },
         item);
 }
+
 
 ///============================================================================
 /// 値セット
@@ -209,6 +210,7 @@ void GlobalParameter::AddTreePoP() {
     }
 }
 
+
 //==============================================================================
 // ファイル保存・読み込み
 //==============================================================================
@@ -246,7 +248,19 @@ void GlobalParameter::SaveFile(const std::string& groupName, const std::string& 
         std::filesystem::create_directories(dir);
     }
 
-    std::string filePath = kDirectoryPath + folderName + "/" + groupName + ".json";
+    // フォルダ名が指定されている場合はサブディレクトリを作成
+    std::string fullDir = kDirectoryPath + folderName;
+    if (!folderName.empty()) {
+        std::filesystem::path subDir(fullDir);
+        if (!std::filesystem::exists(subDir)) {
+            std::filesystem::create_directories(subDir);
+        }
+        fullDir += "/";
+    } else if (!folderName.empty()) {
+        fullDir += "/";
+    }
+
+    std::string filePath = fullDir + groupName + ".json";
     std::ofstream ofs(filePath);
     if (ofs.fail()) {
         std::string message = "Failed to open data file for write.";
@@ -259,15 +273,25 @@ void GlobalParameter::SaveFile(const std::string& groupName, const std::string& 
 }
 
 void GlobalParameter::LoadFiles() {
-
     std::filesystem::path dir(kDirectoryPath);
     if (!std::filesystem::exists(dir))
         return;
 
-    // kDirectoryPath 直下のファイルを処理
-    for (const auto& entry : std::filesystem::directory_iterator(dir)) {
-        if (!entry.is_regular_file())
+    std::error_code ec;
+
+    // kDirectoryPath 直下のJSONファイルを処理
+    for (const auto& entry : std::filesystem::directory_iterator(dir, ec)) {
+        if (ec) {
+            std::cerr << "Error accessing directory: " << ec.message() << std::endl;
+            break;
+        }
+
+        if (!entry.is_regular_file(ec))
             continue; // ファイルのみを処理
+
+        if (ec)
+            continue; // エラーの場合はスキップ
+
         const std::filesystem::path& filePath = entry.path();
 
         // .json ファイルのみを対象
@@ -280,22 +304,38 @@ void GlobalParameter::LoadFiles() {
         // 拡張子を除いたファイル名を取得
         std::string fileName = filePath.stem().string();
 
-        // フォルダ名とファイル名を渡して LoadFile を呼び出し
-        LoadFile(fileName, folderName);
+          LoadFile(fileName, folderName);
     }
 
     // kDirectoryPath 直下のフォルダを処理
-    for (const auto& entry : std::filesystem::directory_iterator(dir)) {
-        if (!entry.is_directory())
+    for (const auto& entry : std::filesystem::directory_iterator(dir, ec)) {
+        if (ec) {
+            std::cerr << "Error accessing directory: " << ec.message() << std::endl;
+            break;
+        }
+
+        if (!entry.is_directory(ec))
             continue; // フォルダのみを処理
+
+        if (ec)
+            continue; // エラーの場合はスキップ
 
         std::filesystem::path folderPath = entry.path();
         std::string folderName           = folderPath.filename().string();
 
-        // 各フォルダ内のファイルを処理
-        for (const auto& fileEntry : std::filesystem::directory_iterator(folderPath)) {
-            if (!fileEntry.is_regular_file())
+        // 各フォルダ内のJSONファイルを処理
+        std::error_code folder_ec;
+        for (const auto& fileEntry : std::filesystem::directory_iterator(folderPath, folder_ec)) {
+            if (folder_ec) {
+                std::cerr << "Error accessing folder " << folderName << ": " << folder_ec.message() << std::endl;
+                break; // このフォルダをスキップして次に進む
+            }
+
+            if (!fileEntry.is_regular_file(folder_ec))
                 continue; // ファイルのみを処理
+
+            if (folder_ec)
+                continue; // エラーの場合はスキップ
 
             const std::filesystem::path& filePath = fileEntry.path();
 
@@ -306,42 +346,49 @@ void GlobalParameter::LoadFiles() {
             // 拡張子を除いたファイル名を取得
             std::string fileName = filePath.stem().string();
 
-            // フォルダ名とファイル名を渡して LoadFile を呼び出し
             LoadFile(fileName, folderName);
+     
         }
     }
    
 }
 
 void GlobalParameter::LoadFile(const std::string& groupName, const std::string& folderName) {
+    std::string filePath = kDirectoryPath + folderName;
+    if (!folderName.empty()) {
+        filePath += "/";
+    }
+    filePath += groupName + ".json";
 
-    std::string filePath = kDirectoryPath + folderName + "/" + groupName + ".json";
     std::ifstream ifs(filePath);
     if (ifs.fail()) {
-        std::string message = "Failed to open data file for read.";
-        MessageBoxA(nullptr, message.c_str(), "GlobalParameter", 0);
-        assert(0);
-        return;
+        std::cerr << "Warning: Could not open file: " << filePath << std::endl;
+     
     }
 
     json root;
     ifs >> root;
+    if (ifs.fail()) {
+        std::cerr << "Warning: Failed to parse JSON in file: " << filePath << std::endl;
+        ifs.close();
+   
+    }
     ifs.close();
 
+    // JSONの構造をチェック
     auto itGroup = root.find(groupName);
-    assert(itGroup != root.end());
+    if (itGroup == root.end()) {
+        std::cerr << "Warning: Group '" << groupName << "' not found in file: " << filePath << std::endl;
+     
+    }
 
+    // データを安全に読み込み
     for (auto itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
         const std::string& itemName = itItem.key();
 
         // Integer (int32_t)
         if (itItem->is_number_integer()) {
             int32_t value = itItem->get<int32_t>();
-            SetValue(groupName, itemName, value, WidgetType::SliderInt);
-        }
-        // Unsigned Integer (uint32_t)
-        else if (itItem->is_number_integer()) {
-            uint32_t value = itItem->get<uint32_t>();
             SetValue(groupName, itemName, value, WidgetType::SliderInt);
         }
         // Float (float)
@@ -373,10 +420,10 @@ void GlobalParameter::LoadFile(const std::string& groupName, const std::string& 
         else if (itItem->is_string()) {
             std::string value = itItem->get<std::string>();
             SetValue(groupName, itemName, value, WidgetType::NONE);
-        }
+        } 
     }
-}
 
+}
 void GlobalParameter::CopyGroup(const std::string& fromGroup, const std::string& toGroup) {
     auto it = dates_.find(fromGroup);
     if (it == dates_.end())

@@ -349,6 +349,12 @@
     <Filter Include="MyEngine\.h\Easing">
       <UniqueIdentifier>{8f585426-d020-4a52-b5fe-ba4f621a60be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.h\utility\CameraEditor">
+      <UniqueIdentifier>{86745219-1af0-46bf-8773-dc4c8f0b1461}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\CameraEditor">
+      <UniqueIdentifier>{7ff1fcef-200f-4f44-9d0b-2cc5e237686d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -927,6 +933,15 @@
     </ClCompile>
     <ClCompile Include="Engine\Easing\EasingStep.cpp">
       <Filter>MyEngine\.cpp\Easing</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\CameraEditor\CameraKeyFrame.cpp">
+      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\CameraEditor\CameraEditor.cpp">
+      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\CameraEditor\CameraAnimationData.cpp">
+      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1550,6 +1565,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Easing\EasingStep.h">
       <Filter>MyEngine\.h\Easing</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\CameraEditor\CameraKeyFrame.h">
+      <Filter>MyEngine\.h\utility\CameraEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\CameraEditor\CameraEditor.h">
+      <Filter>MyEngine\.h\utility\CameraEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\CameraEditor\CameraAnimationData.h">
+      <Filter>MyEngine\.h\utility\CameraEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
