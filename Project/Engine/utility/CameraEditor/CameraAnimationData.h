@@ -33,6 +33,7 @@ public:
     void ApplyToViewProjection(ViewProjection& viewProjection);
 
     /// キーフレーム操作
+    void EasingTypeSelector(const char* label, int32_t& target);
     void AddKeyFrame();
     void RemoveKeyFrame(int32_t index);
     void ClearAllKeyFrames();
@@ -43,10 +44,10 @@ public:
     void Reset();
 
     /// データのロード
-    void LoadAllData();
+    void LoadData();
     void LoadAllKeyFrames();
     void SaveAllKeyFrames();
-    void SaveAllData();
+    void SaveData();
 
 private:
     /// パラメータのバインド
@@ -76,6 +77,7 @@ private:
     float currentFov_;
 
     // リセット用パラメータ
+    float resetTimePoint_ = 0.0f;
     int32_t resetPosEaseType_;
     int32_t resetRotateEaseType_;
     int32_t resetFovEaseType_;

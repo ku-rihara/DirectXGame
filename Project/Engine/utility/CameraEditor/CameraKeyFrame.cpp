@@ -15,6 +15,8 @@ void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t&
     positionEase_.SetAdaptValue(&currentKeyFrameParam_.position);
     rotationEase_.SetAdaptValue(&currentKeyFrameParam_.rotation);
     fovEase_.SetAdaptValue(&currentKeyFrameParam_.fov);
+
+    AdaptEaseParam();
 }
 
 void CameraKeyFrame::LoadData() {
@@ -30,19 +32,7 @@ void CameraKeyFrame::SaveData() {
 
 void CameraKeyFrame::Update(float deltaTime) {
 
-    // parameterをEasingに適応
-    positionEase_.SetMaxTime(timePoint_);
-    rotationEase_.SetMaxTime(timePoint_);
-    fovEase_.SetMaxTime(timePoint_);
-
-    positionEase_.SetEndValue(keyFrameParam_.position);
-    rotationEase_.SetEndValue(keyFrameParam_.rotation);
-    fovEase_.SetEndValue(keyFrameParam_.fov);
-
-    positionEase_.SetType(static_cast<EasingType>(positionEaseType_));
-    rotationEase_.SetType(static_cast<EasingType>(rotationEaseType_));
-    fovEase_.SetType(static_cast<EasingType>(fovEaseType_));
-
+  
     positionEase_.Update(deltaTime);
     rotationEase_.Update(deltaTime);
     fovEase_.Update(deltaTime);
@@ -59,7 +49,6 @@ void CameraKeyFrame::BindParams() {
 }
 
 void CameraKeyFrame::AdjustParam() {
-
 #ifdef _DEBUG
 
     ImGui::SeparatorText(("Camera KeyFrame: " + groupName_).c_str());
@@ -77,23 +66,31 @@ void CameraKeyFrame::AdjustParam() {
     EasingTypeSelector("Easing Type Rotate", rotationEaseType_);
     EasingTypeSelector("Easing Type Fov", fovEaseType_);
 
+    AdaptEaseParam();
+
     ImGui::PopID();
 
 #endif // _DEBUG
 }
 
+void CameraKeyFrame::AdaptEaseParam() {
+    // parameterをEasingに適応
+    positionEase_.SetMaxTime(timePoint_);
+    rotationEase_.SetMaxTime(timePoint_);
+    fovEase_.SetMaxTime(timePoint_);
+
+    positionEase_.SetEndValue(keyFrameParam_.position);
+    rotationEase_.SetEndValue(keyFrameParam_.rotation);
+    fovEase_.SetEndValue(keyFrameParam_.fov);
+
+    positionEase_.SetType(static_cast<EasingType>(positionEaseType_));
+    rotationEase_.SetType(static_cast<EasingType>(rotationEaseType_));
+    fovEase_.SetType(static_cast<EasingType>(fovEaseType_));
+  }
+
 void CameraKeyFrame::EasingTypeSelector(const char* label, int32_t& target) {
     int type = static_cast<int>(target);
     if (ImGui::Combo(label, &type, EasingTypeLabels.data(), static_cast<int>(EasingTypeLabels.size()))) {
         target = type;
-
-        std::string lbl(label);
-        if (lbl == "Easing Type Position") {
-            positionEase_.SetType(static_cast<EasingType>(target));
-        } else if (lbl == "Easing Type Rotate") {
-            rotationEase_.SetType(static_cast<EasingType>(target));
-        } else if (lbl == "Easing Type Fov") {
-            fovEase_.SetType(static_cast<EasingType>(target));
-        }
     }
 }

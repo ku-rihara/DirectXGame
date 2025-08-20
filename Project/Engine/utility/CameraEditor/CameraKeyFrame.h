@@ -25,6 +25,7 @@ public:
     void EasingTypeSelector(const char* label, int32_t& target);
     void AdjustParam();
     void BindParams();
+    void AdaptEaseParam();
 
     // データのロード
     void LoadData();

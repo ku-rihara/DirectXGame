@@ -22,7 +22,7 @@ void CameraEditor::AllLoadFile() {
                     // 新規作成してロード
                     auto anim = std::make_unique<CameraAnimationData>();
                     anim->Init(fileName);
-                    anim->LoadAllData(); // アニメーションデータとキーフレームデータをすべてロード
+                    anim->LoadData(); // アニメーションデータとキーフレームデータをすべてロード
                     animations_.push_back(std::move(anim));
                 }
             }
@@ -33,7 +33,7 @@ void CameraEditor::AllLoadFile() {
 void CameraEditor::AllSaveFile() {
     // すべてのアニメーションデータを保存
     for (auto& animation : animations_) {
-        animation->SaveAllData();
+        animation->SaveData();
     }
 }
 

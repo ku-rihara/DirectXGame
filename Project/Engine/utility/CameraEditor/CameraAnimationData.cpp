@@ -21,30 +21,20 @@ void CameraAnimationData::Init(const std::string& animationName) {
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
-void CameraAnimationData::LoadAllData() {
-    try {
-        // アニメーションデータのロード
-        globalParameter_->LoadFile(groupName_, folderName_);
+void CameraAnimationData::LoadData() {
 
-        // キーフレームデータのロード
-        LoadAllKeyFrames();
-    } catch (const std::exception& e) {
-        std::cerr << "Failed to load animation data: " << groupName_ << " - " << e.what() << std::endl;
-        throw;
-    }
+    // アニメーションデータのロード
+    globalParameter_->LoadFile(groupName_, folderName_);
+    // キーフレームデータのロード
+    LoadAllKeyFrames();
 }
 
-void CameraAnimationData::SaveAllData() {
-    try {
-        // アニメーションデータの保存
-        globalParameter_->SaveFile(groupName_, folderName_);
+void CameraAnimationData::SaveData() {
 
-        // キーフレームデータの保存
-        SaveAllKeyFrames();
-    } catch (const std::exception& e) {
-        std::cerr << "Failed to save animation data: " << groupName_ << " - " << e.what() << std::endl;
-        throw;
-    }
+    // アニメーションデータの保存
+    globalParameter_->SaveFile(groupName_, folderName_);
+    // キーフレームデータの保存
+    SaveAllKeyFrames();
 }
 
 void CameraAnimationData::SaveAllKeyFrames() {
@@ -253,6 +243,7 @@ void CameraAnimationData::BindParams() {
     globalParameter_->Bind(groupName_, "resetPosEaseType", &resetPosEaseType_);
     globalParameter_->Bind(groupName_, "resetRotateEaseType", &resetRotateEaseType_);
     globalParameter_->Bind(groupName_, "resetFovEaseType", &resetFovEaseType_);
+    globalParameter_->Bind(groupName_, "resetTimePoint", &resetTimePoint_);
 }
 
 void CameraAnimationData::AdjustParam() {
@@ -295,13 +286,16 @@ void CameraAnimationData::AdjustParam() {
         ImGui::Text("State: %s", stateText);
     }
 
-    globalParameter_->ParamSaveForImGui(groupName_, folderName_);
-    ImGui::SameLine();
-    globalParameter_->ParamLoadForImGui(groupName_, folderName_);
+    ImGui::SeparatorText("Reset Param");
+    // イージングタイプの設定
+    ImGui::DragFloat("Reset Time Point", &resetTimePoint_, 0.01f);
+    EasingTypeSelector("Easing Type Position", resetPosEaseType_);
+    EasingTypeSelector("Easing Type Rotate", resetRotateEaseType_);
+    EasingTypeSelector("Easing Type Fov", resetFovEaseType_);
 
     // キーフレーム管理
     if (ImGui::CollapsingHeader("KeyFrame Management")) {
-       
+
         ImGui::Separator();
         // キーフレームリスト
         if (showKeyFrameList_) {
@@ -342,6 +336,17 @@ void CameraAnimationData::AdjustParam() {
         }
     }
 
+     // セーブ、ロード
+    if (ImGui::Button("Load Data")) {
+        LoadData();
+        MessageBoxA(nullptr, "Animation data loaded successfully.", "Camera Animation", 0);
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Save Data")) {
+        SaveData();
+        MessageBoxA(nullptr, "Animation data saved successfully.", "Camera Animation", 0);
+    }
+
     // 現在の値表示
     ImGui::SeparatorText("Current Values");
     ImGui::Text("Position: (%.2f, %.2f, %.2f)", currentPosition_.x, currentPosition_.y, currentPosition_.z);
@@ -349,5 +354,12 @@ void CameraAnimationData::AdjustParam() {
     ImGui::Text("FOV: %.2f", currentFov_);
 
     ImGui::PopID();
-}
 #endif // _DEBUG
+}
+
+void CameraAnimationData::EasingTypeSelector(const char* label, int32_t& target) {
+    int type = static_cast<int>(target);
+    if (ImGui::Combo(label, &type, EasingTypeLabels.data(), static_cast<int>(EasingTypeLabels.size()))) {
+        target = type;
+    }
+}
