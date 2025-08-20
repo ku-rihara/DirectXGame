@@ -51,8 +51,7 @@ public:
     void Init() override;
     void Update() override;
     void TitleUpdate();
-    void EffectDraw(const ViewProjection& viewProjection);
-
+  
     // 移動
     void Move(const float& speed); // 移動
     bool CheckIsMoving(); // 動かしてるかフラグ

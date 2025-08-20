@@ -27,6 +27,7 @@ private:
     std::array<ParticleEffect, 1> debriParticle_;
     std::array<ParticleEffect, 1> rushParticle_;
     std::array<ParticleEffect, 1> rushRingEffect_;
+    std::array<ParticleEffect, 1> afterGlowEffect_;
     std::array<ParticleEffect, 3> starEffect_;
 
     int32_t starSound_;
@@ -39,10 +40,9 @@ public:
     /// ===================================================
 
     ///* 初期化、更新、描画
-    void Init(const Vector3& position);
+    void Init(WorldTransform* transform);
     void Update(const Vector3& position);
-    void Draw(const ViewProjection& viewProjection);
-
+   
     void SpecialAttackRenditionInit();
     void FallEffectRenditionInit();
     void RushAttackEmit();
