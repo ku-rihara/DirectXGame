@@ -42,16 +42,24 @@ public:
     void Pause();
     void Reset();
 
+    /// データのロード
+    void LoadAllData();
+    void LoadAllKeyFrames();
+    void SaveAllKeyFrames();
+    void SaveAllData();
+
 private:
     /// パラメータのバインド
     void BindParams();
 
- 
+    /// キーフレーム間の補間
+    void InterpolateKeyFrames();
+
 private:
     // GlobalParameter
     GlobalParameter* globalParameter_;
     std::string groupName_;
-    std::string folderName_ = "CameraAnimation";
+    std::string folderName_ = "CameraAnimation/AnimationData";
 
     // キーフレーム
     std::vector<std::unique_ptr<CameraKeyFrame>> keyFrames_;
@@ -71,16 +79,14 @@ private:
     int32_t resetPosEaseType_;
     int32_t resetRotateEaseType_;
     int32_t resetFovEaseType_;
-    
+
     // UI用パラメータ
     float playbackSpeed_        = 1.0f;
     bool showKeyFrameList_      = true;
     bool showAnimationControls_ = true;
     bool showInitialSettings_   = false;
 
-    // キーフレーム追加用の時間
-    float newKeyFrameTime_ = 0.0f;
-
+  
 public:
     /// アニメーション制御
     float GetCurrentTimer() const { return currentTime_; }

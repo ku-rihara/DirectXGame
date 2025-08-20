@@ -6,8 +6,14 @@
 #include <string>
 #include <vector>
 
-
 class CameraKeyFrame {
+public:
+    struct KeyFrameParam {
+        Vector3 position = {0.0f, 0.0f, 0.0f};
+        Vector3 rotation = {0.0f, 0.0f, 0.0f};
+        float fov        = 45.0f * 3.141592654f / 180.0f;
+    };
+
 public:
     CameraKeyFrame()  = default;
     ~CameraKeyFrame() = default;
@@ -20,15 +26,19 @@ public:
     void AdjustParam();
     void BindParams();
 
+    // データのロード
+    void LoadData();
+    void SaveData();
+
 private:
     GlobalParameter* globalParameter_;
     std::string groupName_;
-    int32_t currentKeyFrameIndex = -1;
+    const std::string folderName_ = "CameraAnimation/KeyFrames";
+    int32_t currentKeyFrameIndex  = -1;
 
-    float timePoint_  = 0.0f;
-    Vector3 position_ = {0.0f, 0.0f, 0.0f};
-    Vector3 rotation_ = {0.0f, 0.0f, 0.0f};
-    float fov_        = 45.0f * 3.141592654f / 180.0f;
+    float timePoint_ = 0.0f;
+    KeyFrameParam keyFrameParam_;
+    KeyFrameParam currentKeyFrameParam_;
 
     // easing Type
     int32_t positionEaseType_ = 0;
@@ -41,4 +51,12 @@ private:
     Easing<float> fovEase_;
 
 public:
+    // ゲッター
+    float GetTimePoint() const { return timePoint_; }
+    Vector3 GetPosition() const { return currentKeyFrameParam_.position; }
+    Vector3 GetRotation() const { return currentKeyFrameParam_.rotation; }
+    float GetFov() const { return currentKeyFrameParam_.fov; }
+
+    // セッター
+    void SetTimePoint(float timePoint) { timePoint_ = timePoint; }
 };

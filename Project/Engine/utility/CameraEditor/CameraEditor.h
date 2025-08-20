@@ -9,6 +9,8 @@ public:
     CameraEditor()  = default;
     ~CameraEditor() = default;
 
+    void AllLoadFile();
+    void AllSaveFile();
     void AddAnimation(const std::string& animationName);
     void Update(float deltaTime);
     void EditorUpdate();

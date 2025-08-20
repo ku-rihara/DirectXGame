@@ -1,26 +1,43 @@
 #include "CameraKeyFrame.h"
 #include <imgui.h>
+#include <iostream>
 
 void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t& keyNumber) {
     // グローバルパラメータ
     globalParameter_     = GlobalParameter::GetInstance();
     currentKeyFrameIndex = keyNumber;
-    groupName_           =  cameraAnimationName + "_KeyFrame_" + std::to_string(currentKeyFrameIndex);
+    groupName_           = cameraAnimationName + "_KeyFrame_" + std::to_string(currentKeyFrameIndex);
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
     // adapt
-    positionEase_.SetAdaptValue(&position_);
-    rotationEase_.SetAdaptValue(&rotation_);
-    fovEase_.SetAdaptValue(&fov_);
+    positionEase_.SetAdaptValue(&currentKeyFrameParam_.position);
+    rotationEase_.SetAdaptValue(&currentKeyFrameParam_.rotation);
+    fovEase_.SetAdaptValue(&currentKeyFrameParam_.fov);
 }
+
+void CameraKeyFrame::LoadData() {
+
+    // パラメータファイルから読み込み
+    globalParameter_->LoadFile(groupName_, folderName_);
+}
+
+void CameraKeyFrame::SaveData() {
+    // パラメータファイルに保存
+    globalParameter_->SaveFile(groupName_, folderName_);
+}
+
 void CameraKeyFrame::Update(float deltaTime) {
 
-     // parameterをEasingに適応
+    // parameterをEasingに適応
     positionEase_.SetMaxTime(timePoint_);
     rotationEase_.SetMaxTime(timePoint_);
     fovEase_.SetMaxTime(timePoint_);
+
+    positionEase_.SetEndValue(keyFrameParam_.position);
+    rotationEase_.SetEndValue(keyFrameParam_.rotation);
+    fovEase_.SetEndValue(keyFrameParam_.fov);
 
     positionEase_.SetType(static_cast<EasingType>(positionEaseType_));
     rotationEase_.SetType(static_cast<EasingType>(rotationEaseType_));
@@ -33,9 +50,9 @@ void CameraKeyFrame::Update(float deltaTime) {
 
 void CameraKeyFrame::BindParams() {
     globalParameter_->Bind(groupName_, "timePoint", &timePoint_);
-    globalParameter_->Bind(groupName_, "position", &position_);
-    globalParameter_->Bind(groupName_, "rotation", &rotation_);
-    globalParameter_->Bind(groupName_, "fov", &fov_);
+    globalParameter_->Bind(groupName_, "position", &keyFrameParam_.position);
+    globalParameter_->Bind(groupName_, "rotation", &keyFrameParam_.rotation);
+    globalParameter_->Bind(groupName_, "fov", &keyFrameParam_.fov);
     globalParameter_->Bind(groupName_, "positionEaseType", &positionEaseType_);
     globalParameter_->Bind(groupName_, "rotationEaseType", &rotationEaseType_);
     globalParameter_->Bind(groupName_, "fovEaseType", &fovEaseType_);
@@ -44,27 +61,24 @@ void CameraKeyFrame::BindParams() {
 void CameraKeyFrame::AdjustParam() {
 
 #ifdef _DEBUG
-    if (ImGui::CollapsingHeader(groupName_.c_str())) {
-        ImGui::PushID(groupName_.c_str());
 
-        // セーブ・ロード
-        globalParameter_->ParamSaveForImGui(groupName_, "CameraAnimation");
-        globalParameter_->ParamLoadForImGui(groupName_, "CameraAnimation");
+    ImGui::SeparatorText(("Camera KeyFrame: " + groupName_).c_str());
+    ImGui::PushID(groupName_.c_str());
 
-        ImGui::DragFloat("Time Point", &timePoint_, 0.01f, 0.0f, 9999.0f);
+    ImGui::DragFloat("Time Point", &timePoint_, 0.01f, 0.0f, 9999.0f);
 
-        ImGui::DragFloat3("Position", &position_.x, 0.1f);
-        ImGui::DragFloat3("Rotation", &rotation_.x, 0.1f);
+    ImGui::DragFloat3("Position", &keyFrameParam_.position.x, 0.1f);
+    ImGui::DragFloat3("Rotation", &keyFrameParam_.rotation.x, 0.1f);
 
-        ImGui::DragFloat("FOV", &fov_, 0.01f);
+    ImGui::DragFloat("FOV", &keyFrameParam_.fov, 0.01f);
 
-        // イージングタイプの設定
-        EasingTypeSelector("Easing Type Position", positionEaseType_);
-        EasingTypeSelector("Easing Type Rotate", rotationEaseType_);
-        EasingTypeSelector("Easing Type Fov", fovEaseType_);
+    // イージングタイプの設定
+    EasingTypeSelector("Easing Type Position", positionEaseType_);
+    EasingTypeSelector("Easing Type Rotate", rotationEaseType_);
+    EasingTypeSelector("Easing Type Fov", fovEaseType_);
 
-        ImGui::PopID();
-    }
+    ImGui::PopID();
+
 #endif // _DEBUG
 }
 
