@@ -27,6 +27,8 @@ void CameraAnimationData::LoadData() {
     globalParameter_->LoadFile(groupName_, folderName_);
     // キーフレームデータのロード
     LoadAllKeyFrames();
+    //値同期
+    globalParameter_->SyncParamForGroup(groupName_);
 }
 
 void CameraAnimationData::SaveData() {
@@ -45,15 +47,13 @@ void CameraAnimationData::SaveAllKeyFrames() {
 }
 
 void CameraAnimationData::LoadAllKeyFrames() {
-    // 修正: 正しいフォルダパス構造に変更
-    std::string folderPath     = "Resources/GlobalParameter/CameraAnimation/KeyFrames/";
-    std::string keyFramePrefix = groupName_ + "_KeyFrame_";
 
-    try {
+    std::string folderPath     = "Resources/GlobalParameter/CameraAnimation/KeyFrames/";
+    std::string keyFramePrefix = groupName_;
+
         if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {
-            // 既存のキーフレームをクリア
-            keyFrames_.clear();
-            selectedKeyFrameIndex_ = -1;
+            // 既存のキーフレームをクリア（重要：バインド情報もクリア）
+            ClearAllKeyFrames();
 
             std::vector<std::pair<int32_t, std::string>> keyFrameFiles;
 
@@ -83,7 +83,8 @@ void CameraAnimationData::LoadAllKeyFrames() {
             // キーフレームを作成してロード
             for (const auto& [index, fileName] : keyFrameFiles) {
                 auto newKeyFrame = std::make_unique<CameraKeyFrame>();
-                newKeyFrame->Init(groupName_, static_cast<int32_t>(keyFrames_.size()));
+                // 実際のファイルインデックスを使用
+                newKeyFrame->Init(groupName_, index);
                 newKeyFrame->LoadData(); // キーフレームデータをロード
                 keyFrames_.push_back(std::move(newKeyFrame));
             }
@@ -93,13 +94,9 @@ void CameraAnimationData::LoadAllKeyFrames() {
                 selectedKeyFrameIndex_ = 0;
             }
         }
-    } catch (const std::exception& e) {
-        std::cerr << "Failed to load keyframes for animation: " << groupName_ << " - " << e.what() << std::endl;
-        // キーフレームの読み込みに失敗してもアニメーション自体は使用可能にする
-        keyFrames_.clear();
-        selectedKeyFrameIndex_ = -1;
-    }
+  
 }
+
 
 void CameraAnimationData::Update(float deltaTime) {
     // 再生中の更新

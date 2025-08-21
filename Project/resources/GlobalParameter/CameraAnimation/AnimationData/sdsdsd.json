@@ -4,7 +4,7 @@
         "playbackSpeed": 1.0,
         "resetFovEaseType": 0,
         "resetPosEaseType": 0,
-        "resetRotateEaseType": 0,
-        "resetTimePoint": 0.0
+        "resetRotateEaseType": 4,
+        "resetTimePoint": 1.5700000524520874
     }
 }
