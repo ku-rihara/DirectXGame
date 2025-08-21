@@ -123,6 +123,9 @@ public:
     void ParamSaveForImGui(const std::string& groupName, const std::string& fileName = "");
     void ParamLoadForImGui(const std::string& groupName, const std::string& fileName = "");
 
+    void ClearBindingsForGroup(const std::string& groupName);
+    void RemoveGroup(const std::string& groupName);
+
 private:
     ///=================================================================================
     /// private variant
