@@ -52,7 +52,7 @@ void CameraAnimationData::LoadAllKeyFrames() {
     std::string keyFramePrefix = groupName_;
 
         if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {
-            // 既存のキーフレームをクリア（重要：バインド情報もクリア）
+            // 既存のキーフレームをクリア
             ClearAllKeyFrames();
 
             std::vector<std::pair<int32_t, std::string>> keyFrameFiles;
@@ -307,12 +307,12 @@ void CameraAnimationData::AdjustParam() {
                     selectedKeyFrameIndex_ = i;
                 }
 
-                ImGui::SameLine();
-                if (ImGui::SmallButton("X")) {
+               /* ImGui::SameLine();
+                if (ImGui::Button("X")) {
                     RemoveKeyFrame(i);
                     ImGui::PopID();
                     break;
-                }
+                }*/
 
                 ImGui::PopID();
 
