@@ -52,8 +52,8 @@ void ViewProjection::TransferMatrix() {
 
 void ViewProjection::UpdateMatrix() {
 
-    // オイラーからQuaternionへの変換
-    quaternion_=Quaternion::EulerToQuaternion(rotation_);
+    //// オイラーからQuaternionへの変換
+    //quaternion_=Quaternion::EulerToQuaternion(rotation_);
     // ビュー行列の更新
     UpdateViewMatrix();
     // 射影行列の更新
@@ -66,7 +66,7 @@ void ViewProjection::UpdateViewMatrix() {
     Matrix4x4 rotateMatrix;
 
     // クォータニオンから回転行列を作成
-    rotateMatrix = MakeRotateMatrixFromQuaternion(quaternion_);
+    rotateMatrix = MakeRotateMatrix(rotation_);
 
     // 平行移動行列を計算
     Matrix4x4 translateMatrix = MakeTranslateMatrix(translation_);
