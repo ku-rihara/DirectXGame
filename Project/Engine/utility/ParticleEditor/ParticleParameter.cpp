@@ -304,7 +304,7 @@ void ParticleParameter::ScaleParmEditor() {
             ImGui::DragFloat3("ScaleV3 Min", reinterpret_cast<float*>(&parameters_.scaleDistV3.min), 0.1f);
         }
 
-        // EaseParm
+        // EaseParam
         if (parameters_.scaleEaseParm.isScaleEase) {
 
             if (parameters_.isScalerScale) {

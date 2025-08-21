@@ -16,15 +16,11 @@ void CameraEditor::AllLoadFile() {
             if (entry.is_regular_file() && entry.path().extension() == ".json") {
                 std::string fileName = entry.path().stem().string();
 
-                // "_KeyFrame_"を含むファイルはキーフレームファイルなのでスキップ
-                if (fileName.find("_KeyFrame_") == std::string::npos) {
-
-                    // 新規作成してロード
-                    auto anim = std::make_unique<CameraAnimationData>();
-                    anim->Init(fileName);
-                    anim->LoadData(); // アニメーションデータとキーフレームデータをすべてロード
-                    animations_.push_back(std::move(anim));
-                }
+                // 新規作成してロード
+                auto anim = std::make_unique<CameraAnimationData>();
+                anim->Init(fileName);
+                anim->LoadData(); // アニメーションデータとキーフレームデータをすべてロード
+                animations_.push_back(std::move(anim));
             }
         }
     }

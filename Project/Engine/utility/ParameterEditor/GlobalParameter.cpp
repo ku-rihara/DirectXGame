@@ -516,6 +516,30 @@ void GlobalParameter::SyncParamForGroup(const std::string& group) {
     }
 }
 
+void GlobalParameter::ClearBindingsForGroup(const std::string& groupName) {
+    auto it = bindings_.find(groupName);
+    if (it != bindings_.end()) {
+        bindings_.erase(it);
+    }
+}
+
+void GlobalParameter::RemoveGroup(const std::string& groupName) {
+    // バインド情報をクリア
+    ClearBindingsForGroup(groupName);
+
+    // グループデータを削除
+    auto dataIt = dates_.find(groupName);
+    if (dataIt != dates_.end()) {
+        dates_.erase(dataIt);
+    }
+
+    // 表示フラグを削除
+    auto visIt = visibilityFlags_.find(groupName);
+    if (visIt != visibilityFlags_.end()) {
+        visibilityFlags_.erase(visIt);
+    }
+}
+
 void GlobalParameter::BindResetAll() {
     bindings_.clear();
 }

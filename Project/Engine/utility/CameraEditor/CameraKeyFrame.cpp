@@ -4,12 +4,22 @@
 
 void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t& keyNumber) {
     // グローバルパラメータ
-    globalParameter_     = GlobalParameter::GetInstance();
-    currentKeyFrameIndex = keyNumber;
-    groupName_           = cameraAnimationName + "_KeyFrame_" + std::to_string(currentKeyFrameIndex);
+    globalParameter_         = GlobalParameter::GetInstance();
+    currentKeyFrameIndex     = keyNumber;
+    std::string newGroupName = cameraAnimationName + std::to_string(currentKeyFrameIndex);
+
+
+    if (!groupName_.empty() && groupName_ != newGroupName) {
+        globalParameter_->ClearBindingsForGroup(groupName_);
+    }
+
+    groupName_ = newGroupName;
     globalParameter_->CreateGroup(groupName_, false);
+
+    // 重複バインドを防ぐ
+    globalParameter_->ClearBindingsForGroup(groupName_);
+
     BindParams();
-    globalParameter_->SyncParamForGroup(groupName_);
 
     // adapt
     positionEase_.SetAdaptValue(&currentKeyFrameParam_.position);
@@ -23,6 +33,7 @@ void CameraKeyFrame::LoadData() {
 
     // パラメータファイルから読み込み
     globalParameter_->LoadFile(groupName_, folderName_);
+    globalParameter_->SyncParamForGroup(groupName_);
 }
 
 void CameraKeyFrame::SaveData() {
@@ -54,7 +65,7 @@ void CameraKeyFrame::AdjustParam() {
     ImGui::SeparatorText(("Camera KeyFrame: " + groupName_).c_str());
     ImGui::PushID(groupName_.c_str());
 
-    ImGui::DragFloat("Time Point", &timePoint_, 0.01f, 0.0f, 9999.0f);
+    ImGui::DragFloat("Time Point", &timePoint_, 0.01f);
 
     ImGui::DragFloat3("Position", &keyFrameParam_.position.x, 0.1f);
     ImGui::DragFloat3("Rotation", &keyFrameParam_.rotation.x, 0.1f);
