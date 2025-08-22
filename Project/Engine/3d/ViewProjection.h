@@ -45,6 +45,10 @@ public:
     Vector3 translation_ = {0, 0, 0};
     Quaternion quaternion_ = Quaternion::Identity(); 
 
+     // オフセット値
+    Vector3 positionOffset_ = {0, 0, 0};
+    Vector3 rotationOffset_ = {0, 0, 0};
+ 
     float fovAngleY_   = 45.0f * 3.141592654f / 180.0f;
     float aspectRatio_ = (float)16 / 9;
     float nearZ_       = 0.1f;
@@ -71,4 +75,6 @@ public: // getter
     Vector3 GetWorldPos() const;
     const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return constBuffer_; }
     const Matrix4x4& GetCameraMatrix() const { return cameraMatrix_; }
+    Vector3 GetFinalPosition() const;
+    Vector3 GetFinalRotation() const;
 };

@@ -66,10 +66,12 @@ void ViewProjection::UpdateViewMatrix() {
     Matrix4x4 rotateMatrix;
 
     // クォータニオンから回転行列を作成
-    rotateMatrix = MakeRotateMatrix(rotation_);
+    Vector3 finalRotation = GetFinalRotation();
+    rotateMatrix          = MakeRotateMatrix(finalRotation);
 
     // 平行移動行列を計算
-    Matrix4x4 translateMatrix = MakeTranslateMatrix(translation_);
+    Vector3 finalPosition     = GetFinalPosition();
+    Matrix4x4 translateMatrix = MakeTranslateMatrix(finalPosition);
 
     // カメラ行列を作成
     cameraMatrix_ = rotateMatrix * translateMatrix;
@@ -94,4 +96,12 @@ Vector3 ViewProjection::GetWorldPos() const {
         cameraMatrix_.m[3][1], // Y成分
         cameraMatrix_.m[3][2] // Z成分
     );
+}
+
+Vector3 ViewProjection::GetFinalPosition() const { 
+    return translation_ + positionOffset_;
+}
+
+Vector3 ViewProjection::GetFinalRotation() const { 
+    return rotation_ + rotationOffset_; 
 }
