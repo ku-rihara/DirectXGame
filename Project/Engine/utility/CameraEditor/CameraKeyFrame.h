@@ -20,12 +20,14 @@ public:
 
     void Init(const std::string& cameraAnimationName, const int32_t& keyNumber);
     void Update(float deltaTime);
+    
 
     // paramEdit
     void EasingTypeSelector(const char* label, int32_t& target);
     void AdjustParam();
     void BindParams();
     void AdaptEaseParam();
+    bool IsFinished() const;
 
     // データのロード
     void LoadData();
@@ -60,4 +62,5 @@ public:
 
     // セッター
     void SetTimePoint(float timePoint) { timePoint_ = timePoint; }
+    void SetStartEasing(const Vector3& pos, const Vector3& rotate, const float& fov);
 };
