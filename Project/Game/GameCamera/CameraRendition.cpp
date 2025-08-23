@@ -66,54 +66,54 @@ void CameraRendition::UpdateBehaviorRoot() {
 }
 
 void CameraRendition::UpdateZoomInOut() {
-    switch (zoomStep_) {
-    case ZoomStep::ZOOM_IN:
-        ZoomShakeUpdate(); // ZoomInOut専用のShake処理
-        inEase_.Update(Frame::DeltaTime());
-        pGameCamera_->SetOffSet(tempInOffset_);
+    //switch (zoomStep_) {
+    //case ZoomStep::ZOOM_IN:
+    //    ZoomShakeUpdate(); // ZoomInOut専用のShake処理
+    //    inEase_.Update(Frame::DeltaTime());
+    //    pGameCamera_->SetOffSet(tempInOffset_);
 
-        // イージング完了チェック
-        if (inEase_.IsFinished()) {
-            zoomShakeT_ = 0.0f;
-            pGameCamera_->SetShakePos(Vector3::ZeroVector());
-            zoomStep_ = ZoomStep::ZOOM_OUT;
-        }
-        break;
+    //    // イージング完了チェック
+    //    if (inEase_.IsFinished()) {
+    //        zoomShakeT_ = 0.0f;
+    //        pGameCamera_->SetShakePos(Vector3::ZeroVector());
+    //        zoomStep_ = ZoomStep::ZOOM_OUT;
+    //    }
+    //    break;
 
-    case ZoomStep::ZOOM_OUT:
-        outEase_.Update(Frame::DeltaTime());
-        pGameCamera_->SetOffSet(tempInOffset_);
+    //case ZoomStep::ZOOM_OUT:
+    //    outEase_.Update(Frame::DeltaTime());
+    //    pGameCamera_->SetOffSet(tempInOffset_);
 
-        // イージング完了チェック
-        if (outEase_.IsFinished()) {
-            saveOffset_ = tempInOffset_;
-            zoomStep_   = ZoomStep::RETURN_ROOT;
-        }
-        break;
+    //    // イージング完了チェック
+    //    if (outEase_.IsFinished()) {
+    //        saveOffset_ = tempInOffset_;
+    //        zoomStep_   = ZoomStep::RETURN_ROOT;
+    //    }
+    //    break;
 
-    case ZoomStep::RETURN_ROOT:
-        ChangeBehaviorMode(BehaviorMode::BACKLASH);
-        break;
-    }
+    //case ZoomStep::RETURN_ROOT:
+    //    ChangeBehaviorMode(BehaviorMode::BACKLASH);
+    //    break;
+    //}
 }
 
 void CameraRendition::UpdateBacklash() {
-    switch (backlashStep_) {
-    case BacklashStep::OUT_IN:
-        backlashEase_.Update(Frame::DeltaTimeRate());
-        pGameCamera_->SetOffSet(tempBacklashOffset_);
+    //switch (backlashStep_) {
+    //case BacklashStep::OUT_IN:
+    //    backlashEase_.Update(Frame::DeltaTimeRate());
+    //    pGameCamera_->SetOffSet(tempBacklashOffset_);
 
-        // イージング完了チェック
-        if (backlashEase_.IsFinished()) {
-            pGameCamera_->SetOffSet(tempBacklashOffset_);
-            backlashStep_ = BacklashStep::RETURN_ROOT;
-        }
-        break;
+    //    // イージング完了チェック
+    //    if (backlashEase_.IsFinished()) {
+    //        pGameCamera_->SetOffSet(tempBacklashOffset_);
+    //        backlashStep_ = BacklashStep::RETURN_ROOT;
+    //    }
+    //    break;
 
-    case BacklashStep::RETURN_ROOT:
-        ChangeBehaviorMode(BehaviorMode::ROOT);
-        break;
-    }
+    //case BacklashStep::RETURN_ROOT:
+    //    ChangeBehaviorMode(BehaviorMode::ROOT);
+    //    break;
+    //}
 }
 
 // =================================== ヘルパー関数 ===================================
@@ -203,18 +203,6 @@ void CameraRendition::InitializeShaking() {
 void CameraRendition::InitializeZoomInOut() {
     zoomStep_ = ZoomStep::ZOOM_IN;
 
-    // イージングの設定
-    inEase_.ApplyFromJson("ZoomIn.json");
-    inEase_.SaveAppliedJsonFileName();
-    inEase_.SetAdaptValue(&tempInOffset_);
-    inEase_.Reset();
-
-    outEase_.ApplyFromJson("ZoomOut.json");
-    outEase_.SaveAppliedJsonFileName();
-    outEase_.SetAdaptValue(&tempInOffset_);
-    outEase_.Reset();
-
-    saveOffset_    = Vector3::ZeroVector();
     zoomShakeTMax_ = kWaitTime_ + 0.4f;
     zoomShakeT_    = zoomShakeTMax_;
 }
@@ -232,11 +220,4 @@ void CameraRendition::InitializeBacklash() {
 void (CameraRendition::* CameraRendition::spShakeFuncTable_[static_cast<int>(ShakeMode::COUNT)])() = {
     &CameraRendition::UpdateShakeWait, // WAIT
     &CameraRendition::UpdateShaking // SHAKING
-};
-
-// Behavior系統の関数ポインタテーブル
-void (CameraRendition::* CameraRendition::spBehaviorFuncTable_[static_cast<int>(BehaviorMode::COUNT)])() = {
-    &CameraRendition::UpdateBehaviorRoot, // ROOT
-    &CameraRendition::UpdateZoomInOut, // ZOOM_IN_OUT
-    &CameraRendition::UpdateBacklash // BACKLASH
 };
