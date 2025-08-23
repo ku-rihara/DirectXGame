@@ -8,7 +8,6 @@ void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t&
     currentKeyFrameIndex     = keyNumber;
     std::string newGroupName = cameraAnimationName + std::to_string(currentKeyFrameIndex);
 
-
     if (!groupName_.empty() && groupName_ != newGroupName) {
         globalParameter_->ClearBindingsForGroup(groupName_);
     }
@@ -43,7 +42,6 @@ void CameraKeyFrame::SaveData() {
 
 void CameraKeyFrame::Update(float deltaTime) {
 
-  
     positionEase_.Update(deltaTime);
     rotationEase_.Update(deltaTime);
     fovEase_.Update(deltaTime);
@@ -97,7 +95,7 @@ void CameraKeyFrame::AdaptEaseParam() {
     positionEase_.SetType(static_cast<EasingType>(positionEaseType_));
     rotationEase_.SetType(static_cast<EasingType>(rotationEaseType_));
     fovEase_.SetType(static_cast<EasingType>(fovEaseType_));
-  }
+}
 
 void CameraKeyFrame::EasingTypeSelector(const char* label, int32_t& target) {
     int type = static_cast<int>(target);
@@ -105,3 +103,14 @@ void CameraKeyFrame::EasingTypeSelector(const char* label, int32_t& target) {
         target = type;
     }
 }
+
+bool CameraKeyFrame::IsFinished() const {
+
+    return positionEase_.IsFinished() && rotationEase_.IsFinished() && fovEase_.IsFinished();
+}
+
+void CameraKeyFrame::SetStartEasing(const Vector3& pos, const Vector3& rotate, const float& fov) {
+    positionEase_.SetStartValue(pos);
+    rotationEase_.SetStartValue(rotate);    
+    fovEase_.SetStartValue(fov);
+ }
