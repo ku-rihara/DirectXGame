@@ -50,7 +50,7 @@ void GameCameraBackLash::Update() {
 		/// カメラ移動
 		/// --------------------------------------------------------------------
 	case GameCameraBackLash::Step::RETURNROOT:
-		pGameCamera_->ChangeBehavior(std::make_unique<GameCameraRoot>(pGameCamera_));
+		/*pGameCamera_->ChangeBehavior(std::make_unique<GameCameraRoot>(pGameCamera_));*/
 		break;
 	default:
 		break;

@@ -47,7 +47,7 @@ void StateShaking::Update() {
 		/// ------------------------------------------------------
 		/// 通常モードに戻る
 		///---------------------------------------------------------
-		pGameCamera_->ChangeShakeState(std::make_unique<ShakeWait>(pGameCamera_));
+	/*	pGameCamera_->ChangeShakeState(std::make_unique<ShakeWait>(pGameCamera_));*/
 		break;
 	default:
 		break;

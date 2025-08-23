@@ -67,7 +67,7 @@ private:
     Vector3 currentOffsetRotation_;
     float currentOffsetFov_ = 0.0f;
 
-    // 一時的なViewProjection
+    // ViewProjection
     ViewProjection* pViewProjection_=nullptr;
 
     // アニメーション名

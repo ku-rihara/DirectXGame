@@ -86,7 +86,7 @@ void GameCameraZoomInOut::Update() {
 		///---------------------------------------------------------
 	case Step::RETURNROOT:
 	
-		pGameCamera_->ChangeBehavior(std::make_unique<GameCameraBackLash>(pGameCamera_));
+	/*	pGameCamera_->ChangeBehavior(std::make_unique<GameCameraBackLash>(pGameCamera_));*/
 		break;
 	default:
 		break;
