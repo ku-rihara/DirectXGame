@@ -1,8 +1,5 @@
 #include "CameraAnimation.h"
-#include"Frame/Frame.h"
-#include "MathFunction.h"
-#include <imgui.h>
-#include <iostream>
+
 
 void CameraAnimation::Init() {
     // 生成
