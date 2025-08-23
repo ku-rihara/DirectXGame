@@ -24,13 +24,12 @@ void GameCamera::Init() {
     rotate_ = paramater_.firstRotate_;
     offset_ = paramater_.firstOffset_;
 
-    // CameraRenditionの初期化（StateパターンからCameraRenditionに変更）
     rendition_.Init();
     rendition_.SetGameCamera(this);
 }
 
 void GameCamera::Update() {
-    // CameraRenditionの更新（Shake系統とBehavior系統両方が更新される）
+  
     rendition_.Update();
 
     // カメラの基本移動処理
@@ -134,7 +133,6 @@ void GameCamera::ChangeZoomInOut() {
 }
 
 void GameCamera::StartZoomWithShake() {
-    // ズーム演出とシェイク演出を同時に開始
     rendition_.ChangeToZoomInOut();
     rendition_.ChangeToShaking();
 }
@@ -161,12 +159,10 @@ CameraRendition::BehaviorMode GameCamera::GetBehaviorMode() const {
     return rendition_.GetCurrentBehaviorMode();
 }
 
-// ================================= Paramater Edit ================================= //
+// ================================= Parameter Edit ================================= //
 
 void GameCamera::BindParams() {
     globalParameter_->Bind(groupName_, "firstRotate_", &paramater_.firstRotate_);
-    globalParameter_->Bind(groupName_, "zoomORotate_", &paramater_.zoomRotate_);
-    globalParameter_->Bind(groupName_, "backLashTime_", &paramater_.backLashTime_);
     globalParameter_->Bind(groupName_, "firstOffset_", &paramater_.firstOffset_);
 }
 
@@ -177,8 +173,6 @@ void GameCamera::AdjustParam() {
 
         /// 変数の調整
         ImGui::SliderAngle("First Rotate", &paramater_.firstRotate_, 0, 1000);
-        ImGui::SliderAngle("Zoom Rotate", &paramater_.zoomRotate_, 0, 1000);
-        ImGui::DragFloat("Backlash Time", &paramater_.backLashTime_, 0.01f);
         ImGui::DragFloat3("firstOffset", &paramater_.firstOffset_.x, 0.01f);
 
         /// セーブとロード

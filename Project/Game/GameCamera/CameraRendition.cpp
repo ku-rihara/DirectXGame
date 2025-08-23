@@ -14,9 +14,9 @@ void CameraRendition::Init() {
 }
 
 void CameraRendition::Update() {
-    if (!pGameCamera_)
+    if (!pGameCamera_) {
         return;
-
+    }
     // Shake系統の更新
     int shakeModeIndex = static_cast<int>(currentShakeMode_);
     if (shakeModeIndex >= 0 && shakeModeIndex < static_cast<int>(ShakeMode::COUNT)) {
@@ -33,8 +33,7 @@ void CameraRendition::Update() {
 // =================================== Shake系統の更新関数 ===================================
 
 void CameraRendition::UpdateShakeWait() {
-    // 待機状態では何もしない
-    // 外部からChangeToShaking()が呼ばれるまで待機
+    // 待機
 }
 
 void CameraRendition::UpdateShaking() {
@@ -44,8 +43,9 @@ void CameraRendition::UpdateShaking() {
         pGameCamera_->SetShakePos(ShakeWave<Vector3>(shakeT_, 0.6f));
         shakeT_ -= Frame::DeltaTime();
 
-        if (shakeT_ > 0.0f)
+        if (shakeT_ > 0.0f) {
             return;
+        }
 
         shakeT_ = 0.0f;
         pGameCamera_->SetShakePos(Vector3::ZeroVector());
@@ -62,8 +62,7 @@ void CameraRendition::UpdateShaking() {
 // =================================== Behavior系統の更新関数 ===================================
 
 void CameraRendition::UpdateBehaviorRoot() {
-    // ルート状態では特に何もしない
-    // 他の状態への遷移は外部から呼び出される
+  // 待機
 }
 
 void CameraRendition::UpdateZoomInOut() {
@@ -73,7 +72,7 @@ void CameraRendition::UpdateZoomInOut() {
         inEase_.Update(Frame::DeltaTime());
         pGameCamera_->SetOffSet(tempInOffset_);
 
-        // イージング完了チェック（コールバックの代わり）
+        // イージング完了チェック
         if (inEase_.IsFinished()) {
             zoomShakeT_ = 0.0f;
             pGameCamera_->SetShakePos(Vector3::ZeroVector());
@@ -149,8 +148,9 @@ void CameraRendition::ChangeShakeMode(ShakeMode newMode) {
 }
 
 void CameraRendition::ChangeToShaking() {
-    if (currentShakeMode_ != ShakeMode::WAIT)
+    if (currentShakeMode_ != ShakeMode::WAIT) {
         return;
+    }
     ChangeShakeMode(ShakeMode::SHAKING);
 }
 

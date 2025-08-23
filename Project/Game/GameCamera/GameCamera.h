@@ -11,8 +11,6 @@ public:
     struct Parameter {
         Vector3 firstOffset_;
         float firstRotate_;
-        float zoomRotate_;
-        float backLashTime_;
     };
 
 private:
