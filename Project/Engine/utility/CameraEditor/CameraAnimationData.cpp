@@ -179,15 +179,14 @@ void CameraAnimationData::AdvanceToNextKeyFrame() {
     if (activeKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size()) - 1) {
         activeKeyFrameIndex_++;
 
-        // 次のキーフレームを初期化（前のキーフレームの終了値から開始）
+        // 次のキーフレームを初期化
         if (activeKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
             // 前のキーフレームの最終値を取得
             Vector3 startPos = currentPosition_;
             Vector3 startRot = currentRotation_;
             float startFov   = currentFov_;
 
-            // 新しいキーフレームの開始値として設定
-            // （この部分は実装に応じて調整が必要かもしれません）
+            keyFrames_[activeKeyFrameIndex_]->SetStartEasing(startPos, startRot, startFov);
         }
     }
 }
