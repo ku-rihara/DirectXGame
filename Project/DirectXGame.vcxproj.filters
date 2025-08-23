@@ -946,6 +946,9 @@
     <ClCompile Include="Engine\utility\CameraEditor\CameraAnimation.cpp">
       <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Game\GameCamera\CameraRendition.cpp">
+      <Filter>Game\GameCamera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1580,6 +1583,9 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\CameraEditor\CameraAnimation.h">
       <Filter>MyEngine\.h\utility\CameraEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameCamera\CameraRendition.h">
+      <Filter>Game\GameCamera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

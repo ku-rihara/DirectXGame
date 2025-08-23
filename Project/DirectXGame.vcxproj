@@ -154,6 +154,7 @@
     <ClCompile Include="Game\GameCamera\Behavior\GameCameraBacklash.cpp" />
     <ClCompile Include="Game\GameCamera\Behavior\GameCameraRoot.cpp" />
     <ClCompile Include="Game\GameCamera\Behavior\GameCameraZoomInOut.cpp" />
+    <ClCompile Include="Game\GameCamera\CameraRendition.cpp" />
     <ClCompile Include="Game\GameCamera\GameCamera.cpp" />
     <ClCompile Include="Game\GameCamera\ShakeState\BaseShakeState.cpp" />
     <ClCompile Include="Game\GameCamera\ShakeState\StateShaking.cpp" />
@@ -366,6 +367,7 @@
     <ClInclude Include="Game\GameCamera\Behavior\GameCameraBacklash.h" />
     <ClInclude Include="Game\GameCamera\Behavior\GameCameraRoot.h" />
     <ClInclude Include="Game\GameCamera\Behavior\GameCameraZoomInOut.h" />
+    <ClInclude Include="Game\GameCamera\CameraRendition.h" />
     <ClInclude Include="Game\GameCamera\GameCamera.h" />
     <ClInclude Include="Game\GameCamera\ShakeState\BaseShakeState.h" />
     <ClInclude Include="Game\GameCamera\ShakeState\StateShaking.h" />
