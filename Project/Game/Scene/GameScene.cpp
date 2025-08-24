@@ -30,11 +30,13 @@ void GameScene::Init() {
     skuBox_          = std::make_unique<SkyBox>();
     putObjForBlender = std::make_unique<PutObjForBlender>();
     cameraEditor_    = std::make_unique<CameraEditor>();
+    shakeEditor_     = std::make_unique<ShakeEditor>();
 
     monsterBall_->Init();
     ground_->Init();
     plane_->Init();
     skuBox_->Init();
+    shakeEditor_->Init();
     putObjForBlender->LoadJsonFile("game.json");
     putObjForBlender->EasingAllReset();
 
@@ -52,6 +54,7 @@ void GameScene::Update() {
     // 各クラス更新
     ground_->Update();
     cameraEditor_->Update(Frame::DeltaTime());
+    shakeEditor_->Update(Frame::DeltaTime());
     monsterBall_->Update();
     plane_->Update();
     skuBox_->Update();
@@ -119,6 +122,7 @@ void GameScene::Debug() {
 
     ImGui::End();
     cameraEditor_->EditorUpdate();
+    shakeEditor_->EditorUpdate();
 #endif
 }
 

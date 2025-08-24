@@ -113,6 +113,9 @@
     <ClCompile Include="Engine\utility\RailEditor\ControlPosManager.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\Rail.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\RailManager.cpp" />
+    <ClCompile Include="Engine\utility\ShakeEditor\ShakeData.cpp" />
+    <ClCompile Include="Engine\utility\ShakeEditor\ShakeEditor.cpp" />
+    <ClCompile Include="Engine\utility\ShakeEditor\ShakePlayer.cpp" />
     <ClCompile Include="Game\EasingTestObj\EasingTestObj.cpp" />
     <ClCompile Include="Game\Ground\Ground.cpp" />
     <ClCompile Include="Game\MonsterBall\MonsterBall.cpp" />
@@ -253,6 +256,9 @@
     <ClInclude Include="Engine\utility\RailEditor\ControlPosManager.h" />
     <ClInclude Include="Engine\utility\RailEditor\Rail.h" />
     <ClInclude Include="Engine\utility\RailEditor\RailManager.h" />
+    <ClInclude Include="Engine\utility\ShakeEditor\ShakeData.h" />
+    <ClInclude Include="Engine\utility\ShakeEditor\ShakeEditor.h" />
+    <ClInclude Include="Engine\utility\ShakeEditor\ShakePlayer.h" />
     <ClInclude Include="Game\EasingTestObj\EasingTestObj.h" />
     <ClInclude Include="Game\Ground\Ground.h" />
     <ClInclude Include="Game\MonsterBall\MonsterBall.h" />
