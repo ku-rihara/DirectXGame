@@ -32,7 +32,7 @@ void CameraAnimationData::Init(const std::string& animationName) {
 void CameraAnimationData::LoadData() {
 
     // アニメーションデータのロード
-    globalParameter_->LoadFile(groupName_, folderName_);
+    globalParameter_->LoadFile(groupName_, folderPath_);
     // キーフレームデータのロード
     LoadAllKeyFrames();
     // 値同期
@@ -42,7 +42,7 @@ void CameraAnimationData::LoadData() {
 void CameraAnimationData::SaveData() {
 
     // アニメーションデータの保存
-    globalParameter_->SaveFile(groupName_, folderName_);
+    globalParameter_->SaveFile(groupName_, folderPath_);
     // キーフレームデータの保存
     SaveAllKeyFrames();
 }

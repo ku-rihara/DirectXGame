@@ -72,7 +72,7 @@ private:
     // GlobalParameter
     GlobalParameter* globalParameter_;
     std::string groupName_;
-    std::string folderName_ = "CameraAnimation/AnimationData";
+    std::string folderPath_ = "CameraAnimation/AnimationData";
 
     // キーフレーム
     std::vector<std::unique_ptr<CameraKeyFrame>> keyFrames_;

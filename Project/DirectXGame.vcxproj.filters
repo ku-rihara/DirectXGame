@@ -355,6 +355,12 @@
     <Filter Include="MyEngine\.cpp\utility\CameraEditor">
       <UniqueIdentifier>{7ff1fcef-200f-4f44-9d0b-2cc5e237686d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.h\utility\ShakeEditor">
+      <UniqueIdentifier>{b598867d-1557-4204-8949-7f620bc285d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\ShakeEditor">
+      <UniqueIdentifier>{54cd1afe-91ee-4208-8d44-5e3f9d0d2fc1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -948,6 +954,15 @@
     </ClCompile>
     <ClCompile Include="Game\GameCamera\CameraRendition.cpp">
       <Filter>Game\GameCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ShakeEditor\ShakeEditor.cpp">
+      <Filter>MyEngine\.cpp\utility\ShakeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ShakeEditor\ShakePlayer.cpp">
+      <Filter>MyEngine\.cpp\utility\ShakeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ShakeEditor\ShakeData.cpp">
+      <Filter>MyEngine\.cpp\utility\ShakeEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1586,6 +1601,15 @@
     </ClInclude>
     <ClInclude Include="Game\GameCamera\CameraRendition.h">
       <Filter>Game\GameCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ShakeEditor\ShakePlayer.h">
+      <Filter>MyEngine\.h\utility\ShakeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ShakeEditor\ShakeEditor.h">
+      <Filter>MyEngine\.h\utility\ShakeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ShakeEditor\ShakeData.h">
+      <Filter>MyEngine\.h\utility\ShakeEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

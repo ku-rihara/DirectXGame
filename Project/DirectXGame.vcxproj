@@ -127,6 +127,9 @@
     <ClCompile Include="Game\Combo\Combo.cpp" />
     <ClCompile Include="Game\Combo\ComboUI.cpp" />
     <ClCompile Include="Game\Combo\ComboUIController.cpp" />
+    <ClCompile Include="Engine\utility\ShakeEditor\ShakeData.cpp" />
+    <ClCompile Include="Engine\utility\ShakeEditor\ShakeEditor.cpp" />
+    <ClCompile Include="Engine\utility\ShakeEditor\ShakePlayer.cpp" />
     <ClCompile Include="Game\EasingTestObj\EasingTestObj.cpp" />
     <ClCompile Include="Game\Enemy\BaseEnemy.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\BaseEnemyBehavior.cpp" />
@@ -340,6 +343,9 @@
     <ClInclude Include="Game\Combo\Combo.h" />
     <ClInclude Include="Game\Combo\ComboUI.h" />
     <ClInclude Include="Game\Combo\ComboUIController.h" />
+    <ClInclude Include="Engine\utility\ShakeEditor\ShakeData.h" />
+    <ClInclude Include="Engine\utility\ShakeEditor\ShakeEditor.h" />
+    <ClInclude Include="Engine\utility\ShakeEditor\ShakePlayer.h" />
     <ClInclude Include="Game\EasingTestObj\EasingTestObj.h" />
     <ClInclude Include="Game\Enemy\BaseEnemy.h" />
     <ClInclude Include="Game\Enemy\Behavior\BaseEnemyBehavior.h" />
