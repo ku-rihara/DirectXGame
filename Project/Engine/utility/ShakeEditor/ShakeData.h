@@ -45,9 +45,9 @@ public:
     void AdjustParam();
 
     /// 再生制御
-    void Play();
-    void Stop();
-    void Reset();
+    void Play(); // リセットしてから再生開始
+    void Stop(); // 停止してオフセットをクリア
+    void Reset(); // パラメータをリセット（再生状態は変更しない）
 
     /// データのロード・セーブ
     void LoadData();
@@ -82,18 +82,18 @@ private:
     std::string folderPath_ = "ShakeEditor";
 
     // シェイクパラメータ
-    float shakeLength_     = 1.0f;
-    float maxTime_         = 1.0f;
-    float startTime_       = 1.0f;
-    int32_t easeType_      = 0;
-    int32_t shakeType_     = 0;
-    int32_t axisFlag_      = AXIS_XYZ; // 軸設定
+    float shakeLength_ = 1.0f;
+    float maxTime_     = 1.0f;
+    float startTime_   = 1.0f;
+    int32_t easeType_  = 0;
+    int32_t shakeType_ = 0;
+    int32_t axisFlag_  = AXIS_XYZ; // 軸設定
 
     // 再生状態
     PlayState playState_ = PlayState::STOPPED;
 
     // 現在のシェイク値
-    Vector3 currentShakeOffset_  = {0.0f, 0.0f, 0.0f};
+    Vector3 currentShakeOffset_ = {0.0f, 0.0f, 0.0f};
 
     // イージング用
     Easing<float> timeEase_;
@@ -108,7 +108,7 @@ public:
     float GetShakeLength() const { return shakeLength_; }
     float GetMaxTime() const { return maxTime_; }
     Vector3 GetShakeOffset() const { return currentShakeOffset_; }
-  
+
     void SetAxisFlag(AxisFlag flag) { axisFlag_ = static_cast<int32_t>(flag); }
     AxisFlag GetAxisFlag() const { return static_cast<AxisFlag>(axisFlag_); }
 };

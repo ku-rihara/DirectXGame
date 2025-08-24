@@ -277,6 +277,8 @@ bool CameraAnimationData::IsFinished() const {
 void CameraAnimationData::Play() {
     playState_ = PlayState::PLAYING;
 
+    Reset();
+
     // 再生開始時にフラグをリセット
     isAllKeyFramesFinished_ = false;
 
