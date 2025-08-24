@@ -24,16 +24,16 @@ private:
     LockOn* lockOn_;
     ViewProjection viewprojection_;
 
-    CameraRendition rendition_; /// 演出管理クラス
+    std::unique_ptr<CameraRendition> rendition_; /// 演出管理クラス
 
-    const WorldTransform* target_ = nullptr; /// 追従対象
-    Vector3 stickInput_; /// スティック入力ベクトル
-    Vector3 interTarget_ = {}; /// 補間用ターゲット座標
-    float destinationAngleY_; /// Y軸回転の目標角度
-    int viewMoveTime_; /// カメラ移動時間
+    const WorldTransform* target_ = nullptr; 
+    Vector3 stickInput_;
+    Vector3 interTarget_ = {};
+    float destinationAngleY_; 
+    int viewMoveTime_;
 
-    Vector3 shakePos_; /// シェイク座標
-    float rotate_; /// 回転角度
+    Vector3 shakeOffsetPos_;
+    float rotate_; 
 
     Parameter paramater_; /// パラメータ構造体
 
@@ -62,6 +62,9 @@ public:
     void ChangeZoomInOut(); /// ズーム演出開始
     void StartZoomWithShake(); /// ズーム + シェイクの同時演出
 
+    void PlayAnimation(const std::string& filename);
+    void PlayShake(const std::string& filename);
+
     ///-------------------------------------------------------------------------------------
     /// Editor
     ///------------------------------------------------------------------------------------
@@ -81,8 +84,7 @@ public:
     bool IsBehaviorActive() const;
     bool IsAnyRenditionActive() const;
     CameraRendition::ShakeMode GetShakeMode() const;
-    CameraRendition::BehaviorMode GetBehaviorMode() const;
-
+  
     /// ===================================================
     /// setter
     /// ===================================================
@@ -90,8 +92,8 @@ public:
     void SetRotate(const float& rotate) { rotate_ = rotate; }
     void SetOffSet(const Vector3& offset) { offset_ = offset; }
     void SetLockOn(LockOn* lockon) { lockOn_ = lockon; }
-    void SetShakePos(const Vector3& shake) { shakePos_ = shake; }
-    void SetShakePosY(const float& shake) { shakePos_.y = shake; }
+    void SetShakePos(const Vector3& shake) { shakeOffsetPos_ = shake; }
+    void SetShakePosY(const float& shake) { shakeOffsetPos_.y = shake; }
     void SetDestinationAngleY_(float angle) { destinationAngleY_ = angle; }
     void SetViewProjectionPos(Vector3 pos) { viewprojection_.translation_ = pos; }
 };

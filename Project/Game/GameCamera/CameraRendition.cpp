@@ -5,29 +5,36 @@
 
 void CameraRendition::Init() {
     currentShakeMode_    = ShakeMode::WAIT;
-    currentBehaviorMode_ = BehaviorMode::ROOT;
 
     // 各イージングの初期化
-    inEase_.Init("CameraZoomIn");
+  /*  inEase_.Init("CameraZoomIn");
     outEase_.Init("CameraZoomOut");
-    backlashEase_.Init("CameraBacklash");
+    backlashEase_.Init("CameraBacklash");*/
+
+    shakePlayer_ = std::make_unique<ShakePlayer>();
+    cameraAnimation_ = std::make_unique<CameraAnimation>();
+
 }
 
 void CameraRendition::Update() {
     if (!pGameCamera_) {
         return;
     }
+
+    shakePlayer_->Update(Frame::DeltaTimeRate());
+    cameraAnimation_->Update(Frame::DeltaTimeRate());
+
     // Shake系統の更新
     int shakeModeIndex = static_cast<int>(currentShakeMode_);
     if (shakeModeIndex >= 0 && shakeModeIndex < static_cast<int>(ShakeMode::COUNT)) {
         (this->*spShakeFuncTable_[shakeModeIndex])();
     }
 
-    // Behavior系統の更新
-    int behaviorModeIndex = static_cast<int>(currentBehaviorMode_);
-    if (behaviorModeIndex >= 0 && behaviorModeIndex < static_cast<int>(BehaviorMode::COUNT)) {
-        (this->*spBehaviorFuncTable_[behaviorModeIndex])();
-    }
+    //// Behavior系統の更新
+    //int behaviorModeIndex = static_cast<int>(currentBehaviorMode_);
+    //if (behaviorModeIndex >= 0 && behaviorModeIndex < static_cast<int>(BehaviorMode::COUNT)) {
+    //    (this->*spBehaviorFuncTable_[behaviorModeIndex])();
+    //}
 }
 
 // =================================== Shake系統の更新関数 ===================================
@@ -119,15 +126,15 @@ void CameraRendition::UpdateBacklash() {
 // =================================== ヘルパー関数 ===================================
 
 void CameraRendition::ZoomShakeUpdate() {
-    // ZoomInOut専用のShake処理
-    pGameCamera_->SetShakePos(Shake<Vector3>(zoomShakeT_, 1.6f));
-    zoomShakeT_ -= Frame::DeltaTime();
+    //// ZoomInOut専用のShake処理
+    //pGameCamera_->SetShakePos(Shake<Vector3>(zoomShakeT_, 1.6f));
+    //zoomShakeT_ -= Frame::DeltaTime();
 
-    if (zoomShakeT_ > 0.0f) {
-        return;
-    }
-    zoomShakeT_ = 0.0f;
-    pGameCamera_->SetShakePos(Vector3::ZeroVector());
+    //if (zoomShakeT_ > 0.0f) {
+    //    return;
+    //}
+    //zoomShakeT_ = 0.0f;
+    //pGameCamera_->SetShakePos(Vector3::ZeroVector());
 }
 
 // =================================== モード変更関数（Shake系統） ===================================
@@ -160,36 +167,36 @@ void CameraRendition::ChangeToShakeWait() {
 
 // =================================== モード変更関数（Behavior系統） ===================================
 
-void CameraRendition::ChangeBehaviorMode(BehaviorMode newMode) {
-    currentBehaviorMode_ = newMode;
-
-    // 新しいモードに応じて初期化処理を実行
-    switch (newMode) {
-    case BehaviorMode::ZOOM_IN_OUT:
-        InitializeZoomInOut();
-        break;
-    case BehaviorMode::BACKLASH:
-        InitializeBacklash();
-        break;
-    case BehaviorMode::ROOT:
-    default:
-
-        break;
-    }
-}
+//void CameraRendition::ChangeBehaviorMode(BehaviorMode newMode) {
+//    currentBehaviorMode_ = newMode;
+//
+//    // 新しいモードに応じて初期化処理を実行
+//    switch (newMode) {
+//    case BehaviorMode::ZOOM_IN_OUT:
+//        InitializeZoomInOut();
+//        break;
+//    case BehaviorMode::BACKLASH:
+//        InitializeBacklash();
+//        break;
+//    case BehaviorMode::ROOT:
+//    default:
+//
+//        break;
+//    }
+//}
 
 void CameraRendition::ChangeToZoomInOut() {
-    if (currentBehaviorMode_ != BehaviorMode::ROOT)
+   /* if (currentBehaviorMode_ != BehaviorMode::ROOT)
         return;
-    ChangeBehaviorMode(BehaviorMode::ZOOM_IN_OUT);
+    ChangeBehaviorMode(BehaviorMode::ZOOM_IN_OUT);*/
 }
 
 void CameraRendition::ChangeToBacklash() {
-    ChangeBehaviorMode(BehaviorMode::BACKLASH);
+   /* ChangeBehaviorMode(BehaviorMode::BACKLASH);*/
 }
 
 void CameraRendition::ChangeToBehaviorRoot() {
-    ChangeBehaviorMode(BehaviorMode::ROOT);
+   /* ChangeBehaviorMode(BehaviorMode::ROOT);*/
 }
 
 // =================================== 初期化関数 ===================================
@@ -201,19 +208,27 @@ void CameraRendition::InitializeShaking() {
 }
 
 void CameraRendition::InitializeZoomInOut() {
-    zoomStep_ = ZoomStep::ZOOM_IN;
+   /* zoomStep_ = ZoomStep::ZOOM_IN;
 
     zoomShakeTMax_ = kWaitTime_ + 0.4f;
-    zoomShakeT_    = zoomShakeTMax_;
+    zoomShakeT_    = zoomShakeTMax_;*/
 }
 
 void CameraRendition::InitializeBacklash() {
-    backlashStep_ = BacklashStep::OUT_IN;
+   /* backlashStep_ = BacklashStep::OUT_IN;
 
     backlashEase_.ApplyFromJson("CameraZoomOut.json");
     backlashEase_.SaveAppliedJsonFileName();
     backlashEase_.SetAdaptValue(&tempBacklashOffset_);
-    backlashEase_.Reset();
+    backlashEase_.Reset();*/
+}
+
+ // play呼び出し
+void CameraRendition::AnimationPlay(const std::string& filename) {
+    cameraAnimation_->Play(filename);
+}
+void CameraRendition::ShakePlay(const std::string& filename) {
+    shakePlayer_->Play(filename);
 }
 
 // Shake系統の関数ポインタテーブル

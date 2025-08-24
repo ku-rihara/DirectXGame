@@ -24,13 +24,15 @@ void GameCamera::Init() {
     rotate_ = paramater_.firstRotate_;
     offset_ = paramater_.firstOffset_;
 
-    rendition_.Init();
-    rendition_.SetGameCamera(this);
+    rendition_ = std::make_unique<CameraRendition>();
+    rendition_->Init();
+    rendition_->SetGameCamera(this);
 }
 
 void GameCamera::Update() {
   
-    rendition_.Update();
+    rendition_->Update();
+    shakeOffsetPos_ = rendition_->GetShakeOffset();
 
     // カメラの基本移動処理
     MoveUpdate();
@@ -118,33 +120,29 @@ void GameCamera::Reset() {
 Vector3 GameCamera::OffsetCalc(const Vector3& offset) const {
     // カメラの角度から回転行列を計算する
     Matrix4x4 rotateMatrix = MakeRotateYMatrix(viewprojection_.rotation_.y);
-    Vector3 resultOffset   = TransformNormal(offset + shakePos_, rotateMatrix);
+    Vector3 resultOffset   = TransformNormal(offset + shakeOffsetPos_, rotateMatrix);
     return resultOffset;
 }
 
 // ================================= CameraRendition関連のメソッド ================================= //
 
 void GameCamera::ChangeShakeMode() {
-    rendition_.ChangeToShaking();
+    rendition_->ChangeToShaking();
 }
 
 void GameCamera::ChangeZoomInOut() {
-    rendition_.ChangeToZoomInOut();
+    rendition_->ChangeToZoomInOut();
 }
 
 void GameCamera::StartZoomWithShake() {
-    rendition_.ChangeToZoomInOut();
-    rendition_.ChangeToShaking();
+    rendition_->ChangeToZoomInOut();
+    rendition_->ChangeToShaking();
 }
 
 // ================================= CameraRendition状態確認メソッド ================================= //
 
 bool GameCamera::IsShakeActive() const {
-    return !rendition_.IsShakeWait();
-}
-
-bool GameCamera::IsBehaviorActive() const {
-    return !rendition_.IsBehaviorRoot();
+    return !rendition_->IsShakeWait();
 }
 
 bool GameCamera::IsAnyRenditionActive() const {
@@ -152,11 +150,7 @@ bool GameCamera::IsAnyRenditionActive() const {
 }
 
 CameraRendition::ShakeMode GameCamera::GetShakeMode() const {
-    return rendition_.GetCurrentShakeMode();
-}
-
-CameraRendition::BehaviorMode GameCamera::GetBehaviorMode() const {
-    return rendition_.GetCurrentBehaviorMode();
+    return rendition_->GetCurrentShakeMode();
 }
 
 // ================================= Parameter Edit ================================= //
@@ -179,32 +173,7 @@ void GameCamera::AdjustParam() {
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
 
-        // CameraRendition状態表示
-        ImGui::Separator();
-        ImGui::Text("CameraRendition Status:");
-        const char* shakeModes[]    = {"WAIT", "SHAKING"};
-        const char* behaviorModes[] = {"ROOT", "ZOOM_IN_OUT", "BACKLASH"};
-
-        int shakeIndex    = static_cast<int>(GetShakeMode());
-        int behaviorIndex = static_cast<int>(GetBehaviorMode());
-
-        ImGui::Text("Shake Mode: %s", shakeModes[shakeIndex]);
-        ImGui::Text("Behavior Mode: %s", behaviorModes[behaviorIndex]);
-        ImGui::Text("Any Active: %s", IsAnyRenditionActive() ? "Yes" : "No");
-
-        // 演出開始ボタン
-        if (ImGui::Button("Start Shake")) {
-            ChangeShakeMode();
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Start Zoom")) {
-            ChangeZoomInOut();
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Zoom + Shake")) {
-            StartZoomWithShake();
-        }
-
+       
         ImGui::PopID();
     }
 #endif // _DEBUG
@@ -241,9 +210,11 @@ void GameCamera::Debug() {
     ImGui::DragFloat("rotate", &rotate_, 0.01f);
     ImGui::DragFloat3("offset", &offset_.x, 0.1f);
 
-    // CameraRenditionのデバッグ情報も表示
-    ImGui::Separator();
-    ImGui::Text("CameraRendition Debug:");
-    ImGui::Text("Shake: %s", IsShakeActive() ? "Active" : "Inactive");
-    ImGui::Text("Behavior: %s", IsBehaviorActive() ? "Active" : "Inactive");
 }
+
+void GameCamera::PlayAnimation(const std::string& filename) {
+    rendition_->AnimationPlay(filename);
+ }
+void GameCamera::PlayShake(const std::string& filename) {
+     rendition_->ShakePlay(filename);   
+ }
