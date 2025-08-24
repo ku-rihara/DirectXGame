@@ -6,13 +6,6 @@
 
 class CameraAnimation {
 public:
-    enum class AnimationState {
-        IDLE, // 待機状態
-        LOADING, // ロード中
-        PLAYING, // 再生中
-        RESETTING // リセット中
-    };
-
     struct CameraParam {
         Vector3 position;
         Vector3 rotation;
@@ -33,13 +26,7 @@ public:
     void SaveInitialValues();
 
 private:
-    
-    // step
-    void StepLoad();
-    void StepWait();
-    void StepPlaying();
-    void StepReset();
-
+ 
     /// ViewProjectionにオフセット値を適用
     void ApplyOffsetToViewProjection();
 
@@ -47,20 +34,9 @@ private:
     // アニメーションデータ
     std::unique_ptr<CameraAnimationData> animationData_;
 
-    // アニメーション状態
-    AnimationState currentStep_ = AnimationState::IDLE;
-
+ 
     // 初期値
     CameraParam initialParam_;
-
-    // リセット用パラメータ
-    float resetTimer_    = 0.0f;
-    float resetDuration_ = 1.0f;
-
-    // リセット時のイージングタイプ
-    int32_t resetPosEaseType_    = 0;
-    int32_t resetRotateEaseType_ = 0;
-    int32_t resetFovEaseType_    = 0;
 
     // 現在のオフセット値
     Vector3 currentOffsetPosition_;
@@ -68,13 +44,11 @@ private:
     float currentOffsetFov_ = 0.0f;
 
     // 一時的なViewProjection
-    ViewProjection* pViewProjection_=nullptr;
+    ViewProjection* pViewProjection_ = nullptr;
 
     // アニメーション名
     std::string currentAnimationName_;
 
-private:
-    static void (CameraAnimation::* spFuncTable_[])();
 public:
     // ゲッター
     const std::string& GetAnimationName() const { return currentAnimationName_; }

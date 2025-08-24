@@ -1,8 +1,8 @@
 #include "ShakeData.h"
 #include "Shake.h"
-#include<Windows.h>
 #include <algorithm>
 #include <imgui.h>
+#include <Windows.h>
 
 void ShakeData::Init(const std::string& shakeName) {
     globalParameter_ = GlobalParameter::GetInstance();
@@ -22,6 +22,11 @@ void ShakeData::Init(const std::string& shakeName) {
     timeEase_.SetAdaptValue(&easedTime_);
     timeEase_.SetStartValue(startTime_);
     timeEase_.SetEndValue(0.0f);
+
+     timeEase_.SetOnFinishCallback([this]() {
+        Stop();
+        Reset();
+    });
 
     // 初期状態
     playState_          = PlayState::STOPPED;
@@ -43,7 +48,6 @@ void ShakeData::Update(float deltaTime) {
 }
 
 void ShakeData::UpdateShakeValues() {
-
     UpdateVector3Shake();
 }
 
@@ -79,14 +83,18 @@ Vector3 ShakeData::ApplyAxisFlag(const Vector3& shakeValue) const {
 }
 
 void ShakeData::Play() {
+    Reset();
+
     playState_ = PlayState::PLAYING;
 
     // イージング初期化
-    timeEase_.SetStartValue(1.0f);
+    timeEase_.SetStartValue(startTime_);
     timeEase_.SetEndValue(0.0f);
     timeEase_.SetMaxTime(maxTime_);
     timeEase_.SetType(static_cast<EasingType>(easeType_));
-    easedTime_ = 0.0f;
+    timeEase_.Reset(); // イージングもリセット
+    easedTime_ = startTime_;
+
 }
 
 void ShakeData::Stop() {
@@ -95,8 +103,12 @@ void ShakeData::Stop() {
 }
 
 void ShakeData::Reset() {
-    Stop();
-    easedTime_ = 0.0f;
+
+    easedTime_          = startTime_;
+    currentShakeOffset_ = {0.0f, 0.0f, 0.0f};
+
+    // イージングもリセット
+    timeEase_.Reset();
 }
 
 bool ShakeData::IsFinished() const {
@@ -152,6 +164,13 @@ void ShakeData::AdjustParam() {
         }
         ImGui::Text("State: %s", stateText);
 
+        // 進行状況を表示
+        float progress = 0.0f;
+        if (maxTime_ > 0.0f) {
+            progress = (startTime_ - easedTime_) / (startTime_ - 0.0f);
+        }
+        ImGui::ProgressBar(progress, ImVec2(0.0f, 0.0f), "Progress");
+
         ImGui::Separator();
 
         // Vector3の場合は個別軸のチェックボックス
@@ -200,12 +219,12 @@ void ShakeData::AdjustParam() {
         // セーブ・ロード
         if (ImGui::Button("Load Data")) {
             LoadData();
-            MessageBoxA(nullptr, " shake loaded successfully.", "Shake Data", 0);
+            MessageBoxA(nullptr, "Shake loaded successfully.", "Shake Data", 0);
         }
         ImGui::SameLine();
         if (ImGui::Button("Save Data")) {
             SaveData();
-            MessageBoxA(nullptr, " shake loaded successfully.", "Shake Data", 0);
+            MessageBoxA(nullptr, "Shake saved successfully.", "Shake Data", 0);
         }
 
         ImGui::PopID();
