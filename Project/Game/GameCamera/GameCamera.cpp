@@ -27,6 +27,7 @@ void GameCamera::Init() {
     rendition_ = std::make_unique<CameraRendition>();
     rendition_->Init();
     rendition_->SetGameCamera(this);
+    rendition_->SetViewProjection(&viewprojection_);
 }
 
 void GameCamera::Update() {
@@ -145,9 +146,6 @@ bool GameCamera::IsShakeActive() const {
     return !rendition_->IsShakeWait();
 }
 
-bool GameCamera::IsAnyRenditionActive() const {
-    return IsShakeActive() || IsBehaviorActive();
-}
 
 CameraRendition::ShakeMode GameCamera::GetShakeMode() const {
     return rendition_->GetCurrentShakeMode();

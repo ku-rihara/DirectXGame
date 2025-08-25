@@ -55,8 +55,8 @@ void CameraAnimation::SaveInitialValues() {
         return;
     }
     
-    initialParam_.position = pViewProjection_->translation_;
-    initialParam_.rotation = pViewProjection_->rotation_;
+    initialParam_.position = pViewProjection_->positionOffset_;
+    initialParam_.rotation = pViewProjection_->rotationOffset_;
     initialParam_.fov      = pViewProjection_->fovAngleY_;
 }
 

@@ -18,8 +18,8 @@ private:
     /// private varius
     /// ===================================================
 
-    GlobalParameter* globalParameter_; /// グローバルパラメータ
-    const std::string groupName_ = "GameCamera"; /// グループ名
+    GlobalParameter* globalParameter_; // グローバルパラメータ
+    const std::string groupName_ = "GameCamera"; // グループ名
 
     LockOn* lockOn_;
     ViewProjection viewprojection_;

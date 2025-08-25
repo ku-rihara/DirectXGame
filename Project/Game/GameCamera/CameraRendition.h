@@ -67,6 +67,7 @@ private:
     ShakeMode currentShakeMode_ = ShakeMode::WAIT;
     std::unique_ptr<ShakePlayer> shakePlayer_;
     std::unique_ptr<CameraAnimation> cameraAnimation_;
+  
 
     // Shake関連
     ShakeStep shakeStep_ = ShakeStep::SHAKE;
@@ -81,4 +82,5 @@ public:
 
      // セッター
     void SetGameCamera(GameCamera* camera) { pGameCamera_ = camera; }
+    void SetViewProjection(ViewProjection* viewProjection);
 };
