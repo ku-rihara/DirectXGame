@@ -1,19 +1,20 @@
 {
-    "kjkj2": {
+    "PlayerthrustAttack1": {
         "fov": 0.7853981852531433,
         "fovEaseType": 0,
         "position": [
-            15.100000381469727,
-            3.799999952316284,
-            0.0
+            0.0,
+            0.0,
+            -15.0
         ],
         "positionEaseType": 0,
         "rotation": [
+            0.3839724659919739,
             0.0,
-            8.0,
             0.0
         ],
         "rotationEaseType": 0,
-        "timePoint": 0.0
+        "timeMode": 1,
+        "timePoint": 0.1599999964237213
     }
 }

@@ -1,4 +1,5 @@
 #include "CameraEditor.h"
+#include "Frame/Frame.h"
 #include <algorithm>
 #include <filesystem>
 #include <imgui.h>
@@ -108,10 +109,7 @@ void CameraEditor::ApplyToViewProjection() {
 
     // 再生中のアニメーションがあれば適用
     for (auto& animation : animations_) {
-        if (animation->IsPlaying()) {
-            animation->ApplyToViewProjection(*viewProjection_);
-            return;
-        }
+        animation->ApplyToViewProjection(*viewProjection_);
     }
 }
 
@@ -185,25 +183,12 @@ void CameraEditor::EditorUpdate() {
             ImGui::SeparatorText("Animation Controls");
             ImGui::PushID("selected_controls");
 
-            // 再生制御ボタン
-            if (ImGui::Button("Play")) {
-                PlaySelectedAnimation();
-            }
-            ImGui::SameLine();
-            if (ImGui::Button("Pause")) {
-                PauseSelectedAnimation();
-            }
-            ImGui::SameLine();
-            if (ImGui::Button("Reset")) {
-                ResetSelectedAnimation();
-            }
-
             // 状態表示
             ImGui::Text("Selected: %s", animations_[selectedIndex_]->GetGroupName().c_str());
             ImGui::Text("Playing: %s", IsSelectedAnimationPlaying() ? "Yes" : "No");
             ImGui::Text("Finished: %s", IsSelectedAnimationFinished() ? "Yes" : "No");
 
-            // 手動適用ボタン（自動適用がOFFの場合）
+            // 手動適用ボタン
             if (!autoApplyToViewProjection_) {
                 if (ImGui::Button("Apply to ViewProjection")) {
                     if (viewProjection_ && IsSelectedAnimationPlaying()) {

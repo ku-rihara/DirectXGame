@@ -132,9 +132,11 @@ void CameraAnimationData::UpdateActiveKeyFrames(float deltaTime) {
 
     // 初期値に戻るイージング中の場合
     if (isReturningToInitial_) {
-        returnPositionEase_.Update(deltaTime);
-        returnRotationEase_.Update(deltaTime);
-        returnFovEase_.Update(deltaTime);
+        // 復帰用イージングは常にDeltaTimeRateを使用
+        float scaledDeltaTime = deltaTime * playbackSpeed_;
+        returnPositionEase_.Update(scaledDeltaTime);
+        returnRotationEase_.Update(scaledDeltaTime);
+        returnFovEase_.Update(scaledDeltaTime);
 
         // イージングが完了したかチェック
         if (returnPositionEase_.IsFinished() && returnRotationEase_.IsFinished() && returnFovEase_.IsFinished()) {
@@ -146,7 +148,7 @@ void CameraAnimationData::UpdateActiveKeyFrames(float deltaTime) {
 
     // 現在のアクティブキーフレームを更新
     if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
-        keyFrames_[activeKeyFrameIndex_]->Update(deltaTime);
+        keyFrames_[activeKeyFrameIndex_]->Update();
     }
 }
 
@@ -410,12 +412,7 @@ void CameraAnimationData::AdjustParam() {
                     ImGui::PopStyleColor();
                 }
 
-                /* ImGui::SameLine();
-                 if (ImGui::Button("X")) {
-                     RemoveKeyFrame(i);
-                     ImGui::PopID();
-                     break;
-                 }*/
+     
 
                 ImGui::PopID();
 
