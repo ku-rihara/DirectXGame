@@ -7,6 +7,7 @@
 #include <vector>
 
 class CameraEditor {
+
 public:
     CameraEditor()  = default;
     ~CameraEditor() = default;
@@ -31,6 +32,9 @@ public:
     // ViewProjectionに値を適用する機能
     void ApplyToViewProjection();
 
+    // KeyFrameプレビュー機能
+    void ApplySelectedKeyFrameToViewProjection();
+
 private:
     void SetViewProjection(ViewProjection* vp);
 
@@ -46,8 +50,17 @@ private:
     // 再生制御用
     bool autoApplyToViewProjection_ = true;
 
+    // KeyFrameプレビュー用
+    bool keyFramePreviewMode_       = false;
+    bool isApplyingKeyFramePreview_ = false;
+
 public:
     // ゲッター
     bool GetAutoApplyToViewProjection() const { return autoApplyToViewProjection_; }
     void SetAutoApplyToViewProjection(bool enable) { autoApplyToViewProjection_ = enable; }
+
+    // KeyFrameプレビューモード関連
+    bool GetKeyFramePreviewMode() const { return keyFramePreviewMode_; }
+    void SetKeyFramePreviewMode(bool enable) { keyFramePreviewMode_ = enable; }
+    bool IsApplyingKeyFramePreview() const { return isApplyingKeyFramePreview_; }
 };

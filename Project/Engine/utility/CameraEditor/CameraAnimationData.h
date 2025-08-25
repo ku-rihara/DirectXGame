@@ -131,7 +131,11 @@ public:
     int32_t GetLastCompletedKeyFrameIndex() const { return lastCompletedKeyFrameIndex_; }
     int32_t GetTotalKeyFrameCount() const { return static_cast<int32_t>(keyFrames_.size()); }
     bool IsReturningToInitial() const { return isReturningToInitial_; }
-
+  
+    int32_t GetSelectedKeyFrameIndex() const { return selectedKeyFrameIndex_; }
+    void SetSelectedKeyFrameIndex(int32_t index);
+    CameraKeyFrame* GetSelectedKeyFrame();
+    const CameraKeyFrame* GetSelectedKeyFrame() const;
     // 初期値設定用
     void SetInitialValues(const Vector3& position, const Vector3& rotation, float fov);
 };

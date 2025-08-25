@@ -58,8 +58,8 @@ void CameraEditor::Update(float deltaTime) {
 
     // debugObjectの更新
     if (debugObject_ && viewProjection_) {
-        debugObject_->transform_.translation_ = viewProjection_->positionOffset_;
-        debugObject_->transform_.rotation_    = viewProjection_->rotationOffset_;
+        debugObject_->transform_.translation_ = viewProjection_->translation_ + viewProjection_->positionOffset_;
+        debugObject_->transform_.rotation_    = viewProjection_->rotation_ + viewProjection_->rotationOffset_;
     }
 }
 
@@ -134,6 +134,9 @@ void CameraEditor::EditorUpdate() {
         // 設定
         ImGui::Checkbox("Auto Apply to ViewProjection", &autoApplyToViewProjection_);
 
+        // KeyFrame確認モード
+        ImGui::Checkbox("KeyFrame Preview Mode", &keyFramePreviewMode_);
+
         ImGui::Separator();
 
         // UI
@@ -167,6 +170,10 @@ void CameraEditor::EditorUpdate() {
 
             if (ImGui::Selectable(displayName.c_str(), isSelected)) {
                 selectedIndex_ = i;
+                // 選択が変わった時にKeyFrameプレビューモードをリセット
+                if (keyFramePreviewMode_) {
+                    isApplyingKeyFramePreview_ = false;
+                }
             }
 
             if (isPlaying || isFinished) {
@@ -188,13 +195,17 @@ void CameraEditor::EditorUpdate() {
             ImGui::Text("Playing: %s", IsSelectedAnimationPlaying() ? "Yes" : "No");
             ImGui::Text("Finished: %s", IsSelectedAnimationFinished() ? "Yes" : "No");
 
-            // 手動適用ボタン
-            if (!autoApplyToViewProjection_) {
-                if (ImGui::Button("Apply to ViewProjection")) {
-                    if (viewProjection_ && IsSelectedAnimationPlaying()) {
-                        animations_[selectedIndex_]->ApplyToViewProjection(*viewProjection_);
-                    }
-                }
+            // KeyFrameプレビューモードの制御
+            if (keyFramePreviewMode_) {
+                ImGui::Separator();
+                ImGui::SeparatorText("KeyFrame Preview");
+
+                auto* selectedAnim        = animations_[selectedIndex_].get();
+                int selectedKeyFrameIndex = selectedAnim->GetSelectedKeyFrameIndex();
+
+                ImGui::Text("Selected KeyFrame: %d", selectedKeyFrameIndex);
+
+                ApplySelectedKeyFrameToViewProjection();
             }
 
             ImGui::PopID();
@@ -206,6 +217,25 @@ void CameraEditor::EditorUpdate() {
         }
     }
 #endif
+}
+
+void CameraEditor::ApplySelectedKeyFrameToViewProjection() {
+    if (!viewProjection_ || selectedIndex_ < 0 || selectedIndex_ >= static_cast<int>(animations_.size())) {
+        return;
+    }
+
+    auto* selectedAnim     = animations_[selectedIndex_].get();
+    auto* selectedKeyFrame = selectedAnim->GetSelectedKeyFrame();
+
+    if (!selectedKeyFrame) {
+        return;
+    }
+
+
+    // 選択中のKeyFrameの値をViewProjectionに適用
+    viewProjection_->positionOffset_ = selectedKeyFrame->GetEditPosition();
+    viewProjection_->rotationOffset_ = selectedKeyFrame->GetEditRotation();
+    viewProjection_->fovAngleY_      = selectedKeyFrame->GetEditFov();
 }
 
 CameraAnimationData* CameraEditor::GetSelectedAnimation() {
