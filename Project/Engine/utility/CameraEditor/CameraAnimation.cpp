@@ -16,6 +16,7 @@ void CameraAnimation::Update(float deltaTime) {
     // アニメーションデータの更新
     if (animationData_) {
         animationData_->Update(deltaTime);
+        ApplyOffsetToViewProjection();
     }
 }
 

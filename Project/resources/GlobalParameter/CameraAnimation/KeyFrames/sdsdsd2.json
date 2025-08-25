@@ -4,16 +4,16 @@
         "fovEaseType": 0,
         "position": [
             17.5,
-            0.0,
+            65.9000015258789,
             0.0
         ],
         "positionEaseType": 0,
         "rotation": [
-            0.0,
+            5.900000095367432,
             0.0,
             0.0
         ],
         "rotationEaseType": 0,
-        "timePoint": 0.0
+        "timePoint": 1.6299999952316284
     }
 }

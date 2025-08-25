@@ -1,4 +1,6 @@
 #pragma once
+#include "3d/Object3D.h"
+#include "3d/ViewProjection.h"
 #include "CameraAnimationData.h"
 #include <memory>
 #include <string>
@@ -9,17 +11,43 @@ public:
     CameraEditor()  = default;
     ~CameraEditor() = default;
 
+    void Init(ViewProjection* vp);
+    void Update(float deltaTime);
+    void EditorUpdate();
+
     void AllLoadFile();
     void AllSaveFile();
     void AddAnimation(const std::string& animationName);
-    void Update(float deltaTime);
-    void EditorUpdate();
+
     CameraAnimationData* GetSelectedAnimation();
+
+    // 再生機能の追加
+    void PlaySelectedAnimation();
+    void PauseSelectedAnimation();
+    void ResetSelectedAnimation();
+    bool IsSelectedAnimationPlaying() const;
+    bool IsSelectedAnimationFinished() const;
+
+    // ViewProjectionに値を適用する機能
+    void ApplyToViewProjection();
+
+private:
+    void SetViewProjection(ViewProjection* vp);
 
 private:
     std::vector<std::unique_ptr<CameraAnimationData>> animations_;
-    int selectedIndex_ = -1;
+    int selectedIndex_                     = -1;
+    ViewProjection* viewProjection_        = nullptr;
+    std::unique_ptr<Object3d> debugObject_ = nullptr;
 
     // 入力用バッファ
     char nameBuffer_[128] = "";
+
+    // 再生制御用
+    bool autoApplyToViewProjection_ = true;
+
+public:
+    // ゲッター
+    bool GetAutoApplyToViewProjection() const { return autoApplyToViewProjection_; }
+    void SetAutoApplyToViewProjection(bool enable) { autoApplyToViewProjection_ = enable; }
 };

@@ -20,11 +20,14 @@ void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t&
 
     BindParams();
 
-    // adapt
-    positionEase_.SetAdaptValue(&currentKeyFrameParam_.position);
-    rotationEase_.SetAdaptValue(&currentKeyFrameParam_.rotation);
-    fovEase_.SetAdaptValue(&currentKeyFrameParam_.fov);
+   
+    AdaptValueSetting();
+    AdaptEaseParam();
+}
 
+void CameraKeyFrame::Reset() {
+    positionEase_.Reset();
+    AdaptValueSetting();
     AdaptEaseParam();
 }
 
@@ -66,7 +69,10 @@ void CameraKeyFrame::AdjustParam() {
     ImGui::DragFloat("Time Point", &timePoint_, 0.01f);
 
     ImGui::DragFloat3("Position", &keyFrameParam_.position.x, 0.1f);
-    ImGui::DragFloat3("Rotation", &keyFrameParam_.rotation.x, 0.1f);
+    ImGui::SeparatorText("Rotate");
+    ImGui::SliderAngle("X", &keyFrameParam_.rotation.x);
+    ImGui::SliderAngle("Y", &keyFrameParam_.rotation.y);
+    ImGui::SliderAngle("Z", &keyFrameParam_.rotation.z);
 
     ImGui::DragFloat("FOV", &keyFrameParam_.fov, 0.01f);
 
@@ -96,6 +102,13 @@ void CameraKeyFrame::AdaptEaseParam() {
     rotationEase_.SetType(static_cast<EasingType>(rotationEaseType_));
     fovEase_.SetType(static_cast<EasingType>(fovEaseType_));
 }
+
+void CameraKeyFrame::AdaptValueSetting() {
+    // adapt
+    positionEase_.SetAdaptValue(&currentKeyFrameParam_.position);
+    rotationEase_.SetAdaptValue(&currentKeyFrameParam_.rotation);
+    fovEase_.SetAdaptValue(&currentKeyFrameParam_.fov);
+ }
 
 void CameraKeyFrame::EasingTypeSelector(const char* label, int32_t& target) {
     int type = static_cast<int>(target);

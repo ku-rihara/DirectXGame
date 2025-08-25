@@ -80,7 +80,7 @@
             0.0
         ],
         "axisFlag": 7,
-        "easeType": 3,
+        "easeType": 1,
         "isMoveForRail": true,
         "maxTime": 1.0,
         "moveSpeed": 1.5499999523162842,

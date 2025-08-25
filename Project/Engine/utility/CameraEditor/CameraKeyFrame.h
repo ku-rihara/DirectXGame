@@ -27,6 +27,8 @@ public:
     void AdjustParam();
     void BindParams();
     void AdaptEaseParam();
+    void AdaptValueSetting();
+    void Reset();
     bool IsFinished() const;
 
     // データのロード

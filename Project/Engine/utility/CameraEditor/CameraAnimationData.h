@@ -77,7 +77,7 @@ private:
     // キーフレーム
     std::vector<std::unique_ptr<CameraKeyFrame>> keyFrames_;
     int32_t selectedKeyFrameIndex_ = -1;
-    int32_t finalKeyFrameIndex_ = -1;
+    int32_t finalKeyFrameIndex_    = -1;
     int32_t activeKeyFrameIndex_   = 0;
 
     // 再生状態
@@ -88,6 +88,10 @@ private:
     Vector3 currentPosition_;
     Vector3 currentRotation_;
     float currentFov_;
+
+    Vector3 returnPosition_;
+    Vector3 returnRotation_;
+    float returnFov_;
 
     // リセット用パラメータ
     float resetTimePoint_ = 0.0f;
@@ -103,7 +107,7 @@ private:
 
     // キーフレーム進行管理用の新しいメンバ変数
     bool isAllKeyFramesFinished_        = false;
-   int32_t lastCompletedKeyFrameIndex_ = -1;
+    int32_t lastCompletedKeyFrameIndex_ = -1;
 
     // 初期値復帰用のメンバ変数
     bool isReturningToInitial_ = false;
@@ -117,7 +121,6 @@ private:
     Easing<float> returnFovEase_;
 
 public:
-   
     std::string GetGroupName() const { return groupName_; }
     bool IsPlaying() const;
     bool IsFinished() const;
