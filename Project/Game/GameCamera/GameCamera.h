@@ -75,6 +75,7 @@ public:
     /// getter
     /// ===================================================
     const ViewProjection& GetViewProjection() { return viewprojection_; }
+    ViewProjection& GetViewProjectionRef() { return viewprojection_; }
     Vector3 GetTargetPos() const;
     Vector3 GetOffset() const { return offset_; };
     Parameter GetParamater() const { return paramater_; }

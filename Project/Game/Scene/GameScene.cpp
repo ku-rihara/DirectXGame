@@ -9,7 +9,6 @@
 #include "Lighrt/Light.h"
 #include <imgui.h>
 
-
 void GameScene::Init() {
     //// グローバル変数の読み込み
     GlobalParameter::GetInstance()->LoadFiles();
@@ -33,6 +32,7 @@ void GameScene::Init() {
     comboCreate_          = std::make_unique<ComboCreateEditor>();
     fireInjectors_        = std::make_unique<FireInjectors>();
     comboScene_           = std::make_unique<ComboScene>();
+    cameraEditor_         = std::make_unique<CameraEditor>();
 
     ///=======================================================================================
     /// 初期化
@@ -55,6 +55,7 @@ void GameScene::Init() {
     ///---------------------------------------------------------------------------------------
     /// セット
     ///---------------------------------------------------------------------------------------
+    cameraEditor_->Init(&gameCamera_->GetViewProjectionRef());
     gameCamera_->SetTarget(&player_->GetTransform());
     enemyManager_->SetPlayer(player_.get());
     enemyManager_->SetCombo(combo_.get());
@@ -68,7 +69,7 @@ void GameScene::Init() {
     enemySpawner_->SetEnemyManager(enemyManager_.get());
     fireInjectors_->SetCombo(combo_.get());
 
-    //comboScene
+    // comboScene
     comboScene_->SetPlayer(player_.get());
     comboScene_->SetCombo(combo_.get());
 
@@ -112,6 +113,7 @@ void GameScene::Update() {
 
     // debugCamera
     debugCamera_->Update();
+    cameraEditor_->Update(Frame::DeltaTime());
     Debug();
 
     // 各クラス更新
@@ -131,7 +133,6 @@ void GameScene::Update() {
     enemyManager_->HpBarUpdate(viewProjection_);
     lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
 
-    
     Object3DRegistry::GetInstance()->UpdateAll();
 
     /// パーティクル更新
@@ -204,6 +205,7 @@ void GameScene::Debug() {
     fireInjectors_->AdjustParam();
 
     ShadowMap::GetInstance()->DebugImGui();
+    cameraEditor_->EditorUpdate();
 
     ImGui::End();
 #endif
