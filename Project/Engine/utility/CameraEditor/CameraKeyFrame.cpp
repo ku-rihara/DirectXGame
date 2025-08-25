@@ -1,4 +1,5 @@
 #include "CameraKeyFrame.h"
+#include "Frame/Frame.h" 
 #include <imgui.h>
 #include <iostream>
 
@@ -20,13 +21,14 @@ void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t&
 
     BindParams();
 
-   
     AdaptValueSetting();
     AdaptEaseParam();
 }
 
 void CameraKeyFrame::Reset() {
     positionEase_.Reset();
+    rotationEase_.Reset();
+    fovEase_.Reset();
     AdaptValueSetting();
     AdaptEaseParam();
 }
@@ -43,11 +45,22 @@ void CameraKeyFrame::SaveData() {
     globalParameter_->SaveFile(groupName_, folderName_);
 }
 
-void CameraKeyFrame::Update(float deltaTime) {
+void CameraKeyFrame::Update() {
+    // TimeModeに応じてデルタタイムを決定
+    float actualDeltaTime;
+    switch (static_cast<TimeMode>(timeMode_)) {
+    case TimeMode::DELTA_TIME:
+        actualDeltaTime = Frame::DeltaTime(); // タイムスケール無視
+        break;
+    case TimeMode::DELTA_TIME_RATE:
+    default:
+        actualDeltaTime = Frame::DeltaTimeRate(); // タイムスケール適用
+        break;
+    }
 
-    positionEase_.Update(deltaTime);
-    rotationEase_.Update(deltaTime);
-    fovEase_.Update(deltaTime);
+    positionEase_.Update(actualDeltaTime);
+    rotationEase_.Update(actualDeltaTime);
+    fovEase_.Update(actualDeltaTime);
 }
 
 void CameraKeyFrame::BindParams() {
@@ -58,6 +71,7 @@ void CameraKeyFrame::BindParams() {
     globalParameter_->Bind(groupName_, "positionEaseType", &positionEaseType_);
     globalParameter_->Bind(groupName_, "rotationEaseType", &rotationEaseType_);
     globalParameter_->Bind(groupName_, "fovEaseType", &fovEaseType_);
+    globalParameter_->Bind(groupName_, "timeMode", &timeMode_); // TimeModeのバインド追加
 }
 
 void CameraKeyFrame::AdjustParam() {
@@ -75,6 +89,25 @@ void CameraKeyFrame::AdjustParam() {
     ImGui::SliderAngle("Z", &keyFrameParam_.rotation.z);
 
     ImGui::DragFloat("FOV", &keyFrameParam_.fov, 0.01f);
+
+    ImGui::Separator();
+
+    // タイムモード設定
+    TimeModeSelector("Time Mode", timeMode_);
+
+    // 現在のタイムスケール値を表示
+    ImGui::Text("Current TimeScale: %.2f", Frame::GetTimeScale());
+
+    // 現在使用されているDeltaTime値を表示
+    if (static_cast<TimeMode>(timeMode_) == TimeMode::DELTA_TIME) {
+        ImGui::Text("Using DeltaTime: %.4f", Frame::DeltaTime());
+        ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "TimeScale ignored");
+    } else {
+        ImGui::Text("Using DeltaTimeRate: %.4f", Frame::DeltaTimeRate());
+        ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "TimeScale applied");
+    }
+
+    ImGui::Separator();
 
     // イージングタイプの設定
     EasingTypeSelector("Easing Type Position", positionEaseType_);
@@ -108,12 +141,19 @@ void CameraKeyFrame::AdaptValueSetting() {
     positionEase_.SetAdaptValue(&currentKeyFrameParam_.position);
     rotationEase_.SetAdaptValue(&currentKeyFrameParam_.rotation);
     fovEase_.SetAdaptValue(&currentKeyFrameParam_.fov);
- }
+}
 
 void CameraKeyFrame::EasingTypeSelector(const char* label, int32_t& target) {
     int type = static_cast<int>(target);
     if (ImGui::Combo(label, &type, EasingTypeLabels.data(), static_cast<int>(EasingTypeLabels.size()))) {
         target = type;
+    }
+}
+
+void CameraKeyFrame::TimeModeSelector(const char* label, int32_t& target) {
+    int mode = static_cast<int>(target);
+    if (ImGui::Combo(label, &mode, TimeModeLabels.data(), static_cast<int>(TimeModeLabels.size()))) {
+        target = mode;
     }
 }
 
@@ -124,6 +164,6 @@ bool CameraKeyFrame::IsFinished() const {
 
 void CameraKeyFrame::SetStartEasing(const Vector3& pos, const Vector3& rotate, const float& fov) {
     positionEase_.SetStartValue(pos);
-    rotationEase_.SetStartValue(rotate);    
+    rotationEase_.SetStartValue(rotate);
     fovEase_.SetStartValue(fov);
- }
+}
