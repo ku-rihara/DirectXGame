@@ -27,6 +27,10 @@ void CameraAnimationData::Init(const std::string& animationName) {
     // 新しいフラグの初期化
     isAllKeyFramesFinished_     = false;
     lastCompletedKeyFrameIndex_ = -1;
+
+    returnPositionEase_.SetAdaptValue(&returnPosition_);
+    returnRotationEase_.SetAdaptValue(&returnRotation_);
+    returnFovEase_.SetAdaptValue(&returnFov_);
 }
 
 void CameraAnimationData::LoadData() {
@@ -153,28 +157,33 @@ void CameraAnimationData::UpdateKeyFrameProgression() {
 
     // 現在のキーフレームが完了したかチェック
     if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
-        if (keyFrames_[activeKeyFrameIndex_]->IsFinished()) {
-            // 完了したキーフレームのインデックスを記録
-            lastCompletedKeyFrameIndex_ = activeKeyFrameIndex_;
+        if (!keyFrames_[activeKeyFrameIndex_]->IsFinished()) {
+            return;
+        }
 
-            // 最後のキーフレームかチェック
-            if (activeKeyFrameIndex_ == static_cast<int32_t>(keyFrames_.size()) - 1) {
-                // 最後のキーフレームに到達
+        // 完了したキーフレームのインデックスを記録
+        lastCompletedKeyFrameIndex_ = activeKeyFrameIndex_;
 
-                isAllKeyFramesFinished_ = true;
+        // 最後のキーフレームかチェック
+        if (activeKeyFrameIndex_ == static_cast<int32_t>(keyFrames_.size()) - 1) {
+            // 最後のキーフレームに到達
+            isAllKeyFramesFinished_ = true;
 
-                if (autoReturnToInitial_) {
-                    playState_ = PlayState::STOPPED;
-                    Reset();
-                }
+            // 最終キーフレームインデックスを設定
+            finalKeyFrameIndex_ = activeKeyFrameIndex_;
+
+            if (autoReturnToInitial_) {
+                // 初期値復帰を開始
+                StartReturnToInitial();
             } else {
-                // 次のキーフレームに進む
-                AdvanceToNextKeyFrame();
+                playState_ = PlayState::STOPPED;
             }
+        } else {
+            // 次のキーフレームに進む
+            AdvanceToNextKeyFrame();
         }
     }
 }
-
 void CameraAnimationData::AdvanceToNextKeyFrame() {
     if (activeKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size()) - 1) {
         activeKeyFrameIndex_++;
@@ -196,20 +205,24 @@ void CameraAnimationData::UpdateInterpolatedValues() {
         return;
     }
 
-    // アクティブなキーフレームから現在の補間値を取得
-    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
+    // 初期値復帰中の場合
+    if (isReturningToInitial_) {
+        currentPosition_ = returnPosition_;
+        currentRotation_ = returnRotation_;
+        currentFov_      = returnFov_;
+    } else if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
+        // アクティブなキーフレームから現在の補間値を取得
         currentPosition_ = keyFrames_[activeKeyFrameIndex_]->GetPosition();
         currentRotation_ = keyFrames_[activeKeyFrameIndex_]->GetRotation();
         currentFov_      = keyFrames_[activeKeyFrameIndex_]->GetFov();
     }
 }
-
 void CameraAnimationData::ApplyToViewProjection(ViewProjection& viewProjection) {
 
     // viewProjectionの値適応
-    viewProjection.translation_ = currentPosition_;
-    viewProjection.rotation_    = currentRotation_;
-    viewProjection.fovAngleY_   = currentFov_;
+    viewProjection.positionOffset_ = currentPosition_;
+    viewProjection.rotationOffset_ = currentRotation_;
+    viewProjection.fovAngleY_      = currentFov_;
 
     // 行列更新
     viewProjection.UpdateMatrix();
@@ -275,15 +288,8 @@ bool CameraAnimationData::IsFinished() const {
 }
 
 void CameraAnimationData::Play() {
-    playState_ = PlayState::PLAYING;
-
     Reset();
-
-    // 再生開始時にフラグをリセット
-    isAllKeyFramesFinished_ = false;
-
-    lastCompletedKeyFrameIndex_ = -1;
-    activeKeyFrameIndex_        = 0;
+    playState_ = PlayState::PLAYING;
 }
 
 void CameraAnimationData::Pause() {
@@ -295,13 +301,23 @@ void CameraAnimationData::Pause() {
 }
 
 void CameraAnimationData::Reset() {
+    // 全キーフレームをリセット
+    for (auto& keyframe : keyFrames_) {
+        keyframe->Reset();
+    }
 
-    playState_           = PlayState::STOPPED;
-    activeKeyFrameIndex_ = 0;
+    // 復帰用イージングをリセット
+    returnPositionEase_.Reset();
+    returnRotationEase_.Reset();
+    returnFovEase_.Reset();
 
     // フラグをリセット
     isAllKeyFramesFinished_     = false;
+    isReturningToInitial_       = false;
     lastCompletedKeyFrameIndex_ = -1;
+    activeKeyFrameIndex_        = 0;
+
+    playState_ = PlayState::STOPPED;
 }
 
 void CameraAnimationData::BindParams() {
@@ -419,7 +435,6 @@ void CameraAnimationData::AdjustParam() {
             keyFrames_[selectedKeyFrameIndex_]->AdjustParam();
         }
     }
-
     // セーブ、ロード
     if (ImGui::Button("Load Data")) {
         LoadData();
@@ -455,27 +470,35 @@ void CameraAnimationData::SetInitialValues(const Vector3& position, const Vector
 }
 
 void CameraAnimationData::StartReturnToInitial() {
+    if (isReturningToInitial_) {
+        return;
+    }
     isReturningToInitial_ = true;
 
+    Vector3 currentPos    = currentPosition_;
+    Vector3 currentRot    = currentRotation_;
+    float currentFovValue = currentFov_;
+
     // 現在の値から初期値へのイージングを設定
-    returnPositionEase_.SetAdaptValue(&currentPosition_);
-    returnPositionEase_.SetStartValue(keyFrames_[finalKeyFrameIndex_]->GetPosition());
+    returnPositionEase_.SetStartValue(currentPos);
     returnPositionEase_.SetEndValue(initialPosition_);
     returnPositionEase_.SetMaxTime(resetTimePoint_);
     returnPositionEase_.SetType(static_cast<EasingType>(resetPosEaseType_));
+    returnPositionEase_.Reset(); // イージングをリセット
 
-    returnRotationEase_.SetAdaptValue(&currentRotation_);
-    returnRotationEase_.SetStartValue(keyFrames_[finalKeyFrameIndex_]->GetRotation());
+    returnRotationEase_.SetStartValue(currentRot);
     returnRotationEase_.SetEndValue(initialRotation_);
     returnRotationEase_.SetMaxTime(resetTimePoint_);
     returnRotationEase_.SetType(static_cast<EasingType>(resetRotateEaseType_));
+    returnRotationEase_.Reset(); // イージングをリセット
 
-    returnFovEase_.SetAdaptValue(&currentFov_);
-    returnFovEase_.SetStartValue(keyFrames_[finalKeyFrameIndex_]->GetFov());
+    returnFovEase_.SetStartValue(currentFovValue);
     returnFovEase_.SetEndValue(initialFov_);
     returnFovEase_.SetMaxTime(resetTimePoint_);
     returnFovEase_.SetType(static_cast<EasingType>(resetFovEaseType_));
+    returnFovEase_.Reset(); // イージングをリセット
 }
+
 
 bool CameraAnimationData::IsPlaying() const {
     return playState_ == PlayState::PLAYING;
