@@ -395,6 +395,7 @@ void CameraAnimationData::AdjustParam() {
 
         ImGui::Separator();
         // キーフレームリスト
+        // キーフレームリスト表示部分
         if (showKeyFrameList_) {
             ImGui::Text("KeyFrames (%zu):", keyFrames_.size());
             for (int32_t i = 0; i < static_cast<int32_t>(keyFrames_.size()); ++i) {
@@ -418,12 +419,10 @@ void CameraAnimationData::AdjustParam() {
                     ImGui::PopStyleColor();
                 }
 
-     
-
                 ImGui::PopID();
-
                 ImGui::Spacing();
             }
+
             if (ImGui::Button("Add KeyFrame")) {
                 AddKeyFrame();
             }
@@ -501,6 +500,26 @@ void CameraAnimationData::StartReturnToInitial() {
     returnFovEase_.SetType(static_cast<EasingType>(resetFovEaseType_));
     returnFovEase_.Reset(); // イージングをリセット
 }
+
+
+void CameraAnimationData::SetSelectedKeyFrameIndex(int32_t index) {
+    if (index >= -1 && index < static_cast<int32_t>(keyFrames_.size())) {
+        selectedKeyFrameIndex_ = index;
+    }
+}
+CameraKeyFrame* CameraAnimationData::GetSelectedKeyFrame() {
+    if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
+        return keyFrames_[selectedKeyFrameIndex_].get();
+    }
+    return nullptr;
+}
+const CameraKeyFrame* CameraAnimationData::GetSelectedKeyFrame() const {
+    if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
+        return keyFrames_[selectedKeyFrameIndex_].get();
+    }
+    return nullptr;
+}
+
 
 
 bool CameraAnimationData::IsPlaying() const {

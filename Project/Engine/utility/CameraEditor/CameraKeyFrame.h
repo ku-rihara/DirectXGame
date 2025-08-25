@@ -75,6 +75,9 @@ public:
     Vector3 GetPosition() const { return currentKeyFrameParam_.position; }
     Vector3 GetRotation() const { return currentKeyFrameParam_.rotation; }
     float GetFov() const { return currentKeyFrameParam_.fov; }
+    Vector3 GetEditPosition() const { return keyFrameParam_.position; }
+    Vector3 GetEditRotation() const { return keyFrameParam_.rotation; }
+    float GetEditFov() const { return keyFrameParam_.fov; }
     TimeMode GetTimeMode() const { return static_cast<TimeMode>(timeMode_); }
 
     // セッター
