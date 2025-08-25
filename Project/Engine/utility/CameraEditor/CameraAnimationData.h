@@ -83,6 +83,7 @@ private:
     // 再生状態
     PlayState playState_      = PlayState::STOPPED;
     bool autoReturnToInitial_ = true;
+    bool isAllFinished_       = false;
 
     // 現在の補間値
     Vector3 currentPosition_;

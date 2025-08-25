@@ -141,6 +141,7 @@ void CameraAnimationData::UpdateActiveKeyFrames(float deltaTime) {
         // イージングが完了したかチェック
         if (returnPositionEase_.IsFinished() && returnRotationEase_.IsFinished() && returnFovEase_.IsFinished()) {
             isReturningToInitial_ = false;
+            isAllFinished_        = true;
             playState_            = PlayState::STOPPED;
         }
         return;
@@ -222,12 +223,16 @@ void CameraAnimationData::UpdateInterpolatedValues() {
 void CameraAnimationData::ApplyToViewProjection(ViewProjection& viewProjection) {
 
     // viewProjectionの値適応
-    viewProjection.positionOffset_ = currentPosition_;
-    viewProjection.rotationOffset_ = currentRotation_;
-    viewProjection.fovAngleY_      = currentFov_;
+    if (playState_ == PlayState::PLAYING) {
+        viewProjection.positionOffset_ = currentPosition_;
+        viewProjection.rotationOffset_ = currentRotation_;
+        viewProjection.fovAngleY_      = currentFov_;
+    } else if (isAllFinished_) {
+        viewProjection.positionOffset_ = initialPosition_;
+        viewProjection.rotationOffset_ = initialRotation_;
+        viewProjection.fovAngleY_      = initialFov_;
+    }
 
-    // 行列更新
-    viewProjection.UpdateMatrix();
 }
 
 void CameraAnimationData::AddKeyFrame() {
@@ -316,6 +321,7 @@ void CameraAnimationData::Reset() {
     // フラグをリセット
     isAllKeyFramesFinished_     = false;
     isReturningToInitial_       = false;
+    isAllFinished_              = false;
     lastCompletedKeyFrameIndex_ = -1;
     activeKeyFrameIndex_        = 0;
 
