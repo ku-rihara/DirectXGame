@@ -401,7 +401,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
             Random::Range(paramaters.rotateDist.min.z, paramaters.rotateDist.max.z)};
 
         // adapt
-        particle.worldTransform_.rotation_ = toRadian(paramaters.baseRotate + rotate);
+        particle.worldTransform_.rotation_ = ToRadian(paramaters.baseRotate + rotate);
     }
 
     ///------------------------------------------------------------------------

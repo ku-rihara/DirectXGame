@@ -1,9 +1,7 @@
 #include "ViewProjection.h"
 #include "Dx/DirectXCommon.h"
-#include <assert.h>
-#include <cmath>
-#include <DirectXMath.h>
-
+#include"MathFunction.h"
+#include <cassert>
 void ViewProjection::Init() {
 
     // 定数バッファ生成
@@ -82,7 +80,7 @@ void ViewProjection::UpdateViewMatrix() {
 void ViewProjection::UpdateProjectionMatrix() {
     if (projectionType_ == ProjectionType::PERSPECTIVE) {
         // 透視投影
-        matProjection_ = MakePerspectiveFovMatrix(fovAngleY_, aspectRatio_, nearZ_, farZ_);
+        matProjection_ = MakePerspectiveFovMatrix(ToRadian(fovAngleY_), aspectRatio_, nearZ_, farZ_);
     } else {
         // 平行投影
         matProjection_ = MakeOrthographicMatrix(-orthoWidth_ / 2, orthoHeight_ / 2, orthoWidth_ / 2, -orthoHeight_ / 2, 1.0f, 100.0f);
