@@ -232,7 +232,6 @@ void CameraAnimationData::ApplyToViewProjection(ViewProjection& viewProjection) 
         viewProjection.rotationOffset_ = initialRotation_;
         viewProjection.fovAngleY_      = initialFov_;
     }
-
 }
 
 void CameraAnimationData::AddKeyFrame() {
@@ -372,12 +371,7 @@ void CameraAnimationData::AdjustParam() {
             stateText = "PAUSED";
             break;
         }
-        ImGui::Text("State: %s", stateText);
-
-        // 新しいステータス表示
-        ImGui::Text("Active KeyFrame: %d / %d", activeKeyFrameIndex_, static_cast<int32_t>(keyFrames_.size()));
-        ImGui::Text("Last Completed: %d", lastCompletedKeyFrameIndex_);
-
+    
         if (isAllKeyFramesFinished_) {
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Animation Finished!");
         }
@@ -390,53 +384,50 @@ void CameraAnimationData::AdjustParam() {
     EasingTypeSelector("Easing Type Rotate", resetRotateEaseType_);
     EasingTypeSelector("Easing Type Fov", resetFovEaseType_);
 
-    // キーフレーム管理
-    if (ImGui::CollapsingHeader("KeyFrame Management")) {
+    ImGui::SeparatorText("keyFrameEdit");
+    // キーフレームリスト
+    // キーフレームリスト表示部分
+    if (showKeyFrameList_) {
+        ImGui::Text("KeyFrames (%zu):", keyFrames_.size());
+        for (int32_t i = 0; i < static_cast<int32_t>(keyFrames_.size()); ++i) {
+            ImGui::PushID(i);
 
-        ImGui::Separator();
-        // キーフレームリスト
-        // キーフレームリスト表示部分
-        if (showKeyFrameList_) {
-            ImGui::Text("KeyFrames (%zu):", keyFrames_.size());
-            for (int32_t i = 0; i < static_cast<int32_t>(keyFrames_.size()); ++i) {
-                ImGui::PushID(i);
+            bool isSelected       = (selectedKeyFrameIndex_ == i);
+            bool isActive         = (activeKeyFrameIndex_ == i);
+            std::string labelText = "KeyFrame " + std::to_string(i) + " (t:" + std::to_string(keyFrames_[i]->GetTimePoint()) + ")";
 
-                bool isSelected       = (selectedKeyFrameIndex_ == i);
-                bool isActive         = (activeKeyFrameIndex_ == i);
-                std::string labelText = "KeyFrame " + std::to_string(i) + " (t:" + std::to_string(keyFrames_[i]->GetTimePoint()) + ")";
-
-                // アクティブなキーフレームを強調表示
-                if (isActive) {
-                    labelText += " [ACTIVE]";
-                    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 0.0f, 1.0f));
-                }
-
-                if (ImGui::Selectable(labelText.c_str(), isSelected, 0, ImVec2(0, 0))) {
-                    selectedKeyFrameIndex_ = i;
-                }
-
-                if (isActive) {
-                    ImGui::PopStyleColor();
-                }
-
-                ImGui::PopID();
-                ImGui::Spacing();
+            // アクティブなキーフレームを強調表示
+            if (isActive) {
+                labelText += " [ACTIVE]";
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 0.0f, 1.0f));
             }
 
-            if (ImGui::Button("Add KeyFrame")) {
-                AddKeyFrame();
+            if (ImGui::Selectable(labelText.c_str(), isSelected, 0, ImVec2(0, 0))) {
+                selectedKeyFrameIndex_ = i;
             }
-            ImGui::SameLine();
-            if (ImGui::Button("Clear All KeyFrames")) {
-                ClearAllKeyFrames();
+
+            if (isActive) {
+                ImGui::PopStyleColor();
             }
+
+            ImGui::PopID();
+            ImGui::Spacing();
         }
-        ImGui::Separator();
-        // 選択されたキーフレームの調整
-        if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
-            keyFrames_[selectedKeyFrameIndex_]->AdjustParam();
+
+        if (ImGui::Button("Add KeyFrame")) {
+            AddKeyFrame();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Clear All KeyFrames")) {
+            ClearAllKeyFrames();
         }
     }
+    ImGui::Separator();
+    // 選択されたキーフレームの調整
+    if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
+        keyFrames_[selectedKeyFrameIndex_]->AdjustParam();
+    }
+
     // セーブ、ロード
     if (ImGui::Button("Load Data")) {
         LoadData();
@@ -501,7 +492,6 @@ void CameraAnimationData::StartReturnToInitial() {
     returnFovEase_.Reset(); // イージングをリセット
 }
 
-
 void CameraAnimationData::SetSelectedKeyFrameIndex(int32_t index) {
     if (index >= -1 && index < static_cast<int32_t>(keyFrames_.size())) {
         selectedKeyFrameIndex_ = index;
@@ -519,8 +509,6 @@ const CameraKeyFrame* CameraAnimationData::GetSelectedKeyFrame() const {
     }
     return nullptr;
 }
-
-
 
 bool CameraAnimationData::IsPlaying() const {
     return playState_ == PlayState::PLAYING;

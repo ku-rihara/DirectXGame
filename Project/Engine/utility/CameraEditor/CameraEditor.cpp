@@ -210,7 +210,6 @@ void CameraEditor::EditorUpdate() {
             }
 
             ImGui::PopID();
-
             ImGui::Separator();
 
             // 選択中アニメーションの詳細編集
