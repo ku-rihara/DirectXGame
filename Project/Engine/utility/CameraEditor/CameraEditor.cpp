@@ -108,6 +108,10 @@ void CameraEditor::ApplyToViewProjection() {
         return;
     }
 
+    if (keyFramePreviewMode_) {
+        return;
+    }
+
     // 再生中のアニメーションがあれば適用
     for (auto& animation : animations_) {
         animation->ApplyToViewProjection(*viewProjection_);
@@ -132,11 +136,19 @@ void CameraEditor::EditorUpdate() {
 
         ImGui::Separator();
 
-        // 設定
-        ImGui::Checkbox("Auto Apply to ViewProjection", &autoApplyToViewProjection_);
-
-        // KeyFrame確認モード
-        ImGui::Checkbox("KeyFrame Preview Mode", &keyFramePreviewMode_);
+       // 設定（ラジオボタン版）
+        ImGui::Text("ViewProjection Mode:");
+        if (ImGui::RadioButton("Auto Apply to ViewProjection", autoApplyToViewProjection_)) {
+            autoApplyToViewProjection_ = true;
+            keyFramePreviewMode_       = false;
+         
+        }
+        ImGui::SameLine();
+        if (ImGui::RadioButton("KeyFrame Preview Mode", keyFramePreviewMode_)) {
+            keyFramePreviewMode_       = true;
+            autoApplyToViewProjection_ = false;
+          
+        }
 
         ImGui::Separator();
 
@@ -171,10 +183,7 @@ void CameraEditor::EditorUpdate() {
 
             if (ImGui::Selectable(displayName.c_str(), isSelected)) {
                 selectedIndex_ = i;
-                // 選択が変わった時にKeyFrameプレビューモードをリセット
-                if (keyFramePreviewMode_) {
-                    isApplyingKeyFramePreview_ = false;
-                }
+               
             }
 
             if (isPlaying || isFinished) {
@@ -230,7 +239,6 @@ void CameraEditor::ApplySelectedKeyFrameToViewProjection() {
     if (!selectedKeyFrame) {
         return;
     }
-
 
     // 選択中のKeyFrameの値をViewProjectionに適用
     viewProjection_->positionOffset_ = selectedKeyFrame->GetEditPosition();

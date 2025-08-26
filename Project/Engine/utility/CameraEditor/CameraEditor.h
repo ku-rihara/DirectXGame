@@ -52,8 +52,7 @@ private:
 
     // KeyFrameプレビュー用
     bool keyFramePreviewMode_       = false;
-    bool isApplyingKeyFramePreview_ = false;
-
+  
 public:
     // ゲッター
     bool GetAutoApplyToViewProjection() const { return autoApplyToViewProjection_; }
@@ -62,5 +61,5 @@ public:
     // KeyFrameプレビューモード関連
     bool GetKeyFramePreviewMode() const { return keyFramePreviewMode_; }
     void SetKeyFramePreviewMode(bool enable) { keyFramePreviewMode_ = enable; }
-    bool IsApplyingKeyFramePreview() const { return isApplyingKeyFramePreview_; }
+
 };
