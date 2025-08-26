@@ -83,7 +83,7 @@ void CameraKeyFrame::AdjustParam() {
     ImGui::DragFloat("Time Point", &timePoint_, 0.01f);
 
     ImGui::DragFloat3("Position", &keyFrameParam_.position.x, 0.1f);
-    ImGui::SeparatorText("Rotate");
+  
     ImGui::SliderAngle("X", &keyFrameParam_.rotation.x);
     ImGui::SliderAngle("Y", &keyFrameParam_.rotation.y);
     ImGui::SliderAngle("Z", &keyFrameParam_.rotation.z);
