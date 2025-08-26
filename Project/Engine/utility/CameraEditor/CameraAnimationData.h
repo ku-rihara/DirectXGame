@@ -114,7 +114,7 @@ private:
     bool isReturningToInitial_ = false;
     Vector3 initialPosition_   = {0.0f, 0.0f, 0.0f};
     Vector3 initialRotation_   = {0.0f, 0.0f, 0.0f};
-    float initialFov_          = 45.0f * 3.141592654f / 180.0f;
+    float initialFov_          = 45.0f;
 
     // 初期値復帰用のイージング
     Easing<Vector3> returnPositionEase_;

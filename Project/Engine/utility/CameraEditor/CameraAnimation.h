@@ -58,5 +58,7 @@ public:
     Vector3 GetOffsetPosition() const { return currentOffsetPosition_; }
     Vector3 GetOffsetRotation() const { return currentOffsetRotation_; }
     float GetOffsetFov() const { return currentOffsetFov_; }
+
+    void SetAdapt(bool adapt) { isAdapt_ = adapt; }
     void SetViewProjection(ViewProjection* viewProjection);
 };
