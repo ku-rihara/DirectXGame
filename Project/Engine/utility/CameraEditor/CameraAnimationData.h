@@ -43,6 +43,9 @@ public:
     void Pause();
     void Reset();
 
+    /// アクティブなキーフレームのみ更新
+    void UpdateActiveKeyFrames(float deltaTime);
+
     /// データのロード
     void LoadData();
     void LoadAllKeyFrames();
@@ -53,28 +56,43 @@ private:
     /// パラメータのバインド
     void BindParams();
 
-    /// キーフレーム間の補間
-    void InterpolateKeyFrames();
+    /// キーフレーム進行管理
+    void UpdateKeyFrameProgression();
+
+    /// 次のキーフレームに進む
+    void AdvanceToNextKeyFrame();
+
+    /// キーフレーム補間値の更新
+    void UpdateInterpolatedValues();
+
+    /// 初期値復帰開始
+    void StartReturnToInitial();
 
 private:
     // GlobalParameter
     GlobalParameter* globalParameter_;
     std::string groupName_;
-    std::string folderName_ = "CameraAnimation/AnimationData";
+    std::string folderPath_ = "CameraAnimation/AnimationData";
 
     // キーフレーム
     std::vector<std::unique_ptr<CameraKeyFrame>> keyFrames_;
     int32_t selectedKeyFrameIndex_ = -1;
+    int32_t finalKeyFrameIndex_    = -1;
+    int32_t activeKeyFrameIndex_   = 0;
 
     // 再生状態
     PlayState playState_      = PlayState::STOPPED;
-    float currentTime_        = 0.0f;
     bool autoReturnToInitial_ = true;
+    bool isAllFinished_       = false;
 
     // 現在の補間値
     Vector3 currentPosition_;
     Vector3 currentRotation_;
     float currentFov_;
+
+    Vector3 returnPosition_;
+    Vector3 returnRotation_;
+    float returnFov_;
 
     // リセット用パラメータ
     float resetTimePoint_ = 0.0f;
@@ -88,11 +106,36 @@ private:
     bool showAnimationControls_ = true;
     bool showInitialSettings_   = false;
 
-  
+    // キーフレーム進行管理用の新しいメンバ変数
+    bool isAllKeyFramesFinished_        = false;
+    int32_t lastCompletedKeyFrameIndex_ = -1;
+
+    // 初期値復帰用のメンバ変数
+    bool isReturningToInitial_ = false;
+    Vector3 initialPosition_   = {0.0f, 0.0f, 0.0f};
+    Vector3 initialRotation_   = {0.0f, 0.0f, 0.0f};
+    float initialFov_          = 45.0f;
+
+    // 初期値復帰用のイージング
+    Easing<Vector3> returnPositionEase_;
+    Easing<Vector3> returnRotationEase_;
+    Easing<float> returnFovEase_;
+
 public:
-    /// アニメーション制御
-    float GetCurrentTimer() const { return currentTime_; }
     std::string GetGroupName() const { return groupName_; }
-    bool IsPlaying() const { return playState_ == PlayState::PLAYING; }
+    bool IsPlaying() const;
     bool IsFinished() const;
+
+    bool IsAllKeyFramesFinished() const { return isAllKeyFramesFinished_; }
+    int32_t GetActiveKeyFrameIndex() const { return activeKeyFrameIndex_; }
+    int32_t GetLastCompletedKeyFrameIndex() const { return lastCompletedKeyFrameIndex_; }
+    int32_t GetTotalKeyFrameCount() const { return static_cast<int32_t>(keyFrames_.size()); }
+    bool IsReturningToInitial() const { return isReturningToInitial_; }
+  
+    int32_t GetSelectedKeyFrameIndex() const { return selectedKeyFrameIndex_; }
+    void SetSelectedKeyFrameIndex(int32_t index);
+    CameraKeyFrame* GetSelectedKeyFrame();
+    const CameraKeyFrame* GetSelectedKeyFrame() const;
+    // 初期値設定用
+    void SetInitialValues(const Vector3& position, const Vector3& rotation, float fov);
 };

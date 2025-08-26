@@ -48,9 +48,9 @@ void EnemySpawner::ParseJsonData(const std::string& filename) {
         spawn.position.z = (float)spawnData["position"][1];
 
         // rotate
-        spawn.rotation.x = -toRadian((float)spawnData["rotation"][0]);
-        spawn.rotation.y = -toRadian((float)spawnData["rotation"][2]);
-        spawn.rotation.z = -toRadian((float)spawnData["rotation"][1]);
+        spawn.rotation.x = -ToRadian((float)spawnData["rotation"][0]);
+        spawn.rotation.y = -ToRadian((float)spawnData["rotation"][2]);
+        spawn.rotation.z = -ToRadian((float)spawnData["rotation"][1]);
 
         // scale
         spawn.scale.x = (float)spawnData["scaling"][0];

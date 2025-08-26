@@ -1,6 +1,7 @@
 #pragma once
 #include "Matrix4x4.h"
 #include "Vector3.h"
+#include "Quaternion.h"
 #include <d3d12.h>
 #include <wrl.h>
 
@@ -40,16 +41,21 @@ public:
 public:
     // S,R,T
     Vector3 scale_{1, 1, 1};
-    Vector3 rotation_    = {0, 0, 0};
+    Vector3 rotation_    = {0, 0, 0};    
     Vector3 translation_ = {0, 0, 0};
+    Quaternion quaternion_ = Quaternion::Identity(); 
 
-    float fovAngleY_   = 45.0f * 3.141592654f / 180.0f;
+     // オフセット値
+    Vector3 positionOffset_ = {0, 0, 0};
+    Vector3 rotationOffset_ = {0, 0, 0};
+ 
+    float fovAngleY_   = 45.0f;
     float aspectRatio_ = (float)16 / 9;
     float nearZ_       = 0.1f;
     float farZ_        = 1000.0f;
 
     ProjectionType projectionType_ = ProjectionType::PERSPECTIVE;
-
+   
     // 平行投影用パラメータ
     float orthoWidth_  = 150.0f;
     float orthoHeight_ = 150.0f;
@@ -69,4 +75,6 @@ public: // getter
     Vector3 GetWorldPos() const;
     const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return constBuffer_; }
     const Matrix4x4& GetCameraMatrix() const { return cameraMatrix_; }
+    Vector3 GetFinalPosition() const;
+    Vector3 GetFinalRotation() const;
 };

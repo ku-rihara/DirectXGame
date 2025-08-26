@@ -1,4 +1,5 @@
 #include "CameraKeyFrame.h"
+#include "Frame/Frame.h" 
 #include <imgui.h>
 #include <iostream>
 
@@ -7,7 +8,6 @@ void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t&
     globalParameter_         = GlobalParameter::GetInstance();
     currentKeyFrameIndex     = keyNumber;
     std::string newGroupName = cameraAnimationName + std::to_string(currentKeyFrameIndex);
-
 
     if (!groupName_.empty() && groupName_ != newGroupName) {
         globalParameter_->ClearBindingsForGroup(groupName_);
@@ -21,11 +21,15 @@ void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t&
 
     BindParams();
 
-    // adapt
-    positionEase_.SetAdaptValue(&currentKeyFrameParam_.position);
-    rotationEase_.SetAdaptValue(&currentKeyFrameParam_.rotation);
-    fovEase_.SetAdaptValue(&currentKeyFrameParam_.fov);
+    AdaptValueSetting();
+    AdaptEaseParam();
+}
 
+void CameraKeyFrame::Reset() {
+    positionEase_.Reset();
+    rotationEase_.Reset();
+    fovEase_.Reset();
+    AdaptValueSetting();
     AdaptEaseParam();
 }
 
@@ -41,12 +45,22 @@ void CameraKeyFrame::SaveData() {
     globalParameter_->SaveFile(groupName_, folderName_);
 }
 
-void CameraKeyFrame::Update(float deltaTime) {
+void CameraKeyFrame::Update() {
+    // TimeModeに応じてデルタタイムを決定
+    float actualDeltaTime;
+    switch (static_cast<TimeMode>(timeMode_)) {
+    case TimeMode::DELTA_TIME:
+        actualDeltaTime = Frame::DeltaTime(); // タイムスケール無視
+        break;
+    case TimeMode::DELTA_TIME_RATE:
+    default:
+        actualDeltaTime = Frame::DeltaTimeRate(); // タイムスケール適用
+        break;
+    }
 
-  
-    positionEase_.Update(deltaTime);
-    rotationEase_.Update(deltaTime);
-    fovEase_.Update(deltaTime);
+    positionEase_.Update(actualDeltaTime);
+    rotationEase_.Update(actualDeltaTime);
+    fovEase_.Update(actualDeltaTime);
 }
 
 void CameraKeyFrame::BindParams() {
@@ -57,6 +71,7 @@ void CameraKeyFrame::BindParams() {
     globalParameter_->Bind(groupName_, "positionEaseType", &positionEaseType_);
     globalParameter_->Bind(groupName_, "rotationEaseType", &rotationEaseType_);
     globalParameter_->Bind(groupName_, "fovEaseType", &fovEaseType_);
+    globalParameter_->Bind(groupName_, "timeMode", &timeMode_); // TimeModeのバインド追加
 }
 
 void CameraKeyFrame::AdjustParam() {
@@ -68,9 +83,19 @@ void CameraKeyFrame::AdjustParam() {
     ImGui::DragFloat("Time Point", &timePoint_, 0.01f);
 
     ImGui::DragFloat3("Position", &keyFrameParam_.position.x, 0.1f);
-    ImGui::DragFloat3("Rotation", &keyFrameParam_.rotation.x, 0.1f);
+  
+    ImGui::SliderAngle("X", &keyFrameParam_.rotation.x);
+    ImGui::SliderAngle("Y", &keyFrameParam_.rotation.y);
+    ImGui::SliderAngle("Z", &keyFrameParam_.rotation.z);
 
     ImGui::DragFloat("FOV", &keyFrameParam_.fov, 0.01f);
+
+    ImGui::Separator();
+
+    // タイムモード設定
+    TimeModeSelector("Time Mode", timeMode_);
+
+    ImGui::Separator();
 
     // イージングタイプの設定
     EasingTypeSelector("Easing Type Position", positionEaseType_);
@@ -97,11 +122,36 @@ void CameraKeyFrame::AdaptEaseParam() {
     positionEase_.SetType(static_cast<EasingType>(positionEaseType_));
     rotationEase_.SetType(static_cast<EasingType>(rotationEaseType_));
     fovEase_.SetType(static_cast<EasingType>(fovEaseType_));
-  }
+}
+
+void CameraKeyFrame::AdaptValueSetting() {
+    // adapt
+    positionEase_.SetAdaptValue(&currentKeyFrameParam_.position);
+    rotationEase_.SetAdaptValue(&currentKeyFrameParam_.rotation);
+    fovEase_.SetAdaptValue(&currentKeyFrameParam_.fov);
+}
 
 void CameraKeyFrame::EasingTypeSelector(const char* label, int32_t& target) {
     int type = static_cast<int>(target);
     if (ImGui::Combo(label, &type, EasingTypeLabels.data(), static_cast<int>(EasingTypeLabels.size()))) {
         target = type;
     }
+}
+
+void CameraKeyFrame::TimeModeSelector(const char* label, int32_t& target) {
+    int mode = static_cast<int>(target);
+    if (ImGui::Combo(label, &mode, TimeModeLabels.data(), static_cast<int>(TimeModeLabels.size()))) {
+        target = mode;
+    }
+}
+
+bool CameraKeyFrame::IsFinished() const {
+
+    return positionEase_.IsFinished() && rotationEase_.IsFinished() && fovEase_.IsFinished();
+}
+
+void CameraKeyFrame::SetStartEasing(const Vector3& pos, const Vector3& rotate, const float& fov) {
+    positionEase_.SetStartValue(pos);
+    rotationEase_.SetStartValue(rotate);
+    fovEase_.SetStartValue(fov);
 }

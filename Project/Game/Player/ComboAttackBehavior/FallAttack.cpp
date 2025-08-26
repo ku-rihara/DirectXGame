@@ -85,7 +85,7 @@ void FallAttack::Update() {
 
         // 演出
         pPlayer_->GetEffects()->FallEffectRenditionInit();
-        pPlayer_->GetGameCamera()->ChangeShakeMode();
+        pPlayer_->GetGameCamera()->PlayShake("FallAttackCamera");
         pPlayer_->FallSound();
 
         // 攻撃タイプの変更
@@ -111,6 +111,7 @@ void FallAttack::Update() {
 
         // 反動ジャンプ
         pPlayer_->Jump(boundSpeed_, boundFallSpeedLimit_, gravity_);
+
 
         // 次の振る舞い
         if (pPlayer_->GetTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {

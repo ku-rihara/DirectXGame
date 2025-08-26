@@ -4,7 +4,7 @@
 const float DebugCamera::distance_ = 23.0f;
 
 DebugCamera::DebugCamera(int window_width, int window_height) {
- 
+
     input_ = Input::GetInstance();
     // ビュープロジェクションの初期化
     viewProjection_.Init();
@@ -51,11 +51,9 @@ void DebugCamera::Update() {
         yaw_ += mouseMove.lX * 0.005f;
         pitch_ += mouseMove.lY * 0.005f;
 
-      
-        const float maxPitch = std::numbers::pi_v<float> / 2.0f - 0.01f; 
+        const float maxPitch = std::numbers::pi_v<float> / 2.0f - 0.01f;
         pitch_               = std::fmax(std::fmin(pitch_, maxPitch), -maxPitch);
 
-      
         if (yaw_ > std::numbers::pi_v<float> * 2.0f) {
             yaw_ -= std::numbers::pi_v<float> * 2.0f;
         }
@@ -66,7 +64,7 @@ void DebugCamera::Update() {
         //
         Matrix4x4 rotY = MakeRotateYMatrix(yaw_);
         Matrix4x4 rotX = MakeRotateXMatrix(pitch_);
-        matRot_        = rotY * rotX; 
+        matRot_        = rotY * rotX;
     }
 
     UpdateMatrix();

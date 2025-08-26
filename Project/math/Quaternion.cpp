@@ -113,7 +113,7 @@ Quaternion Quaternion::Slerp(const Quaternion& start, Quaternion end, const floa
 
     float dot = Quaternion::Dot(start, end);
 
-    // 内積が負の場合、最短経路を取るためにendを反転
+    // 内積が負の場合、最短経路を取るためにEndを反転
     if (dot < 0.0f) {
         end = end * -1.0f;
         dot = -dot;
@@ -134,4 +134,18 @@ Quaternion Quaternion::Slerp(const Quaternion& start, Quaternion end, const floa
     float s1 = sin_theta / sin_theta_0;
 
     return (start * s0) + (end * s1);
+}
+
+Quaternion Quaternion::EulerToQuaternion(const Vector3& Euler) {
+    Quaternion result;
+    // オイラー角からクォータニオンを生成
+    Quaternion qx = Quaternion::MakeRotateAxisAngle(Vector3(1, 0, 0), Euler.x);
+    Quaternion qy = Quaternion::MakeRotateAxisAngle(Vector3(0, 1, 0), Euler.y);
+    Quaternion qz = Quaternion::MakeRotateAxisAngle(Vector3(0, 0, 1), Euler.z);
+
+    // XYZ順で回転を合成
+    result      = qx * qy * qz;
+    result = result.Normalize();
+
+    return result;
 }

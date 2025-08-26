@@ -195,39 +195,32 @@ Vector3 DirectionToEulerAngles(const Vector3& direction, const ViewProjection& v
 }
 
 
+constexpr float Deg2Rad = std::numbers::pi_v<float> / 180.0f;
+constexpr float Rad2Deg = 180.0f / std::numbers::pi_v<float>;
+
 // float
-float toRadian(float degrees) {
-    return degrees * (std::numbers::pi_v<float> / 180.0f);
+float ToRadian(float degrees) {
+    return degrees * Deg2Rad;
 }
 
-float toDegree(float radians) {
-    return radians * (180.0f / std::numbers::pi_v<float>);
+float ToDegree(float radians) {
+    return radians * Rad2Deg;
 }
 
 // Vector2
-Vector2 toRadian(const Vector2& degrees) {
-    return {
-        degrees.x * (std::numbers::pi_v<float> / 180.0f),
-        degrees.y * (std::numbers::pi_v<float> / 180.0f)};
+Vector2 ToRadian(const Vector2& degrees) {
+    return {degrees.x * Deg2Rad, degrees.y * Deg2Rad};
 }
 
-Vector2 toDegree(const Vector2& radians) {
-    return {
-        radians.x * (180.0f / std::numbers::pi_v<float>),
-        radians.y * (180.0f / std::numbers::pi_v<float>)};
+Vector2 ToDegree(const Vector2& radians) {
+    return {radians.x * Rad2Deg, radians.y * Rad2Deg};
 }
 
 // Vector3
-Vector3 toRadian(const Vector3& degrees) {
-    return {
-        degrees.x * (std::numbers::pi_v<float> / 180.0f),
-        degrees.y * (std::numbers::pi_v<float> / 180.0f),
-        degrees.z * (std::numbers::pi_v<float> / 180.0f)};
+Vector3 ToRadian(const Vector3& degrees) {
+    return {degrees.x * Deg2Rad, degrees.y * Deg2Rad, degrees.z * Deg2Rad};
 }
 
-Vector3 toDegree(const Vector3& radians) {
-    return {
-        radians.x * (180.0f / std::numbers::pi_v<float>),
-        radians.y * (180.0f / std::numbers::pi_v<float>),
-        radians.z * (180.0f / std::numbers::pi_v<float>)};
+Vector3 ToDegree(const Vector3& radians) {
+    return {radians.x * Rad2Deg, radians.y * Rad2Deg, radians.z * Rad2Deg};
 }

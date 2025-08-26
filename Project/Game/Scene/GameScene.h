@@ -18,6 +18,8 @@
 #include "SkyBox/SkyBox.h"
 #include "SkyDome/SkyDome.h"
 #include "UI/HowToOperate.h"
+#include "utility/CameraEditor/CameraEditor.h"
+#include "utility/ShakeEditor/ShakeEditor.h"
 
 /// <summary>
 /// ゲームシーン
@@ -65,6 +67,8 @@ private:
     std::unique_ptr<FireInjectors> fireInjectors_               = nullptr;
     std::unique_ptr<GameBackGroundObject> gameBackGroundObject_ = nullptr;
     std::unique_ptr<ComboScene> comboScene_                     = nullptr;
+    std::unique_ptr<CameraEditor> cameraEditor_                 = nullptr;
+    std::unique_ptr<ShakeEditor> shakeEditor_                   = nullptr;
 
     bool isDraw = true;
 

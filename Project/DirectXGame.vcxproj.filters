@@ -139,9 +139,6 @@
     <Filter Include="Game\UI\HowToOperate">
       <UniqueIdentifier>{eba982c5-fc14-4c04-b2b6-bbbd2cc2b653}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\GameCamera\Behavior">
-      <UniqueIdentifier>{2aa02fce-99c5-4754-a297-6ce1884e9ca1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.h\Light">
       <UniqueIdentifier>{628ab431-7495-4a04-bd50-fe846b42960d}</UniqueIdentifier>
     </Filter>
@@ -192,9 +189,6 @@
     </Filter>
     <Filter Include="Game\Player\core">
       <UniqueIdentifier>{d3e51b1b-0df3-4fb3-bd66-3f185b05cfcd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\GameCamera\ShakeState">
-      <UniqueIdentifier>{9b037334-580c-496b-8f10-8dd932361185}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Enemy\Behevior\Damage">
       <UniqueIdentifier>{d269b1c9-4fa2-49cd-99e9-ef7cc1bcd7fc}</UniqueIdentifier>
@@ -355,6 +349,15 @@
     <Filter Include="MyEngine\.cpp\utility\CameraEditor">
       <UniqueIdentifier>{7ff1fcef-200f-4f44-9d0b-2cc5e237686d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.h\utility\ShakeEditor">
+      <UniqueIdentifier>{b598867d-1557-4204-8949-7f620bc285d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\ShakeEditor">
+      <UniqueIdentifier>{54cd1afe-91ee-4208-8d44-5e3f9d0d2fc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\TimeScaleEditor">
+      <UniqueIdentifier>{db86007f-edfe-471b-9800-4bb32187b5fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -493,12 +496,6 @@
     <ClCompile Include="math\Shake.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameCamera\Behavior\BaseGameCameraBehavior.cpp">
-      <Filter>Game\GameCamera\Behavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GameCamera\Behavior\GameCameraRoot.cpp">
-      <Filter>Game\GameCamera\Behavior</Filter>
-    </ClCompile>
     <ClCompile Include="math\Quaternion.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
@@ -546,9 +543,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Lighrt\AreaLight.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GameCamera\Behavior\GameCameraZoomInOut.cpp">
-      <Filter>Game\GameCamera\Behavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\MonsterBall\MonsterBall.cpp">
       <Filter>Game\MonsterBall</Filter>
@@ -633,18 +627,6 @@
     </ClCompile>
     <ClCompile Include="Game\CollisionBox\EnemyCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GameCamera\ShakeState\BaseShakeState.cpp">
-      <Filter>Game\GameCamera\ShakeState</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GameCamera\ShakeState\ShakeWait.cpp">
-      <Filter>Game\GameCamera\ShakeState</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GameCamera\ShakeState\StateShaking.cpp">
-      <Filter>Game\GameCamera\ShakeState</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\GameCamera\Behavior\GameCameraBacklash.cpp">
-      <Filter>Game\GameCamera\Behavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\EnemyBoundDamage.cpp">
       <Filter>Game\Enemy\Behevior\Damage</Filter>
@@ -943,6 +925,27 @@
     <ClCompile Include="Engine\utility\CameraEditor\CameraAnimationData.cpp">
       <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\utility\CameraEditor\CameraAnimation.cpp">
+      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameCamera\CameraRendition.cpp">
+      <Filter>Game\GameCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ShakeEditor\ShakeEditor.cpp">
+      <Filter>MyEngine\.cpp\utility\ShakeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ShakeEditor\ShakePlayer.cpp">
+      <Filter>MyEngine\.cpp\utility\ShakeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ShakeEditor\ShakeData.cpp">
+      <Filter>MyEngine\.cpp\utility\ShakeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\TimeScaleEditor\TimeScaleData.cpp">
+      <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\TimeScaleEditor\TimeScaleController.cpp">
+      <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1119,12 +1122,6 @@
     <ClInclude Include="math\Shake.h">
       <Filter>liberary\.h</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameCamera\Behavior\BaseGameCameraBehavior.h">
-      <Filter>Game\GameCamera\Behavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameCamera\Behavior\GameCameraRoot.h">
-      <Filter>Game\GameCamera\Behavior</Filter>
-    </ClInclude>
     <ClInclude Include="math\Quaternion.h">
       <Filter>liberary\.h</Filter>
     </ClInclude>
@@ -1172,9 +1169,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Lighrt\AreaLight.h">
       <Filter>MyEngine\.h\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameCamera\Behavior\GameCameraZoomInOut.h">
-      <Filter>Game\GameCamera\Behavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\MonsterBall\MonsterBall.h">
       <Filter>Game\MonsterBall</Filter>
@@ -1253,18 +1247,6 @@
     </ClInclude>
     <ClInclude Include="Game\CollisionBox\EnemyCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameCamera\ShakeState\BaseShakeState.h">
-      <Filter>Game\GameCamera\ShakeState</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameCamera\ShakeState\ShakeWait.h">
-      <Filter>Game\GameCamera\ShakeState</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameCamera\ShakeState\StateShaking.h">
-      <Filter>Game\GameCamera\ShakeState</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameCamera\Behavior\GameCameraBacklash.h">
-      <Filter>Game\GameCamera\Behavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\EnemyBoundDamage.h">
       <Filter>Game\Enemy\Behevior\Damage</Filter>
@@ -1574,6 +1556,27 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\CameraEditor\CameraAnimationData.h">
       <Filter>MyEngine\.h\utility\CameraEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\CameraEditor\CameraAnimation.h">
+      <Filter>MyEngine\.h\utility\CameraEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameCamera\CameraRendition.h">
+      <Filter>Game\GameCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ShakeEditor\ShakePlayer.h">
+      <Filter>MyEngine\.h\utility\ShakeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ShakeEditor\ShakeEditor.h">
+      <Filter>MyEngine\.h\utility\ShakeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ShakeEditor\ShakeData.h">
+      <Filter>MyEngine\.h\utility\ShakeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\TimeScaleEditor\TimeScaleData.h">
+      <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\TimeScaleEditor\TimeScaleController.h">
+      <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

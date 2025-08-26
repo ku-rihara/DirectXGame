@@ -101,8 +101,9 @@ void ThrustPunch::Update() {
         BaseComboAattackBehavior::PreOderNextComboForButton();
 
         // イージング終了時の処理
-        if (thrustRailManager_->GetRailMoveTime() > 0.0f)
+        if (thrustRailManager_->GetRailMoveTime() > 0.0f) {
             break;
+        }
 
         thrustRailManager_->SetRailMoveTime(0.0f);
         pPlayer_->GetLeftHand()->RailForthComboUpdate(0.0f);
@@ -144,7 +145,8 @@ void ThrustPunch::ChangeSlow() {
         Frame::SetTimeScale(0.001f);
         PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::GRAY);
         pPlayer_->SoundStrongPunch();
-        pPlayer_->GetGameCamera()->ChangeZoomInOut();
+        pPlayer_->GetGameCamera()->PlayAnimation("PlayerthrustAttack");
+        pPlayer_->GetGameCamera()->PlayShake("ThurstAttackCamera");
         istimeSlow_ = true;
     }
 
