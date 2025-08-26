@@ -95,18 +95,6 @@ void CameraKeyFrame::AdjustParam() {
     // タイムモード設定
     TimeModeSelector("Time Mode", timeMode_);
 
-    // 現在のタイムスケール値を表示
-    ImGui::Text("Current TimeScale: %.2f", Frame::GetTimeScale());
-
-    // 現在使用されているDeltaTime値を表示
-    if (static_cast<TimeMode>(timeMode_) == TimeMode::DELTA_TIME) {
-        ImGui::Text("Using DeltaTime: %.4f", Frame::DeltaTime());
-        ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "TimeScale ignored");
-    } else {
-        ImGui::Text("Using DeltaTimeRate: %.4f", Frame::DeltaTimeRate());
-        ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "TimeScale applied");
-    }
-
     ImGui::Separator();
 
     // イージングタイプの設定
