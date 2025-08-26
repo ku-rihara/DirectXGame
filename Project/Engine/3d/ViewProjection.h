@@ -49,7 +49,7 @@ public:
     Vector3 positionOffset_ = {0, 0, 0};
     Vector3 rotationOffset_ = {0, 0, 0};
  
-    float fovAngleY_   = 45.0f * 3.141592654f / 180.0f;
+    float fovAngleY_   = 45.0f;
     float aspectRatio_ = (float)16 / 9;
     float nearZ_       = 0.1f;
     float farZ_        = 1000.0f;

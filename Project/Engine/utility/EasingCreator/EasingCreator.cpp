@@ -296,8 +296,8 @@ void EasingCreator<T>::Edit() {
         }
 
          if (ImGui::Button("Change Radian")) {
-            editingParam_.startValue = toRadian(editingParam_.startValue);
-            editingParam_.endValue   = toRadian(editingParam_.endValue);
+            editingParam_.startValue = ToRadian(editingParam_.startValue);
+            editingParam_.endValue   = ToRadian(editingParam_.endValue);
         }
 
         // イージングタイプの設定

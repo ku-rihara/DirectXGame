@@ -82,9 +82,9 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
         objectData.object3d->transform_.translation_.z = (float)transform["translation"][1];
 
         // 回転角
-        objectData.object3d->transform_.rotation_.x = -toRadian((float)transform["rotation"][0]);
-        objectData.object3d->transform_.rotation_.y = -toRadian((float)transform["rotation"][2]);
-        objectData.object3d->transform_.rotation_.z = -toRadian((float)transform["rotation"][1]);
+        objectData.object3d->transform_.rotation_.x = -ToRadian((float)transform["rotation"][0]);
+        objectData.object3d->transform_.rotation_.y = -ToRadian((float)transform["rotation"][2]);
+        objectData.object3d->transform_.rotation_.z = -ToRadian((float)transform["rotation"][1]);
 
         // スケーリング
         objectData.object3d->transform_.scale_.x = (float)transform["scaling"][0];

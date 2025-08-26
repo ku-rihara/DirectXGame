@@ -45,6 +45,7 @@ private:
 
     // 一時的なViewProjection
     ViewProjection* pViewProjection_ = nullptr;
+    bool isAdapt_                    = true;
 
     // アニメーション名
     std::string currentAnimationName_;

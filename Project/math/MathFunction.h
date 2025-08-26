@@ -25,16 +25,16 @@ float LerpShortAngle(float a, float b, float t);
 
 
 
-float toRadian(float degrees);
-float toDegree(float radians);
+float ToRadian(float degrees);
+float ToDegree(float radians);
 
 // Vector2
-Vector2 toRadian(const Vector2& degrees);
-Vector2 toDegree(const Vector2& radians);
+Vector2 ToRadian(const Vector2& degrees);
+Vector2 ToDegree(const Vector2& radians);
 
 // Vector3
-Vector3 toRadian(const Vector3& degrees);
-Vector3 toDegree(const Vector3& radians);
+Vector3 ToRadian(const Vector3& degrees);
+Vector3 ToDegree(const Vector3& radians);
 
 
  Vector3 DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view);
