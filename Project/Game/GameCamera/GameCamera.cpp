@@ -125,34 +125,6 @@ Vector3 GameCamera::OffsetCalc(const Vector3& offset) const {
     return resultOffset;
 }
 
-// ================================= CameraRendition関連のメソッド ================================= //
-
-void GameCamera::ChangeShakeMode() {
-    rendition_->ChangeToShaking();
-}
-
-void GameCamera::ChangeZoomInOut() {
-    rendition_->ChangeToZoomInOut();
-}
-
-void GameCamera::StartZoomWithShake() {
-    rendition_->ChangeToZoomInOut();
-    rendition_->ChangeToShaking();
-}
-
-// ================================= CameraRendition状態確認メソッド ================================= //
-
-bool GameCamera::IsShakeActive() const {
-    return !rendition_->IsShakeWait();
-}
-
-
-CameraRendition::ShakeMode GameCamera::GetShakeMode() const {
-    return rendition_->GetCurrentShakeMode();
-}
-
-// ================================= Parameter Edit ================================= //
-
 void GameCamera::BindParams() {
     globalParameter_->Bind(groupName_, "firstRotate_", &paramater_.firstRotate_);
     globalParameter_->Bind(groupName_, "firstOffset_", &paramater_.firstOffset_);

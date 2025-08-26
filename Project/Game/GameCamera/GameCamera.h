@@ -57,11 +57,6 @@ public:
     Vector3 OffsetCalc(const Vector3& offset) const;
     Vector3 GetWorldPos() const;
 
-    // CameraRendition関連のメソッド
-    void ChangeShakeMode(); /// 通常のシェイク演出開始
-    void ChangeZoomInOut(); /// ズーム演出開始
-    void StartZoomWithShake(); /// ズーム + シェイクの同時演出
-
     void PlayAnimation(const std::string& filename);
     void PlayShake(const std::string& filename);
 
@@ -79,12 +74,6 @@ public:
     Vector3 GetTargetPos() const;
     Vector3 GetOffset() const { return offset_; };
     Parameter GetParamater() const { return paramater_; }
-
-    // CameraRendition状態確認
-    bool IsShakeActive() const;
-    bool IsBehaviorActive() const;
-    bool IsAnyRenditionActive() const;
-    CameraRendition::ShakeMode GetShakeMode() const;
   
     /// ===================================================
     /// setter

@@ -146,6 +146,7 @@ void ThrustPunch::ChangeSlow() {
         PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::GRAY);
         pPlayer_->SoundStrongPunch();
         pPlayer_->GetGameCamera()->PlayAnimation("PlayerthrustAttack");
+        pPlayer_->GetGameCamera()->PlayShake("ThurstAttackCamera");
         istimeSlow_ = true;
     }
 
