@@ -116,6 +116,8 @@
     <ClCompile Include="Engine\utility\ShakeEditor\ShakeData.cpp" />
     <ClCompile Include="Engine\utility\ShakeEditor\ShakeEditor.cpp" />
     <ClCompile Include="Engine\utility\ShakeEditor\ShakePlayer.cpp" />
+    <ClCompile Include="Engine\utility\TimeScaleEditor\TimeScaleData.cpp" />
+    <ClCompile Include="Engine\utility\TimeScaleEditor\TimeScaleController.cpp" />
     <ClCompile Include="Game\EasingTestObj\EasingTestObj.cpp" />
     <ClCompile Include="Game\Ground\Ground.cpp" />
     <ClCompile Include="Game\MonsterBall\MonsterBall.cpp" />
@@ -259,6 +261,8 @@
     <ClInclude Include="Engine\utility\ShakeEditor\ShakeData.h" />
     <ClInclude Include="Engine\utility\ShakeEditor\ShakeEditor.h" />
     <ClInclude Include="Engine\utility\ShakeEditor\ShakePlayer.h" />
+    <ClInclude Include="Engine\utility\TimeScaleEditor\TimeScaleData.h" />
+    <ClInclude Include="Engine\utility\TimeScaleEditor\TimeScaleController.h" />
     <ClInclude Include="Game\EasingTestObj\EasingTestObj.h" />
     <ClInclude Include="Game\Ground\Ground.h" />
     <ClInclude Include="Game\MonsterBall\MonsterBall.h" />

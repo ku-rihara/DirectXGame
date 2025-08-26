@@ -223,6 +223,9 @@
     <Filter Include="MyEngine\.cpp\utility\ShakeEditor">
       <UniqueIdentifier>{54cd1afe-91ee-4208-8d44-5e3f9d0d2fc1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\utility\TimeScaleEditor">
+      <UniqueIdentifier>{db86007f-edfe-471b-9800-4bb32187b5fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -606,6 +609,12 @@
     </ClCompile>
     <ClCompile Include="Engine\utility\ShakeEditor\ShakeData.cpp">
       <Filter>MyEngine\.cpp\utility\ShakeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\TimeScaleEditor\TimeScaleData.cpp">
+      <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\TimeScaleEditor\TimeScaleController.cpp">
+      <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1034,6 +1043,12 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\ShakeEditor\ShakeData.h">
       <Filter>MyEngine\.h\utility\ShakeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\TimeScaleEditor\TimeScaleData.h">
+      <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\TimeScaleEditor\TimeScaleController.h">
+      <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

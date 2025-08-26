@@ -31,12 +31,14 @@ void GameScene::Init() {
     putObjForBlender = std::make_unique<PutObjForBlender>();
     cameraEditor_    = std::make_unique<CameraEditor>();
     shakeEditor_     = std::make_unique<ShakeEditor>();
+    timeScaleController_ = std::make_unique<TimeScaleController>();
 
     monsterBall_->Init();
     ground_->Init();
     plane_->Init();
     skuBox_->Init();
     cameraEditor_->Init(&viewProjection_);
+    timeScaleController_->Init();
 
     shakeEditor_->Init();
     putObjForBlender->LoadJsonFile("game.json");
@@ -57,6 +59,7 @@ void GameScene::Update() {
     ground_->Update();
     cameraEditor_->Update(Frame::DeltaTime());
     shakeEditor_->Update(Frame::DeltaTime());
+    timeScaleController_->Update(Frame::DeltaTime());
     monsterBall_->Update();
     plane_->Update();
     skuBox_->Update();
@@ -125,6 +128,7 @@ void GameScene::Debug() {
     ImGui::End();
     cameraEditor_->EditorUpdate();
     shakeEditor_->EditorUpdate();
+    timeScaleController_->EditorUpdate();
 #endif
 }
 

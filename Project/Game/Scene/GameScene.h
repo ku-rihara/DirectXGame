@@ -10,6 +10,7 @@
 #include "SkyBox/SkyBox.h"
 #include "utility/CameraEditor/CameraEditor.h"
 #include "utility/ShakeEditor/ShakeEditor.h"
+#include "utility/TimeScaleEditor/TimeScaleController.h"
 // emitter
 #include "utility/ParticleEditor/ParticleEmitter.h"
 
@@ -26,13 +27,14 @@ private:
     /// Private variants
     ///========================================================
 
-    std::unique_ptr<Ground> ground_                    = nullptr;
-    std::unique_ptr<MonsterBall> monsterBall_          = nullptr;
-    std::unique_ptr<Plane> plane_                      = nullptr;
-    std::unique_ptr<SkyBox> skuBox_                    = nullptr;
-    std::unique_ptr<PutObjForBlender> putObjForBlender = nullptr;
-    std::unique_ptr<CameraEditor> cameraEditor_        = nullptr;
-    std::unique_ptr<ShakeEditor> shakeEditor_          = nullptr;
+    std::unique_ptr<Ground> ground_                           = nullptr;
+    std::unique_ptr<MonsterBall> monsterBall_                 = nullptr;
+    std::unique_ptr<Plane> plane_                             = nullptr;
+    std::unique_ptr<SkyBox> skuBox_                           = nullptr;
+    std::unique_ptr<PutObjForBlender> putObjForBlender        = nullptr;
+    std::unique_ptr<CameraEditor> cameraEditor_               = nullptr;
+    std::unique_ptr<ShakeEditor> shakeEditor_                 = nullptr;
+    std::unique_ptr<TimeScaleController> timeScaleController_ = nullptr;
 
 public:
     ///========================================================
