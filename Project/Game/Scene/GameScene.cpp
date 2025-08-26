@@ -34,6 +34,7 @@ void GameScene::Init() {
     comboScene_           = std::make_unique<ComboScene>();
     cameraEditor_         = std::make_unique<CameraEditor>();
     shakeEditor_          = std::make_unique<ShakeEditor>();
+    hitStop_              = std::make_unique<HitStop>();
 
     ///=======================================================================================
     /// 初期化
@@ -50,6 +51,7 @@ void GameScene::Init() {
     howToOperate_->Init();
     comboScene_->Init();
     shakeEditor_->Init();
+    hitStop_->Init();
     viewProjection_.Init();
 
     gameBackGroundObject_->Init("game.json");
@@ -69,6 +71,7 @@ void GameScene::Init() {
     player_->SetLockOn(lockOn_.get());
     player_->SetGameCamera(gameCamera_.get());
     player_->SetCombo(combo_.get());
+    player_->SetHitStop(hitStop_.get());
     enemySpawner_->SetEnemyManager(enemyManager_.get());
     fireInjectors_->SetCombo(combo_.get());
 
@@ -118,6 +121,7 @@ void GameScene::Update() {
     debugCamera_->Update();
     cameraEditor_->Update(Frame::DeltaTime());
     shakeEditor_->Update(Frame::DeltaTime());
+    hitStop_->Update();
     Debug();
 
     // 各クラス更新
@@ -214,6 +218,7 @@ void GameScene::Debug() {
     ImGui::Begin("Rendition");
     cameraEditor_->EditorUpdate();
     shakeEditor_->EditorUpdate();
+    hitStop_->EditorUpdate();
     ImGui::End();
 #endif
 }

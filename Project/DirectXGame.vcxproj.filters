@@ -358,6 +358,9 @@
     <Filter Include="MyEngine\.cpp\utility\TimeScaleEditor">
       <UniqueIdentifier>{db86007f-edfe-471b-9800-4bb32187b5fa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\HitStop">
+      <UniqueIdentifier>{3adc9587-cb4f-47e4-963a-a8c4e5452d46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -945,6 +948,9 @@
     </ClCompile>
     <ClCompile Include="Engine\utility\TimeScaleEditor\TimeScaleController.cpp">
       <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HitStop\HitStop.cpp">
+      <Filter>Game\HitStop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1577,6 +1583,9 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\TimeScaleEditor\TimeScaleController.h">
       <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HitStop\HitStop.h">
+      <Filter>Game\HitStop</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
