@@ -1,6 +1,6 @@
 #include "ViewProjection.h"
 #include "Dx/DirectXCommon.h"
-#include"MathFunction.h"
+#include "MathFunction.h"
 #include <cassert>
 void ViewProjection::Init() {
 
@@ -51,8 +51,8 @@ void ViewProjection::TransferMatrix() {
 void ViewProjection::UpdateMatrix() {
 
     //// オイラーからQuaternionへの変換
-    //quaternion_=Quaternion::EulerToQuaternion(rotation_);
-    // ビュー行列の更新
+    // quaternion_=Quaternion::EulerToQuaternion(rotation_);
+    //  ビュー行列の更新
     UpdateViewMatrix();
     // 射影行列の更新
     UpdateProjectionMatrix();
@@ -63,12 +63,15 @@ void ViewProjection::UpdateMatrix() {
 void ViewProjection::UpdateViewMatrix() {
     Matrix4x4 rotateMatrix;
 
-    // クォータニオンから回転行列を作成
+    // 最終的な回転値を取得
     Vector3 finalRotation = GetFinalRotation();
     rotateMatrix          = MakeRotateMatrix(finalRotation);
 
-    // 平行移動行列を計算
-    Vector3 finalPosition     = GetFinalPosition();
+    // positionOffset_をカメラの回転に合わせて変換
+    Vector3 transformedPositionOffset = TransformNormal(positionOffset_, rotateMatrix);
+
+    // 最終的な位置を計算
+    Vector3 finalPosition     = translation_ + transformedPositionOffset;
     Matrix4x4 translateMatrix = MakeTranslateMatrix(finalPosition);
 
     // カメラ行列を作成
@@ -87,7 +90,6 @@ void ViewProjection::UpdateProjectionMatrix() {
     }
 }
 
-
 Vector3 ViewProjection::GetWorldPos() const {
     return Vector3(
         cameraMatrix_.m[3][0], // X成分
@@ -96,10 +98,14 @@ Vector3 ViewProjection::GetWorldPos() const {
     );
 }
 
-Vector3 ViewProjection::GetFinalPosition() const { 
-    return translation_ + positionOffset_;
+Vector3 ViewProjection::GetFinalPosition() const {
+    Vector3 finalRotation             = GetFinalRotation();
+    Matrix4x4 rotateMatrix            = MakeRotateMatrix(finalRotation);
+    Vector3 transformedPositionOffset = TransformNormal(positionOffset_, rotateMatrix);
+
+    return translation_ + transformedPositionOffset;
 }
 
-Vector3 ViewProjection::GetFinalRotation() const { 
-    return rotation_ + rotationOffset_; 
+Vector3 ViewProjection::GetFinalRotation() const {
+    return rotation_ + rotationOffset_;
 }
