@@ -39,7 +39,7 @@ void TimeScaleData::AdjustParam() {
 
         // TimeScale調整
         ImGui::DragFloat("TimeScale", &timeScale_, 0.001f);
-        ImGui::DragFloat("Duration", &duration_, 0.01f);
+        ImGui::DragFloat("Duration", &duration_, 0.001f);
 
         ImGui::Separator();
 

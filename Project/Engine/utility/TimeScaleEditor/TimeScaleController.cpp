@@ -118,7 +118,7 @@ void TimeScaleController::EditorUpdate() {
 
         // 即座制御
         float immediateValue = GetCurrentTimeScale();
-        if (ImGui::DragFloat("Immediate TimeScale", &immediateValue, 0.01f, 0.0f, 3.0f)) {
+        if (ImGui::DragFloat("Immediate TimeScale", &immediateValue, 0.001f, 0.0f, 3.0f)) {
             SetTimeScaleImmediate(immediateValue);
         }
         ImGui::SameLine();
