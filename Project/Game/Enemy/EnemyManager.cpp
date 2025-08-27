@@ -2,6 +2,7 @@
 #include "NormalEnemy.h"
 #include "StrongEnemy.h"
 
+#include "AttackEffect/AttackEffect.h"
 #include "Combo/Combo.h"
 #include "LockOn/LockOn.h"
 #include "Spawner/EnemySpawner.h"
@@ -23,7 +24,7 @@ void EnemyManager::Init() {
     globalParameter_->SyncParamForGroup(groupName_);
 
     /// パーティクル初期化
-    ParticleInit(); 
+    ParticleInit();
 }
 
 ///========================================================================================
@@ -43,10 +44,11 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
     }
 
     // 初期化とlistに追加
-    enemy->SetPlayer(pPlayer_); 
+    enemy->SetPlayer(pPlayer_);
     enemy->SetGameCamera(pGameCamera_);
     enemy->SetManager(this);
     enemy->SetCombo(pCombo_);
+    enemy->SetAttackEffect(pAttackEffect_);
     enemy->SetGroupId(groupID);
     enemy->Init(position);
     enemies_.push_back(std::move(enemy));
@@ -67,7 +69,7 @@ void EnemyManager::Update() {
 
         (*it)->Update(); // 更新
 
-        if ((*it)->GetIsDeath()) {//死亡処理
+        if ((*it)->GetIsDeath()) { // 死亡処理
 
             if (pEnemySpawner_) {
                 pEnemySpawner_->OnEnemyDestroyed((*it)->GetGroupId());
@@ -84,7 +86,7 @@ void EnemyManager::Update() {
 }
 
 void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
-    
+
     for (auto it = enemies_.begin(); it != enemies_.end();) {
         (*it)->DisplaySprite(viewProjection); // 更新
         ++it;
@@ -301,6 +303,10 @@ void EnemyManager::SetGameCamera(GameCamera* gameCamera) {
 
 void EnemyManager::SetEnemySpawner(EnemySpawner* enemySpawner) {
     pEnemySpawner_ = enemySpawner;
+}
+
+void EnemyManager::SetAttackEffect(AttackEffect* effect) {
+    pAttackEffect_ = effect;
 }
 
 void EnemyManager::CheckIsEnemiesCleared() {

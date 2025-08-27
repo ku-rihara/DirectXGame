@@ -20,6 +20,8 @@
 #include "Frame/Frame.h"
 #include "Matrix4x4.h"
 #include "Player/Player.h"
+#include"GameCamera/GameCamera.h"
+#include"AttackEffect/AttackEffect.h"
 
 ///========================================================
 ///  初期化
@@ -140,7 +142,9 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
         case PlayerAttackController::AttackType::NORMAL:
 
             TakeDamage(attackController->GetAttackPower());
-            pCombo_->ComboCountUP(); // コンボカウントアップ
+            pCombo_->ComboCountUP();
+           /* pGameCamera_->PlayShake();*/
+            pAttackEffect_->PlayHitStop("PunchHitStop");
             ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
         }
     }
@@ -262,9 +266,7 @@ bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
 }
 
 void BaseEnemy::TakeDamage(const float& damageValue) {
-
-    // float decrementSize = HPMax_ * (par * 0.01f); //(per/100);
-    hp_ -= damageValue;
+     hp_ -= damageValue;
 
     if (hp_ < 0.0f) {
         hp_ = 0.0f;
@@ -325,6 +327,9 @@ void BaseEnemy::SetManager(EnemyManager* manager) {
 
 void BaseEnemy::SetCombo(Combo* manager) {
     pCombo_ = manager;
+}
+void BaseEnemy::SetAttackEffect(AttackEffect* attackEffect) {
+    pAttackEffect_ = attackEffect; 
 }
 
 void BaseEnemy::BackToDamageRoot() {

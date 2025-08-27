@@ -34,7 +34,7 @@ void GameScene::Init() {
     comboScene_           = std::make_unique<ComboScene>();
     cameraEditor_         = std::make_unique<CameraEditor>();
     shakeEditor_          = std::make_unique<ShakeEditor>();
-    attackEffect_              = std::make_unique<AttackEffect>();
+    attackEffect_         = std::make_unique<AttackEffect>();
 
     ///=======================================================================================
     /// 初期化
@@ -67,6 +67,7 @@ void GameScene::Init() {
     enemyManager_->SetGameCamera(gameCamera_.get());
     enemyManager_->SetLockOn(lockOn_.get());
     enemyManager_->SetEnemySpawner(enemySpawner_.get());
+    enemyManager_->SetAttackEffect(attackEffect_.get());
     player_->SetViewProjection(&viewProjection_);
     player_->SetLockOn(lockOn_.get());
     player_->SetGameCamera(gameCamera_.get());
