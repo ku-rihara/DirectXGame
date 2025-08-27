@@ -317,6 +317,11 @@ void CameraAnimationData::Reset() {
     returnRotationEase_.Reset();
     returnFovEase_.Reset();
 
+    // 最初のキーフレームに初期値を設定
+    if (!keyFrames_.empty() && activeKeyFrameIndex_ == 0) {
+        keyFrames_[0]->SetStartEasing(initialPosition_, initialRotation_, initialFov_);
+    }
+
     // フラグをリセット
     isAllKeyFramesFinished_     = false;
     isReturningToInitial_       = false;
@@ -371,7 +376,7 @@ void CameraAnimationData::AdjustParam() {
             stateText = "PAUSED";
             break;
         }
-    
+
         if (isAllKeyFramesFinished_) {
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Animation Finished!");
         }
