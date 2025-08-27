@@ -38,8 +38,8 @@ void TimeScaleData::AdjustParam() {
         ImGui::PushID(groupName_.c_str());
 
         // TimeScale調整
-        ImGui::DragFloat("TimeScale", &timeScale_, 0.01f, 0.0f, 3.0f);
-        ImGui::DragFloat("Duration", &duration_, 0.01f, 0.1f, 10.0f);
+        ImGui::DragFloat("TimeScale", &timeScale_, 0.001f);
+        ImGui::DragFloat("Duration", &duration_, 0.001f);
 
         ImGui::Separator();
 
