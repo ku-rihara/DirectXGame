@@ -1,6 +1,6 @@
 #include "ViewProjection.h"
 #include "Dx/DirectXCommon.h"
-#include"MathFunction.h"
+#include "MathFunction.h"
 #include <cassert>
 void ViewProjection::Init() {
 
@@ -51,8 +51,8 @@ void ViewProjection::TransferMatrix() {
 void ViewProjection::UpdateMatrix() {
 
     //// オイラーからQuaternionへの変換
-    //quaternion_=Quaternion::EulerToQuaternion(rotation_);
-    // ビュー行列の更新
+    // quaternion_=Quaternion::EulerToQuaternion(rotation_);
+    //  ビュー行列の更新
     UpdateViewMatrix();
     // 射影行列の更新
     UpdateProjectionMatrix();
@@ -90,7 +90,6 @@ void ViewProjection::UpdateProjectionMatrix() {
     }
 }
 
-
 Vector3 ViewProjection::GetWorldPos() const {
     return Vector3(
         cameraMatrix_.m[3][0], // X成分
@@ -107,6 +106,6 @@ Vector3 ViewProjection::GetFinalPosition() const {
     return translation_ + transformedPositionOffset;
 }
 
-Vector3 ViewProjection::GetFinalRotation() const { 
-    return rotation_ + rotationOffset_; 
+Vector3 ViewProjection::GetFinalRotation() const {
+    return rotation_ + rotationOffset_;
 }
