@@ -11,7 +11,7 @@ public:
     struct KeyFrameParam {
         Vector3 position = {0.0f, 0.0f, 0.0f};
         Vector3 rotation = {0.0f, 0.0f, 0.0f};
-        float fov        = 45.0f * 3.141592654f / 180.0f;
+        float fov        = 45.0f;
     };
 
     enum class TimeMode {
