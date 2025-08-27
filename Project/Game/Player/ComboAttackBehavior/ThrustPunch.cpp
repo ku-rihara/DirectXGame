@@ -151,6 +151,4 @@ void ThrustPunch::ChangeSlow() {
         pPlayer_->GetGameCamera()->PlayShake("ThurstAttackCamera");
         istimeSlow_ = true;
     }
-
-   
 }
