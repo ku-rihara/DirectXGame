@@ -226,6 +226,15 @@
     <Filter Include="MyEngine\.cpp\utility\TimeScaleEditor">
       <UniqueIdentifier>{db86007f-edfe-471b-9800-4bb32187b5fa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.h\utility\TimeScaleEditor">
+      <UniqueIdentifier>{316afbc6-e343-4113-808b-6fa6e3216164}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\PostEffectEditor">
+      <UniqueIdentifier>{52fc72c3-c38b-47a4-9cdb-a7d5c409752b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\PostEffectEditor">
+      <UniqueIdentifier>{23cd0615-ea1f-489b-b444-d020879100e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -615,6 +624,12 @@
     </ClCompile>
     <ClCompile Include="Engine\utility\TimeScaleEditor\TimeScaleController.cpp">
       <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\PostEffectEditor\PostEffectData.cpp">
+      <Filter>MyEngine\.cpp\utility\PostEffectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\PostEffectEditor\PostEffectController.cpp">
+      <Filter>MyEngine\.cpp\utility\PostEffectEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1044,11 +1059,17 @@
     <ClInclude Include="Engine\utility\ShakeEditor\ShakeData.h">
       <Filter>MyEngine\.h\utility\ShakeEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\TimeScaleEditor\TimeScaleData.h">
-      <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\utility\TimeScaleEditor\TimeScaleController.h">
-      <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
+      <Filter>MyEngine\.h\utility\TimeScaleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\TimeScaleEditor\TimeScaleData.h">
+      <Filter>MyEngine\.h\utility\TimeScaleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\PostEffectEditor\PostEffectData.h">
+      <Filter>MyEngine\.h\utility\PostEffectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\PostEffectEditor\PostEffectController.h">
+      <Filter>MyEngine\.h\utility\PostEffectEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
