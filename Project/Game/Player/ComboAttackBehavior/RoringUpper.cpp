@@ -6,6 +6,7 @@
 #include <numbers>
 /// objs
 #include "Player/Player.h"
+#include"AttackEffect/AttackEffect.h"
 
 // input
 #include "input/Input.h"
@@ -102,7 +103,6 @@ void RoringUpper::Update() {
         if (pPlayer_->GetTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {
             break;
         }
-        Frame::SetTimeScale(1.0f);
         pPlayer_->PositionYReset();
         railManager_->SetRailMoveTime(0.0f);
         pPlayer_->GetRightHand()->RailThreeComboUpdate(0.0f);
@@ -116,7 +116,7 @@ void RoringUpper::Update() {
         ///----------------------------------------------------
     case Order::WAIT:
 
-        waitTine_ += Frame::DeltaTime();
+        waitTine_ += Frame::DeltaTimeRate();
 
         // コンボ途切れ
         if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(THIRD).waitTime) {
@@ -175,6 +175,7 @@ void RoringUpper::HitStopUpdate() {
     // デルタタイムスケール小さく
     if (pPlayer_->GetAttackController()->GetIsHitStop() && !isHitStop_) {
         pPlayer_->GetEffects()->SpecialAttackRenditionInit();
+        pPlayer_->GetAttackEffect()->PlayHitStop("UpperHitStop");
         isHitStop_ = true;
     }
 }
@@ -185,12 +186,12 @@ void RoringUpper::AnimationMove() {
     pPlayer_->GetRightHand()->RailThreeComboUpdate(pPlayer_->GetAttackController()->GetAttackSpeed(pPlayer_->GetRightHand()->GetRailRunSpeedThree()));
   
     // バック
-    backlashEase_.Update( atkSpeed_);
+    backlashEase_.Update(atkSpeed_);
     pPlayer_->SetWorldPositionX(tempWorldPos_.x);
     pPlayer_->SetWorldPositionZ(tempWorldPos_.z);
 
     // 回転
-    rotateEase_.Update( atkSpeed_);
+    rotateEase_.Update(atkSpeed_);
     pPlayer_->SetHeadRotateX(xRotate_);
 
     pPlayer_->Jump(jumpPower_, fallSpeedLimit_, gravity_);

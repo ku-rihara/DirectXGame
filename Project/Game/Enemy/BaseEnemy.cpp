@@ -143,8 +143,7 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 
             TakeDamage(attackController->GetAttackPower());
             pCombo_->ComboCountUP();
-           /* pGameCamera_->PlayShake();*/
-            pAttackEffect_->PlayHitStop("PunchHitStop");
+            pGameCamera_->PlayShake("PunchAttackCamera");
             ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
         }
     }

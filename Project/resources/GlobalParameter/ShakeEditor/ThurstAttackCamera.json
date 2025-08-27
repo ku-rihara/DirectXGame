@@ -2,8 +2,8 @@
     "ThurstAttackCamera": {
         "axisFlag": 3,
         "easeType": 4,
-        "maxTime": 0.5199999809265137,
-        "shakeLength": 1.2699999809265137,
+        "maxTime": 0.3499999940395355,
+        "shakeLength": 0.7799999713897705,
         "shakeType": 0,
         "startTime": 1.0
     }
