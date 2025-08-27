@@ -358,8 +358,17 @@
     <Filter Include="MyEngine\.cpp\utility\TimeScaleEditor">
       <UniqueIdentifier>{db86007f-edfe-471b-9800-4bb32187b5fa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\HitStop">
-      <UniqueIdentifier>{3adc9587-cb4f-47e4-963a-a8c4e5452d46}</UniqueIdentifier>
+    <Filter Include="MyEngine\.h\utility\TileScaleEditor">
+      <UniqueIdentifier>{c8105416-44b0-458b-b1d0-784486d97837}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\PostEffectEditor">
+      <UniqueIdentifier>{f328784d-1054-4768-b123-548a56e9d88f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\PostEffectEditor">
+      <UniqueIdentifier>{bf8ac9e4-f43b-41fe-bf88-7e8b65d23b95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\AttackEffect">
+      <UniqueIdentifier>{e59252d0-c8a8-40b8-89ff-a6b2dd6c3a3a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -949,8 +958,14 @@
     <ClCompile Include="Engine\utility\TimeScaleEditor\TimeScaleController.cpp">
       <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Game\HitStop\HitStop.cpp">
-      <Filter>Game\HitStop</Filter>
+    <ClCompile Include="Engine\utility\PostEffectEditor\PostEffectController.cpp">
+      <Filter>MyEngine\.cpp\utility\PostEffectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\PostEffectEditor\PostEffectData.cpp">
+      <Filter>MyEngine\.cpp\utility\PostEffectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\AttackEffect\AttackEffect.cpp">
+      <Filter>Game\AttackEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1579,19 +1594,19 @@
       <Filter>MyEngine\.h\utility\ShakeEditor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\utility\TimeScaleEditor\TimeScaleController.h">
-      <Filter>MyEngine\.h\utility\TimeScaleEditor</Filter>
+      <Filter>MyEngine\.h\utility\TileScaleEditor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\utility\TimeScaleEditor\TimeScaleData.h">
-      <Filter>MyEngine\.h\utility\TimeScaleEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\PostEffectEditor\PostEffectData.h">
-      <Filter>MyEngine\.h\utility\PostEffectEditor</Filter>
+      <Filter>MyEngine\.h\utility\TileScaleEditor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\utility\PostEffectEditor\PostEffectController.h">
       <Filter>MyEngine\.h\utility\PostEffectEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Game\HitStop\HitStop.h">
-      <Filter>Game\HitStop</Filter>
+    <ClInclude Include="Engine\utility\PostEffectEditor\PostEffectData.h">
+      <Filter>MyEngine\.h\utility\PostEffectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\AttackEffect\AttackEffect.h">
+      <Filter>Game\AttackEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -7,7 +7,7 @@
 /// objs
 #include "GameCamera/GameCamera.h"
 #include "Player/Player.h"
-#include"HitStop/HitStop.h"
+#include"AttackEffect/AttackEffect.h"
 
 // offscreen
 #include "PostEffect/PostEffectRenderer.h"
@@ -145,19 +145,12 @@ void ThrustPunch::ChangeSlow() {
     if (pPlayer_->GetAttackController()->GetIsSlow() && !istimeSlow_) {
         PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::GRAY);
         pPlayer_->SoundStrongPunch();
-        pPlayer_->GetHitStop()->PlayHitStop("PlayerThurstAttackHitStop");
+        pPlayer_->GetAttackEffect()->PlayHitStop("PlayerThurstAttackHitStop");
+        pPlayer_->GetAttackEffect()->PlayPostEffect("PlayerThurstAttackGrayScale");
         pPlayer_->GetGameCamera()->PlayAnimation("PlayerthrustAttack");
         pPlayer_->GetGameCamera()->PlayShake("ThurstAttackCamera");
         istimeSlow_ = true;
     }
 
-    // スロータイム
-    if (istimeSlow_) {
-        timeDownTime_ += Frame::DeltaTime();
-        if (timeDownTime_ >= kTimeDownTime_) {
-            /// スケール変化
-            BaseComboAattackBehavior::ScalingEaseUpdate();
-            PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::NONE);
-        }
-    }
+   
 }

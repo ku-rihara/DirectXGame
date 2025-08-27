@@ -32,7 +32,7 @@ class SpecialAttackGauge;
 class LockOn;
 class GameCamera;
 class Combo;
-class HitStop;
+class AttackEffect;
 class Player : public BaseObject, public AABBCollider {
 
 private: // struct
@@ -103,7 +103,7 @@ private: // class
     LockOn* pLockOn_         = nullptr;
     GameCamera* pGameCamera_ = nullptr;
     Combo* pCombo_           = nullptr;
-    HitStop* pHitStop_       = nullptr;
+    AttackEffect* pHitStop_       = nullptr;
 
     const ViewProjection* viewProjection_ = nullptr;
 
@@ -149,7 +149,7 @@ public:
     PlayerEffects* GetEffects() const { return effects_.get(); }
     LockOn* GetLockOn() const { return pLockOn_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
-    HitStop* GetHitStop() const { return pHitStop_; }
+    AttackEffect* GetAttackEffect() const { return pHitStop_; }
     PlayerParameter* GetParameter() const { return parameters_.get(); }
     PlayerAttackController* GetAttackController() const { return attackController_.get(); }
     float GetMoveSpeed() const { return moveSpeed_; }
@@ -161,7 +161,7 @@ public:
     void SetLockOn(LockOn* lockon);
     void SetGameCamera(GameCamera* gamecamera);
     void SetCombo(Combo* combo);
-    void SetHitStop(HitStop* hitStop);
+    void SetHitStop(AttackEffect* hitStop);
     void SetTitleBehavior();
     void RotateReset();
     void HeadLightSetting();

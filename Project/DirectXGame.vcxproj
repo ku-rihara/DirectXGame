@@ -115,6 +115,7 @@
     <ClCompile Include="Engine\utility\RailEditor\ControlPosManager.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\Rail.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\RailManager.cpp" />
+    <ClCompile Include="Game\AttackEffect\AttackEffect.cpp" />
     <ClCompile Include="Game\BackGroundObject\BaseBackGroundObject.cpp" />
     <ClCompile Include="Game\BackGroundObject\GameBackGroundObject.cpp" />
     <ClCompile Include="Game\BaseObject\BaseObject.cpp" />
@@ -159,7 +160,6 @@
     <ClCompile Include="Game\FireInjectors\FireInjectors.cpp" />
     <ClCompile Include="Game\GameCamera\CameraRendition.cpp" />
     <ClCompile Include="Game\GameCamera\GameCamera.cpp" />
-    <ClCompile Include="Game\HitStop\HitStop.cpp" />
     <ClCompile Include="Game\LockOn\LockOn.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\RightJobPunch.cpp" />
@@ -329,6 +329,7 @@
     <ClInclude Include="Engine\utility\RailEditor\ControlPosManager.h" />
     <ClInclude Include="Engine\utility\RailEditor\Rail.h" />
     <ClInclude Include="Engine\utility\RailEditor\RailManager.h" />
+    <ClInclude Include="Game\AttackEffect\AttackEffect.h" />
     <ClInclude Include="Game\BackGroundObject\BaseBackGroundObject.h" />
     <ClInclude Include="Game\BackGroundObject\GameBackGroundObject.h" />
     <ClInclude Include="Game\BaseObject\BaseObject.h" />
@@ -373,7 +374,6 @@
     <ClInclude Include="Game\FireInjectors\FireInjectors.h" />
     <ClInclude Include="Game\GameCamera\CameraRendition.h" />
     <ClInclude Include="Game\GameCamera\GameCamera.h" />
-    <ClInclude Include="Game\HitStop\HitStop.h" />
     <ClInclude Include="Game\LockOn\LockOn.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\RightJobPunch.h" />
