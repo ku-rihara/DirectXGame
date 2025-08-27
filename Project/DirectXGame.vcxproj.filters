@@ -1578,11 +1578,17 @@
     <ClInclude Include="Engine\utility\ShakeEditor\ShakeData.h">
       <Filter>MyEngine\.h\utility\ShakeEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\TimeScaleEditor\TimeScaleData.h">
-      <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\utility\TimeScaleEditor\TimeScaleController.h">
-      <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
+      <Filter>MyEngine\.h\utility\TimeScaleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\TimeScaleEditor\TimeScaleData.h">
+      <Filter>MyEngine\.h\utility\TimeScaleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\PostEffectEditor\PostEffectData.h">
+      <Filter>MyEngine\.h\utility\PostEffectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\PostEffectEditor\PostEffectController.h">
+      <Filter>MyEngine\.h\utility\PostEffectEditor</Filter>
     </ClInclude>
     <ClInclude Include="Game\HitStop\HitStop.h">
       <Filter>Game\HitStop</Filter>
