@@ -69,7 +69,7 @@ void CameraAnimation::ApplyOffsetToViewProjection() {
         return;
     }
 
-    // アニメーションデータを一時的なViewProjectionに適用
+    // アニメーションデータをViewProjectionに適用
     animationData_->ApplyToViewProjection(*pViewProjection_);
 }
 

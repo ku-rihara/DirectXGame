@@ -46,15 +46,16 @@ void CameraKeyFrame::SaveData() {
 }
 
 void CameraKeyFrame::Update() {
-    // TimeModeに応じてデルタタイムを決定
     float actualDeltaTime;
     switch (static_cast<TimeMode>(timeMode_)) {
     case TimeMode::DELTA_TIME:
-        actualDeltaTime = Frame::DeltaTime(); // タイムスケール無視
+        // タイムスケール無視
+        actualDeltaTime = Frame::DeltaTime(); 
         break;
     case TimeMode::DELTA_TIME_RATE:
     default:
-        actualDeltaTime = Frame::DeltaTimeRate(); // タイムスケール適用
+        // タイムスケール適用
+        actualDeltaTime = Frame::DeltaTimeRate();
         break;
     }
 
@@ -71,7 +72,7 @@ void CameraKeyFrame::BindParams() {
     globalParameter_->Bind(groupName_, "positionEaseType", &positionEaseType_);
     globalParameter_->Bind(groupName_, "rotationEaseType", &rotationEaseType_);
     globalParameter_->Bind(groupName_, "fovEaseType", &fovEaseType_);
-    globalParameter_->Bind(groupName_, "timeMode", &timeMode_); // TimeModeのバインド追加
+    globalParameter_->Bind(groupName_, "timeMode", &timeMode_);
 }
 
 void CameraKeyFrame::AdjustParam() {

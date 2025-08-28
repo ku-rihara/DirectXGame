@@ -35,21 +35,17 @@ public:
     ShakeData()  = default;
     ~ShakeData() = default;
 
-    /// 初期化
+    /// 初期化、更新、調節
     void Init(const std::string& shakeName);
-
-    /// 更新
     void Update(float deltaTime);
-
-    /// ImGuiでの調整
     void AdjustParam();
 
     /// 再生制御
-    void Play(); // リセットしてから再生開始
-    void Stop(); // 停止してオフセットをクリア
-    void Reset(); // パラメータをリセット（再生状態は変更しない）
+    void Play();
+    void Stop();
+    void Reset();
 
-    /// データのロード・セーブ
+    /// 　Load,Save
     void LoadData();
     void SaveData();
 
@@ -58,21 +54,15 @@ public:
     bool IsFinished() const;
 
 private:
-    /// パラメータのバインド
+    /// Editor
     void BindParams();
-
-    /// イージングタイプセレクター
     void EasingTypeSelector(const char* label, int32_t& target);
 
     /// シェイク値の計算
     void UpdateShakeValues();
 
-    /// 軸フラグに基づいてVector3を適用
+    // 適応
     Vector3 ApplyAxisFlag(const Vector3& shakeValue) const;
-
-    /// 型に応じた個別のシェイク計算
-    void UpdateFloatShake();
-    void UpdateVector2Shake();
     void UpdateVector3Shake();
 
 private:
@@ -87,7 +77,7 @@ private:
     float startTime_   = 1.0f;
     int32_t easeType_  = 0;
     int32_t shakeType_ = 0;
-    int32_t axisFlag_  = AXIS_XYZ; // 軸設定
+    int32_t axisFlag_  = AXIS_XYZ;
 
     // 再生状態
     PlayState playState_ = PlayState::STOPPED;
@@ -99,16 +89,21 @@ private:
     Easing<float> timeEase_;
     float easedTime_ = 0.0f;
 
-    // UI表示制御
+    // UI表示
     bool showControls_ = true;
 
 public:
-    // ゲッター
+    //--------------------------------------------------------------------------------------
+    // getter
+    //--------------------------------------------------------------------------------------
     std::string GetGroupName() const { return groupName_; }
     float GetShakeLength() const { return shakeLength_; }
     float GetMaxTime() const { return maxTime_; }
     Vector3 GetShakeOffset() const { return currentShakeOffset_; }
-
-    void SetAxisFlag(AxisFlag flag) { axisFlag_ = static_cast<int32_t>(flag); }
     AxisFlag GetAxisFlag() const { return static_cast<AxisFlag>(axisFlag_); }
+    //--------------------------------------------------------------------------------------
+    // setter
+    //--------------------------------------------------------------------------------------
+    void SetAxisFlag(AxisFlag flag) { axisFlag_ = static_cast<int32_t>(flag); }
+
 };

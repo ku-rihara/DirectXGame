@@ -92,7 +92,7 @@ void ShakeData::Play() {
     timeEase_.SetEndValue(0.0f);
     timeEase_.SetMaxTime(maxTime_);
     timeEase_.SetType(static_cast<EasingType>(easeType_));
-    timeEase_.Reset(); // イージングもリセット
+    timeEase_.Reset();
     easedTime_ = startTime_;
 
 }
@@ -107,7 +107,6 @@ void ShakeData::Reset() {
     easedTime_          = startTime_;
     currentShakeOffset_ = {0.0f, 0.0f, 0.0f};
 
-    // イージングもリセット
     timeEase_.Reset();
 }
 
@@ -173,7 +172,6 @@ void ShakeData::AdjustParam() {
 
         ImGui::Separator();
 
-        // Vector3の場合は個別軸のチェックボックス
         bool x = (axisFlag_ & AXIS_X) != 0;
         bool y = (axisFlag_ & AXIS_Y) != 0;
         bool z = (axisFlag_ & AXIS_Z) != 0;

@@ -29,7 +29,7 @@ public:
     bool IsSelectedAnimationPlaying() const;
     bool IsSelectedAnimationFinished() const;
 
-    // ViewProjectionに値を適用する機能
+    // ViewProjection適応
     void ApplyToViewProjection();
 
     // KeyFrameプレビュー機能
@@ -39,6 +39,7 @@ private:
     void SetViewProjection(ViewProjection* vp);
 
 private:
+    // Animationデバッグ
     std::vector<std::unique_ptr<CameraAnimationData>> animations_;
     int selectedIndex_                     = -1;
     ViewProjection* viewProjection_        = nullptr;
@@ -46,20 +47,21 @@ private:
 
     // 入力用バッファ
     char nameBuffer_[128] = "";
-
     // 再生制御用
     bool autoApplyToViewProjection_ = true;
-
     // KeyFrameプレビュー用
-    bool keyFramePreviewMode_       = false;
-  
+    bool keyFramePreviewMode_ = false;
+
 public:
-    // ゲッター
+    //--------------------------------------------------------------------------------------
+    // getter
+    //--------------------------------------------------------------------------------------
     bool GetAutoApplyToViewProjection() const { return autoApplyToViewProjection_; }
-    void SetAutoApplyToViewProjection(bool enable) { autoApplyToViewProjection_ = enable; }
-
-    // KeyFrameプレビューモード関連
     bool GetKeyFramePreviewMode() const { return keyFramePreviewMode_; }
-    void SetKeyFramePreviewMode(bool enable) { keyFramePreviewMode_ = enable; }
 
+    //--------------------------------------------------------------------------------------
+    // setter
+    //--------------------------------------------------------------------------------------
+    void SetAutoApplyToViewProjection(bool enable) { autoApplyToViewProjection_ = enable; }
+    void SetKeyFramePreviewMode(bool enable) { keyFramePreviewMode_ = enable; }
 };
