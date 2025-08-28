@@ -4,6 +4,7 @@
 
 /// Player
 #include "Player/Player.h"
+#include"GameCamera/GameCamera.h"
 #include "CollisionBox/PlayerAttackController.h"
 
 #include "Frame/Frame.h"
@@ -63,6 +64,7 @@ void RushAttack::Update() {
         //エフェクト初期化
         PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::RADIALBLUR);
         pPlayer_->GetEffects()->RushAttackRingEffectEmit();
+        pPlayer_->GetGameCamera()->PlayAnimation("PlayerRush");
 
         //攻撃タイプ変更
         pPlayer_->GetAttackController()->ChangeAttackType(PlayerAttackController::AttackType::RUSH);

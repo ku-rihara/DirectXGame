@@ -504,6 +504,10 @@ void Player::SetGameCamera(GameCamera* gamecamera) {
     pGameCamera_ = gamecamera;
 }
 
+void Player::SetHitStop(AttackEffect* hitStop) {
+    pHitStop_ = hitStop;
+}
+
 /// =======================================================================================
 /// Sound
 /// =======================================================================================

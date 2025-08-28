@@ -19,6 +19,7 @@ class Player;
 class GameCamera;
 class EnemyManager;
 class Combo;
+class AttackEffect;
 class BaseEnemy : public BaseObject, public AABBCollider {
 public:
     enum class Type {
@@ -62,6 +63,7 @@ protected:
     Combo* pCombo_;
     GameCamera* pGameCamera_;
     EnemyManager* pEnemyManager_;
+    AttackEffect* pAttackEffect_;
 
     std::unique_ptr<FindSprite> findSprite_;
     std::unique_ptr<NotFindSprite> notFindSprite_;
@@ -142,11 +144,13 @@ public:
     void SetGameCamera(GameCamera* gamecamera);
     void SetManager(EnemyManager* manager);
     void SetCombo(Combo* combo);
+    void SetAttackEffect(AttackEffect* attackEffect);
     void SetParameter(const Type& type, const Parameter& paramater);
     void SetBodyRotateX(const float& r) { obj3d_->transform_.rotation_.x = r; }
     void SetBodyColor(const Vector4& color);
     void SetIsDeath(const bool& is) { isDeath_ = is; }
     void SetGroupId(int groupId) { groupId_ = groupId; }
+    
 
 private:
     bool IsInView(const ViewProjection& viewProjection) const;

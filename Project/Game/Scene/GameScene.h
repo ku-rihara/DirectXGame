@@ -4,6 +4,7 @@
 #include "BaseScene.h"
 
 // object
+#include "AttackEffect/AttackEffect.h"
 #include "BackGroundObject/GameBackGroundObject.h"
 #include "Combo/Combo.h"
 #include "ComboCreate/ComboCreateEditor.h"
@@ -69,6 +70,7 @@ private:
     std::unique_ptr<ComboScene> comboScene_                     = nullptr;
     std::unique_ptr<CameraEditor> cameraEditor_                 = nullptr;
     std::unique_ptr<ShakeEditor> shakeEditor_                   = nullptr;
+    std::unique_ptr<AttackEffect> attackEffect_                 = nullptr;
 
     bool isDraw = true;
 

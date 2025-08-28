@@ -1,0 +1,10 @@
+{
+    "PlayerRush": {
+        "autoReturnToInitial": true,
+        "playbackSpeed": 1.0,
+        "resetFovEaseType": 6,
+        "resetPosEaseType": 6,
+        "resetRotateEaseType": 6,
+        "resetTimePoint": 0.20000000298023224
+    }
+}

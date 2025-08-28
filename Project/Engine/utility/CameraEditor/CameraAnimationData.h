@@ -22,8 +22,6 @@ public:
 
     /// 初期化
     void Init(const std::string& animationName);
-
-    /// 更新
     void Update(float deltaTime);
 
     /// ImGuiでの調整
@@ -43,29 +41,24 @@ public:
     void Pause();
     void Reset();
 
-    /// アクティブなキーフレームのみ更新
     void UpdateActiveKeyFrames(float deltaTime);
 
-    /// データのロード
+    /// Load,Save
     void LoadData();
     void LoadAllKeyFrames();
     void SaveAllKeyFrames();
     void SaveData();
 
 private:
-    /// パラメータのバインド
+  
     void BindParams();
 
-    /// キーフレーム進行管理
+    // キーフレーム進行管理
     void UpdateKeyFrameProgression();
-
-    /// 次のキーフレームに進む
     void AdvanceToNextKeyFrame();
 
-    /// キーフレーム補間値の更新
+    // 補間値更新
     void UpdateInterpolatedValues();
-
-    /// 初期値復帰開始
     void StartReturnToInitial();
 
 private:
@@ -106,7 +99,7 @@ private:
     bool showAnimationControls_ = true;
     bool showInitialSettings_   = false;
 
-    // キーフレーム進行管理用の新しいメンバ変数
+    // キーフレーム進行管理
     bool isAllKeyFramesFinished_        = false;
     int32_t lastCompletedKeyFrameIndex_ = -1;
 
@@ -122,6 +115,10 @@ private:
     Easing<float> returnFovEase_;
 
 public:
+
+    //--------------------------------------------------------------------------------------
+    // getter
+    //--------------------------------------------------------------------------------------
     std::string GetGroupName() const { return groupName_; }
     bool IsPlaying() const;
     bool IsFinished() const;
@@ -133,9 +130,11 @@ public:
     bool IsReturningToInitial() const { return isReturningToInitial_; }
   
     int32_t GetSelectedKeyFrameIndex() const { return selectedKeyFrameIndex_; }
-    void SetSelectedKeyFrameIndex(int32_t index);
     CameraKeyFrame* GetSelectedKeyFrame();
     const CameraKeyFrame* GetSelectedKeyFrame() const;
-    // 初期値設定用
+    //--------------------------------------------------------------------------------------
+    // setter
+    //--------------------------------------------------------------------------------------
+    void SetSelectedKeyFrameIndex(int32_t index);
     void SetInitialValues(const Vector3& position, const Vector3& rotation, float fov);
 };

@@ -73,17 +73,13 @@ void CameraAnimationData::LoadAllKeyFrames() {
             if (entry.is_regular_file() && entry.path().extension() == ".json") {
                 std::string fileName = entry.path().stem().string();
 
-                // このアニメーションのキーフレームファイルかチェック
+                // ファイルチェック
                 if (fileName.find(keyFramePrefix) == 0) {
                     // インデックス番号を抽出
                     std::string indexStr = fileName.substr(keyFramePrefix.length());
-                    try {
-                        int32_t index = std::stoi(indexStr);
-                        keyFrameFiles.emplace_back(index, fileName);
-                    } catch (const std::exception&) {
-                        // インデックスの解析に失敗した場合はスキップ
-                        continue;
-                    }
+
+                    int32_t index = std::stoi(indexStr);
+                    keyFrameFiles.emplace_back(index, fileName);
                 }
             }
         }
@@ -95,7 +91,7 @@ void CameraAnimationData::LoadAllKeyFrames() {
         for (const auto& [index, fileName] : keyFrameFiles) {
             auto newKeyFrame = std::make_unique<CameraKeyFrame>();
             newKeyFrame->Init(groupName_, index);
-            newKeyFrame->LoadData(); // キーフレームデータをロード
+            newKeyFrame->LoadData(); //Load
             keyFrames_.push_back(std::move(newKeyFrame));
         }
 
@@ -130,9 +126,9 @@ void CameraAnimationData::UpdateActiveKeyFrames(float deltaTime) {
         return;
     }
 
-    // 初期値に戻るイージング中の場合
+    // 初期値に戻るイージング
     if (isReturningToInitial_) {
-        // 復帰用イージングは常にDeltaTimeRateを使用
+
         float scaledDeltaTime = deltaTime * playbackSpeed_;
         returnPositionEase_.Update(scaledDeltaTime);
         returnRotationEase_.Update(scaledDeltaTime);
@@ -317,6 +313,11 @@ void CameraAnimationData::Reset() {
     returnRotationEase_.Reset();
     returnFovEase_.Reset();
 
+    // 最初のキーフレームに初期値を設定
+    if (!keyFrames_.empty() && activeKeyFrameIndex_ == 0) {
+        keyFrames_[0]->SetStartEasing(initialPosition_, initialRotation_, initialFov_);
+    }
+
     // フラグをリセット
     isAllKeyFramesFinished_     = false;
     isReturningToInitial_       = false;
@@ -371,7 +372,7 @@ void CameraAnimationData::AdjustParam() {
             stateText = "PAUSED";
             break;
         }
-    
+
         if (isAllKeyFramesFinished_) {
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Animation Finished!");
         }
@@ -386,7 +387,6 @@ void CameraAnimationData::AdjustParam() {
 
     ImGui::SeparatorText("keyFrameEdit");
     // キーフレームリスト
-    // キーフレームリスト表示部分
     if (showKeyFrameList_) {
         ImGui::Text("KeyFrames (%zu):", keyFrames_.size());
         for (int32_t i = 0; i < static_cast<int32_t>(keyFrames_.size()); ++i) {
@@ -477,19 +477,19 @@ void CameraAnimationData::StartReturnToInitial() {
     returnPositionEase_.SetEndValue(initialPosition_);
     returnPositionEase_.SetMaxTime(resetTimePoint_);
     returnPositionEase_.SetType(static_cast<EasingType>(resetPosEaseType_));
-    returnPositionEase_.Reset(); // イージングをリセット
+    returnPositionEase_.Reset();
 
     returnRotationEase_.SetStartValue(currentRot);
     returnRotationEase_.SetEndValue(initialRotation_);
     returnRotationEase_.SetMaxTime(resetTimePoint_);
     returnRotationEase_.SetType(static_cast<EasingType>(resetRotateEaseType_));
-    returnRotationEase_.Reset(); // イージングをリセット
+    returnRotationEase_.Reset();
 
     returnFovEase_.SetStartValue(currentFovValue);
     returnFovEase_.SetEndValue(initialFov_);
     returnFovEase_.SetMaxTime(resetTimePoint_);
     returnFovEase_.SetType(static_cast<EasingType>(resetFovEaseType_));
-    returnFovEase_.Reset(); // イージングをリセット
+    returnFovEase_.Reset();
 }
 
 void CameraAnimationData::SetSelectedKeyFrameIndex(int32_t index) {

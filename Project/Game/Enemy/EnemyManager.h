@@ -18,6 +18,7 @@ class LockOn;
 class Combo;
 class GameCamera;
 class EnemySpawner;
+class AttackEffect;
 
 class EnemyManager {
 public:
@@ -81,6 +82,7 @@ private:
     GameCamera* pGameCamera_;
     Combo* pCombo_;
     EnemySpawner* pEnemySpawner_;
+    AttackEffect* pAttackEffect_;
 
 private:
 
@@ -121,4 +123,5 @@ public:
     void SetGameCamera(GameCamera* gameCamera);
     void SetCombo(Combo* combo);
     void SetEnemySpawner(EnemySpawner* enemySpawner);
+    void SetAttackEffect(AttackEffect* effect);
 };

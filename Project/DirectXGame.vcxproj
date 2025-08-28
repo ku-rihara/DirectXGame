@@ -109,10 +109,13 @@
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleManager.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleParameter.cpp" />
+    <ClCompile Include="Engine\utility\PostEffectEditor\PostEffectController.cpp" />
+    <ClCompile Include="Engine\utility\PostEffectEditor\PostEffectData.cpp" />
     <ClCompile Include="Engine\utility\PutObjForBlender\PutObjForBlender.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\ControlPosManager.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\Rail.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\RailManager.cpp" />
+    <ClCompile Include="Game\AttackEffect\AttackEffect.cpp" />
     <ClCompile Include="Game\BackGroundObject\BaseBackGroundObject.cpp" />
     <ClCompile Include="Game\BackGroundObject\GameBackGroundObject.cpp" />
     <ClCompile Include="Game\BaseObject\BaseObject.cpp" />
@@ -320,10 +323,13 @@
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleEmitter.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleManager.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleParameter.h" />
+    <ClInclude Include="Engine\utility\PostEffectEditor\PostEffectController.h" />
+    <ClInclude Include="Engine\utility\PostEffectEditor\PostEffectData.h" />
     <ClInclude Include="Engine\utility\PutObjForBlender\PutObjForBlender.h" />
     <ClInclude Include="Engine\utility\RailEditor\ControlPosManager.h" />
     <ClInclude Include="Engine\utility\RailEditor\Rail.h" />
     <ClInclude Include="Engine\utility\RailEditor\RailManager.h" />
+    <ClInclude Include="Game\AttackEffect\AttackEffect.h" />
     <ClInclude Include="Game\BackGroundObject\BaseBackGroundObject.h" />
     <ClInclude Include="Game\BackGroundObject\GameBackGroundObject.h" />
     <ClInclude Include="Game\BaseObject\BaseObject.h" />

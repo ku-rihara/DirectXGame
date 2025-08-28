@@ -59,7 +59,7 @@ void TimeScaleController::AllLoadFile() {
     std::string folderPath = "Resources/GlobalParameter/TimeScale/";
 
     if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {
-        // 既存のTimeScaleをクリア
+        // TimeScaleをクリア
         timeScales_.clear();
         selectedIndex_ = -1;
 
@@ -70,7 +70,7 @@ void TimeScaleController::AllLoadFile() {
                 // 新規作成してロード
                 auto timeScale = std::make_unique<TimeScaleData>();
                 timeScale->Init(fileName);
-                timeScale->LoadData(); // TimeScaleデータをロード
+                timeScale->LoadData(); // Load
                 timeScales_.push_back(std::move(timeScale));
             }
         }
@@ -99,7 +99,7 @@ void TimeScaleController::EditorUpdate() {
         if (ImGui::Button("Add TimeScale")) {
             if (strlen(nameBuffer_) > 0) {
                 AddTimeScale(nameBuffer_);
-                nameBuffer_[0] = '\0'; // クリア
+                nameBuffer_[0] = '\0'; 
             }
         }
 
@@ -116,15 +116,7 @@ void TimeScaleController::EditorUpdate() {
             ImGui::Text("Status: Inactive");
         }
 
-        // 即座制御
-        float immediateValue = GetCurrentTimeScale();
-        if (ImGui::DragFloat("Immediate TimeScale", &immediateValue, 0.01f, 0.0f, 3.0f)) {
-            SetTimeScaleImmediate(immediateValue);
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Reset")) {
-            StopTimeScale();
-        }
+      
 
         ImGui::Separator();
 
