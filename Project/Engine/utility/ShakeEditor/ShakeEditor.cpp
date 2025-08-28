@@ -25,7 +25,7 @@ void ShakeEditor::AllLoadFile() {
                 // 新規作成してロード
                 auto shake = std::make_unique<ShakeData>();
                 shake->Init(fileName);
-                shake->LoadData(); // シェイクデータをロード
+                shake->LoadData(); //Load
                 shakes_.push_back(std::move(shake));
             }
         }
@@ -65,7 +65,7 @@ void ShakeEditor::EditorUpdate() {
         if (ImGui::Button("Add Shake")) {
             if (strlen(nameBuffer_) > 0) {
                 AddShake(nameBuffer_);
-                nameBuffer_[0] = '\0'; // クリア
+                nameBuffer_[0] = '\0';
             }
         }
 

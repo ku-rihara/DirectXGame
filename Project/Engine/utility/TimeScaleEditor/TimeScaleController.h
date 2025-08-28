@@ -9,7 +9,7 @@ public:
     TimeScaleController()  = default;
     ~TimeScaleController() = default;
 
-    /// 初期化・更新
+    /// 初期化,更新
     void Init();
     void Update(float deltaTime);
 

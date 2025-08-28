@@ -26,15 +26,14 @@ public:
     void SaveInitialValues();
 
 private:
- 
     /// ViewProjectionにオフセット値を適用
     void ApplyOffsetToViewProjection();
 
 private:
     // アニメーションデータ
     std::unique_ptr<CameraAnimationData> animationData_;
+    ViewProjection* pViewProjection_ = nullptr;
 
- 
     // 初期値
     CameraParam initialParam_;
 
@@ -43,22 +42,23 @@ private:
     Vector3 currentOffsetRotation_;
     float currentOffsetFov_ = 0.0f;
 
-    // 一時的なViewProjection
-    ViewProjection* pViewProjection_ = nullptr;
-    bool isAdapt_                    = true;
+    bool isAdapt_ = true;
 
     // アニメーション名
     std::string currentAnimationName_;
 
 public:
-    // ゲッター
+    //--------------------------------------------------------------------------------------
+    // getter
+    //--------------------------------------------------------------------------------------
     const std::string& GetAnimationName() const { return currentAnimationName_; }
-
-    // オフセット値のゲッター
     Vector3 GetOffsetPosition() const { return currentOffsetPosition_; }
     Vector3 GetOffsetRotation() const { return currentOffsetRotation_; }
     float GetOffsetFov() const { return currentOffsetFov_; }
 
+    //--------------------------------------------------------------------------------------
+    // setter
+    //--------------------------------------------------------------------------------------
     void SetAdapt(bool adapt) { isAdapt_ = adapt; }
     void SetViewProjection(ViewProjection* viewProjection);
 };

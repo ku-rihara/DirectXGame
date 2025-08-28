@@ -26,7 +26,7 @@ void CameraEditor::AllLoadFile() {
                 // 新規作成してロード
                 auto anim = std::make_unique<CameraAnimationData>();
                 anim->Init(fileName);
-                anim->LoadData(); // アニメーションデータとキーフレームデータをすべてロード
+                anim->LoadData(); //Load
                 animations_.push_back(std::move(anim));
             }
         }
@@ -174,10 +174,10 @@ void CameraEditor::EditorUpdate() {
             std::string displayName = animations_[i]->GetGroupName();
             if (isPlaying) {
                 displayName += " [PLAYING]";
-                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 1.0f, 0.0f, 1.0f)); // 緑色
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 1.0f, 0.0f, 1.0f)); // Playing
             } else if (isFinished) {
                 displayName += " [FINISHED]";
-                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.5f, 0.0f, 1.0f)); // オレンジ色
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.5f, 0.0f, 1.0f)); // Finish
             }
 
             if (ImGui::Selectable(displayName.c_str(), isSelected)) {

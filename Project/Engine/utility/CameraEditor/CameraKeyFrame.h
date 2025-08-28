@@ -16,7 +16,7 @@ public:
 
     enum class TimeMode {
         DELTA_TIME      = 0,
-        DELTA_TIME_RATE = 1 
+        DELTA_TIME_RATE = 1
     };
 
 public:
@@ -36,11 +36,12 @@ public:
     void Reset();
     bool IsFinished() const;
 
-    // データのロード
+    // Load,Save
     void LoadData();
     void SaveData();
 
 private:
+    // GlobalParameter
     GlobalParameter* globalParameter_;
     std::string groupName_;
     const std::string folderName_ = "CameraAnimation/KeyFrames";
@@ -56,21 +57,22 @@ private:
     int32_t fovEaseType_      = 0;
 
     // Time Mode
-    int32_t timeMode_ = static_cast<int32_t>(TimeMode::DELTA_TIME_RATE); 
+    int32_t timeMode_ = static_cast<int32_t>(TimeMode::DELTA_TIME_RATE);
 
     // easing
     Easing<Vector3> positionEase_;
     Easing<Vector3> rotationEase_;
     Easing<float> fovEase_;
 
-    // TimeMode用のラベル
+    // TimeModeラベル
     static inline std::vector<const char*> TimeModeLabels = {
         "DeltaTime (No TimeScale)",
-        "DeltaTimeRate (With TimeScale)"
-    };
+        "DeltaTimeRate (With TimeScale)"};
 
 public:
-    // ゲッター
+    //--------------------------------------------------------------------------------------
+    // getter
+    //--------------------------------------------------------------------------------------
     float GetTimePoint() const { return timePoint_; }
     Vector3 GetPosition() const { return currentKeyFrameParam_.position; }
     Vector3 GetRotation() const { return currentKeyFrameParam_.rotation; }
@@ -80,7 +82,9 @@ public:
     float GetEditFov() const { return keyFrameParam_.fov; }
     TimeMode GetTimeMode() const { return static_cast<TimeMode>(timeMode_); }
 
-    // セッター
+    //--------------------------------------------------------------------------------------
+    // setter
+    //--------------------------------------------------------------------------------------
     void SetTimePoint(float timePoint) { timePoint_ = timePoint; }
     void SetStartEasing(const Vector3& pos, const Vector3& rotate, const float& fov);
     void SetTimeMode(TimeMode mode) { timeMode_ = static_cast<int32_t>(mode); }

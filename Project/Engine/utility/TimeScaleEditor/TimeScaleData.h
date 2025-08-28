@@ -13,7 +13,7 @@ public:
     /// ImGuiでの調整
     void AdjustParam();
 
-    /// データのロード・セーブ
+    /// Load,Save
     void LoadData();
     void SaveData();
 
@@ -35,10 +35,15 @@ private:
     bool showControls_ = true;
 
 public:
-    // ゲッター・セッター
+    //--------------------------------------------------------------------------------------
+    // getter
+    //--------------------------------------------------------------------------------------
     std::string GetGroupName() const { return groupName_; }
     float GetTimeScale() const { return timeScale_; }
     float GetDuration() const { return duration_; }
+    //--------------------------------------------------------------------------------------
+    // setter
+    //--------------------------------------------------------------------------------------
     void SetTimeScale(float timeScale) { timeScale_ = timeScale; }
     void SetDuration(float duration) { duration_ = duration; }
 };
