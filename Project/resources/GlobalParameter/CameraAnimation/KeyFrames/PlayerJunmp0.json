@@ -1,0 +1,20 @@
+{
+    "PlayerJunmp0": {
+        "fov": 52.400001525878906,
+        "fovEaseType": 22,
+        "position": [
+            0.0,
+            -1.5,
+            -2.5
+        ],
+        "positionEaseType": 22,
+        "rotation": [
+            -0.06981316953897476,
+            0.0,
+            0.0
+        ],
+        "rotationEaseType": 22,
+        "timeMode": 1,
+        "timePoint": 0.23000000417232513
+    }
+}

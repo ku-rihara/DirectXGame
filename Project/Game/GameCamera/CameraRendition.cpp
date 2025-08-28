@@ -17,11 +17,10 @@ void CameraRendition::Update() {
         return;
     }
 
-    shakePlayer_->Update(Frame::DeltaTimeRate());
+    shakePlayer_->Update(Frame::DeltaTime());
     cameraAnimation_->Update(Frame::DeltaTimeRate());
 
 }
-
 
  // play呼び出し
 void CameraRendition::AnimationPlay(const std::string& filename) {

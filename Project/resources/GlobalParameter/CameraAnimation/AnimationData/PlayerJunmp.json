@@ -1,0 +1,10 @@
+{
+    "PlayerJunmp": {
+        "autoReturnToInitial": true,
+        "playbackSpeed": 1.0,
+        "resetFovEaseType": 22,
+        "resetPosEaseType": 22,
+        "resetRotateEaseType": 22,
+        "resetTimePoint": 0.7699999809265137
+    }
+}
