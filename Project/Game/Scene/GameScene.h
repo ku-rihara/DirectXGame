@@ -28,6 +28,13 @@
 /// </summary>
 class GameScene : public BaseScene {
 public:
+    enum class GameState {
+        INTRO,
+        PLAY,
+        FINISH,
+    };
+
+public:
     GameScene()           = default;
     ~GameScene() override = default;
 
@@ -43,6 +50,11 @@ public:
     void SkyBoxDraw() override;
     void DrawShadow() override;
 
+    // state Update
+    void IntroUpdate();
+    void PlayUpdate();
+    void FinishUpdate();
+
     void Debug() override;
     void ViewProjectionUpdate() override;
     void ViewProssess() override;
@@ -54,7 +66,7 @@ private:
     /// Private variants
     ///========================================================
 
-    ///* objects
+    // objects
     std::unique_ptr<GameCamera> gameCamera_                     = nullptr;
     std::unique_ptr<Field> field_                               = nullptr;
     std::unique_ptr<LockOn> lockOn_                             = nullptr;
@@ -72,6 +84,9 @@ private:
     std::unique_ptr<CameraEditor> cameraEditor_                 = nullptr;
     std::unique_ptr<ShakeEditor> shakeEditor_                   = nullptr;
     std::unique_ptr<AttackEffect> attackEffect_                 = nullptr;
+    std::unique_ptr<GameIntro> gameIntro_                       = nullptr;
+
+    GameState gameState_ = GameState::INTRO;
 
     bool isDraw = true;
 

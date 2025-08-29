@@ -28,22 +28,24 @@ void GameScene::Init() {
     howToOperate_         = std::make_unique<HowToOperate>();
     skyBox_               = std::make_unique<SkyBox>();
     combo_                = std::make_unique<Combo>();
-    gameBackGroundObject_ = std::make_unique<GameBackGroundObject>();
     comboCreate_          = std::make_unique<ComboCreateEditor>();
     fireInjectors_        = std::make_unique<FireInjectors>();
+    gameBackGroundObject_ = std::make_unique<GameBackGroundObject>();
     comboScene_           = std::make_unique<ComboScene>();
     cameraEditor_         = std::make_unique<CameraEditor>();
     shakeEditor_          = std::make_unique<ShakeEditor>();
     attackEffect_         = std::make_unique<AttackEffect>();
+    gameIntro_            = std::make_unique<GameIntro>();
 
     ///=======================================================================================
     /// 初期化
     ///=======================================================================================
 
-    player_->Init();
+    player_->GameSceneInit();
     lockOn_->Init();
     skyBox_->Init();
     combo_->Init();
+    gameIntro_->Init();
     enemyManager_->Init();
     enemySpawner_->Init("enemySpawner.json");
     fireInjectors_->Init();
@@ -75,13 +77,19 @@ void GameScene::Init() {
     player_->SetHitStop(attackEffect_.get());
     enemySpawner_->SetEnemyManager(enemyManager_.get());
     fireInjectors_->SetCombo(combo_.get());
+    // gameIntro
+    gameIntro_->SetFireInjectors(fireInjectors_.get());
+    gameIntro_->SetGameCamera(gameCamera_.get());
+    gameIntro_->SetPlayer(player_.get());
+    gameIntro_->SetGameBackGroundObject(gameBackGroundObject_.get());
+    gameIntro_->SetHowToOperate(howToOperate_.get());
 
     // comboScene
     comboScene_->SetPlayer(player_.get());
     comboScene_->SetCombo(combo_.get());
 
     isfirstChange_ = false;
-    alpha_         = 2.5f;
+    alpha_         = 1.0f;
     shandle_       = TextureManager::GetInstance()->LoadTexture("Resources/Texture/screenChange.png");
     screenSprite_.reset(Sprite::Create(shandle_, Vector2(0, 0), Vector4(1, 1, 1, alpha_)));
 
@@ -104,22 +112,84 @@ void GameScene::Init() {
     cSprite_.reset(Sprite::Create(chandle_, Vector2(0, -720), Vector4(1, 1, 1, 1.0f)));
 
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
+
+    gameState_ = GameState::INTRO;
 }
 
 void GameScene::Update() {
+
+    switch (gameState_) {
+    case GameScene::GameState::INTRO:
+
+        IntroUpdate();
+
+        break;
+    case GameScene::GameState::PLAY:
+
+        PlayUpdate();
+
+        /// クリア
+        if (enemyManager_->GetIsAllCleared() && enemySpawner_->GetAllGroupsCompleted()) {
+            gameState_ = GameScene::GameState::FINISH;
+        }
+
+        break;
+    case GameScene::GameState::FINISH:
+
+        FinishUpdate();
+
+        break;
+    default:
+        break;
+    }
+
+    Object3DRegistry::GetInstance()->UpdateAll();
+
+    /// パーティクル更新
+    ParticleManager::GetInstance()->Update();
+    ViewProjectionUpdate();
+}
+
+void GameScene::IntroUpdate() {
+
+    if (Frame::DeltaTime() >= 2.0f) {
+        return;
+    }
 
     screenSprite_->SetAlpha(alpha_);
 
     if (!isfirstChange_) {
         alpha_ -= Frame::DeltaTime();
+
         if (alpha_ <= 0.0f) {
             alpha_         = 0.0f;
             isfirstChange_ = true;
         }
     }
 
+    // gameIntro
+    gameIntro_->Update();
+    howToOperate_->Update();
     // debugCamera
     debugCamera_->Update();
+
+    // Editor
+    cameraEditor_->Update(Frame::DeltaTime());
+    shakeEditor_->Update(Frame::DeltaTime());
+    attackEffect_->Update();
+    Debug();
+
+    // obj
+    skyBox_->Update();
+    gameCamera_->Update();
+    combo_->Update();
+}
+void GameScene::PlayUpdate() {
+
+    // debugCamera
+    debugCamera_->Update();
+
+    // Editor
     cameraEditor_->Update(Frame::DeltaTime());
     shakeEditor_->Update(Frame::DeltaTime());
     attackEffect_->Update();
@@ -135,30 +205,25 @@ void GameScene::Update() {
     combo_->Update();
     fireInjectors_->Update();
     gameCamera_->Update();
-    if (isfirstChange_) {
+    /*if (isfirstChange_) {
         gameBackGroundObject_->Update();
-    }
+    }*/
 
     enemyManager_->HpBarUpdate(viewProjection_);
     lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
+}
+void GameScene::FinishUpdate() {
+    finishSpriteEase_.Update(Frame::DeltaTime());
+    cSprite_->SetPosition(tempSpritePos_);
 
-    Object3DRegistry::GetInstance()->UpdateAll();
-
-    /// パーティクル更新
-    ParticleManager::GetInstance()->Update();
-    ViewProjectionUpdate();
-
-    /// クリア
-    if (enemyManager_->GetIsAllCleared() && enemySpawner_->GetAllGroupsCompleted()) {
-        finishSpriteEase_.Update(Frame::DeltaTime());
-        cSprite_->SetPosition(tempSpritePos_);
+    if (!isend_) {
+        return;
     }
-    if (isend_) {
-        alpha_ += Frame::DeltaTime();
-        if (alpha_ >= 1.2f) {
-            alpha_ = 1.0f;
-            SceneManager::GetInstance()->ChangeScene("TITLE");
-        }
+
+    alpha_ += Frame::DeltaTime();
+    if (alpha_ >= 1.2f) {
+        alpha_ = 1.0f;
+        SceneManager::GetInstance()->ChangeScene("TITLE");
     }
 }
 
@@ -212,7 +277,7 @@ void GameScene::Debug() {
     enemyManager_->AdjustParam();
     combo_->AdjustParam();
     fireInjectors_->AdjustParam();
-
+    gameIntro_->AdjustParam();
     ShadowMap::GetInstance()->DebugImGui();
     ImGui::End();
 

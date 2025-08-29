@@ -55,12 +55,7 @@ void PlayerSpawn::Update() {
         ///================================================================
     case PlayerSpawn::Step::WAIT:
 
-        pPlayer_->DissolveUpdate(1.0f);
-        pPlayer_->GetLeftHand()->DissolveAdapt(1.0f);
-        pPlayer_->GetRightHand()->DissolveAdapt(1.0f);
-        pPlayer_->GetLeftHand()->SetIsEmit(false);
-        pPlayer_->GetRightHand()->SetIsEmit(false);
-        pPlayer_->SetShadowFrag(false);
+       
         startWaitTime_ += Frame::DeltaTime();
         if (startWaitTime_ < pPlayerParameter_->GetParamaters().spawnParam.waitTime_) {
             break;

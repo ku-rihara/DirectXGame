@@ -5,6 +5,7 @@ class Player;
 class FireInjectors;
 class GameBackGroundObject;
 class GameCamera;
+class HowToOperate;
 
 class GameIntro {
 public:
@@ -43,18 +44,22 @@ private:
 
     // param
     float waitTime_;
+    float objSpawnTime_;
 
-    Player* pPlayer_               = nullptr;
     FireInjectors* pFireInjectors_ = nullptr;
     GameCamera* pGameCamera_       = nullptr;
+    Player* pPlayer_               = nullptr;
+    HowToOperate* pHowToOperate_   = nullptr;
 
     GameBackGroundObject* pGameBackGroundObject_ = nullptr;
 
     float currentWaitTime_;
+    float currentObjSpawnTime_;
     bool isFinish_  = false;
     IntroStep step_ = IntroStep::START;
 
 public:
+    void SetHowToOperate(HowToOperate* howToOperate) { pHowToOperate_ = howToOperate; }
     void SetGameCamera(GameCamera* gameCamera) { pGameCamera_ = gameCamera; }
     void SetPlayer(Player* player) { pPlayer_ = player; }
     void SetFireInjectors(FireInjectors* fireInjectors) { pFireInjectors_ = fireInjectors; }

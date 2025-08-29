@@ -22,8 +22,7 @@ TitleFirstFall::TitleFirstFall(Player* player)
 	step_ = STEP::FALL; // 落ちる
 
 	fallRotateY_ = 0.0f;
-	/*fallSpeed_ = 0.2f;*/
-
+	
 	boundSpeed_ = 1.4f;
 	gravity_ = 8.8f;
 	boundFallSpeedLimit_ = -5.2f;
@@ -32,11 +31,7 @@ TitleFirstFall::TitleFirstFall(Player* player)
 
 	initRotate_ = pPlayer_->GetTransform().rotation_;
 
-	///land
-	/*landScaleEasing_.maxTime = 0.5f;
-	landScaleEasing_.amplitude = 0.6f;
-	landScaleEasing_.period = 0.2f;*/
-
+	
 	EasingInit();
 
 	// ハンド初期化

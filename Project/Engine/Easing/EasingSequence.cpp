@@ -20,7 +20,7 @@ void EasingSequence::AddStep(const std::string& name, T* adaptValue) {
         if (currentStep_ + 1 < steps_.size()) {
             ++currentStep_;
         } else if (loop_) {
-            currentStep_ = 0; // ループ有効時のみ先頭へ
+            currentStep_ = 0; 
         } else {
             return; // ループなしで最後のステップなら何もしない
         }

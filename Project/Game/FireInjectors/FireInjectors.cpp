@@ -1,14 +1,15 @@
 #include "FireInjectors.h"
-#include"Combo/Combo.h"
+#include "Combo/Combo.h"
+#include"Frame/Frame.h"
 #include <imgui.h>
 
 void FireInjectors::Init() {
 
     putObjForBlender_ = std::make_unique<PutObjForBlender>();
-
     putObjForBlender_->LoadJsonFile("FireInjectors.json");
-   
-     // グローバルパラメータ
+    putObjForBlender_->EasingAllReset();
+
+    // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();
@@ -23,11 +24,11 @@ void FireInjectors::Update() {
     const int currentCombo = pCombo_->GetComboCount();
 
     if (currentCombo == 0) {
-        prevComboCount_    = 0;
+        prevComboCount_ = 0;
         return;
     }
 
-    // コンボが一気に飛んだ場合も検出できるように
+    // 発射
     for (int i = prevComboCount_ + 1; i <= currentCombo; ++i) {
         if (i % fireShotComboNum_ == 0) {
             putObjForBlender_->StartRailEmitAll();
@@ -38,12 +39,16 @@ void FireInjectors::Update() {
     prevComboCount_ = currentCombo;
 }
 
-
+void FireInjectors::Spawn() {
+    putObjForBlender_->EasingUpdateSelectGroup(Frame::DeltaTime(), 0);
+}
+void FireInjectors::Launch() {
+    putObjForBlender_->EasingUpdateSelectGroup(Frame::DeltaTime(), 1);
+}
 
 void FireInjectors::Draw(const ViewProjection& viewProjection) {
     putObjForBlender_->DrawAll(viewProjection);
 }
-
 
 ///=========================================================
 /// バインド

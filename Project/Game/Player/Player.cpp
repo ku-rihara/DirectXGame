@@ -121,10 +121,14 @@ void Player::TitleUpdate() {
 }
 
 void Player::GameIntroUpdate() {
+
+     effects_->Update(GetWorldPosition());
  
     if (dynamic_cast<PlayerSpawn*>(behavior_.get())) {
         behavior_->Update();
     }
+    /// 行列更新
+    UpdateMatrix();
 }
 
 ///=========================================================
@@ -494,6 +498,23 @@ void Player::PositionYReset() {
     baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
 }
 
+void Player::GameSceneInit() {
+    Init();
+
+    DissolveUpdate(1.0f);
+    leftHand_->DissolveAdapt(1.0f);
+    rightHand_->DissolveAdapt(1.0f);
+    leftHand_->SetIsEmit(false);
+    rightHand_->SetIsEmit(false);
+    SetShadowFrag(false);
+}
+
+void Player::SetShadowFrag(const bool& isShadow) {
+    obj3d_->SetIsShadow(isShadow);
+    leftHand_->SetIsShadow(isShadow);
+    rightHand_->SetIsShadow(isShadow);
+}
+
 ///==============================================================================
 /// Class Set
 ///===============================================================================
@@ -515,11 +536,6 @@ void Player::SetHitStop(AttackEffect* hitStop) {
     pHitStop_ = hitStop;
 }
 
-void Player::SetShadowFrag(const bool& isShadow) {
-    obj3d_->SetIsShadow(isShadow);
-    leftHand_->SetIsShadow(isShadow);
-    rightHand_->SetIsShadow(isShadow);
-}
 
 /// =======================================================================================
 /// Sound

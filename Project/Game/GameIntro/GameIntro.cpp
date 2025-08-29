@@ -1,8 +1,9 @@
 #include "gameIntro.h"
 #include "BackGroundObject/GameBackGroundObject.h"
 #include "FireInjectors/FireInjectors.h"
-#include"GameCamera/GameCamera.h"
 #include "Frame/Frame.h"
+#include "GameCamera/GameCamera.h"
+#include"UI/HowToOperate.h"
 #include "player/Player.h"
 #include <imgui.h>
 
@@ -23,7 +24,7 @@ void GameIntro::Update() {
 }
 
 void GameIntro::Start() {
-
+    pGameCamera_->PlayAnimation("IntroOverLook");
     step_ = IntroStep::WAIT;
 }
 
@@ -38,8 +39,19 @@ void GameIntro::Wait() {
 }
 
 void GameIntro::ObjSpawn() {
+    currentObjSpawnTime_ += Frame::DeltaTime();
+
+    // obj生成演出
+    pGameBackGroundObject_->Update();
+    pFireInjectors_->Spawn();
+
+    if (currentObjSpawnTime_ >= objSpawnTime_) {
+        step_ = IntroStep::PLAYERSPAWN;
+    }
 }
 void GameIntro::PlayerSpawn() {
+    pHowToOperate_->ScalingEasing();
+    pPlayer_->GameIntroUpdate();
 }
 void GameIntro::Finish() {
 }
@@ -49,6 +61,7 @@ void GameIntro::Finish() {
 ///==========================================================
 void GameIntro::BindParams() {
     globalParameter_->Bind(groupName_, "waitTime", &waitTime_);
+    globalParameter_->Bind(groupName_, "objSpawnTime", &objSpawnTime_);
 }
 
 ///=========================================================
@@ -61,6 +74,7 @@ void GameIntro::AdjustParam() {
         ImGui::PushID(groupName_.c_str());
 
         ImGui::DragFloat("waitTime", &waitTime_, 0.01f);
+        ImGui::DragFloat("objSpawnTime", &objSpawnTime_, 0.01f);
 
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
