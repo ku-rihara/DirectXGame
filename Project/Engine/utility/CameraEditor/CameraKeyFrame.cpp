@@ -1,4 +1,5 @@
 #include "CameraKeyFrame.h"
+#include"MathFunction.h"
 #include "Frame/Frame.h" 
 #include <imgui.h>
 #include <iostream>
@@ -84,10 +85,13 @@ void CameraKeyFrame::AdjustParam() {
     ImGui::DragFloat("Time Point", &timePoint_, 0.01f);
 
     ImGui::DragFloat3("Position", &keyFrameParam_.position.x, 0.1f);
-  
-    ImGui::SliderAngle("X", &keyFrameParam_.rotation.x);
-    ImGui::SliderAngle("Y", &keyFrameParam_.rotation.y);
-    ImGui::SliderAngle("Z", &keyFrameParam_.rotation.z);
+
+    Vector3 rotationDegrees = ToDegree(keyFrameParam_.rotation);
+
+    if (ImGui::DragFloat3("Rotation (Degrees)", &rotationDegrees.x, 1.0f)) {
+   
+        keyFrameParam_.rotation = ToRadian(rotationDegrees);
+    }
 
     ImGui::DragFloat("FOV", &keyFrameParam_.fov, 0.01f);
 
