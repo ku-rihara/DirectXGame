@@ -152,6 +152,11 @@ void GameScene::Update() {
     /// パーティクル更新
     ParticleManager::GetInstance()->Update();
     ViewProjectionUpdate();
+
+    if (alpha_ >= 1.2f) {
+        alpha_ = 1.0f;
+        SceneManager::GetInstance()->ChangeScene("TITLE");
+    }
 }
 
 void GameScene::IntroUpdate() {
@@ -194,7 +199,6 @@ void GameScene::IntroUpdate() {
 }
 void GameScene::PlayUpdate() {
 
-
     // debugCamera
     debugCamera_->Update();
 
@@ -214,12 +218,14 @@ void GameScene::PlayUpdate() {
     combo_->Update();
     fireInjectors_->Update();
     gameCamera_->Update();
-  
 
     enemyManager_->HpBarUpdate(viewProjection_);
     lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
 }
 void GameScene::FinishUpdate() {
+
+    screenSprite_->SetAlpha(alpha_);
+
     finishSpriteEase_.Update(Frame::DeltaTime());
     cSprite_->SetPosition(tempSpritePos_);
 
@@ -228,10 +234,6 @@ void GameScene::FinishUpdate() {
     }
 
     alpha_ += Frame::DeltaTime();
-    if (alpha_ >= 1.2f) {
-        alpha_ = 1.0f;
-        SceneManager::GetInstance()->ChangeScene("TITLE");
-    }
 }
 
 /// ===================================================
