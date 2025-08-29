@@ -16,6 +16,7 @@ public:
         WAIT,
         OBJSPAWN,
         PLAYERSPAWN,
+        PURPOSWAIT,
         PURPOSEAPPEAR,
         FINISH,
     };
@@ -27,11 +28,14 @@ public:
     void Init();
     void Update();
 
+    bool ProcessStep(float limitTime, IntroStep nextStep, bool enableEnemySpawn = false);
+
     // stepMove
     void Start();
     void Wait();
     void ObjSpawn();
     void PlayerSpawn();
+    void PurposeWait();
     void PurposeAppear();
     void Finish();
 
@@ -50,6 +54,8 @@ private:
     float waitTime_;
     float objSpawnTime_;
     float playerSpawnTime_;
+    float purposeWaitTime_;
+
 
     FireInjectors* pFireInjectors_  = nullptr;
     GameCamera* pGameCamera_        = nullptr;

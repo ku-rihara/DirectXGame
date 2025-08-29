@@ -1,0 +1,20 @@
+{
+    "LeftPunch0": {
+        "fov": 45.0,
+        "fovEaseType": 0,
+        "position": [
+            0.6000000238418579,
+            0.0,
+            0.0
+        ],
+        "positionEaseType": 0,
+        "rotation": [
+            0.0,
+            0.01745329238474369,
+            0.0
+        ],
+        "rotationEaseType": 0,
+        "timeMode": 0,
+        "timePoint": 0.10000000149011612
+    }
+}

@@ -15,9 +15,9 @@ void GameIntro::Init() {
     BindParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
-   /* int32_t spriteHandle=
+    /* int32_t spriteHandle=
 
-    sprite_.reset(Sprite::Create())*/
+     sprite_.reset(Sprite::Create())*/
 
     // step
     step_ = IntroStep::START;
@@ -32,43 +32,32 @@ void GameIntro::Start() {
     step_ = IntroStep::WAIT;
 }
 
-// 最初の待機
 void GameIntro::Wait() {
-    currentTime_ += Frame::DeltaTime();
-
-    if (currentTime_ >= waitTime_) {
-        currentTime_ = 0.0f;
-        step_        = IntroStep::OBJSPAWN;
-    }
+    ProcessStep(waitTime_, IntroStep::OBJSPAWN);
 }
 
 void GameIntro::ObjSpawn() {
-    currentTime_ += Frame::DeltaTime();
-
-    // obj生成演出
     pGameBackGroundObject_->Update();
     pFireInjectors_->Spawn();
 
-    if (currentTime_ >= objSpawnTime_) {
-        step_        = IntroStep::PLAYERSPAWN;
-        currentTime_ = 0.0f;
-    }
+    ProcessStep(objSpawnTime_, IntroStep::PLAYERSPAWN);
 }
-void GameIntro::PlayerSpawn() {
-    currentTime_ += Frame::DeltaTime();
 
-    pHowToOperate_->ScalingEasing();
+void GameIntro::PlayerSpawn() {
     pPlayer_->GameIntroUpdate();
 
-    if (currentTime_ >= playerSpawnTime_) {
-        currentTime_ = 0.0f;
-        isAbleEnemySpawn_ = true;
-        step_        = IntroStep::PURPOSEAPPEAR;
-    }
+    ProcessStep(playerSpawnTime_, IntroStep::PURPOSWAIT, true);
+}
+
+void GameIntro::PurposeWait() {
+    pHowToOperate_->ScalingEasing();
+    pPlayer_->GameIntroUpdate();
+    ProcessStep(waitTime_, IntroStep::PURPOSEAPPEAR);
 }
 
 void GameIntro::PurposeAppear() {
-   
+    pPlayer_->GameIntroUpdate();
+    isFinish_ = true;
 }
 
 void GameIntro::Finish() {
@@ -81,6 +70,7 @@ void GameIntro::BindParams() {
     globalParameter_->Bind(groupName_, "waitTime", &waitTime_);
     globalParameter_->Bind(groupName_, "objSpawnTime", &objSpawnTime_);
     globalParameter_->Bind(groupName_, "playerSpawnTime", &playerSpawnTime_);
+    globalParameter_->Bind(groupName_, "purposeWaitTime", &purposeWaitTime_);
 }
 
 ///=========================================================
@@ -95,6 +85,7 @@ void GameIntro::AdjustParam() {
         ImGui::DragFloat("waitTime", &waitTime_, 0.01f);
         ImGui::DragFloat("objSpawnTime", &objSpawnTime_, 0.01f);
         ImGui::DragFloat("playerSpawnTime", &playerSpawnTime_, 0.01f);
+        ImGui::DragFloat("purposeWaitTime", &purposeWaitTime_, 0.01f);
 
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
@@ -105,6 +96,20 @@ void GameIntro::AdjustParam() {
 #endif // _DEBUG
 }
 
+bool GameIntro::ProcessStep(float limitTime, IntroStep nextStep, bool enableEnemySpawn) {
+    currentTime_ += Frame::DeltaTime();
+
+    if (currentTime_ >= limitTime) {
+        currentTime_ = 0.0f;
+        step_        = nextStep;
+        if (enableEnemySpawn) {
+            isAbleEnemySpawn_ = true;
+        }
+        return true;
+    }
+    return false;
+}
+
 /// --------------------------------------------------------------------------------
 // メンバ関数のポインタ配列
 /// --------------------------------------------------------------------------------
@@ -113,6 +118,7 @@ void (GameIntro::* GameIntro::spFuncTable_[])(){
     &GameIntro::Wait,
     &GameIntro::ObjSpawn,
     &GameIntro::PlayerSpawn,
+    &GameIntro::PurposeWait,
     &GameIntro::PurposeAppear,
     &GameIntro::Finish,
 };

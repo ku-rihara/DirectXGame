@@ -21,6 +21,7 @@ public:
 private:
     /// 　振る舞いオーダー
     enum class Order {
+        INIT,
         PUNCH,
         BACKPUNCH,
         WAIT,

@@ -2,6 +2,7 @@
 #include "LeftJobPunch.h"
 #include "ComboAttackRoot.h"
 #include "RoringUpper.h"
+#include"GameCamera/GameCamera.h"
 
 /// objs
 #include "Player/Player.h"
@@ -39,7 +40,7 @@ void LeftJobPunch::Init() {
 
     pPlayer_->SoundPunch();
     // 振る舞い順序初期化
-    order_ = Order::PUNCH;
+    order_ = Order::INIT;
 }
 
 // 更新
@@ -55,35 +56,42 @@ void LeftJobPunch::Update() {
 
     switch (order_) {
 
-    case Order::PUNCH:
+        ///-----------------------------------------------------------------------------
+        /// 初期化
+        ///------------------------------------------------------------------------------
+    case Order::INIT:
+        pPlayer_->GetGameCamera()->PlayAnimation("LeftPunch");
+        order_ = Order::PUNCH;
+        break;
 
         ///----------------------------------------------------
         /// パンチ
         ///----------------------------------------------------
-        
+    case Order::PUNCH:
+
         /// パンチイージング更新
-        punchEase_.Update( atkSpeed_);
+        punchEase_.Update(atkSpeed_);
         pPlayer_->GetLeftHand()->SetObjTranslate(punchPosition_);
-       
 
         pPlayer_->GetAttackController()->SetPosition(pPlayer_->GetLeftHand()->GetObjTransform().GetWorldPos());
-        
+
         break;
 
-    case Order::BACKPUNCH:
         ///----------------------------------------------------
         /// バックパンチ
         ///----------------------------------------------------
+    case Order::BACKPUNCH:
+       
         pPlayer_->AdaptRotate();
 
         /// バックパンチイージング更新
-        backPunchEase_.Update( atkSpeed_);
+        backPunchEase_.Update(atkSpeed_);
         pPlayer_->GetLeftHand()->SetObjTranslate(punchPosition_);
-      
+
         break;
 
     case Order::WAIT:
-        waitTine_ +=  atkSpeed_;
+        waitTine_ += atkSpeed_;
         pPlayer_->AdaptRotate();
 
         /// コンボ途切れ
@@ -117,8 +125,7 @@ void LeftJobPunch::EasingInit() {
         order_ = Order::WAIT;
     });
 
-
-     // start end Value Set
+    // start end Value Set
     punchEase_.SetStartValue(lHandStartPos_);
     punchEase_.SetEndValue(lHandTargetPos_);
 
@@ -127,7 +134,6 @@ void LeftJobPunch::EasingInit() {
 }
 
 void LeftJobPunch::CollisionBoxInit() {
-  
 }
 
 void LeftJobPunch::Debug() {
