@@ -373,6 +373,12 @@
     <Filter Include="Game\GameIntro">
       <UniqueIdentifier>{92588cd3-ec6f-4fcf-b2e7-4b261419bf32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.h\utility\DissolveEditor">
+      <UniqueIdentifier>{409b413e-b3ca-43a6-80e4-09e2600ca98e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\DissolveEditor">
+      <UniqueIdentifier>{78acc7c9-b041-45d7-a84f-a85e75e2755f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -972,6 +978,15 @@
     </ClCompile>
     <ClCompile Include="Game\GameIntro\GameIntro.cpp">
       <Filter>Game\GameIntro</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\DissolveEditor\DissolvePlayer.cpp">
+      <Filter>MyEngine\.cpp\utility\DissolveEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\DissolveEditor\DissolveEditor.cpp">
+      <Filter>MyEngine\.cpp\utility\DissolveEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\DissolveEditor\DissolveData.cpp">
+      <Filter>MyEngine\.cpp\utility\DissolveEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1616,6 +1631,15 @@
     </ClInclude>
     <ClInclude Include="Game\GameIntro\GameIntro.h">
       <Filter>Game\GameIntro</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\DissolveEditor\DissolvePlayer.h">
+      <Filter>MyEngine\.h\utility\DissolveEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\DissolveEditor\DissolveEditor.h">
+      <Filter>MyEngine\.h\utility\DissolveEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\DissolveEditor\DissolveData.h">
+      <Filter>MyEngine\.h\utility\DissolveEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
