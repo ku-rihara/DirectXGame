@@ -1,22 +1,26 @@
 #pragma once
 
-#include"BasePlayerBehavior.h"
-
+#include "BasePlayerBehavior.h"
 
 class PlayerJump : public BasePlayerBehavior {
 private:
-	float speed_;
-	/// ===================================================
-	///private varians
-	/// ===================================================
+    float speed_;
+    enum class Step {
+        START,
+        JUMP,
+
+    };
+    /// ===================================================
+    /// private varians
+    /// ===================================================
+    Step step_ = Step::START;
 
 public:
-	//コンストラクタ
+    // コンストラクタ
     PlayerJump(Player* player);
-	~PlayerJump();
+    ~PlayerJump();
 
-	void Update()override;
+    void Update() override;
 
-	void Debug()override;
-
+    void Debug() override;
 };
