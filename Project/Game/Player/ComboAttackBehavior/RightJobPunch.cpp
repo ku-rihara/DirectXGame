@@ -1,6 +1,7 @@
 /// behavior
 #include "RightJobPunch.h"
 #include "ComboAttackRoot.h"
+#include "GameCamera/GameCamera.h"
 #include "LeftJobPunch.h"
 
 /// objs
@@ -48,7 +49,7 @@ void RightJobPunch::Init() {
     BaseComboAattackBehavior::AnimationInit();
 
     // 振る舞い順序初期化
-    order_ = Order::RUSH;
+    order_ = Order::INIT;
 }
 
 // 更新
@@ -66,11 +67,19 @@ void RightJobPunch::Update() {
 
     switch (order_) {
 
-    case Order::RUSH:
+        
+        ///-----------------------------------------------------------------------------
+        /// 初期化
+        ///------------------------------------------------------------------------------
+    case Order::INIT:
+        pPlayer_->GetGameCamera()->PlayAnimation("RightPunch");
+        order_ = Order::RUSH;
+        break;
 
         ///-----------------------------------------------------------------------------
         /// 突進
         ///------------------------------------------------------------------------------
+    case Order::RUSH:
 
         ChangeSpeedForLockOn(); // ロックオンによる突進スピードの変化
 
@@ -79,11 +88,11 @@ void RightJobPunch::Update() {
 
         break;
 
-    case Order::PUNCH:
         ///----------------------------------------------------
         /// パンチ
         ///----------------------------------------------------
-
+    case Order::PUNCH:
+      
         /// パンチイージング更新
         punchEase_.Update(atkSpeed_);
         pPlayer_->GetRightHand()->SetObjTranslate(punchPosition_);
@@ -93,10 +102,11 @@ void RightJobPunch::Update() {
 
         break;
 
-    case Order::BACKPUNCH:
         ///----------------------------------------------------
         /// バックパンチ
         ///----------------------------------------------------
+    case Order::BACKPUNCH:
+  
         BaseComboAattackBehavior::PreOderNextComboForButton();
         pPlayer_->AdaptRotate();
 

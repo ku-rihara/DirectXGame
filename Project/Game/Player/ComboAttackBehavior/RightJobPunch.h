@@ -21,6 +21,7 @@ public:
 
 private:
     enum class Order {
+        INIT,
         RUSH,
         PUNCH,
         BACKPUNCH,

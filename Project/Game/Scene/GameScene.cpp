@@ -194,6 +194,7 @@ void GameScene::IntroUpdate() {
 }
 void GameScene::PlayUpdate() {
 
+
     // debugCamera
     debugCamera_->Update();
 
@@ -213,9 +214,7 @@ void GameScene::PlayUpdate() {
     combo_->Update();
     fireInjectors_->Update();
     gameCamera_->Update();
-    /*if (isfirstChange_) {
-        gameBackGroundObject_->Update();
-    }*/
+  
 
     enemyManager_->HpBarUpdate(viewProjection_);
     lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
