@@ -49,6 +49,7 @@ void Player::Init() {
     obj3d_.reset(Object3d::CreateModel("Player.obj"));
     obj3d_->material_.materialData_->enableLighting = 7;
     obj3d_->material_.SetEnvironmentCoefficient(0.05f);
+    obj3d_->SetIsShadow(false);
 
     // Playerの攻撃クラス
     attackController_ = std::make_unique<PlayerAttackController>();
@@ -120,6 +121,13 @@ void Player::TitleUpdate() {
     UpdateMatrix();
 }
 
+void Player::GameIntroUpdate() {
+ 
+    if (dynamic_cast<PlayerSpawn*>(behavior_.get())) {
+        behavior_->Update();
+    }
+}
+
 ///=========================================================
 /// 移動の入力処理
 ///==========================================================
@@ -175,7 +183,7 @@ void Player::Move(const float& speed) {
         }
         FaceToTarget();
     } else {
-        FaceToTarget(); // ターゲットを向くか
+        FaceToTarget();
     }
 }
 
@@ -508,6 +516,12 @@ void Player::SetHitStop(AttackEffect* hitStop) {
     pHitStop_ = hitStop;
 }
 
+void Player::SpawnStart() {
+    obj3d_->SetIsShadow(true);
+    leftHand_->SetIsShadow(true);
+    rightHand_->SetIsShadow(true);
+}
+
 /// =======================================================================================
 /// Sound
 /// =======================================================================================
@@ -524,3 +538,4 @@ void Player::FallSound() {
 bool Player::CheckIsChargeMax() const {
     return currentUpperChargeTime_ >= parameters_->GetParamaters().upperParam.chargeTime;
 }
+

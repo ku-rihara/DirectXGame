@@ -24,11 +24,15 @@ void BasePlayerHand::Init() {
 ///==========================================================
 void BasePlayerHand::Update() {
 
+    obj3d_->SetIsShadow(isShadow_);
+
     // エミッター更新
     emitter_->SetTargetPosition(obj3d_->transform_.GetWorldPos());
     emitter_->Update();
     emitter_->EditorUpdate();
-    emitter_->Emit();
+    if (isEmit_) {
+        emitter_->Emit();
+    }
 
     BaseObject::Update();
 }

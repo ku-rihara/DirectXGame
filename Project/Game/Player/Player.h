@@ -52,6 +52,8 @@ public:
     void Init() override;
     void Update() override;
     void TitleUpdate();
+    void GameIntroUpdate();
+    void SpawnStart();
   
     // 移動
     void Move(const float& speed); // 移動
