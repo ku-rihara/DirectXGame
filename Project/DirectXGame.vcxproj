@@ -102,6 +102,9 @@
     <ClCompile Include="Engine\utility\CameraEditor\CameraEditor.cpp" />
     <ClCompile Include="Engine\utility\CameraEditor\CameraKeyFrame.cpp" />
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
+    <ClCompile Include="Engine\utility\DissolveEditor\DissolveData.cpp" />
+    <ClCompile Include="Engine\utility\DissolveEditor\DissolveEditor.cpp" />
+    <ClCompile Include="Engine\utility\DissolveEditor\DissolvePlayer.cpp" />
     <ClCompile Include="Engine\utility\EasingCreator\EasingCreator.cpp" />
     <ClCompile Include="Engine\utility\EasingCreator\EasingEditor.cpp" />
     <ClCompile Include="Engine\utility\EasingCreator\EasingParameterData.cpp" />
@@ -160,6 +163,7 @@
     <ClCompile Include="Game\FireInjectors\FireInjectors.cpp" />
     <ClCompile Include="Game\GameCamera\CameraRendition.cpp" />
     <ClCompile Include="Game\GameCamera\GameCamera.cpp" />
+    <ClCompile Include="Game\GameIntro\GameIntro.cpp" />
     <ClCompile Include="Game\LockOn\LockOn.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\RightJobPunch.cpp" />
@@ -316,6 +320,9 @@
     <ClInclude Include="Engine\utility\CameraEditor\CameraEditor.h" />
     <ClInclude Include="Engine\utility\CameraEditor\CameraKeyFrame.h" />
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h" />
+    <ClInclude Include="Engine\utility\DissolveEditor\DissolveData.h" />
+    <ClInclude Include="Engine\utility\DissolveEditor\DissolveEditor.h" />
+    <ClInclude Include="Engine\utility\DissolveEditor\DissolvePlayer.h" />
     <ClInclude Include="Engine\utility\EasingCreator\EasingCreator.h" />
     <ClInclude Include="Engine\utility\EasingCreator\EasingEditor.h" />
     <ClInclude Include="Engine\utility\EasingCreator\EasingParameterData.h" />
@@ -374,6 +381,7 @@
     <ClInclude Include="Game\FireInjectors\FireInjectors.h" />
     <ClInclude Include="Game\GameCamera\CameraRendition.h" />
     <ClInclude Include="Game\GameCamera\GameCamera.h" />
+    <ClInclude Include="Game\GameIntro\GameIntro.h" />
     <ClInclude Include="Game\LockOn\LockOn.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\RightJobPunch.h" />

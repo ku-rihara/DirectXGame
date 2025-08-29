@@ -42,7 +42,6 @@ void ParticleEmitter::Init() {
     railManager_->Init(particleName_ + "Emit");
 
     /// 発生位置可視化オブジェ
-  /*  obj3d_.reset(Object3d::CreateModel("DebugCube.obj"));*/
     debugLine_.Init(24); 
     emitBoxTransform_.Init();
 }

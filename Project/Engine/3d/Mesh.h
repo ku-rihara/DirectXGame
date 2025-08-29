@@ -32,7 +32,7 @@ public:
 
 private:
     ///==========================================================
-    /// pritected variable
+    /// protected variable
     ///==========================================================
 
     DirectXCommon* directXCommon_ = nullptr;

@@ -55,14 +55,12 @@ void PlayerSpawn::Update() {
         ///================================================================
     case PlayerSpawn::Step::WAIT:
 
-         pPlayer_->DissolveUpdate(1.0f);
-        pPlayer_->GetLeftHand()->DissolveAdapt(1.0f);
-        pPlayer_->GetRightHand()->DissolveAdapt(1.0f);
+       
         startWaitTime_ += Frame::DeltaTime();
         if (startWaitTime_ < pPlayerParameter_->GetParamaters().spawnParam.waitTime_) {
             break;
         }
-       
+        pPlayer_->SetShadowFrag(true);
         step_ = Step::SPAWN;
         break;
 
@@ -80,6 +78,8 @@ void PlayerSpawn::Update() {
         ///
         ///================================================================
     case PlayerSpawn::Step::END:
+        pPlayer_->GetLeftHand()->SetIsEmit(true);
+        pPlayer_->GetRightHand()->SetIsEmit(true);
         pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
         break;
     default:

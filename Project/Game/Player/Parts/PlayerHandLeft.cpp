@@ -15,7 +15,7 @@ void PlayerHandLeft::Init() {
     obj3d_->transform_.scale_                       = {2, 2, 2};
     obj3d_->material_.materialData_->enableLighting = 2;
     obj3d_->material_.SetEnvironmentCoefficient(0.15f);
-
+   
     trustRailManager_ = std::make_unique<RailManager>();
     trustRailManager_->Init(railGroupName_);
 

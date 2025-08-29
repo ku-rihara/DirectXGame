@@ -14,7 +14,7 @@ void ModelMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
     materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 
     // 初期値をセット
-    materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);  // 初期値を直接ここで設定
+    materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f); 
     materialData_->shininess = 12.5f;
     materialData_->uvTransform = MakeIdentity4x4();
     materialData_->enableLighting = 2;

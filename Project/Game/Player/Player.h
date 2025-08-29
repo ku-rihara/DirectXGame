@@ -51,7 +51,10 @@ public:
     // 初期化、更新、描画
     void Init() override;
     void Update() override;
+    void GameSceneInit();
     void TitleUpdate();
+    void GameIntroUpdate();
+    void SetShadowFrag(const bool&isShadow);
   
     // 移動
     void Move(const float& speed); // 移動
