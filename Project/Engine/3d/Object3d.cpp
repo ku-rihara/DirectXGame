@@ -52,7 +52,7 @@ void Object3d::Draw(const ViewProjection& viewProjection) {
 }
 
 void Object3d::ShadowDraw(const ViewProjection& viewProjection) {
-    if (!model_ || !isDraw_) {
+    if (!model_ || !isShadow_ ||!isDraw_) {
         return;
     }
 

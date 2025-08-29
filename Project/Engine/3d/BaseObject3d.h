@@ -36,7 +36,7 @@ protected:
     Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
     TransformationMatrix* wvpDate_;
     ShadowMap* shadowMap_;
-    bool isShadow_ = false;
+    bool isShadow_ = true;
     bool isDraw_   = true;
 
     Model* model_       = nullptr;
