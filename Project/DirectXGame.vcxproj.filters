@@ -370,6 +370,9 @@
     <Filter Include="Game\AttackEffect">
       <UniqueIdentifier>{e59252d0-c8a8-40b8-89ff-a6b2dd6c3a3a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameIntro">
+      <UniqueIdentifier>{92588cd3-ec6f-4fcf-b2e7-4b261419bf32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -966,6 +969,9 @@
     </ClCompile>
     <ClCompile Include="Game\AttackEffect\AttackEffect.cpp">
       <Filter>Game\AttackEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameIntro\GameIntro.cpp">
+      <Filter>Game\GameIntro</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1607,6 +1613,9 @@
     </ClInclude>
     <ClInclude Include="Game\AttackEffect\AttackEffect.h">
       <Filter>Game\AttackEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameIntro\GameIntro.h">
+      <Filter>Game\GameIntro</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

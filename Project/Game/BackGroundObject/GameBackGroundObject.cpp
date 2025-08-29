@@ -8,7 +8,7 @@ void GameBackGroundObject::Init(const std::string& filename) {
 
 void GameBackGroundObject::Update() {
   
-    putObjForBlender_->EasingUpdateSelectGroup(Frame::DeltaTime(), 0);
+    putObjForBlender_->EasingUpdateSelectGroup(Frame::DeltaTime(), 0); 
 }
 
 void GameBackGroundObject::Draw(const ViewProjection& viewProjection) {
