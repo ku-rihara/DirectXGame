@@ -48,7 +48,7 @@ protected:
     float railRunSpeedForth_;
 
     bool isEmit_   = true;
-    bool isShadow_ = false;
+    bool isShadow_ = true;
 
 public:
     ///========================================================

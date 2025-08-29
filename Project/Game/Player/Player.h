@@ -53,7 +53,7 @@ public:
     void Update() override;
     void TitleUpdate();
     void GameIntroUpdate();
-    void SpawnStart();
+    void SetShadowFrag(const bool&isShadow);
   
     // 移動
     void Move(const float& speed); // 移動

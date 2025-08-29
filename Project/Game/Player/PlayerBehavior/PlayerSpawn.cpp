@@ -60,11 +60,12 @@ void PlayerSpawn::Update() {
         pPlayer_->GetRightHand()->DissolveAdapt(1.0f);
         pPlayer_->GetLeftHand()->SetIsEmit(false);
         pPlayer_->GetRightHand()->SetIsEmit(false);
+        pPlayer_->SetShadowFrag(false);
         startWaitTime_ += Frame::DeltaTime();
         if (startWaitTime_ < pPlayerParameter_->GetParamaters().spawnParam.waitTime_) {
             break;
         }
-        pPlayer_->SpawnStart();
+        pPlayer_->SetShadowFrag(true);
         step_ = Step::SPAWN;
         break;
 

@@ -49,8 +49,7 @@ void Player::Init() {
     obj3d_.reset(Object3d::CreateModel("Player.obj"));
     obj3d_->material_.materialData_->enableLighting = 7;
     obj3d_->material_.SetEnvironmentCoefficient(0.05f);
-    obj3d_->SetIsShadow(false);
-
+   
     // Playerの攻撃クラス
     attackController_ = std::make_unique<PlayerAttackController>();
     attackController_->Init();
@@ -516,10 +515,10 @@ void Player::SetHitStop(AttackEffect* hitStop) {
     pHitStop_ = hitStop;
 }
 
-void Player::SpawnStart() {
-    obj3d_->SetIsShadow(true);
-    leftHand_->SetIsShadow(true);
-    rightHand_->SetIsShadow(true);
+void Player::SetShadowFrag(const bool& isShadow) {
+    obj3d_->SetIsShadow(isShadow);
+    leftHand_->SetIsShadow(isShadow);
+    rightHand_->SetIsShadow(isShadow);
 }
 
 /// =======================================================================================
