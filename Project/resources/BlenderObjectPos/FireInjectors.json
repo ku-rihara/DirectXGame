@@ -45,12 +45,12 @@
                             "files": [
                                 {
                                     "file_index": 1,
-                                    "filename": "FirePollSpawnScale",
+                                    "filename": "FirePollSpawnScale.json",
                                     "srt_type": "Scale"
                                 },
                                 {
                                     "file_index": 2,
-                                    "filename": "FirePollSpawnR",
+                                    "filename": "FirePollSpawnR.json",
                                     "srt_type": "Rotation"
                                 }
                             ]
@@ -104,12 +104,12 @@
                             "files": [
                                 {
                                     "file_index": 1,
-                                    "filename": "FirePollSpawnScale",
+                                    "filename": "FirePollSpawnScale.json",
                                     "srt_type": "Scale"
                                 },
                                 {
                                     "file_index": 2,
-                                    "filename": "FirePollSpawnR",
+                                    "filename": "FirePollSpawnR.json",
                                     "srt_type": "Rotation"
                                 }
                             ]
@@ -163,12 +163,12 @@
                             "files": [
                                 {
                                     "file_index": 1,
-                                    "filename": "FirePollSpawnScale",
+                                    "filename": "FirePollSpawnScale.json",
                                     "srt_type": "Scale"
                                 },
                                 {
                                     "file_index": 2,
-                                    "filename": "FirePollSpawnR",
+                                    "filename": "FirePollSpawnR.json",
                                     "srt_type": "Rotation"
                                 }
                             ]
@@ -222,12 +222,12 @@
                             "files": [
                                 {
                                     "file_index": 1,
-                                    "filename": "FirePollSpawnScale",
+                                    "filename": "FirePollSpawnScale.json",
                                     "srt_type": "Scale"
                                 },
                                 {
                                     "file_index": 2,
-                                    "filename": "FirePollSpawnR",
+                                    "filename": "FirePollSpawnR.json",
                                     "srt_type": "Rotation"
                                 }
                             ]
@@ -281,12 +281,12 @@
                             "files": [
                                 {
                                     "file_index": 1,
-                                    "filename": "FirePollSpawnScale",
+                                    "filename": "FirePollSpawnScale.json",
                                     "srt_type": "Scale"
                                 },
                                 {
                                     "file_index": 2,
-                                    "filename": "FirePollSpawnR",
+                                    "filename": "FirePollSpawnR.json",
                                     "srt_type": "Rotation"
                                 }
                             ]
@@ -340,12 +340,12 @@
                             "files": [
                                 {
                                     "file_index": 1,
-                                    "filename": "FirePollSpawnScale",
+                                    "filename": "FirePollSpawnScale.json",
                                     "srt_type": "Scale"
                                 },
                                 {
                                     "file_index": 2,
-                                    "filename": "FirePollSpawnR",
+                                    "filename": "FirePollSpawnR.json",
                                     "srt_type": "Rotation"
                                 }
                             ]
@@ -399,12 +399,12 @@
                             "files": [
                                 {
                                     "file_index": 1,
-                                    "filename": "FirePollSpawnScale",
+                                    "filename": "FirePollSpawnScale.json",
                                     "srt_type": "Scale"
                                 },
                                 {
                                     "file_index": 2,
-                                    "filename": "FirePollSpawnR",
+                                    "filename": "FirePollSpawnR.json",
                                     "srt_type": "Rotation"
                                 }
                             ]
@@ -458,12 +458,12 @@
                             "files": [
                                 {
                                     "file_index": 1,
-                                    "filename": "FirePollSpawnScale",
+                                    "filename": "FirePollSpawnScale.json",
                                     "srt_type": "Scale"
                                 },
                                 {
                                     "file_index": 2,
-                                    "filename": "FirePollSpawnR",
+                                    "filename": "FirePollSpawnR.json",
                                     "srt_type": "Rotation"
                                 }
                             ]

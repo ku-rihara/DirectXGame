@@ -170,6 +170,10 @@ void GameScene::IntroUpdate() {
     // gameIntro
     gameIntro_->Update();
     howToOperate_->Update();
+    if (gameIntro_->GetIsAbleEnemySpawn()) {
+        enemySpawner_->Update(Frame::DeltaTimeRate());
+        enemyManager_->Update();
+    }
     // debugCamera
     debugCamera_->Update();
 
