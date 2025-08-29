@@ -1,6 +1,7 @@
 {
     "GameIntro": {
         "objSpawnTime": 4.059999942779541,
+        "playerSpawnTime": 4.190000057220459,
         "waitTime": 0.10000000149011612
     }
 }

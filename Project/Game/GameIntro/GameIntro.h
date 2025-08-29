@@ -1,5 +1,7 @@
 #pragma once
+#include "2d/Sprite.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
+#include <memory>
 
 class Player;
 class FireInjectors;
@@ -14,6 +16,7 @@ public:
         WAIT,
         OBJSPAWN,
         PLAYERSPAWN,
+        PURPOSEAPPEAR,
         FINISH,
     };
 
@@ -29,6 +32,7 @@ public:
     void Wait();
     void ObjSpawn();
     void PlayerSpawn();
+    void PurposeAppear();
     void Finish();
 
     // Editor
@@ -45,20 +49,27 @@ private:
     // param
     float waitTime_;
     float objSpawnTime_;
+    float playerSpawnTime_;
 
-    FireInjectors* pFireInjectors_ = nullptr;
-    GameCamera* pGameCamera_       = nullptr;
-    Player* pPlayer_               = nullptr;
-    HowToOperate* pHowToOperate_   = nullptr;
+    FireInjectors* pFireInjectors_  = nullptr;
+    GameCamera* pGameCamera_        = nullptr;
+    Player* pPlayer_                = nullptr;
+    HowToOperate* pHowToOperate_    = nullptr;
+    std::unique_ptr<Sprite> sprite_ = nullptr;
 
     GameBackGroundObject* pGameBackGroundObject_ = nullptr;
 
-    float currentWaitTime_;
-    float currentObjSpawnTime_;
-    bool isFinish_  = false;
-    IntroStep step_ = IntroStep::START;
+    // time
+    float currentTime_;
+
+    bool isFinish_         = false;
+    bool isAbleEnemySpawn_ = false;
+    IntroStep step_        = IntroStep::START;
 
 public:
+    bool GetIsAbleEnemySpawn() const { return isAbleEnemySpawn_; }
+    bool GetIsFinish() const { return isFinish_; }
+
     void SetHowToOperate(HowToOperate* howToOperate) { pHowToOperate_ = howToOperate; }
     void SetGameCamera(GameCamera* gameCamera) { pGameCamera_ = gameCamera; }
     void SetPlayer(Player* player) { pPlayer_ = player; }
