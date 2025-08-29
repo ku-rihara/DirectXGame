@@ -21,6 +21,7 @@
 #include "UI/HowToOperate.h"
 #include "utility/CameraEditor/CameraEditor.h"
 #include "utility/ShakeEditor/ShakeEditor.h"
+#include "GameIntro/GameIntro.h"
 
 /// <summary>
 /// ゲームシーン
