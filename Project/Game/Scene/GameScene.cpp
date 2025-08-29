@@ -123,6 +123,10 @@ void GameScene::Update() {
 
         IntroUpdate();
 
+        if (gameIntro_->GetIsFinish()) {
+            gameState_ = GameScene::GameState::PLAY;
+        }
+
         break;
     case GameScene::GameState::PLAY:
 
