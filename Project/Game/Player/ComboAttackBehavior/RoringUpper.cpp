@@ -6,6 +6,7 @@
 #include <numbers>
 /// objs
 #include "Player/Player.h"
+#include"GameCamera/GameCamera.h"
 #include"AttackEffect/AttackEffect.h"
 
 // input
@@ -173,6 +174,8 @@ void RoringUpper::HitStopUpdate() {
     // デルタタイムスケール小さく
     if (pPlayer_->GetAttackController()->GetIsHitStop() && !isHitStop_) {
         pPlayer_->GetEffects()->SpecialAttackRenditionInit();
+        pPlayer_->GetGameCamera()->PlayAnimation("UpperAtk");
+        
         pPlayer_->GetAttackEffect()->PlayHitStop("UpperHitStop");
         isHitStop_ = true;
     }

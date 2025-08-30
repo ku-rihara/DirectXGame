@@ -46,7 +46,7 @@ void MovieLine::AppearUpdate() {
 void MovieLine::ExitUpdate() {
     for (int32_t i = 0; i < static_cast<int32_t>(exitEasing_.size()); ++i) {
         exitEasing_[i].Update(Frame::DeltaTime());
-        sprite_[i]->SetPosition(Vector2(appearPosition_[i].x, appearAdaptPos_[i].y));
+        sprite_[i]->SetPosition(Vector2(appearPosition_[i].x, exitAdaptPos_[i].y));
     }
 }
 

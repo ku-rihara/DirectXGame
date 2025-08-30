@@ -60,11 +60,13 @@ void GameIntro::PurposeWait() {
 }
 
 void GameIntro::PurposeAppear() {
-    movieLine_->ExitUpdate();
     pPlayer_->GameIntroUpdate();
     isFinish_ = true;
 }
-
+void GameIntro::EndUpdate() {
+    movieLine_->ExitUpdate();
+}
+    
 void GameIntro::Finish() {
 }
 

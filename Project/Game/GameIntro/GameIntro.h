@@ -28,6 +28,7 @@ public:
 
     void Init();
     void Update();
+    void EndUpdate();
     void SpriteDraw();
 
     bool ProcessStep(float limitTime, IntroStep nextStep, bool enableEnemySpawn = false);
