@@ -988,6 +988,9 @@
     <ClCompile Include="Engine\utility\DissolveEditor\DissolveData.cpp">
       <Filter>MyEngine\.cpp\utility\DissolveEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Game\GameIntro\MovieLine.cpp">
+      <Filter>Game\GameIntro</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1640,6 +1643,9 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\DissolveEditor\DissolveData.h">
       <Filter>MyEngine\.h\utility\DissolveEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameIntro\MovieLine.h">
+      <Filter>Game\GameIntro</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
