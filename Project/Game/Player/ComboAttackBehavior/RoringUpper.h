@@ -61,7 +61,7 @@ private:
 	Easing<float> rotateEase_; 
 	float xRotate_;
 	
-	//hitstop
+	//hitStop
 	bool isHitStop_;
 	
 

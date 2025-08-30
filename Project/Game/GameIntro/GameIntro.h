@@ -1,5 +1,6 @@
 #pragma once
 #include "2d/Sprite.h"
+#include"MovieLine.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
 #include <memory>
 
@@ -27,6 +28,7 @@ public:
 
     void Init();
     void Update();
+    void SpriteDraw();
 
     bool ProcessStep(float limitTime, IntroStep nextStep, bool enableEnemySpawn = false);
 
@@ -56,12 +58,13 @@ private:
     float playerSpawnTime_;
     float purposeWaitTime_;
 
+    FireInjectors* pFireInjectors_ = nullptr;
+    GameCamera* pGameCamera_       = nullptr;
+    Player* pPlayer_               = nullptr;
+    HowToOperate* pHowToOperate_   = nullptr;
 
-    FireInjectors* pFireInjectors_  = nullptr;
-    GameCamera* pGameCamera_        = nullptr;
-    Player* pPlayer_                = nullptr;
-    HowToOperate* pHowToOperate_    = nullptr;
-    std::unique_ptr<Sprite> sprite_ = nullptr;
+    std::unique_ptr<Sprite> sprite_       = nullptr;
+    std::unique_ptr<MovieLine> movieLine_ = nullptr;
 
     GameBackGroundObject* pGameBackGroundObject_ = nullptr;
 

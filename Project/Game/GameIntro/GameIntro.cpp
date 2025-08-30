@@ -15,12 +15,16 @@ void GameIntro::Init() {
     BindParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
-    /* int32_t spriteHandle=
+    // obj
+    movieLine_ = std::make_unique<MovieLine>();
+    movieLine_->Init();
 
-     sprite_.reset(Sprite::Create())*/
+        /* int32_t spriteHandle=
 
-    // step
-    step_ = IntroStep::START;
+         sprite_.reset(Sprite::Create())*/
+
+        // step
+        step_ = IntroStep::START;
 }
 
 void GameIntro::Update() {
@@ -37,6 +41,7 @@ void GameIntro::Wait() {
 }
 
 void GameIntro::ObjSpawn() {
+    movieLine_->AppearUpdate();
     pGameBackGroundObject_->Update();
     pFireInjectors_->Spawn();
 
@@ -45,7 +50,6 @@ void GameIntro::ObjSpawn() {
 
 void GameIntro::PlayerSpawn() {
     pPlayer_->GameIntroUpdate();
-
     ProcessStep(playerSpawnTime_, IntroStep::PURPOSWAIT, true);
 }
 
@@ -56,12 +60,17 @@ void GameIntro::PurposeWait() {
 }
 
 void GameIntro::PurposeAppear() {
+    movieLine_->ExitUpdate();
     pPlayer_->GameIntroUpdate();
     isFinish_ = true;
 }
 
 void GameIntro::Finish() {
 }
+
+void GameIntro::SpriteDraw() {
+    movieLine_->Draw();
+ }
 
 ///=========================================================
 /// バインド
@@ -93,6 +102,7 @@ void GameIntro::AdjustParam() {
 
         ImGui::PopID();
     }
+    movieLine_->AdjustParam();
 #endif // _DEBUG
 }
 

@@ -271,6 +271,7 @@ void GameScene::SpriteDraw() {
     lockOn_->Draw();
     howToOperate_->Draw();
     combo_->Draw();
+    gameIntro_->SpriteDraw();
     cSprite_->Draw();
     screenSprite_->Draw();
 }
