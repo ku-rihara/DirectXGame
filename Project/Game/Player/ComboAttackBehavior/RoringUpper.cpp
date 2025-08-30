@@ -149,9 +149,7 @@ void RoringUpper::CollisionInit() {
 }
 
 void RoringUpper::EasingInit() {
-    backlashEase_.Init("UpperBackLash");
-    backlashEase_.ApplyFromJson("UpperBackLash.json");
-    backlashEase_.SaveAppliedJsonFileName();
+    backlashEase_.Init("UpperBackLash", "UpperBackLash.json");
     backlashEase_.SetAdaptValue(&tempWorldPos_);
     backlashEase_.Reset();
 

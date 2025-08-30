@@ -295,9 +295,6 @@
     <Filter Include="MyEngine\.h\Animation">
       <UniqueIdentifier>{f713b9a0-da3f-43be-b0fa-f9350a0b4541}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\FireInjectors">
-      <UniqueIdentifier>{0b7b5e54-0d48-470f-91bf-bfc9c50b2e86}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.cpp\Pipeline">
       <UniqueIdentifier>{2d147451-6345-4e6b-b8ac-bfea1e2c4367}</UniqueIdentifier>
     </Filter>
@@ -378,6 +375,9 @@
     </Filter>
     <Filter Include="MyEngine\.cpp\utility\DissolveEditor">
       <UniqueIdentifier>{78acc7c9-b041-45d7-a84f-a85e75e2755f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\FireInjectors">
+      <UniqueIdentifier>{0b7b5e54-0d48-470f-91bf-bfc9c50b2e86}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -987,6 +987,9 @@
     </ClCompile>
     <ClCompile Include="Engine\utility\DissolveEditor\DissolveData.cpp">
       <Filter>MyEngine\.cpp\utility\DissolveEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameIntro\MovieLine.cpp">
+      <Filter>Game\GameIntro</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1640,6 +1643,9 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\DissolveEditor\DissolveData.h">
       <Filter>MyEngine\.h\utility\DissolveEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameIntro\MovieLine.h">
+      <Filter>Game\GameIntro</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

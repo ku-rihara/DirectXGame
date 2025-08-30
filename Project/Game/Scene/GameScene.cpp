@@ -199,6 +199,17 @@ void GameScene::IntroUpdate() {
 }
 void GameScene::PlayUpdate() {
 
+     screenSprite_->SetAlpha(alpha_);
+
+    if (!isfirstChange_) {
+        alpha_ -= Frame::DeltaTime();
+
+        if (alpha_ <= 0.0f) {
+            alpha_         = 0.0f;
+            isfirstChange_ = true;
+        }
+    }
+
     // debugCamera
     debugCamera_->Update();
 
@@ -260,6 +271,7 @@ void GameScene::SpriteDraw() {
     lockOn_->Draw();
     howToOperate_->Draw();
     combo_->Draw();
+    gameIntro_->SpriteDraw();
     cSprite_->Draw();
     screenSprite_->Draw();
 }
