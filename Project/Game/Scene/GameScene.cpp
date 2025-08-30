@@ -113,7 +113,7 @@ void GameScene::Init() {
 
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 
-    gameState_ = GameState::INTRO;
+    gameState_ = GameState::PLAY;
 }
 
 void GameScene::Update() {
@@ -212,6 +212,7 @@ void GameScene::PlayUpdate() {
 
     // debugCamera
     debugCamera_->Update();
+    gameIntro_->EndUpdate();
 
     // Editor
     cameraEditor_->Update(Frame::DeltaTime());
