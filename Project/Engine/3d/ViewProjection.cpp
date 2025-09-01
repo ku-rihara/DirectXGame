@@ -1,6 +1,7 @@
 #include "ViewProjection.h"
 #include "Dx/DirectXCommon.h"
 #include "MathFunction.h"
+#include "WorldTransform.h"
 #include <cassert>
 void ViewProjection::Init() {
 
@@ -8,10 +9,8 @@ void ViewProjection::Init() {
     CreateConstantBuffer();
     // マッピング
     Map();
-
     // 初期クォータニオンを設定
     quaternion_ = Quaternion::Identity();
-
     // ビュー行列の更新
     UpdateViewMatrix();
     // 射影行列の更新
@@ -61,22 +60,25 @@ void ViewProjection::UpdateMatrix() {
 }
 
 void ViewProjection::UpdateViewMatrix() {
-    Matrix4x4 rotateMatrix;
+    //  ローカル回転
+    Vector3 finalRotation  = GetFinalRotation();
+    Matrix4x4 rotateMatrix = MakeRotateMatrix(finalRotation);
 
-    // 最終的な回転値を取得
-    Vector3 finalRotation = GetFinalRotation();
-    rotateMatrix          = MakeRotateMatrix(finalRotation);
+    // ローカル平行移動
+    Vector3 transformedPosOffset = TransformNormal(positionOffset_, rotateMatrix);
+    Vector3 finalLocalPos        = translation_ + transformedPosOffset;
+    Matrix4x4 translateMatrix    = MakeTranslateMatrix(finalLocalPos);
 
-    // positionOffset_をカメラの回転に合わせて変換
-    Vector3 transformedPositionOffset = TransformNormal(positionOffset_, rotateMatrix);
+    // ローカル変換
+    Matrix4x4 localCameraMatrix = rotateMatrix * translateMatrix;
 
-    // 最終的な位置を計算
-    Vector3 finalPosition     = translation_ + transformedPositionOffset;
-    Matrix4x4 translateMatrix = MakeTranslateMatrix(finalPosition);
+    if (parent_) {
+        cameraMatrix_ = localCameraMatrix * parent_->matWorld_;
+    } else {
+        cameraMatrix_ = localCameraMatrix;
+    }
 
-    // カメラ行列を作成
-    cameraMatrix_ = rotateMatrix * translateMatrix;
-    // 最終的なビュー行列の設定
+    // ビュー行列は逆行列
     matView_ = Inverse(cameraMatrix_);
 }
 
