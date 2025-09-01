@@ -64,7 +64,7 @@ void DebugCamera::Update() {
         //
         Matrix4x4 rotY = MakeRotateYMatrix(yaw_);
         Matrix4x4 rotX = MakeRotateXMatrix(pitch_);
-        matRot_        = rotY * rotX;
+        matRot_        = rotX * rotY;
     }
 
     UpdateMatrix();
