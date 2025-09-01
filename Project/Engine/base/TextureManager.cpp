@@ -189,11 +189,18 @@ const DirectX::TexMetadata& TextureManager::GetMetaData(uint32_t textureIndex) {
 
 D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(uint32_t index) const {
 
+   
     assert(index < textureDatas_.size());
 
     // インデックスに対応するエントリを探す
     auto it = textureDatas_.begin();
-    std::advance(it, index);
+  
+    for (auto& texData : textureDatas_) {
+        if (texData.second.index == index) {
+            it = textureDatas_.find(texData.first);
+            break;
+        }
+    }
 
     const TextureData& textureData = it->second; // マップの値部分を取得
     return textureData.srvGPUHandle;

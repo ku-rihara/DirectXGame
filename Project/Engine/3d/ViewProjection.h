@@ -1,17 +1,18 @@
 #pragma once
 #include "Matrix4x4.h"
-#include "Vector3.h"
 #include "Quaternion.h"
+#include "Vector3.h"
 #include <d3d12.h>
 #include <wrl.h>
 
 // 定数バッファ用データ構造体
 struct ConstBufferDataViewProjection {
-    Matrix4x4 view; 
-    Matrix4x4 projection; 
-    Vector3 cameraPos; 
+    Matrix4x4 view;
+    Matrix4x4 projection;
+    Vector3 cameraPos;
 };
 
+class WorldTransform;
 class ViewProjection {
 public:
     enum class ProjectionType {
@@ -37,25 +38,31 @@ public:
     void UpdateViewMatrix();
     /// 射影行列を更新する
     void UpdateProjectionMatrix();
+    // ペアレント設定
+    void SetParent(const WorldTransform* parent) { parent_ = parent; }
+    void ClearParent() { parent_ = nullptr; }
+
+private:
+    const WorldTransform* parent_ = nullptr;
 
 public:
     // S,R,T
     Vector3 scale_{1, 1, 1};
-    Vector3 rotation_    = {0, 0, 0};    
-    Vector3 translation_ = {0, 0, 0};
-    Quaternion quaternion_ = Quaternion::Identity(); 
+    Vector3 rotation_      = {0, 0, 0};
+    Vector3 translation_   = {0, 0, 0};
+    Quaternion quaternion_ = Quaternion::Identity();
 
-     // オフセット値
+    // オフセット値
     Vector3 positionOffset_ = {0, 0, 0};
     Vector3 rotationOffset_ = {0, 0, 0};
- 
+
     float fovAngleY_   = 45.0f;
     float aspectRatio_ = (float)16 / 9;
     float nearZ_       = 0.1f;
     float farZ_        = 1000.0f;
 
     ProjectionType projectionType_ = ProjectionType::PERSPECTIVE;
-   
+
     // 平行投影用パラメータ
     float orthoWidth_  = 150.0f;
     float orthoHeight_ = 150.0f;
