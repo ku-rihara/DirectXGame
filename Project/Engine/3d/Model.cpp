@@ -148,7 +148,7 @@ void Model::CreateModel(const std::string& ModelFileName) {
     }
 
     textureManager_ = TextureManager::GetInstance();
-    textureHandle_  = textureManager_->LoadTexture(modelData_.material.textureFilePath);
+    textureIndex_   = textureManager_->LoadTexture(modelData_.material.textureFilePath);
 
     dxCommon_ = DirectXCommon::GetInstance();
 
@@ -202,7 +202,7 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Shado
     if (textureHandle.has_value()) {
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
     } else {
-        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
+        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureIndex_));
     }
 
     uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
@@ -241,7 +241,7 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, co
     if (textureHandle.has_value()) {
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
     } else {
-        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
+        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureIndex_));
     }
 
     // 環境マップ
@@ -277,7 +277,7 @@ void Model::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HAND
     if (textureHandle.has_value()) {
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
     } else {
-        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle_));
+        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureIndex_));
     }
 
     commandList->DrawInstanced(UINT(modelData_.vertices.size()), instanceNum, 0, 0);
@@ -290,7 +290,7 @@ void Model::DrawForShadowMap(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource,
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
     commandList->IASetIndexBuffer(&indexBufferView_);
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    
+
     // b0: ワールド行列
     commandList->SetGraphicsRootConstantBufferView(0, wvpResource->GetGPUVirtualAddress());
     // b1: ライト行列
