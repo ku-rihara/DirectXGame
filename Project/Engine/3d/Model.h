@@ -12,8 +12,8 @@
 
 #include "Animation/SkinCluster.h"
 
-#include "Material/ModelMaterial.h"
 #include "Dx/DirectXCommon.h"
+#include "Material/ModelMaterial.h"
 #include "Material/ParticleMaterial.h"
 
 // 3Dモデル共通部
@@ -64,7 +64,7 @@ public:
     ///============================================================
 
     void Draw(
-        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap&shadowMap, ModelMaterial material,
+        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material,
         std::optional<uint32_t> textureHandle = std::nullopt); /// モデル描画
 
     void DrawAnimation(
@@ -87,7 +87,7 @@ private:
     TextureManager* textureManager_ = nullptr;
     DirectXCommon* dxCommon_        = nullptr;
 
-    uint32_t textureHandle_;
+    uint32_t textureIndex_;
     ModelData modelData_;
 
     /// GPUHandle,BufferView
@@ -108,6 +108,7 @@ public:
     ///============================================================
     /// getter method
     ///============================================================
-    ModelData GetModelData() { return modelData_; }
+    const uint32_t GetTextureIndex() const { return textureIndex_; }
+    const ModelData& GetModelData() { return modelData_; }
     bool GetIsFileGltf() const { return isFileGltf_; }
 };

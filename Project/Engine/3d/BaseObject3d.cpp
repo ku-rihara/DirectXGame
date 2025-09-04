@@ -1,16 +1,17 @@
 #include "BaseObject3d.h"
+#include "base/TextureManager.h"
 #include "Dx/DirectXCommon.h"
 #include "ModelManager.h"
 
 void BaseObject3d::SetModel(const std::string& modelName) {
     // モデルを検索してセット
-    model_ = (ModelManager::GetInstance()->FindModel(modelName));
+    model_        = (ModelManager::GetInstance()->FindModel(modelName));
+    textureIndex_ = model_->GetTextureIndex();
 }
 
 void BaseObject3d::CreateMaterialResource() {
     material_.CreateMaterialResource(DirectXCommon::GetInstance());
 }
-
 
 ///============================================================
 /// WVPリソース作成
@@ -44,4 +45,8 @@ void BaseObject3d::DebugImgui() {
 #ifdef _DEBUG
     material_.DebugImGui();
 #endif
+}
+
+void BaseObject3d::SetTexture(const std::string& name) {
+    textureIndex_ = TextureManager::GetInstance()->LoadTexture(textureFirePath_ + name);
 }
