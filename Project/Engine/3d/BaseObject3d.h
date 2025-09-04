@@ -6,6 +6,8 @@
 #include "ObjectColor.h"
 #include "ShadowMap/ShadowMap.h"
 #include "struct/TransformationMatrix.h"
+#include <cstdint>
+#include <string>
 
 class BaseObject3d {
 public:
@@ -38,24 +40,28 @@ protected:
     ShadowMap* shadowMap_;
     bool isShadow_ = true;
     bool isDraw_   = true;
+    uint32_t textureIndex_;
 
     Model* model_       = nullptr;
     BlendMode blendMode = BlendMode::None;
+
+    const std::string textureFirePath_ = "Resources/Texture/ModelTexture/";
 
 public:
     ///========================================================================================
     ///  getter method
     ///========================================================================================
     Model* GetModel() { return model_; }
-
+    const int32_t& GetTextureIndex() const { return textureIndex_; }
     ///========================================================================================
     ///  setter method
     ///========================================================================================
     void SetIsDraw(const bool& is) { isDraw_ = is; }
+    void SetTexture(const std::string& name);
     void SetModel(Model* model) { model_ = model; }
     void SetBlendMode(BlendMode mode) { blendMode = mode; }
     void SetModel(const std::string& modelName);
-    void SetwvpDate(Matrix4x4 date) {wvpDate_->WVP = date; }
+    void SetwvpDate(Matrix4x4 date) { wvpDate_->WVP = date; }
     void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
     void SetIsShadow(const bool& is) { isShadow_ = is; }
 };

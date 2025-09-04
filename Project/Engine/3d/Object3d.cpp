@@ -48,7 +48,7 @@ void Object3d::Draw(const ViewProjection& viewProjection) {
     UpdateWVPData(viewProjection);
 
     Object3DPiprline::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
-    model_->Draw(wvpResource_, *shadowMap_, material_);
+    model_->Draw(wvpResource_, *shadowMap_, material_,textureIndex_);
 }
 
 void Object3d::ShadowDraw(const ViewProjection& viewProjection) {

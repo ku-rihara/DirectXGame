@@ -4,9 +4,7 @@
 #include <memory>
 #include <string>
 
-/// <summary>
-/// モデルマネージャー
-/// </summary>
+
 class ModelManager {
 private:
 
@@ -15,7 +13,7 @@ private:
 	///============================================================
 
 	static ModelManager* instance_;
-	static std::map<std::string, std::unique_ptr<Model>> models_; // staticに変更
+	static std::map<std::string, std::unique_ptr<Model>> models_; 
 	std::unique_ptr<ModelCommon> modelCommon = nullptr;
 
 private:
