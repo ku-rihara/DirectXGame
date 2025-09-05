@@ -214,9 +214,6 @@
     <Filter Include="MyEngine\.h\utility\CameraEditor">
       <UniqueIdentifier>{86745219-1af0-46bf-8773-dc4c8f0b1461}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.cpp\utility\CameraEditor">
-      <UniqueIdentifier>{7ff1fcef-200f-4f44-9d0b-2cc5e237686d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.h\utility\ShakeEditor">
       <UniqueIdentifier>{b598867d-1557-4204-8949-7f620bc285d1}</UniqueIdentifier>
     </Filter>
@@ -240,6 +237,9 @@
     </Filter>
     <Filter Include="MyEngine\.cpp\utility\DissolveEditor">
       <UniqueIdentifier>{78acc7c9-b041-45d7-a84f-a85e75e2755f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\CameraEditor">
+      <UniqueIdentifier>{7ff1fcef-200f-4f44-9d0b-2cc5e237686d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

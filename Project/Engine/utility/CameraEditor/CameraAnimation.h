@@ -1,64 +1,79 @@
 #pragma once
+#include "3d/Object3D.h"
+#include "3d/ViewProjection.h"
 #include "CameraAnimationData.h"
-#include <functional>
 #include <memory>
 #include <string>
+#include <vector>
 
 class CameraAnimation {
-public:
-    struct CameraParam {
-        Vector3 position;
-        Vector3 rotation;
-        float fov;
-    };
-
 public:
     CameraAnimation()  = default;
     ~CameraAnimation() = default;
 
-    /// 初期化
-    void Init();
+    /// 初期化・更新
+    void Init(ViewProjection* vp);
     void Update(float deltaTime);
+    void EditorUpdate();
 
-    // Play, Stop, ForceReset
+    /// ファイル管理
+    void AllLoadFile();
+    void AllSaveFile();
+    void AddAnimation(const std::string& animationName);
+
+    /// 再生制御（統合機能）
     void Play(const std::string& animationName);
-    void Reset();
-    void SaveInitialValues();
+    void PlaySelectedAnimation();
+    void PauseSelectedAnimation();
+    void ResetSelectedAnimation();
+    void StopAllAnimations();
+
+    /// 状態取得
+    bool IsSelectedAnimationPlaying() const;
+    bool IsSelectedAnimationFinished() const;
+    bool IsAnyAnimationPlaying() const;
+    CameraAnimationData* GetSelectedAnimation();
+    CameraAnimationData* GetAnimationByName(const std::string& name);
+
+    /// ViewProjection制御
+    void ApplyToViewProjection();
+    void ApplySelectedKeyFrameToViewProjection();
+    void SetViewProjection(ViewProjection* vp) { viewProjection_ = vp; }
 
 private:
-    /// ViewProjectionにオフセット値を適用
-    void ApplyOffsetToViewProjection();
+    /// 内部処理
+    void UpdateAnimations(float deltaTime);
+    void HandleAutoApply();
 
 private:
     // アニメーションデータ
-    std::unique_ptr<CameraAnimationData> animationData_;
-    ViewProjection* pViewProjection_ = nullptr;
+    std::vector<std::unique_ptr<CameraAnimationData>> animations_;
+    int selectedIndex_ = -1;
 
-    // 初期値
-    CameraParam initialParam_;
+    // ViewProjection関連
+    ViewProjection* viewProjection_        = nullptr;
+    std::unique_ptr<Object3d> debugObject_ = nullptr;
 
-    // 現在のオフセット値
-    Vector3 currentOffsetPosition_;
-    Vector3 currentOffsetRotation_;
-    float currentOffsetFov_ = 0.0f;
+    // 再生制御用
+    bool autoApplyToViewProjection_ = true;
+    bool keyFramePreviewMode_       = false;
 
-    bool isAdapt_ = true;
-
-    // アニメーション名
-    std::string currentAnimationName_;
+    // UI用バッファ
+    char nameBuffer_[128] = "";
 
 public:
     //--------------------------------------------------------------------------------------
     // getter
     //--------------------------------------------------------------------------------------
-    const std::string& GetAnimationName() const { return currentAnimationName_; }
-    Vector3 GetOffsetPosition() const { return currentOffsetPosition_; }
-    Vector3 GetOffsetRotation() const { return currentOffsetRotation_; }
-    float GetOffsetFov() const { return currentOffsetFov_; }
+    bool GetAutoApplyToViewProjection() const { return autoApplyToViewProjection_; }
+    bool GetKeyFramePreviewMode() const { return keyFramePreviewMode_; }
+    int GetSelectedIndex() const { return selectedIndex_; }
+    size_t GetAnimationCount() const { return animations_.size(); }
 
     //--------------------------------------------------------------------------------------
     // setter
     //--------------------------------------------------------------------------------------
-    void SetAdapt(bool adapt) { isAdapt_ = adapt; }
-    void SetViewProjection(ViewProjection* viewProjection);
+    void SetAutoApplyToViewProjection(bool enable) { autoApplyToViewProjection_ = enable; }
+    void SetKeyFramePreviewMode(bool enable) { keyFramePreviewMode_ = enable; }
+    void SetSelectedIndex(int index);
 };
