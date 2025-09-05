@@ -35,7 +35,7 @@ void Line3D::Init(const size_t& lineMaxNum) {
     vertexBufferView_.SizeInBytes    = static_cast<UINT>(bufferSize);
     vertexBufferView_.StrideInBytes  = sizeof(Vertex);
 
-    // ★ Mapして保持（vectorは使わない）
+   
     vertexBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 
     // 定数バッファ
@@ -125,7 +125,7 @@ void Line3D::DrawSphereWireframe(const Vector3& center, float radius, const Vect
 void Line3D::DrawCubeWireframe(const Vector3& center, const Vector3& size, const Vector4& color) {
     Vector3 half = size * 0.5f;
 
-    // 8頂点定義（ローカル空間にオフセット）
+    // 8頂点定義
     Vector3 vertices[8] = {
         center + Vector3(-half.x, -half.y, -half.z),
         center + Vector3(half.x, -half.y, -half.z),
