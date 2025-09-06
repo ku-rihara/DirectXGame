@@ -28,7 +28,6 @@ void GameScene::Init() {
     howToOperate_         = std::make_unique<HowToOperate>();
     skyBox_               = std::make_unique<SkyBox>();
     combo_                = std::make_unique<Combo>();
-    comboCreate_          = std::make_unique<ComboCreateEditor>();
     fireInjectors_        = std::make_unique<FireInjectors>();
     gameBackGroundObject_ = std::make_unique<GameBackGroundObject>();
     comboScene_           = std::make_unique<ComboScene>();
