@@ -137,6 +137,7 @@ private:
     /// グループごとの可視性フラグを管理
     std::unordered_map<std::string, bool> visibilityFlags_;
 
+
     std::unordered_map<std::string, std::vector<BoundItem>> bindings_;
 
     // データを保存する際のディレクトリパス

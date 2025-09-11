@@ -18,8 +18,8 @@ void DebugCamera::Init() {
     // ビュープロジェクションの初期化
     viewProjection_.Init();
     // カメラの初期位置を設定
-    /* viewProjection_.translation_ = {0, 68.0f, -294.201f};*/
-    viewProjection_.translation_ = {0, 5.0f, -10};
+ /*   viewProjection_.translation_ = {0, -5, -distance_};*/
+    viewProjection_.translation_ = {7, 104, -301};
     viewProjection_.rotation_    = {0, 0, 0};
     matRot_                      = MakeIdentity4x4();
     yaw_                         = 0.0f;
@@ -36,14 +36,14 @@ void DebugCamera::Update() {
         // カメラのローカル座標系に合わせて平行移動する
         Vector3 right = TransformNormal({1, 0, 0}, matRot_); // カメラの右方向
         Vector3 up    = TransformNormal({0, 1, 0}, matRot_); // カメラの上方向
-        viewProjection_.translation_ -= right * (mouseMove.lX * 0.02f); // X軸方向の移動
-        viewProjection_.translation_ += up * (mouseMove.lY * 0.02f); // Y軸方向の移動
+        viewProjection_.translation_ -= right * (mouseMove.lX * 0.005f); // X軸方向の移動
+        viewProjection_.translation_ += up * (mouseMove.lY * 0.005f); // Y軸方向の移動
     }
 
     if (input_->GetWheel()) {
         // カメラの前方向に基づいた移動
         Vector3 forward = TransformNormal({0, 0, 1}, matRot_);
-        viewProjection_.translation_ += forward * (mouseMove.lZ * 0.02f);
+        viewProjection_.translation_ += forward * (mouseMove.lZ * 0.005f);
     }
 
     // マウスの右ボタンで視点移動

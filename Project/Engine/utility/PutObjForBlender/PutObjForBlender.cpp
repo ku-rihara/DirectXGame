@@ -150,7 +150,6 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
             objectData.translationEasing.resize(groupId + 1);
             objectData.isAdaptEasing.resize(groupId + 1);
             objectData.easingStartTimes.resize(groupId + 1, 0.0f);
-            // preScale, preRotation, preTranslationも同様にリサイズ
             objectData.preScale.resize(groupId + 1);
             objectData.preRotation.resize(groupId + 1);
             objectData.preTranslation.resize(groupId + 1);
@@ -379,6 +378,7 @@ PrimitiveType PutObjForBlender::StringToPrimitiveType(const std::string& typeStr
     }
     if (typeStr == "Box") {
         return PrimitiveType::Box;
+    } else {
+        return PrimitiveType::Plane;
     }
-    return PrimitiveType::Plane;
 }

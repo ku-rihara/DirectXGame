@@ -8,6 +8,7 @@ void CameraEditor::Init(ViewProjection* vp) {
     AllLoadFile();
     SetViewProjection(vp);
     debugObject_.reset(Object3d::CreateModel("debugCube.obj"));
+    debugObject_->SetIsDraw(false);
 }
 
 void CameraEditor::AllLoadFile() {

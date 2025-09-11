@@ -29,8 +29,8 @@ void GameScene::Init() {
     plane_           = std::make_unique<Plane>();
     skuBox_          = std::make_unique<SkyBox>();
     putObjForBlender = std::make_unique<PutObjForBlender>();
-    cameraEditor_    = std::make_unique<CameraAnimation>();
-    shakeEditor_         = std::make_unique<ShakePlayer>();
+    cameraEditor_    = std::make_unique<CameraEditor>();
+    shakeEditor_         = std::make_unique<ShakeEditor>();
     timeScaleController_ = std::make_unique<TimeScaleController>();
 
     monsterBall_->Init();
@@ -64,10 +64,7 @@ void GameScene::Update() {
     plane_->Update();
     skuBox_->Update();
 
-    if (input_->TrrigerKey(DIK_SPACE)) {
-        cameraEditor_->Play("PlayerthrustAttack");
-    }
-
+   
     Object3DRegistry::GetInstance()->UpdateAll();
     AnimationRegistry::GetInstance()->UpdateAll(Frame::DeltaTimeRate());
 

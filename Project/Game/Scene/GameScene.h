@@ -8,7 +8,6 @@
 #include "MonsterBall/MonsterBall.h"
 #include "Plane/Plane.h"
 #include "SkyBox/SkyBox.h"
-#include "utility/CameraEditor/CameraAnimation.h"
 #include "utility/ShakeEditor/ShakePlayer.h"
 #include "utility/TimeScaleEditor/TimeScaleController.h"
 // emitter
@@ -16,7 +15,9 @@
 
 #include "SkyBox/SkyBox.h"
 
+#include "utility/CameraEditor/CameraEditor.h"
 #include "utility/PutObjForBlender/PutObjForBlender.h"
+#include "utility/ShakeEditor/ShakeEditor.h"
 
 /// <summary>
 /// ゲームシーン
@@ -32,8 +33,8 @@ private:
     std::unique_ptr<Plane> plane_                             = nullptr;
     std::unique_ptr<SkyBox> skuBox_                           = nullptr;
     std::unique_ptr<PutObjForBlender> putObjForBlender        = nullptr;
-    std::unique_ptr<CameraAnimation> cameraEditor_            = nullptr;
-    std::unique_ptr<ShakePlayer> shakeEditor_                 = nullptr;
+    std::unique_ptr<CameraEditor> cameraEditor_               = nullptr;
+    std::unique_ptr<ShakeEditor> shakeEditor_                 = nullptr;
     std::unique_ptr<TimeScaleController> timeScaleController_ = nullptr;
 
 public:

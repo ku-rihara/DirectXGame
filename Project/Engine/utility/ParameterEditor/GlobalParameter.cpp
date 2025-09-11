@@ -350,6 +350,7 @@ void GlobalParameter::LoadFiles() {
      
         }
     }
+   
 }
 
 void GlobalParameter::LoadFile(const std::string& groupName, const std::string& folderName) {
@@ -494,6 +495,7 @@ void GlobalParameter::Bind(const std::string& group, const std::string& key, T* 
     item.pushVariant = [=]() {
         SetValue<T>(group, key, *variable, widgetType);
     };
+   
 
     bindings_[group].emplace_back(std::move(item));
 }
