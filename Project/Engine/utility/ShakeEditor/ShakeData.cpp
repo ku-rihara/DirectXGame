@@ -138,6 +138,16 @@ void ShakeData::AdjustParam() {
         ImGui::SeparatorText(("Shake Editor: " + groupName_).c_str());
         ImGui::PushID(groupName_.c_str());
 
+        // 再生制御
+        if (ImGui::Button("Play"))
+            Play();
+        ImGui::SameLine();
+        if (ImGui::Button("Stop"))
+            Stop();
+        ImGui::SameLine();
+        if (ImGui::Button("Reset"))
+            Reset();
+
         // 状態表示
         const char* stateText = "";
         switch (playState_) {

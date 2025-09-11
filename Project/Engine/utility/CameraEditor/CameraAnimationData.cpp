@@ -346,7 +346,15 @@ void CameraAnimationData::AdjustParam() {
         ImGui::SeparatorText(("Camera Editor: " + groupName_).c_str());
         ImGui::PushID(groupName_.c_str());
 
-       
+        // 再生制御
+        if (ImGui::Button("Play"))
+            Play();
+        ImGui::SameLine();
+        if (ImGui::Button("Pause"))
+            Pause();
+        ImGui::SameLine();
+        if (ImGui::Button("Reset"))
+            Reset();
 
         ImGui::DragFloat("Playback Speed", &playbackSpeed_, 0.1f, 0.1f, 5.0f);
         ImGui::Checkbox("Auto Return to Initial", &autoReturnToInitial_);
