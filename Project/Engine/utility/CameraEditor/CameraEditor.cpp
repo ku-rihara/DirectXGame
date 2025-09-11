@@ -136,7 +136,7 @@ void CameraEditor::EditorUpdate() {
 
         ImGui::Separator();
 
-       // 設定（ラジオボタン版）
+       // 設定
         ImGui::Text("ViewProjection Mode:");
         if (ImGui::RadioButton("Auto Apply to ViewProjection", autoApplyToViewProjection_)) {
             autoApplyToViewProjection_ = true;

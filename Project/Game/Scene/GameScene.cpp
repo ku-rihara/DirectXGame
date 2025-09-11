@@ -28,12 +28,9 @@ void GameScene::Init() {
     howToOperate_         = std::make_unique<HowToOperate>();
     skyBox_               = std::make_unique<SkyBox>();
     combo_                = std::make_unique<Combo>();
-    comboCreate_          = std::make_unique<ComboCreateEditor>();
     fireInjectors_        = std::make_unique<FireInjectors>();
     gameBackGroundObject_ = std::make_unique<GameBackGroundObject>();
     comboScene_           = std::make_unique<ComboScene>();
-    cameraEditor_         = std::make_unique<CameraEditor>();
-    shakeEditor_          = std::make_unique<ShakeEditor>();
     attackEffect_         = std::make_unique<AttackEffect>();
     gameIntro_            = std::make_unique<GameIntro>();
 
@@ -52,7 +49,6 @@ void GameScene::Init() {
     gameCamera_->Init();
     howToOperate_->Init();
     comboScene_->Init();
-    shakeEditor_->Init();
     attackEffect_->Init();
     viewProjection_.Init();
 
@@ -61,8 +57,7 @@ void GameScene::Init() {
     ///---------------------------------------------------------------------------------------
     /// セット
     ///---------------------------------------------------------------------------------------
-    cameraEditor_->Init(&gameCamera_->GetViewProjectionRef());
-
+   
     gameCamera_->SetTarget(&player_->GetTransform());
     enemyManager_->SetPlayer(player_.get());
     enemyManager_->SetCombo(combo_.get());
@@ -187,8 +182,6 @@ void GameScene::IntroUpdate() {
     debugCamera_->Update();
 
     // Editor
-    cameraEditor_->Update(Frame::DeltaTime());
-    shakeEditor_->Update(Frame::DeltaTime());
     attackEffect_->Update();
     Debug();
 
@@ -206,8 +199,7 @@ void GameScene::PlayUpdate() {
     gameIntro_->EndUpdate();
 
     // Editor
-    cameraEditor_->Update(Frame::DeltaTime());
-    shakeEditor_->Update(Frame::DeltaTime());
+ 
     attackEffect_->Update();
     Debug();
 
@@ -295,8 +287,7 @@ void GameScene::Debug() {
     ImGui::End();
 
     ImGui::Begin("Rendition");
-    cameraEditor_->EditorUpdate();
-    shakeEditor_->EditorUpdate();
+ 
     attackEffect_->EditorUpdate();
     ImGui::End();
 #endif

@@ -343,9 +343,6 @@
     <Filter Include="MyEngine\.h\utility\CameraEditor">
       <UniqueIdentifier>{86745219-1af0-46bf-8773-dc4c8f0b1461}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.cpp\utility\CameraEditor">
-      <UniqueIdentifier>{7ff1fcef-200f-4f44-9d0b-2cc5e237686d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.h\utility\ShakeEditor">
       <UniqueIdentifier>{b598867d-1557-4204-8949-7f620bc285d1}</UniqueIdentifier>
     </Filter>
@@ -378,6 +375,9 @@
     </Filter>
     <Filter Include="Game\FireInjectors">
       <UniqueIdentifier>{0b7b5e54-0d48-470f-91bf-bfc9c50b2e86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\CameraEditor">
+      <UniqueIdentifier>{32855cfa-547f-4fc0-8cfe-602053ee4b6b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -937,18 +937,6 @@
     <ClCompile Include="Engine\Easing\EasingStep.cpp">
       <Filter>MyEngine\.cpp\Easing</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\CameraEditor\CameraKeyFrame.cpp">
-      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\CameraEditor\CameraEditor.cpp">
-      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\CameraEditor\CameraAnimationData.cpp">
-      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\CameraEditor\CameraAnimation.cpp">
-      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GameCamera\CameraRendition.cpp">
       <Filter>Game\GameCamera</Filter>
     </ClCompile>
@@ -990,6 +978,18 @@
     </ClCompile>
     <ClCompile Include="Game\GameIntro\MovieLine.cpp">
       <Filter>Game\GameIntro</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\CameraEditor\CameraAnimation.cpp">
+      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\CameraEditor\CameraAnimationData.cpp">
+      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\CameraEditor\CameraEditor.cpp">
+      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\CameraEditor\CameraKeyFrame.cpp">
+      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

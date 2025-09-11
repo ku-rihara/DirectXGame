@@ -77,12 +77,9 @@ private:
     std::unique_ptr<EnemyManager> enemyManager_                 = nullptr;
     std::unique_ptr<EnemySpawner> enemySpawner_                 = nullptr;
     std::unique_ptr<HowToOperate> howToOperate_                 = nullptr;
-    std::unique_ptr<ComboCreateEditor> comboCreate_             = nullptr;
     std::unique_ptr<FireInjectors> fireInjectors_               = nullptr;
     std::unique_ptr<GameBackGroundObject> gameBackGroundObject_ = nullptr;
     std::unique_ptr<ComboScene> comboScene_                     = nullptr;
-    std::unique_ptr<CameraEditor> cameraEditor_                 = nullptr;
-    std::unique_ptr<ShakeEditor> shakeEditor_                   = nullptr;
     std::unique_ptr<AttackEffect> attackEffect_                 = nullptr;
     std::unique_ptr<GameIntro> gameIntro_                       = nullptr;
 

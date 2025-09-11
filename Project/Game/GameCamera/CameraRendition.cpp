@@ -31,6 +31,6 @@ void CameraRendition::ShakePlay(const std::string& filename) {
 }
 
  void CameraRendition::SetViewProjection(ViewProjection* viewProjection) {
-     cameraAnimation_->SetViewProjection(viewProjection); 
+    cameraAnimation_->SetViewProjection(viewProjection);
  }
 
