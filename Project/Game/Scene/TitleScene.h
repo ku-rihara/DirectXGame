@@ -32,9 +32,7 @@ private:
 	bool isFinished_;
 	float alpha_;
 public:
-	///========================================================
-	/// Constralt destract
-	///========================================================
+	
 	TitleScene();
 	~TitleScene()override;
 
