@@ -7,9 +7,8 @@
 #include"utility/ParticleEditor/ParticleEmitter.h"
 #include<string>
 #include<array>
-/// <summary>
-/// タイトルシーン
-/// </summary>
+
+
 class TitleScene :public BaseScene {
 private:
 	
@@ -18,9 +17,7 @@ private:
     std::unique_ptr<Plane> plane_ = nullptr;
 	
 public:
-	///========================================================
-	/// Constralt destract
-	///========================================================
+	
 	TitleScene();
 	~TitleScene()override;
 
