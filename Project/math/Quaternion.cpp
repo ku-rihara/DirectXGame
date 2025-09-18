@@ -2,12 +2,11 @@
 #include "Vector3.h"
 #include <cfloat>
 #include <cmath>
-
+#include "Matrix4x4.h"
 
 Quaternion Quaternion::operator-() const {
     return Quaternion(-x, -y, -z, -w);
 }
-
 
 Quaternion Quaternion::operator*(const Quaternion& obj) const {
     return Quaternion(
@@ -27,7 +26,6 @@ Quaternion Quaternion::operator*(float scalar) const {
 
     return result;
 }
-
 
 Quaternion operator*(float scalar, const Quaternion& q) {
     return Quaternion(q.x * scalar, q.y * scalar, q.z * scalar, q.w * scalar);
@@ -53,7 +51,6 @@ float Quaternion::Norm() const {
     return std::sqrt(x * x + y * y + z * z + w * w);
 }
 
-
 Quaternion Quaternion::Normalize() const {
     float norm = Norm();
     if (norm == 0) {
@@ -71,7 +68,6 @@ Quaternion Quaternion::Inverse() const {
     float normSquared    = norm * norm;
     return Quaternion(conjugate.x / normSquared, conjugate.y / normSquared, conjugate.z / normSquared, conjugate.w / normSquared);
 }
-
 
 Quaternion Quaternion::MakeRotateAxisAngle(const Vector3& axis, const float& angle) {
     // 正規化された軸を使用
@@ -96,18 +92,15 @@ Vector3 Quaternion::RotateVector(const Vector3& vector) {
     return Vector3(rotatedQuat.x, rotatedQuat.y, rotatedQuat.z);
 }
 
-
 float Quaternion::Dot(const Quaternion& q1, const Quaternion& q2) {
     return q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.w * q2.w;
 }
 
-
 Quaternion Quaternion::Lerp(const Quaternion& start, const Quaternion& end, const float& t) {
- 
+
     Quaternion result = (start * (1.0f - t)) + (end * t);
     return (result).Normalize();
 }
-
 
 Quaternion Quaternion::Slerp(const Quaternion& start, Quaternion end, const float& t) {
 
@@ -121,7 +114,7 @@ Quaternion Quaternion::Slerp(const Quaternion& start, Quaternion end, const floa
 
     const float DOT_THRESHOLD = 0.9995f;
     if (dot > DOT_THRESHOLD) {
-        return Lerp(start, end, t); 
+        return Lerp(start, end, t);
     }
 
     float theta_0 = std::acos(dot);
@@ -144,8 +137,44 @@ Quaternion Quaternion::EulerToQuaternion(const Vector3& Euler) {
     Quaternion qz = Quaternion::MakeRotateAxisAngle(Vector3(0, 0, 1), Euler.z);
 
     // XYZ順で回転を合成
-    result      = qx * qy * qz;
+    result = qx * qy * qz;
     result = result.Normalize();
 
     return result;
+}
+
+Matrix4x4 Quaternion::MakeRotateMatrix() const {
+    Matrix4x4 m;
+
+    float xx = x * x;
+    float yy = y * y;
+    float zz = z * z;
+    float xy = x * y;
+    float xz = x * z;
+    float yz = y * z;
+    float wx = w * x;
+    float wy = w * y;
+    float wz = w * z;
+
+    m.m[0][0] = 1.0f - 2.0f * (yy + zz);
+    m.m[0][1] = 2.0f * (xy + wz);
+    m.m[0][2] = 2.0f * (xz - wy);
+    m.m[0][3] = 0.0f;
+
+    m.m[1][0] = 2.0f * (xy - wz);
+    m.m[1][1] = 1.0f - 2.0f * (xx + zz);
+    m.m[1][2] = 2.0f * (yz + wx);
+    m.m[1][3] = 0.0f;
+
+    m.m[2][0] = 2.0f * (xz + wy);
+    m.m[2][1] = 2.0f * (yz - wx);
+    m.m[2][2] = 1.0f - 2.0f * (xx + yy);
+    m.m[2][3] = 0.0f;
+
+    m.m[3][0] = 0.0f;
+    m.m[3][1] = 0.0f;
+    m.m[3][2] = 0.0f;
+    m.m[3][3] = 1.0f;
+
+    return m;
 }

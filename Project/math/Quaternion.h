@@ -1,5 +1,7 @@
 #pragma once
 class Vector3;
+class Matrix4x4;
+
 class Quaternion {
 public:
     float x;
@@ -25,17 +27,11 @@ public:
     static Quaternion Slerp(const Quaternion& start, Quaternion end, const float& t);
     static Quaternion EulerToQuaternion(const Vector3& Euler);
 
-    // 共役Quaternionを返す
-    Quaternion Conjugate() const;
-
-    // ノルム
-    float Norm() const;
-
-    // 正規化
-    Quaternion Normalize() const;
-
-    // 逆Quaternion
-    Quaternion Inverse() const;
+    Quaternion Conjugate() const;                //< 共役Quaternion
+    float Norm() const;                          //< ノルム
+    Quaternion Normalize() const;                //< 正規化
+    Quaternion Inverse() const;                  //< 逆Quaternion
+    Matrix4x4 MakeRotateMatrix()const; //<回転行列作成
 
     Vector3 RotateVector(const Vector3& vector);
 

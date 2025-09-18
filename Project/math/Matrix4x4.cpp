@@ -6,12 +6,11 @@
 #include <cmath>
 #include <DirectXMath.h>
 #include <numbers>
-using namespace DirectX;
 
 Matrix4x4 MakeIdentity4x4() {
-    XMMATRIX identity = XMMatrixIdentity();
+    DirectX::XMMATRIX identity = DirectX::XMMatrixIdentity();
     Matrix4x4 result;
-    XMStoreFloat4x4(reinterpret_cast<XMFLOAT4X4*>(&result), identity);
+    DirectX::XMStoreFloat4x4(reinterpret_cast<DirectX::XMFLOAT4X4*>(&result), identity);
     return result;
 }
 
@@ -495,7 +494,7 @@ Matrix4x4 MakeRotateMatrixFromQuaternion(const Quaternion& q) {
 Matrix4x4 MakeRootAtMatrix(const Vector3& eye, const Vector3& target, const Vector3& up) {
     Vector3 zAxis = (target - eye).Normalize(); // 視線方向 (前方向)
     Vector3 xAxis = Vector3::Cross(up, zAxis).Normalize(); // 右方向
-    Vector3 yAxis = Vector3::Cross(zAxis, xAxis); // 上方向（正規直交化済）
+    Vector3 yAxis = Vector3::Cross(zAxis, xAxis); // 上方向
 
     Matrix4x4 result = {};
 
@@ -520,4 +519,37 @@ Matrix4x4 MakeRootAtMatrix(const Vector3& eye, const Vector3& target, const Vect
     result.m[3][3] = 1.0f;
 
     return result;
+}
+
+Quaternion QuaternionFromMatrix(const Matrix4x4& m) {
+    Quaternion q;
+    float trace = m.m[0][0] + m.m[1][1] + m.m[2][2]; // 対角成分の和
+
+    if (trace > 0.0f) {
+        float s = std::sqrt(trace + 1.0f) * 2.0f; 
+        q.w     = 0.25f * s;
+        q.x     = (m.m[2][1] - m.m[1][2]) / s;
+        q.y     = (m.m[0][2] - m.m[2][0]) / s;
+        q.z     = (m.m[1][0] - m.m[0][1]) / s;
+    } else if ((m.m[0][0] > m.m[1][1]) && (m.m[0][0] > m.m[2][2])) {
+        float s = std::sqrt(1.0f + m.m[0][0] - m.m[1][1] - m.m[2][2]) * 2.0f; 
+        q.w     = (m.m[2][1] - m.m[1][2]) / s;
+        q.x     = 0.25f * s;
+        q.y     = (m.m[0][1] + m.m[1][0]) / s;
+        q.z     = (m.m[0][2] + m.m[2][0]) / s;
+    } else if (m.m[1][1] > m.m[2][2]) {
+        float s = std::sqrt(1.0f + m.m[1][1] - m.m[0][0] - m.m[2][2]) * 2.0f; 
+        q.w     = (m.m[0][2] - m.m[2][0]) / s;
+        q.x     = (m.m[0][1] + m.m[1][0]) / s;
+        q.y     = 0.25f * s;
+        q.z     = (m.m[1][2] + m.m[2][1]) / s;
+    } else {
+        float s = std::sqrt(1.0f + m.m[2][2] - m.m[0][0] - m.m[1][1]) * 2.0f; 
+        q.w     = (m.m[1][0] - m.m[0][1]) / s;
+        q.x     = (m.m[0][2] + m.m[2][0]) / s;
+        q.y     = (m.m[1][2] + m.m[2][1]) / s;
+        q.z     = 0.25f * s;
+    }
+
+    return q.Normalize();
 }
