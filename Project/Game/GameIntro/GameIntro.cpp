@@ -19,12 +19,10 @@ void GameIntro::Init() {
     movieLine_ = std::make_unique<MovieLine>();
     movieLine_->Init();
 
-        /* int32_t spriteHandle=
+  
 
-         sprite_.reset(Sprite::Create())*/
-
-        // step
-        step_ = IntroStep::START;
+    // step
+    step_ = IntroStep::START;
 }
 
 void GameIntro::Update() {
@@ -66,13 +64,13 @@ void GameIntro::PurposeAppear() {
 void GameIntro::EndUpdate() {
     movieLine_->ExitUpdate();
 }
-    
+
 void GameIntro::Finish() {
 }
 
 void GameIntro::SpriteDraw() {
     movieLine_->Draw();
- }
+}
 
 ///=========================================================
 /// バインド
