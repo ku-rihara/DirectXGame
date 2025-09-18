@@ -69,8 +69,6 @@ public:
     const WorldTransform* parent_ = nullptr;
     RotateOder rotateOder_        = RotateOder::XYZ;
 
-    
-
 private:
 
     // animation parent

@@ -6,9 +6,14 @@
 
 #include <list>
 #include <memory>
+#include <variant>
 
 class BaseEnemy;
+class Player;
 class LockOn {
+public:
+    using LockOnVariant = std::variant<BaseEnemy*>;
+
 public:
     LockOn()  = default;
     ~LockOn() = default;
@@ -18,9 +23,9 @@ public:
     void Draw();
 
     // 線形補間
-    void LarpTimeIncrement(float incrementTime);
+    void LerpTimeIncrement(float incrementTime);
 
-    bool IsTargetRange(const BaseEnemy& enemy, const ViewProjection& viewProjection, Vector3& positionView);
+    bool IsTargetRange(const LockOnVariant& target, const Player* player, Vector3& relativePosition)const;
     bool IsOutOfRange(const std::list<std::unique_ptr<BaseEnemy>>& enemies, const ViewProjection& viewProjection);
     void Search(const std::list<std::unique_ptr<BaseEnemy>>& enemies, const ViewProjection& viewProjection);
 
@@ -38,10 +43,9 @@ private:
     float spriteRotation_; //< スプライトz回転
 
     // parameter
-    float kDegreeToRadian_;
-    float minDistance_;
-    float maxDistance_;
-    float angleRange_;
+    float minDistance_; //< 最小距離
+    float maxDistance_; //< 最大距離
+    float angleRange_;  //< 角度範囲（度）
 
 public:
     // Getter
