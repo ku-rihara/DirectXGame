@@ -13,7 +13,7 @@
 
 // 定数バッファ用データ構造体
 struct ConstBufferDataWorldTransform {
-    Matrix4x4 matWorld; 
+    Matrix4x4 matWorld;
 };
 
 enum class BillboardType {
@@ -73,8 +73,8 @@ private:
 
     // animation parent
     const Object3DAnimation* parentAnimation_ = nullptr;
-    int32_t parentJointIndex_              = -1;
-    std::string parentJointName_; 
+    int32_t parentJointIndex_                 = -1;
+    std::string parentJointName_;
 
     Matrix4x4 billboardMatrix_;
     Matrix4x4 backToFrontMatrix_;
@@ -90,17 +90,10 @@ public:
     Vector3 GetLocalPos() const;
     Vector3 GetWorldPos() const;
 
-    Vector3 GetRightVector() const {
-        return Vector3(matWorld_.m[0][0], matWorld_.m[1][0], matWorld_.m[2][0]);
-    }
-
-    Vector3 GetUpVector() const {
-        return Vector3(matWorld_.m[0][1], matWorld_.m[1][1], matWorld_.m[2][1]);
-    }
-
-    Vector3 GetForwardVector() const {
-        return Vector3(matWorld_.m[0][2], matWorld_.m[1][2], matWorld_.m[2][2]);
-    }
+    // GetVector
+    Vector3 GetRightVector() const;
+    Vector3 GetUpVector() const;
+    Vector3 GetForwardVector() const;
 
 
 public:
@@ -139,7 +132,7 @@ public:
             parentJointName_   = std::move(other.parentJointName_);
             billboardMatrix_   = std::move(other.billboardMatrix_);
             backToFrontMatrix_ = std::move(other.backToFrontMatrix_);
-          
+
             other.parentAnimation_  = nullptr;
             other.parentJointIndex_ = -1;
             other.parentJointName_.clear();

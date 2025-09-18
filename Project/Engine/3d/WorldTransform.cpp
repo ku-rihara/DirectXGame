@@ -1,7 +1,6 @@
 #include "WorldTransform.h"
 #include "Animation/Object3DAnimation.h"
 
-
 void WorldTransform::Init() {
 
     scale_       = {1, 1, 1};
@@ -241,4 +240,34 @@ void WorldTransform::UpdateMatrixWithJoint() {
 
 bool WorldTransform::HasParentJoint() const {
     return parentAnimation_ != nullptr && parentJointIndex_ != -1;
+}
+
+Vector3 WorldTransform::GetRightVector() const {
+
+    if (rotateOder_ == RotateOder::Quaternion) {
+        Matrix4x4 rotationMatrix = quaternion_.MakeRotateMatrix();
+        return TransformNormal(Vector3::ToRight(), rotationMatrix).Normalize();
+    }
+
+    return Vector3(matWorld_.m[0][0], matWorld_.m[1][0], matWorld_.m[2][0]);
+}
+
+Vector3 WorldTransform::GetUpVector() const {
+
+    if (rotateOder_ == RotateOder::Quaternion) {
+        Matrix4x4 rotationMatrix = quaternion_.MakeRotateMatrix();
+        return TransformNormal(Vector3::ToUp(), rotationMatrix).Normalize();
+    }
+
+    return Vector3(matWorld_.m[0][1], matWorld_.m[1][1], matWorld_.m[2][1]);
+}
+
+Vector3 WorldTransform::GetForwardVector() const {
+
+    if (rotateOder_ == RotateOder::Quaternion) {
+        Matrix4x4 rotationMatrix = quaternion_.MakeRotateMatrix();
+        return TransformNormal(Vector3::ToForward(), rotationMatrix).Normalize();
+    }
+
+    return Vector3(matWorld_.m[0][2], matWorld_.m[1][2], matWorld_.m[2][2]);
 }
