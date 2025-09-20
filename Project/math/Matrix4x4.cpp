@@ -7,6 +7,9 @@
 #include <DirectXMath.h>
 #include <numbers>
 
+//#pragma warning(disable : 4723) // ゼロ除算の可能性を警告
+//#pragma warning(disable : 4724) // コンパイル時ゼロ除算
+
 Matrix4x4 MakeIdentity4x4() {
     DirectX::XMMATRIX identity = DirectX::XMMatrixIdentity();
     Matrix4x4 result;

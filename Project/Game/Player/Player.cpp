@@ -219,7 +219,7 @@ void Player::AttackPowerCharge() {
 
 void Player::FaceToTarget() {
     if (pLockOn_ && pLockOn_->GetEnemyTarget()) {
-        Vector3 differectialVector = pLockOn_->GetTargetPosition() - GetWorldPosition();
+        Vector3 differectialVector = pLockOn_->GetCurrentTargetPosition() - GetWorldPosition();
 
         // Y軸周り角度(θy)
         baseTransform_.rotation_.y = std::atan2(differectialVector.x, differectialVector.z);

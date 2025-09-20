@@ -188,7 +188,7 @@ void RightJobPunch::ChangeSpeedForLockOn() {
         return;
     }
 
-    Vector3 differectialVector = pPlayer_->GetLockOn()->GetTargetPosition() - pPlayer_->GetWorldPosition();
+    Vector3 differectialVector = pPlayer_->GetLockOn()->GetCurrentTargetPosition() - pPlayer_->GetWorldPosition();
     // 距離
     float distance = differectialVector.Length();
     // 距離しきい値
