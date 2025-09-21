@@ -991,6 +991,9 @@
     <ClCompile Include="Engine\utility\CameraEditor\CameraKeyFrame.cpp">
       <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Game\LockOn\LockOnController.cpp">
+      <Filter>Game\LockOn</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1646,6 +1649,9 @@
     </ClInclude>
     <ClInclude Include="Game\GameIntro\MovieLine.h">
       <Filter>Game\GameIntro</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\LockOn\LockOnController.h">
+      <Filter>Game\LockOn</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

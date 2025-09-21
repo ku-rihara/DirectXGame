@@ -19,7 +19,7 @@ void GameScene::Init() {
     ///=======================================================================================
 
     field_                = std::make_unique<Field>();
-    lockOn_               = std::make_unique<LockOn>();
+    lockOnController_     = std::make_unique<LockOnController>();
     player_               = std::make_unique<Player>();
     gameCamera_           = std::make_unique<GameCamera>();
     enemyManager_         = std::make_unique<EnemyManager>();
@@ -39,7 +39,7 @@ void GameScene::Init() {
     ///=======================================================================================
 
     player_->GameSceneInit();
-    lockOn_->Init();
+    lockOnController_->Init();
     skyBox_->Init();
     combo_->Init();
     gameIntro_->Init();
@@ -62,11 +62,10 @@ void GameScene::Init() {
     enemyManager_->SetPlayer(player_.get());
     enemyManager_->SetCombo(combo_.get());
     enemyManager_->SetGameCamera(gameCamera_.get());
-    enemyManager_->SetLockOn(lockOn_.get());
     enemyManager_->SetEnemySpawner(enemySpawner_.get());
     enemyManager_->SetAttackEffect(attackEffect_.get());
     player_->SetViewProjection(&viewProjection_);
-    player_->SetLockOn(lockOn_.get());
+    player_->SetLockOn(lockOnController_.get());
     player_->SetGameCamera(gameCamera_.get());
     player_->SetCombo(combo_.get());
     player_->SetHitStop(attackEffect_.get());
@@ -215,7 +214,7 @@ void GameScene::PlayUpdate() {
     gameCamera_->Update();
 
     enemyManager_->HpBarUpdate(viewProjection_);
-    lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);
+  /*  lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);*/
 }
 void GameScene::FinishUpdate() {
 
@@ -252,7 +251,7 @@ void GameScene::SkyBoxDraw() {
 /// ======================================================
 void GameScene::SpriteDraw() {
     enemyManager_->SpriteDraw(viewProjection_);
-    lockOn_->Draw();
+   /* lockOn_->Draw();*/
     howToOperate_->Draw();
     combo_->Draw();
     gameIntro_->SpriteDraw();

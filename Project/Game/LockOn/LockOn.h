@@ -108,5 +108,5 @@ public:
     const bool& ExistTarget() const { return currentTarget_.has_value(); }
     Vector3 GetCurrentTargetPosition() const;
     Vector3 GetTargetObjectPosition(const LockOnVariant& target) const;
-    const LockOnVariant* GetCurrentTarget() const;
+    const LockOnVariant* GetIsCurrentTarget() const;
 };

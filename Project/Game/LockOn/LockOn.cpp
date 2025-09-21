@@ -23,7 +23,7 @@ void LockOn::Init() {
     globalParameter_->SyncParamForGroup(groupName_);
 
     // スプライトの読み込みと作成
-    reticleHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/UI/MissileReticle.png");
+    reticleHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/UI/anchorPoint.png");
 
     // メインターゲット用スプライト
     lockOnMark_.reset(Sprite::Create(reticleHandle_, Vector2::ZeroVector(), Vector4::kWHITE()));
@@ -121,8 +121,9 @@ void LockOn::HandleTargetSwitching(const std::vector<LockOnVariant>& targets, co
     bool switchTriggered    = currentSwitchInput && !prevSwitchInput_;
     prevSwitchInput_        = currentSwitchInput;
 
-    if (!switchTriggered)
+    if (!switchTriggered) {
         return;
+    }
 
     // 有効なターゲットリストを更新
     validTargets_ = GetValidTargets(targets, player);
@@ -319,7 +320,7 @@ Vector3 LockOn::GetTargetObjectPosition(const LockOnVariant& target) const {
     },
         target);
 
-    return Vector3{};
+   
 }
 
 void LockOn::OnObjectDestroyed(const LockOnVariant& obj) {
@@ -415,6 +416,6 @@ void LockOn::AdjustParam() {
 #endif // _DEBUG
 }
 
-const LockOn::LockOnVariant* LockOn::GetCurrentTarget() const {
+const LockOn::LockOnVariant* LockOn::GetIsCurrentTarget() const {
     return currentTarget_ ? &(*currentTarget_) : nullptr;
 }

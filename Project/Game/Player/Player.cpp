@@ -16,7 +16,7 @@
 /// object
 #include "CollisionBox/EnemyCollisionBox.h"
 #include "Field/Field.h"
-#include "LockOn/LockOn.h"
+#include "LockOn/LockOnController.h"
 
 /// behavior
 #include "ComboAttackBehavior/ComboAttackRoot.h"
@@ -218,11 +218,11 @@ void Player::AttackPowerCharge() {
 }
 
 void Player::FaceToTarget() {
-    if (pLockOn_ && pLockOn_->GetEnemyTarget()) {
-        Vector3 differectialVector = pLockOn_->GetCurrentTargetPosition() - GetWorldPosition();
+    if (pLockOn_ && pLockOn_->GetLockOn()->GetIsCurrentTarget()) {
+        Vector3 differentialVector = pLockOn_->GetLockOn()->GetCurrentTargetPosition() - GetWorldPosition();
 
         // Y軸周り角度(θy)
-        baseTransform_.rotation_.y = std::atan2(differectialVector.x, differectialVector.z);
+        baseTransform_.rotation_.y = std::atan2(differentialVector.x, differentialVector.z);
     }
 }
 
@@ -519,8 +519,8 @@ void Player::SetShadowFrag(const bool& isShadow) {
 /// Class Set
 ///===============================================================================
 
-void Player::SetLockOn(LockOn* lockon) {
-    pLockOn_ = lockon;
+void Player::SetLockOn(LockOnController* lockOn) {
+    pLockOn_ = lockOn;
 }
 
 void Player::SetCombo(Combo* combo) {
@@ -528,8 +528,8 @@ void Player::SetCombo(Combo* combo) {
     attackController_->SetCombo(combo);
 }
 
-void Player::SetGameCamera(GameCamera* gamecamera) {
-    pGameCamera_ = gamecamera;
+void Player::SetGameCamera(GameCamera* gameCamera) {
+    pGameCamera_ = gameCamera;
 }
 
 void Player::SetHitStop(AttackEffect* hitStop) {

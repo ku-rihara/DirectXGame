@@ -78,7 +78,6 @@ private:
 
     // ohter class
     Player* pPlayer_;
-    LockOn* pLockOn_;
     GameCamera* pGameCamera_;
     Combo* pCombo_;
     EnemySpawner* pEnemySpawner_;
@@ -91,7 +90,7 @@ private:
     ///========================================================
 
     // 敵リスト
-    std::list<std::unique_ptr<BaseEnemy>> enemies_;
+    std::vector<std::unique_ptr<BaseEnemy>> enemies_;
     std::vector<std::string> enemyTypes_ = {"NormalEnemy", "StrongEnemy"};
 
     // 一時的な敵生成用データ
@@ -114,7 +113,7 @@ public:
     /// getter method
     ///========================================================
     bool GetIsAllCleared() const { return areAllEnemiesCleared_; }
-    const std::list<std::unique_ptr<BaseEnemy>>& GetEnemies() const { return enemies_; }
+    const std::vector<std::unique_ptr<BaseEnemy>>& GetEnemies() const { return enemies_; }
     ///========================================================
     /// setter method
     ///========================================================
