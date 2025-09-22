@@ -71,6 +71,7 @@ void GameScene::Init() {
     player_->SetHitStop(attackEffect_.get());
     enemySpawner_->SetEnemyManager(enemyManager_.get());
     fireInjectors_->SetCombo(combo_.get());
+    lockOnController_->SetEnemyManager(enemyManager_.get());
     // gameIntro
     gameIntro_->SetFireInjectors(fireInjectors_.get());
     gameIntro_->SetGameCamera(gameCamera_.get());
@@ -214,7 +215,7 @@ void GameScene::PlayUpdate() {
     gameCamera_->Update();
 
     enemyManager_->HpBarUpdate(viewProjection_);
-  /*  lockOn_->Update(enemyManager_->GetEnemies(), viewProjection_);*/
+    lockOnController_->Update(player_.get(), viewProjection_);
 }
 void GameScene::FinishUpdate() {
 
@@ -251,7 +252,7 @@ void GameScene::SkyBoxDraw() {
 /// ======================================================
 void GameScene::SpriteDraw() {
     enemyManager_->SpriteDraw(viewProjection_);
-   /* lockOn_->Draw();*/
+    lockOnController_->Draw();
     howToOperate_->Draw();
     combo_->Draw();
     gameIntro_->SpriteDraw();

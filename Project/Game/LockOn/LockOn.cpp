@@ -108,7 +108,7 @@ void LockOn::ResizeTargetMarkers(const size_t& targetCount) {
         ableLockOnMarkers_.resize(targetCount);
 
         for (size_t i = currentSize; i < targetCount; ++i) {
-            ableLockOnMarkers_[i].sprite.reset(Sprite::Create(reticleHandle_, Vector2{0, 0}, Vector4(1, 1, 1, 1)));
+            ableLockOnMarkers_[i].sprite.reset(Sprite::Create(reticleHandle_, Vector2::ZeroVector(), Vector4::kWHITE()));
             ableLockOnMarkers_[i].sprite->SetAnchorPoint(Vector2(0.5f, 0.5f));
         }
     }
