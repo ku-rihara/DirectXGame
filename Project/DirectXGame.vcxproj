@@ -163,7 +163,9 @@
     <ClCompile Include="Game\FireInjectors\FireInjectors.cpp" />
     <ClCompile Include="Game\GameCamera\CameraRendition.cpp" />
     <ClCompile Include="Game\GameCamera\GameCamera.cpp" />
-    <ClCompile Include="Game\GameIntro\GameIntro.cpp" />
+    <ClCompile Include="Game\GameIntro\BaseGameIntro.cpp" />
+    <ClCompile Include="Game\GameIntro\IntroSpawnField.cpp" />
+    <ClCompile Include="Game\GameIntro\GameIntroManager.cpp" />
     <ClCompile Include="Game\GameIntro\MovieLine.cpp" />
     <ClCompile Include="Game\LockOn\LockOn.cpp" />
     <ClCompile Include="Game\LockOn\LockOnController.cpp" />
@@ -383,7 +385,9 @@
     <ClInclude Include="Game\FireInjectors\FireInjectors.h" />
     <ClInclude Include="Game\GameCamera\CameraRendition.h" />
     <ClInclude Include="Game\GameCamera\GameCamera.h" />
-    <ClInclude Include="Game\GameIntro\GameIntro.h" />
+    <ClInclude Include="Game\GameIntro\BaseGameIntro.h" />
+    <ClInclude Include="Game\GameIntro\IntroSpawnField.h" />
+    <ClInclude Include="Game\GameIntro\GameIntroManager.h" />
     <ClInclude Include="Game\GameIntro\MovieLine.h" />
     <ClInclude Include="Game\LockOn\LockOn.h" />
     <ClInclude Include="Game\LockOn\LockOnController.h" />
