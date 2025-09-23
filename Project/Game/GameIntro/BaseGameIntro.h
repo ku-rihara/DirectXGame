@@ -15,14 +15,15 @@ public:
     virtual ~BaseGameIntro() = default;
 
     // Init,Update,Draw
-    virtual void Init(const std::string& name) = 0;
-    virtual void Update() = 0;
-    virtual void Draw()   = 0;
+    virtual void Init(const std::string& name);
+    virtual void Update(const float& playSpeed);
+    virtual void Draw() = 0;
 
     // Param Edit
-    virtual void AdjustParam() = 0;
+    virtual void BindParams();
+    virtual void AdjustParam();
+    virtual void AdjustUniqueParam() = 0;
 
-    
 protected:
     GlobalParameter* globalParameter_ = nullptr;
     std::string groupName_;
@@ -38,6 +39,7 @@ protected:
     bool isFinish_         = false;
     bool isAbleEnemySpawn_ = false;
     float currentTime_     = 0.0f;
+    float playSpeed_;
 
 public:
     // Getters

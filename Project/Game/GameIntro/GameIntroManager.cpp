@@ -1,31 +1,31 @@
 #include "GameIntroManager.h"
 #include "Frame/Frame.h"
 #include "Input/Input.h"
+#include "IntroSpawnField.h"
 #include <algorithm>
 #include <imgui.h>
 
 void GameIntroManager::Init() {
 
+    // GlobalParameter
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
     BindParam();
     globalParameter_->SyncParamForGroup(groupName_);
 
-    // Initialize all intro sequences
+    // 初期化
+    introSequences_[0] = std::make_unique<IntroSpawnField>();
+    introSequences_[0]->Init("IntroSpawnField");
+
+    //  クラスセット
     for (auto& intro : introSequences_) {
-        // 生成
         intro->SetHowToOperate(pHowToOperate_);
         intro->SetGameCamera(pGameCamera_);
         intro->SetPlayer(pPlayer_);
         intro->SetFireInjectors(pFireInjectors_);
         intro->SetGameBackGroundObject(pGameBackGroundObject_);
-
-     
     }
-    // 初期化
-    introSequences_
 
-    currentPlaySpeed_ = 1.0f;
     currentIndex_     = 0;
     isInitialized_    = true;
 }
@@ -52,7 +52,7 @@ void GameIntroManager::Draw() {
 }
 
 void GameIntroManager::BindParam() {
-  
+
     globalParameter_->Bind(groupName_, "fastSpeed", &fastSpeed_);
 }
 
@@ -61,15 +61,16 @@ void GameIntroManager::AdjustParam() {
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
-        ImGui::DragFloat("Fast Speed", &fastSpeed_, 0.1f, 1.0f, 10.0f);
-       
-        // Save/Load parameters
+        ImGui::DragFloat("Fast Speed", &fastSpeed_, 0.01f,1.0f);
+
+        // セーブ、ロード
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
 
         ImGui::PopID();
     }
 
+    // 各イントロステップのパラメータ編集
     for (auto& intro : introSequences_) {
         intro->AdjustParam();
     }
@@ -87,18 +88,17 @@ bool GameIntroManager::IsAllIntroFinished() const {
     return currentIndex_ >= static_cast<int>(introSequences_.size());
 }
 
-
 void GameIntroManager::ProcessInput() {
     Input* input = Input::GetInstance();
 
-    if (input->TrrigerKey(DIK_SPACE) || input->IsPressPad(XINPUT_GAMEPAD_A)) {
+    if (input->TrrigerKey(DIK_SPACE) || input->IsPressPad(0,XINPUT_GAMEPAD_A)) {
         currentPlaySpeed_ = fastSpeed_;
     } else {
         currentPlaySpeed_ = 1.0f;
     }
 }
 
-void GameIntroManager::UpdateCurrentIntro() {
+void GameIntroManager::UpdateCurrentIntro(const float& speed) {
     if (currentIndex_ >= static_cast<int>(introSequences_.size())) {
         return;
     }

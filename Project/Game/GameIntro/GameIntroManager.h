@@ -26,7 +26,7 @@ public:
 
 private:
     void ProcessInput();
-    void UpdateCurrentIntro();
+    void UpdateCurrentIntro(const float&speed);
     void MoveToNextIntro();
 
 private:

@@ -21,15 +21,17 @@ public:
     ~IntroSpawnField() override = default;
 
     // Init,Update,Draw
-    void Init(const std::string&name) override;
-    void Update() override;
+    void Init(const std::string& name) override;
+    void Update(const float&playSpeed) override;
     void Draw() override;
-    
+
     // Param Edit
     void AdjustParam() override;
+    void BindParams() override;
+    void AdjustUniqueParam() override;
 
 private:
-    // Step functions
+    // Step function
     void Start();
     void Wait();
     void ObjSpawn();
@@ -38,9 +40,8 @@ private:
     void PurposeAppear();
     void Finish();
 
-    // Utility functions
+    // Step更新
     bool ProcessStep(float limitTime, IntroStep nextStep, bool enableEnemySpawn = false);
-    void BindParams();
 
 private:
     static void (IntroSpawnField::* spFuncTable_[])();
