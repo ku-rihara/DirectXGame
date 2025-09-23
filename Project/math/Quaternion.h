@@ -1,6 +1,6 @@
 #pragma once
 class Vector3;
-class Matrix4x4;
+struct Matrix4x4;
 
 class Quaternion {
 public:

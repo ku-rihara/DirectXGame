@@ -75,7 +75,7 @@ bool Input::PushKey(BYTE keyNumber)const {
 }
 
 
-bool Input::TrrigerKey(BYTE keyNumber)const {
+bool Input::TriggerKey(BYTE keyNumber)const {
 	return (key_[keyNumber] & 0x80) && !(keyPre_[keyNumber] & 0x80);
 }
 

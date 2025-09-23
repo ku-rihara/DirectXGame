@@ -73,19 +73,19 @@ public:
     //--------------------------------------------------------------------------------------
     // getter
     //--------------------------------------------------------------------------------------
-    float GetTimePoint() const { return timePoint_; }
-    Vector3 GetPosition() const { return currentKeyFrameParam_.position; }
-    Vector3 GetRotation() const { return currentKeyFrameParam_.rotation; }
-    float GetFov() const { return currentKeyFrameParam_.fov; }
-    Vector3 GetEditPosition() const { return keyFrameParam_.position; }
-    Vector3 GetEditRotation() const { return keyFrameParam_.rotation; }
-    float GetEditFov() const { return keyFrameParam_.fov; }
-    TimeMode GetTimeMode() const { return static_cast<TimeMode>(timeMode_); }
+   const  float& GetTimePoint() const { return timePoint_; }
+    const Vector3& GetPosition() const { return currentKeyFrameParam_.position; }
+   const Vector3& GetRotation() const { return currentKeyFrameParam_.rotation; }
+    const float& GetFov() const { return currentKeyFrameParam_.fov; }
+   const Vector3& GetEditPosition() const { return keyFrameParam_.position; }
+    const Vector3& GetEditRotation() const { return keyFrameParam_.rotation; }
+   const float& GetEditFov() const { return keyFrameParam_.fov; }
+    const TimeMode& GetTimeMode() const { return static_cast<TimeMode>(timeMode_); }
 
     //--------------------------------------------------------------------------------------
     // setter
     //--------------------------------------------------------------------------------------
-    void SetTimePoint(float timePoint) { timePoint_ = timePoint; }
+    void SetTimePoint(const float& timePoint) { timePoint_ = timePoint; }
     void SetStartEasing(const Vector3& pos, const Vector3& rotate, const float& fov);
-    void SetTimeMode(TimeMode mode) { timeMode_ = static_cast<int32_t>(mode); }
+    void SetTimeMode(const TimeMode& mode) { timeMode_ = static_cast<int32_t>(mode); }
 };
