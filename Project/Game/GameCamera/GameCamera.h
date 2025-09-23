@@ -18,7 +18,7 @@ public:
     /// public method
     /// ===================================================
     void Init();
-    void Update(const float&cameraPlaySpeed);
+    void Update(const float& cameraPlaySpeed = 1.0f);
     void MoveUpdate();
 
     void Reset();

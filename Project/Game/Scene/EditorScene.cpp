@@ -40,7 +40,7 @@ void EditorScene::Update() {
     Debug();
     ViewProjectionUpdate();
 
-    if (input_->TrrigerKey(DIK_RETURN)) {
+    if (input_->TriggerKey(DIK_RETURN)) {
 
         SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
     }

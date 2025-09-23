@@ -10,7 +10,7 @@ public:
     virtual ~BaseBackGroundObject() = default;
 
     virtual void Init(const std::string& filename);
-    virtual void Update()                                   = 0;
+    virtual void Update(const float& playSpeed)             = 0;
     virtual void Draw(const ViewProjection& viewProjection) = 0;
 
 protected:

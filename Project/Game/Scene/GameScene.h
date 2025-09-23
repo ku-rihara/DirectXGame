@@ -14,7 +14,7 @@
 #include "Field/Field.h"
 #include "FireInjectors/FireInjectors.h"
 #include "GameCamera/GameCamera.h"
-#include "GameIntro/GameIntro.h"
+#include "GameIntro/GameIntroManager.h"
 #include "LockOn/LockOnController.h"
 #include "Player/Player.h"
 #include "SkyBox/SkyBox.h"
@@ -81,7 +81,7 @@ private:
     std::unique_ptr<GameBackGroundObject> gameBackGroundObject_ = nullptr;
     std::unique_ptr<ComboScene> comboScene_                     = nullptr;
     std::unique_ptr<AttackEffect> attackEffect_                 = nullptr;
-    std::unique_ptr<GameIntro> gameIntro_                       = nullptr;
+    std::unique_ptr<GameIntroManager> gameIntro_                = nullptr;
 
     GameState gameState_ = GameState::INTRO;
 

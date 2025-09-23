@@ -187,12 +187,11 @@ void GameScene::IntroUpdate() {
 
     // obj
     skyBox_->Update();
-    gameCamera_->Update();
+    gameCamera_->Update(gameIntro_->GetCurrentPlaySpeedRate());
     combo_->Update();
 }
 void GameScene::PlayUpdate() {
 
-   
 
     // debugCamera
     debugCamera_->Update();
@@ -255,7 +254,7 @@ void GameScene::SpriteDraw() {
     lockOnController_->Draw();
     howToOperate_->Draw();
     combo_->Draw();
-    gameIntro_->SpriteDraw();
+    gameIntro_->Draw();
     cSprite_->Draw();
     screenSprite_->Draw();
 }

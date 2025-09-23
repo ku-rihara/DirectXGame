@@ -38,7 +38,7 @@ public:
     /// 押し込んでいるか
     bool PushKey(BYTE keyNumber) const;
     /// トリガーしているか
-    bool TrrigerKey(BYTE keyNumber) const;
+    bool TriggerKey(BYTE keyNumber) const;
     /// 　離しているか
     bool ReleaseKey(BYTE keyNumber) const;
     /// 　離した瞬間か

@@ -38,9 +38,9 @@ void GameIntroManager::Update() {
     ProcessInput();
 
     // 再生スピード
-    float playSpeed = Frame::DeltaTime() * currentPlaySpeed_;
+    float playSpeed = Frame::DeltaTime() * currentPlaySpeedRate_;
 
-    UpdateCurrentIntro();
+    UpdateCurrentIntro(playSpeed);
 }
 
 void GameIntroManager::Draw() {
@@ -53,7 +53,7 @@ void GameIntroManager::Draw() {
 
 void GameIntroManager::BindParam() {
 
-    globalParameter_->Bind(groupName_, "fastSpeed", &fastSpeed_);
+    globalParameter_->Bind(groupName_, "fastSpeed", &fastSpeedRate_);
 }
 
 void GameIntroManager::AdjustParam() {
@@ -61,7 +61,7 @@ void GameIntroManager::AdjustParam() {
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
-        ImGui::DragFloat("Fast Speed", &fastSpeed_, 0.01f,1.0f);
+        ImGui::DragFloat("Fast Speed", &fastSpeedRate_, 0.01f,1.0f);
 
         // セーブ、ロード
         globalParameter_->ParamSaveForImGui(groupName_);
@@ -91,10 +91,10 @@ bool GameIntroManager::IsAllIntroFinished() const {
 void GameIntroManager::ProcessInput() {
     Input* input = Input::GetInstance();
 
-    if (input->TrrigerKey(DIK_SPACE) || input->IsPressPad(0,XINPUT_GAMEPAD_A)) {
-        currentPlaySpeed_ = fastSpeed_;
+    if (input->TriggerKey(DIK_SPACE) || input->IsPressPad(0,XINPUT_GAMEPAD_A)) {
+        currentPlaySpeedRate_ = fastSpeedRate_;
     } else {
-        currentPlaySpeed_ = 1.0f;
+        currentPlaySpeedRate_ = 1.0f;
     }
 }
 
@@ -103,7 +103,7 @@ void GameIntroManager::UpdateCurrentIntro(const float& speed) {
         return;
     }
 
-    introSequences_[currentIndex_]->Update();
+    introSequences_[currentIndex_]->Update(speed);
 
     if (introSequences_[currentIndex_]->GetIsFinish()) {
         MoveToNextIntro();

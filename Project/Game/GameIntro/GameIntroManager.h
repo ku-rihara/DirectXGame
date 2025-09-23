@@ -26,7 +26,7 @@ public:
 
 private:
     void ProcessInput();
-    void UpdateCurrentIntro(const float&speed);
+    void UpdateCurrentIntro(const float& speed);
     void MoveToNextIntro();
 
 private:
@@ -38,8 +38,8 @@ private:
     bool isInitialized_   = false;
 
     // speed Param
-    float currentPlaySpeed_ = 1.0f; //<現在再生スピード
-    float fastSpeed_        = 3.0f; //<早送りスピード
+    float currentPlaySpeedRate_ = 1.0f; //<現在再生スピード
+    float fastSpeedRate_        = 3.0f; //<早送りスピード
 
     // Dependencies
     HowToOperate* pHowToOperate_                 = nullptr;
@@ -54,7 +54,7 @@ public:
     //-------------------------------------------------------------------------------------
     const int32_t& GetCurrentIntroIndex() const { return currentIndex_; }
     int32_t GetTotalIntroCount() const { return static_cast<int32_t>(introSequences_.size()); }
-    const float& GetSpeedMultiplier() const { return currentPlaySpeed_; }
+    const float& GetCurrentPlaySpeedRate() const { return currentPlaySpeedRate_; }
 
     //-------------------------------------------------------------------------------------
     // setter method
@@ -64,5 +64,5 @@ public:
     void SetPlayer(Player* player);
     void SetFireInjectors(FireInjectors* fireInjectors);
     void SetGameBackGroundObject(GameBackGroundObject* gameBackGroundObject);
-    void SetSpeedMultiplier(const float& multiplier) { currentPlaySpeed_ = multiplier; }
+    void SetSpeedMultiplier(const float& multiplier) { currentPlaySpeedRate_ = multiplier; }
 };

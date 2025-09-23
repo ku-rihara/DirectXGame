@@ -37,7 +37,7 @@ void BaseScene::ViewProjectionUpdate() {
 
 #ifdef _DEBUG
 	// デバッグカメラモード切り替え------------------------------
-	if (Input::GetInstance()->TrrigerKey(DIK_SPACE)) {
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		if (isDebugCameraActive_ == false) {
 			isDebugCameraActive_ = true;
 		}

@@ -32,7 +32,7 @@ void GameCamera::Init() {
 
 void GameCamera::Update(const float& cameraPlaySpeed) {
   
-    rendition_->Update();
+    rendition_->Update(cameraPlaySpeed);
     shakeOffsetPos_ = rendition_->GetShakeOffset();
 
     // カメラの基本移動処理
@@ -75,7 +75,7 @@ void GameCamera::MoveUpdate() {
     }
 
     // reset
-    if (input->TrrigerKey(DIK_R) || Input::IsTriggerPad(0, XINPUT_GAMEPAD_RIGHT_THUMB)) {
+    if (input->TriggerKey(DIK_R) || Input::IsTriggerPad(0, XINPUT_GAMEPAD_RIGHT_THUMB)) {
         Reset();
     }
 

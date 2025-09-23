@@ -13,7 +13,7 @@ public:
     ~CameraRendition() = default;
 
     void Init();
-    void Update(const float&cameraPlaySpeed);
+    void Update(const float& speedRate);
 
     // play呼び出し
     void AnimationPlay(const std::string& filename);
