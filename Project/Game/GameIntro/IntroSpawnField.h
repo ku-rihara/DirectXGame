@@ -51,9 +51,10 @@ private:
     float playerSpawnTime_;
     float finishWaitTime_;
 
-    // Objects
-    std::unique_ptr<MovieLine> movieLine_ = nullptr;
-
+   
     // State
     Step step_ = Step::START;
+
+public:
+    const Step& GetCurrentStep() const { return step_; }
 };

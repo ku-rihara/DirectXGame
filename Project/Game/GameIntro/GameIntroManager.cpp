@@ -2,8 +2,8 @@
 #include "Frame/Frame.h"
 #include "Input/Input.h"
 // step
+#include "IntroAppearPurpose.h"
 #include "IntroSpawnField.h"
-#include"IntroAppearPurpose.h"
 
 #include <algorithm>
 #include <imgui.h>
@@ -15,6 +15,10 @@ void GameIntroManager::Init() {
     globalParameter_->CreateGroup(groupName_, false);
     BindParam();
     globalParameter_->SyncParamForGroup(groupName_);
+
+    // MovieLine 初期化
+    movieLine_ = std::make_unique<MovieLine>();
+    movieLine_->Init();
 
     // 初期化
     introSequences_[SpawnField] = std::make_unique<IntroSpawnField>();
@@ -32,20 +36,71 @@ void GameIntroManager::Update() {
         return;
     }
 
+    // 早送り入力
     ProcessInput();
 
     // 再生スピード
     float playSpeed = Frame::DeltaTime() * currentPlaySpeedRate_;
 
+    // イントロ更新
     UpdateCurrentIntro(playSpeed);
+
+    // MovieLine更新
+    MovieLineUpdate();
+}
+
+void GameIntroManager::MovieLineUpdate() {
+
+    // 状態遷移の判定
+    CheckMovieLineStateTransition();
+
+    // 状態ごとの更新処理
+    switch (movieLineState_) {
+    case GameIntroManager::MovieLineState::NONE:
+        break;
+    case GameIntroManager::MovieLineState::APPEAR:
+        movieLine_->AppearUpdate();
+        break;
+    case GameIntroManager::MovieLineState::EXIT:
+        movieLine_->ExitUpdate();
+        break;
+    default:
+        break;
+    }
+}
+
+void GameIntroManager::CheckMovieLineStateTransition() {
+
+    if (currentIndex_ < static_cast<int>(introSequences_.size())) {
+
+        // movieLine状態遷移
+        if (currentIndex_ == SpawnField) {
+            auto* spawnField = dynamic_cast<IntroSpawnField*>(introSequences_[SpawnField].get());
+            if (spawnField) {
+                // ObjSpawn段階でMovieLineを表示開始
+                if (spawnField->GetCurrentStep() == IntroSpawnField::Step::OBJSPAWN && movieLineState_ == MovieLineState::NONE) {
+                    movieLineState_ = MovieLineState::APPEAR;
+                }
+                // PlayerSpawn段階でMovieLineを退場開始
+                else if (spawnField->GetCurrentStep() == IntroSpawnField::Step::FINISH && movieLineState_ == MovieLineState::APPEAR) {
+                    movieLineState_ = MovieLineState::EXIT;
+                }
+            }
+        }
+    }
 }
 
 void GameIntroManager::UIDraw() {
-    if (!isInitialized_ || currentIndex_ >= static_cast<int>(introSequences_.size())) {
-        return;
+
+    //
+    if (isInitialized_ && currentIndex_ <= static_cast<int>(introSequences_.size())) {
+        introSequences_[currentIndex_]->Draw();
     }
 
-    introSequences_[currentIndex_]->Draw();
+    // movieLine
+    if (movieLine_) {
+        movieLine_->Draw();
+    }
 }
 
 void GameIntroManager::BindParam() {
@@ -71,6 +126,9 @@ void GameIntroManager::AdjustParam() {
     for (auto& intro : introSequences_) {
         intro->AdjustParam();
     }
+
+    // movieLine
+    movieLine_->AdjustParam();
 
 #endif // _DEBUG
 }
@@ -106,7 +164,7 @@ void GameIntroManager::MoveToNextIntro() {
 }
 
 const bool& GameIntroManager::GetIsFinishStep(const IntroStep& step) {
-  
+
     return introSequences_[step]->GetIsFinish();
 }
 
@@ -139,4 +197,4 @@ void GameIntroManager::ClassisSet() {
         intro->SetFireInjectors(pFireInjectors_);
         intro->SetGameBackGroundObject(pGameBackGroundObject_);
     }
- }
+}

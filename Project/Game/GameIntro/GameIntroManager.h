@@ -1,18 +1,24 @@
 #pragma once
 #include "BaseGameIntro.h"
+#include "MovieLine.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
+#include <array>
 #include <cstdint>
 #include <memory>
 #include <vector>
-#include <array>
 
 class GameIntroManager {
 public:
-
     enum IntroStep {
         SpawnField,
         AppearPurpose,
         COUNT,
+    };
+
+    enum class MovieLineState {
+        NONE,
+        APPEAR,
+        EXIT
     };
 
 public:
@@ -23,11 +29,14 @@ public:
     void Update();
     void UIDraw();
 
+    // movieLine
+    void MovieLineUpdate();
+    void CheckMovieLineStateTransition();
+
     // param Edit
     void BindParam();
     void AdjustParam();
 
-  
     // State
     bool IsAllIntroFinished() const;
 
@@ -43,6 +52,10 @@ private:
     std::array<std::unique_ptr<BaseGameIntro>, static_cast<size_t>(IntroStep::COUNT)> introSequences_;
     int32_t currentIndex_ = 0;
     bool isInitialized_   = false;
+
+    // MovieLine管理
+    std::unique_ptr<MovieLine> movieLine_ = nullptr;
+    MovieLineState movieLineState_        = MovieLineState::NONE;
 
     // speed Param
     float currentPlaySpeedRate_ = 1.0f; //<現在再生スピード
@@ -63,6 +76,7 @@ public:
     int32_t GetTotalIntroCount() const { return static_cast<int32_t>(introSequences_.size()); }
     const float& GetCurrentPlaySpeedRate() const { return currentPlaySpeedRate_; }
     const bool& GetIsFinishStep(const IntroStep& step);
+    MovieLine* GetMovieLine() const { return movieLine_.get(); }
 
     //-------------------------------------------------------------------------------------
     // setter method

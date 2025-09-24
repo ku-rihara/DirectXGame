@@ -11,9 +11,7 @@ void IntroSpawnField::Init(const std::string& name) {
 
     BaseGameIntro::Init(name);
 
-    // MovieLine 初期化
-    movieLine_ = std::make_unique<MovieLine>();
-    movieLine_->Init();
+   
 
     // 変数初期化
     step_             = Step::START;
@@ -28,9 +26,7 @@ void IntroSpawnField::Update(const float& playSpeed) {
 }
 
 void IntroSpawnField::Draw() {
-    if (movieLine_) {
-        movieLine_->Draw();
-    }
+    
 }
 
 void IntroSpawnField::Start() {
@@ -45,9 +41,7 @@ void IntroSpawnField::Wait() {
 }
 
 void IntroSpawnField::ObjSpawn() {
-    if (movieLine_) {
-        movieLine_->AppearUpdate();
-    }
+   
     if (pGameBackGroundObject_) {
         pGameBackGroundObject_->Update(playSpeed_);
     }
