@@ -4,23 +4,30 @@
 #include <cstdint>
 #include <memory>
 #include <vector>
+#include <array>
 
 class GameIntroManager {
+public:
+
+    enum IntroStep {
+        SpawnField,
+        AppearPurpose,
+        COUNT,
+    };
+
 public:
     GameIntroManager()  = default;
     ~GameIntroManager() = default;
 
     void Init();
     void Update();
-    void Draw();
+    void UIDraw();
 
     // param Edit
     void BindParam();
     void AdjustParam();
 
-    // Add intro sequences
-    void AddIntroSequence(std::unique_ptr<BaseGameIntro> intro);
-
+  
     // State
     bool IsAllIntroFinished() const;
 
@@ -33,7 +40,7 @@ private:
     GlobalParameter* globalParameter_ = nullptr;
     const std::string groupName_      = "GameIntroManager";
 
-    std::vector<std::unique_ptr<BaseGameIntro>> introSequences_;
+    std::array<std::unique_ptr<BaseGameIntro>, static_cast<size_t>(IntroStep::COUNT)> introSequences_;
     int32_t currentIndex_ = 0;
     bool isInitialized_   = false;
 
@@ -55,6 +62,7 @@ public:
     const int32_t& GetCurrentIntroIndex() const { return currentIndex_; }
     int32_t GetTotalIntroCount() const { return static_cast<int32_t>(introSequences_.size()); }
     const float& GetCurrentPlaySpeedRate() const { return currentPlaySpeedRate_; }
+    const bool& GetIsFinishStep(const IntroStep& step);
 
     //-------------------------------------------------------------------------------------
     // setter method
@@ -65,4 +73,5 @@ public:
     void SetFireInjectors(FireInjectors* fireInjectors);
     void SetGameBackGroundObject(GameBackGroundObject* gameBackGroundObject);
     void SetSpeedMultiplier(const float& multiplier) { currentPlaySpeedRate_ = multiplier; }
+    void ClassisSet();
 };

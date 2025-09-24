@@ -81,7 +81,7 @@ private:
     std::unique_ptr<GameBackGroundObject> gameBackGroundObject_ = nullptr;
     std::unique_ptr<ComboScene> comboScene_                     = nullptr;
     std::unique_ptr<AttackEffect> attackEffect_                 = nullptr;
-    std::unique_ptr<GameIntroManager> gameIntro_                = nullptr;
+    std::unique_ptr<GameIntroManager> gameIntroManager_         = nullptr;
 
     GameState gameState_ = GameState::INTRO;
 

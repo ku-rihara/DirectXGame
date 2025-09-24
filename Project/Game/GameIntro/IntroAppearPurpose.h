@@ -4,20 +4,20 @@
 #include "MovieLine.h"
 #include <memory>
 
-class IntroSpawnField : public BaseGameIntro {
+class IntroAppearPurpose : public BaseGameIntro {
 public:
     enum class Step {
-        START,
-        WAIT,
-        OBJSPAWN,
-        PLAYERSPAWN,
-        PURPOSWAIT,
+        APPEARWAIT,
+        APPEAR,
+        DISAPPEARWAIT,
+        DISAPPEAR,
+        FINISHWAIT,
         FINISH,
     };
 
 public:
-    IntroSpawnField()           = default;
-    ~IntroSpawnField() override = default;
+    IntroAppearPurpose()           = default;
+    ~IntroAppearPurpose() override = default;
 
     // Init,Update,Draw
     void Init(const std::string& name) override;
@@ -31,10 +31,10 @@ public:
 
 private:
     // Step function
-    void Start();
-    void Wait();
-    void ObjSpawn();
-    void PlayerSpawn();
+    void APPEARWAIT();
+    void APPEAR();
+    void DISAPPEARWAIT();
+    void DISAPPEAR();
     void FinishWait();
     void Finish();
 
@@ -42,18 +42,15 @@ private:
     bool ProcessStep(const float& limitTime, const Step& nextStep, const bool& enableEnemySpawn = false);
 
 private:
-    static void (IntroSpawnField::* spFuncTable_[])();
+    static void (IntroAppearPurpose::* spFuncTable_[])();
 
 private:
     // Parameters
-    float waitTime_;
-    float objSpawnTime_;
-    float playerSpawnTime_;
-    float finishWaitTime_;
+    float appearWaitTime_;
 
     // Objects
-    std::unique_ptr<MovieLine> movieLine_ = nullptr;
-
+    std::unique_ptr<Sprite> sprite_       = nullptr;
+   
     // State
-    Step step_ = Step::START;
+    Step step_ = Step::APPEARWAIT;
 };

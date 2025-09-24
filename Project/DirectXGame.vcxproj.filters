@@ -1000,6 +1000,9 @@
     <ClCompile Include="Game\GameIntro\BaseGameIntro.cpp">
       <Filter>Game\GameIntro</Filter>
     </ClCompile>
+    <ClCompile Include="Game\GameIntro\IntroAppearPurpose.cpp">
+      <Filter>Game\GameIntro</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1663,6 +1666,9 @@
       <Filter>Game\GameIntro</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameIntro\BaseGameIntro.h">
+      <Filter>Game\GameIntro</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameIntro\IntroAppearPurpose.h">
       <Filter>Game\GameIntro</Filter>
     </ClInclude>
   </ItemGroup>

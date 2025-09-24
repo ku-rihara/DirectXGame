@@ -28,7 +28,7 @@ protected:
     GlobalParameter* globalParameter_ = nullptr;
     std::string groupName_;
 
-    // Dependencies
+    // other class
     FireInjectors* pFireInjectors_               = nullptr;
     GameCamera* pGameCamera_                     = nullptr;
     Player* pPlayer_                             = nullptr;
@@ -42,11 +42,15 @@ protected:
     float playSpeed_;
 
 public:
+    // -------------------------------------------------------------------------------
     // Getters
-    bool GetIsFinish() const { return isFinish_; }
-    bool GetIsAbleEnemySpawn() const { return isAbleEnemySpawn_; }
+    // -------------------------------------------------------------------------------
+    const bool& GetIsFinish() const { return isFinish_; }
+    const bool& GetIsAbleEnemySpawn() const { return isAbleEnemySpawn_; }
 
-    // Setters for dependencies
+    // -------------------------------------------------------------------------------
+    // Setters
+    // -------------------------------------------------------------------------------
     void SetHowToOperate(HowToOperate* howToOperate) { pHowToOperate_ = howToOperate; }
     void SetGameCamera(GameCamera* gameCamera) { pGameCamera_ = gameCamera; }
     void SetPlayer(Player* player) { pPlayer_ = player; }

@@ -164,6 +164,7 @@
     <ClCompile Include="Game\GameCamera\CameraRendition.cpp" />
     <ClCompile Include="Game\GameCamera\GameCamera.cpp" />
     <ClCompile Include="Game\GameIntro\BaseGameIntro.cpp" />
+    <ClCompile Include="Game\GameIntro\IntroAppearPurpose.cpp" />
     <ClCompile Include="Game\GameIntro\IntroSpawnField.cpp" />
     <ClCompile Include="Game\GameIntro\GameIntroManager.cpp" />
     <ClCompile Include="Game\GameIntro\MovieLine.cpp" />
@@ -386,6 +387,7 @@
     <ClInclude Include="Game\GameCamera\CameraRendition.h" />
     <ClInclude Include="Game\GameCamera\GameCamera.h" />
     <ClInclude Include="Game\GameIntro\BaseGameIntro.h" />
+    <ClInclude Include="Game\GameIntro\IntroAppearPurpose.h" />
     <ClInclude Include="Game\GameIntro\IntroSpawnField.h" />
     <ClInclude Include="Game\GameIntro\GameIntroManager.h" />
     <ClInclude Include="Game\GameIntro\MovieLine.h" />

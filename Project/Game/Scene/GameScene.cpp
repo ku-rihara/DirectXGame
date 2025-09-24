@@ -32,7 +32,7 @@ void GameScene::Init() {
     gameBackGroundObject_ = std::make_unique<GameBackGroundObject>();
     comboScene_           = std::make_unique<ComboScene>();
     attackEffect_         = std::make_unique<AttackEffect>();
-    gameIntro_            = std::make_unique<GameIntro>();
+    gameIntroManager_     = std::make_unique<GameIntroManager>();
 
     ///=======================================================================================
     /// 初期化
@@ -42,7 +42,7 @@ void GameScene::Init() {
     lockOnController_->Init();
     skyBox_->Init();
     combo_->Init();
-    gameIntro_->Init();
+    gameIntroManager_->Init();
     enemyManager_->Init();
     enemySpawner_->Init("enemySpawner.json");
     fireInjectors_->Init();
@@ -57,7 +57,7 @@ void GameScene::Init() {
     ///---------------------------------------------------------------------------------------
     /// セット
     ///---------------------------------------------------------------------------------------
-   
+
     gameCamera_->SetTarget(&player_->GetTransform());
     enemyManager_->SetPlayer(player_.get());
     enemyManager_->SetCombo(combo_.get());
@@ -73,11 +73,12 @@ void GameScene::Init() {
     fireInjectors_->SetCombo(combo_.get());
     lockOnController_->SetEnemyManager(enemyManager_.get());
     // gameIntro
-    gameIntro_->SetFireInjectors(fireInjectors_.get());
-    gameIntro_->SetGameCamera(gameCamera_.get());
-    gameIntro_->SetPlayer(player_.get());
-    gameIntro_->SetGameBackGroundObject(gameBackGroundObject_.get());
-    gameIntro_->SetHowToOperate(howToOperate_.get());
+    gameIntroManager_->SetFireInjectors(fireInjectors_.get());
+    gameIntroManager_->SetGameCamera(gameCamera_.get());
+    gameIntroManager_->SetPlayer(player_.get());
+    gameIntroManager_->SetGameBackGroundObject(gameBackGroundObject_.get());
+    gameIntroManager_->SetHowToOperate(howToOperate_.get());
+    gameIntroManager_->ClassisSet();
 
     // comboScene
     comboScene_->SetPlayer(player_.get());
@@ -118,7 +119,7 @@ void GameScene::Update() {
 
         IntroUpdate();
 
-        if (gameIntro_->GetIsFinish()) {
+        if (gameIntroManager_->GetIsFinishStep(GameIntroManager::AppearPurpose)) {
             gameState_ = GameScene::GameState::PLAY;
         }
 
@@ -172,9 +173,9 @@ void GameScene::IntroUpdate() {
     }
 
     // gameIntro
-    gameIntro_->Update();
+    gameIntroManager_->Update();
     howToOperate_->Update();
-    if (gameIntro_->GetIsAbleEnemySpawn()) {
+    if (gameIntroManager_->GetIsFinishStep(GameIntroManager::SpawnField)) {
         enemySpawner_->Update(Frame::DeltaTimeRate());
         enemyManager_->Update();
     }
@@ -187,18 +188,17 @@ void GameScene::IntroUpdate() {
 
     // obj
     skyBox_->Update();
-    gameCamera_->Update(gameIntro_->GetCurrentPlaySpeedRate());
+    gameCamera_->Update(gameIntroManager_->GetCurrentPlaySpeedRate());
     combo_->Update();
 }
 void GameScene::PlayUpdate() {
 
-
     // debugCamera
     debugCamera_->Update();
-    gameIntro_->EndUpdate();
+   /* gameIntroManager_->EndUpdate();*/
 
     // Editor
- 
+
     attackEffect_->Update();
     Debug();
 
@@ -254,7 +254,7 @@ void GameScene::SpriteDraw() {
     lockOnController_->Draw();
     howToOperate_->Draw();
     combo_->Draw();
-    gameIntro_->Draw();
+    gameIntroManager_->UIDraw();
     cSprite_->Draw();
     screenSprite_->Draw();
 }
@@ -281,12 +281,12 @@ void GameScene::Debug() {
     enemyManager_->AdjustParam();
     combo_->AdjustParam();
     fireInjectors_->AdjustParam();
-    gameIntro_->AdjustParam();
+    gameIntroManager_->AdjustParam();
     ShadowMap::GetInstance()->DebugImGui();
     ImGui::End();
 
     ImGui::Begin("Rendition");
- 
+
     attackEffect_->EditorUpdate();
     ImGui::End();
 #endif

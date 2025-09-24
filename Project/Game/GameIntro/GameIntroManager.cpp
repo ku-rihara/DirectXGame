@@ -1,7 +1,10 @@
 #include "GameIntroManager.h"
 #include "Frame/Frame.h"
 #include "Input/Input.h"
+// step
 #include "IntroSpawnField.h"
+#include"IntroAppearPurpose.h"
+
 #include <algorithm>
 #include <imgui.h>
 
@@ -14,20 +17,14 @@ void GameIntroManager::Init() {
     globalParameter_->SyncParamForGroup(groupName_);
 
     // 初期化
-    introSequences_[0] = std::make_unique<IntroSpawnField>();
-    introSequences_[0]->Init("IntroSpawnField");
+    introSequences_[SpawnField] = std::make_unique<IntroSpawnField>();
+    introSequences_[SpawnField]->Init("IntroSpawnField");
 
-    //  クラスセット
-    for (auto& intro : introSequences_) {
-        intro->SetHowToOperate(pHowToOperate_);
-        intro->SetGameCamera(pGameCamera_);
-        intro->SetPlayer(pPlayer_);
-        intro->SetFireInjectors(pFireInjectors_);
-        intro->SetGameBackGroundObject(pGameBackGroundObject_);
-    }
+    introSequences_[AppearPurpose] = std::make_unique<IntroAppearPurpose>();
+    introSequences_[AppearPurpose]->Init("IntroAppearPurpose");
 
-    currentIndex_     = 0;
-    isInitialized_    = true;
+    currentIndex_  = 0;
+    isInitialized_ = true;
 }
 
 void GameIntroManager::Update() {
@@ -43,7 +40,7 @@ void GameIntroManager::Update() {
     UpdateCurrentIntro(playSpeed);
 }
 
-void GameIntroManager::Draw() {
+void GameIntroManager::UIDraw() {
     if (!isInitialized_ || currentIndex_ >= static_cast<int>(introSequences_.size())) {
         return;
     }
@@ -61,7 +58,7 @@ void GameIntroManager::AdjustParam() {
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
-        ImGui::DragFloat("Fast Speed", &fastSpeedRate_, 0.01f,1.0f);
+        ImGui::DragFloat("Fast Speed", &fastSpeedRate_, 0.01f, 1.0f);
 
         // セーブ、ロード
         globalParameter_->ParamSaveForImGui(groupName_);
@@ -78,12 +75,6 @@ void GameIntroManager::AdjustParam() {
 #endif // _DEBUG
 }
 
-void GameIntroManager::AddIntroSequence(std::unique_ptr<BaseGameIntro> intro) {
-    if (intro) {
-        introSequences_.push_back(std::move(intro));
-    }
-}
-
 bool GameIntroManager::IsAllIntroFinished() const {
     return currentIndex_ >= static_cast<int>(introSequences_.size());
 }
@@ -91,7 +82,7 @@ bool GameIntroManager::IsAllIntroFinished() const {
 void GameIntroManager::ProcessInput() {
     Input* input = Input::GetInstance();
 
-    if (input->TriggerKey(DIK_SPACE) || input->IsPressPad(0,XINPUT_GAMEPAD_A)) {
+    if (input->TriggerKey(DIK_F) || input->IsPressPad(0, XINPUT_GAMEPAD_A)) {
         currentPlaySpeedRate_ = fastSpeedRate_;
     } else {
         currentPlaySpeedRate_ = 1.0f;
@@ -114,6 +105,11 @@ void GameIntroManager::MoveToNextIntro() {
     currentIndex_++;
 }
 
+const bool& GameIntroManager::GetIsFinishStep(const IntroStep& step) {
+  
+    return introSequences_[step]->GetIsFinish();
+}
+
 void GameIntroManager::SetHowToOperate(HowToOperate* howToOperate) {
     pHowToOperate_ = howToOperate;
 }
@@ -133,3 +129,14 @@ void GameIntroManager::SetFireInjectors(FireInjectors* fireInjectors) {
 void GameIntroManager::SetGameBackGroundObject(GameBackGroundObject* gameBackGroundObject) {
     pGameBackGroundObject_ = gameBackGroundObject;
 }
+
+void GameIntroManager::ClassisSet() {
+    //  クラスセット
+    for (auto& intro : introSequences_) {
+        intro->SetHowToOperate(pHowToOperate_);
+        intro->SetGameCamera(pGameCamera_);
+        intro->SetPlayer(pPlayer_);
+        intro->SetFireInjectors(pFireInjectors_);
+        intro->SetGameBackGroundObject(pGameBackGroundObject_);
+    }
+ }

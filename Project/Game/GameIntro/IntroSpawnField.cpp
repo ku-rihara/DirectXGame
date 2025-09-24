@@ -16,7 +16,7 @@ void IntroSpawnField::Init(const std::string& name) {
     movieLine_->Init();
 
     // 変数初期化
-    step_             = IntroStep::START;
+    step_             = Step::START;
     isFinish_         = false;
     isAbleEnemySpawn_ = false;
     currentTime_      = 0.0f;
@@ -37,11 +37,11 @@ void IntroSpawnField::Start() {
     if (pGameCamera_) {
         pGameCamera_->PlayAnimation("IntroOverLook");
     }
-    step_ = IntroStep::WAIT;
+    step_ = Step::WAIT;
 }
 
 void IntroSpawnField::Wait() {
-    ProcessStep(waitTime_, IntroStep::OBJSPAWN);
+    ProcessStep(waitTime_, Step::OBJSPAWN);
 }
 
 void IntroSpawnField::ObjSpawn() {
@@ -49,44 +49,40 @@ void IntroSpawnField::ObjSpawn() {
         movieLine_->AppearUpdate();
     }
     if (pGameBackGroundObject_) {
-        pGameBackGroundObject_->Update();
+        pGameBackGroundObject_->Update(playSpeed_);
     }
     if (pFireInjectors_) {
         pFireInjectors_->Spawn();
     }
 
-    ProcessStep(objSpawnTime_, IntroStep::PLAYERSPAWN);
+    ProcessStep(objSpawnTime_, Step::PLAYERSPAWN);
 }
 
 void IntroSpawnField::PlayerSpawn() {
     if (pPlayer_) {
         pPlayer_->GameIntroUpdate();
     }
-    ProcessStep(playerSpawnTime_, IntroStep::PURPOSWAIT, true);
+    ProcessStep(playerSpawnTime_, Step::PURPOSWAIT, true);
 }
 
-void IntroSpawnField::PurposeWait() {
+void IntroSpawnField::FinishWait() {
     if (pHowToOperate_) {
         pHowToOperate_->ScalingEasing();
     }
     if (pPlayer_) {
         pPlayer_->GameIntroUpdate();
     }
-    ProcessStep(purposeWaitTime_, IntroStep::PURPOSEAPPEAR);
+    ProcessStep(finishWaitTime_, Step::FINISH);
 }
 
-void IntroSpawnField::PurposeAppear() {
+void IntroSpawnField::Finish() {
     if (pPlayer_) {
         pPlayer_->GameIntroUpdate();
     }
     isFinish_ = true;
 }
 
-void IntroSpawnField::Finish() {
-    // Cleanup or final actions
-}
-
-bool IntroSpawnField::ProcessStep(float limitTime, IntroStep nextStep, bool enableEnemySpawn) {
+bool IntroSpawnField::ProcessStep(const float& limitTime, const Step& nextStep, const bool& enableEnemySpawn) {
     currentTime_ += playSpeed_;
 
     if (currentTime_ >= limitTime) {
@@ -105,7 +101,7 @@ void IntroSpawnField::BindParams() {
     globalParameter_->Bind(groupName_, "waitTime", &waitTime_);
     globalParameter_->Bind(groupName_, "objSpawnTime", &objSpawnTime_);
     globalParameter_->Bind(groupName_, "playerSpawnTime", &playerSpawnTime_);
-    globalParameter_->Bind(groupName_, "purposeWaitTime", &purposeWaitTime_);
+    globalParameter_->Bind(groupName_, "purposeWaitTime", &finishWaitTime_);
 }
 
 void IntroSpawnField::AdjustParam() {
@@ -116,7 +112,7 @@ void IntroSpawnField::AdjustUniqueParam() {
     ImGui::DragFloat("Wait Time", &waitTime_, 0.01f, 0.0f);
     ImGui::DragFloat("Obj Spawn Time", &objSpawnTime_, 0.01f, 0.0f);
     ImGui::DragFloat("Player Spawn Time", &playerSpawnTime_, 0.01f, 0.0f);
-    ImGui::DragFloat("Purpose Wait Time", &purposeWaitTime_, 0.01f, 0.0f);
+    ImGui::DragFloat("Finish Wait Time", &finishWaitTime_, 0.01f, 0.0f);
  }
 
 void (IntroSpawnField::* IntroSpawnField::spFuncTable_[])() = {
@@ -124,7 +120,6 @@ void (IntroSpawnField::* IntroSpawnField::spFuncTable_[])() = {
     &IntroSpawnField::Wait,
     &IntroSpawnField::ObjSpawn,
     &IntroSpawnField::PlayerSpawn,
-    &IntroSpawnField::PurposeWait,
-    &IntroSpawnField::PurposeAppear,
+    &IntroSpawnField::FinishWait,
     &IntroSpawnField::Finish,
 };
