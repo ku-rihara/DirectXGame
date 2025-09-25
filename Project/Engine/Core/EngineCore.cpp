@@ -11,17 +11,17 @@
 #include "base/TextureManager.h"
 #include "Dx/DirectXCommon.h"
 #include "Lighrt/Light.h"
-#include "Pipeline/Line3DPipeline.h"
-#include "Pipeline/Object3DPiprline.h"
-#include "Pipeline/SkinningObject3DPipeline.h"
-#include "Pipeline/SpritePipeline.h"
+#include "Pipeline/Line3D/Line3DPipeline.h"
+#include "Pipeline/Object3D/Object3DPiprline.h"
+#include "Pipeline/Skinning/SkinningObject3DPipeline.h"
+#include "Pipeline/Sprite/SpritePipeline.h"
 #include "PostEffect/PostEffectRenderer.h"
 #include"ShadowMap/ShadowMap.h"
 /// audio,input
 #include "audio/Audio.h"
 #include "input/Input.h"
 /// utility
-#include "Pipeline/ParticlePipeline.h"
+#include "Pipeline/Particle/ParticlePipeline.h"
 #include "utility/ParticleEditor/ParticleManager.h"
 /// imGui,function
 #include "function/Convert.h"

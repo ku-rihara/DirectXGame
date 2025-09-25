@@ -28,7 +28,7 @@ struct Well
 
 StructuredBuffer<Well> gMatrixPalette : register(t0);
 StructuredBuffer<Vertex> gInputVertices : register(t1);
-StructuredBuffer<VertexInfluence>gInfluences:register(t2);
+StructuredBuffer<VertexInfluence> gInfluences : register(t2);
 
 RWStructuredBuffer<Vertex> gOutputVertices : register(u0);
 ConstantBuffer<SkinningInformation> gSkinningInformation : register(b0);
@@ -57,7 +57,7 @@ Vertex Skinning(Vertex vertex, VertexInfluence input)
 
 
 [numthreads(1024, 1, 1)]
-void main( uint3 DTid : SV_DispatchThreadID )
+void main(uint3 DTid : SV_DispatchThreadID)
 {
     int vertexIndex = DTid.x;
     if (vertexIndex < gSkinningInformation.numVertices)
@@ -66,7 +66,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
         VertexInfluence influenceInput = gInfluences[vertexIndex];
         
         //Skining処理
-        Vertex skinned = Skinning(vertexInput, influenceInput); 
+        Vertex skinned = Skinning(vertexInput, influenceInput);
         
         //書き込む
         gOutputVertices[vertexIndex] = skinned;

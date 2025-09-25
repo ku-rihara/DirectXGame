@@ -1,6 +1,6 @@
 #include "Object3DRegistry.h"
 #include "3d/Object3d.h"
-#include "Pipeline/Object3DPiprline.h"
+#include "Pipeline/Object3D/Object3DPiprline.h"
 #include <imgui.h>
 #include <cstdlib>
 

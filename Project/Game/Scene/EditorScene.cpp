@@ -6,7 +6,7 @@
 #include "base/TextureManager.h"
 // class
 #include "3d/Object3DRegistry.h"
-#include "Pipeline/Object3DPiprline.h"
+#include "Pipeline/Object3D/Object3DPiprline.h"
 #include "utility/ParticleEditor/ParticleManager.h"
 
 // math

@@ -117,7 +117,7 @@ void SkinningObject3DPipeline::CreateGraphicsPipeline() {
     depthStencilDesc_.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
     // Shaderをコンパイルする
-    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/SkinningObject3d.VS.hlsl", L"vs_6_0");
+    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Skinning/SkinningObject3d.VS.hlsl", L"vs_6_0");
     assert(vertexShaderBlob_ != nullptr);
 
     pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Object3d.PS.hlsl", L"ps_6_0");

@@ -10,7 +10,7 @@
 #include "Scene/Manager/SceneManager.h"
 
 #include "Animation/AnimationRegistry.h"
-#include "Pipeline/Object3DPiprline.h"
+#include "Pipeline/Object3D/Object3DPiprline.h"
 #include "ShadowMap/ShadowMap.h"
 
 #include <imgui.h>
