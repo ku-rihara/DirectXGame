@@ -1,7 +1,7 @@
 #include "ParticleManager.h"
 #include "3d/ModelManager.h"
 #include "base/TextureManager.h"
-#include "Pipeline/ParticlePipeline.h"
+#include "Pipeline/Particle/ParticlePipeline.h"
 #include"Animation/ModelAnimation.h"
 // frame
 #include "Frame/Frame.h"

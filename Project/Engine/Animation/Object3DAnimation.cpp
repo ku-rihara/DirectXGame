@@ -3,8 +3,8 @@
 #include "AnimationRegistry.h"
 #include "base/SrvManager.h"
 #include "MathFunction.h"
-#include "Pipeline/Object3DPiprline.h"
-#include "Pipeline/SkinningObject3DPipeline.h"
+#include "Pipeline/Object3D/Object3DPiprline.h"
+#include "Pipeline/Skinning/SkinningObject3DPipeline.h"
 #include <algorithm>
 #include <cassert>
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "3d/ViewProjection.h"
-#include "Pipeline/ParticlePipeline.h"
+#include "Pipeline/Particle/ParticlePipeline.h"
 #include "utility/RailEditor/RailManager.h"
 
 /// primitive

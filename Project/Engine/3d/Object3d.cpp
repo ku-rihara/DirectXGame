@@ -1,7 +1,7 @@
 #include "Object3d.h"
 #include "ModelManager.h"
 #include "Object3DRegistry.h"
-#include "Pipeline/Object3DPiprline.h"
+#include "Pipeline/Object3D/Object3DPiprline.h"
 
 Object3d::~Object3d() {
     if (Object3DRegistry::GetInstance()) {
