@@ -241,6 +241,9 @@
     <Filter Include="MyEngine\.cpp\utility\CameraEditor">
       <UniqueIdentifier>{7ff1fcef-200f-4f44-9d0b-2cc5e237686d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソースファイル\Skinning">
+      <UniqueIdentifier>{15836091-162c-440d-9b7f-062994c31720}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1113,9 +1116,6 @@
     <None Include="resources\Shader\Line3D.hlsli">
       <Filter>リソースファイル</Filter>
     </None>
-    <None Include="resources\Shader\SkinningObject3d.hlsli">
-      <Filter>リソースファイル</Filter>
-    </None>
     <None Include="resources\Shader\Lighting\AreaLight.hlsli">
       <Filter>リソースファイル\Lighting</Filter>
     </None>
@@ -1139,6 +1139,9 @@
     </None>
     <None Include="resources\Shader\PostEffect\Fullscreen.hlsli">
       <Filter>リソースファイル\PostEffect</Filter>
+    </None>
+    <None Include="resources\Shader\Skinning\SkinningObject3d.hlsli">
+      <Filter>リソースファイル\Skinning</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1170,9 +1173,6 @@
       <Filter>リソースファイル</Filter>
     </FxCompile>
     <FxCompile Include="resources\Shader\Line3D.VS.hlsl">
-      <Filter>リソースファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\SkinningObject3d.VS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
     <FxCompile Include="resources\Shader\PostEffect\Random.PS.hlsl">
@@ -1213,6 +1213,12 @@
     </FxCompile>
     <FxCompile Include="resources\Shader\ShadowMap\ShadowMap.VS.hlsl">
       <Filter>リソースファイル\ShadowMap</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Skinning\Skinning.CS.hlsl">
+      <Filter>リソースファイル\Skinning</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Skinning\SkinningObject3d.VS.hlsl">
+      <Filter>リソースファイル\Skinning</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
