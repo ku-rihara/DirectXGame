@@ -1,6 +1,7 @@
 #pragma once
 #include "2d/Sprite.h"
 #include "BaseGameIntro.h"
+#include "Easing/Easing.h"
 #include "MovieLine.h"
 #include <memory>
 
@@ -13,6 +14,13 @@ public:
         DISAPPEAR,
         FINISHWAIT,
         FINISH,
+    };
+
+    struct SpriteVariable {
+        float currentRotateX;
+        Vector2 currentScale;
+        std::unique_ptr<Easing<float>> rotateEasing;
+        std::unique_ptr<Easing<Vector2>> scaleEasing;
     };
 
 public:
@@ -38,6 +46,8 @@ private:
     void FinishWait();
     void Finish();
 
+    void EasingInit();
+
     // Step更新
     bool ProcessStep(const float& limitTime, const Step& nextStep, const bool& enableEnemySpawn = false);
 
@@ -49,8 +59,9 @@ private:
     float appearWaitTime_;
 
     // Objects
-    std::unique_ptr<Sprite> sprite_       = nullptr;
-   
+    std::unique_ptr<Sprite> sprite_ = nullptr;
+    SpriteVariable spriteVariable_;
+
     // State
     Step step_ = Step::APPEARWAIT;
 };

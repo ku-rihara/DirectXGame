@@ -11,8 +11,8 @@ void IntroAppearPurpose::Init(const std::string& name) {
 
     BaseGameIntro::Init(name);
 
-    // MovieLine 初期化
-  
+    // Easing 初期化
+    EasingInit();
 
     // 変数初期化
     step_             = Step::APPEARWAIT;
@@ -81,3 +81,8 @@ void (IntroAppearPurpose::* IntroAppearPurpose::spFuncTable_[])() = {
     &IntroAppearPurpose::FinishWait,
     &IntroAppearPurpose::Finish,
 };
+
+void IntroAppearPurpose::EasingInit() {
+    spriteVariable_.rotateEasing = std::make_unique<Easing<float>>();
+    spriteVariable_.scaleEasing = std::make_unique<Easing<Vector2>>();
+ }
