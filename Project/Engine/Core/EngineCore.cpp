@@ -11,17 +11,13 @@
 #include "base/TextureManager.h"
 #include "Dx/DirectXCommon.h"
 #include "Lighrt/Light.h"
-#include "Pipeline/Line3DPipeline.h"
-#include "Pipeline/Object3DPiprline.h"
-#include "Pipeline/SkinningObject3DPipeline.h"
-#include "Pipeline/SpritePipeline.h"
+#include"Pipeline/PipelineManager.h"
 #include "PostEffect/PostEffectRenderer.h"
 #include"ShadowMap/ShadowMap.h"
 /// audio,input
 #include "audio/Audio.h"
 #include "input/Input.h"
 /// utility
-#include "Pipeline/ParticlePipeline.h"
 #include "utility/ParticleEditor/ParticleManager.h"
 /// imGui,function
 #include "function/Convert.h"
@@ -61,12 +57,8 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     textureManager_ = TextureManager::GetInstance();
     textureManager_->Init(directXCommon_, srvManager_);
 
-    // Object3DPipeline
-    Object3DPiprline_ = Object3DPiprline::GetInstance();
-    Object3DPiprline_->Init(directXCommon_);
-
-    skinningObject3DPipeline_ = SkinningObject3DPipeline::GetInstance();
-    skinningObject3DPipeline_->Init(directXCommon_);
+    pipelineManager_ = PipelineManager::GetInstance();
+    pipelineManager_->Init(directXCommon_);
 
     // skybox
     skyBoxRenderer_ = SkyBoxRenderer::GetInstance();
@@ -80,16 +72,7 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     PostEffectRenderer_->Init(directXCommon_);
 
     // ParticlePipeline
-    ParticlePipeline_ = ParticlePipeline::GetInstance();
-    ParticlePipeline_->Init(directXCommon_);
     ParticleManager::GetInstance()->Init(srvManager_);
-
-    // SpritePipeline
-    SpritePipeline_ = SpritePipeline::GetInstance();
-    SpritePipeline_->Init(directXCommon_);
-
-    Line3DPipeline_ = Line3DPipeline::GetInstance();
-    Line3DPipeline_->Init(directXCommon_);
 
     // ModelManager
     modelManager_ = ModelManager::GetInstance();

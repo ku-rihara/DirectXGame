@@ -4,9 +4,9 @@
 
 // object
 #include "BaseObject/BaseObject.h"
+#include "CollisionBox/PlayerAttackController.h"
 #include "Effect/PlayerEffects.h"
 #include "Parameter/PlayerParameter.h"
-#include"CollisionBox/PlayerAttackController.h"
 
 /// Parts
 #include "Parts/PlayerHandLeft.h"
@@ -29,7 +29,7 @@
 #include <string>
 
 class SpecialAttackGauge;
-class LockOn;
+class LockOnController;
 class GameCamera;
 class Combo;
 class AttackEffect;
@@ -54,8 +54,8 @@ public:
     void GameSceneInit();
     void TitleUpdate();
     void GameIntroUpdate();
-    void SetShadowFrag(const bool&isShadow);
-  
+    void SetShadowFrag(const bool& isShadow);
+
     // 移動
     void Move(const float& speed); // 移動
     bool CheckIsMoving(); // 動かしてるかフラグ
@@ -92,7 +92,6 @@ public:
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
     Vector3 GetCollisionPos() const override;
 
-  
     // sound
     void SoundPunch();
     void SoundStrongPunch();
@@ -103,10 +102,10 @@ private: // class
     const std::string groupName_ = "Player";
 
     /// other class
-    LockOn* pLockOn_         = nullptr;
-    GameCamera* pGameCamera_ = nullptr;
-    Combo* pCombo_           = nullptr;
-    AttackEffect* pHitStop_       = nullptr;
+    LockOnController* pLockOn_ = nullptr;
+    GameCamera* pGameCamera_   = nullptr;
+    Combo* pCombo_             = nullptr;
+    AttackEffect* pHitStop_    = nullptr;
 
     const ViewProjection* viewProjection_ = nullptr;
 
@@ -115,7 +114,7 @@ private: // class
     std::unique_ptr<PlayerEffects> effects_;
     std::unique_ptr<PlayerParameter> parameters_;
     std::unique_ptr<PlayerAttackController> attackController_;
-    
+
     /// behavior
     std::unique_ptr<BasePlayerBehavior> behavior_            = nullptr;
     std::unique_ptr<BaseComboAattackBehavior> comboBehavior_ = nullptr;
@@ -150,7 +149,7 @@ public:
     BasePlayerBehavior* GetBehavior() const { return behavior_.get(); }
     BaseTitleBehavior* GetTitleBehavior() const { return titleBehavior_.get(); }
     PlayerEffects* GetEffects() const { return effects_.get(); }
-    LockOn* GetLockOn() const { return pLockOn_; }
+    LockOnController* GetLockOn() const { return pLockOn_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
     AttackEffect* GetAttackEffect() const { return pHitStop_; }
     PlayerParameter* GetParameter() const { return parameters_.get(); }
@@ -161,7 +160,7 @@ public:
     /// setter
     /// =========================================================================================
     void SetViewProjection(const ViewProjection* viewProjection) { viewProjection_ = viewProjection; }
-    void SetLockOn(LockOn* lockon);
+    void SetLockOn(LockOnController* lockon);
     void SetGameCamera(GameCamera* gamecamera);
     void SetCombo(Combo* combo);
     void SetHitStop(AttackEffect* hitStop);
@@ -171,6 +170,6 @@ public:
 
     void SetHeadScale(const Vector3& scale) { obj3d_->transform_.scale_ = scale; }
     void SetHeadPosY(const float& posy) { obj3d_->transform_.translation_.y = posy; }
-    void SetHeadRotateX(const float& zrotate) { obj3d_->transform_.rotation_.x = zrotate; }
-    void SetHeadRotateY(const float& zrotate) { obj3d_->transform_.rotation_.y = zrotate; }
+    void SetHeadRotateX(const float& zRotate) { obj3d_->transform_.rotation_.x = zRotate; }
+    void SetHeadRotateY(const float& zRotate) { obj3d_->transform_.rotation_.y = zRotate; }
 };

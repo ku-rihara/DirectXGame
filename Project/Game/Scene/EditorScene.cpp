@@ -6,7 +6,7 @@
 #include "base/TextureManager.h"
 // class
 #include "3d/Object3DRegistry.h"
-#include "Pipeline/Object3DPiprline.h"
+#include "Pipeline/PipelineManager.h"
 #include "utility/ParticleEditor/ParticleManager.h"
 
 // math
@@ -40,7 +40,7 @@ void EditorScene::Update() {
     Debug();
     ViewProjectionUpdate();
 
-    if (input_->TrrigerKey(DIK_RETURN)) {
+    if (input_->TriggerKey(DIK_RETURN)) {
 
         SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
     }
@@ -52,7 +52,7 @@ void EditorScene::Update() {
 void EditorScene::ModelDraw() {
     /// commandList取得
     ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
-    Object3DPiprline::GetInstance()->PreDraw(commandList);
+    PipelineManager::GetInstance()->PreDraw(PipelineType::Object3D, commandList);
     Object3DRegistry::GetInstance()->DrawAll(viewProjection_);
 
     ParticleManager::GetInstance()->Draw(viewProjection_);

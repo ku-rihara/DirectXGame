@@ -43,7 +43,7 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
         enemy->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
     }
 
-    // 初期化とlistに追加
+    // 初期化とvectorに追加
     enemy->SetPlayer(pPlayer_);
     enemy->SetGameCamera(pGameCamera_);
     enemy->SetManager(this);
@@ -59,37 +59,42 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
 ///========================================================================================
 void EnemyManager::Update() {
 
-    for (auto it = enemies_.begin(); it != enemies_.end();) {
+    // 死亡した敵のインデックスを記録
+    for (size_t i = 0; i < enemies_.size();) {
 
-        if ((*it)->GetType() == BaseEnemy::Type::NORMAL) {
-            (*it)->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
-        } else if ((*it)->GetType() == BaseEnemy::Type::STRONG) {
-            (*it)->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
+        if (enemies_[i]->GetType() == BaseEnemy::Type::NORMAL) {
+            enemies_[i]->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
+        } else if (enemies_[i]->GetType() == BaseEnemy::Type::STRONG) {
+            enemies_[i]->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
         }
 
-        (*it)->Update(); // 更新
+        // 更新
+        enemies_[i]->Update();
 
-        if ((*it)->GetIsDeath()) { // 死亡処理
+        // 死亡処理
+        if (enemies_[i]->GetIsDeath()) {
 
             if (pEnemySpawner_) {
-                pEnemySpawner_->OnEnemyDestroyed((*it)->GetGroupId());
+                pEnemySpawner_->OnEnemyDestroyed(enemies_[i]->GetGroupId());
             }
 
-            pLockOn_->OnEnemyDestroyed((*it).get());
-            it = enemies_.erase(it);
+            // vectorから削除
+            enemies_[i] = std::move(enemies_.back());
+            enemies_.pop_back();
+
             CheckIsEnemiesCleared();
         } else {
-            ++it;
+            ++i;
         }
     }
-    ParticleUpdate(); // パーティクル更新
+    // パーティクル更新
+    ParticleUpdate();
 }
 
 void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
 
-    for (auto it = enemies_.begin(); it != enemies_.end();) {
-        (*it)->DisplaySprite(viewProjection); // 更新
-        ++it;
+    for (size_t i = 0; i < enemies_.size(); ++i) {
+        enemies_[i]->DisplaySprite(viewProjection);
     }
 }
 
@@ -97,8 +102,8 @@ void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
 ///  スプライト描画処理
 ///========================================================================================
 void EnemyManager::SpriteDraw(const ViewProjection& viewProjection) {
-    for (auto it = enemies_.begin(); it != enemies_.end(); ++it) {
-        (*it)->SpriteDraw(viewProjection);
+    for (size_t i = 0; i < enemies_.size(); ++i) {
+        enemies_[i]->SpriteDraw(viewProjection);
     }
 }
 
@@ -269,7 +274,7 @@ void EnemyManager::ParticleUpdate() {
         spawnEffectStrong_[i].emitter->Update();
     }
 
-    // ヒビ
+    // ひび
     fallCrack_->Update();
 
     // 死亡パーティクル
@@ -290,9 +295,7 @@ void EnemyManager::ParticleUpdate() {
 void EnemyManager::SetPlayer(Player* player) {
     pPlayer_ = player;
 }
-void EnemyManager::SetLockOn(LockOn* lockOn) {
-    pLockOn_ = lockOn;
-}
+
 void EnemyManager::SetCombo(Combo* lockOn) {
     pCombo_ = lockOn;
 }

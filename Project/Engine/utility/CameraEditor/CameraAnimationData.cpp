@@ -105,7 +105,7 @@ void CameraAnimationData::LoadAllKeyFrames() {
         }
     }
 }
-void CameraAnimationData::Update(float deltaTime) {
+void CameraAnimationData::Update(const float& playSpeed) {
     // 再生中の更新
     if (playState_ != PlayState::PLAYING) {
         return;
@@ -115,13 +115,13 @@ void CameraAnimationData::Update(float deltaTime) {
     UpdateKeyFrameProgression();
 
     // アクティブなキーフレームのみ更新
-    UpdateActiveKeyFrames(deltaTime * playbackSpeed_);
+    UpdateActiveKeyFrames(playSpeed);
 
     // 補間値の更新
     UpdateInterpolatedValues();
 }
 
-void CameraAnimationData::UpdateActiveKeyFrames(float deltaTime) {
+void CameraAnimationData::UpdateActiveKeyFrames(const float& playSpeed) {
     if (keyFrames_.empty()) {
         return;
     }
@@ -129,7 +129,7 @@ void CameraAnimationData::UpdateActiveKeyFrames(float deltaTime) {
     // 初期値に戻るイージング
     if (isReturningToInitial_) {
 
-        float scaledDeltaTime = deltaTime * playbackSpeed_;
+        float scaledDeltaTime = playSpeed;
         returnPositionEase_.Update(scaledDeltaTime);
         returnRotationEase_.Update(scaledDeltaTime);
         returnFovEase_.Update(scaledDeltaTime);
@@ -242,7 +242,7 @@ void CameraAnimationData::AddKeyFrame() {
     isAllKeyFramesFinished_ = false;
 }
 
-void CameraAnimationData::RemoveKeyFrame(int32_t index) {
+void CameraAnimationData::RemoveKeyFrame(const int32_t& index) {
     if (index >= 0 && index < static_cast<int32_t>(keyFrames_.size())) {
         keyFrames_.erase(keyFrames_.begin() + index);
 
@@ -330,7 +330,6 @@ void CameraAnimationData::Reset() {
 
 void CameraAnimationData::BindParams() {
     // メイン設定
-    globalParameter_->Bind(groupName_, "playbackSpeed", &playbackSpeed_);
     globalParameter_->Bind(groupName_, "autoReturnToInitial", &autoReturnToInitial_);
     globalParameter_->Bind(groupName_, "resetPosEaseType", &resetPosEaseType_);
     globalParameter_->Bind(groupName_, "resetRotateEaseType", &resetRotateEaseType_);
@@ -356,7 +355,6 @@ void CameraAnimationData::AdjustParam() {
         if (ImGui::Button("Reset"))
             Reset();
 
-        ImGui::DragFloat("Playback Speed", &playbackSpeed_, 0.1f, 0.1f, 5.0f);
         ImGui::Checkbox("Auto Return to Initial", &autoReturnToInitial_);
 
         // 状態表示
@@ -456,7 +454,7 @@ void CameraAnimationData::EasingTypeSelector(const char* label, int32_t& target)
     }
 }
 
-void CameraAnimationData::SetInitialValues(const Vector3& position, const Vector3& rotation, float fov) {
+void CameraAnimationData::SetInitialValues(const Vector3& position, const Vector3& rotation, const float& fov) {
     initialPosition_ = position;
     initialRotation_ = rotation;
     initialFov_      = fov;
@@ -492,7 +490,7 @@ void CameraAnimationData::StartReturnToInitial() {
     returnFovEase_.Reset();
 }
 
-void CameraAnimationData::SetSelectedKeyFrameIndex(int32_t index) {
+void CameraAnimationData::SetSelectedKeyFrameIndex(const int32_t& index) {
     if (index >= -1 && index < static_cast<int32_t>(keyFrames_.size())) {
         selectedKeyFrameIndex_ = index;
     }

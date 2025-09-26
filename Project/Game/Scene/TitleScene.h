@@ -11,9 +11,7 @@
 #include"UI/TitleRogo.h"
 #include "utility/PutObjForBlender/PutObjForBlender.h"
 
-/// <summary>
-/// タイトルシーン
-/// </summary>
+
 class TitleScene :public BaseScene {
 private:
 	
@@ -32,9 +30,7 @@ private:
 	bool isFinished_;
 	float alpha_;
 public:
-	///========================================================
-	/// Constralt destract
-	///========================================================
+	
 	TitleScene();
 	~TitleScene()override;
 

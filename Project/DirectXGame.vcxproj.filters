@@ -379,6 +379,45 @@
     <Filter Include="MyEngine\.cpp\utility\CameraEditor">
       <UniqueIdentifier>{32855cfa-547f-4fc0-8cfe-602053ee4b6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソースファイル\Skinning">
+      <UniqueIdentifier>{15836091-162c-440d-9b7f-062994c31720}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Pipeline\Skinning">
+      <UniqueIdentifier>{867a20e9-e469-424a-b5e4-e91d7432bc9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Pipeline\Line3D">
+      <UniqueIdentifier>{8e48f525-48d0-48b1-967a-e73c384d8adb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Pipeline\Sprite">
+      <UniqueIdentifier>{dbfa1082-6913-4de7-890a-736053fb72ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Pipeline\ShadowMap">
+      <UniqueIdentifier>{7185db5c-c011-4bed-8272-2659e9d38186}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Pipeline\Particle">
+      <UniqueIdentifier>{1fd60901-89e0-4f20-84f6-44a03af70679}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Pipeline\Object3D">
+      <UniqueIdentifier>{04a2f136-8d68-4619-b049-b4aa822d1f21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Pipeline\Line3D">
+      <UniqueIdentifier>{4cc469bb-ab09-4fca-88c9-376f63b44487}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Pipeline\Object3D">
+      <UniqueIdentifier>{c74a0a8e-89cb-42ea-903d-5f769323c546}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Pipeline\ShadowMap">
+      <UniqueIdentifier>{01200718-3ec7-4e45-b5c7-196a2930f8b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Pipeline\Particle">
+      <UniqueIdentifier>{c2d13b05-ad9f-4685-a8e0-20361e6229c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Pipeline\Skinning">
+      <UniqueIdentifier>{0f9249f0-eefc-4544-b24f-b77627e85108}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Pipeline\Sprite">
+      <UniqueIdentifier>{97e25e22-2e54-48f6-841a-2e55242d72ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -811,21 +850,6 @@
     <ClCompile Include="Engine\base\RtvManager.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Pipeline\Line3DPipeline.cpp">
-      <Filter>MyEngine\.cpp\Pipeline</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Pipeline\Object3DPiprline.cpp">
-      <Filter>MyEngine\.cpp\Pipeline</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Pipeline\ParticlePipeline.cpp">
-      <Filter>MyEngine\.cpp\Pipeline</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Pipeline\SkinningObject3DPipeline.cpp">
-      <Filter>MyEngine\.cpp\Pipeline</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Pipeline\SpritePipeline.cpp">
-      <Filter>MyEngine\.cpp\Pipeline</Filter>
-    </ClCompile>
     <ClCompile Include="Game\BackGroundObject\BaseBackGroundObject.cpp">
       <Filter>Game\BackGroundObject</Filter>
     </ClCompile>
@@ -919,9 +943,6 @@
     <ClCompile Include="Engine\Animation\Object3DAnimation.cpp">
       <Filter>MyEngine\.cpp\Animation</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Pipeline\ShadowMapPipeline.cpp">
-      <Filter>MyEngine\.cpp\Pipeline</Filter>
-    </ClCompile>
     <ClCompile Include="Game\ComboScene\ComboScene.cpp">
       <Filter>Game\ComboScene</Filter>
     </ClCompile>
@@ -964,7 +985,7 @@
     <ClCompile Include="Game\AttackEffect\AttackEffect.cpp">
       <Filter>Game\AttackEffect</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameIntro\GameIntro.cpp">
+    <ClCompile Include="Game\GameIntro\IntroSpawnField.cpp">
       <Filter>Game\GameIntro</Filter>
     </ClCompile>
     <ClCompile Include="Engine\utility\DissolveEditor\DissolvePlayer.cpp">
@@ -990,6 +1011,45 @@
     </ClCompile>
     <ClCompile Include="Engine\utility\CameraEditor\CameraKeyFrame.cpp">
       <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\LockOn\LockOnController.cpp">
+      <Filter>Game\LockOn</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameIntro\GameIntroManager.cpp">
+      <Filter>Game\GameIntro</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameIntro\BaseGameIntro.cpp">
+      <Filter>Game\GameIntro</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameIntro\IntroAppearPurpose.cpp">
+      <Filter>Game\GameIntro</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\Line3D\Line3DPipeline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline\Line3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\ShadowMap\ShadowMapPipeline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline\ShadowMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\Particle\ParticlePipeline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\Skinning\SkinningCSPipeline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline\Skinning</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\Skinning\SkinningObject3DPipeline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline\Skinning</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\Sprite\SpritePipeline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\Object3D\Object3DPipeline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline\Object3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\PipelineManager.cpp">
+      <Filter>MyEngine\.cpp\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\BasePipeline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1464,21 +1524,6 @@
     <ClInclude Include="Engine\Animation\SkinCluster.h">
       <Filter>MyEngine\.h\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Pipeline\Line3DPipeline.h">
-      <Filter>MyEngine\.h\Pipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Pipeline\Object3DPiprline.h">
-      <Filter>MyEngine\.h\Pipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Pipeline\ParticlePipeline.h">
-      <Filter>MyEngine\.h\Pipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Pipeline\SkinningObject3DPipeline.h">
-      <Filter>MyEngine\.h\Pipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Pipeline\SpritePipeline.h">
-      <Filter>MyEngine\.h\Pipeline</Filter>
-    </ClInclude>
     <ClInclude Include="Game\BackGroundObject\BaseBackGroundObject.h">
       <Filter>Game\BackGroundObject</Filter>
     </ClInclude>
@@ -1566,9 +1611,6 @@
     <ClInclude Include="Engine\PostEffect\RadialBlur.h">
       <Filter>MyEngine\.h\PostEffect</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Pipeline\ShadowMapPipeline.h">
-      <Filter>MyEngine\.h\Pipeline</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\3d\Object3DRegistry.h">
       <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
@@ -1632,7 +1674,7 @@
     <ClInclude Include="Game\AttackEffect\AttackEffect.h">
       <Filter>Game\AttackEffect</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameIntro\GameIntro.h">
+    <ClInclude Include="Game\GameIntro\IntroSpawnField.h">
       <Filter>Game\GameIntro</Filter>
     </ClInclude>
     <ClInclude Include="Engine\utility\DissolveEditor\DissolvePlayer.h">
@@ -1646,6 +1688,45 @@
     </ClInclude>
     <ClInclude Include="Game\GameIntro\MovieLine.h">
       <Filter>Game\GameIntro</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\LockOn\LockOnController.h">
+      <Filter>Game\LockOn</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameIntro\GameIntroManager.h">
+      <Filter>Game\GameIntro</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameIntro\BaseGameIntro.h">
+      <Filter>Game\GameIntro</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameIntro\IntroAppearPurpose.h">
+      <Filter>Game\GameIntro</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\Line3D\Line3DPipeline.h">
+      <Filter>MyEngine\.h\Pipeline\Line3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\ShadowMap\ShadowMapPipeline.h">
+      <Filter>MyEngine\.h\Pipeline\ShadowMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\Skinning\SkinningObject3DPipeline.h">
+      <Filter>MyEngine\.h\Pipeline\Skinning</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\Skinning\SkinningCSPipeline.h">
+      <Filter>MyEngine\.h\Pipeline\Skinning</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\Sprite\SpritePipeline.h">
+      <Filter>MyEngine\.h\Pipeline\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\Particle\ParticlePipeline.h">
+      <Filter>MyEngine\.h\Pipeline\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\Object3D\Object3DPipeline.h">
+      <Filter>MyEngine\.h\Pipeline\Object3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\PipelineManager.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\BasePipeline.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1663,9 +1744,6 @@
       <Filter>リソースファイル</Filter>
     </None>
     <None Include="resources\Shader\Line3D.hlsli">
-      <Filter>リソースファイル</Filter>
-    </None>
-    <None Include="resources\Shader\SkinningObject3d.hlsli">
       <Filter>リソースファイル</Filter>
     </None>
     <None Include="resources\Shader\Lighting\AreaLight.hlsli">
@@ -1691,6 +1769,9 @@
     </None>
     <None Include="resources\Shader\PostEffect\Fullscreen.hlsli">
       <Filter>リソースファイル\PostEffect</Filter>
+    </None>
+    <None Include="resources\Shader\Skinning\SkinningObject3d.hlsli">
+      <Filter>リソースファイル\Skinning</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1722,9 +1803,6 @@
       <Filter>リソースファイル</Filter>
     </FxCompile>
     <FxCompile Include="resources\Shader\Line3D.VS.hlsl">
-      <Filter>リソースファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\SkinningObject3d.VS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
     <FxCompile Include="resources\Shader\PostEffect\Random.PS.hlsl">
@@ -1765,6 +1843,12 @@
     </FxCompile>
     <FxCompile Include="resources\Shader\ShadowMap\ShadowMap.VS.hlsl">
       <Filter>リソースファイル\ShadowMap</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Skinning\Skinning.CS.hlsl">
+      <Filter>リソースファイル\Skinning</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Skinning\SkinningObject3d.VS.hlsl">
+      <Filter>リソースファイル\Skinning</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -13,14 +13,13 @@ public:
     ~CameraRendition() = default;
 
     void Init();
-    void Update();
+    void Update(const float& speedRate);
 
     // play呼び出し
     void AnimationPlay(const std::string& filename);
     void ShakePlay(const std::string& filename);
 
 private:
-    // メンバ変数
     GameCamera* pGameCamera_    = nullptr;
     std::unique_ptr<ShakePlayer> shakePlayer_;
     std::unique_ptr<CameraAnimation> cameraAnimation_;

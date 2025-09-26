@@ -5,16 +5,10 @@
 #include <cassert>
 #include <string>
 
-ShadowMapPipeline* ShadowMapPipeline::GetInstance() {
-    static ShadowMapPipeline instance;
-    return &instance;
-}
+
 
 void ShadowMapPipeline::Init(DirectXCommon* dxCommon) {
-    // 引数で受けとる
-    dxCommon_ = dxCommon;
-    // グラフィックスパイプラインの生成
-    CreateGraphicsPipeline();
+    BasePipeline::Init(dxCommon);
 }
 
 void ShadowMapPipeline::CreateGraphicsPipeline() {
@@ -112,4 +106,9 @@ void ShadowMapPipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
     // RootSignatureを設定
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
     commandList->SetPipelineState(pipelineState_.Get());
+}
+
+void ShadowMapPipeline::PreBlendSet(ID3D12GraphicsCommandList* commandList, const BlendMode& blendMode) {
+    commandList;
+    blendMode;
 }

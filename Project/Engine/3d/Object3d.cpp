@@ -1,7 +1,8 @@
 #include "Object3d.h"
 #include "ModelManager.h"
 #include "Object3DRegistry.h"
-#include "Pipeline/Object3DPiprline.h"
+#include "Pipeline/Object3D/Object3DPipeline.h"
+#include "Pipeline/PipelineManager.h"
 
 Object3d::~Object3d() {
     if (Object3DRegistry::GetInstance()) {
@@ -41,18 +42,18 @@ void Object3d::Update() {
 /// 描画
 ///============================================================
 void Object3d::Draw(const ViewProjection& viewProjection) {
-    if (!model_||!isDraw_) {
+    if (!model_ || !isDraw_) {
         return;
     }
 
     UpdateWVPData(viewProjection);
 
-    Object3DPiprline::GetInstance()->PreBlendSet(DirectXCommon::GetInstance()->GetCommandList(), blendMode);
-    model_->Draw(wvpResource_, *shadowMap_, material_,textureIndex_);
+    PipelineManager::GetInstance()->PreBlendSet(PipelineType::Object3D, DirectXCommon::GetInstance()->GetCommandList(), blendMode);
+    model_->Draw(wvpResource_, *shadowMap_, material_, textureIndex_);
 }
 
 void Object3d::ShadowDraw(const ViewProjection& viewProjection) {
-    if (!model_ || !isShadow_ ||!isDraw_) {
+    if (!model_ || !isShadow_ || !isDraw_) {
         return;
     }
 

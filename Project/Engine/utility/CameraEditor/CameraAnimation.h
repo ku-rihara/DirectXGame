@@ -18,7 +18,7 @@ public:
 
     /// 初期化
     void Init();
-    void Update(float deltaTime);
+    void Update(const float& deltaTime, const float& speedRate = 1.0f);
 
     // Play, Stop, ForceReset
     void Play(const std::string& animationName);

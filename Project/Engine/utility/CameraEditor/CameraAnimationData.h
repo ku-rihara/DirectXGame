@@ -22,7 +22,7 @@ public:
 
     /// 初期化
     void Init(const std::string& animationName);
-    void Update(float deltaTime);
+    void Update(const float& playSpeed);
 
     /// ImGuiでの調整
     void AdjustParam();
@@ -33,7 +33,7 @@ public:
     /// キーフレーム操作
     void EasingTypeSelector(const char* label, int32_t& target);
     void AddKeyFrame();
-    void RemoveKeyFrame(int32_t index);
+    void RemoveKeyFrame(const int32_t& index);
     void ClearAllKeyFrames();
 
     /// 再生制御
@@ -41,7 +41,7 @@ public:
     void Pause();
     void Reset();
 
-    void UpdateActiveKeyFrames(float deltaTime);
+    void UpdateActiveKeyFrames(const float& playSpeed);
 
     /// Load,Save
     void LoadData();
@@ -94,7 +94,6 @@ private:
     int32_t resetFovEaseType_;
 
     // UI用パラメータ
-    float playbackSpeed_        = 1.0f;
     bool showKeyFrameList_      = true;
     bool showAnimationControls_ = true;
     bool showInitialSettings_   = false;
@@ -123,18 +122,18 @@ public:
     bool IsPlaying() const;
     bool IsFinished() const;
 
-    bool IsAllKeyFramesFinished() const { return isAllKeyFramesFinished_; }
-    int32_t GetActiveKeyFrameIndex() const { return activeKeyFrameIndex_; }
-    int32_t GetLastCompletedKeyFrameIndex() const { return lastCompletedKeyFrameIndex_; }
+    const bool& IsAllKeyFramesFinished() const { return isAllKeyFramesFinished_; }
+    const int32_t& GetActiveKeyFrameIndex() const { return activeKeyFrameIndex_; }
+    const int32_t& GetLastCompletedKeyFrameIndex() const { return lastCompletedKeyFrameIndex_; }
     int32_t GetTotalKeyFrameCount() const { return static_cast<int32_t>(keyFrames_.size()); }
-    bool IsReturningToInitial() const { return isReturningToInitial_; }
+    const bool& IsReturningToInitial() const { return isReturningToInitial_; }
   
-    int32_t GetSelectedKeyFrameIndex() const { return selectedKeyFrameIndex_; }
+    const int32_t& GetSelectedKeyFrameIndex() const { return selectedKeyFrameIndex_; }
     CameraKeyFrame* GetSelectedKeyFrame();
     const CameraKeyFrame* GetSelectedKeyFrame() const;
     //--------------------------------------------------------------------------------------
     // setter
     //--------------------------------------------------------------------------------------
-    void SetSelectedKeyFrameIndex(int32_t index);
-    void SetInitialValues(const Vector3& position, const Vector3& rotation, float fov);
+    void SetSelectedKeyFrameIndex(const int32_t& index);
+    void SetInitialValues(const Vector3& position, const Vector3& rotation, const float& fov);
 };

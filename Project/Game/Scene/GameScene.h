@@ -14,14 +14,14 @@
 #include "Field/Field.h"
 #include "FireInjectors/FireInjectors.h"
 #include "GameCamera/GameCamera.h"
-#include "LockOn/LockOn.h"
+#include "GameIntro/GameIntroManager.h"
+#include "LockOn/LockOnController.h"
 #include "Player/Player.h"
 #include "SkyBox/SkyBox.h"
 #include "SkyDome/SkyDome.h"
 #include "UI/HowToOperate.h"
 #include "utility/CameraEditor/CameraEditor.h"
 #include "utility/ShakeEditor/ShakeEditor.h"
-#include "GameIntro/GameIntro.h"
 
 /// <summary>
 /// ゲームシーン
@@ -69,7 +69,7 @@ private:
     // objects
     std::unique_ptr<GameCamera> gameCamera_                     = nullptr;
     std::unique_ptr<Field> field_                               = nullptr;
-    std::unique_ptr<LockOn> lockOn_                             = nullptr;
+    std::unique_ptr<LockOnController> lockOnController_         = nullptr;
     std::unique_ptr<Player> player_                             = nullptr;
     std::unique_ptr<Skydome> skyDome_                           = nullptr;
     std::unique_ptr<SkyBox> skyBox_                             = nullptr;
@@ -81,7 +81,7 @@ private:
     std::unique_ptr<GameBackGroundObject> gameBackGroundObject_ = nullptr;
     std::unique_ptr<ComboScene> comboScene_                     = nullptr;
     std::unique_ptr<AttackEffect> attackEffect_                 = nullptr;
-    std::unique_ptr<GameIntro> gameIntro_                       = nullptr;
+    std::unique_ptr<GameIntroManager> gameIntroManager_         = nullptr;
 
     GameState gameState_ = GameState::INTRO;
 

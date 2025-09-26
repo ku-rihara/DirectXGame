@@ -5,7 +5,7 @@
 #include "MinMax.h"
 // editor
 #include "utility/ParameterEditor/GlobalParameter.h"
-#include "Pipeline/ParticlePipeline.h"
+#include "Pipeline/Particle/ParticlePipeline.h"
 #include "utility/RailEditor/RailManager.h"
 // int32_t
 #include <cstdint>

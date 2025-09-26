@@ -1,8 +1,5 @@
 #include "WorldTransform.h"
 #include "Animation/Object3DAnimation.h"
-#include "Dx/DirectXCommon.h"
-#include <assert.h>
-#include <numbers>
 
 void WorldTransform::Init() {
 
@@ -15,7 +12,6 @@ void WorldTransform::Init() {
 }
 
 void WorldTransform::TransferMatrix() {
-
 }
 
 
@@ -53,14 +49,12 @@ void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection,
     case BillboardType::XYZ:
         // 全ビルボード
         billboardMatrix_ = cameraMatrix;
-
         break;
 
     case BillboardType::Y: {
         // Y軸ビルボード
         float angleY     = std::atan2(toCamera.x, toCamera.z);
         billboardMatrix_ = MakeRotateYMatrix(angleY);
-
         break;
     }
 
@@ -97,15 +91,34 @@ void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection,
     if (HasParentJoint()) {
         UpdateMatrixWithJoint();
     }
-    // 通常のparent
+
     else if (parent_) {
-        matWorld_ *= parent_->matWorld_;
+        // 親の行列から回転成分だけ取得
+        Matrix4x4 parentRotationOnly = parent_->matWorld_;
+        parentRotationOnly.m[3][0]   = 0.0f;
+        parentRotationOnly.m[3][1]   = 0.0f;
+        parentRotationOnly.m[3][2]   = 0.0f;
+
+        // 親の位置成分を取得
+        Vector3 parentPosition = parent_->GetWorldPos();
+
+        // 現在のワールド行列に親の回転のみ適用
+        Matrix4x4 tempMatrix = matWorld_;
+
+        // 現在の位置を一旦保存
+        Vector3 currentPos = Vector3(tempMatrix.m[3][0], tempMatrix.m[3][1], tempMatrix.m[3][2]);
+
+        // 親の回転を現在の位置に適用
+        Vector3 rotatedOffset = TransformNormal(currentPos, parentRotationOnly);
+
+        matWorld_.m[3][0] = parentPosition.x + rotatedOffset.x;
+        matWorld_.m[3][1] = parentPosition.y + rotatedOffset.y;
+        matWorld_.m[3][2] = parentPosition.z + rotatedOffset.z;
     }
 
     // 定数バッファに転送する
     TransferMatrix();
 }
-
 void WorldTransform::SetParent(const WorldTransform* parent) {
     parent_ = parent;
 }
@@ -187,7 +200,7 @@ Vector3 WorldTransform::GetWorldPos() const {
     return Vector3(
         matWorld_.m[3][0], // X成分
         matWorld_.m[3][1], // Y成分
-        matWorld_.m[3][2]  // Z成分
+        matWorld_.m[3][2] // Z成分
     );
 }
 
@@ -213,7 +226,7 @@ void WorldTransform::UpdateMatrixWithJoint() {
         return;
     }
 
-    // 親JointのskeletonSpaceMatrix取得
+    // 親JointSkeletonSpaceMatrix取得
     const Joint& parentJoint    = skeleton.joints[parentJointIndex_];
     Matrix4x4 parentJointMatrix = parentJoint.skeletonSpaceMatrix;
 
@@ -227,4 +240,34 @@ void WorldTransform::UpdateMatrixWithJoint() {
 
 bool WorldTransform::HasParentJoint() const {
     return parentAnimation_ != nullptr && parentJointIndex_ != -1;
+}
+
+Vector3 WorldTransform::GetRightVector() const {
+
+    if (rotateOder_ == RotateOder::Quaternion) {
+        Matrix4x4 rotationMatrix = quaternion_.MakeRotateMatrix();
+        return TransformNormal(Vector3::ToRight(), rotationMatrix).Normalize();
+    }
+
+    return Vector3(matWorld_.m[0][0], matWorld_.m[1][0], matWorld_.m[2][0]);
+}
+
+Vector3 WorldTransform::GetUpVector() const {
+
+    if (rotateOder_ == RotateOder::Quaternion) {
+        Matrix4x4 rotationMatrix = quaternion_.MakeRotateMatrix();
+        return TransformNormal(Vector3::ToUp(), rotationMatrix).Normalize();
+    }
+
+    return Vector3(matWorld_.m[0][1], matWorld_.m[1][1], matWorld_.m[2][1]);
+}
+
+Vector3 WorldTransform::GetForwardVector() const {
+
+    if (rotateOder_ == RotateOder::Quaternion) {
+        Matrix4x4 rotationMatrix = quaternion_.MakeRotateMatrix();
+        return TransformNormal(Vector3::ToForward(), rotationMatrix).Normalize();
+    }
+
+    return Vector3(matWorld_.m[0][2], matWorld_.m[1][2], matWorld_.m[2][2]);
 }

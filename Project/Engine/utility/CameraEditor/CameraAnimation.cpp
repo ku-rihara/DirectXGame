@@ -12,10 +12,10 @@ void CameraAnimation::Init() {
   
 }
 
-void CameraAnimation::Update(float deltaTime) {
+void CameraAnimation::Update(const float& deltaTime, const float& speedRate) {
     // アニメーションデータの更新
     if (animationData_) {
-        animationData_->Update(deltaTime);
+        animationData_->Update(deltaTime * speedRate);
         ApplyOffsetToViewProjection();
     }
 }

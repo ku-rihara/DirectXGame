@@ -183,28 +183,28 @@ void RightJobPunch::CollisionBoxInit() {
 }
 
 void RightJobPunch::ChangeSpeedForLockOn() {
-    // ターゲット追い越し防止
-    if (!(pPlayer_->GetLockOn() && pPlayer_->GetLockOn()->GetEnemyTarget())) {
-        return;
-    }
+    //// ターゲット追い越し防止
+    //if (!(pPlayer_->GetLockOn() && pPlayer_->GetLockOn()->GetEnemyTarget())) {
+    //    return;
+    //}
 
-    Vector3 differectialVector = pPlayer_->GetLockOn()->GetTargetPosition() - pPlayer_->GetWorldPosition();
-    // 距離
-    float distance = differectialVector.Length();
-    // 距離しきい値
-    const float threshold = 2.2f;
+    //Vector3 differectialVector = pPlayer_->GetLockOn()->GetCurrentTargetPosition() - pPlayer_->GetWorldPosition();
+    //// 距離
+    //float distance = differectialVector.Length();
+    //// 距離しきい値
+    //const float threshold = 2.2f;
 
-    // しきい値より離れていない場合は終了
-    if (distance <= threshold) {
-        return;
-    }
+    //// しきい値より離れていない場合は終了
+    //if (distance <= threshold) {
+    //    return;
+    //}
 
-    // Y軸回り角度
-    pPlayer_->SetRotationY(std::atan2(differectialVector.x, differectialVector.z));
-    // しきい値を超える速さなら補正する
-    if (speed_ > distance - threshold) {
-        speed_ = distance - threshold;
-    }
+    //// Y軸回り角度
+    //pPlayer_->SetRotationY(std::atan2(differectialVector.x, differectialVector.z));
+    //// しきい値を超える速さなら補正する
+    //if (speed_ > distance - threshold) {
+    //    speed_ = distance - threshold;
+    //}
 }
 
 void RightJobPunch::Debug() {

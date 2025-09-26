@@ -9,10 +9,9 @@ class ViewProjection;
 
 struct Matrix4x4 {
 	float m[4][4];
+
 	Matrix4x4 operator+(const Matrix4x4& obj) const; // 加算
-
 	Matrix4x4 operator-(const Matrix4x4& obj) const; // 減算
-
 	Matrix4x4 operator*(const Matrix4x4& obj) const; // 積
 	void operator*=(const Matrix4x4& obj) ; // 積
 };
@@ -68,3 +67,5 @@ Vector3 ExtractEulerAngles(const Matrix4x4& matrix);
 Matrix4x4 MakeRotateMatrixFromQuaternion(const Quaternion& q);
 
 Matrix4x4 MakeRootAtMatrix(const Vector3& eye, const Vector3& target, const Vector3& up);
+
+Quaternion QuaternionFromMatrix(const Matrix4x4& m);

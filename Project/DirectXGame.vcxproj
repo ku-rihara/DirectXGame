@@ -73,12 +73,15 @@
     <ClCompile Include="Engine\Material\MeshMaterial.cpp" />
     <ClCompile Include="Engine\Material\ParticleMaterial.cpp" />
     <ClCompile Include="Engine\Material\SkyBoxMaterial.cpp" />
-    <ClCompile Include="Engine\Pipeline\Line3DPipeline.cpp" />
-    <ClCompile Include="Engine\Pipeline\Object3DPiprline.cpp" />
-    <ClCompile Include="Engine\Pipeline\ParticlePipeline.cpp" />
-    <ClCompile Include="Engine\Pipeline\ShadowMapPipeline.cpp" />
-    <ClCompile Include="Engine\Pipeline\SkinningObject3DPipeline.cpp" />
-    <ClCompile Include="Engine\Pipeline\SpritePipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\BasePipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\Line3D\Line3DPipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\Object3D\Object3DPipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\Particle\ParticlePipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\PipelineManager.cpp" />
+    <ClCompile Include="Engine\Pipeline\ShadowMap\ShadowMapPipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\Skinning\SkinningCSPipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\Skinning\SkinningObject3DPipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\Sprite\SpritePipeline.cpp" />
     <ClCompile Include="Engine\PostEffect\BasePostEffect.cpp" />
     <ClCompile Include="Engine\PostEffect\BoxFilter.cpp" />
     <ClCompile Include="Engine\PostEffect\Dissolve.cpp" />
@@ -163,9 +166,13 @@
     <ClCompile Include="Game\FireInjectors\FireInjectors.cpp" />
     <ClCompile Include="Game\GameCamera\CameraRendition.cpp" />
     <ClCompile Include="Game\GameCamera\GameCamera.cpp" />
-    <ClCompile Include="Game\GameIntro\GameIntro.cpp" />
+    <ClCompile Include="Game\GameIntro\BaseGameIntro.cpp" />
+    <ClCompile Include="Game\GameIntro\IntroAppearPurpose.cpp" />
+    <ClCompile Include="Game\GameIntro\IntroSpawnField.cpp" />
+    <ClCompile Include="Game\GameIntro\GameIntroManager.cpp" />
     <ClCompile Include="Game\GameIntro\MovieLine.cpp" />
     <ClCompile Include="Game\LockOn\LockOn.cpp" />
+    <ClCompile Include="Game\LockOn\LockOnController.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\RightJobPunch.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\RoolingPunchAttack.cpp" />
@@ -283,12 +290,15 @@
     <ClInclude Include="Engine\Material\MeshMaterial.h" />
     <ClInclude Include="Engine\Material\ParticleMaterial.h" />
     <ClInclude Include="Engine\Material\SkyBoxMaterial.h" />
-    <ClInclude Include="Engine\Pipeline\Line3DPipeline.h" />
-    <ClInclude Include="Engine\Pipeline\Object3DPiprline.h" />
-    <ClInclude Include="Engine\Pipeline\ParticlePipeline.h" />
-    <ClInclude Include="Engine\Pipeline\ShadowMapPipeline.h" />
-    <ClInclude Include="Engine\Pipeline\SkinningObject3DPipeline.h" />
-    <ClInclude Include="Engine\Pipeline\SpritePipeline.h" />
+    <ClInclude Include="Engine\Pipeline\BasePipeline.h" />
+    <ClInclude Include="Engine\Pipeline\Line3D\Line3DPipeline.h" />
+    <ClInclude Include="Engine\Pipeline\Object3D\Object3DPipeline.h" />
+    <ClInclude Include="Engine\Pipeline\Particle\ParticlePipeline.h" />
+    <ClInclude Include="Engine\Pipeline\PipelineManager.h" />
+    <ClInclude Include="Engine\Pipeline\ShadowMap\ShadowMapPipeline.h" />
+    <ClInclude Include="Engine\Pipeline\Skinning\SkinningCSPipeline.h" />
+    <ClInclude Include="Engine\Pipeline\Skinning\SkinningObject3DPipeline.h" />
+    <ClInclude Include="Engine\Pipeline\Sprite\SpritePipeline.h" />
     <ClInclude Include="Engine\PostEffect\BasePostEffect.h" />
     <ClInclude Include="Engine\PostEffect\BoxFilter.h" />
     <ClInclude Include="Engine\PostEffect\Dissolve.h" />
@@ -382,9 +392,13 @@
     <ClInclude Include="Game\FireInjectors\FireInjectors.h" />
     <ClInclude Include="Game\GameCamera\CameraRendition.h" />
     <ClInclude Include="Game\GameCamera\GameCamera.h" />
-    <ClInclude Include="Game\GameIntro\GameIntro.h" />
+    <ClInclude Include="Game\GameIntro\BaseGameIntro.h" />
+    <ClInclude Include="Game\GameIntro\IntroAppearPurpose.h" />
+    <ClInclude Include="Game\GameIntro\IntroSpawnField.h" />
+    <ClInclude Include="Game\GameIntro\GameIntroManager.h" />
     <ClInclude Include="Game\GameIntro\MovieLine.h" />
     <ClInclude Include="Game\LockOn\LockOn.h" />
+    <ClInclude Include="Game\LockOn\LockOnController.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\RightJobPunch.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\RoolingPunchAttack.h" />
@@ -490,7 +504,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
-    <None Include="resources\Shader\SkinningObject3d.hlsli">
+    <None Include="resources\Shader\Skinning\SkinningObject3d.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
@@ -580,7 +594,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="resources\Shader\SkinningObject3d.VS.hlsl">
+    <FxCompile Include="resources\Shader\Skinning\Skinning.CS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Skinning\SkinningObject3d.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

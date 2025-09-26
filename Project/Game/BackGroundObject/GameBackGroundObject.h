@@ -8,7 +8,7 @@ public:
     virtual ~GameBackGroundObject() = default;
 
      void Init(const std::string& filename) override; 
-     void Update() override;            
+     void Update(const float& playSpeed) override;            
      void Draw(const ViewProjection& viewProjection) override;
 
 private:

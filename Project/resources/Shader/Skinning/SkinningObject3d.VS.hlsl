@@ -1,5 +1,6 @@
 #include"SkinningObject3d.hlsli"
-#include"ShadowMap/ShadowMap.hlsli"
+#include"../ShadowMap/ShadowMap.hlsli"
+
 struct TransformationMatrix
 {
     float4x4 WVP;

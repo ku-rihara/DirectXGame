@@ -5,17 +5,9 @@
 #include <cassert>
 #include <string>
 
-SkinningObject3DPipeline* SkinningObject3DPipeline::GetInstance() {
-    static SkinningObject3DPipeline instance;
-    return &instance;
-}
 
 void SkinningObject3DPipeline::Init(DirectXCommon* dxCommon) {
-
-    // 引数で受けとる
-    dxCommon_ = dxCommon;
-    // グラフィックスパイプラインの生成
-    CreateGraphicsPipeline();
+    BasePipeline::Init(dxCommon);
 }
 
 void SkinningObject3DPipeline::CreateGraphicsPipeline() {
@@ -117,7 +109,7 @@ void SkinningObject3DPipeline::CreateGraphicsPipeline() {
     depthStencilDesc_.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
     // Shaderをコンパイルする
-    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/SkinningObject3d.VS.hlsl", L"vs_6_0");
+    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Skinning/SkinningObject3d.VS.hlsl", L"vs_6_0");
     assert(vertexShaderBlob_ != nullptr);
 
     pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Object3d.PS.hlsl", L"ps_6_0");
@@ -197,12 +189,11 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     descriptorRange[5].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
     descriptorRange[5].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-     // dissolve (t5)
+    // dissolve (t5)
     descriptorRange[6].BaseShaderRegister                = 5;
     descriptorRange[6].NumDescriptors                    = 1;
     descriptorRange[6].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
     descriptorRange[6].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
 
     // RootParameterを作成
     D3D12_ROOT_PARAMETER rootParameters[15] = {};
@@ -272,7 +263,7 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     rootParameters[11].DescriptorTable.pDescriptorRanges   = &descriptorRange[5];
     rootParameters[11].DescriptorTable.NumDescriptorRanges = 1;
 
-       // 12: lightTransform
+    // 12: lightTransform
     rootParameters[12].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[12].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
     rootParameters[12].Descriptor.ShaderRegister = 1;
@@ -312,7 +303,7 @@ void SkinningObject3DPipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
 }
 
-void SkinningObject3DPipeline::PreBlendSet(ID3D12GraphicsCommandList* commandList, BlendMode blendMode) {
+void SkinningObject3DPipeline::PreBlendSet(ID3D12GraphicsCommandList* commandList, const BlendMode& blendMode) {
     switch (blendMode) {
     case BlendMode::None:
         commandList->SetPipelineState(graphicsPipelineStateNone_.Get());

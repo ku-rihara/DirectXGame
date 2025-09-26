@@ -37,7 +37,7 @@ void BaseScene::ViewProjectionUpdate() {
 
 #ifdef _DEBUG
 	// デバッグカメラモード切り替え------------------------------
-	if (Input::GetInstance()->TrrigerKey(DIK_SPACE)) {
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		if (isDebugCameraActive_ == false) {
 			isDebugCameraActive_ = true;
 		}
@@ -48,7 +48,7 @@ void BaseScene::ViewProjectionUpdate() {
 	// デバッグカメラモード切り替え------------------------------
 #endif
 
-	if (isDebugCameraActive_ == true) { // デバッグカメラがアクティブなら
+	if (isDebugCameraActive_ == true) { 
 		// デバッグカメラの更新
 		debugCamera_->Update();
 		// カメラ行列の計算をデバッグカメラのビュープロジェクションから行う
@@ -58,10 +58,9 @@ void BaseScene::ViewProjectionUpdate() {
 		
 	}
 	// アクティブでない
-	else if (isDebugCameraActive_ == false) { // デバッグカメラがアクティブでない
+	else if (isDebugCameraActive_ == false) {
 		ViewProssess();
 
-		/*viewProjection_.TransferMatrix();*/
 	}
 
 	Light::GetInstance()->SetWorldCameraPos(viewProjection_.GetWorldPos());
