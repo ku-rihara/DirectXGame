@@ -142,8 +142,7 @@ void SkinningObject3DPipeline::CreateGraphicsPipeline() {
 }
 
 void SkinningObject3DPipeline::CreateRootSignature() {
-    HRESULT hr = 0;
-
+   
     // RootSignatureを作成
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
     descriptionRootSignature.Flags             = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
@@ -283,19 +282,8 @@ void SkinningObject3DPipeline::CreateRootSignature() {
     descriptionRootSignature.pParameters   = rootParameters;
     descriptionRootSignature.NumParameters = _countof(rootParameters);
 
-    // Object*************************************************************************************************************************
-    // シリアライズしてバイナリにする
-    signatureBlob_ = nullptr;
-    errorBlob_     = nullptr;
-    hr             = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
-    if (FAILED(hr)) {
-        Log(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
-        assert(false);
-    }
-    // バイナリを元に生成
-    rootSignature_ = nullptr;
-    hr             = dxCommon_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(), signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
-    assert(SUCCEEDED(hr));
+  // シリアライズしてバイナリにする
+    SerializeAndCreateRootSignature(descriptionRootSignature);
 }
 
 void SkinningObject3DPipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {

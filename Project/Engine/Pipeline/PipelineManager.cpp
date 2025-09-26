@@ -35,7 +35,7 @@ void PipelineManager::Init(DirectXCommon* dxCommon) {
     }
 }
 
-BasePipeline* PipelineManager::GetPipeline(PipelineType type) const {
+BasePipeline* PipelineManager::GetPipeline(const PipelineType& type) const {
 
     size_t index = static_cast<size_t>(type);
     return pipelines_[index].get();

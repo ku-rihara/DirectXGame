@@ -17,6 +17,7 @@ class Light;
 class DsvManager;
 class ShadowMap;
 class PipelineManager;
+class CSPipelineManager;
 
 class EngineCore {
 public:
@@ -67,4 +68,5 @@ public:
      DsvManager* dsvManager_;
      ShadowMap* shadowMap_;
      PipelineManager* pipelineManager_;
+     CSPipelineManager* csPipelineManager_;
 };
