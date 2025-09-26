@@ -3,12 +3,12 @@
 /// base
 #include "Dx/DirectXCommon.h"
 
-class DsvManager {
+class UavManager {
 public:
-    DsvManager()  = default;
-    ~DsvManager() = default;
+    UavManager()  = default;
+    ~UavManager() = default;
 
-    static DsvManager* GetInstance();
+    static UavManager* GetInstance();
 
     ///===================================================================
     /// public method
@@ -24,7 +24,7 @@ public:
     D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(const uint32_t& index);
 
     // RTV作成
-    void Create(const uint32_t& index, ID3D12Resource* resource, D3D12_DEPTH_STENCIL_VIEW_DESC* desc);
+    void Create(const uint32_t& index, ID3D12Resource* resource, D3D12_RENDER_TARGET_VIEW_DESC* desc);
 
 private:
     ///=========================================
@@ -35,7 +35,7 @@ private:
     DirectXCommon* dxCommon_ = nullptr;
 
     uint32_t descriptorSize_; //< デスクリプタサイズ
-    uint32_t useIndex_ = 0;   //< 次に使用するインデックス
+    uint32_t useIndex_ = 0; //< 次に使用するインデックス
 
     Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_ = nullptr;
 

@@ -56,7 +56,7 @@ void DxRenderTarget::CreateRenderTextureRTV() {
     rtvDesc.Format        = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
     rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
-    rtvManager_->CreateRTV(renderTextureRtvIndex_, renderTextureResource_.Get(), &rtvDesc);
+    rtvManager_->Create(renderTextureRtvIndex_, renderTextureResource_.Get(), &rtvDesc);
 }
 
 ///==========================================================
@@ -76,7 +76,7 @@ void DxRenderTarget::CreateRenderTextureSRV() {
     srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
     // SRV生成
-    srvManager_->CreateSRVforTexture2D(srvIndex, renderTextureResource_.Get(), srvDesc);
+    srvManager_->CreateForTexture2D(srvIndex, renderTextureResource_.Get(), srvDesc);
 }
 
 ///==========================================================

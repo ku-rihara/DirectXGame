@@ -26,12 +26,12 @@ public:
     bool IsAbleSecure();
 
     /// GPU、CPUデスクリプタハンドル取得
-    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(uint32_t index);
-    D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(uint32_t index);
+    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(const uint32_t& index);
+    D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(const uint32_t& index);
 
     /// SRV生成(テクスチャ用、Structured Buffer用)
-    void CreateSRVforTexture2D(uint32_t srvIndex, ID3D12Resource* pResource, D3D12_SHADER_RESOURCE_VIEW_DESC desc);
-    void CreateSRVforStructuredBuffer(uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structuredByteStride);
+    void CreateForTexture2D(const uint32_t& srvIndex, ID3D12Resource* pResource, D3D12_SHADER_RESOURCE_VIEW_DESC desc);
+    void CreateForStructuredBuffer(const uint32_t& srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structuredByteStride);
 
 private:
     ///=========================================
@@ -41,9 +41,9 @@ private:
     /// other class
     DirectXCommon* dxCommon_ = nullptr;
 
-    uint32_t descriptorSize_; // SRV用のデスクリプタサイズ
-    uint32_t useIndex_ = 0; // 次に使用するインデックス
-    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_; // SRV用デスクリプタ
+    uint32_t descriptorSize_;//< デスクリプタサイズ
+    uint32_t useIndex_ = 0; //< 次に使用するインデックス
+    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_; 
 
     // リソースとデータ
     std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> instancingResources_;
@@ -56,11 +56,11 @@ public:
     /// getter method
     ///===================================================================
 
-    uint32_t GetDescriptorSizeSRV() const { return descriptorSize_; }
-    ID3D12DescriptorHeap* GetSrvDescriptorHeap() const { return descriptorHeap_.Get(); }
+   const uint32_t& GetDescriptorSize() const { return descriptorSize_; }
+    ID3D12DescriptorHeap* GetDescriptorHeap() const { return descriptorHeap_.Get(); }
 
     ///===================================================================
     /// setter method
     ///===================================================================
-    void SetSrvDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srv) { this->descriptorHeap_ = srv; }
+    void SetDescriptorHeap(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& srv) {descriptorHeap_ = srv; }
 };
