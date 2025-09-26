@@ -1,6 +1,5 @@
 #include "Line3D.h"
-#include "Pipeline/Line3D/Line3DPipeline.h"
-#include "Pipeline/Object3D/Object3DPiprline.h"
+#include"Pipeline/PipelineManager.h"
 #include "Dx/DirectXCommon.h"
 #include <cassert>
 #include <cstring>
@@ -69,8 +68,8 @@ void Line3D::Draw(const ViewProjection& viewProj) {
 
     auto commandList = DirectXCommon::GetInstance()->GetCommandList();
 
-    Line3DPipeline::GetInstance()->PreDraw(commandList);
-
+    PipelineManager::GetInstance()->PreDraw(PipelineType::Line3D, commandList);
+  
     // 転送
     *cBufferData_ = {viewProj.matView_ * viewProj.matProjection_};
 
@@ -80,7 +79,7 @@ void Line3D::Draw(const ViewProjection& viewProj) {
 
     Reset();
 
-    Object3DPiprline::GetInstance()->PreDraw(commandList);
+  PipelineManager::GetInstance()->PreDraw(PipelineType::Object3D, commandList);
 }
 
 void Line3D::DrawSphereWireframe(const Vector3& center, float radius, const Vector4& color) {

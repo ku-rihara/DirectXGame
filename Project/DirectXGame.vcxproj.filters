@@ -685,8 +685,14 @@
     <ClCompile Include="Engine\Pipeline\Particle\ParticlePipeline.cpp">
       <Filter>MyEngine\.cpp\Pileline\Particle</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Pipeline\Object3D\Object3DPiprline.cpp">
+    <ClCompile Include="Engine\Pipeline\Object3D\Object3DPipeline.cpp">
       <Filter>MyEngine\.cpp\Pileline\Object3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\BasePipeline.cpp">
+      <Filter>MyEngine\.cpp\Pileline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\PipelineManager.cpp">
+      <Filter>MyEngine\.cpp\Pileline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1134,11 +1140,17 @@
     <ClInclude Include="Engine\Pipeline\Particle\ParticlePipeline.h">
       <Filter>MyEngine\.h\Pipeline\Particle</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Pipeline\Object3D\Object3DPiprline.h">
+    <ClInclude Include="Engine\Pipeline\Object3D\Object3DPipeline.h">
       <Filter>MyEngine\.h\Pipeline\Object3D</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Pipeline\Line3D\Line3DPipeline.h">
       <Filter>MyEngine\.h\Pipeline\Line3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\BasePipeline.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\PipelineManager.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

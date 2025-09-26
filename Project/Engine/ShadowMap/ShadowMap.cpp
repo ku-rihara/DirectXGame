@@ -9,7 +9,7 @@
 #include "Dx/DxDepthBuffer.h"
 #include "Lighrt/DirectionalLight.h"
 #include "Lighrt/Light.h"
-#include "Pipeline/ShadowMapPipeline.h"
+#include "Pipeline/ShadowMap/ShadowMapPipeline.h"
 #include <imgui.h>
 
 ShadowMap* ShadowMap::GetInstance() {

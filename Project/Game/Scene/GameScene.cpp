@@ -10,7 +10,7 @@
 #include "Scene/Manager/SceneManager.h"
 
 #include "Animation/AnimationRegistry.h"
-#include "Pipeline/Object3D/Object3DPiprline.h"
+#include "Pipeline/PipelineManager.h"
 #include "ShadowMap/ShadowMap.h"
 
 #include <imgui.h>
@@ -24,12 +24,12 @@ void GameScene::Init() {
 
     BaseScene::Init();
 
-    ground_          = std::make_unique<Ground>();
-    monsterBall_     = std::make_unique<MonsterBall>();
-    plane_           = std::make_unique<Plane>();
-    skuBox_          = std::make_unique<SkyBox>();
-    putObjForBlender = std::make_unique<PutObjForBlender>();
-    cameraEditor_    = std::make_unique<CameraEditor>();
+    ground_              = std::make_unique<Ground>();
+    monsterBall_         = std::make_unique<MonsterBall>();
+    plane_               = std::make_unique<Plane>();
+    skuBox_              = std::make_unique<SkyBox>();
+    putObjForBlender     = std::make_unique<PutObjForBlender>();
+    cameraEditor_        = std::make_unique<CameraEditor>();
     shakeEditor_         = std::make_unique<ShakeEditor>();
     timeScaleController_ = std::make_unique<TimeScaleController>();
 
@@ -44,7 +44,6 @@ void GameScene::Init() {
     putObjForBlender->LoadJsonFile("game.json");
     putObjForBlender->EasingAllReset();
 
-  
     isDebugCameraActive_ = true;
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
@@ -64,7 +63,6 @@ void GameScene::Update() {
     plane_->Update();
     skuBox_->Update();
 
-   
     Object3DRegistry::GetInstance()->UpdateAll();
     AnimationRegistry::GetInstance()->UpdateAll(Frame::DeltaTimeRate());
 
@@ -84,14 +82,8 @@ void GameScene::Update() {
 /// モデル描画
 /// ===================================================
 void GameScene::ModelDraw() {
-    /// commandList取得
-    ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
-    Object3DPiprline::GetInstance()->PreDraw(commandList);
-
-    /* ground_->Draw(viewProjection_);
-     plane_->Draw(viewProjection_);*/
+   
     Object3DRegistry::GetInstance()->DrawAll(viewProjection_);
-
     ParticleManager::GetInstance()->Draw(viewProjection_);
 }
 

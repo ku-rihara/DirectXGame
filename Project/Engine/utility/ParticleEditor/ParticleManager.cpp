@@ -1,7 +1,7 @@
 #include "ParticleManager.h"
 #include "3d/ModelManager.h"
 #include "base/TextureManager.h"
-#include "Pipeline/Particle/ParticlePipeline.h"
+#include "Pipeline/PipelineManager.h"
 #include"Animation/ModelAnimation.h"
 // frame
 #include "Frame/Frame.h"
@@ -159,7 +159,8 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
         }
 
         if (instanceIndex > 0) {
-            ParticlePipeline::GetInstance()->PreDraw(commandList, group.param.blendMode);
+            PipelineManager::GetInstance()->PreDraw(PipelineType::Particle,commandList);
+            PipelineManager::GetInstance()->PreBlendSet(PipelineType::Particle,commandList, group.param.blendMode);
             // モデル描画
             if (group.model) {
                 group.model->DrawInstancing(instanceIndex, pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),

@@ -201,10 +201,6 @@ void Sprite::SetScale(const Vector2& scale) {
     transform_.scale.y = scale.y;
 }
 
-void Sprite::PreDraw(ID3D12GraphicsCommandList* commandList) {
-    SpritePipeline::GetInstance()->PreDraw(commandList);
-}
-
 void Sprite::SetColor(const Vector3& color) {
     material_.materialData_->color.x = color.x;
     material_.materialData_->color.y = color.y;

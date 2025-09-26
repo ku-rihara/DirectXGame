@@ -6,7 +6,7 @@
 #include "base/TextureManager.h"
 // class
 #include "3d/Object3DRegistry.h"
-#include "Pipeline/Object3D/Object3DPiprline.h"
+#include "Pipeline/PipelineManager.h"
 #include "utility/ParticleEditor/ParticleManager.h"
 
 // math
@@ -72,7 +72,7 @@ void TitleScene::Update() {
 void TitleScene::ModelDraw() {
     /// commandList取得
     ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
-    Object3DPiprline::GetInstance()->PreDraw(commandList);
+    PipelineManager::GetInstance()->PreDraw(PipelineType::Object3D, commandList);
     Object3DRegistry::GetInstance()->DrawAll(viewProjection_);
     EnemydamageEffect_[0]->DebugDraw(viewProjection_);
     ParticleManager::GetInstance()->Draw(viewProjection_);

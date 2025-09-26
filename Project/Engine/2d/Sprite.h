@@ -9,21 +9,15 @@
 
 class Sprite {
 public:
-
-    Sprite() = default;
+    Sprite()  = default;
     ~Sprite() = default;
 
+    // スプライトの作成
     static Sprite* Create(const uint32_t& textureHandle, const Vector2& position, const Vector4& color);
-    /// スプライトの作成
     void CreateSprite(const uint32_t& textureHandle, const Vector2& position, const Vector4& color);
-    // 描画前
-    static void PreDraw(ID3D12GraphicsCommandList* commandList);
+
     // 描画
     void Draw();
-    // ポジションセット
-    void SetPosition(const Vector2& pos);
-    // スプライトセット
-    void SetScale(const Vector2& scale);
     void DebugImGui();
 
 public:
@@ -38,21 +32,21 @@ public:
         Vector3 translate;
     };
 
-    /// Transform
-    Transform transform_; /// トランスフォーム
-    UVTransform uvTransform_; /// UVトランスフォーム
-    Vector2 textureLeftTop_; /// テクスチャ左上
-    Vector2 textureSize_; /// テクスチャサイズ
+    // Transform
+    Transform transform_; //< トランスフォーム
+    UVTransform uvTransform_; //< UVトランスフォーム
+    Vector2 textureLeftTop_; //< テクスチャ左上
+    Vector2 textureSize_; //< テクスチャサイズ
 
-    /// anchorPoint
+    // anchorPoint
     Vector2 anchorPoint_;
 
-    /// flip
-    bool isFlipX_ = false; /// FlipX
-    bool isFlipY_ = false; /// FlipY
+    // flip
+    bool isFlipX_ = false;
+    bool isFlipY_ = false;
 
 private:
-    Vector2 textureAdjustSize_; /// テクスチャサイズ
+    Vector2 textureAdjustSize_; //< テクスチャサイズ
 
     // テクスチャ
     D3D12_GPU_DESCRIPTOR_HANDLE texture_;
@@ -60,14 +54,12 @@ private:
 
     D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
     D3D12_INDEX_BUFFER_VIEW indexBufferView_;
-    // リソース******************************************************************
-    // 頂点リソース
-    Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
-    // wvpリソース
-    Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
-    // indexリソース
-    Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;
-    // データ****************************************************************************
+
+    Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_; //< 頂点リソース
+    Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_; //< wvpリソース
+    Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_; //<indexリソース
+
+    // データ
     TransformationMatrix2D* wvpData_;
     VertexData* vertexData_;
     SpriteMaterial material_;
@@ -87,6 +79,9 @@ public:
     ///=========================================================================================
     ///  setter
     ///=========================================================================================
+    void SetPosition(const Vector2& pos);
+    void SetScale(const Vector2& scale);
+
     void SetAnchorPoint(const Vector2& anchorPoint) { anchorPoint_ = anchorPoint; }
     void SetTextureSize(const Vector2& size) { textureSize_ = size; }
     void SetTextureLeftTop(const Vector2& leftTop) { textureLeftTop_ = leftTop; }

@@ -6,21 +6,17 @@ class DirectXCommon;
 class WinApp;
 class ImGuiManager;
 class TextureManager;
-class SpritePipeline;
-class Object3DPiprline;
 class ModelManager;
-class ParticlePipeline;
 class SrvManager;
 class Audio;
 class Input;
 class PostEffectRenderer;
 class SkyBoxRenderer;
-class Line3DPipeline;
 class RtvManager;
-class SkinningObject3DPipeline;
 class Light;
 class DsvManager;
 class ShadowMap;
+class PipelineManager;
 
 class EngineCore {
 public:
@@ -60,19 +56,15 @@ public:
      DirectXCommon* directXCommon_;
      ImGuiManager* imguiManager_;
      TextureManager* textureManager_;
-     SpritePipeline* SpritePipeline_;
-     Object3DPiprline* Object3DPiprline_;
      ModelManager* modelManager_;
-     ParticlePipeline* ParticlePipeline_;
      SrvManager* srvManager_;
      Audio* audio_;
      Input* input_;
      SkyBoxRenderer* skyBoxRenderer_;
-     Line3DPipeline* Line3DPipeline_;
      RtvManager* rtvManager_;
-     SkinningObject3DPipeline* skinningObject3DPipeline_;
      PostEffectRenderer* PostEffectRenderer_;
      Light* light_;
      DsvManager* dsvManager_;
      ShadowMap* shadowMap_;
+     PipelineManager* pipelineManager_;
 };
