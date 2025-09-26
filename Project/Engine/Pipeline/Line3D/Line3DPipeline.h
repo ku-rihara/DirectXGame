@@ -21,6 +21,5 @@ protected:
 
 private:
     Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_;
-    Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob_;
-    Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob_;
+  
 };

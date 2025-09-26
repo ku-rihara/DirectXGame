@@ -28,9 +28,6 @@ protected:
 private: // メンバ変数
     D3D12_STATIC_SAMPLER_DESC staticSamplers_[2];
 
-    Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob_;
-    Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob_;
-
     Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineStateAdd_;
     Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineStateNone_;
 

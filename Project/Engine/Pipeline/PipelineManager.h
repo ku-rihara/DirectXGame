@@ -50,5 +50,5 @@ private:
 
 public:
     // getter
-    BasePipeline* GetPipeline(PipelineType type) const;
+    BasePipeline* GetPipeline(const PipelineType& type) const;
 };

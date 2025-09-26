@@ -1051,6 +1051,12 @@
     <ClCompile Include="Engine\Pipeline\BasePipeline.cpp">
       <Filter>MyEngine\.cpp\Pipeline</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Pipeline\BaseCSPipeline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\CSPipelineManager.cpp">
+      <Filter>MyEngine\.cpp\Pipeline</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1726,6 +1732,12 @@
       <Filter>MyEngine\.h\Pipeline</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Pipeline\BasePipeline.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\BaseCSPipeline.h">
+      <Filter>MyEngine\.h\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\CSPipelineManager.h">
       <Filter>MyEngine\.h\Pipeline</Filter>
     </ClInclude>
   </ItemGroup>

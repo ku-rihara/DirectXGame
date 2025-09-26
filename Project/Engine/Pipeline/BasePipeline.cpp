@@ -4,29 +4,23 @@
 #include "function/Log.h"
 #include <cassert>
 
-
 void BasePipeline::Init(DirectXCommon* dxCommon) {
     // 引数で受けとる
     dxCommon_ = dxCommon;
     // グラフィックスパイプラインの生成
     CreateGraphicsPipeline();
- }
+}
 
 void BasePipeline::SerializeAndCreateRootSignature(const D3D12_ROOT_SIGNATURE_DESC& desc) {
-    HRESULT hr = D3D12SerializeRootSignature(&desc, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
+    // シリアライズしてバイナリにする
+    HRESULT hr     = D3D12SerializeRootSignature(&desc, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
     if (FAILED(hr)) {
-        if (errorBlob_) {
-            Log(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
-        }
+        Log(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
         assert(false);
-        return;
     }
-
-    hr = dxCommon_->GetDevice()->CreateRootSignature(
-        0,
-        signatureBlob_->GetBufferPointer(),
-        signatureBlob_->GetBufferSize(),
-        IID_PPV_ARGS(&rootSignature_));
+    // バイナリを元に生成
+    rootSignature_ = nullptr;
+    hr             = dxCommon_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(), signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
     assert(SUCCEEDED(hr));
 }
 
