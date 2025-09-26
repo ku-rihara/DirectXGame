@@ -74,8 +74,7 @@ void Line3DPipeline::CreateGraphicsPipeline() {
 }
 
 void Line3DPipeline::CreateRootSignature() {
-    HRESULT hr = 0;
-
+  
     D3D12_ROOT_SIGNATURE_DESC desc{};
     desc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
@@ -87,12 +86,8 @@ void Line3DPipeline::CreateRootSignature() {
     desc.pParameters   = &param;
     desc.NumParameters = 1;
 
-    hr = D3D12SerializeRootSignature(&desc, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
-    assert(SUCCEEDED(hr));
-
-    hr = dxCommon_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(),
-        signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
-    assert(SUCCEEDED(hr));
+     // シリアライズしてバイナリにする
+    SerializeAndCreateRootSignature(desc);
 }
 
 void Line3DPipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {

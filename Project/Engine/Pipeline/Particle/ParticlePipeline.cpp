@@ -154,8 +154,7 @@ void ParticlePipeline::CreateGraphicsPipeline() {
 }
 
 void ParticlePipeline::CreateRootSignature() {
-    HRESULT hr = 0;
-
+ 
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 
     descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
@@ -187,17 +186,8 @@ void ParticlePipeline::CreateRootSignature() {
     descriptionRootSignature.pParameters   = RootParameter;
     descriptionRootSignature.NumParameters = _countof(RootParameter);
 
-    signatureBlob_ = nullptr;
-    errorBlob_     = nullptr;
-    hr             = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
-    if (FAILED(hr)) {
-        Log(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
-        assert(false);
-    }
-    // バイナリを元に生成
-    rootSignature_ = nullptr;
-    hr             = dxCommon_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(), signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
-    assert(SUCCEEDED(hr));
+     // シリアライズしてバイナリにする
+    SerializeAndCreateRootSignature(descriptionRootSignature);
 }
 
 void ParticlePipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {

@@ -11,9 +11,10 @@
 #include "base/TextureManager.h"
 #include "Dx/DirectXCommon.h"
 #include "Lighrt/Light.h"
-#include"Pipeline/PipelineManager.h"
+#include "Pipeline/CSPipelineManager.h"
+#include "Pipeline/PipelineManager.h"
 #include "PostEffect/PostEffectRenderer.h"
-#include"ShadowMap/ShadowMap.h"
+#include "ShadowMap/ShadowMap.h"
 /// audio,input
 #include "audio/Audio.h"
 #include "input/Input.h"
@@ -57,8 +58,13 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     textureManager_ = TextureManager::GetInstance();
     textureManager_->Init(directXCommon_, srvManager_);
 
+    // graphicPipeline
     pipelineManager_ = PipelineManager::GetInstance();
     pipelineManager_->Init(directXCommon_);
+
+    // CsPipeline
+    csPipelineManager_ = CSPipelineManager::GetInstance();
+    csPipelineManager_->Init(directXCommon_);
 
     // skybox
     skyBoxRenderer_ = SkyBoxRenderer::GetInstance();

@@ -70,8 +70,7 @@ void ShadowMapPipeline::CreateGraphicsPipeline() {
 }
 
 void ShadowMapPipeline::CreateRootSignature() {
-    HRESULT hr = 0;
-
+  
     D3D12_ROOT_PARAMETER rootParams[2] = {};
 
     // b0: WorldMatrix
@@ -92,14 +91,8 @@ void ShadowMapPipeline::CreateRootSignature() {
     descriptionRootSignature.NumStaticSamplers = 0;
     descriptionRootSignature.pStaticSamplers   = nullptr;
 
-    hr = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
-    if (FAILED(hr)) {
-        Log(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
-        assert(false);
-    }
-
-    hr = dxCommon_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(), signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
-    assert(SUCCEEDED(hr));
+    // シリアライズしてバイナリにする
+    SerializeAndCreateRootSignature(descriptionRootSignature);
 }
 
 void ShadowMapPipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {

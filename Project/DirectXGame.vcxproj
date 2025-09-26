@@ -73,7 +73,9 @@
     <ClCompile Include="Engine\Material\MeshMaterial.cpp" />
     <ClCompile Include="Engine\Material\ParticleMaterial.cpp" />
     <ClCompile Include="Engine\Material\SkyBoxMaterial.cpp" />
+    <ClCompile Include="Engine\Pipeline\BaseCSPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\BasePipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\CSPipelineManager.cpp" />
     <ClCompile Include="Engine\Pipeline\Line3D\Line3DPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Object3D\Object3DPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Particle\ParticlePipeline.cpp" />
@@ -290,7 +292,9 @@
     <ClInclude Include="Engine\Material\MeshMaterial.h" />
     <ClInclude Include="Engine\Material\ParticleMaterial.h" />
     <ClInclude Include="Engine\Material\SkyBoxMaterial.h" />
+    <ClInclude Include="Engine\Pipeline\BaseCSPipeline.h" />
     <ClInclude Include="Engine\Pipeline\BasePipeline.h" />
+    <ClInclude Include="Engine\Pipeline\CSPipelineManager.h" />
     <ClInclude Include="Engine\Pipeline\Line3D\Line3DPipeline.h" />
     <ClInclude Include="Engine\Pipeline\Object3D\Object3DPipeline.h" />
     <ClInclude Include="Engine\Pipeline\Particle\ParticlePipeline.h" />
