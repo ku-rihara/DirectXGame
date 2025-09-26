@@ -1052,10 +1052,10 @@
       <Filter>MyEngine\.cpp\Pipeline</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Pipeline\BaseCSPipeline.cpp">
-      <Filter>MyEngine\.cpp\Pileline</Filter>
+      <Filter>MyEngine\.cpp\Pipeline</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Pipeline\CSPipelineManager.cpp">
-      <Filter>MyEngine\.cpp\Pileline</Filter>
+      <Filter>MyEngine\.cpp\Pipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
