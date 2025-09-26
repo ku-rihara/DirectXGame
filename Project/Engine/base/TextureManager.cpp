@@ -153,7 +153,7 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
     }
 
     // SRVの作成
-    pSrvManager_->CreateSRVforTexture2D(
+    pSrvManager_->CreateForTexture2D(
         textureData.srvIndex,
         textureData.resource.Get(),
         srvDesc);

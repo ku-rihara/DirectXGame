@@ -20,7 +20,7 @@ void PointLightManager::Init(ID3D12Device* device) {
    srvIndex_ = SrvManager::GetInstance()->Allocate();
 
     //SRVを作成
-    SrvManager::GetInstance()->CreateSRVforStructuredBuffer(
+    SrvManager::GetInstance()->CreateForStructuredBuffer(
         srvIndex_,
         structuredBufferResource_.Get(),
         maxLights,

@@ -47,8 +47,8 @@ void DxSwapChain::CreateRenderTargetViews(RtvManager* rtvManager) {
     rtvDesc_.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
     // RTVを作成   
-    rtvManager->CreateRTV(rtvManager->Allocate(), resources_[0].Get(), &rtvDesc_);
-    rtvManager->CreateRTV(rtvManager->Allocate(), resources_[1].Get(), &rtvDesc_);
+    rtvManager->Create(rtvManager->Allocate(), resources_[0].Get(), &rtvDesc_);
+    rtvManager->Create(rtvManager->Allocate(), resources_[1].Get(), &rtvDesc_);
 }
 
 void DxSwapChain::Present() {
