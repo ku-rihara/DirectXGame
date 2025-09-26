@@ -71,7 +71,7 @@ void DxDepthBuffer::CreateDSV() {
     dsvDesc.Format        = DXGI_FORMAT_D24_UNORM_S8_UINT;
     dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 
-    dsvManager_->CreateDSV(depthStencilDsvIndex_, depthStencilResource_.Get(), &dsvDesc);
+    dsvManager_->Create(depthStencilDsvIndex_, depthStencilResource_.Get(), &dsvDesc);
 }
 
 void DxDepthBuffer::CreateDepthSRV() {
@@ -87,7 +87,7 @@ void DxDepthBuffer::CreateDepthSRV() {
     srvDesc.ViewDimension           = D3D12_SRV_DIMENSION_TEXTURE2D;
     srvDesc.Texture2D.MipLevels     = 1;
 
-    srvManager_->CreateSRVforTexture2D(depthTextureSrvIndex_, depthStencilResource_.Get(), srvDesc);
+    srvManager_->CreateForTexture2D(depthTextureSrvIndex_, depthStencilResource_.Get(), srvDesc);
 }
 
 void DxDepthBuffer::Clear(ID3D12GraphicsCommandList* commandList) {

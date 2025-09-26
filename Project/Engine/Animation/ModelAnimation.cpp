@@ -45,7 +45,7 @@ SkinCluster ModelAnimation::CreateSkinCluster(ModelData& modelData, const Skelet
     skinCluster.paletteSrvHandle.second = SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex);
 
     // palette用のSrvを作成
-    SrvManager::GetInstance()->CreateSRVforStructuredBuffer(
+    SrvManager::GetInstance()->CreateForStructuredBuffer(
         srvIndex, skinCluster.paletteResource.Get(), UINT(skeleton.joints.size()), sizeof(WellForGPU));
 
     // influence用のResourceを作成

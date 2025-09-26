@@ -299,7 +299,7 @@ void ParticleManager::CreateInstancingResource(const std::string& name, const ui
     particleGroups_[name].srvIndex = pSrvManager_->Allocate();
 
     // SRVの作成
-    pSrvManager_->CreateSRVforStructuredBuffer(
+    pSrvManager_->CreateForStructuredBuffer(
         particleGroups_[name].srvIndex,
         particleGroups_[name].instancingResource.Get(),
         instanceNum,

@@ -1,30 +1,30 @@
-#include "DsvManager.h"
+#include "UavManager.h"
 #include <cassert>
 #include <d3d12.h>
 
 // 最大RTV数の定義
-const uint32_t DsvManager::kMaxCount = 2;
+const uint32_t UavManager::kMaxCount = 4;
 
 // シングルトンインスタンスの取得
-DsvManager* DsvManager::GetInstance() {
-    static DsvManager instance;
+UavManager* UavManager::GetInstance() {
+    static UavManager instance;
     return &instance;
 }
 
 ///=========================================
 /// 初期化
 ///=========================================
-void DsvManager::Init(DirectXCommon* directXCommon) {
+void UavManager::Init(DirectXCommon* directXCommon) {
     dxCommon_       = directXCommon;
-    descriptorHeap_ = dxCommon_->InitializeDescriptorHeap(dxCommon_->GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_DSV, kMaxCount, false);
-    descriptorSize_ = dxCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+    descriptorHeap_ = dxCommon_->InitializeDescriptorHeap(dxCommon_->GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV, kMaxCount, false);
+    descriptorSize_ = dxCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
     useIndex_       = 0;
 }
 
 ///=========================================
 /// アロケータ
 ///=========================================
-uint32_t DsvManager::Allocate() {
+uint32_t UavManager::Allocate() {
 
     assert(IsAbleSecure());
 
@@ -39,21 +39,21 @@ uint32_t DsvManager::Allocate() {
     return useIndex_;
 }
 
-bool DsvManager::IsAbleSecure() {
-    if (useIndex_ >= DsvManager::kMaxCount) {
+bool UavManager::IsAbleSecure() {
+    if (useIndex_ >= UavManager::kMaxCount) {
         return false;
     } else {
         return true;
     }
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE DsvManager::GetCPUDescriptorHandle(const uint32_t& index) {
+D3D12_CPU_DESCRIPTOR_HANDLE UavManager::GetCPUDescriptorHandle(const uint32_t& index) {
     D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap_->GetCPUDescriptorHandleForHeapStart();
     handleCPU.ptr += (descriptorSize_ * index);
     return handleCPU;
 }
 
-void DsvManager::Create(const uint32_t& index, ID3D12Resource* resource, D3D12_DEPTH_STENCIL_VIEW_DESC* desc) {
+void UavManager::Create(const uint32_t& index, ID3D12Resource* resource, D3D12_RENDER_TARGET_VIEW_DESC* desc) {
 
-    dxCommon_->GetDevice()->CreateDepthStencilView(resource, desc, GetCPUDescriptorHandle(index));
+    dxCommon_->GetDevice()->CreateRenderTargetView(resource, desc, GetCPUDescriptorHandle(index));
 }

@@ -64,13 +64,13 @@ void SrvManager::PreDraw() {
 ///=========================================
 /// GPU、CPUデスクリプタハンドル取得
  ///=========================================
-D3D12_CPU_DESCRIPTOR_HANDLE SrvManager::GetCPUDescriptorHandle(uint32_t index) {
+D3D12_CPU_DESCRIPTOR_HANDLE SrvManager::GetCPUDescriptorHandle(const uint32_t& index) {
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap_->GetCPUDescriptorHandleForHeapStart();
 	handleCPU.ptr += (descriptorSize_ * index);
 	return handleCPU;
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE SrvManager::GetGPUDescriptorHandle(uint32_t index) {
+D3D12_GPU_DESCRIPTOR_HANDLE SrvManager::GetGPUDescriptorHandle(const uint32_t& index) {
 	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap_->GetGPUDescriptorHandleForHeapStart();
 	handleGPU.ptr += (descriptorSize_ * index);
 	return handleGPU;
@@ -79,12 +79,8 @@ D3D12_GPU_DESCRIPTOR_HANDLE SrvManager::GetGPUDescriptorHandle(uint32_t index) {
 ///=========================================
 /// テクスチャ用SRV生成
 ///=========================================
-void SrvManager::CreateSRVforTexture2D(uint32_t srvIndex, ID3D12Resource* pResource,D3D12_SHADER_RESOURCE_VIEW_DESC desc) {
+void SrvManager::CreateForTexture2D(const uint32_t& srvIndex, ID3D12Resource* pResource, D3D12_SHADER_RESOURCE_VIEW_DESC desc) {
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-	/*srvDesc.Format = Format;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MipLevels = MipLevels;*/
     srvDesc = desc;
 	//生成
 	dxCommon_->GetDevice()->CreateShaderResourceView(pResource, &srvDesc, GetCPUDescriptorHandle(srvIndex));
@@ -94,7 +90,7 @@ void SrvManager::CreateSRVforTexture2D(uint32_t srvIndex, ID3D12Resource* pResou
 ///=========================================
 /// StructureBuffer用SRV生成
 ///=========================================
-void SrvManager::CreateSRVforStructuredBuffer(uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structuredByteStride) {
+void SrvManager::CreateForStructuredBuffer(const uint32_t& srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structuredByteStride) {
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
 	instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;

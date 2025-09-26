@@ -700,6 +700,9 @@
     <ClCompile Include="Engine\Pipeline\CSPipelineManager.cpp">
       <Filter>MyEngine\.cpp\Pileline</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\base\UavManager.cpp">
+      <Filter>MyEngine\.cpp\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1163,6 +1166,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Pipeline\CSPipelineManager.h">
       <Filter>MyEngine\.h\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\UavManager.h">
+      <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

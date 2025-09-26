@@ -122,7 +122,7 @@ void ShadowMap::CreateSRVHandle() {
     shadowMapSrvDesc.ViewDimension           = D3D12_SRV_DIMENSION_TEXTURE2D;
     shadowMapSrvDesc.Texture2D.MipLevels     = 1;
 
-    srvManager_->CreateSRVforTexture2D(shadowMapSrvIndex_, shadowMapResource_.Get(), shadowMapSrvDesc);
+    srvManager_->CreateForTexture2D(shadowMapSrvIndex_, shadowMapResource_.Get(), shadowMapSrvDesc);
 }
 
 void ShadowMap::CreateDSVHandle() {
@@ -133,7 +133,7 @@ void ShadowMap::CreateDSVHandle() {
     dsvDesc.Format        = DXGI_FORMAT_D32_FLOAT;
     dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 
-    dsvManager_->CreateDSV(shadowMapDsvIndex_, shadowMapResource_.Get(), &dsvDesc);
+    dsvManager_->Create(shadowMapDsvIndex_, shadowMapResource_.Get(), &dsvDesc);
 }
 
 void ShadowMap::UpdateLightMatrix() {

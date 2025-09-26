@@ -33,6 +33,7 @@
     <ClCompile Include="Engine\base\SpriteMaterial.cpp" />
     <ClCompile Include="Engine\base\SrvManager.cpp" />
     <ClCompile Include="Engine\base\TextureManager.cpp" />
+    <ClCompile Include="Engine\base\UavManager.cpp" />
     <ClCompile Include="Engine\base\WinApp.cpp" />
     <ClCompile Include="Engine\Collider\AABBCollider.cpp" />
     <ClCompile Include="Engine\Collider\BaseCollider.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Engine\base\SpriteMaterial.h" />
     <ClInclude Include="Engine\base\SrvManager.h" />
     <ClInclude Include="Engine\base\TextureManager.h" />
+    <ClInclude Include="Engine\base\UavManager.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
     <ClInclude Include="Engine\Collider\AABBCollider.h" />
     <ClInclude Include="Engine\Collider\BaseCollider.h" />
