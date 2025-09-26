@@ -2,7 +2,7 @@
 /// Scene
 #include "PostEffect/PostEffectRenderer.h"
 #include "Scene/Factory/SceneFactory.h"
-#include"Pipeline/Object3D/Object3DPiprline.h"
+#include"Pipeline/PipelineManager.h"
 // renderer
 #include "base/SkyBoxRenderer.h"
 // utility
@@ -57,7 +57,7 @@ void KTGame::Draw() {
     // --------------------------------------------------------------------------
     /// スプライト描画
     // --------------------------------------------------------------------------
-    Sprite::PreDraw(commandList);
+    PipelineManager::GetInstance()->PreDraw(PipelineType::Sprite, commandList);
 
     /// ゲームシーン描画
     pSceneManager_->SpriteDraw();

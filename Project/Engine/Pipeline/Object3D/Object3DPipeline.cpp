@@ -1,24 +1,16 @@
-#include "Object3DPiprline.h"
+#include "Object3DPipeline.h"
 #include "Dx/DxCompiler.h"
 // Function
 #include "function/Log.h"
 #include <cassert>
 #include <string>
 
-Object3DPiprline* Object3DPiprline::GetInstance() {
-    static Object3DPiprline instance;
-    return &instance;
+
+void Object3DPipeline::Init(DirectXCommon* dxCommon) {
+    BasePipeline::Init(dxCommon);
 }
 
-void Object3DPiprline::Init(DirectXCommon* dxCommon) {
-
-    // 引数で受けとる
-    dxCommon_ = dxCommon;
-    // グラフィックスパイプラインの生成
-    CreateGraphicsPipeline();
-}
-
-void Object3DPiprline::CreateGraphicsPipeline() {
+void Object3DPipeline::CreateGraphicsPipeline() {
 
     HRESULT hr = 0;
 
@@ -134,7 +126,7 @@ void Object3DPiprline::CreateGraphicsPipeline() {
     CreatePSO(blendDescNone, graphicsPipelineStateNone_);
 }
 
-void Object3DPiprline::CreateRootSignature() {
+void Object3DPipeline::CreateRootSignature() {
     HRESULT hr = 0;
     // RootSignatureを作成
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -277,12 +269,12 @@ void Object3DPiprline::CreateRootSignature() {
     assert(SUCCEEDED(hr));
 }
 
-void Object3DPiprline::PreDraw(ID3D12GraphicsCommandList* commandList) {
+void Object3DPipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
     // RootSignatureを設定
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
 }
 
-void Object3DPiprline::PreBlendSet(ID3D12GraphicsCommandList* commandList, BlendMode blendMode) {
+void Object3DPipeline::PreBlendSet(ID3D12GraphicsCommandList* commandList,const BlendMode& blendMode) {
     switch (blendMode) {
     case BlendMode::None:
         commandList->SetPipelineState(graphicsPipelineStateNone_.Get());

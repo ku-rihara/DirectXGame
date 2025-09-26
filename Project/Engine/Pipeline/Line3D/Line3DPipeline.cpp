@@ -3,14 +3,9 @@
 #include"Dx/DxCompiler.h"
 #include <cassert>
 
-Line3DPipeline* Line3DPipeline::GetInstance() {
-    static Line3DPipeline instance;
-    return &instance;
-}
 
 void Line3DPipeline::Init(DirectXCommon* dxCommon) {
-    dxCommon_ = dxCommon;
-    CreateGraphicsPipeline();
+    BasePipeline::Init(dxCommon);
 }
 
 void Line3DPipeline::CreateGraphicsPipeline() {
@@ -104,4 +99,9 @@ void Line3DPipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
     commandList->SetPipelineState(graphicsPipelineState_.Get());
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
+}
+
+void Line3DPipeline::PreBlendSet(ID3D12GraphicsCommandList* commandList, const BlendMode& blendMode) {
+    commandList;
+    blendMode;
 }

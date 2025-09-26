@@ -4,16 +4,9 @@
 #include <cassert>
 #include <string>
 
-SpritePipeline* SpritePipeline::GetInstance() {
-    static SpritePipeline instance;
-    return &instance;
-}
 
 void SpritePipeline::Init(DirectXCommon* dxCommon) {
-    // 引数で受け取る
-    dxCommon_ = dxCommon;
-    // グラフィックスパイプラインの生成
-    CreateGraphicsPipeline();
+    BasePipeline::Init(dxCommon);
 }
 
 void SpritePipeline::CreateGraphicsPipeline() {
@@ -158,7 +151,7 @@ void SpritePipeline::CreateRootSignature() {
 }
 
 void SpritePipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
-    // パイプラインの設定 (Sprite用)
+    // パイプラインの設定 
     commandList->SetPipelineState(graphicsPipelineState_.Get());
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
 
@@ -166,9 +159,7 @@ void SpritePipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-
-//void ::PreDraw(ID3D12GraphicsCommandList* commandList) {
-//    ////の描画。変更が必要なものだけ変更する
-//    commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
-//    commandList->IASetIndexBuffer(&indexBufferView_);//IBVを設定
-//}
+void SpritePipeline::PreBlendSet(ID3D12GraphicsCommandList* commandList, const BlendMode& blendMode) {
+    commandList;
+    blendMode;
+ }

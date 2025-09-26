@@ -1045,6 +1045,12 @@
     <ClCompile Include="Engine\Pipeline\Sprite\SpritePipeline.cpp">
       <Filter>MyEngine\.cpp\Pipeline\Sprite</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Pipeline\BasePipeline.cpp">
+      <Filter>MyEngine\.cpp\Pileline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\PipelineManager.cpp">
+      <Filter>MyEngine\.cpp\Pileline</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">

@@ -3,8 +3,8 @@
 #include "AnimationRegistry.h"
 #include "base/SrvManager.h"
 #include "MathFunction.h"
-#include "Pipeline/Object3D/Object3DPiprline.h"
-#include "Pipeline/Skinning/SkinningObject3DPipeline.h"
+#include "Pipeline/Object3D/Object3DPipeline.h"
+#include "Pipeline/PipelineManager.h"
 #include <algorithm>
 #include <cassert>
 
@@ -261,13 +261,13 @@ void Object3DAnimation::Draw(const ViewProjection& viewProjection) {
     UpdateWVPData(viewProjection);
 
     // スキニング用パイプライン設定
-    SkinningObject3DPipeline::GetInstance()->PreDraw(DirectXCommon::GetInstance()->GetCommandList());
+    PipelineManager::GetInstance()->PreDraw(PipelineType::SkinningObject3D, DirectXCommon::GetInstance()->GetCommandList());
 
     // アニメーション描画
     model_->DrawAnimation(wvpResource_, *shadowMap_, material_, skinCluster_);
 
     // 通常パイプラインに戻す
-    Object3DPiprline::GetInstance()->PreDraw(DirectXCommon::GetInstance()->GetCommandList());
+    PipelineManager::GetInstance()->PreDraw(PipelineType::Object3D, DirectXCommon::GetInstance()->GetCommandList());
 }
 
 ///=====================================================================
