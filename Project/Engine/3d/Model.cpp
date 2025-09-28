@@ -247,7 +247,19 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, co
     // 環境マップ
     uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
     commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
-    commandList->SetGraphicsRootDescriptorTable(14, skinCluster.paletteSrvHandle.second);
+    // compute
+
+    // コンピュートシェーダー用のリソース設定
+    commandList->SetComputeRootConstantBufferView(0,skinningInfoResource_->GetGPUVirtualAddress());
+    commandList->SetComputeRootDescriptorTable(1, skinCluster.paletteSrvHandle.second);
+    commandList->SetComputeRootDescriptorTable(2, inputVertexSrvHandle_.second);
+    commandList->SetComputeRootDescriptorTable(3, skinCluster.influenceSrvHandle.second);
+    commandList->SetComputeRootDescriptorTable(4, outputVertexUavHandle_.second);
+
+    //commandList->SetComputeRootDescriptorTable(0, skinCluster.paletteSrvHandle.second); // t0
+    //commandList->SetComputeRootDescriptorTable(2, skinCluster.influenceSrvHandle.second); // t1, t2
+    //commandList->SetComputeRootDescriptorTable(5, skinCluster.meshSectionSrvHandle.second); // t3
+    //commandList->SetComputeRootConstantBufferView(4, skinningInformation_->GetGPUVirtualAddress()); // b0
 
     // ライト
     Light::GetInstance()->SetLightCommands(commandList);

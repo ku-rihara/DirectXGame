@@ -31,7 +31,7 @@ public:
 
     // アニメーション制御
     void ChangeAnimation(const std::string& animationName);
-    void SetAnimationTime(float time);
+    void SetAnimationTime(const float& time);
     void ResetAnimation();
 
     // 更新・描画
@@ -45,8 +45,8 @@ public:
 
 private:
     void Create(const std::string& fileName);
-    Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time);
-    Quaternion CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time);
+    Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframe, const float& time);
+    Quaternion CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, const float& time);
 
 private:
     /// ============================================================
@@ -95,11 +95,11 @@ public:
 
     const Skeleton& GetSkeleton() const { return skeleton_; }
     const Joint* GetJoint(const std::string& name) const;
-    float GetAnimationTime() const { return animationTime_; }
+    const float& GetAnimationTime() const { return animationTime_; }
     float GetAnimationDuration() const;
-    int32_t GetCurrentAnimationIndex() const { return currentAnimationIndex_; }
+    const int32_t& GetCurrentAnimationIndex() const { return currentAnimationIndex_; }
     const std::string& GetCurrentAnimationName() const;
-    bool IsAnimationTransitioning() const { return isChange_; }
+    const float& IsAnimationTransitioning() const { return isChange_; }
 
-    void SetTransitionDuration(float duration) { transitionDuration_ = duration; }
+    void SetTransitionDuration(const float& duration) { transitionDuration_ = duration; }
 };

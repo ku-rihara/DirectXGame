@@ -2,7 +2,7 @@
 #include <cassert>
 #include <d3d12.h>
 
-// 最大RTV数の定義
+// 最大DSV数の定義
 const uint32_t DsvManager::kMaxCount = 2;
 
 // シングルトンインスタンスの取得
