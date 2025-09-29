@@ -17,6 +17,7 @@
 #include "Material/ParticleMaterial.h"
 
 // 3Dモデル共通部
+class ModelAnimation;
 class ModelCommon {
 private:
     ///============================================================
