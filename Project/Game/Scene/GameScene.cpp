@@ -8,6 +8,7 @@
 #include "Frame/Frame.h"
 #include "Lighrt/Light.h"
 #include <imgui.h>
+#include "Animation/AnimationRegistry.h"
 
 void GameScene::Init() {
     //// グローバル変数の読み込み
