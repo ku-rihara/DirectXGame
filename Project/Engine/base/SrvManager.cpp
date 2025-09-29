@@ -88,7 +88,7 @@ void SrvManager::CreateForTexture2D(const uint32_t& srvIndex, ID3D12Resource* pR
 ///=========================================
 /// StructureBuffer用SRV生成
 ///=========================================
-void SrvManager::CreateForStructuredBuffer(const uint32_t& srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structuredByteStride) {
+void SrvManager::CreateForStructuredBuffer(const uint32_t& srvIndex, ID3D12Resource* pResource, const UINT& numElements, const UINT& structuredByteStride) {
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
 	instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
@@ -104,3 +104,15 @@ void SrvManager::CreateForStructuredBuffer(const uint32_t& srvIndex, ID3D12Resou
 	dxCommon_->GetDevice()->CreateShaderResourceView(pResource, &instancingSrvDesc, GetCPUDescriptorHandle(srvIndex));
 }
 
+void SrvManager::CreateStructuredUAV(const uint32_t& index, ID3D12Resource* resource, const UINT& numElements, const UINT& byteStride) {
+    D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc{};
+    uavDesc.Format                      = DXGI_FORMAT_UNKNOWN;
+    uavDesc.ViewDimension               = D3D12_UAV_DIMENSION_BUFFER;
+    uavDesc.Buffer.FirstElement         = 0;
+    uavDesc.Buffer.NumElements          = numElements;
+    uavDesc.Buffer.CounterOffsetInBytes = 0;
+    uavDesc.Buffer.Flags                = D3D12_BUFFER_UAV_FLAG_NONE;
+    uavDesc.Buffer.StructureByteStride  = byteStride;
+
+    dxCommon_->GetDevice()->CreateUnorderedAccessView(resource, nullptr, &uavDesc, GetCPUDescriptorHandle(index));
+}

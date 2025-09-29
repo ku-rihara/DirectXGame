@@ -6,22 +6,22 @@
 #include "Animation/SkinCluster.h"
 #include "AnimationData.h"
 #include "ModelAnimation.h"
-#include <memory>
-#include <string>
-#include <vector>
-#include <Vector3.h>
-#include <Quaternion.h>
 #include <cstdint>
+#include <memory>
+#include <Quaternion.h>
+#include <string>
+#include <Vector3.h>
+#include <vector>
 
 class Object3DAnimation : public BaseObject3d {
 public:
     Object3DAnimation() = default;
-    ~Object3DAnimation()override;
+    ~Object3DAnimation() override;
 
     /// ============================================================
     /// public methods
     /// ============================================================
-   
+
     /// モデル作成
     static Object3DAnimation* CreateModel(const std::string& instanceName);
 
@@ -41,12 +41,11 @@ public:
     void DebugDraw(const ViewProjection& viewProjection);
     void DebugImgui() override;
 
-   
-
 private:
     void Create(const std::string& fileName);
     Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time);
     Quaternion CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time);
+    void CSSkinning();
 
 private:
     /// ============================================================
@@ -58,7 +57,7 @@ private:
     void UpdateSkinCluster();
     void AnimationTransition(const float& deltaTime);
     void TransitionFinish();
-    void UpdateWVPData(const ViewProjection& viewProjection)override;
+    void UpdateWVPData(const ViewProjection& viewProjection) override;
     void CreateWVPResource() override;
     void CreateMaterialResource() override;
     void CreateShadowMap() override;

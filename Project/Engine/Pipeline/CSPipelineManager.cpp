@@ -36,3 +36,8 @@ void CSPipelineManager::PreDraw(const CSPipelineType& type, ID3D12GraphicsComman
     pipelines_[index]->PreDraw(commandList);
 }
 
+void CSPipelineManager::DisPatch(const CSPipelineType& type, ID3D12GraphicsCommandList* commandList, const UINT& numThreadsX) {
+    size_t index = static_cast<size_t>(type);
+    assert(pipelines_[index]);
+    pipelines_[index]->Dispatch(commandList,numThreadsX);
+ }

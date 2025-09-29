@@ -30,23 +30,22 @@ void SkinningCSPipeline::CreateComputePipeline() {
 }
 
 void SkinningCSPipeline::CreateRootSignature() {
-  
     // DescriptorRangeを設定
     D3D12_DESCRIPTOR_RANGE descriptorRange[4] = {};
 
-    // gMatrixPalette (t0) 
+    // gMatrixPalette (t0)
     descriptorRange[0].BaseShaderRegister                = 0;
     descriptorRange[0].NumDescriptors                    = 1;
     descriptorRange[0].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
     descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-    // gInputVertices (t1) 
+    // gInputVertices (t1)
     descriptorRange[1].BaseShaderRegister                = 1;
     descriptorRange[1].NumDescriptors                    = 1;
     descriptorRange[1].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
     descriptorRange[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-    // gInfluences (t2) 
+    // gInfluences (t2)
     descriptorRange[2].BaseShaderRegister                = 2;
     descriptorRange[2].NumDescriptors                    = 1;
     descriptorRange[2].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
@@ -58,37 +57,37 @@ void SkinningCSPipeline::CreateRootSignature() {
     descriptorRange[3].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
     descriptorRange[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-    // RootParameterを作成
+    // RootParameterを作成 
     D3D12_ROOT_PARAMETER rootParameters[5] = {};
 
-    // 0: SkinningInformation
-    rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[0].ShaderVisibility          = D3D12_SHADER_VISIBILITY_ALL;
-    rootParameters[0].Descriptor.ShaderRegister = 0;
+    // 0: gMatrixPalette (t0)
+    rootParameters[0].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[0].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_ALL;
+    rootParameters[0].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
+    rootParameters[0].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 1: gMatrixPalette (t0)
+    // 1: gInputVertices (t1) 
     rootParameters[1].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[1].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_ALL;
-    rootParameters[1].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
+    rootParameters[1].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
     rootParameters[1].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 2: gInputVertices (t1)
+    // 2: gInfluences (t2)
     rootParameters[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_ALL;
-    rootParameters[2].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
+    rootParameters[2].DescriptorTable.pDescriptorRanges   = &descriptorRange[2];
     rootParameters[2].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 3: gInfluences (t2)
+    // 3: gOutputVertices (u0) 
     rootParameters[3].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[3].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_ALL;
-    rootParameters[3].DescriptorTable.pDescriptorRanges   = &descriptorRange[2];
+    rootParameters[3].DescriptorTable.pDescriptorRanges   = &descriptorRange[3];
     rootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 4: gOutputVertices (u0)
-    rootParameters[4].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[4].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_ALL;
-    rootParameters[4].DescriptorTable.pDescriptorRanges   = &descriptorRange[3];
-    rootParameters[4].DescriptorTable.NumDescriptorRanges = 1;
+    // 4: SkinningInformation
+    rootParameters[4].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[4].ShaderVisibility          = D3D12_SHADER_VISIBILITY_ALL;
+    rootParameters[4].Descriptor.ShaderRegister = 0;
 
     // Root Signature Descriptionを設定
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -98,7 +97,7 @@ void SkinningCSPipeline::CreateRootSignature() {
     descriptionRootSignature.pStaticSamplers   = nullptr;
     descriptionRootSignature.NumStaticSamplers = 0;
 
-     // シリアライズしてバイナリにする
+    // シリアライズしてバイナリにする
     SerializeAndCreateRootSignature(descriptionRootSignature);
 }
 
@@ -110,7 +109,7 @@ void SkinningCSPipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
 }
 
 
-void SkinningCSPipeline::Dispatch(ID3D12GraphicsCommandList* commandList, UINT numVertices) {
+void SkinningCSPipeline::Dispatch(ID3D12GraphicsCommandList* commandList, const UINT& numVertices) {
     // 必要なグループ数を計算
     UINT numGroups = (numVertices + 1023) / 1024;
     commandList->Dispatch(numGroups, 1, 1);
