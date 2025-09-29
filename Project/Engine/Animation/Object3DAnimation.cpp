@@ -3,6 +3,7 @@
 #include "AnimationRegistry.h"
 #include "base/SrvManager.h"
 #include "MathFunction.h"
+#include "Pipeline/CSPipelineManager.h"
 #include "Pipeline/Object3D/Object3DPipeline.h"
 #include "Pipeline/PipelineManager.h"
 #include <algorithm>
@@ -44,7 +45,7 @@ void Object3DAnimation::Create(const std::string& fileName) {
 
         // スキンクラスターの作成
         ModelData modelData = model_->GetModelData();
-        skinCluster_        = modelAnimation_->CreateSkinCluster(modelData, skeleton_);
+        skinCluster_        = modelAnimation_->CreateSkinCluster(modelData, skeleton_, model_);
     }
 
     // リソース作成
@@ -98,7 +99,7 @@ void Object3DAnimation::ChangeAnimation(const std::string& animationName) {
 ///============================================================
 /// アニメーション時間設定
 ///============================================================
-void Object3DAnimation::SetAnimationTime(const float& time) {
+void Object3DAnimation::SetAnimationTime(float time) {
     if (!animations_.empty()) {
         float duration = animations_[currentAnimationIndex_].duration;
         animationTime_ = std::fmod(time, duration);
@@ -249,6 +250,26 @@ void Object3DAnimation::TransitionFinish() {
     isChange_              = false;
 }
 
+void Object3DAnimation::CSSkinning() {
+    auto commandList = DirectXCommon::GetInstance()->GetCommandList();
+
+    // Compute Shader用リソース設定
+    commandList->SetComputeRootDescriptorTable(0, skinCluster_.paletteSrvHandle.second);
+    commandList->SetComputeRootDescriptorTable(1, skinCluster_.inputVertexSrvHandle.second);
+    commandList->SetComputeRootDescriptorTable(2, skinCluster_.influenceSrvHandle.second);
+    commandList->SetComputeRootDescriptorTable(3, skinCluster_.outputVertexUavHandle.second);
+    commandList->SetComputeRootConstantBufferView(4, skinCluster_.skinningInfoResource->GetGPUVirtualAddress());
+
+    // スキニング実行
+    int numVertices = static_cast<int>(model_->GetModelData().vertices.size());
+    CSPipelineManager::GetInstance()->DisPatch(CSPipelineType::Skinning, commandList, numVertices);
+
+        D3D12_RESOURCE_BARRIER barrier = {};
+    barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_UAV;
+    barrier.UAV.pResource          = skinCluster_.outputVertexResource.Get();
+    commandList->ResourceBarrier(1, &barrier);
+}
+
 ///============================================================
 /// 描画
 ///============================================================
@@ -260,10 +281,13 @@ void Object3DAnimation::Draw(const ViewProjection& viewProjection) {
     // WVPデータ更新
     UpdateWVPData(viewProjection);
 
-    // スキニング用パイプライン設定
-    PipelineManager::GetInstance()->PreDraw(PipelineType::SkinningObject3D, DirectXCommon::GetInstance()->GetCommandList());
+    // スキニング
+    CSPipelineManager::GetInstance()->PreDraw(CSPipelineType::Skinning, DirectXCommon::GetInstance()->GetCommandList());
+    CSSkinning();
 
     // アニメーション描画
+    PipelineManager::GetInstance()->PreDraw(PipelineType::SkinningObject3D, DirectXCommon::GetInstance()->GetCommandList());
+    PipelineManager::GetInstance()->PreBlendSet(PipelineType::SkinningObject3D, DirectXCommon::GetInstance()->GetCommandList(),blendMode);
     model_->DrawAnimation(wvpResource_, *shadowMap_, material_, skinCluster_);
 
     // 通常パイプラインに戻す
@@ -340,11 +364,11 @@ const std::string& Object3DAnimation::GetCurrentAnimationName() const {
 ///============================================================
 /// 計算メソッド
 ///============================================================
-Vector3 Object3DAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe, const float& time) {
+Vector3 Object3DAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time) {
     return modelAnimation_->CalculateValue(keyframe, time);
 }
 
-Quaternion Object3DAnimation::CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, const float& time) {
+Quaternion Object3DAnimation::CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time) {
     return modelAnimation_->CalculateValueQuaternion(keyframe, time);
 }
 

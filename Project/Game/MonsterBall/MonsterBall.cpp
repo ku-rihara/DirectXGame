@@ -41,6 +41,7 @@ void MonsterBall::Init() {
 void MonsterBall::Update() {
 
     modelAnimation_->Update(Frame::DeltaTime());
+    modelAnimation2_->Update(Frame::DeltaTime());
 
     emitter_->Update();
     emitter_->Emit();

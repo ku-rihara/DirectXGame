@@ -17,7 +17,7 @@ public:
     virtual void PreDraw(ID3D12GraphicsCommandList* commandList);
 
     // Dispatch
-    virtual void Dispatch(ID3D12GraphicsCommandList* commandList, UINT numThreadsX) = 0;
+    virtual void Dispatch(ID3D12GraphicsCommandList* commandList,const UINT& numThreadsX) = 0;
 
 protected:
     virtual void CreateRootSignature()   = 0;

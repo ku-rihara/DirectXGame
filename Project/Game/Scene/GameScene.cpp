@@ -84,6 +84,7 @@ void GameScene::Update() {
 void GameScene::ModelDraw() {
    
     Object3DRegistry::GetInstance()->DrawAll(viewProjection_);
+    AnimationRegistry::GetInstance()->DrawAll(viewProjection_);
     ParticleManager::GetInstance()->Draw(viewProjection_);
 }
 

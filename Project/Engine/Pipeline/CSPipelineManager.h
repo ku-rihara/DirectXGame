@@ -27,10 +27,10 @@ public:
 
     void Init(DirectXCommon* dxCommon);
     void PreDraw(const CSPipelineType& type, ID3D12GraphicsCommandList* commandList) const;
+    void DisPatch(const CSPipelineType& type, ID3D12GraphicsCommandList* commandList, const UINT& numThreadsX);
 
-private:
-    CSPipelineManager()  = default;
-    ~CSPipelineManager() = default;
+    private : CSPipelineManager() = default;
+    ~CSPipelineManager()          = default;
 
 private:
     std::array<std::unique_ptr<BaseCSPipeline>, static_cast<size_t>(CSPipelineType::Count)> pipelines_;

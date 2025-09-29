@@ -218,6 +218,8 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Shado
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
 }
 
+
+
 void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material, SkinCluster skinCluster, std::optional<uint32_t> textureHandle) {
 
     auto commandList = dxCommon_->GetCommandList();
@@ -247,15 +249,7 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, co
     // 環境マップ
     uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
     commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
-    // compute
 
-    // コンピュートシェーダー用のリソース設定
-    commandList->SetComputeRootDescriptorTable(0, skinCluster.paletteSrvHandle.second);
-    commandList->SetComputeRootDescriptorTable(2, skinCluster.influenceSrvHandle.second);
-    commandList->SetComputeRootDescriptorTable(3, skinCluster.influenceSrvHandle.second);
-    commandList->SetComputeRootConstantBufferView(4, skinningInformation_.second);
-
-   
     // ライト
     Light::GetInstance()->SetLightCommands(commandList);
 

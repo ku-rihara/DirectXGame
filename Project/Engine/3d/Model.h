@@ -17,7 +17,6 @@
 #include "Material/ParticleMaterial.h"
 
 // 3Dモデル共通部
-class ModelAnimation;
 class ModelCommon {
 private:
     ///============================================================
@@ -40,6 +39,8 @@ class TextureManager;
 class ShadowMap;
 
 class Model {
+
+	 
 
 public:
     ///============================================================
@@ -109,5 +110,6 @@ public:
     ///============================================================
     const uint32_t GetTextureIndex() const { return textureIndex_; }
     const ModelData& GetModelData() { return modelData_; }
+    ID3D12Resource* GetVertexResource() { return vertexResource_.Get(); }
     bool GetIsFileGltf() const { return isFileGltf_; }
 };
