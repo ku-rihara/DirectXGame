@@ -6,7 +6,6 @@
 #include <Windows.h>
 #include <wrl/client.h>
 
-
 // 前方宣言
 class ImGuiManager;
 class TextureManager;
@@ -19,6 +18,11 @@ class DxSwapChain;
 class DxRenderTarget;
 class DxCompiler;
 class DxDepthBuffer;
+
+enum class ViewType {
+    UnorderedAccess,
+    ShaderResource,
+};
 
 class DirectXCommon {
 private:
@@ -52,17 +56,17 @@ public:
     void Finalize();
 
     // リソースの作成
-    Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(Microsoft::WRL::ComPtr<ID3D12Device> device, size_t sizeInBytes);
+    Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(Microsoft::WRL::ComPtr<ID3D12Device> device, const size_t& sizeInBytes, const ViewType& viewType = ViewType::ShaderResource);
 
     // DescriptorHeapの作成
     Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> InitializeDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device> device,
-        D3D12_DESCRIPTOR_HEAP_TYPE heapType,UINT numDescriptors,bool shaderVisible);
+        const D3D12_DESCRIPTOR_HEAP_TYPE& heapType, const UINT& numDescriptors, const bool& shaderVisible);
 
 public:
     /// レンダーテクスチャ関連
     void PreRenderTexture();
     void DepthBarrierTransition();
-   
+
 private:
     ImGuiManager* imguiManager_     = nullptr;
     TextureManager* textureManager_ = nullptr;
@@ -90,8 +94,8 @@ public:
     ///==========================================================
 
     /// ディスクリプタハンドル取得
-    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap,uint32_t descriptorSize,uint32_t index);
-    D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap,uint32_t descriptorSize,uint32_t index);
+    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
+    D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
     DxDevice* GetDxDevice() const { return dxDevice_.get(); }
     DxCommand* GetDxCommand() const { return dxCommand_.get(); }

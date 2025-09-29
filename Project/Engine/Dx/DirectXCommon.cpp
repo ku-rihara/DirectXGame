@@ -6,10 +6,10 @@
 // dx
 #include "DxCommand.h"
 #include "DxCompiler.h"
+#include "DxDepthBuffer.h"
 #include "DxDevice.h"
 #include "DxRenderTarget.h"
 #include "DxSwapChain.h"
-#include "DxDepthBuffer.h"
 #include <cassert>
 
 #pragma comment(lib, "dxguid.lib")
@@ -53,7 +53,7 @@ void DirectXCommon::InitDxClasses() {
 void DirectXCommon::InitRenderingResources() {
 
     dxSwapChain_->CreateRenderTargetViews(rtvManager_);
-    dxRenderTarget_->Init(dxDevice_->GetDevice(),depthBuffer_.get(), rtvManager_, srvManager_, dxCommand_.get(), dxSwapChain_.get(), backBufferWidth_, backBufferHeight_);
+    dxRenderTarget_->Init(dxDevice_->GetDevice(), depthBuffer_.get(), rtvManager_, srvManager_, dxCommand_.get(), dxSwapChain_.get(), backBufferWidth_, backBufferHeight_);
 }
 
 void DirectXCommon::PreDraw() {
@@ -80,40 +80,60 @@ void DirectXCommon::PostDraw() {
     dxCommand_->ResetCommand();
 }
 
-Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(Microsoft::WRL::ComPtr<ID3D12Device> device, size_t sizeInBytes) {
-    //  リソース設定
+Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(
+    Microsoft::WRL::ComPtr<ID3D12Device> device,
+    const std::size_t& sizeInBytes,
+    const ViewType& viewType) {
+    // リソース記述
     D3D12_RESOURCE_DESC resourceDesc{};
     resourceDesc.Dimension        = D3D12_RESOURCE_DIMENSION_BUFFER;
-    resourceDesc.Width            = sizeInBytes;
+    resourceDesc.Width            = static_cast<UINT64>(sizeInBytes);
     resourceDesc.Height           = 1;
     resourceDesc.DepthOrArraySize = 1;
     resourceDesc.MipLevels        = 1;
     resourceDesc.SampleDesc.Count = 1;
     resourceDesc.Format           = DXGI_FORMAT_UNKNOWN;
     resourceDesc.Layout           = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-    resourceDesc.Flags            = D3D12_RESOURCE_FLAG_NONE;
 
-    //  ヒープ設定
-    D3D12_HEAP_PROPERTIES heapProperties{};
-    heapProperties.Type                 = D3D12_HEAP_TYPE_UPLOAD;
-    heapProperties.CPUPageProperty      = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-    heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+    // ヒーププロパティ
+    D3D12_HEAP_PROPERTIES heapProps{};
+    heapProps.CPUPageProperty      = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+    heapProps.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+
+    //初期ステート
+    D3D12_RESOURCE_STATES initialState = D3D12_RESOURCE_STATE_COMMON;
+
+    switch (viewType) {
+    case ViewType::UnorderedAccess:
+        // UAV用
+        resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+        heapProps.Type     = D3D12_HEAP_TYPE_DEFAULT;
+        initialState       = D3D12_RESOURCE_STATE_COMMON;
+        break;
+
+    case ViewType::ShaderResource:
+    default:
+        // SRV用
+        resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
+        heapProps.Type     = D3D12_HEAP_TYPE_UPLOAD;
+        initialState       = D3D12_RESOURCE_STATE_GENERIC_READ;
+        break;
+    }
 
     Microsoft::WRL::ComPtr<ID3D12Resource> resource;
+    HRESULT hr = device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc,
+        initialState, nullptr, IID_PPV_ARGS(&resource));
 
-    //  バッファ生成
-    hr_ = device->CreateCommittedResource(
-        &heapProperties, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-        IID_PPV_ARGS(&resource));
-    assert(SUCCEEDED(hr_));
+    assert(SUCCEEDED(hr) && "CreateCommittedResource failed");
+    if (FAILED(hr)) {
+        return nullptr;
+    }
 
     return resource;
 }
-
 Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DirectXCommon::InitializeDescriptorHeap(
-    Microsoft::WRL::ComPtr<ID3D12Device> device,D3D12_DESCRIPTOR_HEAP_TYPE heapType,
-    UINT numDescriptors,
-    bool shaderVisible) {
+    Microsoft::WRL::ComPtr<ID3D12Device> device, const D3D12_DESCRIPTOR_HEAP_TYPE& heapType,
+    const UINT& numDescriptors, const bool& shaderVisible) {
 
     Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap = nullptr;
     D3D12_DESCRIPTOR_HEAP_DESC DescriptorHeapDesc{};
@@ -157,7 +177,6 @@ Microsoft::WRL::ComPtr<ID3D12Device> DirectXCommon::GetDevice() const {
 ID3D12GraphicsCommandList* DirectXCommon::GetCommandList() const {
     return dxCommand_->GetCommandList();
 }
-
 
 void DirectXCommon::Finalize() {
 

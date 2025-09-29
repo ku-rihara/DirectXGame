@@ -218,18 +218,16 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Shado
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
 }
 
+
+
 void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material, SkinCluster skinCluster, std::optional<uint32_t> textureHandle) {
 
     auto commandList = dxCommon_->GetCommandList();
 
-    D3D12_VERTEX_BUFFER_VIEW vbvs[2] = {
-        vertexBufferView_, // 頂点データ
-        skinCluster.influenceBufferView // インフルエンス
-    };
-
-    // 頂点バッファとインデックスバッファの設定
+ 
     commandList->IASetIndexBuffer(&indexBufferView_);
-    commandList->IASetVertexBuffers(0, 2, vbvs);
+    commandList->IASetVertexBuffers(0, 1, &skinCluster.outputVertexBufferView); 
+   
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     material.SetCommandList(commandList);
@@ -247,7 +245,6 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, co
     // 環境マップ
     uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
     commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
-    commandList->SetGraphicsRootDescriptorTable(14, skinCluster.paletteSrvHandle.second);
 
     // ライト
     Light::GetInstance()->SetLightCommands(commandList);

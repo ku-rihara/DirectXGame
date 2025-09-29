@@ -110,5 +110,6 @@ public:
     ///============================================================
     const uint32_t GetTextureIndex() const { return textureIndex_; }
     const ModelData& GetModelData() { return modelData_; }
+    ID3D12Resource* GetVertexResource() { return vertexResource_.Get(); }
     bool GetIsFileGltf() const { return isFileGltf_; }
 };

@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 
+class Model;
 class ModelAnimation {
 public:
     ModelAnimation()  = default;
@@ -29,7 +30,16 @@ public:
     int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
 
     /// スキンクラスター作成
-    SkinCluster CreateSkinCluster(ModelData& modelData, const Skeleton& skeleton);
+    SkinCluster CreateSkinCluster(ModelData& modelData, const Skeleton& skeleton, Model* model);
+
+private:
+    // 各Resource作成
+    void CreatePaletteResource(SkinCluster& skinCluster, const Skeleton& skeleton);
+    void CreateInputVertexSRV(SkinCluster& skinCluster, ModelData& modelData, Model* model);
+    void CreateInfluenceResource(SkinCluster& skinCluster, ModelData& modelData);
+    void CreateOutputVertexResourceAndUAV(SkinCluster& skinCluster, ModelData& modelData);
+    void CreateSkinningInfoResource(SkinCluster& skinCluster, ModelData& modelData);
+    void SetupInfluenceVBV(SkinCluster& skinCluster, ModelData& modelData);
 
 private:
     /// ============================================================

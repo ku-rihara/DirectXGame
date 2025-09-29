@@ -8,6 +8,7 @@
 #include "Frame/Frame.h"
 #include "Lighrt/Light.h"
 #include <imgui.h>
+#include "Animation/AnimationRegistry.h"
 
 void GameScene::Init() {
     //// グローバル変数の読み込み
@@ -236,6 +237,7 @@ void GameScene::FinishUpdate() {
 void GameScene::ModelDraw() {
 
     Object3DRegistry::GetInstance()->DrawAll(viewProjection_);
+    AnimationRegistry::GetInstance()->DrawAll(viewProjection_);
     ParticleManager::GetInstance()->Draw(viewProjection_);
 }
 
