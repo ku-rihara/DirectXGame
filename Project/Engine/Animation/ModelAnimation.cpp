@@ -259,6 +259,8 @@ void ModelAnimation::CreateOutputVertexResourceAndUAV(SkinCluster& skinCluster, 
     uavDesc.ViewDimension                    = D3D12_UAV_DIMENSION_BUFFER;
     uavDesc.Buffer.FirstElement              = 0;
     uavDesc.Buffer.NumElements               = UINT(modelData.vertices.size());
+    uavDesc.Buffer.CounterOffsetInBytes      = 0;
+    uavDesc.Buffer.Flags                     = D3D12_BUFFER_UAV_FLAG_NONE;
     uavDesc.Buffer.StructureByteStride       = sizeof(VertexData);
 
     dxCommon->GetDevice()->CreateUnorderedAccessView(
@@ -267,10 +269,9 @@ void ModelAnimation::CreateOutputVertexResourceAndUAV(SkinCluster& skinCluster, 
         &uavDesc,
         skinCluster.outputVertexUavHandle.first);
 
-    // //  Vertex Buffer Viewを作成
-    //skinCluster.outputVertexBufferView.BufferLocation = skinCluster.outputVertexResource->GetGPUVirtualAddress();
-    //skinCluster.outputVertexBufferView.StrideInBytes  = sizeof(VertexData);
-    //skinCluster.outputVertexBufferView.SizeInBytes    = UINT(sizeof(VertexData) * modelData.vertices.size());
+    skinCluster.outputVertexBufferView.BufferLocation = skinCluster.outputVertexResource->GetGPUVirtualAddress();
+    skinCluster.outputVertexBufferView.SizeInBytes    = static_cast<UINT>(sizeof(VertexData) * modelData.vertices.size());
+    skinCluster.outputVertexBufferView.StrideInBytes  = sizeof(VertexData);
 }
 
 void ModelAnimation::CreateSkinningInfoResource(SkinCluster& skinCluster, ModelData& modelData) {

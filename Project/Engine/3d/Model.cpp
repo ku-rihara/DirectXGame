@@ -224,14 +224,10 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, co
 
     auto commandList = dxCommon_->GetCommandList();
 
-    D3D12_VERTEX_BUFFER_VIEW vbvs[2] = {
-        vertexBufferView_, // 頂点データ
-        skinCluster.influenceBufferView // インフルエンス
-    };
-
-    // 頂点バッファとインデックスバッファの設定
+ 
     commandList->IASetIndexBuffer(&indexBufferView_);
-    commandList->IASetVertexBuffers(0, 2, vbvs);
+    commandList->IASetVertexBuffers(0, 1, &skinCluster.outputVertexBufferView); 
+   
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     material.SetCommandList(commandList);
