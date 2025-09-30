@@ -2,8 +2,10 @@
 #include "2d/Sprite.h"
 #include "Dx/DirectXCommon.h"
 #include "Pipeline/PipelineManager.h"
+#include <algorithm>
 #include <cstdlib>
 #include <imgui.h>
+#include <vector>
 
 bool SpriteRegistry::isDestroyed_ = false;
 
@@ -58,9 +60,16 @@ void SpriteRegistry::UnregisterObject(Sprite* object) {
 void SpriteRegistry::DrawAll() {
     PipelineManager::GetInstance()->PreDraw(PipelineType::Sprite, DirectXCommon::GetInstance()->GetCommandList());
 
-    auto objectsCopy = sprites_;
+    std::vector<Sprite*> sortedSprites(sprites_.begin(), sprites_.end());
+    // ソート
+    std::sort(sortedSprites.begin(), sortedSprites.end(), [](Sprite* a, Sprite* b) {
+        if (a == nullptr || b == nullptr)
+            return false;
+        return a->GetLayerNum() < b->GetLayerNum(); 
+    });
 
-    for (Sprite* obj : objectsCopy) {
+    // ソート済みのスプライトを描画
+    for (Sprite* obj : sortedSprites) {
         if (obj != nullptr && sprites_.find(obj) != sprites_.end()) {
             obj->Draw();
         }
