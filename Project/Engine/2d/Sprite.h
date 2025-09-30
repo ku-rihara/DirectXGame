@@ -8,6 +8,7 @@
 #include "struct/ModelData.h"
 #include "struct/TransformationMatrix.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
+#include <cstdint>
 #include <string>
 
 class Sprite {
@@ -23,11 +24,13 @@ public:
         Vector2 translate;
     };
 
-    struct StartParameter {
-        Vector2 position_ = Vector2::ZeroVector();
-        Vector2 scale_    = Vector2::UnitVector();
-        Vector2 uvScale_  = Vector2::UnitVector();
-        Vector4 color_    = Vector4::kWHITE();
+    struct Parameter {
+        Vector2 position_         = Vector2::ZeroVector();
+        Vector2 scale_            = Vector2::UnitVector();
+        Vector2 uvScale_          = Vector2::UnitVector();
+        Vector4 color_            = Vector4::kWHITE();
+        Vector2 startAnchorPoint_ = Vector2::UnitVector();
+        int32_t startLayerNum_;
     };
 
 public:
@@ -54,22 +57,20 @@ public:
     UVTransform uvTransform_; //< UVトランスフォーム
     Vector2 textureLeftTop_; //< テクスチャ左上
 
-    // anchorPoint
-    Vector2 anchorPoint_;
-
     // flip
     bool isFlipX_ = false;
     bool isFlipY_ = false;
+
+    Vector2 anchorPoint_;
 
 private:
     // パラメータ編集
     GlobalParameter* globalParameter_;
     std::string groupName_;
-    const std::string filePath_ = "Resources/Texture/";
+    const std::string filePath_   = "Resources/Texture/";
     const std::string folderPath_ = "SpriteParam";
-    StartParameter startParameter_;
+    Parameter parameter_;
 
-    // レイヤー番号
     int32_t layerNum_;
 
     // テクスチャ
@@ -100,7 +101,7 @@ public:
     const Vector2& GetTextureSize() const { return textureSize_; }
     const Vector2& GetTextureLeftTop() const { return textureLeftTop_; }
     const int32_t& GetLayerNum() const { return layerNum_; }
-    const StartParameter& GetStartParameter() const { return startParameter_; }
+    const Parameter& GetStartParameter() const { return parameter_; }
     const bool& GetIsFlipX() const { return isFlipX_; }
     const bool& GetIsFlipY() const { return isFlipY_; }
 
