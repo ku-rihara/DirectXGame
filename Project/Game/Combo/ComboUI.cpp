@@ -5,10 +5,9 @@
 
 void ComboUI::Init(const ComboDigit& digit) {
 
-    int32_t textureId = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Number/Numbers.png");
-
+  
     /// Sprite create
-    sprite_.reset(Sprite::Create(textureId, Vector2::UnitVector(), Vector4::kWHITE()));
+    sprite_.reset(Sprite::Create("Number/Numbers.png"));
     sprite_->SetUVScale(Vector2(0.1f, 1.0f));
     sprite_->SetAnchorPoint(Vector2(0.5f, 0.5f));
 
