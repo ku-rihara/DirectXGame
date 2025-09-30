@@ -1,10 +1,4 @@
 #include "IntroAppearPurpose.h"
-#include "BackGroundObject/GameBackGroundObject.h"
-#include "FireInjectors/FireInjectors.h"
-#include "Frame/Frame.h"
-#include "GameCamera/GameCamera.h"
-#include "player/Player.h"
-#include "UI/HowToOperate.h"
 #include <imgui.h>
 
 void IntroAppearPurpose::Init(const std::string& name) {
@@ -13,6 +7,9 @@ void IntroAppearPurpose::Init(const std::string& name) {
 
     // Easing 初期化
     EasingInit();
+
+    // スプライト初期化
+   /* sprite_*/
 
     // 変数初期化
     step_             = Step::APPEARWAIT;
@@ -27,7 +24,6 @@ void IntroAppearPurpose::Update(const float& playSpeed) {
 }
 
 void IntroAppearPurpose::Draw() {
-  
 }
 
 // Step function
@@ -45,6 +41,7 @@ void IntroAppearPurpose::Finish() {
 }
 
 bool IntroAppearPurpose::ProcessStep(const float& limitTime, const Step& nextStep, const bool& enableEnemySpawn) {
+    // タイム加算
     currentTime_ += playSpeed_;
 
     if (currentTime_ >= limitTime) {
@@ -61,7 +58,8 @@ bool IntroAppearPurpose::ProcessStep(const float& limitTime, const Step& nextSte
 void IntroAppearPurpose::BindParams() {
     BaseGameIntro::BindParams();
     globalParameter_->Bind(groupName_, "AppearWaitTime", &appearWaitTime_);
-
+    globalParameter_->Bind(groupName_, "disAppearWaitTime", &disAppearWaitTime_);
+    globalParameter_->Bind(groupName_, "finishWaitTime", &finishWaitTime_);
 }
 
 void IntroAppearPurpose::AdjustParam() {
@@ -70,7 +68,8 @@ void IntroAppearPurpose::AdjustParam() {
 
 void IntroAppearPurpose::AdjustUniqueParam() {
     ImGui::DragFloat("AppearWait Time", &appearWaitTime_, 0.01f, 0.0f);
-  
+    ImGui::DragFloat("DisAppear Time", &disAppearWaitTime_, 0.01f, 0.0f);
+    ImGui::DragFloat("FinishWait Time", &finishWaitTime_, 0.01f, 0.0f);
 }
 
 void (IntroAppearPurpose::* IntroAppearPurpose::spFuncTable_[])() = {
@@ -84,5 +83,5 @@ void (IntroAppearPurpose::* IntroAppearPurpose::spFuncTable_[])() = {
 
 void IntroAppearPurpose::EasingInit() {
     spriteVariable_.rotateEasing = std::make_unique<Easing<float>>();
-    spriteVariable_.scaleEasing = std::make_unique<Easing<Vector2>>();
- }
+    spriteVariable_.scaleEasing  = std::make_unique<Easing<Vector2>>();
+}

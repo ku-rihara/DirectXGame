@@ -57,6 +57,8 @@ private:
 private:
     // Parameters
     float appearWaitTime_;
+    float disAppearWaitTime_;
+    float finishWaitTime_;
 
     // Objects
     std::unique_ptr<Sprite> sprite_ = nullptr;
