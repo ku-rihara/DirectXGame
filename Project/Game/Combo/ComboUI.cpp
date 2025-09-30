@@ -5,22 +5,22 @@
 
 void ComboUI::Init(const ComboDigit& digit) {
 
-  
     /// Sprite create
     sprite_.reset(Sprite::Create("Number/Numbers.png"));
-    sprite_->SetUVScale(Vector2(0.1f, 1.0f));
-    sprite_->SetAnchorPoint(Vector2(0.5f, 0.5f));
+    /*  sprite_->SetUVScale(Vector2(0.1f, 1.0f));
+      sprite_->SetAnchorPoint(Vector2(0.5f, 0.5f));*/
 
     CreateGroupName(digit);
 
     isVisible_ = true;
 }
 
-void ComboUI::Update(const Vector2& scale,const float &alpha) {
-    sprite_->SetPosition(position_);
+void ComboUI::Update(const Vector2& scale, const float& alpha) {
+
+    sprite_->transform_.translate = position_;
+    sprite_->transform_.scale     = (Vector2(scale.x * 0.1f, scale.y));
+    sprite_->uvTransform_.pos     = (Vector2(uvPosX_, 0.0f));
     sprite_->SetAlpha(alpha);
-    sprite_->SetScale(Vector2(scale.x * 0.1f, scale.y));
-    sprite_->SetUVTranslate(Vector2(uvPosX_, 0.0f));
 }
 void ComboUI::Draw() {
     if (!isVisible_) {
