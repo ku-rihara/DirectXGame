@@ -117,9 +117,10 @@ void Sprite::CreateSprite(const std::string& textureName) {
     ///==========================================================================================
     //  変数初期化
     ///==========================================================================================
-    transform_.translate           = startPosition_;
-    transform_.scale               = startScale_;
-    material_.materialData_->color = startColor_;
+    transform_.translate           = startParameter_.position_;
+    transform_.scale               = startParameter_.scale_;
+    uvTransform_.scale             = startParameter_.uvScale_;
+    material_.materialData_->color = startParameter_.color_;
 
     // テクスチャ座標取得
     const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(textureIndex_);
@@ -208,9 +209,10 @@ void Sprite::Draw() {
 ///==========================================================
 void Sprite::BindParams() {
     globalParameter_->Bind(groupName_, "layerNum", &layerNum_);
-    globalParameter_->Bind(groupName_, "startPosition", &startPosition_);
-    globalParameter_->Bind(groupName_, "startScale", &startScale_);
-    globalParameter_->Bind(groupName_, "startColor", &startColor_);
+    globalParameter_->Bind(groupName_, "startPosition", &startParameter_.position_);
+    globalParameter_->Bind(groupName_, "startScale", &startParameter_.scale_);
+    globalParameter_->Bind(groupName_, "startColor", &startParameter_.color_);
+    globalParameter_->Bind(groupName_, "startColor", &startParameter_.uvScale_);
 }
 
 ///=========================================================
@@ -228,9 +230,9 @@ void Sprite::AdjustParam() {
         ImGui::InputInt("LayerNum", &layerNum_);
 
         ImGui::SeparatorText("InitParam");
-        ImGui::DragFloat2("StartPos", &startPosition_.x, 0.1f);
-        ImGui::DragFloat2("StartScale", &startScale_.x, 0.1f);
-        ImGui::ColorEdit4("StartColor", &startColor_.x);
+        ImGui::DragFloat2("StartPos", &startParameter_.position_.x, 0.1f);
+        ImGui::DragFloat2("StartScale", &startParameter_.scale_.x, 0.1f);
+        ImGui::ColorEdit4("StartColor", &startParameter_.color_.x);
 
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);

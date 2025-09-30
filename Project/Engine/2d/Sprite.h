@@ -23,6 +23,13 @@ public:
         Vector2 translate;
     };
 
+    struct StartParameter {
+        Vector2 position_ = Vector2::ZeroVector();
+        Vector2 scale_    = Vector2::UnitVector();
+        Vector2 uvScale_  = Vector2::UnitVector();
+        Vector4 color_    = Vector4::kWHITE();
+    };
+
 public:
     Sprite() = default;
     ~Sprite();
@@ -59,12 +66,11 @@ private:
     GlobalParameter* globalParameter_;
     std::string groupName_;
     const std::string filePath_ = "Resources/Texture/";
+    const std::string folderPath_ = "SpriteParam";
+    StartParameter startParameter_;
 
     // レイヤー番号
     int32_t layerNum_;
-    Vector2 startPosition_;
-    Vector2 startScale_;
-    Vector4 startColor_;
 
     // テクスチャ
     Vector2 textureSize_; //< テクスチャ自体のサイズ
@@ -77,8 +83,8 @@ private:
 
     // Resource
     Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_; //< 頂点リソース
-    Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;    //< wvpリソース
-    Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;  //<indexリソース
+    Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_; //< wvpリソース
+    Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_; //<indexリソース
 
     // データ
     TransformationMatrix2D* wvpData_;
@@ -94,7 +100,7 @@ public:
     const Vector2& GetTextureSize() const { return textureSize_; }
     const Vector2& GetTextureLeftTop() const { return textureLeftTop_; }
     const int32_t& GetLayerNum() const { return layerNum_; }
-    const Vector2& GetStartScale() const { return startScale_; }
+    const StartParameter& GetStartParameter() const { return startParameter_; }
     const bool& GetIsFlipX() const { return isFlipX_; }
     const bool& GetIsFlipY() const { return isFlipY_; }
 
