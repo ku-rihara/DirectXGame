@@ -54,7 +54,6 @@ private:
     };
 
 private:
-    
     /// usisng
 
     using Item = std::variant<int32_t, uint32_t, float, Vector2, Vector3, Vector4, bool, std::string>;
@@ -67,7 +66,7 @@ private:
 
 public:
     static GlobalParameter* GetInstance();
-    GlobalParameter() = default;
+    GlobalParameter()  = default;
     ~GlobalParameter() = default;
 
     ///=================================================================================
@@ -109,6 +108,8 @@ public:
     void SyncAll();
     void SyncParamForGroup(const std::string& group);
 
+    bool HasGroup(const std::string& groupName) const;
+
     // ------------------------------------------------------------------------------
     // ファイルへの保存・読み込み
     // ------------------------------------------------------------------------------
@@ -136,7 +137,6 @@ private:
 
     /// グループごとの可視性フラグを管理
     std::unordered_map<std::string, bool> visibilityFlags_;
-
 
     std::unordered_map<std::string, std::vector<BoundItem>> bindings_;
 
