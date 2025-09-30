@@ -117,10 +117,12 @@ void Sprite::CreateSprite(const std::string& textureName) {
     ///==========================================================================================
     //  変数初期化
     ///==========================================================================================
-    transform_.translate           = startParameter_.position_;
-    transform_.scale               = startParameter_.scale_;
-    uvTransform_.scale             = startParameter_.uvScale_;
-    material_.materialData_->color = startParameter_.color_;
+    transform_.translate           = parameter_.position_;
+    transform_.scale               = parameter_.scale_;
+    uvTransform_.scale             = parameter_.uvScale_;
+    material_.materialData_->color = parameter_.color_;
+    anchorPoint_                   = parameter_.startAnchorPoint_;
+    layerNum_                      = parameter_.startLayerNum_;
 
     // テクスチャ座標取得
     const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(textureIndex_);
@@ -208,11 +210,12 @@ void Sprite::Draw() {
 /// バインド
 ///==========================================================
 void Sprite::BindParams() {
-    globalParameter_->Bind(groupName_, "layerNum", &layerNum_);
-    globalParameter_->Bind(groupName_, "startPosition", &startParameter_.position_);
-    globalParameter_->Bind(groupName_, "startScale", &startParameter_.scale_);
-    globalParameter_->Bind(groupName_, "startColor", &startParameter_.color_);
-    globalParameter_->Bind(groupName_, "startColor", &startParameter_.uvScale_);
+    globalParameter_->Bind(groupName_, "layerNum", &parameter_.startLayerNum_);
+    globalParameter_->Bind(groupName_, "startPosition", &parameter_.position_);
+    globalParameter_->Bind(groupName_, "startScale", &parameter_.scale_);
+    globalParameter_->Bind(groupName_, "startColor", &parameter_.color_);
+    globalParameter_->Bind(groupName_, "startUVScale", &parameter_.uvScale_);
+    globalParameter_->Bind(groupName_, "startAnchorPoint", &parameter_.startAnchorPoint_);
 }
 
 ///=========================================================
@@ -227,13 +230,14 @@ void Sprite::AdjustParam() {
         ImGui::PushID(groupName_.c_str());
 
         ImGui::SeparatorText("LayerNum");
-        ImGui::InputInt("LayerNum", &layerNum_);
+        ImGui::InputInt("LayerNum", &parameter_.startLayerNum_);
 
         ImGui::SeparatorText("InitParam");
-        ImGui::DragFloat2("StartPos", &startParameter_.position_.x, 0.1f);
-        ImGui::DragFloat2("StartScale", &startParameter_.scale_.x, 0.1f);
-        ImGui::ColorEdit4("StartColor", &startParameter_.color_.x);
-
+        ImGui::DragFloat2("StartPos", &parameter_.position_.x, 0.1f);
+        ImGui::DragFloat2("StartScale", &parameter_.scale_.x, 0.1f);
+        ImGui::DragFloat2("StartAnchorPoint", &parameter_.startAnchorPoint_.x, 0.01f);
+        ImGui::ColorEdit4("StartColor", &parameter_.color_.x);
+      
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
