@@ -71,7 +71,9 @@ void SpriteRegistry::DrawAll() {
     // ソート済みのスプライトを描画
     for (Sprite* obj : sortedSprites) {
         if (obj != nullptr && sprites_.find(obj) != sprites_.end()) {
-            obj->Draw();
+            if (obj->GetIsDraw()) {
+                obj->Draw();
+            }
         }
     }
 }

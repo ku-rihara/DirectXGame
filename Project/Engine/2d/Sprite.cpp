@@ -117,7 +117,7 @@ void Sprite::CreateSprite(const std::string& textureName) {
     ///==========================================================================================
     //  変数初期化
     ///==========================================================================================
-    transform_.translate           = parameter_.position_;
+    transform_.pos                 = parameter_.position_;
     transform_.scale               = parameter_.scale_;
     uvTransform_.scale             = parameter_.uvScale_;
     material_.materialData_->color = parameter_.color_;
@@ -177,7 +177,7 @@ void Sprite::Draw() {
     //  Transform
     ///==========================================================================================
     Vector3 size      = Vector3(textureSize_.x, textureSize_.y, 0.0f) * Vector3(transform_.scale.x, transform_.scale.y, 0.0f);
-    Vector3 translate = Vector3(transform_.translate.x, transform_.translate.y, 0.0f);
+    Vector3 translate = Vector3(transform_.pos.x, transform_.pos.y, 0.0f);
 
     // 行列変換
     Matrix4x4 worldMatrixSprite               = MakeAffineMatrix(size, transform_.rotate, translate);
@@ -237,7 +237,7 @@ void Sprite::AdjustParam() {
         ImGui::DragFloat2("StartScale", &parameter_.scale_.x, 0.1f);
         ImGui::DragFloat2("StartAnchorPoint", &parameter_.startAnchorPoint_.x, 0.01f);
         ImGui::ColorEdit4("StartColor", &parameter_.color_.x);
-      
+
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
