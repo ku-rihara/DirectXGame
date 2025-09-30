@@ -21,7 +21,7 @@ public:
     struct Transform {
         Vector2 scale;
         Vector3 rotate;
-        Vector2 translate;
+        Vector2 pos;
     };
 
     struct Parameter {
@@ -72,6 +72,7 @@ private:
     Parameter parameter_;
 
     int32_t layerNum_;
+    bool isDraw_ = true;
 
     // テクスチャ
     Vector2 textureSize_; //< テクスチャ自体のサイズ
@@ -96,7 +97,7 @@ public:
     ///=========================================================================================
     ///  getter
     ///=========================================================================================
-    const Vector2& GetPosition() const { return transform_.translate; }
+    const Vector2& GetPosition() const { return transform_.pos; }
     const Vector2& GetAnchorPoint() const { return anchorPoint_; }
     const Vector2& GetTextureSize() const { return textureSize_; }
     const Vector2& GetTextureLeftTop() const { return textureLeftTop_; }
@@ -104,6 +105,7 @@ public:
     const Parameter& GetStartParameter() const { return parameter_; }
     const bool& GetIsFlipX() const { return isFlipX_; }
     const bool& GetIsFlipY() const { return isFlipY_; }
+    const bool& GetIsDraw() const { return isDraw_; };
 
     ///=========================================================================================
     ///  setter
@@ -119,4 +121,5 @@ public:
     void SetAlpha(const float& alpha);
 
     void SetLayerNum(const int32_t& layerNum) { layerNum_ = layerNum; }
+    void SetIsDraw(const bool& isDraw) { isDraw_ = isDraw; }
 };
