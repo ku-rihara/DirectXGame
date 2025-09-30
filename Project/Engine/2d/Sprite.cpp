@@ -1,26 +1,57 @@
 #include "Sprite.h"
-#include "Pipeline/Sprite/SpritePipeline.h"
 #include "base/TextureManager.h"
+#include "base/WinApp.h"
 #include "Dx/DirectXCommon.h"
-#include"base/WinApp.h"
+#include "SpriteRegistry.h"
 #include <imgui.h>
 
-namespace {
-DirectXCommon* directXCommon = DirectXCommon::GetInstance();
-// Model* model=Model::GetInstance();
+Sprite::~Sprite() {
+    if (SpriteRegistry::GetInstance()) {
+        SpriteRegistry::GetInstance()->UnregisterObject(this);
+    }
 }
 
-Sprite* Sprite::Create(const uint32_t& textureHandle, const Vector2& position, const Vector4& color) {
-    // 新しいModelインスタンスを作成
-    Sprite* sprite = new Sprite();
-    sprite->CreateSprite(textureHandle, position, color);
-    return sprite; // 成功した場合は新しいモデルを返す
+Sprite* Sprite::Create(const std::string& textureName, const bool& isAbleEdit) {
+    // 新しいSpriteインスタンスを作成
+    std::unique_ptr<Sprite> sprite = std::make_unique<Sprite>();
+
+    sprite->ParamEditorSet(textureName, isAbleEdit);
+
+    SpriteRegistry::GetInstance()->RegisterObject(sprite.get());
+    return sprite.release();
 }
 
-void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position, const Vector4& color) {
-    // テクスチャ
-    texture_      = TextureManager::GetInstance()->GetTextureHandle(textureHandle);
-    textureIndex_ = textureHandle;
+void Sprite::ParamEditorSet(const std::string& textureName, const bool& isAbleEditor) {
+    if (!isAbleEditor) {
+        return;
+    }
+    // グローバルパラメータ
+    globalParameter_ = GlobalParameter::GetInstance();
+
+    std::string uniqueGroupName = textureName;
+    int32_t index               = 0;
+
+    // グループが既に存在する場合、インデックスを追加
+    while (globalParameter_->HasGroup(uniqueGroupName)) {
+        index++;
+        uniqueGroupName = textureName + std::to_string(index);
+    }
+
+    groupName_ = uniqueGroupName;
+
+    // グループ作成
+    globalParameter_->CreateGroup(groupName_, false);
+    BindParams();
+    globalParameter_->SyncParamForGroup(groupName_);
+    CreateSprite(filePath_ + textureName);
+}
+
+void Sprite::CreateSprite(const std::string& textureName) {
+    DirectXCommon* directXCommon = DirectXCommon::GetInstance();
+
+    // テクスチャ読み込み
+    textureIndex_ = TextureManager::GetInstance()->LoadTexture(textureName);
+    texture_      = TextureManager::GetInstance()->GetTextureHandle(textureIndex_);
 
     // Sprite用の頂点リソースを作る
     vertexResource_ = directXCommon->CreateBufferResource(directXCommon->GetDevice(), sizeof(VertexData) * 4);
@@ -51,7 +82,7 @@ void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position
     indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
     // 使用するリソースのサイズはインデックス6つ分のサイズ
     indexBufferView_.SizeInBytes = sizeof(uint32_t) * 6;
-    // インデックスはuint32_tとする
+    // インデックスはUint32_tとする
     indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
     // インデックスリソースにデータを書き込む
     uint32_t* indexDataSprite = nullptr;
@@ -67,11 +98,11 @@ void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position
     //  マテリアル
     ///==========================================================================================
     material_.CreateMaterialResource(directXCommon);
-    // Lightingを無効
-    material_.materialData_->color = color;
+
     // UVTransformは単位行列を書き込んでおく
     material_.materialData_->uvTransform = MakeIdentity4x4();
-    uvTransform_.scale                   = {1, 1};
+    uvTransform_.scale                   = {1.0f, 1.0f};
+
     ///==========================================================================================
     //  WVP
     ///==========================================================================================
@@ -82,43 +113,22 @@ void Sprite::CreateSprite(const uint32_t& textureHandle, const Vector2& position
     wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
     // 単位行列を書き込んでおく
     wvpData_->WVP = MakeIdentity4x4();
+
     ///==========================================================================================
     //  変数初期化
     ///==========================================================================================
-    transform_.translate = {position.x, position.y, 1.0f};
-    transform_.scale     = {1, 1, 1};
+    transform_.translate           = startPosition_;
+    transform_.scale               = startScale_;
+    material_.materialData_->color = startColor_;
+
     // テクスチャ座標取得
-    const DirectX::TexMetadata& metadata =
-        TextureManager::GetInstance()->GetMetaData(textureHandle);
-    textureAdjustSize_.x = static_cast<float>(metadata.width);
-    textureAdjustSize_.y = static_cast<float>(metadata.height);
-    /// テクスチャサイズに合わせる
-
-    textureSize_ = textureAdjustSize_;
+    const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(textureIndex_);
+    textureSize_.x                       = static_cast<float>(metadata.width);
+    textureSize_.y                       = static_cast<float>(metadata.height);
 }
-
-void Sprite::DebugImGui() {
-#ifdef _DEBUG
-    ImGui::ColorEdit4(" Color", (float*)&material_.materialData_->color);
-    if (ImGui::TreeNode("Transform")) {
-        ImGui::DragFloat3(" pos", &transform_.translate.x);
-        ImGui::DragFloat2("size", &textureSize_.x);
-
-        ImGui::TreePop();
-    }
-    if (ImGui::TreeNode("UV")) {
-        ImGui::DragFloat2(" uvScale", (float*)&uvTransform_.scale.x);
-        ImGui::DragFloat3(" uvRotate", (float*)&uvTransform_.rotate.x);
-        ImGui::DragFloat2(" uvTransform", (float*)&uvTransform_.pos.x, 0.1f);
-        ImGui::DragFloat2(" anchorPoint", (float*)&anchorPoint_.x, 0.1f);
-
-        ImGui::TreePop();
-    }
-#endif
-}
-
 
 void Sprite::Draw() {
+    DirectXCommon* directXCommon = DirectXCommon::GetInstance();
 
     ///==========================================================================================
     //  anchorPoint
@@ -149,10 +159,10 @@ void Sprite::Draw() {
     //  TextureClip
     ///==========================================================================================
 
-    float texLeft   = textureLeftTop_.x / textureAdjustSize_.x;
-    float texRight  = (textureLeftTop_.x + textureSize_.x) / textureAdjustSize_.x;
-    float texTop    = textureLeftTop_.y / textureAdjustSize_.y;
-    float texBottom = (textureLeftTop_.y + textureSize_.y) / textureAdjustSize_.y;
+    float texLeft   = textureLeftTop_.x / textureSize_.x;
+    float texRight  = (textureLeftTop_.x + textureSize_.x) / textureSize_.x;
+    float texTop    = textureLeftTop_.y / textureSize_.y;
+    float texBottom = (textureLeftTop_.y + textureSize_.y) / textureSize_.y;
 
     // 頂点リソースにデータ書き込む
     vertexData_[0].texcoord = {texLeft, texBottom};
@@ -163,7 +173,11 @@ void Sprite::Draw() {
     ///==========================================================================================
     //  Transform
     ///==========================================================================================
-    Matrix4x4 worldMatrixSprite               = MakeAffineMatrix(Vector3(textureSize_.x, textureSize_.y, 0) * (transform_.scale), transform_.rotate, transform_.translate);
+    Vector3 size      = Vector3(textureSize_.x, textureSize_.y, 0.0f) * Vector3(transform_.scale.x, transform_.scale.y, 0.0f);
+    Vector3 translate = Vector3(transform_.translate.x, transform_.translate.y, 0.0f);
+
+    // 行列変換
+    Matrix4x4 worldMatrixSprite               = MakeAffineMatrix(size, transform_.rotate, translate);
     Matrix4x4 projectionMatrixSprite          = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kWindowWidth), float(WinApp::kWindowHeight), 0.0f, 100.0f);
     Matrix4x4 worldViewProjectionMatrixSprite = worldMatrixSprite * projectionMatrixSprite;
 
@@ -181,7 +195,7 @@ void Sprite::Draw() {
     directXCommon->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
     directXCommon->GetCommandList()->IASetIndexBuffer(&indexBufferView_); // IBVを設定
 
-    // TransformationmatrixCBufferの場所を設定
+    // TransFormationMatrixCBufferの場所を設定
     material_.SetCommandList(directXCommon->GetCommandList());
     directXCommon->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
     directXCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, texture_);
@@ -189,16 +203,42 @@ void Sprite::Draw() {
     directXCommon->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
 
-void Sprite::SetPosition(const Vector2& pos) {
-
-    transform_.translate.x = pos.x;
-    transform_.translate.y = pos.y;
+///=========================================================
+/// バインド
+///==========================================================
+void Sprite::BindParams() {
+    globalParameter_->Bind(groupName_, "layerNum", &layerNum_);
+    globalParameter_->Bind(groupName_, "startPosition", &startPosition_);
+    globalParameter_->Bind(groupName_, "startScale", &startScale_);
+    globalParameter_->Bind(groupName_, "startColor", &startColor_);
 }
 
-void Sprite::SetScale(const Vector2& scale) {
+///=========================================================
+/// パラメータ調整
+///==========================================================
+void Sprite::AdjustParam() {
+#ifdef _DEBUG
+    if (groupName_.empty()) {
+        return;
+    }
+    if (ImGui::CollapsingHeader(groupName_.c_str())) {
+        ImGui::PushID(groupName_.c_str());
 
-    transform_.scale.x = scale.x;
-    transform_.scale.y = scale.y;
+        ImGui::SeparatorText("LayerNum");
+        ImGui::InputInt("LayerNum", &layerNum_);
+
+        ImGui::SeparatorText("InitParam");
+        ImGui::DragFloat2("StartPos", &startPosition_.x, 0.1f);
+        ImGui::DragFloat2("StartScale", &startScale_.x, 0.1f);
+        ImGui::ColorEdit4("StartColor", &startColor_.x);
+
+        // セーブ・ロード
+        globalParameter_->ParamSaveForImGui(groupName_);
+        globalParameter_->ParamLoadForImGui(groupName_);
+
+        ImGui::PopID();
+    }
+#endif // _DEBUG
 }
 
 void Sprite::SetColor(const Vector3& color) {

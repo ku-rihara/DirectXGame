@@ -1,7 +1,6 @@
 #include "Object3d.h"
 #include "ModelManager.h"
 #include "Object3DRegistry.h"
-#include "Pipeline/Object3D/Object3DPipeline.h"
 #include "Pipeline/PipelineManager.h"
 
 Object3d::~Object3d() {
