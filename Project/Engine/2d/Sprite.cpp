@@ -242,6 +242,7 @@ void Sprite::AdjustParam() {
         // 適応
         transform_.pos = parameter_.position_;
         transform_.scale = parameter_.scale_;
+        material_.materialData_->color = parameter_.color_;
 
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
