@@ -8,8 +8,10 @@ void IntroAppearPurpose::Init(const std::string& name) {
 
     // スプライト初期化
     for (size_t i = 0; i < sprites_.size(); ++i) {
-        sprites_[i].reset(Sprite::Create("PurposeUI/gamePurposeNo" + std::to_string(i+1) + ".png"));
+        sprites_[i].reset(Sprite::Create("PurposeUI/gamePurposeNo" + std::to_string(i + 1) + ".png"));
     }
+
+    backLineSprite_.reset(Sprite::Create("PurposeUI/gamePurposeLine.png"));
 
     // Easing 初期化
     EasingInit();
@@ -41,6 +43,13 @@ void IntroAppearPurpose::SideAppear() {
         sprites_[i]->transform_.pos.x = spriteVariable_.sideAppearPosX[i];
     }
 
+    // 　ScaleY
+    spriteVariable_.scaleEaseY->Update(Frame::DeltaTime());
+    for (size_t i = 0; i < spriteVariable_.sideAppearEase.size(); ++i) {
+        sprites_[i]->transform_.scale.y = spriteVariable_.scaleY;
+    }
+    backLineSprite_->transform_.scale.y = spriteVariable_.scaleY;
+
     if (!spriteVariable_.isBackSideUI) {
         return;
     }
@@ -54,8 +63,8 @@ void IntroAppearPurpose::SideAppear() {
     // centerScale演出
     spriteVariable_.centerAppearEase->Update(Frame::DeltaTime());
     sprites_[CENTER]->transform_.scale = spriteVariable_.centerScale;
-   
-    //次のステップ
+
+    // 次のステップ
     if (spriteVariable_.centerAppearEase->IsFinished() && spriteVariable_.sideBackEase[LEFT]->IsFinished()) {
         step_ = Step::FINISHWAIT;
     }
@@ -113,6 +122,7 @@ void IntroAppearPurpose::EasingInit() {
         spriteVariable_.sideBackEase[i]   = std::make_unique<Easing<float>>();
     }
     spriteVariable_.centerAppearEase = std::make_unique<Easing<Vector2>>();
+    spriteVariable_.scaleEaseY       = std::make_unique<Easing<float>>();
 
     // サイドUI出現Easing
     spriteVariable_.sideAppearEase[LEFT]->Init("leftAppearPosX", "leftAppearPosX.json");
@@ -124,6 +134,7 @@ void IntroAppearPurpose::EasingInit() {
 
     // CenterEasing
     spriteVariable_.centerAppearEase->Init("CenterAppearScale", "CenterAppearScale.json");
+    spriteVariable_.scaleEaseY->Init("PurposeScaleY", "PurposeScaleY.json");
 
     // 適応値、スタート値セット(サイドUI出現Easing)
     for (size_t i = 0; i < static_cast<size_t>(spriteVariable_.sideAppearEase.size()); ++i) {
@@ -147,4 +158,9 @@ void IntroAppearPurpose::EasingInit() {
     spriteVariable_.centerAppearEase->SetAdaptValue(&spriteVariable_.centerScale);
     spriteVariable_.centerAppearEase->SetStartValue(Vector2::ZeroVector());
     spriteVariable_.centerAppearEase->Reset();
+
+    // 適応値、スタート値セット(scaleEaseY)
+    spriteVariable_.scaleEaseY->SetAdaptValue(&spriteVariable_.scaleY);
+    spriteVariable_.scaleEaseY->SetStartValue(0.0f);
+    spriteVariable_.scaleEaseY->Reset();
 }

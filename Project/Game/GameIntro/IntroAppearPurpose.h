@@ -27,10 +27,12 @@ public:
     struct SpriteVariable {
         std::array<float, 2> sideAppearPosX;
         std::array<float, 2> sideBackPosX;
+        float scaleY;
         Vector2 centerScale;
         std::array<std::unique_ptr<Easing<float>>, 2> sideAppearEase;
         std::array<std::unique_ptr<Easing<float>>, 2> sideBackEase;
         std::unique_ptr<Easing<Vector2>> centerAppearEase;
+        std::unique_ptr<Easing<float>> scaleEaseY;
         bool isBackSideUI = false;
     };
 

@@ -1,0 +1,27 @@
+{
+    "PurposeUI/gamePurposeNo1.png": {
+        "layerNum": 3,
+        "startAnchorPoint": [
+            0.5,
+            0.5
+        ],
+        "startColor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "startPosition": [
+            469.6000061035156,
+            382.8999938964844
+        ],
+        "startScale": [
+            1.0,
+            1.0
+        ],
+        "startUVScale": [
+            1.0,
+            1.0
+        ]
+    }
+}
