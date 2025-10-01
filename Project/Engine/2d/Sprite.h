@@ -73,6 +73,7 @@ private:
 
     int32_t layerNum_;
     bool isDraw_ = true;
+    bool isAdaptStartParam_=false;
 
     // テクスチャ
     Vector2 textureSize_; //< テクスチャ自体のサイズ

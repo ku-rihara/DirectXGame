@@ -239,14 +239,17 @@ void Sprite::AdjustParam() {
         ImGui::DragFloat2("StartAnchorPoint", &parameter_.startAnchorPoint_.x, 0.01f);
         ImGui::ColorEdit4("StartColor", &parameter_.color_.x);
 
-        // 適応
-        transform_.pos = parameter_.position_;
-        transform_.scale = parameter_.scale_;
-        material_.materialData_->color = parameter_.color_;
+        ImGui::Checkbox("isAdaptStartParam", &isAdaptStartParam_);
+        if (isAdaptStartParam_) {
+            // 適応
+            transform_.pos                 = parameter_.position_;
+            transform_.scale               = parameter_.scale_;
+            material_.materialData_->color = parameter_.color_;
+        }
 
         // セーブ・ロード
-        globalParameter_->ParamSaveForImGui(groupName_);
-        globalParameter_->ParamLoadForImGui(groupName_);
+        globalParameter_->ParamSaveForImGui(groupName_, folderPath_);
+        globalParameter_->ParamLoadForImGui(groupName_, folderPath_);
 
         ImGui::PopID();
     }
