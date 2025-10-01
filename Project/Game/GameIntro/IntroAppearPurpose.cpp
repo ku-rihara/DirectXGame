@@ -150,7 +150,7 @@ void IntroAppearPurpose::EasingInit() {
     for (size_t i = 0; i < static_cast<size_t>(spriteVariable_.sideBackEase.size()); ++i) {
         spriteVariable_.sideBackEase[i]->SetAdaptValue(&spriteVariable_.sideBackPosX[i]);
         spriteVariable_.sideBackEase[i]->SetStartValue(spriteVariable_.sideAppearEase[i]->GetEndValue());
-        spriteVariable_.sideBackEase[i]->SetStartValue(sprites_[i]->GetStartParameter().position_.x);
+        spriteVariable_.sideBackEase[i]->SetEndValue(sprites_[i]->GetStartParameter().position_.x);
         spriteVariable_.sideBackEase[i]->Reset();
     }
 
