@@ -370,7 +370,7 @@ void GlobalParameter::LoadFile(const std::string& groupName, const std::string& 
      
     }
 
-    // データを安全に読み込み
+    // データを読み込み
     for (auto itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
         const std::string& itemName = itItem.key();
 

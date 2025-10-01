@@ -26,17 +26,16 @@
 ///========================================================
 ///  初期化
 ///========================================================
-void BaseEnemy::Init(const Vector3& spownPos) {
+void BaseEnemy::Init(const Vector3& spawnPos) {
 
     // HP
     HPMax_     = 105.0f;
     hp_        = HPMax_;
-    hpBarSize_ = {HPMax_, 90};
     hpBar_     = std::make_unique<EnemyHPBar>();
-    hpBar_->Init(hpBarSize_);
+    hpBar_->Init(HPMax_);
 
     /// transform
-    baseTransform_.translation_   = spownPos;
+    baseTransform_.translation_   = spawnPos;
     baseTransform_.translation_.y = parameter_.basePosY;
     baseTransform_.scale_         = Vector3::ZeroVector();
 
@@ -87,12 +86,10 @@ void BaseEnemy::DisplaySprite(const ViewProjection& viewProjection) {
     Vector2 positionScreenV2(positionScreen.x - 70, positionScreen.y - 90.0f);
     // Hpバーの座標確定
     Vector2 hpBarPosition = positionScreenV2;
-    // Hpバーのサイズ
-    hpBar_->SetSize(hpBarSize_);
     // HPBarスプライト
     hpBar_->SetPosition(hpBarPosition);
     // Hpバー更新
-    hpBar_->Update(int(hp_));
+    hpBar_->Update(hp_);
 
     Vector2 findPos(positionScreen.x, positionScreen.y - 100.0f);
 

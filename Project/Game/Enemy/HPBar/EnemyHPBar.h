@@ -9,8 +9,8 @@ public:
     ~EnemyHPBar() = default;
 
     // 初期化、更新、描画
-    void Init(const Vector2& size);
-    void Update(int hp);
+    void Init(const float& hpMax);
+    void Update(const float& hp);
     void Draw();
 
 private:
@@ -21,8 +21,8 @@ private:
 
     // parameter
     bool isSpawned_ = false;
+    float hpMax_;
     float alpha_;
-    Vector2 size_;
     Vector2 position_;
 
 public:
@@ -30,7 +30,6 @@ public:
     bool GetIsSpawned() const { return isSpawned_; }
     // setter
     void SetPosition(Vector2 pos) { position_ = pos; }
-    void SetSize(Vector2 size) { size_ = size; }
     void SetIsSpawned(bool is) { isSpawned_ = is; }
     void SetAlpha(float a) { alpha_ = a; }
 };
