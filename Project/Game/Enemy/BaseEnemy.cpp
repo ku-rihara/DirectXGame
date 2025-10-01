@@ -16,12 +16,12 @@
 /// collisionBox
 #include "CollisionBox/PlayerAttackController.h"
 
+#include "AttackEffect/AttackEffect.h"
 #include "audio/Audio.h"
 #include "Frame/Frame.h"
+#include "GameCamera/GameCamera.h"
 #include "Matrix4x4.h"
 #include "Player/Player.h"
-#include"GameCamera/GameCamera.h"
-#include"AttackEffect/AttackEffect.h"
 
 ///========================================================
 ///  初期化
@@ -29,9 +29,9 @@
 void BaseEnemy::Init(const Vector3& spawnPos) {
 
     // HP
-    HPMax_     = 105.0f;
-    hp_        = HPMax_;
-    hpBar_     = std::make_unique<EnemyHPBar>();
+    HPMax_ = 105.0f;
+    hp_    = HPMax_;
+    hpBar_ = std::make_unique<EnemyHPBar>();
     hpBar_->Init(HPMax_);
 
     /// transform
@@ -102,6 +102,10 @@ void BaseEnemy::DisplaySprite(const ViewProjection& viewProjection) {
     notFindSprite_->SetPosition(findPos);
     // Hpバー更新
     notFindSprite_->Update();
+
+    findSprite_->SetIsSpowned(IsInView(viewProjection));
+    notFindSprite_->SetIsSpowned(IsInView(viewProjection));
+    hpBar_->SetIsDraw(IsInView(viewProjection));
 }
 
 Vector3 BaseEnemy::GetDirectionToTarget(const Vector3& target) {
@@ -113,18 +117,6 @@ Vector3 BaseEnemy::GetDirectionToTarget(const Vector3& target) {
     Vector3 direction = target - enemyPosition;
 
     return direction;
-}
-
-///========================================================
-/// Sprite描画
-///========================================================
-void BaseEnemy::SpriteDraw(const ViewProjection& viewProjection) {
-
-    if (IsInView(viewProjection)) {
-        findSprite_->Draw();
-        notFindSprite_->Draw();
-        hpBar_->Draw();
-    }
 }
 
 void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
@@ -262,7 +254,7 @@ bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
 }
 
 void BaseEnemy::TakeDamage(const float& damageValue) {
-     hp_ -= damageValue;
+    hp_ -= damageValue;
 
     if (hp_ < 0.0f) {
         hp_ = 0.0f;
@@ -325,7 +317,7 @@ void BaseEnemy::SetCombo(Combo* manager) {
     pCombo_ = manager;
 }
 void BaseEnemy::SetAttackEffect(AttackEffect* attackEffect) {
-    pAttackEffect_ = attackEffect; 
+    pAttackEffect_ = attackEffect;
 }
 
 void BaseEnemy::BackToDamageRoot() {

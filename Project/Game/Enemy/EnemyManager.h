@@ -41,8 +41,6 @@ public:
     void SpawnEnemy(const std::string& enemyType, const Vector3& position, const int32_t& groupID);
     void HpBarUpdate(const ViewProjection& viewProjection);
 
-    // スプライト描画
-    void SpriteDraw(const ViewProjection& viewProjection);
     ///-------------------------------------------------------------------------------------
     /// Particle
     ///-------------------------------------------------------------------------------------

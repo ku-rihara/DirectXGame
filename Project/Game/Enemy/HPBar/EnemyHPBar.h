@@ -21,15 +21,17 @@ private:
 
     // parameter
     bool isSpawned_ = false;
+    bool isDraw_    = false;
     float hpMax_;
     float alpha_;
     Vector2 position_;
 
 public:
     // getter
-    bool GetIsSpawned() const { return isSpawned_; }
+    const bool& GetIsSpawned() const { return isSpawned_; }
     // setter
-    void SetPosition(Vector2 pos) { position_ = pos; }
-    void SetIsSpawned(bool is) { isSpawned_ = is; }
-    void SetAlpha(float a) { alpha_ = a; }
+    void SetPosition(const Vector2& pos) { position_ = pos; }
+    void SetIsSpawned(const bool& is) { isSpawned_ = is; }
+    void SetAlpha(const float& a) { alpha_ = a; }
+    void SetIsDraw(const bool& is) { isDraw_ = is; }
 };

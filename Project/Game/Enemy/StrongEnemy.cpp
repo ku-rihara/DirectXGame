@@ -29,13 +29,6 @@ void StrongEnemy::DisplaySprite(const ViewProjection& viewProjection) {
 	BaseEnemy::DisplaySprite(viewProjection);
 }
 
-///========================================================
-/// Sprite描画
-///========================================================
-void StrongEnemy::SpriteDraw(const ViewProjection& viewProjection) {
-	BaseEnemy::SpriteDraw(viewProjection);
-}
-
 
 void StrongEnemy::SpawnRenditionInit() {
     // ガレキパーティクル

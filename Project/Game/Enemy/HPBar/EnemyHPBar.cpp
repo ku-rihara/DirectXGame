@@ -31,5 +31,9 @@ void EnemyHPBar::Update(const float& hp) {
     hpSprite_->transform_.scale.x = currentScale;
 
     sprite_->transform_.pos = position_;
+
+    // isDrawセット
+    sprite_->SetIsDraw(isDraw_);
+    hpSprite_->SetIsDraw(isDraw_);
    
 }

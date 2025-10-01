@@ -46,8 +46,8 @@ void TitleScene::Init() {
     viewProjection_.translation_ = {7.8f, 3.6f, 8.3f};
     viewProjection_.rotation_.y  = 3.8f;
 
-    shandle_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/screenChange.png");
-    screenSprite_.reset(Sprite::Create(shandle_, Vector2(0, 0), Vector4(1, 1, 1, alpha_)));
+
+    screenSprite_.reset(Sprite::Create("screenChange.png"));
 
     player_->SetTitleBehavior();
     player_->SetWorldPositionY(30.0f);
