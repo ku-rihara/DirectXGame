@@ -38,7 +38,7 @@ public:
     ~Sprite();
 
     // スプライトの作成
-    static Sprite* Create(const std::string& textureName, const bool& isAbleEdit = true);
+    static Sprite* Create(const std::string& textureName, const bool& isAbleEdit = false);
     void CreateSprite(const std::string& textureName);
 
     // editor

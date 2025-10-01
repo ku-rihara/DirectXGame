@@ -238,6 +238,10 @@ void Sprite::AdjustParam() {
         ImGui::DragFloat2("StartAnchorPoint", &parameter_.startAnchorPoint_.x, 0.01f);
         ImGui::ColorEdit4("StartColor", &parameter_.color_.x);
 
+        // 適応
+        transform_.pos = parameter_.position_;
+        transform_.scale = parameter_.scale_;
+
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
