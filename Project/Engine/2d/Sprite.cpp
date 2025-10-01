@@ -29,13 +29,20 @@ void Sprite::ParamEditorSet(const std::string& textureName, const bool& isAbleEd
     // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
 
-    std::string uniqueGroupName = textureName;
+    // フォルダパスを除去してファイル名のみを取得
+    std::string fileName = textureName;
+    size_t lastSlash     = textureName.find_last_of("/\\");
+    if (lastSlash != std::string::npos) {
+        fileName = textureName.substr(lastSlash + 1);
+    }
+
+    std::string uniqueGroupName = fileName;
     int32_t index               = 0;
 
     // グループが既に存在する場合、インデックスを追加
     while (SpriteRegistry::GetInstance()->HasGroupName(uniqueGroupName)) {
         index++;
-        uniqueGroupName = textureName + std::to_string(index);
+        uniqueGroupName = fileName + std::to_string(index);
     }
 
     groupName_ = uniqueGroupName;
@@ -44,7 +51,6 @@ void Sprite::ParamEditorSet(const std::string& textureName, const bool& isAbleEd
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();
     globalParameter_->SyncParamForGroup(groupName_);
-
 }
 
 void Sprite::CreateSprite(const std::string& textureName) {
