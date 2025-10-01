@@ -1,4 +1,5 @@
 #include "IntroAppearPurpose.h"
+#include "Frame/Frame.h"
 #include <imgui.h>
 
 void IntroAppearPurpose::Init(const std::string& name) {
@@ -33,6 +34,29 @@ void IntroAppearPurpose::SideAppearWait() {
     ProcessStep(appearWaitTime_, Step::SIDEAPPEAR);
 }
 void IntroAppearPurpose::SideAppear() {
+
+    // 　サイドUIのAppear演出
+    for (size_t i = 0; i < sprites_.size(); ++i) {
+        spriteVariable_.sideAppearEase[i]->Update(Frame::DeltaTime());
+        sprites_[i]->transform_.pos.x = spriteVariable_.sideAppearPosX[i];
+    }
+
+    if (!spriteVariable_.isBackSideUI) {
+        return;
+    }
+
+    // 　サイドUIのBack演出
+    for (size_t i = 0; i < sprites_.size(); ++i) {
+        spriteVariable_.sideBackEase[i]->Update(Frame::DeltaTime());
+        sprites_[i]->transform_.pos.x = spriteVariable_.sideBackPosX[i];
+    }
+
+    // centerScale演出
+    spriteVariable_.centerAppearEase->Update(Frame::DeltaTime());
+    sprites_[LEFT]->transform_.scale = spriteVariable_.centerScale;
+    sprites_[RIGHT]->transform_.scale = spriteVariable_.centerScale;
+
+    if (spriteVariable_.centerAppearEase->get)
 }
 
 void IntroAppearPurpose::FinishWait() {
@@ -86,6 +110,7 @@ void IntroAppearPurpose::EasingInit() {
         spriteVariable_.sideAppearEase[i] = std::make_unique<Easing<float>>();
         spriteVariable_.sideBackEase[i]   = std::make_unique<Easing<float>>();
     }
+    spriteVariable_.centerAppearEase = std::make_unique<Easing<Vector2>>();
 
     // サイドUI出現Easing
     spriteVariable_.sideAppearEase[LEFT]->Init("UPMovieLineExit", "UPMovieLineExit.json");
@@ -95,16 +120,28 @@ void IntroAppearPurpose::EasingInit() {
     spriteVariable_.sideBackEase[LEFT]->Init("UPMovieLineExit", "UPMovieLineExit.json");
     spriteVariable_.sideBackEase[RIGHT]->Init("UPMovieLineExit", "UPMovieLineExit.json");
 
-    // 適応値、スタート値セット
+    // CenterEasing
+    spriteVariable_.centerAppearEase->Init("UPMovieLineExit", "UPMovieLineExit.json");
+
+    // 適応値、スタート値セット(サイドUI出現Easing)
     for (size_t i = 0; i < static_cast<size_t>(spriteVariable_.sideAppearEase.size()); ++i) {
         spriteVariable_.sideAppearEase[i]->SetAdaptValue(&spriteVariable_.sideAppearPosX[i]);
         spriteVariable_.sideAppearEase[i]->SetStartValue(sprites_[i]->GetStartParameter().position_.x);
         spriteVariable_.sideAppearEase[i]->Reset();
+        spriteVariable_.sideAppearEase[i]->SetOnFinishCallback([this] {
+            spriteVariable_.isBackSideUI = true;
+        });
     }
 
+    // 適応値、スタート値セット(元に戻るサイドUIEasing)
     for (size_t i = 0; i < static_cast<size_t>(spriteVariable_.sideBackEase.size()); ++i) {
         spriteVariable_.sideBackEase[i]->SetAdaptValue(&spriteVariable_.sideBackPosX[i]);
-        spriteVariable_.sideBackEase[i]->SetStartValue(spriteVariable_.sideAppearEase[i]->gete);
+        spriteVariable_.sideBackEase[i]->SetStartValue(spriteVariable_.sideAppearEase[i]->GetEndValue());
         spriteVariable_.sideBackEase[i]->Reset();
     }
+
+    // 適応値、スタート値セット(CenterEasing)
+    spriteVariable_.centerAppearEase->SetAdaptValue(&spriteVariable_.centerScale);
+    spriteVariable_.centerAppearEase->SetStartValue(Vector2::ZeroVector());
+    spriteVariable_.centerAppearEase->Reset();
 }

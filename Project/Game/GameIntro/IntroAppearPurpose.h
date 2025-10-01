@@ -26,8 +26,11 @@ public:
     struct SpriteVariable {
         std::array<float, 2> sideAppearPosX;
         std::array<float, 2> sideBackPosX;
-        std::array<std::unique_ptr<Easing<float>>,static_cast<size_t>(SpritePos::COUNT)> sideAppearEase;
+        Vector2 centerScale;
+        std::array<std::unique_ptr<Easing<float>>, static_cast<size_t>(SpritePos::COUNT)> sideAppearEase;
         std::array<std::unique_ptr<Easing<float>>, static_cast<size_t>(SpritePos::COUNT)> sideBackEase;
+        std::unique_ptr<Easing<Vector2>> centerAppearEase;
+        bool isBackSideUI = false;
     };
 
 public:
@@ -45,7 +48,6 @@ public:
     void AdjustUniqueParam() override;
 
 private:
-  
     // Step function
     void SideAppearWait();
     void SideAppear();
