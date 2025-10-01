@@ -1,6 +1,7 @@
 /// scene
 #include "TitleScene.h"
 #include "3d/Object3DRegistry.h"
+#include"2d/SpriteRegistry.h"
 #include "Lighrt/Light.h"
 #include "Manager/SceneManager.h"
 #include "Player/TitleBehavior/TitleRightPunch.h"
@@ -40,14 +41,13 @@ void TitleScene::Init() {
     player_->Init();
     titleRogo_->Init();
     putObjForBlender_->LoadJsonFile("gameScene.json");
-   
+
     alpha_ = 0.0f;
 
     viewProjection_.translation_ = {7.8f, 3.6f, 8.3f};
     viewProjection_.rotation_.y  = 3.8f;
 
-    shandle_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/screenChange.png");
-    screenSprite_.reset(Sprite::Create(shandle_, Vector2(0, 0), Vector4(1, 1, 1, alpha_)));
+    screenSprite_.reset(Sprite::Create("screenChange.png"));
 
     player_->SetTitleBehavior();
     player_->SetWorldPositionY(30.0f);
@@ -62,7 +62,7 @@ void TitleScene::Update() {
     player_->TitleUpdate();
     field_->Update();
     skyBox_->Update();
-    
+
     if (dynamic_cast<TitleRightPunch*>(player_->GetTitleBehavior())) {
         if (!isTitleRogoUpdate) {
             isTitleRogoUpdate = true;
@@ -103,36 +103,10 @@ void TitleScene::ChangeForJoyState() {
 }
 
 /// ===================================================
-/// モデル描画
-/// ===================================================
-void TitleScene::ModelDraw() {
-
-    Object3DRegistry::GetInstance()->DrawAll(viewProjection_);
-
-    ParticleManager::GetInstance()->Draw(viewProjection_);
-}
-
-/// ===================================================
 /// SkyBox描画
 /// ===================================================
 void TitleScene::SkyBoxDraw() {
     skyBox_->Draw(viewProjection_);
-}
-
-/// ===================================================
-/// スプライト描画
-/// ===================================================
-void TitleScene::SpriteDraw() {
-    titleRogo_->Draw();
-
-    screenSprite_->Draw();
-}
-
-/// ===================================================
-/// 影
-/// ===================================================
-void TitleScene::DrawShadow() {
-    Object3DRegistry::GetInstance()->DrawAllShadow(viewProjection_);
 }
 
 void TitleScene::Debug() {
@@ -140,9 +114,11 @@ void TitleScene::Debug() {
     ImGui::Begin("Camera");
     ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
     ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
-    titleRogo_->Debug();
+    ImGui::End();
+
+    ImGui::Begin("Param");
     Light::GetInstance()->DebugImGui();
-    /*player_->AdjustParm();*/
+    SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();
 #endif
 }

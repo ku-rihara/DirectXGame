@@ -9,19 +9,12 @@ GlobalParameter* GlobalParameter::GetInstance() {
     return &instance;
 }
 
-/// =====================================================================================
-/// 指定したグループ名のグループを作成し、表示フラグを設定。
-/// =====================================================================================
+
 void GlobalParameter::CreateGroup(const std::string& groupName, const bool& isVisible) {
     dates_[groupName]; // グループを作成
     visibilityFlags_[groupName] = isVisible; // 表示フラグを設定
 }
 
-/// =====================================================================================
-/// デバッグ時の更新処理。
-/// 値を操作可能にする。
-/// また、保存ボタンを押すと指定グループをファイルに保存。
-/// =====================================================================================
 void GlobalParameter::Update() {
 #ifdef _DEBUG
     if (!ImGui::Begin("Global Parameter", nullptr, ImGuiWindowFlags_MenuBar)) {
@@ -138,14 +131,9 @@ void GlobalParameter::SetValue(const std::string& groupName, const std::string& 
         } else {
             throw std::runtime_error("Type mismatch for key: " + key);
         }
-        // if (!isLoading_) {
-        //     // 描画設定の更新
-        //     existingSettings.widgetType    = widgetType;
-        //     existingSettings.treeNodeLabel = treeNodeLabel;
-        // }
+       
     } else {
         // 新規の場合、値と設定を追加
-
         DrawSettings settings;
         settings.widgetType    = widgetType;
         settings.treeNodeLabel = treeNodeLabel;
@@ -382,7 +370,7 @@ void GlobalParameter::LoadFile(const std::string& groupName, const std::string& 
      
     }
 
-    // データを安全に読み込み
+    // データを読み込み
     for (auto itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
         const std::string& itemName = itItem.key();
 
@@ -544,6 +532,10 @@ void GlobalParameter::RemoveGroup(const std::string& groupName) {
 
 void GlobalParameter::BindResetAll() {
     bindings_.clear();
+}
+
+bool GlobalParameter::HasGroup(const std::string& groupName) const {
+    return dates_.find(groupName) != dates_.end();
 }
 
 template void GlobalParameter::SetValue<int>(const std::string& groupName, const std::string& key, int value, WidgetType widgetType);

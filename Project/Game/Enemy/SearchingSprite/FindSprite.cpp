@@ -1,32 +1,27 @@
 #include "FindSprite.h"
-#include"base/TextureManager.h"
-
+#include "base/TextureManager.h"
 
 void FindSprite::Init() {
-	// テクスチャハンドル
-	uint32_t findSprite =TextureManager::GetInstance()->LoadTexture("Resources/Texture/Find.png");
 
-	// スプライト生成
-	sprite_.reset(Sprite::Create(findSprite, {}, { 1,1,1,1 }));
+    // スプライト生成
+    sprite_.reset(Sprite::Create("Find.png",false));
 
-	// アンカーポイント、スケールセット
-	sprite_->SetAnchorPoint(Vector2(0.5f, 0.5f));
-	sprite_->SetScale(Vector2());
+    // アンカーポイント、スケールセット
+    sprite_->SetAnchorPoint(Vector2(0.5f, 0.5f));
+    sprite_->transform_.scale = Vector2::ZeroVector();
 }
 
 void FindSprite::Update() {
 
-	//alpha,Posセット
-	sprite_->SetAlpha(1.0f);
-	sprite_->SetPosition(position_);
+    // Posセット
+    sprite_->transform_.pos = position_;
 }
 
 void FindSprite::Draw() {
-	// 描画
-	sprite_->Draw();
+    // 描画
+    sprite_->Draw();
 }
 
-
 void FindSprite::SetScale(const Vector2& scale) {
-	sprite_->SetScale(scale);
+    sprite_->transform_.scale = scale;
 }

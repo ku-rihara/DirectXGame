@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp" />
     <ClCompile Include="Engine\2d\Sprite.cpp" />
+    <ClCompile Include="Engine\2d\SpriteRegistry.cpp" />
     <ClCompile Include="Engine\3d\BaseObject3d.cpp" />
     <ClCompile Include="Engine\3d\Object3DRegistry.cpp" />
     <ClCompile Include="Engine\3d\Line3d.cpp" />
@@ -228,6 +229,7 @@
   <ItemGroup>
     <ClInclude Include="Engine\2d\ImGuiManager.h" />
     <ClInclude Include="Engine\2d\Sprite.h" />
+    <ClInclude Include="Engine\2d\SpriteRegistry.h" />
     <ClInclude Include="Engine\3d\BaseObject3d.h" />
     <ClInclude Include="Engine\3d\Object3DRegistry.h" />
     <ClInclude Include="Engine\3d\Line3d.h" />

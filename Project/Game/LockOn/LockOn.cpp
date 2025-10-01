@@ -22,11 +22,8 @@ void LockOn::Init() {
     BindParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
-    // スプライトの読み込みと作成
-    reticleHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/UI/anchorPoint.png");
-
     // メインターゲット用スプライト
-    lockOnMark_.reset(Sprite::Create(reticleHandle_, Vector2::ZeroVector(), Vector4::kWHITE()));
+    lockOnMark_.reset(Sprite::Create("UI/anchorPoint.png", false));
     lockOnMark_->SetAnchorPoint(Vector2(0.5f, 0.5f));
 }
 
@@ -86,15 +83,15 @@ void LockOn::UpdateTargetMarkers(const std::vector<LockOnVariant>& validTargets,
 
         // スプライトの位置とスケールを設定
         if (ableLockOnMarkers_[i].sprite) {
-            ableLockOnMarkers_[i].sprite->SetPosition(ableLockOnMarkers_[i].screenPosition);
+            ableLockOnMarkers_[i].sprite->transform_.pos = ableLockOnMarkers_[i].screenPosition;
 
             if (isCurrentTarget) {
                 // 現在のターゲットは大きく表示
-                ableLockOnMarkers_[i].sprite->SetScale(currentTargetScale_);
+                ableLockOnMarkers_[i].sprite->transform_.scale = currentTargetScale_;
                 ableLockOnMarkers_[i].sprite->SetColor(Vector3(1.0f, 0.0f, 0.0f)); // 赤色
             } else {
                 // 利用可能なターゲットは小さく表示
-                ableLockOnMarkers_[i].sprite->SetScale(ableTargetScale_);
+                ableLockOnMarkers_[i].sprite->transform_.scale = ableTargetScale_;
                 ableLockOnMarkers_[i].sprite->SetColor(Vector3(1.0f, 1.0f, 1.0f)); // 黄色
             }
         }
@@ -108,7 +105,7 @@ void LockOn::ResizeTargetMarkers(const size_t& targetCount) {
         ableLockOnMarkers_.resize(targetCount);
 
         for (size_t i = currentSize; i < targetCount; ++i) {
-            ableLockOnMarkers_[i].sprite.reset(Sprite::Create(reticleHandle_, Vector2::ZeroVector(), Vector4::kWHITE()));
+            ableLockOnMarkers_[i].sprite.reset(Sprite::Create("UI/anchorPoint.png"));
             ableLockOnMarkers_[i].sprite->SetAnchorPoint(Vector2(0.5f, 0.5f));
         }
     }
@@ -260,14 +257,14 @@ void LockOn::UpdateCurrentReticleUI(const ViewProjection& viewProjection) {
     Vector2 positionScreenV2(positionScreen.x, positionScreen.y);
 
     // スケール
-    lockOnMark_->SetScale(spriteScale_);
+    lockOnMark_->transform_.scale = spriteScale_;
 
     // 線形補間の計算
     LerpTimeIncrement(targetChangeSpeed_);
     lockOnMarkPos_ = Lerp(prePos_, positionScreenV2, lerpTime_);
 
     // スプライトの座標と回転を設定
-    lockOnMark_->SetPosition(lockOnMarkPos_);
+    lockOnMark_->transform_.pos = lockOnMarkPos_;
     spriteRotation_ += Frame::DeltaTime();
     /* lockOnMark_->transform_.rotate.z = spriteRotation_;*/
 }
@@ -319,8 +316,6 @@ Vector3 LockOn::GetTargetObjectPosition(const LockOnVariant& target) const {
         return obj->GetWorldPosition();
     },
         target);
-
-   
 }
 
 void LockOn::OnObjectDestroyed(const LockOnVariant& obj) {

@@ -32,13 +32,6 @@ void NormalEnemy::DisplaySprite(const ViewProjection& viewProjection) {
 
 }
 
-///========================================================
-/// Sprite描画
-///========================================================
-void NormalEnemy::SpriteDraw(const ViewProjection& viewProjection) {
-	BaseEnemy::SpriteDraw(viewProjection);
-}
-
 void NormalEnemy::SpawnRenditionInit() {
     // ガレキパーティクル
     pEnemyManager_->SpawnEmitByNormalEnemy(baseTransform_.translation_);

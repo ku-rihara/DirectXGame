@@ -11,11 +11,9 @@ void MovieLine::Init() {
     BindParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
-    int32_t textureHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/movieLine.png");
-
     // create
     for (int32_t i = 0; i < static_cast<int32_t>(sprite_.size()); ++i) {
-        sprite_[i].reset(Sprite::Create(textureHandle, Vector2::ZeroVector(), Vector4::kWHITE()));
+        sprite_[i].reset(Sprite::Create("movieLine.png"));
     }
 
     exitEasing_[0].Init("UPMovieLineExit", "UPMovieLineExit.json");
@@ -39,14 +37,14 @@ void MovieLine::Init() {
 void MovieLine::AppearUpdate() {
     for (int32_t i = 0; i < static_cast<int32_t>(appearEasing_.size()); ++i) {
         appearEasing_[i].Update(Frame::DeltaTime());
-        sprite_[i]->SetPosition(appearAdaptPos_[i]);
+        sprite_[i]->transform_.pos = appearAdaptPos_[i];
     }
 }
 
 void MovieLine::ExitUpdate() {
     for (int32_t i = 0; i < static_cast<int32_t>(exitEasing_.size()); ++i) {
         exitEasing_[i].Update(Frame::DeltaTime());
-        sprite_[i]->SetPosition(Vector2(appearPosition_[i].x, exitAdaptPos_[i].y));
+        sprite_[i]->transform_.pos = Vector2(appearPosition_[i].x, exitAdaptPos_[i].y);
     }
 }
 

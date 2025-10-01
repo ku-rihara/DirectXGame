@@ -5,10 +5,11 @@
 // base
 #include "base/TextureManager.h"
 // math
+#include "Animation/AnimationRegistry.h"
 #include "Frame/Frame.h"
 #include "Lighrt/Light.h"
 #include <imgui.h>
-#include "Animation/AnimationRegistry.h"
+#include "2d/SpriteRegistry.h"
 
 void GameScene::Init() {
     //// グローバル変数の読み込み
@@ -86,9 +87,8 @@ void GameScene::Init() {
     comboScene_->SetCombo(combo_.get());
 
     isfirstChange_ = false;
-    alpha_         = 1.0f;
     shandle_       = TextureManager::GetInstance()->LoadTexture("Resources/Texture/screenChange.png");
-    screenSprite_.reset(Sprite::Create(shandle_, Vector2(0, 0), Vector4(1, 1, 1, alpha_)));
+    screenSprite_.reset(Sprite::Create("screenChange.png"));
 
     finishSpriteEase_.Init("finishSpriteTest");
     finishSpriteEase_.ApplyFromJson("finishSpriteTest.json");
@@ -105,8 +105,8 @@ void GameScene::Init() {
         }
     });
 
-    chandle_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/Clear.png");
-    cSprite_.reset(Sprite::Create(chandle_, Vector2(0, -720), Vector4(1, 1, 1, 1.0f)));
+    cSprite_.reset(Sprite::Create("Clear.png"));
+    cSprite_->transform_.pos = Vector2(0, -720);
 
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 
@@ -196,7 +196,7 @@ void GameScene::PlayUpdate() {
 
     // debugCamera
     debugCamera_->Update();
-   /* gameIntroManager_->EndUpdate();*/
+    /* gameIntroManager_->EndUpdate();*/
 
     // Editor
 
@@ -222,7 +222,7 @@ void GameScene::FinishUpdate() {
     screenSprite_->SetAlpha(alpha_);
 
     finishSpriteEase_.Update(Frame::DeltaTime());
-    cSprite_->SetPosition(tempSpritePos_);
+    cSprite_->transform_.pos = tempSpritePos_;
 
     if (!isend_) {
         return;
@@ -231,41 +231,12 @@ void GameScene::FinishUpdate() {
     alpha_ += Frame::DeltaTime();
 }
 
-/// ===================================================
-/// モデル描画
-/// ===================================================
-void GameScene::ModelDraw() {
-
-    Object3DRegistry::GetInstance()->DrawAll(viewProjection_);
-    AnimationRegistry::GetInstance()->DrawAll(viewProjection_);
-    ParticleManager::GetInstance()->Draw(viewProjection_);
-}
 
 /// ===================================================
 /// SkyBox描画
 /// ===================================================
 void GameScene::SkyBoxDraw() {
     skyBox_->Draw(viewProjection_);
-}
-
-/// ======================================================
-/// スプライト描画
-/// ======================================================
-void GameScene::SpriteDraw() {
-    enemyManager_->SpriteDraw(viewProjection_);
-    lockOnController_->Draw();
-    howToOperate_->Draw();
-    combo_->Draw();
-    gameIntroManager_->UIDraw();
-    cSprite_->Draw();
-    screenSprite_->Draw();
-}
-
-/// ======================================================
-/// 影描画
-/// ======================================================
-void GameScene::DrawShadow() {
-    Object3DRegistry::GetInstance()->DrawAllShadow(viewProjection_);
 }
 
 void GameScene::Debug() {
@@ -285,6 +256,7 @@ void GameScene::Debug() {
     fireInjectors_->AdjustParam();
     gameIntroManager_->AdjustParam();
     ShadowMap::GetInstance()->DebugImGui();
+    SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();
 
     ImGui::Begin("Rendition");

@@ -1,41 +1,39 @@
 #include "EnemyHPBar.h"
-#include"base/TextureManager.h"
+#include "base/TextureManager.h"
+#include "MathFunction.h"
 
+void EnemyHPBar::Init(const float& hpMax) {
+  
+    // スプライト生成
+    sprite_.reset(Sprite::Create("boss_Hpbar01.png", false));
+    hpSprite_.reset(Sprite::Create("boss_Hpbar02.png", false));
 
-void EnemyHPBar::Init(const Vector2& size) {
+    hpMax_ = hpMax;
 
-	// textureHandle取得
-	uint32_t barHandle=TextureManager::GetInstance()->LoadTexture("Resources/Texture/boss_Hpbar01.png");
-	uint32_t HpHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/boss_Hpbar02.png");
-	
-	// スプライト生成
-    sprite_.reset(Sprite::Create(barHandle, {}, {1, 1, 1, 1}));
-    hpSprite_.reset(Sprite::Create(HpHandle, {}, {1, 1, 1, 1}));
-
-	// サイズセット
-    size_ = size;
-	sprite_->SetTextureSize(size_);
-	hpSprite_->SetTextureSize(size_);
-
+    // サイズセット
+    /*sprite_->SetTextureSize(size_);
+    hpSprite_->SetTextureSize(size_);*/
 }
 
-void EnemyHPBar::Update(int hp) {
+void EnemyHPBar::Update(const float& hp) {
 
-	// alphaセット
-	sprite_->SetAlpha(1.0f);
-	hpSprite_->SetAlpha(1.0f);
+    // alphaセット
+    sprite_->SetAlpha(1.0f);
+    hpSprite_->SetAlpha(1.0f);
 
-	// positionセット
-	hpSprite_->SetPosition(Vector2(position_.x, position_.y));
-	hpSprite_->SetTextureSize(Vector2(float(max(hp,0.0f)), size_.y));
+    // positionセット
+    hpSprite_->transform_.pos = position_;
 
-	sprite_->SetPosition(position_);
-	sprite_->SetTextureSize(size_);
-}
+    // hpMaxを1としてスケールをセット
+    float currentScale = Lerp(0.0f, hpMax_, hp / hpMax_);
 
-void EnemyHPBar::Draw() {
-	
-	// 描画
-	hpSprite_->Draw();
-	sprite_->Draw();
+    /*hpSprite_->SetTextureSize(Vector2(float(max(hp,0.0f)), size_.y));*/
+    hpSprite_->transform_.scale.x = currentScale;
+
+    sprite_->transform_.pos = position_;
+
+    // isDrawセット
+    sprite_->SetIsDraw(isDraw_);
+    hpSprite_->SetIsDraw(isDraw_);
+   
 }

@@ -98,14 +98,6 @@ void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
     }
 }
 
-///========================================================================================
-///  スプライト描画処理
-///========================================================================================
-void EnemyManager::SpriteDraw(const ViewProjection& viewProjection) {
-    for (size_t i = 0; i < enemies_.size(); ++i) {
-        enemies_[i]->SpriteDraw(viewProjection);
-    }
-}
 
 ///=================================================================================
 /// パラメータをグループに追加
