@@ -10,7 +10,6 @@ std::list<BaseCollider*> CollisionManager::baseColliders_;
 void CollisionManager::Init() { 
 
 
-	//Parameter関連****************************************************************
 	globalParameter_ = GlobalParameter::GetInstance();
 	const char* groupName = "CollisionManager";
 

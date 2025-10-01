@@ -66,17 +66,7 @@ void TitleScene::Update() {
     }
 }
 
-/// ===================================================
-/// モデル描画
-/// ===================================================
-void TitleScene::ModelDraw() {
-    /// commandList取得
-    ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
-    PipelineManager::GetInstance()->PreDraw(PipelineType::Object3D, commandList);
-    Object3DRegistry::GetInstance()->DrawAll(viewProjection_);
-    EnemydamageEffect_[0]->DebugDraw(viewProjection_);
-    ParticleManager::GetInstance()->Draw(viewProjection_);
-}
+
 
 /// ===================================================
 /// SkyBox描画
@@ -84,17 +74,6 @@ void TitleScene::ModelDraw() {
 void TitleScene::SkyBoxDraw() {
 }
 
-/// ===================================================
-/// スプライト描画
-/// ===================================================
-void TitleScene::SpriteDraw() {
-}
-
-/// ===================================================
-/// 影
-/// ===================================================
-void TitleScene::DrawShadow() {
-}
 
 void TitleScene::Debug() {
 #ifdef _DEBUG

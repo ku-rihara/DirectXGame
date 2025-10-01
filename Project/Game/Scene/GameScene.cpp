@@ -79,33 +79,10 @@ void GameScene::Update() {
 }
 
 /// ===================================================
-/// モデル描画
-/// ===================================================
-void GameScene::ModelDraw() {
-   
-    Object3DRegistry::GetInstance()->DrawAll(viewProjection_);
-    AnimationRegistry::GetInstance()->DrawAll(viewProjection_);
-    ParticleManager::GetInstance()->Draw(viewProjection_);
-}
-
-/// ===================================================
 /// SkyBox描画
 /// ===================================================
 void GameScene::SkyBoxDraw() {
     skuBox_->Draw(viewProjection_);
-}
-
-/// ======================================================
-/// スプライト描画
-/// ======================================================
-void GameScene::SpriteDraw() {
-}
-
-/// ======================================================
-/// 影描画
-/// ======================================================
-void GameScene::DrawShadow() {
-    Object3DRegistry::GetInstance()->DrawAllShadow(viewProjection_);
 }
 
 void GameScene::Debug() {

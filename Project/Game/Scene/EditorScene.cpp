@@ -46,34 +46,11 @@ void EditorScene::Update() {
     }
 }
 
-/// ===================================================
-/// モデル描画
-/// ===================================================
-void EditorScene::ModelDraw() {
-    /// commandList取得
-    ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
-    PipelineManager::GetInstance()->PreDraw(PipelineType::Object3D, commandList);
-    Object3DRegistry::GetInstance()->DrawAll(viewProjection_);
-
-    ParticleManager::GetInstance()->Draw(viewProjection_);
-}
 
 /// ===================================================
 /// SkyBox描画
 /// ===================================================
 void EditorScene::SkyBoxDraw() {
-}
-
-/// ===================================================
-/// スプライト描画
-/// ===================================================
-void EditorScene::SpriteDraw() {
-}
-
-/// ===================================================
-/// 影
-/// ===================================================
-void EditorScene::DrawShadow() {
 }
 
 

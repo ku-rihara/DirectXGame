@@ -13,7 +13,7 @@ OBBCollider::~OBBCollider() {
 
 
 void OBBCollider::Init() {
- /*   cObject3d_.reset(Object3d::CreateModel("DebugCube.obj"));*/
+
     debugLine_.Init(24); 
     cTransform_.Init();
     obb_.size = { 1.5f,1.5f,1.5f };
@@ -28,7 +28,7 @@ void OBBCollider::UpdateWorldTransform() {
 
      obb_.center = GetCollisionPos();
 
-    // 回転ベクトルを更新（各軸に対応する方向ベクトル）
+    // 回転ベクトルを更新
     obb_.orientations[0] = cTransform_.GetRightVector();    // X軸方向ベクトル
     obb_.orientations[1] = cTransform_.GetUpVector();       // Y軸方向ベクトル
     obb_.orientations[2] = cTransform_.GetForwardVector();  // Z軸方向ベクトル

@@ -39,24 +39,30 @@ void KTFramework::Run() {
 
     // ウィンドウのxボタンが押されるまでループ
     while (engineCore_->ProcessMessage() == 0) {
-        engineCore_->BeginFrame(); /// フレームの開始
+        // フレームの開始
+        engineCore_->BeginFrame();
 
-        Update(); /// 更新
-
+        // 更新
+        Update();
         ShadowMap::GetInstance()->UpdateLightMatrix();
-        ShadowMap::GetInstance()->PreDraw();
+
+        // 影描画
         DrawShadow();
-        ShadowMap::GetInstance()->PostDraw();
 
-        engineCore_->PreRenderTexture(); /// 描画前処理
+        /// 描画前処理
+        engineCore_->PreRenderTexture();
 
-        Draw(); /// 描画
+        // オフジェクト、スプライト描画
+        Draw();
 
-        engineCore_->PreDraw(); /// 描画前処理
+        /// 描画前処理
+        engineCore_->PreDraw();
 
-        DrawPostEffect(); /// 描画
+        // ポストエフェクト描画
+        DrawPostEffect();
 
-        engineCore_->EndFrame(); /// フレームの終了
+        /// フレームの終了
+        engineCore_->EndFrame();
     }
     Finalize();
 }
