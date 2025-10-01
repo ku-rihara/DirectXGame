@@ -87,7 +87,7 @@ void GameScene::Init() {
 
     isfirstChange_ = false;
     shandle_       = TextureManager::GetInstance()->LoadTexture("Resources/Texture/screenChange.png");
-    screenSprite_.reset(Sprite::Create("screenChange"));
+    screenSprite_.reset(Sprite::Create("screenChange.png"));
 
     finishSpriteEase_.Init("finishSpriteTest");
     finishSpriteEase_.ApplyFromJson("finishSpriteTest.json");
@@ -230,41 +230,12 @@ void GameScene::FinishUpdate() {
     alpha_ += Frame::DeltaTime();
 }
 
-/// ===================================================
-/// モデル描画
-/// ===================================================
-void GameScene::ModelDraw() {
-
-    Object3DRegistry::GetInstance()->DrawAll(viewProjection_);
-    AnimationRegistry::GetInstance()->DrawAll(viewProjection_);
-    ParticleManager::GetInstance()->Draw(viewProjection_);
-}
 
 /// ===================================================
 /// SkyBox描画
 /// ===================================================
 void GameScene::SkyBoxDraw() {
     skyBox_->Draw(viewProjection_);
-}
-
-/// ======================================================
-/// スプライト描画
-/// ======================================================
-void GameScene::SpriteDraw() {
-   /* enemyManager_->SpriteDraw(viewProjection_);
-    lockOnController_->Draw();
-    howToOperate_->Draw();
-    combo_->Draw();
-    gameIntroManager_->UIDraw();
-    cSprite_->Draw();
-    screenSprite_->Draw();*/
-}
-
-/// ======================================================
-/// 影描画
-/// ======================================================
-void GameScene::DrawShadow() {
-    Object3DRegistry::GetInstance()->DrawAllShadow(viewProjection_);
 }
 
 void GameScene::Debug() {

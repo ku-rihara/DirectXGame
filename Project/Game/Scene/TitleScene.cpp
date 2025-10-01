@@ -102,37 +102,12 @@ void TitleScene::ChangeForJoyState() {
     isFinished_ = true;
 }
 
-/// ===================================================
-/// モデル描画
-/// ===================================================
-void TitleScene::ModelDraw() {
-
-    Object3DRegistry::GetInstance()->DrawAll(viewProjection_);
-
-    ParticleManager::GetInstance()->Draw(viewProjection_);
-}
 
 /// ===================================================
 /// SkyBox描画
 /// ===================================================
 void TitleScene::SkyBoxDraw() {
     skyBox_->Draw(viewProjection_);
-}
-
-/// ===================================================
-/// スプライト描画
-/// ===================================================
-void TitleScene::SpriteDraw() {
-    titleRogo_->Draw();
-
-    screenSprite_->Draw();
-}
-
-/// ===================================================
-/// 影
-/// ===================================================
-void TitleScene::DrawShadow() {
-    Object3DRegistry::GetInstance()->DrawAllShadow(viewProjection_);
 }
 
 void TitleScene::Debug() {
@@ -142,7 +117,7 @@ void TitleScene::Debug() {
     ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
     titleRogo_->Debug();
     Light::GetInstance()->DebugImGui();
-    /*player_->AdjustParm();*/
+ 
     ImGui::End();
 #endif
 }

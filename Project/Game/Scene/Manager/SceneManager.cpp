@@ -32,40 +32,17 @@ void SceneManager::Update() {
 	}
 }
 
-///==============================================
-/// モデル描画
-///==============================================
-void SceneManager::ModelDraw() {
-	if (scene_) {
-		scene_->ModelDraw();
-	}
-}
-
-///==============================================
-/// スプライト描画
-///==============================================
-void SceneManager::SpriteDraw() {
-	if (scene_) {
-		scene_->SpriteDraw();
-	}
-}
-
 void SceneManager::SkyBoxDraw() {
     if (scene_) {
         scene_->SkyBoxDraw();
     }
  }
 
-void SceneManager::DrawShadow() {
-     if (scene_) {
-         scene_->DrawShadow();
-     }
- }
 
 ///==============================================
 /// シーン切り替え
 ///==============================================
-void SceneManager::ChangeScene(const std::string& scenemane) {
+void SceneManager::ChangeScene(const std::string& sceneName) {
 	assert(sceneFactory_);
 	assert(!nextScene_);
 
@@ -82,7 +59,7 @@ void SceneManager::ChangeScene(const std::string& scenemane) {
     GlobalParameter::GetInstance()->LoadFiles();
 
 	// 次のシーンを生成
-	nextScene_ = std::unique_ptr<BaseScene>(sceneFactory_->CreateScene(scenemane));
+    nextScene_ = std::unique_ptr<BaseScene>(sceneFactory_->CreateScene(sceneName));
 	scene_ = std::move(nextScene_);
 	scene_->Init();
   

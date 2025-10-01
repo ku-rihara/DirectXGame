@@ -5,7 +5,7 @@
 
 void HowToOperate::Init() {
   
-    sprite_.reset(Sprite::Create("HowToOperate", true));
+    sprite_.reset(Sprite::Create("HowToOperate.png", true));
     /*   sprite_->SetScale(Vector2::ZeroVector());
        sprite_->anchorPoint_ = {0.5f, 0.5f};
        position_             = {1033, 509};*/
