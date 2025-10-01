@@ -16,6 +16,7 @@ Sprite* Sprite::Create(const std::string& textureName, const bool& isAbleEdit) {
     std::unique_ptr<Sprite> sprite = std::make_unique<Sprite>();
 
     sprite->ParamEditorSet(textureName, isAbleEdit);
+    sprite->CreateSprite(sprite->filePath_ + textureName);
 
     SpriteRegistry::GetInstance()->RegisterObject(sprite.get());
     return sprite.release();
@@ -43,7 +44,7 @@ void Sprite::ParamEditorSet(const std::string& textureName, const bool& isAbleEd
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();
     globalParameter_->SyncParamForGroup(groupName_);
-    CreateSprite(filePath_ + textureName);
+
 }
 
 void Sprite::CreateSprite(const std::string& textureName) {
