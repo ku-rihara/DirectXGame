@@ -110,3 +110,15 @@ void SpriteRegistry::DebugImGui() {
     }
 #endif // _DEBUG
 }
+
+///============================================================
+/// グループ名の重複チェック
+///============================================================
+bool SpriteRegistry::HasGroupName(const std::string& groupName) const {
+    for (const Sprite* sprite : sprites_) {
+        if (sprite != nullptr && sprite->GetGroupName() == groupName) {
+            return true;
+        }
+    }
+    return false;
+}
