@@ -20,15 +20,16 @@ public:
     enum SpritePos {
         LEFT,
         RIGHT,
-        COUNT
+        CENTER,
+        COUNT,
     };
 
     struct SpriteVariable {
         std::array<float, 2> sideAppearPosX;
         std::array<float, 2> sideBackPosX;
         Vector2 centerScale;
-        std::array<std::unique_ptr<Easing<float>>, static_cast<size_t>(SpritePos::COUNT)> sideAppearEase;
-        std::array<std::unique_ptr<Easing<float>>, static_cast<size_t>(SpritePos::COUNT)> sideBackEase;
+        std::array<std::unique_ptr<Easing<float>>, 2> sideAppearEase;
+        std::array<std::unique_ptr<Easing<float>>, 2> sideBackEase;
         std::unique_ptr<Easing<Vector2>> centerAppearEase;
         bool isBackSideUI = false;
     };

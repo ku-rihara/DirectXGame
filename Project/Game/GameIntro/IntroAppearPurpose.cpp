@@ -8,7 +8,7 @@ void IntroAppearPurpose::Init(const std::string& name) {
 
     // スプライト初期化
     for (size_t i = 0; i < sprites_.size(); ++i) {
-        sprites_[i].reset(Sprite::Create("PurposeUI/gamePurposeNo" + std::to_string(i) + ".png"));
+        sprites_[i].reset(Sprite::Create("PurposeUI/gamePurposeNo" + std::to_string(i+1) + ".png"));
     }
 
     // Easing 初期化
@@ -36,7 +36,7 @@ void IntroAppearPurpose::SideAppearWait() {
 void IntroAppearPurpose::SideAppear() {
 
     // 　サイドUIのAppear演出
-    for (size_t i = 0; i < sprites_.size(); ++i) {
+    for (size_t i = 0; i < spriteVariable_.sideAppearEase.size(); ++i) {
         spriteVariable_.sideAppearEase[i]->Update(Frame::DeltaTime());
         sprites_[i]->transform_.pos.x = spriteVariable_.sideAppearPosX[i];
     }
@@ -46,17 +46,19 @@ void IntroAppearPurpose::SideAppear() {
     }
 
     // 　サイドUIのBack演出
-    for (size_t i = 0; i < sprites_.size(); ++i) {
+    for (size_t i = 0; i < spriteVariable_.sideBackEase.size(); ++i) {
         spriteVariable_.sideBackEase[i]->Update(Frame::DeltaTime());
         sprites_[i]->transform_.pos.x = spriteVariable_.sideBackPosX[i];
     }
 
     // centerScale演出
     spriteVariable_.centerAppearEase->Update(Frame::DeltaTime());
-    sprites_[LEFT]->transform_.scale = spriteVariable_.centerScale;
-    sprites_[RIGHT]->transform_.scale = spriteVariable_.centerScale;
-
-    if (spriteVariable_.centerAppearEase->get)
+    sprites_[CENTER]->transform_.scale = spriteVariable_.centerScale;
+   
+    //次のステップ
+    if (spriteVariable_.centerAppearEase->IsFinished() && spriteVariable_.sideBackEase[LEFT]->IsFinished()) {
+        step_ = Step::FINISHWAIT;
+    }
 }
 
 void IntroAppearPurpose::FinishWait() {
@@ -106,22 +108,22 @@ void (IntroAppearPurpose::* IntroAppearPurpose::spFuncTable_[])() = {
 void IntroAppearPurpose::EasingInit() {
 
     // 生成
-    for (size_t i = 0; i < sprites_.size(); ++i) {
+    for (size_t i = 0; i < spriteVariable_.sideAppearEase.size(); ++i) {
         spriteVariable_.sideAppearEase[i] = std::make_unique<Easing<float>>();
         spriteVariable_.sideBackEase[i]   = std::make_unique<Easing<float>>();
     }
     spriteVariable_.centerAppearEase = std::make_unique<Easing<Vector2>>();
 
     // サイドUI出現Easing
-    spriteVariable_.sideAppearEase[LEFT]->Init("UPMovieLineExit", "UPMovieLineExit.json");
-    spriteVariable_.sideAppearEase[RIGHT]->Init("UPMovieLineExit", "UPMovieLineExit.json");
+    spriteVariable_.sideAppearEase[LEFT]->Init("leftAppearPosX", "leftAppearPosX.json");
+    spriteVariable_.sideAppearEase[RIGHT]->Init("RightAppearPosX", "RightAppearPosX.json");
 
     // 元に戻るサイドUIEasing
-    spriteVariable_.sideBackEase[LEFT]->Init("UPMovieLineExit", "UPMovieLineExit.json");
-    spriteVariable_.sideBackEase[RIGHT]->Init("UPMovieLineExit", "UPMovieLineExit.json");
+    spriteVariable_.sideBackEase[LEFT]->Init("LeftBackPosX", "LeftBackPosX.json");
+    spriteVariable_.sideBackEase[RIGHT]->Init("RightBackPosX", "RightBackPosX.json");
 
     // CenterEasing
-    spriteVariable_.centerAppearEase->Init("UPMovieLineExit", "UPMovieLineExit.json");
+    spriteVariable_.centerAppearEase->Init("CenterAppearScale", "CenterAppearScale.json");
 
     // 適応値、スタート値セット(サイドUI出現Easing)
     for (size_t i = 0; i < static_cast<size_t>(spriteVariable_.sideAppearEase.size()); ++i) {
@@ -137,6 +139,7 @@ void IntroAppearPurpose::EasingInit() {
     for (size_t i = 0; i < static_cast<size_t>(spriteVariable_.sideBackEase.size()); ++i) {
         spriteVariable_.sideBackEase[i]->SetAdaptValue(&spriteVariable_.sideBackPosX[i]);
         spriteVariable_.sideBackEase[i]->SetStartValue(spriteVariable_.sideAppearEase[i]->GetEndValue());
+        spriteVariable_.sideBackEase[i]->SetStartValue(sprites_[i]->GetStartParameter().position_.x);
         spriteVariable_.sideBackEase[i]->Reset();
     }
 
