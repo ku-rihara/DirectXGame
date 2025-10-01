@@ -52,9 +52,7 @@ void TitleRogo::Update() {
         break;
     }
 
-    punchSprite_->transform_.pos  = punchPosition_;
-    rushSprite_->transform_.pos   = rushPosition_;
-    bottomSprite_->transform_.pos = bottonPosition_;
+
 }
 
 void TitleRogo::Draw() {
