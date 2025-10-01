@@ -95,9 +95,3 @@ void TitleRogo::EasingSet() {
     });
 }
 
-void TitleRogo::Debug() {
-    ImGui::SeparatorText("SpriteText");
-    ImGui::DragFloat2("punchPosition_", &punchPosition_.x, 0.1f);
-    ImGui::DragFloat2("rushPosition_", &rushPosition_.x, 0.1f);
-    ImGui::DragFloat2("bottonPosition_", &bottonPosition_.x, 0.1f);
-}

@@ -4,7 +4,7 @@
 void FindSprite::Init() {
 
     // スプライト生成
-    sprite_.reset(Sprite::Create("Find.png"));
+    sprite_.reset(Sprite::Create("Find.png",false));
 
     // アンカーポイント、スケールセット
     sprite_->SetAnchorPoint(Vector2(0.5f, 0.5f));

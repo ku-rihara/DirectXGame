@@ -9,6 +9,7 @@
 #include "Frame/Frame.h"
 #include "Lighrt/Light.h"
 #include <imgui.h>
+#include "2d/SpriteRegistry.h"
 
 void GameScene::Init() {
     //// グローバル変数の読み込み
@@ -255,6 +256,7 @@ void GameScene::Debug() {
     fireInjectors_->AdjustParam();
     gameIntroManager_->AdjustParam();
     ShadowMap::GetInstance()->DebugImGui();
+    SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();
 
     ImGui::Begin("Rendition");
