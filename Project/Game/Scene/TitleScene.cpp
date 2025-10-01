@@ -1,6 +1,7 @@
 /// scene
 #include "TitleScene.h"
 #include "3d/Object3DRegistry.h"
+#include"2d/SpriteRegistry.h"
 #include "Lighrt/Light.h"
 #include "Manager/SceneManager.h"
 #include "Player/TitleBehavior/TitleRightPunch.h"
@@ -40,12 +41,11 @@ void TitleScene::Init() {
     player_->Init();
     titleRogo_->Init();
     putObjForBlender_->LoadJsonFile("gameScene.json");
-   
+
     alpha_ = 0.0f;
 
     viewProjection_.translation_ = {7.8f, 3.6f, 8.3f};
     viewProjection_.rotation_.y  = 3.8f;
-
 
     screenSprite_.reset(Sprite::Create("screenChange.png"));
 
@@ -62,7 +62,7 @@ void TitleScene::Update() {
     player_->TitleUpdate();
     field_->Update();
     skyBox_->Update();
-    
+
     if (dynamic_cast<TitleRightPunch*>(player_->GetTitleBehavior())) {
         if (!isTitleRogoUpdate) {
             isTitleRogoUpdate = true;
@@ -102,7 +102,6 @@ void TitleScene::ChangeForJoyState() {
     isFinished_ = true;
 }
 
-
 /// ===================================================
 /// SkyBox描画
 /// ===================================================
@@ -115,10 +114,13 @@ void TitleScene::Debug() {
     ImGui::Begin("Camera");
     ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
     ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
+    ImGui::End();
+
+    ImGui::Begin("Camera");
     titleRogo_->Debug();
     Light::GetInstance()->DebugImGui();
- 
     ImGui::End();
+    SpriteRegistry::GetInstance()->DebugImGui();
 #endif
 }
 

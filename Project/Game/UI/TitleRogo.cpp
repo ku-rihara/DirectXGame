@@ -6,21 +6,11 @@
 void TitleRogo::Init() {
   
     punchSprite_.reset(Sprite::Create("TitleFontPunch.png", true));
-    punchSprite_->anchorPoint_ = {0.5f, 0.5f};
-
+   
     rushSprite_.reset(Sprite::Create("TitleFontRush.png", true));
-    rushSprite_->anchorPoint_ = {0.5f, 0.5f};
-
+    
     bottomSprite_.reset(Sprite::Create("StartBottomA.png", true));
-    bottomSprite_->anchorPoint_ = {0.5f, 0.5f};
-
-    /*  punchPosition_  = {696.0f, 137.9f};
-      rushPosition_   = {1066.0f, 135.6f};
-      bottonPosition_ = {933, 540};
-
-      punchSprite_->SetScale(Vector2(0, 0));
-      rushSprite_->SetScale(Vector2(0, 0));
-      bottomSprite_->SetScale(Vector2(0, 0));*/
+   
 
     EasingSet();
 

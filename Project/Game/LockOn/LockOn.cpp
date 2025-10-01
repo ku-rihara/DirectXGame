@@ -23,7 +23,7 @@ void LockOn::Init() {
     globalParameter_->SyncParamForGroup(groupName_);
 
     // メインターゲット用スプライト
-    lockOnMark_.reset(Sprite::Create("UI/anchorPoint.png"));
+    lockOnMark_.reset(Sprite::Create("UI/anchorPoint.png", false));
     lockOnMark_->SetAnchorPoint(Vector2(0.5f, 0.5f));
 }
 
