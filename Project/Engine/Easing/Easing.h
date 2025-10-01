@@ -129,9 +129,10 @@ public:
     /// Getter methods
     /// -------------------------------------------------------------------------
     const T& GetValue() const { return *currentValue_; }
-    bool IsFinished() const { return isFinished_; }
-    std::string GetCurrentAppliedFileName() const { return currentAppliedFileName_; }
-    float GetCurrentEaseTime() const { return currentTime_; }
+    const T& GetEndValue() const { return endValue_; }
+    const bool& IsFinished() const { return isFinished_; }
+    const std::string& GetCurrentAppliedFileName() const { return currentAppliedFileName_; }
+    const float& GetCurrentEaseTime() const { return currentTime_; }
     /// -------------------------------------------------------------------------
     /// Setter methods
     /// -------------------------------------------------------------------------
