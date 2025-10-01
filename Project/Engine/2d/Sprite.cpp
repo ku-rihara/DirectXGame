@@ -33,7 +33,7 @@ void Sprite::ParamEditorSet(const std::string& textureName, const bool& isAbleEd
     int32_t index               = 0;
 
     // グループが既に存在する場合、インデックスを追加
-    while (globalParameter_->HasGroup(uniqueGroupName)) {
+    while (SpriteRegistry::GetInstance()->HasGroupName(uniqueGroupName)) {
         index++;
         uniqueGroupName = textureName + std::to_string(index);
     }

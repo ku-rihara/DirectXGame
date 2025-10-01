@@ -98,6 +98,7 @@ public:
     ///  getter
     ///=========================================================================================
     const Vector2& GetPosition() const { return transform_.pos; }
+    const std::string& GetGroupName() const { return groupName_; }
     const Vector2& GetAnchorPoint() const { return anchorPoint_; }
     const Vector2& GetTextureSize() const { return textureSize_; }
     const Vector2& GetTextureLeftTop() const { return textureLeftTop_; }

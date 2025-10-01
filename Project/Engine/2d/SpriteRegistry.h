@@ -3,6 +3,7 @@
 #include <memory>
 #include <unordered_set>
 #include <vector>
+#include <string>
 
 // 前方宣言
 class Sprite;
@@ -45,6 +46,7 @@ private:
     static SpriteRegistry* instance_;
 
 public:
+    bool HasGroupName(const std::string& groupName) const;
     size_t GetRegisteredCount() const { return sprites_.size(); }
 
 };
