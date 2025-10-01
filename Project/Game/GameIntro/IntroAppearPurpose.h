@@ -3,24 +3,31 @@
 #include "BaseGameIntro.h"
 #include "Easing/Easing.h"
 #include "MovieLine.h"
+#include <array>
+#include <cstdint>
 #include <memory>
 
 class IntroAppearPurpose : public BaseGameIntro {
 public:
     enum class Step {
-        APPEARWAIT,
-        APPEAR,
-        DISAPPEARWAIT,
-        DISAPPEAR,
+        SIDEAPPEARWAIT,
+        SIDEAPPEAR,
+        CENTERAPPEAR,
         FINISHWAIT,
         FINISH,
     };
 
+    enum SpritePos {
+        LEFT,
+        RIGHT,
+        COUNT
+    };
+
     struct SpriteVariable {
-        float currentRotateX;
-        Vector2 currentScale;
-        std::unique_ptr<Easing<float>> rotateEasing;
-        std::unique_ptr<Easing<Vector2>> scaleEasing;
+        std::array<float, 2> sideAppearPosX;
+        std::array<float, 2> sideBackPosX;
+        std::array<std::unique_ptr<Easing<float>>,static_cast<size_t>(SpritePos::COUNT)> sideAppearEase;
+        std::array<std::unique_ptr<Easing<float>>, static_cast<size_t>(SpritePos::COUNT)> sideBackEase;
     };
 
 public:
@@ -38,11 +45,10 @@ public:
     void AdjustUniqueParam() override;
 
 private:
+  
     // Step function
-    void APPEARWAIT();
-    void APPEAR();
-    void DISAPPEARWAIT();
-    void DISAPPEAR();
+    void SideAppearWait();
+    void SideAppear();
     void FinishWait();
     void Finish();
 
@@ -61,9 +67,10 @@ private:
     float finishWaitTime_;
 
     // Objects
-    std::unique_ptr<Sprite> sprite_ = nullptr;
+    std::unique_ptr<Sprite> backLineSprite_;
+    std::array<std::unique_ptr<Sprite>, static_cast<size_t>(SpritePos::COUNT)> sprites_;
     SpriteVariable spriteVariable_;
 
     // State
-    Step step_ = Step::APPEARWAIT;
+    Step step_ = Step::SIDEAPPEARWAIT;
 };

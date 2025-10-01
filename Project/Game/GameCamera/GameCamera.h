@@ -9,8 +9,8 @@ class LockOn;
 class GameCamera {
 public:
     struct Parameter {
-        Vector3 firstOffset_;
-        float firstRotate_;
+        Vector3 offsetPos;
+        float rotate;
     };
 
 public:
@@ -24,8 +24,7 @@ public:
     void Reset();
     void GetIsCameraMove();
 
-    void Debug();
-
+  
     void RotateAdapt();
     void TranslateAdapt();
 
@@ -56,11 +55,9 @@ private:
     int viewMoveTime_;
 
     Vector3 shakeOffsetPos_;
-    float rotate_;
-
     Parameter parameter_; //< パラメータ構造体
 
-    Vector3 offset_; //< オフセット
+  
 
 public:
     /// ===================================================
@@ -68,7 +65,6 @@ public:
     /// ===================================================
     const ViewProjection& GetViewProjection() { return viewProjection_; }
     ViewProjection& GetViewProjectionRef() { return viewProjection_; }
-    const Vector3& GetOffset() const { return offset_; };
     const Parameter& GetParameter() const { return parameter_; }
     Vector3 OffsetCalc(const Vector3& offset) const;
     Vector3 GetWorldPos() const;
@@ -76,8 +72,6 @@ public:
     /// setter
     /// ===================================================
     void SetTarget(const WorldTransform* target);
-    void SetRotate(const float& rotate) { rotate_ = rotate; }
-    void SetOffSet(const Vector3& offset) { offset_ = offset; }
     void SetLockOn(LockOn* lockOn) { lockOn_ = lockOn; }
     void SetShakePos(const Vector3& shake) { shakeOffsetPos_ = shake; }
     void SetShakePosY(const float& shake) { shakeOffsetPos_.y = shake; }

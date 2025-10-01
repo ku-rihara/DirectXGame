@@ -5,14 +5,16 @@ void IntroAppearPurpose::Init(const std::string& name) {
 
     BaseGameIntro::Init(name);
 
+    // スプライト初期化
+    for (size_t i = 0; i < sprites_.size(); ++i) {
+        sprites_[i].reset(Sprite::Create("PurposeUI/gamePurposeNo" + std::to_string(i) + ".png"));
+    }
+
     // Easing 初期化
     EasingInit();
 
-    // スプライト初期化
-   /* sprite_*/
-
     // 変数初期化
-    step_             = Step::APPEARWAIT;
+    step_             = Step::SIDEAPPEARWAIT;
     isFinish_         = false;
     isAbleEnemySpawn_ = false;
     currentTime_      = 0.0f;
@@ -27,14 +29,12 @@ void IntroAppearPurpose::Draw() {
 }
 
 // Step function
-void IntroAppearPurpose::APPEARWAIT() {
+void IntroAppearPurpose::SideAppearWait() {
+    ProcessStep(appearWaitTime_, Step::SIDEAPPEAR);
 }
-void IntroAppearPurpose::APPEAR() {
+void IntroAppearPurpose::SideAppear() {
 }
-void IntroAppearPurpose::DISAPPEARWAIT() {
-}
-void IntroAppearPurpose::DISAPPEAR() {
-}
+
 void IntroAppearPurpose::FinishWait() {
 }
 void IntroAppearPurpose::Finish() {
@@ -73,15 +73,38 @@ void IntroAppearPurpose::AdjustUniqueParam() {
 }
 
 void (IntroAppearPurpose::* IntroAppearPurpose::spFuncTable_[])() = {
-    &IntroAppearPurpose::APPEARWAIT,
-    &IntroAppearPurpose::APPEAR,
-    &IntroAppearPurpose::DISAPPEARWAIT,
-    &IntroAppearPurpose::DISAPPEAR,
+    &IntroAppearPurpose::SideAppearWait,
+    &IntroAppearPurpose::SideAppear,
     &IntroAppearPurpose::FinishWait,
     &IntroAppearPurpose::Finish,
 };
 
 void IntroAppearPurpose::EasingInit() {
-    spriteVariable_.rotateEasing = std::make_unique<Easing<float>>();
-    spriteVariable_.scaleEasing  = std::make_unique<Easing<Vector2>>();
+
+    // 生成
+    for (size_t i = 0; i < sprites_.size(); ++i) {
+        spriteVariable_.sideAppearEase[i] = std::make_unique<Easing<float>>();
+        spriteVariable_.sideBackEase[i]   = std::make_unique<Easing<float>>();
+    }
+
+    // サイドUI出現Easing
+    spriteVariable_.sideAppearEase[LEFT]->Init("UPMovieLineExit", "UPMovieLineExit.json");
+    spriteVariable_.sideAppearEase[RIGHT]->Init("UPMovieLineExit", "UPMovieLineExit.json");
+
+    // 元に戻るサイドUIEasing
+    spriteVariable_.sideBackEase[LEFT]->Init("UPMovieLineExit", "UPMovieLineExit.json");
+    spriteVariable_.sideBackEase[RIGHT]->Init("UPMovieLineExit", "UPMovieLineExit.json");
+
+    // 適応値、スタート値セット
+    for (size_t i = 0; i < static_cast<size_t>(spriteVariable_.sideAppearEase.size()); ++i) {
+        spriteVariable_.sideAppearEase[i]->SetAdaptValue(&spriteVariable_.sideAppearPosX[i]);
+        spriteVariable_.sideAppearEase[i]->SetStartValue(sprites_[i]->GetStartParameter().position_.x);
+        spriteVariable_.sideAppearEase[i]->Reset();
+    }
+
+    for (size_t i = 0; i < static_cast<size_t>(spriteVariable_.sideBackEase.size()); ++i) {
+        spriteVariable_.sideBackEase[i]->SetAdaptValue(&spriteVariable_.sideBackPosX[i]);
+        spriteVariable_.sideBackEase[i]->SetStartValue(spriteVariable_.sideAppearEase[i]->gete);
+        spriteVariable_.sideBackEase[i]->Reset();
+    }
 }
