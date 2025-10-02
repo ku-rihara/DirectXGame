@@ -25,7 +25,6 @@ void EnemyHPBar::Update(const float& hp) {
     // hpMaxを1としてスケールをセット
     float currentScale = Lerp(0.0f, 1.0f, hp / hpMax_);
 
-    /*hpSprite_->SetTextureSize(Vector2(float(max(hp,0.0f)), size_.y));*/
     hpSprite_->transform_.scale.x = currentScale;
 
     sprite_->transform_.pos = position_;

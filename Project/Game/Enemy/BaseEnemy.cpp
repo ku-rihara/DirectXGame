@@ -81,7 +81,7 @@ void BaseEnemy::Update() {
 ///========================================================
 void BaseEnemy::DisplaySprite(const ViewProjection& viewProjection) {
     // ワールド座標からスクリーン座標に変換
-    Vector3 positionScreen = ScreenTransform(GetWorldPosition(), viewProjection);
+    Vector2 positionScreen = ScreenTransform(GetWorldPosition(), viewProjection);
     // Vector2に格納
     Vector2 positionScreenV2 = positionScreen - parameter_.hpBarPosOffset;
     // Hpバーの座標確定
