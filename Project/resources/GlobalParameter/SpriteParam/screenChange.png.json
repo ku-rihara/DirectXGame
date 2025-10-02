@@ -1,9 +1,9 @@
 {
     "screenChange.png": {
-        "layerNum": 1,
+        "layerNum": 19,
         "startAnchorPoint": [
-            1.0,
-            1.0
+            0.5,
+            0.5
         ],
         "startColor": [
             1.0,
@@ -12,8 +12,8 @@
             1.0
         ],
         "startPosition": [
-            0.0,
-            0.0
+            640.0,
+            362.6000061035156
         ],
         "startScale": [
             1.0,
