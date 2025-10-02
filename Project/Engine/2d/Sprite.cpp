@@ -251,6 +251,7 @@ void Sprite::AdjustParam() {
             transform_.pos                 = parameter_.position_;
             transform_.scale               = parameter_.scale_;
             material_.materialData_->color = parameter_.color_;
+            anchorPoint_                   = parameter_.startAnchorPoint_;
         }
 
         // セーブ・ロード
