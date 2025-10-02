@@ -2,10 +2,12 @@
 #include "3d/ViewProjection.h"
 #include "base/WinApp.h"
 #include "Quaternion.h"
+#include"Vector2.h"
 #include <assert.h>
 #include <cmath>
 #include <DirectXMath.h>
 #include <numbers>
+
 
 Matrix4x4 MakeIdentity4x4() {
     DirectX::XMMATRIX identity = DirectX::XMMatrixIdentity();
@@ -106,7 +108,7 @@ Matrix4x4 MakeScaleMatrix(const Vector3& scale) {
 }
 
 // X軸回転行列
-Matrix4x4 MakeRotateXMatrix(float radian) {
+Matrix4x4 MakeRotateXMatrix(const float& radian) {
     Matrix4x4 result;
     result.m[0][0] = 1;
     result.m[0][1] = 0;
@@ -128,7 +130,7 @@ Matrix4x4 MakeRotateXMatrix(float radian) {
 }
 
 // Y軸回転行列
-Matrix4x4 MakeRotateYMatrix(float radian) {
+Matrix4x4 MakeRotateYMatrix(const float& radian) {
     Matrix4x4 result;
     result.m[0][0] = std::cos(radian);
     result.m[0][1] = 0;
@@ -150,7 +152,7 @@ Matrix4x4 MakeRotateYMatrix(float radian) {
 }
 
 // Z軸回転行列
-Matrix4x4 MakeRotateZMatrix(float radian) {
+Matrix4x4 MakeRotateZMatrix(const float& radian) {
     Matrix4x4 result;
     result.m[0][0] = std::cos(radian);
     result.m[0][1] = std::sin(radian);
@@ -279,7 +281,7 @@ Matrix4x4 Transpose(const Matrix4x4& m) {
     return result;
 }
 
-Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip) {
+Matrix4x4 MakePerspectiveFovMatrix(const float& fovY, const float& aspectRatio, const float& nearClip, const float& farClip) {
     Matrix4x4 result;
     result.m[0][0] = (1 / aspectRatio) * (1 / std::tan(fovY / 2));
     result.m[0][1] = 0;
@@ -300,7 +302,7 @@ Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip
     return result;
 }
 
-Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip) {
+Matrix4x4 MakeOrthographicMatrix(const float& left, const float& top, const float& right, const float& bottom, const float& nearClip, const float& farClip) {
     Matrix4x4 result;
     result.m[0][0] = 2 / (right - left);
     result.m[0][1] = 0;
@@ -321,7 +323,7 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
     return result;
 }
 
-Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth) {
+Matrix4x4 MakeViewportMatrix(const float& left, const float& top, const float& width, const float& height, const float& minDepth, const float& maxDepth) {
     Matrix4x4 result;
     result.m[0][0] = width / 2;
     result.m[0][1] = 0;
@@ -342,17 +344,19 @@ Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, f
     return result;
 }
 
-Vector3 ScreenTransform(Vector3 worldPos, const ViewProjection& viewProjection) {
+Vector2 ScreenTransform(const Vector3& worldPos, const ViewProjection& viewProjection) {
     // ビューポート行列
     Matrix4x4 matViewport = MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);
     // ビュー行列とプロジェクション行列、ビューポート行列を合成する
     Matrix4x4 matViewProjectionViewport = viewProjection.matView_ * viewProjection.matProjection_ * matViewport;
     // ワールド→スクリーン変換
-    return TransformMatrix(worldPos, matViewProjectionViewport);
+    const Vector3& result= TransformMatrix(worldPos, matViewProjectionViewport);
+
+    return Vector2(result.x, result.y);
 }
 
 
-Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, int row) {
+Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, const int& row) {
     Matrix4x4 result = matrix; // 元の行列をコピー
 
     // 行のベクトルを取り出す（X, Y, Z 成分）
@@ -370,7 +374,7 @@ Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, int row) {
 }
 
 // 任意軸回転行列
-Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
+Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, const float& angle) {
 
     Matrix4x4 result{};
 
