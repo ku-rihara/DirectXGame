@@ -98,7 +98,6 @@ void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
     }
 }
 
-
 ///=================================================================================
 /// パラメータをグループに追加
 ///=================================================================================
@@ -122,6 +121,7 @@ void EnemyManager::BindParams() {
         globalParameter_->Bind(groupName_, "burstTime" + std::to_string(int(i + 1)), &parameters_[i].burstTime);
         globalParameter_->Bind(groupName_, "blowGravity" + std::to_string(int(i + 1)), &parameters_[i].blowGravity);
         globalParameter_->Bind(groupName_, "initScale" + std::to_string(int(i + 1)), &parameters_[i].initScale_);
+        globalParameter_->Bind(groupName_, "hpBarPosOffset" + std::to_string(int(i + 1)), &parameters_[i].hpBarPosOffset);
     }
 }
 
@@ -144,6 +144,8 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::DragFloat("burstTime", &parameters_[static_cast<size_t>(type)].burstTime, 0.01f);
     ImGui::DragFloat("blowGravity", &parameters_[static_cast<size_t>(type)].blowGravity, 0.01f);
     ImGui::DragFloat("blowTime", &parameters_[static_cast<size_t>(type)].blowTime, 0.01f);
+    ImGui::SeparatorText("UI");
+    ImGui::DragFloat2("HPBarOffsetPos", &parameters_[static_cast<size_t>(type)].hpBarPosOffset.x, 0.01f);
 }
 
 void EnemyManager::AdjustParam() {
@@ -167,6 +169,7 @@ void EnemyManager::AdjustParam() {
 
         ImGui::PopID();
     }
+    ImGui::Separator();
 
 #endif
 }

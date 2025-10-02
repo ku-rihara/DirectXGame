@@ -29,13 +29,20 @@ void Sprite::ParamEditorSet(const std::string& textureName, const bool& isAbleEd
     // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
 
-    std::string uniqueGroupName = textureName;
+    // フォルダパスを除去してファイル名のみを取得
+    std::string fileName = textureName;
+    size_t lastSlash     = textureName.find_last_of("/\\");
+    if (lastSlash != std::string::npos) {
+        fileName = textureName.substr(lastSlash + 1);
+    }
+
+    std::string uniqueGroupName = fileName;
     int32_t index               = 0;
 
     // グループが既に存在する場合、インデックスを追加
     while (SpriteRegistry::GetInstance()->HasGroupName(uniqueGroupName)) {
         index++;
-        uniqueGroupName = textureName + std::to_string(index);
+        uniqueGroupName = fileName + std::to_string(index);
     }
 
     groupName_ = uniqueGroupName;
@@ -44,7 +51,6 @@ void Sprite::ParamEditorSet(const std::string& textureName, const bool& isAbleEd
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();
     globalParameter_->SyncParamForGroup(groupName_);
-
 }
 
 void Sprite::CreateSprite(const std::string& textureName) {
@@ -239,14 +245,18 @@ void Sprite::AdjustParam() {
         ImGui::DragFloat2("StartAnchorPoint", &parameter_.startAnchorPoint_.x, 0.01f);
         ImGui::ColorEdit4("StartColor", &parameter_.color_.x);
 
-        // 適応
-        transform_.pos = parameter_.position_;
-        transform_.scale = parameter_.scale_;
-        material_.materialData_->color = parameter_.color_;
+        ImGui::Checkbox("isAdaptStartParam", &isAdaptStartParam_);
+        if (isAdaptStartParam_) {
+            // 適応
+            transform_.pos                 = parameter_.position_;
+            transform_.scale               = parameter_.scale_;
+            material_.materialData_->color = parameter_.color_;
+            anchorPoint_                   = parameter_.startAnchorPoint_;
+        }
 
         // セーブ・ロード
-        globalParameter_->ParamSaveForImGui(groupName_);
-        globalParameter_->ParamLoadForImGui(groupName_);
+        globalParameter_->ParamSaveForImGui(groupName_, folderPath_);
+        globalParameter_->ParamLoadForImGui(groupName_, folderPath_);
 
         ImGui::PopID();
     }

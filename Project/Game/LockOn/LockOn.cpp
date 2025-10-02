@@ -23,8 +23,8 @@ void LockOn::Init() {
     globalParameter_->SyncParamForGroup(groupName_);
 
     // メインターゲット用スプライト
-    lockOnMark_.reset(Sprite::Create("UI/anchorPoint.png", false));
-    lockOnMark_->SetAnchorPoint(Vector2(0.5f, 0.5f));
+    lockOnMark_.reset(Sprite::Create("UI/anchorPoint.png"));
+   
 }
 
 void LockOn::Update(const std::vector<LockOnVariant>& targets, const Player* player, const ViewProjection& viewProjection) {
@@ -74,8 +74,8 @@ void LockOn::UpdateTargetMarkers(const std::vector<LockOnVariant>& validTargets,
         Vector3 targetWorldPos = GetTargetObjectPosition(validTargets[i]);
 
         // スクリーン座標に変換
-        Vector3 screenPos                    = ScreenTransform(targetWorldPos, viewProjection);
-        ableLockOnMarkers_[i].screenPosition = Vector2(screenPos.x, screenPos.y);
+        Vector2 screenPos                    = ScreenTransform(targetWorldPos, viewProjection);
+        ableLockOnMarkers_[i].screenPosition = screenPos;
 
         // 現在のターゲットかどうかをチェック
         bool isCurrentTarget                  = (currentTarget_.has_value() && validTargets[i] == currentTarget_.value());
@@ -251,10 +251,10 @@ void LockOn::UpdateCurrentReticleUI(const ViewProjection& viewProjection) {
     Vector3 positionWorld = GetCurrentTargetPosition();
 
     // ワールド座標からスクリーン座標に変換
-    Vector3 positionScreen = ScreenTransform(positionWorld, viewProjection);
+    Vector2 positionScreen = ScreenTransform(positionWorld, viewProjection);
 
     // Vector2に格納
-    Vector2 positionScreenV2(positionScreen.x, positionScreen.y);
+    Vector2 positionScreenV2 = positionScreen;
 
     // スケール
     lockOnMark_->transform_.scale = spriteScale_;

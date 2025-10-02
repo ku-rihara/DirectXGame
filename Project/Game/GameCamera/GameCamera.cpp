@@ -21,8 +21,8 @@ void GameCamera::Init() {
     BindParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
-    rotate_ = parameter_.firstRotate_;
-    offset_ = parameter_.firstOffset_;
+  /*  rotate_ = parameter_.rotate;
+    offset_ = parameter_.offsetPos;*/
 
     rendition_ = std::make_unique<CameraRendition>();
     rendition_->Init();
@@ -94,7 +94,7 @@ void GameCamera::RotateAdapt() {
     viewProjection_.rotation_.y = LerpShortAngle(viewProjection_.rotation_.y, destinationAngleY_, 0.3f);
 
     // 見下ろし角度の固定
-    const float fixedPitchAngle = rotate_ * std::numbers::pi_v<float> / 180.0f;
+    const float fixedPitchAngle = parameter_.rotate * std::numbers::pi_v<float> / 180.0f;
     viewProjection_.rotation_.x = fixedPitchAngle;
 }
 
@@ -102,7 +102,7 @@ void GameCamera::TranslateAdapt() {
     if (!target_)
         return;
     interTarget_                 = Lerp(interTarget_, target_->translation_, 1.0f);
-    Vector3 offset               = OffsetCalc(offset_);
+    Vector3 offset               = OffsetCalc(parameter_.offsetPos);
     viewProjection_.translation_ = interTarget_ + offset;
 }
 
@@ -115,7 +115,7 @@ void GameCamera::Reset() {
     }
     destinationAngleY_ = viewProjection_.rotation_.y;
     // 追従対象からのオフセット
-    Vector3 offset               = OffsetCalc(offset_);
+    Vector3 offset               = OffsetCalc(parameter_.offsetPos);
     viewProjection_.translation_ = interTarget_ + offset;
 }
 
@@ -127,8 +127,8 @@ Vector3 GameCamera::OffsetCalc(const Vector3& offset) const {
 }
 
 void GameCamera::BindParams() {
-    globalParameter_->Bind(groupName_, "firstRotate_", &parameter_.firstRotate_);
-    globalParameter_->Bind(groupName_, "firstOffset_", &parameter_.firstOffset_);
+    globalParameter_->Bind(groupName_, "firstRotate_", &parameter_.rotate);
+    globalParameter_->Bind(groupName_, "firstOffset_", &parameter_.offsetPos);
 }
 
 void GameCamera::AdjustParam() {
@@ -137,8 +137,8 @@ void GameCamera::AdjustParam() {
         ImGui::PushID(groupName_.c_str());
 
         /// 変数の調整
-        ImGui::SliderAngle("First Rotate", &parameter_.firstRotate_, 0, 1000);
-        ImGui::DragFloat3("firstOffset", &parameter_.firstOffset_.x, 0.01f);
+        ImGui::SliderAngle("First Rotate", &parameter_.rotate, 0, 1000);
+        ImGui::DragFloat3("firstOffset", &parameter_.offsetPos.x, 0.01f);
 
         /// セーブとロード
         globalParameter_->ParamSaveForImGui(groupName_);
@@ -174,11 +174,6 @@ void GameCamera::SetTarget(const WorldTransform* target) {
     Reset();
 }
 
-void GameCamera::Debug() {
-    ImGui::DragFloat("rotate", &rotate_, 0.01f);
-    ImGui::DragFloat3("offset", &offset_.x, 0.1f);
-
-}
 
 void GameCamera::PlayAnimation(const std::string& filename) {
     rendition_->AnimationPlay(filename);
