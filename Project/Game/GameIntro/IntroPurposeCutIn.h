@@ -7,14 +7,17 @@
 #include <cstdint>
 #include <memory>
 
-class IntroAppearPurpose : public BaseGameIntro {
+class IntroPurposeCutIn : public BaseGameIntro {
 public:
     enum class Step {
-        SIDEAPPEARWAIT,
-        SIDEAPPEAR,
-        CENTERAPPEAR,
-        FINISHWAIT,
-        FINISH,
+        SideAppearWait,
+        SideAppear,
+        CenterAppearWait,
+        CenterAppear,
+        CloseWait,
+        Close,
+        FinishWait,
+        Finish,
     };
 
     enum SpritePos {
@@ -27,18 +30,20 @@ public:
     struct SpriteVariable {
         std::array<float, 2> sideAppearPosX;
         std::array<float, 2> sideBackPosX;
-        float scaleY;
+        float appearScaleY;
+        float closeScaleY;
         Vector2 centerScale;
         std::array<std::unique_ptr<Easing<float>>, 2> sideAppearEase;
         std::array<std::unique_ptr<Easing<float>>, 2> sideBackEase;
         std::unique_ptr<Easing<Vector2>> centerAppearEase;
-        std::unique_ptr<Easing<float>> scaleEaseY;
+        std::unique_ptr<Easing<float>> appearScaleEaseY;
+        std::unique_ptr<Easing<float>> closeScaleEaseY;
         bool isBackSideUI = false;
     };
 
 public:
-    IntroAppearPurpose()           = default;
-    ~IntroAppearPurpose() override = default;
+    IntroPurposeCutIn()           = default;
+    ~IntroPurposeCutIn() override = default;
 
     // Init,Update,Draw
     void Init(const std::string& name) override;
@@ -54,6 +59,10 @@ private:
     // Step function
     void SideAppearWait();
     void SideAppear();
+    void CenterAppearWait();
+    void CenterAppear();
+    void CloseWait();
+    void Close();
     void FinishWait();
     void Finish();
 
@@ -63,12 +72,13 @@ private:
     bool ProcessStep(const float& limitTime, const Step& nextStep, const bool& enableEnemySpawn = false);
 
 private:
-    static void (IntroAppearPurpose::* spFuncTable_[])();
+    static void (IntroPurposeCutIn::* spFuncTable_[])();
 
 private:
     // Parameters
-    float appearWaitTime_;
-    float disAppearWaitTime_;
+    float sideAppearWaitTime_;
+    float closeWaitTime_;
+    float centerAppearWaitTime_;
     float finishWaitTime_;
 
     // Objects
@@ -77,5 +87,5 @@ private:
     SpriteVariable spriteVariable_;
 
     // State
-    Step step_ = Step::SIDEAPPEARWAIT;
+    Step step_ = Step::SideAppearWait;
 };

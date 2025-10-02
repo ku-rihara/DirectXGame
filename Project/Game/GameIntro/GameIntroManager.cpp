@@ -2,7 +2,7 @@
 #include "Frame/Frame.h"
 #include "Input/Input.h"
 // step
-#include "IntroAppearPurpose.h"
+#include "IntroPurposeCutIn.h"
 #include "IntroSpawnField.h"
 
 #include <algorithm>
@@ -24,8 +24,8 @@ void GameIntroManager::Init() {
     introSequences_[SpawnField] = std::make_unique<IntroSpawnField>();
     introSequences_[SpawnField]->Init("IntroSpawnField");
 
-    introSequences_[AppearPurpose] = std::make_unique<IntroAppearPurpose>();
-    introSequences_[AppearPurpose]->Init("IntroAppearPurpose");
+    introSequences_[AppearPurpose] = std::make_unique<IntroPurposeCutIn>();
+    introSequences_[AppearPurpose]->Init("IntroPurposeCutIn");
 
     currentIndex_  = 0;
     isInitialized_ = true;

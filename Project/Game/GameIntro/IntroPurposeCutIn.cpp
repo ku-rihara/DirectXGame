@@ -1,8 +1,8 @@
-#include "IntroAppearPurpose.h"
+#include "IntroPurposeCutIn.h"
 #include "Frame/Frame.h"
 #include <imgui.h>
 
-void IntroAppearPurpose::Init(const std::string& name) {
+void IntroPurposeCutIn::Init(const std::string& name) {
 
     BaseGameIntro::Init(name);
 
@@ -17,25 +17,25 @@ void IntroAppearPurpose::Init(const std::string& name) {
     EasingInit();
 
     // 変数初期化
-    step_             = Step::SIDEAPPEARWAIT;
+    step_             = Step::SideAppearWait;
     isFinish_         = false;
     isAbleEnemySpawn_ = false;
     currentTime_      = 0.0f;
 }
 
-void IntroAppearPurpose::Update(const float& playSpeed) {
+void IntroPurposeCutIn::Update(const float& playSpeed) {
     BaseGameIntro::Update(playSpeed);
     (this->*spFuncTable_[static_cast<size_t>(step_)])();
 }
 
-void IntroAppearPurpose::Draw() {
+void IntroPurposeCutIn::Draw() {
 }
 
 // Step function
-void IntroAppearPurpose::SideAppearWait() {
-    ProcessStep(appearWaitTime_, Step::SIDEAPPEAR);
+void IntroPurposeCutIn::SideAppearWait() {
+    ProcessStep(sideAppearWaitTime_, Step::SideAppear);
 }
-void IntroAppearPurpose::SideAppear() {
+void IntroPurposeCutIn::SideAppear() {
 
     // 　サイドUIのAppear演出
     for (size_t i = 0; i < spriteVariable_.sideAppearEase.size(); ++i) {
@@ -44,16 +44,23 @@ void IntroAppearPurpose::SideAppear() {
     }
 
     // 　ScaleY
-    spriteVariable_.scaleEaseY->Update(Frame::DeltaTime());
+    spriteVariable_.appearScaleEaseY->Update(Frame::DeltaTime());
     for (size_t i = 0; i < spriteVariable_.sideAppearEase.size(); ++i) {
-        sprites_[i]->transform_.scale.y = spriteVariable_.scaleY;
+        sprites_[i]->transform_.scale.y = spriteVariable_.appearScaleY;
     }
-    backLineSprite_->transform_.scale.y = spriteVariable_.scaleY;
+    backLineSprite_->transform_.scale.y = spriteVariable_.appearScaleY;
 
     if (!spriteVariable_.isBackSideUI) {
         return;
     }
 
+   step_ = Step::CenterAppearWait;
+}
+
+void IntroPurposeCutIn::CenterAppearWait() {
+    ProcessStep(centerAppearWaitTime_, Step::CenterAppear);
+}
+void IntroPurposeCutIn::CenterAppear() {
     // 　サイドUIのBack演出
     for (size_t i = 0; i < spriteVariable_.sideBackEase.size(); ++i) {
         spriteVariable_.sideBackEase[i]->Update(Frame::DeltaTime());
@@ -66,16 +73,30 @@ void IntroAppearPurpose::SideAppear() {
 
     // 次のステップ
     if (spriteVariable_.centerAppearEase->IsFinished() && spriteVariable_.sideBackEase[LEFT]->IsFinished()) {
-        step_ = Step::FINISHWAIT;
+        step_ = Step::CloseWait;
     }
 }
 
-void IntroAppearPurpose::FinishWait() {
-}
-void IntroAppearPurpose::Finish() {
+void IntroPurposeCutIn::CloseWait() {
+    ProcessStep(closeWaitTime_, Step::Close);
 }
 
-bool IntroAppearPurpose::ProcessStep(const float& limitTime, const Step& nextStep, const bool& enableEnemySpawn) {
+void IntroPurposeCutIn::Close() {
+
+    // 　ScaleY
+    spriteVariable_.closeScaleEaseY->Update(Frame::DeltaTime());
+    for (size_t i = 0; i < sprites_.size(); ++i) {
+        sprites_[i]->transform_.scale.y = spriteVariable_.closeScaleY;
+    }
+    backLineSprite_->transform_.scale.y = spriteVariable_.closeScaleY;
+}
+
+void IntroPurposeCutIn::FinishWait() {
+}
+void IntroPurposeCutIn::Finish() {
+}
+
+bool IntroPurposeCutIn::ProcessStep(const float& limitTime, const Step& nextStep, const bool& enableEnemySpawn) {
     // タイム加算
     currentTime_ += playSpeed_;
 
@@ -90,39 +111,37 @@ bool IntroAppearPurpose::ProcessStep(const float& limitTime, const Step& nextSte
     return false;
 }
 
-void IntroAppearPurpose::BindParams() {
+void IntroPurposeCutIn::BindParams() {
     BaseGameIntro::BindParams();
-    globalParameter_->Bind(groupName_, "AppearWaitTime", &appearWaitTime_);
-    globalParameter_->Bind(groupName_, "disAppearWaitTime", &disAppearWaitTime_);
+  
+    globalParameter_->Bind(groupName_, "AppearWaitTime", &sideAppearWaitTime_);
+    globalParameter_->Bind(groupName_, "closeWaitTime", &closeWaitTime_);
+    globalParameter_->Bind(groupName_, "centerAppearWaitTime", &centerAppearWaitTime_);
     globalParameter_->Bind(groupName_, "finishWaitTime", &finishWaitTime_);
 }
 
-void IntroAppearPurpose::AdjustParam() {
+void IntroPurposeCutIn::AdjustParam() {
     BaseGameIntro::AdjustParam();
 }
 
-void IntroAppearPurpose::AdjustUniqueParam() {
-    ImGui::DragFloat("AppearWait Time", &appearWaitTime_, 0.01f, 0.0f);
-    ImGui::DragFloat("DisAppear Time", &disAppearWaitTime_, 0.01f, 0.0f);
+void IntroPurposeCutIn::AdjustUniqueParam() {
+    ImGui::DragFloat("SideAppearWait Time", &sideAppearWaitTime_, 0.01f, 0.0f);
+    ImGui::DragFloat("CenterAppearWait Time", &centerAppearWaitTime_, 0.01f, 0.0f);
+    ImGui::DragFloat("CloseWait Time", &closeWaitTime_, 0.01f, 0.0f);
     ImGui::DragFloat("FinishWait Time", &finishWaitTime_, 0.01f, 0.0f);
 }
 
-void (IntroAppearPurpose::* IntroAppearPurpose::spFuncTable_[])() = {
-    &IntroAppearPurpose::SideAppearWait,
-    &IntroAppearPurpose::SideAppear,
-    &IntroAppearPurpose::FinishWait,
-    &IntroAppearPurpose::Finish,
-};
-
-void IntroAppearPurpose::EasingInit() {
+void IntroPurposeCutIn::EasingInit() {
 
     // 生成
     for (size_t i = 0; i < spriteVariable_.sideAppearEase.size(); ++i) {
         spriteVariable_.sideAppearEase[i] = std::make_unique<Easing<float>>();
         spriteVariable_.sideBackEase[i]   = std::make_unique<Easing<float>>();
     }
+
     spriteVariable_.centerAppearEase = std::make_unique<Easing<Vector2>>();
-    spriteVariable_.scaleEaseY       = std::make_unique<Easing<float>>();
+    spriteVariable_.appearScaleEaseY = std::make_unique<Easing<float>>();
+    spriteVariable_.closeScaleEaseY  = std::make_unique<Easing<float>>();
 
     // サイドUI出現Easing
     spriteVariable_.sideAppearEase[LEFT]->Init("leftAppearPosX", "leftAppearPosX.json");
@@ -134,7 +153,12 @@ void IntroAppearPurpose::EasingInit() {
 
     // CenterEasing
     spriteVariable_.centerAppearEase->Init("CenterAppearScale", "CenterAppearScale.json");
-    spriteVariable_.scaleEaseY->Init("PurposeScaleY", "PurposeScaleY.json");
+
+    // AppearScaleY
+    spriteVariable_.appearScaleEaseY->Init("PurposeScaleY", "PurposeScaleY.json");
+
+    // CloseScaleY
+    spriteVariable_.closeScaleEaseY->Init("PurposeCloseScaleY", "PurposeCloseScaleY.json");
 
     // 適応値、スタート値セット(サイドUI出現Easing)
     for (size_t i = 0; i < static_cast<size_t>(spriteVariable_.sideAppearEase.size()); ++i) {
@@ -159,8 +183,22 @@ void IntroAppearPurpose::EasingInit() {
     spriteVariable_.centerAppearEase->SetStartValue(Vector2::ZeroVector());
     spriteVariable_.centerAppearEase->Reset();
 
-    // 適応値、スタート値セット(scaleEaseY)
-    spriteVariable_.scaleEaseY->SetAdaptValue(&spriteVariable_.scaleY);
-    spriteVariable_.scaleEaseY->SetStartValue(0.0f);
-    spriteVariable_.scaleEaseY->Reset();
+    // 適応値、スタート値セット(AppearScaleEaseY)
+    spriteVariable_.appearScaleEaseY->SetAdaptValue(&spriteVariable_.appearScaleY);
+    spriteVariable_.appearScaleEaseY->Reset();
+
+    // 適応値、スタート値セット(CloseScaleEaseY)
+    spriteVariable_.closeScaleEaseY->SetAdaptValue(&spriteVariable_.closeScaleY);
+    spriteVariable_.closeScaleEaseY->Reset();
 }
+
+void (IntroPurposeCutIn::* IntroPurposeCutIn::spFuncTable_[])() = {
+    &IntroPurposeCutIn::SideAppearWait,
+    &IntroPurposeCutIn::SideAppear,
+    &IntroPurposeCutIn::CenterAppearWait,
+    &IntroPurposeCutIn::CenterAppear,
+    &IntroPurposeCutIn::CloseWait,
+    &IntroPurposeCutIn::Close,
+    &IntroPurposeCutIn::FinishWait,
+    &IntroPurposeCutIn::Finish,
+};
