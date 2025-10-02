@@ -76,9 +76,6 @@
     <Filter Include="MyEngine\.cpp\Collider">
       <UniqueIdentifier>{31794c82-90f5-4d92-8da2-666292754e5b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.h\Collider">
-      <UniqueIdentifier>{261d89ef-d3f4-4da1-aa9e-bfd6e260bf1a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.cpp\Core">
       <UniqueIdentifier>{b79d053e-0a76-457f-9fe2-ce730fecf455}</UniqueIdentifier>
     </Filter>
@@ -279,6 +276,30 @@
     </Filter>
     <Filter Include="MyEngine\.h\Pipeline\Object3D">
       <UniqueIdentifier>{04a2f136-8d68-4619-b049-b4aa822d1f21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソースファイル\Particle">
+      <UniqueIdentifier>{22f1abac-a706-47e8-a915-8827c3f81cfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソースファイル\Particle\CS">
+      <UniqueIdentifier>{1010e4d4-4406-448a-8efe-28d430a3f08e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\GPUParticle">
+      <UniqueIdentifier>{051197de-2a91-4aae-ab14-f617f4b1a001}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\GPUParticle">
+      <UniqueIdentifier>{aa8b0c32-c9be-42e4-8baf-99d6d906a8ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\GPUParticle\UploadBuffer">
+      <UniqueIdentifier>{00ef74a7-6b08-427e-8cd8-e40d2599bd7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\GPUParticle\UploadBuffer">
+      <UniqueIdentifier>{340244ac-4add-4b95-bc0d-743d48896fbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Collider">
+      <UniqueIdentifier>{261d89ef-d3f4-4da1-aa9e-bfd6e260bf1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\GPUParticle\Data">
+      <UniqueIdentifier>{8f64a725-dbc0-4270-8781-dc3c43090878}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -702,6 +723,12 @@
     </ClCompile>
     <ClCompile Include="Engine\2d\SpriteRegistry.cpp">
       <Filter>MyEngine\.cpp\2d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GPUParticle\GPUParticleEmitter.cpp">
+      <Filter>MyEngine\.cpp\GPUParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GPUParticle\UploadBuffer\GPUParticleUploadBuffer.cpp">
+      <Filter>MyEngine\.cpp\GPUParticle\UploadBuffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1170,13 +1197,19 @@
     <ClInclude Include="Engine\2d\SpriteRegistry.h">
       <Filter>MyEngine\.h\2d</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\GPUParticle\GPUParticleEmitter.h">
+      <Filter>MyEngine\.h\GPUParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GPUParticle\UploadBuffer\GPUParticleUploadBuffer.h">
+      <Filter>MyEngine\.h\GPUParticle\UploadBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GPUParticle\Data\GPUParticleEmitterData.h">
+      <Filter>MyEngine\.h\GPUParticle\Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
     <None Include="resources\Shader\Object3d.hlsli">
-      <Filter>リソースファイル</Filter>
-    </None>
-    <None Include="resources\Shader\Particle.hlsli">
       <Filter>リソースファイル</Filter>
     </None>
     <None Include="resources\Shader\Sprite.hlsli">
@@ -1215,18 +1248,15 @@
     <None Include="resources\Shader\Skinning\SkinningObject3d.hlsli">
       <Filter>リソースファイル\Skinning</Filter>
     </None>
+    <None Include="resources\Shader\Particle\Particle.hlsli">
+      <Filter>リソースファイル\Particle</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\Shader\Object3d.PS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
     <FxCompile Include="resources\Shader\Object3d.VS.hlsl">
-      <Filter>リソースファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\Particle.PS.hlsl">
-      <Filter>リソースファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\Shader\Particle.VS.hlsl">
       <Filter>リソースファイル</Filter>
     </FxCompile>
     <FxCompile Include="resources\Shader\Sprite.PS.hlsl">
@@ -1291,6 +1321,15 @@
     </FxCompile>
     <FxCompile Include="resources\Shader\Skinning\SkinningObject3d.VS.hlsl">
       <Filter>リソースファイル\Skinning</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Particle\Particle.PS.hlsl">
+      <Filter>リソースファイル\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Particle\Particle.VS.hlsl">
+      <Filter>リソースファイル\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Particle\CS\EmitParticle.CS.hlsl">
+      <Filter>リソースファイル\Particle\CS</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

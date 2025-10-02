@@ -57,6 +57,8 @@
     <ClCompile Include="Engine\Frame\Frame.cpp" />
     <ClCompile Include="Engine\Function\Convert.cpp" />
     <ClCompile Include="Engine\Function\GetFile.cpp" />
+    <ClCompile Include="Engine\GPUParticle\GPUParticleEmitter.cpp" />
+    <ClCompile Include="Engine\GPUParticle\UploadBuffer\GPUParticleUploadBuffer.cpp" />
     <ClCompile Include="Engine\input\GamePad.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
     <ClCompile Include="Engine\input\Mouse.cpp" />
@@ -204,6 +206,9 @@
     <ClInclude Include="Engine\Function\Convert.h" />
     <ClInclude Include="Engine\Function\GetFile.h" />
     <ClInclude Include="Engine\Function\Log.h" />
+    <ClInclude Include="Engine\GPUParticle\Data\GPUParticleEmitterData.h" />
+    <ClInclude Include="Engine\GPUParticle\GPUParticleEmitter.h" />
+    <ClInclude Include="Engine\GPUParticle\UploadBuffer\GPUParticleUploadBuffer.h" />
     <ClInclude Include="Engine\input\GamePad.h" />
     <ClInclude Include="Engine\input\Input.h" />
     <ClInclude Include="Engine\input\Mouse.h" />
@@ -352,7 +357,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
-    <None Include="resources\Shader\Particle.hlsli">
+    <None Include="resources\Shader\Particle\Particle.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
@@ -394,11 +399,15 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="resources\Shader\Particle.PS.hlsl">
+    <FxCompile Include="resources\Shader\Particle\CS\EmitParticle.CS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="resources\Shader\Particle.VS.hlsl">
+    <FxCompile Include="resources\Shader\Particle\Particle.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Particle\Particle.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
