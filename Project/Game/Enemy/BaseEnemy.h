@@ -30,6 +30,7 @@ public:
 
     struct Parameter {
         Vector3 initScale_;
+        Vector2 hpBarPosOffset;
         float chaseDistance;
         float chaseSpeed;
         float basePosY;
