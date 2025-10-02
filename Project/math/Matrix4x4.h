@@ -4,6 +4,7 @@
 
 
 class Vector3;
+class Vector2;
 class Quaternion;
 class ViewProjection;
 
@@ -23,13 +24,13 @@ Matrix4x4 MakeTranslateMatrix(const Vector3& translate);
 Matrix4x4 MakeScaleMatrix(const Vector3& scale);
 
 // X軸回転行列
-Matrix4x4 MakeRotateXMatrix(float radian);
+Matrix4x4 MakeRotateXMatrix(const float& radian);
 
 // Y軸回転行列
-Matrix4x4 MakeRotateYMatrix(float radian);
+Matrix4x4 MakeRotateYMatrix(const float& radian);
 
 // Z軸回転行列
-Matrix4x4 MakeRotateZMatrix(float radian);
+Matrix4x4 MakeRotateZMatrix(const float& radian);
 
 // 回転行列
 Matrix4x4 MakeRotateMatrix(Vector3 rotate);
@@ -47,18 +48,18 @@ Matrix4x4 Inverse(const Matrix4x4& m);
 
 Matrix4x4 Transpose(const Matrix4x4& m);
 
-Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip);
+Matrix4x4 MakePerspectiveFovMatrix(const float& fovY, const float& aspectRatio, const float& nearClip, const float& farClip);
 
-Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip);
+Matrix4x4 MakeOrthographicMatrix(const float& left, const float& top, const float& right, const float& bottom, const float& nearClip, const float& farClip);
 
-Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);
+Matrix4x4 MakeViewportMatrix(const float& left, const float& top, const float& width, const float& height, const float& minDepth, const float& maxDepth);
 
-Vector3 ScreenTransform(Vector3 worldPos, const ViewProjection& viewProjection);
+Vector2 ScreenTransform(const Vector3& worldPos, const ViewProjection& viewProjection);
 
 
-Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, int row);
+Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, const int& row);
 
-Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle);
+Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, const float& angle);
 
 Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to);
 
