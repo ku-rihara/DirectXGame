@@ -54,7 +54,7 @@ void IntroPurposeCutIn::SideAppear() {
         return;
     }
 
-   step_ = Step::CenterAppearWait;
+    step_ = Step::CenterAppearWait;
 }
 
 void IntroPurposeCutIn::CenterAppearWait() {
@@ -113,7 +113,7 @@ bool IntroPurposeCutIn::ProcessStep(const float& limitTime, const Step& nextStep
 
 void IntroPurposeCutIn::BindParams() {
     BaseGameIntro::BindParams();
-  
+
     globalParameter_->Bind(groupName_, "AppearWaitTime", &sideAppearWaitTime_);
     globalParameter_->Bind(groupName_, "closeWaitTime", &closeWaitTime_);
     globalParameter_->Bind(groupName_, "centerAppearWaitTime", &centerAppearWaitTime_);
@@ -190,6 +190,9 @@ void IntroPurposeCutIn::EasingInit() {
     // 適応値、スタート値セット(CloseScaleEaseY)
     spriteVariable_.closeScaleEaseY->SetAdaptValue(&spriteVariable_.closeScaleY);
     spriteVariable_.closeScaleEaseY->Reset();
+    spriteVariable_.closeScaleEaseY->SetOnFinishCallback([this] {
+        isFinish_ = true;
+    });
 }
 
 void (IntroPurposeCutIn::* IntroPurposeCutIn::spFuncTable_[])() = {
