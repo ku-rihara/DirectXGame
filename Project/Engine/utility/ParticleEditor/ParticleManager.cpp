@@ -164,11 +164,11 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
             // モデル描画
             if (group.model) {
                 group.model->DrawInstancing(instanceIndex, pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
-                    group.material, group.textureHandle);
+                    &group.material, group.textureHandle);
                 // メッシュ描画
             } else if (group.primitive_->GetMesh()) {
                 group.primitive_->GetMesh()->DrawInstancing(instanceIndex, pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
-                    group.material, group.textureHandle);
+                    &group.material, group.textureHandle);
             }
         }
     }

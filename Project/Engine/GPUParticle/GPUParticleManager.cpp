@@ -258,7 +258,7 @@ void GPUParticleManager::DrawGroup(GPUParticleGroup& group) {
         group.model->DrawInstancing(
             group.maxParticleCount,
             group.resourceCreator->GetParticleSrvHandle(),
-            group.material,
+            &group.material,
             group.textureHandle);
 
     } else if (group.primitive_ && group.primitive_->GetMesh()) {
@@ -266,7 +266,7 @@ void GPUParticleManager::DrawGroup(GPUParticleGroup& group) {
         group.primitive_->GetMesh()->DrawInstancing(
             group.maxParticleCount,
             group.resourceCreator->GetParticleSrvHandle(),
-            group.material,
+            &group.material,
             group.textureHandle);
     }
 }

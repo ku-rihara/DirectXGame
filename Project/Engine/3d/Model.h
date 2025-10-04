@@ -14,7 +14,6 @@
 
 #include "Dx/DirectXCommon.h"
 #include "Material/ModelMaterial.h"
-#include "Material/ParticleMaterial.h"
 
 // 3Dモデル共通部
 class ModelCommon {
@@ -37,7 +36,7 @@ public:
 
 class TextureManager;
 class ShadowMap;
-
+class BaseMaterial;
 class Model {
 
 	 
@@ -64,17 +63,16 @@ public:
     ///============================================================
 
     void Draw(
-        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material,
-        std::optional<uint32_t> textureHandle = std::nullopt); /// モデル描画
+        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap,  ModelMaterial material, 
+            const std::optional<uint32_t>& textureHandle = std::nullopt); /// モデル描画
 
     void DrawAnimation(
-        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material,
-        SkinCluster skinCluster, std::optional<uint32_t> textureHandle = std::nullopt); /// モデル描画
+        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material, const SkinCluster& skinCluster,
+        const std::optional<uint32_t>& textureHandle = std::nullopt); /// モデル描画
 
     void DrawInstancing(
-        const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle,
-        ParticleMaterial material,
-        std::optional<uint32_t> textureHandle = std::nullopt); /// モデルバーティクル
+        const uint32_t& instanceNum, const D3D12_GPU_DESCRIPTOR_HANDLE& instancingGUPHandle, BaseMaterial* material,
+        const std::optional<uint32_t>&  textureHandle = std::nullopt); /// モデルバーティクル
 
     void DrawForShadowMap(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap);
 

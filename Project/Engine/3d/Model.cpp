@@ -10,6 +10,7 @@
 #include "Lighrt/Light.h"
 #include "ShadowMap/ShadowMap.h"
 #include <filesystem>
+#include "Material/BaseMaterial.h"
 
 void ModelCommon::Init(DirectXCommon* dxCommon) {
     dxCommon_ = dxCommon;
@@ -183,7 +184,8 @@ void Model::DebugImGui() {
 #endif
 }
 
-void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material, std::optional<uint32_t> textureHandle) {
+void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap,  ModelMaterial material, 
+    const std::optional<uint32_t>& textureHandle) {
 
     auto commandList = dxCommon_->GetCommandList();
     /*materialDate_->color = color.;*/
@@ -220,7 +222,8 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Shado
 
 
 
-void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material, SkinCluster skinCluster, std::optional<uint32_t> textureHandle) {
+void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material, const SkinCluster& skinCluster,
+    const std::optional<uint32_t>& textureHandle) {
 
     auto commandList = dxCommon_->GetCommandList();
 
@@ -257,8 +260,8 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, co
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
 }
 
-void Model::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, ParticleMaterial material,
-    std::optional<uint32_t> textureHandle) {
+void Model::DrawInstancing(const uint32_t& instanceNum, const D3D12_GPU_DESCRIPTOR_HANDLE& instancingGUPHandle, BaseMaterial* material,
+    const std::optional<uint32_t>& textureHandle) {
     auto commandList = dxCommon_->GetCommandList();
 
     // ルートシグネチャとパイプラインステートを設定
@@ -267,7 +270,7 @@ void Model::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HAND
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     // マテリアルのリソースを設定
-    material.SetCommandList(commandList);
+    material->SetCommandList(commandList);
     commandList->SetGraphicsRootDescriptorTable(0, instancingGUPHandle);
 
     // テクスチャハンドルの設定
