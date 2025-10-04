@@ -1355,5 +1355,11 @@
     <FxCompile Include="resources\Shader\Particle\CS\InitParticle.CS.hlsl">
       <Filter>リソースファイル\Particle\CS</Filter>
     </FxCompile>
+    <FxCompile Include="resources\Shader\Particle\GPUParticle.VS..hlsl">
+      <Filter>リソースファイル\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Particle\GPUParticle.PS..hlsl">
+      <Filter>リソースファイル\Particle</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
