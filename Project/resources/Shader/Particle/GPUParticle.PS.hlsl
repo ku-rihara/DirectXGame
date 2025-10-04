@@ -29,7 +29,7 @@ PixelShaderOutput main(VertexShaderOutput input)
     float cos = 0.0f;
    
    
-        output.color = gMaterial.color * textureColor*input.color;
+    output.color = gMaterial.color * textureColor * input.color;
     
     if (output.color.a == 0.0)
     {

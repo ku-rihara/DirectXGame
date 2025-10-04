@@ -742,6 +742,15 @@
     <ClCompile Include="Engine\Pipeline\Particle\CS\InitParticlePipeline.cpp">
       <Filter>MyEngine\.cpp\Pileline\Particle\CS</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Pipeline\Particle\GPUParticlePipeline.cpp">
+      <Filter>MyEngine\.cpp\Pileline\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GPUParticle\GPUParticleManager.cpp">
+      <Filter>MyEngine\.cpp\GPUParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Material\GPUParticleMaterial.cpp">
+      <Filter>MyEngine\.cpp\Material</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1227,6 +1236,15 @@
     <ClInclude Include="Engine\Pipeline\Particle\CS\InitParticlePipeline.h">
       <Filter>MyEngine\.h\Pipeline\Particle\CS</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Pipeline\Particle\GPUParticlePipeline.h">
+      <Filter>MyEngine\.h\Pipeline\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GPUParticle\GPUParticleManager.h">
+      <Filter>MyEngine\.h\GPUParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Material\GPUParticleMaterial.h">
+      <Filter>MyEngine\.h\Material</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -1355,10 +1373,10 @@
     <FxCompile Include="resources\Shader\Particle\CS\InitParticle.CS.hlsl">
       <Filter>リソースファイル\Particle\CS</Filter>
     </FxCompile>
-    <FxCompile Include="resources\Shader\Particle\GPUParticle.VS..hlsl">
+    <FxCompile Include="resources\Shader\Particle\GPUParticle.VS.hlsl">
       <Filter>リソースファイル\Particle</Filter>
     </FxCompile>
-    <FxCompile Include="resources\Shader\Particle\GPUParticle.PS..hlsl">
+    <FxCompile Include="resources\Shader\Particle\GPUParticle.PS.hlsl">
       <Filter>リソースファイル\Particle</Filter>
     </FxCompile>
   </ItemGroup>

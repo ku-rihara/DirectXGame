@@ -12,20 +12,21 @@ void GPUParticleResourceCreator::Create() {
 }
 
 void GPUParticleResourceCreator::CreateParticleResource() {
+    // ParticleCS用のBufferを作成
+    particleResource_ = dxCommon_->CreateBufferResource(
+        dxCommon_->GetDevice(),
+        sizeof(ParticleCS) * particleMaxCount_,
+        ViewType::UnorderedAccess);
 
-    //　ParticleCS用のBufferを作成
-    particleResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(),
-        sizeof(ParticleCS) * particleMaxCount_,ViewType::UnorderedAccess);
-
-    //UAV作成
+    // UAV作成
     uint32_t uavIndex         = srvManager_->Allocate();
     particleUavHandle_.first  = srvManager_->GetCPUDescriptorHandle(uavIndex);
     particleUavHandle_.second = srvManager_->GetGPUDescriptorHandle(uavIndex);
 
     srvManager_->CreateStructuredUAV(
-        uavIndex, particleResource_.Get(), 
+        uavIndex, particleResource_.Get(),
         particleMaxCount_, sizeof(ParticleCS));
-      
+
     // SRVを作成
     uint32_t srvIndex         = srvManager_->Allocate();
     particleSrvHandle_.first  = srvManager_->GetCPUDescriptorHandle(srvIndex);
@@ -36,12 +37,9 @@ void GPUParticleResourceCreator::CreateParticleResource() {
         particleResource_.Get(),
         particleMaxCount_,
         sizeof(ParticleCS));
-
 }
 
-
 void GPUParticleResourceCreator::CreateEmitterResource() {
-   
     // Emitterデータ用のバッファ
     emitResource_ = dxCommon_->CreateBufferResource(
         dxCommon_->GetDevice(),
@@ -52,11 +50,11 @@ void GPUParticleResourceCreator::CreateEmitterResource() {
 }
 
 void GPUParticleResourceCreator::CreatePerViewResource() {
-    // Emitterデータ用のバッファ
+    // PerViewデータ用のバッファ
     perViewResource_ = dxCommon_->CreateBufferResource(
         dxCommon_->GetDevice(),
         sizeof(PerView));
 
-    // マップしておく
-    emitResource_->Map(0, nullptr, reinterpret_cast<void**>(&perViewData_));
-  }
+    // マップしておく 
+    perViewResource_->Map(0, nullptr, reinterpret_cast<void**>(&perViewData_));
+}

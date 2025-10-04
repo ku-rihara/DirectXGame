@@ -3,6 +3,7 @@
 // Pipeline includes
 #include "Pipeline/Line3D/Line3DPipeline.h"
 #include "Pipeline/Object3D/Object3DPipeline.h"
+#include "Pipeline/Particle/GPUParticlePipeline.h"
 #include "Pipeline/Particle/ParticlePipeline.h"
 #include "Pipeline/ShadowMap/ShadowMapPipeline.h"
 #include "Pipeline/Skinning/SkinningObject3DPipeline.h"
@@ -26,6 +27,7 @@ void PipelineManager::Init(DirectXCommon* dxCommon) {
     pipelines_[static_cast<size_t>(PipelineType::Object3D)]         = std::make_unique<Object3DPipeline>();
     pipelines_[static_cast<size_t>(PipelineType::SkinningObject3D)] = std::make_unique<SkinningObject3DPipeline>();
     pipelines_[static_cast<size_t>(PipelineType::Particle)]         = std::make_unique<ParticlePipeline>();
+    pipelines_[static_cast<size_t>(PipelineType::GPUParticle)]      = std::make_unique<GPUParticlePipeline>();
     pipelines_[static_cast<size_t>(PipelineType::ShadowMap)]        = std::make_unique<ShadowMapPipeline>();
     pipelines_[static_cast<size_t>(PipelineType::Line3D)]           = std::make_unique<Line3DPipeline>();
 
@@ -43,7 +45,7 @@ BasePipeline* PipelineManager::GetPipeline(const PipelineType& type) const {
 
 void PipelineManager::PreDraw(const PipelineType& type, ID3D12GraphicsCommandList* commandList) const {
     size_t index = static_cast<size_t>(type);
-    assert(pipelines_[index]); 
+    assert(pipelines_[index]);
     pipelines_[index]->PreDraw(commandList);
 }
 

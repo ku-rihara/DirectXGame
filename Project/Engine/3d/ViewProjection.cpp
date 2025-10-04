@@ -111,3 +111,15 @@ Vector3 ViewProjection::GetFinalPosition() const {
 Vector3 ViewProjection::GetFinalRotation() const {
     return rotation_ + rotationOffset_;
 }
+
+Matrix4x4 ViewProjection::GetBillboardMatrix() const {
+    // カメラ行列から回転成分のみを取得
+    Matrix4x4 billboardMatrix = cameraMatrix_;
+
+    // 平行移動成分をクリア
+    billboardMatrix.m[3][0] = 0.0f;
+    billboardMatrix.m[3][1] = 0.0f;
+    billboardMatrix.m[3][2] = 0.0f;
+
+    return billboardMatrix;
+}

@@ -13,7 +13,7 @@ void InitParticlePipeline::CreateComputePipeline() {
     HRESULT hr = 0;
 
     // Compute Shaderをコンパイルする
-    computeShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Particle/InitParticle.CS.hlsl", L"cs_6_0");
+    computeShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Particle/CS/InitParticle.CS.hlsl", L"cs_6_0");
     assert(computeShaderBlob_ != nullptr);
 
     // Compute Pipeline State Descriptionを設定
@@ -68,7 +68,6 @@ void InitParticlePipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
 }
 
 void InitParticlePipeline::Dispatch(ID3D12GraphicsCommandList* commandList, const UINT& numVertices) {
-    // InitParticleシェーダーは[numthreads(1024, 1, 1)]で、kMaxParticles = 1024
-    // 1グループで全パーティクルを初期化
+    numVertices;
     commandList->Dispatch(1, 1, 1);
 }

@@ -13,7 +13,7 @@ void EmitParticlePipeline::CreateComputePipeline() {
     HRESULT hr = 0;
 
     // Compute Shaderをコンパイルする
-    computeShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Particle/EmitParticle.CS.hlsl", L"cs_6_0");
+    computeShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Particle/CS/EmitParticle.CS.hlsl", L"cs_6_0");
     assert(computeShaderBlob_ != nullptr);
 
     // Compute Pipeline State Descriptionを設定

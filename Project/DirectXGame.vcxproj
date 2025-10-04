@@ -58,6 +58,7 @@
     <ClCompile Include="Engine\Function\Convert.cpp" />
     <ClCompile Include="Engine\Function\GetFile.cpp" />
     <ClCompile Include="Engine\GPUParticle\GPUParticleEmitter.cpp" />
+    <ClCompile Include="Engine\GPUParticle\GPUParticleManager.cpp" />
     <ClCompile Include="Engine\GPUParticle\ResourceCreator\GPUParticleResourceCreator.cpp" />
     <ClCompile Include="Engine\input\GamePad.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
@@ -72,6 +73,7 @@
     <ClCompile Include="Engine\Lighrt\SpotLight.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLightManager.cpp" />
     <ClCompile Include="Engine\Material\BaseMaterial.cpp" />
+    <ClCompile Include="Engine\Material\GPUParticleMaterial.cpp" />
     <ClCompile Include="Engine\Material\ModelMaterial.cpp" />
     <ClCompile Include="Engine\Material\MeshMaterial.cpp" />
     <ClCompile Include="Engine\Material\ParticleMaterial.cpp" />
@@ -83,6 +85,7 @@
     <ClCompile Include="Engine\Pipeline\Object3D\Object3DPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Particle\CS\EmitParticlePipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Particle\CS\InitParticlePipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\Particle\GPUParticlePipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Particle\ParticlePipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\PipelineManager.cpp" />
     <ClCompile Include="Engine\Pipeline\ShadowMap\ShadowMapPipeline.cpp" />
@@ -211,6 +214,7 @@
     <ClInclude Include="Engine\GPUParticle\Data\GPUParticleEmitterData.h" />
     <ClInclude Include="Engine\GPUParticle\Data\ParticleCSData.h" />
     <ClInclude Include="Engine\GPUParticle\GPUParticleEmitter.h" />
+    <ClInclude Include="Engine\GPUParticle\GPUParticleManager.h" />
     <ClInclude Include="Engine\GPUParticle\ResourceCreator\GPUParticleResourceCreator.h" />
     <ClInclude Include="Engine\input\GamePad.h" />
     <ClInclude Include="Engine\input\Input.h" />
@@ -225,6 +229,7 @@
     <ClInclude Include="Engine\Lighrt\SpotLight.h" />
     <ClInclude Include="Engine\Lighrt\SpotLightManager.h" />
     <ClInclude Include="Engine\Material\BaseMaterial.h" />
+    <ClInclude Include="Engine\Material\GPUParticleMaterial.h" />
     <ClInclude Include="Engine\Material\ModelMaterial.h" />
     <ClInclude Include="Engine\Material\MeshMaterial.h" />
     <ClInclude Include="Engine\Material\ParticleMaterial.h" />
@@ -236,6 +241,7 @@
     <ClInclude Include="Engine\Pipeline\Object3D\Object3DPipeline.h" />
     <ClInclude Include="Engine\Pipeline\Particle\CS\EmitParticlePipeline.h" />
     <ClInclude Include="Engine\Pipeline\Particle\CS\InitParticlePipeline.h" />
+    <ClInclude Include="Engine\Pipeline\Particle\GPUParticlePipeline.h" />
     <ClInclude Include="Engine\Pipeline\Particle\ParticlePipeline.h" />
     <ClInclude Include="Engine\Pipeline\PipelineManager.h" />
     <ClInclude Include="Engine\Pipeline\ShadowMap\ShadowMapPipeline.h" />
@@ -412,11 +418,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="resources\Shader\Particle\GPUParticle.PS..hlsl">
+    <FxCompile Include="resources\Shader\Particle\GPUParticle.PS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="resources\Shader\Particle\GPUParticle.VS..hlsl">
+    <FxCompile Include="resources\Shader\Particle\GPUParticle.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

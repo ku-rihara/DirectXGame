@@ -1,4 +1,4 @@
-
+#include"../Particle.hlsli"
 struct EmitterSphere
 {
     float3 translate;
