@@ -1,5 +1,7 @@
 #pragma once
 
+#include"Vector3.h"
+#include<cstdint>
 struct EmitterSphere {
     Vector3 translate;
     float radius;

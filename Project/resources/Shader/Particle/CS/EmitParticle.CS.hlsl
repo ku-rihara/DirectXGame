@@ -9,12 +9,6 @@ struct EmitterSphere
     uint emit;
 };
 
-struct Particle
-{
-    float3 scale;
-    float3 translate;
-    float4 color;
-};
 
 ConstantBuffer<EmitterSphere> gEmitter : register(b0);
 RWStructuredBuffer<Particle> gParticles : register(u0);

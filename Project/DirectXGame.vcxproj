@@ -58,7 +58,7 @@
     <ClCompile Include="Engine\Function\Convert.cpp" />
     <ClCompile Include="Engine\Function\GetFile.cpp" />
     <ClCompile Include="Engine\GPUParticle\GPUParticleEmitter.cpp" />
-    <ClCompile Include="Engine\GPUParticle\UploadBuffer\GPUParticleUploadBuffer.cpp" />
+    <ClCompile Include="Engine\GPUParticle\ResourceCreator\GPUParticleResourceCreator.cpp" />
     <ClCompile Include="Engine\input\GamePad.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
     <ClCompile Include="Engine\input\Mouse.cpp" />
@@ -81,6 +81,8 @@
     <ClCompile Include="Engine\Pipeline\CSPipelineManager.cpp" />
     <ClCompile Include="Engine\Pipeline\Line3D\Line3DPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Object3D\Object3DPipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\Particle\CS\EmitParticlePipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\Particle\CS\InitParticlePipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Particle\ParticlePipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\PipelineManager.cpp" />
     <ClCompile Include="Engine\Pipeline\ShadowMap\ShadowMapPipeline.cpp" />
@@ -207,8 +209,9 @@
     <ClInclude Include="Engine\Function\GetFile.h" />
     <ClInclude Include="Engine\Function\Log.h" />
     <ClInclude Include="Engine\GPUParticle\Data\GPUParticleEmitterData.h" />
+    <ClInclude Include="Engine\GPUParticle\Data\ParticleCSData.h" />
     <ClInclude Include="Engine\GPUParticle\GPUParticleEmitter.h" />
-    <ClInclude Include="Engine\GPUParticle\UploadBuffer\GPUParticleUploadBuffer.h" />
+    <ClInclude Include="Engine\GPUParticle\ResourceCreator\GPUParticleResourceCreator.h" />
     <ClInclude Include="Engine\input\GamePad.h" />
     <ClInclude Include="Engine\input\Input.h" />
     <ClInclude Include="Engine\input\Mouse.h" />
@@ -231,6 +234,8 @@
     <ClInclude Include="Engine\Pipeline\CSPipelineManager.h" />
     <ClInclude Include="Engine\Pipeline\Line3D\Line3DPipeline.h" />
     <ClInclude Include="Engine\Pipeline\Object3D\Object3DPipeline.h" />
+    <ClInclude Include="Engine\Pipeline\Particle\CS\EmitParticlePipeline.h" />
+    <ClInclude Include="Engine\Pipeline\Particle\CS\InitParticlePipeline.h" />
     <ClInclude Include="Engine\Pipeline\Particle\ParticlePipeline.h" />
     <ClInclude Include="Engine\Pipeline\PipelineManager.h" />
     <ClInclude Include="Engine\Pipeline\ShadowMap\ShadowMapPipeline.h" />
@@ -400,6 +405,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="resources\Shader\Particle\CS\EmitParticle.CS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Particle\CS\InitParticle.CS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

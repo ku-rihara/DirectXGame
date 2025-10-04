@@ -10,7 +10,15 @@ struct ParticleForGPU
     uint isFlipX;
     uint isFlipY;
 };
+
+struct PerView
+{
+    float4x4 viewProjection;
+    float4x4 billboardMatrix;
+};
+
 StructuredBuffer<ParticleForGPU> gParticle : register(t0);
+ConstantBuffer<PerView> gPerView : register(b0);
 
 VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID)
 {
@@ -29,7 +37,13 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
     }
 
     // 頂点座標の変換
-    output.position = mul(input.position, gParticle[instanceID].WVP);
+    Particle particle = gParticle[instanceID];
+    float4x4 worldMatrix = gPerView.billboardMatrix;
+    worldMatrix[0] *= particle.scale.x;
+    worldMatrix[1] *= particle.scale.y;
+    worldMatrix[2] *= particle.scale.z;
+    worldMatrix[3] = particle.scale.xyz;
+    output.position = mul(input.position, mul(worldMatrix, gPerView.viewProjection));
 
     // UVTransform を適用
     float4 transformedUV = mul(float4(texcoord, 0.0f, 1.0f), gParticle[instanceID].UVTransform);
