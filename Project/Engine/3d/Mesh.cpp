@@ -87,7 +87,7 @@ void Mesh::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDL
 
     // マテリアルのリソースを設定
     material.SetCommandList(commandList);
-    commandList->SetGraphicsRootDescriptorTable(1, instancingGUPHandle);
+    commandList->SetGraphicsRootDescriptorTable(0, instancingGUPHandle);
 
     // テクスチャハンドルの設定
     if (textureHandle.has_value()) {

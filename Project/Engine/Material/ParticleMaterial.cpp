@@ -26,7 +26,7 @@ void ParticleMaterial::UpdateMaterialData(const Vector4& Color) {
 
 void ParticleMaterial::SetCommandList(ID3D12GraphicsCommandList* commandList) {
     // シェーダーにマテリアルデータを送る
-    commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(1, materialResource_->GetGPUVirtualAddress());
 }
 
 void ParticleMaterial::DebugImGui() {
