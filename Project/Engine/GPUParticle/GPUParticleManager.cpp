@@ -2,13 +2,10 @@
 #include "3d/ModelManager.h"
 #include "3d/ViewProjection.h"
 #include "base/TextureManager.h"
-//
-#include "GPUParticleEmitter.h"
 // pipeline
 #include "Pipeline/CSPipelineManager.h"
 #include "Pipeline/PipelineManager.h"
 // primitive
-
 #include "Primitive/PrimitiveCylinder.h"
 #include "Primitive/PrimitivePlane.h"
 #include "Primitive/PrimitiveRing.h"
@@ -50,7 +47,7 @@ void GPUParticleManager::CreateParticleGroup(
 
 void GPUParticleManager::CreatePrimitiveParticle(
     const std::string& name,
-    PrimitiveType type,
+    const PrimitiveType& type,
     const int32_t& maxCount) {
 
     if (particleGroups_.contains(name)) {
@@ -132,10 +129,9 @@ void GPUParticleManager::InitializeGroupResources(GPUParticleGroup& group) {
         group.emitSphereData->emit          = 0;
     }
 
-    // エミッター作成
-    group.emitter = std::make_unique<GPUParticleEmitter>();
-    group.emitter->Init();
+    // Note: エミッターは別途GPUParticleEmitter::CreateParticle()で作成される
 }
+
 void GPUParticleManager::SetModel(const std::string& name, const std::string& modelName) {
     assert(particleGroups_.contains(name));
 
@@ -167,15 +163,24 @@ void GPUParticleManager::SetEmitterSphere(const std::string& name, const Emitter
     }
 }
 
+void GPUParticleManager::Emit(const std::string& name) {
+    auto it = particleGroups_.find(name);
+    if (it == particleGroups_.end()) {
+        return;
+    }
+
+    GPUParticleGroup& group = it->second;
+
+    if (!group.emitSphereData) {
+        return;
+    }
+
+    // 即座にエミット
+    group.emitSphereData->emit = 1;
+}
+
 void GPUParticleManager::Update() {
     for (auto& [groupName, group] : particleGroups_) {
-        // エミッター更新
-        if (group.emitter && group.emitSphereData) {
-            group.emitter->Update();
-            // エミッターの状態を同期
-            group.emitSphereData->frequencyTime = group.emitter->GetFrequencyTime();
-            group.emitSphereData->emit          = group.emitter->GetEmitFlag();
-        }
 
         // ViewProjectionデータ更新
         if (viewProjection_ && group.perViewData) {
@@ -223,6 +228,7 @@ void GPUParticleManager::Draw(const ViewProjection& viewProjection) {
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
     PipelineManager* pipe                  = PipelineManager::GetInstance();
     viewProjection;
+
     for (auto& [groupName, group] : particleGroups_) {
         if (!group.resourceCreator) {
             continue;

@@ -3,10 +3,9 @@
 #include "base/SrvManager.h"
 #include "Data/ParticleCSData.h"
 #include "Dx/DirectXCommon.h"
-#include "GPUParticleEmitter.h"
 #include "Material/ParticleMaterial.h"
-#include "ResourceCreator/GPUParticleResourceCreator.h"
 #include "Primitive/IPrimitive.h"
+#include "ResourceCreator/GPUParticleResourceCreator.h"
 
 #include <cstdint>
 #include <memory>
@@ -26,9 +25,8 @@ public:
         uint32_t textureHandle   = 0;
         int32_t maxParticleCount = 1024;
 
-        // GPU Resources
+        // Resources
         std::unique_ptr<GPUParticleResourceCreator> resourceCreator;
-        std::unique_ptr<GPUParticleEmitter> emitter;
 
         // Mapped data pointers
         EmitterSphere* emitSphereData = nullptr;
@@ -41,14 +39,12 @@ public:
 
     static GPUParticleManager* GetInstance();
 
-    // 初期化
+    // Init,Update,Draw
     void Init(SrvManager* srvManager);
-
-    // 更新・描画
     void Update();
     void Draw(const ViewProjection& viewProjection);
 
-    // グループ作成
+    // Group creation
     void CreateParticleGroup(
         const std::string& name,
         const std::string& modelFilePath,
@@ -56,8 +52,11 @@ public:
 
     void CreatePrimitiveParticle(
         const std::string& name,
-        PrimitiveType type,
+       const PrimitiveType& type,
         const int32_t& maxCount);
+
+    // Emit
+    void Emit(const std::string& name);
 
 private:
     void InitializeGroupResources(GPUParticleGroup& group);
@@ -78,7 +77,7 @@ public:
     // Getter
     GPUParticleGroup* GetParticleGroup(const std::string& name);
 
-    // setter
+    // Setter
     void SetTextureHandle(const std::string& name, const uint32_t& handle);
     void SetModel(const std::string& name, const std::string& modelName);
     void SetEmitterSphere(const std::string& name, const EmitterSphere& emitter);
