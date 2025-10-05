@@ -244,12 +244,15 @@ void Sprite::AdjustParam() {
         ImGui::DragFloat2("StartScale", &parameter_.scale_.x, 0.1f);
         ImGui::DragFloat2("StartAnchorPoint", &parameter_.startAnchorPoint_.x, 0.01f);
         ImGui::ColorEdit4("StartColor", &parameter_.color_.x);
+        ImGui::SeparatorText("UVParam");
+        ImGui::DragFloat2("UVScale", &parameter_.uvScale_.x, 0.01f);
 
         ImGui::Checkbox("isAdaptStartParam", &isAdaptStartParam_);
         if (isAdaptStartParam_) {
             // 適応
             transform_.pos                 = parameter_.position_;
             transform_.scale               = parameter_.scale_;
+            uvTransform_.scale             = parameter_.uvScale_;
             material_.materialData_->color = parameter_.color_;
             anchorPoint_                   = parameter_.startAnchorPoint_;
         }
