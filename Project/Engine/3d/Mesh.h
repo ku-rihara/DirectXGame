@@ -22,11 +22,11 @@ public:
 
     void Init(DirectXCommon* directXCommon, const uint32_t& vertexNum);
     void CreateVertexResource();
-    void SetIndexData(const uint32_t* indices, uint32_t indexCount);
-    void DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, ParticleMaterial material, std::optional<uint32_t> textureHandle);
+    void SetIndexData(const uint32_t* indices, const uint32_t& indexCount);
+    void DrawInstancing(const uint32_t& instanceNum,const D3D12_GPU_DESCRIPTOR_HANDLE& instancingGUPHandle, BaseMaterial* material, const std::optional<uint32_t>& textureHandle);
     void DebugImGui();
 
-    void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, MeshMaterial material, std::optional<uint32_t> textureHandle = std::nullopt);
+    void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, MeshMaterial material, const std::optional<uint32_t>& textureHandle = std::nullopt);
    
     void SetTexture(const std::string& name);
 
@@ -63,7 +63,7 @@ public:
     ///==========================================================
 
     // vertexData
-    void SetVertexPositionData(const uint32_t index, const Vector4& pos) { vertexDate_[index].position = pos; }
-    void SetVertexNormData(const uint32_t index, const Vector3& norm) { vertexDate_[index].normal = norm; }
-    void SetVertexTexcoordData(const uint32_t index, const Vector2& texcoord) { vertexDate_[index].texcoord = texcoord; }
+    void SetVertexPositionData(const uint32_t& index, const Vector4& pos) { vertexDate_[index].position = pos; }
+    void SetVertexNormData(const uint32_t& index, const Vector3& norm) { vertexDate_[index].normal = norm; }
+    void SetVertexTexcoordData(const uint32_t& index, const Vector2& texcoord) { vertexDate_[index].texcoord = texcoord; }
 };

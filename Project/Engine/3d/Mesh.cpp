@@ -13,7 +13,7 @@ void Mesh::Init(DirectXCommon* directXCommon, const uint32_t& vertexNum) {
     textureHandle_ = TextureManager::GetInstance()->LoadTexture("resources/Texture/default.png");
 }
 
-void Mesh::SetIndexData(const uint32_t* indices, uint32_t indexCount) {
+void Mesh::SetIndexData(const uint32_t* indices,const uint32_t& indexCount) {
     indexNum_ = indexCount;
 
 
@@ -54,7 +54,7 @@ void Mesh::CreateVertexResource() {
 }
 
 
-void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, MeshMaterial material, std::optional<uint32_t> textureHandle) {
+void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, MeshMaterial material, const std::optional<uint32_t>& textureHandle) {
     auto commandList = directXCommon_->GetCommandList();
 
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
@@ -75,8 +75,8 @@ void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, MeshMaterial
 }
 
 
-void Mesh::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDLE instancingGUPHandle, ParticleMaterial material,
-    std::optional<uint32_t> textureHandle) {
+void Mesh::DrawInstancing(const uint32_t& instanceNum, const D3D12_GPU_DESCRIPTOR_HANDLE& instancingGUPHandle, BaseMaterial* material,
+   const std::optional<uint32_t>& textureHandle) {
 
     auto commandList = directXCommon_->GetCommandList();
 
@@ -86,8 +86,8 @@ void Mesh::DrawInstancing(const uint32_t instanceNum, D3D12_GPU_DESCRIPTOR_HANDL
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     // マテリアルのリソースを設定
-    material.SetCommandList(commandList);
-    commandList->SetGraphicsRootDescriptorTable(1, instancingGUPHandle);
+    material->SetCommandList(commandList);
+    commandList->SetGraphicsRootDescriptorTable(0, instancingGUPHandle);
 
     // テクスチャハンドルの設定
     if (textureHandle.has_value()) {

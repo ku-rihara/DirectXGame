@@ -13,6 +13,8 @@ class SkinningCSPipeline;
 
 enum class CSPipelineType {
     Skinning,
+    Particle_Init,
+    Particle_Emit,
     Count
 };
 

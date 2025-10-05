@@ -1,16 +1,16 @@
-#include "ParticlePipeline.h"
 #include "Dx/DxCompiler.h"
+#include "GPUParticlePipeline.h"
 // Function
 #include "function/Log.h"
 #include "Material/ModelMaterial.h"
 #include <cassert>
 #include <string>
 
-void ParticlePipeline::Init(DirectXCommon* dxCommon) {
+void GPUParticlePipeline::Init(DirectXCommon* dxCommon) {
     BasePipeline::Init(dxCommon);
 }
 
-void ParticlePipeline::CreateGraphicsPipeline() {
+void GPUParticlePipeline::CreateGraphicsPipeline() {
 
     HRESULT hr = 0;
 
@@ -117,10 +117,10 @@ void ParticlePipeline::CreateGraphicsPipeline() {
     depthStencilDesc_.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
     // ShaderをコンパイルするParticle
-    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Particle/Particle.VS.hlsl", L"vs_6_0");
+    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Particle/GPUParticle.VS.hlsl", L"vs_6_0");
     assert(vertexShaderBlob_ != nullptr);
 
-    pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Particle/Particle.PS.hlsl", L"ps_6_0");
+    pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Particle/GPUParticle.PS.hlsl", L"ps_6_0");
     assert(pixelShaderBlob_ != nullptr);
 
     // PSO作成用関数
@@ -152,41 +152,46 @@ void ParticlePipeline::CreateGraphicsPipeline() {
     CreatePSO(blendDescScreen, graphicsPipelineStateScreen_);
 }
 
-void ParticlePipeline::CreateRootSignature() {
+void GPUParticlePipeline::CreateRootSignature() {
     // DescriptorRangeを設定
     D3D12_DESCRIPTOR_RANGE descriptorRange[2] = {};
 
-    // gParticle (t0) - StructuredBuffer 
+    // gParticle (t0) - StructuredBuffer (Vertex Shader)
     descriptorRange[0].BaseShaderRegister                = 0;
     descriptorRange[0].NumDescriptors                    = 1;
     descriptorRange[0].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
     descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-    // gTexture (t0) - Texture2D
+    // gTexture (t0) - Texture2D (Pixel Shader)
     descriptorRange[1].BaseShaderRegister                = 0;
     descriptorRange[1].NumDescriptors                    = 1;
     descriptorRange[1].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
     descriptorRange[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
     // RootParameterを作成
-    D3D12_ROOT_PARAMETER rootParameters[3] = {};
+    D3D12_ROOT_PARAMETER rootParameters[4] = {};
 
-    // 1: gParticle (t0) - StructuredBuffer 
-    rootParameters[0].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[0].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_VERTEX;
-    rootParameters[0].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
-    rootParameters[0].DescriptorTable.NumDescriptorRanges = 1;
+    // 0: gPerView (b0) - ConstantBuffer
+    rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[0].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
+    rootParameters[0].Descriptor.ShaderRegister = 0;
+
+    // 1: gParticle (t0) - StructuredBuffer
+    rootParameters[1].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[1].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_VERTEX;
+    rootParameters[1].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
+    rootParameters[1].DescriptorTable.NumDescriptorRanges = 1;
 
     // 2: gMaterial (b0) - ConstantBuffer
-    rootParameters[1].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[1].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[1].Descriptor.ShaderRegister = 0;
+    rootParameters[2].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[2].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[2].Descriptor.ShaderRegister = 0;
 
-    // 3: gTexture (t0) - Texture2D 
-    rootParameters[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[2].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
-    rootParameters[2].DescriptorTable.NumDescriptorRanges = 1;
+    // 3: gTexture (t0) - Texture2D
+    rootParameters[3].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[3].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[3].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
+    rootParameters[3].DescriptorTable.NumDescriptorRanges = 1;
 
     // Root Signature Descriptionを設定
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -200,11 +205,11 @@ void ParticlePipeline::CreateRootSignature() {
     SerializeAndCreateRootSignature(descriptionRootSignature);
 }
 
-void ParticlePipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
+void GPUParticlePipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
 }
 
-void ParticlePipeline::PreBlendSet(ID3D12GraphicsCommandList* commandList, const BlendMode& blendMode) {
+void GPUParticlePipeline::PreBlendSet(ID3D12GraphicsCommandList* commandList, const BlendMode& blendMode) {
     switch (blendMode) {
     case BlendMode::None:
         commandList->SetPipelineState(graphicsPipelineStateNone_.Get());

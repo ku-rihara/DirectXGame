@@ -2,6 +2,8 @@
 
 // Pipeline includes
 #include "Pipeline/Skinning/SkinningCSPipeline.h"
+#include"Pipeline/Particle/CS/EmitParticlePipeline.h"
+#include"Pipeline/Particle/CS/InitParticlePipeline.h"
 
 #include "Dx/DirectXCommon.h"
 #include <cassert>
@@ -18,6 +20,8 @@ void CSPipelineManager::Init(DirectXCommon* dxCommon) {
 
     // 生成
     pipelines_[static_cast<size_t>(CSPipelineType::Skinning)] = std::make_unique<SkinningCSPipeline>();
+    pipelines_[static_cast<size_t>(CSPipelineType::Particle_Emit)] = std::make_unique<EmitParticlePipeline>();
+    pipelines_[static_cast<size_t>(CSPipelineType::Particle_Init)] = std::make_unique<InitParticlePipeline>();
 
     // 全パイプラインを作成・初期化
     for (size_t i = 0; i < static_cast<size_t>(CSPipelineType::Count); ++i) {

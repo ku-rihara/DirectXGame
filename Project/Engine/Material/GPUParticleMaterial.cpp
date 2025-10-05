@@ -1,9 +1,9 @@
-#include "ParticleMaterial.h"
+#include "GPUParticleMaterial.h"
 #include "Dx/DirectXCommon.h"
 #include <cassert>
 #include <imgui.h>
 
-void ParticleMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
+void GPUParticleMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
     assert(dxCommon);
 
     // マテリアルリソース作成
@@ -20,16 +20,16 @@ void ParticleMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
     materialData_->environmentCoefficient = 0.0f;
 }
 
-void ParticleMaterial::UpdateMaterialData(const Vector4& Color) {
+void GPUParticleMaterial::UpdateMaterialData(const Vector4& Color) {
     materialData_->color = Color;
 }
 
-void ParticleMaterial::SetCommandList(ID3D12GraphicsCommandList* commandList) {
+void GPUParticleMaterial::SetCommandList(ID3D12GraphicsCommandList* commandList) {
     // シェーダーにマテリアルデータを送る
-    commandList->SetGraphicsRootConstantBufferView(1, materialResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(2, materialResource_->GetGPUVirtualAddress());
 }
 
-void ParticleMaterial::DebugImGui() {
+void GPUParticleMaterial::DebugImGui() {
 #ifdef _DEBUG
     ImGui::ColorEdit4("Color", reinterpret_cast<float*>(&materialData_->color));
     ImGui::DragFloat("Shininess", &materialData_->shininess, 0.01f);
