@@ -36,6 +36,8 @@ void GameScene::Init() {
     attackEffect_         = std::make_unique<AttackEffect>();
     gameIntroManager_     = std::make_unique<GameIntroManager>();
 
+    stadiumLightEffect_ = std::make_unique<StadiumLightEffect>();
+
     ///=======================================================================================
     /// 初期化
     ///=======================================================================================
@@ -54,6 +56,7 @@ void GameScene::Init() {
     attackEffect_->Init();
     viewProjection_.Init();
 
+    stadiumLightEffect_->Init("ComboLevel1.json");
     gameBackGroundObject_->Init("game.json");
 
     ///---------------------------------------------------------------------------------------
@@ -85,6 +88,7 @@ void GameScene::Init() {
     // comboScene
     comboScene_->SetPlayer(player_.get());
     comboScene_->SetCombo(combo_.get());
+    comboScene_->SetStadiumLightEffect(stadiumLightEffect_.get());
 
     isfirstChange_ = false;
     shandle_       = TextureManager::GetInstance()->LoadTexture("Resources/Texture/screenChange.png");
@@ -212,6 +216,7 @@ void GameScene::PlayUpdate() {
     combo_->Update();
     fireInjectors_->Update();
     gameCamera_->Update();
+    stadiumLightEffect_->Update(Frame::DeltaTimeRate());
 
     enemyManager_->HpBarUpdate(viewProjection_);
     lockOnController_->Update(player_.get(), viewProjection_);

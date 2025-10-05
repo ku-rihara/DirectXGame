@@ -133,6 +133,8 @@
     <ClCompile Include="Engine\utility\RailEditor\RailManager.cpp" />
     <ClCompile Include="Game\AttackEffect\AttackEffect.cpp" />
     <ClCompile Include="Game\BackGroundObject\BaseBackGroundObject.cpp" />
+    <ClCompile Include="Game\BackGroundObject\ComboLeve\BaseComboLevelBackObj.cpp" />
+    <ClCompile Include="Game\BackGroundObject\ComboLeve\StadiumLightEffect.cpp" />
     <ClCompile Include="Game\BackGroundObject\GameBackGroundObject.cpp" />
     <ClCompile Include="Game\BaseObject\BaseObject.cpp" />
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp" />
@@ -371,6 +373,8 @@
     <ClInclude Include="Engine\utility\RailEditor\RailManager.h" />
     <ClInclude Include="Game\AttackEffect\AttackEffect.h" />
     <ClInclude Include="Game\BackGroundObject\BaseBackGroundObject.h" />
+    <ClInclude Include="Game\BackGroundObject\ComboLeve\BaseComboLevelBackObj.h" />
+    <ClInclude Include="Game\BackGroundObject\ComboLeve\StadiumLightEffect.h" />
     <ClInclude Include="Game\BackGroundObject\GameBackGroundObject.h" />
     <ClInclude Include="Game\BaseObject\BaseObject.h" />
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h" />

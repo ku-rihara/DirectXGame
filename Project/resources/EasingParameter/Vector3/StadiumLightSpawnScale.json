@@ -1,5 +1,5 @@
 {
-    "StartAudienceSeatS": {
+    "StadiumLightSpawnScale": {
         "StartTimeOffset": 0.0,
         "amplitude": 0.0,
         "backRatio": 0.0,
@@ -10,7 +10,7 @@
         ],
         "finishOffsetTime": 0.0,
         "finishType": 1,
-        "maxTime": 0.5,
+        "maxTime": 0.6000000238418579,
         "period": 0.0,
         "startValue": [
             0.0,

@@ -1,23 +1,23 @@
 {
-    "StartAudienceSeatS": {
+    "StadiumLightSpawnR": {
         "StartTimeOffset": 0.0,
         "amplitude": 0.0,
         "backRatio": 0.0,
         "endValue": [
-            1.0,
-            1.0,
-            1.0
+            0.0,
+            31.415925979614258,
+            0.0
         ],
         "finishOffsetTime": 0.0,
         "finishType": 1,
-        "maxTime": 0.5,
+        "maxTime": 1.5399999618530273,
         "period": 0.0,
         "startValue": [
             0.0,
             0.0,
             0.0
         ],
-        "type": 22,
+        "type": 19,
         "waitTime": 0.0
     }
 }

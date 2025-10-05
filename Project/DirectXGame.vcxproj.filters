@@ -445,6 +445,9 @@
     <Filter Include="MyEngine\.cpp\Pipeline\Particle\CS">
       <UniqueIdentifier>{2891f6ed-d6b6-4d6f-af69-a03fdf4e788c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\BackGroundObject\ComboLevel">
+      <UniqueIdentifier>{c094f561-3bc0-4506-ac52-7363b27c4f08}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1107,6 +1110,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Pipeline\Particle\CS\InitParticlePipeline.cpp">
       <Filter>MyEngine\.cpp\Pipeline\Particle\CS</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BackGroundObject\ComboLeve\StadiumLightEffect.cpp">
+      <Filter>Game\BackGroundObject\ComboLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BackGroundObject\ComboLeve\BaseComboLevelBackObj.cpp">
+      <Filter>Game\BackGroundObject\ComboLevel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1820,6 +1829,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Material\GPUParticleMaterial.h">
       <Filter>MyEngine\.h\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BackGroundObject\ComboLeve\StadiumLightEffect.h">
+      <Filter>Game\BackGroundObject\ComboLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BackGroundObject\ComboLeve\BaseComboLevelBackObj.h">
+      <Filter>Game\BackGroundObject\ComboLevel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
