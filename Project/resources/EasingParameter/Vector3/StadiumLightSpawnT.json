@@ -1,0 +1,23 @@
+{
+    "StadiumLightSpawnT": {
+        "StartTimeOffset": 0.0,
+        "amplitude": 0.0,
+        "backRatio": 0.5,
+        "endValue": [
+            0.0,
+            15.0,
+            0.0
+        ],
+        "finishOffsetTime": 0.0,
+        "finishType": 0,
+        "maxTime": 1.600000023841858,
+        "period": 0.0,
+        "startValue": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "type": 38,
+        "waitTime": 0.0
+    }
+}

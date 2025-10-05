@@ -1,6 +1,6 @@
 {
     "HowToOperatorEasing": {
-        "StartTimeOffset": 2.140000104904175,
+        "StartTimeOffset": 0.0,
         "adaptVec2AxisType": 0,
         "amplitude": 0.0,
         "backRatio": 0.0,
@@ -10,7 +10,7 @@
         ],
         "finishOffsetTime": 0.0,
         "finishType": 1,
-        "maxTime": 0.4000000059604645,
+        "maxTime": 0.25,
         "period": 0.0,
         "startValue": [
             0.0,

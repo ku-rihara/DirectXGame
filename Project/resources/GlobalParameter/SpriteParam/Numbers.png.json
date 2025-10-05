@@ -1,0 +1,27 @@
+{
+    "Numbers.png": {
+        "layerNum": 0,
+        "startAnchorPoint": [
+            1.0,
+            1.0
+        ],
+        "startColor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "startPosition": [
+            0.0,
+            0.0
+        ],
+        "startScale": [
+            1.0,
+            1.0
+        ],
+        "startUVScale": [
+            0.10000000149011612,
+            1.0
+        ]
+    }
+}

@@ -11,7 +11,7 @@ public:
         WAIT,
         OBJSPAWN,
         PLAYERSPAWN,
-        PURPOSWAIT,
+        FNISHWAIT,
         FINISH,
     };
 

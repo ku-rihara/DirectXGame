@@ -56,7 +56,7 @@ void IntroSpawnField::PlayerSpawn() {
     if (pPlayer_) {
         pPlayer_->GameIntroUpdate();
     }
-    ProcessStep(playerSpawnTime_, Step::PURPOSWAIT, true);
+    ProcessStep(playerSpawnTime_, Step::FNISHWAIT, true);
 }
 
 void IntroSpawnField::FinishWait() {

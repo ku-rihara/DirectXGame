@@ -13,6 +13,7 @@ class SpritePipeline;
 class Object3DPipeline;
 class SkinningObject3DPipeline;
 class ParticlePipeline;
+class GPUParticlePipeline;
 class ShadowMapPipeline;
 class Line3DPipeline;
 
@@ -21,6 +22,7 @@ enum class PipelineType {
     Object3D,
     SkinningObject3D,
     Particle,
+    GPUParticle,
     ShadowMap,
     Line3D,
     Count 

@@ -143,10 +143,10 @@ void ThrustPunch::Debug() {
 void ThrustPunch::ChangeSlow() {
     // デルタタイムスケール小さく
     if (pPlayer_->GetAttackController()->GetIsSlow() && !istimeSlow_) {
-        PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::GRAY);
+      /*  PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::GRAY);*/
         pPlayer_->SoundStrongPunch();
         pPlayer_->GetAttackEffect()->PlayHitStop("PlayerThurstAttackHitStop");
-        pPlayer_->GetAttackEffect()->PlayPostEffect("PlayerThurstAttackGrayScale");
+      /*  pPlayer_->GetAttackEffect()->PlayPostEffect("PlayerThurstAttackGrayScale");*/
         pPlayer_->GetGameCamera()->PlayAnimation("PlayerthrustAttack");
         pPlayer_->GetGameCamera()->PlayShake("ThurstAttackCamera");
         istimeSlow_ = true;

@@ -1,0 +1,27 @@
+{
+    "HowToOperate.png": {
+        "layerNum": 3,
+        "startAnchorPoint": [
+            0.5,
+            0.5
+        ],
+        "startColor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "startPosition": [
+            1033.0,
+            509.0
+        ],
+        "startScale": [
+            0.0,
+            0.0
+        ],
+        "startUVScale": [
+            1.0,
+            1.0
+        ]
+    }
+}

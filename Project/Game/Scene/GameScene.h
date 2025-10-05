@@ -8,6 +8,7 @@
 #include "BackGroundObject/GameBackGroundObject.h"
 #include "Combo/Combo.h"
 #include "ComboCreate/ComboCreateEditor.h"
+#include "BackGroundObject/ComboLeve/StadiumLightEffect.h"
 #include "ComboScene/ComboScene.h"
 #include "Enemy/EnemyManager.h"
 #include "Enemy/Spawner/EnemySpawner.h"
@@ -80,6 +81,7 @@ private:
     std::unique_ptr<ComboScene> comboScene_                     = nullptr;
     std::unique_ptr<AttackEffect> attackEffect_                 = nullptr;
     std::unique_ptr<GameIntroManager> gameIntroManager_         = nullptr;
+    std::unique_ptr<StadiumLightEffect> stadiumLightEffect_     = nullptr;
 
     GameState gameState_ = GameState::INTRO;
 

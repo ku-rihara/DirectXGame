@@ -17,15 +17,14 @@ void ComboUI::Init(const ComboDigit& digit) {
 
 void ComboUI::Update(const Vector2& scale, const float& alpha) {
 
-    sprite_->transform_.pos = position_;
-    sprite_->transform_.scale     = (Vector2(scale.x * 0.1f, scale.y));
-    sprite_->uvTransform_.pos     = (Vector2(uvPosX_, 0.0f));
+    sprite_->SetIsDraw(isVisible_);
+
+    sprite_->transform_.pos   = position_;
+    sprite_->transform_.scale = (Vector2(scale.x * 0.1f, scale.y));
+    sprite_->uvTransform_.pos = (Vector2(uvPosX_, 0.0f));
     sprite_->SetAlpha(alpha);
 }
 void ComboUI::Draw() {
-    if (!isVisible_) {
-        return; // 0の場合は描画しない
-    }
 
     sprite_->Draw();
 }

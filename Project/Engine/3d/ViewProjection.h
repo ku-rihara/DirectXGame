@@ -84,4 +84,5 @@ public: // getter
     const Matrix4x4& GetCameraMatrix() const { return cameraMatrix_; }
     Vector3 GetFinalPosition() const;
     Vector3 GetFinalRotation() const;
+    Matrix4x4 GetBillboardMatrix() const;
 };

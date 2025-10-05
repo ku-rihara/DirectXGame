@@ -3,6 +3,8 @@
 // 前方宣言
 class Player;
 class Combo;
+class StadiumLightEffect;
+
 class ComboScene {
 public:
     enum class State {
@@ -30,10 +32,12 @@ private:
 private:
     Player* pPlayer_ = nullptr;
     Combo* pCombo_   = nullptr;
+    StadiumLightEffect* stadiumLightEffect_ = nullptr;
 
     State state_ = State::CHECK;
 
 public: // accessor
     void SetPlayer(Player* player);
     void SetCombo(Combo* combo);
+    void SetStadiumLightEffect(StadiumLightEffect* stadiumLightEffect);
 };
