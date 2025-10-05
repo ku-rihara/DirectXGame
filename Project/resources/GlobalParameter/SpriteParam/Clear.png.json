@@ -1,9 +1,9 @@
 {
-    "gamePurposeNo3.png": {
-        "layerNum": 5,
+    "Clear.png": {
+        "layerNum": 18,
         "startAnchorPoint": [
-            0.5,
-            0.5
+            1.0,
+            1.0
         ],
         "startColor": [
             1.0,
@@ -12,12 +12,12 @@
             1.0
         ],
         "startPosition": [
-            564.7999877929688,
-            325.1000061035156
-        ],
-        "startScale": [
             0.0,
             0.0
+        ],
+        "startScale": [
+            1.0,
+            1.0
         ],
         "startUVScale": [
             1.0,

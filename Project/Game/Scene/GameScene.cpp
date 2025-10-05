@@ -179,6 +179,7 @@ void GameScene::IntroUpdate() {
     if (gameIntroManager_->GetIsFinishStep(GameIntroManager::SpawnField)) {
         enemySpawner_->Update(Frame::DeltaTimeRate());
         enemyManager_->Update();
+        enemyManager_->HpBarUpdate(viewProjection_);
     }
     // debugCamera
     debugCamera_->Update();
@@ -196,10 +197,8 @@ void GameScene::PlayUpdate() {
 
     // debugCamera
     debugCamera_->Update();
-    /* gameIntroManager_->EndUpdate();*/
-
+   
     // Editor
-
     attackEffect_->Update();
     Debug();
 

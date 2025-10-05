@@ -2,7 +2,7 @@
     "IntroSpawnField": {
         "objSpawnTime": 4.059999942779541,
         "playerSpawnTime": 4.190000057220459,
-        "purposeWaitTime": 0.0,
+        "purposeWaitTime": 0.4000000059604645,
         "waitTime": 0.10000000149011612
     }
 }
