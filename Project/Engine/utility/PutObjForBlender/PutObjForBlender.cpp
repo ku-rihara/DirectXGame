@@ -275,36 +275,6 @@ void PutObjForBlender::EasingAllReset() {
     currentTime_ = 0.0f;
 }
 
-void PutObjForBlender::EasingUpdateSelectGroup(const float& deltaTime, const int32_t& groupNum) {
-    // 現在時間を自動的に加算
-    currentTime_ += deltaTime;
-
-    for (auto& objectData : levelData_->objects) {
-        // 指定されたグループが存在するかチェック
-        if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.easingStartTimes.size())) {
-            continue;
-        }
-
-        // 開始時間を超えるまではreturn
-        if (currentTime_ < objectData.easingStartTimes[groupNum]) {
-            continue;
-        }
-
-        // 指定されたグループのイージングを更新
-        if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Scale) && objectData.scalingEasing[groupNum]) {
-            objectData.scalingEasing[groupNum]->Update(deltaTime);
-        }
-        if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Rotate) && objectData.rotationEasing[groupNum]) {
-            objectData.rotationEasing[groupNum]->Update(deltaTime);
-        }
-        if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Translate) && objectData.translationEasing[groupNum]) {
-            objectData.translationEasing[groupNum]->Update(deltaTime);
-        }
-
-        // PreValueをWorldTransformに適用
-        AdaptEasing(objectData, groupNum);
-    }
-}
 
 void PutObjForBlender::AdaptEasing(LevelData::ObjectData& objectData, const int32_t& groupNum) {
     // グループ番号が有効範囲内かチェック
@@ -365,7 +335,97 @@ void PutObjForBlender::DrawAll(const ViewProjection& viewProjection) {
 }
 
 
-bool PutObjForBlender::IsAdaptEasing(const LevelData::ObjectData& objectData, int32_t groupNum, EasingAdaptTransform type) {
+void PutObjForBlender::EasingUpdateSelectGroup(const float& deltaTime, const int32_t& groupNum) {
+    // 現在時間を自動的に加算
+    currentTime_ += deltaTime;
+
+    for (auto& objectData : levelData_->objects) {
+        // 指定されたグループが存在するかチェック
+        if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.easingStartTimes.size())) {
+            continue;
+        }
+
+        // 開始時間を超えるまではreturn
+        if (currentTime_ < objectData.easingStartTimes[groupNum]) {
+            continue;
+        }
+
+        // 指定されたグループのイージングを更新
+        if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Scale) && objectData.scalingEasing[groupNum]) {
+            objectData.scalingEasing[groupNum]->Update(deltaTime);
+        }
+        if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Rotate) && objectData.rotationEasing[groupNum]) {
+            objectData.rotationEasing[groupNum]->Update(deltaTime);
+        }
+        if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Translate) && objectData.translationEasing[groupNum]) {
+            objectData.translationEasing[groupNum]->Update(deltaTime);
+        }
+
+        // PreValueをWorldTransformに適用
+        AdaptEasing(objectData, groupNum);
+    }
+}
+
+void PutObjForBlender::EasingResetSelectGroup(const int32_t& groupNum) {
+    for (auto& objectData : levelData_->objects) {
+        // 指定されたグループが存在するかチェック
+        if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.scalingEasing.size())) {
+            continue;
+        }
+
+        // 指定されたグループのイージングをリセット
+        if (objectData.scalingEasing[groupNum]) {
+            objectData.scalingEasing[groupNum]->Reset();
+        }
+        if (objectData.rotationEasing[groupNum]) {
+            objectData.rotationEasing[groupNum]->Reset();
+        }
+        if (objectData.translationEasing[groupNum]) {
+            objectData.translationEasing[groupNum]->Reset();
+        }
+
+        // リセット後の初期値を適用
+        AdaptEasing(objectData, groupNum);
+    }
+}
+
+bool PutObjForBlender::GetIsEasingFinish(const int32_t& groupNum) const {
+    if (!levelData_) {
+        return true;
+    }
+
+    for (const auto& objectData : levelData_->objects) {
+        // 指定されたグループが存在するかチェック
+        if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.scalingEasing.size())) {
+            continue;
+        }
+
+        // いずれかのイージングが終了していない場合はfalseを返す
+        if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Scale)) {
+            if (objectData.scalingEasing[groupNum] && !objectData.scalingEasing[groupNum]->IsAllFinished()) {
+                return false;
+            }
+        }
+
+        if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Rotate)) {
+            if (objectData.rotationEasing[groupNum] && !objectData.rotationEasing[groupNum]->IsAllFinished()) {
+                return false;
+            }
+        }
+
+        if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Translate)) {
+            if (objectData.translationEasing[groupNum] && !objectData.translationEasing[groupNum]->IsAllFinished()) {
+                return false;
+            }
+        }
+    }
+
+    // すべてのオブジェクトの指定グループのイージングが完了している
+    return true;
+}
+
+
+bool PutObjForBlender::IsAdaptEasing(const LevelData::ObjectData& objectData, const int32_t& groupNum, const EasingAdaptTransform& type)const {
     if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.isAdaptEasing.size())) {
         return false;
     }
