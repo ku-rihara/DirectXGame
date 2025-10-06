@@ -134,28 +134,41 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
 }
 
 void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, LevelData::ObjectData& objectData) {
-    for (const auto& group : easingGroups) {
 
-        if (!group.contains("group_id") || !group.contains("steps")) {
+    // 最大のgroup_idを見つける
+    int32_t maxGroupId = -1;
+    for (const auto& group : easingGroups) {
+        if (!group.contains("group_id")) {
             continue;
         }
-
         int32_t groupId = group["group_id"].get<int32_t>();
-
-        // グループの数に合わせて配列を増やす
-        if (objectData.scalingEasing.size() <= groupId) {
-            objectData.scalingEasing.resize(groupId + 1);
-            objectData.rotationEasing.resize(groupId + 1);
-            objectData.translationEasing.resize(groupId + 1);
-            objectData.isAdaptEasing.resize(groupId + 1);
-            objectData.easingStartTimes.resize(groupId + 1, 0.0f);
-            objectData.preScale.resize(groupId + 1);
-            objectData.preRotation.resize(groupId + 1);
-            objectData.preTranslation.resize(groupId + 1);
+        if (groupId > maxGroupId) {
+            maxGroupId = groupId;
         }
+    }
 
-        // 各イージングシーケンスを初期化
-        for (size_t i = 0; i < objectData.scalingEasing.size(); ++i) {
+    // グループが存在しない場合は終了
+    if (maxGroupId < 0) {
+        return;
+    }
+
+    // 必要なサイズを一度に確保して初期化
+    size_t requiredSize = static_cast<size_t>(maxGroupId) + 1;
+
+    // 現在のサイズより大きい場合のみリサイズ
+    if (objectData.scalingEasing.size() < requiredSize) {
+        // リサイズと同時に新しい要素を初期化
+        objectData.scalingEasing.resize(requiredSize);
+        objectData.rotationEasing.resize(requiredSize);
+        objectData.translationEasing.resize(requiredSize);
+        objectData.isAdaptEasing.resize(requiredSize);
+        objectData.easingStartTimes.resize(requiredSize, 0.0f);
+        objectData.preScale.resize(requiredSize);
+        objectData.preRotation.resize(requiredSize);
+        objectData.preTranslation.resize(requiredSize);
+
+        // リサイズで追加された要素のみを初期化
+        for (size_t i = 0; i < requiredSize; ++i) {
             if (!objectData.scalingEasing[i]) {
                 objectData.scalingEasing[i] = std::make_unique<EasingSequence>();
             }
@@ -165,6 +178,21 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
             if (!objectData.translationEasing[i]) {
                 objectData.translationEasing[i] = std::make_unique<EasingSequence>();
             }
+        }
+    }
+
+    // 第二のパス: 各グループの設定を読み込み
+    for (const auto& group : easingGroups) {
+
+        if (!group.contains("group_id") || !group.contains("steps")) {
+            continue;
+        }
+
+        int32_t groupId = group["group_id"].get<int32_t>();
+
+        // 範囲チェック
+        if (groupId < 0 || groupId >= static_cast<int32_t>(objectData.scalingEasing.size())) {
+            continue;
         }
 
         objectData.isAdaptEasing[groupId].fill(false);
@@ -181,12 +209,17 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
         if (group.contains("is_loop")) {
             isLoop = group["is_loop"].get<bool>();
         }
-     /*   objectData.easingIsLoop[groupId] = isLoop;*/
 
         // EasingSequenceにループフラグを設定
-        objectData.scalingEasing[groupId]->SetLoop(isLoop);
-        objectData.rotationEasing[groupId]->SetLoop(isLoop);
-        objectData.translationEasing[groupId]->SetLoop(isLoop);
+        if (objectData.scalingEasing[groupId]) {
+            objectData.scalingEasing[groupId]->SetLoop(isLoop);
+        }
+        if (objectData.rotationEasing[groupId]) {
+            objectData.rotationEasing[groupId]->SetLoop(isLoop);
+        }
+        if (objectData.translationEasing[groupId]) {
+            objectData.translationEasing[groupId]->SetLoop(isLoop);
+        }
 
         // ステップを走査
         for (const auto& step : group["steps"]) {
@@ -203,18 +236,18 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
                 std::string filename = file["filename"].get<std::string>();
                 std::string srtType  = file["srt_type"].get<std::string>();
 
-                if (srtType == "Scale") {
+                if (srtType == "Scale" && objectData.scalingEasing[groupId]) {
 
                     objectData.scalingEasing[groupId]->AddStep(filename, &objectData.preScale[groupId]);
                     objectData.isAdaptEasing[groupId][static_cast<int>(EasingAdaptTransform::Scale)] = true;
 
-                } else if (srtType == "Rotation") {
+                } else if (srtType == "Rotation" && objectData.rotationEasing[groupId]) {
 
                     objectData.rotationEasing[groupId]->AddStep(filename, &objectData.preRotation[groupId]);
                     objectData.rotationEasing[groupId]->SetBaseValue(objectData.object3d->transform_.rotation_);
                     objectData.isAdaptEasing[groupId][static_cast<int>(EasingAdaptTransform::Rotate)] = true;
 
-                } else if (srtType == "Transform") {
+                } else if (srtType == "Transform" && objectData.translationEasing[groupId]) {
 
                     objectData.translationEasing[groupId]->AddStep(filename, &objectData.preTranslation[groupId]);
                     objectData.translationEasing[groupId]->SetBaseValue(objectData.object3d->transform_.GetWorldPos());
