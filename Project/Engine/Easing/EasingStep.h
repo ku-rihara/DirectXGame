@@ -19,6 +19,8 @@ template <typename T>
 class EasingStep : public IEasingStep {
 public:
     EasingStep();
+    ~EasingStep() override = default;   
+
     explicit EasingStep(std::unique_ptr<Easing<T>> easing);
 
     void ApplyFromJson(const std::string& fileName) override;

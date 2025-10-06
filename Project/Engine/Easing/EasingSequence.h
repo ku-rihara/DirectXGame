@@ -6,6 +6,9 @@
 
 class EasingSequence {
 public:
+    EasingSequence() = default;
+    ~EasingSequence() = default;
+
     template <typename T>
     void AddStep(const std::string& name, T* adaptValue);
 
