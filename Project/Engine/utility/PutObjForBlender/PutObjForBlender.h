@@ -55,6 +55,7 @@ public:
     // easing
     void EasingAllReset();
     void EasingUpdateSelectGroup(const float& deltaTime, const int32_t& groupNum);
+    void EasingResetSelectGroup(const int32_t& groupNum);
     void ConvertJSONToObjects(const nlohmann::json& object);
     PrimitiveType StringToPrimitiveType(const std::string& typeStr);
 
@@ -62,7 +63,7 @@ private:
     void DrawObject(LevelData::ObjectData& objectData, const ViewProjection& viewProjection);
     void AdaptEasing(LevelData::ObjectData& objectData, const int32_t& groupNum);
     void LoadEasingGroups(const nlohmann::json& easingGroups, LevelData::ObjectData& objectData);
-    bool IsAdaptEasing(const LevelData::ObjectData& objectData, int32_t groupNum, EasingAdaptTransform type);
+    bool IsAdaptEasing(const LevelData::ObjectData& objectData, const int32_t& groupNum, const EasingAdaptTransform& type) const;
 
 private:
     const std::string directoryPath_ = "Resources/BlenderObjectPos/";
@@ -73,4 +74,5 @@ private:
     nlohmann::json jsonData_;
 
 public:
+    bool GetIsEasingFinish(const int32_t& groupNum)const;
 };
