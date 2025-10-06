@@ -24,7 +24,7 @@ public:
     bool GetIsEasingFinish(const int32_t& groupNum)const;
 
 private:
-    ObjEffectMode effectMode_;
+    ObjEffectMode effectMode_=ObjEffectMode::NONE;
     const int32_t kEffectModeOffset_ = 1;
 
 public:

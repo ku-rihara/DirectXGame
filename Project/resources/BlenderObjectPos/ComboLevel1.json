@@ -44,58 +44,6 @@
             }
         },
         {
-            "type": "MESH",
-            "name": "平面",
-            "transform": {
-                "translation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "isDisable": false,
-            "file_name": "Field.obj",
-            "easing_groups": [
-                {
-                    "group_id": 0,
-                    "steps": [
-                        {
-                            "step_number": 1,
-                            "files": [
-                                {
-                                    "file_index": 1,
-                                    "filename": "StartFieldS.json",
-                                    "srt_type": "Scale"
-                                },
-                                {
-                                    "file_index": 2,
-                                    "filename": "StartFieldR.json",
-                                    "srt_type": "Rotation"
-                                },
-                                {
-                                    "file_index": 3,
-                                    "filename": "StartFieldT.json",
-                                    "srt_type": "Transform"
-                                }
-                            ]
-                        }
-                    ],
-                    "start_time": 0.800000011920929,
-                    "is_loop": false
-                }
-            ]
-        },
-        {
             "type": "LIGHT",
             "name": "Light.001",
             "transform": {
@@ -236,7 +184,7 @@
                             "files": [
                                 {
                                     "file_index": 1,
-                                    "filename": "StadiumLightPlus.json",
+                                    "filename": "StadiumLightPulus.json",
                                     "srt_type": "Scale"
                                 }
                             ]
@@ -331,7 +279,7 @@
                             "files": [
                                 {
                                     "file_index": 1,
-                                    "filename": "StadiumLightPlus.json",
+                                    "filename": "StadiumLightPulus.json",
                                     "srt_type": "Scale"
                                 }
                             ]
@@ -426,7 +374,7 @@
                             "files": [
                                 {
                                     "file_index": 1,
-                                    "filename": "StadiumLightPlus.json",
+                                    "filename": "StadiumLightPulus.json",
                                     "srt_type": "Scale"
                                 }
                             ]
@@ -521,7 +469,7 @@
                             "files": [
                                 {
                                     "file_index": 1,
-                                    "filename": "StadiumLightPlus.json",
+                                    "filename": "StadiumLightPulus.json",
                                     "srt_type": "Scale"
                                 }
                             ]
@@ -616,7 +564,7 @@
                             "files": [
                                 {
                                     "file_index": 1,
-                                    "filename": "StadiumLightPlus.json",
+                                    "filename": "StadiumLightPulus.json",
                                     "srt_type": "Scale"
                                 }
                             ]
@@ -711,7 +659,7 @@
                             "files": [
                                 {
                                     "file_index": 1,
-                                    "filename": "StadiumLightPlus.json",
+                                    "filename": "StadiumLightPulus.json",
                                     "srt_type": "Scale"
                                 }
                             ]
@@ -806,7 +754,7 @@
                             "files": [
                                 {
                                     "file_index": 1,
-                                    "filename": "StadiumLightPlus.json",
+                                    "filename": "StadiumLightPulus.json",
                                     "srt_type": "Scale"
                                 }
                             ]
@@ -901,7 +849,7 @@
                             "files": [
                                 {
                                     "file_index": 1,
-                                    "filename": "StadiumLightPlus.json",
+                                    "filename": "StadiumLightPulus.json",
                                     "srt_type": "Scale"
                                 }
                             ]
