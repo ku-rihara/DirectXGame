@@ -6,7 +6,7 @@
 enum class ObjEffectMode {
     NONE,
     SPAWN,
-    WAIT,
+    PULSE,
     CLOSE,
 };
 
@@ -19,8 +19,13 @@ public:
     virtual void Update(const float& playSpeed) override;
     virtual void Draw(const ViewProjection& viewProjection) override;
 
+    void EasingResetSelectGroup(const int32_t& groupNum);
+    void EasingAllReset();
+    bool GetIsEasingFinish(const int32_t& groupNum)const;
+
 private:
     ObjEffectMode effectMode_;
+    const int32_t kEffectModeOffset_ = 1;
 
 public:
     void SetEffectMode(const ObjEffectMode& mode) { effectMode_ = mode; }

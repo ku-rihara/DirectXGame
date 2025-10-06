@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 
 // 前方宣言
 class Player;
@@ -33,6 +34,7 @@ private:
     Player* pPlayer_ = nullptr;
     Combo* pCombo_   = nullptr;
     ComboLevelObjHolder* comboLevelObjHolder_ = nullptr;
+    const int32_t levelOffset_                = 1;
 
     State state_ = State::CHECK;
 

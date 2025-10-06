@@ -1,7 +1,12 @@
 #include "ComboLevelObjHolder.h"
 
-void ComboLevelObjHolder::Init() {
-   
+void ComboLevelObjHolder::Init(const std::string& filename) {
+    // 各オブジェクトの初期化
+    for (auto& obj : objects_) {
+        if (obj) {
+            obj->Init(filename);
+        }
+    }
 }
 
 void ComboLevelObjHolder::Update(const float& playSpeed) {
@@ -30,7 +35,7 @@ void ComboLevelObjHolder::Add(const ComboLevelObjType& type, const std::string& 
     case ComboLevelObjType::STADIUM_LIGHT:
         objects_[index] = std::make_unique<StadiumLightEffect>();
         break;
-  
+    // 新しいオブジェクトタイプはここに追加
     default:
         break;
     }
@@ -41,7 +46,39 @@ void ComboLevelObjHolder::Add(const ComboLevelObjType& type, const std::string& 
     }
 }
 
+void ComboLevelObjHolder::EasingResetSelectGroup(const int32_t& groupNum) {
+    for (auto& obj : objects_) {
+        if (obj) {
+            obj->EasingResetSelectGroup(groupNum);
+        }
+    }
+}
+
+void ComboLevelObjHolder::EasingAllReset() {
+    for (auto& obj : objects_) {
+        if (obj) {
+            obj->EasingAllReset();
+        }
+    }
+}
+
+void ComboLevelObjHolder::CloseForComboLevel(const int32_t& level) {
+    // レベルに応じたオブジェクトのエフェクトモードをCLOSEに設定
+    for (int32_t i = 0; i < level; ++i) {
+
+        objects_[i]->SetEffectMode(ObjEffectMode::CLOSE);
+    }
+}
+
+bool ComboLevelObjHolder::GetIsEasingFinish(const ComboLevelObjType& type, const int32_t& groupNum) const {
+    if (objects_[ToIndex(type)]) {
+        return objects_[ToIndex(type)]->GetIsEasingFinish(groupNum);
+    }
+    return true;
+}
+
 void ComboLevelObjHolder::SetEffectMode(const ComboLevelObjType& type, const ObjEffectMode& mode) {
+   
     if (objects_[ToIndex(type)]) {
         objects_[ToIndex(type)]->SetEffectMode(mode);
     }

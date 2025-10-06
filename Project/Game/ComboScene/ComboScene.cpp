@@ -37,23 +37,18 @@ void ComboScene::LevelUp() {
 
     pCombo_->LevelUp();
 
-    // レベルアップにまつわる演出を呼び出す
-    switch (pCombo_->GetCurrentLevel()) {
-    case 1:
-        comboLevelObjHolder_->SetEffectMode(ComboLevelObjType::STADIUM_LIGHT,ObjEffectMode::SPAWN);
-        break;
-            break;
-    default:
-        break;
-    }
+    // レベル対象のオブジェクトをスポーン
+    comboLevelObjHolder_->SetEffectMode(static_cast<ComboLevelObjType>(pCombo_->GetCurrentLevel() - levelOffset_), ObjEffectMode::SPAWN);
 
     // チェックに戻す
     state_ = State::CHECK;
 }
 
 void ComboScene::LevelReset() {
+    // 背景オブジェクトClose
+    comboLevelObjHolder_->CloseForComboLevel(pCombo_->GetCurrentLevel());
+    // コンボリセット
     pCombo_->Reset();
-
     // チェックに戻す
     state_ = State::CHECK;
 }

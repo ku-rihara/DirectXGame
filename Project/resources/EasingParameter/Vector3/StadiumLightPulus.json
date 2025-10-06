@@ -1,0 +1,23 @@
+{
+    "StadiumLightPulus": {
+        "StartTimeOffset": 0.0,
+        "amplitude": 0.0,
+        "backRatio": 0.5,
+        "endValue": [
+            1.2999999523162842,
+            1.2999999523162842,
+            1.2999999523162842
+        ],
+        "finishOffsetTime": 0.0,
+        "finishType": 0,
+        "maxTime": 0.8999999761581421,
+        "period": 0.0,
+        "startValue": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "type": 47,
+        "waitTime": 0.0
+    }
+}
