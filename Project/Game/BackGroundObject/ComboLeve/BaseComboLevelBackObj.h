@@ -2,6 +2,7 @@
 #include "../BaseBackGroundObject.h"
 #include <cstdint>
 #include <string>
+
 enum class ObjEffectMode {
     NONE,
     SPAWN,

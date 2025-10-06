@@ -3,7 +3,7 @@
 // 前方宣言
 class Player;
 class Combo;
-class StadiumLightEffect;
+class ComboLevelObjHolder;
 
 class ComboScene {
 public:
@@ -32,12 +32,12 @@ private:
 private:
     Player* pPlayer_ = nullptr;
     Combo* pCombo_   = nullptr;
-    StadiumLightEffect* stadiumLightEffect_ = nullptr;
+    ComboLevelObjHolder* comboLevelObjHolder_ = nullptr;
 
     State state_ = State::CHECK;
 
 public: // accessor
     void SetPlayer(Player* player);
     void SetCombo(Combo* combo);
-    void SetStadiumLightEffect(StadiumLightEffect* stadiumLightEffect);
+    void SetComboLevelObjHolder(ComboLevelObjHolder* comboLevelObjHolder);
 };

@@ -5,10 +5,10 @@
 
 // object
 #include "AttackEffect/AttackEffect.h"
+#include "BackGroundObject/ComboLeve/ComboLevelObjHolder.h"
 #include "BackGroundObject/GameBackGroundObject.h"
 #include "Combo/Combo.h"
 #include "ComboCreate/ComboCreateEditor.h"
-#include "BackGroundObject/ComboLeve/StadiumLightEffect.h"
 #include "ComboScene/ComboScene.h"
 #include "Enemy/EnemyManager.h"
 #include "Enemy/Spawner/EnemySpawner.h"
@@ -47,7 +47,6 @@ public:
     void Init() override;
     void Update() override;
     void SkyBoxDraw() override;
-   
 
     // state Update
     void IntroUpdate();
@@ -81,7 +80,7 @@ private:
     std::unique_ptr<ComboScene> comboScene_                     = nullptr;
     std::unique_ptr<AttackEffect> attackEffect_                 = nullptr;
     std::unique_ptr<GameIntroManager> gameIntroManager_         = nullptr;
-    std::unique_ptr<StadiumLightEffect> stadiumLightEffect_     = nullptr;
+    std::unique_ptr<ComboLevelObjHolder> comboLevelObjHolder_   = nullptr;
 
     GameState gameState_ = GameState::INTRO;
 

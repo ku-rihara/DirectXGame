@@ -1,6 +1,6 @@
 #include "ComboScene.h"
 
-#include "BackGroundObject/ComboLeve/StadiumLightEffect.h"
+#include "BackGroundObject/ComboLeve/ComboLevelObjHolder.h"
 #include "Combo/Combo.h"
 #include "Player/Player.h"
 
@@ -40,7 +40,7 @@ void ComboScene::LevelUp() {
     // レベルアップにまつわる演出を呼び出す
     switch (pCombo_->GetCurrentLevel()) {
     case 1:
-        stadiumLightEffect_->SetEffectMode(ObjEffectMode::SPAWN);
+        comboLevelObjHolder_->SetEffectMode(ComboLevelObjType::STADIUM_LIGHT,ObjEffectMode::SPAWN);
         break;
             break;
     default:
@@ -69,8 +69,8 @@ void ComboScene::SetCombo(Combo* combo) {
     pCombo_ = combo;
 }
 
-void ComboScene::SetStadiumLightEffect(StadiumLightEffect* stadiumLightEffect) {
-    stadiumLightEffect_ = stadiumLightEffect;
+void ComboScene::SetComboLevelObjHolder(ComboLevelObjHolder* comboLevelObjHolder) {
+    comboLevelObjHolder_ = comboLevelObjHolder;
 }
 
 /// --------------------------------------------------------------------------------
