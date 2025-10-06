@@ -75,4 +75,5 @@ private:
 
 public:
     bool GetIsEasingFinish(const int32_t& groupNum)const;
+    bool GetIsEasingPlaying(const int32_t& groupNum) const;
 };

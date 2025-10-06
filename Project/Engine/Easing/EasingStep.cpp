@@ -32,7 +32,7 @@ void EasingStep<T>::ApplyFromJson(const std::string& fileName) {
 }
 
 template <typename T>
-void EasingStep<T>::Update(float deltaTime) {
+void EasingStep<T>::Update(const float& deltaTime) {
     easing_->Update(deltaTime);
 }
 
@@ -45,6 +45,12 @@ template <typename T>
 bool EasingStep<T>::IsFinished() const {
     return easing_->IsFinished();
 }
+
+ template <typename T>
+bool EasingStep<T>::IsPlaying() const {
+    return easing_->IsPlaying();
+}
+
 
 // 明示的インスタンス化
 template class EasingStep<float>;

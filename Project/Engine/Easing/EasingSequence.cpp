@@ -39,7 +39,6 @@ void EasingSequence::AddStep(const std::string& name, T* adaptValue) {
                 }
             }
         }
-   
     });
 
     steps_.emplace_back(std::move(step));
@@ -57,7 +56,7 @@ void EasingSequence::Reset() {
     }
 }
 
-void EasingSequence::Update(float deltaTime) {
+void EasingSequence::Update(const float& deltaTime) {
     if (steps_.empty()) {
         return;
     }
@@ -104,6 +103,17 @@ bool EasingSequence::IsAllFinished() const {
     // 最後のステップかつ終了
     return currentStep_ >= steps_.size() - 1 && steps_[currentStep_]->IsFinished();
 }
+
+bool EasingSequence::IsAllPlaying() const {
+
+    for (const auto& step : steps_) {
+        if (step->IsPlaying()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 // 明示的インスタンス化
 template void EasingSequence::AddStep<float>(const std::string&, float*);
