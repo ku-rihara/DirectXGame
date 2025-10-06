@@ -9,7 +9,7 @@ class IEasingStep {
 public:
     virtual ~IEasingStep()                                  = default;
     virtual void ApplyFromJson(const std::string& fileName) = 0;
-    virtual void Update(float deltaTime)                    = 0;
+    virtual void Update(const float& deltaTime)             = 0;
     virtual void Reset()                                    = 0;
     virtual bool IsFinished() const                         = 0;
     virtual bool IsPlaying() const                          = 0;
