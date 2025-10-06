@@ -136,7 +136,6 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
 void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, LevelData::ObjectData& objectData) {
     for (const auto& group : easingGroups) {
 
-        // グループIDとステップがあるかチェック
         if (!group.contains("group_id") || !group.contains("steps")) {
             continue;
         }
@@ -168,7 +167,6 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
             }
         }
 
-        // 現在のグループのフラグを初期化
         objectData.isAdaptEasing[groupId].fill(false);
 
         // start_timeを取得
@@ -178,15 +176,25 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
         }
         objectData.easingStartTimes[groupId] = startTime;
 
+        // is_loopを取得
+        bool isLoop = false;
+        if (group.contains("is_loop")) {
+            isLoop = group["is_loop"].get<bool>();
+        }
+     /*   objectData.easingIsLoop[groupId] = isLoop;*/
+
+        // EasingSequenceにループフラグを設定
+        objectData.scalingEasing[groupId]->SetLoop(isLoop);
+        objectData.rotationEasing[groupId]->SetLoop(isLoop);
+        objectData.translationEasing[groupId]->SetLoop(isLoop);
+
         // ステップを走査
         for (const auto& step : group["steps"]) {
 
-            // ステップ番号とファイルがあるかチェック
             if (!step.contains("step_number") || !step.contains("files")) {
                 continue;
             }
 
-            // ファイル情報を走査
             for (const auto& file : step["files"]) {
                 if (!file.contains("filename") || !file.contains("srt_type")) {
                     continue;
@@ -195,16 +203,17 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
                 std::string filename = file["filename"].get<std::string>();
                 std::string srtType  = file["srt_type"].get<std::string>();
 
-                // SRTタイプそれぞれステップに追加
                 if (srtType == "Scale") {
 
                     objectData.scalingEasing[groupId]->AddStep(filename, &objectData.preScale[groupId]);
                     objectData.isAdaptEasing[groupId][static_cast<int>(EasingAdaptTransform::Scale)] = true;
+
                 } else if (srtType == "Rotation") {
 
                     objectData.rotationEasing[groupId]->AddStep(filename, &objectData.preRotation[groupId]);
                     objectData.rotationEasing[groupId]->SetBaseValue(objectData.object3d->transform_.rotation_);
                     objectData.isAdaptEasing[groupId][static_cast<int>(EasingAdaptTransform::Rotate)] = true;
+
                 } else if (srtType == "Transform") {
 
                     objectData.translationEasing[groupId]->AddStep(filename, &objectData.preTranslation[groupId]);
@@ -241,7 +250,6 @@ void PutObjForBlender::StartRailEmitAll() {
     }
 }
 
-// easing
 void PutObjForBlender::EasingAllReset() {
     for (auto& objectData : levelData_->objects) {
         for (auto& easingSequence : objectData.scalingEasing) {
@@ -266,6 +274,7 @@ void PutObjForBlender::EasingAllReset() {
     }
     currentTime_ = 0.0f;
 }
+
 void PutObjForBlender::EasingUpdateSelectGroup(const float& deltaTime, const int32_t& groupNum) {
     // 現在時間を自動的に加算
     currentTime_ += deltaTime;
@@ -329,7 +338,6 @@ void PutObjForBlender::EmitterAllEdit() {
         for (std::unique_ptr<ParticleEmitter>& emitter : objectData.emitters) {
             const std::string& name = emitter->GetParticleName();
 
-            // 既に処理済みならスキップ
             if (processedParticleNames.count(name) > 0) {
                 continue;
             }
@@ -355,6 +363,7 @@ void PutObjForBlender::DrawAll(const ViewProjection& viewProjection) {
         DrawObject(obj, viewProjection);
     }
 }
+
 
 bool PutObjForBlender::IsAdaptEasing(const LevelData::ObjectData& objectData, int32_t groupNum, EasingAdaptTransform type) {
     if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.isAdaptEasing.size())) {

@@ -24,6 +24,8 @@ public:
     size_t GetCurrentIndex() const { return currentStep_; }
     size_t GetStepCount() const { return steps_.size(); }
     void SetLoop(bool loop) { loop_ = loop; }
+    bool IsLoop() const { return loop_; }
+    bool IsAllFinished() const;
 
 private:
     std::vector<std::unique_ptr<IEasingStep>> steps_;

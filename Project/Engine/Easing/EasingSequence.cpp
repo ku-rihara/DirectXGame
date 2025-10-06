@@ -17,25 +17,34 @@ void EasingSequence::AddStep(const std::string& name, T* adaptValue) {
             return;
         }
 
+        // 次のステップへ
         if (currentStep_ + 1 < steps_.size()) {
             ++currentStep_;
-        } else if (loop_) {
-            currentStep_ = 0; 
-        } else {
-            return; // ループなしで最後のステップなら何もしない
-        }
+            steps_[currentStep_]->Reset();
 
-        steps_[currentStep_]->Reset();
-
-        if (adaptValue) {
-            if (auto* typed = dynamic_cast<EasingStep<T>*>(steps_[currentStep_].get())) {
-                *adaptValue = typed->GetValue();
+            if (adaptValue) {
+                if (auto* typed = dynamic_cast<EasingStep<T>*>(steps_[currentStep_].get())) {
+                    *adaptValue = typed->GetValue();
+                }
             }
         }
+        // 最後のステップの場合
+        else if (loop_) {
+            currentStep_ = 0;
+            steps_[currentStep_]->Reset();
+
+            if (adaptValue) {
+                if (auto* typed = dynamic_cast<EasingStep<T>*>(steps_[currentStep_].get())) {
+                    *adaptValue = typed->GetValue();
+                }
+            }
+        }
+   
     });
 
     steps_.emplace_back(std::move(step));
 }
+
 template <typename T>
 void EasingSequence::AddStep(std::unique_ptr<Easing<T>> easing) {
     steps_.emplace_back(std::make_unique<EasingStep<T>>(std::move(easing)));
@@ -52,6 +61,11 @@ void EasingSequence::Update(float deltaTime) {
     if (steps_.empty()) {
         return;
     }
+
+    if (currentStep_ >= steps_.size()) {
+        return;
+    }
+
     auto* step = steps_[currentStep_].get();
     step->Update(deltaTime);
 }
@@ -75,6 +89,20 @@ IEasingStep* EasingSequence::GetCurrentStep() {
     if (currentStep_ < steps_.size())
         return steps_[currentStep_].get();
     return nullptr;
+}
+
+bool EasingSequence::IsAllFinished() const {
+    if (steps_.empty()) {
+        return true;
+    }
+
+    // ループが有効なら常にFalse
+    if (loop_) {
+        return false;
+    }
+
+    // 最後のステップかつ終了
+    return currentStep_ >= steps_.size() - 1 && steps_[currentStep_]->IsFinished();
 }
 
 // 明示的インスタンス化
