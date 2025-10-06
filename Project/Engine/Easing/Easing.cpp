@@ -263,6 +263,7 @@ void Easing<T>::Update(float deltaTime) {
         currentTime_ += deltaTime;
     }
 
+    isPlaying_ = true;
     CalculateValue();
 
     if (vector2Proxy_) {
@@ -271,6 +272,7 @@ void Easing<T>::Update(float deltaTime) {
 
     //  終了時間を過ぎたら終了処理
     if (currentTime_ < maxTime_ - finishTimeOffset_) {
+        isPlaying_ = false;
         return;
     }
 
@@ -477,6 +479,7 @@ template <typename T>
 void Easing<T>::Easing::FinishBehavior() {
     currentTime_ = maxTime_;
     isFinished_  = true;
+    isPlaying_   = false;
 
     switch (finishValueType_) {
     case EasingFinishValueType::Start:

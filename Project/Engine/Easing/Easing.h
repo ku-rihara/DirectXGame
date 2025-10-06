@@ -100,6 +100,7 @@ private:
     float backRatio_ = 0.0f;
 
     bool isFinished_ = false;
+    bool isPlaying_  = false;
 
 private:
     // ファイル
@@ -131,6 +132,7 @@ public:
     const T& GetValue() const { return *currentValue_; }
     const T& GetEndValue() const { return endValue_; }
     const bool& IsFinished() const { return isFinished_; }
+    const bool& IsPlaying() const { return isPlaying_; }
     const std::string& GetCurrentAppliedFileName() const { return currentAppliedFileName_; }
     const float& GetCurrentEaseTime() const { return currentTime_; }
     /// -------------------------------------------------------------------------
