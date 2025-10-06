@@ -15,7 +15,7 @@ void BaseComboLevelBackObj::Update(const float& playSpeed) {
     if (effectMode_ == ObjEffectMode::SPAWN) {
 
          // クローズが終わってなかったらCLose優先
-        if (putObjForBlender_->GetIsEasingFinish(static_cast<int32_t>(ObjEffectMode::CLOSE) - kEffectModeOffset_)) {
+        if (putObjForBlender_->GetIsEasingPlaying(static_cast<int32_t>(ObjEffectMode::CLOSE) - kEffectModeOffset_)) {
             putObjForBlender_->EasingUpdateSelectGroup(playSpeed, static_cast<int32_t>(ObjEffectMode::CLOSE) - kEffectModeOffset_);
             return;
         }
