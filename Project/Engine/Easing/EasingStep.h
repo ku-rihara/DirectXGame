@@ -12,6 +12,7 @@ public:
     virtual void Update(float deltaTime)                    = 0;
     virtual void Reset()                                    = 0;
     virtual bool IsFinished() const                         = 0;
+    virtual bool IsPlaying() const                          = 0;
 };
 
 template <typename T>
@@ -21,9 +22,10 @@ public:
     explicit EasingStep(std::unique_ptr<Easing<T>> easing);
 
     void ApplyFromJson(const std::string& fileName) override;
-    void Update(float deltaTime) override;
+    void Update(const float& deltaTime) override;
     void Reset() override;
     bool IsFinished() const override;
+    bool IsPlaying() const override;
 
 private:
     std::unique_ptr<Easing<T>> easing_;

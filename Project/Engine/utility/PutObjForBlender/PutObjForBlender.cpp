@@ -389,6 +389,41 @@ void PutObjForBlender::EasingResetSelectGroup(const int32_t& groupNum) {
     }
 }
 
+bool PutObjForBlender::GetIsEasingPlaying(const int32_t& groupNum) const {
+    if (!levelData_) {
+        return false;
+    }
+
+    for (const auto& objectData : levelData_->objects) {
+        // 指定されたグループが存在するかチェック
+        if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.scalingEasing.size())) {
+            continue;
+        }
+
+        // いずれかのイージングが終了していない場合はfalseを返す
+        if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Scale)) {
+            if (objectData.scalingEasing[groupNum] && objectData.scalingEasing[groupNum]->IsAllPlaying()) {
+                return true;
+            }
+        }
+
+        if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Rotate)) {
+            if (objectData.rotationEasing[groupNum] && objectData.rotationEasing[groupNum]->IsAllPlaying()) {
+                return true;
+            }
+        }
+
+        if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Translate)) {
+            if (objectData.translationEasing[groupNum] && objectData.translationEasing[groupNum]->IsAllPlaying()) {
+                return true;
+            }
+        }
+    }
+
+    // 何かしら再生中
+    return false;
+ }
+
 bool PutObjForBlender::GetIsEasingFinish(const int32_t& groupNum) const {
     if (!levelData_) {
         return true;
