@@ -13,7 +13,7 @@ public:
     void AddStep(std::unique_ptr<Easing<T>> easing);
 
     void Reset();
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
 
     template <typename T>
     void SetBaseValue(const T& value);
@@ -21,16 +21,14 @@ public:
     const IEasingStep* GetCurrentStep() const;
     IEasingStep* GetCurrentStep();
 
+    size_t GetCurrentIndex() const { return currentStep_; }
+    size_t GetStepCount() const { return steps_.size(); }
+    void SetLoop(bool loop) { loop_ = loop; }
+    bool IsAllFinished() const;
+    bool IsAllPlaying() const;
+
 private:
     std::vector<std::unique_ptr<IEasingStep>> steps_;
     size_t currentStep_ = 0;
     bool loop_          = false;
-
-public:
-    const size_t& GetCurrentIndex() const { return currentStep_; }
-    const size_t& GetStepCount() const { return steps_.size(); }
-    void SetLoop(const bool& loop) { loop_ = loop; }
-    const bool& IsLoop() const { return loop_; }
-    bool IsAllFinished() const;
-    bool IsAllPlaying() const;
 };
