@@ -167,6 +167,8 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
         objectData.preScale.resize(requiredSize);
         objectData.preRotation.resize(requiredSize);
         objectData.preTranslation.resize(requiredSize);
+        objectData.onLoopEndCallbacks.resize(requiredSize);
+        objectData.previousStepIndices.resize(requiredSize, 0);
 
         // リサイズで追加された要素のみを初期化
         for (size_t i = 0; i < requiredSize; ++i) {
@@ -182,7 +184,7 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
         }
     }
 
-    // 第二のパス: 各グループの設定を読み込み
+    //  各グループの設定を読み込み
     for (const auto& group : easingGroups) {
 
         if (!group.contains("group_id") || !group.contains("steps")) {
@@ -506,16 +508,6 @@ void PutObjForBlender::SetLoopEndCallback(const int32_t& groupNum, const std::fu
     }
 }
 
-// ループ終了時のコールバック設定
-void PutObjForBlender::SetLoopEndCallbackForObject(const size_t& objectIndex, const int32_t& groupNum, const std::function<void()>& callback) {
-    if (!levelData_ || objectIndex >= levelData_->objects.size())
-        return;
-
-    auto& objectData = levelData_->objects[objectIndex];
-    if (groupNum >= 0 && groupNum < static_cast<int32_t>(objectData.onLoopEndCallbacks.size())) {
-        objectData.onLoopEndCallbacks[groupNum] = callback;
-    }
-}
 
 // ループ終了の検知とトリガー
 void PutObjForBlender::CheckAndTriggerLoopEnd(LevelData::ObjectData& objectData, const int32_t& groupNum) {
