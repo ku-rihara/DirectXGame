@@ -1,12 +1,12 @@
 #pragma once
 #include "BaseComboLevelBackObj.h"
-#include "StadiumLightEffect.h"
 #include <array>
 #include <memory>
 #include <string>
 
 enum class ComboLevelObjType {
     STADIUM_LIGHT,
+    SPEAKER,
     COUNT
 };
 

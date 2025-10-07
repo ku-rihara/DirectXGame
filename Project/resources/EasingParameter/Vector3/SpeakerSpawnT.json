@@ -1,0 +1,23 @@
+{
+    "SpeakerSpawnT": {
+        "StartTimeOffset": 0.0,
+        "amplitude": 0.0,
+        "backRatio": 0.0,
+        "endValue": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "finishOffsetTime": 0.0,
+        "finishType": 1,
+        "maxTime": 1.4600000381469727,
+        "period": 0.0,
+        "startValue": [
+            0.0,
+            -6.050000190734863,
+            0.0
+        ],
+        "type": 22,
+        "waitTime": 0.0
+    }
+}

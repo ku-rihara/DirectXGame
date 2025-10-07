@@ -1,0 +1,1783 @@
+{
+    "name": "scene",
+    "objects": [
+        {
+            "type": "MESH",
+            "name": "Mesh_(2).003",
+            "transform": {
+                "translation": [
+                    -48.486297607421875,
+                    -54.0,
+                    61.465797424316406
+                ],
+                "rotation": [
+                    49.0880241394043,
+                    2.1030654907226562,
+                    124.17861938476562
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "Speaker.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "SpeakerSpawnScale.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "SpeakerSpawnT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                },
+                {
+                    "group_id": 1,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "SpeakerPulus.json",
+                                    "srt_type": "Scale"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": true
+                },
+                {
+                    "group_id": 2,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "SpeakerCloseS.json",
+                                    "srt_type": "Scale"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "Mesh_(2).002",
+            "transform": {
+                "translation": [
+                    49.72584533691406,
+                    -54.7080078125,
+                    61.72844696044922
+                ],
+                "rotation": [
+                    49.08803939819336,
+                    2.103065013885498,
+                    -135.9778289794922
+                ],
+                "scaling": [
+                    1.0,
+                    0.9999999403953552,
+                    1.0
+                ]
+            },
+            "file_name": "Speaker.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "SpeakerSpawnScale.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "SpeakerSpawnT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                },
+                {
+                    "group_id": 1,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "SpeakerPulus.json",
+                                    "srt_type": "Scale"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": true
+                },
+                {
+                    "group_id": 2,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "SpeakerCloseS.json",
+                                    "srt_type": "Scale"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "Mesh_(2).001",
+            "transform": {
+                "translation": [
+                    63.9511604309082,
+                    67.37826538085938,
+                    63.22129821777344
+                ],
+                "rotation": [
+                    49.08803176879883,
+                    2.1030685901641846,
+                    -65.28036499023438
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "Speaker.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "SpeakerSpawnScale.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "SpeakerSpawnT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                },
+                {
+                    "group_id": 1,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "SpeakerPulus.json",
+                                    "srt_type": "Scale"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": true
+                },
+                {
+                    "group_id": 2,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "SpeakerCloseS.json",
+                                    "srt_type": "Scale"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "Mesh_(2)",
+            "transform": {
+                "translation": [
+                    -52.97357177734375,
+                    72.42456817626953,
+                    64.74726867675781
+                ],
+                "rotation": [
+                    49.08803176879883,
+                    2.1030685901641846,
+                    53.76958465576172
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "Speaker.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "SpeakerSpawnScale.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "SpeakerSpawnT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                },
+                {
+                    "group_id": 1,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "SpeakerPulus.json",
+                                    "srt_type": "Scale"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": true
+                },
+                {
+                    "group_id": 2,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "SpeakerCloseS.json",
+                                    "srt_type": "Scale"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "LIGHT",
+            "name": "Light.002",
+            "transform": {
+                "translation": [
+                    -7.957993507385254,
+                    47.70909881591797,
+                    8.392168998718262
+                ],
+                "rotation": [
+                    37.261051177978516,
+                    3.163706064224243,
+                    106.93632507324219
+                ],
+                "scaling": [
+                    2.0835955142974854,
+                    2.7713353633880615,
+                    2.696988582611084
+                ]
+            }
+        },
+        {
+            "type": "LIGHT",
+            "name": "Light.001",
+            "transform": {
+                "translation": [
+                    -7.957993507385254,
+                    47.70909881591797,
+                    8.392168998718262
+                ],
+                "rotation": [
+                    37.261051177978516,
+                    3.163706064224243,
+                    106.93632507324219
+                ],
+                "scaling": [
+                    2.0835955142974854,
+                    2.7713353633880615,
+                    2.696988582611084
+                ]
+            }
+        },
+        {
+            "type": "CAMERA",
+            "name": "Camera.002",
+            "transform": {
+                "translation": [
+                    -0.6246070861816406,
+                    33.02084732055664,
+                    6.514531135559082
+                ],
+                "rotation": [
+                    63.559295654296875,
+                    1.5625435025867773e-06,
+                    46.69194412231445
+                ],
+                "scaling": [
+                    2.565101385116577,
+                    2.418213367462158,
+                    2.8594412803649902
+                ]
+            }
+        },
+        {
+            "type": "CAMERA",
+            "name": "Camera.001",
+            "transform": {
+                "translation": [
+                    -0.6246070861816406,
+                    33.02084732055664,
+                    6.514531135559082
+                ],
+                "rotation": [
+                    63.559295654296875,
+                    1.5625435025867773e-06,
+                    46.69194412231445
+                ],
+                "scaling": [
+                    2.565101385116577,
+                    2.418213367462158,
+                    2.8594412803649902
+                ]
+            }
+        },
+        {
+            "type": "LIGHT",
+            "name": "Light.003",
+            "transform": {
+                "translation": [
+                    -7.957993507385254,
+                    47.70909881591797,
+                    8.392168998718262
+                ],
+                "rotation": [
+                    37.261051177978516,
+                    3.163706064224243,
+                    106.93632507324219
+                ],
+                "scaling": [
+                    2.0835955142974854,
+                    2.7713353633880615,
+                    2.696988582611084
+                ]
+            }
+        },
+        {
+            "type": "LIGHT",
+            "name": "Light",
+            "transform": {
+                "translation": [
+                    -7.957993507385254,
+                    47.70909881591797,
+                    8.392168998718262
+                ],
+                "rotation": [
+                    37.261051177978516,
+                    3.163706064224243,
+                    106.93632507324219
+                ],
+                "scaling": [
+                    2.0835955142974854,
+                    2.7713353633880615,
+                    2.696988582611084
+                ]
+            }
+        },
+        {
+            "type": "CAMERA",
+            "name": "Camera.003",
+            "transform": {
+                "translation": [
+                    -0.6246070861816406,
+                    33.02084732055664,
+                    6.514531135559082
+                ],
+                "rotation": [
+                    63.559295654296875,
+                    1.5625435025867773e-06,
+                    46.69194412231445
+                ],
+                "scaling": [
+                    2.565101385116577,
+                    2.418213367462158,
+                    2.8594412803649902
+                ]
+            }
+        },
+        {
+            "type": "CAMERA",
+            "name": "Camera",
+            "transform": {
+                "translation": [
+                    -0.6246070861816406,
+                    33.02084732055664,
+                    6.514531135559082
+                ],
+                "rotation": [
+                    63.559295654296875,
+                    1.5625435025867773e-06,
+                    46.69194412231445
+                ],
+                "scaling": [
+                    2.565101385116577,
+                    2.418213367462158,
+                    2.8594412803649902
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "平面",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isDisable": true,
+            "file_name": "Field.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StartFieldS.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StartFieldR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StartFieldT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.800000011920929,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "Rope_2_Cylinder.005",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isDisable": true,
+            "file_name": "FieldSide.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StartSideFieldS.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StartSideFieldR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StartSideFieldT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 1.5,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "Node_013_mel_grandstand_genericmedium_a_physics_!bk.003",
+            "transform": {
+                "translation": [
+                    119.60420989990234,
+                    -3.0797276496887207,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isDisable": true,
+            "file_name": "AudienceSeats.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StartAudienceSeatS.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StartAudienceSeatR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StartAudienceSeatT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 2.5999999046325684,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "Node_013_mel_grandstand_genericmedium_a_physics_!bk.002",
+            "transform": {
+                "translation": [
+                    -119.67853546142578,
+                    -3.0797276496887207,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isDisable": true,
+            "file_name": "AudienceSeats.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StartAudienceSeatS.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StartAudienceSeatR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StartAudienceSeatT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 2.799999952316284,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "Node_013_mel_grandstand_genericmedium_a_physics_!bk.001",
+            "transform": {
+                "translation": [
+                    0.0,
+                    -117.20775604248047,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isDisable": true,
+            "file_name": "AudienceSeats.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StartAudienceSeatS.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StartAudienceSeatR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StartAudienceSeatT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 2.700000047683716,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "Node_013_mel_grandstand_genericmedium_a_physics_!bk",
+            "transform": {
+                "translation": [
+                    0.0,
+                    119.16585540771484,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isDisable": true,
+            "file_name": "AudienceSeats.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StartAudienceSeatS.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StartAudienceSeatR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StartAudienceSeatT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 2.5,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "LIGHT",
+            "name": "Light.004",
+            "transform": {
+                "translation": [
+                    -7.957993507385254,
+                    47.70909881591797,
+                    8.392168998718262
+                ],
+                "rotation": [
+                    37.261051177978516,
+                    3.163706064224243,
+                    106.93632507324219
+                ],
+                "scaling": [
+                    2.0835955142974854,
+                    2.7713353633880615,
+                    2.696988582611084
+                ]
+            }
+        },
+        {
+            "type": "LIGHT",
+            "name": "Light.005",
+            "transform": {
+                "translation": [
+                    -7.957993507385254,
+                    47.70909881591797,
+                    8.392168998718262
+                ],
+                "rotation": [
+                    37.261051177978516,
+                    3.163706064224243,
+                    106.93632507324219
+                ],
+                "scaling": [
+                    2.0835955142974854,
+                    2.7713353633880615,
+                    2.696988582611084
+                ]
+            }
+        },
+        {
+            "type": "CAMERA",
+            "name": "Camera.004",
+            "transform": {
+                "translation": [
+                    -0.6246070861816406,
+                    33.02084732055664,
+                    6.514531135559082
+                ],
+                "rotation": [
+                    63.559295654296875,
+                    1.5625435025867773e-06,
+                    46.69194412231445
+                ],
+                "scaling": [
+                    2.565101385116577,
+                    2.418213367462158,
+                    2.8594412803649902
+                ]
+            }
+        },
+        {
+            "type": "CAMERA",
+            "name": "Camera.005",
+            "transform": {
+                "translation": [
+                    -0.6246070861816406,
+                    33.02084732055664,
+                    6.514531135559082
+                ],
+                "rotation": [
+                    63.559295654296875,
+                    1.5625435025867773e-06,
+                    46.69194412231445
+                ],
+                "scaling": [
+                    2.565101385116577,
+                    2.418213367462158,
+                    2.8594412803649902
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "Sphere.005_Sphere.016",
+            "transform": {
+                "translation": [
+                    -33.87982940673828,
+                    160.5557861328125,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isDisable": true,
+            "file_name": "backLight.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightSpawnScale.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StadiumLightSpawnR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StadiumLightSpawnT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                },
+                {
+                    "group_id": 1,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightPulus.json",
+                                    "srt_type": "Scale"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": true
+                },
+                {
+                    "group_id": 2,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightCloseS.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StadiumLightCloseR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StadiumLightCloseT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "Sphere.005_Sphere.007",
+            "transform": {
+                "translation": [
+                    155.2280731201172,
+                    42.10722351074219,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isDisable": true,
+            "file_name": "backLight.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightSpawnScale.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StadiumLightSpawnR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StadiumLightSpawnT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                },
+                {
+                    "group_id": 1,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightPulus.json",
+                                    "srt_type": "Scale"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": true
+                },
+                {
+                    "group_id": 2,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightCloseS.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StadiumLightCloseR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StadiumLightCloseT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "Sphere.005_Sphere.006",
+            "transform": {
+                "translation": [
+                    155.2280731201172,
+                    -40.03448486328125,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isDisable": true,
+            "file_name": "backLight.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightSpawnScale.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StadiumLightSpawnR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StadiumLightSpawnT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                },
+                {
+                    "group_id": 1,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightPulus.json",
+                                    "srt_type": "Scale"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": true
+                },
+                {
+                    "group_id": 2,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightCloseS.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StadiumLightCloseR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StadiumLightCloseT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "Sphere.005_Sphere.005",
+            "transform": {
+                "translation": [
+                    -162.16104125976562,
+                    -40.03448486328125,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isDisable": true,
+            "file_name": "backLight.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightSpawnScale.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StadiumLightSpawnR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StadiumLightSpawnT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                },
+                {
+                    "group_id": 1,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightPulus.json",
+                                    "srt_type": "Scale"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": true
+                },
+                {
+                    "group_id": 2,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightCloseS.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StadiumLightCloseR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StadiumLightCloseT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "Sphere.005_Sphere.004",
+            "transform": {
+                "translation": [
+                    -162.16104125976562,
+                    42.10722351074219,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isDisable": true,
+            "file_name": "backLight.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightSpawnScale.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StadiumLightSpawnR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StadiumLightSpawnT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                },
+                {
+                    "group_id": 1,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightPulus.json",
+                                    "srt_type": "Scale"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": true
+                },
+                {
+                    "group_id": 2,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightCloseS.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StadiumLightCloseR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StadiumLightCloseT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "Sphere.005_Sphere.003",
+            "transform": {
+                "translation": [
+                    -33.807373046875,
+                    -161.10055541992188,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    176.46163940429688
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isDisable": true,
+            "file_name": "backLight.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightSpawnScale.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StadiumLightSpawnR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StadiumLightSpawnT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                },
+                {
+                    "group_id": 1,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightPulus.json",
+                                    "srt_type": "Scale"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": true
+                },
+                {
+                    "group_id": 2,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightCloseS.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StadiumLightCloseR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StadiumLightCloseT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "Sphere.005_Sphere.002",
+            "transform": {
+                "translation": [
+                    42.062171936035156,
+                    -165.79190063476562,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isDisable": true,
+            "file_name": "backLight.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightSpawnScale.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StadiumLightSpawnR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StadiumLightSpawnT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                },
+                {
+                    "group_id": 1,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightPulus.json",
+                                    "srt_type": "Scale"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": true
+                },
+                {
+                    "group_id": 2,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightCloseS.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StadiumLightCloseR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StadiumLightCloseT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "MESH",
+            "name": "Sphere.005_Sphere.001",
+            "transform": {
+                "translation": [
+                    42.13462829589844,
+                    160.5557861328125,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isDisable": true,
+            "file_name": "backLight.obj",
+            "easing_groups": [
+                {
+                    "group_id": 0,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightSpawnScale.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StadiumLightSpawnR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StadiumLightSpawnT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                },
+                {
+                    "group_id": 1,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightPulus.json",
+                                    "srt_type": "Scale"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": true
+                },
+                {
+                    "group_id": 2,
+                    "steps": [
+                        {
+                            "step_number": 1,
+                            "files": [
+                                {
+                                    "file_index": 1,
+                                    "filename": "StadiumLightCloseS.json",
+                                    "srt_type": "Scale"
+                                },
+                                {
+                                    "file_index": 2,
+                                    "filename": "StadiumLightCloseR.json",
+                                    "srt_type": "Rotation"
+                                },
+                                {
+                                    "file_index": 3,
+                                    "filename": "StadiumLightCloseT.json",
+                                    "srt_type": "Transform"
+                                }
+                            ]
+                        }
+                    ],
+                    "start_time": 0.0,
+                    "is_loop": false
+                }
+            ]
+        },
+        {
+            "type": "LIGHT",
+            "name": "Light.006",
+            "transform": {
+                "translation": [
+                    -7.957993507385254,
+                    47.70909881591797,
+                    8.392168998718262
+                ],
+                "rotation": [
+                    37.261051177978516,
+                    3.163706064224243,
+                    106.93632507324219
+                ],
+                "scaling": [
+                    2.0835955142974854,
+                    2.7713353633880615,
+                    2.696988582611084
+                ]
+            }
+        },
+        {
+            "type": "LIGHT",
+            "name": "Light.007",
+            "transform": {
+                "translation": [
+                    -7.957993507385254,
+                    47.70909881591797,
+                    8.392168998718262
+                ],
+                "rotation": [
+                    37.261051177978516,
+                    3.163706064224243,
+                    106.93632507324219
+                ],
+                "scaling": [
+                    2.0835955142974854,
+                    2.7713353633880615,
+                    2.696988582611084
+                ]
+            }
+        },
+        {
+            "type": "LIGHT",
+            "name": "Light.008",
+            "transform": {
+                "translation": [
+                    4.076245307922363,
+                    1.0054539442062378,
+                    5.903861999511719
+                ],
+                "rotation": [
+                    37.26104736328125,
+                    3.1637091636657715,
+                    106.93632507324219
+                ],
+                "scaling": [
+                    1.0,
+                    0.9999999403953552,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "CAMERA",
+            "name": "Camera.006",
+            "transform": {
+                "translation": [
+                    -0.6246070861816406,
+                    33.02084732055664,
+                    6.514531135559082
+                ],
+                "rotation": [
+                    63.559295654296875,
+                    1.5625435025867773e-06,
+                    46.69194412231445
+                ],
+                "scaling": [
+                    2.565101385116577,
+                    2.418213367462158,
+                    2.8594412803649902
+                ]
+            }
+        },
+        {
+            "type": "CAMERA",
+            "name": "Camera.007",
+            "transform": {
+                "translation": [
+                    -0.6246070861816406,
+                    33.02084732055664,
+                    6.514531135559082
+                ],
+                "rotation": [
+                    63.559295654296875,
+                    1.5625435025867773e-06,
+                    46.69194412231445
+                ],
+                "scaling": [
+                    2.565101385116577,
+                    2.418213367462158,
+                    2.8594412803649902
+                ]
+            }
+        },
+        {
+            "type": "CAMERA",
+            "name": "Camera.008",
+            "transform": {
+                "translation": [
+                    7.358891487121582,
+                    -6.925790786743164,
+                    4.958309173583984
+                ],
+                "rotation": [
+                    63.559295654296875,
+                    2.2983238068263745e-07,
+                    46.69194412231445
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        }
+    ]
+}

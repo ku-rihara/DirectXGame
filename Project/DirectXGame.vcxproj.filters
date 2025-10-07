@@ -1120,6 +1120,9 @@
     <ClCompile Include="Game\BackGroundObject\ComboLeve\ComboLevelObjHolder.cpp">
       <Filter>Game\BackGroundObject\ComboLevel</Filter>
     </ClCompile>
+    <ClCompile Include="Game\BackGroundObject\ComboLeve\SpeakerEffect.cpp">
+      <Filter>Game\BackGroundObject\ComboLevel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1840,6 +1843,9 @@
       <Filter>Game\BackGroundObject\ComboLevel</Filter>
     </ClInclude>
     <ClInclude Include="Game\BackGroundObject\ComboLeve\ComboLevelObjHolder.h">
+      <Filter>Game\BackGroundObject\ComboLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BackGroundObject\ComboLeve\SpeakerEffect.h">
       <Filter>Game\BackGroundObject\ComboLevel</Filter>
     </ClInclude>
   </ItemGroup>

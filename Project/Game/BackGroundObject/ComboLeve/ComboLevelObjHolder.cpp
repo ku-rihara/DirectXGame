@@ -1,4 +1,6 @@
 #include "ComboLevelObjHolder.h"
+#include "StadiumLightEffect.h"
+#include"SpeakerEffect.h"
 
 void ComboLevelObjHolder::Init(const std::string& filename) {
     // 各オブジェクトの初期化
@@ -41,7 +43,9 @@ void ComboLevelObjHolder::Add(const ComboLevelObjType& type, const std::string& 
     case ComboLevelObjType::STADIUM_LIGHT:
         objects_[index] = std::make_unique<StadiumLightEffect>();
         break;
-    // 新しいオブジェクトタイプはここに追加
+    case ComboLevelObjType::SPEAKER:
+        objects_[index] = std::make_unique<SpeakerEffect>();
+        break;
     default:
         break;
     }

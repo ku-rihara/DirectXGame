@@ -3,8 +3,8 @@
 
 class StadiumLightEffect : public BaseComboLevelBackObj {
 public:
-    StadiumLightEffect()          = default;
-    virtual ~StadiumLightEffect() = default;
+    StadiumLightEffect()  = default;
+    ~StadiumLightEffect()override = default;
 
     void Init(const std::string& filename) override;
     void Update(const float& playSpeed) override;

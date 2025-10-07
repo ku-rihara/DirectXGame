@@ -57,6 +57,7 @@ void GameScene::Init() {
     viewProjection_.Init();
 
     comboLevelObjHolder_->Add(ComboLevelObjType::STADIUM_LIGHT,"ComboLevel1.json");
+    comboLevelObjHolder_->Add(ComboLevelObjType::SPEAKER, "ComboLevel2.json");
     gameBackGroundObject_->Init("game.json");
 
     ///---------------------------------------------------------------------------------------
