@@ -11,14 +11,13 @@
 #include <string>
 #include <vector>
 
-class PutObjForBlender {
-private:
-    enum class EasingAdaptTransform {
-        Scale,
-        Rotate,
-        Translate
-    };
+  enum class EasingAdaptTransform {
+    Scale,
+    Rotate,
+    Translate,
+  };
 
+class PutObjForBlender {
 public:
     // レベルデータ
     struct LevelData {
