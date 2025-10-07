@@ -370,21 +370,18 @@ void PutObjForBlender::DrawAll(const ViewProjection& viewProjection) {
 
 
 void PutObjForBlender::EasingUpdateSelectGroup(const float& deltaTime, const int32_t& groupNum) {
-    // 現在時間を自動的に加算
     currentTime_ += deltaTime;
 
     for (auto& objectData : levelData_->objects) {
-        // 指定されたグループが存在するかチェック
         if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.easingStartTimes.size())) {
             continue;
         }
 
-        // 開始時間を超えるまではreturn
         if (currentTime_ < objectData.easingStartTimes[groupNum]) {
             continue;
         }
 
-        // 指定されたグループのイージングを更新
+        // イージング更新
         if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Scale) && objectData.scalingEasing[groupNum]) {
             objectData.scalingEasing[groupNum]->Update(deltaTime);
         }
@@ -394,6 +391,9 @@ void PutObjForBlender::EasingUpdateSelectGroup(const float& deltaTime, const int
         if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Translate) && objectData.translationEasing[groupNum]) {
             objectData.translationEasing[groupNum]->Update(deltaTime);
         }
+
+        // ループ終了の検知
+        CheckAndTriggerLoopEnd(objectData, groupNum);
 
         // PreValueをWorldTransformに適用
         AdaptEasing(objectData, groupNum);
@@ -491,6 +491,68 @@ bool PutObjForBlender::GetIsEasingFinish(const int32_t& groupNum) const {
 
     // すべてのオブジェクトの指定グループのイージングが完了している
     return true;
+}
+
+
+// ループ終了時のコールバック設定
+void PutObjForBlender::SetLoopEndCallback(const int32_t& groupNum, const std::function<void()>& callback) {
+    if (!levelData_)
+        return;
+
+    for (auto& objectData : levelData_->objects) {
+        if (groupNum >= 0 && groupNum < static_cast<int32_t>(objectData.onLoopEndCallbacks.size())) {
+            objectData.onLoopEndCallbacks[groupNum] = callback;
+        }
+    }
+}
+
+// ループ終了時のコールバック設定
+void PutObjForBlender::SetLoopEndCallbackForObject(const size_t& objectIndex, const int32_t& groupNum, const std::function<void()>& callback) {
+    if (!levelData_ || objectIndex >= levelData_->objects.size())
+        return;
+
+    auto& objectData = levelData_->objects[objectIndex];
+    if (groupNum >= 0 && groupNum < static_cast<int32_t>(objectData.onLoopEndCallbacks.size())) {
+        objectData.onLoopEndCallbacks[groupNum] = callback;
+    }
+}
+
+// ループ終了の検知とトリガー
+void PutObjForBlender::CheckAndTriggerLoopEnd(LevelData::ObjectData& objectData, const int32_t& groupNum) {
+    if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.previousStepIndices.size())) {
+        return;
+    }
+
+    // いずれかのイージングシーケンスからステップインデックスを取得
+    size_t currentStepIndex = 0;
+    bool hasValidEasing     = false;
+
+    if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Scale) && objectData.scalingEasing[groupNum]) {
+        currentStepIndex = objectData.scalingEasing[groupNum]->GetCurrentIndex();
+        hasValidEasing   = true;
+    } else if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Rotate) && objectData.rotationEasing[groupNum]) {
+        currentStepIndex = objectData.rotationEasing[groupNum]->GetCurrentIndex();
+        hasValidEasing   = true;
+    } else if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Translate) && objectData.translationEasing[groupNum]) {
+        currentStepIndex = objectData.translationEasing[groupNum]->GetCurrentIndex();
+        hasValidEasing   = true;
+    }
+
+    if (!hasValidEasing) {
+        return;
+    }
+
+    size_t previousStepIndex = objectData.previousStepIndices[groupNum];
+
+    if (currentStepIndex < previousStepIndex) {
+        // コールバックが設定されていれば実行
+        if (objectData.onLoopEndCallbacks[groupNum]) {
+            objectData.onLoopEndCallbacks[groupNum]();
+        }
+    }
+
+    // 現在のステップインデックスを保存
+    objectData.previousStepIndices[groupNum] = currentStepIndex;
 }
 
 

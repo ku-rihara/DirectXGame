@@ -36,6 +36,8 @@ public:
             std::vector<Vector3> preTranslation;
             std::vector<std::array<bool, 3>> isAdaptEasing;
             std::vector<float> easingStartTimes;
+            std::vector<std::function<void()>> onLoopEndCallbacks;
+            std::vector<size_t> previousStepIndices;
         };
         // オブジェクトのコンテナ
         std::vector<ObjectData> objects;
@@ -59,6 +61,8 @@ public:
     void ConvertJSONToObjects(const nlohmann::json& object);
     PrimitiveType StringToPrimitiveType(const std::string& typeStr);
 
+    void CheckAndTriggerLoopEnd(LevelData::ObjectData& objectData, const int32_t& groupNum);
+
 private:
     void DrawObject(LevelData::ObjectData& objectData, const ViewProjection& viewProjection);
     void AdaptEasing(LevelData::ObjectData& objectData, const int32_t& groupNum);
@@ -74,6 +78,9 @@ private:
     nlohmann::json jsonData_;
 
 public:
-    bool GetIsEasingFinish(const int32_t& groupNum)const;
+    bool GetIsEasingFinish(const int32_t& groupNum) const;
     bool GetIsEasingPlaying(const int32_t& groupNum) const;
+
+    void SetLoopEndCallback(const int32_t& groupNum, const std::function<void()>& callback);
+    void SetLoopEndCallbackForObject(const size_t& objectIndex, const int32_t& groupNum, const std::function<void()>& callback);
 };
