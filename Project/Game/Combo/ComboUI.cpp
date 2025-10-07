@@ -109,7 +109,7 @@ void ComboUI::CreateGroupName(const ComboDigit& digit) {
         break;
     }
     comboDigit_ = digit;
-    ///* グローバルパラメータ
+    // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
     BindParams();

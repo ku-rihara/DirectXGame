@@ -136,7 +136,7 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
 
 void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, LevelData::ObjectData& objectData) {
 
-    // 最大のgroup_idを見つける
+    // 最大のGroup_idを見つける
     int32_t maxGroupId = -1;
     for (const auto& group : easingGroups) {
         if (!group.contains("group_id")) {

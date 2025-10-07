@@ -3,6 +3,8 @@
 
 void BaseComboLevelBackObj::Init(const std::string& filename) {
     BaseBackGroundObject::Init(filename);
+
+    putObjForBlender_->EasingUpdateSelectGroup(Frame::DeltaTimeRate(), static_cast<int32_t>(ObjEffectMode::SPAWN));
 }
 
 void BaseComboLevelBackObj::Update(const float& playSpeed) {
@@ -11,23 +13,30 @@ void BaseComboLevelBackObj::Update(const float& playSpeed) {
         return;
     }
 
-   
     if (effectMode_ == ObjEffectMode::SPAWN) {
 
-         // クローズが終わってなかったらCLose優先
-        if (putObjForBlender_->GetIsEasingPlaying(static_cast<int32_t>(ObjEffectMode::CLOSE) - kEffectModeOffset_)) {
-            putObjForBlender_->EasingUpdateSelectGroup(playSpeed, static_cast<int32_t>(ObjEffectMode::CLOSE) - kEffectModeOffset_);
+        // クローズが終わってなかったらCLose優先
+        if (putObjForBlender_->GetIsEasingPlaying(static_cast<int32_t>(ObjEffectMode::CLOSE))) {
+            putObjForBlender_->EasingUpdateSelectGroup(playSpeed, static_cast<int32_t>(ObjEffectMode::CLOSE));
             return;
         }
 
         // スポーンが終わったらPULSEへ
-        if (putObjForBlender_->GetIsEasingFinish(static_cast<int32_t>(ObjEffectMode::SPAWN) - kEffectModeOffset_)) {
+        if (putObjForBlender_->GetIsEasingFinish(static_cast<int32_t>(ObjEffectMode::SPAWN))) {
             effectMode_ = ObjEffectMode::PULSE;
         }
-      
     }
-   
-    putObjForBlender_->EasingUpdateSelectGroup(playSpeed, static_cast<int32_t>(effectMode_) - kEffectModeOffset_);
+
+    if (effectMode_ == ObjEffectMode::CLOSE) {
+        // クローズが終わったらNONEへ
+        if (putObjForBlender_->GetIsEasingFinish(static_cast<int32_t>(ObjEffectMode::CLOSE))) {
+            putObjForBlender_->EasingAllReset();
+            effectMode_ = ObjEffectMode::NONE;
+            return;
+        }
+    }
+
+    putObjForBlender_->EasingUpdateSelectGroup(playSpeed, static_cast<int32_t>(effectMode_));
 }
 
 void BaseComboLevelBackObj::Draw(const ViewProjection& viewProjection) {
@@ -38,8 +47,7 @@ int32_t BaseComboLevelBackObj::ConvertEffectModeToInt(const ObjEffectMode& mode)
     return static_cast<int32_t>(mode);
 }
 
-
-  void BaseComboLevelBackObj::EasingResetSelectGroup(const int32_t& groupNum) {
+void BaseComboLevelBackObj::EasingResetSelectGroup(const int32_t& groupNum) {
     if (putObjForBlender_) {
         putObjForBlender_->EasingResetSelectGroup(groupNum);
     }

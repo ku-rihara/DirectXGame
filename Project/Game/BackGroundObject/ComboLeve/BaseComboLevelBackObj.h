@@ -4,10 +4,10 @@
 #include <string>
 
 enum class ObjEffectMode {
-    NONE,
     SPAWN,
     PULSE,
     CLOSE,
+    NONE,
 };
 
 class BaseComboLevelBackObj : public BaseBackGroundObject {
@@ -25,7 +25,6 @@ public:
 
 private:
     ObjEffectMode effectMode_=ObjEffectMode::NONE;
-    const int32_t kEffectModeOffset_ = 1;
 
 public:
     void SetEffectMode(const ObjEffectMode& mode) { effectMode_ = mode; }
