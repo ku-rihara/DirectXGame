@@ -58,13 +58,15 @@ void Frame::FixFPS() {
 }
 
 
-void Frame::SetTimeScale(float scale) {
-    if (scale < 0.0f) {
-        scale = 0.0f; 
-    }
+void Frame::SetTimeScale(const float& scale) {
+   
     timeScale_ = scale;
 }
 
 float Frame::GetTimeScale() {
     return timeScale_;
+}
+
+void Frame::ResetDeltaTime() {
+    deltaTime_ = 0.0f;
 }
