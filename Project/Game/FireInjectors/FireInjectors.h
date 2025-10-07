@@ -11,8 +11,7 @@ class FireInjectors {
 public:
     void Init();
     void Update();
-    void Draw(const ViewProjection& viewProjection);
-
+   
     void Spawn();
     void Launch();
 

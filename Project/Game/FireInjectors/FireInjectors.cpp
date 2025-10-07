@@ -46,9 +46,6 @@ void FireInjectors::Launch() {
     putObjForBlender_->EasingUpdateSelectGroup(Frame::DeltaTime(), 1);
 }
 
-void FireInjectors::Draw(const ViewProjection& viewProjection) {
-    putObjForBlender_->DrawAll(viewProjection);
-}
 
 ///=========================================================
 /// バインド
