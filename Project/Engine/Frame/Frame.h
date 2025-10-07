@@ -1,8 +1,6 @@
 #include <chrono>
 
-/// <summary>
-/// フレームクラス
-/// </summary>
+
 class Frame {
 private:
     /// ========================================================
@@ -26,7 +24,8 @@ public:
     static float DeltaTime();
     static float DeltaTimeRate();
     static void FixFPS();   
-    static void SetTimeScale(float scale); 
-    static float GetTimeScale();          
+    static void SetTimeScale(const float& scale); 
+    static float GetTimeScale();      
+    static void ResetDeltaTime();
 
 };
