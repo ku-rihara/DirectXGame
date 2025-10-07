@@ -8,6 +8,11 @@ public:
 
     void Init(const std::string& filename) override;
     void Update(const float& playSpeed) override;
-  
+
 private:
+    bool isPulseOneCycleEnd_ = false;
+
+public:
+    const bool& GetIsPulseOneCycleEnd() const { return isPulseOneCycleEnd_; }
+    void SetIsPulseOneCycleEnd(const bool& isEnd) { isPulseOneCycleEnd_ = isEnd; }
 };

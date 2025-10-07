@@ -17,15 +17,17 @@ public:
 
     virtual void Init(const std::string& filename) override;
     virtual void Update(const float& playSpeed) override;
-  
+
     void EasingResetSelectGroup(const int32_t& groupNum);
     void EasingAllReset();
-    bool GetIsEasingFinish(const int32_t& groupNum)const;
+    bool GetIsEasingFinish(const int32_t& groupNum) const;
 
-private:
-    ObjEffectMode effectMode_=ObjEffectMode::NONE;
+protected:
+    ObjEffectMode effectMode_ = ObjEffectMode::NONE;
+    bool isPulseCycleStart_   = false;
 
 public:
     void SetEffectMode(const ObjEffectMode& mode) { effectMode_ = mode; }
     int32_t ConvertEffectModeToInt(const ObjEffectMode& mode);
+    void SetIsPulseCycleStart(const bool& isStart) { isPulseCycleStart_ = isStart; }
 };

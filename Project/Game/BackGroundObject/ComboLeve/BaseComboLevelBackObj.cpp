@@ -31,10 +31,15 @@ void BaseComboLevelBackObj::Update(const float& playSpeed) {
         // クローズが終わったらNONEへ
         if (putObjForBlender_->GetIsEasingFinish(static_cast<int32_t>(ObjEffectMode::CLOSE))) {
             putObjForBlender_->EasingAllReset();
+            isPulseCycleStart_ = false;
             putObjForBlender_->EasingUpdateSelectGroup(0.0f, static_cast<int32_t>(ObjEffectMode::SPAWN));
-            effectMode_ = ObjEffectMode::NONE;
-          
+            effectMode_ = ObjEffectMode::NONE;       
         }
+    }
+
+    // PULSEの開始タイミングを制御
+    if (effectMode_ == ObjEffectMode::PULSE && !isPulseCycleStart_) {
+        return;
     }
 
     putObjForBlender_->EasingUpdateSelectGroup(playSpeed, static_cast<int32_t>(effectMode_));

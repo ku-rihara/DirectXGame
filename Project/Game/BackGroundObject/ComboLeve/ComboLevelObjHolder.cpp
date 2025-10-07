@@ -14,6 +14,21 @@ void ComboLevelObjHolder::Update(const float& playSpeed) {
     for (auto& obj : objects_) {
         if (obj) {
             obj->Update(playSpeed);
+
+            // PULSEのタイミングを合わせる処理
+            if (dynamic_cast<StadiumLightEffect*>(obj.get())) {
+                StadiumLightEffect* stadiumLight = dynamic_cast<StadiumLightEffect*>(obj.get());
+                if (stadiumLight->GetIsPulseOneCycleEnd()) {
+                    // PULSEが一周期終了したら他のオブジェクトのPULSEを開始
+                    for (auto& otherObj : objects_) {
+                        if (otherObj && otherObj.get() != obj.get()) {
+                            otherObj->SetIsPulseCycleStart(true);
+                        }
+                    }
+                 
+                    stadiumLight->SetIsPulseOneCycleEnd(false); // フラグリセット
+                }
+            }
         }
     }
 }
