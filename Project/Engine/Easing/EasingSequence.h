@@ -1,12 +1,13 @@
 #pragma once
 #include "EasingStep.h"
 #include <cassert>
+#include <functional>
 #include <memory>
 #include <vector>
 
 class EasingSequence {
 public:
-    EasingSequence() = default;
+    EasingSequence()  = default;
     ~EasingSequence() = default;
 
     template <typename T>
@@ -24,14 +25,18 @@ public:
     const IEasingStep* GetCurrentStep() const;
     IEasingStep* GetCurrentStep();
 
-    size_t GetCurrentIndex() const { return currentStep_; }
-    size_t GetStepCount() const { return steps_.size(); }
-    void SetLoop(bool loop) { loop_ = loop; }
     bool IsAllFinished() const;
     bool IsAllPlaying() const;
 
 private:
     std::vector<std::unique_ptr<IEasingStep>> steps_;
-    size_t currentStep_ = 0;
-    bool loop_          = false;
+    std::function<void()> onAllFinishCallback_ = nullptr;
+    size_t currentStep_                        = 0;
+    bool loop_                                 = false;
+
+public:
+    const size_t& GetCurrentIndex() const { return currentStep_; }
+    const size_t& GetStepCount() const { return steps_.size(); }
+    void SetLoop(const bool& loop) { loop_ = loop; }
+    void SetOnAllFinishCallback(std::function<void()> callBack) {onAllFinishCallback_ = callBack;}
 };

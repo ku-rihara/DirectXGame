@@ -133,7 +133,6 @@ void PutObjForBlender::ConvertJSONToObjects(const nlohmann::json& object) {
     }
 }
 
-
 void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, LevelData::ObjectData& objectData) {
 
     // 最大のGroup_idを見つける
@@ -155,6 +154,7 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
 
     // 必要なサイズを一度に確保して初期化
     size_t requiredSize = static_cast<size_t>(maxGroupId) + 1;
+    objectData.groupCount = requiredSize;
 
     // 現在のサイズより大きい場合のみリサイズ
     if (objectData.scalingEasing.size() < requiredSize) {
@@ -167,8 +167,6 @@ void PutObjForBlender::LoadEasingGroups(const nlohmann::json& easingGroups, Leve
         objectData.preScale.resize(requiredSize);
         objectData.preRotation.resize(requiredSize);
         objectData.preTranslation.resize(requiredSize);
-        objectData.onLoopEndCallbacks.resize(requiredSize);
-        objectData.previousStepIndices.resize(requiredSize, 0);
 
         // リサイズで追加された要素のみを初期化
         for (size_t i = 0; i < requiredSize; ++i) {
@@ -311,10 +309,9 @@ void PutObjForBlender::EasingAllReset() {
     currentTime_ = 0.0f;
 }
 
-
 void PutObjForBlender::AdaptEasing(LevelData::ObjectData& objectData, const int32_t& groupNum) {
     // グループ番号が有効範囲内かチェック
-    if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.preScale.size())) {
+    if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.groupCount)) {
         return;
     }
 
@@ -354,28 +351,12 @@ void PutObjForBlender::EmitterAllEdit() {
     }
 }
 
-void PutObjForBlender::DrawObject(LevelData::ObjectData& objectData, const ViewProjection& viewProjection) {
-    if (objectData.object3d) {
-        objectData.object3d->transform_.UpdateMatrix();
-        objectData.object3d->Draw(viewProjection);
-    }
-}
-
-void PutObjForBlender::DrawAll(const ViewProjection& viewProjection) {
-    if (!levelData_)
-        return;
-
-    for (auto& obj : levelData_->objects) {
-        DrawObject(obj, viewProjection);
-    }
-}
-
 
 void PutObjForBlender::EasingUpdateSelectGroup(const float& deltaTime, const int32_t& groupNum) {
     currentTime_ += deltaTime;
 
     for (auto& objectData : levelData_->objects) {
-        if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.easingStartTimes.size())) {
+        if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.groupCount)) {
             continue;
         }
 
@@ -394,9 +375,6 @@ void PutObjForBlender::EasingUpdateSelectGroup(const float& deltaTime, const int
             objectData.translationEasing[groupNum]->Update(deltaTime);
         }
 
-        // ループ終了の検知
-        CheckAndTriggerLoopEnd(objectData, groupNum);
-
         // PreValueをWorldTransformに適用
         AdaptEasing(objectData, groupNum);
     }
@@ -405,7 +383,7 @@ void PutObjForBlender::EasingUpdateSelectGroup(const float& deltaTime, const int
 void PutObjForBlender::EasingResetSelectGroup(const int32_t& groupNum) {
     for (auto& objectData : levelData_->objects) {
         // 指定されたグループが存在するかチェック
-        if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.scalingEasing.size())) {
+        if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.groupCount)) {
             continue;
         }
 
@@ -432,7 +410,7 @@ bool PutObjForBlender::GetIsEasingPlaying(const int32_t& groupNum) const {
 
     for (const auto& objectData : levelData_->objects) {
         // 指定されたグループが存在するかチェック
-        if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.scalingEasing.size())) {
+        if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.groupCount)) {
             continue;
         }
 
@@ -458,7 +436,7 @@ bool PutObjForBlender::GetIsEasingPlaying(const int32_t& groupNum) const {
 
     // 何かしら再生中
     return false;
- }
+}
 
 bool PutObjForBlender::GetIsEasingFinish(const int32_t& groupNum) const {
     if (!levelData_) {
@@ -467,7 +445,7 @@ bool PutObjForBlender::GetIsEasingFinish(const int32_t& groupNum) const {
 
     for (const auto& objectData : levelData_->objects) {
         // 指定されたグループが存在するかチェック
-        if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.scalingEasing.size())) {
+        if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.groupCount)) {
             continue;
         }
 
@@ -495,61 +473,42 @@ bool PutObjForBlender::GetIsEasingFinish(const int32_t& groupNum) const {
     return true;
 }
 
+void PutObjForBlender::SetLoopEndCallback(const int32_t& groupNum, const EasingAdaptTransform& transformType, const std::function<void()>& callback) {
+    for (const auto& objectData : levelData_->objects) {
+        // 指定されたグループが存在するかチェック
+        if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.groupCount)) {
+            continue;
+        }
 
-// ループ終了時のコールバック設定
-void PutObjForBlender::SetLoopEndCallback(const int32_t& groupNum, const std::function<void()>& callback) {
-    if (!levelData_)
-        return;
+        // いずれかのイージングが終了していない場合はFalseを返す
+        if (IsAdaptEasing(objectData, groupNum, transformType)) {
 
-    for (auto& objectData : levelData_->objects) {
-        if (groupNum >= 0 && groupNum < static_cast<int32_t>(objectData.onLoopEndCallbacks.size())) {
-            objectData.onLoopEndCallbacks[groupNum] = callback;
+            switch (transformType) {
+            case EasingAdaptTransform::Scale:
+                if (objectData.scalingEasing[groupNum]) {
+                    objectData.scalingEasing[groupNum]->SetOnAllFinishCallback(callback);
+                }
+                break;
+            case EasingAdaptTransform::Rotate:
+                if (objectData.rotationEasing[groupNum]) {
+                    objectData.rotationEasing[groupNum]->SetOnAllFinishCallback(callback);
+                }
+                break;
+            case EasingAdaptTransform::Translate:
+                if (objectData.translationEasing[groupNum]) {
+                    objectData.translationEasing[groupNum]->SetOnAllFinishCallback(callback);
+                }
+                break;
+            default:
+                break;
+            }
+          
         }
     }
 }
 
-
-// ループ終了の検知とトリガー
-void PutObjForBlender::CheckAndTriggerLoopEnd(LevelData::ObjectData& objectData, const int32_t& groupNum) {
-    if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.previousStepIndices.size())) {
-        return;
-    }
-
-    // いずれかのイージングシーケンスからステップインデックスを取得
-    size_t currentStepIndex = 0;
-    bool hasValidEasing     = false;
-
-    if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Scale) && objectData.scalingEasing[groupNum]) {
-        currentStepIndex = objectData.scalingEasing[groupNum]->GetCurrentIndex();
-        hasValidEasing   = true;
-    } else if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Rotate) && objectData.rotationEasing[groupNum]) {
-        currentStepIndex = objectData.rotationEasing[groupNum]->GetCurrentIndex();
-        hasValidEasing   = true;
-    } else if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Translate) && objectData.translationEasing[groupNum]) {
-        currentStepIndex = objectData.translationEasing[groupNum]->GetCurrentIndex();
-        hasValidEasing   = true;
-    }
-
-    if (!hasValidEasing) {
-        return;
-    }
-
-    size_t previousStepIndex = objectData.previousStepIndices[groupNum];
-
-    if (currentStepIndex < previousStepIndex) {
-        // コールバックが設定されていれば実行
-        if (objectData.onLoopEndCallbacks[groupNum]) {
-            objectData.onLoopEndCallbacks[groupNum]();
-        }
-    }
-
-    // 現在のステップインデックスを保存
-    objectData.previousStepIndices[groupNum] = currentStepIndex;
-}
-
-
-bool PutObjForBlender::IsAdaptEasing(const LevelData::ObjectData& objectData, const int32_t& groupNum, const EasingAdaptTransform& type)const {
-    if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.isAdaptEasing.size())) {
+bool PutObjForBlender::IsAdaptEasing(const LevelData::ObjectData& objectData, const int32_t& groupNum, const EasingAdaptTransform& type) const {
+    if (groupNum < 0 || groupNum >= static_cast<int32_t>(objectData.groupCount)) {
         return false;
     }
     return objectData.isAdaptEasing[groupNum][static_cast<int32_t>(type)];
