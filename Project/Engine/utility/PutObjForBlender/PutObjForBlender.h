@@ -82,5 +82,5 @@ public:
     bool GetIsEasingPlaying(const int32_t& groupNum) const;
 
     void SetLoopEndCallback(const int32_t& groupNum, const std::function<void()>& callback);
-    void SetLoopEndCallbackForObject(const size_t& objectIndex, const int32_t& groupNum, const std::function<void()>& callback);
+   
 };
