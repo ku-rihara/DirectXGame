@@ -115,6 +115,8 @@ void GameScene::Init() {
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 
     gameState_ = GameState::INTRO;
+
+    Frame::ResetDeltaTime();
 }
 
 void GameScene::Update() {

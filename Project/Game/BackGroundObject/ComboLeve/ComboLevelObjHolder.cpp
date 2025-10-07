@@ -18,14 +18,6 @@ void ComboLevelObjHolder::Update(const float& playSpeed) {
     }
 }
 
-void ComboLevelObjHolder::Draw(const ViewProjection& viewProjection) {
-    // 各オブジェクトの描画
-    for (auto& obj : objects_) {
-        if (obj) {
-            obj->Draw(viewProjection);
-        }
-    }
-}
 
 void ComboLevelObjHolder::Add(const ComboLevelObjType& type, const std::string& filename) {
     size_t index = ToIndex(type);

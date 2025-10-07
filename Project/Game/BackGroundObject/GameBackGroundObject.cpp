@@ -11,6 +11,3 @@ void GameBackGroundObject::Update(const float&playSpeed) {
     putObjForBlender_->EasingUpdateSelectGroup(playSpeed, 0);
 }
 
-void GameBackGroundObject::Draw(const ViewProjection& viewProjection) {
-    putObjForBlender_->DrawAll(viewProjection);
-}

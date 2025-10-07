@@ -17,8 +17,7 @@ public:
 
     virtual void Init(const std::string& filename) override;
     virtual void Update(const float& playSpeed) override;
-    virtual void Draw(const ViewProjection& viewProjection) override;
-
+  
     void EasingResetSelectGroup(const int32_t& groupNum);
     void EasingAllReset();
     bool GetIsEasingFinish(const int32_t& groupNum)const;

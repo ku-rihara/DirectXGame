@@ -11,7 +11,7 @@ void DirectionalLight::Init(ID3D12Device* device) {
     lightResource_->Map(0, nullptr, reinterpret_cast<void**>(&lightData_));
     lightData_->color = { 1.0f,1.0f,1.0f,1.0f };
     lightData_->direction = { 0.019f,-0.839f,-0.543f };
-    lightData_->intensity = 0.8f;
+    lightData_->intensity = 0.6f;
 }
 
 void DirectionalLight::SetDirection(const Vector3& direction) {

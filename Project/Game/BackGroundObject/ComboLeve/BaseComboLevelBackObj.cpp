@@ -3,8 +3,7 @@
 
 void BaseComboLevelBackObj::Init(const std::string& filename) {
     BaseBackGroundObject::Init(filename);
-
-    putObjForBlender_->EasingUpdateSelectGroup(Frame::DeltaTimeRate(), static_cast<int32_t>(ObjEffectMode::SPAWN));
+    putObjForBlender_->EasingUpdateSelectGroup(0.0f, static_cast<int32_t>(ObjEffectMode::SPAWN));
 }
 
 void BaseComboLevelBackObj::Update(const float& playSpeed) {
@@ -31,16 +30,13 @@ void BaseComboLevelBackObj::Update(const float& playSpeed) {
         // クローズが終わったらNONEへ
         if (putObjForBlender_->GetIsEasingFinish(static_cast<int32_t>(ObjEffectMode::CLOSE))) {
             putObjForBlender_->EasingAllReset();
+            putObjForBlender_->EasingUpdateSelectGroup(0.0f, static_cast<int32_t>(ObjEffectMode::SPAWN));
             effectMode_ = ObjEffectMode::NONE;
-            return;
+          
         }
     }
 
     putObjForBlender_->EasingUpdateSelectGroup(playSpeed, static_cast<int32_t>(effectMode_));
-}
-
-void BaseComboLevelBackObj::Draw(const ViewProjection& viewProjection) {
-    putObjForBlender_->DrawAll(viewProjection);
 }
 
 int32_t BaseComboLevelBackObj::ConvertEffectModeToInt(const ObjEffectMode& mode) {

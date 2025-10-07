@@ -17,8 +17,7 @@ public:
 
     void Init(const std::string& filename);
     void Update(const float& playSpeed);
-    void Draw(const ViewProjection& viewProjection);
-
+  
     size_t ToIndex(const ComboLevelObjType& type) const { return static_cast<size_t>(type); }
 
     // Easing制御

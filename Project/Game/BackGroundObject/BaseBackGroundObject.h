@@ -11,8 +11,7 @@ public:
 
     virtual void Init(const std::string& filename);
     virtual void Update(const float& playSpeed)             = 0;
-    virtual void Draw(const ViewProjection& viewProjection) = 0;
-
+   
 protected:
     std::unique_ptr<PutObjForBlender> putObjForBlender_;
 };
