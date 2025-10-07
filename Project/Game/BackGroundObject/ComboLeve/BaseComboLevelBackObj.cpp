@@ -22,6 +22,7 @@ void BaseComboLevelBackObj::Update(const float& playSpeed) {
 
         // スポーンが終わったらPULSEへ
         if (putObjForBlender_->GetIsEasingFinish(static_cast<int32_t>(ObjEffectMode::SPAWN))) {
+            putObjForBlender_->EasingAllReset();
             effectMode_ = ObjEffectMode::PULSE;
         }
     }

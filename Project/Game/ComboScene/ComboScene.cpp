@@ -38,7 +38,9 @@ void ComboScene::LevelUp() {
     pCombo_->LevelUp();
 
     // レベル対象のオブジェクトをスポーン
-    comboLevelObjHolder_->SetEffectMode(static_cast<ComboLevelObjType>(pCombo_->GetCurrentLevel() - levelOffset_), ObjEffectMode::SPAWN);
+    if (pCombo_->GetCurrentLevel() <= static_cast<int32_t>(ComboLevelObjType::COUNT)) {
+        comboLevelObjHolder_->SetEffectMode(static_cast<ComboLevelObjType>(pCombo_->GetCurrentLevel() - levelOffset_), ObjEffectMode::SPAWN);
+    }
 
     // チェックに戻す
     state_ = State::CHECK;
