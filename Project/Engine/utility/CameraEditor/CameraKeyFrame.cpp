@@ -46,17 +46,17 @@ void CameraKeyFrame::SaveData() {
     globalParameter_->SaveFile(groupName_, folderName_);
 }
 
-void CameraKeyFrame::Update() {
+void CameraKeyFrame::Update(const float& speedRate) {
     float actualDeltaTime;
     switch (static_cast<TimeMode>(timeMode_)) {
     case TimeMode::DELTA_TIME:
         // タイムスケール無視
-        actualDeltaTime = Frame::DeltaTime(); 
+        actualDeltaTime = Frame::DeltaTime() * speedRate; 
         break;
     case TimeMode::DELTA_TIME_RATE:
     default:
         // タイムスケール適用
-        actualDeltaTime = Frame::DeltaTimeRate();
+        actualDeltaTime = Frame::DeltaTimeRate() * speedRate;
         break;
     }
 

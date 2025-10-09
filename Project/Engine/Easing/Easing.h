@@ -34,7 +34,7 @@ public:
     void LoadAndApplyFromSavedJson();
 
     // イージング更新
-    void Update(float deltaTime);
+    void Update(const float& deltaTime);
 
     // 変数に適応
     void SetAdaptValue(T* value);

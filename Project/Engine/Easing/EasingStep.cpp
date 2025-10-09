@@ -32,7 +32,7 @@ void EasingStep<T>::ApplyFromJson(const std::string& fileName) {
 }
 
 template <typename T>
-void EasingStep<T>::Update( float deltaTime) {
+void EasingStep<T>::Update(const float& deltaTime) {
     easing_->Update(deltaTime);
 }
 

@@ -17,7 +17,7 @@ public:
     void AddStep(std::unique_ptr<Easing<T>> easing);
 
     void Reset();
-    void Update(float deltaTime);
+    void Update(const float& deltaTime);
 
     template <typename T>
     void SetBaseValue(const T& value);

@@ -18,7 +18,7 @@ public:
 
     /// 初期化
     void Init();
-    void Update(const float& deltaTime, const float& speedRate = 1.0f);
+    void Update(const float& speedRate = 1.0f);
 
     // Play, Stop, ForceReset
     void Play(const std::string& animationName);
@@ -52,13 +52,13 @@ public:
     // getter
     //--------------------------------------------------------------------------------------
     const std::string& GetAnimationName() const { return currentAnimationName_; }
-    Vector3 GetOffsetPosition() const { return currentOffsetPosition_; }
-    Vector3 GetOffsetRotation() const { return currentOffsetRotation_; }
-    float GetOffsetFov() const { return currentOffsetFov_; }
+  const Vector3& GetOffsetPosition() const { return currentOffsetPosition_; }
+  const Vector3& GetOffsetRotation() const { return currentOffsetRotation_; }
+  const float& GetOffsetFov() const { return currentOffsetFov_; }
 
     //--------------------------------------------------------------------------------------
     // setter
     //--------------------------------------------------------------------------------------
-    void SetAdapt(bool adapt) { isAdapt_ = adapt; }
+    void SetAdapt(const bool& adapt) { isAdapt_ = adapt; }
     void SetViewProjection(ViewProjection* viewProjection);
 };

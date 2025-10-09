@@ -13,7 +13,7 @@ public:
     ~CameraEditor() = default;
 
     void Init(ViewProjection* vp);
-    void Update(float deltaTime);
+    void Update();
     void EditorUpdate();
 
     void AllLoadFile();

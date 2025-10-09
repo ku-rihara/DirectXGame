@@ -63,7 +63,7 @@ void EasingSequence::Reset() {
     }
 }
 
-void EasingSequence::Update(float deltaTime) {
+void EasingSequence::Update(const float& deltaTime) {
     if (steps_.empty()) {
         return;
     }

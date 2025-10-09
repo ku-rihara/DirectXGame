@@ -22,7 +22,7 @@ public:
 
     /// 初期化
     void Init(const std::string& animationName);
-    void Update(const float& playSpeed);
+    void Update(const float& speedRate = 1.0f);
 
     /// ImGuiでの調整
     void AdjustParam();
@@ -41,7 +41,7 @@ public:
     void Pause();
     void Reset();
 
-    void UpdateActiveKeyFrames(const float& playSpeed);
+    void UpdateActiveKeyFrames(const float& speedRate = 1.0f);
 
     /// Load,Save
     void LoadData();
@@ -50,7 +50,6 @@ public:
     void SaveData();
 
 private:
-  
     void BindParams();
 
     // キーフレーム進行管理
@@ -60,6 +59,8 @@ private:
     // 補間値更新
     void UpdateInterpolatedValues();
     void StartReturnToInitial();
+
+    void TimeModeSelector(const char* label, int32_t& target);
 
 private:
     // GlobalParameter
@@ -113,8 +114,15 @@ private:
     Easing<Vector3> returnRotationEase_;
     Easing<float> returnFovEase_;
 
-public:
+    // timeMode
+    int32_t timeMode_ = static_cast<int32_t>(CameraKeyFrame::TimeMode::DELTA_TIME_RATE);
 
+    // TimeModeラベル
+    std::vector<const char*> TimeModeLabels = {
+        "DeltaTime (No TimeScale)",
+        "DeltaTimeRate (With TimeScale)"};
+
+public:
     //--------------------------------------------------------------------------------------
     // getter
     //--------------------------------------------------------------------------------------
@@ -127,7 +135,7 @@ public:
     const int32_t& GetLastCompletedKeyFrameIndex() const { return lastCompletedKeyFrameIndex_; }
     int32_t GetTotalKeyFrameCount() const { return static_cast<int32_t>(keyFrames_.size()); }
     const bool& IsReturningToInitial() const { return isReturningToInitial_; }
-  
+
     const int32_t& GetSelectedKeyFrameIndex() const { return selectedKeyFrameIndex_; }
     CameraKeyFrame* GetSelectedKeyFrame();
     const CameraKeyFrame* GetSelectedKeyFrame() const;
