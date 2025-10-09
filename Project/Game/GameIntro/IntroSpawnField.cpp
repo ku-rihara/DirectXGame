@@ -1,7 +1,6 @@
 #include "IntroSpawnField.h"
 #include "BackGroundObject/GameBackGroundObject.h"
 #include "FireInjectors/FireInjectors.h"
-#include "Frame/Frame.h"
 #include "GameCamera/GameCamera.h"
 #include "player/Player.h"
 #include "UI/HowToOperate.h"
@@ -10,8 +9,6 @@
 void IntroSpawnField::Init(const std::string& name) {
 
     BaseGameIntro::Init(name);
-
-   
 
     // 変数初期化
     step_             = Step::START;

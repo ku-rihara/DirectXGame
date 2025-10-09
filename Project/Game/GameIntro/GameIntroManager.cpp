@@ -40,7 +40,7 @@ void GameIntroManager::Update() {
     ProcessInput();
 
     // 再生スピード
-    float playSpeed = Frame::DeltaTime() * currentPlaySpeedRate_;
+    const float playSpeed = Frame::DeltaTime() * currentPlaySpeedRate_;
 
     // イントロ更新
     UpdateCurrentIntro(playSpeed);
