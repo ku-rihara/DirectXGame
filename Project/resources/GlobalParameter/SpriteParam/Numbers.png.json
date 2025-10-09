@@ -2,8 +2,8 @@
     "Numbers.png": {
         "layerNum": 0,
         "startAnchorPoint": [
-            1.0,
-            1.0
+            0.5,
+            0.5
         ],
         "startColor": [
             1.0,
@@ -12,8 +12,8 @@
             1.0
         ],
         "startPosition": [
-            0.0,
-            0.0
+            160.0,
+            110.0
         ],
         "startScale": [
             1.0,

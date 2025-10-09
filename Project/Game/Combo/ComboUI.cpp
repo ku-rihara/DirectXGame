@@ -7,9 +7,7 @@ void ComboUI::Init(const ComboDigit& digit) {
 
     /// Sprite create
     sprite_.reset(Sprite::Create("Number/Numbers.png"));
-    /*  sprite_->SetUVScale(Vector2(0.1f, 1.0f));
-      sprite_->SetAnchorPoint(Vector2(0.5f, 0.5f));*/
-
+   
     CreateGroupName(digit);
 
     isVisible_ = true;
@@ -19,7 +17,7 @@ void ComboUI::Update(const Vector2& scale, const float& alpha) {
 
     sprite_->SetIsDraw(isVisible_);
 
-    sprite_->transform_.pos   = position_;
+  
     sprite_->transform_.scale = (Vector2(scale.x * 0.1f, scale.y));
     sprite_->uvTransform_.pos = (Vector2(uvPosX_, 0.0f));
     sprite_->SetAlpha(alpha);
