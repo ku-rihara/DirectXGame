@@ -56,7 +56,7 @@ void GameScene::Update() {
 
     // 各クラス更新
     ground_->Update();
-    cameraEditor_->Update(Frame::DeltaTime());
+    cameraEditor_->Update();
     shakeEditor_->Update(Frame::DeltaTime());
     timeScaleController_->Update(Frame::DeltaTime());
     monsterBall_->Update();

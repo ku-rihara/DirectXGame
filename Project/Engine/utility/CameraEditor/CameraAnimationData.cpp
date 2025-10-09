@@ -1,6 +1,7 @@
 #include "CameraAnimationData.h"
 #undef min
 #undef max
+#include "Frame/Frame.h"
 #include <algorithm>
 #include <cmath>
 #include <filesystem>
@@ -91,7 +92,7 @@ void CameraAnimationData::LoadAllKeyFrames() {
         for (const auto& [index, fileName] : keyFrameFiles) {
             auto newKeyFrame = std::make_unique<CameraKeyFrame>();
             newKeyFrame->Init(groupName_, index);
-            newKeyFrame->LoadData(); //Load
+            newKeyFrame->LoadData(); // Load
             keyFrames_.push_back(std::move(newKeyFrame));
         }
 
@@ -105,7 +106,7 @@ void CameraAnimationData::LoadAllKeyFrames() {
         }
     }
 }
-void CameraAnimationData::Update(const float& playSpeed) {
+void CameraAnimationData::Update(const float& speedRate) {
     // 再生中の更新
     if (playState_ != PlayState::PLAYING) {
         return;
@@ -115,13 +116,13 @@ void CameraAnimationData::Update(const float& playSpeed) {
     UpdateKeyFrameProgression();
 
     // アクティブなキーフレームのみ更新
-    UpdateActiveKeyFrames(playSpeed);
+    UpdateActiveKeyFrames(speedRate);
 
     // 補間値の更新
     UpdateInterpolatedValues();
 }
 
-void CameraAnimationData::UpdateActiveKeyFrames(const float& playSpeed) {
+void CameraAnimationData::UpdateActiveKeyFrames(const float& speedRate) {
     if (keyFrames_.empty()) {
         return;
     }
@@ -129,10 +130,23 @@ void CameraAnimationData::UpdateActiveKeyFrames(const float& playSpeed) {
     // 初期値に戻るイージング
     if (isReturningToInitial_) {
 
-        float scaledDeltaTime = playSpeed;
-        returnPositionEase_.Update(scaledDeltaTime);
-        returnRotationEase_.Update(scaledDeltaTime);
-        returnFovEase_.Update(scaledDeltaTime);
+        float actualDeltaTime = 0.0f;
+        switch (static_cast<CameraKeyFrame::TimeMode>(timeMode_)) {
+        case CameraKeyFrame::TimeMode::DELTA_TIME:
+            // タイムスケール無視
+            actualDeltaTime = Frame::DeltaTime() * speedRate;
+            break;
+        case CameraKeyFrame::TimeMode::DELTA_TIME_RATE:
+            // タイムスケール適用
+            actualDeltaTime = Frame::DeltaTimeRate() * speedRate;
+            break;
+        default:
+
+            break;
+        }
+        returnPositionEase_.Update(actualDeltaTime);
+        returnRotationEase_.Update(actualDeltaTime);
+        returnFovEase_.Update(actualDeltaTime);
 
         // イージングが完了したかチェック
         if (returnPositionEase_.IsFinished() && returnRotationEase_.IsFinished() && returnFovEase_.IsFinished()) {
@@ -145,7 +159,7 @@ void CameraAnimationData::UpdateActiveKeyFrames(const float& playSpeed) {
 
     // 現在のアクティブキーフレームを更新
     if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
-        keyFrames_[activeKeyFrameIndex_]->Update();
+        keyFrames_[activeKeyFrameIndex_]->Update(speedRate);
     }
 }
 
@@ -335,6 +349,7 @@ void CameraAnimationData::BindParams() {
     globalParameter_->Bind(groupName_, "resetRotateEaseType", &resetRotateEaseType_);
     globalParameter_->Bind(groupName_, "resetFovEaseType", &resetFovEaseType_);
     globalParameter_->Bind(groupName_, "resetTimePoint", &resetTimePoint_);
+    globalParameter_->Bind(groupName_, "timeMode", &timeMode_);
 }
 
 void CameraAnimationData::AdjustParam() {
@@ -382,6 +397,9 @@ void CameraAnimationData::AdjustParam() {
     EasingTypeSelector("Easing Type Position", resetPosEaseType_);
     EasingTypeSelector("Easing Type Rotate", resetRotateEaseType_);
     EasingTypeSelector("Easing Type Fov", resetFovEaseType_);
+
+    ImGui::SeparatorText("deltaTime");
+    TimeModeSelector("Time Mode", timeMode_);
 
     ImGui::SeparatorText("keyFrameEdit");
     // キーフレームリスト
@@ -510,4 +528,11 @@ const CameraKeyFrame* CameraAnimationData::GetSelectedKeyFrame() const {
 
 bool CameraAnimationData::IsPlaying() const {
     return playState_ == PlayState::PLAYING;
+}
+
+void CameraAnimationData::TimeModeSelector(const char* label, int32_t& target) {
+    int mode = static_cast<int>(target);
+    if (ImGui::Combo(label, &mode, TimeModeLabels.data(), static_cast<int>(TimeModeLabels.size()))) {
+        target = mode;
+    }
 }

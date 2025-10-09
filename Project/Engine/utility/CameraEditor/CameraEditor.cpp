@@ -1,6 +1,4 @@
 #include "CameraEditor.h"
-#include "Frame/Frame.h"
-#include <algorithm>
 #include <filesystem>
 #include <imgui.h>
 
@@ -47,9 +45,9 @@ void CameraEditor::AddAnimation(const std::string& animationName) {
     animations_.push_back(std::move(anime));
 }
 
-void CameraEditor::Update(float deltaTime) {
+void CameraEditor::Update() {
     for (auto& cAnime : animations_) {
-        cAnime->Update(deltaTime);
+        cAnime->Update();
     }
 
     // 自動でViewProjectionに適用

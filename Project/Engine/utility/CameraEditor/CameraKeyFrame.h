@@ -24,7 +24,7 @@ public:
     ~CameraKeyFrame() = default;
 
     void Init(const std::string& cameraAnimationName, const int32_t& keyNumber);
-    void Update();
+    void Update(const float&speedRate);
 
     // paramEdit
     void EasingTypeSelector(const char* label, int32_t& target);
@@ -65,7 +65,7 @@ private:
     Easing<float> fovEase_;
 
     // TimeModeラベル
-    static inline std::vector<const char*> TimeModeLabels = {
+    std::vector<const char*> TimeModeLabels = {
         "DeltaTime (No TimeScale)",
         "DeltaTimeRate (With TimeScale)"};
 
@@ -73,13 +73,13 @@ public:
     //--------------------------------------------------------------------------------------
     // getter
     //--------------------------------------------------------------------------------------
-   const  float& GetTimePoint() const { return timePoint_; }
+    const float& GetTimePoint() const { return timePoint_; }
     const Vector3& GetPosition() const { return currentKeyFrameParam_.position; }
-   const Vector3& GetRotation() const { return currentKeyFrameParam_.rotation; }
+    const Vector3& GetRotation() const { return currentKeyFrameParam_.rotation; }
     const float& GetFov() const { return currentKeyFrameParam_.fov; }
-   const Vector3& GetEditPosition() const { return keyFrameParam_.position; }
+    const Vector3& GetEditPosition() const { return keyFrameParam_.position; }
     const Vector3& GetEditRotation() const { return keyFrameParam_.rotation; }
-   const float& GetEditFov() const { return keyFrameParam_.fov; }
+    const float& GetEditFov() const { return keyFrameParam_.fov; }
     const TimeMode& GetTimeMode() const { return static_cast<TimeMode>(timeMode_); }
 
     //--------------------------------------------------------------------------------------
