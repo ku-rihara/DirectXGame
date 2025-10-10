@@ -1,6 +1,5 @@
 #pragma once
 #include "3d/Object3d.h"
-#include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
 
 // std
@@ -9,7 +8,7 @@
 class BaseObject {
 protected:
     /// ===================================================
-    ///  protected variaus
+    ///  protected variables
     /// ===================================================
 
     // モデル配列データ
