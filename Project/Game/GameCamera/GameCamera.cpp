@@ -30,9 +30,9 @@ void GameCamera::Init() {
     rendition_->SetViewProjection(&viewProjection_);
 }
 
-void GameCamera::Update(const float& cameraPlaySpeed) {
+void GameCamera::Update(const float& speedRate) {
   
-    rendition_->Update(cameraPlaySpeed);
+    rendition_->Update(speedRate);
     shakeOffsetPos_ = rendition_->GetShakeOffset();
 
     // カメラの基本移動処理
