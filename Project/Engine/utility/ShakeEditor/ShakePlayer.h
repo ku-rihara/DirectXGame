@@ -28,5 +28,5 @@ private:
     Vector3 totalShakeOffset_ = {0.0f, 0.0f, 0.0f};
 
 public:
-    Vector3 GetTotalShakeOffset() const { return totalShakeOffset_; }
+   const Vector3& GetTotalShakeOffset() const { return totalShakeOffset_; }
 };
