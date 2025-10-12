@@ -91,6 +91,10 @@ void GPUParticleManager::DispatchInitParticle(GPUParticleGroup& group) {
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
     CSPipelineManager* csPipe              = CSPipelineManager::GetInstance();
 
+    //  デスクリプタヒープを設定
+    ID3D12DescriptorHeap* descriptorHeaps[] = {srvManager_->GetDescriptorHeap()};
+    commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+
     // InitParticleパス
     csPipe->PreDraw(CSPipelineType::Particle_Init, commandList);
 
@@ -129,7 +133,6 @@ void GPUParticleManager::InitializeGroupResources(GPUParticleGroup& group) {
         group.emitSphereData->emit          = 0;
     }
 
-    // Note: エミッターは別途GPUParticleEmitter::CreateParticle()で作成される
 }
 
 void GPUParticleManager::SetModel(const std::string& name, const std::string& modelName) {
@@ -203,6 +206,10 @@ void GPUParticleManager::DispatchComputeShaders(GPUParticleGroup& group) {
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
     CSPipelineManager* csPipe              = CSPipelineManager::GetInstance();
 
+    //  デスクリプタヒープを設定
+    ID3D12DescriptorHeap* descriptorHeaps[] = {srvManager_->GetDescriptorHeap()};
+    commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+
     // エミットパス
     csPipe->PreDraw(CSPipelineType::Particle_Emit, commandList);
 
@@ -223,7 +230,6 @@ void GPUParticleManager::DispatchComputeShaders(GPUParticleGroup& group) {
     barrier.UAV.pResource          = group.resourceCreator->GetParticleResource();
     commandList->ResourceBarrier(1, &barrier);
 }
-
 void GPUParticleManager::Draw(const ViewProjection& viewProjection) {
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
     PipelineManager* pipe                  = PipelineManager::GetInstance();
@@ -261,19 +267,11 @@ void GPUParticleManager::Draw(const ViewProjection& viewProjection) {
 void GPUParticleManager::DrawGroup(GPUParticleGroup& group) {
     if (group.model) {
         // モデル描画
-        group.model->DrawInstancing(
-            group.maxParticleCount,
-            group.resourceCreator->GetParticleSrvHandle(),
-            &group.material,
-            group.textureHandle);
+        group.model->DrawInstancing(group.maxParticleCount);
 
     } else if (group.primitive_ && group.primitive_->GetMesh()) {
         // プリミティブ描画
-        group.primitive_->GetMesh()->DrawInstancing(
-            group.maxParticleCount,
-            group.resourceCreator->GetParticleSrvHandle(),
-            &group.material,
-            group.textureHandle);
+        group.primitive_->GetMesh()->DrawInstancing(group.maxParticleCount);
     }
 }
 

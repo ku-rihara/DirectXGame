@@ -70,9 +70,7 @@ public:
         Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material, const SkinCluster& skinCluster,
         const std::optional<uint32_t>& textureHandle = std::nullopt); /// モデル描画
 
-    void DrawInstancing(
-        const uint32_t& instanceNum, const D3D12_GPU_DESCRIPTOR_HANDLE& instancingGUPHandle, BaseMaterial* material,
-        const std::optional<uint32_t>&  textureHandle = std::nullopt); /// モデルバーティクル
+    void DrawInstancing(const uint32_t& instanceNum); 
 
     void DrawForShadowMap(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap);
 

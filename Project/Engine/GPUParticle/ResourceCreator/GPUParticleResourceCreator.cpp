@@ -14,8 +14,7 @@ void GPUParticleResourceCreator::Create() {
 void GPUParticleResourceCreator::CreateParticleResource() {
     // ParticleCS用のBufferを作成
     particleResource_ = dxCommon_->CreateBufferResource(
-        dxCommon_->GetDevice(),
-        sizeof(ParticleCS) * particleMaxCount_,
+        dxCommon_->GetDevice(),sizeof(ParticleCS) * particleMaxCount_,
         ViewType::UnorderedAccess);
 
     // UAV作成

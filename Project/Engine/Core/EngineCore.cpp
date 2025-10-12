@@ -18,7 +18,8 @@
 /// audio,input
 #include "audio/Audio.h"
 #include "input/Input.h"
-/// utility
+/// particle
+#include "GPUParticle/GPUParticleManager.h"
 #include "utility/ParticleEditor/ParticleManager.h"
 /// imGui,function
 #include "function/Convert.h"
@@ -29,7 +30,7 @@
 ///=======================================================================
 /// 初期化
 ///========================================================================
-void EngineCore::Initialize(const char* title, int width, int height) {
+void EngineCore::Initialize(const char* title, const int& width, const int& height) {
     // ゲームウィンドウの作成
     std::string windowTitle = std::string(title);
     auto&& titleString      = ConvertString(windowTitle);
@@ -78,7 +79,12 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     PostEffectRenderer_->Init(directXCommon_);
 
     // ParticlePipeline
-    ParticleManager::GetInstance()->Init(srvManager_);
+    particleManager_ = ParticleManager::GetInstance();
+    particleManager_->Init(srvManager_);
+
+    // GPU Particle
+    gpuParticleManager_ = GPUParticleManager::GetInstance();
+    gpuParticleManager_->Init(srvManager_);
 
     // ModelManager
     modelManager_ = ModelManager::GetInstance();
@@ -88,8 +94,8 @@ void EngineCore::Initialize(const char* title, int width, int height) {
     light_->Init(directXCommon_);
 
     // ImGuiManager
-    imguiManager_ = ImGuiManager::GetInstance();
-    imguiManager_->Init(winApp_.get(), directXCommon_, srvManager_);
+    imGuiManager_ = ImGuiManager::GetInstance();
+    imGuiManager_->Init(winApp_.get(), directXCommon_, srvManager_);
 
     // Input
     input_ = Input::GetInstance();
@@ -112,7 +118,7 @@ int EngineCore::ProcessMessage() {
 ///========================================================================
 void EngineCore::BeginFrame() {
 #ifdef _DEBUG
-    imguiManager_->Begin();
+    imGuiManager_->Begin();
 #endif
     input_->Update();
     light_->Update();
@@ -138,8 +144,8 @@ void EngineCore::PreDraw() {
 void EngineCore::EndFrame() {
 #ifdef _DEBUG
 
-    imguiManager_->preDraw();
-    imguiManager_->Draw();
+    imGuiManager_->preDraw();
+    imGuiManager_->Draw();
 #endif
 
     directXCommon_->PostDraw();
@@ -157,6 +163,6 @@ void EngineCore::Finalize() {
     modelManager_->Finalize();
 
 #ifdef _DEBUG
-    imguiManager_->Finalizer();
+    imGuiManager_->Finalizer();
 #endif
 }

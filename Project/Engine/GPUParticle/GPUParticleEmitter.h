@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-class GPUParticleManager;
+
 enum class PrimitiveType;
 
 class GPUParticleEmitter {
@@ -29,7 +29,6 @@ public:
 
 private:
     void InitWithModel(const std::string& name,const std::string& modelFilePath, const int32_t& maxCount);
-
     void InitWithPrimitive(const std::string& name,const PrimitiveType& type,const int32_t& maxCount);
 
 private:

@@ -21,6 +21,7 @@ private:
     void CreateParticleResource();
     void CreateEmitterResource();
     void CreatePerViewResource();
+     
 
 private:
     DirectXCommon* dxCommon_;

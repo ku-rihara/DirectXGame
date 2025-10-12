@@ -61,7 +61,7 @@ void SpriteRegistry::DrawAll() {
     PipelineManager::GetInstance()->PreDraw(PipelineType::Sprite, DirectXCommon::GetInstance()->GetCommandList());
 
     std::vector<Sprite*> sortedSprites(sprites_.begin(), sprites_.end());
-    // ソート
+    // レイヤー番号順にソート
     std::sort(sortedSprites.begin(), sortedSprites.end(), [](Sprite* a, Sprite* b) {
         if (a == nullptr || b == nullptr)
             return false;

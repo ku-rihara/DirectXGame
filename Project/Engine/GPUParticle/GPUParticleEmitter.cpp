@@ -73,7 +73,7 @@ void GPUParticleEmitter::Update() {
         return;
     }
 
-    // タイミング更新 (ParticleEmitterと同様)
+    // タイミング更新 
     currentTime_ += Frame::DeltaTime();
 
     // エミットタイミングチェック
