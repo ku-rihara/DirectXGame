@@ -76,6 +76,8 @@ void GPUParticleManager::CreatePrimitiveParticle(
         group.primitive_->Create();
     }
 
+    group.textureHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
+
     // リソース作成
     InitializeGroupResources(group);
 
@@ -132,7 +134,6 @@ void GPUParticleManager::InitializeGroupResources(GPUParticleGroup& group) {
         group.emitSphereData->frequencyTime = 0.0f;
         group.emitSphereData->emit          = 0;
     }
-
 }
 
 void GPUParticleManager::SetModel(const std::string& name, const std::string& modelName) {
@@ -256,8 +257,7 @@ void GPUParticleManager::Draw(const ViewProjection& viewProjection) {
         group.material.SetCommandList(commandList);
 
         // t0(PS): テクスチャ
-        commandList->SetGraphicsRootDescriptorTable(3,
-            srvManager_->GetGPUDescriptorHandle(group.textureHandle));
+        commandList->SetGraphicsRootDescriptorTable(3, srvManager_->GetGPUDescriptorHandle(group.textureHandle));
 
         // 描画
         DrawGroup(group);

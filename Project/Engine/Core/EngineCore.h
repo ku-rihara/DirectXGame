@@ -11,7 +11,6 @@ class SrvManager;
 class Audio;
 class Input;
 class PostEffectRenderer;
-class SkyBoxRenderer;
 class RtvManager;
 class Light;
 class DsvManager;
@@ -62,7 +61,6 @@ public:
      SrvManager* srvManager_;
      Audio* audio_;
      Input* input_;
-     SkyBoxRenderer* skyBoxRenderer_;
      RtvManager* rtvManager_;
      PostEffectRenderer* PostEffectRenderer_;
      Light* light_;

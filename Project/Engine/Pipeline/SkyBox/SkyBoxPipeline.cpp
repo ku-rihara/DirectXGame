@@ -1,27 +1,17 @@
-#include "SkyBoxRenderer.h"
-// Function
+#include "SkyBoxPipeline.h"
+#include "Dx/DxCompiler.h"
 #include "function/Log.h"
-#include"TextureManager.h"
-#include"Dx/DxCompiler.h"
+#include "Material/ModelMaterial.h"
+#include "base/TextureManager.h"
 #include <cassert>
 #include <string>
 
-SkyBoxRenderer* SkyBoxRenderer::GetInstance() {
-    static SkyBoxRenderer instance;
-    return &instance;
-}
-
-void SkyBoxRenderer::Init(DirectXCommon* dxCommon) {
-
-    // 引数で受けとる
-    dxCommon_ = dxCommon;
-    // グラフィックスパイプラインの生成
-    CreateGraphicsPipeline();
-
+void SkyBoxPipeline::Init(DirectXCommon* dxCommon) {
+    BasePipeline::Init(dxCommon);
     environmentalMapTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/output.dds");
 }
 
-void SkyBoxRenderer::CreateGraphicsPipeline() {
+void SkyBoxPipeline::CreateGraphicsPipeline() {
 
     HRESULT hr = 0;
 
@@ -39,28 +29,28 @@ void SkyBoxRenderer::CreateGraphicsPipeline() {
     // InputLayoutの設定を行う
     D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
 
-    inputElementDescs[0].SemanticName             = "POSITION";
-    inputElementDescs[0].SemanticIndex            = 0;
-    inputElementDescs[0].Format                   = DXGI_FORMAT_R32G32B32A32_FLOAT;
-    inputElementDescs[0].AlignedByteOffset        = D3D12_APPEND_ALIGNED_ELEMENT;
+    inputElementDescs[0].SemanticName      = "POSITION";
+    inputElementDescs[0].SemanticIndex     = 0;
+    inputElementDescs[0].Format            = DXGI_FORMAT_R32G32B32A32_FLOAT;
+    inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
-    inputElementDescs[1].SemanticName             = "TEXCOORD";
-    inputElementDescs[1].SemanticIndex            = 0;
-    inputElementDescs[1].Format                   = DXGI_FORMAT_R32G32_FLOAT;
-    inputElementDescs[1].AlignedByteOffset        = D3D12_APPEND_ALIGNED_ELEMENT;
+    inputElementDescs[1].SemanticName      = "TEXCOORD";
+    inputElementDescs[1].SemanticIndex     = 0;
+    inputElementDescs[1].Format            = DXGI_FORMAT_R32G32_FLOAT;
+    inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
-    inputElementDescs[2].SemanticName             = "NORMAL";
-    inputElementDescs[2].SemanticIndex            = 0;
-    inputElementDescs[2].Format                   = DXGI_FORMAT_R32G32B32_FLOAT;
-    inputElementDescs[2].AlignedByteOffset        = D3D12_APPEND_ALIGNED_ELEMENT;
+    inputElementDescs[2].SemanticName      = "NORMAL";
+    inputElementDescs[2].SemanticIndex     = 0;
+    inputElementDescs[2].Format            = DXGI_FORMAT_R32G32B32_FLOAT;
+    inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
     D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
     inputLayoutDesc.pInputElementDescs = inputElementDescs;
     inputLayoutDesc.NumElements        = _countof(inputElementDescs);
 
-    ////BlendStateの設定
+    // BlendStateの設定
     D3D12_BLEND_DESC blendDesc{};
-    ////すべての色要素を書き込む
+    // すべての色要素を書き込む
     blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
     blendDesc.RenderTarget[0].BlendEnable           = TRUE;
     blendDesc.RenderTarget[0].SrcBlend              = D3D12_BLEND_SRC_ALPHA;
@@ -77,7 +67,7 @@ void SkyBoxRenderer::CreateGraphicsPipeline() {
     // 三角形の色を塗りつぶす
     rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
-    // DepthStencilStateの設定-------------------------------------
+    // DepthStencilStateの設定
     // Depthの機能を有効化する
     depthStencilDesc_.DepthEnable = true;
     // 書き込みする
@@ -86,12 +76,13 @@ void SkyBoxRenderer::CreateGraphicsPipeline() {
     depthStencilDesc_.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
     // Shaderをコンパイルする
-    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/SkyBox.VS.hlsl",L"vs_6_0");
+    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/SkyBox.VS.hlsl", L"vs_6_0");
     assert(vertexShaderBlob_ != nullptr);
 
-    pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/SkyBox.PS.hlsl",L"ps_6_0");
+    pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/SkyBox.PS.hlsl", L"ps_6_0");
+    assert(pixelShaderBlob_ != nullptr);
 
-    // PSO作成用関数
+    // PSO作成
     D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc = {};
     graphicsPipelineStateDesc.pRootSignature                     = rootSignature_.Get();
     graphicsPipelineStateDesc.InputLayout                        = inputLayoutDesc;
@@ -110,15 +101,8 @@ void SkyBoxRenderer::CreateGraphicsPipeline() {
     hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&pipelineState_));
     assert(SUCCEEDED(hr));
 }
-void SkyBoxRenderer::CreateRootSignature() {
-    HRESULT hr = 0;
 
-    // Static Sampler 設定
-    D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
-    descriptionRootSignature.Flags             = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-    descriptionRootSignature.pStaticSamplers   = staticSamplers_;
-    descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers_);
-
+void SkyBoxPipeline::CreateRootSignature() {
     // SRV (TextureCube) 用の descriptor range
     D3D12_DESCRIPTOR_RANGE descriptorRange{};
     descriptorRange.BaseShaderRegister                = 0; // t0
@@ -126,55 +110,48 @@ void SkyBoxRenderer::CreateRootSignature() {
     descriptorRange.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
     descriptorRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-    // RootParameters 最小構成（Material, Transform, Texture）
+    // RootParameters
     D3D12_ROOT_PARAMETER rootParameters[3] = {};
 
-    // Material（PixelShader）→ b0
+    // Material（PixelShader）
     rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[0].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[0].Descriptor.ShaderRegister = 0;
 
-    // TransformationMatrix（VertexShader）→ b0
+    // TransformationMatrix（VertexShader）
     rootParameters[1].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[1].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
     rootParameters[1].Descriptor.ShaderRegister = 0;
 
-    // TextureCube（PixelShader）→ t0（DescriptorTable）
+    // TextureCube（PixelShader）
     rootParameters[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[2].DescriptorTable.pDescriptorRanges   = &descriptorRange;
     rootParameters[2].DescriptorTable.NumDescriptorRanges = 1;
 
-    descriptionRootSignature.pParameters   = rootParameters;
-    descriptionRootSignature.NumParameters = _countof(rootParameters);
+    // Root Signature Description
+    D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
+    descriptionRootSignature.Flags             = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+    descriptionRootSignature.pParameters       = rootParameters;
+    descriptionRootSignature.NumParameters     = _countof(rootParameters);
+    descriptionRootSignature.pStaticSamplers   = staticSamplers_;
+    descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers_);
 
-    // シリアライズ
-    signatureBlob_ = nullptr;
-    errorBlob_     = nullptr;
-    hr             = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1,
-                    &signatureBlob_, &errorBlob_);
-
-    if (FAILED(hr)) {
-        Log(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
-        assert(false);
-    }
-
-    // ルートシグネチャ生成
-    hr = dxCommon_->GetDevice()->CreateRootSignature(
-        0, signatureBlob_->GetBufferPointer(), signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
-    assert(SUCCEEDED(hr));
+    // シリアライズしてバイナリにする
+    SerializeAndCreateRootSignature(descriptionRootSignature);
 }
 
-void SkyBoxRenderer::PreDraw(ID3D12GraphicsCommandList* commandList) {
-    // RootSignatureを設定
+void SkyBoxPipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
     commandList->SetPipelineState(pipelineState_.Get());
 }
 
-void SkyBoxRenderer::SetPiplelineState(ID3D12GraphicsCommandList* commandList) {
-    commandList->SetPipelineState(pipelineState_.Get());
+void SkyBoxPipeline::PreBlendSet(ID3D12GraphicsCommandList* commandList, const BlendMode& blendMode) {
+    // SkyBoxは単一のブレンドモードのみ使用
+    blendMode;
+    commandList;
 }
 
-void SkyBoxRenderer::SetEnvironmentalMapTextureHandle(const std::string& texture) {
+void SkyBoxPipeline::SetEnvironmentalMapTextureHandle(const std::string& texture) {
     environmentalMapTextureHandle_ = TextureManager::GetInstance()->LoadTexture(texture);
- }
+}

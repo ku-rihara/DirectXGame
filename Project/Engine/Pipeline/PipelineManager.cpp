@@ -8,6 +8,7 @@
 #include "Pipeline/ShadowMap/ShadowMapPipeline.h"
 #include "Pipeline/Skinning/SkinningObject3DPipeline.h"
 #include "Pipeline/Sprite/SpritePipeline.h"
+#include"Pipeline/SkyBox/SkyBoxPipeline.h"
 
 #include "Dx/DirectXCommon.h"
 #include <cassert>
@@ -30,6 +31,7 @@ void PipelineManager::Init(DirectXCommon* dxCommon) {
     pipelines_[static_cast<size_t>(PipelineType::GPUParticle)]      = std::make_unique<GPUParticlePipeline>();
     pipelines_[static_cast<size_t>(PipelineType::ShadowMap)]        = std::make_unique<ShadowMapPipeline>();
     pipelines_[static_cast<size_t>(PipelineType::Line3D)]           = std::make_unique<Line3DPipeline>();
+    pipelines_[static_cast<size_t>(PipelineType::SkyBox)]           = std::make_unique<SkyBoxPipeline>();
 
     // 全パイプラインを作成・初期化
     for (size_t i = 0; i < static_cast<size_t>(PipelineType::Count); ++i) {

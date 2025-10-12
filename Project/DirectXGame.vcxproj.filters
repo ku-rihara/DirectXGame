@@ -307,6 +307,12 @@
     <Filter Include="MyEngine\.h\GPUParticle\ResourceCreator">
       <UniqueIdentifier>{00ef74a7-6b08-427e-8cd8-e40d2599bd7a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.h\Pipeline\SkyBox">
+      <UniqueIdentifier>{a3f5d430-ae61-4fa0-9c39-eb32dd1a8a2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Pileline\SkyBox">
+      <UniqueIdentifier>{7292d38d-6fd7-4091-a848-0f04f8b9aa65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -510,9 +516,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Primitive\PrimitiveBox.cpp">
       <Filter>MyEngine\.cpp\Primitive</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\SkyBoxRenderer.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
     <ClCompile Include="Game\SkyBox\SkyBox.cpp">
       <Filter>Game\SkyBox</Filter>
@@ -751,6 +754,9 @@
     <ClCompile Include="Engine\Material\GPUParticleMaterial.cpp">
       <Filter>MyEngine\.cpp\Material</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Pipeline\SkyBox\SkyBoxPipeline.cpp">
+      <Filter>MyEngine\.cpp\Pileline\SkyBox</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -986,9 +992,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Primitive\PrimitiveBox.h">
       <Filter>MyEngine\.h\Primitive</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\SkyBoxRenderer.h">
-      <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
     <ClInclude Include="Game\SkyBox\SkyBox.h">
       <Filter>Game\SkyBox</Filter>
@@ -1244,6 +1247,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Material\GPUParticleMaterial.h">
       <Filter>MyEngine\.h\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Pipeline\SkyBox\SkyBoxPipeline.h">
+      <Filter>MyEngine\.h\Pipeline\SkyBox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

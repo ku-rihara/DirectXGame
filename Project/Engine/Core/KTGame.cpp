@@ -7,8 +7,7 @@
 #include "Scene/Factory/SceneFactory.h"
 #include "utility/ParticleEditor/ParticleManager.h"
 #include"GPUParticle/GPUParticleManager.h"
-// renderer
-#include "base/SkyBoxRenderer.h"
+
 // utility
 #include "Collider/CollisionManager.h"
 
@@ -40,13 +39,11 @@ void KTGame::Update() {
 // =============================================================
 void KTGame::Draw() {
 
-    /// commandList取得
-    ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+ 
     const ViewProjection& viewProjection   = pSceneManager_->GetScene()->GetViewProjection();
     // --------------------------------------------------------------------------
     /// SkyBox描画
     // --------------------------------------------------------------------------
-    SkyBoxRenderer::GetInstance()->PreDraw(commandList);
     /// ゲームシーン描画
     pSceneManager_->SkyBoxDraw();
 
@@ -62,7 +59,7 @@ void KTGame::Draw() {
     ParticleManager::GetInstance()->Draw(viewProjection);
     // GPUパーティクル描画
     GPUParticleManager::GetInstance()->Draw(viewProjection);
-
+   
     /// コリジョン描画
     collisionManager_->Draw(viewProjection);
 

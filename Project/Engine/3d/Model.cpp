@@ -4,13 +4,14 @@
 #include <assimp/postprocess.h>
 //
 // class
-#include "base/SkyBoxRenderer.h"
 #include "base/TextureManager.h"
 #include "Dx/DxRenderTarget.h"
 #include "Lighrt/Light.h"
+#include "Material/BaseMaterial.h"
+#include "Pipeline/PipelineManager.h"
+#include "Pipeline/SkyBox/SkyBoxPipeline.h"
 #include "ShadowMap/ShadowMap.h"
 #include <filesystem>
-#include "Material/BaseMaterial.h"
 
 void ModelCommon::Init(DirectXCommon* dxCommon) {
     dxCommon_ = dxCommon;
@@ -184,7 +185,7 @@ void Model::DebugImGui() {
 #endif
 }
 
-void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap,  ModelMaterial material, 
+void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material,
     const std::optional<uint32_t>& textureHandle) {
 
     auto commandList = dxCommon_->GetCommandList();
@@ -207,8 +208,12 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Shado
         commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureIndex_));
     }
 
-    uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
-    commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
+    // 環境マップ
+    BasePipeline* skyBoxPipeline = PipelineManager::GetInstance()->GetPipeline(PipelineType::SkyBox);
+    if (SkyBoxPipeline* skyBoxPipe = dynamic_cast<SkyBoxPipeline*>(skyBoxPipeline)) {
+        uint32_t environmentalMapTexture = skyBoxPipe->GetEnvironmentalMapTextureHandle();
+        commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
+    }
 
     Light::GetInstance()->SetLightCommands(commandList);
 
@@ -220,17 +225,14 @@ void Model::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const Shado
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
 }
 
-
-
 void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material, const SkinCluster& skinCluster,
     const std::optional<uint32_t>& textureHandle) {
 
     auto commandList = dxCommon_->GetCommandList();
 
- 
     commandList->IASetIndexBuffer(&indexBufferView_);
-    commandList->IASetVertexBuffers(0, 1, &skinCluster.outputVertexBufferView); 
-   
+    commandList->IASetVertexBuffers(0, 1, &skinCluster.outputVertexBufferView);
+
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     material.SetCommandList(commandList);
@@ -246,8 +248,11 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, co
     }
 
     // 環境マップ
-    uint32_t environmentalMapTexture = SkyBoxRenderer::GetInstance()->GetEnvironmentalMapTextureHandle();
-    commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
+    BasePipeline* skyBoxPipeline = PipelineManager::GetInstance()->GetPipeline(PipelineType::SkyBox);
+    if (SkyBoxPipeline* skyBoxPipe = dynamic_cast<SkyBoxPipeline*>(skyBoxPipeline)) {
+        uint32_t environmentalMapTexture = skyBoxPipe->GetEnvironmentalMapTextureHandle();
+        commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(environmentalMapTexture));
+    }
 
     // ライト
     Light::GetInstance()->SetLightCommands(commandList);
@@ -267,17 +272,6 @@ void Model::DrawInstancing(const uint32_t& instanceNum) {
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
     commandList->IASetIndexBuffer(&indexBufferView_);
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-    //// マテリアルのリソースを設定
-    //material->SetCommandList(commandList);
-    //commandList->SetGraphicsRootDescriptorTable(0, instancingGUPHandle);
-
-    //// テクスチャハンドルの設定
-    //if (textureHandle.has_value()) {
-    //    commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
-    //} else {
-    //    commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureIndex_));
-    //}
 
     commandList->DrawInstanced(UINT(modelData_.vertices.size()), instanceNum, 0, 0);
 }

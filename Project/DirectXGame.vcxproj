@@ -30,7 +30,6 @@
     <ClCompile Include="Engine\audio\Audio.cpp" />
     <ClCompile Include="Engine\base\DsvManager.cpp" />
     <ClCompile Include="Engine\base\RtvManager.cpp" />
-    <ClCompile Include="Engine\base\SkyBoxRenderer.cpp" />
     <ClCompile Include="Engine\base\SpriteMaterial.cpp" />
     <ClCompile Include="Engine\base\SrvManager.cpp" />
     <ClCompile Include="Engine\base\TextureManager.cpp" />
@@ -91,6 +90,7 @@
     <ClCompile Include="Engine\Pipeline\ShadowMap\ShadowMapPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Skinning\SkinningCSPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Skinning\SkinningObject3DPipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\SkyBox\SkyBoxPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Sprite\SpritePipeline.cpp" />
     <ClCompile Include="Engine\PostEffect\BasePostEffect.cpp" />
     <ClCompile Include="Engine\PostEffect\BoxFilter.cpp" />
@@ -183,7 +183,6 @@
     <ClInclude Include="Engine\audio\Audio.h" />
     <ClInclude Include="Engine\base\DsvManager.h" />
     <ClInclude Include="Engine\base\RtvManager.h" />
-    <ClInclude Include="Engine\base\SkyBoxRenderer.h" />
     <ClInclude Include="Engine\base\SpriteMaterial.h" />
     <ClInclude Include="Engine\base\SrvManager.h" />
     <ClInclude Include="Engine\base\TextureManager.h" />
@@ -247,6 +246,7 @@
     <ClInclude Include="Engine\Pipeline\ShadowMap\ShadowMapPipeline.h" />
     <ClInclude Include="Engine\Pipeline\Skinning\SkinningCSPipeline.h" />
     <ClInclude Include="Engine\Pipeline\Skinning\SkinningObject3DPipeline.h" />
+    <ClInclude Include="Engine\Pipeline\SkyBox\SkyBoxPipeline.h" />
     <ClInclude Include="Engine\Pipeline\Sprite\SpritePipeline.h" />
     <ClInclude Include="Engine\PostEffect\BasePostEffect.h" />
     <ClInclude Include="Engine\PostEffect\BoxFilter.h" />
