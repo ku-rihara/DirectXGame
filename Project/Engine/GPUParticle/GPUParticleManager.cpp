@@ -106,11 +106,7 @@ void GPUParticleManager::DispatchInitParticle(GPUParticleGroup& group) {
 
     csPipe->DisPatch(CSPipelineType::Particle_Init, commandList, group.maxParticleCount);
 
-    // UAVバリア
-    D3D12_RESOURCE_BARRIER barrier = {};
-    barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_UAV;
-    barrier.UAV.pResource          = group.resourceCreator->GetParticleResource();
-    commandList->ResourceBarrier(1, &barrier);
+   
 }
 
 void GPUParticleManager::InitializeGroupResources(GPUParticleGroup& group) {
@@ -246,18 +242,16 @@ void GPUParticleManager::Draw(const ViewProjection& viewProjection) {
         pipe->PreBlendSet(PipelineType::GPUParticle, commandList, BlendMode::Add);
 
         // b0: PerViewバッファ
-        commandList->SetGraphicsRootConstantBufferView(0,
-            group.resourceCreator->GetPerViewResource()->GetGPUVirtualAddress());
+        commandList->SetGraphicsRootConstantBufferView(0,group.resourceCreator->GetPerViewResource()->GetGPUVirtualAddress());
 
         // t0: パーティクルSRV
-        commandList->SetGraphicsRootDescriptorTable(1,
-            group.resourceCreator->GetParticleSrvHandle());
+        commandList->SetGraphicsRootDescriptorTable(1,group.resourceCreator->GetParticleSrvHandle());
 
         // b2(PS): マテリアル
         group.material.SetCommandList(commandList);
 
         // t0(PS): テクスチャ
-        commandList->SetGraphicsRootDescriptorTable(3, srvManager_->GetGPUDescriptorHandle(group.textureHandle));
+        commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(group.textureHandle));
 
         // 描画
         DrawGroup(group);

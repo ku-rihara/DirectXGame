@@ -47,7 +47,7 @@ void GameScene::Init() {
 
     isDebugCameraActive_ = true;
 
-    testGpuParticleEmitter_.reset(GPUParticleEmitter::CreateParticlePrimitive("test", PrimitiveType::Plane, 1024));
+    testGpuParticleEmitter_.reset(GPUParticleEmitter::CreateParticlePrimitive("test", PrimitiveType::Box, 1024));
 
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
     GPUParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
@@ -71,6 +71,7 @@ void GameScene::Update() {
     Object3DRegistry::GetInstance()->UpdateAll();
     AnimationRegistry::GetInstance()->UpdateAll(Frame::DeltaTimeRate());
     testGpuParticleEmitter_->Emit();
+    testGpuParticleEmitter_->Update();
 
     putObjForBlender->EasingUpdateSelectGroup(Frame::DeltaTime(), 0);
 

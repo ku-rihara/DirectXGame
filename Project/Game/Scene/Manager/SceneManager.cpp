@@ -37,6 +37,7 @@ void SceneManager::SkyBoxDraw() {
     if (scene_) {
         PipelineManager::GetInstance()->PreDraw(PipelineType::SkyBox, DirectXCommon::GetInstance()->GetCommandList());
         scene_->SkyBoxDraw();
+        PipelineManager::GetInstance()->PreDraw(PipelineType::Object3D, DirectXCommon::GetInstance()->GetCommandList());
     }
 }
 
