@@ -260,8 +260,7 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, co
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
 }
 
-void Model::DrawInstancing(const uint32_t& instanceNum, const D3D12_GPU_DESCRIPTOR_HANDLE& instancingGUPHandle, BaseMaterial* material,
-    const std::optional<uint32_t>& textureHandle) {
+void Model::DrawInstancing(const uint32_t& instanceNum) {
     auto commandList = dxCommon_->GetCommandList();
 
     // ルートシグネチャとパイプラインステートを設定
@@ -269,16 +268,16 @@ void Model::DrawInstancing(const uint32_t& instanceNum, const D3D12_GPU_DESCRIPT
     commandList->IASetIndexBuffer(&indexBufferView_);
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    // マテリアルのリソースを設定
-    material->SetCommandList(commandList);
-    commandList->SetGraphicsRootDescriptorTable(0, instancingGUPHandle);
+    //// マテリアルのリソースを設定
+    //material->SetCommandList(commandList);
+    //commandList->SetGraphicsRootDescriptorTable(0, instancingGUPHandle);
 
-    // テクスチャハンドルの設定
-    if (textureHandle.has_value()) {
-        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
-    } else {
-        commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureIndex_));
-    }
+    //// テクスチャハンドルの設定
+    //if (textureHandle.has_value()) {
+    //    commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureHandle.value()));
+    //} else {
+    //    commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(textureIndex_));
+    //}
 
     commandList->DrawInstanced(UINT(modelData_.vertices.size()), instanceNum, 0, 0);
 }

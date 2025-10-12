@@ -18,6 +18,8 @@ class DsvManager;
 class ShadowMap;
 class PipelineManager;
 class CSPipelineManager;
+class ParticleManager;
+class GPUParticleManager;
 
 class EngineCore {
 public:
@@ -31,7 +33,7 @@ public:
     ///========================================================================
 
     /// システム全体の初期化
-     void Initialize(const char* title, int width = 1280, int height = 720);
+    void Initialize(const char* title, const int& width = 1280, const int& height = 720);
 
     // Windowsのメッセージを処理
      int ProcessMessage();
@@ -39,7 +41,6 @@ public:
     // フレーム開始処理
      void BeginFrame();
 
-     void PreSrvDraw();
      void PreRenderTexture();
      void PreDraw();
 
@@ -55,7 +56,7 @@ public:
      ///=======================================================================
      std::unique_ptr<WinApp> winApp_;
      DirectXCommon* directXCommon_;
-     ImGuiManager* imguiManager_;
+     ImGuiManager* imGuiManager_;
      TextureManager* textureManager_;
      ModelManager* modelManager_;
      SrvManager* srvManager_;
@@ -69,4 +70,6 @@ public:
      ShadowMap* shadowMap_;
      PipelineManager* pipelineManager_;
      CSPipelineManager* csPipelineManager_;
+     ParticleManager* particleManager_;
+     GPUParticleManager* gpuParticleManager_;
 };

@@ -3,7 +3,7 @@
 #include "base/SrvManager.h"
 #include "Data/ParticleCSData.h"
 #include "Dx/DirectXCommon.h"
-#include "Material/ParticleMaterial.h"
+#include "Material/GPUParticleMaterial.h"
 #include "Primitive/IPrimitive.h"
 #include "ResourceCreator/GPUParticleResourceCreator.h"
 
@@ -21,7 +21,7 @@ public:
     struct GPUParticleGroup {
         Model* model                           = nullptr;
         std::unique_ptr<IPrimitive> primitive_ = nullptr;
-        ParticleMaterial material;
+        GPUParticleMaterial material;
         uint32_t textureHandle   = 0;
         int32_t maxParticleCount = 1024;
 

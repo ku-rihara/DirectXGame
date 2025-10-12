@@ -1,8 +1,8 @@
 #include "ParticleManager.h"
 #include "3d/ModelManager.h"
+#include "Animation/ModelAnimation.h"
 #include "base/TextureManager.h"
 #include "Pipeline/PipelineManager.h"
-#include"Animation/ModelAnimation.h"
 // frame
 #include "Frame/Frame.h"
 // Function
@@ -26,8 +26,8 @@ ParticleManager* ParticleManager::GetInstance() {
 /// 　初期化
 ///============================================================
 void ParticleManager::Init(SrvManager* srvManager) {
-    pSrvManager_     = srvManager;
-  
+    pSrvManager_ = srvManager;
+
     SetAllParticleFile();
 }
 
@@ -70,7 +70,6 @@ void ParticleManager::Update() {
             ///------------------------------------------------------------------------
             it->velocity_.y += it->gravity_ * Frame::DeltaTime();
 
-          
             ///------------------------------------------------------------------------
             /// 変位更新
             ///------------------------------------------------------------------------
@@ -87,7 +86,6 @@ void ParticleManager::Update() {
                     it->worldTransform_.translation_ += it->speedV3 * Frame::DeltaTime();
                 }
             }
-
 
             ///------------------------------------------------------------------------
             /// UV更新
@@ -159,16 +157,22 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
         }
 
         if (instanceIndex > 0) {
-            PipelineManager::GetInstance()->PreDraw(PipelineType::Particle,commandList);
-            PipelineManager::GetInstance()->PreBlendSet(PipelineType::Particle,commandList, group.param.blendMode);
+            PipelineManager::GetInstance()->PreDraw(PipelineType::Particle, commandList);
+            PipelineManager::GetInstance()->PreBlendSet(PipelineType::Particle, commandList, group.param.blendMode);
+
+            // マテリアルのリソースを設定
+            group.material.SetCommandList(commandList);
+            commandList->SetGraphicsRootDescriptorTable(0, pSrvManager_->GetGPUDescriptorHandle(group.srvIndex));
+
+            // テクスチャハンドルの設定
+            commandList->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureHandle(group.textureHandle));
+
             // モデル描画
             if (group.model) {
-                group.model->DrawInstancing(instanceIndex, pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
-                    &group.material, group.textureHandle);
+                group.model->DrawInstancing(instanceIndex);
                 // メッシュ描画
             } else if (group.primitive_->GetMesh()) {
-                group.primitive_->GetMesh()->DrawInstancing(instanceIndex, pSrvManager_->GetGPUDescriptorHandle(group.srvIndex),
-                    &group.material, group.textureHandle);
+                group.primitive_->GetMesh()->DrawInstancing(instanceIndex);
             }
         }
     }
@@ -346,7 +350,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
     /// adapt
     particle.worldTransform_.translation_ = paramaters.targetPos + paramaters.emitPos + randomTranslate;
     // fllow pos用
-    particle.offSet                       = paramaters.targetPos + paramaters.emitPos + randomTranslate;
+    particle.offSet = paramaters.targetPos + paramaters.emitPos + randomTranslate;
 
     ///------------------------------------------------------------------------
     /// 速度、向き
@@ -453,7 +457,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
     }
 
     // EaseParm Adapt
-    particle.easeTime                       = 0.0f;
+    particle.easeTime                        = 0.0f;
     particle.scaleInfo.easeParam.isScaleEase = paramaters.scaleEaseParm.isScaleEase;
     particle.scaleInfo.easeParam.maxTime     = paramaters.scaleEaseParm.maxTime;
     particle.scaleInfo.easeParam.easeType    = paramaters.scaleEaseParm.easeType;
@@ -523,7 +527,7 @@ void ParticleManager::Emit(
 
     // 指定されたパーティクルグループを取得
     ParticleGroup& particleGroup = particleGroups_[name];
-    particleGroup.param           = groupParamaters;
+    particleGroup.param          = groupParamaters;
 
     // 生成、グループ追加
     std::list<Particle> particles;

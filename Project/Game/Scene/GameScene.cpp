@@ -3,6 +3,7 @@
 // class
 #include "3d/Object3DRegistry.h"
 #include "utility/ParticleEditor/ParticleManager.h"
+#include "GPUParticle/GPUParticleManager.h"
 
 // math
 #include "Frame/Frame.h"
@@ -45,7 +46,11 @@ void GameScene::Init() {
     putObjForBlender->EasingAllReset();
 
     isDebugCameraActive_ = true;
+
+    testGpuParticleEmitter_.reset(GPUParticleEmitter::CreateParticlePrimitive("test", PrimitiveType::Plane, 1024));
+
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
+    GPUParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
 void GameScene::Update() {
@@ -65,6 +70,7 @@ void GameScene::Update() {
 
     Object3DRegistry::GetInstance()->UpdateAll();
     AnimationRegistry::GetInstance()->UpdateAll(Frame::DeltaTimeRate());
+    testGpuParticleEmitter_->Emit();
 
     putObjForBlender->EasingUpdateSelectGroup(Frame::DeltaTime(), 0);
 
@@ -76,6 +82,7 @@ void GameScene::Update() {
     }
 
     ParticleManager::GetInstance()->Update();
+    GPUParticleManager::GetInstance()->Update();
 }
 
 /// ===================================================

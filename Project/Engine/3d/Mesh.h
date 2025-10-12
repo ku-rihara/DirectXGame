@@ -23,7 +23,7 @@ public:
     void Init(DirectXCommon* directXCommon, const uint32_t& vertexNum);
     void CreateVertexResource();
     void SetIndexData(const uint32_t* indices, const uint32_t& indexCount);
-    void DrawInstancing(const uint32_t& instanceNum,const D3D12_GPU_DESCRIPTOR_HANDLE& instancingGUPHandle, BaseMaterial* material, const std::optional<uint32_t>& textureHandle);
+    void DrawInstancing(const uint32_t& instanceNum);
     void DebugImGui();
 
     void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, MeshMaterial material, const std::optional<uint32_t>& textureHandle = std::nullopt);

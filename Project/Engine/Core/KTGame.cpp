@@ -3,10 +3,10 @@
 #include "2d/SpriteRegistry.h"
 #include "3d/Object3DRegistry.h"
 #include "Animation/AnimationRegistry.h"
-#include "Pipeline/PipelineManager.h"
 #include "PostEffect/PostEffectRenderer.h"
 #include "Scene/Factory/SceneFactory.h"
 #include "utility/ParticleEditor/ParticleManager.h"
+#include"GPUParticle/GPUParticleManager.h"
 // renderer
 #include "base/SkyBoxRenderer.h"
 // utility
@@ -25,7 +25,7 @@ void KTGame::Init() {
     pSceneManager_ = SceneManager::GetInstance();
     pSceneManager_->SetSceneFactory(sceneFactory_.get());
     pSceneManager_->ChangeScene("GAMEPLAY");
-    /*pSceneManager_->ChangeScene("GAMEPLAY");*/
+
 }
 
 // =============================================================
@@ -53,12 +53,15 @@ void KTGame::Draw() {
     // --------------------------------------------------------------------------
     /// モデル描画
     // --------------------------------------------------------------------------
-    PipelineManager::GetInstance()->PreDraw(PipelineType::Object3D, commandList);
-
-    // オブジェクト、アニメーション、パーティクル描画
+   
+    // オブジェクト描画
     Object3DRegistry::GetInstance()->DrawAll(viewProjection);
+    // アニメーション描画
     AnimationRegistry::GetInstance()->DrawAll(viewProjection);
+    // パーティクル描画
     ParticleManager::GetInstance()->Draw(viewProjection);
+    // GPUパーティクル描画
+    GPUParticleManager::GetInstance()->Draw(viewProjection);
 
     /// コリジョン描画
     collisionManager_->Draw(viewProjection);
@@ -66,7 +69,6 @@ void KTGame::Draw() {
     // --------------------------------------------------------------------------
     /// スプライト描画
     // --------------------------------------------------------------------------
-    PipelineManager::GetInstance()->PreDraw(PipelineType::Sprite, commandList);
     SpriteRegistry::GetInstance()->DrawAll();
 }
 
