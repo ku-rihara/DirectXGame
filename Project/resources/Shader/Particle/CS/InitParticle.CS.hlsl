@@ -11,6 +11,8 @@ void main(uint3 DTid : SV_DispatchThreadID)
     if (particleIndex < kMaxParticles)
     {
         gParticles[particleIndex] = (Particle) 0;
+        gParticles[particleIndex].scale = float3(100.0f, 100.0f, 100.0f);
+        gParticles[particleIndex].color = float4(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
 }
