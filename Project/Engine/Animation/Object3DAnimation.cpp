@@ -262,7 +262,14 @@ void Object3DAnimation::CSSkinning() {
 
     // スキニング実行
     int numVertices = static_cast<int>(model_->GetModelData().vertices.size());
-    CSPipelineManager::GetInstance()->DisPatch(CSPipelineType::Skinning, commandList, numVertices);     
+    CSPipelineManager::GetInstance()->DisPatch(CSPipelineType::Skinning, commandList, numVertices);  
+
+    //UAV barrier 
+    D3D12_RESOURCE_BARRIER barrier = {};
+    barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_UAV;
+    barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+    barrier.UAV.pResource          = skinCluster_.outputVertexResource.Get();
+    commandList->ResourceBarrier(1, &barrier);
 }
 
 ///============================================================

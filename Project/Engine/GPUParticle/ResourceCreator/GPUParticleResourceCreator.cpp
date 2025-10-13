@@ -46,6 +46,13 @@ void GPUParticleResourceCreator::CreateEmitterResource() {
 
     // マップしておく
     emitResource_->Map(0, nullptr, reinterpret_cast<void**>(&emitSphere_));
+
+    // PerFrameデータ用のバッファ
+    perFrameResource_ = dxCommon_->CreateBufferResource(
+        dxCommon_->GetDevice(), sizeof(PerFrame));
+
+    // マップしておく
+    emitResource_->Map(0, nullptr, reinterpret_cast<void**>(&perFrameData_));
 }
 
 void GPUParticleResourceCreator::CreatePerViewResource() {

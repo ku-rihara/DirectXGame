@@ -46,8 +46,9 @@ DirectX::ScratchImage TextureManager::LoadTextureFile(const std::string& filePat
 
     // ミニマップの作成
     DirectX::ScratchImage mipImages{};
-    if (DirectX::IsCompressed(image.GetMetadata().format)) { // 圧縮フォーマットかどうかを調べる
-        mipImages = std::move(image); // 圧縮フォーマットならそのまま使うのでMoveする
+    // 圧縮フォーマットならそのまま使うのでMoveする
+    if (DirectX::IsCompressed(image.GetMetadata().format)) {
+        mipImages = std::move(image);
     } else {
         hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
     }

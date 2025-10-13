@@ -254,20 +254,6 @@ void ModelAnimation::CreateOutputVertexResourceAndUAV(SkinCluster& skinCluster, 
     skinCluster.outputVertexUavHandle.first  = srvManager->GetCPUDescriptorHandle(outputVertexUavIndex);
     skinCluster.outputVertexUavHandle.second = srvManager->GetGPUDescriptorHandle(outputVertexUavIndex);
 
-   /* D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
-    uavDesc.Format                           = DXGI_FORMAT_UNKNOWN;
-    uavDesc.ViewDimension                    = D3D12_UAV_DIMENSION_BUFFER;
-    uavDesc.Buffer.FirstElement              = 0;
-    uavDesc.Buffer.NumElements               = UINT(modelData.vertices.size());
-    uavDesc.Buffer.CounterOffsetInBytes      = 0;
-    uavDesc.Buffer.Flags                     = D3D12_BUFFER_UAV_FLAG_NONE;
-    uavDesc.Buffer.StructureByteStride       = sizeof(VertexData);
-
-    dxCommon->GetDevice()->CreateUnorderedAccessView(
-        skinCluster.outputVertexResource.Get(),
-        nullptr,
-        &uavDesc,
-        skinCluster.outputVertexUavHandle.first);*/
 
     // UAV作成
     srvManager->CreateStructuredUAV(

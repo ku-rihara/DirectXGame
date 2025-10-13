@@ -6,7 +6,6 @@
 /// base
 #include "base/DsvManager.h"
 #include "base/RtvManager.h"
-#include "base/SkyBoxRenderer.h"
 #include "base/SrvManager.h"
 #include "base/TextureManager.h"
 #include "Dx/DirectXCommon.h"
@@ -66,10 +65,6 @@ void EngineCore::Initialize(const char* title, const int& width, const int& heig
     // CsPipeline
     csPipelineManager_ = CSPipelineManager::GetInstance();
     csPipelineManager_->Init(directXCommon_);
-
-    // skybox
-    skyBoxRenderer_ = SkyBoxRenderer::GetInstance();
-    skyBoxRenderer_->Init(directXCommon_);
 
     shadowMap_ = ShadowMap::GetInstance();
     shadowMap_->Init(directXCommon_);

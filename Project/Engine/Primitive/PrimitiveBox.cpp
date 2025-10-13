@@ -1,6 +1,5 @@
 #include "PrimitiveBox.h"
 #include "3d/Mesh.h"
-#include "base/SkyBoxRenderer.h"
 #include <numbers>
 
 void PrimitiveBox::Init() {

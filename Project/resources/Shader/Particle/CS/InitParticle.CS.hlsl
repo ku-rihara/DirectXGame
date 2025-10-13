@@ -11,6 +11,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     if (particleIndex < kMaxParticles)
     {
         gParticles[particleIndex] = (Particle) 0;
+       
     }
 
 }

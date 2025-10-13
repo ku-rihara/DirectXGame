@@ -448,6 +448,15 @@
     <Filter Include="Game\BackGroundObject\ComboLevel">
       <UniqueIdentifier>{c094f561-3bc0-4506-ac52-7363b27c4f08}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソースファイル\Random">
+      <UniqueIdentifier>{06914a50-77df-4e36-9100-2bfef8813310}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Pipeline\SkyBox">
+      <UniqueIdentifier>{d2c5c7b4-7eb9-4751-8b7f-27522fca7e01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Pipeline\SkyBox">
+      <UniqueIdentifier>{647a01ef-6a48-46ff-840f-f1b296205edd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -799,9 +808,6 @@
     <ClCompile Include="Engine\Primitive\PrimitiveBox.cpp">
       <Filter>MyEngine\.cpp\Primitive</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\SkyBoxRenderer.cpp">
-      <Filter>MyEngine\.cpp\base</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\Effect\PlayerEffects.cpp">
       <Filter>Game\Player\Effects</Filter>
     </ClCompile>
@@ -1122,6 +1128,9 @@
     </ClCompile>
     <ClCompile Include="Game\BackGroundObject\ComboLeve\SpeakerEffect.cpp">
       <Filter>Game\BackGroundObject\ComboLevel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\SkyBox\SkyBoxPipeline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline\SkyBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1506,9 +1515,6 @@
     <ClInclude Include="Engine\Primitive\PrimitiveBox.h">
       <Filter>MyEngine\.h\Primitive</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\SkyBoxRenderer.h">
-      <Filter>MyEngine\.h\base</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\Effect\PlayerEffects.h">
       <Filter>Game\Player\Effects</Filter>
     </ClInclude>
@@ -1848,6 +1854,9 @@
     <ClInclude Include="Game\BackGroundObject\ComboLeve\SpeakerEffect.h">
       <Filter>Game\BackGroundObject\ComboLevel</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Pipeline\SkyBox\SkyBoxPipeline.h">
+      <Filter>MyEngine\.h\Pipeline\SkyBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -1892,6 +1901,9 @@
     </None>
     <None Include="resources\Shader\Particle\Particle.hlsli">
       <Filter>リソースファイル\Particle</Filter>
+    </None>
+    <None Include="resources\Shader\Random\Random.hlsli">
+      <Filter>リソースファイル\Random</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
