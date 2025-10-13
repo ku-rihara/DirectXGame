@@ -106,7 +106,12 @@ void GPUParticleManager::DispatchInitParticle(GPUParticleGroup& group) {
 
     csPipe->DisPatch(CSPipelineType::Particle_Init, commandList, group.maxParticleCount);
 
-   
+   // UAV barrier
+    D3D12_RESOURCE_BARRIER barrier = {};
+    barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_UAV;
+    barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+    barrier.UAV.pResource          = group.resourceCreator->GetParticleResource();
+    commandList->ResourceBarrier(1, &barrier);
 }
 
 void GPUParticleManager::InitializeGroupResources(GPUParticleGroup& group) {
@@ -225,9 +230,10 @@ void GPUParticleManager::DispatchComputeShaders(GPUParticleGroup& group) {
     // 1スレッドでエミット処理
     csPipe->DisPatch(CSPipelineType::Particle_Emit, commandList, 1);
 
-    // UAV→SRVバリア
+    // UAV barrier
     D3D12_RESOURCE_BARRIER barrier = {};
     barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_UAV;
+    barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
     barrier.UAV.pResource          = group.resourceCreator->GetParticleResource();
     commandList->ResourceBarrier(1, &barrier);
 }
