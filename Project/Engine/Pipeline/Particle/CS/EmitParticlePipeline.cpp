@@ -40,7 +40,7 @@ void EmitParticlePipeline::CreateRootSignature() {
     descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
     // RootParameterを作成
-    D3D12_ROOT_PARAMETER rootParameters[2] = {};
+    D3D12_ROOT_PARAMETER rootParameters[3] = {};
 
     // 0: gEmitter (b0) - ConstantBuffer
     rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
@@ -52,6 +52,11 @@ void EmitParticlePipeline::CreateRootSignature() {
     rootParameters[1].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_ALL;
     rootParameters[1].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
     rootParameters[1].DescriptorTable.NumDescriptorRanges = 1;
+
+     // 2: gEmitter (b1) - ConstantBuffer
+    rootParameters[2].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[2].ShaderVisibility          = D3D12_SHADER_VISIBILITY_ALL;
+    rootParameters[2].Descriptor.ShaderRegister = 1;
 
     // Root Signature Descriptionを設定
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};

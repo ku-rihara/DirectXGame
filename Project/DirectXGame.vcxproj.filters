@@ -313,6 +313,9 @@
     <Filter Include="MyEngine\.cpp\Pileline\SkyBox">
       <UniqueIdentifier>{7292d38d-6fd7-4091-a848-0f04f8b9aa65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソースファイル\Random">
+      <UniqueIdentifier>{fcc4b6ae-10b4-4328-b879-0e4426af45ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1295,6 +1298,9 @@
     </None>
     <None Include="resources\Shader\Particle\Particle.hlsli">
       <Filter>リソースファイル\Particle</Filter>
+    </None>
+    <None Include="resources\Shader\Random\Random.hlsli">
+      <Filter>リソースファイル\Random</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

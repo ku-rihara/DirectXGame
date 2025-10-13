@@ -76,7 +76,7 @@ void GPUParticleManager::CreatePrimitiveParticle(
         group.primitive_->Create();
     }
 
-    group.textureHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/default.png");
+    group.textureHandle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
 
     // リソース作成
     InitializeGroupResources(group);
@@ -214,6 +214,10 @@ void GPUParticleManager::DispatchComputeShaders(GPUParticleGroup& group) {
     commandList->SetComputeRootConstantBufferView(0,
         group.resourceCreator->GetEmitterResource()->GetGPUVirtualAddress());
 
+    // b1: PerFrame
+    commandList->SetComputeRootConstantBufferView(2,
+        group.resourceCreator->GetPerFrameResource()->GetGPUVirtualAddress());
+
     // u0: パーティクルバッファ(UAV)
     commandList->SetComputeRootDescriptorTable(1,
         group.resourceCreator->GetParticleUavHandle());
@@ -227,6 +231,7 @@ void GPUParticleManager::DispatchComputeShaders(GPUParticleGroup& group) {
     barrier.UAV.pResource          = group.resourceCreator->GetParticleResource();
     commandList->ResourceBarrier(1, &barrier);
 }
+
 void GPUParticleManager::Draw(const ViewProjection& viewProjection) {
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
     PipelineManager* pipe                  = PipelineManager::GetInstance();
