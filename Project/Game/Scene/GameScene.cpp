@@ -134,6 +134,7 @@ void GameScene::PlayUpdate() {
 
     // Editor
     attackEffect_->Update();
+    shakeEditor_->Update(Frame::DeltaTime());
     cameraEditor_->Update();
     Debug();
 
@@ -195,6 +196,7 @@ void GameScene::Debug() {
 
     ImGui::Begin("Rendition");
     cameraEditor_->EditorUpdate();
+    shakeEditor_->EditorUpdate();
     attackEffect_->EditorUpdate();
     ImGui::End();
 #endif

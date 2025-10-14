@@ -21,8 +21,8 @@ void GameCamera::Init() {
     BindParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
-  /*  rotate_ = parameter_.rotate;
-    offset_ = parameter_.offsetPos;*/
+    /*  rotate_ = parameter_.rotate;
+      offset_ = parameter_.offsetPos; */
 
     rendition_ = std::make_unique<CameraRendition>();
     rendition_->Init();
@@ -31,7 +31,7 @@ void GameCamera::Init() {
 }
 
 void GameCamera::Update(const float& speedRate) {
-  
+
     rendition_->Update(speedRate);
     shakeOffsetPos_ = rendition_->GetShakeOffset();
 
@@ -43,20 +43,20 @@ void GameCamera::Update(const float& speedRate) {
 }
 
 void GameCamera::MoveUpdate() {
-   
+
     // 入力処理
     Input* input            = Input::GetInstance();
-    const float rotateSpeed = 0.08f; 
-    Vector2 stickInput      = {0.0f, 0.0f}; 
+    const float rotateSpeed = 0.08f;
+    Vector2 stickInput      = {0.0f, 0.0f};
 
     // ================================= keyBord ================================= //
     if (input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT)) {
 
-         // 右回転
+        // 右回転
         if (input->PushKey(DIK_RIGHT)) {
             stickInput.x = 1.0f;
 
-        } else if (input->PushKey(DIK_LEFT)) { 
+        } else if (input->PushKey(DIK_LEFT)) {
             // 左回転
             stickInput.x = -1.0f;
         }
@@ -144,7 +144,6 @@ void GameCamera::AdjustParam() {
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
 
-       
         ImGui::PopID();
     }
 #endif // _DEBUG
@@ -168,16 +167,14 @@ Vector3 GameCamera::GetWorldPos() const {
     return worldPos;
 }
 
-
 void GameCamera::SetTarget(const WorldTransform* target) {
     target_ = target;
     Reset();
 }
 
-
 void GameCamera::PlayAnimation(const std::string& filename) {
     rendition_->AnimationPlay(filename);
- }
+}
 void GameCamera::PlayShake(const std::string& filename) {
-     rendition_->ShakePlay(filename);   
- }
+    rendition_->ShakePlay(filename);
+}

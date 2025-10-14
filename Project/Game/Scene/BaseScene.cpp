@@ -89,8 +89,6 @@ void BaseScene::ViewProjectionUpdate() {
         break;
     }
 
-   
-
 #endif
 
     switch (cameraMode_) {
