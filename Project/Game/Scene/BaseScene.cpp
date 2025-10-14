@@ -47,33 +47,56 @@ void BaseScene::Debug() {
 
 // ビュープロジェクション更新
 void BaseScene::ViewProjectionUpdate() {
-
 #ifdef _DEBUG
-    // デバッグカメラモード切り替え------------------------------
-    if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-        switch (cameraMode_) {
-        case BaseScene::CameraMode::NORMAL:
+    // シーンごとの切り替え処理------------------------------
+    bool isTriggerSpace = input_->TriggerKey(DIK_SPACE);
+    switch (cameraMode_) {
+        ///------------------------------------------------------
+        /// Normal Mode
+        ///------------------------------------------------------ 
+    case BaseScene::CameraMode::NORMAL:
+        // デバッグモードへ
+        if (isTriggerSpace) {
             cameraMode_ = CameraMode::DEBUG;
-            break;
-        case BaseScene::CameraMode::EDITOR:
-            cameraMode_ = CameraMode::DEBUG;
-            break;
-        case BaseScene::CameraMode::DEBUG:
-            cameraMode_ = CameraMode::NORMAL;
-            break;
-        default:
-            break;
         }
+        // エディターモードへ
+        if (cameraEditor_->GetIsEditing()) {
+            cameraMode_ = CameraMode::EDITOR;
+        }
+        break;
+        ///------------------------------------------------------
+        /// Editor Mode
+        ///------------------------------------------------------ 
+    case BaseScene::CameraMode::EDITOR:
+        // ノーマルモードへ
+        if (!cameraEditor_->GetIsEditing()) {
+            cameraMode_ = CameraMode::NORMAL;
+        }
+        // デバッグモードへ
+        if (isTriggerSpace) {
+            cameraMode_ = CameraMode::DEBUG;
+        }
+        break;
+        ///------------------------------------------------------
+        /// Debug Mode
+        ///------------------------------------------------------ 
+    case BaseScene::CameraMode::DEBUG:
+        if (isTriggerSpace) {
+            cameraMode_ = CameraMode::NORMAL;
+        }
+        break;
+    default:
+        break;
     }
 
 #endif
 
-       switch (cameraMode_) {
+    switch (cameraMode_) {
     case BaseScene::CameraMode::NORMAL:
         ViewProcess();
         break;
     case BaseScene::CameraMode::EDITOR:
-     
+
         break;
     case BaseScene::CameraMode::DEBUG:
         // デバッグカメラの更新
@@ -86,7 +109,6 @@ void BaseScene::ViewProjectionUpdate() {
     default:
         break;
     }
-
 
     Light::GetInstance()->SetWorldCameraPos(viewProjection_.GetWorldPos());
 }
