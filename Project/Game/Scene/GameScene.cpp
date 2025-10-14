@@ -134,6 +134,7 @@ void GameScene::PlayUpdate() {
 
     // Editor
     attackEffect_->Update();
+    cameraEditor_->Update();
     Debug();
 
     // 各クラス更新
