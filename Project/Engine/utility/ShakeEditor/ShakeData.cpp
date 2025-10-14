@@ -214,8 +214,6 @@ void ShakeData::AdjustParam() {
 
         ImGui::Separator();
 
-         ImGui::Text("File Operations:");
-
         // Load ボタン
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));

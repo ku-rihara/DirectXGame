@@ -89,6 +89,7 @@ void ShakeEditor::EditorUpdate() {
             shakes_[selectedIndex_]->AdjustParam();
         }
 
+        ImGui::Separator();
         ImGui::Text("File Operations:");
 
         // Load ボタン
