@@ -25,7 +25,7 @@ AnimationRegistry* AnimationRegistry::GetInstance() {
         return nullptr;
     }
 
-    // 初回呼び出し時にatexit登録
+    // 初回呼び出し時にAtexit登録
     static bool registered = false;
     if (!registered) {
         std::atexit([]() { isAlive = false; });

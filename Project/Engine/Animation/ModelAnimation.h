@@ -39,7 +39,6 @@ private:
     void CreateInfluenceResource(SkinCluster& skinCluster, ModelData& modelData);
     void CreateOutputVertexResourceAndUAV(SkinCluster& skinCluster, ModelData& modelData);
     void CreateSkinningInfoResource(SkinCluster& skinCluster, ModelData& modelData);
-    void SetupInfluenceVBV(SkinCluster& skinCluster, ModelData& modelData);
 
 private:
     /// ============================================================
@@ -50,6 +49,6 @@ private:
 
 public:
     /// キーフレーム補間計算
-    static Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time);
-    static Quaternion CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time);
+    static Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframe,const float& time);
+    static Quaternion CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, const float& time);
 };

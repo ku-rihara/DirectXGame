@@ -57,12 +57,12 @@ private:
     bool HasParentJoint() const;
   
 public:
-    //SRT,Q
-    Vector3 scale_ = {1, 1, 1};
-    Vector3 rotation_ = {};
-    Vector3 translation_   = {};
-    Quaternion quaternion_ = {};
-   
+    // SRT,Q
+    Vector3 scale_ = Vector3::UnitVector();
+    Vector3 rotation_;
+    Vector3 translation_;
+    Quaternion quaternion_;
+
     // matrix
     Matrix4x4 matWorld_;
 

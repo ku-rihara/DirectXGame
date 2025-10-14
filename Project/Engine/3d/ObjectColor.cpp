@@ -55,7 +55,7 @@ void ObjectColor::TransferMatrix() {
 }
 
 // グラフィックスコマンドを積む
-void ObjectColor::SetGraphicsCommand(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex) const {
+void ObjectColor::SetGraphicsCommand(ID3D12GraphicsCommandList* commandList, const UINT& rootParameterIndex) const {
     assert(commandList);
     // 定数バッファビューを設定
     commandList->SetGraphicsRootConstantBufferView(rootParameterIndex, constBuffer_->GetGPUVirtualAddress());

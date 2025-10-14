@@ -6,7 +6,7 @@
 #include "struct/VertexData.h"
 
 #include "Material/MeshMaterial.h"
-#include"Material/ParticleMaterial.h"
+#include "Material/ParticleMaterial.h"
 #include <cstdint>
 #include <optional>
 
@@ -27,7 +27,7 @@ public:
     void DebugImGui();
 
     void Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, MeshMaterial material, const std::optional<uint32_t>& textureHandle = std::nullopt);
-   
+
     void SetTexture(const std::string& name);
 
 private:
@@ -48,10 +48,8 @@ private:
     // Transform データ
     VertexData* vertexDate_ = nullptr;
 
-    // 頂点数
-    uint32_t vertexNum_;
-
-    uint32_t textureHandle_;
+    uint32_t vertexNum_; //<頂点数
+    uint32_t textureHandle_; //<textureHandle
 
 public:
     ///==========================================================

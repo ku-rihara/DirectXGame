@@ -138,7 +138,7 @@ Animation ModelAnimation::LoadAnimationFile(const std::string& fileName) {
     return animation;
 }
 
-Vector3 ModelAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time) {
+Vector3 ModelAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe, const float& time) {
     assert(!keyframe.empty());
     if (keyframe.size() == 1 || time <= keyframe[0].time) {
         return keyframe[0].value;
@@ -154,7 +154,7 @@ Vector3 ModelAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyfr
     return (*keyframe.rbegin()).value;
 }
 
-Quaternion ModelAnimation::CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time) {
+Quaternion ModelAnimation::CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, const float& time) {
     assert(!keyframe.empty());
     if (keyframe.size() == 1 || time <= keyframe[0].time) {
         return keyframe[0].value;

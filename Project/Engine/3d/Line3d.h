@@ -24,7 +24,7 @@ public:
     void Draw( const ViewProjection& viewProj);
 
     // 球の描画
-    void DrawSphereWireframe(const Vector3& center, float radius, const Vector4& color);
+    void DrawSphereWireframe(const Vector3& center,const float& radius, const Vector4& color);
     void DrawCubeWireframe(const Vector3& center, const Vector3& size, const Vector4& color);
 
     void Reset();

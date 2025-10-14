@@ -47,6 +47,6 @@ private:
 
 public:
     bool HasGroupName(const std::string& groupName) const;
-    size_t GetRegisteredCount() const { return sprites_.size(); }
+    const size_t& GetRegisteredCount() const { return sprites_.size(); }
 
 };

@@ -38,9 +38,6 @@ class TextureManager;
 class ShadowMap;
 class BaseMaterial;
 class Model {
-
-	 
-
 public:
     ///============================================================
     /// public method
@@ -104,8 +101,8 @@ public:
     ///============================================================
     /// getter method
     ///============================================================
-    const uint32_t GetTextureIndex() const { return textureIndex_; }
+    const uint32_t& GetTextureIndex() const { return textureIndex_; }
     const ModelData& GetModelData() { return modelData_; }
     ID3D12Resource* GetVertexResource() { return vertexResource_.Get(); }
-    bool GetIsFileGltf() const { return isFileGltf_; }
+    const bool& GetIsFileGltf() const { return isFileGltf_; }
 };

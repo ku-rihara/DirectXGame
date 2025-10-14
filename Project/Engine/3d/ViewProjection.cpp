@@ -49,8 +49,6 @@ void ViewProjection::TransferMatrix() {
 
 void ViewProjection::UpdateMatrix() {
 
-    //// オイラーからQuaternionへの変換
-    // quaternion_=Quaternion::EulerToQuaternion(rotation_);
     //  ビュー行列の更新
     UpdateViewMatrix();
     // 射影行列の更新
@@ -88,7 +86,7 @@ void ViewProjection::UpdateProjectionMatrix() {
         matProjection_ = MakePerspectiveFovMatrix(ToRadian(fovAngleY_), aspectRatio_, nearZ_, farZ_);
     } else {
         // 平行投影
-        matProjection_ = MakeOrthographicMatrix(-orthoWidth_ / 2, orthoHeight_ / 2, orthoWidth_ / 2, -orthoHeight_ / 2, 1.0f, 100.0f);
+        matProjection_ = MakeOrthographicMatrix(-orthoWidth_ / 2.0f, orthoHeight_ / 2.0f, orthoWidth_ / 2.0f, -orthoHeight_ / 2.0f, 1.0f, 100.0f);
     }
 }
 
@@ -122,4 +120,8 @@ Matrix4x4 ViewProjection::GetBillboardMatrix() const {
     billboardMatrix.m[3][2] = 0.0f;
 
     return billboardMatrix;
+}
+
+void ViewProjection::ClearParent() {
+    parent_ = nullptr;
 }

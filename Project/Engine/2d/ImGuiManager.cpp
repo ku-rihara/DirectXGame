@@ -21,28 +21,25 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
     dxCommon_    = dxCommon;
     pSrvManager_ = srvManager;
 
-    // pSrvManager_->Allocate();//確保
-    // dxCommon_->CreateDescriptorHeap(dxCommon_->GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, SrvManager::kMaxCount, true);
-    // srvDescriptorHeap_ = dxCommon_->CreateDescriptorHeap(dxCommon_->GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, DirectXCommon::kMaxSRVCount, true);
-
+	
 #ifdef _DEBUG
 
     HRESULT result;
     // ImGuiの初期化
 
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // ドッキングを有効化
-
-    // デスクリプタヒープ設定
-    D3D12_DESCRIPTOR_HEAP_DESC desc = {};
-    desc.Type                       = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-    desc.NumDescriptors             = 1;
-    desc.Flags                      = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-    // デスクリプタヒープ生成
-    result = dxCommon_->GetDevice()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&srvHeap_));
-    assert(SUCCEEDED(result));
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	
+	// デスクリプタヒープ設定
+	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
+	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	desc.NumDescriptors = 1;
+	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	// デスクリプタヒープ生成
+	result = dxCommon_->GetDevice()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&srvHeap_));
+	assert(SUCCEEDED(result));
 
     ImGui::StyleColorsDark();
     ImGui_ImplWin32_Init(winApp->GetHwnd());

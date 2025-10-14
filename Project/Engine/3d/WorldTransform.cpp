@@ -3,7 +3,7 @@
 
 void WorldTransform::Init() {
 
-    scale_       = {1, 1, 1};
+    scale_       = Vector3::UnitVector();
     rotation_    = {};
     translation_ = {};
 
@@ -23,7 +23,7 @@ void WorldTransform::UpdateMatrix() {
     if (HasParentJoint()) {
         UpdateMatrixWithJoint();
     }
-    // 通常のparent
+    // 通常のParent
     else if (parent_) {
         matWorld_ *= parent_->matWorld_;
     }
