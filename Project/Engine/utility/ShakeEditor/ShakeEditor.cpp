@@ -25,7 +25,7 @@ void ShakeEditor::AllLoadFile() {
                 // 新規作成してロード
                 auto shake = std::make_unique<ShakeData>();
                 shake->Init(fileName);
-                shake->LoadData(); //Load
+                shake->LoadData(); // Load
                 shakes_.push_back(std::move(shake));
             }
         }
@@ -37,8 +37,7 @@ void ShakeEditor::Update(float deltaTime) {
     for (auto& shake : shakes_) {
         shake->Update(deltaTime);
         if (shake->IsPlaying() && preViewObj_) {
-            preViewObj_->transform_.translation_=shake->GetShakeOffset();
-    
+            preViewObj_->transform_.translation_ = shake->GetShakeOffset();
         }
     }
 }
@@ -46,19 +45,6 @@ void ShakeEditor::Update(float deltaTime) {
 void ShakeEditor::EditorUpdate() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader("Shake Manager")) {
-
-        // 全体制御
-        if (ImGui::Button("Load All Shakes")) {
-            AllLoadFile();
-            MessageBoxA(nullptr, "All shakes loaded successfully.", "Shake Editor", 0);
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Save All Shakes")) {
-            AllSaveFile();
-            MessageBoxA(nullptr, "All shakes saved successfully.", "Shake Editor", 0);
-        }
-
-        ImGui::Separator();
 
         // 新規追加
         ImGui::InputText("New Shake Name", nameBuffer_, IM_ARRAYSIZE(nameBuffer_));
@@ -93,8 +79,6 @@ void ShakeEditor::EditorUpdate() {
                 ImGui::PopStyleColor();
             }
 
-            
-
             ImGui::PopID();
         }
 
@@ -104,6 +88,28 @@ void ShakeEditor::EditorUpdate() {
         if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(shakes_.size())) {
             shakes_[selectedIndex_]->AdjustParam();
         }
+
+        ImGui::Text("File Operations:");
+
+        // Load ボタン
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
+        if (ImGui::Button("Load All Shakes")) {
+            AllLoadFile();
+            MessageBoxA(nullptr, "All Shakes loaded successfully.", "Shake Editor", 0);
+        }
+        ImGui::PopStyleColor(3);
+
+        // Save ボタン
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.4f, 0.9f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.5f, 1.0f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.3f, 0.8f, 1.0f));
+        if (ImGui::Button("Save All Shakes")) {
+            AllSaveFile();
+            MessageBoxA(nullptr, "All Shakes saved successfully.", "Shake Editor", 0);
+        }
+        ImGui::PopStyleColor(3);
     }
 #endif
 }

@@ -123,19 +123,6 @@ void CameraEditor::EditorUpdate() {
     if (ImGui::CollapsingHeader("Camera Animation Manager")) {
         isEditing_ = true;
 
-        // ロード
-        if (ImGui::Button("Load All Animations")) {
-            AllLoadFile();
-            MessageBoxA(nullptr, "All animations loaded successfully.", "Camera Animation", 0);
-        }
-        ImGui::SameLine();
-        // セーブ
-        if (ImGui::Button("Save All Animations")) {
-            AllSaveFile();
-            MessageBoxA(nullptr, "All animations saved successfully.", "Camera Animation", 0);
-        }
-
-        ImGui::Separator();
 
         // 設定
         ImGui::Text("ViewProjection Mode:");
@@ -222,6 +209,30 @@ void CameraEditor::EditorUpdate() {
             // 選択中アニメーションの詳細編集
             animations_[selectedIndex_]->AdjustParam();
         }
+
+       
+        ImGui::Text("File Operations:");
+
+        // Load ボタン
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
+        if (ImGui::Button("Load All CameraAnimations")) {
+            AllLoadFile();
+            MessageBoxA(nullptr, "All animations loaded successfully.", "Camera Animation", 0);
+        }
+        ImGui::PopStyleColor(3);
+
+      
+        // Save ボタン
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.4f, 0.9f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.5f, 1.0f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.3f, 0.8f, 1.0f));
+        if (ImGui::Button("Save All CameraAnimations")) {
+            AllSaveFile();
+            MessageBoxA(nullptr, "All animations saved successfully.", "Camera Animation", 0);
+        }
+        ImGui::PopStyleColor(3);
     }
 #endif
 }
