@@ -199,7 +199,6 @@ void GameScene::Debug() {
     ImGui::End();
 
     ImGui::Begin("Rendition");
-    cameraEditor_->EditorUpdate();
     attackEffect_->EditorUpdate();
     ImGui::End();
 #endif
@@ -210,7 +209,7 @@ void GameScene::ViewProjectionUpdate() {
     BaseScene::ViewProjectionUpdate();
 }
 
-void GameScene::ViewProssess() {
+void GameScene::ViewProcess() {
     viewProjection_.matView_       = gameCamera_->GetViewProjection().matView_;
     viewProjection_.matProjection_ = gameCamera_->GetViewProjection().matProjection_;
     viewProjection_.cameraMatrix_  = gameCamera_->GetViewProjection().cameraMatrix_;
@@ -250,8 +249,6 @@ void GameScene::ObjectInit() {
     attackEffect_         = std::make_unique<AttackEffect>();
     gameIntroManager_     = std::make_unique<GameIntroManager>();
     comboLevelObjHolder_  = std::make_unique<ComboLevelObjHolder>();
-
-    cameraEditor_ = std::make_unique<CameraEditor>();
 
     // 初期化---------------------------------------------------------------------------
 
@@ -300,8 +297,6 @@ void GameScene::SetClassPointer() {
     gameIntroManager_->SetGameBackGroundObject(gameBackGroundObject_.get());
     gameIntroManager_->SetHowToOperate(howToOperate_.get());
     gameIntroManager_->ClassisSet();
-
-    cameraEditor_->Init(&gameCamera_->GetViewProjectionRef());
 
     // comboScene
     comboScene_->SetPlayer(player_.get());

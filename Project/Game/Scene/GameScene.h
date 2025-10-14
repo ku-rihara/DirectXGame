@@ -8,7 +8,6 @@
 #include "BackGroundObject/ComboLeve/ComboLevelObjHolder.h"
 #include "BackGroundObject/GameBackGroundObject.h"
 #include "Combo/Combo.h"
-#include "ComboCreate/ComboCreateEditor.h"
 #include "ComboScene/ComboScene.h"
 #include "Enemy/EnemyManager.h"
 #include "Enemy/Spawner/EnemySpawner.h"
@@ -22,7 +21,7 @@
 #include "SkyDome/SkyDome.h"
 #include "UI/HowToOperate.h"
 #include "utility/CameraEditor/CameraEditor.h"
-#include "utility/ShakeEditor/ShakeEditor.h"
+
 
 /// <summary>
 /// ゲームシーン
@@ -58,7 +57,7 @@ public:
 
     void Debug() override;
     void ViewProjectionUpdate() override;
-    void ViewProssess() override;
+    void ViewProcess() override;
 
     void ChangeForJoyState();
 
@@ -84,9 +83,6 @@ private:
     std::unique_ptr<AttackEffect> attackEffect_                 = nullptr;
     std::unique_ptr<GameIntroManager> gameIntroManager_         = nullptr;
     std::unique_ptr<ComboLevelObjHolder> comboLevelObjHolder_   = nullptr;
-
-    // editor
-    std::unique_ptr<CameraEditor> cameraEditor_ = nullptr;
 
     GameState gameState_ = GameState::INTRO;
 

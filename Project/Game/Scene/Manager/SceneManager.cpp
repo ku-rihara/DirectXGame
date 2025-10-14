@@ -2,10 +2,15 @@
 #include "3d/Object3DRegistry.h"
 #include "Animation/AnimationRegistry.h"
 #include "Dx/DirectXCommon.h"
+#include "Frame/Frame.h"
+#include "GPUParticle/GPUParticleManager.h"
 #include "input/Input.h"
 #include "Pipeline/PipelineManager.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
 #include "utility/ParticleEditor/ParticleManager.h"
+
+#include "3d/Object3DRegistry.h"
+#include "Animation/AnimationRegistry.h"
 #include <cassert>
 
 // シングルトンインスタンスの取得
@@ -31,6 +36,14 @@ void SceneManager::Update() {
     if (scene_) {
         scene_->Update();
     }
+
+    // 登録されているオブジェクトを更新
+    Object3DRegistry::GetInstance()->UpdateAll();
+    AnimationRegistry::GetInstance()->UpdateAll(Frame::DeltaTimeRate());
+
+    // パーティクル更新
+    ParticleManager::GetInstance()->Update();
+    GPUParticleManager::GetInstance()->Update();
 }
 
 void SceneManager::SkyBoxDraw() {

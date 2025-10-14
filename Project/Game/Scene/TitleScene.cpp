@@ -129,6 +129,6 @@ void TitleScene::ViewProjectionUpdate() {
     Light::GetInstance()->SetWorldCameraPos(player_->GetWorldPosition());
 }
 
-void TitleScene::ViewProssess() {
+void TitleScene::ViewProcess() {
     viewProjection_.UpdateMatrix();
 }

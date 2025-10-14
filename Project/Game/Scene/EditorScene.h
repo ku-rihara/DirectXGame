@@ -1,43 +1,37 @@
 #pragma once
 
-///baseScene
-#include"BaseScene.h"
+/// baseScene
+#include "BaseScene.h"
 
-#include"Easing/Easing.h"
-#include"utility/ParticleEditor/ParticleEmitter.h"
-#include"utility/EasingCreator/Easingeditor.h"
+#include "Easing/Easing.h"
 #include "EasingTestObj/EasingTestObj.h"
+#include "utility/EasingCreator/Easingeditor.h"
 #include <memory>
 /// <summary>
 /// EditorScene
 /// </summary>
-class EditorScene :public BaseScene {
+class EditorScene : public BaseScene {
 private:
-
- 
     std::unique_ptr<EasingTestObj> easingTestObject_;
     EasingEditor easingEditor_;
 
 public:
-	///========================================================
-	/// Constralt destract
-	///========================================================
+    ///========================================================
+    /// Constralt destract
+    ///========================================================
     EditorScene();
     ~EditorScene() override;
 
-	///========================================================
-	/// private method
-	///========================================================
+    ///========================================================
+    /// private method
+    ///========================================================
 
-	/// 初期化、更新、描画
-	void Init()override;
-	void Update()override;
+    /// 初期化、更新、描画
+    void Init() override;
+    void Update() override;
     void SkyBoxDraw() override;
 
-	void Debug()override;/// debug
-	void ViewProjectionUpdate()override;
-	void ViewProssess()override;
-
-
-
+    void Debug() override; /// debug
+    void ViewProjectionUpdate() override;
+    void ViewProcess() override;
 };
