@@ -66,22 +66,27 @@ void BaseScene::ViewProjectionUpdate() {
         }
     }
 
-    // デバッグカメラモード切り替え------------------------------
 #endif
 
-    if (cameraMode_ == CameraMode::DEBUG) {
+       switch (cameraMode_) {
+    case BaseScene::CameraMode::NORMAL:
+        ViewProcess();
+        break;
+    case BaseScene::CameraMode::EDITOR:
+     
+        break;
+    case BaseScene::CameraMode::DEBUG:
         // デバッグカメラの更新
         debugCamera_->Update();
         // カメラ行列の計算をDebugCameraのViewProjectionから行う
         viewProjection_.matView_       = debugCamera_->GetViewProjection().matView_;
         viewProjection_.matProjection_ = debugCamera_->GetViewProjection().matProjection_;
         viewProjection_.cameraMatrix_  = debugCamera_->GetViewProjection().cameraMatrix_;
+        break;
+    default:
+        break;
+    }
 
-    }
-    // アクティブでない
-    else if (cameraMode_ == CameraMode::NORMAL) {
-        ViewProcess();
-    }
 
     Light::GetInstance()->SetWorldCameraPos(viewProjection_.GetWorldPos());
 }
