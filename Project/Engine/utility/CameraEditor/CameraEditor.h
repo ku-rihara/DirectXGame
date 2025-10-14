@@ -43,20 +43,23 @@ private:
     std::vector<std::unique_ptr<CameraAnimationData>> animations_;
     int selectedIndex_                     = -1;
     ViewProjection* viewProjection_        = nullptr;
-    std::unique_ptr<Object3d> debugObject_ = nullptr;
+
+    std::unique_ptr<Object3d> preViewCameraObj_ = nullptr;
+    std::unique_ptr<Object3d> preViewFollowObj_ = nullptr;
 
     // 入力用バッファ
     char nameBuffer_[128] = "";
-    // 再生制御用
-    bool autoApplyToViewProjection_ = true;
-    // KeyFrameプレビュー用
-    bool keyFramePreviewMode_ = false;
+
+    bool autoApplyToViewProjection_ = true; //<再生制御
+    bool keyFramePreviewMode_       = false; //< KeyFrameプレビュー
+    bool isEditing_                 = false;
 
 public:
     //--------------------------------------------------------------------------------------
     // getter
     //--------------------------------------------------------------------------------------
-    bool GetAutoApplyToViewProjection() const { return autoApplyToViewProjection_; }
+    bool
+    GetAutoApplyToViewProjection() const { return autoApplyToViewProjection_; }
     bool GetKeyFramePreviewMode() const { return keyFramePreviewMode_; }
 
     //--------------------------------------------------------------------------------------

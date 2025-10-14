@@ -5,8 +5,9 @@
 void CameraEditor::Init(ViewProjection* vp) {
     AllLoadFile();
     SetViewProjection(vp);
-    debugObject_.reset(Object3d::CreateModel("debugCube.obj"));
-    debugObject_->SetIsDraw(false);
+    preViewCameraObj_.reset(Object3d::CreateModel("debugCube.obj"));
+    preViewFollowObj_.reset(Object3d::CreateModel("debugCube.obj"));
+    preViewCameraObj_->SetIsDraw(false);
 }
 
 void CameraEditor::AllLoadFile() {
@@ -25,7 +26,7 @@ void CameraEditor::AllLoadFile() {
                 // 新規作成してロード
                 auto anim = std::make_unique<CameraAnimationData>();
                 anim->Init(fileName);
-                anim->LoadData(); //Load
+                anim->LoadData(); // Load
                 animations_.push_back(std::move(anim));
             }
         }
@@ -56,9 +57,9 @@ void CameraEditor::Update() {
     }
 
     // debugObjectの更新
-    if (debugObject_ && viewProjection_) {
-        debugObject_->transform_.translation_ = viewProjection_->translation_ + viewProjection_->positionOffset_;
-        debugObject_->transform_.rotation_    = viewProjection_->rotation_ + viewProjection_->rotationOffset_;
+    if (preViewCameraObj_ && viewProjection_) {
+        preViewCameraObj_->transform_.translation_ = preViewFollowObj_->transform_.translation_ + viewProjection_->translation_ + viewProjection_->positionOffset_;
+        preViewCameraObj_->transform_.rotation_    = preViewFollowObj_->transform_.rotation_ + viewProjection_->rotation_ + viewProjection_->rotationOffset_;
     }
 }
 
@@ -118,7 +119,9 @@ void CameraEditor::ApplyToViewProjection() {
 
 void CameraEditor::EditorUpdate() {
 #ifdef _DEBUG
+    isEditing_ = false;
     if (ImGui::CollapsingHeader("Camera Animation Manager")) {
+        isEditing_ = true;
 
         // ロード
         if (ImGui::Button("Load All Animations")) {
@@ -134,18 +137,16 @@ void CameraEditor::EditorUpdate() {
 
         ImGui::Separator();
 
-       // 設定
+        // 設定
         ImGui::Text("ViewProjection Mode:");
         if (ImGui::RadioButton("Auto Apply to ViewProjection", autoApplyToViewProjection_)) {
             autoApplyToViewProjection_ = true;
             keyFramePreviewMode_       = false;
-         
         }
         ImGui::SameLine();
         if (ImGui::RadioButton("KeyFrame Preview Mode", keyFramePreviewMode_)) {
             keyFramePreviewMode_       = true;
             autoApplyToViewProjection_ = false;
-          
         }
 
         ImGui::Separator();
@@ -181,7 +182,6 @@ void CameraEditor::EditorUpdate() {
 
             if (ImGui::Selectable(displayName.c_str(), isSelected)) {
                 selectedIndex_ = i;
-               
             }
 
             if (isPlaying || isFinished) {

@@ -50,7 +50,7 @@ void BaseScene::ViewProjectionUpdate() {
 
 #ifdef _DEBUG
     // デバッグカメラモード切り替え------------------------------
-    if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+    if (input_->TriggerKey(DIK_SPACE)) {
         switch (cameraMode_) {
         case BaseScene::CameraMode::NORMAL:
             cameraMode_ = CameraMode::DEBUG;
@@ -66,14 +66,19 @@ void BaseScene::ViewProjectionUpdate() {
         }
     }
 
+    if (cameraMode_ != CameraMode::EDITOR) {
+        if (cameraEditor_->getis)
+        
+    }
+
 #endif
 
-       switch (cameraMode_) {
+    switch (cameraMode_) {
     case BaseScene::CameraMode::NORMAL:
         ViewProcess();
         break;
     case BaseScene::CameraMode::EDITOR:
-     
+
         break;
     case BaseScene::CameraMode::DEBUG:
         // デバッグカメラの更新
@@ -86,7 +91,6 @@ void BaseScene::ViewProjectionUpdate() {
     default:
         break;
     }
-
 
     Light::GetInstance()->SetWorldCameraPos(viewProjection_.GetWorldPos());
 }

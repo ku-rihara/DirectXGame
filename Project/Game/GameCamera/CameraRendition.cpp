@@ -19,7 +19,6 @@ void CameraRendition::Update(const float& speedRate) {
 
     shakePlayer_->Update(Frame::DeltaTime());
     cameraAnimation_->Update(speedRate);
-
 }
 
  // play呼び出し
