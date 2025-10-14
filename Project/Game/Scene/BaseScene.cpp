@@ -89,10 +89,7 @@ void BaseScene::ViewProjectionUpdate() {
         break;
     }
 
-    if (cameraMode_ != CameraMode::EDITOR) {
-        if (cameraEditor_->getis)
-        
-    }
+   
 
 #endif
 
