@@ -48,6 +48,9 @@ public:
     void Update() override;
     void SkyBoxDraw() override;
 
+    void ObjectInit();
+    void SetClassPointer();
+
     // state Update
     void IntroUpdate();
     void PlayUpdate();
@@ -81,6 +84,9 @@ private:
     std::unique_ptr<AttackEffect> attackEffect_                 = nullptr;
     std::unique_ptr<GameIntroManager> gameIntroManager_         = nullptr;
     std::unique_ptr<ComboLevelObjHolder> comboLevelObjHolder_   = nullptr;
+
+    // editor
+    std::unique_ptr<CameraEditor> cameraEditor_ = nullptr;
 
     GameState gameState_ = GameState::INTRO;
 
