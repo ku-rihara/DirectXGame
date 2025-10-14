@@ -61,7 +61,7 @@ public:
     void SetModel(Model* model) { model_ = model; }
     void SetBlendMode(BlendMode mode) { blendMode = mode; }
     void SetModel(const std::string& modelName);
-    void SetwvpDate(Matrix4x4 date) { wvpDate_->WVP = date; }
-    void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
+    void SetwvpDate(const Matrix4x4& date) { wvpDate_->WVP = date; }
+    void SetWorldMatrixDate(const Matrix4x4& date) { wvpDate_->World = date; }
     void SetIsShadow(const bool& is) { isShadow_ = is; }
 };

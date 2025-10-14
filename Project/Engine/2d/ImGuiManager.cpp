@@ -21,10 +21,7 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
 	dxCommon_ = dxCommon;
 	pSrvManager_ = srvManager;
 
-	//pSrvManager_->Allocate();//確保
-	//dxCommon_->CreateDescriptorHeap(dxCommon_->GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, SrvManager::kMaxCount, true);
-	//srvDescriptorHeap_ = dxCommon_->CreateDescriptorHeap(dxCommon_->GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, DirectXCommon::kMaxSRVCount, true);
-
+	
 #ifdef _DEBUG
 
 	HRESULT result;
@@ -33,7 +30,7 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;// ドッキングを有効化
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	
 	// デスクリプタヒープ設定
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};

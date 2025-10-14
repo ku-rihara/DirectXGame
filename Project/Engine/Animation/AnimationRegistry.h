@@ -29,8 +29,6 @@ public:
     void DrawAllShadow(const ViewProjection& viewProjection);
     void DebugDrawAll(const ViewProjection& viewProjection);
 
-    size_t GetRegisteredCount() const { return animations_.size(); }
-
     void Clear();
     void DebugImGui();
 
@@ -42,11 +40,11 @@ private:
     AnimationRegistry(const AnimationRegistry&)            = delete;
     AnimationRegistry& operator=(const AnimationRegistry&) = delete;
 
-    /// ============================================================
-    /// private members
-    /// ============================================================
 private:
     std::unordered_set<Object3DAnimation*> animations_;
     static AnimationRegistry* instance_;
     static bool isDestroyed_;
+
+public:
+    const size_t& GetRegisteredCount() const { return animations_.size(); }
 };

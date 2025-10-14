@@ -26,9 +26,6 @@ public:
     void DrawAll(const ViewProjection& viewProjection);
     void DrawAllShadow(const ViewProjection& viewProjection);
 
-    /// 登録オブジェクト数取得
-    size_t GetRegisteredCount() const { return objects_.size(); }
-
     void Clear();
     void DebugImGui();
 
@@ -48,4 +45,8 @@ private:
 
     std::unordered_set<Object3d*> objects_;
     static Object3DRegistry* instance_;
+
+public:
+    // getter
+    const size_t& GetRegisteredCount() const { return objects_.size(); }
 };

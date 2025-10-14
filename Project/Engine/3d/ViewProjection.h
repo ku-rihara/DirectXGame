@@ -20,27 +20,32 @@ public:
         ORTHOGRAPHIC // 平行投影
     };
 
+private:
+    Microsoft::WRL::ComPtr<ID3D12Resource> constBuffer_;
+    ConstBufferDataViewProjection* constMap          = nullptr;
+    ViewProjection(const ViewProjection&)            = delete;
+    ViewProjection& operator=(const ViewProjection&) = delete;
+
 public:
     ViewProjection()  = default;
     ~ViewProjection() = default;
 
     /// 初期化
     void Init();
-    /// 定数バッファ生成
+    /// 定数バッファ生成,マッピング
     void CreateConstantBuffer();
-    /// マッピング
     void Map();
-    /// 行列転送
+
+    /// 行列転送,更新
     void TransferMatrix();
-    /// 行列の更新
     void UpdateMatrix();
-    /// ビュー行列の更新
+
+    // ビュー、プロジェクション行列更新
     void UpdateViewMatrix();
-    /// 射影行列を更新する
     void UpdateProjectionMatrix();
-    // ペアレント設定
-    void SetParent(const WorldTransform* parent) { parent_ = parent; }
-    void ClearParent() { parent_ = nullptr; }
+
+    // ペアレント解除
+    void ClearParent();
 
 private:
     const WorldTransform* parent_ = nullptr;
@@ -72,17 +77,15 @@ public:
     Matrix4x4 matProjection_;
     Matrix4x4 cameraMatrix_;
 
-private:
-    Microsoft::WRL::ComPtr<ID3D12Resource> constBuffer_;
-    ConstBufferDataViewProjection* constMap          = nullptr;
-    ViewProjection(const ViewProjection&)            = delete;
-    ViewProjection& operator=(const ViewProjection&) = delete;
-
-public: // getter
+public:
+    // getter
     Vector3 GetWorldPos() const;
     const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return constBuffer_; }
     const Matrix4x4& GetCameraMatrix() const { return cameraMatrix_; }
     Vector3 GetFinalPosition() const;
     Vector3 GetFinalRotation() const;
     Matrix4x4 GetBillboardMatrix() const;
+
+    // setter
+    void SetParent(const WorldTransform* parent) { parent_ = parent; }
 };
