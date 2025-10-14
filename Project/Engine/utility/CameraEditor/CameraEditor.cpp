@@ -5,8 +5,9 @@
 void CameraEditor::Init(ViewProjection* vp) {
     AllLoadFile();
     SetViewProjection(vp);
-    debugObject_.reset(Object3d::CreateModel("debugCube.obj"));
-    debugObject_->SetIsDraw(false);
+    preViewCameraObj_.reset(Object3d::CreateModel("debugCube.obj"));
+    preViewFollowObj_.reset(Object3d::CreateModel("debugSphere.obj"));
+    preViewCameraObj_->SetIsDraw(false);
 }
 
 void CameraEditor::AllLoadFile() {
@@ -56,9 +57,9 @@ void CameraEditor::Update() {
     }
 
     // debugObjectの更新
-    if (debugObject_ && viewProjection_) {
-        debugObject_->transform_.translation_ = viewProjection_->translation_ + viewProjection_->positionOffset_;
-        debugObject_->transform_.rotation_    = viewProjection_->rotation_ + viewProjection_->rotationOffset_;
+    if (preViewCameraObj_ && viewProjection_) {
+        preViewCameraObj_->transform_.translation_ = viewProjection_->translation_ + viewProjection_->positionOffset_;
+        preViewCameraObj_->transform_.rotation_    = viewProjection_->rotation_ + viewProjection_->rotationOffset_;
     }
 }
 
@@ -118,7 +119,9 @@ void CameraEditor::ApplyToViewProjection() {
 
 void CameraEditor::EditorUpdate() {
 #ifdef _DEBUG
+    isEditing_ = false;
     if (ImGui::CollapsingHeader("Camera Animation Manager")) {
+        isEditing_ = true;
 
         // ロード
         if (ImGui::Button("Load All Animations")) {
