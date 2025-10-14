@@ -41,8 +41,8 @@ private:
 private:
     // Animationデバッグ
     std::vector<std::unique_ptr<CameraAnimationData>> animations_;
-    int selectedIndex_                     = -1;
-    ViewProjection* viewProjection_        = nullptr;
+    int selectedIndex_              = -1;
+    ViewProjection* viewProjection_ = nullptr;
 
     std::unique_ptr<Object3d> preViewCameraObj_ = nullptr;
     std::unique_ptr<Object3d> preViewFollowObj_ = nullptr;
@@ -58,13 +58,13 @@ public:
     //--------------------------------------------------------------------------------------
     // getter
     //--------------------------------------------------------------------------------------
-    bool
-    GetAutoApplyToViewProjection() const { return autoApplyToViewProjection_; }
-    bool GetKeyFramePreviewMode() const { return keyFramePreviewMode_; }
+    const bool& GetIsEditing() const { return isEditing_; }
+    const bool& GetAutoApplyToViewProjection() const { return autoApplyToViewProjection_; }
+    const bool& GetKeyFramePreviewMode() const { return keyFramePreviewMode_; }
 
     //--------------------------------------------------------------------------------------
     // setter
     //--------------------------------------------------------------------------------------
-    void SetAutoApplyToViewProjection(bool enable) { autoApplyToViewProjection_ = enable; }
-    void SetKeyFramePreviewMode(bool enable) { keyFramePreviewMode_ = enable; }
+    void SetAutoApplyToViewProjection(const bool& enable) { autoApplyToViewProjection_ = enable; }
+    void SetKeyFramePreviewMode(const bool& enable) { keyFramePreviewMode_ = enable; }
 };
