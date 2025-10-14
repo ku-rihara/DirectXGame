@@ -72,9 +72,7 @@ void TitleScene::Update() {
         titleRogo_->Update();
     }
 
-    Object3DRegistry::GetInstance()->UpdateAll();
-    ParticleManager::GetInstance()->Update();
-
+  
     // 　ゲーム遷移
     if (Input::GetInstance()->PushKey(DIK_SPACE)) {
         isFinished_ = true;

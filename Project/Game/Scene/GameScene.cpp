@@ -1,12 +1,10 @@
 #include "GameScene.h"
-#include "3d/Object3DRegistry.h"
 #include "Scene/Manager/SceneManager.h"
-#include "utility/ParticleEditor/ParticleManager.h"
+
 // base
 #include "base/TextureManager.h"
 // math
 #include "2d/SpriteRegistry.h"
-#include "Animation/AnimationRegistry.h"
 #include "Frame/Frame.h"
 #include "Lighrt/Light.h"
 #include <imgui.h>
@@ -46,8 +44,6 @@ void GameScene::Init() {
     cSprite_.reset(Sprite::Create("Clear.png"));
     cSprite_->transform_.pos = Vector2(0, -720);
 
-    ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
-
     gameState_ = GameState::INTRO;
 
     Frame::ResetDeltaTime();
@@ -84,10 +80,8 @@ void GameScene::Update() {
         break;
     }
 
-    Object3DRegistry::GetInstance()->UpdateAll();
-
+  
     /// パーティクル更新
-    ParticleManager::GetInstance()->Update();
     ViewProjectionUpdate();
 
     if (alpha_ >= 1.2f) {
@@ -199,6 +193,7 @@ void GameScene::Debug() {
     ImGui::End();
 
     ImGui::Begin("Rendition");
+    cameraEditor_->EditorUpdate();
     attackEffect_->EditorUpdate();
     ImGui::End();
 #endif

@@ -66,15 +66,14 @@ void BaseScene::ViewProjectionUpdate() {
         }
     }
 
-    // デバッグカメラモード切り替え------------------------------
 #endif
 
-    switch (cameraMode_) {
+       switch (cameraMode_) {
     case BaseScene::CameraMode::NORMAL:
         ViewProcess();
         break;
     case BaseScene::CameraMode::EDITOR:
-        cameraMode_ = CameraMode::DEBUG;
+     
         break;
     case BaseScene::CameraMode::DEBUG:
         // デバッグカメラの更新
@@ -87,6 +86,7 @@ void BaseScene::ViewProjectionUpdate() {
     default:
         break;
     }
+
 
     Light::GetInstance()->SetWorldCameraPos(viewProjection_.GetWorldPos());
 }
