@@ -81,19 +81,7 @@ void TimeScaleController::EditorUpdate() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader("TimeScale Manager")) {
 
-        // 全体制御
-        if (ImGui::Button("Load All TimeScales")) {
-            AllLoadFile();
-            MessageBoxA(nullptr, "All TimeScales loaded successfully.", "TimeScale Player", 0);
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Save All TimeScales")) {
-            AllSaveFile();
-            MessageBoxA(nullptr, "All TimeScales saved successfully.", "TimeScale Player", 0);
-        }
-
-        ImGui::Separator();
-
+  
         // 新規追加
         ImGui::InputText("New TimeScale Name", nameBuffer_, IM_ARRAYSIZE(nameBuffer_));
         if (ImGui::Button("Add TimeScale")) {
@@ -146,6 +134,29 @@ void TimeScaleController::EditorUpdate() {
         if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(timeScales_.size())) {
             timeScales_[selectedIndex_]->AdjustParam();
         }
+
+         ImGui::Separator();
+        ImGui::Text("File Operations:");
+
+        // Load ボタン
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
+        if (ImGui::Button("Load All TimeScales")) {
+            AllLoadFile();
+            MessageBoxA(nullptr, "All TimeScales loaded successfully.", "TimeScale Player", 0);
+        }
+        ImGui::PopStyleColor(3);
+
+        // Save ボタン
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.4f, 0.9f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.5f, 1.0f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.3f, 0.8f, 1.0f));
+        if (ImGui::Button("Save All TimeScales")) {
+            AllSaveFile();
+            MessageBoxA(nullptr, "All TimeScales saved successfully.", "TimeScale Player", 0);
+        }
+        ImGui::PopStyleColor(3);
     }
 #endif
 }
