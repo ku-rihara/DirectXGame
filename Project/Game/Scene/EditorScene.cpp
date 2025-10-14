@@ -70,6 +70,6 @@ void EditorScene::ViewProjectionUpdate() {
     BaseScene::ViewProjectionUpdate();
 }
 
-void EditorScene::ViewProssess() {
+void EditorScene::ViewProcess() {
     viewProjection_.UpdateMatrix();
 }

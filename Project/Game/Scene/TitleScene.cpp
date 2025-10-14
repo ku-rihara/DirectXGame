@@ -89,6 +89,6 @@ void TitleScene::ViewProjectionUpdate() {
     BaseScene::ViewProjectionUpdate();
 }
 
-void TitleScene::ViewProssess() {
+void TitleScene::ViewProcess() {
     viewProjection_.UpdateMatrix();
 }
