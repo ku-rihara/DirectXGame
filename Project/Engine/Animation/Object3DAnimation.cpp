@@ -99,7 +99,7 @@ void Object3DAnimation::ChangeAnimation(const std::string& animationName) {
 ///============================================================
 /// アニメーション時間設定
 ///============================================================
-void Object3DAnimation::SetAnimationTime(float time) {
+void Object3DAnimation::SetAnimationTime(const float& time) {
     if (!animations_.empty()) {
         float duration = animations_[currentAnimationIndex_].duration;
         animationTime_ = std::fmod(time, duration);
@@ -366,11 +366,11 @@ const std::string& Object3DAnimation::GetCurrentAnimationName() const {
 ///============================================================
 /// 計算メソッド
 ///============================================================
-Vector3 Object3DAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time) {
+Vector3 Object3DAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe,const float& time) {
     return modelAnimation_->CalculateValue(keyframe, time);
 }
 
-Quaternion Object3DAnimation::CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time) {
+Quaternion Object3DAnimation::CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, const float& time) {
     return modelAnimation_->CalculateValueQuaternion(keyframe, time);
 }
 

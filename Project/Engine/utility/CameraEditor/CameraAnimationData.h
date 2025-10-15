@@ -89,7 +89,9 @@ private:
     float returnFov_;
 
     // リセット用パラメータ
-    float resetTimePoint_ = 0.0f;
+    float resetTimePoint_   = 0.0f;
+    float returnDelayTime_  = 0.0f; 
+    float returnDelayTimer_ = 0.0f;
     int32_t resetPosEaseType_;
     int32_t resetRotateEaseType_;
     int32_t resetFovEaseType_;
@@ -105,6 +107,7 @@ private:
 
     // 初期値復帰用のメンバ変数
     bool isReturningToInitial_ = false;
+    bool isWaitingForReturn_   = false;
     Vector3 initialPosition_   = {0.0f, 0.0f, 0.0f};
     Vector3 initialRotation_   = {0.0f, 0.0f, 0.0f};
     float initialFov_          = 45.0f;

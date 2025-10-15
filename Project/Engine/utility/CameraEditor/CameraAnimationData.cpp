@@ -28,6 +28,8 @@ void CameraAnimationData::Init(const std::string& animationName) {
     // 新しいフラグの初期化
     isAllKeyFramesFinished_     = false;
     lastCompletedKeyFrameIndex_ = -1;
+    isWaitingForReturn_         = false;
+    returnDelayTimer_           = 0.0f;
 
     returnPositionEase_.SetAdaptValue(&returnPosition_);
     returnRotationEase_.SetAdaptValue(&returnRotation_);
@@ -106,6 +108,7 @@ void CameraAnimationData::LoadAllKeyFrames() {
         }
     }
 }
+
 void CameraAnimationData::Update(const float& speedRate) {
     // 再生中の更新
     if (playState_ != PlayState::PLAYING) {
@@ -127,23 +130,35 @@ void CameraAnimationData::UpdateActiveKeyFrames(const float& speedRate) {
         return;
     }
 
+    float actualDeltaTime = 0.0f;
+    switch (static_cast<CameraKeyFrame::TimeMode>(timeMode_)) {
+    case CameraKeyFrame::TimeMode::DELTA_TIME:
+        // タイムスケール無視
+        actualDeltaTime = Frame::DeltaTime() * speedRate;
+        break;
+    case CameraKeyFrame::TimeMode::DELTA_TIME_RATE:
+        // タイムスケール適用
+        actualDeltaTime = Frame::DeltaTimeRate() * speedRate;
+        break;
+    default:
+        break;
+    }
+
+    // returnEasing開始待機中の処理
+    if (isWaitingForReturn_) {
+        returnDelayTimer_ += actualDeltaTime;
+
+        // 待機時間を超えたらイージング開始
+        if (returnDelayTimer_ >= returnDelayTime_) {
+            isWaitingForReturn_   = false;
+            isReturningToInitial_ = true;
+            returnDelayTimer_     = 0.0f;
+        }
+        return;
+    }
+
     // 初期値に戻るイージング
     if (isReturningToInitial_) {
-
-        float actualDeltaTime = 0.0f;
-        switch (static_cast<CameraKeyFrame::TimeMode>(timeMode_)) {
-        case CameraKeyFrame::TimeMode::DELTA_TIME:
-            // タイムスケール無視
-            actualDeltaTime = Frame::DeltaTime() * speedRate;
-            break;
-        case CameraKeyFrame::TimeMode::DELTA_TIME_RATE:
-            // タイムスケール適用
-            actualDeltaTime = Frame::DeltaTimeRate() * speedRate;
-            break;
-        default:
-
-            break;
-        }
         returnPositionEase_.Update(actualDeltaTime);
         returnRotationEase_.Update(actualDeltaTime);
         returnFovEase_.Update(actualDeltaTime);
@@ -197,6 +212,7 @@ void CameraAnimationData::UpdateKeyFrameProgression() {
         }
     }
 }
+
 void CameraAnimationData::AdvanceToNextKeyFrame() {
     if (activeKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size()) - 1) {
         activeKeyFrameIndex_++;
@@ -230,6 +246,7 @@ void CameraAnimationData::UpdateInterpolatedValues() {
         currentFov_      = keyFrames_[activeKeyFrameIndex_]->GetFov();
     }
 }
+
 void CameraAnimationData::ApplyToViewProjection(ViewProjection& viewProjection) {
 
     // viewProjectionの値適応
@@ -335,9 +352,11 @@ void CameraAnimationData::Reset() {
     // フラグをリセット
     isAllKeyFramesFinished_     = false;
     isReturningToInitial_       = false;
+    isWaitingForReturn_         = false;
     isAllFinished_              = false;
     lastCompletedKeyFrameIndex_ = -1;
     activeKeyFrameIndex_        = 0;
+    returnDelayTimer_           = 0.0f;
 
     playState_ = PlayState::STOPPED;
 }
@@ -349,6 +368,7 @@ void CameraAnimationData::BindParams() {
     globalParameter_->Bind(groupName_, "resetRotateEaseType", &resetRotateEaseType_);
     globalParameter_->Bind(groupName_, "resetFovEaseType", &resetFovEaseType_);
     globalParameter_->Bind(groupName_, "resetTimePoint", &resetTimePoint_);
+    globalParameter_->Bind(groupName_, "returnDelayTime", &returnDelayTime_);
     globalParameter_->Bind(groupName_, "timeMode", &timeMode_);
 }
 
@@ -389,10 +409,16 @@ void CameraAnimationData::AdjustParam() {
         if (isAllKeyFramesFinished_) {
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Animation Finished!");
         }
+
+        if (isWaitingForReturn_) {
+            ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Waiting for Return... (%.2f/%.2f)",
+                returnDelayTimer_, returnDelayTime_);
+        }
     }
 
     ImGui::SeparatorText("Reset Param");
     // イージングタイプの設定
+    ImGui::DragFloat("Return Delay Time", &returnDelayTime_, 0.01f, 0.0f, 10.0f);
     ImGui::DragFloat("Reset Time Point", &resetTimePoint_, 0.01f);
     EasingTypeSelector("Easing Type Position", resetPosEaseType_);
     EasingTypeSelector("Easing Type Rotate", resetRotateEaseType_);
@@ -456,7 +482,6 @@ void CameraAnimationData::AdjustParam() {
     }
     ImGui::PopStyleColor(3);
 
-  
     // Save ボタン
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.4f, 0.9f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.5f, 1.0f, 1.0f));
@@ -491,10 +516,18 @@ void CameraAnimationData::SetInitialValues(const Vector3& position, const Vector
 }
 
 void CameraAnimationData::StartReturnToInitial() {
-    if (isReturningToInitial_) {
+    if (isReturningToInitial_ || isWaitingForReturn_) {
         return;
     }
-    isReturningToInitial_ = true;
+
+    // 待機時間が設定されている場合は待機状態に
+    if (returnDelayTime_ > 0.0f) {
+        isWaitingForReturn_ = true;
+        returnDelayTimer_   = 0.0f;
+    } else {
+        // 待機時間がない場合は即座にイージング開始
+        isReturningToInitial_ = true;
+    }
 
     Vector3 currentPos    = currentPosition_;
     Vector3 currentRot    = currentRotation_;
@@ -525,12 +558,14 @@ void CameraAnimationData::SetSelectedKeyFrameIndex(const int32_t& index) {
         selectedKeyFrameIndex_ = index;
     }
 }
+
 CameraKeyFrame* CameraAnimationData::GetSelectedKeyFrame() {
     if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
         return keyFrames_[selectedKeyFrameIndex_].get();
     }
     return nullptr;
 }
+
 const CameraKeyFrame* CameraAnimationData::GetSelectedKeyFrame() const {
     if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
         return keyFrames_[selectedKeyFrameIndex_].get();

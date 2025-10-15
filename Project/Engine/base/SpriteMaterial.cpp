@@ -35,7 +35,7 @@ void SpriteMaterial::SetCommandList(ID3D12GraphicsCommandList* commandList) {
 
 void SpriteMaterial::DebugImGui() {
 #ifdef _DEBUG
-    ImGui::ColorEdit4("Color", reinterpret_cast<float*>(&materialData_->color));  // materialData_のcolorを使用
+    ImGui::ColorEdit4("Color", reinterpret_cast<float*>(&materialData_->color));  
 #endif
 }
 
