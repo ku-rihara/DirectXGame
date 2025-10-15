@@ -22,12 +22,11 @@ FallAttack::FallAttack(Player* player)
 FallAttack::~FallAttack() {
 }
 
-
 void FallAttack::Init() {
 
     BaseComboAattackBehavior::Init();
 
-    step_ = STEP::FALL; // 落ちる
+    step_ = STEP::PREACTION; // 落ちる
 
     fallRotateY_ = 0.0f;
 
@@ -44,6 +43,8 @@ void FallAttack::Init() {
     fallInitPosLHand_ = pPlayer_->GetLeftHand()->GetTransform().translation_.y;
     fallInitPosRHand_ = pPlayer_->GetRightHand()->GetTransform().translation_.y;
 
+    tempPosY_ = pPlayer_->GetWorldPosition().y;
+
     EasingInit();
 
     pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
@@ -52,13 +53,20 @@ void FallAttack::Init() {
 // 更新
 void FallAttack::Update() {
     switch (step_) {
+
+        ///---------------------------------------------------------
+        /// 予備動作
+        ///---------------------------------------------------------
+    case STEP::PREACTION:
+
+        preActionPosYEase_.Update(atkSpeed_);
+        pPlayer_->SetWorldPositionY(tempPosY_ + preActionPosY_);
+        break;
         ///---------------------------------------------------------
         /// 落ちる
         ///---------------------------------------------------------
 
     case STEP::FALL:
-
-        /*	fallEaseT_ += Frame::DeltaTimeRate();*/
 
         pPlayer_->GetLeftHand()->SetWorldPositionY(0.2f);
         pPlayer_->GetRightHand()->SetWorldPositionY(0.2f);
@@ -101,7 +109,7 @@ void FallAttack::Update() {
         BaseComboAattackBehavior::PreOderNextComboForButton(); // 次のコンボに移行可能
 
         /// スケール変化
-        landScaleEasing_.Update( atkSpeed_);
+        landScaleEasing_.Update(atkSpeed_);
         pPlayer_->SetScale(tempLandScale_);
         pPlayer_->GetAttackController()->SetPosition(pPlayer_->GetWorldPosition());
 
@@ -111,7 +119,6 @@ void FallAttack::Update() {
 
         // 反動ジャンプ
         pPlayer_->Jump(boundSpeed_, boundFallSpeedLimit_, gravity_);
-
 
         // 次の振る舞い
         if (pPlayer_->GetTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {
@@ -145,28 +152,31 @@ void FallAttack::Update() {
 
 void FallAttack::EasingInit() {
 
-    landScaleEasing_.Init("PlayerLandScaling");
-    landScaleEasing_.ApplyFromJson("PlayerLandScaling.json");
-    landScaleEasing_.SaveAppliedJsonFileName();
+    landScaleEasing_.Init("PlayerLandScaling", "PlayerLandScaling.json");
     landScaleEasing_.SetAdaptValue(&tempLandScale_);
     landScaleEasing_.Reset();
 
-    fallEase_.Init("PlayerFallAttack");
-    fallEase_.ApplyFromJson("PlayerFallAttack.json");
-    fallEase_.SaveAppliedJsonFileName();
+    fallEase_.Init("PlayerFallAttack", "PlayerFallAttack.json");
     fallEase_.SetAdaptValue(&tempWorldPosY_);
     fallEase_.Reset();
-
     fallEase_.SetStartValue(playerInitPosY_);
     fallEase_.SetEndValue(pPlayerParameter_->GetParamaters().startPos_.y);
 
     fallEase_.SetOnFinishCallback([this]() {
         step_ = STEP::FALLFINISH;
     });
+
+    preActionPosYEase_.Init("preActionPosY", "preActionPosY.json");
+    preActionPosYEase_.SetAdaptValue(&preActionPosY_);
+    preActionPosYEase_.Reset();
+
+    preActionPosYEase_.SetOnFinishCallback([this]() {
+        pPlayer_->GetGameCamera()->PlayAnimation("FallAttackPreAction");
+        step_ = STEP::FALL;
+    });
 }
 
 void FallAttack::CollisionInit() {
-  
 }
 
 void FallAttack::Debug() {

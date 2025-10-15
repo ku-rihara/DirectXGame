@@ -20,6 +20,7 @@ public:
 
 private:
 	enum class STEP {
+		PREACTION,
 		FALL,
         FALLFINISH,
 		LANDING,
@@ -55,5 +56,9 @@ private:
 
 	Vector3 tempLandScale_;
 	Easing<Vector3> landScaleEasing_;
+    Easing<float> preActionPosYEase_;
+
+	float tempPosY_;
+	float preActionPosY_;
 	float waitTime_;
 };

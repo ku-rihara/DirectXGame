@@ -198,6 +198,7 @@
     <ClCompile Include="Game\Player\ComboAttackBehavior\LeftJobPunch.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\RoringUpper.cpp" />
     <ClCompile Include="Game\Player\Effect\PlayerEffects.cpp" />
+    <ClCompile Include="Game\Player\JumpAttackUI\JumpAttackUI.cpp" />
     <ClCompile Include="Game\Player\Parameter\PlayerParameter.cpp" />
     <ClCompile Include="Game\Player\Parts\BasePlayerHand.cpp" />
     <ClCompile Include="Game\Player\Parts\PlayerHandLeft.cpp" />
@@ -440,6 +441,7 @@
     <ClInclude Include="Game\Player\ComboAttackBehavior\LeftJobPunch.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\RoringUpper.h" />
     <ClInclude Include="Game\Player\Effect\PlayerEffects.h" />
+    <ClInclude Include="Game\Player\JumpAttackUI\JumpAttackUI.h" />
     <ClInclude Include="Game\Player\Parameter\PlayerParameter.h" />
     <ClInclude Include="Game\Player\Parts\BasePlayerHand.h" />
     <ClInclude Include="Game\Player\Parts\PlayerHandLeft.h" />

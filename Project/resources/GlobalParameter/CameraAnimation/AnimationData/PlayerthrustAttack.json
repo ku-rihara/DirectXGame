@@ -5,6 +5,7 @@
         "resetFovEaseType": 6,
         "resetPosEaseType": 6,
         "resetRotateEaseType": 6,
-        "resetTimePoint": 0.28999999165534973
+        "resetTimePoint": 0.28999999165534973,
+        "timeMode": 1
     }
 }

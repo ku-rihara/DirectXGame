@@ -457,6 +457,9 @@
     <Filter Include="MyEngine\.h\Pipeline\SkyBox">
       <UniqueIdentifier>{647a01ef-6a48-46ff-840f-f1b296205edd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player\JumpAttackUI">
+      <UniqueIdentifier>{2a057082-9dd0-48a1-983c-2389abf8a682}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1131,6 +1134,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Pipeline\SkyBox\SkyBoxPipeline.cpp">
       <Filter>MyEngine\.cpp\Pipeline\SkyBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\JumpAttackUI\JumpAttackUI.cpp">
+      <Filter>Game\Player\JumpAttackUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1856,6 +1862,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Pipeline\SkyBox\SkyBoxPipeline.h">
       <Filter>MyEngine\.h\Pipeline\SkyBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\JumpAttackUI\JumpAttackUI.h">
+      <Filter>Game\Player\JumpAttackUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
