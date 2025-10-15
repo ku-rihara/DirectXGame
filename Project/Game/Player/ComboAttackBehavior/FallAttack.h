@@ -20,6 +20,7 @@ public:
 
 private:
 	enum class STEP {
+        START,
 		PREACTION,
 		FALL,
         FALLFINISH,

@@ -1,10 +1,11 @@
 {
     "FallAttackPreAction": {
         "autoReturnToInitial": true,
-        "resetFovEaseType": 10,
-        "resetPosEaseType": 10,
-        "resetRotateEaseType": 10,
-        "resetTimePoint": 0.23000000417232513,
+        "resetFovEaseType": 6,
+        "resetPosEaseType": 6,
+        "resetRotateEaseType": 6,
+        "resetTimePoint": 0.23999999463558197,
+        "returnDelayTime": 0.0,
         "timeMode": 1
     }
 }

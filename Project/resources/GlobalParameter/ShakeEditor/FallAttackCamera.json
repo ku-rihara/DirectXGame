@@ -1,9 +1,9 @@
 {
     "FallAttackCamera": {
-        "axisFlag": 2,
+        "axisFlag": 3,
         "easeType": 1,
-        "maxTime": 0.699999988079071,
-        "shakeLength": 1.9900000095367432,
+        "maxTime": 0.7799999713897705,
+        "shakeLength": 1.809999942779541,
         "shakeType": 1,
         "startTime": 1.0
     }

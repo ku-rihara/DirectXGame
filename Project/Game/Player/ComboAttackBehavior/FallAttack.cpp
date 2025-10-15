@@ -26,7 +26,7 @@ void FallAttack::Init() {
 
     BaseComboAattackBehavior::Init();
 
-    step_ = STEP::PREACTION; // 落ちる
+    step_ = STEP::START;
 
     fallRotateY_ = 0.0f;
 
@@ -53,6 +53,15 @@ void FallAttack::Init() {
 // 更新
 void FallAttack::Update() {
     switch (step_) {
+
+        ///---------------------------------------------------------
+        /// 開始
+        ///---------------------------------------------------------
+    case STEP::START:
+
+        pPlayer_->GetGameCamera()->PlayAnimation("FallAttackPreAction");
+        step_ = STEP::PREACTION;
+        break;
 
         ///---------------------------------------------------------
         /// 予備動作
@@ -171,7 +180,6 @@ void FallAttack::EasingInit() {
     preActionPosYEase_.Reset();
 
     preActionPosYEase_.SetOnFinishCallback([this]() {
-        pPlayer_->GetGameCamera()->PlayAnimation("FallAttackPreAction");
         step_ = STEP::FALL;
     });
 }
