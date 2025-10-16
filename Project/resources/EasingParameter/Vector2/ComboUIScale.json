@@ -1,5 +1,6 @@
 {
     "ComboUIScale": {
+        "StartTimeOffset": 0.0,
         "adaptVec2AxisType": 0,
         "amplitude": 0.9800000190734863,
         "backRatio": 0.0,

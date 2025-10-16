@@ -1,5 +1,6 @@
 {
     "EnemyFindSpriteScaling": {
+        "StartTimeOffset": 0.0,
         "adaptVec2AxisType": 0,
         "amplitude": 0.0,
         "backRatio": 0.0,

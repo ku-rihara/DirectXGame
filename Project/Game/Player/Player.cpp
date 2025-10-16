@@ -49,7 +49,7 @@ void Player::Init() {
     obj3d_.reset(Object3d::CreateModel("Player.obj"));
     obj3d_->material_.materialData_->enableLighting = 7;
     obj3d_->material_.SetEnvironmentCoefficient(0.05f);
-   
+
     // Playerの攻撃クラス
     attackController_ = std::make_unique<PlayerAttackController>();
     attackController_->Init();
@@ -68,6 +68,10 @@ void Player::Init() {
     /// レールペアレント
     rightHand_->SetRailParent(&baseTransform_);
     leftHand_->SetRailParent(&baseTransform_);
+
+    // JumpAttackUI
+    jumpAttackUI_ = std::make_unique<JumpAttackUI>();
+    jumpAttackUI_->Init();
 
     // パラメータセット
     baseTransform_.translation_ = parameters_->GetParamaters().startPos_;
@@ -99,6 +103,8 @@ void Player::Update() {
         behavior_->Update();
     }
 
+    jumpAttackUI_->Update(GetWorldPosition(), *viewProjection_);
+
     /// Particle
     effects_->Update(GetWorldPosition());
 
@@ -122,8 +128,8 @@ void Player::TitleUpdate() {
 
 void Player::GameIntroUpdate() {
 
-     effects_->Update(GetWorldPosition());
- 
+    effects_->Update(GetWorldPosition());
+
     if (dynamic_cast<PlayerSpawn*>(behavior_.get())) {
         behavior_->Update();
     }
@@ -360,6 +366,7 @@ void Player::AdjustParam() {
     // パーツのパラメータ
     leftHand_->AdjustParm();
     rightHand_->AdjustParm();
+    jumpAttackUI_->AdjustParam();
 
 #endif // _DEBUG
 }
@@ -536,7 +543,6 @@ void Player::SetHitStop(AttackEffect* hitStop) {
     pHitStop_ = hitStop;
 }
 
-
 /// =======================================================================================
 /// Sound
 /// =======================================================================================
@@ -553,4 +559,3 @@ void Player::FallSound() {
 bool Player::CheckIsChargeMax() const {
     return currentUpperChargeTime_ >= parameters_->GetParamaters().upperParam.chargeTime;
 }
-

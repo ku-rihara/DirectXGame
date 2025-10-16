@@ -7,7 +7,8 @@
 
 class ViewProjection;
 class JumpAttackUI {
-public:
+private:
+    // ボタンタイプ
     enum Type {
         X,
         Y,
@@ -15,16 +16,17 @@ public:
         A,
         COUNT
     };
-
+    // 状態
     enum class State {
         WAIT,
         OPEN,
         CLOSE,
     };
-
+public:
     struct BottomParam {
         std::unique_ptr<Sprite> sprite;
         Vector2 discreteDirection;
+        Vector2 posValueOffset;
     };
 
     struct EasingParam {
@@ -49,8 +51,12 @@ public:
     void BindParams();
     void AdjustParam();
 
+    void StartOpen();
+    void StartClose();
+
 private:
     void DirectionByBottom(const size_t& TypeNum);
+    std::string BottomNameByType(const size_t& TypeNum);
     static void (JumpAttackUI::* spFuncTable_[])();
 
     void EasingInit();
@@ -69,7 +75,7 @@ private:
     std::array<BottomParam, static_cast<size_t>(Type::COUNT)> bottoms_;
     State state_ = State::WAIT;
     EasingParam easingParam_;
-    
 
+    
 public:
 };

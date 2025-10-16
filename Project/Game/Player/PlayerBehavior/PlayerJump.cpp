@@ -30,6 +30,7 @@ void PlayerJump::Update() {
     switch (step_) {
     case PlayerJump::Step::START:
         pPlayer_->GetGameCamera()->PlayAnimation("PlayerJunmp");
+        pPlayer_->GetJumpAttackUI()->StartOpen();
         step_ = Step::JUMP;
         break;
     case PlayerJump::Step::JUMP:
@@ -43,7 +44,7 @@ void PlayerJump::Update() {
         if (pPlayer_->GetTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {
             return;
         }
-
+        pPlayer_->GetJumpAttackUI()->StartClose();
         // behavior切り替え
         pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
         break;

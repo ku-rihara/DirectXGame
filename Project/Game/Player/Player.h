@@ -6,6 +6,7 @@
 #include "BaseObject/BaseObject.h"
 #include "CollisionBox/PlayerAttackController.h"
 #include "Effect/PlayerEffects.h"
+#include "JumpAttackUI/JumpAttackUI.h"
 #include "Parameter/PlayerParameter.h"
 
 /// Parts
@@ -114,6 +115,7 @@ private: // class
     std::unique_ptr<PlayerEffects> effects_;
     std::unique_ptr<PlayerParameter> parameters_;
     std::unique_ptr<PlayerAttackController> attackController_;
+    std::unique_ptr<JumpAttackUI> jumpAttackUI_;
 
     /// behavior
     std::unique_ptr<BasePlayerBehavior> behavior_            = nullptr;
@@ -154,6 +156,7 @@ public:
     AttackEffect* GetAttackEffect() const { return pHitStop_; }
     PlayerParameter* GetParameter() const { return parameters_.get(); }
     PlayerAttackController* GetAttackController() const { return attackController_.get(); }
+    JumpAttackUI* GetJumpAttackUI() const { return jumpAttackUI_.get(); }
     float GetMoveSpeed() const { return moveSpeed_; }
 
     /// =========================================================================================
