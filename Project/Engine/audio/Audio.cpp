@@ -19,8 +19,9 @@ void Audio::Init() {
 }
 
 int Audio::LoadWave(const std::string& filename) {
+    std::string fullPath = filePath_ + filename;
     // ファイルがすでに読み込まれている場合
-    auto it = soundIndexMap_.find(filename);
+    auto it = soundIndexMap_.find(fullPath);
 
     if (it != soundIndexMap_.end()) {
         return it->second; // 既存のインデックスを返す
@@ -28,7 +29,7 @@ int Audio::LoadWave(const std::string& filename) {
 
     // ファイルオープン------------------------
     std::ifstream file;
-    file.open(filename, std::ios_base::binary);
+    file.open(fullPath, std::ios_base::binary);
     assert(file.is_open());
 
     // RIFFヘッダーの読み込み
@@ -76,7 +77,7 @@ int Audio::LoadWave(const std::string& filename) {
     int index = int(soundDatas_.size()) - 1;
 
     // ファイル名とインデックスをマップに保存
-    soundIndexMap_[filename] = index;
+    soundIndexMap_[fullPath] = index;
 
     return index;
 }
