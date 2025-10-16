@@ -7,6 +7,9 @@ void CameraEditor::Init(ViewProjection* vp) {
     SetViewProjection(vp);
     preViewCameraObj_.reset(Object3d::CreateModel("debugCube.obj"));
     preViewFollowObj_.reset(Object3d::CreateModel("debugCube.obj"));
+
+    preViewCameraObj_->SetIsDraw(false);
+    preViewFollowObj_->SetIsDraw(false);
 }
 
 void CameraEditor::AllLoadFile() {
