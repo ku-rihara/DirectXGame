@@ -60,6 +60,9 @@ void CameraEditor::Update() {
         preViewCameraObj_->transform_.translation_ = preViewFollowObj_->transform_.translation_ + viewProjection_->translation_ + viewProjection_->positionOffset_;
         preViewCameraObj_->transform_.rotation_    = preViewFollowObj_->transform_.rotation_ + viewProjection_->rotation_ + viewProjection_->rotationOffset_;
     }
+
+    preViewFollowObj_->SetIsDraw(isPreViewDraw_);
+    preViewCameraObj_->SetIsDraw(isPreViewDraw_);
 }
 
 void CameraEditor::PlaySelectedAnimation() {
@@ -127,8 +130,6 @@ void CameraEditor::EditorUpdate() {
         ImGui::Text("Camera PreViewFollowObj:");
         ImGui::DragFloat3("preViewFollowObj", &preViewFollowObj_->transform_.translation_.x, 0.1f);
         ImGui::Checkbox("IsDraw", &isPreViewDraw_);
-        preViewFollowObj_->SetIsDraw(isPreViewDraw_);
-        preViewCameraObj_->SetIsDraw(isPreViewDraw_);
 
         ImGui::Separator();
         ImGui::Text("Camera Edit:");
