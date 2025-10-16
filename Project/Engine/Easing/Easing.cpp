@@ -490,10 +490,18 @@ void Easing<T>::Easing::FinishBehavior() {
 
     switch (finishValueType_) {
     case EasingFinishValueType::Start:
-        *currentValue_ = startValue_ + baseValue_;
+        if (isStartEndReverse_) {
+            *currentValue_ = endValue_ + baseValue_;
+        } else {
+            *currentValue_ = startValue_ + baseValue_;
+        }
         break;
     case EasingFinishValueType::End:
-        *currentValue_ = endValue_ + baseValue_;
+        if (isStartEndReverse_) {
+            *currentValue_ = startValue_ + baseValue_;
+        } else {
+            *currentValue_ = endValue_ + baseValue_;
+        }
         break;
     default:
         break;
