@@ -24,7 +24,7 @@ void TextureManager::Init(DirectXCommon* dxCommon, SrvManager* srvManager) {
     directXCommon_ = dxCommon;
     pSrvManager_   = srvManager;
     // SRVと同様
-    textureDatas_.reserve(SrvManager::kMaxCount);
+    textureDates_.reserve(SrvManager::kMaxCount);
 }
 
 DirectX::ScratchImage TextureManager::LoadTextureFile(const std::string& filePath) {
@@ -114,8 +114,8 @@ Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::UploadTextureDate(Microso
 uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 
     // 読み込み済みテクスチャを検索
-    if (textureDatas_.contains(filePath)) {
-        return textureDatas_[filePath].index; // インデックスを返す
+    if (textureDates_.contains(filePath)) {
+        return textureDates_[filePath].index; // インデックスを返す
     }
 
     // テクスチャ上限枚数をチェック
@@ -124,7 +124,7 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
     // テクスチャファイルを読み、MipMapの作成
     DirectX::ScratchImage mipImage = LoadTextureFile(filePath);
 
-    TextureData& textureData = textureDatas_[filePath];
+    TextureData& textureData = textureDates_[filePath];
 
     // メタデータとリソースの初期化
     textureData.metadata = mipImage.GetMetadata();
@@ -172,20 +172,20 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
     directXCommon_->GetDxCommand()->ResetCommand();
 
     // 新しく読み込んだテクスチャのインデックスを設定し、返す
-    textureData.index = static_cast<uint32_t>(textureDatas_.size() - 1);
+    textureData.index = static_cast<uint32_t>(textureDates_.size() - 1);
     return textureData.index;
 }
 
-const DirectX::TexMetadata& TextureManager::GetMetaData(uint32_t textureIndex) {
+const DirectX::TexMetadata& TextureManager::GetMetaData(const uint32_t& textureIndex) {
     // 範囲外チェック
-    assert(textureIndex < textureDatas_.size());
+    assert(textureIndex < textureDates_.size());
 
     // 指定されたインデックスのエントリを取得
-    auto it = textureDatas_.begin();
+    auto it = textureDates_.begin();
     //std::advance(it, textureIndex);
-    for (auto& texData : textureDatas_) {
+    for (auto& texData : textureDates_) {
         if (texData.second.index == textureIndex) {
-            it = textureDatas_.find(texData.first);
+            it = textureDates_.find(texData.first);
             break;
         }
     }
@@ -194,16 +194,16 @@ const DirectX::TexMetadata& TextureManager::GetMetaData(uint32_t textureIndex) {
     return it->second.metadata;
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(uint32_t index) const {
+D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(const uint32_t& index) const {
 
-    assert(index < textureDatas_.size());
+    assert(index < textureDates_.size());
 
     // インデックスに対応するエントリを探す
-    auto it = textureDatas_.begin();
+    auto it = textureDates_.begin();
     //std::advance(it, index);
-    for(auto& texData : textureDatas_){
+    for(auto& texData : textureDates_){
         if(texData.second.index == index){
-            it = textureDatas_.find(texData.first);
+            it = textureDates_.find(texData.first);
             break;
         }
 	}
@@ -215,7 +215,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(uint32_t index) con
 uint32_t TextureManager::GetSrvIndex(const std::string& filePath) {
     // ファイルパスに基づいてインデックスを検索
     uint32_t index = 0;
-    for (const auto& [key, textureData] : textureDatas_) {
+    for (const auto& [key, textureData] : textureDates_) {
         if (key == filePath) {
             return index;
         }

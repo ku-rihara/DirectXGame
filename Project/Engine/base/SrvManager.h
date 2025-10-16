@@ -30,7 +30,7 @@ public:
     D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(const uint32_t& index);
 
     /// SRV生成(テクスチャ用、Structured Buffer用)
-    void CreateForTexture2D(const uint32_t& srvIndex, ID3D12Resource* pResource, D3D12_SHADER_RESOURCE_VIEW_DESC desc);
+    void CreateForTexture2D(const uint32_t& srvIndex, ID3D12Resource* pResource, const D3D12_SHADER_RESOURCE_VIEW_DESC& desc);
     void CreateForStructuredBuffer(const uint32_t& srvIndex, ID3D12Resource* pResource, const UINT& numElements, const UINT& structuredByteStride);
 
     void CreateStructuredUAV(const uint32_t& index, ID3D12Resource* resource, const UINT& numElements, const UINT& byteStride);

@@ -47,11 +47,10 @@ public:
     static DirectXCommon* GetInstance();
     ~DirectXCommon() = default;
 
-    void Init(WinApp* win, int32_t backBufferWidth = 1280, int32_t backBufferHeight = 720);
+    void Init(WinApp* win,const int32_t& backBufferWidth = 1280, const int32_t& backBufferHeight = 720);
     void InitRenderingResources();
 
     void PreDraw();
-    void ClearDepthBuffer();
     void PostDraw();
     void Finalize();
 
@@ -94,8 +93,8 @@ public:
     ///==========================================================
 
     /// ディスクリプタハンドル取得
-    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
-    D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
+    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, const uint32_t& descriptorSize,const uint32_t& index);
+    D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, const uint32_t& descriptorSize,const uint32_t& index);
 
     DxDevice* GetDxDevice() const { return dxDevice_.get(); }
     DxCommand* GetDxCommand() const { return dxCommand_.get(); }

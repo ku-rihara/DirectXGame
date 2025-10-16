@@ -4,7 +4,7 @@
 #include <cassert>
 
 void DxDepthBuffer::Init(Microsoft::WRL::ComPtr<ID3D12Device> device, DsvManager* dsvManager,
-    SrvManager* srvManager, uint32_t width, uint32_t height) {
+    SrvManager* srvManager,const uint32_t& width,const uint32_t& height) {
     dsvManager_ = dsvManager;
     srvManager_ = srvManager;
     width_      = width;
@@ -95,7 +95,7 @@ void DxDepthBuffer::Clear(ID3D12GraphicsCommandList* commandList) {
     commandList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 }
 
-void DxDepthBuffer::TransitionState(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES newState) {
+void DxDepthBuffer::TransitionState(ID3D12GraphicsCommandList* commandList,const D3D12_RESOURCE_STATES& newState) {
     if (currentState_ != newState) {
         D3D12_RESOURCE_BARRIER barrier{};
         barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;

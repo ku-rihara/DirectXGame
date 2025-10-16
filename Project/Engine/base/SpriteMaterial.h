@@ -11,7 +11,6 @@ class SpriteMaterial {
 public:
     SpriteMaterial();
     ~SpriteMaterial()=default;
-
  
     /// マテリアルのリソースを作成する関数
     void CreateMaterialResource(DirectXCommon* dxCommon);
@@ -30,14 +29,10 @@ private:
     };
 
 private:
-
     // GPUリソースへのポインタ
     Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 
 public:
     MaterialSprite* materialData_;
- 
-
-
 
 };

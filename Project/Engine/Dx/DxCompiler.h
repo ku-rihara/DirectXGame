@@ -28,6 +28,4 @@ private:
     Microsoft::WRL::ComPtr<IDxcCompiler3> dxcCompiler_         = nullptr;
     Microsoft::WRL::ComPtr<IDxcIncludeHandler> includeHandler_ = nullptr;
 
-public:
-    
 };

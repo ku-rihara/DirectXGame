@@ -6,7 +6,7 @@
 void DxSwapChain::Init(
     Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory,
     Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue,
-    WinApp* winApp,int32_t backBufferWidth,int32_t backBufferHeight) {
+    WinApp* winApp, const int32_t& backBufferWidth, const int32_t& backBufferHeight) {
 
     commandQueue_ = commandQueue;
 
@@ -58,13 +58,13 @@ void DxSwapChain::Present() {
 }
 
 // リソース状態管理
-void DxSwapChain::UpdateResourceState(UINT index, D3D12_RESOURCE_STATES state) {
+void DxSwapChain::UpdateResourceState(const UINT& index, const D3D12_RESOURCE_STATES& state) {
     if (index < 2) {
         resourceStates_[index] = state;
     }
 }
 
-D3D12_RESOURCE_STATES DxSwapChain::GetResourceState(UINT index) const {
+D3D12_RESOURCE_STATES DxSwapChain::GetResourceState(const UINT& index) const {
     if (index < 2) {
         return resourceStates_[index];
     } else {

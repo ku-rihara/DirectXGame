@@ -12,7 +12,7 @@
 ///==========================================================
 void DxRenderTarget::Init(
     Microsoft::WRL::ComPtr<ID3D12Device> device, DxDepthBuffer*depthBuffer, RtvManager* rtvManager, SrvManager* srvManager,
-    DxCommand* dxCommand, DxSwapChain* dxSwapChain, uint32_t width, uint32_t height) {
+    DxCommand* dxCommand, DxSwapChain* dxSwapChain, const uint32_t& width, const uint32_t& height) {
 
     rtvManager_  = rtvManager;
     srvManager_  = srvManager;
@@ -83,7 +83,7 @@ void DxRenderTarget::CreateRenderTextureSRV() {
 /// レンダーテクスチャリソース作成
 ///==========================================================
 Microsoft::WRL::ComPtr<ID3D12Resource> DxRenderTarget::CreateRenderTextureResource(
-    Microsoft::WRL::ComPtr<ID3D12Device> device, uint32_t width, uint32_t height,
+    Microsoft::WRL::ComPtr<ID3D12Device> device, const uint32_t& width, const uint32_t& height,
     DXGI_FORMAT format, const Vector4& clearColor) {
 
     // リソース設定
@@ -259,7 +259,7 @@ void DxRenderTarget::SetupViewportAndScissor() {
 /// リソース状態遷移バリア
 ///==========================================================
 void DxRenderTarget::PutTransitionBarrier(ID3D12Resource* pResource,
-    D3D12_RESOURCE_STATES Before, D3D12_RESOURCE_STATES After) {
+    const D3D12_RESOURCE_STATES& Before,const D3D12_RESOURCE_STATES& After) {
 
     D3D12_RESOURCE_BARRIER barrier{};
     barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
