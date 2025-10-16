@@ -40,6 +40,8 @@ void ShakeEditor::Update(const float& deltaTime) {
             preViewObj_->transform_.translation_ = basePos_ + shake->GetShakeOffset();
         }
     }
+
+     preViewObj_->SetIsDraw(isPreViewDraw_);
 }
 
 void ShakeEditor::EditorUpdate() {
@@ -50,7 +52,6 @@ void ShakeEditor::EditorUpdate() {
         ImGui::Text("Preview Object:");
         ImGui::DragFloat3("preViewFollowObj", &basePos_.x, 0.1f);
         ImGui::Checkbox("IsDraw", &isPreViewDraw_);
-        preViewObj_->SetIsDraw(isPreViewDraw_);
 
         ImGui::Separator();
         ImGui::Text("Shake Edit:");
