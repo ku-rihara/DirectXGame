@@ -123,6 +123,7 @@ void CameraEditor::EditorUpdate() {
     if (ImGui::CollapsingHeader("Camera Animation Manager")) {
         isEditing_ = true;
 
+        ImGui::DragFloat3("preViewFollowObj", &preViewFollowObj_->transform_.translation_.x, 0.1f);
 
         // 設定
         ImGui::Text("ViewProjection Mode:");
@@ -210,7 +211,6 @@ void CameraEditor::EditorUpdate() {
             animations_[selectedIndex_]->AdjustParam();
         }
 
-       
         ImGui::Text("File Operations:");
 
         // Load ボタン
@@ -223,7 +223,6 @@ void CameraEditor::EditorUpdate() {
         }
         ImGui::PopStyleColor(3);
 
-      
         // Save ボタン
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.4f, 0.9f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.5f, 1.0f, 1.0f));
