@@ -53,6 +53,7 @@ private:
     bool autoApplyToViewProjection_ = true; //<再生制御
     bool keyFramePreviewMode_       = false; //< KeyFrameプレビュー
     bool isEditing_                 = false;
+    bool isPreViewDraw_             = false;
 
 public:
     //--------------------------------------------------------------------------------------
