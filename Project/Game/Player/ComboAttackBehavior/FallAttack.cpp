@@ -58,7 +58,8 @@ void FallAttack::Update() {
         /// 開始
         ///---------------------------------------------------------
     case STEP::START:
-
+        pPlayer_->GetJumpAttackUI()->StartClose();
+        pPlayer_->GetEffects()->SpecialAttackRenditionInit();
         pPlayer_->GetGameCamera()->PlayAnimation("FallAttackPreAction");
         step_ = STEP::PREACTION;
         break;
