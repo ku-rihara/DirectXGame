@@ -22,9 +22,6 @@ void IntroSpawnField::Update(const float& playSpeed) {
     (this->*spFuncTable_[static_cast<size_t>(step_)])();
 }
 
-void IntroSpawnField::Draw() {
-    
-}
 
 void IntroSpawnField::Start() {
     if (pGameCamera_) {

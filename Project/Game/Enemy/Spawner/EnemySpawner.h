@@ -11,7 +11,7 @@
 
 class EnemyManager;
 class EnemySpawner {
-private:// struct
+private: // struct
     // スポーンポイント構造体
     struct SpawnPoint {
         std::string name;
@@ -41,14 +41,12 @@ public:
     EnemySpawner()  = default;
     ~EnemySpawner() = default;
 
-    // JSONデータから初期化
+    // 初期化、更新
     void Init(const std::string& jsonData);
-
-    // 更新処理
-    void Update(float deltaTime);
+    void Update(const float& deltaTime);
 
     // 敵が倒されたときの通知
-    void OnEnemyDestroyed(int groupId);
+    void OnEnemyDestroyed(const int& groupId);
 
     ///=======================================================================================
     /// Editor method
@@ -57,7 +55,7 @@ public:
     void SettingGroupSpawnPos();
     void UpdateCurrentGroup();
     void SpawnEnemiesInGroup(SpawnGroup& group);
-    bool IsGroupCompleted(int groupId) const;
+    bool IsGroupCompleted(const int& groupId) const;
     void ActivateNextGroup();
 
 private:
@@ -77,17 +75,17 @@ private:
     bool allGroupsCompleted_;
 
 private:
-    EnemyManager* pEnemyManager_ = nullptr;
+    EnemyManager* pEnemyManager_     = nullptr;
     const std::string directoryPath_ = "Resources/EnemyParameter/";
 
 public:
     ///=======================================================================================
     /// getter method
     ///=======================================================================================
-    bool IsActive() const { return isSystemActive_; }
-    int GetCurrentGroupIndex() const { return currentGroupIndex_; }
-    int GetTotalGroups() const { return static_cast<int>(spawnGroups_.size()); }
-    bool GetAllGroupsCompleted() const { return allGroupsCompleted_; }
+    const bool& IsActive() const { return isSystemActive_; }
+    const int& GetCurrentGroupIndex() const { return currentGroupIndex_; }
+    const int& GetTotalGroups() const { return static_cast<int>(spawnGroups_.size()); }
+    const bool& GetAllGroupsCompleted() const { return allGroupsCompleted_; }
 
     ///=======================================================================================
     /// setter method

@@ -283,20 +283,6 @@ void LockOn::SortTargetsByAngle(std::vector<std::pair<float, LockOnVariant>>& va
         });
 }
 
-void LockOn::Draw() {
-
-    // 利用可能なターゲットマーカーを描画
-    for (const auto& marker : ableLockOnMarkers_) {
-        if (marker.sprite) {
-            marker.sprite->Draw();
-        }
-    }
-
-    // メインのロックオンマーカーを描画
-    if (currentTarget_.has_value()) {
-        lockOnMark_->Draw();
-    }
-}
 
 Vector3 LockOn::GetCurrentTargetPosition() const {
     if (currentTarget_.has_value()) {
@@ -365,7 +351,7 @@ bool LockOn::IsTargetRange(const LockOnVariant& target, const Player* player, Ve
     return false;
 }
 
-void LockOn::LerpTimeIncrement(float incrementTime) {
+void LockOn::LerpTimeIncrement(const float& incrementTime) {
     lerpTime_ += incrementTime;
     if (lerpTime_ >= 1.0f) {
         lerpTime_ = 1.0f;

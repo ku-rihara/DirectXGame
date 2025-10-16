@@ -28,8 +28,6 @@ void IntroPurposeCutIn::Update(const float& playSpeed) {
     (this->*spFuncTable_[static_cast<size_t>(step_)])();
 }
 
-void IntroPurposeCutIn::Draw() {
-}
 
 // Step function
 void IntroPurposeCutIn::SideAppearWait() {

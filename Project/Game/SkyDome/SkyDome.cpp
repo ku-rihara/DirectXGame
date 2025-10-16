@@ -1,16 +1,16 @@
 #include "Skydome.h"
 
 
-Skydome::Skydome() {}
+SkyDome::SkyDome() {}
 
-Skydome::~Skydome() {}
+SkyDome::~SkyDome() {}
 
-void Skydome::Init() {
+void SkyDome::Init() {
     obj3D_.reset(Object3d::CreateModel("SkyDome.obj"));
 	transform_.Init();
 	transform_.scale_ = { 200, 200, 200 };
 }
 
-void Skydome::Update() {
+void SkyDome::Update() {
 	transform_.UpdateMatrix();
 }

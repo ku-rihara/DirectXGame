@@ -4,27 +4,26 @@
 #include <memory>
 
 class NotFindSprite {
+public:
+    // 初期化、更新、描画
+    void Init();
+    void Update();
+    void Draw();
+
 private:
-	// 座標
+	
 	Vector2 position_;
-	// スプライト
 	std::unique_ptr<Sprite> sprite_;
 
-	bool isSpowned_ = false;
+	bool isSpawned_ = false;
 	float alpha_;
 
 public:
-	// 初期化
-	void Init();
-	// 更新
-	void Update();
-	// 描画
-	void Draw();
 	//getter
-	bool GetIsSpowned() const { return isSpowned_; }
+	bool GetIsSpawned() const { return isSpawned_; }
 	// setter
-	void SetPosition(Vector2 pos) { position_ = pos; }
-	void SetIsSpowned(bool is) { isSpowned_ = is; }
-	void SetAlpha(float a) { alpha_ = a; }
+    void SetPosition(const Vector2& pos) { position_ = pos; }
+    void SetIsSpawned(const bool& is) { isSpawned_ = is; }
+    void SetAlpha(const float& a) { alpha_ = a; }
 	void SetScale(const Vector2& scale);
 };

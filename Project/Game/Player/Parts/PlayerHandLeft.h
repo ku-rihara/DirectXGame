@@ -23,7 +23,7 @@ public:
     void Update() override;
 
     void RailForthComboUpdate(const float& speed);
-    void AdjustParm() override;
+    void AdjustParam() override;
     void SaveAndLoad() override;
 
     void DissolveAdapt(const float& dissolve) override;

@@ -14,11 +14,10 @@ public:
     BaseGameIntro()          = default;
     virtual ~BaseGameIntro() = default;
 
-    // Init,Update,Draw
+    // Init,Update
     virtual void Init(const std::string& name);
     virtual void Update(const float& playSpeed);
-    virtual void Draw() = 0;
-
+   
     // Param Edit
     virtual void BindParams();
     virtual void AdjustParam();

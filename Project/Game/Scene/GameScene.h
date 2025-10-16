@@ -71,7 +71,7 @@ private:
     std::unique_ptr<Field> field_                               = nullptr;
     std::unique_ptr<LockOnController> lockOnController_         = nullptr;
     std::unique_ptr<Player> player_                             = nullptr;
-    std::unique_ptr<Skydome> skyDome_                           = nullptr;
+    std::unique_ptr<SkyDome> skyDome_                           = nullptr;
     std::unique_ptr<SkyBox> skyBox_                             = nullptr;
     std::unique_ptr<Combo> combo_                               = nullptr;
     std::unique_ptr<EnemyManager> enemyManager_                 = nullptr;

@@ -44,14 +44,14 @@ public:
     void SetPlayerBaseTransform(const WorldTransform* playerBaseTransform);
     void SetParentTransform(WorldTransform* transform) override;
 
-    void ChangeAttackType(AttackType attackType);
+    void ChangeAttackType(const AttackType& attackType);
 
-    //attackValue
+    // attackValue
     float GetAttackPower();
     float GetAttackSpeed(const float& baseTime);
 
     // AttackTypeを文字列に変換
-    std::string GetAttackTypeName(AttackType type);
+    std::string GetAttackTypeName(const AttackType& type);
 
     void ResetComboEffect();
 
@@ -87,9 +87,9 @@ public:
 
 public: // accessor
     Vector3 GetCollisionPos() const override;
-    bool GetIsSlow() const { return isSlow_; }
-    bool GetIsHitStop() const { return isHitStop_; }
-    AttackType GetTagList() const { return attackType_; }
+    const bool& GetIsSlow() const { return isSlow_; }
+    const bool& GetIsHitStop() const { return isHitStop_; }
+   const AttackType& GetTagList() const { return attackType_; }
 
     void SetIsSlow(const bool& is) { isSlow_ = is; }
     void SetIsHitStop(const bool& is) { isHitStop_ = is; }

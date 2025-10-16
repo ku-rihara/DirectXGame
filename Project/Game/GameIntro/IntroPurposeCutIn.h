@@ -45,10 +45,10 @@ public:
     IntroPurposeCutIn()           = default;
     ~IntroPurposeCutIn() override = default;
 
-    // Init,Update,Draw
+    // Init,Update
     void Init(const std::string& name) override;
     void Update(const float& playSpeed) override;
-    void Draw() override;
+   
 
     // Param Edit
     void AdjustParam() override;

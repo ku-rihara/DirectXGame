@@ -11,7 +11,7 @@ void BasePlayerHand::Init() {
     // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    AddParmGroup();
+    AddParamGroup();
     ApplyGlobalParameter();
 
     emitter_.reset(ParticleEmitter::CreateParticlePrimitive(groupName_, PrimitiveType::Plane, 300));
@@ -55,7 +55,7 @@ void BasePlayerHand::ParamLoadForImGui() {
 ///=================================================================================
 /// パラメータをグループに追加
 ///=================================================================================
-void BasePlayerHand::AddParmGroup() {
+void BasePlayerHand::AddParamGroup() {
     globalParameter_->CreateGroup(groupName_, false);
 
     // Position
@@ -103,7 +103,7 @@ void BasePlayerHand::DissolveAdapt(const float& dissolve) {
     obj3d_->material_.SetDissolveThreshold(dissolve);
 }
 
-void BasePlayerHand::AjustParmBase() {
+void BasePlayerHand::AdjustParamBase() {
     ImGui::SeparatorText("Param");
     ImGui::DragFloat3("Position", &obj3d_->transform_.translation_.x, 0.1f);
     ImGui::DragFloat("RailRunSpeedThree", &railRunSpeedThree_, 0.01f);

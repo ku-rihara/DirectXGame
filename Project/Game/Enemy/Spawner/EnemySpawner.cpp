@@ -73,7 +73,7 @@ void EnemySpawner::SettingGroupSpawnPos() {
     }
 }
 
-void EnemySpawner::Update(float deltaTime) {
+void EnemySpawner::Update(const float& deltaTime) {
 
     currentTime_ += deltaTime;
 
@@ -135,7 +135,7 @@ void EnemySpawner::SpawnEnemiesInGroup(SpawnGroup& group) {
     }
 }
 
-bool EnemySpawner::IsGroupCompleted(int groupId) const {
+bool EnemySpawner::IsGroupCompleted(const int& groupId) const {
     if (groupId >= 0 && groupId < spawnGroups_.size()) {
         const SpawnGroup& group = spawnGroups_[groupId];
         return (group.aliveCount == 0 && group.spawnedCount == group.objectCount);
@@ -152,7 +152,7 @@ void EnemySpawner::ActivateNextGroup() {
     }
 }
 
-void EnemySpawner::OnEnemyDestroyed(int groupId) {
+void EnemySpawner::OnEnemyDestroyed(const int& groupId) {
     if (groupId >= 0 && groupId < spawnGroups_.size()) {
         spawnGroups_[groupId].aliveCount--;
         if (spawnGroups_[groupId].aliveCount < 0) {

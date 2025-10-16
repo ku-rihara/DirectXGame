@@ -26,9 +26,10 @@ private:
 
 public:
     
+    // getter
    const Vector3& GetShakeOffset() const { return shakePlayer_->GetTotalShakeOffset(); }
 
-    // セッター
+    // setter
     void SetGameCamera(GameCamera* camera) { pGameCamera_ = camera; }
     void SetViewProjection(ViewProjection* viewProjection);
 };

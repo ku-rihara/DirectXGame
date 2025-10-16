@@ -55,7 +55,7 @@ private:
     int viewMoveTime_;
 
     Vector3 shakeOffsetPos_;
-    Parameter parameter_; //< パラメータ構造体
+    Parameter parameter_; 
 
   
 

@@ -48,11 +48,6 @@ void MovieLine::ExitUpdate() {
     }
 }
 
-void MovieLine::Draw() {
-    for (int32_t i = 0; i < static_cast<int32_t>(sprite_.size()); ++i) {
-        sprite_[i]->Draw();
-    }
-}
 
 ///=========================================================
 /// バインド

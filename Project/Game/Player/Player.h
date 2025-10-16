@@ -70,8 +70,8 @@ public:
     void DissolveUpdate(const float& dissolve);
 
     // ジャンプ
-    void Jump(float& speed, const float& fallSpeedLimit, const float& gravity); /// ジャンプ
-    void Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump = false); /// 落ちる
+    void Jump(float& speed, const float& fallSpeedLimit, const float& gravity);
+    void Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump = false);
 
     // 振る舞い切り替え
     void ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior);
@@ -157,7 +157,7 @@ public:
     PlayerParameter* GetParameter() const { return parameters_.get(); }
     PlayerAttackController* GetAttackController() const { return attackController_.get(); }
     JumpAttackUI* GetJumpAttackUI() const { return jumpAttackUI_.get(); }
-    float GetMoveSpeed() const { return moveSpeed_; }
+    const float& GetMoveSpeed() const { return moveSpeed_; }
 
     /// =========================================================================================
     /// setter

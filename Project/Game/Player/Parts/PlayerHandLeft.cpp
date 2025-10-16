@@ -39,13 +39,13 @@ void PlayerHandLeft::RailForthComboUpdate(const float& speed) {
 ///=====================================================
 ///  パラメータ調節
 ///=====================================================
-void PlayerHandLeft::AdjustParm() {
+void PlayerHandLeft::AdjustParam() {
 
     BasePlayerHand::SetValues();
 
     if (ImGui::CollapsingHeader("LeftHand")) {
         ImGui::PushID("LeftHand");
-        BasePlayerHand::AjustParmBase();
+        BasePlayerHand::AdjustParamBase();
         trustRailManager_->ImGuiEdit();
         SaveAndLoad();
         ImGui::PopID();

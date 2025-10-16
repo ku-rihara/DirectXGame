@@ -23,7 +23,6 @@ public:
     void Init();
     void AppearUpdate();
     void ExitUpdate();
-    void Draw();
 
     // editor
     void AdjustParam();

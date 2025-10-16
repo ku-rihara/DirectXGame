@@ -16,17 +16,17 @@ public:
 
     virtual void Init();
     virtual void Update();
-    virtual void AdjustParm() = 0;
+    virtual void AdjustParam() = 0;
     virtual void DissolveAdapt(const float& dissolve);
 
     ///-------------------------------------------------------------------------------------
     /// Editor
     ///-------------------------------------------------------------------------------------
     void ParamLoadForImGui();
-    void AddParmGroup();
+    void AddParamGroup();
     void SetValues();
     void ApplyGlobalParameter();
-    void AjustParmBase();
+    void AdjustParamBase();
 
     virtual void SaveAndLoad();
 

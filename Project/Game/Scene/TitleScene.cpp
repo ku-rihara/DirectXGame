@@ -28,7 +28,7 @@ void TitleScene::Init() {
 
     field_            = std::make_unique<Field>();
     player_           = std::make_unique<Player>();
-    skydome_          = std::make_unique<Skydome>();
+    skydome_          = std::make_unique<SkyDome>();
     titleRogo_        = std::make_unique<TitleRogo>();
     skyBox_           = std::make_unique<SkyBox>();
     putObjForBlender_ = std::make_unique<PutObjForBlender>();

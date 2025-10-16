@@ -22,9 +22,6 @@ void LockOnController::Update(Player* pPlayer, const ViewProjection& viewProject
 
     lockOn_->Update(targets, pPlayer, viewProjection);
 }
-void LockOnController::Draw() {
-    lockOn_->Draw();
-}
 
 void LockOnController::SetEnemyManager(EnemyManager* enemyManager) {
     pEnemyManager_ = enemyManager;

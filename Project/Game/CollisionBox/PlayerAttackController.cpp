@@ -44,7 +44,7 @@ void PlayerAttackController::TimerUpdate(const float& deltaTime) {
     }
 }
 
-void PlayerAttackController::ChangeAttackType(AttackType attackType) {
+void PlayerAttackController::ChangeAttackType(const AttackType& attackType) {
     attackType_ = attackType;
 
     // offset
@@ -114,7 +114,7 @@ void PlayerAttackController::AdjustParam() {
 }
 
 // AttackTypeを文字列に変換する関数
-std::string PlayerAttackController::GetAttackTypeName(AttackType type) {
+std::string PlayerAttackController::GetAttackTypeName(const AttackType& type) {
     switch (type) {
     case AttackType::NORMAL:
         return "NORMAL";

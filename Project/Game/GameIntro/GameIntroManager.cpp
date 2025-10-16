@@ -90,19 +90,6 @@ void GameIntroManager::CheckMovieLineStateTransition() {
     }
 }
 
-void GameIntroManager::UIDraw() {
-
-    //
-    if (isInitialized_ && currentIndex_ <= static_cast<int>(introSequences_.size())) {
-        introSequences_[currentIndex_]->Draw();
-    }
-
-    // movieLine
-    if (movieLine_) {
-        movieLine_->Draw();
-    }
-}
-
 void GameIntroManager::BindParam() {
 
     globalParameter_->Bind(groupName_, "fastSpeed", &fastSpeedRate_);

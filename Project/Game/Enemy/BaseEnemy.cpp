@@ -52,7 +52,7 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
 
     // audio
     deathSound_  = Audio::GetInstance()->LoadWave("EnemyDeath.wav");
-    thurstSound_ = Audio::GetInstance()->LoadWave("Enemythurst.wav");
+    thrustSound_ = Audio::GetInstance()->LoadWave("Enemythurst.wav");
 
     // 振る舞い初期化
     ChangeBehavior(std::make_unique<EnemyDamageRoot>(this));
@@ -103,8 +103,8 @@ void BaseEnemy::DisplaySprite(const ViewProjection& viewProjection) {
     // Hpバー更新
     notFindSprite_->Update();
 
-    findSprite_->SetIsSpowned(IsInView(viewProjection));
-    notFindSprite_->SetIsSpowned(IsInView(viewProjection));
+    findSprite_->SetIsSpawned(IsInView(viewProjection));
+    notFindSprite_->SetIsSpawned(IsInView(viewProjection));
     hpBar_->SetIsDraw(IsInView(viewProjection));
 }
 
@@ -268,7 +268,7 @@ void BaseEnemy::DamageRenditionInit() {
 void BaseEnemy::ThrustRenditionInit() {
     // ガレキパーティクル
     pEnemyManager_->ThrustEmit(GetWorldPosition());
-    Audio::GetInstance()->PlayWave(thurstSound_, 0.2f);
+    Audio::GetInstance()->PlayWave(thrustSound_, 0.2f);
 }
 
 void BaseEnemy::DeathRenditionInit() {

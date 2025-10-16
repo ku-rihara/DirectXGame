@@ -47,13 +47,13 @@ void PlayerHandRight::RailForthComboUpdate(const float& speed) {
     obj3d_->transform_.translation_ = (stopPunchRailManager_->GetPositionOnRail());
 }
 
-void PlayerHandRight::AdjustParm() {
+void PlayerHandRight::AdjustParam() {
 
     BasePlayerHand::SetValues();
 
     if (ImGui::CollapsingHeader("RightHand")) {
         ImGui::PushID("RightHand");
-        BasePlayerHand::AjustParmBase();
+        BasePlayerHand::AdjustParamBase();
         threeComboRailManager_->ImGuiEdit();
         stopPunchRailManager_->ImGuiEdit();
         SaveAndLoad();

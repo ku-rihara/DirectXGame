@@ -17,10 +17,6 @@ void FindSprite::Update() {
     sprite_->transform_.pos = position_;
 }
 
-void FindSprite::Draw() {
-    // 描画
-    sprite_->Draw();
-}
 
 void FindSprite::SetScale(const Vector2& scale) {
     sprite_->transform_.scale = scale;

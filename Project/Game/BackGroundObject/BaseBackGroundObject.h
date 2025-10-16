@@ -10,8 +10,8 @@ public:
     virtual ~BaseBackGroundObject() = default;
 
     virtual void Init(const std::string& filename);
-    virtual void Update(const float& playSpeed)             = 0;
-   
+    virtual void Update(const float& playSpeed) = 0;
+
 protected:
     std::unique_ptr<PutObjForBlender> putObjForBlender_;
 };

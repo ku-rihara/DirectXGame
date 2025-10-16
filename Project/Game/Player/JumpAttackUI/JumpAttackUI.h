@@ -77,7 +77,6 @@ private:
     State state_ = State::WAIT;
     EasingParam easingParam_;
 
-    // 
     float notOperateAlpha_;
     
 public:

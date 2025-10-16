@@ -14,15 +14,16 @@
 class BaseEnemy;
 class Player;
 
-struct TargetMarker {
-    std::unique_ptr<Sprite> sprite;
-    Vector2 screenPosition;
-    bool isCurrentTarget = false;
-};
-
 class LockOn {
 public:
     using LockOnVariant = std::variant<BaseEnemy*>;
+
+public:
+    struct TargetMarker {
+        std::unique_ptr<Sprite> sprite;
+        Vector2 screenPosition;
+        bool isCurrentTarget = false;
+    };
 
 public:
     LockOn()  = default;
@@ -31,7 +32,7 @@ public:
     // 初期化、更新、描画
     void Init();
     void Update(const std::vector<LockOnVariant>& targets, const Player* player, const ViewProjection& viewProjection);
-    void Draw();
+   
 
     void OnObjectDestroyed(const LockOnVariant& obj);
 
@@ -40,13 +41,11 @@ public:
     void BindParams();
 
 private:
-    // 自動検索関連
+    // ターゲット検索、切り替え
     void AutoSearchTarget(const std::vector<LockOnVariant>& targets, const Player* player);
-
-    // 手動切り替え関連
     void HandleTargetSwitching(const std::vector<LockOnVariant>& targets, const Player* player);
 
-    // ターゲット検索・管理
+    // ターゲット検索、管理
     std::vector<LockOnVariant> GetValidTargets(const std::vector<LockOnVariant>& targets, const Player* player) const;
     bool IsTargetRange(const LockOnVariant& target, const Player* player, Vector3& relativePosition) const;
     void SortTargetsByDistance(std::vector<std::pair<float, LockOnVariant>>& validTargets) const;
@@ -55,7 +54,7 @@ private:
     // UI更新
     void ResizeTargetMarkers(const size_t& targetCount);
     void UpdateCurrentReticleUI(const ViewProjection& viewProjection);
-    void LerpTimeIncrement(float incrementTime);
+    void LerpTimeIncrement(const float& incrementTime);
     void UpdateTargetMarkers(const std::vector<LockOnVariant>& validTargets, const ViewProjection& viewProjection);
 
 private:
@@ -94,7 +93,7 @@ private:
     // パラメータ
     float minDistance_; //< 最小距離
     float maxDistance_; //< 最大距離
-    float angleRange_; //< 角度範囲（度）
+    float angleRange_; //< 角度範囲
 
     // 切り替えモード
     enum class SwitchMode {

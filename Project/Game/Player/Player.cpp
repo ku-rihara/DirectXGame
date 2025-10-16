@@ -364,8 +364,8 @@ void Player::AdjustParam() {
     // 攻撃パラメータ
     attackController_->AdjustParam();
     // パーツのパラメータ
-    leftHand_->AdjustParm();
-    rightHand_->AdjustParm();
+    leftHand_->AdjustParam();
+    rightHand_->AdjustParam();
     jumpAttackUI_->AdjustParam();
 
 #endif // _DEBUG

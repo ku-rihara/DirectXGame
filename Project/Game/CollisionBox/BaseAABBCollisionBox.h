@@ -37,7 +37,7 @@ public:
 public:
     /// getter
     virtual Vector3 GetCollisionPos() const override;
-    std::string GetTag() const { return tag_; }
+    const std::string& GetTag() const { return tag_; }
 
     /// setter
     void SetIsCollision(const bool& is) { isCollision_ = is; } 

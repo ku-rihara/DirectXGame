@@ -84,9 +84,9 @@ public:
     /// =========================================================================================
     /// getter
     /// =========================================================================================
-    Parameters GetParamaters() const { return playerParams_; }
-    ComboParam GetNormalComboParm(const ComboNum& index) const { return normalComboParams_[static_cast<int>(index)]; }
-    ComboParam GetJumpComboParm(const ComboNum& index) const { return jumpComboParams_[static_cast<int>(index)]; }
+   const Parameters& GetParamaters() const { return playerParams_; }
+   const ComboParam& GetNormalComboParm(const ComboNum& index) const { return normalComboParams_[static_cast<int>(index)]; }
+   const ComboParam& GetJumpComboParm(const ComboNum& index) const { return jumpComboParams_[static_cast<int>(index)]; }
 
     /// =========================================================================================
     /// setter

@@ -6,6 +6,16 @@
 #include "utility/ParticleEditor/ParticleEmitter.h"
 class MonsterBall {
 public:
+    MonsterBall();
+    ~MonsterBall();
+
+    void Init();
+    void Update();
+    void Draw(ViewProjection& viewProjection);
+
+    void Debug();
+    void ScaleEasing();
+
 private:
     // ワールド変換データ
     WorldTransform transform_;
@@ -23,16 +33,5 @@ private:
     Vector3 direction_;
     float objectiveAngle_ = 0.0f;
     float speed_;
-
-public:
-    MonsterBall();
-    ~MonsterBall();
-
-    void Init();
-    void Update();
-    void Draw(ViewProjection& viewProjection);
-
-    void Debug();
-    void ScaleEasing();
 
 };

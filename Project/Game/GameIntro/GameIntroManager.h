@@ -25,10 +25,10 @@ public:
     GameIntroManager()  = default;
     ~GameIntroManager() = default;
 
+    // 初期化、更新
     void Init();
     void Update();
-    void UIDraw();
-
+    
     // movieLine
     void MovieLineUpdate();
     void CheckMovieLineStateTransition();
@@ -73,7 +73,7 @@ public:
     // getter method
     //-------------------------------------------------------------------------------------
     const int32_t& GetCurrentIntroIndex() const { return currentIndex_; }
-    int32_t GetTotalIntroCount() const { return static_cast<int32_t>(introSequences_.size()); }
+    const int32_t& GetTotalIntroCount() const { return static_cast<int32_t>(introSequences_.size()); }
     const float& GetCurrentPlaySpeedRate() const { return currentPlaySpeedRate_; }
     const bool& GetIsFinishStep(const IntroStep& step);
     MovieLine* GetMovieLine() const { return movieLine_.get(); }

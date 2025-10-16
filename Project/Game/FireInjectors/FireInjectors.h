@@ -11,7 +11,7 @@ class FireInjectors {
 public:
     void Init();
     void Update();
-   
+
     void Spawn();
     void Launch();
 
@@ -24,15 +24,13 @@ public:
 private:
     std::unique_ptr<PutObjForBlender> putObjForBlender_ = nullptr;
 
-    GlobalParameter* globalParameter_; /// グローバルパラメータ
-    const std::string groupName_ = "FireInjectors"; /// グループ名
+    GlobalParameter* globalParameter_; 
+    const std::string groupName_ = "FireInjectors"; 
 
     Combo* pCombo_;
 
     int32_t fireShotComboNum_;
-
-      int prevComboCount_     = 0;
-  
+    int prevComboCount_ = 0;
     bool isEasing_;
 
 public:

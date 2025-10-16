@@ -11,10 +11,7 @@ public:
     void Init();
     void Update();
     void SpriteDraw();
-
-    /// parm Edit
-    
-  
+ 
     //加算システム
     void AddGauge();
 
@@ -35,9 +32,5 @@ private:
 
     // glovalParameter
     GlobalParameter* globalParameter_;
-
-public:
-
-
 
 };

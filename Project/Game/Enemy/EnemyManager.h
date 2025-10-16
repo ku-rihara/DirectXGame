@@ -57,18 +57,16 @@ public:
     void AdjustParam();
     void DrawEnemyParamUI(BaseEnemy::Type type);
 
-private:// struct
-
+private: // struct
     struct ParticleEffect {
         std::string name;
         std::unique_ptr<ParticleEmitter> emitter;
     };
 
-private:// json
+private: // json
     using json = nlohmann::json;
 
 private:
-
     // globalParameter
     GlobalParameter* globalParameter_;
     const std::string groupName_ = "Enemies";
@@ -82,7 +80,6 @@ private:
     AttackEffect* pAttackEffect_;
 
 private:
-
     ///========================================================
     /// Private variants
     ///========================================================
@@ -110,7 +107,7 @@ public:
     ///========================================================
     /// getter method
     ///========================================================
-    bool GetIsAllCleared() const { return areAllEnemiesCleared_; }
+    const bool& GetIsAllCleared() const { return areAllEnemiesCleared_; }
     const std::vector<std::unique_ptr<BaseEnemy>>& GetEnemies() const { return enemies_; }
     ///========================================================
     /// setter method

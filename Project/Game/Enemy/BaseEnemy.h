@@ -49,38 +49,6 @@ public:
         float blowGravity;
     };
 
-private:
-    int deathSound_;
-    int thurstSound_;
-    int32_t groupId_;
-
-protected:
-    // structure
-    Type type_;
-    Parameter parameter_;
-
-    /// other class
-    Player* pPlayer_;
-    Combo* pCombo_;
-    GameCamera* pGameCamera_;
-    EnemyManager* pEnemyManager_;
-    AttackEffect* pAttackEffect_;
-
-    std::unique_ptr<FindSprite> findSprite_;
-    std::unique_ptr<NotFindSprite> notFindSprite_;
-    std::unique_ptr<EnemyCollisionBox> collisionBox_;
-    std::unique_ptr<EnemyHPBar> hpBar_;
-
-    // parameter
-    bool isDeath_;
-    float hp_;
-    float HPMax_;
-    Vector2 hpBarSize_;
-
-    /// behavior
-    std::unique_ptr<BaseEnemyBehavior> damageBehavior_   = nullptr;
-    std::unique_ptr<BaseEnemyMoveBehavior> moveBehavior_ = nullptr;
-
 public:
     BaseEnemy()          = default;
     virtual ~BaseEnemy() = default;
@@ -111,7 +79,6 @@ public:
 
     void TakeDamage(const float& par);
 
-
     /// Behavior
     void ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior);
     void ChangeMoveBehavior(std::unique_ptr<BaseEnemyMoveBehavior> behavior);
@@ -125,18 +92,54 @@ public:
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
     Vector3 GetCollisionPos() const override;
 
+private:
+    bool IsInView(const ViewProjection& viewProjection) const;
+
+private:
+    int deathSound_;
+    int thrustSound_;
+    int32_t groupId_;
+
+protected:
+    // structure
+    Type type_;
+    Parameter parameter_;
+
+    /// other class
+    Player* pPlayer_;
+    Combo* pCombo_;
+    GameCamera* pGameCamera_;
+    EnemyManager* pEnemyManager_;
+    AttackEffect* pAttackEffect_;
+
+    std::unique_ptr<FindSprite> findSprite_;
+    std::unique_ptr<NotFindSprite> notFindSprite_;
+    std::unique_ptr<EnemyCollisionBox> collisionBox_;
+    std::unique_ptr<EnemyHPBar> hpBar_;
+
+    // parameter
+    bool isDeath_;
+    float hp_;
+    float HPMax_;
+    Vector2 hpBarSize_;
+
+    /// behavior
+    std::unique_ptr<BaseEnemyBehavior> damageBehavior_   = nullptr;
+    std::unique_ptr<BaseEnemyMoveBehavior> moveBehavior_ = nullptr;
+
+public:
     /// ========================================================================================
     ///  getter method
     /// ========================================================================================
-    bool GetIsDeath() const { return isDeath_; }
-    Type GetType() const { return type_; }
-    Parameter GetParameter() const { return parameter_; }
+    const bool& GetIsDeath() const { return isDeath_; }
+    const Type& GetType() const { return type_; }
+    const Parameter& GetParameter() const { return parameter_; }
+    const int32_t& GetGroupId() const { return groupId_; }
     Player* GetPlayer() { return pPlayer_; }
     GameCamera* GetGameCamera() { return pGameCamera_; }
     BaseEnemyBehavior* GetDamageBehavior() const { return damageBehavior_.get(); }
     FindSprite* GetFindSprite() { return findSprite_.get(); }
     NotFindSprite* GetNotFindSprite() { return notFindSprite_.get(); }
-    int32_t GetGroupId() const { return groupId_; }
     /// ========================================================================================
     ///  setter method
     /// ========================================================================================
@@ -149,9 +152,6 @@ public:
     void SetBodyRotateX(const float& r) { obj3d_->transform_.rotation_.x = r; }
     void SetBodyColor(const Vector4& color);
     void SetIsDeath(const bool& is) { isDeath_ = is; }
-    void SetGroupId(int groupId) { groupId_ = groupId; }
-    
+    void SetGroupId(const int& groupId) { groupId_ = groupId; }
 
-private:
-    bool IsInView(const ViewProjection& viewProjection) const;
 };

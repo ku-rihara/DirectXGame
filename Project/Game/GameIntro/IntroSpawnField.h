@@ -19,11 +19,10 @@ public:
     IntroSpawnField()           = default;
     ~IntroSpawnField() override = default;
 
-    // Init,Update,Draw
+    // Init,Update
     void Init(const std::string& name) override;
     void Update(const float& playSpeed) override;
-    void Draw() override;
-
+  
     // Param Edit
     void AdjustParam() override;
     void BindParams() override;
@@ -50,8 +49,7 @@ private:
     float objSpawnTime_;
     float playerSpawnTime_;
     float finishWaitTime_;
-
-   
+  
     // State
     Step step_ = Step::START;
 
