@@ -17,7 +17,7 @@ void Easing<T>::Init(const std::string& name, const std::string& adaptFile) {
     if (!adaptFile.empty()) {
         ApplyFromJson(adaptFile);
         SaveAppliedJsonFileName();
-    } 
+    }
 
     LoadAndApplyFromSavedJson();
 }
@@ -64,7 +64,7 @@ void Easing<T>::SaveAppliedJsonFileName() {
 
     FilePathChangeForType();
 
-    std::string savePath = FilePath_ + adaptDataPath_ + filePathForType_ + "/" + easingName_  +".json";
+    std::string savePath = FilePath_ + adaptDataPath_ + filePathForType_ + "/" + easingName_ + ".json";
 
     nlohmann::json saveJson;
     saveJson["appliedFileName"] = currentAppliedFileName_;
@@ -294,7 +294,6 @@ void Easing<T>::Update(const float& deltaTime) {
     }
 }
 
-
 template <typename T>
 void Easing<T>::ResetStartValue() {
     currentTime_ = 0.0f;
@@ -316,9 +315,16 @@ void Easing<T>::FilePathChangeForType() {
 
 template <typename T>
 void Easing<T>::CalculateValue() {
+    T startValue = {};
+    T endValue   = {};
+    if (isStartEndReverse_) {
+        startValue = endValue_ + baseValue_;
+        endValue   = startValue_ + baseValue_;
+    } else {
 
-    T startValue = startValue_ + baseValue_;
-    T endValue   = endValue_ + baseValue_;
+        startValue = startValue_ + baseValue_;
+        endValue   = endValue_ + baseValue_;
+    }
 
     switch (type_) {
 
@@ -475,6 +481,7 @@ void Easing<T>::CalculateValue() {
         break;
     }
 }
+
 template <typename T>
 void Easing<T>::Easing::FinishBehavior() {
     currentTime_ = maxTime_;
