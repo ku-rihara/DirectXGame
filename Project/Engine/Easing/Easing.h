@@ -125,6 +125,8 @@ private:
     std::function<void()> onFinishCallback_;
     std::function<void()> onWaitEndCallback_;
 
+    bool isStartEndReverse_ = false;
+
 public:
     /// -------------------------------------------------------------------------
     /// Getter methods
@@ -144,4 +146,5 @@ public:
     void SetBaseValue(const T& value) { baseValue_ = value; }
     void SetType(const EasingType& type) { type_ = type; }
     void SetMaxTime(const float& time) { maxTime_ = time; }
+    void SetIsStartEndReverse(const bool& isReverse) { isStartEndReverse_ = isReverse; }
 };
