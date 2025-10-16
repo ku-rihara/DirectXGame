@@ -17,7 +17,8 @@ private:
 
 	std::unordered_map<int, std::chrono::steady_clock::time_point> lastPlayTimes_;
 
-	
+	const std::string filePath_ = "Resources/Audio/";
+
 public:
 	static Audio* GetInstance();
 

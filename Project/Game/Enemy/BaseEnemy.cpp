@@ -51,8 +51,8 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
     notFindSprite_->Init();
 
     // audio
-    deathSound_  = Audio::GetInstance()->LoadWave("Resources/EnemyDeath.wav");
-    thurstSound_ = Audio::GetInstance()->LoadWave("Resources/Enemythurst.wav");
+    deathSound_  = Audio::GetInstance()->LoadWave("EnemyDeath.wav");
+    thurstSound_ = Audio::GetInstance()->LoadWave("Enemythurst.wav");
 
     // 振る舞い初期化
     ChangeBehavior(std::make_unique<EnemyDamageRoot>(this));

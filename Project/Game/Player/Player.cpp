@@ -77,9 +77,9 @@ void Player::Init() {
     baseTransform_.translation_ = parameters_->GetParamaters().startPos_;
 
     // 音
-    punchSoundID_ = Audio::GetInstance()->LoadWave("Resources/punchAir.wav");
-    strongPunch_  = Audio::GetInstance()->LoadWave("Resources/StrongPunch.wav");
-    fallSound_    = Audio::GetInstance()->LoadWave("Resources/PlayerFall.wav");
+    punchSoundID_ = Audio::GetInstance()->LoadWave("punchAir.wav");
+    strongPunch_  = Audio::GetInstance()->LoadWave("StrongPunch.wav");
+    fallSound_    = Audio::GetInstance()->LoadWave("PlayerFall.wav");
 
     /// 通常モードから
     ChangeBehavior(std::make_unique<PlayerSpawn>(this));

@@ -6,7 +6,7 @@
 ///==========================================================
 void PlayerEffects::Init(WorldTransform* transform) {
 
-    starSound_ = Audio::GetInstance()->LoadWave("Resources/starEffect.wav");
+    starSound_ = Audio::GetInstance()->LoadWave("starEffect.wav");
 
     // debri
     debriParticle_[0].emitter.reset(ParticleEmitter::CreateParticle("DebriParticle", "debri.obj", 100));
