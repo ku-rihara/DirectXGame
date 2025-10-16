@@ -77,7 +77,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE SrvManager::GetGPUDescriptorHandle(const uint32_t& i
 ///=========================================
 /// テクスチャ用SRV生成
 ///=========================================
-void SrvManager::CreateForTexture2D(const uint32_t& srvIndex, ID3D12Resource* pResource, D3D12_SHADER_RESOURCE_VIEW_DESC desc) {
+void SrvManager::CreateForTexture2D(const uint32_t& srvIndex, ID3D12Resource* pResource, const D3D12_SHADER_RESOURCE_VIEW_DESC& desc) {
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
     srvDesc = desc;
 	//生成

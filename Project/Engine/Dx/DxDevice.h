@@ -14,7 +14,6 @@ public:
 
     // 初期化
     void Init();
-
     // 終了処理
     void Finalize();
 

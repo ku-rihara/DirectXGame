@@ -94,7 +94,7 @@ void EngineCore::Initialize(const char* title, const int& width, const int& heig
 
     // Input
     input_ = Input::GetInstance();
-    input_->Init(winApp_->GetHInstaice(), winApp_->GetHwnd());
+    input_->Init(winApp_->GetHInstance(), winApp_->GetHwnd());
 
     // Audio
     audio_ = Audio::GetInstance();
