@@ -32,12 +32,12 @@ void ShakeEditor::AllLoadFile() {
     }
 }
 
-void ShakeEditor::Update(float deltaTime) {
+void ShakeEditor::Update(const float& deltaTime) {
     // すべてのシェイクを更新
     for (auto& shake : shakes_) {
         shake->Update(deltaTime);
         if (shake->IsPlaying() && preViewObj_) {
-            preViewObj_->transform_.translation_ = shake->GetShakeOffset();
+            preViewObj_->transform_.translation_ = basePos_ + shake->GetShakeOffset();
         }
     }
 }
@@ -45,6 +45,15 @@ void ShakeEditor::Update(float deltaTime) {
 void ShakeEditor::EditorUpdate() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader("Shake Manager")) {
+        ImGui::PushID("Shake Manager");
+
+        ImGui::Text("Preview Object:");
+        ImGui::DragFloat3("preViewFollowObj", &basePos_.x, 0.1f);
+        ImGui::Checkbox("IsDraw", &isPreViewDraw_);
+        preViewObj_->SetIsDraw(isPreViewDraw_);
+
+        ImGui::Separator();
+        ImGui::Text("Shake Edit:");
 
         // 新規追加
         ImGui::InputText("New Shake Name", nameBuffer_, IM_ARRAYSIZE(nameBuffer_));
@@ -111,6 +120,8 @@ void ShakeEditor::EditorUpdate() {
             MessageBoxA(nullptr, "All Shakes saved successfully.", "Shake Editor", 0);
         }
         ImGui::PopStyleColor(3);
+
+        ImGui::PopID();
     }
 #endif
 }
@@ -122,7 +133,7 @@ void ShakeEditor::AddShake(const std::string& shakeName) {
     selectedIndex_ = static_cast<int>(shakes_.size()) - 1;
 }
 
-void ShakeEditor::RemoveShake(int index) {
+void ShakeEditor::RemoveShake(const int& index) {
     if (index >= 0 && index < static_cast<int>(shakes_.size())) {
         shakes_.erase(shakes_.begin() + index);
 

@@ -7,7 +7,6 @@ void CameraEditor::Init(ViewProjection* vp) {
     SetViewProjection(vp);
     preViewCameraObj_.reset(Object3d::CreateModel("debugCube.obj"));
     preViewFollowObj_.reset(Object3d::CreateModel("debugCube.obj"));
-    preViewCameraObj_->SetIsDraw(false);
 }
 
 void CameraEditor::AllLoadFile() {
@@ -123,7 +122,16 @@ void CameraEditor::EditorUpdate() {
     if (ImGui::CollapsingHeader("Camera Animation Manager")) {
         isEditing_ = true;
 
+        ImGui::PushID("Camera Animation Manager");
+
+        ImGui::Text("Camera PreViewFollowObj:");
         ImGui::DragFloat3("preViewFollowObj", &preViewFollowObj_->transform_.translation_.x, 0.1f);
+        ImGui::Checkbox("IsDraw", &isPreViewDraw_);
+        preViewFollowObj_->SetIsDraw(isPreViewDraw_);
+        preViewCameraObj_->SetIsDraw(isPreViewDraw_);
+
+        ImGui::Separator();
+        ImGui::Text("Camera Edit:");
 
         // 設定
         ImGui::Text("ViewProjection Mode:");
@@ -232,6 +240,8 @@ void CameraEditor::EditorUpdate() {
             MessageBoxA(nullptr, "All animations saved successfully.", "Camera Animation", 0);
         }
         ImGui::PopStyleColor(3);
+
+        ImGui::PopID();
     }
 #endif
 }
