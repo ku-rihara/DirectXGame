@@ -27,6 +27,7 @@ public:
         std::unique_ptr<Sprite> sprite;
         Vector2 discreteDirection;
         Vector2 posValueOffset;
+        bool isNotOperate;
     };
 
     struct EasingParam {
@@ -76,6 +77,8 @@ private:
     State state_ = State::WAIT;
     EasingParam easingParam_;
 
+    // 
+    float notOperateAlpha_;
     
 public:
 };

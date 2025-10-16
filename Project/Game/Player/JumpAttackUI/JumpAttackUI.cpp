@@ -22,6 +22,10 @@ void JumpAttackUI::Init() {
     globalParameter_->SyncParamForGroup(groupName_);
 
     EasingInit();
+
+    bottoms_[Y].isNotOperate = true;
+    bottoms_[B].isNotOperate = true;
+    bottoms_[A].isNotOperate = true;
 }
 
 void JumpAttackUI::Update(const Vector3& basePos, const ViewProjection& viewProjection) {
@@ -43,6 +47,14 @@ void JumpAttackUI::Update(const Vector3& basePos, const ViewProjection& viewProj
         bottoms_[i].sprite->transform_.pos      = bottoms_[i].discreteDirection * easingParam_.posEaseValue + offset;
         bottoms_[i].sprite->transform_.scale    = easingParam_.scaleEaseValue;
         bottoms_[i].sprite->transform_.rotate.z = easingParam_.rotateEaseValue;
+
+        // alpha
+        if (bottoms_[i].isNotOperate) {
+            bottoms_[i].sprite->SetAlpha(notOperateAlpha_);
+        } else {
+
+            bottoms_[i].sprite->SetAlpha(1.0f);
+        }
     }
 }
 void JumpAttackUI::DirectionByBottom(const size_t& TypeNum) {
@@ -104,6 +116,7 @@ void JumpAttackUI::BindParams() {
     for (size_t i = 0; i < static_cast<size_t>(Type::COUNT); ++i) {
         globalParameter_->Bind(groupName_, "posValueOffset" + BottomNameByType(i), &bottoms_[i].posValueOffset);
     }
+    globalParameter_->Bind(groupName_, "notOperateAlpha", &notOperateAlpha_);
 }
 
 void JumpAttackUI::AdjustParam() {
@@ -115,6 +128,7 @@ void JumpAttackUI::AdjustParam() {
         for (size_t i = 0; i < static_cast<size_t>(Type::COUNT); ++i) {
             ImGui::DragFloat2(("PosValueOffset" + BottomNameByType(i)).c_str(), &bottoms_[i].posValueOffset.x, 0.1f);
         }
+        ImGui::DragFloat("NotOperateAlpha", &notOperateAlpha_, 0.01f, 0.0f, 1.0f);
 
         // セーブ・ロード
         globalParameter_->ParamSaveForImGui(groupName_);
@@ -175,8 +189,6 @@ void JumpAttackUI::StartClose() {
     easingParam_.rotateEasing->SetIsStartEndReverse(true);
     easingParam_.rotateEasing->Reset();
 }
-
-
 
 void (JumpAttackUI::* JumpAttackUI::spFuncTable_[])() = {
     &JumpAttackUI::Wait,
