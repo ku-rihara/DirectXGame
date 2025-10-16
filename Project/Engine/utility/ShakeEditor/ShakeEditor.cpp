@@ -7,6 +7,7 @@
 void ShakeEditor::Init() {
     AllLoadFile();
     preViewObj_.reset(Object3d::CreateModel("DebugCube.obj"));
+    preViewObj_->SetIsDraw(false);
 }
 
 void ShakeEditor::AllLoadFile() {
