@@ -95,9 +95,9 @@ void JumpAttackUI::Open() {
     easingParam_.rotateEasing->Update(Frame::DeltaTime());
 }
 void JumpAttackUI::Close() {
-    easingParam_.scaleEasing->Update(-Frame::DeltaTime());
-    easingParam_.posEasing->Update(-Frame::DeltaTime());
-    easingParam_.rotateEasing->Update(-Frame::DeltaTime());
+    easingParam_.scaleEasing->Update(Frame::DeltaTime());
+    easingParam_.posEasing->Update(Frame::DeltaTime());
+    easingParam_.rotateEasing->Update(Frame::DeltaTime());
 }
 
 void JumpAttackUI::BindParams() {
@@ -149,13 +149,34 @@ void JumpAttackUI::EasingInit() {
 }
 
 void JumpAttackUI::StartOpen() {
-
     state_ = State::OPEN;
-}
-void JumpAttackUI::StartClose() {
 
-    state_ = State::CLOSE;
+    // 通常状態に設定 (Start → End)
+    easingParam_.scaleEasing->SetIsStartEndReverse(false);
+    easingParam_.scaleEasing->Reset();
+
+    easingParam_.posEasing->SetIsStartEndReverse(false);
+    easingParam_.posEasing->Reset();
+
+    easingParam_.rotateEasing->SetIsStartEndReverse(false);
+    easingParam_.rotateEasing->Reset();
 }
+
+void JumpAttackUI::StartClose() {
+    state_ = State::CLOSE;
+
+    // 反転状態に設定 (End → Start)
+    easingParam_.scaleEasing->SetIsStartEndReverse(true);
+    easingParam_.scaleEasing->Reset();
+
+    easingParam_.posEasing->SetIsStartEndReverse(true);
+    easingParam_.posEasing->Reset();
+
+    easingParam_.rotateEasing->SetIsStartEndReverse(true);
+    easingParam_.rotateEasing->Reset();
+}
+
+
 
 void (JumpAttackUI::* JumpAttackUI::spFuncTable_[])() = {
     &JumpAttackUI::Wait,
