@@ -60,7 +60,8 @@ public:
 
 private:
     void InitializeGroupResources(GPUParticleGroup& group);
-    void DispatchComputeShaders(GPUParticleGroup& group);
+    void DispatchEmit(GPUParticleGroup& group);
+    void DispatchUpdate(GPUParticleGroup& group);
     void CreateMaterialResource(const std::string& name);
     void DrawGroup(GPUParticleGroup& group);
     void DispatchInitParticle(GPUParticleGroup& group);

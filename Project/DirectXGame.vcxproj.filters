@@ -313,7 +313,7 @@
     <Filter Include="MyEngine\.cpp\Pileline\SkyBox">
       <UniqueIdentifier>{7292d38d-6fd7-4091-a848-0f04f8b9aa65}</UniqueIdentifier>
     </Filter>
-    <Filter Include="リソースファイル\Random">
+    <Filter Include="リソースファイル\Library">
       <UniqueIdentifier>{fcc4b6ae-10b4-4328-b879-0e4426af45ab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -759,6 +759,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Pipeline\SkyBox\SkyBoxPipeline.cpp">
       <Filter>MyEngine\.cpp\Pileline\SkyBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\Particle\CS\UpdateParticlePipeline.cpp">
+      <Filter>MyEngine\.cpp\Pileline\Particle\CS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1254,6 +1257,9 @@
     <ClInclude Include="Engine\Pipeline\SkyBox\SkyBoxPipeline.h">
       <Filter>MyEngine\.h\Pipeline\SkyBox</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Pipeline\Particle\CS\UpdateParticlePipeline.h">
+      <Filter>MyEngine\.h\Pipeline\Particle\CS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -1299,8 +1305,11 @@
     <None Include="resources\Shader\Particle\Particle.hlsli">
       <Filter>リソースファイル\Particle</Filter>
     </None>
-    <None Include="resources\Shader\Random\Random.hlsli">
-      <Filter>リソースファイル\Random</Filter>
+    <None Include="resources\Shader\Library\PerFrame.hlsli">
+      <Filter>リソースファイル\Library</Filter>
+    </None>
+    <None Include="resources\Shader\Library\Random.hlsli">
+      <Filter>リソースファイル\Library</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1390,6 +1399,9 @@
     </FxCompile>
     <FxCompile Include="resources\Shader\Particle\GPUParticle.PS.hlsl">
       <Filter>リソースファイル\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Particle\CS\UpdateParticle.CS.hlsl">
+      <Filter>リソースファイル\Particle\CS</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

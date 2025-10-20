@@ -11,12 +11,36 @@ void ShadowMapPipeline::Init(DirectXCommon* dxCommon) {
     BasePipeline::Init(dxCommon);
 }
 
+void ShadowMapPipeline::CreateRootSignature() {
+  
+    D3D12_ROOT_PARAMETER rootParams[2] = {};
+
+    // b0: WorldMatrix
+    rootParams[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParams[0].Descriptor.ShaderRegister = 0;
+    rootParams[0].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
+
+    // b1: LightMatrix
+    rootParams[1].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParams[1].Descriptor.ShaderRegister = 1;
+    rootParams[1].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
+
+    D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature = {};
+    descriptionRootSignature.pParameters               = rootParams; // ルートパラメーターの配列
+    descriptionRootSignature.NumParameters             = _countof(rootParams); // 配列の長さ
+    descriptionRootSignature.Flags                     = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+
+    descriptionRootSignature.NumStaticSamplers = 0;
+    descriptionRootSignature.pStaticSamplers   = nullptr;
+
+    // シリアライズしてバイナリにする
+    SerializeAndCreateRootSignature(descriptionRootSignature);
+}
+
 void ShadowMapPipeline::CreateGraphicsPipeline() {
     HRESULT hr = 0;
 
-    CreateRootSignature();
-
-   // InputLayoutの設定を行う
+    // InputLayoutの設定を行う
     D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
     inputElementDescs[0].SemanticName             = "POSITION";
     inputElementDescs[0].SemanticIndex            = 0;
@@ -67,32 +91,6 @@ void ShadowMapPipeline::CreateGraphicsPipeline() {
 
     hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&pipelineDesc, IID_PPV_ARGS(&pipelineState_));
     assert(SUCCEEDED(hr));
-}
-
-void ShadowMapPipeline::CreateRootSignature() {
-  
-    D3D12_ROOT_PARAMETER rootParams[2] = {};
-
-    // b0: WorldMatrix
-    rootParams[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParams[0].Descriptor.ShaderRegister = 0;
-    rootParams[0].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
-
-    // b1: LightMatrix
-    rootParams[1].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParams[1].Descriptor.ShaderRegister = 1;
-    rootParams[1].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
-
-    D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature = {};
-    descriptionRootSignature.pParameters               = rootParams; // ルートパラメーターの配列
-    descriptionRootSignature.NumParameters             = _countof(rootParams); // 配列の長さ
-    descriptionRootSignature.Flags                     = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-
-    descriptionRootSignature.NumStaticSamplers = 0;
-    descriptionRootSignature.pStaticSamplers   = nullptr;
-
-    // シリアライズしてバイナリにする
-    SerializeAndCreateRootSignature(descriptionRootSignature);
 }
 
 void ShadowMapPipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {

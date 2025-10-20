@@ -5,9 +5,11 @@
 #include <cassert>
 
 void BasePipeline::Init(DirectXCommon* dxCommon) {
-    // 引数で受けとる
+   
     dxCommon_ = dxCommon;
-    // グラフィックスパイプラインの生成
+
+    // パイプラインの生成、ルートシグネチャの生成
+    CreateRootSignature();
     CreateGraphicsPipeline();
 }
 

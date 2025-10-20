@@ -1,6 +1,5 @@
 #include "Particle.hlsli"
 
-
 struct PerView
 {
     float4x4 viewProjection;

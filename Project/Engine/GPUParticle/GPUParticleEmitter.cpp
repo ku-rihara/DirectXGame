@@ -99,7 +99,7 @@ void GPUParticleEmitter::Update() {
 /// エミット
 ///=================================================================================
 void GPUParticleEmitter::Emit() {
-    if (name_.empty() &&!shouldEmit_) {
+    if (name_.empty() || !shouldEmit_) { 
         return;
     }
 

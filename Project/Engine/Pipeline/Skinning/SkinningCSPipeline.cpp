@@ -9,26 +9,6 @@ void SkinningCSPipeline::Init(DirectXCommon* dxCommon) {
     BaseCSPipeline::Init(dxCommon);
 }
 
-void SkinningCSPipeline::CreateComputePipeline() {
-    HRESULT hr = 0;
-
-    // Compute Shaderをコンパイルする
-    computeShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Skinning/Skinning.CS.hlsl", L"cs_6_0");
-    assert(computeShaderBlob_ != nullptr);
-
-    // Compute Pipeline State Descriptionを設定
-    D3D12_COMPUTE_PIPELINE_STATE_DESC computePipelineStateDesc{};
-    computePipelineStateDesc.CS = {
-        .pShaderBytecode = computeShaderBlob_->GetBufferPointer(),
-        .BytecodeLength  = computeShaderBlob_->GetBufferSize(),
-    };
-    computePipelineStateDesc.pRootSignature = rootSignature_.Get();
-
-    // Compute Pipeline Stateを作成
-    hr = dxCommon_->GetDevice()->CreateComputePipelineState(&computePipelineStateDesc, IID_PPV_ARGS(&computePipelineState_));
-    assert(SUCCEEDED(hr));
-}
-
 void SkinningCSPipeline::CreateRootSignature() {
     // DescriptorRangeを設定
     D3D12_DESCRIPTOR_RANGE descriptorRange[4] = {};
@@ -100,6 +80,27 @@ void SkinningCSPipeline::CreateRootSignature() {
     // シリアライズしてバイナリにする
     SerializeAndCreateRootSignature(descriptionRootSignature);
 }
+
+void SkinningCSPipeline::CreateComputePipeline() {
+    HRESULT hr = 0;
+
+    // Compute Shaderをコンパイルする
+    computeShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Skinning/Skinning.CS.hlsl", L"cs_6_0");
+    assert(computeShaderBlob_ != nullptr);
+
+    // Compute Pipeline State Descriptionを設定
+    D3D12_COMPUTE_PIPELINE_STATE_DESC computePipelineStateDesc{};
+    computePipelineStateDesc.CS = {
+        .pShaderBytecode = computeShaderBlob_->GetBufferPointer(),
+        .BytecodeLength  = computeShaderBlob_->GetBufferSize(),
+    };
+    computePipelineStateDesc.pRootSignature = rootSignature_.Get();
+
+    // Compute Pipeline Stateを作成
+    hr = dxCommon_->GetDevice()->CreateComputePipelineState(&computePipelineStateDesc, IID_PPV_ARGS(&computePipelineState_));
+    assert(SUCCEEDED(hr));
+}
+
 
 void SkinningCSPipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
     // Compute用のRootSignatureを設定

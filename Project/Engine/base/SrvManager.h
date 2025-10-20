@@ -33,7 +33,11 @@ public:
     void CreateForTexture2D(const uint32_t& srvIndex, ID3D12Resource* pResource, const D3D12_SHADER_RESOURCE_VIEW_DESC& desc);
     void CreateForStructuredBuffer(const uint32_t& srvIndex, ID3D12Resource* pResource, const UINT& numElements, const UINT& structuredByteStride);
 
+    // UAV生成
     void CreateStructuredUAV(const uint32_t& index, ID3D12Resource* resource, const UINT& numElements, const UINT& byteStride);
+    
+    // UAVバリアを張る
+    void UAVBarrierTransition(ID3D12GraphicsCommandList* commandList, ID3D12Resource* resource);
 
 private:
     ///=========================================
