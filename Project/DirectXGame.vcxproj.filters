@@ -448,9 +448,6 @@
     <Filter Include="Game\BackGroundObject\ComboLevel">
       <UniqueIdentifier>{c094f561-3bc0-4506-ac52-7363b27c4f08}</UniqueIdentifier>
     </Filter>
-    <Filter Include="リソースファイル\Random">
-      <UniqueIdentifier>{06914a50-77df-4e36-9100-2bfef8813310}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.cpp\Pipeline\SkyBox">
       <UniqueIdentifier>{d2c5c7b4-7eb9-4751-8b7f-27522fca7e01}</UniqueIdentifier>
     </Filter>
@@ -459,6 +456,9 @@
     </Filter>
     <Filter Include="Game\Player\JumpAttackUI">
       <UniqueIdentifier>{2a057082-9dd0-48a1-983c-2389abf8a682}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソースファイル\library">
+      <UniqueIdentifier>{06914a50-77df-4e36-9100-2bfef8813310}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1137,6 +1137,12 @@
     </ClCompile>
     <ClCompile Include="Game\Player\JumpAttackUI\JumpAttackUI.cpp">
       <Filter>Game\Player\JumpAttackUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Dx\DxResourceBarrier.cpp">
+      <Filter>MyEngine\.cpp\Dx</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Pipeline\Particle\CS\UpdateParticlePipeline.cpp">
+      <Filter>MyEngine\.cpp\Pipeline\Particle\CS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1866,6 +1872,12 @@
     <ClInclude Include="Game\Player\JumpAttackUI\JumpAttackUI.h">
       <Filter>Game\Player\JumpAttackUI</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Pipeline\Particle\CS\UpdateParticlePipeline.h">
+      <Filter>MyEngine\.h\Pipeline\Particle\CS</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Dx\DxResourceBarrier.h">
+      <Filter>MyEngine\.h\Dx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -1911,8 +1923,11 @@
     <None Include="resources\Shader\Particle\Particle.hlsli">
       <Filter>リソースファイル\Particle</Filter>
     </None>
-    <None Include="resources\Shader\Random\Random.hlsli">
-      <Filter>リソースファイル\Random</Filter>
+    <None Include="resources\Shader\Library\PerFrame.hlsli">
+      <Filter>リソースファイル\library</Filter>
+    </None>
+    <None Include="resources\Shader\Library\Random.hlsli">
+      <Filter>リソースファイル\library</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -2002,6 +2017,9 @@
     </FxCompile>
     <FxCompile Include="resources\Shader\Particle\GPUParticle.PS.hlsl">
       <Filter>リソースファイル\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Particle\CS\UpdateParticle.CS.hlsl">
+      <Filter>リソースファイル\Particle\CS</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

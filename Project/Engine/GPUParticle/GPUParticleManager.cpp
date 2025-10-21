@@ -2,6 +2,8 @@
 #include "3d/ModelManager.h"
 #include "3d/ViewProjection.h"
 #include "base/TextureManager.h"
+//dx
+#include"Dx/DxResourceBarrier.h"
 // pipeline
 #include "Pipeline/CSPipelineManager.h"
 #include "Pipeline/PipelineManager.h"
@@ -85,34 +87,6 @@ void GPUParticleManager::CreatePrimitiveParticle(
     CreateMaterialResource(name);
 }
 
-void GPUParticleManager::DispatchInitParticle(GPUParticleGroup& group) {
-    if (!group.resourceCreator) {
-        return;
-    }
-
-    ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-    CSPipelineManager* csPipe              = CSPipelineManager::GetInstance();
-
-    //  デスクリプタヒープを設定
-    ID3D12DescriptorHeap* descriptorHeaps[] = {srvManager_->GetDescriptorHeap()};
-    commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
-
-    // InitParticleパス
-    csPipe->PreDraw(CSPipelineType::Particle_Init, commandList);
-
-    // u0: パーティクルバッファ(UAV)
-    commandList->SetComputeRootDescriptorTable(0,
-        group.resourceCreator->GetParticleUavHandle());
-
-    csPipe->DisPatch(CSPipelineType::Particle_Init, commandList, group.maxParticleCount);
-
-   // UAV barrier
-    D3D12_RESOURCE_BARRIER barrier = {};
-    barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_UAV;
-    barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-    barrier.UAV.pResource          = group.resourceCreator->GetParticleResource();
-    commandList->ResourceBarrier(1, &barrier);
-}
 
 void GPUParticleManager::InitializeGroupResources(GPUParticleGroup& group) {
     // リソースクリエイター作成
@@ -137,36 +111,6 @@ void GPUParticleManager::InitializeGroupResources(GPUParticleGroup& group) {
     }
 }
 
-void GPUParticleManager::SetModel(const std::string& name, const std::string& modelName) {
-    assert(particleGroups_.contains(name));
-
-    ModelManager::GetInstance()->LoadModel(modelName);
-    particleGroups_[name].model = ModelManager::GetInstance()->FindModel(modelName);
-
-    if (particleGroups_[name].model) {
-        particleGroups_[name].textureHandle = TextureManager::GetInstance()->LoadTexture(
-            particleGroups_[name].model->GetModelData().material.textureFilePath);
-    }
-}
-
-void GPUParticleManager::SetTextureHandle(const std::string& name, const uint32_t& handle) {
-    assert(particleGroups_.contains(name));
-    particleGroups_[name].textureHandle = handle;
-}
-
-void GPUParticleManager::CreateMaterialResource(const std::string& name) {
-    assert(particleGroups_.contains(name));
-    particleGroups_[name].material.CreateMaterialResource(dxCommon_);
-}
-
-void GPUParticleManager::SetEmitterSphere(const std::string& name, const EmitterSphere& emitter) {
-    assert(particleGroups_.contains(name));
-
-    GPUParticleGroup& group = particleGroups_[name];
-    if (group.emitSphereData) {
-        *group.emitSphereData = emitter;
-    }
-}
 
 void GPUParticleManager::Emit(const std::string& name) {
     auto it = particleGroups_.find(name);
@@ -182,6 +126,9 @@ void GPUParticleManager::Emit(const std::string& name) {
 
     // 即座にエミット
     group.emitSphereData->emit = 1;
+
+    // Emit dispatch
+    DispatchEmit(group);
 }
 
 void GPUParticleManager::Update() {
@@ -194,19 +141,51 @@ void GPUParticleManager::Update() {
             group.perViewData->billboardMatrix =
                 viewProjection_->GetBillboardMatrix();
         }
-
-        // コンピュートシェーダーディスパッチ
-        DispatchComputeShaders(group);
+        group.resourceCreator->PerFrameIncrement();
+        DispatchUpdate(group);
     }
 }
 
-void GPUParticleManager::DispatchComputeShaders(GPUParticleGroup& group) {
+
+void GPUParticleManager::DispatchInitParticle(GPUParticleGroup& group) {
     if (!group.resourceCreator) {
         return;
     }
 
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
     CSPipelineManager* csPipe              = CSPipelineManager::GetInstance();
+    DxResourceBarrier* barrier             = dxCommon_->GetResourceBarrier();
+
+    //  デスクリプタヒープを設定
+    ID3D12DescriptorHeap* descriptorHeaps[] = {srvManager_->GetDescriptorHeap()};
+    commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+
+    // InitParticleパス
+    csPipe->PreDraw(CSPipelineType::Particle_Init, commandList);
+
+    // u0: パーティクルバッファ(UAV)
+    commandList->SetComputeRootDescriptorTable(0,
+        group.resourceCreator->GetParticleUavHandle());
+
+    // u1: Counter(UAV)
+    commandList->SetComputeRootDescriptorTable(1,
+        group.resourceCreator->GetCounterUavHandle());
+
+    csPipe->DisPatch(CSPipelineType::Particle_Init, commandList, group.maxParticleCount);
+
+    // UAV barrier
+    barrier->UAVBarrier(commandList, group.resourceCreator->GetParticleResource());
+}
+
+
+void GPUParticleManager::DispatchEmit(GPUParticleGroup& group) {
+    if (!group.resourceCreator) {
+        return;
+    }
+
+    ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+    CSPipelineManager* csPipe              = CSPipelineManager::GetInstance();
+    DxResourceBarrier* barrier             = dxCommon_->GetResourceBarrier();
 
     //  デスクリプタヒープを設定
     ID3D12DescriptorHeap* descriptorHeaps[] = {srvManager_->GetDescriptorHeap()};
@@ -227,16 +206,48 @@ void GPUParticleManager::DispatchComputeShaders(GPUParticleGroup& group) {
     commandList->SetComputeRootDescriptorTable(1,
         group.resourceCreator->GetParticleUavHandle());
 
+    // u1: Counter(UAV)
+    commandList->SetComputeRootDescriptorTable(3,
+        group.resourceCreator->GetCounterUavHandle());
+
     // 1スレッドでエミット処理
     csPipe->DisPatch(CSPipelineType::Particle_Emit, commandList, 1);
 
     // UAV barrier
-    D3D12_RESOURCE_BARRIER barrier = {};
-    barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_UAV;
-    barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-    barrier.UAV.pResource          = group.resourceCreator->GetParticleResource();
-    commandList->ResourceBarrier(1, &barrier);
+    barrier->UAVBarrier(commandList, group.resourceCreator->GetParticleResource());
 }
+
+void GPUParticleManager::DispatchUpdate(GPUParticleGroup& group) {
+    if (!group.resourceCreator) {
+        return;
+    }
+
+    ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+    CSPipelineManager* csPipe              = CSPipelineManager::GetInstance();
+    DxResourceBarrier* barrier             = dxCommon_->GetResourceBarrier();
+
+    // デスクリプタヒープを設定
+    ID3D12DescriptorHeap* descriptorHeaps[] = {srvManager_->GetDescriptorHeap()};
+    commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+
+    // 更新パス
+    csPipe->PreDraw(CSPipelineType::Particle_Update, commandList);
+
+    // u0: パーティクルバッファ(UAV)
+    commandList->SetComputeRootDescriptorTable(0,
+        group.resourceCreator->GetParticleUavHandle());
+
+    // b0: PerFrame
+    commandList->SetComputeRootConstantBufferView(1,
+        group.resourceCreator->GetPerFrameResource()->GetGPUVirtualAddress());
+
+    // 全パーティクルを更新
+    csPipe->DisPatch(CSPipelineType::Particle_Update, commandList, group.maxParticleCount);
+
+    // UAV barrier
+    barrier->UAVBarrier(commandList, group.resourceCreator->GetParticleResource());
+}
+
 
 void GPUParticleManager::Draw(const ViewProjection& viewProjection) {
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
@@ -253,10 +264,10 @@ void GPUParticleManager::Draw(const ViewProjection& viewProjection) {
         pipe->PreBlendSet(PipelineType::GPUParticle, commandList, BlendMode::Add);
 
         // b0: PerViewバッファ
-        commandList->SetGraphicsRootConstantBufferView(0,group.resourceCreator->GetPerViewResource()->GetGPUVirtualAddress());
+        commandList->SetGraphicsRootConstantBufferView(0, group.resourceCreator->GetPerViewResource()->GetGPUVirtualAddress());
 
         // t0: パーティクルSRV
-        commandList->SetGraphicsRootDescriptorTable(1,group.resourceCreator->GetParticleSrvHandle());
+        commandList->SetGraphicsRootDescriptorTable(1, group.resourceCreator->GetParticleSrvHandle());
 
         // b2(PS): マテリアル
         group.material.SetCommandList(commandList);
@@ -290,4 +301,35 @@ GPUParticleManager::GPUParticleGroup* GPUParticleManager::GetParticleGroup(const
         return &it->second;
     }
     return nullptr;
+}
+
+void GPUParticleManager::SetModel(const std::string& name, const std::string& modelName) {
+    assert(particleGroups_.contains(name));
+
+    ModelManager::GetInstance()->LoadModel(modelName);
+    particleGroups_[name].model = ModelManager::GetInstance()->FindModel(modelName);
+
+    if (particleGroups_[name].model) {
+        particleGroups_[name].textureHandle = TextureManager::GetInstance()->LoadTexture(
+            particleGroups_[name].model->GetModelData().material.textureFilePath);
+    }
+}
+
+void GPUParticleManager::SetTextureHandle(const std::string& name, const uint32_t& handle) {
+    assert(particleGroups_.contains(name));
+    particleGroups_[name].textureHandle = handle;
+}
+
+void GPUParticleManager::CreateMaterialResource(const std::string& name) {
+    assert(particleGroups_.contains(name));
+    particleGroups_[name].material.CreateMaterialResource(dxCommon_);
+}
+
+void GPUParticleManager::SetEmitterSphere(const std::string& name, const EmitterSphere& emitter) {
+    assert(particleGroups_.contains(name));
+
+    GPUParticleGroup& group = particleGroups_[name];
+    if (group.emitSphereData) {
+        *group.emitSphereData = emitter;
+    }
 }

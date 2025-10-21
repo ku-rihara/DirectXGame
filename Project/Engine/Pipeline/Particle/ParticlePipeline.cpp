@@ -10,9 +10,8 @@ void ParticlePipeline::Init(DirectXCommon* dxCommon) {
     BasePipeline::Init(dxCommon);
 }
 
-void ParticlePipeline::CreateGraphicsPipeline() {
 
-    HRESULT hr = 0;
+void ParticlePipeline::CreateRootSignature() {
 
     staticSamplers_[0].Filter           = D3D12_FILTER_MIN_MAG_MIP_LINEAR; // バイリニアフィルタ
     staticSamplers_[0].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_WRAP; // 0~1の範囲外をリピート
@@ -23,7 +22,56 @@ void ParticlePipeline::CreateGraphicsPipeline() {
     staticSamplers_[0].ShaderRegister   = 0; // レジスタ番号0
     staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // pxelShaderで使う
 
-    CreateRootSignature();
+    // DescriptorRangeを設定
+    D3D12_DESCRIPTOR_RANGE descriptorRange[2] = {};
+
+    // gParticle (t0) - StructuredBuffer 
+    descriptorRange[0].BaseShaderRegister                = 0;
+    descriptorRange[0].NumDescriptors                    = 1;
+    descriptorRange[0].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+    // gTexture (t0) - Texture2D
+    descriptorRange[1].BaseShaderRegister                = 0;
+    descriptorRange[1].NumDescriptors                    = 1;
+    descriptorRange[1].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorRange[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+    // RootParameterを作成
+    D3D12_ROOT_PARAMETER rootParameters[3] = {};
+
+    // 1: gParticle (t0) - StructuredBuffer 
+    rootParameters[0].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[0].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_VERTEX;
+    rootParameters[0].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
+    rootParameters[0].DescriptorTable.NumDescriptorRanges = 1;
+
+    // 2: gMaterial (b0) - ConstantBuffer
+    rootParameters[1].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[1].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[1].Descriptor.ShaderRegister = 0;
+
+    // 3: gTexture (t0) - Texture2D 
+    rootParameters[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[2].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
+    rootParameters[2].DescriptorTable.NumDescriptorRanges = 1;
+
+    // Root Signature Descriptionを設定
+    D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
+    descriptionRootSignature.Flags             = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+    descriptionRootSignature.pParameters       = rootParameters;
+    descriptionRootSignature.NumParameters     = _countof(rootParameters);
+    descriptionRootSignature.pStaticSamplers   = staticSamplers_;
+    descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers_);
+
+    // シリアライズしてバイナリにする
+    SerializeAndCreateRootSignature(descriptionRootSignature);
+}
+
+void ParticlePipeline::CreateGraphicsPipeline() {
+
+    HRESULT hr = 0;
 
     // InputLayoutの設定を行う
     D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
@@ -150,54 +198,6 @@ void ParticlePipeline::CreateGraphicsPipeline() {
     CreatePSO(blendDescMultiply, graphicsPipelineStateMultiply_);
     CreatePSO(blendDescSubtractive, graphicsPipelineStateSubtractive_);
     CreatePSO(blendDescScreen, graphicsPipelineStateScreen_);
-}
-
-void ParticlePipeline::CreateRootSignature() {
-    // DescriptorRangeを設定
-    D3D12_DESCRIPTOR_RANGE descriptorRange[2] = {};
-
-    // gParticle (t0) - StructuredBuffer 
-    descriptorRange[0].BaseShaderRegister                = 0;
-    descriptorRange[0].NumDescriptors                    = 1;
-    descriptorRange[0].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-    descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-    // gTexture (t0) - Texture2D
-    descriptorRange[1].BaseShaderRegister                = 0;
-    descriptorRange[1].NumDescriptors                    = 1;
-    descriptorRange[1].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-    descriptorRange[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-    // RootParameterを作成
-    D3D12_ROOT_PARAMETER rootParameters[3] = {};
-
-    // 1: gParticle (t0) - StructuredBuffer 
-    rootParameters[0].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[0].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_VERTEX;
-    rootParameters[0].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
-    rootParameters[0].DescriptorTable.NumDescriptorRanges = 1;
-
-    // 2: gMaterial (b0) - ConstantBuffer
-    rootParameters[1].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[1].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[1].Descriptor.ShaderRegister = 0;
-
-    // 3: gTexture (t0) - Texture2D 
-    rootParameters[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[2].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
-    rootParameters[2].DescriptorTable.NumDescriptorRanges = 1;
-
-    // Root Signature Descriptionを設定
-    D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
-    descriptionRootSignature.Flags             = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-    descriptionRootSignature.pParameters       = rootParameters;
-    descriptionRootSignature.NumParameters     = _countof(rootParameters);
-    descriptionRootSignature.pStaticSamplers   = staticSamplers_;
-    descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers_);
-
-    // シリアライズしてバイナリにする
-    SerializeAndCreateRootSignature(descriptionRootSignature);
 }
 
 void ParticlePipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {

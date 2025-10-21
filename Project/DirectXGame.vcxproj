@@ -48,6 +48,7 @@
     <ClCompile Include="Engine\Dx\DxDevice.cpp" />
     <ClCompile Include="Engine\Dx\DxReleaseChecker.cpp" />
     <ClCompile Include="Engine\Dx\DxRenderTarget.cpp" />
+    <ClCompile Include="Engine\Dx\DxResourceBarrier.cpp" />
     <ClCompile Include="Engine\Dx\DxSwapChain.cpp" />
     <ClCompile Include="Engine\Easing\Easing.cpp" />
     <ClCompile Include="Engine\Easing\EasingFunction.cpp" />
@@ -84,6 +85,7 @@
     <ClCompile Include="Engine\Pipeline\Object3D\Object3DPipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Particle\CS\EmitParticlePipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Particle\CS\InitParticlePipeline.cpp" />
+    <ClCompile Include="Engine\Pipeline\Particle\CS\UpdateParticlePipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Particle\GPUParticlePipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\Particle\ParticlePipeline.cpp" />
     <ClCompile Include="Engine\Pipeline\PipelineManager.cpp" />
@@ -279,6 +281,7 @@
     <ClInclude Include="Engine\Dx\DxDevice.h" />
     <ClInclude Include="Engine\Dx\DxReleaseChecker.h" />
     <ClInclude Include="Engine\Dx\DxRenderTarget.h" />
+    <ClInclude Include="Engine\Dx\DxResourceBarrier.h" />
     <ClInclude Include="Engine\Dx\DxSwapChain.h" />
     <ClInclude Include="Engine\Easing\Easing.h" />
     <ClInclude Include="Engine\Easing\EasingFunction.h" />
@@ -318,6 +321,7 @@
     <ClInclude Include="Engine\Pipeline\Object3D\Object3DPipeline.h" />
     <ClInclude Include="Engine\Pipeline\Particle\CS\EmitParticlePipeline.h" />
     <ClInclude Include="Engine\Pipeline\Particle\CS\InitParticlePipeline.h" />
+    <ClInclude Include="Engine\Pipeline\Particle\CS\UpdateParticlePipeline.h" />
     <ClInclude Include="Engine\Pipeline\Particle\GPUParticlePipeline.h" />
     <ClInclude Include="Engine\Pipeline\Particle\ParticlePipeline.h" />
     <ClInclude Include="Engine\Pipeline\PipelineManager.h" />
@@ -492,6 +496,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
+    <None Include="resources\Shader\Library\PerFrame.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="resources\Shader\Library\Random.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
     <None Include="resources\Shader\Lighting\AmbientLight.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -529,10 +541,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
     <None Include="resources\Shader\PostEffect\Fullscreen.hlsli">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </None>
-    <None Include="resources\Shader\Random\Random.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
@@ -575,6 +583,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="resources\Shader\Particle\CS\InitParticle.CS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\Shader\Particle\CS\UpdateParticle.CS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

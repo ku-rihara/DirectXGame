@@ -8,9 +8,25 @@ void Line3DPipeline::Init(DirectXCommon* dxCommon) {
     BasePipeline::Init(dxCommon);
 }
 
-void Line3DPipeline::CreateGraphicsPipeline() {
 
-    CreateRootSignature();
+void Line3DPipeline::CreateRootSignature() {
+  
+    D3D12_ROOT_SIGNATURE_DESC desc{};
+    desc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+
+    D3D12_ROOT_PARAMETER param{};
+    param.ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    param.ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
+    param.Descriptor.ShaderRegister = 0;
+
+    desc.pParameters   = &param;
+    desc.NumParameters = 1;
+
+     // シリアライズしてバイナリにする
+    SerializeAndCreateRootSignature(desc);
+}
+
+void Line3DPipeline::CreateGraphicsPipeline() {
 
     // InputLayoutの設定を行う
     D3D12_INPUT_ELEMENT_DESC inputElementDescs[2] = {};
@@ -28,9 +44,9 @@ void Line3DPipeline::CreateGraphicsPipeline() {
     inputLayoutDesc.pInputElementDescs = inputElementDescs;
     inputLayoutDesc.NumElements        = _countof(inputElementDescs);
 
-    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Line3D.VS.hlsl",L"vs_6_0");
+    vertexShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Line3D.VS.hlsl", L"vs_6_0");
 
-    pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Line3D.PS.hlsl",L"ps_6_0");
+    pixelShaderBlob_ = dxCommon_->GetDxCompiler()->CompileShader(L"resources/Shader/Line3D.PS.hlsl", L"ps_6_0");
 
     D3D12_BLEND_DESC blendDesc{};
     blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
@@ -73,22 +89,6 @@ void Line3DPipeline::CreateGraphicsPipeline() {
     }
 }
 
-void Line3DPipeline::CreateRootSignature() {
-  
-    D3D12_ROOT_SIGNATURE_DESC desc{};
-    desc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-
-    D3D12_ROOT_PARAMETER param{};
-    param.ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    param.ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
-    param.Descriptor.ShaderRegister = 0;
-
-    desc.pParameters   = &param;
-    desc.NumParameters = 1;
-
-     // シリアライズしてバイナリにする
-    SerializeAndCreateRootSignature(desc);
-}
 
 void Line3DPipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
     commandList->SetPipelineState(graphicsPipelineState_.Get());

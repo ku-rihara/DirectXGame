@@ -99,15 +99,13 @@ void GPUParticleEmitter::Update() {
 /// エミット
 ///=================================================================================
 void GPUParticleEmitter::Emit() {
-    if (name_.empty() &&!shouldEmit_) {
+    if (name_.empty() || !shouldEmit_) { 
         return;
     }
 
     // 即座にエミットをトリガー
     GPUParticleManager::GetInstance()->Emit(name_);
 }
-
-
 
 void GPUParticleEmitter::SetEmitterData(const EmitterSphere& emitter) {
     if (name_.empty()) {

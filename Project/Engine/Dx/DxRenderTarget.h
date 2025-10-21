@@ -12,14 +12,14 @@ class SrvManager;
 class DxCommand;
 class DxSwapChain;
 class DxDepthBuffer;
+class DxResourceBarrier;
 class DxRenderTarget {
 public:
     DxRenderTarget()  = default;
     ~DxRenderTarget() = default;
 
     // 初期化
-    void Init(Microsoft::WRL::ComPtr<ID3D12Device> device, DxDepthBuffer* depthBuffer, RtvManager* rtvManager, SrvManager* srvManager,
-        DxCommand* dxCommand, DxSwapChain* dxSwapChain, const uint32_t& width, const uint32_t& height);
+    void Init(Microsoft::WRL::ComPtr<ID3D12Device> device, const uint32_t& width, const uint32_t& height);
 
     void PreRenderTexture();
     void PreDraw();
@@ -30,25 +30,25 @@ public:
 private:
     void CreateRenderTextureRTV();
     void CreateRenderTextureSRV();
-    void PutTransitionBarrier(ID3D12Resource* pResource, const D3D12_RESOURCE_STATES& Before, const D3D12_RESOURCE_STATES& After);
-
+   
     Microsoft::WRL::ComPtr<ID3D12Resource> CreateRenderTextureResource(
         Microsoft::WRL::ComPtr<ID3D12Device> device, const uint32_t& width, const uint32_t& height,
         DXGI_FORMAT format, const Vector4& clearColor);
 
 private:
-    RtvManager* rtvManager_   = nullptr;
-    SrvManager* srvManager_   = nullptr;
-    DxCommand* dxCommand_     = nullptr;
-    DxSwapChain* dxSwapChain_ = nullptr;
-
-    DxDepthBuffer* depthBuffer_ = nullptr;
+    //
+    RtvManager* rtvManager_ = nullptr;
+    SrvManager* srvManager_ = nullptr;
+    // dx class
+    DxCommand* dxCommand_                 = nullptr;
+    DxSwapChain* dxSwapChain_             = nullptr;
+    DxDepthBuffer* depthBuffer_           = nullptr;
+    DxResourceBarrier* dxResourceBarrier_ = nullptr;
 
     Microsoft::WRL::ComPtr<ID3D12Resource> renderTextureResource_;
     D3D12_GPU_DESCRIPTOR_HANDLE renderTextureGPUSrvHandle_;
     D3D12_CPU_DESCRIPTOR_HANDLE renderTextureCPUSrvHandle_;
     D3D12_CLEAR_VALUE clearValue_;
-    D3D12_RESOURCE_STATES renderTextureCurrentState_;
 
     UINT backBufferIndex_;
     D3D12_VIEWPORT viewport_{};
@@ -59,9 +59,13 @@ private:
     uint32_t renderTextureRtvIndex_;
 
 public:
-    // ゲッター
+    // getter
     Microsoft::WRL::ComPtr<ID3D12Resource> GetRenderTextureResource() const { return renderTextureResource_; }
     const D3D12_GPU_DESCRIPTOR_HANDLE& GetRenderTextureGPUSrvHandle() const { return renderTextureGPUSrvHandle_; }
     const D3D12_CPU_DESCRIPTOR_HANDLE& GetRenderTextureCPUSrvHandle() const { return renderTextureCPUSrvHandle_; }
     const D3D12_CLEAR_VALUE& GetClearValue() const { return clearValue_; }
+
+    // setter
+    void SetUseClasses(DxDepthBuffer* depthBuffer, RtvManager* rtvManager, SrvManager* srvManager,
+        DxCommand* dxCommand, DxSwapChain* dxSwapChain, DxResourceBarrier* resourceBarrier);
 };

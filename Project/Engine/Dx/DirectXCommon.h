@@ -12,12 +12,14 @@ class TextureManager;
 class SrvManager;
 class RtvManager;
 class WinApp;
+// Dx
 class DxDevice;
 class DxCommand;
 class DxSwapChain;
 class DxRenderTarget;
 class DxCompiler;
 class DxDepthBuffer;
+class DxResourceBarrier;
 
 enum class ViewType {
     UnorderedAccess,
@@ -80,6 +82,7 @@ private:
     std::unique_ptr<DxRenderTarget> dxRenderTarget_;
     std::unique_ptr<DxCompiler> dxCompiler_;
     std::unique_ptr<DxDepthBuffer> depthBuffer_;
+    std::unique_ptr<DxResourceBarrier> resourceBarrier_;
 
     ///===========================================================================
     /// バックバッファ関連
@@ -96,12 +99,14 @@ public:
     D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, const uint32_t& descriptorSize,const uint32_t& index);
     D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, const uint32_t& descriptorSize,const uint32_t& index);
 
+    // dxポインタ
     DxDevice* GetDxDevice() const { return dxDevice_.get(); }
     DxCommand* GetDxCommand() const { return dxCommand_.get(); }
     DxSwapChain* GetDxSwapChain() const { return dxSwapChain_.get(); }
     DxRenderTarget* GetDxRenderTarget() const { return dxRenderTarget_.get(); }
     DxCompiler* GetDxCompiler() const { return dxCompiler_.get(); }
     DxDepthBuffer* GetDepthBuffer() const { return depthBuffer_.get(); }
+    DxResourceBarrier* GetResourceBarrier() const { return resourceBarrier_.get(); }
 
     Microsoft::WRL::ComPtr<ID3D12Device> GetDevice() const;
     ID3D12GraphicsCommandList* GetCommandList() const;

@@ -1,10 +1,9 @@
 #include "Object3DAnimation.h"
 #include "3d/ModelManager.h"
 #include "AnimationRegistry.h"
-#include "base/SrvManager.h"
+#include "Dx/DxResourceBarrier.h"
 #include "MathFunction.h"
 #include "Pipeline/CSPipelineManager.h"
-#include "Pipeline/Object3D/Object3DPipeline.h"
 #include "Pipeline/PipelineManager.h"
 #include <algorithm>
 #include <cassert>
@@ -252,6 +251,7 @@ void Object3DAnimation::TransitionFinish() {
 
 void Object3DAnimation::CSSkinning() {
     auto commandList = DirectXCommon::GetInstance()->GetCommandList();
+    DxResourceBarrier* barrier = DirectXCommon::GetInstance()->GetResourceBarrier();
 
     // Compute Shader用リソース設定
     commandList->SetComputeRootDescriptorTable(0, skinCluster_.paletteSrvHandle.second);
@@ -262,14 +262,10 @@ void Object3DAnimation::CSSkinning() {
 
     // スキニング実行
     int numVertices = static_cast<int>(model_->GetModelData().vertices.size());
-    CSPipelineManager::GetInstance()->DisPatch(CSPipelineType::Skinning, commandList, numVertices);  
+    CSPipelineManager::GetInstance()->DisPatch(CSPipelineType::Skinning, commandList, numVertices);
 
-    //UAV barrier 
-    D3D12_RESOURCE_BARRIER barrier = {};
-    barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_UAV;
-    barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-    barrier.UAV.pResource          = skinCluster_.outputVertexResource.Get();
-    commandList->ResourceBarrier(1, &barrier);
+    // UAV barrier
+    barrier->UAVBarrier(commandList, skinCluster_.outputVertexResource.Get());
 }
 
 ///============================================================
@@ -289,7 +285,7 @@ void Object3DAnimation::Draw(const ViewProjection& viewProjection) {
 
     // アニメーション描画
     PipelineManager::GetInstance()->PreDraw(PipelineType::SkinningObject3D, DirectXCommon::GetInstance()->GetCommandList());
-    PipelineManager::GetInstance()->PreBlendSet(PipelineType::SkinningObject3D, DirectXCommon::GetInstance()->GetCommandList(),blendMode);
+    PipelineManager::GetInstance()->PreBlendSet(PipelineType::SkinningObject3D, DirectXCommon::GetInstance()->GetCommandList(), blendMode);
     model_->DrawAnimation(wvpResource_, *shadowMap_, material_, skinCluster_);
 
     // 通常パイプラインに戻す
@@ -366,7 +362,7 @@ const std::string& Object3DAnimation::GetCurrentAnimationName() const {
 ///============================================================
 /// 計算メソッド
 ///============================================================
-Vector3 Object3DAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe,const float& time) {
+Vector3 Object3DAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe, const float& time) {
     return modelAnimation_->CalculateValue(keyframe, time);
 }
 

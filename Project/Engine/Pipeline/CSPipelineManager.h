@@ -15,6 +15,7 @@ enum class CSPipelineType {
     Skinning,
     Particle_Init,
     Particle_Emit,
+    Particle_Update,
     Count
 };
 
@@ -27,6 +28,7 @@ public:
     CSPipelineManager(CSPipelineManager&&)                 = delete;
     CSPipelineManager& operator=(CSPipelineManager&&)      = delete;
 
+    // 初期化、描画前処理、ディスパッチ
     void Init(DirectXCommon* dxCommon);
     void PreDraw(const CSPipelineType& type, ID3D12GraphicsCommandList* commandList) const;
     void DisPatch(const CSPipelineType& type, ID3D12GraphicsCommandList* commandList, const UINT& numThreadsX);

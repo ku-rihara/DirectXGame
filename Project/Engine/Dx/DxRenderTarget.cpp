@@ -3,26 +3,18 @@
 #include "base/RtvManager.h"
 #include "base/SrvManager.h"
 #include "DxCommand.h"
+#include "DxDepthBuffer.h"
+#include "DxResourceBarrier.h"
 #include "DxSwapChain.h"
-#include"DxDepthBuffer.h"
 #include <cassert>
 
 ///==========================================================
 /// 初期化
 ///==========================================================
-void DxRenderTarget::Init(
-    Microsoft::WRL::ComPtr<ID3D12Device> device, DxDepthBuffer*depthBuffer, RtvManager* rtvManager, SrvManager* srvManager,
-    DxCommand* dxCommand, DxSwapChain* dxSwapChain, const uint32_t& width, const uint32_t& height) {
-
-    rtvManager_  = rtvManager;
-    srvManager_  = srvManager;
-    dxCommand_   = dxCommand;
-    dxSwapChain_ = dxSwapChain;
+void DxRenderTarget::Init(Microsoft::WRL::ComPtr<ID3D12Device> device, const uint32_t& width, const uint32_t& height) {
 
     backBufferHeight_ = height;
     backBufferWidth_  = width;
-
-    depthBuffer_ = depthBuffer;
 
     clearColor_ = Vector4(0.2f, 0.2f, 0.2f, 1.0f);
 
@@ -42,8 +34,7 @@ void DxRenderTarget::Init(
     // ビューポートとシザー矩形の初期化
     SetupViewportAndScissor();
 
-    // 初期状態をRENDER_TARGETに設定
-    renderTextureCurrentState_ = D3D12_RESOURCE_STATE_RENDER_TARGET;
+    dxResourceBarrier_->RegisterResource(renderTextureResource_.Get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
 }
 
 ///==========================================================
@@ -126,85 +117,77 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DxRenderTarget::CreateRenderTextureResour
     return resource;
 }
 
-
 void DxRenderTarget::PreRenderTexture() {
 
-    // ========================================
-    // 1. レンダーテクスチャをRENDER_TARGET状態に遷移
-    // ========================================
-    if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_RENDER_TARGET) {
-        PutTransitionBarrier(renderTextureResource_.Get(), renderTextureCurrentState_,
-            D3D12_RESOURCE_STATE_RENDER_TARGET);
-    }
+    // ----------------------------------------------
+    // レンダーテクスチャをRENDER_TARGET状態に遷移
+    // ----------------------------------------------
+    dxResourceBarrier_->Transition(dxCommand_->GetCommandList(), renderTextureResource_.Get(), D3D12_RESOURCE_STATE_RENDER_TARGET);
 
-    // ========================================
-    // 2. 深度バッファをDEPTH_WRITE状態に遷移
-    // ========================================
+    // ----------------------------------------------
+    // 深度バッファをDEPTH_WRITE状態に遷移
+    // ----------------------------------------------
     depthBuffer_->TransitionState(dxCommand_->GetCommandList(), D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
-    // ========================================
-    // 3. レンダーターゲット設定
-    // ========================================
+    // ----------------------------------------------
+    // レンダーターゲット設定
+    // ----------------------------------------------
     D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(renderTextureRtvIndex_);
     D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = depthBuffer_->GetDsvHandle();
 
     dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
 
-    // ========================================
-    // 4. クリア処理
-    // ========================================
+    // ----------------------------------------------
+    // クリア処理
+    // ----------------------------------------------
     dxCommand_->GetCommandList()->ClearRenderTargetView(rtvHandle, clearValue_.Color, 0, nullptr);
     depthBuffer_->Clear(dxCommand_->GetCommandList());
 
-    // ========================================
-    // 5. ビューポート・シザー設定
-    // ========================================
+    // ----------------------------------------------
+    // ビューポート・シザー設定
+    // ----------------------------------------------
     dxCommand_->GetCommandList()->RSSetViewports(1, &viewport_);
     dxCommand_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
 }
 
 void DxRenderTarget::PreDraw() {
 
-    // =============================================
-    // 1. オフスクリーンリソースをシェーダーリソース状態に遷移
-    // ==============================================
+    // ----------------------------------------------
+    // オフスクリーンリソースをシェーダーリソース状態に遷移
+    // ----------------------------------------------
 
     // レンダーテクスチャをシェーダーリソースに変更
-    if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE) {
-        PutTransitionBarrier(renderTextureResource_.Get(), renderTextureCurrentState_,
-            D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-    }
+    dxResourceBarrier_->Transition(dxCommand_->GetCommandList(),
+        renderTextureResource_.Get(),
+        D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
     // 深度バッファをシェーダーリソースに変更
     depthBuffer_->TransitionState(dxCommand_->GetCommandList(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
-    // ========================================
-    // 2. バックバッファをレンダーターゲット状態に遷移
-    // ========================================
-    backBufferIndex_                            = dxSwapChain_->GetCurrentBackBufferIndex();
-    D3D12_RESOURCE_STATES currentSwapChainState = dxSwapChain_->GetResourceState(backBufferIndex_);
+    // ----------------------------------------------
+    // バックバッファをレンダーターゲット状態に遷移
+    // ----------------------------------------------
+    backBufferIndex_ = dxSwapChain_->GetCurrentBackBufferIndex();
 
-    if (currentSwapChainState != D3D12_RESOURCE_STATE_RENDER_TARGET) {
-        PutTransitionBarrier(dxSwapChain_->GetSwapChainResource(backBufferIndex_).Get(),
-            currentSwapChainState, D3D12_RESOURCE_STATE_RENDER_TARGET);
-        dxSwapChain_->UpdateResourceState(backBufferIndex_, D3D12_RESOURCE_STATE_RENDER_TARGET);
-    }
+    dxResourceBarrier_->Transition(dxCommand_->GetCommandList(),
+        dxSwapChain_->GetSwapChainResource(backBufferIndex_).Get(),
+        D3D12_RESOURCE_STATE_RENDER_TARGET);
 
-    // ========================================
-    // 3. バックバッファをレンダーターゲットに設定
-    // ========================================
+    // ----------------------------------------------
+    // バックバッファをレンダーターゲットに設定
+    // ----------------------------------------------
     D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvManager_->GetCPUDescriptorHandle(backBufferIndex_);
 
     dxCommand_->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
 
-    // ========================================
-    // 4. バックバッファをクリア
-    // ========================================
+    // ----------------------------------------------
+    //  バックバッファをクリア
+    // ----------------------------------------------
     dxCommand_->GetCommandList()->ClearRenderTargetView(rtvHandle, clearValue_.Color, 0, nullptr);
 
-    // ========================================
-    // 5. ビューポート・シザー設定
-    // ========================================
+    // ----------------------------------------------
+    // ビューポート・シザー設定
+    // ----------------------------------------------
     dxCommand_->GetCommandList()->RSSetViewports(1, &viewport_);
     dxCommand_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
 }
@@ -215,26 +198,24 @@ void DxRenderTarget::PreDraw() {
 void DxRenderTarget::PostDrawTransitionBarrier() {
     UINT currentIndex = dxSwapChain_->GetCurrentBackBufferIndex();
 
-    // ========================================
-    // 1. バックバッファをPRESENT状態に遷移
-    // ========================================
-    PutTransitionBarrier(dxSwapChain_->GetSwapChainResource(currentIndex).Get(),
-        D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-    dxSwapChain_->UpdateResourceState(currentIndex, D3D12_RESOURCE_STATE_PRESENT);
+    // ----------------------------------------------
+    //  バックバッファをPRESENT状態に遷移
+    // ----------------------------------------------
+    dxResourceBarrier_->Transition(dxCommand_->GetCommandList(),
+        dxSwapChain_->GetSwapChainResource(currentIndex).Get(),
+        D3D12_RESOURCE_STATE_PRESENT);
 
-    // ========================================
-    // 2. オフスクリーンリソースを次フレーム用に準備
-    // ========================================
+    // ----------------------------------------------
+    //  オフスクリーンリソースを次フレーム用に準備
+    // ----------------------------------------------
 
-    if (renderTextureCurrentState_ != D3D12_RESOURCE_STATE_RENDER_TARGET) {
-        PutTransitionBarrier(renderTextureResource_.Get(), renderTextureCurrentState_,
-            D3D12_RESOURCE_STATE_RENDER_TARGET);
-    }
+    dxResourceBarrier_->Transition(dxCommand_->GetCommandList(),
+        renderTextureResource_.Get(),
+        D3D12_RESOURCE_STATE_RENDER_TARGET);
 
     // 深度バッファを次フレーム用に準備
     depthBuffer_->TransitionState(dxCommand_->GetCommandList(), D3D12_RESOURCE_STATE_DEPTH_WRITE);
 }
-
 
 ///==========================================================
 /// ビューポートとシザー矩形設定
@@ -256,29 +237,21 @@ void DxRenderTarget::SetupViewportAndScissor() {
 }
 
 ///==========================================================
-/// リソース状態遷移バリア
-///==========================================================
-void DxRenderTarget::PutTransitionBarrier(ID3D12Resource* pResource,
-    const D3D12_RESOURCE_STATES& Before,const D3D12_RESOURCE_STATES& After) {
-
-    D3D12_RESOURCE_BARRIER barrier{};
-    barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-    barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-    barrier.Transition.pResource   = pResource;
-    barrier.Transition.StateBefore = Before;
-    barrier.Transition.StateAfter  = After;
-
-    dxCommand_->GetCommandList()->ResourceBarrier(1, &barrier);
-
-    // レンダーテクスチャの状態更新
-    if (pResource == renderTextureResource_.Get()) {
-        renderTextureCurrentState_ = After;
-    }
-}
-
-///==========================================================
 /// 終了処理
 ///==========================================================
 void DxRenderTarget::Finalize() {
+    if (renderTextureResource_) {
+        dxResourceBarrier_->UnregisterResource(renderTextureResource_.Get());
+    }
     renderTextureResource_.Reset();
+}
+
+void DxRenderTarget::SetUseClasses(DxDepthBuffer* depthBuffer, RtvManager* rtvManager, SrvManager* srvManager,
+    DxCommand* dxCommand, DxSwapChain* dxSwapChain, DxResourceBarrier* resourceBarrier) {
+    rtvManager_        = rtvManager;
+    srvManager_        = srvManager;
+    dxCommand_         = dxCommand;
+    dxSwapChain_       = dxSwapChain;
+    depthBuffer_       = depthBuffer;
+    dxResourceBarrier_ = resourceBarrier;
 }

@@ -4,9 +4,6 @@
 #include "Matrix4x4.h"
 #include "Vector3.h"
 class DebugCamera {
-    // カメラ注視点までの距離
-    static const float distance_;
-
 public:
     DebugCamera(int window_width, int window_height);
     ~DebugCamera() = default;

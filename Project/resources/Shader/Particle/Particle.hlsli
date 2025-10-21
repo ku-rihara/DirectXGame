@@ -1,4 +1,6 @@
 
+static const uint kMaxParticles = 1024;
+
 struct Particle
 {
     float3 translate;

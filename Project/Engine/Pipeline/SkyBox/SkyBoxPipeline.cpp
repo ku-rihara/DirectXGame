@@ -11,10 +11,9 @@ void SkyBoxPipeline::Init(DirectXCommon* dxCommon) {
     environmentalMapTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/Texture/output.dds");
 }
 
-void SkyBoxPipeline::CreateGraphicsPipeline() {
+void SkyBoxPipeline::CreateRootSignature() {
 
-    HRESULT hr = 0;
-
+    
     staticSamplers_[0].Filter           = D3D12_FILTER_MIN_MAG_MIP_LINEAR; // バイリニアフィルタ
     staticSamplers_[0].AddressU         = D3D12_TEXTURE_ADDRESS_MODE_WRAP; // 0~1の範囲外をリピート
     staticSamplers_[0].AddressV         = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
@@ -24,7 +23,47 @@ void SkyBoxPipeline::CreateGraphicsPipeline() {
     staticSamplers_[0].ShaderRegister   = 0; // レジスタ番号０
     staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // pxelShaderで使う
 
-    CreateRootSignature();
+    // SRV (TextureCube) 用の descriptor range
+    D3D12_DESCRIPTOR_RANGE descriptorRange{};
+    descriptorRange.BaseShaderRegister                = 0; // t0
+    descriptorRange.NumDescriptors                    = 1;
+    descriptorRange.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+    // RootParameters
+    D3D12_ROOT_PARAMETER rootParameters[3] = {};
+
+    // Material（PixelShader）
+    rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[0].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[0].Descriptor.ShaderRegister = 0;
+
+    // TransformationMatrix（VertexShader）
+    rootParameters[1].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[1].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
+    rootParameters[1].Descriptor.ShaderRegister = 0;
+
+    // TextureCube（PixelShader）
+    rootParameters[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+    rootParameters[2].DescriptorTable.pDescriptorRanges   = &descriptorRange;
+    rootParameters[2].DescriptorTable.NumDescriptorRanges = 1;
+
+    // Root Signature Description
+    D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
+    descriptionRootSignature.Flags             = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+    descriptionRootSignature.pParameters       = rootParameters;
+    descriptionRootSignature.NumParameters     = _countof(rootParameters);
+    descriptionRootSignature.pStaticSamplers   = staticSamplers_;
+    descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers_);
+
+    // シリアライズしてバイナリにする
+    SerializeAndCreateRootSignature(descriptionRootSignature);
+}
+
+void SkyBoxPipeline::CreateGraphicsPipeline() {
+
+    HRESULT hr = 0;
 
     // InputLayoutの設定を行う
     D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
@@ -102,44 +141,6 @@ void SkyBoxPipeline::CreateGraphicsPipeline() {
     assert(SUCCEEDED(hr));
 }
 
-void SkyBoxPipeline::CreateRootSignature() {
-    // SRV (TextureCube) 用の descriptor range
-    D3D12_DESCRIPTOR_RANGE descriptorRange{};
-    descriptorRange.BaseShaderRegister                = 0; // t0
-    descriptorRange.NumDescriptors                    = 1;
-    descriptorRange.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-    descriptorRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-    // RootParameters
-    D3D12_ROOT_PARAMETER rootParameters[3] = {};
-
-    // Material（PixelShader）
-    rootParameters[0].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[0].ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[0].Descriptor.ShaderRegister = 0;
-
-    // TransformationMatrix（VertexShader）
-    rootParameters[1].ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-    rootParameters[1].ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
-    rootParameters[1].Descriptor.ShaderRegister = 0;
-
-    // TextureCube（PixelShader）
-    rootParameters[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootParameters[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
-    rootParameters[2].DescriptorTable.pDescriptorRanges   = &descriptorRange;
-    rootParameters[2].DescriptorTable.NumDescriptorRanges = 1;
-
-    // Root Signature Description
-    D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
-    descriptionRootSignature.Flags             = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-    descriptionRootSignature.pParameters       = rootParameters;
-    descriptionRootSignature.NumParameters     = _countof(rootParameters);
-    descriptionRootSignature.pStaticSamplers   = staticSamplers_;
-    descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers_);
-
-    // シリアライズしてバイナリにする
-    SerializeAndCreateRootSignature(descriptionRootSignature);
-}
 
 void SkyBoxPipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
     commandList->SetGraphicsRootSignature(rootSignature_.Get());

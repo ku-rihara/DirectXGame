@@ -29,8 +29,3 @@ class RandomGenerator
     }
 };
 
-struct PerFrame
-{
-    float time;
-    float deltaTime;
-};
