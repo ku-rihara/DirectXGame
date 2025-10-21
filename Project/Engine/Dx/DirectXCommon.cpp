@@ -10,6 +10,7 @@
 #include "DxDevice.h"
 #include "DxRenderTarget.h"
 #include "DxSwapChain.h"
+#include"DxResourceBarrier.h"
 #include <cassert>
 
 #pragma comment(lib, "dxguid.lib")
@@ -35,12 +36,14 @@ void DirectXCommon::Init(WinApp* win,const int32_t& backBufferWidth, const int32
 }
 
 void DirectXCommon::InitDxClasses() {
+
     dxDevice_       = std::make_unique<DxDevice>();
     dxCommand_      = std::make_unique<DxCommand>();
     dxSwapChain_    = std::make_unique<DxSwapChain>();
     dxRenderTarget_ = std::make_unique<DxRenderTarget>();
     dxCompiler_     = std::make_unique<DxCompiler>();
     depthBuffer_    = std::make_unique<DxDepthBuffer>();
+    resourceBarrier_ = std::make_unique<DxResourceBarrier>();
 
     // 各Dxクラス初期化
     dxDevice_->Init();
@@ -53,7 +56,11 @@ void DirectXCommon::InitDxClasses() {
 void DirectXCommon::InitRenderingResources() {
 
     dxSwapChain_->CreateRenderTargetViews(rtvManager_);
-    dxRenderTarget_->Init(dxDevice_->GetDevice(), depthBuffer_.get(), rtvManager_, srvManager_, dxCommand_.get(), dxSwapChain_.get(), backBufferWidth_, backBufferHeight_);
+
+    // renderTarget初期化
+    dxRenderTarget_->SetUseClasses(
+        depthBuffer_.get(), rtvManager_, srvManager_, dxCommand_.get(), dxSwapChain_.get(),resourceBarrier_.get());
+    dxRenderTarget_->Init(dxDevice_->GetDevice(),backBufferWidth_, backBufferHeight_);
 }
 
 void DirectXCommon::PreDraw() {

@@ -763,6 +763,9 @@
     <ClCompile Include="Engine\Pipeline\Particle\CS\UpdateParticlePipeline.cpp">
       <Filter>MyEngine\.cpp\Pileline\Particle\CS</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Dx\DxResourceBarrier.cpp">
+      <Filter>MyEngine\.cpp\Dx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1259,6 +1262,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Pipeline\Particle\CS\UpdateParticlePipeline.h">
       <Filter>MyEngine\.h\Pipeline\Particle\CS</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Dx\DxResourceBarrier.h">
+      <Filter>MyEngine\.h\Dx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

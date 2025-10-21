@@ -48,7 +48,7 @@ private:
 
 public:
     Microsoft::WRL::ComPtr<IDXGISwapChain4> GetSwapChain() const { return swapChain_; }
-    Microsoft::WRL::ComPtr<ID3D12Resource> GetSwapChainResource(int index) const {
+    Microsoft::WRL::ComPtr<ID3D12Resource> GetSwapChainResource(const int& index) const {
         return resources_[index];
     }
 

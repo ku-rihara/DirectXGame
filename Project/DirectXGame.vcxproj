@@ -48,6 +48,7 @@
     <ClCompile Include="Engine\Dx\DxDevice.cpp" />
     <ClCompile Include="Engine\Dx\DxReleaseChecker.cpp" />
     <ClCompile Include="Engine\Dx\DxRenderTarget.cpp" />
+    <ClCompile Include="Engine\Dx\DxResourceBarrier.cpp" />
     <ClCompile Include="Engine\Dx\DxSwapChain.cpp" />
     <ClCompile Include="Engine\Easing\Easing.cpp" />
     <ClCompile Include="Engine\Easing\EasingFunction.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="Engine\Dx\DxDevice.h" />
     <ClInclude Include="Engine\Dx\DxReleaseChecker.h" />
     <ClInclude Include="Engine\Dx\DxRenderTarget.h" />
+    <ClInclude Include="Engine\Dx\DxResourceBarrier.h" />
     <ClInclude Include="Engine\Dx\DxSwapChain.h" />
     <ClInclude Include="Engine\Easing\Easing.h" />
     <ClInclude Include="Engine\Easing\EasingFunction.h" />

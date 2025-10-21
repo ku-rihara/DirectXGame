@@ -73,6 +73,6 @@ void UpdateParticlePipeline::PreDraw(ID3D12GraphicsCommandList* commandList) {
 }
 
 void UpdateParticlePipeline::Dispatch(ID3D12GraphicsCommandList* commandList, const UINT& numVertices) {
-    numVertices;
-    commandList->Dispatch(1, 1, 1);
+    uint32_t threadGroups = (numVertices + 1023) / 1024;
+    commandList->Dispatch(threadGroups, 1, 1);
 }

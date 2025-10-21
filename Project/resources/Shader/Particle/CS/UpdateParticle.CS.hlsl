@@ -10,7 +10,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     uint particleIndex = DTid.x;
     if (particleIndex < kMaxParticles)
     {
-     //alpha0は死んでるとみなして更新しない
+        //alpha0は死んでるとみなして更新しない
         if (gParticles[particleIndex].color.a != 0)
         {
             gParticles[particleIndex].translate += gParticles[particleIndex].velocity;

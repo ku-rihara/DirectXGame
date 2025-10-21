@@ -107,8 +107,6 @@ void GPUParticleEmitter::Emit() {
     GPUParticleManager::GetInstance()->Emit(name_);
 }
 
-
-
 void GPUParticleEmitter::SetEmitterData(const EmitterSphere& emitter) {
     if (name_.empty()) {
         return;
