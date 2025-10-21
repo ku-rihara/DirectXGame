@@ -57,6 +57,13 @@ void DirectXCommon::InitRenderingResources() {
 
     dxSwapChain_->CreateRenderTargetViews(rtvManager_);
 
+    // SwapChainのバックバッファを登録
+     for (UINT i = 0; i < 2; ++i) { 
+        resourceBarrier_->RegisterResource(
+            dxSwapChain_->GetSwapChainResource(i).Get(),
+            D3D12_RESOURCE_STATE_PRESENT);
+    }
+
     // renderTarget初期化
     dxRenderTarget_->SetUseClasses(
         depthBuffer_.get(), rtvManager_, srvManager_, dxCommand_.get(), dxSwapChain_.get(),resourceBarrier_.get());

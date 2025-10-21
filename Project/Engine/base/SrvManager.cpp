@@ -113,11 +113,3 @@ void SrvManager::CreateStructuredUAV(const uint32_t& index, ID3D12Resource* reso
     dxCommon_->GetDevice()->CreateUnorderedAccessView(resource, nullptr, &uavDesc, GetCPUDescriptorHandle(index));
 }
 
-void SrvManager::UAVBarrierTransition(ID3D12GraphicsCommandList* commandList, ID3D12Resource* resource) {
-    // UAV barrier
-    D3D12_RESOURCE_BARRIER barrier = {};
-    barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_UAV;
-    barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-    barrier.UAV.pResource          = resource;
-    commandList->ResourceBarrier(1, &barrier);
-}

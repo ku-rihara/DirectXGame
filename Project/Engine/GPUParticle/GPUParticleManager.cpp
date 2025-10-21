@@ -2,6 +2,8 @@
 #include "3d/ModelManager.h"
 #include "3d/ViewProjection.h"
 #include "base/TextureManager.h"
+//dx
+#include"Dx/DxResourceBarrier.h"
 // pipeline
 #include "Pipeline/CSPipelineManager.h"
 #include "Pipeline/PipelineManager.h"
@@ -85,38 +87,6 @@ void GPUParticleManager::CreatePrimitiveParticle(
     CreateMaterialResource(name);
 }
 
-void GPUParticleManager::DispatchInitParticle(GPUParticleGroup& group) {
-    if (!group.resourceCreator) {
-        return;
-    }
-
-    ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-    CSPipelineManager* csPipe              = CSPipelineManager::GetInstance();
-
-    //  デスクリプタヒープを設定
-    ID3D12DescriptorHeap* descriptorHeaps[] = {srvManager_->GetDescriptorHeap()};
-    commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
-
-    // InitParticleパス
-    csPipe->PreDraw(CSPipelineType::Particle_Init, commandList);
-
-    // u0: パーティクルバッファ(UAV)
-    commandList->SetComputeRootDescriptorTable(0,
-        group.resourceCreator->GetParticleUavHandle());
-
-     // u1: Counter(UAV)
-    commandList->SetComputeRootDescriptorTable(1,
-        group.resourceCreator->GetCounterUavHandle());
-
-    csPipe->DisPatch(CSPipelineType::Particle_Init, commandList, group.maxParticleCount);
-
-    // UAV barrier
-    D3D12_RESOURCE_BARRIER barrier = {};
-    barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_UAV;
-    barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-    barrier.UAV.pResource          = group.resourceCreator->GetParticleResource();
-    commandList->ResourceBarrier(1, &barrier);
-}
 
 void GPUParticleManager::InitializeGroupResources(GPUParticleGroup& group) {
     // リソースクリエイター作成
@@ -176,6 +146,38 @@ void GPUParticleManager::Update() {
     }
 }
 
+
+void GPUParticleManager::DispatchInitParticle(GPUParticleGroup& group) {
+    if (!group.resourceCreator) {
+        return;
+    }
+
+    ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+    CSPipelineManager* csPipe              = CSPipelineManager::GetInstance();
+    DxResourceBarrier* barrier             = dxCommon_->GetResourceBarrier();
+
+    //  デスクリプタヒープを設定
+    ID3D12DescriptorHeap* descriptorHeaps[] = {srvManager_->GetDescriptorHeap()};
+    commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+
+    // InitParticleパス
+    csPipe->PreDraw(CSPipelineType::Particle_Init, commandList);
+
+    // u0: パーティクルバッファ(UAV)
+    commandList->SetComputeRootDescriptorTable(0,
+        group.resourceCreator->GetParticleUavHandle());
+
+    // u1: Counter(UAV)
+    commandList->SetComputeRootDescriptorTable(1,
+        group.resourceCreator->GetCounterUavHandle());
+
+    csPipe->DisPatch(CSPipelineType::Particle_Init, commandList, group.maxParticleCount);
+
+    // UAV barrier
+    barrier->UAVBarrier(commandList, group.resourceCreator->GetParticleResource());
+}
+
+
 void GPUParticleManager::DispatchEmit(GPUParticleGroup& group) {
     if (!group.resourceCreator) {
         return;
@@ -183,6 +185,7 @@ void GPUParticleManager::DispatchEmit(GPUParticleGroup& group) {
 
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
     CSPipelineManager* csPipe              = CSPipelineManager::GetInstance();
+    DxResourceBarrier* barrier             = dxCommon_->GetResourceBarrier();
 
     //  デスクリプタヒープを設定
     ID3D12DescriptorHeap* descriptorHeaps[] = {srvManager_->GetDescriptorHeap()};
@@ -211,7 +214,7 @@ void GPUParticleManager::DispatchEmit(GPUParticleGroup& group) {
     csPipe->DisPatch(CSPipelineType::Particle_Emit, commandList, 1);
 
     // UAV barrier
-    SrvManager::GetInstance()->UAVBarrierTransition(commandList, group.resourceCreator->GetParticleResource());
+    barrier->UAVBarrier(commandList, group.resourceCreator->GetParticleResource());
 }
 
 void GPUParticleManager::DispatchUpdate(GPUParticleGroup& group) {
@@ -221,6 +224,7 @@ void GPUParticleManager::DispatchUpdate(GPUParticleGroup& group) {
 
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
     CSPipelineManager* csPipe              = CSPipelineManager::GetInstance();
+    DxResourceBarrier* barrier             = dxCommon_->GetResourceBarrier();
 
     // デスクリプタヒープを設定
     ID3D12DescriptorHeap* descriptorHeaps[] = {srvManager_->GetDescriptorHeap()};
@@ -241,8 +245,7 @@ void GPUParticleManager::DispatchUpdate(GPUParticleGroup& group) {
     csPipe->DisPatch(CSPipelineType::Particle_Update, commandList, group.maxParticleCount);
 
     // UAV barrier
-    SrvManager::GetInstance()->UAVBarrierTransition(commandList,
-        group.resourceCreator->GetParticleResource());
+    barrier->UAVBarrier(commandList, group.resourceCreator->GetParticleResource());
 }
 
 
