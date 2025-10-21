@@ -9,6 +9,9 @@
 #include <cstdint>
 #include <string>
 
+/// <summary>
+///  3Dオブジェクトの基底クラス
+/// </summary>
 class BaseObject3d {
 public:
     ///========================================================================================
@@ -17,12 +20,13 @@ public:
 
     BaseObject3d()          = default;
     virtual ~BaseObject3d() = default;
+    
 
-    virtual void DebugImgui();
     virtual void CreateMaterialResource();
     virtual void CreateShadowMap();
     virtual void CreateWVPResource();
     virtual void UpdateWVPData(const ViewProjection& viewProjection);
+    virtual void DebugImgui();
 
 public:
     ModelMaterial material_;

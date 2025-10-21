@@ -127,8 +127,7 @@ void GPUParticleManager::Emit(const std::string& name) {
     // 即座にエミット
     group.emitSphereData->emit = 1;
 
-    // Emit dispatch
-    DispatchEmit(group);
+  
 }
 
 void GPUParticleManager::Update() {
@@ -142,6 +141,7 @@ void GPUParticleManager::Update() {
                 viewProjection_->GetBillboardMatrix();
         }
         group.resourceCreator->PerFrameIncrement();
+        DispatchEmit(group);
         DispatchUpdate(group);
     }
 }
@@ -247,7 +247,6 @@ void GPUParticleManager::DispatchUpdate(GPUParticleGroup& group) {
     // UAV barrier
     barrier->UAVBarrier(commandList, group.resourceCreator->GetParticleResource());
 }
-
 
 void GPUParticleManager::Draw(const ViewProjection& viewProjection) {
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();

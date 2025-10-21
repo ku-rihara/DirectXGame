@@ -1,16 +1,26 @@
 #pragma once
 
 #include <memory>
+#include <string>
 #include <unordered_set>
 #include <vector>
-#include <string>
 
 // 前方宣言
 class Sprite;
 
+/// <summary>
+/// 全てのスプライトを管理するクラス
+/// </summary>
 class SpriteRegistry {
+private:
+    SpriteRegistry() = default;
+    ~SpriteRegistry();
+
+    /// コピー禁止
+    SpriteRegistry(const SpriteRegistry&)            = delete;
+    SpriteRegistry& operator=(const SpriteRegistry&) = delete;
+
 public:
-  
     static SpriteRegistry* GetInstance();
 
     /// ============================================================
@@ -21,20 +31,11 @@ public:
     void RegisterObject(Sprite* object);
     void UnregisterObject(Sprite* object);
 
-    /// 更新、描画
-    void UpdateAll();
-    void DrawAll();
+    void UpdateAll(); //<全スプライト更新
+    void DrawAll();   //<全スプライト描画
 
-    void Clear();
-    void DebugImGui();
-
-private:
-    SpriteRegistry()  = default;
-    ~SpriteRegistry();
-
-    /// コピー禁止
-    SpriteRegistry(const SpriteRegistry&)            = delete;
-    SpriteRegistry& operator=(const SpriteRegistry&) = delete;
+    void Clear();      //<登録解除
+    void DebugImGui(); //<ImGuiデバッグ
 
     /// ============================================================
     /// private members
@@ -48,5 +49,4 @@ private:
 public:
     bool HasGroupName(const std::string& groupName) const;
     const size_t& GetRegisteredCount() const { return sprites_.size(); }
-
 };

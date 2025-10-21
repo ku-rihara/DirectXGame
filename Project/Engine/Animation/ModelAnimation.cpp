@@ -36,7 +36,6 @@ SkinCluster ModelAnimation::CreateSkinCluster(ModelData& modelData, const Skelet
     CreatePaletteResource(skinCluster, skeleton);
     CreateInputVertexSRV(skinCluster, modelData, model);
     CreateInfluenceResource(skinCluster, modelData);
- /*   CreateInfluenceSRV(skinCluster, modelData);*/
     CreateOutputVertexResourceAndUAV(skinCluster, modelData);
     CreateSkinningInfoResource(skinCluster, modelData);
    

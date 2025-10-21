@@ -87,7 +87,6 @@ void ImGuiManager::Finalizer() {
 }
 
 
-//
 void ImGuiManager::Draw(){
 
 #ifdef _DEBUG

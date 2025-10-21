@@ -11,6 +11,9 @@
 #include <cstdint>
 #include <string>
 
+/// <summary>
+/// スプライトクラス
+/// </summary>
 class Sprite {
 public:
     struct UVTransform {
@@ -42,8 +45,8 @@ public:
     void CreateSprite(const std::string& textureName);
 
     // editor
-    void AdjustParam();
-    void BindParams();
+    void AdjustParam(); //< パラメータ調整
+    void BindParams();  //< パラメータバインド
 
     // 描画
     void Draw();
@@ -53,15 +56,15 @@ private:
 
 public:
     // Transform
-    Transform transform_; //< トランスフォーム
+    Transform transform_;     //< トランスフォーム
     UVTransform uvTransform_; //< UVトランスフォーム
-    Vector2 textureLeftTop_; //< テクスチャ左上
+    Vector2 textureLeftTop_;  //< テクスチャ左上
+    Vector2 anchorPoint_;     //< アンカーポイント
 
     // flip
     bool isFlipX_ = false;
     bool isFlipY_ = false;
 
-    Vector2 anchorPoint_;
 
 private:
     // パラメータ編集
@@ -72,8 +75,8 @@ private:
     Parameter parameter_;
 
     int32_t layerNum_;
-    bool isDraw_ = true;
-    bool isAdaptStartParam_=false;
+    bool isDraw_            = true;
+    bool isAdaptStartParam_ = false;
 
     // テクスチャ
     Vector2 textureSize_; //< テクスチャ自体のサイズ
