@@ -1,7 +1,6 @@
 #pragma once
 #include "utility/EasingCreator/EasingParameterData.h"
 #include "Vector2Proxy.h"
-// std
 #include <cstdint>
 #include <functional>
 #include <memory>
@@ -9,67 +8,98 @@
 #include <type_traits>
 #include <vector>
 
+/// <summary>
+/// イージングを扱うのテンプレートクラス
+/// </summary>
+/// <typeparam name="T">イージング対象の型(float, Vector2, Vector3)</typeparam>
 template <typename T>
 class Easing {
 public:
     Easing()  = default;
     ~Easing() = default;
 
-    /// =========================================================================
-    /// Public Methods
-    /// =========================================================================
-
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="name">イージング名</param>
+    /// <param name="adaptFile">適用するJSONファイル名</param>
     void Init(const std::string& name, const std::string& adaptFile = "");
-    void Reset();
-    void ResetStartValue();
 
-    //  Easing setting
+    /// <summary>
+    /// イージングパラメータ設定
+    /// </summary>
+    /// <param name="easingParam">イージングパラメータ</param>
     void SettingValue(const EasingParameter<T>& easingParam);
 
-    // 適応
+    /// <summary>
+    /// JSONファイルから適用
+    /// </summary>
+    /// <param name="fileName">ファイル名</param>
     void ApplyFromJson(const std::string& fileName);
-    void ApplyForImGui();
 
-    void SaveAppliedJsonFileName();
-    void LoadAndApplyFromSavedJson();
-
-    // イージング更新
+    /// <summary>
+    /// イージング更新
+    /// </summary>
+    /// <param name="deltaTime">デルタタイム</param>
     void Update(const float& deltaTime);
 
-    // 変数に適応
+    /// <summary>
+    /// 変数に適用
+    /// </summary>
+    /// <param name="value">適用先の値</param>
     void SetAdaptValue(T* value);
 
-    // 軸の適応
+    /// <summary>
+    /// Vector2の軸に適用(float用)
+    /// </summary>
+    /// <param name="value">適用先のVector2</param>
     template <typename U = T>
     typename std::enable_if_t<std::is_same_v<U, float>, void>
     SetAdaptValue(Vector2* value);
 
+    /// <summary>
+    /// Vector3の軸に適用(float用)
+    /// </summary>
+    /// <param name="value">適用先のVector3</param>
     template <typename U = T>
     typename std::enable_if_t<std::is_same_v<U, float>, void>
     SetAdaptValue(Vector3* value);
 
+    /// <summary>
+    /// Vector3の軸に適用(Vector2用)
+    /// </summary>
+    /// <param name="value">適用先のVector3</param>
     template <typename U = T>
     typename std::enable_if_t<std::is_same_v<U, Vector2>, void>
     SetAdaptValue(Vector3* value);
 
-    // callbacks
-    void SetFinishValueType(const EasingFinishValueType& type) { finishValueType_ = type; }
+    /// <summary>
+    /// 終了時コールバック設定
+    /// </summary>
+    /// <param name="callback">コールバック関数</param>
     void SetOnFinishCallback(const std::function<void()>& callback) { onFinishCallback_ = callback; }
+
+    /// <summary>
+    /// 待機終了時コールバック設定
+    /// </summary>
+    /// <param name="callback">コールバック関数</param>
     void SetOnWaitEndCallback(const std::function<void()>& callback) { onWaitEndCallback_ = callback; }
 
-private:
-    /// =========================================================================
-    /// Private Methods
-    /// =========================================================================
-
-    void CalculateValue();
-    void FinishBehavior();
-    void ChangeAdaptAxis();
-    void FilePathChangeForType();
-    bool IsEasingStarted() const;
+    void Reset(); //< リセット
+    void ResetStartValue(); //< 開始値にリセット
+    void ApplyForImGui(); //< ImGuiで適用
+    void SaveAppliedJsonFileName(); //< 適用したJSONファイル名を保存
+    void LoadAndApplyFromSavedJson(); //< 保存されたJSONを読み込んで適用
 
 private:
-    // イージング初期化パラメータ
+    
+    void CalculateValue();        //< イージング値計算
+    void FinishBehavior();        //< 終了時の動作
+    void ChangeAdaptAxis();       //< 適用軸変更
+    void FilePathChangeForType(); //< ファイルパスを型に応じて変更
+    bool IsEasingStarted() const; //< イージング開始判定
+
+private:
     EasingType type_                       = EasingType::InSine;
     EasingFinishValueType finishValueType_ = EasingFinishValueType::End;
 
@@ -77,24 +107,20 @@ private:
     AdaptVector2AxisType adaptVector2AxisType_ = AdaptVector2AxisType::XY;
 
 private:
-    // イージングの値
     T startValue_;
     T endValue_;
     T baseValue_;
     T* currentValue_;
 
-    // タイム
     float maxTime_     = 0.0f;
     float currentTime_ = 0.0f;
     float waitTimeMax_ = 0.0f;
     float waitTime_    = 0.0f;
 
-    // オフセット
     float startTimeOffset_        = 0.0f;
     float finishTimeOffset_       = 0.0f;
     float currentStartTimeOffset_ = 0.0f;
 
-    // amplitude用Parameter
     float amplitude_ = 0.0f;
     float period_    = 0.0f;
     float backRatio_ = 0.0f;
@@ -103,7 +129,6 @@ private:
     bool isPlaying_  = false;
 
 private:
-    // ファイル
     const std::string FilePath_      = "Resources/EasingParameter/";
     const std::string adaptDataPath_ = "AdaptData/";
 
@@ -114,14 +139,12 @@ private:
     std::string currentSelectedFileName_;
     std::string easingName_;
 
-    // 軸
     AdaptVector2AxisType oldTypeVector2_;
     AdaptFloatAxisType oldTypeFloat_;
     Vector2* adaptTargetVec2_ = nullptr;
     Vector3* adaptTargetVec3_ = nullptr;
     std::unique_ptr<IVector2Proxy> vector2Proxy_;
 
-    // コールバック関数
     std::function<void()> onFinishCallback_;
     std::function<void()> onWaitEndCallback_;
 

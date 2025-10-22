@@ -9,7 +9,7 @@
 class Sprite;
 
 /// <summary>
-/// 全てのスプライトを管理するクラス
+/// Spriteの登録管理クラス
 /// </summary>
 class SpriteRegistry {
 private:

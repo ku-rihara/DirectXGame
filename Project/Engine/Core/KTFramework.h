@@ -9,6 +9,22 @@
 
 // ゲーム全体
 class KTFramework {
+public:
+    virtual ~KTFramework() = default;
+
+    ///=======================================================
+    /// public method
+    ///=======================================================
+    virtual void Init();               //< 初期化
+    virtual void Update();             //< 更新
+    virtual void Draw()           = 0; //< 描画
+    virtual void DrawPostEffect() = 0; //< ポストエフェクト描画
+    virtual void DrawShadow()     = 0; //< シャドウ描画
+    virtual void Finalize();           //< 終了処理
+
+    void DisplayFPS(); //< FPS表示
+    void Run();        //< 実行
+
 protected:
     /// other class
     SceneManager* pSceneManager_ = nullptr;
@@ -19,21 +35,4 @@ protected:
     std::unique_ptr<AbstractSceneFactory> sceneFactory_;
     std::unique_ptr<CollisionManager> collisionManager_;
     std::unique_ptr<EngineCore> engineCore_;
-
-public:
-    virtual ~KTFramework() = default;
-
-    ///=======================================================
-    /// public method
-    ///=======================================================
-    virtual void Init();
-    virtual void Update();
-    virtual void Draw()           = 0;
-    virtual void DrawPostEffect() = 0;
-    virtual void DrawShadow()     = 0;
-    virtual void Finalize();
-
-    void DisplayFPS(); /// FPS表示
-
-    void Run(); /// 実行
 };

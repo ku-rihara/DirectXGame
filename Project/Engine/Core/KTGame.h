@@ -1,23 +1,19 @@
 #pragma once
 
-#include"Core/KTFramework.h"
+#include "Core/KTFramework.h"
 
-class KTGame :public KTFramework {
-
-
-	
+class KTGame : public KTFramework {
 public:
-
-	KTGame() = default;
+    KTGame()  = default;
     ~KTGame() = default;
 
-	///======================================
+    ///======================================
     /// public method
     ///======================================
-	 void Init()override;
-	 void Update()override;
-	 void Draw()override;
-	 void DrawPostEffect()override;
-     void DrawShadow() override; 
-	 void Finalize()override;
+    void Init() override; //< 初期化
+    void Update() override; //< 更新
+    void Draw() override; //< 描画
+    void DrawPostEffect() override; //< ポストエフェクト描画
+    void DrawShadow() override; //< シャドウ描画
+    void Finalize() override; //< 終了処理
 };

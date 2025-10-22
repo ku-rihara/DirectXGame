@@ -6,6 +6,7 @@
 #include <string>
 #include <wrl.h>
 
+
 class DirectXCommon;
 
 class BaseMaterial {

@@ -4,40 +4,83 @@
 #include "Dx/DirectXCommon.h"
 #include <vector>
 
-/// SRV管理
+/// <summary>
+/// SRV管理クラス
+/// </summary>
 class SrvManager {
 public:
     SrvManager()  = default;
     ~SrvManager() = default;
 
+    /// <summary>
+    /// シングルトンインスタンス取得
+    /// </summary>
+    /// <returns>SrvManagerのインスタンス</returns>
     static SrvManager* GetInstance();
 
     ///===================================================================
     /// public method
     ///===================================================================
+
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="dxCommon">DirectXCommon</param>
     void Init(DirectXCommon* dxCommon);
 
-    // アロケータ
+    /// <summary>
+    /// SRVインデックス割り当て
+    /// </summary>
+    /// <returns>割り当てられたインデックス</returns>
     uint32_t Allocate();
 
-    // 描画前処理
-    void PreDraw();
+    void PreDraw(); //< 描画前処理
 
+    /// <summary>
+    /// 確保可能かチェック
+    /// </summary>
+    /// <returns>確保可能ならtrue</returns>
     bool IsAbleSecure();
 
-    /// GPU、CPUデスクリプタハンドル取得
+    /// <summary>
+    /// CPUデスクリプタハンドル取得
+    /// </summary>
+    /// <param name="index">インデックス</param>
+    /// <returns>CPUデスクリプタハンドル</returns>
     D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(const uint32_t& index);
+
+    /// <summary>
+    /// GPUデスクリプタハンドル取得
+    /// </summary>
+    /// <param name="index">インデックス</param>
+    /// <returns>GPUデスクリプタハンドル</returns>
     D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(const uint32_t& index);
 
-    /// SRV生成(テクスチャ用、Structured Buffer用)
+    /// <summary>
+    /// テクスチャ用SRV作成
+    /// </summary>
+    /// <param name="srvIndex">SRVインデックス</param>
+    /// <param name="pResource">リソース</param>
+    /// <param name="desc">SRVデスク</param>
     void CreateForTexture2D(const uint32_t& srvIndex, ID3D12Resource* pResource, const D3D12_SHADER_RESOURCE_VIEW_DESC& desc);
+
+    /// <summary>
+    /// StructuredBuffer用SRV作成
+    /// </summary>
+    /// <param name="srvIndex">SRVインデックス</param>
+    /// <param name="pResource">リソース</param>
+    /// <param name="numElements">要素数</param>
+    /// <param name="structuredByteStride">ストライド</param>
     void CreateForStructuredBuffer(const uint32_t& srvIndex, ID3D12Resource* pResource, const UINT& numElements, const UINT& structuredByteStride);
 
-    // UAV生成
+    /// <summary>
+    /// StructuredBuffer用UAV作成
+    /// </summary>
+    /// <param name="index">インデックス</param>
+    /// <param name="resource">リソース</param>
+    /// <param name="numElements">要素数</param>
+    /// <param name="byteStride">ストライド</param>
     void CreateStructuredUAV(const uint32_t& index, ID3D12Resource* resource, const UINT& numElements, const UINT& byteStride);
-    
-    // UAVバリアを張る
-    void UAVBarrierTransition(ID3D12GraphicsCommandList* commandList, ID3D12Resource* resource);
 
 private:
     ///=========================================

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Vector3.h"
 #include <array>
 #include <cstdint>
 #include <d3d12.h>

@@ -4,41 +4,42 @@
 #include <memory>
 #include <string>
 
+/// <summary>
+/// モデル管理クラス
+/// </summary>
 class ModelManager {
 private:
-    ///============================================================
-    /// Singleton Restrictions
-    ///============================================================
     ModelManager()                               = default;
     ~ModelManager()                              = default;
     ModelManager(const ModelManager&)            = delete;
     ModelManager& operator=(const ModelManager&) = delete;
 
 public:
-    ///============================================================
-    /// public method
-    ///============================================================
+    static ModelManager* GetInstance(); //< シングルトンインスタンス取得
 
-    // シングルトンインスタンス取得
-    static ModelManager* GetInstance();
-
+    /// <summary>
     /// 初期化
+    /// </summary>
+    /// <param name="dxCommon">DirectXCommonのインスタンス</param>
     void Initialize(DirectXCommon* dxCommon);
 
+    /// <summary>
     /// モデルファイル読み込み
+    /// </summary>
+    /// <param name="modelName">モデル名</param>
+    /// <returns>モデルのポインタ</returns>
     static Model* LoadModel(const std::string& modelName);
 
+    /// <summary>
     /// モデルの検索
+    /// </summary>
+    /// <param name="modelName">モデル名</param>
+    /// <returns>モデルのポインタ</returns>
     Model* FindModel(const std::string& modelName);
 
-    // 終了
-    void Finalize();
+    void Finalize(); //< 終了処理
 
 private:
-    ///============================================================
-    /// private variants
-    ///============================================================
-
     static ModelManager* instance_;
     static std::map<std::string, std::unique_ptr<Model>> models_;
     std::unique_ptr<ModelCommon> modelCommon = nullptr;

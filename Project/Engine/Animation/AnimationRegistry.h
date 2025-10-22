@@ -8,32 +8,62 @@
 class Object3DAnimation;
 class ViewProjection;
 
+/// <summary>
+/// Animationの登録管理クラス
+/// </summary>
 class AnimationRegistry {
 public:
+    /// <summary>
     /// シングルトンインスタンス取得
+    /// </summary>
+    /// <returns>AnimationRegistryのインスタンス</returns>
     static AnimationRegistry* GetInstance();
 
     /// ============================================================
     /// public methods
     /// ============================================================
 
-    /// 登録、解除
+    /// <summary>
+    /// アニメーションの登録
+    /// </summary>
+    /// <param name="animation">登録するアニメーションオブジェクト</param>
     void RegisterAnimation(Object3DAnimation* animation);
+
+    /// <summary>
+    /// アニメーションの登録解除
+    /// </summary>
+    /// <param name="animation">解除するアニメーションオブジェクト</param>
     void UnregisterAnimation(Object3DAnimation* animation);
 
-    /// 更新
+    /// <summary>
+    /// 登録された全てのアニメーションを更新
+    /// </summary>
+    /// <param name="deltaTime">デルタタイム</param>
     void UpdateAll(const float& deltaTime);
 
-    /// 描画
+    /// <summary>
+    /// 全アニメーションを描画
+    /// </summary>
+    /// <param name="viewProjection">ビュープロジェクション</param>
     void DrawAll(const ViewProjection& viewProjection);
+
+    /// <summary>
+    /// 全アニメーションのシャドウを描画
+    /// </summary>
+    /// <param name="viewProjection">ビュープロジェクション</param>
     void DrawAllShadow(const ViewProjection& viewProjection);
+
+    /// <summary>
+    /// 全アニメーションのデバッグ描画
+    /// </summary>
+    /// <param name="viewProjection">ビュープロジェクション</param>
     void DebugDrawAll(const ViewProjection& viewProjection);
 
-    void Clear();
-    void DebugImGui();
+    void Clear(); //< 登録されたアニメーションをクリア
+    void DebugImGui(); //< ImGuiデバッグ表示
 
 private:
-    AnimationRegistry()  = default;
+    AnimationRegistry() = default;
     ~AnimationRegistry();
 
     /// コピー禁止

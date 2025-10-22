@@ -5,6 +5,7 @@
 //
 // class
 #include "base/TextureManager.h"
+#include "Dx/DirectXCommon.h"
 #include "Dx/DxRenderTarget.h"
 #include "Lighrt/Light.h"
 #include "Material/BaseMaterial.h"

@@ -7,26 +7,39 @@
 
 class DirectXCommon;
 
+/// <summary>
+/// スプライトのマテリアルクラス
+/// </summary>
 class SpriteMaterial {
-public:
-    SpriteMaterial();
-    ~SpriteMaterial()=default;
- 
-    /// マテリアルのリソースを作成する関数
-    void CreateMaterialResource(DirectXCommon* dxCommon);
-    /// マテリアルのデータを更新する関数
-    void UpdateMaterialData(const Vector4& Color);
-    /// シェーダーにデータを送る関数
-    void SetCommandList(ID3D12GraphicsCommandList* commandList);
-
-    void DebugImGui();
-
 private:
- 
     struct MaterialSprite {
         Vector4 color;
         Matrix4x4 uvTransform;
     };
+
+public:
+    SpriteMaterial();
+    ~SpriteMaterial()=default;
+ 
+    /// <summary>
+    /// マテリアルリソースの作成
+    /// </summary>
+    /// <param name="dxCommon">DirectXCommon</param>
+    void CreateMaterialResource(DirectXCommon* dxCommon);
+
+    /// <summary>
+    /// マテリアルのデータの更新
+    /// </summary>
+    /// <param name="Color">色</param>
+    void UpdateMaterialData(const Vector4& Color);
+
+    /// <summary>
+    /// シェーダーにデータを送る
+    /// </summary>
+    /// <param name="commandList"></param>
+    void SetCommandList(ID3D12GraphicsCommandList* commandList);
+
+    void DebugImGui(); //< ImGuiデバッグ表示
 
 private:
     // GPUリソースへのポインタ

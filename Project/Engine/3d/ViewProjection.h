@@ -5,7 +5,6 @@
 #include <d3d12.h>
 #include <wrl.h>
 
-// 定数バッファ用データ構造体
 struct ConstBufferDataViewProjection {
     Matrix4x4 view;
     Matrix4x4 projection;
@@ -13,11 +12,15 @@ struct ConstBufferDataViewProjection {
 };
 
 class WorldTransform;
+
+/// <summary>
+/// ビュープロジェクションクラス
+/// </summary>
 class ViewProjection {
 public:
     enum class ProjectionType {
-        PERSPECTIVE, // 透視投影
-        ORTHOGRAPHIC // 平行投影
+        PERSPECTIVE, //< 透視投影
+        ORTHOGRAPHIC //< 平行投影
     };
 
 private:
@@ -30,36 +33,28 @@ public:
     ViewProjection()  = default;
     ~ViewProjection() = default;
 
-    /// 初期化
-    void Init();
-    /// 定数バッファ生成,マッピング
-    void CreateConstantBuffer();
-    void Map();
+    void Init();                 //< 初期化
+    void CreateConstantBuffer(); //< 定数バッファ生成
+    void Map();                  //< マッピング
 
-    /// 行列転送,更新
-    void TransferMatrix();
-    void UpdateMatrix();
+    void TransferMatrix(); //< 行列転送
+    void UpdateMatrix();   //< 行列更新
 
-    // ビュー、プロジェクション行列更新
-    void UpdateViewMatrix();
-    void UpdateProjectionMatrix();
-
-    // ペアレント解除
-    void ClearParent();
+    void UpdateViewMatrix();       //< ビュー行列更新
+    void UpdateProjectionMatrix(); //< プロジェクション行列更新
+    void ClearParent();            //< ペアレント解除
 
 private:
     const WorldTransform* parent_ = nullptr;
 
 public:
-    // S,R,T
     Vector3 scale_{1, 1, 1};
     Vector3 rotation_      = {0, 0, 0};
     Vector3 translation_   = {0, 0, 0};
     Quaternion quaternion_ = Quaternion::Identity();
 
-    // オフセット値
-    Vector3 positionOffset_ = {0, 0, 0};
-    Vector3 rotationOffset_ = {0, 0, 0};
+    Vector3 positionOffset_ = {0, 0, 0}; //< 位置オフセット
+    Vector3 rotationOffset_ = {0, 0, 0}; //< 回転オフセット
 
     float fovAngleY_   = 45.0f;
     float aspectRatio_ = (float)16 / 9;
@@ -68,17 +63,14 @@ public:
 
     ProjectionType projectionType_ = ProjectionType::PERSPECTIVE;
 
-    // 平行投影用パラメータ
-    float orthoWidth_  = 40.0f;
-    float orthoHeight_ = 40.0f;
+    float orthoWidth_  = 40.0f; //< 平行投影の幅
+    float orthoHeight_ = 40.0f; //< 平行投影の高さ
 
-    // matrix
-    Matrix4x4 matView_;
-    Matrix4x4 matProjection_;
-    Matrix4x4 cameraMatrix_;
+    Matrix4x4 matView_; //< ビュー行列
+    Matrix4x4 matProjection_; //< プロジェクション行列
+    Matrix4x4 cameraMatrix_; //< カメラ行列
 
 public:
-    // getter
     Vector3 GetWorldPos() const;
     const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return constBuffer_; }
     const Matrix4x4& GetCameraMatrix() const { return cameraMatrix_; }
@@ -86,6 +78,5 @@ public:
     Vector3 GetFinalRotation() const;
     Matrix4x4 GetBillboardMatrix() const;
 
-    // setter
     void SetParent(const WorldTransform* parent) { parent_ = parent; }
 };

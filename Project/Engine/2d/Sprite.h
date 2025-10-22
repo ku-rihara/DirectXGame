@@ -40,18 +40,25 @@ public:
     Sprite() = default;
     ~Sprite();
 
-    // スプライトの作成
+    /// <summary>
+    /// スプライトの作成
+    /// </summary>
+    /// <param name="textureName">テクスチャのファイル名</param>
+    /// <param name="isAbleEdit">パラメータ編集を可能にするかのフラグ</param>
+    /// <returns>作成されたSpriteのポインタ</returns>
     static Sprite* Create(const std::string& textureName, const bool& isAbleEdit = true);
     void CreateSprite(const std::string& textureName);
 
-    // editor
     void AdjustParam(); //< パラメータ調整
-    void BindParams();  //< パラメータバインド
-
-    // 描画
-    void Draw();
+    void BindParams();  //< パラメータバインド 
+    void Draw();        //<描画
 
 private:
+    /// <summary>
+    /// パラメータ編集のグループに登録する
+    /// </summary>
+    /// <param name="textureName">テクスチャのファイル名</param>
+    /// <param name="isAbleEditor">パラメータ編集を可能にするかのフラグ</param>
     void ParamEditorSet(const std::string& textureName, const bool& isAbleEditor);
 
 public:

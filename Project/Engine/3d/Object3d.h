@@ -1,24 +1,36 @@
 #pragma once
 #include "BaseObject3d.h"
 
+/// <summary>
+/// 3Dオブジェクトクラス
+/// </summary>
 class Object3d : public BaseObject3d {
 public:
     Object3d() = default;
     ~Object3d() override;
 
-    /// ============================================================
-    /// public method
-    /// ============================================================
-
-    /// モデル作成
+    /// <summary>
+    /// モデルを持つオブジェクトを作成
+    /// </summary>
+    /// <param name="instanceName">インスタンス名</param>
+    /// <returns>作成されたObject3dのポインタ</returns>
     static Object3d* CreateModel(const std::string& instanceName);
 
-    /// 初期化、更新、描画
-    void Init();
-    void Update();
+    void Init(); //< 初期化
+    void Update(); //< 更新
+
+    /// <summary>
+    /// 描画
+    /// </summary>
+    /// <param name="viewProjection">ビュープロジェクション</param>
     void Draw(const ViewProjection& viewProjection);
 
-    void DebugImgui() override;
+    void DebugImgui() override; //< ImGuiデバッグ表示
+
+    /// <summary>
+    /// シャドウ描画
+    /// </summary>
+    /// <param name="viewProjection">ビュープロジェクション</param>
     void ShadowDraw(const ViewProjection& viewProjection);
 
 private:
