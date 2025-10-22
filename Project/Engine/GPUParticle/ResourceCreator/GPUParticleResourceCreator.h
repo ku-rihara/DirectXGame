@@ -10,44 +10,39 @@
 class DirectXCommon;
 class SrvManager;
 
+/// <summary>
+/// GPUパーティクル用リソース作成クラス
+/// </summary>
 class GPUParticleResourceCreator {
 public:
     GPUParticleResourceCreator()  = default;
     ~GPUParticleResourceCreator() = default;
 
-    // リソース作成
-    void Create();
-
-    void PerFrameIncrement();
+    void Create(); //< 全リソースを作成
+    void PerFrameIncrement(); //< フレームごとのデータ更新
 
 private:
-    // Resource作成関数
-    void CreateParticleResource();
-    void CreateEmitterResource();
-    void CreatePerViewResource();
-    void CreatePerFrameResource();
-    void CreateCounterResource();
+    void CreateParticleResource(); //< パーティクルバッファ作成
+    void CreateEmitterResource(); //< エミッターバッファ作成
+    void CreatePerViewResource(); //< ビュー情報バッファ作成
+    void CreatePerFrameResource(); //< フレーム情報バッファ作成
+    void CreateCounterResource(); //< カウンターバッファ作成
 
 private:
     DirectXCommon* dxCommon_;
     SrvManager* srvManager_;
 
-    // Resource
     Microsoft::WRL::ComPtr<ID3D12Resource> particleResource_;
     Microsoft::WRL::ComPtr<ID3D12Resource> perViewResource_;
     Microsoft::WRL::ComPtr<ID3D12Resource> emitResource_;
     Microsoft::WRL::ComPtr<ID3D12Resource> perFrameResource_;
     Microsoft::WRL::ComPtr<ID3D12Resource> counterResource_;
 
-    // Handle
     std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> particleSrvHandle_;
     std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> particleUavHandle_;
-
     std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> counterSrvHandle_;
     std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> counterUavHandle_;
 
-
-    // Mapped data pointers
     EmitterSphere* emitSphere_ = nullptr;
     PerView* perViewData_      = nullptr;
     PerFrame* perFrameData_    = nullptr;
@@ -56,7 +51,6 @@ private:
     int32_t particleMaxCount_;
 
 public:
-    // Getters
     ID3D12Resource* GetParticleResource() const { return particleResource_.Get(); }
     ID3D12Resource* GetEmitterResource() const { return emitResource_.Get(); }
     ID3D12Resource* GetPerViewResource() const { return perViewResource_.Get(); }
@@ -72,6 +66,5 @@ public:
     PerView* GetPerViewData() { return perViewData_; }
     PerFrame* GetPerFrameData() { return perFrameData_; }
 
-    // setter
     void SetParticleCountMax(const int32_t& maxCount) { particleMaxCount_ = maxCount; }
 };

@@ -3,10 +3,10 @@
 #include <memory>
 #include <wrl.h>
 // struct
-#include "Vector3.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
-#include <string>
+#include "Vector3.h"
 #include <cstdint>
+#include <string>
 
 struct CameraForGPU {
     Vector3 worldPosition_;
@@ -25,28 +25,54 @@ class AreaLightManager;
 class AmbientLight;
 class DirectXCommon;
 
+/// <summary>
+/// ライト統合管理クラス
+/// </summary>
 class Light {
 public:
     static Light* GetInstance();
     ~Light() = default;
 
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="dxCommon">DirectXCommon</param>
     void Init(DirectXCommon* dxCommon);
-    void Update();
-    void InitAllLights();
-    void DebugImGui();
 
-    //
-    void AddSpotLight();
-    void AddPointLight();
+    /// <summary>
+    /// ライトコマンドを設定
+    /// </summary>
+    /// <param name="commandList">コマンドリスト</param>
+    void SetLightCommands(ID3D12GraphicsCommandList* commandList);
 
+    /// <summary>
+    /// ワールドカメラ座標を設定
+    /// </summary>
+    /// <param name="pos">座標</param>
+    void SetWorldCameraPos(const Vector3& pos);
+
+    /// <summary>
+    /// スポットライトを削除
+    /// </summary>
+    /// <param name="num">番号</param>
     void RemoveSpotLight(const int& num);
+
+    /// <summary>
+    /// ポイントライトを削除
+    /// </summary>
+    /// <param name="num">番号</param>
     void RemovePointLight(const int& num);
 
-    void BindParams();
+    void Update(); //< 更新処理
+    void InitAllLights(); //< 全ライト初期化
+    void DebugImGui(); //< ImGuiデバッグ表示
+    void AddSpotLight(); //< スポットライト追加
+    void AddPointLight(); //< ポイントライト追加
+    void BindParams(); //< パラメータバインド
 
 private:
     DirectXCommon* dxCommon_;
-    GlobalParameter* globalParameter_; 
+    GlobalParameter* globalParameter_;
     const std::string groupName_ = "LightCount";
 
     int32_t spotLightCoutMax_;
@@ -74,8 +100,4 @@ public:
     AmbientLight* GetAmbientLight() { return ambientLight_.get(); }
     DirectionalLight* GetDirectionalLight() { return directionalLight_.get(); }
     Vector3 GetWorldCameraPos() const { return cameraForGPUData_->worldPosition_; }
-
-    // setter
-    void SetLightCommands(ID3D12GraphicsCommandList* commandList);
-    void SetWorldCameraPos(const Vector3& pos);
 };

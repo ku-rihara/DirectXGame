@@ -91,11 +91,6 @@ const IEasingStep* EasingSequence::GetCurrentStep() const {
     return nullptr;
 }
 
-IEasingStep* EasingSequence::GetCurrentStep() {
-    if (currentStep_ < steps_.size())
-        return steps_[currentStep_].get();
-    return nullptr;
-}
 
 bool EasingSequence::IsAllFinished() const {
     if (steps_.empty()) {

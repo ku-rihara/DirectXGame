@@ -1,106 +1,88 @@
-// Input.h (変更なし)
 #pragma once
 
-#include <variant>
-// std
 #include <array>
 #include <memory>
+#include <variant>
 #include <vector>
 #include <wrl.h>
 
 #include "Vector2.h"
 
-#define DIRECTNPUT_VERSION 0x0800 // バージョン指定
-#include <dinput.h>
-// input
-#include "Gamepad.h" 
+#define DIRECTNPUT_VERSION 0x0800
+#include "Gamepad.h"
 #include "Mouse.h"
+#include <dinput.h>
 
+/// <summary>
+/// 入力管理統合クラス
+/// </summary>
 class Input {
 private:
     Microsoft::WRL::ComPtr<IDirectInput8> directInput_    = nullptr;
     Microsoft::WRL::ComPtr<IDirectInputDevice8> keyboard_ = nullptr;
     std::array<BYTE, 256> key_;
     std::array<BYTE, 256> keyPre_;
-    // マウス
     static std::unique_ptr<Mouse> mouse_;
-    static std::vector<std::unique_ptr<Gamepad>> gamepads_; // Gamepadクラスのベクター
+    static std::vector<std::unique_ptr<Gamepad>> gamepads_;
 
 public:
-    // シングルトンインスタンスの取得
     static Input* GetInstance();
     Input()  = default;
     ~Input() = default;
 
+    /// <summary>
+    /// 入力システムの初期化
+    /// </summary>
+    /// <param name="hInstance">インスタンスハンドル</param>
+    /// <param name="hwnd">ウィンドウハンドル</param>
     void Init(HINSTANCE hInstance, HWND hwnd);
-    void Update();
 
-    /// 押し込んでいるか
-    bool PushKey(BYTE keyNumber) const;
-    /// トリガーしているか
-    bool TriggerKey(BYTE keyNumber) const;
-    /// 　離しているか
-    bool ReleaseKey(BYTE keyNumber) const;
-    /// 　離した瞬間か
-    bool ReleaseMomentKey(BYTE keyNumber) const;
+    void Update(); //< 入力状態を更新
 
-    ///-------------------------------------------------------------------------------------------------------
-    /// マウス
-    ///-------------------------------------------------------------------------------------------------------
+    // キーボード
+    bool PushKey(BYTE keyNumber) const; //< キーが押されているか
+    bool TriggerKey(BYTE keyNumber) const; //< キーがトリガーされたか
+    bool ReleaseKey(BYTE keyNumber) const; //< キーが離されているか
+    bool ReleaseMomentKey(BYTE keyNumber) const; //< キーが離された瞬間か
 
+    // マウス
     /// <summary>
     /// マウスの押下をチェック
     /// </summary>
-    /// <param name="buttonNumber">マウスボタン番号(0:左,1:右,2:中,3~7:拡張マウスボタン)</param>
-    /// <returns>押されているか</returns>
+    /// <param name="mouseNumber">マウスボタン番号(0:左,1:右,2:中,3~7:拡張)</param>
+    /// <returns>押下状態</returns>
     static bool IsPressMouse(int32_t mouseNumber);
 
     /// <summary>
-    /// マウスのトリガーをチェック。押した瞬間だけtrueになる
+    /// マウスのトリガーをチェック
     /// </summary>
-    /// <param name="buttonNumber">マウスボタン番号(0:左,1:右,2:中,3~7:拡張マウスボタン)</param>
-    /// <returns>トリガーか</returns>
+    /// <param name="buttonNumber">マウスボタン番号</param>
+    /// <returns>トリガー状態</returns>
     static bool IsTriggerMouse(int32_t buttonNumber);
 
-    /// <summary>
-    /// マウス移動量を取得
-    /// </summary>
-    /// <returns>マウス移動量</returns>
-    static MouseMove GetMouseMove();
+    static MouseMove GetMouseMove(); //< マウス移動量を取得
+    static int32_t GetWheel(); //< ホイールスクロール量を取得
+    static Vector2 GetMousePos(); //< マウス位置を取得(ウィンドウ座標系)
 
     /// <summary>
-    /// ホイールスクロール量を取得する
+    /// 3Dワールド座標でのマウス位置を取得
     /// </summary>
-    /// <returns>ホイールスクロール量。奥側に回したら+。Windowsの設定で逆にしてたら逆</returns>
-    static int32_t GetWheel();
-
-    /// <summary>
-    /// マウスの位置を取得する（ウィンドウ座標系）
-    /// </summary>
-    /// <returns>マウスの位置</returns>
-    static Vector2 GetMousePos();
-
-    /// <summary>
-    /// 3Dのマウス座標
-    /// </summary>
-    /// <param name="viewprojection"></param>
-    /// <param name="depthFactor"></param>
-    /// <returns></returns>
+    /// <param name="viewprojection">ビュープロジェクション</param>
+    /// <param name="depthFactor">深度係数</param>
+    /// <param name="blockSpacing">ブロック間隔</param>
+    /// <returns>3Dマウス座標</returns>
     static Vector3 GetMousePos3D(const ViewProjection& viewprojection, float depthFactor, float blockSpacing = 1.0f);
 
     const BYTE* GetKeyState() const { return key_.data(); }
     const BYTE* GetPreviousKeyState() const { return keyPre_.data(); }
 
-    //-------------------------------------------------------------------------------------------------------
     // ゲームパッド
-    //-------------------------------------------------------------------------------------------------------
-
     /// <summary>
     /// ゲームパッドの入力をチェック
     /// </summary>
     /// <param name="padNumber">パッド番号</param>
     /// <param name="buttonNumber">ボタン番号</param>
-    /// <returns>押されているか</returns>
+    /// <returns>押下状態</returns>
     static bool IsPressPad(int32_t padNumber, int32_t buttonNumber);
 
     /// <summary>
@@ -108,55 +90,50 @@ public:
     /// </summary>
     /// <param name="padNumber">パッド番号</param>
     /// <param name="buttonNumber">ボタン番号</param>
-    /// <returns>トリガーか</returns>
+    /// <returns>トリガー状態</returns>
     static bool IsTriggerPad(int32_t padNumber, int32_t buttonNumber);
 
     /// <summary>
-    /// ゲームパッドのスティックの入力を取得
+    /// ゲームパッドのスティック入力を取得
     /// </summary>
     /// <param name="padNumber">パッド番号</param>
     /// <param name="stickNumber">スティック番号(0:左,1:右)</param>
-    /// <returns>スティックの入力</returns>
+    /// <returns>スティック入力値</returns>
     static Vector2 GetPadStick(int32_t padNumber, int32_t stickNumber);
 
     /// <summary>
     /// ゲームパッドの振動
     /// </summary>
     /// <param name="padNumber">パッド番号</param>
-    ///  /// <param name="leftVelocity">左モーター</param>
-    ///   /// <param name="rightVelocity">右モーター</param>
+    /// <param name="leftVelocity">左モーター強度</param>
+    /// <param name="rightVelocity">右モーター強度</param>
     static void SetVibration(int32_t padNumber, float leftVelocity, float rightVelocity);
 
     /// <summary>
-    /// 現在のジョイスティック状態を取得する
+    /// 現在のジョイスティック状態を取得
     /// </summary>
     /// <param name="stickNo">ジョイスティック番号</param>
-    /// <param name="out">現在のジョイスティック状態</param>
-    /// <returns>正しく取得できたか</returns>
+    /// <param name="out">現在の状態</param>
+    /// <returns>取得成功フラグ</returns>
     template <typename T>
     static bool GetJoystickState(int32_t stickNo, T& out);
 
     /// <summary>
-    /// 前回のジョイスティック状態を取得する
+    /// 前回のジョイスティック状態を取得
     /// </summary>
     /// <param name="stickNo">ジョイスティック番号</param>
-    /// <param name="out">前回のジョイスティック状態</param>
-    /// <returns>正しく取得できたか</returns>
+    /// <param name="out">前回の状態</param>
+    /// <returns>取得成功フラグ</returns>
     template <typename T>
     static bool GetJoystickStatePrevious(int32_t stickNo, T& out);
 
     /// <summary>
-    /// デッドゾーンを設定する
+    /// デッドゾーンを設定
     /// </summary>
     /// <param name="stickNo">ジョイスティック番号</param>
-    /// <param name="deadZoneL">デッドゾーン左スティック 0~32768</param>
-    /// <param name="deadZoneR">デッドゾーン右スティック 0~32768</param>
-    /// <returns>正しく取得できたか</returns>
+    /// <param name="deadZoneL">左スティックデッドゾーン(0~32768)</param>
+    /// <param name="deadZoneR">右スティックデッドゾーン(0~32768)</param>
     static void SetJoystickDeadZone(int32_t stickNo, int32_t deadZoneL, int32_t deadZoneR);
 
-    /// <summary>
-    /// 接続されているジョイスティック数を取得する
-    /// </summary>
-    /// <returns>接続されているジョイスティック数</returns>
-    static size_t GetNumberOfJoysticks();
+    static size_t GetNumberOfJoysticks(); //< 接続されているジョイスティック数を取得
 };
