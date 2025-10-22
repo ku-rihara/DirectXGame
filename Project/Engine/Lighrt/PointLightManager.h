@@ -3,6 +3,9 @@
 #include <memory>
 #include <vector>
 
+/// <summary>
+/// ポイントライト管理クラス
+/// </summary>
 class PointLightManager {
 private:
     std::vector<std::unique_ptr<PointLight>> pointLights_;
@@ -20,14 +23,33 @@ public:
     ///  public  method
     ///=========================================================================================
 
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="device">デバイス</param>
     void Init(ID3D12Device* device);
-    void Add(ID3D12Device* device);
-    void Remove(int index);
-    void UpdateStructuredBuffer();
 
-    void DebugImGui();
-    std::vector<PointLight*> GetLights();
+    /// <summary>
+    /// ポイントライトを追加
+    /// </summary>
+    /// <param name="device">デバイス</param>
+    void Add(ID3D12Device* device);
+
+    /// <summary>
+    /// ポイントライトを削除
+    /// </summary>
+    /// <param name="index">インデックス</param>
+    void Remove(int index);
+
+    /// <summary>
+    /// ライトコマンドを設定
+    /// </summary>
+    /// <param name="commandList">コマンドリスト</param>
     void SetLightCommand(ID3D12GraphicsCommandList* commandList);
+
+    void UpdateStructuredBuffer(); //< StructuredBufferの更新
+    void DebugImGui(); //< ImGuiデバッグ表示
+    std::vector<PointLight*> GetLights();
 
     ///=========================================================================================
     ///  getter  method
@@ -35,5 +57,4 @@ public:
 
     PointLight* GetPointLight(int num) { return pointLights_[num].get(); }
     size_t GetLightCount() const { return pointLights_.size(); }
-   
 };

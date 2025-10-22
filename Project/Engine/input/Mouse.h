@@ -12,6 +12,9 @@ struct MouseMove {
     LONG lZ;
 };
 
+/// <summary>
+///  マウスの入力管理クラス
+/// </summary>
 class Mouse {
 private:
     // マウス
