@@ -39,11 +39,14 @@ void main(uint3 DTid : SV_DispatchThreadID)
                 return;
             }
             
-            //カウント分放出
-            gParticles[countIndex].scale = generator.Generate3d();
-            gParticles[countIndex].translate = generator.Generate3d();
-            gParticles[countIndex].color.rgb = generator.Generate3d();
-            gParticles[countIndex].color.w = 1.0f;
+            // particleIndexを使用して書き込む
+            gParticles[particleIndex].scale = generator.Generate3d();
+            gParticles[particleIndex].translate = gEmitter.translate + generator.Generate3d() * gEmitter.radius;
+            gParticles[particleIndex].velocity = generator.Generate3d() * 0.61f; // 速度を追加
+            gParticles[particleIndex].color.rgb = generator.Generate3d();
+            gParticles[particleIndex].color.w = 1.0f;
+            gParticles[particleIndex].lifeTime = 3.0f; // ライフタイムを設定
+            gParticles[particleIndex].currentTime = 0.0f; // 現在時刻を初期化
 
         }
     }

@@ -5,6 +5,10 @@
 class WinApp;
 class DirectXCommon;
 class SrvManager;
+
+/// <summary>
+/// ImGuiの管理クラス
+/// </summary>
 class ImGuiManager {
 public:
     ~ImGuiManager() = default;
@@ -15,12 +19,14 @@ public:
     /// public method
     ///===========================================================
 
-    void Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srvManager); // 初期化
-
-    void Begin(); // 開始
-    void preDraw(); // 終わり
-    void Finalizer(); // 解放
+    // 初期化、描画
+    void Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srvManager);
     void Draw();
+
+    void Begin();     //< 開始
+    void preDraw();   //< 終わり
+    void Finalizer(); //< 解放
+  
 
 private:
     ///===========================================================

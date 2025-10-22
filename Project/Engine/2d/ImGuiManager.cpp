@@ -86,8 +86,8 @@ void ImGuiManager::Finalizer() {
 #endif
 }
 
-//
-void ImGuiManager::Draw() {
+
+void ImGuiManager::Draw(){
 
 #ifdef _DEBUG
     ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();

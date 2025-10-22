@@ -60,7 +60,7 @@ void Line3D::SetLine(const Vector3& start, const Vector3& end, const Vector4& co
     currentLineCount_++;
 }
 
-// 描画
+
 void Line3D::Draw(const ViewProjection& viewProj) {
     if (currentLineCount_ == 0) {
         return;

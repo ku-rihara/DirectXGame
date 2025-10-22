@@ -1,106 +1,133 @@
 #pragma once
-
+#include "Animation/SkinCluster.h"
+#include "Material/ModelMaterial.h"
+#include "struct/ModelData.h"
+#include <assimp/scene.h>
 #include <d3d12.h>
-#include <wrl.h>
-
 #include <optional>
 #include <string>
+#include <wrl.h>
 
-#include <assimp/scene.h>
-// struct
-#include "struct/ModelData.h"
+class DirectXCommon;
 
-#include "Animation/SkinCluster.h"
-
-#include "Dx/DirectXCommon.h"
-#include "Material/ModelMaterial.h"
-
-// 3Dモデル共通部
+/// <summary>
+/// 3Dモデル共通部
+/// </summary>
 class ModelCommon {
 private:
-    ///============================================================
-    /// private variants
-    ///============================================================
     DirectXCommon* dxCommon_;
 
 public:
-    ///============================================================
-    /// public method
-    ///============================================================
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="dxCommon">DirectXCommonのインスタンス</param>
     void Init(DirectXCommon* dxCommon);
-    ///============================================================
-    /// getter method
-    ///============================================================
+
+public:
     DirectXCommon* GetDxCommon() const { return dxCommon_; }
 };
 
 class TextureManager;
 class ShadowMap;
 class BaseMaterial;
+
+/// <summary>
+/// 3Dモデルクラス
+/// </summary>
 class Model {
 public:
-    ///============================================================
-    /// public method
-    ///============================================================
     Model() = default;
     ~Model();
+
+    /// <summary>
     /// モデル作成
+    /// </summary>
+    /// <param name="ModelFileName">モデルファイル名</param>
     void CreateModel(const std::string& ModelFileName);
 
-    /// モデルロード
+    /// <summary>
+    /// OBJファイルからモデルデータを読み込む
+    /// </summary>
+    /// <param name="directoryPath">ディレクトリパス</param>
+    /// <param name="filename">ファイル名</param>
+    /// <returns>モデルデータ</returns>
     ModelData LoadModelFile(const std::string& directoryPath, const std::string& filename);
+
+    /// <summary>
+    /// GLTFファイルからモデルデータを読み込む
+    /// </summary>
+    /// <param name="directoryPath">ディレクトリパス</param>
+    /// <param name="filename">ファイル名</param>
+    /// <returns>モデルデータ</returns>
     ModelData LoadModelGltf(const std::string& directoryPath, const std::string& filename);
 
+    /// <summary>
+    /// ノード情報を読み込む
+    /// </summary>
+    /// <param name="node">assimpノード</param>
+    /// <returns>ノード</returns>
     Node ReadNode(aiNode* node);
-    void DebugImGui();
-    void Finalize();
 
-    ///============================================================
-    /// Draw method
-    ///============================================================
+    void DebugImGui(); //< ImGuiデバッグ表示
+    void Finalize();   //< 終了処理
 
+    /// <summary>
+    /// モデル描画
+    /// </summary>
+    /// <param name="wvpResource">WVPリソース</param>
+    /// <param name="shadowMap">シャドウマップ</param>
+    /// <param name="material">マテリアル</param>
+    /// <param name="textureHandle">テクスチャハンドル(オプション)</param>
     void Draw(
-        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap,  ModelMaterial material, 
-            const std::optional<uint32_t>& textureHandle = std::nullopt); /// モデル描画
+        Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material,
+        const std::optional<uint32_t>& textureHandle = std::nullopt);
 
+    /// <summary>
+    /// アニメーションモデル描画
+    /// </summary>
+    /// <param name="wvpResource">WVPリソース</param>
+    /// <param name="shadowMap">シャドウマップ</param>
+    /// <param name="material">マテリアル</param>
+    /// <param name="skinCluster">スキンクラスター</param>
+    /// <param name="textureHandle">テクスチャハンドル(オプション)</param>
     void DrawAnimation(
         Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap, ModelMaterial material, const SkinCluster& skinCluster,
-        const std::optional<uint32_t>& textureHandle = std::nullopt); /// モデル描画
+        const std::optional<uint32_t>& textureHandle = std::nullopt);
 
-    void DrawInstancing(const uint32_t& instanceNum); 
+    /// <summary>
+    /// インスタンシング描画
+    /// </summary>
+    /// <param name="instanceNum">インスタンス数</param>
+    void DrawInstancing(const uint32_t& instanceNum);
 
+    /// <summary>
+    /// シャドウマップ用描画
+    /// </summary>
+    /// <param name="wvpResource">WVPリソース</param>
+    /// <param name="shadowMap">シャドウマップ</param>
     void DrawForShadowMap(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, const ShadowMap& shadowMap);
 
 private:
-    ///============================================================
-    /// private variants
-    ///============================================================
-
-    /// テクスチャ
     TextureManager* textureManager_ = nullptr;
     DirectXCommon* dxCommon_        = nullptr;
 
     uint32_t textureIndex_;
     ModelData modelData_;
 
-    /// GPUHandle,BufferView
     D3D12_GPU_DESCRIPTOR_HANDLE handle_;
     D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
     D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
 
-    /// リソース
-    Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_; // 頂点リソース
-    Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_; // indexリソース
+    Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
+    Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;
 
-    bool isFileGltf_; // gltfファイルかのフラグ
+    bool isFileGltf_; //< GLTFファイルかのフラグ
 
     std::string modelPath_   = "Resources/Model/";
     std::string texturePath_ = "Resources/Texture/";
 
 public:
-    ///============================================================
-    /// getter method
-    ///============================================================
     const uint32_t& GetTextureIndex() const { return textureIndex_; }
     const ModelData& GetModelData() { return modelData_; }
     ID3D12Resource* GetVertexResource() { return vertexResource_.Get(); }

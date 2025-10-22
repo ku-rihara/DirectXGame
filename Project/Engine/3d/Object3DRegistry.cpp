@@ -1,8 +1,9 @@
 #include "Object3DRegistry.h"
 #include "3d/Object3d.h"
+#include "Dx/DirectXCommon.h"
 #include "Pipeline/PipelineManager.h"
-#include <imgui.h>
 #include <cstdlib>
+#include <imgui.h>
 
 bool Object3DRegistry::isDestroyed_ = false;
 
@@ -69,7 +70,7 @@ void Object3DRegistry::UpdateAll() {
 /// 全オブジェクトの描画
 ///============================================================
 void Object3DRegistry::DrawAll(const ViewProjection& viewProjection) {
-    PipelineManager::GetInstance()->PreDraw(PipelineType::Object3D,DirectXCommon::GetInstance()->GetCommandList());
+    PipelineManager::GetInstance()->PreDraw(PipelineType::Object3D, DirectXCommon::GetInstance()->GetCommandList());
 
     auto objectsCopy = objects_;
     for (Object3d* obj : objectsCopy) {

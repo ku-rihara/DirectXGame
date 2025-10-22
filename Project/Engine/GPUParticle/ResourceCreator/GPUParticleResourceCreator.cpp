@@ -84,16 +84,6 @@ void GPUParticleResourceCreator::CreateCounterResource() {
         uavIndex, counterResource_.Get(),
         1, sizeof(int32_t));
 
-    //// SRVを作成
-    //uint32_t srvIndex         = srvManager_->Allocate();
-    //counterSrvHandle_.first  = srvManager_->GetCPUDescriptorHandle(srvIndex);
-    //counterSrvHandle_.second = srvManager_->GetGPUDescriptorHandle(srvIndex);
-
-    //srvManager_->CreateForStructuredBuffer(
-    //    srvIndex,
-    //    counterResource_.Get(),
-    //    1,
-    //    sizeof(int32_t));
  }
 
 void GPUParticleResourceCreator::PerFrameIncrement() {

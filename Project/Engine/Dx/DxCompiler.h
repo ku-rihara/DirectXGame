@@ -7,25 +7,29 @@
 
 #pragma comment(lib, "dxcompiler.lib")
 
+/// <summary>
+/// シェーダーコンパイルを行うクラス
+/// </summary>
 class DxCompiler {
 public:
     DxCompiler()  = default;
     ~DxCompiler() = default;
 
-    // 初期化
-    void Init();
+    void Init();     //< 初期化
+    void Finalize(); //< 終了処理
 
-    // シェーダーコンパイル
+    /// <summary>
+    /// シェーダーコンパイル
+    /// </summary>
+    /// <param name="filePath">シェーダーファイルパス</param>
+    /// <param name="profile">シェーダープロファイル</param>
+    /// <returns>コンパイル済みシェーダーBlob</returns>
     Microsoft::WRL::ComPtr<IDxcBlob> CompileShader(
         const std::wstring& filePath,
         const wchar_t* profile);
-
-    // 終了処理
-    void Finalize();
 
 private:
     Microsoft::WRL::ComPtr<IDxcUtils> dxcUtils_                = nullptr;
     Microsoft::WRL::ComPtr<IDxcCompiler3> dxcCompiler_         = nullptr;
     Microsoft::WRL::ComPtr<IDxcIncludeHandler> includeHandler_ = nullptr;
-
 };

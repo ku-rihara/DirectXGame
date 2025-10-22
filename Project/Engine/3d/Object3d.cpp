@@ -1,4 +1,5 @@
 #include "Object3d.h"
+#include "Dx/DirectXCommon.h"
 #include "ModelManager.h"
 #include "Object3DRegistry.h"
 #include "Pipeline/PipelineManager.h"

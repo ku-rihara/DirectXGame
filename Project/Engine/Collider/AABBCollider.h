@@ -3,6 +3,9 @@
 #include "BaseCollider.h"
 #include "Box.h"
 
+/// <summary>
+///  AABBコライダー
+/// </summary>
 class AABBCollider : public BaseCollider {
 public:
     AABBCollider();
@@ -11,11 +14,16 @@ public:
     /// public  method
     /// ===================================================
 
-    void Init() override;
-    void UpdateWorldTransform() override;
+    void Init() override; //< 初期化
+
+    /// <summary>
+    /// デバッグキューブの描画
+    /// </summary>
+    /// <param name="viewProjection">ビュープロジェクション</param>
     void DrawDebugCube(const ViewProjection& viewProjection) override;
 
-    virtual Vector3 GetCollisionPos() const override;
+    void UpdateWorldTransform() override;             //< ワールド変換の更新
+    virtual Vector3 GetCollisionPos() const override; //< 衝突座標の取得
 
 private:
     /// ===================================================
@@ -23,12 +31,12 @@ private:
     /// ===================================================
     Vector3 collisionScale_ = {1.5f, 1.5f, 1.5f}; // AABBのサイズ
     AABB aabb_; // AABB範囲
+
 public:
     ///=========================================================================================
     ///  getter method
     ///=========================================================================================
 
-    /// AABBの範囲を取得
     const AABB& GetAABB() const { return aabb_; }
     const Vector3& GetCollisonScale() const { return collisionScale_; }
 

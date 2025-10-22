@@ -1,8 +1,9 @@
 #pragma once
+
+/// <summary>
+/// DirectXリソースのリリースチェックを行うクラス
+/// </summary>
 class DxReleaseChecker {
-public:
-    /// <summary>
-    /// デストラクタ
-    /// </summary>
-    ~DxReleaseChecker();
+public: 
+    ~DxReleaseChecker(); //< デストラクタでリソースリークをチェック
 };

@@ -9,6 +9,9 @@
 #include <cstdint>
 #include <string>
 
+/// <summary>
+/// 3Dオブジェクトの基底クラス
+/// </summary>
 class BaseObject3d {
 public:
     ///========================================================================================
@@ -18,34 +21,51 @@ public:
     BaseObject3d()          = default;
     virtual ~BaseObject3d() = default;
 
-    virtual void DebugImgui();
-    virtual void CreateMaterialResource();
-    virtual void CreateShadowMap();
-    virtual void CreateWVPResource();
+    virtual void CreateMaterialResource(); //< マテリアルのリソース作成
+    virtual void CreateShadowMap(); //< シャドウマップ作成
+    virtual void CreateWVPResource(); //< WVPリソース作成
+    virtual void DebugImgui(); //< ImGuiデバッグ表示
+
+    /// <summary>
+    /// WVPデータの更新
+    /// </summary>
+    /// <param name="viewProjection">ビュープロジェクション行列</param>
     virtual void UpdateWVPData(const ViewProjection& viewProjection);
 
+    /// <summary>
+    /// テクスチャのセット
+    /// </summary>
+    /// <param name="name">テクスチャ名</param>
+    void SetTexture(const std::string& name);
+
+    /// <summary>
+    /// モデル名からモデルをセット
+    /// </summary>
+    /// <param name="modelName">モデル名</param>
+    void SetModel(const std::string& modelName);
+
 public:
-    ModelMaterial material_;
-    ObjectColor objColor_;
-    WorldTransform transform_;
+    ModelMaterial material_; //< モデルのマテリアル
+    ObjectColor objColor_;   //< オブジェクトの色
+    WorldTransform transform_; //< ワールド変換
 
 protected:
     ///========================================================================================
     ///  protected variant
     ///========================================================================================
 
-    // wvpリソース
-    Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
-    TransformationMatrix* wvpDate_;
-    ShadowMap* shadowMap_;
-    bool isShadow_ = true;
-    bool isDraw_   = true;
-    uint32_t textureIndex_;
+    Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_; //< WVPリソース
+    TransformationMatrix* wvpDate_;                      //< WVPデータのポインタ
+    ShadowMap* shadowMap_;                               //< シャドウマップ
 
-    Model* model_       = nullptr;
-    BlendMode blendMode = BlendMode::None;
+    bool isShadow_ = true;   //< 影を描画するか
+    bool isDraw_   = true;   //< 描画するか
+    uint32_t textureIndex_;  //< テクスチャインデックス
 
-    const std::string textureFirePath_ = "Resources/Texture/ModelTexture/";
+    Model* model_       = nullptr;          //< モデルデータ
+    BlendMode blendMode = BlendMode::None;  //< ブレンドモード
+
+    const std::string textureFirePath_ = "Resources/Texture/ModelTexture/"; //< テクスチャファイルパス
 
 public:
     ///========================================================================================
@@ -53,14 +73,13 @@ public:
     ///========================================================================================
     Model* GetModel() { return model_; }
     const int32_t& GetTextureIndex() const { return textureIndex_; }
+
     ///========================================================================================
     ///  setter method
     ///========================================================================================
     void SetIsDraw(const bool& is) { isDraw_ = is; }
-    void SetTexture(const std::string& name);
     void SetModel(Model* model) { model_ = model; }
     void SetBlendMode(BlendMode mode) { blendMode = mode; }
-    void SetModel(const std::string& modelName);
     void SetwvpDate(const Matrix4x4& date) { wvpDate_->WVP = date; }
     void SetWorldMatrixDate(const Matrix4x4& date) { wvpDate_->World = date; }
     void SetIsShadow(const bool& is) { isShadow_ = is; }

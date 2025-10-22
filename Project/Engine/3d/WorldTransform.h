@@ -11,16 +11,15 @@
 #include <cstdint>
 #include <string>
 
-// 定数バッファ用データ構造体
 struct ConstBufferDataWorldTransform {
     Matrix4x4 matWorld;
 };
 
 enum class BillboardType {
-    XYZ, // xyz
-    X, // x
-    Y, // y
-    Z, // z
+    XYZ, //< XYZ軸ビルボード
+    X, //< X軸ビルボード
+    Y, //< Y軸ビルボード
+    Z, //< Z軸ビルボード
 };
 
 struct AdaptRotate {
@@ -30,48 +29,59 @@ struct AdaptRotate {
 };
 
 enum class RotateOder {
-    XYZ,
-    Quaternion,
+    XYZ, //< オイラー角
+    Quaternion, //< クォータニオン
 };
 
 class Object3DAnimation;
+
+/// <summary>
+/// ワールド変換クラス
+/// </summary>
 class WorldTransform {
 
 public:
     WorldTransform()  = default;
     ~WorldTransform() = default;
 
-    void Init();
+    void Init(); //< 初期化
 
-    void UpdateMatrix();
+    void UpdateMatrix(); //< 行列更新
 
+    /// <summary>
+    /// 指定方向を向く
+    /// </summary>
+    /// <param name="direction">方向ベクトル</param>
+    /// <returns>ワールド方向ベクトル</returns>
     Vector3 LookAt(const Vector3& direction) const;
 
+    /// <summary>
+    /// ビルボード行列更新
+    /// </summary>
+    /// <param name="viewProjection">ビュープロジェクション</param>
+    /// <param name="billboardAxis">ビルボード軸タイプ</param>
+    /// <param name="adaptRotate">回転適用設定</param>
     void BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis = BillboardType::XYZ, const AdaptRotate& adaptRotate = {false, false, false});
 
 private:
-    void TransferMatrix();
-    void UpdateAffineMatrix();
-    void ClearParentJoint();
-    void UpdateMatrixWithJoint();
-    bool HasParentJoint() const;
-  
+    void TransferMatrix(); //< 行列転送
+    void UpdateAffineMatrix(); //< アフィン行列更新
+    void ClearParentJoint(); //< ペアレントジョイントクリア
+    void UpdateMatrixWithJoint(); //< ジョイントで行列更新
+    bool HasParentJoint() const; //< ペアレントジョイントを持つか
+
 public:
-    // SRT,Q
     Vector3 scale_ = Vector3::UnitVector();
     Vector3 rotation_;
     Vector3 translation_;
     Quaternion quaternion_;
 
-    // matrix
-    Matrix4x4 matWorld_;
+    Matrix4x4 matWorld_; //< ワールド行列
 
     const WorldTransform* parent_ = nullptr;
     RotateOder rotateOder_        = RotateOder::XYZ;
 
 private:
-
-    // animation parent
     const Object3DAnimation* parentAnimation_ = nullptr;
     int32_t parentJointIndex_                 = -1;
     std::string parentJointName_;
@@ -79,25 +89,32 @@ private:
     Matrix4x4 billboardMatrix_;
     Matrix4x4 backToFrontMatrix_;
 
-    // コピー禁止
     WorldTransform(const WorldTransform&)            = delete;
     WorldTransform& operator=(const WorldTransform&) = delete;
 
 public:
+    /// <summary>
+    /// ペアレント設定
+    /// </summary>
+    /// <param name="parent">親のWorldTransform</param>
     void SetParent(const WorldTransform* parent);
+
+    /// <summary>
+    /// ペアレントジョイント設定
+    /// </summary>
+    /// <param name="animation">アニメーション</param>
+    /// <param name="jointName">ジョイント名</param>
     void SetParentJoint(const Object3DAnimation* animation, const std::string& jointName);
 
-    Vector3 GetLocalPos() const;
-    Vector3 GetWorldPos() const;
+    Vector3 GetLocalPos() const; //< ローカル座標取得
+    Vector3 GetWorldPos() const; //< ワールド座標取得
 
-    // GetVector
-    Vector3 GetRightVector() const;
-    Vector3 GetUpVector() const;
-    Vector3 GetForwardVector() const;
+    Vector3 GetRightVector() const; //< 右方向ベクトル取得
+    Vector3 GetUpVector() const; //< 上方向ベクトル取得
+    Vector3 GetForwardVector() const; //< 前方向ベクトル取得
 
 
 public:
-    // ムーブコンストラクタ
     WorldTransform(WorldTransform&& other) noexcept
         : scale_(std::move(other.scale_)),
           rotation_(std::move(other.rotation_)),
@@ -117,7 +134,6 @@ public:
         other.parentJointName_.clear();
     }
 
-    // ムーブ代入演算子
     WorldTransform& operator=(WorldTransform&& other) noexcept {
         if (this != &other) {
             scale_             = std::move(other.scale_);

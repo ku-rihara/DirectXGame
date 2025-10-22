@@ -7,22 +7,22 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "dxguid.lib")
 
+/// <summary>
+/// デバイスを管理するクラス
+/// </summary>
 class DxDevice {
 public:
     DxDevice()  = default;
     ~DxDevice() = default;
-
-    // 初期化
-    void Init();
-    // 終了処理
-    void Finalize();
+ 
+    void Init();    //< 初期化
+    void Finalize();//< 終了処理
 
 private:
-
-    // DXGIファクトリーとデバイス初期化
-    void CreateFactory();
-    void CreateDevice();
-    void SetupDebugLayer();
+   
+    void CreateFactory(); //< DXGIファクトリー作成
+    void CreateDevice(); //< デバイス作成
+    void SetupDebugLayer();//< デバッグレイヤー設定
 
     Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory_;
     Microsoft::WRL::ComPtr<IDXGIAdapter4> useAdapter_;

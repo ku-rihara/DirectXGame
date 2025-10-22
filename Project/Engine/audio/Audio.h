@@ -7,6 +7,9 @@
 #include <vector>
 #include <chrono>
 
+/// <summary>
+///  オーディオクラス
+/// </summary>
 class Audio {
 private:
 	//XAudio2のインスタンス

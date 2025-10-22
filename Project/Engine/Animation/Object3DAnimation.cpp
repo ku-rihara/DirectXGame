@@ -1,6 +1,7 @@
 #include "Object3DAnimation.h"
 #include "3d/ModelManager.h"
 #include "AnimationRegistry.h"
+#include "Dx/DirectXCommon.h"
 #include "Dx/DxResourceBarrier.h"
 #include "MathFunction.h"
 #include "Pipeline/CSPipelineManager.h"
@@ -250,7 +251,7 @@ void Object3DAnimation::TransitionFinish() {
 }
 
 void Object3DAnimation::CSSkinning() {
-    auto commandList = DirectXCommon::GetInstance()->GetCommandList();
+    auto commandList           = DirectXCommon::GetInstance()->GetCommandList();
     DxResourceBarrier* barrier = DirectXCommon::GetInstance()->GetResourceBarrier();
 
     // Compute Shader用リソース設定

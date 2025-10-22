@@ -38,7 +38,7 @@ void ObjectColor::Map() {
 
     if (FAILED(result)) {
         OutputDebugStringA("ConstBuffer Map failed.\n");
-        // 必要に応じて return や throw
+        return;
     }
 
     // 初期色の転送
