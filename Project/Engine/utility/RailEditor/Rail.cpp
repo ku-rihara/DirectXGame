@@ -2,7 +2,7 @@
 #include "MathFunction.h"
 #include "base/SrvManager.h"
 
-void Rail::Init(size_t numObjects) {
+void Rail::Init(const size_t& numObjects) {
     numObjects;
 }
 
@@ -56,7 +56,7 @@ void Rail::Update(const std::vector<Vector3>& controlPos) {
 }
 
 
-Vector3 Rail::GetPositionOnRail(float progress) const {
+Vector3 Rail::GetPositionOnRail(const float& progress) const {
     float distance = progress * totalRailLength_;
     float accumulatedDistance = 0.0f;
 

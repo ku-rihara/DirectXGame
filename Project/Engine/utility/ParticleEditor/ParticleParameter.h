@@ -4,8 +4,8 @@
 #include "3d/ViewProjection.h"
 #include "MinMax.h"
 // editor
-#include "utility/ParameterEditor/GlobalParameter.h"
 #include "Pipeline/Particle/ParticlePipeline.h"
+#include "utility/ParameterEditor/GlobalParameter.h"
 #include "utility/RailEditor/RailManager.h"
 // int32_t
 #include <cstdint>
@@ -14,6 +14,10 @@
 #include <vector>
 
 class Object3DAnimation;
+
+/// <summary>
+/// パーティクルパラメータ基底クラス
+/// </summary>
 class ParticleParameter {
 public:
     enum class EaseType {
@@ -88,66 +92,60 @@ public:
     ParticleParameter()          = default;
     virtual ~ParticleParameter() = default;
 
-    // init
-    virtual void Init();
-    void ParameterInit();
+    virtual void Init();         //< 初期化
+    void ParameterInit();        //< パラメータ初期化
+    void AdaptTexture();         //< テクスチャ適用
+    void BindParams();           //< パラメータのバインド
+    virtual void EditorUpdate(); //< エディタ更新
+    void ParticleChange();       //< パーティクル変更処理
+    void ScaleParmEditor();      //< スケールパラメータエディタ
+    void ImGuiTextureSelection();//< テクスチャ選択ImGui
 
-    // Adapt Texture
-    void AdaptTexture();
-
-    ///-------------------------------------------------------------------------------------
-    /// Editor
-    ///-------------------------------------------------------------------------------------
-    void BindParams();
-    virtual void EditorUpdate();
-
-    void ParticleChange();
-    void ScaleParmEditor();
-    void ImGuiTextureSelection();
+    /// <summary>
+    /// テクスチャの適用
+    /// </summary>
+    /// <param name="textureName">テクスチャ名</param>
     void ApplyTexture(const std::string& textureName);
+
+    /// <summary>
+    /// ファイル選択表示
+    /// </summary>
+    /// <param name="header">ヘッダー文字列</param>
+    /// <param name="filenames">ファイル名リスト</param>
+    /// <param name="selectedIndex">選択中のインデックス</param>
+    /// <param name="onApply">適用時のコールバック</param>
     void DisplayFileSelection(const std::string& header, const std::vector<std::string>& filenames, int& selectedIndex,
         const std::function<void(const std::string&)>& onApply);
 
 protected:
-    /// parameters
     Parameters parameters_;
     GroupParamaters groupParamaters_;
     GlobalParameter* globalParameter_;
 
     std::unique_ptr<RailManager> railManager_;
 
-    ///* setting
-    // type
     int32_t billBordType_;
     int32_t blendMode_;
-    // isShot
     bool isShot_;
-    // Time
     float intervalTime_;
-    // Count
     int32_t particleCount_;
 
     bool isMoveForRail_;
     bool isRailRoop_;
     float moveSpeed_;
 
-    // file
     std::string particleName_;
     const std::string folderName_      = "Particle";
     const std::string textureFilePath_ = "Resources/texture";
     std::string selectedTexturePath_;
 
 public:
-    /// =============================================================================
-    /// getter method
-    /// =============================================================================
+    // getter
     std::string GetParticleName() const { return particleName_; }
     int GetPreBillBordType() const { return billBordType_; }
     bool GetPreIsShot() const { return isShot_; }
 
-    /// =============================================================================
-    /// setter method
-    /// =============================================================================
+    // setter
     void SetParameter(const Parameters& param) { parameters_ = param; }
     void SetGroupParameter(const GroupParamaters& groupParam) { groupParamaters_ = groupParam; }
     void SetPreBillBordType(const int& preBillBordType) { billBordType_ = preBillBordType; }

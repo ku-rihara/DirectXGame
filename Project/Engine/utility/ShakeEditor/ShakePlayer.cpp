@@ -5,7 +5,7 @@ void ShakePlayer::Init() {
     shakeData_        = std::make_unique<ShakeData>();
 }
 
-void ShakePlayer::Update(float deltaTime) {
+void ShakePlayer::Update(const float& deltaTime) {
     shakeData_->Update(deltaTime);
     // 合成シェイクオフセットを計算
     UpdateTotalShakeOffset();

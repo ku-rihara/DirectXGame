@@ -4,29 +4,36 @@
 #include <memory>
 #include <string>
 
+/// <summary>
+/// シェイクプレイヤー
+/// </summary>
 class ShakePlayer {
 public:
     ShakePlayer()  = default;
     ~ShakePlayer() = default;
 
-    /// 初期化
-    void Init();
+    void Init(); //< 初期化
+    void StopShake(); //< シェイク停止
 
+    /// <summary>
     /// 更新
-    void Update(float deltaTime);
+    /// </summary>
+    /// <param name="deltaTime">デルタタイム</param>
+    void Update(const float& deltaTime);
 
-    /// シェイク制御
+    /// <summary>
+    /// シェイクの再生
+    /// </summary>
+    /// <param name="shakeName">シェイク名</param>
     void Play(const std::string& shakeName);
-    void StopShake();
 
 private:
-    /// 全シェイクオフセットを計算
-    void UpdateTotalShakeOffset();
+    void UpdateTotalShakeOffset(); //< 全シェイクオフセットの計算
 
 private:
     std::unique_ptr<ShakeData> shakeData_;
     Vector3 totalShakeOffset_ = {0.0f, 0.0f, 0.0f};
 
 public:
-   const Vector3& GetTotalShakeOffset() const { return totalShakeOffset_; }
+    const Vector3& GetTotalShakeOffset() const { return totalShakeOffset_; }
 };
