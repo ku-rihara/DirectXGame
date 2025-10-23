@@ -6,6 +6,9 @@
 #include <cstdint>
 #include <string>
 
+/// <summary>
+/// シェイクデータ
+/// </summary>
 class ShakeData {
 public:
     enum class PlayState {
@@ -19,7 +22,6 @@ public:
         WAVE
     };
 
-    // 軸設定用のフラグ
     enum AxisFlag : uint32_t {
         AXIS_NONE = 0,
         AXIS_X    = 1 << 0,
@@ -35,43 +37,51 @@ public:
     ShakeData()  = default;
     ~ShakeData() = default;
 
-    /// 初期化、更新、調節
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="shakeName">シェイク名</param>
     void Init(const std::string& shakeName);
-    void Update(float deltaTime);
-    void AdjustParam();
 
-    /// 再生制御
-    void Play();
-    void Stop();
-    void Reset();
+    /// <summary>
+    /// 更新
+    /// </summary>
+    /// <param name="deltaTime">デルタタイム</param>
+    void Update(const float& deltaTime);
 
-    /// 　Load,Save
-    void LoadData();
-    void SaveData();
-
-    /// 状態取得
-    bool IsPlaying() const;
-    bool IsFinished() const;
+    void AdjustParam(); //< パラメータ調整
+    void Play();        //< 再生
+    void Stop();        //< 停止
+    void Reset();       //< リセット
+    void LoadData();    //< データロード
+    void SaveData();    //< データセーブ
+    bool IsPlaying() const; //< 再生中か
+    bool IsFinished() const; //< 終了したか
 
 private:
-    /// Editor
-    void BindParams();
+    void BindParams(); //< パラメータのバインド
+    void UpdateShakeValues(); //< シェイク値の計算
+    void UpdateVector3Shake(); //< Vector3シェイクの更新
+
+    /// <summary>
+    /// イージングタイプセレクター
+    /// </summary>
+    /// <param name="label">ラベル</param>
+    /// <param name="target">対象変数</param>
     void EasingTypeSelector(const char* label, int32_t& target);
 
-    /// シェイク値の計算
-    void UpdateShakeValues();
-
-    // 適応
+    /// <summary>
+    /// 軸フラグの適用
+    /// </summary>
+    /// <param name="shakeValue">シェイク値</param>
+    /// <returns>軸フラグ適用後の値</returns>
     Vector3 ApplyAxisFlag(const Vector3& shakeValue) const;
-    void UpdateVector3Shake();
 
 private:
-    // GlobalParameter
     GlobalParameter* globalParameter_;
     std::string groupName_;
     std::string folderPath_ = "ShakeEditor";
 
-    // シェイクパラメータ
     float shakeLength_ = 1.0f;
     float maxTime_     = 1.0f;
     float startTime_   = 1.0f;
@@ -79,31 +89,21 @@ private:
     int32_t shakeType_ = 0;
     int32_t axisFlag_  = AXIS_XYZ;
 
-    // 再生状態
     PlayState playState_ = PlayState::STOPPED;
 
-    // 現在のシェイク値
     Vector3 currentShakeOffset_ = {0.0f, 0.0f, 0.0f};
 
-    // イージング用
     Easing<float> timeEase_;
     float easedTime_ = 0.0f;
 
-    // UI表示
     bool showControls_ = true;
 
 public:
-    //--------------------------------------------------------------------------------------
-    // getter
-    //--------------------------------------------------------------------------------------
     std::string GetGroupName() const { return groupName_; }
     float GetShakeLength() const { return shakeLength_; }
     float GetMaxTime() const { return maxTime_; }
     Vector3 GetShakeOffset() const { return currentShakeOffset_; }
     AxisFlag GetAxisFlag() const { return static_cast<AxisFlag>(axisFlag_); }
-    //--------------------------------------------------------------------------------------
-    // setter
-    //--------------------------------------------------------------------------------------
-    void SetAxisFlag(AxisFlag flag) { axisFlag_ = static_cast<int32_t>(flag); }
 
+    void SetAxisFlag(AxisFlag flag) { axisFlag_ = static_cast<int32_t>(flag); }
 };

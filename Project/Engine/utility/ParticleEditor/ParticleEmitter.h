@@ -4,7 +4,6 @@
 #include "Pipeline/Particle/ParticlePipeline.h"
 #include "utility/RailEditor/RailManager.h"
 
-/// primitive
 #include "3d/Line3D.h"
 #include "Primitive/IPrimitive.h"
 
@@ -13,39 +12,65 @@
 #include <vector>
 
 class Object3DAnimation;
+
+/// <summary>
+/// パーティクルエミッター
+/// </summary>
 class ParticleEmitter : public ParticleParameter {
 
 public:
-    // コンストラクタ
     ParticleEmitter()           = default;
     ~ParticleEmitter() override = default;
 
-    // Create
+    /// <summary>
+    /// パーティクルの作成
+    /// </summary>
+    /// <param name="name">名前</param>
+    /// <param name="modelFilePath">モデルファイルパス</param>
+    /// <param name="maxNum">最大数</param>
+    /// <returns>生成されたエミッター</returns>
     static ParticleEmitter* CreateParticle(
         const std::string& name, const std::string& modelFilePath,
         const int32_t& maxnum);
 
+    /// <summary>
+    /// プリミティブパーティクルの作成
+    /// </summary>
+    /// <param name="name">名前</param>
+    /// <param name="primitiveType">プリミティブタイプ</param>
+    /// <param name="maxNum">最大数</param>
+    /// <returns>生成されたエミッター</returns>
     static ParticleEmitter* CreateParticlePrimitive(
         const std::string& name, const PrimitiveType& primitiveType, const int32_t& maxnum);
-
-    // 初期化
-    void Init();
-    void Emit();
-    void StartRailEmit();
-
-    // 更新
-    void UpdateEmitTransform();
-    void Update();
+  
+     /// <summary>
+    /// 親ジョイントの設定
+    /// </summary>
+    /// <param name="modelAnimation">アニメーションモデル</param>
+    /// <param name="name">ジョイント名</param>
+    void SetParentJoint(const Object3DAnimation* modelAnimation, const std::string& name);
+  
+    /// <summary>
+    /// レールのデバッグ描画
+    /// </summary>
+    /// <param name="viewProjection">ビュープロジェクション</param>
     void RailDraw(const ViewProjection& viewProjection);
+
+    /// <summary>
+    /// デバッグ描画
+    /// </summary>
+    /// <param name="viewProjection">ビュープロジェクション</param>
     void DebugDraw(const ViewProjection& viewProjection);
 
-    /// editor
-    void EditorUpdate() override;
-
-    void SetParentJoint(const Object3DAnimation* modelAnimation, const std::string& name);
+    void Init();                  //< 初期化
+    void Update();                //< 更新
+    void Emit();                  //< パーティクルの放出
+    void StartRailEmit();         //< レール放出開始
+    void UpdateEmitTransform();   //< エミット位置の更新
+    void EditorUpdate() override; //< エディタ更新
 
 private:
-    void RailMoveUpdate();
+    void RailMoveUpdate(); //< レール移動更新
 
 private:
     float currentTime_;
@@ -55,15 +80,10 @@ private:
     std::string editorMessage_;
 
 public:
-    ///=================================================================================
-    /// getter method
-    ///=================================================================================
-    bool GetIsMoveForRail() const { return isMoveForRail_; }
-    float GetMoveSpeed() const { return moveSpeed_; }
-
-    ///=================================================================================
-    /// setter method
-    ///=================================================================================
+    // getter
+   const bool& GetIsMoveForRail() const { return isMoveForRail_; }
+   const float& GetMoveSpeed() const { return moveSpeed_; }
+    // setter
     void SetTextureHandle(const uint32_t& hanle);
     void SetParentTransform(const WorldTransform* transform);
     void SetFollowingPos(const Vector3* pos);

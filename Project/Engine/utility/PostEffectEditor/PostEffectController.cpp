@@ -13,7 +13,7 @@ void PostEffectController::Init() {
     defaultMode_        = PostEffectMode::NONE;
 }
 
-void PostEffectController::Update(float deltaTime) {
+void PostEffectController::Update(const float& deltaTime) {
     if (isPostEffectActive_) {
         currentTimer_ += deltaTime;
 
@@ -173,7 +173,7 @@ void PostEffectController::AddPostEffect(const std::string& postEffectName) {
     selectedIndex_ = static_cast<int>(postEffects_.size()) - 1;
 }
 
-void PostEffectController::RemovePostEffect(int index) {
+void PostEffectController::RemovePostEffect(const int& index) {
     if (index >= 0 && index < static_cast<int>(postEffects_.size())) {
         postEffects_.erase(postEffects_.begin() + index);
 

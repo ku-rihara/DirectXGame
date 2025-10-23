@@ -11,17 +11,18 @@
 #include <string>
 #include <vector>
 
-  enum class EasingAdaptTransform {
+enum class EasingAdaptTransform {
     Scale,
     Rotate,
     Translate,
-  };
+};
 
+/// <summary>
+/// Blenderからエクスポートしたオブジェクト配置クラス
+/// </summary>
 class PutObjForBlender {
 public:
-    // レベルデータ
     struct LevelData {
-        // オブジェクト1個分のデータ
         struct ObjectData {
             std::string fileName;
             std::unique_ptr<Object3d> object3d;
@@ -37,31 +38,73 @@ public:
             std::vector<float> easingStartTimes;
             size_t groupCount = 0;
         };
-        // オブジェクトのコンテナ
         std::vector<ObjectData> objects;
     };
 
 public:
     PutObjForBlender()  = default;
     ~PutObjForBlender() = default;
-    // functions
+
+    /// <summary>
+    /// JSONファイルのロード
+    /// </summary>
+    /// <param name="name">ファイル名</param>
     void LoadJsonFile(const std::string& name);
-    // emit
-    void EmitterAllUpdate();
-    void EmitAll();
-    void StartRailEmitAll();
-    void EmitterAllEdit();
-    // easing
-    void EasingAllReset();
+
+    /// <summary>
+    /// 指定グループのイージング更新
+    /// </summary>
+    /// <param name="deltaTime">デルタタイム</param>
+    /// <param name="groupNum">グループ番号</param>
     void EasingUpdateSelectGroup(const float& deltaTime, const int32_t& groupNum);
+
+    /// <summary>
+    /// 指定グループのイージングリセット
+    /// </summary>
+    /// <param name="groupNum">グループ番号</param>
     void EasingResetSelectGroup(const int32_t& groupNum);
+
+    /// <summary>
+    /// JSONデータをオブジェクトに変換
+    /// </summary>
+    /// <param name="object">JSONオブジェクト</param>
     void ConvertJSONToObjects(const nlohmann::json& object);
+
+    /// <summary>
+    /// 文字列をプリミティブタイプに変換
+    /// </summary>
+    /// <param name="typeStr">タイプ文字列</param>
+    /// <returns>プリミティブタイプ</returns>
     PrimitiveType StringToPrimitiveType(const std::string& typeStr);
 
+    void EmitterAllUpdate(); //< 全エミッター更新
+    void EmitAll(); //< 全エミッター放出
+    void StartRailEmitAll(); //< 全レールエミッター開始
+    void EmitterAllEdit(); //< 全エミッターエディット
+    void EasingAllReset(); //< 全イージングリセット
+
 private:
-  
+    /// <summary>
+    /// イージングの適用
+    /// </summary>
+    /// <param name="objectData">オブジェクトデータ</param>
+    /// <param name="groupNum">グループ番号</param>
     void AdaptEasing(LevelData::ObjectData& objectData, const int32_t& groupNum);
+
+    /// <summary>
+    /// イージンググループのロード
+    /// </summary>
+    /// <param name="easingGroups">イージンググループJSON</param>
+    /// <param name="objectData">オブジェクトデータ</param>
     void LoadEasingGroups(const nlohmann::json& easingGroups, LevelData::ObjectData& objectData);
+
+    /// <summary>
+    /// イージングが適用されているか
+    /// </summary>
+    /// <param name="objectData">オブジェクトデータ</param>
+    /// <param name="groupNum">グループ番号</param>
+    /// <param name="type">変換タイプ</param>
+    /// <returns>適用されているか</returns>
     bool IsAdaptEasing(const LevelData::ObjectData& objectData, const int32_t& groupNum, const EasingAdaptTransform& type) const;
 
 private:
@@ -69,13 +112,11 @@ private:
     std::string fileName_;
     std::unique_ptr<LevelData> levelData_;
     float currentTime_ = 0.0f;
-    // jsonデータ
     nlohmann::json jsonData_;
 
 public:
     bool GetIsEasingFinish(const int32_t& groupNum) const;
     bool GetIsEasingPlaying(const int32_t& groupNum) const;
 
-    void SetLoopEndCallback(const int32_t& groupNum, const EasingAdaptTransform&transformType, const std::function<void()>& callback);
-   
+    void SetLoopEndCallback(const int32_t& groupNum, const EasingAdaptTransform& transformType, const std::function<void()>& callback);
 };

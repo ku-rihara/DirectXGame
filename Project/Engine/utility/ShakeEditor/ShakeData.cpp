@@ -33,7 +33,7 @@ void ShakeData::Init(const std::string& shakeName) {
     currentShakeOffset_ = {0.0f, 0.0f, 0.0f};
 }
 
-void ShakeData::Update(float deltaTime) {
+void ShakeData::Update(const float& deltaTime) {
     if (playState_ != PlayState::PLAYING) {
         return;
     }

@@ -1,35 +1,33 @@
 #pragma once
-#include"Dx/DirectXCommon.h"
-#include "Material/ParticleMaterial.h"
 #include "base/SrvManager.h"
+#include "Dx/DirectXCommon.h"
+#include "Material/ParticleMaterial.h"
 
 #include "3d/Object3d.h"
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
 
-//
 #include "ParticleEmitter.h"
 #include "struct/ParticleForGPU.h"
-
 
 // math
 #include "Box.h"
 #include "MinMax.h"
 // std
 #include <list>
-#include <unordered_map>
 #include <memory>
+#include <unordered_map>
 
 struct ParticleEmitter::GroupParamaters;
 struct ParticleEmitter::Parameters;
 struct ParticleEmitter::EaseParm;
+
+/// <summary>
+/// パーティクルマネージャー
+/// </summary>
 class ParticleManager {
 
 private:
-    ///============================================================
-    /// struct
-    ///============================================================
-
     struct ScaleInFo {
         Vector3 tempScaleV3;
         Vector3 easeEndScale;
@@ -69,15 +67,15 @@ private:
         UVInfo uvInfo_;
     };
 
-    struct AccelerationField { /// 　加速フィールド
+    struct AccelerationField {
         Vector3 acceleration;
         AABB area;
         bool isAdaption;
     };
 
-    struct ParticleGroup { /// パーティクルグループ
-        Model* model = nullptr;
-        std::unique_ptr<IPrimitive> primitive_=nullptr;
+    struct ParticleGroup {
+        Model* model                           = nullptr;
+        std::unique_ptr<IPrimitive> primitive_ = nullptr;
         ParticleMaterial material;
         uint32_t instanceNum;
         uint32_t srvIndex;
@@ -89,71 +87,128 @@ private:
     };
 
 public:
-    ///============================================================
-    /// public method
-    ///============================================================
-    ParticleManager() = default;
+    ParticleManager()  = default;
     ~ParticleManager() = default;
 
-    // 初期化
+    
+    // 初期化、更新、描画
     void Init(SrvManager* srvManager);
+    void Update();
+    void Draw(const ViewProjection& viewProjection);
+
+    /// <summary>
+    /// インスタンシングデータのリセット
+    /// </summary>
+    /// <param name="name">パーティクルグループ名</param>
     void ResetInstancingData(const std::string& name);
 
-    //更新、描画
-    void Update();
+
+    /// <summary>
+    /// UV更新
+    /// </summary>
+    /// <param name="uvInfo">UV情報</param>
+    /// <param name="deltaTime">デルタタイム</param>
     void UpdateUV(UVInfo& uvInfo, float deltaTime);
-    void Draw(const ViewProjection& viewProjection);
-   
-    // モデル、リソース作成(グループ作成)
+
+    /// <summary>
+    /// パーティクルグループの作成
+    /// </summary>
+    /// <param name="name">グループ名</param>
+    /// <param name="modelFilePath">モデルファイルパス</param>
+    /// <param name="maxnum">最大パーティクル数</param>
     void CreateParticleGroup(const std::string name, const std::string modelFilePath, const uint32_t& maxnum);
+
+    /// <summary>
+    /// プリミティブパーティクルの作成
+    /// </summary>
+    /// <param name="name">グループ名</param>
+    /// <param name="type">プリミティブタイプ</param>
+    /// <param name="maxnum">最大パーティクル数</param>
     void CreatePrimitiveParticle(const std::string& name, PrimitiveType type, const uint32_t& maxnum);
 
+    /// <summary>
+    /// モデルの設定
+    /// </summary>
+    /// <param name="name">グループ名</param>
+    /// <param name="modelName">モデル名</param>
     void SetModel(const std::string& name, const std::string& modelName);
+
+    /// <summary>
+    /// マテリアルリソースの作成
+    /// </summary>
+    /// <param name="name">グループ名</param>
     void CreateMaterialResource(const std::string& name);
+
+    /// <summary>
+    /// インスタンシングリソースの作成
+    /// </summary>
+    /// <param name="name">グループ名</param>
+    /// <param name="instanceNum">インスタンス数</param>
     void CreateInstancingResource(const std::string& name, const uint32_t& instanceNum);
 
-    /// リセット、パーティクル作成、エミット
-    void ResetAllParticles();
+    void ResetAllParticles(); //< 全パーティクルのリセット
+
+    /// <summary>
+    /// パーティクルの生成
+    /// </summary>
+    /// <param name="paramaters">パラメータ</param>
+    /// <returns>生成されたパーティクル</returns>
     Particle MakeParticle(const ParticleEmitter::Parameters& paramaters);
+
+    /// <summary>
+    /// パーティクルの放出
+    /// </summary>
+    /// <param name="name">グループ名</param>
+    /// <param name="paramaters">パラメータ</param>
+    /// <param name="groupParamaters">グループパラメータ</param>
+    /// <param name="count">放出数</param>
     void Emit(std::string name, const ParticleEmitter::Parameters& paramaters,
         const ParticleEmitter::GroupParamaters& groupParamaters, const int32_t& count);
 
-    ///============================================================
-    /// param Adapt
-    ///============================================================
+    /// <summary>
+    /// アルファ値の適用
+    /// </summary>
+    /// <param name="data">GPU用データ</param>
+    /// <param name="parm">パーティクルパラメータ</param>
+    /// <param name="group">パーティクルグループ</param>
     void AlphaAdapt(ParticleFprGPU& data, const Particle& parm, const ParticleGroup& group);
+
+    /// <summary>
+    /// スケールの適用
+    /// </summary>
+    /// <param name="time">経過時間</param>
+    /// <param name="parm">スケール情報</param>
+    /// <returns>適用後のスケール</returns>
     Vector3 ScaleAdapt(const float& time, const ScaleInFo& parm);
+
+    /// <summary>
+    /// イージングの適用
+    /// </summary>
+    /// <param name="easetype">イージングタイプ</param>
+    /// <param name="start">開始値</param>
+    /// <param name="end">終了値</param>
+    /// <param name="time">経過時間</param>
+    /// <param name="maxTime">最大時間</param>
+    /// <returns>イージング後の値</returns>
     Vector3 EaseAdapt(const ParticleEmitter::EaseType& easetype, const Vector3& start,
         const Vector3& end, const float& time, const float& maxTime);
 
 private:
-    ///============================================================
-    /// private variant
-    ///============================================================
-
-    // other class
     SrvManager* pSrvManager_;
     AccelerationField accelerationField_;
     const ViewProjection* viewProjection_;
 
-    /// Particle File
-    std::vector<std::string> particleFiles_; // パーティクルのファイル達
+    std::vector<std::string> particleFiles_;
     const std::string dyrectry_ = "Resources/GlobalParameter/Particle";
 
 public:
     std::unordered_map<std::string, ParticleGroup> particleGroups_;
 
-public:
     static ParticleManager* GetInstance();
 
-    ///============================================================
-    /// getter method
-    ///============================================================
     const std::vector<std::string>& GetParticleFiles() const { return particleFiles_; }
     const std::string& getDirectory() const { return dyrectry_; }
-    ///============================================================
-    /// setter method
-    ///============================================================
+
     void SetViewProjection(const ViewProjection* view);
     void SetTextureHandle(const std::string name, const uint32_t& handle);
     void SetAllParticleFile();

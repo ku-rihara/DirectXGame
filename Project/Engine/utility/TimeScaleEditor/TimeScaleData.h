@@ -2,48 +2,44 @@
 #include "utility/ParameterEditor/GlobalParameter.h"
 #include <string>
 
+/// <summary>
+/// タイムスケールデータ
+/// </summary>
 class TimeScaleData {
 public:
     TimeScaleData()  = default;
     ~TimeScaleData() = default;
 
+    /// <summary>
     /// 初期化
+    /// </summary>
+    /// <param name="timeScaleName">タイムスケール名</param>
     void Init(const std::string& timeScaleName);
 
-    /// ImGuiでの調整
-    void AdjustParam();
-
-    /// Load,Save
-    void LoadData();
-    void SaveData();
+    void AdjustParam(); //< パラメータ調整
+    void LoadData(); //< データロード
+    void SaveData(); //< データセーブ
 
 private:
-    /// パラメータのバインド
-    void BindParams();
+    void BindParams(); //< パラメータのバインド
 
 private:
-    // GlobalParameter
     GlobalParameter* globalParameter_;
     std::string groupName_;
     std::string folderPath_ = "TimeScale";
 
-    // TimeScaleパラメータ
     float timeScale_ = 1.0f;
     float duration_  = 1.0f;
 
-    // UI表示制御
     bool showControls_ = true;
 
 public:
-    //--------------------------------------------------------------------------------------
     // getter
-    //--------------------------------------------------------------------------------------
-    std::string GetGroupName() const { return groupName_; }
-    float GetTimeScale() const { return timeScale_; }
-    float GetDuration() const { return duration_; }
-    //--------------------------------------------------------------------------------------
+    const std::string& GetGroupName() const { return groupName_; }
+    const float& GetTimeScale() const { return timeScale_; }
+    const float& GetDuration() const { return duration_; }
+
     // setter
-    //--------------------------------------------------------------------------------------
-    void SetTimeScale(float timeScale) { timeScale_ = timeScale; }
-    void SetDuration(float duration) { duration_ = duration; }
+    void SetTimeScale(const float& timeScale) { timeScale_ = timeScale; }
+    void SetDuration(const float& duration) { duration_ = duration; }
 };
