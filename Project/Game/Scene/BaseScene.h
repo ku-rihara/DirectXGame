@@ -22,6 +22,9 @@
 
 #include <memory>
 
+/// <summary>
+/// シーン基底クラス
+/// </summary>
 class BaseScene {
 public:
     enum class CameraMode {

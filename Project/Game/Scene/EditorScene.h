@@ -7,8 +7,9 @@
 #include "EasingTestObj/EasingTestObj.h"
 #include "utility/EasingCreator/Easingeditor.h"
 #include <memory>
+
 /// <summary>
-/// EditorScene
+/// エディターシーン
 /// </summary>
 class EditorScene : public BaseScene {
 private:
