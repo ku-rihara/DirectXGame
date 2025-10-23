@@ -17,24 +17,39 @@ enum class BlendMode {
 
 class DirectXCommon;
 
+/// <summary>
+/// モデル用マテリアルクラス
+/// </summary>
 class ModelMaterial : public BaseMaterial {
 public:
-    // コンストラクタ
     ModelMaterial()  = default;
     ~ModelMaterial() = default;
 
-    // マテリアルのリソースを作成する関数
+    /// <summary>
+    /// マテリアルリソースの作成
+    /// </summary>
+    /// <param name="dxCommon">DirectXCommon</param>
     void CreateMaterialResource(DirectXCommon* dxCommon) override;
 
-    // マテリアルのデータを更新する関数
+    /// <summary>
+    /// マテリアルデータの更新
+    /// </summary>
+    /// <param name="Color">色</param>
     void UpdateMaterialData(const Vector4& Color) override;
 
-    // シェーダーにデータを送る関数
+    /// <summary>
+    /// コマンドリストへの設定
+    /// </summary>
+    /// <param name="commandList">コマンドリスト</param>
     void SetCommandList(ID3D12GraphicsCommandList* commandList) override;
 
+    /// <summary>
+    /// ディゾルブ用ノイズテクスチャの設定
+    /// </summary>
+    /// <param name="name">テクスチャ名</param>
     void SetDissolveNoizeTexture(const std::string& name);
 
-    void DebugImGui() override;
+    void DebugImGui() override; //< ImGuiデバッグ
 
 private:
     struct MaterialData {
@@ -60,7 +75,6 @@ public:
     void SetShininess(const float& shininess) override { materialData_->shininess = shininess; }
     void SetEnvironmentCoefficient(const float& environmentCoefficient) override { materialData_->environmentCoefficient = environmentCoefficient; }
 
-    // Dissolve
     void SetDissolveThreshold(const float& threshold) { materialData_->dissolveThreshold = threshold; }
     void SetDissolveEdgeColor(const Vector3& color) { materialData_->dissolveEdgeColor = color; }
     void SetDissolveEdgeWidth(const float& width) { materialData_->dissolveEdgeWidth = width; }

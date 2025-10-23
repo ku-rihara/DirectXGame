@@ -1,11 +1,11 @@
 #pragma once
 #include "BasePostEffect.h"
+#include "GrayScale.h"
+#include "RadialBlur.h"
+#include "Vignette.h"
 #include <array>
 #include <d3d12.h>
 #include <memory>
-#include "RadialBlur.h"
-#include "GrayScale.h"
-#include "Vignette.h"
 class ViewProjection;
 
 enum class PostEffectMode {
@@ -24,41 +24,65 @@ enum class PostEffectMode {
 
 class DirectXCommon;
 
+/// <summary>
+/// ポストエフェクト描画管理クラス
+/// </summary>
 class PostEffectRenderer {
 public:
     ~PostEffectRenderer() = default;
     static PostEffectRenderer* GetInstance();
 
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="dxCommon">DirectXCommon</param>
     void Init(DirectXCommon* dxCommon);
+
+    /// <summary>
+    /// 描画
+    /// </summary>
+    /// <param name="commandList">コマンドリスト</param>
     void Draw(ID3D12GraphicsCommandList* commandList);
-    void DrawImGui();
 
-    void SetPostEffectMode(const PostEffectMode& mode) { currentMode_ = mode; }
-
-private:
-    const ViewProjection* viewProjection_;
-    DirectXCommon* dxCommon_   = nullptr;
-    PostEffectMode currentMode_ = PostEffectMode::NONE;
-    std::array<std::unique_ptr<BasePostEffect>, static_cast<size_t>(PostEffectMode::COUNT)> effects_;
-
-public:
-    void SetViewProjection(const ViewProjection* viewProjection);
+    /// <summary>
+    /// 指定したモードのエフェクト取得
+    /// </summary>
+    /// <param name="mode">ポストエフェクトモード</param>
+    /// <returns>ベースポストエフェクト</returns>
     BasePostEffect* GetEffect(PostEffectMode mode);
 
-     // テンプレート版の型安全な取得関数
+    /// <summary>
+    /// エフェクト取得
+    /// </summary>
+    /// <typeparam name="T">エフェクトの型</typeparam>
+    /// <param name="mode">ポストエフェクトモード</param>
+    /// <returns>指定した型のエフェクト</returns>
     template <typename T>
     T* GetEffect(PostEffectMode mode) {
         BasePostEffect* effect = GetEffect(mode);
         return dynamic_cast<T*>(effect);
     }
 
-    // 現在のモードの効果を型安全に取得
+    /// <summary>
+    /// 現在のモードのエフェクトを取得
+    /// </summary>
+    /// <typeparam name="T">エフェクトの型</typeparam>
+    /// <returns>指定した型のエフェクト</returns>
     template <typename T>
     T* GetCurrentEffect() {
         return GetEffect<T>(currentMode_);
     }
 
-    // 特定の効果専用の便利関数
+    void DrawImGui(); //< ImGui描画
+
+private:
+    const ViewProjection* viewProjection_;
+    DirectXCommon* dxCommon_    = nullptr;
+    PostEffectMode currentMode_ = PostEffectMode::NONE;
+    std::array<std::unique_ptr<BasePostEffect>, static_cast<size_t>(PostEffectMode::COUNT)> effects_;
+
+public:
+   // getter
     RadialBlur* GetRadialBlur() {
         return GetEffect<RadialBlur>(PostEffectMode::RADIALBLUR);
     }
@@ -70,4 +94,8 @@ public:
     Vignette* GetVignette() {
         return GetEffect<Vignette>(PostEffectMode::VIGNETTE);
     }
+
+    // setter
+    void SetViewProjection(const ViewProjection* viewProjection);
+    void SetPostEffectMode(const PostEffectMode& mode) { currentMode_ = mode; }
 };

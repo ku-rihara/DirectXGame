@@ -1,11 +1,14 @@
 #pragma once
 
 #include "BasePostEffect.h"
-#include"Vector3.h"
+#include "Vector3.h"
 #include <d3d12.h>
-#include <wrl/client.h>
 #include <string>
+#include <wrl/client.h>
 
+/// <summary>
+/// ディゾルブエフェクトクラス
+/// </summary>
 class Dissolve : public BasePostEffect {
 public:
     struct ParamData {
@@ -14,19 +17,33 @@ public:
     };
 
 private:
-    void CreateGraphicsPipeline() override;
-    void CreateRootSignature() override;
+    void CreateGraphicsPipeline() override; //< グラフィックスパイプライン作成
+    void CreateRootSignature() override; //< ルートシグネチャ作成
 
 public:
-    Dissolve()             = default;
+    Dissolve()           = default;
     ~Dissolve() override = default;
 
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="dxCommon">DirectXCommon</param>
     void Init(DirectXCommon* dxCommon) override;
+
+    /// <summary>
+    /// 描画ステート設定
+    /// </summary>
+    /// <param name="commandList">コマンドリスト
     void SetDrawState(ID3D12GraphicsCommandList* commandList) override;
 
-    void CreateConstantBuffer() override;
+    /// <summary>
+    /// 描画処理
+    /// </summary>
+    /// <param name="commandList">コマンドリスト</param>
     void Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) override;
-    void DebugParamImGui() override;
+
+    void CreateConstantBuffer() override; //< 定数バッファ作成
+    void DebugParamImGui() override; //< ImGuiデバッグパラメータ
 
 private:
     Microsoft::WRL::ComPtr<ID3D12Resource> paramDataResource_;

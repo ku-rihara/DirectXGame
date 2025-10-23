@@ -8,6 +8,9 @@
 #include <string>
 #include <vector>
 
+/// <summary>
+/// カメラアニメーションデータクラス
+/// </summary>
 class CameraAnimationData {
 public:
     enum class PlayState {
@@ -20,66 +23,80 @@ public:
     CameraAnimationData()  = default;
     ~CameraAnimationData() = default;
 
+    /// <summary>
     /// 初期化
+    /// </summary>
+    /// <param name="animationName">アニメーション名</param>
     void Init(const std::string& animationName);
+
+    /// <summary>
+    /// 更新
+    /// </summary>
+    /// <param name="speedRate">速度倍率</param>
     void Update(const float& speedRate = 1.0f);
 
-    /// ImGuiでの調整
-    void AdjustParam();
+    void AdjustParam(); //< ImGuiパラメータ調整
 
-    /// ViewProjectionへの適応
+    /// <summary>
+    /// ViewProjectionへの適用
+    /// </summary>
+    /// <param name="viewProjection">ビュープロジェクション</param>
     void ApplyToViewProjection(ViewProjection& viewProjection);
 
-    /// キーフレーム操作
+    /// <summary>
+    /// イージングタイプセレクター
+    /// </summary>
+    /// <param name="label">ラベル</param>
+    /// <param name="target">対象</param>
     void EasingTypeSelector(const char* label, int32_t& target);
-    void AddKeyFrame();
-    void RemoveKeyFrame(const int32_t& index);
-    void ClearAllKeyFrames();
 
-    /// 再生制御
-    void Play();
-    void Pause();
-    void Reset();
-
+    /// <summary>
+    /// アクティブキーフレーム更新
+    /// </summary>
+    /// <param name="speedRate">速度倍率</param>
     void UpdateActiveKeyFrames(const float& speedRate = 1.0f);
 
-    /// Load,Save
-    void LoadData();
-    void LoadAllKeyFrames();
-    void SaveAllKeyFrames();
-    void SaveData();
+     void AddKeyFrame(); //< キーフレーム追加
+    void RemoveKeyFrame(const int32_t& index); //< キーフレーム削除
+    void ClearAllKeyFrames(); //< 全キーフレームクリア
+
+    void Play(); //< 再生
+    void Pause(); //< 一時停止
+    void Reset(); //< リセット
+
+    void LoadData(); //< データ読み込み
+    void LoadAllKeyFrames(); //< 全キーフレーム読み込み
+    void SaveAllKeyFrames(); //< 全キーフレーム保存
+    void SaveData(); //< データ保存
 
 private:
-    void BindParams();
+    void BindParams();                //< パラメータバインド
+    void UpdateKeyFrameProgression(); //< キーフレーム進行更新
+    void AdvanceToNextKeyFrame();     //< 次のキーフレームへ進む
+    void UpdateInterpolatedValues();  //< 補間値更新
+    void StartReturnToInitial();      //< 初期値復帰開始
 
-    // キーフレーム進行管理
-    void UpdateKeyFrameProgression();
-    void AdvanceToNextKeyFrame();
-
-    // 補間値更新
-    void UpdateInterpolatedValues();
-    void StartReturnToInitial();
-
+    /// <summary>
+    /// タイムモードセレクター
+    /// </summary>
+    /// <param name="label">ラベル</param>
+    /// <param name="target">対象</param>
     void TimeModeSelector(const char* label, int32_t& target);
 
 private:
-    // GlobalParameter
     GlobalParameter* globalParameter_;
     std::string groupName_;
     std::string folderPath_ = "CameraAnimation/AnimationData";
 
-    // キーフレーム
     std::vector<std::unique_ptr<CameraKeyFrame>> keyFrames_;
     int32_t selectedKeyFrameIndex_ = -1;
     int32_t finalKeyFrameIndex_    = -1;
     int32_t activeKeyFrameIndex_   = 0;
 
-    // 再生状態
     PlayState playState_      = PlayState::STOPPED;
     bool autoReturnToInitial_ = true;
     bool isAllFinished_       = false;
 
-    // 現在の補間値
     Vector3 currentPosition_;
     Vector3 currentRotation_;
     float currentFov_;
@@ -88,47 +105,37 @@ private:
     Vector3 returnRotation_;
     float returnFov_;
 
-    // リセット用パラメータ
     float resetTimePoint_   = 0.0f;
-    float returnDelayTime_  = 0.0f; 
+    float returnDelayTime_  = 0.0f;
     float returnDelayTimer_ = 0.0f;
     int32_t resetPosEaseType_;
     int32_t resetRotateEaseType_;
     int32_t resetFovEaseType_;
 
-    // UI用パラメータ
     bool showKeyFrameList_      = true;
     bool showAnimationControls_ = true;
     bool showInitialSettings_   = false;
 
-    // キーフレーム進行管理
     bool isAllKeyFramesFinished_        = false;
     int32_t lastCompletedKeyFrameIndex_ = -1;
 
-    // 初期値復帰用のメンバ変数
     bool isReturningToInitial_ = false;
     bool isWaitingForReturn_   = false;
     Vector3 initialPosition_   = {0.0f, 0.0f, 0.0f};
     Vector3 initialRotation_   = {0.0f, 0.0f, 0.0f};
     float initialFov_          = 45.0f;
 
-    // 初期値復帰用のイージング
     Easing<Vector3> returnPositionEase_;
     Easing<Vector3> returnRotationEase_;
     Easing<float> returnFovEase_;
 
-    // timeMode
     int32_t timeMode_ = static_cast<int32_t>(CameraKeyFrame::TimeMode::DELTA_TIME_RATE);
 
-    // TimeModeラベル
     std::vector<const char*> TimeModeLabels = {
         "DeltaTime (No TimeScale)",
         "DeltaTimeRate (With TimeScale)"};
 
 public:
-    //--------------------------------------------------------------------------------------
-    // getter
-    //--------------------------------------------------------------------------------------
     std::string GetGroupName() const { return groupName_; }
     bool IsPlaying() const;
     bool IsFinished() const;
@@ -142,9 +149,7 @@ public:
     const int32_t& GetSelectedKeyFrameIndex() const { return selectedKeyFrameIndex_; }
     CameraKeyFrame* GetSelectedKeyFrame();
     const CameraKeyFrame* GetSelectedKeyFrame() const;
-    //--------------------------------------------------------------------------------------
-    // setter
-    //--------------------------------------------------------------------------------------
+
     void SetSelectedKeyFrameIndex(const int32_t& index);
     void SetInitialValues(const Vector3& position, const Vector3& rotation, const float& fov);
 };

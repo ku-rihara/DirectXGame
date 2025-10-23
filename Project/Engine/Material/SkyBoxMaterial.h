@@ -8,22 +8,33 @@
 
 class DirectXCommon;
 
+/// <summary>
+/// スカイボックス用マテリアルクラス
+/// </summary>
 class SkyBoxMaterial : public BaseMaterial {
 public:
-    // コンストラクタ
     SkyBoxMaterial()  = default;
     ~SkyBoxMaterial() = default;
 
-    // マテリアルのリソースを作成する関数
+    /// <summary>
+    /// マテリアルリソースの作成
+    /// </summary>
+    /// <param name="dxCommon">DirectXCommon</param>
     void CreateMaterialResource(DirectXCommon* dxCommon) override;
 
-    // マテリアルのデータを更新する関数
+    /// <summary>
+    /// マテリアルデータの更新
+    /// </summary>
+    /// <param name="Color">色</param>
     void UpdateMaterialData(const Vector4& Color) override;
 
-    // シェーダーにデータを送る関数
+    /// <summary>
+    /// コマンドリストへの設定
+    /// </summary>
+    /// <param name="commandList">コマンドリスト</param>
     void SetCommandList(ID3D12GraphicsCommandList* commandList) override;
 
-    void DebugImGui() override;
+    void DebugImGui() override; //< ImGuiデバッグ
 
 private:
     struct MaterialData {
@@ -36,7 +47,6 @@ private:
     };
 
 public:
-    // GPUに送るマテリアルデータの実体
     MaterialData* materialData_ = nullptr;
 
 public:

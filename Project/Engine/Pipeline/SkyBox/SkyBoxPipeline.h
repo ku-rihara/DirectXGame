@@ -5,28 +5,42 @@
 #include <dxcapi.h>
 #include <string>
 
+/// <summary>
+/// スカイボックス描画パイプラインクラス
+/// </summary>
 class SkyBoxPipeline : public BasePipeline {
 public:
     SkyBoxPipeline()  = default;
     ~SkyBoxPipeline() = default;
 
-    ///==============================================
-    /// public method
-    ///==============================================
-
-    // 初期化
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="dxCommon">DirectXCommon</param>
     void Init(DirectXCommon* dxCommon) override;
+
+    /// <summary>
+    /// 描画前処理
+    /// </summary>
+    /// <param name="commandList">コマンドリスト</param>
     void PreDraw(ID3D12GraphicsCommandList* commandList) override;
+
+    /// <summary>
+    /// ブレンドモード設定
+    /// </summary>
+    /// <param name="commandList">コマンドリスト</param>
+    /// <param name="blendMode">ブレンドモード</param>
     void PreBlendSet(ID3D12GraphicsCommandList* commandList, const BlendMode& blendMode) override;
 
-    // テクスチャ設定
+    /// <summary>
+    /// 環境マップテクスチャの設定
+    /// </summary>
+    /// <param name="texture">テクスチャパス</param>
     void SetEnvironmentalMapTextureHandle(const std::string& texture);
 
 private:
-    // ルートシグネチャの作成
-    void CreateRootSignature() override;
-    // グラフィックスパイプラインの生成
-    void CreateGraphicsPipeline() override;
+    void CreateRootSignature() override; //< ルートシグネチャ作成
+    void CreateGraphicsPipeline() override; //< グラフィックスパイプライン作成
 
 private:
     D3D12_STATIC_SAMPLER_DESC staticSamplers_[1];
@@ -34,6 +48,5 @@ private:
     uint32_t environmentalMapTextureHandle_;
 
 public:
-    // getter
     uint32_t GetEnvironmentalMapTextureHandle() const { return environmentalMapTextureHandle_; }
 };

@@ -6,6 +6,9 @@
 #include <string>
 #include <vector>
 
+/// <summary>
+/// カメラキーフレームクラス
+/// </summary>
 class CameraKeyFrame {
 public:
     struct KeyFrameParam {
@@ -23,25 +26,44 @@ public:
     CameraKeyFrame()  = default;
     ~CameraKeyFrame() = default;
 
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="cameraAnimationName">カメラアニメーション名</param>
+    /// <param name="keyNumber">キー番号</param>
     void Init(const std::string& cameraAnimationName, const int32_t& keyNumber);
-    void Update(const float&speedRate);
 
-    // paramEdit
+    /// <summary>
+    /// 更新
+    /// </summary>
+    /// <param name="speedRate">速度倍率</param>
+    void Update(const float& speedRate);
+
+    /// <summary>
+    /// イージングタイプセレクター
+    /// </summary>
+    /// <param name="label">ラベル</param>
+    /// <param name="target">対象</param>
     void EasingTypeSelector(const char* label, int32_t& target);
-    void TimeModeSelector(const char* label, int32_t& target);
-    void AdjustParam();
-    void BindParams();
-    void AdaptEaseParam();
-    void AdaptValueSetting();
-    void Reset();
-    bool IsFinished() const;
 
-    // Load,Save
-    void LoadData();
-    void SaveData();
+    /// <summary>
+    /// タイムモードセレクター
+    /// </summary>
+    /// <param name="label">ラベル</param>
+    /// <param name="target">対象</param>
+    void TimeModeSelector(const char* label, int32_t& target);
+
+    void AdjustParam();       //< パラメータ調整
+    void BindParams();        //< パラメータバインド
+    void AdaptEaseParam();    //< イージングパラメータ適用
+    void AdaptValueSetting(); //< 値設定適用
+    void Reset();             //< リセット
+    bool IsFinished() const;  //< 終了判定
+
+    void LoadData(); //< データ読み込み
+    void SaveData(); //< データ保存
 
 private:
-    // GlobalParameter
     GlobalParameter* globalParameter_;
     std::string groupName_;
     const std::string folderName_ = "CameraAnimation/KeyFrames";
@@ -51,28 +73,21 @@ private:
     KeyFrameParam keyFrameParam_;
     KeyFrameParam currentKeyFrameParam_;
 
-    // easing Type
     int32_t positionEaseType_ = 0;
     int32_t rotationEaseType_ = 0;
     int32_t fovEaseType_      = 0;
 
-    // Time Mode
     int32_t timeMode_ = static_cast<int32_t>(TimeMode::DELTA_TIME_RATE);
 
-    // easing
     Easing<Vector3> positionEase_;
     Easing<Vector3> rotationEase_;
     Easing<float> fovEase_;
 
-    // TimeModeラベル
     std::vector<const char*> TimeModeLabels = {
         "DeltaTime (No TimeScale)",
         "DeltaTimeRate (With TimeScale)"};
 
 public:
-    //--------------------------------------------------------------------------------------
-    // getter
-    //--------------------------------------------------------------------------------------
     const float& GetTimePoint() const { return timePoint_; }
     const Vector3& GetPosition() const { return currentKeyFrameParam_.position; }
     const Vector3& GetRotation() const { return currentKeyFrameParam_.rotation; }
@@ -82,9 +97,6 @@ public:
     const float& GetEditFov() const { return keyFrameParam_.fov; }
     const TimeMode& GetTimeMode() const { return static_cast<TimeMode>(timeMode_); }
 
-    //--------------------------------------------------------------------------------------
-    // setter
-    //--------------------------------------------------------------------------------------
     void SetTimePoint(const float& timePoint) { timePoint_ = timePoint; }
     void SetStartEasing(const Vector3& pos, const Vector3& rotate, const float& fov);
     void SetTimeMode(const TimeMode& mode) { timeMode_ = static_cast<int32_t>(mode); }

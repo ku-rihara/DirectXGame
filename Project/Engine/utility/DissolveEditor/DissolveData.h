@@ -4,6 +4,9 @@
 #include <cstdint>
 #include <string>
 
+/// <summary>
+/// ディゾルブデータクラス
+/// </summary>
 class DissolveData {
 public:
     enum class PlayState {
@@ -16,65 +19,61 @@ public:
     DissolveData()  = default;
     ~DissolveData() = default;
 
-    /// 初期化、更新、調節
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="dissolveName">ディゾルブ名</param>
     void Init(const std::string& dissolveName);
+
+    /// <summary>
+    /// 更新
+    /// </summary>
+    /// <param name="deltaTime">デルタタイム</param>
     void Update(float deltaTime);
-    void AdjustParam();
 
-    /// 再生制御
-    void Play();
-    void Stop();
-    void Reset();
+    void AdjustParam(); //< パラメータ調整
+    void Play();        //< 再生
+    void Stop();        //< 停止
+    void Reset();       //< リセット
 
-    /// Load,Save
-    void LoadData();
-    void SaveData();
+    void LoadData(); //< データ読み込み
+    void SaveData(); //< データ保存
 
-    /// 状態取得
-    bool IsPlaying() const;
-    bool IsFinished() const;
+    bool IsPlaying() const; //< 再生中判定
+    bool IsFinished() const; //< 終了判定
 
 private:
-    /// Editor
-    void BindParams();
+    void BindParams();           //< パラメータバインド
+    void UpdateDissolveValues(); //< ディゾルブ値更新
+
+    /// <summary>
+    /// イージングタイプセレクタ
+    /// </summary>
+    /// <param name="label">ラベル</param>
+    /// <param name="target">ターゲット</param>
     void EasingTypeSelector(const char* label, int32_t& target);
 
-    /// ディゾルブ値の計算
-    void UpdateDissolveValues();
-
 private:
-    // GlobalParameter
     GlobalParameter* globalParameter_;
     std::string groupName_;
     std::string folderPath_ = "DissolveEditor";
-
-    // ディゾルブパラメータ
-    float startThreshold_ = 1.0f;
-    float maxTime_        = 1.0f;
+    float startThreshold_   = 1.0f;
+    float maxTime_          = 1.0f;
     float endThreshold_;
     float offsetTime_;
-    int32_t easeType_ = 0;
-
-    // 再生状態
-    PlayState playState_ = PlayState::STOPPED;
-    float currentTime_   = 0.0f;
-    float totalTime_     = 0.0f;
-
-    // 現在のディゾルブ値
+    int32_t easeType_       = 0;
+    PlayState playState_    = PlayState::STOPPED;
+    float currentTime_      = 0.0f;
+    float totalTime_        = 0.0f;
     float currentThreshold_ = 1.0f;
     bool currentEnable_     = false;
-
-    // イージング用
     Easing<float> thresholdEase_;
     float easedThreshold_ = 1.0f;
-
-    // UI表示
-    bool showControls_ = true;
+    bool showControls_    = true;
 
 public:
-    //--------------------------------------------------------------------------------------
+
     // getter
-    //--------------------------------------------------------------------------------------
     std::string GetGroupName() const { return groupName_; }
     float GetCurrentThreshold() const { return currentThreshold_; }
     bool IsDissolveEnabled() const { return currentEnable_; }
@@ -83,9 +82,7 @@ public:
     float GetMaxTime() const { return maxTime_; }
     float GetOffsetTime() const { return offsetTime_; }
 
-    //--------------------------------------------------------------------------------------
     // setter
-    //--------------------------------------------------------------------------------------
     void SetStartThreshold(float threshold) { startThreshold_ = threshold; }
     void SetEndThreshold(float threshold) { endThreshold_ = threshold; }
     void SetMaxTime(float time) { maxTime_ = time; }
