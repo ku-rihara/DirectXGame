@@ -22,7 +22,10 @@ public:
     void Update();
     void SkyBoxDraw();
   
-
+    /// <summary>
+    /// シーン切り替え
+    /// </summary>
+    /// <param name="sceneName"></param>
     void ChangeScene(const std::string& scenemane);
 
     ///===========================================================

@@ -8,7 +8,9 @@
 #include<string>
 #include<array>
 
-
+/// <summary>
+///  タイトルシーン
+/// </summary>
 class TitleScene :public BaseScene {
 private:
 	
