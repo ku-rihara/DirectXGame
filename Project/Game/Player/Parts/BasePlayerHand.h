@@ -7,6 +7,9 @@
 #include "BaseObject/BaseObject.h"
 #include "utility/ParticleEditor/ParticleEmitter.h"
 
+/// <summary>
+/// プレイヤーの手の基底クラス
+/// </summary>
 class BasePlayerHand : public BaseObject {
 public:
     virtual ~BasePlayerHand() = default;
@@ -14,32 +17,38 @@ public:
     /// public method
     ///=============================================
 
+    // 初期化、更新
     virtual void Init();
     virtual void Update();
-    virtual void AdjustParam() = 0;
+
+    virtual void AdjustParam() = 0; //< パラメータの調整
+
+    /// <summary>
+    /// ディゾルブ効果の適用
+    /// </summary>
+    /// <param name="dissolve">ディゾルブ値</param>
     virtual void DissolveAdapt(const float& dissolve);
 
-    ///-------------------------------------------------------------------------------------
-    /// Editor
-    ///-------------------------------------------------------------------------------------
-    void ParamLoadForImGui();
-    void AddParamGroup();
-    void SetValues();
-    void ApplyGlobalParameter();
-    void AdjustParamBase();
+    void SetBlendModeSub(); //< ブレンドモードをSubに設定
+    void SetBlendModeAdd(); //< ブレンドモードをAddに設定
 
-    virtual void SaveAndLoad();
+    void ParamLoadForImGui();    //< ImGui用パラメータロード
+    void AddParamGroup();        //< パラメータグループの追加
+    void SetValues();            //< 値の設定
+    void ApplyGlobalParameter(); //< グローバルパラメータの適用
+    void AdjustParamBase();      //< 基本パラメータの調整
+    virtual void SaveAndLoad();  //< セーブ・ロード
 
 protected:
     ///=============================================
     /// private variant
     ///=============================================
 
-    /// グローバルなパラメータ
+    /// グローバルパラメータ
     GlobalParameter* globalParameter_;
     std::string groupName_;
 
-    // エミッター
+    // emitter
     std::unique_ptr<ParticleEmitter> emitter_;
     Vector3 direction_;
 
@@ -64,8 +73,6 @@ public:
     ///========================================================
     virtual void SetRailParent(WorldTransform* parent) = 0;
     virtual void SetParent(WorldTransform* parent);
-    void SetBlendModeSub();
-    void SetBlendModeAdd();
     void SetObjTranslate(const Vector3& pos) { obj3d_->transform_.translation_ = pos; }
     void SetIsEmit(const bool& isEmit) { isEmit_ = isEmit; }
     void SetIsShadow(const bool& isShadow) { isShadow_ = isShadow; }

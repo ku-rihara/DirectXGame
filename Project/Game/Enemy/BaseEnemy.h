@@ -20,6 +20,10 @@ class GameCamera;
 class EnemyManager;
 class Combo;
 class AttackEffect;
+
+/// <summary>
+/// 敵の基底クラス
+/// </summary>
 class BaseEnemy : public BaseObject, public AABBCollider {
 public:
     enum class Type {
@@ -57,42 +61,91 @@ public:
     ///  public method
     ///========================================================================================
 
-    /// 初期化、更新、描画
+    // 初期化、更新
     virtual void Init(const Vector3& spownPos);
     virtual void Update();
+
+    /// <summary>
+    /// スプライトUIの表示
+    /// </summary>
+    /// <param name="viewProjection">ビュープロジェクション</param>
     virtual void DisplaySprite(const ViewProjection& viewProjection);
 
-    /// Rendition Init
-    void DamageRenditionInit();
-    void ThrustRenditionInit();
-    void DeathRenditionInit();
-    virtual void SpawnRenditionInit() = 0;
+    virtual void SpawnRenditionInit() = 0; //< スポーン演出初期化
 
-    void ScaleReset();
-    void RotateInit();
+    void DamageRenditionInit(); //< ダメージ演出初期化
+    void ThrustRenditionInit(); //< 突き飛ばし演出初期化
+    void DeathRenditionInit();  //< 死亡演出初期化
+    void ScaleReset();          //< スケールリセット
+    void RotateInit();          //< 回転初期化
 
-    /// jump
+    /// <summary>
+    /// ジャンプ処理
+    /// </summary>
+    /// <param name="speed">速度</param>
+    /// <param name="fallSpeedLimit">落下速度制限</param>
+    /// <param name="gravity">重力</param>
     void Jump(float& speed, const float& fallSpeedLimit, const float& gravity);
+
+    /// <summary>
+    /// 落下処理
+    /// </summary>
+    /// <param name="speed">速度</param>
+    /// <param name="fallSpeedLimit">落下速度制限</param>
+    /// <param name="gravity">重力</param>
+    /// <param name="isJump">ジャンプフラグ</param>
     void Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump);
 
+    /// <summary>
+    /// ターゲットへの方向取得
+    /// </summary>
+    /// <param name="target">ターゲット位置</param>
     Vector3 GetDirectionToTarget(const Vector3& target);
 
-    void TakeDamage(const float& par);
+    /// <summary>
+    /// ダメージ処理
+    /// </summary>
+    /// <param name="damageValue">ダメージ量</param>
+    void TakeDamage(const float& damageValue);
 
-    /// Behavior
+    /// <summary>
+    /// ビヘイビア変更
+    /// </summary>
+    /// <param name="behavior">新しいビヘイビア</param>
     void ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior);
+
+    /// <summary>
+    /// 移動ビヘイビア変更
+    /// </summary>
+    /// <param name="behavior">新しい移動ビヘイビア</param>
     void ChangeMoveBehavior(std::unique_ptr<BaseEnemyMoveBehavior> behavior);
-    void BackToDamageRoot();
-    void BehaviorChangeDeath();
+
+    void BackToDamageRoot(); //< ダメージルートに戻る
+    void BehaviorChangeDeath(); //< 死亡ビヘイビアに変更
 
     /// ====================================================================
     /// Collision
     /// ====================================================================
+
+    /// <summary>
+    /// 衝突開始時コールバック
+    /// </summary>
+    /// <param name="other">衝突相手のコライダー</param>
     void OnCollisionEnter([[maybe_unused]] BaseCollider* other) override;
+
+    /// <summary>
+    /// 衝突中コールバック
+    /// </summary>
+    /// <param name="other">衝突相手のコライダー</param>
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
+
     Vector3 GetCollisionPos() const override;
 
 private:
+    /// <summary>
+    /// 視野内判定
+    /// </summary>
+    /// <param name="viewProjection">ビュープロジェクション</param>
     bool IsInView(const ViewProjection& viewProjection) const;
 
 private:
@@ -153,5 +206,4 @@ public:
     void SetBodyColor(const Vector4& color);
     void SetIsDeath(const bool& is) { isDeath_ = is; }
     void SetGroupId(const int& groupId) { groupId_ = groupId; }
-
 };

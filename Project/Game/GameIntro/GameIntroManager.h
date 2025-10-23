@@ -7,6 +7,9 @@
 #include <memory>
 #include <vector>
 
+/// <summary>
+/// ゲームイントロ管理クラス
+/// </summary>
 class GameIntroManager {
 public:
     enum IntroStep {
@@ -28,40 +31,43 @@ public:
     // 初期化、更新
     void Init();
     void Update();
-    
-    // movieLine
-    void MovieLineUpdate();
-    void CheckMovieLineStateTransition();
 
-    // param Edit
-    void BindParam();
-    void AdjustParam();
+    void MovieLineUpdate();               //< ムービーライン更新
+    void CheckMovieLineStateTransition(); //< ムービーライン状態遷移チェック
 
-    // State
-    bool IsAllIntroFinished() const;
+    void BindParam();     //< パラメータバインド
+    void AdjustParam();   //< パラメータ調整
+
+    bool IsAllIntroFinished() const; //< 全イントロ終了判定
+
+    /// <summary>
+    /// 指定ステップの終了判定
+    /// </summary>
+    /// <param name="step">イントロステップ</param>
+    /// <returns>終了していればtrue</returns>
+    const bool& GetIsFinishStep(const IntroStep& step);
 
 private:
-    void ProcessInput();
+    
+    /// <summary>
+    /// 現在のイントロを更新
+    /// </summary>
+    /// <param name="speed">再生速度</param>
     void UpdateCurrentIntro(const float& speed);
-    void MoveToNextIntro();
+
+    void ProcessInput(); //< 入力処理
+    void MoveToNextIntro(); //< 次のイントロへ移行
 
 private:
     GlobalParameter* globalParameter_ = nullptr;
     const std::string groupName_      = "GameIntroManager";
-
     std::array<std::unique_ptr<BaseGameIntro>, static_cast<size_t>(IntroStep::COUNT)> introSequences_;
-    int32_t currentIndex_ = 0;
-    bool isInitialized_   = false;
-
-    // MovieLine管理
-    std::unique_ptr<MovieLine> movieLine_ = nullptr;
-    MovieLineState movieLineState_        = MovieLineState::NONE;
-
-    // speed Param
-    float currentPlaySpeedRate_ = 1.0f; //<現在再生スピード
-    float fastSpeedRate_        = 3.0f; //<早送りスピード
-
-    // Dependencies
+    int32_t currentIndex_                        = 0;
+    bool isInitialized_                          = false;
+    std::unique_ptr<MovieLine> movieLine_        = nullptr;
+    MovieLineState movieLineState_               = MovieLineState::NONE;
+    float currentPlaySpeedRate_                  = 1.0f;
+    float fastSpeedRate_                         = 3.0f;
     HowToOperate* pHowToOperate_                 = nullptr;
     GameCamera* pGameCamera_                     = nullptr;
     Player* pPlayer_                             = nullptr;
@@ -69,18 +75,13 @@ private:
     GameBackGroundObject* pGameBackGroundObject_ = nullptr;
 
 public:
-    //-------------------------------------------------------------------------------------
-    // getter method
-    //-------------------------------------------------------------------------------------
+    // getter
     const int32_t& GetCurrentIntroIndex() const { return currentIndex_; }
     const int32_t& GetTotalIntroCount() const { return static_cast<int32_t>(introSequences_.size()); }
     const float& GetCurrentPlaySpeedRate() const { return currentPlaySpeedRate_; }
-    const bool& GetIsFinishStep(const IntroStep& step);
     MovieLine* GetMovieLine() const { return movieLine_.get(); }
 
-    //-------------------------------------------------------------------------------------
-    // setter method
-    //-------------------------------------------------------------------------------------
+    // setter
     void SetHowToOperate(HowToOperate* howToOperate);
     void SetGameCamera(GameCamera* gameCamera);
     void SetPlayer(Player* player);

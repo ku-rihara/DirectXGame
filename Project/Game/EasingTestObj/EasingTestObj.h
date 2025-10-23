@@ -3,6 +3,10 @@
 #include "3d/WorldTransform.h"
 #include "Easing/Easing.h"
 #include "Easing/EasingSequence.h"
+
+/// <summary>
+/// イージングテスト用オブジェクトクラス
+/// </summary>
 class EasingTestObj {
 private:
     enum class AdaptType {
@@ -14,11 +18,13 @@ private:
 public:
     EasingTestObj();
     ~EasingTestObj();
+
+    // 初期化、更新
     void Init();
     void Update();
 
-    void Debug();
-    void ScaleEasing();
+    void Debug(); //< デバッグ処理
+    void ScaleEasing(); //< スケールイージング
 
 private:
     // モデル

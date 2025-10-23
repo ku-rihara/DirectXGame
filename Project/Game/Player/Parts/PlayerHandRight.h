@@ -2,6 +2,9 @@
 
 #include "Player/Parts/BasePlayerHand.h"
 
+/// <summary>
+/// プレイヤーの右手クラス
+/// </summary>
 class PlayerHandRight : public BasePlayerHand {
 private:
 private:
@@ -24,14 +27,29 @@ public:
     /// public method
     ///=============================================
 
+    // 初期化、更新
     void Init() override;
     void Update() override;
 
+    /// <summary>
+    /// 3コンボ目のレール更新
+    /// </summary>
+    /// <param name="speed">速度</param>
     void RailThreeComboUpdate(const float& speed);
-    void RailForthComboUpdate(const float& speed);
-    void AdjustParam() override;
-    void SaveAndLoad() override;
 
+    /// <summary>
+    /// 4コンボ目のレール更新
+    /// </summary>
+    /// <param name="speed">速度</param>
+    void RailForthComboUpdate(const float& speed);
+
+    void AdjustParam() override; //< パラメータの調整
+    void SaveAndLoad() override; //< セーブ・ロード
+
+    /// <summary>
+    /// ディゾルブ効果の適用
+    /// </summary>
+    /// <param name="dissolve">ディゾルブ値</param>
     virtual void DissolveAdapt(const float& dissolve);
 
     ///===========================================

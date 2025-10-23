@@ -22,10 +22,7 @@ void ComboUI::Update(const Vector2& scale, const float& alpha) {
     sprite_->uvTransform_.pos = (Vector2(uvPosX_, 0.0f));
     sprite_->SetAlpha(alpha);
 }
-void ComboUI::Draw() {
 
-    sprite_->Draw();
-}
 
 ///=========================================================
 /// パラメータ調整

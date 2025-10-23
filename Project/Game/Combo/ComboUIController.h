@@ -10,6 +10,9 @@
 #include <cstdint>
 #include <memory>
 
+/// <summary>
+/// コンボUIの制御クラス
+/// </summary>
 class ComboUIController {
 private:
     struct ScalingParameter {
@@ -20,43 +23,51 @@ public:
     ComboUIController()  = default;
     ~ComboUIController() = default;
 
-    // init update draw
-    void Init();
-    void Update(const int32_t& comboNum);
-    void Draw();
+   
+    void Init();//<初期化
+    void ChangeCountUPAnimation(); //< カウントアップアニメーション変更
 
+    /// <summary>
+    /// 更新
+    /// </summary>
+    /// <param name="comboNum">コンボ数</param>
+    void Update(const int32_t& comboNum);
+
+    /// <summary>
+    /// 時間に応じたアルファ値適応
+    /// </summary>
+    /// <param name="comboTime">コンボ時間</param>
+    /// <param name="comboMaxTime">コンボ最大時間</param>
     void AlphaAdaptForTime(const float& comboTime, const float& comboMaxTime);
 
-    // behavior
+    /// <summary>
+    /// ビヘイビア変更
+    /// </summary>
+    /// <param name="behavior">新しいビヘイビア</param>
     void ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> behavior);
-    void ChangeCountUPAnimation();
-    ///-------------------------------------------------------------------------------------
-    /// Editor
-    ///-------------------------------------------------------------------------------------
-    void AdjustParam();
-    void BindParams();
+
+    void AdjustParam(); //< パラメータ調整
+    void BindParams(); //< パラメータバインド
 
 private:
-    GlobalParameter* globalParameter_;        // グローバルパラメータ
+    GlobalParameter* globalParameter_; // グローバルパラメータ
     const std::string groupName_ = "ComboUI"; // グループ名
 
-    // parameter 
+    // parameter
     ScalingParameter parameter_;
 
-    // Variants 
+    // Variants
     Vector2 baseScale_;
     std::array<std::unique_ptr<ComboUI>, 3> comboSprites_;
     float alpha_;
 
-    // behavior 
+    // behavior
     std::unique_ptr<BaseComboUIBehavior> behavior_;
 
 public:
-    
     ///* getter *//
     const ScalingParameter& GetScalingParameter() const { return parameter_; }
 
     ///* setter *//
     void SetBaseScale(const Vector2& pos) { baseScale_ = pos; }
- 
 };

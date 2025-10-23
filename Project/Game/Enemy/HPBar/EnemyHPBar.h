@@ -3,23 +3,30 @@
 #include "Vector2.h"
 #include <memory>
 
+/// <summary>
+/// 敵のHPバー表示クラス
+/// </summary>
 class EnemyHPBar {
 public:
     EnemyHPBar()  = default;
     ~EnemyHPBar() = default;
 
-    // 初期化、更新、描画
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="hpMax">最大HP</param>
     void Init(const float& hpMax);
+
+    /// <summary>
+    /// 更新
+    /// </summary>
+    /// <param name="hp">現在のHP</param>
     void Update(const float& hp);
-    void Draw();
 
 private:
-
-    // スプライト
     std::unique_ptr<Sprite> sprite_;
     std::unique_ptr<Sprite> hpSprite_;
 
-    // parameter
     bool isSpawned_ = false;
     bool isDraw_    = false;
     float hpMax_;
@@ -29,6 +36,7 @@ private:
 public:
     // getter
     const bool& GetIsSpawned() const { return isSpawned_; }
+
     // setter
     void SetPosition(const Vector2& pos) { position_ = pos; }
     void SetIsSpawned(const bool& is) { isSpawned_ = is; }

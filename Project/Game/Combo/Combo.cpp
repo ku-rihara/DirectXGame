@@ -23,10 +23,6 @@ void Combo::Update() {
     uiController_->AlphaAdaptForTime(comboTime_, comboTimeMax_);
 }
 
-void Combo::Draw() {
-    uiController_->Draw();
-}
-
 ///==========================================================
 /// パラメータ調整
 ///==========================================================

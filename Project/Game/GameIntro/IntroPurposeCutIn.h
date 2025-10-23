@@ -7,6 +7,9 @@
 #include <cstdint>
 #include <memory>
 
+/// <summary>
+/// 目的カットイン表示演出クラス
+/// </summary>
 class IntroPurposeCutIn : public BaseGameIntro {
 public:
     enum class Step {
@@ -45,47 +48,54 @@ public:
     IntroPurposeCutIn()           = default;
     ~IntroPurposeCutIn() override = default;
 
-    // Init,Update
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="name">イントロ名</param>
     void Init(const std::string& name) override;
+
+    /// <summary>
+    /// 更新
+    /// </summary>
+    /// <param name="playSpeed">再生速度</param>
     void Update(const float& playSpeed) override;
-   
 
     // Param Edit
-    void AdjustParam() override;
-    void BindParams() override;
-    void AdjustUniqueParam() override;
+    void AdjustParam() override;       //< パラメータ調整
+    void BindParams() override;        //< パラメータバインド
+    void AdjustUniqueParam() override; //< 固有パラメータ調整
 
 private:
     // Step function
-    void SideAppearWait();
-    void SideAppear();
-    void CenterAppearWait();
-    void CenterAppear();
-    void CloseWait();
-    void Close();
-    void FinishWait();
-    void Finish();
+    void SideAppearWait();   //< サイド出現待機
+    void SideAppear();       //< サイド出現
+    void CenterAppearWait(); //< 中央出現待機
+    void CenterAppear();     //< 中央出現
+    void CloseWait();        //< 終了待機
+    void Close();            //< 終了
+    void FinishWait();       //< 完了待機
+    void Finish();           //< 完了
+    void EasingInit();       //< イージング初期化
 
-    void EasingInit();
-
-    // Step更新
+    /// <summary>
+    /// ステップ処理
+    /// </summary>
+    /// <param name="limitTime">制限時間</param>
+    /// <param name="nextStep">次のステップ</param>
+    /// <param name="enableEnemySpawn">敵生成有効化</param>
+    /// <returns>ステップ完了でtrue</returns>
     bool ProcessStep(const float& limitTime, const Step& nextStep, const bool& enableEnemySpawn = false);
 
 private:
     static void (IntroPurposeCutIn::* spFuncTable_[])();
 
 private:
-    // Parameters
     float sideAppearWaitTime_;
     float closeWaitTime_;
     float centerAppearWaitTime_;
     float finishWaitTime_;
-
-    // Objects
     std::unique_ptr<Sprite> backLineSprite_;
     std::array<std::unique_ptr<Sprite>, static_cast<size_t>(SpritePos::COUNT)> sprites_;
     SpriteVariable spriteVariable_;
-
-    // State
     Step step_ = Step::SideAppearWait;
 };

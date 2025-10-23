@@ -3,27 +3,34 @@
 #include "Vector2.h"
 #include <memory>
 
+/// <summary>
+/// 未発見時に表示されるスプライトクラス
+/// </summary>
 class NotFindSprite {
 public:
     // 初期化、更新、描画
     void Init();
     void Update();
-    void Draw();
+   
+    /// <summary>
+    /// スケールの設定
+    /// </summary>
+    /// <param name="scale">設定するスケール</param>
+    void SetScale(const Vector2& scale);
 
 private:
-	
-	Vector2 position_;
-	std::unique_ptr<Sprite> sprite_;
+    Vector2 position_;
+    std::unique_ptr<Sprite> sprite_;
 
-	bool isSpawned_ = false;
-	float alpha_;
+    bool isSpawned_ = false;
+    float alpha_;
 
 public:
-	//getter
-	bool GetIsSpawned() const { return isSpawned_; }
-	// setter
+    // getter
+    bool GetIsSpawned() const { return isSpawned_; }
+
+    // setter
     void SetPosition(const Vector2& pos) { position_ = pos; }
     void SetIsSpawned(const bool& is) { isSpawned_ = is; }
     void SetAlpha(const float& a) { alpha_ = a; }
-	void SetScale(const Vector2& scale);
 };

@@ -2,6 +2,9 @@
 
 #include "BasePlayerBehavior.h"
 
+/// <summary>
+/// プレイヤージャンプ振る舞いクラス
+/// </summary>
 class PlayerJump : public BasePlayerBehavior {
 private:
     float speed_;
@@ -11,7 +14,7 @@ private:
 
     };
     /// ===================================================
-    /// private varians
+    /// private variable
     /// ===================================================
     Step step_ = Step::START;
 
@@ -20,7 +23,6 @@ public:
     PlayerJump(Player* player);
     ~PlayerJump();
 
-    void Update() override;
-
-    void Debug() override;
+    void Update() override; //< 更新
+    void Debug() override; //< デバッグ
 };

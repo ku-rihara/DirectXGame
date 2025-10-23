@@ -8,26 +8,25 @@
 
 constexpr int32_t kComboLevel = 5;
 
+/// <summary>
+/// コンボシステムの管理クラス
+/// </summary>
 class Combo {
 public:
     Combo()  = default;
     ~Combo() = default;
 
-    // init update draw
+    // 初期化、更新
     void Init();
     void Update();
-    void Draw();
+   
+    void ComboCountUP();        //< コンボカウント増加
+    void ComboTimerDecrement(); //< コンボタイマー減少
+    void LevelUp();             //< レベルアップ
+    void Reset();               //< リセット
 
-    void ComboCountUP();
-    void ComboTimerDecrement();
-    void LevelUp();
-    void Reset();
-
-    ///-------------------------------------------------------------------------------------
-    /// Editor
-    ///-------------------------------------------------------------------------------------
-    void AdjustParam();
-    void BindParams();
+    void AdjustParam(); //< パラメータ調整
+    void BindParams(); //< パラメータバインド
 
 private:
     // UIコントローラ
@@ -45,7 +44,7 @@ private:
 
     bool isReset_ = false;
 
-public: 
+public:
     // Getter
     const int32_t& GetComboCount() const { return comboCount_; }
     const int32_t& GetCurrentLevel() const { return currentLevel_; }

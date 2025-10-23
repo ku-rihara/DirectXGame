@@ -1,13 +1,15 @@
 #pragma once
-
 #include "2d/Sprite.h"
+#include "Easing/Easing.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
 #include "Vector2.h"
-#include"Easing/Easing.h"
 #include <array>
 #include <memory>
 #include <string>
 
+/// <summary>
+/// ムービーライン表示クラス
+/// </summary>
 class MovieLine {
 public:
     enum class Type {
@@ -20,18 +22,18 @@ public:
     MovieLine()  = default;
     ~MovieLine() = default;
 
+    // 初期化、更新
     void Init();
-    void AppearUpdate();
-    void ExitUpdate();
+    void AppearUpdate(); //< 出現更新
+    void ExitUpdate(); //< 退出更新
 
     // editor
-    void AdjustParam();
-    void BindParams();
+    void AdjustParam(); //< パラメータ調整
+    void BindParams(); //< パラメータバインド
 
 private:
     GlobalParameter* globalParameter_;
     const std::string groupName_ = "MovieLine";
-
     std::array<std::unique_ptr<Sprite>, 2> sprite_;
     std::array<Vector2, 2> appearPosition_;
     std::array<Vector2, 2> appearAdaptPos_;

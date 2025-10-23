@@ -1,22 +1,33 @@
 #pragma once
-#include"utility/TimeScaleEditor/TimeScaleController.h"
-#include"utility/PostEffectEditor/PostEffectController.h"
+#include "utility/PostEffectEditor/PostEffectController.h"
+#include "utility/TimeScaleEditor/TimeScaleController.h"
 #include <memory>
 
+/// <summary>
+/// 攻撃時のエフェクト管理クラス
+/// </summary>
 class AttackEffect {
 public:
-    AttackEffect()=default;
+    AttackEffect()  = default;
     ~AttackEffect() = default;
 
-    void Init();
-    void Update();
-    void PlayHitStop(const std::string& timeScaleName);
-    void PlayPostEffect(const std::string& effectName);
+    void Init();         //< 初期化
+    void Update();       //< 更新
+    void EditorUpdate(); //< エディタ更新
 
-    void EditorUpdate();
+    /// <summary>
+    /// ヒットストップの再生
+    /// </summary>
+    /// <param name="timeScaleName">タイムスケール名</param>
+    void PlayHitStop(const std::string& timeScaleName);
+
+    /// <summary>
+    /// ポストエフェクトの再生
+    /// </summary>
+    /// <param name="effectName">エフェクト名</param>
+    void PlayPostEffect(const std::string& effectName);
 
 private:
     std::unique_ptr<TimeScaleController> timeScaleController_;
-    std::unique_ptr<PostEffectController>postEffectController_;
-
+    std::unique_ptr<PostEffectController> postEffectController_;
 };

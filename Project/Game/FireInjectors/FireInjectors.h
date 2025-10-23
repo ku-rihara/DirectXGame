@@ -1,5 +1,4 @@
 #pragma once
-#include "3d/ViewProjection.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
 #include "utility/PutObjForBlender/PutObjForBlender.h"
 #include <cstdint>
@@ -7,32 +6,32 @@
 #include <string>
 
 class Combo;
+
+/// <summary>
+/// 炎噴射の演出装置クラス
+/// </summary>
 class FireInjectors {
 public:
+    // 初期化、更新
     void Init();
     void Update();
 
-    void Spawn();
-    void Launch();
+    void Spawn(); //< 生成
+    void Launch(); //< 発射
 
-    ///-------------------------------------------------------------------------------------
-    /// Editor
-    ///-------------------------------------------------------------------------------------
-    void AdjustParam();
-    void BindParams();
+    void AdjustParam(); //< パラメータ調整
+    void BindParams(); //< パラメータバインド
 
 private:
     std::unique_ptr<PutObjForBlender> putObjForBlender_ = nullptr;
-
-    GlobalParameter* globalParameter_; 
-    const std::string groupName_ = "FireInjectors"; 
-
+    GlobalParameter* globalParameter_;
+    const std::string groupName_ = "FireInjectors";
     Combo* pCombo_;
-
     int32_t fireShotComboNum_;
     int prevComboCount_ = 0;
     bool isEasing_;
 
 public:
+    // setter
     void SetCombo(Combo* combo);
 };

@@ -9,47 +9,50 @@ class GameBackGroundObject;
 class GameCamera;
 class HowToOperate;
 
+/// <summary>
+/// ゲームイントロ基底クラス
+/// </summary>
 class BaseGameIntro {
 public:
     BaseGameIntro()          = default;
     virtual ~BaseGameIntro() = default;
 
-    // Init,Update
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="name">イントロ名</param>
     virtual void Init(const std::string& name);
+
+    /// <summary>
+    /// 更新
+    /// </summary>
+    /// <param name="playSpeed">再生速度</param>
     virtual void Update(const float& playSpeed);
-   
+
     // Param Edit
-    virtual void BindParams();
-    virtual void AdjustParam();
-    virtual void AdjustUniqueParam() = 0;
+    virtual void BindParams();            //< パラメータバインド
+    virtual void AdjustParam();           //< パラメータ調整
+    virtual void AdjustUniqueParam() = 0; //< 固有パラメータ調整
 
 protected:
     GlobalParameter* globalParameter_ = nullptr;
     std::string groupName_;
-
-    // other class
     FireInjectors* pFireInjectors_               = nullptr;
     GameCamera* pGameCamera_                     = nullptr;
     Player* pPlayer_                             = nullptr;
     HowToOperate* pHowToOperate_                 = nullptr;
     GameBackGroundObject* pGameBackGroundObject_ = nullptr;
-
-    // Common state
-    bool isFinish_         = false;
-    bool isAbleEnemySpawn_ = false;
-    float currentTime_     = 0.0f;
+    bool isFinish_                               = false;
+    bool isAbleEnemySpawn_                       = false;
+    float currentTime_                           = 0.0f;
     float playSpeed_;
 
 public:
-    // -------------------------------------------------------------------------------
-    // Getters
-    // -------------------------------------------------------------------------------
+    // getter
     const bool& GetIsFinish() const { return isFinish_; }
     const bool& GetIsAbleEnemySpawn() const { return isAbleEnemySpawn_; }
 
-    // -------------------------------------------------------------------------------
-    // Setters
-    // -------------------------------------------------------------------------------
+    // setter
     void SetHowToOperate(HowToOperate* howToOperate) { pHowToOperate_ = howToOperate; }
     void SetGameCamera(GameCamera* gameCamera) { pGameCamera_ = gameCamera; }
     void SetPlayer(Player* player) { pPlayer_ = player; }

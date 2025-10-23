@@ -5,6 +5,9 @@
 // std
 #include <string>
 
+/// <summary>
+/// オブジェクトの基底クラス
+/// </summary>
 class BaseObject {
 protected:
     /// ===================================================
@@ -22,12 +25,11 @@ public:
     /// public method
     /// ===================================================
 
-    // 初期化、更新、描画
+    // 初期化、更新
     virtual void Init();
     virtual void Update();
 
-    // 中心座標取得
-    virtual Vector3 GetWorldPosition() const;
+    virtual Vector3 GetWorldPosition() const; //< 中心座標取得
 
     /// ===================================================
     /// getter

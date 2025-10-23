@@ -1,32 +1,33 @@
 #pragma once
 
-#include"BaseTitleBehavior.h"
-#include"Easing/Easing.h"
+#include "BaseTitleBehavior.h"
+#include "Easing/Easing.h"
 
+/// <summary>
+/// タイトル待機振る舞いクラス
+/// </summary>
 class TitleWait : public BaseTitleBehavior {
 
-	enum class STEP {
-		PRESS,
-		RESTORATIVE,
-	};
-	
+    enum class STEP {
+        PRESS,
+        RESTORATIVE,
+    };
+
 private:
-	
-	/// ===================================================
-	///private varians
-	/// ===================================================
-	STEP  step_;
-	Easing<float> pressEase_;
+    /// ===================================================
+    /// private variable
+    /// ===================================================
+    STEP step_;
+    Easing<float> pressEase_;
     float tempScaleY_;
-	float  pressScale_;
-	float waitTime_;
+    float pressScale_;
+    float waitTime_;
 
 public:
-	//コンストラクタ
+    // コンストラクタ
     TitleWait(Player* player);
-	~TitleWait();
+    ~TitleWait();
 
-	void Update()override;
-	void Debug()override;
-
+    void Update() override; //< 更新
+    void Debug() override;  //< デバッグ
 };

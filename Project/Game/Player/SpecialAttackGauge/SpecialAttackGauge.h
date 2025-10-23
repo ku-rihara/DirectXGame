@@ -4,20 +4,20 @@
 #include "utility/ParameterEditor/GlobalParameter.h"
 #include <memory>
 
+/// <summary>
+/// 必殺技ゲージ管理クラス
+/// </summary>
 class SpecialAttackGauge {
 public:
-
-    //　init,update,draw
+    // 初期化、更新
     void Init();
     void Update();
-    void SpriteDraw();
- 
-    //加算システム
-    void AddGauge();
+
+    void SpriteDraw(); //< スプライト描画
+    void AddGauge();   //< ゲージ加算
 
 private:
-
-    //gauge
+    // gauge
     float gauge_;
     float gaugeUpRate_;
     float gaugeMax_;
@@ -26,11 +26,10 @@ private:
     std::unique_ptr<Sprite> gaugeFrameSprite_;
     std::unique_ptr<Sprite> gaugeSprite_;
 
-    //position
+    // position
     Vector2 gaugeFramePos_;
     Vector2 gaugePos_;
 
-    // glovalParameter
+    // globalParameter
     GlobalParameter* globalParameter_;
-
 };

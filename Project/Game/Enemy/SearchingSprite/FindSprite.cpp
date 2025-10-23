@@ -12,7 +12,6 @@ void FindSprite::Init() {
 }
 
 void FindSprite::Update() {
-
     // Posセット
     sprite_->transform_.pos = position_;
 }

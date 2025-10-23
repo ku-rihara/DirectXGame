@@ -11,6 +11,9 @@
 #include <memory>
 #include <string>
 
+/// <summary>
+/// プレイヤーのエフェクト管理クラス
+/// </summary>
 class PlayerEffects {
 public:
     struct ParticleEffect {
@@ -25,20 +28,28 @@ public:
     ///  public method
     /// ===================================================
 
-    ///* 初期化、更新、描画
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="transform">ワールド変換データ</param>
     void Init(WorldTransform* transform);
+
+    /// <summary>
+    /// 更新
+    /// </summary>
+    /// <param name="position">位置座標</param>
     void Update(const Vector3& position);
 
-    void SpecialAttackRenditionInit();
-    void FallEffectRenditionInit();
-    void RushAttackEmit();
-    void RushAttackRingEffectEmit();
+    void SpecialAttackRenditionInit(); //< 必殺技演出の初期化
+    void FallEffectRenditionInit(); //< 落下エフェクト演出の初期化
+    void RushAttackEmit(); //< ラッシュ攻撃エフェクトの放出
+    void RushAttackRingEffectEmit(); //< ラッシュ攻撃リングエフェクトの放出
 
 private:
     /// ===================================================
-    /// private variaus
+    /// private variables
     /// ===================================================
-  
+
     std::unique_ptr<ParticleEmitter> fallCrack_;
     std::array<ParticleEffect, 1> debriParticle_;
     std::array<ParticleEffect, 1> rushParticle_;
@@ -48,11 +59,7 @@ private:
 
     int32_t starSound_;
 
-
-    /// ====================================================================
-    /// Editor
-    /// ====================================================================
-
+public:
     /// =========================================================================================
     /// getter
     /// =========================================================================================

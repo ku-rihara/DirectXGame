@@ -2,9 +2,6 @@
 
 Vector3 Field::baseScale_ = {70, 1, 70};
 
-Field::Field() {}
-
-Field::~Field() {}
 
 void Field::Init() {
 

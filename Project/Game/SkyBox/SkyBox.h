@@ -1,23 +1,32 @@
 #pragma once
-#include "Primitive/PrimitiveBox.h"
 #include "3d/WorldTransform.h"
+#include "Primitive/PrimitiveBox.h"
 #include <memory>
+
+/// <summary>
+/// スカイボックス管理クラス
+/// </summary>
 class SkyBox {
-public:
-
-private:
-	// ワールド変換データ
-	WorldTransform transform_;
-	// モデル
-    std::unique_ptr<PrimitiveBox> primitiveBox_ = nullptr;
-
-	
 public:
     SkyBox();
     ~SkyBox();
-	void Init();
-	void Update();
-	void Draw(ViewProjection& viewProjection);
 
-	void Debug();
+    // 初期化、更新、デバッグ
+    void Init();
+    void Update();
+    void Debug(); 
+
+    /// <summary>
+    /// 描画
+    /// </summary>
+    /// <param name="viewProjection">ビュープロジェクション</param>
+    void Draw(ViewProjection& viewProjection);
+
+private:
+    // ワールド変換データ
+    WorldTransform transform_;
+    // モデル
+    std::unique_ptr<PrimitiveBox> primitiveBox_ = nullptr;
+
+public:
 };

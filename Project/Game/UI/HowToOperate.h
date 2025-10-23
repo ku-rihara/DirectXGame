@@ -4,18 +4,21 @@
 #include "Vector2.h"
 #include <memory>
 
+/// <summary>
+/// 操作方法表示クラス
+/// </summary>
 class HowToOperate {
 public:
-    HowToOperate() = default;
+    HowToOperate()  = default;
     ~HowToOperate() = default;
-    // 初期化
+
+    // 初期化、更新
     void Init();
-    // 更新
     void Update();
-    void ScalingEasing();
-    // 描画
-    void Draw();
-    void Debug();
+
+    void ScalingEasing(); //< スケールイージング
+    void Draw();          //< 描画
+    void Debug();         //< デバッグ
 
 private:
     // 座標

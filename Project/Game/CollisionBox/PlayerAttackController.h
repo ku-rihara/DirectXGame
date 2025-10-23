@@ -7,6 +7,10 @@
 #include <string>
 
 class Combo;
+
+/// <summary>
+/// プレイヤー攻撃の制御クラス
+/// </summary>
 class PlayerAttackController : public BaseAABBCollisionBox {
 public:
     enum class AttackType {
@@ -35,34 +39,64 @@ public:
     PlayerAttackController()           = default;
     ~PlayerAttackController() override = default;
 
+    // 初期化、更新、描画
     void Init() override;
     void Update() override;
     void Draw() override;
+
+    /// <summary>
+    /// タイマー更新
+    /// </summary>
+    /// <param name="deltaTime">デルタタイム</param>
     void TimerUpdate(const float& deltaTime);
 
-    // transformSet
+    /// <summary>
+    /// プレイヤーのベーストランスフォーム設定
+    /// </summary>
+    /// <param name="playerBaseTransform">プレイヤーのベーストランスフォーム</param>
     void SetPlayerBaseTransform(const WorldTransform* playerBaseTransform);
+
+    /// <summary>
+    /// 親トランスフォームの設定
+    /// </summary>
+    /// <param name="transform">親のワールドトランスフォーム</param>
     void SetParentTransform(WorldTransform* transform) override;
 
+    /// <summary>
+    /// 攻撃タイプの変更
+    /// </summary>
+    /// <param name="attackType">攻撃タイプ</param>
     void ChangeAttackType(const AttackType& attackType);
 
-    // attackValue
-    float GetAttackPower();
+    /// <summary>
+    /// 攻撃速度取得
+    /// </summary>
+    /// <param name="baseTime">基本時間</param>
     float GetAttackSpeed(const float& baseTime);
 
-    // AttackTypeを文字列に変換
+    /// <summary>
+    /// 攻撃タイプを文字列に変換
+    /// </summary>
+    /// <param name="type">攻撃タイプ</param>
     std::string GetAttackTypeName(const AttackType& type);
 
-    void ResetComboEffect();
-
+    /// <summary>
+    /// 衝突開始時コールバック
+    /// </summary>
+    /// <param name="other">衝突相手のコライダー</param>
     void OnCollisionEnter([[maybe_unused]] BaseCollider* other) override;
+
+    /// <summary>
+    /// 衝突中コールバック
+    /// </summary>
+    /// <param name="other">衝突相手のコライダー</param>
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 
-    ///-------------------------------------------------------------------------------------
-    /// Editor
-    ///-------------------------------------------------------------------------------------
-    void AdjustParam();
-    void BindParams();
+    void AdjustParam(); //< パラメータ調整
+    void BindParams(); //< パラメータバインド
+
+    float GetAttackPower(); //< 攻撃力取得
+    void ResetComboEffect(); //< コンボエフェクトリセット
 
 private:
     GlobalParameter* globalParameter_;
@@ -85,11 +119,12 @@ private:
 public:
     AttackType attackType_;
 
-public: // accessor
+public:
+
     Vector3 GetCollisionPos() const override;
     const bool& GetIsSlow() const { return isSlow_; }
     const bool& GetIsHitStop() const { return isHitStop_; }
-   const AttackType& GetTagList() const { return attackType_; }
+    const AttackType& GetTagList() const { return attackType_; }
 
     void SetIsSlow(const bool& is) { isSlow_ = is; }
     void SetIsHitStop(const bool& is) { isHitStop_ = is; }

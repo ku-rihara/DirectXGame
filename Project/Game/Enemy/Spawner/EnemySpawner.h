@@ -10,9 +10,12 @@
 #include <vector>
 
 class EnemyManager;
+
+/// <summary>
+/// 敵の生成管理クラス
+/// </summary>
 class EnemySpawner {
 private: // struct
-    // スポーンポイント構造体
     struct SpawnPoint {
         std::string name;
         int32_t groupId;
@@ -25,7 +28,6 @@ private: // struct
         bool hasSpawned = false;
     };
 
-    // グループ情報構造体
     struct SpawnGroup {
         int32_t id;
         int32_t objectCount;
@@ -41,29 +43,57 @@ public:
     EnemySpawner()  = default;
     ~EnemySpawner() = default;
 
-    // 初期化、更新
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="jsonData">スポーン設定のJSONデータ</param>
     void Init(const std::string& jsonData);
+
+    /// <summary>
+    /// 更新
+    /// </summary>
+    /// <param name="deltaTime">デルタタイム</param>
     void Update(const float& deltaTime);
 
-    // 敵が倒されたときの通知
+    /// <summary>
+    /// 敵が倒されたときの通知
+    /// </summary>
+    /// <param name="groupId">グループID</param>
     void OnEnemyDestroyed(const int& groupId);
 
     ///=======================================================================================
     /// Editor method
     ///=======================================================================================
+
+    /// <summary>
+    /// JSONデータの解析
+    /// </summary>
+    /// <param name="jsonData">JSONデータ</param>
     void ParseJsonData(const std::string& jsonData);
-    void SettingGroupSpawnPos();
-    void UpdateCurrentGroup();
+
+    void SettingGroupSpawnPos(); //< グループスポーン位置設定
+    void UpdateCurrentGroup();  //< 現在のグループ更新
+
+    /// <summary>
+    /// グループ内の敵を生成
+    /// </summary>
+    /// <param name="group">スポーングループ</param>
     void SpawnEnemiesInGroup(SpawnGroup& group);
+
+    /// <summary>
+    /// グループが完了したかチェック
+    /// </summary>
+    /// <param name="groupId">グループID</param>
+    /// <returns>完了していればtrue</returns>
     bool IsGroupCompleted(const int& groupId) const;
-    void ActivateNextGroup();
+
+    void ActivateNextGroup(); //< 次のグループをアクティブ化
 
 private:
     using json = nlohmann::json;
     json jsonData_;
 
 private:
-    // 敵の種類リスト
     std::array<std::string, 2> enemyTypes_ = {"NormalEnemy", "StrongEnemy"};
     std::vector<SpawnPoint> spawnPoints_;
     std::vector<SpawnGroup> spawnGroups_;

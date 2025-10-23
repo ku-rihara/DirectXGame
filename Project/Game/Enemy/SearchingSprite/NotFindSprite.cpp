@@ -18,10 +18,6 @@ void NotFindSprite::Update() {
     sprite_->transform_.pos = position_;
 }
 
-void NotFindSprite::Draw() {
-    // 描画
-    sprite_->Draw();
-}
 
 void NotFindSprite::SetScale(const Vector2& scale) {
     sprite_->transform_.scale = scale;

@@ -5,7 +5,17 @@
 
 #include "Easing/Easing.h"
 
+/// <summary>
+/// タイトルロゴ管理クラス
+/// </summary>
 class TitleRogo {
+public:
+    // 初期化、更新
+    void Init();
+    void Update();
+
+    void Draw();      //< 描画
+    void EasingSet(); //< イージングの設定
 private:
     enum class Step {
         PUNCH,
@@ -34,14 +44,4 @@ private:
     Vector2 punchSpriteScale_;
     Vector2 rushSpriteScale_;
     Vector2 bottomSpriteScale_;
-
-public:
-    // 初期化
-    void Init();
-    // 更新
-    void Update();
-    // 描画
-    void Draw();
-
-    void EasingSet();
 };

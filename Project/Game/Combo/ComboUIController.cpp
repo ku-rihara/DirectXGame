@@ -34,12 +34,6 @@ void ComboUIController::Update(const int32_t& comboNum) {
     }
 }
 
-void ComboUIController::Draw() {
-    for (int32_t i = 0; i < comboSprites_.size(); ++i) {
-        comboSprites_[i]->Draw();
-    }
-}
-
 void ComboUIController::AlphaAdaptForTime(const float& comboTime, const float& comboMaxTime) {
 
     alpha_ = std::clamp(comboTime / comboMaxTime, 0.0f, 1.0f);

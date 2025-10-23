@@ -7,7 +7,7 @@
 #include "BaseEnemy.h"
 
 /// <summary>
-/// 敵クラス
+/// 通常敵クラス
 /// </summary>
 class NormalEnemy : public BaseEnemy {
 public:
@@ -17,14 +17,22 @@ public:
     ///  public method
     ///========================================================================================
 
-    // 初期化、更新、描画
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="spawnPos">スポーン位置</param>
     void Init(const Vector3& spownPos) override;
+
+    // 初期化、更新
     void Update() override;
-  
-    /// Hpバー処理
+
+    /// <summary>
+    /// スプライト表示
+    /// </summary>
+    /// <param name="viewProjection">ビュープロジェクション</param>
     void DisplaySprite(const ViewProjection& viewProjection) override;
 
-    void SpawnRenditionInit() override;
+    void SpawnRenditionInit() override; //< スポーン演出初期化
 
 private:
 private:
