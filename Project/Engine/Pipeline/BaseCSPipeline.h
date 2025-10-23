@@ -8,24 +8,43 @@
 class DirectXCommon;
 enum class BlendMode;
 
+/// <summary>
+/// コンピュートシェーダパイプラインの基底クラス
+/// </summary>
 class BaseCSPipeline {
 public:
     BaseCSPipeline()          = default;
     virtual ~BaseCSPipeline() = default;
 
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="dxCommon">DirectXCommon</param>
     virtual void Init(DirectXCommon* dxCommon);
+
+    /// <summary>
+    /// 描画前処理
+    /// </summary>
+    /// <param name="commandList">コマンドリスト</param>
     virtual void PreDraw(ID3D12GraphicsCommandList* commandList);
 
-    // Dispatch
-    virtual void Dispatch(ID3D12GraphicsCommandList* commandList,const UINT& numThreadsX) = 0;
+    /// <summary>
+    /// ディスパッチ実行
+    /// </summary>
+    /// <param name="commandList">コマンドリスト</param>
+    /// <param name="numThreadsX">スレッド数X</param>
+    virtual void Dispatch(ID3D12GraphicsCommandList* commandList, const UINT& numThreadsX) = 0;
 
 protected:
-    virtual void CreateRootSignature()   = 0;
-    virtual void CreateComputePipeline() = 0;
+    virtual void CreateRootSignature()   = 0; //< ルートシグネチャ作成
+    virtual void CreateComputePipeline() = 0; //< コンピュートパイプライン作成
 
+    /// <summary>
+    /// ルートシグネチャのシリアライズと作成
+    /// </summary>
+    /// <param name="desc">ルートシグネチャの設定</param>
     void SerializeAndCreateRootSignature(const D3D12_ROOT_SIGNATURE_DESC& desc);
 
-    // Common member variables
     DirectXCommon* dxCommon_ = nullptr;
     Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;
     Microsoft::WRL::ComPtr<ID3DBlob> signatureBlob_;
@@ -34,12 +53,10 @@ protected:
     Microsoft::WRL::ComPtr<ID3D12PipelineState> computePipelineState_;
 
 private:
-    // コピー禁止
     BaseCSPipeline(const BaseCSPipeline&)            = delete;
     BaseCSPipeline& operator=(const BaseCSPipeline&) = delete;
 
 public:
-    // getter
     DirectXCommon* GetDxCommon() const { return dxCommon_; }
     ID3D12RootSignature* GetRootSignature() const { return rootSignature_.Get(); }
     ID3D12PipelineState* GetComputePipelineState() const { return computePipelineState_.Get(); }

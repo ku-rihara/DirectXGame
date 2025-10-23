@@ -1,9 +1,9 @@
 #pragma once
 
+#include "Material/ModelMaterial.h"
 #include <array>
 #include <d3d12.h>
 #include <functional>
-#include <Material/ModelMaterial.h>
 #include <memory>
 #include <unordered_map>
 
@@ -19,6 +19,9 @@ enum class CSPipelineType {
     Count
 };
 
+/// <summary>
+/// コンピュートシェーダパイプライン管理クラス
+/// </summary>
 class CSPipelineManager {
 public:
     static CSPipelineManager* GetInstance();
@@ -28,19 +31,35 @@ public:
     CSPipelineManager(CSPipelineManager&&)                 = delete;
     CSPipelineManager& operator=(CSPipelineManager&&)      = delete;
 
-    // 初期化、描画前処理、ディスパッチ
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="dxCommon">DirectXCommon</param>
     void Init(DirectXCommon* dxCommon);
+
+    /// <summary>
+    /// 描画前処理
+    /// </summary>
+    /// <param name="type">パイプラインタイプ</param>
+    /// <param name="commandList">コマンドリスト</param>
     void PreDraw(const CSPipelineType& type, ID3D12GraphicsCommandList* commandList) const;
+
+    /// <summary>
+    /// ディスパッチ実行
+    /// </summary>
+    /// <param name="type">パイプラインタイプ</param>
+    /// <param name="commandList">コマンドリスト</param>
+    /// <param name="numThreadsX">スレッド数X</param>
     void DisPatch(const CSPipelineType& type, ID3D12GraphicsCommandList* commandList, const UINT& numThreadsX);
 
-    private : CSPipelineManager() = default;
-    ~CSPipelineManager()          = default;
+private:
+    CSPipelineManager()  = default;
+    ~CSPipelineManager() = default;
 
 private:
     std::array<std::unique_ptr<BaseCSPipeline>, static_cast<size_t>(CSPipelineType::Count)> pipelines_;
     DirectXCommon* dxCommon_ = nullptr;
 
 public:
-    // getter
     BaseCSPipeline* GetPipeline(const CSPipelineType& type) const;
 };

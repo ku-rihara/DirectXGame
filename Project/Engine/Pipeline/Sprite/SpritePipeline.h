@@ -1,37 +1,47 @@
 #pragma once
-#include "Dx/DirectXCommon.h"
 #include "../BasePipeline.h"
+#include "Dx/DirectXCommon.h"
 #include <dxcapi.h>
 
+/// <summary>
+/// スプライト描画パイプラインクラス
+/// </summary>
 class SpritePipeline : public BasePipeline {
 public:
-   
     SpritePipeline()  = default;
     ~SpritePipeline() = default;
 
-    // 初期化
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="dxCommon">DirectXCommon</param>
     void Init(DirectXCommon* dxCommon) override;
-    // 共通描画処理
+
+    /// <summary>
+    /// 描画前処理
+    /// </summary>
+    /// <param name="commandList">コマンドリスト</param>
     void PreDraw(ID3D12GraphicsCommandList* commandList) override;
-    // Blend Set
+
+    /// <summary>
+    /// ブレンドモード設定
+    /// </summary>
+    /// <param name="commandList">コマンドリスト</param>
+    /// <param name="blendMode">ブレンドモード</param>
     void PreBlendSet(ID3D12GraphicsCommandList* commandList, const BlendMode& blendMode) override;
 
 private:
-    // ルートシグネチャの作成
-    void CreateRootSignature() override;
-    // グラフィックスパイプラインの生成
-    void CreateGraphicsPipeline() override;
+    void CreateRootSignature() override; //< ルートシグネチャ作成
+    void CreateGraphicsPipeline() override; //< グラフィックスパイプライン作成
 
-private: // メンバ変数
+private:
     D3D12_STATIC_SAMPLER_DESC staticSamplers_[1];
-  
-  
+
     Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob_;
     Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob_;
 
     Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_;
 
 public:
-    // getter
     ID3D12PipelineState* GetGraphicsPipelineStateSprite() const { return graphicsPipelineState_.Get(); }
 };

@@ -10,21 +10,33 @@
 class DirectXCommon;
 class ViewProjection;
 
+/// <summary>
+/// ポストエフェクトの基底クラス
+/// </summary>
 class BasePostEffect {
 protected:
-    virtual void CreateGraphicsPipeline();
-    virtual void CreateRootSignature();
+    virtual void CreateGraphicsPipeline(); //< グラフィックスパイプライン作成
+    virtual void CreateRootSignature(); //< ルートシグネチャ作成
 
 public:
     BasePostEffect()          = default;
     virtual ~BasePostEffect() = default;
 
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="dxCommon">DirectXCommon</param>
     virtual void Init(DirectXCommon* dxCommon);
+
+    /// <summary>
+    /// 描画ステート設定
+    /// </summary>
+    /// <param name="commandList">コマンドリスト</param>
     virtual void SetDrawState(ID3D12GraphicsCommandList* commandList);
 
-    virtual void Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) = 0;
-    virtual void CreateConstantBuffer()                                        = 0;
-    virtual void DebugParamImGui()                                             = 0;
+    virtual void Draw([[maybe_unused]] ID3D12GraphicsCommandList* commandList) = 0; //< 描画処理
+    virtual void CreateConstantBuffer()                                        = 0; //< 定数バッファ作成
+    virtual void DebugParamImGui()                                             = 0; //< ImGuiデバッグパラメータ
 
 protected:
     DirectXCommon* dxCommon_ = nullptr;
