@@ -11,7 +11,7 @@ void InitParticlePipeline::Init(DirectXCommon* dxCommon) {
 
 void InitParticlePipeline::CreateRootSignature() {
     // DescriptorRangeを設定
-    D3D12_DESCRIPTOR_RANGE descriptorRange[2] = {};
+    D3D12_DESCRIPTOR_RANGE descriptorRange[3] = {};
 
     // gParticles (u0) - RWStructuredBuffer
     descriptorRange[0].BaseShaderRegister                = 0;
@@ -19,14 +19,20 @@ void InitParticlePipeline::CreateRootSignature() {
     descriptorRange[0].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
     descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-    // gCounter (u1) - RWStructuredBuffer
+    // gFreeListIndex (u1) - RWStructuredBuffer
     descriptorRange[1].BaseShaderRegister                = 1;
     descriptorRange[1].NumDescriptors                    = 1;
     descriptorRange[1].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
     descriptorRange[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
+    // gFreeList (u2) - RWStructuredBuffer
+    descriptorRange[2].BaseShaderRegister                = 2;
+    descriptorRange[2].NumDescriptors                    = 1;
+    descriptorRange[2].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+    descriptorRange[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
     // RootParameterを作成
-    D3D12_ROOT_PARAMETER rootParameters[2] = {};
+    D3D12_ROOT_PARAMETER rootParameters[3] = {};
 
     // 0: gParticles (u0) - RWStructuredBuffer
     rootParameters[0].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -34,11 +40,17 @@ void InitParticlePipeline::CreateRootSignature() {
     rootParameters[0].DescriptorTable.pDescriptorRanges   = &descriptorRange[0];
     rootParameters[0].DescriptorTable.NumDescriptorRanges = 1;
 
-    // 1: gCounter (u1) - RWStructuredBuffer
+    // 1: gFreeListIndex (u1) - RWStructuredBuffer
     rootParameters[1].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
     rootParameters[1].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_ALL;
     rootParameters[1].DescriptorTable.pDescriptorRanges   = &descriptorRange[1];
     rootParameters[1].DescriptorTable.NumDescriptorRanges = 1;
+
+    // 1: gFreeList (u2) - RWStructuredBuffer
+    rootParameters[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY_ALL;
+    rootParameters[2].DescriptorTable.pDescriptorRanges   = &descriptorRange[2];
+    rootParameters[2].DescriptorTable.NumDescriptorRanges = 1;
 
     // Root Signature Descriptionを設定
     D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};

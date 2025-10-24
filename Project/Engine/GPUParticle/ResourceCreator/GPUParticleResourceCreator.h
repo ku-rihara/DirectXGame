@@ -26,7 +26,8 @@ private:
     void CreateEmitterResource(); //< エミッターバッファ作成
     void CreatePerViewResource(); //< ビュー情報バッファ作成
     void CreatePerFrameResource(); //< フレーム情報バッファ作成
-    void CreateCounterResource(); //< カウンターバッファ作成
+    void CreateFreeListIndexResource(); //< フリーリストインデックスバッファ作成
+    void CreateFreeListResource(); //< フリーリストバッファ作成
 
 private:
     DirectXCommon* dxCommon_;
@@ -36,12 +37,18 @@ private:
     Microsoft::WRL::ComPtr<ID3D12Resource> perViewResource_;
     Microsoft::WRL::ComPtr<ID3D12Resource> emitResource_;
     Microsoft::WRL::ComPtr<ID3D12Resource> perFrameResource_;
-    Microsoft::WRL::ComPtr<ID3D12Resource> counterResource_;
+    Microsoft::WRL::ComPtr<ID3D12Resource> freeListIndexResource_;
+    Microsoft::WRL::ComPtr<ID3D12Resource> freeListResource_;
 
     std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> particleSrvHandle_;
     std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> particleUavHandle_;
-    std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> counterSrvHandle_;
-    std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> counterUavHandle_;
+
+    std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> freeListIndexSrvHandle_;
+    std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> freeListIndexUavHandle_;
+
+    std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> freeListSrvHandle_;
+    std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> freeListUavHandle_;
+
 
     EmitterSphere* emitSphere_ = nullptr;
     PerView* perViewData_      = nullptr;
@@ -55,12 +62,15 @@ public:
     ID3D12Resource* GetEmitterResource() const { return emitResource_.Get(); }
     ID3D12Resource* GetPerViewResource() const { return perViewResource_.Get(); }
     ID3D12Resource* GetPerFrameResource() const { return perFrameResource_.Get(); }
-    ID3D12Resource* GetCounterResource() const { return counterResource_.Get(); }
+    ID3D12Resource* GetFreeListResource() const { return freeListIndexResource_.Get(); }
 
     D3D12_GPU_DESCRIPTOR_HANDLE GetParticleSrvHandle() const { return particleSrvHandle_.second; }
     D3D12_GPU_DESCRIPTOR_HANDLE GetParticleUavHandle() const { return particleUavHandle_.second; }
-    D3D12_GPU_DESCRIPTOR_HANDLE GetCounterSrvHandle() const { return counterSrvHandle_.second; }
-    D3D12_GPU_DESCRIPTOR_HANDLE GetCounterUavHandle() const { return counterUavHandle_.second; }
+    D3D12_GPU_DESCRIPTOR_HANDLE GetFreeListIndexSrvHandle() const { return freeListIndexSrvHandle_.second; }
+    D3D12_GPU_DESCRIPTOR_HANDLE GetFreeListIndexUavHandle() const { return freeListIndexUavHandle_.second; }
+    D3D12_GPU_DESCRIPTOR_HANDLE GetFreeListSrvHandle() const { return freeListSrvHandle_.second; }
+    D3D12_GPU_DESCRIPTOR_HANDLE GetFreeListUavHandle() const { return freeListUavHandle_.second; }
+
 
     EmitterSphere* GetEmitterData() { return emitSphere_; }
     PerView* GetPerViewData() { return perViewData_; }

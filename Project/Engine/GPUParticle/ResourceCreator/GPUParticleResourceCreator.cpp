@@ -11,7 +11,8 @@ void GPUParticleResourceCreator::Create() {
     CreateEmitterResource();
     CreatePerViewResource();
     CreatePerFrameResource();
-    CreateCounterResource();
+    CreateFreeListIndexResource();
+    CreateFreeListResource();
 }
 
 void GPUParticleResourceCreator::CreateParticleResource() {
@@ -69,22 +70,37 @@ void GPUParticleResourceCreator::CreatePerFrameResource() {
     perFrameResource_->Map(0, nullptr, reinterpret_cast<void**>(&perFrameData_));
 }
 
-void GPUParticleResourceCreator::CreateCounterResource() {
+void GPUParticleResourceCreator::CreateFreeListIndexResource() {
     // ParticleCS用のBufferを作成
-    counterResource_ = dxCommon_->CreateBufferResource(
+    freeListIndexResource_ = dxCommon_->CreateBufferResource(
         dxCommon_->GetDevice(), sizeof(int32_t),
         ViewType::UnorderedAccess);
 
     // UAV作成
-    uint32_t uavIndex         = srvManager_->Allocate();
-    counterUavHandle_.first  = srvManager_->GetCPUDescriptorHandle(uavIndex);
-    counterUavHandle_.second = srvManager_->GetGPUDescriptorHandle(uavIndex);
+    uint32_t uavIndex              = srvManager_->Allocate();
+    freeListIndexUavHandle_.first  = srvManager_->GetCPUDescriptorHandle(uavIndex);
+    freeListIndexUavHandle_.second = srvManager_->GetGPUDescriptorHandle(uavIndex);
 
     srvManager_->CreateStructuredUAV(
-        uavIndex, counterResource_.Get(),
+        uavIndex, freeListIndexResource_.Get(),
         1, sizeof(int32_t));
+}
 
- }
+void GPUParticleResourceCreator::CreateFreeListResource() {
+    // ParticleCS用のBufferを作成
+    freeListResource_ = dxCommon_->CreateBufferResource(
+        dxCommon_->GetDevice(), sizeof(int32_t) * particleMaxCount_,
+        ViewType::UnorderedAccess);
+
+    // UAV作成
+    uint32_t uavIndex         = srvManager_->Allocate();
+    freeListSrvHandle_.first  = srvManager_->GetCPUDescriptorHandle(uavIndex);
+    freeListUavHandle_.second = srvManager_->GetGPUDescriptorHandle(uavIndex);
+
+    srvManager_->CreateStructuredUAV(
+        uavIndex, freeListResource_.Get(),
+        particleMaxCount_, sizeof(int32_t));
+}
 
 void GPUParticleResourceCreator::PerFrameIncrement() {
     perFrameData_->deltaTime = Frame::DeltaTime();

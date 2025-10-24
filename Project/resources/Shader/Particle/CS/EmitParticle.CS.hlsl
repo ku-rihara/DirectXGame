@@ -12,11 +12,11 @@ struct EmitterSphere
     uint emit;
 };
 
-
 ConstantBuffer<EmitterSphere> gEmitter : register(b0);
 ConstantBuffer<PerFrame> gPerFrame : register(b1);
 RWStructuredBuffer<Particle> gParticles : register(u0);
-RWStructuredBuffer<int> gCounter : register(u1);
+RWStructuredBuffer<int> gFreeListIndex : register(u1);
+RWStructuredBuffer<int> gFreeList : register(u2);
 
 [numthreads(1, 1, 1)]
 void main(uint3 DTid : SV_DispatchThreadID)
@@ -31,23 +31,32 @@ void main(uint3 DTid : SV_DispatchThreadID)
         for (uint countIndex = 0; countIndex < gEmitter.count; ++countIndex)
         {
             
-            int particleIndex;
-            InterlockedAdd(gCounter[0], 1, particleIndex);
-            if (particleIndex >= kMaxParticles)
+            int freeListIndex;
+            // FreeListのIndexを1つ前に設定し、現在のindexを取得する
+            InterlockedAdd(gFreeListIndex[0], -1, freeListIndex);
+            if (0 <= freeListIndex && freeListIndex < kMaxParticles)
             {
-                //上限到達したら終了
-                return;
+                
+                int particleIndex = gFreeList[freeListIndex];
+                // particleIndexを使用して書き込む
+                gParticles[particleIndex].scale = generator.Generate3d();
+                gParticles[particleIndex].translate = gEmitter.translate + generator.Generate3d() * gEmitter.radius;
+                gParticles[particleIndex].velocity = generator.Generate3d() * 0.61f; // 速度を追加
+                gParticles[particleIndex].color.rgb = generator.Generate3d();
+                gParticles[particleIndex].color.w = 1.0f;
+                gParticles[particleIndex].lifeTime = 3.0f; // ライフタイムを設定
+                gParticles[particleIndex].currentTime = 0.0f; // 現在時刻を初期化
+               
+            }
+            else
+            {
+                //発生させられなかったので、減らした分元に戻す
+                InterlockedAdd(gFreeListIndex[0], 1);
+                break;
+
             }
             
-            // particleIndexを使用して書き込む
-            gParticles[particleIndex].scale = generator.Generate3d();
-            gParticles[particleIndex].translate = gEmitter.translate + generator.Generate3d() * gEmitter.radius;
-            gParticles[particleIndex].velocity = generator.Generate3d() * 0.61f; // 速度を追加
-            gParticles[particleIndex].color.rgb = generator.Generate3d();
-            gParticles[particleIndex].color.w = 1.0f;
-            gParticles[particleIndex].lifeTime = 3.0f; // ライフタイムを設定
-            gParticles[particleIndex].currentTime = 0.0f; // 現在時刻を初期化
-
+           
         }
     }
 }

@@ -2,8 +2,8 @@
 #include "3d/ModelManager.h"
 #include "3d/ViewProjection.h"
 #include "base/TextureManager.h"
-//dx
-#include"Dx/DxResourceBarrier.h"
+// dx
+#include "Dx/DxResourceBarrier.h"
 // pipeline
 #include "Pipeline/CSPipelineManager.h"
 #include "Pipeline/PipelineManager.h"
@@ -87,7 +87,6 @@ void GPUParticleManager::CreatePrimitiveParticle(
     CreateMaterialResource(name);
 }
 
-
 void GPUParticleManager::InitializeGroupResources(GPUParticleGroup& group) {
     // リソースクリエイター作成
     group.resourceCreator = std::make_unique<GPUParticleResourceCreator>();
@@ -111,7 +110,6 @@ void GPUParticleManager::InitializeGroupResources(GPUParticleGroup& group) {
     }
 }
 
-
 void GPUParticleManager::Emit(const std::string& name) {
     auto it = particleGroups_.find(name);
     if (it == particleGroups_.end()) {
@@ -126,8 +124,6 @@ void GPUParticleManager::Emit(const std::string& name) {
 
     // 即座にエミット
     group.emitSphereData->emit = 1;
-
-  
 }
 
 void GPUParticleManager::Update() {
@@ -145,7 +141,6 @@ void GPUParticleManager::Update() {
         DispatchUpdate(group);
     }
 }
-
 
 void GPUParticleManager::DispatchInitParticle(GPUParticleGroup& group) {
     if (!group.resourceCreator) {
@@ -169,14 +164,17 @@ void GPUParticleManager::DispatchInitParticle(GPUParticleGroup& group) {
 
     // u1: Counter(UAV)
     commandList->SetComputeRootDescriptorTable(1,
-        group.resourceCreator->GetCounterUavHandle());
+        group.resourceCreator->GetFreeListIndexUavHandle());
+
+    // u2: Counter(UAV)
+    commandList->SetComputeRootDescriptorTable(2,
+        group.resourceCreator->GetFreeListUavHandle());
 
     csPipe->DisPatch(CSPipelineType::Particle_Init, commandList, group.maxParticleCount);
 
     // UAV barrier
     barrier->UAVBarrier(commandList, group.resourceCreator->GetParticleResource());
 }
-
 
 void GPUParticleManager::DispatchEmit(GPUParticleGroup& group) {
     if (!group.resourceCreator) {
@@ -208,7 +206,11 @@ void GPUParticleManager::DispatchEmit(GPUParticleGroup& group) {
 
     // u1: Counter(UAV)
     commandList->SetComputeRootDescriptorTable(3,
-        group.resourceCreator->GetCounterUavHandle());
+        group.resourceCreator->GetFreeListIndexUavHandle());
+
+    // u2: Counter(UAV)
+    commandList->SetComputeRootDescriptorTable(4,
+        group.resourceCreator->GetFreeListUavHandle());
 
     // 1スレッドでエミット処理
     csPipe->DisPatch(CSPipelineType::Particle_Emit, commandList, 1);
@@ -240,6 +242,14 @@ void GPUParticleManager::DispatchUpdate(GPUParticleGroup& group) {
     // b0: PerFrame
     commandList->SetComputeRootConstantBufferView(1,
         group.resourceCreator->GetPerFrameResource()->GetGPUVirtualAddress());
+
+    // u1: Counter(UAV)
+    commandList->SetComputeRootDescriptorTable(2,
+        group.resourceCreator->GetFreeListIndexUavHandle());
+
+    // u2: Counter(UAV)
+    commandList->SetComputeRootDescriptorTable(3,
+        group.resourceCreator->GetFreeListUavHandle());
 
     // 全パーティクルを更新
     csPipe->DisPatch(CSPipelineType::Particle_Update, commandList, group.maxParticleCount);
