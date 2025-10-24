@@ -104,11 +104,11 @@ public:
     /// <param name="jointName">ジョイント名</param>
     void SetParentJoint(const Object3DAnimation* animation, const std::string& jointName);
 
-    Vector3 GetLocalPos() const; //< ローカル座標取得
-    Vector3 GetWorldPos() const; //< ワールド座標取得
+    Vector3 GetLocalPos() const;      //< ローカル座標取得
+    Vector3 GetWorldPos() const;      //< ワールド座標取得
 
-    Vector3 GetRightVector() const; //< 右方向ベクトル取得
-    Vector3 GetUpVector() const; //< 上方向ベクトル取得
+    Vector3 GetRightVector() const;   //< 右方向ベクトル取得
+    Vector3 GetUpVector() const;      //< 上方向ベクトル取得
     Vector3 GetForwardVector() const; //< 前方向ベクトル取得
 
 public:
