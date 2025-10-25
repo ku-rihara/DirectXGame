@@ -427,9 +427,6 @@
     <Filter Include="MyEngine\.h\Collider">
       <UniqueIdentifier>{261d89ef-d3f4-4da1-aa9e-bfd6e260bf1a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.cpp\GPUParticle\ResourceCreator">
-      <UniqueIdentifier>{340244ac-4add-4b95-bc0d-743d48896fbd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.h\Pipeline\Particle\CS">
       <UniqueIdentifier>{ce505e37-05b2-45a2-89c7-c84d80609328}</UniqueIdentifier>
     </Filter>
@@ -438,9 +435,6 @@
     </Filter>
     <Filter Include="MyEngine\.h\GPUParticle\Data">
       <UniqueIdentifier>{8f64a725-dbc0-4270-8781-dc3c43090878}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.h\GPUParticle\ResourceCreator">
-      <UniqueIdentifier>{00ef74a7-6b08-427e-8cd8-e40d2599bd7a}</UniqueIdentifier>
     </Filter>
     <Filter Include="MyEngine\.cpp\Pipeline\Particle\CS">
       <UniqueIdentifier>{2891f6ed-d6b6-4d6f-af69-a03fdf4e788c}</UniqueIdentifier>
@@ -459,6 +453,12 @@
     </Filter>
     <Filter Include="リソースファイル\library">
       <UniqueIdentifier>{06914a50-77df-4e36-9100-2bfef8813310}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\GPUParticle\GPUParticleResourceData">
+      <UniqueIdentifier>{00ef74a7-6b08-427e-8cd8-e40d2599bd7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\GPUParticle\GPUParticleResourceData">
+      <UniqueIdentifier>{340244ac-4add-4b95-bc0d-743d48896fbd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1102,9 +1102,6 @@
     <ClCompile Include="Engine\GPUParticle\GPUParticleEmitter.cpp">
       <Filter>MyEngine\.cpp\GPUParticle</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GPUParticle\ResourceCreator\GPUParticleResourceCreator.cpp">
-      <Filter>MyEngine\.cpp\GPUParticle\ResourceCreator</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\GPUParticle\GPUParticleManager.cpp">
       <Filter>MyEngine\.cpp\GPUParticle</Filter>
     </ClCompile>
@@ -1143,6 +1140,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Pipeline\Particle\CS\UpdateParticlePipeline.cpp">
       <Filter>MyEngine\.cpp\Pipeline\Particle\CS</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleResourceData.cpp">
+      <Filter>MyEngine\.cpp\GPUParticle\GPUParticleResourceData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1836,9 +1836,6 @@
     <ClInclude Include="Engine\GPUParticle\Data\ParticleCSData.h">
       <Filter>MyEngine\.h\GPUParticle\Data</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GPUParticle\ResourceCreator\GPUParticleResourceCreator.h">
-      <Filter>MyEngine\.h\GPUParticle\ResourceCreator</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Pipeline\Particle\CS\EmitParticlePipeline.h">
       <Filter>MyEngine\.h\Pipeline\Particle\CS</Filter>
     </ClInclude>
@@ -1877,6 +1874,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Dx\DxResourceBarrier.h">
       <Filter>MyEngine\.h\Dx</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleResourceData.h">
+      <Filter>MyEngine\.h\GPUParticle\GPUParticleResourceData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

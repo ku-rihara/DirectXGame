@@ -1,9 +1,9 @@
-#include "GPUParticleResourceCreator.h"
+#include "GPUParticleResourceData.h"
 #include "base/SrvManager.h"
 #include "Dx/DirectXCommon.h"
 #include "Frame/Frame.h"
 
-void GPUParticleResourceCreator::Create() {
+void GPUParticleResourceData::Create() {
     dxCommon_   = DirectXCommon::GetInstance();
     srvManager_ = SrvManager::GetInstance();
 
@@ -15,7 +15,7 @@ void GPUParticleResourceCreator::Create() {
     CreateFreeListResource();
 }
 
-void GPUParticleResourceCreator::CreateParticleResource() {
+void GPUParticleResourceData::CreateParticleResource() {
     // ParticleCS用のBufferを作成
     particleResource_ = dxCommon_->CreateBufferResource(
         dxCommon_->GetDevice(), sizeof(ParticleCS) * particleMaxCount_,
@@ -42,7 +42,7 @@ void GPUParticleResourceCreator::CreateParticleResource() {
         sizeof(ParticleCS));
 }
 
-void GPUParticleResourceCreator::CreateEmitterResource() {
+void GPUParticleResourceData::CreateEmitterResource() {
     // Emitterデータ用のバッファ
     emitResource_ = dxCommon_->CreateBufferResource(
         dxCommon_->GetDevice(),
@@ -52,7 +52,7 @@ void GPUParticleResourceCreator::CreateEmitterResource() {
     emitResource_->Map(0, nullptr, reinterpret_cast<void**>(&emitSphere_));
 }
 
-void GPUParticleResourceCreator::CreatePerViewResource() {
+void GPUParticleResourceData::CreatePerViewResource() {
     // PerViewデータ用のバッファ
     perViewResource_ = dxCommon_->CreateBufferResource(
         dxCommon_->GetDevice(),
@@ -62,7 +62,7 @@ void GPUParticleResourceCreator::CreatePerViewResource() {
     perViewResource_->Map(0, nullptr, reinterpret_cast<void**>(&perViewData_));
 }
 
-void GPUParticleResourceCreator::CreatePerFrameResource() {
+void GPUParticleResourceData::CreatePerFrameResource() {
     // PerFrameデータ用のバッファ
     perFrameResource_ = dxCommon_->CreateBufferResource(
         dxCommon_->GetDevice(), sizeof(PerFrame) * particleMaxCount_);
@@ -70,7 +70,7 @@ void GPUParticleResourceCreator::CreatePerFrameResource() {
     perFrameResource_->Map(0, nullptr, reinterpret_cast<void**>(&perFrameData_));
 }
 
-void GPUParticleResourceCreator::CreateFreeListIndexResource() {
+void GPUParticleResourceData::CreateFreeListIndexResource() {
     // ParticleCS用のBufferを作成
     freeListIndexResource_ = dxCommon_->CreateBufferResource(
         dxCommon_->GetDevice(), sizeof(int32_t),
@@ -86,7 +86,7 @@ void GPUParticleResourceCreator::CreateFreeListIndexResource() {
         1, sizeof(int32_t));
 }
 
-void GPUParticleResourceCreator::CreateFreeListResource() {
+void GPUParticleResourceData::CreateFreeListResource() {
     // ParticleCS用のBufferを作成
     freeListResource_ = dxCommon_->CreateBufferResource(
         dxCommon_->GetDevice(), sizeof(int32_t) * particleMaxCount_,
@@ -102,7 +102,7 @@ void GPUParticleResourceCreator::CreateFreeListResource() {
         particleMaxCount_, sizeof(int32_t));
 }
 
-void GPUParticleResourceCreator::PerFrameIncrement() {
+void GPUParticleResourceData::PerFrameIncrement() {
     perFrameData_->deltaTime = Frame::DeltaTime();
     perFrameData_->time += perFrameData_->deltaTime;
 }

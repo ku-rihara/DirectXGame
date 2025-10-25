@@ -89,7 +89,7 @@ void GPUParticleManager::CreatePrimitiveParticle(
 
 void GPUParticleManager::InitializeGroupResources(GPUParticleGroup& group) {
     // リソースクリエイター作成
-    group.resourceCreator = std::make_unique<GPUParticleResourceCreator>();
+    group.resourceCreator = std::make_unique<GPUParticleResourceData>();
     group.resourceCreator->SetParticleCountMax(group.maxParticleCount);
     group.resourceCreator->Create();
 
