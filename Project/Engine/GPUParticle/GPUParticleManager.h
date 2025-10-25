@@ -5,7 +5,7 @@
 #include "Dx/DirectXCommon.h"
 #include "Material/GPUParticleMaterial.h"
 #include "Primitive/IPrimitive.h"
-#include "ResourceCreator/GPUParticleResourceCreator.h"
+#include "ResourceData/GPUParticleResourceData.h"
 
 #include <cstdint>
 #include <memory>
@@ -31,7 +31,7 @@ public:
         uint32_t textureHandle   = 0;
         int32_t maxParticleCount = 1024;
 
-        std::unique_ptr<GPUParticleResourceCreator> resourceCreator;
+        std::unique_ptr<GPUParticleResourceData> resourceCreator;
 
         EmitterSphere* emitSphereData = nullptr;
         PerView* perViewData          = nullptr;

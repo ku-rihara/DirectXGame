@@ -11,12 +11,12 @@ class DirectXCommon;
 class SrvManager;
 
 /// <summary>
-/// GPUパーティクル用リソース作成クラス
+/// GPUパーティクル用リソースデータクラス
 /// </summary>
-class GPUParticleResourceCreator {
+class GPUParticleResourceData {
 public:
-    GPUParticleResourceCreator()  = default;
-    ~GPUParticleResourceCreator() = default;
+    GPUParticleResourceData()  = default;
+    ~GPUParticleResourceData() = default;
 
     void Create(); //< 全リソースを作成
     void PerFrameIncrement(); //< フレームごとのデータ更新
