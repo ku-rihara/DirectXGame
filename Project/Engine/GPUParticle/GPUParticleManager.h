@@ -31,7 +31,7 @@ public:
         uint32_t textureHandle   = 0;
         int32_t maxParticleCount = 1024;
 
-        std::unique_ptr<GPUParticleResourceData> resourceCreator;
+        std::unique_ptr<GPUParticleResourceData> resourceData;
 
         EmitterSphere* emitSphereData = nullptr;
         PerView* perViewData          = nullptr;
@@ -43,16 +43,9 @@ public:
 
     static GPUParticleManager* GetInstance();
 
-    /// <summary>
-    /// マネージャーの初期化
-    /// </summary>
-    /// <param name="srvManager">SRVマネージャー</param>
+    // 初期化、更新、描画
     void Init(SrvManager* srvManager);
-
-    /// <summary>
-    /// 全パーティクルグループを描画
-    /// </summary>
-    /// <param name="viewProjection">ビュープロジェクション</param>
+    void Update();
     void Draw(const ViewProjection& viewProjection);
 
     /// <summary>
@@ -62,8 +55,7 @@ public:
     /// <param name="modelFilePath">モデルファイルパス</param>
     /// <param name="maxCount">最大パーティクル数</param>
     void CreateParticleGroup(
-        const std::string& name,
-        const std::string& modelFilePath,
+        const std::string& name,const std::string& modelFilePath,
         const int32_t& maxCount = 1024);
 
     /// <summary>
@@ -73,8 +65,7 @@ public:
     /// <param name="type">プリミティブタイプ</param>
     /// <param name="maxCount">最大パーティクル数</param>
     void CreatePrimitiveParticle(
-        const std::string& name,
-        const PrimitiveType& type,
+        const std::string& name,const PrimitiveType& type,
         const int32_t& maxCount);
 
     /// <summary>
@@ -82,27 +73,13 @@ public:
     /// </summary>
     /// <param name="name">グループ名</param>
     void Emit(const std::string& name);
-
-    void Update(); //< 全パーティクルグループを更新
-
+  
 private:
     /// <summary>
     /// グループリソースの初期化
     /// </summary>
     /// <param name="group">パーティクルグループ</param>
     void InitializeGroupResources(GPUParticleGroup& group);
-
-    /// <summary>
-    /// エミット処理のディスパッチ
-    /// </summary>
-    /// <param name="group">パーティクルグループ</param>
-    void DispatchEmit(GPUParticleGroup& group);
-
-    /// <summary>
-    /// 更新処理のディスパッチ
-    /// </summary>
-    /// <param name="group">パーティクルグループ</param>
-    void DispatchUpdate(GPUParticleGroup& group);
 
     /// <summary>
     /// マテリアルリソースを作成
@@ -116,10 +93,9 @@ private:
     /// <param name="group">パーティクルグループ</param>
     void DrawGroup(GPUParticleGroup& group);
 
-    /// <summary>
-    /// パーティクル初期化のディスパッチ
-    /// </summary>
-    /// <param name="group">パーティクルグループ</param>
+     // DisPatch処理
+    void DispatchEmit(GPUParticleGroup& group);
+    void DispatchUpdate(GPUParticleGroup& group);
     void DispatchInitParticle(GPUParticleGroup& group);
 
 private:

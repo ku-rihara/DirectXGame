@@ -4,6 +4,7 @@
 #include "base/TextureManager.h"
 // dx
 #include "Dx/DxResourceBarrier.h"
+#include "Frame/Frame.h"
 // pipeline
 #include "Pipeline/CSPipelineManager.h"
 #include "Pipeline/PipelineManager.h"
@@ -89,15 +90,15 @@ void GPUParticleManager::CreatePrimitiveParticle(
 
 void GPUParticleManager::InitializeGroupResources(GPUParticleGroup& group) {
     // リソースクリエイター作成
-    group.resourceCreator = std::make_unique<GPUParticleResourceData>();
-    group.resourceCreator->SetParticleCountMax(group.maxParticleCount);
-    group.resourceCreator->Create();
+    group.resourceData = std::make_unique<GPUParticleResourceData>();
+    group.resourceData->SetParticleMaxCount(group.maxParticleCount);
+    group.resourceData->Create();
 
     DispatchInitParticle(group);
 
     // マップされたデータポインタを取得
-    group.emitSphereData = group.resourceCreator->GetEmitterData();
-    group.perViewData    = group.resourceCreator->GetPerViewData();
+    group.emitSphereData = group.resourceData->GetEmitterBuffer().mappedData;
+    group.perViewData    = group.resourceData->GetPerViewBuffer().mappedData;
 
     // デフォルト値を設定
     if (group.emitSphereData) {
@@ -136,126 +137,39 @@ void GPUParticleManager::Update() {
             group.perViewData->billboardMatrix =
                 viewProjection_->GetBillboardMatrix();
         }
-        group.resourceCreator->PerFrameIncrement();
+
+        // Particle更新
+        // TODO:DeltaTimeはParticleごとに設定できるようにする
+        group.resourceData->UpdatePerFrameData(Frame::DeltaTime());
         DispatchEmit(group);
         DispatchUpdate(group);
     }
 }
 
 void GPUParticleManager::DispatchInitParticle(GPUParticleGroup& group) {
-    if (!group.resourceCreator) {
+    if (!group.resourceData) {
         return;
     }
 
-    ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-    CSPipelineManager* csPipe              = CSPipelineManager::GetInstance();
-    DxResourceBarrier* barrier             = dxCommon_->GetResourceBarrier();
-
-    //  デスクリプタヒープを設定
-    ID3D12DescriptorHeap* descriptorHeaps[] = {srvManager_->GetDescriptorHeap()};
-    commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
-
-    // InitParticleパス
-    csPipe->PreDraw(CSPipelineType::Particle_Init, commandList);
-
-    // u0: パーティクルバッファ(UAV)
-    commandList->SetComputeRootDescriptorTable(0,
-        group.resourceCreator->GetParticleUavHandle());
-
-    // u1: Counter(UAV)
-    commandList->SetComputeRootDescriptorTable(1,
-        group.resourceCreator->GetFreeListIndexUavHandle());
-
-    // u2: Counter(UAV)
-    commandList->SetComputeRootDescriptorTable(2,
-        group.resourceCreator->GetFreeListUavHandle());
-
-    csPipe->DisPatch(CSPipelineType::Particle_Init, commandList, group.maxParticleCount);
-
-    // UAV barrier
-    barrier->UAVBarrier(commandList, group.resourceCreator->GetParticleResource());
+    // Initのシェーダーバインド、ディスパッチを行う
+    group.resourceData->GetCommandExecutorRef()->ExecuteInitPass(dxCommon_->GetCommandList(), group.maxParticleCount);
 }
 
 void GPUParticleManager::DispatchEmit(GPUParticleGroup& group) {
-    if (!group.resourceCreator) {
+    if (!group.resourceData) {
         return;
     }
 
-    ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-    CSPipelineManager* csPipe              = CSPipelineManager::GetInstance();
-    DxResourceBarrier* barrier             = dxCommon_->GetResourceBarrier();
-
-    //  デスクリプタヒープを設定
-    ID3D12DescriptorHeap* descriptorHeaps[] = {srvManager_->GetDescriptorHeap()};
-    commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
-
-    // エミットパス
-    csPipe->PreDraw(CSPipelineType::Particle_Emit, commandList);
-
-    // b0: エミッターデータ
-    commandList->SetComputeRootConstantBufferView(0,
-        group.resourceCreator->GetEmitterResource()->GetGPUVirtualAddress());
-
-    // b1: PerFrame
-    commandList->SetComputeRootConstantBufferView(2,
-        group.resourceCreator->GetPerFrameResource()->GetGPUVirtualAddress());
-
-    // u0: パーティクルバッファ(UAV)
-    commandList->SetComputeRootDescriptorTable(1,
-        group.resourceCreator->GetParticleUavHandle());
-
-    // u1: Counter(UAV)
-    commandList->SetComputeRootDescriptorTable(3,
-        group.resourceCreator->GetFreeListIndexUavHandle());
-
-    // u2: Counter(UAV)
-    commandList->SetComputeRootDescriptorTable(4,
-        group.resourceCreator->GetFreeListUavHandle());
-
-    // 1スレッドでエミット処理
-    csPipe->DisPatch(CSPipelineType::Particle_Emit, commandList, 1);
-
-    // UAV barrier
-    barrier->UAVBarrier(commandList, group.resourceCreator->GetParticleResource());
+    // Emitのシェーダーバインド、ディスパッチを行う
+    group.resourceData->GetCommandExecutorRef()->ExecuteEmitPass(dxCommon_->GetCommandList(), 1);
 }
 
 void GPUParticleManager::DispatchUpdate(GPUParticleGroup& group) {
-    if (!group.resourceCreator) {
+    if (!group.resourceData) {
         return;
     }
-
-    ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-    CSPipelineManager* csPipe              = CSPipelineManager::GetInstance();
-    DxResourceBarrier* barrier             = dxCommon_->GetResourceBarrier();
-
-    // デスクリプタヒープを設定
-    ID3D12DescriptorHeap* descriptorHeaps[] = {srvManager_->GetDescriptorHeap()};
-    commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
-
-    // 更新パス
-    csPipe->PreDraw(CSPipelineType::Particle_Update, commandList);
-
-    // u0: パーティクルバッファ(UAV)
-    commandList->SetComputeRootDescriptorTable(0,
-        group.resourceCreator->GetParticleUavHandle());
-
-    // b0: PerFrame
-    commandList->SetComputeRootConstantBufferView(1,
-        group.resourceCreator->GetPerFrameResource()->GetGPUVirtualAddress());
-
-    // u1: Counter(UAV)
-    commandList->SetComputeRootDescriptorTable(2,
-        group.resourceCreator->GetFreeListIndexUavHandle());
-
-    // u2: Counter(UAV)
-    commandList->SetComputeRootDescriptorTable(3,
-        group.resourceCreator->GetFreeListUavHandle());
-
-    // 全パーティクルを更新
-    csPipe->DisPatch(CSPipelineType::Particle_Update, commandList, group.maxParticleCount);
-
-    // UAV barrier
-    barrier->UAVBarrier(commandList, group.resourceCreator->GetParticleResource());
+    // Initのシェーダーバインド、ディスパッチを行う
+    group.resourceData->GetCommandExecutorRef()->ExecuteUpdatePass(dxCommon_->GetCommandList(), group.maxParticleCount);
 }
 
 void GPUParticleManager::Draw(const ViewProjection& viewProjection) {
@@ -264,7 +178,7 @@ void GPUParticleManager::Draw(const ViewProjection& viewProjection) {
     viewProjection;
 
     for (auto& [groupName, group] : particleGroups_) {
-        if (!group.resourceCreator) {
+        if (!group.resourceData) {
             continue;
         }
 
@@ -273,10 +187,10 @@ void GPUParticleManager::Draw(const ViewProjection& viewProjection) {
         pipe->PreBlendSet(PipelineType::GPUParticle, commandList, BlendMode::Add);
 
         // b0: PerViewバッファ
-        commandList->SetGraphicsRootConstantBufferView(0, group.resourceCreator->GetPerViewResource()->GetGPUVirtualAddress());
+        commandList->SetGraphicsRootConstantBufferView(0, group.resourceData->GetPerViewBuffer().resource->GetGPUVirtualAddress());
 
         // t0: パーティクルSRV
-        commandList->SetGraphicsRootDescriptorTable(1, group.resourceCreator->GetParticleSrvHandle());
+        commandList->SetGraphicsRootDescriptorTable(1, group.resourceData->GetParticleBuffer().gpuHandle);
 
         // b2(PS): マテリアル
         group.material.SetCommandList(commandList);

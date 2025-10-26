@@ -766,6 +766,9 @@
     <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleResourceData.cpp">
       <Filter>MyEngine\.cpp\GPUParticle\ResourceData</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.cpp">
+      <Filter>MyEngine\.cpp\GPUParticle\ResourceData</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1264,6 +1267,9 @@
       <Filter>MyEngine\.h\Dx</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleResourceData.h">
+      <Filter>MyEngine\.h\GPUParticle\ResourceData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.h">
       <Filter>MyEngine\.h\GPUParticle\ResourceData</Filter>
     </ClInclude>
   </ItemGroup>

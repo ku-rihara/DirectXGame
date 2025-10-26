@@ -59,6 +59,7 @@
     <ClCompile Include="Engine\Function\GetFile.cpp" />
     <ClCompile Include="Engine\GPUParticle\GPUParticleEmitter.cpp" />
     <ClCompile Include="Engine\GPUParticle\GPUParticleManager.cpp" />
+    <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.cpp" />
     <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleResourceData.cpp" />
     <ClCompile Include="Engine\input\GamePad.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="Engine\GPUParticle\Data\ParticleCSData.h" />
     <ClInclude Include="Engine\GPUParticle\GPUParticleEmitter.h" />
     <ClInclude Include="Engine\GPUParticle\GPUParticleManager.h" />
+    <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.h" />
     <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleResourceData.h" />
     <ClInclude Include="Engine\input\GamePad.h" />
     <ClInclude Include="Engine\input\Input.h" />
