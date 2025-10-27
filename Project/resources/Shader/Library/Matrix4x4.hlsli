@@ -33,7 +33,7 @@ float4x4 MakeRotationMatrix(float3 rotation)
 
 float4x4 MakeScaleMatrix(float3 scale)
 {
-    float4x4 scaleMatrix = (
+    float4x4 scaleMatrix = float4x4(
         scale.x, 0, 0, 0,
         0, scale.y, 0, 0,
         0, 0, scale.z, 0,

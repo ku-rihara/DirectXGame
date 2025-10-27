@@ -15,8 +15,8 @@ struct Particle
 {
     float3 translate;
     float3 scale;
-    float rotate;
-    float rotateSpeed; 
+    float3 rotate;
+    float3 rotateSpeed; 
     float lifeTime;
     float3 velocity;
     float currentTime;
