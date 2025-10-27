@@ -73,6 +73,10 @@ void GPUParticleCommandExecutor::ExecuteEmitPass(ID3D12GraphicsCommandList* comm
     commandList->SetComputeRootDescriptorTable(4,
         resourceData_->GetFreeListBuffer().gpuHandle);
 
+     // b2: EmitParam
+    commandList->SetComputeRootConstantBufferView(5,
+        resourceData_->GetEmitParamBuffer().resource->GetGPUVirtualAddress());
+
     // 1スレッドでエミット処理
     csPipeManager_->DisPatch(CSPipelineType::Particle_Emit, commandList, numThreadsX);
 

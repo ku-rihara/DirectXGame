@@ -19,7 +19,7 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
     float4x4 scaleMatrix = MakeScaleMatrix(particle.scale);
  
     // 回転適用
-    float4x4 rotationMatrix = MakeRotationMatrix(particle.rotation);
+    float4x4 rotationMatrix = MakeRotationMatrix(particle.rotate);
     
     // ビルボード行列と組み合わせ
     float4x4 worldMatrix = mul(mul(scaleMatrix, rotationMatrix), gPerView.billboardMatrix);
