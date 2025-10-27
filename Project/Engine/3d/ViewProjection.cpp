@@ -125,3 +125,12 @@ Matrix4x4 ViewProjection::GetBillboardMatrix() const {
 void ViewProjection::ClearParent() {
     parent_ = nullptr;
 }
+
+Vector3 ViewProjection::GetForward() const {
+
+    return Vector3(
+        cameraMatrix_.m[2][0], // X成分
+        cameraMatrix_.m[2][1], // Y成分
+        cameraMatrix_.m[2][2] // Z成分
+    );
+}
