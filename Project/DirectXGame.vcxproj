@@ -176,6 +176,7 @@
     <ClCompile Include="Game\Enemy\NormalEnemy.cpp" />
     <ClCompile Include="Game\Enemy\SearchingSprite\FindSprite.cpp" />
     <ClCompile Include="Game\Enemy\SearchingSprite\NotFindSprite.cpp" />
+    <ClCompile Include="Game\Enemy\Spawner\ContinuousEnemySpawner.cpp" />
     <ClCompile Include="Game\Enemy\Spawner\EnemySpawner.cpp" />
     <ClCompile Include="Game\Enemy\StrongEnemy.cpp" />
     <ClCompile Include="Game\Field\Field.cpp" />
@@ -421,6 +422,7 @@
     <ClInclude Include="Game\Enemy\NormalEnemy.h" />
     <ClInclude Include="Game\Enemy\SearchingSprite\FindSprite.h" />
     <ClInclude Include="Game\Enemy\SearchingSprite\NotFindSprite.h" />
+    <ClInclude Include="Game\Enemy\Spawner\ContinuousEnemySpawner.h" />
     <ClInclude Include="Game\Enemy\Spawner\EnemySpawner.h" />
     <ClInclude Include="Game\Enemy\StrongEnemy.h" />
     <ClInclude Include="Game\Field\Field.h" />

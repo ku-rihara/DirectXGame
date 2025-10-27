@@ -3,10 +3,17 @@
 #include "MathFunction.h"
 #include <cassert>
 #include <fstream>
+#include <imgui.h>
 
 void EnemySpawner::Init(const std::string& jsonData) {
     ParseJsonData(jsonData);
     SettingGroupSpawnPos();
+
+    // グローバルパラメータ
+    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_->CreateGroup(groupName_, false);
+    BindParams();
+    globalParameter_->SyncParamForGroup(groupName_);
 }
 
 void EnemySpawner::ParseJsonData(const std::string& filename) {
@@ -34,6 +41,9 @@ void EnemySpawner::ParseJsonData(const std::string& filename) {
         spawnGroups_.push_back(group);
     }
 
+    // 最大フェーズ数を取得
+    maxFazeNum_ = static_cast<int32_t>(spawnGroups_.size());
+
     // スポーンポイント情報の読み込み
     spawnPoints_.clear();
     for (const auto& spawnData : jsonData_["spawn_points"]) {
@@ -60,7 +70,7 @@ void EnemySpawner::ParseJsonData(const std::string& filename) {
         // etcParams
         spawn.enemyType   = spawnData["enemy_type"];
         spawn.spawnOffset = spawnData["spawn_offset"];
-        
+
         spawnPoints_.push_back(spawn);
     }
 }
@@ -135,10 +145,42 @@ void EnemySpawner::SpawnEnemiesInGroup(SpawnGroup& group) {
     }
 }
 
+///=========================================================
+/// パラメータ調整
+///==========================================================
+void EnemySpawner::AdjustParam() {
+#ifdef _DEBUG
+
+    if (ImGui::CollapsingHeader(groupName_.c_str())) {
+        ImGui::PushID(groupName_.c_str());
+
+        for (int32_t i = 0; i < spawnGroups_.size() - 1; ++i) {
+            ImGui::InputInt(("nextFazeEnemyNum" + std::to_string(i)).c_str(), &spawnGroups_[i].nextFazeEnemyNum);
+        }
+
+        // セーブ・ロード
+        globalParameter_->ParamSaveForImGui(groupName_);
+        globalParameter_->ParamLoadForImGui(groupName_);
+
+        ImGui::PopID();
+    }
+
+#endif
+}
+
+///=========================================================
+/// パラメータBind
+///==========================================================
+void EnemySpawner::BindParams() {
+    for (int32_t i = 0; i < spawnGroups_.size() - 1; ++i) {
+        globalParameter_->Bind(groupName_, "nextFazeEnemyNum" + std::to_string(i), &spawnGroups_[i].nextFazeEnemyNum);
+    }
+}
+
 bool EnemySpawner::IsGroupCompleted(const int& groupId) const {
     if (groupId >= 0 && groupId < spawnGroups_.size()) {
         const SpawnGroup& group = spawnGroups_[groupId];
-        return (group.aliveCount == 0 && group.spawnedCount == group.objectCount);
+        return (group.aliveCount <= group.nextFazeEnemyNum && group.spawnedCount == group.objectCount);
     }
     return false;
 }

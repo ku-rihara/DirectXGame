@@ -1144,6 +1144,9 @@
     <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleResourceData.cpp">
       <Filter>MyEngine\.cpp\GPUParticle\ResourceData</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Enemy\Spawner\ContinuousEnemySpawner.cpp">
+      <Filter>Game\Enemy\Spawner</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1877,6 +1880,9 @@
     </ClInclude>
     <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleResourceData.h">
       <Filter>MyEngine\.h\GPUParticle\ResourceData</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Spawner\ContinuousEnemySpawner.h">
+      <Filter>Game\Enemy\Spawner</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

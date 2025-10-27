@@ -15,7 +15,7 @@ class EnemyManager;
 /// 敵の生成管理クラス
 /// </summary>
 class EnemySpawner {
-private: // struct
+private:
     struct SpawnPoint {
         std::string name;
         int32_t groupId;
@@ -31,10 +31,11 @@ private: // struct
     struct SpawnGroup {
         int32_t id;
         int32_t objectCount;
-        int32_t spawnedCount = 0;
-        int32_t aliveCount   = 0;
-        bool isActive        = false;
-        bool isCompleted     = false;
+        int32_t spawnedCount     = 0;
+        int32_t aliveCount       = 0;
+        int32_t nextFazeEnemyNum = 0;
+        bool isActive            = false;
+        bool isCompleted         = false;
         float spawnTime;
         float groupStartTime = 0.0f;
     };
@@ -71,9 +72,6 @@ public:
     /// <param name="jsonData">JSONデータ</param>
     void ParseJsonData(const std::string& jsonData);
 
-    void SettingGroupSpawnPos(); //< グループスポーン位置設定
-    void UpdateCurrentGroup();  //< 現在のグループ更新
-
     /// <summary>
     /// グループ内の敵を生成
     /// </summary>
@@ -88,10 +86,21 @@ public:
     bool IsGroupCompleted(const int& groupId) const;
 
     void ActivateNextGroup(); //< 次のグループをアクティブ化
+    void SettingGroupSpawnPos(); //< グループスポーン位置設定
+    void UpdateCurrentGroup(); //< 現在のグループ更新
+
+    void AdjustParam(); //< パラメータ調整
+    void BindParams(); //< パラメータバインド
 
 private:
     using json = nlohmann::json;
     json jsonData_;
+
+    GlobalParameter* globalParameter_;
+    const std::string groupName_ = "EnemySpawner";
+
+    EnemyManager* pEnemyManager_     = nullptr;
+    const std::string directoryPath_ = "Resources/EnemyParameter/";
 
 private:
     std::array<std::string, 2> enemyTypes_ = {"NormalEnemy", "StrongEnemy"};
@@ -99,14 +108,12 @@ private:
     std::vector<SpawnGroup> spawnGroups_;
     std::unordered_map<int, std::vector<SpawnPoint*>> groupSpawnPoints_;
 
+    int32_t maxFazeNum_;
+
     float currentTime_;
     int currentGroupIndex_;
     bool isSystemActive_;
     bool allGroupsCompleted_;
-
-private:
-    EnemyManager* pEnemyManager_     = nullptr;
-    const std::string directoryPath_ = "Resources/EnemyParameter/";
 
 public:
     ///=======================================================================================

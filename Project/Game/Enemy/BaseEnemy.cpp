@@ -238,19 +238,27 @@ void BaseEnemy::BehaviorChangeDeath() {
 }
 
 bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
-    Vector3 positionView = {};
-    // 敵のロックオン座標を取得
+
+    // 敵のワールド座標
     Vector3 positionWorld = GetWorldPosition();
 
-    positionView = TransformMatrix(positionWorld, viewProjection.matView_);
-    // 距離条件チェック
-    if (0.0f <= positionView.z && positionView.z <= 1280.0f) {
-        float actTangent = std::atan2(std::sqrt(positionView.x * positionView.x + positionView.y * positionView.y), positionView.z);
+    // ビュー空間に変換
+    Vector3 positionView = TransformMatrix(positionWorld, viewProjection.matView_);
 
-        // コーンに収まっているか
-        return (std::fabsf(actTangent) <= std::fabsf(180.0f * 3.14f));
+    // ===== 後ろにいる場合は描画しない =====
+    if (positionView.z <= 0.0f) {
+        return false;
     }
-    return false;
+
+    // ===== スクリーン座標に変換 =====
+    Vector2 positionScreen = ScreenTransform(positionWorld, viewProjection);
+
+    // 画面範囲チェック
+    if (positionScreen.x < 0.0f || positionScreen.x > 1280.0f || positionScreen.y < 0.0f || positionScreen.y > 720.0f) {
+        return false;
+    }
+
+    return true;
 }
 
 void BaseEnemy::TakeDamage(const float& damageValue) {
