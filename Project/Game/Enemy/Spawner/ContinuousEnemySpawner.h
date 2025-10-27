@@ -33,7 +33,7 @@ public:
 
     // 初期化、更新
     void Init();
-    void Update(const float& deltaTime);
+    void Update(const float& deltaTime, const ViewProjection& viewProjection);
 
     void Start(); //< スポーンシステムの開始
     void Stop(); //< スポーンシステムの停止

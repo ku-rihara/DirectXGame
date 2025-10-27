@@ -103,8 +103,8 @@ void BaseEnemy::DisplaySprite(const ViewProjection& viewProjection) {
     // Hpバー更新
     notFindSprite_->Update();
 
-    findSprite_->SetIsSpawned(IsInView(viewProjection));
-    notFindSprite_->SetIsSpawned(IsInView(viewProjection));
+    findSprite_->SetIsDraw(IsInView(viewProjection));
+    notFindSprite_->SetIsDraw(IsInView(viewProjection));
     hpBar_->SetIsDraw(IsInView(viewProjection));
 }
 

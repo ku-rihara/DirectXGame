@@ -16,6 +16,7 @@ void NotFindSprite::Update() {
     // alpha,Posセット
     sprite_->SetAlpha(1.0f);
     sprite_->transform_.pos = position_;
+    sprite_->SetIsDraw(isDraw_);
 }
 
 

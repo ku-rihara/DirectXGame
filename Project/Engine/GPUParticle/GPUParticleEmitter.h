@@ -36,18 +36,6 @@ public:
     void Update(); //< エミッターの更新
     void Emit(); //< パーティクルを放出
 
-    /// <summary>
-    /// エミッターデータを設定
-    /// </summary>
-    /// <param name="emitter">エミッター設定データ</param>
-    void SetEmitterData(const EmitterSphere& emitter);
-
-    /// <summary>
-    /// テクスチャを設定
-    /// </summary>
-    /// <param name="textureHandle">テクスチャハンドル</param>
-    void SetTexture(uint32_t textureHandle);
-
 private:
     /// <summary>
     /// モデルで初期化
@@ -77,4 +65,8 @@ public:
     const bool& IsValid() const { return !name_.empty(); }
     const float& GetFrequencyTime() const { return currentTime_; }
     uint32_t GetEmitFlag() const { return shouldEmit_ ? 1 : 0; }
+
+    // setter
+    void SetEmitterData(const ParticleEmit& emitter);
+    void SetTexture(const uint32_t& textureHandle);
 };

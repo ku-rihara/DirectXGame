@@ -14,6 +14,7 @@ void FindSprite::Init() {
 void FindSprite::Update() {
     // Posセット
     sprite_->transform_.pos = position_;
+    sprite_->SetIsDraw(isDraw_);
 }
 
 

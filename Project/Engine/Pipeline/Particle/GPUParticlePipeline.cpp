@@ -19,7 +19,7 @@ void GPUParticlePipeline::CreateRootSignature() {
     staticSamplers_[0].ComparisonFunc   = D3D12_COMPARISON_FUNC_NEVER; // 比較しない
     staticSamplers_[0].MaxLOD           = D3D12_FLOAT32_MAX; // ありったけのMipMapを使う
     staticSamplers_[0].ShaderRegister   = 0; // レジスタ番号0
-    staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // pxelShaderで使う
+    staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // pixelShaderで使う
     // DescriptorRangeを設定
     D3D12_DESCRIPTOR_RANGE descriptorRange[2] = {};
 

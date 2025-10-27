@@ -20,7 +20,7 @@ void ContinuousEnemySpawner::Init() {
     isActive_          = false;
 }
 
-void ContinuousEnemySpawner::Update(const float& deltaTime) {
+void ContinuousEnemySpawner::Update(const float& deltaTime, const ViewProjection& viewProjection) {
     // スポーンシステムが非アクティブなら処理しない
     if (!isActive_ || !config_.isEnabled) {
         return;
@@ -43,7 +43,7 @@ void ContinuousEnemySpawner::Update(const float& deltaTime) {
     if (spawnTimer_ >= config_.spawnInterval) {
         spawnTimer_ = 0.0f;
 
-        Vector3 spawnPosition = CalculateSpawnPosition(view);
+        Vector3 spawnPosition = CalculateSpawnPosition(viewProjection);
         // 敵をスポーン
         pEnemyManager_->SpawnEnemy(config_.enemyType, spawnPosition, kContinuousSpawnGroupId);
         totalSpawnedCount_++;
@@ -67,7 +67,7 @@ Vector3 ContinuousEnemySpawner::CalculateSpawnPosition(const ViewProjection& vie
     Vector3 spawnPos=Vector3::ZeroVector();
     // プレイヤーの位置と正面方向を取得
     Vector3 playerPos  = viewProjection.GetWorldPos();
-    Vector3 forwardDir = viewProjection.gett;
+    Vector3 forwardDir = viewProjection.GetForward();
 
     // 複数回試行して有効な位置を探す
     for (int32_t retry = 0; retry < config_.maxRetryCount; ++retry) {

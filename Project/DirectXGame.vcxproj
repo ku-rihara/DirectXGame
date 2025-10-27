@@ -59,6 +59,8 @@
     <ClCompile Include="Engine\Function\GetFile.cpp" />
     <ClCompile Include="Engine\GPUParticle\GPUParticleEmitter.cpp" />
     <ClCompile Include="Engine\GPUParticle\GPUParticleManager.cpp" />
+    <ClCompile Include="Engine\GPUParticle\GPUParticleParamEditor.cpp" />
+    <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.cpp" />
     <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleResourceData.cpp" />
     <ClCompile Include="Engine\input\GamePad.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
@@ -296,6 +298,8 @@
     <ClInclude Include="Engine\GPUParticle\Data\ParticleCSData.h" />
     <ClInclude Include="Engine\GPUParticle\GPUParticleEmitter.h" />
     <ClInclude Include="Engine\GPUParticle\GPUParticleManager.h" />
+    <ClInclude Include="Engine\GPUParticle\GPUParticleParamEditor.h" />
+    <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.h" />
     <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleResourceData.h" />
     <ClInclude Include="Engine\input\GamePad.h" />
     <ClInclude Include="Engine\input\Input.h" />
@@ -498,6 +502,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
+    <None Include="resources\Shader\Library\Matrix4x4.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </None>
     <None Include="resources\Shader\Library\PerFrame.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

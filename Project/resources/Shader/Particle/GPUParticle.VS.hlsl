@@ -1,4 +1,5 @@
 #include "Particle.hlsli"
+#include"../Library/Matrix4x4.hlsli"
 
 struct PerView
 {
@@ -13,16 +14,19 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
 {
     VertexShaderOutput output;
     Particle particle = gParticle[instanceID];
+    
+    // スケール適応
+    float4x4 scaleMatrix = MakeScaleMatrix(particle.scale);
  
-    // 頂点座標の変換
-    float4x4 worldMatrix = gPerView.billboardMatrix;
-    worldMatrix[0] *= particle.scale.x;
-    worldMatrix[1] *= particle.scale.y;
-    worldMatrix[2] *= particle.scale.z;
+    // 回転適用
+    float4x4 rotationMatrix = MakeRotationMatrix(particle.rotation);
+    
+    // ビルボード行列と組み合わせ
+    float4x4 worldMatrix = mul(mul(scaleMatrix, rotationMatrix), gPerView.billboardMatrix);
     worldMatrix[3].xyz = particle.translate;
+    
     output.position = mul(input.position, mul(worldMatrix, gPerView.viewProjection));
     output.texcoord = input.texcoord;
-    // 色の決定
     output.color = particle.color;
 
     return output;

@@ -22,15 +22,15 @@ private:
     Vector2 position_;
     std::unique_ptr<Sprite> sprite_;
 
-    bool isSpawned_ = false;
+    bool isDraw_ = false;
     float alpha_;
 
 public:
     // getter
-    bool GetIsSpawned() const { return isSpawned_; }
+    bool GetIsDraw() const { return isDraw_; }
 
     // setter
     void SetPosition(const Vector2& pos) { position_ = pos; }
-    void SetIsSpawned(const bool& is) { isSpawned_ = is; }
+    void SetIsDraw(const bool& is) { isDraw_ = is; }
     void SetAlpha(const float& a) { alpha_ = a; }
 };

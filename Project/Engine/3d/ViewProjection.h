@@ -72,6 +72,7 @@ public:
 
 public:
     Vector3 GetWorldPos() const;
+    Vector3 GetForward() const;
     const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return constBuffer_; }
     const Matrix4x4& GetCameraMatrix() const { return cameraMatrix_; }
     Vector3 GetFinalPosition() const;
