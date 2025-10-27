@@ -769,6 +769,9 @@
     <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.cpp">
       <Filter>MyEngine\.cpp\GPUParticle\ResourceData</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\GPUParticle\GPUParticleParamEditor.cpp">
+      <Filter>MyEngine\.cpp\GPUParticle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1272,6 +1275,9 @@
     <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.h">
       <Filter>MyEngine\.h\GPUParticle\ResourceData</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\GPUParticle\GPUParticleParamEditor.h">
+      <Filter>MyEngine\.h\GPUParticle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -1321,6 +1327,9 @@
       <Filter>リソースファイル\Library</Filter>
     </None>
     <None Include="resources\Shader\Library\Random.hlsli">
+      <Filter>リソースファイル\Library</Filter>
+    </None>
+    <None Include="resources\Shader\Library\Matrix4x4.hlsli">
       <Filter>リソースファイル\Library</Filter>
     </None>
   </ItemGroup>

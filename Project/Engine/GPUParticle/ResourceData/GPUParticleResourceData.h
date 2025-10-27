@@ -42,7 +42,7 @@ public:
     /// <summary>
     /// エミッターデータを更新
     /// </summary>
-    void UpdateEmitterData(const EmitterSphere& data);
+    void UpdateEmitterData(const ParticleEmit& data);
 
     /// <summary>
     /// ビューデータを更新
@@ -56,12 +56,13 @@ public:
 
 private:
     //*----------------------ヘルパー関数----------------------*//
-    void CreateParticleResource(); //< パーティクルバッファ作成
-    void CreateEmitterResource(); //< エミッターバッファ作成
-    void CreatePerViewResource(); //< ビュー情報バッファ作成
-    void CreatePerFrameResource(); //< フレーム情報バッファ作成
+    void CreateParticleResource();      //< パーティクルバッファ作成
+    void CreateEmitterResource();       //< エミッターバッファ作成
+    void CreatePerViewResource();       //< ビュー情報バッファ作成
+    void CreatePerFrameResource();      //< フレーム情報バッファ作成
     void CreateFreeListIndexResource(); //< フリーリストインデックスバッファ作成
-    void CreateFreeListResource(); //< フリーリストバッファ作成
+    void CreateFreeListResource();      //< フリーリストバッファ作成
+    void CreateEmitParamResource();     //< エミッターパラメータバッファ作成
 
 private:
     std::unique_ptr<GPUParticleCommandExecutor> commandExecutor_;
@@ -74,17 +75,19 @@ private:
     GPUResourceHandle freeListIndexBuffer_;
     GPUResourceHandle freeListBuffer_;
 
-    MappedResourceHandle<EmitterSphere> emitterBuffer_;
+    MappedResourceHandle<ParticleEmit> emitterBuffer_;
     MappedResourceHandle<PerView> perViewBuffer_;
     MappedResourceHandle<PerFrame> perFrameBuffer_;
+    MappedResourceHandle<EmitParameter> emitParamBuffer_;
 
     int32_t particleMaxCount_ = 1024;
 
 public:
     // getter
-    const MappedResourceHandle<EmitterSphere>& GetEmitterBuffer() const { return emitterBuffer_; };
+    const MappedResourceHandle<ParticleEmit>& GetEmitterBuffer() const { return emitterBuffer_; };
     const MappedResourceHandle<PerView>& GetPerViewBuffer() const { return perViewBuffer_; };
     const MappedResourceHandle<PerFrame>& GetPerFrameBuffer() const { return perFrameBuffer_; };
+    const MappedResourceHandle<EmitParameter>& GetEmitParamBuffer() const { return emitParamBuffer_; };
     GPUParticleCommandExecutor* GetCommandExecutorRef() const;
 
     const GPUResourceHandle& GetParticleBuffer() const { return particleBuffer_; }

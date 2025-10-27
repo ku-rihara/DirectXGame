@@ -33,7 +33,7 @@ public:
 
         std::unique_ptr<GPUParticleResourceData> resourceData;
 
-        EmitterSphere* emitSphereData = nullptr;
+        ParticleEmit* emitSphereData = nullptr;
         PerView* perViewData          = nullptr;
     };
 
@@ -54,9 +54,7 @@ public:
     /// <param name="name">グループ名</param>
     /// <param name="modelFilePath">モデルファイルパス</param>
     /// <param name="maxCount">最大パーティクル数</param>
-    void CreateParticleGroup(
-        const std::string& name,const std::string& modelFilePath,
-        const int32_t& maxCount = 1024);
+    void CreateParticleGroup(const std::string& name,const std::string& modelFilePath,const int32_t& maxCount = 1024);
 
     /// <summary>
     /// プリミティブベースのパーティクルグループを作成
@@ -64,9 +62,7 @@ public:
     /// <param name="name">グループ名</param>
     /// <param name="type">プリミティブタイプ</param>
     /// <param name="maxCount">最大パーティクル数</param>
-    void CreatePrimitiveParticle(
-        const std::string& name,const PrimitiveType& type,
-        const int32_t& maxCount);
+    void CreatePrimitiveParticle(const std::string& name,const PrimitiveType& type, const int32_t& maxCount);
 
     /// <summary>
     /// 指定したグループのパーティクルを放出
@@ -109,6 +105,6 @@ public:
     GPUParticleGroup* GetParticleGroup(const std::string& name);
     void SetTextureHandle(const std::string& name, const uint32_t& handle);
     void SetModel(const std::string& name, const std::string& modelName);
-    void SetEmitterSphere(const std::string& name, const EmitterSphere& emitter);
+    void SetEmitterSphere(const std::string& name, const ParticleEmit& emitter);
     void SetViewProjection(const ViewProjection* view);
 };

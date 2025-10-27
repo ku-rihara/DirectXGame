@@ -7,9 +7,7 @@
 /// パーティクル作成
 ///=================================================================================
 GPUParticleEmitter* GPUParticleEmitter::CreateParticle(
-    const std::string& name,
-    const std::string& modelFilePath,
-    const int32_t& maxCount) {
+    const std::string& name, const std::string& modelFilePath,const int32_t& maxCount) {
 
     auto emitter = std::make_unique<GPUParticleEmitter>();
     emitter->InitWithModel(name, modelFilePath, maxCount);
@@ -21,9 +19,7 @@ GPUParticleEmitter* GPUParticleEmitter::CreateParticle(
 /// パーティクル作成(Primitive)
 ///=================================================================================
 GPUParticleEmitter* GPUParticleEmitter::CreateParticlePrimitive(
-    const std::string& name,
-    const PrimitiveType& type,
-    const int32_t& maxCount) {
+    const std::string& name,const PrimitiveType& type,const int32_t& maxCount) {
 
     auto emitter = std::make_unique<GPUParticleEmitter>();
     emitter->InitWithPrimitive(name, type, maxCount);
@@ -87,7 +83,7 @@ void GPUParticleEmitter::Update() {
     // マネージャーのエミッターデータを更新
     auto group = GPUParticleManager::GetInstance()->GetParticleGroup(name_);
     if (group && group->emitSphereData) {
-        EmitterSphere emitterData = *group->emitSphereData;
+        ParticleEmit emitterData = *group->emitSphereData;
         emitterData.frequencyTime = currentTime_;
         emitterData.emit          = shouldEmit_ ? 1 : 0;
 
@@ -107,7 +103,7 @@ void GPUParticleEmitter::Emit() {
     GPUParticleManager::GetInstance()->Emit(name_);
 }
 
-void GPUParticleEmitter::SetEmitterData(const EmitterSphere& emitter) {
+void GPUParticleEmitter::SetEmitterData(const ParticleEmit& emitter) {
     if (name_.empty()) {
         return;
     }
@@ -121,7 +117,7 @@ void GPUParticleEmitter::SetEmitterData(const EmitterSphere& emitter) {
 ///=================================================================================
 /// テクスチャ切り替え
 ///=================================================================================
-void GPUParticleEmitter::SetTexture(uint32_t textureHandle) {
+void GPUParticleEmitter::SetTexture(const uint32_t& textureHandle) {
     if (name_.empty()) {
         return;
     }

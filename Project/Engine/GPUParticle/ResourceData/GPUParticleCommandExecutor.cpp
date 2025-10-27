@@ -43,7 +43,7 @@ void GPUParticleCommandExecutor::ExecuteInitPass(ID3D12GraphicsCommandList* comm
 }
 
 void GPUParticleCommandExecutor::ExecuteEmitPass(ID3D12GraphicsCommandList* commandList, const UINT& numThreadsX) {
-  
+
     DxResourceBarrier* barrier = dxCommon_->GetResourceBarrier();
 
     //  デスクリプタヒープを設定
@@ -81,8 +81,8 @@ void GPUParticleCommandExecutor::ExecuteEmitPass(ID3D12GraphicsCommandList* comm
 }
 
 void GPUParticleCommandExecutor::ExecuteUpdatePass(ID3D12GraphicsCommandList* commandList, const UINT& numThreadsX) {
- 
-    DxResourceBarrier* barrier             = dxCommon_->GetResourceBarrier();
+
+    DxResourceBarrier* barrier = dxCommon_->GetResourceBarrier();
 
     // デスクリプタヒープを設定
     ID3D12DescriptorHeap* descriptorHeaps[] = {srvManager_->GetDescriptorHeap()};

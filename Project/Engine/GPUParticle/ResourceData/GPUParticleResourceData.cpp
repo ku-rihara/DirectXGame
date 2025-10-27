@@ -17,6 +17,7 @@ void GPUParticleResourceData::Create() {
     CreatePerFrameResource();
     CreateFreeListIndexResource();
     CreateFreeListResource();
+    CreateEmitParamResource();
 }
 
 void GPUParticleResourceData::CreateParticleResource() {
@@ -50,7 +51,7 @@ void GPUParticleResourceData::CreateEmitterResource() {
     // Emitterデータ用のバッファ
     emitterBuffer_.resource = dxCommon_->CreateBufferResource(
         dxCommon_->GetDevice(),
-        sizeof(EmitterSphere));
+        sizeof(ParticleEmit));
 
     // マップしておく
     emitterBuffer_.resource->Map(0, nullptr, reinterpret_cast<void**>(&emitterBuffer_.mappedData));
@@ -72,6 +73,16 @@ void GPUParticleResourceData::CreatePerFrameResource() {
         dxCommon_->GetDevice(), sizeof(PerFrame));
 
     perFrameBuffer_.resource->Map(0, nullptr, reinterpret_cast<void**>(&perFrameBuffer_.mappedData));
+}
+
+void GPUParticleResourceData::CreateEmitParamResource() {
+    // Emitterデータ用のバッファ
+    emitParamBuffer_.resource = dxCommon_->CreateBufferResource(
+        dxCommon_->GetDevice(),
+        sizeof(EmitParameter));
+
+    // マップしておく
+    emitParamBuffer_.resource->Map(0, nullptr, reinterpret_cast<void**>(&emitParamBuffer_.mappedData));
 }
 
 void GPUParticleResourceData::CreateFreeListIndexResource() {
@@ -106,7 +117,8 @@ void GPUParticleResourceData::CreateFreeListResource() {
         particleMaxCount_, sizeof(int32_t));
 }
 
-void GPUParticleResourceData::UpdateEmitterData(const EmitterSphere& data) {
+
+void GPUParticleResourceData::UpdateEmitterData(const ParticleEmit& data) {
     if (emitterBuffer_.IsValid()) {
         *emitterBuffer_.mappedData = data;
     }

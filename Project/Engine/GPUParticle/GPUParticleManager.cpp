@@ -248,7 +248,7 @@ void GPUParticleManager::CreateMaterialResource(const std::string& name) {
     particleGroups_[name].material.CreateMaterialResource(dxCommon_);
 }
 
-void GPUParticleManager::SetEmitterSphere(const std::string& name, const EmitterSphere& emitter) {
+void GPUParticleManager::SetEmitterSphere(const std::string& name, const ParticleEmit& emitter) {
     assert(particleGroups_.contains(name));
 
     GPUParticleGroup& group = particleGroups_[name];

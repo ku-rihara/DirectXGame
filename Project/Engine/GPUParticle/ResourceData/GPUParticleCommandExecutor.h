@@ -6,7 +6,6 @@ class DirectXCommon;
 class CSPipelineManager;
 class SrvManager;
 
-
 /// <summary>
 /// GPUパーティクルのシェーダーバインドや、ディスパッチを行う
 /// </summary>
