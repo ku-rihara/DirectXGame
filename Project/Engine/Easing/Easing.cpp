@@ -7,7 +7,7 @@
 #include <Windows.h>
 
 template <typename T>
-void Easing<T>::Init(const std::string& name, const std::string& adaptFile) {
+void Easing<T>::Init( const std::string& adaptFile) {
 
     // 初期化、ファイル読み込み
     FilePathChangeForType();

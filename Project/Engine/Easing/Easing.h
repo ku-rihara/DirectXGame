@@ -11,7 +11,7 @@
 /// <summary>
 /// イージングを扱うのテンプレートクラス
 /// </summary>
-/// <typeparam name="T">イージング対象の型(float, Vector2, Vector3)</typeparam>
+/// <typeParam name="T">イージング対象の型(float, Vector2, Vector3)</typeParam>
 template <typename T>
 class Easing {
 public:
@@ -23,7 +23,7 @@ public:
     /// </summary>
     /// <param name="name">イージング名</param>
     /// <param name="adaptFile">適用するJSONファイル名</param>
-    void Init(const std::string& name, const std::string& adaptFile = "");
+    void Init(const std::string& adaptFile);
 
     /// <summary>
     /// イージングパラメータ設定
@@ -137,7 +137,6 @@ private:
     std::string currentAppliedFileName_;
     std::string filePathForType_;
     std::string currentSelectedFileName_;
-    std::string easingName_;
 
     AdaptVector2AxisType oldTypeVector2_;
     AdaptFloatAxisType oldTypeFloat_;
