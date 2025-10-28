@@ -15,10 +15,7 @@ void Easing<T>::Init(const std::string& adaptFile) {
   
     if (!adaptFile.empty()) {
         ApplyFromJson(adaptFile);
-        SaveAppliedJsonFileName();
     }
-
-    LoadAndApplyFromSavedJson();
 }
 
 template <typename T>
@@ -55,49 +52,6 @@ void Easing<T>::SettingValue(const EasingParameter<T>& easingParam) {
     startTimeOffset_ = easingParam.startTimeOffset;
 }
 
-template <typename T>
-void Easing<T>::SaveAppliedJsonFileName() {
-    if (currentAppliedFileName_.empty()) {
-        return;
-    }
-
-    FilePathChangeForType();
-
-    std::string savePath = FilePath_ + adaptDataPath_ + filePathForType_ + "/" + easingName_ + ".json";
-
-    nlohmann::json saveJson;
-    saveJson["appliedFileName"] = currentAppliedFileName_;
-    saveJson["type"]            = filePathForType_;
-
-    std::ofstream ofs(savePath);
-    if (ofs.is_open()) {
-        ofs << saveJson.dump(4);
-        ofs.close();
-    }
-}
-
-template <typename T>
-void Easing<T>::LoadAndApplyFromSavedJson() {
-    FilePathChangeForType();
-
-    std::string savePath = FilePath_ + adaptDataPath_ + filePathForType_ + "/" + easingName_ + ".json";
-
-    std::ifstream ifs(savePath);
-    if (!ifs.is_open()) {
-        return;
-    }
-
-    nlohmann::json saveJson;
-    ifs >> saveJson;
-
-    if (saveJson.contains("appliedFileName")) {
-        std::string savedFileName = saveJson["appliedFileName"].get<std::string>();
-        if (!savedFileName.empty()) {
-            // 保存されていたJSONファイルを適用
-            ApplyFromJson(savedFileName);
-        }
-    }
-}
 
 template <typename T>
 void Easing<T>::ApplyFromJson(const std::string& fileName) {
@@ -233,18 +187,6 @@ void Easing<T>::ApplyForImGui() {
         ApplyFromJson(selectedFile);
     }
 
-    // ロード
-    if (ImGui::Button("Load")) {
-        LoadAndApplyFromSavedJson();
-    }
-
-    // 保存
-    if (ImGui::Button("Save")) {
-        SaveAppliedJsonFileName();
-        std::string filename = "EasingAdaptFile";
-        std::string message  = std::format("{}.json saved.", filename);
-        MessageBoxA(nullptr, message.c_str(), "Easing", 0);
-    }
 #endif // _DEBUG
 }
 

@@ -79,9 +79,7 @@ public:
     void Reset(); //< リセット
     void ResetStartValue(); //< 開始値にリセット
     void ApplyForImGui(); //< ImGuiで適用
-    void SaveAppliedJsonFileName(); //< 適用したJSONファイル名を保存
-    void LoadAndApplyFromSavedJson(); //< 保存されたJSONを読み込んで適用
-
+   
 private:
     void CalculateValue(); //< イージング値計算
     void FinishBehavior(); //< 終了時の動作
@@ -120,13 +118,13 @@ private:
 
 private:
     const std::string FilePath_      = "Resources/EasingParameter/";
-    const std::string adaptDataPath_ = "AdaptData/";
-
+  
     int32_t selectedFileIndex_;
     std::vector<std::string> easingFiles_;
     std::string currentAppliedFileName_;
     std::string filePathForType_;
     std::string currentSelectedFileName_;
+    std::string easingName_;
 
     AdaptVector2AxisType oldTypeVector2_;
     AdaptFloatAxisType oldTypeFloat_;
