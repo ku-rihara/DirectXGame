@@ -12,6 +12,7 @@ void ShakeData::Init(const std::string& shakeName) {
     globalParameter_->CreateGroup(groupName_, true);
 
     // 重複バインドを防ぐ
+    globalParameter_->ClearBindingsForGroup(groupName_);
     BindParams();
 
     // パラメータ同期
@@ -210,28 +211,6 @@ void ShakeData::AdjustParam() {
 
         // イージングタイプ
         EasingTypeSelector("Easing Type", easeType_);
-
-        ImGui::Separator();
-
-        // Load ボタン
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
-        if (ImGui::Button("Load ShakeData")) {
-            LoadData();
-            MessageBoxA(nullptr, "shakeData loaded successfully.", "ShakeData", 0);
-        }
-        ImGui::PopStyleColor(3);
-
-        // Save ボタン
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.4f, 0.9f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.5f, 1.0f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.3f, 0.8f, 1.0f));
-        if (ImGui::Button("Save ShakeData")) {
-            SaveData();
-            MessageBoxA(nullptr, "All animations saved successfully.", "ShakeData", 0);
-        }
-        ImGui::PopStyleColor(3);
 
         ImGui::PopID();
     }
