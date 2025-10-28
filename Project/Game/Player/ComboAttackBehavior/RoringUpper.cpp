@@ -150,16 +150,14 @@ void RoringUpper::CollisionInit() {
 }
 
 void RoringUpper::EasingInit() {
-    backlashEase_.Init("UpperBackLash", "UpperBackLash.json");
+    backlashEase_.Init("UpperBackLash.json");
     backlashEase_.SetAdaptValue(&tempWorldPos_);
     backlashEase_.Reset();
 
     backlashEase_.SetStartValue(initPos_);
     backlashEase_.SetEndValue(backlashPos_);
 
-    rotateEase_.Init("upperRotate");
-    rotateEase_.ApplyFromJson("upperRotate.json");
-    rotateEase_.SaveAppliedJsonFileName();
+    rotateEase_.Init("upperRotate.json");
     rotateEase_.SetAdaptValue(&xRotate_);
     rotateEase_.Reset();
 }

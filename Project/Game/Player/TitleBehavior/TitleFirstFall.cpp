@@ -111,9 +111,7 @@ void TitleFirstFall::Update() {
 }
 
 void TitleFirstFall::EasingInit() {
-    landScaleEasing_.Init("TitleLandScaleing");
-    landScaleEasing_.ApplyFromJson("TitleLandScaleing.json");
-    landScaleEasing_.SaveAppliedJsonFileName();
+    landScaleEasing_.Init("TitleLandScaleing.json");
     landScaleEasing_.SetAdaptValue(&tempScale_);
     landScaleEasing_.Reset();
 
@@ -121,9 +119,7 @@ void TitleFirstFall::EasingInit() {
        
     });
 
-	fallEase_.Init("TitleFall");
-    fallEase_.ApplyFromJson("TitleFall.json");
-    fallEase_.SaveAppliedJsonFileName();
+	fallEase_.Init("TitleFall.json");
     fallEase_.SetAdaptValue(&tempPosY_);
     fallEase_.Reset();
 

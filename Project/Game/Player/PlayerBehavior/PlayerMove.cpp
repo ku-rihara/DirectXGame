@@ -20,7 +20,7 @@ PlayerMove::PlayerMove(Player* player)
     /// ===================================================
 
     // waitEase
-    waitEase_.Init("PlayerWait", "PlayerWait.json");
+    waitEase_.Init("PlayerWait.json");
     waitEase_.SetAdaptValue(&tempWaitScaleY_);
 
     waitEase_.SetOnWaitEndCallback([this]() {

@@ -26,9 +26,7 @@ void GameScene::Init() {
     shandle_       = TextureManager::GetInstance()->LoadTexture("Resources/Texture/screenChange.png");
     screenSprite_.reset(Sprite::Create("screenChange.png"));
 
-    finishSpriteEase_.Init("finishSpriteTest");
-    finishSpriteEase_.ApplyFromJson("finishSpriteTest.json");
-    finishSpriteEase_.SaveAppliedJsonFileName();
+    finishSpriteEase_.Init("finishSpriteTest.json");
     finishSpriteEase_.SetAdaptValue(&tempSpritePos_);
     finishSpriteEase_.Reset();
 

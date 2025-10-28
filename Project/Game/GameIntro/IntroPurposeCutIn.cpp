@@ -142,21 +142,21 @@ void IntroPurposeCutIn::EasingInit() {
     spriteVariable_.closeScaleEaseY  = std::make_unique<Easing<float>>();
 
     // サイドUI出現Easing
-    spriteVariable_.sideAppearEase[LEFT]->Init("leftAppearPosX", "leftAppearPosX.json");
-    spriteVariable_.sideAppearEase[RIGHT]->Init("RightAppearPosX", "RightAppearPosX.json");
+    spriteVariable_.sideAppearEase[LEFT]->Init("leftAppearPosX.json");
+    spriteVariable_.sideAppearEase[RIGHT]->Init("RightAppearPosX.json");
 
     // 元に戻るサイドUIEasing
-    spriteVariable_.sideBackEase[LEFT]->Init("LeftBackPosX", "LeftBackPosX.json");
-    spriteVariable_.sideBackEase[RIGHT]->Init("RightBackPosX", "RightBackPosX.json");
+    spriteVariable_.sideBackEase[LEFT]->Init("LeftBackPosX.json");
+    spriteVariable_.sideBackEase[RIGHT]->Init("RightBackPosX.json");
 
     // CenterEasing
-    spriteVariable_.centerAppearEase->Init("CenterAppearScale", "CenterAppearScale.json");
+    spriteVariable_.centerAppearEase->Init("CenterAppearScale.json");
 
     // AppearScaleY
-    spriteVariable_.appearScaleEaseY->Init("PurposeScaleY", "PurposeScaleY.json");
+    spriteVariable_.appearScaleEaseY->Init("PurposeScaleY.json");
 
     // CloseScaleY
-    spriteVariable_.closeScaleEaseY->Init("PurposeCloseScaleY", "PurposeCloseScaleY.json");
+    spriteVariable_.closeScaleEaseY->Init("PurposeCloseScaleY.json");
 
     // 適応値、スタート値セット(サイドUI出現Easing)
     for (size_t i = 0; i < static_cast<size_t>(spriteVariable_.sideAppearEase.size()); ++i) {

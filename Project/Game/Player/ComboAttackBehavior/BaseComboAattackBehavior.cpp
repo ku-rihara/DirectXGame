@@ -46,14 +46,14 @@ void BaseComboAattackBehavior::AnimationInit() {
 
     // scaling
 
-    startEasing_.Init("AttackStart");
+    startEasing_.Init("AttackStartScaling.json");
     startEasing_.SetAdaptValue(&tempScaleValue_);
     tempScaleValue_ = Vector3::UnitVector();
 
-    rotateEasing_.Init("AttackRotate");
+    rotateEasing_.Init("AttackRotate.json");
     rotateEasing_.SetAdaptValue(&tempRotateValue_);
     
-    floatEase_.Init("AttackFloating");
+    floatEase_.Init("AttackFloating.json");
     floatEase_.SetAdaptValue(&tempFloatValue_);
 
     floatEase_.SetOnFinishCallback([this] {

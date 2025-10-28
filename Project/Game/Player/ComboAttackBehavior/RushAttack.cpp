@@ -43,7 +43,7 @@ void RushAttack::Init() {
 
     pPlayer_->RotateReset();
 
-    rushBlurEase_.Init("RushEffect", "RushBlur.json");
+    rushBlurEase_.Init("RushBlur.json");
     rushBlurEase_.SetAdaptValue(&tempBlurParam_);
 
     rushBlurEase_.SetOnWaitEndCallback([this]() {
@@ -128,7 +128,7 @@ void RushAttack::CollisionInit() {
    
 }
 void RushAttack::EasingInit() {
-    handRMoveEase_.Init("RHandMove");
+    handRMoveEase_.Init("RHandMove.json");
     handRMoveEase_.SetAdaptValue(&tempRHandPos_);
     handRMoveEase_.Reset();
 
@@ -138,7 +138,7 @@ void RushAttack::EasingInit() {
 
     });
 
-    handLMoveEase_.Init("LHandMove");
+    handLMoveEase_.Init("LHandMove.json");
     handLMoveEase_.SetAdaptValue(&tempLHandPos_);
     handLMoveEase_.Reset();
 
@@ -148,7 +148,7 @@ void RushAttack::EasingInit() {
 
     });
 
-    rushEase_.Init("rushAttack");
+    rushEase_.Init("rushAttack.json");
     rushEase_.SetAdaptValue(&tempRushPos_);
     rushEase_.Reset();
 

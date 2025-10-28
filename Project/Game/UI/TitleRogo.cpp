@@ -63,9 +63,7 @@ void TitleRogo::Draw() {
 }
 
 void TitleRogo::EasingSet() {
-    punchEase_.Init("punchSpriteScale");
-    punchEase_.ApplyFromJson("punchSpriteScale.json");
-    punchEase_.SaveAppliedJsonFileName();
+    punchEase_.Init("punchSpriteScale.json");
     punchEase_.SetAdaptValue(&punchSpriteScale_);
     punchEase_.Reset();
 
@@ -73,9 +71,7 @@ void TitleRogo::EasingSet() {
         step_ = Step::RUSH;
     });
 
-    rushEase_.Init("rushSpriteScale");
-    rushEase_.ApplyFromJson("rushSpriteScale.json");
-    rushEase_.SaveAppliedJsonFileName();
+    rushEase_.Init("rushSpriteScale.json");
     rushEase_.SetAdaptValue(&rushSpriteScale_);
     rushEase_.Reset();
 
@@ -84,9 +80,7 @@ void TitleRogo::EasingSet() {
         step_ = Step::BOTTON;
     });
 
-    bottomEase_.Init("bottomSpriteScale");
-    bottomEase_.ApplyFromJson("bottomSpriteScale.json");
-    bottomEase_.SaveAppliedJsonFileName();
+    bottomEase_.Init("bottomSpriteScale.json");
     bottomEase_.SetAdaptValue(&bottomSpriteScale_);
     bottomEase_.Reset();
 

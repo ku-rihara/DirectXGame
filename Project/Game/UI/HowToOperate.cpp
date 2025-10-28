@@ -7,7 +7,7 @@ void HowToOperate::Init() {
   
     sprite_.reset(Sprite::Create("HowToOperate.png", true));
 
-    scaleEasing_.Init("HowToOperatorScaling", "HowToOperatorEasing.json");
+    scaleEasing_.Init("HowToOperatorEasing.json");
     scale_ = Vector2::ZeroVector();
     scaleEasing_.SetAdaptValue(&scale_);
     scaleEasing_.Reset();

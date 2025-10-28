@@ -14,7 +14,7 @@ ComboCountUP::ComboCountUP(ComboUIController* uiController)
     : BaseComboUIBehavior("ComboCountUP", uiController) {
 
     // easing 初期化
-    scalingEasing_.Init("ComboUIScaling");
+    scalingEasing_.Init("ComboUIScale.json");
     scalingEasing_.SetAdaptValue(&baseScale_);
     scalingEasing_.Reset();
 

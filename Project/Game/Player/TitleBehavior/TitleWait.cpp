@@ -19,13 +19,7 @@ TitleWait::TitleWait(Player* player)
 	/// 変数初期化
 	///---------------------------------------------------------
 
-	/*pressEase_.maxTime = 0.3f;
-	restEase_.maxTime = 0.25f;
-	pressScale_ = 0.85f;*/
-
-	pressEase_.Init("TitleWait");
-    pressEase_.ApplyFromJson("TitleWait.json");
-    pressEase_.SaveAppliedJsonFileName();
+	pressEase_.Init("TitleWait.json");
     pressEase_.SetAdaptValue(&tempScaleY_);
     pressEase_.Reset();
 

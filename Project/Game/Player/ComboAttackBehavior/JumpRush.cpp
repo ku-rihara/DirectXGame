@@ -27,11 +27,11 @@ void JumpRush::Init() {
 
     BaseComboAattackBehavior::Init();
 
-    assaultJumpEase_.Init("PlayerAssaultJump");
+    assaultJumpEase_.Init("PlayerAssaultJumpEase.json");
     assaultJumpEase_.SetAdaptValue(&tempPositionY_);
     assaultJumpEase_.Reset();
 
-    assaultEase_.Init("PlayerAssault");
+    assaultEase_.Init("PlayerAssaultEase.json");
     assaultEase_.SetAdaptValue(&tempPosition_);
     assaultEase_.Reset();
 

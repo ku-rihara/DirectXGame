@@ -17,9 +17,7 @@ PlayerSpawn::PlayerSpawn(Player* player)
     /// 変数初期化
     /// ===================================================
 
-    waitEase_.Init("PlayerWait");
-    waitEase_.ApplyFromJson("PlayerWait.json");
-    waitEase_.SaveAppliedJsonFileName();
+    waitEase_.Init("PlayerWait.json");
     waitEase_.SetAdaptValue(&tempWaitScaleY_);
     waitEase_.Reset();
 
@@ -27,9 +25,7 @@ PlayerSpawn::PlayerSpawn(Player* player)
         waitEase_.Reset();
     });
 
-    spawnEase_.Init("Spawn");
-    spawnEase_.ApplyFromJson("SpawnDissolve.json");
-    spawnEase_.SaveAppliedJsonFileName();
+    spawnEase_.Init("SpawnDissolve.json");
     spawnEase_.SetAdaptValue(&tempDessolve_);
     spawnEase_.Reset();
 

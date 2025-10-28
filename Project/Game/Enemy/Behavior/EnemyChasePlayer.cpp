@@ -23,13 +23,11 @@ EnemyChasePlayer::EnemyChasePlayer(BaseEnemy* boss)
     pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2(0, 0));
     pBaseEnemy_->GetFindSprite()->SetScale(Vector2(0, 0));
 
-    spriteEasing_.Init("EnemyFindSprite");
+    spriteEasing_.Init("EnemyFindSpriteScaling.json");
     spriteEasing_.SetAdaptValue(&tempSpriteScale_);
     spriteEasing_.Reset();
 
-    scaleEasing_.Init("EnemyFindScaling");
-    scaleEasing_.ApplyFromJson("EnemyFindScaling.json");
-    scaleEasing_.SaveAppliedJsonFileName();
+    scaleEasing_.Init("EnemyFindScaling.json");
     scaleEasing_.SetAdaptValue(&tempEnemyScale_);
     scaleEasing_.Reset();
 

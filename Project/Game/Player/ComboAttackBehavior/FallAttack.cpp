@@ -158,11 +158,11 @@ void FallAttack::Update() {
 
 void FallAttack::EasingInit() {
 
-    landScaleEasing_.Init("PlayerLandScaling", "PlayerLandScaling.json");
+    landScaleEasing_.Init("PlayerLandScaling.json");
     landScaleEasing_.SetAdaptValue(&tempLandScale_);
     landScaleEasing_.Reset();
 
-    fallEase_.Init("PlayerFallAttack", "PlayerFallAttack.json");
+    fallEase_.Init("PlayerFallAttack.json");
     fallEase_.SetAdaptValue(&tempWorldPosY_);
     fallEase_.Reset();
     fallEase_.SetStartValue(playerInitPosY_);
@@ -172,7 +172,7 @@ void FallAttack::EasingInit() {
         step_ = STEP::FALLFINISH;
     });
 
-    preActionPosYEase_.Init("preActionPosY", "preActionPosY.json");
+    preActionPosYEase_.Init("preActionPosY.json");
     preActionPosYEase_.SetAdaptValue(&preActionPosY_);
     preActionPosYEase_.Reset();
 

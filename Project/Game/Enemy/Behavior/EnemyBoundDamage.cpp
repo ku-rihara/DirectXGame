@@ -42,17 +42,12 @@ void EnemyBoundDamage::Update() {
 	/// ヒットバッグ
 	///---------------------------------------------------------
 	
-		//// Yに加算
-		//pBaseEnemy_->AddPosition(Vector3(0, speed_, 0));
-
 		// 回転
 		rotate_ += pBaseEnemy_->GetParameter().thrustRotateSpeed * Frame::DeltaTimeRate();
 		pBaseEnemy_->SetBodyRotateX(rotate_);
 
 		pBaseEnemy_->Jump(speed_, fallSpeedLimit_, gravity_);
-		// 加速する
-		/*speed_ = max(speed_ - (gravity_ * Frame::DeltaTimeRate()),fallSpeedLimit_);*/
-	
+
 		if (pBaseEnemy_->GetTransform().translation_.y > pBaseEnemy_->GetParameter().basePosY) break;
 
 		step_ = Step::RETUNROOT;

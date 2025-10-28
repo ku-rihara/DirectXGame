@@ -7,7 +7,7 @@
 #include"MathFunction.h"
 /// obj
 #include"Enemy/BaseEnemy.h"
-#include"Player/Player.h"/// プレイヤーの座標取得に使ってるので消さないこと
+#include"Player/Player.h"
 /// frame
 #include"Frame/Frame.h"
 /// imgui
@@ -24,9 +24,7 @@ EnemyWait::EnemyWait(BaseEnemy* boss)
 	pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2(0, 0));
 	pBaseEnemy_->GetFindSprite()->SetScale(Vector2(0, 0));
 
-	spriteEase_.Init("EnemyOverLookSprite");
-    /*spriteEase_.ApplyFromJson("EnemyOverLookSpriteScaling.json");
-    spriteEase_.SaveAppliedJsonFileName();*/
+	spriteEase_.Init("EnemyOverLookSpriteScaling.json");
     spriteEase_.SetAdaptValue(&tempSpriteScale_);
     spriteEase_.Reset();
 

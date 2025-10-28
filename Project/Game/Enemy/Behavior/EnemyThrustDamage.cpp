@@ -22,19 +22,13 @@ EnemyThrustDamage::EnemyThrustDamage(BaseEnemy* boss)
 	// 赤色
 	pBaseEnemy_->SetBodyColor(Vector4(0.9f, 0, 0, 0.9f));
 
-	easing_.Init("EnemyThrusted");
-    easing_.ApplyFromJson("EnemyThrusted.json");
-    easing_.SaveAppliedJsonFileName();
+	easing_.Init("EnemyThrusted.json");
     easing_.SetAdaptValue(&tempPos_);
     easing_.Reset();
 
     easing_.SetOnFinishCallback([this]() {
         step_ = Step::NEXTBEHAVIOR;
     });
-
-
-	/*easing_.time = 0.0f;
-	easing_.maxTime = 0.15f;*/
 
 	hitStopTime_ = 0.0f;
 	kHitStopTime_ = 0.05f;
@@ -49,11 +43,6 @@ EnemyThrustDamage::~EnemyThrustDamage() {
 }
 
 void EnemyThrustDamage::Update() {
-
-	/*hitStopTime_ += Frame::DeltaTime();
-	if (hitStopTime_ >= kHitStopTime_) {
-		Frame::SetTimeScale(1.0f);
-	}*/
 
 	switch (step_)
 	{

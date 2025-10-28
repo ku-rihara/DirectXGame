@@ -16,11 +16,11 @@ void MovieLine::Init() {
         sprite_[i].reset(Sprite::Create("movieLine.png"));
     }
 
-    exitEasing_[0].Init("UPMovieLineExit", "UPMovieLineExit.json");
-    exitEasing_[1].Init("DownMovieLineExit", "DownMovieLineExit.json");
+    exitEasing_[0].Init("UPMovieLineExit.json");
+    exitEasing_[1].Init("DownMovieLineExit.json");
 
-    appearEasing_[0].Init("UPMovieLineAppear", "UPMovieLineAppear.json");
-    appearEasing_[1].Init("DownMovieLineAppear", "DownMovieLineAppear.json");
+    appearEasing_[0].Init("UPMovieLineAppear.json");
+    appearEasing_[1].Init("DownMovieLineAppear.json");
 
     for (int32_t i = 0; i < static_cast<int32_t>(exitEasing_.size()); ++i) {
         exitEasing_[i].SetAdaptValue(&exitAdaptPos_[i]);

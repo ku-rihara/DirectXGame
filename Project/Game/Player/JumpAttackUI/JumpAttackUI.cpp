@@ -145,9 +145,9 @@ void JumpAttackUI::EasingInit() {
     easingParam_.rotateEasing = std::make_unique<Easing<float>>();
 
     // Init
-    easingParam_.scaleEasing->Init("PlayerOperateUIScaling", "PlayerOperateUIScaling.json");
-    easingParam_.posEasing->Init("PlayerOperateUIOffsetPos", "PlayerOperateUIOffsetPos.json");
-    easingParam_.rotateEasing->Init("PlayerOperateUIRotate", "PlayerOperateUIRotate.json");
+    easingParam_.scaleEasing->Init("PlayerOperateUIScaling.json");
+    easingParam_.posEasing->Init("PlayerOperateUIOffsetPos.json");
+    easingParam_.rotateEasing->Init("PlayerOperateUIRotate.json");
 
     // scale
     easingParam_.scaleEasing->SetAdaptValue(&easingParam_.scaleEaseValue);

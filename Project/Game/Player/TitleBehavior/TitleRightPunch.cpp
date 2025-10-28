@@ -80,11 +80,11 @@ void TitleRightPunch::Update() {
 }
 
 void TitleRightPunch::EasingInit() {
-    scalingEase_.Init("TitleScaling");
+    scalingEase_.Init("TitleScaling.json");
     scalingEase_.SetAdaptValue(&tempScale_);
     scalingEase_.Reset();
 
-    punchEase_.Init("PlayerRightPunch");
+    punchEase_.Init("PlayerRightPunch.json");
     punchEase_.SetAdaptValue(&punchPosition_);
     punchEase_.Reset();
 
@@ -92,7 +92,7 @@ void TitleRightPunch::EasingInit() {
         order_ = Order::BACKPUNCH;
     });
 
-    backPunchEase_.Init("PlayerRightBackPunch");
+    backPunchEase_.Init("PlayerRightBackPunch.json");
     backPunchEase_.SetAdaptValue(&punchPosition_);
     backPunchEase_.Reset();
 

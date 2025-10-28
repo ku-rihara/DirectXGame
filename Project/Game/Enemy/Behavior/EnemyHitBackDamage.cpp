@@ -19,9 +19,6 @@ EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
 	// 赤色
 	pBaseEnemy_->SetBodyColor(Vector4(0.9f, 0, 0, 0.9f));
 
-	/*easing_.time = 0.0f;
-	easing_.maxTime = 0.2f;*/
-
 	pBaseEnemy_->DamageRenditionInit();
 
 	///
@@ -29,16 +26,12 @@ EnemyHitBackDamage::EnemyHitBackDamage(BaseEnemy* boss)
 	pBaseEnemy_->GetFindSprite()->SetScale(Vector2(1, 1));
     pBaseEnemy_->SetScale(pBaseEnemy_->GetParameter().initScale_);
 
-	archingRotateEase_.Init("EnemyArchingRotate");
-    archingRotateEase_.ApplyFromJson("EnemyArchingRotate.json");
-    archingRotateEase_.SaveAppliedJsonFileName();
+	archingRotateEase_.Init("EnemyArchingRotate.json");
     archingRotateEase_.SetAdaptValue(&tempArchingRotateX_);
     archingRotateEase_.Reset();
 
    
-	archingPosEase_.Init("EnemyArchingPos");
-    archingPosEase_.ApplyFromJson("EnemyArchingPos.json");
-    archingPosEase_.SaveAppliedJsonFileName();
+	archingPosEase_.Init("EnemyArchingPos.json");
     archingPosEase_.SetAdaptValue(&tempArchingPos_);
     archingPosEase_.Reset();
 

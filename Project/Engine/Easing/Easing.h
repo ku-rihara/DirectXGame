@@ -11,19 +11,16 @@
 /// <summary>
 /// イージングを扱うのテンプレートクラス
 /// </summary>
-/// <typeparam name="T">イージング対象の型(float, Vector2, Vector3)</typeparam>
+/// <typeParam name="T">イージング対象の型(float, Vector2, Vector3)</typeParam>
 template <typename T>
 class Easing {
 public:
     Easing()  = default;
     ~Easing() = default;
 
-    /// <summary>
-    /// 初期化
-    /// </summary>
-    /// <param name="name">イージング名</param>
-    /// <param name="adaptFile">適用するJSONファイル名</param>
-    void Init(const std::string& name, const std::string& adaptFile = "");
+    // 初期化(ファイルロード)、更新
+    void Init(const std::string& adaptFile);
+    void Update(const float& deltaTime);
 
     /// <summary>
     /// イージングパラメータ設定
@@ -36,12 +33,6 @@ public:
     /// </summary>
     /// <param name="fileName">ファイル名</param>
     void ApplyFromJson(const std::string& fileName);
-
-    /// <summary>
-    /// イージング更新
-    /// </summary>
-    /// <param name="deltaTime">デルタタイム</param>
-    void Update(const float& deltaTime);
 
     /// <summary>
     /// 変数に適用
@@ -88,14 +79,11 @@ public:
     void Reset(); //< リセット
     void ResetStartValue(); //< 開始値にリセット
     void ApplyForImGui(); //< ImGuiで適用
-    void SaveAppliedJsonFileName(); //< 適用したJSONファイル名を保存
-    void LoadAndApplyFromSavedJson(); //< 保存されたJSONを読み込んで適用
-
+   
 private:
-    
-    void CalculateValue();        //< イージング値計算
-    void FinishBehavior();        //< 終了時の動作
-    void ChangeAdaptAxis();       //< 適用軸変更
+    void CalculateValue(); //< イージング値計算
+    void FinishBehavior(); //< 終了時の動作
+    void ChangeAdaptAxis(); //< 適用軸変更
     void FilePathChangeForType(); //< ファイルパスを型に応じて変更
     bool IsEasingStarted() const; //< イージング開始判定
 
@@ -130,8 +118,7 @@ private:
 
 private:
     const std::string FilePath_      = "Resources/EasingParameter/";
-    const std::string adaptDataPath_ = "AdaptData/";
-
+  
     int32_t selectedFileIndex_;
     std::vector<std::string> easingFiles_;
     std::string currentAppliedFileName_;
