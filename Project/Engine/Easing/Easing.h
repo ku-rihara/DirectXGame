@@ -64,22 +64,14 @@ public:
     typename std::enable_if_t<std::is_same_v<U, Vector2>, void>
     SetAdaptValue(Vector3* value);
 
-    /// <summary>
-    /// 終了時コールバック設定
-    /// </summary>
-    /// <param name="callback">コールバック関数</param>
+    // 　イージング終了コールバック、いーじんぐ待機終了コールバック
     void SetOnFinishCallback(const std::function<void()>& callback) { onFinishCallback_ = callback; }
-
-    /// <summary>
-    /// 待機終了時コールバック設定
-    /// </summary>
-    /// <param name="callback">コールバック関数</param>
     void SetOnWaitEndCallback(const std::function<void()>& callback) { onWaitEndCallback_ = callback; }
 
-    void Reset(); //< リセット
+    void Reset();           //< リセット
     void ResetStartValue(); //< 開始値にリセット
-    void ApplyForImGui(); //< ImGuiで適用
-   
+    void ApplyForImGui();   //< ImGuiで適用
+
 private:
     void CalculateValue(); //< イージング値計算
     void FinishBehavior(); //< 終了時の動作
@@ -117,8 +109,8 @@ private:
     bool isPlaying_  = false;
 
 private:
-    const std::string FilePath_      = "Resources/EasingParameter/";
-  
+    const std::string FilePath_ = "Resources/EasingParameter/";
+
     int32_t selectedFileIndex_;
     std::vector<std::string> easingFiles_;
     std::string currentAppliedFileName_;

@@ -84,6 +84,7 @@ Vector3 ShakeData::ApplyAxisFlag(const Vector3& shakeValue) const {
 
 void ShakeData::Play() {
     Reset();
+    globalParameter_->SyncParamForGroup(groupName_);
 
     playState_ = PlayState::PLAYING;
 
@@ -120,6 +121,7 @@ void ShakeData::LoadData() {
 }
 
 void ShakeData::SaveData() {
+    globalParameter_->SyncParamForGroup(groupName_);
     globalParameter_->SaveFile(groupName_, folderPath_);
 }
 

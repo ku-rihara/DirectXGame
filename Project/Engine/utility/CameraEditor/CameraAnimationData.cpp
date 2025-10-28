@@ -48,6 +48,7 @@ void CameraAnimationData::LoadData() {
 
 void CameraAnimationData::SaveData() {
 
+    globalParameter_->SyncParamForGroup(groupName_);
     // アニメーションデータの保存
     globalParameter_->SaveFile(groupName_, folderPath_);
     // キーフレームデータの保存
@@ -323,8 +324,15 @@ bool CameraAnimationData::IsFinished() const {
 void CameraAnimationData::Play() {
     Reset();
     playState_ = PlayState::PLAYING;
-}
 
+    //  再生開始時にパラメータを再同期
+    globalParameter_->SyncParamForGroup(groupName_);
+
+    // キーフレームのパラメータも再同期
+    for (auto& keyFrame : keyFrames_) {
+        keyFrame->SyncParams(); 
+    }
+}
 void CameraAnimationData::Pause() {
     if (playState_ == PlayState::PLAYING) {
         playState_ = PlayState::PAUSED;
