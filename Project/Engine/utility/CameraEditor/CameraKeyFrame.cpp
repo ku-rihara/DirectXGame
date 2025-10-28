@@ -4,7 +4,7 @@
 #include <imgui.h>
 #include <iostream>
 
-void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t& keyNumber) {
+void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t& keyNumber, const bool& bindSkip) {
     // グローバルパラメータ
     globalParameter_         = GlobalParameter::GetInstance();
     currentKeyFrameIndex     = keyNumber;
@@ -13,7 +13,8 @@ void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t&
     groupName_ = newGroupName;
     globalParameter_->CreateGroup(groupName_, false);
 
-    if (!globalParameter_->HasBindings(groupName_)) {
+    // bindSkipがfalseの場合のみバインド（エディタ用）
+    if (!bindSkip && !globalParameter_->HasBindings(groupName_)) {
         BindParams();
     }
 

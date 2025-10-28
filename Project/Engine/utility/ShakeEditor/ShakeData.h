@@ -41,7 +41,7 @@ public:
     /// 初期化
     /// </summary>
     /// <param name="shakeName">シェイク名</param>
-    void Init(const std::string& shakeName);
+    void Init(const std::string& shakeName, const bool& bindSkip = false);
 
     /// <summary>
     /// 更新

@@ -31,7 +31,7 @@ public:
     /// </summary>
     /// <param name="cameraAnimationName">カメラアニメーション名</param>
     /// <param name="keyNumber">キー番号</param>
-    void Init(const std::string& cameraAnimationName, const int32_t& keyNumber);
+    void Init(const std::string& cameraAnimationName, const int32_t& keyNumber, const bool& bindSkip = false);
 
     /// <summary>
     /// 更新
