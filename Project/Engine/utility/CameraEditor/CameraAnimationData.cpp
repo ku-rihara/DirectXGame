@@ -17,7 +17,7 @@ void CameraAnimationData::Init(const std::string& animationName) {
     globalParameter_->CreateGroup(groupName_, true);
 
     // 重複バインドを防ぐ
-    globalParameter_->ClearBindingsForGroup(groupName_);
+  
     BindParams();
 
     // パラメータ同期

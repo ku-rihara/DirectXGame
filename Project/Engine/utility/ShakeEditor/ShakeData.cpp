@@ -12,7 +12,6 @@ void ShakeData::Init(const std::string& shakeName) {
     globalParameter_->CreateGroup(groupName_, true);
 
     // 重複バインドを防ぐ
-    globalParameter_->ClearBindingsForGroup(groupName_);
     BindParams();
 
     // パラメータ同期
