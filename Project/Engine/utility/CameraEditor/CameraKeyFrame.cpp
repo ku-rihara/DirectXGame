@@ -10,16 +10,10 @@ void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t&
     currentKeyFrameIndex     = keyNumber;
     std::string newGroupName = cameraAnimationName + std::to_string(currentKeyFrameIndex);
 
-    if (!groupName_.empty() && groupName_ != newGroupName) {
-        globalParameter_->ClearBindingsForGroup(groupName_);
-    }
-
     groupName_ = newGroupName;
     globalParameter_->CreateGroup(groupName_, false);
 
-    // 重複バインドを防ぐ
-    globalParameter_->ClearBindingsForGroup(groupName_);
-
+   
     BindParams();
 
     AdaptValueSetting();
