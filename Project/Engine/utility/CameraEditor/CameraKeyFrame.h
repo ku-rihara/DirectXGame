@@ -53,15 +53,16 @@ public:
     /// <param name="target">対象</param>
     void TimeModeSelector(const char* label, int32_t& target);
 
-    void AdjustParam();       //< パラメータ調整
-    void BindParams();        //< パラメータバインド
-    void AdaptEaseParam();    //< イージングパラメータ適用
+    void AdjustParam(); //< パラメータ調整
+    void BindParams(); //< パラメータバインド
+    void AdaptEaseParam(); //< イージングパラメータ適用
     void AdaptValueSetting(); //< 値設定適用
-    void Reset();             //< リセット
-    bool IsFinished() const;  //< 終了判定
+    void Reset(); //< リセット
+    bool IsFinished() const; //< 終了判定
 
     void LoadData(); //< データ読み込み
     void SaveData(); //< データ保存
+    void SyncParams(); //< パラメータ同期
 
 private:
     GlobalParameter* globalParameter_;

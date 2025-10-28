@@ -42,6 +42,7 @@ void CameraKeyFrame::LoadData() {
 }
 
 void CameraKeyFrame::SaveData() {
+    globalParameter_->SyncParamForGroup(groupName_);
     // パラメータファイルに保存
     globalParameter_->SaveFile(groupName_, folderName_);
 }
@@ -63,6 +64,11 @@ void CameraKeyFrame::Update(const float& speedRate) {
     positionEase_.Update(actualDeltaTime);
     rotationEase_.Update(actualDeltaTime);
     fovEase_.Update(actualDeltaTime);
+}
+
+void CameraKeyFrame::SyncParams() {
+    // グローバルパラメータから最新の値を取得
+    globalParameter_->SyncParamForGroup(groupName_);
 }
 
 void CameraKeyFrame::BindParams() {
