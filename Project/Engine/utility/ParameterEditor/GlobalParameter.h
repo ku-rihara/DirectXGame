@@ -172,6 +172,11 @@ public:
     /// <param name="groupName">グループ名</param>
     void RemoveGroup(const std::string& groupName);
 
+    /// <summary>
+    /// グループの全バインド変数をGlobalParameterに反映
+    /// </summary>
+    void PushBindingsForGroup(const std::string& groupName);
+
     void AddTreePoP();   //< ツリーポップ
     void BindResetAll(); //< 全バインドリセット
     void SyncAll();      //< 全同期

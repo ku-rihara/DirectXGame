@@ -113,6 +113,8 @@ void CameraKeyFrame::AdjustParam() {
     EasingTypeSelector("Easing Type Rotate", rotationEaseType_);
     EasingTypeSelector("Easing Type Fov", fovEaseType_);
 
+    globalParameter_->PushBindingsForGroup(groupName_);
+
     AdaptEaseParam();
 
     ImGui::PopID();

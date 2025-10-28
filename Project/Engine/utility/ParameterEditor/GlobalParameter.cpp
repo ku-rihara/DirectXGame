@@ -497,6 +497,15 @@ void GlobalParameter::SyncAll() {
     }
 }
 
+void GlobalParameter::PushBindingsForGroup(const std::string& groupName) {
+    auto it = bindings_.find(groupName);
+    if (it != bindings_.end()) {
+        for (auto& item : it->second) {
+            item.pushVariant(); 
+        }
+    }
+}
+
 void GlobalParameter::SyncParamForGroup(const std::string& group) {
     auto it = bindings_.find(group);
     if (it != bindings_.end()) {
