@@ -161,26 +161,19 @@ public:
     void ParamLoadForImGui(const std::string& groupName, const std::string& fileName = "");
 
     /// <summary>
-    /// グループのバインディングを全てクリア
-    /// </summary>
-    /// <param name="groupName">グループ名</param>
-    void ClearBindingsForGroup(const std::string& groupName);
-
-    /// <summary>
     /// グループ削除
     /// </summary>
     /// <param name="groupName">グループ名</param>
     void RemoveGroup(const std::string& groupName);
 
-    /// <summary>
-    /// グループの全バインド変数をGlobalParameterに反映
+    /// グループにバインドが存在するか確認
     /// </summary>
-    void PushBindingsForGroup(const std::string& groupName);
+    bool HasBindings(const std::string& groupName) const;
 
-    void AddTreePoP();   //< ツリーポップ
+    void AddTreePoP(); //< ツリーポップ
     void BindResetAll(); //< 全バインドリセット
-    void SyncAll();      //< 全同期
-    void LoadFiles();    //< 全ファイル読み込み
+    void SyncAll(); //< 全同期
+    void LoadFiles(); //< 全ファイル読み込み
 
 private:
     std::unordered_map<std::string, Group> dates_;
