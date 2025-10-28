@@ -170,6 +170,12 @@ public:
     /// </summary>
     bool HasBindings(const std::string& groupName) const;
 
+     /// <summary>
+    /// グループのバインドをクリア
+    /// </summary>
+    /// <param name="groupName"></param>
+    void ClearBindingsForGroup(const std::string& groupName);
+
     void AddTreePoP(); //< ツリーポップ
     void BindResetAll(); //< 全バインドリセット
     void SyncAll(); //< 全同期

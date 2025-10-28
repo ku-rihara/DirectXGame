@@ -8,7 +8,7 @@
 #include <imgui.h>
 #include <iostream>
 
-void CameraAnimationData::Init(const std::string& animationName,const bool& bindSkip) {
+void CameraAnimationData::Init(const std::string& animationName) {
 
     globalParameter_ = GlobalParameter::GetInstance();
 
@@ -16,10 +16,9 @@ void CameraAnimationData::Init(const std::string& animationName,const bool& bind
     groupName_ = animationName;
     globalParameter_->CreateGroup(groupName_, true);
 
-    // bindSkipがfalseの場合のみバインド
-    if (!bindSkip && !globalParameter_->HasBindings(groupName_)) {
-        BindParams();
-    }
+    // 重複バインドを防ぐ
+    globalParameter_->ClearBindingsForGroup(groupName_);
+    BindParams();
 
     // パラメータ同期
     globalParameter_->SyncParamForGroup(groupName_);
@@ -37,19 +36,18 @@ void CameraAnimationData::Init(const std::string& animationName,const bool& bind
     returnFovEase_.SetAdaptValue(&returnFov_);
 }
 
+void CameraAnimationData::LoadData() {
 
-void CameraAnimationData::LoadData(const bool& bindSkip) {
     // アニメーションデータのロード
     globalParameter_->LoadFile(groupName_, folderPath_);
     // キーフレームデータのロード
-    LoadAllKeyFrames(bindSkip);
+    LoadAllKeyFrames();
     // 値同期
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
 void CameraAnimationData::SaveData() {
 
-    globalParameter_->SyncParamForGroup(groupName_);
     // アニメーションデータの保存
     globalParameter_->SaveFile(groupName_, folderPath_);
     // キーフレームデータの保存
@@ -63,7 +61,7 @@ void CameraAnimationData::SaveAllKeyFrames() {
     }
 }
 
-void CameraAnimationData::LoadAllKeyFrames(const bool& bindSkip) {
+void CameraAnimationData::LoadAllKeyFrames() {
     std::string folderPath     = "Resources/GlobalParameter/CameraAnimation/KeyFrames/";
     std::string keyFramePrefix = groupName_;
 
@@ -92,24 +90,24 @@ void CameraAnimationData::LoadAllKeyFrames(const bool& bindSkip) {
         // インデックス順にソート
         std::sort(keyFrameFiles.begin(), keyFrameFiles.end());
 
-        // キーフレームを作成してロード（bindSkipを渡す）
+        // キーフレームを作成してロード
         for (const auto& [index, fileName] : keyFrameFiles) {
             auto newKeyFrame = std::make_unique<CameraKeyFrame>();
-            newKeyFrame->Init(groupName_, index, bindSkip);
-            newKeyFrame->LoadData();
+            newKeyFrame->Init(groupName_, index);
+            newKeyFrame->LoadData(); // Load
             keyFrames_.push_back(std::move(newKeyFrame));
         }
 
         // 最初のキーフレームを選択状態に
         if (!keyFrames_.empty()) {
             selectedKeyFrameIndex_ = 0;
-            finalKeyFrameIndex_    = keyFrameFiles.back().first;
+
+            finalKeyFrameIndex_ = keyFrameFiles.back().first;
         } else {
             finalKeyFrameIndex_ = -1;
         }
     }
 }
-
 
 void CameraAnimationData::Update(const float& speedRate) {
     // 再生中の更新
@@ -325,15 +323,8 @@ bool CameraAnimationData::IsFinished() const {
 void CameraAnimationData::Play() {
     Reset();
     playState_ = PlayState::PLAYING;
-
-    //  再生開始時にパラメータを再同期
-    globalParameter_->SyncParamForGroup(groupName_);
-
-    // キーフレームのパラメータも再同期
-    for (auto& keyFrame : keyFrames_) {
-        keyFrame->SyncParams();
-    }
 }
+
 void CameraAnimationData::Pause() {
     if (playState_ == PlayState::PLAYING) {
         playState_ = PlayState::PAUSED;
@@ -473,7 +464,6 @@ void CameraAnimationData::AdjustParam() {
             ClearAllKeyFrames();
         }
     }
-
     ImGui::Separator();
     // 選択されたキーフレームの調整
     if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {

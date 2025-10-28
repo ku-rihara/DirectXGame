@@ -4,7 +4,7 @@
 #include <imgui.h>
 #include <Windows.h>
 
-void ShakeData::Init(const std::string& shakeName, const bool& bindSkip) {
+void ShakeData::Init(const std::string& shakeName) {
     globalParameter_ = GlobalParameter::GetInstance();
 
     // グループ名設定
@@ -12,9 +12,8 @@ void ShakeData::Init(const std::string& shakeName, const bool& bindSkip) {
     globalParameter_->CreateGroup(groupName_, true);
 
     // 重複バインドを防ぐ
-    if (!bindSkip && !globalParameter_->HasBindings(groupName_)) {
-        BindParams();
-    }
+    globalParameter_->ClearBindingsForGroup(groupName_);
+    BindParams();
 
     // パラメータ同期
     globalParameter_->SyncParamForGroup(groupName_);
@@ -24,7 +23,7 @@ void ShakeData::Init(const std::string& shakeName, const bool& bindSkip) {
     timeEase_.SetStartValue(startTime_);
     timeEase_.SetEndValue(0.0f);
 
-    timeEase_.SetOnFinishCallback([this]() {
+     timeEase_.SetOnFinishCallback([this]() {
         Stop();
         Reset();
     });
@@ -85,7 +84,6 @@ Vector3 ShakeData::ApplyAxisFlag(const Vector3& shakeValue) const {
 
 void ShakeData::Play() {
     Reset();
-    globalParameter_->SyncParamForGroup(groupName_);
 
     playState_ = PlayState::PLAYING;
 
@@ -96,6 +94,7 @@ void ShakeData::Play() {
     timeEase_.SetType(static_cast<EasingType>(easeType_));
     timeEase_.Reset();
     easedTime_ = startTime_;
+
 }
 
 void ShakeData::Stop() {
@@ -121,7 +120,6 @@ void ShakeData::LoadData() {
 }
 
 void ShakeData::SaveData() {
-    globalParameter_->SyncParamForGroup(groupName_);
     globalParameter_->SaveFile(groupName_, folderPath_);
 }
 
