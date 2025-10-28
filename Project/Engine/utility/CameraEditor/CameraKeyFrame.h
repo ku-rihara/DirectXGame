@@ -31,7 +31,7 @@ public:
     /// </summary>
     /// <param name="cameraAnimationName">カメラアニメーション名</param>
     /// <param name="keyNumber">キー番号</param>
-    void Init(const std::string& cameraAnimationName, const int32_t& keyNumber, const bool& bindSkip = false);
+    void Init(const std::string& cameraAnimationName, const int32_t& keyNumber);
 
     /// <summary>
     /// 更新
@@ -53,16 +53,15 @@ public:
     /// <param name="target">対象</param>
     void TimeModeSelector(const char* label, int32_t& target);
 
-    void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
-    void AdaptEaseParam(); //< イージングパラメータ適用
+    void AdjustParam();       //< パラメータ調整
+    void BindParams();        //< パラメータバインド
+    void AdaptEaseParam();    //< イージングパラメータ適用
     void AdaptValueSetting(); //< 値設定適用
-    void Reset(); //< リセット
-    bool IsFinished() const; //< 終了判定
+    void Reset();             //< リセット
+    bool IsFinished() const;  //< 終了判定
 
     void LoadData(); //< データ読み込み
     void SaveData(); //< データ保存
-    void SyncParams(); //< パラメータ同期
 
 private:
     GlobalParameter* globalParameter_;

@@ -4,19 +4,23 @@
 #include <imgui.h>
 #include <iostream>
 
-void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t& keyNumber, const bool& bindSkip) {
+void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t& keyNumber) {
     // グローバルパラメータ
     globalParameter_         = GlobalParameter::GetInstance();
     currentKeyFrameIndex     = keyNumber;
     std::string newGroupName = cameraAnimationName + std::to_string(currentKeyFrameIndex);
 
+    if (!groupName_.empty() && groupName_ != newGroupName) {
+        globalParameter_->ClearBindingsForGroup(groupName_);
+    }
+
     groupName_ = newGroupName;
     globalParameter_->CreateGroup(groupName_, false);
 
-    // bindSkipがfalseの場合のみバインド（エディタ用）
-    if (!bindSkip && !globalParameter_->HasBindings(groupName_)) {
-        BindParams();
-    }
+    // 重複バインドを防ぐ
+    globalParameter_->ClearBindingsForGroup(groupName_);
+
+    BindParams();
 
     AdaptValueSetting();
     AdaptEaseParam();
@@ -38,7 +42,6 @@ void CameraKeyFrame::LoadData() {
 }
 
 void CameraKeyFrame::SaveData() {
-    globalParameter_->SyncParamForGroup(groupName_);
     // パラメータファイルに保存
     globalParameter_->SaveFile(groupName_, folderName_);
 }
@@ -60,11 +63,6 @@ void CameraKeyFrame::Update(const float& speedRate) {
     positionEase_.Update(actualDeltaTime);
     rotationEase_.Update(actualDeltaTime);
     fovEase_.Update(actualDeltaTime);
-}
-
-void CameraKeyFrame::SyncParams() {
-    // グローバルパラメータから最新の値を取得
-    globalParameter_->SyncParamForGroup(groupName_);
 }
 
 void CameraKeyFrame::BindParams() {

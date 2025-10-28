@@ -533,6 +533,13 @@ void GlobalParameter::RemoveGroup(const std::string& groupName) {
     }
 }
 
+void GlobalParameter::ClearBindingsForGroup(const std::string& groupName) {
+    auto it = bindings_.find(groupName);
+    if (it != bindings_.end()) {
+        it->second.clear(); 
+    }
+}
+
 void GlobalParameter::BindResetAll() {
     bindings_.clear();
 }

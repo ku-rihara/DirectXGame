@@ -27,7 +27,7 @@ public:
     /// 初期化
     /// </summary>
     /// <param name="animationName">アニメーション名</param>
-    void Init(const std::string& animationName, const bool& bindSkip = false);
+    void Init(const std::string& animationName);
 
     /// <summary>
     /// 更新
@@ -56,25 +56,25 @@ public:
     /// <param name="speedRate">速度倍率</param>
     void UpdateActiveKeyFrames(const float& speedRate = 1.0f);
 
-    void AddKeyFrame(); //< キーフレーム追加
+     void AddKeyFrame();                       //< キーフレーム追加
     void RemoveKeyFrame(const int32_t& index); //< キーフレーム削除
-    void ClearAllKeyFrames(); //< 全キーフレームクリア
+    void ClearAllKeyFrames();                  //< 全キーフレームクリア
 
-    void Play(); //< 再生
+    void Play();  //< 再生
     void Pause(); //< 一時停止
     void Reset(); //< リセット
 
-    void LoadData(const bool& bindSkip = false); //< データ読み込み
-    void LoadAllKeyFrames(const bool& bindSkip = false); //< 全キーフレーム読み込み
+    void LoadData();         //< データ読み込み
+    void LoadAllKeyFrames(); //< 全キーフレーム読み込み
     void SaveAllKeyFrames(); //< 全キーフレーム保存
-    void SaveData(); //< データ保存
+    void SaveData();         //< データ保存
 
 private:
-    void BindParams(); //< パラメータバインド
+    void BindParams();                //< パラメータバインド
     void UpdateKeyFrameProgression(); //< キーフレーム進行更新
-    void AdvanceToNextKeyFrame(); //< 次のキーフレームへ進む
-    void UpdateInterpolatedValues(); //< 補間値更新
-    void StartReturnToInitial(); //< 初期値復帰開始
+    void AdvanceToNextKeyFrame();     //< 次のキーフレームへ進む
+    void UpdateInterpolatedValues();  //< 補間値更新
+    void StartReturnToInitial();      //< 初期値復帰開始
 
     /// <summary>
     /// タイムモードセレクター
