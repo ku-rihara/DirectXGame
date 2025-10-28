@@ -7,13 +7,12 @@
 #include <Windows.h>
 
 template <typename T>
-void Easing<T>::Init( const std::string& adaptFile) {
+void Easing<T>::Init(const std::string& adaptFile) {
 
     // 初期化、ファイル読み込み
     FilePathChangeForType();
     easingFiles_ = GetFileNamesForDyrectry(FilePath_ + filePathForType_);
-    easingName_  = name;
-
+  
     if (!adaptFile.empty()) {
         ApplyFromJson(adaptFile);
         SaveAppliedJsonFileName();
