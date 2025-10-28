@@ -474,16 +474,15 @@ void GlobalParameter::Bind(const std::string& group, const std::string& key, T* 
 
     BoundItem item;
 
-    // 変数取得
+   // 変数取得
     item.pullVariant = [=]() {
         *variable = GetValue<T>(group, key);
     };
 
-    // 変数セット
+   // 変数セット
     item.pushVariant = [=]() {
         SetValue<T>(group, key, *variable, widgetType);
     };
-   
 
     bindings_[group].emplace_back(std::move(item));
 }

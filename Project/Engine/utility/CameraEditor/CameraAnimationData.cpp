@@ -470,28 +470,6 @@ void CameraAnimationData::AdjustParam() {
         keyFrames_[selectedKeyFrameIndex_]->AdjustParam();
     }
 
-    ImGui::Text("File Operations:");
-
-    // Load ボタン
-    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
-    if (ImGui::Button("Load CameraAnimationData")) {
-        LoadData();
-        MessageBoxA(nullptr, "CameraAnimationData loaded successfully.", "Camera Animation Data", 0);
-    }
-    ImGui::PopStyleColor(3);
-
-    // Save ボタン
-    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.4f, 0.9f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.5f, 1.0f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.3f, 0.8f, 1.0f));
-    if (ImGui::Button("Save CameraAnimationData")) {
-        SaveData();
-        MessageBoxA(nullptr, "CameraAnimationData saved successfully.", "Camera Animation Data", 0);
-    }
-    ImGui::PopStyleColor(3);
-
     // 現在の値表示
     ImGui::SeparatorText("Current Values");
     ImGui::Text("Position: (%.2f, %.2f, %.2f)", currentPosition_.x, currentPosition_.y, currentPosition_.z);
