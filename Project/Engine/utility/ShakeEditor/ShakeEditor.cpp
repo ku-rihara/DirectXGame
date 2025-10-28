@@ -90,6 +90,8 @@ void ShakeEditor::EditorUpdate() {
                 ImGui::PopStyleColor();
             }
 
+
+
             ImGui::PopID();
         }
 
@@ -103,6 +105,38 @@ void ShakeEditor::EditorUpdate() {
         ImGui::Separator();
         ImGui::Text("File Operations:");
 
+
+        // 選択中のシェイク個別のセーブ/ロード
+        if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(shakes_.size())) {
+            ImGui::SeparatorText("Selected Shake File Operations");
+
+            auto* selectedShake   = shakes_[selectedIndex_].get();
+            std::string shakeName = selectedShake->GetGroupName();
+
+            // 個別Load
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
+            if (ImGui::Button(("Load " + shakeName).c_str())) {
+                selectedShake->LoadData();
+                MessageBoxA(nullptr, (shakeName + " loaded successfully.").c_str(), "Shake Editor", 0);
+            }
+            ImGui::PopStyleColor(3);
+            ImGui::SameLine();
+
+            // 個別Save
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.4f, 0.9f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.5f, 1.0f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.3f, 0.8f, 1.0f));
+            if (ImGui::Button(("Save " + shakeName).c_str())) {
+                // 保存前に現在の値を同期
+                selectedShake->SaveData();
+                MessageBoxA(nullptr, (shakeName + " saved successfully.").c_str(), "Shake Editor", 0);
+            }
+            ImGui::PopStyleColor(3);
+        }
+        ImGui::SeparatorText("All File Save/Load");
+
         // Load ボタン
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
@@ -112,6 +146,7 @@ void ShakeEditor::EditorUpdate() {
             MessageBoxA(nullptr, "All Shakes loaded successfully.", "Shake Editor", 0);
         }
         ImGui::PopStyleColor(3);
+        ImGui::SameLine();
 
         // Save ボタン
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.4f, 0.9f, 1.0f));

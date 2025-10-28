@@ -472,29 +472,19 @@ void GlobalParameter::Bind(const std::string& group, const std::string& key, T* 
     // ImGuiで使うためにAddItem
     AddItem(group, key, *variable, widgetType);
 
-    // 既に同じ変数がバインドされているかチェック
-    auto& groupBindings = bindings_[group];
-    for (const auto& item : groupBindings) {
-        if (item.variablePtr == static_cast<void*>(variable)) {
-            // 既にバインド済みなので何もしない
-            return;
-        }
-    }
-
     BoundItem item;
-    item.variablePtr = static_cast<void*>(variable);
 
-    // 変数取得
+   // 変数取得
     item.pullVariant = [=]() {
         *variable = GetValue<T>(group, key);
     };
 
-    // 変数セット
+   // 変数セット
     item.pushVariant = [=]() {
         SetValue<T>(group, key, *variable, widgetType);
     };
 
-    groupBindings.emplace_back(std::move(item));
+    bindings_[group].emplace_back(std::move(item));
 }
 
 //

@@ -14,6 +14,7 @@ void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t&
     globalParameter_->CreateGroup(groupName_, false);
 
    
+   globalParameter_->ClearBindingsForGroup(groupName_);
     BindParams();
 
     AdaptValueSetting();

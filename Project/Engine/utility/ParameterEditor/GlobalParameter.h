@@ -40,9 +40,9 @@ private:
     struct BoundItem {
         std::function<void()> pullVariant;
         std::function<void()> pushVariant;
-        void* variablePtr;
+       
     };
-
+    
     using Item      = std::variant<int32_t, uint32_t, float, Vector2, Vector3, Vector4, bool, std::string>;
     using Parameter = std::pair<Item, DrawSettings>;
     using Group     = std::map<std::string, Parameter>;

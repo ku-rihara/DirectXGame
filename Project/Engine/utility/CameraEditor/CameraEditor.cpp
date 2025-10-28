@@ -215,7 +215,7 @@ void CameraEditor::EditorUpdate() {
 
                 ApplySelectedKeyFrameToViewProjection();
             }
-
+            
             ImGui::PopID();
             ImGui::Separator();
 
@@ -224,6 +224,39 @@ void CameraEditor::EditorUpdate() {
         }
 
         ImGui::Text("File Operations:");
+
+         // 選択中のアニメーション個別のセーブ/ロード
+        if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(animations_.size())) {
+            ImGui::SeparatorText("Selected Animation File Operations");
+
+            auto* selectedAnim   = animations_[selectedIndex_].get();
+            std::string animName = selectedAnim->GetGroupName();
+
+            // 個別Load
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
+            if (ImGui::Button(("Load " + animName).c_str())) {
+                selectedAnim->LoadData();
+                MessageBoxA(nullptr, (animName + " loaded successfully.").c_str(), "Camera Animation", 0);
+            }
+            ImGui::PopStyleColor(3);
+
+            ImGui::SameLine();
+
+            // 個別Save
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.4f, 0.9f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.5f, 1.0f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.3f, 0.8f, 1.0f));
+            if (ImGui::Button(("Save " + animName).c_str())) {
+                // 保存前に現在の値を同期
+                selectedAnim->SaveData();
+                MessageBoxA(nullptr, (animName + " saved successfully.").c_str(), "Camera Animation", 0);
+            }
+            ImGui::PopStyleColor(3);
+        }
+
+        ImGui::SeparatorText("ALL File Save/Load");
 
         // Load ボタン
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
@@ -234,6 +267,7 @@ void CameraEditor::EditorUpdate() {
             MessageBoxA(nullptr, "All animations loaded successfully.", "Camera Animation", 0);
         }
         ImGui::PopStyleColor(3);
+        ImGui::SameLine();
 
         // Save ボタン
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.4f, 0.9f, 1.0f));
