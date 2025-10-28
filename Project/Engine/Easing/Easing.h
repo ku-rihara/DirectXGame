@@ -18,12 +18,9 @@ public:
     Easing()  = default;
     ~Easing() = default;
 
-    /// <summary>
-    /// 初期化
-    /// </summary>
-    /// <param name="name">イージング名</param>
-    /// <param name="adaptFile">適用するJSONファイル名</param>
+    // 初期化(ファイルロード)、更新
     void Init(const std::string& adaptFile);
+    void Update(const float& deltaTime);
 
     /// <summary>
     /// イージングパラメータ設定
@@ -36,12 +33,6 @@ public:
     /// </summary>
     /// <param name="fileName">ファイル名</param>
     void ApplyFromJson(const std::string& fileName);
-
-    /// <summary>
-    /// イージング更新
-    /// </summary>
-    /// <param name="deltaTime">デルタタイム</param>
-    void Update(const float& deltaTime);
 
     /// <summary>
     /// 変数に適用
@@ -92,10 +83,9 @@ public:
     void LoadAndApplyFromSavedJson(); //< 保存されたJSONを読み込んで適用
 
 private:
-    
-    void CalculateValue();        //< イージング値計算
-    void FinishBehavior();        //< 終了時の動作
-    void ChangeAdaptAxis();       //< 適用軸変更
+    void CalculateValue(); //< イージング値計算
+    void FinishBehavior(); //< 終了時の動作
+    void ChangeAdaptAxis(); //< 適用軸変更
     void FilePathChangeForType(); //< ファイルパスを型に応じて変更
     bool IsEasingStarted() const; //< イージング開始判定
 
