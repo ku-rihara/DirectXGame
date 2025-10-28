@@ -15,9 +15,9 @@ void ContinuousEnemySpawner::Init() {
     globalParameter_->SyncParamForGroup(groupName_);
 
     // 初期化
-    spawnTimer_        = 0.0f;
+  
     totalSpawnedCount_ = 0;
-    isActive_          = false;
+    Start();
 }
 
 void ContinuousEnemySpawner::Update(const float& deltaTime, const ViewProjection& viewProjection) {

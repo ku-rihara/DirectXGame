@@ -10,9 +10,10 @@ void TimeScaleData::Init(const std::string& timeScaleName) {
     globalParameter_->CreateGroup(groupName_, true);
 
     // 重複バインドを防ぐ
-    globalParameter_->ClearBindingsForGroup(groupName_);
-    BindParams();
-
+    if (!globalParameter_->HasBindings(groupName_)) {
+        BindParams();
+    }
+    
     // パラメータ同期
     globalParameter_->SyncParamForGroup(groupName_);
 }
@@ -54,7 +55,7 @@ void TimeScaleData::AdjustParam() {
             MessageBoxA(nullptr, "TimeScale data saved successfully.", "TimeScale Data", 0);
         }
 
-         ImGui::Separator();
+        ImGui::Separator();
         ImGui::Text("File Operations:");
 
         // Load ボタン

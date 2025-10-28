@@ -11,8 +11,9 @@ void DissolveData::Init(const std::string& dissolveName) {
     globalParameter_->CreateGroup(groupName_, true);
 
     // 重複バインドを防ぐ
-    globalParameter_->ClearBindingsForGroup(groupName_);
-    BindParams();
+    if (!globalParameter_->HasBindings(groupName_)) {
+        BindParams();
+    }
 
     // パラメータ同期
     globalParameter_->SyncParamForGroup(groupName_);

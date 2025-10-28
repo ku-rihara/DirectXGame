@@ -497,6 +497,12 @@ void GlobalParameter::SyncAll() {
     }
 }
 
+bool GlobalParameter::HasBindings(const std::string& groupName) const {
+    auto it = bindings_.find(groupName);
+    return it != bindings_.end() && !it->second.empty();
+}
+
+
 void GlobalParameter::SyncParamForGroup(const std::string& group) {
     auto it = bindings_.find(group);
     if (it != bindings_.end()) {
@@ -506,16 +512,13 @@ void GlobalParameter::SyncParamForGroup(const std::string& group) {
     }
 }
 
-void GlobalParameter::ClearBindingsForGroup(const std::string& groupName) {
+
+void GlobalParameter::RemoveGroup(const std::string& groupName) {
+    // バインド情報をクリア
     auto it = bindings_.find(groupName);
     if (it != bindings_.end()) {
         bindings_.erase(it);
     }
-}
-
-void GlobalParameter::RemoveGroup(const std::string& groupName) {
-    // バインド情報をクリア
-    ClearBindingsForGroup(groupName);
 
     // グループデータを削除
     auto dataIt = dates_.find(groupName);
@@ -527,6 +530,13 @@ void GlobalParameter::RemoveGroup(const std::string& groupName) {
     auto visIt = visibilityFlags_.find(groupName);
     if (visIt != visibilityFlags_.end()) {
         visibilityFlags_.erase(visIt);
+    }
+}
+
+void GlobalParameter::ClearBindingsForGroup(const std::string& groupName) {
+    auto it = bindings_.find(groupName);
+    if (it != bindings_.end()) {
+        it->second.clear(); 
     }
 }
 
