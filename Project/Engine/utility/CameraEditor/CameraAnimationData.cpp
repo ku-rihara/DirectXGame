@@ -17,8 +17,9 @@ void CameraAnimationData::Init(const std::string& animationName) {
     globalParameter_->CreateGroup(groupName_, true);
 
     // 重複バインドを防ぐ
-    globalParameter_->ClearBindingsForGroup(groupName_);
-    BindParams();
+    if (!globalParameter_->HasBindings(groupName_)) {
+        BindParams();
+    }
 
     // パラメータ同期
     globalParameter_->SyncParamForGroup(groupName_);
@@ -473,7 +474,6 @@ void CameraAnimationData::AdjustParam() {
         }
     }
 
-    globalParameter_->PushBindingsForGroup(groupName_);
     ImGui::Separator();
     // 選択されたキーフレームの調整
     if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {

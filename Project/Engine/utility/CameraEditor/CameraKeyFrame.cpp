@@ -10,17 +10,12 @@ void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t&
     currentKeyFrameIndex     = keyNumber;
     std::string newGroupName = cameraAnimationName + std::to_string(currentKeyFrameIndex);
 
-    if (!groupName_.empty() && groupName_ != newGroupName) {
-        globalParameter_->ClearBindingsForGroup(groupName_);
-    }
-
     groupName_ = newGroupName;
     globalParameter_->CreateGroup(groupName_, false);
 
-    // 重複バインドを防ぐ
-    globalParameter_->ClearBindingsForGroup(groupName_);
-
-    BindParams();
+    if (!globalParameter_->HasBindings(groupName_)) {
+        BindParams();
+    }
 
     AdaptValueSetting();
     AdaptEaseParam();
@@ -112,8 +107,6 @@ void CameraKeyFrame::AdjustParam() {
     EasingTypeSelector("Easing Type Position", positionEaseType_);
     EasingTypeSelector("Easing Type Rotate", rotationEaseType_);
     EasingTypeSelector("Easing Type Fov", fovEaseType_);
-
-    globalParameter_->PushBindingsForGroup(groupName_);
 
     AdaptEaseParam();
 

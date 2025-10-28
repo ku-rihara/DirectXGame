@@ -12,8 +12,9 @@ void ShakeData::Init(const std::string& shakeName) {
     globalParameter_->CreateGroup(groupName_, true);
 
     // 重複バインドを防ぐ
-    globalParameter_->ClearBindingsForGroup(groupName_);
-    BindParams();
+    if (!globalParameter_->HasBindings(groupName_)) {
+        BindParams();
+    }
 
     // パラメータ同期
     globalParameter_->SyncParamForGroup(groupName_);
@@ -213,8 +214,7 @@ void ShakeData::AdjustParam() {
 
         // イージングタイプ
         EasingTypeSelector("Easing Type", easeType_);
-        globalParameter_->PushBindingsForGroup(groupName_);
-
+     
         ImGui::Separator();
 
         // Load ボタン

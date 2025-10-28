@@ -11,8 +11,9 @@ void PostEffectData::Init(const std::string& postEffectName) {
     globalParameter_->CreateGroup(groupName_, true);
 
     // 重複バインドを防ぐ
-    globalParameter_->ClearBindingsForGroup(groupName_);
-    BindParams();
+    if (!globalParameter_->HasBindings(groupName_)) {
+        BindParams();
+    }
 
     // パラメータ同期
     globalParameter_->SyncParamForGroup(groupName_);
