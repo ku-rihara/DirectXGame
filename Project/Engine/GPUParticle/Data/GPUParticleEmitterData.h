@@ -13,7 +13,7 @@ struct ParticleEmit {
     uint32_t emit;
 };
 
-// HLSL定数バッファの16バイトアライメントに合わせた構造体
+
 struct EmitParameter {
     Vector3 scaleMin;
     float _padding0; 
