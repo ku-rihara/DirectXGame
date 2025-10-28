@@ -60,7 +60,6 @@ void FallAttack::Update() {
     case STEP::START:
         pPlayer_->GetJumpAttackUI()->StartClose();
         pPlayer_->GetEffects()->SpecialAttackRenditionInit();
-        pPlayer_->GetGameCamera()->PlayAnimation("FallAttackPreAction");
         step_ = STEP::PREACTION;
         break;
 
@@ -77,9 +76,6 @@ void FallAttack::Update() {
         ///---------------------------------------------------------
 
     case STEP::FALL:
-
-        pPlayer_->GetLeftHand()->SetWorldPositionY(0.2f);
-        pPlayer_->GetRightHand()->SetWorldPositionY(0.2f);
 
         fallRotateY_ += Frame::DeltaTimeRate() * rotateYSpeed_;
         pPlayer_->SetRotationY(fallRotateY_);
@@ -181,6 +177,7 @@ void FallAttack::EasingInit() {
     preActionPosYEase_.Reset();
 
     preActionPosYEase_.SetOnFinishCallback([this]() {
+        pPlayer_->GetGameCamera()->PlayAnimation("FallAttackPreAction");
         step_ = STEP::FALL;
     });
 }
