@@ -4,7 +4,7 @@
 #include <imgui.h>
 #include <Windows.h>
 
-void ShakeData::Init(const std::string& shakeName) {
+void ShakeData::Init(const std::string& shakeName, const bool& bindSkip) {
     globalParameter_ = GlobalParameter::GetInstance();
 
     // グループ名設定
@@ -12,7 +12,7 @@ void ShakeData::Init(const std::string& shakeName) {
     globalParameter_->CreateGroup(groupName_, true);
 
     // 重複バインドを防ぐ
-    if (!globalParameter_->HasBindings(groupName_)) {
+    if (!bindSkip && !globalParameter_->HasBindings(groupName_)) {
         BindParams();
     }
 
@@ -24,7 +24,7 @@ void ShakeData::Init(const std::string& shakeName) {
     timeEase_.SetStartValue(startTime_);
     timeEase_.SetEndValue(0.0f);
 
-     timeEase_.SetOnFinishCallback([this]() {
+    timeEase_.SetOnFinishCallback([this]() {
         Stop();
         Reset();
     });
@@ -96,7 +96,6 @@ void ShakeData::Play() {
     timeEase_.SetType(static_cast<EasingType>(easeType_));
     timeEase_.Reset();
     easedTime_ = startTime_;
-
 }
 
 void ShakeData::Stop() {
@@ -214,7 +213,7 @@ void ShakeData::AdjustParam() {
 
         // イージングタイプ
         EasingTypeSelector("Easing Type", easeType_);
-     
+
         ImGui::Separator();
 
         // Load ボタン

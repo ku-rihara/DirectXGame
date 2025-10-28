@@ -8,7 +8,7 @@
 #include <imgui.h>
 #include <iostream>
 
-void CameraAnimationData::Init(const std::string& animationName) {
+void CameraAnimationData::Init(const std::string& animationName,const bool& bindSkip) {
 
     globalParameter_ = GlobalParameter::GetInstance();
 
@@ -16,10 +16,10 @@ void CameraAnimationData::Init(const std::string& animationName) {
     groupName_ = animationName;
     globalParameter_->CreateGroup(groupName_, true);
 
-    // 重複バインドを防ぐ
-  
+    // bindSkipがfalseの場合のみバインド
+    if (!bindSkip && !globalParameter_->HasBindings(groupName_)) {
         BindParams();
-    
+    }
 
     // パラメータ同期
     globalParameter_->SyncParamForGroup(groupName_);
@@ -37,12 +37,12 @@ void CameraAnimationData::Init(const std::string& animationName) {
     returnFovEase_.SetAdaptValue(&returnFov_);
 }
 
-void CameraAnimationData::LoadData() {
 
+void CameraAnimationData::LoadData(const bool& bindSkip) {
     // アニメーションデータのロード
     globalParameter_->LoadFile(groupName_, folderPath_);
     // キーフレームデータのロード
-    LoadAllKeyFrames();
+    LoadAllKeyFrames(bindSkip);
     // 値同期
     globalParameter_->SyncParamForGroup(groupName_);
 }
@@ -63,7 +63,7 @@ void CameraAnimationData::SaveAllKeyFrames() {
     }
 }
 
-void CameraAnimationData::LoadAllKeyFrames() {
+void CameraAnimationData::LoadAllKeyFrames(const bool& bindSkip) {
     std::string folderPath     = "Resources/GlobalParameter/CameraAnimation/KeyFrames/";
     std::string keyFramePrefix = groupName_;
 
@@ -92,24 +92,24 @@ void CameraAnimationData::LoadAllKeyFrames() {
         // インデックス順にソート
         std::sort(keyFrameFiles.begin(), keyFrameFiles.end());
 
-        // キーフレームを作成してロード
+        // キーフレームを作成してロード（bindSkipを渡す）
         for (const auto& [index, fileName] : keyFrameFiles) {
             auto newKeyFrame = std::make_unique<CameraKeyFrame>();
-            newKeyFrame->Init(groupName_, index);
-            newKeyFrame->LoadData(); // Load
+            newKeyFrame->Init(groupName_, index, bindSkip);
+            newKeyFrame->LoadData();
             keyFrames_.push_back(std::move(newKeyFrame));
         }
 
         // 最初のキーフレームを選択状態に
         if (!keyFrames_.empty()) {
             selectedKeyFrameIndex_ = 0;
-
-            finalKeyFrameIndex_ = keyFrameFiles.back().first;
+            finalKeyFrameIndex_    = keyFrameFiles.back().first;
         } else {
             finalKeyFrameIndex_ = -1;
         }
     }
 }
+
 
 void CameraAnimationData::Update(const float& speedRate) {
     // 再生中の更新
