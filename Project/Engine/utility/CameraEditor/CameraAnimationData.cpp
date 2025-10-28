@@ -330,7 +330,7 @@ void CameraAnimationData::Play() {
 
     // キーフレームのパラメータも再同期
     for (auto& keyFrame : keyFrames_) {
-        keyFrame->SyncParams(); 
+        keyFrame->SyncParams();
     }
 }
 void CameraAnimationData::Pause() {
@@ -472,6 +472,8 @@ void CameraAnimationData::AdjustParam() {
             ClearAllKeyFrames();
         }
     }
+
+    globalParameter_->PushBindingsForGroup(groupName_);
     ImGui::Separator();
     // 選択されたキーフレームの調整
     if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {

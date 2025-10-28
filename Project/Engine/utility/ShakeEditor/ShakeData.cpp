@@ -213,6 +213,7 @@ void ShakeData::AdjustParam() {
 
         // イージングタイプ
         EasingTypeSelector("Easing Type", easeType_);
+        globalParameter_->PushBindingsForGroup(groupName_);
 
         ImGui::Separator();
 
