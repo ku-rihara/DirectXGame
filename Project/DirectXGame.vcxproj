@@ -145,6 +145,7 @@
     <ClCompile Include="Game\BaseObject\BaseObject.cpp" />
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp" />
     <ClCompile Include="Game\CollisionBox\EnemyCollisionBox.cpp" />
+    <ClCompile Include="Game\CollisionBox\PlayerAttackController.cpp" />
     <ClCompile Include="Game\ComboScene\ComboScene.cpp" />
     <ClCompile Include="Game\Combo\Behavior\BaseComboUIBehavior.cpp" />
     <ClCompile Include="Game\Combo\Behavior\ComboCountUp.cpp" />
@@ -393,6 +394,7 @@
     <ClInclude Include="Game\BaseObject\BaseObject.h" />
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h" />
     <ClInclude Include="Game\CollisionBox\EnemyCollisionBox.h" />
+    <ClInclude Include="Game\CollisionBox\PlayerAttackController.h" />
     <ClInclude Include="Game\ComboScene\ComboScene.h" />
     <ClInclude Include="Game\Combo\Behavior\BaseComboUIBehavior.h" />
     <ClInclude Include="Game\Combo\Behavior\ComboCountUp.h" />

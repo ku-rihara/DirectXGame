@@ -1153,6 +1153,9 @@
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackData.cpp">
       <Filter>Game\Player\ComboCreator</Filter>
     </ClCompile>
+    <ClCompile Include="Game\CollisionBox\PlayerAttackController.cpp">
+      <Filter>Game\CollisionBox</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1895,6 +1898,9 @@
     </ClInclude>
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackData.h">
       <Filter>Game\Player\ComboCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CollisionBox\PlayerAttackController.h">
+      <Filter>Game\CollisionBox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
