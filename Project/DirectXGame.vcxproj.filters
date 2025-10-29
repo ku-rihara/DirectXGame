@@ -283,9 +283,6 @@
     <Filter Include="Game\EasingTestObj">
       <UniqueIdentifier>{a383ecc6-f375-4bf7-9b58-7f4ba9f98f42}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\ComboCreate">
-      <UniqueIdentifier>{84b3c227-9d01-4f00-aa9d-03f155fdbb2c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.cpp\Animation">
       <UniqueIdentifier>{f84405b2-ba15-4fcd-9d2f-c731c2e277d1}</UniqueIdentifier>
     </Filter>
@@ -460,6 +457,9 @@
     <Filter Include="MyEngine\.h\GPUParticle\ResourceData">
       <UniqueIdentifier>{00ef74a7-6b08-427e-8cd8-e40d2599bd7a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player\ComboCreator">
+      <UniqueIdentifier>{4d571f9d-bdee-482b-a917-03263be5f41b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -578,9 +578,6 @@
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClCompile>
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp">
-      <Filter>Game\CollisionBox</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\CollisionBox\PlayerAttackController.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\ThrustPunch.cpp">
@@ -874,9 +871,6 @@
     <ClCompile Include="Game\EasingTestObj\EasingTestObj.cpp">
       <Filter>Game\EasingTestObj</Filter>
     </ClCompile>
-    <ClCompile Include="Game\ComboCreate\ComboCreateEditor.cpp">
-      <Filter>Game\ComboCreate</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Animation\ModelAnimation.cpp">
       <Filter>MyEngine\.cpp\Animation</Filter>
     </ClCompile>
@@ -1153,6 +1147,12 @@
     <ClCompile Include="Engine\GPUParticle\GPUParticleParamEditor.cpp">
       <Filter>MyEngine\.cpp\GPUParticle</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackCreator.cpp">
+      <Filter>Game\Player\ComboCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackData.cpp">
+      <Filter>Game\Player\ComboCreator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1309,9 +1309,6 @@
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClInclude>
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h">
-      <Filter>Game\CollisionBox</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\CollisionBox\PlayerAttackController.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ThrustPunch.h">
@@ -1598,9 +1595,6 @@
     </ClInclude>
     <ClInclude Include="Game\EasingTestObj\EasingTestObj.h">
       <Filter>Game\EasingTestObj</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\ComboCreate\ComboCreateEditor.h">
-      <Filter>Game\ComboCreate</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Animation\AnimationData.h">
       <Filter>MyEngine\.h\Animation</Filter>
@@ -1895,6 +1889,12 @@
     </ClInclude>
     <ClInclude Include="Engine\GPUParticle\GPUParticleParamEditor.h">
       <Filter>MyEngine\.h\GPUParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackCreator.h">
+      <Filter>Game\Player\ComboCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackData.h">
+      <Filter>Game\Player\ComboCreator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

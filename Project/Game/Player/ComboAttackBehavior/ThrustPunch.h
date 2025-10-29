@@ -2,7 +2,6 @@
 
 #include"BaseComboAattackBehavior.h"
 
-#include"CollisionBox/PlayerAttackController.h"
 #include"utility/RailEditor/RailManager.h"
 
 class ThrustPunch : public BaseComboAattackBehavior {

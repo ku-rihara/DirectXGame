@@ -1,8 +1,6 @@
 #pragma once
 
 #include"BaseComboAattackBehavior.h"
-#include"Easing/EasingFunction.h"
-#include"CollisionBox/PlayerAttackController.h"
 #include"Easing/Easing.h"
 
 class RailManager;

@@ -14,7 +14,7 @@
 #include "Combo/Combo.h"
 
 /// collisionBox
-#include "CollisionBox/PlayerAttackController.h"
+#include "Player/ComboCreator/PlayerAttackController.h"
 
 #include "AttackEffect/AttackEffect.h"
 #include "audio/Audio.h"

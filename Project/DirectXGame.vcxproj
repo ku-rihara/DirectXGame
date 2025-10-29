@@ -144,9 +144,7 @@
     <ClCompile Include="Game\BackGroundObject\GameBackGroundObject.cpp" />
     <ClCompile Include="Game\BaseObject\BaseObject.cpp" />
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp" />
-    <ClCompile Include="Game\CollisionBox\PlayerAttackController.cpp" />
     <ClCompile Include="Game\CollisionBox\EnemyCollisionBox.cpp" />
-    <ClCompile Include="Game\ComboCreate\ComboCreateEditor.cpp" />
     <ClCompile Include="Game\ComboScene\ComboScene.cpp" />
     <ClCompile Include="Game\Combo\Behavior\BaseComboUIBehavior.cpp" />
     <ClCompile Include="Game\Combo\Behavior\ComboCountUp.cpp" />
@@ -202,6 +200,8 @@
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\LeftJobPunch.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\RoringUpper.cpp" />
+    <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackCreator.cpp" />
+    <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackData.cpp" />
     <ClCompile Include="Game\Player\Effect\PlayerEffects.cpp" />
     <ClCompile Include="Game\Player\JumpAttackUI\JumpAttackUI.cpp" />
     <ClCompile Include="Game\Player\Parameter\PlayerParameter.cpp" />
@@ -392,9 +392,7 @@
     <ClInclude Include="Game\BackGroundObject\GameBackGroundObject.h" />
     <ClInclude Include="Game\BaseObject\BaseObject.h" />
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h" />
-    <ClInclude Include="Game\CollisionBox\PlayerAttackController.h" />
     <ClInclude Include="Game\CollisionBox\EnemyCollisionBox.h" />
-    <ClInclude Include="Game\ComboCreate\ComboCreateEditor.h" />
     <ClInclude Include="Game\ComboScene\ComboScene.h" />
     <ClInclude Include="Game\Combo\Behavior\BaseComboUIBehavior.h" />
     <ClInclude Include="Game\Combo\Behavior\ComboCountUp.h" />
@@ -450,6 +448,8 @@
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\LeftJobPunch.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\RoringUpper.h" />
+    <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackCreator.h" />
+    <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackData.h" />
     <ClInclude Include="Game\Player\Effect\PlayerEffects.h" />
     <ClInclude Include="Game\Player\JumpAttackUI\JumpAttackUI.h" />
     <ClInclude Include="Game\Player\Parameter\PlayerParameter.h" />
