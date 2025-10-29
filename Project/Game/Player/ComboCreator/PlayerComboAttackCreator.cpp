@@ -12,20 +12,18 @@ void PlayerComboAttackCreator::Init() {
     globalParameter_->SyncParamForGroup(commonGroupName_);
 
     AllLoadFile();
-    preViewObj_.reset(Object3d::CreateModel("DebugCube.obj"));
-    preViewObj_->SetIsDraw(false);
+   
 }
 
 void PlayerComboAttackCreator::AllLoadFile() {
     // AttackCreatorのPlayerComboAttackDataフォルダ内のすべてのファイルを検索
-    std::string folderPath = "Resources/GlobalParameter/AttackCreator/";
-
-    if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {
+  
+    if (std::filesystem::exists(AttackDataFolderPath_) && std::filesystem::is_directory(AttackDataFolderPath_)) {
         // 既存の攻撃データをクリア
         attacks_.clear();
         selectedIndex_ = -1;
 
-        for (const auto& entry : std::filesystem::directory_iterator(folderPath)) {
+        for (const auto& entry : std::filesystem::directory_iterator(AttackDataFolderPath_)) {
             if (entry.is_regular_file() && entry.path().extension() == ".json") {
                 std::string fileName = entry.path().stem().string();
 
@@ -48,9 +46,9 @@ void PlayerComboAttackCreator::Update(const float& deltaTime) {
     // すべての攻撃データを更新
     for (auto& attack : attacks_) {
         // 必要に応じて更新処理
+        attack;
+        deltaTime;
     }
-
-    preViewObj_->SetIsDraw(isPreViewDraw_);
 }
 
 void PlayerComboAttackCreator::EditorUpdate() {

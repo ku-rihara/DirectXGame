@@ -1,5 +1,4 @@
 #pragma once
-#include "3d/Object3d.h"
 #include "PlayerComboAttackData.h"
 #include <array>
 #include <memory>
@@ -59,7 +58,6 @@ private:
 
 private:
     std::vector<std::unique_ptr<PlayerComboAttackData>> attacks_;
-    std::unique_ptr<Object3d> preViewObj_;
 
     Vector3 basePos_   = Vector3::ZeroVector();
     int selectedIndex_ = -1;
@@ -71,6 +69,9 @@ private:
     // 共通パラメータ
     GlobalParameter* globalParameter_;
     const std::string commonGroupName_ = "ComboCommonParam";
+
+    const std::string AttackDataFolderPath_ = "Resources/GlobalParameter/AttackCreator/";
+
     std::array<AttackValueForLevel, kComboLevel> attackValueForLevel_;
 
 public:

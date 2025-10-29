@@ -9,8 +9,7 @@ void PlayerComboAttackData::Init(const std::string& attackName) {
     groupName_ = attackName;
     globalParameter_->CreateGroup(groupName_, true);
 
-    // 重複バインドを防ぐ
-    globalParameter_->ClearBindingsForGroup(groupName_);
+    // バインド
     BindParams();
 
     // パラメータ同期
@@ -30,9 +29,22 @@ void PlayerComboAttackData::SaveData() {
 /// バインド
 ///==========================================================
 void PlayerComboAttackData::BindParams() {
-    globalParameter_->Bind(groupName_, "offsetValue", &attackParam_.collisionOffsetValue);
-    globalParameter_->Bind(groupName_, "ColliderSize", &attackParam_.collisionSize);
-    globalParameter_->Bind(groupName_, "adaptTime", &attackParam_.adaptTime);
+    // CollisionParam
+    globalParameter_->Bind(groupName_, "collisionSize", &attackParam_.collisionPara.collisionSize);
+    globalParameter_->Bind(groupName_, "collisionOffsetValue", &attackParam_.collisionPara.collisionOffsetValue);
+    globalParameter_->Bind(groupName_, "adaptTime", &attackParam_.collisionPara.adaptTime);
+
+    // MoveParam
+    globalParameter_->Bind(groupName_, "moveValue", &attackParam_.moveParam.value);
+    globalParameter_->Bind(groupName_, "moveEaseType", &attackParam_.moveParam.easeType);
+
+    // KnockBackParam
+    globalParameter_->Bind(groupName_, "knockBackSpeed", &attackParam_.knockBackParam.speed);
+    globalParameter_->Bind(groupName_, "knockBackDecreaseEaseType", &attackParam_.knockBackParam.decreaseEaseType);
+
+    // Other
+    globalParameter_->Bind(groupName_, "cancelFrame", &attackParam_.cancelFrame);
+    globalParameter_->Bind(groupName_, "precedeInputFrame", &attackParam_.precedeInputFrame);
     globalParameter_->Bind(groupName_, "power", &attackParam_.power);
 }
 
@@ -44,18 +56,41 @@ void PlayerComboAttackData::AdjustParam() {
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
-        ImGui::SeparatorText("Attack Parameter");
+        // Collision Parameter
+        ImGui::SeparatorText("Collision Parameter");
+        ImGui::DragFloat3("Collision Size", &attackParam_.collisionPara.collisionSize.x, 0.01f);
+        ImGui::DragFloat("Collision Offset Value", &attackParam_.collisionPara.collisionOffsetValue, 0.01f);
+        ImGui::DragFloat("Adapt Time", &attackParam_.collisionPara.adaptTime, 0.01f);
 
-        ImGui::DragFloat3("CollisionSize", &attackParam_.collisionSize.x, 0.01f);
-        ImGui::DragFloat("offsetValue", &attackParam_.collisionOffsetValue, 0.01f);
-        ImGui::DragFloat("adaptTime", &attackParam_.adaptTime, 0.01f);
-        ImGui::DragFloat("power", &attackParam_.power, 0.01f);
+        // Move Parameter
+        ImGui::SeparatorText("Move Parameter");
+        ImGui::DragFloat3("Move Value", &attackParam_.moveParam.value.x, 0.01f);
+        EasingTypeSelector("Move Easing Type", attackParam_.moveParam.easeType);
+
+        // KnockBack Parameter
+        ImGui::SeparatorText("KnockBack Parameter");
+        ImGui::DragFloat("KnockBack Speed", &attackParam_.knockBackParam.speed, 0.01f);
+        EasingTypeSelector("KnockBack Decrease Easing Type", attackParam_.knockBackParam.decreaseEaseType);
+
+        // Other Parameters
+        ImGui::SeparatorText("Other Parameters");
+        ImGui::DragFloat("Cancel Frame", &attackParam_.cancelFrame, 0.01f);
+        ImGui::DragFloat("Precede Input Frame", &attackParam_.precedeInputFrame, 0.01f);
+        ImGui::DragFloat("Power", &attackParam_.power, 0.01f);
 
         // セーブ・ロード
+        ImGui::Separator();
         globalParameter_->ParamSaveForImGui(groupName_, folderPath_);
         globalParameter_->ParamLoadForImGui(groupName_, folderPath_);
 
         ImGui::PopID();
     }
 #endif // _DEBUG
+}
+
+void PlayerComboAttackData::EasingTypeSelector(const char* label, int32_t& target) {
+    int type = static_cast<int32_t>(target);
+    if (ImGui::Combo(label, &type, EasingTypeLabels.data(), static_cast<int>(EasingTypeLabels.size()))) {
+        target = type;
+    }
 }
