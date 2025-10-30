@@ -1,4 +1,6 @@
 #include "PlayerComboAttackData.h"
+#include "Function/GetFile.h"
+#include <algorithm>
 #include <imgui.h>
 
 void PlayerComboAttackData::Init(const std::string& attackName) {
@@ -11,8 +13,6 @@ void PlayerComboAttackData::Init(const std::string& attackName) {
 
     // バインド
     BindParams();
-
-    // パラメータ同期
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
@@ -29,23 +29,25 @@ void PlayerComboAttackData::SaveData() {
 /// バインド
 ///==========================================================
 void PlayerComboAttackData::BindParams() {
+    // simpleParam
+    globalParameter_->Bind(groupName_, "power", &attackParam_.power);
+    globalParameter_->Bind(groupName_, "KnockBackPower", &attackParam_.knockBackPower);
+
     // CollisionParam
-    globalParameter_->Bind(groupName_, "collisionSize", &attackParam_.collisionPara.collisionSize);
-    globalParameter_->Bind(groupName_, "collisionOffsetValue", &attackParam_.collisionPara.collisionOffsetValue);
+    globalParameter_->Bind(groupName_, "collisionSize", &attackParam_.collisionPara.size);
+    globalParameter_->Bind(groupName_, "collisionOffsetPos", &attackParam_.collisionPara.offsetPos);
     globalParameter_->Bind(groupName_, "adaptTime", &attackParam_.collisionPara.adaptTime);
 
     // MoveParam
     globalParameter_->Bind(groupName_, "moveValue", &attackParam_.moveParam.value);
     globalParameter_->Bind(groupName_, "moveEaseType", &attackParam_.moveParam.easeType);
 
-    // KnockBackParam
-    globalParameter_->Bind(groupName_, "knockBackSpeed", &attackParam_.knockBackParam.speed);
-    globalParameter_->Bind(groupName_, "knockBackDecreaseEaseType", &attackParam_.knockBackParam.decreaseEaseType);
+    // TimingParam
+    globalParameter_->Bind(groupName_, "cancelFrame", &attackParam_.timingParam.cancelFrame);
+    globalParameter_->Bind(groupName_, "precedeInputFrame", &attackParam_.timingParam.precedeInputFrame);
 
-    // Other
-    globalParameter_->Bind(groupName_, "cancelFrame", &attackParam_.cancelFrame);
-    globalParameter_->Bind(groupName_, "precedeInputFrame", &attackParam_.precedeInputFrame);
-    globalParameter_->Bind(groupName_, "power", &attackParam_.power);
+    // nextAttack
+    globalParameter_->Bind(groupName_, "NextAttackType", &attackParam_.nextAttackType);
 }
 
 ///==========================================================
@@ -53,39 +55,87 @@ void PlayerComboAttackData::BindParams() {
 ///==========================================================
 void PlayerComboAttackData::AdjustParam() {
 #ifdef _DEBUG
-    if (ImGui::CollapsingHeader(groupName_.c_str())) {
-        ImGui::PushID(groupName_.c_str());
 
-        // Collision Parameter
-        ImGui::SeparatorText("Collision Parameter");
-        ImGui::DragFloat3("Collision Size", &attackParam_.collisionPara.collisionSize.x, 0.01f);
-        ImGui::DragFloat("Collision Offset Value", &attackParam_.collisionPara.collisionOffsetValue, 0.01f);
-        ImGui::DragFloat("Adapt Time", &attackParam_.collisionPara.adaptTime, 0.01f);
+    ImGui::PushID(groupName_.c_str());
 
-        // Move Parameter
-        ImGui::SeparatorText("Move Parameter");
-        ImGui::DragFloat3("Move Value", &attackParam_.moveParam.value.x, 0.01f);
-        EasingTypeSelector("Move Easing Type", attackParam_.moveParam.easeType);
+    // Simple Parameter
+    ImGui::SeparatorText("simple Parameter");
+    ImGui::DragFloat("Power", &attackParam_.power, 0.01f);
+    ImGui::DragFloat("KnockBack Power", &attackParam_.knockBackPower, 0.01f);
 
-        // KnockBack Parameter
-        ImGui::SeparatorText("KnockBack Parameter");
-        ImGui::DragFloat("KnockBack Speed", &attackParam_.knockBackParam.speed, 0.01f);
-        EasingTypeSelector("KnockBack Decrease Easing Type", attackParam_.knockBackParam.decreaseEaseType);
+    // Collision Parameter
+    ImGui::SeparatorText("Collision Parameter");
+    ImGui::DragFloat3("Collision Size", &attackParam_.collisionPara.size.x, 0.01f);
+    ImGui::DragFloat3("Collision Offset Pos", &attackParam_.collisionPara.offsetPos.x, 0.01f);
+    ImGui::DragFloat("Adapt Time", &attackParam_.collisionPara.adaptTime, 0.01f);
 
-        // Other Parameters
-        ImGui::SeparatorText("Other Parameters");
-        ImGui::DragFloat("Cancel Frame", &attackParam_.cancelFrame, 0.01f);
-        ImGui::DragFloat("Precede Input Frame", &attackParam_.precedeInputFrame, 0.01f);
-        ImGui::DragFloat("Power", &attackParam_.power, 0.01f);
+    // Move Parameter
+    ImGui::SeparatorText("Move Parameter");
+    ImGui::DragFloat3("Move Value", &attackParam_.moveParam.value.x, 0.01f);
+    EasingTypeSelector("Move Easing Type", attackParam_.moveParam.easeType);
 
-        // セーブ・ロード
-        ImGui::Separator();
-        globalParameter_->ParamSaveForImGui(groupName_, folderPath_);
-        globalParameter_->ParamLoadForImGui(groupName_, folderPath_);
+    // Other Parameters
+    ImGui::SeparatorText("Timing Parameter");
+    ImGui::DragFloat("Cancel Frame", &attackParam_.timingParam.cancelFrame, 0.01f);
+    ImGui::DragFloat("Precede Input Frame", &attackParam_.timingParam.precedeInputFrame, 0.01f);
 
-        ImGui::PopID();
-    }
+    // next Attack
+    ImGui::SeparatorText("Next Attack");
+    SelectNextAttack();
+
+    // セーブ・ロード
+    ImGui::Separator();
+    globalParameter_->ParamSaveForImGui(groupName_, folderPath_);
+    globalParameter_->ParamLoadForImGui(groupName_, folderPath_);
+
+    ImGui::PopID();
+
 #endif // _DEBUG
+}
+
+void PlayerComboAttackData::SelectNextAttack() {
+    if (needsRefresh_ || attackFileNames_.empty()) {
+        attackFileNames_ = GetFileNamesForDyrectry("Resources/GlobalParameter/AttackCreator");
+   
+        // 自身のファイルを候補から削除
+        attackFileNames_.erase(
+            std::remove_if(attackFileNames_.begin(), attackFileNames_.end(),
+                [this](const std::string& name) {
+                    return name == groupName_;
+                }),
+            attackFileNames_.end());
+
+        // 先頭に"None"を追加
+        attackFileNames_.insert(attackFileNames_.begin(), "None");
+
+        needsRefresh_ = false;
+    }
+
+    // 現在選択中のインデックスを取得
+    int currentIndex = 0;
+    for (int i = 0; i < attackFileNames_.size(); i++) {
+        if (attackFileNames_[i] == attackParam_.nextAttackType) {
+            currentIndex = i;
+            break;
+        }
+    }
+
+    // comboItemsに順番に追加していく
+    std::vector<const char*> comboItems;
+    for (const auto& name : attackFileNames_) {
+        comboItems.push_back(name.c_str());
+    }
+
+    // コンボボックスで選択
+    if (ImGui::Combo("Next Attack Type", &currentIndex, comboItems.data(), static_cast<int>(comboItems.size()))) {
+        attackParam_.nextAttackType = attackFileNames_[currentIndex];
+    }
+
+    // リフレッシュボタン
+    ImGui::SameLine();
+    if (ImGui::SmallButton("Refresh")) {
+        needsRefresh_ = true;
+    }
 }
 
 void PlayerComboAttackData::EasingTypeSelector(const char* label, int32_t& target) {

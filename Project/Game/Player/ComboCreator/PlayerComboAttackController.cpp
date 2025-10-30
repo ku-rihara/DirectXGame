@@ -12,7 +12,6 @@ void PlayerComboAttackController::Init() {
     globalParameter_->SyncParamForGroup(commonGroupName_);
 
     AllLoadFile();
-   
 }
 
 void PlayerComboAttackController::AllLoadFile() {
@@ -56,16 +55,6 @@ void PlayerComboAttackController::EditorUpdate() {
     if (ImGui::CollapsingHeader("Attack Creator Manager")) {
         ImGui::PushID("Attack Creator Manager");
 
-        // 共通パラメータの調整
-        AdjustCommonParam();
-
-        ImGui::Separator();
-
-        ImGui::Text("Preview Object:");
-        ImGui::DragFloat3("preViewFollowObj", &basePos_.x, 0.1f);
-        ImGui::Checkbox("IsDraw", &isPreViewDraw_);
-
-        ImGui::Separator();
         ImGui::Text("Attack Edit:");
 
         // 新規追加
@@ -154,8 +143,10 @@ void PlayerComboAttackController::EditorUpdate() {
             MessageBoxA(nullptr, "All Attacks saved successfully.", "Attack Creator", 0);
         }
         ImGui::PopStyleColor(3);
-
         ImGui::PopID();
+
+        // 共通パラメータの調整
+        AdjustCommonParam();
     }
 #endif
 }

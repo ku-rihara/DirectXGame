@@ -1,4 +1,5 @@
 #pragma once
+#include "Combo/Combo.h"
 #include "PlayerComboAttackData.h"
 #include <array>
 #include <memory>
@@ -57,20 +58,14 @@ private:
     void AdjustCommonParam(); //< 共通パラメータ調整
 
 private:
-    std::vector<std::unique_ptr<PlayerComboAttackData>> attacks_;
-
-    Vector3 basePos_   = Vector3::ZeroVector();
-    int selectedIndex_ = -1;
-
-    bool isPreViewDraw_;
-
-    char nameBuffer_[128] = "";
-
     // 共通パラメータ
     GlobalParameter* globalParameter_;
-    const std::string commonGroupName_ = "ComboCommonParam";
-
+    const std::string commonGroupName_      = "ComboCommonParam";
     const std::string AttackDataFolderPath_ = "Resources/GlobalParameter/AttackCreator/";
+
+    std::vector<std::unique_ptr<PlayerComboAttackData>> attacks_;
+    int selectedIndex_    = -1;
+    char nameBuffer_[128] = "";
 
     std::array<AttackValueForLevel, kComboLevel> attackValueForLevel_;
 

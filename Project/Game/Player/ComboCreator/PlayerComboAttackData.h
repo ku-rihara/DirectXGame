@@ -1,13 +1,11 @@
 #pragma once
 
-#include "Combo/Combo.h"
 #include "Easing/Easing.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
 #include "Vector3.h"
 #include <cstdint>
 #include <string>
-
-class Combo;
+#include <vector>
 
 /// <summary>
 /// プレイヤー攻撃データクラス
@@ -21,28 +19,27 @@ public:
         Easing<Vector3> easing;
     };
 
-    // ノックバックパラメータ
-    struct KnockBackParam {
-        float speed;
-        int32_t decreaseEaseType = 0;
-        Easing<float> decreaseEase;
-    };
-
     // コリジョンパラメータ
     struct CollisionParam {
-        Vector3 collisionSize;
-        float collisionOffsetValue;
+        Vector3 size;
+        Vector3 offsetPos;
         float adaptTime;
+    };
+
+    // タイミングパラメータ
+    struct TimingParam {
+        float cancelFrame;
+        float precedeInputFrame;
     };
 
     // アタックパラメータ
     struct AttackParameter {
         CollisionParam collisionPara;
         MoveParam moveParam;
-        KnockBackParam knockBackParam;
-        float cancelFrame;
-        float precedeInputFrame;
+        TimingParam timingParam;
+        float knockBackPower;
         float power;
+        std::string nextAttackType;
     };
 
 public:
@@ -62,18 +59,29 @@ public:
     /// <param name="target">対象変数</param>
     void EasingTypeSelector(const char* label, int32_t& target);
 
-    void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
-    void LoadData(); //< データロード
-    void SaveData(); //< データセーブ
+     // パラメータバインド、調節
+    void AdjustParam();
+    void BindParams();
+
+    // データロード、セーブ
+    void LoadData();
+    void SaveData();
+
+private:
+
+    // 次の攻撃の選択
+    void SelectNextAttack(); 
 
 private:
     GlobalParameter* globalParameter_;
     std::string groupName_;
     const std::string folderPath_ = "AttackCreator";
 
+
     // 攻撃パラメータ
     AttackParameter attackParam_;
+    bool needsRefresh_ = true;
+    std::vector<std::string> attackFileNames_;
 
 public:
     const std::string& GetGroupName() const { return groupName_; }

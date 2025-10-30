@@ -141,7 +141,7 @@ void GameScene::PlayUpdate() {
     skyBox_->Update();
     howToOperate_->Update();
     enemySpawner_->Update(Frame::DeltaTimeRate());
-    continuousEnemySpawner_->Update(Frame::DeltaTimeRate(),viewProjection_);
+    continuousEnemySpawner_->Update(Frame::DeltaTimeRate(), viewProjection_);
     enemyManager_->Update();
     combo_->Update();
     fireInjectors_->Update();
@@ -199,6 +199,11 @@ void GameScene::Debug() {
     shakeEditor_->EditorUpdate();
     attackEffect_->EditorUpdate();
     ImGui::End();
+
+    ImGui::Begin("PlayerAttack");
+    playerComboAttackController_->EditorUpdate();
+ 
+    ImGui::End();
 #endif
 }
 
@@ -231,23 +236,24 @@ void GameScene::ObjectInit() {
 
     // 生成---------------------------------------------------------------------------
 
-    field_                  = std::make_unique<Field>();
-    lockOnController_       = std::make_unique<LockOnController>();
-    player_                 = std::make_unique<Player>();
-    gameCamera_             = std::make_unique<GameCamera>();
-    enemyManager_           = std::make_unique<EnemyManager>();
-    enemySpawner_           = std::make_unique<EnemySpawner>();
-    skyDome_                = std::make_unique<SkyDome>();
-    howToOperate_           = std::make_unique<HowToOperate>();
-    skyBox_                 = std::make_unique<SkyBox>();
-    combo_                  = std::make_unique<Combo>();
-    fireInjectors_          = std::make_unique<FireInjectors>();
-    gameBackGroundObject_   = std::make_unique<GameBackGroundObject>();
-    comboScene_             = std::make_unique<ComboScene>();
-    attackEffect_           = std::make_unique<AttackEffect>();
-    gameIntroManager_       = std::make_unique<GameIntroManager>();
-    comboLevelObjHolder_    = std::make_unique<ComboLevelObjHolder>();
-    continuousEnemySpawner_ = std::make_unique<ContinuousEnemySpawner>();
+    field_                       = std::make_unique<Field>();
+    lockOnController_            = std::make_unique<LockOnController>();
+    player_                      = std::make_unique<Player>();
+    gameCamera_                  = std::make_unique<GameCamera>();
+    enemyManager_                = std::make_unique<EnemyManager>();
+    enemySpawner_                = std::make_unique<EnemySpawner>();
+    skyDome_                     = std::make_unique<SkyDome>();
+    howToOperate_                = std::make_unique<HowToOperate>();
+    skyBox_                      = std::make_unique<SkyBox>();
+    combo_                       = std::make_unique<Combo>();
+    fireInjectors_               = std::make_unique<FireInjectors>();
+    gameBackGroundObject_        = std::make_unique<GameBackGroundObject>();
+    comboScene_                  = std::make_unique<ComboScene>();
+    attackEffect_                = std::make_unique<AttackEffect>();
+    gameIntroManager_            = std::make_unique<GameIntroManager>();
+    comboLevelObjHolder_         = std::make_unique<ComboLevelObjHolder>();
+    continuousEnemySpawner_      = std::make_unique<ContinuousEnemySpawner>();
+    playerComboAttackController_ = std::make_unique<PlayerComboAttackController>();
 
     // 初期化---------------------------------------------------------------------------
 
@@ -263,6 +269,7 @@ void GameScene::ObjectInit() {
     gameCamera_->Init();
     howToOperate_->Init();
     comboScene_->Init();
+    playerComboAttackController_->Init();
     attackEffect_->Init();
     viewProjection_.Init();
 
@@ -277,6 +284,7 @@ void GameScene::ObjectInit() {
 void GameScene::SetClassPointer() {
 
     gameCamera_->SetTarget(&player_->GetTransform());
+
     // enemyManager
     enemyManager_->SetPlayer(player_.get());
     enemyManager_->SetCombo(combo_.get());
