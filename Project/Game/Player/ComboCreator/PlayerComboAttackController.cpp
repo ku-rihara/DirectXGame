@@ -1,10 +1,10 @@
-#include "PlayerComboAttackCreator.h"
+#include "PlayerComboAttackController.h"
 #include <algorithm>
 #include <filesystem>
 #include <imgui.h>
 #include <Windows.h>
 
-void PlayerComboAttackCreator::Init() {
+void PlayerComboAttackController::Init() {
     // 共通パラメータの初期化
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(commonGroupName_, false);
@@ -15,9 +15,9 @@ void PlayerComboAttackCreator::Init() {
    
 }
 
-void PlayerComboAttackCreator::AllLoadFile() {
+void PlayerComboAttackController::AllLoadFile() {
+
     // AttackCreatorのPlayerComboAttackDataフォルダ内のすべてのファイルを検索
-  
     if (std::filesystem::exists(AttackDataFolderPath_) && std::filesystem::is_directory(AttackDataFolderPath_)) {
         // 既存の攻撃データをクリア
         attacks_.clear();
@@ -42,7 +42,7 @@ void PlayerComboAttackCreator::AllLoadFile() {
     }
 }
 
-void PlayerComboAttackCreator::Update(const float& deltaTime) {
+void PlayerComboAttackController::Update(const float& deltaTime) {
     // すべての攻撃データを更新
     for (auto& attack : attacks_) {
         // 必要に応じて更新処理
@@ -51,7 +51,7 @@ void PlayerComboAttackCreator::Update(const float& deltaTime) {
     }
 }
 
-void PlayerComboAttackCreator::EditorUpdate() {
+void PlayerComboAttackController::EditorUpdate() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader("Attack Creator Manager")) {
         ImGui::PushID("Attack Creator Manager");
@@ -160,14 +160,14 @@ void PlayerComboAttackCreator::EditorUpdate() {
 #endif
 }
 
-void PlayerComboAttackCreator::AddAttack(const std::string& attackName) {
+void PlayerComboAttackController::AddAttack(const std::string& attackName) {
     auto attack = std::make_unique<PlayerComboAttackData>();
     attack->Init(attackName);
     attacks_.push_back(std::move(attack));
     selectedIndex_ = static_cast<int>(attacks_.size()) - 1;
 }
 
-void PlayerComboAttackCreator::RemoveAttack(const int& index) {
+void PlayerComboAttackController::RemoveAttack(const int& index) {
     if (index >= 0 && index < static_cast<int>(attacks_.size())) {
         attacks_.erase(attacks_.begin() + index);
 
@@ -183,7 +183,7 @@ void PlayerComboAttackCreator::RemoveAttack(const int& index) {
     }
 }
 
-void PlayerComboAttackCreator::AllSaveFile() {
+void PlayerComboAttackController::AllSaveFile() {
     // 共通パラメータを保存
     globalParameter_->SaveFile(commonGroupName_);
 
@@ -193,14 +193,14 @@ void PlayerComboAttackCreator::AllSaveFile() {
     }
 }
 
-PlayerComboAttackData* PlayerComboAttackCreator::GetSelectedAttack() {
+PlayerComboAttackData* PlayerComboAttackController::GetSelectedAttack() {
     if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(attacks_.size())) {
         return attacks_[selectedIndex_].get();
     }
     return nullptr;
 }
 
-PlayerComboAttackData* PlayerComboAttackCreator::GetAttackByName(const std::string& name) {
+PlayerComboAttackData* PlayerComboAttackController::GetAttackByName(const std::string& name) {
     auto it = std::find_if(attacks_.begin(), attacks_.end(),
         [&name](const std::unique_ptr<PlayerComboAttackData>& attack) {
             return attack->GetGroupName() == name;
@@ -215,7 +215,7 @@ PlayerComboAttackData* PlayerComboAttackCreator::GetAttackByName(const std::stri
 ///==========================================================
 /// 共通パラメータバインド
 ///==========================================================
-void PlayerComboAttackCreator::BindCommonParams() {
+void PlayerComboAttackController::BindCommonParams() {
     for (int32_t i = 0; i < kComboLevel; ++i) {
         globalParameter_->Bind(commonGroupName_, "AttackSpeedRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].speedRate);
         globalParameter_->Bind(commonGroupName_, "AttackPowerRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].powerRate);
@@ -225,7 +225,7 @@ void PlayerComboAttackCreator::BindCommonParams() {
 ///==========================================================
 /// 共通パラメータ調整
 ///==========================================================
-void PlayerComboAttackCreator::AdjustCommonParam() {
+void PlayerComboAttackController::AdjustCommonParam() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader("Common Combo Parameters")) {
         ImGui::PushID("CommonComboParams");

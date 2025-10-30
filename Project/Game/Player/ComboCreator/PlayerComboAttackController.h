@@ -6,9 +6,9 @@
 #include <vector>
 
 /// <summary>
-/// コンボアタッククリエイター
+/// コンボアタック制御
 /// </summary>
-class PlayerComboAttackCreator {
+class PlayerComboAttackController {
 public:
     struct AttackValueForLevel {
         float speedRate;
@@ -16,8 +16,8 @@ public:
     };
 
 public:
-    PlayerComboAttackCreator()  = default;
-    ~PlayerComboAttackCreator() = default;
+    PlayerComboAttackController()  = default;
+    ~PlayerComboAttackController() = default;
 
     void Init(); //< 初期化
 
