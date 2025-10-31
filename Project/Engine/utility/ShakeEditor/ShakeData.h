@@ -64,13 +64,6 @@ private:
     void UpdateVector3Shake(); //< Vector3シェイクの更新
 
     /// <summary>
-    /// イージングタイプセレクター
-    /// </summary>
-    /// <param name="label">ラベル</param>
-    /// <param name="target">対象変数</param>
-    void EasingTypeSelector(const char* label, int32_t& target);
-
-    /// <summary>
     /// 軸フラグの適用
     /// </summary>
     /// <param name="shakeValue">シェイク値</param>
