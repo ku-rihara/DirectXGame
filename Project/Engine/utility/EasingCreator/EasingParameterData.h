@@ -97,7 +97,8 @@ constexpr std::array<const char*, static_cast<int>(EasingType::COUNT)> EasingTyp
     "BackInQuartZero", "BackOutQuartZero", "BackInOutQuartZero",
     "BackInQuintZero", "BackOutQuintZero", "BackInOutQuintZero",
     "BackInExpoZero", "BackOutExpoZero", "BackInOutExpoZero",
-    "BackInCircZero", "BackOutCircZero", "BackInOutCircZero"};
+    "BackInCircZero", "BackOutCircZero", "BackInOutCircZero"
+};
 
 constexpr std::array<const char*, static_cast<int>(AdaptFloatAxisType::COUNT)> AdaptFloatAxisTypeLabels = {
     "X",
@@ -114,6 +115,14 @@ constexpr std::array<const char*, static_cast<int>(AdaptVector2AxisType::COUNT)>
 constexpr std::array<const char*, static_cast<int>(AdaptVector2AxisType::COUNT)> FinishTypeLabels = {
     "Start", "End"
 };
+
+/// <summary>
+/// イージングタイプをImGuiでセレクトする
+/// </summary>
+/// <param name="label"></param>
+/// <param name="target"></param>
+void ImGuiEasingTypeSelector(const char* label, int32_t& target);
+
 
 template <typename T>
 struct EasingParameter {
