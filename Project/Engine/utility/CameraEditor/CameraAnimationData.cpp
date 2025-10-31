@@ -420,9 +420,9 @@ void CameraAnimationData::AdjustParam() {
     // イージングタイプの設定
     ImGui::DragFloat("Return Delay Time", &returnDelayTime_, 0.01f, 0.0f, 10.0f);
     ImGui::DragFloat("Reset Time Point", &resetTimePoint_, 0.01f);
-    EasingTypeSelector("Easing Type Position", resetPosEaseType_);
-    EasingTypeSelector("Easing Type Rotate", resetRotateEaseType_);
-    EasingTypeSelector("Easing Type Fov", resetFovEaseType_);
+    ImGuiEasingTypeSelector("Easing Type Position", resetPosEaseType_);
+    ImGuiEasingTypeSelector("Easing Type Rotate", resetRotateEaseType_);
+    ImGuiEasingTypeSelector("Easing Type Fov", resetFovEaseType_);
 
     ImGui::SeparatorText("deltaTime");
     TimeModeSelector("Time Mode", timeMode_);
@@ -480,12 +480,6 @@ void CameraAnimationData::AdjustParam() {
 #endif // _DEBUG
 }
 
-void CameraAnimationData::EasingTypeSelector(const char* label, int32_t& target) {
-    int type = static_cast<int32_t>(target);
-    if (ImGui::Combo(label, &type, EasingTypeLabels.data(), static_cast<int>(EasingTypeLabels.size()))) {
-        target = type;
-    }
-}
 
 void CameraAnimationData::SetInitialValues(const Vector3& position, const Vector3& rotation, const float& fov) {
     initialPosition_ = position;

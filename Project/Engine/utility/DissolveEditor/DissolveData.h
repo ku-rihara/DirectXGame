@@ -46,13 +46,6 @@ private:
     void BindParams();           //< パラメータバインド
     void UpdateDissolveValues(); //< ディゾルブ値更新
 
-    /// <summary>
-    /// イージングタイプセレクタ
-    /// </summary>
-    /// <param name="label">ラベル</param>
-    /// <param name="target">ターゲット</param>
-    void EasingTypeSelector(const char* label, int32_t& target);
-
 private:
     GlobalParameter* globalParameter_;
     std::string groupName_;

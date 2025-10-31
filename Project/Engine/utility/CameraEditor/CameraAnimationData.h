@@ -44,13 +44,6 @@ public:
     void ApplyToViewProjection(ViewProjection& viewProjection);
 
     /// <summary>
-    /// イージングタイプセレクター
-    /// </summary>
-    /// <param name="label">ラベル</param>
-    /// <param name="target">対象</param>
-    void EasingTypeSelector(const char* label, int32_t& target);
-
-    /// <summary>
     /// アクティブキーフレーム更新
     /// </summary>
     /// <param name="speedRate">速度倍率</param>

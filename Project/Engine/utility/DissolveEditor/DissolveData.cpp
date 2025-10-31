@@ -175,7 +175,7 @@ void DissolveData::AdjustParam() {
         ImGui::DragFloat("Offset Time", &offsetTime_, 0.01f, 0.0f, 5.0f);
 
         // イージングタイプ
-        EasingTypeSelector("Easing Type", easeType_);
+        ImGuiEasingTypeSelector("Easing Type", easeType_);
 
         ImGui::Separator();
 
@@ -193,13 +193,6 @@ void DissolveData::AdjustParam() {
         ImGui::PopID();
     }
 #endif // _DEBUG
-}
-
-void DissolveData::EasingTypeSelector(const char* label, int32_t& target) {
-    int type = static_cast<int32_t>(target);
-    if (ImGui::Combo(label, &type, EasingTypeLabels.data(), static_cast<int>(EasingTypeLabels.size()))) {
-        target = type;
-    }
 }
 
 bool DissolveData::IsPlaying() const {
