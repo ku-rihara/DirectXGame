@@ -46,6 +46,8 @@ public:
     PlayerComboAttackData()  = default;
     ~PlayerComboAttackData() = default;
 
+    //*-------------------------------- public Method --------------------------------*//
+
     /// <summary>
     /// 初期化
     /// </summary>
@@ -68,11 +70,14 @@ public:
     void SaveData();
 
 private:
+    //*-------------------------------- private Method --------------------------------*//
 
     // 次の攻撃の選択
     void SelectNextAttack(); 
 
 private:
+    //*-------------------------------- Private variants--------------------------------*//
+
     GlobalParameter* globalParameter_;
     std::string groupName_;
     const std::string folderPath_ = "AttackCreator";
@@ -84,6 +89,7 @@ private:
     std::vector<std::string> attackFileNames_;
 
 public:
+    //*-------------------------------- Getter Method --------------------------------*//
     const std::string& GetGroupName() const { return groupName_; }
     AttackParameter& GetAttackParam() { return attackParam_; }
 };

@@ -229,12 +229,9 @@ void GameScene::ChangeForJoyState() {
     isend_ = true;
 }
 
-/// ---------------------------------------------------------------------------------
-/// オブジェクト初期化
-/// ---------------------------------------------------------------------------------
 void GameScene::ObjectInit() {
 
-    // 生成---------------------------------------------------------------------------
+     //*-------------------------------- オブジェクト生成 --------------------------------*//
 
     field_                       = std::make_unique<Field>();
     lockOnController_            = std::make_unique<LockOnController>();
@@ -255,9 +252,9 @@ void GameScene::ObjectInit() {
     continuousEnemySpawner_      = std::make_unique<ContinuousEnemySpawner>();
     playerComboAttackController_ = std::make_unique<PlayerComboAttackController>();
 
-    // 初期化---------------------------------------------------------------------------
+    //*--------------------------------------- 初期化 ---------------------------------------*//
 
-    player_->GameSceneInit();
+    player_->InitInGameScene();
     lockOnController_->Init();
     skyBox_->Init();
     combo_->Init();
@@ -278,10 +275,9 @@ void GameScene::ObjectInit() {
     gameBackGroundObject_->Init("game.json");
 }
 
-/// ---------------------------------------------------------------------------------
-/// クラスポインタセット
-/// ---------------------------------------------------------------------------------
 void GameScene::SetClassPointer() {
+
+    //*-------------------------------- Classポインタセット --------------------------------*//
 
     gameCamera_->SetTarget(&player_->GetTransform());
 
@@ -303,6 +299,7 @@ void GameScene::SetClassPointer() {
     player_->SetGameCamera(gameCamera_.get());
     player_->SetCombo(combo_.get());
     player_->SetHitStop(attackEffect_.get());
+    player_->SetComboAttackController(playerComboAttackController_.get());
 
     fireInjectors_->SetCombo(combo_.get());
     lockOnController_->SetEnemyManager(enemyManager_.get());

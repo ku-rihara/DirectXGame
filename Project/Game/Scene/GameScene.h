@@ -63,9 +63,8 @@ public:
     void ChangeForJoyState();
 
 private:
-    ///========================================================
-    /// Private variants
-    ///========================================================
+   
+    //*-------------------------------- Private variants--------------------------------*//
 
     // objects
     std::unique_ptr<GameCamera> gameCamera_                                   = nullptr;

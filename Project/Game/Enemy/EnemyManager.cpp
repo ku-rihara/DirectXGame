@@ -34,11 +34,11 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
 
     std::unique_ptr<BaseEnemy> enemy;
 
-    if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]) { // 通常敵
+    if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]) { 
         enemy = std::make_unique<NormalEnemy>();
         enemy->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
     }
-    if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)]) { // 通常敵
+    if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)]) { 
         enemy = std::make_unique<StrongEnemy>();
         enemy->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
     }

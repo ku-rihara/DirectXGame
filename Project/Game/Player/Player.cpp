@@ -505,7 +505,7 @@ void Player::PositionYReset() {
     baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
 }
 
-void Player::GameSceneInit() {
+void Player::InitInGameScene() {
     Init();
 
     DissolveUpdate(1.0f);
@@ -541,6 +541,14 @@ void Player::SetGameCamera(GameCamera* gameCamera) {
 
 void Player::SetHitStop(AttackEffect* hitStop) {
     pHitStop_ = hitStop;
+}
+
+void Player::SetViewProjection(const ViewProjection* viewProjection) {
+    viewProjection_ = viewProjection;
+}
+
+void Player::SetComboAttackController(PlayerComboAttackController* playerComboAttackController) {
+    comboAttackController_ = playerComboAttackController;
 }
 
 /// =======================================================================================
