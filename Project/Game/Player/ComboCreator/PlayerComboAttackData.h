@@ -12,6 +12,13 @@
 /// </summary>
 class PlayerComboAttackData {
 public:
+    enum class TriggerCondition {
+        GROUND, // 地上のみ
+        AIR,    // 空中のみ
+        BOTH    // 両方
+    };
+
+public:
     // 移動パラメータ
     struct MoveParam {
         Vector3 value;
@@ -32,11 +39,20 @@ public:
         float precedeInputFrame;
     };
 
+    // 攻撃発動に関するパラメータ
+    struct TriggerParam {
+        bool isFirstAttack;
+        TriggerCondition condition;
+        int32_t keyBordBottom;
+        int32_t gamePadBottom;
+    };
+
     // アタックパラメータ
     struct AttackParameter {
         CollisionParam collisionPara;
         MoveParam moveParam;
         TimingParam timingParam;
+        TriggerParam triggerParam;
         float knockBackPower;
         float power;
         std::string nextAttackType;
@@ -54,7 +70,7 @@ public:
     /// <param name="attackName">攻撃名</param>
     void Init(const std::string& attackName);
 
-     // パラメータバインド、調節
+    // パラメータバインド、調節
     void AdjustParam();
     void BindParams();
 
@@ -66,7 +82,7 @@ private:
     //*-------------------------------- private Method --------------------------------*//
 
     // 次の攻撃の選択
-    void SelectNextAttack(); 
+    void SelectNextAttack();
 
 private:
     //*-------------------------------- Private variants--------------------------------*//
@@ -79,6 +95,8 @@ private:
     AttackParameter attackParam_;
     bool needsRefresh_ = true;
     std::vector<std::string> attackFileNames_;
+
+    int32_t tempCondition_;
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//

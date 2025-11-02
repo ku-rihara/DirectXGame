@@ -1,90 +1,98 @@
 #include "ComboAttackRoot.h"
-#include "FallAttack.h"
-#include "RightJobPunch.h"
-
 #include "DynamicComboAttack.h"
 #include "input/Input.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
-#include "Player/PlayerBehavior/PlayerJump.h"
-
-/// Player
 #include "Player/Player.h"
-
+#include "Player/PlayerBehavior/PlayerJump.h"
 #include <imgui.h>
 
 // 初期化
 ComboAttackRoot::ComboAttackRoot(Player* player)
     : BaseComboAattackBehavior("ComboAttackRoot", player) {
-
     Init();
 }
 
-ComboAttackRoot ::~ComboAttackRoot() {
-}
+ComboAttackRoot::~ComboAttackRoot() {}
 
 void ComboAttackRoot::Init() {
-
     pPlayer_->SetHeadScale(Vector3::UnitVector());
     pPlayer_->RotateReset();
     attackPatern_ = AttackPatern::NORMAL;
 }
 
 void ComboAttackRoot::Update() {
-    // 攻撃ボタンが押された時
-    if (Input::GetInstance()->TriggerKey(KeyboardKey::H) || Input::IsTriggerPad(0, GamepadButton::X)) {
+    // 現在の状態を判定
+    JudgeAttackPattern();
 
-        // ComboAttackControllerから攻撃を取得
-        auto* controller = pPlayer_->GetComboAttackController();
+    // 攻撃コントローラーを取得
+    auto* controller = pPlayer_->GetComboAttackController();
+    if (!controller) {
+        return;
+    }
 
-        if (controller) {
-            // デフォルトの最初の攻撃名を取得
-            auto* firstAttack = controller->GetAttackByName("FirstPunch");
+    // 全ての攻撃データをチェック
+    const auto& attacks = controller->GetAllAttacks();
 
-            if (!firstAttack) {
-                return;
-            }
+    for (const auto& attackPtr : attacks) {
+        if (!attackPtr)
+            continue;
 
-            // コンボ攻撃を開始
-            pPlayer_->ChangeComboBehavior(std::make_unique<DynamicComboAttack>(pPlayer_, firstAttack));
+        auto& attackParam  = attackPtr->GetAttackParam();
+        auto& triggerParam = attackParam.triggerParam;
+
+        // isFirstAttackがtrueの攻撃のみ対象
+        if (!triggerParam.isFirstAttack) {
+            continue;
+        }
+
+        // 状態条件のチェック
+        if (!CheckConditionMuch(triggerParam.condition)) {
+            continue;
+        }
+
+        // 入力チェック
+        bool triggered = false;
+
+        // キーボード入力チェック
+        if (Input::GetInstance()->TriggerKey(static_cast<KeyboardKey>(triggerParam.keyBordBottom))) {
+            triggered = true;
+        }
+
+        // ゲームパッド入力チェック
+        if (Input::IsTriggerPad(0, FromXInputButtonFlag(triggerParam.gamePadBottom))) {
+            triggered = true;
+        }
+
+        // トリガーされたら攻撃開始
+        if (triggered) {
+            pPlayer_->ChangeComboBehavior(
+                std::make_unique<DynamicComboAttack>(pPlayer_, attackPtr.get()));
+            return; // 最初にマッチした攻撃を実行
         }
     }
 }
 
-//// 更新
-// void ComboAttackRoot::Update() {
-//
-//     ///---------------------------------------------------------
-//     /// キー入力によるコンボ開始処理
-//     ///---------------------------------------------------------
-//
-//     JudgeAttackPatern();
-//
-//     switch (attackPatern_) {
-//     case AttackPatern::NORMAL:
-//         /// 通常攻撃
-//         BaseComboAattackBehavior::PreOderNextComboForButton();
-//         if (!isNextCombo_) {
-//             break;
-//         }
-//         BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<RightJobPunch>(pPlayer_));
-//
-//         break;
-//     case AttackPatern::JUMP:
-//         /// ジャンプ攻撃
-//         BaseComboAattackBehavior::PreOderNextComboForButton();
-//         if (!isNextCombo_) {
-//             break;
-//         }
-//         BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<FallAttack>(pPlayer_));
-//
-//         break;
-//     default:
-//         break;
-//     }
-// }
+bool ComboAttackRoot::CheckConditionMuch(const PlayerComboAttackData::TriggerCondition& condition) {
+    switch (condition) {
+    case PlayerComboAttackData::TriggerCondition::GROUND:
+        // 地上のみ
+        return attackPatern_ == AttackPatern::NORMAL;
 
-void ComboAttackRoot::JudgeAttackPatern() {
-    /// 浮遊時のコンボ
+    case PlayerComboAttackData::TriggerCondition::AIR:
+        // 空中のみ
+        return attackPatern_ == AttackPatern::JUMP;
+
+    case PlayerComboAttackData::TriggerCondition::BOTH:
+        // 両方OK
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+void ComboAttackRoot::JudgeAttackPattern() {
+    // ジャンプ中かどうかで判定
     if (dynamic_cast<PlayerJump*>(pPlayer_->GetBehavior())) {
         attackPatern_ = AttackPatern::JUMP;
     } else {
@@ -93,5 +101,5 @@ void ComboAttackRoot::JudgeAttackPatern() {
 }
 
 void ComboAttackRoot::Debug() {
-    ImGui::Text("ComboAttackRoot");
+
 }

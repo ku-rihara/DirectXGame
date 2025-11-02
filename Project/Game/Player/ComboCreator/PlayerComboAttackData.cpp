@@ -1,5 +1,6 @@
 #include "PlayerComboAttackData.h"
 #include "Function/GetFile.h"
+#include "input/InputData.h"
 #include <algorithm>
 #include <imgui.h>
 
@@ -14,6 +15,9 @@ void PlayerComboAttackData::Init(const std::string& attackName) {
     // バインド
     BindParams();
     globalParameter_->SyncParamForGroup(groupName_);
+
+    // condition適応
+    attackParam_.triggerParam.condition = static_cast<TriggerCondition>(tempCondition_);
 }
 
 void PlayerComboAttackData::LoadData() {
@@ -37,11 +41,17 @@ void PlayerComboAttackData::BindParams() {
     globalParameter_->Bind(groupName_, "collisionSize", &attackParam_.collisionPara.size);
     globalParameter_->Bind(groupName_, "collisionOffsetPos", &attackParam_.collisionPara.offsetPos);
     globalParameter_->Bind(groupName_, "adaptTime", &attackParam_.collisionPara.adaptTime);
-    
+
     // MoveParam
     globalParameter_->Bind(groupName_, "moveValue", &attackParam_.moveParam.value);
     globalParameter_->Bind(groupName_, "moveEaseType", &attackParam_.moveParam.easeType);
     globalParameter_->Bind(groupName_, "moveEaseTime", &attackParam_.moveParam.easeTime);
+
+    // TriggerParam
+    globalParameter_->Bind(groupName_, "gamePadBottom", &attackParam_.triggerParam.gamePadBottom);
+    globalParameter_->Bind(groupName_, "keyBordBottom", &attackParam_.triggerParam.keyBordBottom);
+    globalParameter_->Bind(groupName_, "Condition", &tempCondition_);
+    globalParameter_->Bind(groupName_, "IsFirstAttack", &attackParam_.triggerParam.isFirstAttack);
 
     // TimingParam
     globalParameter_->Bind(groupName_, "cancelFrame", &attackParam_.timingParam.cancelFrame);
@@ -58,6 +68,16 @@ void PlayerComboAttackData::AdjustParam() {
 #ifdef _DEBUG
 
     ImGui::PushID(groupName_.c_str());
+
+    // TriggerParam
+    ImGui::Checkbox("isFirstAttack", &attackParam_.triggerParam.isFirstAttack);
+    ImGuiKeyboardKeySelector("keyBoard:TriggerBottom", attackParam_.triggerParam.keyBordBottom);
+    ImGuiKeyboardKeySelector("GamePad:TriggerBottom", attackParam_.triggerParam.gamePadBottom);
+    const char* conditionItems[] = {"Ground", "Air", "Both"};
+    tempCondition_               = static_cast<int>(attackParam_.triggerParam.condition);
+    if (ImGui::Combo("Trigger Condition", &tempCondition_, conditionItems, IM_ARRAYSIZE(conditionItems))) {
+        attackParam_.triggerParam.condition = static_cast<TriggerCondition>(tempCondition_);
+    }
 
     // Simple Parameter
     ImGui::SeparatorText("simple Parameter");
@@ -98,7 +118,7 @@ void PlayerComboAttackData::AdjustParam() {
 void PlayerComboAttackData::SelectNextAttack() {
     if (needsRefresh_ || attackFileNames_.empty()) {
         attackFileNames_ = GetFileNamesForDyrectry("Resources/GlobalParameter/AttackCreator");
-   
+
         // 自身のファイルを候補から削除
         attackFileNames_.erase(
             std::remove_if(attackFileNames_.begin(), attackFileNames_.end(),
@@ -139,4 +159,3 @@ void PlayerComboAttackData::SelectNextAttack() {
         needsRefresh_ = true;
     }
 }
-
