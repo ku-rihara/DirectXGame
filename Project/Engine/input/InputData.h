@@ -7,7 +7,7 @@
 /// <summary>
 /// ゲームパッドボタンの列挙型
 /// </summary>
-enum class GamepadButton : int32_t {
+enum class GamepadButton {
     A,
     B,
     X,
@@ -29,65 +29,65 @@ enum class GamepadButton : int32_t {
 /// </summary>
 enum class KeyboardKey : int32_t {
     // 文字キー
-    A = DIK_A,
-    B = DIK_B,
-    C = DIK_C,
-    D = DIK_D,
-    E = DIK_E,
-    F = DIK_F,
-    G = DIK_G,
-    H = DIK_H,
-    I = DIK_I,
-    J = DIK_J,
-    K = DIK_K,
-    L = DIK_L,
-    M = DIK_M,
-    N = DIK_N,
-    O = DIK_O,
-    P = DIK_P,
-    Q = DIK_Q,
-    R = DIK_R,
-    S = DIK_S,
-    T = DIK_T,
-    U = DIK_U,
-    V = DIK_V,
-    W = DIK_W,
-    X = DIK_X,
-    Y = DIK_Y,
-    Z = DIK_Z,
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+    H,
+    I,
+    J,
+    K,
+    L,
+    M,
+    N,
+    O,
+    P,
+    Q,
+    R,
+    S,
+    T,
+    U,
+    V,
+    W,
+    X,
+    Y,
+    Z,
 
     // 数字キー
-    Key0 = DIK_0,
-    Key1 = DIK_1,
-    Key2 = DIK_2,
-    Key3 = DIK_3,
-    Key4 = DIK_4,
-    Key5 = DIK_5,
-    Key6 = DIK_6,
-    Key7 = DIK_7,
-    Key8 = DIK_8,
-    Key9 = DIK_9,
+    Key0,
+    Key1,
+    Key2,
+    Key3,
+    Key4,
+    Key5,
+    Key6,
+    Key7,
+    Key8,
+    Key9,
 
     // 特殊キー
-    Space      = DIK_SPACE,
-    Enter      = DIK_RETURN,
-    Escape     = DIK_ESCAPE,
-    Backspace  = DIK_BACK,
-    Tab        = DIK_TAB,
-    LeftShift  = DIK_LSHIFT,
-    RightShift = DIK_RSHIFT,
-    LeftCtrl   = DIK_LCONTROL,
-    RightCtrl  = DIK_RCONTROL,
-    LeftAlt    = DIK_LALT,
-    RightAlt   = DIK_RALT,
+    Space,
+    Enter,
+    Escape,
+    Backspace,
+    Tab,
+    LeftShift,
+    RightShift,
+    LeftCtrl,
+    RightCtrl,
+    LeftAlt,
+    RightAlt,
 
     // 矢印キー
-    Up    = DIK_UP,
-    Down  = DIK_DOWN,
-    Left  = DIK_LEFT,
-    Right = DIK_RIGHT,
+    Up,
+    Down,
+    Left,
+    Right,
 
-    COUNT
+    COUNT 
 };
 
 /// <summary>
@@ -169,3 +169,17 @@ int32_t ToXInputButtonFlag(GamepadButton button);
 /// <param name="xinputFlag">XINPUTのボタンビット</param>
 /// <returns>対応するGamepadButton</returns>
 GamepadButton FromXInputButtonFlag(const int32_t& xinputFlag);
+
+/// <summary>
+/// KeyboardKey列挙型からDirectInputのキーコードに変換
+/// </summary>
+/// <param name="key">KeyboardKey列挙型のキー</param>
+/// <returns>対応するDirectInputのキーコード</returns>
+int32_t ToDIKCode(KeyboardKey key);
+
+/// <summary>
+/// DirectInputのキーコードからKeyboardKey列挙型に変換
+/// </summary>
+/// <param name="dikCode">DirectInputのキーコード</param>
+/// <returns>対応するKeyboardKey列挙型のキー</returns>
+KeyboardKey FromDIKCode(const int32_t& dikCode);
