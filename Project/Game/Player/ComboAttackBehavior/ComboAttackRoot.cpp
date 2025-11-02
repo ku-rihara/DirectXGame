@@ -25,7 +25,7 @@ void ComboAttackRoot::Update() {
     JudgeAttackPattern();
 
     // 攻撃コントローラーを取得
-    auto* controller = pPlayer_->GetComboAttackController();
+    PlayerComboAttackController* controller = pPlayer_->GetComboAttackController();
     if (!controller) {
         return;
     }
@@ -54,7 +54,7 @@ void ComboAttackRoot::Update() {
         bool triggered = false;
 
         // キーボード入力チェック
-        if (Input::GetInstance()->TriggerKey(static_cast<KeyboardKey>(triggerParam.keyBordBottom))) {
+        if (Input::GetInstance()->TriggerKey(FromDIKCode(triggerParam.keyBordBottom))) {
             triggered = true;
         }
 

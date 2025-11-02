@@ -1,24 +1,29 @@
 {
     "test1": {
+        "Condition": 0,
+        "IsFirstAttack": true,
         "KnockBackPower": 0.0,
         "NextAttackType": "test2",
-        "adaptTime": 0.0,
+        "adaptTime": 0.9300000071525574,
         "cancelFrame": 0.0,
         "collisionOffsetPos": [
             0.0,
             0.0,
-            0.0
+            2.4100000858306885
         ],
         "collisionSize": [
-            0.0,
-            0.0,
-            0.0
+            3.0,
+            3.0,
+            3.0
         ],
+        "gamePadBottom": 16384,
+        "keyBordBottom": 37,
+        "moveEaseTime": 0.4300000071525574,
         "moveEaseType": 0,
         "moveValue": [
             0.0,
             0.0,
-            0.0
+            3.380000114440918
         ],
         "power": 1.5499999523162842,
         "precedeInputFrame": 0.0
