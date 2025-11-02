@@ -98,9 +98,9 @@ void CameraKeyFrame::AdjustParam() {
     ImGui::Separator();
 
     // イージングタイプの設定
-    EasingTypeSelector("Easing Type Position", positionEaseType_);
-    EasingTypeSelector("Easing Type Rotate", rotationEaseType_);
-    EasingTypeSelector("Easing Type Fov", fovEaseType_);
+    ImGuiEasingTypeSelector("Easing Type Position", positionEaseType_);
+    ImGuiEasingTypeSelector("Easing Type Rotate", rotationEaseType_);
+    ImGuiEasingTypeSelector("Easing Type Fov", fovEaseType_);
 
     AdaptEaseParam();
 
@@ -131,12 +131,6 @@ void CameraKeyFrame::AdaptValueSetting() {
     fovEase_.SetAdaptValue(&currentKeyFrameParam_.fov);
 }
 
-void CameraKeyFrame::EasingTypeSelector(const char* label, int32_t& target) {
-    int type = static_cast<int>(target);
-    if (ImGui::Combo(label, &type, EasingTypeLabels.data(), static_cast<int>(EasingTypeLabels.size()))) {
-        target = type;
-    }
-}
 
 void CameraKeyFrame::TimeModeSelector(const char* label, int32_t& target) {
     int mode = static_cast<int>(target);

@@ -40,13 +40,6 @@ public:
     void Update(const float& speedRate);
 
     /// <summary>
-    /// イージングタイプセレクター
-    /// </summary>
-    /// <param name="label">ラベル</param>
-    /// <param name="target">対象</param>
-    void EasingTypeSelector(const char* label, int32_t& target);
-
-    /// <summary>
     /// タイムモードセレクター
     /// </summary>
     /// <param name="label">ラベル</param>
