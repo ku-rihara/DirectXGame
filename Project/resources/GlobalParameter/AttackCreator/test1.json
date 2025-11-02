@@ -9,15 +9,15 @@
         "collisionOffsetPos": [
             0.0,
             0.0,
-            2.4100000858306885
+            0.0
         ],
         "collisionSize": [
-            3.0,
-            3.0,
-            3.0
+            9.0,
+            9.0,
+            9.0
         ],
         "gamePadBottom": 16384,
-        "keyBordBottom": 37,
+        "keyBordBottom": 35,
         "moveEaseTime": 0.4300000071525574,
         "moveEaseType": 0,
         "moveValue": [

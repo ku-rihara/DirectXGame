@@ -26,7 +26,7 @@ void DynamicComboAttack::Init() {
     collisionTimer_    = 0.0f;
 
     // 移動イージングの初期化
-    const Vector3& moveVector = pPlayer_->GetTransform().GetForwardVector() * attackData_->GetAttackParam().moveParam.value;
+    const Vector3& moveVector = pPlayer_->GetTransform().LookAt(Vector3::ToForward()) * attackData_->GetAttackParam().moveParam.value;
 
     startPosition_  = pPlayer_->GetWorldPosition();
     targetPosition_ = startPosition_ + moveVector;
@@ -105,6 +105,7 @@ void DynamicComboAttack::UpdateAttack() {
         pPlayer_->GetPlayerCollisionInfo()->SetIsCollision(false);
     } else {
         isCollisionActive_ = true;
+        pPlayer_->GetPlayerCollisionInfo()->SetIsCollision(isCollisionActive_);
 
         // プレイヤーの向きを取得
         float playerRotationY    = pPlayer_->GetTransform().rotation_.y;
