@@ -280,3 +280,238 @@ GamepadButton FromXInputButtonFlag(const int32_t& xInputFlag) {
         return GamepadButton::COUNT;
     }
 }
+
+
+int32_t ToDIKCode(KeyboardKey key) {
+    switch (key) {
+    // 文字キー
+    case KeyboardKey::A:
+        return DIK_A;
+    case KeyboardKey::B:
+        return DIK_B;
+    case KeyboardKey::C:
+        return DIK_C;
+    case KeyboardKey::D:
+        return DIK_D;
+    case KeyboardKey::E:
+        return DIK_E;
+    case KeyboardKey::F:
+        return DIK_F;
+    case KeyboardKey::G:
+        return DIK_G;
+    case KeyboardKey::H:
+        return DIK_H;
+    case KeyboardKey::I:
+        return DIK_I;
+    case KeyboardKey::J:
+        return DIK_J;
+    case KeyboardKey::K:
+        return DIK_K;
+    case KeyboardKey::L:
+        return DIK_L;
+    case KeyboardKey::M:
+        return DIK_M;
+    case KeyboardKey::N:
+        return DIK_N;
+    case KeyboardKey::O:
+        return DIK_O;
+    case KeyboardKey::P:
+        return DIK_P;
+    case KeyboardKey::Q:
+        return DIK_Q;
+    case KeyboardKey::R:
+        return DIK_R;
+    case KeyboardKey::S:
+        return DIK_S;
+    case KeyboardKey::T:
+        return DIK_T;
+    case KeyboardKey::U:
+        return DIK_U;
+    case KeyboardKey::V:
+        return DIK_V;
+    case KeyboardKey::W:
+        return DIK_W;
+    case KeyboardKey::X:
+        return DIK_X;
+    case KeyboardKey::Y:
+        return DIK_Y;
+    case KeyboardKey::Z:
+        return DIK_Z;
+
+    // 数字キー
+    case KeyboardKey::Key0:
+        return DIK_0;
+    case KeyboardKey::Key1:
+        return DIK_1;
+    case KeyboardKey::Key2:
+        return DIK_2;
+    case KeyboardKey::Key3:
+        return DIK_3;
+    case KeyboardKey::Key4:
+        return DIK_4;
+    case KeyboardKey::Key5:
+        return DIK_5;
+    case KeyboardKey::Key6:
+        return DIK_6;
+    case KeyboardKey::Key7:
+        return DIK_7;
+    case KeyboardKey::Key8:
+        return DIK_8;
+    case KeyboardKey::Key9:
+        return DIK_9;
+
+    // 特殊キー
+    case KeyboardKey::Space:
+        return DIK_SPACE;
+    case KeyboardKey::Enter:
+        return DIK_RETURN;
+    case KeyboardKey::Escape:
+        return DIK_ESCAPE;
+    case KeyboardKey::Backspace:
+        return DIK_BACK;
+    case KeyboardKey::Tab:
+        return DIK_TAB;
+    case KeyboardKey::LeftShift:
+        return DIK_LSHIFT;
+    case KeyboardKey::RightShift:
+        return DIK_RSHIFT;
+    case KeyboardKey::LeftCtrl:
+        return DIK_LCONTROL;
+    case KeyboardKey::RightCtrl:
+        return DIK_RCONTROL;
+    case KeyboardKey::LeftAlt:
+        return DIK_LALT;
+    case KeyboardKey::RightAlt:
+        return DIK_RALT;
+
+    // 矢印キー
+    case KeyboardKey::Up:
+        return DIK_UP;
+    case KeyboardKey::Down:
+        return DIK_DOWN;
+    case KeyboardKey::Left:
+        return DIK_LEFT;
+    case KeyboardKey::Right:
+        return DIK_RIGHT;
+
+    default:
+        return 0; 
+    }
+}
+
+KeyboardKey FromDIKCode(const int32_t& dikCode) {
+    switch (dikCode) {
+    // 文字キー
+    case DIK_A:
+        return KeyboardKey::A;
+    case DIK_B:
+        return KeyboardKey::B;
+    case DIK_C:
+        return KeyboardKey::C;
+    case DIK_D:
+        return KeyboardKey::D;
+    case DIK_E:
+        return KeyboardKey::E;
+    case DIK_F:
+        return KeyboardKey::F;
+    case DIK_G:
+        return KeyboardKey::G;
+    case DIK_H:
+        return KeyboardKey::H;
+    case DIK_I:
+        return KeyboardKey::I;
+    case DIK_J:
+        return KeyboardKey::J;
+    case DIK_K:
+        return KeyboardKey::K;
+    case DIK_L:
+        return KeyboardKey::L;
+    case DIK_M:
+        return KeyboardKey::M;
+    case DIK_N:
+        return KeyboardKey::N;
+    case DIK_O:
+        return KeyboardKey::O;
+    case DIK_P:
+        return KeyboardKey::P;
+    case DIK_Q:
+        return KeyboardKey::Q;
+    case DIK_R:
+        return KeyboardKey::R;
+    case DIK_S:
+        return KeyboardKey::S;
+    case DIK_T:
+        return KeyboardKey::T;
+    case DIK_U:
+        return KeyboardKey::U;
+    case DIK_V:
+        return KeyboardKey::V;
+    case DIK_W:
+        return KeyboardKey::W;
+    case DIK_X:
+        return KeyboardKey::X;
+    case DIK_Y:
+        return KeyboardKey::Y;
+    case DIK_Z:
+        return KeyboardKey::Z;
+
+    // 数字キー
+    case DIK_0:
+        return KeyboardKey::Key0;
+    case DIK_1:
+        return KeyboardKey::Key1;
+    case DIK_2:
+        return KeyboardKey::Key2;
+    case DIK_3:
+        return KeyboardKey::Key3;
+    case DIK_4:
+        return KeyboardKey::Key4;
+    case DIK_5:
+        return KeyboardKey::Key5;
+    case DIK_6:
+        return KeyboardKey::Key6;
+    case DIK_7:
+        return KeyboardKey::Key7;
+    case DIK_8:
+        return KeyboardKey::Key8;
+    case DIK_9:
+        return KeyboardKey::Key9;
+
+    // 特殊キー
+    case DIK_SPACE:
+        return KeyboardKey::Space;
+    case DIK_RETURN:
+        return KeyboardKey::Enter;
+    case DIK_ESCAPE:
+        return KeyboardKey::Escape;
+    case DIK_BACK:
+        return KeyboardKey::Backspace;
+    case DIK_TAB:
+        return KeyboardKey::Tab;
+    case DIK_LSHIFT:
+        return KeyboardKey::LeftShift;
+    case DIK_RSHIFT:
+        return KeyboardKey::RightShift;
+    case DIK_LCONTROL:
+        return KeyboardKey::LeftCtrl;
+    case DIK_RCONTROL:
+        return KeyboardKey::RightCtrl;
+    case DIK_LALT:
+        return KeyboardKey::LeftAlt;
+    case DIK_RALT:
+        return KeyboardKey::RightAlt;
+
+    // 矢印キー
+    case DIK_UP:
+        return KeyboardKey::Up;
+    case DIK_DOWN:
+        return KeyboardKey::Down;
+    case DIK_LEFT:
+        return KeyboardKey::Left;
+    case DIK_RIGHT:
+        return KeyboardKey::Right;
+
+    default:
+        return KeyboardKey::COUNT; 
+    }
+}

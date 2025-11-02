@@ -68,19 +68,19 @@ void Input::Update() {
 
 // キーボード*************************************************************
 bool Input::PushKey(KeyboardKey key) const {
-    return (key_[static_cast<BYTE>(key)] & 0x80);
+    return (key_[static_cast<BYTE>(ToDIKCode(key))] & 0x80);
 }
 
 bool Input::TriggerKey(KeyboardKey key) const {
-    return (key_[static_cast<BYTE>(key)] & 0x80) && !(keyPre_[static_cast<BYTE>(key)] & 0x80);
+    return (key_[static_cast<BYTE>(ToDIKCode(key))] & 0x80) && !(keyPre_[static_cast<BYTE>(ToDIKCode(key))] & 0x80);
 }
 
 bool Input::ReleaseKey(KeyboardKey key) const {
-    return !(key_[static_cast<BYTE>(key)] & 0x80);
+    return !(key_[static_cast<BYTE>(ToDIKCode(key))] & 0x80);
 }
 
 bool Input::ReleaseMomentKey(KeyboardKey key) const {
-    return !(key_[static_cast<BYTE>(key)] & 0x80) && (keyPre_[static_cast<BYTE>(key)] & 0x80);
+    return !(key_[static_cast<BYTE>(ToDIKCode(key))] & 0x80) && (keyPre_[static_cast<BYTE>(ToDIKCode(key))] & 0x80);
 }
 
 const BYTE* Input::GetKeyState() const {
