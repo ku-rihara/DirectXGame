@@ -127,7 +127,7 @@ void DynamicComboAttack::UpdateAttack() {
 void DynamicComboAttack::UpdateRecovery() {
     pPlayer_->AdaptRotate();
 
-    // 硬直時間（簡易的に実装）
+    // 硬直時間
     static float recoveryTime = 0.0f;
     recoveryTime += atkSpeed_;
 

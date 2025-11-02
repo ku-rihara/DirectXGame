@@ -31,7 +31,7 @@ void RightJobPunch::Init() {
 
     BaseComboAattackBehavior::Init();
 
-    /// parm
+    /// param
     speed_    = pPlayerParameter_->GetParamaters().rushDistance;
     waitTine_ = 0.0f;
 
