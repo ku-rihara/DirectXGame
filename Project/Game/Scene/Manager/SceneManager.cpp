@@ -28,7 +28,7 @@ SceneManager::~SceneManager() {
 void SceneManager::Update() {
 
     // 次のシーンが設定されている場合
-    if (Input::GetInstance()->PushKey(DIK_E) && Input::GetInstance()->PushKey(DIK_ESCAPE)) {
+    if (Input::GetInstance()->PushKey(KeyboardKey::E) && Input::GetInstance()->PushKey(KeyboardKey::Escape)) {
         ChangeScene("EDITOR");
     }
 

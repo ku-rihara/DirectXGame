@@ -64,6 +64,7 @@
     <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleResourceData.cpp" />
     <ClCompile Include="Engine\input\GamePad.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
+    <ClCompile Include="Engine\input\InputData.cpp" />
     <ClCompile Include="Engine\input\Mouse.cpp" />
     <ClCompile Include="Engine\Lighrt\AmbientLight.cpp" />
     <ClCompile Include="Engine\Lighrt\AreaLight.cpp" />
@@ -224,6 +225,7 @@
     <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleResourceData.h" />
     <ClInclude Include="Engine\input\GamePad.h" />
     <ClInclude Include="Engine\input\Input.h" />
+    <ClInclude Include="Engine\input\InputData.h" />
     <ClInclude Include="Engine\input\Mouse.h" />
     <ClInclude Include="Engine\Lighrt\AmbientLight.h" />
     <ClInclude Include="Engine\Lighrt\AreaLight.h" />

@@ -62,7 +62,7 @@ void GameScene::Update() {
     // viewProjection 更新
     ViewProjectionUpdate();
 
-    if (input_->TriggerKey(DIK_RETURN)) {
+    if (input_->TriggerKey(KeyboardKey::Enter)) {
         SceneManager::GetInstance()->ChangeScene("TITLE");
     }
 }

@@ -42,7 +42,7 @@ void TitleScene::Update() {
         EnemydamageEffect_[i]->EditorUpdate();
         EnemydamageEffect_[i]->Emit();
 
-        if (Input::GetInstance()->TriggerKey(DIK_O)) {
+        if (Input::GetInstance()->TriggerKey(KeyboardKey::O)) {
             EnemydamageEffect_[i]->StartRailEmit();
         }
     }
@@ -60,7 +60,7 @@ void TitleScene::Update() {
     Debug();
     ViewProjectionUpdate();
 
-    if (input_->TriggerKey(DIK_RETURN)) {
+    if (input_->TriggerKey(KeyboardKey::Enter)) {
 
         SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
     }

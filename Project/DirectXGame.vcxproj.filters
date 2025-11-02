@@ -772,6 +772,9 @@
     <ClCompile Include="Engine\GPUParticle\GPUParticleParamEditor.cpp">
       <Filter>MyEngine\.cpp\GPUParticle</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\input\InputData.cpp">
+      <Filter>MyEngine\.cpp\input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1277,6 +1280,9 @@
     </ClInclude>
     <ClInclude Include="Engine\GPUParticle\GPUParticleParamEditor.h">
       <Filter>MyEngine\.h\GPUParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\input\InputData.h">
+      <Filter>MyEngine\.h\input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

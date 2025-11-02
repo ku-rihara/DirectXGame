@@ -10,6 +10,7 @@
 
 #define DIRECTNPUT_VERSION 0x0800
 #include "Gamepad.h"
+#include "InputData.h"
 #include "Mouse.h"
 #include <dinput.h>
 
@@ -36,14 +37,19 @@ public:
     /// <param name="hInstance">インスタンスハンドル</param>
     /// <param name="hwnd">ウィンドウハンドル</param>
     void Init(HINSTANCE hInstance, HWND hwnd);
-
     void Update(); //< 入力状態を更新
 
-    // キーボード
-    bool PushKey(BYTE keyNumber) const; //< キーが押されているか
-    bool TriggerKey(BYTE keyNumber) const; //< キーがトリガーされたか
-    bool ReleaseKey(BYTE keyNumber) const; //< キーが離されているか
-    bool ReleaseMomentKey(BYTE keyNumber) const; //< キーが離された瞬間か
+    //*------------------------------------ キーボード ------------------------------------*//
+
+    bool PushKey(KeyboardKey key) const; //< キーが押されているか
+    bool TriggerKey(KeyboardKey key) const; //< キーがトリガーされたか
+    bool ReleaseKey(KeyboardKey key) const; //< キーが離されているか
+    bool ReleaseMomentKey(KeyboardKey key) const; //< キーが離された瞬間か
+
+    const BYTE* GetKeyState() const;
+    const BYTE* GetPreviousKeyState() const;
+
+    //*------------------------------------ マウス ------------------------------------*//
 
     // マウス
     /// <summary>
@@ -53,16 +59,10 @@ public:
     /// <returns>押下状態</returns>
     static bool IsPressMouse(int32_t mouseNumber);
 
-    /// <summary>
-    /// マウスのトリガーをチェック
-    /// </summary>
-    /// <param name="buttonNumber">マウスボタン番号</param>
-    /// <returns>トリガー状態</returns>
-    static bool IsTriggerMouse(int32_t buttonNumber);
-
+    static bool IsTriggerMouse(int32_t buttonNumber); //< マウスのトリガーをチェック
     static MouseMove GetMouseMove(); //< マウス移動量を取得
     static int32_t GetWheel(); //< ホイールスクロール量を取得
-    static Vector2 GetMousePos(); //< マウス位置を取得(ウィンドウ座標系)
+    static Vector2 GetMousePos(); //< マウス位置を取得
 
     /// <summary>
     /// 3Dワールド座標でのマウス位置を取得
@@ -73,25 +73,24 @@ public:
     /// <returns>3Dマウス座標</returns>
     static Vector3 GetMousePos3D(const ViewProjection& viewprojection, float depthFactor, float blockSpacing = 1.0f);
 
-    const BYTE* GetKeyState() const { return key_.data(); }
-    const BYTE* GetPreviousKeyState() const { return keyPre_.data(); }
+    //*------------------------------------ ゲームパッド ------------------------------------*//
 
     // ゲームパッド
     /// <summary>
-    /// ゲームパッドの入力をチェック
+    /// ゲームパッドの入力をチェック（列挙型使用）
     /// </summary>
     /// <param name="padNumber">パッド番号</param>
-    /// <param name="buttonNumber">ボタン番号</param>
+    /// <param name="button">ボタン（列挙型）</param>
     /// <returns>押下状態</returns>
-    static bool IsPressPad(int32_t padNumber, int32_t buttonNumber);
+    static bool IsPressPad(int32_t padNumber, GamepadButton button);
 
     /// <summary>
-    /// ゲームパッドのトリガーをチェック
+    /// ゲームパッドのトリガーをチェック（列挙型使用）
     /// </summary>
     /// <param name="padNumber">パッド番号</param>
-    /// <param name="buttonNumber">ボタン番号</param>
+    /// <param name="button">ボタン（列挙型）</param>
     /// <returns>トリガー状態</returns>
-    static bool IsTriggerPad(int32_t padNumber, int32_t buttonNumber);
+    static bool IsTriggerPad(int32_t padNumber, GamepadButton button);
 
     /// <summary>
     /// ゲームパッドのスティック入力を取得
