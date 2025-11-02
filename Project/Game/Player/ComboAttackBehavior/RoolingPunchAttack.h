@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseComboAattackBehavior.h"
-#include "CollisionBox/PlayerAttackController.h"
+#include "CollisionBox/PlayerCollisionInfo.h"
 
 
 class RoolingPunchAttack : public BaseComboAattackBehavior {
@@ -22,7 +22,7 @@ private:
     Order order_; /// 振る舞い順序
 
     // collision
-    std::unique_ptr<PlayerAttackController> collisionBox_;
+    std::unique_ptr<PlayerCollisionInfo> collisionBox_;
 
     /// パンチ
    /* Easing punchEase_; /// パンチイージング*/

@@ -154,7 +154,7 @@ void PlayerCollisionInfo::OnCollisionEnter([[maybe_unused]] BaseCollider* other)
     if (dynamic_cast<BaseEnemy*>(other)) {
         switch (attackType_) {
             /// -----------------------------------------------------------------------
-            /// PlayerAttackController::AttackType::NORMAL
+            /// PlayerCollisionInfo::AttackType::NORMAL
             /// -----------------------------------------------------------------------
         case PlayerCollisionInfo::AttackType::NORMAL:
 
@@ -168,32 +168,32 @@ void PlayerCollisionInfo::OnCollisionStay([[maybe_unused]] BaseCollider* other) 
         switch (attackType_) {
 
             /// -----------------------------------------------------------------------
-            /// PlayerAttackController::AttackType::FALL
+            /// PlayerCollisionInfo::AttackType::FALL
             /// -----------------------------------------------------------------------
         case PlayerCollisionInfo::AttackType::FALL:
 
             break;
             /// -----------------------------------------------------------------------
-            /// PlayerAttackController::AttackType::RUSH
+            /// PlayerCollisionInfo::AttackType::RUSH
             /// -----------------------------------------------------------------------
         case PlayerCollisionInfo::AttackType::RUSH:
 
             break;
 
             /// -----------------------------------------------------------------------
-            /// PlayerAttackController::AttackType::THRUST
+            /// PlayerCollisionInfo::AttackType::THRUST
             /// -----------------------------------------------------------------------
         case PlayerCollisionInfo::AttackType::THRUST:
             isSlow_ = true;
             break;
             /// -----------------------------------------------------------------------
-            /// PlayerAttackController::AttackType::UPPER
+            /// PlayerCollisionInfo::AttackType::UPPER
             /// -----------------------------------------------------------------------
         case PlayerCollisionInfo::AttackType::UPPER:
             isHitStop_ = true;
             break;
             /// -----------------------------------------------------------------------
-            /// PlayerAttackController::AttackType::COUNT
+            /// PlayerCollisionInfo::AttackType::COUNT
             /// -----------------------------------------------------------------------
         case PlayerCollisionInfo::AttackType::COUNT:
             break;

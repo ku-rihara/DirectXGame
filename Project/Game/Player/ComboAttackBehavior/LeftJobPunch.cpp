@@ -26,7 +26,7 @@ void LeftJobPunch::Init() {
     waitTine_ = 0.0f;
 
     /// collisionType
-    pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerAttackController::AttackType::NORMAL);
+    pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerCollisionInfo::AttackType::NORMAL);
 
     /// パンチ座標セット
     lHandStartPos_  = pPlayer_->GetLeftHand()->GetObjTransform().translation_;

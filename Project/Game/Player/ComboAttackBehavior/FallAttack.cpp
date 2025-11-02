@@ -103,7 +103,7 @@ void FallAttack::Update() {
         pPlayer_->FallSound();
 
         // 攻撃タイプの変更
-        pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerAttackController::AttackType::FALL);
+        pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerCollisionInfo::AttackType::FALL);
 
         step_ = STEP::LANDING;
         break;

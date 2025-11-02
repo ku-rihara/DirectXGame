@@ -41,7 +41,7 @@ void RightJobPunch::Init() {
     rushPos_          = initPos_ + (forwardDirection_ * speed_); // 突進座標を決める
 
     /// collisionType
-    pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerAttackController::AttackType::NORMAL);
+    pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerCollisionInfo::AttackType::NORMAL);
 
     EasingInit();
 

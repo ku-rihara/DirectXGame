@@ -67,7 +67,7 @@ void RushAttack::Update() {
         pPlayer_->GetGameCamera()->PlayAnimation("PlayerRush");
 
         //攻撃タイプ変更
-        pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerAttackController::AttackType::RUSH);
+        pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerCollisionInfo::AttackType::RUSH);
 
         step_ = STEP::RUSH;
 

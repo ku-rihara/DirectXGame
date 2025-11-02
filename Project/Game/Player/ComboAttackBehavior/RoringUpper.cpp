@@ -36,7 +36,7 @@ void RoringUpper::Init() {
     kCollisionAliveTime_ = 0.3f;
 
     /// collisionBox
-    pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerAttackController::AttackType::UPPER);
+    pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerCollisionInfo::AttackType::UPPER);
 
     // rail
     RailInit();

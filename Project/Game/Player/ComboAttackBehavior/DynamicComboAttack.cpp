@@ -26,18 +26,20 @@ void DynamicComboAttack::Init() {
     collisionTimer_    = 0.0f;
 
     // 移動イージングの初期化
-    Vector3 moveVector = pPlayer_->GetTransform().GetForwardVector() * attackData_->GetAttackParam().moveParam.value;
+    const Vector3& moveVector = pPlayer_->GetTransform().GetForwardVector() * attackData_->GetAttackParam().moveParam.value;
 
     startPosition_  = pPlayer_->GetWorldPosition();
     targetPosition_ = startPosition_ + moveVector;
 
+    // moveParam取得
+    const PlayerComboAttackData::MoveParam& moveParam = attackData_->GetAttackParam().moveParam;
+
     // イージングのセットアップ
-    moveEasing_.SetEasingType(static_cast<EaseType>(moveParam.easeType));
+    moveEasing_.SetType(static_cast<EasingType>(moveParam.easeType));
     moveEasing_.SetStartValue(startPosition_);
     moveEasing_.SetEndValue(targetPosition_);
     moveEasing_.SetAdaptValue(&currentMoveValue_);
-    moveEasing_.SetDuration(1.0f);
-
+   
     moveEasing_.SetOnFinishCallback([this]() {
         order_ = Order::RECOVERY;
     });
@@ -105,7 +107,7 @@ void DynamicComboAttack::UpdateAttack() {
         isCollisionActive_ = true;
 
         // プレイヤーの向きを取得
-        float playerRotationY    = pPlayer_->GetRotation().y;
+        float playerRotationY    = pPlayer_->GetTransform().rotation_.y;
         Matrix4x4 rotationMatrix = MakeRotateYMatrix(playerRotationY);
 
         // オフセットをワールド座標に変換

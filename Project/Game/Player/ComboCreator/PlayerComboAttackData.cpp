@@ -37,10 +37,11 @@ void PlayerComboAttackData::BindParams() {
     globalParameter_->Bind(groupName_, "collisionSize", &attackParam_.collisionPara.size);
     globalParameter_->Bind(groupName_, "collisionOffsetPos", &attackParam_.collisionPara.offsetPos);
     globalParameter_->Bind(groupName_, "adaptTime", &attackParam_.collisionPara.adaptTime);
-
+    
     // MoveParam
     globalParameter_->Bind(groupName_, "moveValue", &attackParam_.moveParam.value);
     globalParameter_->Bind(groupName_, "moveEaseType", &attackParam_.moveParam.easeType);
+    globalParameter_->Bind(groupName_, "moveEaseTime", &attackParam_.moveParam.easeTime);
 
     // TimingParam
     globalParameter_->Bind(groupName_, "cancelFrame", &attackParam_.timingParam.cancelFrame);
@@ -71,6 +72,7 @@ void PlayerComboAttackData::AdjustParam() {
 
     // Move Parameter
     ImGui::SeparatorText("Move Parameter");
+    ImGui::DragFloat("Move Ease Time", &attackParam_.moveParam.easeTime, 0.01f);
     ImGui::DragFloat3("Move Value", &attackParam_.moveParam.value.x, 0.01f);
     ImGuiEasingTypeSelector("Move Easing Type", attackParam_.moveParam.easeType);
 

@@ -16,7 +16,7 @@ public:
     struct MoveParam {
         Vector3 value;
         int32_t easeType = 0;
-        Easing<Vector3> easing;
+        float easeTime;
     };
 
     // コリジョンパラメータ

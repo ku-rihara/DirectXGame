@@ -65,7 +65,7 @@ void ThrustPunch::Update() {
         ///-----------------------------------------------------------------------------------------------------
     case Order::START:
        
-        pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerAttackController::AttackType::THRUST);
+        pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerCollisionInfo::AttackType::THRUST);
         pPlayer_->GetPlayerCollisionInfo()->SetPosition(pPlayer_->GetWorldPosition());
 
         order_ = Order::LPUNCH;

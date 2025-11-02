@@ -20,7 +20,7 @@ void GameScene::Init() {
     // クラスポインタセット
     SetClassPointer();
 
-    // その他オブジェクト初期化(いずれクラス分けする)
+    // その他オブジェクト初期化
 
     isfirstChange_ = false;
     shandle_       = TextureManager::GetInstance()->LoadTexture("Resources/Texture/screenChange.png");
