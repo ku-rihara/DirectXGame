@@ -72,7 +72,7 @@ void PlayerComboAttackData::AdjustParam() {
     // TriggerParam
     ImGui::Checkbox("isFirstAttack", &attackParam_.triggerParam.isFirstAttack);
     ImGuiKeyboardKeySelector("keyBoard:TriggerBottom", attackParam_.triggerParam.keyBordBottom);
-    ImGuiKeyboardKeySelector("GamePad:TriggerBottom", attackParam_.triggerParam.gamePadBottom);
+    ImGuiGamepadButtonSelector("GamePad:TriggerBottom", attackParam_.triggerParam.gamePadBottom);
     const char* conditionItems[] = {"Ground", "Air", "Both"};
     tempCondition_               = static_cast<int>(attackParam_.triggerParam.condition);
     if (ImGui::Combo("Trigger Condition", &tempCondition_, conditionItems, IM_ARRAYSIZE(conditionItems))) {
