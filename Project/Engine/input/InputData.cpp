@@ -164,17 +164,84 @@ int32_t GetGamepadButtonIndex(const int32_t& buttonValue) {
 
 
 int32_t GetKeyboardKeyIndex(const int32_t& keyValue) {
+    switch (keyValue) {
     // 文字キー A-Z
-    if (keyValue >= DIK_A && keyValue <= DIK_Z) {
-        return keyValue - DIK_A;
-    }
+    case DIK_A:
+        return 0;
+    case DIK_B:
+        return 1;
+    case DIK_C:
+        return 2;
+    case DIK_D:
+        return 3;
+    case DIK_E:
+        return 4;
+    case DIK_F:
+        return 5;
+    case DIK_G:
+        return 6;
+    case DIK_H:
+        return 7;
+    case DIK_I:
+        return 8;
+    case DIK_J:
+        return 9;
+    case DIK_K:
+        return 10;
+    case DIK_L:
+        return 11;
+    case DIK_M:
+        return 12;
+    case DIK_N:
+        return 13;
+    case DIK_O:
+        return 14;
+    case DIK_P:
+        return 15;
+    case DIK_Q:
+        return 16;
+    case DIK_R:
+        return 17;
+    case DIK_S:
+        return 18;
+    case DIK_T:
+        return 19;
+    case DIK_U:
+        return 20;
+    case DIK_V:
+        return 21;
+    case DIK_W:
+        return 22;
+    case DIK_X:
+        return 23;
+    case DIK_Y:
+        return 24;
+    case DIK_Z:
+        return 25;
+
     // 数字キー 0-9
-    if (keyValue >= DIK_0 && keyValue <= DIK_9) {
-        return 26 + (keyValue - DIK_0);
-    }
+    case DIK_0:
+        return 26;
+    case DIK_1:
+        return 27;
+    case DIK_2:
+        return 28;
+    case DIK_3:
+        return 29;
+    case DIK_4:
+        return 30;
+    case DIK_5:
+        return 31;
+    case DIK_6:
+        return 32;
+    case DIK_7:
+        return 33;
+    case DIK_8:
+        return 34;
+    case DIK_9:
+        return 35;
 
     // 特殊キー
-    switch (keyValue) {
     case DIK_SPACE:
         return 36;
     case DIK_RETURN:
@@ -205,6 +272,7 @@ int32_t GetKeyboardKeyIndex(const int32_t& keyValue) {
         return 49;
     case DIK_RIGHT:
         return 50;
+
     default:
         return 0;
     }
