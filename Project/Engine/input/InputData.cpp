@@ -57,72 +57,174 @@ void ImGuiGamepadButtonSelector(const char* label, int32_t& target) {
         }
     }
 }
-
 void ImGuiKeyboardKeySelector(const char* label, int32_t& target) {
     int currentIndex = GetKeyboardKeyIndex(target);
 
     if (ImGui::Combo(label, &currentIndex, KeyboardKeyLabels.data(), static_cast<int>(KeyboardKeyLabels.size()))) {
         // インデックスから実際のキー値に変換
+        switch (currentIndex) {
         // 文字キー A-Z
-        if (currentIndex >= 0 && currentIndex <= 25) {
-            target = DIK_A + currentIndex;
-        }
+        case 0:
+            target = DIK_A;
+            break;
+        case 1:
+            target = DIK_B;
+            break;
+        case 2:
+            target = DIK_C;
+            break;
+        case 3:
+            target = DIK_D;
+            break;
+        case 4:
+            target = DIK_E;
+            break;
+        case 5:
+            target = DIK_F;
+            break;
+        case 6:
+            target = DIK_G;
+            break;
+        case 7:
+            target = DIK_H;
+            break;
+        case 8:
+            target = DIK_I;
+            break;
+        case 9:
+            target = DIK_J;
+            break;
+        case 10:
+            target = DIK_K;
+            break;
+        case 11:
+            target = DIK_L;
+            break;
+        case 12:
+            target = DIK_M;
+            break;
+        case 13:
+            target = DIK_N;
+            break;
+        case 14:
+            target = DIK_O;
+            break;
+        case 15:
+            target = DIK_P;
+            break;
+        case 16:
+            target = DIK_Q;
+            break;
+        case 17:
+            target = DIK_R;
+            break;
+        case 18:
+            target = DIK_S;
+            break;
+        case 19:
+            target = DIK_T;
+            break;
+        case 20:
+            target = DIK_U;
+            break;
+        case 21:
+            target = DIK_V;
+            break;
+        case 22:
+            target = DIK_W;
+            break;
+        case 23:
+            target = DIK_X;
+            break;
+        case 24:
+            target = DIK_Y;
+            break;
+        case 25:
+            target = DIK_Z;
+            break;
+
         // 数字キー 0-9
-        else if (currentIndex >= 26 && currentIndex <= 35) {
-            target = DIK_0 + (currentIndex - 26);
-        }
+        case 26:
+            target = DIK_0;
+            break;
+        case 27:
+            target = DIK_1;
+            break;
+        case 28:
+            target = DIK_2;
+            break;
+        case 29:
+            target = DIK_3;
+            break;
+        case 30:
+            target = DIK_4;
+            break;
+        case 31:
+            target = DIK_5;
+            break;
+        case 32:
+            target = DIK_6;
+            break;
+        case 33:
+            target = DIK_7;
+            break;
+        case 34:
+            target = DIK_8;
+            break;
+        case 35:
+            target = DIK_9;
+            break;
+
         // 特殊キー
-        else {
-            switch (currentIndex) {
-            case 36:
-                target = DIK_SPACE;
-                break;
-            case 37:
-                target = DIK_RETURN;
-                break;
-            case 38:
-                target = DIK_ESCAPE;
-                break;
-            case 39:
-                target = DIK_BACK;
-                break;
-            case 40:
-                target = DIK_TAB;
-                break;
-            case 41:
-                target = DIK_LSHIFT;
-                break;
-            case 42:
-                target = DIK_RSHIFT;
-                break;
-            case 43:
-                target = DIK_LCONTROL;
-                break;
-            case 44:
-                target = DIK_RCONTROL;
-                break;
-            case 45:
-                target = DIK_LALT;
-                break;
-            case 46:
-                target = DIK_RALT;
-                break;
-            case 47:
-                target = DIK_UP;
-                break;
-            case 48:
-                target = DIK_DOWN;
-                break;
-            case 49:
-                target = DIK_LEFT;
-                break;
-            case 50:
-                target = DIK_RIGHT;
-                break;
-            default:
-                target = DIK_H;
-                break;
-            }
+        case 36:
+            target = DIK_SPACE;
+            break;
+        case 37:
+            target = DIK_RETURN;
+            break;
+        case 38:
+            target = DIK_ESCAPE;
+            break;
+        case 39:
+            target = DIK_BACK;
+            break;
+        case 40:
+            target = DIK_TAB;
+            break;
+        case 41:
+            target = DIK_LSHIFT;
+            break;
+        case 42:
+            target = DIK_RSHIFT;
+            break;
+        case 43:
+            target = DIK_LCONTROL;
+            break;
+        case 44:
+            target = DIK_RCONTROL;
+            break;
+        case 45:
+            target = DIK_LALT;
+            break;
+        case 46:
+            target = DIK_RALT;
+            break;
+        case 47:
+            target = DIK_UP;
+            break;
+        case 48:
+            target = DIK_DOWN;
+            break;
+        case 49:
+            target = DIK_LEFT;
+            break;
+        case 50:
+            target = DIK_RIGHT;
+            break;
+
+        default:
+            target = DIK_A;
+            break;
         }
     }
 }
