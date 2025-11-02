@@ -1144,6 +1144,9 @@
     <ClCompile Include="Engine\GPUParticle\GPUParticleParamEditor.cpp">
       <Filter>MyEngine\.cpp\GPUParticle</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\input\InputData.cpp">
+      <Filter>MyEngine\.cpp\input</Filter>
+    </ClCompile>
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackController.cpp">
       <Filter>Game\Player\ComboCreator</Filter>
     </ClCompile>
@@ -1892,6 +1895,9 @@
     </ClInclude>
     <ClInclude Include="Engine\GPUParticle\GPUParticleParamEditor.h">
       <Filter>MyEngine\.h\GPUParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\input\InputData.h">
+      <Filter>MyEngine\.h\input</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackController.h">
       <Filter>Game\Player\ComboCreator</Filter>

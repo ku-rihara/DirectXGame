@@ -74,7 +74,7 @@ void TitleScene::Update() {
 
   
     // 　ゲーム遷移
-    if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+    if (Input::GetInstance()->PushKey(KeyboardKey::Space)) {
         isFinished_ = true;
     } else {
         ChangeForJoyState(); // コントローラジャンプ
@@ -93,7 +93,7 @@ void TitleScene::Update() {
 
 void TitleScene::ChangeForJoyState() {
 
-    if (!((Input::IsTriggerPad(0, XINPUT_GAMEPAD_A)))) {
+    if (!((Input::IsTriggerPad(0, GamepadButton::A)))) {
         return;
     }
 

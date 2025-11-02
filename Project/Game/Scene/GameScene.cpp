@@ -32,7 +32,7 @@ void GameScene::Init() {
 
     finishSpriteEase_.SetOnFinishCallback([this]() {
         // 　ジャンプに切り替え
-        if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+        if (Input::GetInstance()->PushKey(KeyboardKey::Space)) {
             isend_ = true;
         } else {
             ChangeForJoyState();
@@ -222,7 +222,7 @@ void GameScene::ViewProcess() {
 
 void GameScene::ChangeForJoyState() {
 
-    if (!((Input::IsTriggerPad(0, XINPUT_GAMEPAD_A)))) {
+    if (!((Input::IsTriggerPad(0, GamepadButton::A)))) {
         return;
     }
 

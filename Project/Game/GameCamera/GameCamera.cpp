@@ -50,13 +50,13 @@ void GameCamera::MoveUpdate() {
     Vector2 stickInput      = {0.0f, 0.0f};
 
     // ================================= keyBord ================================= //
-    if (input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT)) {
+    if (input->PushKey(KeyboardKey::Right) || input->PushKey(KeyboardKey::Left)) {
 
         // 右回転
-        if (input->PushKey(DIK_RIGHT)) {
+        if (input->PushKey(KeyboardKey::Right)) {
             stickInput.x = 1.0f;
 
-        } else if (input->PushKey(DIK_LEFT)) {
+        } else if (input->PushKey(KeyboardKey::Left)) {
             // 左回転
             stickInput.x = -1.0f;
         }
@@ -75,7 +75,7 @@ void GameCamera::MoveUpdate() {
     }
 
     // reset
-    if (input->TriggerKey(DIK_R) || Input::IsTriggerPad(0, XINPUT_GAMEPAD_RIGHT_THUMB)) {
+    if (input->TriggerKey(KeyboardKey::R) || Input::IsTriggerPad(0, GamepadButton::RS)) {
         Reset();
     }
 

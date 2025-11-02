@@ -127,7 +127,7 @@ bool GameIntroManager::IsAllIntroFinished() const {
 void GameIntroManager::ProcessInput() {
     Input* input = Input::GetInstance();
 
-    if (input->TriggerKey(DIK_F) || input->IsPressPad(0, XINPUT_GAMEPAD_A)) {
+    if (input->TriggerKey(KeyboardKey::F) || input->IsPressPad(0, GamepadButton::A)) {
         currentPlaySpeedRate_ = fastSpeedRate_;
     } else {
         currentPlaySpeedRate_ = 1.0f;

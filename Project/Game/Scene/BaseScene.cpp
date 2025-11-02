@@ -49,7 +49,7 @@ void BaseScene::Debug() {
 void BaseScene::ViewProjectionUpdate() {
 #ifdef _DEBUG
     // シーンごとの切り替え処理------------------------------
-    bool isTriggerSpace = input_->TriggerKey(DIK_SPACE);
+    bool isTriggerSpace = input_->TriggerKey(KeyboardKey::Space);
     switch (cameraMode_) {
         ///------------------------------------------------------
         /// Normal Mode

@@ -31,7 +31,7 @@ void ComboAttackRoot::Init() {
 
 void ComboAttackRoot::Update() {
     // 攻撃ボタンが押された時
-    if (Input::GetInstance()->TriggerKey(DIK_H) || Input::IsTriggerPad(0, XINPUT_GAMEPAD_X)) {
+    if (Input::GetInstance()->TriggerKey(KeyboardKey::H) || Input::IsTriggerPad(0, GamepadButton::X)) {
 
         // ComboAttackControllerから攻撃を取得
         auto* controller = pPlayer_->GetComboAttackController();

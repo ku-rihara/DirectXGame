@@ -48,14 +48,14 @@ void PlayerMove::Update() {
     MoveAnimation();
     WaitAnimation();
 
-    if ((Input::IsPressPad(0, XINPUT_GAMEPAD_Y))) {
+    if ((Input::IsPressPad(0, GamepadButton::Y))) {
         pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed * 2.4f);
     } else {
         pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
     }
 
     // 　ジャンプに切り替え
-    if (Input::GetInstance()->PushKey(DIK_J)) {
+    if (Input::GetInstance()->PushKey(KeyboardKey::J)) {
         pPlayer_->ChangeBehavior(std::make_unique<PlayerJump>(pPlayer_));
     } else {
         JumpForJoyState(); // コントローラジャンプ
@@ -64,7 +64,7 @@ void PlayerMove::Update() {
 
 void PlayerMove::JumpForJoyState() {
 
-    if (!(Input::IsTriggerPad(0, XINPUT_GAMEPAD_A))) {
+    if (!(Input::IsTriggerPad(0, GamepadButton::A))) {
         return;
     }
 

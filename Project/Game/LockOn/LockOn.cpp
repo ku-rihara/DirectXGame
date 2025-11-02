@@ -114,7 +114,7 @@ void LockOn::ResizeTargetMarkers(const size_t& targetCount) {
 void LockOn::HandleTargetSwitching(const std::vector<LockOnVariant>& targets, const Player* player) {
 
     // ボタン入力の検出
-    bool currentSwitchInput = Input::IsTriggerPad(0, XINPUT_GAMEPAD_Y);
+    bool currentSwitchInput = Input::IsTriggerPad(0, GamepadButton::Y);
     bool switchTriggered    = currentSwitchInput && !prevSwitchInput_;
     prevSwitchInput_        = currentSwitchInput;
 

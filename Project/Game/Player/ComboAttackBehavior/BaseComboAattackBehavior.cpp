@@ -13,10 +13,10 @@ BaseComboAattackBehavior::BaseComboAattackBehavior(const std::string& name, Play
 ///  コンボ移動フラグ処理
 void BaseComboAattackBehavior::PreOderNextComboForButton() {
 
-    if (Input::GetInstance()->TriggerKey(DIK_H)) {
+    if (Input::GetInstance()->TriggerKey(KeyboardKey::H)) {
         isNextCombo_ = true;
     } else {
-        if (!(Input::IsTriggerPad(0, XINPUT_GAMEPAD_X))) {
+        if (!(Input::IsTriggerPad(0, GamepadButton::X))) {
             return;
         }
 
