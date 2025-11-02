@@ -11,7 +11,7 @@ class Combo;
 /// <summary>
 /// プレイヤー攻撃の制御クラス
 /// </summary>
-class PlayerAttackController : public BaseAABBCollisionBox {
+class PlayerCollisionInfo : public BaseAABBCollisionBox {
 public:
     enum class AttackType {
         NORMAL,
@@ -36,8 +36,8 @@ public:
     };
 
 public:
-    PlayerAttackController()           = default;
-    ~PlayerAttackController() override = default;
+    PlayerCollisionInfo()           = default;
+    ~PlayerCollisionInfo() override = default;
 
     // 初期化、更新、描画
     void Init() override;
@@ -118,7 +118,6 @@ private:
 
 public:
     AttackType attackType_;
-
 public:
 
     Vector3 GetCollisionPos() const override;

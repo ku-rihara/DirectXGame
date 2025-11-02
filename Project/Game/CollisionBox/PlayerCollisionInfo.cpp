@@ -1,10 +1,10 @@
-#include "PlayerAttackController.h"
+#include "PlayerCollisionInfo.h"
 #include "Frame/Frame.h"
 // enemy
 #include "Enemy/BaseEnemy.h"
 #include <imgui.h>
 
-void PlayerAttackController::Init() {
+void PlayerCollisionInfo::Init() {
     // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
@@ -16,7 +16,7 @@ void PlayerAttackController::Init() {
     BaseAABBCollisionBox::Init();
 }
 
-void PlayerAttackController::Update() {
+void PlayerCollisionInfo::Update() {
 
     // 攻撃タイプのColliderパラメータ
     SetSize(attackParam_[static_cast<size_t>(attackType_)].collisionSize);
@@ -28,11 +28,11 @@ void PlayerAttackController::Update() {
     BaseAABBCollisionBox::Update();
 }
 
-void PlayerAttackController::Draw() {
+void PlayerCollisionInfo::Draw() {
     BaseAABBCollisionBox::Draw();
 }
 
-void PlayerAttackController::TimerUpdate(const float& deltaTime) {
+void PlayerCollisionInfo::TimerUpdate(const float& deltaTime) {
     if (!isCollision_) {
         return;
     }
@@ -44,7 +44,7 @@ void PlayerAttackController::TimerUpdate(const float& deltaTime) {
     }
 }
 
-void PlayerAttackController::ChangeAttackType(const AttackType& attackType) {
+void PlayerCollisionInfo::ChangeAttackType(const AttackType& attackType) {
     attackType_ = attackType;
 
     // offset
@@ -61,7 +61,7 @@ void PlayerAttackController::ChangeAttackType(const AttackType& attackType) {
 ///==========================================================
 /// バインド
 ///==========================================================
-void PlayerAttackController::BindParams() {
+void PlayerCollisionInfo::BindParams() {
 
     for (int32_t i = 0; i < kComboLevel; ++i) {
         globalParameter_->Bind(groupName_, "AttackSpeedRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].speedRate);
@@ -80,7 +80,7 @@ void PlayerAttackController::BindParams() {
 ///==========================================================
 /// パラメータ調整
 ///==========================================================
-void PlayerAttackController::AdjustParam() {
+void PlayerCollisionInfo::AdjustParam() {
 
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
@@ -114,7 +114,7 @@ void PlayerAttackController::AdjustParam() {
 }
 
 // AttackTypeを文字列に変換する関数
-std::string PlayerAttackController::GetAttackTypeName(const AttackType& type) {
+std::string PlayerCollisionInfo::GetAttackTypeName(const AttackType& type) {
     switch (type) {
     case AttackType::NORMAL:
         return "NORMAL";
@@ -131,7 +131,7 @@ std::string PlayerAttackController::GetAttackTypeName(const AttackType& type) {
     }
 }
 
-float PlayerAttackController::GetAttackPower() {
+float PlayerCollisionInfo::GetAttackPower() {
 
     // 攻撃力と上昇値を取得
     float value = attackParam_[static_cast<size_t>(attackType_)].power;
@@ -143,59 +143,59 @@ float PlayerAttackController::GetAttackPower() {
     return result;
 }
 
-float PlayerAttackController::GetAttackSpeed(const float& baseTime) {
+float PlayerCollisionInfo::GetAttackSpeed(const float& baseTime) {
 
     float result = baseTime * attackValueForLevel_[pCombo_->GetCurrentLevel()].speedRate;
 
     return result;
 }
 
-void PlayerAttackController::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
+void PlayerCollisionInfo::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
     if (dynamic_cast<BaseEnemy*>(other)) {
         switch (attackType_) {
             /// -----------------------------------------------------------------------
             /// PlayerAttackController::AttackType::NORMAL
             /// -----------------------------------------------------------------------
-        case PlayerAttackController::AttackType::NORMAL:
+        case PlayerCollisionInfo::AttackType::NORMAL:
 
             break;
         }
     }
 }
 
-void PlayerAttackController::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
+void PlayerCollisionInfo::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     if (dynamic_cast<BaseEnemy*>(other)) {
         switch (attackType_) {
 
             /// -----------------------------------------------------------------------
             /// PlayerAttackController::AttackType::FALL
             /// -----------------------------------------------------------------------
-        case PlayerAttackController::AttackType::FALL:
+        case PlayerCollisionInfo::AttackType::FALL:
 
             break;
             /// -----------------------------------------------------------------------
             /// PlayerAttackController::AttackType::RUSH
             /// -----------------------------------------------------------------------
-        case PlayerAttackController::AttackType::RUSH:
+        case PlayerCollisionInfo::AttackType::RUSH:
 
             break;
 
             /// -----------------------------------------------------------------------
             /// PlayerAttackController::AttackType::THRUST
             /// -----------------------------------------------------------------------
-        case PlayerAttackController::AttackType::THRUST:
+        case PlayerCollisionInfo::AttackType::THRUST:
             isSlow_ = true;
             break;
             /// -----------------------------------------------------------------------
             /// PlayerAttackController::AttackType::UPPER
             /// -----------------------------------------------------------------------
-        case PlayerAttackController::AttackType::UPPER:
+        case PlayerCollisionInfo::AttackType::UPPER:
             isHitStop_ = true;
             break;
             /// -----------------------------------------------------------------------
             /// PlayerAttackController::AttackType::COUNT
             /// -----------------------------------------------------------------------
-        case PlayerAttackController::AttackType::COUNT:
+        case PlayerCollisionInfo::AttackType::COUNT:
             break;
         default:
             break;
@@ -203,23 +203,23 @@ void PlayerAttackController::OnCollisionStay([[maybe_unused]] BaseCollider* othe
     }
 }
 
-void PlayerAttackController::ResetComboEffect() {
+void PlayerCollisionInfo::ResetComboEffect() {
     isSlow_    = false;
     isHitStop_ = false;
 }
 
-void PlayerAttackController::SetCombo(Combo* combo) {
+void PlayerCollisionInfo::SetCombo(Combo* combo) {
     pCombo_ = combo;
 }
 
-void PlayerAttackController::SetPlayerBaseTransform(const WorldTransform* playerBaseTransform) {
+void PlayerCollisionInfo::SetPlayerBaseTransform(const WorldTransform* playerBaseTransform) {
     baseTransform_ = playerBaseTransform;
 }
 
-Vector3 PlayerAttackController::GetCollisionPos() const {
+Vector3 PlayerCollisionInfo::GetCollisionPos() const {
     return BaseAABBCollisionBox::GetCollisionPos();
 }
 
-void PlayerAttackController::SetParentTransform(WorldTransform* transform) {
+void PlayerCollisionInfo::SetParentTransform(WorldTransform* transform) {
     BaseAABBCollisionBox::SetParentTransform(transform);
 }

@@ -26,7 +26,7 @@ void LeftJobPunch::Init() {
     waitTine_ = 0.0f;
 
     /// collisionType
-    pPlayer_->GetAttackController()->ChangeAttackType(PlayerAttackController::AttackType::NORMAL);
+    pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerAttackController::AttackType::NORMAL);
 
     /// パンチ座標セット
     lHandStartPos_  = pPlayer_->GetLeftHand()->GetObjTransform().translation_;
@@ -73,7 +73,7 @@ void LeftJobPunch::Update() {
         punchEase_.Update(atkSpeed_);
         pPlayer_->GetLeftHand()->SetObjTranslate(punchPosition_);
 
-        pPlayer_->GetAttackController()->SetPosition(pPlayer_->GetLeftHand()->GetObjTransform().GetWorldPos());
+        pPlayer_->GetPlayerCollisionInfo()->SetPosition(pPlayer_->GetLeftHand()->GetObjTransform().GetWorldPos());
 
         break;
 

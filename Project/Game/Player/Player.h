@@ -2,7 +2,7 @@
 #include "3d/ViewProjection.h"
 #include "BaseObject/BaseObject.h"
 #include "Collider/AABBCollider.h"
-#include "CollisionBox/PlayerAttackController.h"
+#include "CollisionBox/PlayerCollisionInfo.h"
 #include "ComboAttackBehavior/BaseComboAattackBehavior.h"
 #include "Effect/PlayerEffects.h"
 #include "JumpAttackUI/JumpAttackUI.h"
@@ -126,7 +126,7 @@ private:
     std::unique_ptr<PlayerHandRight> rightHand_;
     std::unique_ptr<PlayerEffects> effects_;
     std::unique_ptr<PlayerParameter> parameters_;
-    std::unique_ptr<PlayerAttackController> attackController_;
+    std::unique_ptr<PlayerCollisionInfo> playerCollisionInfo_;
     std::unique_ptr<JumpAttackUI> jumpAttackUI_;
 
     /// behavior
@@ -165,7 +165,8 @@ public:
     GameCamera* GetGameCamera() const { return pGameCamera_; }
     AttackEffect* GetAttackEffect() const { return pHitStop_; }
     PlayerParameter* GetParameter() const { return parameters_.get(); }
-    PlayerAttackController* GetAttackController() const { return attackController_.get(); }
+    PlayerCollisionInfo* GetPlayerCollisionInfo() const { return playerCollisionInfo_.get(); }
+    PlayerComboAttackController* GetComboAttackController() const { return comboAttackController_; }
     JumpAttackUI* GetJumpAttackUI() const { return jumpAttackUI_.get(); }
     const float& GetMoveSpeed() const { return moveSpeed_; }
 

@@ -51,9 +51,9 @@ void Player::Init() {
     obj3d_->material_.SetEnvironmentCoefficient(0.05f);
 
     // Playerの攻撃クラス
-    attackController_ = std::make_unique<PlayerAttackController>();
-    attackController_->Init();
-    attackController_->SetPlayerBaseTransform(&baseTransform_);
+    playerCollisionInfo_ = std::make_unique<PlayerAttackController>();
+    playerCollisionInfo_->Init();
+    playerCollisionInfo_->SetPlayerBaseTransform(&baseTransform_);
 
     // トランスフォーム初期化
     obj3d_->transform_.Init();
@@ -96,7 +96,7 @@ void Player::Update() {
     HeadLightSetting();
 
     // 攻撃更新
-    attackController_->Update();
+    playerCollisionInfo_->Update();
 
     /// 振る舞い処理(コンボ攻撃中は中止)
     if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
@@ -362,7 +362,7 @@ void Player::AdjustParam() {
     // プレイヤーのパラメータ
     parameters_->AdjustParam();
     // 攻撃パラメータ
-    attackController_->AdjustParam();
+    playerCollisionInfo_->AdjustParam();
     // パーツのパラメータ
     leftHand_->AdjustParam();
     rightHand_->AdjustParam();
@@ -532,7 +532,7 @@ void Player::SetLockOn(LockOnController* lockOn) {
 
 void Player::SetCombo(Combo* combo) {
     pCombo_ = combo;
-    attackController_->SetCombo(combo);
+    playerCollisionInfo_->SetCombo(combo);
 }
 
 void Player::SetGameCamera(GameCamera* gameCamera) {

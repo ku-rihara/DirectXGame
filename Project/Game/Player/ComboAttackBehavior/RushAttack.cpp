@@ -67,7 +67,7 @@ void RushAttack::Update() {
         pPlayer_->GetGameCamera()->PlayAnimation("PlayerRush");
 
         //攻撃タイプ変更
-        pPlayer_->GetAttackController()->ChangeAttackType(PlayerAttackController::AttackType::RUSH);
+        pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerAttackController::AttackType::RUSH);
 
         step_ = STEP::RUSH;
 
@@ -97,7 +97,7 @@ void RushAttack::Update() {
 
         /// 当たり判定座標
       
-        pPlayer_->GetAttackController()->SetPosition(pPlayer_->GetWorldPosition());
+        pPlayer_->GetPlayerCollisionInfo()->SetPosition(pPlayer_->GetWorldPosition());
         
 
         break;

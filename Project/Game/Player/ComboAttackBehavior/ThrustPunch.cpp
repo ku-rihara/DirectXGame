@@ -50,7 +50,7 @@ void ThrustPunch::Init() {
     stopRailManager_->SetRailMoveTime(0.0f);
     pPlayer_->GetRightHand()->RailForthComboUpdate(0.0f);
 
-    pPlayer_->GetAttackController()->ResetComboEffect();
+    pPlayer_->GetPlayerCollisionInfo()->ResetComboEffect();
 }
 
 // 更新
@@ -65,8 +65,8 @@ void ThrustPunch::Update() {
         ///-----------------------------------------------------------------------------------------------------
     case Order::START:
        
-        pPlayer_->GetAttackController()->ChangeAttackType(PlayerAttackController::AttackType::THRUST);
-        pPlayer_->GetAttackController()->SetPosition(pPlayer_->GetWorldPosition());
+        pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerAttackController::AttackType::THRUST);
+        pPlayer_->GetPlayerCollisionInfo()->SetPosition(pPlayer_->GetWorldPosition());
 
         order_ = Order::LPUNCH;
 
@@ -77,7 +77,7 @@ void ThrustPunch::Update() {
     case Order::LPUNCH:
 
         // レール更新と座標反映
-        pPlayer_->GetLeftHand()->RailForthComboUpdate(pPlayer_->GetAttackController()->GetAttackSpeed(pPlayer_->GetLeftHand()->GetRailRunSpeedForth()));
+        pPlayer_->GetLeftHand()->RailForthComboUpdate(pPlayer_->GetPlayerCollisionInfo()->GetAttackSpeed(pPlayer_->GetLeftHand()->GetRailRunSpeedForth()));
        
         // イージング終了時の処理
         if (thrustRailManager_->GetRailMoveTime() < 1.0f) {
@@ -96,7 +96,7 @@ void ThrustPunch::Update() {
     case Order::LBACKPUNCH:
 
         // レール更新と座標反映
-        pPlayer_->GetLeftHand()->RailForthComboUpdate(pPlayer_->GetAttackController()->GetAttackSpeed(-pPlayer_->GetLeftHand()->GetRailRunSpeedForth()));
+        pPlayer_->GetLeftHand()->RailForthComboUpdate(pPlayer_->GetPlayerCollisionInfo()->GetAttackSpeed(-pPlayer_->GetLeftHand()->GetRailRunSpeedForth()));
 
         /// コンボ先行予約
         BaseComboAattackBehavior::PreOderNextComboForButton();
@@ -142,7 +142,7 @@ void ThrustPunch::Debug() {
 
 void ThrustPunch::ChangeSlow() {
     // デルタタイムスケール小さく
-    if (pPlayer_->GetAttackController()->GetIsSlow() && !istimeSlow_) {
+    if (pPlayer_->GetPlayerCollisionInfo()->GetIsSlow() && !istimeSlow_) {
       /*  PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::GRAY);*/
         pPlayer_->SoundStrongPunch();
         pPlayer_->GetAttackEffect()->PlayHitStop("PlayerThurstAttackHitStop");

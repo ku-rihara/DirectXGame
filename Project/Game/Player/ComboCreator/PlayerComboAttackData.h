@@ -54,13 +54,6 @@ public:
     /// <param name="attackName">攻撃名</param>
     void Init(const std::string& attackName);
 
-    /// <summary>
-    /// イージングタイプセレクター
-    /// </summary>
-    /// <param name="label">ラベル</param>
-    /// <param name="target">対象変数</param>
-    void EasingTypeSelector(const char* label, int32_t& target);
-
      // パラメータバインド、調節
     void AdjustParam();
     void BindParams();
@@ -81,7 +74,6 @@ private:
     GlobalParameter* globalParameter_;
     std::string groupName_;
     const std::string folderPath_ = "AttackCreator";
-
 
     // 攻撃パラメータ
     AttackParameter attackParam_;

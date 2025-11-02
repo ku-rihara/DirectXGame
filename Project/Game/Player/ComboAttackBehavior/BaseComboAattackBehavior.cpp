@@ -33,7 +33,7 @@ void BaseComboAattackBehavior::ChangeNextCombo(std::unique_ptr<BaseComboAattackB
 
 
 void BaseComboAattackBehavior::Init() {
-    atkSpeed_ = pPlayer_->GetAttackController()->GetAttackSpeed(Frame::DeltaTimeRate());
+    atkSpeed_ = pPlayer_->GetPlayerCollisionInfo()->GetAttackSpeed(Frame::DeltaTimeRate());
 }
 
 void BaseComboAattackBehavior::AnimationInit() {
@@ -72,7 +72,7 @@ void BaseComboAattackBehavior::ScalingEaseUpdate() {
 }
 
 void BaseComboAattackBehavior::RotateMotionUpdate(const float& start, const float& end, const bool& isClockwise) {
-    atkSpeed_ = pPlayer_->GetAttackController()->GetAttackSpeed(Frame::DeltaTimeRate());
+    atkSpeed_ = pPlayer_->GetPlayerCollisionInfo()->GetAttackSpeed(Frame::DeltaTimeRate());
 
     if (isClockwise) {
         rotateEasing_.SetStartValue(start);

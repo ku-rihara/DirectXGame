@@ -1,9 +1,10 @@
-/// Combobehavior
 #include "ComboAttackRoot.h"
 #include "FallAttack.h"
 #include "RightJobPunch.h"
 
+#include "DynamicComboAttack.h"
 #include "input/Input.h"
+#include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/PlayerBehavior/PlayerJump.h"
 
 /// Player
@@ -23,44 +24,64 @@ ComboAttackRoot ::~ComboAttackRoot() {
 
 void ComboAttackRoot::Init() {
 
-  
     pPlayer_->SetHeadScale(Vector3::UnitVector());
     pPlayer_->RotateReset();
     attackPatern_ = AttackPatern::NORMAL;
 }
 
-// 更新
 void ComboAttackRoot::Update() {
+    // 攻撃ボタンが押された時
+    if (Input::GetInstance()->TriggerKey(DIK_H) || Input::IsTriggerPad(0, XINPUT_GAMEPAD_X)) {
 
-    ///---------------------------------------------------------
-    /// キー入力によるコンボ開始処理
-    ///---------------------------------------------------------
+        // ComboAttackControllerから攻撃を取得
+        auto* controller = pPlayer_->GetComboAttackController();
 
-    JudgeAttackPatern();
+        if (controller) {
+            // デフォルトの最初の攻撃名を取得
+            auto* firstAttack = controller->GetAttackByName("FirstPunch");
 
-    switch (attackPatern_) {
-    case AttackPatern::NORMAL:
-        /// 通常攻撃
-        BaseComboAattackBehavior::PreOderNextComboForButton();
-        if (!isNextCombo_) {
-            break;
+            if (!firstAttack) {
+                return;
+            }
+
+            // コンボ攻撃を開始
+            pPlayer_->ChangeComboBehavior(std::make_unique<DynamicComboAttack>(pPlayer_, firstAttack));
         }
-        BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<RightJobPunch>(pPlayer_));
-
-        break;
-    case AttackPatern::JUMP:
-        /// ジャンプ攻撃
-        BaseComboAattackBehavior::PreOderNextComboForButton();
-        if (!isNextCombo_) {
-            break;
-        }
-        BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<FallAttack>(pPlayer_));
-
-        break;
-    default:
-        break;
     }
 }
+
+//// 更新
+// void ComboAttackRoot::Update() {
+//
+//     ///---------------------------------------------------------
+//     /// キー入力によるコンボ開始処理
+//     ///---------------------------------------------------------
+//
+//     JudgeAttackPatern();
+//
+//     switch (attackPatern_) {
+//     case AttackPatern::NORMAL:
+//         /// 通常攻撃
+//         BaseComboAattackBehavior::PreOderNextComboForButton();
+//         if (!isNextCombo_) {
+//             break;
+//         }
+//         BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<RightJobPunch>(pPlayer_));
+//
+//         break;
+//     case AttackPatern::JUMP:
+//         /// ジャンプ攻撃
+//         BaseComboAattackBehavior::PreOderNextComboForButton();
+//         if (!isNextCombo_) {
+//             break;
+//         }
+//         BaseComboAattackBehavior::ChangeNextCombo(std::make_unique<FallAttack>(pPlayer_));
+//
+//         break;
+//     default:
+//         break;
+//     }
+// }
 
 void ComboAttackRoot::JudgeAttackPatern() {
     /// 浮遊時のコンボ

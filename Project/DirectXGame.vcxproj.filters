@@ -667,9 +667,6 @@
     <ClCompile Include="Game\Player\ComboAttackBehavior\LeftJobPunch.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp">
-      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerJump.cpp">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
     </ClCompile>
@@ -1153,8 +1150,14 @@
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackData.cpp">
       <Filter>Game\Player\ComboCreator</Filter>
     </ClCompile>
-    <ClCompile Include="Game\CollisionBox\PlayerAttackController.cpp">
+    <ClCompile Include="Game\CollisionBox\PlayerCollisionInfo.cpp">
       <Filter>Game\CollisionBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\DynamicComboAttack.cpp">
+      <Filter>Game\Player\Behavior\ComboBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp">
+      <Filter>Game\Player\Behavior\ComboBehavior</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1396,9 +1399,6 @@
       <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\LeftJobPunch.h">
-      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerJump.h">
@@ -1899,8 +1899,14 @@
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackData.h">
       <Filter>Game\Player\ComboCreator</Filter>
     </ClInclude>
-    <ClInclude Include="Game\CollisionBox\PlayerAttackController.h">
+    <ClInclude Include="Game\CollisionBox\PlayerCollisionInfo.h">
       <Filter>Game\CollisionBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\DynamicComboAttack.h">
+      <Filter>Game\Player\Behavior\ComboBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h">
+      <Filter>Game\Player\Behavior\ComboBehavior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

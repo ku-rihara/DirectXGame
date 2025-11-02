@@ -72,7 +72,7 @@ void PlayerComboAttackData::AdjustParam() {
     // Move Parameter
     ImGui::SeparatorText("Move Parameter");
     ImGui::DragFloat3("Move Value", &attackParam_.moveParam.value.x, 0.01f);
-    EasingTypeSelector("Move Easing Type", attackParam_.moveParam.easeType);
+    ImGuiEasingTypeSelector("Move Easing Type", attackParam_.moveParam.easeType);
 
     // Other Parameters
     ImGui::SeparatorText("Timing Parameter");
@@ -138,9 +138,3 @@ void PlayerComboAttackData::SelectNextAttack() {
     }
 }
 
-void PlayerComboAttackData::EasingTypeSelector(const char* label, int32_t& target) {
-    int type = static_cast<int32_t>(target);
-    if (ImGui::Combo(label, &type, EasingTypeLabels.data(), static_cast<int>(EasingTypeLabels.size()))) {
-        target = type;
-    }
-}

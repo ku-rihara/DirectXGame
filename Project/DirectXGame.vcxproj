@@ -145,7 +145,7 @@
     <ClCompile Include="Game\BaseObject\BaseObject.cpp" />
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp" />
     <ClCompile Include="Game\CollisionBox\EnemyCollisionBox.cpp" />
-    <ClCompile Include="Game\CollisionBox\PlayerAttackController.cpp" />
+    <ClCompile Include="Game\CollisionBox\PlayerCollisionInfo.cpp" />
     <ClCompile Include="Game\ComboScene\ComboScene.cpp" />
     <ClCompile Include="Game\Combo\Behavior\BaseComboUIBehavior.cpp" />
     <ClCompile Include="Game\Combo\Behavior\ComboCountUp.cpp" />
@@ -192,6 +192,7 @@
     <ClCompile Include="Game\LockOn\LockOn.cpp" />
     <ClCompile Include="Game\LockOn\LockOnController.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp" />
+    <ClCompile Include="Game\Player\ComboAttackBehavior\DynamicComboAttack.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\RightJobPunch.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\RoolingPunchAttack.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\ThrustPunch.cpp" />
@@ -394,7 +395,7 @@
     <ClInclude Include="Game\BaseObject\BaseObject.h" />
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h" />
     <ClInclude Include="Game\CollisionBox\EnemyCollisionBox.h" />
-    <ClInclude Include="Game\CollisionBox\PlayerAttackController.h" />
+    <ClInclude Include="Game\CollisionBox\PlayerCollisionInfo.h" />
     <ClInclude Include="Game\ComboScene\ComboScene.h" />
     <ClInclude Include="Game\Combo\Behavior\BaseComboUIBehavior.h" />
     <ClInclude Include="Game\Combo\Behavior\ComboCountUp.h" />
@@ -441,6 +442,7 @@
     <ClInclude Include="Game\LockOn\LockOn.h" />
     <ClInclude Include="Game\LockOn\LockOnController.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h" />
+    <ClInclude Include="Game\Player\ComboAttackBehavior\DynamicComboAttack.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\RightJobPunch.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\RoolingPunchAttack.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\ThrustPunch.h" />
