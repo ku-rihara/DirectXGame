@@ -316,6 +316,12 @@
     <Filter Include="MyEngine\.h\GPUParticle\ResourceData">
       <UniqueIdentifier>{00ef74a7-6b08-427e-8cd8-e40d2599bd7a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\utility\FileSelector">
+      <UniqueIdentifier>{3a1b69a4-6e07-40d8-8e60-4be87d850710}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\FileSelector">
+      <UniqueIdentifier>{0a9f8023-eea7-44d2-a542-a2ca47a48fd5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -774,6 +780,9 @@
     </ClCompile>
     <ClCompile Include="Engine\input\InputData.cpp">
       <Filter>MyEngine\.cpp\input</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\FileSelector\FileSelector.cpp">
+      <Filter>MyEngine\.cpp\utility\FileSelector</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1283,6 +1292,9 @@
     </ClInclude>
     <ClInclude Include="Engine\input\InputData.h">
       <Filter>MyEngine\.h\input</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\FileSelector\FileSelector.h">
+      <Filter>MyEngine\.h\utility\FileSelector</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
