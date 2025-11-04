@@ -361,8 +361,7 @@ void ParticleParameter::ParticleChange() {
     DisplayFileSelection("SelectParticle", filenames, selectedIndex, [this](const std::string& selectedFile) {
         globalParameter_->CopyGroup(selectedFile, particleName_);
         globalParameter_->SyncParamForGroup(particleName_);
-      /*  ApplyGlobalParameter(selectedFile);
-        globalParameter_->LoadFile(selectedFile, folderName_);*/
+     
         ImGui::Text("Load Successful: %s", (folderName_ + selectedFile).c_str());
     });
 }
@@ -370,7 +369,7 @@ void ParticleParameter::ParticleChange() {
 /// texture選択
 void ParticleParameter::ImGuiTextureSelection() {
     static int selectedIndex           = 0; // 現在選択中のインデックス
-    std::vector<std::string> filenames = GetFileNamesForDyrectry(textureFilePath_);
+    std::vector<std::string> filenames = GetFileNamesForDirectory(textureFilePath_);
 
     DisplayFileSelection("SelectTexture", filenames, selectedIndex, [this](const std::string& selectedFile) {
         ApplyTexture(selectedFile);

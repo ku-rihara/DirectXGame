@@ -117,7 +117,7 @@ void PlayerComboAttackData::AdjustParam() {
 
 void PlayerComboAttackData::SelectNextAttack() {
     if (needsRefresh_ || attackFileNames_.empty()) {
-        attackFileNames_ = GetFileNamesForDyrectry("Resources/GlobalParameter/AttackCreator");
+        attackFileNames_ = GetFileNamesForDirectory("Resources/GlobalParameter/AttackCreator");
 
         // 自身のファイルを候補から削除
         attackFileNames_.erase(

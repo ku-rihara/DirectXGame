@@ -11,7 +11,7 @@ void Easing<T>::Init(const std::string& adaptFile) {
 
     // 初期化、ファイル読み込み
     FilePathChangeForType();
-    easingFiles_ = GetFileNamesForDyrectry(FilePath_ + filePathForType_);
+    easingFiles_ = GetFileNamesForDirectory(FilePath_ + filePathForType_);
   
     if (!adaptFile.empty()) {
         ApplyFromJson(adaptFile);
@@ -157,7 +157,7 @@ template <typename T>
 void Easing<T>::ApplyForImGui() {
     FilePathChangeForType();
 
-    easingFiles_ = GetFileNamesForDyrectry(FilePath_ + filePathForType_);
+    easingFiles_ = GetFileNamesForDirectory(FilePath_ + filePathForType_);
 
     if (easingFiles_.empty()) {
         return;

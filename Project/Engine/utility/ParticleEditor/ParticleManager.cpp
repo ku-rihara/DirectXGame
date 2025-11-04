@@ -618,5 +618,5 @@ void ParticleManager::SetViewProjection(const ViewProjection* view) {
 }
 
 void ParticleManager::SetAllParticleFile() {
-    particleFiles_ = GetFileNamesForDyrectry(dyrectry_);
+    particleFiles_ = GetFileNamesForDirectory(dyrectry_);
 }

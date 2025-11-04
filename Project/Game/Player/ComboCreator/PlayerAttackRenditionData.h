@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Easing/Easing.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
 #include "Vector3.h"
 #include <cstdint>
@@ -15,6 +14,7 @@ public:
     struct RenditionParam {
         std::string fileName;
         float startTiming;
+        float duration;
         bool triggerByHit;
     };
 
@@ -27,38 +27,32 @@ public:
     /// <summary>
     /// 初期化
     /// </summary>
-    /// <param name="attackName">攻撃名</param>
-    void Init(const std::string& attackName);
+    /// <param name="groupName">グループ名</param>
+    void Init(const std::string& groupName);
 
-    // パラメータバインド、調節
+    // パラメータバインド、調整
     void AdjustParam();
-    void BindParams();
-
-    // データロード、セーブ
-    void LoadData();
-    void SaveData();
+    void BindParams(GlobalParameter* globalParam, const std::string& groupName);
 
 private:
     //*-------------------------------- private Method --------------------------------*//
 
-    // 次の攻撃の選択
-    void SelectNextAttack();
+    // 演出パラメータの選択UI
+    void SelectRenditionFile(const char* label, const std::string& directory, RenditionParam& param);
 
 private:
     //*-------------------------------- Private variants--------------------------------*//
 
-    GlobalParameter* globalParameter_;
     std::string groupName_;
-    const std::string folderPath_ = "AttackRenditionData";
 
+    // 演出パラメータ
     RenditionParam cameraAction_;
     RenditionParam hitStopParam_;
     RenditionParam shakeAction_;
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//
-    const std::string& GetGroupName() const { return groupName_; }
-    const RenditionParam& GetCameraAction() { return cameraAction_; }
-    const RenditionParam& GetHitStopParam() { return hitStopParam_; }
-    const RenditionParam& GetShakeAction() { return shakeAction_; }
+    const RenditionParam& GetCameraAction() const { return cameraAction_; }
+    const RenditionParam& GetHitStopParam() const { return hitStopParam_; }
+    const RenditionParam& GetShakeAction() const { return shakeAction_; }
 };

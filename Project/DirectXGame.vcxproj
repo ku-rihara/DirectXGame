@@ -126,6 +126,7 @@
     <ClCompile Include="Engine\utility\EasingCreator\EasingCreator.cpp" />
     <ClCompile Include="Engine\utility\EasingCreator\EasingEditor.cpp" />
     <ClCompile Include="Engine\utility\EasingCreator\EasingParameterData.cpp" />
+    <ClCompile Include="Engine\utility\FileSelector\FileSelector.cpp" />
     <ClCompile Include="Engine\utility\ParameterEditor\GlobalParameter.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleManager.cpp" />
@@ -378,6 +379,7 @@
     <ClInclude Include="Engine\utility\EasingCreator\EasingCreator.h" />
     <ClInclude Include="Engine\utility\EasingCreator\EasingEditor.h" />
     <ClInclude Include="Engine\utility\EasingCreator\EasingParameterData.h" />
+    <ClInclude Include="Engine\utility\FileSelector\FileSelector.h" />
     <ClInclude Include="Engine\utility\ParameterEditor\GlobalParameter.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleEmitter.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleManager.h" />

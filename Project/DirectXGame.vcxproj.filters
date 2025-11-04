@@ -457,6 +457,12 @@
     <Filter Include="MyEngine\.h\GPUParticle\ResourceData">
       <UniqueIdentifier>{00ef74a7-6b08-427e-8cd8-e40d2599bd7a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\utility\FileSelector">
+      <UniqueIdentifier>{3a1b69a4-6e07-40d8-8e60-4be87d850710}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\FileSelector">
+      <UniqueIdentifier>{0a9f8023-eea7-44d2-a542-a2ca47a48fd5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Game\Player\ComboCreator">
       <UniqueIdentifier>{4d571f9d-bdee-482b-a917-03263be5f41b}</UniqueIdentifier>
     </Filter>
@@ -1146,6 +1152,9 @@
     </ClCompile>
     <ClCompile Include="Engine\input\InputData.cpp">
       <Filter>MyEngine\.cpp\input</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\FileSelector\FileSelector.cpp">
+      <Filter>MyEngine\.cpp\utility\FileSelector</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackController.cpp">
       <Filter>Game\Player\ComboCreator</Filter>
@@ -1901,6 +1910,9 @@
     </ClInclude>
     <ClInclude Include="Engine\input\InputData.h">
       <Filter>MyEngine\.h\input</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\FileSelector\FileSelector.h">
+      <Filter>MyEngine\.h\utility\FileSelector</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackController.h">
       <Filter>Game\Player\ComboCreator</Filter>

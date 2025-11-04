@@ -5,4 +5,4 @@
 ///------------------------------------------------------------------------------------------------
 /// ファイル取得
 ///------------------------------------------------------------------------------------------------
-std::vector<std::string> GetFileNamesForDyrectry(const std::string& directory);
+std::vector<std::string> GetFileNamesForDirectory(const std::string& directory);
