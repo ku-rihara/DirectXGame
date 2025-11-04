@@ -46,6 +46,7 @@ public:
         int32_t keyBordBottom;
         int32_t gamePadBottom;
     };
+    
 
     // アタックパラメータ
     struct AttackParameter {

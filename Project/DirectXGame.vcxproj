@@ -203,6 +203,7 @@
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\LeftJobPunch.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\RoringUpper.cpp" />
+    <ClCompile Include="Game\Player\ComboCreator\PlayerAttackRenditionData.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackController.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackData.cpp" />
     <ClCompile Include="Game\Player\Effect\PlayerEffects.cpp" />
@@ -454,6 +455,7 @@
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\LeftJobPunch.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\RoringUpper.h" />
+    <ClInclude Include="Game\Player\ComboCreator\PlayerAttackRenditionData.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackController.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackData.h" />
     <ClInclude Include="Game\Player\Effect\PlayerEffects.h" />

@@ -25,35 +25,23 @@ void DynamicComboAttack::Init() {
     isCollisionActive_ = false;
     collisionTimer_    = 0.0f;
 
-    // 移動イージングの初期化
-    startPosition_ = pPlayer_->GetWorldPosition();
-
-    // moveParam取得
+    // targetPosを計算
     const PlayerComboAttackData::MoveParam& moveParam = attackData_->GetAttackParam().moveParam;
-
-    // プレイヤーの向き(Y軸回転)を取得
-    float playerRotationY    = pPlayer_->GetTransform().rotation_.y;
-    Matrix4x4 rotationMatrix = MakeRotateYMatrix(playerRotationY);
-
-    // ローカル座標での移動ベクトル(X,Y,Z)をワールド座標に変換
-    Vector3 localMoveVector = moveParam.value; // これがX,Y,Zの移動量
-    Vector3 worldMoveVector = TransformNormal(localMoveVector, rotationMatrix);
-
-    // 目標位置を計算
-    targetPosition_ = startPosition_ + worldMoveVector;
+    startPosition_  = pPlayer_->GetWorldPosition();
+    targetPosition_ = pPlayer_->GetTransform().CalcForwardTargetPos(startPosition_, moveParam.value);
 
     // イージングのセットアップ
     moveEasing_.SetType(static_cast<EasingType>(moveParam.easeType));
     moveEasing_.SetStartValue(startPosition_);
     moveEasing_.SetEndValue(targetPosition_);
     moveEasing_.SetAdaptValue(&currentMoveValue_);
-   
+
     moveEasing_.SetOnFinishCallback([this]() {
         order_ = Order::RECOVERY;
     });
 
     //// サウンド再生
-    //pPlayer_->SoundPunch();
+    // pPlayer_->SoundPunch();
 
     order_ = Order::INIT;
 }

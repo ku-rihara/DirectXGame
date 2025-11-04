@@ -1162,6 +1162,9 @@
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player\ComboCreator\PlayerAttackRenditionData.cpp">
+      <Filter>Game\Player\ComboCreator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1913,6 +1916,9 @@
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h">
       <Filter>Game\Player\Behavior\ComboBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboCreator\PlayerAttackRenditionData.h">
+      <Filter>Game\Player\ComboCreator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
