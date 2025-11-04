@@ -26,13 +26,21 @@ void DynamicComboAttack::Init() {
     collisionTimer_    = 0.0f;
 
     // 移動イージングの初期化
-    const Vector3& moveVector = pPlayer_->GetTransform().LookAt(Vector3::ToForward()) * attackData_->GetAttackParam().moveParam.value;
-
-    startPosition_  = pPlayer_->GetWorldPosition();
-    targetPosition_ = startPosition_ + moveVector;
+    startPosition_ = pPlayer_->GetWorldPosition();
 
     // moveParam取得
     const PlayerComboAttackData::MoveParam& moveParam = attackData_->GetAttackParam().moveParam;
+
+    // プレイヤーの向き(Y軸回転)を取得
+    float playerRotationY    = pPlayer_->GetTransform().rotation_.y;
+    Matrix4x4 rotationMatrix = MakeRotateYMatrix(playerRotationY);
+
+    // ローカル座標での移動ベクトル(X,Y,Z)をワールド座標に変換
+    Vector3 localMoveVector = moveParam.value; // これがX,Y,Zの移動量
+    Vector3 worldMoveVector = TransformNormal(localMoveVector, rotationMatrix);
+
+    // 目標位置を計算
+    targetPosition_ = startPosition_ + worldMoveVector;
 
     // イージングのセットアップ
     moveEasing_.SetType(static_cast<EasingType>(moveParam.easeType));
