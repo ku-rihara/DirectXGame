@@ -16,7 +16,7 @@ public:
     /// <param name="excludeName">除外するファイル名</param>
     /// <param name="addNoneOption">先頭に"None"を追加するか</param>
     /// <returns>選択が変更されたらtrue</returns>
-    bool SelectFile(
+    void SelectFile(
         const char* label,
         const std::string& directoryPath,
         std::string& currentSelection,

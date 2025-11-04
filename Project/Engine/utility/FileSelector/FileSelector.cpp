@@ -5,7 +5,7 @@
 #include <filesystem>
 
 
-bool FileSelector::SelectFile(
+void FileSelector::SelectFile(
     const char* label,
     const std::string& directoryPath,
     std::string& currentSelection,
@@ -63,6 +63,6 @@ bool FileSelector::SelectFile(
         needsRefresh_ = true;
     }
 
-    return changed;
+ 
 }
 
