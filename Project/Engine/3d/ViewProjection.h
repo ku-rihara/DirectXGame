@@ -63,8 +63,8 @@ public:
 
     ProjectionType projectionType_ = ProjectionType::PERSPECTIVE;
 
-    float orthoWidth_  = 40.0f; //< 平行投影の幅
-    float orthoHeight_ = 40.0f; //< 平行投影の高さ
+    float orthoWidth_  = 150.0f; //< 平行投影の幅
+    float orthoHeight_ = 150.0f; //< 平行投影の高さ
 
     Matrix4x4 matView_; //< ビュー行列
     Matrix4x4 matProjection_; //< プロジェクション行列
