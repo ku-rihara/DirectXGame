@@ -12,7 +12,6 @@ public:
     struct RenditionParam {
         std::string fileName;
         float startTiming;
-        float duration;
         bool triggerByHit;
         FileSelector fileSelector;
     };
@@ -44,10 +43,12 @@ private:
     RenditionParam cameraAction_;
     RenditionParam hitStopParam_;
     RenditionParam shakeAction_;
+    RenditionParam postEffectParam_;
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//
     const RenditionParam& GetCameraAction() const { return cameraAction_; }
     const RenditionParam& GetHitStopParam() const { return hitStopParam_; }
     const RenditionParam& GetShakeAction() const { return shakeAction_; }
+    const RenditionParam& GetPostEffectParam() const { return postEffectParam_; }
 };

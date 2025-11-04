@@ -7,20 +7,22 @@ void PlayerAttackRenditionData::BindParams(GlobalParameter* globalParam, const s
     // Camera Action
     globalParam->Bind(groupName, "CameraAction_FileName", &cameraAction_.fileName);
     globalParam->Bind(groupName, "CameraAction_StartTiming", &cameraAction_.startTiming);
-    globalParam->Bind(groupName, "CameraAction_Duration", &cameraAction_.duration);
     globalParam->Bind(groupName, "CameraAction_TriggerByHit", &cameraAction_.triggerByHit);
 
     // Hit Stop
     globalParam->Bind(groupName, "HitStop_FileName", &hitStopParam_.fileName);
     globalParam->Bind(groupName, "HitStop_StartTiming", &hitStopParam_.startTiming);
-    globalParam->Bind(groupName, "HitStop_Duration", &hitStopParam_.duration);
     globalParam->Bind(groupName, "HitStop_TriggerByHit", &hitStopParam_.triggerByHit);
 
     // Shake Action
     globalParam->Bind(groupName, "ShakeAction_FileName", &shakeAction_.fileName);
     globalParam->Bind(groupName, "ShakeAction_StartTiming", &shakeAction_.startTiming);
-    globalParam->Bind(groupName, "ShakeAction_Duration", &shakeAction_.duration);
     globalParam->Bind(groupName, "ShakeAction_TriggerByHit", &shakeAction_.triggerByHit);
+
+    // Shake Action
+    globalParam->Bind(groupName, "PostEffectParam_FileName", &postEffectParam_.fileName);
+    globalParam->Bind(groupName, "PostEffectParam_StartTiming", &postEffectParam_.startTiming);
+    globalParam->Bind(groupName, "PostEffectParam_TriggerByHit", &postEffectParam_.triggerByHit);
 }
 
 void PlayerAttackRenditionData::AdjustParam() {
@@ -33,22 +35,25 @@ void PlayerAttackRenditionData::AdjustParam() {
         ImGui::SeparatorText("Camera Action");
         SelectRenditionFile("Camera File", folderPath_ + "CameraAnimation/AnimationData", cameraAction_);
         ImGui::DragFloat("Camera Start Timing", &cameraAction_.startTiming, 0.01f, 0.0f, 10.0f);
-        ImGui::DragFloat("Camera Duration", &cameraAction_.duration, 0.01f, 0.0f, 10.0f);
         ImGui::Checkbox("Camera Trigger By Hit", &cameraAction_.triggerByHit);
 
         // Hit Stop
         ImGui::SeparatorText("Hit Stop");
         SelectRenditionFile("HitStop File", folderPath_ + "TimeScale", hitStopParam_);
         ImGui::DragFloat("HitStop Start Timing", &hitStopParam_.startTiming, 0.01f, 0.0f, 10.0f);
-        ImGui::DragFloat("HitStop Duration", &hitStopParam_.duration, 0.01f, 0.0f, 1.0f);
         ImGui::Checkbox("HitStop Trigger By Hit", &hitStopParam_.triggerByHit);
 
         // Shake Action
         ImGui::SeparatorText("Shake Action");
         SelectRenditionFile("Shake File", folderPath_ + "ShakeEditor", shakeAction_);
         ImGui::DragFloat("Shake Start Timing", &shakeAction_.startTiming, 0.01f, 0.0f, 10.0f);
-        ImGui::DragFloat("Shake Duration", &shakeAction_.duration, 0.01f, 0.0f, 10.0f);
         ImGui::Checkbox("Shake Trigger By Hit", &shakeAction_.triggerByHit);
+
+        // PostEffect
+        ImGui::SeparatorText("PostEffect");
+        SelectRenditionFile("PostEffect File", folderPath_ + "PostEffect", postEffectParam_);
+        ImGui::DragFloat("Shake Start Timing", &postEffectParam_.startTiming, 0.01f, 0.0f, 10.0f);
+        ImGui::Checkbox("Shake Trigger By Hit", &postEffectParam_.triggerByHit);
 
         ImGui::PopID();
     }
