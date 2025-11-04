@@ -62,6 +62,8 @@ public:
     /// <param name="billboardAxis">ビルボード軸タイプ</param>
     /// <param name="adaptRotate">回転適用設定</param>
     void BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis = BillboardType::XYZ, const AdaptRotate& adaptRotate = {false, false, false});
+    
+    Vector3 CalcForwardTargetPos(const Vector3& startPos, const Vector3& offsetValue);
 
 private:
     void TransferMatrix(); //< 行列転送
