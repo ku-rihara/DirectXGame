@@ -59,6 +59,9 @@ void PlayerComboAttackData::BindParams() {
 
     // nextAttack
     globalParameter_->Bind(groupName_, "NextAttackType", &attackParam_.nextAttackType);
+
+    // 演出のパラメータバインド
+    renditionData_.BindParams(globalParameter_, groupName_);
 }
 
 ///==========================================================
@@ -105,6 +108,8 @@ void PlayerComboAttackData::AdjustParam() {
     ImGui::SeparatorText("Next Attack");
     SelectNextAttack();
 
+    renditionData_.AdjustParam();
+
     // セーブ・ロード
     ImGui::Separator();
     globalParameter_->ParamSaveForImGui(groupName_, folderPath_);
@@ -115,47 +120,12 @@ void PlayerComboAttackData::AdjustParam() {
 #endif // _DEBUG
 }
 
+
 void PlayerComboAttackData::SelectNextAttack() {
-    if (needsRefresh_ || attackFileNames_.empty()) {
-        attackFileNames_ = GetFileNamesForDirectory("Resources/GlobalParameter/AttackCreator");
-
-        // 自身のファイルを候補から削除
-        attackFileNames_.erase(
-            std::remove_if(attackFileNames_.begin(), attackFileNames_.end(),
-                [this](const std::string& name) {
-                    return name == groupName_;
-                }),
-            attackFileNames_.end());
-
-        // 先頭に"None"を追加
-        attackFileNames_.insert(attackFileNames_.begin(), "None");
-
-        needsRefresh_ = false;
-    }
-
-    // 現在選択中のインデックスを取得
-    int currentIndex = 0;
-    for (int i = 0; i < attackFileNames_.size(); i++) {
-        if (attackFileNames_[i] == attackParam_.nextAttackType) {
-            currentIndex = i;
-            break;
-        }
-    }
-
-    // comboItemsに順番に追加していく
-    std::vector<const char*> comboItems;
-    for (const auto& name : attackFileNames_) {
-        comboItems.push_back(name.c_str());
-    }
-
-    // コンボボックスで選択
-    if (ImGui::Combo("Next Attack Type", &currentIndex, comboItems.data(), static_cast<int>(comboItems.size()))) {
-        attackParam_.nextAttackType = attackFileNames_[currentIndex];
-    }
-
-    // リフレッシュボタン
-    ImGui::SameLine();
-    if (ImGui::SmallButton("Refresh")) {
-        needsRefresh_ = true;
-    }
+    fileSelector_.SelectFile(
+        "Next Attack Type",
+        "Resources/GlobalParameter/AttackCreator",
+        attackParam_.nextAttackType,
+        groupName_, 
+        true);
 }

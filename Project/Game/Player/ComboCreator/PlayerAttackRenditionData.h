@@ -1,10 +1,8 @@
 #pragma once
 
+#include "utility/FileSelector/FileSelector.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
-#include "Vector3.h"
-#include <cstdint>
 #include <string>
-#include <vector>
 
 /// <summary>
 /// プレイヤー攻撃演出データクラス
@@ -16,6 +14,7 @@ public:
         float startTiming;
         float duration;
         bool triggerByHit;
+        FileSelector fileSelector;
     };
 
 public:
@@ -24,11 +23,6 @@ public:
 
     //*-------------------------------- public Method --------------------------------*//
 
-    /// <summary>
-    /// 初期化
-    /// </summary>
-    /// <param name="groupName">グループ名</param>
-    void Init(const std::string& groupName);
 
     // パラメータバインド、調整
     void AdjustParam();
@@ -44,6 +38,7 @@ private:
     //*-------------------------------- Private variants--------------------------------*//
 
     std::string groupName_;
+    const std::string folderPath_ = "Resources/GlobalParameter/";
 
     // 演出パラメータ
     RenditionParam cameraAction_;

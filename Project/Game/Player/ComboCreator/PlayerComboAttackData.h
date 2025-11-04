@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Easing/Easing.h"
+#include "PlayerAttackRenditionData.h"
+#include "utility/FileSelector/FileSelector.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
 #include "Vector3.h"
 #include <cstdint>
@@ -14,8 +16,8 @@ class PlayerComboAttackData {
 public:
     enum class TriggerCondition {
         GROUND, // 地上のみ
-        AIR,    // 空中のみ
-        BOTH    // 両方
+        AIR, // 空中のみ
+        BOTH // 両方
     };
 
 public:
@@ -46,7 +48,6 @@ public:
         int32_t keyBordBottom;
         int32_t gamePadBottom;
     };
-    
 
     // アタックパラメータ
     struct AttackParameter {
@@ -91,6 +92,9 @@ private:
     GlobalParameter* globalParameter_;
     std::string groupName_;
     const std::string folderPath_ = "AttackCreator";
+
+    PlayerAttackRenditionData renditionData_;
+    FileSelector fileSelector_;
 
     // 攻撃パラメータ
     AttackParameter attackParam_;

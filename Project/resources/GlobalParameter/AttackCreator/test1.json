@@ -1,9 +1,21 @@
 {
     "test1": {
+        "CameraAction_Duration": 0.0,
+        "CameraAction_FileName": "PlayerthrustAttack",
+        "CameraAction_StartTiming": 1.059999942779541,
+        "CameraAction_TriggerByHit": false,
         "Condition": 0,
+        "HitStop_Duration": 0.0,
+        "HitStop_FileName": "",
+        "HitStop_StartTiming": 0.0,
+        "HitStop_TriggerByHit": false,
         "IsFirstAttack": true,
         "KnockBackPower": 0.0,
         "NextAttackType": "test2",
+        "ShakeAction_Duration": 0.0,
+        "ShakeAction_FileName": "",
+        "ShakeAction_StartTiming": 0.0,
+        "ShakeAction_TriggerByHit": false,
         "adaptTime": 0.9300000071525574,
         "cancelFrame": 0.0,
         "collisionOffsetPos": [

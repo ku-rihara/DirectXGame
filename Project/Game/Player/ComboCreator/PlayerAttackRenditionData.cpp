@@ -1,8 +1,5 @@
 #include "PlayerAttackRenditionData.h"
-#include "utility/FileSelector/FileSelector.h"
 #include <imgui.h>
-
-
 
 void PlayerAttackRenditionData::BindParams(GlobalParameter* globalParam, const std::string& groupName) {
     groupName_ = groupName;
@@ -29,25 +26,26 @@ void PlayerAttackRenditionData::BindParams(GlobalParameter* globalParam, const s
 void PlayerAttackRenditionData::AdjustParam() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader("Rendition Parameters")) {
-        ImGui::PushID("RenditionParams");
+
+        ImGui::PushID((groupName_ + "RenditionParams").c_str());
 
         // Camera Action
         ImGui::SeparatorText("Camera Action");
-        SelectRenditionFile("Camera File", "Resources/CameraAction", cameraAction_);
+        SelectRenditionFile("Camera File", folderPath_ + "CameraAnimation/AnimationData", cameraAction_);
         ImGui::DragFloat("Camera Start Timing", &cameraAction_.startTiming, 0.01f, 0.0f, 10.0f);
         ImGui::DragFloat("Camera Duration", &cameraAction_.duration, 0.01f, 0.0f, 10.0f);
         ImGui::Checkbox("Camera Trigger By Hit", &cameraAction_.triggerByHit);
 
         // Hit Stop
         ImGui::SeparatorText("Hit Stop");
-        SelectRenditionFile("HitStop File", "Resources/HitStop", hitStopParam_);
+        SelectRenditionFile("HitStop File", folderPath_ + "TimeScale", hitStopParam_);
         ImGui::DragFloat("HitStop Start Timing", &hitStopParam_.startTiming, 0.01f, 0.0f, 10.0f);
         ImGui::DragFloat("HitStop Duration", &hitStopParam_.duration, 0.01f, 0.0f, 1.0f);
         ImGui::Checkbox("HitStop Trigger By Hit", &hitStopParam_.triggerByHit);
 
         // Shake Action
         ImGui::SeparatorText("Shake Action");
-        SelectRenditionFile("Shake File", "Resources/ShakeAction", shakeAction_);
+        SelectRenditionFile("Shake File", folderPath_ + "ShakeEditor", shakeAction_);
         ImGui::DragFloat("Shake Start Timing", &shakeAction_.startTiming, 0.01f, 0.0f, 10.0f);
         ImGui::DragFloat("Shake Duration", &shakeAction_.duration, 0.01f, 0.0f, 10.0f);
         ImGui::Checkbox("Shake Trigger By Hit", &shakeAction_.triggerByHit);
@@ -62,5 +60,5 @@ void PlayerAttackRenditionData::SelectRenditionFile(
     const std::string& directory,
     RenditionParam& param) {
 
-    FileSelector::SelectFile(label, directory, param.fileName, "", true);
+    param.fileSelector.SelectFile(label, directory, param.fileName, "", true);
 }
