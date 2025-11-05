@@ -15,7 +15,7 @@ void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t&
 
    
    globalParameter_->ClearBindingsForGroup(groupName_);
-    BindParams();
+    RegisterParams();
 
     AdaptValueSetting();
     AdaptEaseParam();
@@ -60,7 +60,7 @@ void CameraKeyFrame::Update(const float& speedRate) {
     fovEase_.Update(actualDeltaTime);
 }
 
-void CameraKeyFrame::BindParams() {
+void CameraKeyFrame::RegisterParams() {
     globalParameter_->Bind(groupName_, "timePoint", &timePoint_);
     globalParameter_->Bind(groupName_, "position", &keyFrameParam_.position);
     globalParameter_->Bind(groupName_, "rotation", &keyFrameParam_.rotation);

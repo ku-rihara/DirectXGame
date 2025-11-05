@@ -33,7 +33,7 @@ void ParticleParameter::Init() {
    ///* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(particleName_, false);
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(particleName_);
 
     // Editor上で設定したテクスチャを適応
@@ -50,7 +50,7 @@ void ParticleParameter::Init() {
 }
 
 
-void ParticleParameter::BindParams() {
+void ParticleParameter::RegisterParams() {
     // Position
     globalParameter_->Bind(particleName_, "Position Base", &parameters_.emitPos);
     globalParameter_->Bind(particleName_, "Position Max", &parameters_.positionDist.max);

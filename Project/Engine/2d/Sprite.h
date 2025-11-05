@@ -50,7 +50,7 @@ public:
     void CreateSprite(const std::string& textureName);
 
     void AdjustParam(); //< パラメータ調整
-    void BindParams();  //< パラメータバインド 
+    void RegisterParams();  //< パラメータバインド 
     void Draw();        //<描画
 
 private:

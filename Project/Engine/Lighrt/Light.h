@@ -68,7 +68,7 @@ public:
     void DebugImGui(); //< ImGuiデバッグ表示
     void AddSpotLight(); //< スポットライト追加
     void AddPointLight(); //< ポイントライト追加
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
 private:
     DirectXCommon* dxCommon_;
