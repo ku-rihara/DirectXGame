@@ -138,28 +138,28 @@ public:
     /// </summary>
     /// <param name="groupName">グループ名</param>
     /// <param name="fileName">ファイル名</param>
-    void LoadFile(const std::string& groupName, const std::string& fileName = "");
+    void LoadFile(const std::string& groupName, const std::string& fileName = "Application");
 
     /// <summary>
     /// ファイル保存
     /// </summary>
     /// <param name="groupName">グループ名</param>
     /// <param name="fileName">ファイル名</param>
-    void SaveFile(const std::string& groupName, const std::string& fileName = "");
+    void SaveFile(const std::string& groupName, const std::string& fileName = "Application");
 
     /// <summary>
     /// ImGui用パラメータ保存
     /// </summary>
     /// <param name="groupName">グループ名</param>
     /// <param name="fileName">ファイル名</param>
-    void ParamSaveForImGui(const std::string& groupName, const std::string& fileName = "");
+    void ParamSaveForImGui(const std::string& groupName, const std::string& fileName = "Application");
 
     /// <summary>
     /// ImGui用パラメータ読み込み
     /// </summary>
     /// <param name="groupName">グループ名</param>
     /// <param name="fileName">ファイル名</param>
-    void ParamLoadForImGui(const std::string& groupName, const std::string& fileName = "");
+    void ParamLoadForImGui(const std::string& groupName, const std::string& fileName = "Application");
 
     /// <summary>
     /// グループ削除
