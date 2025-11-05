@@ -44,7 +44,7 @@ void ComboUI::AdjustParam() {
 #endif // _DEBUG
 }
 
-void ComboUI::BindParams() {
+void ComboUI::RegisterParams() {
     globalParameter_->Bind(groupName_, "position", &position_);
 }
 
@@ -107,6 +107,6 @@ void ComboUI::CreateGroupName(const ComboDigit& digit) {
     // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 }

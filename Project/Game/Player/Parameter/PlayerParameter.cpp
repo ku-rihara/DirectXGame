@@ -10,7 +10,7 @@ void PlayerParameter::Init() {
     // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
@@ -101,7 +101,7 @@ void PlayerParameter::AdjustParam() {
 ///=====================================================
 ///  ImGuiからパラメータを得る
 ///=====================================================
-void PlayerParameter::BindParams() {
+void PlayerParameter::RegisterParams() {
 
     globalParameter_->Bind(groupName_, "Translate", &playerParams_.startPos_);
     globalParameter_->Bind(groupName_, "JumpSpeed", &playerParams_.normalJump.jumpSpeed);

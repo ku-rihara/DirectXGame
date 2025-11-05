@@ -19,7 +19,7 @@ void LockOn::Init() {
     //* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
     // メインターゲット用スプライト
@@ -361,7 +361,7 @@ void LockOn::LerpTimeIncrement(const float& incrementTime) {
 ///=========================================================
 /// バインド
 ///==========================================================
-void LockOn::BindParams() {
+void LockOn::RegisterParams() {
     globalParameter_->Bind(groupName_, "minDistance", &minDistance_);
     globalParameter_->Bind(groupName_, "maxDistance", &maxDistance_);
     globalParameter_->Bind(groupName_, "angleRange", &angleRange_);

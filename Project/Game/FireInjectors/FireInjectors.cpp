@@ -12,7 +12,7 @@ void FireInjectors::Init() {
     // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
@@ -50,7 +50,7 @@ void FireInjectors::Launch() {
 ///=========================================================
 /// バインド
 ///==========================================================
-void FireInjectors::BindParams() {
+void FireInjectors::RegisterParams() {
     globalParameter_->Bind(groupName_, "fireShotComboNum", &fireShotComboNum_);
 }
 

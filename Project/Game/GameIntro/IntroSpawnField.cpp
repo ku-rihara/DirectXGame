@@ -84,8 +84,8 @@ bool IntroSpawnField::ProcessStep(const float& limitTime, const Step& nextStep, 
     return false;
 }
 
-void IntroSpawnField::BindParams() {
-    BaseGameIntro::BindParams();
+void IntroSpawnField::RegisterParams() {
+    BaseGameIntro::RegisterParams();
     globalParameter_->Bind(groupName_, "waitTime", &waitTime_);
     globalParameter_->Bind(groupName_, "objSpawnTime", &objSpawnTime_);
     globalParameter_->Bind(groupName_, "playerSpawnTime", &playerSpawnTime_);

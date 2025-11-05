@@ -40,7 +40,7 @@ public:
     void ResetSpawnCount(); //< スポーンカウントのリセット
 
     void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
 private:
     /// <summary>

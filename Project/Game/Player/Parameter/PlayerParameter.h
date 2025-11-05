@@ -64,7 +64,7 @@ public:
     // 初期化
     void Init();
 
-    void BindParams();//<パラメータバインド
+    void RegisterParams();//<パラメータバインド
     void AdjustParam();//<パラメータ編集
 
 private:

@@ -8,7 +8,7 @@ void PlayerCollisionInfo::Init() {
     // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
     SetIsCollision(false);
@@ -61,7 +61,7 @@ void PlayerCollisionInfo::ChangeAttackType(const AttackType& attackType) {
 ///==========================================================
 /// バインド
 ///==========================================================
-void PlayerCollisionInfo::BindParams() {
+void PlayerCollisionInfo::RegisterParams() {
 
     for (int32_t i = 0; i < kComboLevel; ++i) {
         globalParameter_->Bind(groupName_, "AttackSpeedRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].speedRate);

@@ -11,7 +11,7 @@ void ComboUIController::Init() {
     // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
     // Ui生成
@@ -67,7 +67,7 @@ void ComboUIController::AdjustParam() {
 ///=========================================================
 /// パラメータBind
 ///==========================================================
-void ComboUIController::BindParams() {
+void ComboUIController::RegisterParams() {
 }
 
 void ComboUIController::ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> behavior) {

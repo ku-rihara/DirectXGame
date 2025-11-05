@@ -18,7 +18,7 @@ void GameCamera::Init() {
     ///* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
     /*  rotate_ = parameter_.rotate;
@@ -126,7 +126,7 @@ Vector3 GameCamera::OffsetCalc(const Vector3& offset) const {
     return resultOffset;
 }
 
-void GameCamera::BindParams() {
+void GameCamera::RegisterParams() {
     globalParameter_->Bind(groupName_, "firstRotate_", &parameter_.rotate);
     globalParameter_->Bind(groupName_, "firstOffset_", &parameter_.offsetPos);
 }

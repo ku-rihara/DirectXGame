@@ -13,7 +13,7 @@ void PlayerEasingAnimationData::Init(const std::string& attackName) {
     globalParameter_->CreateGroup(groupName_, true);
 
     // バインド
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
@@ -29,7 +29,7 @@ void PlayerEasingAnimationData::SaveData() {
 ///==========================================================
 /// バインド
 ///==========================================================
-void PlayerEasingAnimationData::BindParams() {
+void PlayerEasingAnimationData::RegisterParams() {
    
     // MoveParam
     globalParameter_->Bind(groupName_, "moveValue", &attackParam_.moveParam.value);

@@ -49,7 +49,7 @@ public:
     void CreateGroupName(const ComboDigit& digit);
 
     void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
 private:
     ///* globalParameter *//

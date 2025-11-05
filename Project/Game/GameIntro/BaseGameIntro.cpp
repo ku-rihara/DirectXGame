@@ -7,7 +7,7 @@ void BaseGameIntro::Init(const std::string& name) {
     // Global parameter 
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
@@ -16,7 +16,7 @@ void BaseGameIntro::Update(const float& playSpeed) {
 }
 
 
-void BaseGameIntro::BindParams() {
+void BaseGameIntro::RegisterParams() {
    
 }
 

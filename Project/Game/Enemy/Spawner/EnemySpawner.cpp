@@ -12,7 +12,7 @@ void EnemySpawner::Init(const std::string& jsonData) {
     // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
@@ -171,7 +171,7 @@ void EnemySpawner::AdjustParam() {
 ///=========================================================
 /// パラメータBind
 ///==========================================================
-void EnemySpawner::BindParams() {
+void EnemySpawner::RegisterParams() {
     for (int32_t i = 0; i < spawnGroups_.size() - 1; ++i) {
         globalParameter_->Bind(groupName_, "nextFazeEnemyNum" + std::to_string(i), &spawnGroups_[i].nextFazeEnemyNum);
     }

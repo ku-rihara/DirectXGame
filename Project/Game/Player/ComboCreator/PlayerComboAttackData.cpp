@@ -13,7 +13,7 @@ void PlayerComboAttackData::Init(const std::string& attackName) {
     globalParameter_->CreateGroup(groupName_, true);
 
     // バインド
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
     // condition適応
@@ -32,7 +32,7 @@ void PlayerComboAttackData::SaveData() {
 ///==========================================================
 /// バインド
 ///==========================================================
-void PlayerComboAttackData::BindParams() {
+void PlayerComboAttackData::RegisterParams() {
     // simpleParam
     globalParameter_->Bind(groupName_, "power", &attackParam_.power);
     globalParameter_->Bind(groupName_, "KnockBackPower", &attackParam_.knockBackPower);

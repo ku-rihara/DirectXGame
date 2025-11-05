@@ -11,7 +11,7 @@ void ContinuousEnemySpawner::Init() {
     // グローバルパラメータ設定
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
     // 初期化
@@ -207,7 +207,7 @@ void ContinuousEnemySpawner::AdjustParam() {
 #endif
 }
 
-void ContinuousEnemySpawner::BindParams() {
+void ContinuousEnemySpawner::RegisterParams() {
     globalParameter_->Bind(groupName_, "enabled", &config_.isEnabled);
     globalParameter_->Bind(groupName_, "spawnInterval", &config_.spawnInterval);
     globalParameter_->Bind(groupName_, "forwardDistanceMin", &config_.forwardDistance.min);

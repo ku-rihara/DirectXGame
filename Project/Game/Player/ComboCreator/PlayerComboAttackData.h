@@ -74,7 +74,7 @@ public:
 
     // パラメータバインド、調節
     void AdjustParam();
-    void BindParams();
+    void RegisterParams();
 
     // データロード、セーブ
     void LoadData();

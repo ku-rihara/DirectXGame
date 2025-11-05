@@ -53,7 +53,7 @@ public:
     ///-------------------------------------------------------------------------------------
     /// Editor
     ///-------------------------------------------------------------------------------------
-    void BindParams();
+    void RegisterParams();
     void AdjustParam();
     void DrawEnemyParamUI(BaseEnemy::Type type);
 

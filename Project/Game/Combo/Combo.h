@@ -26,7 +26,7 @@ public:
     void Reset();               //< リセット
 
     void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
 private:
     // UIコントローラ

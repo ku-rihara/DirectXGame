@@ -93,7 +93,7 @@ public:
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 
     void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
     float GetAttackPower(); //< 攻撃力取得
     void ResetComboEffect(); //< コンボエフェクトリセット

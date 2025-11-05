@@ -20,7 +20,7 @@ void EnemyManager::Init() {
     /// グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
     /// パーティクル初期化
@@ -101,7 +101,7 @@ void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
 ///=================================================================================
 /// パラメータをグループに追加
 ///=================================================================================
-void EnemyManager::BindParams() {
+void EnemyManager::RegisterParams() {
 
     for (uint32_t i = 0; i < parameters_.size(); ++i) {
         globalParameter_->Bind(groupName_, "chaseDistance" + std::to_string(int(i + 1)), &parameters_[i].chaseDistance);

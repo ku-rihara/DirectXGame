@@ -7,7 +7,7 @@ void Combo::Init() {
     // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
     uiController_ = std::make_unique<ComboUIController>();
@@ -50,7 +50,7 @@ void Combo::AdjustParam() {
     uiController_->AdjustParam();
 }
 
-void Combo::BindParams() {
+void Combo::RegisterParams() {
     globalParameter_->Bind(groupName_, "comboTimeMax_", &comboTimeMax_);
     for (int32_t i = 0; i < kComboLevel; ++i) {
         globalParameter_->Bind(groupName_, "LevelUpComboNum" + std::to_string(int(i + 1)), &LevelUpNum[i]);

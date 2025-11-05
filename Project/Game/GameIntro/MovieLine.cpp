@@ -8,7 +8,7 @@ void MovieLine::Init() {
     /// グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
     // create
@@ -52,7 +52,7 @@ void MovieLine::ExitUpdate() {
 ///=========================================================
 /// バインド
 ///==========================================================
-void MovieLine::BindParams() {
+void MovieLine::RegisterParams() {
 
     globalParameter_->Bind(groupName_, "appearPositionUP", &appearPosition_[0]);
     globalParameter_->Bind(groupName_, "appearPositionDown", &appearPosition_[1]);

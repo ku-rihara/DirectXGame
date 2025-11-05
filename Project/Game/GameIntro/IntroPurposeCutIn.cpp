@@ -109,8 +109,8 @@ bool IntroPurposeCutIn::ProcessStep(const float& limitTime, const Step& nextStep
     return false;
 }
 
-void IntroPurposeCutIn::BindParams() {
-    BaseGameIntro::BindParams();
+void IntroPurposeCutIn::RegisterParams() {
+    BaseGameIntro::RegisterParams();
 
     globalParameter_->Bind(groupName_, "AppearWaitTime", &sideAppearWaitTime_);
     globalParameter_->Bind(groupName_, "closeWaitTime", &closeWaitTime_);
