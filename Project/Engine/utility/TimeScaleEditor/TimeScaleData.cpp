@@ -11,7 +11,7 @@ void TimeScaleData::Init(const std::string& timeScaleName) {
 
     // 重複バインドを防ぐ
     if (!globalParameter_->HasBindings(groupName_)) {
-        BindParams();
+        RegisterParams();
     }
     
     // パラメータ同期
@@ -27,7 +27,7 @@ void TimeScaleData::SaveData() {
     globalParameter_->SaveFile(groupName_, folderPath_);
 }
 
-void TimeScaleData::BindParams() {
+void TimeScaleData::RegisterParams() {
     globalParameter_->Bind(groupName_, "timeScale", &timeScale_);
     globalParameter_->Bind(groupName_, "duration", &duration_);
 }

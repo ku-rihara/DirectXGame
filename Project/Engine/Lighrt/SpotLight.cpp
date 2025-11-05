@@ -10,7 +10,7 @@ void SpotLight::Init(ID3D12Device* device, const std::string& groupName) {
     groupName_       = groupName;
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
@@ -24,7 +24,7 @@ void SpotLight::Update() {
 void SpotLight::DebugImGui() {
 }
 
-void SpotLight::BindParams() {
+void SpotLight::RegisterParams() {
     lightData_->decay = max(lightData_->decay,0.1f);
     globalParameter_->Bind(groupName_, "Color", &lightData_->color);
     globalParameter_->Bind(groupName_, "Pos", &tempPos_);

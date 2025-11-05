@@ -59,7 +59,7 @@ public:
     bool IsFinished() const; //< 終了したか
 
 private:
-    void BindParams(); //< パラメータのバインド
+    void RegisterParams(); //< パラメータのバインド
     void UpdateShakeValues(); //< シェイク値の計算
     void UpdateVector3Shake(); //< Vector3シェイクの更新
 

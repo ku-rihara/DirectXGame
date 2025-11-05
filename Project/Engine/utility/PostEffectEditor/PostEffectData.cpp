@@ -12,7 +12,7 @@ void PostEffectData::Init(const std::string& postEffectName) {
 
     // 重複バインドを防ぐ
     if (!globalParameter_->HasBindings(groupName_)) {
-        BindParams();
+        RegisterParams();
     }
 
     // パラメータ同期
@@ -28,7 +28,7 @@ void PostEffectData::SaveData() {
     globalParameter_->SaveFile(groupName_, folderPath_);
 }
 
-void PostEffectData::BindParams() {
+void PostEffectData::RegisterParams() {
     globalParameter_->Bind(groupName_, "postEffectModeIndex", &postEffectModeIndex_);
     globalParameter_->Bind(groupName_, "duration", &duration_);
 }

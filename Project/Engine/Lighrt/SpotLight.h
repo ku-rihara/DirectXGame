@@ -41,7 +41,7 @@ public:
     void Update();     //< 更新処理
     void DebugImGui(); //< ImGuiデバッグ表示
     void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
 private:
     bool isMove_;

@@ -19,7 +19,7 @@ void Light::Init(DirectXCommon* dxCommon) {
     ///* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
     // 鏡面反射
@@ -108,7 +108,7 @@ void Light::DebugImGui() {
     ImGui::End();
 }
 
-void Light::BindParams() {
+void Light::RegisterParams() {
     globalParameter_->Bind(groupName_,"spotLightCoutMax", &spotLightCoutMax_);
 }
 

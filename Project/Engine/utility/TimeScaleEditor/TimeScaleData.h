@@ -21,7 +21,7 @@ public:
     void SaveData(); //< データセーブ
 
 private:
-    void BindParams(); //< パラメータのバインド
+    void RegisterParams(); //< パラメータのバインド
 
 private:
     GlobalParameter* globalParameter_;

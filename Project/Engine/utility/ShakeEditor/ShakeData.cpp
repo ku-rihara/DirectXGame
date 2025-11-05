@@ -13,7 +13,7 @@ void ShakeData::Init(const std::string& shakeName) {
 
     // 重複バインドを防ぐ
     globalParameter_->ClearBindingsForGroup(groupName_);
-    BindParams();
+    RegisterParams();
 
     // パラメータ同期
     globalParameter_->SyncParamForGroup(groupName_);
@@ -122,7 +122,7 @@ void ShakeData::SaveData() {
     globalParameter_->SaveFile(groupName_, folderPath_);
 }
 
-void ShakeData::BindParams() {
+void ShakeData::RegisterParams() {
     globalParameter_->Bind(groupName_, "shakeLength", &shakeLength_);
     globalParameter_->Bind(groupName_, "maxTime", &maxTime_);
     globalParameter_->Bind(groupName_, "easeType", &easeType_);

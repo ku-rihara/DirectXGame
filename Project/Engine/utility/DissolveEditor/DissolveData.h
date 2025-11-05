@@ -43,7 +43,7 @@ public:
     bool IsFinished() const; //< 終了判定
 
 private:
-    void BindParams();           //< パラメータバインド
+    void RegisterParams();           //< パラメータバインド
     void UpdateDissolveValues(); //< ディゾルブ値更新
 
 private:

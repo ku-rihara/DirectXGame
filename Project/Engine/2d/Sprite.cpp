@@ -49,7 +49,7 @@ void Sprite::ParamEditorSet(const std::string& textureName, const bool& isAbleEd
 
     // グループ作成
     globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
@@ -216,7 +216,7 @@ void Sprite::Draw() {
 ///=========================================================
 /// バインド
 ///==========================================================
-void Sprite::BindParams() {
+void Sprite::RegisterParams() {
     globalParameter_->Bind(groupName_, "layerNum", &parameter_.startLayerNum_);
     globalParameter_->Bind(groupName_, "startPosition", &parameter_.position_);
     globalParameter_->Bind(groupName_, "startScale", &parameter_.scale_);

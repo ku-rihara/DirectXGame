@@ -47,7 +47,7 @@ public:
     void TimeModeSelector(const char* label, int32_t& target);
 
     void AdjustParam();       //< パラメータ調整
-    void BindParams();        //< パラメータバインド
+    void RegisterParams();        //< パラメータバインド
     void AdaptEaseParam();    //< イージングパラメータ適用
     void AdaptValueSetting(); //< 値設定適用
     void Reset();             //< リセット

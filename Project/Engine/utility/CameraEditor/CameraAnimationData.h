@@ -63,7 +63,7 @@ public:
     void SaveData();         //< データ保存
 
 private:
-    void BindParams();                //< パラメータバインド
+    void RegisterParams();                //< パラメータバインド
     void UpdateKeyFrameProgression(); //< キーフレーム進行更新
     void AdvanceToNextKeyFrame();     //< 次のキーフレームへ進む
     void UpdateInterpolatedValues();  //< 補間値更新

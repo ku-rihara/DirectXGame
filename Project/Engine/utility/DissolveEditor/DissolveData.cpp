@@ -12,7 +12,7 @@ void DissolveData::Init(const std::string& dissolveName) {
 
     // 重複バインドを防ぐ
     if (!globalParameter_->HasBindings(groupName_)) {
-        BindParams();
+        RegisterParams();
     }
 
     // パラメータ同期
@@ -112,7 +112,7 @@ void DissolveData::SaveData() {
     globalParameter_->SaveFile(groupName_, folderPath_);
 }
 
-void DissolveData::BindParams() {
+void DissolveData::RegisterParams() {
     globalParameter_->Bind(groupName_, "startThreshold", &startThreshold_);
     globalParameter_->Bind(groupName_, "endThreshold", &endThreshold_);
     globalParameter_->Bind(groupName_, "maxTime", &maxTime_);

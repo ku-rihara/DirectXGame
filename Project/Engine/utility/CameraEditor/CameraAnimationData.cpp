@@ -18,7 +18,7 @@ void CameraAnimationData::Init(const std::string& animationName) {
 
     // 重複バインドを防ぐ
     globalParameter_->ClearBindingsForGroup(groupName_);
-    BindParams();
+    RegisterParams();
 
     // パラメータ同期
     globalParameter_->SyncParamForGroup(groupName_);
@@ -361,7 +361,7 @@ void CameraAnimationData::Reset() {
     playState_ = PlayState::STOPPED;
 }
 
-void CameraAnimationData::BindParams() {
+void CameraAnimationData::RegisterParams() {
     // メイン設定
     globalParameter_->Bind(groupName_, "autoReturnToInitial", &autoReturnToInitial_);
     globalParameter_->Bind(groupName_, "resetPosEaseType", &resetPosEaseType_);
