@@ -23,7 +23,7 @@ void ShakeData::Init(const std::string& shakeName) {
     timeEase_.SetStartValue(startTime_);
     timeEase_.SetEndValue(0.0f);
 
-     timeEase_.SetOnFinishCallback([this]() {
+    timeEase_.SetOnFinishCallback([this]() {
         Stop();
         Reset();
     });
@@ -94,7 +94,6 @@ void ShakeData::Play() {
     timeEase_.SetType(static_cast<EasingType>(easeType_));
     timeEase_.Reset();
     easedTime_ = startTime_;
-
 }
 
 void ShakeData::Stop() {
@@ -139,14 +138,17 @@ void ShakeData::AdjustParam() {
         ImGui::PushID(groupName_.c_str());
 
         // 再生制御
-        if (ImGui::Button("Play"))
+        if (ImGui::Button("Play")) {
             Play();
+        }
         ImGui::SameLine();
-        if (ImGui::Button("Stop"))
+        if (ImGui::Button("Stop")) {
             Stop();
+        }
         ImGui::SameLine();
-        if (ImGui::Button("Reset"))
+        if (ImGui::Button("Reset")) {
             Reset();
+        }
 
         // 状態表示
         const char* stateText = "";
@@ -178,24 +180,27 @@ void ShakeData::AdjustParam() {
 
         ImGui::Text("Active Axes:");
         if (ImGui::Checkbox("X", &x)) {
-            if (x)
+            if (x) {
                 axisFlag_ |= AXIS_X;
-            else
+            } else {
                 axisFlag_ &= ~AXIS_X;
+            }
         }
         ImGui::SameLine();
         if (ImGui::Checkbox("Y", &y)) {
-            if (y)
+            if (y) {
                 axisFlag_ |= AXIS_Y;
-            else
+            } else {
                 axisFlag_ &= ~AXIS_Y;
+            }
         }
         ImGui::SameLine();
         if (ImGui::Checkbox("Z", &z)) {
-            if (z)
+            if (z) {
                 axisFlag_ |= AXIS_Z;
-            else
+            } else {
                 axisFlag_ &= ~AXIS_Z;
+            }
         }
 
         ImGui::Separator();
