@@ -1,22 +1,17 @@
-#include "PlayerComboAttackController.h"
+#include "PlayerEasingAnimation.h"
 #include <algorithm>
 #include <filesystem>
 #include <imgui.h>
 #include <Windows.h>
 
-void PlayerComboAttackController::Init() {
-    // 共通パラメータの初期化
-    globalParameter_ = GlobalParameter::GetInstance();
-    globalParameter_->CreateGroup(commonGroupName_, false);
-    BindCommonParams();
-    globalParameter_->SyncParamForGroup(commonGroupName_);
-
+void PlayerEasingAnimation::Init() {
+  
     AllLoadFile();
 }
 
-void PlayerComboAttackController::AllLoadFile() {
+void PlayerEasingAnimation::AllLoadFile() {
 
-    // AttackCreatorのPlayerComboAttackDataフォルダ内のすべてのファイルを検索
+    // AttackCreatorのPlayerEasingAnimationDataフォルダ内のすべてのファイルを検索
     if (std::filesystem::exists(AttackDataFolderPath_) && std::filesystem::is_directory(AttackDataFolderPath_)) {
         // 既存の攻撃データをクリア
         attacks_.clear();
@@ -26,13 +21,9 @@ void PlayerComboAttackController::AllLoadFile() {
             if (entry.is_regular_file() && entry.path().extension() == ".json") {
                 std::string fileName = entry.path().stem().string();
 
-                // 共通パラメータファイルはスキップ
-                if (fileName == commonGroupName_) {
-                    continue;
-                }
 
                 // 新規作成してロード
-                auto attack = std::make_unique<PlayerComboAttackData>();
+                auto attack = std::make_unique<PlayerEasingAnimationData>();
                 attack->Init(fileName);
                 attack->LoadData(); // Load
                 attacks_.push_back(std::move(attack));
@@ -41,7 +32,7 @@ void PlayerComboAttackController::AllLoadFile() {
     }
 }
 
-void PlayerComboAttackController::Update(const float& deltaTime) {
+void PlayerEasingAnimation::Update(const float& deltaTime) {
     // すべての攻撃データを更新
     for (auto& attack : attacks_) {
         // 必要に応じて更新処理
@@ -50,7 +41,7 @@ void PlayerComboAttackController::Update(const float& deltaTime) {
     }
 }
 
-void PlayerComboAttackController::EditorUpdate() {
+void PlayerEasingAnimation::EditorUpdate() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader("Attack Creator Manager")) {
         ImGui::PushID("Attack Creator Manager");
@@ -151,14 +142,14 @@ void PlayerComboAttackController::EditorUpdate() {
 #endif
 }
 
-void PlayerComboAttackController::AddAttack(const std::string& attackName) {
-    auto attack = std::make_unique<PlayerComboAttackData>();
+void PlayerEasingAnimation::AddAttack(const std::string& attackName) {
+    auto attack = std::make_unique<PlayerEasingAnimationData>();
     attack->Init(attackName);
     attacks_.push_back(std::move(attack));
     selectedIndex_ = static_cast<int>(attacks_.size()) - 1;
 }
 
-void PlayerComboAttackController::RemoveAttack(const int& index) {
+void PlayerEasingAnimation::RemoveAttack(const int& index) {
     if (index >= 0 && index < static_cast<int>(attacks_.size())) {
         attacks_.erase(attacks_.begin() + index);
 
@@ -174,26 +165,24 @@ void PlayerComboAttackController::RemoveAttack(const int& index) {
     }
 }
 
-void PlayerComboAttackController::AllSaveFile() {
-    // 共通パラメータを保存
-    globalParameter_->SaveFile(commonGroupName_);
-
+void PlayerEasingAnimation::AllSaveFile() {
+  
     // すべての攻撃データを保存
     for (auto& attack : attacks_) {
         attack->SaveData();
     }
 }
 
-PlayerComboAttackData* PlayerComboAttackController::GetSelectedAttack() {
+PlayerEasingAnimationData* PlayerEasingAnimation::GetSelectedAttack() {
     if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(attacks_.size())) {
         return attacks_[selectedIndex_].get();
     }
     return nullptr;
 }
 
-PlayerComboAttackData* PlayerComboAttackController::GetAttackByName(const std::string& name) {
+PlayerEasingAnimationData* PlayerEasingAnimation::GetAttackByName(const std::string& name) {
     auto it = std::find_if(attacks_.begin(), attacks_.end(),
-        [&name](const std::unique_ptr<PlayerComboAttackData>& attack) {
+        [&name](const std::unique_ptr<PlayerEasingAnimationData>& attack) {
             return attack->GetGroupName() == name;
         });
 
@@ -201,38 +190,4 @@ PlayerComboAttackData* PlayerComboAttackController::GetAttackByName(const std::s
         return it->get();
     }
     return nullptr;
-}
-
-///==========================================================
-/// 共通パラメータバインド
-///==========================================================
-void PlayerComboAttackController::BindCommonParams() {
-    for (int32_t i = 0; i < kComboLevel; ++i) {
-        globalParameter_->Bind(commonGroupName_, "AttackSpeedRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].speedRate);
-        globalParameter_->Bind(commonGroupName_, "AttackPowerRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].powerRate);
-    }
-}
-
-///==========================================================
-/// 共通パラメータ調整
-///==========================================================
-void PlayerComboAttackController::AdjustCommonParam() {
-#ifdef _DEBUG
-    if (ImGui::CollapsingHeader("Common Combo Parameters")) {
-        ImGui::PushID("CommonComboParams");
-
-        // attackLevel Values
-        for (int32_t i = 0; i < kComboLevel; ++i) {
-            ImGui::SeparatorText(("AttackValue Level " + std::to_string(int(i + 1))).c_str());
-            ImGui::DragFloat(("AttackSpeedRate" + std::to_string(int(i + 1))).c_str(), &attackValueForLevel_[i].speedRate, 0.01f);
-            ImGui::DragFloat(("AttackPowerRate" + std::to_string(int(i + 1))).c_str(), &attackValueForLevel_[i].powerRate, 0.01f);
-        }
-
-        // セーブ・ロード
-        globalParameter_->ParamSaveForImGui(commonGroupName_);
-        globalParameter_->ParamLoadForImGui(commonGroupName_);
-
-        ImGui::PopID();
-    }
-#endif // _DEBUG
 }

@@ -207,6 +207,8 @@
     <ClCompile Include="Game\Player\ComboCreator\PlayerAttackRenditionData.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackController.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackData.cpp" />
+    <ClCompile Include="Game\Player\EasingAnimation\PlayerEasingAnimation.cpp" />
+    <ClCompile Include="Game\Player\EasingAnimation\PlayerEasingAnimationData.cpp" />
     <ClCompile Include="Game\Player\Effect\PlayerEffects.cpp" />
     <ClCompile Include="Game\Player\JumpAttackUI\JumpAttackUI.cpp" />
     <ClCompile Include="Game\Player\Parameter\PlayerParameter.cpp" />
@@ -460,6 +462,8 @@
     <ClInclude Include="Game\Player\ComboCreator\PlayerAttackRenditionData.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackController.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackData.h" />
+    <ClInclude Include="Game\Player\EasingAnimation\PlayerEasingAnimation.h" />
+    <ClInclude Include="Game\Player\EasingAnimation\PlayerEasingAnimationData.h" />
     <ClInclude Include="Game\Player\Effect\PlayerEffects.h" />
     <ClInclude Include="Game\Player\JumpAttackUI\JumpAttackUI.h" />
     <ClInclude Include="Game\Player\Parameter\PlayerParameter.h" />

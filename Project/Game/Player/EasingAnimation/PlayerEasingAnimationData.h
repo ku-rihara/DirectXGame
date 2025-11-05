@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Easing/Easing.h"
-#include "PlayerAttackRenditionData.h"
+#include "PlayerEasingAnimationData.h"
 #include "utility/FileSelector/FileSelector.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
 #include "Vector3.h"
@@ -10,59 +10,22 @@
 #include <vector>
 
 /// <summary>
-/// プレイヤー攻撃データクラス
+/// プレイヤーイージングアニメーションデータクラス
 /// </summary>
-class PlayerComboAttackData {
+class PlayerEasingAnimationData {
 public:
-    enum class TriggerCondition {
-        GROUND, // 地上のみ
-        AIR, // 空中のみ
-        BOTH // 両方
+
+    struct HandParam {
     };
 
-public:
-    // 移動パラメータ
-    struct MoveParam {
-        Vector3 value;
-        int32_t easeType = 0;
-        float easeTime;
-    };
+    // アニメーションパラメータ
+    struct AnimationParameters {
 
-    // コリジョンパラメータ
-    struct CollisionParam {
-        Vector3 size;
-        Vector3 offsetPos;
-        float adaptTime;
-    };
-
-    // タイミングパラメータ
-    struct TimingParam {
-        float cancelFrame;
-        float precedeInputFrame;
-    };
-
-    // 攻撃発動に関するパラメータ
-    struct TriggerParam {
-        bool isFirstAttack;
-        TriggerCondition condition;
-        int32_t keyBordBottom;
-        int32_t gamePadBottom;
-    };
-
-    // アタックパラメータ
-    struct AttackParameter {
-        CollisionParam collisionPara;
-        MoveParam moveParam;
-        TimingParam timingParam;
-        TriggerParam triggerParam;
-        float knockBackPower;
-        float power;
-        std::string nextAttackType;
     };
 
 public:
-    PlayerComboAttackData()  = default;
-    ~PlayerComboAttackData() = default;
+    PlayerEasingAnimationData()  = default;
+    ~PlayerEasingAnimationData() = default;
 
     //*-------------------------------- public Method --------------------------------*//
 
@@ -91,9 +54,9 @@ private:
 
     GlobalParameter* globalParameter_;
     std::string groupName_;
-    const std::string folderPath_ = "AttackCreator";
+    const std::string folderPath_ = "PlayerEasingAnimation";
 
-    PlayerAttackRenditionData renditionData_;
+    PlayerEasingAnimationData renditionData_;
     FileSelector fileSelector_;
 
     // 攻撃パラメータ
