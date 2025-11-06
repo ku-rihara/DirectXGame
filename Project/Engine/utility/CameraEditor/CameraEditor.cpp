@@ -3,7 +3,7 @@
 #include <imgui.h>
 
 void CameraEditor::Init(ViewProjection* vp) {
-    AllLoadFile(true);
+    AllLoadFile();
     SetViewProjection(vp);
     preViewCameraObj_.reset(Object3d::CreateModel("debugCube.obj"));
     preViewFollowObj_.reset(Object3d::CreateModel("debugCube.obj"));
@@ -12,7 +12,7 @@ void CameraEditor::Init(ViewProjection* vp) {
     preViewFollowObj_->SetIsDraw(false);
 }
 
-void CameraEditor::AllLoadFile(const bool& isKeyFrameReconstruction) {
+void CameraEditor::AllLoadFile() {
     // CameraAnimationのAnimationDataフォルダ内のすべてのファイルを検索
     std::string folderPath = "Resources/GlobalParameter/CameraAnimation/AnimationData/";
 
@@ -28,7 +28,7 @@ void CameraEditor::AllLoadFile(const bool& isKeyFrameReconstruction) {
                 // 新規作成してロード
                 auto anim = std::make_unique<CameraAnimationData>();
                 anim->Init(fileName);
-                anim->LoadData(isKeyFrameReconstruction);
+                anim->LoadData();
                 animations_.push_back(std::move(anim));
             }
         }
@@ -237,7 +237,7 @@ void CameraEditor::EditorUpdate() {
             ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
             ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
             if (ImGui::Button(("Load " + animName).c_str())) {
-                selectedAnim->LoadData(false);
+                selectedAnim->LoadData();
             }
             ImGui::PopStyleColor(3);
 
@@ -262,7 +262,7 @@ void CameraEditor::EditorUpdate() {
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
         if (ImGui::Button("Load All CameraAnimations")) {
-            AllLoadFile(false);
+            AllLoadFile();
         }
         ImGui::PopStyleColor(3);
         ImGui::SameLine();

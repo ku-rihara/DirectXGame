@@ -24,7 +24,7 @@ void CameraAnimation::Play(const std::string& animationName) {
     currentAnimationName_ = animationName;
     // アニメーションデータの初期化とロード
     animationData_->Init(currentAnimationName_);
-    animationData_->LoadData(false);
+    animationData_->InitKeyFrames();
 
     // 現在の値を初期値として保存
     SaveInitialValues();

@@ -11,9 +11,9 @@
 void CameraAnimationData::Init(const std::string& animationName) {
 
     // グループ名設定
-    globalParameter_      = GlobalParameter::GetInstance();
-    groupName_            = animationName;
-  
+    globalParameter_ = GlobalParameter::GetInstance();
+    groupName_       = animationName;
+
     if (!globalParameter_->HasRegisters(animationName)) {
         // 新規登録
         globalParameter_->CreateGroup(groupName_, true);
@@ -42,12 +42,12 @@ void CameraAnimationData::ResetValue() {
     returnFovEase_.SetAdaptValue(&returnFov_);
 }
 
-void CameraAnimationData::LoadData(const bool& isKeyFrameReconstruction) {
+void CameraAnimationData::LoadData() {
 
     // アニメーションデータのロード
     globalParameter_->LoadFile(groupName_, folderPath_);
     // キーフレームデータのロード
-    LoadKeyFrames(isKeyFrameReconstruction);
+    LoadKeyFrames();
     // 値同期
     globalParameter_->SyncParamForGroup(groupName_);
 }
@@ -67,7 +67,7 @@ void CameraAnimationData::SaveAllKeyFrames() {
     }
 }
 
-void CameraAnimationData::LoadKeyFrames(const bool& isKeyFrameReconstruction) {
+void CameraAnimationData::LoadKeyFrames() {
     std::string folderPath     = "Resources/GlobalParameter/CameraAnimation/KeyFrames/";
     std::string keyFramePrefix = groupName_;
 
@@ -94,9 +94,9 @@ void CameraAnimationData::LoadKeyFrames(const bool& isKeyFrameReconstruction) {
         // インデックス順にソート
         std::sort(keyFrameFiles.begin(), keyFrameFiles.end());
 
-        KeyFrameAllLoad(keyFrameFiles, isKeyFrameReconstruction);
+        KeyFrameAllLoad(keyFrameFiles);
 
-         // 最初のキーフレームを選択状態に
+        // 最初のキーフレームを選択状態に
         if (!keyFrames_.empty()) {
             selectedKeyFrameIndex_ = 0;
 
@@ -107,12 +107,12 @@ void CameraAnimationData::LoadKeyFrames(const bool& isKeyFrameReconstruction) {
     }
 }
 
-void CameraAnimationData::KeyFrameAllLoad(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles, const bool& isKeyFrameReconstruction) {
+void CameraAnimationData::KeyFrameAllLoad(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles) {
 
     // 再構築
-    if (isKeyFrameReconstruction) {
+    if (keyFrames_.size() == 0) {
         // 既存のキーフレームをクリア
-        ClearAllKeyFrames();
+        ClearKeyFrames();
         // キーフレームを作成してロード
         for (const auto& [index, fileName] : KeyFrameFiles) {
             auto newKeyFrame = std::make_unique<CameraKeyFrame>();
@@ -325,7 +325,7 @@ void CameraAnimationData::RemoveKeyFrame(const int32_t& index) {
     }
 }
 
-void CameraAnimationData::ClearAllKeyFrames() {
+void CameraAnimationData::ClearKeyFrames() {
     keyFrames_.clear();
     selectedKeyFrameIndex_ = -1;
     activeKeyFrameIndex_   = 0;
@@ -335,6 +335,13 @@ void CameraAnimationData::ClearAllKeyFrames() {
 
     lastCompletedKeyFrameIndex_ = -1;
 }
+
+void CameraAnimationData::InitKeyFrames() {
+    // すべてのキーフレームを保存
+    for (int32_t i = 0; i < keyFrames_.size();++i) {
+        keyFrames_[i]->Init(groupName_, i);
+    }
+ }
 
 bool CameraAnimationData::IsFinished() const {
     return isAllKeyFramesFinished_;
@@ -491,7 +498,7 @@ void CameraAnimationData::AdjustParam() {
         }
         ImGui::SameLine();
         if (ImGui::Button("Clear All KeyFrames")) {
-            ClearAllKeyFrames();
+            ClearKeyFrames();
         }
     }
     ImGui::Separator();
@@ -560,12 +567,6 @@ void CameraAnimationData::SetSelectedKeyFrameIndex(const int32_t& index) {
     }
 }
 
-CameraKeyFrame* CameraAnimationData::GetSelectedKeyFrame() {
-    if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
-        return keyFrames_[selectedKeyFrameIndex_].get();
-    }
-    return nullptr;
-}
 
 const CameraKeyFrame* CameraAnimationData::GetSelectedKeyFrame() const {
     if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {

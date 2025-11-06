@@ -25,38 +25,32 @@ public:
 
     /// 初期化
     void Init(const std::string& animationName);
-   
-    /// <summary>
-    /// 更新
-    /// </summary>
-    /// <param name="speedRate">速度倍率</param>
     void Update(const float& speedRate = 1.0f);
 
-    /// <summary>
     /// ViewProjectionへの適用
-    /// </summary>
-    /// <param name="viewProjection">ビュープロジェクション</param>
     void ApplyToViewProjection(ViewProjection& viewProjection);
 
     /// <summary>
-    /// アクティブキーフレーム更新
+    /// アクティブなキーフレーム更新
     /// </summary>
     /// <param name="speedRate">速度倍率</param>
     void UpdateActiveKeyFrames(const float& speedRate = 1.0f);
 
-     void AddKeyFrame();                       //< キーフレーム追加
+    void AddKeyFrame();                        //< キーフレーム追加
     void RemoveKeyFrame(const int32_t& index); //< キーフレーム削除
-    void ClearAllKeyFrames();                  //< 全キーフレームクリア
+    void ClearKeyFrames();                     //< 全キーフレームクリア
+    void InitKeyFrames();                      //< キーフレーム初期化
 
-    void Play();  //< 再生
-    void Pause(); //< 一時停止
-    void Reset(); //< リセット
+    // 再生、一時停止、リセット
+    void Play();  
+    void Pause(); 
+    void Reset(); 
 
-    void LoadData(const bool& isKeyFrameReconstruction);      //< データ読み込み
-    void LoadKeyFrames(const bool& isKeyFrameReconstruction); //< 全キーフレーム読み込み
-    void SaveAllKeyFrames();                                  //< 全キーフレーム保存
-    void SaveData();                                          //< データ保存
-    void AdjustParam();                                       //< ImGuiパラメータ調整
+    void LoadData();                //< データ読み込み
+    void LoadKeyFrames();           //< 全キーフレーム読み込み
+    void SaveAllKeyFrames();        //< 全キーフレーム保存
+    void SaveData();                //< データ保存
+    void AdjustParam();             //< ImGuiパラメータ調整
 
 private:
     void RegisterParams();            //< パラメータ登録
@@ -67,7 +61,7 @@ private:
 
     void ResetValue();
     void LoadParams();
-    void KeyFrameAllLoad(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles, const bool& isKeyFrameReconstruction);
+    void KeyFrameAllLoad(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
 
     /// <summary>
     /// タイムモードセレクター
@@ -140,7 +134,6 @@ public:
     const bool& IsReturningToInitial() const { return isReturningToInitial_; }
 
     const int32_t& GetSelectedKeyFrameIndex() const { return selectedKeyFrameIndex_; }
-    CameraKeyFrame* GetSelectedKeyFrame();
     const CameraKeyFrame* GetSelectedKeyFrame() const;
 
     void SetSelectedKeyFrameIndex(const int32_t& index);
