@@ -64,16 +64,16 @@ void PlayerCollisionInfo::ChangeAttackType(const AttackType& attackType) {
 void PlayerCollisionInfo::RegisterParams() {
 
     for (int32_t i = 0; i < kComboLevel; ++i) {
-        globalParameter_->Bind(groupName_, "AttackSpeedRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].speedRate);
-        globalParameter_->Bind(groupName_, "AttackPowerRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].powerRate);
+        globalParameter_->Regist(groupName_, "AttackSpeedRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].speedRate);
+        globalParameter_->Regist(groupName_, "AttackPowerRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].powerRate);
     }
 
     for (int32_t i = 0; i < attackParam_.size(); ++i) {
         std::string attackTypeName = GetAttackTypeName(static_cast<AttackType>(i));
-        globalParameter_->Bind(groupName_, "offsetValue_" + attackTypeName, &attackParam_[i].collisionOffsetValue);
-        globalParameter_->Bind(groupName_, "ColliderSize_" + attackTypeName, &attackParam_[i].collisionSize);
-        globalParameter_->Bind(groupName_, "adaptTime_" + attackTypeName, &attackParam_[i].adaptTime);
-        globalParameter_->Bind(groupName_, "power_" + attackTypeName, &attackParam_[i].power);
+        globalParameter_->Regist(groupName_, "offsetValue_" + attackTypeName, &attackParam_[i].collisionOffsetValue);
+        globalParameter_->Regist(groupName_, "ColliderSize_" + attackTypeName, &attackParam_[i].collisionSize);
+        globalParameter_->Regist(groupName_, "adaptTime_" + attackTypeName, &attackParam_[i].adaptTime);
+        globalParameter_->Regist(groupName_, "power_" + attackTypeName, &attackParam_[i].power);
     }
 }
 

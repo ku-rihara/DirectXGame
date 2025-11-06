@@ -52,84 +52,84 @@ void ParticleParameter::Init() {
 
 void ParticleParameter::RegisterParams() {
     // Position
-    globalParameter_->Bind(particleName_, "Position Base", &parameters_.emitPos);
-    globalParameter_->Bind(particleName_, "Position Max", &parameters_.positionDist.max);
-    globalParameter_->Bind(particleName_, "Position Min", &parameters_.positionDist.min);
+    globalParameter_->Regist(particleName_, "Position Base", &parameters_.emitPos);
+    globalParameter_->Regist(particleName_, "Position Max", &parameters_.positionDist.max);
+    globalParameter_->Regist(particleName_, "Position Min", &parameters_.positionDist.min);
 
     // Scale
-    globalParameter_->Bind(particleName_, "Scale Max", &parameters_.scaleDist.max);
-    globalParameter_->Bind(particleName_, "Scale Min", &parameters_.scaleDist.min);
-    globalParameter_->Bind(particleName_, "ScaleV3 Max", &parameters_.scaleDistV3.max);
-    globalParameter_->Bind(particleName_, "ScaleV3 Min", &parameters_.scaleDistV3.min);
+    globalParameter_->Regist(particleName_, "Scale Max", &parameters_.scaleDist.max);
+    globalParameter_->Regist(particleName_, "Scale Min", &parameters_.scaleDist.min);
+    globalParameter_->Regist(particleName_, "ScaleV3 Max", &parameters_.scaleDistV3.max);
+    globalParameter_->Regist(particleName_, "ScaleV3 Min", &parameters_.scaleDistV3.min);
 
     // Rotate
-    globalParameter_->Bind(particleName_, "Rotate Base", &parameters_.baseRotate);
-    globalParameter_->Bind(particleName_, "Rotate Max", &parameters_.rotateDist.max);
-    globalParameter_->Bind(particleName_, "Rotate Min", &parameters_.rotateDist.min);
-    globalParameter_->Bind(particleName_, "RotateSpeed Max", &parameters_.rotateSpeedDist.max);
-    globalParameter_->Bind(particleName_, "RotateSpeed Min", &parameters_.rotateSpeedDist.min);
+    globalParameter_->Regist(particleName_, "Rotate Base", &parameters_.baseRotate);
+    globalParameter_->Regist(particleName_, "Rotate Max", &parameters_.rotateDist.max);
+    globalParameter_->Regist(particleName_, "Rotate Min", &parameters_.rotateDist.min);
+    globalParameter_->Regist(particleName_, "RotateSpeed Max", &parameters_.rotateSpeedDist.max);
+    globalParameter_->Regist(particleName_, "RotateSpeed Min", &parameters_.rotateSpeedDist.min);
 
     // UV
-    globalParameter_->Bind(particleName_, "UV Pos", &parameters_.uvParm.pos);
-    globalParameter_->Bind(particleName_, "UV Rotate", &parameters_.uvParm.rotate);
-    globalParameter_->Bind(particleName_, "UV NumOfFrame", &parameters_.uvParm.numOfFrame);
-    globalParameter_->Bind(particleName_, "UV ScroolSpeed", &parameters_.uvParm.frameScroolSpeed);
-    globalParameter_->Bind(particleName_, "UV IsRoop", &parameters_.uvParm.isRoop);
-    globalParameter_->Bind(particleName_, "UV isScroolEachPixel", &parameters_.uvParm.isScroolEachPixel);
-    globalParameter_->Bind(particleName_, "UV isScrool", &parameters_.uvParm.isScrool);
-    globalParameter_->Bind(particleName_, "UV isFlipX", &parameters_.uvParm.isFlipX);
-    globalParameter_->Bind(particleName_, "UV isFlipY", &parameters_.uvParm.isFlipY);
+    globalParameter_->Regist(particleName_, "UV Pos", &parameters_.uvParm.pos);
+    globalParameter_->Regist(particleName_, "UV Rotate", &parameters_.uvParm.rotate);
+    globalParameter_->Regist(particleName_, "UV NumOfFrame", &parameters_.uvParm.numOfFrame);
+    globalParameter_->Regist(particleName_, "UV ScroolSpeed", &parameters_.uvParm.frameScroolSpeed);
+    globalParameter_->Regist(particleName_, "UV IsRoop", &parameters_.uvParm.isRoop);
+    globalParameter_->Regist(particleName_, "UV isScroolEachPixel", &parameters_.uvParm.isScroolEachPixel);
+    globalParameter_->Regist(particleName_, "UV isScrool", &parameters_.uvParm.isScrool);
+    globalParameter_->Regist(particleName_, "UV isFlipX", &parameters_.uvParm.isFlipX);
+    globalParameter_->Regist(particleName_, "UV isFlipY", &parameters_.uvParm.isFlipY);
 
     // Velocity
-    globalParameter_->Bind(particleName_, "Speed Max", &parameters_.speedDist.max);
-    globalParameter_->Bind(particleName_, "Speed Min", &parameters_.speedDist.min);
-    globalParameter_->Bind(particleName_, "SpeedV3 Max", &parameters_.velocityDistV3.max);
-    globalParameter_->Bind(particleName_, "SpeedV3 Min", &parameters_.velocityDistV3.min);
-    globalParameter_->Bind(particleName_, "Direction Max", &parameters_.directionDist.max);
-    globalParameter_->Bind(particleName_, "Direction Min", &parameters_.directionDist.min);
-    globalParameter_->Bind(particleName_, "isFloatVelocity", &parameters_.isFloatVelocity);
+    globalParameter_->Regist(particleName_, "Speed Max", &parameters_.speedDist.max);
+    globalParameter_->Regist(particleName_, "Speed Min", &parameters_.speedDist.min);
+    globalParameter_->Regist(particleName_, "SpeedV3 Max", &parameters_.velocityDistV3.max);
+    globalParameter_->Regist(particleName_, "SpeedV3 Min", &parameters_.velocityDistV3.min);
+    globalParameter_->Regist(particleName_, "Direction Max", &parameters_.directionDist.max);
+    globalParameter_->Regist(particleName_, "Direction Min", &parameters_.directionDist.min);
+    globalParameter_->Regist(particleName_, "isFloatVelocity", &parameters_.isFloatVelocity);
 
     // Color
-    globalParameter_->Bind(particleName_, "BaseColor", &parameters_.baseColor);
-    globalParameter_->Bind(particleName_, "Color Max", &parameters_.colorDist.max);
-    globalParameter_->Bind(particleName_, "Color Min", &parameters_.colorDist.min);
+    globalParameter_->Regist(particleName_, "BaseColor", &parameters_.baseColor);
+    globalParameter_->Regist(particleName_, "Color Max", &parameters_.colorDist.max);
+    globalParameter_->Regist(particleName_, "Color Min", &parameters_.colorDist.min);
 
     // その他
-    globalParameter_->Bind(particleName_, "IntervalTime", &intervalTime_);
-    globalParameter_->Bind(particleName_, "Gravity", &parameters_.gravity);
-    globalParameter_->Bind(particleName_, "LifeTime", &parameters_.lifeTime);
-    globalParameter_->Bind(particleName_, "Particle Count", &particleCount_);
+    globalParameter_->Regist(particleName_, "IntervalTime", &intervalTime_);
+    globalParameter_->Regist(particleName_, "Gravity", &parameters_.gravity);
+    globalParameter_->Regist(particleName_, "LifeTime", &parameters_.lifeTime);
+    globalParameter_->Regist(particleName_, "Particle Count", &particleCount_);
 
     /// frag
-    globalParameter_->Bind(particleName_, "isScalerScale", &parameters_.isScalerScale);
-    globalParameter_->Bind(particleName_, "isRotateforDirection", &parameters_.isRotateforDirection);
-    globalParameter_->Bind(particleName_, "isBillBord", &groupParamaters_.isBillBord);
-    globalParameter_->Bind(particleName_, "AdaptRotateIsX", &groupParamaters_.adaptRotate_.isX);
-    globalParameter_->Bind(particleName_, "AdaptRotateIsY", &groupParamaters_.adaptRotate_.isY);
-    globalParameter_->Bind(particleName_, "AdaptRotateIsZ", &groupParamaters_.adaptRotate_.isZ);
-    globalParameter_->Bind(particleName_, "isShot", &isShot_);
-    globalParameter_->Bind(particleName_, "isAlphaNoMove", &groupParamaters_.isAlphaNoMove);
+    globalParameter_->Regist(particleName_, "isScalerScale", &parameters_.isScalerScale);
+    globalParameter_->Regist(particleName_, "isRotateforDirection", &parameters_.isRotateforDirection);
+    globalParameter_->Regist(particleName_, "isBillBord", &groupParamaters_.isBillBord);
+    globalParameter_->Regist(particleName_, "AdaptRotateIsX", &groupParamaters_.adaptRotate_.isX);
+    globalParameter_->Regist(particleName_, "AdaptRotateIsY", &groupParamaters_.adaptRotate_.isY);
+    globalParameter_->Regist(particleName_, "AdaptRotateIsZ", &groupParamaters_.adaptRotate_.isZ);
+    globalParameter_->Regist(particleName_, "isShot", &isShot_);
+    globalParameter_->Regist(particleName_, "isAlphaNoMove", &groupParamaters_.isAlphaNoMove);
 
-     globalParameter_->Bind(particleName_, "isRailRoop", &isRailRoop_);
-    globalParameter_->Bind(particleName_, "isMoveForRail", &isMoveForRail_);
-    globalParameter_->Bind(particleName_, "moveSpeed", &moveSpeed_);
+     globalParameter_->Regist(particleName_, "isRailRoop", &isRailRoop_);
+    globalParameter_->Regist(particleName_, "isMoveForRail", &isMoveForRail_);
+    globalParameter_->Regist(particleName_, "moveSpeed", &moveSpeed_);
 
 
     // easeParm
-    globalParameter_->Bind(particleName_, "scaleEaseParm.isScaleEase", &parameters_.scaleEaseParm.isScaleEase);
-    globalParameter_->Bind(particleName_, "scaleEaseParm.maxTime", &parameters_.scaleEaseParm.maxTime);
-    globalParameter_->Bind(particleName_, "scaleEaseParm.easeTypeInt", &parameters_.scaleEaseParm.easeTypeInt);
-    globalParameter_->Bind(particleName_, "scaleEaseParm.endValueF.max", &parameters_.scaleEaseParm.endValueF.max);
-    globalParameter_->Bind(particleName_, "scaleEaseParm.endValueF.min", &parameters_.scaleEaseParm.endValueF.min);
-    globalParameter_->Bind(particleName_, "scaleEaseParm.endValueV3.max", &parameters_.scaleEaseParm.endValueV3.max);
-    globalParameter_->Bind(particleName_, "scaleEaseParm.endValueV3.min", &parameters_.scaleEaseParm.endValueV3.min);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.isScaleEase", &parameters_.scaleEaseParm.isScaleEase);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.maxTime", &parameters_.scaleEaseParm.maxTime);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.easeTypeInt", &parameters_.scaleEaseParm.easeTypeInt);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.endValueF.max", &parameters_.scaleEaseParm.endValueF.max);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.endValueF.min", &parameters_.scaleEaseParm.endValueF.min);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.endValueV3.max", &parameters_.scaleEaseParm.endValueV3.max);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.endValueV3.min", &parameters_.scaleEaseParm.endValueV3.min);
 
     // mpde Setting
-    globalParameter_->Bind(particleName_, "preBillBordType_", &billBordType_);
-    globalParameter_->Bind(particleName_, "blendMode", &blendMode_);
+    globalParameter_->Regist(particleName_, "preBillBordType_", &billBordType_);
+    globalParameter_->Regist(particleName_, "blendMode", &blendMode_);
 
     // テクスチャ
-    globalParameter_->Bind(particleName_, "selectedTexturePath_", &selectedTexturePath_);
+    globalParameter_->Regist(particleName_, "selectedTexturePath_", &selectedTexturePath_);
 }
 
 

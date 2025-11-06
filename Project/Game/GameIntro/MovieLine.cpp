@@ -54,8 +54,8 @@ void MovieLine::ExitUpdate() {
 ///==========================================================
 void MovieLine::RegisterParams() {
 
-    globalParameter_->Bind(groupName_, "appearPositionUP", &appearPosition_[0]);
-    globalParameter_->Bind(groupName_, "appearPositionDown", &appearPosition_[1]);
+    globalParameter_->Regist(groupName_, "appearPositionUP", &appearPosition_[0]);
+    globalParameter_->Regist(groupName_, "appearPositionDown", &appearPosition_[1]);
 }
 ///=========================================================
 /// パラメータ調整

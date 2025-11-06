@@ -1,15 +1,11 @@
 #include "CameraAnimation.h"
 
-
 void CameraAnimation::Init() {
     // 生成
     animationData_ = std::make_unique<CameraAnimationData>();
 
     // オフセット値を初期化
-    currentOffsetPosition_ = {0.0f, 0.0f, 0.0f};
-    currentOffsetRotation_ = {0.0f, 0.0f, 0.0f};
-    currentOffsetFov_      = 0.0f;
-  
+    ResetOffsetParam();
 }
 
 void CameraAnimation::Update(const float& speedRate) {
@@ -28,36 +24,30 @@ void CameraAnimation::Play(const std::string& animationName) {
     currentAnimationName_ = animationName;
     // アニメーションデータの初期化とロード
     animationData_->Init(currentAnimationName_);
-    animationData_->LoadData();
+    animationData_->LoadData(false);
 
     // 現在の値を初期値として保存
     SaveInitialValues();
 
     animationData_->Play();
-
 }
 
 void CameraAnimation::Reset() {
     if (animationData_) {
         animationData_->Reset();
     }
- 
-    // オフセット値をリセット
-    currentOffsetPosition_ = {0.0f, 0.0f, 0.0f};
-    currentOffsetRotation_ = {0.0f, 0.0f, 0.0f};
-    currentOffsetFov_      = 0.0f;
-}
 
+    // オフセット値をリセット
+    ResetOffsetParam();
+}
 
 void CameraAnimation::SaveInitialValues() {
 
-    if(!pViewProjection_) {
+    if (!pViewProjection_) {
         return;
     }
-    
-    initialParam_.position = pViewProjection_->positionOffset_;
-    initialParam_.rotation = pViewProjection_->rotationOffset_;
-    initialParam_.fov      = pViewProjection_->fovAngleY_;
+
+    SetStartParam();
 }
 
 void CameraAnimation::ApplyOffsetToViewProjection() {
@@ -73,7 +63,18 @@ void CameraAnimation::ApplyOffsetToViewProjection() {
     animationData_->ApplyToViewProjection(*pViewProjection_);
 }
 
- void CameraAnimation::SetViewProjection(ViewProjection* viewProjection) { 
-     pViewProjection_ = viewProjection; 
- } 
+void CameraAnimation::SetViewProjection(ViewProjection* viewProjection) {
+    pViewProjection_ = viewProjection;
+}
 
+void CameraAnimation::SetStartParam() {
+    startParam_.position = pViewProjection_->positionOffset_;
+    startParam_.rotation = pViewProjection_->rotationOffset_;
+    startParam_.fov      = pViewProjection_->fovAngleY_;
+}
+
+void CameraAnimation::ResetOffsetParam() {
+    currentOffsetPosition_ = {0.0f, 0.0f, 0.0f};
+    currentOffsetRotation_ = {0.0f, 0.0f, 0.0f};
+    currentOffsetFov_      = 0.0f;
+}

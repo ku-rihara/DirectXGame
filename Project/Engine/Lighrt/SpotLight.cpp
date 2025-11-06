@@ -26,15 +26,15 @@ void SpotLight::DebugImGui() {
 
 void SpotLight::RegisterParams() {
     lightData_->decay = max(lightData_->decay,0.1f);
-    globalParameter_->Bind(groupName_, "Color", &lightData_->color);
-    globalParameter_->Bind(groupName_, "Pos", &tempPos_);
-    globalParameter_->Bind(groupName_, "Direction", &lightData_->direction);
-    globalParameter_->Bind(groupName_, "Distance", &lightData_->distance);
-    globalParameter_->Bind(groupName_, "intenesity", &lightData_->intensity);
-    globalParameter_->Bind(groupName_, "decay", &lightData_->decay);
-    globalParameter_->Bind(groupName_, "cosAngle", &lightData_->cosAngle);
-    globalParameter_->Bind(groupName_, "cosFalloffStart", &lightData_->cosFalloffStart);
-    globalParameter_->Bind(groupName_, "isMove", &isMove_);
+    globalParameter_->Regist(groupName_, "Color", &lightData_->color);
+    globalParameter_->Regist(groupName_, "Pos", &tempPos_);
+    globalParameter_->Regist(groupName_, "Direction", &lightData_->direction);
+    globalParameter_->Regist(groupName_, "Distance", &lightData_->distance);
+    globalParameter_->Regist(groupName_, "intenesity", &lightData_->intensity);
+    globalParameter_->Regist(groupName_, "decay", &lightData_->decay);
+    globalParameter_->Regist(groupName_, "cosAngle", &lightData_->cosAngle);
+    globalParameter_->Regist(groupName_, "cosFalloffStart", &lightData_->cosFalloffStart);
+    globalParameter_->Regist(groupName_, "isMove", &isMove_);
 }
 
 void SpotLight::AdjustParam() {

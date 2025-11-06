@@ -5,24 +5,24 @@ void PlayerAttackRenditionData::BindParams(GlobalParameter* globalParam, const s
     groupName_ = groupName;
 
     // Camera Action
-    globalParam->Bind(groupName, "CameraAction_FileName", &cameraAction_.fileName);
-    globalParam->Bind(groupName, "CameraAction_StartTiming", &cameraAction_.startTiming);
-    globalParam->Bind(groupName, "CameraAction_TriggerByHit", &cameraAction_.triggerByHit);
+    globalParam->Regist(groupName, "CameraAction_FileName", &cameraAction_.fileName);
+    globalParam->Regist(groupName, "CameraAction_StartTiming", &cameraAction_.startTiming);
+    globalParam->Regist(groupName, "CameraAction_TriggerByHit", &cameraAction_.triggerByHit);
 
     // Hit Stop
-    globalParam->Bind(groupName, "HitStop_FileName", &hitStopParam_.fileName);
-    globalParam->Bind(groupName, "HitStop_StartTiming", &hitStopParam_.startTiming);
-    globalParam->Bind(groupName, "HitStop_TriggerByHit", &hitStopParam_.triggerByHit);
+    globalParam->Regist(groupName, "HitStop_FileName", &hitStopParam_.fileName);
+    globalParam->Regist(groupName, "HitStop_StartTiming", &hitStopParam_.startTiming);
+    globalParam->Regist(groupName, "HitStop_TriggerByHit", &hitStopParam_.triggerByHit);
 
     // Shake Action
-    globalParam->Bind(groupName, "ShakeAction_FileName", &shakeAction_.fileName);
-    globalParam->Bind(groupName, "ShakeAction_StartTiming", &shakeAction_.startTiming);
-    globalParam->Bind(groupName, "ShakeAction_TriggerByHit", &shakeAction_.triggerByHit);
+    globalParam->Regist(groupName, "ShakeAction_FileName", &shakeAction_.fileName);
+    globalParam->Regist(groupName, "ShakeAction_StartTiming", &shakeAction_.startTiming);
+    globalParam->Regist(groupName, "ShakeAction_TriggerByHit", &shakeAction_.triggerByHit);
 
     // Shake Action
-    globalParam->Bind(groupName, "PostEffectParam_FileName", &postEffectParam_.fileName);
-    globalParam->Bind(groupName, "PostEffectParam_StartTiming", &postEffectParam_.startTiming);
-    globalParam->Bind(groupName, "PostEffectParam_TriggerByHit", &postEffectParam_.triggerByHit);
+    globalParam->Regist(groupName, "PostEffectParam_FileName", &postEffectParam_.fileName);
+    globalParam->Regist(groupName, "PostEffectParam_StartTiming", &postEffectParam_.startTiming);
+    globalParam->Regist(groupName, "PostEffectParam_TriggerByHit", &postEffectParam_.triggerByHit);
 }
 
 void PlayerAttackRenditionData::AdjustParam() {

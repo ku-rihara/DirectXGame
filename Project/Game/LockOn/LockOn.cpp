@@ -362,12 +362,12 @@ void LockOn::LerpTimeIncrement(const float& incrementTime) {
 /// バインド
 ///==========================================================
 void LockOn::RegisterParams() {
-    globalParameter_->Bind(groupName_, "minDistance", &minDistance_);
-    globalParameter_->Bind(groupName_, "maxDistance", &maxDistance_);
-    globalParameter_->Bind(groupName_, "angleRange", &angleRange_);
-    globalParameter_->Bind(groupName_, "spriteScale", &spriteScale_);
-    globalParameter_->Bind(groupName_, "targetChangeSpeed", &targetChangeSpeed_);
-    globalParameter_->Bind(groupName_, "availableTargetScale", &ableTargetScale_);
+    globalParameter_->Regist(groupName_, "minDistance", &minDistance_);
+    globalParameter_->Regist(groupName_, "maxDistance", &maxDistance_);
+    globalParameter_->Regist(groupName_, "angleRange", &angleRange_);
+    globalParameter_->Regist(groupName_, "spriteScale", &spriteScale_);
+    globalParameter_->Regist(groupName_, "targetChangeSpeed", &targetChangeSpeed_);
+    globalParameter_->Regist(groupName_, "availableTargetScale", &ableTargetScale_);
 }
 
 ///=========================================================

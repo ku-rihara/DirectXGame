@@ -51,9 +51,9 @@ void Combo::AdjustParam() {
 }
 
 void Combo::RegisterParams() {
-    globalParameter_->Bind(groupName_, "comboTimeMax_", &comboTimeMax_);
+    globalParameter_->Regist(groupName_, "comboTimeMax_", &comboTimeMax_);
     for (int32_t i = 0; i < kComboLevel; ++i) {
-        globalParameter_->Bind(groupName_, "LevelUpComboNum" + std::to_string(int(i + 1)), &LevelUpNum[i]);
+        globalParameter_->Regist(groupName_, "LevelUpComboNum" + std::to_string(int(i + 1)), &LevelUpNum[i]);
     }
 }
 

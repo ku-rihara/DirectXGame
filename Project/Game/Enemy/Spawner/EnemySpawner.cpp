@@ -173,7 +173,7 @@ void EnemySpawner::AdjustParam() {
 ///==========================================================
 void EnemySpawner::RegisterParams() {
     for (int32_t i = 0; i < spawnGroups_.size() - 1; ++i) {
-        globalParameter_->Bind(groupName_, "nextFazeEnemyNum" + std::to_string(i), &spawnGroups_[i].nextFazeEnemyNum);
+        globalParameter_->Regist(groupName_, "nextFazeEnemyNum" + std::to_string(i), &spawnGroups_[i].nextFazeEnemyNum);
     }
 }
 

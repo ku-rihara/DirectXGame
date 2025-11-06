@@ -127,8 +127,8 @@ Vector3 GameCamera::OffsetCalc(const Vector3& offset) const {
 }
 
 void GameCamera::RegisterParams() {
-    globalParameter_->Bind(groupName_, "firstRotate_", &parameter_.rotate);
-    globalParameter_->Bind(groupName_, "firstOffset_", &parameter_.offsetPos);
+    globalParameter_->Regist(groupName_, "firstRotate_", &parameter_.rotate);
+    globalParameter_->Regist(groupName_, "firstOffset_", &parameter_.offsetPos);
 }
 
 void GameCamera::AdjustParam() {

@@ -92,7 +92,7 @@ void GameIntroManager::CheckMovieLineStateTransition() {
 
 void GameIntroManager::BindParam() {
 
-    globalParameter_->Bind(groupName_, "fastSpeed", &fastSpeedRate_);
+    globalParameter_->Regist(groupName_, "fastSpeed", &fastSpeedRate_);
 }
 
 void GameIntroManager::AdjustParam() {

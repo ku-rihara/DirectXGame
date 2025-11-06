@@ -217,12 +217,12 @@ void Sprite::Draw() {
 /// バインド
 ///==========================================================
 void Sprite::RegisterParams() {
-    globalParameter_->Bind(groupName_, "layerNum", &parameter_.startLayerNum_);
-    globalParameter_->Bind(groupName_, "startPosition", &parameter_.position_);
-    globalParameter_->Bind(groupName_, "startScale", &parameter_.scale_);
-    globalParameter_->Bind(groupName_, "startColor", &parameter_.color_);
-    globalParameter_->Bind(groupName_, "startUVScale", &parameter_.uvScale_);
-    globalParameter_->Bind(groupName_, "startAnchorPoint", &parameter_.startAnchorPoint_);
+    globalParameter_->Regist(groupName_, "layerNum", &parameter_.startLayerNum_);
+    globalParameter_->Regist(groupName_, "startPosition", &parameter_.position_);
+    globalParameter_->Regist(groupName_, "startScale", &parameter_.scale_);
+    globalParameter_->Regist(groupName_, "startColor", &parameter_.color_);
+    globalParameter_->Regist(groupName_, "startUVScale", &parameter_.uvScale_);
+    globalParameter_->Regist(groupName_, "startAnchorPoint", &parameter_.startAnchorPoint_);
 }
 
 ///=========================================================

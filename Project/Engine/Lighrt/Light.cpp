@@ -109,7 +109,7 @@ void Light::DebugImGui() {
 }
 
 void Light::RegisterParams() {
-    globalParameter_->Bind(groupName_,"spotLightCoutMax", &spotLightCoutMax_);
+    globalParameter_->Regist(groupName_,"spotLightCoutMax", &spotLightCoutMax_);
 }
 
 void Light::SetLightCommands(ID3D12GraphicsCommandList* commandList) {

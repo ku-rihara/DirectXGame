@@ -3,7 +3,7 @@
 #include <imgui.h>
 
 void CameraEditor::Init(ViewProjection* vp) {
-    AllLoadFile();
+    AllLoadFile(true);
     SetViewProjection(vp);
     preViewCameraObj_.reset(Object3d::CreateModel("debugCube.obj"));
     preViewFollowObj_.reset(Object3d::CreateModel("debugCube.obj"));
@@ -12,7 +12,7 @@ void CameraEditor::Init(ViewProjection* vp) {
     preViewFollowObj_->SetIsDraw(false);
 }
 
-void CameraEditor::AllLoadFile() {
+void CameraEditor::AllLoadFile(const bool& isKeyFrameReconstruction) {
     // CameraAnimationのAnimationDataフォルダ内のすべてのファイルを検索
     std::string folderPath = "Resources/GlobalParameter/CameraAnimation/AnimationData/";
 
@@ -28,7 +28,7 @@ void CameraEditor::AllLoadFile() {
                 // 新規作成してロード
                 auto anim = std::make_unique<CameraAnimationData>();
                 anim->Init(fileName);
-                anim->LoadData(); // Load
+                anim->LoadData(isKeyFrameReconstruction);
                 animations_.push_back(std::move(anim));
             }
         }
@@ -215,7 +215,7 @@ void CameraEditor::EditorUpdate() {
 
                 ApplySelectedKeyFrameToViewProjection();
             }
-            
+
             ImGui::PopID();
             ImGui::Separator();
 
@@ -225,7 +225,7 @@ void CameraEditor::EditorUpdate() {
 
         ImGui::Text("File Operations:");
 
-         // 選択中のアニメーション個別のセーブ/ロード
+        // 選択中のアニメーション個別のセーブ/ロード
         if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(animations_.size())) {
             ImGui::SeparatorText("Selected Animation File Operations");
 
@@ -237,8 +237,7 @@ void CameraEditor::EditorUpdate() {
             ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
             ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
             if (ImGui::Button(("Load " + animName).c_str())) {
-                selectedAnim->LoadData();
-                MessageBoxA(nullptr, (animName + " loaded successfully.").c_str(), "Camera Animation", 0);
+                selectedAnim->LoadData(false);
             }
             ImGui::PopStyleColor(3);
 
@@ -263,8 +262,7 @@ void CameraEditor::EditorUpdate() {
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
         ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
         if (ImGui::Button("Load All CameraAnimations")) {
-            AllLoadFile();
-            MessageBoxA(nullptr, "All animations loaded successfully.", "Camera Animation", 0);
+            AllLoadFile(false);
         }
         ImGui::PopStyleColor(3);
         ImGui::SameLine();

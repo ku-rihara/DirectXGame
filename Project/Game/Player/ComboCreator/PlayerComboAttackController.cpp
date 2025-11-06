@@ -208,8 +208,8 @@ PlayerComboAttackData* PlayerComboAttackController::GetAttackByName(const std::s
 ///==========================================================
 void PlayerComboAttackController::BindCommonParams() {
     for (int32_t i = 0; i < kComboLevel; ++i) {
-        globalParameter_->Bind(commonGroupName_, "AttackSpeedRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].speedRate);
-        globalParameter_->Bind(commonGroupName_, "AttackPowerRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].powerRate);
+        globalParameter_->Regist(commonGroupName_, "AttackSpeedRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].speedRate);
+        globalParameter_->Regist(commonGroupName_, "AttackPowerRate" + std::to_string(int(i + 1)), &attackValueForLevel_[i].powerRate);
     }
 }
 

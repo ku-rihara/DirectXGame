@@ -10,19 +10,25 @@
 
 void CameraAnimationData::Init(const std::string& animationName) {
 
-    globalParameter_ = GlobalParameter::GetInstance();
+    // グループ名設定
+    globalParameter_      = GlobalParameter::GetInstance();
+    groupName_            = animationName;
+  
+    if (!globalParameter_->HasRegisters(animationName)) {
+        // 新規登録
+        globalParameter_->CreateGroup(groupName_, true);
+        RegisterParams();
+        globalParameter_->SyncParamForGroup(groupName_);
+    } else {
+        // パラメータを取得
+        LoadParams();
+    }
 
-    // メイングループの設定
-    groupName_ = animationName;
-    globalParameter_->CreateGroup(groupName_, true);
+    // 値初期化
+    ResetValue();
+}
 
-    // 重複バインドを防ぐ
-    globalParameter_->ClearBindingsForGroup(groupName_);
-    RegisterParams();
-
-    // パラメータ同期
-    globalParameter_->SyncParamForGroup(groupName_);
-
+void CameraAnimationData::ResetValue() {
     activeKeyFrameIndex_ = 0;
 
     // 新しいフラグの初期化
@@ -36,12 +42,12 @@ void CameraAnimationData::Init(const std::string& animationName) {
     returnFovEase_.SetAdaptValue(&returnFov_);
 }
 
-void CameraAnimationData::LoadData() {
+void CameraAnimationData::LoadData(const bool& isKeyFrameReconstruction) {
 
     // アニメーションデータのロード
     globalParameter_->LoadFile(groupName_, folderPath_);
     // キーフレームデータのロード
-    LoadAllKeyFrames();
+    LoadKeyFrames(isKeyFrameReconstruction);
     // 値同期
     globalParameter_->SyncParamForGroup(groupName_);
 }
@@ -61,13 +67,11 @@ void CameraAnimationData::SaveAllKeyFrames() {
     }
 }
 
-void CameraAnimationData::LoadAllKeyFrames() {
+void CameraAnimationData::LoadKeyFrames(const bool& isKeyFrameReconstruction) {
     std::string folderPath     = "Resources/GlobalParameter/CameraAnimation/KeyFrames/";
     std::string keyFramePrefix = groupName_;
 
     if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {
-        // 既存のキーフレームをクリア
-        ClearAllKeyFrames();
 
         std::vector<std::pair<int32_t, std::string>> keyFrameFiles;
 
@@ -90,21 +94,37 @@ void CameraAnimationData::LoadAllKeyFrames() {
         // インデックス順にソート
         std::sort(keyFrameFiles.begin(), keyFrameFiles.end());
 
-        // キーフレームを作成してロード
-        for (const auto& [index, fileName] : keyFrameFiles) {
-            auto newKeyFrame = std::make_unique<CameraKeyFrame>();
-            newKeyFrame->Init(groupName_, index);
-            newKeyFrame->LoadData(); // Load
-            keyFrames_.push_back(std::move(newKeyFrame));
-        }
+        KeyFrameAllLoad(keyFrameFiles, isKeyFrameReconstruction);
 
-        // 最初のキーフレームを選択状態に
+         // 最初のキーフレームを選択状態に
         if (!keyFrames_.empty()) {
             selectedKeyFrameIndex_ = 0;
 
             finalKeyFrameIndex_ = keyFrameFiles.back().first;
         } else {
             finalKeyFrameIndex_ = -1;
+        }
+    }
+}
+
+void CameraAnimationData::KeyFrameAllLoad(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles, const bool& isKeyFrameReconstruction) {
+
+    // 再構築
+    if (isKeyFrameReconstruction) {
+        // 既存のキーフレームをクリア
+        ClearAllKeyFrames();
+        // キーフレームを作成してロード
+        for (const auto& [index, fileName] : KeyFrameFiles) {
+            auto newKeyFrame = std::make_unique<CameraKeyFrame>();
+            newKeyFrame->Init(groupName_, index);
+            newKeyFrame->LoadData(); // Load
+            keyFrames_.push_back(std::move(newKeyFrame));
+        }
+    } else {
+
+        // すべてのキーフレームを保存
+        for (auto& keyFrame : keyFrames_) {
+            keyFrame->LoadData();
         }
     }
 }
@@ -363,13 +383,23 @@ void CameraAnimationData::Reset() {
 
 void CameraAnimationData::RegisterParams() {
     // メイン設定
-    globalParameter_->Bind(groupName_, "autoReturnToInitial", &autoReturnToInitial_);
-    globalParameter_->Bind(groupName_, "resetPosEaseType", &resetPosEaseType_);
-    globalParameter_->Bind(groupName_, "resetRotateEaseType", &resetRotateEaseType_);
-    globalParameter_->Bind(groupName_, "resetFovEaseType", &resetFovEaseType_);
-    globalParameter_->Bind(groupName_, "resetTimePoint", &resetTimePoint_);
-    globalParameter_->Bind(groupName_, "returnDelayTime", &returnDelayTime_);
-    globalParameter_->Bind(groupName_, "timeMode", &timeMode_);
+    globalParameter_->Regist(groupName_, "autoReturnToInitial", &autoReturnToInitial_);
+    globalParameter_->Regist(groupName_, "resetPosEaseType", &resetPosEaseType_);
+    globalParameter_->Regist(groupName_, "resetRotateEaseType", &resetRotateEaseType_);
+    globalParameter_->Regist(groupName_, "resetFovEaseType", &resetFovEaseType_);
+    globalParameter_->Regist(groupName_, "resetTimePoint", &resetTimePoint_);
+    globalParameter_->Regist(groupName_, "returnDelayTime", &returnDelayTime_);
+    globalParameter_->Regist(groupName_, "timeMode", &timeMode_);
+}
+
+void CameraAnimationData::LoadParams() {
+    autoReturnToInitial_ = globalParameter_->GetValue<bool>(groupName_, "autoReturnToInitial");
+    resetPosEaseType_    = globalParameter_->GetValue<int32_t>(groupName_, "resetPosEaseType");
+    resetRotateEaseType_ = globalParameter_->GetValue<int32_t>(groupName_, "resetRotateEaseType");
+    resetFovEaseType_    = globalParameter_->GetValue<int32_t>(groupName_, "resetFovEaseType");
+    resetTimePoint_      = globalParameter_->GetValue<float>(groupName_, "resetTimePoint");
+    returnDelayTime_     = globalParameter_->GetValue<float>(groupName_, "returnDelayTime");
+    timeMode_            = globalParameter_->GetValue<int32_t>(groupName_, "timeMode");
 }
 
 void CameraAnimationData::AdjustParam() {
@@ -479,7 +509,6 @@ void CameraAnimationData::AdjustParam() {
     ImGui::PopID();
 #endif // _DEBUG
 }
-
 
 void CameraAnimationData::SetInitialValues(const Vector3& position, const Vector3& rotation, const float& fov) {
     initialPosition_ = position;

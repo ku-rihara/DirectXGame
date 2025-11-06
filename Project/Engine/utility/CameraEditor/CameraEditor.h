@@ -23,7 +23,7 @@ public:
     void Update(); //< 更新
     void EditorUpdate(); //< エディタ更新
 
-    void AllLoadFile(); //< 全ファイル読み込み
+    void AllLoadFile(const bool& isKeyFrameReconstruction); //< 全ファイル読み込み
     void AllSaveFile(); //< 全ファイル保存
 
     /// <summary>

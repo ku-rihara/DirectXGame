@@ -70,7 +70,7 @@ void SceneManager::ChangeScene(const std::string& sceneName) {
     AnimationRegistry::GetInstance()->Clear();
 
     //// グローバル変数の読み込み
-    GlobalParameter::GetInstance()->BindResetAll();
+    GlobalParameter::GetInstance()->ResetAllRegister();
     GlobalParameter::GetInstance()->LoadFiles();
 
     // 次のシーンを生成

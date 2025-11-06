@@ -114,9 +114,9 @@ void JumpAttackUI::Close() {
 
 void JumpAttackUI::RegisterParams() {
     for (size_t i = 0; i < static_cast<size_t>(Type::COUNT); ++i) {
-        globalParameter_->Bind(groupName_, "posValueOffset" + BottomNameByType(i), &bottoms_[i].posValueOffset);
+        globalParameter_->Regist(groupName_, "posValueOffset" + BottomNameByType(i), &bottoms_[i].posValueOffset);
     }
-    globalParameter_->Bind(groupName_, "notOperateAlpha", &notOperateAlpha_);
+    globalParameter_->Regist(groupName_, "notOperateAlpha", &notOperateAlpha_);
 }
 
 void JumpAttackUI::AdjustParam() {

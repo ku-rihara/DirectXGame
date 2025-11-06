@@ -19,7 +19,8 @@ public:
     CameraAnimation()  = default;
     ~CameraAnimation() = default;
 
-    void Init(); //< 初期化
+    // 初期化
+    void Init(); 
 
     /// <summary>
     /// 更新
@@ -38,12 +39,14 @@ public:
 
 private:
     void ApplyOffsetToViewProjection(); //< ViewProjectionにオフセット適用
+    void SetStartParam();
+    void ResetOffsetParam();
 
 private:
     std::unique_ptr<CameraAnimationData> animationData_;
     ViewProjection* pViewProjection_ = nullptr;
 
-    CameraParam initialParam_;
+    CameraParam startParam_;
 
     Vector3 currentOffsetPosition_;
     Vector3 currentOffsetRotation_;

@@ -9,13 +9,17 @@ void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t&
     globalParameter_         = GlobalParameter::GetInstance();
     currentKeyFrameIndex     = keyNumber;
     std::string newGroupName = cameraAnimationName + std::to_string(currentKeyFrameIndex);
-
-    groupName_ = newGroupName;
-    globalParameter_->CreateGroup(groupName_, false);
-
+    groupName_               = newGroupName;
    
-   globalParameter_->ClearBindingsForGroup(groupName_);
-    RegisterParams();
+    if (!globalParameter_->HasRegisters(groupName_)) {
+        // 新規登録
+        globalParameter_->CreateGroup(groupName_, true);
+        RegisterParams();
+      
+    } else {
+        // パラメータを取得
+        LoadParams();
+    }
 
     AdaptValueSetting();
     AdaptEaseParam();
@@ -61,14 +65,32 @@ void CameraKeyFrame::Update(const float& speedRate) {
 }
 
 void CameraKeyFrame::RegisterParams() {
-    globalParameter_->Bind(groupName_, "timePoint", &timePoint_);
-    globalParameter_->Bind(groupName_, "position", &keyFrameParam_.position);
-    globalParameter_->Bind(groupName_, "rotation", &keyFrameParam_.rotation);
-    globalParameter_->Bind(groupName_, "fov", &keyFrameParam_.fov);
-    globalParameter_->Bind(groupName_, "positionEaseType", &positionEaseType_);
-    globalParameter_->Bind(groupName_, "rotationEaseType", &rotationEaseType_);
-    globalParameter_->Bind(groupName_, "fovEaseType", &fovEaseType_);
-    globalParameter_->Bind(groupName_, "timeMode", &timeMode_);
+    globalParameter_->Regist(groupName_, "timePoint", &timePoint_);
+    globalParameter_->Regist(groupName_, "position", &keyFrameParam_.position);
+    globalParameter_->Regist(groupName_, "rotation", &keyFrameParam_.rotation);
+    globalParameter_->Regist(groupName_, "fov", &keyFrameParam_.fov);
+    globalParameter_->Regist(groupName_, "positionEaseType", &positionEaseType_);
+    globalParameter_->Regist(groupName_, "rotationEaseType", &rotationEaseType_);
+    globalParameter_->Regist(groupName_, "fovEaseType", &fovEaseType_);
+    globalParameter_->Regist(groupName_, "timeMode", &timeMode_);
+}
+
+void CameraKeyFrame::LoadParams() {
+    // timePoint
+    timePoint_ = globalParameter_->GetValue<float>(groupName_, "timePoint");
+
+    // KeyFrameParam
+    keyFrameParam_.position = globalParameter_->GetValue<Vector3>(groupName_, "position");
+    keyFrameParam_.rotation = globalParameter_->GetValue<Vector3>(groupName_, "rotation");
+    keyFrameParam_.fov      = globalParameter_->GetValue<float>(groupName_, "fov");
+
+    // EaseType
+    positionEaseType_ = globalParameter_->GetValue<int32_t>(groupName_, "positionEaseType");
+    rotationEaseType_ = globalParameter_->GetValue<int32_t>(groupName_, "rotationEaseType");
+    fovEaseType_      = globalParameter_->GetValue<int32_t>(groupName_, "fovEaseType");
+
+    // TimeMode
+    timeMode_ = globalParameter_->GetValue<int32_t>(groupName_, "timeMode");
 }
 
 void CameraKeyFrame::AdjustParam() {

@@ -208,14 +208,14 @@ void ContinuousEnemySpawner::AdjustParam() {
 }
 
 void ContinuousEnemySpawner::RegisterParams() {
-    globalParameter_->Bind(groupName_, "enabled", &config_.isEnabled);
-    globalParameter_->Bind(groupName_, "spawnInterval", &config_.spawnInterval);
-    globalParameter_->Bind(groupName_, "forwardDistanceMin", &config_.forwardDistance.min);
-    globalParameter_->Bind(groupName_, "forwardDistanceMax", &config_.forwardDistance.max);
-    globalParameter_->Bind(groupName_, "lateralOffsetMin", &config_.lateralOffset.min);
-    globalParameter_->Bind(groupName_, "lateralOffsetMax", &config_.lateralOffset.max);
-    globalParameter_->Bind(groupName_, "minDistanceFromEnemies", &config_.minDistanceFromEnemies);
-    globalParameter_->Bind(groupName_, "maxRetryCount", &config_.maxRetryCount);
-    globalParameter_->Bind(groupName_, "maxSpawnCount", &config_.maxSpawnCount);
-    globalParameter_->Bind(groupName_, "fieldMargin", &config_.fieldMargin);
+    globalParameter_->Regist(groupName_, "enabled", &config_.isEnabled);
+    globalParameter_->Regist(groupName_, "spawnInterval", &config_.spawnInterval);
+    globalParameter_->Regist(groupName_, "forwardDistanceMin", &config_.forwardDistance.min);
+    globalParameter_->Regist(groupName_, "forwardDistanceMax", &config_.forwardDistance.max);
+    globalParameter_->Regist(groupName_, "lateralOffsetMin", &config_.lateralOffset.min);
+    globalParameter_->Regist(groupName_, "lateralOffsetMax", &config_.lateralOffset.max);
+    globalParameter_->Regist(groupName_, "minDistanceFromEnemies", &config_.minDistanceFromEnemies);
+    globalParameter_->Regist(groupName_, "maxRetryCount", &config_.maxRetryCount);
+    globalParameter_->Regist(groupName_, "maxSpawnCount", &config_.maxSpawnCount);
+    globalParameter_->Regist(groupName_, "fieldMargin", &config_.fieldMargin);
 }

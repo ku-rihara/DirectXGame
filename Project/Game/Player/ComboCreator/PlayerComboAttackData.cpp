@@ -34,31 +34,31 @@ void PlayerComboAttackData::SaveData() {
 ///==========================================================
 void PlayerComboAttackData::RegisterParams() {
     // simpleParam
-    globalParameter_->Bind(groupName_, "power", &attackParam_.power);
-    globalParameter_->Bind(groupName_, "KnockBackPower", &attackParam_.knockBackPower);
+    globalParameter_->Regist(groupName_, "power", &attackParam_.power);
+    globalParameter_->Regist(groupName_, "KnockBackPower", &attackParam_.knockBackPower);
 
     // CollisionParam
-    globalParameter_->Bind(groupName_, "collisionSize", &attackParam_.collisionPara.size);
-    globalParameter_->Bind(groupName_, "collisionOffsetPos", &attackParam_.collisionPara.offsetPos);
-    globalParameter_->Bind(groupName_, "adaptTime", &attackParam_.collisionPara.adaptTime);
+    globalParameter_->Regist(groupName_, "collisionSize", &attackParam_.collisionPara.size);
+    globalParameter_->Regist(groupName_, "collisionOffsetPos", &attackParam_.collisionPara.offsetPos);
+    globalParameter_->Regist(groupName_, "adaptTime", &attackParam_.collisionPara.adaptTime);
 
     // MoveParam
-    globalParameter_->Bind(groupName_, "moveValue", &attackParam_.moveParam.value);
-    globalParameter_->Bind(groupName_, "moveEaseType", &attackParam_.moveParam.easeType);
-    globalParameter_->Bind(groupName_, "moveEaseTime", &attackParam_.moveParam.easeTime);
+    globalParameter_->Regist(groupName_, "moveValue", &attackParam_.moveParam.value);
+    globalParameter_->Regist(groupName_, "moveEaseType", &attackParam_.moveParam.easeType);
+    globalParameter_->Regist(groupName_, "moveEaseTime", &attackParam_.moveParam.easeTime);
 
     // TriggerParam
-    globalParameter_->Bind(groupName_, "gamePadBottom", &attackParam_.triggerParam.gamePadBottom);
-    globalParameter_->Bind(groupName_, "keyBordBottom", &attackParam_.triggerParam.keyBordBottom);
-    globalParameter_->Bind(groupName_, "Condition", &tempCondition_);
-    globalParameter_->Bind(groupName_, "IsFirstAttack", &attackParam_.triggerParam.isFirstAttack);
+    globalParameter_->Regist(groupName_, "gamePadBottom", &attackParam_.triggerParam.gamePadBottom);
+    globalParameter_->Regist(groupName_, "keyBordBottom", &attackParam_.triggerParam.keyBordBottom);
+    globalParameter_->Regist(groupName_, "Condition", &tempCondition_);
+    globalParameter_->Regist(groupName_, "IsFirstAttack", &attackParam_.triggerParam.isFirstAttack);
 
     // TimingParam
-    globalParameter_->Bind(groupName_, "cancelFrame", &attackParam_.timingParam.cancelFrame);
-    globalParameter_->Bind(groupName_, "precedeInputFrame", &attackParam_.timingParam.precedeInputFrame);
+    globalParameter_->Regist(groupName_, "cancelFrame", &attackParam_.timingParam.cancelFrame);
+    globalParameter_->Regist(groupName_, "precedeInputFrame", &attackParam_.timingParam.precedeInputFrame);
 
     // nextAttack
-    globalParameter_->Bind(groupName_, "NextAttackType", &attackParam_.nextAttackType);
+    globalParameter_->Regist(groupName_, "NextAttackType", &attackParam_.nextAttackType);
 
     // 演出のパラメータバインド
     renditionData_.BindParams(globalParameter_, groupName_);

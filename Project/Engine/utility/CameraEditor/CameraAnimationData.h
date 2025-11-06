@@ -23,19 +23,14 @@ public:
     CameraAnimationData()  = default;
     ~CameraAnimationData() = default;
 
-    /// <summary>
     /// 初期化
-    /// </summary>
-    /// <param name="animationName">アニメーション名</param>
     void Init(const std::string& animationName);
-
+   
     /// <summary>
     /// 更新
     /// </summary>
     /// <param name="speedRate">速度倍率</param>
     void Update(const float& speedRate = 1.0f);
-
-    void AdjustParam(); //< ImGuiパラメータ調整
 
     /// <summary>
     /// ViewProjectionへの適用
@@ -57,17 +52,22 @@ public:
     void Pause(); //< 一時停止
     void Reset(); //< リセット
 
-    void LoadData();         //< データ読み込み
-    void LoadAllKeyFrames(); //< 全キーフレーム読み込み
-    void SaveAllKeyFrames(); //< 全キーフレーム保存
-    void SaveData();         //< データ保存
+    void LoadData(const bool& isKeyFrameReconstruction);      //< データ読み込み
+    void LoadKeyFrames(const bool& isKeyFrameReconstruction); //< 全キーフレーム読み込み
+    void SaveAllKeyFrames();                                  //< 全キーフレーム保存
+    void SaveData();                                          //< データ保存
+    void AdjustParam();                                       //< ImGuiパラメータ調整
 
 private:
-    void RegisterParams();                //< パラメータバインド
+    void RegisterParams();            //< パラメータ登録
     void UpdateKeyFrameProgression(); //< キーフレーム進行更新
     void AdvanceToNextKeyFrame();     //< 次のキーフレームへ進む
     void UpdateInterpolatedValues();  //< 補間値更新
     void StartReturnToInitial();      //< 初期値復帰開始
+
+    void ResetValue();
+    void LoadParams();
+    void KeyFrameAllLoad(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles, const bool& isKeyFrameReconstruction);
 
     /// <summary>
     /// タイムモードセレクター
@@ -80,7 +80,7 @@ private:
     GlobalParameter* globalParameter_;
     std::string groupName_;
     std::string folderPath_ = "CameraAnimation/AnimationData";
-
+   
     std::vector<std::unique_ptr<CameraKeyFrame>> keyFrames_;
     int32_t selectedKeyFrameIndex_ = -1;
     int32_t finalKeyFrameIndex_    = -1;

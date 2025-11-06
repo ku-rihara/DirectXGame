@@ -45,7 +45,7 @@ void ComboUI::AdjustParam() {
 }
 
 void ComboUI::RegisterParams() {
-    globalParameter_->Bind(groupName_, "position", &position_);
+    globalParameter_->Regist(groupName_, "position", &position_);
 }
 
 // 　桁数による数字の決定

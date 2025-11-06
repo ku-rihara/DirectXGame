@@ -51,7 +51,7 @@ void FireInjectors::Launch() {
 /// バインド
 ///==========================================================
 void FireInjectors::RegisterParams() {
-    globalParameter_->Bind(groupName_, "fireShotComboNum", &fireShotComboNum_);
+    globalParameter_->Regist(groupName_, "fireShotComboNum", &fireShotComboNum_);
 }
 
 ///=========================================================

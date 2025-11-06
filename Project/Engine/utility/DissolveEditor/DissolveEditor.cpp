@@ -52,7 +52,6 @@ void DissolveEditor::EditorUpdate() {
         // 全体制御
         if (ImGui::Button("Load All Dissolves")) {
             AllLoadFile();
-            MessageBoxA(nullptr, "All dissolves loaded successfully.", "Dissolve Editor", 0);
         }
         ImGui::SameLine();
         if (ImGui::Button("Save All Dissolves")) {

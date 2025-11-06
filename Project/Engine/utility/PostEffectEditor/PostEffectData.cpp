@@ -11,9 +11,7 @@ void PostEffectData::Init(const std::string& postEffectName) {
     globalParameter_->CreateGroup(groupName_, true);
 
     // 重複バインドを防ぐ
-    if (!globalParameter_->HasBindings(groupName_)) {
-        RegisterParams();
-    }
+    RegisterParams();
 
     // パラメータ同期
     globalParameter_->SyncParamForGroup(groupName_);
@@ -29,8 +27,8 @@ void PostEffectData::SaveData() {
 }
 
 void PostEffectData::RegisterParams() {
-    globalParameter_->Bind(groupName_, "postEffectModeIndex", &postEffectModeIndex_);
-    globalParameter_->Bind(groupName_, "duration", &duration_);
+    globalParameter_->Regist(groupName_, "postEffectModeIndex", &postEffectModeIndex_);
+    globalParameter_->Regist(groupName_, "duration", &duration_);
 }
 
 void PostEffectData::AdjustParam() {
