@@ -61,14 +61,14 @@ void CameraKeyFrame::Update(const float& speedRate) {
 }
 
 void CameraKeyFrame::RegisterParams() {
-    globalParameter_->Bind(groupName_, "timePoint", &timePoint_);
-    globalParameter_->Bind(groupName_, "position", &keyFrameParam_.position);
-    globalParameter_->Bind(groupName_, "rotation", &keyFrameParam_.rotation);
-    globalParameter_->Bind(groupName_, "fov", &keyFrameParam_.fov);
-    globalParameter_->Bind(groupName_, "positionEaseType", &positionEaseType_);
-    globalParameter_->Bind(groupName_, "rotationEaseType", &rotationEaseType_);
-    globalParameter_->Bind(groupName_, "fovEaseType", &fovEaseType_);
-    globalParameter_->Bind(groupName_, "timeMode", &timeMode_);
+    globalParameter_->Regist(groupName_, "timePoint", &timePoint_);
+    globalParameter_->Regist(groupName_, "position", &keyFrameParam_.position);
+    globalParameter_->Regist(groupName_, "rotation", &keyFrameParam_.rotation);
+    globalParameter_->Regist(groupName_, "fov", &keyFrameParam_.fov);
+    globalParameter_->Regist(groupName_, "positionEaseType", &positionEaseType_);
+    globalParameter_->Regist(groupName_, "rotationEaseType", &rotationEaseType_);
+    globalParameter_->Regist(groupName_, "fovEaseType", &fovEaseType_);
+    globalParameter_->Regist(groupName_, "timeMode", &timeMode_);
 }
 
 void CameraKeyFrame::AdjustParam() {

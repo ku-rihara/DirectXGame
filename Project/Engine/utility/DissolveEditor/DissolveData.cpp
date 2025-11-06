@@ -113,11 +113,11 @@ void DissolveData::SaveData() {
 }
 
 void DissolveData::RegisterParams() {
-    globalParameter_->Bind(groupName_, "startThreshold", &startThreshold_);
-    globalParameter_->Bind(groupName_, "endThreshold", &endThreshold_);
-    globalParameter_->Bind(groupName_, "maxTime", &maxTime_);
-    globalParameter_->Bind(groupName_, "offsetTime", &offsetTime_);
-    globalParameter_->Bind(groupName_, "easeType", &easeType_);
+    globalParameter_->Regist(groupName_, "startThreshold", &startThreshold_);
+    globalParameter_->Regist(groupName_, "endThreshold", &endThreshold_);
+    globalParameter_->Regist(groupName_, "maxTime", &maxTime_);
+    globalParameter_->Regist(groupName_, "offsetTime", &offsetTime_);
+    globalParameter_->Regist(groupName_, "easeType", &easeType_);
 }
 
 void DissolveData::AdjustParam() {

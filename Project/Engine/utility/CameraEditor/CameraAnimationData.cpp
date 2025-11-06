@@ -363,13 +363,13 @@ void CameraAnimationData::Reset() {
 
 void CameraAnimationData::RegisterParams() {
     // メイン設定
-    globalParameter_->Bind(groupName_, "autoReturnToInitial", &autoReturnToInitial_);
-    globalParameter_->Bind(groupName_, "resetPosEaseType", &resetPosEaseType_);
-    globalParameter_->Bind(groupName_, "resetRotateEaseType", &resetRotateEaseType_);
-    globalParameter_->Bind(groupName_, "resetFovEaseType", &resetFovEaseType_);
-    globalParameter_->Bind(groupName_, "resetTimePoint", &resetTimePoint_);
-    globalParameter_->Bind(groupName_, "returnDelayTime", &returnDelayTime_);
-    globalParameter_->Bind(groupName_, "timeMode", &timeMode_);
+    globalParameter_->Regist(groupName_, "autoReturnToInitial", &autoReturnToInitial_);
+    globalParameter_->Regist(groupName_, "resetPosEaseType", &resetPosEaseType_);
+    globalParameter_->Regist(groupName_, "resetRotateEaseType", &resetRotateEaseType_);
+    globalParameter_->Regist(groupName_, "resetFovEaseType", &resetFovEaseType_);
+    globalParameter_->Regist(groupName_, "resetTimePoint", &resetTimePoint_);
+    globalParameter_->Regist(groupName_, "returnDelayTime", &returnDelayTime_);
+    globalParameter_->Regist(groupName_, "timeMode", &timeMode_);
 }
 
 void CameraAnimationData::AdjustParam() {

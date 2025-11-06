@@ -123,12 +123,12 @@ void ShakeData::SaveData() {
 }
 
 void ShakeData::RegisterParams() {
-    globalParameter_->Bind(groupName_, "shakeLength", &shakeLength_);
-    globalParameter_->Bind(groupName_, "maxTime", &maxTime_);
-    globalParameter_->Bind(groupName_, "easeType", &easeType_);
-    globalParameter_->Bind(groupName_, "shakeType", &shakeType_);
-    globalParameter_->Bind(groupName_, "startTime", &startTime_);
-    globalParameter_->Bind(groupName_, "axisFlag", &axisFlag_);
+    globalParameter_->Regist(groupName_, "shakeLength", &shakeLength_);
+    globalParameter_->Regist(groupName_, "maxTime", &maxTime_);
+    globalParameter_->Regist(groupName_, "easeType", &easeType_);
+    globalParameter_->Regist(groupName_, "shakeType", &shakeType_);
+    globalParameter_->Regist(groupName_, "startTime", &startTime_);
+    globalParameter_->Regist(groupName_, "axisFlag", &axisFlag_);
 }
 
 void ShakeData::AdjustParam() {

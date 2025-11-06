@@ -112,7 +112,7 @@ public:
     /// <param name="variable">変数ポインタ</param>
     /// <param name="widgetType">ウィジェットタイプ</param>
     template <typename T>
-    void Bind(const std::string& group, const std::string& key, T* variable, WidgetType widgetType = WidgetType::NONE);
+    void Regist(const std::string& group, const std::string& key, T* variable, WidgetType widgetType = WidgetType::NONE);
 
     /// <summary>
     /// グループコピー

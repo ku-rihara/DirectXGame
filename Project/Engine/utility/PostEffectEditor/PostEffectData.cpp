@@ -29,8 +29,8 @@ void PostEffectData::SaveData() {
 }
 
 void PostEffectData::RegisterParams() {
-    globalParameter_->Bind(groupName_, "postEffectModeIndex", &postEffectModeIndex_);
-    globalParameter_->Bind(groupName_, "duration", &duration_);
+    globalParameter_->Regist(groupName_, "postEffectModeIndex", &postEffectModeIndex_);
+    globalParameter_->Regist(groupName_, "duration", &duration_);
 }
 
 void PostEffectData::AdjustParam() {

@@ -468,7 +468,7 @@ void GlobalParameter::ParamLoadForImGui(const std::string& groupName, const std:
 }
 
 template <typename T>
-void GlobalParameter::Bind(const std::string& group, const std::string& key, T* variable, WidgetType widgetType) {
+void GlobalParameter::Regist(const std::string& group, const std::string& key, T* variable, WidgetType widgetType) {
     // ImGuiで使うためにAddItem
     AddItem(group, key, *variable, widgetType);
 
@@ -574,11 +574,11 @@ template Vector4 GlobalParameter::GetValue<Vector4>(const std::string& groupName
 template bool GlobalParameter::GetValue<bool>(const std::string& groupName, const std::string& key) const;
 template std::string GlobalParameter::GetValue<std::string>(const std::string& groupName, const std::string& key) const;
 
-template void GlobalParameter::Bind<int32_t>(const std::string& group, const std::string& key, int32_t* variable, WidgetType widgetType);
-template void GlobalParameter::Bind<uint32_t>(const std::string& group, const std::string& key, uint32_t* variable, WidgetType widgetType);
-template void GlobalParameter::Bind<float>(const std::string& group, const std::string& key, float* variable, WidgetType widgetType);
-template void GlobalParameter::Bind<Vector2>(const std::string& group, const std::string& key, Vector2* variable, WidgetType widgetType);
-template void GlobalParameter::Bind<Vector3>(const std::string& group, const std::string& key, Vector3* variable, WidgetType widgetType);
-template void GlobalParameter::Bind<Vector4>(const std::string& group, const std::string& key, Vector4* variable, WidgetType widgetType);
-template void GlobalParameter::Bind<bool>(const std::string& group, const std::string& key, bool* variable, WidgetType widgetType);
-template void GlobalParameter::Bind<std::string>(const std::string& group, const std::string& key, std::string* variable, WidgetType widgetType);
+template void GlobalParameter::Regist<int32_t>(const std::string& group, const std::string& key, int32_t* variable, WidgetType widgetType);
+template void GlobalParameter::Regist<uint32_t>(const std::string& group, const std::string& key, uint32_t* variable, WidgetType widgetType);
+template void GlobalParameter::Regist<float>(const std::string& group, const std::string& key, float* variable, WidgetType widgetType);
+template void GlobalParameter::Regist<Vector2>(const std::string& group, const std::string& key, Vector2* variable, WidgetType widgetType);
+template void GlobalParameter::Regist<Vector3>(const std::string& group, const std::string& key, Vector3* variable, WidgetType widgetType);
+template void GlobalParameter::Regist<Vector4>(const std::string& group, const std::string& key, Vector4* variable, WidgetType widgetType);
+template void GlobalParameter::Regist<bool>(const std::string& group, const std::string& key, bool* variable, WidgetType widgetType);
+template void GlobalParameter::Regist<std::string>(const std::string& group, const std::string& key, std::string* variable, WidgetType widgetType);

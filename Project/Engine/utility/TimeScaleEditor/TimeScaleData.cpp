@@ -28,8 +28,8 @@ void TimeScaleData::SaveData() {
 }
 
 void TimeScaleData::RegisterParams() {
-    globalParameter_->Bind(groupName_, "timeScale", &timeScale_);
-    globalParameter_->Bind(groupName_, "duration", &duration_);
+    globalParameter_->Regist(groupName_, "timeScale", &timeScale_);
+    globalParameter_->Regist(groupName_, "duration", &duration_);
 }
 
 void TimeScaleData::AdjustParam() {
