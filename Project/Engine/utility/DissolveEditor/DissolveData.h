@@ -44,7 +44,7 @@ public:
 
 private:
     void RegisterParams();           //< パラメータバインド
-    void UpdateDissolveValues(); //< ディゾルブ値更新
+    void UpdateDissolveValues();     //< ディゾルブ値更新
 
 private:
     GlobalParameter* globalParameter_;

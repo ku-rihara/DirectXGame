@@ -469,6 +469,7 @@ void GlobalParameter::ParamLoadForImGui(const std::string& groupName, const std:
 
 template <typename T>
 void GlobalParameter::Regist(const std::string& group, const std::string& key, T* variable, WidgetType widgetType) {
+
     // ImGuiで使うためにAddItem
     AddItem(group, key, *variable, widgetType);
 
@@ -484,39 +485,47 @@ void GlobalParameter::Regist(const std::string& group, const std::string& key, T
         SetValue<T>(group, key, *variable, widgetType);
     };
 
-    bindings_[group].emplace_back(std::move(item));
+    registParams_[group].emplace_back(std::move(item));
 }
 
 //
 void GlobalParameter::SyncAll() {
-    for (auto& [group, items] : bindings_) {
+    for (auto& [group, items] : registParams_) {
         for (auto& item : items) {
             item.pushVariant();
         }
     }
 }
 
-bool GlobalParameter::HasBindings(const std::string& groupName) const {
-    auto it = bindings_.find(groupName);
-    return it != bindings_.end() && !it->second.empty();
+bool GlobalParameter::HasRegisters(const std::string& groupName) const {
+    auto it = registParams_.find(groupName);
+    return it != registParams_.end() && !it->second.empty();
 }
 
 
 void GlobalParameter::SyncParamForGroup(const std::string& group) {
-    auto it = bindings_.find(group);
-    if (it != bindings_.end()) {
+    auto it = registParams_.find(group);
+    if (it != registParams_.end()) {
         for (auto& item : it->second) {
             item.pullVariant();
         }
     }
 }
 
+void GlobalParameter::ClearRegistersForGroup(const std::string& groupName) {
+    auto it = registParams_.find(groupName);
+    if (it != registParams_.end()) {
+        it->second.clear();
+    }
+}
+
+
 
 void GlobalParameter::RemoveGroup(const std::string& groupName) {
-    // バインド情報をクリア
-    auto it = bindings_.find(groupName);
-    if (it != bindings_.end()) {
-        bindings_.erase(it);
+    // 登録情報をクリア
+    auto it = registParams_.find(groupName);
+    if (it != registParams_.end()) {
+        registParams_.erase(it);
     }
 
     // グループデータを削除
@@ -532,15 +541,8 @@ void GlobalParameter::RemoveGroup(const std::string& groupName) {
     }
 }
 
-void GlobalParameter::ClearBindingsForGroup(const std::string& groupName) {
-    auto it = bindings_.find(groupName);
-    if (it != bindings_.end()) {
-        it->second.clear(); 
-    }
-}
-
-void GlobalParameter::BindResetAll() {
-    bindings_.clear();
+void GlobalParameter::ResetAllRegister() {
+    registParams_.clear();
 }
 
 bool GlobalParameter::HasGroup(const std::string& groupName) const {

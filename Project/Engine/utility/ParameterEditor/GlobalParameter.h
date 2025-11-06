@@ -40,9 +40,8 @@ private:
     struct BoundItem {
         std::function<void()> pullVariant;
         std::function<void()> pushVariant;
-       
     };
-    
+
     using Item      = std::variant<int32_t, uint32_t, float, Vector2, Vector3, Vector4, bool, std::string>;
     using Parameter = std::pair<Item, DrawSettings>;
     using Group     = std::map<std::string, Parameter>;
@@ -105,7 +104,7 @@ public:
     void DrawWidget(const std::string& itemName, Item& item, const DrawSettings& drawSettings);
 
     /// <summary>
-    /// 変数バインド
+    /// 変数登録
     /// </summary>
     /// <param name="group">グループ名</param>
     /// <param name="key">キー</param>
@@ -167,25 +166,22 @@ public:
     /// <param name="groupName">グループ名</param>
     void RemoveGroup(const std::string& groupName);
 
-    /// グループにバインドが存在するか確認
-    /// </summary>
-    bool HasBindings(const std::string& groupName) const;
-
-     /// <summary>
+    /// <summary>
     /// グループのバインドをクリア
     /// </summary>
     /// <param name="groupName"></param>
-    void ClearBindingsForGroup(const std::string& groupName);
+    void ClearRegistersForGroup(const std::string& groupName);
 
     void AddTreePoP(); //< ツリーポップ
-    void BindResetAll(); //< 全バインドリセット
+    void ResetAllRegister(); //< 全バインドリセット
     void SyncAll(); //< 全同期
     void LoadFiles(); //< 全ファイル読み込み
+    bool HasRegisters(const std::string& groupName) const;
 
 private:
     std::unordered_map<std::string, Group> dates_;
     std::unordered_map<std::string, bool> visibilityFlags_;
-    std::unordered_map<std::string, std::vector<BoundItem>> bindings_;
+    std::unordered_map<std::string, std::vector<BoundItem>> registParams_;
     const std::string kDirectoryPath = "Resources/GlobalParameter/";
     std::stack<std::string> treeNodeStack_;
 };

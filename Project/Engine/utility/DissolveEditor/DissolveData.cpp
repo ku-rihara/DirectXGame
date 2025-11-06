@@ -10,10 +10,7 @@ void DissolveData::Init(const std::string& dissolveName) {
     groupName_ = dissolveName;
     globalParameter_->CreateGroup(groupName_, true);
 
-    // 重複バインドを防ぐ
-    if (!globalParameter_->HasBindings(groupName_)) {
-        RegisterParams();
-    }
+    RegisterParams();
 
     // パラメータ同期
     globalParameter_->SyncParamForGroup(groupName_);

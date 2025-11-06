@@ -29,11 +29,9 @@ void GameScene::Init() {
     ground_->Init();
     plane_->Init();
     skuBox_->Init();
-    cameraEditor_->Init(&viewProjection_);
     timeScaleController_->Init();
 
-    shakeEditor_->Init();
-    putObjForBlender->LoadJsonFile("game.json");
+   putObjForBlender->LoadJsonFile("game.json");
     putObjForBlender->EasingAllReset();
 
     cameraMode_ = BaseScene::CameraMode::DEBUG;

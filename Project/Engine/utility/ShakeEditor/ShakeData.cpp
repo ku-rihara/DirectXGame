@@ -6,31 +6,20 @@
 
 void ShakeData::Init(const std::string& shakeName) {
     globalParameter_ = GlobalParameter::GetInstance();
+    groupName_       = shakeName;
 
-    // グループ名設定
-    groupName_ = shakeName;
-    globalParameter_->CreateGroup(groupName_, true);
+    if (!globalParameter_->HasRegisters(shakeName)) {
+        // 新規登録
+        globalParameter_->CreateGroup(groupName_, true);
+        RegisterParams();
+        globalParameter_->SyncParamForGroup(groupName_);
+    } else {
+        // 値取得
+        LoadParams();
+    }
 
-    // 重複バインドを防ぐ
-    globalParameter_->ClearBindingsForGroup(groupName_);
-    RegisterParams();
-
-    // パラメータ同期
-    globalParameter_->SyncParamForGroup(groupName_);
-
-    // イージング設定
-    timeEase_.SetAdaptValue(&easedTime_);
-    timeEase_.SetStartValue(startTime_);
-    timeEase_.SetEndValue(0.0f);
-
-    timeEase_.SetOnFinishCallback([this]() {
-        Stop();
-        Reset();
-    });
-
-    // 初期状態
-    playState_          = PlayState::STOPPED;
-    currentShakeOffset_ = {0.0f, 0.0f, 0.0f};
+    // リセット
+    ResetParams();
 }
 
 void ShakeData::Update(const float& deltaTime) {
@@ -131,6 +120,15 @@ void ShakeData::RegisterParams() {
     globalParameter_->Regist(groupName_, "axisFlag", &axisFlag_);
 }
 
+void ShakeData::LoadParams() {
+    shakeLength_ = globalParameter_->GetValue<float>(groupName_, "shakeLength");
+    maxTime_     = globalParameter_->GetValue<float>(groupName_, "maxTime");
+    easeType_    = globalParameter_->GetValue<int32_t>(groupName_, "easeType");
+    shakeType_   = globalParameter_->GetValue<int32_t>(groupName_, "shakeType");
+    startTime_   = globalParameter_->GetValue<float>(groupName_, "startTime");
+    axisFlag_    = globalParameter_->GetValue<int32_t>(groupName_, "axisFlag");
+}
+
 void ShakeData::AdjustParam() {
 #ifdef _DEBUG
     if (showControls_) {
@@ -224,4 +222,21 @@ void ShakeData::AdjustParam() {
 
 bool ShakeData::IsPlaying() const {
     return playState_ == PlayState::PLAYING;
+}
+
+void ShakeData::ResetParams() {
+
+    // イージング設定
+    timeEase_.SetAdaptValue(&easedTime_);
+    timeEase_.SetStartValue(startTime_);
+    timeEase_.SetEndValue(0.0f);
+
+    timeEase_.SetOnFinishCallback([this]() {
+        Stop();
+        Reset();
+    });
+
+    // 初期状態
+    playState_          = PlayState::STOPPED;
+    currentShakeOffset_ = {0.0f, 0.0f, 0.0f};
 }

@@ -49,19 +49,21 @@ public:
     /// <param name="deltaTime">デルタタイム</param>
     void Update(const float& deltaTime);
 
-    void AdjustParam(); //< パラメータ調整
-    void Play();        //< 再生
-    void Stop();        //< 停止
-    void Reset();       //< リセット
-    void LoadData();    //< データロード
-    void SaveData();    //< データセーブ
-    bool IsPlaying() const; //< 再生中か
+    void AdjustParam();      //< パラメータ調整
+    void Play();             //< 再生
+    void Stop();             //< 停止
+    void Reset();            //< リセット
+    void LoadData();         //< データロード
+    void SaveData();         //< データセーブ
+    bool IsPlaying() const;  //< 再生中か
     bool IsFinished() const; //< 終了したか
 
 private:
-    void RegisterParams(); //< パラメータのバインド
-    void UpdateShakeValues(); //< シェイク値の計算
-    void UpdateVector3Shake(); //< Vector3シェイクの更新
+    void RegisterParams();      //< パラメータのバインド
+    void UpdateShakeValues();   //< シェイク値の計算
+    void UpdateVector3Shake();  //< Vector3シェイクの更新
+    void ResetParams();         //< パラメータリセット
+    void LoadParams();          //< パラメータ取得
 
     /// <summary>
     /// 軸フラグの適用
@@ -84,7 +86,7 @@ private:
 
     PlayState playState_ = PlayState::STOPPED;
 
-    Vector3 currentShakeOffset_ = {0.0f, 0.0f, 0.0f};
+    Vector3 currentShakeOffset_ =Vector3::ZeroVector();
 
     Easing<float> timeEase_;
     float easedTime_ = 0.0f;
@@ -98,5 +100,5 @@ public:
     Vector3 GetShakeOffset() const { return currentShakeOffset_; }
     AxisFlag GetAxisFlag() const { return static_cast<AxisFlag>(axisFlag_); }
 
-    void SetAxisFlag(AxisFlag flag) { axisFlag_ = static_cast<int32_t>(flag); }
+    void SetAxisFlag(const AxisFlag& flag) { axisFlag_ = static_cast<int32_t>(flag); }
 };

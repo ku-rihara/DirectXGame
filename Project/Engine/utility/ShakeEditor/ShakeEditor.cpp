@@ -119,7 +119,6 @@ void ShakeEditor::EditorUpdate() {
             ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
             if (ImGui::Button(("Load " + shakeName).c_str())) {
                 selectedShake->LoadData();
-                MessageBoxA(nullptr, (shakeName + " loaded successfully.").c_str(), "Shake Editor", 0);
             }
             ImGui::PopStyleColor(3);
             ImGui::SameLine();
@@ -143,7 +142,6 @@ void ShakeEditor::EditorUpdate() {
         ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
         if (ImGui::Button("Load All Shakes")) {
             AllLoadFile();
-            MessageBoxA(nullptr, "All Shakes loaded successfully.", "Shake Editor", 0);
         }
         ImGui::PopStyleColor(3);
         ImGui::SameLine();
