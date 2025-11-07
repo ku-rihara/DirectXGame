@@ -61,7 +61,7 @@ private:
 
     void ResetValue();
     void LoadParams();
-    void KeyFrameAllLoad(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
+    void RebuildAndLoadAllKeyFrames(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
 
     /// <summary>
     /// タイムモードセレクター
