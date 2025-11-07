@@ -793,6 +793,9 @@
     <ClCompile Include="Engine\utility\RailEditor\RailManager.cpp">
       <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\utility\RailEditor\RailControlPoint.cpp">
+      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1312,6 +1315,9 @@
       <Filter>MyEngine\.h\utility\RailEditor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\utility\RailEditor\RailManager.h">
+      <Filter>MyEngine\.h\utility\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\RailEditor\RailControlPoint.h">
       <Filter>MyEngine\.h\utility\RailEditor</Filter>
     </ClInclude>
   </ItemGroup>

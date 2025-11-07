@@ -1,12 +1,11 @@
 #include "RailData.h"
 #include "Frame/Frame.h"
 #include "MathFunction.h"
+#include <algorithm>
+#include <filesystem>
 #include <fstream>
 #include <imgui.h>
-#include <json.hpp>
 #include <Windows.h>
-
-using json = nlohmann::json;
 
 void RailData::Init(const std::string& railName) {
     globalParameter_ = GlobalParameter::GetInstance();
@@ -15,23 +14,6 @@ void RailData::Init(const std::string& railName) {
     // Rail初期化
     rail_ = std::make_unique<Rail>();
     rail_->Init(5);
-
-    // 制御点データをファイルから読み込み
-    std::ifstream file(dyrectrypath_ + groupName_ + ".json", std::ios::in);
-    if (file.is_open()) {
-        json root;
-        file >> root;
-        file.close();
-
-        controlPoints_.clear();
-        for (const auto& position : root) {
-            Vector3 pos;
-            pos.x = position.at("x").get<float>();
-            pos.y = position.at("y").get<float>();
-            pos.z = position.at("z").get<float>();
-            controlPoints_.push_back(pos);
-        }
-    }
 
     if (!globalParameter_->HasRegisters(railName)) {
         // 新規登録
@@ -54,8 +36,8 @@ void RailData::Update(const float& speed, const PositionMode& mode, const Vector
 
     direction_ = direction;
 
-    // 経過時間を更新
-    elapsedTime_ += speed;
+    // Easingを更新
+    timeEase_.Update(speed);
 
     // 開始時間に達していない場合は待機
     if (elapsedTime_ < startTime_) {
@@ -63,10 +45,10 @@ void RailData::Update(const float& speed, const PositionMode& mode, const Vector
         return;
     }
 
-    // レール更新用の座標リストを作成
+    // キーフレームから制御点リストを作成
     std::vector<Vector3> positions;
-    for (const auto& point : controlPoints_) {
-        Vector3 pos = point * direction_;
+    for (const auto& keyFrame : controlPoints_) {
+        Vector3 pos = keyFrame->GetPosition() * direction_;
 
         if (mode == PositionMode::WORLD && parentTransform_ != nullptr) {
             // ワールド座標に変換
@@ -79,20 +61,9 @@ void RailData::Update(const float& speed, const PositionMode& mode, const Vector
     }
 
     // レール更新
-    rail_->Update(positions);
-
-    // 開始時間を引いた実際のレール移動時間を計算
-    float railTime = elapsedTime_ - startTime_;
-
-    // 正規化された時間(0~1)を計算
-    float t = 0.0f;
-    if (maxTime_ > 0.0f) {
-        t = railTime / maxTime_;
+    if (!positions.empty()) {
+        rail_->Update(positions);
     }
-
-    // Easingを適用
-    timeEase_.SetType(static_cast<EasingType>(easeType_));
-    easedTime_ = timeEase_.EaseInOut(t, 0.0f, 1.0f);
 
     RoopOrStop();
 
@@ -101,15 +72,14 @@ void RailData::Update(const float& speed, const PositionMode& mode, const Vector
 }
 
 void RailData::RoopOrStop() {
-    // 開始時間を引いた実際のレール移動時間
-    float railTime = elapsedTime_ - startTime_;
-
-    if (railTime < maxTime_)
+    // イージングが完了したかチェック
+    if (!timeEase_.IsFinished()) {
         return;
+    }
 
     if (isLoop_) {
-        elapsedTime_ = 0.0f;
-        easedTime_   = 0.0f;
+        timeEase_.Reset();
+        easedTime_ = 0.0f;
     } else {
         easedTime_ = 1.0f;
         playState_ = PlayState::STOPPED;
@@ -118,9 +88,8 @@ void RailData::RoopOrStop() {
 
 void RailData::Play() {
     Reset();
-    playState_   = PlayState::PLAYING;
-    elapsedTime_ = 0.0f;
-    easedTime_   = 0.0f;
+    playState_ = PlayState::PLAYING;
+    timeEase_.Reset();
 }
 
 void RailData::Stop() {
@@ -132,6 +101,7 @@ void RailData::Reset() {
     elapsedTime_     = 0.0f;
     easedTime_       = 0.0f;
     currentPosition_ = Vector3::ZeroVector();
+    timeEase_.Reset();
 }
 
 bool RailData::IsFinished() const {
@@ -142,13 +112,43 @@ bool RailData::IsPlaying() const {
     return playState_ == PlayState::PLAYING;
 }
 
-void RailData::AddPoint(const Vector3& position) {
-    controlPoints_.push_back(position);
+void RailData::AddKeyFrame() {
+    int32_t newIndex = static_cast<int32_t>(controlPoints_.size());
+    auto newKeyFrame = std::make_unique<RailControlPoint>();
+    newKeyFrame->Init(groupName_, newIndex);
+
+    controlPoints_.push_back(std::move(newKeyFrame));
+    selectedKeyFrameIndex_ = newIndex;
 }
 
-void RailData::RemovePoint(size_t index) {
-    if (index < controlPoints_.size()) {
+void RailData::RemoveKeyFrame(const int32_t& index) {
+    if (index >= 0 && index < static_cast<int32_t>(controlPoints_.size())) {
         controlPoints_.erase(controlPoints_.begin() + index);
+
+        // 選択インデックスの調整
+        if (selectedKeyFrameIndex_ >= index) {
+            selectedKeyFrameIndex_--;
+            if (selectedKeyFrameIndex_ < 0 && !controlPoints_.empty()) {
+                selectedKeyFrameIndex_ = 0;
+            }
+        }
+
+        // インデックスの再設定
+        for (int32_t i = 0; i < static_cast<int32_t>(controlPoints_.size()); ++i) {
+            controlPoints_[i]->Init(groupName_, i);
+        }
+    }
+}
+
+void RailData::ClearKeyFrames() {
+    controlPoints_.clear();
+    selectedKeyFrameIndex_ = -1;
+}
+
+void RailData::InitKeyFrames() {
+    // すべてのキーフレームを初期化
+    for (int32_t i = 0; i < static_cast<int32_t>(controlPoints_.size()); ++i) {
+        controlPoints_[i]->Init(groupName_, i);
     }
 }
 
@@ -156,37 +156,77 @@ void RailData::LoadData() {
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
 
-    // 制御点データをファイルから読み込み
-    std::ifstream file(dyrectrypath_ + groupName_ + ".json", std::ios::in);
-    if (file.is_open()) {
-        json root;
-        file >> root;
-        file.close();
-
-        controlPoints_.clear();
-        for (const auto& position : root) {
-            Vector3 pos;
-            pos.x = position.at("x").get<float>();
-            pos.y = position.at("y").get<float>();
-            pos.z = position.at("z").get<float>();
-            controlPoints_.push_back(pos);
-        }
-    }
+    // キーフレームデータの読み込み
+    LoadKeyFrames();
 }
 
 void RailData::SaveData() {
     globalParameter_->SaveFile(groupName_, folderPath_);
 
-    // 制御点データをファイルに保存
-    json root;
-    for (const auto& pos : controlPoints_) {
-        root.push_back({{"x", pos.x}, {"y", pos.y}, {"z", pos.z}});
-    }
+    // キーフレームデータの保存
+    SaveAllKeyFrames();
+}
 
-    std::ofstream file(dyrectrypath_ + groupName_ + ".json", std::ios::out);
-    if (file.is_open()) {
-        file << root.dump(4);
-        file.close();
+void RailData::SaveAllKeyFrames() {
+    // すべてのキーフレームを保存
+    for (auto& keyFrame : controlPoints_) {
+        keyFrame->SaveData();
+    }
+}
+
+void RailData::LoadKeyFrames() {
+    std::string folderPath     = "Resources/GlobalParameter/RailEditor/ControlPoints/";
+    std::string keyFramePrefix = groupName_;
+
+    if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {
+
+        std::vector<std::pair<int32_t, std::string>> keyFrameFiles;
+
+        // キーフレームファイルを検索
+        for (const auto& entry : std::filesystem::directory_iterator(folderPath)) {
+            if (entry.is_regular_file() && entry.path().extension() == ".json") {
+                std::string fileName = entry.path().stem().string();
+
+                // ファイル名チェック
+                if (fileName.find(keyFramePrefix) == 0) {
+                    // インデックス番号を抽出
+                    std::string indexStr = fileName.substr(keyFramePrefix.length());
+
+                    int32_t index = std::stoi(indexStr);
+                    keyFrameFiles.emplace_back(index, fileName);
+                }
+            }
+        }
+
+        // インデックス順にソート
+        std::sort(keyFrameFiles.begin(), keyFrameFiles.end());
+
+        RebuildAndLoadAllKeyFrames(keyFrameFiles);
+
+        // 最初のキーフレームを選択状態に
+        if (!controlPoints_.empty()) {
+            selectedKeyFrameIndex_ = 0;
+        }
+    }
+}
+
+void RailData::RebuildAndLoadAllKeyFrames(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles) {
+    // 再構築
+    if (controlPoints_.size() == 0) {
+        // 既存のキーフレームをクリア
+        ClearKeyFrames();
+        // キーフレームを作成してロード
+        for (const auto& [index, fileName] : KeyFrameFiles) {
+            auto newKeyFrame = std::make_unique<RailControlPoint>();
+            newKeyFrame->Init(groupName_, index);
+            newKeyFrame->LoadData(); // Load
+            controlPoints_.push_back(std::move(newKeyFrame));
+        }
+    } else {
+        // すべてのキーフレームをロード
+        for (auto& keyFrame : controlPoints_) {
+            keyFrame->LoadData();
+        }
     }
 }
 
@@ -212,36 +252,30 @@ void RailData::ResetParams() {
 
     // Easing初期化
     timeEase_.SetAdaptValue(&easedTime_);
+    timeEase_.SetStartValue(0.0f);
+    timeEase_.SetEndValue(1.0f);
+    timeEase_.SetMaxTime(maxTime_);
+    timeEase_.SetType(static_cast<EasingType>(easeType_));
 }
 
-void RailData::ImGuiControlPoints() {
-    // 色を緑系統に変更
-    ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+void RailData::ImGuiKeyFrameList() {
+    ImGui::SeparatorText("KeyFrames");
 
-    if (ImGui::CollapsingHeader("Control Points")) {
-        // 現在の座標リストを表示
-        ImGui::SeparatorText("Current Positions");
-        for (size_t i = 0; i < controlPoints_.size(); ++i) {
-            ImGui::PushID(static_cast<int>(i));
-            if (ImGui::DragFloat3("Edit Position", &controlPoints_[i].x, 0.1f)) {
-            }
-            ImGui::SameLine();
-            if (ImGui::Button("Remove")) {
-                RemovePoint(i);
-            }
-            ImGui::PopID();
-        }
-
-        // 座標追加用
-        ImGui::SeparatorText("Add New Position");
-        ImGui::DragFloat3("New Position", &tempAddPosition_.x, 0.1f);
-        if (ImGui::Button("Add Position")) {
-            AddPoint(tempAddPosition_);
-            tempAddPosition_ = {0.0f, 0.0f, 0.0f};
-        }
+    if (ImGui::Button("Add KeyFrame")) {
+        AddKeyFrame();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Clear All KeyFrames")) {
+        ClearKeyFrames();
     }
 
-    ImGui::PopStyleColor();
+    ImGui::Separator();
+
+    for (int32_t i = 0; i < static_cast<int32_t>(controlPoints_.size()); ++i) {
+        ImGui::PushID(i);
+        controlPoints_[i]->AdjustParam();
+        ImGui::PopID();
+    }
 }
 
 void RailData::AdjustParam() {
@@ -279,11 +313,7 @@ void RailData::AdjustParam() {
         ImGui::Text("State: %s", stateText);
 
         // 進行状況を表示
-        float progress  = 0.0f;
-        float totalTime = startTime_ + maxTime_;
-        if (totalTime > 0.0f) {
-            progress = elapsedTime_ / totalTime;
-        }
+        float progress = easedTime_;
         ImGui::ProgressBar(progress, ImVec2(0.0f, 0.0f), "Progress");
 
         ImGui::Separator();
@@ -298,12 +328,24 @@ void RailData::AdjustParam() {
         // イージングタイプ選択
         ImGuiEasingTypeSelector("Easing Type", easeType_);
 
+        // パラメータをEasingに反映
+        timeEase_.SetMaxTime(maxTime_);
+        timeEase_.SetType(static_cast<EasingType>(easeType_));
+
         ImGui::Separator();
 
-        // 制御点エディタ
-        ImGuiControlPoints();
+        // キーフレームリスト（すべてのキーフレームを表示）
+        if (showKeyFrameList_) {
+            ImGuiKeyFrameList();
+        }
 
         ImGui::PopID();
     }
 #endif // _DEBUG
+}
+
+void RailData::SetSelectedKeyFrameIndex(const int32_t& index) {
+    if (index >= -1 && index < static_cast<int32_t>(controlPoints_.size())) {
+        selectedKeyFrameIndex_ = index;
+    }
 }

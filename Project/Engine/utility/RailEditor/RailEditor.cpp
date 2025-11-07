@@ -12,7 +12,7 @@ void RailEditor::Init() {
 
 void RailEditor::AllLoadFile() {
     // RailEditorのRailDataフォルダ内のすべてのファイルを検索
-    std::string folderPath = "Resources/GlobalParameter/RailEditor/";
+    std::string folderPath = "Resources/GlobalParameter/RailEditor/Datas/";
 
     if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {
         // 既存のレールをクリア
@@ -36,7 +36,7 @@ void RailEditor::AllLoadFile() {
 void RailEditor::Update(const float& deltaTime) {
     // すべてのレールを更新
     for (auto& rail : rails_) {
-        rail->Update(rail->GetMoveSpeed() * deltaTime, RailData::PositionMode::WORLD);
+        rail->Update(deltaTime, RailData::PositionMode::WORLD);
         if (rail->IsPlaying() && preViewObj_) {
             preViewObj_->transform_.translation_ = basePos_ + rail->GetCurrentPosition();
         }
