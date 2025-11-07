@@ -16,8 +16,8 @@ class PlayerComboAttackData {
 public:
     enum class TriggerCondition {
         GROUND, // 地上のみ
-        AIR, // 空中のみ
-        BOTH // 両方
+        AIR,    // 空中のみ
+        BOTH    // 両方
     };
 
 public:
@@ -107,4 +107,5 @@ public:
     //*-------------------------------- Getter Method --------------------------------*//
     const std::string& GetGroupName() const { return groupName_; }
     AttackParameter& GetAttackParam() { return attackParam_; }
+    const PlayerAttackRenditionData& GetRenditionData() const { return renditionData_; }
 };

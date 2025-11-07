@@ -2,7 +2,10 @@
 
 #include "utility/FileSelector/FileSelector.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
+#include <array>
 #include <string>
+#include <utility>
+#include <cstdint>
 
 /// <summary>
 /// プレイヤー攻撃演出データクラス
@@ -11,9 +14,17 @@ class PlayerAttackRenditionData {
 public:
     struct RenditionParam {
         std::string fileName;
-        float startTiming;
-        bool triggerByHit;
-        FileSelector fileSelector;
+        float startTiming = 0.0f;
+        float currentTime_;
+        bool triggerByHit = false;
+    };
+
+    enum class Type {
+        CameraAction,
+        HitStop,
+        ShakeAction,
+        PostEffect,
+        Count
     };
 
 public:
@@ -22,33 +33,25 @@ public:
 
     //*-------------------------------- public Method --------------------------------*//
 
-
-    // パラメータバインド、調整
     void AdjustParam();
     void BindParams(GlobalParameter* globalParam, const std::string& groupName);
 
 private:
     //*-------------------------------- private Method --------------------------------*//
-
-    // 演出パラメータの選択UI
-    void SelectRenditionFile(const char* label, const std::string& directory, RenditionParam& param);
+    void SelectRenditionFile(const char* label, const std::string& directory, std::pair<RenditionParam, FileSelector>& param);
 
 private:
     //*-------------------------------- Private variants--------------------------------*//
-
     std::string groupName_;
     const std::string folderPath_ = "Resources/GlobalParameter/";
 
-    // 演出パラメータ
-    RenditionParam cameraAction_;
-    RenditionParam hitStopParam_;
-    RenditionParam shakeAction_;
-    RenditionParam postEffectParam_;
+    // 演出パラメータ配列
+    std::array<std::pair<RenditionParam, FileSelector>, static_cast<size_t>(Type::Count)> renditionParams_;
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//
-    const RenditionParam& GetCameraAction() const { return cameraAction_; }
-    const RenditionParam& GetHitStopParam() const { return hitStopParam_; }
-    const RenditionParam& GetShakeAction() const { return shakeAction_; }
-    const RenditionParam& GetPostEffectParam() const { return postEffectParam_; }
+    const RenditionParam& GetRenditionParamFromIndex(const int32_t& index) const;
+    const RenditionParam& GetRenditionParamFromType(const Type& type) const {
+        return renditionParams_[static_cast<size_t>(type)].first;
+    }
 };
