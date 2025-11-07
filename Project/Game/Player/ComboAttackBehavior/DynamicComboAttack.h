@@ -1,8 +1,8 @@
 #pragma once
-
+#include"Rendition/PlayerAttackRendition.h"
 #include "BaseComboAattackBehavior.h"
-#include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Easing/Easing.h"
+#include <memory>
 
 /// <summary>
 /// データ駆動型のコンボ攻撃クラス
@@ -12,9 +12,9 @@ public:
     DynamicComboAttack(Player* player, PlayerComboAttackData* attackData);
     ~DynamicComboAttack();
 
-    void Init() override;
+    void Init()   override;
     void Update() override;
-    void Debug() override;
+    void Debug()  override;
 
 private:
     /// 振る舞いオーダー
@@ -41,6 +41,7 @@ private:
     float waitTime_;
 
     // 移動関連
+    std::unique_ptr<PlayerAttackRendition> attackRendition_;
     Easing<Vector3> moveEasing_;
     Vector3 currentMoveValue_;
     Vector3 startPosition_;

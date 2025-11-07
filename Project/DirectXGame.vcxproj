@@ -195,6 +195,7 @@
     <ClCompile Include="Game\LockOn\LockOnController.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\DynamicComboAttack.cpp" />
+    <ClCompile Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\RightJobPunch.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\RoolingPunchAttack.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\ThrustPunch.cpp" />
@@ -450,6 +451,7 @@
     <ClInclude Include="Game\LockOn\LockOnController.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\DynamicComboAttack.h" />
+    <ClInclude Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\RightJobPunch.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\RoolingPunchAttack.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\ThrustPunch.h" />

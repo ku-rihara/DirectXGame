@@ -469,6 +469,9 @@
     <Filter Include="Game\Player\EasingAnimation">
       <UniqueIdentifier>{47d13edc-3c7f-4474-b21c-f1f4aa93dc4e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player\Behavior\ComboBehavior\Rendition">
+      <UniqueIdentifier>{d01d8ed8-e9bf-4f45-80e0-b2515f3433fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1182,6 +1185,9 @@
     </ClCompile>
     <ClCompile Include="Game\Player\EasingAnimation\PlayerEasingAnimationData.cpp">
       <Filter>Game\Player\EasingAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.cpp">
+      <Filter>Game\Player\Behavior\ComboBehavior\Rendition</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1946,6 +1952,9 @@
     </ClInclude>
     <ClInclude Include="Game\Player\EasingAnimation\PlayerEasingAnimationData.h">
       <Filter>Game\Player\EasingAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.h">
+      <Filter>Game\Player\Behavior\ComboBehavior\Rendition</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

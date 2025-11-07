@@ -1,0 +1,63 @@
+#include "PlayerAttackRendition.h"
+#include "GameCamera/GameCamera.h"
+#include "AttackEffect/AttackEffect.h"
+#include "Frame/Frame.h"
+#include "Player/ComboCreator/PlayerComboAttackController.h"
+#include "Player/ComboCreator/PlayerComboAttackData.h"
+#include "Player/Player.h"
+
+void PlayerAttackRendition::Init(Player* player, PlayerComboAttackData* playerComboAttackData) {
+    pPlayer_               = player;
+    playerComboAttackData_ = playerComboAttackData;
+    Reset();
+}
+
+void PlayerAttackRendition::Reset() {
+    currentTime_ = 0.0f;
+    isPlayed_.fill(false);
+}
+
+void PlayerAttackRendition::Update(const float& deltaTime) {
+    if (!pPlayer_ || !playerComboAttackData_)
+        return;
+
+    currentTime_ += deltaTime;
+
+    auto& renditionData = playerComboAttackData_->GetRenditionData();
+
+    for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::Type::Count); ++i) {
+        const auto& param = renditionData.GetRenditionParamFromIndex(i);
+
+        // すでに再生済みならスキップ
+        if (isPlayed_[i]) {
+            continue;
+        }
+
+        // startTiming に達したら発動
+        if (currentTime_ >= param.startTiming) {
+            switch (static_cast<PlayerAttackRenditionData::Type>(i)) {
+            case PlayerAttackRenditionData::Type::CameraAction:
+                pPlayer_->GetGameCamera()->PlayAnimation(param.fileName);
+                break;
+
+            case PlayerAttackRenditionData::Type::HitStop:
+                pPlayer_->GetAttackEffect()->PlayHitStop(param.fileName);
+                break;
+
+            case PlayerAttackRenditionData::Type::ShakeAction:
+                pPlayer_->GetGameCamera()->PlayShake(param.fileName);
+                break;
+
+            case PlayerAttackRenditionData::Type::PostEffect:
+                pPlayer_->GetAttackEffect()->PlayPostEffect(param.fileName);
+                break;
+
+            default:
+                break;
+            }
+
+            // 再生済みに設定
+            isPlayed_[i] = true;
+        }
+    }
+}

@@ -1,69 +1,75 @@
 #include "PlayerAttackRenditionData.h"
 #include <imgui.h>
+#include <cassert>
 
 void PlayerAttackRenditionData::BindParams(GlobalParameter* globalParam, const std::string& groupName) {
     groupName_ = groupName;
 
-    // Camera Action
-    globalParam->Regist(groupName, "CameraAction_FileName", &cameraAction_.fileName);
-    globalParam->Regist(groupName, "CameraAction_StartTiming", &cameraAction_.startTiming);
-    globalParam->Regist(groupName, "CameraAction_TriggerByHit", &cameraAction_.triggerByHit);
+    struct RegInfo {
+        Type type;
+        const char* name;
+    };
 
-    // Hit Stop
-    globalParam->Regist(groupName, "HitStop_FileName", &hitStopParam_.fileName);
-    globalParam->Regist(groupName, "HitStop_StartTiming", &hitStopParam_.startTiming);
-    globalParam->Regist(groupName, "HitStop_TriggerByHit", &hitStopParam_.triggerByHit);
+    // 登録する項目リスト
+    const RegInfo infos[] = {
+        {Type::CameraAction, "CameraAction"},
+        {Type::HitStop, "HitStop"},
+        {Type::ShakeAction, "ShakeAction"},
+        {Type::PostEffect, "PostEffectParam"},
+    };
 
-    // Shake Action
-    globalParam->Regist(groupName, "ShakeAction_FileName", &shakeAction_.fileName);
-    globalParam->Regist(groupName, "ShakeAction_StartTiming", &shakeAction_.startTiming);
-    globalParam->Regist(groupName, "ShakeAction_TriggerByHit", &shakeAction_.triggerByHit);
+    for (const auto& info : infos) {
+        auto& param = renditionParams_[static_cast<size_t>(info.type)].first;
 
-    // Shake Action
-    globalParam->Regist(groupName, "PostEffectParam_FileName", &postEffectParam_.fileName);
-    globalParam->Regist(groupName, "PostEffectParam_StartTiming", &postEffectParam_.startTiming);
-    globalParam->Regist(groupName, "PostEffectParam_TriggerByHit", &postEffectParam_.triggerByHit);
+        globalParam->Regist(groupName, std::string(info.name) + "_FileName", &param.fileName);
+        globalParam->Regist(groupName, std::string(info.name) + "_StartTiming", &param.startTiming);
+        globalParam->Regist(groupName, std::string(info.name) + "_TriggerByHit", &param.triggerByHit);
+    }
 }
 
 void PlayerAttackRenditionData::AdjustParam() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader("Rendition Parameters")) {
-
         ImGui::PushID((groupName_ + "RenditionParams").c_str());
 
-        // Camera Action
-        ImGui::SeparatorText("Camera Action");
-        SelectRenditionFile("Camera File", folderPath_ + "CameraAnimation/AnimationData", cameraAction_);
-        ImGui::DragFloat("Camera Start Timing", &cameraAction_.startTiming, 0.01f, 0.0f, 10.0f);
-        ImGui::Checkbox("Camera Trigger By Hit", &cameraAction_.triggerByHit);
+        struct UIInfo {
+            Type type;
+            const char* label;
+            const char* dir;
+        };
 
-        // Hit Stop
-        ImGui::SeparatorText("Hit Stop");
-        SelectRenditionFile("HitStop File", folderPath_ + "TimeScale", hitStopParam_);
-        ImGui::DragFloat("HitStop Start Timing", &hitStopParam_.startTiming, 0.01f, 0.0f, 10.0f);
-        ImGui::Checkbox("HitStop Trigger By Hit", &hitStopParam_.triggerByHit);
+        const UIInfo infos[] = {
+            {Type::CameraAction, "Camera Action", "CameraAnimation/AnimationData"},
+            {Type::HitStop, "Hit Stop", "TimeScale"},
+            {Type::ShakeAction, "Shake Action", "ShakeEditor"},
+            {Type::PostEffect, "PostEffect", "PostEffect"},
+        };
 
-        // Shake Action
-        ImGui::SeparatorText("Shake Action");
-        SelectRenditionFile("Shake File", folderPath_ + "ShakeEditor", shakeAction_);
-        ImGui::DragFloat("Shake Start Timing", &shakeAction_.startTiming, 0.01f, 0.0f, 10.0f);
-        ImGui::Checkbox("Shake Trigger By Hit", &shakeAction_.triggerByHit);
+        for (const auto& info : infos) {
+            auto& paramPair = renditionParams_[static_cast<size_t>(info.type)];
+            auto& param     = paramPair.first;
 
-        // PostEffect
-        ImGui::SeparatorText("PostEffect");
-        SelectRenditionFile("PostEffect File", folderPath_ + "PostEffect", postEffectParam_);
-        ImGui::DragFloat("Shake Start Timing", &postEffectParam_.startTiming, 0.01f, 0.0f, 10.0f);
-        ImGui::Checkbox("Shake Trigger By Hit", &postEffectParam_.triggerByHit);
+            ImGui::SeparatorText(info.label);
+            SelectRenditionFile(info.label, folderPath_ + info.dir, paramPair);
+            ImGui::DragFloat("Start Timing", &param.startTiming, 0.01f, 0.0f, 10.0f);
+            ImGui::Checkbox("Trigger By Hit", &param.triggerByHit);
+        }
 
         ImGui::PopID();
     }
-#endif // _DEBUG
+#endif
 }
 
 void PlayerAttackRenditionData::SelectRenditionFile(
     const char* label,
     const std::string& directory,
-    RenditionParam& param) {
+    std::pair<RenditionParam, FileSelector>& param) {
 
-    param.fileSelector.SelectFile(label, directory, param.fileName, "", true);
+    param.second.SelectFile(label, directory, param.first.fileName, "", true);
 }
+
+const PlayerAttackRenditionData::RenditionParam& PlayerAttackRenditionData::GetRenditionParamFromIndex(const int32_t& index) const {
+    assert(index >= 0 && index < static_cast<int32_t>(Type::Count) && "Invalid Rendition Type Index");
+    return GetRenditionParamFromType(static_cast<Type>(index));
+}
+

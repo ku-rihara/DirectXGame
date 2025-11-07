@@ -3,6 +3,7 @@
 #include "Frame/Frame.h"
 #include "GameCamera/GameCamera.h"
 #include "MathFunction.h"
+#include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
 
 DynamicComboAttack::DynamicComboAttack(Player* player, PlayerComboAttackData* attackData)
@@ -25,10 +26,12 @@ void DynamicComboAttack::Init() {
     isCollisionActive_ = false;
     collisionTimer_    = 0.0f;
 
+    attackRendition_->Init(pPlayer_, attackData_);
+
     // targetPosを計算
     const PlayerComboAttackData::MoveParam& moveParam = attackData_->GetAttackParam().moveParam;
-    startPosition_  = pPlayer_->GetWorldPosition();
-    targetPosition_ = pPlayer_->GetTransform().CalcForwardTargetPos(startPosition_, moveParam.value);
+    startPosition_                                    = pPlayer_->GetWorldPosition();
+    targetPosition_                                   = pPlayer_->GetTransform().CalcForwardTargetPos(startPosition_, moveParam.value);
 
     // イージングのセットアップ
     moveEasing_.SetType(static_cast<EasingType>(moveParam.easeType));
@@ -94,6 +97,7 @@ void DynamicComboAttack::UpdateAttack() {
     auto& collisionParam = attackData_->GetAttackParam().collisionPara;
 
     collisionTimer_ += atkSpeed_;
+    attackRendition_->Update(atkSpeed_);
 
     if (collisionTimer_ >= collisionParam.adaptTime) {
         // コリジョンを無効化
