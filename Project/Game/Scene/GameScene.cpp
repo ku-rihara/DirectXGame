@@ -86,6 +86,7 @@ void GameScene::Debug() {
     ImGui::End();
     cameraEditor_->EditorUpdate();
     shakeEditor_->EditorUpdate();
+    railEditor_->EditorUpdate();
     timeScaleController_->EditorUpdate();
 #endif
 }

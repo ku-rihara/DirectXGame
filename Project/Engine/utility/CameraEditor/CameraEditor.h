@@ -20,11 +20,8 @@ public:
     /// <param name="vp">ビュープロジェクション</param>
     void Init(ViewProjection* vp);
 
-    void Update(); //< 更新
+    void Update();       //< 更新
     void EditorUpdate(); //< エディタ更新
-
-    void AllLoadFile(); //< 全ファイル読み込み
-    void AllSaveFile(); //< 全ファイル保存
 
     /// <summary>
     /// アニメーション追加
@@ -37,7 +34,7 @@ public:
     void PlaySelectedAnimation();             //< 選択中のアニメーション再生
     void PauseSelectedAnimation();            //< 選択中のアニメーション一時停止
     void ResetSelectedAnimation();            //< 選択中のアニメーションリセット
-    bool IsSelectedAnimationPlaying() const;  //< 選択中のアニメーション再生中か
+    bool IsSelectedAnimationPlaying()  const;  //< 選択中のアニメーション再生中か
     bool IsSelectedAnimationFinished() const; //< 選択中のアニメーション終了したか
 
     void ApplyToViewProjection();                 //< ViewProjectionに適用
@@ -45,7 +42,8 @@ public:
 
 private:
     void SetViewProjection(ViewProjection* vp);
-
+    void AllLoadFile(); //< 全ファイル読み込み
+    void AllSaveFile(); //< 全ファイル保存
 private:
     std::vector<std::unique_ptr<CameraAnimationData>> animations_;
     int selectedIndex_              = -1;

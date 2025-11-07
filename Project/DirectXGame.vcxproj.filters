@@ -487,15 +487,6 @@
     <ClCompile Include="math\Vector2.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\RailEditor\Rail.cpp">
-      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\RailEditor\RailManager.cpp">
-      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\RailEditor\ControlPosManager.cpp">
-      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleEmitter.cpp">
       <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
     </ClCompile>
@@ -784,6 +775,24 @@
     <ClCompile Include="Engine\utility\FileSelector\FileSelector.cpp">
       <Filter>MyEngine\.cpp\utility\FileSelector</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\utility\RailEditor\RailData.cpp">
+      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\RailEditor\RailEditor.cpp">
+      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\RailEditor\RailPlayer.cpp">
+      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\RailEditor\ControlPosManager.cpp">
+      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\RailEditor\Rail.cpp">
+      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\RailEditor\RailManager.cpp">
+      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -983,15 +992,6 @@
     </ClInclude>
     <ClInclude Include="Engine\input\GamePad.h">
       <Filter>MyEngine\.h\input</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\RailEditor\Rail.h">
-      <Filter>MyEngine\.h\utility\RailEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\RailEditor\RailManager.h">
-      <Filter>MyEngine\.h\utility\RailEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\RailEditor\ControlPosManager.h">
-      <Filter>MyEngine\.h\utility\RailEditor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleManager.h">
       <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
@@ -1295,6 +1295,24 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\FileSelector\FileSelector.h">
       <Filter>MyEngine\.h\utility\FileSelector</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\RailEditor\RailData.h">
+      <Filter>MyEngine\.h\utility\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\RailEditor\RailEditor.h">
+      <Filter>MyEngine\.h\utility\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\RailEditor\RailPlayer.h">
+      <Filter>MyEngine\.h\utility\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\RailEditor\ControlPosManager.h">
+      <Filter>MyEngine\.h\utility\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\RailEditor\Rail.h">
+      <Filter>MyEngine\.h\utility\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\RailEditor\RailManager.h">
+      <Filter>MyEngine\.h\utility\RailEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
