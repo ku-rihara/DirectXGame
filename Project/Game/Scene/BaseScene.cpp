@@ -20,11 +20,13 @@ void BaseScene::Init() {
     debugCamera_  = std::make_unique<DebugCamera>(WinApp::kWindowWidth, WinApp::kWindowHeight);
     cameraEditor_ = std::make_unique<CameraEditor>();
     shakeEditor_  = std::make_unique<ShakeEditor>();
+    railEditor_   = std::make_unique<RailEditor>();
 
     // 初期化
     debugCamera_->Init();
     cameraEditor_->Init(&viewProjection_);
     shakeEditor_->Init();
+    railEditor_->Init();
     viewProjection_.Init();
 
     // ビュープロジェクション
@@ -53,7 +55,7 @@ void BaseScene::ViewProjectionUpdate() {
     switch (cameraMode_) {
         ///------------------------------------------------------
         /// Normal Mode
-        ///------------------------------------------------------ 
+        ///------------------------------------------------------
     case BaseScene::CameraMode::NORMAL:
         // デバッグモードへ
         if (isTriggerSpace) {
@@ -66,7 +68,7 @@ void BaseScene::ViewProjectionUpdate() {
         break;
         ///------------------------------------------------------
         /// Editor Mode
-        ///------------------------------------------------------ 
+        ///------------------------------------------------------
     case BaseScene::CameraMode::EDITOR:
         // ノーマルモードへ
         if (!cameraEditor_->GetIsEditing()) {
@@ -79,7 +81,7 @@ void BaseScene::ViewProjectionUpdate() {
         break;
         ///------------------------------------------------------
         /// Debug Mode
-        ///------------------------------------------------------ 
+        ///------------------------------------------------------
     case BaseScene::CameraMode::DEBUG:
         if (isTriggerSpace) {
             cameraMode_ = CameraMode::NORMAL;

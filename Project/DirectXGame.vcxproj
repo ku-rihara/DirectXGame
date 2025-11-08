@@ -136,6 +136,9 @@
     <ClCompile Include="Engine\utility\PutObjForBlender\PutObjForBlender.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\ControlPosManager.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\Rail.cpp" />
+    <ClCompile Include="Engine\utility\RailEditor\RailControlPoint.cpp" />
+    <ClCompile Include="Engine\utility\RailEditor\RailData.cpp" />
+    <ClCompile Include="Engine\utility\RailEditor\RailEditor.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\RailManager.cpp" />
     <ClCompile Include="Game\AttackEffect\AttackEffect.cpp" />
     <ClCompile Include="Game\BackGroundObject\BaseBackGroundObject.cpp" />
@@ -392,6 +395,9 @@
     <ClInclude Include="Engine\utility\PutObjForBlender\PutObjForBlender.h" />
     <ClInclude Include="Engine\utility\RailEditor\ControlPosManager.h" />
     <ClInclude Include="Engine\utility\RailEditor\Rail.h" />
+    <ClInclude Include="Engine\utility\RailEditor\RailControlPoint.h" />
+    <ClInclude Include="Engine\utility\RailEditor\RailData.h" />
+    <ClInclude Include="Engine\utility\RailEditor\RailEditor.h" />
     <ClInclude Include="Engine\utility\RailEditor\RailManager.h" />
     <ClInclude Include="Game\AttackEffect\AttackEffect.h" />
     <ClInclude Include="Game\BackGroundObject\BaseBackGroundObject.h" />

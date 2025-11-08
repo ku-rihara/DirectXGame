@@ -1189,6 +1189,15 @@
     <ClCompile Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Rendition</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\utility\RailEditor\RailControlPoint.cpp">
+      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\RailEditor\RailData.cpp">
+      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\RailEditor\RailEditor.cpp">
+      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1955,6 +1964,15 @@
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Rendition</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\RailEditor\RailControlPoint.h">
+      <Filter>MyEngine\.h\utility\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\RailEditor\RailData.h">
+      <Filter>MyEngine\.h\utility\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\RailEditor\RailEditor.h">
+      <Filter>MyEngine\.h\utility\RailEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

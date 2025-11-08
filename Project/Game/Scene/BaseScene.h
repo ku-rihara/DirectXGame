@@ -16,6 +16,7 @@
 // editor
 #include "utility/CameraEditor/CameraEditor.h"
 #include "utility/ShakeEditor/ShakeEditor.h"
+#include"utility/RailEditor/RailEditor.h"
 
 // debug
 #include "utility/Debug/DebugCamera.h"
@@ -57,6 +58,7 @@ protected:
 
     std::unique_ptr<CameraEditor> cameraEditor_ = nullptr;
     std::unique_ptr<ShakeEditor> shakeEditor_   = nullptr;
+    std::unique_ptr<RailEditor> railEditor_     = nullptr;
 
     ViewProjection viewProjection_;
 
