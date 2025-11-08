@@ -30,6 +30,12 @@ void RailData::Init(const std::string& railName) {
 }
 
 void RailData::Update(const float& speed, const PositionMode& mode, const Vector3& direction) {
+    // 戻り中の更新処理
+    if (playState_ == PlayState::RETURNING) {
+        UpdateReturn(speed);
+        return;
+    }
+
     if (playState_ != PlayState::PLAYING) {
         return;
     }
@@ -41,7 +47,7 @@ void RailData::Update(const float& speed, const PositionMode& mode, const Vector
 
     // 開始時間に達していない場合は待機
     if (elapsedTime_ < startTime_) {
-        currentPosition_ = Vector3::ZeroVector();
+        currentPosition_ = startPosition_; // 開始位置を保持
         return;
     }
 
@@ -65,13 +71,13 @@ void RailData::Update(const float& speed, const PositionMode& mode, const Vector
         rail_->Update(positions);
     }
 
-    RoopOrStop();
+    LoopOrStop();
 
     // Easing適用後の時間で現在位置を取得
-    currentPosition_ = rail_->GetPositionOnRail(easedTime_);
+    currentPosition_ = startPosition_ + rail_->GetPositionOnRail(easedTime_);
 }
 
-void RailData::RoopOrStop() {
+void RailData::LoopOrStop() {
     // イージングが完了したかチェック
     if (!timeEase_.IsFinished()) {
         return;
@@ -82,25 +88,89 @@ void RailData::RoopOrStop() {
         easedTime_ = 0.0f;
     } else {
         easedTime_ = 1.0f;
-        playState_ = PlayState::STOPPED;
+
+        // 戻りモードが設定されている場合、戻り動作を開始
+        if (returnParam_.mode != ReturnMode::NONE) {
+            StartReturn();
+        } else {
+            playState_ = PlayState::STOPPED;
+        }
+    }
+}
+
+void RailData::StartReturn() {
+    playState_                = PlayState::RETURNING;
+    returnParam_.easeAdaptPos = Vector3::ZeroVector();
+
+    if (returnParam_.mode == ReturnMode::DIRECT_RETURN) {
+        // 直接戻る用のイージング設定
+        returnParam_.ease.SetAdaptValue(&returnParam_.easeAdaptPos);
+        returnParam_.ease.SetStartValue(currentPosition_);
+        returnParam_.ease.SetEndValue(startPosition_);
+        returnParam_.ease.SetMaxTime(returnParam_.maxTime);
+        returnParam_.ease.SetType(static_cast<EasingType>(returnParam_.easeType));
+        returnParam_.ease.Reset();
+    } else if (returnParam_.mode == ReturnMode::REVERSE_RAIL) {
+        // レール逆走用のイージング設定を適用
+        timeEase_.SetStartValue(1.0f);
+        timeEase_.SetEndValue(0.0f);
+        timeEase_.SetMaxTime(returnParam_.maxTime);
+        timeEase_.SetType(static_cast<EasingType>(returnParam_.easeType));
+    }
+}
+
+void RailData::UpdateReturn(const float& speed) {
+    switch (returnParam_.mode) {
+    case ReturnMode::REVERSE_RAIL:
+        // レールを逆走
+        timeEase_.Update(speed);
+
+        // easedTimeが0以下になったら終了
+        if (easedTime_ <= 0.0f) {
+            easedTime_       = 0.0f;
+            currentPosition_ = startPosition_;
+            playState_       = PlayState::STOPPED;
+            // 元のイージング設定に戻す
+            timeEase_.SetMaxTime(maxTime_);
+            timeEase_.SetType(static_cast<EasingType>(easeType_));
+        } else {
+            currentPosition_ = startPosition_ + rail_->GetPositionOnRail(easedTime_);
+        }
+        break;
+
+    case ReturnMode::DIRECT_RETURN:
+        // 直接戻る
+        returnParam_.ease.Update(speed);
+
+        currentPosition_ = returnParam_.easeAdaptPos;
+
+        if (returnParam_.ease.IsFinished()) {
+            currentPosition_ = startPosition_;
+            playState_       = PlayState::STOPPED;
+        }
+        break;
+
+    default:
+        break;
     }
 }
 
 void RailData::Play() {
     Reset();
-    playState_ = PlayState::PLAYING;
+    startPosition_ = currentPosition_; // 開始位置を記憶
+    playState_     = PlayState::PLAYING;
     timeEase_.Reset();
 }
 
 void RailData::Stop() {
     playState_       = PlayState::STOPPED;
-    currentPosition_ = Vector3::ZeroVector();
+    currentPosition_ = startPosition_;
 }
 
 void RailData::Reset() {
     elapsedTime_     = 0.0f;
     easedTime_       = 0.0f;
-    currentPosition_ = Vector3::ZeroVector();
+    currentPosition_ = startPosition_;
     timeEase_.Reset();
 }
 
@@ -109,7 +179,7 @@ bool RailData::IsFinished() const {
 }
 
 bool RailData::IsPlaying() const {
-    return playState_ == PlayState::PLAYING;
+    return playState_ == PlayState::PLAYING || playState_ == PlayState::RETURNING;
 }
 
 void RailData::AddKeyFrame() {
@@ -219,7 +289,7 @@ void RailData::RebuildAndLoadAllKeyFrames(const std::vector<std::pair<int32_t, s
         for (const auto& [index, fileName] : KeyFrameFiles) {
             auto newKeyFrame = std::make_unique<RailControlPoint>();
             newKeyFrame->Init(groupName_, index);
-            newKeyFrame->LoadData(); // Load
+            newKeyFrame->LoadData();
             controlPoints_.push_back(std::move(newKeyFrame));
         }
     } else {
@@ -235,18 +305,26 @@ void RailData::RegisterParams() {
     globalParameter_->Regist(groupName_, "startTime", &startTime_);
     globalParameter_->Regist(groupName_, "isLoop", &isLoop_);
     globalParameter_->Regist(groupName_, "easeType", &easeType_);
+    globalParameter_->Regist(groupName_, "returnMode", &returnParam_.modeInt);
+    globalParameter_->Regist(groupName_, "returnTime", &returnParam_.maxTime);
+    globalParameter_->Regist(groupName_, "returnEaseType", &returnParam_.easeType);
 }
 
 void RailData::LoadParams() {
-    maxTime_   = globalParameter_->GetValue<float>(groupName_, "maxTime");
-    startTime_ = globalParameter_->GetValue<float>(groupName_, "startTime");
-    isLoop_    = globalParameter_->GetValue<bool>(groupName_, "isLoop");
-    easeType_  = globalParameter_->GetValue<int32_t>(groupName_, "easeType");
+    maxTime_              = globalParameter_->GetValue<float>(groupName_, "maxTime");
+    startTime_            = globalParameter_->GetValue<float>(groupName_, "startTime");
+    isLoop_               = globalParameter_->GetValue<bool>(groupName_, "isLoop");
+    easeType_             = globalParameter_->GetValue<int32_t>(groupName_, "easeType");
+    returnParam_.modeInt  = globalParameter_->GetValue<int32_t>(groupName_, "returnMode");
+    returnParam_.maxTime  = globalParameter_->GetValue<float>(groupName_, "returnTime");
+    returnParam_.easeType = globalParameter_->GetValue<int32_t>(groupName_, "returnEaseType");
+    returnParam_.mode     = static_cast<ReturnMode>(returnParam_.modeInt);
 }
 
 void RailData::ResetParams() {
     playState_       = PlayState::STOPPED;
     currentPosition_ = Vector3::ZeroVector();
+    startPosition_   = Vector3::ZeroVector();
     elapsedTime_     = 0.0f;
     easedTime_       = 0.0f;
 
@@ -309,6 +387,9 @@ void RailData::AdjustParam() {
         case PlayState::PAUSED:
             stateText = "PAUSED";
             break;
+        case PlayState::RETURNING:
+            stateText = "RETURNING";
+            break;
         }
         ImGui::Text("State: %s", stateText);
 
@@ -334,7 +415,22 @@ void RailData::AdjustParam() {
 
         ImGui::Separator();
 
-        // キーフレームリスト（すべてのキーフレームを表示）
+        // 戻りモードの設定
+        ImGui::SeparatorText("Return Settings");
+        const char* returnModes[] = {"None", "Reverse Rail", "Direct Return"};
+        if (ImGui::Combo("Return Mode", &returnParam_.modeInt, returnModes, IM_ARRAYSIZE(returnModes))) {
+            returnParam_.mode = static_cast<ReturnMode>(returnParam_.modeInt);
+        }
+
+        // 戻り用の設定を表示
+        if (returnParam_.mode != ReturnMode::NONE) {
+            ImGui::DragFloat("Return Time", &returnParam_.maxTime, 0.01f, 0.1f, 10.0f);
+            ImGuiEasingTypeSelector("Return Easing Type", returnParam_.easeType);
+        }
+
+        ImGui::Separator();
+
+        // キーフレームリスト
         if (showKeyFrameList_) {
             ImGuiKeyFrameList();
         }

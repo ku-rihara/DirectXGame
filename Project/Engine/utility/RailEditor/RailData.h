@@ -17,12 +17,28 @@ public:
     enum class PlayState {
         STOPPED,
         PLAYING,
-        PAUSED
+        PAUSED,
+        RETURNING // 追加: 戻り中の状態
     };
 
     enum class PositionMode {
         WORLD,
         LOCAL,
+    };
+
+    enum class ReturnMode {
+        NONE, // 戻らない
+        REVERSE_RAIL, // レールを逆走して戻る
+        DIRECT_RETURN // 直接元の位置に戻る
+    };
+
+    struct ReturnParam {
+        ReturnMode mode  = ReturnMode::NONE;
+        int32_t modeInt  = 0;
+        float maxTime    = 1.0f;
+        int32_t easeType = 0;
+        Easing<Vector3> ease;
+        Vector3 easeAdaptPos;
     };
 
 public:
@@ -79,14 +95,16 @@ private:
     void RegisterParams(); //< パラメータのバインド
     void LoadParams(); //< パラメータ取得
     void ResetParams(); //< パラメータリセット
-    void RoopOrStop(); //< ループまたは停止
+    void LoopOrStop(); //< ループまたは停止
+    void StartReturn(); //< 戻り動作を開始
+    void UpdateReturn(const float& speed); //< 戻り動作の更新
     void ImGuiKeyFrameList(); //< キーフレームリストのImGui
     void RebuildAndLoadAllKeyFrames(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
 
 private:
     GlobalParameter* globalParameter_;
     std::string groupName_;
-    std::string folderPath_ = "RailEditor/Datas";
+    std::string folderPath_ = "RailEditor/Dates";
 
     std::unique_ptr<Rail> rail_;
 
@@ -106,12 +124,16 @@ private:
     PlayState playState_ = PlayState::STOPPED;
 
     Vector3 currentPosition_ = Vector3::ZeroVector();
+    Vector3 startPosition_   = Vector3::ZeroVector();
     Vector3 direction_       = {1.0f, 1.0f, 1.0f};
 
     WorldTransform* parentTransform_ = nullptr;
 
     bool showControls_     = true;
     bool showKeyFrameList_ = true;
+
+    //  戻り動作用のパラメータ
+    ReturnParam returnParam_;
 
 public:
     std::string GetGroupName() const { return groupName_; }
