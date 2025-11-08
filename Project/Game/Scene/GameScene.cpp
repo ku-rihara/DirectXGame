@@ -141,7 +141,7 @@ void GameScene::PlayUpdate() {
     skyBox_->Update();
     howToOperate_->Update();
     enemySpawner_->Update(Frame::DeltaTimeRate());
-    continuousEnemySpawner_->Update(Frame::DeltaTimeRate(), viewProjection_);
+    continuousEnemySpawner_->Update(Frame::DeltaTimeRate());
     enemyManager_->Update();
     combo_->Update();
     fireInjectors_->Update();

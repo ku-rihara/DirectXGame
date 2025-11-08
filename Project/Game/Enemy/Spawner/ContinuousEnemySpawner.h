@@ -33,7 +33,7 @@ public:
 
     // 初期化、更新
     void Init();
-    void Update(const float& deltaTime, const ViewProjection& viewProjection);
+    void Update(const float& deltaTime);
 
     void Start(); //< スポーンシステムの開始
     void Stop(); //< スポーンシステムの停止
@@ -48,7 +48,7 @@ private:
     /// </summary>
     /// <param name="outPosition">スポーン位置出力</param>
     /// <returns>スポーン位置</returns>
-    Vector3 CalculateSpawnPosition(const ViewProjection& viewProjection);
+    Vector3 CalculateSpawnPosition();
 
     /// <summary>
     /// スポーン位置が有効かチェック
