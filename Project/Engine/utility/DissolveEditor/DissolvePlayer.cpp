@@ -11,6 +11,10 @@ void DissolvePlayer::Update(float deltaTime) {
 }
 
 void DissolvePlayer::Play(const std::string& dissolveName) {
+
+      dissolveData_.reset();
+    dissolveData_ = std::make_unique<DissolveData>();
+
     if (dissolveData_) {
         dissolveData_->Init(dissolveName);
         dissolveData_->LoadData();

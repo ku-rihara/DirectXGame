@@ -22,6 +22,10 @@ void CameraAnimation::Play(const std::string& animationName) {
     }
 
     currentAnimationName_ = animationName;
+
+    animationData_.reset();
+    animationData_ = std::make_unique<CameraAnimationData>();
+
     // アニメーションデータの初期化とロード
     animationData_->Init(currentAnimationName_);
     animationData_->LoadData();

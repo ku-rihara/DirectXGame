@@ -16,6 +16,10 @@ void ShakePlayer::UpdateTotalShakeOffset() {
 }
 
 void ShakePlayer::Play(const std::string& shakeName) {
+
+    shakeData_.reset();
+    shakeData_ = std::make_unique<ShakeData>();
+
     shakeData_->Init(shakeName);
     shakeData_->LoadData();
     shakeData_->Play();
