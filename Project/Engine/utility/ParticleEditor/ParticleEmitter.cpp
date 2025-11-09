@@ -42,7 +42,7 @@ void ParticleEmitter::Init() {
     railManager_->Init(particleName_ + "Emit");
 
     /// 発生位置可視化オブジェ
-    debugLine_.Init(24); 
+    debugLine_.reset(Line3D::Create(24));
     emitBoxTransform_.Init();
 }
 
@@ -77,6 +77,7 @@ void ParticleEmitter::Update() {
 
     RailMoveUpdate();
     UpdateEmitTransform();
+    SetEmitLine();
 
     /* SetValues();*/
 }
@@ -119,20 +120,16 @@ void ParticleEmitter::UpdateEmitTransform() {
     emitBoxTransform_.UpdateMatrix();
 }
 
-void ParticleEmitter::RailDraw(const ViewProjection& viewProjection) {
-    viewProjection;
-    /*railManager_->RailDraw(viewProjection);*/
-}
-void ParticleEmitter::DebugDraw(const ViewProjection& viewProjection) {
-    viewProjection;
+
+void ParticleEmitter::SetEmitLine() {
 #ifdef _DEBUG
 
     if (isMoveForRail_) { // レールに沿うエミット位置
-        railManager_->Draw(viewProjection, emitBoxTransform_.scale_);
+        railManager_->SetCubeLine(emitBoxTransform_.scale_);
 
     } else { // レールに沿わないエミット位置
-        debugLine_.DrawCubeWireframe(emitBoxTransform_.GetWorldPos(), emitBoxTransform_.scale_,Vector4::kWHITE());
-        debugLine_.Draw(viewProjection);
+        debugLine_->SetCubeWireframe(emitBoxTransform_.GetWorldPos(), emitBoxTransform_.scale_,Vector4::kWHITE());
+     
     }
 #endif // _DEBUG
 }

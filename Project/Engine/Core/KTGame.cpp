@@ -6,6 +6,7 @@
 #include "PostEffect/PostEffectRenderer.h"
 #include "Scene/Factory/SceneFactory.h"
 #include "utility/ParticleEditor/ParticleManager.h"
+#include"Line3D/Line3DManager.h"
 #include"GPUParticle/GPUParticleManager.h"
 
 // utility
@@ -59,10 +60,10 @@ void KTGame::Draw() {
     ParticleManager::GetInstance()->Draw(viewProjection);
     // GPUパーティクル描画
     GPUParticleManager::GetInstance()->Draw(viewProjection);
-   
-    /// コリジョン描画
-    collisionManager_->Draw(viewProjection);
-
+    // ライン描画
+    collisionManager_->LineAllSet();
+    Line3DManager::GetInstance()->DrawAll(viewProjection);
+  
     // --------------------------------------------------------------------------
     /// スプライト描画
     // --------------------------------------------------------------------------

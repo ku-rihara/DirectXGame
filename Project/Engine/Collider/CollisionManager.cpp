@@ -65,7 +65,7 @@ void CollisionManager::UpdateWorldTransform() {
 	}	
 }
 
-void CollisionManager::Draw(const ViewProjection& viewProjection) {
+void CollisionManager::LineAllSet() {
 #ifdef _DEBUG
 
 	// 非表示なら抜ける
@@ -74,10 +74,10 @@ void CollisionManager::Draw(const ViewProjection& viewProjection) {
 	}
 	//全てのコライダーを描画する
 	for (BaseCollider* baseCollider : baseColliders_) {
-		baseCollider->DrawDebugCube(viewProjection);
+		baseCollider->SetDebugCube();
 	}
 #endif // _DEBUG
-	viewProjection;
+
 }
 
 // CheckCollisionPairを改造

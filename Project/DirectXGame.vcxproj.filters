@@ -328,6 +328,12 @@
     <Filter Include="MyEngine\.h\utility\ObjEaseAnimation">
       <UniqueIdentifier>{c42f835d-ce70-4ff5-af6d-b3553ea25a77}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\Line3D">
+      <UniqueIdentifier>{544ae49e-d1f3-44f8-9497-a58fe21a8777}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Line3D">
+      <UniqueIdentifier>{7990ad44-c6c2-4468-9a24-0eb238145bbd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -558,9 +564,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Animation\ModelAnimation.cpp">
       <Filter>MyEngine\.cpp\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\Line3d.cpp">
-      <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\RtvManager.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
@@ -810,6 +813,12 @@
     </ClCompile>
     <ClCompile Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationEditor.cpp">
       <Filter>MyEngine\.cpp\utility\ObjEaseAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Line3D\Line3DManager.cpp">
+      <Filter>MyEngine\.cpp\Line3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Line3D\Line3d.cpp">
+      <Filter>MyEngine\.cpp\Line3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1080,9 +1089,6 @@
     <ClInclude Include="Engine\Animation\SkeletonData.h">
       <Filter>MyEngine\.h\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Line3d.h">
-      <Filter>MyEngine\.h\3d</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Animation\SkinCluster.h">
       <Filter>MyEngine\.h\Animation</Filter>
     </ClInclude>
@@ -1343,6 +1349,12 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationEditor.h">
       <Filter>MyEngine\.h\utility\ObjEaseAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Line3D\Line3DManager.h">
+      <Filter>MyEngine\.h\Line3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Line3D\Line3d.h">
+      <Filter>MyEngine\.h\Line3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

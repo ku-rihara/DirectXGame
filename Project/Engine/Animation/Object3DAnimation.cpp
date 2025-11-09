@@ -61,7 +61,7 @@ void Object3DAnimation::Create(const std::string& fileName) {
 ///============================================================
 void Object3DAnimation::Init() {
     transform_.Init();
-    line3dDrawer_.Init(5120);
+    line3dDrawer_.reset(Line3D::Create(5120));
 }
 
 ///============================================================
@@ -311,22 +311,19 @@ void Object3DAnimation::DrawShadow(const ViewProjection& viewProjection) {
 ///============================================================
 /// デバッグ描画
 ///============================================================
-void Object3DAnimation::DebugDraw(const ViewProjection& viewProjection) {
+void Object3DAnimation::DebugLineSet() {
     for (const Joint& joint : skeleton_.joints) {
         // Joint位置
         Vector3 jointPos = TransformMatrix(transform_.GetWorldPos(), joint.skeletonSpaceMatrix);
-        line3dDrawer_.DrawCubeWireframe(jointPos, Vector3(0.01f, 0.01f, 0.01f), Vector4::kWHITE());
+        line3dDrawer_->SetCubeWireframe(jointPos, Vector3(0.01f, 0.01f, 0.01f), Vector4::kWHITE());
 
         // 親とのライン描画
         if (joint.parent) {
             const Joint& parentJoint = skeleton_.joints[*joint.parent];
             Vector3 parentPos        = TransformMatrix(transform_.GetWorldPos(), parentJoint.skeletonSpaceMatrix);
-            line3dDrawer_.SetLine(jointPos, parentPos, Vector4::kWHITE());
+            line3dDrawer_->SetLine(jointPos, parentPos, Vector4::kWHITE());
         }
     }
-
-    // Joint描画
-    line3dDrawer_.Draw(viewProjection);
 }
 
 ///============================================================

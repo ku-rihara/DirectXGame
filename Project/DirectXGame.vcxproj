@@ -16,7 +16,6 @@
     <ClCompile Include="Engine\2d\SpriteRegistry.cpp" />
     <ClCompile Include="Engine\3d\BaseObject3d.cpp" />
     <ClCompile Include="Engine\3d\Object3DRegistry.cpp" />
-    <ClCompile Include="Engine\3d\Line3d.cpp" />
     <ClCompile Include="Engine\3d\Mesh.cpp" />
     <ClCompile Include="Engine\3d\Model.cpp" />
     <ClCompile Include="Engine\3d\ModelManager.cpp" />
@@ -75,6 +74,8 @@
     <ClCompile Include="Engine\Lighrt\PointLightManager.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLight.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLightManager.cpp" />
+    <ClCompile Include="Engine\Line3D\Line3d.cpp" />
+    <ClCompile Include="Engine\Line3D\Line3DManager.cpp" />
     <ClCompile Include="Engine\Material\BaseMaterial.cpp" />
     <ClCompile Include="Engine\Material\GPUParticleMaterial.cpp" />
     <ClCompile Include="Engine\Material\ModelMaterial.cpp" />
@@ -179,7 +180,6 @@
     <ClInclude Include="Engine\2d\SpriteRegistry.h" />
     <ClInclude Include="Engine\3d\BaseObject3d.h" />
     <ClInclude Include="Engine\3d\Object3DRegistry.h" />
-    <ClInclude Include="Engine\3d\Line3d.h" />
     <ClInclude Include="Engine\3d\Mesh.h" />
     <ClInclude Include="Engine\3d\Model.h" />
     <ClInclude Include="Engine\3d\ModelManager.h" />
@@ -244,6 +244,8 @@
     <ClInclude Include="Engine\Lighrt\PointLightManager.h" />
     <ClInclude Include="Engine\Lighrt\SpotLight.h" />
     <ClInclude Include="Engine\Lighrt\SpotLightManager.h" />
+    <ClInclude Include="Engine\Line3D\Line3d.h" />
+    <ClInclude Include="Engine\Line3D\Line3DManager.h" />
     <ClInclude Include="Engine\Material\BaseMaterial.h" />
     <ClInclude Include="Engine\Material\GPUParticleMaterial.h" />
     <ClInclude Include="Engine\Material\ModelMaterial.h" />

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "3d/BaseObject3d.h"
-#include "3d/Line3d.h"
+#include "Line3D/Line3D.h"
 #include "Animation/SkeletonData.h"
 #include "Animation/SkinCluster.h"
 #include "AnimationData.h"
@@ -76,7 +76,7 @@ public:
     /// デバッグ描画
     /// </summary>
     /// <param name="viewProjection">ビュープロジェクション</param>
-    void DebugDraw(const ViewProjection& viewProjection);
+    void DebugLineSet();
 
 private:
     /// <summary>
@@ -154,7 +154,7 @@ private:
     SkinCluster skinCluster_;
 
     // 描画・デバッグ
-    Line3D line3dDrawer_;
+    std::unique_ptr<Line3D> line3dDrawer_;
 
     // アニメーション状態
     float animationTime_           = 0.0f;

@@ -90,10 +90,10 @@ void AnimationRegistry::DrawAllShadow(const ViewProjection& viewProjection) {
 ///============================================================
 /// デバッグ描画
 ///============================================================
-void AnimationRegistry::DebugDrawAll(const ViewProjection& viewProjection) {
+void AnimationRegistry::DebugLineAllSet() {
     for (Object3DAnimation* animation : animations_) {
         if (animation != nullptr) {
-            animation->DebugDraw(viewProjection);
+            animation->DebugLineSet();
         }
     }
 }
