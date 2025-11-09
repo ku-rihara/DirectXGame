@@ -62,7 +62,7 @@ private:
         Vector3 rotateSpeed_;
         Vector4 color_;
         const Vector3* followPos = nullptr;
-        WorldTransform worldTransform_;
+        std::unique_ptr<WorldTransform> worldTransform_; 
         ScaleInFo scaleInfo;
         UVInfo uvInfo_;
     };

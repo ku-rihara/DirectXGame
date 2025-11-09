@@ -35,7 +35,6 @@ void ParticleManager::Init(SrvManager* srvManager) {
 /// 更新
 ///============================================================
 void ParticleManager::Update() {
-
     // 各粒子グループを周る
     for (auto& groupPair : particleGroups_) {
         ParticleGroup& group           = groupPair.second;
@@ -47,7 +46,7 @@ void ParticleManager::Update() {
             ///------------------------------------------------------------------------
             /// 加速フィールド
             ///------------------------------------------------------------------------
-            if (accelerationField_.isAdaption && IsCollision(accelerationField_.area, it->worldTransform_.translation_)) {
+            if (accelerationField_.isAdaption && IsCollision(accelerationField_.area, it->worldTransform_->translation_)) {
                 it->velocity_ += accelerationField_.acceleration * Frame::DeltaTimeRate();
             }
 
@@ -55,15 +54,15 @@ void ParticleManager::Update() {
             /// スケール変更
             ///------------------------------------------------------------------------
             (*it).easeTime += Frame::DeltaTimeRate();
-            (*it).easeTime               = std::min((*it).easeTime, (*it).scaleInfo.easeParam.maxTime);
-            (*it).worldTransform_.scale_ = ScaleAdapt((*it).easeTime, (*it).scaleInfo);
+            (*it).easeTime                = std::min((*it).easeTime, (*it).scaleInfo.easeParam.maxTime);
+            (*it).worldTransform_->scale_ = ScaleAdapt((*it).easeTime, (*it).scaleInfo);
 
             ///------------------------------------------------------------------------
             /// 回転させる
             ///------------------------------------------------------------------------
-            it->worldTransform_.rotation_.x += it->rotateSpeed_.x * Frame::DeltaTimeRate();
-            it->worldTransform_.rotation_.y += it->rotateSpeed_.y * Frame::DeltaTimeRate();
-            it->worldTransform_.rotation_.z += it->rotateSpeed_.z * Frame::DeltaTimeRate();
+            it->worldTransform_->rotation_.x += it->rotateSpeed_.x * Frame::DeltaTimeRate();
+            it->worldTransform_->rotation_.y += it->rotateSpeed_.y * Frame::DeltaTimeRate();
+            it->worldTransform_->rotation_.z += it->rotateSpeed_.z * Frame::DeltaTimeRate();
 
             ///------------------------------------------------------------------------
             /// 重力の適用
@@ -74,16 +73,16 @@ void ParticleManager::Update() {
             /// 変位更新
             ///------------------------------------------------------------------------
             if (it->followPos) {
-                it->worldTransform_.translation_ = *it->followPos + it->offSet;
+                it->worldTransform_->translation_ = *it->followPos + it->offSet;
             } else {
-                it->worldTransform_.translation_.y += it->velocity_.y * Frame::DeltaTime();
+                it->worldTransform_->translation_.y += it->velocity_.y * Frame::DeltaTime();
 
                 if (it->isFloatVelocity) {
-                    // 通常：方向ベクトル × スカラー速度
-                    it->worldTransform_.translation_ += it->direction_ * it->speed_ * Frame::DeltaTime();
+                    // 通常:方向ベクトル × スカラー速度
+                    it->worldTransform_->translation_ += it->direction_ * it->speed_ * Frame::DeltaTime();
                 } else {
                     // ベクトル速度そのまま適用
-                    it->worldTransform_.translation_ += it->speedV3 * Frame::DeltaTime();
+                    it->worldTransform_->translation_ += it->speedV3 * Frame::DeltaTime();
                 }
             }
 
@@ -98,10 +97,9 @@ void ParticleManager::Update() {
             ///------------------------------------------------------------------------
 
             if (group.param.isBillBord) {
-
-                it->worldTransform_.BillboardUpdateMatrix(*viewProjection_, group.param.billBordType, group.param.adaptRotate_);
+                it->worldTransform_->BillboardUpdateMatrix(*viewProjection_, group.param.billBordType, group.param.adaptRotate_);
             } else {
-                it->worldTransform_.UpdateMatrix();
+                it->worldTransform_->UpdateMatrix();
             }
 
             // 時間を進める
@@ -110,7 +108,6 @@ void ParticleManager::Update() {
         }
     }
 }
-
 ///============================================================
 /// 描画
 ///============================================================
@@ -133,9 +130,9 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
             }
 
             // WVP適応
-            instancingData[instanceIndex].World                 = it->worldTransform_.matWorld_;
-            instancingData[instanceIndex].WVP                   = it->worldTransform_.matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
-            instancingData[instanceIndex].WorldInverseTranspose = Inverse(Transpose(it->worldTransform_.matWorld_));
+            instancingData[instanceIndex].World                 = it->worldTransform_->matWorld_;
+            instancingData[instanceIndex].WVP                   = it->worldTransform_->matWorld_ * viewProjection.matView_ * viewProjection.matProjection_;
+            instancingData[instanceIndex].WorldInverseTranspose = Inverse(Transpose(it->worldTransform_->matWorld_));
 
             /// Alpha適応
             AlphaAdapt(instancingData[instanceIndex], *it, group);
@@ -318,19 +315,20 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
     Particle particle;
 
     /// Init
-    particle.lifeTime_    = paramaters.lifeTime;
-    particle.currentTime_ = 0.0f;
-    particle.worldTransform_.Init();
+    particle.lifeTime_       = paramaters.lifeTime;
+    particle.currentTime_    = 0.0f;
+    particle.worldTransform_ = std::make_unique<WorldTransform>(); // ポインタとして作成
+    particle.worldTransform_->Init();
 
     ///------------------------------------------------------------------------
     /// ペアレント
     ///------------------------------------------------------------------------
     if (paramaters.parentTransform) { // parent
-        particle.worldTransform_.parent_ = paramaters.parentTransform;
+        particle.worldTransform_->parent_ = paramaters.parentTransform;
     }
 
     if (paramaters.jointParent.animation) {
-        particle.worldTransform_.SetParentJoint(paramaters.jointParent.animation, paramaters.jointParent.name);
+        particle.worldTransform_->SetParentJoint(paramaters.jointParent.animation, paramaters.jointParent.name);
     }
 
     if (paramaters.followingPos_) {
@@ -348,7 +346,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
         Random::Range(paramaters.positionDist.min.z, paramaters.positionDist.max.z)};
 
     /// adapt
-    particle.worldTransform_.translation_ = paramaters.targetPos + paramaters.emitPos + randomTranslate;
+    particle.worldTransform_->translation_ = paramaters.targetPos + paramaters.emitPos + randomTranslate;
     // fllow pos用
     particle.offSet = paramaters.targetPos + paramaters.emitPos + randomTranslate;
 
@@ -365,7 +363,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
 
         direction = direction.Normalize();
 
-        // スピード（float）を生成
+        // スピード(float)を生成
         float speed = Random::Range(paramaters.speedDist.min, paramaters.speedDist.max);
 
         // カメラ回転を適用
@@ -393,10 +391,10 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
     ///------------------------------------------------------------------------
     /// 回転
     ///------------------------------------------------------------------------
-    if (paramaters.isRotateforDirection) { // 進行方向向く場合
+    if (paramaters.isRotateforDirection) { // 進行方向向き場合
 
         // caluclation direction angle
-        particle.worldTransform_.rotation_ = DirectionToEulerAngles(particle.direction_, *viewProjection_);
+        particle.worldTransform_->rotation_ = DirectionToEulerAngles(particle.direction_, *viewProjection_);
 
     } else {
         // random
@@ -406,7 +404,7 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
             Random::Range(paramaters.rotateDist.min.z, paramaters.rotateDist.max.z)};
 
         // adapt
-        particle.worldTransform_.rotation_ = ToRadian(paramaters.baseRotate + rotate);
+        particle.worldTransform_->rotation_ = ToRadian(paramaters.baseRotate + rotate);
     }
 
     ///------------------------------------------------------------------------
@@ -428,9 +426,9 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
     if (paramaters.isScalerScale) { // スカラー
 
         /// Easing Start Scale
-        float scale                     = Random::Range(paramaters.scaleDist.min, paramaters.scaleDist.max);
-        particle.worldTransform_.scale_ = {scale, scale, scale};
-        particle.scaleInfo.tempScaleV3  = particle.worldTransform_.scale_;
+        float scale                      = Random::Range(paramaters.scaleDist.min, paramaters.scaleDist.max);
+        particle.worldTransform_->scale_ = {scale, scale, scale};
+        particle.scaleInfo.tempScaleV3   = particle.worldTransform_->scale_;
 
         /// 　Easing end Scale
         float endscale                  = Random::Range(paramaters.scaleEaseParm.endValueF.min, paramaters.scaleEaseParm.endValueF.min);
@@ -444,8 +442,8 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
             Random::Range(paramaters.scaleDistV3.min.y, paramaters.scaleDistV3.max.y),
             Random::Range(paramaters.scaleDistV3.min.z, paramaters.scaleDistV3.max.z)};
 
-        particle.worldTransform_.scale_ = ScaleV3;
-        particle.scaleInfo.tempScaleV3  = ScaleV3;
+        particle.worldTransform_->scale_ = ScaleV3;
+        particle.scaleInfo.tempScaleV3   = ScaleV3;
 
         /// 　Easing end Scale
         Vector3 endScaleV3 = {
@@ -480,13 +478,13 @@ ParticleManager::Particle ParticleManager::MakeParticle(const ParticleEmitter::P
     /// UVTransform
     ///------------------------------------------------------------------------
     float frameWidth = 1.0f;
-    // 各フレームのUV幅（例：10フレームなら0.1f）
+    // 各フレームのUV幅(例:10フレームなら0.1f)
     if (paramaters.uvParm.numOfFrame != 0) {
         frameWidth = 1.0f / float(paramaters.uvParm.numOfFrame);
     }
     const float stopPosition = 1.0f - frameWidth;
 
-    // UV位置（開始オフセット）
+    // UV位置(開始オフセット)
     particle.uvInfo_.pos    = Vector3(paramaters.uvParm.pos.x, paramaters.uvParm.pos.y, 1.0f);
     particle.uvInfo_.rotate = paramaters.uvParm.rotate;
 

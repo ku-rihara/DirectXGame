@@ -6,10 +6,9 @@
 #include <cstdint>
 #include <d3d12.h>
 #include <list>
+#include <memory>
 #include <string>
 #include <wrl.h>
-#include <cstdint>
-#include <string>
 
 struct ConstBufferDataWorldTransform {
     Matrix4x4 matWorld;
@@ -33,16 +32,16 @@ enum class RotateOder {
     Quaternion, //< クォータニオン
 };
 
+class ObjEaseAnimationPlayer;
 class Object3DAnimation;
 
 /// <summary>
 /// ワールド変換クラス
 /// </summary>
 class WorldTransform {
-
 public:
-    WorldTransform()  = default;
-    ~WorldTransform() = default;
+    WorldTransform();
+    ~WorldTransform();
 
     void Init(); //< 初期化
 
@@ -69,7 +68,25 @@ public:
     /// <param name="startPos"></param>
     /// <param name="offsetValue"></param>
     /// <returns></returns>
-    Vector3 CalcForwardTargetPos(const Vector3& startPos, const Vector3& offsetValue)const;
+    Vector3 CalcForwardTargetPos(const Vector3& startPos, const Vector3& offsetValue) const;
+
+    /// <summary>
+    /// オブジェクトイージングアニメーション再生
+    /// </summary>
+    /// <param name="categoryName">カテゴリー名</param>
+    /// <param name="animationName">アニメーション名</param>
+    void PlayObjEaseAnimation(const std::string& categoryName, const std::string& animationName);
+
+    /// <summary>
+    /// オブジェクトイージングアニメーション停止
+    /// </summary>
+    void StopObjEaseAnimation();
+
+    /// <summary>
+    /// アニメーション更新
+    /// </summary>
+    /// <param name="deltaTime">デルタタイム</param>
+    void UpdateObjEaseAnimation(const float& deltaTime);
 
 private:
     void TransferMatrix(); //< 行列転送
@@ -77,6 +94,11 @@ private:
     void ClearParentJoint(); //< ペアレントジョイントクリア
     void UpdateMatrixWithJoint(); //< ジョイントで行列更新
     bool HasParentJoint() const; //< ペアレントジョイントを持つか
+
+    /// <summary>
+    /// アニメーション適用後のTransform更新
+    /// </summary>
+    void ApplyAnimationToTransform();
 
 public:
     Vector3 scale_ = Vector3::OneVector();
@@ -97,8 +119,8 @@ private:
     Matrix4x4 billboardMatrix_;
     Matrix4x4 backToFrontMatrix_;
 
-    WorldTransform(const WorldTransform&)            = delete;
-    WorldTransform& operator=(const WorldTransform&) = delete;
+    // オブジェクトイージングアニメーション
+    std::unique_ptr<ObjEaseAnimationPlayer> objEaseAnimationPlayer_;
 
 public:
     /// <summary>
@@ -121,46 +143,8 @@ public:
     Vector3 GetUpVector() const; //< 上方向ベクトル取得
     Vector3 GetForwardVector() const; //< 前方向ベクトル取得
 
-
-public:
-    WorldTransform(WorldTransform&& other) noexcept
-        : scale_(std::move(other.scale_)),
-          rotation_(std::move(other.rotation_)),
-          translation_(std::move(other.translation_)),
-          quaternion_(std::move(other.quaternion_)),
-          matWorld_(std::move(other.matWorld_)),
-          parent_(other.parent_),
-          rotateOder_(other.rotateOder_),
-          parentAnimation_(other.parentAnimation_),
-          parentJointIndex_(other.parentJointIndex_),
-          parentJointName_(std::move(other.parentJointName_)),
-          billboardMatrix_(std::move(other.billboardMatrix_)),
-          backToFrontMatrix_(std::move(other.backToFrontMatrix_)) {
-
-        other.parentAnimation_  = nullptr;
-        other.parentJointIndex_ = -1;
-        other.parentJointName_.clear();
-    }
-
-    WorldTransform& operator=(WorldTransform&& other) noexcept {
-        if (this != &other) {
-            scale_             = std::move(other.scale_);
-            rotation_          = std::move(other.rotation_);
-            translation_       = std::move(other.translation_);
-            quaternion_        = std::move(other.quaternion_);
-            matWorld_          = std::move(other.matWorld_);
-            parent_            = other.parent_;
-            rotateOder_        = other.rotateOder_;
-            parentAnimation_   = other.parentAnimation_;
-            parentJointIndex_  = other.parentJointIndex_;
-            parentJointName_   = std::move(other.parentJointName_);
-            billboardMatrix_   = std::move(other.billboardMatrix_);
-            backToFrontMatrix_ = std::move(other.backToFrontMatrix_);
-
-            other.parentAnimation_  = nullptr;
-            other.parentJointIndex_ = -1;
-            other.parentJointName_.clear();
-        }
-        return *this;
-    }
+    /// <summary>
+    /// アニメーションプレイヤー取得
+    /// </summary>
+    ObjEaseAnimationPlayer* GetObjEaseAnimationPlayer() { return objEaseAnimationPlayer_.get(); }
 };
