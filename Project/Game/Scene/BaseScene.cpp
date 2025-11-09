@@ -1,5 +1,6 @@
 #include "BaseScene.h"
 #include "base/WinApp.h"
+#include "Frame/Frame.h"
 #include "Lighrt/Light.h"
 #include "PostEffect/PostEffectRenderer.h"
 
@@ -38,6 +39,14 @@ void BaseScene::Init() {
     PostEffectRenderer::GetInstance()->SetViewProjection(&viewProjection_);
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
     GPUParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
+}
+
+void BaseScene::Update() {
+    debugCamera_->Update();
+    cameraEditor_->Update();
+    shakeEditor_->Update(Frame::DeltaTimeRate());
+    railEditor_->Update(Frame::DeltaTimeRate());
+    objEaseAnimationEditor_->Update(Frame::DeltaTimeRate());
 }
 
 void BaseScene::Debug() {

@@ -49,6 +49,8 @@ void GameScene::Init() {
 
 void GameScene::Update() {
 
+    BaseScene::Update();
+
     switch (gameState_) {
     case GameScene::GameState::INTRO:
 
@@ -112,8 +114,6 @@ void GameScene::IntroUpdate() {
         enemyManager_->Update();
         enemyManager_->HpBarUpdate(viewProjection_);
     }
-    // debugCamera
-    debugCamera_->Update();
 
     // Editor
     attackEffect_->Update();
@@ -126,13 +126,8 @@ void GameScene::IntroUpdate() {
 }
 void GameScene::PlayUpdate() {
 
-    // debugCamera
-    debugCamera_->Update();
-
     // Editor
     attackEffect_->Update();
-    shakeEditor_->Update(Frame::DeltaTime());
-    cameraEditor_->Update();
     Debug();
 
     // 各クラス更新

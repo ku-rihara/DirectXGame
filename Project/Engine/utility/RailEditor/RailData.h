@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 
+class Line3D;
+
 /// <summary>
 /// レールデータ
 /// </summary>
@@ -18,7 +20,7 @@ public:
         STOPPED,
         PLAYING,
         PAUSED,
-        RETURNING // 追加: 戻り中の状態
+        RETURNING
     };
 
     enum class PositionMode {
@@ -69,6 +71,13 @@ public:
     void LoadKeyFrames(); //< 全キーフレーム読み込み
     bool IsPlaying() const; //< 再生中か
     bool IsFinished() const; //< 終了したか
+
+    /// <summary>
+    /// 制御点を繋ぐ線を描画
+    /// </summary>
+    /// <param name="line3d">Line3Dオブジェクト</param>
+    /// <param name="color">線の色</param>
+    void SetControlPointLines(Line3D* line3d, const Vector4& color = {1.0f, 1.0f, 0.0f, 1.0f});
 
     /// <summary>
     /// キーフレームの追加
@@ -135,17 +144,22 @@ private:
     //  戻り動作用のパラメータ
     ReturnParam returnParam_;
 
+    // 線描画の表示設定
+    bool showControlPointLines_ = true;
+
 public:
-    std::string GetGroupName() const { return groupName_; }
-    Vector3 GetCurrentPosition() const { return currentPosition_; }
-    bool GetIsLoop() const { return isLoop_; }
+    const std::string& GetGroupName() const { return groupName_; }
+    const Vector3& GetCurrentPosition() const { return currentPosition_; }
+    const bool& GetIsLoop() const { return isLoop_; }
     Rail* GetRail() { return rail_.get(); }
     WorldTransform* GetParentTransform() const { return parentTransform_; }
     const std::vector<std::unique_ptr<RailControlPoint>>& GetKeyFrames() const { return controlPoints_; }
-    int32_t GetKeyFrameCount() const { return static_cast<int32_t>(controlPoints_.size()); }
+    const int32_t& GetKeyFrameCount() const { return static_cast<int32_t>(controlPoints_.size()); }
+    const bool GetShowControlPointLines()& { return showControlPointLines_; }
 
-    void SetIsLoop(bool loop) { isLoop_ = loop; }
+    void SetIsLoop(const bool& loop) { isLoop_ = loop; }
     void SetParent(WorldTransform* parent) { parentTransform_ = parent; }
     void SetDirection(const Vector3& direction) { direction_ = direction; }
     void SetSelectedKeyFrameIndex(const int32_t& index);
+    void SetShowControlPointLines(const bool& show) { showControlPointLines_ = show; }
 };

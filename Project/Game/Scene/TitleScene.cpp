@@ -57,6 +57,8 @@ void TitleScene::Init() {
 
 void TitleScene::Update() {
 
+    BaseScene::Update();
+
     screenSprite_->SetAlpha(alpha_);
 
     player_->TitleUpdate();

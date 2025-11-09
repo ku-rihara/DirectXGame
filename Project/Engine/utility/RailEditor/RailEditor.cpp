@@ -1,4 +1,5 @@
 #include "RailEditor.h"
+#include"Line3D/Line3d.h"
 #include <algorithm>
 #include <filesystem>
 #include <imgui.h>
@@ -8,6 +9,7 @@ void RailEditor::Init() {
     AllLoadFile();
     preViewObj_.reset(Object3d::CreateModel("DebugCube.obj"));
     preViewObj_->SetIsDraw(false);
+    debugLine3D_.reset(Line3D::Create(1000));
 }
 
 void RailEditor::AllLoadFile() {
@@ -43,6 +45,28 @@ void RailEditor::Update(const float& deltaTime) {
     }
 
     preViewObj_->SetIsDraw(isPreViewDraw_);
+
+    // ライン描画
+    DebugLineSet();
+}
+
+void RailEditor::DebugLineSet() {
+    // デバッグライン描画のリセット
+    if (debugLine3D_) {
+        debugLine3D_->Reset();
+
+        // すべてのレールの制御点ラインを描画
+        for (auto& rail : rails_) {
+            Vector4 lineColor = Vector4(1.0f, 1.0f, 0.0f, 1.0f); // 黄色
+
+            // 再生中のレールは緑色で描画
+            if (rail->IsPlaying()) {
+                lineColor = Vector4::kGREEN();
+            }
+
+            rail->SetControlPointLines(debugLine3D_.get(), lineColor);
+        }
+    }
 }
 
 void RailEditor::EditorUpdate() {

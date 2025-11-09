@@ -41,7 +41,7 @@ public:
 
     // 初期化、更新、描画
     virtual void Init();
-    virtual void Update()     = 0;
+    virtual void Update();
     virtual void SkyBoxDraw() = 0;
 
     // デバッグ
