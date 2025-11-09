@@ -50,6 +50,8 @@ void CollisionManager::Update() {
 	UpdateWorldTransform();
 
 	CheckAllCollisions();
+
+	LineAllSet();
 }
 
 void CollisionManager::UpdateWorldTransform() {
