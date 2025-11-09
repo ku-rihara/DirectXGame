@@ -8,7 +8,7 @@
 
 DynamicComboAttack::DynamicComboAttack(Player* player, PlayerComboAttackData* attackData)
     : BaseComboAattackBehavior(attackData->GetGroupName(), player) {
-
+    pPlayer_    = player;
     attackData_ = attackData;
     Init();
 }

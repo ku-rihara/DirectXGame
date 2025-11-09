@@ -65,6 +65,7 @@ void PlayerAttackRenditionData::AdjustParam() {
         };
 
         for (const auto& info : infos) {
+            ImGui::PushID(static_cast<int>(info.type));
             auto& paramPair = renditionParams_[static_cast<size_t>(info.type)];
             auto& param     = paramPair.first;
 
@@ -72,6 +73,7 @@ void PlayerAttackRenditionData::AdjustParam() {
             SelectRenditionFile(info.label, folderPath_ + info.dir, paramPair);
             ImGui::DragFloat("Start Timing", &param.startTiming, 0.01f, 0.0f, 10.0f);
             ImGui::Checkbox("Trigger By Hit", &param.triggerByHit);
+            ImGui::PopID();
         }
 
         ImGui::PopID();
