@@ -58,6 +58,8 @@ void Line3DManager::UnregisterLine(Line3D* line) {
 /// 全Line3Dオブジェクトの一括描画
 ///============================================================
 void Line3DManager::DrawAll(const ViewProjection& viewProj) {
+    viewProj;
+#ifdef _DEBUG
     if (lines_.empty()) {
         return;
     }
@@ -77,6 +79,7 @@ void Line3DManager::DrawAll(const ViewProjection& viewProj) {
 
     // Object3D用のパイプラインに戻す
     PipelineManager::GetInstance()->PreDraw(PipelineType::Object3D, commandList);
+#endif // _DEBUG
 }
 
 ///============================================================
