@@ -93,12 +93,14 @@ void PlayerAttackRenditionData::AdjustParam() {
         };
 
         for (const auto& info : objAnimInfos) {
+            ImGui::PushID(static_cast<int>(info.type));
             auto& paramPair = objAnimationParams_[static_cast<size_t>(info.type)];
             auto& param     = paramPair.first;
 
             ImGui::SeparatorText(info.label);
             SelectObjAnimationFile(info.label, paramPair);
             ImGui::DragFloat("Start Timing", &param.startTiming, 0.01f, 0.0f, 10.0f);
+            ImGui::PopID();
         }
 
         ImGui::PopID();

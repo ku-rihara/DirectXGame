@@ -36,6 +36,7 @@ public:
     /// ===================================================
     const WorldTransform& GetTransform() const { return baseTransform_; }
     const Vector3& GetScale() const { return baseTransform_.scale_; }
+    Object3d* GetObject3DRef() const { return obj3d_.get(); }
     /// ===================================================
     /// setter
     /// ===================================================

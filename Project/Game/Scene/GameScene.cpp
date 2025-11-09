@@ -50,7 +50,7 @@ void GameScene::Init() {
 void GameScene::Update() {
 
     BaseScene::Update();
-
+  
     switch (gameState_) {
     case GameScene::GameState::INTRO:
 
@@ -117,8 +117,7 @@ void GameScene::IntroUpdate() {
 
     // Editor
     attackEffect_->Update();
-    Debug();
-
+  
     // obj
     skyBox_->Update();
     gameCamera_->Update(gameIntroManager_->GetCurrentPlaySpeedRate());
@@ -128,7 +127,6 @@ void GameScene::PlayUpdate() {
 
     // Editor
     attackEffect_->Update();
-    Debug();
 
     // 各クラス更新
     comboScene_->Update();
