@@ -361,17 +361,14 @@ void ObjEaseAnimationData::ImGuiTransformParam(const char* label, TransformParam
 
     ImGui::Checkbox("Return To Origin", &param.returnToOrigin);
 
-    //  Rail使用フラグ
+    // Translation専用: Rail使用フラグ
     if (type == TransformType::Translation) {
         ImGui::Checkbox("Use Rail", &param.useRail);
 
         if (param.useRail) {
-            // Railファイル名入力
-            char railBuffer[256];
-            strcpy_s(railBuffer, param.railFileName.c_str());
-            if (ImGui::InputText("Rail File Name", railBuffer, sizeof(railBuffer))) {
-                param.railFileName = railBuffer;
-            }
+            // Railファイル選択
+            std::string directory = "Resources/GlobalParameter/RailEditor/Dates";
+            railFileSelector_.selector.SelectFile("Rail File", directory, param.railFileName, "", true);
             return; // Rail使用時は通常パラメータを表示しない
         }
     }

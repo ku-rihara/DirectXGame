@@ -1,6 +1,7 @@
 #pragma once
 #include "Easing/Easing.h"
 #include "Quaternion.h"
+#include "utility/FileSelector/FileSelector.h"
 #include "utility/ParameterEditor/GlobalParameter.h"
 #include "utility/RailEditor/RailPlayer.h"
 #include "Vector3.h"
@@ -47,6 +48,11 @@ public:
         // 実行時データ
         Vector3 currentValue = Vector3::ZeroVector();
         Easing<Vector3> ease;
+    };
+
+    // Rail用ファイルセレクター
+    struct RailFileSelector {
+        FileSelector selector;
     };
 
 public:
@@ -99,6 +105,7 @@ private:
 
     // Rail用
     std::unique_ptr<RailPlayer> railPlayer_;
+    RailFileSelector railFileSelector_;
 
     // 元の値（戻り用）
     Vector3 originalScale_       = Vector3::OneVector();
