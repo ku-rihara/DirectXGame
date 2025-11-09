@@ -34,17 +34,23 @@ void SceneManager::Update() {
 
     // 現在のシーンを更新
     if (scene_) {
+        Debug();
         scene_->Update();
     }
 
     // 登録されているオブジェクトを更新
-    Object3DRegistry::GetInstance()->UpdateAll();
+    Object3DRegistry::GetInstance()->UpdateAll(Frame::DeltaTimeRate());
     AnimationRegistry::GetInstance()->UpdateAll(Frame::DeltaTimeRate());
 
     // パーティクル更新
     ParticleManager::GetInstance()->Update();
     GPUParticleManager::GetInstance()->Update();
 }
+
+void SceneManager::Debug() {
+    scene_->Debug();
+
+ }
 
 void SceneManager::SkyBoxDraw() {
     if (scene_) {

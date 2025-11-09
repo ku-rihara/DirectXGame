@@ -17,7 +17,12 @@ public:
     static Object3d* CreateModel(const std::string& instanceName);
 
     void Init(); //< 初期化
-    void Update(); //< 更新
+
+    /// <summary>
+    /// 更新
+    /// </summary>
+    /// <param name="deltaTime">デルタタイム</param>
+    void Update(const float& deltaTime);
 
     /// <summary>
     /// 描画

@@ -57,7 +57,7 @@ void TitleScene::Update() {
 
     ParticleManager::GetInstance()->Update();
 
-    Debug();
+ 
     ViewProjectionUpdate();
 
     if (input_->TriggerKey(KeyboardKey::Enter)) {

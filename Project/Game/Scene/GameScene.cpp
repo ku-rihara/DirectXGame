@@ -43,8 +43,7 @@ void GameScene::Update() {
 
     /// debugCamera
     debugCamera_->Update();
-    Debug();
-
+  
     // 各クラス更新
     ground_->Update();
     timeScaleController_->Update(Frame::DeltaTime());
@@ -87,6 +86,7 @@ void GameScene::Debug() {
     cameraEditor_->EditorUpdate();
     shakeEditor_->EditorUpdate();
     railEditor_->EditorUpdate();
+    objEaseAnimationEditor_->EditorUpdate();
     timeScaleController_->EditorUpdate();
 #endif
 }

@@ -29,10 +29,10 @@ public:
 
     struct Parameter {
         Vector2 position_         = Vector2::ZeroVector();
-        Vector2 scale_            = Vector2::UnitVector();
-        Vector2 uvScale_          = Vector2::UnitVector();
+        Vector2 scale_            = Vector2::OneVector();
+        Vector2 uvScale_          = Vector2::OneVector();
         Vector4 color_            = Vector4::kWHITE();
-        Vector2 startAnchorPoint_ = Vector2::UnitVector();
+        Vector2 startAnchorPoint_ = Vector2::OneVector();
         int32_t startLayerNum_;
     };
 

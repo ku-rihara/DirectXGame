@@ -56,6 +56,6 @@ Vector2 Vector2::ZeroVector() {
 }
 
 // 単位ベクトル
-Vector2 Vector2::UnitVector() {
+Vector2 Vector2::OneVector() {
 	return Vector2(1.0f, 1.0f);
 }

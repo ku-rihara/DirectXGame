@@ -8,6 +8,8 @@
 #include <list>
 #include <string>
 #include <wrl.h>
+#include <cstdint>
+#include <string>
 
 struct ConstBufferDataWorldTransform {
     Matrix4x4 matWorld;
@@ -77,7 +79,7 @@ private:
     bool HasParentJoint() const; //< ペアレントジョイントを持つか
 
 public:
-    Vector3 scale_ = Vector3::UnitVector();
+    Vector3 scale_ = Vector3::OneVector();
     Vector3 rotation_;
     Vector3 translation_;
     Quaternion quaternion_;
@@ -118,6 +120,7 @@ public:
     Vector3 GetRightVector() const; //< 右方向ベクトル取得
     Vector3 GetUpVector() const; //< 上方向ベクトル取得
     Vector3 GetForwardVector() const; //< 前方向ベクトル取得
+
 
 public:
     WorldTransform(WorldTransform&& other) noexcept

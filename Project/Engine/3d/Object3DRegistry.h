@@ -32,7 +32,7 @@ public:
     /// <param name="object">解除するオブジェクト</param>
     void UnregisterObject(Object3d* object);
 
-    void UpdateAll(); //< 全オブジェクト更新
+    void UpdateAll(const float& deltaTime); //< 全オブジェクト更新
 
     /// <summary>
     /// 全オブジェクト描画

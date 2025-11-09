@@ -1,6 +1,7 @@
 #include "PutObjForBlender.h"
 #include "3d/Model.h"
 #include "mathFunction.h"
+#include"Frame/Frame.h"
 #include <cassert>
 #include <fstream>
 #include <unordered_set>
@@ -329,9 +330,6 @@ void PutObjForBlender::AdaptEasing(LevelData::ObjectData& objectData, const int3
     if (IsAdaptEasing(objectData, groupNum, EasingAdaptTransform::Translate)) {
         objectData.object3d->transform_.translation_ = objectData.preTranslation[groupNum];
     }
-
-    // 変更を反映
-    objectData.object3d->Update();
 }
 
 void PutObjForBlender::EmitterAllEdit() {

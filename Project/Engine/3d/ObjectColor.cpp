@@ -1,6 +1,7 @@
 #include "ObjectColor.h"
 #include"Dx/DirectXCommon.h"
 #include <cassert>
+#include <intsafe.h>
 
 // 初期化
 void ObjectColor::Init() {
@@ -43,6 +44,7 @@ void ObjectColor::Map() {
     // 初期色の転送
     constMap_->color_ = color_;
 }
+
 
 // 行列を転送する
 void ObjectColor::TransferMatrix() {

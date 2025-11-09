@@ -322,6 +322,12 @@
     <Filter Include="MyEngine\.h\utility\FileSelector">
       <UniqueIdentifier>{0a9f8023-eea7-44d2-a542-a2ca47a48fd5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\utility\ObjEaseAnimation">
+      <UniqueIdentifier>{fd6fb531-3099-409e-a70e-278e6e14999e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\ObjEaseAnimation">
+      <UniqueIdentifier>{c42f835d-ce70-4ff5-af6d-b3553ea25a77}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -795,6 +801,15 @@
     </ClCompile>
     <ClCompile Include="Engine\utility\RailEditor\RailControlPoint.cpp">
       <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationPlayer.cpp">
+      <Filter>MyEngine\.cpp\utility\ObjEaseAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationData.cpp">
+      <Filter>MyEngine\.cpp\utility\ObjEaseAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationEditor.cpp">
+      <Filter>MyEngine\.cpp\utility\ObjEaseAnimation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1319,6 +1334,15 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\RailEditor\RailControlPoint.h">
       <Filter>MyEngine\.h\utility\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationPlayer.h">
+      <Filter>MyEngine\.h\utility\ObjEaseAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationData.h">
+      <Filter>MyEngine\.h\utility\ObjEaseAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationEditor.h">
+      <Filter>MyEngine\.h\utility\ObjEaseAnimation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -139,6 +139,7 @@ Node Model::ReadNode(aiNode* node) {
 }
 
 void Model::CreateModel(const std::string& ModelFileName) {
+    modelName_ = ModelFileName;
     std::filesystem::path path(ModelFileName);
     std::string extension = path.extension().string();
     std::string stemName  = path.stem().string();

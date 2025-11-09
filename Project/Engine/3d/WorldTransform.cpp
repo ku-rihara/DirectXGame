@@ -3,7 +3,7 @@
 
 void WorldTransform::Init() {
 
-    scale_       = Vector3::UnitVector();
+    scale_       = Vector3::OneVector();
     rotation_    = {};
     translation_ = {};
 
@@ -13,6 +13,7 @@ void WorldTransform::Init() {
 
 void WorldTransform::TransferMatrix() {
 }
+
 
 void WorldTransform::UpdateMatrix() {
     // SRT更新
@@ -235,6 +236,7 @@ void WorldTransform::UpdateMatrixWithJoint() {
 
     matWorld_ *= parentJointMatrix;
 }
+
 
 bool WorldTransform::HasParentJoint() const {
     return parentAnimation_ != nullptr && parentJointIndex_ != -1;

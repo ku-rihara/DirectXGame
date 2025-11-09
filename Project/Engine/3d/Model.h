@@ -126,10 +126,12 @@ private:
 
     std::string modelPath_   = "Resources/Model/";
     std::string texturePath_ = "Resources/Texture/";
+    std::string modelName_   = "";
 
 public:
     const uint32_t& GetTextureIndex() const { return textureIndex_; }
     const ModelData& GetModelData() { return modelData_; }
+    const std::string& GetModelName() const { return modelName_; }
     ID3D12Resource* GetVertexResource() { return vertexResource_.Get(); }
     const bool& GetIsFileGltf() const { return isFileGltf_; }
 };
