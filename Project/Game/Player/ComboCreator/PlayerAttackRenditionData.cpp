@@ -1,6 +1,6 @@
 #include "PlayerAttackRenditionData.h"
-#include <imgui.h>
 #include <cassert>
+#include <imgui.h>
 
 void PlayerAttackRenditionData::BindParams(GlobalParameter* globalParam, const std::string& groupName) {
     groupName_ = groupName;
@@ -24,6 +24,25 @@ void PlayerAttackRenditionData::BindParams(GlobalParameter* globalParam, const s
         globalParam->Regist(groupName, std::string(info.name) + "_FileName", &param.fileName);
         globalParam->Regist(groupName, std::string(info.name) + "_StartTiming", &param.startTiming);
         globalParam->Regist(groupName, std::string(info.name) + "_TriggerByHit", &param.triggerByHit);
+    }
+
+    // オブジェクトアニメーションパラメータの登録
+    struct ObjAnimRegInfo {
+        ObjAnimationType type;
+        const char* name;
+    };
+
+    const ObjAnimRegInfo objAnimInfos[] = {
+        {ObjAnimationType::Head, "ObjAnim_Head"},
+        {ObjAnimationType::RightHand, "ObjAnim_RightHand"},
+        {ObjAnimationType::LeftHand, "ObjAnim_LeftHand"},
+    };
+
+    for (const auto& info : objAnimInfos) {
+        auto& param = objAnimationParams_[static_cast<size_t>(info.type)].first;
+
+        globalParam->Regist(groupName, std::string(info.name) + "_FileName", &param.fileName);
+        globalParam->Regist(groupName, std::string(info.name) + "_StartTiming", &param.startTiming);
     }
 }
 
@@ -57,6 +76,33 @@ void PlayerAttackRenditionData::AdjustParam() {
 
         ImGui::PopID();
     }
+
+    // オブジェクトアニメーションパラメータのUI
+    if (ImGui::CollapsingHeader("Object Animations")) {
+        ImGui::PushID((groupName_ + "ObjAnimParams").c_str());
+
+        struct ObjAnimUIInfo {
+            ObjAnimationType type;
+            const char* label;
+        };
+
+        const ObjAnimUIInfo objAnimInfos[] = {
+            {ObjAnimationType::Head, "Head Animation"},
+            {ObjAnimationType::RightHand, "Right Hand Animation"},
+            {ObjAnimationType::LeftHand, "Left Hand Animation"},
+        };
+
+        for (const auto& info : objAnimInfos) {
+            auto& paramPair = objAnimationParams_[static_cast<size_t>(info.type)];
+            auto& param     = paramPair.first;
+
+            ImGui::SeparatorText(info.label);
+            SelectObjAnimationFile(info.label, paramPair);
+            ImGui::DragFloat("Start Timing", &param.startTiming, 0.01f, 0.0f, 10.0f);
+        }
+
+        ImGui::PopID();
+    }
 #endif
 }
 
@@ -68,8 +114,14 @@ void PlayerAttackRenditionData::SelectRenditionFile(
     param.second.SelectFile(label, directory, param.first.fileName, "", true);
 }
 
+void PlayerAttackRenditionData::SelectObjAnimationFile(
+    const char* label,
+    std::pair<ObjAnimationParam, FileSelector>& param) {
+
+    param.second.SelectFile(label, objAnimationFolderPath_, param.first.fileName, "", true);
+}
+
 const PlayerAttackRenditionData::RenditionParam& PlayerAttackRenditionData::GetRenditionParamFromIndex(const int32_t& index) const {
     assert(index >= 0 && index < static_cast<int32_t>(Type::Count) && "Invalid Rendition Type Index");
     return GetRenditionParamFromType(static_cast<Type>(index));
 }
-

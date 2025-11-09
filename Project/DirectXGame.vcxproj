@@ -144,6 +144,7 @@
     <ClCompile Include="Engine\utility\RailEditor\RailData.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\RailEditor.cpp" />
     <ClCompile Include="Engine\utility\RailEditor\RailManager.cpp" />
+    <ClCompile Include="Engine\utility\RailEditor\RailPlayer.cpp" />
     <ClCompile Include="Game\AttackEffect\AttackEffect.cpp" />
     <ClCompile Include="Game\BackGroundObject\BaseBackGroundObject.cpp" />
     <ClCompile Include="Game\BackGroundObject\ComboLeve\BaseComboLevelBackObj.cpp" />
@@ -405,6 +406,7 @@
     <ClInclude Include="Engine\utility\RailEditor\RailData.h" />
     <ClInclude Include="Engine\utility\RailEditor\RailEditor.h" />
     <ClInclude Include="Engine\utility\RailEditor\RailManager.h" />
+    <ClInclude Include="Engine\utility\RailEditor\RailPlayer.h" />
     <ClInclude Include="Game\AttackEffect\AttackEffect.h" />
     <ClInclude Include="Game\BackGroundObject\BaseBackGroundObject.h" />
     <ClInclude Include="Game\BackGroundObject\ComboLeve\BaseComboLevelBackObj.h" />

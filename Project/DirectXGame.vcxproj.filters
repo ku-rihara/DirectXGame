@@ -1213,6 +1213,9 @@
     <ClCompile Include="Engine\Line3D\Line3DManager.cpp">
       <Filter>MyEngine\.cpp\Line3D</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\utility\RailEditor\RailPlayer.cpp">
+      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1994,6 +1997,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Line3D\Line3DManager.h">
       <Filter>MyEngine\.h\Line3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\RailEditor\RailPlayer.h">
+      <Filter>MyEngine\.h\utility\RailEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

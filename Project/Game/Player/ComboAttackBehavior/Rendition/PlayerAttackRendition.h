@@ -17,6 +17,7 @@ private:
     float currentTime_ = 0.0f;
 
     std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::Type::Count)> isPlayed_{};
+    std::array<bool, static_cast<size_t>(PlayerAttackRenditionData::ObjAnimationType::Count)> isObjAnimPlayed_{};
 
 public:
     PlayerAttackRendition()  = default;
