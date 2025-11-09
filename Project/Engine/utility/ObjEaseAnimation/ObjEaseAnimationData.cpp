@@ -1,4 +1,5 @@
 #include "ObjEaseAnimationData.h"
+#include "3d/WorldTransform.h"
 #include "MathFunction.h"
 #include <algorithm>
 #include <imgui.h>
@@ -46,12 +47,22 @@ void ObjEaseAnimationData::UpdateTransforms(const float& deltaTime) {
     if (scaleParam_.isActive) {
         scaleParam_.ease.Update(deltaTime);
         scaleParam_.currentValue = scaleParam_.ease.GetValue();
+
+        // 親Transform適用
+        if (scaleParam_.isParentAdapt && parentTransform_) {
+            parentTransform_->scale_ = scaleParam_.currentValue;
+        }
     }
 
     // Rotation更新
     if (rotationParam_.isActive) {
         rotationParam_.ease.Update(deltaTime);
         rotationParam_.currentValue = rotationParam_.ease.GetValue();
+
+        // 親Transform適用
+        if (rotationParam_.isParentAdapt && parentTransform_) {
+            parentTransform_->rotation_ = rotationParam_.currentValue;
+        }
     }
 
     // Translation更新
@@ -65,6 +76,11 @@ void ObjEaseAnimationData::UpdateTransforms(const float& deltaTime) {
             translationParam_.ease.Update(deltaTime);
             translationParam_.currentValue = translationParam_.ease.GetValue();
         }
+
+        // 親Transform適用
+        if (translationParam_.isParentAdapt && parentTransform_) {
+            parentTransform_->translation_ = translationParam_.currentValue;
+        }
     }
 }
 
@@ -75,6 +91,12 @@ void ObjEaseAnimationData::UpdateReturn(const float& deltaTime) {
     if (scaleParam_.isActive && scaleParam_.returnToOrigin) {
         scaleParam_.ease.Update(deltaTime);
         scaleParam_.currentValue = scaleParam_.ease.GetValue();
+
+        // 親Transform適用
+        if (scaleParam_.isParentAdapt && parentTransform_) {
+            parentTransform_->scale_ = scaleParam_.currentValue;
+        }
+
         if (!scaleParam_.ease.IsFinished()) {
             allFinished = false;
         }
@@ -84,6 +106,12 @@ void ObjEaseAnimationData::UpdateReturn(const float& deltaTime) {
     if (rotationParam_.isActive && rotationParam_.returnToOrigin) {
         rotationParam_.ease.Update(deltaTime);
         rotationParam_.currentValue = rotationParam_.ease.GetValue();
+
+        // 親Transform適用
+        if (rotationParam_.isParentAdapt && parentTransform_) {
+            parentTransform_->rotation_ = rotationParam_.currentValue;
+        }
+
         if (!rotationParam_.ease.IsFinished()) {
             allFinished = false;
         }
@@ -103,6 +131,11 @@ void ObjEaseAnimationData::UpdateReturn(const float& deltaTime) {
             if (!translationParam_.ease.IsFinished()) {
                 allFinished = false;
             }
+        }
+
+        // 親Transform適用
+        if (translationParam_.isParentAdapt && parentTransform_) {
+            parentTransform_->translation_ = translationParam_.currentValue;
         }
     }
 
@@ -191,38 +224,70 @@ void ObjEaseAnimationData::Play() {
     Reset();
     playState_ = PlayState::PLAYING;
 
+    // 現在値の取得（親Transform優先）
+    Vector3 currentScale       = parentTransform_ ? parentTransform_->scale_ : scaleParam_.startValue;
+    Vector3 currentRotation    = parentTransform_ ? parentTransform_->rotation_ : rotationParam_.startValue;
+    Vector3 currentTranslation = parentTransform_ ? parentTransform_->translation_ : translationParam_.startValue;
+
     // Scale設定
     if (scaleParam_.isActive) {
         scaleParam_.ease.SetAdaptValue(&scaleParam_.currentValue);
-        scaleParam_.ease.SetStartValue(scaleParam_.startValue);
+
+        // 現在値を開始点にするか判定
+        Vector3 startValue = scaleParam_.useCurrentAsStart ? currentScale : scaleParam_.startValue;
+        scaleParam_.ease.SetStartValue(startValue);
         scaleParam_.ease.SetEndValue(scaleParam_.endValue);
         scaleParam_.ease.SetMaxTime(scaleParam_.maxTime);
         scaleParam_.ease.SetType(static_cast<EasingType>(scaleParam_.easeType));
         scaleParam_.ease.Reset();
+
+        // 元の値も更新（戻り用）
+        if (scaleParam_.useCurrentAsStart) {
+            originalScale_ = currentScale;
+        }
     }
 
     // Rotation設定
     if (rotationParam_.isActive) {
         rotationParam_.ease.SetAdaptValue(&rotationParam_.currentValue);
-        rotationParam_.ease.SetStartValue(rotationParam_.startValue);
+
+        // 現在値を開始点にするか判定
+        Vector3 startValue = rotationParam_.useCurrentAsStart ? currentRotation : rotationParam_.startValue;
+        rotationParam_.ease.SetStartValue(startValue);
         rotationParam_.ease.SetEndValue(rotationParam_.endValue);
         rotationParam_.ease.SetMaxTime(rotationParam_.maxTime);
         rotationParam_.ease.SetType(static_cast<EasingType>(rotationParam_.easeType));
         rotationParam_.ease.Reset();
+
+        // 元の値も更新（戻り用）
+        if (rotationParam_.useCurrentAsStart) {
+            originalRotation_ = currentRotation;
+        }
     }
 
     // Translation設定
     if (translationParam_.isActive) {
         if (translationParam_.useRail && !translationParam_.railFileName.empty()) {
             // Rail再生
+            if (translationParam_.useCurrentAsStart) {
+                originalTranslation_ = currentTranslation;
+            }
             railPlayer_->Play(translationParam_.railFileName);
         } else {
             translationParam_.ease.SetAdaptValue(&translationParam_.currentValue);
-            translationParam_.ease.SetStartValue(translationParam_.startValue);
+
+            // 現在値を開始点にするか判定
+            Vector3 startValue = translationParam_.useCurrentAsStart ? currentTranslation : translationParam_.startValue;
+            translationParam_.ease.SetStartValue(startValue);
             translationParam_.ease.SetEndValue(translationParam_.endValue);
             translationParam_.ease.SetMaxTime(translationParam_.maxTime);
             translationParam_.ease.SetType(static_cast<EasingType>(translationParam_.easeType));
             translationParam_.ease.Reset();
+
+            // 元の値も更新（戻り用）
+            if (translationParam_.useCurrentAsStart) {
+                originalTranslation_ = currentTranslation;
+            }
         }
     }
 }
@@ -234,6 +299,19 @@ void ObjEaseAnimationData::Stop() {
     scaleParam_.currentValue       = originalScale_;
     rotationParam_.currentValue    = originalRotation_;
     translationParam_.currentValue = originalTranslation_;
+
+    // 親Transformにも適用
+    if (parentTransform_) {
+        if (scaleParam_.isParentAdapt) {
+            parentTransform_->scale_ = originalScale_;
+        }
+        if (rotationParam_.isParentAdapt) {
+            parentTransform_->rotation_ = originalRotation_;
+        }
+        if (translationParam_.isParentAdapt) {
+            parentTransform_->translation_ = originalTranslation_;
+        }
+    }
 
     if (railPlayer_) {
         railPlayer_->Stop();
@@ -275,6 +353,8 @@ void ObjEaseAnimationData::SaveData() {
 void ObjEaseAnimationData::RegisterParams() {
     // Scale
     globalParameter_->Regist(groupName_, "Scale_IsActive", &scaleParam_.isActive);
+    globalParameter_->Regist(groupName_, "Scale_IsParentAdapt", &scaleParam_.isParentAdapt);
+    globalParameter_->Regist(groupName_, "Scale_UseCurrentAsStart", &scaleParam_.useCurrentAsStart);
     globalParameter_->Regist(groupName_, "Scale_ReturnToOrigin", &scaleParam_.returnToOrigin);
     globalParameter_->Regist(groupName_, "Scale_StartValue", &scaleParam_.startValue);
     globalParameter_->Regist(groupName_, "Scale_EndValue", &scaleParam_.endValue);
@@ -285,6 +365,8 @@ void ObjEaseAnimationData::RegisterParams() {
 
     // Rotation
     globalParameter_->Regist(groupName_, "Rotation_IsActive", &rotationParam_.isActive);
+    globalParameter_->Regist(groupName_, "Rotation_IsParentAdapt", &rotationParam_.isParentAdapt);
+    globalParameter_->Regist(groupName_, "Rotation_UseCurrentAsStart", &rotationParam_.useCurrentAsStart);
     globalParameter_->Regist(groupName_, "Rotation_ReturnToOrigin", &rotationParam_.returnToOrigin);
     globalParameter_->Regist(groupName_, "Rotation_StartValue", &rotationParam_.startValue);
     globalParameter_->Regist(groupName_, "Rotation_EndValue", &rotationParam_.endValue);
@@ -295,6 +377,8 @@ void ObjEaseAnimationData::RegisterParams() {
 
     // Translation
     globalParameter_->Regist(groupName_, "Translation_IsActive", &translationParam_.isActive);
+    globalParameter_->Regist(groupName_, "Translation_IsParentAdapt", &translationParam_.isParentAdapt);
+    globalParameter_->Regist(groupName_, "Translation_UseCurrentAsStart", &translationParam_.useCurrentAsStart);
     globalParameter_->Regist(groupName_, "Translation_UseRail", &translationParam_.useRail);
     globalParameter_->Regist(groupName_, "Translation_ReturnToOrigin", &translationParam_.returnToOrigin);
     globalParameter_->Regist(groupName_, "Translation_StartValue", &translationParam_.startValue);
@@ -308,36 +392,42 @@ void ObjEaseAnimationData::RegisterParams() {
 
 void ObjEaseAnimationData::LoadParams() {
     // Scale
-    scaleParam_.isActive       = globalParameter_->GetValue<bool>(groupName_, "Scale_IsActive");
-    scaleParam_.returnToOrigin = globalParameter_->GetValue<bool>(groupName_, "Scale_ReturnToOrigin");
-    scaleParam_.startValue     = globalParameter_->GetValue<Vector3>(groupName_, "Scale_StartValue");
-    scaleParam_.endValue       = globalParameter_->GetValue<Vector3>(groupName_, "Scale_EndValue");
-    scaleParam_.maxTime        = globalParameter_->GetValue<float>(groupName_, "Scale_MaxTime");
-    scaleParam_.easeType       = globalParameter_->GetValue<int32_t>(groupName_, "Scale_EaseType");
-    scaleParam_.returnMaxTime  = globalParameter_->GetValue<float>(groupName_, "Scale_ReturnMaxTime");
-    scaleParam_.returnEaseType = globalParameter_->GetValue<int32_t>(groupName_, "Scale_ReturnEaseType");
+    scaleParam_.isActive          = globalParameter_->GetValue<bool>(groupName_, "Scale_IsActive");
+    scaleParam_.isParentAdapt     = globalParameter_->GetValue<bool>(groupName_, "Scale_IsParentAdapt");
+    scaleParam_.useCurrentAsStart = globalParameter_->GetValue<bool>(groupName_, "Scale_UseCurrentAsStart");
+    scaleParam_.returnToOrigin    = globalParameter_->GetValue<bool>(groupName_, "Scale_ReturnToOrigin");
+    scaleParam_.startValue        = globalParameter_->GetValue<Vector3>(groupName_, "Scale_StartValue");
+    scaleParam_.endValue          = globalParameter_->GetValue<Vector3>(groupName_, "Scale_EndValue");
+    scaleParam_.maxTime           = globalParameter_->GetValue<float>(groupName_, "Scale_MaxTime");
+    scaleParam_.easeType          = globalParameter_->GetValue<int32_t>(groupName_, "Scale_EaseType");
+    scaleParam_.returnMaxTime     = globalParameter_->GetValue<float>(groupName_, "Scale_ReturnMaxTime");
+    scaleParam_.returnEaseType    = globalParameter_->GetValue<int32_t>(groupName_, "Scale_ReturnEaseType");
 
     // Rotation
-    rotationParam_.isActive       = globalParameter_->GetValue<bool>(groupName_, "Rotation_IsActive");
-    rotationParam_.returnToOrigin = globalParameter_->GetValue<bool>(groupName_, "Rotation_ReturnToOrigin");
-    rotationParam_.startValue     = globalParameter_->GetValue<Vector3>(groupName_, "Rotation_StartValue");
-    rotationParam_.endValue       = globalParameter_->GetValue<Vector3>(groupName_, "Rotation_EndValue");
-    rotationParam_.maxTime        = globalParameter_->GetValue<float>(groupName_, "Rotation_MaxTime");
-    rotationParam_.easeType       = globalParameter_->GetValue<int32_t>(groupName_, "Rotation_EaseType");
-    rotationParam_.returnMaxTime  = globalParameter_->GetValue<float>(groupName_, "Rotation_ReturnMaxTime");
-    rotationParam_.returnEaseType = globalParameter_->GetValue<int32_t>(groupName_, "Rotation_ReturnEaseType");
+    rotationParam_.isActive          = globalParameter_->GetValue<bool>(groupName_, "Rotation_IsActive");
+    rotationParam_.isParentAdapt     = globalParameter_->GetValue<bool>(groupName_, "Rotation_IsParentAdapt");
+    rotationParam_.useCurrentAsStart = globalParameter_->GetValue<bool>(groupName_, "Rotation_UseCurrentAsStart");
+    rotationParam_.returnToOrigin    = globalParameter_->GetValue<bool>(groupName_, "Rotation_ReturnToOrigin");
+    rotationParam_.startValue        = globalParameter_->GetValue<Vector3>(groupName_, "Rotation_StartValue");
+    rotationParam_.endValue          = globalParameter_->GetValue<Vector3>(groupName_, "Rotation_EndValue");
+    rotationParam_.maxTime           = globalParameter_->GetValue<float>(groupName_, "Rotation_MaxTime");
+    rotationParam_.easeType          = globalParameter_->GetValue<int32_t>(groupName_, "Rotation_EaseType");
+    rotationParam_.returnMaxTime     = globalParameter_->GetValue<float>(groupName_, "Rotation_ReturnMaxTime");
+    rotationParam_.returnEaseType    = globalParameter_->GetValue<int32_t>(groupName_, "Rotation_ReturnEaseType");
 
     // Translation
-    translationParam_.isActive       = globalParameter_->GetValue<bool>(groupName_, "Translation_IsActive");
-    translationParam_.useRail        = globalParameter_->GetValue<bool>(groupName_, "Translation_UseRail");
-    translationParam_.returnToOrigin = globalParameter_->GetValue<bool>(groupName_, "Translation_ReturnToOrigin");
-    translationParam_.startValue     = globalParameter_->GetValue<Vector3>(groupName_, "Translation_StartValue");
-    translationParam_.endValue       = globalParameter_->GetValue<Vector3>(groupName_, "Translation_EndValue");
-    translationParam_.maxTime        = globalParameter_->GetValue<float>(groupName_, "Translation_MaxTime");
-    translationParam_.easeType       = globalParameter_->GetValue<int32_t>(groupName_, "Translation_EaseType");
-    translationParam_.returnMaxTime  = globalParameter_->GetValue<float>(groupName_, "Translation_ReturnMaxTime");
-    translationParam_.returnEaseType = globalParameter_->GetValue<int32_t>(groupName_, "Translation_ReturnEaseType");
-    translationParam_.railFileName   = globalParameter_->GetValue<std::string>(groupName_, "Translation_RailFileName");
+    translationParam_.isActive          = globalParameter_->GetValue<bool>(groupName_, "Translation_IsActive");
+    translationParam_.isParentAdapt     = globalParameter_->GetValue<bool>(groupName_, "Translation_IsParentAdapt");
+    translationParam_.useCurrentAsStart = globalParameter_->GetValue<bool>(groupName_, "Translation_UseCurrentAsStart");
+    translationParam_.useRail           = globalParameter_->GetValue<bool>(groupName_, "Translation_UseRail");
+    translationParam_.returnToOrigin    = globalParameter_->GetValue<bool>(groupName_, "Translation_ReturnToOrigin");
+    translationParam_.startValue        = globalParameter_->GetValue<Vector3>(groupName_, "Translation_StartValue");
+    translationParam_.endValue          = globalParameter_->GetValue<Vector3>(groupName_, "Translation_EndValue");
+    translationParam_.maxTime           = globalParameter_->GetValue<float>(groupName_, "Translation_MaxTime");
+    translationParam_.easeType          = globalParameter_->GetValue<int32_t>(groupName_, "Translation_EaseType");
+    translationParam_.returnMaxTime     = globalParameter_->GetValue<float>(groupName_, "Translation_ReturnMaxTime");
+    translationParam_.returnEaseType    = globalParameter_->GetValue<int32_t>(groupName_, "Translation_ReturnEaseType");
+    translationParam_.railFileName      = globalParameter_->GetValue<std::string>(groupName_, "Translation_RailFileName");
 }
 
 void ObjEaseAnimationData::ResetParams() {
@@ -359,6 +449,8 @@ void ObjEaseAnimationData::ImGuiTransformParam(const char* label, TransformParam
     if (!param.isActive)
         return;
 
+    ImGui::Checkbox("Parent Adapt", &param.isParentAdapt);
+    ImGui::Checkbox("Use Current As Start", &param.useCurrentAsStart);
     ImGui::Checkbox("Return To Origin", &param.returnToOrigin);
 
     // Translation専用: Rail使用フラグ
@@ -373,7 +465,12 @@ void ObjEaseAnimationData::ImGuiTransformParam(const char* label, TransformParam
         }
     }
 
-    ImGui::DragFloat3("Start Value", &param.startValue.x, 0.01f);
+    // UseCurrentAsStartがtrueの場合はStartValueを編集不可に
+    if (!param.useCurrentAsStart) {
+        ImGui::DragFloat3("Start Value", &param.startValue.x, 0.01f);
+    } 
+
+
     ImGui::DragFloat3("End Value", &param.endValue.x, 0.01f);
     ImGui::DragFloat("Max Time", &param.maxTime, 0.01f, 0.1f, 10.0f);
     ImGuiEasingTypeSelector("Easing Type", param.easeType);
