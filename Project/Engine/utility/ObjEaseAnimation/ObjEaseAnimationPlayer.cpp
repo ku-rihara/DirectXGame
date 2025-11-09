@@ -11,9 +11,9 @@ void ObjEaseAnimationPlayer::Update(const float& deltaTime) {
 }
 
 void ObjEaseAnimationPlayer::Play(const std::string& categoryName, const std::string& animationName) {
-    if (!animationData_) {
-        animationData_ = std::make_unique<ObjEaseAnimationData>();
-    }
+   
+    animationData_.reset();
+    animationData_ = std::make_unique<ObjEaseAnimationData>();
 
     // 新しいアニメーションをロード
     animationData_->Init(animationName, categoryName);

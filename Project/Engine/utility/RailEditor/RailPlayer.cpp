@@ -15,9 +15,9 @@ void RailPlayer::Update(const float& speed, const RailData::PositionMode& mode, 
 }
 
 void RailPlayer::Play(const std::string& railName) {
-    if (!railData_) {
-        railData_ = std::make_unique<RailData>();
-    }
+
+    railData_.reset();
+    railData_ = std::make_unique<RailData>();
 
     railData_->Init(railName);
     railData_->LoadData();
