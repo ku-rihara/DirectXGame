@@ -15,7 +15,7 @@ void ContinuousEnemySpawner::Init() {
     globalParameter_->SyncParamForGroup(groupName_);
 
     // 初期化
-  
+
     totalSpawnedCount_ = 0;
     Start();
 }
@@ -64,17 +64,12 @@ void ContinuousEnemySpawner::ResetSpawnCount() {
 }
 
 Vector3 ContinuousEnemySpawner::CalculateSpawnPosition() {
-    Vector3 spawnPos=Vector3::ZeroVector();
-   
+    Vector3 spawnPos = Vector3::ZeroVector();
+
     // 複数回試行して有効な位置を探す
     for (int32_t retry = 0; retry < config_.maxRetryCount; ++retry) {
-        //// プレイヤー正面方向への距離をランダムに決定
-        //float forwardDistance = Random::Range(config_.forwardDistance.min, config_.forwardDistance.max);
 
-        //// 左右のオフセットをランダムに決定
-        //float lateralOffset = Random::Range(config_.lateralOffset.min, config_.lateralOffset.max);
-
-        //　全敵の位置を取得
+        // 　全敵の位置を取得
         std::vector<Vector3> positions;
         for (const auto& baseEnemy : pEnemyManager_->GetEnemies()) {
             Vector3 averagePos = baseEnemy->GetWorldPosition();
@@ -91,9 +86,17 @@ Vector3 ContinuousEnemySpawner::CalculateSpawnPosition() {
         Vector3 averagePos = Vector3::ZeroVector();
         if (!positions.empty()) {
             averagePos = sumPos / static_cast<float>(positions.size());
-        } 
-        // 左右オフセットを追加
-        spawnPos = averagePos;
+        }
+
+        // ランダムでオフセット値を決める
+        Vector3 randomOffset= {
+            Random::Range(config_.spawnRandomOffset.min.x, config_.spawnRandomOffset.max.x),
+            0.0f,
+            Random::Range(config_.spawnRandomOffset.min.y, config_.spawnRandomOffset.max.y),
+        };
+
+        // スポーン位置の決定
+        spawnPos = averagePos + randomOffset;
 
         // フィールド境界内に補正
         if (!ClampToFieldBounds(spawnPos)) {
@@ -172,15 +175,10 @@ void ContinuousEnemySpawner::AdjustParam() {
         ImGui::DragFloat("Spawn Interval (sec)", &config_.spawnInterval, 0.1f);
         ImGui::InputInt("Max Spawn Count (-1=Unlimited)", &config_.maxSpawnCount);
 
-        // 距離設定
-        ImGui::SeparatorText("Forward Distance Settings");
-        ImGui::DragFloat("Forward Distance Min", &config_.forwardDistance.min, 0.1f);
-        ImGui::DragFloat("Forward Distance Max", &config_.forwardDistance.max, 0.1f);
-
-        // 左右オフセット設定
-        ImGui::SeparatorText("Lateral Offset Settings");
-        ImGui::DragFloat("Lateral Offset Min", &config_.lateralOffset.min, 0.1f);
-        ImGui::DragFloat("Lateral Offset Max", &config_.lateralOffset.max, 0.1f);
+        // スポーン位置ランダムオフセット
+        ImGui::SeparatorText("Spawn Position Random Offset");
+        ImGui::DragFloat2("Min Offset (X,Z)", &config_.spawnRandomOffset.min.x, 0.1f);
+        ImGui::DragFloat2("Max Offset (X,Z)", &config_.spawnRandomOffset.max.x, 0.1f);
 
         // その他設定
         ImGui::SeparatorText("Other Settings");
@@ -215,10 +213,8 @@ void ContinuousEnemySpawner::AdjustParam() {
 void ContinuousEnemySpawner::RegisterParams() {
     globalParameter_->Regist(groupName_, "enabled", &config_.isEnabled);
     globalParameter_->Regist(groupName_, "spawnInterval", &config_.spawnInterval);
-    globalParameter_->Regist(groupName_, "forwardDistanceMin", &config_.forwardDistance.min);
-    globalParameter_->Regist(groupName_, "forwardDistanceMax", &config_.forwardDistance.max);
-    globalParameter_->Regist(groupName_, "lateralOffsetMin", &config_.lateralOffset.min);
-    globalParameter_->Regist(groupName_, "lateralOffsetMax", &config_.lateralOffset.max);
+    globalParameter_->Regist(groupName_, "spawnRandomOffset.min", &config_.spawnRandomOffset.min);
+    globalParameter_->Regist(groupName_, "spawnRandomOffset.max", &config_.spawnRandomOffset.max);
     globalParameter_->Regist(groupName_, "minDistanceFromEnemies", &config_.minDistanceFromEnemies);
     globalParameter_->Regist(groupName_, "maxRetryCount", &config_.maxRetryCount);
     globalParameter_->Regist(groupName_, "maxSpawnCount", &config_.maxSpawnCount);

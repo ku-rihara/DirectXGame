@@ -18,8 +18,7 @@ private:
     struct SpawnConfig {
         bool isEnabled = true;
         float spawnInterval;
-        FMinMax forwardDistance;
-        FMinMax lateralOffset;
+        V2MinMax spawnRandomOffset;
         float minDistanceFromEnemies;
         float fieldMargin;
         int32_t maxRetryCount;
