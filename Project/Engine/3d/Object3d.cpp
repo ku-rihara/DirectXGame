@@ -34,10 +34,8 @@ void Object3d::Init() {
 }
 
 void Object3d::Update(const float& deltaTime) {
-    // オブジェクトイージングアニメーション更新
-    UpdateObjEaseAnimation(deltaTime);
-
-    // Transform更新
+    // Transform更新（アニメーション更新を含む）
+    transform_.UpdateObjEaseAnimation(deltaTime);
     transform_.UpdateMatrix();
 
     // マテリアル色更新

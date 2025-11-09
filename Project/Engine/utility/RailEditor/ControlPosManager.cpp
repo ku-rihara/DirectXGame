@@ -25,10 +25,11 @@ void ControlPosManager::Update(const Vector3& Direction, const bool& isDraw) {
 void ControlPosManager::AddPoint(const Vector3& position) {
     movePosies_.push_back(position);
 
-    WorldTransform newTransform;
-    newTransform.Init();
-    if (parentTransform_ != nullptr) { // 既存の親を設定
-        newTransform.SetParent(parentTransform_);
+   
+    auto newTransform = std::make_unique<WorldTransform>();
+    newTransform->Init();
+    if (parentTransform_ != nullptr) {
+        newTransform->SetParent(parentTransform_);
     }
     transforms_.push_back(std::move(newTransform));
 
@@ -37,6 +38,7 @@ void ControlPosManager::AddPoint(const Vector3& position) {
     obj3d->SetIsDraw(isDraw_);
     obj3ds_.push_back(std::move(obj3d));
 }
+
 
 ///=====================================================
 /// 制御点削除

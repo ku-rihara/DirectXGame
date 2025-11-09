@@ -1,7 +1,6 @@
 #pragma once
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
-#include "utility/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 #include "Material/ModelMaterial.h"
 #include "Model.h"
 #include "ObjectColor.h"
@@ -46,30 +45,6 @@ public:
     /// <param name="modelName">モデル名</param>
     void SetModel(const std::string& modelName);
 
-    /// <summary>
-    /// オブジェクトイージングアニメーション再生
-    /// </summary>
-    /// <param name="categoryName">カテゴリー名</param>
-    /// <param name="animationName">アニメーション名</param>
-    void PlayObjEaseAnimation(const std::string& categoryName, const std::string& animationName);
-
-    /// <summary>
-    /// オブジェクトイージングアニメーション停止
-    /// </summary>
-    void StopObjEaseAnimation();
-
-    /// <summary>
-    /// アニメーション更新（継承先のUpdate関数内で呼び出す）
-    /// </summary>
-    /// <param name="deltaTime">デルタタイム</param>
-    void UpdateObjEaseAnimation(const float& deltaTime);
-
-protected:
-    /// <summary>
-    /// アニメーション適用後のTransform更新
-    /// </summary>
-    void ApplyAnimationToTransform();
-
 public:
     ModelMaterial material_; //< モデルのマテリアル
     ObjectColor objColor_; //< オブジェクトの色
@@ -81,20 +56,17 @@ protected:
     ///========================================================================================
 
     Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_; //< WVPリソース
-    TransformationMatrix* wvpDate_;                      //< WVPデータのポインタ
-    ShadowMap* shadowMap_;                               //< シャドウマップ
+    TransformationMatrix* wvpDate_; //< WVPデータのポインタ
+    ShadowMap* shadowMap_; //< シャドウマップ
 
-    bool isShadow_ = true;  //< 影を描画するか
-    bool isDraw_   = true;  //< 描画するか
+    bool isShadow_ = true; //< 影を描画するか
+    bool isDraw_   = true; //< 描画するか
     uint32_t textureIndex_; //< テクスチャインデックス
 
-    Model* model_       = nullptr;         //< モデルデータ
+    Model* model_       = nullptr; //< モデルデータ
     BlendMode blendMode = BlendMode::None; //< ブレンドモード
 
-    const std::string textureFirePath_ = "Resources/Texture/ModelTexture/"; 
-
-    // オブジェクトイージングアニメーション
-    std::unique_ptr<ObjEaseAnimationPlayer> objEaseAnimationPlayer_;
+    const std::string textureFirePath_ = "Resources/Texture/ModelTexture/";
 
 public:
     ///========================================================================================
@@ -102,7 +74,6 @@ public:
     ///========================================================================================
     Model* GetModel() { return model_; }
     const int32_t& GetTextureIndex() const { return textureIndex_; }
-    ObjEaseAnimationPlayer* GetObjEaseAnimationPlayer() { return objEaseAnimationPlayer_.get(); }
 
     ///========================================================================================
     ///  setter method

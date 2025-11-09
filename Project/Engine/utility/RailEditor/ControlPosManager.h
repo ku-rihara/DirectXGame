@@ -16,7 +16,7 @@ private:
     using json = nlohmann::json;
 
 private:
-    std::vector<WorldTransform> transforms_;
+    std::vector<std::unique_ptr<WorldTransform>> transforms_;
     std::vector<Vector3> movePosies_;
     std::vector<std::unique_ptr<Object3d>> obj3ds_;
     std::string filePath_;
