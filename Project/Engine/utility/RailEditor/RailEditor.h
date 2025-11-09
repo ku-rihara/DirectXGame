@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+class Line3D;
+
 /// <summary>
 /// レールエディター
 /// </summary>
@@ -47,10 +49,12 @@ public:
 private:
     void AllLoadFile(); //< 全ファイルロード
     void AllSaveFile(); //< 全ファイルセーブ
+    void DebugLineSet(); //< デバッグラインセット
 
 private:
     std::vector<std::unique_ptr<RailData>> rails_;
     std::unique_ptr<Object3d> preViewObj_;
+    std::unique_ptr<Line3D> debugLine3D_;
 
     Vector3 basePos_   = Vector3::ZeroVector();
     int selectedIndex_ = -1;

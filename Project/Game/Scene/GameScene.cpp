@@ -42,7 +42,7 @@ void GameScene::Init() {
 void GameScene::Update() {
 
     /// debugCamera
-    debugCamera_->Update();
+    BaseScene::Update();
   
     // 各クラス更新
     ground_->Update();

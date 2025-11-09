@@ -1,4 +1,5 @@
 #include "RailData.h"
+#include "Line3D/Line3D.h"
 #include "Frame/Frame.h"
 #include "MathFunction.h"
 #include <algorithm>
@@ -443,5 +444,51 @@ void RailData::AdjustParam() {
 void RailData::SetSelectedKeyFrameIndex(const int32_t& index) {
     if (index >= -1 && index < static_cast<int32_t>(controlPoints_.size())) {
         selectedKeyFrameIndex_ = index;
+    }
+}
+
+void RailData::SetControlPointLines(Line3D* line3d, const Vector4& color) {
+    if (!line3d || !showControlPointLines_) {
+        return;
+    }
+
+    if (controlPoints_.size() < 2) {
+        return; // 制御点が2つ未満なら線を描画しない
+    }
+
+    // 制御点を繋ぐ線を描画
+    for (size_t i = 0; i < controlPoints_.size() - 1; ++i) {
+        Vector3 start = controlPoints_[i]->GetPosition() * direction_;
+        Vector3 end   = controlPoints_[i + 1]->GetPosition() * direction_;
+
+        // ワールド座標に変換
+        if (parentTransform_ != nullptr) {
+            Matrix4x4 parentMatrix = parentTransform_->matWorld_;
+            start                  = TransformMatrix(start, parentMatrix);
+            end                    = TransformMatrix(end, parentMatrix);
+        }
+
+        // 開始位置をオフセット
+        start = startPosition_ + start;
+        end   = startPosition_ + end;
+
+        line3d->SetLine(start, end, color);
+    }
+
+    // ループする場合は最後と最初を繋ぐ
+    if (isLoop_ && controlPoints_.size() > 2) {
+        Vector3 start = controlPoints_[controlPoints_.size() - 1]->GetPosition() * direction_;
+        Vector3 end   = controlPoints_[0]->GetPosition() * direction_;
+
+        if (parentTransform_ != nullptr) {
+            Matrix4x4 parentMatrix = parentTransform_->matWorld_;
+            start                  = TransformMatrix(start, parentMatrix);
+            end                    = TransformMatrix(end, parentMatrix);
+        }
+
+        start = startPosition_ + start;
+        end   = startPosition_ + end;
+
+        line3d->SetLine(start, end, color);
     }
 }

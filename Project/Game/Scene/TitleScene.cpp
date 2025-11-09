@@ -29,12 +29,14 @@ void TitleScene::Init() {
     EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticlePrimitive("comboFireCenter", PrimitiveType::Plane, 500));
     EnemydamageEffect_[2].reset(ParticleEmitter::CreateParticlePrimitive("comboFireNozzleRigth", PrimitiveType::Plane, 500));
 
-     afterGlowEffect_[0].reset(ParticleEmitter::CreateParticle("afterGlowEffect", "Suzanne.obj", 500));
+    afterGlowEffect_[0].reset(ParticleEmitter::CreateParticle("afterGlowEffect", "Suzanne.obj", 500));
 
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
 void TitleScene::Update() {
+
+    BaseScene::Update();
     plane_->Update();
     ///
     for (int i = 0; i < EnemydamageEffect_.size(); i++) {
@@ -51,13 +53,10 @@ void TitleScene::Update() {
         afterGlowEffect_[i]->Update();
         afterGlowEffect_[i]->EditorUpdate();
         afterGlowEffect_[i]->Emit();
-
-        
     }
 
     ParticleManager::GetInstance()->Update();
 
- 
     ViewProjectionUpdate();
 
     if (input_->TriggerKey(KeyboardKey::Enter)) {
@@ -66,14 +65,11 @@ void TitleScene::Update() {
     }
 }
 
-
-
 /// ===================================================
 /// SkyBox描画
 /// ===================================================
 void TitleScene::SkyBoxDraw() {
 }
-
 
 void TitleScene::Debug() {
 #ifdef _DEBUG

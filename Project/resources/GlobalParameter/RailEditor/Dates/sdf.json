@@ -1,0 +1,11 @@
+{
+    "sdf": {
+        "easeType": 0,
+        "isLoop": true,
+        "maxTime": 1.0,
+        "returnEaseType": 5,
+        "returnMode": 1,
+        "returnTime": 0.9300000071525574,
+        "startTime": 0.0
+    }
+}

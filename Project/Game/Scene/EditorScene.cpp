@@ -30,8 +30,10 @@ void EditorScene::Init() {
 }
 
 void EditorScene::Update() {
+
+    BaseScene::Update();
     
-     easingEditor_.Edit();
+    easingEditor_.Edit();
     easingTestObject_->Update();
 
     ParticleManager::GetInstance()->Update();
