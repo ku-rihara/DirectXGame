@@ -9,6 +9,8 @@
 #include <memory>
 #include <string>
 
+class WorldTransform;
+
 /// <summary>
 /// オブジェクトイージングアニメーションデータ
 /// </summary>
@@ -28,9 +30,11 @@ public:
     };
 
     struct TransformParam {
-        bool isActive       = false;
-        bool useRail        = false;
-        bool returnToOrigin = false;
+        bool isActive          = false;
+        bool useRail           = false;
+        bool returnToOrigin    = false;
+        bool isParentAdapt     = false; 
+        bool useCurrentAsStart = false; 
 
         Vector3 startValue = Vector3::OneVector();
         Vector3 endValue   = Vector3::OneVector();
@@ -81,6 +85,12 @@ public:
     bool IsPlaying() const; //< 再生中か
     bool IsFinished() const; //< 終了したか
 
+    /// <summary>
+    /// 親Transformを設定
+    /// </summary>
+    /// <param name="parent">親Transform</param>
+    void SetParentTransform(WorldTransform* parent) { parentTransform_ = parent; }
+
 private:
     void RegisterParams(); //< パラメータのバインド
     void LoadParams(); //< パラメータ取得
@@ -112,6 +122,9 @@ private:
     Vector3 originalRotation_    = Vector3::ZeroVector();
     Vector3 originalTranslation_ = Vector3::ZeroVector();
 
+    // 親Transform
+    WorldTransform* parentTransform_ = nullptr;
+
     bool showControls_ = true;
 
 public:
@@ -122,4 +135,9 @@ public:
     const Vector3& GetCurrentTranslation() const { return translationParam_.currentValue; }
     RailPlayer* GetRailPlayer() { return railPlayer_.get(); }
     bool IsUsingRail() const { return translationParam_.useRail && translationParam_.isActive; }
+
+    // 親適用フラグの取得
+    bool IsScaleParentAdapt() const { return scaleParam_.isParentAdapt; }
+    bool IsRotationParentAdapt() const { return rotationParam_.isParentAdapt; }
+    bool IsTranslationParentAdapt() const { return translationParam_.isParentAdapt; }
 };
