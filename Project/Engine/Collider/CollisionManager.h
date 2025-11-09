@@ -21,12 +21,7 @@ public:
 
     void Init(); //< 初期化
     void Update(); //< 更新
-
-    /// <summary>
-    /// 描画
-    /// </summary>
-    /// <param name="viewProjection">ビュープロジェクション</param>
-    void Draw(const ViewProjection& viewProjection);
+    void LineAllSet();
    
     /// <summary>
     /// コライダーリストに登録

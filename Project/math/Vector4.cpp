@@ -71,7 +71,7 @@ Vector4 Vector4::operator+(const Vector4& other) const {
 	  return Vector4(1.0f, 1.0f, 1.0f, 1.0f);
   }
 
-  Vector4 Vector4::UnitVector() {
+  Vector4 Vector4::OneVector() {
 	  return Vector4(1.0f, 1.0f, 1.0f, 1.0f);
   }
 

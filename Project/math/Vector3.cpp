@@ -158,7 +158,7 @@ Vector3 Vector3::ZeroVector() {
 }
 
 // 単位ベクトル
-Vector3  Vector3::UnitVector() {
+Vector3  Vector3::OneVector() {
 	return Vector3(1.0f, 1.0f, 1.0f);
 }
 

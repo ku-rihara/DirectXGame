@@ -14,7 +14,7 @@ ComboAttackRoot::ComboAttackRoot(Player* player)
 ComboAttackRoot::~ComboAttackRoot() {}
 
 void ComboAttackRoot::Init() {
-    pPlayer_->SetHeadScale(Vector3::UnitVector());
+    pPlayer_->SetHeadScale(Vector3::OneVector());
     pPlayer_->RotateReset();
     attackPatern_ = AttackPatern::NORMAL;
 }

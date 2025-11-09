@@ -17,16 +17,18 @@ void BaseScene::Init() {
     textureManager_ = TextureManager::GetInstance();
 
     // 生成
-    debugCamera_  = std::make_unique<DebugCamera>(WinApp::kWindowWidth, WinApp::kWindowHeight);
-    cameraEditor_ = std::make_unique<CameraEditor>();
-    shakeEditor_  = std::make_unique<ShakeEditor>();
-    railEditor_   = std::make_unique<RailEditor>();
+    debugCamera_            = std::make_unique<DebugCamera>(WinApp::kWindowWidth, WinApp::kWindowHeight);
+    cameraEditor_           = std::make_unique<CameraEditor>();
+    shakeEditor_            = std::make_unique<ShakeEditor>();
+    railEditor_             = std::make_unique<RailEditor>();
+    objEaseAnimationEditor_ = std::make_unique<ObjEaseAnimationEditor>();
 
     // 初期化
     debugCamera_->Init();
     cameraEditor_->Init(&viewProjection_);
     shakeEditor_->Init();
     railEditor_->Init();
+    objEaseAnimationEditor_->Init();
     viewProjection_.Init();
 
     // ビュープロジェクション

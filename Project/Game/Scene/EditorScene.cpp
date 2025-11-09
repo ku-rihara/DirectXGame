@@ -34,10 +34,8 @@ void EditorScene::Update() {
      easingEditor_.Edit();
     easingTestObject_->Update();
 
-    Object3DRegistry::GetInstance()->UpdateAll();
     ParticleManager::GetInstance()->Update();
 
-    Debug();
     ViewProjectionUpdate();
 
     if (input_->TriggerKey(KeyboardKey::Enter)) {

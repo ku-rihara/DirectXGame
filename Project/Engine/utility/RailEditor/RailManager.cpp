@@ -23,7 +23,7 @@ void RailManager::Init(const std::string& groupName) {
     // レールの初期化
     rail_.Init(5);
  
-    lineDrawer_.Init(24);
+    lineDrawer_.reset(Line3D::Create(24));
 
     /// 制御点マネージャー
     emitControlPosManager_ = std::make_unique<ControlPosManager>();
@@ -99,17 +99,9 @@ void RailManager::RoopOrStop() {
 ///=====================================================
 /// 現在位置描画
 ///=====================================================
-void RailManager::Draw(const ViewProjection& viewProjection, const Vector3& size) {
-    lineDrawer_.DrawCubeWireframe(worldTransform_.GetWorldPos(), size, Vector4::kWHITE());
-    lineDrawer_.Draw(viewProjection);
-}
+void RailManager::SetCubeLine(const Vector3& size) {
+    lineDrawer_->SetCubeWireframe(worldTransform_.GetWorldPos(), size, Vector4::kWHITE());
 
-///=====================================================
-/// レール描画
-///=====================================================
-void RailManager::RailDraw(const ViewProjection& viewProjection) {
-    /*rail_.Draw(viewProjection);*/
-    viewProjection;
 }
 
 

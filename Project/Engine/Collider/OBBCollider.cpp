@@ -14,7 +14,7 @@ OBBCollider::~OBBCollider() {
 
 void OBBCollider::Init() {
 
-    debugLine_.Init(24); 
+    debugLine_.reset(Line3D::Create(24));
     cTransform_.Init();
     obb_.size = { 1.5f,1.5f,1.5f };
 }
@@ -37,9 +37,8 @@ void OBBCollider::UpdateWorldTransform() {
     cTransform_.UpdateMatrix();
 }
 
-void OBBCollider::DrawDebugCube(const ViewProjection& viewProjection) {
+void OBBCollider::SetDebugCube() {
     DrawOBBLine(obb_, lineColor_);
-    debugLine_.Draw(viewProjection);
 }
 
 Vector3 OBBCollider::GetCollisionPos() const {
@@ -79,6 +78,6 @@ void OBBCollider::DrawOBBLine(const OBB& obb, const Vector4& color) {
     };
 
     for (int i = 0; i < 12; ++i) {
-        debugLine_.SetLine(verts[indices[i][0]], verts[indices[i][1]], color);
+        debugLine_->SetLine(verts[indices[i][0]], verts[indices[i][1]], color);
     }
 }

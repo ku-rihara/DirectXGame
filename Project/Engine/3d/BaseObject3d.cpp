@@ -7,6 +7,12 @@ void BaseObject3d::SetModel(const std::string& modelName) {
     // モデルを検索してセット
     model_        = (ModelManager::GetInstance()->FindModel(modelName));
     textureIndex_ = model_->GetTextureIndex();
+
+    // オブジェクトイージングアニメーションプレイヤー初期化
+    if (!objEaseAnimationPlayer_) {
+        objEaseAnimationPlayer_ = std::make_unique<ObjEaseAnimationPlayer>();
+        objEaseAnimationPlayer_->Init();
+    }
 }
 
 void BaseObject3d::CreateMaterialResource() {
@@ -49,4 +55,75 @@ void BaseObject3d::DebugImgui() {
 
 void BaseObject3d::SetTexture(const std::string& name) {
     textureIndex_ = TextureManager::GetInstance()->LoadTexture(textureFirePath_ + name);
+}
+
+///============================================================
+/// オブジェクトイージングアニメーション再生
+///============================================================
+void BaseObject3d::PlayObjEaseAnimation(const std::string& categoryName, const std::string& animationName) {
+    if (!objEaseAnimationPlayer_) {
+        objEaseAnimationPlayer_ = std::make_unique<ObjEaseAnimationPlayer>();
+        objEaseAnimationPlayer_->Init();
+    }
+
+    objEaseAnimationPlayer_->Play(categoryName, animationName);
+
+    // Rail使用時、親を設定
+    if (objEaseAnimationPlayer_->GetAnimationData() && objEaseAnimationPlayer_->GetAnimationData()->IsUsingRail()) {
+        auto* railPlayer = objEaseAnimationPlayer_->GetAnimationData()->GetRailPlayer();
+        if (railPlayer) {
+            railPlayer->SetParent(&transform_);
+        }
+    }
+}
+
+///============================================================
+/// オブジェクトイージングアニメーション停止
+///============================================================
+void BaseObject3d::StopObjEaseAnimation() {
+    if (objEaseAnimationPlayer_) {
+        objEaseAnimationPlayer_->Stop();
+    }
+}
+
+///============================================================
+/// アニメーション更新
+///============================================================
+void BaseObject3d::UpdateObjEaseAnimation(const float& deltaTime) {
+    if (objEaseAnimationPlayer_) {
+        objEaseAnimationPlayer_->Update(deltaTime);
+        ApplyAnimationToTransform();
+    }
+}
+
+///============================================================
+/// アニメーション適用後のTransform更新
+///============================================================
+void BaseObject3d::ApplyAnimationToTransform() {
+    if (!objEaseAnimationPlayer_ || !objEaseAnimationPlayer_->IsPlaying()) {
+        return;
+    }
+
+    auto* animData = objEaseAnimationPlayer_->GetAnimationData();
+    if (!animData) {
+        return;
+    }
+
+    // Scaleを適用
+    transform_.scale_ = objEaseAnimationPlayer_->GetCurrentScale();
+
+    // Rotationを適用（ラジアン）
+    transform_.rotation_ = objEaseAnimationPlayer_->GetCurrentRotation();
+
+    // Translationを適用
+    if (!animData->IsUsingRail()) {
+        // 通常のイージング使用時
+        transform_.translation_ = objEaseAnimationPlayer_->GetCurrentTranslation();
+    } else {
+        // Rail使用時
+        auto* railPlayer = animData->GetRailPlayer();
+        if (railPlayer) {
+            transform_.translation_ = railPlayer->GetCurrentPosition();
+        }
+    }
 }

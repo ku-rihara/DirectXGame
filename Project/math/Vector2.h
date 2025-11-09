@@ -60,7 +60,7 @@ public:
 	Vector2 Normalize() const;
 	float Length() const;
 
-	static Vector2 UnitVector();
+	static Vector2 OneVector();
 	static Vector2 ZeroVector();
 };
 

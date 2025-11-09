@@ -22,11 +22,15 @@ struct CBuffer {
 /// </summary>
 class Line3D {
 public:
+    Line3D() = default;
+    ~Line3D();
+
     /// <summary>
-    /// 初期化
+    /// Line3Dオブジェクトを作成
     /// </summary>
     /// <param name="lineMaxNum">最大ライン数</param>
-    void Init(const size_t& lineMaxNum);
+    /// <returns>作成されたLine3Dのポインタ</returns>
+    static Line3D* Create(const size_t& lineMaxNum);
 
     /// <summary>
     /// ラインを設定
@@ -37,18 +41,12 @@ public:
     void SetLine(const Vector3& start, const Vector3& end, const Vector4& color);
 
     /// <summary>
-    /// 描画
-    /// </summary>
-    /// <param name="viewProj">ビュープロジェクション</param>
-    void Draw(const ViewProjection& viewProj);
-
-    /// <summary>
     /// 球のワイヤーフレーム描画
     /// </summary>
     /// <param name="center">中心座標</param>
     /// <param name="radius">半径</param>
     /// <param name="color">色</param>
-    void DrawSphereWireframe(const Vector3& center, const float& radius, const Vector4& color);
+    void SetSphereWireframe(const Vector3& center, const float& radius, const Vector4& color);
 
     /// <summary>
     /// 立方体のワイヤーフレーム描画
@@ -56,21 +54,32 @@ public:
     /// <param name="center">中心座標</param>
     /// <param name="size">サイズ</param>
     /// <param name="color">色</param>
-    void DrawCubeWireframe(const Vector3& center, const Vector3& size, const Vector4& color);
+    void SetCubeWireframe(const Vector3& center, const Vector3& size, const Vector4& color);
+
+    /// <summary>
+    /// 描画
+    /// </summary>
+    /// <param name="viewProj">ビュープロジェクション</param>
+    void Draw(const ViewProjection& viewProj);
 
     void Reset(); //< ライン情報のリセット
+private:
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="lineMaxNum">最大ライン数</param>
+    void Init(const size_t& lineMaxNum);
 
 private:
     size_t maxLines_;                   //< 最大ライン数
     const size_t kVerticesPerLine_ = 2; //< 1ラインあたりの頂点数
     size_t kMaxVertices_;               //< 最大頂点数
 
-    std::vector<Vertex> vertices_{};    //< 頂点データ
-    size_t currentLineCount_ = 0;       //< 現在のライン数
+    size_t currentLineCount_ = 0;    //< 現在のライン数
 
-    Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer_;  //< 頂点バッファ
-    D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};          //< 頂点バッファビュー
-    Vertex* vertexData_ = nullptr;                         //< 頂点データのポインタ
+    Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer_; //< 頂点バッファ
+    D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};         //< 頂点バッファビュー
+    Vertex* vertexData_ = nullptr;                        //< 頂点データのポインタ
 
     Microsoft::WRL::ComPtr<ID3D12Resource> constantBufferResource_; //< 定数バッファ
     CBuffer* cBufferData_ = nullptr;                                //< 定数バッファデータ

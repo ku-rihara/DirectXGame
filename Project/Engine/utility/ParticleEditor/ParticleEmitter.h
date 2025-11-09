@@ -4,7 +4,7 @@
 #include "Pipeline/Particle/ParticlePipeline.h"
 #include "utility/RailEditor/RailManager.h"
 
-#include "3d/Line3D.h"
+#include "Line3D/Line3D.h"
 #include "Primitive/IPrimitive.h"
 
 #include "ParticleParameter.h"
@@ -50,17 +50,14 @@ public:
     /// <param name="name">ジョイント名</param>
     void SetParentJoint(const Object3DAnimation* modelAnimation, const std::string& name);
   
-    /// <summary>
     /// レールのデバッグ描画
-    /// </summary>
-    /// <param name="viewProjection">ビュープロジェクション</param>
-    void RailDraw(const ViewProjection& viewProjection);
+    void RailDraw();
 
     /// <summary>
     /// デバッグ描画
     /// </summary>
     /// <param name="viewProjection">ビュープロジェクション</param>
-    void DebugDraw(const ViewProjection& viewProjection);
+    void SetEmitLine();
 
     void Init();                  //< 初期化
     void Update();                //< 更新
@@ -74,7 +71,7 @@ private:
 
 private:
     float currentTime_;
-    Line3D debugLine_;
+    std::unique_ptr<Line3D>debugLine_;
     WorldTransform emitBoxTransform_;
     bool isStartRailMove_;
     std::string editorMessage_;

@@ -15,13 +15,8 @@ public:
     /// ===================================================
 
     void Init() override; //< 初期化
-
-    /// <summary>
-    /// デバッグキューブの描画
-    /// </summary>
-    /// <param name="viewProjection">ビュープロジェクション</param>
-    void DrawDebugCube(const ViewProjection& viewProjection) override;
-
+    void SetDebugCube() override; //<デバッグキューブの描画セット
+    
     void UpdateWorldTransform() override;             //< ワールド変換の更新
     virtual Vector3 GetCollisionPos() const override; //< 衝突座標の取得
 

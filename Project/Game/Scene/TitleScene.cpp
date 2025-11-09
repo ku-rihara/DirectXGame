@@ -80,7 +80,7 @@ void TitleScene::Update() {
         ChangeForJoyState(); // コントローラジャンプ
     }
 
-    Debug();
+ 
     ViewProjectionUpdate();
 
     if (isFinished_) {

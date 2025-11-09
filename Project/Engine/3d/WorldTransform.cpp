@@ -3,7 +3,7 @@
 
 void WorldTransform::Init() {
 
-    scale_       = Vector3::UnitVector();
+    scale_       = Vector3::OneVector();
     rotation_    = {};
     translation_ = {};
 

@@ -16,7 +16,6 @@
     <ClCompile Include="Engine\2d\SpriteRegistry.cpp" />
     <ClCompile Include="Engine\3d\BaseObject3d.cpp" />
     <ClCompile Include="Engine\3d\Object3DRegistry.cpp" />
-    <ClCompile Include="Engine\3d\Line3d.cpp" />
     <ClCompile Include="Engine\3d\Mesh.cpp" />
     <ClCompile Include="Engine\3d\Model.cpp" />
     <ClCompile Include="Engine\3d\ModelManager.cpp" />
@@ -75,6 +74,8 @@
     <ClCompile Include="Engine\Lighrt\PointLightManager.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLight.cpp" />
     <ClCompile Include="Engine\Lighrt\SpotLightManager.cpp" />
+    <ClCompile Include="Engine\Line3D\Line3d.cpp" />
+    <ClCompile Include="Engine\Line3D\Line3DManager.cpp" />
     <ClCompile Include="Engine\Material\BaseMaterial.cpp" />
     <ClCompile Include="Engine\Material\GPUParticleMaterial.cpp" />
     <ClCompile Include="Engine\Material\ModelMaterial.cpp" />
@@ -127,6 +128,9 @@
     <ClCompile Include="Engine\utility\EasingCreator\EasingEditor.cpp" />
     <ClCompile Include="Engine\utility\EasingCreator\EasingParameterData.cpp" />
     <ClCompile Include="Engine\utility\FileSelector\FileSelector.cpp" />
+    <ClCompile Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationData.cpp" />
+    <ClCompile Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationEditor.cpp" />
+    <ClCompile Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationPlayer.cpp" />
     <ClCompile Include="Engine\utility\ParameterEditor\GlobalParameter.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\utility\ParticleEditor\ParticleManager.cpp" />
@@ -211,8 +215,6 @@
     <ClCompile Include="Game\Player\ComboCreator\PlayerAttackRenditionData.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackController.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackData.cpp" />
-    <ClCompile Include="Game\Player\EasingAnimation\PlayerEasingAnimation.cpp" />
-    <ClCompile Include="Game\Player\EasingAnimation\PlayerEasingAnimationData.cpp" />
     <ClCompile Include="Game\Player\Effect\PlayerEffects.cpp" />
     <ClCompile Include="Game\Player\JumpAttackUI\JumpAttackUI.cpp" />
     <ClCompile Include="Game\Player\Parameter\PlayerParameter.cpp" />
@@ -260,7 +262,6 @@
     <ClInclude Include="Engine\2d\SpriteRegistry.h" />
     <ClInclude Include="Engine\3d\BaseObject3d.h" />
     <ClInclude Include="Engine\3d\Object3DRegistry.h" />
-    <ClInclude Include="Engine\3d\Line3d.h" />
     <ClInclude Include="Engine\3d\Mesh.h" />
     <ClInclude Include="Engine\3d\Model.h" />
     <ClInclude Include="Engine\3d\ModelManager.h" />
@@ -325,6 +326,8 @@
     <ClInclude Include="Engine\Lighrt\PointLightManager.h" />
     <ClInclude Include="Engine\Lighrt\SpotLight.h" />
     <ClInclude Include="Engine\Lighrt\SpotLightManager.h" />
+    <ClInclude Include="Engine\Line3D\Line3d.h" />
+    <ClInclude Include="Engine\Line3D\Line3DManager.h" />
     <ClInclude Include="Engine\Material\BaseMaterial.h" />
     <ClInclude Include="Engine\Material\GPUParticleMaterial.h" />
     <ClInclude Include="Engine\Material\ModelMaterial.h" />
@@ -386,6 +389,9 @@
     <ClInclude Include="Engine\utility\EasingCreator\EasingEditor.h" />
     <ClInclude Include="Engine\utility\EasingCreator\EasingParameterData.h" />
     <ClInclude Include="Engine\utility\FileSelector\FileSelector.h" />
+    <ClInclude Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationData.h" />
+    <ClInclude Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationEditor.h" />
+    <ClInclude Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationPlayer.h" />
     <ClInclude Include="Engine\utility\ParameterEditor\GlobalParameter.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleEmitter.h" />
     <ClInclude Include="Engine\utility\ParticleEditor\ParticleManager.h" />
@@ -470,8 +476,6 @@
     <ClInclude Include="Game\Player\ComboCreator\PlayerAttackRenditionData.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackController.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackData.h" />
-    <ClInclude Include="Game\Player\EasingAnimation\PlayerEasingAnimation.h" />
-    <ClInclude Include="Game\Player\EasingAnimation\PlayerEasingAnimationData.h" />
     <ClInclude Include="Game\Player\Effect\PlayerEffects.h" />
     <ClInclude Include="Game\Player\JumpAttackUI\JumpAttackUI.h" />
     <ClInclude Include="Game\Player\Parameter\PlayerParameter.h" />

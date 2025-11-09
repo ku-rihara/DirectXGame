@@ -1,14 +1,38 @@
 #include "Line3D.h"
-#include"Pipeline/PipelineManager.h"
 #include "Dx/DirectXCommon.h"
+#include "Line3DManager.h"
+#include "Pipeline/PipelineManager.h"
 #include <cassert>
+#include <cmath>
+#include <cstdint>
 #include <cstring>
 #include <d3dx12.h>
-#include <cmath>
 #include <numbers>
-#include <cstdint>
 
-// 初期化
+///============================================================
+/// デストラクタ
+///============================================================
+Line3D::~Line3D() {
+    if (Line3DManager::GetInstance()) {
+        Line3DManager::GetInstance()->UnregisterLine(this);
+    }
+}
+
+///============================================================
+/// Line3Dオブジェクト作成
+///============================================================
+Line3D* Line3D::Create(const size_t& lineMaxNum) {
+    std::unique_ptr<Line3D> line3d = std::make_unique<Line3D>();
+    line3d->Init(lineMaxNum);
+
+    Line3DManager::GetInstance()->RegisterLine(line3d.get());
+
+    return line3d.release();
+}
+
+///============================================================
+/// 初期化
+///============================================================
 void Line3D::Init(const size_t& lineMaxNum) {
     auto dxCommon = DirectXCommon::GetInstance();
     HRESULT hr;
@@ -34,7 +58,6 @@ void Line3D::Init(const size_t& lineMaxNum) {
     vertexBufferView_.SizeInBytes    = static_cast<UINT>(bufferSize);
     vertexBufferView_.StrideInBytes  = sizeof(Vertex);
 
-   
     vertexBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 
     // 定数バッファ
@@ -45,7 +68,9 @@ void Line3D::Init(const size_t& lineMaxNum) {
     Reset();
 }
 
-
+///============================================================
+/// ラインを設定
+///============================================================
 void Line3D::SetLine(const Vector3& start, const Vector3& end, const Vector4& color) {
     if (currentLineCount_ >= maxLines_) {
         return;
@@ -53,14 +78,15 @@ void Line3D::SetLine(const Vector3& start, const Vector3& end, const Vector4& co
 
     size_t index = currentLineCount_ * 2;
 
-   
     vertexData_[index]     = {start, color};
     vertexData_[index + 1] = {end, color};
 
     currentLineCount_++;
 }
 
-
+///============================================================
+/// 描画
+///============================================================
 void Line3D::Draw(const ViewProjection& viewProj) {
     if (currentLineCount_ == 0) {
         return;
@@ -68,21 +94,18 @@ void Line3D::Draw(const ViewProjection& viewProj) {
 
     auto commandList = DirectXCommon::GetInstance()->GetCommandList();
 
-    PipelineManager::GetInstance()->PreDraw(PipelineType::Line3D, commandList);
-  
     // 転送
     *cBufferData_ = {viewProj.matView_ * viewProj.matProjection_};
 
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
     commandList->SetGraphicsRootConstantBufferView(0, constantBufferResource_->GetGPUVirtualAddress());
     commandList->DrawInstanced(static_cast<UINT>(currentLineCount_ * kVerticesPerLine_), 1, 0, 0);
-
-    Reset();
-
-  PipelineManager::GetInstance()->PreDraw(PipelineType::Object3D, commandList);
 }
 
-void Line3D::DrawSphereWireframe(const Vector3& center, const float& radius, const Vector4& color) {
+///============================================================
+/// 球のワイヤーフレーム描画
+///============================================================
+void Line3D::SetSphereWireframe(const Vector3& center, const float& radius, const Vector4& color) {
     const int32_t latMax = 8;
     const int32_t lonMax = 8;
 
@@ -121,7 +144,10 @@ void Line3D::DrawSphereWireframe(const Vector3& center, const float& radius, con
     }
 }
 
-void Line3D::DrawCubeWireframe(const Vector3& center, const Vector3& size, const Vector4& color) {
+///============================================================
+/// 立方体のワイヤーフレーム描画
+///============================================================
+void Line3D::SetCubeWireframe(const Vector3& center, const Vector3& size, const Vector4& color) {
     Vector3 half = size * 0.5f;
 
     // 8頂点定義
@@ -151,9 +177,9 @@ void Line3D::DrawCubeWireframe(const Vector3& center, const Vector3& size, const
     }
 }
 
-
-
-
+///============================================================
+/// ライン情報のリセット
+///============================================================
 void Line3D::Reset() {
     currentLineCount_ = 0;
 }

@@ -33,8 +33,14 @@ Object3d* Object3d::CreateModel(const std::string& instanceName) {
 void Object3d::Init() {
 }
 
-void Object3d::Update() {
+void Object3d::Update(const float& deltaTime) {
+    // オブジェクトイージングアニメーション更新
+    UpdateObjEaseAnimation(deltaTime);
+
+    // Transform更新
     transform_.UpdateMatrix();
+
+    // マテリアル色更新
     material_.materialData_->color = objColor_.GetColor();
 }
 

@@ -79,7 +79,7 @@ private:
     bool HasParentJoint() const; //< ペアレントジョイントを持つか
 
 public:
-    Vector3 scale_ = Vector3::UnitVector();
+    Vector3 scale_ = Vector3::OneVector();
     Vector3 rotation_;
     Vector3 translation_;
     Quaternion quaternion_;

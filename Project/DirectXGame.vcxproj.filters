@@ -466,11 +466,20 @@
     <Filter Include="Game\Player\ComboCreator">
       <UniqueIdentifier>{4d571f9d-bdee-482b-a917-03263be5f41b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player\EasingAnimation">
-      <UniqueIdentifier>{47d13edc-3c7f-4474-b21c-f1f4aa93dc4e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Player\Behavior\ComboBehavior\Rendition">
       <UniqueIdentifier>{d01d8ed8-e9bf-4f45-80e0-b2515f3433fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\ObjEaseAnimation">
+      <UniqueIdentifier>{265e2ff9-ffea-4b5c-98d8-74123d0cc320}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\ObjEaseAnimation">
+      <UniqueIdentifier>{e51ed770-3fd9-48ca-b59c-636ee62fd3ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Line3D">
+      <UniqueIdentifier>{dd87c618-9ebe-428f-8a1b-954768de0c4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Line3D">
+      <UniqueIdentifier>{7621e716-64af-48fb-910f-d61f252ba166}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -886,9 +895,6 @@
     <ClCompile Include="Game\FireInjectors\FireInjectors.cpp">
       <Filter>Game\FireInjectors</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Line3d.cpp">
-      <Filter>MyEngine\.cpp\3d</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\base\RtvManager.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
     </ClCompile>
@@ -1180,12 +1186,6 @@
     <ClCompile Include="Game\Player\ComboCreator\PlayerAttackRenditionData.cpp">
       <Filter>Game\Player\ComboCreator</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\EasingAnimation\PlayerEasingAnimation.cpp">
-      <Filter>Game\Player\EasingAnimation</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\EasingAnimation\PlayerEasingAnimationData.cpp">
-      <Filter>Game\Player\EasingAnimation</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Rendition</Filter>
     </ClCompile>
@@ -1197,6 +1197,21 @@
     </ClCompile>
     <ClCompile Include="Engine\utility\RailEditor\RailEditor.cpp">
       <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationData.cpp">
+      <Filter>MyEngine\.cpp\utility\ObjEaseAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationEditor.cpp">
+      <Filter>MyEngine\.cpp\utility\ObjEaseAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationPlayer.cpp">
+      <Filter>MyEngine\.cpp\utility\ObjEaseAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Line3D\Line3d.cpp">
+      <Filter>MyEngine\.cpp\Line3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Line3D\Line3DManager.cpp">
+      <Filter>MyEngine\.cpp\Line3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1650,9 +1665,6 @@
     <ClInclude Include="Engine\Animation\SkeletonData.h">
       <Filter>MyEngine\.h\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Line3d.h">
-      <Filter>MyEngine\.h\3d</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\base\RtvManager.h">
       <Filter>MyEngine\.h\base</Filter>
     </ClInclude>
@@ -1956,12 +1968,6 @@
     <ClInclude Include="Game\Player\ComboCreator\PlayerAttackRenditionData.h">
       <Filter>Game\Player\ComboCreator</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\EasingAnimation\PlayerEasingAnimation.h">
-      <Filter>Game\Player\EasingAnimation</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\EasingAnimation\PlayerEasingAnimationData.h">
-      <Filter>Game\Player\EasingAnimation</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Rendition</Filter>
     </ClInclude>
@@ -1973,6 +1979,21 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\RailEditor\RailEditor.h">
       <Filter>MyEngine\.h\utility\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationData.h">
+      <Filter>MyEngine\.h\utility\ObjEaseAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationEditor.h">
+      <Filter>MyEngine\.h\utility\ObjEaseAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\ObjEaseAnimation\ObjEaseAnimationPlayer.h">
+      <Filter>MyEngine\.h\utility\ObjEaseAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Line3D\Line3d.h">
+      <Filter>MyEngine\.h\Line3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Line3D\Line3DManager.h">
+      <Filter>MyEngine\.h\Line3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
