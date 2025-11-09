@@ -61,7 +61,6 @@ void KTGame::Draw() {
     // GPUパーティクル描画
     GPUParticleManager::GetInstance()->Draw(viewProjection);
     // ライン描画
-    collisionManager_->LineAllSet();
     Line3DManager::GetInstance()->DrawAll(viewProjection);
   
     // --------------------------------------------------------------------------
