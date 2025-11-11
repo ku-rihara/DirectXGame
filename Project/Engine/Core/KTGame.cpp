@@ -5,7 +5,7 @@
 #include "Animation/AnimationRegistry.h"
 #include "PostEffect/PostEffectRenderer.h"
 #include "Scene/Factory/SceneFactory.h"
-#include "utility/ParticleEditor/ParticleManager.h"
+#include "Editor/ParticleEditor/ParticleManager.h"
 #include"Line3D/Line3DManager.h"
 #include"GPUParticle/GPUParticleManager.h"
 

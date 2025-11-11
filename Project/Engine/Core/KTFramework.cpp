@@ -7,7 +7,7 @@
 #include "ShadowMap/ShadowMap.h"
 
 /// utility
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 
 #include "Frame/Frame.h"
 /// imgui

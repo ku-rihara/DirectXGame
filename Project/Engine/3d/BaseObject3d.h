@@ -6,7 +6,7 @@
 #include "ObjectColor.h"
 #include "ShadowMap/ShadowMap.h"
 #include "struct/TransformationMatrix.h"
-#include "utility/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
+#include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 #include <cstdint>
 #include <memory>
 #include <string>

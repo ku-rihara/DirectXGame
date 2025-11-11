@@ -1,13 +1,13 @@
 #pragma once
-#include "3d/Line3D.h"
+#include "Line3D/Line3D.h"
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
 #include "Vector3.h"
 #include <memory>
 #include <vector>
 
-#include "utility/RailEditor/ControlPosManager.h"
-#include "utility/RailEditor/Rail.h"
+#include "Editor/RailEditor/ControlPosManager.h"
+#include "Editor/RailEditor/Rail.h"
 
 class SrvManager;
 
@@ -44,13 +44,7 @@ public:
     /// </summary>
     /// <param name="viewProjection">ビュープロジェクション</param>
     /// <param name="size">サイズ</param>
-    void Draw(const ViewProjection& viewProjection, const Vector3& size = Vector3(0.1f, 0.1f, 0.1f));
-
-    /// <summary>
-    /// レール描画
-    /// </summary>
-    /// <param name="viewProjection">ビュープロジェクション</param>
-    void RailDraw(const ViewProjection& viewProjection);
+    void SetCubeLine(const Vector3& size = Vector3(0.1f, 0.1f, 0.1f));
 
     void RoopOrStop(); //< ループまたは停止
     void ImGuiEdit(); //< ImGuiにて編集
@@ -68,9 +62,10 @@ private:
     Vector3 scale_;
     bool isRoop_;
 
-    Line3D lineDrawer_;
+    std::unique_ptr<Line3D> lineDrawer_;
 
 public:
+
     // getter
     bool GetIsRoop() const { return isRoop_; }
     float GetRailMoveTime() const { return railMoveTime_; }

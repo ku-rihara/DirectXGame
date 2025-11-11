@@ -1,5 +1,5 @@
 #pragma once
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector3.h"
 #include "Vector4.h"
 #include <d3d12.h>

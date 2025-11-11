@@ -1,6 +1,6 @@
 #pragma once
 #include "PostEffect/PostEffectRenderer.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include <string>
 
 /// <summary>

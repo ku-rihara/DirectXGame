@@ -2,8 +2,8 @@
 #include "Easing/Easing.h"
 #include "Quaternion.h"
 #include "utility/FileSelector/FileSelector.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
-#include "utility/RailEditor/RailPlayer.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Editor/RailEditor/RailPlayer.h"
 #include "Vector3.h"
 #include <cstdint>
 #include <memory>

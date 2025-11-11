@@ -14,10 +14,10 @@
 #include "input/Input.h"
 
 // editor
-#include "utility/CameraEditor/CameraEditor.h"
-#include "utility/ShakeEditor/ShakeEditor.h"
-#include"utility/RailEditor/RailEditor.h"
-#include"utility/ObjEaseAnimation/ObjEaseAnimationEditor.h"
+#include "Editor/CameraEditor/CameraEditor.h"
+#include "Editor/ShakeEditor/ShakeEditor.h"
+#include"Editor/RailEditor/RailEditor.h"
+#include"Editor/ObjEaseAnimation/ObjEaseAnimationEditor.h"
 
 // debug
 #include "utility/Debug/DebugCamera.h"

@@ -6,7 +6,7 @@
 
 // Particle
 #include "GPUParticle/GPUParticleManager.h"
-#include "utility/ParticleEditor/ParticleManager.h"
+#include "Editor/ParticleEditor/ParticleManager.h"
 
 #include <imgui.h>
 
