@@ -16,7 +16,7 @@ void CameraAnimationData::Init(const std::string& animationName) {
 
     if (!globalParameter_->HasRegisters(animationName)) {
         // 新規登録
-        globalParameter_->CreateGroup(groupName_, true);
+        globalParameter_->CreateGroup(groupName_);
         RegisterParams();
         globalParameter_->SyncParamForGroup(groupName_);
     } else {

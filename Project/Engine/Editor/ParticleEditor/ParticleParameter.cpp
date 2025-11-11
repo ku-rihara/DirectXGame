@@ -32,7 +32,7 @@ void ParticleParameter::Init() {
 
    ///* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
-    globalParameter_->CreateGroup(particleName_, false);
+    globalParameter_->CreateGroup(particleName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(particleName_);
 

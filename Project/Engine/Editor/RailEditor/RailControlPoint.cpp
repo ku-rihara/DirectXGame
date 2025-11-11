@@ -10,7 +10,7 @@ void RailControlPoint::Init(const std::string& railName, const int32_t& keyNumbe
 
     if (!globalParameter_->HasRegisters(groupName_)) {
         // 新規登録
-        globalParameter_->CreateGroup(groupName_, true);
+        globalParameter_->CreateGroup(groupName_);
         RegisterParams();
     } else {
         // パラメータを取得

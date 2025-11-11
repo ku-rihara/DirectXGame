@@ -13,7 +13,7 @@ void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t&
    
     if (!globalParameter_->HasRegisters(groupName_)) {
         // 新規登録
-        globalParameter_->CreateGroup(groupName_, true);
+        globalParameter_->CreateGroup(groupName_);
         RegisterParams();
       
     } else {

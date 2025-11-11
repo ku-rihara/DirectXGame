@@ -16,7 +16,7 @@ void ObjEaseAnimationData::Init(const std::string& animationName, const std::str
 
     if (!globalParameter_->HasRegisters(groupName_)) {
         // 新規登録
-        globalParameter_->CreateGroup(groupName_, true);
+        globalParameter_->CreateGroup(groupName_);
         RegisterParams();
         globalParameter_->SyncParamForGroup(groupName_);
     } else {
