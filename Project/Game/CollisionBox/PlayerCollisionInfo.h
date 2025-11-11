@@ -2,7 +2,7 @@
 
 #include "BaseAABBCollisionBox.h"
 #include "Combo/Combo.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include <array>
 #include <string>
 

@@ -2,7 +2,7 @@
 
 #include "ComboUI.h"
 
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 // behavior
 #include "Behavior/BaseComboUIBehavior.h"
 // std

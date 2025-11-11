@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseGameIntro.h"
 #include "MovieLine.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include <array>
 #include <cstdint>
 #include <memory>

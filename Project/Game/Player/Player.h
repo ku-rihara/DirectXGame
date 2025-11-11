@@ -11,8 +11,8 @@
 #include "Parts/PlayerHandRight.h"
 #include "PlayerBehavior/BasePlayerBehavior.h"
 #include "TitleBehavior/BaseTitleBehavior.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
-#include "utility/ParticleEditor/ParticleEmitter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParticleEditor/ParticleEmitter.h"
 #include <memory>
 #include <string>
 

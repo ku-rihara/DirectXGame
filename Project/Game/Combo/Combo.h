@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Combo/ComboUIController.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 // std
 #include <cstdint>
 #include <memory>

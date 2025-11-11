@@ -2,7 +2,7 @@
 
 #include"BaseComboAattackBehavior.h"
 
-#include"utility/RailEditor/RailManager.h"
+#include"Editor/RailEditor/RailManager.h"
 
 class ThrustPunch : public BaseComboAattackBehavior {
 private:

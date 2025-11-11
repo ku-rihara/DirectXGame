@@ -1,5 +1,5 @@
 #pragma once
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "utility/PutObjForBlender/PutObjForBlender.h"
 #include <cstdint>
 #include <memory>

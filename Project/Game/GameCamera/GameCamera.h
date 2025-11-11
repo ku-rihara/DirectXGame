@@ -2,7 +2,7 @@
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
 #include "CameraRendition.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include <memory>
 
 class LockOn;

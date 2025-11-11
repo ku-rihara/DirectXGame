@@ -5,7 +5,7 @@
 #include "Lighrt/Light.h"
 #include "Manager/SceneManager.h"
 #include "Player/TitleBehavior/TitleRightPunch.h"
-#include "utility/ParticleEditor/ParticleManager.h"
+#include "Editor/ParticleEditor/ParticleManager.h"
 
 #include "base/TextureManager.h"
 #include "Frame/Frame.h"

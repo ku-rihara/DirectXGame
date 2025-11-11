@@ -1,6 +1,6 @@
 #pragma once
-#include "utility/PostEffectEditor/PostEffectController.h"
-#include "utility/TimeScaleEditor/TimeScaleController.h"
+#include "Editor/PostEffectEditor/PostEffectController.h"
+#include "Editor/TimeScaleEditor/TimeScaleController.h"
 #include <memory>
 
 /// <summary>
