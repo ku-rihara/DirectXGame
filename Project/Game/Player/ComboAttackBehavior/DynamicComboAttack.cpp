@@ -26,6 +26,7 @@ void DynamicComboAttack::Init() {
     isCollisionActive_ = false;
     collisionTimer_    = 0.0f;
 
+    attackRendition_ = std::make_unique<PlayerAttackRendition>();
     attackRendition_->Init(pPlayer_, attackData_);
 
     // targetPosを計算
