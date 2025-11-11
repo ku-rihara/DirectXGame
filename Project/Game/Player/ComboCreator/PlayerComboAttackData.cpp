@@ -10,7 +10,7 @@ void PlayerComboAttackData::Init(const std::string& attackName) {
 
     // グループ名設定
     groupName_ = attackName;
-    globalParameter_->CreateGroup(groupName_, true);
+    globalParameter_->CreateGroup(groupName_);
 
     // バインド
     RegisterParams();

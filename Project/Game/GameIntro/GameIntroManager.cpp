@@ -12,7 +12,7 @@ void GameIntroManager::Init() {
 
     // GlobalParameter
     globalParameter_ = GlobalParameter::GetInstance();
-    globalParameter_->CreateGroup(groupName_, false);
+    globalParameter_->CreateGroup(groupName_);
     BindParam();
     globalParameter_->SyncParamForGroup(groupName_);
 
