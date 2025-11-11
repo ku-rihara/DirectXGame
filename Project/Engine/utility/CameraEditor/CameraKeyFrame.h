@@ -59,9 +59,12 @@ private:
     void LoadParams();
 
 private:
+
+    // GlobalParam
     GlobalParameter* globalParameter_;
     std::string groupName_;
-    const std::string folderName_ = "CameraAnimation/KeyFrames";
+    std::string folderPath_ = "CameraAnimation/KeyFrames";
+
     int32_t currentKeyFrameIndex  = -1;
 
     float timePoint_ = 0.0f;

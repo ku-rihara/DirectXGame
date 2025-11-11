@@ -24,13 +24,13 @@ void RailControlPoint::Reset() {
 
 void RailControlPoint::LoadData() {
     // パラメータファイルから読み込み
-    globalParameter_->LoadFile(groupName_, folderName_);
+    globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
 void RailControlPoint::SaveData() {
     // パラメータファイルに保存
-    globalParameter_->SaveFile(groupName_, folderName_);
+    globalParameter_->SaveFile(groupName_, folderPath_);
 }
 
 void RailControlPoint::RegisterParams() {
