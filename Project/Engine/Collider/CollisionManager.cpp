@@ -42,7 +42,7 @@ void CollisionManager::Reset() {
 
 void CollisionManager::Update() { 
 	
-	//imguiからパラメータを取得
+	//imGuiからパラメータを取得
 	ApplyGlobalParameter();
 
 	UpdateWorldTransform();
@@ -54,10 +54,6 @@ void CollisionManager::Update() {
 
 void CollisionManager::UpdateWorldTransform() {
 	
-	//非表示なら抜ける
-	if (!isColliderVisible_) {
-		return;
-	}
 	//全てのコライダーについて行列更新をする
 	for (BaseCollider* baseCollider : baseColliders_) {
 		baseCollider->UpdateWorldTransform();
@@ -128,9 +124,9 @@ void CollisionManager::CheckCollisionPair(BaseCollider* colliderA, BaseCollider*
 	}
 }
 
-// コリジョン処理を分ける関数
+
 void CollisionManager::HandleCollision(BaseCollider* colliderA, BaseCollider* colliderB) {
-	// **必ず OnCollisionEnter を呼ぶ**
+	//  OnCollisionEnter
 	colliderA->OnCollisionEnter(colliderB);
 	colliderB->OnCollisionEnter(colliderA);
 
@@ -159,13 +155,13 @@ void CollisionManager::CheckAllCollisions() {
 	std::list<BaseCollider*>::iterator itrA = baseColliders_.begin();
 	for (; itrA != baseColliders_.end(); ++itrA) {
 		// イテレータAからコライダーAを取得する
-		BaseCollider* colliderA = *itrA;//ダブルポインタから中身のポインタを取り出す処理
+		BaseCollider* colliderA = *itrA;
 
-		// イテレーターBはイテレータAの次の要素から回す（重複判定を回避）
+		// イテレーターBはイテレータAの次の要素から回す
 		std::list<BaseCollider*>::iterator itrB = itrA;
 		itrB++;
 		for (; itrB != baseColliders_.end(); ++itrB) {
-			BaseCollider* colliderB = *itrB;//ダブルポインタから中身のポインタを取り出す処理
+			BaseCollider* colliderB = *itrB;
 
 			// ペアの当たり判定
 			CheckCollisionPair(colliderA, colliderB);
