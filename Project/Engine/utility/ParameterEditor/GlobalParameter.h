@@ -59,7 +59,7 @@ public:
     /// </summary>
     /// <param name="groupName">グループ名</param>
     /// <param name="isVisible">表示フラグ</param>
-    void CreateGroup(const std::string& groupName, const bool& isVisible);
+    void CreateGroup(const std::string& groupName, const bool& isVisible=false);
 
     /// <summary>
     /// セパレータテキスト追加

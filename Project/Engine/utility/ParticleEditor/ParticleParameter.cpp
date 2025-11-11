@@ -278,8 +278,8 @@ void ParticleParameter::EditorUpdate() {
     // パーティクル切り替え
     ParticleChange();
 
-    globalParameter_->ParamSaveForImGui(particleName_,folderName_);
-    globalParameter_->ParamLoadForImGui(particleName_, folderName_);
+    globalParameter_->ParamSaveForImGui(particleName_,folderPath_);
+    globalParameter_->ParamLoadForImGui(particleName_, folderPath_);
 
     ImGui::PopID();
     ImGui::End();
@@ -362,7 +362,7 @@ void ParticleParameter::ParticleChange() {
         globalParameter_->CopyGroup(selectedFile, particleName_);
         globalParameter_->SyncParamForGroup(particleName_);
      
-        ImGui::Text("Load Successful: %s", (folderName_ + selectedFile).c_str());
+        ImGui::Text("Load Successful: %s", (folderPath_ + selectedFile).c_str());
     });
 }
 

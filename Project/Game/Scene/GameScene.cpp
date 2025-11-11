@@ -25,7 +25,7 @@ void GameScene::Init() {
     putObjForBlender     = std::make_unique<PutObjForBlender>();
     timeScaleController_ = std::make_unique<TimeScaleController>();
 
-    monsterBall_->Init();
+  /*  monsterBall_->Init();*/
     ground_->Init();
     plane_->Init();
     skuBox_->Init();
@@ -47,7 +47,7 @@ void GameScene::Update() {
     // 各クラス更新
     ground_->Update();
     timeScaleController_->Update(Frame::DeltaTime());
-    monsterBall_->Update();
+   /* monsterBall_->Update();*/
     plane_->Update();
     skuBox_->Update();
 

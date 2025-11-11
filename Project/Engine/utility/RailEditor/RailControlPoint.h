@@ -32,7 +32,7 @@ private:
 private:
     GlobalParameter* globalParameter_;
     std::string groupName_;
-    const std::string folderName_ = "RailEditor/ControlPoints";
+    const std::string folderPath_ = "RailEditor/ControlPoints";
     int32_t currentKeyFrameIndex  = -1;
 
     Vector3 position_ = {0.0f, 0.0f, 0.0f};

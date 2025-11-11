@@ -135,7 +135,7 @@ protected:
     float moveSpeed_;
 
     std::string particleName_;
-    const std::string folderName_      = "Particle";
+    const std::string folderPath_      = "Particle";
     const std::string textureFilePath_ = "Resources/texture";
     std::string selectedTexturePath_;
 

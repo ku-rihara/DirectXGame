@@ -94,16 +94,7 @@ void CameraAnimationData::LoadKeyFrames() {
         // インデックス順にソート
         std::sort(keyFrameFiles.begin(), keyFrameFiles.end());
 
-        RebuildAndLoadAllKeyFrames(keyFrameFiles);
-
-        // 最初のキーフレームを選択状態に
-        if (!keyFrames_.empty()) {
-            selectedKeyFrameIndex_ = 0;
-
-            finalKeyFrameIndex_ = keyFrameFiles.back().first;
-        } else {
-            finalKeyFrameIndex_ = -1;
-        }
+        RebuildAndLoadAllKeyFrames(keyFrameFiles);      
     }
 }
 
