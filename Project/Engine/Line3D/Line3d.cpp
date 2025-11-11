@@ -100,6 +100,8 @@ void Line3D::Draw(const ViewProjection& viewProj) {
     commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
     commandList->SetGraphicsRootConstantBufferView(0, constantBufferResource_->GetGPUVirtualAddress());
     commandList->DrawInstanced(static_cast<UINT>(currentLineCount_ * kVerticesPerLine_), 1, 0, 0);
+
+    Reset();
 }
 
 ///============================================================
