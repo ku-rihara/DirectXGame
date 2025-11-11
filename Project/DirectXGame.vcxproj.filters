@@ -196,21 +196,6 @@
     <Filter Include="Game\Enemy\Spawner">
       <UniqueIdentifier>{56719232-7938-486e-b2c4-15494f312b10}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.h\utility\RailEditor">
-      <UniqueIdentifier>{fd8669ab-e586-4603-8989-fde63074b7f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.cpp\utility\RailEditor">
-      <UniqueIdentifier>{38b63eec-6feb-456d-8ec6-809cc5cedf01}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.cpp\utility\ParticleEditor">
-      <UniqueIdentifier>{e160a169-d446-4008-85cf-77b40545199e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.h\utility\ParticleEditor">
-      <UniqueIdentifier>{4b1e989d-a14e-4aab-8692-e2fbb2059019}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.cpp\utility\ParameterEditor">
-      <UniqueIdentifier>{68cc7c40-2b21-43d7-9461-36612c85f182}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.cpp\Primitive">
       <UniqueIdentifier>{a660c6f0-a988-46d1-bca0-d2fc5408ee78}</UniqueIdentifier>
     </Filter>
