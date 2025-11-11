@@ -2,7 +2,7 @@
 #include "3d/ViewProjection.h"
 #include "CameraKeyFrame.h"
 #include "Quaternion.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include <cstdint>
 #include <memory>
 #include <string>

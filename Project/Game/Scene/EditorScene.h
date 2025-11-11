@@ -5,7 +5,7 @@
 
 #include "Easing/Easing.h"
 #include "EasingTestObj/EasingTestObj.h"
-#include "utility/EasingCreator/Easingeditor.h"
+#include "Editor/EasingCreator/Easingeditor.h"
 #include <memory>
 
 /// <summary>

@@ -2,7 +2,7 @@
 #include "3d/object3d.h"
 #include "3d/WorldTransform.h"
 #include "Easing/EasingSequence.h"
-#include "utility/ParticleEditor/ParticleEmitter.h"
+#include "Editor/ParticleEditor/ParticleEmitter.h"
 #include <array>
 #include <cstdint>
 #include <json.hpp>

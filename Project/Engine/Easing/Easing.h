@@ -1,5 +1,5 @@
 #pragma once
-#include "utility/EasingCreator/EasingParameterData.h"
+#include "Editor/EasingCreator/EasingParameterData.h"
 #include "Vector2Proxy.h"
 #include <cstdint>
 #include <functional>

@@ -7,7 +7,7 @@
 // class
 #include "3d/Object3DRegistry.h"
 #include "Pipeline/PipelineManager.h"
-#include "utility/ParticleEditor/ParticleManager.h"
+#include "Editor/ParticleEditor/ParticleManager.h"
 
 // math
 #include "Frame/Frame.h"

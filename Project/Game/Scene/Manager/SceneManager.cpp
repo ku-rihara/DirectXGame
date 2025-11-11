@@ -6,8 +6,8 @@
 #include "GPUParticle/GPUParticleManager.h"
 #include "input/Input.h"
 #include "Pipeline/PipelineManager.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
-#include "utility/ParticleEditor/ParticleManager.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParticleEditor/ParticleManager.h"
 
 #include "3d/Object3DRegistry.h"
 #include "Animation/AnimationRegistry.h"

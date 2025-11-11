@@ -1,6 +1,6 @@
 #pragma once
 #include "Easing/Easing.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include <cstdint>

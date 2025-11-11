@@ -8,7 +8,7 @@
 #include "MonsterBall/MonsterBall.h"
 #include "Plane/Plane.h"
 #include "SkyBox/SkyBox.h"
-#include "utility/TimeScaleEditor/TimeScaleController.h"
+#include "Editor/TimeScaleEditor/TimeScaleController.h"
 // emitter
 #include "GPUParticle/GPUParticleEmitter.h"
 

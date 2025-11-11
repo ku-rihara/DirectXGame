@@ -3,7 +3,7 @@
 #include <memory>
 #include <wrl.h>
 // struct
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector3.h"
 #include <cstdint>
 #include <string>
