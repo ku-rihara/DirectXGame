@@ -109,17 +109,14 @@ void Line3D::SetSphereWireframe(const Vector3& center, const float& radius, cons
     const int32_t latMax = 8;
     const int32_t lonMax = 8;
 
-    using std::numbers::pi_v;
-    const float PI = pi_v<float>;
-
     // 緯度方向（Y軸を中心に）+Zから-Zへ
     for (int32_t lat = 0; lat <= latMax; ++lat) {
-        float theta1 = PI * (float)(lat) / (float)latMax;
-        float theta2 = PI * (float)(lat + 1) / (float)latMax;
+        float theta1 = std::numbers::pi_v<float> * (float)(lat) / (float)latMax;
+        float theta2 = std::numbers::pi_v<float> * (float)(lat + 1) / (float)latMax;
 
         for (int32_t lon = 0; lon < lonMax; ++lon) {
-            float phi1 = 2.0f * PI * (float)(lon) / (float)lonMax;
-            float phi2 = 2.0f * PI * (float)(lon + 1) / (float)lonMax;
+            float phi1 = 2.0f * std::numbers::pi_v<float> * (float)(lon) / (float)lonMax;
+            float phi2 = 2.0f * std::numbers::pi_v<float> * (float)(lon + 1) / (float)lonMax;
 
             Vector3 p1 = {
                 radius * std::sin(theta1) * std::cos(phi1),
