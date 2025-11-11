@@ -47,7 +47,7 @@ void GameScene::Update() {
     // 各クラス更新
     ground_->Update();
     timeScaleController_->Update(Frame::DeltaTime());
-   /* monsterBall_->Update();*/
+ 
     plane_->Update();
     skuBox_->Update();
 
