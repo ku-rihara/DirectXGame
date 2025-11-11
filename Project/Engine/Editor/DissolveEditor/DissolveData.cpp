@@ -8,7 +8,7 @@ void DissolveData::Init(const std::string& dissolveName) {
 
     // グループ名設定
     groupName_ = dissolveName;
-    globalParameter_->CreateGroup(groupName_, true);
+    globalParameter_->CreateGroup(groupName_);
 
     RegisterParams();
 

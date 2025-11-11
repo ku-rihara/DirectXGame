@@ -10,7 +10,7 @@ void ShakeData::Init(const std::string& shakeName) {
 
     if (!globalParameter_->HasRegisters(shakeName)) {
         // 新規登録
-        globalParameter_->CreateGroup(groupName_, true);
+        globalParameter_->CreateGroup(groupName_);
         RegisterParams();
         globalParameter_->SyncParamForGroup(groupName_);
     } else {

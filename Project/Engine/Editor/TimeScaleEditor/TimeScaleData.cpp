@@ -7,7 +7,7 @@ void TimeScaleData::Init(const std::string& timeScaleName) {
 
     // グループ名設定
     groupName_ = timeScaleName;
-    globalParameter_->CreateGroup(groupName_, true);
+    globalParameter_->CreateGroup(groupName_);
 
     RegisterParams();
 

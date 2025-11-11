@@ -8,7 +8,7 @@ void PostEffectData::Init(const std::string& postEffectName) {
 
     // グループ名設定
     groupName_ = postEffectName;
-    globalParameter_->CreateGroup(groupName_, true);
+    globalParameter_->CreateGroup(groupName_);
 
     // 重複バインドを防ぐ
     RegisterParams();

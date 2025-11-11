@@ -15,57 +15,26 @@
 /// </summary>
 class GlobalParameter {
 public:
-    // ウィジェットタイプ
-    enum class WidgetType {
-        NONE,
-        SliderInt,
-        DragFloat,
-        DragFloat2,
-        DragFloat3,
-        DragFloat4,
-        Checkbox,
-        ColorEdit4,
-        SlideAngle,
-    };
-
-    // 描画設定
-    struct DrawSettings {
-        WidgetType widgetType;
-        float minValue = 0.0f;
-        float maxValue = 100.0f;
-        std::string treeNodeLabel;
-    };
-
 private:
     struct BoundItem {
         std::function<void()> pullVariant;
         std::function<void()> pushVariant;
     };
 
-    using Item      = std::variant<int32_t, uint32_t, float, Vector2, Vector3, Vector4, bool, std::string>;
-    using Parameter = std::pair<Item, DrawSettings>;
-    using Group     = std::map<std::string, Parameter>;
-    using json      = nlohmann::json;
+    using Item  = std::variant<int32_t, uint32_t, float, Vector2, Vector3, Vector4, bool, std::string>;
+    using Group = std::map<std::string, Item>;
+    using json  = nlohmann::json;
 
 public:
     static GlobalParameter* GetInstance();
     GlobalParameter()  = default;
     ~GlobalParameter() = default;
 
-    void Update(); //< 更新
-
     /// <summary>
     /// グループ作成
     /// </summary>
     /// <param name="groupName">グループ名</param>
-    /// <param name="isVisible">表示フラグ</param>
-    void CreateGroup(const std::string& groupName, const bool& isVisible=false);
-
-    /// <summary>
-    /// セパレータテキスト追加
-    /// </summary>
-    /// <param name="nodeName">ノード名</param>
-    void AddSeparatorText(const std::string& nodeName);
+    void CreateGroup(const std::string& groupName);
 
     /// <summary>
     /// 値設定
@@ -73,9 +42,8 @@ public:
     /// <param name="groupName">グループ名</param>
     /// <param name="key">キー</param>
     /// <param name="value">値</param>
-    /// <param name="widgetType">ウィジェットタイプ</param>
     template <typename T>
-    void SetValue(const std::string& groupName, const std::string& key, T value, WidgetType widgetType = WidgetType::NONE);
+    void SetValue(const std::string& groupName, const std::string& key, T value);
 
     /// <summary>
     /// アイテム追加
@@ -83,9 +51,8 @@ public:
     /// <param name="groupName">グループ名</param>
     /// <param name="key">キー</param>
     /// <param name="value">値</param>
-    /// <param name="widgetType">ウィジェットタイプ</param>
     template <typename T>
-    void AddItem(const std::string& groupName, const std::string& key, T value, WidgetType widgetType = WidgetType::NONE);
+    void AddItem(const std::string& groupName, const std::string& key, T value);
 
     /// <summary>
     /// 値取得
@@ -96,22 +63,13 @@ public:
     T GetValue(const std::string& groupName, const std::string& key) const;
 
     /// <summary>
-    /// ウィジェット描画
-    /// </summary>
-    /// <param name="itemName">アイテム名</param>
-    /// <param name="item">アイテム</param>
-    /// <param name="drawSettings">描画設定</param>
-    void DrawWidget(const std::string& itemName, Item& item, const DrawSettings& drawSettings);
-
-    /// <summary>
     /// 変数登録
     /// </summary>
     /// <param name="group">グループ名</param>
     /// <param name="key">キー</param>
     /// <param name="variable">変数ポインタ</param>
-    /// <param name="widgetType">ウィジェットタイプ</param>
     template <typename T>
-    void Regist(const std::string& group, const std::string& key, T* variable, WidgetType widgetType = WidgetType::NONE);
+    void Regist(const std::string& group, const std::string& key, T* variable);
 
     /// <summary>
     /// グループコピー
@@ -172,7 +130,6 @@ public:
     /// <param name="groupName"></param>
     void ClearRegistersForGroup(const std::string& groupName);
 
-    void AddTreePoP(); //< ツリーポップ
     void ResetAllRegister(); //< 全バインドリセット
     void SyncAll(); //< 全同期
     void LoadFiles(); //< 全ファイル読み込み
@@ -180,8 +137,6 @@ public:
 
 private:
     std::unordered_map<std::string, Group> dates_;
-    std::unordered_map<std::string, bool> visibilityFlags_;
     std::unordered_map<std::string, std::vector<BoundItem>> registParams_;
     const std::string kDirectoryPath = "Resources/GlobalParameter/";
-    std::stack<std::string> treeNodeStack_;
 };

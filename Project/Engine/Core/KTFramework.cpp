@@ -79,7 +79,6 @@ void KTFramework::Update() {
     /// FPS表示
     DisplayFPS();
     /// グローバル変数の更新
-    GlobalParameter::GetInstance()->Update();
     GlobalParameter::GetInstance()->SyncAll();
     /// ゲームシーンの毎フレーム処理
     pSceneManager_->Update();

@@ -48,7 +48,7 @@ void Sprite::ParamEditorSet(const std::string& textureName, const bool& isAbleEd
     groupName_ = uniqueGroupName;
 
     // グループ作成
-    globalParameter_->CreateGroup(groupName_, false);
+    globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 }
