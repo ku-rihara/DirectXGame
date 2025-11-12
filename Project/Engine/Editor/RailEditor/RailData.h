@@ -62,13 +62,17 @@ public:
     void Update(const float& speed, const PositionMode& mode = PositionMode::WORLD, const Vector3& direction = {1.0f, 1.0f, 1.0f});
 
     void AdjustParam(); //< パラメータ調整
+
     void Play(); //< 再生
     void Stop(); //< 停止
     void Reset(); //< リセット
+
     void LoadData(); //< データロード
     void SaveData(); //< データセーブ
-    void SaveAllKeyFrames(); //< 全キーフレーム保存
+
+    void SaveKeyFrames(); //< 全キーフレーム保存
     void LoadKeyFrames(); //< 全キーフレーム読み込み
+
     bool IsPlaying() const; //< 再生中か
     bool IsFinished() const; //< 終了したか
 
@@ -103,14 +107,16 @@ public:
 private:
     void RegisterParams(); //< パラメータのバインド
     void LoadParams(); //< パラメータ取得
-    void ResetParams(); //< パラメータリセット
+    void InitParams(); //< パラメータリセット
     void LoopOrStop(); //< ループまたは停止
     void StartReturn(); //< 戻り動作を開始
     void UpdateReturn(const float& speed); //< 戻り動作の更新
     void ImGuiKeyFrameList(); //< キーフレームリストのImGui
     void RebuildAndLoadAllKeyFrames(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
-
-private:
+    void CheckAndHandleFinish();
+    void OnReturnComplete();
+    void EaseTimeSetup(const bool&isReverse);
+    private:
     GlobalParameter* globalParameter_;
     std::string groupName_;
     std::string folderPath_ = "RailEditor/Dates";
