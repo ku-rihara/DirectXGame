@@ -6,8 +6,8 @@
 #include "GPUParticle/GPUParticleManager.h"
 #include "input/Input.h"
 #include "Pipeline/PipelineManager.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
-#include "utility/ParticleEditor/ParticleManager.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParticleEditor/ParticleManager.h"
 
 #include "3d/Object3DRegistry.h"
 #include "Animation/AnimationRegistry.h"
@@ -28,23 +28,29 @@ SceneManager::~SceneManager() {
 void SceneManager::Update() {
 
     // 次のシーンが設定されている場合
-    if (Input::GetInstance()->PushKey(DIK_E) && Input::GetInstance()->PushKey(DIK_ESCAPE)) {
+    if (Input::GetInstance()->PushKey(KeyboardKey::E) && Input::GetInstance()->PushKey(KeyboardKey::Escape)) {
         ChangeScene("EDITOR");
     }
 
     // 現在のシーンを更新
     if (scene_) {
+        Debug();
         scene_->Update();
     }
 
     // 登録されているオブジェクトを更新
-    Object3DRegistry::GetInstance()->UpdateAll();
+    Object3DRegistry::GetInstance()->UpdateAll(Frame::DeltaTimeRate());
     AnimationRegistry::GetInstance()->UpdateAll(Frame::DeltaTimeRate());
 
     // パーティクル更新
     ParticleManager::GetInstance()->Update();
     GPUParticleManager::GetInstance()->Update();
 }
+
+void SceneManager::Debug() {
+    scene_->Debug();
+
+ }
 
 void SceneManager::SkyBoxDraw() {
     if (scene_) {
@@ -70,7 +76,7 @@ void SceneManager::ChangeScene(const std::string& sceneName) {
     AnimationRegistry::GetInstance()->Clear();
 
     //// グローバル変数の読み込み
-    GlobalParameter::GetInstance()->BindResetAll();
+    GlobalParameter::GetInstance()->ResetAllRegister();
     GlobalParameter::GetInstance()->LoadFiles();
 
     // 次のシーンを生成

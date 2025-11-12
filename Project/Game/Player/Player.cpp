@@ -51,9 +51,9 @@ void Player::Init() {
     obj3d_->material_.SetEnvironmentCoefficient(0.05f);
 
     // Playerの攻撃クラス
-    attackController_ = std::make_unique<PlayerAttackController>();
-    attackController_->Init();
-    attackController_->SetPlayerBaseTransform(&baseTransform_);
+    playerCollisionInfo_ = std::make_unique<PlayerCollisionInfo>();
+    playerCollisionInfo_->Init();
+    playerCollisionInfo_->SetPlayerBaseTransform(&baseTransform_);
 
     // トランスフォーム初期化
     obj3d_->transform_.Init();
@@ -96,7 +96,7 @@ void Player::Update() {
     HeadLightSetting();
 
     // 攻撃更新
-    attackController_->Update();
+    playerCollisionInfo_->Update();
 
     /// 振る舞い処理(コンボ攻撃中は中止)
     if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
@@ -146,16 +146,16 @@ Vector3 Player::GetInputDirection() {
     Input* input     = Input::GetInstance();
 
     // キーボード入力
-    if (input->PushKey(DIK_W)) {
+    if (input->PushKey(KeyboardKey::W)) {
         velocity.z += 1.0f; // 前進
     }
-    if (input->PushKey(DIK_S)) {
+    if (input->PushKey(KeyboardKey::S)) {
         velocity.z -= 1.0f; // 後退
     }
-    if (input->PushKey(DIK_A)) {
+    if (input->PushKey(KeyboardKey::A)) {
         velocity.x -= 1.0f; // 左移動
     }
-    if (input->PushKey(DIK_D)) {
+    if (input->PushKey(KeyboardKey::D)) {
         velocity.x += 1.0f; // 右移動
     }
 
@@ -204,10 +204,10 @@ void Player::AttackPowerCharge() {
     }
 
     // チャージタイム加算
-    if (input->PushKey(DIK_H) || Input::IsPressPad(0, XINPUT_GAMEPAD_X)) {
+    if (input->PushKey(KeyboardKey::H) || Input::IsPressPad(0, GamepadButton::X)) {
         currentUpperChargeTime_ += Frame::DeltaTimeRate();
 
-    } else if (input->ReleaseKey(DIK_H) && !CheckIsChargeMax()) { // チャージ途中切れ
+    } else if (input->ReleaseKey(KeyboardKey::H) && !CheckIsChargeMax()) { // チャージ途中切れ
         currentUpperChargeTime_ = 0.0f;
     }
 
@@ -217,7 +217,7 @@ void Player::AttackPowerCharge() {
     }
 
     // リリースでアッパー攻撃
-    if (input->ReleaseKey(DIK_H)) {
+    if (input->ReleaseKey(KeyboardKey::H)) {
         currentUpperChargeTime_ = 0.0f;
         ChangeComboBehavior(std::make_unique<RoringUpper>(this));
     }
@@ -248,18 +248,18 @@ bool Player::CheckIsMoving() {
     //---------------------------------------------------------------------
     // keyboard
     //---------------------------------------------------------------------
-    if (input->PushKey(DIK_W) || input->PushKey(DIK_A) || input->PushKey(DIK_S) || input->PushKey(DIK_D)) {
+    if (input->PushKey(KeyboardKey::W) || input->PushKey(KeyboardKey::A) || input->PushKey(KeyboardKey::S) || input->PushKey(KeyboardKey::D)) {
         // キーボード入力
-        if (input->PushKey(DIK_W)) {
+        if (input->PushKey(KeyboardKey::W)) {
             keyboardVelocity.z += 1.0f; // 前進
         }
-        if (input->PushKey(DIK_S)) {
+        if (input->PushKey(KeyboardKey::S)) {
             keyboardVelocity.z -= 1.0f; // 後退
         }
-        if (input->PushKey(DIK_A)) {
+        if (input->PushKey(KeyboardKey::A)) {
             keyboardVelocity.x -= 1.0f; // 左移動
         }
-        if (input->PushKey(DIK_D)) {
+        if (input->PushKey(KeyboardKey::D)) {
             keyboardVelocity.x += 1.0f; // 右移動
         }
 
@@ -362,7 +362,7 @@ void Player::AdjustParam() {
     // プレイヤーのパラメータ
     parameters_->AdjustParam();
     // 攻撃パラメータ
-    attackController_->AdjustParam();
+    playerCollisionInfo_->AdjustParam();
     // パーツのパラメータ
     leftHand_->AdjustParam();
     rightHand_->AdjustParam();
@@ -505,7 +505,7 @@ void Player::PositionYReset() {
     baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
 }
 
-void Player::GameSceneInit() {
+void Player::InitInGameScene() {
     Init();
 
     DissolveUpdate(1.0f);
@@ -532,7 +532,7 @@ void Player::SetLockOn(LockOnController* lockOn) {
 
 void Player::SetCombo(Combo* combo) {
     pCombo_ = combo;
-    attackController_->SetCombo(combo);
+    playerCollisionInfo_->SetCombo(combo);
 }
 
 void Player::SetGameCamera(GameCamera* gameCamera) {
@@ -541,6 +541,14 @@ void Player::SetGameCamera(GameCamera* gameCamera) {
 
 void Player::SetHitStop(AttackEffect* hitStop) {
     pHitStop_ = hitStop;
+}
+
+void Player::SetViewProjection(const ViewProjection* viewProjection) {
+    viewProjection_ = viewProjection;
+}
+
+void Player::SetComboAttackController(PlayerComboAttackController* playerComboAttackController) {
+    comboAttackController_ = playerComboAttackController;
 }
 
 /// =======================================================================================

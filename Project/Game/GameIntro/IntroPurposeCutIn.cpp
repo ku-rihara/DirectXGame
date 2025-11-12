@@ -109,13 +109,13 @@ bool IntroPurposeCutIn::ProcessStep(const float& limitTime, const Step& nextStep
     return false;
 }
 
-void IntroPurposeCutIn::BindParams() {
-    BaseGameIntro::BindParams();
+void IntroPurposeCutIn::RegisterParams() {
+    BaseGameIntro::RegisterParams();
 
-    globalParameter_->Bind(groupName_, "AppearWaitTime", &sideAppearWaitTime_);
-    globalParameter_->Bind(groupName_, "closeWaitTime", &closeWaitTime_);
-    globalParameter_->Bind(groupName_, "centerAppearWaitTime", &centerAppearWaitTime_);
-    globalParameter_->Bind(groupName_, "finishWaitTime", &finishWaitTime_);
+    globalParameter_->Regist(groupName_, "AppearWaitTime", &sideAppearWaitTime_);
+    globalParameter_->Regist(groupName_, "closeWaitTime", &closeWaitTime_);
+    globalParameter_->Regist(groupName_, "centerAppearWaitTime", &centerAppearWaitTime_);
+    globalParameter_->Regist(groupName_, "finishWaitTime", &finishWaitTime_);
 }
 
 void IntroPurposeCutIn::AdjustParam() {

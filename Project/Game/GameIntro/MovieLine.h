@@ -1,7 +1,7 @@
 #pragma once
 #include "2d/Sprite.h"
 #include "Easing/Easing.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector2.h"
 #include <array>
 #include <memory>
@@ -29,7 +29,7 @@ public:
 
     // editor
     void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
 private:
     GlobalParameter* globalParameter_;

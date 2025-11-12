@@ -20,7 +20,7 @@ EnemyBoundDamage::EnemyBoundDamage(BaseEnemy* boss)
 
 	pBaseEnemy_->DamageRenditionInit();
 	pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2::ZeroVector());
-	pBaseEnemy_->GetFindSprite()->SetScale(Vector2::UnitVector());
+	pBaseEnemy_->GetFindSprite()->SetScale(Vector2::OneVector());
     pBaseEnemy_->ScaleReset();
 	pBaseEnemy_->ThrustRenditionInit();
 	step_ = Step::BOUND; /// ステップ初期化

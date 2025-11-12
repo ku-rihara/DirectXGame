@@ -1,7 +1,7 @@
 #include "Easing.h"
 #include "Easing/EasingFunction.h"
 #include "Function/GetFile.h"
-#include "utility/EasingCreator/EasingCreator.h"
+#include "Editor/EasingCreator/EasingCreator.h"
 #include <fstream>
 #include <imGui.h>
 #include <Windows.h>
@@ -11,7 +11,7 @@ void Easing<T>::Init(const std::string& adaptFile) {
 
     // 初期化、ファイル読み込み
     FilePathChangeForType();
-    easingFiles_ = GetFileNamesForDyrectry(FilePath_ + filePathForType_);
+    easingFiles_ = GetFileNamesForDirectory(FilePath_ + filePathForType_);
   
     if (!adaptFile.empty()) {
         ApplyFromJson(adaptFile);
@@ -157,7 +157,7 @@ template <typename T>
 void Easing<T>::ApplyForImGui() {
     FilePathChangeForType();
 
-    easingFiles_ = GetFileNamesForDyrectry(FilePath_ + filePathForType_);
+    easingFiles_ = GetFileNamesForDirectory(FilePath_ + filePathForType_);
 
     if (easingFiles_.empty()) {
         return;

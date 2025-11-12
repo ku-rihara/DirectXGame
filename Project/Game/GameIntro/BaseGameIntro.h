@@ -1,5 +1,5 @@
 #pragma once
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include <memory>
 #include <string>
 
@@ -30,7 +30,7 @@ public:
     virtual void Update(const float& playSpeed);
 
     // Param Edit
-    virtual void BindParams();            //< パラメータバインド
+    virtual void RegisterParams();            //< パラメータバインド
     virtual void AdjustParam();           //< パラメータ調整
     virtual void AdjustUniqueParam() = 0; //< 固有パラメータ調整
 

@@ -7,7 +7,7 @@
 // struct
 #include "struct/ModelData.h"
 #include "struct/TransformationMatrix.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include <cstdint>
 #include <string>
 
@@ -29,10 +29,10 @@ public:
 
     struct Parameter {
         Vector2 position_         = Vector2::ZeroVector();
-        Vector2 scale_            = Vector2::UnitVector();
-        Vector2 uvScale_          = Vector2::UnitVector();
+        Vector2 scale_            = Vector2::OneVector();
+        Vector2 uvScale_          = Vector2::OneVector();
         Vector4 color_            = Vector4::kWHITE();
-        Vector2 startAnchorPoint_ = Vector2::UnitVector();
+        Vector2 startAnchorPoint_ = Vector2::OneVector();
         int32_t startLayerNum_;
     };
 
@@ -50,7 +50,7 @@ public:
     void CreateSprite(const std::string& textureName);
 
     void AdjustParam(); //< パラメータ調整
-    void BindParams();  //< パラメータバインド 
+    void RegisterParams();  //< パラメータバインド 
     void Draw();        //<描画
 
 private:

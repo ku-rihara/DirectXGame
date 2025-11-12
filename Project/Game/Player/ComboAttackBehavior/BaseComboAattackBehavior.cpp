@@ -13,10 +13,10 @@ BaseComboAattackBehavior::BaseComboAattackBehavior(const std::string& name, Play
 ///  コンボ移動フラグ処理
 void BaseComboAattackBehavior::PreOderNextComboForButton() {
 
-    if (Input::GetInstance()->TriggerKey(DIK_H)) {
+    if (Input::GetInstance()->TriggerKey(KeyboardKey::H)) {
         isNextCombo_ = true;
     } else {
-        if (!(Input::IsTriggerPad(0, XINPUT_GAMEPAD_X))) {
+        if (!(Input::IsTriggerPad(0, GamepadButton::X))) {
             return;
         }
 
@@ -33,7 +33,7 @@ void BaseComboAattackBehavior::ChangeNextCombo(std::unique_ptr<BaseComboAattackB
 
 
 void BaseComboAattackBehavior::Init() {
-    atkSpeed_ = pPlayer_->GetAttackController()->GetAttackSpeed(Frame::DeltaTimeRate());
+    atkSpeed_ = pPlayer_->GetPlayerCollisionInfo()->GetAttackSpeed(Frame::DeltaTimeRate());
 }
 
 void BaseComboAattackBehavior::AnimationInit() {
@@ -48,7 +48,7 @@ void BaseComboAattackBehavior::AnimationInit() {
 
     startEasing_.Init("AttackStartScaling.json");
     startEasing_.SetAdaptValue(&tempScaleValue_);
-    tempScaleValue_ = Vector3::UnitVector();
+    tempScaleValue_ = Vector3::OneVector();
 
     rotateEasing_.Init("AttackRotate.json");
     rotateEasing_.SetAdaptValue(&tempRotateValue_);
@@ -72,7 +72,7 @@ void BaseComboAattackBehavior::ScalingEaseUpdate() {
 }
 
 void BaseComboAattackBehavior::RotateMotionUpdate(const float& start, const float& end, const bool& isClockwise) {
-    atkSpeed_ = pPlayer_->GetAttackController()->GetAttackSpeed(Frame::DeltaTimeRate());
+    atkSpeed_ = pPlayer_->GetPlayerCollisionInfo()->GetAttackSpeed(Frame::DeltaTimeRate());
 
     if (isClockwise) {
         rotateEasing_.SetStartValue(start);

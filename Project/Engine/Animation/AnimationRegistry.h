@@ -53,12 +53,7 @@ public:
     /// <param name="viewProjection">ビュープロジェクション</param>
     void DrawAllShadow(const ViewProjection& viewProjection);
 
-    /// <summary>
-    /// 全アニメーションのデバッグ描画
-    /// </summary>
-    /// <param name="viewProjection">ビュープロジェクション</param>
-    void DebugDrawAll(const ViewProjection& viewProjection);
-
+    void DebugLineAllSet();
     void Clear(); //< 登録されたアニメーションをクリア
     void DebugImGui(); //< ImGuiデバッグ表示
 

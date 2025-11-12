@@ -2,8 +2,7 @@
 
 #include"BaseComboAattackBehavior.h"
 #include"Easing/EasingFunction.h"
-#include"CollisionBox/PlayerAttackController.h"
-#include"utility/ParticleEditor/ParticleEmitter.h"
+#include"Editor/ParticleEditor/ParticleEmitter.h"
 #include"Easing/Easing.h"
 
 class RushAttack : public BaseComboAattackBehavior {

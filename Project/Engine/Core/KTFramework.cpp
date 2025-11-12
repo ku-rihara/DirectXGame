@@ -7,7 +7,7 @@
 #include "ShadowMap/ShadowMap.h"
 
 /// utility
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 
 #include "Frame/Frame.h"
 /// imgui
@@ -79,7 +79,6 @@ void KTFramework::Update() {
     /// FPS表示
     DisplayFPS();
     /// グローバル変数の更新
-    GlobalParameter::GetInstance()->Update();
     GlobalParameter::GetInstance()->SyncAll();
     /// ゲームシーンの毎フレーム処理
     pSceneManager_->Update();

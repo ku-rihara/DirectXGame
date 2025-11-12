@@ -19,7 +19,7 @@
 #include "input/Input.h"
 /// particle
 #include "GPUParticle/GPUParticleManager.h"
-#include "utility/ParticleEditor/ParticleManager.h"
+#include "Editor/ParticleEditor/ParticleManager.h"
 /// imGui,function
 #include "function/Convert.h"
 #include <imgui_impl_dx12.h>

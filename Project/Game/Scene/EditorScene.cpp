@@ -7,7 +7,7 @@
 // class
 #include "3d/Object3DRegistry.h"
 #include "Pipeline/PipelineManager.h"
-#include "utility/ParticleEditor/ParticleManager.h"
+#include "Editor/ParticleEditor/ParticleManager.h"
 
 // math
 #include "Frame/Frame.h"
@@ -30,17 +30,17 @@ void EditorScene::Init() {
 }
 
 void EditorScene::Update() {
+
+    BaseScene::Update();
     
-     easingEditor_.Edit();
+    easingEditor_.Edit();
     easingTestObject_->Update();
 
-    Object3DRegistry::GetInstance()->UpdateAll();
     ParticleManager::GetInstance()->Update();
 
-    Debug();
     ViewProjectionUpdate();
 
-    if (input_->TriggerKey(DIK_RETURN)) {
+    if (input_->TriggerKey(KeyboardKey::Enter)) {
 
         SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
     }

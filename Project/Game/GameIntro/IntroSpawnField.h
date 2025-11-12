@@ -36,7 +36,7 @@ public:
 
     // Param Edit
     void AdjustParam() override; //< パラメータ調整
-    void BindParams() override; //< パラメータバインド
+    void RegisterParams() override; //< パラメータバインド
     void AdjustUniqueParam() override; //< 固有パラメータ調整
 
 private:

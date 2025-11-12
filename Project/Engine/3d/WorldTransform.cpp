@@ -1,19 +1,28 @@
 #include "WorldTransform.h"
 #include "Animation/Object3DAnimation.h"
+#include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
+
+WorldTransform::WorldTransform()  = default;
+WorldTransform::~WorldTransform() = default;
 
 void WorldTransform::Init() {
 
-    scale_       = Vector3::UnitVector();
+    scale_       = Vector3::OneVector();
     rotation_    = {};
     translation_ = {};
 
     //  行列の更新
     UpdateMatrix();
+
+    // オブジェクトイージングアニメーションプレイヤー初期化
+    if (!objEaseAnimationPlayer_) {
+        objEaseAnimationPlayer_ = std::make_unique<ObjEaseAnimationPlayer>();
+        objEaseAnimationPlayer_->Init();
+    }
 }
 
 void WorldTransform::TransferMatrix() {
 }
-
 
 void WorldTransform::UpdateMatrix() {
     // SRT更新
@@ -31,6 +40,7 @@ void WorldTransform::UpdateMatrix() {
     // 定数バッファに転送する
     TransferMatrix();
 }
+
 void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis, const AdaptRotate& adaptRotate) {
     // スケール、回転、平行移動行列を計算
     Matrix4x4 scaleMatrix     = MakeScaleMatrix(scale_);
@@ -119,6 +129,7 @@ void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection,
     // 定数バッファに転送する
     TransferMatrix();
 }
+
 void WorldTransform::SetParent(const WorldTransform* parent) {
     parent_ = parent;
 }
@@ -237,7 +248,6 @@ void WorldTransform::UpdateMatrixWithJoint() {
     matWorld_ *= parentJointMatrix;
 }
 
-
 bool WorldTransform::HasParentJoint() const {
     return parentAnimation_ != nullptr && parentJointIndex_ != -1;
 }
@@ -270,4 +280,91 @@ Vector3 WorldTransform::GetForwardVector() const {
     }
 
     return Vector3(matWorld_.m[0][2], matWorld_.m[1][2], matWorld_.m[2][2]);
+}
+
+Vector3 WorldTransform::CalcForwardTargetPos(const Vector3& startPos, const Vector3& offsetValue) const {
+    // 移動イージングの初期化
+    const Vector3& startPosition = startPos;
+
+    // 向き(Y軸回転)を取得
+    float playerRotationY    = rotation_.y;
+    Matrix4x4 rotationMatrix = MakeRotateYMatrix(playerRotationY);
+
+    // ローカル座標での移動ベクトルをワールド座標に変換
+    Vector3 localMoveVector = offsetValue;
+    Vector3 worldMoveVector = TransformNormal(localMoveVector, rotationMatrix);
+
+    // 目標位置を計算
+    return startPosition + worldMoveVector;
+}
+
+///============================================================
+/// オブジェクトイージングアニメーション再生
+///============================================================
+void WorldTransform::PlayObjEaseAnimation(const std::string& categoryName, const std::string& animationName) {
+    if (!objEaseAnimationPlayer_) {
+        objEaseAnimationPlayer_ = std::make_unique<ObjEaseAnimationPlayer>();
+        objEaseAnimationPlayer_->Init();
+    }
+
+    objEaseAnimationPlayer_->Play(categoryName, animationName);
+
+    // Rail使用時、親を設定
+    if (objEaseAnimationPlayer_->GetAnimationData() && objEaseAnimationPlayer_->GetAnimationData()->IsUsingRail()) {
+        auto* railPlayer = objEaseAnimationPlayer_->GetAnimationData()->GetRailPlayer();
+        if (railPlayer) {
+            railPlayer->SetParent(this);
+        }
+    }
+}
+
+///============================================================
+/// オブジェクトイージングアニメーション停止
+///============================================================
+void WorldTransform::StopObjEaseAnimation() {
+    if (objEaseAnimationPlayer_) {
+        objEaseAnimationPlayer_->Stop();
+    }
+}
+
+///============================================================
+/// アニメーション更新
+///============================================================
+void WorldTransform::UpdateObjEaseAnimation(const float& deltaTime) {
+    if (objEaseAnimationPlayer_) {
+        objEaseAnimationPlayer_->Update(deltaTime);
+        ApplyAnimationToTransform();
+    }
+}
+
+///============================================================
+/// アニメーション適用後のTransform更新
+///============================================================
+void WorldTransform::ApplyAnimationToTransform() {
+    if (!objEaseAnimationPlayer_ || !objEaseAnimationPlayer_->IsPlaying()) {
+        return;
+    }
+
+    auto* animData = objEaseAnimationPlayer_->GetAnimationData();
+    if (!animData) {
+        return;
+    }
+
+    // Scaleを適用
+    scale_ = objEaseAnimationPlayer_->GetCurrentScale();
+
+    // Rotationを適用（ラジアン）
+    rotation_ = objEaseAnimationPlayer_->GetCurrentRotation();
+
+    // Translationを適用
+    if (!animData->IsUsingRail()) {
+        // 通常のイージング使用時
+        translation_ = objEaseAnimationPlayer_->GetCurrentTranslation();
+    } else {
+        // Rail使用時
+        auto* railPlayer = animData->GetRailPlayer();
+        if (railPlayer) {
+            translation_ = railPlayer->GetCurrentPosition();
+        }
+    }
 }

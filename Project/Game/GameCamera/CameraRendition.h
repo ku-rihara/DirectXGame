@@ -1,7 +1,7 @@
 #pragma once
 #include "Easing/Easing.h"
-#include "utility/CameraEditor/CameraAnimation.h"
-#include "utility/ShakeEditor/ShakePlayer.h"
+#include "Editor/CameraEditor/CameraAnimation.h"
+#include "Editor/ShakeEditor/ShakePlayer.h"
 #include "Vector3.h"
 
 class GameCamera;

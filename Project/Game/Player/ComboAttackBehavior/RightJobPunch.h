@@ -1,7 +1,6 @@
 #pragma once
 
 #include "BaseComboAattackBehavior.h"
-#include "CollisionBox/PlayerAttackController.h"
 
 
 class RightJobPunch : public BaseComboAattackBehavior {

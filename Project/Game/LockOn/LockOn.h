@@ -1,7 +1,7 @@
 #pragma once
 #include "2d/Sprite.h"
 #include "3d/ViewProjection.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector3.h"
 #include <cstdint>
 #include <memory>
@@ -50,7 +50,7 @@ public:
 
     // editor
     void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
 private:
     /// <summary>

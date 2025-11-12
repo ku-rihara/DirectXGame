@@ -6,7 +6,9 @@
 #include "ObjectColor.h"
 #include "ShadowMap/ShadowMap.h"
 #include "struct/TransformationMatrix.h"
+#include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 #include <cstdint>
+#include <memory>
 #include <string>
 
 /// <summary>
@@ -44,9 +46,33 @@ public:
     /// <param name="modelName">モデル名</param>
     void SetModel(const std::string& modelName);
 
+    /// <summary>
+    /// オブジェクトイージングアニメーション再生
+    /// </summary>
+    /// <param name="categoryName">カテゴリー名</param>
+    /// <param name="animationName">アニメーション名</param>
+    void PlayObjEaseAnimation(const std::string& categoryName, const std::string& animationName);
+
+    /// <summary>
+    /// オブジェクトイージングアニメーション停止
+    /// </summary>
+    void StopObjEaseAnimation();
+
+    /// <summary>
+    /// アニメーション更新
+    /// </summary>
+    /// <param name="deltaTime">デルタタイム</param>
+    void UpdateObjEaseAnimation(const float& deltaTime);
+
+protected:
+    /// <summary>
+    /// アニメーション適用後のTransform更新
+    /// </summary>
+    void ApplyAnimationToTransform();
+
 public:
     ModelMaterial material_; //< モデルのマテリアル
-    ObjectColor objColor_;   //< オブジェクトの色
+    ObjectColor objColor_; //< オブジェクトの色
     WorldTransform transform_; //< ワールド変換
 
 protected:
@@ -55,17 +81,20 @@ protected:
     ///========================================================================================
 
     Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_; //< WVPリソース
-    TransformationMatrix* wvpDate_;                      //< WVPデータのポインタ
-    ShadowMap* shadowMap_;                               //< シャドウマップ
+    TransformationMatrix* wvpDate_; //< WVPデータのポインタ
+    ShadowMap* shadowMap_; //< シャドウマップ
 
-    bool isShadow_ = true;   //< 影を描画するか
-    bool isDraw_   = true;   //< 描画するか
-    uint32_t textureIndex_;  //< テクスチャインデックス
+    bool isShadow_ = true; //< 影を描画するか
+    bool isDraw_   = true; //< 描画するか
+    uint32_t textureIndex_; //< テクスチャインデックス
 
-    Model* model_       = nullptr;          //< モデルデータ
-    BlendMode blendMode = BlendMode::None;  //< ブレンドモード
+    Model* model_       = nullptr; //< モデルデータ
+    BlendMode blendMode = BlendMode::None; //< ブレンドモード
 
-    const std::string textureFirePath_ = "Resources/Texture/ModelTexture/"; //< テクスチャファイルパス
+    const std::string textureFirePath_ = "Resources/Texture/ModelTexture/";
+
+    // オブジェクトイージングアニメーション
+    std::unique_ptr<ObjEaseAnimationPlayer> objEaseAnimationPlayer_;
 
 public:
     ///========================================================================================
@@ -73,6 +102,7 @@ public:
     ///========================================================================================
     Model* GetModel() { return model_; }
     const int32_t& GetTextureIndex() const { return textureIndex_; }
+    ObjEaseAnimationPlayer* GetObjEaseAnimationPlayer() { return objEaseAnimationPlayer_.get(); }
 
     ///========================================================================================
     ///  setter method

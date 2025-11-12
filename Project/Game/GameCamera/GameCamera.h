@@ -2,7 +2,7 @@
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
 #include "CameraRendition.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include <memory>
 
 class LockOn;
@@ -49,7 +49,7 @@ public:
     Vector3 OffsetCalc(const Vector3& offset) const;
 
     // Editor
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
     void AdjustParam(); //< パラメータ調整
 
 private:

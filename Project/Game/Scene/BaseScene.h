@@ -14,8 +14,10 @@
 #include "input/Input.h"
 
 // editor
-#include "utility/CameraEditor/CameraEditor.h"
-#include "utility/ShakeEditor/ShakeEditor.h"
+#include "Editor/CameraEditor/CameraEditor.h"
+#include "Editor/ShakeEditor/ShakeEditor.h"
+#include"Editor/RailEditor/RailEditor.h"
+#include"Editor/ObjEaseAnimation/ObjEaseAnimationEditor.h"
 
 // debug
 #include "utility/Debug/DebugCamera.h"
@@ -39,7 +41,7 @@ public:
 
     // 初期化、更新、描画
     virtual void Init();
-    virtual void Update()     = 0;
+    virtual void Update();
     virtual void SkyBoxDraw() = 0;
 
     // デバッグ
@@ -57,6 +59,8 @@ protected:
 
     std::unique_ptr<CameraEditor> cameraEditor_ = nullptr;
     std::unique_ptr<ShakeEditor> shakeEditor_   = nullptr;
+    std::unique_ptr<RailEditor> railEditor_     = nullptr;
+    std::unique_ptr<ObjEaseAnimationEditor> objEaseAnimationEditor_=nullptr;
 
     ViewProjection viewProjection_;
 

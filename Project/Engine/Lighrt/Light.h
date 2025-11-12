@@ -3,7 +3,7 @@
 #include <memory>
 #include <wrl.h>
 // struct
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector3.h"
 #include <cstdint>
 #include <string>
@@ -68,7 +68,7 @@ public:
     void DebugImGui(); //< ImGuiデバッグ表示
     void AddSpotLight(); //< スポットライト追加
     void AddPointLight(); //< ポイントライト追加
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
 private:
     DirectXCommon* dxCommon_;

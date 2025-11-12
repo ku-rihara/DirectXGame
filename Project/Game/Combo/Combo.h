@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Combo/ComboUIController.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 // std
 #include <cstdint>
 #include <memory>
@@ -26,7 +26,7 @@ public:
     void Reset();               //< リセット
 
     void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
 private:
     // UIコントローラ

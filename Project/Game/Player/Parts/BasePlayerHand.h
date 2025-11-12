@@ -1,11 +1,11 @@
 #pragma once
 
-#include "utility/ParameterEditor/GlobalParameter.h"
-#include "utility/RailEditor/ControlPosManager.h"
-#include "utility/RailEditor/RailManager.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Editor/RailEditor/ControlPosManager.h"
+#include "Editor/RailEditor/RailManager.h"
 
 #include "BaseObject/BaseObject.h"
-#include "utility/ParticleEditor/ParticleEmitter.h"
+#include "Editor/ParticleEditor/ParticleEmitter.h"
 
 /// <summary>
 /// プレイヤーの手の基底クラス

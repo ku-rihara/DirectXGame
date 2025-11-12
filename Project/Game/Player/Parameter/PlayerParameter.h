@@ -1,7 +1,7 @@
 #pragma once
 
 /// utility
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 
 /// std
 #include <array>
@@ -64,7 +64,7 @@ public:
     // 初期化
     void Init();
 
-    void BindParams();//<パラメータバインド
+    void RegisterParams();//<パラメータバインド
     void AdjustParam();//<パラメータ編集
 
 private:

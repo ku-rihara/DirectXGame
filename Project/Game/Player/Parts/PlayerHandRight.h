@@ -6,19 +6,6 @@
 /// プレイヤーの右手クラス
 /// </summary>
 class PlayerHandRight : public BasePlayerHand {
-private:
-private:
-    ///===========================================
-    /// private variant
-    ///=============================================
-    std::string threeComboName_;
-    std::string forthComboName_;
-
-    // 　移動用制御点
-    std::unique_ptr<RailManager> threeComboRailManager_;
-    std::unique_ptr<RailManager> stopPunchRailManager_;
-
-    Vector3 combo3MovePos_;
 
 public:
     PlayerHandRight()  = default;
@@ -52,6 +39,20 @@ public:
     /// <param name="dissolve">ディゾルブ値</param>
     virtual void DissolveAdapt(const float& dissolve);
 
+private:
+    ///===========================================
+    /// private variant
+    ///=============================================
+    std::string threeComboName_;
+    std::string forthComboName_;
+
+    // 　移動用制御点
+    std::unique_ptr<RailManager> threeComboRailManager_;
+    std::unique_ptr<RailManager> stopPunchRailManager_;
+
+    Vector3 combo3MovePos_;
+
+public:
     ///===========================================
     /// getter method
     ///=============================================

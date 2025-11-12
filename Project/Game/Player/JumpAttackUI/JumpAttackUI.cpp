@@ -17,8 +17,8 @@ void JumpAttackUI::Init() {
 
     // Global parameter
     globalParameter_ = GlobalParameter::GetInstance();
-    globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    globalParameter_->CreateGroup(groupName_);
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
     EasingInit();
@@ -112,11 +112,11 @@ void JumpAttackUI::Close() {
     easingParam_.rotateEasing->Update(Frame::DeltaTime());
 }
 
-void JumpAttackUI::BindParams() {
+void JumpAttackUI::RegisterParams() {
     for (size_t i = 0; i < static_cast<size_t>(Type::COUNT); ++i) {
-        globalParameter_->Bind(groupName_, "posValueOffset" + BottomNameByType(i), &bottoms_[i].posValueOffset);
+        globalParameter_->Regist(groupName_, "posValueOffset" + BottomNameByType(i), &bottoms_[i].posValueOffset);
     }
-    globalParameter_->Bind(groupName_, "notOperateAlpha", &notOperateAlpha_);
+    globalParameter_->Regist(groupName_, "notOperateAlpha", &notOperateAlpha_);
 }
 
 void JumpAttackUI::AdjustParam() {

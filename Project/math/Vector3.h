@@ -42,7 +42,7 @@ public:
 	static Vector3 ToUp();      // 上方向
 	static Vector3 ToForward(); // 前方向
 	static Vector3 ToRight();   // 右方向
-	static Vector3 UnitVector();// 単位ベクトル
+	static Vector3 OneVector();// 単位ベクトル
 	static Vector3 ZeroVector();
 
 

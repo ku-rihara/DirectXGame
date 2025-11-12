@@ -196,39 +196,6 @@
     <Filter Include="Game\Enemy\Spawner">
       <UniqueIdentifier>{56719232-7938-486e-b2c4-15494f312b10}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.cpp\utility\RailEditor">
-      <UniqueIdentifier>{51a8756f-630b-4731-a137-18eb9e2bad0e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.h\utility\RailEditor">
-      <UniqueIdentifier>{a1a4d21c-afb7-499c-938c-549c4c6ef567}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.cpp\utility\ParticleEditor">
-      <UniqueIdentifier>{ef4cf453-ddc8-44a4-8472-d26f34bd117a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.h\utility\ParticleEditor">
-      <UniqueIdentifier>{faf4888a-672e-4301-bb40-9621257e786a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.h\utility\RailEditor">
-      <UniqueIdentifier>{fd8669ab-e586-4603-8989-fde63074b7f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.cpp\utility\RailEditor">
-      <UniqueIdentifier>{38b63eec-6feb-456d-8ec6-809cc5cedf01}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.cpp\utility\ParticleEditor">
-      <UniqueIdentifier>{e160a169-d446-4008-85cf-77b40545199e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.h\utility\ParticleEditor">
-      <UniqueIdentifier>{4b1e989d-a14e-4aab-8692-e2fbb2059019}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.cpp\utility\ParameterEditor">
-      <UniqueIdentifier>{c77b02e3-7e6e-47c2-96b6-027952dccbc6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.cpp\utility\ParameterEditor">
-      <UniqueIdentifier>{68cc7c40-2b21-43d7-9461-36612c85f182}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.h\utility\ParameterEditor">
-      <UniqueIdentifier>{6045dc64-7d52-4582-b49c-567e7f5074bc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.cpp\Primitive">
       <UniqueIdentifier>{a660c6f0-a988-46d1-bca0-d2fc5408ee78}</UniqueIdentifier>
     </Filter>
@@ -274,17 +241,8 @@
     <Filter Include="Game\Combo\UIBehavior">
       <UniqueIdentifier>{6482a217-db8f-4dd2-9188-4fd6fb9978b1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.h\utility\EasingCreator">
-      <UniqueIdentifier>{fd45ac81-3519-4403-ad3b-c42be8a0eed2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.cpp\utility\EasingCreator">
-      <UniqueIdentifier>{407ebb1a-3954-4162-b7ea-af0d1db90731}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\EasingTestObj">
       <UniqueIdentifier>{a383ecc6-f375-4bf7-9b58-7f4ba9f98f42}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\ComboCreate">
-      <UniqueIdentifier>{84b3c227-9d01-4f00-aa9d-03f155fdbb2c}</UniqueIdentifier>
     </Filter>
     <Filter Include="MyEngine\.cpp\Animation">
       <UniqueIdentifier>{f84405b2-ba15-4fcd-9d2f-c731c2e277d1}</UniqueIdentifier>
@@ -337,44 +295,14 @@
     <Filter Include="MyEngine\.h\Easing">
       <UniqueIdentifier>{8f585426-d020-4a52-b5fe-ba4f621a60be}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.h\utility\CameraEditor">
-      <UniqueIdentifier>{86745219-1af0-46bf-8773-dc4c8f0b1461}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.h\utility\ShakeEditor">
-      <UniqueIdentifier>{b598867d-1557-4204-8949-7f620bc285d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.cpp\utility\ShakeEditor">
-      <UniqueIdentifier>{54cd1afe-91ee-4208-8d44-5e3f9d0d2fc1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.cpp\utility\TimeScaleEditor">
-      <UniqueIdentifier>{db86007f-edfe-471b-9800-4bb32187b5fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.h\utility\TileScaleEditor">
-      <UniqueIdentifier>{c8105416-44b0-458b-b1d0-784486d97837}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.h\utility\PostEffectEditor">
-      <UniqueIdentifier>{f328784d-1054-4768-b123-548a56e9d88f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.cpp\utility\PostEffectEditor">
-      <UniqueIdentifier>{bf8ac9e4-f43b-41fe-bf88-7e8b65d23b95}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\AttackEffect">
       <UniqueIdentifier>{e59252d0-c8a8-40b8-89ff-a6b2dd6c3a3a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\GameIntro">
       <UniqueIdentifier>{92588cd3-ec6f-4fcf-b2e7-4b261419bf32}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyEngine\.h\utility\DissolveEditor">
-      <UniqueIdentifier>{409b413e-b3ca-43a6-80e4-09e2600ca98e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.cpp\utility\DissolveEditor">
-      <UniqueIdentifier>{78acc7c9-b041-45d7-a84f-a85e75e2755f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\FireInjectors">
       <UniqueIdentifier>{0b7b5e54-0d48-470f-91bf-bfc9c50b2e86}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MyEngine\.cpp\utility\CameraEditor">
-      <UniqueIdentifier>{32855cfa-547f-4fc0-8cfe-602053ee4b6b}</UniqueIdentifier>
     </Filter>
     <Filter Include="リソースファイル\Skinning">
       <UniqueIdentifier>{15836091-162c-440d-9b7f-062994c31720}</UniqueIdentifier>
@@ -459,6 +387,90 @@
     </Filter>
     <Filter Include="MyEngine\.h\GPUParticle\ResourceData">
       <UniqueIdentifier>{00ef74a7-6b08-427e-8cd8-e40d2599bd7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\FileSelector">
+      <UniqueIdentifier>{3a1b69a4-6e07-40d8-8e60-4be87d850710}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\FileSelector">
+      <UniqueIdentifier>{0a9f8023-eea7-44d2-a542-a2ca47a48fd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\ComboCreator">
+      <UniqueIdentifier>{4d571f9d-bdee-482b-a917-03263be5f41b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Behavior\ComboBehavior\Rendition">
+      <UniqueIdentifier>{d01d8ed8-e9bf-4f45-80e0-b2515f3433fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Line3D">
+      <UniqueIdentifier>{dd87c618-9ebe-428f-8a1b-954768de0c4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Line3D">
+      <UniqueIdentifier>{7621e716-64af-48fb-910f-d61f252ba166}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor">
+      <UniqueIdentifier>{01a2376a-499f-422b-8a2a-1e5b58fae491}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\CameraEditor">
+      <UniqueIdentifier>{32855cfa-547f-4fc0-8cfe-602053ee4b6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\DissolveEditor">
+      <UniqueIdentifier>{78acc7c9-b041-45d7-a84f-a85e75e2755f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\EasingCreator">
+      <UniqueIdentifier>{407ebb1a-3954-4162-b7ea-af0d1db90731}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\ParameterEditor">
+      <UniqueIdentifier>{c77b02e3-7e6e-47c2-96b6-027952dccbc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\ObjEaseAnimation">
+      <UniqueIdentifier>{e51ed770-3fd9-48ca-b59c-636ee62fd3ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\PostEffectEditor">
+      <UniqueIdentifier>{bf8ac9e4-f43b-41fe-bf88-7e8b65d23b95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\ParticleEditor">
+      <UniqueIdentifier>{ef4cf453-ddc8-44a4-8472-d26f34bd117a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\RailEditor">
+      <UniqueIdentifier>{51a8756f-630b-4731-a137-18eb9e2bad0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\ShakeEditor">
+      <UniqueIdentifier>{54cd1afe-91ee-4208-8d44-5e3f9d0d2fc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\TimeScaleEditor">
+      <UniqueIdentifier>{db86007f-edfe-471b-9800-4bb32187b5fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Editor">
+      <UniqueIdentifier>{2aef5d69-b0b6-4156-9726-771f3df39ccb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Editor\CameraEditor">
+      <UniqueIdentifier>{86745219-1af0-46bf-8773-dc4c8f0b1461}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Editor\DissolveEditor">
+      <UniqueIdentifier>{409b413e-b3ca-43a6-80e4-09e2600ca98e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Editor\EasingCreator">
+      <UniqueIdentifier>{fd45ac81-3519-4403-ad3b-c42be8a0eed2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Editor\ObjEaseAnimation">
+      <UniqueIdentifier>{265e2ff9-ffea-4b5c-98d8-74123d0cc320}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Editor\ParameterEditor">
+      <UniqueIdentifier>{6045dc64-7d52-4582-b49c-567e7f5074bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Editor\ParticleEditor">
+      <UniqueIdentifier>{faf4888a-672e-4301-bb40-9621257e786a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Editor\RailEditor">
+      <UniqueIdentifier>{a1a4d21c-afb7-499c-938c-549c4c6ef567}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Editor\ShakeEditor">
+      <UniqueIdentifier>{b598867d-1557-4204-8949-7f620bc285d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Editor\TileScaleEditor">
+      <UniqueIdentifier>{c8105416-44b0-458b-b1d0-784486d97837}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Editor\PostEffectEditor">
+      <UniqueIdentifier>{f328784d-1054-4768-b123-548a56e9d88f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -580,9 +592,6 @@
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
-    <ClCompile Include="Game\CollisionBox\PlayerAttackController.cpp">
-      <Filter>Game\CollisionBox</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\ThrustPunch.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClCompile>
@@ -670,9 +679,6 @@
     <ClCompile Include="Game\Player\ComboAttackBehavior\LeftJobPunch.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp">
-      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerJump.cpp">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
     </ClCompile>
@@ -757,27 +763,6 @@
     <ClCompile Include="Game\Enemy\Spawner\EnemySpawner.cpp">
       <Filter>Game\Enemy\Spawner</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\RailEditor\ControlPosManager.cpp">
-      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\RailEditor\Rail.cpp">
-      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\RailEditor\RailManager.cpp">
-      <Filter>MyEngine\.cpp\utility\RailEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\ParticleEditor\ParticleEmitter.cpp">
-      <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\ParticleEditor\ParticleManager.cpp">
-      <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\ParameterEditor\GlobalParameter.cpp">
-      <Filter>MyEngine\.cpp\utility\ParameterEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\ParticleEditor\ParticleParameter.cpp">
-      <Filter>MyEngine\.cpp\utility\ParticleEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Primitive\PrimitivePlane.cpp">
       <Filter>MyEngine\.cpp\Primitive</Filter>
     </ClCompile>
@@ -859,32 +844,17 @@
     <ClCompile Include="Game\Scene\EditorScene.cpp">
       <Filter>Game\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\EasingCreator\EasingCreator.cpp">
-      <Filter>MyEngine\.cpp\utility\EasingCreator</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\EasingCreator\EasingParameterData.cpp">
-      <Filter>MyEngine\.cpp\utility\EasingCreator</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\EasingCreator\EasingEditor.cpp">
-      <Filter>MyEngine\.cpp\utility\EasingCreator</Filter>
-    </ClCompile>
     <ClCompile Include="math\Vector2Proxy.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
     <ClCompile Include="Game\EasingTestObj\EasingTestObj.cpp">
       <Filter>Game\EasingTestObj</Filter>
     </ClCompile>
-    <ClCompile Include="Game\ComboCreate\ComboCreateEditor.cpp">
-      <Filter>Game\ComboCreate</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Animation\ModelAnimation.cpp">
       <Filter>MyEngine\.cpp\Animation</Filter>
     </ClCompile>
     <ClCompile Include="Game\FireInjectors\FireInjectors.cpp">
       <Filter>Game\FireInjectors</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\Line3d.cpp">
-      <Filter>MyEngine\.cpp\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\RtvManager.cpp">
       <Filter>MyEngine\.cpp\base</Filter>
@@ -1000,56 +970,14 @@
     <ClCompile Include="Game\GameCamera\CameraRendition.cpp">
       <Filter>Game\GameCamera</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\ShakeEditor\ShakeEditor.cpp">
-      <Filter>MyEngine\.cpp\utility\ShakeEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\ShakeEditor\ShakePlayer.cpp">
-      <Filter>MyEngine\.cpp\utility\ShakeEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\ShakeEditor\ShakeData.cpp">
-      <Filter>MyEngine\.cpp\utility\ShakeEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\TimeScaleEditor\TimeScaleData.cpp">
-      <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\TimeScaleEditor\TimeScaleController.cpp">
-      <Filter>MyEngine\.cpp\utility\TimeScaleEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\PostEffectEditor\PostEffectController.cpp">
-      <Filter>MyEngine\.cpp\utility\PostEffectEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\PostEffectEditor\PostEffectData.cpp">
-      <Filter>MyEngine\.cpp\utility\PostEffectEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Game\AttackEffect\AttackEffect.cpp">
       <Filter>Game\AttackEffect</Filter>
     </ClCompile>
     <ClCompile Include="Game\GameIntro\IntroSpawnField.cpp">
       <Filter>Game\GameIntro</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\utility\DissolveEditor\DissolvePlayer.cpp">
-      <Filter>MyEngine\.cpp\utility\DissolveEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\DissolveEditor\DissolveEditor.cpp">
-      <Filter>MyEngine\.cpp\utility\DissolveEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\DissolveEditor\DissolveData.cpp">
-      <Filter>MyEngine\.cpp\utility\DissolveEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GameIntro\MovieLine.cpp">
       <Filter>Game\GameIntro</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\CameraEditor\CameraAnimation.cpp">
-      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\CameraEditor\CameraAnimationData.cpp">
-      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\CameraEditor\CameraEditor.cpp">
-      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\utility\CameraEditor\CameraKeyFrame.cpp">
-      <Filter>MyEngine\.cpp\utility\CameraEditor</Filter>
     </ClCompile>
     <ClCompile Include="Game\LockOn\LockOnController.cpp">
       <Filter>Game\LockOn</Filter>
@@ -1152,6 +1080,132 @@
     </ClCompile>
     <ClCompile Include="Engine\GPUParticle\GPUParticleParamEditor.cpp">
       <Filter>MyEngine\.cpp\GPUParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\input\InputData.cpp">
+      <Filter>MyEngine\.cpp\input</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\FileSelector\FileSelector.cpp">
+      <Filter>MyEngine\.cpp\utility\FileSelector</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackController.cpp">
+      <Filter>Game\Player\ComboCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboCreator\PlayerComboAttackData.cpp">
+      <Filter>Game\Player\ComboCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CollisionBox\PlayerCollisionInfo.cpp">
+      <Filter>Game\CollisionBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\DynamicComboAttack.cpp">
+      <Filter>Game\Player\Behavior\ComboBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp">
+      <Filter>Game\Player\Behavior\ComboBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboCreator\PlayerAttackRenditionData.cpp">
+      <Filter>Game\Player\ComboCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.cpp">
+      <Filter>Game\Player\Behavior\ComboBehavior\Rendition</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Line3D\Line3d.cpp">
+      <Filter>MyEngine\.cpp\Line3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Line3D\Line3DManager.cpp">
+      <Filter>MyEngine\.cpp\Line3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScaleController.cpp">
+      <Filter>MyEngine\.cpp\Editor\TimeScaleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScaleData.cpp">
+      <Filter>MyEngine\.cpp\Editor\TimeScaleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ShakeEditor\ShakeEditor.cpp">
+      <Filter>MyEngine\.cpp\Editor\ShakeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ShakeEditor\ShakePlayer.cpp">
+      <Filter>MyEngine\.cpp\Editor\ShakeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ShakeEditor\ShakeData.cpp">
+      <Filter>MyEngine\.cpp\Editor\ShakeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\RailEditor\RailManager.cpp">
+      <Filter>MyEngine\.cpp\Editor\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\RailEditor\RailPlayer.cpp">
+      <Filter>MyEngine\.cpp\Editor\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\RailEditor\ControlPosManager.cpp">
+      <Filter>MyEngine\.cpp\Editor\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\RailEditor\Rail.cpp">
+      <Filter>MyEngine\.cpp\Editor\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\RailEditor\RailControlPoint.cpp">
+      <Filter>MyEngine\.cpp\Editor\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\RailEditor\RailData.cpp">
+      <Filter>MyEngine\.cpp\Editor\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\RailEditor\RailEditor.cpp">
+      <Filter>MyEngine\.cpp\Editor\RailEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectController.cpp">
+      <Filter>MyEngine\.cpp\Editor\PostEffectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\PostEffectEditor\PostEffectData.cpp">
+      <Filter>MyEngine\.cpp\Editor\PostEffectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleEmitter.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleManager.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleParameter.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParameterEditor\GlobalParameter.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParameterEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationEditor.cpp">
+      <Filter>MyEngine\.cpp\Editor\ObjEaseAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationPlayer.cpp">
+      <Filter>MyEngine\.cpp\Editor\ObjEaseAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationData.cpp">
+      <Filter>MyEngine\.cpp\Editor\ObjEaseAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\EasingCreator\EasingEditor.cpp">
+      <Filter>MyEngine\.cpp\Editor\EasingCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\EasingCreator\EasingParameterData.cpp">
+      <Filter>MyEngine\.cpp\Editor\EasingCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\EasingCreator\EasingCreator.cpp">
+      <Filter>MyEngine\.cpp\Editor\EasingCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\DissolveEditor\DissolveEditor.cpp">
+      <Filter>MyEngine\.cpp\Editor\DissolveEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\DissolveEditor\DissolvePlayer.cpp">
+      <Filter>MyEngine\.cpp\Editor\DissolveEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\DissolveEditor\DissolveData.cpp">
+      <Filter>MyEngine\.cpp\Editor\DissolveEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\CameraEditor\CameraEditor.cpp">
+      <Filter>MyEngine\.cpp\Editor\CameraEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\CameraEditor\CameraKeyFrame.cpp">
+      <Filter>MyEngine\.cpp\Editor\CameraEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\CameraEditor\CameraAnimation.cpp">
+      <Filter>MyEngine\.cpp\Editor\CameraEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\CameraEditor\CameraAnimationData.cpp">
+      <Filter>MyEngine\.cpp\Editor\CameraEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1311,9 +1365,6 @@
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
-    <ClInclude Include="Game\CollisionBox\PlayerAttackController.h">
-      <Filter>Game\CollisionBox</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ThrustPunch.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClInclude>
@@ -1398,9 +1449,6 @@
     <ClInclude Include="Game\Player\ComboAttackBehavior\LeftJobPunch.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h">
-      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerJump.h">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
     </ClInclude>
@@ -1481,27 +1529,6 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\Spawner\EnemySpawner.h">
       <Filter>Game\Enemy\Spawner</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\RailEditor\Rail.h">
-      <Filter>MyEngine\.h\utility\RailEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\RailEditor\RailManager.h">
-      <Filter>MyEngine\.h\utility\RailEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\RailEditor\ControlPosManager.h">
-      <Filter>MyEngine\.h\utility\RailEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\ParticleEditor\ParticleEmitter.h">
-      <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\ParticleEditor\ParticleManager.h">
-      <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\ParameterEditor\GlobalParameter.h">
-      <Filter>MyEngine\.h\utility\ParameterEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\ParticleEditor\ParticleParameter.h">
-      <Filter>MyEngine\.h\utility\ParticleEditor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Primitive\PrimitivePlane.h">
       <Filter>MyEngine\.h\Primitive</Filter>
@@ -1584,23 +1611,11 @@
     <ClInclude Include="Game\Scene\EditorScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\EasingCreator\EasingParameterData.h">
-      <Filter>MyEngine\.h\utility\EasingCreator</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\EasingCreator\EasingCreator.h">
-      <Filter>MyEngine\.h\utility\EasingCreator</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\EasingCreator\EasingEditor.h">
-      <Filter>MyEngine\.h\utility\EasingCreator</Filter>
-    </ClInclude>
     <ClInclude Include="math\Vector2Proxy.h">
       <Filter>liberary\.h</Filter>
     </ClInclude>
     <ClInclude Include="Game\EasingTestObj\EasingTestObj.h">
       <Filter>Game\EasingTestObj</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\ComboCreate\ComboCreateEditor.h">
-      <Filter>Game\ComboCreate</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Animation\AnimationData.h">
       <Filter>MyEngine\.h\Animation</Filter>
@@ -1613,9 +1628,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Animation\SkeletonData.h">
       <Filter>MyEngine\.h\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\Line3d.h">
-      <Filter>MyEngine\.h\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\RtvManager.h">
       <Filter>MyEngine\.h\base</Filter>
@@ -1734,56 +1746,14 @@
     <ClInclude Include="Engine\Easing\EasingStep.h">
       <Filter>MyEngine\.h\Easing</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\utility\CameraEditor\CameraKeyFrame.h">
-      <Filter>MyEngine\.h\utility\CameraEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\CameraEditor\CameraEditor.h">
-      <Filter>MyEngine\.h\utility\CameraEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\CameraEditor\CameraAnimationData.h">
-      <Filter>MyEngine\.h\utility\CameraEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\CameraEditor\CameraAnimation.h">
-      <Filter>MyEngine\.h\utility\CameraEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Game\GameCamera\CameraRendition.h">
       <Filter>Game\GameCamera</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\ShakeEditor\ShakePlayer.h">
-      <Filter>MyEngine\.h\utility\ShakeEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\ShakeEditor\ShakeEditor.h">
-      <Filter>MyEngine\.h\utility\ShakeEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\ShakeEditor\ShakeData.h">
-      <Filter>MyEngine\.h\utility\ShakeEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\TimeScaleEditor\TimeScaleController.h">
-      <Filter>MyEngine\.h\utility\TileScaleEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\TimeScaleEditor\TimeScaleData.h">
-      <Filter>MyEngine\.h\utility\TileScaleEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\PostEffectEditor\PostEffectController.h">
-      <Filter>MyEngine\.h\utility\PostEffectEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\PostEffectEditor\PostEffectData.h">
-      <Filter>MyEngine\.h\utility\PostEffectEditor</Filter>
     </ClInclude>
     <ClInclude Include="Game\AttackEffect\AttackEffect.h">
       <Filter>Game\AttackEffect</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameIntro\IntroSpawnField.h">
       <Filter>Game\GameIntro</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\DissolveEditor\DissolvePlayer.h">
-      <Filter>MyEngine\.h\utility\DissolveEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\DissolveEditor\DissolveEditor.h">
-      <Filter>MyEngine\.h\utility\DissolveEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\utility\DissolveEditor\DissolveData.h">
-      <Filter>MyEngine\.h\utility\DissolveEditor</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameIntro\MovieLine.h">
       <Filter>Game\GameIntro</Filter>
@@ -1895,6 +1865,132 @@
     </ClInclude>
     <ClInclude Include="Engine\GPUParticle\GPUParticleParamEditor.h">
       <Filter>MyEngine\.h\GPUParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\input\InputData.h">
+      <Filter>MyEngine\.h\input</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\FileSelector\FileSelector.h">
+      <Filter>MyEngine\.h\utility\FileSelector</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackController.h">
+      <Filter>Game\Player\ComboCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboCreator\PlayerComboAttackData.h">
+      <Filter>Game\Player\ComboCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CollisionBox\PlayerCollisionInfo.h">
+      <Filter>Game\CollisionBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\DynamicComboAttack.h">
+      <Filter>Game\Player\Behavior\ComboBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h">
+      <Filter>Game\Player\Behavior\ComboBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboCreator\PlayerAttackRenditionData.h">
+      <Filter>Game\Player\ComboCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.h">
+      <Filter>Game\Player\Behavior\ComboBehavior\Rendition</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Line3D\Line3d.h">
+      <Filter>MyEngine\.h\Line3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Line3D\Line3DManager.h">
+      <Filter>MyEngine\.h\Line3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\CameraEditor\CameraEditor.h">
+      <Filter>MyEngine\.h\Editor\CameraEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\CameraEditor\CameraKeyFrame.h">
+      <Filter>MyEngine\.h\Editor\CameraEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\CameraEditor\CameraAnimation.h">
+      <Filter>MyEngine\.h\Editor\CameraEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\CameraEditor\CameraAnimationData.h">
+      <Filter>MyEngine\.h\Editor\CameraEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\DissolveEditor\DissolveEditor.h">
+      <Filter>MyEngine\.h\Editor\DissolveEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\DissolveEditor\DissolvePlayer.h">
+      <Filter>MyEngine\.h\Editor\DissolveEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\DissolveEditor\DissolveData.h">
+      <Filter>MyEngine\.h\Editor\DissolveEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\EasingCreator\EasingParameterData.h">
+      <Filter>MyEngine\.h\Editor\EasingCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\EasingCreator\EasingCreator.h">
+      <Filter>MyEngine\.h\Editor\EasingCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\EasingCreator\EasingEditor.h">
+      <Filter>MyEngine\.h\Editor\EasingCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationEditor.h">
+      <Filter>MyEngine\.h\Editor\ObjEaseAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationPlayer.h">
+      <Filter>MyEngine\.h\Editor\ObjEaseAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationData.h">
+      <Filter>MyEngine\.h\Editor\ObjEaseAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParameterEditor\GlobalParameter.h">
+      <Filter>MyEngine\.h\Editor\ParameterEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleManager.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleParameter.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleEmitter.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectController.h">
+      <Filter>MyEngine\.h\Editor\PostEffectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\PostEffectEditor\PostEffectData.h">
+      <Filter>MyEngine\.h\Editor\PostEffectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\RailEditor\RailManager.h">
+      <Filter>MyEngine\.h\Editor\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\RailEditor\RailPlayer.h">
+      <Filter>MyEngine\.h\Editor\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\RailEditor\ControlPosManager.h">
+      <Filter>MyEngine\.h\Editor\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\RailEditor\Rail.h">
+      <Filter>MyEngine\.h\Editor\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\RailEditor\RailControlPoint.h">
+      <Filter>MyEngine\.h\Editor\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\RailEditor\RailData.h">
+      <Filter>MyEngine\.h\Editor\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\RailEditor\RailEditor.h">
+      <Filter>MyEngine\.h\Editor\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ShakeEditor\ShakeEditor.h">
+      <Filter>MyEngine\.h\Editor\ShakeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ShakeEditor\ShakePlayer.h">
+      <Filter>MyEngine\.h\Editor\ShakeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ShakeEditor\ShakeData.h">
+      <Filter>MyEngine\.h\Editor\ShakeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScaleData.h">
+      <Filter>MyEngine\.h\Editor\TileScaleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScaleController.h">
+      <Filter>MyEngine\.h\Editor\TileScaleEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,9 +1,10 @@
 #pragma once
 
-#include "3D/Line3D.h"
+#include "Line3D/Line3D.h"
 #include "3d/WorldTransform.h"
 #include "Vector3.h"
 #include <Vector4.h>
+#include <memory>
 
 /// <summary>
 ///  Collider基底クラス
@@ -18,11 +19,9 @@ public:
 
     virtual void Init() = 0; //< 初期化
 
-    /// <summary>
-    /// デバッグキューブの描画
-    /// </summary>
-    /// <param name="viewProjection">ビュープロジェクション</param>
-    virtual void DrawDebugCube(const ViewProjection& viewProjection) = 0;
+
+    // デバッグキューブのセット
+    virtual void SetDebugCube() = 0;
 
     /// <summary>
     /// 衝突開始時の処理
@@ -54,7 +53,7 @@ protected:
     WorldTransform cTransform_; //< ワールド変換
     uint32_t typeID_  = 0u; //< コリジョンのタイプID
     bool isColliding_ = false; //< 衝突フラグ
-    Line3D debugLine_; //< デバッグ表示用Line
+    std::unique_ptr<Line3D> debugLine_; //< デバッグ表示用Line
     Vector4 lineColor_ = Vector4::kWHITE(); //< デバッグ表示用のラインカラー
 
     bool isAdaptCollision = true;

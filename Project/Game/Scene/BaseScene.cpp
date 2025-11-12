@@ -1,11 +1,12 @@
 #include "BaseScene.h"
 #include "base/WinApp.h"
+#include "Frame/Frame.h"
 #include "Lighrt/Light.h"
 #include "PostEffect/PostEffectRenderer.h"
 
 // Particle
 #include "GPUParticle/GPUParticleManager.h"
-#include "utility/ParticleEditor/ParticleManager.h"
+#include "Editor/ParticleEditor/ParticleManager.h"
 
 #include <imgui.h>
 
@@ -17,14 +18,18 @@ void BaseScene::Init() {
     textureManager_ = TextureManager::GetInstance();
 
     // 生成
-    debugCamera_  = std::make_unique<DebugCamera>(WinApp::kWindowWidth, WinApp::kWindowHeight);
-    cameraEditor_ = std::make_unique<CameraEditor>();
-    shakeEditor_  = std::make_unique<ShakeEditor>();
+    debugCamera_            = std::make_unique<DebugCamera>(WinApp::kWindowWidth, WinApp::kWindowHeight);
+    cameraEditor_           = std::make_unique<CameraEditor>();
+    shakeEditor_            = std::make_unique<ShakeEditor>();
+    railEditor_             = std::make_unique<RailEditor>();
+    objEaseAnimationEditor_ = std::make_unique<ObjEaseAnimationEditor>();
 
     // 初期化
     debugCamera_->Init();
     cameraEditor_->Init(&viewProjection_);
     shakeEditor_->Init();
+    railEditor_->Init();
+    objEaseAnimationEditor_->Init();
     viewProjection_.Init();
 
     // ビュープロジェクション
@@ -34,6 +39,14 @@ void BaseScene::Init() {
     PostEffectRenderer::GetInstance()->SetViewProjection(&viewProjection_);
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
     GPUParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
+}
+
+void BaseScene::Update() {
+    debugCamera_->Update();
+    cameraEditor_->Update();
+    shakeEditor_->Update(Frame::DeltaTimeRate());
+    railEditor_->Update(Frame::DeltaTimeRate());
+    objEaseAnimationEditor_->Update(Frame::DeltaTimeRate());
 }
 
 void BaseScene::Debug() {
@@ -49,11 +62,11 @@ void BaseScene::Debug() {
 void BaseScene::ViewProjectionUpdate() {
 #ifdef _DEBUG
     // シーンごとの切り替え処理------------------------------
-    bool isTriggerSpace = input_->TriggerKey(DIK_SPACE);
+    bool isTriggerSpace = input_->TriggerKey(KeyboardKey::Space);
     switch (cameraMode_) {
         ///------------------------------------------------------
         /// Normal Mode
-        ///------------------------------------------------------ 
+        ///------------------------------------------------------
     case BaseScene::CameraMode::NORMAL:
         // デバッグモードへ
         if (isTriggerSpace) {
@@ -66,7 +79,7 @@ void BaseScene::ViewProjectionUpdate() {
         break;
         ///------------------------------------------------------
         /// Editor Mode
-        ///------------------------------------------------------ 
+        ///------------------------------------------------------
     case BaseScene::CameraMode::EDITOR:
         // ノーマルモードへ
         if (!cameraEditor_->GetIsEditing()) {
@@ -79,7 +92,7 @@ void BaseScene::ViewProjectionUpdate() {
         break;
         ///------------------------------------------------------
         /// Debug Mode
-        ///------------------------------------------------------ 
+        ///------------------------------------------------------
     case BaseScene::CameraMode::DEBUG:
         if (isTriggerSpace) {
             cameraMode_ = CameraMode::NORMAL;

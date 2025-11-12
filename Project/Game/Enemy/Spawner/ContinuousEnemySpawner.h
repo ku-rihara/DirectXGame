@@ -18,8 +18,7 @@ private:
     struct SpawnConfig {
         bool isEnabled = true;
         float spawnInterval;
-        FMinMax forwardDistance;
-        FMinMax lateralOffset;
+        V2MinMax spawnRandomOffset;
         float minDistanceFromEnemies;
         float fieldMargin;
         int32_t maxRetryCount;
@@ -33,14 +32,14 @@ public:
 
     // 初期化、更新
     void Init();
-    void Update(const float& deltaTime, const ViewProjection& viewProjection);
+    void Update(const float& deltaTime);
 
     void Start(); //< スポーンシステムの開始
     void Stop(); //< スポーンシステムの停止
     void ResetSpawnCount(); //< スポーンカウントのリセット
 
     void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
 private:
     /// <summary>
@@ -48,7 +47,7 @@ private:
     /// </summary>
     /// <param name="outPosition">スポーン位置出力</param>
     /// <returns>スポーン位置</returns>
-    Vector3 CalculateSpawnPosition(const ViewProjection& viewProjection);
+    Vector3 CalculateSpawnPosition();
 
     /// <summary>
     /// スポーン位置が有効かチェック

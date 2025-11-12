@@ -1,5 +1,5 @@
 #pragma once
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "utility/PutObjForBlender/PutObjForBlender.h"
 #include <cstdint>
 #include <memory>
@@ -20,7 +20,7 @@ public:
     void Launch(); //< 発射
 
     void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
 private:
     std::unique_ptr<PutObjForBlender> putObjForBlender_ = nullptr;

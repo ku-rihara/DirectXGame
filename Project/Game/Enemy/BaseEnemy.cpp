@@ -14,7 +14,7 @@
 #include "Combo/Combo.h"
 
 /// collisionBox
-#include "CollisionBox/PlayerAttackController.h"
+#include "CollisionBox/PlayerCollisionInfo.h"
 
 #include "AttackEffect/AttackEffect.h"
 #include "audio/Audio.h"
@@ -122,13 +122,13 @@ Vector3 BaseEnemy::GetDirectionToTarget(const Vector3& target) {
 void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 
     // 普通のパンチに攻撃されたら
-    if (PlayerAttackController* attackController = dynamic_cast<PlayerAttackController*>(other)) {
+    if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
 
         switch (attackController->attackType_) {
             ///------------------------------------------------------------------
             /// 通常
             ///------------------------------------------------------------------
-        case PlayerAttackController::AttackType::NORMAL:
+        case PlayerCollisionInfo::AttackType::NORMAL:
 
             TakeDamage(attackController->GetAttackPower());
             pCombo_->ComboCountUP();
@@ -140,7 +140,7 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 
 void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-    if (PlayerAttackController* attackController = dynamic_cast<PlayerAttackController*>(other)) {
+    if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
 
         // 攻撃タイプごとに振る舞いを切り替える
         switch (attackController->attackType_) {
@@ -148,7 +148,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             ///------------------------------------------------------------------
             /// アッパー
             ///------------------------------------------------------------------
-        case PlayerAttackController::AttackType::UPPER:
+        case PlayerCollisionInfo::AttackType::UPPER:
 
             if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
                 break;
@@ -162,7 +162,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             ///------------------------------------------------------------------
             /// 突き飛ばし
             ///------------------------------------------------------------------
-        case PlayerAttackController::AttackType::THRUST:
+        case PlayerCollisionInfo::AttackType::THRUST:
             if (dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) {
                 break;
             }
@@ -174,7 +174,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             ///------------------------------------------------------------------
             /// 落下攻撃
             ///------------------------------------------------------------------
-        case PlayerAttackController::AttackType::FALL:
+        case PlayerCollisionInfo::AttackType::FALL:
             if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
                 break;
             }
@@ -188,7 +188,7 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             ///------------------------------------------------------------------
             /// 突進
             ///------------------------------------------------------------------
-        case PlayerAttackController::AttackType::RUSH:
+        case PlayerCollisionInfo::AttackType::RUSH:
             if (dynamic_cast<EnemyBoundDamage*>(damageBehavior_.get())) {
                 break;
             }

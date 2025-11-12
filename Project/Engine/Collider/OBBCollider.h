@@ -17,12 +17,7 @@ public:
     /// ===================================================
 
     void Init() override; //< 初期化処理
-
-    /// <summary>
-    /// デバッグキューブの描画
-    /// </summary>
-    /// <param name="viewProjection">ビュープロジェクション</param>
-    void DrawDebugCube(const ViewProjection& viewProjection) override;
+    void SetDebugCube() override; //< デバッグキューブのセット
 
     /// <summary>
     /// OBBのラインを描画

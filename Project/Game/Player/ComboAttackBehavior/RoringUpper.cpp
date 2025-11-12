@@ -13,7 +13,6 @@
 #include "input/Input.h"
 
 /// math
-#include "CollisionBox/PlayerAttackController.h"
 #include "Frame/Frame.h"
 
 // 初期化
@@ -37,7 +36,7 @@ void RoringUpper::Init() {
     kCollisionAliveTime_ = 0.3f;
 
     /// collisionBox
-    pPlayer_->GetAttackController()->ChangeAttackType(PlayerAttackController::AttackType::UPPER);
+    pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerCollisionInfo::AttackType::UPPER);
 
     // rail
     RailInit();
@@ -66,7 +65,7 @@ void RoringUpper::Init() {
 
     collisionAdaptTime_ = 0.0f;
 
-    pPlayer_->GetAttackController()->ResetComboEffect();
+    pPlayer_->GetPlayerCollisionInfo()->ResetComboEffect();
 }
 
 // 更新
@@ -89,7 +88,7 @@ void RoringUpper::Update() {
         // タイム加算
         collisionAdaptTime_ += Frame::DeltaTimeRate();
        
-        pPlayer_->GetAttackController()->SetPosition(pPlayer_->GetWorldPosition());
+        pPlayer_->GetPlayerCollisionInfo()->SetPosition(pPlayer_->GetWorldPosition());
 
        
         if (collisionAdaptTime_ >= kCollisionAliveTime_) {
@@ -170,7 +169,7 @@ void RoringUpper::RailInit() {
 
 void RoringUpper::HitStopUpdate() {
     // デルタタイムスケール小さく
-    if (pPlayer_->GetAttackController()->GetIsHitStop() && !isHitStop_) {
+    if (pPlayer_->GetPlayerCollisionInfo()->GetIsHitStop() && !isHitStop_) {
         pPlayer_->GetEffects()->SpecialAttackRenditionInit();
         pPlayer_->GetGameCamera()->PlayAnimation("UpperAtk");
         
@@ -182,7 +181,7 @@ void RoringUpper::HitStopUpdate() {
 void RoringUpper::AnimationMove() {
     /// minを返す
     railManager_->SetRailMoveTime(std::min(railManager_->GetRailMoveTime(), 1.0f));
-    pPlayer_->GetRightHand()->RailThreeComboUpdate(pPlayer_->GetAttackController()->GetAttackSpeed(pPlayer_->GetRightHand()->GetRailRunSpeedThree()));
+    pPlayer_->GetRightHand()->RailThreeComboUpdate(pPlayer_->GetPlayerCollisionInfo()->GetAttackSpeed(pPlayer_->GetRightHand()->GetRailRunSpeedThree()));
   
     // バック
     backlashEase_.Update(atkSpeed_);

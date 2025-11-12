@@ -31,7 +31,7 @@ void RightJobPunch::Init() {
 
     BaseComboAattackBehavior::Init();
 
-    /// parm
+    /// param
     speed_    = pPlayerParameter_->GetParamaters().rushDistance;
     waitTine_ = 0.0f;
 
@@ -41,7 +41,7 @@ void RightJobPunch::Init() {
     rushPos_          = initPos_ + (forwardDirection_ * speed_); // 突進座標を決める
 
     /// collisionType
-    pPlayer_->GetAttackController()->ChangeAttackType(PlayerAttackController::AttackType::NORMAL);
+    pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerCollisionInfo::AttackType::NORMAL);
 
     EasingInit();
 
@@ -98,7 +98,7 @@ void RightJobPunch::Update() {
         pPlayer_->GetRightHand()->SetObjTranslate(punchPosition_);
 
         /// 当たり判定座標
-        pPlayer_->GetAttackController()->SetPosition(pPlayer_->GetRightHand()->GetObjTransform().GetWorldPos());
+        pPlayer_->GetPlayerCollisionInfo()->SetPosition(pPlayer_->GetRightHand()->GetObjTransform().GetWorldPos());
 
         break;
 

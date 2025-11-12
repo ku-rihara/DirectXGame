@@ -12,7 +12,7 @@ void GameIntroManager::Init() {
 
     // GlobalParameter
     globalParameter_ = GlobalParameter::GetInstance();
-    globalParameter_->CreateGroup(groupName_, false);
+    globalParameter_->CreateGroup(groupName_);
     BindParam();
     globalParameter_->SyncParamForGroup(groupName_);
 
@@ -92,7 +92,7 @@ void GameIntroManager::CheckMovieLineStateTransition() {
 
 void GameIntroManager::BindParam() {
 
-    globalParameter_->Bind(groupName_, "fastSpeed", &fastSpeedRate_);
+    globalParameter_->Regist(groupName_, "fastSpeed", &fastSpeedRate_);
 }
 
 void GameIntroManager::AdjustParam() {
@@ -127,7 +127,7 @@ bool GameIntroManager::IsAllIntroFinished() const {
 void GameIntroManager::ProcessInput() {
     Input* input = Input::GetInstance();
 
-    if (input->TriggerKey(DIK_F) || input->IsPressPad(0, XINPUT_GAMEPAD_A)) {
+    if (input->TriggerKey(KeyboardKey::F) || input->IsPressPad(0, GamepadButton::A)) {
         currentPlaySpeedRate_ = fastSpeedRate_;
     } else {
         currentPlaySpeedRate_ = 1.0f;

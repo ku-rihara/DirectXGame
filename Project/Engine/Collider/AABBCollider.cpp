@@ -13,7 +13,7 @@ AABBCollider::~AABBCollider() {
 
 void AABBCollider::Init() {
    
-   debugLine_.Init(24);
+    debugLine_.reset(Line3D::Create(24));
     cTransform_.Init();
 }
 
@@ -26,9 +26,8 @@ void AABBCollider::UpdateWorldTransform() {
     cTransform_.UpdateMatrix();
 }
 
-void AABBCollider::DrawDebugCube(const ViewProjection& viewProjection) {
-    debugLine_.DrawCubeWireframe(cTransform_.GetWorldPos(), cTransform_.scale_, lineColor_);
-    debugLine_.Draw(viewProjection);
+void AABBCollider::SetDebugCube() {
+    debugLine_->SetCubeWireframe(cTransform_.GetWorldPos(), cTransform_.scale_, lineColor_);
 }
 
 Vector3 AABBCollider::GetCollisionPos() const {

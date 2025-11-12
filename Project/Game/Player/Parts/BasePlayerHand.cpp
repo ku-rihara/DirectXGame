@@ -10,7 +10,7 @@ void BasePlayerHand::Init() {
 
     // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
-    globalParameter_->CreateGroup(groupName_, false);
+    globalParameter_->CreateGroup(groupName_);
     AddParamGroup();
     ApplyGlobalParameter();
 
@@ -56,7 +56,7 @@ void BasePlayerHand::ParamLoadForImGui() {
 /// パラメータをグループに追加
 ///=================================================================================
 void BasePlayerHand::AddParamGroup() {
-    globalParameter_->CreateGroup(groupName_, false);
+    globalParameter_->CreateGroup(groupName_);
 
     // Position
     globalParameter_->AddItem(groupName_, "Translate", obj3d_->transform_.translation_);
@@ -70,7 +70,7 @@ void BasePlayerHand::AddParamGroup() {
 void BasePlayerHand::SetValues() {
 
     // グループを追加
-    globalParameter_->CreateGroup(groupName_, false);
+    globalParameter_->CreateGroup(groupName_);
 
     // Position
     globalParameter_->SetValue(groupName_, "Translate", obj3d_->transform_.translation_);

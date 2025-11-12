@@ -1,16 +1,11 @@
 #pragma once
 
-#include "3d/Object3d.h"
-#include "3d/ViewProjection.h"
-// class
-#include "Collider/AABBCollider.h"
-#include "Collider/OBBCollider.h"
-
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 /// std
 #include <list>
 #include <memory>
 
+class BaseCollider;
 /// <summary>
 ///  Collision管理クラス
 /// </summary>
@@ -21,12 +16,7 @@ public:
 
     void Init(); //< 初期化
     void Update(); //< 更新
-
-    /// <summary>
-    /// 描画
-    /// </summary>
-    /// <param name="viewProjection">ビュープロジェクション</param>
-    void Draw(const ViewProjection& viewProjection);
+    void LineAllSet();
    
     /// <summary>
     /// コライダーリストに登録
@@ -80,7 +70,8 @@ private:
     // 衝突状態をペアごとに管理するマップ
     std::unordered_map<std::pair<BaseCollider*, BaseCollider*>, bool, PairHash> collisionStates_;
 
-    // コリジョンスフィア可視化
+    // globalParameter
     GlobalParameter* globalParameter_;
+    std::string groupName_ = "CollisionManager";
     bool isColliderVisible_;
 };

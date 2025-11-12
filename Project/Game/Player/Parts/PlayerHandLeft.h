@@ -6,15 +6,6 @@
 /// プレイヤーの左手クラス
 /// </summary>
 class PlayerHandLeft : public BasePlayerHand {
-private:
-private:
-    ///===========================================
-    /// private variant
-    ///=============================================
-
-    std::string railGroupName_;
-    std::unique_ptr<RailManager> trustRailManager_;
-
 public:
     PlayerHandLeft()  = default;
     ~PlayerHandLeft() = default;
@@ -41,6 +32,15 @@ public:
     /// <param name="dissolve">ディゾルブ値</param>
     void DissolveAdapt(const float& dissolve) override;
 
+private:
+    ///===========================================
+    /// private variant
+    ///=============================================
+
+    std::string railGroupName_;
+    std::unique_ptr<RailManager> trustRailManager_;
+
+public:
     ///===========================================
     /// getter method
     ///=============================================

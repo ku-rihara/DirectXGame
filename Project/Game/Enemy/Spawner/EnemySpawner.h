@@ -90,7 +90,7 @@ public:
     void UpdateCurrentGroup(); //< 現在のグループ更新
 
     void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
 private:
     using json = nlohmann::json;

@@ -20,7 +20,7 @@ void GameScene::Init() {
     // クラスポインタセット
     SetClassPointer();
 
-    // その他オブジェクト初期化(いずれクラス分けする)
+    // その他オブジェクト初期化
 
     isfirstChange_ = false;
     shandle_       = TextureManager::GetInstance()->LoadTexture("Resources/Texture/screenChange.png");
@@ -32,7 +32,7 @@ void GameScene::Init() {
 
     finishSpriteEase_.SetOnFinishCallback([this]() {
         // 　ジャンプに切り替え
-        if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+        if (Input::GetInstance()->PushKey(KeyboardKey::Space)) {
             isend_ = true;
         } else {
             ChangeForJoyState();
@@ -49,6 +49,8 @@ void GameScene::Init() {
 
 void GameScene::Update() {
 
+    BaseScene::Update();
+  
     switch (gameState_) {
     case GameScene::GameState::INTRO:
 
@@ -112,13 +114,10 @@ void GameScene::IntroUpdate() {
         enemyManager_->Update();
         enemyManager_->HpBarUpdate(viewProjection_);
     }
-    // debugCamera
-    debugCamera_->Update();
 
     // Editor
     attackEffect_->Update();
-    Debug();
-
+  
     // obj
     skyBox_->Update();
     gameCamera_->Update(gameIntroManager_->GetCurrentPlaySpeedRate());
@@ -126,14 +125,8 @@ void GameScene::IntroUpdate() {
 }
 void GameScene::PlayUpdate() {
 
-    // debugCamera
-    debugCamera_->Update();
-
     // Editor
     attackEffect_->Update();
-    shakeEditor_->Update(Frame::DeltaTime());
-    cameraEditor_->Update();
-    Debug();
 
     // 各クラス更新
     comboScene_->Update();
@@ -141,7 +134,7 @@ void GameScene::PlayUpdate() {
     skyBox_->Update();
     howToOperate_->Update();
     enemySpawner_->Update(Frame::DeltaTimeRate());
-    continuousEnemySpawner_->Update(Frame::DeltaTimeRate(),viewProjection_);
+    continuousEnemySpawner_->Update(Frame::DeltaTimeRate());
     enemyManager_->Update();
     combo_->Update();
     fireInjectors_->Update();
@@ -199,6 +192,11 @@ void GameScene::Debug() {
     shakeEditor_->EditorUpdate();
     attackEffect_->EditorUpdate();
     ImGui::End();
+
+    ImGui::Begin("PlayerAttack");
+    playerComboAttackController_->EditorUpdate();
+ 
+    ImGui::End();
 #endif
 }
 
@@ -217,41 +215,39 @@ void GameScene::ViewProcess() {
 
 void GameScene::ChangeForJoyState() {
 
-    if (!((Input::IsTriggerPad(0, XINPUT_GAMEPAD_A)))) {
+    if (!((Input::IsTriggerPad(0, GamepadButton::A)))) {
         return;
     }
 
     isend_ = true;
 }
 
-/// ---------------------------------------------------------------------------------
-/// オブジェクト初期化
-/// ---------------------------------------------------------------------------------
 void GameScene::ObjectInit() {
 
-    // 生成---------------------------------------------------------------------------
+     //*-------------------------------- オブジェクト生成 --------------------------------*//
 
-    field_                  = std::make_unique<Field>();
-    lockOnController_       = std::make_unique<LockOnController>();
-    player_                 = std::make_unique<Player>();
-    gameCamera_             = std::make_unique<GameCamera>();
-    enemyManager_           = std::make_unique<EnemyManager>();
-    enemySpawner_           = std::make_unique<EnemySpawner>();
-    skyDome_                = std::make_unique<SkyDome>();
-    howToOperate_           = std::make_unique<HowToOperate>();
-    skyBox_                 = std::make_unique<SkyBox>();
-    combo_                  = std::make_unique<Combo>();
-    fireInjectors_          = std::make_unique<FireInjectors>();
-    gameBackGroundObject_   = std::make_unique<GameBackGroundObject>();
-    comboScene_             = std::make_unique<ComboScene>();
-    attackEffect_           = std::make_unique<AttackEffect>();
-    gameIntroManager_       = std::make_unique<GameIntroManager>();
-    comboLevelObjHolder_    = std::make_unique<ComboLevelObjHolder>();
-    continuousEnemySpawner_ = std::make_unique<ContinuousEnemySpawner>();
+    field_                       = std::make_unique<Field>();
+    lockOnController_            = std::make_unique<LockOnController>();
+    player_                      = std::make_unique<Player>();
+    gameCamera_                  = std::make_unique<GameCamera>();
+    enemyManager_                = std::make_unique<EnemyManager>();
+    enemySpawner_                = std::make_unique<EnemySpawner>();
+    skyDome_                     = std::make_unique<SkyDome>();
+    howToOperate_                = std::make_unique<HowToOperate>();
+    skyBox_                      = std::make_unique<SkyBox>();
+    combo_                       = std::make_unique<Combo>();
+    fireInjectors_               = std::make_unique<FireInjectors>();
+    gameBackGroundObject_        = std::make_unique<GameBackGroundObject>();
+    comboScene_                  = std::make_unique<ComboScene>();
+    attackEffect_                = std::make_unique<AttackEffect>();
+    gameIntroManager_            = std::make_unique<GameIntroManager>();
+    comboLevelObjHolder_         = std::make_unique<ComboLevelObjHolder>();
+    continuousEnemySpawner_      = std::make_unique<ContinuousEnemySpawner>();
+    playerComboAttackController_ = std::make_unique<PlayerComboAttackController>();
 
-    // 初期化---------------------------------------------------------------------------
+    //*--------------------------------------- 初期化 ---------------------------------------*//
 
-    player_->GameSceneInit();
+    player_->InitInGameScene();
     lockOnController_->Init();
     skyBox_->Init();
     combo_->Init();
@@ -263,6 +259,7 @@ void GameScene::ObjectInit() {
     gameCamera_->Init();
     howToOperate_->Init();
     comboScene_->Init();
+    playerComboAttackController_->Init();
     attackEffect_->Init();
     viewProjection_.Init();
 
@@ -271,12 +268,12 @@ void GameScene::ObjectInit() {
     gameBackGroundObject_->Init("game.json");
 }
 
-/// ---------------------------------------------------------------------------------
-/// クラスポインタセット
-/// ---------------------------------------------------------------------------------
 void GameScene::SetClassPointer() {
 
+    //*-------------------------------- Classポインタセット --------------------------------*//
+
     gameCamera_->SetTarget(&player_->GetTransform());
+
     // enemyManager
     enemyManager_->SetPlayer(player_.get());
     enemyManager_->SetCombo(combo_.get());
@@ -295,6 +292,7 @@ void GameScene::SetClassPointer() {
     player_->SetGameCamera(gameCamera_.get());
     player_->SetCombo(combo_.get());
     player_->SetHitStop(attackEffect_.get());
+    player_->SetComboAttackController(playerComboAttackController_.get());
 
     fireInjectors_->SetCombo(combo_.get());
     lockOnController_->SetEnemyManager(enemyManager_.get());

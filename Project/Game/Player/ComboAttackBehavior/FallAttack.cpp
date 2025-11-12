@@ -8,7 +8,7 @@
 #include "GameCamera/GameCamera.h"
 #include "Player/Player.h"
 
-#include "CollisionBox/PlayerAttackController.h"
+
 #include "Frame/Frame.h"
 #include <imgui.h>
 
@@ -103,7 +103,7 @@ void FallAttack::Update() {
         pPlayer_->FallSound();
 
         // 攻撃タイプの変更
-        pPlayer_->GetAttackController()->ChangeAttackType(PlayerAttackController::AttackType::FALL);
+        pPlayer_->GetPlayerCollisionInfo()->ChangeAttackType(PlayerCollisionInfo::AttackType::FALL);
 
         step_ = STEP::LANDING;
         break;
@@ -117,7 +117,7 @@ void FallAttack::Update() {
         /// スケール変化
         landScaleEasing_.Update(atkSpeed_);
         pPlayer_->SetScale(tempLandScale_);
-        pPlayer_->GetAttackController()->SetPosition(pPlayer_->GetWorldPosition());
+        pPlayer_->GetPlayerCollisionInfo()->SetPosition(pPlayer_->GetWorldPosition());
 
         // 回転する
         landRotateX_ += Frame::DeltaTimeRate() * rotateXSpeed_;

@@ -2,7 +2,7 @@
 
 #include "ComboUI.h"
 
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 // behavior
 #include "Behavior/BaseComboUIBehavior.h"
 // std
@@ -47,7 +47,7 @@ public:
     void ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> behavior);
 
     void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
 private:
     GlobalParameter* globalParameter_; // グローバルパラメータ

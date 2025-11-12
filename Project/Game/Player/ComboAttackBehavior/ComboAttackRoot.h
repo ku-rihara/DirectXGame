@@ -1,6 +1,7 @@
 #pragma once
 
 #include"BaseComboAattackBehavior.h"
+#include "Player/ComboCreator/PlayerComboAttackData.h"
 
 
 class ComboAttackRoot : public BaseComboAattackBehavior {
@@ -27,7 +28,8 @@ public:
 	void Update()override;
 	void Debug()override;
 
-	void JudgeAttackPatern(); //攻撃パターンの判断　
+	void JudgeAttackPattern(); //攻撃パターンの判断　
+    bool CheckConditionMuch(const PlayerComboAttackData::TriggerCondition& condition);
 
 
 };
