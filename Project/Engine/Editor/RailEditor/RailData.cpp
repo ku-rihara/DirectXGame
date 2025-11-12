@@ -1,6 +1,6 @@
 #include "RailData.h"
-#include "Line3D/Line3D.h"
 #include "Frame/Frame.h"
+#include "Line3D/Line3D.h"
 #include "MathFunction.h"
 #include <algorithm>
 #include <filesystem>
@@ -27,7 +27,7 @@ void RailData::Init(const std::string& railName) {
     }
 
     // リセット
-    ResetParams();
+    InitParams();
 }
 
 void RailData::Update(const float& speed, const PositionMode& mode, const Vector3& direction) {
@@ -72,27 +72,28 @@ void RailData::Update(const float& speed, const PositionMode& mode, const Vector
         rail_->Update(positions);
     }
 
-    LoopOrStop();
+    CheckAndHandleFinish();
 
     // Easing適用後の時間で現在位置を取得
     currentPosition_ = startPosition_ + rail_->GetPositionOnRail(easedTime_);
 }
 
-void RailData::LoopOrStop() {
+void RailData::CheckAndHandleFinish() {
     // イージングが完了したかチェック
     if (!timeEase_.IsFinished()) {
         return;
     }
 
-    if (isLoop_) {
-        timeEase_.Reset();
-        easedTime_ = 0.0f;
-    } else {
-        easedTime_ = 1.0f;
+    easedTime_ = 1.0f;
 
-        // 戻りモードが設定されている場合、戻り動作を開始
-        if (returnParam_.mode != ReturnMode::NONE) {
-            StartReturn();
+    // 戻りモードが設定されている場合、戻り動作を開始
+    if (returnParam_.mode != ReturnMode::NONE) {
+        StartReturn();
+    } else {
+        // 戻りモードがNONEの場合、ループ判定
+        if (isLoop_) {
+            timeEase_.Reset();
+            easedTime_ = 0.0f;
         } else {
             playState_ = PlayState::STOPPED;
         }
@@ -102,6 +103,7 @@ void RailData::LoopOrStop() {
 void RailData::StartReturn() {
     playState_                = PlayState::RETURNING;
     returnParam_.easeAdaptPos = Vector3::ZeroVector();
+    timeEase_.Reset();
 
     if (returnParam_.mode == ReturnMode::DIRECT_RETURN) {
         // 直接戻る用のイージング設定
@@ -113,8 +115,7 @@ void RailData::StartReturn() {
         returnParam_.ease.Reset();
     } else if (returnParam_.mode == ReturnMode::REVERSE_RAIL) {
         // レール逆走用のイージング設定を適用
-        timeEase_.SetStartValue(1.0f);
-        timeEase_.SetEndValue(0.0f);
+        EaseTimeSetup(true);
         timeEase_.SetMaxTime(returnParam_.maxTime);
         timeEase_.SetType(static_cast<EasingType>(returnParam_.easeType));
     }
@@ -130,10 +131,9 @@ void RailData::UpdateReturn(const float& speed) {
         if (easedTime_ <= 0.0f) {
             easedTime_       = 0.0f;
             currentPosition_ = startPosition_;
-            playState_       = PlayState::STOPPED;
-            // 元のイージング設定に戻す
-            timeEase_.SetMaxTime(maxTime_);
-            timeEase_.SetType(static_cast<EasingType>(easeType_));
+
+            // 戻り完了後の処理
+            OnReturnComplete();
         } else {
             currentPosition_ = startPosition_ + rail_->GetPositionOnRail(easedTime_);
         }
@@ -147,7 +147,9 @@ void RailData::UpdateReturn(const float& speed) {
 
         if (returnParam_.ease.IsFinished()) {
             currentPosition_ = startPosition_;
-            playState_       = PlayState::STOPPED;
+
+            // 戻り完了後の処理
+            OnReturnComplete();
         }
         break;
 
@@ -156,9 +158,24 @@ void RailData::UpdateReturn(const float& speed) {
     }
 }
 
+void RailData::OnReturnComplete() {
+    EaseTimeSetup(false);
+    // 戻り動作完了後の処理
+    if (isLoop_) {
+        // ループする場合は再度再生開始
+        Play();
+    } else {
+        // ループしない場合は停止
+        playState_ = PlayState::STOPPED;
+        // 元のイージング設定に戻す
+        timeEase_.SetMaxTime(maxTime_);
+        timeEase_.SetType(static_cast<EasingType>(easeType_));
+    }
+}
+
 void RailData::Play() {
     Reset();
-    startPosition_ = currentPosition_; // 開始位置を記憶
+    startPosition_ = currentPosition_;
     playState_     = PlayState::PLAYING;
     timeEase_.Reset();
 }
@@ -235,10 +252,10 @@ void RailData::SaveData() {
     globalParameter_->SaveFile(groupName_, folderPath_);
 
     // キーフレームデータの保存
-    SaveAllKeyFrames();
+    SaveKeyFrames();
 }
 
-void RailData::SaveAllKeyFrames() {
+void RailData::SaveKeyFrames() {
     // すべてのキーフレームを保存
     for (auto& keyFrame : controlPoints_) {
         keyFrame->SaveData();
@@ -322,7 +339,7 @@ void RailData::LoadParams() {
     returnParam_.mode     = static_cast<ReturnMode>(returnParam_.modeInt);
 }
 
-void RailData::ResetParams() {
+void RailData::InitParams() {
     playState_       = PlayState::STOPPED;
     currentPosition_ = Vector3::ZeroVector();
     startPosition_   = Vector3::ZeroVector();
@@ -331,10 +348,12 @@ void RailData::ResetParams() {
 
     // Easing初期化
     timeEase_.SetAdaptValue(&easedTime_);
-    timeEase_.SetStartValue(0.0f);
-    timeEase_.SetEndValue(1.0f);
+    EaseTimeSetup(false);
     timeEase_.SetMaxTime(maxTime_);
     timeEase_.SetType(static_cast<EasingType>(easeType_));
+
+    returnParam_.mode = static_cast<ReturnMode>(returnParam_.modeInt);
+    timeEase_.Reset();
 }
 
 void RailData::ImGuiKeyFrameList() {
@@ -405,6 +424,11 @@ void RailData::AdjustParam() {
         ImGui::DragFloat("Max Time", &maxTime_, 0.01f, 0.1f, 10.0f);
         ImGui::Checkbox("Loop", &isLoop_);
 
+        // ループの説明を追加
+        if (returnParam_.mode != ReturnMode::NONE) {
+            ImGui::TextWrapped("Note: Loop will restart after return completes");
+        }
+
         ImGui::Separator();
 
         // イージングタイプ選択
@@ -427,6 +451,7 @@ void RailData::AdjustParam() {
         if (returnParam_.mode != ReturnMode::NONE) {
             ImGui::DragFloat("Return Time", &returnParam_.maxTime, 0.01f, 0.1f, 10.0f);
             ImGuiEasingTypeSelector("Return Easing Type", returnParam_.easeType);
+            ImGui::TextWrapped("Return is part of one complete cycle");
         }
 
         ImGui::Separator();
@@ -474,21 +499,14 @@ void RailData::SetControlPointLines(Line3D* line3d, const Vector4& color) {
 
         line3d->SetLine(start, end, color);
     }
-
-    // ループする場合は最後と最初を繋ぐ
-    if (isLoop_ && controlPoints_.size() > 2) {
-        Vector3 start = controlPoints_[controlPoints_.size() - 1]->GetPosition() * direction_;
-        Vector3 end   = controlPoints_[0]->GetPosition() * direction_;
-
-        if (parentTransform_ != nullptr) {
-            Matrix4x4 parentMatrix = parentTransform_->matWorld_;
-            start                  = TransformMatrix(start, parentMatrix);
-            end                    = TransformMatrix(end, parentMatrix);
-        }
-
-        start = startPosition_ + start;
-        end   = startPosition_ + end;
-
-        line3d->SetLine(start, end, color);
-    }
 }
+
+void RailData::EaseTimeSetup(const bool& isReverse) {
+    if (isReverse) {
+        timeEase_.SetStartValue(1.0f);
+        timeEase_.SetEndValue(0.0f);
+    } else {
+        timeEase_.SetStartValue(0.0f);
+        timeEase_.SetEndValue(1.0f);
+    }
+ }

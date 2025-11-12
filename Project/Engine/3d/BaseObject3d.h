@@ -59,7 +59,7 @@ public:
     void StopObjEaseAnimation();
 
     /// <summary>
-    /// アニメーション更新（継承先のUpdate関数内で呼び出す）
+    /// アニメーション更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
     void UpdateObjEaseAnimation(const float& deltaTime);
