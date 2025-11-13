@@ -44,10 +44,10 @@ void RailData::Update(const float& speed, const PositionMode& mode, const Vector
     direction_ = direction;
 
     // Easingを更新
-    timeEase_.Update(speed);
+    railMoveParam_.timeEase.Update(speed);
 
     // 開始時間に達していない場合は待機
-    if (elapsedTime_ < startTime_) {
+    if (railMoveParam_.elapsedTime < railMoveParam_.startTime) {
         currentPosition_ = startPosition_; // 開始位置を保持
         return;
     }
@@ -75,25 +75,25 @@ void RailData::Update(const float& speed, const PositionMode& mode, const Vector
     CheckAndHandleFinish();
 
     // Easing適用後の時間で現在位置を取得
-    currentPosition_ = startPosition_ + rail_->GetPositionOnRail(easedTime_);
+    currentPosition_ = startPosition_ + rail_->GetPositionOnRail(railMoveParam_.adaptTime);
 }
 
 void RailData::CheckAndHandleFinish() {
     // イージングが完了したかチェック
-    if (!timeEase_.IsFinished()) {
+    if (!railMoveParam_.timeEase.IsFinished()) {
         return;
     }
 
-    easedTime_ = 1.0f;
+    railMoveParam_.adaptTime = 1.0f;
 
     // 戻りモードが設定されている場合、戻り動作を開始
-    if (returnParam_.mode != ReturnMode::NONE) {
+    if (railMoveParam_.returnMode != ReturnMode::NONE) {
         StartReturn();
     } else {
         // 戻りモードがNONEの場合、ループ判定
-        if (isLoop_) {
-            timeEase_.Reset();
-            easedTime_ = 0.0f;
+        if (railMoveParam_.isLoop) {
+            railMoveParam_.timeEase.Reset();
+            railMoveParam_.adaptTime = 0.0f;
         } else {
             playState_ = PlayState::STOPPED;
         }
@@ -102,50 +102,50 @@ void RailData::CheckAndHandleFinish() {
 
 void RailData::StartReturn() {
     playState_                = PlayState::RETURNING;
-    returnParam_.easeAdaptPos = Vector3::ZeroVector();
-    timeEase_.Reset();
+    directReturnParam_.easeAdaptPos = Vector3::ZeroVector();
+    railMoveParam_.timeEase.Reset();
 
-    if (returnParam_.mode == ReturnMode::DIRECT_RETURN) {
+    if (railMoveParam_.returnMode == ReturnMode::DIRECT_RETURN) {
         // 直接戻る用のイージング設定
-        returnParam_.ease.SetAdaptValue(&returnParam_.easeAdaptPos);
-        returnParam_.ease.SetStartValue(currentPosition_);
-        returnParam_.ease.SetEndValue(startPosition_);
-        returnParam_.ease.SetMaxTime(returnParam_.maxTime);
-        returnParam_.ease.SetType(static_cast<EasingType>(returnParam_.easeType));
-        returnParam_.ease.Reset();
-    } else if (returnParam_.mode == ReturnMode::REVERSE_RAIL) {
+        directReturnParam_.ease.SetAdaptValue(&directReturnParam_.easeAdaptPos);
+        directReturnParam_.ease.SetStartValue(currentPosition_);
+        directReturnParam_.ease.SetEndValue(startPosition_);
+        directReturnParam_.ease.SetMaxTime(directReturnParam_.maxTime);
+        directReturnParam_.ease.SetType(static_cast<EasingType>(directReturnParam_.easeTypeInt));
+        directReturnParam_.ease.Reset();
+    } else if (railMoveParam_.returnMode == ReturnMode::REVERSE_RAIL) {
         // レール逆走用のイージング設定を適用
         EaseTimeSetup(true);
-        timeEase_.SetMaxTime(returnParam_.maxTime);
-        timeEase_.SetType(static_cast<EasingType>(returnParam_.easeType));
+        railMoveParam_.timeEase.SetMaxTime(directReturnParam_.maxTime);
+        railMoveParam_.timeEase.SetType(static_cast<EasingType>(directReturnParam_.easeTypeInt));
     }
 }
 
 void RailData::UpdateReturn(const float& speed) {
-    switch (returnParam_.mode) {
+    switch (railMoveParam_.returnMode) {
     case ReturnMode::REVERSE_RAIL:
         // レールを逆走
-        timeEase_.Update(speed);
+        railMoveParam_.timeEase.Update(speed);
 
         // easedTimeが0以下になったら終了
-        if (easedTime_ <= 0.0f) {
-            easedTime_       = 0.0f;
+        if (railMoveParam_.adaptTime <= 0.0f) {
+            railMoveParam_.adaptTime       = 0.0f;
             currentPosition_ = startPosition_;
 
             // 戻り完了後の処理
             OnReturnComplete();
         } else {
-            currentPosition_ = startPosition_ + rail_->GetPositionOnRail(easedTime_);
+            currentPosition_ = startPosition_ + rail_->GetPositionOnRail(railMoveParam_.adaptTime);
         }
         break;
 
     case ReturnMode::DIRECT_RETURN:
         // 直接戻る
-        returnParam_.ease.Update(speed);
+        directReturnParam_.ease.Update(speed);
 
-        currentPosition_ = returnParam_.easeAdaptPos;
+        currentPosition_ = directReturnParam_.easeAdaptPos;
 
-        if (returnParam_.ease.IsFinished()) {
+        if (directReturnParam_.ease.IsFinished()) {
             currentPosition_ = startPosition_;
 
             // 戻り完了後の処理
@@ -161,15 +161,15 @@ void RailData::UpdateReturn(const float& speed) {
 void RailData::OnReturnComplete() {
     EaseTimeSetup(false);
     // 戻り動作完了後の処理
-    if (isLoop_) {
+    if (railMoveParam_.isLoop) {
         // ループする場合は再度再生開始
         Play();
     } else {
         // ループしない場合は停止
         playState_ = PlayState::STOPPED;
         // 元のイージング設定に戻す
-        timeEase_.SetMaxTime(maxTime_);
-        timeEase_.SetType(static_cast<EasingType>(easeType_));
+        railMoveParam_.timeEase.SetMaxTime(railMoveParam_.maxTime);
+        railMoveParam_.timeEase.SetType(static_cast<EasingType>(railMoveParam_.easeTypeInt));
     }
 }
 
@@ -177,7 +177,7 @@ void RailData::Play() {
     Reset();
     startPosition_ = currentPosition_;
     playState_     = PlayState::PLAYING;
-    timeEase_.Reset();
+    railMoveParam_.timeEase.Reset();
 }
 
 void RailData::Stop() {
@@ -186,10 +186,10 @@ void RailData::Stop() {
 }
 
 void RailData::Reset() {
-    elapsedTime_     = 0.0f;
-    easedTime_       = 0.0f;
+    railMoveParam_.elapsedTime     = 0.0f;
+    railMoveParam_.adaptTime       = 0.0f;
     currentPosition_ = startPosition_;
-    timeEase_.Reset();
+    railMoveParam_.timeEase.Reset();
 }
 
 bool RailData::IsFinished() const {
@@ -319,41 +319,41 @@ void RailData::RebuildAndLoadAllKeyFrames(const std::vector<std::pair<int32_t, s
 }
 
 void RailData::RegisterParams() {
-    globalParameter_->Regist(groupName_, "maxTime", &maxTime_);
-    globalParameter_->Regist(groupName_, "startTime", &startTime_);
-    globalParameter_->Regist(groupName_, "isLoop", &isLoop_);
-    globalParameter_->Regist(groupName_, "easeType", &easeType_);
-    globalParameter_->Regist(groupName_, "returnMode", &returnParam_.modeInt);
-    globalParameter_->Regist(groupName_, "returnTime", &returnParam_.maxTime);
-    globalParameter_->Regist(groupName_, "returnEaseType", &returnParam_.easeType);
+    globalParameter_->Regist(groupName_, "maxTime", &railMoveParam_.maxTime);
+    globalParameter_->Regist(groupName_, "startTime", &railMoveParam_.startTime);
+    globalParameter_->Regist(groupName_, "isLoop", &railMoveParam_.isLoop);
+    globalParameter_->Regist(groupName_, "easeType", &railMoveParam_.easeTypeInt);
+    globalParameter_->Regist(groupName_, "returnMode", &railMoveParam_.returnModeInt);
+    globalParameter_->Regist(groupName_, "returnTime", &directReturnParam_.maxTime);
+    globalParameter_->Regist(groupName_, "returnEaseType", &directReturnParam_.easeTypeInt);
 }
 
 void RailData::LoadParams() {
-    maxTime_              = globalParameter_->GetValue<float>(groupName_, "maxTime");
-    startTime_            = globalParameter_->GetValue<float>(groupName_, "startTime");
-    isLoop_               = globalParameter_->GetValue<bool>(groupName_, "isLoop");
-    easeType_             = globalParameter_->GetValue<int32_t>(groupName_, "easeType");
-    returnParam_.modeInt  = globalParameter_->GetValue<int32_t>(groupName_, "returnMode");
-    returnParam_.maxTime  = globalParameter_->GetValue<float>(groupName_, "returnTime");
-    returnParam_.easeType = globalParameter_->GetValue<int32_t>(groupName_, "returnEaseType");
-    returnParam_.mode     = static_cast<ReturnMode>(returnParam_.modeInt);
+    railMoveParam_.maxTime              = globalParameter_->GetValue<float>(groupName_, "maxTime");
+    railMoveParam_.startTime            = globalParameter_->GetValue<float>(groupName_, "startTime");
+    railMoveParam_.isLoop               = globalParameter_->GetValue<bool>(groupName_, "isLoop");
+    railMoveParam_.easeTypeInt             = globalParameter_->GetValue<int32_t>(groupName_, "easeType");
+    railMoveParam_.returnModeInt  = globalParameter_->GetValue<int32_t>(groupName_, "returnMode");
+    directReturnParam_.maxTime  = globalParameter_->GetValue<float>(groupName_, "returnTime");
+    directReturnParam_.easeTypeInt = globalParameter_->GetValue<int32_t>(groupName_, "returnEaseType");
+    railMoveParam_.returnMode     = static_cast<ReturnMode>(railMoveParam_.returnModeInt);
 }
 
 void RailData::InitParams() {
     playState_       = PlayState::STOPPED;
     currentPosition_ = Vector3::ZeroVector();
     startPosition_   = Vector3::ZeroVector();
-    elapsedTime_     = 0.0f;
-    easedTime_       = 0.0f;
+    railMoveParam_.elapsedTime     = 0.0f;
+    railMoveParam_.adaptTime       = 0.0f;
 
     // Easing初期化
-    timeEase_.SetAdaptValue(&easedTime_);
+    railMoveParam_.timeEase.SetAdaptValue(&railMoveParam_.adaptTime);
     EaseTimeSetup(false);
-    timeEase_.SetMaxTime(maxTime_);
-    timeEase_.SetType(static_cast<EasingType>(easeType_));
+    railMoveParam_.timeEase.SetMaxTime(railMoveParam_.maxTime);
+    railMoveParam_.timeEase.SetType(static_cast<EasingType>(railMoveParam_.easeTypeInt));
 
-    returnParam_.mode = static_cast<ReturnMode>(returnParam_.modeInt);
-    timeEase_.Reset();
+    railMoveParam_.returnMode = static_cast<ReturnMode>(railMoveParam_.returnModeInt);
+    railMoveParam_.timeEase.Reset();
 }
 
 void RailData::ImGuiKeyFrameList() {
@@ -414,43 +414,43 @@ void RailData::AdjustParam() {
         ImGui::Text("State: %s", stateText);
 
         // 進行状況を表示
-        float progress = easedTime_;
+        float progress = railMoveParam_.adaptTime;
         ImGui::ProgressBar(progress, ImVec2(0.0f, 0.0f), "Progress");
 
         ImGui::Separator();
 
         // パラメータ調整
-        ImGui::DragFloat("Start Time", &startTime_, 0.01f, 0.0f, 10.0f);
-        ImGui::DragFloat("Max Time", &maxTime_, 0.01f, 0.1f, 10.0f);
-        ImGui::Checkbox("Loop", &isLoop_);
+        ImGui::DragFloat("Start Time", &railMoveParam_.startTime, 0.01f, 0.0f, 10.0f);
+        ImGui::DragFloat("Max Time", &railMoveParam_.maxTime, 0.01f, 0.1f, 10.0f);
+        ImGui::Checkbox("Loop", &railMoveParam_.isLoop);
 
         // ループの説明を追加
-        if (returnParam_.mode != ReturnMode::NONE) {
+        if (railMoveParam_.returnMode != ReturnMode::NONE) {
             ImGui::TextWrapped("Note: Loop will restart after return completes");
         }
 
         ImGui::Separator();
 
         // イージングタイプ選択
-        ImGuiEasingTypeSelector("Easing Type", easeType_);
+        ImGuiEasingTypeSelector("Easing Type", railMoveParam_.easeTypeInt);
 
         // パラメータをEasingに反映
-        timeEase_.SetMaxTime(maxTime_);
-        timeEase_.SetType(static_cast<EasingType>(easeType_));
+        railMoveParam_.timeEase.SetMaxTime(railMoveParam_.maxTime);
+        railMoveParam_.timeEase.SetType(static_cast<EasingType>(railMoveParam_.easeTypeInt));
 
         ImGui::Separator();
 
         // 戻りモードの設定
         ImGui::SeparatorText("Return Settings");
         const char* returnModes[] = {"None", "Reverse Rail", "Direct Return"};
-        if (ImGui::Combo("Return Mode", &returnParam_.modeInt, returnModes, IM_ARRAYSIZE(returnModes))) {
-            returnParam_.mode = static_cast<ReturnMode>(returnParam_.modeInt);
+        if (ImGui::Combo("Return Mode", &railMoveParam_.returnModeInt, returnModes, IM_ARRAYSIZE(returnModes))) {
+            railMoveParam_.returnMode = static_cast<ReturnMode>(railMoveParam_.returnModeInt);
         }
 
         // 戻り用の設定を表示
-        if (returnParam_.mode != ReturnMode::NONE) {
-            ImGui::DragFloat("Return Time", &returnParam_.maxTime, 0.01f, 0.1f, 10.0f);
-            ImGuiEasingTypeSelector("Return Easing Type", returnParam_.easeType);
+        if (railMoveParam_.returnMode != ReturnMode::NONE) {
+            ImGui::DragFloat("Return Time", &directReturnParam_.maxTime, 0.01f, 0.1f, 10.0f);
+            ImGuiEasingTypeSelector("Return Easing Type", directReturnParam_.easeTypeInt);
             ImGui::TextWrapped("Return is part of one complete cycle");
         }
 
@@ -464,12 +464,6 @@ void RailData::AdjustParam() {
         ImGui::PopID();
     }
 #endif // _DEBUG
-}
-
-void RailData::SetSelectedKeyFrameIndex(const int32_t& index) {
-    if (index >= -1 && index < static_cast<int32_t>(controlPoints_.size())) {
-        selectedKeyFrameIndex_ = index;
-    }
 }
 
 void RailData::SetControlPointLines(Line3D* line3d, const Vector4& color) {
@@ -503,10 +497,10 @@ void RailData::SetControlPointLines(Line3D* line3d, const Vector4& color) {
 
 void RailData::EaseTimeSetup(const bool& isReverse) {
     if (isReverse) {
-        timeEase_.SetStartValue(1.0f);
-        timeEase_.SetEndValue(0.0f);
+        railMoveParam_.timeEase.SetStartValue(1.0f);
+        railMoveParam_.timeEase.SetEndValue(0.0f);
     } else {
-        timeEase_.SetStartValue(0.0f);
-        timeEase_.SetEndValue(1.0f);
+        railMoveParam_.timeEase.SetStartValue(0.0f);
+        railMoveParam_.timeEase.SetEndValue(1.0f);
     }
  }
