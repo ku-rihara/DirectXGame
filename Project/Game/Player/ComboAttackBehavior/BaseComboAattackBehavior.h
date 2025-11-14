@@ -39,12 +39,6 @@ public:
     virtual void Update() = 0; /// 更新
     virtual void Debug()  = 0; /// デバッグ
 
-    void AnimationInit();
-
-    void ScalingEaseUpdate();
-    void RotateMotionUpdate(const float& start, const float& end, const bool& isClockwise);
-    void FloatAnimationUpdate();
-
     virtual void PreOderNextComboForButton();
     virtual void ChangeNextCombo(std::unique_ptr<BaseComboAattackBehavior> nextCombo);
 

@@ -36,7 +36,7 @@ void LeftJobPunch::Init() {
     EasingInit();
 
     // 　モーション
-    BaseComboAattackBehavior::AnimationInit();
+    
 
     pPlayer_->SoundPunch();
     // 振る舞い順序初期化
@@ -47,10 +47,10 @@ void LeftJobPunch::Init() {
 void LeftJobPunch::Update() {
 
     // 　モーション
-    BaseComboAattackBehavior::RotateMotionUpdate(0, GetRotateValue(), true);
-    BaseComboAattackBehavior::FloatAnimationUpdate();
+    
+    
     /// スケール変化
-    BaseComboAattackBehavior::ScalingEaseUpdate();
+    
 
     pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
 

@@ -46,21 +46,17 @@ void RightJobPunch::Init() {
     EasingInit();
 
     // 　モーション
-    BaseComboAattackBehavior::AnimationInit();
+    
 
     // 振る舞い順序初期化
     order_ = Order::INIT;
 }
 
 // 更新
-void RightJobPunch::Update() {
-
-    // 　モーション
-    BaseComboAattackBehavior::RotateMotionUpdate(0, GetRotateValue(), false);
-    BaseComboAattackBehavior::FloatAnimationUpdate();
+void RightJobPunch::Update() {   
 
     /// スケール変化
-    BaseComboAattackBehavior::ScalingEaseUpdate();
+    
 
     // 攻撃中の移動
     pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);

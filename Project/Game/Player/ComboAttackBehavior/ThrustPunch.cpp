@@ -38,7 +38,7 @@ void ThrustPunch::Init() {
     thrustRailManager_ = pPlayer_->GetLeftHand()->GetThrustRailManager();
     thrustRailManager_->SetIsRoop(false);
 
-    BaseComboAattackBehavior::AnimationInit();
+    
 
     kTimeDownTime_ = 0.65f;
     timeDownTime_  = 0.0f;
@@ -55,8 +55,7 @@ void ThrustPunch::Init() {
 
 // 更新
 void ThrustPunch::Update() {
-    BaseComboAattackBehavior::RotateMotionUpdate(GetRotateValueAnti(), GetRotateValue(), false);
-
+   
     ChangeSlow();
 
     switch (order_) {

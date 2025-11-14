@@ -16,9 +16,7 @@ DynamicComboAttack::DynamicComboAttack(Player* player, PlayerComboAttackData* at
 DynamicComboAttack::~DynamicComboAttack() {}
 
 void DynamicComboAttack::Init() {
-
-    // アニメーション初期化
-    BaseComboAattackBehavior::AnimationInit();
+    BaseComboAattackBehavior::Init();  
 
     // タイミングのリセット
     currentFrame_      = 0.0f;
@@ -51,11 +49,7 @@ void DynamicComboAttack::Init() {
 }
 
 void DynamicComboAttack::Update() {
-    // モーション更新
-    BaseComboAattackBehavior::RotateMotionUpdate(0, GetRotateValue(), true);
-    BaseComboAattackBehavior::FloatAnimationUpdate();
-    BaseComboAattackBehavior::ScalingEaseUpdate();
-
+ 
     // 通常移動
     pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
 
@@ -81,10 +75,7 @@ void DynamicComboAttack::Update() {
 }
 
 void DynamicComboAttack::InitializeAttack() {
-    // カメラアニメーション再生
-    if (pPlayer_->GetGameCamera()) {
-        // pPlayer_->GetGameCamera()->PlayAnimation("ComboAttack");
-    }
+   
 
     SetupCollision();
     order_ = Order::ATTACK;

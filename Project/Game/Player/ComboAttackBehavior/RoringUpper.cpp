@@ -51,7 +51,7 @@ void RoringUpper::Init() {
     fallSpeedLimit_ = pPlayerParameter_->GetParamaters().upperJump.fallSpeedLimit * 60.0f; // 5.2
 
     // 　モーション
-    BaseComboAattackBehavior::AnimationInit();
+    
 
     // hitStop
     isHitStop_ = false;
@@ -71,7 +71,7 @@ void RoringUpper::Init() {
 // 更新
 void RoringUpper::Update() {
 
-    BaseComboAattackBehavior::ScalingEaseUpdate();
+    
     // 向き変更
     pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
 

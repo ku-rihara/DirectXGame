@@ -40,7 +40,7 @@ void JumpRush::Init() {
     });
 
     // 　モーション
-    BaseComboAattackBehavior::AnimationInit();
+    
 
     // 振る舞い順序初期化
     order_ = Order::CALUCRATION;
@@ -48,10 +48,8 @@ void JumpRush::Init() {
 
 //更新
 void JumpRush::Update() {
-	BaseComboAattackBehavior::RotateMotionUpdate(0, GetRotateValueAnti(), true);
-	BaseComboAattackBehavior::ScalingEaseUpdate();
 	
-
+	
 	switch (order_) {
 
 		///----------------------------------------------------
