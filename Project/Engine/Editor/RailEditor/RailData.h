@@ -1,8 +1,8 @@
 #pragma once
 #include "Easing/Easing.h"
-#include "RailControlPoint.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Editor/RailEditor/Rail.h"
+#include "RailControlPoint.h"
 #include "Vector3.h"
 #include <cstdint>
 #include <memory>
@@ -34,13 +34,23 @@ public:
         DIRECT_RETURN // 直接元の位置に戻る
     };
 
-    struct ReturnParam {
-        ReturnMode mode  = ReturnMode::NONE;
-        int32_t modeInt  = 0;
+    struct RailDirectReturnParam {
         float maxTime    = 1.0f;
-        int32_t easeType = 0;
+        int32_t easeTypeInt = 0;
         Easing<Vector3> ease;
         Vector3 easeAdaptPos;
+    };
+
+    struct RailMoveParam {
+        ReturnMode returnMode = ReturnMode::NONE;
+        float maxTime = 1.0f;
+        float startTime;
+        int32_t easeTypeInt = 0;
+        int32_t returnModeInt = 0;
+        bool isLoop;
+        float elapsedTime;
+        Easing<float> timeEase;
+        float adaptTime;
     };
 
 public:
@@ -106,17 +116,23 @@ public:
 
 private:
     void RegisterParams(); //< パラメータのバインド
+
     void LoadParams(); //< パラメータ取得
     void InitParams(); //< パラメータリセット
+
     void LoopOrStop(); //< ループまたは停止
     void StartReturn(); //< 戻り動作を開始
+
     void UpdateReturn(const float& speed); //< 戻り動作の更新
-    void ImGuiKeyFrameList(); //< キーフレームリストのImGui
+    void ImGuiKeyFrameList();              //< キーフレームリストのImGui
     void RebuildAndLoadAllKeyFrames(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
+
     void CheckAndHandleFinish();
     void OnReturnComplete();
-    void EaseTimeSetup(const bool&isReverse);
-    private:
+
+    void EaseTimeSetup(const bool& isReverse);
+
+private:
     GlobalParameter* globalParameter_;
     std::string groupName_;
     std::string folderPath_ = "RailEditor/Dates";
@@ -126,15 +142,6 @@ private:
     // キーフレームリスト
     std::vector<std::unique_ptr<RailControlPoint>> controlPoints_;
     int32_t selectedKeyFrameIndex_ = -1;
-
-    float maxTime_    = 1.0f;
-    float startTime_  = 0.0f;
-    int32_t easeType_ = 0;
-    bool isLoop_      = true;
-
-    float elapsedTime_ = 0.0f;
-    Easing<float> timeEase_;
-    float easedTime_ = 0.0f;
 
     PlayState playState_ = PlayState::STOPPED;
 
@@ -147,8 +154,9 @@ private:
     bool showControls_     = true;
     bool showKeyFrameList_ = true;
 
-    //  戻り動作用のパラメータ
-    ReturnParam returnParam_;
+    // イージングパラメータ
+    RailDirectReturnParam directReturnParam_;
+    RailMoveParam railMoveParam_;
 
     // 線描画の表示設定
     bool showControlPointLines_ = true;
@@ -156,16 +164,7 @@ private:
 public:
     const std::string& GetGroupName() const { return groupName_; }
     const Vector3& GetCurrentPosition() const { return currentPosition_; }
-    const bool& GetIsLoop() const { return isLoop_; }
-    Rail* GetRail() { return rail_.get(); }
     WorldTransform* GetParentTransform() const { return parentTransform_; }
-    const std::vector<std::unique_ptr<RailControlPoint>>& GetKeyFrames() const { return controlPoints_; }
-    const int32_t& GetKeyFrameCount() const { return static_cast<int32_t>(controlPoints_.size()); }
-    const bool GetShowControlPointLines()& { return showControlPointLines_; }
-
-    void SetIsLoop(const bool& loop) { isLoop_ = loop; }
-    void SetParent(WorldTransform* parent) { parentTransform_ = parent; }
-    void SetDirection(const Vector3& direction) { direction_ = direction; }
-    void SetSelectedKeyFrameIndex(const int32_t& index);
-    void SetShowControlPointLines(const bool& show) { showControlPointLines_ = show; }
+  
+    void SetParent(WorldTransform* parent) { parentTransform_ = parent; }   
 };

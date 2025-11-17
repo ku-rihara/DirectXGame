@@ -1,9 +1,9 @@
 #pragma once
 #include "Easing/Easing.h"
-#include "Quaternion.h"
-#include "utility/FileSelector/FileSelector.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Editor/RailEditor/RailPlayer.h"
+#include "Quaternion.h"
+#include "utility/FileSelector/FileSelector.h"
 #include "Vector3.h"
 #include <cstdint>
 #include <memory>
@@ -33,8 +33,7 @@ public:
         bool isActive          = false;
         bool useRail           = false;
         bool returnToOrigin    = false;
-        bool isParentAdapt     = false; 
-        bool useCurrentAsStart = false; 
+        bool useCurrentAsStart = false;
 
         Vector3 startValue = Vector3::OneVector();
         Vector3 endValue   = Vector3::OneVector();
@@ -76,14 +75,19 @@ public:
     /// <param name="deltaTime">デルタタイム</param>
     void Update(const float& deltaTime);
 
-    void AdjustParam(); //< パラメータ調整
-    void Play(); //< 再生
-    void Stop(); //< 停止
-    void Reset(); //< リセット
-    void LoadData(); //< データロード
-    void SaveData(); //< データセーブ
-    bool IsPlaying() const; //< 再生中か
-    bool IsFinished() const; //< 終了したか
+    // 再生制御
+    void Play();
+    void Stop();
+    void Reset();
+
+    // 編集、セーブ、ロード
+    void AdjustParam(); 
+    void LoadData(); 
+    void SaveData(); 
+
+    // 再生状態
+    bool IsPlaying() const; 
+    bool IsFinished() const;
 
     /// <summary>
     /// 親Transformを設定
@@ -117,7 +121,7 @@ private:
     std::unique_ptr<RailPlayer> railPlayer_;
     RailFileSelector railFileSelector_;
 
-    // 元の値（戻り用）
+    // 元の値
     Vector3 originalScale_       = Vector3::OneVector();
     Vector3 originalRotation_    = Vector3::ZeroVector();
     Vector3 originalTranslation_ = Vector3::ZeroVector();
@@ -135,9 +139,4 @@ public:
     const Vector3& GetCurrentTranslation() const { return translationParam_.currentValue; }
     RailPlayer* GetRailPlayer() { return railPlayer_.get(); }
     bool IsUsingRail() const { return translationParam_.useRail && translationParam_.isActive; }
-
-    // 親適用フラグの取得
-    bool IsScaleParentAdapt() const { return scaleParam_.isParentAdapt; }
-    bool IsRotationParentAdapt() const { return rotationParam_.isParentAdapt; }
-    bool IsTranslationParentAdapt() const { return translationParam_.isParentAdapt; }
 };
