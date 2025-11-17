@@ -5,14 +5,14 @@
 
 // class
 #include "BaseObject/BaseObject.h"
-#include "Behavior/BaseEnemyBehavior.h"
-#include "Behavior/BaseEnemyMoveBehavior.h"
+#include "../Behavior/BaseEnemyBehavior.h"
+#include "../Behavior/BaseEnemyMoveBehavior.h"
 #include "Collider/AABBCollider.h"
 #include "CollisionBox/EnemyCollisionBox.h"
 #include "Enemy/HPBar/EnemyHPBar.h"
 
-#include "SearchingSprite/FindSprite.h"
-#include "SearchingSprite/NotFindSprite.h"
+#include "../SearchingSprite/FindSprite.h"
+#include "../SearchingSprite/NotFindSprite.h"
 #include <cstdint>
 
 class Player;

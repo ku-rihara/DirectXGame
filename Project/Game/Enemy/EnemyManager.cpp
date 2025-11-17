@@ -1,6 +1,6 @@
 #include "EnemyManager.h"
-#include "NormalEnemy.h"
-#include "StrongEnemy.h"
+#include "Types/NormalEnemy.h"
+#include "Types/StrongEnemy.h"
 
 #include "AttackEffect/AttackEffect.h"
 #include "Combo/Combo.h"

@@ -1,7 +1,7 @@
 #include "PlayerCollisionInfo.h"
 #include "Frame/Frame.h"
 // enemy
-#include "Enemy/BaseEnemy.h"
+#include "Enemy/Types/BaseEnemy.h"
 #include <imgui.h>
 
 void PlayerCollisionInfo::Init() {

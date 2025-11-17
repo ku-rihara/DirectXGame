@@ -3,7 +3,7 @@
 #include"EnemyDamageRoot.h"
 #include"EnemyChasePlayer.h"
 /// obj
-#include"Enemy/BaseEnemy.h"
+#include"Enemy/Types/BaseEnemy.h"
 #include"Player/Player.h"
 /// math
 #include"MathFunction.h"

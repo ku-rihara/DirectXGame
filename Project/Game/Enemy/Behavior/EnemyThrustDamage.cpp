@@ -6,7 +6,7 @@
 #include"GameCamera/GameCamera.h"
 
 /// obj
-#include"Enemy/BaseEnemy.h"
+#include"Enemy/Types/BaseEnemy.h"
 #include"Player/Player.h"
 /// math
 #include"MathFunction.h"

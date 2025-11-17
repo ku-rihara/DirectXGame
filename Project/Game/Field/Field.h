@@ -21,5 +21,5 @@ public:
 
 private:
     std::unique_ptr<Object3d> obj3d_ = nullptr;
-    std::array<std::unique_ptr<ParticleEmitter>, 1> emitter_;
+  
 };

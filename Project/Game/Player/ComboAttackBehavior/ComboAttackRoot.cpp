@@ -33,8 +33,9 @@ void ComboAttackRoot::Update() {
     const auto& attacks = controller->GetAllAttacks();
 
     for (const auto& attackPtr : attacks) {
-        if (!attackPtr)
+        if (!attackPtr) {
             continue;
+        }
 
         auto& attackParam  = attackPtr->GetAttackParam();
         auto& triggerParam = attackParam.triggerParam;

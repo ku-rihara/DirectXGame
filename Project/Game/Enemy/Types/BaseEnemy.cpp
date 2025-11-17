@@ -1,14 +1,14 @@
 #include "BaseEnemy.h"
 
 // behavior
-#include "Behavior/EnemyBoundDamage.h"
-#include "Behavior/EnemyDamageRoot.h"
-#include "Behavior/EnemyDeath.h"
-#include "Behavior/EnemyHitBackDamage.h"
-#include "Behavior/EnemySpawn.h"
-#include "Behavior/EnemyStopDamage.h"
-#include "Behavior/EnemyThrustDamage.h"
-#include "Behavior/EnemyUpperDamage.h"
+#include "../Behavior/EnemyBoundDamage.h"
+#include "../Behavior/EnemyDamageRoot.h"
+#include "../Behavior/EnemyDeath.h"
+#include "../Behavior/EnemyHitBackDamage.h"
+#include "../Behavior/EnemySpawn.h"
+#include "../Behavior/EnemyStopDamage.h"
+#include "../Behavior/EnemyThrustDamage.h"
+#include "../Behavior/EnemyUpperDamage.h"
 #include "Enemy/EnemyManager.h"
 
 #include "Combo/Combo.h"

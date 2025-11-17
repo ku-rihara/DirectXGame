@@ -16,7 +16,7 @@ DynamicComboAttack::DynamicComboAttack(Player* player, PlayerComboAttackData* at
 DynamicComboAttack::~DynamicComboAttack() {}
 
 void DynamicComboAttack::Init() {
-    BaseComboAattackBehavior::Init();  
+    BaseComboAattackBehavior::Init();
 
     // タイミングのリセット
     currentFrame_      = 0.0f;
@@ -49,19 +49,23 @@ void DynamicComboAttack::Init() {
 }
 
 void DynamicComboAttack::Update() {
- 
+
     // 通常移動
     pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
 
     switch (order_) {
+
+        // 攻撃初期化
     case Order::INIT:
         InitializeAttack();
         break;
 
+        // 攻撃更新
     case Order::ATTACK:
         UpdateAttack();
         break;
 
+        //
     case Order::RECOVERY:
         UpdateRecovery();
         break;
@@ -75,7 +79,6 @@ void DynamicComboAttack::Update() {
 }
 
 void DynamicComboAttack::InitializeAttack() {
-   
 
     SetupCollision();
     order_ = Order::ATTACK;
@@ -119,15 +122,16 @@ void DynamicComboAttack::UpdateAttack() {
 
 void DynamicComboAttack::UpdateRecovery() {
     pPlayer_->AdaptRotate();
+    order_ = Order::WAIT;
 
     // 硬直時間
-    static float recoveryTime = 0.0f;
-    recoveryTime += atkSpeed_;
+    // static float recoveryTime = 0.0f;
+    // recoveryTime += atkSpeed_;
 
-    if (recoveryTime >= 0.2f) { // 0.2秒の硬直
-        recoveryTime = 0.0f;
-        order_       = Order::WAIT;
-    }
+    // if (recoveryTime >= 0.2f) { // 0.2秒の硬直
+    //     recoveryTime = 0.0f;
+    //     order_       = Order::WAIT;
+    // }
 }
 
 void DynamicComboAttack::UpdateWait() {
@@ -145,25 +149,27 @@ void DynamicComboAttack::UpdateWait() {
         if (waitTime_ >= timingParam.precedeInputFrame) {
             BaseComboAattackBehavior::PreOderNextComboForButton();
 
-            if (isNextCombo_) {
-                // 次の攻撃データを取得
-                auto& nextAttackType = attackData_->GetAttackParam().nextAttackType;
+            if (!isNextCombo_) {
+                return;
+            }
 
-                if (nextAttackType != "None" && !nextAttackType.empty()) {
-                    // ComboAttackControllerから次の攻撃データを取得
-                    auto* nextAttackData = pPlayer_->GetComboAttackController()->GetAttackByName(nextAttackType);
+            // 次の攻撃データを取得
+            auto& nextAttackType = attackData_->GetAttackParam().nextAttackType;
 
-                    if (nextAttackData) {
-                        BaseComboAattackBehavior::ChangeNextCombo(
-                            std::make_unique<DynamicComboAttack>(pPlayer_, nextAttackData));
-                    } else {
-                        // データが見つからない場合はルートに戻る
-                        pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
-                    }
+            if (nextAttackType != "None" && !nextAttackType.empty()) {
+                // ComboAttackControllerから次の攻撃データを取得
+                auto* nextAttackData = pPlayer_->GetComboAttackController()->GetAttackByName(nextAttackType);
+
+                if (nextAttackData) {
+                    BaseComboAattackBehavior::ChangeNextCombo(
+                        std::make_unique<DynamicComboAttack>(pPlayer_, nextAttackData));
                 } else {
-                    // 次の攻撃が設定されていない場合はルートに戻る
+                    // データが見つからない場合はルートに戻る
                     pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
                 }
+            } else {
+                // 次の攻撃が設定されていない場合はルートに戻る
+                pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
             }
         }
     }

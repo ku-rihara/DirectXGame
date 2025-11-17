@@ -1,9 +1,7 @@
 #pragma once
 #include <list>
 #include <memory>
-// Function
-
-// class
+// baseEnemy
 #include "BaseEnemy.h"
 
 /// <summary>

@@ -1,7 +1,6 @@
 #pragma once
-// Function
 
-// class
+// baseEnemy
 #include "BaseEnemy.h"
 
 /// <summary>

@@ -6,7 +6,7 @@
 /// math
 #include "MathFunction.h"
 /// obj
-#include "Enemy/BaseEnemy.h"
+#include "Enemy/Types/BaseEnemy.h"
 #include "Player/Player.h" /// プレイヤーの座標取得に使ってるので消さないこと
 /// frame
 #include "Frame/Frame.h"

@@ -1,5 +1,5 @@
 #include "BaseEnemyBehavior.h"
-#include"Enemy/BaseEnemy.h"
+#include"Enemy/Types/BaseEnemy.h"
 #include"Player/Player.h"
 
 

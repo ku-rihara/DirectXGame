@@ -1,7 +1,7 @@
 #pragma once
 
 #include "3d/ViewProjection.h"
-#include "BaseEnemy.h"
+#include "Types/BaseEnemy.h"
 #include "Editor/ParticleEditor/ParticleEmitter.h"
 
 /// std
