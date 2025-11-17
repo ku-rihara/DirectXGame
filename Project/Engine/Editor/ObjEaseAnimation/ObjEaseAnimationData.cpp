@@ -47,22 +47,12 @@ void ObjEaseAnimationData::UpdateTransforms(const float& deltaTime) {
     if (scaleParam_.isActive) {
         scaleParam_.ease.Update(deltaTime);
         scaleParam_.currentValue = scaleParam_.ease.GetValue();
-
-        // 親Transform適用
-        if (scaleParam_.isParentAdapt && parentTransform_) {
-            parentTransform_->scale_ = scaleParam_.currentValue;
-        }
     }
 
     // Rotation更新
     if (rotationParam_.isActive) {
         rotationParam_.ease.Update(deltaTime);
         rotationParam_.currentValue = rotationParam_.ease.GetValue();
-
-        // 親Transform適用
-        if (rotationParam_.isParentAdapt && parentTransform_) {
-            parentTransform_->rotation_ = rotationParam_.currentValue;
-        }
     }
 
     // Translation更新
@@ -76,14 +66,10 @@ void ObjEaseAnimationData::UpdateTransforms(const float& deltaTime) {
             translationParam_.ease.Update(deltaTime);
             translationParam_.currentValue = translationParam_.ease.GetValue();
         }
-
-        // 親Transform適用
-        if (translationParam_.isParentAdapt && parentTransform_) {
-            parentTransform_->translation_ = translationParam_.currentValue;
-        }
     }
 }
 
+// UpdateReturnメソッド - 親Transform適用部分を削除
 void ObjEaseAnimationData::UpdateReturn(const float& deltaTime) {
     bool allFinished = true;
 
@@ -91,11 +77,6 @@ void ObjEaseAnimationData::UpdateReturn(const float& deltaTime) {
     if (scaleParam_.isActive && scaleParam_.returnToOrigin) {
         scaleParam_.ease.Update(deltaTime);
         scaleParam_.currentValue = scaleParam_.ease.GetValue();
-
-        // 親Transform適用
-        if (scaleParam_.isParentAdapt && parentTransform_) {
-            parentTransform_->scale_ = scaleParam_.currentValue;
-        }
 
         if (!scaleParam_.ease.IsFinished()) {
             allFinished = false;
@@ -106,11 +87,6 @@ void ObjEaseAnimationData::UpdateReturn(const float& deltaTime) {
     if (rotationParam_.isActive && rotationParam_.returnToOrigin) {
         rotationParam_.ease.Update(deltaTime);
         rotationParam_.currentValue = rotationParam_.ease.GetValue();
-
-        // 親Transform適用
-        if (rotationParam_.isParentAdapt && parentTransform_) {
-            parentTransform_->rotation_ = rotationParam_.currentValue;
-        }
 
         if (!rotationParam_.ease.IsFinished()) {
             allFinished = false;
@@ -131,11 +107,6 @@ void ObjEaseAnimationData::UpdateReturn(const float& deltaTime) {
             if (!translationParam_.ease.IsFinished()) {
                 allFinished = false;
             }
-        }
-
-        // 親Transform適用
-        if (translationParam_.isParentAdapt && parentTransform_) {
-            parentTransform_->translation_ = translationParam_.currentValue;
         }
     }
 
@@ -300,19 +271,6 @@ void ObjEaseAnimationData::Stop() {
     rotationParam_.currentValue    = originalRotation_;
     translationParam_.currentValue = originalTranslation_;
 
-    // 親Transformにも適用
-    if (parentTransform_) {
-        if (scaleParam_.isParentAdapt) {
-            parentTransform_->scale_ = originalScale_;
-        }
-        if (rotationParam_.isParentAdapt) {
-            parentTransform_->rotation_ = originalRotation_;
-        }
-        if (translationParam_.isParentAdapt) {
-            parentTransform_->translation_ = originalTranslation_;
-        }
-    }
-
     if (railPlayer_) {
         railPlayer_->Stop();
     }
@@ -353,7 +311,6 @@ void ObjEaseAnimationData::SaveData() {
 void ObjEaseAnimationData::RegisterParams() {
     // Scale
     globalParameter_->Regist(groupName_, "Scale_IsActive", &scaleParam_.isActive);
-    globalParameter_->Regist(groupName_, "Scale_IsParentAdapt", &scaleParam_.isParentAdapt);
     globalParameter_->Regist(groupName_, "Scale_UseCurrentAsStart", &scaleParam_.useCurrentAsStart);
     globalParameter_->Regist(groupName_, "Scale_ReturnToOrigin", &scaleParam_.returnToOrigin);
     globalParameter_->Regist(groupName_, "Scale_StartValue", &scaleParam_.startValue);
@@ -365,7 +322,6 @@ void ObjEaseAnimationData::RegisterParams() {
 
     // Rotation
     globalParameter_->Regist(groupName_, "Rotation_IsActive", &rotationParam_.isActive);
-    globalParameter_->Regist(groupName_, "Rotation_IsParentAdapt", &rotationParam_.isParentAdapt);
     globalParameter_->Regist(groupName_, "Rotation_UseCurrentAsStart", &rotationParam_.useCurrentAsStart);
     globalParameter_->Regist(groupName_, "Rotation_ReturnToOrigin", &rotationParam_.returnToOrigin);
     globalParameter_->Regist(groupName_, "Rotation_StartValue", &rotationParam_.startValue);
@@ -377,7 +333,6 @@ void ObjEaseAnimationData::RegisterParams() {
 
     // Translation
     globalParameter_->Regist(groupName_, "Translation_IsActive", &translationParam_.isActive);
-    globalParameter_->Regist(groupName_, "Translation_IsParentAdapt", &translationParam_.isParentAdapt);
     globalParameter_->Regist(groupName_, "Translation_UseCurrentAsStart", &translationParam_.useCurrentAsStart);
     globalParameter_->Regist(groupName_, "Translation_UseRail", &translationParam_.useRail);
     globalParameter_->Regist(groupName_, "Translation_ReturnToOrigin", &translationParam_.returnToOrigin);
@@ -393,7 +348,6 @@ void ObjEaseAnimationData::RegisterParams() {
 void ObjEaseAnimationData::LoadParams() {
     // Scale
     scaleParam_.isActive          = globalParameter_->GetValue<bool>(groupName_, "Scale_IsActive");
-    scaleParam_.isParentAdapt     = globalParameter_->GetValue<bool>(groupName_, "Scale_IsParentAdapt");
     scaleParam_.useCurrentAsStart = globalParameter_->GetValue<bool>(groupName_, "Scale_UseCurrentAsStart");
     scaleParam_.returnToOrigin    = globalParameter_->GetValue<bool>(groupName_, "Scale_ReturnToOrigin");
     scaleParam_.startValue        = globalParameter_->GetValue<Vector3>(groupName_, "Scale_StartValue");
@@ -405,8 +359,7 @@ void ObjEaseAnimationData::LoadParams() {
 
     // Rotation
     rotationParam_.isActive          = globalParameter_->GetValue<bool>(groupName_, "Rotation_IsActive");
-    rotationParam_.isParentAdapt     = globalParameter_->GetValue<bool>(groupName_, "Rotation_IsParentAdapt");
-    rotationParam_.useCurrentAsStart = globalParameter_->GetValue<bool>(groupName_, "Rotation_UseCurrentAsStart");
+   rotationParam_.useCurrentAsStart = globalParameter_->GetValue<bool>(groupName_, "Rotation_UseCurrentAsStart");
     rotationParam_.returnToOrigin    = globalParameter_->GetValue<bool>(groupName_, "Rotation_ReturnToOrigin");
     rotationParam_.startValue        = globalParameter_->GetValue<Vector3>(groupName_, "Rotation_StartValue");
     rotationParam_.endValue          = globalParameter_->GetValue<Vector3>(groupName_, "Rotation_EndValue");
@@ -417,7 +370,6 @@ void ObjEaseAnimationData::LoadParams() {
 
     // Translation
     translationParam_.isActive          = globalParameter_->GetValue<bool>(groupName_, "Translation_IsActive");
-    translationParam_.isParentAdapt     = globalParameter_->GetValue<bool>(groupName_, "Translation_IsParentAdapt");
     translationParam_.useCurrentAsStart = globalParameter_->GetValue<bool>(groupName_, "Translation_UseCurrentAsStart");
     translationParam_.useRail           = globalParameter_->GetValue<bool>(groupName_, "Translation_UseRail");
     translationParam_.returnToOrigin    = globalParameter_->GetValue<bool>(groupName_, "Translation_ReturnToOrigin");
@@ -449,7 +401,6 @@ void ObjEaseAnimationData::ImGuiTransformParam(const char* label, TransformParam
     if (!param.isActive)
         return;
 
-    ImGui::Checkbox("Parent Adapt", &param.isParentAdapt);
     ImGui::Checkbox("Use Current As Start", &param.useCurrentAsStart);
     ImGui::Checkbox("Return To Origin", &param.returnToOrigin);
 
