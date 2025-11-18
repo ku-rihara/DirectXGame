@@ -7,22 +7,21 @@
 void EnemyDamageReactionData::Init(const std::string& reactionName) {
     // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
-
     // グループ名設定
     groupName_ = reactionName;
-    globalParameter_->CreateGroup(groupName_);
 
-    // バインド
+    // 新規登録
+    globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
 void EnemyDamageReactionData::LoadData() {
     globalParameter_->LoadFile(groupName_, folderPath_);
-    globalParameter_->SyncParamForGroup(groupName_);
-
     // 演出データをロード
     LoadRenditions();
+
+    globalParameter_->SyncParamForGroup(groupName_);
 }
 
 void EnemyDamageReactionData::SaveData() {

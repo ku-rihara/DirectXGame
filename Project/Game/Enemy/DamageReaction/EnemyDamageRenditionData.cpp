@@ -38,6 +38,7 @@ void EnemyDamageRenditionData::RegisterParams() {
     globalParameter_->Regist(groupName_, "isAdaptParentS", &objAnimationParams_.first.isAdaptParentS);
     globalParameter_->Regist(groupName_, "isAdaptParentR", &objAnimationParams_.first.isAdaptParentR);
     globalParameter_->Regist(groupName_, "isAdaptParentT", &objAnimationParams_.first.isAdaptParentT);
+    globalParameter_->Regist(groupName_, "isPriorityDeath", &objAnimationParams_.first.isPriorityDeath);
 }
 
 void EnemyDamageRenditionData::AdjustParam() {
@@ -54,7 +55,8 @@ void EnemyDamageRenditionData::AdjustParam() {
     ImGui::Checkbox("Adapt Parent Scale", &objAnimationParams_.first.isAdaptParentS);
     ImGui::Checkbox("Adapt Parent Rotate", &objAnimationParams_.first.isAdaptParentR);
     ImGui::Checkbox("Adapt Parent Translate", &objAnimationParams_.first.isAdaptParentT);
-
+    ImGui::SeparatorText("IsPriorityDeath");
+    ImGui::Checkbox("PriorityDeath", &objAnimationParams_.first.isPriorityDeath);
     ImGui::PopID();
 #endif
 }

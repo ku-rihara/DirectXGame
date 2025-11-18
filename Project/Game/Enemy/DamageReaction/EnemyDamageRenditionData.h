@@ -15,10 +15,11 @@ public:
     // オブジェクトアニメーションパラメータ
     struct ObjAnimationParam {
         std::string fileName;
-        float startTiming   = 0.0f;
-        bool isAdaptParentS = false;
-        bool isAdaptParentR = false;
-        bool isAdaptParentT = false;
+        float startTiming    = 0.0f;
+        bool isAdaptParentS  = false;
+        bool isAdaptParentR  = false;
+        bool isAdaptParentT  = false;
+        bool isPriorityDeath = false;
     };
 
 public:

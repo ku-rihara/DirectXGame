@@ -21,7 +21,6 @@ void EnemyDamageReactionController::AllLoadFile() {
             if (entry.is_regular_file() && entry.path().extension() == ".json") {
                 std::string fileName = entry.path().stem().string();
 
- 
                 // 新規作成してロード
                 auto attack = std::make_unique<EnemyDamageReactionData>();
                 attack->Init(fileName);
@@ -97,7 +96,6 @@ void EnemyDamageReactionController::EditorUpdate() {
             ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
             if (ImGui::Button(("Load " + attackName).c_str())) {
                 selectedAttack->LoadData();
-                MessageBoxA(nullptr, (attackName + " loaded successfully.").c_str(), "Attack Creator", 0);
             }
             ImGui::PopStyleColor(3);
             ImGui::SameLine();

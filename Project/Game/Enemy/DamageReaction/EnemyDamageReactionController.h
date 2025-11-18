@@ -33,7 +33,7 @@ private:
     //*-------------------------------- Private variants--------------------------------*//
     
     // 共通パラメータ
-    const std::string AttackDataFolderPath_ = "Resources/GlobalParameter/EnemyDamageReactionController/";
+    const std::string AttackDataFolderPath_ = "Resources/GlobalParameter/EnemyDamageReaction/ReactionDates/";
 
     std::vector<std::unique_ptr<EnemyDamageReactionData>> reactions_;
     int selectedIndex_    = -1;
