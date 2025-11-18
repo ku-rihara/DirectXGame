@@ -42,20 +42,18 @@ public:
     void SpawnEnemy(const std::string& enemyType, const Vector3& position, const int32_t& groupID);
     void HpBarUpdate(const ViewProjection& viewProjection);
 
-    ///-------------------------------------------------------------------------------------
-    /// Particle
-    ///-------------------------------------------------------------------------------------
+    // Particle Effect
     void DamageEffectShot(const Vector3& pos);
     void ThrustEmit(const Vector3& pos);
     void DeathEmit(const Vector3& pos);
     void SpawnEmitByNormalEnemy(const Vector3& pos);
     void SpawnEmitByStrongEnemy(const Vector3& pos);
     void ParticleUpdate();
-    ///-------------------------------------------------------------------------------------
-    /// Editor
-    ///-------------------------------------------------------------------------------------
+    
+    // Param Edit
     void RegisterParams();
     void AdjustParam();
+    void DamageReactionCreate();
     void DrawEnemyParamUI(BaseEnemy::Type type);
 
 private: // struct

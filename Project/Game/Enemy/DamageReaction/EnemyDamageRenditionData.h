@@ -49,7 +49,7 @@ private:
     GlobalParameter* globalParameter_;
     std::string groupName_;
     int32_t currentRenditionIndex_            = -1;
-    std::string folderPath_                   = "EnemyDamageReaction/Renditions/";
+    std::string folderPath_                   = "EnemyDamageReaction/RenditionDates/";
     const std::string objAnimationFolderPath_ = "Resources/GlobalParameter/ObjEaseAnimation/Enemy/";
 
     // オブジェクトアニメーションパラメータ

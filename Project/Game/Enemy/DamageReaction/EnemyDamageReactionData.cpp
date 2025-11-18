@@ -187,11 +187,6 @@ void EnemyDamageReactionData::AdjustParam() {
         renditions_[selectedRenditionIndex_]->AdjustParam();
     }
 
-    // セーブ・ロード
-    ImGui::Separator();
-    globalParameter_->ParamSaveForImGui(groupName_, folderPath_);
-    globalParameter_->ParamLoadForImGui(groupName_, folderPath_);
-
     ImGui::PopID();
 
 #endif // _DEBUG

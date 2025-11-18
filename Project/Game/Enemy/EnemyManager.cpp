@@ -168,8 +168,6 @@ void EnemyManager::AdjustParam() {
 
             ImGui::PopID();
         }
-        // ダメージリアクションエディター
-        damageReactionController_->EditorUpdate();
 
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
@@ -180,6 +178,10 @@ void EnemyManager::AdjustParam() {
 
 #endif
 }
+
+void EnemyManager::DamageReactionCreate() {
+    damageReactionController_->EditorUpdate();
+ }
 
 ///---------------------------------------------------------
 /// Particle Init

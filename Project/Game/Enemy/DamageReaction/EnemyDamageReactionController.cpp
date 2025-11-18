@@ -114,26 +114,7 @@ void EnemyDamageReactionController::EditorUpdate() {
         }
         ImGui::SeparatorText("All File Save/Load");
 
-        // Load ボタン
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
-        if (ImGui::Button("Load All Attacks")) {
-            AllLoadFile();
-            MessageBoxA(nullptr, "All Attacks loaded successfully.", "Attack Creator", 0);
-        }
-        ImGui::PopStyleColor(3);
-        ImGui::SameLine();
-
-        // Save ボタン
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.4f, 0.9f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.5f, 1.0f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.3f, 0.8f, 1.0f));
-        if (ImGui::Button("Save All Attacks")) {
-            AllSaveFile();
-            MessageBoxA(nullptr, "All Attacks saved successfully.", "Attack Creator", 0);
-        }
-        ImGui::PopStyleColor(3);
+       
         ImGui::PopID();
 
       

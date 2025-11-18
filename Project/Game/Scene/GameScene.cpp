@@ -195,7 +195,10 @@ void GameScene::Debug() {
 
     ImGui::Begin("PlayerAttack");
     playerComboAttackController_->EditorUpdate();
- 
+    ImGui::End();
+
+    ImGui::Begin("EnemyDamageReaction");
+    enemyManager_->DamageReactionCreate();
     ImGui::End();
 #endif
 }

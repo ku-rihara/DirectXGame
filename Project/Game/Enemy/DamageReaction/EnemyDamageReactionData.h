@@ -63,8 +63,8 @@ private:
     // グローバルパラメータ
     GlobalParameter* globalParameter_;
     std::string groupName_;
-    const std::string folderPath_ = "EnemyDamageReaction";
-    const std::string renditionFolderPath_ = "Resources/GlobalParameter/EnemyDamageReaction/Renditions/";
+    const std::string folderPath_ = "EnemyDamageReaction/ReactionDates";
+    const std::string renditionFolderPath_ = "Resources/GlobalParameter/EnemyDamageReaction/RenditionDates/";
 
     // 演出データリスト
     std::vector<std::unique_ptr<EnemyDamageRenditionData>> renditions_;
