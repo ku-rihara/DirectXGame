@@ -106,6 +106,6 @@ private:
 public:
     //*-------------------------------- Getter Method --------------------------------*//
     const std::string& GetGroupName() const { return groupName_; }
-    AttackParameter& GetAttackParam() { return attackParam_; }
+    const AttackParameter& GetAttackParam() const { return attackParam_; }
     const PlayerAttackRenditionData& GetRenditionData() const { return renditionData_; }
 };

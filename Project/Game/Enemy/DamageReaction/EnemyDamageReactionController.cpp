@@ -136,8 +136,7 @@ void EnemyDamageReactionController::EditorUpdate() {
         ImGui::PopStyleColor(3);
         ImGui::PopID();
 
-        // 共通パラメータの調整
-        AdjustCommonParam();
+      
     }
 #endif
 }

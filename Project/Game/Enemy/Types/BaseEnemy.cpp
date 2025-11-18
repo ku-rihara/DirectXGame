@@ -1,14 +1,10 @@
 #include "BaseEnemy.h"
 
 // behavior
-#include "../Behavior/EnemyBoundDamage.h"
+#include "../Behavior/DamageReaction/EnemyDamageReactionRoot.h"
 #include "../Behavior/EnemyDamageRoot.h"
 #include "../Behavior/EnemyDeath.h"
-#include "../Behavior/EnemyHitBackDamage.h"
 #include "../Behavior/EnemySpawn.h"
-#include "../Behavior/EnemyStopDamage.h"
-#include "../Behavior/EnemyThrustDamage.h"
-#include "../Behavior/EnemyUpperDamage.h"
 #include "Enemy/EnemyManager.h"
 
 #include "Combo/Combo.h"
@@ -55,7 +51,7 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
     thrustSound_ = Audio::GetInstance()->LoadWave("Enemythurst.wav");
 
     // 振る舞い初期化
-    ChangeBehavior(std::make_unique<EnemyDamageRoot>(this));
+    ChangeDamageReactionBehavior(std::make_unique<EnemyDamageRoot>(this));
     ChangeMoveBehavior(std::make_unique<EnemySpawn>(this));
 }
 
@@ -121,86 +117,95 @@ Vector3 BaseEnemy::GetDirectionToTarget(const Vector3& target) {
 
 void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 
-    // 普通のパンチに攻撃されたら
-    if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
+    //// 普通のパンチに攻撃されたら
+    // if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
 
-        switch (attackController->attackType_) {
-            ///------------------------------------------------------------------
-            /// 通常
-            ///------------------------------------------------------------------
-        case PlayerCollisionInfo::AttackType::NORMAL:
+    //    switch (attackController->attackType_) {
+    //        ///------------------------------------------------------------------
+    //        /// 通常
+    //        ///------------------------------------------------------------------
+    //    case PlayerCollisionInfo::AttackType::NORMAL:
 
-            TakeDamage(attackController->GetAttackPower());
-            pCombo_->ComboCountUP();
-            pGameCamera_->PlayShake("PunchAttackCamera");
-            ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
-        }
-    }
+    //        TakeDamage(attackController->GetAttackPower());
+    //        pCombo_->ComboCountUP();
+    //        pGameCamera_->PlayShake("PunchAttackCamera");
+    //        ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
+    //    }
+    //}
 }
 
 void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
+    //
     if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
 
-        // 攻撃タイプごとに振る舞いを切り替える
-        switch (attackController->attackType_) {
+        // Rootにし、受けたダメージの判定を行う
+        ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
 
-            ///------------------------------------------------------------------
-            /// アッパー
-            ///------------------------------------------------------------------
-        case PlayerCollisionInfo::AttackType::UPPER:
-
-            if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
-                break;
-            }
-            TakeDamage(attackController->GetAttackPower());
-            pCombo_->ComboCountUP();
-            ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
-
-            break;
-
-            ///------------------------------------------------------------------
-            /// 突き飛ばし
-            ///------------------------------------------------------------------
-        case PlayerCollisionInfo::AttackType::THRUST:
-            if (dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) {
-                break;
-            }
-            TakeDamage(attackController->GetAttackPower());
-            pCombo_->ComboCountUP();
-            ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
-
-            break;
-            ///------------------------------------------------------------------
-            /// 落下攻撃
-            ///------------------------------------------------------------------
-        case PlayerCollisionInfo::AttackType::FALL:
-            if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
-                break;
-            }
-            TakeDamage(attackController->GetAttackPower());
-            pCombo_->ComboCountUP();
-            ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
-
-            return;
-
-            break;
-            ///------------------------------------------------------------------
-            /// 突進
-            ///------------------------------------------------------------------
-        case PlayerCollisionInfo::AttackType::RUSH:
-            if (dynamic_cast<EnemyBoundDamage*>(damageBehavior_.get())) {
-                break;
-            }
-            TakeDamage(attackController->GetAttackPower());
-            pCombo_->ComboCountUP();
-            ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
-
-            break;
-        default:
-            break;
+        if (EnemyDamageReactionRoot* damageReaction = dynamic_cast<EnemyDamageReactionRoot*>(damageBehavior_.get())) {
+            damageReaction->SelectDamageActionBehaviorByAttack(*attackController);
         }
     }
+
+    //    // 攻撃タイプごとに振る舞いを切り替える
+    //    switch (attackController->attackType_) {
+
+    //        ///------------------------------------------------------------------
+    //        /// アッパー
+    //        ///------------------------------------------------------------------
+    //    case PlayerCollisionInfo::AttackType::UPPER:
+
+    //        if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
+    //            break;
+    //        }
+    //        TakeDamage(attackController->GetAttackPower());
+    //        pCombo_->ComboCountUP();
+    //        ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
+
+    //        break;
+
+    //        ///------------------------------------------------------------------
+    //        /// 突き飛ばし
+    //        ///------------------------------------------------------------------
+    //    case PlayerCollisionInfo::AttackType::THRUST:
+    //        if (dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) {
+    //            break;
+    //        }
+    //        TakeDamage(attackController->GetAttackPower());
+    //        pCombo_->ComboCountUP();
+    //        ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
+
+    //        break;
+    //        ///------------------------------------------------------------------
+    //        /// 落下攻撃
+    //        ///------------------------------------------------------------------
+    //    case PlayerCollisionInfo::AttackType::FALL:
+    //        if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
+    //            break;
+    //        }
+    //        TakeDamage(attackController->GetAttackPower());
+    //        pCombo_->ComboCountUP();
+    //        ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
+
+    //        return;
+
+    //        break;
+    //        ///------------------------------------------------------------------
+    //        /// 突進
+    //        ///------------------------------------------------------------------
+    //    case PlayerCollisionInfo::AttackType::RUSH:
+    //        if (dynamic_cast<EnemyBoundDamage*>(damageBehavior_.get())) {
+    //            break;
+    //        }
+    //        TakeDamage(attackController->GetAttackPower());
+    //        pCombo_->ComboCountUP();
+    //        ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
+
+    //        break;
+    //    default:
+    //        break;
+    //    }
+    //}
 }
 
 Vector3 BaseEnemy::GetCollisionPos() const {
@@ -215,7 +220,7 @@ void BaseEnemy::SetPlayer(Player* player) {
     pPlayer_ = player;
 }
 
-void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior) {
+void BaseEnemy::ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior) {
     // 引数で受け取った状態を次の状態としてセット
     damageBehavior_ = std::move(behavior);
 }
@@ -228,13 +233,13 @@ void BaseEnemy::BehaviorChangeDeath() {
     if (hp_ > 0) {
         return;
     }
-    if (dynamic_cast<EnemyDeath*>(damageBehavior_.get()) || dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) {
-        return;
-    };
+    /* if (dynamic_cast<EnemyDeath*>(damageBehavior_.get()) || dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) {
+         return;
+     };
 
-    isAdaptCollision = false;
-    collisionBox_->SetIsCollision(false);
-    ChangeBehavior(std::make_unique<EnemyDeath>(this));
+     isAdaptCollision = false;
+     collisionBox_->SetIsCollision(false);
+     ChangeDamageReactionBehavior(std::make_unique<EnemyDeath>(this));*/
 }
 
 bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
@@ -329,7 +334,7 @@ void BaseEnemy::SetAttackEffect(AttackEffect* attackEffect) {
 }
 
 void BaseEnemy::BackToDamageRoot() {
-    ChangeBehavior(std::make_unique<EnemyDamageRoot>(this)); /// 追っかけ
+    ChangeDamageReactionBehavior(std::make_unique<EnemyDamageRoot>(this)); /// 追っかけ
 }
 
 void BaseEnemy::SetParameter(const Type& type, const Parameter& paramater) {

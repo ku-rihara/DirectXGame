@@ -47,7 +47,7 @@ public:
     //*-------------------------------- public Method --------------------------------*//
 
     void AdjustParam();
-    void BindParams(GlobalParameter* globalParam, const std::string& groupName);
+    void RegisterParams(GlobalParameter* globalParam, const std::string& groupName);
 
 private:
     //*-------------------------------- private Method --------------------------------*//

@@ -1,8 +1,9 @@
 #pragma once
 
 #include "3d/ViewProjection.h"
-#include "Types/BaseEnemy.h"
+#include "DamageReaction/EnemyDamageReactionController.h"
 #include "Editor/ParticleEditor/ParticleEmitter.h"
+#include "Types/BaseEnemy.h"
 
 /// std
 #include <json.hpp>
@@ -79,6 +80,9 @@ private:
     EnemySpawner* pEnemySpawner_;
     AttackEffect* pAttackEffect_;
 
+    // damageReaction
+    std::unique_ptr<EnemyDamageReactionController> damageReactionController_;
+
 private:
     ///========================================================
     /// Private variants
@@ -109,6 +113,7 @@ public:
     ///========================================================
     const bool& GetIsAllCleared() const { return areAllEnemiesCleared_; }
     const std::vector<std::unique_ptr<BaseEnemy>>& GetEnemies() const { return enemies_; }
+    EnemyDamageReactionController* GetDamageReactionControllerPtr() const { return damageReactionController_.get(); }
     ///========================================================
     /// setter method
     ///========================================================

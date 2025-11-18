@@ -1,22 +1,19 @@
 #pragma once
 
-#include"BaseEnemyDamageReaction.h"
+#include "BaseEnemyDamageReaction.h"
 
-
+class PlayerCollisionInfo;
 class EnemyDamageReactionRoot : public BaseEnemyDamageReaction {
-private:
-
-private:
-
-	
-
 public:
-	//コンストラクタ
+    // コンストラクタ
     EnemyDamageReactionRoot(BaseEnemy* boss);
     ~EnemyDamageReactionRoot();
 
+    void Update() override;
+    void Debug() override;
 
-	void Update()override;
-	void Debug()override;
+    void SelectDamageActionBehaviorByAttack(const PlayerCollisionInfo&playerCollisionInfo);
 
+private:
+    PlayerCollisionInfo* pPlayerCollisionInfo_ = nullptr;
 };

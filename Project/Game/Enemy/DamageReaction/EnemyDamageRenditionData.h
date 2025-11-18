@@ -8,21 +8,17 @@
 #include <utility>
 
 /// <summary>
-/// プレイヤー攻撃演出データクラス
+/// 敵のダメージ演出データクラス
 /// </summary>
 class EnemyDamageRenditionData {
 public:
-    struct RenditionParam {
-        std::string fileName;
-        float startTiming = 0.0f;
-        float currentTime_;
-        bool triggerByHit = false;
-    };
-
     // オブジェクトアニメーションパラメータ
     struct ObjAnimationParam {
         std::string fileName;
-        float startTiming = 0.0f;
+        float startTiming   = 0.0f;
+        bool isAdaptParentS = false;
+        bool isAdaptParentR = false;
+        bool isAdaptParentT = false;
     };
 
 public:
@@ -31,29 +27,36 @@ public:
 
     //*-------------------------------- public Method --------------------------------*//
 
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="reactionName">リアクション名</param>
+    /// <param name="renditionIndex">演出インデックス</param>
+    void Init(const std::string& groupName, const int32_t& renditionIndex);
+
     void AdjustParam();
-    void BindParams(GlobalParameter* globalParam, const std::string& groupName);
+    void RegisterParams();
+    void LoadData();
+    void SaveData();
+    void Reset();
 
 private:
     //*-------------------------------- private Method --------------------------------*//
-    void SelectRenditionFile(const char* label, const std::string& directory, std::pair<RenditionParam, FileSelector>& param);
     void SelectObjAnimationFile(const char* label, std::pair<ObjAnimationParam, FileSelector>& param);
 
 private:
     //*-------------------------------- Private variants--------------------------------*//
+    GlobalParameter* globalParameter_;
     std::string groupName_;
-    const std::string folderPath_             = "Resources/GlobalParameter/";
+    int32_t currentRenditionIndex_            = -1;
+    std::string folderPath_                   = "EnemyDamageReaction/Renditions/";
     const std::string objAnimationFolderPath_ = "Resources/GlobalParameter/ObjEaseAnimation/Enemy/";
 
-  
-    // オブジェクトアニメーションパラメータ配列
+    // オブジェクトアニメーションパラメータ
     std::pair<ObjAnimationParam, FileSelector> objAnimationParams_;
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//
-    const RenditionParam& GetRenditionParamFromIndex(const int32_t& index) const;
-
-    const ObjAnimationParam& GetObjAnimationParamFromIndex() const {return objAnimationParams_.first;}
-    const ObjAnimationParam& GetObjAnimationParamFromType() const {return objAnimationParams_.first;
-    }
+    const std::string& GetGroupName() const { return groupName_; }
+    const ObjAnimationParam& GetObjAnimationParam() const { return objAnimationParams_.first; }
 };

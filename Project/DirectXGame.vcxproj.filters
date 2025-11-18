@@ -232,9 +232,6 @@
     <Filter Include="Game\Combo\UIBehavior">
       <UniqueIdentifier>{6482a217-db8f-4dd2-9188-4fd6fb9978b1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\EasingTestObj">
-      <UniqueIdentifier>{a383ecc6-f375-4bf7-9b58-7f4ba9f98f42}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.cpp\Animation">
       <UniqueIdentifier>{f84405b2-ba15-4fcd-9d2f-c731c2e277d1}</UniqueIdentifier>
     </Filter>
@@ -474,6 +471,9 @@
     </Filter>
     <Filter Include="Game\Enemy\SearchingSprite\Spawner">
       <UniqueIdentifier>{56719232-7938-486e-b2c4-15494f312b10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\EasingTestObj">
+      <UniqueIdentifier>{a383ecc6-f375-4bf7-9b58-7f4ba9f98f42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1222,7 +1222,10 @@
     <ClCompile Include="Game\Enemy\Behavior\DamageReaction\BaseEnemyDamageReaction.cpp">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\DamageReaction\EnemyDamageReacrtionRoot.cpp">
+    <ClCompile Include="Game\Enemy\Behavior\DamageReaction\EnemyDamageReactionRoot.cpp">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\DamageReaction\EnemyDamageReacrtionAction.cpp">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2023,6 +2026,9 @@
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\DamageReaction\EnemyDamageReactionRoot.h">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\DamageReaction\EnemyDamageReacrtionAction.h">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClInclude>
   </ItemGroup>

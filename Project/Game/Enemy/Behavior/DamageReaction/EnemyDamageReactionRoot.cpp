@@ -10,9 +10,8 @@
 
 //初期化
 EnemyDamageReactionRoot::EnemyDamageReactionRoot(BaseEnemy* boss)
-    : BaseEnemyDamageReaction("EnemyDamgeReackdtionRoot", boss) {
-	
-	
+    : BaseEnemyDamageReaction("EnemyDamageReactionRoot", boss) {
+
 }
 
 EnemyDamageReactionRoot::~EnemyDamageReactionRoot() {
@@ -28,3 +27,6 @@ void EnemyDamageReactionRoot::Debug() {
 
 }
 
+void EnemyDamageReactionRoot::SelectDamageActionBehaviorByAttack(const PlayerCollisionInfo& playerCollisionInfo) {
+
+ }

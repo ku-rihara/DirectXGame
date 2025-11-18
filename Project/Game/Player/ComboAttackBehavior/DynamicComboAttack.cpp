@@ -8,8 +8,10 @@
 
 DynamicComboAttack::DynamicComboAttack(Player* player, PlayerComboAttackData* attackData)
     : BaseComboAattackBehavior(attackData->GetGroupName(), player) {
-    pPlayer_    = player;
+
+    // attackDataセット
     attackData_ = attackData;
+    // 初期化
     Init();
 }
 
@@ -124,14 +126,7 @@ void DynamicComboAttack::UpdateRecovery() {
     pPlayer_->AdaptRotate();
     order_ = Order::WAIT;
 
-    // 硬直時間
-    // static float recoveryTime = 0.0f;
-    // recoveryTime += atkSpeed_;
-
-    // if (recoveryTime >= 0.2f) { // 0.2秒の硬直
-    //     recoveryTime = 0.0f;
-    //     order_       = Order::WAIT;
-    // }
+   
 }
 
 void DynamicComboAttack::UpdateWait() {

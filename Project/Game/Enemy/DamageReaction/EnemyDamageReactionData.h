@@ -1,33 +1,27 @@
 #pragma once
 
 #include "Easing/Easing.h"
-#include "Player/ComboCreator/PlayerAttackRenditionData.h"
-#include "utility/FileSelector/FileSelector.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
+#include "EnemyDamageRenditionData.h"
+#include "utility/FileSelector/FileSelector.h"
 #include "Vector3.h"
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <vector>
 
 /// <summary>
-/// プレイヤー攻撃データクラス
+/// ダメージリアクションデータクラス
 /// </summary>
 class EnemyDamageReactionData {
 public:
-   
-    // タイミングパラメータ
-    struct TimingParam {
-        float cancelFrame;
-        float precedeInputFrame;
-    };
-
-    // アタックパラメータ
+    // リアクションパラメータ
     struct ReactionParameter {
-        TimingParam timingParam;
+        std::string triggerAttackName;
     };
 
 public:
-    EnemyDamageReactionData() = default;
+    EnemyDamageReactionData()  = default;
     ~EnemyDamageReactionData() = default;
 
     //*-------------------------------- public Method --------------------------------*//
@@ -35,8 +29,8 @@ public:
     /// <summary>
     /// 初期化
     /// </summary>
-    /// <param name="attackName">攻撃名</param>
-    void Init(const std::string& attackName);
+    /// <param name="reactionName">リアクション名</param>
+    void Init(const std::string& reactionName);
 
     // パラメータバインド、調節
     void AdjustParam();
@@ -46,32 +40,53 @@ public:
     void LoadData();
     void SaveData();
 
+    // 演出データ追加、削除、クリア、初期化
+    void AddRendition(); 
+    void RemoveRendition(const int32_t& index); 
+    void ClearRenditions(); 
+    void InitRenditions();  
+
+    // 保存、読み込み
+    void SaveAllRenditions(); 
+    void LoadRenditions();    
+
 private:
     //*-------------------------------- private Method --------------------------------*//
 
     // 次の攻撃の選択
-    void SelectNextAttack();
+    void SelectTriggerAttack();
+    void CreateOrLoadRendition(const std::vector<std::pair<int32_t, std::string>>& renditionFiles);
 
 private:
     //*-------------------------------- Private variants--------------------------------*//
 
+    // グローバルパラメータ
     GlobalParameter* globalParameter_;
     std::string groupName_;
     const std::string folderPath_ = "EnemyDamageReaction";
+    const std::string renditionFolderPath_ = "Resources/GlobalParameter/EnemyDamageReaction/Renditions/";
 
-    PlayerAttackRenditionData renditionData_;
+    // 演出データリスト
+    std::vector<std::unique_ptr<EnemyDamageRenditionData>> renditions_;
+    int32_t selectedRenditionIndex_ = -1;
+    bool showRenditionList_         = true;
+
     FileSelector fileSelector_;
 
-    // 攻撃パラメータ
+    // リアクションパラメータ
     ReactionParameter reactionParam_;
-    bool needsRefresh_ = true;
-    std::vector<std::string> attackFileNames_;
-
-    int32_t tempCondition_;
+    std::vector<std::string> reactionFileNames_;
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//
     const std::string& GetGroupName() const { return groupName_; }
-    ReactionParameter& GetReactionParam() { return reactionParam_; }
-    const PlayerAttackRenditionData& GetRenditionData() const { return renditionData_; }
+    const ReactionParameter& GetReactionParam() const { return reactionParam_; }
+
+    // 演出データ取得
+    const std::vector<std::unique_ptr<EnemyDamageRenditionData>>& GetAllRenditions() const { return renditions_; }
+    int32_t GetRenditionCount() const { return static_cast<int32_t>(renditions_.size()); }
+    const EnemyDamageRenditionData* GetSelectedRendition() const;
+    const int32_t& GetSelectedRenditionIndex() const { return selectedRenditionIndex_; }
+
+    void SetSelectedRenditionIndex(const int32_t& index);
 };

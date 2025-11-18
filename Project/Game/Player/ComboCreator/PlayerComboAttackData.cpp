@@ -61,7 +61,7 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "NextAttackType", &attackParam_.nextAttackType);
 
     // 演出のパラメータバインド
-    renditionData_.BindParams(globalParameter_, groupName_);
+    renditionData_.RegisterParams(globalParameter_, groupName_);
 }
 
 ///==========================================================

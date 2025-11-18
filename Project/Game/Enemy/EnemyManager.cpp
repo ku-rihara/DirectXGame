@@ -17,6 +17,10 @@ void EnemyManager::Init() {
     selectedEnemyType_ = "NormalEnemy";
     spawnPosition_     = {};
 
+    // ダメージリアクション初期化
+    damageReactionController_ = std::make_unique<EnemyDamageReactionController>();
+    damageReactionController_->Init();
+
     /// グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
@@ -154,6 +158,7 @@ void EnemyManager::AdjustParam() {
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
+        // 敵のパラメータ編集
         for (size_t i = 0; i < static_cast<size_t>(BaseEnemy::Type::COUNT); ++i) {
             BaseEnemy::Type type = static_cast<BaseEnemy::Type>(i);
             ImGui::SeparatorText(enemyTypes_[i].c_str());
@@ -163,6 +168,8 @@ void EnemyManager::AdjustParam() {
 
             ImGui::PopID();
         }
+        // ダメージリアクションエディター
+        damageReactionController_->EditorUpdate();
 
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);

@@ -97,7 +97,7 @@ void EnemyThrustDamage::Update() {
 		pBaseEnemy_->RotateInit();
 		pBaseEnemy_->SetBodyColor(Vector4(1.0f, 1, 1, 1.0f));
 		pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetParameter().basePosY);
-		pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyBoundDamage>(pBaseEnemy_));
+		pBaseEnemy_->ChangeDamageReactionBehavior(std::make_unique<EnemyBoundDamage>(pBaseEnemy_));
 		break;
 	}
 }

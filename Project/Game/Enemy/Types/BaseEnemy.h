@@ -4,9 +4,9 @@
 // function
 
 // class
-#include "BaseObject/BaseObject.h"
-#include "../Behavior/BaseEnemyBehavior.h"
+#include "../Behavior/DamageReaction/BaseEnemyDamageReaction.h"
 #include "../Behavior/BaseEnemyMoveBehavior.h"
+#include "BaseObject/BaseObject.h"
 #include "Collider/AABBCollider.h"
 #include "CollisionBox/EnemyCollisionBox.h"
 #include "Enemy/HPBar/EnemyHPBar.h"
@@ -75,9 +75,9 @@ public:
 
     void DamageRenditionInit(); //< ダメージ演出初期化
     void ThrustRenditionInit(); //< 突き飛ばし演出初期化
-    void DeathRenditionInit();  //< 死亡演出初期化
-    void ScaleReset();          //< スケールリセット
-    void RotateInit();          //< 回転初期化
+    void DeathRenditionInit(); //< 死亡演出初期化
+    void ScaleReset(); //< スケールリセット
+    void RotateInit(); //< 回転初期化
 
     /// <summary>
     /// ジャンプ処理
@@ -112,7 +112,7 @@ public:
     /// ビヘイビア変更
     /// </summary>
     /// <param name="behavior">新しいビヘイビア</param>
-    void ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior);
+    void ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior);
 
     /// <summary>
     /// 移動ビヘイビア変更
@@ -152,7 +152,6 @@ private:
     int deathSound_;
     int thrustSound_;
     int32_t groupId_;
-
 protected:
     // structure
     Type type_;
@@ -177,8 +176,8 @@ protected:
     Vector2 hpBarSize_;
 
     /// behavior
-    std::unique_ptr<BaseEnemyBehavior> damageBehavior_   = nullptr;
-    std::unique_ptr<BaseEnemyMoveBehavior> moveBehavior_ = nullptr;
+    std::unique_ptr<BaseEnemyDamageReaction> damageBehavior_ = nullptr;
+    std::unique_ptr<BaseEnemyMoveBehavior> moveBehavior_     = nullptr;
 
 public:
     /// ========================================================================================
@@ -190,7 +189,7 @@ public:
     const int32_t& GetGroupId() const { return groupId_; }
     Player* GetPlayer() { return pPlayer_; }
     GameCamera* GetGameCamera() { return pGameCamera_; }
-    BaseEnemyBehavior* GetDamageBehavior() const { return damageBehavior_.get(); }
+    BaseEnemyDamageReaction* GetDamageReactionBehavior() const { return damageBehavior_.get(); }
     FindSprite* GetFindSprite() { return findSprite_.get(); }
     NotFindSprite* GetNotFindSprite() { return notFindSprite_.get(); }
     /// ========================================================================================
