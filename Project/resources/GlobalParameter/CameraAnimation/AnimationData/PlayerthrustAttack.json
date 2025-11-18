@@ -2,9 +2,10 @@
     "PlayerthrustAttack": {
         "autoReturnToInitial": true,
         "playbackSpeed": 1.0,
-        "resetFovEaseType": 0,
-        "resetPosEaseType": 0,
-        "resetRotateEaseType": 0,
-        "resetTimePoint": 0.17000000178813934
+        "resetFovEaseType": 6,
+        "resetPosEaseType": 6,
+        "resetRotateEaseType": 6,
+        "resetTimePoint": 0.28999999165534973,
+        "timeMode": 1
     }
 }

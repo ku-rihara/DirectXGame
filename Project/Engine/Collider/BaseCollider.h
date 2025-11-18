@@ -50,12 +50,15 @@ protected:
     /// protected variant
     /// ===================================================
 
-    WorldTransform cTransform_; //< ワールド変換
-    uint32_t typeID_  = 0u; //< コリジョンのタイプID
-    bool isColliding_ = false; //< 衝突フラグ
-    std::unique_ptr<Line3D> debugLine_; //< デバッグ表示用Line
-    Vector4 lineColor_ = Vector4::kWHITE(); //< デバッグ表示用のラインカラー
+    WorldTransform cTransform_;
+    uint32_t typeID_  = 0u;    
+    
+    // デバックライン
+    std::unique_ptr<Line3D> debugLine_; 
+    Vector4 lineColor_ = Vector4::kWHITE(); 
 
+    // 衝突判定フラグ、衝突適応フラグ
+    bool isColliding_     = false; 
     bool isAdaptCollision = true;
 
 public:
