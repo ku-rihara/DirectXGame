@@ -31,7 +31,7 @@ public:
     /// </summary>
     /// <param name="cameraAnimationName">カメラアニメーション名</param>
     /// <param name="keyNumber">キー番号</param>
-    void Init(const std::string& cameraAnimationName, const int32_t& keyNumber);
+    void Init(const std::string& groupName, const int32_t& keyNumber);
 
     /// <summary>
     /// 更新
@@ -63,7 +63,7 @@ private:
     // GlobalParam
     GlobalParameter* globalParameter_;
     std::string groupName_;
-    std::string folderPath_ = "CameraAnimation/KeyFrames";
+    std::string folderPath_ = "CameraAnimation/KeyFrames/";
 
     int32_t currentKeyFrameIndex  = -1;
 

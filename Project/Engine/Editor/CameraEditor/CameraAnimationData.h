@@ -1,8 +1,8 @@
 #pragma once
 #include "3d/ViewProjection.h"
 #include "CameraKeyFrame.h"
-#include "Quaternion.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Quaternion.h"
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -17,6 +17,29 @@ public:
         STOPPED,
         PLAYING,
         PAUSED
+    };
+    struct CameraTransform {
+        Vector3 position = {0.0f, 0.0f, 0.0f};
+        Vector3 rotation = {0.0f, 0.0f, 0.0f};
+        float fov        = 45.0f;
+    };
+
+    struct ResetParam {
+        float timePoint;
+        float delayTime;
+        float currentDelayTimer;
+        int32_t posEaseType;
+        int32_t rotateEaseType;
+        int32_t fovEaseType;
+    };
+
+    struct ReturnParam {
+        Easing<Vector3> positionEase;
+        Easing<Vector3> rotationEase;
+        Easing<float> fovEase;
+        bool isReturningToInitial = false;
+        bool isWaitingForReturn   = false;
+        bool autoReturnToInitial  = true;
     };
 
 public:
@@ -36,32 +59,36 @@ public:
     /// <param name="speedRate">速度倍率</param>
     void UpdateActiveKeyFrames(const float& speedRate = 1.0f);
 
-    void AddKeyFrame();                        //< キーフレーム追加
-    void RemoveKeyFrame(const int32_t& index); //< キーフレーム削除
-    void ClearKeyFrames();                     //< 全キーフレームクリア
-    void InitKeyFrames();                      //< キーフレーム初期化
-
     // 再生、一時停止、リセット
-    void Play();  
-    void Pause(); 
-    void Reset(); 
+    void Play();
+    void Pause();
+    void Reset();
 
-    void LoadData();                //< データ読み込み
-    void LoadKeyFrames();           //< 全キーフレーム読み込み
-    void SaveAllKeyFrames();        //< 全キーフレーム保存
-    void SaveData();                //< データ保存
-    void AdjustParam();             //< ImGuiパラメータ調整
+    // ロード、セーブ、編集
+    void LoadData();
+    void SaveData();
+    void AdjustParam();
+
+    // キーフレームロード、セーブ
+    void LoadKeyFrames();
+    void SaveAllKeyFrames();
+
+    // キーフレーム、追加、削除、クリア、初期化
+    void AddKeyFrame();
+    void RemoveKeyFrame(const int32_t& index);
+    void ClearKeyFrames();
+    void InitKeyFrames();
 
 private:
-    void RegisterParams();            //< パラメータ登録
+    void RegisterParams(); //< パラメータ登録
     void UpdateKeyFrameProgression(); //< キーフレーム進行更新
-    void AdvanceToNextKeyFrame();     //< 次のキーフレームへ進む
-    void UpdateInterpolatedValues();  //< 補間値更新
-    void StartReturnToInitial();      //< 初期値復帰開始
+    void AdvanceToNextKeyFrame(); //< 次のキーフレームへ進む
+    void UpdateInterpolatedValues(); //< 補間値更新
+    void StartReturnToInitial(); //< 初期値復帰開始
 
     void ResetValue();
     void LoadParams();
-    void RebuildAndLoadAllKeyFrames(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
+    void CreateOrLoadKeyFrames(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
 
     /// <summary>
     /// タイムモードセレクター
@@ -73,31 +100,25 @@ private:
 private:
     GlobalParameter* globalParameter_;
     std::string groupName_;
-    std::string folderPath_ = "CameraAnimation/AnimationData";
-   
+    std::string folderPath_               = "CameraAnimation/AnimationData";
+    const std::string keyFrameFolderPath_ = "Resources/GlobalParameter/CameraAnimation/KeyFrames/";
+
     std::vector<std::unique_ptr<CameraKeyFrame>> keyFrames_;
     int32_t selectedKeyFrameIndex_ = -1;
     int32_t finalKeyFrameIndex_    = -1;
     int32_t activeKeyFrameIndex_   = 0;
 
-    PlayState playState_      = PlayState::STOPPED;
-    bool autoReturnToInitial_ = true;
-    bool isAllFinished_       = false;
+    PlayState playState_ = PlayState::STOPPED;
+    bool isAllFinished_  = false;
 
-    Vector3 currentPosition_;
-    Vector3 currentRotation_;
-    float currentFov_;
+    // camera Transform
+    CameraTransform currentCameraTransform_;
+    CameraTransform returnCameraTransform_;
+    CameraTransform initialCameraTransform_;
 
-    Vector3 returnPosition_;
-    Vector3 returnRotation_;
-    float returnFov_;
-
-    float resetTimePoint_   = 0.0f;
-    float returnDelayTime_  = 0.0f;
-    float returnDelayTimer_ = 0.0f;
-    int32_t resetPosEaseType_;
-    int32_t resetRotateEaseType_;
-    int32_t resetFovEaseType_;
+    // reset,return Params
+    ResetParam resetParam_;
+    ReturnParam returnParam_;
 
     bool showKeyFrameList_      = true;
     bool showAnimationControls_ = true;
@@ -105,16 +126,6 @@ private:
 
     bool isAllKeyFramesFinished_        = false;
     int32_t lastCompletedKeyFrameIndex_ = -1;
-
-    bool isReturningToInitial_ = false;
-    bool isWaitingForReturn_   = false;
-    Vector3 initialPosition_   = {0.0f, 0.0f, 0.0f};
-    Vector3 initialRotation_   = {0.0f, 0.0f, 0.0f};
-    float initialFov_          = 45.0f;
-
-    Easing<Vector3> returnPositionEase_;
-    Easing<Vector3> returnRotationEase_;
-    Easing<float> returnFovEase_;
 
     int32_t timeMode_ = static_cast<int32_t>(CameraKeyFrame::TimeMode::DELTA_TIME_RATE);
 
@@ -131,7 +142,7 @@ public:
     const int32_t& GetActiveKeyFrameIndex() const { return activeKeyFrameIndex_; }
     const int32_t& GetLastCompletedKeyFrameIndex() const { return lastCompletedKeyFrameIndex_; }
     int32_t GetTotalKeyFrameCount() const { return static_cast<int32_t>(keyFrames_.size()); }
-    const bool& IsReturningToInitial() const { return isReturningToInitial_; }
+    const bool& IsReturningToInitial() const { return returnParam_.isReturningToInitial; }
 
     const int32_t& GetSelectedKeyFrameIndex() const { return selectedKeyFrameIndex_; }
     const CameraKeyFrame* GetSelectedKeyFrame() const;

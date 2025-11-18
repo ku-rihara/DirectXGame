@@ -32,14 +32,14 @@ void CameraAnimationData::ResetValue() {
     activeKeyFrameIndex_ = 0;
 
     // 新しいフラグの初期化
-    isAllKeyFramesFinished_     = false;
-    lastCompletedKeyFrameIndex_ = -1;
-    isWaitingForReturn_         = false;
-    returnDelayTimer_           = 0.0f;
+    isAllKeyFramesFinished_         = false;
+    lastCompletedKeyFrameIndex_     = -1;
+    returnParam_.isWaitingForReturn = false;
+    resetParam_.currentDelayTimer   = 0.0f;
 
-    returnPositionEase_.SetAdaptValue(&returnPosition_);
-    returnRotationEase_.SetAdaptValue(&returnRotation_);
-    returnFovEase_.SetAdaptValue(&returnFov_);
+    returnParam_.positionEase.SetAdaptValue(&returnCameraTransform_.position);
+    returnParam_.rotationEase.SetAdaptValue(&returnCameraTransform_.rotation);
+    returnParam_.fovEase.SetAdaptValue(&returnCameraTransform_.fov);
 }
 
 void CameraAnimationData::LoadData() {
@@ -68,7 +68,7 @@ void CameraAnimationData::SaveAllKeyFrames() {
 }
 
 void CameraAnimationData::LoadKeyFrames() {
-    std::string folderPath     = "Resources/GlobalParameter/CameraAnimation/KeyFrames/";
+    std::string folderPath     = keyFrameFolderPath_ + groupName_ + "/";
     std::string keyFramePrefix = groupName_;
 
     if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {
@@ -94,13 +94,13 @@ void CameraAnimationData::LoadKeyFrames() {
         // インデックス順にソート
         std::sort(keyFrameFiles.begin(), keyFrameFiles.end());
 
-        RebuildAndLoadAllKeyFrames(keyFrameFiles);      
+        CreateOrLoadKeyFrames(keyFrameFiles);
     }
 }
 
-void CameraAnimationData::RebuildAndLoadAllKeyFrames(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles) {
+void CameraAnimationData::CreateOrLoadKeyFrames(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles) {
 
-    // 再構築
+    // 作成
     if (keyFrames_.size() == 0) {
         // 既存のキーフレームをクリア
         ClearKeyFrames();
@@ -156,29 +156,29 @@ void CameraAnimationData::UpdateActiveKeyFrames(const float& speedRate) {
     }
 
     // returnEasing開始待機中の処理
-    if (isWaitingForReturn_) {
-        returnDelayTimer_ += actualDeltaTime;
+    if (returnParam_.isWaitingForReturn) {
+        resetParam_.currentDelayTimer += actualDeltaTime;
 
         // 待機時間を超えたらイージング開始
-        if (returnDelayTimer_ >= returnDelayTime_) {
-            isWaitingForReturn_   = false;
-            isReturningToInitial_ = true;
-            returnDelayTimer_     = 0.0f;
+        if (resetParam_.currentDelayTimer >= resetParam_.delayTime) {
+            returnParam_.isWaitingForReturn   = false;
+            returnParam_.isReturningToInitial = true;
+            resetParam_.currentDelayTimer     = 0.0f;
         }
         return;
     }
 
     // 初期値に戻るイージング
-    if (isReturningToInitial_) {
-        returnPositionEase_.Update(actualDeltaTime);
-        returnRotationEase_.Update(actualDeltaTime);
-        returnFovEase_.Update(actualDeltaTime);
+    if (returnParam_.isReturningToInitial) {
+        returnParam_.positionEase.Update(actualDeltaTime);
+        returnParam_.rotationEase.Update(actualDeltaTime);
+        returnParam_.fovEase.Update(actualDeltaTime);
 
         // イージングが完了したかチェック
-        if (returnPositionEase_.IsFinished() && returnRotationEase_.IsFinished() && returnFovEase_.IsFinished()) {
-            isReturningToInitial_ = false;
-            isAllFinished_        = true;
-            playState_            = PlayState::STOPPED;
+        if (returnParam_.positionEase.IsFinished() && returnParam_.rotationEase.IsFinished() && returnParam_.fovEase.IsFinished()) {
+            returnParam_.isReturningToInitial = false;
+            isAllFinished_                    = true;
+            playState_                        = PlayState::STOPPED;
         }
         return;
     }
@@ -211,7 +211,7 @@ void CameraAnimationData::UpdateKeyFrameProgression() {
             // 最終キーフレームインデックスを設定
             finalKeyFrameIndex_ = activeKeyFrameIndex_;
 
-            if (autoReturnToInitial_) {
+            if (returnParam_.autoReturnToInitial) {
                 // 初期値復帰を開始
                 StartReturnToInitial();
             } else {
@@ -231,9 +231,9 @@ void CameraAnimationData::AdvanceToNextKeyFrame() {
         // 次のキーフレームを初期化
         if (activeKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
             // 前のキーフレームの最終値を取得
-            Vector3 startPos = currentPosition_;
-            Vector3 startRot = currentRotation_;
-            float startFov   = currentFov_;
+            Vector3 startPos = currentCameraTransform_.position;
+            Vector3 startRot = currentCameraTransform_.rotation;
+            float startFov   = currentCameraTransform_.fov;
 
             keyFrames_[activeKeyFrameIndex_]->SetStartEasing(startPos, startRot, startFov);
         }
@@ -246,15 +246,15 @@ void CameraAnimationData::UpdateInterpolatedValues() {
     }
 
     // 初期値復帰中の場合
-    if (isReturningToInitial_) {
-        currentPosition_ = returnPosition_;
-        currentRotation_ = returnRotation_;
-        currentFov_      = returnFov_;
+    if (returnParam_.isReturningToInitial) {
+        currentCameraTransform_.position = returnCameraTransform_.position;
+        currentCameraTransform_.rotation = returnCameraTransform_.rotation;
+        currentCameraTransform_.fov      = returnCameraTransform_.fov;
     } else if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
         // アクティブなキーフレームから現在の補間値を取得
-        currentPosition_ = keyFrames_[activeKeyFrameIndex_]->GetPosition();
-        currentRotation_ = keyFrames_[activeKeyFrameIndex_]->GetRotation();
-        currentFov_      = keyFrames_[activeKeyFrameIndex_]->GetFov();
+        currentCameraTransform_.position = keyFrames_[activeKeyFrameIndex_]->GetPosition();
+        currentCameraTransform_.rotation = keyFrames_[activeKeyFrameIndex_]->GetRotation();
+        currentCameraTransform_.fov      = keyFrames_[activeKeyFrameIndex_]->GetFov();
     }
 }
 
@@ -262,13 +262,13 @@ void CameraAnimationData::ApplyToViewProjection(ViewProjection& viewProjection) 
 
     // viewProjectionの値適応
     if (playState_ == PlayState::PLAYING) {
-        viewProjection.positionOffset_ = currentPosition_;
-        viewProjection.rotationOffset_ = currentRotation_;
-        viewProjection.fovAngleY_      = currentFov_;
+        viewProjection.positionOffset_ = currentCameraTransform_.position;
+        viewProjection.rotationOffset_ = currentCameraTransform_.rotation;
+        viewProjection.fovAngleY_      = currentCameraTransform_.fov;
     } else if (isAllFinished_) {
-        viewProjection.positionOffset_ = initialPosition_;
-        viewProjection.rotationOffset_ = initialRotation_;
-        viewProjection.fovAngleY_      = initialFov_;
+        viewProjection.positionOffset_ = initialCameraTransform_.position;
+        viewProjection.rotationOffset_ = initialCameraTransform_.rotation;
+        viewProjection.fovAngleY_      = initialCameraTransform_.fov;
     }
 }
 
@@ -329,10 +329,10 @@ void CameraAnimationData::ClearKeyFrames() {
 
 void CameraAnimationData::InitKeyFrames() {
     // すべてのキーフレームを保存
-    for (int32_t i = 0; i < keyFrames_.size();++i) {
+    for (int32_t i = 0; i < keyFrames_.size(); ++i) {
         keyFrames_[i]->Init(groupName_, i);
     }
- }
+}
 
 bool CameraAnimationData::IsFinished() const {
     return isAllKeyFramesFinished_;
@@ -358,46 +358,46 @@ void CameraAnimationData::Reset() {
     }
 
     // 復帰用イージングをリセット
-    returnPositionEase_.Reset();
-    returnRotationEase_.Reset();
-    returnFovEase_.Reset();
+    returnParam_.positionEase.Reset();
+    returnParam_.rotationEase.Reset();
+    returnParam_.fovEase.Reset();
 
     // 最初のキーフレームに初期値を設定
     if (!keyFrames_.empty() && activeKeyFrameIndex_ == 0) {
-        keyFrames_[0]->SetStartEasing(initialPosition_, initialRotation_, initialFov_);
+        keyFrames_[0]->SetStartEasing(initialCameraTransform_.position, initialCameraTransform_.rotation, initialCameraTransform_.fov);
     }
 
     // フラグをリセット
-    isAllKeyFramesFinished_     = false;
-    isReturningToInitial_       = false;
-    isWaitingForReturn_         = false;
-    isAllFinished_              = false;
-    lastCompletedKeyFrameIndex_ = -1;
-    activeKeyFrameIndex_        = 0;
-    returnDelayTimer_           = 0.0f;
+    isAllKeyFramesFinished_           = false;
+    returnParam_.isReturningToInitial = false;
+    returnParam_.isWaitingForReturn   = false;
+    isAllFinished_                    = false;
+    lastCompletedKeyFrameIndex_       = -1;
+    activeKeyFrameIndex_              = 0;
+    resetParam_.currentDelayTimer     = 0.0f;
 
     playState_ = PlayState::STOPPED;
 }
 
 void CameraAnimationData::RegisterParams() {
     // メイン設定
-    globalParameter_->Regist(groupName_, "autoReturnToInitial", &autoReturnToInitial_);
-    globalParameter_->Regist(groupName_, "resetPosEaseType", &resetPosEaseType_);
-    globalParameter_->Regist(groupName_, "resetRotateEaseType", &resetRotateEaseType_);
-    globalParameter_->Regist(groupName_, "resetFovEaseType", &resetFovEaseType_);
-    globalParameter_->Regist(groupName_, "resetTimePoint", &resetTimePoint_);
-    globalParameter_->Regist(groupName_, "returnDelayTime", &returnDelayTime_);
+    globalParameter_->Regist(groupName_, "autoReturnToInitial", &returnParam_.autoReturnToInitial);
+    globalParameter_->Regist(groupName_, "resetPosEaseType", &resetParam_.posEaseType);
+    globalParameter_->Regist(groupName_, "resetRotateEaseType", &resetParam_.rotateEaseType);
+    globalParameter_->Regist(groupName_, "resetFovEaseType", &resetParam_.fovEaseType);
+    globalParameter_->Regist(groupName_, "resetTimePoint", &resetParam_.timePoint);
+    globalParameter_->Regist(groupName_, "returnDelayTime", &resetParam_.delayTime);
     globalParameter_->Regist(groupName_, "timeMode", &timeMode_);
 }
 
 void CameraAnimationData::LoadParams() {
-    autoReturnToInitial_ = globalParameter_->GetValue<bool>(groupName_, "autoReturnToInitial");
-    resetPosEaseType_    = globalParameter_->GetValue<int32_t>(groupName_, "resetPosEaseType");
-    resetRotateEaseType_ = globalParameter_->GetValue<int32_t>(groupName_, "resetRotateEaseType");
-    resetFovEaseType_    = globalParameter_->GetValue<int32_t>(groupName_, "resetFovEaseType");
-    resetTimePoint_      = globalParameter_->GetValue<float>(groupName_, "resetTimePoint");
-    returnDelayTime_     = globalParameter_->GetValue<float>(groupName_, "returnDelayTime");
-    timeMode_            = globalParameter_->GetValue<int32_t>(groupName_, "timeMode");
+    returnParam_.autoReturnToInitial       = globalParameter_->GetValue<bool>(groupName_, "autoReturnToInitial");
+    resetParam_.posEaseType    = globalParameter_->GetValue<int32_t>(groupName_, "resetPosEaseType");
+    resetParam_.rotateEaseType = globalParameter_->GetValue<int32_t>(groupName_, "resetRotateEaseType");
+    resetParam_.fovEaseType    = globalParameter_->GetValue<int32_t>(groupName_, "resetFovEaseType");
+    resetParam_.timePoint      = globalParameter_->GetValue<float>(groupName_, "resetTimePoint");
+    resetParam_.delayTime      = globalParameter_->GetValue<float>(groupName_, "returnDelayTime");
+    timeMode_                  = globalParameter_->GetValue<int32_t>(groupName_, "timeMode");
 }
 
 void CameraAnimationData::AdjustParam() {
@@ -418,7 +418,7 @@ void CameraAnimationData::AdjustParam() {
         if (ImGui::Button("Reset"))
             Reset();
 
-        ImGui::Checkbox("Auto Return to Initial", &autoReturnToInitial_);
+        ImGui::Checkbox("Auto Return to Initial", &returnParam_.autoReturnToInitial);
 
         // 状態表示
         const char* stateText = "";
@@ -438,19 +438,19 @@ void CameraAnimationData::AdjustParam() {
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Animation Finished!");
         }
 
-        if (isWaitingForReturn_) {
+        if (returnParam_.isWaitingForReturn) {
             ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Waiting for Return... (%.2f/%.2f)",
-                returnDelayTimer_, returnDelayTime_);
+                resetParam_.currentDelayTimer, resetParam_.delayTime);
         }
     }
 
     ImGui::SeparatorText("Reset Param");
     // イージングタイプの設定
-    ImGui::DragFloat("Return Delay Time", &returnDelayTime_, 0.01f, 0.0f, 10.0f);
-    ImGui::DragFloat("Reset Time Point", &resetTimePoint_, 0.01f);
-    ImGuiEasingTypeSelector("Easing Type Position", resetPosEaseType_);
-    ImGuiEasingTypeSelector("Easing Type Rotate", resetRotateEaseType_);
-    ImGuiEasingTypeSelector("Easing Type Fov", resetFovEaseType_);
+    ImGui::DragFloat("Return Delay Time", &resetParam_.delayTime, 0.01f, 0.0f, 10.0f);
+    ImGui::DragFloat("Reset Time Point", &resetParam_.timePoint, 0.01f);
+    ImGuiEasingTypeSelector("Easing Type Position", resetParam_.posEaseType);
+    ImGuiEasingTypeSelector("Easing Type Rotate", resetParam_.rotateEaseType);
+    ImGuiEasingTypeSelector("Easing Type Fov", resetParam_.fovEaseType);
 
     ImGui::SeparatorText("deltaTime");
     TimeModeSelector("Time Mode", timeMode_);
@@ -500,56 +500,56 @@ void CameraAnimationData::AdjustParam() {
 
     // 現在の値表示
     ImGui::SeparatorText("Current Values");
-    ImGui::Text("Position: (%.2f, %.2f, %.2f)", currentPosition_.x, currentPosition_.y, currentPosition_.z);
-    ImGui::Text("Rotation: (%.2f, %.2f, %.2f)", currentRotation_.x, currentRotation_.y, currentRotation_.z);
-    ImGui::Text("FOV: %.2f", currentFov_);
+    ImGui::Text("Position: (%.2f, %.2f, %.2f)", currentCameraTransform_.position.x, currentCameraTransform_.position.y, currentCameraTransform_.position.z);
+    ImGui::Text("Rotation: (%.2f, %.2f, %.2f)", currentCameraTransform_.rotation.x, currentCameraTransform_.rotation.y, currentCameraTransform_.rotation.z);
+    ImGui::Text("FOV: %.2f", currentCameraTransform_.fov);
 
     ImGui::PopID();
 #endif // _DEBUG
 }
 
 void CameraAnimationData::SetInitialValues(const Vector3& position, const Vector3& rotation, const float& fov) {
-    initialPosition_ = position;
-    initialRotation_ = rotation;
-    initialFov_      = fov;
+    initialCameraTransform_.position = position;
+    initialCameraTransform_.rotation = rotation;
+    initialCameraTransform_.fov      = fov;
 }
 
 void CameraAnimationData::StartReturnToInitial() {
-    if (isReturningToInitial_ || isWaitingForReturn_) {
+    if (returnParam_.isReturningToInitial || returnParam_.isWaitingForReturn) {
         return;
     }
 
     // 待機時間が設定されている場合は待機状態に
-    if (returnDelayTime_ > 0.0f) {
-        isWaitingForReturn_ = true;
-        returnDelayTimer_   = 0.0f;
+    if (resetParam_.delayTime > 0.0f) {
+        returnParam_.isWaitingForReturn = true;
+        resetParam_.currentDelayTimer   = 0.0f;
     } else {
         // 待機時間がない場合は即座にイージング開始
-        isReturningToInitial_ = true;
+        returnParam_.isReturningToInitial = true;
     }
 
-    Vector3 currentPos    = currentPosition_;
-    Vector3 currentRot    = currentRotation_;
-    float currentFovValue = currentFov_;
+    Vector3 currentPos    = currentCameraTransform_.position;
+    Vector3 currentRot    = currentCameraTransform_.rotation;
+    float currentFovValue = currentCameraTransform_.fov;
 
     // 現在の値から初期値へのイージングを設定
-    returnPositionEase_.SetStartValue(currentPos);
-    returnPositionEase_.SetEndValue(initialPosition_);
-    returnPositionEase_.SetMaxTime(resetTimePoint_);
-    returnPositionEase_.SetType(static_cast<EasingType>(resetPosEaseType_));
-    returnPositionEase_.Reset();
+    returnParam_.positionEase.SetStartValue(currentPos);
+    returnParam_.positionEase.SetEndValue(initialCameraTransform_.position);
+    returnParam_.positionEase.SetMaxTime(resetParam_.timePoint);
+    returnParam_.positionEase.SetType(static_cast<EasingType>(resetParam_.posEaseType));
+    returnParam_.positionEase.Reset();
 
-    returnRotationEase_.SetStartValue(currentRot);
-    returnRotationEase_.SetEndValue(initialRotation_);
-    returnRotationEase_.SetMaxTime(resetTimePoint_);
-    returnRotationEase_.SetType(static_cast<EasingType>(resetRotateEaseType_));
-    returnRotationEase_.Reset();
+    returnParam_.rotationEase.SetStartValue(currentRot);
+    returnParam_.rotationEase.SetEndValue(initialCameraTransform_.rotation);
+    returnParam_.rotationEase.SetMaxTime(resetParam_.timePoint);
+    returnParam_.rotationEase.SetType(static_cast<EasingType>(resetParam_.rotateEaseType));
+    returnParam_.rotationEase.Reset();
 
-    returnFovEase_.SetStartValue(currentFovValue);
-    returnFovEase_.SetEndValue(initialFov_);
-    returnFovEase_.SetMaxTime(resetTimePoint_);
-    returnFovEase_.SetType(static_cast<EasingType>(resetFovEaseType_));
-    returnFovEase_.Reset();
+    returnParam_.fovEase.SetStartValue(currentFovValue);
+    returnParam_.fovEase.SetEndValue(initialCameraTransform_.fov);
+    returnParam_.fovEase.SetMaxTime(resetParam_.timePoint);
+    returnParam_.fovEase.SetType(static_cast<EasingType>(resetParam_.fovEaseType));
+    returnParam_.fovEase.Reset();
 }
 
 void CameraAnimationData::SetSelectedKeyFrameIndex(const int32_t& index) {
@@ -557,7 +557,6 @@ void CameraAnimationData::SetSelectedKeyFrameIndex(const int32_t& index) {
         selectedKeyFrameIndex_ = index;
     }
 }
-
 
 const CameraKeyFrame* CameraAnimationData::GetSelectedKeyFrame() const {
     if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {

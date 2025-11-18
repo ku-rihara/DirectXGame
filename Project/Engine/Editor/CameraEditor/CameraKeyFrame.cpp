@@ -1,21 +1,23 @@
 #include "CameraKeyFrame.h"
-#include"MathFunction.h"
-#include "Frame/Frame.h" 
+#include "Frame/Frame.h"
+#include "MathFunction.h"
 #include <imgui.h>
 #include <iostream>
 
-void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t& keyNumber) {
+void CameraKeyFrame::Init(const std::string& groupName, const int32_t& keyNumber) {
     // グローバルパラメータ
     globalParameter_         = GlobalParameter::GetInstance();
     currentKeyFrameIndex     = keyNumber;
-    std::string newGroupName = cameraAnimationName + std::to_string(currentKeyFrameIndex);
+    std::string newGroupName = groupName + std::to_string(currentKeyFrameIndex);
     groupName_               = newGroupName;
-   
+
+    folderPath_ += groupName;
+
     if (!globalParameter_->HasRegisters(groupName_)) {
         // 新規登録
         globalParameter_->CreateGroup(groupName_);
         RegisterParams();
-      
+
     } else {
         // パラメータを取得
         LoadParams();
@@ -50,7 +52,7 @@ void CameraKeyFrame::Update(const float& speedRate) {
     switch (static_cast<TimeMode>(timeMode_)) {
     case TimeMode::DELTA_TIME:
         // タイムスケール無視
-        actualDeltaTime = Frame::DeltaTime() * speedRate; 
+        actualDeltaTime = Frame::DeltaTime() * speedRate;
         break;
     case TimeMode::DELTA_TIME_RATE:
     default:
@@ -106,7 +108,7 @@ void CameraKeyFrame::AdjustParam() {
     Vector3 rotationDegrees = ToDegree(keyFrameParam_.rotation);
 
     if (ImGui::DragFloat3("Rotation (Degrees)", &rotationDegrees.x, 1.0f)) {
-   
+
         keyFrameParam_.rotation = ToRadian(rotationDegrees);
     }
 
@@ -152,7 +154,6 @@ void CameraKeyFrame::AdaptValueSetting() {
     rotationEase_.SetAdaptValue(&currentKeyFrameParam_.rotation);
     fovEase_.SetAdaptValue(&currentKeyFrameParam_.fov);
 }
-
 
 void CameraKeyFrame::TimeModeSelector(const char* label, int32_t& target) {
     int mode = static_cast<int>(target);
