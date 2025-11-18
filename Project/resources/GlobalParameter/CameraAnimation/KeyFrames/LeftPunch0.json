@@ -1,6 +1,11 @@
 {
+<<<<<<<< HEAD:Project/resources/GlobalParameter/CameraAnimation/KeyFrames/LeftPunch0.json
     "LeftPunch0": {
         "fov": 45.0,
+========
+    "PlayerthrustAttack2": {
+        "fov": 45.41999816894531,
+>>>>>>>> Engine/Develop:Project/resources/GlobalParameter/CameraAnimation/KeyFrames/PlayerthrustAttack/PlayerthrustAttack2.json
         "fovEaseType": 0,
         "position": [
             0.6000000238418579,
