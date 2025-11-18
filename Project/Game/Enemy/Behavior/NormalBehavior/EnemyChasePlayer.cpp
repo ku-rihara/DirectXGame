@@ -17,7 +17,7 @@
 
 // 初期化
 EnemyChasePlayer::EnemyChasePlayer(BaseEnemy* boss)
-    : BaseEnemyMoveBehavior("EnemyChasePlayer", boss) {
+    : BaseEnemyBehavior("EnemyChasePlayer", boss) {
 
   
     pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2(0, 0));
@@ -55,7 +55,7 @@ void EnemyChasePlayer::Update() {
 
     // 　一定距離で見失う
     if (distance_ > pBaseEnemy_->GetParameter().chaseDistance) {
-        pBaseEnemy_->ChangeMoveBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
+        pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
         return;
     }
 

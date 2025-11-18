@@ -4,8 +4,8 @@
 // function
 
 // class
-#include "../Behavior/DamageReaction/BaseEnemyDamageReaction.h"
-#include "../Behavior/BaseEnemyMoveBehavior.h"
+#include "../Behavior/DamageReactionBehavior/BaseEnemyDamageReaction.h"
+#include "../Behavior/NormalBehavior/BaseEnemyBehavior.h"
 #include "BaseObject/BaseObject.h"
 #include "Collider/AABBCollider.h"
 #include "CollisionBox/EnemyCollisionBox.h"
@@ -118,7 +118,7 @@ public:
     /// 移動ビヘイビア変更
     /// </summary>
     /// <param name="behavior">新しい移動ビヘイビア</param>
-    void ChangeMoveBehavior(std::unique_ptr<BaseEnemyMoveBehavior> behavior);
+    void ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior);
 
     void BackToDamageRoot(); //< ダメージルートに戻る
     void BehaviorChangeDeath(); //< 死亡ビヘイビアに変更
@@ -177,7 +177,7 @@ protected:
 
     /// behavior
     std::unique_ptr<BaseEnemyDamageReaction> damageBehavior_ = nullptr;
-    std::unique_ptr<BaseEnemyMoveBehavior> moveBehavior_     = nullptr;
+    std::unique_ptr<BaseEnemyBehavior> moveBehavior_     = nullptr;
 
 public:
     /// ========================================================================================

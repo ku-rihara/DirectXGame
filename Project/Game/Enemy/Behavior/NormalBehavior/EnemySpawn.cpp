@@ -13,7 +13,7 @@
 
 // 初期化
 EnemySpawn::EnemySpawn(BaseEnemy* boss)
-    : BaseEnemyMoveBehavior("EnemySpawn", boss) {
+    : BaseEnemyBehavior("EnemySpawn", boss) {
 
     /// spawn
 
@@ -53,7 +53,7 @@ void EnemySpawn::Update() {
         ///  移動Behaviorに切り替え
         ///------------------------------------------------------------------
     case EnemySpawn::Step::ChangeNextBehavior:
-        pBaseEnemy_->ChangeMoveBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
+        pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyWait>(pBaseEnemy_));
         break;
     default:
         break;

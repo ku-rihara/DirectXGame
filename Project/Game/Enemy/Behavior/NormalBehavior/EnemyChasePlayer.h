@@ -1,9 +1,9 @@
 #pragma once
 
-#include"BaseEnemyMoveBehavior.h"
+#include"BaseEnemyBehavior.h"
 #include"Easing/Easing.h"
 
-class EnemyChasePlayer : public BaseEnemyMoveBehavior {
+class EnemyChasePlayer : public BaseEnemyBehavior {
 private:
 	
 	float chaseSpeedMax_;

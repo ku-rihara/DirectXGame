@@ -17,12 +17,12 @@
 
 //初期化
 EnemyWait::EnemyWait(BaseEnemy* boss)
-	: BaseEnemyMoveBehavior("EnemyWait", boss) {
+	: BaseEnemyBehavior("EnemyWait", boss) {
 	
 
 	//パラメータ初期化
-	pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2(0, 0));
-	pBaseEnemy_->GetFindSprite()->SetScale(Vector2(0, 0));
+	pBaseEnemy_->GetNotFindSprite()->SetScale(Vector2::ZeroVector());
+	pBaseEnemy_->GetFindSprite()->SetScale(Vector2::ZeroVector());
 
 	spriteEase_.Init("EnemyOverLookSpriteScaling.json");
     spriteEase_.SetAdaptValue(&tempSpriteScale_);
@@ -49,7 +49,7 @@ void EnemyWait::Update() {
 
 		// 近すぎる場合は追従を停止して攻撃
 		if (distance_ < pBaseEnemy_->GetParameter().chaseDistance) {
-			pBaseEnemy_->ChangeMoveBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
+			pBaseEnemy_->ChangeBehavior(std::make_unique<EnemyChasePlayer>(pBaseEnemy_));
 			return;
 		}
 

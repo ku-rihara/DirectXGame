@@ -1,10 +1,10 @@
 #pragma once
 
-#include"BaseEnemyMoveBehavior.h"
+#include"BaseEnemyBehavior.h"
 
 #include"Easing/Easing.h"
 
-class EnemySpawn : public BaseEnemyMoveBehavior {
+class EnemySpawn : public BaseEnemyBehavior {
 public:
     // コンストラクタ
     EnemySpawn(BaseEnemy* boss);

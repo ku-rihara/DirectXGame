@@ -1,10 +1,8 @@
 #include "BaseEnemy.h"
 
 // behavior
-#include "../Behavior/DamageReaction/EnemyDamageReactionRoot.h"
-#include "../Behavior/EnemyDamageRoot.h"
-#include "../Behavior/EnemyDeath.h"
-#include "../Behavior/EnemySpawn.h"
+#include "../Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
+#include "../Behavior/NormalBehavior/EnemySpawn.h"
 #include "Enemy/EnemyManager.h"
 
 #include "Combo/Combo.h"
@@ -51,8 +49,8 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
     thrustSound_ = Audio::GetInstance()->LoadWave("Enemythurst.wav");
 
     // 振る舞い初期化
-    ChangeDamageReactionBehavior(std::make_unique<EnemyDamageRoot>(this));
-    ChangeMoveBehavior(std::make_unique<EnemySpawn>(this));
+     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
+    ChangeBehavior(std::make_unique<EnemySpawn>(this));
 }
 
 ///========================================================
@@ -60,7 +58,7 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
 ///========================================================
 void BaseEnemy::Update() {
 
-    if (dynamic_cast<EnemyDamageRoot*>(damageBehavior_.get())) {
+    if (dynamic_cast<EnemyDamageReactionRoot*>(damageBehavior_.get())) {
         moveBehavior_->Update();
     }
 
@@ -225,7 +223,7 @@ void BaseEnemy::ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReac
     damageBehavior_ = std::move(behavior);
 }
 
-void BaseEnemy::ChangeMoveBehavior(std::unique_ptr<BaseEnemyMoveBehavior> behavior) {
+void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior) {
     moveBehavior_ = std::move(behavior);
 }
 
@@ -334,12 +332,12 @@ void BaseEnemy::SetAttackEffect(AttackEffect* attackEffect) {
 }
 
 void BaseEnemy::BackToDamageRoot() {
-    ChangeDamageReactionBehavior(std::make_unique<EnemyDamageRoot>(this)); /// 追っかけ
+    ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
 }
 
-void BaseEnemy::SetParameter(const Type& type, const Parameter& paramater) {
+void BaseEnemy::SetParameter(const Type& type, const Parameter& parameter) {
     type_      = type;
-    parameter_ = paramater;
+    parameter_ = parameter;
 }
 void BaseEnemy::SetBodyColor(const Vector4& color) {
     obj3d_->objColor_.SetColor(color);

@@ -148,12 +148,6 @@
     <Filter Include="Game\Player\Behavior\TitleBehavior">
       <UniqueIdentifier>{b01ecc97-be49-417c-b138-660a6158c88c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Enemy\Behevior\Base">
-      <UniqueIdentifier>{1746ae5f-60db-477d-aa9e-b09ea00862c4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Enemy\Behevior\MoveBehavior">
-      <UniqueIdentifier>{e99abf53-21bf-4374-907f-ce66abce6461}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Player\Behavior\Base">
       <UniqueIdentifier>{566bf61f-7694-4068-9d7b-8bd02d70ef3f}</UniqueIdentifier>
     </Filter>
@@ -180,9 +174,6 @@
     </Filter>
     <Filter Include="Game\Player\core">
       <UniqueIdentifier>{d3e51b1b-0df3-4fb3-bd66-3f185b05cfcd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Enemy\Behevior\Damage">
-      <UniqueIdentifier>{d269b1c9-4fa2-49cd-99e9-ef7cc1bcd7fc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Scene\Manager">
       <UniqueIdentifier>{20578600-268f-441b-8c4f-b9fd3cd175ca}</UniqueIdentifier>
@@ -475,6 +466,9 @@
     <Filter Include="Game\EasingTestObj">
       <UniqueIdentifier>{a383ecc6-f375-4bf7-9b58-7f4ba9f98f42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemy\Behevior\NormalBehavior">
+      <UniqueIdentifier>{e99abf53-21bf-4374-907f-ce66abce6461}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -610,15 +604,6 @@
     <ClCompile Include="math\Quaternion.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyWait.cpp">
-      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyChasePlayer.cpp">
-      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemySpawn.cpp">
-      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Lighrt\Light.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
     </ClCompile>
@@ -700,12 +685,6 @@
     <ClCompile Include="Game\GameCamera\GameCamera.cpp">
       <Filter>Game\GameCamera</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\BaseEnemyBehavior.cpp">
-      <Filter>Game\Enemy\Behevior\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\BaseEnemyMoveBehavior.cpp">
-      <Filter>Game\Enemy\Behevior\Base</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp">
       <Filter>Game\Player\Behavior\Base\Atacck</Filter>
     </ClCompile>
@@ -726,27 +705,6 @@
     </ClCompile>
     <ClCompile Include="Game\CollisionBox\EnemyCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyBoundDamage.cpp">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyDamageRoot.cpp">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyDeath.cpp">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyHitBackDamage.cpp">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyStopDamage.cpp">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyThrustDamage.cpp">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyUpperDamage.cpp">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\JumpRush.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
@@ -1219,14 +1177,26 @@
     <ClCompile Include="Game\Enemy\DamageReaction\EnemyDamageReactionData.cpp">
       <Filter>Game\Enemy\DamageReaction</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\DamageReaction\BaseEnemyDamageReaction.cpp">
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.cpp">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\DamageReaction\EnemyDamageReactionRoot.cpp">
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReacrtionAction.cpp">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\DamageReaction\EnemyDamageReacrtionAction.cpp">
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.cpp">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\BaseEnemyBehavior.cpp">
+      <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\EnemyChasePlayer.cpp">
+      <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\EnemySpawn.cpp">
+      <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\EnemyWait.cpp">
+      <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1401,15 +1371,6 @@
     <ClInclude Include="math\Quaternion.h">
       <Filter>liberary\.h</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyWait.h">
-      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyChasePlayer.h">
-      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemySpawn.h">
-      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Lighrt\PointLight.h">
       <Filter>MyEngine\.h\Light</Filter>
     </ClInclude>
@@ -1488,12 +1449,6 @@
     <ClInclude Include="Game\GameCamera\GameCamera.h">
       <Filter>Game\GameCamera</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\BaseEnemyBehavior.h">
-      <Filter>Game\Enemy\Behevior\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\BaseEnemyMoveBehavior.h">
-      <Filter>Game\Enemy\Behevior\Base</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h">
       <Filter>Game\Player\Behavior\Base\Atacck</Filter>
     </ClInclude>
@@ -1511,27 +1466,6 @@
     </ClInclude>
     <ClInclude Include="Game\CollisionBox\EnemyCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyBoundDamage.h">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyDamageRoot.h">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyDeath.h">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyHitBackDamage.h">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyStopDamage.h">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyThrustDamage.h">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyUpperDamage.h">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\JumpRush.h">
       <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
@@ -2022,14 +1956,26 @@
     <ClInclude Include="Game\Enemy\DamageReaction\EnemyDamageReactionData.h">
       <Filter>Game\Enemy\DamageReaction</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\DamageReaction\BaseEnemyDamageReaction.h">
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.h">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\DamageReaction\EnemyDamageReactionRoot.h">
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReacrtionAction.h">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\DamageReaction\EnemyDamageReacrtionAction.h">
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.h">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\BaseEnemyBehavior.h">
+      <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\EnemyChasePlayer.h">
+      <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\EnemySpawn.h">
+      <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\EnemyWait.h">
+      <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
