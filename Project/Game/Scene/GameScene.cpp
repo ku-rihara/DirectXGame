@@ -191,6 +191,7 @@ void GameScene::Debug() {
     cameraEditor_->EditorUpdate();
     shakeEditor_->EditorUpdate();
     attackEffect_->EditorUpdate();
+    objEaseAnimationEditor_->EditorUpdate();
     ImGui::End();
 
     ImGui::Begin("PlayerAttack");
