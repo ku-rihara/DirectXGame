@@ -25,7 +25,7 @@ void WorldTransform::TransferMatrix() {
 }
 
 void WorldTransform::UpdateMatrix() {
-    // SRT更新
+    // TransformType更新
     UpdateAffineMatrix();
 
     // JointParent
@@ -350,21 +350,34 @@ void WorldTransform::ApplyAnimationToTransform() {
         return;
     }
 
-    // Scaleを適用
-    scale_ = objEaseAnimationPlayer_->GetCurrentScale();
+    // Scaleをオフセットとして適用
+    Vector3 scaleOffset = objEaseAnimationPlayer_->GetCurrentScale();
+    scale_              = Vector3(
+        scale_.x * scaleOffset.x,
+        scale_.y * scaleOffset.y,
+        scale_.z * scaleOffset.z);
 
-    // Rotationを適用（ラジアン）
-    rotation_ = objEaseAnimationPlayer_->GetCurrentRotation();
-
-    // Translationを適用
-    if (!animData->IsUsingRail()) {
-        // 通常のイージング使用時
-        translation_ = objEaseAnimationPlayer_->GetCurrentTranslation();
+    // Rotationをオフセットとして適用
+    if (rotateOder_ == RotateOder::Quaternion) {
+        // Quaternionの場合
+        Vector3 rotationOffset = objEaseAnimationPlayer_->GetCurrentRotation();
+        Quaternion offsetQuat  = Quaternion::EulerToQuaternion(rotationOffset);
+        quaternion_            = quaternion_ * offsetQuat;
     } else {
-        // Rail使用時
+        // オイラー角の場合
+        Vector3 rotationOffset = objEaseAnimationPlayer_->GetCurrentRotation();
+        rotation_              = rotation_ + rotationOffset;
+    }
+
+    // Translationをオフセットとして適用
+    if (!animData->IsUsingRail()) {
+        Vector3 translationOffset = objEaseAnimationPlayer_->GetCurrentTranslation();
+        translation_              = translation_ + translationOffset;
+    } else {
         auto* railPlayer = animData->GetRailPlayer();
         if (railPlayer) {
-            translation_ = railPlayer->GetCurrentPosition();
+            Vector3 railOffset = railPlayer->GetCurrentPosition();
+            translation_       = translation_ + railOffset;
         }
     }
 }

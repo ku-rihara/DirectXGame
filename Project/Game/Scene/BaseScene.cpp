@@ -42,11 +42,18 @@ void BaseScene::Init() {
 }
 
 void BaseScene::Update() {
+    // エディター機能更新
+    EditorUpdate();
+}
+
+void BaseScene::EditorUpdate() {
+#ifdef _DEBUG
     debugCamera_->Update();
     cameraEditor_->Update();
     shakeEditor_->Update(Frame::DeltaTimeRate());
     railEditor_->Update(Frame::DeltaTimeRate());
     objEaseAnimationEditor_->Update(Frame::DeltaTimeRate());
+#endif
 }
 
 void BaseScene::Debug() {

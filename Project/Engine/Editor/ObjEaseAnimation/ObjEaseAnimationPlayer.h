@@ -39,8 +39,8 @@ public:
     bool IsFinished() const {return animationData_->IsFinished(); }
 
     const Vector3& GetCurrentScale() const {return animationData_->GetCurrentScale();}
-    const Vector3& GetCurrentRotation() const {return animationData_->GetCurrentRotation();}
-    const Vector3& GetCurrentTranslation() const {return animationData_->GetCurrentTranslation();}
+    const Vector3& GetCurrentRotation() const {return animationData_->GetCurrentRotate();}
+    const Vector3& GetCurrentTranslation() const {return animationData_->GetCurrentPos();}
 
     ObjEaseAnimationData* GetAnimationData() { return animationData_.get(); }
 };

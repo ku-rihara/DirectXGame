@@ -7,6 +7,20 @@
 
 void ObjEaseAnimationEditor::Init() {
     AllLoadFile();
+    InitPreviewObject();
+}
+
+void ObjEaseAnimationEditor::InitPreviewObject() {
+
+    // デフォルトモデルでプレビューオブジェクトを作成
+    previewObject_.reset(Object3d::CreateModel("DebugCube.obj"));
+   
+    if (previewObject_) {
+        previewObject_->SetIsAutoUpdate(false);
+        previewObject_->transform_.scale_       = previewBaseTransform_.scale;
+        previewObject_->transform_.rotation_    = previewBaseTransform_.rotation;
+        previewObject_->transform_.translation_ = previewBaseTransform_.translation;
+    }
 }
 
 void ObjEaseAnimationEditor::AllLoadFile() {
@@ -62,12 +76,71 @@ void ObjEaseAnimationEditor::Update(const float& deltaTime) {
             animation->Update(deltaTime);
         }
     }
+
+    // プレビューオブジェクトを更新
+    UpdatePreviewObject();
+}
+
+void ObjEaseAnimationEditor::UpdatePreviewObject() {
+    if (!previewObject_ || !showPreview_) {
+        return;
+    }
+
+    // ベース値をリセット
+    previewObject_->transform_.scale_       = previewBaseTransform_.scale;
+    previewObject_->transform_.rotation_    = previewBaseTransform_.rotation;
+    previewObject_->transform_.translation_ = previewBaseTransform_.translation;
+
+    // 選択中のアニメーションを適用
+    if (selectedCategoryIndex_ >= 0 && selectedCategoryIndex_ < static_cast<int>(categories_.size())) {
+        auto& category = categories_[selectedCategoryIndex_];
+        if (category.selectedAnimationIndex >= 0 && category.selectedAnimationIndex < static_cast<int>(category.animations.size())) {
+            auto* animation = category.animations[category.selectedAnimationIndex].get();
+
+            if (animation && animation->IsPlaying()) {
+                // アニメーションのオフセット値を取得して適用
+                Vector3 scaleOffset       = animation->GetCurrentScale();
+                Vector3 rotationOffset    = animation->GetCurrentRotate();
+                Vector3 translationOffset = animation->GetCurrentPos();
+
+                previewObject_->transform_.scale_       = previewBaseTransform_.scale * scaleOffset;
+                previewObject_->transform_.rotation_    = previewBaseTransform_.rotation + rotationOffset;
+                previewObject_->transform_.translation_ = previewBaseTransform_.translation + translationOffset;
+            }
+        }
+    }
+
+    previewObject_->Update();
 }
 
 void ObjEaseAnimationEditor::EditorUpdate() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader("Object Ease Animation Manager")) {
         ImGui::PushID("ObjEaseAnimationManager");
+
+        // プレビュー設定
+        ImGui::SeparatorText("Preview Settings");
+        ImGui::Checkbox("Show Preview", &showPreview_);
+
+        if (showPreview_) {
+            ImGui::InputText("Preview Model", previewModelNameBuffer_, IM_ARRAYSIZE(previewModelNameBuffer_));
+         
+            if (ImGui::Button("Change Model")) {
+                ChangePreviewModel(previewModelNameBuffer_);
+            }
+
+            ImGui::DragFloat3("Base Scale", &previewBaseTransform_.scale.x, 0.01f);
+            ImGui::DragFloat3("Base Rotation", &previewBaseTransform_.rotation.x, 0.01f);
+            ImGui::DragFloat3("Base Translation", &previewBaseTransform_.translation.x, 0.1f);
+
+            if (ImGui::Button("Reset Preview Transform")) {
+                previewBaseTransform_.scale       = Vector3::OneVector();
+                previewBaseTransform_.rotation    = Vector3::ZeroVector();
+                previewBaseTransform_.translation = Vector3::ZeroVector();
+            }
+        }
+
+        ImGui::Separator();
 
         ImGui::SeparatorText("Category Management");
 
@@ -355,4 +428,8 @@ ObjEaseAnimationData* ObjEaseAnimationEditor::GetAnimationByName(const std::stri
     }
 
     return nullptr;
+}
+
+void ObjEaseAnimationEditor::ChangePreviewModel(const std::string& modelName) {
+    previewObject_->SetModelByName(modelName);
 }

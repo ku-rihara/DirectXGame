@@ -21,14 +21,14 @@ void CameraAnimationData::Init(const std::string& animationName) {
         globalParameter_->SyncParamForGroup(groupName_);
     } else {
         // パラメータを取得
-        LoadParams();
+        GetParams();
     }
 
     // 値初期化
-    ResetValue();
+    ResetParams();
 }
 
-void CameraAnimationData::ResetValue() {
+void CameraAnimationData::ResetParams() {
     activeKeyFrameIndex_ = 0;
 
     // 新しいフラグの初期化
@@ -390,14 +390,14 @@ void CameraAnimationData::RegisterParams() {
     globalParameter_->Regist(groupName_, "timeMode", &timeMode_);
 }
 
-void CameraAnimationData::LoadParams() {
-    returnParam_.autoReturnToInitial       = globalParameter_->GetValue<bool>(groupName_, "autoReturnToInitial");
-    resetParam_.posEaseType    = globalParameter_->GetValue<int32_t>(groupName_, "resetPosEaseType");
-    resetParam_.rotateEaseType = globalParameter_->GetValue<int32_t>(groupName_, "resetRotateEaseType");
-    resetParam_.fovEaseType    = globalParameter_->GetValue<int32_t>(groupName_, "resetFovEaseType");
-    resetParam_.timePoint      = globalParameter_->GetValue<float>(groupName_, "resetTimePoint");
-    resetParam_.delayTime      = globalParameter_->GetValue<float>(groupName_, "returnDelayTime");
-    timeMode_                  = globalParameter_->GetValue<int32_t>(groupName_, "timeMode");
+void CameraAnimationData::GetParams() {
+    returnParam_.autoReturnToInitial = globalParameter_->GetValue<bool>(groupName_, "autoReturnToInitial");
+    resetParam_.posEaseType          = globalParameter_->GetValue<int32_t>(groupName_, "resetPosEaseType");
+    resetParam_.rotateEaseType       = globalParameter_->GetValue<int32_t>(groupName_, "resetRotateEaseType");
+    resetParam_.fovEaseType          = globalParameter_->GetValue<int32_t>(groupName_, "resetFovEaseType");
+    resetParam_.timePoint            = globalParameter_->GetValue<float>(groupName_, "resetTimePoint");
+    resetParam_.delayTime            = globalParameter_->GetValue<float>(groupName_, "returnDelayTime");
+    timeMode_                        = globalParameter_->GetValue<int32_t>(groupName_, "timeMode");
 }
 
 void CameraAnimationData::AdjustParam() {

@@ -101,7 +101,7 @@ void RailData::CheckAndHandleFinish() {
 }
 
 void RailData::StartReturn() {
-    playState_                = PlayState::RETURNING;
+    playState_                      = PlayState::RETURNING;
     directReturnParam_.easeAdaptPos = Vector3::ZeroVector();
     railMoveParam_.timeEase.Reset();
 
@@ -112,10 +112,11 @@ void RailData::StartReturn() {
         directReturnParam_.ease.SetEndValue(startPosition_);
         directReturnParam_.ease.SetMaxTime(directReturnParam_.maxTime);
         directReturnParam_.ease.SetType(static_cast<EasingType>(directReturnParam_.easeTypeInt));
+        directReturnParam_.ease.SetIsStartEndReverse(false);
         directReturnParam_.ease.Reset();
     } else if (railMoveParam_.returnMode == ReturnMode::REVERSE_RAIL) {
-        // レール逆走用のイージング設定を適用
-        EaseTimeSetup(true);
+
+        railMoveParam_.timeEase.SetIsStartEndReverse(true);
         railMoveParam_.timeEase.SetMaxTime(directReturnParam_.maxTime);
         railMoveParam_.timeEase.SetType(static_cast<EasingType>(directReturnParam_.easeTypeInt));
     }
@@ -159,7 +160,6 @@ void RailData::UpdateReturn(const float& speed) {
 }
 
 void RailData::OnReturnComplete() {
-    EaseTimeSetup(false);
     // 戻り動作完了後の処理
     if (railMoveParam_.isLoop) {
         // ループする場合は再度再生開始
@@ -168,6 +168,7 @@ void RailData::OnReturnComplete() {
         // ループしない場合は停止
         playState_ = PlayState::STOPPED;
         // 元のイージング設定に戻す
+        railMoveParam_.timeEase.SetIsStartEndReverse(false);
         railMoveParam_.timeEase.SetMaxTime(railMoveParam_.maxTime);
         railMoveParam_.timeEase.SetType(static_cast<EasingType>(railMoveParam_.easeTypeInt));
     }
@@ -340,17 +341,19 @@ void RailData::LoadParams() {
 }
 
 void RailData::InitParams() {
-    playState_       = PlayState::STOPPED;
-    currentPosition_ = Vector3::ZeroVector();
-    startPosition_   = Vector3::ZeroVector();
-    railMoveParam_.elapsedTime     = 0.0f;
-    railMoveParam_.adaptTime       = 0.0f;
+    playState_                 = PlayState::STOPPED;
+    currentPosition_           = Vector3::ZeroVector();
+    startPosition_             = Vector3::ZeroVector();
+    railMoveParam_.elapsedTime = 0.0f;
+    railMoveParam_.adaptTime   = 0.0f;
 
     // Easing初期化
     railMoveParam_.timeEase.SetAdaptValue(&railMoveParam_.adaptTime);
-    EaseTimeSetup(false);
+    railMoveParam_.timeEase.SetStartValue(0.0f);
+    railMoveParam_.timeEase.SetEndValue(1.0f);
     railMoveParam_.timeEase.SetMaxTime(railMoveParam_.maxTime);
     railMoveParam_.timeEase.SetType(static_cast<EasingType>(railMoveParam_.easeTypeInt));
+    railMoveParam_.timeEase.SetIsStartEndReverse(false);
 
     railMoveParam_.returnMode = static_cast<ReturnMode>(railMoveParam_.returnModeInt);
     railMoveParam_.timeEase.Reset();

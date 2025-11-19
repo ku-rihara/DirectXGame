@@ -267,158 +267,163 @@ void Easing<T>::CalculateValue() {
         endValue   = endValue_ + baseValue_;
     }
 
+    // currentOffsetのイージング計算
+    if (!currentOffset_) {
+        return;
+    }
+
     switch (type_) {
 
     case EasingType::InSine:
-        *currentValue_ = EaseInSine(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseInSine(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutSine:
-        *currentValue_ = EaseOutSine(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseOutSine(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutSine:
-        *currentValue_ = EaseInOutSine(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseInOutSine(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InQuint:
-        *currentValue_ = EaseInQuint(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseInQuint(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutQuint:
-        *currentValue_ = EaseOutQuint(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseOutQuint(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutQuint:
-        *currentValue_ = EaseInOutQuint(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseInOutQuint(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InCirc:
-        *currentValue_ = EaseInCirc(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseInCirc(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutCirc:
-        *currentValue_ = EaseOutCirc(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseOutCirc(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutCirc:
-        *currentValue_ = EaseInOutCirc(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseInOutCirc(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InExpo:
-        *currentValue_ = EaseInExpo(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseInExpo(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutExpo:
-        *currentValue_ = EaseOutExpo(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseOutExpo(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutExpo:
-        *currentValue_ = EaseInOutExpo(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseInOutExpo(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InCubic:
-        *currentValue_ = EaseInCubic(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseInCubic(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutCubic:
-        *currentValue_ = EaseOutCubic(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseOutCubic(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutCubic:
-        *currentValue_ = EaseInOutCubic(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseInOutCubic(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InQuad:
-        *currentValue_ = EaseInQuad(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseInQuad(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutQuad:
-        *currentValue_ = EaseOutQuad(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseOutQuad(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutQuad:
-        *currentValue_ = EaseInOutQuad(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseInOutQuad(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InQuart:
-        *currentValue_ = EaseInQuart(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseInQuart(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutQuart:
-        *currentValue_ = EaseOutQuart(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseOutQuart(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutQuart:
-        /*    currentValue_ = EaseInOutQuart(startValue, endValue, currentTime_, maxTime_);*/
+        /*    currentOffset_ = EaseInOutQuart(startValue, endValue, currentTime_, maxTime_);*/
         break;
     case EasingType::InBack:
-        *currentValue_ = EaseInBack(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseInBack(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutBack:
-        *currentValue_ = EaseOutBack(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseOutBack(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutBack:
-        *currentValue_ = EaseInOutBack(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseInOutBack(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InBounce:
-        *currentValue_ = EaseInBounce(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseInBounce(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::OutBounce:
-        *currentValue_ = EaseOutBounce(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseOutBounce(startValue, endValue, currentTime_, maxTime_);
         break;
     case EasingType::InOutBounce:
-        *currentValue_ = EaseInOutBounce(startValue, endValue, currentTime_, maxTime_);
+        *currentOffset_ = EaseInOutBounce(startValue, endValue, currentTime_, maxTime_);
         break;
 
     //  特殊イージング
     case EasingType::SquishyScaling:
-        *currentValue_ = EaseAmplitudeScale(startValue, currentTime_, maxTime_, amplitude_, period_);
+        *currentOffset_ = EaseAmplitudeScale(startValue, currentTime_, maxTime_, amplitude_, period_);
         break;
 
     //  Back
     case EasingType::BackInSineZero:
-        *currentValue_ = Back::InSineZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::InSineZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackOutSineZero:
-        *currentValue_ = Back::OutSineZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::OutSineZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackInOutSineZero:
-        *currentValue_ = Back::InOutSineZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::InOutSineZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackInQuadZero:
-        *currentValue_ = Back::InQuadZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::InQuadZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackOutQuadZero:
-        *currentValue_ = Back::OutQuadZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::OutQuadZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackInOutQuadZero:
-        *currentValue_ = Back::InOutQuadZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::InOutQuadZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackInCubicZero:
-        *currentValue_ = Back::InCubicZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::InCubicZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackOutCubicZero:
-        *currentValue_ = Back::OutCubicZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::OutCubicZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackInOutCubicZero:
-        *currentValue_ = Back::InOutCubicZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::InOutCubicZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackInQuartZero:
-        *currentValue_ = Back::InQuartZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::InQuartZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackOutQuartZero:
-        *currentValue_ = Back::OutQuartZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::OutQuartZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackInOutQuartZero:
-        *currentValue_ = Back::InOutQuartZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::InOutQuartZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackInQuintZero:
-        *currentValue_ = Back::InQuintZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::InQuintZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackOutQuintZero:
-        *currentValue_ = Back::OutQuintZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::OutQuintZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackInOutQuintZero:
-        *currentValue_ = Back::InOutQuintZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::InOutQuintZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackInExpoZero:
-        *currentValue_ = Back::InExpoZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::InExpoZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackOutExpoZero:
-        *currentValue_ = Back::OutExpoZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::OutExpoZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackInOutExpoZero:
-        *currentValue_ = Back::InOutExpoZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::InOutExpoZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackInCircZero:
-        *currentValue_ = Back::InCircZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::InCircZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackOutCircZero:
-        *currentValue_ = Back::OutCircZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::OutCircZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     case EasingType::BackInOutCircZero:
-        *currentValue_ = Back::InOutCircZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
+        *currentOffset_ = Back::InOutCircZero(startValue, endValue, currentTime_, maxTime_, backRatio_);
         break;
     }
 }
@@ -432,16 +437,16 @@ void Easing<T>::Easing::FinishBehavior() {
     switch (finishValueType_) {
     case EasingFinishValueType::Start:
         if (isStartEndReverse_) {
-            *currentValue_ = endValue_ + baseValue_;
+            *currentOffset_ = endValue_ + baseValue_;
         } else {
-            *currentValue_ = startValue_ + baseValue_;
+            *currentOffset_ = startValue_ + baseValue_;
         }
         break;
     case EasingFinishValueType::End:
         if (isStartEndReverse_) {
-            *currentValue_ = startValue_ + baseValue_;
+            *currentOffset_ = startValue_ + baseValue_;
         } else {
-            *currentValue_ = endValue_ + baseValue_;
+            *currentOffset_ = endValue_ + baseValue_;
         }
         break;
     default:
@@ -450,7 +455,7 @@ void Easing<T>::Easing::FinishBehavior() {
 }
 template <typename T>
 void Easing<T>::Easing::SetAdaptValue(T* value) {
-    currentValue_ = value;
+    currentOffset_ = value;
 }
 
 template <>
@@ -459,13 +464,13 @@ void Easing<float>::SetAdaptValue<float>(Vector2* value) {
     adaptTargetVec2_ = value;
     switch (adaptFloatAxisType_) {
     case AdaptFloatAxisType::X:
-        currentValue_ = &value->x;
+        currentOffset_ = &value->x;
         break;
     case AdaptFloatAxisType::Y:
-        currentValue_ = &value->y;
+        currentOffset_ = &value->y;
         break;
     default:
-        currentValue_ = &value->x;
+        currentOffset_ = &value->x;
         break;
     }
 }
@@ -476,16 +481,16 @@ void Easing<float>::SetAdaptValue<float>(Vector3* value) {
     adaptTargetVec3_ = value;
     switch (adaptFloatAxisType_) {
     case AdaptFloatAxisType::X:
-        currentValue_ = &value->x;
+        currentOffset_ = &value->x;
         break;
     case AdaptFloatAxisType::Y:
-        currentValue_ = &value->y;
+        currentOffset_ = &value->y;
         break;
     case AdaptFloatAxisType::Z:
-        currentValue_ = &value->z;
+        currentOffset_ = &value->z;
         break;
     default:
-        currentValue_ = &value->x;
+        currentOffset_ = &value->x;
         break;
     }
 }
@@ -513,12 +518,12 @@ void Easing<Vector2>::SetAdaptValue<Vector2>(Vector3* value) {
 
         break;
     }
-    currentValue_ = &vector2Proxy_->Get();
+    currentOffset_ = &vector2Proxy_->Get();
 }
 
 template <typename T>
-void Easing<T>::Easing::SetCurrentValue(const T& value) {
-    *currentValue_ = value;
+void Easing<T>::Easing::SetcurrentOffset(const T& value) {
+    *currentOffset_ = value;
 }
 template <typename T>
 bool Easing<T>::IsEasingStarted() const {

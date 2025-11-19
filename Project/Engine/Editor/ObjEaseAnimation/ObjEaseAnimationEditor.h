@@ -1,5 +1,6 @@
 #pragma once
 #include "ObjEaseAnimationData.h"
+#include "3d/Object3d.h"
 #include <map>
 #include <memory>
 #include <string>
@@ -16,19 +17,21 @@ public:
         int32_t selectedAnimationIndex = -1;
     };
 
+    struct PreViewTransform {
+        Vector3 scale       = Vector3::OneVector();
+        Vector3 rotation    = Vector3::ZeroVector();
+        Vector3 translation = Vector3::ZeroVector();
+    };
+    ;
+
 public:
     ObjEaseAnimationEditor()  = default;
     ~ObjEaseAnimationEditor() = default;
 
-    void Init(); //< 初期化
-
-    /// <summary>
-    /// 更新
-    /// </summary>
-    /// <param name="deltaTime">デルタタイム</param>
+    // 初期化、更新
+    void Init(); 
     void Update(const float& deltaTime);
-
-    void EditorUpdate(); //< エディタ更新
+    void EditorUpdate(); 
 
     /// <summary>
     /// カテゴリーの追加
@@ -65,17 +68,31 @@ public:
     ObjEaseAnimationData* GetAnimationByName(const std::string& categoryName, const std::string& animationName);
 
 private:
-    void AllLoadFile(); //< 全ファイルロード
-    void AllSaveFile(); //< 全ファイルセーブ
-    void LoadCategory(const std::string& categoryName); //< カテゴリーロード
-    void SaveCategory(const int32_t& categoryIndex); //< カテゴリーセーブ
+
+    // プレビューオブジェクト初期化、更新、モデル変更
+   void InitPreviewObject();
+   void UpdatePreviewObject();
+   void ChangePreviewModel(const std::string& modelName);
+
+    // 全カテゴリーのロード、セーブ
+    void AllLoadFile(); 
+    void AllSaveFile(); 
+    void LoadCategory(const std::string& categoryName);
+    void SaveCategory(const int32_t& categoryIndex);
 
 private:
     std::vector<Category> categories_;
     int32_t selectedCategoryIndex_ = -1;
+    std::unique_ptr<Object3d> previewObject_ = nullptr;
 
     char categoryNameBuffer_[128]  = "";
     char animationNameBuffer_[128] = "";
+
+    // プレビュー設定
+    bool showPreview_                 = true;
+    char previewModelNameBuffer_[128] = "DebugCube.obj";
+    PreViewTransform previewBaseTransform_;
+
 
 public:
     const int32_t& GetCategoryCount() const { return static_cast<int32_t>(categories_.size()); }

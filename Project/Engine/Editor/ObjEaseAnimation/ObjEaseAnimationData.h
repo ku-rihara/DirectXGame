@@ -30,26 +30,24 @@ public:
     };
 
     struct TransformParam {
-        bool isActive          = false;
-        bool useRail           = false;
-        bool returnToOrigin    = false;
-        bool useCurrentAsStart = false;
+        bool isActive       = false;
+        bool useRail        = false;
+        bool returnToOrigin = false;
 
-        Vector3 startValue = Vector3::OneVector();
-        Vector3 endValue   = Vector3::OneVector();
+        // オフセット値として扱う
+        Vector3 startValue = Vector3::ZeroVector();
+        Vector3 endValue   = Vector3::ZeroVector();
 
         float maxTime    = 1.0f;
         int32_t easeType = 0;
 
-        // 戻り用パラメータ
         float returnMaxTime    = 1.0f;
         int32_t returnEaseType = 0;
 
-        // Rail用
         std::string railFileName;
 
-        // 実行時データ
-        Vector3 currentValue = Vector3::ZeroVector();
+        // 現在のオフセット値
+        Vector3 currentOffset = Vector3::ZeroVector();
         Easing<Vector3> ease;
     };
 
@@ -81,29 +79,32 @@ public:
     void Reset();
 
     // 編集、セーブ、ロード
-    void AdjustParam(); 
-    void LoadData(); 
-    void SaveData(); 
+    void AdjustParam();
+    void LoadData();
+    void SaveData();
 
     // 再生状態
-    bool IsPlaying() const; 
+    bool IsPlaying() const;
     bool IsFinished() const;
-
-    /// <summary>
-    /// 親Transformを設定
-    /// </summary>
-    /// <param name="parent">親Transform</param>
-    void SetParentTransform(WorldTransform* parent) { parentTransform_ = parent; }
+    bool IsUsingRail() const;
 
 private:
-    void RegisterParams(); //< パラメータのバインド
-    void LoadParams(); //< パラメータ取得
-    void ResetParams(); //< パラメータリセット
-    void UpdateTransforms(const float& deltaTime); //< Transform更新
-    void UpdateReturn(const float& deltaTime); //< 戻り動作更新
+    const char* GetSRTName(const TransformType& type) const;
+
+    // パラメータ登録、取得、リセット
+    void RegisterParams();
+    void GetParams();
+    void ResetParams();
+
+    // 更新処理
+    void UpdateTransforms(const float& deltaTime);
+    void UpdateReturn(const float& deltaTime);
+
     void StartReturn(); //< 戻り動作開始
     void CheckFinish(); //< 終了判定
-    void ImGuiTransformParam(const char* label, TransformParam& param, TransformType type);
+
+    // ImGui
+    void ImGuiTransformParam(const char* label, TransformParam& param, const TransformType& type);
 
 private:
     GlobalParameter* globalParameter_;
@@ -111,9 +112,8 @@ private:
     std::string categoryName_;
     std::string folderPath_;
 
-    TransformParam scaleParam_;
-    TransformParam rotationParam_;
-    TransformParam translationParam_;
+    std::array<TransformParam, static_cast<size_t>(TransformType::Count)> transformParams_;
+    std::array<Vector3, static_cast<size_t>(TransformType::Count)> originalValues_;
 
     PlayState playState_ = PlayState::STOPPED;
 
@@ -121,22 +121,13 @@ private:
     std::unique_ptr<RailPlayer> railPlayer_;
     RailFileSelector railFileSelector_;
 
-    // 元の値
-    Vector3 originalScale_       = Vector3::OneVector();
-    Vector3 originalRotation_    = Vector3::ZeroVector();
-    Vector3 originalTranslation_ = Vector3::ZeroVector();
-
-    // 親Transform
-    WorldTransform* parentTransform_ = nullptr;
-
     bool showControls_ = true;
 
 public:
-    std::string GetGroupName() const { return groupName_; }
-    std::string GetCategoryName() const { return categoryName_; }
-    const Vector3& GetCurrentScale() const { return scaleParam_.currentValue; }
-    const Vector3& GetCurrentRotation() const { return rotationParam_.currentValue; }
-    const Vector3& GetCurrentTranslation() const { return translationParam_.currentValue; }
+    const std::string& GetGroupName() const { return groupName_; }
+    const std::string& GetCategoryName() const { return categoryName_; }
+    const Vector3& GetCurrentPos() const { return transformParams_[static_cast<size_t>(TransformType::Translation)].currentOffset; }
+    const Vector3& GetCurrentScale() const { return transformParams_[static_cast<size_t>(TransformType::Scale)].currentOffset; }
+    const Vector3& GetCurrentRotate() const { return transformParams_[static_cast<size_t>(TransformType::Rotation)].currentOffset; }
     RailPlayer* GetRailPlayer() { return railPlayer_.get(); }
-    bool IsUsingRail() const { return translationParam_.useRail && translationParam_.isActive; }
 };

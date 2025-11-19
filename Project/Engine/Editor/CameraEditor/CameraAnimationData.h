@@ -64,6 +64,10 @@ public:
     void Pause();
     void Reset();
 
+    // 再生状態取得
+    bool IsPlaying() const;
+    bool IsFinished() const;
+
     // ロード、セーブ、編集
     void LoadData();
     void SaveData();
@@ -80,14 +84,19 @@ public:
     void InitKeyFrames();
 
 private:
-    void RegisterParams(); //< パラメータ登録
-    void UpdateKeyFrameProgression(); //< キーフレーム進行更新
+
+    // パラメータ登録、取得、リセット
+    void ResetParams();
+    void RegisterParams();
+    void GetParams();
+  
+    // 更新処理
+    void UpdateKeyFrameProgression(); 
+    void UpdateInterpolatedValues(); 
+
     void AdvanceToNextKeyFrame(); //< 次のキーフレームへ進む
-    void UpdateInterpolatedValues(); //< 補間値更新
     void StartReturnToInitial(); //< 初期値復帰開始
 
-    void ResetValue();
-    void LoadParams();
     void CreateOrLoadKeyFrames(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
 
     /// <summary>
@@ -134,10 +143,7 @@ private:
         "DeltaTimeRate (With TimeScale)"};
 
 public:
-    std::string GetGroupName() const { return groupName_; }
-    bool IsPlaying() const;
-    bool IsFinished() const;
-
+    const std::string& GetGroupName() const { return groupName_; }
     const bool& IsAllKeyFramesFinished() const { return isAllKeyFramesFinished_; }
     const int32_t& GetActiveKeyFrameIndex() const { return activeKeyFrameIndex_; }
     const int32_t& GetLastCompletedKeyFrameIndex() const { return lastCompletedKeyFrameIndex_; }

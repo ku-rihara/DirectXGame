@@ -25,13 +25,13 @@ void GameScene::Init() {
     putObjForBlender     = std::make_unique<PutObjForBlender>();
     timeScaleController_ = std::make_unique<TimeScaleController>();
 
-  /*  monsterBall_->Init();*/
+    /*  monsterBall_->Init();*/
     ground_->Init();
     plane_->Init();
     skuBox_->Init();
     timeScaleController_->Init();
 
-   putObjForBlender->LoadJsonFile("game.json");
+    putObjForBlender->LoadJsonFile("game.json");
     putObjForBlender->EasingAllReset();
 
     cameraMode_ = BaseScene::CameraMode::DEBUG;
@@ -43,11 +43,11 @@ void GameScene::Update() {
 
     /// debugCamera
     BaseScene::Update();
-  
+
     // 各クラス更新
     ground_->Update();
     timeScaleController_->Update(Frame::DeltaTime());
- 
+
     plane_->Update();
     skuBox_->Update();
 
@@ -81,13 +81,15 @@ void GameScene::Debug() {
     plane_->Debug();
     skuBox_->Debug();
     ShadowMap::GetInstance()->DebugImGui();
-
     ImGui::End();
+
+    ImGui::Begin("editor");
     cameraEditor_->EditorUpdate();
     shakeEditor_->EditorUpdate();
     railEditor_->EditorUpdate();
     objEaseAnimationEditor_->EditorUpdate();
     timeScaleController_->EditorUpdate();
+    ImGui::End();
 #endif
 }
 

@@ -9,6 +9,7 @@ void ObjEaseAnimationData::Init(const std::string& animationName, const std::str
     groupName_       = animationName;
     categoryName_    = categoryName;
     folderPath_      = "ObjEaseAnimation/" + categoryName_;
+    transformParams_[static_cast<size_t>(TransformType::Scale)].startValue = Vector3::OneVector();
 
     // Rail初期化
     railPlayer_ = std::make_unique<RailPlayer>();
@@ -21,7 +22,7 @@ void ObjEaseAnimationData::Init(const std::string& animationName, const std::str
         globalParameter_->SyncParamForGroup(groupName_);
     } else {
         // 値取得
-        LoadParams();
+        GetParams();
     }
 
     // リセット
@@ -43,68 +44,46 @@ void ObjEaseAnimationData::Update(const float& deltaTime) {
 }
 
 void ObjEaseAnimationData::UpdateTransforms(const float& deltaTime) {
-    // Scale更新
-    if (scaleParam_.isActive) {
-        scaleParam_.ease.Update(deltaTime);
-        scaleParam_.currentValue = scaleParam_.ease.GetValue();
-    }
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        auto& param = transformParams_[i];
 
-    // Rotation更新
-    if (rotationParam_.isActive) {
-        rotationParam_.ease.Update(deltaTime);
-        rotationParam_.currentValue = rotationParam_.ease.GetValue();
-    }
+        if (!param.isActive) {
+            if (i == static_cast<size_t>(TransformType::Scale)) {
+                param.currentOffset = Vector3::OneVector();
+            }
+            continue;
+        }
 
-    // Translation更新
-    if (translationParam_.isActive) {
-        if (translationParam_.useRail) {
-            // Rail使用
+        if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
             railPlayer_->Update(deltaTime);
-            translationParam_.currentValue = originalTranslation_ + railPlayer_->GetCurrentPosition();
+            param.currentOffset = railPlayer_->GetCurrentPosition();
         } else {
-            // 通常のイージング
-            translationParam_.ease.Update(deltaTime);
-            translationParam_.currentValue = translationParam_.ease.GetValue();
+            param.ease.Update(deltaTime);
+            param.currentOffset = param.ease.GetValue();
         }
     }
 }
 
-// UpdateReturnメソッド - 親Transform適用部分を削除
 void ObjEaseAnimationData::UpdateReturn(const float& deltaTime) {
     bool allFinished = true;
 
-    // Scale戻り
-    if (scaleParam_.isActive && scaleParam_.returnToOrigin) {
-        scaleParam_.ease.Update(deltaTime);
-        scaleParam_.currentValue = scaleParam_.ease.GetValue();
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        auto& param = transformParams_[i];
 
-        if (!scaleParam_.ease.IsFinished()) {
-            allFinished = false;
-        }
-    }
+        if (!param.isActive || !param.returnToOrigin)
+            continue;
 
-    // Rotation戻り
-    if (rotationParam_.isActive && rotationParam_.returnToOrigin) {
-        rotationParam_.ease.Update(deltaTime);
-        rotationParam_.currentValue = rotationParam_.ease.GetValue();
-
-        if (!rotationParam_.ease.IsFinished()) {
-            allFinished = false;
-        }
-    }
-
-    // Translation戻り
-    if (translationParam_.isActive && translationParam_.returnToOrigin) {
-        if (translationParam_.useRail) {
+        // Translation + Rail使用時の特殊処理
+        if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
             railPlayer_->Update(deltaTime);
-            translationParam_.currentValue = originalTranslation_ + railPlayer_->GetCurrentPosition();
+            param.currentOffset = originalValues_[i] + railPlayer_->GetCurrentPosition();
             if (railPlayer_->IsPlaying()) {
                 allFinished = false;
             }
         } else {
-            translationParam_.ease.Update(deltaTime);
-            translationParam_.currentValue = translationParam_.ease.GetValue();
-            if (!translationParam_.ease.IsFinished()) {
+            param.ease.Update(deltaTime);
+            param.currentOffset = param.ease.GetValue();
+            if (!param.ease.IsFinished()) {
                 allFinished = false;
             }
         }
@@ -118,20 +97,19 @@ void ObjEaseAnimationData::UpdateReturn(const float& deltaTime) {
 void ObjEaseAnimationData::CheckFinish() {
     bool allFinished = true;
 
-    // 各Transformの完了をチェック
-    if (scaleParam_.isActive && !scaleParam_.ease.IsFinished()) {
-        allFinished = false;
-    }
-    if (rotationParam_.isActive && !rotationParam_.ease.IsFinished()) {
-        allFinished = false;
-    }
-    if (translationParam_.isActive) {
-        if (translationParam_.useRail) {
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        const auto& param = transformParams_[i];
+
+        if (!param.isActive)
+            continue;
+
+        // Translation + Rail使用時の特殊処理
+        if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
             if (railPlayer_->IsPlaying()) {
                 allFinished = false;
             }
         } else {
-            if (!translationParam_.ease.IsFinished()) {
+            if (!param.ease.IsFinished()) {
                 allFinished = false;
             }
         }
@@ -140,12 +118,12 @@ void ObjEaseAnimationData::CheckFinish() {
     if (allFinished) {
         // 戻り動作が必要かチェック
         bool needReturn = false;
-        if (scaleParam_.isActive && scaleParam_.returnToOrigin)
-            needReturn = true;
-        if (rotationParam_.isActive && rotationParam_.returnToOrigin)
-            needReturn = true;
-        if (translationParam_.isActive && translationParam_.returnToOrigin)
-            needReturn = true;
+        for (const auto& param : transformParams_) {
+            if (param.isActive && param.returnToOrigin) {
+                needReturn = true;
+                break;
+            }
+        }
 
         if (needReturn) {
             StartReturn();
@@ -158,36 +136,21 @@ void ObjEaseAnimationData::CheckFinish() {
 void ObjEaseAnimationData::StartReturn() {
     playState_ = PlayState::RETURNING;
 
-    // Scale戻り設定（StartとEndを入れ替え）
-    if (scaleParam_.isActive && scaleParam_.returnToOrigin) {
-        scaleParam_.ease.SetStartValue(scaleParam_.endValue);
-        scaleParam_.ease.SetEndValue(scaleParam_.startValue);
-        scaleParam_.ease.SetMaxTime(scaleParam_.returnMaxTime);
-        scaleParam_.ease.SetType(static_cast<EasingType>(scaleParam_.returnEaseType));
-        scaleParam_.ease.Reset();
-    }
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        auto& param = transformParams_[i];
 
-    // Rotation戻り設定（StartとEndを入れ替え）
-    if (rotationParam_.isActive && rotationParam_.returnToOrigin) {
-        rotationParam_.ease.SetStartValue(rotationParam_.endValue);
-        rotationParam_.ease.SetEndValue(rotationParam_.startValue);
-        rotationParam_.ease.SetMaxTime(rotationParam_.returnMaxTime);
-        rotationParam_.ease.SetType(static_cast<EasingType>(rotationParam_.returnEaseType));
-        rotationParam_.ease.Reset();
-    }
+        if (!param.isActive || !param.returnToOrigin)
+            continue;
 
-    // Translation戻り設定（StartとEndを入れ替え）
-    if (translationParam_.isActive && translationParam_.returnToOrigin) {
-        if (translationParam_.useRail) {
-            // Railの戻り処理はRailPlayer側で処理される
-            // 特に何もしない（Railが自動で戻る設定になっている）
-        } else {
-            translationParam_.ease.SetStartValue(translationParam_.endValue);
-            translationParam_.ease.SetEndValue(translationParam_.startValue);
-            translationParam_.ease.SetMaxTime(translationParam_.returnMaxTime);
-            translationParam_.ease.SetType(static_cast<EasingType>(translationParam_.returnEaseType));
-            translationParam_.ease.Reset();
+        if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
+            continue;
         }
+
+        // 戻り設定
+        param.ease.SetIsStartEndReverse(true);
+        param.ease.SetMaxTime(param.returnMaxTime);
+        param.ease.SetType(static_cast<EasingType>(param.returnEaseType));
+        param.ease.Reset();
     }
 }
 
@@ -195,71 +158,26 @@ void ObjEaseAnimationData::Play() {
     Reset();
     playState_ = PlayState::PLAYING;
 
-    // 現在値の取得（親Transform優先）
-    Vector3 currentScale       = parentTransform_ ? parentTransform_->scale_ : scaleParam_.startValue;
-    Vector3 currentRotation    = parentTransform_ ? parentTransform_->rotation_ : rotationParam_.startValue;
-    Vector3 currentTranslation = parentTransform_ ? parentTransform_->translation_ : translationParam_.startValue;
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        auto& param = transformParams_[i];
 
-    // Scale設定
-    if (scaleParam_.isActive) {
-        scaleParam_.ease.SetAdaptValue(&scaleParam_.currentValue);
+        if (!param.isActive)
+            continue;
 
-        // 現在値を開始点にするか判定
-        Vector3 startValue = scaleParam_.useCurrentAsStart ? currentScale : scaleParam_.startValue;
-        scaleParam_.ease.SetStartValue(startValue);
-        scaleParam_.ease.SetEndValue(scaleParam_.endValue);
-        scaleParam_.ease.SetMaxTime(scaleParam_.maxTime);
-        scaleParam_.ease.SetType(static_cast<EasingType>(scaleParam_.easeType));
-        scaleParam_.ease.Reset();
-
-        // 元の値も更新（戻り用）
-        if (scaleParam_.useCurrentAsStart) {
-            originalScale_ = currentScale;
+        // Translation + Rail使用時の特殊処理
+        if (i == static_cast<size_t>(TransformType::Translation) && param.useRail && !param.railFileName.empty()) {
+            railPlayer_->Play(param.railFileName);
+            continue;
         }
-    }
 
-    // Rotation設定
-    if (rotationParam_.isActive) {
-        rotationParam_.ease.SetAdaptValue(&rotationParam_.currentValue);
-
-        // 現在値を開始点にするか判定
-        Vector3 startValue = rotationParam_.useCurrentAsStart ? currentRotation : rotationParam_.startValue;
-        rotationParam_.ease.SetStartValue(startValue);
-        rotationParam_.ease.SetEndValue(rotationParam_.endValue);
-        rotationParam_.ease.SetMaxTime(rotationParam_.maxTime);
-        rotationParam_.ease.SetType(static_cast<EasingType>(rotationParam_.easeType));
-        rotationParam_.ease.Reset();
-
-        // 元の値も更新（戻り用）
-        if (rotationParam_.useCurrentAsStart) {
-            originalRotation_ = currentRotation;
-        }
-    }
-
-    // Translation設定
-    if (translationParam_.isActive) {
-        if (translationParam_.useRail && !translationParam_.railFileName.empty()) {
-            // Rail再生
-            if (translationParam_.useCurrentAsStart) {
-                originalTranslation_ = currentTranslation;
-            }
-            railPlayer_->Play(translationParam_.railFileName);
-        } else {
-            translationParam_.ease.SetAdaptValue(&translationParam_.currentValue);
-
-            // 現在値を開始点にするか判定
-            Vector3 startValue = translationParam_.useCurrentAsStart ? currentTranslation : translationParam_.startValue;
-            translationParam_.ease.SetStartValue(startValue);
-            translationParam_.ease.SetEndValue(translationParam_.endValue);
-            translationParam_.ease.SetMaxTime(translationParam_.maxTime);
-            translationParam_.ease.SetType(static_cast<EasingType>(translationParam_.easeType));
-            translationParam_.ease.Reset();
-
-            // 元の値も更新（戻り用）
-            if (translationParam_.useCurrentAsStart) {
-                originalTranslation_ = currentTranslation;
-            }
-        }
+        // 通常のイージング設定
+        param.ease.SetAdaptValue(&param.currentOffset);
+        param.ease.SetStartValue(param.startValue);
+        param.ease.SetEndValue(param.endValue);
+        param.ease.SetMaxTime(param.maxTime);
+        param.ease.SetType(static_cast<EasingType>(param.easeType));
+        param.ease.SetIsStartEndReverse(false); 
+        param.ease.Reset();
     }
 }
 
@@ -267,9 +185,9 @@ void ObjEaseAnimationData::Stop() {
     playState_ = PlayState::STOPPED;
 
     // 現在値を初期値に戻す
-    scaleParam_.currentValue       = originalScale_;
-    rotationParam_.currentValue    = originalRotation_;
-    translationParam_.currentValue = originalTranslation_;
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        transformParams_[i].currentOffset = originalValues_[i];
+    }
 
     if (railPlayer_) {
         railPlayer_->Stop();
@@ -277,13 +195,10 @@ void ObjEaseAnimationData::Stop() {
 }
 
 void ObjEaseAnimationData::Reset() {
-    scaleParam_.currentValue       = scaleParam_.startValue;
-    rotationParam_.currentValue    = rotationParam_.startValue;
-    translationParam_.currentValue = translationParam_.startValue;
-
-    scaleParam_.ease.Reset();
-    rotationParam_.ease.Reset();
-    translationParam_.ease.Reset();
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        transformParams_[i].currentOffset = transformParams_[i].startValue;
+        transformParams_[i].ease.Reset();
+    }
 
     if (railPlayer_) {
         railPlayer_->Stop();
@@ -301,7 +216,7 @@ bool ObjEaseAnimationData::IsPlaying() const {
 void ObjEaseAnimationData::LoadData() {
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
-    LoadParams();
+    GetParams();
 }
 
 void ObjEaseAnimationData::SaveData() {
@@ -309,128 +224,108 @@ void ObjEaseAnimationData::SaveData() {
 }
 
 void ObjEaseAnimationData::RegisterParams() {
-    // Scale
-    globalParameter_->Regist(groupName_, "Scale_IsActive", &scaleParam_.isActive);
-    globalParameter_->Regist(groupName_, "Scale_UseCurrentAsStart", &scaleParam_.useCurrentAsStart);
-    globalParameter_->Regist(groupName_, "Scale_ReturnToOrigin", &scaleParam_.returnToOrigin);
-    globalParameter_->Regist(groupName_, "Scale_StartValue", &scaleParam_.startValue);
-    globalParameter_->Regist(groupName_, "Scale_EndValue", &scaleParam_.endValue);
-    globalParameter_->Regist(groupName_, "Scale_MaxTime", &scaleParam_.maxTime);
-    globalParameter_->Regist(groupName_, "Scale_EaseType", &scaleParam_.easeType);
-    globalParameter_->Regist(groupName_, "Scale_ReturnMaxTime", &scaleParam_.returnMaxTime);
-    globalParameter_->Regist(groupName_, "Scale_ReturnEaseType", &scaleParam_.returnEaseType);
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        const char* name = GetSRTName(static_cast<TransformType>(i));
+        auto& param      = transformParams_[i];
 
-    // Rotation
-    globalParameter_->Regist(groupName_, "Rotation_IsActive", &rotationParam_.isActive);
-    globalParameter_->Regist(groupName_, "Rotation_UseCurrentAsStart", &rotationParam_.useCurrentAsStart);
-    globalParameter_->Regist(groupName_, "Rotation_ReturnToOrigin", &rotationParam_.returnToOrigin);
-    globalParameter_->Regist(groupName_, "Rotation_StartValue", &rotationParam_.startValue);
-    globalParameter_->Regist(groupName_, "Rotation_EndValue", &rotationParam_.endValue);
-    globalParameter_->Regist(groupName_, "Rotation_MaxTime", &rotationParam_.maxTime);
-    globalParameter_->Regist(groupName_, "Rotation_EaseType", &rotationParam_.easeType);
-    globalParameter_->Regist(groupName_, "Rotation_ReturnMaxTime", &rotationParam_.returnMaxTime);
-    globalParameter_->Regist(groupName_, "Rotation_ReturnEaseType", &rotationParam_.returnEaseType);
+        globalParameter_->Regist(groupName_, std::string(name) + "_IsActive", &param.isActive);
+        // useCurrentAsStart を削除
+        globalParameter_->Regist(groupName_, std::string(name) + "_ReturnToOrigin", &param.returnToOrigin);
+        globalParameter_->Regist(groupName_, std::string(name) + "_startValue", &param.startValue);
+        globalParameter_->Regist(groupName_, std::string(name) + "_endValue", &param.endValue);
+        globalParameter_->Regist(groupName_, std::string(name) + "_MaxTime", &param.maxTime);
+        globalParameter_->Regist(groupName_, std::string(name) + "_EaseType", &param.easeType);
+        globalParameter_->Regist(groupName_, std::string(name) + "_ReturnMaxTime", &param.returnMaxTime);
+        globalParameter_->Regist(groupName_, std::string(name) + "_ReturnEaseType", &param.returnEaseType);
 
-    // Translation
-    globalParameter_->Regist(groupName_, "Translation_IsActive", &translationParam_.isActive);
-    globalParameter_->Regist(groupName_, "Translation_UseCurrentAsStart", &translationParam_.useCurrentAsStart);
-    globalParameter_->Regist(groupName_, "Translation_UseRail", &translationParam_.useRail);
-    globalParameter_->Regist(groupName_, "Translation_ReturnToOrigin", &translationParam_.returnToOrigin);
-    globalParameter_->Regist(groupName_, "Translation_StartValue", &translationParam_.startValue);
-    globalParameter_->Regist(groupName_, "Translation_EndValue", &translationParam_.endValue);
-    globalParameter_->Regist(groupName_, "Translation_MaxTime", &translationParam_.maxTime);
-    globalParameter_->Regist(groupName_, "Translation_EaseType", &translationParam_.easeType);
-    globalParameter_->Regist(groupName_, "Translation_ReturnMaxTime", &translationParam_.returnMaxTime);
-    globalParameter_->Regist(groupName_, "Translation_ReturnEaseType", &translationParam_.returnEaseType);
-    globalParameter_->Regist(groupName_, "Translation_RailFileName", &translationParam_.railFileName);
+        if (i == static_cast<size_t>(TransformType::Translation)) {
+            globalParameter_->Regist(groupName_, std::string(name) + "_UseRail", &param.useRail);
+            globalParameter_->Regist(groupName_, std::string(name) + "_RailFileName", &param.railFileName);
+        }
+    }
 }
 
-void ObjEaseAnimationData::LoadParams() {
-    // Scale
-    scaleParam_.isActive          = globalParameter_->GetValue<bool>(groupName_, "Scale_IsActive");
-    scaleParam_.useCurrentAsStart = globalParameter_->GetValue<bool>(groupName_, "Scale_UseCurrentAsStart");
-    scaleParam_.returnToOrigin    = globalParameter_->GetValue<bool>(groupName_, "Scale_ReturnToOrigin");
-    scaleParam_.startValue        = globalParameter_->GetValue<Vector3>(groupName_, "Scale_StartValue");
-    scaleParam_.endValue          = globalParameter_->GetValue<Vector3>(groupName_, "Scale_EndValue");
-    scaleParam_.maxTime           = globalParameter_->GetValue<float>(groupName_, "Scale_MaxTime");
-    scaleParam_.easeType          = globalParameter_->GetValue<int32_t>(groupName_, "Scale_EaseType");
-    scaleParam_.returnMaxTime     = globalParameter_->GetValue<float>(groupName_, "Scale_ReturnMaxTime");
-    scaleParam_.returnEaseType    = globalParameter_->GetValue<int32_t>(groupName_, "Scale_ReturnEaseType");
+void ObjEaseAnimationData::GetParams() {
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        const char* name = GetSRTName(static_cast<TransformType>(i));
+        auto& param      = transformParams_[i];
 
-    // Rotation
-    rotationParam_.isActive          = globalParameter_->GetValue<bool>(groupName_, "Rotation_IsActive");
-   rotationParam_.useCurrentAsStart = globalParameter_->GetValue<bool>(groupName_, "Rotation_UseCurrentAsStart");
-    rotationParam_.returnToOrigin    = globalParameter_->GetValue<bool>(groupName_, "Rotation_ReturnToOrigin");
-    rotationParam_.startValue        = globalParameter_->GetValue<Vector3>(groupName_, "Rotation_StartValue");
-    rotationParam_.endValue          = globalParameter_->GetValue<Vector3>(groupName_, "Rotation_EndValue");
-    rotationParam_.maxTime           = globalParameter_->GetValue<float>(groupName_, "Rotation_MaxTime");
-    rotationParam_.easeType          = globalParameter_->GetValue<int32_t>(groupName_, "Rotation_EaseType");
-    rotationParam_.returnMaxTime     = globalParameter_->GetValue<float>(groupName_, "Rotation_ReturnMaxTime");
-    rotationParam_.returnEaseType    = globalParameter_->GetValue<int32_t>(groupName_, "Rotation_ReturnEaseType");
+        param.isActive       = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsActive");
+        param.returnToOrigin = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_ReturnToOrigin");
+        param.startValue     = globalParameter_->GetValue<Vector3>(groupName_, std::string(name) + "_startValue");
+        param.endValue       = globalParameter_->GetValue<Vector3>(groupName_, std::string(name) + "_endValue");
+        param.maxTime        = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_MaxTime");
+        param.easeType       = globalParameter_->GetValue<int32_t>(groupName_, std::string(name) + "_EaseType");
+        param.returnMaxTime  = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_ReturnMaxTime");
+        param.returnEaseType = globalParameter_->GetValue<int32_t>(groupName_, std::string(name) + "_ReturnEaseType");
 
-    // Translation
-    translationParam_.isActive          = globalParameter_->GetValue<bool>(groupName_, "Translation_IsActive");
-    translationParam_.useCurrentAsStart = globalParameter_->GetValue<bool>(groupName_, "Translation_UseCurrentAsStart");
-    translationParam_.useRail           = globalParameter_->GetValue<bool>(groupName_, "Translation_UseRail");
-    translationParam_.returnToOrigin    = globalParameter_->GetValue<bool>(groupName_, "Translation_ReturnToOrigin");
-    translationParam_.startValue        = globalParameter_->GetValue<Vector3>(groupName_, "Translation_StartValue");
-    translationParam_.endValue          = globalParameter_->GetValue<Vector3>(groupName_, "Translation_EndValue");
-    translationParam_.maxTime           = globalParameter_->GetValue<float>(groupName_, "Translation_MaxTime");
-    translationParam_.easeType          = globalParameter_->GetValue<int32_t>(groupName_, "Translation_EaseType");
-    translationParam_.returnMaxTime     = globalParameter_->GetValue<float>(groupName_, "Translation_ReturnMaxTime");
-    translationParam_.returnEaseType    = globalParameter_->GetValue<int32_t>(groupName_, "Translation_ReturnEaseType");
-    translationParam_.railFileName      = globalParameter_->GetValue<std::string>(groupName_, "Translation_RailFileName");
+        if (i == static_cast<size_t>(TransformType::Translation)) {
+            param.useRail      = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_UseRail");
+            param.railFileName = globalParameter_->GetValue<std::string>(groupName_, std::string(name) + "_RailFileName");
+        }
+    }
 }
 
 void ObjEaseAnimationData::ResetParams() {
     playState_ = PlayState::STOPPED;
 
-    scaleParam_.currentValue       = scaleParam_.startValue;
-    rotationParam_.currentValue    = rotationParam_.startValue;
-    translationParam_.currentValue = translationParam_.startValue;
-
-    originalScale_       = scaleParam_.startValue;
-    originalRotation_    = rotationParam_.startValue;
-    originalTranslation_ = translationParam_.startValue;
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        transformParams_[i].currentOffset = transformParams_[i].startValue;
+        originalValues_[i]                = transformParams_[i].startValue;
+    }
 }
 
-void ObjEaseAnimationData::ImGuiTransformParam(const char* label, TransformParam& param, TransformType type) {
+void ObjEaseAnimationData::ImGuiTransformParam(const char* label, TransformParam& param, const TransformType& TransformTypeType) {
     ImGui::SeparatorText(label);
     ImGui::Checkbox((std::string(label) + " Active").c_str(), &param.isActive);
+    ImGui::PushID(label);
 
-    if (!param.isActive)
+    if (!param.isActive) {
+        ImGui::PopID();
         return;
+    }
 
-    ImGui::Checkbox("Use Current As Start", &param.useCurrentAsStart);
     ImGui::Checkbox("Return To Origin", &param.returnToOrigin);
 
-    // Translation専用: Rail使用フラグ
-    if (type == TransformType::Translation) {
+    // Rail使用フラグ
+    if (TransformTypeType == TransformType::Translation) {
         ImGui::Checkbox("Use Rail", &param.useRail);
 
         if (param.useRail) {
             // Railファイル選択
             std::string directory = "Resources/GlobalParameter/RailEditor/Dates";
             railFileSelector_.selector.SelectFile("Rail File", directory, param.railFileName, "", true);
-            return; // Rail使用時は通常パラメータを表示しない
+            return; 
         }
     }
 
-    // UseCurrentAsStartがtrueの場合はStartValueを編集不可に
-    if (!param.useCurrentAsStart) {
+    if (TransformTypeType == TransformType::Rotation) {
+        // Radian から Degree に変換して表示
+        Vector3 startValueDeg = ToDegree(param.startValue);
+        Vector3 endValueDeg   = ToDegree(param.endValue);
+
+        ImGui::DragFloat3("Start Value (Degree)", &startValueDeg.x, 0.1f);
+        ImGui::DragFloat3("End Value (Degree)", &endValueDeg.x, 0.1f);
+
+        // Degree から Radian に変換して保存
+        param.startValue = ToRadian(startValueDeg);
+        param.endValue   = ToRadian(endValueDeg);
+    } else {
+
         ImGui::DragFloat3("Start Value", &param.startValue.x, 0.01f);
-    } 
-
-
-    ImGui::DragFloat3("End Value", &param.endValue.x, 0.01f);
+        ImGui::DragFloat3("End Value", &param.endValue.x, 0.01f);
+    }
+    // maxTime, easeType
     ImGui::DragFloat("Max Time", &param.maxTime, 0.01f, 0.1f, 10.0f);
     ImGuiEasingTypeSelector("Easing Type", param.easeType);
 
+    // Return Parameters
     if (param.returnToOrigin) {
         ImGui::SeparatorText("Return Parameters");
         ImGui::DragFloat("Return Max Time", &param.returnMaxTime, 0.01f, 0.1f, 10.0f);
         ImGuiEasingTypeSelector("Return Easing Type", param.returnEaseType);
     }
+    ImGui::PopID();
 }
 
 void ObjEaseAnimationData::AdjustParam() {
@@ -470,11 +365,31 @@ void ObjEaseAnimationData::AdjustParam() {
         ImGui::Separator();
 
         // 各Transformパラメータ
-        ImGuiTransformParam("Scale", scaleParam_, TransformType::Scale);
-        ImGuiTransformParam("Rotation", rotationParam_, TransformType::Rotation);
-        ImGuiTransformParam("Translation", translationParam_, TransformType::Translation);
+        for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+            ImGuiTransformParam(GetSRTName(static_cast<TransformType>(i)), transformParams_[i], static_cast<TransformType>(i));
+        }
 
         ImGui::PopID();
     }
 #endif // _DEBUG
+}
+
+//*-------------------------------getter Method-------------------------------*/
+
+bool ObjEaseAnimationData::IsUsingRail() const {
+    const auto& transParam = transformParams_[static_cast<size_t>(TransformType::Translation)];
+    return transParam.useRail && transParam.isActive;
+}
+
+const char* ObjEaseAnimationData::GetSRTName(const TransformType& type) const {
+    switch (type) {
+    case TransformType::Scale:
+        return "Scale";
+    case TransformType::Rotation:
+        return "Rotation";
+    case TransformType::Translation:
+        return "Translation";
+    default:
+        return "Unknown";
+    }
 }

@@ -39,7 +39,7 @@ void SceneManager::Update() {
     }
 
     // 登録されているオブジェクトを更新
-    Object3DRegistry::GetInstance()->UpdateAll(Frame::DeltaTimeRate());
+    Object3DRegistry::GetInstance()->UpdateAll();
     AnimationRegistry::GetInstance()->UpdateAll(Frame::DeltaTimeRate());
 
     // パーティクル更新

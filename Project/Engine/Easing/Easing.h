@@ -90,7 +90,7 @@ private:
     T startValue_;
     T endValue_;
     T baseValue_;
-    T* currentValue_;
+    T* currentOffset_;
 
     float maxTime_     = 0.0f;
     float currentTime_ = 0.0f;
@@ -133,7 +133,7 @@ public:
     /// -------------------------------------------------------------------------
     /// Getter methods
     /// -------------------------------------------------------------------------
-    const T& GetValue() const { return *currentValue_; }
+    const T& GetValue() const { return *currentOffset_; }
     const T& GetEndValue() const { return endValue_; }
     const bool& IsFinished() const { return isFinished_; }
     const bool& IsPlaying() const { return isPlaying_; }
@@ -144,7 +144,7 @@ public:
     /// -------------------------------------------------------------------------
     void SetStartValue(const T& value) { startValue_ = value; }
     void SetEndValue(const T& value) { endValue_ = value; }
-    void SetCurrentValue(const T& value);
+    void SetcurrentOffset(const T& value);
     void SetBaseValue(const T& value) { baseValue_ = value; }
     void SetType(const EasingType& type) { type_ = type; }
     void SetMaxTime(const float& time) { maxTime_ = time; }
