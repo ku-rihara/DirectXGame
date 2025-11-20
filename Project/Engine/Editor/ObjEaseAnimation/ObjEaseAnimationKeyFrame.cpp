@@ -7,7 +7,7 @@ void ObjEaseAnimationKeyFrame::Init(const std::string& animationName, const std:
     globalParameter_      = GlobalParameter::GetInstance();
     currentKeyFrameIndex_ = keyNumber;
     groupName_            = animationName + std::to_string(currentKeyFrameIndex_);
-    folderPath_           = "ObjEaseAnimation/" + categoryName + "KeyFrames/" + animationName;
+    folderPath_           = "ObjEaseAnimation/" + categoryName + "/" + "KeyFrames/" + animationName;
 
     // Scaleの初期値を1に設定
     transformParams_[static_cast<size_t>(TransformType::Scale)].endValue = Vector3::OneVector();
