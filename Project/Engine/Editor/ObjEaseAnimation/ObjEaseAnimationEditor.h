@@ -30,33 +30,15 @@ public:
 
     // 初期化、更新
     void Init(); 
-    void Update(const float& deltaTime);
+    void Update();
     void EditorUpdate(); 
 
-    /// <summary>
-    /// カテゴリーの追加
-    /// </summary>
-    /// <param name="categoryName">カテゴリー名</param>
+    //カテゴリー追加、削除
     void AddCategory(const std::string& categoryName);
-
-    /// <summary>
-    /// カテゴリーの削除
-    /// </summary>
-    /// <param name="index">インデックス</param>
     void RemoveCategory(const int32_t& index);
 
-    /// <summary>
-    /// アニメーションの追加
-    /// </summary>
-    /// <param name="categoryIndex">カテゴリーインデックス</param>
-    /// <param name="animationName">アニメーション名</param>
+    // アニメーション追加、削除
     void AddAnimation(const int32_t& categoryIndex, const std::string& animationName);
-
-    /// <summary>
-    /// アニメーションの削除
-    /// </summary>
-    /// <param name="categoryIndex">カテゴリーインデックス</param>
-    /// <param name="animationIndex">アニメーションインデックス</param>
     void RemoveAnimation(const int32_t& categoryIndex, const int32_t& animationIndex);
 
     /// <summary>
@@ -87,6 +69,9 @@ private:
 
     char categoryNameBuffer_[128]  = "";
     char animationNameBuffer_[128] = "";
+
+    const std::string& objEaseAnimationBasePath_ = "Resources/GlobalParameter/ObjEaseAnimation/";
+    const std::string& dateFolderName_           = "Dates/";
 
     // プレビュー設定
     bool showPreview_                 = true;

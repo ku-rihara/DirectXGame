@@ -826,6 +826,9 @@
     <ClCompile Include="Engine\Editor\TimeScaleEditor\TimeScaleData.cpp">
       <Filter>MyEngine\.cpp\Editor\TimeScaleEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationKeyFrame.cpp">
+      <Filter>MyEngine\.cpp\Editor\ObjEaseAnimation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1361,6 +1364,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Editor\RailEditor\RailEditor.h">
       <Filter>MyEngine\.h\Editor\RailEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationKeyFrame.h">
+      <Filter>MyEngine\.h\Editor\ObjEaseAnimation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

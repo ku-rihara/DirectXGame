@@ -65,6 +65,7 @@
     <ClCompile Include="Engine\Editor\EasingCreator\EasingParameterData.cpp" />
     <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationData.cpp" />
     <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationEditor.cpp" />
+    <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationKeyFrame.cpp" />
     <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationPlayer.cpp" />
     <ClCompile Include="Engine\Editor\ParameterEditor\GlobalParameter.cpp" />
     <ClCompile Include="Engine\Editor\ParticleEditor\ParticleEmitter.cpp" />
@@ -232,6 +233,7 @@
     <ClInclude Include="Engine\Editor\EasingCreator\EasingParameterData.h" />
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationData.h" />
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationEditor.h" />
+    <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationKeyFrame.h" />
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationPlayer.h" />
     <ClInclude Include="Engine\Editor\ParameterEditor\GlobalParameter.h" />
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticleEmitter.h" />

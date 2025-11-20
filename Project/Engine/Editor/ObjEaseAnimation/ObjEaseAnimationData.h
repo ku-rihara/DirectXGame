@@ -1,15 +1,16 @@
 #pragma once
 #include "Easing/Easing.h"
+#include "Editor/ObjEaseAnimation/ObjEaseAnimationKeyFrame.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "Editor/RailEditor/RailPlayer.h"
-#include "Quaternion.h"
 #include "utility/FileSelector/FileSelector.h"
 #include "Vector3.h"
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <vector>
 
 class WorldTransform;
+class RailPlayer;
 
 /// <summary>
 /// オブジェクトイージングアニメーションデータ
@@ -29,22 +30,22 @@ public:
         Count
     };
 
+    struct KeyFrameState {
+        int finalKeyFrameIndex;
+        int selectedKeyFrameIndex      = -1;
+        int lastCompletedKeyFrameIndex = -1;
+        int activeKeyFrameIndex        = 0;
+        bool isAllKeyFramesFinished    = false;
+    };
+
     struct TransformParam {
         bool isActive       = false;
-        bool useRail        = false;
         bool returnToOrigin = false;
 
-        // オフセット値として扱う
         Vector3 startValue = Vector3::ZeroVector();
-        Vector3 endValue   = Vector3::ZeroVector();
-
-        float maxTime    = 1.0f;
-        int32_t easeType = 0;
 
         float returnMaxTime    = 1.0f;
         int32_t returnEaseType = 0;
-
-        std::string railFileName;
 
         // 現在のオフセット値
         Vector3 currentOffset = Vector3::ZeroVector();
@@ -60,18 +61,9 @@ public:
     ObjEaseAnimationData()  = default;
     ~ObjEaseAnimationData() = default;
 
-    /// <summary>
-    /// 初期化
-    /// </summary>
-    /// <param name="animationName">アニメーション名</param>
-    /// <param name="categoryName">カテゴリー名</param>
+    // 初期化、更新
     void Init(const std::string& animationName, const std::string& categoryName);
-
-    /// <summary>
-    /// 更新
-    /// </summary>
-    /// <param name="deltaTime">デルタタイム</param>
-    void Update(const float& deltaTime);
+    void Update();
 
     // 再生制御
     void Play();
@@ -86,7 +78,6 @@ public:
     // 再生状態
     bool IsPlaying() const;
     bool IsFinished() const;
-    bool IsUsingRail() const;
 
 private:
     const char* GetSRTName(const TransformType& type) const;
@@ -96,15 +87,22 @@ private:
     void GetParams();
     void ResetParams();
 
-    // 更新処理
-    void UpdateTransforms(const float& deltaTime);
-    void UpdateReturn(const float& deltaTime);
+    // キーフレーム更新
+    void UpdateKeyFrameProgression();
+    void AdvanceToNextKeyFrame();
+   
+    // キーフレームセーブ、ロード
+    void LoadKeyFrames();
+    void SaveKeyFrames();
+    void CreateOrLoadKeyFrames(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
+
+    // キーフレーム追加、削除、クリア
+    void AddKeyFrame();
+    void RemoveKeyFrame(const int32_t& index);
+    void ClearKeyFrames();
 
     void StartReturn(); //< 戻り動作開始
     void CheckFinish(); //< 終了判定
-
-    // ImGui
-    void ImGuiTransformParam(const char* label, TransformParam& param, const TransformType& type);
 
 private:
     GlobalParameter* globalParameter_;
@@ -112,22 +110,23 @@ private:
     std::string categoryName_;
     std::string folderPath_;
 
-    std::array<TransformParam, static_cast<size_t>(TransformType::Count)> transformParams_;
+    // keyFrame
+    std::vector<std::unique_ptr<ObjEaseAnimationKeyFrame>> keyFrameDates_;
+    const std::string& keyFrameFolderName_ = "KeyFrames";
+    KeyFrameState keyFrameState_;
+
+    // originParam
     std::array<Vector3, static_cast<size_t>(TransformType::Count)> originalValues_;
 
+    // state
     PlayState playState_ = PlayState::STOPPED;
-
-    // Rail用
-    std::unique_ptr<RailPlayer> railPlayer_;
-    RailFileSelector railFileSelector_;
-
-    bool showControls_ = true;
+    bool showControls_   = true;
 
 public:
     const std::string& GetGroupName() const { return groupName_; }
     const std::string& GetCategoryName() const { return categoryName_; }
-    const Vector3& GetCurrentPos() const { return transformParams_[static_cast<size_t>(TransformType::Translation)].currentOffset; }
-    const Vector3& GetCurrentScale() const { return transformParams_[static_cast<size_t>(TransformType::Scale)].currentOffset; }
-    const Vector3& GetCurrentRotate() const { return transformParams_[static_cast<size_t>(TransformType::Rotation)].currentOffset; }
-    RailPlayer* GetRailPlayer() { return railPlayer_.get(); }
+    const Vector3& GetOriginalValue(const TransformType& type) const { return originalValues_[static_cast<size_t>(type)]; }
+    Vector3 GetActiveKeyFrameValue(const TransformType& type) const;
+    bool GetIsUseRailActiveKeyFrame() const;
+    RailPlayer* GetCurrentRailPlayer() const;
 };

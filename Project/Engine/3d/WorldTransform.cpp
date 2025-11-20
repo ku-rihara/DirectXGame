@@ -310,8 +310,8 @@ void WorldTransform::PlayObjEaseAnimation(const std::string& categoryName, const
     objEaseAnimationPlayer_->Play(categoryName, animationName);
 
     // Rail使用時、親を設定
-    if (objEaseAnimationPlayer_->GetAnimationData() && objEaseAnimationPlayer_->GetAnimationData()->IsUsingRail()) {
-        auto* railPlayer = objEaseAnimationPlayer_->GetAnimationData()->GetRailPlayer();
+    if (objEaseAnimationPlayer_->GetAnimationData() && objEaseAnimationPlayer_->GetAnimationData()->GetIsUseRailActiveKeyFrame()) {
+        auto* railPlayer = objEaseAnimationPlayer_->GetAnimationData()->GetCurrentRailPlayer();
         if (railPlayer) {
             railPlayer->SetParent(this);
         }
@@ -330,9 +330,9 @@ void WorldTransform::StopObjEaseAnimation() {
 ///============================================================
 /// アニメーション更新
 ///============================================================
-void WorldTransform::UpdateObjEaseAnimation(const float& deltaTime) {
+void WorldTransform::UpdateObjEaseAnimation() {
     if (objEaseAnimationPlayer_) {
-        objEaseAnimationPlayer_->Update(deltaTime);
+        objEaseAnimationPlayer_->Update();
         ApplyAnimationToTransform();
     }
 }
@@ -370,11 +370,11 @@ void WorldTransform::ApplyAnimationToTransform() {
     }
 
     // Translationをオフセットとして適用
-    if (!animData->IsUsingRail()) {
+    if (!animData->GetIsUseRailActiveKeyFrame()) {
         Vector3 translationOffset = objEaseAnimationPlayer_->GetCurrentTranslation();
         translation_              = translation_ + translationOffset;
     } else {
-        auto* railPlayer = animData->GetRailPlayer();
+        auto* railPlayer = animData->GetCurrentRailPlayer();
         if (railPlayer) {
             Vector3 railOffset = railPlayer->GetCurrentPosition();
             translation_       = translation_ + railOffset;

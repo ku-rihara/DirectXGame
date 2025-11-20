@@ -522,7 +522,7 @@ void Easing<Vector2>::SetAdaptValue<Vector2>(Vector3* value) {
 }
 
 template <typename T>
-void Easing<T>::Easing::SetcurrentOffset(const T& value) {
+void Easing<T>::Easing::SetCurrentOffset(const T& value) {
     *currentOffset_ = value;
 }
 template <typename T>

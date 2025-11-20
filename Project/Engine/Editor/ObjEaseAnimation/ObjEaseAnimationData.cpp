@@ -1,5 +1,6 @@
 #include "ObjEaseAnimationData.h"
 #include "3d/WorldTransform.h"
+#include "Editor/RailEditor/RailPlayer.h"
 #include "MathFunction.h"
 #include <algorithm>
 #include <imgui.h>
@@ -8,12 +9,7 @@ void ObjEaseAnimationData::Init(const std::string& animationName, const std::str
     globalParameter_ = GlobalParameter::GetInstance();
     groupName_       = animationName;
     categoryName_    = categoryName;
-    folderPath_      = "ObjEaseAnimation/" + categoryName_;
-    transformParams_[static_cast<size_t>(TransformType::Scale)].startValue = Vector3::OneVector();
-
-    // Rail初期化
-    railPlayer_ = std::make_unique<RailPlayer>();
-    railPlayer_->Init();
+    folderPath_      = "ObjEaseAnimation/" + categoryName_ + "/" + "Dates";
 
     if (!globalParameter_->HasRegisters(groupName_)) {
         // 新規登録
@@ -29,180 +25,62 @@ void ObjEaseAnimationData::Init(const std::string& animationName, const std::str
     ResetParams();
 }
 
-void ObjEaseAnimationData::Update(const float& deltaTime) {
-    if (playState_ == PlayState::RETURNING) {
-        UpdateReturn(deltaTime);
+void ObjEaseAnimationData::Update() {
+
+    UpdateKeyFrameProgression();
+}
+
+void ObjEaseAnimationData::UpdateKeyFrameProgression() {
+    if (keyFrameDates_.empty() || playState_ != PlayState::PLAYING) {
         return;
     }
 
-    if (playState_ != PlayState::PLAYING) {
-        return;
-    }
-
-    UpdateTransforms(deltaTime);
-    CheckFinish();
-}
-
-void ObjEaseAnimationData::UpdateTransforms(const float& deltaTime) {
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        auto& param = transformParams_[i];
-
-        if (!param.isActive) {
-            if (i == static_cast<size_t>(TransformType::Scale)) {
-                param.currentOffset = Vector3::OneVector();
-            }
-            continue;
+    // 現在のキーフレームが完了したかチェック
+    if (keyFrameState_.activeKeyFrameIndex >= 0 && keyFrameState_.activeKeyFrameIndex < static_cast<int32_t>(keyFrameDates_.size())) {
+        if (!keyFrameDates_[keyFrameState_.activeKeyFrameIndex]->IsFinished()) {
+            return;
         }
 
-        if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
-            railPlayer_->Update(deltaTime);
-            param.currentOffset = railPlayer_->GetCurrentPosition();
-        } else {
-            param.ease.Update(deltaTime);
-            param.currentOffset = param.ease.GetValue();
-        }
-    }
-}
+        keyFrameState_.lastCompletedKeyFrameIndex = keyFrameState_.activeKeyFrameIndex;
 
-void ObjEaseAnimationData::UpdateReturn(const float& deltaTime) {
-    bool allFinished = true;
+        // 最後のキーフレームかチェック
+        if (keyFrameState_.activeKeyFrameIndex == static_cast<int32_t>(keyFrameDates_.size()) - 1) {
+            keyFrameState_.isAllKeyFramesFinished = true;
+            keyFrameState_.finalKeyFrameIndex     = keyFrameState_.activeKeyFrameIndex;
 
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        auto& param = transformParams_[i];
-
-        if (!param.isActive || !param.returnToOrigin)
-            continue;
-
-        // Translation + Rail使用時の特殊処理
-        if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
-            railPlayer_->Update(deltaTime);
-            param.currentOffset = originalValues_[i] + railPlayer_->GetCurrentPosition();
-            if (railPlayer_->IsPlaying()) {
-                allFinished = false;
-            }
-        } else {
-            param.ease.Update(deltaTime);
-            param.currentOffset = param.ease.GetValue();
-            if (!param.ease.IsFinished()) {
-                allFinished = false;
-            }
-        }
-    }
-
-    if (allFinished) {
-        playState_ = PlayState::STOPPED;
-    }
-}
-
-void ObjEaseAnimationData::CheckFinish() {
-    bool allFinished = true;
-
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        const auto& param = transformParams_[i];
-
-        if (!param.isActive)
-            continue;
-
-        // Translation + Rail使用時の特殊処理
-        if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
-            if (railPlayer_->IsPlaying()) {
-                allFinished = false;
-            }
-        } else {
-            if (!param.ease.IsFinished()) {
-                allFinished = false;
-            }
-        }
-    }
-
-    if (allFinished) {
-        // 戻り動作が必要かチェック
-        bool needReturn = false;
-        for (const auto& param : transformParams_) {
-            if (param.isActive && param.returnToOrigin) {
-                needReturn = true;
-                break;
-            }
-        }
-
-        if (needReturn) {
-            StartReturn();
-        } else {
             playState_ = PlayState::STOPPED;
+
+        } else {
+            AdvanceToNextKeyFrame();
         }
     }
 }
 
-void ObjEaseAnimationData::StartReturn() {
-    playState_ = PlayState::RETURNING;
+void ObjEaseAnimationData::AdvanceToNextKeyFrame() {
+    if (keyFrameState_.activeKeyFrameIndex < static_cast<int32_t>(keyFrameDates_.size()) - 1) {
+        keyFrameState_.activeKeyFrameIndex++;
 
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        auto& param = transformParams_[i];
+        if (keyFrameState_.activeKeyFrameIndex < static_cast<int32_t>(keyFrameDates_.size())) {
+            // 前のキーフレームの最終値を次のキーフレームの開始値として設定
+            Vector3 startScale       = GetActiveKeyFrameValue(TransformType::Scale);
+            Vector3 startRotation    = GetActiveKeyFrameValue(TransformType::Rotation);
+            Vector3 startTranslation = GetActiveKeyFrameValue(TransformType::Translation);
 
-        if (!param.isActive || !param.returnToOrigin)
-            continue;
-
-        if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
-            continue;
+            keyFrameDates_[keyFrameState_.activeKeyFrameIndex]->SetStartValues(startScale, startRotation, startTranslation);
         }
-
-        // 戻り設定
-        param.ease.SetIsStartEndReverse(true);
-        param.ease.SetMaxTime(param.returnMaxTime);
-        param.ease.SetType(static_cast<EasingType>(param.returnEaseType));
-        param.ease.Reset();
     }
 }
 
 void ObjEaseAnimationData::Play() {
     Reset();
     playState_ = PlayState::PLAYING;
-
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        auto& param = transformParams_[i];
-
-        if (!param.isActive)
-            continue;
-
-        // Translation + Rail使用時の特殊処理
-        if (i == static_cast<size_t>(TransformType::Translation) && param.useRail && !param.railFileName.empty()) {
-            railPlayer_->Play(param.railFileName);
-            continue;
-        }
-
-        // 通常のイージング設定
-        param.ease.SetAdaptValue(&param.currentOffset);
-        param.ease.SetStartValue(param.startValue);
-        param.ease.SetEndValue(param.endValue);
-        param.ease.SetMaxTime(param.maxTime);
-        param.ease.SetType(static_cast<EasingType>(param.easeType));
-        param.ease.SetIsStartEndReverse(false); 
-        param.ease.Reset();
-    }
 }
 
 void ObjEaseAnimationData::Stop() {
     playState_ = PlayState::STOPPED;
-
-    // 現在値を初期値に戻す
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        transformParams_[i].currentOffset = originalValues_[i];
-    }
-
-    if (railPlayer_) {
-        railPlayer_->Stop();
-    }
 }
 
 void ObjEaseAnimationData::Reset() {
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        transformParams_[i].currentOffset = transformParams_[i].startValue;
-        transformParams_[i].ease.Reset();
-    }
-
-    if (railPlayer_) {
-        railPlayer_->Stop();
-    }
 }
 
 bool ObjEaseAnimationData::IsFinished() const {
@@ -215,117 +93,88 @@ bool ObjEaseAnimationData::IsPlaying() const {
 
 void ObjEaseAnimationData::LoadData() {
     globalParameter_->LoadFile(groupName_, folderPath_);
+    LoadKeyFrames();
     globalParameter_->SyncParamForGroup(groupName_);
     GetParams();
 }
 
+void ObjEaseAnimationData::LoadKeyFrames() {
+    std::string folderPath     = folderPath_ + keyFrameFolderName_ + groupName_ + "/";
+    std::string keyFramePrefix = groupName_;
+
+    if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {
+
+        std::vector<std::pair<int32_t, std::string>> keyFrameFiles;
+
+        // キーフレームファイルを検索
+        for (const auto& entry : std::filesystem::directory_iterator(folderPath)) {
+            if (entry.is_regular_file() && entry.path().extension() == ".json") {
+                std::string fileName = entry.path().stem().string();
+
+                // ファイルチェック
+                if (fileName.find(keyFramePrefix) == 0) {
+                    // インデックス番号を抽出
+                    std::string indexStr = fileName.substr(keyFramePrefix.length());
+
+                    int32_t index = std::stoi(indexStr);
+                    keyFrameFiles.emplace_back(index, fileName);
+                }
+            }
+        }
+
+        // インデックス順にソート
+        std::sort(keyFrameFiles.begin(), keyFrameFiles.end());
+
+        CreateOrLoadKeyFrames(keyFrameFiles);
+    }
+}
+
+void ObjEaseAnimationData::CreateOrLoadKeyFrames(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles) {
+
+    // 作成
+    if (keyFrameDates_.size() == 0) {
+        // 既存のキーフレームをクリア
+        ClearKeyFrames();
+        // キーフレームを作成してロード
+        for (const auto& [index, fileName] : KeyFrameFiles) {
+            auto newKeyFrame = std::make_unique<ObjEaseAnimationKeyFrame>();
+            newKeyFrame->Init(groupName_, categoryName_, index);
+            newKeyFrame->LoadData(); // Load
+            keyFrameDates_.push_back(std::move(newKeyFrame));
+        }
+    } else {
+
+        // すべてのキーフレームを保存
+        for (auto& keyFrame : keyFrameDates_) {
+            keyFrame->LoadData();
+        }
+    }
+}
+
 void ObjEaseAnimationData::SaveData() {
     globalParameter_->SaveFile(groupName_, folderPath_);
+    SaveKeyFrames();
+}
+
+void ObjEaseAnimationData::SaveKeyFrames() {
+    // すべてのキーフレームを保存
+    for (auto& keyFrame : keyFrameDates_) {
+        keyFrame->SaveData();
+    }
 }
 
 void ObjEaseAnimationData::RegisterParams() {
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        const char* name = GetSRTName(static_cast<TransformType>(i));
-        auto& param      = transformParams_[i];
-
-        globalParameter_->Regist(groupName_, std::string(name) + "_IsActive", &param.isActive);
-        // useCurrentAsStart を削除
-        globalParameter_->Regist(groupName_, std::string(name) + "_ReturnToOrigin", &param.returnToOrigin);
-        globalParameter_->Regist(groupName_, std::string(name) + "_startValue", &param.startValue);
-        globalParameter_->Regist(groupName_, std::string(name) + "_endValue", &param.endValue);
-        globalParameter_->Regist(groupName_, std::string(name) + "_MaxTime", &param.maxTime);
-        globalParameter_->Regist(groupName_, std::string(name) + "_EaseType", &param.easeType);
-        globalParameter_->Regist(groupName_, std::string(name) + "_ReturnMaxTime", &param.returnMaxTime);
-        globalParameter_->Regist(groupName_, std::string(name) + "_ReturnEaseType", &param.returnEaseType);
-
-        if (i == static_cast<size_t>(TransformType::Translation)) {
-            globalParameter_->Regist(groupName_, std::string(name) + "_UseRail", &param.useRail);
-            globalParameter_->Regist(groupName_, std::string(name) + "_RailFileName", &param.railFileName);
-        }
-    }
 }
 
 void ObjEaseAnimationData::GetParams() {
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        const char* name = GetSRTName(static_cast<TransformType>(i));
-        auto& param      = transformParams_[i];
-
-        param.isActive       = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsActive");
-        param.returnToOrigin = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_ReturnToOrigin");
-        param.startValue     = globalParameter_->GetValue<Vector3>(groupName_, std::string(name) + "_startValue");
-        param.endValue       = globalParameter_->GetValue<Vector3>(groupName_, std::string(name) + "_endValue");
-        param.maxTime        = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_MaxTime");
-        param.easeType       = globalParameter_->GetValue<int32_t>(groupName_, std::string(name) + "_EaseType");
-        param.returnMaxTime  = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_ReturnMaxTime");
-        param.returnEaseType = globalParameter_->GetValue<int32_t>(groupName_, std::string(name) + "_ReturnEaseType");
-
-        if (i == static_cast<size_t>(TransformType::Translation)) {
-            param.useRail      = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_UseRail");
-            param.railFileName = globalParameter_->GetValue<std::string>(groupName_, std::string(name) + "_RailFileName");
-        }
-    }
 }
 
 void ObjEaseAnimationData::ResetParams() {
-    playState_ = PlayState::STOPPED;
+    playState_                         = PlayState::STOPPED;
+    keyFrameState_.activeKeyFrameIndex = 0;
 
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        transformParams_[i].currentOffset = transformParams_[i].startValue;
-        originalValues_[i]                = transformParams_[i].startValue;
-    }
-}
-
-void ObjEaseAnimationData::ImGuiTransformParam(const char* label, TransformParam& param, const TransformType& TransformTypeType) {
-    ImGui::SeparatorText(label);
-    ImGui::Checkbox((std::string(label) + " Active").c_str(), &param.isActive);
-    ImGui::PushID(label);
-
-    if (!param.isActive) {
-        ImGui::PopID();
-        return;
-    }
-
-    ImGui::Checkbox("Return To Origin", &param.returnToOrigin);
-
-    // Rail使用フラグ
-    if (TransformTypeType == TransformType::Translation) {
-        ImGui::Checkbox("Use Rail", &param.useRail);
-
-        if (param.useRail) {
-            // Railファイル選択
-            std::string directory = "Resources/GlobalParameter/RailEditor/Dates";
-            railFileSelector_.selector.SelectFile("Rail File", directory, param.railFileName, "", true);
-            return; 
-        }
-    }
-
-    if (TransformTypeType == TransformType::Rotation) {
-        // Radian から Degree に変換して表示
-        Vector3 startValueDeg = ToDegree(param.startValue);
-        Vector3 endValueDeg   = ToDegree(param.endValue);
-
-        ImGui::DragFloat3("Start Value (Degree)", &startValueDeg.x, 0.1f);
-        ImGui::DragFloat3("End Value (Degree)", &endValueDeg.x, 0.1f);
-
-        // Degree から Radian に変換して保存
-        param.startValue = ToRadian(startValueDeg);
-        param.endValue   = ToRadian(endValueDeg);
-    } else {
-
-        ImGui::DragFloat3("Start Value", &param.startValue.x, 0.01f);
-        ImGui::DragFloat3("End Value", &param.endValue.x, 0.01f);
-    }
-    // maxTime, easeType
-    ImGui::DragFloat("Max Time", &param.maxTime, 0.01f, 0.1f, 10.0f);
-    ImGuiEasingTypeSelector("Easing Type", param.easeType);
-
-    // Return Parameters
-    if (param.returnToOrigin) {
-        ImGui::SeparatorText("Return Parameters");
-        ImGui::DragFloat("Return Max Time", &param.returnMaxTime, 0.01f, 0.1f, 10.0f);
-        ImGuiEasingTypeSelector("Return Easing Type", param.returnEaseType);
-    }
-    ImGui::PopID();
+    keyFrameState_.isAllKeyFramesFinished     = false;
+    keyFrameState_.lastCompletedKeyFrameIndex = -1;
 }
 
 void ObjEaseAnimationData::AdjustParam() {
@@ -335,17 +184,14 @@ void ObjEaseAnimationData::AdjustParam() {
         ImGui::PushID(groupName_.c_str());
 
         // 再生制御
-        if (ImGui::Button("Play")) {
+        if (ImGui::Button("Play"))
             Play();
-        }
         ImGui::SameLine();
-        if (ImGui::Button("Stop")) {
+        if (ImGui::Button("Stop"))
             Stop();
-        }
         ImGui::SameLine();
-        if (ImGui::Button("Reset")) {
+        if (ImGui::Button("Reset"))
             Reset();
-        }
 
         // 状態表示
         const char* stateText = "";
@@ -362,24 +208,121 @@ void ObjEaseAnimationData::AdjustParam() {
         }
         ImGui::Text("State: %s", stateText);
 
-        ImGui::Separator();
-
-        // 各Transformパラメータ
-        for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-            ImGuiTransformParam(GetSRTName(static_cast<TransformType>(i)), transformParams_[i], static_cast<TransformType>(i));
+        if (keyFrameState_.isAllKeyFramesFinished) {
+            ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Animation Finished!");
         }
 
         ImGui::PopID();
     }
-#endif // _DEBUG
+
+    // キーフレームリスト
+
+    ImGui::SeparatorText("KeyFrames");
+    ImGui::Text("KeyFrames (%zu):", keyFrameDates_.size());
+
+    for (int32_t i = 0; i < static_cast<int32_t>(keyFrameDates_.size()); ++i) {
+        ImGui::PushID(i);
+
+        bool isSelected       = (keyFrameState_.selectedKeyFrameIndex == i);
+        bool isActive         = (keyFrameState_.activeKeyFrameIndex == i);
+        std::string labelText = "KeyFrame " + std::to_string(i) + " (t:" + std::to_string(keyFrameDates_[i]->GetTimePoint()) + ")";
+
+        if (isActive) {
+            labelText += " [ACTIVE]";
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 0.0f, 1.0f));
+        }
+
+        if (ImGui::Selectable(labelText.c_str(), isSelected, 0, ImVec2(0, 0))) {
+            keyFrameState_.selectedKeyFrameIndex = i;
+        }
+
+        if (isActive) {
+            ImGui::PopStyleColor();
+        }
+
+        ImGui::PopID();
+        ImGui::Spacing();
+    }
+
+    if (ImGui::Button("Add KeyFrame")) {
+        AddKeyFrame();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Remove Selected KeyFrame")) {
+        if (keyFrameState_.selectedKeyFrameIndex >= 0 && keyFrameState_.selectedKeyFrameIndex < static_cast<int32_t>(keyFrameDates_.size())) {
+            RemoveKeyFrame(keyFrameState_.selectedKeyFrameIndex);
+        }
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Clear All KeyFrames")) {
+        ClearKeyFrames();
+    }
+
+    ImGui::Separator();
+
+    // 選択されたキーフレームの調整
+    if (keyFrameState_.selectedKeyFrameIndex >= 0 && keyFrameState_.selectedKeyFrameIndex < static_cast<int32_t>(keyFrameDates_.size())) {
+        keyFrameDates_[keyFrameState_.selectedKeyFrameIndex]->AdjustParam();
+    }
+#endif
+}
+
+void ObjEaseAnimationData::ClearKeyFrames() {
+    keyFrameDates_.clear();
+    keyFrameState_.selectedKeyFrameIndex = -1;
+    keyFrameState_.activeKeyFrameIndex   = 0;
+
+    // フラグをリセット
+    keyFrameState_.isAllKeyFramesFinished = false;
+
+    keyFrameState_.lastCompletedKeyFrameIndex = -1;
+}
+
+void ObjEaseAnimationData::AddKeyFrame() {
+    int32_t newIndex = static_cast<int32_t>(keyFrameDates_.size());
+    auto newKeyFrame = std::make_unique<ObjEaseAnimationKeyFrame>();
+    newKeyFrame->Init(groupName_, categoryName_, newIndex);
+
+    keyFrameDates_.push_back(std::move(newKeyFrame));
+    keyFrameState_.selectedKeyFrameIndex = newIndex;
+
+    // フラグをリセット
+    keyFrameState_.isAllKeyFramesFinished = false;
+}
+
+void ObjEaseAnimationData::RemoveKeyFrame(const int32_t& index) {
+    if (index >= 0 && index < static_cast<int32_t>(keyFrameDates_.size())) {
+        keyFrameDates_.erase(keyFrameDates_.begin() + index);
+
+        // 選択インデックスの調整
+        if (keyFrameState_.selectedKeyFrameIndex >= index) {
+            keyFrameState_.selectedKeyFrameIndex--;
+            if (keyFrameState_.selectedKeyFrameIndex < 0 && !keyFrameDates_.empty()) {
+                keyFrameState_.selectedKeyFrameIndex = 0;
+            }
+        }
+
+        // アクティブインデックスの調整
+        if (keyFrameState_.activeKeyFrameIndex >= index) {
+            keyFrameState_.activeKeyFrameIndex--;
+            if (keyFrameState_.activeKeyFrameIndex < 0 && !keyFrameDates_.empty()) {
+                keyFrameState_.activeKeyFrameIndex = 0;
+            }
+        }
+
+        // インデックスの再設定
+        for (int32_t i = 0; i < static_cast<int32_t>(keyFrameDates_.size()); ++i) {
+            keyFrameDates_[i]->Init(groupName_, categoryName_, i);
+        }
+
+        // フラグをリセット
+        keyFrameState_.isAllKeyFramesFinished = false;
+
+        keyFrameState_.lastCompletedKeyFrameIndex = -1;
+    }
 }
 
 //*-------------------------------getter Method-------------------------------*/
-
-bool ObjEaseAnimationData::IsUsingRail() const {
-    const auto& transParam = transformParams_[static_cast<size_t>(TransformType::Translation)];
-    return transParam.useRail && transParam.isActive;
-}
 
 const char* ObjEaseAnimationData::GetSRTName(const TransformType& type) const {
     switch (type) {
@@ -392,4 +335,55 @@ const char* ObjEaseAnimationData::GetSRTName(const TransformType& type) const {
     default:
         return "Unknown";
     }
+}
+
+RailPlayer* ObjEaseAnimationData::GetCurrentRailPlayer() const {
+    if (keyFrameState_.activeKeyFrameIndex >= 0 && keyFrameState_.activeKeyFrameIndex < static_cast<int32_t>(keyFrameDates_.size())) {
+        auto* railPlayer = keyFrameDates_[keyFrameState_.activeKeyFrameIndex]->GetRailPlayer();
+        if (railPlayer) {
+            return railPlayer;
+        }
+    }
+    return nullptr;
+}
+
+Vector3 ObjEaseAnimationData::GetActiveKeyFrameValue(const TransformType& type) const {
+    if (keyFrameDates_.empty()) {
+        return originalValues_[static_cast<size_t>(type)];
+    }
+
+    // 現在のアクティブキーフレームを更新
+    if (keyFrameState_.activeKeyFrameIndex >= 0 && keyFrameState_.activeKeyFrameIndex < static_cast<int32_t>(keyFrameDates_.size())) {
+
+        switch (type) {
+            // scale
+        case TransformType::Scale:
+            return keyFrameDates_[keyFrameState_.activeKeyFrameIndex]->GetCurrentScale();
+            break;
+
+            // rotation
+        case TransformType::Rotation:
+            return keyFrameDates_[keyFrameState_.activeKeyFrameIndex]->GetCurrentRotation();
+
+            break;
+            // translation
+        case TransformType::Translation:
+            return keyFrameDates_[keyFrameState_.activeKeyFrameIndex]->GetCurrentTranslation();
+
+            break;
+        default:
+            break;
+        }
+    }
+
+    return Vector3::ZeroVector();
+}
+
+bool ObjEaseAnimationData::GetIsUseRailActiveKeyFrame() const {
+    bool isUseRail = false;
+    if (keyFrameState_.activeKeyFrameIndex >= 0 && keyFrameState_.activeKeyFrameIndex < static_cast<int32_t>(keyFrameDates_.size())) {
+        isUseRail = keyFrameDates_[keyFrameState_.activeKeyFrameIndex]->IsUsingRail();
+    }
+
+    return isUseRail;
 }

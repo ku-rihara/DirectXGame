@@ -14,7 +14,7 @@ void ObjEaseAnimationEditor::InitPreviewObject() {
 
     // デフォルトモデルでプレビューオブジェクトを作成
     previewObject_.reset(Object3d::CreateModel("DebugCube.obj"));
-   
+
     if (previewObject_) {
         previewObject_->SetIsAutoUpdate(false);
         previewObject_->transform_.scale_       = previewBaseTransform_.scale;
@@ -24,7 +24,7 @@ void ObjEaseAnimationEditor::InitPreviewObject() {
 }
 
 void ObjEaseAnimationEditor::AllLoadFile() {
-    std::string baseFolderPath = "Resources/GlobalParameter/ObjEaseAnimation/";
+    std::string baseFolderPath = objEaseAnimationBasePath_;
 
     if (!std::filesystem::exists(baseFolderPath) || !std::filesystem::is_directory(baseFolderPath)) {
         return;
@@ -44,7 +44,7 @@ void ObjEaseAnimationEditor::AllLoadFile() {
 }
 
 void ObjEaseAnimationEditor::LoadCategory(const std::string& categoryName) {
-    std::string categoryPath = "Resources/GlobalParameter/ObjEaseAnimation/" + categoryName;
+    std::string categoryPath = objEaseAnimationBasePath_ + categoryName + "/" + dateFolderName_;
 
     if (!std::filesystem::exists(categoryPath) || !std::filesystem::is_directory(categoryPath)) {
         return;
@@ -69,11 +69,11 @@ void ObjEaseAnimationEditor::LoadCategory(const std::string& categoryName) {
     categories_.push_back(std::move(newCategory));
 }
 
-void ObjEaseAnimationEditor::Update(const float& deltaTime) {
+void ObjEaseAnimationEditor::Update() {
     // すべてのアニメーションを更新
     for (auto& category : categories_) {
         for (auto& animation : category.animations) {
-            animation->Update(deltaTime);
+            animation->Update();
         }
     }
 
@@ -99,9 +99,9 @@ void ObjEaseAnimationEditor::UpdatePreviewObject() {
 
             if (animation && animation->IsPlaying()) {
                 // アニメーションのオフセット値を取得して適用
-                Vector3 scaleOffset       = animation->GetCurrentScale();
-                Vector3 rotationOffset    = animation->GetCurrentRotate();
-                Vector3 translationOffset = animation->GetCurrentPos();
+                Vector3 scaleOffset       = animation->GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Scale);
+                Vector3 rotationOffset    = animation->GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Rotation);
+                Vector3 translationOffset = animation->GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Translation);
 
                 previewObject_->transform_.scale_       = previewBaseTransform_.scale * scaleOffset;
                 previewObject_->transform_.rotation_    = previewBaseTransform_.rotation + rotationOffset;
@@ -124,7 +124,7 @@ void ObjEaseAnimationEditor::EditorUpdate() {
 
         if (showPreview_) {
             ImGui::InputText("Preview Model", previewModelNameBuffer_, IM_ARRAYSIZE(previewModelNameBuffer_));
-         
+
             if (ImGui::Button("Change Model")) {
                 ChangePreviewModel(previewModelNameBuffer_);
             }

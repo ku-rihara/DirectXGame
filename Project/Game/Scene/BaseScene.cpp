@@ -52,7 +52,7 @@ void BaseScene::EditorUpdate() {
     cameraEditor_->Update();
     shakeEditor_->Update(Frame::DeltaTimeRate());
     railEditor_->Update(Frame::DeltaTimeRate());
-    objEaseAnimationEditor_->Update(Frame::DeltaTimeRate());
+    objEaseAnimationEditor_->Update();
 #endif
 }
 

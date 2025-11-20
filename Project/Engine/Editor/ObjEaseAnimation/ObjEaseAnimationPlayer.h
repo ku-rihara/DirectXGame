@@ -12,22 +12,13 @@ public:
     ObjEaseAnimationPlayer()  = default;
     ~ObjEaseAnimationPlayer() = default;
 
-    void Init(); //< 初期化
+    // 初期化、更新
+    void Init();
+    void Update();
 
-    /// <summary>
-    /// 更新
-    /// </summary>
-    /// <param name="deltaTime">デルタタイム</param>
-    void Update(const float& deltaTime);
-
-    /// <summary>
-    /// アニメーション再生
-    /// </summary>
-    /// <param name="categoryName">カテゴリー名</param>
-    /// <param name="animationName">アニメーション名</param>
+    // 再生、停止
     void Play(const std::string& categoryName, const std::string& animationName);
-
-    void Stop(); //< アニメーション停止
+    void Stop();
 
 private:
     std::unique_ptr<ObjEaseAnimationData> animationData_;
@@ -36,11 +27,11 @@ private:
 
 public:
     bool IsPlaying() const { return animationData_->IsPlaying(); }
-    bool IsFinished() const {return animationData_->IsFinished(); }
+    bool IsFinished() const { return animationData_->IsFinished(); }
 
-    const Vector3& GetCurrentScale() const {return animationData_->GetCurrentScale();}
-    const Vector3& GetCurrentRotation() const {return animationData_->GetCurrentRotate();}
-    const Vector3& GetCurrentTranslation() const {return animationData_->GetCurrentPos();}
+    Vector3 GetCurrentScale() const;
+    Vector3 GetCurrentRotation() const;
+    Vector3 GetCurrentTranslation() const;
 
     ObjEaseAnimationData* GetAnimationData() { return animationData_.get(); }
 };
