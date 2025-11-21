@@ -101,8 +101,8 @@ void ObjEaseAnimationKeyFrame::UpdatePlay(const float& deltaTime) {
         }
     }
 }
-void ObjEaseAnimationKeyFrame::UpdateReturn(const float& deltaTime) {
 
+void ObjEaseAnimationKeyFrame::UpdateReturn(const float& deltaTime) {
     bool allFinished = true;
 
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
@@ -113,10 +113,12 @@ void ObjEaseAnimationKeyFrame::UpdateReturn(const float& deltaTime) {
         }
 
         // Translation + Rail使用時の特殊処理
-        if (i == static_cast<size_t>(TransformType::Translation)) {
-            railPlayer_->Update(deltaTime);
-            param.currentOffset = railPlayer_->GetCurrentPosition();
-            if (railPlayer_->IsPlaying()) {
+        if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
+            // TODO: Railの逆再生機能が必要
+            // 現状ではRailPlayerに逆再生機能がないため、イージングで戻る
+            param.ease.Update(deltaTime);
+            param.currentOffset = param.ease.GetValue();
+            if (!param.ease.IsFinished()) {
                 allFinished = false;
             }
         } else {
@@ -227,7 +229,7 @@ void ObjEaseAnimationKeyFrame::LoadParams() {
         param.easeType         = globalParameter_->GetValue<int32_t>(groupName_, std::string(name) + "_EaseType");
         param.isReturnToOrigin = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_IsReturnToOrigin");
         param.returnEaseType   = globalParameter_->GetValue<int32_t>(groupName_, std::string(name) + "_ReturnEaseType");
-        param.returnMaxTime    = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_ReturnMaxTime");
+        param.returnMaxTime    = globalParameter_->GetValue<float>(groupName_, std::string(name) + "_ReturnMaxTime");
 
         if (i == static_cast<size_t>(TransformType::Translation)) {
             param.useRail      = globalParameter_->GetValue<bool>(groupName_, std::string(name) + "_UseRail");
@@ -244,7 +246,8 @@ void ObjEaseAnimationKeyFrame::AdaptEaseParam() {
             continue;
         }
 
-        param.ease.SetMaxTime(timePoint_);
+        // 各TransformのmaxTimeを使用
+        param.ease.SetMaxTime(param.maxTime);
         param.ease.SetEndValue(param.endValue);
         param.ease.SetType(static_cast<EasingType>(param.easeType));
     }
@@ -262,10 +265,11 @@ void ObjEaseAnimationKeyFrame::ImGuiTransformParam(const char* label, TransformP
 
     if (type == TransformType::Translation) {
         ImGui::Checkbox("Use Rail", &param.useRail);
-        
+
         if (param.useRail) {
             std::string directory = globalParameter_->GetDirectoryPath() + "RailEditor/Dates";
             railFileSelector_.selector.SelectFile("Rail File", directory, param.railFileName, "", true);
+
             ImGui::PopID();
             return;
         }
@@ -282,6 +286,17 @@ void ObjEaseAnimationKeyFrame::ImGuiTransformParam(const char* label, TransformP
     ImGui::DragFloat("Max Time", &param.maxTime, 0.01f, 0.1f, 10.0f);
     ImGuiEasingTypeSelector("Easing Type", param.easeType);
 
+    ImGui::Separator();
+    ImGui::Text("Return Settings");
+    ImGui::Checkbox("Return to Origin", &param.isReturnToOrigin);
+
+    if (param.isReturnToOrigin) {
+        ImGui::Indent();
+        ImGui::DragFloat("Return Time", &param.returnMaxTime, 0.01f, 0.1f, 10.0f);
+        ImGuiEasingTypeSelector("Return Easing", param.returnEaseType);
+        ImGui::Unindent();
+    }
+
     ImGui::PopID();
 }
 
@@ -297,6 +312,7 @@ void ObjEaseAnimationKeyFrame::AdjustParam() {
     ImGui::SeparatorText(("KeyFrame: " + groupName_).c_str());
     ImGui::PushID(groupName_.c_str());
 
+    ImGui::Text("Time Point: Start timing of this keyframe");
     ImGui::DragFloat("Time Point", &timePoint_, 0.01f);
     TimeModeSelector("Time Mode", timeMode_);
 
@@ -329,7 +345,6 @@ void ObjEaseAnimationKeyFrame::SetStartValues(const Vector3& scale, const Vector
 }
 
 bool ObjEaseAnimationKeyFrame::IsFinished() const {
-
     // 戻りの場合は、戻り動作が完了しているかチェック
     if (playState_ == PlayState::RETURNING) {
         return playState_ == PlayState::STOPPED;

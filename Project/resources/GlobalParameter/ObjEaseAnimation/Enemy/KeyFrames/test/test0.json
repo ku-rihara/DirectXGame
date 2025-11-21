@@ -13,14 +13,14 @@
         ],
         "Scale_EaseType": 0,
         "Scale_IsActive": true,
-        "Scale_IsReturnToOrigin": false,
+        "Scale_IsReturnToOrigin": true,
         "Scale_MaxTime": 0.6600000262260437,
-        "Scale_ReturnEaseType": 0,
-        "Scale_ReturnMaxTime": 1.0,
+        "Scale_ReturnEaseType": 4,
+        "Scale_ReturnMaxTime": 0.5099999904632568,
         "Scale_endValue": [
-            1.0,
-            1.0,
-            1.0
+            1.2799999713897705,
+            1.1200000047683716,
+            1.2799999713897705
         ],
         "Translation_EaseType": 0,
         "Translation_IsActive": false,
@@ -36,6 +36,6 @@
             0.0
         ],
         "timeMode": 1,
-        "timePoint": 1.0
+        "timePoint": 0.0
     }
 }

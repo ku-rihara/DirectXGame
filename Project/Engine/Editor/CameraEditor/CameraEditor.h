@@ -14,14 +14,10 @@ public:
     CameraEditor()  = default;
     ~CameraEditor() = default;
 
-    /// <summary>
-    /// 初期化
-    /// </summary>
-    /// <param name="vp">ビュープロジェクション</param>
+    // 初期化、更新
     void Init(ViewProjection* vp);
-
-    void Update();       //< 更新
-    void EditorUpdate(); //< エディタ更新
+    void Update();      
+    void EditorUpdate();
 
     /// <summary>
     /// アニメーション追加
@@ -31,14 +27,18 @@ public:
 
     CameraAnimationData* GetSelectedAnimation();
 
-    void PlaySelectedAnimation();             //< 選択中のアニメーション再生
-    void PauseSelectedAnimation();            //< 選択中のアニメーション一時停止
-    void ResetSelectedAnimation();            //< 選択中のアニメーションリセット
-    bool IsSelectedAnimationPlaying()  const;  //< 選択中のアニメーション再生中か
-    bool IsSelectedAnimationFinished() const; //< 選択中のアニメーション終了したか
+     // 選択アニメーション再生、一時停止、リセット
+    void PlaySelectedAnimation();            
+    void PauseSelectedAnimation();           
+    void ResetSelectedAnimation();           
 
-    void ApplyToViewProjection();                 //< ViewProjectionに適用
-    void ApplySelectedKeyFrameToViewProjection(); //< 選択中のキーフレームをViewProjectionに適用
+    // 選択アニメーション状態取得
+    bool IsSelectedAnimationPlaying()  const; 
+    bool IsSelectedAnimationFinished() const; 
+
+    // ViewProjectionへの適用
+    void ApplyToViewProjection();                 
+    void ApplySelectedKeyFrameToViewProjection(); 
 
 private:
     void SetViewProjection(ViewProjection* vp);
