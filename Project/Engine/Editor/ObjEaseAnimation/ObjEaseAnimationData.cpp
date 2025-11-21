@@ -9,7 +9,10 @@ void ObjEaseAnimationData::Init(const std::string& animationName, const std::str
     globalParameter_ = GlobalParameter::GetInstance();
     groupName_       = animationName;
     categoryName_    = categoryName;
-    folderPath_      = "ObjEaseAnimation/" + categoryName_ + "/" + "Dates";
+
+    // DatesとKeyFramesフォルダパス設定
+    folderPath_         = baseFolderPath_ + categoryName_ + "/" + "Dates";
+    keyFrameFolderPath_ = baseFolderPath_ + categoryName_ + "/" + "KeyFrames/" + animationName + "/";
 
     if (!globalParameter_->HasRegisters(groupName_)) {
         // 新規登録
@@ -99,7 +102,7 @@ void ObjEaseAnimationData::LoadData() {
 }
 
 void ObjEaseAnimationData::LoadKeyFrames() {
-    std::string folderPath     = folderPath_ + keyFrameFolderName_ + groupName_ + "/";
+    std::string folderPath     = "Resources/GlobalParameter/"+ keyFrameFolderPath_;
     std::string keyFramePrefix = groupName_;
 
     if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {

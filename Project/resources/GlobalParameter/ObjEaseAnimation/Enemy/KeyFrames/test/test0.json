@@ -12,7 +12,7 @@
             0.0
         ],
         "Scale_EaseType": 0,
-        "Scale_IsActive": false,
+        "Scale_IsActive": true,
         "Scale_IsReturnToOrigin": false,
         "Scale_MaxTime": 1.0,
         "Scale_ReturnEaseType": 0,

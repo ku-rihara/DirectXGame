@@ -109,10 +109,11 @@ private:
     std::string groupName_;
     std::string categoryName_;
     std::string folderPath_;
+    std::string keyFrameFolderPath_;
+    const std::string& baseFolderPath_ = "ObjEaseAnimation/";
 
     // keyFrame
     std::vector<std::unique_ptr<ObjEaseAnimationKeyFrame>> keyFrameDates_;
-    const std::string& keyFrameFolderName_ = "KeyFrames";
     KeyFrameState keyFrameState_;
 
     // originParam
