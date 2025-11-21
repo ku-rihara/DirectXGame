@@ -1,6 +1,6 @@
 #pragma once
-#include "ObjEaseAnimationData.h"
 #include "3d/Object3d.h"
+#include "ObjEaseAnimationData.h"
 #include <map>
 #include <memory>
 #include <string>
@@ -29,11 +29,11 @@ public:
     ~ObjEaseAnimationEditor() = default;
 
     // 初期化、更新
-    void Init(); 
+    void Init();
     void Update();
-    void EditorUpdate(); 
+    void EditorUpdate();
 
-    //カテゴリー追加、削除
+    // カテゴリー追加、削除
     void AddCategory(const std::string& categoryName);
     void RemoveCategory(const int32_t& index);
 
@@ -50,34 +50,32 @@ public:
     ObjEaseAnimationData* GetAnimationByName(const std::string& categoryName, const std::string& animationName);
 
 private:
-
     // プレビューオブジェクト初期化、更新、モデル変更
-   void InitPreviewObject();
-   void UpdatePreviewObject();
-   void ChangePreviewModel(const std::string& modelName);
+    void InitPreviewObject();
+    void UpdatePreviewObject();
+    void ChangePreviewModel(const std::string& modelName);
 
     // 全カテゴリーのロード、セーブ
-    void AllLoadFile(); 
-    void AllSaveFile(); 
+    void AllLoadFile();
+    void AllSaveFile();
     void LoadCategory(const std::string& categoryName);
     void SaveCategory(const int32_t& categoryIndex);
 
 private:
     std::vector<Category> categories_;
-    int32_t selectedCategoryIndex_ = -1;
+    int32_t selectedCategoryIndex_           = -1;
     std::unique_ptr<Object3d> previewObject_ = nullptr;
 
     char categoryNameBuffer_[128]  = "";
     char animationNameBuffer_[128] = "";
 
-    const std::string& objEaseAnimationBasePath_ = "Resources/GlobalParameter/ObjEaseAnimation/";
-    const std::string& dateFolderName_           = "Dates/";
+    const std::string& animationFolderName_ = "ObjEaseAnimation/";
+    const std::string& dateFolderName_      = "Dates/";
 
     // プレビュー設定
     bool showPreview_                 = true;
     char previewModelNameBuffer_[128] = "DebugCube.obj";
     PreViewTransform previewBaseTransform_;
-
 
 public:
     const int32_t& GetCategoryCount() const { return static_cast<int32_t>(categories_.size()); }

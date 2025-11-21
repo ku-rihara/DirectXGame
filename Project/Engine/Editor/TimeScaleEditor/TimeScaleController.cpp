@@ -1,4 +1,5 @@
 #include "TimeScaleController.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Frame/Frame.h"
 #include <algorithm>
 #include <filesystem>
@@ -56,7 +57,7 @@ bool TimeScaleController::IsTimeScaleActive() const {
 
 void TimeScaleController::AllLoadFile() {
     // TimeScaleのフォルダ内のすべてのファイルを検索
-    std::string folderPath = "Resources/GlobalParameter/TimeScale/";
+    std::string folderPath = GlobalParameter::GetInstance()->GetDirectoryPath() + "TimeScale/";
 
     if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {
         // TimeScaleをクリア
@@ -81,13 +82,12 @@ void TimeScaleController::EditorUpdate() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader("TimeScale Manager")) {
 
-  
         // 新規追加
         ImGui::InputText("New TimeScale Name", nameBuffer_, IM_ARRAYSIZE(nameBuffer_));
         if (ImGui::Button("Add TimeScale")) {
             if (strlen(nameBuffer_) > 0) {
                 AddTimeScale(nameBuffer_);
-                nameBuffer_[0] = '\0'; 
+                nameBuffer_[0] = '\0';
             }
         }
 
@@ -104,8 +104,6 @@ void TimeScaleController::EditorUpdate() {
             ImGui::Text("Status: Inactive");
         }
 
-      
-
         ImGui::Separator();
 
         // TimeScaleリスト表示
@@ -120,7 +118,6 @@ void TimeScaleController::EditorUpdate() {
                 selectedIndex_ = i;
             }
 
-         
             if (ImGui::Button("Play")) {
                 PlayTimeScale(timeScales_[i]->GetGroupName());
             }
@@ -135,7 +132,7 @@ void TimeScaleController::EditorUpdate() {
             timeScales_[selectedIndex_]->AdjustParam();
         }
 
-         ImGui::Separator();
+        ImGui::Separator();
         ImGui::Text("File Operations:");
 
         // Load ボタン

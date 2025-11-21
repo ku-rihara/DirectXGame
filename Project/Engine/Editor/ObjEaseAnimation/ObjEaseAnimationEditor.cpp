@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <imgui.h>
 #include <Windows.h>
+#include "Editor/ParameterEditor/GlobalParameter.h"
 
 void ObjEaseAnimationEditor::Init() {
     AllLoadFile();
@@ -24,7 +25,7 @@ void ObjEaseAnimationEditor::InitPreviewObject() {
 }
 
 void ObjEaseAnimationEditor::AllLoadFile() {
-    std::string baseFolderPath = objEaseAnimationBasePath_;
+    std::string baseFolderPath =GlobalParameter::GetInstance()->GetDirectoryPath()+ animationFolderName_;
 
     if (!std::filesystem::exists(baseFolderPath) || !std::filesystem::is_directory(baseFolderPath)) {
         return;
@@ -44,7 +45,7 @@ void ObjEaseAnimationEditor::AllLoadFile() {
 }
 
 void ObjEaseAnimationEditor::LoadCategory(const std::string& categoryName) {
-    std::string categoryPath = objEaseAnimationBasePath_ + categoryName + "/" + dateFolderName_;
+    std::string categoryPath = GlobalParameter::GetInstance()->GetDirectoryPath() + animationFolderName_ + categoryName + "/" + dateFolderName_;
 
     if (!std::filesystem::exists(categoryPath) || !std::filesystem::is_directory(categoryPath)) {
         return;
@@ -321,7 +322,7 @@ void ObjEaseAnimationEditor::AddCategory(const std::string& categoryName) {
     selectedCategoryIndex_ = static_cast<int32_t>(categories_.size()) - 1;
 
     // フォルダ作成
-    std::string folderPath = "Resources/GlobalParameter/ObjEaseAnimation/" + categoryName;
+    std::string folderPath = GlobalParameter::GetInstance()->GetDirectoryPath() + animationFolderName_ + categoryName;
     std::filesystem::create_directories(folderPath);
 }
 

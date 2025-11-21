@@ -109,8 +109,8 @@ private:
 private:
     GlobalParameter* globalParameter_;
     std::string groupName_;
-    std::string folderPath_               = "CameraAnimation/AnimationData";
-    const std::string keyFrameFolderPath_ = "Resources/GlobalParameter/CameraAnimation/KeyFrames/";
+    std::string dateFolderPath_               = "CameraAnimation/AnimationData";
+    const std::string keyFrameFolderPath_ = "CameraAnimation/KeyFrames/";
 
     std::vector<std::unique_ptr<CameraKeyFrame>> keyFrames_;
     int32_t selectedKeyFrameIndex_ = -1;

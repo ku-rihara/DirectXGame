@@ -102,7 +102,7 @@ void ObjEaseAnimationData::LoadData() {
 }
 
 void ObjEaseAnimationData::LoadKeyFrames() {
-    std::string folderPath     = "Resources/GlobalParameter/"+ keyFrameFolderPath_;
+    std::string folderPath     = globalParameter_->GetDirectoryPath() + ""+ keyFrameFolderPath_;
     std::string keyFramePrefix = groupName_;
 
     if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {

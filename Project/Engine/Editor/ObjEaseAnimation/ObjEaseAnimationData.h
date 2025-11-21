@@ -110,7 +110,7 @@ private:
     std::string categoryName_;
     std::string folderPath_;
     std::string keyFrameFolderPath_;
-    const std::string& baseFolderPath_ = "ObjEaseAnimation/";
+    const std::string baseFolderPath_ = "ObjEaseAnimation/";
 
     // keyFrame
     std::vector<std::unique_ptr<ObjEaseAnimationKeyFrame>> keyFrameDates_;

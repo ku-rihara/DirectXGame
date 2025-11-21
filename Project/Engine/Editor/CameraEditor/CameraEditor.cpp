@@ -1,6 +1,7 @@
 #include "CameraEditor.h"
 #include <filesystem>
 #include <imgui.h>
+#include "Editor/ParameterEditor/GlobalParameter.h"
 
 void CameraEditor::Init(ViewProjection* vp) {
     AllLoadFile();
@@ -14,7 +15,7 @@ void CameraEditor::Init(ViewProjection* vp) {
 
 void CameraEditor::AllLoadFile() {
     // CameraAnimationのAnimationDataフォルダ内のすべてのファイルを検索
-    std::string folderPath = "Resources/GlobalParameter/CameraAnimation/AnimationData/";
+    std::string folderPath = GlobalParameter::GetInstance()->GetDirectoryPath() + "CameraAnimation/AnimationData/";
 
     if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {
         // 既存のアニメーションをクリア

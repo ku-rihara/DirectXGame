@@ -262,9 +262,9 @@ void ObjEaseAnimationKeyFrame::ImGuiTransformParam(const char* label, TransformP
 
     if (type == TransformType::Translation) {
         ImGui::Checkbox("Use Rail", &param.useRail);
-
+        
         if (param.useRail) {
-            std::string directory = "Resources/GlobalParameter/RailEditor/Dates";
+            std::string directory = globalParameter_->GetDirectoryPath() + "RailEditor/Dates";
             railFileSelector_.selector.SelectFile("Rail File", directory, param.railFileName, "", true);
             ImGui::PopID();
             return;

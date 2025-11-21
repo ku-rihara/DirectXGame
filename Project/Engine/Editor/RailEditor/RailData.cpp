@@ -264,7 +264,7 @@ void RailData::SaveKeyFrames() {
 }
 
 void RailData::LoadKeyFrames() {
-    std::string folderPath     = "Resources/GlobalParameter/RailEditor/ControlPoints/";
+    std::string folderPath     = globalParameter_->GetDirectoryPath() + "RailEditor/ControlPoints/";
     std::string keyFramePrefix = groupName_;
 
     if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {

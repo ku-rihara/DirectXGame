@@ -45,7 +45,7 @@ void CameraAnimationData::ResetParams() {
 void CameraAnimationData::LoadData() {
 
     // アニメーションデータのロード
-    globalParameter_->LoadFile(groupName_, folderPath_);
+    globalParameter_->LoadFile(groupName_, dateFolderPath_);
     // キーフレームデータのロード
     LoadKeyFrames();
     // 値同期
@@ -55,7 +55,7 @@ void CameraAnimationData::LoadData() {
 void CameraAnimationData::SaveData() {
 
     // アニメーションデータの保存
-    globalParameter_->SaveFile(groupName_, folderPath_);
+    globalParameter_->SaveFile(groupName_, dateFolderPath_);
     // キーフレームデータの保存
     SaveAllKeyFrames();
 }
@@ -68,7 +68,7 @@ void CameraAnimationData::SaveAllKeyFrames() {
 }
 
 void CameraAnimationData::LoadKeyFrames() {
-    std::string folderPath     = keyFrameFolderPath_ + groupName_ + "/";
+    std::string folderPath     = globalParameter_->GetDirectoryPath() + keyFrameFolderPath_ + groupName_ + "/";
     std::string keyFramePrefix = groupName_;
 
     if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {

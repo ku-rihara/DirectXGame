@@ -19,13 +19,8 @@ public:
     CameraAnimation()  = default;
     ~CameraAnimation() = default;
 
-    // 初期化
+    // 初期化、更新
     void Init(); 
-
-    /// <summary>
-    /// 更新
-    /// </summary>
-    /// <param name="speedRate">速度倍率</param>
     void Update(const float& speedRate = 1.0f);
 
     /// <summary>
