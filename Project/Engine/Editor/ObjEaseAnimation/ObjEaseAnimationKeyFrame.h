@@ -51,7 +51,10 @@ public:
 
         // 現在のオフセット値
         Vector3 currentOffset = Vector3::ZeroVector();
+        Vector3 startValue    = Vector3::ZeroVector();
+        // イージング
         Easing<Vector3> ease;
+        Easing<Vector3> returnEase;
     };
 
     struct RailFileSelector {
@@ -98,6 +101,8 @@ private:
 
     void ImGuiTransformParam(const char* label, TransformParam& param, const TransformType& type);
     void TimeModeSelector(const char* label, int32_t& target);
+
+    void CheckPlayFinishAndStartReturn();
 
 private:
     GlobalParameter* globalParameter_;

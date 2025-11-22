@@ -86,7 +86,7 @@ public:
 private:
 
     // パラメータ登録、取得、リセット
-    void ResetParams();
+    void InitParams();
     void RegisterParams();
     void GetParams();
   
@@ -134,7 +134,7 @@ private:
     bool showInitialSettings_   = false;
 
     bool isAllKeyFramesFinished_        = false;
-    int32_t lastCompletedKeyFrameIndex_ = -1;
+ 
 
     int32_t timeMode_ = static_cast<int32_t>(CameraKeyFrame::TimeMode::DELTA_TIME_RATE);
 
@@ -146,7 +146,6 @@ public:
     const std::string& GetGroupName() const { return groupName_; }
     const bool& IsAllKeyFramesFinished() const { return isAllKeyFramesFinished_; }
     const int32_t& GetActiveKeyFrameIndex() const { return activeKeyFrameIndex_; }
-    const int32_t& GetLastCompletedKeyFrameIndex() const { return lastCompletedKeyFrameIndex_; }
     int32_t GetTotalKeyFrameCount() const { return static_cast<int32_t>(keyFrames_.size()); }
     const bool& IsReturningToInitial() const { return returnParam_.isReturningToInitial; }
 

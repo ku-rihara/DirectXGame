@@ -62,7 +62,7 @@ private:
     void RegisterParams();      //< パラメータのバインド
     void UpdateShakeValues();   //< シェイク値の計算
     void UpdateVector3Shake();  //< Vector3シェイクの更新
-    void ResetParams();         //< パラメータリセット
+    void InitParams();         //< パラメータリセット
     void LoadParams();          //< パラメータ取得
 
     /// <summary>

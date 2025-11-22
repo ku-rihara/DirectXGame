@@ -10,26 +10,22 @@ void ObjEaseAnimationData::Init(const std::string& animationName, const std::str
     groupName_       = animationName;
     categoryName_    = categoryName;
 
-    // DatesとKeyFramesフォルダパス設定
     folderPath_         = baseFolderPath_ + categoryName_ + "/" + "Dates";
     keyFrameFolderPath_ = baseFolderPath_ + categoryName_ + "/" + "KeyFrames/" + animationName + "/";
 
     if (!globalParameter_->HasRegisters(groupName_)) {
-        // 新規登録
         globalParameter_->CreateGroup(groupName_);
         RegisterParams();
         globalParameter_->SyncParamForGroup(groupName_);
     } else {
-        // 値取得
         GetParams();
     }
 
-    // リセット
-    ResetParams();
+    InitParams();
 }
 
-void ObjEaseAnimationData::Update() {
 
+void ObjEaseAnimationData::Update() {
     UpdateKeyFrameProgression();
 }
 
@@ -38,21 +34,22 @@ void ObjEaseAnimationData::UpdateKeyFrameProgression() {
         return;
     }
 
-    // 現在のキーフレームが完了したかチェック
+    // 現在のキーフレームを更新
     if (keyFrameState_.activeKeyFrameIndex >= 0 && keyFrameState_.activeKeyFrameIndex < static_cast<int32_t>(keyFrameDates_.size())) {
+
+        // アクティブなキーフレームを更新
+        keyFrameDates_[keyFrameState_.activeKeyFrameIndex]->Update(1.0f);
+
+        // 現在のキーフレームが完了したかチェック
         if (!keyFrameDates_[keyFrameState_.activeKeyFrameIndex]->IsFinished()) {
             return;
         }
 
-        keyFrameState_.lastCompletedKeyFrameIndex = keyFrameState_.activeKeyFrameIndex;
-
+  
         // 最後のキーフレームかチェック
         if (keyFrameState_.activeKeyFrameIndex == static_cast<int32_t>(keyFrameDates_.size()) - 1) {
             keyFrameState_.isAllKeyFramesFinished = true;
-            keyFrameState_.finalKeyFrameIndex     = keyFrameState_.activeKeyFrameIndex;
-
-            playState_ = PlayState::STOPPED;
-
+            playState_                            = PlayState::STOPPED;
         } else {
             AdvanceToNextKeyFrame();
         }
@@ -77,13 +74,37 @@ void ObjEaseAnimationData::AdvanceToNextKeyFrame() {
 void ObjEaseAnimationData::Play() {
     Reset();
     playState_ = PlayState::PLAYING;
+
+    // 最初のキーフレームを開始
+    if (!keyFrameDates_.empty()) {
+        keyFrameState_.activeKeyFrameIndex = 0;
+
+        // 最初のキーフレームの開始値を設定
+        keyFrameDates_[0]->SetStartValues(
+            originalValues_[static_cast<size_t>(TransformType::Scale)],
+            originalValues_[static_cast<size_t>(TransformType::Rotation)],
+            originalValues_[static_cast<size_t>(TransformType::Translation)]);
+    }
 }
 
 void ObjEaseAnimationData::Stop() {
     playState_ = PlayState::STOPPED;
+
+    // 全てのキーフレームをリセット
+    for (auto& keyFrame : keyFrameDates_) {
+        keyFrame->Reset();
+    }
 }
 
 void ObjEaseAnimationData::Reset() {
+    // 全てのキーフレームをリセット
+    for (auto& keyFrame : keyFrameDates_) {
+        keyFrame->Reset();
+    }
+
+    // 状態をリセット
+    keyFrameState_.activeKeyFrameIndex        = 0;
+    keyFrameState_.isAllKeyFramesFinished     = false;
 }
 
 bool ObjEaseAnimationData::IsFinished() const {
@@ -102,7 +123,7 @@ void ObjEaseAnimationData::LoadData() {
 }
 
 void ObjEaseAnimationData::LoadKeyFrames() {
-    std::string folderPath     = globalParameter_->GetDirectoryPath() + ""+ keyFrameFolderPath_;
+    std::string folderPath     = globalParameter_->GetDirectoryPath() + keyFrameFolderPath_;
     std::string keyFramePrefix = groupName_;
 
     if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {
@@ -118,8 +139,7 @@ void ObjEaseAnimationData::LoadKeyFrames() {
                 if (fileName.find(keyFramePrefix) == 0) {
                     // インデックス番号を抽出
                     std::string indexStr = fileName.substr(keyFramePrefix.length());
-
-                    int32_t index = std::stoi(indexStr);
+                    int32_t index        = std::stoi(indexStr);
                     keyFrameFiles.emplace_back(index, fileName);
                 }
             }
@@ -133,7 +153,6 @@ void ObjEaseAnimationData::LoadKeyFrames() {
 }
 
 void ObjEaseAnimationData::CreateOrLoadKeyFrames(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles) {
-
     // 作成
     if (keyFrameDates_.size() == 0) {
         // 既存のキーフレームをクリア
@@ -146,7 +165,6 @@ void ObjEaseAnimationData::CreateOrLoadKeyFrames(const std::vector<std::pair<int
             keyFrameDates_.push_back(std::move(newKeyFrame));
         }
     } else {
-
         // すべてのキーフレームを保存
         for (auto& keyFrame : keyFrameDates_) {
             keyFrame->LoadData();
@@ -167,17 +185,30 @@ void ObjEaseAnimationData::SaveKeyFrames() {
 }
 
 void ObjEaseAnimationData::RegisterParams() {
+    // 元の値を登録
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        const char* name = GetSRTName(static_cast<TransformType>(i));
+        globalParameter_->Regist(groupName_, std::string(name) + "_OriginalValue", &originalValues_[i]);
+    }
 }
 
 void ObjEaseAnimationData::GetParams() {
+    // 元の値を取得
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        const char* name   = GetSRTName(static_cast<TransformType>(i));
+        originalValues_[i] = globalParameter_->GetValue<Vector3>(groupName_, std::string(name) + "_OriginalValue");
+    }
 }
 
-void ObjEaseAnimationData::ResetParams() {
-    playState_                         = PlayState::STOPPED;
-    keyFrameState_.activeKeyFrameIndex = 0;
-
+void ObjEaseAnimationData::InitParams() {
+    playState_                                = PlayState::STOPPED;
+    keyFrameState_.activeKeyFrameIndex        = 0;
     keyFrameState_.isAllKeyFramesFinished     = false;
-    keyFrameState_.lastCompletedKeyFrameIndex = -1;
+
+    // デフォルト値設定
+    originalValues_[static_cast<size_t>(TransformType::Scale)]       = Vector3::OneVector();
+    originalValues_[static_cast<size_t>(TransformType::Rotation)]    = Vector3::ZeroVector();
+    originalValues_[static_cast<size_t>(TransformType::Translation)] = Vector3::ZeroVector();
 }
 
 void ObjEaseAnimationData::AdjustParam() {
@@ -215,11 +246,21 @@ void ObjEaseAnimationData::AdjustParam() {
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Animation Finished!");
         }
 
+        ImGui::Separator();
+        ImGui::SeparatorText("Original Values (Start Position)");
+      
+        ImGui::DragFloat3("Original Scale", &originalValues_[static_cast<size_t>(TransformType::Scale)].x, 0.01f);
+
+        Vector3 originalRotationDeg = ToDegree(originalValues_[static_cast<size_t>(TransformType::Rotation)]);
+        ImGui::DragFloat3("Original Rotation (Deg)", &originalRotationDeg.x, 0.1f);
+        originalValues_[static_cast<size_t>(TransformType::Rotation)] = ToRadian(originalRotationDeg);
+
+        ImGui::DragFloat3("Original Translation", &originalValues_[static_cast<size_t>(TransformType::Translation)].x, 0.1f);
+
         ImGui::PopID();
     }
 
     // キーフレームリスト
-
     ImGui::SeparatorText("KeyFrames");
     ImGui::Text("KeyFrames (%zu):", keyFrameDates_.size());
 
@@ -278,7 +319,6 @@ void ObjEaseAnimationData::ClearKeyFrames() {
     // フラグをリセット
     keyFrameState_.isAllKeyFramesFinished = false;
 
-    keyFrameState_.lastCompletedKeyFrameIndex = -1;
 }
 
 void ObjEaseAnimationData::AddKeyFrame() {
@@ -321,7 +361,6 @@ void ObjEaseAnimationData::RemoveKeyFrame(const int32_t& index) {
         // フラグをリセット
         keyFrameState_.isAllKeyFramesFinished = false;
 
-        keyFrameState_.lastCompletedKeyFrameIndex = -1;
     }
 }
 

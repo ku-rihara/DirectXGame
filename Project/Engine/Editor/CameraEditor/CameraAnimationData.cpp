@@ -25,15 +25,14 @@ void CameraAnimationData::Init(const std::string& animationName) {
     }
 
     // 値初期化
-    ResetParams();
+    InitParams();
 }
 
-void CameraAnimationData::ResetParams() {
+void CameraAnimationData::InitParams() {
     activeKeyFrameIndex_ = 0;
 
     // 新しいフラグの初期化
     isAllKeyFramesFinished_         = false;
-    lastCompletedKeyFrameIndex_     = -1;
     returnParam_.isWaitingForReturn = false;
     resetParam_.currentDelayTimer   = 0.0f;
 
@@ -41,6 +40,7 @@ void CameraAnimationData::ResetParams() {
     returnParam_.rotationEase.SetAdaptValue(&returnCameraTransform_.rotation);
     returnParam_.fovEase.SetAdaptValue(&returnCameraTransform_.fov);
 }
+
 
 void CameraAnimationData::LoadData() {
 
@@ -200,9 +200,7 @@ void CameraAnimationData::UpdateKeyFrameProgression() {
             return;
         }
 
-        // 完了したキーフレームのインデックスを記録
-        lastCompletedKeyFrameIndex_ = activeKeyFrameIndex_;
-
+  
         // 最後のキーフレームかチェック
         if (activeKeyFrameIndex_ == static_cast<int32_t>(keyFrames_.size()) - 1) {
             // 最後のキーフレームに到達
@@ -312,7 +310,6 @@ void CameraAnimationData::RemoveKeyFrame(const int32_t& index) {
         // フラグをリセット
         isAllKeyFramesFinished_ = false;
 
-        lastCompletedKeyFrameIndex_ = -1;
     }
 }
 
@@ -324,7 +321,6 @@ void CameraAnimationData::ClearKeyFrames() {
     // フラグをリセット
     isAllKeyFramesFinished_ = false;
 
-    lastCompletedKeyFrameIndex_ = -1;
 }
 
 void CameraAnimationData::InitKeyFrames() {
@@ -372,12 +368,14 @@ void CameraAnimationData::Reset() {
     returnParam_.isReturningToInitial = false;
     returnParam_.isWaitingForReturn   = false;
     isAllFinished_                    = false;
-    lastCompletedKeyFrameIndex_       = -1;
+
+    // keyFrameインデックスリセット
     activeKeyFrameIndex_              = 0;
     resetParam_.currentDelayTimer     = 0.0f;
 
     playState_ = PlayState::STOPPED;
 }
+
 
 void CameraAnimationData::RegisterParams() {
     // メイン設定
@@ -439,7 +437,7 @@ void CameraAnimationData::AdjustParam() {
         }
 
         if (returnParam_.isWaitingForReturn) {
-            ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Waiting for Return... (%.2f/%.2f)",
+            ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Waiting for Return (%.2f/%.2f)",
                 resetParam_.currentDelayTimer, resetParam_.delayTime);
         }
     }

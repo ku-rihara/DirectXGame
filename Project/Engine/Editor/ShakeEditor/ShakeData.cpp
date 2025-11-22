@@ -19,7 +19,7 @@ void ShakeData::Init(const std::string& shakeName) {
     }
 
     // リセット
-    ResetParams();
+    InitParams();
 }
 
 void ShakeData::Update(const float& deltaTime) {
@@ -224,7 +224,7 @@ bool ShakeData::IsPlaying() const {
     return playState_ == PlayState::PLAYING;
 }
 
-void ShakeData::ResetParams() {
+void ShakeData::InitParams() {
 
     // イージング設定
     timeEase_.SetAdaptValue(&easedTime_);

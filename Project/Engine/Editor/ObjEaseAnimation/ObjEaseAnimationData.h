@@ -2,7 +2,6 @@
 #include "Easing/Easing.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationKeyFrame.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "utility/FileSelector/FileSelector.h"
 #include "Vector3.h"
 #include <cstdint>
 #include <memory>
@@ -31,30 +30,9 @@ public:
     };
 
     struct KeyFrameState {
-        int finalKeyFrameIndex;
         int selectedKeyFrameIndex      = -1;
-        int lastCompletedKeyFrameIndex = -1;
         int activeKeyFrameIndex        = 0;
         bool isAllKeyFramesFinished    = false;
-    };
-
-    struct TransformParam {
-        bool isActive       = false;
-        bool returnToOrigin = false;
-
-        Vector3 startValue = Vector3::ZeroVector();
-
-        float returnMaxTime    = 1.0f;
-        int32_t returnEaseType = 0;
-
-        // 現在のオフセット値
-        Vector3 currentOffset = Vector3::ZeroVector();
-        Easing<Vector3> ease;
-    };
-
-    // Rail用ファイルセレクター
-    struct RailFileSelector {
-        FileSelector selector;
     };
 
 public:
@@ -85,12 +63,12 @@ private:
     // パラメータ登録、取得、リセット
     void RegisterParams();
     void GetParams();
-    void ResetParams();
+    void InitParams();
 
     // キーフレーム更新
     void UpdateKeyFrameProgression();
     void AdvanceToNextKeyFrame();
-   
+
     // キーフレームセーブ、ロード
     void LoadKeyFrames();
     void SaveKeyFrames();
@@ -100,9 +78,6 @@ private:
     void AddKeyFrame();
     void RemoveKeyFrame(const int32_t& index);
     void ClearKeyFrames();
-
-    void StartReturn(); //< 戻り動作開始
-    void CheckFinish(); //< 終了判定
 
 private:
     GlobalParameter* globalParameter_;
