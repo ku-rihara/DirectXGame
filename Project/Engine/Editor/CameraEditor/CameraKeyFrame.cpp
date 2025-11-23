@@ -7,8 +7,8 @@
 void CameraKeyFrame::Init(const std::string& groupName, const int32_t& keyNumber) {
     // グローバルパラメータ
     globalParameter_         = GlobalParameter::GetInstance();
-    currentKeyFrameIndex     = keyNumber;
-    std::string newGroupName = groupName + std::to_string(currentKeyFrameIndex);
+    currenTSequenceElementIndex     = keyNumber;
+    std::string newGroupName = groupName + std::to_string(currenTSequenceElementIndex);
     groupName_               = newGroupName;
 
     folderPath_ += groupName;
@@ -150,9 +150,9 @@ void CameraKeyFrame::AdaptEaseParam() {
 
 void CameraKeyFrame::AdaptValueSetting() {
     // adapt
-    positionEase_.SetAdaptValue(&currentKeyFrameParam_.position);
-    rotationEase_.SetAdaptValue(&currentKeyFrameParam_.rotation);
-    fovEase_.SetAdaptValue(&currentKeyFrameParam_.fov);
+    positionEase_.SetAdaptValue(&currenTSequenceElementParam_.position);
+    rotationEase_.SetAdaptValue(&currenTSequenceElementParam_.rotation);
+    fovEase_.SetAdaptValue(&currenTSequenceElementParam_.fov);
 }
 
 void CameraKeyFrame::TimeModeSelector(const char* label, int32_t& target) {

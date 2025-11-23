@@ -84,10 +84,10 @@ void GameScene::Debug() {
     ImGui::End();
 
     ImGui::Begin("editor");
-    cameraEditor_->EditorUpdate();
+    /*cameraEditor_->EditorUpdate();*/
     shakeEditor_->EditorUpdate();
     railEditor_->EditorUpdate();
-    objEaseAnimationEditor_->EditorUpdate();
+    /*objEaseAnimationEditor_->EditorUpdate();*/
     timeScaleController_->EditorUpdate();
     ImGui::End();
 #endif

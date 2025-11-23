@@ -10,9 +10,9 @@
 #include <string>
 
 /// <summary>
-/// オブジェクトイージングアニメーションキーフレーム
+/// オブジェクトイージングアニメーションセクション
 /// </summary>
-class ObjEaseAnimationKeyFrame {
+class ObjEaseAnimationSection {
 public:
     enum class TransformType {
         Scale,
@@ -62,11 +62,11 @@ public:
     };
 
 public:
-    ObjEaseAnimationKeyFrame()  = default;
-    ~ObjEaseAnimationKeyFrame() = default;
+    ObjEaseAnimationSection()  = default;
+    ~ObjEaseAnimationSection() = default;
 
     // 初期化、更新
-    void Init(const std::string& animationName,const std::string&categoryName, const int32_t& keyNumber);
+    void Init(const std::string& animationName, const std::string& categoryName, const int32_t& keyNumber);
     void Update(const float& speedRate);
 
     // リセット、終了判定
@@ -108,7 +108,7 @@ private:
     GlobalParameter* globalParameter_;
     std::string groupName_;
     std::string folderPath_;
-    int32_t currentKeyFrameIndex_ = -1;
+    int32_t currenTSequenceElementIndex_ = -1;
 
     // transformParam
     std::array<TransformParam, static_cast<size_t>(TransformType::Count)> transformParams_;

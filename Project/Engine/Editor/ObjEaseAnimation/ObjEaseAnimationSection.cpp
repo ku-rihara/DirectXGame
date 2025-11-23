@@ -1,12 +1,12 @@
-#include "ObjEaseAnimationKeyFrame.h"
+#include "ObjEaseAnimationSection.h"
 #include "Frame/Frame.h"
 #include "MathFunction.h"
 #include <imgui.h>
 
-void ObjEaseAnimationKeyFrame::Init(const std::string& animationName, const std::string& categoryName, const int32_t& keyNumber) {
+void ObjEaseAnimationSection::Init(const std::string& animationName, const std::string& categoryName, const int32_t& keyNumber) {
     globalParameter_      = GlobalParameter::GetInstance();
-    currentKeyFrameIndex_ = keyNumber;
-    groupName_            = animationName + std::to_string(currentKeyFrameIndex_);
+    currenTSequenceElementIndex_ = keyNumber;
+    groupName_            = animationName + std::to_string(currenTSequenceElementIndex_);
     folderPath_           = "ObjEaseAnimation/" + categoryName + "/" + "KeyFrames/" + animationName;
 
     // Scaleの初期値を1に設定
@@ -28,7 +28,7 @@ void ObjEaseAnimationKeyFrame::Init(const std::string& animationName, const std:
     AdaptEaseParam();
 }
 
-void ObjEaseAnimationKeyFrame::Reset() {
+void ObjEaseAnimationSection::Reset() {
 
     // 全Transformのリセット
     for (auto& param : transformParams_) {
@@ -50,19 +50,19 @@ void ObjEaseAnimationKeyFrame::Reset() {
     AdaptEaseParam();
 }
 
-void ObjEaseAnimationKeyFrame::LoadData() {
+void ObjEaseAnimationSection::LoadData() {
 
     // パラメータ読み込み・同期
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
-void ObjEaseAnimationKeyFrame::SaveData() {
+void ObjEaseAnimationSection::SaveData() {
         // セーブ
     globalParameter_->SaveFile(groupName_, folderPath_);
 }
 
-void ObjEaseAnimationKeyFrame::Update(const float& speedRate) {
+void ObjEaseAnimationSection::Update(const float& speedRate) {
     float actualDeltaTime;
 
     // 時間モードに応じてデルタタイム取得
@@ -110,7 +110,7 @@ void ObjEaseAnimationKeyFrame::Update(const float& speedRate) {
     CheckPlayFinishAndStartReturn();
 }
 
-void ObjEaseAnimationKeyFrame::UpdatePlay(const float& deltaTime) {
+void ObjEaseAnimationSection::UpdatePlay(const float& deltaTime) {
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
         auto& param = transformParams_[i];
 
@@ -133,7 +133,7 @@ void ObjEaseAnimationKeyFrame::UpdatePlay(const float& deltaTime) {
     }
 }
 
-void ObjEaseAnimationKeyFrame::CheckPlayFinishAndStartReturn() {
+void ObjEaseAnimationSection::CheckPlayFinishAndStartReturn() {
     bool allPlayFinished = true;
     bool anyReturnNeeded = false;
 
@@ -171,7 +171,7 @@ void ObjEaseAnimationKeyFrame::CheckPlayFinishAndStartReturn() {
     }
 }
 
-void ObjEaseAnimationKeyFrame::StartReturn() {
+void ObjEaseAnimationSection::StartReturn() {
     playState_ = PlayState::RETURNING;
 
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
@@ -197,7 +197,7 @@ void ObjEaseAnimationKeyFrame::StartReturn() {
     }
 }
 
-void ObjEaseAnimationKeyFrame::UpdateReturn(const float& deltaTime) {
+void ObjEaseAnimationSection::UpdateReturn(const float& deltaTime) {
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
         auto& param = transformParams_[i];
 
@@ -217,7 +217,7 @@ void ObjEaseAnimationKeyFrame::UpdateReturn(const float& deltaTime) {
     CheckFinish();
 }
 
-void ObjEaseAnimationKeyFrame::CheckFinish() {
+void ObjEaseAnimationSection::CheckFinish() {
     bool allFinished = true;
 
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
@@ -256,7 +256,7 @@ void ObjEaseAnimationKeyFrame::CheckFinish() {
     }
 }
 
-void ObjEaseAnimationKeyFrame::RegisterParams() {
+void ObjEaseAnimationSection::RegisterParams() {
     globalParameter_->Regist(groupName_, "timePoint", &timePoint_);
     globalParameter_->Regist(groupName_, "timeMode", &timeMode_);
 
@@ -279,7 +279,7 @@ void ObjEaseAnimationKeyFrame::RegisterParams() {
     }
 }
 
-void ObjEaseAnimationKeyFrame::LoadParams() {
+void ObjEaseAnimationSection::LoadParams() {
     timePoint_ = globalParameter_->GetValue<float>(groupName_, "timePoint");
     timeMode_  = globalParameter_->GetValue<int32_t>(groupName_, "timeMode");
 
@@ -302,7 +302,7 @@ void ObjEaseAnimationKeyFrame::LoadParams() {
     }
 }
 
-void ObjEaseAnimationKeyFrame::AdaptEaseParam() {
+void ObjEaseAnimationSection::AdaptEaseParam() {
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
         auto& param = transformParams_[i];
 
@@ -318,7 +318,7 @@ void ObjEaseAnimationKeyFrame::AdaptEaseParam() {
     }
 }
 
-void ObjEaseAnimationKeyFrame::ImGuiTransformParam(const char* label, TransformParam& param, const TransformType& type) {
+void ObjEaseAnimationSection::ImGuiTransformParam(const char* label, TransformParam& param, const TransformType& type) {
     ImGui::SeparatorText(label);
     ImGui::Checkbox((std::string(label) + " Active").c_str(), &param.isActive);
     ImGui::PushID(label);
@@ -364,14 +364,14 @@ void ObjEaseAnimationKeyFrame::ImGuiTransformParam(const char* label, TransformP
     ImGui::PopID();
 }
 
-void ObjEaseAnimationKeyFrame::TimeModeSelector(const char* label, int32_t& target) {
+void ObjEaseAnimationSection::TimeModeSelector(const char* label, int32_t& target) {
     int mode = static_cast<int>(target);
     if (ImGui::Combo(label, &mode, TimeModeLabels.data(), static_cast<int>(TimeModeLabels.size()))) {
         target = mode;
     }
 }
 
-void ObjEaseAnimationKeyFrame::AdjustParam() {
+void ObjEaseAnimationSection::AdjustParam() {
 #ifdef _DEBUG
     ImGui::SeparatorText(("KeyFrame: " + groupName_).c_str());
     ImGui::PushID(groupName_.c_str());
@@ -391,13 +391,13 @@ void ObjEaseAnimationKeyFrame::AdjustParam() {
 #endif
 }
 
-void ObjEaseAnimationKeyFrame::AdaptValueSetting() {
+void ObjEaseAnimationSection::AdaptValueSetting() {
     for (auto& param : transformParams_) {
         param.ease.SetAdaptValue(&param.currentOffset);
     }
 }
 
-void ObjEaseAnimationKeyFrame::SetStartValues(const Vector3& scale, const Vector3& rotation, const Vector3& translation) {
+void ObjEaseAnimationSection::SetStartValues(const Vector3& scale, const Vector3& rotation, const Vector3& translation) {
     transformParams_[static_cast<size_t>(TransformType::Scale)].ease.SetStartValue(scale);
     transformParams_[static_cast<size_t>(TransformType::Rotation)].ease.SetStartValue(rotation);
     transformParams_[static_cast<size_t>(TransformType::Translation)].ease.SetStartValue(translation);
@@ -411,7 +411,7 @@ void ObjEaseAnimationKeyFrame::SetStartValues(const Vector3& scale, const Vector
     transformParams_[static_cast<size_t>(TransformType::Translation)].currentOffset = translation;
 }
 
-bool ObjEaseAnimationKeyFrame::IsFinished() const {
+bool ObjEaseAnimationSection::IsFinished() const {
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
         const auto& param = transformParams_[i];
 
@@ -442,12 +442,12 @@ bool ObjEaseAnimationKeyFrame::IsFinished() const {
     return playState_ == PlayState::STOPPED;
 }
 
-bool ObjEaseAnimationKeyFrame::IsUsingRail() const {
+bool ObjEaseAnimationSection::IsUsingRail() const {
     const auto& transParam = transformParams_[static_cast<size_t>(TransformType::Translation)];
     return transParam.useRail && transParam.isActive;
 }
 
-const char* ObjEaseAnimationKeyFrame::GetSRTName(const TransformType& type) const {
+const char* ObjEaseAnimationSection::GetSRTName(const TransformType& type) const {
     switch (type) {
     case TransformType::Scale:
         return "Scale";

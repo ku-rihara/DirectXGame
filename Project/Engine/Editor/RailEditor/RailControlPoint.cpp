@@ -4,8 +4,8 @@
 void RailControlPoint::Init(const std::string& railName, const int32_t& keyNumber) {
     // グローバルパラメータ
     globalParameter_         = GlobalParameter::GetInstance();
-    currentKeyFrameIndex     = keyNumber;
-    std::string newGroupName = railName + std::to_string(currentKeyFrameIndex);
+    currenTSequenceElementIndex     = keyNumber;
+    std::string newGroupName = railName + std::to_string(currenTSequenceElementIndex);
     groupName_               = newGroupName;
 
     if (!globalParameter_->HasRegisters(groupName_)) {

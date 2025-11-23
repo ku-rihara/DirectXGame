@@ -2,6 +2,7 @@
 #include "3d/Object3D.h"
 #include "3d/ViewProjection.h"
 #include "CameraAnimationData.h"
+#include "Editor/BaseEffectEditor/BaseEffectEditor.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -9,50 +10,37 @@
 /// <summary>
 /// カメラアニメーションエディタクラス
 /// </summary>
-class CameraEditor {
+class CameraEditor : public BaseEffectEditor<CameraAnimationData> {
 public:
     CameraEditor()  = default;
     ~CameraEditor() = default;
 
     // 初期化、更新
-    void Init(ViewProjection* vp);
-    void Update();      
-    void EditorUpdate();
+    void Init(const std::string& animationName, const bool& isUseCategory = false) override;
+    void Update(const float& speedRate = 1.0f) override;
 
-    /// <summary>
-    /// アニメーション追加
-    /// </summary>
-    /// <param name="animationName">アニメーション名</param>
+    // 選択アニメーション再生、一時停止、リセット
+    void PlaySelectedAnimation();
+    void PauseSelectedAnimation();
+    void ResetSelectedAnimation();
+
     void AddAnimation(const std::string& animationName);
 
-    CameraAnimationData* GetSelectedAnimation();
-
-     // 選択アニメーション再生、一時停止、リセット
-    void PlaySelectedAnimation();            
-    void PauseSelectedAnimation();           
-    void ResetSelectedAnimation();           
-
     // 選択アニメーション状態取得
-    bool IsSelectedAnimationPlaying()  const; 
-    bool IsSelectedAnimationFinished() const; 
+    bool IsSelectedAnimationPlaying() const;
+    bool IsSelectedAnimationFinished() const;
 
     // ViewProjectionへの適用
-    void ApplyToViewProjection();                 
-    void ApplySelectedKeyFrameToViewProjection(); 
+    void ApplyToViewProjection();
+    void ApplySelectedKeyFrameToViewProjection();
 
 private:
-    void SetViewProjection(ViewProjection* vp);
-    void AllLoadFile(); //< 全ファイル読み込み
-    void AllSaveFile(); //< 全ファイル保存
-private:
-    std::vector<std::unique_ptr<CameraAnimationData>> animations_;
-    int selectedIndex_              = -1;
     ViewProjection* viewProjection_ = nullptr;
 
     std::unique_ptr<Object3d> preViewCameraObj_ = nullptr;
     std::unique_ptr<Object3d> preViewFollowObj_ = nullptr;
 
-    char nameBuffer_[128] = "";
+    const std::string folderName_ = "CameraAnimation/AnimationData/";
 
     bool autoApplyToViewProjection_ = true;
     bool keyFramePreviewMode_       = false;
@@ -62,8 +50,10 @@ private:
 public:
     const bool& GetIsEditing() const { return isEditing_; }
     const bool& GetAutoApplyToViewProjection() const { return autoApplyToViewProjection_; }
-    const bool& GetKeyFramePreviewMode() const { return keyFramePreviewMode_; }
+    const bool& GetSequenceElementPreviewMode() const { return keyFramePreviewMode_; }
+    CameraAnimationData* GetSelectedAnimation();
 
     void SetAutoApplyToViewProjection(const bool& enable) { autoApplyToViewProjection_ = enable; }
-    void SetKeyFramePreviewMode(const bool& enable) { keyFramePreviewMode_ = enable; }
+    void SetSequenceElementPreviewMode(const bool& enable) { keyFramePreviewMode_ = enable; }
+    void SetViewProjection(ViewProjection* vp);
 };

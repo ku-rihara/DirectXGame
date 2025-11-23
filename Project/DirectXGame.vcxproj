@@ -53,6 +53,10 @@
     <ClCompile Include="Engine\Easing\EasingFunction.cpp" />
     <ClCompile Include="Engine\Easing\EasingSequence.cpp" />
     <ClCompile Include="Engine\Easing\EasingStep.cpp" />
+    <ClCompile Include="Engine\Editor\BaseEffectEditor\BaseEffectData.cpp" />
+    <ClCompile Include="Engine\Editor\BaseEffectEditor\BaseEffectEditor.cpp" />
+    <ClCompile Include="Engine\Editor\BaseEffectEditor\BaseEffectPlayer.cpp" />
+    <ClCompile Include="Engine\Editor\BaseEffectEditor\BaseSequenceEffectData.cpp" />
     <ClCompile Include="Engine\Editor\CameraEditor\CameraAnimation.cpp" />
     <ClCompile Include="Engine\Editor\CameraEditor\CameraAnimationData.cpp" />
     <ClCompile Include="Engine\Editor\CameraEditor\CameraEditor.cpp" />
@@ -63,9 +67,10 @@
     <ClCompile Include="Engine\Editor\EasingCreator\EasingCreator.cpp" />
     <ClCompile Include="Engine\Editor\EasingCreator\EasingEditor.cpp" />
     <ClCompile Include="Engine\Editor\EasingCreator\EasingParameterData.cpp" />
+    <ClCompile Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.cpp" />
     <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationData.cpp" />
     <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationEditor.cpp" />
-    <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationKeyFrame.cpp" />
+    <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationSection.cpp" />
     <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationPlayer.cpp" />
     <ClCompile Include="Engine\Editor\ParameterEditor\GlobalParameter.cpp" />
     <ClCompile Include="Engine\Editor\ParticleEditor\ParticleEmitter.cpp" />
@@ -221,6 +226,10 @@
     <ClInclude Include="Engine\Easing\EasingFunction.h" />
     <ClInclude Include="Engine\Easing\EasingSequence.h" />
     <ClInclude Include="Engine\Easing\EasingStep.h" />
+    <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseEffectData.h" />
+    <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseEffectEditor.h" />
+    <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseEffectPlayer.h" />
+    <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseSequenceEffectData.h" />
     <ClInclude Include="Engine\Editor\CameraEditor\CameraAnimation.h" />
     <ClInclude Include="Engine\Editor\CameraEditor\CameraAnimationData.h" />
     <ClInclude Include="Engine\Editor\CameraEditor\CameraEditor.h" />
@@ -231,9 +240,10 @@
     <ClInclude Include="Engine\Editor\EasingCreator\EasingCreator.h" />
     <ClInclude Include="Engine\Editor\EasingCreator\EasingEditor.h" />
     <ClInclude Include="Engine\Editor\EasingCreator\EasingParameterData.h" />
+    <ClInclude Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.h" />
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationData.h" />
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationEditor.h" />
-    <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationKeyFrame.h" />
+    <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationSection.h" />
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationPlayer.h" />
     <ClInclude Include="Engine\Editor\ParameterEditor\GlobalParameter.h" />
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticleEmitter.h" />

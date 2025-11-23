@@ -1,44 +1,64 @@
 #include "ObjEaseAnimationPlayer.h"
 
 void ObjEaseAnimationPlayer::Init() {
-    animationData_ = std::make_unique<ObjEaseAnimationData>();
+
+     BaseEffectPlayer::Init();
 }
 
-void ObjEaseAnimationPlayer::Update() {
-    if (animationData_) {
-        animationData_->Update();
+void ObjEaseAnimationPlayer::Update(const float& speedRate) {
+    if (effectData_) {
+        effectData_->Update(speedRate);
     }
 }
 
-void ObjEaseAnimationPlayer::Play(const std::string& categoryName, const std::string& animationName) {
-
-    animationData_->Play();
-   
-    animationData_.reset();
-    animationData_ = std::make_unique<ObjEaseAnimationData>();
-
-    // 新しいアニメーションをロード
-    animationData_->Init(animationName, categoryName);
-    animationData_->LoadData();
-    animationData_->Play();
-
-    currentCategoryName_  = categoryName;
-    currentAnimationName_ = animationName;
-}
-
-void ObjEaseAnimationPlayer::Stop() {
-    if (animationData_) {
-        animationData_->Stop();
+void ObjEaseAnimationPlayer::PlayInCategory(const std::string& categoryName, const std::string& animationName) {
+    if (effectData_) {
+        effectData_->Pause();
     }
+
+    effectData_.reset();
+    effectData_ = CreateEffectData();
+
+    // キャスト
+    auto* animData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animData) {
+        animData->InitWithCategory(animationName, categoryName);
+        animData->LoadData();
+        animData->Play();
+    }
+
+    currentCategoryName_ = categoryName;
+    currentEffectName_   = animationName;
 }
 
- Vector3 ObjEaseAnimationPlayer::GetCurrentScale() const {
-    return animationData_->GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Scale);
-}
- Vector3 ObjEaseAnimationPlayer::GetCurrentRotation() const {
-    return animationData_->GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Rotation);
+std::unique_ptr<BaseEffectData> ObjEaseAnimationPlayer::CreateEffectData() {
+    return std::make_unique<ObjEaseAnimationData>();
 }
 
- Vector3 ObjEaseAnimationPlayer::GetCurrentTranslation() const {
-    return animationData_->GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Translation);
+Vector3 ObjEaseAnimationPlayer::GetCurrentScale() const {
+    auto* animData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animData) {
+        return animData->GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Scale);
+    }
+    return Vector3::OneVector();
+}
+
+Vector3 ObjEaseAnimationPlayer::GetCurrentRotation() const {
+    auto* animData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animData) {
+        return animData->GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Rotation);
+    }
+    return Vector3::ZeroVector();
+}
+
+Vector3 ObjEaseAnimationPlayer::GetCurrentTranslation() const {
+    auto* animData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animData) {
+        return animData->GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Translation);
+    }
+    return Vector3::ZeroVector();
+}
+
+ObjEaseAnimationData* ObjEaseAnimationPlayer::GetAnimationData() {
+    return dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
 }

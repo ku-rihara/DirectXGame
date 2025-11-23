@@ -60,10 +60,10 @@ protected:
     Audio* audio_                   = nullptr;
     TextureManager* textureManager_ = nullptr;
 
-    std::unique_ptr<CameraEditor> cameraEditor_                     = nullptr;
+  /*  std::unique_ptr<CameraEditor> cameraEditor_                     = nullptr;*/
     std::unique_ptr<ShakeEditor> shakeEditor_                       = nullptr;
     std::unique_ptr<RailEditor> railEditor_                         = nullptr;
-    std::unique_ptr<ObjEaseAnimationEditor> objEaseAnimationEditor_ = nullptr;
+    /*std::unique_ptr<ObjEaseAnimationEditor> objEaseAnimationEditor_ = nullptr;*/
 
     ViewProjection viewProjection_;
 

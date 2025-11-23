@@ -19,17 +19,16 @@ void BaseScene::Init() {
 
     // 生成
     debugCamera_            = std::make_unique<DebugCamera>(WinApp::kWindowWidth, WinApp::kWindowHeight);
-    cameraEditor_           = std::make_unique<CameraEditor>();
+   /* cameraEditor_           = std::make_unique<CameraEditor>();*/
     shakeEditor_            = std::make_unique<ShakeEditor>();
     railEditor_             = std::make_unique<RailEditor>();
-    objEaseAnimationEditor_ = std::make_unique<ObjEaseAnimationEditor>();
+   /* objEaseAnimationEditor_ = std::make_unique<ObjEaseAnimationEditor>();*/
 
     // 初期化
     debugCamera_->Init();
-    cameraEditor_->Init(&viewProjection_);
+  /*  cameraEditor_->Init(&viewProjection_);*/
     shakeEditor_->Init();
     railEditor_->Init();
-    objEaseAnimationEditor_->Init();
     viewProjection_.Init();
 
     // ビュープロジェクション
@@ -49,10 +48,10 @@ void BaseScene::Update() {
 void BaseScene::EditorUpdate() {
 #ifdef _DEBUG
     debugCamera_->Update();
-    cameraEditor_->Update();
+   /* cameraEditor_->Update();*/
     shakeEditor_->Update(Frame::DeltaTimeRate());
     railEditor_->Update(Frame::DeltaTimeRate());
-    objEaseAnimationEditor_->Update();
+    /*objEaseAnimationEditor_->Update();*/
 #endif
 }
 
@@ -80,18 +79,18 @@ void BaseScene::ViewProjectionUpdate() {
             cameraMode_ = CameraMode::DEBUG;
         }
         // エディターモードへ
-        if (cameraEditor_->GetIsEditing()) {
+       /* if (cameraEditor_->GetIsEditing()) {
             cameraMode_ = CameraMode::EDITOR;
-        }
+        }*/
         break;
         ///------------------------------------------------------
         /// Editor Mode
         ///------------------------------------------------------
     case BaseScene::CameraMode::EDITOR:
         // ノーマルモードへ
-        if (!cameraEditor_->GetIsEditing()) {
+       /* if (!cameraEditor_->GetIsEditing()) {
             cameraMode_ = CameraMode::NORMAL;
-        }
+        }*/
         // デバッグモードへ
         if (isTriggerSpace) {
             cameraMode_ = CameraMode::DEBUG;

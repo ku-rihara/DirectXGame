@@ -1,5 +1,6 @@
 #pragma once
 #include "CameraAnimationData.h"
+#include "Editor/BaseEffectEditor/BaseEffectPlayer.h"
 #include <functional>
 #include <memory>
 #include <string>
@@ -7,7 +8,7 @@
 /// <summary>
 /// カメラアニメーション制御クラス
 /// </summary>
-class CameraAnimation {
+class CameraAnimation : public BaseEffectPlayer {
 public:
     struct CameraParam {
         Vector3 position;
@@ -16,29 +17,29 @@ public:
     };
 
 public:
-    CameraAnimation()  = default;
-    ~CameraAnimation() = default;
+    CameraAnimation()           = default;
+    ~CameraAnimation() override = default;
+
+    //*----------------------------- public Methods -----------------------------*//
 
     // 初期化、更新
-    void Init(); 
-    void Update(const float& speedRate = 1.0f);
+    void Init() override;
+    void Update(const float& speedRate = 1.0f) override;
 
-    /// <summary>
-    /// アニメーション再生
-    /// </summary>
-    /// <param name="animationName">アニメーション名</param>
-    void Play(const std::string& animationName);
-
-    void Reset(); //< リセット
-    void SaveInitialValues(); //< 初期値保存
+    // 再生、リセット、初期値保存
+    void Play(const std::string& animationName)override;
+    void Reset()override;
+    void SaveInitialValues();
 
 private:
-    void ApplyOffsetToViewProjection(); //< ViewProjectionにオフセット適用
+    //*---------------------------- private Methods ----------------------------*//
+    std::unique_ptr<BaseEffectData> CreateEffectData() override;
+
+    void ApplyOffsetToViewProjection(); 
     void SetStartParam();
     void ResetOffsetParam();
 
 private:
-    std::unique_ptr<CameraAnimationData> animationData_;
     ViewProjection* pViewProjection_ = nullptr;
 
     CameraParam startParam_;
@@ -49,10 +50,8 @@ private:
 
     bool isAdapt_ = true;
 
-    std::string currentAnimationName_;
-
 public:
-    const std::string& GetAnimationName() const { return currentAnimationName_; }
+
     const Vector3& GetOffsetPosition() const { return currentOffsetPosition_; }
     const Vector3& GetOffsetRotation() const { return currentOffsetRotation_; }
     const float& GetOffsetFov() const { return currentOffsetFov_; }

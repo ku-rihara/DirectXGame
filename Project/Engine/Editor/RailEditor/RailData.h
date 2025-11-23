@@ -112,7 +112,7 @@ public:
     /// <summary>
     /// キーフレーム初期化
     /// </summary>
-    void InitKeyFrames();
+    void IniTSequenceElements();
 
 private:
     void RegisterParams(); //< パラメータのバインド

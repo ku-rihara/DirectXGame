@@ -234,7 +234,7 @@ void RailData::ClearKeyFrames() {
     selectedKeyFrameIndex_ = -1;
 }
 
-void RailData::InitKeyFrames() {
+void RailData::IniTSequenceElements() {
     // すべてのキーフレームを初期化
     for (int32_t i = 0; i < static_cast<int32_t>(controlPoints_.size()); ++i) {
         controlPoints_[i]->Init(groupName_, i);
