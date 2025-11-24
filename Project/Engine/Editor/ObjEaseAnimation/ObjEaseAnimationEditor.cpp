@@ -5,7 +5,6 @@
 
 void ObjEaseAnimationEditor::Init(const std::string& typeName, const bool& isUseCategory) {
     BaseEffectEditor::Init(typeName, isUseCategory);
-    AllLoadFile();
     InitPreviewObject();
 }
 

@@ -13,6 +13,7 @@ void BaseEffectEditor<TEffectData>::Init(const std::string& typeName, const bool
     isUseCategorySystem_ = isUseCategory;
     baseFolderPath_ = GetFolderPath();
     effectTypeName_ = typeName;
+    AllLoadFile();
 }
 
 template <typename TEffectData>
