@@ -1,83 +1,75 @@
 #pragma once
+#include "3d/Object3d.h"
+#include "Editor/BaseEffectEditor/BaseEffectEditor.h"
 #include "ObjEaseAnimationData.h"
-#include <map>
 #include <memory>
 #include <string>
-#include <vector>
 
 /// <summary>
 /// オブジェクトイージングアニメーションエディター
 /// </summary>
-class ObjEaseAnimationEditor {
+class ObjEaseAnimationEditor : public BaseEffectEditor<ObjEaseAnimationData> {
 public:
-    struct Category {
-        std::string name;
-        std::vector<std::unique_ptr<ObjEaseAnimationData>> animations;
-        int32_t selectedAnimationIndex = -1;
+    struct PreViewTransform {
+        Vector3 scale       = Vector3::OneVector();
+        Vector3 rotation    = Vector3::ZeroVector();
+        Vector3 translation = Vector3::ZeroVector();
     };
 
 public:
     ObjEaseAnimationEditor()  = default;
     ~ObjEaseAnimationEditor() = default;
 
-    void Init(); //< 初期化
+    //*----------------------------- public Methods -----------------------------*//
 
-    /// <summary>
-    /// 更新
-    /// </summary>
-    /// <param name="deltaTime">デルタタイム</param>
-    void Update(const float& deltaTime);
+    // BaseEffectEditorからのオーバーライド
+    void Init(const std::string& typeName, const bool& isUseCategory = false) override;
+    void Update(const float& speedRate = 1.0f) override;
+    void EditorUpdate() override;
 
-    void EditorUpdate(); //< エディタ更新
+    // 選択アニメーション再生、一時停止、リセット
+    void PlaySelectedAnimation();
+    void PauseSelectedAnimation();
+    void ResetSelectedAnimation();
 
-    /// <summary>
-    /// カテゴリーの追加
-    /// </summary>
-    /// <param name="categoryName">カテゴリー名</param>
-    void AddCategory(const std::string& categoryName);
+    // 選択アニメーション状態取得
+    bool IsSelectedAnimationPlaying() const;
+    bool IsSelectedAnimationFinished() const;
 
-    /// <summary>
-    /// カテゴリーの削除
-    /// </summary>
-    /// <param name="index">インデックス</param>
-    void RemoveCategory(const int32_t& index);
+protected:
+    //*---------------------------- protected Methods ----------------------------*//
 
-    /// <summary>
-    /// アニメーションの追加
-    /// </summary>
-    /// <param name="categoryIndex">カテゴリーインデックス</param>
-    /// <param name="animationName">アニメーション名</param>
-    void AddAnimation(const int32_t& categoryIndex, const std::string& animationName);
+    std::unique_ptr<ObjEaseAnimationData> CreateEffectData() override;
+    void RenderSpecificUI() override;
+    std::string GetFolderPath() const override;
 
-    /// <summary>
-    /// アニメーションの削除
-    /// </summary>
-    /// <param name="categoryIndex">カテゴリーインデックス</param>
-    /// <param name="animationIndex">アニメーションインデックス</param>
-    void RemoveAnimation(const int32_t& categoryIndex, const int32_t& animationIndex);
-
-    /// <summary>
-    /// 名前からアニメーションデータを取得
-    /// </summary>
-    /// <param name="categoryName">カテゴリー名</param>
-    /// <param name="animationName">アニメーション名</param>
-    /// <returns>アニメーションデータ</returns>
-    ObjEaseAnimationData* GetAnimationByName(const std::string& categoryName, const std::string& animationName);
+    // カテゴリーシステムを使用
+    std::string GetCategoryFolderName() const override { return animationFolderName_; }
+    std::string GetDataFolderName() const override { return dateFolderName_; }
 
 private:
-    void AllLoadFile(); //< 全ファイルロード
-    void AllSaveFile(); //< 全ファイルセーブ
-    void LoadCategory(const std::string& categoryName); //< カテゴリーロード
-    void SaveCategory(const int32_t& categoryIndex); //< カテゴリーセーブ
+    //*---------------------------- private Methods ----------------------------*//
+
+    // Preview初期化、更新、切り替え
+    void InitPreviewObject();
+    void UpdatePreviewObject();
+    void ChangePreviewModel(const std::string& modelName);
 
 private:
-    std::vector<Category> categories_;
-    int32_t selectedCategoryIndex_ = -1;
+    //*---------------------------- private Variant ----------------------------*//
 
-    char categoryNameBuffer_[128]  = "";
-    char animationNameBuffer_[128] = "";
+    std::unique_ptr<Object3d> previewObject_ = nullptr;
+
+    const std::string animationFolderName_ = "ObjEaseAnimation/";
+    const std::string dateFolderName_      = "Dates/";
+
+    // プレビュー設定
+    bool showPreview_                 = true;
+    char previewModelNameBuffer_[128] = "DebugCube.obj";
+    PreViewTransform previewBaseTransform_;
 
 public:
-    const int32_t& GetCategoryCount() const { return static_cast<int32_t>(categories_.size()); }
-    const std::vector<Category>& GetCategories() const { return categories_; }
+    //*----------------------------- getter Methods -----------------------------*//
+
+    ObjEaseAnimationData* GetSelectedAnimation();
 };

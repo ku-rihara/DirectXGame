@@ -26,17 +26,8 @@ public:
     CameraKeyFrame()  = default;
     ~CameraKeyFrame() = default;
 
-    /// <summary>
-    /// 初期化
-    /// </summary>
-    /// <param name="cameraAnimationName">カメラアニメーション名</param>
-    /// <param name="keyNumber">キー番号</param>
+    // 初期化、更新
     void Init(const std::string& groupName, const int32_t& keyNumber);
-
-    /// <summary>
-    /// 更新
-    /// </summary>
-    /// <param name="speedRate">速度倍率</param>
     void Update(const float& speedRate);
 
     /// <summary>
@@ -46,9 +37,11 @@ public:
     /// <param name="target">対象</param>
     void TimeModeSelector(const char* label, int32_t& target);
 
-    void AdjustParam();       //< パラメータ調整
-    void RegisterParams();        //< パラメータバインド
-    void AdaptEaseParam();    //< イージングパラメータ適用
+    // パラメータ調整、登録、適応
+    void AdjustParam();           
+    void RegisterParams();        
+    void AdaptEaseParam();   
+
     void AdaptValueSetting(); //< 値設定適用
     void Reset();             //< リセット
     bool IsFinished() const;  //< 終了判定
@@ -56,7 +49,7 @@ public:
     void LoadData(); //< データ読み込み
     void SaveData(); //< データ保存
 private:
-    void LoadParams();
+    void GetParams();
 
 private:
 
@@ -65,11 +58,11 @@ private:
     std::string groupName_;
     std::string folderPath_ = "CameraAnimation/KeyFrames/";
 
-    int32_t currentKeyFrameIndex  = -1;
+    int32_t currenTSequenceElementIndex  = -1;
 
     float timePoint_ = 0.0f;
     KeyFrameParam keyFrameParam_;
-    KeyFrameParam currentKeyFrameParam_;
+    KeyFrameParam currenTSequenceElementParam_;
 
     int32_t positionEaseType_ = 0;
     int32_t rotationEaseType_ = 0;
@@ -87,9 +80,9 @@ private:
 
 public:
     const float& GetTimePoint() const { return timePoint_; }
-    const Vector3& GetPosition() const { return currentKeyFrameParam_.position; }
-    const Vector3& GetRotation() const { return currentKeyFrameParam_.rotation; }
-    const float& GetFov() const { return currentKeyFrameParam_.fov; }
+    const Vector3& GetPosition() const { return currenTSequenceElementParam_.position; }
+    const Vector3& GetRotation() const { return currenTSequenceElementParam_.rotation; }
+    const float& GetFov() const { return currenTSequenceElementParam_.fov; }
     const Vector3& GetEditPosition() const { return keyFrameParam_.position; }
     const Vector3& GetEditRotation() const { return keyFrameParam_.rotation; }
     const float& GetEditFov() const { return keyFrameParam_.fov; }

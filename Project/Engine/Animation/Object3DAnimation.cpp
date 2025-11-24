@@ -34,7 +34,7 @@ void Object3DAnimation::Create(const std::string& fileName) {
 
     // Object3Dの作成とモデル設定
     ModelManager::GetInstance()->LoadModel(fileName);
-    SetModel(fileName);
+    SetModelByName(fileName);
 
     // アニメーションデータの読み込み
     animations_.push_back(modelAnimation_->LoadAnimationFile(fileName));
@@ -329,8 +329,8 @@ void Object3DAnimation::DebugLineSet() {
 ///============================================================
 /// デバッグImGui
 ///============================================================
-void Object3DAnimation::DebugImgui() {
-    BaseObject3d::DebugImgui();
+void Object3DAnimation::DebugImGui() {
+    BaseObject3d::DebugImGui();
 }
 
 ///============================================================

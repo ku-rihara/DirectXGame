@@ -469,6 +469,18 @@
     <Filter Include="Game\Enemy\Behevior\NormalBehavior">
       <UniqueIdentifier>{e99abf53-21bf-4374-907f-ce66abce6461}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.h\Editor\BaseEffectEditor">
+      <UniqueIdentifier>{89671226-8576-4501-a77f-e235cfd7400d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\BaseEffectEditor">
+      <UniqueIdentifier>{81ea0af1-4eee-4903-9473-1904adec97fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\EffectEditorSuite">
+      <UniqueIdentifier>{5450a5bf-189d-4e33-a506-f7a5d5a57b27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Editor\EffectEditorSuite">
+      <UniqueIdentifier>{88afa0cc-2cac-4965-869e-c3e4c0de169d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1197,6 +1209,24 @@
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\EnemyWait.cpp">
       <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationSection.cpp">
+      <Filter>MyEngine\.cpp\Editor\ObjEaseAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\BaseEffectEditor\BaseEffectData.cpp">
+      <Filter>MyEngine\.cpp\Editor\BaseEffectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\BaseEffectEditor\BaseEffectEditor.cpp">
+      <Filter>MyEngine\.cpp\Editor\BaseEffectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\BaseEffectEditor\BaseEffectPlayer.cpp">
+      <Filter>MyEngine\.cpp\Editor\BaseEffectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\BaseEffectEditor\BaseSequenceEffectData.cpp">
+      <Filter>MyEngine\.cpp\Editor\BaseEffectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.cpp">
+      <Filter>MyEngine\.cpp\Editor\EffectEditorSuite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1976,6 +2006,24 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\EnemyWait.h">
       <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseEffectData.h">
+      <Filter>MyEngine\.h\Editor\BaseEffectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseEffectEditor.h">
+      <Filter>MyEngine\.h\Editor\BaseEffectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseEffectPlayer.h">
+      <Filter>MyEngine\.h\Editor\BaseEffectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseSequenceEffectData.h">
+      <Filter>MyEngine\.h\Editor\BaseEffectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.h">
+      <Filter>MyEngine\.h\Editor\EffectEditorSuite</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationSection.h">
+      <Filter>MyEngine\.h\Editor\ObjEaseAnimation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -50,7 +50,7 @@ void GameScene::Init() {
 void GameScene::Update() {
 
     BaseScene::Update();
-  
+
     switch (gameState_) {
     case GameScene::GameState::INTRO:
 
@@ -117,7 +117,7 @@ void GameScene::IntroUpdate() {
 
     // Editor
     attackEffect_->Update();
-  
+
     // obj
     skyBox_->Update();
     gameCamera_->Update(gameIntroManager_->GetCurrentPlaySpeedRate());
@@ -168,9 +168,10 @@ void GameScene::SkyBoxDraw() {
 void GameScene::Debug() {
 #ifdef _DEBUG
     ImGui::Begin("Camera");
-    BaseScene::Debug();
     gameCamera_->AdjustParam();
     ImGui::End();
+
+    BaseScene::Debug();
 
     Light::GetInstance()->DebugImGui();
     howToOperate_->Debug();
@@ -188,10 +189,8 @@ void GameScene::Debug() {
     ImGui::End();
 
     ImGui::Begin("Rendition");
-    cameraEditor_->EditorUpdate();
     shakeEditor_->EditorUpdate();
     attackEffect_->EditorUpdate();
-    objEaseAnimationEditor_->EditorUpdate();
     ImGui::End();
 
     ImGui::Begin("PlayerAttack");
@@ -228,7 +227,7 @@ void GameScene::ChangeForJoyState() {
 
 void GameScene::ObjectInit() {
 
-     //*-------------------------------- オブジェクト生成 --------------------------------*//
+    //*-------------------------------- オブジェクト生成 --------------------------------*//
 
     field_                       = std::make_unique<Field>();
     lockOnController_            = std::make_unique<LockOnController>();

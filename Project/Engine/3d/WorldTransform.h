@@ -86,7 +86,7 @@ public:
     /// アニメーション更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    void UpdateObjEaseAnimation(const float& deltaTime);
+    void UpdateObjEaseAnimation();
 
 private:
     void TransferMatrix(); //< 行列転送

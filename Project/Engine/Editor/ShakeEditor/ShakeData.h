@@ -62,8 +62,8 @@ private:
     void RegisterParams();      //< パラメータのバインド
     void UpdateShakeValues();   //< シェイク値の計算
     void UpdateVector3Shake();  //< Vector3シェイクの更新
-    void ResetParams();         //< パラメータリセット
-    void LoadParams();          //< パラメータ取得
+    void InitParams();          //< パラメータリセット
+    void GetParams();          //< パラメータ取得
 
     /// <summary>
     /// 軸フラグの適用

@@ -1,7 +1,7 @@
 #include "DebugCamera.h"
 #include <numbers>
 
-DebugCamera::DebugCamera(int window_width, int window_height) {
+DebugCamera::DebugCamera(const int& window_width, const int& window_height) {
 
     input_ = Input::GetInstance();
     // ビュープロジェクションの初期化
@@ -37,7 +37,7 @@ void DebugCamera::Update() {
         viewProjection_.translation_ += up * (mouseMove.lY * 0.02f); // Y軸方向の移動
     }
 
-    if (input_->GetWheel()) {
+    if (input_->GetWheel()&&input_->PushKey(KeyboardKey::LeftShift)) {
         // カメラの前方向に基づいた移動
         Vector3 forward = TransformNormal({0, 0, 1}, matRot_);
         viewProjection_.translation_ += forward * (mouseMove.lZ * 0.02f);

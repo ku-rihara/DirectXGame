@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <imgui.h>
 #include <Windows.h>
+#include "Editor/ParameterEditor/GlobalParameter.h"
 
 void DissolveEditor::Init() {
     AllLoadFile();
@@ -11,7 +12,7 @@ void DissolveEditor::Init() {
 
 void DissolveEditor::AllLoadFile() {
     // DissolveEditorのDissolveDataフォルダ内のすべてのファイルを検索
-    std::string folderPath = "Resources/GlobalParameter/DissolveEditor/";
+    std::string folderPath = GlobalParameter::GetInstance()->GetDirectoryPath() + "DissolveEditor/";
 
     if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {
         // 既存のディゾルブをクリア

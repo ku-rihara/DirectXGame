@@ -15,11 +15,11 @@ void ShakeData::Init(const std::string& shakeName) {
         globalParameter_->SyncParamForGroup(groupName_);
     } else {
         // 値取得
-        LoadParams();
+        GetParams();
     }
 
     // リセット
-    ResetParams();
+    InitParams();
 }
 
 void ShakeData::Update(const float& deltaTime) {
@@ -120,7 +120,7 @@ void ShakeData::RegisterParams() {
     globalParameter_->Regist(groupName_, "axisFlag", &axisFlag_);
 }
 
-void ShakeData::LoadParams() {
+void ShakeData::GetParams() {
     shakeLength_ = globalParameter_->GetValue<float>(groupName_, "shakeLength");
     maxTime_     = globalParameter_->GetValue<float>(groupName_, "maxTime");
     easeType_    = globalParameter_->GetValue<int32_t>(groupName_, "easeType");
@@ -224,7 +224,7 @@ bool ShakeData::IsPlaying() const {
     return playState_ == PlayState::PLAYING;
 }
 
-void ShakeData::ResetParams() {
+void ShakeData::InitParams() {
 
     // イージング設定
     timeEase_.SetAdaptValue(&easedTime_);

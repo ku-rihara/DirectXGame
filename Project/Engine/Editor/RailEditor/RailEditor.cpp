@@ -1,5 +1,6 @@
 #include "RailEditor.h"
 #include"Line3D/Line3d.h"
+#include"Editor/ParameterEditor/GlobalParameter.h"
 #include <algorithm>
 #include <filesystem>
 #include <imgui.h>
@@ -14,7 +15,7 @@ void RailEditor::Init() {
 
 void RailEditor::AllLoadFile() {
     // RailEditorのRailDataフォルダ内のすべてのファイルを検索
-    std::string folderPath = "Resources/GlobalParameter/RailEditor/Dates/";
+    std::string folderPath = GlobalParameter::GetInstance()->GetDirectoryPath() + "RailEditor/Dates/";
 
     if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {
         // 既存のレールをクリア

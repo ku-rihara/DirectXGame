@@ -1,4 +1,5 @@
 #include "ShakeEditor.h"
+#include"Editor/ParameterEditor/GlobalParameter.h"
 #include <algorithm>
 #include <filesystem>
 #include <imgui.h>
@@ -12,7 +13,7 @@ void ShakeEditor::Init() {
 
 void ShakeEditor::AllLoadFile() {
     // ShakeEditorのShakeDataフォルダ内のすべてのファイルを検索
-    std::string folderPath = "Resources/GlobalParameter/ShakeEditor/";
+    std::string folderPath = GlobalParameter::GetInstance()->GetDirectoryPath() + "ShakeEditor/";
 
     if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {
         // 既存のシェイクをクリア

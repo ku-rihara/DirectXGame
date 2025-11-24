@@ -56,12 +56,17 @@ void Object3DRegistry::UnregisterObject(Object3d* object) {
 ///============================================================
 /// 全オブジェクトの更新
 ///============================================================
-void Object3DRegistry::UpdateAll(const float&deltaTime) {
+void Object3DRegistry::UpdateAll() {
 
     auto objectsCopy = objects_;
     for (Object3d* obj : objectsCopy) {
         if (obj != nullptr && objects_.find(obj) != objects_.end()) {
-            obj->Update(deltaTime);
+
+            if (!obj->GetIsAutoUpdate()) {
+                continue;
+            }
+
+            obj->Update();
         }
     }
 }
@@ -114,11 +119,11 @@ void Object3DRegistry::DebugImGui() {
             if (obj != nullptr) {
                 ImGui::PushID(index);
 
-                if (ImGui::CollapsingHeader(("Object " +obj->GetModel()->GetModelName()).c_str())) {
+                if (ImGui::CollapsingHeader(("Object " +obj->GetModelPtr()->GetModelName()).c_str())) {
                     ImGui::Text("Object Address: %p", static_cast<void*>(obj));
 
                     // オブジェクトのデバッグ情報を表示
-                    obj->DebugImgui();
+                    obj->DebugImGui();
                 }
 
                 ImGui::PopID();

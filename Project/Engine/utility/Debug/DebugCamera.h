@@ -9,7 +9,7 @@
 /// </summary>
 class DebugCamera {
 public:
-    DebugCamera(int window_width, int window_height);
+    DebugCamera(const int& window_width, const int& window_height);
     ~DebugCamera() = default;
 
     void Init(); //< 初期化
