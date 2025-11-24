@@ -21,9 +21,11 @@ public:
         Count
     };
 
-     enum class PlayState {
+    enum class PlayState {
         STOPPED,
+        WAITING, // startTime_待機中
         PLAYING,
+        RETURN_WAITING, // returnStartTime_待機中
         RETURNING
     };
 
@@ -44,7 +46,7 @@ public:
         int32_t easeType = 0;
 
         // 戻り動作パラメータ
-        float returnMaxTime = 1.0f;
+        float returnMaxTime    = 1.0f;
         int32_t returnEaseType = 0;
 
         std::string railFileName;
@@ -67,7 +69,7 @@ public:
 
     // 初期化、更新
     void Init(const std::string& animationName, const std::string& categoryName, const int32_t& keyNumber);
-    void Update(const float& speedRate);
+    void Update(const float& speedRate = 1.0f);
 
     // リセット、終了判定
     void Reset();
@@ -91,6 +93,9 @@ private:
     void AdaptEaseParam();
     void AdaptValueSetting();
 
+    // 再生開始
+    void StartPlay();
+
     // 変換更新、戻り更新
     void UpdatePlay(const float& deltaTime);
     void UpdateReturn(const float& deltaTime);
@@ -112,10 +117,15 @@ private:
 
     // transformParam
     std::array<TransformParam, static_cast<size_t>(TransformType::Count)> transformParams_;
-     
+
     // time
-    float timePoint_  = 1.0f;
-    int32_t timeMode_ = static_cast<int32_t>(TimeMode::DELTA_TIME_RATE);
+    float startTime_       = 0.0f;
+    float returnStartTime_ = 0.0f;
+    int32_t timeMode_      = static_cast<int32_t>(TimeMode::DELTA_TIME_RATE);
+
+    // 経過時間
+    float elapsedTime_       = 0.0f; 
+    float returnElapsedTime_ = 0.0f; 
 
     // rail
     std::unique_ptr<RailPlayer> railPlayer_;
@@ -129,7 +139,7 @@ private:
         "DeltaTimeRate (With TimeScale)"};
 
 public:
-    const float& GetTimePoint() const { return timePoint_; }
+    const float& GetTimePoint() const { return startTime_; }
     const Vector3& GetCurrentScale() const { return transformParams_[static_cast<size_t>(TransformType::Scale)].currentOffset; }
     const Vector3& GetCurrentRotation() const { return transformParams_[static_cast<size_t>(TransformType::Rotation)].currentOffset; }
     const Vector3& GetCurrentTranslation() const { return transformParams_[static_cast<size_t>(TransformType::Translation)].currentOffset; }
@@ -141,5 +151,6 @@ public:
     RailPlayer* GetRailPlayer() { return railPlayer_.get(); }
     bool IsUsingRail() const;
 
-    void SetTimePoint(const float& timePoint) { timePoint_ = timePoint; }
+    void SetStatePlay();
+    void SetTimePoint(const float& timePoint) { startTime_ = timePoint; }
 };

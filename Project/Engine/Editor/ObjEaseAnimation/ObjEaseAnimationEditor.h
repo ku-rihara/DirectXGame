@@ -23,10 +23,19 @@ public:
     //*----------------------------- public Methods -----------------------------*//
 
     // BaseEffectEditorからのオーバーライド
-    void Init(const std::string& typeName, const bool& isUseCategory=false) override;
+    void Init(const std::string& typeName, const bool& isUseCategory = false) override;
     void Update(const float& speedRate = 1.0f) override;
     void EditorUpdate() override;
-  
+
+    // 選択アニメーション再生、一時停止、リセット
+    void PlaySelectedAnimation();
+    void PauseSelectedAnimation();
+    void ResetSelectedAnimation();
+
+    // 選択アニメーション状態取得
+    bool IsSelectedAnimationPlaying() const;
+    bool IsSelectedAnimationFinished() const;
+
 protected:
     //*---------------------------- protected Methods ----------------------------*//
 
@@ -34,7 +43,7 @@ protected:
     void RenderSpecificUI() override;
     std::string GetFolderPath() const override;
 
-     // カテゴリーシステムを使用
+    // カテゴリーシステムを使用
     std::string GetCategoryFolderName() const override { return animationFolderName_; }
     std::string GetDataFolderName() const override { return dateFolderName_; }
 
@@ -58,4 +67,9 @@ private:
     bool showPreview_                 = true;
     char previewModelNameBuffer_[128] = "DebugCube.obj";
     PreViewTransform previewBaseTransform_;
+
+public:
+    //*----------------------------- getter Methods -----------------------------*//
+
+    ObjEaseAnimationData* GetSelectedAnimation();
 };

@@ -6,7 +6,6 @@
 #include <filesystem>
 #include <imgui.h>
 
-
 void ObjEaseAnimationData::InitWithCategory(const std::string& animationName, const std::string& categoryName) {
     BaseSequenceEffectData::InitWithCategory(animationName, categoryName);
 
@@ -24,8 +23,22 @@ void ObjEaseAnimationData::InitWithCategory(const std::string& animationName, co
 }
 
 void ObjEaseAnimationData::Update(const float& speedRate) {
-    speedRate;
+    if (playState_ != PlayState::PLAYING) {
+        return;
+    }
     UpdateKeyFrameProgression();
+    UpdateActiveSection(speedRate);
+}
+
+void ObjEaseAnimationData::UpdateActiveSection(const float& speedRate) {
+    if (sectionElements_.empty()) {
+        return;
+    }
+
+    // 現在のアクティブキーフレームを更新
+    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
+        sectionElements_[activeKeyFrameIndex_]->Update(speedRate);
+    }
 }
 
 void ObjEaseAnimationData::UpdateKeyFrameProgression() {
@@ -33,13 +46,10 @@ void ObjEaseAnimationData::UpdateKeyFrameProgression() {
         return;
     }
 
-    // 現在のキーフレームを更新
+    // 現在のキーフレームが完了したかチェック
     if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
-        sectionElements_[activeKeyFrameIndex_]->Update(1.0f);
-
-        // 現在のキーフレームが完了したかチェック
         if (!sectionElements_[activeKeyFrameIndex_]->IsFinished()) {
-            return;
+            return; // まだ完了していない
         }
 
         // 最後のキーフレームかチェック
@@ -69,8 +79,9 @@ void ObjEaseAnimationData::AdvanceToNexTSequenceElement() {
 
 void ObjEaseAnimationData::Reset() {
     // 全てのキーフレームをリセット
-    for (auto& keyFrame : sectionElements_) {
-        keyFrame->Reset();
+    for (auto& section : sectionElements_) {
+        section->Reset();
+        section->SetStatePlay();
     }
 
     // 状態をリセット
@@ -80,11 +91,9 @@ void ObjEaseAnimationData::Reset() {
 }
 
 void ObjEaseAnimationData::RegisterParams() {
-   
 }
 
 void ObjEaseAnimationData::GetParams() {
-    
 }
 
 void ObjEaseAnimationData::InitParams() {
@@ -110,7 +119,7 @@ std::string ObjEaseAnimationData::GeTSequenceElementFolderPath() const {
 
 void ObjEaseAnimationData::CreateOrLoadSections(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles) {
     if (sectionElements_.size() == 0) {
-       
+
         for (const auto& [index, fileName] : KeyFrameFiles) {
             auto newKeyFrame = CreateKeyFrame(index);
             newKeyFrame->LoadData();
@@ -122,7 +131,6 @@ void ObjEaseAnimationData::CreateOrLoadSections(const std::vector<std::pair<int3
         }
     }
 }
-
 
 RailPlayer* ObjEaseAnimationData::GetCurrentRailPlayer() const {
     if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
@@ -165,40 +173,38 @@ bool ObjEaseAnimationData::GetIsUseRailActiveKeyFrame() const {
 
 void ObjEaseAnimationData::AdjustParam() {
 #ifdef _DEBUG
-    if (ImGui::TreeNode("Animation Settings")) {
-        ImGui::Text("Category: %s", categoryName_.c_str());
-        ImGui::Text("Animation: %s", groupName_.c_str());
 
-        // KeyFrame Controls
-        ImGui::Separator();
-        ImGui::Text("Sections: %d", GetTotalKeyFrameCount());
+    ImGui::Text("Category: %s", categoryName_.c_str());
+    ImGui::Text("Animation: %s", groupName_.c_str());
 
-        if (ImGui::Button("Add KeyFrame")) {
-            AddKeyFrame();
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Remove Selected") && selectedKeyFrameIndex_ >= 0) {
-            RemoveKeyFrame(selectedKeyFrameIndex_);
-        }
+    // KeyFrame Controls
+    ImGui::Separator();
+    ImGui::Text("Sections: %d", GetTotalKeyFrameCount());
 
-        // KeyFrame List
-        for (int i = 0; i < GetTotalKeyFrameCount(); ++i) {
-            ImGui::PushID(i);
-            bool isSelected = (selectedKeyFrameIndex_ == i);
-            if (ImGui::Selectable(("KeyFrame " + std::to_string(i)).c_str(), isSelected)) {
-                SetSelectedKeyFrameIndex(i);
-            }
-            ImGui::PopID();
-        }
-
-        // Selected KeyFrame Edit
-        if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < GetTotalKeyFrameCount()) {
-            ImGui::Separator();
-            sectionElements_[selectedKeyFrameIndex_]->AdjustParam();
-        }
-
-        ImGui::TreePop();
+    if (ImGui::Button("Add Section")) {
+        AddKeyFrame();
     }
+    ImGui::SameLine();
+    if (ImGui::Button("Remove Selected") && selectedKeyFrameIndex_ >= 0) {
+        RemoveKeyFrame(selectedKeyFrameIndex_);
+    }
+
+    // KeyFrame List
+    for (int i = 0; i < GetTotalKeyFrameCount(); ++i) {
+        ImGui::PushID(i);
+        bool isSelected = (selectedKeyFrameIndex_ == i);
+        if (ImGui::Selectable(("Section " + std::to_string(i)).c_str(), isSelected)) {
+            SetSelectedKeyFrameIndex(i);
+        }
+        ImGui::PopID();
+    }
+
+    // Selected KeyFrame Edit
+    if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < GetTotalKeyFrameCount()) {
+        ImGui::Separator();
+        sectionElements_[selectedKeyFrameIndex_]->AdjustParam();
+    }
+
 #endif
 }
 

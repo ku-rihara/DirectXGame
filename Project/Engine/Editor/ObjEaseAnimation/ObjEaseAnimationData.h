@@ -56,7 +56,7 @@ private:
     //*---------------------------- private Methods ----------------------------*//
     const char* GetSRTName(const TransformType& type) const;
     void CreateOrLoadSections(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
-
+    void UpdateActiveSection(const float& speedRate);
 private:
     //*---------------------------- private Variant ----------------------------*//
    

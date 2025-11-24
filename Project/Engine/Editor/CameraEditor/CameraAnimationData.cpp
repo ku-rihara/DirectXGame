@@ -260,15 +260,6 @@ void CameraAnimationData::AdjustParam() {
         ImGui::SeparatorText(("Camera Editor: " + groupName_).c_str());
         ImGui::PushID(groupName_.c_str());
 
-        if (ImGui::Button("Play"))
-            Play();
-        ImGui::SameLine();
-        if (ImGui::Button("Pause"))
-            Pause();
-        ImGui::SameLine();
-        if (ImGui::Button("Reset"))
-            Reset();
-
         ImGui::Checkbox("Auto Return to Initial", &returnParam_.autoReturnToInitial);
 
         if (isAllKeyFramesFinished_) {

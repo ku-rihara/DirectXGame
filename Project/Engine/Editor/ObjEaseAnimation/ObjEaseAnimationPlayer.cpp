@@ -19,11 +19,11 @@ void ObjEaseAnimationPlayer::Play(const std::string& animationName) {
     effectData_.reset();
     effectData_ = CreateEffectData();
 
-    auto* animData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
-    if (animData) {
-        animData->Init(animationName);
-        animData->LoadData();
-        animData->Play();
+    auto* animeData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animeData) {
+        animeData->Init(animationName);
+        animeData->LoadData();
+        animeData->Play();
     }
 
     currentEffectName_ = animationName;

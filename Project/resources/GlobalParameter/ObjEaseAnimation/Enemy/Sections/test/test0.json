@@ -16,7 +16,7 @@
         "Scale_IsReturnToOrigin": true,
         "Scale_MaxTime": 0.6600000262260437,
         "Scale_ReturnEaseType": 4,
-        "Scale_ReturnMaxTime": 0.10000000149011612,
+        "Scale_ReturnMaxTime": 0.6600000262260437,
         "Scale_endValue": [
             1.2799999713897705,
             1.1200000047683716,
@@ -35,6 +35,8 @@
             0.0,
             0.0
         ],
+        "returnStartTime": 0.18000000715255737,
+        "startTime": 0.3799999952316284,
         "timeMode": 1,
         "timePoint": 0.0
     }

@@ -16,13 +16,17 @@ void EffectEditorSuite::Init() {
 }
 
 
-void EffectEditorSuite::Update(const float& deltaTime) {
+void EffectEditorSuite::Update() {
 
-    objEaseAnimationEditor_->Update(deltaTime);
-    cameraEditor_->Update(deltaTime);
+    objEaseAnimationEditor_->Update();
+    cameraEditor_->Update();
 }
 
 void EffectEditorSuite::EditorUpdate() {
     objEaseAnimationEditor_->EditorUpdate();
     cameraEditor_->EditorUpdate();
 }
+
+void EffectEditorSuite::SetViewProjection(ViewProjection* viewProjection) {
+    cameraEditor_->SetViewProjection(viewProjection);
+ }

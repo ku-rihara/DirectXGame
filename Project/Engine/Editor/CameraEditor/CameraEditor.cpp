@@ -112,7 +112,7 @@ void CameraEditor::RenderSpecificUI() {
     if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
         ImGui::Separator();
 
-        if (ImGui::Button("Play Selected")) {
+        if (ImGui::Button("Play")) {
             PlaySelectedAnimation();
         }
         ImGui::SameLine();

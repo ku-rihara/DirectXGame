@@ -2,6 +2,7 @@
 
 #include <memory>
 
+class ViewProjection;
 class ObjEaseAnimationEditor;
 class CameraEditor;
 class EffectEditorSuite {
@@ -12,7 +13,7 @@ public:
 
     // 初期化、更新、エディター更新
     void Init();
-    void Update(const float& deltaTime);
+    void Update();
     void EditorUpdate();
 
 private:
@@ -21,4 +22,5 @@ private:
 
 public:
     CameraEditor* GetCameraEditor() const { return cameraEditor_.get(); }
+    void SetViewProjection(ViewProjection* viewProjection);
 };

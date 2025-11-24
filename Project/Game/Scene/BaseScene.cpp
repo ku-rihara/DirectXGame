@@ -40,6 +40,8 @@ void BaseScene::Init() {
     PostEffectRenderer::GetInstance()->SetViewProjection(&viewProjection_);
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
     GPUParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
+
+    effectEditorSuite_->SetViewProjection(&viewProjection_);
 }
 
 void BaseScene::Update() {
@@ -52,7 +54,7 @@ void BaseScene::EditorClassUpdate() {
     debugCamera_->Update();
     shakeEditor_->Update(Frame::DeltaTimeRate());
     railEditor_->Update(Frame::DeltaTimeRate());
-    effectEditorSuite_->Update(Frame::DeltaTimeRate());
+    effectEditorSuite_->Update();
 #endif
 }
 

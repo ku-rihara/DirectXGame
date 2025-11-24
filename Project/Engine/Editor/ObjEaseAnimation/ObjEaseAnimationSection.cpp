@@ -4,10 +4,10 @@
 #include <imgui.h>
 
 void ObjEaseAnimationSection::Init(const std::string& animationName, const std::string& categoryName, const int32_t& keyNumber) {
-    globalParameter_      = GlobalParameter::GetInstance();
+    globalParameter_             = GlobalParameter::GetInstance();
     currenTSequenceElementIndex_ = keyNumber;
-    groupName_            = animationName + std::to_string(currenTSequenceElementIndex_);
-    folderPath_           = "ObjEaseAnimation/" + categoryName + "/" + "Sections/" + animationName;
+    groupName_                   = animationName + std::to_string(currenTSequenceElementIndex_);
+    folderPath_                  = "ObjEaseAnimation/" + categoryName + "/" + "Sections/" + animationName;
 
     // Scaleの初期値を1に設定
     transformParams_[static_cast<size_t>(TransformType::Scale)].endValue = Vector3::OneVector();
@@ -29,7 +29,6 @@ void ObjEaseAnimationSection::Init(const std::string& animationName, const std::
 }
 
 void ObjEaseAnimationSection::Reset() {
-
     // 全Transformのリセット
     for (auto& param : transformParams_) {
         param.ease.Reset();
@@ -45,20 +44,23 @@ void ObjEaseAnimationSection::Reset() {
     // 再生状態を停止に
     playState_ = PlayState::STOPPED;
 
+    // 経過時間リセット
+    elapsedTime_       = 0.0f;
+    returnElapsedTime_ = 0.0f;
+
     // イージング再適応
     AdaptValueSetting();
     AdaptEaseParam();
 }
 
 void ObjEaseAnimationSection::LoadData() {
-
     // パラメータ読み込み・同期
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
 void ObjEaseAnimationSection::SaveData() {
-        // セーブ
+    // セーブ
     globalParameter_->SaveFile(groupName_, folderPath_);
 }
 
@@ -81,33 +83,54 @@ void ObjEaseAnimationSection::Update(const float& speedRate) {
         return;
     }
 
+    // 待機中の場合、経過時間を加算してstartTime_チェック
+    if (playState_ == PlayState::WAITING) {
+        elapsedTime_ += actualDeltaTime;
+
+        // startTime_を超えたら再生開始
+        if (elapsedTime_ >= startTime_) {
+            StartPlay();
+        }
+        return;
+    }
+
+    // 戻り待機中の場合
+    if (playState_ == PlayState::RETURN_WAITING) {
+        returnElapsedTime_ += actualDeltaTime;
+
+        // returnStartTime_を超えたら戻り開始
+        if (returnElapsedTime_ >= returnStartTime_) {
+            StartReturn();
+        }
+        return;
+    }
+
     // 戻り中の更新
     if (playState_ == PlayState::RETURNING) {
         UpdateReturn(actualDeltaTime);
         return;
     }
 
-    // 再生開始時の処理
-    if (playState_ != PlayState::PLAYING) {
-        playState_ = PlayState::PLAYING;
-
-        // 全てのイージングをリセットして開始
-        for (auto& param : transformParams_) {
-            if (param.isActive) {
-                param.ease.Reset();
-            }
-        }
-
-        // Rail使用時はRailを再生
-        const auto& transParam = transformParams_[static_cast<size_t>(TransformType::Translation)];
-        if (transParam.isActive && transParam.useRail && !transParam.railFileName.empty()) {
-            railPlayer_->Play(transParam.railFileName);
-        }
-    }
-
     // 再生更新
     UpdatePlay(actualDeltaTime);
     CheckPlayFinishAndStartReturn();
+}
+
+void ObjEaseAnimationSection::StartPlay() {
+    playState_ = PlayState::PLAYING;
+
+    // 全てのイージングをリセットして開始
+    for (auto& param : transformParams_) {
+        if (param.isActive) {
+            param.ease.Reset();
+        }
+    }
+
+    // Rail使用時はRailを再生
+    const auto& transParam = transformParams_[static_cast<size_t>(TransformType::Translation)];
+    if (transParam.isActive && transParam.useRail && !transParam.railFileName.empty()) {
+        railPlayer_->Play(transParam.railFileName);
+    }
 }
 
 void ObjEaseAnimationSection::UpdatePlay(const float& deltaTime) {
@@ -164,7 +187,9 @@ void ObjEaseAnimationSection::CheckPlayFinishAndStartReturn() {
     // 再生が完了した場合
     if (allPlayFinished) {
         if (anyReturnNeeded) {
-            StartReturn();
+            // 戻り待機状態に移行
+            playState_         = PlayState::RETURN_WAITING;
+            returnElapsedTime_ = 0.0f;
         } else {
             playState_ = PlayState::STOPPED;
         }
@@ -257,7 +282,8 @@ void ObjEaseAnimationSection::CheckFinish() {
 }
 
 void ObjEaseAnimationSection::RegisterParams() {
-    globalParameter_->Regist(groupName_, "timePoint", &timePoint_);
+    globalParameter_->Regist(groupName_, "startTime", &startTime_);
+    globalParameter_->Regist(groupName_, "returnStartTime", &returnStartTime_);
     globalParameter_->Regist(groupName_, "timeMode", &timeMode_);
 
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
@@ -280,8 +306,9 @@ void ObjEaseAnimationSection::RegisterParams() {
 }
 
 void ObjEaseAnimationSection::GetParams() {
-    timePoint_ = globalParameter_->GetValue<float>(groupName_, "timePoint");
-    timeMode_  = globalParameter_->GetValue<int32_t>(groupName_, "timeMode");
+    startTime_       = globalParameter_->GetValue<float>(groupName_, "startTime");
+    timeMode_        = globalParameter_->GetValue<int32_t>(groupName_, "timeMode");
+    returnStartTime_ = globalParameter_->GetValue<float>(groupName_, "returnStartTime");
 
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
         const char* name = GetSRTName(static_cast<TransformType>(i));
@@ -357,6 +384,7 @@ void ObjEaseAnimationSection::ImGuiTransformParam(const char* label, TransformPa
     if (param.isReturnToOrigin) {
         ImGui::Separator();
         ImGui::Text("Return Settings:");
+        ImGui::DragFloat("Return Start Time", &returnStartTime_, 0.01f, 0.0f, 100.0f);
         ImGui::DragFloat("Return Max Time", &param.returnMaxTime, 0.01f, 0.1f, 10.0f);
         ImGuiEasingTypeSelector("Return Easing Type", param.returnEaseType);
     }
@@ -373,10 +401,10 @@ void ObjEaseAnimationSection::TimeModeSelector(const char* label, int32_t& targe
 
 void ObjEaseAnimationSection::AdjustParam() {
 #ifdef _DEBUG
-    ImGui::SeparatorText(("KeyFrame: " + groupName_).c_str());
+    ImGui::SeparatorText(("Section: " + groupName_).c_str());
     ImGui::PushID(groupName_.c_str());
 
-    ImGui::DragFloat("Time Point", &timePoint_, 0.01f);
+    ImGui::DragFloat("Start Time", &startTime_, 0.01f, 0.0f, 100.0f);
     TimeModeSelector("Time Mode", timeMode_);
 
     ImGui::Separator();
@@ -458,4 +486,9 @@ const char* ObjEaseAnimationSection::GetSRTName(const TransformType& type) const
     default:
         return "Unknown";
     }
+}
+
+void ObjEaseAnimationSection::SetStatePlay() {
+    playState_   = PlayState::WAITING;
+    elapsedTime_ = 0.0f;
 }
