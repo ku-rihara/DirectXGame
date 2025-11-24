@@ -4,9 +4,12 @@
 #include "Lighrt/Light.h"
 #include "PostEffect/PostEffectRenderer.h"
 
+// editor
+#include "Editor/CameraEditor/CameraEditor.h"
+
 // Particle
-#include "GPUParticle/GPUParticleManager.h"
 #include "Editor/ParticleEditor/ParticleManager.h"
+#include "GPUParticle/GPUParticleManager.h"
 
 #include <imgui.h>
 
@@ -18,17 +21,16 @@ void BaseScene::Init() {
     textureManager_ = TextureManager::GetInstance();
 
     // 生成
-    debugCamera_            = std::make_unique<DebugCamera>(WinApp::kWindowWidth, WinApp::kWindowHeight);
-   /* cameraEditor_           = std::make_unique<CameraEditor>();*/
-    shakeEditor_            = std::make_unique<ShakeEditor>();
-    railEditor_             = std::make_unique<RailEditor>();
-   /* objEaseAnimationEditor_ = std::make_unique<ObjEaseAnimationEditor>();*/
+    debugCamera_       = std::make_unique<DebugCamera>(WinApp::kWindowWidth, WinApp::kWindowHeight);
+    shakeEditor_       = std::make_unique<ShakeEditor>();
+    railEditor_        = std::make_unique<RailEditor>();
+    effectEditorSuite_ = std::make_unique<EffectEditorSuite>();
 
     // 初期化
     debugCamera_->Init();
-  /*  cameraEditor_->Init(&viewProjection_);*/
     shakeEditor_->Init();
     railEditor_->Init();
+    effectEditorSuite_->Init();
     viewProjection_.Init();
 
     // ビュープロジェクション
@@ -42,16 +44,15 @@ void BaseScene::Init() {
 
 void BaseScene::Update() {
     // エディター機能更新
-    EditorUpdate();
+    EditorClassUpdate();
 }
 
-void BaseScene::EditorUpdate() {
+void BaseScene::EditorClassUpdate() {
 #ifdef _DEBUG
     debugCamera_->Update();
-   /* cameraEditor_->Update();*/
     shakeEditor_->Update(Frame::DeltaTimeRate());
     railEditor_->Update(Frame::DeltaTimeRate());
-    /*objEaseAnimationEditor_->Update();*/
+    effectEditorSuite_->Update(Frame::DeltaTimeRate());
 #endif
 }
 
@@ -60,6 +61,11 @@ void BaseScene::Debug() {
     ImGui::Begin("Camera");
     ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
     ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
+    ImGui::End();
+
+    // エディター編集
+    ImGui::Begin("Effect Editor Suite");
+    effectEditorSuite_->EditorUpdate();
     ImGui::End();
 #endif
 }
@@ -79,18 +85,18 @@ void BaseScene::ViewProjectionUpdate() {
             cameraMode_ = CameraMode::DEBUG;
         }
         // エディターモードへ
-       /* if (cameraEditor_->GetIsEditing()) {
+        if (effectEditorSuite_->GetCameraEditor()->GetIsEditing()) {
             cameraMode_ = CameraMode::EDITOR;
-        }*/
+        }
         break;
         ///------------------------------------------------------
         /// Editor Mode
         ///------------------------------------------------------
     case BaseScene::CameraMode::EDITOR:
         // ノーマルモードへ
-       /* if (!cameraEditor_->GetIsEditing()) {
+        if (!effectEditorSuite_->GetCameraEditor()->GetIsEditing()) {
             cameraMode_ = CameraMode::NORMAL;
-        }*/
+        }
         // デバッグモードへ
         if (isTriggerSpace) {
             cameraMode_ = CameraMode::DEBUG;

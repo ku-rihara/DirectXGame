@@ -18,6 +18,7 @@ public:
     // 初期化、更新
     void Init(const std::string& animationName, const bool& isUseCategory = false) override;
     void Update(const float& speedRate = 1.0f) override;
+    void EditorUpdate() override;
 
     // 選択アニメーション再生、一時停止、リセット
     void PlaySelectedAnimation();
@@ -33,6 +34,14 @@ public:
     // ViewProjectionへの適用
     void ApplyToViewProjection();
     void ApplySelectedKeyFrameToViewProjection();
+
+protected:
+    //*---------------------------- protected Methods ----------------------------*//
+
+    // 純粋仮想関数の実装
+    std::unique_ptr<CameraAnimationData> CreateEffectData() override;
+    void RenderSpecificUI() override;
+    std::string GetFolderPath() const override;
 
 private:
     ViewProjection* viewProjection_ = nullptr;

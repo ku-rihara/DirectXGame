@@ -99,3 +99,7 @@ std::string ObjEaseAnimationEditor::GetFolderPath() const {
 void ObjEaseAnimationEditor::ChangePreviewModel(const std::string& modelName) {
     previewObject_->SetModelByName(modelName);
 }
+
+void ObjEaseAnimationEditor::EditorUpdate() {
+    BaseEffectEditor::EditorUpdate();
+}

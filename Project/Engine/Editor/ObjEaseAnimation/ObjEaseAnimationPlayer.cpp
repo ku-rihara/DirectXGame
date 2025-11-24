@@ -1,14 +1,33 @@
 #include "ObjEaseAnimationPlayer.h"
 
 void ObjEaseAnimationPlayer::Init() {
-
-     BaseEffectPlayer::Init();
+    BaseEffectPlayer::Init();
 }
 
 void ObjEaseAnimationPlayer::Update(const float& speedRate) {
     if (effectData_) {
         effectData_->Update(speedRate);
     }
+}
+
+void ObjEaseAnimationPlayer::Play(const std::string& animationName) {
+  
+    if (effectData_) {
+        effectData_->Pause();
+    }
+
+    effectData_.reset();
+    effectData_ = CreateEffectData();
+
+    auto* animData = dynamic_cast<ObjEaseAnimationData*>(effectData_.get());
+    if (animData) {
+        animData->Init(animationName);
+        animData->LoadData();
+        animData->Play();
+    }
+
+    currentEffectName_ = animationName;
+    currentCategoryName_.clear(); 
 }
 
 void ObjEaseAnimationPlayer::PlayInCategory(const std::string& categoryName, const std::string& animationName) {

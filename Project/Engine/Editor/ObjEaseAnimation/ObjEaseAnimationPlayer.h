@@ -19,13 +19,15 @@ public:
     void Init() override;
     void Update(const float& speedRate = 1.0f) override;
 
-    // 再生
+    void Play(const std::string& effectName) override;
     void PlayInCategory(const std::string& categoryName, const std::string& animationName);
 
-private:
-
-    //*---------------------------- private Variant ----------------------------*//
+protected:
+    //*---------------------------- protected Methods ----------------------------*//
     std::unique_ptr<BaseEffectData> CreateEffectData() override;
+
+private:
+    //*---------------------------- private Variant ----------------------------*//
     std::string currentCategoryName_;
 
 public:

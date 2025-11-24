@@ -23,9 +23,9 @@ public:
 
     //*----------------------------- public Methods -----------------------------*//
 
-    virtual void Init(const std::string& typeName,const bool&isUseCategory=false);
+    virtual void Init(const std::string& typeName, const bool& isUseCategory = false);
     virtual void Update(const float& deltaTime);
-    void EditorUpdate();
+    virtual void EditorUpdate();
 
     // 共通操作
     void AddEffect(const std::string& name);

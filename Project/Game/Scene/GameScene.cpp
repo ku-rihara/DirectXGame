@@ -73,7 +73,7 @@ void GameScene::SkyBoxDraw() {
 
 void GameScene::Debug() {
 #ifdef _DEBUG
-
+    BaseScene::Debug();
     Light::GetInstance()->DebugImGui();
     ImGui::Begin("Object");
     ground_->Debug();
@@ -84,10 +84,8 @@ void GameScene::Debug() {
     ImGui::End();
 
     ImGui::Begin("editor");
-    /*cameraEditor_->EditorUpdate();*/
     shakeEditor_->EditorUpdate();
     railEditor_->EditorUpdate();
-    /*objEaseAnimationEditor_->EditorUpdate();*/
     timeScaleController_->EditorUpdate();
     ImGui::End();
 #endif

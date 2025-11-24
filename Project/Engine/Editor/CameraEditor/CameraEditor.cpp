@@ -5,8 +5,7 @@
 
 void CameraEditor::Init(const std::string& animationName, const bool& isUseCategory) {
     BaseEffectEditor::Init(animationName, isUseCategory);
-   
- 
+
     preViewCameraObj_.reset(Object3d::CreateModel("debugCube.obj"));
     preViewFollowObj_.reset(Object3d::CreateModel("debugCube.obj"));
 
@@ -54,32 +53,6 @@ void CameraEditor::PlaySelectedAnimation() {
     }
 }
 
-void CameraEditor::PauseSelectedAnimation() {
-    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
-        effects_[selectedIndex_]->Pause();
-    }
-}
-
-void CameraEditor::ResetSelectedAnimation() {
-    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
-        effects_[selectedIndex_]->Reset();
-    }
-}
-
-bool CameraEditor::IsSelectedAnimationPlaying() const {
-    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
-        return effects_[selectedIndex_]->IsPlaying();
-    }
-    return false;
-}
-
-bool CameraEditor::IsSelectedAnimationFinished() const {
-    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
-        return effects_[selectedIndex_]->IsFinished();
-    }
-    return false;
-}
-
 void CameraEditor::ApplyToViewProjection() {
     if (!viewProjection_) {
         return;
@@ -124,3 +97,71 @@ void CameraEditor::SetViewProjection(ViewProjection* vp) {
     viewProjection_ = vp;
 }
 
+std::unique_ptr<CameraAnimationData> CameraEditor::CreateEffectData() {
+    return std::make_unique<CameraAnimationData>();
+}
+
+void CameraEditor::RenderSpecificUI() {
+    // CameraEditor固有のUI表示
+    ImGui::SeparatorText("Camera Editor Settings");
+
+    ImGui::Checkbox("Auto Apply to ViewProjection", &autoApplyToViewProjection_);
+    ImGui::Checkbox("KeyFrame Preview Mode", &keyFramePreviewMode_);
+    ImGui::Checkbox("Show Preview Objects", &isPreViewDraw_);
+
+    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
+        ImGui::Separator();
+
+        if (ImGui::Button("Play Selected")) {
+            PlaySelectedAnimation();
+        }
+        ImGui::SameLine();
+
+        if (ImGui::Button("Pause")) {
+            PauseSelectedAnimation();
+        }
+        ImGui::SameLine();
+
+        if (ImGui::Button("Reset")) {
+            ResetSelectedAnimation();
+        }
+
+        if (keyFramePreviewMode_ && ImGui::Button("Apply Selected KeyFrame to ViewProjection")) {
+            ApplySelectedKeyFrameToViewProjection();
+        }
+    }
+}
+
+void CameraEditor::EditorUpdate() {
+    BaseEffectEditor::EditorUpdate();
+}
+
+std::string CameraEditor::GetFolderPath() const {
+    return folderName_;
+}
+
+void CameraEditor::PauseSelectedAnimation() {
+    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
+        effects_[selectedIndex_]->Pause();
+    }
+}
+
+void CameraEditor::ResetSelectedAnimation() {
+    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
+        effects_[selectedIndex_]->Reset();
+    }
+}
+
+bool CameraEditor::IsSelectedAnimationPlaying() const {
+    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
+        return effects_[selectedIndex_]->IsPlaying();
+    }
+    return false;
+}
+
+bool CameraEditor::IsSelectedAnimationFinished() const {
+    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
+        return effects_[selectedIndex_]->IsFinished();
+    }
+    return false;
+}

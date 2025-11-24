@@ -14,8 +14,7 @@
 #include "input/Input.h"
 
 // editor
-#include "Editor/CameraEditor/CameraEditor.h"
-#include "Editor/ObjEaseAnimation/ObjEaseAnimationEditor.h"
+#include "Editor/EffectEditorSuite/EffectEditorSuite.h"
 #include "Editor/RailEditor/RailEditor.h"
 #include "Editor/ShakeEditor/ShakeEditor.h"
 
@@ -52,7 +51,7 @@ public:
     virtual void ViewProcess() = 0;
 
 private:
-    void EditorUpdate();
+    void EditorClassUpdate();
 
 protected:
     DirectXCommon* dxCommon_        = nullptr;
@@ -60,15 +59,15 @@ protected:
     Audio* audio_                   = nullptr;
     TextureManager* textureManager_ = nullptr;
 
-  /*  std::unique_ptr<CameraEditor> cameraEditor_                     = nullptr;*/
-    std::unique_ptr<ShakeEditor> shakeEditor_                       = nullptr;
-    std::unique_ptr<RailEditor> railEditor_                         = nullptr;
-    /*std::unique_ptr<ObjEaseAnimationEditor> objEaseAnimationEditor_ = nullptr;*/
+    std::unique_ptr<EffectEditorSuite> effectEditorSuite_ = nullptr;
+    std::unique_ptr<ShakeEditor> shakeEditor_             = nullptr;
+    std::unique_ptr<RailEditor> railEditor_               = nullptr;
 
     ViewProjection viewProjection_;
 
     std::unique_ptr<DebugCamera> debugCamera_;
     CameraMode cameraMode_ = CameraMode::NORMAL;
+
 
 public:
     ///========================================================

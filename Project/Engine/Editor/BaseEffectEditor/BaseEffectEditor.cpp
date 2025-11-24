@@ -573,7 +573,7 @@ void BaseEffectEditor<TEffectData>::LoadCategory(const std::string& categoryName
             auto effect = CreateEffectData();
             effect->Init(effectName);
 
-            // カテゴリー情報を設定(派生クラスで必要な場合)
+            // カテゴリー情報を設定
             if constexpr (requires { effect->SetCategoryName(categoryName); }) {
                 effect->SetCategoryName(categoryName);
             }

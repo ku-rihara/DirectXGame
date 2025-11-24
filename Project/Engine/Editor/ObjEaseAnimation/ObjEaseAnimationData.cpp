@@ -26,7 +26,7 @@ void ObjEaseAnimationData::InitWithCategory(const std::string& animationName, co
 }
 
 void ObjEaseAnimationData::Update(const float& speedRate) {
-    (void)speedRate; // 未使用パラメータ警告を抑制
+    speedRate;
     UpdateKeyFrameProgression();
 }
 
@@ -82,19 +82,11 @@ void ObjEaseAnimationData::Reset() {
 }
 
 void ObjEaseAnimationData::RegisterParams() {
-    // 元の値を登録
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        const char* name = GetSRTName(static_cast<TransformType>(i));
-        globalParameter_->Regist(groupName_, std::string(name) + "_OriginalValue", &originalValues_[i]);
-    }
+   
 }
 
 void ObjEaseAnimationData::LoadParams() {
-    // 元の値を取得
-    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-        const char* name   = GetSRTName(static_cast<TransformType>(i));
-        originalValues_[i] = globalParameter_->GetValue<Vector3>(groupName_, std::string(name) + "_OriginalValue");
-    }
+    
 }
 
 void ObjEaseAnimationData::InitParams() {
@@ -133,18 +125,6 @@ void ObjEaseAnimationData::CreateOrLoadKeyFrames(const std::vector<std::pair<int
     }
 }
 
-const char* ObjEaseAnimationData::GetSRTName(const TransformType& type) const {
-    switch (type) {
-    case TransformType::Scale:
-        return "Scale";
-    case TransformType::Rotation:
-        return "Rotation";
-    case TransformType::Translation:
-        return "Translation";
-    default:
-        return "Unknown";
-    }
-}
 
 RailPlayer* ObjEaseAnimationData::GetCurrentRailPlayer() const {
     if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
@@ -190,15 +170,6 @@ void ObjEaseAnimationData::AdjustParam() {
     if (ImGui::TreeNode("Animation Settings")) {
         ImGui::Text("Category: %s", categoryName_.c_str());
         ImGui::Text("Animation: %s", groupName_.c_str());
-
-        // Original Values
-        if (ImGui::TreeNode("Original Values")) {
-            for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
-                const char* name = GetSRTName(static_cast<TransformType>(i));
-                ImGui::DragFloat3(name, &originalValues_[i].x, 0.01f);
-            }
-            ImGui::TreePop();
-        }
 
         // KeyFrame Controls
         ImGui::Separator();
