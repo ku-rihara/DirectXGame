@@ -31,6 +31,7 @@ public:
     // BaseEffectDataからのオーバーライド
     void Update(const float& speedRate = 1.0f) override;
     void Reset() override;
+    void Play() override;
 
     // カテゴリー対応初期化
     void InitWithCategory(const std::string& animationName, const std::string& categoryName)override;
@@ -54,9 +55,11 @@ protected:
 
 private:
     //*---------------------------- private Methods ----------------------------*//
-    const char* GetSRTName(const TransformType& type) const;
+    std::string GetSRTName(const TransformType& type) const;
     void CreateOrLoadSections(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
     void UpdateActiveSection(const float& speedRate);
+   
+
 private:
     //*---------------------------- private Variant ----------------------------*//
    

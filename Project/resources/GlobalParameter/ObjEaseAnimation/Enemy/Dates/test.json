@@ -21,6 +21,21 @@
         "Gravity": -0.800000011920929,
         "IntervalTime": 0.019999999552965164,
         "LifeTime": 5.800000190734863,
+        "Original_Rotation": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Original_Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Original_Translation": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "Particle Count": 9,
         "Position Base": [
             0.0,

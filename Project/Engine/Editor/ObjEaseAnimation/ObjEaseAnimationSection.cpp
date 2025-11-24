@@ -488,7 +488,8 @@ const char* ObjEaseAnimationSection::GetSRTName(const TransformType& type) const
     }
 }
 
-void ObjEaseAnimationSection::SetStatePlay() {
-    playState_   = PlayState::WAITING;
-    elapsedTime_ = 0.0f;
+void ObjEaseAnimationSection::StartWaiting() {
+    playState_         = PlayState::WAITING;
+    elapsedTime_       = 0.0f;
+    returnElapsedTime_ = 0.0f;
 }
