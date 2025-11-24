@@ -63,7 +63,7 @@ private:
     void UpdateShakeValues();   //< シェイク値の計算
     void UpdateVector3Shake();  //< Vector3シェイクの更新
     void InitParams();          //< パラメータリセット
-    void LoadParams();          //< パラメータ取得
+    void GetParams();          //< パラメータ取得
 
     /// <summary>
     /// 軸フラグの適用

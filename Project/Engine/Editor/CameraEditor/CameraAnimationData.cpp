@@ -14,7 +14,7 @@ void CameraAnimationData::Init(const std::string& animationName) {
         RegisterParams();
         globalParameter_->SyncParamForGroup(groupName_);
     } else {
-        LoadParams();
+        GetParams();
     }
 
     InitParams();
@@ -41,7 +41,7 @@ void CameraAnimationData::RegisterParams() {
     globalParameter_->Regist(groupName_, "timeMode", &timeMode_);
 }
 
-void CameraAnimationData::LoadParams() {
+void CameraAnimationData::GetParams() {
     returnParam_.autoReturnToInitial = globalParameter_->GetValue<bool>(groupName_, "autoReturnToInitial");
     resetParam_.posEaseType          = globalParameter_->GetValue<int32_t>(groupName_, "resetPosEaseType");
     resetParam_.rotateEaseType       = globalParameter_->GetValue<int32_t>(groupName_, "resetRotateEaseType");
@@ -62,7 +62,7 @@ void CameraAnimationData::Update(const float& speedRate) {
 }
 
 void CameraAnimationData::UpdateActiveKeyFrames(const float& speedRate) {
-    if (keyFrames_.empty()) {
+    if (sectionElements_.empty()) {
         return;
     }
 
@@ -105,23 +105,23 @@ void CameraAnimationData::UpdateActiveKeyFrames(const float& speedRate) {
     }
 
     // 現在のアクティブキーフレームを更新
-    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
-        keyFrames_[activeKeyFrameIndex_]->Update(speedRate);
+    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
+        sectionElements_[activeKeyFrameIndex_]->Update(speedRate);
     }
 }
 
 void CameraAnimationData::UpdateKeyFrameProgression() {
-    if (keyFrames_.empty() || playState_ != PlayState::PLAYING) {
+    if (sectionElements_.empty() || playState_ != PlayState::PLAYING) {
         return;
     }
 
-    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
-        if (!keyFrames_[activeKeyFrameIndex_]->IsFinished()) {
+    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
+        if (!sectionElements_[activeKeyFrameIndex_]->IsFinished()) {
             return;
         }
 
         // 最後のキーフレームかチェック
-        if (activeKeyFrameIndex_ == static_cast<int32_t>(keyFrames_.size()) - 1) {
+        if (activeKeyFrameIndex_ == static_cast<int32_t>(sectionElements_.size()) - 1) {
             isAllKeyFramesFinished_ = true;
             finalKeyFrameIndex_     = activeKeyFrameIndex_;
 
@@ -137,21 +137,21 @@ void CameraAnimationData::UpdateKeyFrameProgression() {
 }
 
 void CameraAnimationData::AdvanceToNexTSequenceElement() {
-    if (activeKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size()) - 1) {
+    if (activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size()) - 1) {
         activeKeyFrameIndex_++;
 
-        if (activeKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
+        if (activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
             Vector3 startPos = currentCameraTransform_.position;
             Vector3 startRot = currentCameraTransform_.rotation;
             float startFov   = currentCameraTransform_.fov;
 
-            keyFrames_[activeKeyFrameIndex_]->SetStartEasing(startPos, startRot, startFov);
+            sectionElements_[activeKeyFrameIndex_]->SetStartEasing(startPos, startRot, startFov);
         }
     }
 }
 
 void CameraAnimationData::UpdateInterpolatedValues() {
-    if (keyFrames_.empty()) {
+    if (sectionElements_.empty()) {
         return;
     }
 
@@ -159,10 +159,10 @@ void CameraAnimationData::UpdateInterpolatedValues() {
         currentCameraTransform_.position = returnCameraTransform_.position;
         currentCameraTransform_.rotation = returnCameraTransform_.rotation;
         currentCameraTransform_.fov      = returnCameraTransform_.fov;
-    } else if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
-        currentCameraTransform_.position = keyFrames_[activeKeyFrameIndex_]->GetPosition();
-        currentCameraTransform_.rotation = keyFrames_[activeKeyFrameIndex_]->GetRotation();
-        currentCameraTransform_.fov      = keyFrames_[activeKeyFrameIndex_]->GetFov();
+    } else if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
+        currentCameraTransform_.position = sectionElements_[activeKeyFrameIndex_]->GetPosition();
+        currentCameraTransform_.rotation = sectionElements_[activeKeyFrameIndex_]->GetRotation();
+        currentCameraTransform_.fov      = sectionElements_[activeKeyFrameIndex_]->GetFov();
     }
 }
 
@@ -179,7 +179,7 @@ void CameraAnimationData::ApplyToViewProjection(ViewProjection& viewProjection) 
 }
 
 void CameraAnimationData::Reset() {
-    for (auto& keyframe : keyFrames_) {
+    for (auto& keyframe : sectionElements_) {
         keyframe->Reset();
     }
 
@@ -187,8 +187,8 @@ void CameraAnimationData::Reset() {
     returnParam_.rotationEase.Reset();
     returnParam_.fovEase.Reset();
 
-    if (!keyFrames_.empty() && activeKeyFrameIndex_ == 0) {
-        keyFrames_[0]->SetStartEasing(
+    if (!sectionElements_.empty() && activeKeyFrameIndex_ == 0) {
+        sectionElements_[0]->SetStartEasing(
             initialCameraTransform_.position,
             initialCameraTransform_.rotation,
             initialCameraTransform_.fov);
@@ -294,13 +294,13 @@ void CameraAnimationData::AdjustParam() {
 
     ImGui::SeparatorText("keyFrameEdit");
     if (showKeyFrameList_) {
-        ImGui::Text("KeyFrames (%zu):", keyFrames_.size());
-        for (int32_t i = 0; i < static_cast<int32_t>(keyFrames_.size()); ++i) {
+        ImGui::Text("KeyFrames (%zu):", sectionElements_.size());
+        for (int32_t i = 0; i < static_cast<int32_t>(sectionElements_.size()); ++i) {
             ImGui::PushID(i);
 
             bool isSelected       = (selectedKeyFrameIndex_ == i);
             bool isActive         = (activeKeyFrameIndex_ == i);
-            std::string labelText = "KeyFrame " + std::to_string(i) + " (t:" + std::to_string(keyFrames_[i]->GetTimePoint()) + ")";
+            std::string labelText = "KeyFrame " + std::to_string(i) + " (t:" + std::to_string(sectionElements_[i]->GetTimePoint()) + ")";
 
             if (isActive) {
                 labelText += " [ACTIVE]";
@@ -329,8 +329,8 @@ void CameraAnimationData::AdjustParam() {
     }
 
     ImGui::Separator();
-    if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
-        keyFrames_[selectedKeyFrameIndex_]->AdjustParam();
+    if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
+        sectionElements_[selectedKeyFrameIndex_]->AdjustParam();
     }
 
     ImGui::SeparatorText("Current Values");
@@ -351,4 +351,11 @@ void CameraAnimationData::TimeModeSelector(const char* label, int32_t& target) {
     if (ImGui::Combo(label, &mode, TimeModeLabels.data(), static_cast<int>(TimeModeLabels.size()))) {
         target = mode;
     }
+}
+
+void CameraAnimationData::LoadSequenceElements() {
+    BaseSequenceEffectData::LoadSequenceElements();
+}
+void CameraAnimationData::SaveSequenceElements() {
+    BaseSequenceEffectData::SaveSequenceElements();
 }

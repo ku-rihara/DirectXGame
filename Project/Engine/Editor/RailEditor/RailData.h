@@ -117,7 +117,7 @@ public:
 private:
     void RegisterParams(); //< パラメータのバインド
 
-    void LoadParams(); //< パラメータ取得
+    void GetParams(); //< パラメータ取得
     void InitParams(); //< パラメータリセット
 
     void LoopOrStop(); //< ループまたは停止

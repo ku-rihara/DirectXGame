@@ -26,7 +26,7 @@ void BaseEffectData::LoadData() {
     // ロード、同期
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
-    LoadParams();
+    GetParams();
 }
 
 void BaseEffectData::SaveData() {

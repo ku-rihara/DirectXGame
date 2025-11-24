@@ -49,7 +49,7 @@ public:
     void LoadData(); //< データ読み込み
     void SaveData(); //< データ保存
 private:
-    void LoadParams();
+    void GetParams();
 
 private:
 

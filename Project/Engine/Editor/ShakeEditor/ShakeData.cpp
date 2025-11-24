@@ -15,7 +15,7 @@ void ShakeData::Init(const std::string& shakeName) {
         globalParameter_->SyncParamForGroup(groupName_);
     } else {
         // 値取得
-        LoadParams();
+        GetParams();
     }
 
     // リセット
@@ -120,7 +120,7 @@ void ShakeData::RegisterParams() {
     globalParameter_->Regist(groupName_, "axisFlag", &axisFlag_);
 }
 
-void ShakeData::LoadParams() {
+void ShakeData::GetParams() {
     shakeLength_ = globalParameter_->GetValue<float>(groupName_, "shakeLength");
     maxTime_     = globalParameter_->GetValue<float>(groupName_, "maxTime");
     easeType_    = globalParameter_->GetValue<int32_t>(groupName_, "easeType");

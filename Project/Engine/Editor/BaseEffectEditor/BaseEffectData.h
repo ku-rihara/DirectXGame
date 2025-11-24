@@ -33,14 +33,14 @@ public:
     virtual bool IsFinished() const;
 
     // ファイル操作
-    void LoadData();
-    void SaveData();
+    virtual void LoadData() = 0;
+    virtual void SaveData() = 0;
 
 protected:
     //*---------------------------- protected Methods ----------------------------*//
 
     virtual void RegisterParams() = 0;
-    virtual void LoadParams()     = 0;
+    virtual void GetParams()      = 0;
     virtual void InitParams()     = 0;
 
 protected:

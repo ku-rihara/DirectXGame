@@ -26,8 +26,10 @@ public:
     void UpdateKeyFrameIndices();
 
     // キーフレームファイル操作
-    void LoadKeyFrames();
-    void SaveKeyFrames();
+    void LoadData() override;
+    void SaveData() override;
+    virtual void LoadSequenceElements() = 0;
+    virtual void SaveSequenceElements() = 0;
 
 protected:
     //*---------------------------- protected Methods ----------------------------*//
@@ -39,16 +41,17 @@ protected:
 
 protected:
     //*---------------------------- protected Variant ----------------------------*//
-    std::vector<std::unique_ptr<TSequenceElement>> keyFrames_;
+    std::vector<std::unique_ptr<TSequenceElement>> sectionElements_;
     int32_t activeKeyFrameIndex_   = 0;
     int32_t selectedKeyFrameIndex_ = -1;
     bool isAllKeyFramesFinished_   = false;
+    std::string categoryName_;
 
 public:
     //*----------------------------- getter Methods -----------------------------*//
     const int32_t& GetActiveKeyFrameIndex() const { return activeKeyFrameIndex_; }
     const int32_t& GetSelectedKeyFrameIndex() const { return selectedKeyFrameIndex_; }
-    int32_t GetTotalKeyFrameCount() const { return static_cast<int32_t>(keyFrames_.size()); }
+    int32_t GetTotalKeyFrameCount() const { return static_cast<int32_t>(sectionElements_.size()); }
     const TSequenceElement* GetSelectedKeyFrame() const;
 
     //*----------------------------- setter Methods -----------------------------*//

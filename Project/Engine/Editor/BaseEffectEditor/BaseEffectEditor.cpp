@@ -37,7 +37,7 @@ template <typename TEffectData>
 void BaseEffectEditor<TEffectData>::EditorUpdate() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader((effectTypeName_ + " Editor").c_str())) {
-        ImGui::PushID("BaseEffectEditor");
+        ImGui::PushID(effectTypeName_.c_str());
 
         // 派生クラス固有のUI
         RenderSpecificUI();
@@ -572,13 +572,7 @@ void BaseEffectEditor<TEffectData>::LoadCategory(const std::string& categoryName
             std::string effectName = entry.path().stem().string();
 
             auto effect = CreateEffectData();
-            effect->Init(effectName);
-
-            // カテゴリー情報を設定
-            if constexpr (requires { effect->SetCategoryName(categoryName); }) {
-                effect->SetCategoryName(categoryName);
-            }
-
+            effect->InitWithCategory(effectName, categoryName);
             effect->LoadData();
             newCategory.effects.push_back(std::move(effect));
         }
@@ -588,7 +582,6 @@ void BaseEffectEditor<TEffectData>::LoadCategory(const std::string& categoryName
 }
 
 
-// 明示的インスタンス化
-template class BaseEffectEditor<ShakeData>;
+
 template class BaseEffectEditor<CameraAnimationData>;
 template class BaseEffectEditor<ObjEaseAnimationData>;

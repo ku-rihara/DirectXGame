@@ -87,7 +87,7 @@ private:
     const char* GetSRTName(const TransformType& type) const;
 
     void RegisterParams();
-    void LoadParams();
+    void GetParams();
     void AdaptEaseParam();
     void AdaptValueSetting();
 

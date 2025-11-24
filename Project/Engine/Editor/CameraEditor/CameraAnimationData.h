@@ -48,6 +48,9 @@ public:
     void Update(const float& speedRate = 1.0f) override;
     void Reset() override;
 
+    void LoadSequenceElements() override;
+    void SaveSequenceElements() override;
+
     // ViewProjectionへの適用
     void ApplyToViewProjection(ViewProjection& viewProjection);
 
@@ -61,7 +64,7 @@ protected:
     //*---------------------------- protected Methods ----------------------------*//
 
     void RegisterParams() override;
-    void LoadParams() override;
+    void GetParams() override;
     void InitParams() override;
 
     void UpdateKeyFrameProgression() override;

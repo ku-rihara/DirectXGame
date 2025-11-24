@@ -33,15 +33,17 @@ public:
     void Reset() override;
 
     // カテゴリー対応初期化
-    void InitWithCategory(const std::string& animationName, const std::string& categoryName);
+    void InitWithCategory(const std::string& animationName, const std::string& categoryName)override;
 
     // 編集用メソッド
     void AdjustParam();
+    void LoadSequenceElements() override;
+    void SaveSequenceElements() override;
 
     //*----------------------------- protected Methods from Base -----------------------------*//
 protected:
     void RegisterParams() override;
-    void LoadParams() override;
+    void GetParams() override;
     void InitParams() override;
 
     // BaseSequenceEffectDataからのオーバーライド
@@ -53,11 +55,11 @@ protected:
 private:
     //*---------------------------- private Methods ----------------------------*//
     const char* GetSRTName(const TransformType& type) const;
-    void CreateOrLoadKeyFrames(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
+    void CreateOrLoadSections(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
 
 private:
     //*---------------------------- private Variant ----------------------------*//
-    std::string categoryName_;
+   
     const std::string baseFolderPath_ = "ObjEaseAnimation/";
 
     // originParam

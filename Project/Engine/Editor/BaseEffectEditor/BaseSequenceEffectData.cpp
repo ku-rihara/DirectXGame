@@ -9,45 +9,68 @@ template <typename TSequenceElement>
 void BaseSequenceEffectData<TSequenceElement>::Init(const std::string& name) {
     groupName_       = name;
     globalParameter_ = GlobalParameter::GetInstance();
+    categoryName_    = "";
 }
 
 template <typename TSequenceElement>
 void BaseSequenceEffectData<TSequenceElement>::InitWithCategory(const std::string& name, const std::string& categoryName) {
     groupName_       = name;
-    categoryName;
+    categoryName_    = categoryName;
     globalParameter_ = GlobalParameter::GetInstance();
 }
 
 template <typename TSequenceElement>
+void BaseSequenceEffectData<TSequenceElement>::LoadData() {
+    // まず基底クラスのパラメータをロード
+    if (!folderPath_.empty()) {
+        globalParameter_->LoadFile(groupName_, folderPath_);
+        globalParameter_->SyncParamForGroup(groupName_);
+        GetParams();
+    }
+
+    // 次にシーケンス要素をロード
+    LoadSequenceElements();
+}
+
+template <typename TSequenceElement>
+void BaseSequenceEffectData<TSequenceElement>::SaveData() {
+    // 基底クラスのパラメータを保存
+    if (!folderPath_.empty()) {
+        globalParameter_->SaveFile(groupName_, folderPath_);
+    }
+
+    // シーケンス要素を保存
+    SaveSequenceElements();
+}
+
+template <typename TSequenceElement>
 void BaseSequenceEffectData<TSequenceElement>::AddKeyFrame() {
-    int32_t newIndex = static_cast<int32_t>(keyFrames_.size());
+    int32_t newIndex = static_cast<int32_t>(sectionElements_.size());
     auto newKeyFrame = CreateKeyFrame(newIndex);
-    keyFrames_.push_back(std::move(newKeyFrame));
+    sectionElements_.push_back(std::move(newKeyFrame));
     selectedKeyFrameIndex_  = newIndex;
     isAllKeyFramesFinished_ = false;
 }
 
 template <typename TSequenceElement>
 void BaseSequenceEffectData<TSequenceElement>::RemoveKeyFrame(const int32_t& index) {
-    if (index >= 0 && index < static_cast<int32_t>(keyFrames_.size())) {
-        keyFrames_.erase(keyFrames_.begin() + index);
+    if (index >= 0 && index < static_cast<int32_t>(sectionElements_.size())) {
+        sectionElements_.erase(sectionElements_.begin() + index);
 
-        // インデックス調整
         if (selectedKeyFrameIndex_ >= index) {
             selectedKeyFrameIndex_--;
-            if (selectedKeyFrameIndex_ < 0 && !keyFrames_.empty()) {
+            if (selectedKeyFrameIndex_ < 0 && !sectionElements_.empty()) {
                 selectedKeyFrameIndex_ = 0;
             }
         }
 
         if (activeKeyFrameIndex_ >= index) {
             activeKeyFrameIndex_--;
-            if (activeKeyFrameIndex_ < 0 && !keyFrames_.empty()) {
+            if (activeKeyFrameIndex_ < 0 && !sectionElements_.empty()) {
                 activeKeyFrameIndex_ = 0;
             }
         }
 
-        // インデックスの再設定
         UpdateKeyFrameIndices();
         isAllKeyFramesFinished_ = false;
     }
@@ -55,7 +78,7 @@ void BaseSequenceEffectData<TSequenceElement>::RemoveKeyFrame(const int32_t& ind
 
 template <typename TSequenceElement>
 void BaseSequenceEffectData<TSequenceElement>::ClearKeyFrames() {
-    keyFrames_.clear();
+    sectionElements_.clear();
     selectedKeyFrameIndex_  = -1;
     activeKeyFrameIndex_    = 0;
     isAllKeyFramesFinished_ = false;
@@ -63,11 +86,10 @@ void BaseSequenceEffectData<TSequenceElement>::ClearKeyFrames() {
 
 template <typename TSequenceElement>
 void BaseSequenceEffectData<TSequenceElement>::UpdateKeyFrameIndices() {
-   
 }
 
 template <typename TSequenceElement>
-void BaseSequenceEffectData<TSequenceElement>::LoadKeyFrames() {
+void BaseSequenceEffectData<TSequenceElement>::LoadSequenceElements() {
     std::string folderPath = globalParameter_->GetDirectoryPath() + GeTSequenceElementFolderPath();
 
     if (!std::filesystem::exists(folderPath) || !std::filesystem::is_directory(folderPath)) {
@@ -82,7 +104,8 @@ void BaseSequenceEffectData<TSequenceElement>::LoadKeyFrames() {
 
             if (fileName.find(groupName_) == 0) {
                 std::string indexStr = fileName.substr(groupName_.length());
-                int32_t index        = std::stoi(indexStr);
+
+                int32_t index = std::stoi(indexStr);
                 keyFrameFiles.emplace_back(index, fileName);
             }
         }
@@ -90,38 +113,38 @@ void BaseSequenceEffectData<TSequenceElement>::LoadKeyFrames() {
 
     std::sort(keyFrameFiles.begin(), keyFrameFiles.end());
 
-    if (keyFrames_.size() == 0) {
+    if (sectionElements_.size() == 0) {
         ClearKeyFrames();
         for (const auto& [index, fileName] : keyFrameFiles) {
             auto newKeyFrame = CreateKeyFrame(index);
             newKeyFrame->LoadData();
-            keyFrames_.push_back(std::move(newKeyFrame));
+            sectionElements_.push_back(std::move(newKeyFrame));
         }
     } else {
-        for (auto& keyFrame : keyFrames_) {
+        for (auto& keyFrame : sectionElements_) {
             keyFrame->LoadData();
         }
     }
 }
 
 template <typename TSequenceElement>
-void BaseSequenceEffectData<TSequenceElement>::SaveKeyFrames() {
-    for (auto& keyFrame : keyFrames_) {
+void BaseSequenceEffectData<TSequenceElement>::SaveSequenceElements() {
+    for (auto& keyFrame : sectionElements_) {
         keyFrame->SaveData();
     }
 }
 
 template <typename TSequenceElement>
 const TSequenceElement* BaseSequenceEffectData<TSequenceElement>::GetSelectedKeyFrame() const {
-    if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < static_cast<int32_t>(keyFrames_.size())) {
-        return keyFrames_[selectedKeyFrameIndex_].get();
+    if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
+        return sectionElements_[selectedKeyFrameIndex_].get();
     }
     return nullptr;
 }
 
 template <typename TSequenceElement>
 void BaseSequenceEffectData<TSequenceElement>::SetSelectedKeyFrameIndex(const int32_t& index) {
-    if (index >= -1 && index < static_cast<int32_t>(keyFrames_.size())) {
+    if (index >= -1 && index < static_cast<int32_t>(sectionElements_.size())) {
         selectedKeyFrameIndex_ = index;
     }
 }

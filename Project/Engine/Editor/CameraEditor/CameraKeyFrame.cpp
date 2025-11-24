@@ -20,7 +20,7 @@ void CameraKeyFrame::Init(const std::string& groupName, const int32_t& keyNumber
 
     } else {
         // パラメータを取得
-        LoadParams();
+        GetParams();
     }
 
     AdaptValueSetting();
@@ -77,7 +77,7 @@ void CameraKeyFrame::RegisterParams() {
     globalParameter_->Regist(groupName_, "timeMode", &timeMode_);
 }
 
-void CameraKeyFrame::LoadParams() {
+void CameraKeyFrame::GetParams() {
     // timePoint
     timePoint_ = globalParameter_->GetValue<float>(groupName_, "timePoint");
 

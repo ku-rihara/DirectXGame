@@ -14,7 +14,7 @@ void RailControlPoint::Init(const std::string& railName, const int32_t& keyNumbe
         RegisterParams();
     } else {
         // パラメータを取得
-        LoadParams();
+        GetParams();
     }
 }
 
@@ -37,7 +37,7 @@ void RailControlPoint::RegisterParams() {
     globalParameter_->Regist(groupName_, "position", &position_);
 }
 
-void RailControlPoint::LoadParams() {
+void RailControlPoint::GetParams() {
     position_ = globalParameter_->GetValue<Vector3>(groupName_, "position");
 }
 

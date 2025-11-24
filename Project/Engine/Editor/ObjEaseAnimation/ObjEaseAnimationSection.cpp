@@ -7,7 +7,7 @@ void ObjEaseAnimationSection::Init(const std::string& animationName, const std::
     globalParameter_      = GlobalParameter::GetInstance();
     currenTSequenceElementIndex_ = keyNumber;
     groupName_            = animationName + std::to_string(currenTSequenceElementIndex_);
-    folderPath_           = "ObjEaseAnimation/" + categoryName + "/" + "KeyFrames/" + animationName;
+    folderPath_           = "ObjEaseAnimation/" + categoryName + "/" + "Sections/" + animationName;
 
     // Scaleの初期値を1に設定
     transformParams_[static_cast<size_t>(TransformType::Scale)].endValue = Vector3::OneVector();
@@ -21,7 +21,7 @@ void ObjEaseAnimationSection::Init(const std::string& animationName, const std::
         globalParameter_->CreateGroup(groupName_);
         RegisterParams();
     } else {
-        LoadParams();
+        GetParams();
     }
 
     AdaptValueSetting();
@@ -279,7 +279,7 @@ void ObjEaseAnimationSection::RegisterParams() {
     }
 }
 
-void ObjEaseAnimationSection::LoadParams() {
+void ObjEaseAnimationSection::GetParams() {
     timePoint_ = globalParameter_->GetValue<float>(groupName_, "timePoint");
     timeMode_  = globalParameter_->GetValue<int32_t>(groupName_, "timeMode");
 

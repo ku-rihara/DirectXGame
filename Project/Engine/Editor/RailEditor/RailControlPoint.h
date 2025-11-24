@@ -27,7 +27,7 @@ public:
     void SaveData(); //< データ保存
 
 private:
-    void LoadParams();
+    void GetParams();
 
 private:
     GlobalParameter* globalParameter_;

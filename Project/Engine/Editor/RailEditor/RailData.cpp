@@ -23,7 +23,7 @@ void RailData::Init(const std::string& railName) {
         globalParameter_->SyncParamForGroup(groupName_);
     } else {
         // 値取得
-        LoadParams();
+        GetParams();
     }
 
     // リセット
@@ -329,7 +329,7 @@ void RailData::RegisterParams() {
     globalParameter_->Regist(groupName_, "returnEaseType", &directReturnParam_.easeTypeInt);
 }
 
-void RailData::LoadParams() {
+void RailData::GetParams() {
     railMoveParam_.maxTime              = globalParameter_->GetValue<float>(groupName_, "maxTime");
     railMoveParam_.startTime            = globalParameter_->GetValue<float>(groupName_, "startTime");
     railMoveParam_.isLoop               = globalParameter_->GetValue<bool>(groupName_, "isLoop");
