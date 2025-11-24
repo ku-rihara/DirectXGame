@@ -81,7 +81,6 @@ void ObjEaseAnimationData::Reset() {
     // 全てのキーフレームをリセット
     for (auto& section : sectionElements_) {
         section->Reset();
-        section->SetStatePlay();
     }
 
     // 状態をリセット
@@ -90,10 +89,34 @@ void ObjEaseAnimationData::Reset() {
     playState_              = PlayState::STOPPED;
 }
 
+void ObjEaseAnimationData::Play() {
+    BaseEffectData::Play();
+
+    Vector3 scale = originalValues_[static_cast<size_t>(TransformType::Scale)];
+    Vector3 rotate = originalValues_[static_cast<size_t>(TransformType::Rotation)];
+    Vector3 transform = originalValues_[static_cast<size_t>(TransformType::Translation)];
+
+    // 全てのキーフレームをリセット
+    for (auto& section : sectionElements_) {
+        section->StartWaiting();
+        section->SetStartValues(scale, rotate, transform);
+    }
+ }
+
 void ObjEaseAnimationData::RegisterParams() {
+    // originalValues_をパラメータとして登録
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        std::string srtName = GetSRTName(static_cast<TransformType>(i));
+        globalParameter_->Regist(groupName_, "Original_" + srtName, &originalValues_[i]);
+    }
 }
 
 void ObjEaseAnimationData::GetParams() {
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        std::string srtName = GetSRTName(static_cast<TransformType>(i));
+        originalValues_[i]  = globalParameter_->GetValue<Vector3>(groupName_, "Original_" + srtName);
+    }
+  
 }
 
 void ObjEaseAnimationData::InitParams() {
@@ -101,10 +124,6 @@ void ObjEaseAnimationData::InitParams() {
     activeKeyFrameIndex_    = 0;
     isAllKeyFramesFinished_ = false;
 
-    // デフォルト値設定
-    originalValues_[static_cast<size_t>(TransformType::Scale)]       = Vector3::OneVector();
-    originalValues_[static_cast<size_t>(TransformType::Rotation)]    = Vector3::ZeroVector();
-    originalValues_[static_cast<size_t>(TransformType::Translation)] = Vector3::ZeroVector();
 }
 
 std::unique_ptr<ObjEaseAnimationSection> ObjEaseAnimationData::CreateKeyFrame(const int32_t& index) {
@@ -177,6 +196,12 @@ void ObjEaseAnimationData::AdjustParam() {
     ImGui::Text("Category: %s", categoryName_.c_str());
     ImGui::Text("Animation: %s", groupName_.c_str());
 
+    // Origintransform 編集
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        std::string srtName = GetSRTName(static_cast<TransformType>(i));
+        ImGui::DragFloat3(("Origin" + srtName).c_str(), &originalValues_[i].x, 0.01f);
+    }
+
     // KeyFrame Controls
     ImGui::Separator();
     ImGui::Text("Sections: %d", GetTotalKeyFrameCount());
@@ -206,6 +231,19 @@ void ObjEaseAnimationData::AdjustParam() {
     }
 
 #endif
+}
+
+std::string ObjEaseAnimationData::GetSRTName(const TransformType& type) const {
+    switch (type) {
+    case TransformType::Scale:
+        return "Scale";
+    case TransformType::Rotation:
+        return "Rotation";
+    case TransformType::Translation:
+        return "Translation";
+    default:
+        return "Unknown";
+    }
 }
 
 void ObjEaseAnimationData::LoadSequenceElements() {

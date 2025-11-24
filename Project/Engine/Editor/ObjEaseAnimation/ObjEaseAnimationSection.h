@@ -23,9 +23,9 @@ public:
 
     enum class PlayState {
         STOPPED,
-        WAITING, // startTime_待機中
+        WAITING, 
         PLAYING,
-        RETURN_WAITING, // returnStartTime_待機中
+        RETURN_WAITING,
         RETURNING
     };
 
@@ -80,10 +80,9 @@ public:
     void SaveData();
     void AdjustParam();
 
-    /// <summary>
-    /// 開始値を設定
-    /// </summary>
+    // 開始処理
     void SetStartValues(const Vector3& scale, const Vector3& rotation, const Vector3& translation);
+    void StartWaiting();
 
 private:
     const char* GetSRTName(const TransformType& type) const;
@@ -150,7 +149,4 @@ public:
 
     RailPlayer* GetRailPlayer() { return railPlayer_.get(); }
     bool IsUsingRail() const;
-
-    void SetStatePlay();
-    void SetTimePoint(const float& timePoint) { startTime_ = timePoint; }
 };

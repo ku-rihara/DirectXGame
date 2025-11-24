@@ -25,9 +25,9 @@ public:
     virtual void Init(const std::string& name)         = 0;
     virtual void Update(const float& speedRate = 1.0f) = 0;
     virtual void Reset()                               = 0;
-
+    virtual void Play()                                = 0;
     // 共通実装
-    virtual void Play();
+  
     virtual void Pause();
     virtual bool IsPlaying() const;
     virtual bool IsFinished() const;

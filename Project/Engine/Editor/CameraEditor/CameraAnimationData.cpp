@@ -203,6 +203,10 @@ void CameraAnimationData::Reset() {
     playState_                        = PlayState::STOPPED;
 }
 
+void CameraAnimationData::Play() {
+    BaseEffectData::Play();
+}
+
 void CameraAnimationData::StartReturnToInitial() {
     if (returnParam_.isReturningToInitial || returnParam_.isWaitingForReturn) {
         return;
