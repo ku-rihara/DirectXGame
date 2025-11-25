@@ -92,44 +92,7 @@ void ObjEaseAnimationEditor::RenderSpecificUI() {
     // 再生コントロール
     ImGui::SeparatorText("Animation Control");
 
-    auto* selectedAnim = GetSelectedAnimation();
-    if (selectedAnim) {
-        if (ImGui::Button("Play Selected")) {
-            PlaySelectedAnimation();
-        }
-        ImGui::SameLine();
-
-        if (ImGui::Button("Pause")) {
-            PauseSelectedAnimation();
-        }
-        ImGui::SameLine();
-
-        if (ImGui::Button("Reset")) {
-            ResetSelectedAnimation();
-        }
-
-        // 状態表示
-        ImGui::Spacing();
-        if (IsSelectedAnimationPlaying()) {
-            ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Playing");
-        } else if (IsSelectedAnimationFinished()) {
-            ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Finished");
-        } else {
-            ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "Stopped");
-        }
-
-        // 現在の値表示
-        ImGui::SeparatorText("Current Animation Values");
-        Vector3 currentScale = selectedAnim->GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Scale);
-        Vector3 currentRot   = selectedAnim->GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Rotation);
-        Vector3 currentTrans = selectedAnim->GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Translation);
-
-        ImGui::Text("Scale: (%.2f, %.2f, %.2f)", currentScale.x, currentScale.y, currentScale.z);
-        ImGui::Text("Rotation: (%.2f, %.2f, %.2f)", currentRot.x, currentRot.y, currentRot.z);
-        ImGui::Text("Translation: (%.2f, %.2f, %.2f)", currentTrans.x, currentTrans.y, currentTrans.z);
-    } else {
-        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "No animation selected");
-    }
+    BaseEffectEditor::RenderPlayBack();
 }
 
 std::string ObjEaseAnimationEditor::GetFolderPath() const {
@@ -140,57 +103,10 @@ void ObjEaseAnimationEditor::ChangePreviewModel(const std::string& modelName) {
     previewObject_->SetModelByName(modelName);
 }
 
-void ObjEaseAnimationEditor::PlaySelectedAnimation() {
-    auto* selectedAnim = GetSelectedAnimation();
-    if (selectedAnim) {
-        selectedAnim->Play();
-    }
-}
-
-void ObjEaseAnimationEditor::PauseSelectedAnimation() {
-    auto* selectedAnim = GetSelectedAnimation();
-    if (selectedAnim) {
-        selectedAnim->Pause();
-    }
-}
-
-void ObjEaseAnimationEditor::ResetSelectedAnimation() {
-    auto* selectedAnim = GetSelectedAnimation();
-    if (selectedAnim) {
-        selectedAnim->Reset();
-    }
-}
-
-bool ObjEaseAnimationEditor::IsSelectedAnimationPlaying() const {
-    if (selectedCategoryIndex_ >= 0 && selectedCategoryIndex_ < static_cast<int>(categories_.size())) {
-        auto& category = categories_[selectedCategoryIndex_];
-        if (category.selectedEffectIndex >= 0 && category.selectedEffectIndex < static_cast<int>(category.effects.size())) {
-            return category.effects[category.selectedEffectIndex]->IsPlaying();
-        }
-    }
-    return false;
-}
-
-bool ObjEaseAnimationEditor::IsSelectedAnimationFinished() const {
-    if (selectedCategoryIndex_ >= 0 && selectedCategoryIndex_ < static_cast<int>(categories_.size())) {
-        auto& category = categories_[selectedCategoryIndex_];
-        if (category.selectedEffectIndex >= 0 && category.selectedEffectIndex < static_cast<int>(category.effects.size())) {
-            return category.effects[category.selectedEffectIndex]->IsFinished();
-        }
-    }
-    return false;
-}
-
-ObjEaseAnimationData* ObjEaseAnimationEditor::GetSelectedAnimation() {
-    if (selectedCategoryIndex_ >= 0 && selectedCategoryIndex_ < static_cast<int>(categories_.size())) {
-        auto& category = categories_[selectedCategoryIndex_];
-        if (category.selectedEffectIndex >= 0 && category.selectedEffectIndex < static_cast<int>(category.effects.size())) {
-            return category.effects[category.selectedEffectIndex].get();
-        }
-    }
-    return nullptr;
-}
-
 void ObjEaseAnimationEditor::EditorUpdate() {
     BaseEffectEditor::EditorUpdate();
+}
+
+void ObjEaseAnimationEditor::PlaySelectedAnimation() {
+    BaseEffectEditor::PlaySelectedAnimation();
 }

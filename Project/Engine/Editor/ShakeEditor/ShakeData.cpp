@@ -87,13 +87,13 @@ void ShakeData::Play() {
 
 void ShakeData::Stop() {
     playState_          = PlayState::STOPPED;
-    currentShakeOffset_ = {0.0f, 0.0f, 0.0f};
+    currentShakeOffset_ = Vector3::ZeroVector();
 }
 
 void ShakeData::Reset() {
 
     easedTime_          = startTime_;
-    currentShakeOffset_ = {0.0f, 0.0f, 0.0f};
+    currentShakeOffset_ = Vector3::ZeroVector();
 
     timeEase_.Reset();
 }
@@ -134,19 +134,6 @@ void ShakeData::AdjustParam() {
     if (showControls_) {
         ImGui::SeparatorText(("Shake Editor: " + groupName_).c_str());
         ImGui::PushID(groupName_.c_str());
-
-        // 再生制御
-        if (ImGui::Button("Play")) {
-            Play();
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Stop")) {
-            Stop();
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Reset")) {
-            Reset();
-        }
 
         // 状態表示
         const char* stateText = "";

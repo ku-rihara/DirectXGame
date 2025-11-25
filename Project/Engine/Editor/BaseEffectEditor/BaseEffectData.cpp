@@ -1,4 +1,5 @@
 #include"BaseEffectData.h"
+#include <imgui.h>
 
 
 void BaseEffectData::Play() {
@@ -33,3 +34,4 @@ void BaseEffectData::SaveData() {
     // セーブ
     globalParameter_->SaveFile(groupName_, folderPath_);
 }
+

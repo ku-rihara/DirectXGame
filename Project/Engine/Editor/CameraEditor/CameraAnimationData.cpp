@@ -38,7 +38,7 @@ void CameraAnimationData::RegisterParams() {
     globalParameter_->Regist(groupName_, "resetFovEaseType", &resetParam_.fovEaseType);
     globalParameter_->Regist(groupName_, "resetTimePoint", &resetParam_.timePoint);
     globalParameter_->Regist(groupName_, "returnDelayTime", &resetParam_.delayTime);
-    globalParameter_->Regist(groupName_, "timeMode", &timeMode_);
+    timeModeSelector_.RegisterParam(groupName_, globalParameter_);
 }
 
 void CameraAnimationData::GetParams() {
@@ -48,7 +48,7 @@ void CameraAnimationData::GetParams() {
     resetParam_.fovEaseType          = globalParameter_->GetValue<int32_t>(groupName_, "resetFovEaseType");
     resetParam_.timePoint            = globalParameter_->GetValue<float>(groupName_, "resetTimePoint");
     resetParam_.delayTime            = globalParameter_->GetValue<float>(groupName_, "returnDelayTime");
-    timeMode_                        = globalParameter_->GetValue<int32_t>(groupName_, "timeMode");
+    timeModeSelector_.GetParam(groupName_, globalParameter_);
 }
 
 void CameraAnimationData::Update(const float& speedRate) {
@@ -67,11 +67,11 @@ void CameraAnimationData::UpdateActiveKeyFrames(const float& speedRate) {
     }
 
     float actualDeltaTime = 0.0f;
-    switch (static_cast<CameraKeyFrame::TimeMode>(timeMode_)) {
-    case CameraKeyFrame::TimeMode::DELTA_TIME:
+    switch (static_cast<TimeMode>(timeModeSelector_.GetTimeModeInt())) {
+    case TimeMode::DELTA_TIME:
         actualDeltaTime = Frame::DeltaTime() * speedRate;
         break;
-    case CameraKeyFrame::TimeMode::DELTA_TIME_RATE:
+    case TimeMode::DELTA_TIME_RATE:
         actualDeltaTime = Frame::DeltaTimeRate() * speedRate;
         break;
     default:
@@ -285,7 +285,7 @@ void CameraAnimationData::AdjustParam() {
     ImGuiEasingTypeSelector("Easing Type Fov", resetParam_.fovEaseType);
 
     ImGui::SeparatorText("deltaTime");
-    TimeModeSelector("Time Mode", timeMode_);
+    timeModeSelector_.SelectTimeModeImGui("Time Mode");
 
     ImGui::SeparatorText("keyFrameEdit");
     if (showKeyFrameList_) {
@@ -339,13 +339,6 @@ void CameraAnimationData::AdjustParam() {
         currentCameraTransform_.rotation.z);
     ImGui::Text("FOV: %.2f", currentCameraTransform_.fov);
 #endif
-}
-
-void CameraAnimationData::TimeModeSelector(const char* label, int32_t& target) {
-    int mode = static_cast<int>(target);
-    if (ImGui::Combo(label, &mode, TimeModeLabels.data(), static_cast<int>(TimeModeLabels.size()))) {
-        target = mode;
-    }
 }
 
 void CameraAnimationData::LoadSequenceElements() {

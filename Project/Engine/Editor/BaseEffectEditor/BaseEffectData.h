@@ -42,7 +42,7 @@ protected:
     virtual void RegisterParams() = 0;
     virtual void GetParams()      = 0;
     virtual void InitParams()     = 0;
-
+  
 protected:
     //*---------------------------- protected Variant ----------------------------*//
 
