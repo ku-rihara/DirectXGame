@@ -1,7 +1,9 @@
 #include "BaseSequenceEffectData.h"
+// editor
 #include "Editor/CameraEditor/CameraKeyFrame.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationSection.h"
 #include "Editor/RailEditor/RailControlPoint.h"
+// std
 #include <algorithm>
 #include <filesystem>
 

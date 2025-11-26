@@ -13,10 +13,6 @@ void CameraEditor::Init(const std::string& animationName, const bool& isUseCateg
     preViewFollowObj_->SetIsDraw(false);
 }
 
-void CameraEditor::AddAnimation(const std::string& animationName) {
-    BaseEffectEditor::AddEffect(animationName);
-}
-
 void CameraEditor::Update(const float& speedRate) {
     // 未使用
     speedRate;
@@ -112,21 +108,9 @@ void CameraEditor::RenderSpecificUI() {
     if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
         ImGui::Separator();
 
-        if (ImGui::Button("Play")) {
-            PlaySelectedAnimation();
-        }
-        ImGui::SameLine();
+        BaseEffectEditor::RenderPlayBack();
 
-        if (ImGui::Button("Pause")) {
-            PauseSelectedAnimation();
-        }
-        ImGui::SameLine();
-
-        if (ImGui::Button("Reset")) {
-            ResetSelectedAnimation();
-        }
-
-        if (keyFramePreviewMode_ && ImGui::Button("Apply Selected KeyFrame to ViewProjection")) {
+        if (keyFramePreviewMode_) {
             ApplySelectedKeyFrameToViewProjection();
         }
     }
@@ -138,30 +122,4 @@ void CameraEditor::EditorUpdate() {
 
 std::string CameraEditor::GetFolderPath() const {
     return folderName_;
-}
-
-void CameraEditor::PauseSelectedAnimation() {
-    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
-        effects_[selectedIndex_]->Pause();
-    }
-}
-
-void CameraEditor::ResetSelectedAnimation() {
-    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
-        effects_[selectedIndex_]->Reset();
-    }
-}
-
-bool CameraEditor::IsSelectedAnimationPlaying() const {
-    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
-        return effects_[selectedIndex_]->IsPlaying();
-    }
-    return false;
-}
-
-bool CameraEditor::IsSelectedAnimationFinished() const {
-    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
-        return effects_[selectedIndex_]->IsFinished();
-    }
-    return false;
 }

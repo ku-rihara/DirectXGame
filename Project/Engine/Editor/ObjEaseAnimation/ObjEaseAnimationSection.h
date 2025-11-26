@@ -3,6 +3,7 @@
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Editor/RailEditor/RailPlayer.h"
 #include "utility/FileSelector/FileSelector.h"
+#include "utility/TimeModeSelector/TimeModeSelector.h"
 #include "Vector3.h"
 #include <array>
 #include <cstdint>
@@ -23,15 +24,10 @@ public:
 
     enum class PlayState {
         STOPPED,
-        WAITING, 
+        WAITING,
         PLAYING,
         RETURN_WAITING,
         RETURNING
-    };
-
-    enum class TimeMode {
-        DELTA_TIME      = 0,
-        DELTA_TIME_RATE = 1
     };
 
     struct TransformParam {
@@ -104,8 +100,6 @@ private:
     void StartReturn();
 
     void ImGuiTransformParam(const char* label, TransformParam& param, const TransformType& type);
-    void TimeModeSelector(const char* label, int32_t& target);
-
     void CheckPlayFinishAndStartReturn();
 
 private:
@@ -120,11 +114,10 @@ private:
     // time
     float startTime_       = 0.0f;
     float returnStartTime_ = 0.0f;
-    int32_t timeMode_      = static_cast<int32_t>(TimeMode::DELTA_TIME_RATE);
 
     // 経過時間
-    float elapsedTime_       = 0.0f; 
-    float returnElapsedTime_ = 0.0f; 
+    float elapsedTime_       = 0.0f;
+    float returnElapsedTime_ = 0.0f;
 
     // rail
     std::unique_ptr<RailPlayer> railPlayer_;
@@ -133,9 +126,7 @@ private:
     // 再生状態
     PlayState playState_ = PlayState::STOPPED;
 
-    std::vector<const char*> TimeModeLabels = {
-        "DeltaTime (No TimeScale)",
-        "DeltaTimeRate (With TimeScale)"};
+    TimeModeSelector timeModeSelector_;
 
 public:
     const float& GetTimePoint() const { return startTime_; }

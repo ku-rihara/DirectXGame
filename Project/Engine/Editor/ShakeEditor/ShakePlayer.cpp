@@ -1,31 +1,34 @@
 #include "ShakePlayer.h"
 
 void ShakePlayer::Init() {
+    BaseEffectPlayer::Init();
     totalShakeOffset_ = {0.0f, 0.0f, 0.0f};
-    shakeData_        = std::make_unique<ShakeData>();
 }
 
-void ShakePlayer::Update(const float& deltaTime) {
-    shakeData_->Update(deltaTime);
-    // 合成シェイクオフセットを計算
-    UpdateTotalShakeOffset();
+void ShakePlayer::Update(const float& speedRate) {
+    if (effectData_) {
+        effectData_->Update(speedRate);
+        UpdateTotalShakeOffset();
+    }
 }
 
 void ShakePlayer::UpdateTotalShakeOffset() {
-    totalShakeOffset_ = shakeData_->GetShakeOffset();
+    if (ShakeData* shakeData = dynamic_cast<ShakeData*>(effectData_.get())) {
+        totalShakeOffset_ = shakeData->GetShakeOffset();
+    }
 }
 
 void ShakePlayer::Play(const std::string& shakeName) {
+    currentEffectName_ = shakeName;
 
-    shakeData_.reset();
-    shakeData_ = std::make_unique<ShakeData>();
+    effectData_.reset();
+    effectData_ = CreateEffectData();
 
-    shakeData_->Init(shakeName);
-    shakeData_->LoadData();
-    shakeData_->Play();
+    effectData_->Init(shakeName);
+    effectData_->LoadData();
+    effectData_->Play();
 }
 
-void ShakePlayer::StopShake() {
-    shakeData_->Stop();
-    totalShakeOffset_ = {0.0f, 0.0f, 0.0f};
+std::unique_ptr<BaseEffectData> ShakePlayer::CreateEffectData() {
+    return std::make_unique<ShakeData>();
 }

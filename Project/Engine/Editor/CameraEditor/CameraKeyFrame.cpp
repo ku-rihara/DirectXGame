@@ -49,7 +49,7 @@ void CameraKeyFrame::SaveData() {
 
 void CameraKeyFrame::Update(const float& speedRate) {
     float actualDeltaTime;
-    switch (static_cast<TimeMode>(timeMode_)) {
+    switch (static_cast<TimeMode>(timeModeSelector_.GetTimeModeInt())) {
     case TimeMode::DELTA_TIME:
         // タイムスケール無視
         actualDeltaTime = Frame::DeltaTime() * speedRate;
@@ -74,7 +74,8 @@ void CameraKeyFrame::RegisterParams() {
     globalParameter_->Regist(groupName_, "positionEaseType", &positionEaseType_);
     globalParameter_->Regist(groupName_, "rotationEaseType", &rotationEaseType_);
     globalParameter_->Regist(groupName_, "fovEaseType", &fovEaseType_);
-    globalParameter_->Regist(groupName_, "timeMode", &timeMode_);
+    timeModeSelector_.RegisterParam(groupName_,globalParameter_);
+ 
 }
 
 void CameraKeyFrame::GetParams() {
@@ -92,7 +93,7 @@ void CameraKeyFrame::GetParams() {
     fovEaseType_      = globalParameter_->GetValue<int32_t>(groupName_, "fovEaseType");
 
     // TimeMode
-    timeMode_ = globalParameter_->GetValue<int32_t>(groupName_, "timeMode");
+    timeModeSelector_.GetParam(groupName_, globalParameter_);
 }
 
 void CameraKeyFrame::AdjustParam() {
@@ -117,7 +118,7 @@ void CameraKeyFrame::AdjustParam() {
     ImGui::Separator();
 
     // タイムモード設定
-    TimeModeSelector("Time Mode", timeMode_);
+    timeModeSelector_.SelectTimeModeImGui("Time Mode");
 
     ImGui::Separator();
 
@@ -155,12 +156,6 @@ void CameraKeyFrame::AdaptValueSetting() {
     fovEase_.SetAdaptValue(&currenTSequenceElementParam_.fov);
 }
 
-void CameraKeyFrame::TimeModeSelector(const char* label, int32_t& target) {
-    int mode = static_cast<int>(target);
-    if (ImGui::Combo(label, &mode, TimeModeLabels.data(), static_cast<int>(TimeModeLabels.size()))) {
-        target = mode;
-    }
-}
 
 bool CameraKeyFrame::IsFinished() const {
 

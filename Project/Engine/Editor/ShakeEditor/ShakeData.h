@@ -1,6 +1,7 @@
 #pragma once
 #include "Easing/Easing.h"
-#include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Editor/BaseEffectEditor/BaseEffectData.h"
+#include "utility/TimeModeSelector/TimeModeSelector.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include <cstdint>
@@ -9,14 +10,8 @@
 /// <summary>
 /// シェイクデータ
 /// </summary>
-class ShakeData {
+class ShakeData : public BaseEffectData {
 public:
-    enum class PlayState {
-        STOPPED,
-        PLAYING,
-        PAUSED
-    };
-
     enum class ShakeType {
         NORMAL,
         WAVE
@@ -34,48 +29,37 @@ public:
     };
 
 public:
-    ShakeData()  = default;
-    ~ShakeData() = default;
+    ShakeData()           = default;
+    ~ShakeData() override = default;
 
-    /// <summary>
-    /// 初期化
-    /// </summary>
-    /// <param name="shakeName">シェイク名</param>
-    void Init(const std::string& shakeName);
+    //*----------------------------- public Methods -----------------------------*//
 
-    /// <summary>
-    /// 更新
-    /// </summary>
-    /// <param name="deltaTime">デルタタイム</param>
-    void Update(const float& deltaTime);
+    // BaseEffectDataからのオーバーライド
+    void Init(const std::string& shakeName) override;
+    void Update(const float& speedRate = 1.0f) override;
+    void Reset() override;
+    void Play() override;
+    void LoadData() override;
+    void SaveData() override;
 
-    void AdjustParam();      //< パラメータ調整
-    void Play();             //< 再生
-    void Stop();             //< 停止
-    void Reset();            //< リセット
-    void LoadData();         //< データロード
-    void SaveData();         //< データセーブ
-    bool IsPlaying() const;  //< 再生中か
-    bool IsFinished() const; //< 終了したか
+    // シェイク固有
+    void AdjustParam();
 
 private:
-    void RegisterParams();      //< パラメータのバインド
-    void UpdateShakeValues();   //< シェイク値の計算
-    void UpdateVector3Shake();  //< Vector3シェイクの更新
-    void InitParams();          //< パラメータリセット
-    void GetParams();          //< パラメータ取得
+    //*---------------------------- private Methods ----------------------------*//
 
-    /// <summary>
-    /// 軸フラグの適用
-    /// </summary>
-    /// <param name="shakeValue">シェイク値</param>
-    /// <returns>軸フラグ適用後の値</returns>
+    // BaseEffectDataからのオーバーライド
+    void RegisterParams() override;
+    void GetParams() override;
+    void InitParams() override;
+
+    // シェイク値計算
+    void UpdateShakeValues();
+    void UpdateVector3Shake();
     Vector3 ApplyAxisFlag(const Vector3& shakeValue) const;
 
 private:
-    GlobalParameter* globalParameter_;
-    std::string groupName_;
-    std::string folderPath_ = "ShakeEditor";
+    //*---------------------------- private Variant ----------------------------*//
 
     float shakeLength_ = 1.0f;
     float maxTime_     = 1.0f;
@@ -84,17 +68,16 @@ private:
     int32_t shakeType_ = 0;
     int32_t axisFlag_  = AXIS_XYZ;
 
-    PlayState playState_ = PlayState::STOPPED;
-
-    Vector3 currentShakeOffset_ =Vector3::ZeroVector();
+    Vector3 currentShakeOffset_ = Vector3::ZeroVector();
 
     Easing<float> timeEase_;
     float easedTime_ = 0.0f;
 
-    bool showControls_ = true;
+    TimeModeSelector timeModeSelector_;
 
 public:
-    std::string GetGroupName() const { return groupName_; }
+    //*----------------------------- getter Methods -----------------------------*//
+
     float GetShakeLength() const { return shakeLength_; }
     float GetMaxTime() const { return maxTime_; }
     Vector3 GetShakeOffset() const { return currentShakeOffset_; }

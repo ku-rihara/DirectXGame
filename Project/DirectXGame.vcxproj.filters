@@ -481,6 +481,12 @@
     <Filter Include="MyEngine\.h\Editor\EffectEditorSuite">
       <UniqueIdentifier>{88afa0cc-2cac-4965-869e-c3e4c0de169d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\utility\TimeModeSelector">
+      <UniqueIdentifier>{39a265fb-35aa-4d1a-b9c7-603351ef6910}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\TimeModeSelector">
+      <UniqueIdentifier>{03c50b4d-e92c-4dad-91f1-1e665d26cfc8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1227,6 +1233,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.cpp">
       <Filter>MyEngine\.cpp\Editor\EffectEditorSuite</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\TimeModeSelector\TimeModeSelector.cpp">
+      <Filter>MyEngine\.cpp\utility\TimeModeSelector</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2024,6 +2033,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationSection.h">
       <Filter>MyEngine\.h\Editor\ObjEaseAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\TimeModeSelector\TimeModeSelector.h">
+      <Filter>MyEngine\.h\utility\TimeModeSelector</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

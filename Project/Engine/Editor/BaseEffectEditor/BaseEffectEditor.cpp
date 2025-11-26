@@ -1,8 +1,11 @@
 #include "BaseEffectEditor.h"
+// editor
 #include "Editor/CameraEditor/CameraAnimationData.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationData.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "Editor/ShakeEditor/ShakeData.h"
+#include "Editor/RailEditor/RailData.h"
+#include"Editor/ShakeEditor/ShakeData.h"
+// std
 #include <algorithm>
 #include <filesystem>
 #include <imgui.h>
@@ -11,24 +14,24 @@
 template <typename TEffectData>
 void BaseEffectEditor<TEffectData>::Init(const std::string& typeName, const bool& isUseCategory) {
     isUseCategorySystem_ = isUseCategory;
-    baseFolderPath_ = GetFolderPath();
-    effectTypeName_ = typeName;
+    baseFolderPath_      = GetFolderPath();
+    effectTypeName_      = typeName;
     AllLoadFile();
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::Update(const float& deltaTime) {
+void BaseEffectEditor<TEffectData>::Update(const float& deltaTimeOrSpeedRate) {
     if (isUseCategorySystem_) {
         // 全カテゴリーの全エフェクトを更新
         for (auto& category : categories_) {
             for (auto& effect : category.effects) {
-                effect->Update(deltaTime);
+                effect->Update(deltaTimeOrSpeedRate);
             }
         }
     } else {
         //  全エフェクトを更新
         for (auto& effect : effects_) {
-            effect->Update(deltaTime);
+            effect->Update(deltaTimeOrSpeedRate);
         }
     }
 }
@@ -312,6 +315,35 @@ void BaseEffectEditor<TEffectData>::RenderFileOperations() {
 }
 
 template <typename TEffectData>
+void BaseEffectEditor<TEffectData>::RenderPlayBack() {
+
+    ImGui::Separator();
+
+    if (ImGui::Button("Play Selected")) {
+        PlaySelectedAnimation();
+    }
+    ImGui::SameLine();
+
+    if (ImGui::Button("Pause")) {
+        PauseSelectedAnimation();
+    }
+    ImGui::SameLine();
+
+    if (ImGui::Button("Reset")) {
+        ResetSelectedAnimation();
+    }
+
+    // 状態表示
+    ImGui::Spacing();
+    if (IsSelectedAnimationPlaying()) {
+        ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Playing");
+    } else if (IsSelectedAnimationFinished()) {
+        ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Finished");
+    } else {
+        ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "Stopped");
+    }
+}
+template <typename TEffectData>
 void BaseEffectEditor<TEffectData>::AddEffect(const std::string& name) {
     // 既存チェック
     auto it = std::find_if(effects_.begin(), effects_.end(),
@@ -384,7 +416,7 @@ void BaseEffectEditor<TEffectData>::RemoveCategory(const int32_t& index) {
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::AddEffectToCategory(const int32_t& categoryIndex,const std::string& effectName) {
+void BaseEffectEditor<TEffectData>::AddEffectToCategory(const int32_t& categoryIndex, const std::string& effectName) {
     if (categoryIndex < 0 || categoryIndex >= static_cast<int>(categories_.size())) {
         return;
     }
@@ -430,22 +462,6 @@ void BaseEffectEditor<TEffectData>::RemoveEffectFromCategory(const int32_t& cate
     }
 }
 
-template <typename TEffectData>
-TEffectData* BaseEffectEditor<TEffectData>::GetSelectedEffect() {
-    if (isUseCategorySystem_) {
-        if (selectedCategoryIndex_ >= 0 && selectedCategoryIndex_ < static_cast<int>(categories_.size())) {
-            auto& category = categories_[selectedCategoryIndex_];
-            if (category.selectedEffectIndex >= 0 && category.selectedEffectIndex < static_cast<int>(category.effects.size())) {
-                return category.effects[category.selectedEffectIndex].get();
-            }
-        }
-    } else {
-        if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int32_t>(effects_.size())) {
-            return effects_[selectedIndex_].get();
-        }
-    }
-    return nullptr;
-}
 
 template <typename TEffectData>
 TEffectData* BaseEffectEditor<TEffectData>::GetEffectByName(const std::string& name) {
@@ -581,7 +597,65 @@ void BaseEffectEditor<TEffectData>::LoadCategory(const std::string& categoryName
     categories_.push_back(std::move(newCategory));
 }
 
+template <typename TEffectData>
+void BaseEffectEditor<TEffectData>::PauseSelectedAnimation() {
+    auto* selectedAnim = GetSelectedEffect();
+    if (selectedAnim) {
+        selectedAnim->Pause();
+    }
+}
+
+template <typename TEffectData>
+void BaseEffectEditor<TEffectData>::PlaySelectedAnimation() {
+    auto* selectedAnim = GetSelectedEffect();
+    if (selectedAnim) {
+        selectedAnim->Play();
+    }
+}
+
+template <typename TEffectData>
+void BaseEffectEditor<TEffectData>::ResetSelectedAnimation() {
+    auto* selectedAnim = GetSelectedEffect();
+    if (selectedAnim) {
+        selectedAnim->Reset();
+    }
+}
+
+template <typename TEffectData>
+bool BaseEffectEditor<TEffectData>::IsSelectedAnimationPlaying() const {
+    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
+        return effects_[selectedIndex_]->IsPlaying();
+    }
+    return false;
+}
+
+template <typename TEffectData>
+bool BaseEffectEditor<TEffectData>::IsSelectedAnimationFinished() const {
+    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(effects_.size())) {
+        return effects_[selectedIndex_]->IsFinished();
+    }
+    return false;
+}
+
+template <typename TEffectData>
+TEffectData* BaseEffectEditor<TEffectData>::GetSelectedEffect() {
+    if (isUseCategorySystem_) {
+        if (selectedCategoryIndex_ >= 0 && selectedCategoryIndex_ < static_cast<int>(categories_.size())) {
+            auto& category = categories_[selectedCategoryIndex_];
+            if (category.selectedEffectIndex >= 0 && category.selectedEffectIndex < static_cast<int>(category.effects.size())) {
+                return category.effects[category.selectedEffectIndex].get();
+            }
+        }
+    } else {
+        if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int32_t>(effects_.size())) {
+            return effects_[selectedIndex_].get();
+        }
+    }
+    return nullptr;
+}
 
 
 template class BaseEffectEditor<CameraAnimationData>;
 template class BaseEffectEditor<ObjEaseAnimationData>;
+template class BaseEffectEditor<RailData>;
+template class BaseEffectEditor<ShakeData>;

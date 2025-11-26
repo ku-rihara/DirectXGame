@@ -3,6 +3,7 @@
 #include "CameraKeyFrame.h"
 #include "Easing/Easing.h"
 #include "Editor/BaseEffectEditor/BaseSequenceEffectData.h"
+#include "utility/TimeModeSelector/TimeModeSelector.h"
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -79,7 +80,6 @@ private:
     void UpdateActiveKeyFrames(const float& speedRate);
     void UpdateInterpolatedValues();
     void StartReturnToInitial();
-    void TimeModeSelector(const char* label, int32_t& target);
 
 private:
     //*---------------------------- private Variant ----------------------------*//
@@ -102,11 +102,7 @@ private:
     bool showKeyFrameList_      = true;
     bool showAnimationControls_ = true;
 
-    int32_t timeMode_ = static_cast<int32_t>(CameraKeyFrame::TimeMode::DELTA_TIME_RATE);
-
-    std::vector<const char*> TimeModeLabels = {
-        "DeltaTime (No TimeScale)",
-        "DeltaTimeRate (With TimeScale)"};
+    TimeModeSelector timeModeSelector_;
 
 public:
     //*----------------------------- getter Methods -----------------------------*//

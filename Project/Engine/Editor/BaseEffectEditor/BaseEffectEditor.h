@@ -24,7 +24,7 @@ public:
     //*----------------------------- public Methods -----------------------------*//
 
     virtual void Init(const std::string& typeName, const bool& isUseCategory = false);
-    virtual void Update(const float& deltaTime);
+    virtual void Update(const float& deltaTimeOrSpeedRate);
     virtual void EditorUpdate();
 
     // 共通操作
@@ -42,6 +42,7 @@ public:
     void AllSaveFile();
     void SaveCategory(const int32_t& categoryIndex);
     void LoadCategory(const std::string& categoryName);
+    void RenderPlayBack();
 
 protected:
     //*---------------------------- protected Methods ----------------------------*//
@@ -49,17 +50,28 @@ protected:
     // 派生クラスで実装必須
     virtual std::unique_ptr<TEffectData> CreateEffectData() = 0;
     virtual void RenderSpecificUI()                         = 0;
+    virtual void PlaySelectedAnimation()                    = 0;
     virtual std::string GetFolderPath() const               = 0;
 
     // カテゴリー機能を使用するかどうか
     virtual std::string GetCategoryFolderName() const { return ""; }
     virtual std::string GetDataFolderName() const { return ""; }
 
+private:
     // 共通UIレンダリング
     void RenderEffectList();
     void RenderFileOperations();
     void RenderCategoryUI();
     void RenderCategoryEffectListUI();
+
+    // 選択アニメーション再生、一時停止、リセット
+ 
+    void PauseSelectedAnimation();
+    void ResetSelectedAnimation();
+
+    // 選択アニメーション状態取得
+    bool IsSelectedAnimationPlaying() const;
+    bool IsSelectedAnimationFinished() const;
 
 protected:
     //*---------------------------- protected Variant ----------------------------*//

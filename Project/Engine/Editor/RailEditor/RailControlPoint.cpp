@@ -5,8 +5,9 @@ void RailControlPoint::Init(const std::string& railName, const int32_t& keyNumbe
     // グローバルパラメータ
     globalParameter_         = GlobalParameter::GetInstance();
     currenTSequenceElementIndex     = keyNumber;
-    std::string newGroupName = railName + std::to_string(currenTSequenceElementIndex);
+    std::string newGroupName    = railName + std::to_string(currenTSequenceElementIndex);
     groupName_               = newGroupName;
+    folderPath_ += railName;
 
     if (!globalParameter_->HasRegisters(groupName_)) {
         // 新規登録

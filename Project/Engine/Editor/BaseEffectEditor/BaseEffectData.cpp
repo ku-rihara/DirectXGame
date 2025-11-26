@@ -1,5 +1,5 @@
-#include"BaseEffectData.h"
-
+#include "BaseEffectData.h"
+#include <imgui.h>
 
 void BaseEffectData::Play() {
     Reset();
@@ -12,6 +12,11 @@ void BaseEffectData::Pause() {
     } else if (playState_ == PlayState::PAUSED) {
         playState_ = PlayState::PLAYING;
     }
+}
+
+void BaseEffectData::InitWithCategory(const std::string& name, const std::string& categoryName) {
+    name;
+    categoryName;
 }
 
 bool BaseEffectData::IsPlaying() const {

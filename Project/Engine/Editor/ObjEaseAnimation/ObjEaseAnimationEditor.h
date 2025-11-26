@@ -26,15 +26,7 @@ public:
     void Init(const std::string& typeName, const bool& isUseCategory = false) override;
     void Update(const float& speedRate = 1.0f) override;
     void EditorUpdate() override;
-
-    // 選択アニメーション再生、一時停止、リセット
-    void PlaySelectedAnimation();
-    void PauseSelectedAnimation();
-    void ResetSelectedAnimation();
-
-    // 選択アニメーション状態取得
-    bool IsSelectedAnimationPlaying() const;
-    bool IsSelectedAnimationFinished() const;
+    void PlaySelectedAnimation() override;
 
 protected:
     //*---------------------------- protected Methods ----------------------------*//
@@ -71,5 +63,4 @@ private:
 public:
     //*----------------------------- getter Methods -----------------------------*//
 
-    ObjEaseAnimationData* GetSelectedAnimation();
 };

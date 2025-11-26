@@ -56,18 +56,12 @@ public:
     /// <param name="color">色</param>
     void SetCubeWireframe(const Vector3& center, const Vector3& size, const Vector4& color);
 
-    /// <summary>
-    /// 描画
-    /// </summary>
-    /// <param name="viewProj">ビュープロジェクション</param>
+    // 描画、リセット
     void Draw(const ViewProjection& viewProj);
-
-    void Reset(); //< ライン情報のリセット
+    void Reset();
 private:
-    /// <summary>
-    /// 初期化
-    /// </summary>
-    /// <param name="lineMaxNum">最大ライン数</param>
+    
+    // 初期化
     void Init(const size_t& lineMaxNum);
 
 private:

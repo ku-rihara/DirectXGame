@@ -68,7 +68,7 @@ void ObjEaseAnimationSection::Update(const float& speedRate) {
     float actualDeltaTime;
 
     // 時間モードに応じてデルタタイム取得
-    switch (static_cast<TimeMode>(timeMode_)) {
+    switch (static_cast<TimeMode>(timeModeSelector_.GetTimeModeInt())) {
     case TimeMode::DELTA_TIME:
         actualDeltaTime = Frame::DeltaTime() * speedRate;
         break;
@@ -284,7 +284,7 @@ void ObjEaseAnimationSection::CheckFinish() {
 void ObjEaseAnimationSection::RegisterParams() {
     globalParameter_->Regist(groupName_, "startTime", &startTime_);
     globalParameter_->Regist(groupName_, "returnStartTime", &returnStartTime_);
-    globalParameter_->Regist(groupName_, "timeMode", &timeMode_);
+    timeModeSelector_.RegisterParam(groupName_, globalParameter_);
 
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
         const char* name = GetSRTName(static_cast<TransformType>(i));
@@ -306,8 +306,8 @@ void ObjEaseAnimationSection::RegisterParams() {
 }
 
 void ObjEaseAnimationSection::GetParams() {
-    startTime_       = globalParameter_->GetValue<float>(groupName_, "startTime");
-    timeMode_        = globalParameter_->GetValue<int32_t>(groupName_, "timeMode");
+    startTime_ = globalParameter_->GetValue<float>(groupName_, "startTime");
+    timeModeSelector_.GetParam(groupName_, globalParameter_);
     returnStartTime_ = globalParameter_->GetValue<float>(groupName_, "returnStartTime");
 
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
@@ -392,20 +392,13 @@ void ObjEaseAnimationSection::ImGuiTransformParam(const char* label, TransformPa
     ImGui::PopID();
 }
 
-void ObjEaseAnimationSection::TimeModeSelector(const char* label, int32_t& target) {
-    int mode = static_cast<int>(target);
-    if (ImGui::Combo(label, &mode, TimeModeLabels.data(), static_cast<int>(TimeModeLabels.size()))) {
-        target = mode;
-    }
-}
-
 void ObjEaseAnimationSection::AdjustParam() {
 #ifdef _DEBUG
     ImGui::SeparatorText(("Section: " + groupName_).c_str());
     ImGui::PushID(groupName_.c_str());
 
     ImGui::DragFloat("Start Time", &startTime_, 0.01f, 0.0f, 100.0f);
-    TimeModeSelector("Time Mode", timeMode_);
+    timeModeSelector_.SelectTimeModeImGui("Time Mode");
 
     ImGui::Separator();
 

@@ -196,11 +196,22 @@ void ObjEaseAnimationData::AdjustParam() {
     ImGui::Text("Category: %s", categoryName_.c_str());
     ImGui::Text("Animation: %s", groupName_.c_str());
 
-    // Origintransform 編集
+    // OriginTransform 編集
     for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
         std::string srtName = GetSRTName(static_cast<TransformType>(i));
         ImGui::DragFloat3(("Origin" + srtName).c_str(), &originalValues_[i].x, 0.01f);
     }
+
+    // 現在の値表示
+    ImGui::SeparatorText("Current Animation Values");
+    Vector3 currentScale = GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Scale);
+    Vector3 currentRot   = GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Rotation);
+    Vector3 currentTrans = GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Translation);
+
+    ImGui::Text("Scale: (%.2f, %.2f, %.2f)", currentScale.x, currentScale.y, currentScale.z);
+    ImGui::Text("Rotation: (%.2f, %.2f, %.2f)", currentRot.x, currentRot.y, currentRot.z);
+    ImGui::Text("Translation: (%.2f, %.2f, %.2f)", currentTrans.x, currentTrans.y, currentTrans.z);
+
 
     // KeyFrame Controls
     ImGui::Separator();

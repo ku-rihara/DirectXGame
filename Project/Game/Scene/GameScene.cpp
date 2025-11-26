@@ -189,7 +189,6 @@ void GameScene::Debug() {
     ImGui::End();
 
     ImGui::Begin("Rendition");
-    shakeEditor_->EditorUpdate();
     attackEffect_->EditorUpdate();
     ImGui::End();
 
