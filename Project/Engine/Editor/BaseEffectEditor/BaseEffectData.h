@@ -26,8 +26,9 @@ public:
     virtual void Update(const float& speedRate = 1.0f) = 0;
     virtual void Reset()                               = 0;
     virtual void Play()                                = 0;
+    virtual void InitWithCategory(const std::string& name, const std::string& categoryName);
     // 共通実装
-  
+
     virtual void Pause();
     virtual bool IsPlaying() const;
     virtual bool IsFinished() const;
@@ -42,7 +43,7 @@ protected:
     virtual void RegisterParams() = 0;
     virtual void GetParams()      = 0;
     virtual void InitParams()     = 0;
-  
+
 protected:
     //*---------------------------- protected Variant ----------------------------*//
 

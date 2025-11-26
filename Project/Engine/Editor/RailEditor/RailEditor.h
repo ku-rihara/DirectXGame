@@ -1,68 +1,40 @@
 #pragma once
 #include "3d/Object3d.h"
+#include "Editor/BaseEffectEditor/BaseEffectEditor.h"
 #include "RailData.h"
 #include <memory>
 #include <string>
-#include <vector>
 
 class Line3D;
 
 /// <summary>
 /// レールエディター
 /// </summary>
-class RailEditor {
+class RailEditor : public BaseEffectEditor<RailData> {
 public:
-    RailEditor()  = default;
-    ~RailEditor() = default;
+    RailEditor();
+    ~RailEditor();
 
-    void Init(); //< 初期化
-
-    /// <summary>
-    /// 更新
-    /// </summary>
-    /// <param name="deltaTime">デルタタイム</param>
-    void Update(const float& deltaTime);
-
-    /// <summary>
-    /// レールの追加
-    /// </summary>
-    /// <param name="railName">レール名</param>
-    void AddRail(const std::string& railName);
-
-    /// <summary>
-    /// レールの削除
-    /// </summary>
-    /// <param name="index">インデックス</param>
-    void RemoveRail(const int& index);
-
-    void EditorUpdate(); //< エディタ更新
-
-    RailData* GetSelectedRail(); //< 選択中のレール取得
-
-    /// <summary>
-    /// 名前からレールデータを取得
-    /// </summary>
-    /// <param name="name">レール名</param>
-    /// <returns>レールデータ</returns>
-    RailData* GetRailByName(const std::string& name);
+    // 初期化、更新
+    void Init(const std::string& editorName, const bool& isUseCategory = false) override;
+    void Update(const float& speedRate = 1.0f) override;
+    void EditorUpdate() override;
 
 private:
-    void AllLoadFile(); //< 全ファイルロード
-    void AllSaveFile(); //< 全ファイルセーブ
-    void DebugLineSet(); //< デバッグラインセット
+    std::unique_ptr<RailData> CreateEffectData() override;
+    void RenderSpecificUI() override;
+    std::string GetFolderPath() const override;
+    void PlaySelectedAnimation() override;
+
+    void DebugLineSet();
 
 private:
-    std::vector<std::unique_ptr<RailData>> rails_;
     std::unique_ptr<Object3d> preViewObj_;
     std::unique_ptr<Line3D> debugLine3D_;
-
-    Vector3 basePos_   = Vector3::ZeroVector();
-    int selectedIndex_ = -1;
-
-    bool isPreViewDraw_ = false;
-
-    char nameBuffer_[128] = "";
+    const std::string folderName_ = "RailEditor/Dates/";
+    Vector3 basePos_              = Vector3::ZeroVector();
+    bool isPreViewDraw_           = false;
 
 public:
-    const int& GetRailCount() const { return static_cast<int>(rails_.size()); }
+    int GetRailCount() const { return static_cast<int>(effects_.size()); }
 };

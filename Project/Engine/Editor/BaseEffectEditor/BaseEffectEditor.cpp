@@ -1,8 +1,11 @@
 #include "BaseEffectEditor.h"
+// editor
 #include "Editor/CameraEditor/CameraAnimationData.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationData.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
-#include "Editor/ShakeEditor/ShakeData.h"
+#include "Editor/RailEditor/RailData.h"
+#include"Editor/ShakeEditor/ShakeData.h"
+// std
 #include <algorithm>
 #include <filesystem>
 #include <imgui.h>
@@ -654,4 +657,5 @@ TEffectData* BaseEffectEditor<TEffectData>::GetSelectedEffect() {
 
 template class BaseEffectEditor<CameraAnimationData>;
 template class BaseEffectEditor<ObjEaseAnimationData>;
+template class BaseEffectEditor<RailData>;
 template class BaseEffectEditor<ShakeData>;

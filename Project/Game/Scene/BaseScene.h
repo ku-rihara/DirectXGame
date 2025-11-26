@@ -60,8 +60,7 @@ protected:
     TextureManager* textureManager_ = nullptr;
 
     std::unique_ptr<EffectEditorSuite> effectEditorSuite_ = nullptr;
-    std::unique_ptr<ShakeEditor> shakeEditor_             = nullptr;
-    std::unique_ptr<RailEditor> railEditor_               = nullptr;
+   
 
     ViewProjection viewProjection_;
 

@@ -18,7 +18,7 @@ public:
 
     // 初期化、カテゴリー対応初期化
     void Init(const std::string& name) override;
-    virtual void InitWithCategory(const std::string& name, const std::string& categoryName);
+    virtual void InitWithCategory(const std::string& name, const std::string& categoryName)override;
     // キーフレーム管理
     void AddKeyFrame();
     void RemoveKeyFrame(const int32_t& index);

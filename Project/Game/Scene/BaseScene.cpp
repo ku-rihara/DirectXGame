@@ -22,14 +22,10 @@ void BaseScene::Init() {
 
     // 生成
     debugCamera_       = std::make_unique<DebugCamera>(WinApp::kWindowWidth, WinApp::kWindowHeight);
-    shakeEditor_       = std::make_unique<ShakeEditor>();
-    railEditor_        = std::make_unique<RailEditor>();
     effectEditorSuite_ = std::make_unique<EffectEditorSuite>();
 
     // 初期化
     debugCamera_->Init();
-    shakeEditor_->Init();
-    railEditor_->Init();
     effectEditorSuite_->Init();
     viewProjection_.Init();
 
@@ -52,8 +48,6 @@ void BaseScene::Update() {
 void BaseScene::EditorClassUpdate() {
 #ifdef _DEBUG
     debugCamera_->Update();
-    shakeEditor_->Update(Frame::DeltaTimeRate());
-    railEditor_->Update(Frame::DeltaTimeRate());
     effectEditorSuite_->Update();
 #endif
 }
