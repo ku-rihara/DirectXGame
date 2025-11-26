@@ -8,10 +8,11 @@ WorldTransform::~WorldTransform() = default;
 void WorldTransform::Init() {
 
     scale_       = Vector3::OneVector();
-    rotation_    = {};
-    translation_ = {};
+    rotation_    = Vector3::ZeroVector();
+    translation_ = Vector3::ZeroVector();
 
     //  行列の更新
+    InitOffsetTransform();
     UpdateMatrix();
 
     // オブジェクトイージングアニメーションプレイヤー初期化
@@ -34,7 +35,6 @@ void WorldTransform::UpdateMatrix() {
     else if (parent_) {
         matWorld_ *= parent_->matWorld_;
     }
-  
 }
 
 void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis, const AdaptRotate& adaptRotate) {
@@ -121,7 +121,6 @@ void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection,
         matWorld_.m[3][1] = parentPosition.y + rotatedOffset.y;
         matWorld_.m[3][2] = parentPosition.z + rotatedOffset.z;
     }
-
 }
 
 void WorldTransform::SetParent(const WorldTransform* parent) {
@@ -161,13 +160,21 @@ Vector3 WorldTransform::GetLocalPos() const {
 }
 
 void WorldTransform::UpdateAffineMatrix() {
+
+    // オフセット含めた合計を計算
+    const Vector3 scale       = scale_ * offsetTransform_.scale;
+    const Vector3 rotation    = rotation_ + offsetTransform_.rotation;
+    const Vector3 translation = translation_ + offsetTransform_.translation;
+    Quaternion quaternion     = quaternion_ * offsetTransform_.quaternion;
+
     switch (rotateOder_) {
     case RotateOder::XYZ:
-        matWorld_ = MakeAffineMatrix(scale_, rotation_, translation_);
+        matWorld_ = MakeAffineMatrix(scale, rotation, translation);
         break;
     case RotateOder::Quaternion:
-        quaternion_.Normalize();
-        matWorld_ = MakeAffineMatrixQuaternion(scale_, quaternion_, translation_);
+
+        quaternion.Normalize();
+        matWorld_ = MakeAffineMatrixQuaternion(scale, quaternion, translation);
 
         break;
     default:
@@ -336,42 +343,44 @@ void WorldTransform::UpdateObjEaseAnimation() {
 ///============================================================
 void WorldTransform::ApplyAnimationToTransform() {
     if (!objEaseAnimationPlayer_ || !objEaseAnimationPlayer_->IsPlaying()) {
+        InitOffsetTransform();
         return;
     }
 
-    auto* animData = objEaseAnimationPlayer_->GetAnimationData();
-    if (!animData) {
+    auto* animeData = objEaseAnimationPlayer_->GetAnimationData();
+    if (!animeData) {
+        InitOffsetTransform();
         return;
     }
 
-    // Scaleをオフセットとして適用
-    Vector3 scaleOffset = objEaseAnimationPlayer_->GetCurrentScale();
-    scale_              = Vector3(
-        scale_.x * scaleOffset.x,
-        scale_.y * scaleOffset.y,
-        scale_.z * scaleOffset.z);
+    // Scaleをオフセット
+    offsetTransform_.scale = objEaseAnimationPlayer_->GetCurrentScale();
 
-    // Rotationをオフセットとして適用
+    // Rotationをオフセット
     if (rotateOder_ == RotateOder::Quaternion) {
         // Quaternionの場合
-        Vector3 rotationOffset = objEaseAnimationPlayer_->GetCurrentRotation();
-        Quaternion offsetQuat  = Quaternion::EulerToQuaternion(rotationOffset);
-        quaternion_            = quaternion_ * offsetQuat;
+        Vector3 rotationOffset      = objEaseAnimationPlayer_->GetCurrentRotation();
+        offsetTransform_.quaternion = Quaternion::EulerToQuaternion(rotationOffset);
     } else {
         // オイラー角の場合
-        Vector3 rotationOffset = objEaseAnimationPlayer_->GetCurrentRotation();
-        rotation_              = rotation_ + rotationOffset;
+        offsetTransform_.rotation = objEaseAnimationPlayer_->GetCurrentRotation();
     }
 
-    // Translationをオフセットとして適用
-    if (!animData->GetIsUseRailActiveKeyFrame()) {
-        Vector3 translationOffset = objEaseAnimationPlayer_->GetCurrentTranslation();
-        translation_              = translation_ + translationOffset;
+    // Translationをオフセット
+    if (!animeData->GetIsUseRailActiveKeyFrame()) {
+        offsetTransform_.translation = objEaseAnimationPlayer_->GetCurrentTranslation();
+
     } else {
-        auto* railPlayer = animData->GetCurrentRailPlayer();
+        auto* railPlayer = animeData->GetCurrentRailPlayer();
         if (railPlayer) {
-            Vector3 railOffset = railPlayer->GetCurrentPosition();
-            translation_       = translation_ + railOffset;
+            offsetTransform_.translation = railPlayer->GetCurrentPosition();
         }
     }
+}
+
+void WorldTransform::InitOffsetTransform() {
+    offsetTransform_.scale       = Vector3::OneVector();
+    offsetTransform_.translation = Vector3::ZeroVector();
+    offsetTransform_.rotation    = Vector3::ZeroVector();
+    offsetTransform_.quaternion  = Quaternion::Identity();
 }
