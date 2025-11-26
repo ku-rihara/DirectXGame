@@ -5,6 +5,7 @@
 class ViewProjection;
 class ObjEaseAnimationEditor;
 class CameraEditor;
+class ShakeEditor;
 class EffectEditorSuite {
 public:
     EffectEditorSuite();
@@ -19,6 +20,7 @@ public:
 private:
     std::unique_ptr<ObjEaseAnimationEditor> objEaseAnimationEditor_;
     std::unique_ptr<CameraEditor> cameraEditor_;
+    std::unique_ptr<ShakeEditor> shakeEditor_;
 
 public:
     CameraEditor* GetCameraEditor() const { return cameraEditor_.get(); }

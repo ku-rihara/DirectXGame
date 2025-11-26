@@ -654,3 +654,4 @@ TEffectData* BaseEffectEditor<TEffectData>::GetSelectedEffect() {
 
 template class BaseEffectEditor<CameraAnimationData>;
 template class BaseEffectEditor<ObjEaseAnimationData>;
+template class BaseEffectEditor<ShakeData>;
