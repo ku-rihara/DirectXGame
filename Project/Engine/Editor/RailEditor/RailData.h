@@ -91,8 +91,7 @@ private:
     void StartReturn();
     void UpdateReturn(const float& speedRate);
     void OnReturnComplete();
-    void EaseTimeSetup(const bool& isReverse);
-
+  
 private:
     //*---------------------------- private Variant ----------------------------*//
 

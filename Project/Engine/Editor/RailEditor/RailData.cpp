@@ -416,13 +416,3 @@ void RailData::SetControlPointLines(Line3D* line3d, const Vector4& color) {
         line3d->SetLine(start, end, color);
     }
 }
-
-void RailData::EaseTimeSetup(const bool& isReverse) {
-    if (isReverse) {
-        railMoveParam_.timeEase.SetStartValue(1.0f);
-        railMoveParam_.timeEase.SetEndValue(0.0f);
-    } else {
-        railMoveParam_.timeEase.SetStartValue(0.0f);
-        railMoveParam_.timeEase.SetEndValue(1.0f);
-    }
-}
