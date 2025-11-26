@@ -39,7 +39,7 @@ void ComboAttackRoot::Update() {
 
         auto& attackParam  = attackPtr->GetAttackParam();
         auto& triggerParam = attackParam.triggerParam;
-
+    
         // isFirstAttackがtrueの攻撃のみ対象
         if (!triggerParam.isFirstAttack) {
             continue;

@@ -10,24 +10,10 @@ BaseComboAattackBehavior::BaseComboAattackBehavior(const std::string& name, Play
   
 }
 
-///  コンボ移動フラグ処理
-void BaseComboAattackBehavior::PreOderNextComboForButton() {
-
-    if (Input::GetInstance()->TriggerKey(KeyboardKey::H)) {
-        isNextCombo_ = true;
-    } else {
-        if (!(Input::IsTriggerPad(0, GamepadButton::X))) {
-            return;
-        }
-
-        isNextCombo_ = true;
-    }
-}
 
 ///  コンボ移動処理
 void BaseComboAattackBehavior::ChangeNextCombo(std::unique_ptr<BaseComboAattackBehavior> nextCombo) {
-    if (!isNextCombo_)
-        return;
+
     pPlayer_->ChangeComboBehavior(std::move(nextCombo));
 }
 

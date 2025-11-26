@@ -62,8 +62,7 @@ public:
     Vector3 GetInputDirection();  //< 入力方向取得
     void UpdateMatrix();          //< 行列更新
     void PositionYReset();        //< Y座標リセット
-    void AttackPowerCharge();     //< 攻撃力チャージ
-
+  
     /// <summary>
     /// ディゾルブ更新
     /// </summary>

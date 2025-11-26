@@ -1,5 +1,6 @@
 #include "PlayerComboAttackData.h"
 #include "Function/GetFile.h"
+#include "input/Input.h"
 #include "input/InputData.h"
 #include <algorithm>
 #include <imgui.h>
@@ -54,8 +55,9 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "IsFirstAttack", &attackParam_.triggerParam.isFirstAttack);
 
     // TimingParam
-    globalParameter_->Regist(groupName_, "cancelFrame", &attackParam_.timingParam.cancelFrame);
+    globalParameter_->Regist(groupName_, "cancelFrame", &attackParam_.timingParam.cancelStartFrame);
     globalParameter_->Regist(groupName_, "precedeInputFrame", &attackParam_.timingParam.precedeInputFrame);
+    globalParameter_->Regist(groupName_, "finishWaitTime", &attackParam_.timingParam.finishWaitTime);
 
     // nextAttack
     globalParameter_->Regist(groupName_, "NextAttackType", &attackParam_.nextAttackType);
@@ -99,10 +101,11 @@ void PlayerComboAttackData::AdjustParam() {
     ImGui::DragFloat3("Move Value", &attackParam_.moveParam.value.x, 0.01f);
     ImGuiEasingTypeSelector("Move Easing Type", attackParam_.moveParam.easeType);
 
-    // Other Parameters
+    // Timing Parameters
     ImGui::SeparatorText("Timing Parameter");
-    ImGui::DragFloat("Cancel Frame", &attackParam_.timingParam.cancelFrame, 0.01f);
+    ImGui::DragFloat("Cancel Frame", &attackParam_.timingParam.cancelStartFrame, 0.01f);
     ImGui::DragFloat("Precede Input Frame", &attackParam_.timingParam.precedeInputFrame, 0.01f);
+    ImGui::DragFloat("finis hWait Time", &attackParam_.timingParam.finishWaitTime, 0.01f);
 
     // next Attack
     ImGui::SeparatorText("Next Attack");
@@ -120,12 +123,39 @@ void PlayerComboAttackData::AdjustParam() {
 #endif // _DEBUG
 }
 
-
 void PlayerComboAttackData::SelectNextAttack() {
     fileSelector_.SelectFile(
         "Next Attack Type",
         "Resources/GlobalParameter/AttackCreator",
         attackParam_.nextAttackType,
-        groupName_, 
+        groupName_,
         true);
+}
+
+bool PlayerComboAttackData::IsReserveNextAttack(const float& currentTime) {
+
+    // 先行入力受付
+    if (currentTime < attackParam_.timingParam.precedeInputFrame) {
+        return false;
+    }
+
+    // キーボード入力チェック
+    if (Input::GetInstance()->TriggerKey(FromDIKCode(attackParam_.triggerParam.keyBordBottom))) {
+        return true;
+    }
+
+    // ゲームパッド入力チェック
+    if (Input::IsTriggerPad(0, FromXInputButtonFlag(attackParam_.triggerParam.gamePadBottom))) {
+        return true;
+    }
+
+    return false;
+}
+
+bool PlayerComboAttackData::IsWaitFinish(const float& currentTime) {
+    if (currentTime >= attackParam_.timingParam.finishWaitTime) {
+        return true;
+    } else {
+        return false;
+    }
 }

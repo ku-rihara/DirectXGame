@@ -36,7 +36,7 @@ void PlayerAttackRendition::Update(const float& deltaTime) {
         }
 
         // startTiming に達したら発動
-        if (currentTime_ >= param.startTiming) {
+        if (currentTime_ >= param.startTiming && param.fileName != "") {
             switch (static_cast<PlayerAttackRenditionData::Type>(i)) {
             case PlayerAttackRenditionData::Type::CameraAction:
                 pPlayer_->GetGameCamera()->PlayAnimation(param.fileName);

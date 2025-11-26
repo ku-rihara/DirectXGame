@@ -12,7 +12,7 @@ protected:
     Player* pPlayer_                   = nullptr; /// プレイヤー
     PlayerParameter* pPlayerParameter_ = nullptr;
 
-    bool isNextCombo_;
+  
     Easing<Vector3> startEasing_;
     Vector3 tempScaleValue_;
 
@@ -39,7 +39,7 @@ public:
     virtual void Update() = 0; /// 更新
     virtual void Debug()  = 0; /// デバッグ
 
-    virtual void PreOderNextComboForButton();
+   
     virtual void ChangeNextCombo(std::unique_ptr<BaseComboAattackBehavior> nextCombo);
 
     float GetRotateValue() const { return rotateValue_; }

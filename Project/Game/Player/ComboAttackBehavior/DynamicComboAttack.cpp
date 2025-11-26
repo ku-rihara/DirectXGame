@@ -2,6 +2,8 @@
 #include "ComboAttackRoot.h"
 #include "Frame/Frame.h"
 #include "GameCamera/GameCamera.h"
+#include "input/Input.h"
+#include "input/InputData.h"
 #include "MathFunction.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
@@ -26,6 +28,12 @@ void DynamicComboAttack::Init() {
     isCollisionActive_ = false;
     collisionTimer_    = 0.0f;
 
+    // 次の攻撃データを取得
+    nextAttackName_ = attackData_->GetAttackParam().nextAttackType;
+    if (nextAttackName_ != "None" && !nextAttackName_.empty()) {
+        nextAttackData_ = pPlayer_->GetComboAttackController()->GetAttackByName(nextAttackName_);
+    }
+
     attackRendition_ = std::make_unique<PlayerAttackRendition>();
     attackRendition_->Init(pPlayer_, attackData_);
 
@@ -41,7 +49,7 @@ void DynamicComboAttack::Init() {
     moveEasing_.SetAdaptValue(&currentMoveValue_);
 
     moveEasing_.SetOnFinishCallback([this]() {
-        order_ = Order::RECOVERY;
+        order_ = Order::WAIT;
     });
 
     //// サウンド再生
@@ -67,11 +75,6 @@ void DynamicComboAttack::Update() {
         UpdateAttack();
         break;
 
-        //
-    case Order::RECOVERY:
-        UpdateRecovery();
-        break;
-
     case Order::WAIT:
         UpdateWait();
         break;
@@ -89,6 +92,11 @@ void DynamicComboAttack::InitializeAttack() {
 void DynamicComboAttack::UpdateAttack() {
     // 移動適用
     ApplyMovement();
+
+    // 予約入力
+    PreOderNextComboForButton();
+
+    // キャンセル処理
 
     // コリジョン判定
     auto& collisionParam = attackData_->GetAttackParam().collisionPara;
@@ -118,56 +126,67 @@ void DynamicComboAttack::UpdateAttack() {
 
     // イージングが完了したらRecoveryへ
     if (moveEasing_.IsFinished()) {
-        order_ = Order::RECOVERY;
+        order_ = Order::WAIT;
     }
-}
-
-void DynamicComboAttack::UpdateRecovery() {
-    pPlayer_->AdaptRotate();
-    order_ = Order::WAIT;
-
-   
 }
 
 void DynamicComboAttack::UpdateWait() {
-    waitTime_ += atkSpeed_;
+
     pPlayer_->AdaptRotate();
+    waitTime_ += atkSpeed_;
 
-    auto& timingParam = attackData_->GetAttackParam().timingParam;
-
-    // 次の攻撃への受付時間チェック
-    if (waitTime_ >= timingParam.cancelFrame) {
-        // コンボ途切れ
-        pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
-    } else {
-        // 先行入力受付
-        if (waitTime_ >= timingParam.precedeInputFrame) {
-            BaseComboAattackBehavior::PreOderNextComboForButton();
-
-            if (!isNextCombo_) {
-                return;
-            }
-
-            // 次の攻撃データを取得
-            auto& nextAttackType = attackData_->GetAttackParam().nextAttackType;
-
-            if (nextAttackType != "None" && !nextAttackType.empty()) {
-                // ComboAttackControllerから次の攻撃データを取得
-                auto* nextAttackData = pPlayer_->GetComboAttackController()->GetAttackByName(nextAttackType);
-
-                if (nextAttackData) {
-                    BaseComboAattackBehavior::ChangeNextCombo(
-                        std::make_unique<DynamicComboAttack>(pPlayer_, nextAttackData));
-                } else {
-                    // データが見つからない場合はルートに戻る
-                    pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
-                }
-            } else {
-                // 次の攻撃が設定されていない場合はルートに戻る
-                pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
-            }
-        }
+    if (!attackData_->IsWaitFinish(waitTime_)) {
+        return;
     }
+
+    // 次の攻撃
+    ChangeNextAttack();
+}
+
+void DynamicComboAttack::ChangeNextAttack() {
+   
+    // 次のコンボに移動する
+    if (nextAttackData_) {
+
+        BaseComboAattackBehavior::ChangeNextCombo(
+            std::make_unique<DynamicComboAttack>(pPlayer_, nextAttackData_));
+
+    } else {
+        // データが見つからない場合はルートに戻る
+        pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
+    }
+}
+
+///  コンボ移動フラグ処理
+void DynamicComboAttack::PreOderNextComboForButton() {
+
+    if (!nextAttackData_) {
+        isReserveNextCombo_ = false;
+        return;
+    }
+
+    isReserveNextCombo_ = nextAttackData_->IsReserveNextAttack(currentFrame_);
+}
+
+void DynamicComboAttack::AttackCancel() {
+
+    //// タイミング
+    //const float cancelStartFrame = attackData_->GetAttackParam().timingParam.cancelStartFrame;
+    //auto& triggerParam           = attackData_->GetAttackParam().triggerParam;
+
+    //// 先行入力受付
+    //if (currentFrame_ <= cancelStartFrame) {
+    //    return;
+    //}
+
+    // auto& timingParam = attackData_->GetAttackParam().timingParam;
+
+    //// 次の攻撃への受付時間チェック
+    // if (waitTime_ >= timingParam.cancelStartFrame) {
+    //     // コンボ途切れ
+    //     pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
+    // } else {
+    // }
 }
 
 void DynamicComboAttack::ApplyMovement() {
