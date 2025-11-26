@@ -5,6 +5,7 @@
         "maxTime": 0.7799999713897705,
         "shakeLength": 1.809999942779541,
         "shakeType": 1,
-        "startTime": 1.0
+        "startTime": 1.0,
+        "timeMode": 0
     }
 }

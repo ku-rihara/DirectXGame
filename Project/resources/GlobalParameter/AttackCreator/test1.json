@@ -12,7 +12,7 @@
         "IsFirstAttack": true,
         "KnockBackPower": 0.0,
         "NextAttackType": "test2",
-        "ObjAnim_Head_FileName": "",
+        "ObjAnim_Head_FileName": "leftPunch",
         "ObjAnim_Head_StartTiming": 0.0,
         "ObjAnim_LeftHand_FileName": "",
         "ObjAnim_LeftHand_StartTiming": 0.0,

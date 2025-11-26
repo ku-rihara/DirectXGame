@@ -58,7 +58,7 @@ private:
     //*-------------------------------- Private variants--------------------------------*//
     std::string groupName_;
     const std::string folderPath_             = "Resources/GlobalParameter/";
-    const std::string objAnimationFolderPath_ = "Resources/GlobalParameter/ObjEaseAnimation/Player/";
+    const std::string objAnimationFolderPath_ = "Resources/GlobalParameter/ObjEaseAnimation/Player/Dates/";
 
     // 演出パラメータ配列
     std::array<std::pair<RenditionParam, FileSelector>, static_cast<size_t>(Type::Count)> renditionParams_;
