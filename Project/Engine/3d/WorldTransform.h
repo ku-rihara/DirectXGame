@@ -43,9 +43,9 @@ public:
     WorldTransform();
     ~WorldTransform();
 
-    void Init(); //< 初期化
-
-    void UpdateMatrix(); //< 行列更新
+    // 初期化、更新
+    void Init(); 
+    void UpdateMatrix(); 
 
     /// <summary>
     /// 指定方向を向く
@@ -89,7 +89,6 @@ public:
     void UpdateObjEaseAnimation();
 
 private:
-    void TransferMatrix(); //< 行列転送
     void UpdateAffineMatrix(); //< アフィン行列更新
     void ClearParentJoint(); //< ペアレントジョイントクリア
     void UpdateMatrixWithJoint(); //< ジョイントで行列更新

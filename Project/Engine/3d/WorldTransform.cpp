@@ -21,11 +21,9 @@ void WorldTransform::Init() {
     }
 }
 
-void WorldTransform::TransferMatrix() {
-}
-
 void WorldTransform::UpdateMatrix() {
     // TransformType更新
+    UpdateObjEaseAnimation();
     UpdateAffineMatrix();
 
     // JointParent
@@ -36,9 +34,7 @@ void WorldTransform::UpdateMatrix() {
     else if (parent_) {
         matWorld_ *= parent_->matWorld_;
     }
-
-    // 定数バッファに転送する
-    TransferMatrix();
+  
 }
 
 void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis, const AdaptRotate& adaptRotate) {
@@ -126,8 +122,6 @@ void WorldTransform::BillboardUpdateMatrix(const ViewProjection& viewProjection,
         matWorld_.m[3][2] = parentPosition.z + rotatedOffset.z;
     }
 
-    // 定数バッファに転送する
-    TransferMatrix();
 }
 
 void WorldTransform::SetParent(const WorldTransform* parent) {
