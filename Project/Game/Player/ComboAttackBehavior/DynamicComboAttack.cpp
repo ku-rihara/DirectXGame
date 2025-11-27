@@ -97,6 +97,7 @@ void DynamicComboAttack::UpdateAttack() {
     PreOderNextComboForButton();
 
     // キャンセル処理
+    AttackCancel();
 
     // コリジョン判定
     auto& collisionParam = attackData_->GetAttackParam().collisionPara;
@@ -170,23 +171,16 @@ void DynamicComboAttack::PreOderNextComboForButton() {
 
 void DynamicComboAttack::AttackCancel() {
 
-    //// タイミング
-    //const float cancelStartFrame = attackData_->GetAttackParam().timingParam.cancelStartFrame;
-    //auto& triggerParam           = attackData_->GetAttackParam().triggerParam;
+    // タイミング
+    const float cancelStartFrame = attackData_->GetAttackParam().timingParam.cancelTime;
+   
+    // 先行入力受付
+    if (currentFrame_ <= cancelStartFrame) {
+        return;
+    }
 
-    //// 先行入力受付
-    //if (currentFrame_ <= cancelStartFrame) {
-    //    return;
-    //}
+   
 
-    // auto& timingParam = attackData_->GetAttackParam().timingParam;
-
-    //// 次の攻撃への受付時間チェック
-    // if (waitTime_ >= timingParam.cancelStartFrame) {
-    //     // コンボ途切れ
-    //     pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
-    // } else {
-    // }
 }
 
 void DynamicComboAttack::ApplyMovement() {

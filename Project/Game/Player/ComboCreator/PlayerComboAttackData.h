@@ -37,8 +37,9 @@ public:
 
     // タイミングパラメータ
     struct TimingParam {
-        float cancelStartFrame;
-        float precedeInputFrame;
+        bool isCancel;
+        float cancelTime;
+        float precedeInputTime;
         float finishWaitTime;
     };
 
@@ -50,12 +51,17 @@ public:
         int32_t gamePadBottom;
     };
 
+    struct LoopParam {
+        int32_t num;
+    };
+
     // アタックパラメータ
     struct AttackParameter {
         CollisionParam collisionPara;
         MoveParam moveParam;
         TimingParam timingParam;
         TriggerParam triggerParam;
+        LoopParam loopParam;
         float knockBackPower;
         float power;
         std::string nextAttackType;
@@ -81,8 +87,9 @@ public:
     void LoadData();
     void SaveData();
 
-    bool IsReserveNextAttack(const float& currentTime);
+    bool IsReserveNextAttack(const float& currentTime, const AttackParameter& nextAtkParam);
     bool IsWaitFinish(const float& currentTime);
+    bool IsAbleCancel(const float& currentTime, const AttackParameter& nextAtkParam);
 
 private:
     //*-------------------------------- private Method --------------------------------*//
