@@ -1,10 +1,5 @@
 #include "DynamicComboAttack.h"
 #include "ComboAttackRoot.h"
-#include "Frame/Frame.h"
-#include "GameCamera/GameCamera.h"
-#include "input/Input.h"
-#include "input/InputData.h"
-#include "MathFunction.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
 
@@ -166,7 +161,7 @@ void DynamicComboAttack::PreOderNextComboForButton() {
         return;
     }
 
-    isReserveNextCombo_ = nextAttackData_->IsReserveNextAttack(currentFrame_);
+    isReserveNextCombo_ = attackData_->IsReserveNextAttack(currentFrame_,nextAttackData_->GetAttackParam().triggerParam);
 }
 
 void DynamicComboAttack::AttackCancel() {
@@ -179,8 +174,12 @@ void DynamicComboAttack::AttackCancel() {
         return;
     }
 
-   
+    isAbleCancel_ = attackData_->IsAbleCancel(currentFrame_, nextAttackData_->GetAttackParam().triggerParam);
 
+    if (isAbleCancel_) {
+        // 次の攻撃
+        ChangeNextAttack();
+    }
 }
 
 void DynamicComboAttack::ApplyMovement() {

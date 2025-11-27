@@ -146,7 +146,7 @@ void PlayerComboAttackData::SelectNextAttack() {
         true);
 }
 
-bool PlayerComboAttackData::IsReserveNextAttack(const float& currentTime, const AttackParameter& nextAtkParam) {
+bool PlayerComboAttackData::IsReserveNextAttack(const float& currentTime, const TriggerParam& nextAtkTrigger) {
 
     // 先行入力受付
     if (currentTime < attackParam_.timingParam.precedeInputTime && !IsWaitFinish(currentTime)) {
@@ -154,27 +154,19 @@ bool PlayerComboAttackData::IsReserveNextAttack(const float& currentTime, const 
     }
 
     // キーボード入力チェック
-    if (Input::GetInstance()->TriggerKey(FromDIKCode(nextAtkParam.triggerParam.keyBordBottom))) {
+    if (Input::GetInstance()->TriggerKey(FromDIKCode(nextAtkTrigger.keyBordBottom))) {
         return true;
     }
 
     // ゲームパッド入力チェック
-    if (Input::IsTriggerPad(0, FromXInputButtonFlag(nextAtkParam.triggerParam.gamePadBottom))) {
+    if (Input::IsTriggerPad(0, FromXInputButtonFlag(nextAtkTrigger.gamePadBottom))) {
         return true;
     }
 
     return false;
 }
 
-bool PlayerComboAttackData::IsWaitFinish(const float& currentTime) {
-    if (currentTime >= attackParam_.timingParam.finishWaitTime) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-bool PlayerComboAttackData::IsAbleCancel(const float& currentTime,const AttackParameter& nextAtkParam) {
+bool PlayerComboAttackData::IsAbleCancel(const float& currentTime, const TriggerParam& nextAtkTrigger) {
 
     if (!attackParam_.timingParam.isCancel) {
         return false;
@@ -185,14 +177,23 @@ bool PlayerComboAttackData::IsAbleCancel(const float& currentTime,const AttackPa
     }
 
      // キーボード入力チェック
-    if (Input::GetInstance()->TriggerKey(FromDIKCode(nextAtkParam.triggerParam.keyBordBottom))) {
+    if (Input::GetInstance()->TriggerKey(FromDIKCode(nextAtkTrigger.keyBordBottom))) {
         return true;
     }
 
     // ゲームパッド入力チェック
-    if (Input::IsTriggerPad(0, FromXInputButtonFlag(nextAtkParam.triggerParam.gamePadBottom))) {
+    if (Input::IsTriggerPad(0, FromXInputButtonFlag(nextAtkTrigger.gamePadBottom))) {
         return true;
     }
 
     return false;
+}
+
+
+bool PlayerComboAttackData::IsWaitFinish(const float& currentTime) {
+    if (currentTime >= attackParam_.timingParam.finishWaitTime) {
+        return true;
+    } else {
+        return false;
+    }
 }

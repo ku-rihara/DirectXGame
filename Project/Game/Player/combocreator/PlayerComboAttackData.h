@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Easing/Easing.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "PlayerAttackRenditionData.h"
 #include "utility/FileSelector/FileSelector.h"
-#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector3.h"
 #include <cstdint>
 #include <string>
@@ -16,8 +16,8 @@ class PlayerComboAttackData {
 public:
     enum class TriggerCondition {
         GROUND, // 地上のみ
-        AIR,    // 空中のみ
-        BOTH    // 両方
+        AIR, // 空中のみ
+        BOTH // 両方
     };
 
 public:
@@ -37,8 +37,10 @@ public:
 
     // タイミングパラメータ
     struct TimingParam {
-        float cancelFrame;
-        float precedeInputFrame;
+        bool isCancel;
+        float cancelTime;
+        float precedeInputTime;
+        float finishWaitTime;
     };
 
     // 攻撃発動に関するパラメータ
@@ -49,12 +51,17 @@ public:
         int32_t gamePadBottom;
     };
 
+    struct LoopParam {
+        int32_t num;
+    };
+
     // アタックパラメータ
     struct AttackParameter {
         CollisionParam collisionPara;
         MoveParam moveParam;
         TimingParam timingParam;
         TriggerParam triggerParam;
+        LoopParam loopParam;
         float knockBackPower;
         float power;
         std::string nextAttackType;
@@ -79,6 +86,10 @@ public:
     // データロード、セーブ
     void LoadData();
     void SaveData();
+
+    bool IsReserveNextAttack(const float& currentTime, const TriggerParam& nextAtkTrigger);
+    bool IsWaitFinish(const float& currentTime);
+    bool IsAbleCancel(const float& currentTime, const TriggerParam& nextAtkTrigger);
 
 private:
     //*-------------------------------- private Method --------------------------------*//
