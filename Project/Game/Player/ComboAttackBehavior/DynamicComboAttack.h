@@ -44,9 +44,8 @@ private:
     float currentFrame_;
     float waitTime_;
 
-   
-
     bool isReserveNextCombo_;
+    bool isAbleCancel_;
 
     // 移動関連
     std::unique_ptr<PlayerAttackRendition> attackRendition_;

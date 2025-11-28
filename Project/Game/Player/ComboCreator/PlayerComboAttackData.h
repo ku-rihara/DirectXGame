@@ -57,7 +57,7 @@ public:
 
     // アタックパラメータ
     struct AttackParameter {
-        CollisionParam collisionPara;
+        CollisionParam collisionParam;
         MoveParam moveParam;
         TimingParam timingParam;
         TriggerParam triggerParam;
@@ -87,9 +87,9 @@ public:
     void LoadData();
     void SaveData();
 
-    bool IsReserveNextAttack(const float& currentTime, const AttackParameter& nextAtkParam);
+    bool IsReserveNextAttack(const float& currentTime, const TriggerParam& nextAtkTrigger);
     bool IsWaitFinish(const float& currentTime);
-    bool IsAbleCancel(const float& currentTime, const AttackParameter& nextAtkParam);
+    bool IsAbleCancel(const float& currentTime, const TriggerParam& nextAtkTrigger);
 
 private:
     //*-------------------------------- private Method --------------------------------*//

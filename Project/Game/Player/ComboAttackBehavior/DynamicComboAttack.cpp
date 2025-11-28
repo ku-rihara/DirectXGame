@@ -95,7 +95,7 @@ void DynamicComboAttack::UpdateAttack() {
     AttackCancel();
 
     // コリジョン判定
-    auto& collisionParam = attackData_->GetAttackParam().collisionPara;
+    auto& collisionParam = attackData_->GetAttackParam().collisionParam;
 
     collisionTimer_ += atkSpeed_;
     attackRendition_->Update(atkSpeed_);
@@ -189,7 +189,7 @@ void DynamicComboAttack::ApplyMovement() {
 
 void DynamicComboAttack::SetupCollision() {
     auto& attackParam    = attackData_->GetAttackParam();
-    auto& collisionParam = attackParam.collisionPara;
+    auto& collisionParam = attackParam.collisionParam;
 
     // コリジョンサイズ設定
     pPlayer_->GetPlayerCollisionInfo()->SetSize(collisionParam.size);

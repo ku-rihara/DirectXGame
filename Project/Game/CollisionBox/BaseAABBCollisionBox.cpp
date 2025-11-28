@@ -11,8 +11,7 @@ void BaseAABBCollisionBox::Update() {
     SetIsAdaptCollision(isCollision_);
     transform_.UpdateMatrix();
 }
-void BaseAABBCollisionBox::Draw() {
-}
+
 
 Vector3 BaseAABBCollisionBox::GetCollisionPos() const {
 

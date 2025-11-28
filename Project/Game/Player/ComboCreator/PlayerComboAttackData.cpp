@@ -39,9 +39,9 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "KnockBackPower", &attackParam_.knockBackPower);
 
     // CollisionParam
-    globalParameter_->Regist(groupName_, "collisionSize", &attackParam_.collisionPara.size);
-    globalParameter_->Regist(groupName_, "collisionOffsetPos", &attackParam_.collisionPara.offsetPos);
-    globalParameter_->Regist(groupName_, "adaptTime", &attackParam_.collisionPara.adaptTime);
+    globalParameter_->Regist(groupName_, "collisionSize", &attackParam_.collisionParam.size);
+    globalParameter_->Regist(groupName_, "collisionOffsetPos", &attackParam_.collisionParam.offsetPos);
+    globalParameter_->Regist(groupName_, "adaptTime", &attackParam_.collisionParam.adaptTime);
 
     // MoveParam
     globalParameter_->Regist(groupName_, "moveValue", &attackParam_.moveParam.value);
@@ -97,9 +97,9 @@ void PlayerComboAttackData::AdjustParam() {
 
     // Collision Parameter
     ImGui::SeparatorText("Collision Parameter");
-    ImGui::DragFloat3("Collision Size", &attackParam_.collisionPara.size.x, 0.01f);
-    ImGui::DragFloat3("Collision Offset Pos", &attackParam_.collisionPara.offsetPos.x, 0.01f);
-    ImGui::DragFloat("Adapt Time", &attackParam_.collisionPara.adaptTime, 0.01f);
+    ImGui::DragFloat3("Collision Size", &attackParam_.collisionParam.size.x, 0.01f);
+    ImGui::DragFloat3("Collision Offset Pos", &attackParam_.collisionParam.offsetPos.x, 0.01f);
+    ImGui::DragFloat("Adapt Time", &attackParam_.collisionParam.adaptTime, 0.01f);
 
     // Move Parameter
     ImGui::SeparatorText("Move Parameter");

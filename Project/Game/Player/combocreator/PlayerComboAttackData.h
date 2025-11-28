@@ -57,7 +57,7 @@ public:
 
     // アタックパラメータ
     struct AttackParameter {
-        CollisionParam collisionPara;
+        CollisionParam collisionParam;
         MoveParam moveParam;
         TimingParam timingParam;
         TriggerParam triggerParam;
