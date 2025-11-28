@@ -283,9 +283,9 @@ Vector3 WorldTransform::GetForwardVector() const {
     return Vector3(matWorld_.m[0][2], matWorld_.m[1][2], matWorld_.m[2][2]);
 }
 
-Vector3 WorldTransform::CalcForwardTargetPos(const Vector3& startPos, const Vector3& offsetValue) const {
+Vector3 WorldTransform::CalcForwardOffset(const Vector3& offsetValue) const {
     // 移動イージングの初期化
-    const Vector3& startPosition = startPos;
+    const Vector3& startPosition = GetWorldPos();
 
     // 向き(Y軸回転)を取得
     float playerRotationY    = rotation_.y;
@@ -296,7 +296,7 @@ Vector3 WorldTransform::CalcForwardTargetPos(const Vector3& startPos, const Vect
     Vector3 worldMoveVector = TransformNormal(localMoveVector, rotationMatrix);
 
     // 目標位置を計算
-    return startPosition + worldMoveVector;
+    return  worldMoveVector;
 }
 
 ///============================================================

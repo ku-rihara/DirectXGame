@@ -76,7 +76,7 @@ public:
     /// <param name="startPos"></param>
     /// <param name="offsetValue"></param>
     /// <returns></returns>
-    Vector3 CalcForwardTargetPos(const Vector3& startPos, const Vector3& offsetValue) const;
+    Vector3 CalcForwardOffset(const Vector3& offsetValue) const;
 
     /// <summary>
     /// オブジェクトイージングアニメーション再生
