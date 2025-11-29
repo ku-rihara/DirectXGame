@@ -18,7 +18,7 @@ public:
 
     // 初期化、更新、描画
     virtual void Init();
-    virtual void Update();
+    virtual void Update(const float& timeSpeed);
   
     /// <summary>
     /// 親トランスフォームの設定
@@ -45,7 +45,6 @@ protected:
     Vector3 size_;
     bool isCollision_ = true;
 
-public:
     std::string tag_;
 
 public:

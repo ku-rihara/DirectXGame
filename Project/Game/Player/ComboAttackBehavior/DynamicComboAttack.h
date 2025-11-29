@@ -5,6 +5,8 @@
 #include <memory>
 #include <string>
 
+class PlayerCollisionInfo;
+
 /// <summary>
 /// データ駆動型のコンボ攻撃クラス
 /// </summary>
@@ -39,6 +41,7 @@ private:
     Order order_;
     PlayerComboAttackData* attackData_     = nullptr;
     PlayerComboAttackData* nextAttackData_ = nullptr;
+    PlayerCollisionInfo* pCollisionInfo_   = nullptr;
 
     // タイミング
     float currentFrame_;

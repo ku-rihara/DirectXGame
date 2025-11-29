@@ -2,6 +2,7 @@
 #include "ComboAttackRoot.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
+#include"CollisionBox/PlayerCollisionInfo.h"
 
 DynamicComboAttack::DynamicComboAttack(Player* player, PlayerComboAttackData* attackData)
     : BaseComboAattackBehavior(attackData->GetGroupName(), player) {
@@ -35,7 +36,7 @@ void DynamicComboAttack::Init() {
     // targetPosを計算
     const PlayerComboAttackData::MoveParam& moveParam = attackData_->GetAttackParam().moveParam;
     startPosition_                                    = pPlayer_->GetWorldPosition();
-    targetPosition_                                   = pPlayer_->GetTransform().CalcForwardTargetPos(startPosition_, moveParam.value);
+    targetPosition_                                   = startPosition_+pPlayer_->GetTransform().CalcForwardOffset(moveParam.value);
 
     // イージングのセットアップ
     moveEasing_.SetType(static_cast<EasingType>(moveParam.easeType));
@@ -46,6 +47,11 @@ void DynamicComboAttack::Init() {
     moveEasing_.SetOnFinishCallback([this]() {
         order_ = Order::WAIT;
     });
+
+    // コリジョンボックス設定
+    pCollisionInfo_ = pPlayer_->GetPlayerCollisionInfo();
+    pCollisionInfo_->AttackStart(attackData_);
+
 
     //// サウンド再生
     // pPlayer_->SoundPunch();
@@ -97,28 +103,7 @@ void DynamicComboAttack::UpdateAttack() {
     // コリジョン判定
     auto& collisionParam = attackData_->GetAttackParam().collisionParam;
 
-    collisionTimer_ += atkSpeed_;
-    attackRendition_->Update(atkSpeed_);
-
-    if (collisionTimer_ >= collisionParam.adaptTime) {
-        // コリジョンを無効化
-        isCollisionActive_ = false;
-        pPlayer_->GetPlayerCollisionInfo()->SetIsCollision(false);
-    } else {
-        isCollisionActive_ = true;
-        pPlayer_->GetPlayerCollisionInfo()->SetIsCollision(isCollisionActive_);
-
-        // プレイヤーの向きを取得
-        float playerRotationY    = pPlayer_->GetTransform().rotation_.y;
-        Matrix4x4 rotationMatrix = MakeRotateYMatrix(playerRotationY);
-
-        // オフセットをワールド座標に変換
-        Vector3 worldOffset  = TransformNormal(collisionParam.offsetPos, rotationMatrix);
-        Vector3 collisionPos = pPlayer_->GetWorldPosition() + worldOffset;
-
-        // コリジョン位置更新
-        pPlayer_->GetPlayerCollisionInfo()->SetPosition(collisionPos);
-    }
+   pCollisionInfo_->Update(atkSpeed_);
 
     // イージングが完了したらRecoveryへ
     if (moveEasing_.IsFinished()) {

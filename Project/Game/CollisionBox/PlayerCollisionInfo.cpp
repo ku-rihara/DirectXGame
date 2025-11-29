@@ -11,50 +11,28 @@ void PlayerCollisionInfo::Init() {
     BaseAABBCollisionBox::Init();
 }
 
-void PlayerCollisionInfo::Update() {
+void PlayerCollisionInfo::Update(const float&timeSpeed) {
 
     // タイム更新
-    TimerUpdate(Frame::DeltaTime());
+    TimerUpdate(timeSpeed);
 
     // baseの更新
     BaseAABBCollisionBox::Update();
 }
 
-void PlayerCollisionInfo::TimerUpdate(const float& deltaTime) {
+void PlayerCollisionInfo::TimerUpdate(const float& timeSpeed) {
     if (!isCollision_) {
         return;
     }
     // タイマー更新
-    adaptTimer_ -= deltaTime;
+    adaptTimer_ -= timeSpeed;
 
     if (adaptTimer_ <= 0.0f) {
         SetIsCollision(false);
     }
 }
 
-// void PlayerCollisionInfo::ChangeAttackType(const AttackType& attackType) {
-//     attackType_ = attackType;
-//
-//     // offset
-//     float offSetValue = attackParam_[static_cast<size_t>(attackType_)].collisionOffsetValue;
-//     SetOffset(baseTransform_->LookAt(Vector3::ToForward()) * offSetValue);
-//
-//     // time
-//     adaptTimer_ = attackParam_[static_cast<size_t>(attackType_)].adaptTime;
-//
-//     // isCollision
-//     SetIsCollision(true);
-// }
-//
-
-// float PlayerCollisionInfo::GetAttackSpeed(const float& baseTime) {
-//
-//     float result = baseTime * attackValueForLevel_[pCombo_->GetCurrentLevel()].speedRate;
-//
-//     return result;
-// }
-
-void PlayerCollisionInfo::GetAttackInfo(const PlayerComboAttackData* comboAttackData) {
+void PlayerCollisionInfo::AttackStart(const PlayerComboAttackData* comboAttackData) {
     comboAttackData_ = comboAttackData;
 
     // collision情報を取得
@@ -62,11 +40,16 @@ void PlayerCollisionInfo::GetAttackInfo(const PlayerComboAttackData* comboAttack
     SetSize(comboAttackData_->GetAttackParam().collisionParam.size);
 
     // collision位置Offset
+    UpdateOffset();
+
+    // コリジョン可能に 
+    SetIsCollision(true);
 }
 
 void PlayerCollisionInfo::UpdateOffset() {
-    Vector3 offSetValue = comboAttackData_->GetAttackParam().collisionParam.offsetPos;
-    SetOffset(baseTransform_->LookAt(Vector3::ToForward()) * offSetValue);
+    Vector3 offSetValue        = comboAttackData_->GetAttackParam().collisionParam.offsetPos;
+    Vector3 forwardOffSetValue = baseTransform_->CalcForwardOffset(offSetValue);
+    SetOffset(forwardOffSetValue);
 }
 
 void PlayerCollisionInfo::OnCollisionStay([[maybe_unused]] BaseCollider* other) {

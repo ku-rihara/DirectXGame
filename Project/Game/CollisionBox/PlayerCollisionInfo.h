@@ -30,12 +30,12 @@ public:
 
     // 初期化、更新、描画
     void Init() override;
-    void Update() override;
-    void TimerUpdate(const float& deltaTime);
+    void Update(const float& timeSpeed) override;
+    void TimerUpdate(const float& timeSpeed);
     void UpdateOffset();
 
     // 攻撃情報取得
-    void GetAttackInfo(const PlayerComboAttackData* comboAttackData);
+    void AttackStart(const PlayerComboAttackData* comboAttackData);
 
     //コリジョンコールバック
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;

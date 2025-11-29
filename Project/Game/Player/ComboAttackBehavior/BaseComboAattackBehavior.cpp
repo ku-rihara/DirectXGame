@@ -17,8 +17,3 @@ void BaseComboAattackBehavior::ChangeNextCombo(std::unique_ptr<BaseComboAattackB
     pPlayer_->ChangeComboBehavior(std::move(nextCombo));
 }
 
-
-void BaseComboAattackBehavior::Init() {
-    atkSpeed_ = pPlayer_->GetPlayerCollisionInfo()->GetAttackSpeed(Frame::DeltaTimeRate());
-}
-
