@@ -9,7 +9,7 @@ DynamicComboAttack::DynamicComboAttack(Player* player, PlayerComboAttackData* at
     : BaseComboAattackBehavior(attackData->GetGroupName(), player) {
 
     // attackDataセット
-    attackData_ = attackData;
+    attackData_     = attackData;
     pCollisionInfo_ = pPlayer_->GetPlayerCollisionInfo();
     // 初期化
     Init();
@@ -45,15 +45,11 @@ void DynamicComboAttack::Init() {
     moveEasing_.SetEndValue(targetPosition_);
     moveEasing_.SetAdaptValue(&currentMoveValue_);
 
-    moveEasing_.SetOnFinishCallback([this]() {
-        order_ = Order::WAIT;
-    });
 
-    
     // 攻撃スピードと攻撃力
     const PlayerComboAttackController* attackController = pPlayer_->GetComboAttackController();
-    atkSpeed_ = attackController->GetRealAttackSpeed(Frame::DeltaTimeRate());
-    float power = attackController->GetPowerRate();
+    atkSpeed_                                           = attackController->GetRealAttackSpeed(Frame::DeltaTimeRate());
+    float power                                         = attackController->GetPowerRate();
     pCollisionInfo_->SetAttackPower(power);
 
     // コリジョンボックス設定
@@ -108,13 +104,20 @@ void DynamicComboAttack::UpdateAttack() {
     AttackCancel();
 
     // コリジョン判定
-    /* auto& collisionParam = attackData_->GetAttackParam().collisionParam;*/
+    /*    auto& collisionParam = attackData_->GetAttackParam().collisionParam;*/
 
     pCollisionInfo_->TimerUpdate(atkSpeed_);
     pCollisionInfo_->Update();
 
+    // 演出更新
+    if (attackRendition_) {
+        attackRendition_->Update(atkSpeed_);
+
+        attackRendition_->Update(atkSpeed_);
+    }
+
     // イージングが完了したらRecoveryへ
-    if (moveEasing_.IsFinished()) {
+    if (moveEasing_.IsFinished() && pCollisionInfo_->GetIsFinish()) {
         order_ = Order::WAIT;
     }
 }
@@ -188,7 +191,7 @@ void DynamicComboAttack::SetupCollision() {
     pPlayer_->GetPlayerCollisionInfo()->SetSize(collisionParam.size);
 
     // コリジョンを有効化
-    pPlayer_->GetPlayerCollisionInfo()->SetIsCollision(true);
+    pPlayer_->GetPlayerCollisionInfo()->SetIsAbleCollision(true);
 
     collisionTimer_    = 0.0f;
     isCollisionActive_ = true;

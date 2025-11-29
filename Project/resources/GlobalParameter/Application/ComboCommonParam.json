@@ -1,0 +1,14 @@
+{
+    "ComboCommonParam": {
+        "AttackPowerRate1": 1.0,
+        "AttackPowerRate2": 1.0,
+        "AttackPowerRate3": 1.0,
+        "AttackPowerRate4": 1.0,
+        "AttackPowerRate5": 1.0,
+        "AttackSpeedRate1": 1.0,
+        "AttackSpeedRate2": 1.0,
+        "AttackSpeedRate3": 1.0,
+        "AttackSpeedRate4": 1.0,
+        "AttackSpeedRate5": 1.0
+    }
+}

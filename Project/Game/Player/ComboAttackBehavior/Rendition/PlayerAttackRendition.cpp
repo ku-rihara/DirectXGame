@@ -16,11 +16,13 @@ void PlayerAttackRendition::Reset() {
     currentTime_ = 0.0f;
     isPlayed_.fill(false);
     isObjAnimPlayed_.fill(false);
+  
 }
 
 void PlayerAttackRendition::Update(const float& deltaTime) {
-    if (!pPlayer_ || !playerComboAttackData_)
+    if (!pPlayer_ || !playerComboAttackData_) {
         return;
+    }
 
     currentTime_ += deltaTime;
 
@@ -29,6 +31,11 @@ void PlayerAttackRendition::Update(const float& deltaTime) {
     // 通常演出の更新
     for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::Type::Count); ++i) {
         const auto& param = renditionData.GetRenditionParamFromIndex(i);
+
+        // トリガー条件がヒットの場合のcontinue処理
+        if (param.triggerByHit && !pPlayer_->GetPlayerCollisionInfo()->GetIsHit()) {
+            continue;
+        }
 
         // すでに再生済みならスキップ
         if (isPlayed_[i]) {

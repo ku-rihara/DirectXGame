@@ -12,6 +12,12 @@ class PlayerComboAttackData;
 /// </summary>
 class PlayerCollisionInfo : public BaseAABBCollisionBox {
 public:
+    enum class State {
+        DisAbleCollision,
+        AbleCollision,
+    };
+
+public:
     PlayerCollisionInfo()           = default;
     ~PlayerCollisionInfo() override = default;
 
@@ -19,30 +25,49 @@ public:
     void Init() override;
     void Update() override;
     void TimerUpdate(const float& timeSpeed);
+
     void UpdateOffset();
 
     // 攻撃情報取得
     void AttackStart(const PlayerComboAttackData* comboAttackData);
 
-    //コリジョンコールバック
+    // コリジョンコールバック
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
+
+private:
+    void LoopWaiting(const float& timeSpeed);
+    void LoopStart();
 
 private:
     const WorldTransform* baseTransform_          = nullptr;
     const PlayerComboAttackData* comboAttackData_ = nullptr;
 
-    // 状態
+    // time
     float adaptTimer_;
+    float loopWaitTimer_;
+
+    // count
+    int32_t currentLoopCount_;
+
+    // states
     float attackPower_;
-    bool isCollision_;
+
+    // frag
+    bool isInLoopWait_ = false;
+    bool isHit_        = false;
+    bool isFinish_     = false;
 
 public:
     Vector3 GetCollisionPos() const override;
     const PlayerComboAttackData* GetComboAttackData() const { return comboAttackData_; }
     const float& GetAttackPower() const { return attackPower_; };
+    const int32_t& GetCurrentLoopCount() const { return currentLoopCount_; }
+    const bool& GetIsInLoopWait() const { return isInLoopWait_; }
+    const bool& GetIsHit() const { return isHit_; }
+    const bool& GetIsFinish() const { return isFinish_; }
 
     void SetAttackPower(const float& atkPower) { attackPower_ = atkPower; }
-    void SetIsCollision(const bool& is) { isCollision_ = is; }
+    void SetIsHit(const bool& is) { isHit_ = is; }
     void SetPlayerBaseTransform(const WorldTransform* playerBaseTransform);
     void SetParentTransform(WorldTransform* transform) override;
 };

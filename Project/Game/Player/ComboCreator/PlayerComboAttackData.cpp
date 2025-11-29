@@ -42,6 +42,8 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "collisionSize", &attackParam_.collisionParam.size);
     globalParameter_->Regist(groupName_, "collisionOffsetPos", &attackParam_.collisionParam.offsetPos);
     globalParameter_->Regist(groupName_, "adaptTime", &attackParam_.collisionParam.adaptTime);
+    globalParameter_->Regist(groupName_, "loopWaitTime", &attackParam_.collisionParam.loopWaitTime);
+    globalParameter_->Regist(groupName_, "loopNum", &attackParam_.collisionParam.loopNum);
 
     // MoveParam
     globalParameter_->Regist(groupName_, "moveValue", &attackParam_.moveParam.value);
@@ -59,9 +61,6 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "cancelFrame", &attackParam_.timingParam.cancelTime);
     globalParameter_->Regist(groupName_, "precedeInputFrame", &attackParam_.timingParam.precedeInputTime);
     globalParameter_->Regist(groupName_, "finishWaitTime", &attackParam_.timingParam.finishWaitTime);
-
-    // Loop Param
-    globalParameter_->Regist(groupName_, "LoopNum", &attackParam_.loopParam.num);
 
     // nextAttack
     globalParameter_->Regist(groupName_, "NextAttackType", &attackParam_.nextAttackType);
@@ -100,6 +99,10 @@ void PlayerComboAttackData::AdjustParam() {
     ImGui::DragFloat3("Collision Size", &attackParam_.collisionParam.size.x, 0.01f);
     ImGui::DragFloat3("Collision Offset Pos", &attackParam_.collisionParam.offsetPos.x, 0.01f);
     ImGui::DragFloat("Adapt Time", &attackParam_.collisionParam.adaptTime, 0.01f);
+    ImGui::InputInt("Loop Num", &attackParam_.collisionParam.loopNum);
+    if (attackParam_.collisionParam.loopNum > 0) {
+        ImGui::DragFloat("Loop Wait Time", &attackParam_.collisionParam.loopWaitTime, 0.01f);
+    }
 
     // Move Parameter
     ImGui::SeparatorText("Move Parameter");
@@ -116,10 +119,6 @@ void PlayerComboAttackData::AdjustParam() {
     if (attackParam_.timingParam.isCancel) {
         ImGui::DragFloat("Cancel Time", &attackParam_.timingParam.cancelTime, 0.01f);
     }
-
-    // Loop Param
-    ImGui::SeparatorText("Loop Parameter");
-    ImGui::InputInt("Loop Num", &attackParam_.loopParam.num);
 
     // next Attack
     ImGui::SeparatorText("Next Attack");
