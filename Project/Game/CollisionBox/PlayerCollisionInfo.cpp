@@ -14,6 +14,12 @@ void PlayerCollisionInfo::Init() {
 }
 
 void PlayerCollisionInfo::Update() {
+
+    // プレイヤーを常に追従
+    if (comboAttackData_->GetAttackParam().collisionParam.isAlwaysFollowing) {
+        UpdateOffset();
+    }
+
     // baseの更新
     BaseAABBCollisionBox::Update();
 }

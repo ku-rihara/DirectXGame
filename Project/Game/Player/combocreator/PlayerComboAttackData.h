@@ -26,6 +26,7 @@ public:
         Vector3 value;
         int32_t easeType = 0;
         float easeTime;
+        bool isAbleInputMoving;
     };
 
     // コリジョンパラメータ
@@ -33,6 +34,9 @@ public:
         Vector3 size;
         Vector3 offsetPos;
         float adaptTime;
+        float loopWaitTime;
+        int32_t loopNum;
+        bool isAlwaysFollowing;
     };
 
     // タイミングパラメータ
@@ -51,18 +55,14 @@ public:
         int32_t gamePadBottom;
     };
 
-    struct LoopParam {
-        int32_t num;
-    };
-
     // アタックパラメータ
     struct AttackParameter {
         CollisionParam collisionParam;
         MoveParam moveParam;
         TimingParam timingParam;
         TriggerParam triggerParam;
-        LoopParam loopParam;
         float knockBackPower;
+        float upperPower;
         float power;
         std::string nextAttackType;
     };

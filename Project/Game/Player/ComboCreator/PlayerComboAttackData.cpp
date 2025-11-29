@@ -44,11 +44,13 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "adaptTime", &attackParam_.collisionParam.adaptTime);
     globalParameter_->Regist(groupName_, "loopWaitTime", &attackParam_.collisionParam.loopWaitTime);
     globalParameter_->Regist(groupName_, "loopNum", &attackParam_.collisionParam.loopNum);
+    globalParameter_->Regist(groupName_, "isAlwaysFollowing", &attackParam_.collisionParam.isAlwaysFollowing);
 
     // MoveParam
     globalParameter_->Regist(groupName_, "moveValue", &attackParam_.moveParam.value);
     globalParameter_->Regist(groupName_, "moveEaseType", &attackParam_.moveParam.easeType);
     globalParameter_->Regist(groupName_, "moveEaseTime", &attackParam_.moveParam.easeTime);
+    globalParameter_->Regist(groupName_, "isAbleInputMoving", &attackParam_.moveParam.isAbleInputMoving);
 
     // TriggerParam
     globalParameter_->Regist(groupName_, "gamePadBottom", &attackParam_.triggerParam.gamePadBottom);
@@ -93,6 +95,7 @@ void PlayerComboAttackData::AdjustParam() {
     ImGui::SeparatorText("simple Parameter");
     ImGui::DragFloat("Power", &attackParam_.power, 0.01f);
     ImGui::DragFloat("KnockBack Power", &attackParam_.knockBackPower, 0.01f);
+    ImGui::DragFloat("Upper Power", &attackParam_.upperPower, 0.01f);
 
     // Collision Parameter
     ImGui::SeparatorText("Collision Parameter");
@@ -103,9 +106,11 @@ void PlayerComboAttackData::AdjustParam() {
     if (attackParam_.collisionParam.loopNum > 0) {
         ImGui::DragFloat("Loop Wait Time", &attackParam_.collisionParam.loopWaitTime, 0.01f);
     }
+    ImGui::Checkbox("is Always Following", &attackParam_.collisionParam.isAlwaysFollowing);
 
     // Move Parameter
     ImGui::SeparatorText("Move Parameter");
+    ImGui::Checkbox("isAble InputMoving", &attackParam_.moveParam.isAbleInputMoving);
     ImGui::DragFloat("Move Ease Time", &attackParam_.moveParam.easeTime, 0.01f);
     ImGui::DragFloat3("Move Value", &attackParam_.moveParam.value.x, 0.01f);
     ImGuiEasingTypeSelector("Move Easing Type", attackParam_.moveParam.easeType);

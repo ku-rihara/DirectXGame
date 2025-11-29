@@ -45,7 +45,6 @@ void DynamicComboAttack::Init() {
     moveEasing_.SetEndValue(targetPosition_);
     moveEasing_.SetAdaptValue(&currentMoveValue_);
 
-
     // 攻撃スピードと攻撃力
     const PlayerComboAttackController* attackController = pPlayer_->GetComboAttackController();
     atkSpeed_                                           = attackController->GetRealAttackSpeed(Frame::DeltaTimeRate());
@@ -65,7 +64,9 @@ void DynamicComboAttack::Init() {
 void DynamicComboAttack::Update() {
 
     // 通常移動
-    pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+    if (attackData_->GetAttackParam().moveParam.isAbleInputMoving) {
+        pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+    }
 
     switch (order_) {
 
