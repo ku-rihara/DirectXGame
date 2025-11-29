@@ -114,6 +114,7 @@ private:
 
     int32_t tempCondition_;
 
+
 public:
     //*-------------------------------- Getter Method --------------------------------*//
     const std::string& GetGroupName() const { return groupName_; }
