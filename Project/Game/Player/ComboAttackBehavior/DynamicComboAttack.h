@@ -43,6 +43,8 @@ private:
     PlayerComboAttackData* nextAttackData_ = nullptr;
     PlayerCollisionInfo* pCollisionInfo_   = nullptr;
 
+     float atkSpeed_;
+
     // タイミング
     float currentFrame_;
     float waitTime_;

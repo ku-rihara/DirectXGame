@@ -11,10 +11,7 @@ void PlayerCollisionInfo::Init() {
     BaseAABBCollisionBox::Init();
 }
 
-void PlayerCollisionInfo::Update(const float&timeSpeed) {
-
-    // タイム更新
-    TimerUpdate(timeSpeed);
+void PlayerCollisionInfo::Update() {
 
     // baseの更新
     BaseAABBCollisionBox::Update();

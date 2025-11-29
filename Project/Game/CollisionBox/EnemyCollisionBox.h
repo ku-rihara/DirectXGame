@@ -11,7 +11,7 @@ public:
    
     // 初期化、更新、描画
     void Init() override;
-    void Update(const float& timeSpeed) override;
+    void Update() override;
   
     /// <summary>
     /// 衝突中コールバック

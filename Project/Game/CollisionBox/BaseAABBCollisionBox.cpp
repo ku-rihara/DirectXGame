@@ -5,8 +5,8 @@ void BaseAABBCollisionBox::Init() {
     transform_.Init();
     /*SetZeroSizeCollision();*/
 }
-void BaseAABBCollisionBox::Update(const float& timeSpeed) {
-    timeSpeed;
+void BaseAABBCollisionBox::Update() {
+
 
      SetCollisionScale(size_);
     SetIsAdaptCollision(isCollision_);

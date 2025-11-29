@@ -60,5 +60,5 @@ public:
     PlayerComboAttackData* GetAttackByName(const std::string& name);
     const std::vector<std::unique_ptr<PlayerComboAttackData>>& GetAllAttacks() const {return attacks_;}
     const int& GetAttackCount() const { return static_cast<int>(attacks_.size()); }
-    const std::array<AttackValueForLevel, kComboLevel>& GetAttackValueForLevel() const { return attackValueForLevel_; }
+    const AttackValueForLevel& GetAttackValueForLevel(const size_t &index) const { return attackValueForLevel_[index]; }
 };

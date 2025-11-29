@@ -332,8 +332,7 @@ void Player::AdjustParam() {
 
     // プレイヤーのパラメータ
     parameters_->AdjustParam();
-    // 攻撃パラメータ
-    playerCollisionInfo_->AdjustParam();
+
     // パーツのパラメータ
     leftHand_->AdjustParam();
     rightHand_->AdjustParam();
@@ -504,7 +503,7 @@ void Player::SetLockOn(LockOnController* lockOn) {
 
 void Player::SetCombo(Combo* combo) {
     pCombo_ = combo;
-    playerCollisionInfo_->SetCombo(combo);
+
 }
 
 void Player::SetGameCamera(GameCamera* gameCamera) {

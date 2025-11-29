@@ -18,7 +18,7 @@ public:
 
     // 初期化、更新、描画
     virtual void Init();
-    virtual void Update(const float& timeSpeed);
+    virtual void Update();
   
     /// <summary>
     /// 親トランスフォームの設定

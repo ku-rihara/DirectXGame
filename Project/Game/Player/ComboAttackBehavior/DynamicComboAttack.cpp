@@ -1,8 +1,8 @@
 #include "DynamicComboAttack.h"
+#include "CollisionBox/PlayerCollisionInfo.h"
 #include "ComboAttackRoot.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
-#include"CollisionBox/PlayerCollisionInfo.h"
 
 DynamicComboAttack::DynamicComboAttack(Player* player, PlayerComboAttackData* attackData)
     : BaseComboAattackBehavior(attackData->GetGroupName(), player) {
@@ -16,8 +16,9 @@ DynamicComboAttack::DynamicComboAttack(Player* player, PlayerComboAttackData* at
 DynamicComboAttack::~DynamicComboAttack() {}
 
 void DynamicComboAttack::Init() {
-    BaseComboAattackBehavior::Init();
 
+    atkSpeed_ = pPlayer_->GetComboAttackController()->GetAttackValueForLevel();
+  
     // タイミングのリセット
     currentFrame_      = 0.0f;
     waitTime_          = 0.0f;
@@ -36,7 +37,7 @@ void DynamicComboAttack::Init() {
     // targetPosを計算
     const PlayerComboAttackData::MoveParam& moveParam = attackData_->GetAttackParam().moveParam;
     startPosition_                                    = pPlayer_->GetWorldPosition();
-    targetPosition_                                   = startPosition_+pPlayer_->GetTransform().CalcForwardOffset(moveParam.value);
+    targetPosition_                                   = startPosition_ + pPlayer_->GetTransform().CalcForwardOffset(moveParam.value);
 
     // イージングのセットアップ
     moveEasing_.SetType(static_cast<EasingType>(moveParam.easeType));
@@ -51,7 +52,6 @@ void DynamicComboAttack::Init() {
     // コリジョンボックス設定
     pCollisionInfo_ = pPlayer_->GetPlayerCollisionInfo();
     pCollisionInfo_->AttackStart(attackData_);
-
 
     //// サウンド再生
     // pPlayer_->SoundPunch();
@@ -101,9 +101,10 @@ void DynamicComboAttack::UpdateAttack() {
     AttackCancel();
 
     // コリジョン判定
-    auto& collisionParam = attackData_->GetAttackParam().collisionParam;
+   /* auto& collisionParam = attackData_->GetAttackParam().collisionParam;*/
 
-   pCollisionInfo_->Update(atkSpeed_);
+    pCollisionInfo_->TimerUpdate(atkSpeed_);
+    pCollisionInfo_->Update();
 
     // イージングが完了したらRecoveryへ
     if (moveEasing_.IsFinished()) {
@@ -125,7 +126,7 @@ void DynamicComboAttack::UpdateWait() {
 }
 
 void DynamicComboAttack::ChangeNextAttack() {
-   
+
     // 次のコンボに移動する
     if (nextAttackData_) {
 
@@ -146,14 +147,14 @@ void DynamicComboAttack::PreOderNextComboForButton() {
         return;
     }
 
-    isReserveNextCombo_ = attackData_->IsReserveNextAttack(currentFrame_,nextAttackData_->GetAttackParam().triggerParam);
+    isReserveNextCombo_ = attackData_->IsReserveNextAttack(currentFrame_, nextAttackData_->GetAttackParam().triggerParam);
 }
 
 void DynamicComboAttack::AttackCancel() {
 
     // タイミング
     const float cancelStartFrame = attackData_->GetAttackParam().timingParam.cancelTime;
-   
+
     // 先行入力受付
     if (currentFrame_ <= cancelStartFrame) {
         return;

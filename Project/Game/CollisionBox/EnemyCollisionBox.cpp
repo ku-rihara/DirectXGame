@@ -5,8 +5,8 @@ void EnemyCollisionBox::Init() {
 	BaseAABBCollisionBox::Init();
 }
 
-void EnemyCollisionBox::Update(const float& timeSpeed) {
-    BaseAABBCollisionBox::Update(timeSpeed);
+void EnemyCollisionBox::Update() {
+    BaseAABBCollisionBox::Update();
 }
 
 
