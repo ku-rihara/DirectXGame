@@ -17,6 +17,7 @@
 #include "CollisionBox/EnemyCollisionBox.h"
 #include "Field/Field.h"
 #include "LockOn/LockOnController.h"
+#include"ComboCreator/PlayerComboAttackController.h"
 
 /// behavior
 #include "ComboAttackBehavior/ComboAttackRoot.h"
@@ -52,6 +53,7 @@ void Player::Init() {
     playerCollisionInfo_ = std::make_unique<PlayerCollisionInfo>();
     playerCollisionInfo_->Init();
     playerCollisionInfo_->SetPlayerBaseTransform(&baseTransform_);
+    playerCollisionInfo_->SetParentTransform(&baseTransform_);
 
     // トランスフォーム初期化
     obj3d_->transform_.Init();
@@ -503,7 +505,7 @@ void Player::SetLockOn(LockOnController* lockOn) {
 
 void Player::SetCombo(Combo* combo) {
     pCombo_ = combo;
-
+    comboAttackController_->SetCombo(pCombo_);
 }
 
 void Player::SetGameCamera(GameCamera* gameCamera) {

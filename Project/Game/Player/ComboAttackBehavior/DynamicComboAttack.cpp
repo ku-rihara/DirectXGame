@@ -1,6 +1,7 @@
 #include "DynamicComboAttack.h"
 #include "CollisionBox/PlayerCollisionInfo.h"
 #include "ComboAttackRoot.h"
+#include "Frame/Frame.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
 
@@ -9,6 +10,7 @@ DynamicComboAttack::DynamicComboAttack(Player* player, PlayerComboAttackData* at
 
     // attackDataセット
     attackData_ = attackData;
+    pCollisionInfo_ = pPlayer_->GetPlayerCollisionInfo();
     // 初期化
     Init();
 }
@@ -17,8 +19,6 @@ DynamicComboAttack::~DynamicComboAttack() {}
 
 void DynamicComboAttack::Init() {
 
-    atkSpeed_ = pPlayer_->GetComboAttackController()->GetAttackValueForLevel();
-  
     // タイミングのリセット
     currentFrame_      = 0.0f;
     waitTime_          = 0.0f;
@@ -48,6 +48,13 @@ void DynamicComboAttack::Init() {
     moveEasing_.SetOnFinishCallback([this]() {
         order_ = Order::WAIT;
     });
+
+    
+    // 攻撃スピードと攻撃力
+    const PlayerComboAttackController* attackController = pPlayer_->GetComboAttackController();
+    atkSpeed_ = attackController->GetRealAttackSpeed(Frame::DeltaTimeRate());
+    float power = attackController->GetPowerRate();
+    pCollisionInfo_->SetAttackPower(power);
 
     // コリジョンボックス設定
     pCollisionInfo_ = pPlayer_->GetPlayerCollisionInfo();
@@ -101,7 +108,7 @@ void DynamicComboAttack::UpdateAttack() {
     AttackCancel();
 
     // コリジョン判定
-   /* auto& collisionParam = attackData_->GetAttackParam().collisionParam;*/
+    /* auto& collisionParam = attackData_->GetAttackParam().collisionParam;*/
 
     pCollisionInfo_->TimerUpdate(atkSpeed_);
     pCollisionInfo_->Update();

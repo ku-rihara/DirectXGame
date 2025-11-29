@@ -236,3 +236,20 @@ void PlayerComboAttackController::AdjustCommonParam() {
     }
 #endif // _DEBUG
 }
+
+float PlayerComboAttackController::GetRealAttackSpeed(const float& baseTimeSpeed)const {
+
+    float result = baseTimeSpeed * attackValueForLevel_[pCombo_->GetCurrentLevel()].speedRate;
+
+    return result;
+}
+
+float PlayerComboAttackController::GetPowerRate() const {
+
+    float rate = attackValueForLevel_[pCombo_->GetCurrentLevel()].powerRate;
+    return rate;
+}
+
+void PlayerComboAttackController::SetCombo(Combo* combo) {
+    pCombo_ = combo;
+}

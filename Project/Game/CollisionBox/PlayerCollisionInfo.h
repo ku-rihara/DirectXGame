@@ -12,19 +12,6 @@ class PlayerComboAttackData;
 /// </summary>
 class PlayerCollisionInfo : public BaseAABBCollisionBox {
 public:
-    struct AttackValueForLevel {
-        float speedRate;
-        float powerRate;
-    };
-
-    struct AttackParameter {
-        Vector3 collisionSize;
-        float collisionOffsetValue;
-        float adaptTime;
-        float power;
-    };
-
-public:
     PlayerCollisionInfo()           = default;
     ~PlayerCollisionInfo() override = default;
 
@@ -46,12 +33,15 @@ private:
 
     // 状態
     float adaptTimer_;
+    float attackPower_;
     bool isCollision_;
 
 public:
     Vector3 GetCollisionPos() const override;
     const PlayerComboAttackData* GetComboAttackData() const { return comboAttackData_; }
+    const float& GetAttackPower() const { return attackPower_; };
 
+    void SetAttackPower(const float& atkPower) { attackPower_ = atkPower; }
     void SetIsCollision(const bool& is) { isCollision_ = is; }
     void SetPlayerBaseTransform(const WorldTransform* playerBaseTransform);
     void SetParentTransform(WorldTransform* transform) override;

@@ -288,14 +288,6 @@ void GameScene::SetClassPointer() {
     continuousEnemySpawner_->SetEnemyManager(enemyManager_.get());
     continuousEnemySpawner_->SetPlayer(player_.get());
 
-    // Player
-    player_->SetViewProjection(&viewProjection_);
-    player_->SetLockOn(lockOnController_.get());
-    player_->SetGameCamera(gameCamera_.get());
-    player_->SetCombo(combo_.get());
-    player_->SetHitStop(attackEffect_.get());
-    player_->SetComboAttackController(playerComboAttackController_.get());
-
     fireInjectors_->SetCombo(combo_.get());
     lockOnController_->SetEnemyManager(enemyManager_.get());
     // gameIntro
@@ -310,4 +302,12 @@ void GameScene::SetClassPointer() {
     comboScene_->SetPlayer(player_.get());
     comboScene_->SetCombo(combo_.get());
     comboScene_->SetComboLevelObjHolder(comboLevelObjHolder_.get());
+
+      // Player
+    player_->SetViewProjection(&viewProjection_);
+    player_->SetLockOn(lockOnController_.get());
+    player_->SetGameCamera(gameCamera_.get());
+    player_->SetComboAttackController(playerComboAttackController_.get());
+    player_->SetCombo(combo_.get());
+    player_->SetHitStop(attackEffect_.get());
 }

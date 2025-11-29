@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+class Combo;
+
 /// <summary>
 /// コンボアタック制御
 /// </summary>
@@ -34,6 +36,9 @@ public:
     void AllLoadFile(); //< 全ファイルロード
     void AllSaveFile(); //< 全ファイルセーブ
 
+    float GetRealAttackSpeed(const float& baseTimeSpeed) const;
+    float GetPowerRate() const;
+
 private:
 
     //*-------------------------------- private Method --------------------------------*//
@@ -54,11 +59,13 @@ private:
     char nameBuffer_[128] = "";
 
     std::array<AttackValueForLevel, kComboLevel> attackValueForLevel_;
+    Combo* pCombo_=nullptr;
 
 public:
     PlayerComboAttackData* GetSelectedAttack();
     PlayerComboAttackData* GetAttackByName(const std::string& name);
     const std::vector<std::unique_ptr<PlayerComboAttackData>>& GetAllAttacks() const {return attacks_;}
     const int& GetAttackCount() const { return static_cast<int>(attacks_.size()); }
-    const AttackValueForLevel& GetAttackValueForLevel(const size_t &index) const { return attackValueForLevel_[index]; }
+    void SetCombo(Combo* combo);
+   
 };
