@@ -26,7 +26,6 @@ public:
         Vector3 value;
         int32_t easeType = 0;
         float easeTime;
-        bool isAbleInputMoving;
     };
 
     // コリジョンパラメータ
@@ -36,7 +35,6 @@ public:
         float adaptTime;
         float loopWaitTime;
         int32_t loopNum;
-        bool isAlwaysFollowing;
     };
 
     // タイミングパラメータ
@@ -62,7 +60,6 @@ public:
         TimingParam timingParam;
         TriggerParam triggerParam;
         float knockBackPower;
-        float upperPower;
         float power;
         std::string nextAttackType;
     };
@@ -113,7 +110,6 @@ private:
     std::vector<std::string> attackFileNames_;
 
     int32_t tempCondition_;
-
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//
