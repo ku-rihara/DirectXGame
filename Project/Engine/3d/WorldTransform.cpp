@@ -284,9 +284,7 @@ Vector3 WorldTransform::GetForwardVector() const {
 }
 
 Vector3 WorldTransform::CalcForwardOffset(const Vector3& offsetValue) const {
-    // 移動イージングの初期化
-    const Vector3& startPosition = GetWorldPos();
-
+    
     // 向き(Y軸回転)を取得
     float playerRotationY    = rotation_.y;
     Matrix4x4 rotationMatrix = MakeRotateYMatrix(playerRotationY);
