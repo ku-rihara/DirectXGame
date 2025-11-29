@@ -111,7 +111,7 @@ public:
     ///========================================================
     const bool& GetIsAllCleared() const { return areAllEnemiesCleared_; }
     const std::vector<std::unique_ptr<BaseEnemy>>& GetEnemies() const { return enemies_; }
-    EnemyDamageReactionController* GetDamageReactionControllerPtr() const { return damageReactionController_.get(); }
+    EnemyDamageReactionController* GetDamageReactionController() const { return damageReactionController_.get(); }
     ///========================================================
     /// setter method
     ///========================================================

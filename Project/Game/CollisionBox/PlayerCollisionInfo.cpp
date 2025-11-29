@@ -14,6 +14,9 @@ void PlayerCollisionInfo::Init() {
 }
 
 void PlayerCollisionInfo::Update() {
+    if (!comboAttackData_) {
+        return;
+    }
 
     // プレイヤーを常に追従
     if (comboAttackData_->GetAttackParam().collisionParam.isAlwaysFollowing) {

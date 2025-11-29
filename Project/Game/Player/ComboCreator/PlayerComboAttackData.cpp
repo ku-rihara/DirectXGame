@@ -37,6 +37,7 @@ void PlayerComboAttackData::RegisterParams() {
     // simpleParam
     globalParameter_->Regist(groupName_, "power", &attackParam_.power);
     globalParameter_->Regist(groupName_, "KnockBackPower", &attackParam_.knockBackPower);
+    globalParameter_->Regist(groupName_, "blowYPower", &attackParam_.blowYPower);
 
     // CollisionParam
     globalParameter_->Regist(groupName_, "collisionSize", &attackParam_.collisionParam.size);
@@ -95,7 +96,7 @@ void PlayerComboAttackData::AdjustParam() {
     ImGui::SeparatorText("simple Parameter");
     ImGui::DragFloat("Power", &attackParam_.power, 0.01f);
     ImGui::DragFloat("KnockBack Power", &attackParam_.knockBackPower, 0.01f);
-    ImGui::DragFloat("Upper Power", &attackParam_.upperPower, 0.01f);
+    ImGui::DragFloat("Blow Y Power", &attackParam_.blowYPower, 0.01f);
 
     // Collision Parameter
     ImGui::SeparatorText("Collision Parameter");

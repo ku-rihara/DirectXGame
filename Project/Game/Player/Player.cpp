@@ -95,9 +95,6 @@ void Player::Update() {
     // ライト
     HeadLightSetting();
 
-    // 攻撃更新
-    playerCollisionInfo_->Update();
-
     /// 振る舞い処理(コンボ攻撃中は中止)
     if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
         behavior_->Update();

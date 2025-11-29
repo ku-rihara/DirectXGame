@@ -157,10 +157,10 @@ EnemyDamageReactionData* EnemyDamageReactionController::GetSelectedAttack() {
     return nullptr;
 }
 
-EnemyDamageReactionData* EnemyDamageReactionController::GetAttackByName(const std::string& name) {
+EnemyDamageReactionData* EnemyDamageReactionController::GetAttackByTriggerName(const std::string& name) {
     auto it = std::find_if(reactions_.begin(), reactions_.end(),
         [&name](const std::unique_ptr<EnemyDamageReactionData>& attack) {
-            return attack->GetGroupName() == name;
+            return attack->GetReactionParam().triggerAttackName == name;
         });
 
     if (it != reactions_.end()) {

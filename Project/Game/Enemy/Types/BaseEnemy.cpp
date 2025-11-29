@@ -115,95 +115,21 @@ Vector3 BaseEnemy::GetDirectionToTarget(const Vector3& target) {
 
 void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 
-    //// 普通のパンチに攻撃されたら
-    // if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
 
-    //    switch (attackController->attackType_) {
-    //        ///------------------------------------------------------------------
-    //        /// 通常
-    //        ///------------------------------------------------------------------
-    //    case PlayerCollisionInfo::AttackType::NORMAL:
-
-    //        TakeDamage(attackController->GetAttackPower());
-    //        pCombo_->ComboCountUP();
-    //        pGameCamera_->PlayShake("PunchAttackCamera");
-    //        ChangeBehavior(std::make_unique<EnemyHitBackDamage>(this));
-    //    }
-    //}
 }
 
 void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-    //
+    // 
     if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
 
         // Rootにし、受けたダメージの判定を行う
         ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
 
         if (EnemyDamageReactionRoot* damageReaction = dynamic_cast<EnemyDamageReactionRoot*>(damageBehavior_.get())) {
-            damageReaction->SelectDamageActionBehaviorByAttack(*attackController);
+            damageReaction->SelectDamageActionBehaviorByAttack(attackController);
         }
     }
-
-    //    // 攻撃タイプごとに振る舞いを切り替える
-    //    switch (attackController->attackType_) {
-
-    //        ///------------------------------------------------------------------
-    //        /// アッパー
-    //        ///------------------------------------------------------------------
-    //    case PlayerCollisionInfo::AttackType::UPPER:
-
-    //        if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
-    //            break;
-    //        }
-    //        TakeDamage(attackController->GetAttackPower());
-    //        pCombo_->ComboCountUP();
-    //        ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
-
-    //        break;
-
-    //        ///------------------------------------------------------------------
-    //        /// 突き飛ばし
-    //        ///------------------------------------------------------------------
-    //    case PlayerCollisionInfo::AttackType::THRUST:
-    //        if (dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) {
-    //            break;
-    //        }
-    //        TakeDamage(attackController->GetAttackPower());
-    //        pCombo_->ComboCountUP();
-    //        ChangeBehavior(std::make_unique<EnemyThrustDamage>(this));
-
-    //        break;
-    //        ///------------------------------------------------------------------
-    //        /// 落下攻撃
-    //        ///------------------------------------------------------------------
-    //    case PlayerCollisionInfo::AttackType::FALL:
-    //        if (dynamic_cast<EnemyUpperDamage*>(damageBehavior_.get())) {
-    //            break;
-    //        }
-    //        TakeDamage(attackController->GetAttackPower());
-    //        pCombo_->ComboCountUP();
-    //        ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
-
-    //        return;
-
-    //        break;
-    //        ///------------------------------------------------------------------
-    //        /// 突進
-    //        ///------------------------------------------------------------------
-    //    case PlayerCollisionInfo::AttackType::RUSH:
-    //        if (dynamic_cast<EnemyBoundDamage*>(damageBehavior_.get())) {
-    //            break;
-    //        }
-    //        TakeDamage(attackController->GetAttackPower());
-    //        pCombo_->ComboCountUP();
-    //        ChangeBehavior(std::make_unique<EnemyUpperDamage>(this));
-
-    //        break;
-    //    default:
-    //        break;
-    //    }
-    //}
 }
 
 Vector3 BaseEnemy::GetCollisionPos() const {

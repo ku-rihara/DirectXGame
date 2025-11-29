@@ -15,9 +15,28 @@
 /// </summary>
 class EnemyDamageReactionData {
 public:
+    enum class ReactionState {
+        Normal,
+        Slammed,
+        TakeUpper,
+    };
+
+    struct SlammedParam {
+        int32_t boundNum    = 2;
+        float bounceDamping = 0.5f;
+    };
+
+    struct TakeUpperParam {
+        float floatingTime = 1.0f;
+    };
+
     // リアクションパラメータ
     struct ReactionParameter {
         std::string triggerAttackName;
+        int32_t intReactionState = 0;
+        ReactionState reactionState;
+        SlammedParam slammedParam;
+        TakeUpperParam takeUpperParam;
     };
 
 public:
@@ -26,10 +45,7 @@ public:
 
     //*-------------------------------- public Method --------------------------------*//
 
-    /// <summary>
-    /// 初期化
-    /// </summary>
-    /// <param name="reactionName">リアクション名</param>
+    // 初期化
     void Init(const std::string& reactionName);
 
     // パラメータバインド、調節
@@ -41,14 +57,14 @@ public:
     void SaveData();
 
     // 演出データ追加、削除、クリア、初期化
-    void AddRendition(); 
-    void RemoveRendition(const int32_t& index); 
-    void ClearRenditions(); 
-    void InitRenditions();  
+    void AddRendition();
+    void RemoveRendition(const int32_t& index);
+    void ClearRenditions();
+    void InitRenditions();
 
     // 保存、読み込み
-    void SaveAllRenditions(); 
-    void LoadRenditions();    
+    void SaveAllRenditions();
+    void LoadRenditions();
 
 private:
     //*-------------------------------- private Method --------------------------------*//
@@ -63,7 +79,7 @@ private:
     // グローバルパラメータ
     GlobalParameter* globalParameter_;
     std::string groupName_;
-    const std::string folderPath_ = "EnemyDamageReaction/ReactionDates";
+    const std::string folderPath_          = "EnemyDamageReaction/ReactionDates";
     const std::string renditionFolderPath_ = "Resources/GlobalParameter/EnemyDamageReaction/RenditionDates/";
 
     // 演出データリスト
@@ -81,6 +97,7 @@ public:
     //*-------------------------------- Getter Method --------------------------------*//
     const std::string& GetGroupName() const { return groupName_; }
     const ReactionParameter& GetReactionParam() const { return reactionParam_; }
+    ReactionState GetReactionState() const { return static_cast<ReactionState>(reactionParam_.intReactionState); }
 
     // 演出データ取得
     const std::vector<std::unique_ptr<EnemyDamageRenditionData>>& GetAllRenditions() const { return renditions_; }

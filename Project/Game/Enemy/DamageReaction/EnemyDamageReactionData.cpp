@@ -14,6 +14,8 @@ void EnemyDamageReactionData::Init(const std::string& reactionName) {
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
+
+    reactionParam_.reactionState = static_cast<ReactionState>(reactionParam_.intReactionState);
 }
 
 void EnemyDamageReactionData::LoadData() {
@@ -135,6 +137,14 @@ void EnemyDamageReactionData::CreateOrLoadRendition(
 ///==========================================================
 void EnemyDamageReactionData::RegisterParams() {
     globalParameter_->Regist<std::string>(groupName_, "TriggerAttackName", &reactionParam_.triggerAttackName);
+    globalParameter_->Regist<int32_t>(groupName_, "ReactionState", &reactionParam_.intReactionState);
+
+    // SlammedParam
+    globalParameter_->Regist<int32_t>(groupName_, "Slammed_BoundNum", &reactionParam_.slammedParam.boundNum);
+    globalParameter_->Regist<float>(groupName_, "Slammed_BounceDamping", &reactionParam_.slammedParam.bounceDamping);
+
+    // TakeUpperParam
+    globalParameter_->Regist<float>(groupName_, "TakeUpper_FloatingTime", &reactionParam_.takeUpperParam.floatingTime);
 }
 
 ///==========================================================
@@ -148,6 +158,25 @@ void EnemyDamageReactionData::AdjustParam() {
     // Trigger Attack
     ImGui::SeparatorText("Trigger Attack");
     SelectTriggerAttack();
+
+    ImGui::Separator();
+
+    // Reaction State
+    ImGui::SeparatorText("Reaction State");
+    const char* stateNames[] = {"Normal", "Slammed", "TakeUpper"};
+    ImGui::Combo("Reaction Type", &reactionParam_.intReactionState, stateNames, IM_ARRAYSIZE(stateNames));
+
+    // 状態に応じたパラメータ表示
+    reactionParam_.reactionState = static_cast<ReactionState>(reactionParam_.intReactionState);
+
+    if (reactionParam_.reactionState == ReactionState::Slammed) {
+        ImGui::SeparatorText("Slammed Parameters");
+        ImGui::DragInt("Bound Number", &reactionParam_.slammedParam.boundNum, 1.0f, 0, 10);
+        ImGui::DragFloat("Bounce Damping", &reactionParam_.slammedParam.bounceDamping, 0.01f, 0.0f, 1.0f);
+    } else if (reactionParam_.reactionState == ReactionState::TakeUpper) {
+        ImGui::SeparatorText("Take Upper Parameters");
+        ImGui::DragFloat("Floating Time", &reactionParam_.takeUpperParam.floatingTime, 0.01f, 0.0f, 10.0f);
+    }
 
     ImGui::Separator();
 

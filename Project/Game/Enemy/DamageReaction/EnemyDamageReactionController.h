@@ -41,7 +41,7 @@ private:
 
 public:
     EnemyDamageReactionData* GetSelectedAttack();
-    EnemyDamageReactionData* GetAttackByName(const std::string& name);
+    EnemyDamageReactionData* GetAttackByTriggerName(const std::string& name);
     const std::vector<std::unique_ptr<EnemyDamageReactionData>>& GetAllAttacks() const { return reactions_; }
     const int& GetAttackCount() const { return static_cast<int>(reactions_.size()); }
  };

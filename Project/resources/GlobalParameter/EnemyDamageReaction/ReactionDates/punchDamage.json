@@ -1,0 +1,9 @@
+{
+    "punchDamage": {
+        "ReactionState": 0,
+        "Slammed_BounceDamping": 0.5,
+        "Slammed_BoundNum": 2,
+        "TakeUpper_FloatingTime": 1.0,
+        "TriggerAttackName": "leftPunch"
+    }
+}

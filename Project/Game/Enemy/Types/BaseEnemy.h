@@ -187,11 +187,13 @@ public:
     const Type& GetType() const { return type_; }
     const Parameter& GetParameter() const { return parameter_; }
     const int32_t& GetGroupId() const { return groupId_; }
-    Player* GetPlayer() { return pPlayer_; }
-    GameCamera* GetGameCamera() { return pGameCamera_; }
+    Vector3 GetBodyRotation() const {return obj3d_->transform_.rotation_;}
+    Player* GetPlayer() const { return pPlayer_; }
+    GameCamera* GetGameCamera() const { return pGameCamera_; }
     BaseEnemyDamageReaction* GetDamageReactionBehavior() const { return damageBehavior_.get(); }
-    FindSprite* GetFindSprite() { return findSprite_.get(); }
-    NotFindSprite* GetNotFindSprite() { return notFindSprite_.get(); }
+    FindSprite* GetFindSprite() const { return findSprite_.get(); }
+    NotFindSprite* GetNotFindSprite() const { return notFindSprite_.get(); }
+    EnemyManager* GetManager() const { return pEnemyManager_; }
     /// ========================================================================================
     ///  setter method
     /// ========================================================================================
@@ -205,4 +207,5 @@ public:
     void SetBodyColor(const Vector4& color);
     void SetIsDeath(const bool& is) { isDeath_ = is; }
     void SetGroupId(const int& groupId) { groupId_ = groupId; }
+    void SetWorldPositionY(const float& y) {baseTransform_.translation_.y = y; }
 };

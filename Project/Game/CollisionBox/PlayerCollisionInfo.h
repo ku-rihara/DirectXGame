@@ -11,11 +11,7 @@ class PlayerComboAttackData;
 /// プレイヤー攻撃の制御クラス
 /// </summary>
 class PlayerCollisionInfo : public BaseAABBCollisionBox {
-public:
-    enum class State {
-        DisAbleCollision,
-        AbleCollision,
-    };
+
 
 public:
     PlayerCollisionInfo()           = default;
