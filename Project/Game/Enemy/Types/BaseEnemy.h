@@ -173,8 +173,6 @@ public:
     /// ========================================================================================
     const bool& GetIsDeath() const { return isDeath_; }
     const Type& GetType() const { return type_; }
-    const bool& GetIsDamageColling() const { return isDamageColling_; }
-    const std::string& GetLastReceivedAttackName() const { return lastReceivedAttackName_; }
     const Parameter& GetParameter() const { return parameter_; }
     const int32_t& GetGroupId() const { return groupId_; }
     Vector3 GetBodyRotation() const { return obj3d_->transform_.rotation_; }

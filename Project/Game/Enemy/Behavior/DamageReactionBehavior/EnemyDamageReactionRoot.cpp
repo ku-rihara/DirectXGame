@@ -62,11 +62,6 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
         return;
     }
 
-    // ダメージクーリング中
-    if (pBaseEnemy_->GetIsDamageColling() && pBaseEnemy_->GetLastReceivedAttackName() == attackName) {
-        return;
-    }
-
     // ダメージクールタイムの開始
     pBaseEnemy_->StartDamageColling(reactionData->GetReactionParam().damageCollingTime, attackName);
 

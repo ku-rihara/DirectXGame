@@ -9,6 +9,7 @@
 
 /// collisionBox
 #include "CollisionBox/PlayerCollisionInfo.h"
+#include"Player/ComboCreator/PlayerComboAttackData.h"
 
 #include "AttackEffect/AttackEffect.h"
 #include "audio/Audio.h"
@@ -126,6 +127,19 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     //
     if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
 
+         // プレイヤーの攻撃名を取得
+        std::string attackName = attackController->GetComboAttackData()->GetGroupName();
+
+        // 攻撃名が空かチェック
+        if (attackName.empty()) {
+            return;
+        }
+
+        // ダメージクーリング中
+        if (isDamageColling_ && lastReceivedAttackName_ == attackName) {
+            return;
+        }
+
         // Rootにし、受けたダメージの判定を行う
         ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
 
@@ -133,61 +147,6 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
             damageReaction->SelectDamageActionBehaviorByAttack(attackController);
         }
     }
-
-    //if (BaseEnemy* enemy = dynamic_cast<BaseEnemy*>(other)) {
-    //    // 敵の中心座標を取得
-    //    const Vector3& enemyPosition = enemy->GetCollisionPos();
-
-    //    // プレイヤーと敵の位置の差分ベクトルを計算
-    //    Vector3 delta = baseTransform_.translation_ - enemyPosition;
-
-    //    // スケール取得
-    //    Vector3 enemyScale = enemy->GetCollisonScale();
-    //    Vector3 myScale    = GetCollisonScale();
-
-    //    // 押し出す距離の計算
-    //    float pushDistanceX = (enemyScale.x + myScale.x) / 2.0f + 0.1f;
-    //    float pushDistanceZ = (enemyScale.z + myScale.z) / 2.0f + 0.1f;
-
-    //    // 実際の押し戻し距離を計算
-    //    float pushAmountX = pushDistanceX - std::abs(delta.x);
-    //    float pushAmountZ = pushDistanceZ - std::abs(delta.z);
-
-    //    // ワープを防ぐために0以下の値を無効化
-    //    pushAmountX = max(0.0f, pushAmountX);
-    //    pushAmountZ = max(0.0f, pushAmountZ);
-
-    //    // 押し戻し方向
-    //    Vector3 pushDirection = {0, 0, 0};
-    //    float pushDistance    = 0.0f;
-
-    //    if (pushAmountX > 0.0f && pushAmountZ > 0.0f) {
-    //        // XとZ両方めり込んでいる場合
-    //        if (pushAmountX > pushAmountZ) {
-    //            pushDistance  = pushAmountX;
-    //            pushDirection = {delta.x > 0 ? 1.0f : -1.0f, 0, 0};
-    //        } else {
-    //            pushDistance  = pushAmountZ;
-    //            pushDirection = {0, 0, delta.z > 0 ? 1.0f : -1.0f};
-    //        }
-    //        /// それぞれ片方ずるめり込んでいる
-    //    } else if (pushAmountX > 0.0f) {
-    //        pushDistance  = pushAmountX;
-    //        pushDirection = {delta.x > 0 ? 1.0f : -1.0f, 0, 0};
-    //    } else if (pushAmountZ > 0.0f) {
-    //        pushDistance  = pushAmountZ;
-    //        pushDirection = {0, 0, delta.z > 0 ? 1.0f : -1.0f};
-    //    }
-
-    //    // ワープを防ぐため、最大移動量を制限
-    //    float MAX_PUSH_DISTANCE = 0.5f;
-    //    pushDistance            = std::min(pushDistance, MAX_PUSH_DISTANCE);
-
-    //    // 実際に押し戻す
-    //    if (pushDistance > 0.0f) {
-    //        baseTransform_.translation_ += pushDirection * pushDistance;
-    //    }
-    //}
 }
 
 Vector3 BaseEnemy::GetCollisionPos() const {

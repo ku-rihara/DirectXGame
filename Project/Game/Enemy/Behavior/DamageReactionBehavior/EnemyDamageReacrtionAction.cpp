@@ -77,11 +77,6 @@ void EnemyDamageReactionAction::InitReaction() {
     // 状態の設定
     currentState_ = static_cast<ReactionState>(reactionParam.intReactionState);
 
-    // ★ダメージクールタイムを先に開始(Root遷移前)
-    pBaseEnemy_->StartDamageColling(
-        reactionParam.damageCollingTime,
-        reactionParam.triggerAttackName);
-
     // 状態に応じた初期化
     switch (currentState_) {
     case ReactionState::Normal:
@@ -140,7 +135,7 @@ void EnemyDamageReactionAction::InitTakeUpperReaction(const EnemyDamageReactionD
     floatingTimer_  = 0.0f;
     hasBounced_     = false;
 
-    // ★ジャンプ速度を設定(上向きの初速)
+    // 吹っ飛び速度
     jumpSpeed_ = std::abs(blowYPower_);
 
     initialPosition_ = pBaseEnemy_->GetWorldPosition();
@@ -260,7 +255,7 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
     }
     // 浮遊時間終了後、落下
     else {
-        // ★バウンド処理
+        // バウンド処理
         if (!hasBounced_) {
             // 落下中
             jumpSpeed_ -= reactionParam.gravity * Frame::DeltaTimeRate();
