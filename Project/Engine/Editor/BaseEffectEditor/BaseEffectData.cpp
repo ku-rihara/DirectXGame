@@ -27,6 +27,10 @@ bool BaseEffectData::IsFinished() const {
     return playState_ == PlayState::STOPPED;
 }
 
+bool BaseEffectData::IsReturning() const {
+  return  playState_ == PlayState::RETURNING;
+}
+
 void BaseEffectData::LoadData() {
     // ロード、同期
     globalParameter_->LoadFile(groupName_, folderPath_);

@@ -147,7 +147,7 @@ void ObjEaseAnimationSection::UpdatePlay(const float& deltaTime) {
 
         // レールの更新かイージング更新で分岐
         if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
-            railPlayer_->Update(deltaTime);
+            railPlayer_->Update();
             param.currentOffset = railPlayer_->GetCurrentPosition();
         } else {
             param.ease.Update(deltaTime);
@@ -174,7 +174,7 @@ void ObjEaseAnimationSection::CheckPlayFinishAndStartReturn() {
 
         // Translation + Rail使用時の特殊処理
         if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
-            if (railPlayer_->IsPlaying()) {
+            if (railPlayer_->IsPlaying() || railPlayer_->IsReturning()) {
                 allPlayFinished = false;
             }
         } else {
@@ -265,7 +265,7 @@ void ObjEaseAnimationSection::CheckFinish() {
         } else {
             // 通常再生中のチェック
             if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
-                if (railPlayer_->IsPlaying()) {
+                if (railPlayer_->IsPlaying() || railPlayer_->IsReturning()) {
                     allFinished = false;
                 }
             } else {
@@ -450,7 +450,7 @@ bool ObjEaseAnimationSection::IsFinished() const {
             }
         } else if (playState_ == PlayState::PLAYING) {
             if (i == static_cast<size_t>(TransformType::Translation) && param.useRail) {
-                if (railPlayer_->IsPlaying()) {
+                if (railPlayer_->IsPlaying() || railPlayer_->IsReturning()) {
                     return false;
                 }
             } else {
