@@ -1,14 +1,14 @@
 {
     "leftPunchMove0": {
-        "Rotation_EaseType": 0,
-        "Rotation_IsActive": false,
-        "Rotation_IsReturnToOrigin": false,
-        "Rotation_MaxTime": 1.0,
-        "Rotation_ReturnEaseType": 0,
-        "Rotation_ReturnMaxTime": 1.0,
+        "Rotation_EaseType": 3,
+        "Rotation_IsActive": true,
+        "Rotation_IsReturnToOrigin": true,
+        "Rotation_MaxTime": 0.12999999523162842,
+        "Rotation_ReturnEaseType": 21,
+        "Rotation_ReturnMaxTime": 0.20000000298023224,
         "Rotation_endValue": [
             0.0,
-            0.0,
+            0.8569561839103699,
             0.0
         ],
         "Scale_EaseType": 22,
