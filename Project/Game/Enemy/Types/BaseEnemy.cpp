@@ -9,7 +9,7 @@
 
 /// collisionBox
 #include "CollisionBox/PlayerCollisionInfo.h"
-#include"Player/ComboCreator/PlayerComboAttackData.h"
+#include "Player/ComboCreator/PlayerComboAttackData.h"
 
 #include "AttackEffect/AttackEffect.h"
 #include "audio/Audio.h"
@@ -127,7 +127,12 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     //
     if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
 
-         // プレイヤーの攻撃名を取得
+       
+        if (!attackController->GetComboAttackData()) {
+            return;
+        }
+
+        // プレイヤーの攻撃名を取得
         std::string attackName = attackController->GetComboAttackData()->GetGroupName();
 
         // 攻撃名が空かチェック

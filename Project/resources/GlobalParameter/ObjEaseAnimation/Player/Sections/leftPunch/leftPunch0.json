@@ -14,25 +14,25 @@
         "Scale_EaseType": 22,
         "Scale_IsActive": true,
         "Scale_IsReturnToOrigin": true,
-        "Scale_MaxTime": 0.1599999964237213,
+        "Scale_MaxTime": 0.10000000149011612,
         "Scale_ReturnEaseType": 3,
-        "Scale_ReturnMaxTime": 0.15000000596046448,
+        "Scale_ReturnMaxTime": 0.10000000149011612,
         "Scale_endValue": [
-            1.2000000476837158,
-            1.2000000476837158,
-            1.2000000476837158
+            1.399999976158142,
+            1.399999976158142,
+            1.399999976158142
         ],
         "Translation_EaseType": 0,
         "Translation_IsActive": true,
         "Translation_IsReturnToOrigin": true,
-        "Translation_MaxTime": 0.3100000023841858,
+        "Translation_MaxTime": 0.10000000149011612,
         "Translation_RailFileName": "",
         "Translation_ReturnEaseType": 0,
-        "Translation_ReturnMaxTime": 0.3199999928474426,
+        "Translation_ReturnMaxTime": 0.10000000149011612,
         "Translation_UseRail": false,
         "Translation_endValue": [
             0.0,
-            0.7200000286102295,
+            0.949999988079071,
             0.0
         ],
         "returnStartTime": 0.0,
