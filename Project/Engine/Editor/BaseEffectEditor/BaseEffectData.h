@@ -32,6 +32,7 @@ public:
     virtual void Pause();
     virtual bool IsPlaying() const;
     virtual bool IsFinished() const;
+    virtual bool IsReturning() const;
 
     // ファイル操作
     virtual void LoadData() = 0;

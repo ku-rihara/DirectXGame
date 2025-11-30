@@ -23,6 +23,7 @@ public:
 
     bool IsPlaying() const;
     bool IsFinished() const;
+    bool IsReturning() const;
 
 protected:
     //*---------------------------- protected Methods ----------------------------*//
