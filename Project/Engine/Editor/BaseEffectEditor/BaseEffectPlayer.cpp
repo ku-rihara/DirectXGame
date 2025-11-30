@@ -24,3 +24,7 @@ bool BaseEffectPlayer::IsPlaying() const {
 bool BaseEffectPlayer::IsFinished() const {
     return effectData_ && effectData_->IsFinished();
 }
+
+bool BaseEffectPlayer::IsReturning() const {
+    return effectData_ && effectData_->IsReturning();
+}
