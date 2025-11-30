@@ -79,11 +79,10 @@ void EnemyDamageReactionAction::InitReaction() {
 
     // 状態の設定
     currentState_ = static_cast<ReactionState>(reactionParam.intReactionState);
-
+    InitNormalReaction(reactionParam.normalParam);
     // 状態に応じた初期化
     switch (currentState_) {
     case ReactionState::Normal:
-        InitNormalReaction(reactionParam.normalParam);
         break;
 
     case ReactionState::Slammed:

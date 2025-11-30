@@ -185,11 +185,11 @@ void EnemyDamageReactionData::AdjustParam() {
     // 状態に応じたパラメータ表示
     reactionParam_.reactionState = static_cast<ReactionState>(reactionParam_.intReactionState);
 
-    if (reactionParam_.reactionState == ReactionState::Normal) {
+
         ImGui::SeparatorText("Normal Parameters");
         ImGui::DragFloat("Knock Back Time", &reactionParam_.normalParam.knockBackTime, 0.01f, 0.0f, 10.0f);
         ImGui::DragFloat("Knock Back Damping", &reactionParam_.normalParam.knockBackDamping, 0.1f);
-    } else if (reactionParam_.reactionState == ReactionState::Slammed) {
+     if (reactionParam_.reactionState == ReactionState::Slammed) {
         ImGui::SeparatorText("Slammed Parameters");
         ImGui::InputInt("Bound Number", &reactionParam_.slammedParam.boundNum);
         ImGui::DragFloat("Bounce Damping", &reactionParam_.slammedParam.bounceDamping, 0.01f, 0.0f, 1.0f);
