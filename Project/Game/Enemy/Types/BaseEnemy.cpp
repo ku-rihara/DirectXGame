@@ -13,6 +13,7 @@
 
 #include "AttackEffect/AttackEffect.h"
 #include "audio/Audio.h"
+#include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
 #include "Frame/Frame.h"
 #include "GameCamera/GameCamera.h"
 #include "Matrix4x4.h"
@@ -69,9 +70,6 @@ void BaseEnemy::Update() {
     // ダメージBehavior更新
     damageBehavior_->Update();
 
-    // 死んだら死亡Behaviorに切り替え
-    BehaviorChangeDeath();
-
     collisionBox_->SetPosition(GetWorldPosition());
     collisionBox_->Update();
     BaseObject::Update();
@@ -127,7 +125,10 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     //
     if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
 
-       
+        if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
+            return;
+        }
+
         if (!attackController->GetComboAttackData()) {
             return;
         }
@@ -173,19 +174,6 @@ void BaseEnemy::ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReac
 
 void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior) {
     moveBehavior_ = std::move(behavior);
-}
-
-void BaseEnemy::BehaviorChangeDeath() {
-    if (hp_ > 0) {
-        return;
-    }
-    /* if (dynamic_cast<EnemyDeath*>(damageBehavior_.get()) || dynamic_cast<EnemyThrustDamage*>(damageBehavior_.get())) {
-         return;
-     };
-
-     isAdaptCollision = false;
-     collisionBox_->SetIsCollision(false);
-     ChangeDamageReactionBehavior(std::make_unique<EnemyDeath>(this));*/
 }
 
 bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {

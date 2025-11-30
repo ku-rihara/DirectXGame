@@ -43,6 +43,12 @@ public:
         float maxChaseTime;    
         float chaseResetTime; 
         float chaseLimitDistance;
+
+        float deathBlowValue; 
+        float deathBlowValueY;
+        float deathGravity;   
+        float deathRotateSpeed;
+        float deathBurstTime;  
     };
 
 public:
@@ -108,8 +114,7 @@ public:
     void ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior);
 
     void BackToDamageRoot(); //< ダメージルートに戻る
-    void BehaviorChangeDeath(); //< 死亡ビヘイビアに変更
-
+  
     /// ====================================================================
     /// Collision
     /// ====================================================================
@@ -158,6 +163,8 @@ protected:
     float HPMax_;
     Vector2 hpBarSize_;
 
+    bool isDeathPending_ = false;
+
     // hitParam
     bool isDamageColling_;
     float damageCollTime_;
@@ -172,9 +179,11 @@ public:
     ///  getter method
     /// ========================================================================================
     const bool& GetIsDeath() const { return isDeath_; }
+    const bool& GetIsDeathPending() const { return isDeathPending_; }
     const Type& GetType() const { return type_; }
     const Parameter& GetParameter() const { return parameter_; }
     const int32_t& GetGroupId() const { return groupId_; }
+    float GetHP() const { return hp_; } // ★追加
     Vector3 GetBodyRotation() const { return obj3d_->transform_.rotation_; }
     Player* GetPlayer() const { return pPlayer_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
@@ -195,5 +204,6 @@ public:
     void SetBodyColor(const Vector4& color);
     void SetIsDeath(const bool& is) { isDeath_ = is; }
     void SetGroupId(const int& groupId) { groupId_ = groupId; }
+    void SetIsDeathPending(const bool& is) { isDeathPending_ = is; } 
     void SetWorldPositionY(const float& y) { baseTransform_.translation_.y = y; }
 };

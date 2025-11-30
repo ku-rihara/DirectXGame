@@ -179,6 +179,7 @@
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReacrtionAction.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\BaseEnemyBehavior.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\EnemyChasePlayer.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\EnemySpawn.cpp" />
@@ -438,6 +439,7 @@
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.h" />
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReacrtionAction.h" />
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.h" />
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.h" />
     <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\BaseEnemyBehavior.h" />
     <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\EnemyChasePlayer.h" />
     <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\EnemySpawn.h" />

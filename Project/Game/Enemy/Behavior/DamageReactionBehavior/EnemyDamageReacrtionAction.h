@@ -9,6 +9,14 @@ class EnemyDamageRenditionData;
 
 class EnemyDamageReactionAction : public BaseEnemyDamageReaction {
 public:
+    // リアクション状態
+    enum class ReactionState {
+        Normal,
+        Slammed,
+        TakeUpper,
+    };
+
+public:
     // コンストラクタ
     EnemyDamageReactionAction(BaseEnemy* boss, EnemyDamageReactionData* reactionData, const PlayerCollisionInfo* playerCollisionInfo);
     ~EnemyDamageReactionAction() override;
@@ -41,13 +49,6 @@ private:
 private:
     EnemyDamageReactionData* pReactionData_          = nullptr;
     const PlayerCollisionInfo* pPlayerCollisionInfo_ = nullptr;
-
-    // リアクション状態
-    enum class ReactionState {
-        Normal,
-        Slammed,
-        TakeUpper,
-    };
 
     ReactionState currentState_ = ReactionState::Normal;
 

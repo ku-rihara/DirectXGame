@@ -1213,6 +1213,9 @@
     <ClCompile Include="Engine\utility\TimeModeSelector\TimeModeSelector.cpp">
       <Filter>MyEngine\.cpp\utility\TimeModeSelector</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.cpp">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1988,6 +1991,9 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\TimeModeSelector\TimeModeSelector.h">
       <Filter>MyEngine\.h\utility\TimeModeSelector</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.h">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

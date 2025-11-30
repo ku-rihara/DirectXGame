@@ -118,11 +118,17 @@ void EnemyManager::RegisterParams() {
         globalParameter_->Regist(groupName_, "maxChaseTime" + std::to_string(int(i + 1)), &parameters_[i].maxChaseTime);
         globalParameter_->Regist(groupName_, "chaseResetTime" + std::to_string(int(i + 1)), &parameters_[i].chaseResetTime);
         globalParameter_->Regist(groupName_, "ChaseLimitDistance" + std::to_string(int(i + 1)), &parameters_[i].chaseLimitDistance);
-  
+
+        // 死亡パラメータ
+        globalParameter_->Regist(groupName_, "deathBlowValue" + std::to_string(int(i + 1)), &parameters_[i].deathBlowValue);
+        globalParameter_->Regist(groupName_, "deathBlowValueY" + std::to_string(int(i + 1)), &parameters_[i].deathBlowValueY);
+        globalParameter_->Regist(groupName_, "deathGravity" + std::to_string(int(i + 1)), &parameters_[i].deathGravity);
+        globalParameter_->Regist(groupName_, "deathRotateSpeed" + std::to_string(int(i + 1)), &parameters_[i].deathRotateSpeed);
+        globalParameter_->Regist(groupName_, "deathBurstTime" + std::to_string(int(i + 1)), &parameters_[i].deathBurstTime);
     }
 }
 
-
+// DrawEnemyParamUI関数にも追加
 void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
 
     ImGui::DragFloat3("initScale", &parameters_[static_cast<size_t>(type)].initScale_.x, 0.01f);
@@ -137,6 +143,12 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::DragFloat("ChaseResetTime", &parameters_[static_cast<size_t>(type)].chaseResetTime, 0.1f, 0.0f, 10.0f);
     ImGui::DragFloat("ChaseLimitDistance", &parameters_[static_cast<size_t>(type)].chaseLimitDistance, 0.1f);
 
+    ImGui::SeparatorText("Death Settings");
+    ImGui::DragFloat("DeathBlowValue", &parameters_[static_cast<size_t>(type)].deathBlowValue, 0.1f);
+    ImGui::DragFloat("DeathBlowValueY", &parameters_[static_cast<size_t>(type)].deathBlowValueY, 0.1f);
+    ImGui::DragFloat("DeathGravity", &parameters_[static_cast<size_t>(type)].deathGravity, 0.1f);
+    ImGui::DragFloat("DeathRotateSpeed", &parameters_[static_cast<size_t>(type)].deathRotateSpeed, 0.01f);
+    ImGui::DragFloat("DeathBurstTime", &parameters_[static_cast<size_t>(type)].deathBurstTime, 0.01f);
 
     ImGui::SeparatorText("UI");
     ImGui::DragFloat2("HPBarOffsetPos", &parameters_[static_cast<size_t>(type)].hpBarPosOffset.x, 0.01f);

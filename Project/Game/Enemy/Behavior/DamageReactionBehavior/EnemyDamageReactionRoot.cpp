@@ -11,6 +11,7 @@
 #include "Enemy/DamageReaction/EnemyDamageReactionController.h"
 #include "Enemy/DamageReaction/EnemyDamageReactionData.h"
 /// math
+#include "EnemyDeath.h"
 #include "Frame/Frame.h"
 #include "MathFunction.h"
 
@@ -66,11 +67,32 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
     pBaseEnemy_->StartDamageColling(reactionData->GetReactionParam().damageCollingTime, attackName);
 
     // ダメージを適用
-    if (pPlayerCollisionInfo_) {
-        pBaseEnemy_->TakeDamage(pPlayerCollisionInfo_->GetAttackPower());
+    if (!pPlayerCollisionInfo_) {
+        return;
+    }
+    pBaseEnemy_->TakeDamage(pPlayerCollisionInfo_->GetAttackPower());
 
-        // リアクションアクションに切り替え
+    //  ダメージ適用後、HPが0以下かチェック
+    if (pBaseEnemy_->GetHP() <= 0.0f) {
+        // 死亡予約フラグを立てる
+        pBaseEnemy_->SetIsDeathPending(true);
+
+        // コリジョンを無効化
+        pBaseEnemy_->SetIsAdaptCollision(false);
+
+        // Slammed状態の場合は、リアクションアクションに切り替え
+        if (reactionData->GetReactionParam().intReactionState == static_cast<int>(EnemyDamageReactionAction::ReactionState::Slammed)) {
+            pBaseEnemy_->ChangeDamageReactionBehavior(
+                std::make_unique<EnemyDamageReactionAction>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
+        }
+        // それ以外の場合は即座に死亡Behaviorに切り替え
+        else {
+            pBaseEnemy_->ChangeDamageReactionBehavior(
+                std::make_unique<EnemyDeath>(pBaseEnemy_));
+        }
+    } else {
         pBaseEnemy_->ChangeDamageReactionBehavior(
             std::make_unique<EnemyDamageReactionAction>(pBaseEnemy_, reactionData, pPlayerCollisionInfo_));
+    
     }
 }

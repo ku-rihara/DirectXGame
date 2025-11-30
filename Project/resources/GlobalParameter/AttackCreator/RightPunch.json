@@ -8,7 +8,7 @@
         "HitStop_StartTiming": 0.0,
         "HitStop_TriggerByHit": false,
         "IsFirstAttack": false,
-        "KnockBackPower": 26.0,
+        "KnockBackPower": 13.720000267028809,
         "NextAttackType": "",
         "ObjAnim_Head_FileName": "rightPunchMove",
         "ObjAnim_Head_StartTiming": 0.0,
@@ -29,7 +29,7 @@
         "collisionOffsetPos": [
             0.0,
             0.0,
-            5.0
+            2.009999990463257
         ],
         "collisionSize": [
             5.0,
@@ -52,7 +52,7 @@
             2.0
         ],
         "playbackSpeed": 1.0,
-        "power": 1.0,
+        "power": 12.720000267028809,
         "precedeInputFrame": 0.27000001072883606,
         "resetFovEaseType": 1,
         "resetPosEaseType": 1,

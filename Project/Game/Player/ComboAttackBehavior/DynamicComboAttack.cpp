@@ -48,7 +48,8 @@ void DynamicComboAttack::Init() {
     // 攻撃スピードと攻撃力
     const PlayerComboAttackController* attackController = pPlayer_->GetComboAttackController();
     atkSpeed_                                           = attackController->GetRealAttackSpeed(Frame::DeltaTimeRate());
-    float power                                         = attackController->GetPowerRate();
+
+    float power = attackData_->GetAttackParam().power* attackController->GetPowerRate();
     pCollisionInfo_->SetAttackPower(power);
 
     // コリジョンボックス設定
@@ -68,6 +69,8 @@ void DynamicComboAttack::Update() {
         pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
     }
 
+    currentFrame_ += atkSpeed_;
+
     switch (order_) {
 
         // 攻撃初期化
@@ -83,9 +86,11 @@ void DynamicComboAttack::Update() {
     case Order::WAIT:
         UpdateWait();
         break;
-    }
 
-    currentFrame_ += atkSpeed_;
+    case Order::CHANGE:
+        ChangeNextAttack();
+        break;
+    }
 }
 
 void DynamicComboAttack::InitializeAttack() {
@@ -126,7 +131,7 @@ void DynamicComboAttack::UpdateAttack() {
 void DynamicComboAttack::UpdateWait() {
 
     AttackCancel();
-   
+
     pPlayer_->AdaptRotate();
     waitTime_ += atkSpeed_;
 
@@ -134,8 +139,7 @@ void DynamicComboAttack::UpdateWait() {
         return;
     }
 
-    // 次の攻撃
-    ChangeNextAttack();
+    order_ = Order::CHANGE;
 }
 
 void DynamicComboAttack::ChangeNextAttack() {
@@ -145,6 +149,8 @@ void DynamicComboAttack::ChangeNextAttack() {
 
         BaseComboAattackBehavior::ChangeNextCombo(
             std::make_unique<DynamicComboAttack>(pPlayer_, nextAttackData_));
+
+        return;
 
     } else {
         // データが見つからない場合はルートに戻る
@@ -177,7 +183,7 @@ void DynamicComboAttack::AttackCancel() {
 
     if (isAttackCancel_) {
         // 次の攻撃
-        ChangeNextAttack();
+        order_ = Order::CHANGE;
     }
 }
 

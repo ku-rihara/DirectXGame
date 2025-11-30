@@ -68,7 +68,6 @@ void PlayerCollisionInfo::LoopWaiting(const float& timeSpeed) {
         return;
     }
 
-
     // ループ待機タイム減算
     loopWaitTimer_ -= timeSpeed;
 
@@ -120,8 +119,7 @@ void PlayerCollisionInfo::AttackStart(const PlayerComboAttackData* comboAttackDa
 
 void PlayerCollisionInfo::UpdateOffset() {
     Vector3 offSetValue        = comboAttackData_->GetAttackParam().collisionParam.offsetPos;
-    Vector3 forwardOffSetValue = baseTransform_->CalcForwardOffset(offSetValue);
-    SetOffset(forwardOffSetValue);
+    SetOffset(offSetValue);
 }
 
 void PlayerCollisionInfo::OnCollisionStay([[maybe_unused]] BaseCollider* other) {

@@ -8,6 +8,7 @@
 /// math
 #include "Frame/Frame.h"
 #include "MathFunction.h"
+#include "EnemyDeath.h"
 
 // 初期化
 EnemyDamageReactionAction::EnemyDamageReactionAction(
@@ -185,6 +186,12 @@ void EnemyDamageReactionAction::UpdateSlammed() {
 
             // 地面衝突エフェクト
             pBaseEnemy_->ThrustRenditionInit();
+
+            //  HPが0以下の場合、1バウンド目で死亡処理
+            if (pBaseEnemy_->GetIsDeathPending()) {
+                pBaseEnemy_->ChangeDamageReactionBehavior(std::make_unique<EnemyDeath>(pBaseEnemy_));
+                return;
+            }
 
             // 最初のバウンド速度を設定
             bounceSpeed_ = std::abs(blowYPower_) * reactionParam.initialBounceRate;

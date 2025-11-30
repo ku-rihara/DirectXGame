@@ -25,6 +25,7 @@ private:
         INIT,
         ATTACK,
         WAIT,
+        CHANGE,
     };
 
     void InitializeAttack();
