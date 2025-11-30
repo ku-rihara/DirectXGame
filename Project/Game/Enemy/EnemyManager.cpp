@@ -38,11 +38,11 @@ void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& posit
 
     std::unique_ptr<BaseEnemy> enemy;
 
-    if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]) { 
+    if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]) {
         enemy = std::make_unique<NormalEnemy>();
         enemy->SetParameter(BaseEnemy::Type::NORMAL, parameters_[static_cast<size_t>(BaseEnemy::Type::NORMAL)]);
     }
-    if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)]) { 
+    if (enemyType == enemyTypes_[static_cast<size_t>(BaseEnemy::Type::STRONG)]) {
         enemy = std::make_unique<StrongEnemy>();
         enemy->SetParameter(BaseEnemy::Type::STRONG, parameters_[static_cast<size_t>(BaseEnemy::Type::STRONG)]);
     }
@@ -111,19 +111,7 @@ void EnemyManager::RegisterParams() {
         globalParameter_->Regist(groupName_, "chaseDistance" + std::to_string(int(i + 1)), &parameters_[i].chaseDistance);
         globalParameter_->Regist(groupName_, "chaseSpeed" + std::to_string(int(i + 1)), &parameters_[i].chaseSpeed);
         globalParameter_->Regist(groupName_, "basePosY_" + std::to_string(int(i + 1)), &parameters_[i].basePosY);
-        globalParameter_->Regist(groupName_, "thrustRotateSpeed" + std::to_string(int(i + 1)), &parameters_[i].thrustRotateSpeed);
-        globalParameter_->Regist(groupName_, "upperGravity" + std::to_string(int(i + 1)), &parameters_[i].upperGravity);
-        globalParameter_->Regist(groupName_, "upperJumpPower" + std::to_string(int(i + 1)), &parameters_[i].upperJumpPower);
-        globalParameter_->Regist(groupName_, "upperFallSpeedLimit" + std::to_string(int(i + 1)), &parameters_[i].upperFallSpeedLimit);
-        globalParameter_->Regist(groupName_, "hitbackRotateTime" + std::to_string(int(i + 1)), &parameters_[i].archingBackTime);
-        globalParameter_->Regist(groupName_, "hitbackRotateValue" + std::to_string(int(i + 1)), &parameters_[i].archingBackValue);
-        globalParameter_->Regist(groupName_, "hitbackRotateBackRatio" + std::to_string(int(i + 1)), &parameters_[i].archingBackRate);
-        globalParameter_->Regist(groupName_, "blowValue_" + std::to_string(int(i + 1)), &parameters_[i].blowValue);
-        globalParameter_->Regist(groupName_, "blowValueY_" + std::to_string(int(i + 1)), &parameters_[i].blowValueY);
-        globalParameter_->Regist(groupName_, "blowTime" + std::to_string(int(i + 1)), &parameters_[i].blowTime);
-        globalParameter_->Regist(groupName_, "blowRotateSpeed" + std::to_string(int(i + 1)), &parameters_[i].blowRotateSpeed);
         globalParameter_->Regist(groupName_, "burstTime" + std::to_string(int(i + 1)), &parameters_[i].burstTime);
-        globalParameter_->Regist(groupName_, "blowGravity" + std::to_string(int(i + 1)), &parameters_[i].blowGravity);
         globalParameter_->Regist(groupName_, "initScale" + std::to_string(int(i + 1)), &parameters_[i].initScale_);
         globalParameter_->Regist(groupName_, "hpBarPosOffset" + std::to_string(int(i + 1)), &parameters_[i].hpBarPosOffset);
     }
@@ -135,19 +123,9 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::DragFloat("ChaseSpeed", &parameters_[static_cast<size_t>(type)].chaseSpeed, 0.01f);
     ImGui::DragFloat("ChaseDistance", &parameters_[static_cast<size_t>(type)].chaseDistance, 0.01f);
     ImGui::DragFloat("basePosY", &parameters_[static_cast<size_t>(type)].basePosY, 0.01f);
-    ImGui::DragFloat("thrustRotateSpeed", &parameters_[static_cast<size_t>(type)].thrustRotateSpeed, 0.01f);
-    ImGui::DragFloat("upperGravity", &parameters_[static_cast<size_t>(type)].upperGravity, 0.01f);
-    ImGui::DragFloat("upperJumpPowe", &parameters_[static_cast<size_t>(type)].upperJumpPower, 0.01f);
-    ImGui::DragFloat("upperFallSpeedLimit", &parameters_[static_cast<size_t>(type)].upperFallSpeedLimit, 0.01f);
-    ImGui::SliderAngle("hitbackRotateValue", &parameters_[static_cast<size_t>(type)].archingBackValue, -360.0f, 720.0f);
-    ImGui::DragFloat("hitbackRotateBackRatio", &parameters_[static_cast<size_t>(type)].archingBackRate, 0.01f);
-    ImGui::DragFloat("hitbackRotateTime", &parameters_[static_cast<size_t>(type)].archingBackTime, 0.01f);
-    ImGui::DragFloat("blowValue", &parameters_[static_cast<size_t>(type)].blowValue, 0.01f);
-    ImGui::DragFloat("blowValueY", &parameters_[static_cast<size_t>(type)].blowValueY, 0.01f);
-    ImGui::DragFloat("blowRotateSpeed", &parameters_[static_cast<size_t>(type)].blowRotateSpeed, 0.01f);
+
     ImGui::DragFloat("burstTime", &parameters_[static_cast<size_t>(type)].burstTime, 0.01f);
-    ImGui::DragFloat("blowGravity", &parameters_[static_cast<size_t>(type)].blowGravity, 0.01f);
-    ImGui::DragFloat("blowTime", &parameters_[static_cast<size_t>(type)].blowTime, 0.01f);
+
     ImGui::SeparatorText("UI");
     ImGui::DragFloat2("HPBarOffsetPos", &parameters_[static_cast<size_t>(type)].hpBarPosOffset.x, 0.01f);
 }
@@ -181,7 +159,7 @@ void EnemyManager::AdjustParam() {
 
 void EnemyManager::DamageReactionCreate() {
     damageReactionController_->EditorUpdate();
- }
+}
 
 ///---------------------------------------------------------
 /// Particle Init

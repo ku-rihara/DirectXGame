@@ -35,6 +35,11 @@ void EnemyDamageReactionRoot::SelectDamageActionBehaviorByAttack(const PlayerCol
     if (!playerCollisionInfo) {
         return;
     }
+
+    if (!playerCollisionInfo->GetComboAttackData()) {
+        return;
+    }
+
     pPlayerCollisionInfo_ = playerCollisionInfo;
     // プレイヤーの攻撃名を取得
     std::string attackName = playerCollisionInfo->GetComboAttackData()->GetGroupName();

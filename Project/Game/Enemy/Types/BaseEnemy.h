@@ -38,19 +38,7 @@ public:
         float chaseDistance;
         float chaseSpeed;
         float basePosY;
-        float thrustRotateSpeed;
-        float upperGravity;
-        float upperFallSpeedLimit;
-        float upperJumpPower;
-        float archingBackValue;
-        float archingBackRate;
-        float archingBackTime;
-        float blowValue;
-        float blowValueY;
-        float blowTime;
-        float blowRotateSpeed;
         float burstTime;
-        float blowGravity;
     };
 
 public:

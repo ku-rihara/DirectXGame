@@ -21,14 +21,28 @@ public:
         TakeUpper,
     };
 
+    // Normal状態のパラメータ
+    struct NormalParam {
+        float knockBackTime;    
+        float knockBackDamping; 
+    };
+
     struct SlammedParam {
         int32_t boundNum;
         float bounceDamping;
+        float initialBounceRate;
+        float downSpeed;
+        float fallSpeedLimit; 
+        float gravity;
+        float thrustRotateSpeed;
     };
 
     struct TakeUpperParam {
-        float floatingTime;
-        
+        float floatingTime; 
+        float jumpSpeedRate;
+        float fallSpeedLimit; 
+        float gravity; 
+        float thrustRotateSpeed;
     };
 
     // リアクションパラメータ
@@ -36,6 +50,7 @@ public:
         std::string triggerAttackName;
         int32_t intReactionState = 0;
         ReactionState reactionState;
+        NormalParam normalParam;
         SlammedParam slammedParam;
         TakeUpperParam takeUpperParam;
         float damageCollingTime;

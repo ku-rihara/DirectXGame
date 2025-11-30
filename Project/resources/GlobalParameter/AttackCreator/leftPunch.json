@@ -10,7 +10,7 @@
         "HitStop_StartTiming": 0.7099999785423279,
         "HitStop_TriggerByHit": false,
         "IsFirstAttack": true,
-        "KnockBackPower": 5.389999866485596,
+        "KnockBackPower": 26.56999969482422,
         "NextAttackType": "test2",
         "ObjAnim_Head_FileName": "leftPunch",
         "ObjAnim_Head_StartTiming": 0.0,
@@ -93,22 +93,22 @@
         ],
         "Translation_UseCurrentAsStart": true,
         "Translation_UseRail": false,
-        "adaptTime": 0.9300000071525574,
-        "blowYPower": 0.0,
+        "adaptTime": 0.10000000149011612,
+        "blowYPower": 8.8100004196167,
         "cancelFrame": 0.0,
         "collisionOffsetPos": [
             0.0,
             0.0,
-            0.0
+            2.7799999713897705
         ],
         "collisionSize": [
-            9.0,
-            9.0,
-            9.0
+            3.0,
+            3.0,
+            3.0
         ],
         "finishWaitTime": 0.0,
         "gamePadBottom": 16384,
-        "isAbleInputMoving": false,
+        "isAbleInputMoving": true,
         "isAlwaysFollowing": false,
         "isCancel": false,
         "keyBordBottom": 35,

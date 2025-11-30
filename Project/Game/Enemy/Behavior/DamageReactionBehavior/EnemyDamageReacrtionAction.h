@@ -17,39 +17,27 @@ public:
     void Debug() override;
 
 private:
-    /// <summary>
-    /// リアクションの初期化処理
-    /// </summary>
-    void InitializeReaction();
+    // リアクション初期化
+    void InitReaction();
 
-    /// <summary>
-    /// Normal状態の更新
-    /// </summary>
+    void InitNormalReaction(const EnemyDamageReactionData::NormalParam& param);
+    void InitSlammedReaction(const EnemyDamageReactionData::SlammedParam& param);
+    void InitTakeUpperReaction(const EnemyDamageReactionData::TakeUpperParam& param);
+ 
+
+    // 各リアクション処理
     void UpdateNormal();
-
-    /// <summary>
-    /// Slammed状態の更新
-    /// </summary>
     void UpdateSlammed();
-
-    /// <summary>
-    /// TakeUpper状態の更新
-    /// </summary>
     void UpdateTakeUpper();
 
-    /// <summary>
-    /// 演出の更新
-    /// </summary>
+    // 演出更新
     void UpdateRenditions();
 
-    /// <summary>
-    /// リアクション終了判定
-    /// </summary>
-    /// <returns>終了ならtrue</returns>
+    // リアクション終了判定
     bool IsReactionFinished() const;
 
 private:
-    EnemyDamageReactionData* pReactionData_    = nullptr;
+    EnemyDamageReactionData* pReactionData_          = nullptr;
     const PlayerCollisionInfo* pPlayerCollisionInfo_ = nullptr;
 
     // リアクション状態
@@ -58,24 +46,30 @@ private:
         Slammed,
         TakeUpper,
     };
+
     ReactionState currentState_ = ReactionState::Normal;
 
     // 物理パラメータ
-    float blowYPower_ = 0.0f; // プレイヤー攻撃から取得したY方向の力
+    float blowYPower_;
+    float knockBackPower_;
 
     // タイマー
     float reactionTimer_     = 0.0f;
     float totalReactionTime_ = 1.0f;
 
+    // Normal用パラメータ
+    Vector3 knockBackVelocity_;  
+    float knockBackTimer_ = 0.0f;
+
     // Slammed用パラメータ
     int32_t currentBoundCount_ = 0;
     int32_t maxBoundCount_     = 0;
-    float bounceSpeed_         = 0.0f;
-    float bounceDamping_       = 0.5f;
-    bool hasReachedGround_     = false; // 地面に到達したか
+    float bounceSpeed_;
+    float bounceDamping_;
+    bool hasReachedGround_ = false; // 地面に到達したか
 
     // TakeUpper用パラメータ
-    float floatingTime_ = 1.0f;
+    float floatingTime_ = 0.0f;
     float jumpSpeed_    = 0.0f;
     Vector3 initialPosition_;
     bool hasReachedPeak_ = false; // 頂点に到達したか

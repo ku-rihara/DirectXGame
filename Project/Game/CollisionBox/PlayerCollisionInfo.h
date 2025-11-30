@@ -61,6 +61,7 @@ public:
     const bool& GetIsInLoopWait() const { return isInLoopWait_; }
     const bool& GetIsHit() const { return isHit_; }
     const bool& GetIsFinish() const { return isFinish_; }
+    const WorldTransform* GetPlayerTransform() const { return baseTransform_; }
 
     void SetAttackPower(const float& atkPower) { attackPower_ = atkPower; }
     void SetIsHit(const bool& is) { isHit_ = is; }
