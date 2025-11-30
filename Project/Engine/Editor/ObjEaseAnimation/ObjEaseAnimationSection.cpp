@@ -7,7 +7,7 @@ void ObjEaseAnimationSection::Init(const std::string& animationName, const std::
     globalParameter_             = GlobalParameter::GetInstance();
     currenTSequenceElementIndex_ = keyNumber;
     groupName_                   = animationName + std::to_string(currenTSequenceElementIndex_);
-    folderPath_                  = "ObjEaseAnimation/" + categoryName + "/" + "Sections/" + animationName;
+    folderPath_                  = "ObjEaseAnimation/" + categoryName + "/" + "Sections/" + animationName + "/";
 
     // Scaleの初期値を1に設定
     transformParams_[static_cast<size_t>(TransformType::Scale)].endValue = Vector3::OneVector();

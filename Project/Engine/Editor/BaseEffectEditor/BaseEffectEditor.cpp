@@ -433,7 +433,7 @@ void BaseEffectEditor<TEffectData>::AddEffectToCategory(const int32_t& categoryI
     }
 
     auto effect = CreateEffectData();
-    effect->Init(effectName);
+    effect->InitWithCategory(effectName, category.name);
 
     category.effects.push_back(std::move(effect));
     category.selectedEffectIndex = static_cast<int32_t>(category.effects.size()) - 1;
