@@ -10,7 +10,7 @@
         "HitStop_StartTiming": 0.7099999785423279,
         "HitStop_TriggerByHit": false,
         "IsFirstAttack": true,
-        "KnockBackPower": 26.56999969482422,
+        "KnockBackPower": 26.709999084472656,
         "NextAttackType": "test2",
         "ObjAnim_Head_FileName": "leftPunch",
         "ObjAnim_Head_StartTiming": 0.0,
@@ -94,7 +94,7 @@
         "Translation_UseCurrentAsStart": true,
         "Translation_UseRail": false,
         "adaptTime": 0.10000000149011612,
-        "blowYPower": 8.8100004196167,
+        "blowYPower": 32.97999954223633,
         "cancelFrame": 0.0,
         "collisionOffsetPos": [
             0.0,

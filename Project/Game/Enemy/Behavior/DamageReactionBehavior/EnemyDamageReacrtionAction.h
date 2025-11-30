@@ -2,9 +2,9 @@
 
 #include "BaseEnemyDamageReaction.h"
 #include "Vector3.h"
+#include "Enemy/DamageReaction/EnemyDamageReactionData.h"
 
 class PlayerCollisionInfo;
-class EnemyDamageReactionData;
 class EnemyDamageRenditionData;
 
 class EnemyDamageReactionAction : public BaseEnemyDamageReaction {

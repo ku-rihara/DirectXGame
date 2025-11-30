@@ -155,7 +155,6 @@ void EnemyDamageReactionData::RegisterParams() {
 
     // TakeUpperParam
     globalParameter_->Regist(groupName_, "TakeUpper_FloatingTime", &reactionParam_.takeUpperParam.floatingTime);
-    globalParameter_->Regist(groupName_, "TakeUpper_JumpSpeedRate", &reactionParam_.takeUpperParam.jumpSpeedRate);
     globalParameter_->Regist(groupName_, "TakeUpper_FallSpeedLimit", &reactionParam_.takeUpperParam.fallSpeedLimit);
     globalParameter_->Regist(groupName_, "TakeUpper_Gravity", &reactionParam_.takeUpperParam.gravity);
     globalParameter_->Regist(groupName_, "TakeUpper_ThrustRotateSpeed", &reactionParam_.takeUpperParam.thrustRotateSpeed);
@@ -201,11 +200,10 @@ void EnemyDamageReactionData::AdjustParam() {
         ImGui::DragFloat("Thrust Rotate Speed", &reactionParam_.slammedParam.thrustRotateSpeed, 0.01f, 0.0f, 10.0f);
     } else if (reactionParam_.reactionState == ReactionState::TakeUpper) {
         ImGui::SeparatorText("Take Upper Parameters");
-        ImGui::DragFloat("Floating Time", &reactionParam_.takeUpperParam.floatingTime, 0.01f, 0.0f, 10.0f);
-        ImGui::DragFloat("Jump Speed Rate", &reactionParam_.takeUpperParam.jumpSpeedRate, 0.01f, 0.0f, 2.0f);
-        ImGui::DragFloat("Fall Speed Limit", &reactionParam_.takeUpperParam.fallSpeedLimit, 0.1f, 0.0f, 100.0f);
-        ImGui::DragFloat("Gravity", &reactionParam_.takeUpperParam.gravity, 0.1f, 0.0f, 10.0f);
-        ImGui::DragFloat("Thrust Rotate Speed", &reactionParam_.takeUpperParam.thrustRotateSpeed, 0.01f, 0.0f, 10.0f);
+        ImGui::DragFloat("Floating Time", &reactionParam_.takeUpperParam.floatingTime, 0.01f);
+       ImGui::DragFloat("Fall Speed Limit", &reactionParam_.takeUpperParam.fallSpeedLimit, 0.1f);
+        ImGui::DragFloat("Gravity", &reactionParam_.takeUpperParam.gravity, 0.1f);
+        ImGui::DragFloat("Thrust Rotate Speed", &reactionParam_.takeUpperParam.thrustRotateSpeed, 0.01f);
     }
 
     ImGui::Separator();

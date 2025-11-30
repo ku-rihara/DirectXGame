@@ -1,9 +1,20 @@
 {
     "punchDamage": {
-        "ReactionState": 0,
+        "Normal_KnockBackDamping": 0.5899999737739563,
+        "Normal_KnockBackTime": 0.6399999856948853,
+        "ReactionState": 2,
         "Slammed_BounceDamping": 0.5,
         "Slammed_BoundNum": 2,
-        "TakeUpper_FloatingTime": 1.0,
+        "Slammed_DownSpeed": 0.0,
+        "Slammed_FallSpeedLimit": 0.0,
+        "Slammed_Gravity": 0.0,
+        "Slammed_InitialBounceRate": 0.0,
+        "Slammed_ThrustRotateSpeed": 0.0,
+        "TakeUpper_FallSpeedLimit": 188.5,
+        "TakeUpper_FloatingTime": 0.27000001072883606,
+        "TakeUpper_Gravity": 188.8000030517578,
+        "TakeUpper_JumpSpeedRate": 1.0,
+        "TakeUpper_ThrustRotateSpeed": 19.420000076293945,
         "TriggerAttackName": "leftPunch",
         "damageCollingTime": 0.6100000143051147
     }

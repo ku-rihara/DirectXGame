@@ -39,7 +39,6 @@ public:
 
     struct TakeUpperParam {
         float floatingTime; 
-        float jumpSpeedRate;
         float fallSpeedLimit; 
         float gravity; 
         float thrustRotateSpeed;

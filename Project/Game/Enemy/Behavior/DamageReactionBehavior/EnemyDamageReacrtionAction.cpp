@@ -4,8 +4,6 @@
 #include "Enemy/Types/BaseEnemy.h"
 #include "Player/Player.h"
 /// data
-#include "Enemy/DamageReaction/EnemyDamageReactionController.h"
-#include "Enemy/DamageReaction/EnemyDamageReactionData.h"
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 /// math
 #include "Frame/Frame.h"
@@ -135,7 +133,7 @@ void EnemyDamageReactionAction::InitTakeUpperReaction(const EnemyDamageReactionD
     floatingTimer_  = 0.0f;
 
     // ジャンプ速度を設定
-    jumpSpeed_ = std::abs(blowYPower_) * param.jumpSpeedRate;
+    jumpSpeed_ = std::abs(blowYPower_);
 
     initialPosition_ = pBaseEnemy_->GetWorldPosition();
 
@@ -225,7 +223,6 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
     }
 
     const auto& reactionParam = pReactionData_->GetReactionParam().takeUpperParam;
-    const auto& enemyParam    = pBaseEnemy_->GetParameter();
 
     // 頂点に到達していない場合は上昇
     if (!hasReachedPeak_) {
