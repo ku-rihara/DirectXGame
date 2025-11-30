@@ -32,13 +32,17 @@ public:
         COUNT,
     };
 
-    struct Parameter {
+     struct Parameter {
         Vector3 initScale_;
         Vector2 hpBarPosOffset;
         float chaseDistance;
         float chaseSpeed;
         float basePosY;
         float burstTime;
+        float avoidanceRadius; 
+        float maxChaseTime;    
+        float chaseResetTime; 
+        float chaseLimitDistance;
     };
 
 public:

@@ -114,8 +114,14 @@ void EnemyManager::RegisterParams() {
         globalParameter_->Regist(groupName_, "burstTime" + std::to_string(int(i + 1)), &parameters_[i].burstTime);
         globalParameter_->Regist(groupName_, "initScale" + std::to_string(int(i + 1)), &parameters_[i].initScale_);
         globalParameter_->Regist(groupName_, "hpBarPosOffset" + std::to_string(int(i + 1)), &parameters_[i].hpBarPosOffset);
+        globalParameter_->Regist(groupName_, "avoidanceRadius" + std::to_string(int(i + 1)), &parameters_[i].avoidanceRadius);
+        globalParameter_->Regist(groupName_, "maxChaseTime" + std::to_string(int(i + 1)), &parameters_[i].maxChaseTime);
+        globalParameter_->Regist(groupName_, "chaseResetTime" + std::to_string(int(i + 1)), &parameters_[i].chaseResetTime);
+        globalParameter_->Regist(groupName_, "ChaseLimitDistance" + std::to_string(int(i + 1)), &parameters_[i].chaseLimitDistance);
+  
     }
 }
+
 
 void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
 
@@ -123,8 +129,14 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::DragFloat("ChaseSpeed", &parameters_[static_cast<size_t>(type)].chaseSpeed, 0.01f);
     ImGui::DragFloat("ChaseDistance", &parameters_[static_cast<size_t>(type)].chaseDistance, 0.01f);
     ImGui::DragFloat("basePosY", &parameters_[static_cast<size_t>(type)].basePosY, 0.01f);
-
     ImGui::DragFloat("burstTime", &parameters_[static_cast<size_t>(type)].burstTime, 0.01f);
+
+    ImGui::SeparatorText("Chase Settings");
+    ImGui::DragFloat("AvoidanceRadius", &parameters_[static_cast<size_t>(type)].avoidanceRadius, 0.1f);
+    ImGui::DragFloat("MaxChaseTime", &parameters_[static_cast<size_t>(type)].maxChaseTime, 0.1f, 0.0f, 30.0f);
+    ImGui::DragFloat("ChaseResetTime", &parameters_[static_cast<size_t>(type)].chaseResetTime, 0.1f, 0.0f, 10.0f);
+    ImGui::DragFloat("ChaseLimitDistance", &parameters_[static_cast<size_t>(type)].chaseLimitDistance, 0.1f);
+
 
     ImGui::SeparatorText("UI");
     ImGui::DragFloat2("HPBarOffsetPos", &parameters_[static_cast<size_t>(type)].hpBarPosOffset.x, 0.01f);

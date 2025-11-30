@@ -10,11 +10,11 @@
         "Slammed_Gravity": 0.0,
         "Slammed_InitialBounceRate": 0.0,
         "Slammed_ThrustRotateSpeed": 0.0,
-        "TakeUpper_FallSpeedLimit": 188.5,
+        "TakeUpper_FallSpeedLimit": 2222.0,
         "TakeUpper_FloatingTime": 0.27000001072883606,
-        "TakeUpper_Gravity": 188.8000030517578,
+        "TakeUpper_Gravity": 120.0,
         "TakeUpper_JumpSpeedRate": 1.0,
-        "TakeUpper_ThrustRotateSpeed": 19.420000076293945,
+        "TakeUpper_ThrustRotateSpeed": 25.770000457763672,
         "TriggerAttackName": "leftPunch",
         "damageCollingTime": 0.6100000143051147
     }

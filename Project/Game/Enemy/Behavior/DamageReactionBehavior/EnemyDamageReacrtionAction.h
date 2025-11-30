@@ -1,8 +1,8 @@
 #pragma once
 
 #include "BaseEnemyDamageReaction.h"
-#include "Vector3.h"
 #include "Enemy/DamageReaction/EnemyDamageReactionData.h"
+#include "Vector3.h"
 
 class PlayerCollisionInfo;
 class EnemyDamageRenditionData;
@@ -23,7 +23,6 @@ private:
     void InitNormalReaction(const EnemyDamageReactionData::NormalParam& param);
     void InitSlammedReaction(const EnemyDamageReactionData::SlammedParam& param);
     void InitTakeUpperReaction(const EnemyDamageReactionData::TakeUpperParam& param);
- 
 
     // 各リアクション処理
     void UpdateNormal();
@@ -35,6 +34,9 @@ private:
 
     // リアクション終了判定
     bool IsReactionFinished() const;
+
+    // リアクション終了時の処理
+    void OnReactionEnd();
 
 private:
     EnemyDamageReactionData* pReactionData_          = nullptr;
@@ -58,7 +60,7 @@ private:
     float totalReactionTime_ = 1.0f;
 
     // Normal用パラメータ
-    Vector3 knockBackVelocity_;  
+    Vector3 knockBackVelocity_;
     float knockBackTimer_ = 0.0f;
 
     // Slammed用パラメータ
@@ -74,6 +76,7 @@ private:
     Vector3 initialPosition_;
     bool hasReachedPeak_ = false; // 頂点に到達したか
     float floatingTimer_ = 0.0f; // 浮遊時間カウント
+    bool hasBounced_     = false; // バウンド済みか
 
     // 演出管理
     int32_t currentRenditionIndex_ = 0;

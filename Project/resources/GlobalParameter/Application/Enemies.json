@@ -1,5 +1,9 @@
 {
     "Enemies": {
+        "ChaseLimitDistance1": 14.0,
+        "ChaseLimitDistance2": 14.0,
+        "avoidanceRadius1": 20.0,
+        "avoidanceRadius2": 20.0,
         "basePosY_1": 1.5,
         "basePosY_2": 1.5,
         "blowGravity1": 100.0,
@@ -16,6 +20,8 @@
         "burstTime2": 0.5,
         "chaseDistance1": 37.22999954223633,
         "chaseDistance2": 34.52000045776367,
+        "chaseResetTime1": 2.0,
+        "chaseResetTime2": 2.0,
         "chaseSpeed1": 0.3499999940395355,
         "chaseSpeed2": 0.3700000047683716,
         "hitbackRotateBackRatio1": 0.800000011920929,
@@ -42,6 +48,8 @@
             1.399999976158142,
             1.399999976158142
         ],
+        "maxChaseTime1": 5.0,
+        "maxChaseTime2": 5.0,
         "thrustRotateSpeed1": 43.560001373291016,
         "thrustRotateSpeed2": 20.0,
         "upperFallSpeedLimit1": 1.2000000476837158,
