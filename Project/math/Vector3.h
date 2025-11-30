@@ -24,6 +24,7 @@ public:
 
     void operator+=(const Vector3& obj);
     void operator+=(const float& scalar);
+    void operator*=(const float& scalar);
     void operator-=(const Vector3& obj);
 
     // 比較

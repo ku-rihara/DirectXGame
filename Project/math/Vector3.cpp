@@ -46,6 +46,13 @@ void Vector3::operator+=(const float& scalar) {
     z += scalar;
 }
 
+void Vector3::operator*=(const float& scalar) {
+    x *= scalar;
+    y *= scalar;
+    z *= scalar;
+}
+
+
 void Vector3::operator-=(const Vector3& obj) {
     x -= obj.x;
     y -= obj.y;
