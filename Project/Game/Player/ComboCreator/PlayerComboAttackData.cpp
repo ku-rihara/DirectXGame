@@ -58,6 +58,7 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "keyBordBottom", &attackParam_.triggerParam.keyBordBottom);
     globalParameter_->Regist(groupName_, "Condition", &tempCondition_);
     globalParameter_->Regist(groupName_, "IsFirstAttack", &attackParam_.triggerParam.isFirstAttack);
+    globalParameter_->Regist(groupName_, "isAutoAdvance", &attackParam_.timingParam.isAutoAdvance); // ★追加
 
     // TimingParam
     globalParameter_->Regist(groupName_, "isCancel", &attackParam_.timingParam.isCancel);
@@ -103,6 +104,7 @@ void PlayerComboAttackData::AdjustParam() {
     ImGui::DragFloat3("Collision Size", &attackParam_.collisionParam.size.x, 0.01f);
     ImGui::DragFloat3("Collision Offset Pos", &attackParam_.collisionParam.offsetPos.x, 0.01f);
     ImGui::DragFloat("Adapt Time", &attackParam_.collisionParam.adaptTime, 0.01f);
+    ImGui::Checkbox("is Auto Advance to Next Attack", &attackParam_.timingParam.isAutoAdvance);
     ImGui::InputInt("Loop Num", &attackParam_.collisionParam.loopNum);
     if (attackParam_.collisionParam.loopNum > 0) {
         ImGui::DragFloat("Loop Wait Time", &attackParam_.collisionParam.loopWaitTime, 0.01f);

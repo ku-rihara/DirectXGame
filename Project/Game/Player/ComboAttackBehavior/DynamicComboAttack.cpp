@@ -144,8 +144,11 @@ void DynamicComboAttack::UpdateWait() {
 
 void DynamicComboAttack::ChangeNextAttack() {
 
+    //  自動進行フラグがtrueの場合も次に進む
+    bool shouldAdvance = isReserveNextCombo_ || isAttackCancel_ || attackData_->GetAttackParam().timingParam.isAutoAdvance;
+
     // 次のコンボに移動する
-    if (nextAttackData_ && ((isAttackCancel_ || isReserveNextCombo_))) {
+    if (nextAttackData_ && shouldAdvance) {
 
         BaseComboAattackBehavior::ChangeNextCombo(
             std::make_unique<DynamicComboAttack>(pPlayer_, nextAttackData_));

@@ -63,7 +63,7 @@ private:
     // Normal用パラメータ
     Vector3 knockBackVelocity_;
     float knockBackTimer_ = 0.0f;
-
+  
     // Slammed用パラメータ
     int32_t currentBoundCount_ = 0;
     int32_t maxBoundCount_     = 0;

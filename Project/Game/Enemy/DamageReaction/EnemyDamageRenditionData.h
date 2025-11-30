@@ -15,11 +15,7 @@ public:
     // オブジェクトアニメーションパラメータ
     struct ObjAnimationParam {
         std::string fileName;
-        float startTiming    = 0.0f;
-        bool isAdaptParentS  = false;
-        bool isAdaptParentR  = false;
-        bool isAdaptParentT  = false;
-        bool isPriorityDeath = false;
+        float startTiming = 0.0f;
     };
 
 public:
@@ -51,7 +47,7 @@ private:
     std::string groupName_;
     int32_t currentRenditionIndex_            = -1;
     std::string folderPath_                   = "EnemyDamageReaction/RenditionDates/";
-    const std::string objAnimationFolderPath_ = "Resources/GlobalParameter/ObjEaseAnimation/Enemy/";
+    const std::string objAnimationFolderPath_ = "Resources/GlobalParameter/ObjEaseAnimation/Enemy/Dates/";
 
     // オブジェクトアニメーションパラメータ
     std::pair<ObjAnimationParam, FileSelector> objAnimationParams_;

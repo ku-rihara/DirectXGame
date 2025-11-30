@@ -6,9 +6,9 @@
 /// data
 #include "Player/ComboCreator/PlayerComboAttackData.h"
 /// math
+#include "EnemyDeath.h"
 #include "Frame/Frame.h"
 #include "MathFunction.h"
-#include "EnemyDeath.h"
 
 // 初期化
 EnemyDamageReactionAction::EnemyDamageReactionAction(
@@ -38,9 +38,11 @@ void EnemyDamageReactionAction::Update() {
         UpdateNormal();
         break;
     case ReactionState::Slammed:
+        UpdateNormal();
         UpdateSlammed();
         break;
     case ReactionState::TakeUpper:
+        UpdateNormal();
         UpdateTakeUpper();
         break;
     }
@@ -122,8 +124,8 @@ void EnemyDamageReactionAction::InitSlammedReaction(const EnemyDamageReactionDat
     currentBoundCount_ = 0;
     hasReachedGround_  = false;
 
-    // 下向きの速度を設定
-    bounceSpeed_ = -param.downSpeed;
+    // プレイヤーのblowYPowerを使用して下向きの速度を設定
+    bounceSpeed_ = -std::abs(blowYPower_);
 
     // 演出初期化
     pBaseEnemy_->DamageRenditionInit();
@@ -163,7 +165,8 @@ void EnemyDamageReactionAction::UpdateNormal() {
 
         // 位置を更新
         Vector3 newPos = pBaseEnemy_->GetWorldPosition() + knockBackVelocity_ * Frame::DeltaTimeRate();
-        pBaseEnemy_->SetWorldPosition(newPos);
+        pBaseEnemy_->SetWorldPositionX(newPos.x);
+        pBaseEnemy_->SetWorldPositionZ(newPos.z);
     }
 }
 
@@ -177,24 +180,26 @@ void EnemyDamageReactionAction::UpdateSlammed() {
 
     // まず地面に叩きつける
     if (!hasReachedGround_) {
-        // 下向きの力で地面に叩きつける
-        pBaseEnemy_->Fall(bounceSpeed_, reactionParam.fallSpeedLimit, reactionParam.gravity, false);
+        // 毎フレーム下向きに移動(blowYPowerベース)
+        pBaseEnemy_->SetWorldPositionY(
+            pBaseEnemy_->GetWorldPosition().y + bounceSpeed_ * Frame::DeltaTimeRate());
 
         // 地面に到達したか確認
         if (pBaseEnemy_->GetWorldPosition().y <= enemyParam.basePosY) {
+            pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
             hasReachedGround_ = true;
 
             // 地面衝突エフェクト
             pBaseEnemy_->ThrustRenditionInit();
 
-            //  HPが0以下の場合、1バウンド目で死亡処理
+            // HPが0以下の場合、1バウンド目で死亡処理
             if (pBaseEnemy_->GetIsDeathPending()) {
                 pBaseEnemy_->ChangeDamageReactionBehavior(std::make_unique<EnemyDeath>(pBaseEnemy_));
                 return;
             }
 
-            // 最初のバウンド速度を設定
-            bounceSpeed_ = std::abs(blowYPower_) * reactionParam.initialBounceRate;
+            // 叩きつけられたスピードをベースに最初のバウンド速度を設定
+            bounceSpeed_ = std::abs(bounceSpeed_) * reactionParam.initialBounceRate;
         }
         return;
     }
@@ -206,6 +211,7 @@ void EnemyDamageReactionAction::UpdateSlammed() {
 
         // 地面に着地したら次のバウンド
         if (pBaseEnemy_->GetWorldPosition().y <= enemyParam.basePosY) {
+            pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
             currentBoundCount_++;
 
             // 速度を減衰
@@ -237,7 +243,7 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
 
     // 頂点に到達していない場合は上昇
     if (!hasReachedPeak_) {
-        // ★重力を適用しながらジャンプ
+        // 重力を適用しながらジャンプ
         jumpSpeed_ -= reactionParam.gravity * Frame::DeltaTimeRate();
         pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetWorldPosition().y + jumpSpeed_ * Frame::DeltaTimeRate());
 
@@ -278,7 +284,7 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
                 pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
 
                 // 1回だけバウンド
-                jumpSpeed_  = std::abs(blowYPower_) * 0.3f; 
+                jumpSpeed_  = std::abs(blowYPower_) * 0.3f;
                 hasBounced_ = true;
 
                 // バウンドエフェクト
@@ -304,12 +310,28 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
 }
 
 void EnemyDamageReactionAction::UpdateRenditions() {
+    // 早期nullチェック
     if (!pReactionData_) {
         return;
     }
 
-    // 演出データの取得
+    if (!pBaseEnemy_) {
+        return;
+    }
+
+    // インデックスが負の値でないか確認
+    if (currentRenditionIndex_ < 0) {
+        return;
+    }
+
+    // 演出データの取得 - この時点でクラッシュする可能性
+    // pReactionData_が既に破棄されている場合、GetAllRenditions()で落ちる
     const auto& renditions = pReactionData_->GetAllRenditions();
+
+    // サイズチェック - renditionsが無効な場合ここで落ちる可能性
+    if (renditions.size() == 0) {
+        return;
+    }
 
     if (currentRenditionIndex_ >= static_cast<int32_t>(renditions.size())) {
         return;
@@ -325,8 +347,10 @@ void EnemyDamageReactionAction::UpdateRenditions() {
     const auto& animParam = currentRendition->GetObjAnimationParam();
 
     if (!hasPlayedRendition_ && reactionTimer_ >= animParam.startTiming) {
-        // アニメーション再生処理(実装に応じて適切なメソッドを呼び出す)
-        // pBaseEnemy_->PlayAnimation(animParam.fileName, animParam);
+        // オブジェクトの有効性チェックを追加
+        if (pBaseEnemy_->GetObject3D()) {
+            pBaseEnemy_->GetObject3D()->transform_.PlayObjEaseAnimation("Enemy", animParam.fileName);
+        }
 
         hasPlayedRendition_ = true;
         currentRenditionIndex_++;
@@ -363,7 +387,7 @@ bool EnemyDamageReactionAction::IsReactionFinished() const {
 }
 
 void EnemyDamageReactionAction::OnReactionEnd() {
-  
+
     // 回転を0に戻す
     pBaseEnemy_->RotateInit();
 

@@ -35,11 +35,7 @@ void EnemyDamageRenditionData::SaveData() {
 void EnemyDamageRenditionData::RegisterParams() {
     globalParameter_->Regist(groupName_, "FileName", &objAnimationParams_.first.fileName);
     globalParameter_->Regist(groupName_, "StartTiming", &objAnimationParams_.first.startTiming);
-    globalParameter_->Regist(groupName_, "isAdaptParentS", &objAnimationParams_.first.isAdaptParentS);
-    globalParameter_->Regist(groupName_, "isAdaptParentR", &objAnimationParams_.first.isAdaptParentR);
-    globalParameter_->Regist(groupName_, "isAdaptParentT", &objAnimationParams_.first.isAdaptParentT);
-    globalParameter_->Regist(groupName_, "isPriorityDeath", &objAnimationParams_.first.isPriorityDeath);
-}
+ }
 
 void EnemyDamageRenditionData::AdjustParam() {
 #ifdef _DEBUG
@@ -49,14 +45,6 @@ void EnemyDamageRenditionData::AdjustParam() {
     // オブジェクトアニメーションパラメータのUI
     SelectObjAnimationFile("Animation File", objAnimationParams_);
     ImGui::DragFloat("Start Timing", &objAnimationParams_.first.startTiming, 0.01f);
-
-    // 親変換適用チェックボックス
-    ImGui::SeparatorText("AdaptParentTransform");
-    ImGui::Checkbox("Adapt Parent Scale", &objAnimationParams_.first.isAdaptParentS);
-    ImGui::Checkbox("Adapt Parent Rotate", &objAnimationParams_.first.isAdaptParentR);
-    ImGui::Checkbox("Adapt Parent Translate", &objAnimationParams_.first.isAdaptParentT);
-    ImGui::SeparatorText("IsPriorityDeath");
-    ImGui::Checkbox("PriorityDeath", &objAnimationParams_.first.isPriorityDeath);
     ImGui::PopID();
 #endif
 }

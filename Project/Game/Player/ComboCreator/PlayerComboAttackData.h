@@ -45,6 +45,7 @@ public:
         float cancelTime;
         float precedeInputTime;
         float finishWaitTime;
+        bool isAutoAdvance;
     };
 
     // 攻撃発動に関するパラメータ

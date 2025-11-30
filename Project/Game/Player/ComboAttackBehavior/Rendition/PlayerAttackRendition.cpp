@@ -89,15 +89,15 @@ void PlayerAttackRendition::Update(const float& deltaTime) {
         if (currentTime_ >= param.startTiming) {
             switch (static_cast<PlayerAttackRenditionData::ObjAnimationType>(i)) {
             case PlayerAttackRenditionData::ObjAnimationType::Head:
-                pPlayer_->GetObject3DPtr()->transform_.PlayObjEaseAnimation("Player", param.fileName);
+                pPlayer_->GetObject3D()->transform_.PlayObjEaseAnimation("Player", param.fileName);
                 break;
 
             case PlayerAttackRenditionData::ObjAnimationType::RightHand:
-                pPlayer_->GetRightHand()->GetObject3DPtr()->transform_.PlayObjEaseAnimation("Player", param.fileName);
+                pPlayer_->GetRightHand()->GetObject3D()->transform_.PlayObjEaseAnimation("Player", param.fileName);
                 break;
 
             case PlayerAttackRenditionData::ObjAnimationType::LeftHand:
-                pPlayer_->GetLeftHand()->GetObject3DPtr()->transform_.PlayObjEaseAnimation("Player", param.fileName);
+                pPlayer_->GetLeftHand()->GetObject3D()->transform_.PlayObjEaseAnimation("Player", param.fileName);
                 break;
 
             default:
