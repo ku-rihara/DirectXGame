@@ -14,7 +14,7 @@
         "NextAttackType": "test2",
         "ObjAnim_Head_FileName": "leftPunchMove",
         "ObjAnim_Head_StartTiming": 0.0,
-        "ObjAnim_LeftHand_FileName": "",
+        "ObjAnim_LeftHand_FileName": "leftHandPunch",
         "ObjAnim_LeftHand_StartTiming": 0.0,
         "ObjAnim_RightHand_FileName": "",
         "ObjAnim_RightHand_StartTiming": 0.0,
