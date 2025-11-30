@@ -136,15 +136,16 @@ void EnemyDamageReactionData::CreateOrLoadRendition(
 /// バインド
 ///==========================================================
 void EnemyDamageReactionData::RegisterParams() {
-    globalParameter_->Regist<std::string>(groupName_, "TriggerAttackName", &reactionParam_.triggerAttackName);
-    globalParameter_->Regist<int32_t>(groupName_, "ReactionState", &reactionParam_.intReactionState);
+    globalParameter_->Regist(groupName_, "TriggerAttackName", &reactionParam_.triggerAttackName);
+    globalParameter_->Regist(groupName_, "ReactionState", &reactionParam_.intReactionState);
+    globalParameter_->Regist(groupName_, "damageCollingTime", &reactionParam_.damageCollingTime);
 
     // SlammedParam
-    globalParameter_->Regist<int32_t>(groupName_, "Slammed_BoundNum", &reactionParam_.slammedParam.boundNum);
-    globalParameter_->Regist<float>(groupName_, "Slammed_BounceDamping", &reactionParam_.slammedParam.bounceDamping);
+    globalParameter_->Regist(groupName_, "Slammed_BoundNum", &reactionParam_.slammedParam.boundNum);
+    globalParameter_->Regist(groupName_, "Slammed_BounceDamping", &reactionParam_.slammedParam.bounceDamping);
 
     // TakeUpperParam
-    globalParameter_->Regist<float>(groupName_, "TakeUpper_FloatingTime", &reactionParam_.takeUpperParam.floatingTime);
+    globalParameter_->Regist(groupName_, "TakeUpper_FloatingTime", &reactionParam_.takeUpperParam.floatingTime);
 }
 
 ///==========================================================
@@ -162,6 +163,10 @@ void EnemyDamageReactionData::AdjustParam() {
     ImGui::Separator();
 
     // Reaction State
+    ImGui::SeparatorText("Simple Param");
+    ImGui::DragFloat("damageCollingTime", &reactionParam_.damageCollingTime, 0.01f);
+
+
     ImGui::SeparatorText("Reaction State");
     const char* stateNames[] = {"Normal", "Slammed", "TakeUpper"};
     ImGui::Combo("Reaction Type", &reactionParam_.intReactionState, stateNames, IM_ARRAYSIZE(stateNames));

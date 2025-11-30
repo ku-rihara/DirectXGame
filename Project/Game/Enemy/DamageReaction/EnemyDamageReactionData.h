@@ -22,12 +22,13 @@ public:
     };
 
     struct SlammedParam {
-        int32_t boundNum    = 2;
-        float bounceDamping = 0.5f;
+        int32_t boundNum;
+        float bounceDamping;
     };
 
     struct TakeUpperParam {
-        float floatingTime = 1.0f;
+        float floatingTime;
+        
     };
 
     // リアクションパラメータ
@@ -37,6 +38,7 @@ public:
         ReactionState reactionState;
         SlammedParam slammedParam;
         TakeUpperParam takeUpperParam;
+        float damageCollingTime;
     };
 
 public:

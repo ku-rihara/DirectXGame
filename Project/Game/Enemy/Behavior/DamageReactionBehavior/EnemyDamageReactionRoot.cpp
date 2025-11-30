@@ -2,11 +2,11 @@
 #include "EnemyDamageReactionRoot.h"
 #include "EnemyDamageReacrtionAction.h"
 /// obj
-#include"Enemy/EnemyManager.h"
 #include "CollisionBox/PlayerCollisionInfo.h"
+#include "Enemy/EnemyManager.h"
 #include "Enemy/Types/BaseEnemy.h"
+#include "Player/ComboCreator/PlayerComboAttackData.h"
 #include "Player/Player.h"
-#include"Player/ComboCreator/PlayerComboAttackData.h"
 /// data
 #include "Enemy/DamageReaction/EnemyDamageReactionController.h"
 #include "Enemy/DamageReaction/EnemyDamageReactionData.h"
@@ -18,14 +18,14 @@
 EnemyDamageReactionRoot::EnemyDamageReactionRoot(BaseEnemy* boss)
     : BaseEnemyDamageReaction("EnemyDamageReactionRoot", boss) {
 
-     pReactionController_ =pBaseEnemy_->GetManager()->GetDamageReactionController();
+    pReactionController_ = pBaseEnemy_->GetManager()->GetDamageReactionController();
 }
 
 EnemyDamageReactionRoot::~EnemyDamageReactionRoot() {
 }
 
 void EnemyDamageReactionRoot::Update() {
-   // 待機
+    // 待機
 }
 
 void EnemyDamageReactionRoot::Debug() {
@@ -52,11 +52,18 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
 
     // 攻撃名に対応するリアクションデータを検索
     EnemyDamageReactionData* reactionData = pReactionController_->GetAttackByTriggerName(attackName);
-
     if (!reactionData) {
         // 対応するリアクションデータが見つからない場合は何もしない
         return;
     }
+
+    // ダメージクーリング中
+    if (pBaseEnemy_->GetIsDamageColling() && pBaseEnemy_->GetLastReceivedAttackName() == attackName) {
+        return;
+    }
+
+    // ダメージクールタイムの開始
+    pBaseEnemy_->StartDamageColling(reactionData->GetReactionParam().damageCollingTime, attackName);
 
     // ダメージを適用
     if (pPlayerCollisionInfo_) {

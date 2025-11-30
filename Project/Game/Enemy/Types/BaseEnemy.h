@@ -108,16 +108,11 @@ public:
     /// <param name="damageValue">ダメージ量</param>
     void TakeDamage(const float& damageValue);
 
-    /// <summary>
-    /// ビヘイビア変更
-    /// </summary>
-    /// <param name="behavior">新しいビヘイビア</param>
+    // ヒットクールタイム開始
+    void StartDamageColling(const float& collingTime, const std::string&reactiveAttackName);
+  
+    // behavior変更
     void ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior);
-
-    /// <summary>
-    /// 移動ビヘイビア変更
-    /// </summary>
-    /// <param name="behavior">新しい移動ビヘイビア</param>
     void ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior);
 
     void BackToDamageRoot(); //< ダメージルートに戻る
@@ -127,16 +122,8 @@ public:
     /// Collision
     /// ====================================================================
 
-    /// <summary>
-    /// 衝突開始時コールバック
-    /// </summary>
-    /// <param name="other">衝突相手のコライダー</param>
+    // 衝突コールバック
     void OnCollisionEnter([[maybe_unused]] BaseCollider* other) override;
-
-    /// <summary>
-    /// 衝突中コールバック
-    /// </summary>
-    /// <param name="other">衝突相手のコライダー</param>
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 
     Vector3 GetCollisionPos() const override;
@@ -148,10 +135,14 @@ private:
     /// <param name="viewProjection">ビュープロジェクション</param>
     bool IsInView(const ViewProjection& viewProjection) const;
 
+    //　ダメージクールタイムの更新
+    void DamageCollingUpdate(const float& deltaTime);
+
 private:
     int deathSound_;
     int thrustSound_;
     int32_t groupId_;
+
 protected:
     // structure
     Type type_;
@@ -175,9 +166,14 @@ protected:
     float HPMax_;
     Vector2 hpBarSize_;
 
+    // hitParam
+    bool isDamageColling_;
+    float damageCollTime_;
+    std::string lastReceivedAttackName_;
+
     /// behavior
     std::unique_ptr<BaseEnemyDamageReaction> damageBehavior_ = nullptr;
-    std::unique_ptr<BaseEnemyBehavior> moveBehavior_     = nullptr;
+    std::unique_ptr<BaseEnemyBehavior> moveBehavior_         = nullptr;
 
 public:
     /// ========================================================================================
@@ -185,9 +181,11 @@ public:
     /// ========================================================================================
     const bool& GetIsDeath() const { return isDeath_; }
     const Type& GetType() const { return type_; }
+    const bool& GetIsDamageColling() const { return isDamageColling_; }
+    const std::string& GetLastReceivedAttackName() const { return lastReceivedAttackName_; }
     const Parameter& GetParameter() const { return parameter_; }
     const int32_t& GetGroupId() const { return groupId_; }
-    Vector3 GetBodyRotation() const {return obj3d_->transform_.rotation_;}
+    Vector3 GetBodyRotation() const { return obj3d_->transform_.rotation_; }
     Player* GetPlayer() const { return pPlayer_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
     BaseEnemyDamageReaction* GetDamageReactionBehavior() const { return damageBehavior_.get(); }
@@ -207,5 +205,5 @@ public:
     void SetBodyColor(const Vector4& color);
     void SetIsDeath(const bool& is) { isDeath_ = is; }
     void SetGroupId(const int& groupId) { groupId_ = groupId; }
-    void SetWorldPositionY(const float& y) {baseTransform_.translation_.y = y; }
+    void SetWorldPositionY(const float& y) { baseTransform_.translation_.y = y; }
 };

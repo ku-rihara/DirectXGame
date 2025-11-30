@@ -26,6 +26,7 @@ public:
         Vector3 value;
         int32_t easeType = 0;
         float easeTime;
+        bool isAbleInputMoving;
     };
 
     // コリジョンパラメータ
@@ -35,6 +36,7 @@ public:
         float adaptTime;
         float loopWaitTime;
         int32_t loopNum;
+        bool isAlwaysFollowing;
     };
 
     // タイミングパラメータ
@@ -61,6 +63,7 @@ public:
         TriggerParam triggerParam;
         float knockBackPower;
         float power;
+        float blowYPower;
         std::string nextAttackType;
     };
 

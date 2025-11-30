@@ -49,7 +49,7 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
     thrustSound_ = Audio::GetInstance()->LoadWave("Enemythurst.wav");
 
     // 振る舞い初期化
-     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
+    ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
     ChangeBehavior(std::make_unique<EnemySpawn>(this));
 }
 
@@ -62,8 +62,13 @@ void BaseEnemy::Update() {
         moveBehavior_->Update();
     }
 
+    // ダメージクールタイム更新
+    DamageCollingUpdate(Frame::DeltaTimeRate());
+
+    // ダメージBehavior更新
     damageBehavior_->Update();
 
+    // 死んだら死亡Behaviorに切り替え
     BehaviorChangeDeath();
 
     collisionBox_->SetPosition(GetWorldPosition());
@@ -114,13 +119,11 @@ Vector3 BaseEnemy::GetDirectionToTarget(const Vector3& target) {
 }
 
 void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
-
-
 }
 
 void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-    // 
+    //
     if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
 
         // Rootにし、受けたダメージの判定を行う
@@ -195,6 +198,25 @@ void BaseEnemy::TakeDamage(const float& damageValue) {
 
     if (hp_ < 0.0f) {
         hp_ = 0.0f;
+    }
+}
+
+void BaseEnemy::StartDamageColling(const float& collingTime, const std::string& reactiveAttackName) {
+    isDamageColling_ = true;
+    lastReceivedAttackName_ = reactiveAttackName;
+    damageCollTime_  = collingTime;
+}
+
+void BaseEnemy::DamageCollingUpdate(const float& deltaTime) {
+    if (!isDamageColling_) {
+        return;
+    }
+
+    // クールタイム減算
+    damageCollTime_ -= deltaTime;
+
+    if (damageCollTime_ <= 0.0f) {
+        isDamageColling_ = false;
     }
 }
 

@@ -4,6 +4,7 @@
         "Slammed_BounceDamping": 0.5,
         "Slammed_BoundNum": 2,
         "TakeUpper_FloatingTime": 1.0,
-        "TriggerAttackName": "leftPunch"
+        "TriggerAttackName": "leftPunch",
+        "damageCollingTime": 0.6100000143051147
     }
 }
