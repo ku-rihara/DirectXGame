@@ -9,6 +9,7 @@
 void ObjEaseAnimationData::InitWithCategory(const std::string& animationName, const std::string& categoryName) {
     BaseSequenceEffectData::InitWithCategory(animationName, categoryName);
 
+    groupName_  = animationName;
     folderPath_ = baseFolderPath_ + categoryName_ + "/" + "Dates";
 
     if (!globalParameter_->HasRegisters(groupName_)) {
