@@ -17,11 +17,10 @@
 #include "CollisionBox/EnemyCollisionBox.h"
 #include "Field/Field.h"
 #include "LockOn/LockOnController.h"
+#include"ComboCreator/PlayerComboAttackController.h"
 
 /// behavior
 #include "ComboAttackBehavior/ComboAttackRoot.h"
-#include "ComboAttackBehavior/RoringUpper.h"
-#include "ComboAttackBehavior/RushAttack.h"
 #include "PlayerBehavior/PlayerMove.h"
 #include "PlayerBehavior/PlayerSpawn.h"
 #include "TitleBehavior/TitleFirstFall.h"
@@ -54,6 +53,7 @@ void Player::Init() {
     playerCollisionInfo_ = std::make_unique<PlayerCollisionInfo>();
     playerCollisionInfo_->Init();
     playerCollisionInfo_->SetPlayerBaseTransform(&baseTransform_);
+    playerCollisionInfo_->SetParentTransform(&baseTransform_);
 
     // トランスフォーム初期化
     obj3d_->transform_.Init();
@@ -95,9 +95,6 @@ void Player::Update() {
     // ライト
     HeadLightSetting();
 
-    // 攻撃更新
-    playerCollisionInfo_->Update();
-
     /// 振る舞い処理(コンボ攻撃中は中止)
     if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
         behavior_->Update();
@@ -109,7 +106,6 @@ void Player::Update() {
     effects_->Update(GetWorldPosition());
 
     comboBehavior_->Update(); // コンボ攻撃攻撃
-    AttackPowerCharge(); // チャージアタック
     MoveToLimit(); // 移動制限
 
     UpdateMatrix();
@@ -196,32 +192,6 @@ void Player::Move(const float& speed) {
     }
 }
 
-void Player::AttackPowerCharge() {
-    Input* input = Input::GetInstance();
-
-    if (dynamic_cast<RoringUpper*>(comboBehavior_.get())) {
-        return;
-    }
-
-    // チャージタイム加算
-    if (input->PushKey(KeyboardKey::H) || Input::IsPressPad(0, GamepadButton::X)) {
-        currentUpperChargeTime_ += Frame::DeltaTimeRate();
-
-    } else if (input->ReleaseKey(KeyboardKey::H) && !CheckIsChargeMax()) { // チャージ途中切れ
-        currentUpperChargeTime_ = 0.0f;
-    }
-
-    // チャージMax
-    if (!CheckIsChargeMax()) {
-        return;
-    }
-
-    // リリースでアッパー攻撃
-    if (input->ReleaseKey(KeyboardKey::H)) {
-        currentUpperChargeTime_ = 0.0f;
-        ChangeComboBehavior(std::make_unique<RoringUpper>(this));
-    }
-}
 
 void Player::FaceToTarget() {
     if (pLockOn_ && pLockOn_->GetLockOn()->GetIsCurrentTarget()) {
@@ -361,8 +331,7 @@ void Player::AdjustParam() {
 
     // プレイヤーのパラメータ
     parameters_->AdjustParam();
-    // 攻撃パラメータ
-    playerCollisionInfo_->AdjustParam();
+
     // パーツのパラメータ
     leftHand_->AdjustParam();
     rightHand_->AdjustParam();
@@ -411,8 +380,9 @@ void Player::UpdateMatrix() {
 
 void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-    if (dynamic_cast<RushAttack*>(comboBehavior_.get()))
-        return;
+   /* if (dynamic_cast<RushAttack*>(comboBehavior_.get()))
+        return;*/
+    // 突進などの攻撃は、敵を貫通するようにする
 
     if (EnemyCollisionBox* enemy = dynamic_cast<EnemyCollisionBox*>(other)) {
         // 敵の中心座標を取得
@@ -532,7 +502,7 @@ void Player::SetLockOn(LockOnController* lockOn) {
 
 void Player::SetCombo(Combo* combo) {
     pCombo_ = combo;
-    playerCollisionInfo_->SetCombo(combo);
+    comboAttackController_->SetCombo(pCombo_);
 }
 
 void Player::SetGameCamera(GameCamera* gameCamera) {

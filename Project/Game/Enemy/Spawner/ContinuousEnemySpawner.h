@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../math/MinMax.h"
-#include "Enemy/BaseEnemy.h"
+#include "Enemy/Types/BaseEnemy.h"
 #include <cstdint>
 #include <string>
 #include <vector>

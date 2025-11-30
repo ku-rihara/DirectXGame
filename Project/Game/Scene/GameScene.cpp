@@ -50,7 +50,7 @@ void GameScene::Init() {
 void GameScene::Update() {
 
     BaseScene::Update();
-  
+
     switch (gameState_) {
     case GameScene::GameState::INTRO:
 
@@ -117,7 +117,7 @@ void GameScene::IntroUpdate() {
 
     // Editor
     attackEffect_->Update();
-  
+
     // obj
     skyBox_->Update();
     gameCamera_->Update(gameIntroManager_->GetCurrentPlaySpeedRate());
@@ -168,9 +168,10 @@ void GameScene::SkyBoxDraw() {
 void GameScene::Debug() {
 #ifdef _DEBUG
     ImGui::Begin("Camera");
-    BaseScene::Debug();
     gameCamera_->AdjustParam();
     ImGui::End();
+
+    BaseScene::Debug();
 
     Light::GetInstance()->DebugImGui();
     howToOperate_->Debug();
@@ -188,14 +189,15 @@ void GameScene::Debug() {
     ImGui::End();
 
     ImGui::Begin("Rendition");
-    cameraEditor_->EditorUpdate();
-    shakeEditor_->EditorUpdate();
     attackEffect_->EditorUpdate();
     ImGui::End();
 
     ImGui::Begin("PlayerAttack");
     playerComboAttackController_->EditorUpdate();
- 
+    ImGui::End();
+
+    ImGui::Begin("EnemyDamageReaction");
+    enemyManager_->DamageReactionCreate();
     ImGui::End();
 #endif
 }
@@ -224,7 +226,7 @@ void GameScene::ChangeForJoyState() {
 
 void GameScene::ObjectInit() {
 
-     //*-------------------------------- オブジェクト生成 --------------------------------*//
+    //*-------------------------------- オブジェクト生成 --------------------------------*//
 
     field_                       = std::make_unique<Field>();
     lockOnController_            = std::make_unique<LockOnController>();
@@ -286,14 +288,6 @@ void GameScene::SetClassPointer() {
     continuousEnemySpawner_->SetEnemyManager(enemyManager_.get());
     continuousEnemySpawner_->SetPlayer(player_.get());
 
-    // Player
-    player_->SetViewProjection(&viewProjection_);
-    player_->SetLockOn(lockOnController_.get());
-    player_->SetGameCamera(gameCamera_.get());
-    player_->SetCombo(combo_.get());
-    player_->SetHitStop(attackEffect_.get());
-    player_->SetComboAttackController(playerComboAttackController_.get());
-
     fireInjectors_->SetCombo(combo_.get());
     lockOnController_->SetEnemyManager(enemyManager_.get());
     // gameIntro
@@ -308,4 +302,12 @@ void GameScene::SetClassPointer() {
     comboScene_->SetPlayer(player_.get());
     comboScene_->SetCombo(combo_.get());
     comboScene_->SetComboLevelObjHolder(comboLevelObjHolder_.get());
+
+      // Player
+    player_->SetViewProjection(&viewProjection_);
+    player_->SetLockOn(lockOnController_.get());
+    player_->SetGameCamera(gameCamera_.get());
+    player_->SetComboAttackController(playerComboAttackController_.get());
+    player_->SetCombo(combo_.get());
+    player_->SetHitStop(attackEffect_.get());
 }

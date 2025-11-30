@@ -2,7 +2,7 @@
 #include <cassert>
 #include <imgui.h>
 
-void PlayerAttackRenditionData::BindParams(GlobalParameter* globalParam, const std::string& groupName) {
+void PlayerAttackRenditionData::RegisterParams(GlobalParameter* globalParam, const std::string& groupName) {
     groupName_ = groupName;
 
     struct RegInfo {

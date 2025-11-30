@@ -125,18 +125,21 @@ public:
     void RemoveGroup(const std::string& groupName);
 
     /// <summary>
-    /// グループのバインドをクリア
+    /// グループの登録をクリア
     /// </summary>
     /// <param name="groupName"></param>
     void ClearRegistersForGroup(const std::string& groupName);
 
-    void ResetAllRegister(); //< 全バインドリセット
+    void ResetAllRegister(); //< 全登録リセット
     void SyncAll(); //< 全同期
     void LoadFiles(); //< 全ファイル読み込み
     bool HasRegisters(const std::string& groupName) const;
 
 private:
     std::unordered_map<std::string, Group> dates_;
-    std::unordered_map<std::string, std::vector<BoundItem>> registParams_;
+    std::unordered_map<std::string, std::vector<BoundItem>> registerParams_;
     const std::string kDirectoryPath = "Resources/GlobalParameter/";
+
+public:
+    const std::string& GetDirectoryPath() const { return kDirectoryPath; }
 };

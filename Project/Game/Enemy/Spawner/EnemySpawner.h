@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Enemy/BaseEnemy.h"
+#include "Enemy/Types/BaseEnemy.h"
 #include <array>
 #include <cstdint>
 #include <json.hpp>

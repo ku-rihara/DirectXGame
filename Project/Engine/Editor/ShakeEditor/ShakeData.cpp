@@ -1,4 +1,5 @@
 #include "ShakeData.h"
+#include "Frame/Frame.h"
 #include "Shake.h"
 #include <algorithm>
 #include <imgui.h>
@@ -7,6 +8,7 @@
 void ShakeData::Init(const std::string& shakeName) {
     globalParameter_ = GlobalParameter::GetInstance();
     groupName_       = shakeName;
+    folderPath_      = "ShakeEditor";
 
     if (!globalParameter_->HasRegisters(shakeName)) {
         // 新規登録
@@ -15,22 +17,35 @@ void ShakeData::Init(const std::string& shakeName) {
         globalParameter_->SyncParamForGroup(groupName_);
     } else {
         // 値取得
-        LoadParams();
+        GetParams();
     }
 
-    // リセット
-    ResetParams();
+    // 初期化
+    InitParams();
 }
 
-void ShakeData::Update(const float& deltaTime) {
+void ShakeData::Update(const float& speedRate) {
     if (playState_ != PlayState::PLAYING) {
         return;
+    }
+
+    // 実際のデルタタイムを計算
+    float actualDeltaTime = 0.0f;
+    switch (static_cast<TimeMode>(timeModeSelector_.GetTimeModeInt())) {
+    case TimeMode::DELTA_TIME:
+        actualDeltaTime = Frame::DeltaTime() * speedRate;
+        break;
+    case TimeMode::DELTA_TIME_RATE:
+        actualDeltaTime = Frame::DeltaTimeRate() * speedRate;
+        break;
+    default:
+        break;
     }
 
     // イージング更新
     timeEase_.SetMaxTime(maxTime_);
     timeEase_.SetType(static_cast<EasingType>(easeType_));
-    timeEase_.Update(deltaTime);
+    timeEase_.Update(actualDeltaTime);
 
     // シェイク値計算
     UpdateShakeValues();
@@ -73,7 +88,6 @@ Vector3 ShakeData::ApplyAxisFlag(const Vector3& shakeValue) const {
 
 void ShakeData::Play() {
     Reset();
-
     playState_ = PlayState::PLAYING;
 
     // イージング初期化
@@ -85,26 +99,17 @@ void ShakeData::Play() {
     easedTime_ = startTime_;
 }
 
-void ShakeData::Stop() {
-    playState_          = PlayState::STOPPED;
-    currentShakeOffset_ = {0.0f, 0.0f, 0.0f};
-}
-
 void ShakeData::Reset() {
-
     easedTime_          = startTime_;
-    currentShakeOffset_ = {0.0f, 0.0f, 0.0f};
-
+    currentShakeOffset_ = Vector3::ZeroVector();
     timeEase_.Reset();
-}
-
-bool ShakeData::IsFinished() const {
-    return playState_ == PlayState::STOPPED;
+    playState_ = PlayState::STOPPED;
 }
 
 void ShakeData::LoadData() {
     globalParameter_->LoadFile(groupName_, folderPath_);
     globalParameter_->SyncParamForGroup(groupName_);
+    GetParams();
 }
 
 void ShakeData::SaveData() {
@@ -118,15 +123,17 @@ void ShakeData::RegisterParams() {
     globalParameter_->Regist(groupName_, "shakeType", &shakeType_);
     globalParameter_->Regist(groupName_, "startTime", &startTime_);
     globalParameter_->Regist(groupName_, "axisFlag", &axisFlag_);
+    timeModeSelector_.RegisterParam(groupName_, globalParameter_);
 }
 
-void ShakeData::LoadParams() {
+void ShakeData::GetParams() {
     shakeLength_ = globalParameter_->GetValue<float>(groupName_, "shakeLength");
     maxTime_     = globalParameter_->GetValue<float>(groupName_, "maxTime");
     easeType_    = globalParameter_->GetValue<int32_t>(groupName_, "easeType");
     shakeType_   = globalParameter_->GetValue<int32_t>(groupName_, "shakeType");
     startTime_   = globalParameter_->GetValue<float>(groupName_, "startTime");
     axisFlag_    = globalParameter_->GetValue<int32_t>(groupName_, "axisFlag");
+    timeModeSelector_.GetParam(groupName_, globalParameter_);
 }
 
 void ShakeData::AdjustParam() {
@@ -134,19 +141,6 @@ void ShakeData::AdjustParam() {
     if (showControls_) {
         ImGui::SeparatorText(("Shake Editor: " + groupName_).c_str());
         ImGui::PushID(groupName_.c_str());
-
-        // 再生制御
-        if (ImGui::Button("Play")) {
-            Play();
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Stop")) {
-            Stop();
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Reset")) {
-            Reset();
-        }
 
         // 状態表示
         const char* stateText = "";
@@ -159,6 +153,9 @@ void ShakeData::AdjustParam() {
             break;
         case PlayState::PAUSED:
             stateText = "PAUSED";
+            break;
+        case PlayState::RETURNING:
+            stateText = "RETURNING";
             break;
         }
         ImGui::Text("State: %s", stateText);
@@ -206,7 +203,7 @@ void ShakeData::AdjustParam() {
         // パラメータ調整
         ImGui::DragFloat("Shake Length", &shakeLength_, 0.01f, 0.0f, 10.0f);
         ImGui::DragFloat("Max Time", &maxTime_, 0.01f, 0.1f, 10.0f);
-        ImGui::DragFloat("startTime", &startTime_, 0.01f, 0.1f, 1.0f);
+        ImGui::DragFloat("Start Time", &startTime_, 0.01f, 0.1f, 1.0f);
 
         // シェイクタイプ
         const char* shakeTypeItems[] = {"Normal", "Wave"};
@@ -215,25 +212,25 @@ void ShakeData::AdjustParam() {
         // イージングタイプ
         ImGuiEasingTypeSelector("Easing Type", easeType_);
 
+        ImGui::Separator();
+
+        // タイムモード設定
+        timeModeSelector_.SelectTimeModeImGui("Time Mode");
+
         ImGui::PopID();
     }
 #endif // _DEBUG
 }
 
-bool ShakeData::IsPlaying() const {
-    return playState_ == PlayState::PLAYING;
-}
-
-void ShakeData::ResetParams() {
-
+void ShakeData::InitParams() {
     // イージング設定
     timeEase_.SetAdaptValue(&easedTime_);
     timeEase_.SetStartValue(startTime_);
     timeEase_.SetEndValue(0.0f);
 
     timeEase_.SetOnFinishCallback([this]() {
-        Stop();
-        Reset();
+        playState_          = PlayState::STOPPED;
+        currentShakeOffset_ = Vector3::ZeroVector();
     });
 
     // 初期状態

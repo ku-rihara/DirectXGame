@@ -27,7 +27,7 @@ public:
    
     void Init(); //< 初期化
     void ResetAnimation(); //< アニメーションリセット
-    void DebugImgui() override; //< ImGuiデバッグ
+    void DebugImGui() override; //< ImGuiデバッグ
 
     /// <summary>
     /// モデル作成

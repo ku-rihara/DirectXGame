@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Easing/Easing.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "PlayerAttackRenditionData.h"
 #include "utility/FileSelector/FileSelector.h"
-#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector3.h"
 #include <cstdint>
 #include <string>
@@ -16,8 +16,8 @@ class PlayerComboAttackData {
 public:
     enum class TriggerCondition {
         GROUND, // 地上のみ
-        AIR,    // 空中のみ
-        BOTH    // 両方
+        AIR, // 空中のみ
+        BOTH // 両方
     };
 
 public:
@@ -26,6 +26,7 @@ public:
         Vector3 value;
         int32_t easeType = 0;
         float easeTime;
+        bool isAbleInputMoving;
     };
 
     // コリジョンパラメータ
@@ -33,12 +34,18 @@ public:
         Vector3 size;
         Vector3 offsetPos;
         float adaptTime;
+        float loopWaitTime;
+        int32_t loopNum;
+        bool isAlwaysFollowing;
     };
 
     // タイミングパラメータ
     struct TimingParam {
-        float cancelFrame;
-        float precedeInputFrame;
+        bool isCancel;
+        float cancelTime;
+        float precedeInputTime;
+        float finishWaitTime;
+        bool isAutoAdvance;
     };
 
     // 攻撃発動に関するパラメータ
@@ -51,12 +58,13 @@ public:
 
     // アタックパラメータ
     struct AttackParameter {
-        CollisionParam collisionPara;
+        CollisionParam collisionParam;
         MoveParam moveParam;
         TimingParam timingParam;
         TriggerParam triggerParam;
         float knockBackPower;
         float power;
+        float blowYPower;
         std::string nextAttackType;
     };
 
@@ -79,6 +87,10 @@ public:
     // データロード、セーブ
     void LoadData();
     void SaveData();
+
+    bool IsReserveNextAttack(const float& currentTime, const TriggerParam& nextAtkTrigger);
+    bool IsWaitFinish(const float& currentTime);
+    bool IsCancelAttack(const float& currentTime, const TriggerParam& nextAtkTrigger);
 
 private:
     //*-------------------------------- private Method --------------------------------*//
@@ -106,6 +118,6 @@ private:
 public:
     //*-------------------------------- Getter Method --------------------------------*//
     const std::string& GetGroupName() const { return groupName_; }
-    AttackParameter& GetAttackParam() { return attackParam_; }
+    const AttackParameter& GetAttackParam() const { return attackParam_; }
     const PlayerAttackRenditionData& GetRenditionData() const { return renditionData_; }
 };

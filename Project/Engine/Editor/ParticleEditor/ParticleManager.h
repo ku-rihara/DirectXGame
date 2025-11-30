@@ -199,7 +199,7 @@ private:
     const ViewProjection* viewProjection_;
 
     std::vector<std::string> particleFiles_;
-    const std::string dyrectry_ = "Resources/GlobalParameter/Particle";
+    const std::string ParticleFolderName_ = "Particle";
 
 public:
     std::unordered_map<std::string, ParticleGroup> particleGroups_;
@@ -207,7 +207,7 @@ public:
     static ParticleManager* GetInstance();
 
     const std::vector<std::string>& GetParticleFiles() const { return particleFiles_; }
-    const std::string& getDirectory() const { return dyrectry_; }
+    const std::string& getDirectory() const { return ParticleFolderName_; }
 
     void SetViewProjection(const ViewProjection* view);
     void SetTextureHandle(const std::string name, const uint32_t& handle);

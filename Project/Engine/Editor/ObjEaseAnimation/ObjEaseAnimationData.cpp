@@ -1,529 +1,266 @@
 #include "ObjEaseAnimationData.h"
 #include "3d/WorldTransform.h"
+#include "Editor/RailEditor/RailPlayer.h"
 #include "MathFunction.h"
 #include <algorithm>
+#include <filesystem>
 #include <imgui.h>
 
-void ObjEaseAnimationData::Init(const std::string& animationName, const std::string& categoryName) {
-    globalParameter_ = GlobalParameter::GetInstance();
-    groupName_       = animationName;
-    categoryName_    = categoryName;
-    folderPath_      = "ObjEaseAnimation/" + categoryName_;
+void ObjEaseAnimationData::InitWithCategory(const std::string& animationName, const std::string& categoryName) {
+    BaseSequenceEffectData::InitWithCategory(animationName, categoryName);
 
-    // Rail初期化
-    railPlayer_ = std::make_unique<RailPlayer>();
-    railPlayer_->Init();
+    groupName_  = animationName;
+    folderPath_ = baseFolderPath_ + categoryName_ + "/" + "Dates";
 
     if (!globalParameter_->HasRegisters(groupName_)) {
-        // 新規登録
         globalParameter_->CreateGroup(groupName_);
         RegisterParams();
         globalParameter_->SyncParamForGroup(groupName_);
     } else {
-        // 値取得
-        LoadParams();
+        GetParams();
     }
 
-    // リセット
-    ResetParams();
+    InitParams();
 }
 
-void ObjEaseAnimationData::Update(const float& deltaTime) {
-    if (playState_ == PlayState::RETURNING) {
-        UpdateReturn(deltaTime);
-        return;
-    }
-
+void ObjEaseAnimationData::Update(const float& speedRate) {
     if (playState_ != PlayState::PLAYING) {
         return;
     }
-
-    UpdateTransforms(deltaTime);
-    CheckFinish();
+    UpdateKeyFrameProgression();
+    UpdateActiveSection(speedRate);
 }
 
-void ObjEaseAnimationData::UpdateTransforms(const float& deltaTime) {
-    // Scale更新
-    if (scaleParam_.isActive) {
-        scaleParam_.ease.Update(deltaTime);
-        scaleParam_.currentValue = scaleParam_.ease.GetValue();
-
-        // 親Transform適用
-        if (scaleParam_.isParentAdapt && parentTransform_) {
-            parentTransform_->scale_ = scaleParam_.currentValue;
-        }
+void ObjEaseAnimationData::UpdateActiveSection(const float& speedRate) {
+    if (sectionElements_.empty()) {
+        return;
     }
 
-    // Rotation更新
-    if (rotationParam_.isActive) {
-        rotationParam_.ease.Update(deltaTime);
-        rotationParam_.currentValue = rotationParam_.ease.GetValue();
+    // 現在のアクティブキーフレームを更新
+    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
+        sectionElements_[activeKeyFrameIndex_]->Update(speedRate);
+    }
+}
 
-        // 親Transform適用
-        if (rotationParam_.isParentAdapt && parentTransform_) {
-            parentTransform_->rotation_ = rotationParam_.currentValue;
-        }
+void ObjEaseAnimationData::UpdateKeyFrameProgression() {
+    if (sectionElements_.empty() || playState_ != PlayState::PLAYING) {
+        return;
     }
 
-    // Translation更新
-    if (translationParam_.isActive) {
-        if (translationParam_.useRail) {
-            // Rail使用
-            railPlayer_->Update(deltaTime);
-            translationParam_.currentValue = originalTranslation_ + railPlayer_->GetCurrentPosition();
+    // 現在のキーフレームが完了したかチェック
+    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
+        if (!sectionElements_[activeKeyFrameIndex_]->IsFinished()) {
+            return; // まだ完了していない
+        }
+
+        // 最後のキーフレームかチェック
+        if (activeKeyFrameIndex_ == static_cast<int32_t>(sectionElements_.size()) - 1) {
+            isAllKeyFramesFinished_ = true;
+            playState_              = PlayState::STOPPED;
         } else {
-            // 通常のイージング
-            translationParam_.ease.Update(deltaTime);
-            translationParam_.currentValue = translationParam_.ease.GetValue();
-        }
-
-        // 親Transform適用
-        if (translationParam_.isParentAdapt && parentTransform_) {
-            parentTransform_->translation_ = translationParam_.currentValue;
+            AdvanceToNexTSequenceElement();
         }
     }
 }
 
-void ObjEaseAnimationData::UpdateReturn(const float& deltaTime) {
-    bool allFinished = true;
+void ObjEaseAnimationData::AdvanceToNexTSequenceElement() {
+    if (activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size()) - 1) {
+        activeKeyFrameIndex_++;
 
-    // Scale戻り
-    if (scaleParam_.isActive && scaleParam_.returnToOrigin) {
-        scaleParam_.ease.Update(deltaTime);
-        scaleParam_.currentValue = scaleParam_.ease.GetValue();
+        if (activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
+            // 前のキーフレームの最終値を次のキーフレームの開始値として設定
+            Vector3 startScale       = GetActiveKeyFrameValue(TransformType::Scale);
+            Vector3 startRotation    = GetActiveKeyFrameValue(TransformType::Rotation);
+            Vector3 startTranslation = GetActiveKeyFrameValue(TransformType::Translation);
 
-        // 親Transform適用
-        if (scaleParam_.isParentAdapt && parentTransform_) {
-            parentTransform_->scale_ = scaleParam_.currentValue;
+            sectionElements_[activeKeyFrameIndex_]->SetStartValues(startScale, startRotation, startTranslation);
         }
-
-        if (!scaleParam_.ease.IsFinished()) {
-            allFinished = false;
-        }
-    }
-
-    // Rotation戻り
-    if (rotationParam_.isActive && rotationParam_.returnToOrigin) {
-        rotationParam_.ease.Update(deltaTime);
-        rotationParam_.currentValue = rotationParam_.ease.GetValue();
-
-        // 親Transform適用
-        if (rotationParam_.isParentAdapt && parentTransform_) {
-            parentTransform_->rotation_ = rotationParam_.currentValue;
-        }
-
-        if (!rotationParam_.ease.IsFinished()) {
-            allFinished = false;
-        }
-    }
-
-    // Translation戻り
-    if (translationParam_.isActive && translationParam_.returnToOrigin) {
-        if (translationParam_.useRail) {
-            railPlayer_->Update(deltaTime);
-            translationParam_.currentValue = originalTranslation_ + railPlayer_->GetCurrentPosition();
-            if (railPlayer_->IsPlaying()) {
-                allFinished = false;
-            }
-        } else {
-            translationParam_.ease.Update(deltaTime);
-            translationParam_.currentValue = translationParam_.ease.GetValue();
-            if (!translationParam_.ease.IsFinished()) {
-                allFinished = false;
-            }
-        }
-
-        // 親Transform適用
-        if (translationParam_.isParentAdapt && parentTransform_) {
-            parentTransform_->translation_ = translationParam_.currentValue;
-        }
-    }
-
-    if (allFinished) {
-        playState_ = PlayState::STOPPED;
-    }
-}
-
-void ObjEaseAnimationData::CheckFinish() {
-    bool allFinished = true;
-
-    // 各Transformの完了をチェック
-    if (scaleParam_.isActive && !scaleParam_.ease.IsFinished()) {
-        allFinished = false;
-    }
-    if (rotationParam_.isActive && !rotationParam_.ease.IsFinished()) {
-        allFinished = false;
-    }
-    if (translationParam_.isActive) {
-        if (translationParam_.useRail) {
-            if (railPlayer_->IsPlaying()) {
-                allFinished = false;
-            }
-        } else {
-            if (!translationParam_.ease.IsFinished()) {
-                allFinished = false;
-            }
-        }
-    }
-
-    if (allFinished) {
-        // 戻り動作が必要かチェック
-        bool needReturn = false;
-        if (scaleParam_.isActive && scaleParam_.returnToOrigin)
-            needReturn = true;
-        if (rotationParam_.isActive && rotationParam_.returnToOrigin)
-            needReturn = true;
-        if (translationParam_.isActive && translationParam_.returnToOrigin)
-            needReturn = true;
-
-        if (needReturn) {
-            StartReturn();
-        } else {
-            playState_ = PlayState::STOPPED;
-        }
-    }
-}
-
-void ObjEaseAnimationData::StartReturn() {
-    playState_ = PlayState::RETURNING;
-
-    // Scale戻り設定（StartとEndを入れ替え）
-    if (scaleParam_.isActive && scaleParam_.returnToOrigin) {
-        scaleParam_.ease.SetStartValue(scaleParam_.endValue);
-        scaleParam_.ease.SetEndValue(scaleParam_.startValue);
-        scaleParam_.ease.SetMaxTime(scaleParam_.returnMaxTime);
-        scaleParam_.ease.SetType(static_cast<EasingType>(scaleParam_.returnEaseType));
-        scaleParam_.ease.Reset();
-    }
-
-    // Rotation戻り設定（StartとEndを入れ替え）
-    if (rotationParam_.isActive && rotationParam_.returnToOrigin) {
-        rotationParam_.ease.SetStartValue(rotationParam_.endValue);
-        rotationParam_.ease.SetEndValue(rotationParam_.startValue);
-        rotationParam_.ease.SetMaxTime(rotationParam_.returnMaxTime);
-        rotationParam_.ease.SetType(static_cast<EasingType>(rotationParam_.returnEaseType));
-        rotationParam_.ease.Reset();
-    }
-
-    // Translation戻り設定（StartとEndを入れ替え）
-    if (translationParam_.isActive && translationParam_.returnToOrigin) {
-        if (translationParam_.useRail) {
-            // Railの戻り処理はRailPlayer側で処理される
-            // 特に何もしない（Railが自動で戻る設定になっている）
-        } else {
-            translationParam_.ease.SetStartValue(translationParam_.endValue);
-            translationParam_.ease.SetEndValue(translationParam_.startValue);
-            translationParam_.ease.SetMaxTime(translationParam_.returnMaxTime);
-            translationParam_.ease.SetType(static_cast<EasingType>(translationParam_.returnEaseType));
-            translationParam_.ease.Reset();
-        }
-    }
-}
-
-void ObjEaseAnimationData::Play() {
-    Reset();
-    playState_ = PlayState::PLAYING;
-
-    // 現在値の取得（親Transform優先）
-    Vector3 currentScale       = parentTransform_ ? parentTransform_->scale_ : scaleParam_.startValue;
-    Vector3 currentRotation    = parentTransform_ ? parentTransform_->rotation_ : rotationParam_.startValue;
-    Vector3 currentTranslation = parentTransform_ ? parentTransform_->translation_ : translationParam_.startValue;
-
-    // Scale設定
-    if (scaleParam_.isActive) {
-        scaleParam_.ease.SetAdaptValue(&scaleParam_.currentValue);
-
-        // 現在値を開始点にするか判定
-        Vector3 startValue = scaleParam_.useCurrentAsStart ? currentScale : scaleParam_.startValue;
-        scaleParam_.ease.SetStartValue(startValue);
-        scaleParam_.ease.SetEndValue(scaleParam_.endValue);
-        scaleParam_.ease.SetMaxTime(scaleParam_.maxTime);
-        scaleParam_.ease.SetType(static_cast<EasingType>(scaleParam_.easeType));
-        scaleParam_.ease.Reset();
-
-        // 元の値も更新（戻り用）
-        if (scaleParam_.useCurrentAsStart) {
-            originalScale_ = currentScale;
-        }
-    }
-
-    // Rotation設定
-    if (rotationParam_.isActive) {
-        rotationParam_.ease.SetAdaptValue(&rotationParam_.currentValue);
-
-        // 現在値を開始点にするか判定
-        Vector3 startValue = rotationParam_.useCurrentAsStart ? currentRotation : rotationParam_.startValue;
-        rotationParam_.ease.SetStartValue(startValue);
-        rotationParam_.ease.SetEndValue(rotationParam_.endValue);
-        rotationParam_.ease.SetMaxTime(rotationParam_.maxTime);
-        rotationParam_.ease.SetType(static_cast<EasingType>(rotationParam_.easeType));
-        rotationParam_.ease.Reset();
-
-        // 元の値も更新（戻り用）
-        if (rotationParam_.useCurrentAsStart) {
-            originalRotation_ = currentRotation;
-        }
-    }
-
-    // Translation設定
-    if (translationParam_.isActive) {
-        if (translationParam_.useRail && !translationParam_.railFileName.empty()) {
-            // Rail再生
-            if (translationParam_.useCurrentAsStart) {
-                originalTranslation_ = currentTranslation;
-            }
-            railPlayer_->Play(translationParam_.railFileName);
-        } else {
-            translationParam_.ease.SetAdaptValue(&translationParam_.currentValue);
-
-            // 現在値を開始点にするか判定
-            Vector3 startValue = translationParam_.useCurrentAsStart ? currentTranslation : translationParam_.startValue;
-            translationParam_.ease.SetStartValue(startValue);
-            translationParam_.ease.SetEndValue(translationParam_.endValue);
-            translationParam_.ease.SetMaxTime(translationParam_.maxTime);
-            translationParam_.ease.SetType(static_cast<EasingType>(translationParam_.easeType));
-            translationParam_.ease.Reset();
-
-            // 元の値も更新（戻り用）
-            if (translationParam_.useCurrentAsStart) {
-                originalTranslation_ = currentTranslation;
-            }
-        }
-    }
-}
-
-void ObjEaseAnimationData::Stop() {
-    playState_ = PlayState::STOPPED;
-
-    // 現在値を初期値に戻す
-    scaleParam_.currentValue       = originalScale_;
-    rotationParam_.currentValue    = originalRotation_;
-    translationParam_.currentValue = originalTranslation_;
-
-    // 親Transformにも適用
-    if (parentTransform_) {
-        if (scaleParam_.isParentAdapt) {
-            parentTransform_->scale_ = originalScale_;
-        }
-        if (rotationParam_.isParentAdapt) {
-            parentTransform_->rotation_ = originalRotation_;
-        }
-        if (translationParam_.isParentAdapt) {
-            parentTransform_->translation_ = originalTranslation_;
-        }
-    }
-
-    if (railPlayer_) {
-        railPlayer_->Stop();
     }
 }
 
 void ObjEaseAnimationData::Reset() {
-    scaleParam_.currentValue       = scaleParam_.startValue;
-    rotationParam_.currentValue    = rotationParam_.startValue;
-    translationParam_.currentValue = translationParam_.startValue;
+    // 全てのキーフレームをリセット
+    for (auto& section : sectionElements_) {
+        section->Reset();
+    }
 
-    scaleParam_.ease.Reset();
-    rotationParam_.ease.Reset();
-    translationParam_.ease.Reset();
+    // 状態をリセット
+    activeKeyFrameIndex_    = 0;
+    isAllKeyFramesFinished_ = false;
+    playState_              = PlayState::STOPPED;
+}
 
-    if (railPlayer_) {
-        railPlayer_->Stop();
+void ObjEaseAnimationData::Play() {
+    BaseEffectData::Play();
+
+    Vector3 scale = originalValues_[static_cast<size_t>(TransformType::Scale)];
+    Vector3 rotate = originalValues_[static_cast<size_t>(TransformType::Rotation)];
+    Vector3 transform = originalValues_[static_cast<size_t>(TransformType::Translation)];
+
+    // 全てのキーフレームをリセット
+    for (auto& section : sectionElements_) {
+        section->StartWaiting();
+        section->SetStartValues(scale, rotate, transform);
+    }
+ }
+
+void ObjEaseAnimationData::RegisterParams() {
+    // originalValues_をパラメータとして登録
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        std::string srtName = GetSRTName(static_cast<TransformType>(i));
+        globalParameter_->Regist(groupName_, "Original_" + srtName, &originalValues_[i]);
     }
 }
 
-bool ObjEaseAnimationData::IsFinished() const {
-    return playState_ == PlayState::STOPPED;
+void ObjEaseAnimationData::GetParams() {
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        std::string srtName = GetSRTName(static_cast<TransformType>(i));
+        originalValues_[i]  = globalParameter_->GetValue<Vector3>(groupName_, "Original_" + srtName);
+    }
+  
 }
 
-bool ObjEaseAnimationData::IsPlaying() const {
-    return playState_ == PlayState::PLAYING || playState_ == PlayState::RETURNING;
+void ObjEaseAnimationData::InitParams() {
+    playState_              = PlayState::STOPPED;
+    activeKeyFrameIndex_    = 0;
+    isAllKeyFramesFinished_ = false;
+
 }
 
-void ObjEaseAnimationData::LoadData() {
-    globalParameter_->LoadFile(groupName_, folderPath_);
-    globalParameter_->SyncParamForGroup(groupName_);
-    LoadParams();
+std::unique_ptr<ObjEaseAnimationSection> ObjEaseAnimationData::CreateKeyFrame(const int32_t& index) {
+    auto keyFrame = std::make_unique<ObjEaseAnimationSection>();
+    keyFrame->Init(groupName_, categoryName_, index);
+    return keyFrame;
 }
 
-void ObjEaseAnimationData::SaveData() {
-    globalParameter_->SaveFile(groupName_, folderPath_);
+std::string ObjEaseAnimationData::GeTSequenceElementFolderPath() const {
+    return baseFolderPath_ + categoryName_ + "/" + "Sections/" + groupName_ + "/";
 }
 
-void ObjEaseAnimationData::RegisterParams() {
-    // Scale
-    globalParameter_->Regist(groupName_, "Scale_IsActive", &scaleParam_.isActive);
-    globalParameter_->Regist(groupName_, "Scale_IsParentAdapt", &scaleParam_.isParentAdapt);
-    globalParameter_->Regist(groupName_, "Scale_UseCurrentAsStart", &scaleParam_.useCurrentAsStart);
-    globalParameter_->Regist(groupName_, "Scale_ReturnToOrigin", &scaleParam_.returnToOrigin);
-    globalParameter_->Regist(groupName_, "Scale_StartValue", &scaleParam_.startValue);
-    globalParameter_->Regist(groupName_, "Scale_EndValue", &scaleParam_.endValue);
-    globalParameter_->Regist(groupName_, "Scale_MaxTime", &scaleParam_.maxTime);
-    globalParameter_->Regist(groupName_, "Scale_EaseType", &scaleParam_.easeType);
-    globalParameter_->Regist(groupName_, "Scale_ReturnMaxTime", &scaleParam_.returnMaxTime);
-    globalParameter_->Regist(groupName_, "Scale_ReturnEaseType", &scaleParam_.returnEaseType);
+void ObjEaseAnimationData::CreateOrLoadSections(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles) {
+    if (sectionElements_.size() == 0) {
 
-    // Rotation
-    globalParameter_->Regist(groupName_, "Rotation_IsActive", &rotationParam_.isActive);
-    globalParameter_->Regist(groupName_, "Rotation_IsParentAdapt", &rotationParam_.isParentAdapt);
-    globalParameter_->Regist(groupName_, "Rotation_UseCurrentAsStart", &rotationParam_.useCurrentAsStart);
-    globalParameter_->Regist(groupName_, "Rotation_ReturnToOrigin", &rotationParam_.returnToOrigin);
-    globalParameter_->Regist(groupName_, "Rotation_StartValue", &rotationParam_.startValue);
-    globalParameter_->Regist(groupName_, "Rotation_EndValue", &rotationParam_.endValue);
-    globalParameter_->Regist(groupName_, "Rotation_MaxTime", &rotationParam_.maxTime);
-    globalParameter_->Regist(groupName_, "Rotation_EaseType", &rotationParam_.easeType);
-    globalParameter_->Regist(groupName_, "Rotation_ReturnMaxTime", &rotationParam_.returnMaxTime);
-    globalParameter_->Regist(groupName_, "Rotation_ReturnEaseType", &rotationParam_.returnEaseType);
-
-    // Translation
-    globalParameter_->Regist(groupName_, "Translation_IsActive", &translationParam_.isActive);
-    globalParameter_->Regist(groupName_, "Translation_IsParentAdapt", &translationParam_.isParentAdapt);
-    globalParameter_->Regist(groupName_, "Translation_UseCurrentAsStart", &translationParam_.useCurrentAsStart);
-    globalParameter_->Regist(groupName_, "Translation_UseRail", &translationParam_.useRail);
-    globalParameter_->Regist(groupName_, "Translation_ReturnToOrigin", &translationParam_.returnToOrigin);
-    globalParameter_->Regist(groupName_, "Translation_StartValue", &translationParam_.startValue);
-    globalParameter_->Regist(groupName_, "Translation_EndValue", &translationParam_.endValue);
-    globalParameter_->Regist(groupName_, "Translation_MaxTime", &translationParam_.maxTime);
-    globalParameter_->Regist(groupName_, "Translation_EaseType", &translationParam_.easeType);
-    globalParameter_->Regist(groupName_, "Translation_ReturnMaxTime", &translationParam_.returnMaxTime);
-    globalParameter_->Regist(groupName_, "Translation_ReturnEaseType", &translationParam_.returnEaseType);
-    globalParameter_->Regist(groupName_, "Translation_RailFileName", &translationParam_.railFileName);
+        for (const auto& [index, fileName] : KeyFrameFiles) {
+            auto newKeyFrame = CreateKeyFrame(index);
+            newKeyFrame->LoadData();
+            sectionElements_.push_back(std::move(newKeyFrame));
+        }
+    } else {
+        for (auto& keyFrame : sectionElements_) {
+            keyFrame->LoadData();
+        }
+    }
 }
 
-void ObjEaseAnimationData::LoadParams() {
-    // Scale
-    scaleParam_.isActive          = globalParameter_->GetValue<bool>(groupName_, "Scale_IsActive");
-    scaleParam_.isParentAdapt     = globalParameter_->GetValue<bool>(groupName_, "Scale_IsParentAdapt");
-    scaleParam_.useCurrentAsStart = globalParameter_->GetValue<bool>(groupName_, "Scale_UseCurrentAsStart");
-    scaleParam_.returnToOrigin    = globalParameter_->GetValue<bool>(groupName_, "Scale_ReturnToOrigin");
-    scaleParam_.startValue        = globalParameter_->GetValue<Vector3>(groupName_, "Scale_StartValue");
-    scaleParam_.endValue          = globalParameter_->GetValue<Vector3>(groupName_, "Scale_EndValue");
-    scaleParam_.maxTime           = globalParameter_->GetValue<float>(groupName_, "Scale_MaxTime");
-    scaleParam_.easeType          = globalParameter_->GetValue<int32_t>(groupName_, "Scale_EaseType");
-    scaleParam_.returnMaxTime     = globalParameter_->GetValue<float>(groupName_, "Scale_ReturnMaxTime");
-    scaleParam_.returnEaseType    = globalParameter_->GetValue<int32_t>(groupName_, "Scale_ReturnEaseType");
-
-    // Rotation
-    rotationParam_.isActive          = globalParameter_->GetValue<bool>(groupName_, "Rotation_IsActive");
-    rotationParam_.isParentAdapt     = globalParameter_->GetValue<bool>(groupName_, "Rotation_IsParentAdapt");
-    rotationParam_.useCurrentAsStart = globalParameter_->GetValue<bool>(groupName_, "Rotation_UseCurrentAsStart");
-    rotationParam_.returnToOrigin    = globalParameter_->GetValue<bool>(groupName_, "Rotation_ReturnToOrigin");
-    rotationParam_.startValue        = globalParameter_->GetValue<Vector3>(groupName_, "Rotation_StartValue");
-    rotationParam_.endValue          = globalParameter_->GetValue<Vector3>(groupName_, "Rotation_EndValue");
-    rotationParam_.maxTime           = globalParameter_->GetValue<float>(groupName_, "Rotation_MaxTime");
-    rotationParam_.easeType          = globalParameter_->GetValue<int32_t>(groupName_, "Rotation_EaseType");
-    rotationParam_.returnMaxTime     = globalParameter_->GetValue<float>(groupName_, "Rotation_ReturnMaxTime");
-    rotationParam_.returnEaseType    = globalParameter_->GetValue<int32_t>(groupName_, "Rotation_ReturnEaseType");
-
-    // Translation
-    translationParam_.isActive          = globalParameter_->GetValue<bool>(groupName_, "Translation_IsActive");
-    translationParam_.isParentAdapt     = globalParameter_->GetValue<bool>(groupName_, "Translation_IsParentAdapt");
-    translationParam_.useCurrentAsStart = globalParameter_->GetValue<bool>(groupName_, "Translation_UseCurrentAsStart");
-    translationParam_.useRail           = globalParameter_->GetValue<bool>(groupName_, "Translation_UseRail");
-    translationParam_.returnToOrigin    = globalParameter_->GetValue<bool>(groupName_, "Translation_ReturnToOrigin");
-    translationParam_.startValue        = globalParameter_->GetValue<Vector3>(groupName_, "Translation_StartValue");
-    translationParam_.endValue          = globalParameter_->GetValue<Vector3>(groupName_, "Translation_EndValue");
-    translationParam_.maxTime           = globalParameter_->GetValue<float>(groupName_, "Translation_MaxTime");
-    translationParam_.easeType          = globalParameter_->GetValue<int32_t>(groupName_, "Translation_EaseType");
-    translationParam_.returnMaxTime     = globalParameter_->GetValue<float>(groupName_, "Translation_ReturnMaxTime");
-    translationParam_.returnEaseType    = globalParameter_->GetValue<int32_t>(groupName_, "Translation_ReturnEaseType");
-    translationParam_.railFileName      = globalParameter_->GetValue<std::string>(groupName_, "Translation_RailFileName");
+RailPlayer* ObjEaseAnimationData::GetCurrentRailPlayer() const {
+    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
+        auto* railPlayer = sectionElements_[activeKeyFrameIndex_]->GetRailPlayer();
+        if (railPlayer) {
+            return railPlayer;
+        }
+    }
+    return nullptr;
 }
 
-void ObjEaseAnimationData::ResetParams() {
-    playState_ = PlayState::STOPPED;
+Vector3 ObjEaseAnimationData::GetActiveKeyFrameValue(const TransformType& type) const {
+    if (sectionElements_.empty()) {
+        return originalValues_[static_cast<size_t>(type)];
+    }
 
-    scaleParam_.currentValue       = scaleParam_.startValue;
-    rotationParam_.currentValue    = rotationParam_.startValue;
-    translationParam_.currentValue = translationParam_.startValue;
-
-    originalScale_       = scaleParam_.startValue;
-    originalRotation_    = rotationParam_.startValue;
-    originalTranslation_ = translationParam_.startValue;
-}
-
-void ObjEaseAnimationData::ImGuiTransformParam(const char* label, TransformParam& param, TransformType type) {
-    ImGui::SeparatorText(label);
-    ImGui::Checkbox((std::string(label) + " Active").c_str(), &param.isActive);
-
-    if (!param.isActive)
-        return;
-
-    ImGui::Checkbox("Parent Adapt", &param.isParentAdapt);
-    ImGui::Checkbox("Use Current As Start", &param.useCurrentAsStart);
-    ImGui::Checkbox("Return To Origin", &param.returnToOrigin);
-
-    // Translation専用: Rail使用フラグ
-    if (type == TransformType::Translation) {
-        ImGui::Checkbox("Use Rail", &param.useRail);
-
-        if (param.useRail) {
-            // Railファイル選択
-            std::string directory = "Resources/GlobalParameter/RailEditor/Dates";
-            railFileSelector_.selector.SelectFile("Rail File", directory, param.railFileName, "", true);
-            return; // Rail使用時は通常パラメータを表示しない
+    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
+        switch (type) {
+        case TransformType::Scale:
+            return sectionElements_[activeKeyFrameIndex_]->GetCurrentScale();
+        case TransformType::Rotation:
+            return sectionElements_[activeKeyFrameIndex_]->GetCurrentRotation();
+        case TransformType::Translation:
+            return sectionElements_[activeKeyFrameIndex_]->GetCurrentTranslation();
+        default:
+            break;
         }
     }
 
-    // UseCurrentAsStartがtrueの場合はStartValueを編集不可に
-    if (!param.useCurrentAsStart) {
-        ImGui::DragFloat3("Start Value", &param.startValue.x, 0.01f);
-    } 
+    return Vector3::ZeroVector();
+}
 
-
-    ImGui::DragFloat3("End Value", &param.endValue.x, 0.01f);
-    ImGui::DragFloat("Max Time", &param.maxTime, 0.01f, 0.1f, 10.0f);
-    ImGuiEasingTypeSelector("Easing Type", param.easeType);
-
-    if (param.returnToOrigin) {
-        ImGui::SeparatorText("Return Parameters");
-        ImGui::DragFloat("Return Max Time", &param.returnMaxTime, 0.01f, 0.1f, 10.0f);
-        ImGuiEasingTypeSelector("Return Easing Type", param.returnEaseType);
+bool ObjEaseAnimationData::GetIsUseRailActiveKeyFrame() const {
+    bool isUseRail = false;
+    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
+        isUseRail = sectionElements_[activeKeyFrameIndex_]->IsUsingRail();
     }
+    return isUseRail;
 }
 
 void ObjEaseAnimationData::AdjustParam() {
 #ifdef _DEBUG
-    if (showControls_) {
-        ImGui::SeparatorText(("Animation: " + groupName_).c_str());
-        ImGui::PushID(groupName_.c_str());
 
-        // 再生制御
-        if (ImGui::Button("Play")) {
-            Play();
+    ImGui::Text("Category: %s", categoryName_.c_str());
+    ImGui::Text("Animation: %s", groupName_.c_str());
+
+    // OriginTransform 編集
+    for (size_t i = 0; i < static_cast<size_t>(TransformType::Count); ++i) {
+        std::string srtName = GetSRTName(static_cast<TransformType>(i));
+        ImGui::DragFloat3(("Origin" + srtName).c_str(), &originalValues_[i].x, 0.01f);
+    }
+
+    // 現在の値表示
+    ImGui::SeparatorText("Current Animation Values");
+    Vector3 currentScale = GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Scale);
+    Vector3 currentRot   = GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Rotation);
+    Vector3 currentTrans = GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Translation);
+
+    ImGui::Text("Scale: (%.2f, %.2f, %.2f)", currentScale.x, currentScale.y, currentScale.z);
+    ImGui::Text("Rotation: (%.2f, %.2f, %.2f)", currentRot.x, currentRot.y, currentRot.z);
+    ImGui::Text("Translation: (%.2f, %.2f, %.2f)", currentTrans.x, currentTrans.y, currentTrans.z);
+
+
+    // KeyFrame Controls
+    ImGui::Separator();
+    ImGui::Text("Sections: %d", GetTotalKeyFrameCount());
+
+    if (ImGui::Button("Add Section")) {
+        AddKeyFrame();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Remove Selected") && selectedKeyFrameIndex_ >= 0) {
+        RemoveKeyFrame(selectedKeyFrameIndex_);
+    }
+
+    // KeyFrame List
+    for (int i = 0; i < GetTotalKeyFrameCount(); ++i) {
+        ImGui::PushID(i);
+        bool isSelected = (selectedKeyFrameIndex_ == i);
+        if (ImGui::Selectable(("Section " + std::to_string(i)).c_str(), isSelected)) {
+            SetSelectedKeyFrameIndex(i);
         }
-        ImGui::SameLine();
-        if (ImGui::Button("Stop")) {
-            Stop();
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Reset")) {
-            Reset();
-        }
-
-        // 状態表示
-        const char* stateText = "";
-        switch (playState_) {
-        case PlayState::STOPPED:
-            stateText = "STOPPED";
-            break;
-        case PlayState::PLAYING:
-            stateText = "PLAYING";
-            break;
-        case PlayState::RETURNING:
-            stateText = "RETURNING";
-            break;
-        }
-        ImGui::Text("State: %s", stateText);
-
-        ImGui::Separator();
-
-        // 各Transformパラメータ
-        ImGuiTransformParam("Scale", scaleParam_, TransformType::Scale);
-        ImGuiTransformParam("Rotation", rotationParam_, TransformType::Rotation);
-        ImGuiTransformParam("Translation", translationParam_, TransformType::Translation);
-
         ImGui::PopID();
     }
-#endif // _DEBUG
+
+    // Selected KeyFrame Edit
+    if (selectedKeyFrameIndex_ >= 0 && selectedKeyFrameIndex_ < GetTotalKeyFrameCount()) {
+        ImGui::Separator();
+        sectionElements_[selectedKeyFrameIndex_]->AdjustParam();
+    }
+
+#endif
+}
+
+std::string ObjEaseAnimationData::GetSRTName(const TransformType& type) const {
+    switch (type) {
+    case TransformType::Scale:
+        return "Scale";
+    case TransformType::Rotation:
+        return "Rotation";
+    case TransformType::Translation:
+        return "Translation";
+    default:
+        return "Unknown";
+    }
+}
+
+void ObjEaseAnimationData::LoadSequenceElements() {
+    BaseSequenceEffectData::LoadSequenceElements();
+}
+void ObjEaseAnimationData::SaveSequenceElements() {
+    BaseSequenceEffectData::SaveSequenceElements();
 }

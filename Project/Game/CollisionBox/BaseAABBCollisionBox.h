@@ -19,8 +19,7 @@ public:
     // 初期化、更新、描画
     virtual void Init();
     virtual void Update();
-    virtual void Draw();
-
+  
     /// <summary>
     /// 親トランスフォームの設定
     /// </summary>
@@ -44,9 +43,8 @@ protected:
     WorldTransform transform_;
     Vector3 offset_;
     Vector3 size_;
-    bool isCollision_ = true;
+    bool isAbleCollision_ = true;
 
-public:
     std::string tag_;
 
 public:
@@ -55,7 +53,7 @@ public:
     const std::string& GetTag() const { return tag_; }
 
     /// setter
-    void SetIsCollision(const bool& is) { isCollision_ = is; }
+    void SetIsAbleCollision(const bool& is) { isAbleCollision_ = is; }
     void SetSize(const Vector3& size) { size_ = size; }
     void SetPosition(const Vector3& position) { transform_.translation_ = position; }
     void SetOffset(const Vector3& offset) { offset_ = offset; }

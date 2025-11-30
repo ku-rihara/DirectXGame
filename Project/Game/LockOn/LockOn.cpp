@@ -8,7 +8,7 @@
 // from
 #include "Player/Player.h"
 // target
-#include "Enemy/BaseEnemy.h"
+#include "Enemy/Types/BaseEnemy.h"
 
 #include <algorithm>
 #include <cmath>

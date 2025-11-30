@@ -16,11 +16,13 @@ void PlayerAttackRendition::Reset() {
     currentTime_ = 0.0f;
     isPlayed_.fill(false);
     isObjAnimPlayed_.fill(false);
+  
 }
 
 void PlayerAttackRendition::Update(const float& deltaTime) {
-    if (!pPlayer_ || !playerComboAttackData_)
+    if (!pPlayer_ || !playerComboAttackData_) {
         return;
+    }
 
     currentTime_ += deltaTime;
 
@@ -30,13 +32,18 @@ void PlayerAttackRendition::Update(const float& deltaTime) {
     for (int32_t i = 0; i < static_cast<int32_t>(PlayerAttackRenditionData::Type::Count); ++i) {
         const auto& param = renditionData.GetRenditionParamFromIndex(i);
 
+        // トリガー条件がヒットの場合のcontinue処理
+        if (param.triggerByHit && !pPlayer_->GetPlayerCollisionInfo()->GetIsHit()) {
+            continue;
+        }
+
         // すでに再生済みならスキップ
         if (isPlayed_[i]) {
             continue;
         }
 
         // startTiming に達したら発動
-        if (currentTime_ >= param.startTiming) {
+        if (currentTime_ >= param.startTiming && param.fileName != "") {
             switch (static_cast<PlayerAttackRenditionData::Type>(i)) {
             case PlayerAttackRenditionData::Type::CameraAction:
                 pPlayer_->GetGameCamera()->PlayAnimation(param.fileName);
@@ -82,15 +89,15 @@ void PlayerAttackRendition::Update(const float& deltaTime) {
         if (currentTime_ >= param.startTiming) {
             switch (static_cast<PlayerAttackRenditionData::ObjAnimationType>(i)) {
             case PlayerAttackRenditionData::ObjAnimationType::Head:
-                pPlayer_->GetObject3DRef()->PlayObjEaseAnimation("Player", param.fileName);
+                pPlayer_->GetObject3D()->transform_.PlayObjEaseAnimation("Player", param.fileName);
                 break;
 
             case PlayerAttackRenditionData::ObjAnimationType::RightHand:
-                pPlayer_->GetRightHand()->GetObject3DRef()->PlayObjEaseAnimation("Player", param.fileName);
+                pPlayer_->GetRightHand()->GetObject3D()->transform_.PlayObjEaseAnimation("Player", param.fileName);
                 break;
 
             case PlayerAttackRenditionData::ObjAnimationType::LeftHand:
-                pPlayer_->GetLeftHand()->GetObject3DRef()->PlayObjEaseAnimation("Player", param.fileName);
+                pPlayer_->GetLeftHand()->GetObject3D()->transform_.PlayObjEaseAnimation("Player", param.fileName);
                 break;
 
             default:

@@ -1,44 +1,43 @@
 #include "CameraAnimation.h"
 
 void CameraAnimation::Init() {
-    // 生成
-    animationData_ = std::make_unique<CameraAnimationData>();
 
+    BaseEffectPlayer::Init();
     // オフセット値を初期化
     ResetOffsetParam();
 }
 
 void CameraAnimation::Update(const float& speedRate) {
     // アニメーションデータの更新
-    if (animationData_) {
-        animationData_->Update(speedRate);
+    if (effectData_) {
+        effectData_->Update(speedRate);
         ApplyOffsetToViewProjection();
     }
 }
 
 void CameraAnimation::Play(const std::string& animationName) {
-    if (!animationData_) {
+    if (!effectData_) {
         return;
     }
 
-    currentAnimationName_ = animationName;
+    currentEffectName_ = animationName;
 
-    animationData_.reset();
-    animationData_ = std::make_unique<CameraAnimationData>();
+    effectData_.reset();
+    effectData_ = std::make_unique<CameraAnimationData>();
 
     // アニメーションデータの初期化とロード
-    animationData_->Init(currentAnimationName_);
-    animationData_->LoadData();
+    effectData_->Init(currentEffectName_);
+    effectData_->LoadData();
 
     // 現在の値を初期値として保存
     SaveInitialValues();
 
-    animationData_->Play();
+    effectData_->Play();
 }
 
 void CameraAnimation::Reset() {
-    if (animationData_) {
-        animationData_->Reset();
+    if (effectData_) {
+        effectData_->Reset();
     }
 
     // オフセット値をリセット
@@ -55,7 +54,7 @@ void CameraAnimation::SaveInitialValues() {
 }
 
 void CameraAnimation::ApplyOffsetToViewProjection() {
-    if (!animationData_ || !pViewProjection_) {
+    if (!effectData_ || !pViewProjection_) {
         return;
     }
 
@@ -64,7 +63,13 @@ void CameraAnimation::ApplyOffsetToViewProjection() {
     }
 
     // アニメーションデータをViewProjectionに適用
-    animationData_->ApplyToViewProjection(*pViewProjection_);
+    if (CameraAnimationData* cameraData = dynamic_cast<CameraAnimationData*>(effectData_.get())) {
+        cameraData->ApplyToViewProjection(*pViewProjection_);
+    }
+}
+
+std::unique_ptr<BaseEffectData> CameraAnimation::CreateEffectData() {
+    return std::make_unique<CameraAnimationData>();
 }
 
 void CameraAnimation::SetViewProjection(ViewProjection* viewProjection) {

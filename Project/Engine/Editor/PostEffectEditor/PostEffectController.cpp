@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <imgui.h>
 #include <Windows.h>
+#include "Editor/ParameterEditor/GlobalParameter.h"
 
 void PostEffectController::Init() {
     renderer_ = PostEffectRenderer::GetInstance();
@@ -57,7 +58,7 @@ bool PostEffectController::IsPostEffectActive() const {
 
 void PostEffectController::AllLoadFile() {
     // PostEffectのフォルダ内のすべてのファイルを検索
-    std::string folderPath = "Resources/GlobalParameter/PostEffect/";
+    std::string folderPath = GlobalParameter::GetInstance()->GetDirectoryPath() + "PostEffect/";
 
     if (std::filesystem::exists(folderPath) && std::filesystem::is_directory(folderPath)) {
         // 既存のPostEffectをクリア

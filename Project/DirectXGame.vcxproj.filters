@@ -115,12 +115,6 @@
     <Filter Include="Game\SkyDome">
       <UniqueIdentifier>{be115c28-99db-4631-90c5-48e4db1bce50}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Enemy\core">
-      <UniqueIdentifier>{acd7df78-4aff-4ea7-bee3-3255835cbd89}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Enemy\Manager">
-      <UniqueIdentifier>{4ec20f46-29f9-433f-80de-43dc9f16cb67}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\CollisionBox">
       <UniqueIdentifier>{95fdcb87-3d52-42b9-957c-8a29c004140d}</UniqueIdentifier>
     </Filter>
@@ -154,12 +148,6 @@
     <Filter Include="Game\Player\Behavior\TitleBehavior">
       <UniqueIdentifier>{b01ecc97-be49-417c-b138-660a6158c88c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Enemy\Behevior\Base">
-      <UniqueIdentifier>{1746ae5f-60db-477d-aa9e-b09ea00862c4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Enemy\Behevior\MoveBehavior">
-      <UniqueIdentifier>{e99abf53-21bf-4374-907f-ce66abce6461}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Player\Behavior\Base">
       <UniqueIdentifier>{566bf61f-7694-4068-9d7b-8bd02d70ef3f}</UniqueIdentifier>
     </Filter>
@@ -187,14 +175,8 @@
     <Filter Include="Game\Player\core">
       <UniqueIdentifier>{d3e51b1b-0df3-4fb3-bd66-3f185b05cfcd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Enemy\Behevior\Damage">
-      <UniqueIdentifier>{d269b1c9-4fa2-49cd-99e9-ef7cc1bcd7fc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Scene\Manager">
       <UniqueIdentifier>{20578600-268f-441b-8c4f-b9fd3cd175ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Enemy\Spawner">
-      <UniqueIdentifier>{56719232-7938-486e-b2c4-15494f312b10}</UniqueIdentifier>
     </Filter>
     <Filter Include="MyEngine\.cpp\Primitive">
       <UniqueIdentifier>{a660c6f0-a988-46d1-bca0-d2fc5408ee78}</UniqueIdentifier>
@@ -240,9 +222,6 @@
     </Filter>
     <Filter Include="Game\Combo\UIBehavior">
       <UniqueIdentifier>{6482a217-db8f-4dd2-9188-4fd6fb9978b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\EasingTestObj">
-      <UniqueIdentifier>{a383ecc6-f375-4bf7-9b58-7f4ba9f98f42}</UniqueIdentifier>
     </Filter>
     <Filter Include="MyEngine\.cpp\Animation">
       <UniqueIdentifier>{f84405b2-ba15-4fcd-9d2f-c731c2e277d1}</UniqueIdentifier>
@@ -472,6 +451,42 @@
     <Filter Include="MyEngine\.h\Editor\PostEffectEditor">
       <UniqueIdentifier>{f328784d-1054-4768-b123-548a56e9d88f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemy\type">
+      <UniqueIdentifier>{acd7df78-4aff-4ea7-bee3-3255835cbd89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\Behevior\DamageReaction">
+      <UniqueIdentifier>{fdb2d320-68ad-49e9-b11a-d289ecc69a5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\DamageReaction">
+      <UniqueIdentifier>{af911319-e904-4cbb-9bea-7d13f61f8579}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\SearchingSprite\Spawner">
+      <UniqueIdentifier>{56719232-7938-486e-b2c4-15494f312b10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\EasingTestObj">
+      <UniqueIdentifier>{a383ecc6-f375-4bf7-9b58-7f4ba9f98f42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy\Behevior\NormalBehavior">
+      <UniqueIdentifier>{e99abf53-21bf-4374-907f-ce66abce6461}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Editor\BaseEffectEditor">
+      <UniqueIdentifier>{89671226-8576-4501-a77f-e235cfd7400d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\BaseEffectEditor">
+      <UniqueIdentifier>{81ea0af1-4eee-4903-9473-1904adec97fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\EffectEditorSuite">
+      <UniqueIdentifier>{5450a5bf-189d-4e33-a506-f7a5d5a57b27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Editor\EffectEditorSuite">
+      <UniqueIdentifier>{88afa0cc-2cac-4965-869e-c3e4c0de169d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\TimeModeSelector">
+      <UniqueIdentifier>{39a265fb-35aa-4d1a-b9c7-603351ef6910}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\utility\TimeModeSelector">
+      <UniqueIdentifier>{03c50b4d-e92c-4dad-91f1-1e665d26cfc8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -586,38 +601,17 @@
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp">
       <Filter>Game\Scene\Factory</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\RoringUpper.cpp">
-      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClCompile>
     <ClCompile Include="Game\CollisionBox\BaseAABBCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\ThrustPunch.cpp">
-      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Enemy\HPBar\EnemyHPBar.cpp">
       <Filter>Game\Enemy\HPBsr</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\RushAttack.cpp">
-      <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\StrongEnemy.cpp">
-      <Filter>Game\Enemy\core</Filter>
     </ClCompile>
     <ClCompile Include="math\Shake.cpp">
       <Filter>liberary\.cpp</Filter>
     </ClCompile>
     <ClCompile Include="math\Quaternion.cpp">
       <Filter>liberary\.cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyWait.cpp">
-      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyChasePlayer.cpp">
-      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemySpawn.cpp">
-      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Lighrt\Light.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
@@ -670,15 +664,6 @@
     <ClCompile Include="Game\UI\HowToOperate.cpp">
       <Filter>Game\UI\HowToOperate</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\RightJobPunch.cpp">
-      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\FallAttack.cpp">
-      <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\LeftJobPunch.cpp">
-      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\PlayerBehavior\PlayerJump.cpp">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
     </ClCompile>
@@ -700,15 +685,6 @@
     <ClCompile Include="Game\GameCamera\GameCamera.cpp">
       <Filter>Game\GameCamera</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\EnemyManager.cpp">
-      <Filter>Game\Enemy\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\BaseEnemyBehavior.cpp">
-      <Filter>Game\Enemy\Behevior\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\BaseEnemyMoveBehavior.cpp">
-      <Filter>Game\Enemy\Behevior\Base</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp">
       <Filter>Game\Player\Behavior\Base\Atacck</Filter>
     </ClCompile>
@@ -717,12 +693,6 @@
     </ClCompile>
     <ClCompile Include="Game\Player\PlayerBehavior\BasePlayerBehavior.cpp">
       <Filter>Game\Player\Behavior\Base\Normal</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\BaseEnemy.cpp">
-      <Filter>Game\Enemy\core</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\NormalEnemy.cpp">
-      <Filter>Game\Enemy\core</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Function\GetFile.cpp">
       <Filter>MyEngine\.cpp\function</Filter>
@@ -736,32 +706,8 @@
     <ClCompile Include="Game\CollisionBox\EnemyCollisionBox.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyBoundDamage.cpp">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyDamageRoot.cpp">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyDeath.cpp">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyHitBackDamage.cpp">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyStopDamage.cpp">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyThrustDamage.cpp">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\EnemyUpperDamage.cpp">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\JumpRush.cpp">
-      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Enemy\Spawner\EnemySpawner.cpp">
-      <Filter>Game\Enemy\Spawner</Filter>
+      <Filter>Game\Enemy\SearchingSprite\Spawner</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Primitive\PrimitivePlane.cpp">
       <Filter>MyEngine\.cpp\Primitive</Filter>
@@ -813,9 +759,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Dx\DirectXCommon.cpp">
       <Filter>MyEngine\.cpp\Dx</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\RoolingPunchAttack.cpp">
-      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Core\EngineCore.cpp">
       <Filter>MyEngine\.cpp\Core</Filter>
@@ -1073,7 +1016,7 @@
       <Filter>MyEngine\.cpp\GPUParticle\ResourceData</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Spawner\ContinuousEnemySpawner.cpp">
-      <Filter>Game\Enemy\Spawner</Filter>
+      <Filter>Game\Enemy\SearchingSprite\Spawner</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.cpp">
       <Filter>MyEngine\.cpp\GPUParticle\ResourceData</Filter>
@@ -1206,6 +1149,72 @@
     </ClCompile>
     <ClCompile Include="Engine\Editor\CameraEditor\CameraAnimationData.cpp">
       <Filter>MyEngine\.cpp\Editor\CameraEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Types\BaseEnemy.cpp">
+      <Filter>Game\Enemy\type</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Types\NormalEnemy.cpp">
+      <Filter>Game\Enemy\type</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Types\StrongEnemy.cpp">
+      <Filter>Game\Enemy\type</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\EnemyManager.cpp">
+      <Filter>Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\DamageReaction\EnemyDamageRenditionData.cpp">
+      <Filter>Game\Enemy\DamageReaction</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\DamageReaction\EnemyDamageReactionController.cpp">
+      <Filter>Game\Enemy\DamageReaction</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\DamageReaction\EnemyDamageReactionData.cpp">
+      <Filter>Game\Enemy\DamageReaction</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.cpp">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReacrtionAction.cpp">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.cpp">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\BaseEnemyBehavior.cpp">
+      <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\EnemyChasePlayer.cpp">
+      <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\EnemySpawn.cpp">
+      <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\EnemyWait.cpp">
+      <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationSection.cpp">
+      <Filter>MyEngine\.cpp\Editor\ObjEaseAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\BaseEffectEditor\BaseEffectData.cpp">
+      <Filter>MyEngine\.cpp\Editor\BaseEffectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\BaseEffectEditor\BaseEffectEditor.cpp">
+      <Filter>MyEngine\.cpp\Editor\BaseEffectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\BaseEffectEditor\BaseEffectPlayer.cpp">
+      <Filter>MyEngine\.cpp\Editor\BaseEffectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\BaseEffectEditor\BaseSequenceEffectData.cpp">
+      <Filter>MyEngine\.cpp\Editor\BaseEffectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.cpp">
+      <Filter>MyEngine\.cpp\Editor\EffectEditorSuite</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\TimeModeSelector\TimeModeSelector.cpp">
+      <Filter>MyEngine\.cpp\utility\TimeModeSelector</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.cpp">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1359,38 +1368,17 @@
     <ClInclude Include="Game\Scene\Factory\SceneFactory.h">
       <Filter>Game\Scene\Factory</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\RoringUpper.h">
-      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClInclude>
     <ClInclude Include="Game\CollisionBox\BaseAABBCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\ThrustPunch.h">
-      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Enemy\HPBar\EnemyHPBar.h">
       <Filter>Game\Enemy\HPBsr</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\RushAttack.h">
-      <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\StrongEnemy.h">
-      <Filter>Game\Enemy\core</Filter>
     </ClInclude>
     <ClInclude Include="math\Shake.h">
       <Filter>liberary\.h</Filter>
     </ClInclude>
     <ClInclude Include="math\Quaternion.h">
       <Filter>liberary\.h</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyWait.h">
-      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyChasePlayer.h">
-      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemySpawn.h">
-      <Filter>Game\Enemy\Behevior\MoveBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Lighrt\PointLight.h">
       <Filter>MyEngine\.h\Light</Filter>
@@ -1443,12 +1431,6 @@
     <ClInclude Include="Game\UI\HowToOperate.h">
       <Filter>Game\UI\HowToOperate</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\FallAttack.h">
-      <Filter>Game\Player\Behavior\ComboBehavior\Jump</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\LeftJobPunch.h">
-      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\PlayerBehavior\PlayerJump.h">
       <Filter>Game\Player\Behavior\NormalBehavior</Filter>
     </ClInclude>
@@ -1470,15 +1452,6 @@
     <ClInclude Include="Game\GameCamera\GameCamera.h">
       <Filter>Game\GameCamera</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\EnemyManager.h">
-      <Filter>Game\Enemy\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\BaseEnemyBehavior.h">
-      <Filter>Game\Enemy\Behevior\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\BaseEnemyMoveBehavior.h">
-      <Filter>Game\Enemy\Behevior\Base</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h">
       <Filter>Game\Player\Behavior\Base\Atacck</Filter>
     </ClInclude>
@@ -1487,12 +1460,6 @@
     </ClInclude>
     <ClInclude Include="Game\Player\PlayerBehavior\BasePlayerBehavior.h">
       <Filter>Game\Player\Behavior\Base\Normal</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\BaseEnemy.h">
-      <Filter>Game\Enemy\core</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\NormalEnemy.h">
-      <Filter>Game\Enemy\core</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Function\GetFile.h">
       <Filter>MyEngine\.h\function</Filter>
@@ -1503,32 +1470,8 @@
     <ClInclude Include="Game\CollisionBox\EnemyCollisionBox.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyBoundDamage.h">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyDamageRoot.h">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyDeath.h">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyHitBackDamage.h">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyStopDamage.h">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyThrustDamage.h">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\EnemyUpperDamage.h">
-      <Filter>Game\Enemy\Behevior\Damage</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\JumpRush.h">
-      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Enemy\Spawner\EnemySpawner.h">
-      <Filter>Game\Enemy\Spawner</Filter>
+      <Filter>Game\Enemy\SearchingSprite\Spawner</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Primitive\PrimitivePlane.h">
       <Filter>MyEngine\.h\Primitive</Filter>
@@ -1541,9 +1484,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Primitive\PrimitiveCylinder.h">
       <Filter>MyEngine\.h\Primitive</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\RightJobPunch.h">
-      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\SearchingSprite\FindSprite.h">
       <Filter>Game\Enemy\SearchingSprite</Filter>
@@ -1580,9 +1520,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Dx\DirectXCommon.h">
       <Filter>MyEngine\.h\Dx</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\RoolingPunchAttack.h">
-      <Filter>Game\Player\Behavior\ComboBehavior\Normal</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Core\EngineCore.h">
       <Filter>MyEngine\.h\Core</Filter>
@@ -1858,7 +1795,7 @@
       <Filter>MyEngine\.h\GPUParticle\ResourceData</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Spawner\ContinuousEnemySpawner.h">
-      <Filter>Game\Enemy\Spawner</Filter>
+      <Filter>Game\Enemy\SearchingSprite\Spawner</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.h">
       <Filter>MyEngine\.h\GPUParticle\ResourceData</Filter>
@@ -1991,6 +1928,72 @@
     </ClInclude>
     <ClInclude Include="Engine\Editor\TimeScaleEditor\TimeScaleController.h">
       <Filter>MyEngine\.h\Editor\TileScaleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Types\BaseEnemy.h">
+      <Filter>Game\Enemy\type</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Types\NormalEnemy.h">
+      <Filter>Game\Enemy\type</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Types\StrongEnemy.h">
+      <Filter>Game\Enemy\type</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\EnemyManager.h">
+      <Filter>Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\DamageReaction\EnemyDamageRenditionData.h">
+      <Filter>Game\Enemy\DamageReaction</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\DamageReaction\EnemyDamageReactionController.h">
+      <Filter>Game\Enemy\DamageReaction</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\DamageReaction\EnemyDamageReactionData.h">
+      <Filter>Game\Enemy\DamageReaction</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.h">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReacrtionAction.h">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.h">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\BaseEnemyBehavior.h">
+      <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\EnemyChasePlayer.h">
+      <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\EnemySpawn.h">
+      <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\EnemyWait.h">
+      <Filter>Game\Enemy\Behevior\NormalBehavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseEffectData.h">
+      <Filter>MyEngine\.h\Editor\BaseEffectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseEffectEditor.h">
+      <Filter>MyEngine\.h\Editor\BaseEffectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseEffectPlayer.h">
+      <Filter>MyEngine\.h\Editor\BaseEffectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\BaseEffectEditor\BaseSequenceEffectData.h">
+      <Filter>MyEngine\.h\Editor\BaseEffectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.h">
+      <Filter>MyEngine\.h\Editor\EffectEditorSuite</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationSection.h">
+      <Filter>MyEngine\.h\Editor\ObjEaseAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\TimeModeSelector\TimeModeSelector.h">
+      <Filter>MyEngine\.h\utility\TimeModeSelector</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.h">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

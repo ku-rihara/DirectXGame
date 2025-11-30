@@ -1,7 +1,7 @@
 #include "LockOnController.h"
 
 // target
-#include "Enemy/BaseEnemy.h"
+#include "Enemy/Types/BaseEnemy.h"
 #include "Enemy/EnemyManager.h"
 
 void LockOnController::Init() {

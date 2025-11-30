@@ -1,0 +1,12 @@
+{
+    "RightPunchRail": {
+        "easeType": 7,
+        "isLoop": false,
+        "maxTime": 0.20999999344348907,
+        "returnEaseType": 6,
+        "returnMode": 1,
+        "returnTime": 0.18000000715255737,
+        "startTime": 0.0,
+        "timeMode": 1
+    }
+}

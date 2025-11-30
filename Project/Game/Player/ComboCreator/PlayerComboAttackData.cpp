@@ -1,5 +1,6 @@
 #include "PlayerComboAttackData.h"
 #include "Function/GetFile.h"
+#include "input/Input.h"
 #include "input/InputData.h"
 #include <algorithm>
 #include <imgui.h>
@@ -36,32 +37,40 @@ void PlayerComboAttackData::RegisterParams() {
     // simpleParam
     globalParameter_->Regist(groupName_, "power", &attackParam_.power);
     globalParameter_->Regist(groupName_, "KnockBackPower", &attackParam_.knockBackPower);
+    globalParameter_->Regist(groupName_, "blowYPower", &attackParam_.blowYPower);
 
     // CollisionParam
-    globalParameter_->Regist(groupName_, "collisionSize", &attackParam_.collisionPara.size);
-    globalParameter_->Regist(groupName_, "collisionOffsetPos", &attackParam_.collisionPara.offsetPos);
-    globalParameter_->Regist(groupName_, "adaptTime", &attackParam_.collisionPara.adaptTime);
+    globalParameter_->Regist(groupName_, "collisionSize", &attackParam_.collisionParam.size);
+    globalParameter_->Regist(groupName_, "collisionOffsetPos", &attackParam_.collisionParam.offsetPos);
+    globalParameter_->Regist(groupName_, "adaptTime", &attackParam_.collisionParam.adaptTime);
+    globalParameter_->Regist(groupName_, "loopWaitTime", &attackParam_.collisionParam.loopWaitTime);
+    globalParameter_->Regist(groupName_, "loopNum", &attackParam_.collisionParam.loopNum);
+    globalParameter_->Regist(groupName_, "isAlwaysFollowing", &attackParam_.collisionParam.isAlwaysFollowing);
 
     // MoveParam
     globalParameter_->Regist(groupName_, "moveValue", &attackParam_.moveParam.value);
     globalParameter_->Regist(groupName_, "moveEaseType", &attackParam_.moveParam.easeType);
     globalParameter_->Regist(groupName_, "moveEaseTime", &attackParam_.moveParam.easeTime);
+    globalParameter_->Regist(groupName_, "isAbleInputMoving", &attackParam_.moveParam.isAbleInputMoving);
 
     // TriggerParam
     globalParameter_->Regist(groupName_, "gamePadBottom", &attackParam_.triggerParam.gamePadBottom);
     globalParameter_->Regist(groupName_, "keyBordBottom", &attackParam_.triggerParam.keyBordBottom);
     globalParameter_->Regist(groupName_, "Condition", &tempCondition_);
     globalParameter_->Regist(groupName_, "IsFirstAttack", &attackParam_.triggerParam.isFirstAttack);
+    globalParameter_->Regist(groupName_, "isAutoAdvance", &attackParam_.timingParam.isAutoAdvance); // ★追加
 
     // TimingParam
-    globalParameter_->Regist(groupName_, "cancelFrame", &attackParam_.timingParam.cancelFrame);
-    globalParameter_->Regist(groupName_, "precedeInputFrame", &attackParam_.timingParam.precedeInputFrame);
+    globalParameter_->Regist(groupName_, "isCancel", &attackParam_.timingParam.isCancel);
+    globalParameter_->Regist(groupName_, "cancelFrame", &attackParam_.timingParam.cancelTime);
+    globalParameter_->Regist(groupName_, "precedeInputFrame", &attackParam_.timingParam.precedeInputTime);
+    globalParameter_->Regist(groupName_, "finishWaitTime", &attackParam_.timingParam.finishWaitTime);
 
     // nextAttack
     globalParameter_->Regist(groupName_, "NextAttackType", &attackParam_.nextAttackType);
 
     // 演出のパラメータバインド
-    renditionData_.BindParams(globalParameter_, groupName_);
+    renditionData_.RegisterParams(globalParameter_, groupName_);
 }
 
 ///==========================================================
@@ -76,6 +85,8 @@ void PlayerComboAttackData::AdjustParam() {
     ImGui::Checkbox("isFirstAttack", &attackParam_.triggerParam.isFirstAttack);
     ImGuiKeyboardKeySelector("keyBoard:TriggerBottom", attackParam_.triggerParam.keyBordBottom);
     ImGuiGamepadButtonSelector("GamePad:TriggerBottom", attackParam_.triggerParam.gamePadBottom);
+
+    // 発動条件
     const char* conditionItems[] = {"Ground", "Air", "Both"};
     tempCondition_               = static_cast<int>(attackParam_.triggerParam.condition);
     if (ImGui::Combo("Trigger Condition", &tempCondition_, conditionItems, IM_ARRAYSIZE(conditionItems))) {
@@ -86,23 +97,36 @@ void PlayerComboAttackData::AdjustParam() {
     ImGui::SeparatorText("simple Parameter");
     ImGui::DragFloat("Power", &attackParam_.power, 0.01f);
     ImGui::DragFloat("KnockBack Power", &attackParam_.knockBackPower, 0.01f);
+    ImGui::DragFloat("Blow Y Power", &attackParam_.blowYPower, 0.01f);
 
     // Collision Parameter
     ImGui::SeparatorText("Collision Parameter");
-    ImGui::DragFloat3("Collision Size", &attackParam_.collisionPara.size.x, 0.01f);
-    ImGui::DragFloat3("Collision Offset Pos", &attackParam_.collisionPara.offsetPos.x, 0.01f);
-    ImGui::DragFloat("Adapt Time", &attackParam_.collisionPara.adaptTime, 0.01f);
+    ImGui::DragFloat3("Collision Size", &attackParam_.collisionParam.size.x, 0.01f);
+    ImGui::DragFloat3("Collision Offset Pos", &attackParam_.collisionParam.offsetPos.x, 0.01f);
+    ImGui::DragFloat("Adapt Time", &attackParam_.collisionParam.adaptTime, 0.01f);
+    ImGui::Checkbox("is Auto Advance to Next Attack", &attackParam_.timingParam.isAutoAdvance);
+    ImGui::InputInt("Loop Num", &attackParam_.collisionParam.loopNum);
+    if (attackParam_.collisionParam.loopNum > 0) {
+        ImGui::DragFloat("Loop Wait Time", &attackParam_.collisionParam.loopWaitTime, 0.01f);
+    }
+    ImGui::Checkbox("is Always Following", &attackParam_.collisionParam.isAlwaysFollowing);
 
     // Move Parameter
     ImGui::SeparatorText("Move Parameter");
+    ImGui::Checkbox("isAble InputMoving", &attackParam_.moveParam.isAbleInputMoving);
     ImGui::DragFloat("Move Ease Time", &attackParam_.moveParam.easeTime, 0.01f);
     ImGui::DragFloat3("Move Value", &attackParam_.moveParam.value.x, 0.01f);
     ImGuiEasingTypeSelector("Move Easing Type", attackParam_.moveParam.easeType);
 
-    // Other Parameters
+    // Timing Parameters
     ImGui::SeparatorText("Timing Parameter");
-    ImGui::DragFloat("Cancel Frame", &attackParam_.timingParam.cancelFrame, 0.01f);
-    ImGui::DragFloat("Precede Input Frame", &attackParam_.timingParam.precedeInputFrame, 0.01f);
+    ImGui::DragFloat("Precede Input Time", &attackParam_.timingParam.precedeInputTime, 0.01f);
+    ImGui::DragFloat("finish Wait Time", &attackParam_.timingParam.finishWaitTime, 0.01f);
+
+    ImGui::Checkbox("is Add Cancel Time", &attackParam_.timingParam.isCancel);
+    if (attackParam_.timingParam.isCancel) {
+        ImGui::DragFloat("Cancel Time", &attackParam_.timingParam.cancelTime, 0.01f);
+    }
 
     // next Attack
     ImGui::SeparatorText("Next Attack");
@@ -120,12 +144,63 @@ void PlayerComboAttackData::AdjustParam() {
 #endif // _DEBUG
 }
 
-
 void PlayerComboAttackData::SelectNextAttack() {
     fileSelector_.SelectFile(
         "Next Attack Type",
         "Resources/GlobalParameter/AttackCreator",
         attackParam_.nextAttackType,
-        groupName_, 
+        groupName_,
         true);
+}
+
+bool PlayerComboAttackData::IsReserveNextAttack(const float& currentTime, const TriggerParam& nextAtkTrigger) {
+
+    // 先行入力受付
+    if (currentTime < attackParam_.timingParam.precedeInputTime && !IsWaitFinish(currentTime)) {
+        return false;
+    }
+
+    // キーボード入力チェック
+    if (Input::GetInstance()->TriggerKey(FromDIKCode(nextAtkTrigger.keyBordBottom))) {
+        return true;
+    }
+
+    // ゲームパッド入力チェック
+    if (Input::IsTriggerPad(0, FromXInputButtonFlag(nextAtkTrigger.gamePadBottom))) {
+        return true;
+    }
+
+    return false;
+}
+
+bool PlayerComboAttackData::IsCancelAttack(const float& currentTime, const TriggerParam& nextAtkTrigger) {
+
+    if (!attackParam_.timingParam.isCancel) {
+        return false;
+    }
+
+    if (currentTime < attackParam_.timingParam.cancelTime) {
+        return false;
+    }
+
+     // キーボード入力チェック
+    if (Input::GetInstance()->TriggerKey(FromDIKCode(nextAtkTrigger.keyBordBottom))) {
+        return true;
+    }
+
+    // ゲームパッド入力チェック
+    if (Input::IsTriggerPad(0, FromXInputButtonFlag(nextAtkTrigger.gamePadBottom))) {
+        return true;
+    }
+
+    return false;
+}
+
+
+bool PlayerComboAttackData::IsWaitFinish(const float& currentTime) {
+    if (currentTime >= attackParam_.timingParam.finishWaitTime) {
+        return true;
+    } else {
+        return false;
+    }
 }

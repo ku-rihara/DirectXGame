@@ -1,4 +1,5 @@
 #pragma once
+#include "Editor/BaseEffectEditor/BaseEffectPlayer.h"
 #include "RailData.h"
 #include "Vector3.h"
 #include <memory>
@@ -7,40 +8,27 @@
 /// <summary>
 /// レールプレイヤー
 /// </summary>
-class RailPlayer {
+class RailPlayer : public BaseEffectPlayer {
 public:
-    RailPlayer()  = default;
-    ~RailPlayer() = default;
+    RailPlayer()           = default;
+    ~RailPlayer() override = default;
 
-    void Init(); //< 初期化
-    void Stop(); //< レール停止
+    // 初期化、更新、再生
+    void Init() override;
+    void Update(const float& speedRate = 1.0f) override;
+    void Play(const std::string& railName) override;
 
-    /// <summary>
-    /// 更新
-    /// </summary>
-    /// <param name="speed">移動速度</param>
-    /// <param name="mode">座標モード</param>
-    /// <param name="direction">方向</param>
-    void Update(const float& speed, const RailData::PositionMode& mode = RailData::PositionMode::WORLD, const Vector3& direction = {1.0f, 1.0f, 1.0f});
-
-    /// <summary>
-    /// レールの再生
-    /// </summary>
-    /// <param name="railName">レール名</param>
-    void Play(const std::string& railName);
-
-    /// <summary>
-    /// 親トランスフォームの設定
-    /// </summary>
-    /// <param name="parent">親トランスフォーム</param>
-    void SetParent(WorldTransform* parent);
+    void UpdateWithDirection(const float& speedRate, const RailData::PositionMode& mode = RailData::PositionMode::WORLD, const Vector3& direction = {1.0f, 1.0f, 1.0f});
+  
+private:
+    std::unique_ptr<BaseEffectData> CreateEffectData() override;
 
 private:
-    std::unique_ptr<RailData> railData_;
     Vector3 currentPosition_ = {0.0f, 0.0f, 0.0f};
 
 public:
     const Vector3& GetCurrentPosition() const { return currentPosition_; }
-    RailData* GetRailData() { return railData_.get(); }
-    bool IsPlaying() const { return railData_ ? railData_->IsPlaying() : false; }
+    RailData* GetRailData() { return dynamic_cast<RailData*>(effectData_.get()); }
+
+     void SetParent(WorldTransform* parent);
 };

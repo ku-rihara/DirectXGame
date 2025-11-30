@@ -39,13 +39,21 @@ class Object3DAnimation;
 /// ワールド変換クラス
 /// </summary>
 class WorldTransform {
+private:
+    struct Transform {
+        Vector3 scale = Vector3::OneVector();
+        Vector3 rotation;
+        Vector3 translation;
+        Quaternion quaternion;
+    };
+
 public:
     WorldTransform();
     ~WorldTransform();
 
-    void Init(); //< 初期化
-
-    void UpdateMatrix(); //< 行列更新
+    // 初期化、更新
+    void Init(); 
+    void UpdateMatrix(); 
 
     /// <summary>
     /// 指定方向を向く
@@ -68,7 +76,7 @@ public:
     /// <param name="startPos"></param>
     /// <param name="offsetValue"></param>
     /// <returns></returns>
-    Vector3 CalcForwardTargetPos(const Vector3& startPos, const Vector3& offsetValue) const;
+    Vector3 CalcForwardOffset(const Vector3& offsetValue) const;
 
     /// <summary>
     /// オブジェクトイージングアニメーション再生
@@ -86,25 +94,24 @@ public:
     /// アニメーション更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    void UpdateObjEaseAnimation(const float& deltaTime);
+    void UpdateObjEaseAnimation();
 
 private:
-    void TransferMatrix(); //< 行列転送
     void UpdateAffineMatrix(); //< アフィン行列更新
     void ClearParentJoint(); //< ペアレントジョイントクリア
     void UpdateMatrixWithJoint(); //< ジョイントで行列更新
     bool HasParentJoint() const; //< ペアレントジョイントを持つか
 
-    /// <summary>
-    /// アニメーション適用後のTransform更新
-    /// </summary>
     void ApplyAnimationToTransform();
+    void InitOffsetTransform();
 
 public:
     Vector3 scale_ = Vector3::OneVector();
     Vector3 rotation_;
     Vector3 translation_;
     Quaternion quaternion_;
+
+    Transform offsetTransform_;
 
     Matrix4x4 matWorld_; //< ワールド行列
 

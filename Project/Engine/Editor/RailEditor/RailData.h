@@ -1,8 +1,9 @@
 #pragma once
 #include "Easing/Easing.h"
-#include "RailControlPoint.h"
-#include "Editor/ParameterEditor/GlobalParameter.h"
+#include "Editor/BaseEffectEditor/BaseSequenceEffectData.h"
 #include "Editor/RailEditor/Rail.h"
+#include "RailControlPoint.h"
+#include "utility/TimeModeSelector/TimeModeSelector.h"
 #include "Vector3.h"
 #include <cstdint>
 #include <memory>
@@ -14,129 +15,89 @@ class Line3D;
 /// <summary>
 /// レールデータ
 /// </summary>
-class RailData {
+class RailData : public BaseSequenceEffectData<RailControlPoint> {
 public:
-    enum class PlayState {
-        STOPPED,
-        PLAYING,
-        PAUSED,
-        RETURNING
-    };
-
     enum class PositionMode {
         WORLD,
         LOCAL,
     };
 
     enum class ReturnMode {
-        NONE, // 戻らない
-        REVERSE_RAIL, // レールを逆走して戻る
-        DIRECT_RETURN // 直接元の位置に戻る
+        NONE,
+        REVERSE_RAIL,
+        DIRECT_RETURN
     };
 
-    struct ReturnParam {
-        ReturnMode mode  = ReturnMode::NONE;
-        int32_t modeInt  = 0;
-        float maxTime    = 1.0f;
-        int32_t easeType = 0;
+    struct RailDirectReturnParam {
+        float maxTime       = 1.0f;
+        int32_t easeTypeInt = 0;
         Easing<Vector3> ease;
         Vector3 easeAdaptPos;
     };
 
+    struct RailMoveParam {
+        ReturnMode returnMode = ReturnMode::NONE;
+        float maxTime         = 1.0f;
+        float startTime       = 0.0f;
+        int32_t easeTypeInt   = 0;
+        int32_t returnModeInt = 0;
+        bool isLoop           = false;
+        float elapsedTime     = 0.0f;
+        Easing<float> timeEase;
+        float adaptTime = 0.0f;
+    };
+
 public:
-    RailData()  = default;
-    ~RailData() = default;
+    RailData()           = default;
+    ~RailData() override = default;
 
-    /// <summary>
-    /// 初期化
-    /// </summary>
-    /// <param name="railName">レール名</param>
-    void Init(const std::string& railName);
+    //*----------------------------- public Methods -----------------------------*//
 
-    /// <summary>
-    /// 更新
-    /// </summary>
-    /// <param name="speed">移動速度</param>
-    /// <param name="mode">座標モード</param>
-    /// <param name="direction">方向</param>
-    void Update(const float& speed, const PositionMode& mode = PositionMode::WORLD, const Vector3& direction = {1.0f, 1.0f, 1.0f});
+    // BaseEffectDataからのオーバーライド
+    void Init(const std::string& railName) override;
+    void Update(const float& speedRate = 1.0f) override;
+    void Reset() override;
+    void Play() override;
+    void LoadData() override;
+    void SaveData() override;
 
-    void AdjustParam(); //< パラメータ調整
+    // BaseSequenceEffectDataからのオーバーライド
+    void LoadSequenceElements() override;
+    void SaveSequenceElements() override;
 
-    void Play(); //< 再生
-    void Stop(); //< 停止
-    void Reset(); //< リセット
+    // Rail固有の更新
+    void UpdateWithDirection(const float& speedRate, const PositionMode& mode = PositionMode::WORLD, const Vector3& direction = {1.0f, 1.0f, 1.0f});
 
-    void LoadData(); //< データロード
-    void SaveData(); //< データセーブ
+    void AdjustParam();
 
-    void SaveKeyFrames(); //< 全キーフレーム保存
-    void LoadKeyFrames(); //< 全キーフレーム読み込み
-
-    bool IsPlaying() const; //< 再生中か
-    bool IsFinished() const; //< 終了したか
-
-    /// <summary>
-    /// 制御点を繋ぐ線を描画
-    /// </summary>
-    /// <param name="line3d">Line3Dオブジェクト</param>
-    /// <param name="color">線の色</param>
     void SetControlPointLines(Line3D* line3d, const Vector4& color = {1.0f, 1.0f, 0.0f, 1.0f});
 
-    /// <summary>
-    /// キーフレームの追加
-    /// </summary>
-    void AddKeyFrame();
+protected:
+    //*---------------------------- protected Methods ----------------------------*//
 
-    /// <summary>
-    /// キーフレームの削除
-    /// </summary>
-    /// <param name="index">インデックス</param>
-    void RemoveKeyFrame(const int32_t& index);
+    void RegisterParams() override;
+    void GetParams() override;
+    void InitParams() override;
 
-    /// <summary>
-    /// 全キーフレームクリア
-    /// </summary>
-    void ClearKeyFrames();
-
-    /// <summary>
-    /// キーフレーム初期化
-    /// </summary>
-    void InitKeyFrames();
+    void UpdateKeyFrameProgression() override;
+    void AdvanceToNexTSequenceElement() override;
+    std::unique_ptr<RailControlPoint> CreateKeyFrame(const int32_t& index) override;
+    std::string GeTSequenceElementFolderPath() const override;
 
 private:
-    void RegisterParams(); //< パラメータのバインド
-    void LoadParams(); //< パラメータ取得
-    void InitParams(); //< パラメータリセット
-    void LoopOrStop(); //< ループまたは停止
-    void StartReturn(); //< 戻り動作を開始
-    void UpdateReturn(const float& speed); //< 戻り動作の更新
-    void ImGuiKeyFrameList(); //< キーフレームリストのImGui
-    void RebuildAndLoadAllKeyFrames(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
+    //*---------------------------- private Methods ----------------------------*//
+
     void CheckAndHandleFinish();
+    void StartReturn();
+    void UpdateReturn(const float& speedRate);
     void OnReturnComplete();
-    void EaseTimeSetup(const bool&isReverse);
-    private:
-    GlobalParameter* globalParameter_;
-    std::string groupName_;
-    std::string folderPath_ = "RailEditor/Dates";
+  
+private:
+    //*---------------------------- private Variant ----------------------------*//
 
+    std::string dateFolderPath_     = "RailEditor/Dates";
+    const std::string keyFramePath_ = "RailEditor/ControlPoints/";
     std::unique_ptr<Rail> rail_;
-
-    // キーフレームリスト
-    std::vector<std::unique_ptr<RailControlPoint>> controlPoints_;
-    int32_t selectedKeyFrameIndex_ = -1;
-
-    float maxTime_    = 1.0f;
-    float startTime_  = 0.0f;
-    int32_t easeType_ = 0;
-    bool isLoop_      = true;
-
-    float elapsedTime_ = 0.0f;
-    Easing<float> timeEase_;
-    float easedTime_ = 0.0f;
-
-    PlayState playState_ = PlayState::STOPPED;
 
     Vector3 currentPosition_ = Vector3::ZeroVector();
     Vector3 startPosition_   = Vector3::ZeroVector();
@@ -144,28 +105,18 @@ private:
 
     WorldTransform* parentTransform_ = nullptr;
 
-    bool showControls_     = true;
-    bool showKeyFrameList_ = true;
+    RailDirectReturnParam directReturnParam_;
+    RailMoveParam railMoveParam_;
 
-    //  戻り動作用のパラメータ
-    ReturnParam returnParam_;
-
-    // 線描画の表示設定
     bool showControlPointLines_ = true;
 
-public:
-    const std::string& GetGroupName() const { return groupName_; }
-    const Vector3& GetCurrentPosition() const { return currentPosition_; }
-    const bool& GetIsLoop() const { return isLoop_; }
-    Rail* GetRail() { return rail_.get(); }
-    WorldTransform* GetParentTransform() const { return parentTransform_; }
-    const std::vector<std::unique_ptr<RailControlPoint>>& GetKeyFrames() const { return controlPoints_; }
-    const int32_t& GetKeyFrameCount() const { return static_cast<int32_t>(controlPoints_.size()); }
-    const bool GetShowControlPointLines()& { return showControlPointLines_; }
+    TimeModeSelector timeModeSelector_;
 
-    void SetIsLoop(const bool& loop) { isLoop_ = loop; }
+public:
+    //*----------------------------- getter Methods -----------------------------*//
+
+    const Vector3& GetCurrentPosition() const { return currentPosition_; }
+    WorldTransform* GetParentTransform() const { return parentTransform_; }
+
     void SetParent(WorldTransform* parent) { parentTransform_ = parent; }
-    void SetDirection(const Vector3& direction) { direction_ = direction; }
-    void SetSelectedKeyFrameIndex(const int32_t& index);
-    void SetShowControlPointLines(const bool& show) { showControlPointLines_ = show; }
 };

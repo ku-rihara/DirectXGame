@@ -1,4 +1,5 @@
 #pragma once
+#include "Editor/BaseEffectEditor/BaseEffectPlayer.h"
 #include "ObjEaseAnimationData.h"
 #include "Vector3.h"
 #include <memory>
@@ -7,40 +8,35 @@
 /// <summary>
 /// オブジェクトイージングアニメーションプレイヤー
 /// </summary>
-class ObjEaseAnimationPlayer {
+class ObjEaseAnimationPlayer : public BaseEffectPlayer {
 public:
-    ObjEaseAnimationPlayer()  = default;
-    ~ObjEaseAnimationPlayer() = default;
+    ObjEaseAnimationPlayer()           = default;
+    ~ObjEaseAnimationPlayer() override = default;
 
-    void Init(); //< 初期化
+    //*----------------------------- public Methods -----------------------------*//
 
-    /// <summary>
-    /// 更新
-    /// </summary>
-    /// <param name="deltaTime">デルタタイム</param>
-    void Update(const float& deltaTime);
+    // BaseEffectPlayerからのオーバーライド
+    void Init() override;
+    void Update(const float& speedRate = 1.0f) override;
 
-    /// <summary>
-    /// アニメーション再生
-    /// </summary>
-    /// <param name="categoryName">カテゴリー名</param>
-    /// <param name="animationName">アニメーション名</param>
-    void Play(const std::string& categoryName, const std::string& animationName);
+    void Play(const std::string& effectName) override;
+    void PlayInCategory(const std::string& categoryName, const std::string& animationName);
 
-    void Stop(); //< アニメーション停止
+protected:
+    //*---------------------------- protected Methods ----------------------------*//
+    std::unique_ptr<BaseEffectData> CreateEffectData() override;
 
 private:
-    std::unique_ptr<ObjEaseAnimationData> animationData_;
+    //*---------------------------- private Variant ----------------------------*//
     std::string currentCategoryName_;
-    std::string currentAnimationName_;
 
 public:
-    bool IsPlaying() const { return animationData_->IsPlaying(); }
-    bool IsFinished() const {return animationData_->IsFinished(); }
+    //*----------------------------- getter Methods -----------------------------*//
 
-    const Vector3& GetCurrentScale() const {return animationData_->GetCurrentScale();}
-    const Vector3& GetCurrentRotation() const {return animationData_->GetCurrentRotation();}
-    const Vector3& GetCurrentTranslation() const {return animationData_->GetCurrentTranslation();}
+    Vector3 GetCurrentScale() const;
+    Vector3 GetCurrentRotation() const;
+    Vector3 GetCurrentTranslation() const;
 
-    ObjEaseAnimationData* GetAnimationData() { return animationData_.get(); }
+    ObjEaseAnimationData* GetAnimationData();
+    const std::string& GetCurrentCategoryName() const { return currentCategoryName_; }
 };

@@ -349,11 +349,11 @@ void GlobalParameter::Regist(const std::string& group, const std::string& key, T
         SetValue<T>(group, key, *variable);
     };
 
-    registParams_[group].emplace_back(std::move(item));
+    registerParams_[group].emplace_back(std::move(item));
 }
 
 void GlobalParameter::SyncAll() {
-    for (auto& [group, items] : registParams_) {
+    for (auto& [group, items] : registerParams_) {
         for (auto& item : items) {
             item.pushVariant();
         }
@@ -361,13 +361,13 @@ void GlobalParameter::SyncAll() {
 }
 
 bool GlobalParameter::HasRegisters(const std::string& groupName) const {
-    auto it = registParams_.find(groupName);
-    return it != registParams_.end() && !it->second.empty();
+    auto it = registerParams_.find(groupName);
+    return it != registerParams_.end() && !it->second.empty();
 }
 
 void GlobalParameter::SyncParamForGroup(const std::string& group) {
-    auto it = registParams_.find(group);
-    if (it != registParams_.end()) {
+    auto it = registerParams_.find(group);
+    if (it != registerParams_.end()) {
         for (auto& item : it->second) {
             item.pullVariant();
         }
@@ -375,17 +375,17 @@ void GlobalParameter::SyncParamForGroup(const std::string& group) {
 }
 
 void GlobalParameter::ClearRegistersForGroup(const std::string& groupName) {
-    auto it = registParams_.find(groupName);
-    if (it != registParams_.end()) {
+    auto it = registerParams_.find(groupName);
+    if (it != registerParams_.end()) {
         it->second.clear();
     }
 }
 
 void GlobalParameter::RemoveGroup(const std::string& groupName) {
     // 登録情報をクリア
-    auto it = registParams_.find(groupName);
-    if (it != registParams_.end()) {
-        registParams_.erase(it);
+    auto it = registerParams_.find(groupName);
+    if (it != registerParams_.end()) {
+        registerParams_.erase(it);
     }
 
     // グループデータを削除
@@ -396,7 +396,7 @@ void GlobalParameter::RemoveGroup(const std::string& groupName) {
 }
 
 void GlobalParameter::ResetAllRegister() {
-    registParams_.clear();
+    registerParams_.clear();
 }
 
 bool GlobalParameter::HasGroup(const std::string& groupName) const {

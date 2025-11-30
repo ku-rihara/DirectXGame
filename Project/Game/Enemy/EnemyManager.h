@@ -1,8 +1,9 @@
 #pragma once
 
 #include "3d/ViewProjection.h"
-#include "BaseEnemy.h"
+#include "DamageReaction/EnemyDamageReactionController.h"
 #include "Editor/ParticleEditor/ParticleEmitter.h"
+#include "Types/BaseEnemy.h"
 
 /// std
 #include <json.hpp>
@@ -41,20 +42,18 @@ public:
     void SpawnEnemy(const std::string& enemyType, const Vector3& position, const int32_t& groupID);
     void HpBarUpdate(const ViewProjection& viewProjection);
 
-    ///-------------------------------------------------------------------------------------
-    /// Particle
-    ///-------------------------------------------------------------------------------------
+    // Particle Effect
     void DamageEffectShot(const Vector3& pos);
     void ThrustEmit(const Vector3& pos);
     void DeathEmit(const Vector3& pos);
     void SpawnEmitByNormalEnemy(const Vector3& pos);
     void SpawnEmitByStrongEnemy(const Vector3& pos);
     void ParticleUpdate();
-    ///-------------------------------------------------------------------------------------
-    /// Editor
-    ///-------------------------------------------------------------------------------------
+    
+    // Param Edit
     void RegisterParams();
     void AdjustParam();
+    void DamageReactionCreate();
     void DrawEnemyParamUI(BaseEnemy::Type type);
 
 private: // struct
@@ -78,6 +77,9 @@ private:
     Combo* pCombo_;
     EnemySpawner* pEnemySpawner_;
     AttackEffect* pAttackEffect_;
+
+    // damageReaction
+    std::unique_ptr<EnemyDamageReactionController> damageReactionController_;
 
 private:
     ///========================================================
@@ -109,6 +111,7 @@ public:
     ///========================================================
     const bool& GetIsAllCleared() const { return areAllEnemiesCleared_; }
     const std::vector<std::unique_ptr<BaseEnemy>>& GetEnemies() const { return enemies_; }
+    EnemyDamageReactionController* GetDamageReactionController() const { return damageReactionController_.get(); }
     ///========================================================
     /// setter method
     ///========================================================

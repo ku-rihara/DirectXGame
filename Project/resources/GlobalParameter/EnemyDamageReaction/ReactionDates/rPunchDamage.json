@@ -1,0 +1,20 @@
+{
+    "rPunchDamage": {
+        "Normal_KnockBackDamping": 2.299999952316284,
+        "Normal_KnockBackTime": 0.4099999964237213,
+        "ReactionState": 0,
+        "Slammed_BounceDamping": 0.0,
+        "Slammed_BoundNum": 0,
+        "Slammed_DownSpeed": 0.0,
+        "Slammed_FallSpeedLimit": 0.0,
+        "Slammed_Gravity": 0.0,
+        "Slammed_InitialBounceRate": 0.0,
+        "Slammed_ThrustRotateSpeed": 0.0,
+        "TakeUpper_FallSpeedLimit": 0.0,
+        "TakeUpper_FloatingTime": 0.0,
+        "TakeUpper_Gravity": 0.0,
+        "TakeUpper_ThrustRotateSpeed": 0.0,
+        "TriggerAttackName": "RightPunch",
+        "damageCollingTime": 0.6399999856948853
+    }
+}

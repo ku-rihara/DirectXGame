@@ -1,0 +1,42 @@
+{
+    "leftHandPunch0": {
+        "Rotation_EaseType": 0,
+        "Rotation_IsActive": false,
+        "Rotation_IsReturnToOrigin": false,
+        "Rotation_MaxTime": 1.0,
+        "Rotation_ReturnEaseType": 0,
+        "Rotation_ReturnMaxTime": 1.0,
+        "Rotation_endValue": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale_EaseType": 0,
+        "Scale_IsActive": false,
+        "Scale_IsReturnToOrigin": false,
+        "Scale_MaxTime": 1.0,
+        "Scale_ReturnEaseType": 0,
+        "Scale_ReturnMaxTime": 1.0,
+        "Scale_endValue": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Translation_EaseType": 0,
+        "Translation_IsActive": true,
+        "Translation_IsReturnToOrigin": false,
+        "Translation_MaxTime": 1.0,
+        "Translation_RailFileName": "leftPunchRail",
+        "Translation_ReturnEaseType": 0,
+        "Translation_ReturnMaxTime": 1.0,
+        "Translation_UseRail": true,
+        "Translation_endValue": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "returnStartTime": 0.0,
+        "startTime": 0.0,
+        "timeMode": 1
+    }
+}

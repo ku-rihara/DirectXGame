@@ -1,15 +1,17 @@
 #include "DynamicComboAttack.h"
+#include "CollisionBox/PlayerCollisionInfo.h"
 #include "ComboAttackRoot.h"
 #include "Frame/Frame.h"
-#include "GameCamera/GameCamera.h"
-#include "MathFunction.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
 
 DynamicComboAttack::DynamicComboAttack(Player* player, PlayerComboAttackData* attackData)
     : BaseComboAattackBehavior(attackData->GetGroupName(), player) {
-    pPlayer_    = player;
-    attackData_ = attackData;
+
+    // attackDataセット
+    attackData_     = attackData;
+    pCollisionInfo_ = pPlayer_->GetPlayerCollisionInfo();
+    // 初期化
     Init();
 }
 
@@ -17,14 +19,17 @@ DynamicComboAttack::~DynamicComboAttack() {}
 
 void DynamicComboAttack::Init() {
 
-    // アニメーション初期化
-    BaseComboAattackBehavior::AnimationInit();
-
     // タイミングのリセット
     currentFrame_      = 0.0f;
     waitTime_          = 0.0f;
     isCollisionActive_ = false;
     collisionTimer_    = 0.0f;
+
+    // 次の攻撃データを取得
+    nextAttackName_ = attackData_->GetAttackParam().nextAttackType;
+    if (nextAttackName_ != "None" && !nextAttackName_.empty()) {
+        nextAttackData_ = pPlayer_->GetComboAttackController()->GetAttackByName(nextAttackName_);
+    }
 
     attackRendition_ = std::make_unique<PlayerAttackRendition>();
     attackRendition_->Init(pPlayer_, attackData_);
@@ -32,7 +37,7 @@ void DynamicComboAttack::Init() {
     // targetPosを計算
     const PlayerComboAttackData::MoveParam& moveParam = attackData_->GetAttackParam().moveParam;
     startPosition_                                    = pPlayer_->GetWorldPosition();
-    targetPosition_                                   = pPlayer_->GetTransform().CalcForwardTargetPos(startPosition_, moveParam.value);
+    targetPosition_                                   = startPosition_ + pPlayer_->GetTransform().CalcForwardOffset(moveParam.value);
 
     // イージングのセットアップ
     moveEasing_.SetType(static_cast<EasingType>(moveParam.easeType));
@@ -40,9 +45,16 @@ void DynamicComboAttack::Init() {
     moveEasing_.SetEndValue(targetPosition_);
     moveEasing_.SetAdaptValue(&currentMoveValue_);
 
-    moveEasing_.SetOnFinishCallback([this]() {
-        order_ = Order::RECOVERY;
-    });
+    // 攻撃スピードと攻撃力
+    const PlayerComboAttackController* attackController = pPlayer_->GetComboAttackController();
+    atkSpeed_                                           = attackController->GetRealAttackSpeed(Frame::DeltaTimeRate());
+
+    float power = attackData_->GetAttackParam().power* attackController->GetPowerRate();
+    pCollisionInfo_->SetAttackPower(power);
+
+    // コリジョンボックス設定
+    pCollisionInfo_ = pPlayer_->GetPlayerCollisionInfo();
+    pCollisionInfo_->AttackStart(attackData_);
 
     //// サウンド再生
     // pPlayer_->SoundPunch();
@@ -51,40 +63,37 @@ void DynamicComboAttack::Init() {
 }
 
 void DynamicComboAttack::Update() {
-    // モーション更新
-    BaseComboAattackBehavior::RotateMotionUpdate(0, GetRotateValue(), true);
-    BaseComboAattackBehavior::FloatAnimationUpdate();
-    BaseComboAattackBehavior::ScalingEaseUpdate();
 
     // 通常移動
-    pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+    if (attackData_->GetAttackParam().moveParam.isAbleInputMoving) {
+        pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
+    }
+
+    currentFrame_ += atkSpeed_;
 
     switch (order_) {
+
+        // 攻撃初期化
     case Order::INIT:
         InitializeAttack();
         break;
 
+        // 攻撃更新
     case Order::ATTACK:
         UpdateAttack();
-        break;
-
-    case Order::RECOVERY:
-        UpdateRecovery();
         break;
 
     case Order::WAIT:
         UpdateWait();
         break;
-    }
 
-    currentFrame_ += atkSpeed_;
+    case Order::CHANGE:
+        ChangeNextAttack();
+        break;
+    }
 }
 
 void DynamicComboAttack::InitializeAttack() {
-    // カメラアニメーション再生
-    if (pPlayer_->GetGameCamera()) {
-        // pPlayer_->GetGameCamera()->PlayAnimation("ComboAttack");
-    }
 
     SetupCollision();
     order_ = Order::ATTACK;
@@ -94,87 +103,90 @@ void DynamicComboAttack::UpdateAttack() {
     // 移動適用
     ApplyMovement();
 
+    // 予約入力
+    PreOderNextComboForButton();
+
+    // キャンセル処理
+    AttackCancel();
+
     // コリジョン判定
-    auto& collisionParam = attackData_->GetAttackParam().collisionPara;
+    /*    auto& collisionParam = attackData_->GetAttackParam().collisionParam;*/
 
-    collisionTimer_ += atkSpeed_;
-    attackRendition_->Update(atkSpeed_);
+    pCollisionInfo_->TimerUpdate(atkSpeed_);
+    pCollisionInfo_->Update();
 
-    if (collisionTimer_ >= collisionParam.adaptTime) {
-        // コリジョンを無効化
-        isCollisionActive_ = false;
-        pPlayer_->GetPlayerCollisionInfo()->SetIsCollision(false);
-    } else {
-        isCollisionActive_ = true;
-        pPlayer_->GetPlayerCollisionInfo()->SetIsCollision(isCollisionActive_);
+    // 演出更新
+    if (attackRendition_) {
+        attackRendition_->Update(atkSpeed_);
 
-        // プレイヤーの向きを取得
-        float playerRotationY    = pPlayer_->GetTransform().rotation_.y;
-        Matrix4x4 rotationMatrix = MakeRotateYMatrix(playerRotationY);
-
-        // オフセットをワールド座標に変換
-        Vector3 worldOffset  = TransformNormal(collisionParam.offsetPos, rotationMatrix);
-        Vector3 collisionPos = pPlayer_->GetWorldPosition() + worldOffset;
-
-        // コリジョン位置更新
-        pPlayer_->GetPlayerCollisionInfo()->SetPosition(collisionPos);
+        attackRendition_->Update(atkSpeed_);
     }
 
     // イージングが完了したらRecoveryへ
-    if (moveEasing_.IsFinished()) {
-        order_ = Order::RECOVERY;
-    }
-}
-
-void DynamicComboAttack::UpdateRecovery() {
-    pPlayer_->AdaptRotate();
-
-    // 硬直時間
-    static float recoveryTime = 0.0f;
-    recoveryTime += atkSpeed_;
-
-    if (recoveryTime >= 0.2f) { // 0.2秒の硬直
-        recoveryTime = 0.0f;
-        order_       = Order::WAIT;
+    if (moveEasing_.IsFinished() && pCollisionInfo_->GetIsFinish()) {
+        order_ = Order::WAIT;
     }
 }
 
 void DynamicComboAttack::UpdateWait() {
-    waitTime_ += atkSpeed_;
+
+    AttackCancel();
+
     pPlayer_->AdaptRotate();
+    waitTime_ += atkSpeed_;
 
-    auto& timingParam = attackData_->GetAttackParam().timingParam;
+    if (!attackData_->IsWaitFinish(waitTime_)) {
+        return;
+    }
 
-    // 次の攻撃への受付時間チェック
-    if (waitTime_ >= timingParam.cancelFrame) {
-        // コンボ途切れ
-        pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
+    order_ = Order::CHANGE;
+}
+
+void DynamicComboAttack::ChangeNextAttack() {
+
+    //  自動進行フラグがtrueの場合も次に進む
+    bool shouldAdvance = isReserveNextCombo_ || isAttackCancel_ || attackData_->GetAttackParam().timingParam.isAutoAdvance;
+
+    // 次のコンボに移動する
+    if (nextAttackData_ && shouldAdvance) {
+
+        BaseComboAattackBehavior::ChangeNextCombo(
+            std::make_unique<DynamicComboAttack>(pPlayer_, nextAttackData_));
+
+        return;
+
     } else {
-        // 先行入力受付
-        if (waitTime_ >= timingParam.precedeInputFrame) {
-            BaseComboAattackBehavior::PreOderNextComboForButton();
+        // データが見つからない場合はルートに戻る
+        pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
+    }
+}
 
-            if (isNextCombo_) {
-                // 次の攻撃データを取得
-                auto& nextAttackType = attackData_->GetAttackParam().nextAttackType;
+///  コンボ移動フラグ処理
+void DynamicComboAttack::PreOderNextComboForButton() {
 
-                if (nextAttackType != "None" && !nextAttackType.empty()) {
-                    // ComboAttackControllerから次の攻撃データを取得
-                    auto* nextAttackData = pPlayer_->GetComboAttackController()->GetAttackByName(nextAttackType);
+    if (!nextAttackData_) {
+        isReserveNextCombo_ = false;
+        return;
+    }
 
-                    if (nextAttackData) {
-                        BaseComboAattackBehavior::ChangeNextCombo(
-                            std::make_unique<DynamicComboAttack>(pPlayer_, nextAttackData));
-                    } else {
-                        // データが見つからない場合はルートに戻る
-                        pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
-                    }
-                } else {
-                    // 次の攻撃が設定されていない場合はルートに戻る
-                    pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
-                }
-            }
-        }
+    isReserveNextCombo_ = attackData_->IsReserveNextAttack(currentFrame_, nextAttackData_->GetAttackParam().triggerParam);
+}
+
+void DynamicComboAttack::AttackCancel() {
+
+    // タイミング
+    const float cancelStartFrame = attackData_->GetAttackParam().timingParam.cancelTime;
+
+    // 先行入力受付
+    if (currentFrame_ <= cancelStartFrame) {
+        return;
+    }
+
+    isAttackCancel_ = attackData_->IsCancelAttack(currentFrame_, nextAttackData_->GetAttackParam().triggerParam);
+
+    if (isAttackCancel_) {
+        // 次の攻撃
+        order_ = Order::CHANGE;
     }
 }
 
@@ -185,13 +197,13 @@ void DynamicComboAttack::ApplyMovement() {
 
 void DynamicComboAttack::SetupCollision() {
     auto& attackParam    = attackData_->GetAttackParam();
-    auto& collisionParam = attackParam.collisionPara;
+    auto& collisionParam = attackParam.collisionParam;
 
     // コリジョンサイズ設定
     pPlayer_->GetPlayerCollisionInfo()->SetSize(collisionParam.size);
 
     // コリジョンを有効化
-    pPlayer_->GetPlayerCollisionInfo()->SetIsCollision(true);
+    pPlayer_->GetPlayerCollisionInfo()->SetIsAbleCollision(true);
 
     collisionTimer_    = 0.0f;
     isCollisionActive_ = true;

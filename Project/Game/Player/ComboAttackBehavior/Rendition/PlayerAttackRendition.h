@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Player/ComboCreator/PlayerAttackRenditionData.h"
 #include "Editor/RailEditor/RailManager.h"
+#include "Player/ComboCreator/PlayerAttackRenditionData.h"
 
 class Player;
 class PlayerComboAttackData;

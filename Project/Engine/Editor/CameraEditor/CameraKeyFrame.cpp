@@ -1,24 +1,26 @@
 #include "CameraKeyFrame.h"
-#include"MathFunction.h"
-#include "Frame/Frame.h" 
+#include "Frame/Frame.h"
+#include "MathFunction.h"
 #include <imgui.h>
 #include <iostream>
 
-void CameraKeyFrame::Init(const std::string& cameraAnimationName, const int32_t& keyNumber) {
+void CameraKeyFrame::Init(const std::string& groupName, const int32_t& keyNumber) {
     // グローバルパラメータ
     globalParameter_         = GlobalParameter::GetInstance();
-    currentKeyFrameIndex     = keyNumber;
-    std::string newGroupName = cameraAnimationName + std::to_string(currentKeyFrameIndex);
+    currenTSequenceElementIndex     = keyNumber;
+    std::string newGroupName = groupName + std::to_string(currenTSequenceElementIndex);
     groupName_               = newGroupName;
-   
+
+    folderPath_ += groupName;
+
     if (!globalParameter_->HasRegisters(groupName_)) {
         // 新規登録
         globalParameter_->CreateGroup(groupName_);
         RegisterParams();
-      
+
     } else {
         // パラメータを取得
-        LoadParams();
+        GetParams();
     }
 
     AdaptValueSetting();
@@ -47,10 +49,10 @@ void CameraKeyFrame::SaveData() {
 
 void CameraKeyFrame::Update(const float& speedRate) {
     float actualDeltaTime;
-    switch (static_cast<TimeMode>(timeMode_)) {
+    switch (static_cast<TimeMode>(timeModeSelector_.GetTimeModeInt())) {
     case TimeMode::DELTA_TIME:
         // タイムスケール無視
-        actualDeltaTime = Frame::DeltaTime() * speedRate; 
+        actualDeltaTime = Frame::DeltaTime() * speedRate;
         break;
     case TimeMode::DELTA_TIME_RATE:
     default:
@@ -72,10 +74,11 @@ void CameraKeyFrame::RegisterParams() {
     globalParameter_->Regist(groupName_, "positionEaseType", &positionEaseType_);
     globalParameter_->Regist(groupName_, "rotationEaseType", &rotationEaseType_);
     globalParameter_->Regist(groupName_, "fovEaseType", &fovEaseType_);
-    globalParameter_->Regist(groupName_, "timeMode", &timeMode_);
+    timeModeSelector_.RegisterParam(groupName_,globalParameter_);
+ 
 }
 
-void CameraKeyFrame::LoadParams() {
+void CameraKeyFrame::GetParams() {
     // timePoint
     timePoint_ = globalParameter_->GetValue<float>(groupName_, "timePoint");
 
@@ -90,7 +93,7 @@ void CameraKeyFrame::LoadParams() {
     fovEaseType_      = globalParameter_->GetValue<int32_t>(groupName_, "fovEaseType");
 
     // TimeMode
-    timeMode_ = globalParameter_->GetValue<int32_t>(groupName_, "timeMode");
+    timeModeSelector_.GetParam(groupName_, globalParameter_);
 }
 
 void CameraKeyFrame::AdjustParam() {
@@ -106,7 +109,7 @@ void CameraKeyFrame::AdjustParam() {
     Vector3 rotationDegrees = ToDegree(keyFrameParam_.rotation);
 
     if (ImGui::DragFloat3("Rotation (Degrees)", &rotationDegrees.x, 1.0f)) {
-   
+
         keyFrameParam_.rotation = ToRadian(rotationDegrees);
     }
 
@@ -115,7 +118,7 @@ void CameraKeyFrame::AdjustParam() {
     ImGui::Separator();
 
     // タイムモード設定
-    TimeModeSelector("Time Mode", timeMode_);
+    timeModeSelector_.SelectTimeModeImGui("Time Mode");
 
     ImGui::Separator();
 
@@ -148,18 +151,11 @@ void CameraKeyFrame::AdaptEaseParam() {
 
 void CameraKeyFrame::AdaptValueSetting() {
     // adapt
-    positionEase_.SetAdaptValue(&currentKeyFrameParam_.position);
-    rotationEase_.SetAdaptValue(&currentKeyFrameParam_.rotation);
-    fovEase_.SetAdaptValue(&currentKeyFrameParam_.fov);
+    positionEase_.SetAdaptValue(&currenTSequenceElementParam_.position);
+    rotationEase_.SetAdaptValue(&currenTSequenceElementParam_.rotation);
+    fovEase_.SetAdaptValue(&currenTSequenceElementParam_.fov);
 }
 
-
-void CameraKeyFrame::TimeModeSelector(const char* label, int32_t& target) {
-    int mode = static_cast<int>(target);
-    if (ImGui::Combo(label, &mode, TimeModeLabels.data(), static_cast<int>(TimeModeLabels.size()))) {
-        target = mode;
-    }
-}
 
 bool CameraKeyFrame::IsFinished() const {
 
