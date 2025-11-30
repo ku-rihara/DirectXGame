@@ -1,5 +1,5 @@
 {
-    "leftPunch": {
+    "leftPunchMove": {
         "CameraAction_Duration": 0.0,
         "CameraAction_FileName": "PlayerthrustAttack",
         "CameraAction_StartTiming": 1.7699999809265137,
