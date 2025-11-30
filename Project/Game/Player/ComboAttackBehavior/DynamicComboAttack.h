@@ -50,7 +50,7 @@ private:
     float waitTime_;
 
     bool isReserveNextCombo_;
-    bool isAbleCancel_;
+    bool isAttackCancel_;
 
     // 移動関連
     std::unique_ptr<PlayerAttackRendition> attackRendition_;

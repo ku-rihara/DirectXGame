@@ -171,7 +171,7 @@ bool PlayerComboAttackData::IsReserveNextAttack(const float& currentTime, const 
     return false;
 }
 
-bool PlayerComboAttackData::IsAbleCancel(const float& currentTime, const TriggerParam& nextAtkTrigger) {
+bool PlayerComboAttackData::IsCancelAttack(const float& currentTime, const TriggerParam& nextAtkTrigger) {
 
     if (!attackParam_.timingParam.isCancel) {
         return false;

@@ -89,7 +89,7 @@ public:
 
     bool IsReserveNextAttack(const float& currentTime, const TriggerParam& nextAtkTrigger);
     bool IsWaitFinish(const float& currentTime);
-    bool IsAbleCancel(const float& currentTime, const TriggerParam& nextAtkTrigger);
+    bool IsCancelAttack(const float& currentTime, const TriggerParam& nextAtkTrigger);
 
 private:
     //*-------------------------------- private Method --------------------------------*//

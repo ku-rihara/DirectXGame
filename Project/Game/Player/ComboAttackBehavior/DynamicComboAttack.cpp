@@ -125,6 +125,8 @@ void DynamicComboAttack::UpdateAttack() {
 
 void DynamicComboAttack::UpdateWait() {
 
+    AttackCancel();
+   
     pPlayer_->AdaptRotate();
     waitTime_ += atkSpeed_;
 
@@ -139,7 +141,7 @@ void DynamicComboAttack::UpdateWait() {
 void DynamicComboAttack::ChangeNextAttack() {
 
     // 次のコンボに移動する
-    if (nextAttackData_) {
+    if (nextAttackData_ && ((isAttackCancel_ || isReserveNextCombo_))) {
 
         BaseComboAattackBehavior::ChangeNextCombo(
             std::make_unique<DynamicComboAttack>(pPlayer_, nextAttackData_));
@@ -171,9 +173,9 @@ void DynamicComboAttack::AttackCancel() {
         return;
     }
 
-    isAbleCancel_ = attackData_->IsAbleCancel(currentFrame_, nextAttackData_->GetAttackParam().triggerParam);
+    isAttackCancel_ = attackData_->IsCancelAttack(currentFrame_, nextAttackData_->GetAttackParam().triggerParam);
 
-    if (isAbleCancel_) {
+    if (isAttackCancel_) {
         // 次の攻撃
         ChangeNextAttack();
     }
