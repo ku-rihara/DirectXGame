@@ -30,6 +30,15 @@ public:
         RETURNING
     };
 
+    enum class TransformState {
+        INACTIVE,
+        WAITING, 
+        PLAYING, 
+        RETURN_WAITING, 
+        RETURNING, 
+        FINISHED 
+    };
+
     struct TransformParam {
         bool isActive         = false;
         bool isReturnToOrigin = false;
@@ -50,9 +59,14 @@ public:
         // 現在のオフセット値
         Vector3 currentOffset = Vector3::ZeroVector();
         Vector3 startValue    = Vector3::ZeroVector();
+
         // イージング
         Easing<Vector3> ease;
         Easing<Vector3> returnEase;
+
+        // 個別の状態管理
+        TransformState state    = TransformState::INACTIVE;
+        float returnElapsedTime = 0.0f; 
     };
 
     struct RailFileSelector {
@@ -91,16 +105,16 @@ private:
     // 再生開始
     void StartPlay();
 
-    // 変換更新、戻り更新
-    void UpdatePlay(const float& deltaTime);
-    void UpdateReturn(const float& deltaTime);
-    void CheckFinish();
+    // 各Transformの個別更新
+    void UpdateTransform(TransformParam& param, TransformType type, const float& deltaTime);
+    void UpdateTransformPlay(TransformParam& param, TransformType type, const float& deltaTime);
+    void UpdateTransformReturn(TransformParam& param, TransformType type, const float& deltaTime);
 
-    // 戻り動作開始
-    void StartReturn();
+    // 全体の状態チェック
+    void UpdateOverallState();
+    bool AreAllTransformsFinished() const;
 
     void ImGuiTransformParam(const char* label, TransformParam& param, const TransformType& type);
-    void CheckPlayFinishAndStartReturn();
 
 private:
     GlobalParameter* globalParameter_;
@@ -116,8 +130,7 @@ private:
     float returnStartTime_ = 0.0f;
 
     // 経過時間
-    float elapsedTime_       = 0.0f;
-    float returnElapsedTime_ = 0.0f;
+    float elapsedTime_ = 0.0f;
 
     // rail
     std::unique_ptr<RailPlayer> railPlayer_;
