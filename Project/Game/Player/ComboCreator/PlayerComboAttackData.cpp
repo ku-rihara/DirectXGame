@@ -52,13 +52,14 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "moveEaseType", &attackParam_.moveParam.easeType);
     globalParameter_->Regist(groupName_, "moveEaseTime", &attackParam_.moveParam.easeTime);
     globalParameter_->Regist(groupName_, "isAbleInputMoving", &attackParam_.moveParam.isAbleInputMoving);
+    globalParameter_->Regist(groupName_, "isPositionYSelect", &attackParam_.moveParam.isPositionYSelect);
 
     // TriggerParam
     globalParameter_->Regist(groupName_, "gamePadBottom", &attackParam_.triggerParam.gamePadBottom);
     globalParameter_->Regist(groupName_, "keyBordBottom", &attackParam_.triggerParam.keyBordBottom);
     globalParameter_->Regist(groupName_, "Condition", &tempCondition_);
     globalParameter_->Regist(groupName_, "IsFirstAttack", &attackParam_.triggerParam.isFirstAttack);
-    globalParameter_->Regist(groupName_, "isAutoAdvance", &attackParam_.timingParam.isAutoAdvance); // ★追加
+    globalParameter_->Regist(groupName_, "isAutoAdvance", &attackParam_.timingParam.isAutoAdvance);
 
     // TimingParam
     globalParameter_->Regist(groupName_, "isCancel", &attackParam_.timingParam.isCancel);
@@ -115,7 +116,9 @@ void PlayerComboAttackData::AdjustParam() {
     ImGui::SeparatorText("Move Parameter");
     ImGui::Checkbox("isAble InputMoving", &attackParam_.moveParam.isAbleInputMoving);
     ImGui::DragFloat("Move Ease Time", &attackParam_.moveParam.easeTime, 0.01f);
-    ImGui::DragFloat3("Move Value", &attackParam_.moveParam.value.x, 0.01f);
+    ImGui::Checkbox("isPositionYSelect", &attackParam_.moveParam.isPositionYSelect);
+   ImGui::DragFloat3("Move Value", &attackParam_.moveParam.value.x, 0.01f);
+
     ImGuiEasingTypeSelector("Move Easing Type", attackParam_.moveParam.easeType);
 
     // Timing Parameters
@@ -183,7 +186,7 @@ bool PlayerComboAttackData::IsCancelAttack(const float& currentTime, const Trigg
         return false;
     }
 
-     // キーボード入力チェック
+    // キーボード入力チェック
     if (Input::GetInstance()->TriggerKey(FromDIKCode(nextAtkTrigger.keyBordBottom))) {
         return true;
     }
@@ -195,7 +198,6 @@ bool PlayerComboAttackData::IsCancelAttack(const float& currentTime, const Trigg
 
     return false;
 }
-
 
 bool PlayerComboAttackData::IsWaitFinish(const float& currentTime) {
     if (currentTime >= attackParam_.timingParam.finishWaitTime) {

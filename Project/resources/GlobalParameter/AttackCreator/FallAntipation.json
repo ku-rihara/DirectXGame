@@ -1,0 +1,58 @@
+{
+    "FallAntipation": {
+        "CameraAction_FileName": "",
+        "CameraAction_StartTiming": 0.0,
+        "CameraAction_TriggerByHit": false,
+        "Condition": 1,
+        "HitStop_FileName": "",
+        "HitStop_StartTiming": 0.0,
+        "HitStop_TriggerByHit": false,
+        "IsFirstAttack": true,
+        "KnockBackPower": 0.0,
+        "NextAttackType": "",
+        "ObjAnim_Head_FileName": "",
+        "ObjAnim_Head_StartTiming": 0.0,
+        "ObjAnim_LeftHand_FileName": "",
+        "ObjAnim_LeftHand_StartTiming": 0.0,
+        "ObjAnim_RightHand_FileName": "",
+        "ObjAnim_RightHand_StartTiming": 0.0,
+        "PostEffectParam_FileName": "",
+        "PostEffectParam_StartTiming": 0.0,
+        "PostEffectParam_TriggerByHit": false,
+        "ShakeAction_FileName": "",
+        "ShakeAction_StartTiming": 0.0,
+        "ShakeAction_TriggerByHit": false,
+        "adaptTime": 0.0,
+        "blowYPower": 0.0,
+        "cancelFrame": 0.0,
+        "collisionOffsetPos": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "collisionSize": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "finishWaitTime": 0.20000000298023224,
+        "gamePadBottom": 16384,
+        "isAbleInputMoving": false,
+        "isAlwaysFollowing": false,
+        "isAutoAdvance": true,
+        "isCancel": false,
+        "isPositionYSelect": false,
+        "keyBordBottom": 35,
+        "loopNum": 0,
+        "loopWaitTime": 0.0,
+        "moveEaseTime": 0.18000000715255737,
+        "moveEaseType": 6,
+        "moveValue": [
+            0.0,
+            0.800000011920929,
+            0.0
+        ],
+        "power": 0.0,
+        "precedeInputFrame": 0.0
+    }
+}

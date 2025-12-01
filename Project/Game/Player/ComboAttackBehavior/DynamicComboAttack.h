@@ -34,6 +34,7 @@ private:
     void ChangeNextAttack();
     void ApplyMovement();
     void SetupCollision();
+    void SetMoveEasing();
 
     void PreOderNextComboForButton();
     void AttackCancel();

@@ -34,16 +34,7 @@ void DynamicComboAttack::Init() {
     attackRendition_ = std::make_unique<PlayerAttackRendition>();
     attackRendition_->Init(pPlayer_, attackData_);
 
-    // targetPosを計算
-    const PlayerComboAttackData::MoveParam& moveParam = attackData_->GetAttackParam().moveParam;
-    startPosition_                                    = pPlayer_->GetWorldPosition();
-    targetPosition_                                   = startPosition_ + pPlayer_->GetTransform().CalcForwardOffset(moveParam.value);
-
-    // イージングのセットアップ
-    moveEasing_.SetType(static_cast<EasingType>(moveParam.easeType));
-    moveEasing_.SetStartValue(startPosition_);
-    moveEasing_.SetEndValue(targetPosition_);
-    moveEasing_.SetAdaptValue(&currentMoveValue_);
+    SetMoveEasing();
 
     //// サウンド再生
     // pPlayer_->SoundPunch();
@@ -209,6 +200,30 @@ void DynamicComboAttack::SetupCollision() {
 
     collisionTimer_    = 0.0f;
     isCollisionActive_ = true;
+}
+
+void DynamicComboAttack::SetMoveEasing() {
+    // targetPosを計算
+    const PlayerComboAttackData::MoveParam& moveParam = attackData_->GetAttackParam().moveParam;
+    startPosition_                                    = pPlayer_->GetWorldPosition();
+
+    // isPositionSelectフラグに基づいて目標位置を設定
+    if (moveParam.isPositionYSelect) {
+        // Y軸のみ絶対位置を使用、XとZはオフセット計算
+        Vector3 offsetMove = pPlayer_->GetTransform().CalcForwardOffset(moveParam.value);
+        targetPosition_.x  = startPosition_.x + offsetMove.x;
+        targetPosition_.y  = offsetMove.y;
+        targetPosition_.z  = startPosition_.z + offsetMove.z;
+    } else {
+        // 従来通りの相対的なオフセット計算
+        targetPosition_ = startPosition_ + pPlayer_->GetTransform().CalcForwardOffset(moveParam.value);
+    }
+
+    // イージングのセットアップ
+    moveEasing_.SetType(static_cast<EasingType>(moveParam.easeType));
+    moveEasing_.SetStartValue(startPosition_);
+    moveEasing_.SetEndValue(targetPosition_);
+    moveEasing_.SetAdaptValue(&currentMoveValue_);
 }
 
 void DynamicComboAttack::Debug() {

@@ -27,6 +27,7 @@ public:
         int32_t easeType = 0;
         float easeTime;
         bool isAbleInputMoving;
+        bool isPositionYSelect;
     };
 
     // コリジョンパラメータ
