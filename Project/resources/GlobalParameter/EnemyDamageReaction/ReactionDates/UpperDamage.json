@@ -1,0 +1,20 @@
+{
+    "UpperDamage": {
+        "Normal_KnockBackDamping": 0.30000001192092896,
+        "Normal_KnockBackTime": 0.3100000023841858,
+        "ReactionState": 2,
+        "Slammed_BounceDamping": 0.0,
+        "Slammed_BoundNum": 0,
+        "Slammed_DownSpeed": 0.0,
+        "Slammed_FallSpeedLimit": 0.0,
+        "Slammed_Gravity": 0.0,
+        "Slammed_InitialBounceRate": 0.0,
+        "Slammed_ThrustRotateSpeed": 0.0,
+        "TakeUpper_FallSpeedLimit": 258.1000061035156,
+        "TakeUpper_FloatingTime": 0.6800000071525574,
+        "TakeUpper_Gravity": 63.20000076293945,
+        "TakeUpper_ThrustRotateSpeed": 26.1299991607666,
+        "TriggerAttackName": "UpperAttack",
+        "damageCollingTime": 0.5199999809265137
+    }
+}

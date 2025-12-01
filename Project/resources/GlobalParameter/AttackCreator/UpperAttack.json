@@ -8,7 +8,7 @@
         "HitStop_StartTiming": 0.0,
         "HitStop_TriggerByHit": true,
         "IsFirstAttack": false,
-        "KnockBackPower": 13.079999923706055,
+        "KnockBackPower": 15.619999885559082,
         "NextAttackType": "",
         "ObjAnim_Head_FileName": "UpperAttackMotion",
         "ObjAnim_Head_StartTiming": 0.0,
@@ -23,7 +23,7 @@
         "ShakeAction_StartTiming": 0.0,
         "ShakeAction_TriggerByHit": true,
         "adaptTime": 0.28999999165534973,
-        "blowYPower": 21.329999923706055,
+        "blowYPower": 50.61000061035156,
         "cancelFrame": 0.0,
         "collisionOffsetPos": [
             0.0,

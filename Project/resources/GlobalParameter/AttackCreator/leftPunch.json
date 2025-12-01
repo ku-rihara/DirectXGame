@@ -95,7 +95,7 @@
         "Translation_UseRail": false,
         "adaptTime": 0.10000000149011612,
         "blowYPower": 48.849998474121094,
-        "cancelFrame": 0.10999999940395355,
+        "cancelFrame": 0.10000000149011612,
         "collisionOffsetPos": [
             0.0,
             0.0,
@@ -112,6 +112,7 @@
         "isAlwaysFollowing": false,
         "isAutoAdvance": false,
         "isCancel": true,
+        "isPositionYSelect": false,
         "keyBordBottom": 35,
         "loopNum": 0,
         "loopWaitTime": 0.0,
