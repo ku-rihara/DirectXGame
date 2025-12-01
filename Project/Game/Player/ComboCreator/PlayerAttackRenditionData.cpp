@@ -100,7 +100,8 @@ void PlayerAttackRenditionData::AdjustParam() {
             auto& param     = paramPair.first;
 
             ImGui::SeparatorText(info.label);
-            SelectObjAnimationFile(info.label, paramPair);
+            // 各タイプに応じたフォルダパスを使用
+            SelectObjAnimationFile(info.label, GetObjAnimationFolderPath(info.type), paramPair);
             ImGui::DragFloat("Start Timing", &param.startTiming, 0.01f, 0.0f, 10.0f);
             ImGui::PopID();
         }
@@ -120,9 +121,23 @@ void PlayerAttackRenditionData::SelectRenditionFile(
 
 void PlayerAttackRenditionData::SelectObjAnimationFile(
     const char* label,
+    const std::string& directory,
     std::pair<ObjAnimationParam, FileSelector>& param) {
 
-    param.second.SelectFile(label, objAnimationFolderPath_, param.first.fileName, "", true);
+    param.second.SelectFile(label, directory, param.first.fileName, "", true);
+}
+
+std::string PlayerAttackRenditionData::GetObjAnimationFolderPath(ObjAnimationType type) const {
+    switch (type) {
+    case ObjAnimationType::Head:
+        return objAnimationFolderPath_Head_;
+    case ObjAnimationType::RightHand:
+        return objAnimationFolderPath_RightHand_;
+    case ObjAnimationType::LeftHand:
+        return objAnimationFolderPath_LeftHand_;
+    default:
+        return objAnimationFolderPath_Head_; // デフォルト
+    }
 }
 
 const PlayerAttackRenditionData::RenditionParam& PlayerAttackRenditionData::GetRenditionParamFromIndex(const int32_t& index) const {

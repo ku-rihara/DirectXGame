@@ -93,11 +93,11 @@ void PlayerAttackRendition::Update(const float& deltaTime) {
                 break;
 
             case PlayerAttackRenditionData::ObjAnimationType::RightHand:
-                pPlayer_->GetRightHand()->GetObject3D()->transform_.PlayObjEaseAnimation("Player", param.fileName);
+                pPlayer_->GetRightHand()->GetObject3D()->transform_.PlayObjEaseAnimation("RightHand", param.fileName);
                 break;
 
             case PlayerAttackRenditionData::ObjAnimationType::LeftHand:
-                pPlayer_->GetLeftHand()->GetObject3D()->transform_.PlayObjEaseAnimation("Player", param.fileName);
+                pPlayer_->GetLeftHand()->GetObject3D()->transform_.PlayObjEaseAnimation("LeftHand", param.fileName);
                 break;
 
             default:
