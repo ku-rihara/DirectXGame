@@ -179,7 +179,7 @@ void EnemyDamageReactionAction::UpdateSlammed() {
 
     // まず地面に叩きつける
     if (!hasReachedGround_) {
-        // 毎フレーム下向きに移動(blowYPowerベース)
+        // 毎フレーム下向きに移動
         pBaseEnemy_->SetWorldPositionY(
             pBaseEnemy_->GetWorldPosition().y + bounceSpeed_ * Frame::DeltaTimeRate());
 
@@ -248,7 +248,7 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
 
         // 回転演出
         float currentRotation = pBaseEnemy_->GetBodyRotation().x;
-        pBaseEnemy_->SetBodyRotateX(currentRotation + reactionParam.thrustRotateSpeed * Frame::DeltaTimeRate());
+        pBaseEnemy_->SetBodyRotateX(currentRotation + reactionParam.rotateSpeed * Frame::DeltaTimeRate());
 
         // 速度が0以下になったら頂点到達
         if (jumpSpeed_ <= 0.0f) {
@@ -263,7 +263,7 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
 
         // 回転演出
         float currentRotation = pBaseEnemy_->GetBodyRotation().x;
-        pBaseEnemy_->SetBodyRotateX(currentRotation + reactionParam.thrustRotateSpeed * Frame::DeltaTimeRate());
+        pBaseEnemy_->SetBodyRotateX(currentRotation + reactionParam.rotateSpeed * Frame::DeltaTimeRate());
     }
     // 浮遊時間終了後、落下
     else {
@@ -276,7 +276,7 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
 
             // 回転継続
             float currentRotation = pBaseEnemy_->GetBodyRotation().x;
-            pBaseEnemy_->SetBodyRotateX(currentRotation + reactionParam.thrustRotateSpeed * Frame::DeltaTimeRate());
+            pBaseEnemy_->SetBodyRotateX(currentRotation + reactionParam.rotateSpeed * Frame::DeltaTimeRate());
 
             // 地面に着地したらバウンド
             if (pBaseEnemy_->GetWorldPosition().y <= enemyParam.basePosY) {
@@ -297,7 +297,7 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
 
             // 回転継続
             float currentRotation = pBaseEnemy_->GetBodyRotation().x;
-            pBaseEnemy_->SetBodyRotateX(currentRotation + reactionParam.thrustRotateSpeed * Frame::DeltaTimeRate());
+            pBaseEnemy_->SetBodyRotateX(currentRotation + reactionParam.rotateSpeed * Frame::DeltaTimeRate());
 
             // 最終着地
             if (pBaseEnemy_->GetWorldPosition().y <= enemyParam.basePosY) {
@@ -323,11 +323,9 @@ void EnemyDamageReactionAction::UpdateRenditions() {
         return;
     }
 
-    // 演出データの取得 - この時点でクラッシュする可能性
-    // pReactionData_が既に破棄されている場合、GetAllRenditions()で落ちる
     const auto& renditions = pReactionData_->GetAllRenditions();
 
-    // サイズチェック - renditionsが無効な場合ここで落ちる可能性
+    // サイズチェック
     if (renditions.size() == 0) {
         return;
     }

@@ -39,9 +39,9 @@ public:
 
     struct TakeUpperParam {
         float floatingTime; 
-        float fallSpeedLimit; 
-        float gravity; 
-        float thrustRotateSpeed;
+        float fallSpeedLimit;
+        float gravity;
+        float rotateSpeed;
     };
 
     // リアクションパラメータ

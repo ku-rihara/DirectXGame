@@ -157,7 +157,7 @@ void EnemyDamageReactionData::RegisterParams() {
     globalParameter_->Regist(groupName_, "TakeUpper_FloatingTime", &reactionParam_.takeUpperParam.floatingTime);
     globalParameter_->Regist(groupName_, "TakeUpper_FallSpeedLimit", &reactionParam_.takeUpperParam.fallSpeedLimit);
     globalParameter_->Regist(groupName_, "TakeUpper_Gravity", &reactionParam_.takeUpperParam.gravity);
-    globalParameter_->Regist(groupName_, "TakeUpper_ThrustRotateSpeed", &reactionParam_.takeUpperParam.thrustRotateSpeed);
+    globalParameter_->Regist(groupName_, "TakeUpper_ThrustRotateSpeed", &reactionParam_.takeUpperParam.rotateSpeed);
 }
 
 ///==========================================================
@@ -203,7 +203,7 @@ void EnemyDamageReactionData::AdjustParam() {
         ImGui::DragFloat("Floating Time", &reactionParam_.takeUpperParam.floatingTime, 0.01f);
        ImGui::DragFloat("Fall Speed Limit", &reactionParam_.takeUpperParam.fallSpeedLimit, 0.1f);
         ImGui::DragFloat("Gravity", &reactionParam_.takeUpperParam.gravity, 0.1f);
-        ImGui::DragFloat("Thrust Rotate Speed", &reactionParam_.takeUpperParam.thrustRotateSpeed, 0.01f);
+        ImGui::DragFloat("Thrust Rotate Speed", &reactionParam_.takeUpperParam.rotateSpeed, 0.01f);
     }
 
     ImGui::Separator();

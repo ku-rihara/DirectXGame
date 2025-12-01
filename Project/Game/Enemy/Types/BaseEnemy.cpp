@@ -201,7 +201,12 @@ bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
 }
 
 void BaseEnemy::TakeDamage(const float& damageValue) {
+
+    // ダメージを受ける
     hp_ -= damageValue;
+
+    // コンボをカウント
+    pCombo_->ComboCountUP();
 
     if (hp_ < 0.0f) {
         hp_ = 0.0f;

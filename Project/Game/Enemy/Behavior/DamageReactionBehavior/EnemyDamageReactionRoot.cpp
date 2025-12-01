@@ -71,7 +71,7 @@ void EnemyDamageReactionRoot::ApplyReactionByAttackName(const std::string& attac
         return;
     }
     pBaseEnemy_->TakeDamage(pPlayerCollisionInfo_->GetAttackPower());
-
+   
     //  ダメージ適用後、HPが0以下かチェック
     if (pBaseEnemy_->GetHP() <= 0.0f) {
         // 死亡予約フラグを立てる

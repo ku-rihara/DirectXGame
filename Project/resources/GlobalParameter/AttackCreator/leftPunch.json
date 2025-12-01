@@ -2,12 +2,12 @@
     "leftPunch": {
         "CameraAction_Duration": 0.0,
         "CameraAction_FileName": "None",
-        "CameraAction_StartTiming": 1.7699999809265137,
+        "CameraAction_StartTiming": 0.0,
         "CameraAction_TriggerByHit": false,
         "Condition": 0,
         "HitStop_Duration": 0.0,
         "HitStop_FileName": "",
-        "HitStop_StartTiming": 0.7099999785423279,
+        "HitStop_StartTiming": 0.0,
         "HitStop_TriggerByHit": false,
         "IsFirstAttack": true,
         "KnockBackPower": 19.809999465942383,
@@ -34,7 +34,7 @@
             0.0
         ],
         "PostEffectParam_FileName": "",
-        "PostEffectParam_StartTiming": 0.7099999785423279,
+        "PostEffectParam_StartTiming": 0.0,
         "PostEffectParam_TriggerByHit": false,
         "Rotation_EaseType": 0,
         "Rotation_EndValue": [
@@ -71,9 +71,9 @@
         ],
         "Scale_UseCurrentAsStart": false,
         "ShakeAction_Duration": 0.0,
-        "ShakeAction_FileName": "",
-        "ShakeAction_StartTiming": 0.7099999785423279,
-        "ShakeAction_TriggerByHit": false,
+        "ShakeAction_FileName": "PunchAttackCamera",
+        "ShakeAction_StartTiming": 0.0,
+        "ShakeAction_TriggerByHit": true,
         "Translation_EaseType": 6,
         "Translation_EndValue": [
             1.0,
@@ -95,7 +95,7 @@
         "Translation_UseRail": false,
         "adaptTime": 0.10000000149011612,
         "blowYPower": 48.849998474121094,
-        "cancelFrame": 0.1899999976158142,
+        "cancelFrame": 0.10999999940395355,
         "collisionOffsetPos": [
             0.0,
             0.0,
@@ -106,7 +106,7 @@
             5.0,
             5.0
         ],
-        "finishWaitTime": 0.10999999940395355,
+        "finishWaitTime": 0.23000000417232513,
         "gamePadBottom": 16384,
         "isAbleInputMoving": true,
         "isAlwaysFollowing": false,
