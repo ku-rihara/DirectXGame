@@ -1,7 +1,7 @@
 #pragma once
 
-#include "utility/FileSelector/FileSelector.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
+#include "utility/FileSelector/FileSelector.h"
 #include <array>
 #include <cstdint>
 #include <string>
@@ -52,13 +52,20 @@ public:
 private:
     //*-------------------------------- private Method --------------------------------*//
     void SelectRenditionFile(const char* label, const std::string& directory, std::pair<RenditionParam, FileSelector>& param);
-    void SelectObjAnimationFile(const char* label, std::pair<ObjAnimationParam, FileSelector>& param);
+    void SelectObjAnimationFile(const char* label, const std::string& directory, std::pair<ObjAnimationParam, FileSelector>& param);
+
+    // オブジェクトアニメーションタイプに応じたフォルダパスを取得
+    std::string GetObjAnimationFolderPath(ObjAnimationType type) const;
 
 private:
     //*-------------------------------- Private variants--------------------------------*//
     std::string groupName_;
-    const std::string folderPath_             = "Resources/GlobalParameter/";
-    const std::string objAnimationFolderPath_ = "Resources/GlobalParameter/ObjEaseAnimation/Player/Dates/";
+    const std::string folderPath_ = "Resources/GlobalParameter/";
+
+    // 各オブジェクトアニメーションタイプのフォルダパス
+    const std::string objAnimationFolderPath_Head_      = "Resources/GlobalParameter/ObjEaseAnimation/Player/Dates/";
+    const std::string objAnimationFolderPath_RightHand_ = "Resources/GlobalParameter/ObjEaseAnimation/RightHand/Dates/";
+    const std::string objAnimationFolderPath_LeftHand_  = "Resources/GlobalParameter/ObjEaseAnimation/LeftHand/Dates/";
 
     // 演出パラメータ配列
     std::array<std::pair<RenditionParam, FileSelector>, static_cast<size_t>(Type::Count)> renditionParams_;
