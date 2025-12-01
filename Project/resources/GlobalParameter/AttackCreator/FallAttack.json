@@ -9,7 +9,7 @@
         "HitStop_TriggerByHit": false,
         "IsFirstAttack": false,
         "KnockBackPower": 0.0,
-        "NextAttackType": "",
+        "NextAttackType": "FallRandingAttack",
         "ObjAnim_Head_FileName": "",
         "ObjAnim_Head_StartTiming": 0.0,
         "ObjAnim_LeftHand_FileName": "",
