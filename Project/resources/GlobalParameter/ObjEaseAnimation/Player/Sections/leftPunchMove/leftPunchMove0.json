@@ -7,9 +7,9 @@
         "Rotation_ReturnEaseType": 21,
         "Rotation_ReturnMaxTime": 0.20000000298023224,
         "Rotation_endValue": [
-            0.0,
-            0.8569561839103699,
-            0.0
+            0.4991617202758789,
+            0.5585051774978638,
+            0.4014255702495575
         ],
         "Scale_EaseType": 22,
         "Scale_IsActive": true,
@@ -32,7 +32,7 @@
         "Translation_UseRail": false,
         "Translation_endValue": [
             0.0,
-            0.949999988079071,
+            0.8100000023841858,
             0.0
         ],
         "returnStartTime": 0.0,
