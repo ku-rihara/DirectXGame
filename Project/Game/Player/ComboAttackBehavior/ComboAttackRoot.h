@@ -14,7 +14,7 @@ private:
 private:
 
 	/// ===================================================
-	///private varians
+	///private variable
 	/// ===================================================
 
 	AttackPatern attackPatern_;

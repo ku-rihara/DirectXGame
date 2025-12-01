@@ -304,7 +304,7 @@ void BaseEnemy::SetBodyColor(const Vector4& color) {
 }
 
 void BaseEnemy::RotateInit() {
-    obj3d_->transform_.rotation_ = {0.0f, 0.0f, 0.0f};
+    obj3d_->transform_.rotation_ =Vector3::ZeroVector();
 }
 
 void BaseEnemy::ScaleReset() {

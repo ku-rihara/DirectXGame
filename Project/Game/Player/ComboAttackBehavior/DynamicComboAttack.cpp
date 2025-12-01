@@ -45,17 +45,6 @@ void DynamicComboAttack::Init() {
     moveEasing_.SetEndValue(targetPosition_);
     moveEasing_.SetAdaptValue(&currentMoveValue_);
 
-    // 攻撃スピードと攻撃力
-    const PlayerComboAttackController* attackController = pPlayer_->GetComboAttackController();
-    atkSpeed_                                           = attackController->GetRealAttackSpeed(Frame::DeltaTimeRate());
-
-    float power = attackData_->GetAttackParam().power* attackController->GetPowerRate();
-    pCollisionInfo_->SetAttackPower(power);
-
-    // コリジョンボックス設定
-    pCollisionInfo_ = pPlayer_->GetPlayerCollisionInfo();
-    pCollisionInfo_->AttackStart(attackData_);
-
     //// サウンド再生
     // pPlayer_->SoundPunch();
 
@@ -110,7 +99,6 @@ void DynamicComboAttack::UpdateAttack() {
     AttackCancel();
 
     // コリジョン判定
-    /*    auto& collisionParam = attackData_->GetAttackParam().collisionParam;*/
 
     pCollisionInfo_->TimerUpdate(atkSpeed_);
     pCollisionInfo_->Update();
@@ -199,11 +187,25 @@ void DynamicComboAttack::SetupCollision() {
     auto& attackParam    = attackData_->GetAttackParam();
     auto& collisionParam = attackParam.collisionParam;
 
+    // あらかじめコリジョンボックスを更新
+    pCollisionInfo_->Update();
+
     // コリジョンサイズ設定
     pPlayer_->GetPlayerCollisionInfo()->SetSize(collisionParam.size);
 
     // コリジョンを有効化
     pPlayer_->GetPlayerCollisionInfo()->SetIsAbleCollision(true);
+
+    // 攻撃スピード
+    const PlayerComboAttackController* attackController = pPlayer_->GetComboAttackController();
+    atkSpeed_                                           = attackController->GetRealAttackSpeed(Frame::DeltaTimeRate());
+
+    // 攻撃力
+    float power = attackData_->GetAttackParam().power * attackController->GetPowerRate();
+    pCollisionInfo_->SetAttackPower(power);
+
+    // アタックスタート
+    pCollisionInfo_->AttackStart(attackData_);
 
     collisionTimer_    = 0.0f;
     isCollisionActive_ = true;

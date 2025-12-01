@@ -217,7 +217,7 @@ void EnemyManager::ParticleInit() {
 }
 
 ///----------------------------------------------------------------------
-/// Emitt Init
+/// Emit Init
 ///----------------------------------------------------------------------
 
 void EnemyManager::DamageEffectShot(const Vector3& pos) {

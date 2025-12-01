@@ -15,6 +15,7 @@ void PlayerCollisionInfo::Init() {
 
 void PlayerCollisionInfo::Update() {
     if (!comboAttackData_) {
+        BaseAABBCollisionBox::Update();
         return;
     }
 
