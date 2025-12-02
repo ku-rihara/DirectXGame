@@ -45,7 +45,7 @@ private:
     PlayerComboAttackData* nextAttackData_ = nullptr;
     PlayerCollisionInfo* pCollisionInfo_   = nullptr;
 
-     float atkSpeed_;
+    float atkSpeed_;
 
     // タイミング
     float currentFrame_;
@@ -53,6 +53,7 @@ private:
 
     bool isReserveNextCombo_;
     bool isAttackCancel_;
+    bool hasHitEnemy_; 
 
     // 移動関連
     std::unique_ptr<PlayerAttackRendition> attackRendition_;

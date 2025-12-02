@@ -55,6 +55,12 @@ public:
         TriggerCondition condition;
         int32_t keyBordBottom;
         int32_t gamePadBottom;
+        bool requireHit; 
+    };
+
+    // 落下パラメータ
+    struct FallParam {
+        bool enableFall;      
     };
 
     // アタックパラメータ
@@ -63,6 +69,7 @@ public:
         MoveParam moveParam;
         TimingParam timingParam;
         TriggerParam triggerParam;
+        FallParam fallParam;
         float knockBackPower;
         float power;
         float blowYPower;
@@ -89,9 +96,9 @@ public:
     void LoadData();
     void SaveData();
 
-    bool IsReserveNextAttack(const float& currentTime, const TriggerParam& nextAtkTrigger);
+    bool IsReserveNextAttack(const float& currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy);
     bool IsWaitFinish(const float& currentTime);
-    bool IsCancelAttack(const float& currentTime, const TriggerParam& nextAtkTrigger);
+    bool IsCancelAttack(const float& currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy);
 
 private:
     //*-------------------------------- private Method --------------------------------*//
@@ -120,5 +127,6 @@ public:
     //*-------------------------------- Getter Method --------------------------------*//
     const std::string& GetGroupName() const { return groupName_; }
     const AttackParameter& GetAttackParam() const { return attackParam_; }
+    AttackParameter& GetAttackParam() { return attackParam_; }
     const PlayerAttackRenditionData& GetRenditionData() const { return renditionData_; }
 };
