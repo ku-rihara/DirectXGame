@@ -17,6 +17,7 @@ void ObjEaseAnimationEditor::InitPreviewObject() {
         previewObject_->transform_.rotation_    = previewBaseTransform_.rotation;
         previewObject_->transform_.translation_ = previewBaseTransform_.translation;
     }
+    previewObject_->SetIsDraw(false);
 }
 
 void ObjEaseAnimationEditor::Update(const float& speedRate) {
