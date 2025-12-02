@@ -107,6 +107,7 @@ void PlayerCollisionInfo::AttackStart(const PlayerComboAttackData* comboAttackDa
     isInLoopWait_     = false;
     isFinish_         = false;
     isHit_            = false;
+    hasHitEnemy_      = false;
 
     // サイズセット
     SetSize(collisionParam.size);
@@ -126,6 +127,7 @@ void PlayerCollisionInfo::UpdateOffset() {
 void PlayerCollisionInfo::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     if (dynamic_cast<BaseEnemy*>(other)) {
         isHit_ = true;
+        hasHitEnemy_ = true;
     }
 }
 

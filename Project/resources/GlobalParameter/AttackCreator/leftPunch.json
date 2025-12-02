@@ -10,7 +10,7 @@
         "HitStop_StartTiming": 0.0,
         "HitStop_TriggerByHit": false,
         "IsFirstAttack": true,
-        "KnockBackPower": 19.809999465942383,
+        "KnockBackPower": 5.0,
         "NextAttackType": "RightPunch",
         "ObjAnim_Head_FileName": "leftPunchMove",
         "ObjAnim_Head_StartTiming": 0.0,

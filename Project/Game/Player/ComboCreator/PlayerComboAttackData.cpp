@@ -59,6 +59,7 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "keyBordBottom", &attackParam_.triggerParam.keyBordBottom);
     globalParameter_->Regist(groupName_, "Condition", &tempCondition_);
     globalParameter_->Regist(groupName_, "IsFirstAttack", &attackParam_.triggerParam.isFirstAttack);
+    globalParameter_->Regist(groupName_, "RequireHit", &attackParam_.triggerParam.requireHit);
     globalParameter_->Regist(groupName_, "isAutoAdvance", &attackParam_.timingParam.isAutoAdvance);
 
     // TimingParam
@@ -67,6 +68,9 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "precedeInputFrame", &attackParam_.timingParam.precedeInputTime);
     globalParameter_->Regist(groupName_, "finishWaitTime", &attackParam_.timingParam.finishWaitTime);
 
+    // FallParam
+    globalParameter_->Regist(groupName_, "enableFall", &attackParam_.fallParam.enableFall);
+  
     // nextAttack
     globalParameter_->Regist(groupName_, "NextAttackType", &attackParam_.nextAttackType);
 
@@ -84,6 +88,7 @@ void PlayerComboAttackData::AdjustParam() {
 
     // TriggerParam
     ImGui::Checkbox("isFirstAttack", &attackParam_.triggerParam.isFirstAttack);
+    ImGui::Checkbox("Require Hit", &attackParam_.triggerParam.requireHit); 
     ImGuiKeyboardKeySelector("keyBoard:TriggerBottom", attackParam_.triggerParam.keyBordBottom);
     ImGuiGamepadButtonSelector("GamePad:TriggerBottom", attackParam_.triggerParam.gamePadBottom);
 
@@ -117,7 +122,7 @@ void PlayerComboAttackData::AdjustParam() {
     ImGui::Checkbox("isAble InputMoving", &attackParam_.moveParam.isAbleInputMoving);
     ImGui::DragFloat("Move Ease Time", &attackParam_.moveParam.easeTime, 0.01f);
     ImGui::Checkbox("isPositionYSelect", &attackParam_.moveParam.isPositionYSelect);
-   ImGui::DragFloat3("Move Value", &attackParam_.moveParam.value.x, 0.01f);
+    ImGui::DragFloat3("Move Value", &attackParam_.moveParam.value.x, 0.01f);
 
     ImGuiEasingTypeSelector("Move Easing Type", attackParam_.moveParam.easeType);
 
@@ -131,6 +136,10 @@ void PlayerComboAttackData::AdjustParam() {
         ImGui::DragFloat("Cancel Time", &attackParam_.timingParam.cancelTime, 0.01f);
     }
 
+    // Fall Parameters 
+    ImGui::SeparatorText("Fall Parameter");
+    ImGui::Checkbox("Enable Fall", &attackParam_.fallParam.enableFall);
+   
     // next Attack
     ImGui::SeparatorText("Next Attack");
     SelectNextAttack();
@@ -156,10 +165,15 @@ void PlayerComboAttackData::SelectNextAttack() {
         true);
 }
 
-bool PlayerComboAttackData::IsReserveNextAttack(const float& currentTime, const TriggerParam& nextAtkTrigger) {
+bool PlayerComboAttackData::IsReserveNextAttack(const float& currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy) {
 
     // 先行入力受付
     if (currentTime < attackParam_.timingParam.precedeInputTime && !IsWaitFinish(currentTime)) {
+        return false;
+    }
+
+    // ヒット条件チェック
+    if (nextAtkTrigger.requireHit && !hasHitEnemy) {
         return false;
     }
 
@@ -176,13 +190,18 @@ bool PlayerComboAttackData::IsReserveNextAttack(const float& currentTime, const 
     return false;
 }
 
-bool PlayerComboAttackData::IsCancelAttack(const float& currentTime, const TriggerParam& nextAtkTrigger) {
+bool PlayerComboAttackData::IsCancelAttack(const float& currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy) {
 
     if (!attackParam_.timingParam.isCancel) {
         return false;
     }
 
     if (currentTime < attackParam_.timingParam.cancelTime) {
+        return false;
+    }
+
+    // ヒット条件チェック
+    if (nextAtkTrigger.requireHit && !hasHitEnemy) {
         return false;
     }
 

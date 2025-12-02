@@ -139,6 +139,7 @@ void EnemyDamageReactionData::RegisterParams() {
     globalParameter_->Regist(groupName_, "TriggerAttackName", &reactionParam_.triggerAttackName);
     globalParameter_->Regist(groupName_, "ReactionState", &reactionParam_.intReactionState);
     globalParameter_->Regist(groupName_, "damageCollingTime", &reactionParam_.damageCollingTime);
+    globalParameter_->Regist(groupName_, "isPriorityReaction", &reactionParam_.isPriorityReaction);
 
     // NormalParam
     globalParameter_->Regist(groupName_, "Normal_KnockBackTime", &reactionParam_.normalParam.knockBackTime);
@@ -176,6 +177,7 @@ void EnemyDamageReactionData::AdjustParam() {
 
     // Reaction State
     ImGui::SeparatorText("Simple Param");
+    ImGui::Checkbox("isPriorityReaction", &reactionParam_.isPriorityReaction);
     ImGui::DragFloat("damageCollingTime", &reactionParam_.damageCollingTime, 0.01f);
 
     ImGui::SeparatorText("Reaction State");

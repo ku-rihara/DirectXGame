@@ -33,7 +33,7 @@ public:
 private:
     void LoopWaiting(const float& timeSpeed);
     void LoopStart();
-
+  
 private:
     const WorldTransform* baseTransform_          = nullptr;
     const PlayerComboAttackData* comboAttackData_ = nullptr;
@@ -41,6 +41,7 @@ private:
     // time
     float adaptTimer_;
     float loopWaitTimer_;
+    bool hasHitEnemy_ = false;
 
     // count
     int32_t currentLoopCount_;
@@ -62,6 +63,7 @@ public:
     const bool& GetIsHit() const { return isHit_; }
     const bool& GetIsFinish() const { return isFinish_; }
     const WorldTransform* GetPlayerTransform() const { return baseTransform_; }
+   const bool& GetHasHitEnemy() const { return hasHitEnemy_; }
 
     void SetAttackPower(const float& atkPower) { attackPower_ = atkPower; }
     void SetIsHit(const bool& is) { isHit_ = is; }

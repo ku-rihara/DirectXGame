@@ -40,7 +40,7 @@ void GameScene::Init() {
     });
 
     cSprite_.reset(Sprite::Create("Clear.png"));
-    cSprite_->transform_.pos = Vector2(0, -720);
+    cSprite_->transform_.pos = Vector2(640, -720);
 
     gameState_ = GameState::INTRO;
 

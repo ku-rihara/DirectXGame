@@ -53,6 +53,7 @@ public:
         SlammedParam slammedParam;
         TakeUpperParam takeUpperParam;
         float damageCollingTime;
+        bool isPriorityReaction;
     };
 
 public:

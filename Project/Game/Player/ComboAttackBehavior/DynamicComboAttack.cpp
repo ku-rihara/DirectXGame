@@ -4,6 +4,7 @@
 #include "Frame/Frame.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
+#include "Player/PlayerBehavior/PlayerJump.h"
 
 DynamicComboAttack::DynamicComboAttack(Player* player, PlayerComboAttackData* attackData)
     : BaseComboAattackBehavior(attackData->GetGroupName(), player) {
@@ -24,6 +25,7 @@ void DynamicComboAttack::Init() {
     waitTime_          = 0.0f;
     isCollisionActive_ = false;
     collisionTimer_    = 0.0f;
+    hasHitEnemy_       = false; 
 
     // 次の攻撃データを取得
     nextAttackName_ = attackData_->GetAttackParam().nextAttackType;
@@ -90,18 +92,20 @@ void DynamicComboAttack::UpdateAttack() {
     AttackCancel();
 
     // コリジョン判定
-
     pCollisionInfo_->TimerUpdate(atkSpeed_);
     pCollisionInfo_->Update();
+
+    // 敵にヒットしたかをチェック 
+    if (pCollisionInfo_->GetHasHitEnemy()) {
+        hasHitEnemy_ = true;
+    }
 
     // 演出更新
     if (attackRendition_) {
         attackRendition_->Update(atkSpeed_);
-
-        attackRendition_->Update(atkSpeed_);
     }
 
-    // イージングが完了したらRecoveryへ
+    // イージングが完了したらWaitへ
     if (moveEasing_.IsFinished() && pCollisionInfo_->GetIsFinish()) {
         order_ = Order::WAIT;
     }
@@ -135,6 +139,13 @@ void DynamicComboAttack::ChangeNextAttack() {
         return;
 
     } else {
+        // 落下フラグがある場合はPlayerJumpに移行 
+        if (attackData_->GetAttackParam().fallParam.enableFall) {
+            pPlayer_->ChangeBehavior(std::make_unique<PlayerJump>(pPlayer_, true));
+            pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
+            return;
+        }
+
         // データが見つからない場合はルートに戻る
         pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
     }
@@ -148,7 +159,11 @@ void DynamicComboAttack::PreOderNextComboForButton() {
         return;
     }
 
-    isReserveNextCombo_ = attackData_->IsReserveNextAttack(currentFrame_, nextAttackData_->GetAttackParam().triggerParam);
+    // ヒット状態を渡す (MODIFIED)
+    isReserveNextCombo_ = attackData_->IsReserveNextAttack(
+        currentFrame_,
+        nextAttackData_->GetAttackParam().triggerParam,
+        hasHitEnemy_);
 }
 
 void DynamicComboAttack::AttackCancel() {
@@ -161,7 +176,11 @@ void DynamicComboAttack::AttackCancel() {
         return;
     }
 
-    isAttackCancel_ = attackData_->IsCancelAttack(currentFrame_, nextAttackData_->GetAttackParam().triggerParam);
+    // ヒット状態を渡す (MODIFIED)
+    isAttackCancel_ = attackData_->IsCancelAttack(
+        currentFrame_,
+        nextAttackData_->GetAttackParam().triggerParam,
+        hasHitEnemy_);
 
     if (isAttackCancel_) {
         // 次の攻撃
@@ -207,22 +226,19 @@ void DynamicComboAttack::SetMoveEasing() {
     const PlayerComboAttackData::MoveParam& moveParam = attackData_->GetAttackParam().moveParam;
     startPosition_                                    = pPlayer_->GetWorldPosition();
 
-    // isPositionSelectフラグに基づいて目標位置を設定
+    // オフセット計算
+    targetPosition_ = startPosition_ + pPlayer_->GetTransform().CalcForwardOffset(moveParam.value);
+
+    // Yだけ指定する場合
     if (moveParam.isPositionYSelect) {
-        // Y軸のみ絶対位置を使用、XとZはオフセット計算
-        Vector3 offsetMove = pPlayer_->GetTransform().CalcForwardOffset(moveParam.value);
-        targetPosition_.x  = startPosition_.x + offsetMove.x;
-        targetPosition_.y  = offsetMove.y;
-        targetPosition_.z  = startPosition_.z + offsetMove.z;
-    } else {
-        // 従来通りの相対的なオフセット計算
-        targetPosition_ = startPosition_ + pPlayer_->GetTransform().CalcForwardOffset(moveParam.value);
+        targetPosition_.y = moveParam.value.y;
     }
 
     // イージングのセットアップ
     moveEasing_.SetType(static_cast<EasingType>(moveParam.easeType));
     moveEasing_.SetStartValue(startPosition_);
     moveEasing_.SetEndValue(targetPosition_);
+    moveEasing_.SetMaxTime(moveParam.easeTime);
     moveEasing_.SetAdaptValue(&currentMoveValue_);
 }
 

@@ -10,11 +10,12 @@
         "Slammed_Gravity": 0.0,
         "Slammed_InitialBounceRate": 0.0,
         "Slammed_ThrustRotateSpeed": 0.0,
-        "TakeUpper_FallSpeedLimit": 258.1000061035156,
-        "TakeUpper_FloatingTime": 0.6800000071525574,
-        "TakeUpper_Gravity": 63.20000076293945,
-        "TakeUpper_ThrustRotateSpeed": 26.1299991607666,
+        "TakeUpper_FallSpeedLimit": 318.79998779296875,
+        "TakeUpper_FloatingTime": 0.4699999988079071,
+        "TakeUpper_Gravity": 90.30000305175781,
+        "TakeUpper_ThrustRotateSpeed": 26.639999389648438,
         "TriggerAttackName": "UpperAttack",
-        "damageCollingTime": 0.5199999809265137
+        "damageCollingTime": 0.5199999809265137,
+        "isPriorityReaction": false
     }
 }

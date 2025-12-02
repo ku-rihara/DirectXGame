@@ -1,5 +1,5 @@
 {
-    "FallRandingAttack": {
+    "RushAttack": {
         "CameraAction_FileName": "",
         "CameraAction_StartTiming": 0.0,
         "CameraAction_TriggerByHit": false,
@@ -8,8 +8,8 @@
         "HitStop_StartTiming": 0.0,
         "HitStop_TriggerByHit": false,
         "IsFirstAttack": false,
-        "KnockBackPower": 16.219999313354492,
-        "NextAttackType": "RushAttack",
+        "KnockBackPower": 0.0,
+        "NextAttackType": "",
         "ObjAnim_Head_FileName": "",
         "ObjAnim_Head_StartTiming": 0.0,
         "ObjAnim_LeftHand_FileName": "",
@@ -22,37 +22,37 @@
         "ShakeAction_FileName": "",
         "ShakeAction_StartTiming": 0.0,
         "ShakeAction_TriggerByHit": false,
-        "adaptTime": 0.33000001311302185,
-        "blowYPower": 29.489999771118164,
-        "cancelFrame": 0.14000000059604645,
+        "adaptTime": 0.6700000166893005,
+        "blowYPower": 48.47999954223633,
+        "cancelFrame": 0.0,
         "collisionOffsetPos": [
             0.0,
             0.0,
             0.0
         ],
         "collisionSize": [
-            7.0,
-            7.0,
-            7.0
+            5.0,
+            5.0,
+            5.0
         ],
-        "finishWaitTime": 0.11999999731779099,
+        "finishWaitTime": 0.1599999964237213,
         "gamePadBottom": 16384,
         "isAbleInputMoving": false,
-        "isAlwaysFollowing": false,
+        "isAlwaysFollowing": true,
         "isAutoAdvance": false,
-        "isCancel": true,
+        "isCancel": false,
         "isPositionYSelect": false,
         "keyBordBottom": 35,
         "loopNum": 0,
         "loopWaitTime": 0.0,
-        "moveEaseTime": 0.0,
-        "moveEaseType": 0,
+        "moveEaseTime": 0.6399999856948853,
+        "moveEaseType": 22,
         "moveValue": [
             0.0,
             0.0,
-            0.0
+            22.1299991607666
         ],
-        "power": 21.030000686645508,
-        "precedeInputFrame": 0.14000000059604645
+        "power": 14.130000114440918,
+        "precedeInputFrame": 0.0
     }
 }
