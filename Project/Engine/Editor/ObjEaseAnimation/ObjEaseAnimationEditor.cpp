@@ -17,6 +17,7 @@ void ObjEaseAnimationEditor::InitPreviewObject() {
         previewObject_->transform_.rotation_    = previewBaseTransform_.rotation;
         previewObject_->transform_.translation_ = previewBaseTransform_.translation;
     }
+    previewObject_->SetIsDraw(false);
 }
 
 void ObjEaseAnimationEditor::Update(const float& speedRate) {
@@ -28,9 +29,11 @@ void ObjEaseAnimationEditor::Update(const float& speedRate) {
 }
 
 void ObjEaseAnimationEditor::UpdatePreviewObject() {
-    if (!previewObject_ || !showPreview_) {
+    if (!previewObject_) {
         return;
     }
+
+    previewObject_->SetIsDraw(showPreview_);
 
     // ベース値をリセット
     previewObject_->transform_.scale_       = previewBaseTransform_.scale;
