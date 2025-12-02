@@ -28,9 +28,11 @@ void ObjEaseAnimationEditor::Update(const float& speedRate) {
 }
 
 void ObjEaseAnimationEditor::UpdatePreviewObject() {
-    if (!previewObject_ || !showPreview_) {
+    if (!previewObject_) {
         return;
     }
+
+    previewObject_->SetIsDraw(showPreview_);
 
     // ベース値をリセット
     previewObject_->transform_.scale_       = previewBaseTransform_.scale;
