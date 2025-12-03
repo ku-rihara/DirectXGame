@@ -117,7 +117,7 @@ void BaseScene::ViewProjectionUpdate() {
         ViewProcess();
         break;
     case BaseScene::CameraMode::EDITOR:
-
+        viewProjection_.UpdateMatrix();
         break;
     case BaseScene::CameraMode::DEBUG:
         // デバッグカメラの更新

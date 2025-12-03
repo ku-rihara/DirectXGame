@@ -17,9 +17,7 @@ void CameraEditor::Update(const float& speedRate) {
     // 未使用
     speedRate;
 
-    for (auto& cAnime : effects_) {
-        cAnime->Update();
-    }
+    BaseEffectEditor::Update(speedRate);
 
     // 自動でViewProjectionに適用
     if (autoApplyToViewProjection_ && viewProjection_) {
