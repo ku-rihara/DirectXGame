@@ -350,7 +350,7 @@ void ObjEaseAnimationSection::ImGuiTransformParam(const char* label, TransformPa
         ImGui::DragFloat3("End Value", &param.endValue.x, 0.01f);
     }
 
-    ImGui::DragFloat("Max Time", &param.maxTime, 0.01f, 0.1f, 10.0f);
+    ImGui::DragFloat("Max Time", &param.maxTime, 0.01f, 0.0f, 10.0f);
     ImGuiEasingTypeSelector("Easing Type", param.easeType);
 
     // 戻り設定
