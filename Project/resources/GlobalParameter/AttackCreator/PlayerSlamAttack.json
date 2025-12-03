@@ -1,15 +1,15 @@
 {
-    "UpperRush": {
-        "CameraAction_FileName": "",
+    "PlayerSlamAttack": {
+        "CameraAction_FileName": "PlayerthrustAttack",
         "CameraAction_StartTiming": 0.0,
-        "CameraAction_TriggerByHit": false,
+        "CameraAction_TriggerByHit": true,
         "Condition": 0,
-        "HitStop_FileName": "",
+        "HitStop_FileName": "PlayerThurstAttackHitStop",
         "HitStop_StartTiming": 0.0,
-        "HitStop_TriggerByHit": false,
+        "HitStop_TriggerByHit": true,
         "IsFirstAttack": false,
-        "KnockBackPower": 0.0,
-        "NextAttackType": "PlayerSlamAttack",
+        "KnockBackPower": 27.34000015258789,
+        "NextAttackType": "",
         "ObjAnim_Head_FileName": "",
         "ObjAnim_Head_StartTiming": 0.0,
         "ObjAnim_LeftHand_FileName": "",
@@ -19,42 +19,42 @@
         "PostEffectParam_FileName": "",
         "PostEffectParam_StartTiming": 0.0,
         "PostEffectParam_TriggerByHit": false,
-        "RequireHit": true,
-        "ShakeAction_FileName": "",
+        "RequireHit": false,
+        "ShakeAction_FileName": "ThurstAttackCamera",
         "ShakeAction_StartTiming": 0.0,
-        "ShakeAction_TriggerByHit": false,
-        "adaptTime": 0.0,
-        "blowYPower": 0.0,
-        "cancelFrame": 0.12999999523162842,
+        "ShakeAction_TriggerByHit": true,
+        "adaptTime": 0.1899999976158142,
+        "blowYPower": 28.3799991607666,
+        "cancelFrame": 0.0,
         "collisionOffsetPos": [
             0.0,
             0.0,
-            0.0
+            5.460000038146973
         ],
         "collisionSize": [
-            0.0,
-            0.0,
-            0.0
+            8.0,
+            8.0,
+            8.0
         ],
         "enableFall": true,
         "finishWaitTime": 0.0,
-        "gamePadBottom": 16384,
+        "gamePadBottom": 0,
         "isAbleInputMoving": false,
         "isAlwaysFollowing": false,
-        "isAutoAdvance": true,
+        "isAutoAdvance": false,
         "isCancel": false,
-        "isPositionYSelect": true,
-        "keyBordBottom": 35,
+        "isPositionYSelect": false,
+        "keyBordBottom": 0,
         "loopNum": 0,
         "loopWaitTime": 0.0,
-        "moveEaseTime": 0.17000000178813934,
+        "moveEaseTime": 0.0,
         "moveEaseType": 0,
         "moveValue": [
             0.0,
-            17.09000015258789,
-            7.369999885559082
+            0.0,
+            0.0
         ],
-        "power": 0.0,
-        "precedeInputFrame": 0.05000000074505806
+        "power": 26.31999969482422,
+        "precedeInputFrame": 0.0
     }
 }
