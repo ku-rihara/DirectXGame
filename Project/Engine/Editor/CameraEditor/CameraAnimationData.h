@@ -78,8 +78,9 @@ private:
     //*---------------------------- private Methods ----------------------------*//
 
     void UpdateActiveKeyFrames(const float& speedRate);
-    void UpdateInterpolatedValues();
+    void UpdateAdaptCurrentPos();
     void StartReturnToInitial();
+    void CheckIsReturnToInitial(const float& actualDeltaTime);
 
 private:
     //*---------------------------- private Variant ----------------------------*//
@@ -103,6 +104,8 @@ private:
     bool showAnimationControls_ = true;
 
     TimeModeSelector timeModeSelector_;
+
+    const float defaultFovAngle_ = 45.0f;
 
 public:
     //*----------------------------- getter Methods -----------------------------*//

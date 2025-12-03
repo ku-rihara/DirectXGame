@@ -1,6 +1,6 @@
 {
-    "PlayerthrustAttack2": {
-        "fov": 75.0,
+    "test20": {
+        "fov": 22.0,
         "fovEaseType": 0,
         "position": [
             0.0,
@@ -10,11 +10,11 @@
         "positionEaseType": 0,
         "rotation": [
             0.0,
-            0.12217304855585098,
+            0.0,
             0.0
         ],
         "rotationEaseType": 0,
         "timeMode": 1,
-        "timePoint": 0.20999999344348907
+        "timePoint": 0.25999999046325684
     }
 }

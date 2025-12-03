@@ -344,6 +344,7 @@ void BaseEffectEditor<TEffectData>::RenderPlayBack() {
         ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Playing");
     } else if (IsSelectedAnimationFinished()) {
         ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Finished");
+        ResetSelectedAnimation();
     } else {
         ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "Stopped");
     }

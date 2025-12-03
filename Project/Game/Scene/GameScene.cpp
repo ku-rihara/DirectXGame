@@ -49,11 +49,11 @@ void GameScene::Update() {
     BaseScene::Update();
 
     if (input_->TriggerKey(KeyboardKey::R)) {
-        cameraPlayer_->Play("");
+        cameraPlayer_->Play("PlayerthrustAttack");
     }
 
     if (input_->TriggerKey(KeyboardKey::T)) {
-        cameraPlayer_->Play("");
+        cameraPlayer_->Play("test2");
     }
 
     cameraPlayer_->Update();

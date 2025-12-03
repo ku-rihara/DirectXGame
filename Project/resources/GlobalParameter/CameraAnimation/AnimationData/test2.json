@@ -1,11 +1,10 @@
 {
-    "PlayerthrustAttack": {
+    "test2": {
         "autoReturnToInitial": true,
-        "playbackSpeed": 1.0,
         "resetFovEaseType": 0,
         "resetPosEaseType": 0,
         "resetRotateEaseType": 0,
-        "resetTimePoint": 1.5499999523162842,
+        "resetTimePoint": 0.3400000035762787,
         "returnDelayTime": 0.0,
         "timeMode": 1
     }
