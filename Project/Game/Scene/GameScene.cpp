@@ -24,12 +24,16 @@ void GameScene::Init() {
     skuBox_              = std::make_unique<SkyBox>();
     putObjForBlender     = std::make_unique<PutObjForBlender>();
     timeScaleController_ = std::make_unique<TimeScaleController>();
+    cameraPlayer_        = std::make_unique<CameraAnimation>();
 
     /*  monsterBall_->Init();*/
     ground_->Init();
     plane_->Init();
     skuBox_->Init();
     timeScaleController_->Init();
+
+    cameraPlayer_->Init();
+    cameraPlayer_->SetViewProjection(&viewProjection_);
 
     putObjForBlender->LoadJsonFile("game.json");
     putObjForBlender->EasingAllReset();
@@ -43,6 +47,16 @@ void GameScene::Update() {
 
     /// debugCamera
     BaseScene::Update();
+
+    if (input_->TriggerKey(KeyboardKey::R)) {
+        cameraPlayer_->Play("");
+    }
+
+    if (input_->TriggerKey(KeyboardKey::T)) {
+        cameraPlayer_->Play("");
+    }
+
+    cameraPlayer_->Update();
 
     // 各クラス更新
     ground_->Update();

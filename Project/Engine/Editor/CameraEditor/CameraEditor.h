@@ -46,11 +46,10 @@ private:
 
     bool autoApplyToViewProjection_ = true;
     bool keyFramePreviewMode_       = false;
-    bool isEditing_                 = false;
     bool isPreViewDraw_             = false;
 
 public:
-    const bool& GetIsEditing() const { return isEditing_; }
+   
     const bool& GetAutoApplyToViewProjection() const { return autoApplyToViewProjection_; }
     const bool& GetSequenceElementPreviewMode() const { return keyFramePreviewMode_; }
     CameraAnimationData* GetSelectedAnimation();

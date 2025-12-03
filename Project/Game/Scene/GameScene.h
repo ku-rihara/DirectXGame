@@ -14,6 +14,8 @@
 
 #include "utility/PutObjForBlender/PutObjForBlender.h"
 
+#include"Editor/CameraEditor/CameraAnimation.h"
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -31,10 +33,10 @@ private:
     std::unique_ptr<TimeScaleController> timeScaleController_   = nullptr;
     std::unique_ptr<GPUParticleEmitter> testGpuParticleEmitter_ = nullptr;
 
+    std::unique_ptr<CameraAnimation> cameraPlayer_ = nullptr;
+
 public:
-    ///========================================================
-    /// Constralt destract
-    ///========================================================
+
     GameScene();
     ~GameScene() override;
 
