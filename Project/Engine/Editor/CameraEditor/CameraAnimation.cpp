@@ -80,6 +80,10 @@ void CameraAnimation::SetStartParam() {
     startParam_.position = pViewProjection_->positionOffset_;
     startParam_.rotation = pViewProjection_->rotationOffset_;
     startParam_.fov      = pViewProjection_->fovAngleY_;
+
+    if (CameraAnimationData* date = dynamic_cast<CameraAnimationData*>(effectData_.get())) {
+        date->SetInitialValues(startParam_.position, startParam_.rotation, startParam_.fov);
+    }
 }
 
 void CameraAnimation::ResetOffsetParam() {

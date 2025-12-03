@@ -64,8 +64,7 @@ private:
     void RenderCategoryUI();
     void RenderCategoryEffectListUI();
 
-    // 選択アニメーション再生、一時停止、リセット
- 
+    // 選択アニメーション一時停止、リセット
     void PauseSelectedAnimation();
     void ResetSelectedAnimation();
 
@@ -90,6 +89,8 @@ protected:
     std::string baseFolderPath_;
     std::string effectTypeName_;
 
+    bool isEditing_ = false;
+
 private:
     bool isUseCategorySystem_ = false;
 
@@ -98,6 +99,8 @@ public:
 
     TEffectData* GetSelectedEffect();
     TEffectData* GetEffectByName(const std::string& name);
+
+    const bool& GetIsEditing() const {return isEditing_; }
 
     // カテゴリーモード用getter
     TEffectData* GetEffectByName(const std::string& categoryName, const std::string& effectName);

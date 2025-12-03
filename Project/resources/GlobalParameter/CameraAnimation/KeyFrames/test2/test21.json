@@ -1,11 +1,11 @@
 {
-    "ll.;l.;3": {
+    "test21": {
         "fov": 45.0,
         "fovEaseType": 0,
         "position": [
             0.0,
-            0.0,
-            0.0
+            -10.5,
+            13.100000381469727
         ],
         "positionEaseType": 0,
         "rotation": [
@@ -15,6 +15,6 @@
         ],
         "rotationEaseType": 0,
         "timeMode": 1,
-        "timePoint": 0.0
+        "timePoint": 0.4399999976158142
     }
 }

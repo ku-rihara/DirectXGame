@@ -37,12 +37,14 @@ public:
     void CreateConstantBuffer(); //< 定数バッファ生成
     void Map();                  //< マッピング
 
-    void TransferMatrix(); //< 行列転送
-    void UpdateMatrix();   //< 行列更新
+    // 行列転送、更新
+    void TransferMatrix(); 
+    void UpdateMatrix();   
+    void UpdateViewMatrix();       
+    void UpdateProjectionMatrix(); 
 
-    void UpdateViewMatrix();       //< ビュー行列更新
-    void UpdateProjectionMatrix(); //< プロジェクション行列更新
-    void ClearParent();            //< ペアレント解除
+    // ペアレント解除
+    void ClearParent();           
 
 private:
     const WorldTransform* parent_ = nullptr;
@@ -55,7 +57,7 @@ public:
 
     Vector3 positionOffset_ = {0, 0, 0}; //< 位置オフセット
     Vector3 rotationOffset_ = {0, 0, 0}; //< 回転オフセット
-
+  
     float fovAngleY_   = 45.0f;
     float aspectRatio_ = (float)16 / 9;
     float nearZ_       = 0.1f;

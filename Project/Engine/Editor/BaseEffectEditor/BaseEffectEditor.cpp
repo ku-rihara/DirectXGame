@@ -17,6 +17,7 @@ void BaseEffectEditor<TEffectData>::Init(const std::string& typeName, const bool
     baseFolderPath_      = GetFolderPath();
     effectTypeName_      = typeName;
     AllLoadFile();
+    isEditing_ = false;
 }
 
 template <typename TEffectData>
@@ -40,6 +41,8 @@ template <typename TEffectData>
 void BaseEffectEditor<TEffectData>::EditorUpdate() {
 #ifdef _DEBUG
     if (ImGui::CollapsingHeader((effectTypeName_ + " Editor").c_str())) {
+        isEditing_ = true;
+
         ImGui::PushID(effectTypeName_.c_str());
 
         // 派生クラス固有のUI
@@ -82,6 +85,8 @@ void BaseEffectEditor<TEffectData>::EditorUpdate() {
         RenderFileOperations();
 
         ImGui::PopID();
+    } else {
+        isEditing_ = false;
     }
 #endif
 }
@@ -339,6 +344,7 @@ void BaseEffectEditor<TEffectData>::RenderPlayBack() {
         ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Playing");
     } else if (IsSelectedAnimationFinished()) {
         ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Finished");
+        ResetSelectedAnimation();
     } else {
         ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "Stopped");
     }

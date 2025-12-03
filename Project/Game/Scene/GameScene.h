@@ -24,6 +24,8 @@
 #include "UI/HowToOperate.h"
 #include "Editor/CameraEditor/CameraEditor.h"
 
+#include"Editor/CameraEditor/CameraAnimation.h"
+
 /// <summary>
 /// ゲームシーン
 /// </summary>

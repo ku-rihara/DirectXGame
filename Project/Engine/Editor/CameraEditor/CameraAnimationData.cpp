@@ -56,9 +56,12 @@ void CameraAnimationData::Update(const float& speedRate) {
         return;
     }
 
+    // キーフレームの進行状態の更新
     UpdateKeyFrameProgression();
+    // アクティブなキーフレームの更新
     UpdateActiveKeyFrames(speedRate);
-    UpdateInterpolatedValues();
+    // 元の位置に戻る処理の更新
+    UpdateAdaptCurrentPos();
 }
 
 void CameraAnimationData::UpdateActiveKeyFrames(const float& speedRate) {
@@ -78,6 +81,15 @@ void CameraAnimationData::UpdateActiveKeyFrames(const float& speedRate) {
         break;
     }
 
+    CheckIsReturnToInitial(actualDeltaTime);
+
+    // 現在のアクティブキーフレームを更新
+    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
+        sectionElements_[activeKeyFrameIndex_]->Update(speedRate);
+    }
+}
+
+void CameraAnimationData::CheckIsReturnToInitial(const float& actualDeltaTime) {
     // returnEasing開始待機中の処理
     if (returnParam_.isWaitingForReturn) {
         resetParam_.currentDelayTimer += actualDeltaTime;
@@ -87,11 +99,9 @@ void CameraAnimationData::UpdateActiveKeyFrames(const float& speedRate) {
             returnParam_.isReturningToInitial = true;
             resetParam_.currentDelayTimer     = 0.0f;
         }
-        return;
-    }
 
-    // 初期値に戻るイージング
-    if (returnParam_.isReturningToInitial) {
+    } else if (returnParam_.isReturningToInitial) {
+        // 初期値に戻るイージング
         returnParam_.positionEase.Update(actualDeltaTime);
         returnParam_.rotationEase.Update(actualDeltaTime);
         returnParam_.fovEase.Update(actualDeltaTime);
@@ -102,11 +112,6 @@ void CameraAnimationData::UpdateActiveKeyFrames(const float& speedRate) {
             playState_                        = PlayState::STOPPED;
         }
         return;
-    }
-
-    // 現在のアクティブキーフレームを更新
-    if (activeKeyFrameIndex_ >= 0 && activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
-        sectionElements_[activeKeyFrameIndex_]->Update(speedRate);
     }
 }
 
@@ -150,7 +155,7 @@ void CameraAnimationData::AdvanceToNexTSequenceElement() {
     }
 }
 
-void CameraAnimationData::UpdateInterpolatedValues() {
+void CameraAnimationData::UpdateAdaptCurrentPos() {
     if (sectionElements_.empty()) {
         return;
     }
@@ -172,9 +177,9 @@ void CameraAnimationData::ApplyToViewProjection(ViewProjection& viewProjection) 
         viewProjection.rotationOffset_ = currentCameraTransform_.rotation;
         viewProjection.fovAngleY_      = currentCameraTransform_.fov;
     } else if (isAllFinished_) {
-        viewProjection.positionOffset_ = initialCameraTransform_.position;
-        viewProjection.rotationOffset_ = initialCameraTransform_.rotation;
-        viewProjection.fovAngleY_      = initialCameraTransform_.fov;
+        viewProjection.positionOffset_ = Vector3::ZeroVector();
+        viewProjection.rotationOffset_ = Vector3::ZeroVector();
+        viewProjection.fovAngleY_      = defaultFovAngle_;
     }
 }
 
@@ -224,19 +229,19 @@ void CameraAnimationData::StartReturnToInitial() {
     float currentFovValue = currentCameraTransform_.fov;
 
     returnParam_.positionEase.SetStartValue(currentPos);
-    returnParam_.positionEase.SetEndValue(initialCameraTransform_.position);
+    returnParam_.positionEase.SetEndValue(Vector3::ZeroVector());
     returnParam_.positionEase.SetMaxTime(resetParam_.timePoint);
     returnParam_.positionEase.SetType(static_cast<EasingType>(resetParam_.posEaseType));
     returnParam_.positionEase.Reset();
 
     returnParam_.rotationEase.SetStartValue(currentRot);
-    returnParam_.rotationEase.SetEndValue(initialCameraTransform_.rotation);
+    returnParam_.rotationEase.SetEndValue(Vector3::ZeroVector());
     returnParam_.rotationEase.SetMaxTime(resetParam_.timePoint);
     returnParam_.rotationEase.SetType(static_cast<EasingType>(resetParam_.rotateEaseType));
     returnParam_.rotationEase.Reset();
 
     returnParam_.fovEase.SetStartValue(currentFovValue);
-    returnParam_.fovEase.SetEndValue(initialCameraTransform_.fov);
+    returnParam_.fovEase.SetEndValue(defaultFovAngle_);
     returnParam_.fovEase.SetMaxTime(resetParam_.timePoint);
     returnParam_.fovEase.SetType(static_cast<EasingType>(resetParam_.fovEaseType));
     returnParam_.fovEase.Reset();
