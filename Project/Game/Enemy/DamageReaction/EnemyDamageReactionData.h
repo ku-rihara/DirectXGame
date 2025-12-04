@@ -28,12 +28,10 @@ public:
     };
 
     struct SlammedParam {
-        int32_t boundNum;
-        float bounceDamping;
+        int32_t boundNum;       
+        float bounceDamping;    
         float initialBounceRate;
-        float downSpeed;
-        float fallSpeedLimit; 
-        float gravity;
+        float gravity;   
         float thrustRotateSpeed;
     };
 

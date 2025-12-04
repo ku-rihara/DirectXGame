@@ -49,6 +49,8 @@ public:
         float deathGravity;   
         float deathRotateSpeed;
         float deathBurstTime;  
+
+        float gravity;
     };
 
 public:

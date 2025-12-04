@@ -15,9 +15,9 @@
 
 /// object
 #include "CollisionBox/EnemyCollisionBox.h"
+#include "ComboCreator/PlayerComboAttackController.h"
 #include "Field/Field.h"
 #include "LockOn/LockOnController.h"
-#include"ComboCreator/PlayerComboAttackController.h"
 
 /// behavior
 #include "ComboAttackBehavior/ComboAttackRoot.h"
@@ -191,7 +191,6 @@ void Player::Move(const float& speed) {
         FaceToTarget();
     }
 }
-
 
 void Player::FaceToTarget() {
     if (pLockOn_ && pLockOn_->GetLockOn()->GetIsCurrentTarget()) {
@@ -380,8 +379,8 @@ void Player::UpdateMatrix() {
 
 void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-   /* if (dynamic_cast<RushAttack*>(comboBehavior_.get()))
-        return;*/
+    /* if (dynamic_cast<RushAttack*>(comboBehavior_.get()))
+         return;*/
     // 突進などの攻撃は、敵を貫通するようにする
 
     if (EnemyCollisionBox* enemy = dynamic_cast<EnemyCollisionBox*>(other)) {
@@ -464,6 +463,10 @@ void Player::HeadLightSetting() {
     } else {
         Light::GetInstance()->GetAmbientLight()->SetIntensity(0.9f);
     }
+}
+
+void Player::MainHeadAnimationStart(const std::string& name) {
+    baseTransform_.PlayObjEaseAnimation("MainHead", name);
 }
 
 void Player::RotateReset() {

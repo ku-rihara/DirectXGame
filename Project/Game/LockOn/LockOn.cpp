@@ -141,7 +141,7 @@ void LockOn::HandleTargetSwitching(const std::vector<LockOnVariant>& targets, co
                 sortValue = relativePosition.Length(); // 距離
             } else {
                 // プレイヤーの前方ベクトルとの角度
-                Vector3 playerForward      = player->GetTransform().GetForwardVector();
+                Vector3 playerForward      = player->GetBaseTransform().GetForwardVector();
                 Vector3 toTargetNormalized = relativePosition.Normalize();
                 float dot                  = Vector3::Dot(playerForward, toTargetNormalized);
                 dot                        = std::clamp(dot, -1.0f, 1.0f);
@@ -320,7 +320,7 @@ void LockOn::OnObjectDestroyed(const LockOnVariant& obj) {
 bool LockOn::IsTargetRange(const LockOnVariant& target, const Player* player, Vector3& relativePosition) const {
     // プレイヤーの位置と向きを取得
     Vector3 playerPos     = player->GetWorldPosition();
-    Vector3 playerForward = player->GetTransform().GetForwardVector();
+    Vector3 playerForward = player->GetBaseTransform().GetForwardVector();
 
     // ターゲットの位置を取得
     Vector3 targetPos = GetTargetObjectPosition(target);

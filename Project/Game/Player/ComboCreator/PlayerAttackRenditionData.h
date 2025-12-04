@@ -37,6 +37,7 @@ public:
         Head,
         RightHand,
         LeftHand,
+        MainHead,
         Count
     };
 
@@ -66,6 +67,7 @@ private:
     const std::string objAnimationFolderPath_Head_      = "Resources/GlobalParameter/ObjEaseAnimation/Player/Dates/";
     const std::string objAnimationFolderPath_RightHand_ = "Resources/GlobalParameter/ObjEaseAnimation/RightHand/Dates/";
     const std::string objAnimationFolderPath_LeftHand_  = "Resources/GlobalParameter/ObjEaseAnimation/LeftHand/Dates/";
+    const std::string objAnimationFolderPath_MainHead_  = "Resources/GlobalParameter/ObjEaseAnimation/MainHead/Dates/";
 
     // 演出パラメータ配列
     std::array<std::pair<RenditionParam, FileSelector>, static_cast<size_t>(Type::Count)> renditionParams_;

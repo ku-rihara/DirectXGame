@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 
 #include "BaseEnemyDamageReaction.h"
 #include "Enemy/DamageReaction/EnemyDamageReactionData.h"
@@ -69,15 +69,15 @@ private:
     int32_t maxBoundCount_     = 0;
     float bounceSpeed_;
     float bounceDamping_;
-    bool hasReachedGround_ = false; // 地面に到達したか
+    bool hasReachedGround_ = false; 
 
     // TakeUpper用パラメータ
     float floatingTime_ = 0.0f;
     float jumpSpeed_    = 0.0f;
     Vector3 initialPosition_;
-    bool hasReachedPeak_ = false; // 頂点に到達したか
-    float floatingTimer_ = 0.0f; // 浮遊時間カウント
-    bool hasBounced_     = false; // バウンド済みか
+    bool hasReachedPeak_ = false; 
+    float floatingTimer_ = 0.0f;  
+    bool hasBounced_     = false; 
 
     // 演出管理
     int32_t currentRenditionIndex_ = 0;

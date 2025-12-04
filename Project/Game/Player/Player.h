@@ -108,6 +108,8 @@ public:
     void SoundStrongPunch();  //< 強パンチ音再生
     void FallSound();         //< 落下音再生
 
+      void MainHeadAnimationStart(const std::string& name);
+
 private:
     GlobalParameter* globalParameter_;
     const std::string groupName_ = "Player";

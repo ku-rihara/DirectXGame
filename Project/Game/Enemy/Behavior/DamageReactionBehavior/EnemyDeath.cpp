@@ -54,7 +54,7 @@ void EnemyDeath::Update() {
     ///---------------------------------------------------------
     case EnemyDeath::Step::BLOW:
         pBaseEnemy_->SetRotationY(LerpShortAngle(
-            pBaseEnemy_->GetTransform().rotation_.y,
+            pBaseEnemy_->GetBaseTransform().rotation_.y,
             objectiveAngle_,
             0.5f));
         burstTime_ += Frame::DeltaTimeRate();

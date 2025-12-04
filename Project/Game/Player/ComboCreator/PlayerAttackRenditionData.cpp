@@ -36,6 +36,7 @@ void PlayerAttackRenditionData::RegisterParams(GlobalParameter* globalParam, con
         {ObjAnimationType::Head, "ObjAnim_Head"},
         {ObjAnimationType::RightHand, "ObjAnim_RightHand"},
         {ObjAnimationType::LeftHand, "ObjAnim_LeftHand"},
+        {ObjAnimationType::MainHead, "Main_Head"},
     };
 
     for (const auto& info : objAnimInfos) {
@@ -92,6 +93,7 @@ void PlayerAttackRenditionData::AdjustParam() {
             {ObjAnimationType::Head, "Head Animation"},
             {ObjAnimationType::RightHand, "Right Hand Animation"},
             {ObjAnimationType::LeftHand, "Left Hand Animation"},
+            {ObjAnimationType::MainHead, "Main Head Animation"},
         };
 
         for (const auto& info : objAnimInfos) {
@@ -135,6 +137,8 @@ std::string PlayerAttackRenditionData::GetObjAnimationFolderPath(ObjAnimationTyp
         return objAnimationFolderPath_RightHand_;
     case ObjAnimationType::LeftHand:
         return objAnimationFolderPath_LeftHand_;
+    case ObjAnimationType::MainHead:
+        return objAnimationFolderPath_MainHead_;
     default:
         return objAnimationFolderPath_Head_; // デフォルト
     }

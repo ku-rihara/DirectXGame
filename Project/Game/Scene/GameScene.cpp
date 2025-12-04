@@ -274,7 +274,7 @@ void GameScene::SetClassPointer() {
 
     //*-------------------------------- Classポインタセット --------------------------------*//
 
-    gameCamera_->SetTarget(&player_->GetTransform());
+    gameCamera_->SetTarget(&player_->GetBaseTransform());
 
     // enemyManager
     enemyManager_->SetPlayer(player_.get());

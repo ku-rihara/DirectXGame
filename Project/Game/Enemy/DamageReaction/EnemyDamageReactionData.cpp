@@ -149,8 +149,6 @@ void EnemyDamageReactionData::RegisterParams() {
     globalParameter_->Regist(groupName_, "Slammed_BoundNum", &reactionParam_.slammedParam.boundNum);
     globalParameter_->Regist(groupName_, "Slammed_BounceDamping", &reactionParam_.slammedParam.bounceDamping);
     globalParameter_->Regist(groupName_, "Slammed_InitialBounceRate", &reactionParam_.slammedParam.initialBounceRate);
-    globalParameter_->Regist(groupName_, "Slammed_DownSpeed", &reactionParam_.slammedParam.downSpeed);
-    globalParameter_->Regist(groupName_, "Slammed_FallSpeedLimit", &reactionParam_.slammedParam.fallSpeedLimit);
     globalParameter_->Regist(groupName_, "Slammed_Gravity", &reactionParam_.slammedParam.gravity);
     globalParameter_->Regist(groupName_, "Slammed_ThrustRotateSpeed", &reactionParam_.slammedParam.thrustRotateSpeed);
 
@@ -187,23 +185,21 @@ void EnemyDamageReactionData::AdjustParam() {
     // 状態に応じたパラメータ表示
     reactionParam_.reactionState = static_cast<ReactionState>(reactionParam_.intReactionState);
 
-
-        ImGui::SeparatorText("Normal Parameters");
-        ImGui::DragFloat("Knock Back Time", &reactionParam_.normalParam.knockBackTime, 0.01f, 0.0f, 10.0f);
-        ImGui::DragFloat("Knock Back Damping", &reactionParam_.normalParam.knockBackDamping, 0.1f);
-     if (reactionParam_.reactionState == ReactionState::Slammed) {
+    ImGui::SeparatorText("Normal Parameters");
+    ImGui::DragFloat("Knock Back Time", &reactionParam_.normalParam.knockBackTime, 0.01f, 0.0f, 10.0f);
+    ImGui::DragFloat("Knock Back Damping", &reactionParam_.normalParam.knockBackDamping, 0.1f);
+    // AdjustParam内のSlammed部分のみ
+    if (reactionParam_.reactionState == ReactionState::Slammed) {
         ImGui::SeparatorText("Slammed Parameters");
         ImGui::InputInt("Bound Number", &reactionParam_.slammedParam.boundNum);
         ImGui::DragFloat("Bounce Damping", &reactionParam_.slammedParam.bounceDamping, 0.01f, 0.0f, 1.0f);
         ImGui::DragFloat("Initial Bounce Rate", &reactionParam_.slammedParam.initialBounceRate, 0.01f, 0.0f, 2.0f);
-        ImGui::DragFloat("Down Speed", &reactionParam_.slammedParam.downSpeed, 0.1f, 0.0f, 100.0f);
-        ImGui::DragFloat("Fall Speed Limit", &reactionParam_.slammedParam.fallSpeedLimit, 0.1f);
-        ImGui::DragFloat("Gravity", &reactionParam_.slammedParam.gravity, 0.1f);
+        ImGui::DragFloat("Gravity", &reactionParam_.slammedParam.gravity, 0.1f, 0.0f);
         ImGui::DragFloat("Thrust Rotate Speed", &reactionParam_.slammedParam.thrustRotateSpeed, 0.01f);
     } else if (reactionParam_.reactionState == ReactionState::TakeUpper) {
         ImGui::SeparatorText("Take Upper Parameters");
         ImGui::DragFloat("Floating Time", &reactionParam_.takeUpperParam.floatingTime, 0.01f);
-       ImGui::DragFloat("Fall Speed Limit", &reactionParam_.takeUpperParam.fallSpeedLimit, 0.1f);
+        ImGui::DragFloat("Fall Speed Limit", &reactionParam_.takeUpperParam.fallSpeedLimit, 0.1f);
         ImGui::DragFloat("Gravity", &reactionParam_.takeUpperParam.gravity, 0.1f);
         ImGui::DragFloat("Thrust Rotate Speed", &reactionParam_.takeUpperParam.rotateSpeed, 0.01f);
     }

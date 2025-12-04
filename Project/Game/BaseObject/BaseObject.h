@@ -9,6 +9,18 @@
 /// オブジェクトの基底クラス
 /// </summary>
 class BaseObject {
+public:
+    virtual ~BaseObject() = default;
+    /// ===================================================
+    /// public method
+    /// ===================================================
+
+    // 初期化、更新
+    virtual void Init();
+    virtual void Update();
+
+    virtual Vector3 GetWorldPosition() const;
+
 protected:
     /// ===================================================
     ///  protected variables
@@ -20,21 +32,10 @@ protected:
     WorldTransform baseTransform_;
 
 public:
-    virtual ~BaseObject() = default;
-    /// ===================================================
-    /// public method
-    /// ===================================================
-
-    // 初期化、更新
-    virtual void Init();
-    virtual void Update();
-
-    virtual Vector3 GetWorldPosition() const; //< 中心座標取得
-
     /// ===================================================
     /// getter
     /// ===================================================
-    const WorldTransform& GetTransform() const { return baseTransform_; }
+    const WorldTransform& GetBaseTransform() const { return baseTransform_; }
     const Vector3& GetScale() const { return baseTransform_.scale_; }
     Object3d* GetObject3D() const { return obj3d_.get(); }
     /// ===================================================

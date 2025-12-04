@@ -16,7 +16,6 @@ void PlayerAttackRendition::Reset() {
     currentTime_ = 0.0f;
     isPlayed_.fill(false);
     isObjAnimPlayed_.fill(false);
-  
 }
 
 void PlayerAttackRendition::Update(const float& deltaTime) {
@@ -98,6 +97,10 @@ void PlayerAttackRendition::Update(const float& deltaTime) {
 
             case PlayerAttackRenditionData::ObjAnimationType::LeftHand:
                 pPlayer_->GetLeftHand()->GetObject3D()->transform_.PlayObjEaseAnimation("LeftHand", param.fileName);
+                break;
+
+            case PlayerAttackRenditionData::ObjAnimationType::MainHead:
+                pPlayer_->MainHeadAnimationStart(param.fileName);
                 break;
 
             default:

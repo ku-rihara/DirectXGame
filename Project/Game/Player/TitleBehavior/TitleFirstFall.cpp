@@ -29,15 +29,15 @@ TitleFirstFall::TitleFirstFall(Player* player)
 	rotateXSpeed_ = 11.0f;
 	rotateYSpeed_ = 20.0f;
 
-	initRotate_ = pPlayer_->GetTransform().rotation_;
+	initRotate_ = pPlayer_->GetBaseTransform().rotation_;
 
 	
 	EasingInit();
 
 	// ハンド初期化
 	
-	fallInitPosLHand_= pPlayer_->GetLeftHand()->GetTransform().translation_.y;
-	fallInitPosRHand_= pPlayer_->GetRightHand()->GetTransform().translation_.y;
+	fallInitPosLHand_= pPlayer_->GetLeftHand()->GetBaseTransform().translation_.y;
+	fallInitPosRHand_= pPlayer_->GetRightHand()->GetBaseTransform().translation_.y;
 
 }
 
@@ -82,7 +82,7 @@ void TitleFirstFall::Update() {
 		boundSpeed_ = max(boundSpeed_ - (gravity_ * Frame::DeltaTimeRate()), boundFallSpeedLimit_);
 
 	// 次の振る舞い
-        if (pPlayer_->GetTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {
+        if (pPlayer_->GetBaseTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {
             break;
         }
 

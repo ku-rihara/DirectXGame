@@ -36,6 +36,7 @@
         "PostEffectParam_FileName": "",
         "PostEffectParam_StartTiming": 0.0,
         "PostEffectParam_TriggerByHit": false,
+        "RequireHit": false,
         "Rotation_EaseType": 0,
         "Rotation_EndValue": [
             1.0,
@@ -106,6 +107,7 @@
             5.0,
             5.0
         ],
+        "enableFall": false,
         "finishWaitTime": 0.23000000417232513,
         "gamePadBottom": 16384,
         "isAbleInputMoving": true,
@@ -123,7 +125,7 @@
             0.0,
             2.0
         ],
-        "power": 36.56999969482422,
+        "power": 25.0,
         "precedeInputFrame": 0.27000001072883606
     }
 }

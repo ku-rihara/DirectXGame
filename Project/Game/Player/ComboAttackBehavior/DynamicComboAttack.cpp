@@ -227,7 +227,7 @@ void DynamicComboAttack::SetMoveEasing() {
     startPosition_                                    = pPlayer_->GetWorldPosition();
 
     // オフセット計算
-    targetPosition_ = startPosition_ + pPlayer_->GetTransform().CalcForwardOffset(moveParam.value);
+    targetPosition_ = startPosition_ + pPlayer_->GetBaseTransform().CalcForwardOffset(moveParam.value);
 
     // Yだけ指定する場合
     if (moveParam.isPositionYSelect) {

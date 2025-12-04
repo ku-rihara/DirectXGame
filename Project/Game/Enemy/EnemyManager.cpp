@@ -118,6 +118,7 @@ void EnemyManager::RegisterParams() {
         globalParameter_->Regist(groupName_, "maxChaseTime" + std::to_string(int(i + 1)), &parameters_[i].maxChaseTime);
         globalParameter_->Regist(groupName_, "chaseResetTime" + std::to_string(int(i + 1)), &parameters_[i].chaseResetTime);
         globalParameter_->Regist(groupName_, "ChaseLimitDistance" + std::to_string(int(i + 1)), &parameters_[i].chaseLimitDistance);
+        globalParameter_->Regist(groupName_, "gravity" + std::to_string(int(i + 1)), &parameters_[i].gravity);
 
         // 死亡パラメータ
         globalParameter_->Regist(groupName_, "deathBlowValue" + std::to_string(int(i + 1)), &parameters_[i].deathBlowValue);
@@ -128,7 +129,6 @@ void EnemyManager::RegisterParams() {
     }
 }
 
-// DrawEnemyParamUI関数にも追加
 void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
 
     ImGui::DragFloat3("initScale", &parameters_[static_cast<size_t>(type)].initScale_.x, 0.01f);
@@ -136,6 +136,7 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::DragFloat("ChaseDistance", &parameters_[static_cast<size_t>(type)].chaseDistance, 0.01f);
     ImGui::DragFloat("basePosY", &parameters_[static_cast<size_t>(type)].basePosY, 0.01f);
     ImGui::DragFloat("burstTime", &parameters_[static_cast<size_t>(type)].burstTime, 0.01f);
+    ImGui::DragFloat("gravity", &parameters_[static_cast<size_t>(type)].gravity, 0.01f);
 
     ImGui::SeparatorText("Chase Settings");
     ImGui::DragFloat("AvoidanceRadius", &parameters_[static_cast<size_t>(type)].avoidanceRadius, 0.1f);

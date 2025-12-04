@@ -50,7 +50,7 @@ void PlayerJump::Update() {
         pPlayer_->Jump(speed_, pPlayerParameter_->GetParamaters().normalJump.fallSpeedLimit, pPlayerParameter_->GetParamaters().normalJump.gravity);
 
         // 着地、通常移動に戻る
-        if (pPlayer_->GetTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {
+        if (pPlayer_->GetBaseTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {
             return;
         }
         pPlayer_->GetJumpAttackUI()->StartClose();
@@ -70,7 +70,7 @@ void PlayerJump::Update() {
             false);
 
         // 着地、通常移動に戻る
-        if (pPlayer_->GetTransform().translation_.y <= pPlayerParameter_->GetParamaters().startPos_.y) {
+        if (pPlayer_->GetBaseTransform().translation_.y <= pPlayerParameter_->GetParamaters().startPos_.y) {
             pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
         }
         break;
