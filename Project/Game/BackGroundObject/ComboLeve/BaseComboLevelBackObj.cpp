@@ -49,7 +49,7 @@ int32_t BaseComboLevelBackObj::ConvertEffectModeToInt(const ObjEffectMode& mode)
     return static_cast<int32_t>(mode);
 }
 
-void BaseComboLevelBackObj::EasingResetSelectGroup(const int32_t& groupNum) {
+void BaseComboLevelBackObj::EasingResetSelectGroup(int32_t groupNum) {
     if (putObjForBlender_) {
         putObjForBlender_->EasingResetSelectGroup(groupNum);
     }
@@ -61,7 +61,7 @@ void BaseComboLevelBackObj::EasingAllReset() {
     }
 }
 
-bool BaseComboLevelBackObj::GetIsEasingFinish(const int32_t& groupNum) const {
+bool BaseComboLevelBackObj::GetIsEasingFinish(int32_t groupNum) const {
     if (putObjForBlender_) {
         return putObjForBlender_->GetIsEasingFinish(groupNum);
     }

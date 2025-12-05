@@ -29,7 +29,7 @@ public:
     /// </summary>
     /// <param name="reactionName">リアクション名</param>
     /// <param name="renditionIndex">演出インデックス</param>
-    void Init(const std::string& groupName, const int32_t& renditionIndex);
+    void Init(const std::string& groupName, int32_t renditionIndex);
 
     void AdjustParam();
     void RegisterParams();

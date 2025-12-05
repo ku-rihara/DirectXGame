@@ -46,8 +46,8 @@ private:
 
 public:
     // Getter
-    const int32_t& GetComboCount() const { return comboCount_; }
-    const int32_t& GetCurrentLevel() const { return currentLevel_; }
-    const int32_t& GetLevelUPNum(const int32_t& level) const { return LevelUpNum[level]; }
+    int32_t GetComboCount() const { return comboCount_; }
+    int32_t GetCurrentLevel() const { return currentLevel_; }
+    int32_t GetLevelUPNum(int32_t level) const { return LevelUpNum[level]; }
     const bool& GetIsReset() const { return isReset_; }
 };

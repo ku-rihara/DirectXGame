@@ -184,7 +184,7 @@ public:
     const bool& GetIsDeathPending() const { return isDeathPending_; }
     const Type& GetType() const { return type_; }
     const Parameter& GetParameter() const { return parameter_; }
-    const int32_t& GetGroupId() const { return groupId_; }
+    int32_t GetGroupId() const { return groupId_; }
     float GetHP() const { return hp_; } // ★追加
     Vector3 GetBodyRotation() const { return obj3d_->transform_.rotation_; }
     Player* GetPlayer() const { return pPlayer_; }

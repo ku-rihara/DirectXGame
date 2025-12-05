@@ -49,7 +49,7 @@ void ComboUI::RegisterParams() {
 }
 
 // 　桁数による数字の決定
-void ComboUI::CalculateNumber(const int32_t& value) {
+void ComboUI::CalculateNumber(int32_t value) {
 
     switch (comboDigit_) {
     case ComboDigit::ONE:

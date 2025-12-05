@@ -34,7 +34,7 @@ void EnemyManager::Init() {
 ///========================================================================================
 ///  敵の生成
 ///========================================================================================
-void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& position, const int32_t& groupID) {
+void EnemyManager::SpawnEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID) {
 
     std::unique_ptr<BaseEnemy> enemy;
 

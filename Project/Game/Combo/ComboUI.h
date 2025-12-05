@@ -40,7 +40,7 @@ public:
     /// 数値の計算
     /// </summary>
     /// <param name="value">値</param>
-    void CalculateNumber(const int32_t& value);
+    void CalculateNumber(int32_t value);
 
     /// <summary>
     /// グループ名の作成

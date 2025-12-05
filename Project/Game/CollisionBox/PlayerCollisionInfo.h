@@ -58,7 +58,7 @@ public:
     Vector3 GetCollisionPos() const override;
     const PlayerComboAttackData* GetComboAttackData() const { return comboAttackData_; }
     float GetAttackPower() const { return attackPower_; };
-    const int32_t& GetCurrentLoopCount() const { return currentLoopCount_; }
+    int32_t GetCurrentLoopCount() const { return currentLoopCount_; }
     const bool& GetIsInLoopWait() const { return isInLoopWait_; }
     const bool& GetIsHit() const { return isHit_; }
     const bool& GetIsFinish() const { return isFinish_; }

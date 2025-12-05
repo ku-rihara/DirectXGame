@@ -73,7 +73,7 @@ public:
 
     // 演出データ追加、削除、クリア、初期化
     void AddRendition();
-    void RemoveRendition(const int32_t& index);
+    void RemoveRendition(int32_t index);
     void ClearRenditions();
     void InitRenditions();
 
@@ -118,7 +118,7 @@ public:
     const std::vector<std::unique_ptr<EnemyDamageRenditionData>>& GetAllRenditions() const { return renditions_; }
     int32_t GetRenditionCount() const { return static_cast<int32_t>(renditions_.size()); }
     const EnemyDamageRenditionData* GetSelectedRendition() const;
-    const int32_t& GetSelectedRenditionIndex() const { return selectedRenditionIndex_; }
+    int32_t GetSelectedRenditionIndex() const { return selectedRenditionIndex_; }
 
-    void SetSelectedRenditionIndex(const int32_t& index);
+    void SetSelectedRenditionIndex(int32_t index);
 };

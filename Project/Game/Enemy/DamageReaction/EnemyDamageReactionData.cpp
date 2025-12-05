@@ -45,7 +45,7 @@ void EnemyDamageReactionData::AddRendition() {
     selectedRenditionIndex_ = newIndex;
 }
 
-void EnemyDamageReactionData::RemoveRendition(const int32_t& index) {
+void EnemyDamageReactionData::RemoveRendition(int32_t index) {
     if (index >= 0 && index < static_cast<int32_t>(renditions_.size())) {
         renditions_.erase(renditions_.begin() + index);
 
@@ -262,7 +262,7 @@ const EnemyDamageRenditionData* EnemyDamageReactionData::GetSelectedRendition() 
     return nullptr;
 }
 
-void EnemyDamageReactionData::SetSelectedRenditionIndex(const int32_t& index) {
+void EnemyDamageReactionData::SetSelectedRenditionIndex(int32_t index) {
     if (index >= -1 && index < static_cast<int32_t>(renditions_.size())) {
         selectedRenditionIndex_ = index;
     }

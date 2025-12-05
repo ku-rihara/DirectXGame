@@ -23,7 +23,7 @@ void ComboUIController::Init() {
     ChangeBehavior(std::make_unique<ComboWait>(this));
 }
 
-void ComboUIController::Update(const int32_t& comboNum) {
+void ComboUIController::Update(int32_t comboNum) {
 
     behavior_->Update();
 

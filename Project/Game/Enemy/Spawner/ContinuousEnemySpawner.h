@@ -85,7 +85,7 @@ public:
     /// getter
     ///=======================================================================================
     const bool& IsActive() const { return isActive_; }
-    const int32_t& GetTotalSpawnedCount() const { return totalSpawnedCount_; }
+    int32_t GetTotalSpawnedCount() const { return totalSpawnedCount_; }
     float GetNextSpawnTime() const { return config_.spawnInterval - spawnTimer_; }
     SpawnConfig& GetConfig() { return config_; }
 

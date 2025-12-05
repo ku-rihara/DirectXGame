@@ -76,8 +76,8 @@ private:
 
 public:
     // getter
-    const int32_t& GetCurrentIntroIndex() const { return currentIndex_; }
-    const int32_t& GetTotalIntroCount() const { return static_cast<int32_t>(introSequences_.size()); }
+    int32_t GetCurrentIntroIndex() const { return currentIndex_; }
+    int32_t GetTotalIntroCount() const { return static_cast<int32_t>(introSequences_.size()); }
     float GetCurrentPlaySpeedRate() const { return currentPlaySpeedRate_; }
     MovieLine* GetMovieLine() const { return movieLine_.get(); }
 

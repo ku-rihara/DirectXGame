@@ -144,7 +144,7 @@ std::string PlayerAttackRenditionData::GetObjAnimationFolderPath(ObjAnimationTyp
     }
 }
 
-const PlayerAttackRenditionData::RenditionParam& PlayerAttackRenditionData::GetRenditionParamFromIndex(const int32_t& index) const {
+const PlayerAttackRenditionData::RenditionParam& PlayerAttackRenditionData::GetRenditionParamFromIndex(int32_t index) const {
     assert(index >= 0 && index < static_cast<int32_t>(Type::Count) && "Invalid Rendition Type Index");
     return GetRenditionParamFromType(static_cast<Type>(index));
 }

@@ -77,12 +77,12 @@ private:
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//
-    const RenditionParam& GetRenditionParamFromIndex(const int32_t& index) const;
+    const RenditionParam& GetRenditionParamFromIndex(int32_t index) const;
     const RenditionParam& GetRenditionParamFromType(const Type& type) const {
         return renditionParams_[static_cast<size_t>(type)].first;
     }
 
-    const ObjAnimationParam& GetObjAnimationParamFromIndex(const int32_t& index) const {
+    const ObjAnimationParam& GetObjAnimationParamFromIndex(int32_t index) const {
         return objAnimationParams_[index].first;
     }
     const ObjAnimationParam& GetObjAnimationParamFromType(const ObjAnimationType& type) const {

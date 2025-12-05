@@ -39,7 +39,7 @@ public:
     void CheckIsEnemiesCleared();
 
     // 敵の生成
-    void SpawnEnemy(const std::string& enemyType, const Vector3& position, const int32_t& groupID);
+    void SpawnEnemy(const std::string& enemyType, const Vector3& position, int32_t groupID);
     void HpBarUpdate(const ViewProjection& viewProjection);
 
     // Particle Effect

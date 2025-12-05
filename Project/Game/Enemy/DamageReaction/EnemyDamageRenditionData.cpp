@@ -2,7 +2,7 @@
 #include <cassert>
 #include <imgui.h>
 
-void EnemyDamageRenditionData::Init(const std::string& groupName, const int32_t& renditionIndex) {
+void EnemyDamageRenditionData::Init(const std::string& groupName, int32_t renditionIndex) {
     globalParameter_       = GlobalParameter::GetInstance();
     currentRenditionIndex_ = renditionIndex;
 

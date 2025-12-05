@@ -31,7 +31,7 @@ public:
     /// 更新
     /// </summary>
     /// <param name="comboNum">コンボ数</param>
-    void Update(const int32_t& comboNum);
+    void Update(int32_t comboNum);
 
     /// <summary>
     /// 時間に応じたアルファ値適応
