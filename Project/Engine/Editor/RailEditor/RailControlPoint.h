@@ -13,7 +13,7 @@ public:
     ~RailControlPoint() = default;
 
     // 初期化
-    void Init(const std::string& railName, const int32_t& keyNumber);
+    void Init(const std::string& railName, int32_t keyNumber);
 
     void AdjustParam(); //< パラメータ調整
     void RegisterParams(); //< パラメータバインド

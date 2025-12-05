@@ -55,7 +55,7 @@ void BaseSequenceEffectData<TSequenceElement>::AddKeyFrame() {
 }
 
 template <typename TSequenceElement>
-void BaseSequenceEffectData<TSequenceElement>::RemoveKeyFrame(const int32_t& index) {
+void BaseSequenceEffectData<TSequenceElement>::RemoveKeyFrame(int32_t index) {
     if (index >= 0 && index < static_cast<int32_t>(sectionElements_.size())) {
         sectionElements_.erase(sectionElements_.begin() + index);
 
@@ -145,7 +145,7 @@ const TSequenceElement* BaseSequenceEffectData<TSequenceElement>::GetSelectedKey
 }
 
 template <typename TSequenceElement>
-void BaseSequenceEffectData<TSequenceElement>::SetSelectedKeyFrameIndex(const int32_t& index) {
+void BaseSequenceEffectData<TSequenceElement>::SetSelectedKeyFrameIndex(int32_t index) {
     if (index >= -1 && index < static_cast<int32_t>(sectionElements_.size())) {
         selectedKeyFrameIndex_ = index;
     }

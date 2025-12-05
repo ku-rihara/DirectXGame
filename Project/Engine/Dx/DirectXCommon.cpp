@@ -20,7 +20,7 @@ DirectXCommon* DirectXCommon::GetInstance() {
     return &instance;
 }
 
-void DirectXCommon::Init(WinApp* win,const int32_t& backBufferWidth, const int32_t& backBufferHeight) {
+void DirectXCommon::Init(WinApp* win,int32_t backBufferWidth, int32_t backBufferHeight) {
 
     winApp_           = win;
     backBufferWidth_  = backBufferWidth;

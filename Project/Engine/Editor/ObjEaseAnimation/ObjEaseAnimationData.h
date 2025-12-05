@@ -50,7 +50,7 @@ protected:
     // BaseSequenceEffectDataからのオーバーライド
     void UpdateKeyFrameProgression() override;
     void AdvanceToNexTSequenceElement() override;
-    std::unique_ptr<ObjEaseAnimationSection> CreateKeyFrame(const int32_t& index) override;
+    std::unique_ptr<ObjEaseAnimationSection> CreateKeyFrame(int32_t index) override;
     std::string GeTSequenceElementFolderPath() const override;
 
 private:

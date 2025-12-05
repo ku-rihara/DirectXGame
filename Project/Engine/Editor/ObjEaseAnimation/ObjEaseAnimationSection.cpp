@@ -3,7 +3,7 @@
 #include "MathFunction.h"
 #include <imgui.h>
 
-void ObjEaseAnimationSection::Init(const std::string& animationName, const std::string& categoryName, const int32_t& keyNumber) {
+void ObjEaseAnimationSection::Init(const std::string& animationName, const std::string& categoryName, int32_t keyNumber) {
     globalParameter_             = GlobalParameter::GetInstance();
     currenTSequenceElementIndex_ = keyNumber;
     groupName_                   = animationName + std::to_string(currenTSequenceElementIndex_);

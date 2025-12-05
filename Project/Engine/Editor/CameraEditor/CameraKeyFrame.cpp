@@ -4,7 +4,7 @@
 #include <imgui.h>
 #include <iostream>
 
-void CameraKeyFrame::Init(const std::string& groupName, const int32_t& keyNumber) {
+void CameraKeyFrame::Init(const std::string& groupName, int32_t keyNumber) {
     // グローバルパラメータ
     globalParameter_         = GlobalParameter::GetInstance();
     currenTSequenceElementIndex     = keyNumber;

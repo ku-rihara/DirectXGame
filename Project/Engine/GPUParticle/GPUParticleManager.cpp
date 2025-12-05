@@ -27,7 +27,7 @@ void GPUParticleManager::Init(SrvManager* srvManager) {
 void GPUParticleManager::CreateParticleGroup(
     const std::string& name,
     const std::string& modelFilePath,
-    const int32_t& maxCount) {
+    int32_t maxCount) {
 
     if (particleGroups_.contains(name)) {
         return;
@@ -51,7 +51,7 @@ void GPUParticleManager::CreateParticleGroup(
 void GPUParticleManager::CreatePrimitiveParticle(
     const std::string& name,
     const PrimitiveType& type,
-    const int32_t& maxCount) {
+    int32_t maxCount) {
 
     if (particleGroups_.contains(name)) {
         return;

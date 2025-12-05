@@ -29,18 +29,18 @@ public:
 
     // 共通操作
     void AddEffect(const std::string& name);
-    void RemoveEffect(const int32_t& index);
+    void RemoveEffect(int32_t index);
 
     // カテゴリー操作
     void AddCategory(const std::string& categoryName);
-    void RemoveCategory(const int32_t& index);
-    void AddEffectToCategory(const int32_t& categoryIndex, const std::string& effectName);
-    void RemoveEffectFromCategory(const int32_t& categoryIndex, const int32_t& effectIndex);
+    void RemoveCategory(int32_t index);
+    void AddEffectToCategory(int32_t categoryIndex, const std::string& effectName);
+    void RemoveEffectFromCategory(int32_t categoryIndex, int32_t effectIndex);
 
     // セーブ、ロード
     void AllLoadFile();
     void AllSaveFile();
-    void SaveCategory(const int32_t& categoryIndex);
+    void SaveCategory(int32_t categoryIndex);
     void LoadCategory(const std::string& categoryName);
     void RenderPlayBack();
 

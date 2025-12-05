@@ -7,7 +7,7 @@
 /// パーティクル作成
 ///=================================================================================
 GPUParticleEmitter* GPUParticleEmitter::CreateParticle(
-    const std::string& name, const std::string& modelFilePath,const int32_t& maxCount) {
+    const std::string& name, const std::string& modelFilePath,int32_t maxCount) {
 
     auto emitter = std::make_unique<GPUParticleEmitter>();
     emitter->InitWithModel(name, modelFilePath, maxCount);
@@ -19,7 +19,7 @@ GPUParticleEmitter* GPUParticleEmitter::CreateParticle(
 /// パーティクル作成(Primitive)
 ///=================================================================================
 GPUParticleEmitter* GPUParticleEmitter::CreateParticlePrimitive(
-    const std::string& name,const PrimitiveType& type,const int32_t& maxCount) {
+    const std::string& name,const PrimitiveType& type,int32_t maxCount) {
 
     auto emitter = std::make_unique<GPUParticleEmitter>();
     emitter->InitWithPrimitive(name, type, maxCount);
@@ -30,7 +30,7 @@ GPUParticleEmitter* GPUParticleEmitter::CreateParticlePrimitive(
 void GPUParticleEmitter::InitWithModel(
     const std::string& name,
     const std::string& modelFilePath,
-    const int32_t& maxCount) {
+    int32_t maxCount) {
 
     name_ = name;
 
@@ -42,7 +42,7 @@ void GPUParticleEmitter::InitWithModel(
 void GPUParticleEmitter::InitWithPrimitive(
     const std::string& name,
     const PrimitiveType& type,
-    const int32_t& maxCount) {
+    int32_t maxCount) {
 
     name_ = name;
 

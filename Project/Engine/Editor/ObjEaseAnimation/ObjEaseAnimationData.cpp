@@ -127,7 +127,7 @@ void ObjEaseAnimationData::InitParams() {
 
 }
 
-std::unique_ptr<ObjEaseAnimationSection> ObjEaseAnimationData::CreateKeyFrame(const int32_t& index) {
+std::unique_ptr<ObjEaseAnimationSection> ObjEaseAnimationData::CreateKeyFrame(int32_t index) {
     auto keyFrame = std::make_unique<ObjEaseAnimationSection>();
     keyFrame->Init(groupName_, categoryName_, index);
     return keyFrame;

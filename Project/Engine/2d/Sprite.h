@@ -113,7 +113,7 @@ public:
     const Vector2& GetAnchorPoint() const { return anchorPoint_; }
     const Vector2& GetTextureSize() const { return textureSize_; }
     const Vector2& GetTextureLeftTop() const { return textureLeftTop_; }
-    const int32_t& GetLayerNum() const { return layerNum_; }
+    int32_t GetLayerNum() const { return layerNum_; }
     const Parameter& GetStartParameter() const { return parameter_; }
     const bool& GetIsFlipX() const { return isFlipX_; }
     const bool& GetIsFlipY() const { return isFlipY_; }
@@ -132,6 +132,6 @@ public:
     void SetColor(const Vector3& color);
     void SetAlpha(float alpha);
 
-    void SetLayerNum(const int32_t& layerNum) { layerNum_ = layerNum; }
+    void SetLayerNum(int32_t layerNum) { layerNum_ = layerNum; }
     void SetIsDraw(const bool& isDraw) { isDraw_ = isDraw; }
 };
