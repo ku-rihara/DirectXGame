@@ -47,13 +47,13 @@ bool DsvManager::IsAbleSecure() {
     }
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE DsvManager::GetCPUDescriptorHandle(const uint32_t& index) {
+D3D12_CPU_DESCRIPTOR_HANDLE DsvManager::GetCPUDescriptorHandle(uint32_t index) {
     D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap_->GetCPUDescriptorHandleForHeapStart();
     handleCPU.ptr += (descriptorSize_ * index);
     return handleCPU;
 }
 
-void DsvManager::Create(const uint32_t& index, ID3D12Resource* resource, D3D12_DEPTH_STENCIL_VIEW_DESC* desc) {
+void DsvManager::Create(uint32_t index, ID3D12Resource* resource, D3D12_DEPTH_STENCIL_VIEW_DESC* desc) {
 
     dxCommon_->GetDevice()->CreateDepthStencilView(resource, desc, GetCPUDescriptorHandle(index));
 }

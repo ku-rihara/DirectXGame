@@ -63,10 +63,10 @@ private:
 public:
     const std::string& GetName() const { return name_; }
     const bool& IsValid() const { return !name_.empty(); }
-    const float& GetFrequencyTime() const { return currentTime_; }
+    float GetFrequencyTime() const { return currentTime_; }
     uint32_t GetEmitFlag() const { return shouldEmit_ ? 1 : 0; }
 
     // setter
     void SetEmitterData(const ParticleEmit& emitter);
-    void SetTexture(const uint32_t& textureHandle);
+    void SetTexture(uint32_t textureHandle);
 };

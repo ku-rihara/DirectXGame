@@ -5,7 +5,7 @@ void RailPlayer::Init() {
     currentPosition_ = Vector3::ZeroVector();
 }
 
-void RailPlayer::Update(const float& speedRate) {
+void RailPlayer::Update(float speedRate) {
     if (effectData_) {
         effectData_->Update(speedRate);
 
@@ -15,7 +15,7 @@ void RailPlayer::Update(const float& speedRate) {
     }
 }
 
-void RailPlayer::UpdateWithDirection(const float& speedRate, const RailData::PositionMode& mode, const Vector3& direction) {
+void RailPlayer::UpdateWithDirection(float speedRate, const RailData::PositionMode& mode, const Vector3& direction) {
     if (RailData* railData = dynamic_cast<RailData*>(effectData_.get())) {
         railData->UpdateWithDirection(speedRate, mode, direction);
         currentPosition_ = railData->GetCurrentPosition();

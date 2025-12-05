@@ -4,7 +4,7 @@
 #include<numbers>
 #include<assert.h>
 
-float Lerp(const float& start, const float& end, float t) {
+float Lerp(float start, float end, float t) {
 	return (1.0f - t) * start + end * t;
 }
 

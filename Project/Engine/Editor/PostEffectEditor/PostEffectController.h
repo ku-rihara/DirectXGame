@@ -15,7 +15,7 @@ public:
 
     // 初期化、更新
     void Init();
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
 
     /// <summary>
     /// ポストエフェクトの再生

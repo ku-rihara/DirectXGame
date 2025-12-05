@@ -20,7 +20,7 @@ void ObjEaseAnimationEditor::InitPreviewObject() {
     previewObject_->SetIsDraw(false);
 }
 
-void ObjEaseAnimationEditor::Update(const float& speedRate) {
+void ObjEaseAnimationEditor::Update(float speedRate) {
     // 基底クラスのUpdate呼び出し
     BaseEffectEditor::Update(speedRate);
 

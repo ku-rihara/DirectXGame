@@ -267,7 +267,7 @@ void Model::DrawAnimation(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, co
     commandList->DrawIndexedInstanced(UINT(modelData_.indices.size()), 1, 0, 0, 0);
 }
 
-void Model::DrawInstancing(const uint32_t& instanceNum) {
+void Model::DrawInstancing(uint32_t instanceNum) {
     auto commandList = dxCommon_->GetCommandList();
 
     // ルートシグネチャとパイプラインステートを設定

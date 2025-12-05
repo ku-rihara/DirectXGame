@@ -14,7 +14,7 @@ void PostEffectController::Init() {
     defaultMode_        = PostEffectMode::NONE;
 }
 
-void PostEffectController::Update(const float& deltaTime) {
+void PostEffectController::Update(float deltaTime) {
     if (isPostEffectActive_) {
         currentTimer_ += deltaTime;
 

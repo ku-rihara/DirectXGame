@@ -103,7 +103,7 @@ private:
 
 public:
     GPUParticleGroup* GetParticleGroup(const std::string& name);
-    void SetTextureHandle(const std::string& name, const uint32_t& handle);
+    void SetTextureHandle(const std::string& name, uint32_t handle);
     void SetModel(const std::string& name, const std::string& modelName);
     void SetEmitterSphere(const std::string& name, const ParticleEmit& emitter);
     void SetViewProjection(const ViewProjection* view);

@@ -79,15 +79,15 @@ private:
 public:
     // getter
    const bool& GetIsMoveForRail() const { return isMoveForRail_; }
-   const float& GetMoveSpeed() const { return moveSpeed_; }
+   float GetMoveSpeed() const { return moveSpeed_; }
     // setter
-    void SetTextureHandle(const uint32_t& hanle);
+    void SetTextureHandle(uint32_t hanle);
     void SetParentTransform(const WorldTransform* transform);
     void SetFollowingPos(const Vector3* pos);
     void SetBlendMode(const BlendMode& blendmode);
     void SetBillBordType(const BillboardType& billboardType);
     void SetParentBasePos(WorldTransform* parent);
     void SetIsMoveForRail(const bool& isMoveForRail) { isMoveForRail_ = isMoveForRail; }
-    void SetMoveSpeed(const float& moveSpeed) { moveSpeed_ = moveSpeed; }
+    void SetMoveSpeed(float moveSpeed) { moveSpeed_ = moveSpeed; }
     void SetTargetPosition(const Vector3& targetPos) { parameters_.targetPos = targetPos; }
 };

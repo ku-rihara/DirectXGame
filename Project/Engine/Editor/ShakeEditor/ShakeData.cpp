@@ -24,7 +24,7 @@ void ShakeData::Init(const std::string& shakeName) {
     InitParams();
 }
 
-void ShakeData::Update(const float& speedRate) {
+void ShakeData::Update(float speedRate) {
     if (playState_ != PlayState::PLAYING) {
         return;
     }

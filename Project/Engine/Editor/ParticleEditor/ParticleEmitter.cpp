@@ -137,7 +137,7 @@ void ParticleEmitter::SetEmitLine() {
 ///=================================================================================
 /// テクスチャ切り替え
 ///=================================================================================
-void ParticleEmitter::SetTextureHandle(const uint32_t& handle) {
+void ParticleEmitter::SetTextureHandle(uint32_t handle) {
     ParticleManager::GetInstance()->SetTextureHandle(particleName_, handle);
 }
 

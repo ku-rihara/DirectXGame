@@ -21,7 +21,7 @@ void BaseEffectEditor<TEffectData>::Init(const std::string& typeName, const bool
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::Update(const float& deltaTimeOrSpeedRate) {
+void BaseEffectEditor<TEffectData>::Update(float deltaTimeOrSpeedRate) {
     if (isUseCategorySystem_) {
         // 全カテゴリーの全エフェクトを更新
         for (auto& category : categories_) {

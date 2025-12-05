@@ -272,6 +272,6 @@ void Sprite::SetColor(const Vector3& color) {
     material_.materialData_->color.z = color.z;
 }
 
-void Sprite::SetAlpha(const float& alpha) {
+void Sprite::SetAlpha(float alpha) {
     material_.materialData_->color.w = alpha;
 }

@@ -13,7 +13,7 @@ void CameraEditor::Init(const std::string& animationName, const bool& isUseCateg
     preViewFollowObj_->SetIsDraw(false);
 }
 
-void CameraEditor::Update(const float& speedRate) {
+void CameraEditor::Update(float speedRate) {
     // 未使用
     speedRate;
 

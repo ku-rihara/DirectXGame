@@ -22,7 +22,7 @@ public:
     /// ステップの更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    virtual void Update(const float& deltaTime) = 0;
+    virtual void Update(float deltaTime) = 0;
 
     virtual void Reset()            = 0; //< ステップをリセット
     virtual bool IsFinished() const = 0; //< ステップが終了したか
@@ -55,7 +55,7 @@ public:
     /// ステップの更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    void Update(const float& deltaTime) override;
+    void Update(float deltaTime) override;
 
     void Reset() override; //< ステップをリセット
     bool IsFinished() const override; //< ステップが終了したか
@@ -66,7 +66,7 @@ private:
 
 public:
     void SetAdaptValue(T* value);
-    void SetBaseValue(const T& value);
+    void SetBaseValue(T value);
     void SetOnWaitEndCallback(const std::function<void()>& callback);
     const T& GetValue() const { return easing_->GetValue(); }
 };

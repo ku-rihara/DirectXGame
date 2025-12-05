@@ -29,7 +29,7 @@ public:
     //*----------------------------- public Methods -----------------------------*//
 
     // BaseEffectDataからのオーバーライド
-    void Update(const float& speedRate = 1.0f) override;
+    void Update(float speedRate = 1.0f) override;
     void Reset() override;
     void Play() override;
 
@@ -57,7 +57,7 @@ private:
     //*---------------------------- private Methods ----------------------------*//
     std::string GetSRTName(const TransformType& type) const;
     void CreateOrLoadSections(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
-    void UpdateActiveSection(const float& speedRate);
+    void UpdateActiveSection(float speedRate);
    
 private:
     //*---------------------------- private Variant ----------------------------*//

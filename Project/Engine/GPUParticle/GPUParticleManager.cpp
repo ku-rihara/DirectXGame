@@ -238,7 +238,7 @@ void GPUParticleManager::SetModel(const std::string& name, const std::string& mo
     }
 }
 
-void GPUParticleManager::SetTextureHandle(const std::string& name, const uint32_t& handle) {
+void GPUParticleManager::SetTextureHandle(const std::string& name, uint32_t handle) {
     assert(particleGroups_.contains(name));
     particleGroups_[name].textureHandle = handle;
 }

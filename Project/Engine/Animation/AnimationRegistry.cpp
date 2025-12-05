@@ -56,7 +56,7 @@ void AnimationRegistry::UnregisterAnimation(Object3DAnimation* animation) {
 ///============================================================
 /// 更新
 ///============================================================
-void AnimationRegistry::UpdateAll(const float& deltaTime) {
+void AnimationRegistry::UpdateAll(float deltaTime) {
 
     for (Object3DAnimation* animation : animations_) {
         if (animation != nullptr && animations_.find(animation) != animations_.end()) {

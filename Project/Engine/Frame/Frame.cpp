@@ -58,7 +58,7 @@ void Frame::FixFPS() {
 }
 
 
-void Frame::SetTimeScale(const float& scale) {
+void Frame::SetTimeScale(float scale) {
    
     timeScale_ = scale;
 }

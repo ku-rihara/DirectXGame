@@ -25,7 +25,7 @@ public:
     /// タイムスケールを設定
     /// </summary>
     /// <param name="scale">スケール値</param>
-    static void SetTimeScale(const float& scale);
+    static void SetTimeScale(float scale);
 
     static float GetTimeScale(); //< タイムスケールを取得
     static void ResetDeltaTime(); //< デルタタイムをリセット

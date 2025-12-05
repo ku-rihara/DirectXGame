@@ -99,7 +99,7 @@ public:
     /// インスタンシング描画
     /// </summary>
     /// <param name="instanceNum">インスタンス数</param>
-    void DrawInstancing(const uint32_t& instanceNum);
+    void DrawInstancing(uint32_t instanceNum);
 
     /// <summary>
     /// シャドウマップ用描画
@@ -129,7 +129,7 @@ private:
     std::string modelName_   = "";
 
 public:
-    const uint32_t& GetTextureIndex() const { return textureIndex_; }
+    uint32_t GetTextureIndex() const { return textureIndex_; }
     const ModelData& GetModelData() { return modelData_; }
     const std::string& GetModelName() const { return modelName_; }
     ID3D12Resource* GetVertexResource() { return vertexResource_.Get(); }

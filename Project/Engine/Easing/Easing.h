@@ -20,7 +20,7 @@ public:
 
     // 初期化(ファイルロード)、更新
     void Init(const std::string& adaptFile);
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
 
     /// <summary>
     /// イージングパラメータ設定
@@ -139,7 +139,7 @@ public:
     const bool& IsFinished() const { return isFinished_; }
     const bool& IsPlaying() const { return isPlaying_; }
     const std::string& GetCurrentAppliedFileName() const { return currentAppliedFileName_; }
-    const float& GetCurrentEaseTime() const { return currentTime_; }
+    float GetCurrentEaseTime() const { return currentTime_; }
     /// -------------------------------------------------------------------------
     /// Setter methods
     /// -------------------------------------------------------------------------
@@ -148,6 +148,6 @@ public:
     void SetCurrentOffset(const T& value);
     void SetBaseValue(const T& value) { baseValue_ = value; }
     void SetType(const EasingType& type) { type_ = type; }
-    void SetMaxTime(const float& time) { maxTime_ = time; }
+    void SetMaxTime(float time) { maxTime_ = time; }
     void SetIsStartEndReverse(const bool& isReverse) { isStartEndReverse_ = isReverse; }
 };

@@ -5,7 +5,7 @@
 
 class ViewProjection;
 
-float Lerp(const float& start, const float& end, float t);
+float Lerp(float start, float end, float t);
 
 Vector2 Lerp(const Vector2& start, const Vector2& end, float t);
 

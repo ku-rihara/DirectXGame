@@ -36,7 +36,7 @@ public:
 
     // BaseEffectDataからのオーバーライド
     void Init(const std::string& shakeName) override;
-    void Update(const float& speedRate = 1.0f) override;
+    void Update(float speedRate = 1.0f) override;
     void Reset() override;
     void Play() override;
     void LoadData() override;

@@ -39,7 +39,7 @@ public:
     /// 登録された全てのアニメーションを更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    void UpdateAll(const float& deltaTime);
+    void UpdateAll(float deltaTime);
 
     /// <summary>
     /// 全アニメーションを描画
