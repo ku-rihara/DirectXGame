@@ -96,9 +96,9 @@ public:
     void LoadData();
     void SaveData();
 
-    bool IsReserveNextAttack(const float& currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy);
-    bool IsWaitFinish(const float& currentTime);
-    bool IsCancelAttack(const float& currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy);
+    bool IsReserveNextAttack(float currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy);
+    bool IsWaitFinish(float currentTime);
+    bool IsCancelAttack(float currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy);
 
 private:
     //*-------------------------------- private Method --------------------------------*//
