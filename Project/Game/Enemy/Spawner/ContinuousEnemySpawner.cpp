@@ -20,7 +20,7 @@ void ContinuousEnemySpawner::Init() {
     Start();
 }
 
-void ContinuousEnemySpawner::Update(const float& deltaTime) {
+void ContinuousEnemySpawner::Update(float deltaTime) {
     // スポーンシステムが非アクティブなら処理しない
     if (!isActive_ || !config_.isEnabled) {
         return;

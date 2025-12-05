@@ -11,7 +11,7 @@ void ComboLevelObjHolder::Init(const std::string& filename) {
     }
 }
 
-void ComboLevelObjHolder::Update(const float& playSpeed) {
+void ComboLevelObjHolder::Update(float playSpeed) {
     // 各オブジェクトの更新
     for (auto& obj : objects_) {
         if (obj) {

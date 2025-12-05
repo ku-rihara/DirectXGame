@@ -200,7 +200,7 @@ bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
     return true;
 }
 
-void BaseEnemy::TakeDamage(const float& damageValue) {
+void BaseEnemy::TakeDamage(float damageValue) {
 
     // ダメージを受ける
     hp_ -= damageValue;
@@ -213,13 +213,13 @@ void BaseEnemy::TakeDamage(const float& damageValue) {
     }
 }
 
-void BaseEnemy::StartDamageColling(const float& collingTime, const std::string& reactiveAttackName) {
+void BaseEnemy::StartDamageColling(float collingTime, const std::string& reactiveAttackName) {
     isDamageColling_        = true;
     lastReceivedAttackName_ = reactiveAttackName;
     damageCollTime_         = collingTime;
 }
 
-void BaseEnemy::DamageCollingUpdate(const float& deltaTime) {
+void BaseEnemy::DamageCollingUpdate(float deltaTime) {
     if (!isDamageColling_) {
         return;
     }
@@ -250,7 +250,7 @@ void BaseEnemy::DeathRenditionInit() {
 /// ===================================================
 ///  BaseEnemy Jump
 /// ===================================================
-void BaseEnemy::Jump(float& speed, const float& fallSpeedLimit, const float& gravity) {
+void BaseEnemy::Jump(float& speed, float fallSpeedLimit, float gravity) {
     // 移動
     baseTransform_.translation_.y += speed * Frame::DeltaTimeRate();
     Fall(speed, fallSpeedLimit, gravity, true);
@@ -259,7 +259,7 @@ void BaseEnemy::Jump(float& speed, const float& fallSpeedLimit, const float& gra
 ///=========================================================
 /// 　落ちる
 ///==========================================================
-void BaseEnemy::Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump) {
+void BaseEnemy::Fall(float& speed, float fallSpeedLimit, float gravity, const bool& isJump) {
 
     if (!isJump) {
         // 移動

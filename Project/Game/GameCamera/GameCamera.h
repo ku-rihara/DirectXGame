@@ -21,7 +21,7 @@ public:
 public:
     // 初期化、更新
     void Init();
-    void Update(const float& cameraPlaySpeed = 1.0f);
+    void Update(float cameraPlaySpeed = 1.0f);
 
     void MoveUpdate();      //< 移動更新
     void Reset();           //< リセット
@@ -77,7 +77,7 @@ public:
     void SetTarget(const WorldTransform* target);
     void SetLockOn(LockOn* lockOn) { lockOn_ = lockOn; }
     void SetShakePos(const Vector3& shake) { shakeOffsetPos_ = shake; }
-    void SetShakePosY(const float& shake) { shakeOffsetPos_.y = shake; }
-    void SetDestinationAngleY_(const float& angle) { destinationAngleY_ = angle; }
+    void SetShakePosY(float shake) { shakeOffsetPos_.y = shake; }
+    void SetDestinationAngleY_(float angle) { destinationAngleY_ = angle; }
     void SetViewProjectionPos(const Vector3& pos) { viewProjection_.translation_ = pos; }
 };

@@ -34,7 +34,7 @@ void ComboUIController::Update(const int32_t& comboNum) {
     }
 }
 
-void ComboUIController::AlphaAdaptForTime(const float& comboTime, const float& comboMaxTime) {
+void ComboUIController::AlphaAdaptForTime(float comboTime, float comboMaxTime) {
 
     alpha_ = std::clamp(comboTime / comboMaxTime, 0.0f, 1.0f);
 }

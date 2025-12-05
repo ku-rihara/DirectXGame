@@ -165,7 +165,7 @@ void PlayerComboAttackData::SelectNextAttack() {
         true);
 }
 
-bool PlayerComboAttackData::IsReserveNextAttack(const float& currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy) {
+bool PlayerComboAttackData::IsReserveNextAttack(float currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy) {
 
     // 先行入力受付
     if (currentTime < attackParam_.timingParam.precedeInputTime && !IsWaitFinish(currentTime)) {
@@ -190,7 +190,7 @@ bool PlayerComboAttackData::IsReserveNextAttack(const float& currentTime, const 
     return false;
 }
 
-bool PlayerComboAttackData::IsCancelAttack(const float& currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy) {
+bool PlayerComboAttackData::IsCancelAttack(float currentTime, const TriggerParam& nextAtkTrigger, bool hasHitEnemy) {
 
     if (!attackParam_.timingParam.isCancel) {
         return false;
@@ -218,7 +218,7 @@ bool PlayerComboAttackData::IsCancelAttack(const float& currentTime, const Trigg
     return false;
 }
 
-bool PlayerComboAttackData::IsWaitFinish(const float& currentTime) {
+bool PlayerComboAttackData::IsWaitFinish(float currentTime) {
     if (currentTime >= attackParam_.timingParam.finishWaitTime) {
         return true;
     } else {

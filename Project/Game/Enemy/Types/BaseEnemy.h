@@ -85,7 +85,7 @@ public:
     /// <param name="speed">速度</param>
     /// <param name="fallSpeedLimit">落下速度制限</param>
     /// <param name="gravity">重力</param>
-    void Jump(float& speed, const float& fallSpeedLimit, const float& gravity);
+    void Jump(float& speed, float fallSpeedLimit, float gravity);
 
     /// <summary>
     /// 落下処理
@@ -94,7 +94,7 @@ public:
     /// <param name="fallSpeedLimit">落下速度制限</param>
     /// <param name="gravity">重力</param>
     /// <param name="isJump">ジャンプフラグ</param>
-    void Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump);
+    void Fall(float& speed, float fallSpeedLimit, float gravity, const bool& isJump);
 
     /// <summary>
     /// ターゲットへの方向取得
@@ -106,10 +106,10 @@ public:
     /// ダメージ処理
     /// </summary>
     /// <param name="damageValue">ダメージ量</param>
-    void TakeDamage(const float& damageValue);
+    void TakeDamage(float damageValue);
 
     // ヒットクールタイム開始
-    void StartDamageColling(const float& collingTime, const std::string&reactiveAttackName);
+    void StartDamageColling(float collingTime, const std::string&reactiveAttackName);
   
     // behavior変更
     void ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior);
@@ -135,7 +135,7 @@ private:
     bool IsInView(const ViewProjection& viewProjection) const;
 
     //　ダメージクールタイムの更新
-    void DamageCollingUpdate(const float& deltaTime);
+    void DamageCollingUpdate(float deltaTime);
 
 private:
     int deathSound_;
@@ -202,10 +202,10 @@ public:
     void SetCombo(Combo* combo);
     void SetAttackEffect(AttackEffect* attackEffect);
     void SetParameter(const Type& type, const Parameter& paramater);
-    void SetBodyRotateX(const float& r) { obj3d_->transform_.rotation_.x = r; }
+    void SetBodyRotateX(float r) { obj3d_->transform_.rotation_.x = r; }
     void SetBodyColor(const Vector4& color);
     void SetIsDeath(const bool& is) { isDeath_ = is; }
     void SetGroupId(const int& groupId) { groupId_ = groupId; }
     void SetIsDeathPending(const bool& is) { isDeathPending_ = is; } 
-    void SetWorldPositionY(const float& y) { baseTransform_.translation_.y = y; }
+    void SetWorldPositionY(float y) { baseTransform_.translation_.y = y; }
 };

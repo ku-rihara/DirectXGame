@@ -53,7 +53,7 @@ private:
     /// 現在のイントロを更新
     /// </summary>
     /// <param name="speed">再生速度</param>
-    void UpdateCurrentIntro(const float& speed);
+    void UpdateCurrentIntro(float speed);
 
     void ProcessInput(); //< 入力処理
     void MoveToNextIntro(); //< 次のイントロへ移行
@@ -78,7 +78,7 @@ public:
     // getter
     const int32_t& GetCurrentIntroIndex() const { return currentIndex_; }
     const int32_t& GetTotalIntroCount() const { return static_cast<int32_t>(introSequences_.size()); }
-    const float& GetCurrentPlaySpeedRate() const { return currentPlaySpeedRate_; }
+    float GetCurrentPlaySpeedRate() const { return currentPlaySpeedRate_; }
     MovieLine* GetMovieLine() const { return movieLine_.get(); }
 
     // setter
@@ -87,6 +87,6 @@ public:
     void SetPlayer(Player* player);
     void SetFireInjectors(FireInjectors* fireInjectors);
     void SetGameBackGroundObject(GameBackGroundObject* gameBackGroundObject);
-    void SetSpeedMultiplier(const float& multiplier) { currentPlaySpeedRate_ = multiplier; }
+    void SetSpeedMultiplier(float multiplier) { currentPlaySpeedRate_ = multiplier; }
     void ClassisSet();
 };

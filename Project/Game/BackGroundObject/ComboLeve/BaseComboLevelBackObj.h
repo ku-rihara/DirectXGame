@@ -28,7 +28,7 @@ public:
     /// 更新
     /// </summary>
     /// <param name="playSpeed">再生速度</param>
-    virtual void Update(const float& playSpeed) override;
+    virtual void Update(float playSpeed) override;
 
     /// <summary>
     /// 指定グループのイージングリセット

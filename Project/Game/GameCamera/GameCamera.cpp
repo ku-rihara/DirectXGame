@@ -30,7 +30,7 @@ void GameCamera::Init() {
     rendition_->SetViewProjection(&viewProjection_);
 }
 
-void GameCamera::Update(const float& speedRate) {
+void GameCamera::Update(float speedRate) {
 
     rendition_->Update(speedRate);
     shakeOffsetPos_ = rendition_->GetShakeOffset();

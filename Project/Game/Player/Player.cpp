@@ -166,7 +166,7 @@ Vector3 Player::GetInputDirection() {
 ///=========================================================
 /// 移動
 ///==========================================================
-void Player::Move(const float& speed) {
+void Player::Move(float speed) {
 
     /// Inputから速度代入
     direction_ = GetInputDirection();
@@ -295,7 +295,7 @@ void Player::MoveToLimit() {
 /// ===================================================
 ///   Jump
 /// ===================================================
-void Player::Jump(float& speed, const float& fallSpeedLimit, const float& gravity) {
+void Player::Jump(float& speed, float fallSpeedLimit, float gravity) {
     // 移動
     baseTransform_.translation_.y += speed * Frame::DeltaTimeRate();
     Fall(speed, fallSpeedLimit, gravity, true);
@@ -304,7 +304,7 @@ void Player::Jump(float& speed, const float& fallSpeedLimit, const float& gravit
 ///=========================================================
 /// 　落ちる
 ///==========================================================
-void Player::Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump) {
+void Player::Fall(float& speed, float fallSpeedLimit, float gravity, const bool& isJump) {
 
     if (!isJump) {
         // 移動
@@ -439,7 +439,7 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     }
 }
 
-void Player::DissolveUpdate(const float& dissolve) {
+void Player::DissolveUpdate(float dissolve) {
     obj3d_->material_.SetDissolveEdgeColor(Vector3(0.6706f, 0.8824f, 0.9804f));
     obj3d_->material_.SetDissolveEdgeWidth(0.09f);
     obj3d_->material_.SetEnableDissolve(true);

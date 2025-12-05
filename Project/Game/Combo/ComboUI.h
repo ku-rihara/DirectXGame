@@ -34,7 +34,7 @@ public:
     /// </summary>
     /// <param name="scale">スケール</param>
     /// <param name="alpha">アルファ値</param>
-    void Update(const Vector2& scale, const float& alpha);
+    void Update(const Vector2& scale, float alpha);
 
     /// <summary>
     /// 数値の計算

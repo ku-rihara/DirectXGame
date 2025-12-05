@@ -20,7 +20,7 @@ public:
     // 初期化、更新、描画
     void Init() override;
     void Update() override;
-    void TimerUpdate(const float& timeSpeed);
+    void TimerUpdate(float timeSpeed);
 
     void UpdateOffset();
 
@@ -31,7 +31,7 @@ public:
     void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
 
 private:
-    void LoopWaiting(const float& timeSpeed);
+    void LoopWaiting(float timeSpeed);
     void LoopStart();
   
 private:
@@ -57,7 +57,7 @@ private:
 public:
     Vector3 GetCollisionPos() const override;
     const PlayerComboAttackData* GetComboAttackData() const { return comboAttackData_; }
-    const float& GetAttackPower() const { return attackPower_; };
+    float GetAttackPower() const { return attackPower_; };
     const int32_t& GetCurrentLoopCount() const { return currentLoopCount_; }
     const bool& GetIsInLoopWait() const { return isInLoopWait_; }
     const bool& GetIsHit() const { return isHit_; }
@@ -65,7 +65,7 @@ public:
     const WorldTransform* GetPlayerTransform() const { return baseTransform_; }
    const bool& GetHasHitEnemy() const { return hasHitEnemy_; }
 
-    void SetAttackPower(const float& atkPower) { attackPower_ = atkPower; }
+    void SetAttackPower(float atkPower) { attackPower_ = atkPower; }
     void SetIsHit(const bool& is) { isHit_ = is; }
     void SetPlayerBaseTransform(const WorldTransform* playerBaseTransform);
     void SetParentTransform(WorldTransform* transform) override;

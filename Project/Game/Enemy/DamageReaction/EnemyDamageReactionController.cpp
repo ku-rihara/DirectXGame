@@ -31,7 +31,7 @@ void EnemyDamageReactionController::AllLoadFile() {
     }
 }
 
-void EnemyDamageReactionController::Update(const float& deltaTime) {
+void EnemyDamageReactionController::Update(float deltaTime) {
     // すべての攻撃データを更新
     for (auto& attack : reactions_) {
         // 必要に応じて更新処理

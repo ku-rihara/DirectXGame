@@ -32,5 +32,5 @@ public:
     // setter
     void SetPosition(const Vector2& pos) { position_ = pos; }
     void SetIsDraw(const bool& is) { isDraw_ = is; }
-    void SetAlpha(const float& a) { alpha_ = a; }
+    void SetAlpha(float a) { alpha_ = a; }
 };

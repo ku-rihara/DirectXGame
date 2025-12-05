@@ -44,16 +44,16 @@ public:
     void SetParent(WorldTransform* parent);
     void SetColor(const Vector4& color);
     void SetWorldPosition(const Vector3& pos) { baseTransform_.translation_ = pos; }
-    void SetWorldPositionY(const float& pos) { baseTransform_.translation_.y = pos; }
-    void SetWorldPositionX(const float& pos) { baseTransform_.translation_.x = pos; }
-    void SetWorldPositionZ(const float& pos) { baseTransform_.translation_.z = pos; }
+    void SetWorldPositionY(float pos) { baseTransform_.translation_.y = pos; }
+    void SetWorldPositionX(float pos) { baseTransform_.translation_.x = pos; }
+    void SetWorldPositionZ(float pos) { baseTransform_.translation_.z = pos; }
     void AddPosition(const Vector3& pos) { baseTransform_.translation_ += pos; }
     void SetRotation(const Vector3& rotate) { baseTransform_.rotation_ = rotate; }
-    void SetRotationY(const float& rotate) { baseTransform_.rotation_.y = rotate; }
-    void SetRotationX(const float& rotate) { baseTransform_.rotation_.x = rotate; }
-    void SetRotationZ(const float& rotate) { baseTransform_.rotation_.z = rotate; }
+    void SetRotationY(float rotate) { baseTransform_.rotation_.y = rotate; }
+    void SetRotationX(float rotate) { baseTransform_.rotation_.x = rotate; }
+    void SetRotationZ(float rotate) { baseTransform_.rotation_.z = rotate; }
     void SetScale(const Vector3& scale) { baseTransform_.scale_ = scale; }
-    void SetScaleX(const float& scale) { baseTransform_.scale_.x = scale; }
-    void SetScaleY(const float& scale) { baseTransform_.scale_.y = scale; }
-    void SetScaleZ(const float& scale) { baseTransform_.scale_.z = scale; }
+    void SetScaleX(float scale) { baseTransform_.scale_.x = scale; }
+    void SetScaleY(float scale) { baseTransform_.scale_.y = scale; }
+    void SetScaleZ(float scale) { baseTransform_.scale_.z = scale; }
 };

@@ -40,5 +40,5 @@ private:
     /// <summary>
     /// 追従時間を更新
     /// </summary>
-    void UpdateChaseTime(const float& deltaTime);
+    void UpdateChaseTime(float deltaTime);
 };

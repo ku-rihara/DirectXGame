@@ -168,7 +168,7 @@ Vector3 EnemyChasePlayer::CalculateAvoidanceVector() {
     return avoidanceVector;
 }
 
-void EnemyChasePlayer::UpdateChaseTime(const float& deltaTime) {
+void EnemyChasePlayer::UpdateChaseTime(float deltaTime) {
     // 追従中の時間を加算
     if (!isChaseTimeOver_) {
         currentChaseTime_ += deltaTime;

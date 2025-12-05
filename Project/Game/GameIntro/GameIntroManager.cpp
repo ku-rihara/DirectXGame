@@ -134,7 +134,7 @@ void GameIntroManager::ProcessInput() {
     }
 }
 
-void GameIntroManager::UpdateCurrentIntro(const float& speed) {
+void GameIntroManager::UpdateCurrentIntro(float speed) {
     if (currentIndex_ >= static_cast<int>(introSequences_.size())) {
         return;
     }

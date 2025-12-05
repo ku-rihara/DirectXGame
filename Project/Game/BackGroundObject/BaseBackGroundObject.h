@@ -21,7 +21,7 @@ public:
     /// 更新
     /// </summary>
     /// <param name="playSpeed">再生速度</param>
-    virtual void Update(const float& playSpeed) = 0;
+    virtual void Update(float playSpeed) = 0;
 
 protected:
     std::unique_ptr<PutObjForBlender> putObjForBlender_;

@@ -112,7 +112,7 @@ private:
     /// Lerp時間の増加
     /// </summary>
     /// <param name="incrementTime">増加時間</param>
-    void LerpTimeIncrement(const float& incrementTime);
+    void LerpTimeIncrement(float incrementTime);
 
     /// <summary>
     /// ターゲットマーカー更新

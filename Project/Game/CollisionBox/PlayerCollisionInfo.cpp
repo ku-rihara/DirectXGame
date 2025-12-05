@@ -28,7 +28,7 @@ void PlayerCollisionInfo::Update() {
     BaseAABBCollisionBox::Update();
 }
 
-void PlayerCollisionInfo::TimerUpdate(const float& timeSpeed) {
+void PlayerCollisionInfo::TimerUpdate(float timeSpeed) {
     if (!comboAttackData_) {
         return;
     }
@@ -63,7 +63,7 @@ void PlayerCollisionInfo::TimerUpdate(const float& timeSpeed) {
     }
 }
 
-void PlayerCollisionInfo::LoopWaiting(const float& timeSpeed) {
+void PlayerCollisionInfo::LoopWaiting(float timeSpeed) {
     // ループ待機中の処理
     if (!isInLoopWait_) {
         return;

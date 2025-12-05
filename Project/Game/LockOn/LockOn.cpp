@@ -351,7 +351,7 @@ bool LockOn::IsTargetRange(const LockOnVariant& target, const Player* player, Ve
     return false;
 }
 
-void LockOn::LerpTimeIncrement(const float& incrementTime) {
+void LockOn::LerpTimeIncrement(float incrementTime) {
     lerpTime_ += incrementTime;
     if (lerpTime_ >= 1.0f) {
         lerpTime_ = 1.0f;

@@ -24,6 +24,6 @@ public:
     ~PlayerAttackRendition() = default;
 
     void Init(Player* player, PlayerComboAttackData* playerComboAttackData);
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
     void Reset();
 };

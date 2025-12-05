@@ -38,7 +38,7 @@ public:
     /// </summary>
     /// <param name="comboTime">コンボ時間</param>
     /// <param name="comboMaxTime">コンボ最大時間</param>
-    void AlphaAdaptForTime(const float& comboTime, const float& comboMaxTime);
+    void AlphaAdaptForTime(float comboTime, float comboMaxTime);
 
     /// <summary>
     /// ビヘイビア変更

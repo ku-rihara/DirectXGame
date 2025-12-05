@@ -23,7 +23,7 @@ void IntroPurposeCutIn::Init(const std::string& name) {
     currentTime_      = 0.0f;
 }
 
-void IntroPurposeCutIn::Update(const float& playSpeed) {
+void IntroPurposeCutIn::Update(float playSpeed) {
     BaseGameIntro::Update(playSpeed);
     (this->*spFuncTable_[static_cast<size_t>(step_)])();
 }
@@ -94,7 +94,7 @@ void IntroPurposeCutIn::FinishWait() {
 void IntroPurposeCutIn::Finish() {
 }
 
-bool IntroPurposeCutIn::ProcessStep(const float& limitTime, const Step& nextStep, const bool& enableEnemySpawn) {
+bool IntroPurposeCutIn::ProcessStep(float limitTime, const Step& nextStep, const bool& enableEnemySpawn) {
     // タイム加算
     currentTime_ += playSpeed_;
 

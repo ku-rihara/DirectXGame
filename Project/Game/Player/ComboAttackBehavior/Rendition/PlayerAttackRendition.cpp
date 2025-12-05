@@ -18,7 +18,7 @@ void PlayerAttackRendition::Reset() {
     isObjAnimPlayed_.fill(false);
 }
 
-void PlayerAttackRendition::Update(const float& deltaTime) {
+void PlayerAttackRendition::Update(float deltaTime) {
     if (!pPlayer_ || !playerComboAttackData_) {
         return;
     }

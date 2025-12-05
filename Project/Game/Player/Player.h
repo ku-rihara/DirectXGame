@@ -55,7 +55,7 @@ public:
     /// 移動
     /// </summary>
     /// <param name="speed">移動速度</param>
-    void Move(const float& speed);
+    void Move(float speed);
 
     bool CheckIsMoving();         //< 移動中判定
     void MoveToLimit();           //< 移動制限
@@ -67,7 +67,7 @@ public:
     /// ディゾルブ更新
     /// </summary>
     /// <param name="dissolve">ディゾルブ値</param>
-    void DissolveUpdate(const float& dissolve);
+    void DissolveUpdate(float dissolve);
 
     /// <summary>
     /// ジャンプ
@@ -75,7 +75,7 @@ public:
     /// <param name="speed">速度</param>
     /// <param name="fallSpeedLimit">落下速度制限</param>
     /// <param name="gravity">重力</param>
-    void Jump(float& speed, const float& fallSpeedLimit, const float& gravity);
+    void Jump(float& speed, float fallSpeedLimit, float gravity);
 
     /// <summary>
     /// 落下
@@ -84,7 +84,7 @@ public:
     /// <param name="fallSpeedLimit">落下速度制限</param>
     /// <param name="gravity">重力</param>
     /// <param name="isJump">ジャンプ中か</param>
-    void Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump = false);
+    void Fall(float& speed, float fallSpeedLimit, float gravity, const bool& isJump = false);
 
     // 各Behavior切り替え処理
     void ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior);
@@ -169,7 +169,7 @@ public:
     PlayerCollisionInfo* GetPlayerCollisionInfo() const { return playerCollisionInfo_.get(); }
     PlayerComboAttackController* GetComboAttackController() const { return comboAttackController_; }
     JumpAttackUI* GetJumpAttackUI() const { return jumpAttackUI_.get(); }
-    const float& GetMoveSpeed() const { return moveSpeed_; }
+    float GetMoveSpeed() const { return moveSpeed_; }
 
     //*-- setter --*//
     // class Set
@@ -184,7 +184,7 @@ public:
     void RotateReset();
     void HeadLightSetting();
     void SetHeadScale(const Vector3& scale) { obj3d_->transform_.scale_ = scale; }
-    void SetHeadPosY(const float& posy) { obj3d_->transform_.translation_.y = posy; }
-    void SetHeadRotateX(const float& zRotate) { obj3d_->transform_.rotation_.x = zRotate; }
-    void SetHeadRotateY(const float& zRotate) { obj3d_->transform_.rotation_.y = zRotate; }
+    void SetHeadPosY(float posy) { obj3d_->transform_.translation_.y = posy; }
+    void SetHeadRotateX(float zRotate) { obj3d_->transform_.rotation_.x = zRotate; }
+    void SetHeadRotateY(float zRotate) { obj3d_->transform_.rotation_.y = zRotate; }
 };

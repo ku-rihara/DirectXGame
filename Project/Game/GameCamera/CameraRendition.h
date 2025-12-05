@@ -16,7 +16,7 @@ public:
 
     // 初期化、更新
     void Init();
-    void Update(const float& speedRate);
+    void Update(float speedRate);
 
     /// <summary>
     /// アニメーション再生

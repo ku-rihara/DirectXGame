@@ -54,7 +54,7 @@ public:
     /// 更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
 
     /// <summary>
     /// 敵が倒されたときの通知

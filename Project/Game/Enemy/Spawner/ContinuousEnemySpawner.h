@@ -32,7 +32,7 @@ public:
 
     // 初期化、更新
     void Init();
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
 
     void Start(); //< スポーンシステムの開始
     void Stop(); //< スポーンシステムの停止
@@ -86,7 +86,7 @@ public:
     ///=======================================================================================
     const bool& IsActive() const { return isActive_; }
     const int32_t& GetTotalSpawnedCount() const { return totalSpawnedCount_; }
-    const float& GetNextSpawnTime() const { return config_.spawnInterval - spawnTimer_; }
+    float GetNextSpawnTime() const { return config_.spawnInterval - spawnTimer_; }
     SpawnConfig& GetConfig() { return config_; }
 
     ///=======================================================================================

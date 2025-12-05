@@ -12,7 +12,7 @@ void CameraRendition::Init() {
     cameraAnimation_->Init();
 }
 
-void CameraRendition::Update(const float& speedRate) {
+void CameraRendition::Update(float speedRate) {
     if (!pGameCamera_) {
         return;
     }

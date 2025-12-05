@@ -11,7 +11,7 @@ void BaseGameIntro::Init(const std::string& name) {
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
-void BaseGameIntro::Update(const float& playSpeed) {
+void BaseGameIntro::Update(float playSpeed) {
     playSpeed_ = playSpeed;
 }
 

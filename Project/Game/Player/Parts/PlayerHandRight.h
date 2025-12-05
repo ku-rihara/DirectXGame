@@ -22,13 +22,13 @@ public:
     /// 3コンボ目のレール更新
     /// </summary>
     /// <param name="speed">速度</param>
-    void RailThreeComboUpdate(const float& speed);
+    void RailThreeComboUpdate(float speed);
 
     /// <summary>
     /// 4コンボ目のレール更新
     /// </summary>
     /// <param name="speed">速度</param>
-    void RailForthComboUpdate(const float& speed);
+    void RailForthComboUpdate(float speed);
 
     void AdjustParam() override; //< パラメータの調整
     void SaveAndLoad() override; //< セーブ・ロード
@@ -37,7 +37,7 @@ public:
     /// ディゾルブ効果の適用
     /// </summary>
     /// <param name="dissolve">ディゾルブ値</param>
-    virtual void DissolveAdapt(const float& dissolve);
+    virtual void DissolveAdapt(float dissolve);
 
 private:
     ///===========================================

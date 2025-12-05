@@ -27,7 +27,7 @@ public:
     /// 更新
     /// </summary>
     /// <param name="playSpeed">再生速度</param>
-    virtual void Update(const float& playSpeed);
+    virtual void Update(float playSpeed);
 
     // Param Edit
     virtual void RegisterParams();            //< パラメータバインド

@@ -13,7 +13,7 @@ void ComboUI::Init(const ComboDigit& digit) {
     isVisible_ = true;
 }
 
-void ComboUI::Update(const Vector2& scale, const float& alpha) {
+void ComboUI::Update(const Vector2& scale, float alpha) {
 
     sprite_->SetIsDraw(isVisible_);
 

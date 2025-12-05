@@ -96,7 +96,7 @@ void BasePlayerHand::SaveAndLoad() {
     globalParameter_->ParamSaveForImGui(groupName_);
     ParamLoadForImGui();
 }
-void BasePlayerHand::DissolveAdapt(const float& dissolve) {
+void BasePlayerHand::DissolveAdapt(float dissolve) {
     obj3d_->material_.SetDissolveEdgeColor(Vector3(0.6706f, 0.8824f, 0.9804f));
     obj3d_->material_.SetDissolveEdgeWidth(0.05f);
     obj3d_->material_.SetEnableDissolve(true);

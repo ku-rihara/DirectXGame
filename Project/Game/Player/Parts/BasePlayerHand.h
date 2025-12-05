@@ -27,7 +27,7 @@ public:
     /// ディゾルブ効果の適用
     /// </summary>
     /// <param name="dissolve">ディゾルブ値</param>
-    virtual void DissolveAdapt(const float& dissolve);
+    virtual void DissolveAdapt(float dissolve);
 
     void SetBlendModeSub(); //< ブレンドモードをSubに設定
     void SetBlendModeAdd(); //< ブレンドモードをAddに設定

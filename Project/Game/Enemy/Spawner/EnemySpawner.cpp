@@ -83,7 +83,7 @@ void EnemySpawner::SettingGroupSpawnPos() {
     }
 }
 
-void EnemySpawner::Update(const float& deltaTime) {
+void EnemySpawner::Update(float deltaTime) {
 
     currentTime_ += deltaTime;
 

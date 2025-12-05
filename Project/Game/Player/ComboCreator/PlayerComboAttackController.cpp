@@ -41,7 +41,7 @@ void PlayerComboAttackController::AllLoadFile() {
     }
 }
 
-void PlayerComboAttackController::Update(const float& deltaTime) {
+void PlayerComboAttackController::Update(float deltaTime) {
     // すべての攻撃データを更新
     for (auto& attack : attacks_) {
         // 必要に応じて更新処理
@@ -237,7 +237,7 @@ void PlayerComboAttackController::AdjustCommonParam() {
 #endif // _DEBUG
 }
 
-float PlayerComboAttackController::GetRealAttackSpeed(const float& baseTimeSpeed)const {
+float PlayerComboAttackController::GetRealAttackSpeed(float baseTimeSpeed)const {
 
     float result = baseTimeSpeed * attackValueForLevel_[pCombo_->GetCurrentLevel()].speedRate;
 

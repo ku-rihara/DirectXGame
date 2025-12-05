@@ -6,7 +6,7 @@ void BaseComboLevelBackObj::Init(const std::string& filename) {
     putObjForBlender_->EasingUpdateSelectGroup(0.0f, static_cast<int32_t>(ObjEffectMode::SPAWN));
 }
 
-void BaseComboLevelBackObj::Update(const float& playSpeed) {
+void BaseComboLevelBackObj::Update(float playSpeed) {
 
     if (effectMode_ == ObjEffectMode::NONE) {
         return;
