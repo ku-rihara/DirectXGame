@@ -24,7 +24,7 @@ public:
     ~CameraKeyFrame() = default;
 
     // 初期化、更新
-    void Init(const std::string& groupName, const int32_t& keyNumber);
+    void Init(const std::string& groupName, int32_t keyNumber);
     void Update(float speedRate);
 
     // パラメータ調整、登録、適応

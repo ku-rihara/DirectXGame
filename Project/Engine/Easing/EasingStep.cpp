@@ -22,7 +22,7 @@ void EasingStep<T>::SetOnWaitEndCallback(const std::function<void()>& callback) 
 }
 
 template <typename T>
-void EasingStep<T>::SetBaseValue(T value) {
+void EasingStep<T>::SetBaseValue(const T& value) {
     easing_->SetBaseValue(value);
 }
 

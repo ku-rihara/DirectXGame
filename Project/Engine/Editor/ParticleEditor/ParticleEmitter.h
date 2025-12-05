@@ -31,7 +31,7 @@ public:
     /// <returns>生成されたエミッター</returns>
     static ParticleEmitter* CreateParticle(
         const std::string& name, const std::string& modelFilePath,
-        const int32_t& maxnum);
+        int32_t maxnum);
 
     /// <summary>
     /// プリミティブパーティクルの作成
@@ -41,7 +41,7 @@ public:
     /// <param name="maxNum">最大数</param>
     /// <returns>生成されたエミッター</returns>
     static ParticleEmitter* CreateParticlePrimitive(
-        const std::string& name, const PrimitiveType& primitiveType, const int32_t& maxnum);
+        const std::string& name, const PrimitiveType& primitiveType, int32_t maxnum);
   
      /// <summary>
     /// 親ジョイントの設定

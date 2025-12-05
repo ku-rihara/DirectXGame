@@ -253,7 +253,7 @@ void CameraAnimationData::SetInitialValues(const Vector3& position, const Vector
     initialCameraTransform_.fov      = fov;
 }
 
-std::unique_ptr<CameraKeyFrame> CameraAnimationData::CreateKeyFrame(const int32_t& index) {
+std::unique_ptr<CameraKeyFrame> CameraAnimationData::CreateKeyFrame(int32_t index) {
     auto keyFrame = std::make_unique<CameraKeyFrame>();
     keyFrame->Init(groupName_, index);
     return keyFrame;

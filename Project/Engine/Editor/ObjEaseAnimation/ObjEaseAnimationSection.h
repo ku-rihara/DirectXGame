@@ -78,7 +78,7 @@ public:
     ~ObjEaseAnimationSection() = default;
 
     // 初期化、更新
-    void Init(const std::string& animationName, const std::string& categoryName, const int32_t& keyNumber);
+    void Init(const std::string& animationName, const std::string& categoryName, int32_t keyNumber);
     void Update(float speedRate = 1.0f);
 
     // リセット、終了判定

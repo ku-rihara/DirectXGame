@@ -21,7 +21,7 @@ public:
     /// <param name="modelFilePath">モデルファイルパス</param>
     /// <param name="maxCount">最大パーティクル数</param>
     /// <returns>作成されたエミッター</returns>
-    static GPUParticleEmitter* CreateParticle(const std::string& name, const std::string& modelFilePath, const int32_t& maxCount = 1024);
+    static GPUParticleEmitter* CreateParticle(const std::string& name, const std::string& modelFilePath, int32_t maxCount = 1024);
 
     /// <summary>
     /// プリミティブベースのパーティクルを作成
@@ -30,7 +30,7 @@ public:
     /// <param name="type">プリミティブタイプ</param>
     /// <param name="maxCount">最大パーティクル数</param>
     /// <returns>作成されたエミッター</returns>
-    static GPUParticleEmitter* CreateParticlePrimitive(const std::string& name, const PrimitiveType& type, const int32_t& maxCount = 1024);
+    static GPUParticleEmitter* CreateParticlePrimitive(const std::string& name, const PrimitiveType& type, int32_t maxCount = 1024);
 
     void Init(); //< エミッターの初期化
     void Update(); //< エミッターの更新
@@ -43,7 +43,7 @@ private:
     /// <param name="name">パーティクル名</param>
     /// <param name="modelFilePath">モデルファイルパス</param>
     /// <param name="maxCount">最大パーティクル数</param>
-    void InitWithModel(const std::string& name, const std::string& modelFilePath, const int32_t& maxCount);
+    void InitWithModel(const std::string& name, const std::string& modelFilePath, int32_t maxCount);
 
     /// <summary>
     /// プリミティブで初期化
@@ -51,7 +51,7 @@ private:
     /// <param name="name">パーティクル名</param>
     /// <param name="type">プリミティブタイプ</param>
     /// <param name="maxCount">最大パーティクル数</param>
-    void InitWithPrimitive(const std::string& name, const PrimitiveType& type, const int32_t& maxCount);
+    void InitWithPrimitive(const std::string& name, const PrimitiveType& type, int32_t maxCount);
 
 private:
     std::string name_;

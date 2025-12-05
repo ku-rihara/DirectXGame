@@ -66,7 +66,7 @@ private:
 
 public:
     void SetAdaptValue(T* value);
-    void SetBaseValue(T value);
+    void SetBaseValue(const T& value);
     void SetOnWaitEndCallback(const std::function<void()>& callback);
     const T& GetValue() const { return easing_->GetValue(); }
 };

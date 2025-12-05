@@ -39,7 +39,7 @@ public:
     /// </summary>
     /// <param name="value">基準値</param>
     template <typename T>
-    void SetBaseValue(T value);
+    void SetBaseValue(const T& value);
 
     const IEasingStep* GetCurrentStep() const;
 

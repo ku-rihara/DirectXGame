@@ -96,5 +96,5 @@ public:
     const GPUResourceHandle& GetFreeListBuffer() const { return freeListBuffer_; }
     
     // setter
-    void SetParticleMaxCount(const int32_t& maxCount) { particleMaxCount_ = maxCount; }
+    void SetParticleMaxCount(int32_t maxCount) { particleMaxCount_ = maxCount; }
 };

@@ -7,7 +7,7 @@
 ///=================================================================================
 /// パーティクル作成
 ///=================================================================================
-ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const std::string& modelFilePath, const int32_t& maxnum) {
+ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const std::string& modelFilePath, int32_t maxnum) {
 
     auto emitter           = std::make_unique<ParticleEmitter>();
     emitter->particleName_ = name;
@@ -20,7 +20,7 @@ ParticleEmitter* ParticleEmitter::CreateParticle(const std::string& name, const 
 ///=================================================================================
 /// パーティクル作成(Primitive)
 ///=================================================================================
-ParticleEmitter* ParticleEmitter::CreateParticlePrimitive(const std::string& name, const PrimitiveType& primitiveType, const int32_t& maxnum) {
+ParticleEmitter* ParticleEmitter::CreateParticlePrimitive(const std::string& name, const PrimitiveType& primitiveType, int32_t maxnum) {
 
     auto emitter           = std::make_unique<ParticleEmitter>();
     emitter->particleName_ = name;

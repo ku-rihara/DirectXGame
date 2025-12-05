@@ -270,7 +270,7 @@ void RailData::AdvanceToNexTSequenceElement() {
     // Railはキーフレーム進行を使用しない
 }
 
-std::unique_ptr<RailControlPoint> RailData::CreateKeyFrame(const int32_t& index) {
+std::unique_ptr<RailControlPoint> RailData::CreateKeyFrame(int32_t index) {
     auto keyFrame = std::make_unique<RailControlPoint>();
     keyFrame->Init(groupName_, index);
     return keyFrame;

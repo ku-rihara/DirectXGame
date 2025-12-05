@@ -77,7 +77,7 @@ void EasingSequence::Update(float deltaTime) {
 }
 
 template <typename T>
-void EasingSequence::SetBaseValue(T value) {
+void EasingSequence::SetBaseValue(const T& value) {
     for (auto& step : steps_) {
         if (auto* typed = dynamic_cast<EasingStep<T>*>(step.get())) {
             typed->SetBaseValue(value);
@@ -123,6 +123,6 @@ template void EasingSequence::AddStep<Vector3>(const std::string&, Vector3*);
 template void EasingSequence::AddStep<float>(std::unique_ptr<Easing<float>>);
 template void EasingSequence::AddStep<Vector2>(std::unique_ptr<Easing<Vector2>>);
 template void EasingSequence::AddStep<Vector3>(std::unique_ptr<Easing<Vector3>>);
-template void EasingSequence::SetBaseValue<float>(float);
-template void EasingSequence::SetBaseValue<Vector2>(Vector2);
-template void EasingSequence::SetBaseValue<Vector3>(Vector3);
+template void EasingSequence::SetBaseValue<float>(const float&);
+template void EasingSequence::SetBaseValue<Vector2>(const Vector2&);
+template void EasingSequence::SetBaseValue<Vector3>(const Vector3&);

@@ -369,7 +369,7 @@ void BaseEffectEditor<TEffectData>::AddEffect(const std::string& name) {
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::RemoveEffect(const int32_t& index) {
+void BaseEffectEditor<TEffectData>::RemoveEffect(int32_t index) {
     if (index >= 0 && index < static_cast<int32_t>(effects_.size())) {
         effects_.erase(effects_.begin() + index);
 
@@ -406,7 +406,7 @@ void BaseEffectEditor<TEffectData>::AddCategory(const std::string& categoryName)
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::RemoveCategory(const int32_t& index) {
+void BaseEffectEditor<TEffectData>::RemoveCategory(int32_t index) {
     if (index >= 0 && index < static_cast<int>(categories_.size())) {
         categories_.erase(categories_.begin() + index);
 
@@ -422,7 +422,7 @@ void BaseEffectEditor<TEffectData>::RemoveCategory(const int32_t& index) {
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::AddEffectToCategory(const int32_t& categoryIndex, const std::string& effectName) {
+void BaseEffectEditor<TEffectData>::AddEffectToCategory(int32_t categoryIndex, const std::string& effectName) {
     if (categoryIndex < 0 || categoryIndex >= static_cast<int>(categories_.size())) {
         return;
     }
@@ -446,8 +446,8 @@ void BaseEffectEditor<TEffectData>::AddEffectToCategory(const int32_t& categoryI
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::RemoveEffectFromCategory(const int32_t& categoryIndex,
-    const int32_t& effectIndex) {
+void BaseEffectEditor<TEffectData>::RemoveEffectFromCategory(int32_t categoryIndex,
+    int32_t effectIndex) {
     if (categoryIndex < 0 || categoryIndex >= static_cast<int>(categories_.size())) {
         return;
     }
@@ -566,7 +566,7 @@ void BaseEffectEditor<TEffectData>::AllSaveFile() {
 }
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::SaveCategory(const int32_t& categoryIndex) {
+void BaseEffectEditor<TEffectData>::SaveCategory(int32_t categoryIndex) {
     if (categoryIndex < 0 || categoryIndex >= static_cast<int>(categories_.size())) {
         return;
     }

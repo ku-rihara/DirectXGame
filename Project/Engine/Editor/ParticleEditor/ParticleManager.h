@@ -163,7 +163,7 @@ public:
     /// <param name="groupParamaters">グループパラメータ</param>
     /// <param name="count">放出数</param>
     void Emit(std::string name, const ParticleEmitter::Parameters& paramaters,
-        const ParticleEmitter::GroupParamaters& groupParamaters, const int32_t& count);
+        const ParticleEmitter::GroupParamaters& groupParamaters, int32_t count);
 
     /// <summary>
     /// アルファ値の適用

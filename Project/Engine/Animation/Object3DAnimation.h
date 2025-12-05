@@ -173,7 +173,7 @@ public:
     const Skeleton& GetSkeleton() const { return skeleton_; }
     float GetAnimationTime() const { return animationTime_; }
     float GetAnimationDuration() const;
-    const int32_t& GetCurrentAnimationIndex() const { return currentAnimationIndex_; }
+    int32_t GetCurrentAnimationIndex() const { return currentAnimationIndex_; }
     const std::string& GetCurrentAnimationName() const;
     const bool& IsAnimationTransitioning() const { return isChange_; }
     void SetTransitionDuration(float duration) { transitionDuration_ = duration; }

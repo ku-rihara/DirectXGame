@@ -68,7 +68,7 @@ protected:
 public:
     //*----------------------  Getter Methods ----------------------*//
     Model* GetModelPtr() { return model_; }
-    const int32_t& GetTextureIndex() const { return textureIndex_; }
+    int32_t GetTextureIndex() const { return textureIndex_; }
     const bool& GetIsAutoUpdate() const { return isAutoUpdate_; }
     //*----------------------  Setter Methods ----------------------*//
     void SetIsDraw(const bool& is) { isDraw_ = is; }
