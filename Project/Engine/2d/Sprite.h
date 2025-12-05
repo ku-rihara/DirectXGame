@@ -130,7 +130,7 @@ public:
     void SetIsFlipY(const bool& isFlip) { isFlipY_ = isFlip; }
 
     void SetColor(const Vector3& color);
-    void SetAlpha(const float& alpha);
+    void SetAlpha(float alpha);
 
     void SetLayerNum(const int32_t& layerNum) { layerNum_ = layerNum; }
     void SetIsDraw(const bool& isDraw) { isDraw_ = isDraw; }

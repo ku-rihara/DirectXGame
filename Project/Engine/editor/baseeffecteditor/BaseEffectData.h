@@ -23,7 +23,7 @@ public:
 
     // 純粋仮想関数
     virtual void Init(const std::string& name)         = 0;
-    virtual void Update(const float& speedRate = 1.0f) = 0;
+    virtual void Update(float speedRate = 1.0f) = 0;
     virtual void Reset()                               = 0;
     virtual void Play()                                = 0;
     virtual void InitWithCategory(const std::string& name, const std::string& categoryName);

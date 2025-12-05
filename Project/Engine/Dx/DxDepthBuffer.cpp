@@ -4,7 +4,7 @@
 #include <cassert>
 
 void DxDepthBuffer::Init(Microsoft::WRL::ComPtr<ID3D12Device> device, DsvManager* dsvManager,
-    SrvManager* srvManager,const uint32_t& width,const uint32_t& height) {
+    SrvManager* srvManager,uint32_t width,uint32_t height) {
     dsvManager_ = dsvManager;
     srvManager_ = srvManager;
     width_      = width;

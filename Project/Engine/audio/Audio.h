@@ -31,7 +31,7 @@ public:
 	void Init();
 	int LoadWave(const std::string& filename);
 	void Unload(const int& soundId);
-	void PlayWave(const int& soundId, const float& volume);
+	void PlayWave(const int& soundId, float volume);
 	void Finalize();
 
 	IXAudio2* GetXAudio2()const { return xAudio2_.Get(); }

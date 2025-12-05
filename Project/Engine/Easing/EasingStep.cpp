@@ -22,7 +22,7 @@ void EasingStep<T>::SetOnWaitEndCallback(const std::function<void()>& callback) 
 }
 
 template <typename T>
-void EasingStep<T>::SetBaseValue(const T& value) {
+void EasingStep<T>::SetBaseValue(T value) {
     easing_->SetBaseValue(value);
 }
 
@@ -32,7 +32,7 @@ void EasingStep<T>::ApplyFromJson(const std::string& fileName) {
 }
 
 template <typename T>
-void EasingStep<T>::Update(const float& deltaTime) {
+void EasingStep<T>::Update(float deltaTime) {
     easing_->Update(deltaTime);
 }
 

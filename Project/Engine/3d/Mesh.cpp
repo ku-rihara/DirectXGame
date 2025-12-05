@@ -2,7 +2,7 @@
 #include"Dx/DirectXCommon.h"
 #include "base/TextureManager.h"
 
-void Mesh::Init(DirectXCommon* directXCommon, const uint32_t& vertexNum) {
+void Mesh::Init(DirectXCommon* directXCommon, uint32_t vertexNum) {
     directXCommon_ = directXCommon;
     vertexNum_     = vertexNum;
 
@@ -13,7 +13,7 @@ void Mesh::Init(DirectXCommon* directXCommon, const uint32_t& vertexNum) {
     textureHandle_ = TextureManager::GetInstance()->LoadTexture("resources/Texture/default.png");
 }
 
-void Mesh::SetIndexData(const uint32_t* indices,const uint32_t& indexCount) {
+void Mesh::SetIndexData(const uint32_t* indices,uint32_t indexCount) {
     indexNum_ = indexCount;
 
 
@@ -75,7 +75,7 @@ void Mesh::Draw(Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource, MeshMaterial
 }
 
 
-void Mesh::DrawInstancing(const uint32_t& instanceNum) {
+void Mesh::DrawInstancing(uint32_t instanceNum) {
 
     auto commandList = directXCommon_->GetCommandList();
 

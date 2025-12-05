@@ -4,7 +4,7 @@
 #include <numbers>
 
 template <typename T>
-T Shake(const float& t, const float& strength) {
+T Shake(float t, float strength) {
     // t を [0, 1] に正規化
     float normalizedT      = std::clamp(t, 0.0f, 1.0f); // t が 0 から 1 の範囲に収まるように
     float adjustedStrength = normalizedT * strength;
@@ -26,7 +26,7 @@ T Shake(const float& t, const float& strength) {
 }
 
 template <typename T>
-T ShakeWave(const float& t, const float& strength) {
+T ShakeWave(float t, float strength) {
     float normalizedT = std::clamp(t, 0.0f, 1.0f);
     float growth      = normalizedT; // 小さい時は弱く、時間と共に強くなる
     float frequency   = 10.0f;
@@ -56,11 +56,11 @@ T ShakeWave(const float& t, const float& strength) {
     }
 }
 
-template float Shake<float>(const float& t, const float& strength);
-template Vector2 Shake<Vector2>(const float& t, const float& strength);
-template Vector3 Shake<Vector3>(const float& t, const float& strength);
+template float Shake<float>(float t, float strength);
+template Vector2 Shake<Vector2>(float t, float strength);
+template Vector3 Shake<Vector3>(float t, float strength);
 
 // 明示的なテンプレートインスタンス化
-template float ShakeWave<float>(const float& t, const float& strength);
-template Vector2 ShakeWave<Vector2>(const float& t, const float& strength);
-template Vector3 ShakeWave<Vector3>(const float& t, const float& strength);
+template float ShakeWave<float>(float t, float strength);
+template Vector2 ShakeWave<Vector2>(float t, float strength);
+template Vector3 ShakeWave<Vector3>(float t, float strength);

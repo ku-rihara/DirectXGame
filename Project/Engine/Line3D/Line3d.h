@@ -46,7 +46,7 @@ public:
     /// <param name="center">中心座標</param>
     /// <param name="radius">半径</param>
     /// <param name="color">色</param>
-    void SetSphereWireframe(const Vector3& center, const float& radius, const Vector4& color);
+    void SetSphereWireframe(const Vector3& center, float radius, const Vector4& color);
 
     /// <summary>
     /// 立方体のワイヤーフレーム描画

@@ -24,7 +24,7 @@ public:
 		return { x * obj.x, y * obj.y };
 	}
 
-	inline Vector2 operator*(const float& scalar) const {
+	inline Vector2 operator*(float scalar) const {
 		return { x * scalar, y * scalar };
 	}
 
@@ -32,7 +32,7 @@ public:
 		return { x / obj.x, y / obj.y };
 	}
 
-	inline Vector2 operator/(const float& scalar) const {
+	inline Vector2 operator/(float scalar) const {
 		return { x / scalar, y / scalar };
 	}
 
@@ -40,7 +40,7 @@ public:
 		x += obj.x; y += obj.y;
 	}
 
-	inline void operator+=(const float& scalar) {
+	inline void operator+=(float scalar) {
 		x += scalar; y += scalar;
 	}
 
@@ -54,7 +54,7 @@ public:
 
 	// 静的メソッドの宣言
 	static Vector2 Normalize(const Vector2& v);
-	static Vector2 Multiply(const Vector2& v1, const float& v2);
+	static Vector2 Multiply(const Vector2& v1, float v2);
 	static float Dot(const Vector2& v1, const Vector2& v2);
 
 	Vector2 Normalize() const;
@@ -65,6 +65,6 @@ public:
 };
 
 // スカラーとベクトルの掛け算をフレンドとして定義
-inline Vector2 operator*(const float& scalar, const Vector2& vec) {
+inline Vector2 operator*(float scalar, const Vector2& vec) {
 	return { vec.x * scalar, vec.y * scalar };
 }

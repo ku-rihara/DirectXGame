@@ -64,13 +64,13 @@ public:
     /// ===================================================
     /// getter  methods
     /// ===================================================
-    const uint32_t& GetTypeID() const { return typeID_; }
+    uint32_t GetTypeID() const { return typeID_; }
     const bool& GetIsColliding() const { return isColliding_; }
     const bool& GetIsCollision() const { return isAdaptCollision; }
     /// ===================================================
     /// setter  methods
     /// ===================================================
-    void SetTypeID(const uint32_t& typeID) { typeID_ = typeID; }
+    void SetTypeID(uint32_t typeID) { typeID_ = typeID; }
     void SetColliding(const bool& colliding) { isColliding_ = colliding; }
     void SetIsAdaptCollision(const bool& is) { isAdaptCollision = is; }
 };

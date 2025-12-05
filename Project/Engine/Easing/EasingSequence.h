@@ -32,14 +32,14 @@ public:
     /// シーケンスの更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
 
     /// <summary>
     /// 全ステップに基準値を設定
     /// </summary>
     /// <param name="value">基準値</param>
     template <typename T>
-    void SetBaseValue(const T& value);
+    void SetBaseValue(T value);
 
     const IEasingStep* GetCurrentStep() const;
 

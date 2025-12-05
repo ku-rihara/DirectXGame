@@ -23,7 +23,7 @@ void ObjEaseAnimationData::InitWithCategory(const std::string& animationName, co
     InitParams();
 }
 
-void ObjEaseAnimationData::Update(const float& speedRate) {
+void ObjEaseAnimationData::Update(float speedRate) {
     if (playState_ != PlayState::PLAYING) {
         return;
     }
@@ -31,7 +31,7 @@ void ObjEaseAnimationData::Update(const float& speedRate) {
     UpdateActiveSection(speedRate);
 }
 
-void ObjEaseAnimationData::UpdateActiveSection(const float& speedRate) {
+void ObjEaseAnimationData::UpdateActiveSection(float speedRate) {
     if (sectionElements_.empty()) {
         return;
     }

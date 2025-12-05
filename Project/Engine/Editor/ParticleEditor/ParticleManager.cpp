@@ -206,7 +206,7 @@ void ParticleManager::UpdateUV(UVInfo& uvInfo, float deltaTime) {
 ///============================================================
 void ParticleManager::CreateParticleGroup(
     const std::string name, const std::string modelFilePath,
-    const uint32_t& maxnum) {
+    uint32_t maxnum) {
     if (particleGroups_.contains(name)) {
         return;
     }
@@ -225,7 +225,7 @@ void ParticleManager::CreateParticleGroup(
     particleGroups_[name].instanceNum = 0;
 }
 
-void ParticleManager::CreatePrimitiveParticle(const std::string& name, PrimitiveType type, const uint32_t& maxnum) {
+void ParticleManager::CreatePrimitiveParticle(const std::string& name, PrimitiveType type, uint32_t maxnum) {
     if (particleGroups_.contains(name)) {
         return;
     }
@@ -259,7 +259,7 @@ void ParticleManager::CreatePrimitiveParticle(const std::string& name, Primitive
 ///============================================================
 /// テクスチャセット
 ///============================================================
-void ParticleManager::SetTextureHandle(const std::string name, const uint32_t& handle) {
+void ParticleManager::SetTextureHandle(const std::string name, uint32_t handle) {
     particleGroups_[name].textureHandle = handle;
 }
 
@@ -283,7 +283,7 @@ void ParticleManager::CreateMaterialResource(const std::string& name) {
 ///============================================================
 /// インスタンシングリソース作成
 ///============================================================
-void ParticleManager::CreateInstancingResource(const std::string& name, const uint32_t& instanceNum) {
+void ParticleManager::CreateInstancingResource(const std::string& name, uint32_t instanceNum) {
 
     particleGroups_[name].instanceNum = instanceNum;
 
@@ -576,7 +576,7 @@ void ParticleManager::AlphaAdapt(ParticleFprGPU& data, const Particle& parm, con
     data.color.w = 1.0f - (parm.currentTime_ / parm.lifeTime_);
 }
 
-Vector3 ParticleManager::ScaleAdapt(const float& time, const ScaleInFo& info) {
+Vector3 ParticleManager::ScaleAdapt(float time, const ScaleInFo& info) {
 
     if (!info.easeParam.isScaleEase) {
         return info.tempScaleV3;
@@ -587,7 +587,7 @@ Vector3 ParticleManager::ScaleAdapt(const float& time, const ScaleInFo& info) {
 }
 
 Vector3 ParticleManager::EaseAdapt(const ParticleEmitter::EaseType& easetype,
-    const Vector3& start, const Vector3& end, const float& time, const float& maxTime) {
+    const Vector3& start, const Vector3& end, float time, float maxTime) {
 
     switch (easetype) {
     case ParticleEmitter::EaseType::INSINE:

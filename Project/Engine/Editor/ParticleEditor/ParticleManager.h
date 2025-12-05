@@ -116,7 +116,7 @@ public:
     /// <param name="name">グループ名</param>
     /// <param name="modelFilePath">モデルファイルパス</param>
     /// <param name="maxnum">最大パーティクル数</param>
-    void CreateParticleGroup(const std::string name, const std::string modelFilePath, const uint32_t& maxnum);
+    void CreateParticleGroup(const std::string name, const std::string modelFilePath, uint32_t maxnum);
 
     /// <summary>
     /// プリミティブパーティクルの作成
@@ -124,7 +124,7 @@ public:
     /// <param name="name">グループ名</param>
     /// <param name="type">プリミティブタイプ</param>
     /// <param name="maxnum">最大パーティクル数</param>
-    void CreatePrimitiveParticle(const std::string& name, PrimitiveType type, const uint32_t& maxnum);
+    void CreatePrimitiveParticle(const std::string& name, PrimitiveType type, uint32_t maxnum);
 
     /// <summary>
     /// モデルの設定
@@ -144,7 +144,7 @@ public:
     /// </summary>
     /// <param name="name">グループ名</param>
     /// <param name="instanceNum">インスタンス数</param>
-    void CreateInstancingResource(const std::string& name, const uint32_t& instanceNum);
+    void CreateInstancingResource(const std::string& name, uint32_t instanceNum);
 
     void ResetAllParticles(); //< 全パーティクルのリセット
 
@@ -179,7 +179,7 @@ public:
     /// <param name="time">経過時間</param>
     /// <param name="parm">スケール情報</param>
     /// <returns>適用後のスケール</returns>
-    Vector3 ScaleAdapt(const float& time, const ScaleInFo& parm);
+    Vector3 ScaleAdapt(float time, const ScaleInFo& parm);
 
     /// <summary>
     /// イージングの適用
@@ -191,7 +191,7 @@ public:
     /// <param name="maxTime">最大時間</param>
     /// <returns>イージング後の値</returns>
     Vector3 EaseAdapt(const ParticleEmitter::EaseType& easetype, const Vector3& start,
-        const Vector3& end, const float& time, const float& maxTime);
+        const Vector3& end, float time, float maxTime);
 
 private:
     SrvManager* pSrvManager_;
@@ -210,6 +210,6 @@ public:
     const std::string& getDirectory() const { return ParticleFolderName_; }
 
     void SetViewProjection(const ViewProjection* view);
-    void SetTextureHandle(const std::string name, const uint32_t& handle);
+    void SetTextureHandle(const std::string name, uint32_t handle);
     void SetAllParticleFile();
 };

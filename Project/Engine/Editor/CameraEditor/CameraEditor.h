@@ -17,7 +17,7 @@ public:
 
     // 初期化、更新
     void Init(const std::string& animationName, const bool& isUseCategory = false) override;
-    void Update(const float& speedRate = 1.0f) override;
+    void Update(float speedRate = 1.0f) override;
     void EditorUpdate() override;
 
     // 選択アニメーション再生

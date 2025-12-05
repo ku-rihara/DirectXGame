@@ -1,9 +1,6 @@
 #include "Vector3.h"
 #include<math.h>
 
-
-const float kColumnWidth = 60;
-
 // 二項演算子
 Vector3 Vector3::operator+(const Vector3& obj) const {
     return {x + obj.x, y + obj.y, z + obj.z};
@@ -17,7 +14,7 @@ Vector3 Vector3::operator*(const Vector3& obj) const {
     return {x * obj.x, y * obj.y, z * obj.z};
 }
 
-Vector3 Vector3::operator*(const float& scalar) const {
+Vector3 Vector3::operator*(float scalar) const {
     return {x * scalar, y * scalar, z * scalar};
 }
 
@@ -25,7 +22,7 @@ Vector3 Vector3::operator/(const Vector3& obj) const {
     return {x / obj.x, y / obj.y, z / obj.z};
 }
 
-Vector3 Vector3::operator/(const float& scalar) const {
+Vector3 Vector3::operator/(float scalar) const {
     return {x / scalar, y / scalar, z / scalar};
 }
 
@@ -40,13 +37,13 @@ void Vector3::operator+=(const Vector3& obj) {
     z += obj.z;
 }
 
-void Vector3::operator+=(const float& scalar) {
+void Vector3::operator+=(float scalar) {
     x += scalar;
     y += scalar;
     z += scalar;
 }
 
-void Vector3::operator*=(const float& scalar) {
+void Vector3::operator*=(float scalar) {
     x *= scalar;
     y *= scalar;
     z *= scalar;
@@ -65,7 +62,7 @@ bool operator!=(const Vector3& lhs, const Vector3& rhs) {
 }
 
 // スカラー,ベクトル
-Vector3 operator*(const float& scalar, const Vector3& vec) {
+Vector3 operator*(float scalar, const Vector3& vec) {
     return {vec.x * scalar, vec.y * scalar, vec.z * scalar};
 }
 
@@ -102,7 +99,7 @@ Vector3 Vector3::Cross(const Vector3& v1, const Vector3& v2) {
 	return result;
 }
 
-Vector3 Vector3::Multiply(const Vector3& v1, const float& v2) {
+Vector3 Vector3::Multiply(const Vector3& v1, float v2) {
 	Vector3 result;
 	result.x = v1.x * v2;
 	result.y = v1.y * v2;

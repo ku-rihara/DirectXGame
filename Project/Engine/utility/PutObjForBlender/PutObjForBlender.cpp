@@ -350,7 +350,7 @@ void PutObjForBlender::EmitterAllEdit() {
 }
 
 
-void PutObjForBlender::EasingUpdateSelectGroup(const float& deltaTime, const int32_t& groupNum) {
+void PutObjForBlender::EasingUpdateSelectGroup(float deltaTime, const int32_t& groupNum) {
     currentTime_ += deltaTime;
 
     for (auto& objectData : levelData_->objects) {

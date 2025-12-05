@@ -47,7 +47,7 @@ void CameraKeyFrame::SaveData() {
     globalParameter_->SaveFile(groupName_, folderPath_);
 }
 
-void CameraKeyFrame::Update(const float& speedRate) {
+void CameraKeyFrame::Update(float speedRate) {
     float actualDeltaTime;
     switch (static_cast<TimeMode>(timeModeSelector_.GetTimeModeInt())) {
     case TimeMode::DELTA_TIME:
@@ -162,7 +162,7 @@ bool CameraKeyFrame::IsFinished() const {
     return positionEase_.IsFinished() && rotationEase_.IsFinished() && fovEase_.IsFinished();
 }
 
-void CameraKeyFrame::SetStartEasing(const Vector3& pos, const Vector3& rotate, const float& fov) {
+void CameraKeyFrame::SetStartEasing(const Vector3& pos, const Vector3& rotate, float fov) {
     positionEase_.SetStartValue(pos);
     rotationEase_.SetStartValue(rotate);
     fovEase_.SetStartValue(fov);

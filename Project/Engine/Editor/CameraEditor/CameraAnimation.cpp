@@ -7,7 +7,7 @@ void CameraAnimation::Init() {
     ResetOffsetParam();
 }
 
-void CameraAnimation::Update(const float& speedRate) {
+void CameraAnimation::Update(float speedRate) {
     // アニメーションデータの更新
     if (effectData_) {
         effectData_->Update(speedRate);

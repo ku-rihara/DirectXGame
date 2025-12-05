@@ -16,7 +16,7 @@ public:
     //*----------------------------- public Methods -----------------------------*//
 
     virtual void Init()                                = 0;
-    virtual void Update(const float& speedRate = 1.0f) = 0;
+    virtual void Update(float speedRate = 1.0f) = 0;
     virtual void Play(const std::string& effectName)   = 0;
     virtual void Stop();
     virtual void Reset();

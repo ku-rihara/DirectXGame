@@ -117,7 +117,7 @@ void GPUParticleEmitter::SetEmitterData(const ParticleEmit& emitter) {
 ///=================================================================================
 /// テクスチャ切り替え
 ///=================================================================================
-void GPUParticleEmitter::SetTexture(const uint32_t& textureHandle) {
+void GPUParticleEmitter::SetTexture(uint32_t textureHandle) {
     if (name_.empty()) {
         return;
     }

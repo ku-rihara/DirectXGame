@@ -24,11 +24,11 @@ void RailData::Init(const std::string& railName) {
     InitParams();
 }
 
-void RailData::Update(const float& speedRate) {
+void RailData::Update(float speedRate) {
     UpdateWithDirection(speedRate, PositionMode::WORLD, {1.0f, 1.0f, 1.0f});
 }
 
-void RailData::UpdateWithDirection(const float& speedRate, const PositionMode& mode, const Vector3& direction) {
+void RailData::UpdateWithDirection(float speedRate, const PositionMode& mode, const Vector3& direction) {
     if (playState_ == PlayState::RETURNING) {
         UpdateReturn(speedRate);
         return;
@@ -132,7 +132,7 @@ void RailData::StartReturn() {
     }
 }
 
-void RailData::UpdateReturn(const float& speedRate) {
+void RailData::UpdateReturn(float speedRate) {
     // 実際のデルタタイムを計算
     float actualDeltaTime = 0.0f;
     switch (static_cast<TimeMode>(timeModeSelector_.GetTimeModeInt())) {

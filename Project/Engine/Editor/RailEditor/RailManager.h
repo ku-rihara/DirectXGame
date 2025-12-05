@@ -37,7 +37,7 @@ public:
     /// <param name="speed">移動速度</param>
     /// <param name="mode">座標モード</param>
     /// <param name="direction">方向</param>
-    void Update(const float& speed, const PositionMode& mode = PositionMode::WORLD, const Vector3& direction = {1.0f, 1.0f, 1.0f});
+    void Update(float speed, const PositionMode& mode = PositionMode::WORLD, const Vector3& direction = {1.0f, 1.0f, 1.0f});
 
     /// <summary>
     /// 描画
@@ -77,7 +77,7 @@ public:
     // setter
     void SetParent(WorldTransform* parent);
     void SetScale(Vector3 scale) { scale_ = scale; }
-    void SetRailMoveTime(const float& t) { railMoveTime_ = t; }
+    void SetRailMoveTime(float t) { railMoveTime_ = t; }
     void SetIsRoop(const bool& is) { isRoop_ = is; }
     void SetFovAngleY(float value) { viewProjection_.fovAngleY_ = value; }
     void SetAspectRatio(float value) { viewProjection_.aspectRatio_ = value; }

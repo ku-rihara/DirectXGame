@@ -8,7 +8,7 @@ void ShakeEditor::Init(const std::string& editorName, const bool& isUseCategory)
     preViewObj_->SetIsDraw(false);
 }
 
-void ShakeEditor::Update(const float& speedRate) {
+void ShakeEditor::Update(float speedRate) {
     // すべてのシェイクを更新
     for (auto& shake : effects_) {
         shake->Update(speedRate);

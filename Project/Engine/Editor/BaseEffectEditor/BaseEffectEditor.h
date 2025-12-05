@@ -24,7 +24,7 @@ public:
     //*----------------------------- public Methods -----------------------------*//
 
     virtual void Init(const std::string& typeName, const bool& isUseCategory = false);
-    virtual void Update(const float& deltaTimeOrSpeedRate);
+    virtual void Update(float deltaTimeOrSpeedRate);
     virtual void EditorUpdate();
 
     // 共通操作

@@ -79,7 +79,7 @@ public:
 
     // 初期化、更新
     void Init(const std::string& animationName, const std::string& categoryName, const int32_t& keyNumber);
-    void Update(const float& speedRate = 1.0f);
+    void Update(float speedRate = 1.0f);
 
     // リセット、終了判定
     void Reset();
@@ -106,9 +106,9 @@ private:
     void StartPlay();
 
     // 各Transformの個別更新
-    void UpdateTransform(TransformParam& param, TransformType type, const float& deltaTime);
-    void UpdateTransformPlay(TransformParam& param, TransformType type, const float& deltaTime);
-    void UpdateTransformReturn(TransformParam& param, TransformType type, const float& deltaTime);
+    void UpdateTransform(TransformParam& param, TransformType type, float deltaTime);
+    void UpdateTransformPlay(TransformParam& param, TransformType type, float deltaTime);
+    void UpdateTransformReturn(TransformParam& param, TransformType type, float deltaTime);
 
     // 全体の状態チェック
     void UpdateOverallState();
@@ -142,7 +142,7 @@ private:
     TimeModeSelector timeModeSelector_;
 
 public:
-    const float& GetTimePoint() const { return startTime_; }
+    float GetTimePoint() const { return startTime_; }
     const Vector3& GetCurrentScale() const { return transformParams_[static_cast<size_t>(TransformType::Scale)].currentOffset; }
     const Vector3& GetCurrentRotation() const { return transformParams_[static_cast<size_t>(TransformType::Rotation)].currentOffset; }
     const Vector3& GetCurrentTranslation() const { return transformParams_[static_cast<size_t>(TransformType::Translation)].currentOffset; }

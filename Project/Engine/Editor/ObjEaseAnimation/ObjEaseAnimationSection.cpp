@@ -65,7 +65,7 @@ void ObjEaseAnimationSection::SaveData() {
     globalParameter_->SaveFile(groupName_, folderPath_);
 }
 
-void ObjEaseAnimationSection::Update(const float& speedRate) {
+void ObjEaseAnimationSection::Update(float speedRate) {
     float actualDeltaTime;
 
     // 時間モードに応じてデルタタイム取得
@@ -107,7 +107,7 @@ void ObjEaseAnimationSection::Update(const float& speedRate) {
     UpdateOverallState();
 }
 
-void ObjEaseAnimationSection::UpdateTransform(TransformParam& param, TransformType type, const float& deltaTime) {
+void ObjEaseAnimationSection::UpdateTransform(TransformParam& param, TransformType type, float deltaTime) {
     switch (param.state) {
     case TransformState::INACTIVE:
         // 何もしない
@@ -153,7 +153,7 @@ void ObjEaseAnimationSection::UpdateTransform(TransformParam& param, TransformTy
     }
 }
 
-void ObjEaseAnimationSection::UpdateTransformPlay(TransformParam& param, TransformType type, const float& deltaTime) {
+void ObjEaseAnimationSection::UpdateTransformPlay(TransformParam& param, TransformType type, float deltaTime) {
     bool isFinished = false;
 
     // レールの更新かイージング更新で分岐
@@ -180,7 +180,7 @@ void ObjEaseAnimationSection::UpdateTransformPlay(TransformParam& param, Transfo
     }
 }
 
-void ObjEaseAnimationSection::UpdateTransformReturn(TransformParam& param, TransformType type, const float& deltaTime) {
+void ObjEaseAnimationSection::UpdateTransformReturn(TransformParam& param, TransformType type, float deltaTime) {
     // Rail使用時はスキップ(RETURN_WAITINGで処理済み)
     if (type == TransformType::Translation && param.useRail) {
         param.state = TransformState::FINISHED;

@@ -46,7 +46,7 @@ public:
 
     // BaseEffectDataからのオーバーライド
     void Init(const std::string& animationName) override;
-    void Update(const float& speedRate = 1.0f) override;
+    void Update(float speedRate = 1.0f) override;
     void Reset() override;
     void Play() override;
 
@@ -60,7 +60,7 @@ public:
     void AdjustParam();
 
     // 初期値設定
-    void SetInitialValues(const Vector3& position, const Vector3& rotation, const float& fov);
+    void SetInitialValues(const Vector3& position, const Vector3& rotation, float fov);
 
 protected:
     //*---------------------------- protected Methods ----------------------------*//
@@ -77,10 +77,10 @@ protected:
 private:
     //*---------------------------- private Methods ----------------------------*//
 
-    void UpdateActiveKeyFrames(const float& speedRate);
+    void UpdateActiveKeyFrames(float speedRate);
     void UpdateAdaptCurrentPos();
     void StartReturnToInitial();
-    void CheckIsReturnToInitial(const float& actualDeltaTime);
+    void CheckIsReturnToInitial(float actualDeltaTime);
 
 private:
     //*---------------------------- private Variant ----------------------------*//

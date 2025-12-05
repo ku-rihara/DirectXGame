@@ -56,7 +56,7 @@ public:
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
     /// <param name="groupNum">グループ番号</param>
-    void EasingUpdateSelectGroup(const float& deltaTime, const int32_t& groupNum);
+    void EasingUpdateSelectGroup(float deltaTime, const int32_t& groupNum);
 
     /// <summary>
     /// 指定グループのイージングリセット

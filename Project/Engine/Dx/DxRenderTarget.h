@@ -28,7 +28,7 @@ public:
     /// <param name="device">D3D12デバイス</param>
     /// <param name="width">レンダーターゲット幅</param>
     /// <param name="height">レンダーターゲット高さ</param>
-    void Init(Microsoft::WRL::ComPtr<ID3D12Device> device, const uint32_t& width, const uint32_t& height);
+    void Init(Microsoft::WRL::ComPtr<ID3D12Device> device, uint32_t width, uint32_t height);
 
    
     void PreRenderTexture();          //< レンダーテクスチャへの描画準備
@@ -52,7 +52,7 @@ private:
     /// <param name="clearColor">クリアカラー</param>
     /// <returns>レンダーテクスチャリソース</returns>
     Microsoft::WRL::ComPtr<ID3D12Resource> CreateRenderTextureResource(
-        Microsoft::WRL::ComPtr<ID3D12Device> device, const uint32_t& width, const uint32_t& height,
+        Microsoft::WRL::ComPtr<ID3D12Device> device, uint32_t width, uint32_t height,
         DXGI_FORMAT format, const Vector4& clearColor);
 
 private:

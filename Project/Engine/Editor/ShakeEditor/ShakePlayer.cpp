@@ -5,7 +5,7 @@ void ShakePlayer::Init() {
     totalShakeOffset_ = {0.0f, 0.0f, 0.0f};
 }
 
-void ShakePlayer::Update(const float& speedRate) {
+void ShakePlayer::Update(float speedRate) {
     if (effectData_) {
         effectData_->Update(speedRate);
         UpdateTotalShakeOffset();

@@ -130,7 +130,7 @@ void GPUParticleResourceData::UpdatePerViewData(const PerView& data) {
     }
 }
 
-void GPUParticleResourceData::UpdatePerFrameData(const float& deltaTime) {
+void GPUParticleResourceData::UpdatePerFrameData(float deltaTime) {
     if (perFrameBuffer_.IsValid()) {
         perFrameBuffer_.mappedData->deltaTime = deltaTime;
         perFrameBuffer_.mappedData->time += deltaTime;

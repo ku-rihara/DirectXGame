@@ -24,7 +24,7 @@ public:
 
     // BaseEffectEditorからのオーバーライド
     void Init(const std::string& typeName, const bool& isUseCategory = false) override;
-    void Update(const float& speedRate = 1.0f) override;
+    void Update(float speedRate = 1.0f) override;
     void EditorUpdate() override;
     void PlaySelectedAnimation() override;
 

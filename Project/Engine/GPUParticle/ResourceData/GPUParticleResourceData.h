@@ -52,7 +52,7 @@ public:
     /// <summary>
     /// フレームデータを更新
     /// </summary>
-    void UpdatePerFrameData(const float& deltaTime);
+    void UpdatePerFrameData(float deltaTime);
 
 private:
     //*----------------------ヘルパー関数----------------------*//

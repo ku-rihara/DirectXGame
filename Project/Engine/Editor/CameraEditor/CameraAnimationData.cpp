@@ -51,7 +51,7 @@ void CameraAnimationData::GetParams() {
     timeModeSelector_.GetParam(groupName_, globalParameter_);
 }
 
-void CameraAnimationData::Update(const float& speedRate) {
+void CameraAnimationData::Update(float speedRate) {
     if (playState_ != PlayState::PLAYING) {
         return;
     }
@@ -64,7 +64,7 @@ void CameraAnimationData::Update(const float& speedRate) {
     UpdateAdaptCurrentPos();
 }
 
-void CameraAnimationData::UpdateActiveKeyFrames(const float& speedRate) {
+void CameraAnimationData::UpdateActiveKeyFrames(float speedRate) {
     if (sectionElements_.empty()) {
         return;
     }
@@ -89,7 +89,7 @@ void CameraAnimationData::UpdateActiveKeyFrames(const float& speedRate) {
     }
 }
 
-void CameraAnimationData::CheckIsReturnToInitial(const float& actualDeltaTime) {
+void CameraAnimationData::CheckIsReturnToInitial(float actualDeltaTime) {
     // returnEasing開始待機中の処理
     if (returnParam_.isWaitingForReturn) {
         resetParam_.currentDelayTimer += actualDeltaTime;
@@ -247,7 +247,7 @@ void CameraAnimationData::StartReturnToInitial() {
     returnParam_.fovEase.Reset();
 }
 
-void CameraAnimationData::SetInitialValues(const Vector3& position, const Vector3& rotation, const float& fov) {
+void CameraAnimationData::SetInitialValues(const Vector3& position, const Vector3& rotation, float fov) {
     initialCameraTransform_.position = position;
     initialCameraTransform_.rotation = rotation;
     initialCameraTransform_.fov      = fov;
