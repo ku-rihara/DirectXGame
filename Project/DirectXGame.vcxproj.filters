@@ -736,7 +736,7 @@
     <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.cpp">
       <Filter>MyEngine\.cpp\GPUParticle\ResourceData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GPUParticle\GPUParticleParamEditor.cpp">
+    <ClCompile Include="Engine\GPUParticle\GPUParticleParameter.cpp">
       <Filter>MyEngine\.cpp\GPUParticle</Filter>
     </ClCompile>
     <ClCompile Include="Engine\input\InputData.cpp">
@@ -1293,7 +1293,7 @@
     <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.h">
       <Filter>MyEngine\.h\GPUParticle\ResourceData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GPUParticle\GPUParticleParamEditor.h">
+    <ClInclude Include="Engine\GPUParticle\GPUParticleParameter.h">
       <Filter>MyEngine\.h\GPUParticle</Filter>
     </ClInclude>
     <ClInclude Include="Engine\input\InputData.h">

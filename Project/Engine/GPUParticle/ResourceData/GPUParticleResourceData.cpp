@@ -141,3 +141,9 @@ void GPUParticleResourceData::UpdatePerFrameData(float deltaTime) {
  GPUParticleCommandExecutor* GPUParticleResourceData::GetCommandExecutorRef() const {
     return commandExecutor_ ? commandExecutor_.get() : nullptr;
   }
+
+ void GPUParticleResourceData::UpdateEmitParamData(const EmitParameter& data) {
+      if (emitParamBuffer_.IsValid()) {
+          *emitParamBuffer_.mappedData = data;
+      }
+  }

@@ -54,6 +54,8 @@ public:
     /// </summary>
     void UpdatePerFrameData(float deltaTime);
 
+    void UpdateEmitParamData(const EmitParameter& data);
+
 private:
     //*----------------------ヘルパー関数----------------------*//
     void CreateParticleResource();      //< パーティクルバッファ作成

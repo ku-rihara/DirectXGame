@@ -6,6 +6,7 @@
 #include "Easing/Easing.h"
 #include "EasingTestObj/EasingTestObj.h"
 #include "Editor/EasingCreator/Easingeditor.h"
+#include "GPUParticle/GPUParticleEmitter.h"
 #include <memory>
 
 /// <summary>
@@ -16,23 +17,20 @@ private:
     std::unique_ptr<EasingTestObj> easingTestObject_;
     EasingEditor easingEditor_;
 
+    // GPUパーティクルエミッター
+    std::unique_ptr<GPUParticleEmitter> testGPUParticle_;
+    std::unique_ptr<GPUParticleEmitter> fireEffect_;
+    std::unique_ptr<GPUParticleEmitter> explosionEffect_;
+
 public:
-    ///========================================================
-    /// Constralt destract
-    ///========================================================
     EditorScene();
     ~EditorScene() override;
 
-    ///========================================================
-    /// private method
-    ///========================================================
-
-    /// 初期化、更新、描画
     void Init() override;
     void Update() override;
     void SkyBoxDraw() override;
 
-    void Debug() override; /// debug
+    void Debug() override;
     void ViewProjectionUpdate() override;
     void ViewProcess() override;
 };
