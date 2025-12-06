@@ -269,11 +269,7 @@ void BaseEnemy::Fall(float& speed, float fallSpeedLimit, float gravity, const bo
     // 加速する
     speed = max(speed - (gravity * Frame::DeltaTimeRate()), -fallSpeedLimit);
 
-    // 着地
-    if (baseTransform_.translation_.y <= parameter_.basePosY) {
-        baseTransform_.translation_.y = parameter_.basePosY;
-        speed                         = 0.0f;
-    }
+  
 }
 
 void BaseEnemy::SetGameCamera(GameCamera* gamecamera) {

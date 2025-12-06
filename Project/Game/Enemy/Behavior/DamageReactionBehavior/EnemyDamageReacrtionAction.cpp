@@ -244,8 +244,7 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
     // 頂点に到達していない場合は上昇
     if (!hasReachedPeak_) {
         // 重力を適用しながらジャンプ
-        jumpSpeed_ -= takeUpperGravity_ * Frame::DeltaTimeRate();
-        pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetWorldPosition().y + jumpSpeed_ * Frame::DeltaTimeRate());
+        pBaseEnemy_->Jump(jumpSpeed_, takeUpperFallLimit_, takeUpperGravity_);
 
         // 回転演出
         float currentRotation = pBaseEnemy_->GetBodyRotation().x;
@@ -269,9 +268,7 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
     // 浮遊時間終了後、落下
     else {
         // 落下中
-        jumpSpeed_ -= takeUpperGravity_ * Frame::DeltaTimeRate();
-        jumpSpeed_ = (std::max)(jumpSpeed_, -takeUpperFallLimit_);
-        pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetWorldPosition().y + jumpSpeed_ * Frame::DeltaTimeRate());
+        pBaseEnemy_->Fall(jumpSpeed_, takeUpperFallLimit_, takeUpperGravity_, false);
 
         // 回転継続
         float currentRotation = pBaseEnemy_->GetBodyRotation().x;
