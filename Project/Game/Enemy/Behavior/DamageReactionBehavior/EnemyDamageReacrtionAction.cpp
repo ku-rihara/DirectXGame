@@ -80,17 +80,18 @@ void EnemyDamageReactionAction::InitReaction() {
     // 状態の設定
     currentState_ = static_cast<ReactionState>(reactionParam.intReactionState);
     InitNormalReaction(reactionParam.normalParam);
+
     // 状態に応じた初期化
     switch (currentState_) {
     case ReactionState::Normal:
         break;
 
     case ReactionState::Slammed:
-        InitSlammedReaction(reactionParam.slammedParam);
+        InitSlammedReaction(reactionParam.boundParam, reactionParam.slammedParam);
         break;
 
     case ReactionState::TakeUpper:
-        InitTakeUpperReaction(reactionParam.takeUpperParam);
+        InitTakeUpperReaction(reactionParam.boundParam, reactionParam.takeUpperParam);
         break;
     }
 
@@ -116,32 +117,54 @@ void EnemyDamageReactionAction::InitNormalReaction(const EnemyDamageReactionData
     pBaseEnemy_->DamageRenditionInit();
 }
 
-void EnemyDamageReactionAction::InitSlammedReaction(const EnemyDamageReactionData::SlammedParam& param) {
-    // バウンドパラメータの設定
-    maxBoundCount_     = param.boundNum;
-    bounceDamping_     = param.bounceDamping;
+void EnemyDamageReactionAction::InitSlammedReaction(
+    const EnemyDamageReactionData::BoundParam& boundParam,
+    const EnemyDamageReactionData::SlammedParam& param) {
+
+    // バウンドパラメータの設定（共通）
+    maxBoundCount_     = boundParam.boundNum;
+    bounceDamping_     = boundParam.bounceDamping;
+    initialBounceRate_ = boundParam.initialBounceRate;
+
     currentBoundCount_ = 0;
     hasReachedGround_  = false;
 
     // 下向きの速度を設定
     bounceSpeed_ = -std::abs(blowYPower_);
 
+    // Slammed固有のパラメータ
+    slammedGravity_     = param.gravity;
+    slammedRotateSpeed_ = param.rotateSpeed;
+
     // 演出初期化
     pBaseEnemy_->DamageRenditionInit();
 }
 
+void EnemyDamageReactionAction::InitTakeUpperReaction(
+    const EnemyDamageReactionData::BoundParam& boundParam,
+    const EnemyDamageReactionData::TakeUpperParam& param) {
 
-void EnemyDamageReactionAction::InitTakeUpperReaction(const EnemyDamageReactionData::TakeUpperParam& param) {
+    // バウンドパラメータの設定
+    maxBoundCount_     = boundParam.boundNum;
+    bounceDamping_     = boundParam.bounceDamping;
+    initialBounceRate_ = boundParam.initialBounceRate;
+
+    currentBoundCount_ = 0;
+
     // 打ち上げパラメータの設定
     floatingTime_   = param.floatingTime;
     hasReachedPeak_ = false;
     floatingTimer_  = 0.0f;
-    hasBounced_     = false;
 
     // 吹っ飛び速度
     jumpSpeed_ = std::abs(blowYPower_);
 
     initialPosition_ = pBaseEnemy_->GetWorldPosition();
+
+    // TakeUpper固有のパラメータ
+    takeUpperGravity_     = param.gravity;
+    takeUpperRotateSpeed_ = param.rotateSpeed;
+    takeUpperFallLimit_   = param.fallSpeedLimit;
 
     // 演出初期化
     pBaseEnemy_->DamageRenditionInit();
@@ -175,20 +198,19 @@ void EnemyDamageReactionAction::UpdateSlammed() {
         return;
     }
 
-    const auto& reactionParam = pReactionData_->GetReactionParam().slammedParam;
-    const auto& enemyParam    = pBaseEnemy_->GetParameter();
+    const auto& enemyParam = pBaseEnemy_->GetParameter();
 
     // まず地面に叩きつける
     if (!hasReachedGround_) {
         // 重力を適用して加速
-        bounceSpeed_ -= reactionParam.gravity * Frame::DeltaTimeRate();
+        bounceSpeed_ -= slammedGravity_ * Frame::DeltaTimeRate();
 
         // 位置更新
         pBaseEnemy_->SetWorldPositionY(
             pBaseEnemy_->GetWorldPosition().y + bounceSpeed_ * Frame::DeltaTimeRate());
 
         // 地面に到達したか確認
-        if (pBaseEnemy_->GetWorldPosition().y <= enemyParam.basePosY) {
+        if (pBaseEnemy_->GetWorldPosition().y < enemyParam.basePosY) {
             pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
             hasReachedGround_ = true;
 
@@ -202,44 +224,13 @@ void EnemyDamageReactionAction::UpdateSlammed() {
             }
 
             // 叩きつけられたスピードをベースに最初のバウンド速度を設定
-            bounceSpeed_ = std::abs(bounceSpeed_) * reactionParam.initialBounceRate;
+            bounceSpeed_ = std::abs(bounceSpeed_) * initialBounceRate_;
         }
         return;
     }
 
-    // 地面到達後、バウンド処理
-    if (currentBoundCount_ < maxBoundCount_) {
-        // 重力を適用
-        bounceSpeed_ -= reactionParam.gravity * Frame::DeltaTimeRate();
-
-        // 位置更新
-        Vector3 currentPos = pBaseEnemy_->GetWorldPosition();
-        currentPos.y += bounceSpeed_ * Frame::DeltaTimeRate();
-        pBaseEnemy_->SetWorldPositionY(currentPos.y);
-
-        // 回転
-        float currentRotation = pBaseEnemy_->GetBodyRotation().x;
-        pBaseEnemy_->SetBodyRotateX(currentRotation + reactionParam.thrustRotateSpeed * Frame::DeltaTime());
-
-        // 地面に着地したら次のバウンド
-        if (currentPos.y <= enemyParam.basePosY) {
-            pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
-            currentBoundCount_++;
-
-            // 次のバウンド速度を計算
-            float nextBounceSpeed = std::abs(bounceSpeed_) * bounceDamping_;
-
-              if (currentBoundCount_ >= maxBoundCount_) {
-                // バウンド終了
-                bounceSpeed_ = 0.0f;
-            } else {
-                // 次のバウンド
-                bounceSpeed_ = nextBounceSpeed;
-
-                // バウンドエフェクト
-                pBaseEnemy_->ThrustRenditionInit();
-            }
-        }
+    if (hasReachedGround_) {
+        UpdateBounce(enemyParam.basePosY, slammedGravity_, slammedRotateSpeed_);
     }
 }
 
@@ -248,18 +239,17 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
         return;
     }
 
-    const auto& reactionParam = pReactionData_->GetReactionParam().takeUpperParam;
-    const auto& enemyParam    = pBaseEnemy_->GetParameter();
+    const auto& enemyParam = pBaseEnemy_->GetParameter();
 
     // 頂点に到達していない場合は上昇
     if (!hasReachedPeak_) {
         // 重力を適用しながらジャンプ
-        jumpSpeed_ -= reactionParam.gravity * Frame::DeltaTimeRate();
+        jumpSpeed_ -= takeUpperGravity_ * Frame::DeltaTimeRate();
         pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetWorldPosition().y + jumpSpeed_ * Frame::DeltaTimeRate());
 
         // 回転演出
         float currentRotation = pBaseEnemy_->GetBodyRotation().x;
-        pBaseEnemy_->SetBodyRotateX(currentRotation + reactionParam.rotateSpeed * Frame::DeltaTimeRate());
+        pBaseEnemy_->SetBodyRotateX(currentRotation + takeUpperRotateSpeed_ * Frame::DeltaTimeRate());
 
         // 速度が0以下になったら頂点到達
         if (jumpSpeed_ <= 0.0f) {
@@ -274,47 +264,72 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
 
         // 回転演出
         float currentRotation = pBaseEnemy_->GetBodyRotation().x;
-        pBaseEnemy_->SetBodyRotateX(currentRotation + reactionParam.rotateSpeed * Frame::DeltaTimeRate());
+        pBaseEnemy_->SetBodyRotateX(currentRotation + takeUpperRotateSpeed_ * Frame::DeltaTimeRate());
     }
     // 浮遊時間終了後、落下
     else {
-        // バウンド処理
-        if (!hasBounced_) {
-            // 落下中
-            jumpSpeed_ -= reactionParam.gravity * Frame::DeltaTimeRate();
-            jumpSpeed_ = (std::max)(jumpSpeed_, -reactionParam.fallSpeedLimit);
-            pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetWorldPosition().y + jumpSpeed_ * Frame::DeltaTimeRate());
+        // 落下中
+        jumpSpeed_ -= takeUpperGravity_ * Frame::DeltaTimeRate();
+        jumpSpeed_ = (std::max)(jumpSpeed_, -takeUpperFallLimit_);
+        pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetWorldPosition().y + jumpSpeed_ * Frame::DeltaTimeRate());
 
-            // 回転継続
-            float currentRotation = pBaseEnemy_->GetBodyRotation().x;
-            pBaseEnemy_->SetBodyRotateX(currentRotation + reactionParam.rotateSpeed * Frame::DeltaTimeRate());
+        // 回転継続
+        float currentRotation = pBaseEnemy_->GetBodyRotation().x;
+        pBaseEnemy_->SetBodyRotateX(currentRotation + takeUpperRotateSpeed_ * Frame::DeltaTimeRate());
 
-            // 地面に着地したらバウンド
-            if (pBaseEnemy_->GetWorldPosition().y <= enemyParam.basePosY) {
-                pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
+        // 地面に着地したらバウンド処理へ
+        if (pBaseEnemy_->GetWorldPosition().y < enemyParam.basePosY) {
+            pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
 
-                // 1回だけバウンド
-                jumpSpeed_  = std::abs(blowYPower_) * 0.3f;
-                hasBounced_ = true;
+            // 最初の着地時のバウンド速度を設定
+            bounceSpeed_      = std::abs(blowYPower_) * initialBounceRate_;
+            hasReachedGround_ = true;
 
-                // バウンドエフェクト
-                pBaseEnemy_->ThrustRenditionInit();
-            }
+            // バウンドエフェクト
+            pBaseEnemy_->ThrustRenditionInit();
+        }
+    }
+
+    // 地面到達後のバウンド処理
+    if (hasReachedGround_) {
+        UpdateBounce(enemyParam.basePosY, takeUpperGravity_, takeUpperRotateSpeed_);
+    }
+}
+
+void EnemyDamageReactionAction::UpdateBounce(float basePosY, float gravity, float rotateSpeed) {
+    if (currentBoundCount_ >= maxBoundCount_) {
+        return;
+    }
+
+    // 重力を適用
+    bounceSpeed_ -= gravity * Frame::DeltaTimeRate();
+
+    // 位置更新
+    Vector3 currentPos = pBaseEnemy_->GetWorldPosition();
+    currentPos.y += bounceSpeed_ * Frame::DeltaTimeRate();
+    pBaseEnemy_->SetWorldPositionY(currentPos.y);
+
+    // 回転
+    float currentRotation = pBaseEnemy_->GetBodyRotation().x;
+    pBaseEnemy_->SetBodyRotateX(currentRotation + rotateSpeed * Frame::DeltaTime());
+
+    // 地面に着地したら次のバウンド
+    if (currentPos.y <= basePosY) {
+        pBaseEnemy_->SetWorldPositionY(basePosY);
+        currentBoundCount_++;
+
+        // 次のバウンド速度を計算
+        float nextBounceSpeed = std::abs(bounceSpeed_) * bounceDamping_;
+
+        if (currentBoundCount_ >= maxBoundCount_) {
+            // バウンド終了
+            bounceSpeed_ = 0.0f;
         } else {
-            // バウンド後の落下
-            jumpSpeed_ -= reactionParam.gravity * Frame::DeltaTimeRate();
-            jumpSpeed_ = (std::max)(jumpSpeed_, -reactionParam.fallSpeedLimit);
-            pBaseEnemy_->SetWorldPositionY(pBaseEnemy_->GetWorldPosition().y + jumpSpeed_ * Frame::DeltaTimeRate());
+            // 次のバウンド
+            bounceSpeed_ = nextBounceSpeed;
 
-            // 回転継続
-            float currentRotation = pBaseEnemy_->GetBodyRotation().x;
-            pBaseEnemy_->SetBodyRotateX(currentRotation + reactionParam.rotateSpeed * Frame::DeltaTimeRate());
-
-            // 最終着地
-            if (pBaseEnemy_->GetWorldPosition().y <= enemyParam.basePosY) {
-                pBaseEnemy_->SetWorldPositionY(enemyParam.basePosY);
-                jumpSpeed_ = 0.0f;
-            }
+            // バウンドエフェクト
+            pBaseEnemy_->ThrustRenditionInit();
         }
     }
 }
@@ -386,7 +401,7 @@ bool EnemyDamageReactionAction::IsReactionFinished() const {
     }
 
     if (currentState_ == ReactionState::TakeUpper) {
-        if (hasReachedPeak_ && floatingTimer_ >= floatingTime_ && hasBounced_ && pBaseEnemy_->GetWorldPosition().y <= enemyParam.basePosY && std::abs(jumpSpeed_) < 0.01f) {
+        if (hasReachedPeak_ && floatingTimer_ >= floatingTime_ && hasReachedGround_ && currentBoundCount_ >= maxBoundCount_ && pBaseEnemy_->GetWorldPosition().y <= enemyParam.basePosY && std::abs(bounceSpeed_) < 0.01f) {
             return true;
         }
     }

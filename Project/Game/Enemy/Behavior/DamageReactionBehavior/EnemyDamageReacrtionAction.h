@@ -1,4 +1,4 @@
- #pragma once
+#pragma once
 
 #include "BaseEnemyDamageReaction.h"
 #include "Enemy/DamageReaction/EnemyDamageReactionData.h"
@@ -29,13 +29,20 @@ private:
     void InitReaction();
 
     void InitNormalReaction(const EnemyDamageReactionData::NormalParam& param);
-    void InitSlammedReaction(const EnemyDamageReactionData::SlammedParam& param);
-    void InitTakeUpperReaction(const EnemyDamageReactionData::TakeUpperParam& param);
+    void InitSlammedReaction(
+        const EnemyDamageReactionData::BoundParam& boundParam,
+        const EnemyDamageReactionData::SlammedParam& param);
+    void InitTakeUpperReaction(
+        const EnemyDamageReactionData::BoundParam& boundParam,
+        const EnemyDamageReactionData::TakeUpperParam& param);
 
     // 各リアクション処理
     void UpdateNormal();
     void UpdateSlammed();
     void UpdateTakeUpper();
+
+    // バウンド処理
+    void UpdateBounce(float basePosY, float gravity, float rotateSpeed);
 
     // 演出更新
     void UpdateRenditions();
@@ -63,21 +70,28 @@ private:
     // Normal用パラメータ
     Vector3 knockBackVelocity_;
     float knockBackTimer_ = 0.0f;
-  
-    // Slammed用パラメータ
+
+    // バウンドパラメータ
     int32_t currentBoundCount_ = 0;
     int32_t maxBoundCount_     = 0;
     float bounceSpeed_;
     float bounceDamping_;
-    bool hasReachedGround_ = false; 
+    float initialBounceRate_;
+    bool hasReachedGround_ = false;
 
-    // TakeUpper用パラメータ
+    // Slammed固有パラメータ
+    float slammedGravity_;
+    float slammedRotateSpeed_;
+
+    // TakeUpper固有パラメータ
     float floatingTime_ = 0.0f;
     float jumpSpeed_    = 0.0f;
     Vector3 initialPosition_;
-    bool hasReachedPeak_ = false; 
-    float floatingTimer_ = 0.0f;  
-    bool hasBounced_     = false; 
+    bool hasReachedPeak_ = false;
+    float floatingTimer_ = 0.0f;
+    float takeUpperGravity_;
+    float takeUpperRotateSpeed_;
+    float takeUpperFallLimit_;
 
     // 演出管理
     int32_t currentRenditionIndex_ = 0;

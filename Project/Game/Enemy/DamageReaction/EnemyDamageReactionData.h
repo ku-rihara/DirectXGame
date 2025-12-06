@@ -23,20 +23,24 @@ public:
 
     // Normal状態のパラメータ
     struct NormalParam {
-        float knockBackTime;    
-        float knockBackDamping; 
+        float knockBackTime;
+        float knockBackDamping;
+    };
+
+    // バウンド共通パラメータ
+    struct BoundParam {
+        int32_t boundNum;      
+        float bounceDamping;   
+        float initialBounceRate;
     };
 
     struct SlammedParam {
-        int32_t boundNum;       
-        float bounceDamping;    
-        float initialBounceRate;
-        float gravity;   
-        float thrustRotateSpeed;
+        float gravity;
+        float rotateSpeed;
     };
 
     struct TakeUpperParam {
-        float floatingTime; 
+        float floatingTime;
         float fallSpeedLimit;
         float gravity;
         float rotateSpeed;
@@ -48,6 +52,7 @@ public:
         int32_t intReactionState = 0;
         ReactionState reactionState;
         NormalParam normalParam;
+        BoundParam boundParam; 
         SlammedParam slammedParam;
         TakeUpperParam takeUpperParam;
         float damageCollingTime;

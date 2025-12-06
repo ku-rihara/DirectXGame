@@ -1,5 +1,8 @@
 {
     "UpperDamage": {
+        "Bound_BounceDamping": 0.28999999165534973,
+        "Bound_BoundNum": 1,
+        "Bound_InitialBounceRate": 0.9399999976158142,
         "Normal_KnockBackDamping": 0.30000001192092896,
         "Normal_KnockBackTime": 0.3100000023841858,
         "ReactionState": 2,

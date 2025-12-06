@@ -1,5 +1,8 @@
 {
     "SlamdDanage": {
+        "Bound_BounceDamping": 0.4300000071525574,
+        "Bound_BoundNum": 2,
+        "Bound_InitialBounceRate": 0.4300000071525574,
         "Normal_KnockBackDamping": 0.0,
         "Normal_KnockBackTime": 0.25999999046325684,
         "ReactionState": 1,
