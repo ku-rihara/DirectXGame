@@ -68,6 +68,10 @@
     <ClCompile Include="Engine\Editor\EasingCreator\EasingEditor.cpp" />
     <ClCompile Include="Engine\Editor\EasingCreator\EasingParameterData.cpp" />
     <ClCompile Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.cpp" />
+    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleData.cpp" />
+    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleEditor.cpp" />
+    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticlePlayer.cpp" />
+    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.cpp" />
     <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationData.cpp" />
     <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationEditor.cpp" />
     <ClCompile Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationSection.cpp" />
@@ -242,6 +246,10 @@
     <ClInclude Include="Engine\Editor\EasingCreator\EasingEditor.h" />
     <ClInclude Include="Engine\Editor\EasingCreator\EasingParameterData.h" />
     <ClInclude Include="Engine\Editor\EffectEditorSuite\EffectEditorSuite.h" />
+    <ClInclude Include="Engine\Editor\GPUParticleEditor\GPUParticleData.h" />
+    <ClInclude Include="Engine\Editor\GPUParticleEditor\GPUParticleEditor.h" />
+    <ClInclude Include="Engine\Editor\GPUParticleEditor\GPUParticlePlayer.h" />
+    <ClInclude Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.h" />
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationData.h" />
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationEditor.h" />
     <ClInclude Include="Engine\Editor\ObjEaseAnimation\ObjEaseAnimationSection.h" />

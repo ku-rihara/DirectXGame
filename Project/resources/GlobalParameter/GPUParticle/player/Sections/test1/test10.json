@@ -1,0 +1,84 @@
+{
+    "test10": {
+        "Blend Mode": 1,
+        "Color Max": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Color Min": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Count": 1000,
+        "Frequency": 0.009999999776482582,
+        "Is Active": true,
+        "Is Move For Rail": false,
+        "Is Rail Loop": false,
+        "LifeTime Max": 3.0,
+        "LifeTime Min": 1.0,
+        "Move Speed": 1.0,
+        "Position": [
+            6.099999904632568,
+            12.199999809265137,
+            0.0
+        ],
+        "Radius": 1.0,
+        "Rotation Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotation Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotation Speed Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotation Speed Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale Max": [
+            6.0,
+            6.0,
+            6.0
+        ],
+        "Scale Min": [
+            4.0,
+            4.0,
+            4.0
+        ],
+        "Start Time": 0.0,
+        "Texture Path": "Resources/texture/circle.png",
+        "Translate Max": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Translate Min": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "Velocity Max": [
+            254.6999969482422,
+            356.3999938964844,
+            1.0
+        ],
+        "Velocity Min": [
+            -216.5,
+            276.29998779296875,
+            -1.0
+        ],
+        "timeMode": 1
+    }
+}

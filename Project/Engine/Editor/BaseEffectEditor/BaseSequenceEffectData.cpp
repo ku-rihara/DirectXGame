@@ -3,6 +3,7 @@
 #include "Editor/CameraEditor/CameraKeyFrame.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationSection.h"
 #include "Editor/RailEditor/RailControlPoint.h"
+#include"Editor/GPUParticleEditor/GPUParticleSection.h"
 // std
 #include <algorithm>
 #include <filesystem>
@@ -155,3 +156,4 @@ void BaseSequenceEffectData<TSequenceElement>::SetSelectedKeyFrameIndex(int32_t 
 template class BaseSequenceEffectData<CameraKeyFrame>;
 template class BaseSequenceEffectData<ObjEaseAnimationSection>;
 template class BaseSequenceEffectData<RailControlPoint>;
+template class BaseSequenceEffectData<GPUParticleSection>;
