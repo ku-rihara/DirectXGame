@@ -3,8 +3,10 @@
 #include "Frame/Frame.h"
 #include "Function/GetFile.h"
 #include "GPUParticle/GPUParticleManager.h"
+#include "MathFunction.h"
 #include "Primitive/IPrimitive.h"
 #include <imgui.h>
+#include <numbers>
 
 void GPUParticleSection::Init(const std::string& particleName, const std::string& categoryName, int32_t sectionIndex) {
     particleName_ = particleName;
@@ -51,21 +53,27 @@ void GPUParticleSection::Init(const std::string& particleName, const std::string
 }
 
 void GPUParticleSection::ParameterInit() {
-    emitParams_.scaleMin         = {0.5f, 0.5f, 0.5f};
-    emitParams_.scaleMax         = {1.5f, 1.5f, 1.5f};
-    emitParams_.rotationMin      = {0.0f, 0.0f, 0.0f};
-    emitParams_.rotationMax      = {360.0f, 360.0f, 360.0f};
-    emitParams_.rotationSpeedMin = {0.0f, 0.0f, 0.0f};
-    emitParams_.rotationSpeedMax = {180.0f, 180.0f, 180.0f};
-    emitParams_.translateMin     = {-1.0f, -1.0f, -1.0f};
-    emitParams_.translateMax     = {1.0f, 1.0f, 1.0f};
-    emitParams_.velocityMin      = {-1.0f, -1.0f, -1.0f};
-    emitParams_.velocityMax      = {1.0f, 1.0f, 1.0f};
-    emitParams_.colorMin         = {1.0f, 1.0f, 1.0f, 1.0f};
-    emitParams_.colorMax         = {1.0f, 1.0f, 1.0f, 1.0f};
-    emitParams_.lifeTimeMin      = 1.0f;
-    emitParams_.lifeTimeMax      = 3.0f;
+    // Transformパラメータ初期化
+    transformParams_.scaleMin     = {0.5f, 0.5f, 0.5f};
+    transformParams_.scaleMax     = {1.5f, 1.5f, 1.5f};
+    transformParams_.rotationMin  = {0.0f, 0.0f, 0.0f};
+    transformParams_.rotationMax  = {360.0f, 360.0f, 360.0f};
+    transformParams_.translateMin = {-1.0f, -1.0f, -1.0f};
+    transformParams_.translateMax = {1.0f, 1.0f, 1.0f};
 
+    // Physicsパラメータ初期化
+    physicsParams_.velocityMin      = {-1.0f, -1.0f, -1.0f};
+    physicsParams_.velocityMax      = {1.0f, 1.0f, 1.0f};
+    physicsParams_.rotationSpeedMin = {0.0f, 0.0f, 0.0f};
+    physicsParams_.rotationSpeedMax = {180.0f, 180.0f, 180.0f};
+ 
+    // Appearanceパラメータ初期化
+    appearanceParams_.colorMin         = {1.0f, 1.0f, 1.0f, 1.0f};
+    appearanceParams_.colorMax         = {1.0f, 1.0f, 1.0f, 1.0f};
+    appearanceParams_.lifeTimeMin      = 1.0f;
+    appearanceParams_.lifeTimeMax      = 3.0f;
+
+    // その他は既存通り
     emitterSettings_.position  = {0.0f, 0.0f, 0.0f};
     emitterSettings_.count     = 10;
     emitterSettings_.frequency = 1.0f;
@@ -75,22 +83,26 @@ void GPUParticleSection::ParameterInit() {
 }
 
 void GPUParticleSection::RegisterParams() {
-    // Emit Parameters
-    globalParameter_->Regist(sectionName_, "Scale Min", &emitParams_.scaleMin);
-    globalParameter_->Regist(sectionName_, "Scale Max", &emitParams_.scaleMax);
-    globalParameter_->Regist(sectionName_, "Rotation Min", &emitParams_.rotationMin);
-    globalParameter_->Regist(sectionName_, "Rotation Max", &emitParams_.rotationMax);
-    globalParameter_->Regist(sectionName_, "Rotation Speed Min", &emitParams_.rotationSpeedMin);
-    globalParameter_->Regist(sectionName_, "Rotation Speed Max", &emitParams_.rotationSpeedMax);
-    globalParameter_->Regist(sectionName_, "Translate Min", &emitParams_.translateMin);
-    globalParameter_->Regist(sectionName_, "Translate Max", &emitParams_.translateMax);
-    globalParameter_->Regist(sectionName_, "Velocity Min", &emitParams_.velocityMin);
-    globalParameter_->Regist(sectionName_, "Velocity Max", &emitParams_.velocityMax);
-    globalParameter_->Regist(sectionName_, "Color Min", &emitParams_.colorMin);
-    globalParameter_->Regist(sectionName_, "Color Max", &emitParams_.colorMax);
-    globalParameter_->Regist(sectionName_, "LifeTime Min", &emitParams_.lifeTimeMin);
-    globalParameter_->Regist(sectionName_, "LifeTime Max", &emitParams_.lifeTimeMax);
+    // Transform Parameters
+    globalParameter_->Regist(sectionName_, "Scale Min", &transformParams_.scaleMin);
+    globalParameter_->Regist(sectionName_, "Scale Max", &transformParams_.scaleMax);
+    globalParameter_->Regist(sectionName_, "Rotation Min", &transformParams_.rotationMin);
+    globalParameter_->Regist(sectionName_, "Rotation Max", &transformParams_.rotationMax);
+    globalParameter_->Regist(sectionName_, "Translate Min", &transformParams_.translateMin);
+    globalParameter_->Regist(sectionName_, "Translate Max", &transformParams_.translateMax);
 
+    // Physics Parameters
+    globalParameter_->Regist(sectionName_, "Velocity Min", &physicsParams_.velocityMin);
+    globalParameter_->Regist(sectionName_, "Velocity Max", &physicsParams_.velocityMax);
+    globalParameter_->Regist(sectionName_, "Rotation Speed Min", &physicsParams_.rotationSpeedMin);
+    globalParameter_->Regist(sectionName_, "Rotation Speed Max", &physicsParams_.rotationSpeedMax);
+  
+    // Appearance Parameters
+    globalParameter_->Regist(sectionName_, "Color Min", &appearanceParams_.colorMin);
+    globalParameter_->Regist(sectionName_, "Color Max", &appearanceParams_.colorMax);
+    globalParameter_->Regist(sectionName_, "LifeTime Min", &appearanceParams_.lifeTimeMin);
+    globalParameter_->Regist(sectionName_, "LifeTime Max", &appearanceParams_.lifeTimeMax);
+  
     // Emitter Settings
     globalParameter_->Regist(sectionName_, "Position", &emitterSettings_.position);
     globalParameter_->Regist(sectionName_, "Count", reinterpret_cast<int32_t*>(&emitterSettings_.count));
@@ -112,20 +124,25 @@ void GPUParticleSection::RegisterParams() {
 }
 
 void GPUParticleSection::GetParams() {
-    emitParams_.scaleMin         = globalParameter_->GetValue<Vector3>(sectionName_, "Scale Min");
-    emitParams_.scaleMax         = globalParameter_->GetValue<Vector3>(sectionName_, "Scale Max");
-    emitParams_.rotationMin      = globalParameter_->GetValue<Vector3>(sectionName_, "Rotation Min");
-    emitParams_.rotationMax      = globalParameter_->GetValue<Vector3>(sectionName_, "Rotation Max");
-    emitParams_.rotationSpeedMin = globalParameter_->GetValue<Vector3>(sectionName_, "Rotation Speed Min");
-    emitParams_.rotationSpeedMax = globalParameter_->GetValue<Vector3>(sectionName_, "Rotation Speed Max");
-    emitParams_.translateMin     = globalParameter_->GetValue<Vector3>(sectionName_, "Translate Min");
-    emitParams_.translateMax     = globalParameter_->GetValue<Vector3>(sectionName_, "Translate Max");
-    emitParams_.velocityMin      = globalParameter_->GetValue<Vector3>(sectionName_, "Velocity Min");
-    emitParams_.velocityMax      = globalParameter_->GetValue<Vector3>(sectionName_, "Velocity Max");
-    emitParams_.colorMin         = globalParameter_->GetValue<Vector4>(sectionName_, "Color Min");
-    emitParams_.colorMax         = globalParameter_->GetValue<Vector4>(sectionName_, "Color Max");
-    emitParams_.lifeTimeMin      = globalParameter_->GetValue<float>(sectionName_, "LifeTime Min");
-    emitParams_.lifeTimeMax      = globalParameter_->GetValue<float>(sectionName_, "LifeTime Max");
+    // Transform
+    transformParams_.scaleMin     = globalParameter_->GetValue<Vector3>(sectionName_, "Scale Min");
+    transformParams_.scaleMax     = globalParameter_->GetValue<Vector3>(sectionName_, "Scale Max");
+    transformParams_.rotationMin  = globalParameter_->GetValue<Vector3>(sectionName_, "Rotation Min");
+    transformParams_.rotationMax  = globalParameter_->GetValue<Vector3>(sectionName_, "Rotation Max");
+    transformParams_.translateMin = globalParameter_->GetValue<Vector3>(sectionName_, "Translate Min");
+    transformParams_.translateMax = globalParameter_->GetValue<Vector3>(sectionName_, "Translate Max");
+
+    // Physics
+    physicsParams_.velocityMin      = globalParameter_->GetValue<Vector3>(sectionName_, "Velocity Min");
+    physicsParams_.velocityMax      = globalParameter_->GetValue<Vector3>(sectionName_, "Velocity Max");
+    physicsParams_.rotationSpeedMin = globalParameter_->GetValue<Vector3>(sectionName_, "Rotation Speed Min");
+    physicsParams_.rotationSpeedMax = globalParameter_->GetValue<Vector3>(sectionName_, "Rotation Speed Max");
+
+    // Appearance
+    appearanceParams_.colorMin    = globalParameter_->GetValue<Vector4>(sectionName_, "Color Min");
+    appearanceParams_.colorMax    = globalParameter_->GetValue<Vector4>(sectionName_, "Color Max");
+    appearanceParams_.lifeTimeMin = globalParameter_->GetValue<float>(sectionName_, "LifeTime Min");
+    appearanceParams_.lifeTimeMax = globalParameter_->GetValue<float>(sectionName_, "LifeTime Max");
 
     emitterSettings_.position  = globalParameter_->GetValue<Vector3>(sectionName_, "Position");
     emitterSettings_.count     = globalParameter_->GetValue<int32_t>(sectionName_, "Count");
@@ -237,9 +254,9 @@ void GPUParticleSection::UpdateEmitTransform() {
     }
 
     emitBoxTransform_.scale_ = {
-        emitParams_.translateMax.x - emitParams_.translateMin.x,
-        emitParams_.translateMax.y - emitParams_.translateMin.y,
-        emitParams_.translateMax.z - emitParams_.translateMin.z};
+        transformParams_.translateMax.x - transformParams_.translateMin.x,
+        transformParams_.translateMax.y - transformParams_.translateMin.y,
+        transformParams_.translateMax.z - transformParams_.translateMin.z};
 
     emitBoxTransform_.UpdateMatrix();
 }
@@ -272,40 +289,38 @@ void GPUParticleSection::StartRailEmit() {
 }
 
 void GPUParticleSection::ApplyParameters() {
-    EmitParameter shaderParams;
-
-    const float degToRad     = 3.14159f / 180.0f;
-    shaderParams.rotationMin = {
-        emitParams_.rotationMin.x * degToRad,
-        emitParams_.rotationMin.y * degToRad,
-        emitParams_.rotationMin.z * degToRad};
-    shaderParams.rotationMax = {
-        emitParams_.rotationMax.x * degToRad,
-        emitParams_.rotationMax.y * degToRad,
-        emitParams_.rotationMax.z * degToRad};
-    shaderParams.rotationSpeedMin = {
-        emitParams_.rotationSpeedMin.x * degToRad,
-        emitParams_.rotationSpeedMin.y * degToRad,
-        emitParams_.rotationSpeedMin.z * degToRad};
-    shaderParams.rotationSpeedMax = {
-        emitParams_.rotationSpeedMax.x * degToRad,
-        emitParams_.rotationSpeedMax.y * degToRad,
-        emitParams_.rotationSpeedMax.z * degToRad};
-
-    shaderParams.scaleMin     = emitParams_.scaleMin;
-    shaderParams.scaleMax     = emitParams_.scaleMax;
-    shaderParams.translateMin = emitParams_.translateMin;
-    shaderParams.translateMax = emitParams_.translateMax;
-    shaderParams.velocityMin  = emitParams_.velocityMin;
-    shaderParams.velocityMax  = emitParams_.velocityMax;
-    shaderParams.colorMin     = emitParams_.colorMin;
-    shaderParams.colorMax     = emitParams_.colorMax;
-    shaderParams.lifeTimeMin  = emitParams_.lifeTimeMin;
-    shaderParams.lifeTimeMax  = emitParams_.lifeTimeMax;
-
     auto group = GPUParticleManager::GetInstance()->GetParticleGroup(groupName_);
-    if (group && group->resourceData) {
-        group->resourceData->UpdateEmitParamData(shaderParams);
+    if (!group || !group->resourceData) {
+        return;
+    }
+
+    // リソースのバッファに直接書き込み
+    auto& buffers = group->resourceData->GetEmitParamBuffers();
+
+    // Transform
+    if (auto* data = buffers.transformBuffer.mappedData) {
+        data->scaleMin     = transformParams_.scaleMin;
+        data->scaleMax     = transformParams_.scaleMax;
+        data->rotationMin  = ToRadian(transformParams_.rotationMin);
+        data->rotationMax  = ToRadian(transformParams_.rotationMax);
+        data->translateMin = transformParams_.translateMin;
+        data->translateMax = transformParams_.translateMax;
+    }
+
+    // Physics
+    if (auto* data = buffers.physicsBuffer.mappedData) {
+        data->velocityMin      = physicsParams_.velocityMin;
+        data->velocityMax      = physicsParams_.velocityMax;
+        data->rotationSpeedMin = ToRadian(physicsParams_.rotationSpeedMin);
+        data->rotationSpeedMax = ToRadian(physicsParams_.rotationSpeedMax);
+    }
+
+    // Appearance
+    if (auto* data = buffers.appearanceBuffer.mappedData) {
+        data->colorMin    = appearanceParams_.colorMin;
+        data->colorMax    = appearanceParams_.colorMax;
+        data->lifeTimeMin = appearanceParams_.lifeTimeMin;
+        data->lifeTimeMax = appearanceParams_.lifeTimeMax;
     }
 }
 
@@ -350,46 +365,50 @@ void GPUParticleSection::AdjustParam() {
 }
 
 void GPUParticleSection::EmitParameterEditor() {
-    if (ImGui::CollapsingHeader("Emit Parameters")) {
+    if (ImGui::CollapsingHeader("Transform Parameters")) {
         if (ImGui::TreeNode("Scale")) {
-            ImGui::DragFloat3("Min", &emitParams_.scaleMin.x, 0.01f);
-            ImGui::DragFloat3("Max", &emitParams_.scaleMax.x, 0.01f);
+            ImGui::DragFloat3("Min", &transformParams_.scaleMin.x, 0.01f);
+            ImGui::DragFloat3("Max", &transformParams_.scaleMax.x, 0.01f);
             ImGui::TreePop();
         }
 
         if (ImGui::TreeNode("Rotation (Degree)")) {
-            ImGui::DragFloat3("Min", &emitParams_.rotationMin.x, 1.0f, -360.0f, 360.0f);
-            ImGui::DragFloat3("Max", &emitParams_.rotationMax.x, 1.0f, -360.0f, 360.0f);
-            ImGui::TreePop();
-        }
-
-        if (ImGui::TreeNode("Rotation Speed (Degree/sec)")) {
-            ImGui::DragFloat3("Min", &emitParams_.rotationSpeedMin.x, 1.0f, 0.0f, 720.0f);
-            ImGui::DragFloat3("Max", &emitParams_.rotationSpeedMax.x, 1.0f, 0.0f, 720.0f);
+            ImGui::DragFloat3("Min", &transformParams_.rotationMin.x, 1.0f, -360.0f, 360.0f);
+            ImGui::DragFloat3("Max", &transformParams_.rotationMax.x, 1.0f, -360.0f, 360.0f);
             ImGui::TreePop();
         }
 
         if (ImGui::TreeNode("Position Offset")) {
-            ImGui::DragFloat3("Min", &emitParams_.translateMin.x, 0.1f);
-            ImGui::DragFloat3("Max", &emitParams_.translateMax.x, 0.1f);
+            ImGui::DragFloat3("Min", &transformParams_.translateMin.x, 0.1f);
+            ImGui::DragFloat3("Max", &transformParams_.translateMax.x, 0.1f);
             ImGui::TreePop();
         }
+    }
 
+    if (ImGui::CollapsingHeader("Physics Parameters")) {
         if (ImGui::TreeNode("Velocity")) {
-            ImGui::DragFloat3("Min", &emitParams_.velocityMin.x, 0.1f);
-            ImGui::DragFloat3("Max", &emitParams_.velocityMax.x, 0.1f);
+            ImGui::DragFloat3("Min", &physicsParams_.velocityMin.x, 0.1f);
+            ImGui::DragFloat3("Max", &physicsParams_.velocityMax.x, 0.1f);
             ImGui::TreePop();
         }
 
+        if (ImGui::TreeNode("Rotation Speed (Degree/sec)")) {
+            ImGui::DragFloat3("Min", &physicsParams_.rotationSpeedMin.x, 1.0f, 0.0f, 720.0f);
+            ImGui::DragFloat3("Max", &physicsParams_.rotationSpeedMax.x, 1.0f, 0.0f, 720.0f);
+            ImGui::TreePop();
+        }
+    }
+
+    if (ImGui::CollapsingHeader("Appearance Parameters")) {
         if (ImGui::TreeNode("Color")) {
-            ImGui::ColorEdit4("Min", &emitParams_.colorMin.x);
-            ImGui::ColorEdit4("Max", &emitParams_.colorMax.x);
+            ImGui::ColorEdit4("Min", &appearanceParams_.colorMin.x);
+            ImGui::ColorEdit4("Max", &appearanceParams_.colorMax.x);
             ImGui::TreePop();
         }
 
-        if (ImGui::TreeNode("LifeTime")) {
-            ImGui::DragFloat("Min", &emitParams_.lifeTimeMin, 0.1f, 0.1f, 10.0f);
-            ImGui::DragFloat("Max", &emitParams_.lifeTimeMax, 0.1f, 0.1f, 10.0f);
+        if (ImGui::TreeNode("LifeTime & Fade")) {
+            ImGui::DragFloat("Life Min", &appearanceParams_.lifeTimeMin, 0.1f, 0.1f, 10.0f);
+            ImGui::DragFloat("Life Max", &appearanceParams_.lifeTimeMax, 0.1f, 0.1f, 10.0f);
             ImGui::TreePop();
         }
     }

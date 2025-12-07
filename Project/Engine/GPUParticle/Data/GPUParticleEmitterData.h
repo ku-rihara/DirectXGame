@@ -13,9 +13,9 @@ struct ParticleEmit {
 };
 
 
-struct EmitParameter {
+struct EmitTransformParams {
     Vector3 scaleMin;
-    float _padding0; 
+    float _padding0;
     Vector3 scaleMax;
     float _padding1;
 
@@ -24,28 +24,32 @@ struct EmitParameter {
     Vector3 rotationMax;
     float _padding3;
 
-    Vector3 rotationSpeedMin;
-    float _padding4;
-    Vector3 rotationSpeedMax;
-    float _padding5;
-
     Vector3 translateMin;
-    float _padding6;
+    float _padding4;
     Vector3 translateMax;
-    float _padding7;
+    float _padding5;
+};
 
+// Physics系パラメータ
+struct EmitPhysicsParams {
     Vector3 velocityMin;
-    float _padding8;
+    float _padding0;
     Vector3 velocityMax;
-    float _padding9;
+    float _padding1;
 
+    Vector3 rotationSpeedMin; 
+    float _padding2;
+    Vector3 rotationSpeedMax;
+    float _padding3;
+};
+
+// Appearance系パラメータ
+struct EmitAppearanceParams {
     Vector4 colorMin;
     Vector4 colorMax;
 
     float lifeTimeMin;
     float lifeTimeMax;
-    float _padding10;
-    float _padding11; 
 };
 
 struct PerFrame {

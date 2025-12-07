@@ -14,7 +14,16 @@
             1.0
         ],
         "Count": 1000,
+        "Drag": 0.0,
+        "Emissive Strength": 0.0,
+        "Fade In Time": 0.10000000149011612,
+        "Fade Out Time": 0.5,
         "Frequency": 0.009999999776482582,
+        "Gravity": [
+            0.0,
+            -9.800000190734863,
+            0.0
+        ],
         "Is Active": true,
         "Is Move For Rail": false,
         "Is Rail Loop": false,

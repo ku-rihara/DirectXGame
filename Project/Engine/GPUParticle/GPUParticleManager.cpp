@@ -138,7 +138,6 @@ void GPUParticleManager::Update() {
         }
 
         // Particle更新
-        // TODO:DeltaTimeはParticleごとに設定できるようにする
         group.resourceData->UpdatePerFrameData(Frame::DeltaTime());
         DispatchEmit(group);
         DispatchUpdate(group);

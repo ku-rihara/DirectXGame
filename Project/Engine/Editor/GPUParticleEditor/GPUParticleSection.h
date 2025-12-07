@@ -22,21 +22,28 @@ public:
         PLAYING
     };
 
-    struct EmitParameters {
-        Vector3 scaleMin         = {0.5f, 0.5f, 0.5f};
-        Vector3 scaleMax         = {1.5f, 1.5f, 1.5f};
-        Vector3 rotationMin      = {0.0f, 0.0f, 0.0f};
-        Vector3 rotationMax      = {360.0f, 360.0f, 360.0f};
-        Vector3 rotationSpeedMin = {0.0f, 0.0f, 0.0f};
-        Vector3 rotationSpeedMax = {180.0f, 180.0f, 180.0f};
-        Vector3 translateMin     = {-1.0f, -1.0f, -1.0f};
-        Vector3 translateMax     = {1.0f, 1.0f, 1.0f};
+   struct TransformParameters {
+        Vector3 scaleMin     = {0.5f, 0.5f, 0.5f};
+        Vector3 scaleMax     = {1.5f, 1.5f, 1.5f};
+        Vector3 rotationMin  = {0.0f, 0.0f, 0.0f};
+        Vector3 rotationMax  = {360.0f, 360.0f, 360.0f};
+        Vector3 translateMin = {-1.0f, -1.0f, -1.0f};
+        Vector3 translateMax = {1.0f, 1.0f, 1.0f};
+    };
+
+    struct PhysicsParameters {
         Vector3 velocityMin      = {-1.0f, -1.0f, -1.0f};
         Vector3 velocityMax      = {1.0f, 1.0f, 1.0f};
-        Vector4 colorMin         = {1.0f, 1.0f, 1.0f, 1.0f};
-        Vector4 colorMax         = {1.0f, 1.0f, 1.0f, 1.0f};
-        float lifeTimeMin        = 1.0f;
-        float lifeTimeMax        = 3.0f;
+        Vector3 rotationSpeedMin = {0.0f, 0.0f, 0.0f};
+        Vector3 rotationSpeedMax = {180.0f, 180.0f, 180.0f};
+
+    };
+
+    struct AppearanceParameters {
+        Vector4 colorMin       = {1.0f, 1.0f, 1.0f, 1.0f};
+        Vector4 colorMax       = {1.0f, 1.0f, 1.0f, 1.0f};
+        float lifeTimeMin      = 1.0f;
+        float lifeTimeMax      = 3.0f;
     };
 
     struct EmitterSettings {
@@ -104,7 +111,10 @@ private:
     std::string groupName_;     
     int32_t sectionIndex_ = -1;
 
-    EmitParameters emitParams_;
+    TransformParameters transformParams_;
+    PhysicsParameters physicsParams_;
+    AppearanceParameters appearanceParams_;
+
     EmitterSettings emitterSettings_;
     GroupSettings groupSettings_;
 
@@ -136,8 +146,7 @@ private:
 public:
     //*----------------------------- getter Methods -----------------------------*//
     const std::string& GetSectionName() const { return sectionName_; }
-    const EmitParameters& GetEmitParams() const { return emitParams_; }
-    const EmitterSettings& GetEmitterSettings() const { return emitterSettings_; }
+   const EmitterSettings& GetEmitterSettings() const { return emitterSettings_; }
     const GroupSettings& GetGroupSettings() const { return groupSettings_; }
 
     //*----------------------------- setter Methods -----------------------------*//

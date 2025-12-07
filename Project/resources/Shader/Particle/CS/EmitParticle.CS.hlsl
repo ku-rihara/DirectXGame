@@ -2,7 +2,6 @@
 #include"../../Library/Random.hlsli"
 #include"../../Library/PerFrame.hlsli"
 
-
 float3 RandomRange3d(RandomGenerator generator, float3 minValue, float3 maxValue)
 {
     float3 t = generator.Generate3d();
@@ -26,11 +25,14 @@ float4 RandomRange4d(RandomGenerator generator, float4 minValue, float4 maxValue
     return lerp(minValue, maxValue, t);
 }
 
-
+// 定数バッファ定義
 ConstantBuffer<Emitter> gEmitter : register(b0);
 ConstantBuffer<PerFrame> gPerFrame : register(b1);
-ConstantBuffer<EmitParameter> gEmitParam : register(b2);
+ConstantBuffer<EmitTransformParams> gTransformParams : register(b2);
+ConstantBuffer<EmitPhysicsParams> gPhysicsParams : register(b3);
+ConstantBuffer<EmitAppearanceParams> gAppearanceParams : register(b4);
 
+// UAVバッファ定義
 RWStructuredBuffer<Particle> gParticles : register(u0);
 RWStructuredBuffer<int> gFreeListIndex : register(u1);
 RWStructuredBuffer<int> gFreeList : register(u2);
@@ -52,39 +54,41 @@ void main(uint3 DTid : SV_DispatchThreadID)
             {
                 int particleIndex = gFreeList[freeListIndex];
                 
-                // Emit時のパラメータを設定
+                // ----------------------------- Transform Parameters ----------------------------- //
                 
-                // scale
+                // Scale
                 gParticles[particleIndex].scale = RandomRange3d(generator,
-                    gEmitParam.scaleMin, gEmitParam.scaleMax);
+                    gTransformParams.scaleMin, gTransformParams.scaleMax);
                 
-                // rotation
+                // Rotation (初期回転)
                 gParticles[particleIndex].rotate = RandomRange3d(generator,
-                    gEmitParam.rotationMin, gEmitParam.rotationMax);
+                    gTransformParams.rotationMin, gTransformParams.rotationMax);
                 
-                // roationSpeed
-                gParticles[particleIndex].rotateSpeed = RandomRange3d(generator,
-                    gEmitParam.rotationSpeedMin, gEmitParam.rotationSpeedMax);
-                
-                // translate
+                // Position 
                 float3 randomOffset = RandomRange3d(generator,
-                    gEmitParam.translateMin, gEmitParam.translateMax);
-                gParticles[particleIndex].translate = gEmitter.translate +
-                    generator.Generate3d() + randomOffset;
+                    gTransformParams.translateMin, gTransformParams.translateMax);
+                gParticles[particleIndex].translate = gEmitter.translate + randomOffset;
                 
-                // velosity
+                // ----------------------------- Physics Parameters ----------------------------- //
+                
+                // Velocity (初速度)
                 gParticles[particleIndex].velocity = RandomRange3d(generator,
-                    gEmitParam.velocityMin, gEmitParam.velocityMax);
+                    gPhysicsParams.velocityMin, gPhysicsParams.velocityMax);
                 
-                // color
+                // Rotation Speed (回転速度)
+                gParticles[particleIndex].rotateSpeed = RandomRange3d(generator,
+                    gPhysicsParams.rotationSpeedMin, gPhysicsParams.rotationSpeedMax);
+                       
+                
+                // Color
                 gParticles[particleIndex].color = RandomRange4d(generator,
-                    gEmitParam.colorMin, gEmitParam.colorMax);
+                    gAppearanceParams.colorMin, gAppearanceParams.colorMax);
                 
-                // lifeTime
+                // LifeTime
                 gParticles[particleIndex].lifeTime = RandomRange1d(generator,
-                    gEmitParam.lifeTimeMin, gEmitParam.lifeTimeMax);
+                    gAppearanceParams.lifeTimeMin, gAppearanceParams.lifeTimeMax);
                 gParticles[particleIndex].currentTime = 0.0f;
-               
+                
             }
             else
             {

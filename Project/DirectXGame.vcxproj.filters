@@ -361,6 +361,9 @@
     <Filter Include="MyEngine\.h\Editor\GPUParticleEditor">
       <UniqueIdentifier>{f243c575-978d-4ae9-8871-1dd9359ecb6c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\GPUParticleEditor">
+      <UniqueIdentifier>{891cf9dc-1516-4ccb-812e-32cadcff9d26}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -863,16 +866,16 @@
       <Filter>MyEngine\.cpp\utility\TimeModeSelector</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleData.cpp">
-      <Filter>MyEngine\.h\Editor\GPUParticleEditor</Filter>
+      <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleEditor.cpp">
-      <Filter>MyEngine\.h\Editor\GPUParticleEditor</Filter>
+      <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticlePlayer.cpp">
-      <Filter>MyEngine\.h\Editor\GPUParticleEditor</Filter>
+      <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.cpp">
-      <Filter>MyEngine\.h\Editor\GPUParticleEditor</Filter>
+      <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
