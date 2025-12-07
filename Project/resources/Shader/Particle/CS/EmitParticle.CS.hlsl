@@ -2,19 +2,19 @@
 #include"../../Library/Random.hlsli"
 #include"../../Library/PerFrame.hlsli"
 
-float3 RandomRange3d(RandomGenerator generator, float3 minValue, float3 maxValue)
+float3 RandomRange3d(inout RandomGenerator generator, float3 minValue, float3 maxValue)
 {
     float3 t = generator.Generate3d();
     return lerp(minValue, maxValue, t);
 }
 
-float RandomRange1d(RandomGenerator generator, float minValue, float maxValue)
+float RandomRange1d(inout RandomGenerator generator, float minValue, float maxValue)
 {
     float t = generator.Generate1d();
     return lerp(minValue, maxValue, t);
 }
 
-float4 RandomRange4d(RandomGenerator generator, float4 minValue, float4 maxValue)
+float4 RandomRange4d(inout RandomGenerator generator, float4 minValue, float4 maxValue)
 {
     float4 t = float4(
         generator.Generate1d(),
@@ -78,7 +78,8 @@ void main(uint3 DTid : SV_DispatchThreadID)
                 // Rotation Speed (回転速度)
                 gParticles[particleIndex].rotateSpeed = RandomRange3d(generator,
                     gPhysicsParams.rotationSpeedMin, gPhysicsParams.rotationSpeedMax);
-                       
+                
+                // ----------------------------- Appearance Parameters ----------------------------- //
                 
                 // Color
                 gParticles[particleIndex].color = RandomRange4d(generator,

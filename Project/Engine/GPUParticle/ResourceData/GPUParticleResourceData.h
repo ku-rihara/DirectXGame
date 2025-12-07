@@ -1,6 +1,3 @@
-// ============================================
-// GPUParticleResourceData.h - リファクタリング版
-// ============================================
 #pragma once
 #include "../Data/GPUParticleEmitterData.h"
 #include "../Data/ParticleCSData.h"
@@ -112,8 +109,7 @@ public:
 
     // Emit関連バッファのgetter
     const EmitParamBuffers& GetEmitParamBuffers() const { return emitParamBuffers_; }
-    EmitParamBuffers& GetEmitParamBuffers() { return emitParamBuffers_; }
-
+  
     GPUParticleCommandExecutor* GetCommandExecutorRef() const;
 
     const GPUResourceHandle& GetParticleBuffer() const { return particleBuffer_; }

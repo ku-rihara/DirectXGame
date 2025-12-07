@@ -10,6 +10,7 @@ struct ParticleEmit {
     float frequency;
     float frequencyTime;
     uint32_t emit;
+    float _padding0;
 };
 
 
@@ -50,6 +51,10 @@ struct EmitAppearanceParams {
 
     float lifeTimeMin;
     float lifeTimeMax;
+
+    float _padding0;
+    float _padding1;
+    float _padding2;
 };
 
 struct PerFrame {

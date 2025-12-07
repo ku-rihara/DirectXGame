@@ -12,6 +12,7 @@ struct ParticleCS {
     Vector3 rotateSpeed; 
     Vector3 velocity; 
     Vector4 color;
+
 };
 
 struct PerView {
