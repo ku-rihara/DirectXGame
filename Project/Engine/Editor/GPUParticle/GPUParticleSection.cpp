@@ -1,71 +1,37 @@
-#include "GPUParticleEmitter.h"
+#include "GPUParticleSection.h"
 #include "base/TextureManager.h"
 #include "Frame/Frame.h"
 #include "Function/GetFile.h"
-#include "GPUParticleManager.h"
+#include "GPUParticle/GPUParticleManager.h"
 #include "Primitive/IPrimitive.h"
 #include <imgui.h>
 
-///=================================================================================
-/// パーティクル作成
-///=================================================================================
-GPUParticleEmitter* GPUParticleEmitter::CreateParticle(
-    const std::string& name, const std::string& modelFilePath, int32_t maxCount) {
+void GPUParticleSection::Init(const std::string& particleName, const std::string& categoryName, int32_t sectionIndex) {
+    particleName_ = particleName;
+    categoryName_ = categoryName;
+    sectionIndex_ = sectionIndex;
+    sectionName_  = particleName + std::to_string(sectionIndex);
+    groupName_    = categoryName + "_" + sectionName_; // マネージャー用の一意な名前
+    folderPath_   = baseFolderPath_ + categoryName_ + "/" + "Sections/" + particleName_ + "/";
 
-    auto emitter = std::make_unique<GPUParticleEmitter>();
-    emitter->InitWithModel(name, modelFilePath, maxCount);
-    emitter->Init();
-    return emitter.release();
-}
+    globalParameter_ = GlobalParameter::GetInstance();
 
-///=================================================================================
-/// パーティクル作成(Primitive)
-///=================================================================================
-GPUParticleEmitter* GPUParticleEmitter::CreateParticlePrimitive(
-    const std::string& name, const PrimitiveType& type, int32_t maxCount) {
-
-    auto emitter = std::make_unique<GPUParticleEmitter>();
-    emitter->InitWithPrimitive(name, type, maxCount);
-    emitter->Init();
-    return emitter.release();
-}
-
-void GPUParticleEmitter::InitWithModel(
-    const std::string& name,
-    const std::string& modelFilePath,
-    int32_t maxCount) {
-
-    name_ = name;
-    GPUParticleManager::GetInstance()->CreateParticleGroup(name_, modelFilePath, maxCount);
-}
-
-void GPUParticleEmitter::InitWithPrimitive(
-    const std::string& name,
-    const PrimitiveType& type,
-    int32_t maxCount) {
-
-    name_ = name;
-    GPUParticleManager::GetInstance()->CreatePrimitiveParticle(name_, type, maxCount);
-}
-
-///=================================================================================
-/// 初期化
-///=================================================================================
-void GPUParticleEmitter::Init() {
-    currentTime_ = 0.0f;
-    shouldEmit_  = false;
+    // パーティクルグループをマネージャーに作成
+    GPUParticleManager::GetInstance()->CreatePrimitiveParticle(groupName_, PrimitiveType::Plane, 1024);
 
     ParameterInit();
 
-    // GlobalParameter初期化
-    globalParameter_ = GlobalParameter::GetInstance();
-    globalParameter_->CreateGroup(folderPath_ + "/" + name_);
-    RegisterParams();
-    globalParameter_->SyncParamForGroup(folderPath_ + "/" + name_);
+    if (!globalParameter_->HasRegisters(sectionName_)) {
+        globalParameter_->CreateGroup(sectionName_);
+        RegisterParams();
+        globalParameter_->SyncParamForGroup(sectionName_);
+    } else {
+        GetParams();
+    }
 
     // Rail初期化
     railManager_ = std::make_unique<RailManager>();
-    railManager_->Init(name_ + "Emit");
+    railManager_->Init(sectionName_ + "Emit");
 
     // デバッグライン
     debugLine_.reset(Line3D::Create(24));
@@ -79,9 +45,12 @@ void GPUParticleEmitter::Init() {
 
     // パラメータ適用
     ApplyParameters();
+
+    currentTime_ = 0.0f;
+    shouldEmit_  = false;
 }
 
-void GPUParticleEmitter::ParameterInit() {
+void GPUParticleSection::ParameterInit() {
     emitParams_.scaleMin         = {0.5f, 0.5f, 0.5f};
     emitParams_.scaleMax         = {1.5f, 1.5f, 1.5f};
     emitParams_.rotationMin      = {0.0f, 0.0f, 0.0f};
@@ -103,45 +72,102 @@ void GPUParticleEmitter::ParameterInit() {
     emitterSettings_.frequency = 1.0f;
 
     selectedTexturePath_ = "Resources/Texture/circle.png";
+    startTime_           = 0.0f;
 }
 
-void GPUParticleEmitter::RegisterParams() {
-    std::string groupName = folderPath_ + "/" + name_;
+void GPUParticleSection::RegisterParams() {
+    // Emit Parameters
+    globalParameter_->Regist(sectionName_, "Scale Min", &emitParams_.scaleMin);
+    globalParameter_->Regist(sectionName_, "Scale Max", &emitParams_.scaleMax);
+    globalParameter_->Regist(sectionName_, "Rotation Min", &emitParams_.rotationMin);
+    globalParameter_->Regist(sectionName_, "Rotation Max", &emitParams_.rotationMax);
+    globalParameter_->Regist(sectionName_, "Rotation Speed Min", &emitParams_.rotationSpeedMin);
+    globalParameter_->Regist(sectionName_, "Rotation Speed Max", &emitParams_.rotationSpeedMax);
+    globalParameter_->Regist(sectionName_, "Translate Min", &emitParams_.translateMin);
+    globalParameter_->Regist(sectionName_, "Translate Max", &emitParams_.translateMax);
+    globalParameter_->Regist(sectionName_, "Velocity Min", &emitParams_.velocityMin);
+    globalParameter_->Regist(sectionName_, "Velocity Max", &emitParams_.velocityMax);
+    globalParameter_->Regist(sectionName_, "Color Min", &emitParams_.colorMin);
+    globalParameter_->Regist(sectionName_, "Color Max", &emitParams_.colorMax);
+    globalParameter_->Regist(sectionName_, "LifeTime Min", &emitParams_.lifeTimeMin);
+    globalParameter_->Regist(sectionName_, "LifeTime Max", &emitParams_.lifeTimeMax);
 
-    globalParameter_->Regist(groupName, "Scale Min", &emitParams_.scaleMin);
-    globalParameter_->Regist(groupName, "Scale Max", &emitParams_.scaleMax);
-    globalParameter_->Regist(groupName, "Rotation Min", &emitParams_.rotationMin);
-    globalParameter_->Regist(groupName, "Rotation Max", &emitParams_.rotationMax);
-    globalParameter_->Regist(groupName, "Rotation Speed Min", &emitParams_.rotationSpeedMin);
-    globalParameter_->Regist(groupName, "Rotation Speed Max", &emitParams_.rotationSpeedMax);
-    globalParameter_->Regist(groupName, "Translate Min", &emitParams_.translateMin);
-    globalParameter_->Regist(groupName, "Translate Max", &emitParams_.translateMax);
-    globalParameter_->Regist(groupName, "Velocity Min", &emitParams_.velocityMin);
-    globalParameter_->Regist(groupName, "Velocity Max", &emitParams_.velocityMax);
-    globalParameter_->Regist(groupName, "Color Min", &emitParams_.colorMin);
-    globalParameter_->Regist(groupName, "Color Max", &emitParams_.colorMax);
-    globalParameter_->Regist(groupName, "LifeTime Min", &emitParams_.lifeTimeMin);
-    globalParameter_->Regist(groupName, "LifeTime Max", &emitParams_.lifeTimeMax);
+    // Emitter Settings
+    globalParameter_->Regist(sectionName_, "Position", &emitterSettings_.position);
+    globalParameter_->Regist(sectionName_, "Radius", &emitterSettings_.radius);
+    globalParameter_->Regist(sectionName_, "Count", reinterpret_cast<int32_t*>(&emitterSettings_.count));
+    globalParameter_->Regist(sectionName_, "Frequency", &emitterSettings_.frequency);
 
-    globalParameter_->Regist(groupName, "Position", &emitterSettings_.position);
-    globalParameter_->Regist(groupName, "Radius", &emitterSettings_.radius);
-    globalParameter_->Regist(groupName, "Count", reinterpret_cast<int32_t*>(&emitterSettings_.count));
-    globalParameter_->Regist(groupName, "Frequency", &emitterSettings_.frequency);
+    // Group Settings
+    globalParameter_->Regist(sectionName_, "Blend Mode", &blendModeIndex_);
+    globalParameter_->Regist(sectionName_, "Is Active", &groupSettings_.isActive);
+    globalParameter_->Regist(sectionName_, "Texture Path", &selectedTexturePath_);
 
-    globalParameter_->Regist(groupName, "Blend Mode", &blendModeIndex_);
-    globalParameter_->Regist(groupName, "Is Active", &groupSettings_.isActive);
-    globalParameter_->Regist(groupName, "Texture Path", &selectedTexturePath_);
+    // Rail
+    globalParameter_->Regist(sectionName_, "Is Move For Rail", &isMoveForRail_);
+    globalParameter_->Regist(sectionName_, "Is Rail Loop", &isRailLoop_);
+    globalParameter_->Regist(sectionName_, "Move Speed", &moveSpeed_);
 
-    globalParameter_->Regist(groupName, "Is Move For Rail", &isMoveForRail_);
-    globalParameter_->Regist(groupName, "Is Rail Loop", &isRailLoop_);
-    globalParameter_->Regist(groupName, "Move Speed", &moveSpeed_);
+    // Time
+    globalParameter_->Regist(sectionName_, "Start Time", &startTime_);
+    timeModeSelector_.RegisterParam(sectionName_, globalParameter_);
 }
 
-///=================================================================================
-/// 更新
-///=================================================================================
-void GPUParticleEmitter::Update() {
-    if (name_.empty() || !groupSettings_.isActive) {
+void GPUParticleSection::GetParams() {
+    emitParams_.scaleMin         = globalParameter_->GetValue<Vector3>(sectionName_, "Scale Min");
+    emitParams_.scaleMax         = globalParameter_->GetValue<Vector3>(sectionName_, "Scale Max");
+    emitParams_.rotationMin      = globalParameter_->GetValue<Vector3>(sectionName_, "Rotation Min");
+    emitParams_.rotationMax      = globalParameter_->GetValue<Vector3>(sectionName_, "Rotation Max");
+    emitParams_.rotationSpeedMin = globalParameter_->GetValue<Vector3>(sectionName_, "Rotation Speed Min");
+    emitParams_.rotationSpeedMax = globalParameter_->GetValue<Vector3>(sectionName_, "Rotation Speed Max");
+    emitParams_.translateMin     = globalParameter_->GetValue<Vector3>(sectionName_, "Translate Min");
+    emitParams_.translateMax     = globalParameter_->GetValue<Vector3>(sectionName_, "Translate Max");
+    emitParams_.velocityMin      = globalParameter_->GetValue<Vector3>(sectionName_, "Velocity Min");
+    emitParams_.velocityMax      = globalParameter_->GetValue<Vector3>(sectionName_, "Velocity Max");
+    emitParams_.colorMin         = globalParameter_->GetValue<Vector4>(sectionName_, "Color Min");
+    emitParams_.colorMax         = globalParameter_->GetValue<Vector4>(sectionName_, "Color Max");
+    emitParams_.lifeTimeMin      = globalParameter_->GetValue<float>(sectionName_, "LifeTime Min");
+    emitParams_.lifeTimeMax      = globalParameter_->GetValue<float>(sectionName_, "LifeTime Max");
+
+    emitterSettings_.position  = globalParameter_->GetValue<Vector3>(sectionName_, "Position");
+    emitterSettings_.radius    = globalParameter_->GetValue<float>(sectionName_, "Radius");
+    emitterSettings_.count     = globalParameter_->GetValue<int32_t>(sectionName_, "Count");
+    emitterSettings_.frequency = globalParameter_->GetValue<float>(sectionName_, "Frequency");
+
+    blendModeIndex_         = globalParameter_->GetValue<int>(sectionName_, "Blend Mode");
+    groupSettings_.isActive = globalParameter_->GetValue<bool>(sectionName_, "Is Active");
+    selectedTexturePath_    = globalParameter_->GetValue<std::string>(sectionName_, "Texture Path");
+
+    isMoveForRail_ = globalParameter_->GetValue<bool>(sectionName_, "Is Move For Rail");
+    isRailLoop_    = globalParameter_->GetValue<bool>(sectionName_, "Is Rail Loop");
+    moveSpeed_     = globalParameter_->GetValue<float>(sectionName_, "Move Speed");
+
+    startTime_ = globalParameter_->GetValue<float>(sectionName_, "Start Time");
+    timeModeSelector_.GetParam(sectionName_, globalParameter_);
+}
+
+void GPUParticleSection::Update(float speedRate) {
+    if (!groupSettings_.isActive) {
+        return;
+    }
+
+    float actualDeltaTime;
+    switch (static_cast<TimeMode>(timeModeSelector_.GetTimeModeInt())) {
+    case TimeMode::DELTA_TIME:
+        actualDeltaTime = Frame::DeltaTime() * speedRate;
+        break;
+    case TimeMode::DELTA_TIME_RATE:
+    default:
+        actualDeltaTime = Frame::DeltaTimeRate() * speedRate;
+        break;
+    }
+
+    if (playState_ == PlayState::STOPPED) {
+        return;
+    }
+
+    if (playState_ == PlayState::WAITING) {
+        UpdateWaiting(actualDeltaTime);
         return;
     }
 
@@ -149,8 +175,7 @@ void GPUParticleEmitter::Update() {
     UpdateEmitTransform();
     SetEmitLine();
 
-    // タイミング更新
-    currentTime_ += Frame::DeltaTime();
+    currentTime_ += actualDeltaTime;
 
     if (currentTime_ >= emitterSettings_.frequency) {
         shouldEmit_  = true;
@@ -159,8 +184,7 @@ void GPUParticleEmitter::Update() {
         shouldEmit_ = false;
     }
 
-    // マネージャーのエミッターデータを更新
-    auto group = GPUParticleManager::GetInstance()->GetParticleGroup(name_);
+    auto group = GPUParticleManager::GetInstance()->GetParticleGroup(groupName_);
     if (group && group->emitSphereData) {
         ParticleEmit emitterData = *group->emitSphereData;
 
@@ -176,11 +200,25 @@ void GPUParticleEmitter::Update() {
         emitterData.frequencyTime = currentTime_;
         emitterData.emit          = shouldEmit_ ? 1 : 0;
 
-        GPUParticleManager::GetInstance()->SetEmitterSphere(name_, emitterData);
+        GPUParticleManager::GetInstance()->SetEmitterSphere(groupName_, emitterData);
+    }
+
+    ApplyParameters();
+}
+
+void GPUParticleSection::UpdateWaiting(float deltaTime) {
+    elapsedTime_ += deltaTime;
+
+    if (elapsedTime_ >= startTime_) {
+        StartPlay();
     }
 }
 
-void GPUParticleEmitter::RailMoveUpdate() {
+void GPUParticleSection::StartPlay() {
+    playState_ = PlayState::PLAYING;
+}
+
+void GPUParticleSection::RailMoveUpdate() {
     if (!isStartRailMove_) {
         return;
     }
@@ -195,7 +233,7 @@ void GPUParticleEmitter::RailMoveUpdate() {
     }
 }
 
-void GPUParticleEmitter::UpdateEmitTransform() {
+void GPUParticleSection::UpdateEmitTransform() {
     if (isMoveForRail_) {
         emitBoxTransform_.translation_ = railManager_->GetWorldTransform().GetWorldPos();
     } else {
@@ -210,7 +248,7 @@ void GPUParticleEmitter::UpdateEmitTransform() {
     emitBoxTransform_.UpdateMatrix();
 }
 
-void GPUParticleEmitter::SetEmitLine() {
+void GPUParticleSection::SetEmitLine() {
 #ifdef _DEBUG
     if (isMoveForRail_) {
         railManager_->SetCubeLine(emitBoxTransform_.scale_);
@@ -223,30 +261,23 @@ void GPUParticleEmitter::SetEmitLine() {
 #endif
 }
 
-///=================================================================================
-/// エミット
-///=================================================================================
-void GPUParticleEmitter::Emit() {
-    if (name_.empty() || !shouldEmit_ || !groupSettings_.isActive) {
+void GPUParticleSection::Emit() {
+    if (!shouldEmit_ || !groupSettings_.isActive) {
         return;
     }
 
-    GPUParticleManager::GetInstance()->Emit(name_);
+    GPUParticleManager::GetInstance()->Emit(groupName_);
 }
 
-void GPUParticleEmitter::StartRailEmit() {
+void GPUParticleSection::StartRailEmit() {
     isStartRailMove_ = true;
     railManager_->SetRailMoveTime(0.0f);
     railManager_->SetIsRoop(isRailLoop_);
 }
 
-///=================================================================================
-/// パラメータ適用
-///=================================================================================
-void GPUParticleEmitter::ApplyParameters() {
+void GPUParticleSection::ApplyParameters() {
     EmitParameter shaderParams;
 
-    // Degree to Radian conversion
     const float degToRad     = 3.14159f / 180.0f;
     shaderParams.rotationMin = {
         emitParams_.rotationMin.x * degToRad,
@@ -276,19 +307,19 @@ void GPUParticleEmitter::ApplyParameters() {
     shaderParams.lifeTimeMin  = emitParams_.lifeTimeMin;
     shaderParams.lifeTimeMax  = emitParams_.lifeTimeMax;
 
-    auto group = GPUParticleManager::GetInstance()->GetParticleGroup(name_);
+    auto group = GPUParticleManager::GetInstance()->GetParticleGroup(groupName_);
     if (group && group->resourceData) {
         group->resourceData->UpdateEmitParamData(shaderParams);
     }
 }
 
-///=================================================================================
-/// エディタ更新
-///=================================================================================
-void GPUParticleEmitter::EditorUpdate() {
+void GPUParticleSection::AdjustParam() {
 #ifdef _DEBUG
-    ImGui::Begin(("GPU Particle: " + name_).c_str());
-    ImGui::PushID(name_.c_str());
+    ImGui::SeparatorText(("Section: " + sectionName_).c_str());
+    ImGui::PushID(sectionName_.c_str());
+
+    ImGui::DragFloat("Start Time", &startTime_, 0.01f, 0.0f, 100.0f);
+    timeModeSelector_.SelectTimeModeImGui("Time Mode");
 
     EmitParameterEditor();
     EmitterSettingsEditor();
@@ -315,23 +346,14 @@ void GPUParticleEmitter::EditorUpdate() {
         }
     }
 
+    // テクスチャ選択
     ImGuiTextureSelection();
-    ParticlePresetChange();
-
-    if (ImGui::Button("Apply Parameters")) {
-        ApplyParameters();
-    }
-
-    std::string groupName = folderPath_ + "/" + name_;
-    globalParameter_->ParamSaveForImGui(groupName, folderPath_);
-    globalParameter_->ParamLoadForImGui(groupName, folderPath_);
 
     ImGui::PopID();
-    ImGui::End();
 #endif
 }
 
-void GPUParticleEmitter::EmitParameterEditor() {
+void GPUParticleSection::EmitParameterEditor() {
     if (ImGui::CollapsingHeader("Emit Parameters")) {
         if (ImGui::TreeNode("Scale")) {
             ImGui::DragFloat3("Min", &emitParams_.scaleMin.x, 0.01f);
@@ -377,7 +399,7 @@ void GPUParticleEmitter::EmitParameterEditor() {
     }
 }
 
-void GPUParticleEmitter::EmitterSettingsEditor() {
+void GPUParticleSection::EmitterSettingsEditor() {
     if (ImGui::CollapsingHeader("Emitter Settings")) {
         ImGui::DragFloat3("Position", &emitterSettings_.position.x, 0.1f);
         ImGui::DragFloat("Radius", &emitterSettings_.radius, 0.1f, 0.0f, 100.0f);
@@ -386,7 +408,7 @@ void GPUParticleEmitter::EmitterSettingsEditor() {
     }
 }
 
-void GPUParticleEmitter::ImGuiTextureSelection() {
+void GPUParticleSection::ImGuiTextureSelection() {
     static int selectedIndex           = 0;
     std::vector<std::string> filenames = GetFileNamesForDirectory(textureFilePath_);
 
@@ -396,7 +418,7 @@ void GPUParticleEmitter::ImGuiTextureSelection() {
     });
 }
 
-void GPUParticleEmitter::DisplayFileSelection(
+void GPUParticleSection::DisplayFileSelection(
     const std::string& header,
     const std::vector<std::string>& filenames,
     int& selectedIndex,
@@ -420,46 +442,61 @@ void GPUParticleEmitter::DisplayFileSelection(
     }
 }
 
-void GPUParticleEmitter::ParticlePresetChange() {
-    static int selectedIndex           = 0;
-    std::vector<std::string> filenames = GetFileNamesForDirectory(GlobalParameter::GetInstance()->GetDirectoryPath() + folderPath_);
-
-    DisplayFileSelection("Select Preset", filenames, selectedIndex, [this](const std::string& selectedFile) {
-        std::string groupName = folderPath_ + "/" + name_;
-        globalParameter_->CopyGroup(folderPath_ + "/" + selectedFile, groupName);
-        globalParameter_->SyncParamForGroup(groupName);
-        ApplyParameters();
-        ImGui::Text("Preset Loaded: %s", selectedFile.c_str());
-    });
-}
-
-void GPUParticleEmitter::ApplyTexture(const std::string& textureName) {
+void GPUParticleSection::ApplyTexture(const std::string& textureName) {
     selectedTexturePath_ = textureFilePath_ + "/" + textureName + ".png";
     uint32_t handle      = TextureManager::GetInstance()->LoadTexture(selectedTexturePath_);
-    GPUParticleManager::GetInstance()->SetTextureHandle(name_, handle);
+    GPUParticleManager::GetInstance()->SetTextureHandle(groupName_, handle);
 }
 
-void GPUParticleEmitter::AdaptTexture() {
+void GPUParticleSection::AdaptTexture() {
     if (selectedTexturePath_.empty()) {
         return;
     }
     uint32_t handle = TextureManager::GetInstance()->LoadTexture(selectedTexturePath_);
-    GPUParticleManager::GetInstance()->SetTextureHandle(name_, handle);
+    GPUParticleManager::GetInstance()->SetTextureHandle(groupName_, handle);
 }
 
-void GPUParticleEmitter::SetTexture(uint32_t textureHandle) {
-    GPUParticleManager::GetInstance()->SetTextureHandle(name_, textureHandle);
+void GPUParticleSection::SetTexture(uint32_t textureHandle) {
+    GPUParticleManager::GetInstance()->SetTextureHandle(groupName_, textureHandle);
 }
 
-void GPUParticleEmitter::SetEmitterData(const ParticleEmit& emitter) {
-    if (name_.empty()) {
-        return;
-    }
-
+void GPUParticleSection::SetEmitterData(const ParticleEmit& emitter) {
     emitterSettings_.position  = emitter.translate;
     emitterSettings_.radius    = emitter.radius;
     emitterSettings_.count     = emitter.count;
     emitterSettings_.frequency = emitter.frequency;
 
-    GPUParticleManager::GetInstance()->SetEmitterSphere(name_, emitter);
+    GPUParticleManager::GetInstance()->SetEmitterSphere(groupName_, emitter);
+}
+
+void GPUParticleSection::LoadData() {
+    globalParameter_->LoadFile(sectionName_, folderPath_);
+    globalParameter_->SyncParamForGroup(sectionName_);
+    GetParams();
+}
+
+void GPUParticleSection::SaveData() {
+    globalParameter_->SaveFile(sectionName_, folderPath_);
+}
+
+void GPUParticleSection::Reset() {
+    currentTime_ = 0.0f;
+    elapsedTime_ = 0.0f;
+    shouldEmit_  = false;
+    playState_   = PlayState::STOPPED;
+
+    if (railManager_) {
+        railManager_->SetRailMoveTime(0.0f);
+    }
+}
+
+void GPUParticleSection::StartWaiting() {
+    playState_   = PlayState::WAITING;
+    elapsedTime_ = 0.0f;
+}
+
+bool GPUParticleSection::IsFinished() const {
+    // パーティクルは終了条件がないため、常にfalseを返す
+    // 必要に応じて寿命時間などを追加できる
+    return false;
 }

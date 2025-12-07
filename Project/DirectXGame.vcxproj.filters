@@ -706,9 +706,6 @@
     <ClCompile Include="Engine\2d\SpriteRegistry.cpp">
       <Filter>MyEngine\.cpp\2d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GPUParticle\GPUParticleEmitter.cpp">
-      <Filter>MyEngine\.cpp\GPUParticle</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Pipeline\Particle\CS\EmitParticlePipeline.cpp">
       <Filter>MyEngine\.cpp\Pileline\Particle\CS</Filter>
     </ClCompile>
@@ -738,9 +735,6 @@
     </ClCompile>
     <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.cpp">
       <Filter>MyEngine\.cpp\GPUParticle\ResourceData</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\GPUParticle\GPUParticleParameter.cpp">
-      <Filter>MyEngine\.cpp\GPUParticle</Filter>
     </ClCompile>
     <ClCompile Include="Engine\input\InputData.cpp">
       <Filter>MyEngine\.cpp\input</Filter>
@@ -1269,9 +1263,6 @@
     <ClInclude Include="Engine\2d\SpriteRegistry.h">
       <Filter>MyEngine\.h\2d</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GPUParticle\GPUParticleEmitter.h">
-      <Filter>MyEngine\.h\GPUParticle</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\GPUParticle\Data\GPUParticleEmitterData.h">
       <Filter>MyEngine\.h\GPUParticle\Data</Filter>
     </ClInclude>
@@ -1307,9 +1298,6 @@
     </ClInclude>
     <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.h">
       <Filter>MyEngine\.h\GPUParticle\ResourceData</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\GPUParticle\GPUParticleParameter.h">
-      <Filter>MyEngine\.h\GPUParticle</Filter>
     </ClInclude>
     <ClInclude Include="Engine\input\InputData.h">
       <Filter>MyEngine\.h\input</Filter>

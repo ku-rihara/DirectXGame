@@ -4,7 +4,6 @@ static const uint kMaxParticles = 1024;
 struct Emitter
 {
     float3 translate;
-    float radius;
     uint count;
     float frequency;
     float frequencyTime;

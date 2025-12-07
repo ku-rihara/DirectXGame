@@ -29,25 +29,7 @@ void EditorScene::Init() {
     easingEditor_.Init();
     easingEditor_.SetVector3Target(&easingTestObject_->GetEasingData());
 
-    // GPUParticleエミッター作成例
-    testGPUParticle_.reset(
-        GPUParticleEmitter::CreateParticlePrimitive(
-            "TestGPUParticle",
-            PrimitiveType::Plane,
-            10000));
-
-    // エフェクトのプリセット例
-    fireEffect_.reset(
-        GPUParticleEmitter::CreateParticlePrimitive(
-            "FireEffect",
-            PrimitiveType::Plane,
-            5000));
-
-    explosionEffect_.reset(
-        GPUParticleEmitter::CreateParticlePrimitive(
-            "ExplosionEffect",
-            PrimitiveType::Plane,
-            3000));
+   
 }
 
 void EditorScene::Update() {
@@ -62,23 +44,6 @@ void EditorScene::Update() {
 
     // GPUパーティクル更新
     GPUParticleManager::GetInstance()->Update();
-
-    // エミッター更新
-    if (testGPUParticle_) {
-        testGPUParticle_->Update();
-        testGPUParticle_->Emit();
-    }
-
-    if (fireEffect_) {
-        fireEffect_->Update();
-        fireEffect_->Emit();
-    }
-
-    if (explosionEffect_) {
-        explosionEffect_->Update();
-        explosionEffect_->Emit();
-    }
-
     ViewProjectionUpdate();
 
     if (input_->TriggerKey(KeyboardKey::Enter)) {
@@ -101,26 +66,7 @@ void EditorScene::Debug() {
 
     easingTestObject_->Debug();
 
-    // GPUパーティクルエディタ
-    ImGui::Begin("GPU Particle Editor");
-
-    if (ImGui::CollapsingHeader("Test GPU Particle")) {
-        if (testGPUParticle_) {
-            testGPUParticle_->EditorUpdate();
-        }
-    }
-
-    if (ImGui::CollapsingHeader("Fire Effect")) {
-        if (fireEffect_) {
-            fireEffect_->EditorUpdate();
-        }
-    }
-
-    if (ImGui::CollapsingHeader("Explosion Effect")) {
-        if (explosionEffect_) {
-            explosionEffect_->EditorUpdate();
-        }
-    }
+  
 
     ImGui::End();
 #endif

@@ -103,7 +103,6 @@ void GPUParticleManager::InitializeGroupResources(GPUParticleGroup& group) {
     // デフォルト値を設定
     if (group.emitSphereData) {
         group.emitSphereData->translate     = Vector3(0.0f, 0.0f, 0.0f);
-        group.emitSphereData->radius        = 1.0f;
         group.emitSphereData->count         = 10;
         group.emitSphereData->frequency     = 1.0f;
         group.emitSphereData->frequencyTime = 0.0f;

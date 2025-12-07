@@ -10,7 +10,7 @@
 #include "SkyBox/SkyBox.h"
 #include "Editor/TimeScaleEditor/TimeScaleController.h"
 // emitter
-#include "GPUParticle/GPUParticleEmitter.h"
+
 
 #include "utility/PutObjForBlender/PutObjForBlender.h"
 
@@ -31,8 +31,7 @@ private:
     std::unique_ptr<SkyBox> skuBox_                             = nullptr;
     std::unique_ptr<PutObjForBlender> putObjForBlender          = nullptr;
     std::unique_ptr<TimeScaleController> timeScaleController_   = nullptr;
-    std::unique_ptr<GPUParticleEmitter> testGpuParticleEmitter_ = nullptr;
-
+ 
     std::unique_ptr<CameraAnimation> cameraPlayer_ = nullptr;
 
 public:

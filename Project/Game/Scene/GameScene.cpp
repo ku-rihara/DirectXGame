@@ -40,7 +40,6 @@ void GameScene::Init() {
 
     cameraMode_ = BaseScene::CameraMode::DEBUG;
 
-    testGpuParticleEmitter_.reset(GPUParticleEmitter::CreateParticlePrimitive("test", PrimitiveType::Plane, 1024));
 }
 
 void GameScene::Update() {
@@ -64,9 +63,6 @@ void GameScene::Update() {
 
     plane_->Update();
     skuBox_->Update();
-
-    testGpuParticleEmitter_->Emit();
-    testGpuParticleEmitter_->Update();
 
     putObjForBlender->EasingUpdateSelectGroup(Frame::DeltaTime(), 0);
 

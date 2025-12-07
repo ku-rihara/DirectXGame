@@ -67,7 +67,6 @@ void GPUParticleSection::ParameterInit() {
     emitParams_.lifeTimeMax      = 3.0f;
 
     emitterSettings_.position  = {0.0f, 0.0f, 0.0f};
-    emitterSettings_.radius    = 1.0f;
     emitterSettings_.count     = 10;
     emitterSettings_.frequency = 1.0f;
 
@@ -94,7 +93,6 @@ void GPUParticleSection::RegisterParams() {
 
     // Emitter Settings
     globalParameter_->Regist(sectionName_, "Position", &emitterSettings_.position);
-    globalParameter_->Regist(sectionName_, "Radius", &emitterSettings_.radius);
     globalParameter_->Regist(sectionName_, "Count", reinterpret_cast<int32_t*>(&emitterSettings_.count));
     globalParameter_->Regist(sectionName_, "Frequency", &emitterSettings_.frequency);
 
@@ -130,7 +128,6 @@ void GPUParticleSection::GetParams() {
     emitParams_.lifeTimeMax      = globalParameter_->GetValue<float>(sectionName_, "LifeTime Max");
 
     emitterSettings_.position  = globalParameter_->GetValue<Vector3>(sectionName_, "Position");
-    emitterSettings_.radius    = globalParameter_->GetValue<float>(sectionName_, "Radius");
     emitterSettings_.count     = globalParameter_->GetValue<int32_t>(sectionName_, "Count");
     emitterSettings_.frequency = globalParameter_->GetValue<float>(sectionName_, "Frequency");
 
@@ -194,7 +191,6 @@ void GPUParticleSection::Update(float speedRate) {
             emitterData.translate = emitterSettings_.position;
         }
 
-        emitterData.radius        = emitterSettings_.radius;
         emitterData.count         = emitterSettings_.count;
         emitterData.frequency     = emitterSettings_.frequency;
         emitterData.frequencyTime = currentTime_;
@@ -402,7 +398,6 @@ void GPUParticleSection::EmitParameterEditor() {
 void GPUParticleSection::EmitterSettingsEditor() {
     if (ImGui::CollapsingHeader("Emitter Settings")) {
         ImGui::DragFloat3("Position", &emitterSettings_.position.x, 0.1f);
-        ImGui::DragFloat("Radius", &emitterSettings_.radius, 0.1f, 0.0f, 100.0f);
         ImGui::DragInt("Count", reinterpret_cast<int*>(&emitterSettings_.count), 1, 1, 1000);
         ImGui::DragFloat("Frequency", &emitterSettings_.frequency, 0.01f, 0.01f, 10.0f);
     }
@@ -462,7 +457,6 @@ void GPUParticleSection::SetTexture(uint32_t textureHandle) {
 
 void GPUParticleSection::SetEmitterData(const ParticleEmit& emitter) {
     emitterSettings_.position  = emitter.translate;
-    emitterSettings_.radius    = emitter.radius;
     emitterSettings_.count     = emitter.count;
     emitterSettings_.frequency = emitter.frequency;
 

@@ -41,7 +41,6 @@ public:
 
     struct EmitterSettings {
         Vector3 position = {0.0f, 0.0f, 0.0f};
-        float radius     = 1.0f;
         uint32_t count   = 10;
         float frequency  = 1.0f;
     };

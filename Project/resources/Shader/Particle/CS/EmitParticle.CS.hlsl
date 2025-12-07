@@ -70,7 +70,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
                 float3 randomOffset = RandomRange3d(generator,
                     gEmitParam.translateMin, gEmitParam.translateMax);
                 gParticles[particleIndex].translate = gEmitter.translate +
-                    generator.Generate3d() * gEmitter.radius + randomOffset;
+                    generator.Generate3d() + randomOffset;
                 
                 // velosity
                 gParticles[particleIndex].velocity = RandomRange3d(generator,

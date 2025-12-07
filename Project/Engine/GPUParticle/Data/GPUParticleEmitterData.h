@@ -6,7 +6,6 @@
 
 struct ParticleEmit {
     Vector3 translate;
-    float radius;
     uint32_t count;
     float frequency;
     float frequencyTime;
