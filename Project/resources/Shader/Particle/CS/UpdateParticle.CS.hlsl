@@ -9,14 +9,15 @@ ConstantBuffer<PerFrame> gPerFrame : register(b0);
 // 速度ベクトルから回転角度を計算
 float CalculateZRotationFromVelocity(float3 velocity)
 {
-    float velocityLength = length(velocity.xy);
+    // XZ平面での速度の長さ
+    float velocityLength = length(velocity.xz);
     if (velocityLength < 0.001f)
     {
         return 0.0f;
     }
     
-    // XY平面での角度を計算
-    return atan2(velocity.y, velocity.x);
+    // XZ平面での角度を計算
+    return atan2(velocity.z, velocity.x);
 }
 
 [numthreads(1024, 1, 1)]
