@@ -1,6 +1,6 @@
 {
     "FallAntipation": {
-        "CameraAction_FileName": "",
+        "CameraAction_FileName": "FallAttackPreAction",
         "CameraAction_StartTiming": 0.0,
         "CameraAction_TriggerByHit": false,
         "Condition": 1,
@@ -9,8 +9,10 @@
         "HitStop_TriggerByHit": false,
         "IsFirstAttack": true,
         "KnockBackPower": 0.0,
+        "Main_Head_FileName": "None",
+        "Main_Head_StartTiming": 0.0,
         "NextAttackType": "FallAttack",
-        "ObjAnim_Head_FileName": "",
+        "ObjAnim_Head_FileName": "FallPreActionMove",
         "ObjAnim_Head_StartTiming": 0.0,
         "ObjAnim_LeftHand_FileName": "",
         "ObjAnim_LeftHand_StartTiming": 0.0,
@@ -19,6 +21,7 @@
         "PostEffectParam_FileName": "",
         "PostEffectParam_StartTiming": 0.0,
         "PostEffectParam_TriggerByHit": false,
+        "RequireHit": false,
         "ShakeAction_FileName": "",
         "ShakeAction_StartTiming": 0.0,
         "ShakeAction_TriggerByHit": false,
@@ -35,6 +38,7 @@
             0.0,
             0.0
         ],
+        "enableFall": false,
         "finishWaitTime": 0.20000000298023224,
         "gamePadBottom": 16384,
         "isAbleInputMoving": false,
