@@ -1,24 +1,26 @@
 {
     "test10": {
+        "Align To Velocity": true,
+        "Billboard Mode": 1,
         "Blend Mode": 1,
         "Color Max": [
-            1.0,
-            1.0,
-            1.0,
+            0.8529411554336548,
+            0.8069491982460022,
+            0.8069491982460022,
             1.0
         ],
         "Color Min": [
-            0.6078431606292725,
-            0.047673970460891724,
-            0.047673970460891724,
+            0.4754902124404907,
+            0.03496252000331879,
+            0.03496252000331879,
             1.0
         ],
-        "Count": 1000,
+        "Count": 13,
         "Drag": 0.0,
         "Emissive Strength": 0.0,
         "Fade In Time": 0.10000000149011612,
         "Fade Out Time": 0.5,
-        "Frequency": 0.009999999776482582,
+        "Frequency": 0.4300000071525574,
         "Gravity": [
             0.0,
             -9.800000190734863,
@@ -49,25 +51,25 @@
         "Rotation Speed Max": [
             0.0,
             0.0,
-            496.0
+            0.0
         ],
         "Rotation Speed Min": [
             0.0,
             0.0,
-            37.0
+            0.0
         ],
         "Scale Max": [
             2.0,
-            2.0,
+            22.0,
             2.0
         ],
         "Scale Min": [
             2.0,
-            2.0,
+            22.0,
             2.0
         ],
         "Start Time": 0.0,
-        "Texture Path": "Resources/texture/default.png",
+        "Texture Path": "Resources/texture/uvChecker.png",
         "Translate Max": [
             55.0,
             0.0,
@@ -76,17 +78,34 @@
         "Translate Min": [
             -77.80000305175781,
             11.0,
-            -60.70000076293945
+            -66.19999694824219
         ],
-        "Velocity Max": [
+        "UV Flip X": false,
+        "UV Flip Y": false,
+        "UV Loop": false,
+        "UV Pixel Step": 0.0,
+        "UV Position": [
             0.0,
-            234.39999389648438,
+            0.0
+        ],
+        "UV Rotate": -0.0,
+        "UV Scale": [
+            1.0,
             1.0
         ],
+        "UV Scroll Speed": [
+            0.0,
+            0.0
+        ],
+        "Velocity Max": [
+            47.29999923706055,
+            0.4000000059604645,
+            0.0
+        ],
         "Velocity Min": [
-            0.0,
-            0.0,
-            -1.0
+            -23.399999618530273,
+            75.0,
+            0.0
         ],
         "timeMode": 1
     }

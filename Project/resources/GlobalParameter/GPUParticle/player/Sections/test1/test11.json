@@ -1,5 +1,7 @@
 {
     "test11": {
+        "Align To Velocity": true,
+        "Billboard Mode": 0,
         "Blend Mode": 1,
         "Color Max": [
             0.45098036527633667,
@@ -77,6 +79,23 @@
             -75.0999984741211,
             -35.0,
             -29.5
+        ],
+        "UV Flip X": false,
+        "UV Flip Y": false,
+        "UV Loop": true,
+        "UV Pixel Step": 0.0,
+        "UV Position": [
+            0.0,
+            0.0
+        ],
+        "UV Rotate": 0.0,
+        "UV Scale": [
+            1.0,
+            1.0
+        ],
+        "UV Scroll Speed": [
+            0.0,
+            0.0
         ],
         "Velocity Max": [
             43.099998474121094,

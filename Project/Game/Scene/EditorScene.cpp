@@ -68,7 +68,6 @@ void EditorScene::Debug() {
 
   
 
-    ImGui::End();
 #endif
 }
 

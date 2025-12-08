@@ -139,6 +139,7 @@ void GPUParticleManager::Update() {
 
         // Particle更新
         group.resourceData->UpdatePerFrameData(Frame::DeltaTime());
+        group.material.UpdateUVAnimation(Frame::DeltaTime());   
         DispatchEmit(group);
         DispatchUpdate(group);
     }
@@ -194,7 +195,7 @@ void GPUParticleManager::Draw(const ViewProjection& viewProjection) {
         group.material.SetCommandList(commandList);
 
         // t0(PS): テクスチャ
-        commandList->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetTextureHandle(group.textureHandle));
+        commandList->SetGraphicsRootDescriptorTable(4, TextureManager::GetInstance()->GetTextureHandle(group.textureHandle));
 
         // 描画
         DrawGroup(group);

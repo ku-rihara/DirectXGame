@@ -1,8 +1,8 @@
 #pragma once
 #include "3d/WorldTransform.h"
-#include "GPUParticle/Data/GPUParticleEmitterData.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Editor/RailEditor/RailManager.h"
+#include "GPUParticle/Data/GPUParticleEmitterData.h"
 #include "Line3D/Line3D.h"
 #include "Pipeline/Particle/ParticlePipeline.h"
 #include "Primitive/IPrimitive.h"
@@ -22,39 +22,57 @@ public:
         PLAYING
     };
 
-   struct TransformParameters {
-        Vector3 scaleMin     = {0.5f, 0.5f, 0.5f};
-        Vector3 scaleMax     = {1.5f, 1.5f, 1.5f};
-        Vector3 rotationMin  = {0.0f, 0.0f, 0.0f};
-        Vector3 rotationMax  = {360.0f, 360.0f, 360.0f};
-        Vector3 translateMin = {-1.0f, -1.0f, -1.0f};
-        Vector3 translateMax = {1.0f, 1.0f, 1.0f};
+    enum class BillboardMode {
+        None      = 0,
+        Billboard = 1,
+        YAxis     = 2
+    };
+
+public:
+    struct UVParameters {
+        Vector2 uvPosition;
+        float uvRotate;
+        Vector2 uvScrollSpeed;
+        Vector2 uvScale = Vector2::OneVector();
+        bool isFlipX;
+        bool isFlipY;
+        float pixelStep;
+        bool isUVLoop = true;
+    };
+
+    struct TransformParameters {
+        Vector3 scaleMin = {0.5f, 0.5f, 0.5f};
+        Vector3 scaleMax = {1.5f, 1.5f, 1.5f};
+        Vector3 rotationMin;
+        Vector3 rotationMax;
+        Vector3 translateMin;
+        Vector3 translateMax;
     };
 
     struct PhysicsParameters {
-        Vector3 velocityMin      = {-1.0f, -1.0f, -1.0f};
-        Vector3 velocityMax      = {1.0f, 1.0f, 1.0f};
-        Vector3 rotationSpeedMin = {0.0f, 0.0f, 0.0f};
-        Vector3 rotationSpeedMax = {180.0f, 180.0f, 180.0f};
-
+        Vector3 velocityMin;
+        Vector3 velocityMax;
+        Vector3 rotationSpeedMin;
+        Vector3 rotationSpeedMax;
     };
 
     struct AppearanceParameters {
-        Vector4 colorMin       = {1.0f, 1.0f, 1.0f, 1.0f};
-        Vector4 colorMax       = {1.0f, 1.0f, 1.0f, 1.0f};
-        float lifeTimeMin      = 1.0f;
-        float lifeTimeMax      = 3.0f;
+        Vector4 colorMin;
+        Vector4 colorMax;
+        float lifeTimeMin;
+        float lifeTimeMax;
     };
 
     struct EmitterSettings {
-        Vector3 position = {0.0f, 0.0f, 0.0f};
-        uint32_t count   = 10;
-        float frequency  = 1.0f;
+        Vector3 position;
+        uint32_t count  = 10;
+        float frequency = 1.0f;
     };
 
     struct GroupSettings {
-        BlendMode blendMode = BlendMode::Add;
-        bool isActive       = true;
+        BlendMode blendMode   = BlendMode::Add;
+        bool isActive         = true;
+        bool alignToVelocity = true;
     };
 
 public:
@@ -105,10 +123,10 @@ private:
 
 private:
     //*---------------------------- private Variant ----------------------------*//
-    std::string sectionName_;   
-    std::string particleName_;  
-    std::string categoryName_;  
-    std::string groupName_;     
+    std::string sectionName_;
+    std::string particleName_;
+    std::string categoryName_;
+    std::string groupName_;
     int32_t sectionIndex_ = -1;
 
     TransformParameters transformParams_;
@@ -117,6 +135,10 @@ private:
 
     EmitterSettings emitterSettings_;
     GroupSettings groupSettings_;
+
+    int32_t billboardModeInt_        = 1;
+    BillboardMode billboardMode_ = BillboardMode::Billboard;
+    UVParameters uvParams_;
 
     GlobalParameter* globalParameter_ = nullptr;
     std::unique_ptr<RailManager> railManager_;
@@ -146,7 +168,7 @@ private:
 public:
     //*----------------------------- getter Methods -----------------------------*//
     const std::string& GetSectionName() const { return sectionName_; }
-   const EmitterSettings& GetEmitterSettings() const { return emitterSettings_; }
+    const EmitterSettings& GetEmitterSettings() const { return emitterSettings_; }
     const GroupSettings& GetGroupSettings() const { return groupSettings_; }
 
     //*----------------------------- setter Methods -----------------------------*//

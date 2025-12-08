@@ -60,7 +60,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
                 gParticles[particleIndex].scale = RandomRange3d(generator,
                     gTransformParams.scaleMin, gTransformParams.scaleMax);
                 
-                // Rotation (初期回転)
+                // Rotation
                 gParticles[particleIndex].rotate = RandomRange3d(generator,
                     gTransformParams.rotationMin, gTransformParams.rotationMax);
                 

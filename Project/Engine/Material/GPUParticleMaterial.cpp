@@ -8,8 +8,6 @@ void GPUParticleMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
 
     // マテリアルリソース作成
     materialResource_ = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(MaterialData));
-
-    // マテリアルデータへのポインタ取得
     materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 
     // 初期値をセット
@@ -18,15 +16,28 @@ void GPUParticleMaterial::CreateMaterialResource(DirectXCommon* dxCommon) {
     materialData_->uvMatrix               = MakeIdentity4x4();
     materialData_->enableLighting         = 1;
     materialData_->environmentCoefficient = 0.0f;
+
+    // UVアニメーションリソース作成
+    uvAnimeResource_ = dxCommon->CreateBufferResource(dxCommon->GetDevice(), sizeof(UVAnimationData));
+    uvAnimeResource_->Map(0, nullptr, reinterpret_cast<void**>(&uvAnimeData_));
+
 }
 
 void GPUParticleMaterial::UpdateMaterialData(const Vector4& Color) {
     materialData_->color = Color;
 }
 
+void GPUParticleMaterial::UpdateUVAnimation(float deltaTime) {
+    uvAnimeData_->currentTime += deltaTime;
+
+}
+
 void GPUParticleMaterial::SetCommandList(ID3D12GraphicsCommandList* commandList) {
-    // シェーダーにマテリアルデータを送る
+    // マテリアルデータ
     commandList->SetGraphicsRootConstantBufferView(2, materialResource_->GetGPUVirtualAddress());
+
+    // UVアニメーションデータ
+    commandList->SetGraphicsRootConstantBufferView(3, uvAnimeResource_->GetGPUVirtualAddress());
 }
 
 void GPUParticleMaterial::DebugImGui() {

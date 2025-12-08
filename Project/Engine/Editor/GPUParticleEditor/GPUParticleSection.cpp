@@ -13,7 +13,7 @@ void GPUParticleSection::Init(const std::string& particleName, const std::string
     categoryName_ = categoryName;
     sectionIndex_ = sectionIndex;
     sectionName_  = particleName + std::to_string(sectionIndex);
-    groupName_    = categoryName + "_" + sectionName_; // マネージャー用の一意な名前
+    groupName_    = categoryName + "_" + sectionName_;
     folderPath_   = baseFolderPath_ + categoryName_ + "/" + "Sections/" + particleName_ + "/";
 
     globalParameter_ = GlobalParameter::GetInstance();
@@ -53,30 +53,8 @@ void GPUParticleSection::Init(const std::string& particleName, const std::string
 }
 
 void GPUParticleSection::ParameterInit() {
-    // Transformパラメータ初期化
-    transformParams_.scaleMin     = {0.5f, 0.5f, 0.5f};
-    transformParams_.scaleMax     = {1.5f, 1.5f, 1.5f};
-    transformParams_.rotationMin  = {0.0f, 0.0f, 0.0f};
-    transformParams_.rotationMax  = {360.0f, 360.0f, 360.0f};
-    transformParams_.translateMin = {-1.0f, -1.0f, -1.0f};
-    transformParams_.translateMax = {1.0f, 1.0f, 1.0f};
 
-    // Physicsパラメータ初期化
-    physicsParams_.velocityMin      = {-1.0f, -1.0f, -1.0f};
-    physicsParams_.velocityMax      = {1.0f, 1.0f, 1.0f};
-    physicsParams_.rotationSpeedMin = {0.0f, 0.0f, 0.0f};
-    physicsParams_.rotationSpeedMax = {180.0f, 180.0f, 180.0f};
- 
-    // Appearanceパラメータ初期化
-    appearanceParams_.colorMin         = {1.0f, 1.0f, 1.0f, 1.0f};
-    appearanceParams_.colorMax         = {1.0f, 1.0f, 1.0f, 1.0f};
-    appearanceParams_.lifeTimeMin      = 1.0f;
-    appearanceParams_.lifeTimeMax      = 3.0f;
-
-    // その他は既存通り
-    emitterSettings_.position  = {0.0f, 0.0f, 0.0f};
-    emitterSettings_.count     = 10;
-    emitterSettings_.frequency = 1.0f;
+    billboardMode_ = static_cast<BillboardMode>(billboardModeInt_);
 
     selectedTexturePath_ = "Resources/Texture/circle.png";
     startTime_           = 0.0f;
@@ -96,13 +74,13 @@ void GPUParticleSection::RegisterParams() {
     globalParameter_->Regist(sectionName_, "Velocity Max", &physicsParams_.velocityMax);
     globalParameter_->Regist(sectionName_, "Rotation Speed Min", &physicsParams_.rotationSpeedMin);
     globalParameter_->Regist(sectionName_, "Rotation Speed Max", &physicsParams_.rotationSpeedMax);
-  
+
     // Appearance Parameters
     globalParameter_->Regist(sectionName_, "Color Min", &appearanceParams_.colorMin);
     globalParameter_->Regist(sectionName_, "Color Max", &appearanceParams_.colorMax);
     globalParameter_->Regist(sectionName_, "LifeTime Min", &appearanceParams_.lifeTimeMin);
     globalParameter_->Regist(sectionName_, "LifeTime Max", &appearanceParams_.lifeTimeMax);
-  
+
     // Emitter Settings
     globalParameter_->Regist(sectionName_, "Position", &emitterSettings_.position);
     globalParameter_->Regist(sectionName_, "Count", reinterpret_cast<int32_t*>(&emitterSettings_.count));
@@ -121,6 +99,20 @@ void GPUParticleSection::RegisterParams() {
     // Time
     globalParameter_->Regist(sectionName_, "Start Time", &startTime_);
     timeModeSelector_.RegisterParam(sectionName_, globalParameter_);
+
+    // Billboard & Direction
+    globalParameter_->Regist(sectionName_, "Billboard Mode", &billboardModeInt_);
+    globalParameter_->Regist(sectionName_, "Align To Velocity", &groupSettings_.alignToVelocity);
+
+    // UV Parameters
+    globalParameter_->Regist(sectionName_, "UV Position", &uvParams_.uvPosition);
+    globalParameter_->Regist(sectionName_, "UV Rotate", &uvParams_.uvRotate);
+    globalParameter_->Regist(sectionName_, "UV Scroll Speed", &uvParams_.uvScrollSpeed);
+    globalParameter_->Regist(sectionName_, "UV Scale", &uvParams_.uvScale);
+    globalParameter_->Regist(sectionName_, "UV Flip X", &uvParams_.isFlipX);
+    globalParameter_->Regist(sectionName_, "UV Flip Y", &uvParams_.isFlipY);
+    globalParameter_->Regist(sectionName_, "UV Pixel Step", &uvParams_.pixelStep);
+    globalParameter_->Regist(sectionName_, "UV Loop", &uvParams_.isUVLoop);
 }
 
 void GPUParticleSection::GetParams() {
@@ -158,6 +150,19 @@ void GPUParticleSection::GetParams() {
 
     startTime_ = globalParameter_->GetValue<float>(sectionName_, "Start Time");
     timeModeSelector_.GetParam(sectionName_, globalParameter_);
+
+    billboardModeInt_              = globalParameter_->GetValue<int>(sectionName_, "Billboard Mode");
+    billboardMode_                 = static_cast<BillboardMode>(billboardModeInt_);
+    groupSettings_.alignToVelocity = globalParameter_->GetValue<bool>(sectionName_, "Align To Velocity");
+
+    uvParams_.uvPosition    = globalParameter_->GetValue<Vector2>(sectionName_, "UV Position");
+    uvParams_.uvRotate      = globalParameter_->GetValue<float>(sectionName_, "UV Rotate");
+    uvParams_.uvScrollSpeed = globalParameter_->GetValue<Vector2>(sectionName_, "UV Scroll Speed");
+    uvParams_.uvScale       = globalParameter_->GetValue<Vector2>(sectionName_, "UV Scale");
+    uvParams_.isFlipX       = globalParameter_->GetValue<bool>(sectionName_, "UV Flip X");
+    uvParams_.isFlipY       = globalParameter_->GetValue<bool>(sectionName_, "UV Flip Y");
+    uvParams_.pixelStep     = globalParameter_->GetValue<float>(sectionName_, "UV Pixel Step");
+    uvParams_.isUVLoop      = globalParameter_->GetValue<bool>(sectionName_, "UV Loop");
 }
 
 void GPUParticleSection::Update(float speedRate) {
@@ -322,6 +327,22 @@ void GPUParticleSection::ApplyParameters() {
         data->lifeTimeMin = appearanceParams_.lifeTimeMin;
         data->lifeTimeMax = appearanceParams_.lifeTimeMax;
     }
+
+    auto& uvAnimeData         = *group->material.GetUVAnimeData();
+    uvAnimeData.uvPosition    = uvParams_.uvPosition;
+    uvAnimeData.uvRotate      = uvParams_.uvRotate;
+    uvAnimeData.uvScrollSpeed = uvParams_.uvScrollSpeed;
+    uvAnimeData.uvScale       = uvParams_.uvScale;
+    uvAnimeData.isFlipX       = uvParams_.isFlipX ? 1 : 0;
+    uvAnimeData.isFlipY       = uvParams_.isFlipY ? 1 : 0;
+    uvAnimeData.pixelStep     = uvParams_.pixelStep;
+    uvAnimeData.isUVLoop      = uvParams_.isUVLoop ? 1 : 0;
+
+    auto& perView = group->resourceData->GetPerViewBuffer();
+    if (auto* data = perView.mappedData) {
+        data->alignToVelocity = groupSettings_.alignToVelocity ? 1 : 0;
+        data->billboardMode   = static_cast<int32_t>(billboardMode_);
+    }
 }
 
 void GPUParticleSection::AdjustParam() {
@@ -355,6 +376,28 @@ void GPUParticleSection::AdjustParam() {
         if (ImGui::Button("Start Rail Emit")) {
             StartRailEmit();
         }
+    }
+
+    // Billboard Settings
+    if (ImGui::CollapsingHeader("Billboard & Direction")) {
+        const char* modes[] = {"None", "Billboard", "Y-Axis"};
+        if (ImGui::Combo("Billboard Mode", &billboardModeInt_, modes, IM_ARRAYSIZE(modes))) {
+            billboardMode_ = static_cast<BillboardMode>(billboardModeInt_);
+        }
+        ImGui::Checkbox("Align To Velocity", &groupSettings_.alignToVelocity);
+    }
+
+    // UV Settings
+    if (ImGui::CollapsingHeader("UV Animation")) {
+        ImGui::DragFloat2("Position", &uvParams_.uvPosition.x, 0.01f);
+        ImGui::SliderAngle("Rotate", &uvParams_.uvRotate);
+        ImGui::DragFloat2("Scroll Speed", &uvParams_.uvScrollSpeed.x, 0.01f);
+        ImGui::DragFloat2("Scale", &uvParams_.uvScale.x, 0.01f, 0.1f, 10.0f);
+        ImGui::Checkbox("Flip X", &uvParams_.isFlipX);
+        ImGui::SameLine();
+        ImGui::Checkbox("Flip Y", &uvParams_.isFlipY);
+        ImGui::DragFloat("Pixel Step", &uvParams_.pixelStep, 0.001f, 0.0f, 0.1f);
+        ImGui::Checkbox("Loop", &uvParams_.isUVLoop);
     }
 
     // テクスチャ選択

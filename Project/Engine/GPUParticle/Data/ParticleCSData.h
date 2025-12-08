@@ -2,6 +2,7 @@
 #include"Vector3.h"
 #include"Vector4.h"
 #include"Matrix4x4.h"
+#include "Vector2.h"
 
 struct ParticleCS {
     Vector3 translate; 
@@ -18,4 +19,7 @@ struct ParticleCS {
 struct PerView {
     Matrix4x4 viewProjection;
     Matrix4x4 billboardMatrix;
+    int32_t billboardMode;
+    int32_t alignToVelocity;
+    Vector2 padding;
 };
