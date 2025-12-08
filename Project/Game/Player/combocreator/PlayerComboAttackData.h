@@ -28,6 +28,7 @@ public:
         float easeTime;
         bool isAbleInputMoving;
         bool isPositionYSelect;
+        float 
     };
 
     // コリジョンパラメータ
