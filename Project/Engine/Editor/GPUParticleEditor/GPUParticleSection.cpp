@@ -252,16 +252,25 @@ void GPUParticleSection::RailMoveUpdate() {
 }
 
 void GPUParticleSection::UpdateEmitTransform() {
+    Vector3 basePosition;
+
     if (isMoveForRail_) {
-        emitBoxTransform_.translation_ = railManager_->GetWorldTransform().GetWorldPos();
+        basePosition = railManager_->GetWorldTransform().GetWorldPos();
     } else {
-        emitBoxTransform_.translation_ = emitterSettings_.position;
+        basePosition = emitterSettings_.position;
     }
 
-    emitBoxTransform_.scale_ = {
-        transformParams_.translateMax.x - transformParams_.translateMin.x,
-        transformParams_.translateMax.y - transformParams_.translateMin.y,
-        transformParams_.translateMax.z - transformParams_.translateMin.z};
+    // エミット範囲の中心位置を計算
+    Vector3 rangeCenter = (transformParams_.translateMax + transformParams_.translateMin) * 0.5f;
+
+    // エミット範囲のサイズを計算
+    Vector3 rangeSize = transformParams_.translateMax - transformParams_.translateMin;
+
+    // ボックスの中心はベース位置 + 範囲の中心オフセット
+    emitBoxTransform_.translation_ = basePosition + rangeCenter;
+
+    // ボックスのスケールは範囲のサイズ
+    emitBoxTransform_.scale_ = rangeSize;
 
     emitBoxTransform_.UpdateMatrix();
 }
