@@ -42,35 +42,33 @@ void GPUParticlePlayer::Play(const std::string& particleName) {
 }
 
 void GPUParticlePlayer::PlayInCategory(const std::string& categoryName, const std::string& particleName) {
-    // 同じパーティクルが既に再生中なら更新のみ
-    if (effectData_ && currentCategoryName_ == categoryName && currentEffectName_ == particleName) {
-        return;
+    // 初回または違うパーティクルの場合はロード
+    if (!effectData_ || currentCategoryName_ != categoryName || currentEffectName_ != particleName) {
+        if (effectData_) {
+            effectData_->Pause();
+        }
+
+        effectData_.reset();
+        effectData_ = CreateEffectData();
+
+        auto* particleData = dynamic_cast<GPUParticleData*>(effectData_.get());
+        if (particleData) {
+            particleData->InitWithCategory(particleName, categoryName);
+            particleData->LoadData();
+            particleData->Play();
+        }
+
+        currentCategoryName_ = categoryName;
+        currentEffectName_   = particleName;
     }
 
-    if (effectData_) {
-        effectData_->Pause();
-    }
-
-    effectData_.reset();
-    effectData_ = CreateEffectData();
-
-    auto* particleData = dynamic_cast<GPUParticleData*>(effectData_.get());
-    if (particleData) {
-        particleData->InitWithCategory(particleName, categoryName);
-        particleData->LoadData();
-        particleData->Play();
-    }
-
-    currentCategoryName_ = categoryName;
-    currentEffectName_   = particleName;
-}
-
-void GPUParticlePlayer::Draw() {
+    // 毎回エミット
     auto* particleData = GetParticleData();
     if (particleData) {
         particleData->Draw();
     }
 }
+
 
 void GPUParticlePlayer::EmitOnce() {
     shouldEmitOnce_ = true;

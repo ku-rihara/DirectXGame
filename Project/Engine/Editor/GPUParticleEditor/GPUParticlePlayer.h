@@ -35,8 +35,7 @@ public:
 
     // エミッター設定
     void SetEmitterCount(uint32_t count);
-    void SetEmitterFrequency(float frequency);
-
+  
 protected:
     //*---------------------------- protected Methods ----------------------------*//
     std::unique_ptr<BaseEffectData> CreateEffectData() override;
