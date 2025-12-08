@@ -4,8 +4,9 @@
 #include "Frame/Frame.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
-#include"Player/PlayerBehavior/PlayerMove.h"
 #include "Player/PlayerBehavior/PlayerJump.h"
+#include "Player/PlayerBehavior/PlayerMove.h"
+#include <PostEffect/PostEffectRenderer.h>
 
 DynamicComboAttack::DynamicComboAttack(Player* player, PlayerComboAttackData* attackData)
     : BaseComboAattackBehavior(attackData->GetGroupName(), player) {
@@ -26,7 +27,7 @@ void DynamicComboAttack::Init() {
     waitTime_          = 0.0f;
     isCollisionActive_ = false;
     collisionTimer_    = 0.0f;
-    hasHitEnemy_       = false; 
+    hasHitEnemy_       = false;
 
     // 次の攻撃データを取得
     nextAttackName_ = attackData_->GetAttackParam().nextAttackType;
@@ -51,6 +52,10 @@ void DynamicComboAttack::Update() {
     if (attackData_->GetAttackParam().moveParam.isAbleInputMoving) {
         pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
     }
+
+     // 攻撃スピード
+    const PlayerComboAttackController* attackController = pPlayer_->GetComboAttackController();
+    atkSpeed_                                           = attackController->GetRealAttackSpeed(Frame::DeltaTimeRate());
 
     currentFrame_ += atkSpeed_;
 
@@ -96,7 +101,7 @@ void DynamicComboAttack::UpdateAttack() {
     pCollisionInfo_->TimerUpdate(atkSpeed_);
     pCollisionInfo_->Update();
 
-    // 敵にヒットしたかをチェック 
+    // 敵にヒットしたかをチェック
     if (pCollisionInfo_->GetHasHitEnemy()) {
         hasHitEnemy_ = true;
     }
@@ -140,7 +145,7 @@ void DynamicComboAttack::ChangeNextAttack() {
         return;
 
     } else {
-        // 落下フラグがある場合はPlayerJumpに移行 
+        // 落下フラグがある場合はPlayerJumpに移行
         if (attackData_->GetAttackParam().fallParam.enableFall) {
             pPlayer_->ChangeBehavior(std::make_unique<PlayerJump>(pPlayer_, true));
             pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
@@ -148,8 +153,8 @@ void DynamicComboAttack::ChangeNextAttack() {
         }
 
         // データが見つからない場合はルートに戻る
- 
-            pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
+        PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::NONE);
+        pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
         pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
     }
 }
@@ -211,8 +216,7 @@ void DynamicComboAttack::SetupCollision() {
 
     // 攻撃スピード
     const PlayerComboAttackController* attackController = pPlayer_->GetComboAttackController();
-    atkSpeed_                                           = attackController->GetRealAttackSpeed(Frame::DeltaTimeRate());
-
+  
     // 攻撃力
     float power = attackData_->GetAttackParam().power * attackController->GetPowerRate();
     pCollisionInfo_->SetAttackPower(power);

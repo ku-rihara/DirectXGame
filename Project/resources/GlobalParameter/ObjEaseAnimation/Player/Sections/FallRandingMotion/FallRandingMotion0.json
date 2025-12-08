@@ -1,0 +1,42 @@
+{
+    "FallRandingMotion0": {
+        "Rotation_EaseType": 6,
+        "Rotation_IsActive": true,
+        "Rotation_IsReturnToOrigin": true,
+        "Rotation_MaxTime": 0.20999999344348907,
+        "Rotation_ReturnEaseType": 0,
+        "Rotation_ReturnMaxTime": 0.0,
+        "Rotation_endValue": [
+            6.2831854820251465,
+            0.0,
+            0.0
+        ],
+        "Scale_EaseType": 0,
+        "Scale_IsActive": false,
+        "Scale_IsReturnToOrigin": false,
+        "Scale_MaxTime": 1.0,
+        "Scale_ReturnEaseType": 0,
+        "Scale_ReturnMaxTime": 1.0,
+        "Scale_endValue": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Translation_EaseType": 0,
+        "Translation_IsActive": true,
+        "Translation_IsReturnToOrigin": true,
+        "Translation_MaxTime": 0.15000000596046448,
+        "Translation_RailFileName": "",
+        "Translation_ReturnEaseType": 0,
+        "Translation_ReturnMaxTime": 0.20000000298023224,
+        "Translation_UseRail": false,
+        "Translation_endValue": [
+            0.0,
+            3.2100000381469727,
+            0.0
+        ],
+        "returnStartTime": 0.0,
+        "startTime": 0.0,
+        "timeMode": 1
+    }
+}

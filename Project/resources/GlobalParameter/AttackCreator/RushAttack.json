@@ -25,7 +25,7 @@
         "ShakeAction_FileName": "",
         "ShakeAction_StartTiming": 0.0,
         "ShakeAction_TriggerByHit": false,
-        "adaptTime": 0.09000000357627869,
+        "adaptTime": 0.1599999964237213,
         "blowYPower": 33.79999923706055,
         "cancelFrame": 0.0,
         "collisionOffsetPos": [
@@ -50,8 +50,8 @@
         "keyBordBottom": 35,
         "loopNum": 0,
         "loopWaitTime": 0.0,
-        "moveEaseTime": 0.07999999821186066,
-        "moveEaseType": 6,
+        "moveEaseTime": 0.1599999964237213,
+        "moveEaseType": 22,
         "moveValue": [
             0.0,
             0.0,
