@@ -8,6 +8,8 @@ class ObjEaseAnimationEditor;
 class CameraEditor;
 class ShakeEditor;
 class RailEditor;
+class GPUParticleEditor;
+class ParticleEditor;
 
 class EffectEditorSuite {
 public:
@@ -25,6 +27,8 @@ private:
     std::unique_ptr<CameraEditor> cameraEditor_;
     std::unique_ptr<ShakeEditor> shakeEditor_;
     std::unique_ptr<RailEditor> railEditor_;
+    std::unique_ptr<GPUParticleEditor> gpuParticleEditor_;
+    std::unique_ptr<ParticleEditor> particleEditor_;
 
 public:
     CameraEditor* GetCameraEditor() const { return cameraEditor_.get(); }

@@ -6,8 +6,9 @@
 #include "base/TextureManager.h"
 // class
 #include "3d/Object3DRegistry.h"
-#include "Pipeline/PipelineManager.h"
 #include "Editor/ParticleEditor/ParticleManager.h"
+#include "GPUParticle/GPUParticleManager.h"
+#include "Pipeline/PipelineManager.h"
 
 // math
 #include "Frame/Frame.h"
@@ -21,38 +22,40 @@ EditorScene::~EditorScene() {
 void EditorScene::Init() {
 
     BaseScene::Init();
+
     easingTestObject_ = std::make_unique<EasingTestObj>();
     easingTestObject_->Init();
 
     easingEditor_.Init();
-
     easingEditor_.SetVector3Target(&easingTestObject_->GetEasingData());
+
+   
 }
 
 void EditorScene::Update() {
 
     BaseScene::Update();
-    
+
     easingEditor_.Edit();
     easingTestObject_->Update();
 
+    // 通常のパーティクル更新
     ParticleManager::GetInstance()->Update();
 
+    // GPUパーティクル更新
+    GPUParticleManager::GetInstance()->Update();
     ViewProjectionUpdate();
 
     if (input_->TriggerKey(KeyboardKey::Enter)) {
-
         SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
     }
 }
-
 
 /// ===================================================
 /// SkyBox描画
 /// ===================================================
 void EditorScene::SkyBoxDraw() {
 }
-
 
 void EditorScene::Debug() {
 #ifdef _DEBUG
@@ -64,10 +67,12 @@ void EditorScene::Debug() {
     BaseScene::Debug();
 
     easingTestObject_->Debug();
+
+  
+
 #endif
 }
 
-// ビュープロジェクション更新
 void EditorScene::ViewProjectionUpdate() {
     BaseScene::ViewProjectionUpdate();
 }

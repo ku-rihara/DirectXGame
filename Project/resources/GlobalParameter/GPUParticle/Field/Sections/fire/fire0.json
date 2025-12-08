@@ -1,0 +1,102 @@
+{
+    "fire0": {
+        "Align To Velocity": false,
+        "Billboard Mode": 1,
+        "Blend Mode": 1,
+        "Color Max": [
+            0.8480392098426819,
+            0.09976930916309357,
+            0.09976930916309357,
+            1.0
+        ],
+        "Color Min": [
+            0.8676470518112183,
+            0.0467849001288414,
+            0.0467849001288414,
+            0.9921568632125854
+        ],
+        "Count": 9,
+        "Frequency": 0.009999999776482582,
+        "Is Active": true,
+        "Is Move For Rail": false,
+        "Is Rail Loop": false,
+        "LifeTime Max": 6.0,
+        "LifeTime Min": 2.200000047683716,
+        "Move Speed": 1.0,
+        "Position": [
+            -0.5,
+            -40.900001525878906,
+            7.599999904632568
+        ],
+        "Rotation Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotation Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotation Speed Max": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Rotation Speed Min": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Scale Max": [
+            1.0,
+            11.0,
+            1.0
+        ],
+        "Scale Min": [
+            1.9500000476837158,
+            11.0,
+            1.0
+        ],
+        "Start Time": 0.0,
+        "Texture Path": "Resources/texture/circle.png",
+        "Translate Max": [
+            41.599998474121094,
+            51.20000076293945,
+            95.5
+        ],
+        "Translate Min": [
+            -73.9000015258789,
+            30.0,
+            -57.599998474121094
+        ],
+        "UV Flip X": false,
+        "UV Flip Y": false,
+        "UV Loop": true,
+        "UV Pixel Step": 0.0,
+        "UV Position": [
+            0.0,
+            0.0
+        ],
+        "UV Rotate": 0.0,
+        "UV Scale": [
+            1.0,
+            1.0
+        ],
+        "UV Scroll Speed": [
+            0.0,
+            0.0
+        ],
+        "Velocity Max": [
+            0.0,
+            38.599998474121094,
+            0.0
+        ],
+        "Velocity Min": [
+            0.0,
+            6.5,
+            0.0
+        ],
+        "timeMode": 1
+    }
+}

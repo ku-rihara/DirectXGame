@@ -1,4 +1,3 @@
-// ParticleParameter.cpp
 #include "ParticleParameter.h"
 #include "base/TextureManager.h"
 #include "Frame/Frame.h"
@@ -8,7 +7,6 @@
 #include <imgui.h>
 
 void ParticleParameter::ParameterInit() {
-
     // パラメータ初期化
     parameters_.targetPos            = {0.0f, 0.0f, 0.0f};
     parameters_.lifeTime             = 0.0f;
@@ -25,24 +23,18 @@ void ParticleParameter::ParameterInit() {
     parameters_.uvParm.numOfFrame    = 1;
     selectedTexturePath_             = "resources/Texture/uvChecker.png";
 }
-
 void ParticleParameter::Init() {
-
     ParameterInit();
 
-   ///* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(particleName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(particleName_);
 
-    // Editor上で設定したテクスチャを適応
+    // Editorで設定したテクスチャを適用
     AdaptTexture();
 
-    //rail適応
-    
-
-    /// セッティングしたもの適応
+    // セッティングしたもの適用
     groupParamaters_.billBordType      = static_cast<BillboardType>(billBordType_);
     groupParamaters_.isShot            = isShot_;
     groupParamaters_.blendMode         = static_cast<BlendMode>(blendMode_);
@@ -99,8 +91,9 @@ void ParticleParameter::RegisterParams() {
     globalParameter_->Regist(particleName_, "Gravity", &parameters_.gravity);
     globalParameter_->Regist(particleName_, "LifeTime", &parameters_.lifeTime);
     globalParameter_->Regist(particleName_, "Particle Count", &particleCount_);
+    globalParameter_->Regist(particleName_, "Max Particle Num", &maxParticleNum_);
 
-    /// frag
+    // frag
     globalParameter_->Regist(particleName_, "isScalerScale", &parameters_.isScalerScale);
     globalParameter_->Regist(particleName_, "isRotateforDirection", &parameters_.isRotateforDirection);
     globalParameter_->Regist(particleName_, "isBillBord", &groupParamaters_.isBillBord);
@@ -110,26 +103,123 @@ void ParticleParameter::RegisterParams() {
     globalParameter_->Regist(particleName_, "isShot", &isShot_);
     globalParameter_->Regist(particleName_, "isAlphaNoMove", &groupParamaters_.isAlphaNoMove);
 
-     globalParameter_->Regist(particleName_, "isRailRoop", &isRailRoop_);
+    globalParameter_->Regist(particleName_, "isRailRoop", &isRailRoop_);
     globalParameter_->Regist(particleName_, "isMoveForRail", &isMoveForRail_);
     globalParameter_->Regist(particleName_, "moveSpeed", &moveSpeed_);
-
 
     // easeParm
     globalParameter_->Regist(particleName_, "scaleEaseParm.isScaleEase", &parameters_.scaleEaseParm.isScaleEase);
     globalParameter_->Regist(particleName_, "scaleEaseParm.maxTime", &parameters_.scaleEaseParm.maxTime);
     globalParameter_->Regist(particleName_, "scaleEaseParm.easeTypeInt", &parameters_.scaleEaseParm.easeTypeInt);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.startValueF", &parameters_.scaleEaseParm.startValueF);
     globalParameter_->Regist(particleName_, "scaleEaseParm.endValueF.max", &parameters_.scaleEaseParm.endValueF.max);
     globalParameter_->Regist(particleName_, "scaleEaseParm.endValueF.min", &parameters_.scaleEaseParm.endValueF.min);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.startValueV3", &parameters_.scaleEaseParm.startValueV3);
     globalParameter_->Regist(particleName_, "scaleEaseParm.endValueV3.max", &parameters_.scaleEaseParm.endValueV3.max);
     globalParameter_->Regist(particleName_, "scaleEaseParm.endValueV3.min", &parameters_.scaleEaseParm.endValueV3.min);
+    globalParameter_->Regist(particleName_, "scaleEaseParm.backRatio", &parameters_.scaleEaseParm.backRatio);
 
-    // mpde Setting
+    // mode Setting
     globalParameter_->Regist(particleName_, "preBillBordType_", &billBordType_);
     globalParameter_->Regist(particleName_, "blendMode", &blendMode_);
 
     // テクスチャ
     globalParameter_->Regist(particleName_, "selectedTexturePath_", &selectedTexturePath_);
+
+    // Primitive
+    globalParameter_->Regist(particleName_, "useModel", &useModel_);
+    globalParameter_->Regist(particleName_, "primitiveTypeInt", &primitiveTypeInt_);
+    globalParameter_->Regist(particleName_, "modelFilePath", &modelFilePath_);
+}
+
+void ParticleParameter::GetParams() {
+    // Position
+    parameters_.emitPos          = globalParameter_->GetValue<Vector3>(particleName_, "Position Base");
+    parameters_.positionDist.max = globalParameter_->GetValue<Vector3>(particleName_, "Position Max");
+    parameters_.positionDist.min = globalParameter_->GetValue<Vector3>(particleName_, "Position Min");
+
+    // Scale
+    parameters_.scaleDist.max   = globalParameter_->GetValue<float>(particleName_, "Scale Max");
+    parameters_.scaleDist.min   = globalParameter_->GetValue<float>(particleName_, "Scale Min");
+    parameters_.scaleDistV3.max = globalParameter_->GetValue<Vector3>(particleName_, "ScaleV3 Max");
+    parameters_.scaleDistV3.min = globalParameter_->GetValue<Vector3>(particleName_, "ScaleV3 Min");
+
+    // Rotate
+    parameters_.baseRotate          = globalParameter_->GetValue<Vector3>(particleName_, "Rotate Base");
+    parameters_.rotateDist.max      = globalParameter_->GetValue<Vector3>(particleName_, "Rotate Max");
+    parameters_.rotateDist.min      = globalParameter_->GetValue<Vector3>(particleName_, "Rotate Min");
+    parameters_.rotateSpeedDist.max = globalParameter_->GetValue<Vector3>(particleName_, "RotateSpeed Max");
+    parameters_.rotateSpeedDist.min = globalParameter_->GetValue<Vector3>(particleName_, "RotateSpeed Min");
+
+    // UV
+    parameters_.uvParm.pos               = globalParameter_->GetValue<Vector2>(particleName_, "UV Pos");
+    parameters_.uvParm.rotate            = globalParameter_->GetValue<Vector3>(particleName_, "UV Rotate");
+    parameters_.uvParm.numOfFrame        = globalParameter_->GetValue<int32_t>(particleName_, "UV NumOfFrame");
+    parameters_.uvParm.frameScroolSpeed  = globalParameter_->GetValue<float>(particleName_, "UV ScroolSpeed");
+    parameters_.uvParm.isRoop            = globalParameter_->GetValue<bool>(particleName_, "UV IsRoop");
+    parameters_.uvParm.isScroolEachPixel = globalParameter_->GetValue<bool>(particleName_, "UV isScroolEachPixel");
+    parameters_.uvParm.isScrool          = globalParameter_->GetValue<bool>(particleName_, "UV isScrool");
+    parameters_.uvParm.isFlipX           = globalParameter_->GetValue<bool>(particleName_, "UV isFlipX");
+    parameters_.uvParm.isFlipY           = globalParameter_->GetValue<bool>(particleName_, "UV isFlipY");
+
+    // Velocity
+    parameters_.speedDist.max      = globalParameter_->GetValue<float>(particleName_, "Speed Max");
+    parameters_.speedDist.min      = globalParameter_->GetValue<float>(particleName_, "Speed Min");
+    parameters_.velocityDistV3.max = globalParameter_->GetValue<Vector3>(particleName_, "SpeedV3 Max");
+    parameters_.velocityDistV3.min = globalParameter_->GetValue<Vector3>(particleName_, "SpeedV3 Min");
+    parameters_.directionDist.max  = globalParameter_->GetValue<Vector3>(particleName_, "Direction Max");
+    parameters_.directionDist.min  = globalParameter_->GetValue<Vector3>(particleName_, "Direction Min");
+    parameters_.isFloatVelocity    = globalParameter_->GetValue<bool>(particleName_, "isFloatVelocity");
+
+    // Color
+    parameters_.baseColor     = globalParameter_->GetValue<Vector4>(particleName_, "BaseColor");
+    parameters_.colorDist.max = globalParameter_->GetValue<Vector4>(particleName_, "Color Max");
+    parameters_.colorDist.min = globalParameter_->GetValue<Vector4>(particleName_, "Color Min");
+
+    // その他
+    intervalTime_        = globalParameter_->GetValue<float>(particleName_, "IntervalTime");
+    parameters_.gravity  = globalParameter_->GetValue<float>(particleName_, "Gravity");
+    parameters_.lifeTime = globalParameter_->GetValue<float>(particleName_, "LifeTime");
+    particleCount_       = globalParameter_->GetValue<int32_t>(particleName_, "Particle Count");
+    maxParticleNum_      = globalParameter_->GetValue<int32_t>(particleName_, "Max Particle Num");
+
+    // Flag
+    parameters_.isScalerScale         = globalParameter_->GetValue<bool>(particleName_, "isScalerScale");
+    parameters_.isRotateforDirection  = globalParameter_->GetValue<bool>(particleName_, "isRotateforDirection");
+    groupParamaters_.isBillBord       = globalParameter_->GetValue<bool>(particleName_, "isBillBord");
+    groupParamaters_.adaptRotate_.isX = globalParameter_->GetValue<bool>(particleName_, "AdaptRotateIsX");
+    groupParamaters_.adaptRotate_.isY = globalParameter_->GetValue<bool>(particleName_, "AdaptRotateIsY");
+    groupParamaters_.adaptRotate_.isZ = globalParameter_->GetValue<bool>(particleName_, "AdaptRotateIsZ");
+    isShot_                           = globalParameter_->GetValue<bool>(particleName_, "isShot");
+    groupParamaters_.isAlphaNoMove    = globalParameter_->GetValue<bool>(particleName_, "isAlphaNoMove");
+
+    isMoveForRail_ = globalParameter_->GetValue<bool>(particleName_, "isRailRoop");
+    isRailRoop_    = globalParameter_->GetValue<bool>(particleName_, "isMoveForRail");
+    moveSpeed_     = globalParameter_->GetValue<float>(particleName_, "moveSpeed");
+
+    // EaseParm
+    parameters_.scaleEaseParm.isScaleEase    = globalParameter_->GetValue<bool>(particleName_, "scaleEaseParm.isScaleEase");
+    parameters_.scaleEaseParm.maxTime        = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.maxTime");
+    parameters_.scaleEaseParm.easeTypeInt    = globalParameter_->GetValue<int>(particleName_, "scaleEaseParm.easeTypeInt");
+    parameters_.scaleEaseParm.startValueF    = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.startValueF");
+    parameters_.scaleEaseParm.endValueF.max  = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.endValueF.max");
+    parameters_.scaleEaseParm.endValueF.min  = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.endValueF.min");
+    parameters_.scaleEaseParm.startValueV3   = globalParameter_->GetValue<Vector3>(particleName_, "scaleEaseParm.startValueV3");
+    parameters_.scaleEaseParm.endValueV3.max = globalParameter_->GetValue<Vector3>(particleName_, "scaleEaseParm.endValueV3.max");
+    parameters_.scaleEaseParm.endValueV3.min = globalParameter_->GetValue<Vector3>(particleName_, "scaleEaseParm.endValueV3.min");
+    parameters_.scaleEaseParm.backRatio      = globalParameter_->GetValue<float>(particleName_, "scaleEaseParm.backRatio");
+
+    // Mode
+    billBordType_ = globalParameter_->GetValue<int>(particleName_, "preBillBordType_");
+    blendMode_    = globalParameter_->GetValue<int>(particleName_, "blendMode");
+
+    // Texture
+    selectedTexturePath_ = globalParameter_->GetValue<std::string>(particleName_, "selectedTexturePath_");
+
+    // Primitive
+    useModel_         = globalParameter_->GetValue<bool>(particleName_, "useModel");
+    primitiveTypeInt_ = globalParameter_->GetValue<int32_t>(particleName_, "primitiveTypeInt");
+    modelFilePath_    = globalParameter_->GetValue<std::string>(particleName_, "modelFilePath");
 }
 
 

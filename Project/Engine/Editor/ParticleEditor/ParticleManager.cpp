@@ -117,6 +117,7 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
 
     for (auto& groupPair : particleGroups_) {
         ParticleGroup& group           = groupPair.second;
+        std::string name               = groupPair.first;
         std::list<Particle>& particles = group.particles;
         ParticleFprGPU* instancingData = group.instancingData;
 
@@ -127,6 +128,10 @@ void ParticleManager::Draw(const ViewProjection& viewProjection) {
             if (it->currentTime_ >= it->lifeTime_) {
                 it = particles.erase(it);
                 continue;
+            }
+
+            if (instanceIndex > particleGroups_[name].currentNum) {
+                return;
             }
 
             // WVP適応
@@ -286,6 +291,7 @@ void ParticleManager::CreateMaterialResource(const std::string& name) {
 void ParticleManager::CreateInstancingResource(const std::string& name, uint32_t instanceNum) {
 
     particleGroups_[name].instanceNum = instanceNum;
+    particleGroups_[name].currentNum  = instanceNum;
 
     // Instancing用のTransformationMatrixリソースを作る
     particleGroups_[name].instancingResource = DirectXCommon::GetInstance()->CreateBufferResource(
@@ -616,5 +622,5 @@ void ParticleManager::SetViewProjection(const ViewProjection* view) {
 }
 
 void ParticleManager::SetAllParticleFile() {
-    particleFiles_ = GetFileNamesForDirectory(GlobalParameter::GetInstance()->GetDirectoryPath() +ParticleFolderName_);
+    particleFiles_ = GetFileNamesForDirectory(GlobalParameter::GetInstance()->GetDirectoryPath() + ParticleFolderName_);
 }

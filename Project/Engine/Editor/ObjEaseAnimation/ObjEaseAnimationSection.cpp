@@ -114,7 +114,7 @@ void ObjEaseAnimationSection::UpdateTransform(TransformParam& param, TransformTy
         break;
 
     case TransformState::WAITING:
-        // 待機状態(StartPlayで遷移)
+        // 待機状態
         break;
 
     case TransformState::PLAYING:
@@ -181,7 +181,7 @@ void ObjEaseAnimationSection::UpdateTransformPlay(TransformParam& param, Transfo
 }
 
 void ObjEaseAnimationSection::UpdateTransformReturn(TransformParam& param, TransformType type, float deltaTime) {
-    // Rail使用時はスキップ(RETURN_WAITINGで処理済み)
+    // Rail使用時はスキップ
     if (type == TransformType::Translation && param.useRail) {
         param.state = TransformState::FINISHED;
         return;

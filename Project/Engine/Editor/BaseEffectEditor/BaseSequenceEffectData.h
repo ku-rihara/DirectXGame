@@ -18,7 +18,7 @@ public:
 
     // 初期化、カテゴリー対応初期化
     void Init(const std::string& name) override;
-    virtual void InitWithCategory(const std::string& name, const std::string& categoryName)override;
+    virtual void InitWithCategory(const std::string& name, const std::string& categoryName) override;
     // キーフレーム管理
     void AddKeyFrame();
     void RemoveKeyFrame(int32_t index);
@@ -34,10 +34,10 @@ public:
 protected:
     //*---------------------------- protected Methods ----------------------------*//
 
-    virtual void UpdateKeyFrameProgression()                                       = 0;
-    virtual void AdvanceToNexTSequenceElement()                                    = 0;
+    virtual void UpdateKeyFrameProgression()                                = 0;
+    virtual void AdvanceToNexTSequenceElement()                             = 0;
     virtual std::unique_ptr<TSequenceElement> CreateKeyFrame(int32_t index) = 0;
-    virtual std::string GeTSequenceElementFolderPath() const                       = 0;
+    virtual std::string GeTSequenceElementFolderPath() const                = 0;
 
 protected:
     //*---------------------------- protected Variant ----------------------------*//

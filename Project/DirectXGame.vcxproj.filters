@@ -487,6 +487,12 @@
     <Filter Include="MyEngine\.h\utility\TimeModeSelector">
       <UniqueIdentifier>{03c50b4d-e92c-4dad-91f1-1e665d26cfc8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.h\Editor\GPUParticleEditor">
+      <UniqueIdentifier>{f243c575-978d-4ae9-8871-1dd9359ecb6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Editor\GPUParticleEditor">
+      <UniqueIdentifier>{891cf9dc-1516-4ccb-812e-32cadcff9d26}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -970,9 +976,6 @@
     <ClCompile Include="Engine\2d\SpriteRegistry.cpp">
       <Filter>MyEngine\.cpp\2d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GPUParticle\GPUParticleEmitter.cpp">
-      <Filter>MyEngine\.cpp\GPUParticle</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\GPUParticle\GPUParticleManager.cpp">
       <Filter>MyEngine\.cpp\GPUParticle</Filter>
     </ClCompile>
@@ -1020,9 +1023,6 @@
     </ClCompile>
     <ClCompile Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.cpp">
       <Filter>MyEngine\.cpp\GPUParticle\ResourceData</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\GPUParticle\GPUParticleParamEditor.cpp">
-      <Filter>MyEngine\.cpp\GPUParticle</Filter>
     </ClCompile>
     <ClCompile Include="Engine\input\InputData.cpp">
       <Filter>MyEngine\.cpp\input</Filter>
@@ -1215,6 +1215,30 @@
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.cpp">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleData.cpp">
+      <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleEditor.cpp">
+      <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticlePlayer.cpp">
+      <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.cpp">
+      <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleData.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleEditor.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticlePlayer.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleSection.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1743,9 +1767,6 @@
     <ClInclude Include="Engine\2d\SpriteRegistry.h">
       <Filter>MyEngine\.h\2d</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GPUParticle\GPUParticleEmitter.h">
-      <Filter>MyEngine\.h\GPUParticle</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\GPUParticle\Data\GPUParticleEmitterData.h">
       <Filter>MyEngine\.h\GPUParticle\Data</Filter>
     </ClInclude>
@@ -1799,9 +1820,6 @@
     </ClInclude>
     <ClInclude Include="Engine\GPUParticle\ResourceData\GPUParticleCommandExecutor.h">
       <Filter>MyEngine\.h\GPUParticle\ResourceData</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\GPUParticle\GPUParticleParamEditor.h">
-      <Filter>MyEngine\.h\GPUParticle</Filter>
     </ClInclude>
     <ClInclude Include="Engine\input\InputData.h">
       <Filter>MyEngine\.h\input</Filter>
@@ -1994,6 +2012,30 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.h">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\GPUParticleEditor\GPUParticleData.h">
+      <Filter>MyEngine\.h\Editor\GPUParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\GPUParticleEditor\GPUParticleEditor.h">
+      <Filter>MyEngine\.h\Editor\GPUParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\GPUParticleEditor\GPUParticlePlayer.h">
+      <Filter>MyEngine\.h\Editor\GPUParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.h">
+      <Filter>MyEngine\.h\Editor\GPUParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleData.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleEditor.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticlePlayer.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleSection.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
