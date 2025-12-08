@@ -1,0 +1,62 @@
+{
+    "PlayerSlamAttack": {
+        "CameraAction_FileName": "PlayerthrustAttack",
+        "CameraAction_StartTiming": 0.0,
+        "CameraAction_TriggerByHit": true,
+        "Condition": 0,
+        "HitStop_FileName": "PlayerThurstAttackHitStop",
+        "HitStop_StartTiming": 0.0,
+        "HitStop_TriggerByHit": true,
+        "IsFirstAttack": false,
+        "KnockBackPower": 27.34000015258789,
+        "Main_Head_FileName": "SlamedAttackMotion",
+        "Main_Head_StartTiming": 0.0,
+        "NextAttackType": "",
+        "ObjAnim_Head_FileName": "SlamedAttackMotion",
+        "ObjAnim_Head_StartTiming": 0.0,
+        "ObjAnim_LeftHand_FileName": "upperRushHandMotion",
+        "ObjAnim_LeftHand_StartTiming": 0.0,
+        "ObjAnim_RightHand_FileName": "",
+        "ObjAnim_RightHand_StartTiming": 0.0,
+        "PostEffectParam_FileName": "",
+        "PostEffectParam_StartTiming": 0.0,
+        "PostEffectParam_TriggerByHit": false,
+        "RequireHit": false,
+        "ShakeAction_FileName": "ThurstAttackCamera",
+        "ShakeAction_StartTiming": 0.0,
+        "ShakeAction_TriggerByHit": true,
+        "adaptTime": 0.1899999976158142,
+        "blowYPower": 79.66999816894531,
+        "cancelFrame": 0.0,
+        "collisionOffsetPos": [
+            0.0,
+            0.0,
+            5.460000038146973
+        ],
+        "collisionSize": [
+            8.0,
+            8.0,
+            8.0
+        ],
+        "enableFall": true,
+        "finishWaitTime": 0.0,
+        "gamePadBottom": 0,
+        "isAbleInputMoving": false,
+        "isAlwaysFollowing": false,
+        "isAutoAdvance": false,
+        "isCancel": false,
+        "isPositionYSelect": false,
+        "keyBordBottom": 0,
+        "loopNum": 0,
+        "loopWaitTime": 0.0,
+        "moveEaseTime": 0.0,
+        "moveEaseType": 0,
+        "moveValue": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "power": 26.31999969482422,
+        "precedeInputFrame": 0.0
+    }
+}

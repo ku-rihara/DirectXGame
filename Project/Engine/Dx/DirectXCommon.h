@@ -55,7 +55,7 @@ public:
     /// <param name="win">WinApp</param>
     /// <param name="backBufferWidth">バックバッファ幅</param>
     /// <param name="backBufferHeight">バックバッファ高さ</param>
-    void Init(WinApp* win, const int32_t& backBufferWidth = 1280, const int32_t& backBufferHeight = 720);
+    void Init(WinApp* win, int32_t backBufferWidth = 1280, int32_t backBufferHeight = 720);
 
     /// <summary>
     /// リソースの作成
@@ -84,7 +84,7 @@ public:
     /// <param name="descriptorSize">ディスクリプタサイズ</param>
     /// <param name="index">インデックス</param>
     /// <returns>CPUディスクリプタハンドル</returns>
-    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, const uint32_t& descriptorSize, const uint32_t& index);
+    D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
     /// <summary>
     /// GPUディスクリプタハンドル取得
@@ -93,7 +93,7 @@ public:
     /// <param name="descriptorSize">ディスクリプタサイズ</param>
     /// <param name="index">インデックス</param>
     /// <returns>GPUディスクリプタハンドル</returns>
-    D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, const uint32_t& descriptorSize, const uint32_t& index);
+    D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
     void InitRenderingResources(); //< レンダリングリソースの初期化
     void PreDraw();                //< 描画前処理

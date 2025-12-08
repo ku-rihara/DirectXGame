@@ -9,7 +9,7 @@
 /// </summary>
 class DebugCamera {
 public:
-    DebugCamera(int window_width, int window_height);
+    DebugCamera(const int& window_width, const int& window_height);
     ~DebugCamera() = default;
 
     void Init(); //< 初期化
@@ -31,8 +31,8 @@ private:
 public:
     const ViewProjection& GetViewProjection() { return viewProjection_; }
     void SetIsActive(const bool& is) { isActive_ = is; }
-    void SetFovAngleY(const float& value) { viewProjection_.fovAngleY_ = value; }
-    void SetAspectRatio(const float& value) { viewProjection_.aspectRatio_ = value; }
-    void SetNearZ(const float& value) { viewProjection_.nearZ_ = value; }
-    void SetFarZ(const float& value) { viewProjection_.farZ_ = value; }
+    void SetFovAngleY(float value) { viewProjection_.fovAngleY_ = value; }
+    void SetAspectRatio(float value) { viewProjection_.aspectRatio_ = value; }
+    void SetNearZ(float value) { viewProjection_.nearZ_ = value; }
+    void SetFarZ(float value) { viewProjection_.farZ_ = value; }
 };

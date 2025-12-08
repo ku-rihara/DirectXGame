@@ -15,13 +15,12 @@
 
 /// object
 #include "CollisionBox/EnemyCollisionBox.h"
+#include "ComboCreator/PlayerComboAttackController.h"
 #include "Field/Field.h"
 #include "LockOn/LockOnController.h"
 
 /// behavior
 #include "ComboAttackBehavior/ComboAttackRoot.h"
-#include "ComboAttackBehavior/RoringUpper.h"
-#include "ComboAttackBehavior/RushAttack.h"
 #include "PlayerBehavior/PlayerMove.h"
 #include "PlayerBehavior/PlayerSpawn.h"
 #include "TitleBehavior/TitleFirstFall.h"
@@ -51,9 +50,10 @@ void Player::Init() {
     obj3d_->material_.SetEnvironmentCoefficient(0.05f);
 
     // Playerの攻撃クラス
-    attackController_ = std::make_unique<PlayerAttackController>();
-    attackController_->Init();
-    attackController_->SetPlayerBaseTransform(&baseTransform_);
+    playerCollisionInfo_ = std::make_unique<PlayerCollisionInfo>();
+    playerCollisionInfo_->Init();
+    playerCollisionInfo_->SetPlayerBaseTransform(&baseTransform_);
+    playerCollisionInfo_->SetParentTransform(&baseTransform_);
 
     // トランスフォーム初期化
     obj3d_->transform_.Init();
@@ -95,9 +95,6 @@ void Player::Update() {
     // ライト
     HeadLightSetting();
 
-    // 攻撃更新
-    attackController_->Update();
-
     /// 振る舞い処理(コンボ攻撃中は中止)
     if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
         behavior_->Update();
@@ -109,7 +106,6 @@ void Player::Update() {
     effects_->Update(GetWorldPosition());
 
     comboBehavior_->Update(); // コンボ攻撃攻撃
-    AttackPowerCharge(); // チャージアタック
     MoveToLimit(); // 移動制限
 
     UpdateMatrix();
@@ -146,16 +142,16 @@ Vector3 Player::GetInputDirection() {
     Input* input     = Input::GetInstance();
 
     // キーボード入力
-    if (input->PushKey(DIK_W)) {
+    if (input->PushKey(KeyboardKey::W)) {
         velocity.z += 1.0f; // 前進
     }
-    if (input->PushKey(DIK_S)) {
+    if (input->PushKey(KeyboardKey::S)) {
         velocity.z -= 1.0f; // 後退
     }
-    if (input->PushKey(DIK_A)) {
+    if (input->PushKey(KeyboardKey::A)) {
         velocity.x -= 1.0f; // 左移動
     }
-    if (input->PushKey(DIK_D)) {
+    if (input->PushKey(KeyboardKey::D)) {
         velocity.x += 1.0f; // 右移動
     }
 
@@ -170,7 +166,7 @@ Vector3 Player::GetInputDirection() {
 ///=========================================================
 /// 移動
 ///==========================================================
-void Player::Move(const float& speed) {
+void Player::Move(float speed) {
 
     /// Inputから速度代入
     direction_ = GetInputDirection();
@@ -193,33 +189,6 @@ void Player::Move(const float& speed) {
         FaceToTarget();
     } else {
         FaceToTarget();
-    }
-}
-
-void Player::AttackPowerCharge() {
-    Input* input = Input::GetInstance();
-
-    if (dynamic_cast<RoringUpper*>(comboBehavior_.get())) {
-        return;
-    }
-
-    // チャージタイム加算
-    if (input->PushKey(DIK_H) || Input::IsPressPad(0, XINPUT_GAMEPAD_X)) {
-        currentUpperChargeTime_ += Frame::DeltaTimeRate();
-
-    } else if (input->ReleaseKey(DIK_H) && !CheckIsChargeMax()) { // チャージ途中切れ
-        currentUpperChargeTime_ = 0.0f;
-    }
-
-    // チャージMax
-    if (!CheckIsChargeMax()) {
-        return;
-    }
-
-    // リリースでアッパー攻撃
-    if (input->ReleaseKey(DIK_H)) {
-        currentUpperChargeTime_ = 0.0f;
-        ChangeComboBehavior(std::make_unique<RoringUpper>(this));
     }
 }
 
@@ -248,18 +217,18 @@ bool Player::CheckIsMoving() {
     //---------------------------------------------------------------------
     // keyboard
     //---------------------------------------------------------------------
-    if (input->PushKey(DIK_W) || input->PushKey(DIK_A) || input->PushKey(DIK_S) || input->PushKey(DIK_D)) {
+    if (input->PushKey(KeyboardKey::W) || input->PushKey(KeyboardKey::A) || input->PushKey(KeyboardKey::S) || input->PushKey(KeyboardKey::D)) {
         // キーボード入力
-        if (input->PushKey(DIK_W)) {
+        if (input->PushKey(KeyboardKey::W)) {
             keyboardVelocity.z += 1.0f; // 前進
         }
-        if (input->PushKey(DIK_S)) {
+        if (input->PushKey(KeyboardKey::S)) {
             keyboardVelocity.z -= 1.0f; // 後退
         }
-        if (input->PushKey(DIK_A)) {
+        if (input->PushKey(KeyboardKey::A)) {
             keyboardVelocity.x -= 1.0f; // 左移動
         }
-        if (input->PushKey(DIK_D)) {
+        if (input->PushKey(KeyboardKey::D)) {
             keyboardVelocity.x += 1.0f; // 右移動
         }
 
@@ -326,7 +295,7 @@ void Player::MoveToLimit() {
 /// ===================================================
 ///   Jump
 /// ===================================================
-void Player::Jump(float& speed, const float& fallSpeedLimit, const float& gravity) {
+void Player::Jump(float& speed, float fallSpeedLimit, float gravity) {
     // 移動
     baseTransform_.translation_.y += speed * Frame::DeltaTimeRate();
     Fall(speed, fallSpeedLimit, gravity, true);
@@ -335,7 +304,7 @@ void Player::Jump(float& speed, const float& fallSpeedLimit, const float& gravit
 ///=========================================================
 /// 　落ちる
 ///==========================================================
-void Player::Fall(float& speed, const float& fallSpeedLimit, const float& gravity, const bool& isJump) {
+void Player::Fall(float& speed, float fallSpeedLimit, float gravity, const bool& isJump) {
 
     if (!isJump) {
         // 移動
@@ -361,8 +330,7 @@ void Player::AdjustParam() {
 
     // プレイヤーのパラメータ
     parameters_->AdjustParam();
-    // 攻撃パラメータ
-    attackController_->AdjustParam();
+
     // パーツのパラメータ
     leftHand_->AdjustParam();
     rightHand_->AdjustParam();
@@ -411,8 +379,9 @@ void Player::UpdateMatrix() {
 
 void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-    if (dynamic_cast<RushAttack*>(comboBehavior_.get()))
-        return;
+    /* if (dynamic_cast<RushAttack*>(comboBehavior_.get()))
+         return;*/
+    // 突進などの攻撃は、敵を貫通するようにする
 
     if (EnemyCollisionBox* enemy = dynamic_cast<EnemyCollisionBox*>(other)) {
         // 敵の中心座標を取得
@@ -470,7 +439,7 @@ void Player::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
     }
 }
 
-void Player::DissolveUpdate(const float& dissolve) {
+void Player::DissolveUpdate(float dissolve) {
     obj3d_->material_.SetDissolveEdgeColor(Vector3(0.6706f, 0.8824f, 0.9804f));
     obj3d_->material_.SetDissolveEdgeWidth(0.09f);
     obj3d_->material_.SetEnableDissolve(true);
@@ -496,6 +465,10 @@ void Player::HeadLightSetting() {
     }
 }
 
+void Player::MainHeadAnimationStart(const std::string& name) {
+    baseTransform_.PlayObjEaseAnimation("MainHead", name);
+}
+
 void Player::RotateReset() {
     obj3d_->transform_.rotation_      = {0, 0, 0};
     obj3d_->transform_.translation_.y = 0.0f;
@@ -505,7 +478,7 @@ void Player::PositionYReset() {
     baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
 }
 
-void Player::GameSceneInit() {
+void Player::InitInGameScene() {
     Init();
 
     DissolveUpdate(1.0f);
@@ -532,7 +505,7 @@ void Player::SetLockOn(LockOnController* lockOn) {
 
 void Player::SetCombo(Combo* combo) {
     pCombo_ = combo;
-    attackController_->SetCombo(combo);
+    comboAttackController_->SetCombo(pCombo_);
 }
 
 void Player::SetGameCamera(GameCamera* gameCamera) {
@@ -541,6 +514,14 @@ void Player::SetGameCamera(GameCamera* gameCamera) {
 
 void Player::SetHitStop(AttackEffect* hitStop) {
     pHitStop_ = hitStop;
+}
+
+void Player::SetViewProjection(const ViewProjection* viewProjection) {
+    viewProjection_ = viewProjection;
+}
+
+void Player::SetComboAttackController(PlayerComboAttackController* playerComboAttackController) {
+    comboAttackController_ = playerComboAttackController;
 }
 
 /// =======================================================================================

@@ -1,0 +1,72 @@
+{
+    "Enemies": {
+        "ChaseLimitDistance1": 14.0,
+        "ChaseLimitDistance2": 14.0,
+        "avoidanceRadius1": 20.0,
+        "avoidanceRadius2": 20.0,
+        "basePosY_1": 1.5,
+        "basePosY_2": 1.5,
+        "blowGravity1": 100.0,
+        "blowGravity2": 100.0,
+        "blowRotateSpeed1": 23.399999618530273,
+        "blowRotateSpeed2": 22.6200008392334,
+        "blowTime1": 0.25,
+        "blowTime2": 3.0,
+        "blowValueY_1": 50.0,
+        "blowValueY_2": 50.0,
+        "blowValue_1": 2.2799999713897705,
+        "blowValue_2": 2.319999933242798,
+        "burstTime1": 0.5,
+        "burstTime2": 0.5,
+        "chaseDistance1": 37.22999954223633,
+        "chaseDistance2": 34.52000045776367,
+        "chaseResetTime1": 2.0,
+        "chaseResetTime2": 2.0,
+        "chaseSpeed1": 0.3499999940395355,
+        "chaseSpeed2": 0.3700000047683716,
+        "deathBlowValue1": 2.2699999809265137,
+        "deathBlowValue2": 2.2699999809265137,
+        "deathBlowValueY1": 50.0,
+        "deathBlowValueY2": 50.0,
+        "deathBurstTime1": 0.5,
+        "deathBurstTime2": 0.5,
+        "deathGravity1": 100.0,
+        "deathGravity2": 100.0,
+        "deathRotateSpeed1": 23.0,
+        "deathRotateSpeed2": 23.0,
+        "hitbackRotateBackRatio1": 0.800000011920929,
+        "hitbackRotateBackRatio2": 0.800000011920929,
+        "hitbackRotateTime1": 0.5400000214576721,
+        "hitbackRotateTime2": 0.5400000214576721,
+        "hitbackRotateValue1": 0.5934119820594788,
+        "hitbackRotateValue2": 0.6632251143455505,
+        "hpBarPosOffset1": [
+            56.130001068115234,
+            99.29000091552734
+        ],
+        "hpBarPosOffset2": [
+            56.130001068115234,
+            99.29000091552734
+        ],
+        "initScale1": [
+            1.399999976158142,
+            1.399999976158142,
+            1.399999976158142
+        ],
+        "initScale2": [
+            1.399999976158142,
+            1.399999976158142,
+            1.399999976158142
+        ],
+        "maxChaseTime1": 5.0,
+        "maxChaseTime2": 5.0,
+        "thrustRotateSpeed1": 43.560001373291016,
+        "thrustRotateSpeed2": 20.0,
+        "upperFallSpeedLimit1": 1.2000000476837158,
+        "upperFallSpeedLimit2": 1.2000000476837158,
+        "upperGravity1": 3.509999990463257,
+        "upperGravity2": 3.5199999809265137,
+        "upperJumpPower1": 1.350000023841858,
+        "upperJumpPower2": 1.350000023841858
+    }
+}

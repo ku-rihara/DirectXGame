@@ -5,7 +5,7 @@
 
 #include "Easing/Easing.h"
 #include "EasingTestObj/EasingTestObj.h"
-#include "utility/EasingCreator/Easingeditor.h"
+#include "Editor/EasingCreator/Easingeditor.h"
 #include <memory>
 
 /// <summary>
@@ -17,22 +17,14 @@ private:
     EasingEditor easingEditor_;
 
 public:
-    ///========================================================
-    /// Constralt destract
-    ///========================================================
     EditorScene();
     ~EditorScene() override;
 
-    ///========================================================
-    /// private method
-    ///========================================================
-
-    /// 初期化、更新、描画
     void Init() override;
     void Update() override;
     void SkyBoxDraw() override;
 
-    void Debug() override; /// debug
+    void Debug() override;
     void ViewProjectionUpdate() override;
     void ViewProcess() override;
 };

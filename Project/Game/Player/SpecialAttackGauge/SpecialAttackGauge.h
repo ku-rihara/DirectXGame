@@ -1,7 +1,7 @@
 #pragma once
 
 #include "2d/Sprite.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include <memory>
 
 /// <summary>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Combo/ComboUIController.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 // std
 #include <cstdint>
 #include <memory>
@@ -26,7 +26,7 @@ public:
     void Reset();               //< リセット
 
     void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
 private:
     // UIコントローラ
@@ -46,8 +46,8 @@ private:
 
 public:
     // Getter
-    const int32_t& GetComboCount() const { return comboCount_; }
-    const int32_t& GetCurrentLevel() const { return currentLevel_; }
-    const int32_t& GetLevelUPNum(const int32_t& level) const { return LevelUpNum[level]; }
+    int32_t GetComboCount() const { return comboCount_; }
+    int32_t GetCurrentLevel() const { return currentLevel_; }
+    int32_t GetLevelUPNum(int32_t level) const { return LevelUpNum[level]; }
     const bool& GetIsReset() const { return isReset_; }
 };

@@ -23,7 +23,7 @@ void ComboScene::Update() {
 void ComboScene::CheckIsLevelUp() {
 
     // 現在レベルを取得
-    const int32_t& currentLevel = pCombo_->GetCurrentLevel();
+    int32_t currentLevel = pCombo_->GetCurrentLevel();
 
     if (pCombo_->GetComboCount() < pCombo_->GetLevelUPNum(currentLevel)) {
         return; // レベルアップ条件を満たしていない

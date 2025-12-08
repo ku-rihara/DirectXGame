@@ -17,11 +17,14 @@
 #include "GameCamera/GameCamera.h"
 #include "GameIntro/GameIntroManager.h"
 #include "LockOn/LockOnController.h"
+#include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
 #include "SkyBox/SkyBox.h"
 #include "SkyDome/SkyDome.h"
 #include "UI/HowToOperate.h"
-#include "utility/CameraEditor/CameraEditor.h"
+#include "Editor/CameraEditor/CameraEditor.h"
+
+#include"Editor/CameraEditor/CameraAnimation.h"
 
 /// <summary>
 /// ゲームシーン
@@ -62,28 +65,28 @@ public:
     void ChangeForJoyState();
 
 private:
-    ///========================================================
-    /// Private variants
-    ///========================================================
+   
+    //*-------------------------------- Private variants--------------------------------*//
 
     // objects
-    std::unique_ptr<GameCamera> gameCamera_                         = nullptr;
-    std::unique_ptr<Field> field_                                   = nullptr;
-    std::unique_ptr<LockOnController> lockOnController_             = nullptr;
-    std::unique_ptr<Player> player_                                 = nullptr;
-    std::unique_ptr<SkyDome> skyDome_                               = nullptr;
-    std::unique_ptr<SkyBox> skyBox_                                 = nullptr;
-    std::unique_ptr<Combo> combo_                                   = nullptr;
-    std::unique_ptr<EnemyManager> enemyManager_                     = nullptr;
-    std::unique_ptr<EnemySpawner> enemySpawner_                     = nullptr;
-    std::unique_ptr<HowToOperate> howToOperate_                     = nullptr;
-    std::unique_ptr<FireInjectors> fireInjectors_                   = nullptr;
-    std::unique_ptr<GameBackGroundObject> gameBackGroundObject_     = nullptr;
-    std::unique_ptr<ComboScene> comboScene_                         = nullptr;
-    std::unique_ptr<AttackEffect> attackEffect_                     = nullptr;
-    std::unique_ptr<GameIntroManager> gameIntroManager_             = nullptr;
-    std::unique_ptr<ComboLevelObjHolder> comboLevelObjHolder_       = nullptr;
-    std::unique_ptr<ContinuousEnemySpawner> continuousEnemySpawner_ = nullptr;
+    std::unique_ptr<GameCamera> gameCamera_                                   = nullptr;
+    std::unique_ptr<Field> field_                                             = nullptr;
+    std::unique_ptr<LockOnController> lockOnController_                       = nullptr;
+    std::unique_ptr<Player> player_                                           = nullptr;
+    std::unique_ptr<SkyDome> skyDome_                                         = nullptr;
+    std::unique_ptr<SkyBox> skyBox_                                           = nullptr;
+    std::unique_ptr<Combo> combo_                                             = nullptr;
+    std::unique_ptr<EnemyManager> enemyManager_                               = nullptr;
+    std::unique_ptr<EnemySpawner> enemySpawner_                               = nullptr;
+    std::unique_ptr<HowToOperate> howToOperate_                               = nullptr;
+    std::unique_ptr<FireInjectors> fireInjectors_                             = nullptr;
+    std::unique_ptr<GameBackGroundObject> gameBackGroundObject_               = nullptr;
+    std::unique_ptr<ComboScene> comboScene_                                   = nullptr;
+    std::unique_ptr<AttackEffect> attackEffect_                               = nullptr;
+    std::unique_ptr<GameIntroManager> gameIntroManager_                       = nullptr;
+    std::unique_ptr<ComboLevelObjHolder> comboLevelObjHolder_                 = nullptr;
+    std::unique_ptr<ContinuousEnemySpawner> continuousEnemySpawner_           = nullptr;
+    std::unique_ptr<PlayerComboAttackController> playerComboAttackController_ = nullptr;
 
     GameState gameState_ = GameState::INTRO;
 

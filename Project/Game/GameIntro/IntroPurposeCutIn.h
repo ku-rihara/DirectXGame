@@ -58,11 +58,11 @@ public:
     /// 更新
     /// </summary>
     /// <param name="playSpeed">再生速度</param>
-    void Update(const float& playSpeed) override;
+    void Update(float playSpeed) override;
 
     // Param Edit
     void AdjustParam() override;       //< パラメータ調整
-    void BindParams() override;        //< パラメータバインド
+    void RegisterParams() override;        //< パラメータバインド
     void AdjustUniqueParam() override; //< 固有パラメータ調整
 
 private:
@@ -84,7 +84,7 @@ private:
     /// <param name="nextStep">次のステップ</param>
     /// <param name="enableEnemySpawn">敵生成有効化</param>
     /// <returns>ステップ完了でtrue</returns>
-    bool ProcessStep(const float& limitTime, const Step& nextStep, const bool& enableEnemySpawn = false);
+    bool ProcessStep(float limitTime, const Step& nextStep, const bool& enableEnemySpawn = false);
 
 private:
     static void (IntroPurposeCutIn::* spFuncTable_[])();

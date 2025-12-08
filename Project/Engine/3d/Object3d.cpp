@@ -17,7 +17,7 @@ Object3d* Object3d::CreateModel(const std::string& instanceName) {
     std::unique_ptr<Object3d> object3d = std::make_unique<Object3d>();
     ModelManager::GetInstance()->LoadModel(instanceName);
     object3d->transform_.Init();
-    object3d->SetModel(instanceName);
+    object3d->SetModelByName(instanceName);
     object3d->CreateWVPResource();
     object3d->CreateShadowMap();
     object3d->CreateMaterialResource();
@@ -34,7 +34,11 @@ void Object3d::Init() {
 }
 
 void Object3d::Update() {
+  
+    // Transform更新
     transform_.UpdateMatrix();
+
+    // マテリアル色更新
     material_.materialData_->color = objColor_.GetColor();
 }
 
@@ -66,8 +70,8 @@ void Object3d::ShadowDraw(const ViewProjection& viewProjection) {
 /// デバッグ表示
 ///============================================================
 
-void Object3d::DebugImgui() {
-    BaseObject3d::DebugImgui();
+void Object3d::DebugImGui() {
+    BaseObject3d::DebugImGui();
 }
 
 ///============================================================

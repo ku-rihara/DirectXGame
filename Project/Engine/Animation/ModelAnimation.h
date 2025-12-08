@@ -61,7 +61,7 @@ public:
     /// <param name="keyframe">キーフレーム配列</param>
     /// <param name="time">時間</param>
     /// <returns>補間された値</returns>
-    static Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframe, const float& time);
+    static Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time);
 
     /// <summary>
     /// キーフレーム補間計算(Quaternion)
@@ -69,7 +69,7 @@ public:
     /// <param name="keyframe">キーフレーム配列</param>
     /// <param name="time">時間</param>
     /// <returns>補間された値</returns>
-    static Quaternion CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, const float& time);
+    static Quaternion CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time);
 
 private:
     /// <summary>

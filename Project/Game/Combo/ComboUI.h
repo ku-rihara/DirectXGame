@@ -1,7 +1,7 @@
 #pragma once
 
 #include "2d/Sprite.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 
 // std
 #include <cstdint>
@@ -34,13 +34,13 @@ public:
     /// </summary>
     /// <param name="scale">スケール</param>
     /// <param name="alpha">アルファ値</param>
-    void Update(const Vector2& scale, const float& alpha);
+    void Update(const Vector2& scale, float alpha);
 
     /// <summary>
     /// 数値の計算
     /// </summary>
     /// <param name="value">値</param>
-    void CalculateNumber(const int32_t& value);
+    void CalculateNumber(int32_t value);
 
     /// <summary>
     /// グループ名の作成
@@ -49,7 +49,7 @@ public:
     void CreateGroupName(const ComboDigit& digit);
 
     void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
 private:
     ///* globalParameter *//

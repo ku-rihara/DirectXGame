@@ -50,6 +50,6 @@ public:
     MaterialData* materialData_ = nullptr;
 
 public:
-    void SetShininess(const float& shininess) override { materialData_->shininess = shininess; }
-    void SetEnvironmentCoefficient(const float& environmentCoefficient) override { materialData_->environmentCoefficient = environmentCoefficient; }
+    void SetShininess(float shininess) override { materialData_->shininess = shininess; }
+    void SetEnvironmentCoefficient(float environmentCoefficient) override { materialData_->environmentCoefficient = environmentCoefficient; }
 };

@@ -28,19 +28,19 @@ public:
     /// 更新
     /// </summary>
     /// <param name="playSpeed">再生速度</param>
-    virtual void Update(const float& playSpeed) override;
+    virtual void Update(float playSpeed) override;
 
     /// <summary>
     /// 指定グループのイージングリセット
     /// </summary>
     /// <param name="groupNum">グループ番号</param>
-    void EasingResetSelectGroup(const int32_t& groupNum);
+    void EasingResetSelectGroup(int32_t groupNum);
 
     /// <summary>
     /// イージング完了フラグ取得
     /// </summary>
     /// <param name="groupNum">グループ番号</param>
-    bool GetIsEasingFinish(const int32_t& groupNum) const;
+    bool GetIsEasingFinish(int32_t groupNum) const;
 
     void EasingAllReset(); //< 全イージングリセット
 

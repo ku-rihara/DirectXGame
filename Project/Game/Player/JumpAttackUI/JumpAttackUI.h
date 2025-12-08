@@ -58,7 +58,7 @@ public:
     /// <param name="viewProjection">ビュープロジェクション</param>
     void Update(const Vector3& basePos, const ViewProjection& viewProjection);
 
-    void BindParams(); //< パラメータのバインド
+    void RegisterParams(); //< パラメータのバインド
     void AdjustParam(); //< パラメータの調整
     void StartOpen(); //< 開くアニメーション開始
     void StartClose(); //< 閉じるアニメーション開始

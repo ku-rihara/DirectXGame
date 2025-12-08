@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Enemy/BaseEnemy.h"
+#include "Enemy/Types/BaseEnemy.h"
 #include <array>
 #include <cstdint>
 #include <json.hpp>
@@ -54,7 +54,7 @@ public:
     /// 更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
 
     /// <summary>
     /// 敵が倒されたときの通知
@@ -90,7 +90,7 @@ public:
     void UpdateCurrentGroup(); //< 現在のグループ更新
 
     void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
 private:
     using json = nlohmann::json;

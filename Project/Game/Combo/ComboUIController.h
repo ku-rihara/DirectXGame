@@ -2,7 +2,7 @@
 
 #include "ComboUI.h"
 
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 // behavior
 #include "Behavior/BaseComboUIBehavior.h"
 // std
@@ -31,14 +31,14 @@ public:
     /// 更新
     /// </summary>
     /// <param name="comboNum">コンボ数</param>
-    void Update(const int32_t& comboNum);
+    void Update(int32_t comboNum);
 
     /// <summary>
     /// 時間に応じたアルファ値適応
     /// </summary>
     /// <param name="comboTime">コンボ時間</param>
     /// <param name="comboMaxTime">コンボ最大時間</param>
-    void AlphaAdaptForTime(const float& comboTime, const float& comboMaxTime);
+    void AlphaAdaptForTime(float comboTime, float comboMaxTime);
 
     /// <summary>
     /// ビヘイビア変更
@@ -47,7 +47,7 @@ public:
     void ChangeBehavior(std::unique_ptr<BaseComboUIBehavior> behavior);
 
     void AdjustParam(); //< パラメータ調整
-    void BindParams(); //< パラメータバインド
+    void RegisterParams(); //< パラメータバインド
 
 private:
     GlobalParameter* globalParameter_; // グローバルパラメータ

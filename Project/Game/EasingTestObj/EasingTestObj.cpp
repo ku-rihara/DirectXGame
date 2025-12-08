@@ -21,7 +21,7 @@ void EasingTestObj::Init() {
 
 void EasingTestObj::Update() {
 
-    if (Input::GetInstance()->TriggerKey(DIK_U)) {
+    if (Input::GetInstance()->TriggerKey(KeyboardKey::U)) {
         easing_.Reset();
     }
     ScaleEasing();

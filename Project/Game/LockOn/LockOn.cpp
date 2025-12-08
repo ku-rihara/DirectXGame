@@ -8,7 +8,7 @@
 // from
 #include "Player/Player.h"
 // target
-#include "Enemy/BaseEnemy.h"
+#include "Enemy/Types/BaseEnemy.h"
 
 #include <algorithm>
 #include <cmath>
@@ -18,8 +18,8 @@ void LockOn::Init() {
 
     //* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
-    globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    globalParameter_->CreateGroup(groupName_);
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
     // メインターゲット用スプライト
@@ -114,7 +114,7 @@ void LockOn::ResizeTargetMarkers(const size_t& targetCount) {
 void LockOn::HandleTargetSwitching(const std::vector<LockOnVariant>& targets, const Player* player) {
 
     // ボタン入力の検出
-    bool currentSwitchInput = Input::IsTriggerPad(0, XINPUT_GAMEPAD_Y);
+    bool currentSwitchInput = Input::IsTriggerPad(0, GamepadButton::Y);
     bool switchTriggered    = currentSwitchInput && !prevSwitchInput_;
     prevSwitchInput_        = currentSwitchInput;
 
@@ -141,7 +141,7 @@ void LockOn::HandleTargetSwitching(const std::vector<LockOnVariant>& targets, co
                 sortValue = relativePosition.Length(); // 距離
             } else {
                 // プレイヤーの前方ベクトルとの角度
-                Vector3 playerForward      = player->GetTransform().GetForwardVector();
+                Vector3 playerForward      = player->GetBaseTransform().GetForwardVector();
                 Vector3 toTargetNormalized = relativePosition.Normalize();
                 float dot                  = Vector3::Dot(playerForward, toTargetNormalized);
                 dot                        = std::clamp(dot, -1.0f, 1.0f);
@@ -320,7 +320,7 @@ void LockOn::OnObjectDestroyed(const LockOnVariant& obj) {
 bool LockOn::IsTargetRange(const LockOnVariant& target, const Player* player, Vector3& relativePosition) const {
     // プレイヤーの位置と向きを取得
     Vector3 playerPos     = player->GetWorldPosition();
-    Vector3 playerForward = player->GetTransform().GetForwardVector();
+    Vector3 playerForward = player->GetBaseTransform().GetForwardVector();
 
     // ターゲットの位置を取得
     Vector3 targetPos = GetTargetObjectPosition(target);
@@ -351,7 +351,7 @@ bool LockOn::IsTargetRange(const LockOnVariant& target, const Player* player, Ve
     return false;
 }
 
-void LockOn::LerpTimeIncrement(const float& incrementTime) {
+void LockOn::LerpTimeIncrement(float incrementTime) {
     lerpTime_ += incrementTime;
     if (lerpTime_ >= 1.0f) {
         lerpTime_ = 1.0f;
@@ -361,13 +361,13 @@ void LockOn::LerpTimeIncrement(const float& incrementTime) {
 ///=========================================================
 /// バインド
 ///==========================================================
-void LockOn::BindParams() {
-    globalParameter_->Bind(groupName_, "minDistance", &minDistance_);
-    globalParameter_->Bind(groupName_, "maxDistance", &maxDistance_);
-    globalParameter_->Bind(groupName_, "angleRange", &angleRange_);
-    globalParameter_->Bind(groupName_, "spriteScale", &spriteScale_);
-    globalParameter_->Bind(groupName_, "targetChangeSpeed", &targetChangeSpeed_);
-    globalParameter_->Bind(groupName_, "availableTargetScale", &ableTargetScale_);
+void LockOn::RegisterParams() {
+    globalParameter_->Regist(groupName_, "minDistance", &minDistance_);
+    globalParameter_->Regist(groupName_, "maxDistance", &maxDistance_);
+    globalParameter_->Regist(groupName_, "angleRange", &angleRange_);
+    globalParameter_->Regist(groupName_, "spriteScale", &spriteScale_);
+    globalParameter_->Regist(groupName_, "targetChangeSpeed", &targetChangeSpeed_);
+    globalParameter_->Regist(groupName_, "availableTargetScale", &ableTargetScale_);
 }
 
 ///=========================================================

@@ -5,7 +5,7 @@
 #include "Lighrt/Light.h"
 #include "Manager/SceneManager.h"
 #include "Player/TitleBehavior/TitleRightPunch.h"
-#include "utility/ParticleEditor/ParticleManager.h"
+#include "Editor/ParticleEditor/ParticleManager.h"
 
 #include "base/TextureManager.h"
 #include "Frame/Frame.h"
@@ -57,6 +57,8 @@ void TitleScene::Init() {
 
 void TitleScene::Update() {
 
+    BaseScene::Update();
+
     screenSprite_->SetAlpha(alpha_);
 
     player_->TitleUpdate();
@@ -74,13 +76,13 @@ void TitleScene::Update() {
 
   
     // 　ゲーム遷移
-    if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+    if (Input::GetInstance()->PushKey(KeyboardKey::Space)) {
         isFinished_ = true;
     } else {
         ChangeForJoyState(); // コントローラジャンプ
     }
 
-    Debug();
+ 
     ViewProjectionUpdate();
 
     if (isFinished_) {
@@ -93,7 +95,7 @@ void TitleScene::Update() {
 
 void TitleScene::ChangeForJoyState() {
 
-    if (!((Input::IsTriggerPad(0, XINPUT_GAMEPAD_A)))) {
+    if (!((Input::IsTriggerPad(0, GamepadButton::A)))) {
         return;
     }
 
@@ -110,7 +112,6 @@ void TitleScene::SkyBoxDraw() {
 void TitleScene::Debug() {
 #ifdef _DEBUG
     ImGui::Begin("Camera");
-    cameraEditor_->EditorUpdate();
     ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
     ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
     ImGui::End();

@@ -18,8 +18,8 @@ void Light::Init(DirectXCommon* dxCommon) {
 
     ///* グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
-    globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    globalParameter_->CreateGroup(groupName_);
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
     // 鏡面反射
@@ -108,8 +108,8 @@ void Light::DebugImGui() {
     ImGui::End();
 }
 
-void Light::BindParams() {
-    globalParameter_->Bind(groupName_,"spotLightCoutMax", &spotLightCoutMax_);
+void Light::RegisterParams() {
+    globalParameter_->Regist(groupName_,"spotLightCoutMax", &spotLightCoutMax_);
 }
 
 void Light::SetLightCommands(ID3D12GraphicsCommandList* commandList) {

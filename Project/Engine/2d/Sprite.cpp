@@ -48,8 +48,8 @@ void Sprite::ParamEditorSet(const std::string& textureName, const bool& isAbleEd
     groupName_ = uniqueGroupName;
 
     // グループ作成
-    globalParameter_->CreateGroup(groupName_, false);
-    BindParams();
+    globalParameter_->CreateGroup(groupName_);
+    RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 }
 
@@ -216,13 +216,13 @@ void Sprite::Draw() {
 ///=========================================================
 /// バインド
 ///==========================================================
-void Sprite::BindParams() {
-    globalParameter_->Bind(groupName_, "layerNum", &parameter_.startLayerNum_);
-    globalParameter_->Bind(groupName_, "startPosition", &parameter_.position_);
-    globalParameter_->Bind(groupName_, "startScale", &parameter_.scale_);
-    globalParameter_->Bind(groupName_, "startColor", &parameter_.color_);
-    globalParameter_->Bind(groupName_, "startUVScale", &parameter_.uvScale_);
-    globalParameter_->Bind(groupName_, "startAnchorPoint", &parameter_.startAnchorPoint_);
+void Sprite::RegisterParams() {
+    globalParameter_->Regist(groupName_, "layerNum", &parameter_.startLayerNum_);
+    globalParameter_->Regist(groupName_, "startPosition", &parameter_.position_);
+    globalParameter_->Regist(groupName_, "startScale", &parameter_.scale_);
+    globalParameter_->Regist(groupName_, "startColor", &parameter_.color_);
+    globalParameter_->Regist(groupName_, "startUVScale", &parameter_.uvScale_);
+    globalParameter_->Regist(groupName_, "startAnchorPoint", &parameter_.startAnchorPoint_);
 }
 
 ///=========================================================
@@ -272,6 +272,6 @@ void Sprite::SetColor(const Vector3& color) {
     material_.materialData_->color.z = color.z;
 }
 
-void Sprite::SetAlpha(const float& alpha) {
+void Sprite::SetAlpha(float alpha) {
     material_.materialData_->color.w = alpha;
 }

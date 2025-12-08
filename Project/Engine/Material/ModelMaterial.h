@@ -72,12 +72,12 @@ private:
     int32_t dissolveTextureIndex_;
 
 public:
-    void SetShininess(const float& shininess) override { materialData_->shininess = shininess; }
-    void SetEnvironmentCoefficient(const float& environmentCoefficient) override { materialData_->environmentCoefficient = environmentCoefficient; }
+    void SetShininess(float shininess) override { materialData_->shininess = shininess; }
+    void SetEnvironmentCoefficient(float environmentCoefficient) override { materialData_->environmentCoefficient = environmentCoefficient; }
 
-    void SetDissolveThreshold(const float& threshold) { materialData_->dissolveThreshold = threshold; }
+    void SetDissolveThreshold(float threshold) { materialData_->dissolveThreshold = threshold; }
     void SetDissolveEdgeColor(const Vector3& color) { materialData_->dissolveEdgeColor = color; }
-    void SetDissolveEdgeWidth(const float& width) { materialData_->dissolveEdgeWidth = width; }
+    void SetDissolveEdgeWidth(float width) { materialData_->dissolveEdgeWidth = width; }
     void SetEnableDissolve(bool enable) { materialData_->enableDissolve = enable ? 1 : 0; }
 
     float GetDissolveThreshold() const { return materialData_->dissolveThreshold; }

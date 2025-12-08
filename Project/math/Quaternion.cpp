@@ -69,7 +69,7 @@ Quaternion Quaternion::Inverse() const {
     return Quaternion(conjugate.x / normSquared, conjugate.y / normSquared, conjugate.z / normSquared, conjugate.w / normSquared);
 }
 
-Quaternion Quaternion::MakeRotateAxisAngle(const Vector3& axis, const float& angle) {
+Quaternion Quaternion::MakeRotateAxisAngle(const Vector3& axis, float angle) {
     // 正規化された軸を使用
     Vector3 normalizedAxis = (axis).Normalize();
     float halfAngle        = angle / 2.0f;
@@ -96,13 +96,13 @@ float Quaternion::Dot(const Quaternion& q1, const Quaternion& q2) {
     return q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.w * q2.w;
 }
 
-Quaternion Quaternion::Lerp(const Quaternion& start, const Quaternion& end, const float& t) {
+Quaternion Quaternion::Lerp(const Quaternion& start, const Quaternion& end, float t) {
 
     Quaternion result = (start * (1.0f - t)) + (end * t);
     return (result).Normalize();
 }
 
-Quaternion Quaternion::Slerp(const Quaternion& start, Quaternion end, const float& t) {
+Quaternion Quaternion::Slerp(const Quaternion& start, Quaternion end, float t) {
 
     float dot = Quaternion::Dot(start, end);
 

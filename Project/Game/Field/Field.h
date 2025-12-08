@@ -2,7 +2,8 @@
 #include "3d/Object3d.h"
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"
-#include "utility/ParticleEditor/ParticleEmitter.h"
+#include "Editor/GPUParticleEditor/GPUParticlePlayer.h"
+#include "Editor/ParticleEditor/ParticleEmitter.h"
 #include <array>
 
 /// <summary>
@@ -20,6 +21,6 @@ public:
     void Update();
 
 private:
-    std::unique_ptr<Object3d> obj3d_ = nullptr;
-    std::array<std::unique_ptr<ParticleEmitter>, 1> emitter_;
+    std::unique_ptr<Object3d> obj3d_                      = nullptr;
+    std::unique_ptr<GPUParticlePlayer> gpuParticlePlayer_ = nullptr;
 };

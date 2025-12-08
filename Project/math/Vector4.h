@@ -29,7 +29,7 @@ public:
 	 static Vector4 kWHITE();
 
 	 static Vector4 ZeroVector();
-	 static Vector4 UnitVector();
+	 static Vector4 OneVector();
 };
 
 

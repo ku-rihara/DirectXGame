@@ -5,7 +5,7 @@ void SpeakerEffect::Init(const std::string& filename) {
     BaseComboLevelBackObj::Init(filename);
 }
 
-void SpeakerEffect::Update(const float& playSpeed) {
+void SpeakerEffect::Update(float playSpeed) {
    
     BaseComboLevelBackObj::Update(playSpeed);
 

@@ -2,7 +2,6 @@
 
 Vector3 Field::baseScale_ = {70, 1, 70};
 
-
 void Field::Init() {
 
     obj3d_.reset(Object3d::CreateModel("Field.obj"));
@@ -11,12 +10,12 @@ void Field::Init() {
     obj3d_->material_.materialData_->enableLighting = 5;
     obj3d_->material_.SetEnvironmentCoefficient(0.35f);
 
-    emitter_[0].reset(ParticleEmitter::CreateParticlePrimitive("fieldParticleFireSpark", PrimitiveType::Plane, 800));
+    gpuParticlePlayer_ = std::make_unique<GPUParticlePlayer>();
+    gpuParticlePlayer_->Init();
 }
 
 void Field::Update() {
 
-    emitter_[0]->Update();
-    emitter_[0]->EditorUpdate();
-    emitter_[0]->Emit();
+    //gpuParticlePlayer_->Update();
+    //gpuParticlePlayer_->PlayInCategory("Field", "Fire");
 }

@@ -4,7 +4,7 @@
 #include<numbers>
 #include<assert.h>
 
-float Lerp(const float& start, const float& end, float t) {
+float Lerp(float start, float end, float t) {
 	return (1.0f - t) * start + end * t;
 }
 
@@ -115,44 +115,61 @@ Vector3 CatmullRomInterpolation(const Vector3& p0, const Vector3& p1, const Vect
 }
 
 Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t) {
-	if (points.size() < 4) {
-		return Vector3(0,0,0); // デフォルトのVector3(0,0,0)を返す
-	}
-	// 区間数は制御点の数-1
-	size_t division = points.size() - 1;
-	// 1区間の長さ(全体を1.0fとした割合)
-	float areaWidth = 1.0f / division;
-	// 区間内の始点0.0f、終点を1.0fとした時の現在位置
-	float t_2 = std::fmod(t, areaWidth) * division;
-	// 下限(0.0f)と上限(1.0f)とした時の現在位置
-	t_2 = Clamp(t_2, 0.0f, 1.0f);
-	// 区間番号
-	size_t index = static_cast<size_t>(t / areaWidth);
-	// 区間番号が上限を超えないように収める
-	index = Clamp(index, 0, division - 1);
+    if (points.size() < 2) {
+        return Vector3(0, 0, 0);
+    }
 
-	// 4点分のインデックス
-	size_t index0 = index - 1;
-	size_t index1 = index;
-	size_t index2 = index + 1;
-	size_t index3 = index + 2;
-	// 最初の区間のp0はp1を重複使用する
-	if (index == 0) {
-		index0 = index1;
-	}
-	// 最初の区間のp3はp2を重複使用する
-	if (index3 >= points.size()) {
-		index3 = index2;
-	}
+    if (points.size() == 2) {
+        // 制御点が2つの場合は線形補間
+        return Lerp(points[0], points[1], t);
+    }
 
-	// 4点の座標
-	const Vector3& p0 = points[index0];
-	const Vector3& p1 = points[index1];
-	const Vector3& p2 = points[index2];
-	const Vector3& p3 = points[index3];
+    if (points.size() == 3) {
+        // 制御点が3つの場合は特殊処理
+        // p0とp3を重複使用
+        if (t <= 0.5f) {
+            float t_2 = t * 2.0f;
+            return CatmullRomInterpolation(points[0], points[0], points[1], points[2], t_2);
+        } else {
+            float t_2 = (t - 0.5f) * 2.0f;
+            return CatmullRomInterpolation(points[0], points[1], points[2], points[2], t_2);
+        }
+    }
 
-	// 4点を指定してCamull-Rom補間
-	return CatmullRomInterpolation(p0, p1, p2, p3, t_2);
+    // tを[0.0, 1.0]の範囲にクランプ
+    t = Clamp(t, 0.0f, 1.0f);
+
+    // 区間数は制御点の数-1
+    size_t division = points.size() - 1;
+
+    // tを使って区間番号を計算
+    float scaledT = t * static_cast<float>(division);
+    size_t index  = static_cast<size_t>(scaledT);
+
+    // 境界条件: t = 1.0の時は最後の区間に留める
+    if (index >= division) {
+        index = division - 1;
+    }
+
+    // 区間内の進行度を計算(0.0~1.0)
+    float t_2 = scaledT - static_cast<float>(index);
+    // 浮動小数点誤差を考慮してクランプ
+    t_2 = Clamp(t_2, 0.0f, 1.0f);
+
+    // 4点分のインデックス
+    size_t index0 = (index > 0) ? index - 1 : index;
+    size_t index1 = index;
+    size_t index2 = index + 1;
+    size_t index3 = (index + 2 < points.size()) ? index + 2 : index + 1;
+
+    // 4点の座標
+    const Vector3& p0 = points[index0];
+    const Vector3& p1 = points[index1];
+    const Vector3& p2 = points[index2];
+    const Vector3& p3 = points[index3];
+
+    // 4点を指定してCatmull-Rom補間
+    return CatmullRomInterpolation(p0, p1, p2, p3, t_2);
 }
 
 

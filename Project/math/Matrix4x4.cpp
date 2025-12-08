@@ -108,7 +108,7 @@ Matrix4x4 MakeScaleMatrix(const Vector3& scale) {
 }
 
 // X軸回転行列
-Matrix4x4 MakeRotateXMatrix(const float& radian) {
+Matrix4x4 MakeRotateXMatrix(float radian) {
     Matrix4x4 result;
     result.m[0][0] = 1;
     result.m[0][1] = 0;
@@ -130,7 +130,7 @@ Matrix4x4 MakeRotateXMatrix(const float& radian) {
 }
 
 // Y軸回転行列
-Matrix4x4 MakeRotateYMatrix(const float& radian) {
+Matrix4x4 MakeRotateYMatrix(float radian) {
     Matrix4x4 result;
     result.m[0][0] = std::cos(radian);
     result.m[0][1] = 0;
@@ -152,7 +152,7 @@ Matrix4x4 MakeRotateYMatrix(const float& radian) {
 }
 
 // Z軸回転行列
-Matrix4x4 MakeRotateZMatrix(const float& radian) {
+Matrix4x4 MakeRotateZMatrix(float radian) {
     Matrix4x4 result;
     result.m[0][0] = std::cos(radian);
     result.m[0][1] = std::sin(radian);
@@ -281,7 +281,7 @@ Matrix4x4 Transpose(const Matrix4x4& m) {
     return result;
 }
 
-Matrix4x4 MakePerspectiveFovMatrix(const float& fovY, const float& aspectRatio, const float& nearClip, const float& farClip) {
+Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip) {
     Matrix4x4 result;
     result.m[0][0] = (1 / aspectRatio) * (1 / std::tan(fovY / 2));
     result.m[0][1] = 0;
@@ -302,7 +302,7 @@ Matrix4x4 MakePerspectiveFovMatrix(const float& fovY, const float& aspectRatio, 
     return result;
 }
 
-Matrix4x4 MakeOrthographicMatrix(const float& left, const float& top, const float& right, const float& bottom, const float& nearClip, const float& farClip) {
+Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip) {
     Matrix4x4 result;
     result.m[0][0] = 2 / (right - left);
     result.m[0][1] = 0;
@@ -323,7 +323,7 @@ Matrix4x4 MakeOrthographicMatrix(const float& left, const float& top, const floa
     return result;
 }
 
-Matrix4x4 MakeViewportMatrix(const float& left, const float& top, const float& width, const float& height, const float& minDepth, const float& maxDepth) {
+Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth) {
     Matrix4x4 result;
     result.m[0][0] = width / 2;
     result.m[0][1] = 0;
@@ -374,7 +374,7 @@ Matrix4x4 NormalizeMatrixRow(const Matrix4x4& matrix, const int& row) {
 }
 
 // 任意軸回転行列
-Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, const float& angle) {
+Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 
     Matrix4x4 result{};
 

@@ -3,7 +3,7 @@
 #include "3d/ViewProjection.h"
 
 /// utility
-#include "utility/ParticleEditor/ParticleEmitter.h"
+#include "Editor/ParticleEditor/ParticleEmitter.h"
 
 /// std
 #include <array>

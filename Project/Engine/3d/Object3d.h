@@ -16,22 +16,14 @@ public:
     /// <returns>作成されたObject3dのポインタ</returns>
     static Object3d* CreateModel(const std::string& instanceName);
 
-    void Init(); //< 初期化
-    void Update(); //< 更新
-
-    /// <summary>
-    /// 描画
-    /// </summary>
-    /// <param name="viewProjection">ビュープロジェクション</param>
+    // 初期化、更新、描画
+    void Init();
+    void Update();
     void Draw(const ViewProjection& viewProjection);
-
-    void DebugImgui() override; //< ImGuiデバッグ表示
-
-    /// <summary>
-    /// シャドウ描画
-    /// </summary>
-    /// <param name="viewProjection">ビュープロジェクション</param>
     void ShadowDraw(const ViewProjection& viewProjection);
+
+    // デバッグ描画
+    void DebugImGui() override; 
 
 private:
     void UpdateWVPData(const ViewProjection& viewProjection) override;

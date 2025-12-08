@@ -39,7 +39,7 @@ public:
     /// 登録された全てのアニメーションを更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    void UpdateAll(const float& deltaTime);
+    void UpdateAll(float deltaTime);
 
     /// <summary>
     /// 全アニメーションを描画
@@ -53,12 +53,7 @@ public:
     /// <param name="viewProjection">ビュープロジェクション</param>
     void DrawAllShadow(const ViewProjection& viewProjection);
 
-    /// <summary>
-    /// 全アニメーションのデバッグ描画
-    /// </summary>
-    /// <param name="viewProjection">ビュープロジェクション</param>
-    void DebugDrawAll(const ViewProjection& viewProjection);
-
+    void DebugLineAllSet();
     void Clear(); //< 登録されたアニメーションをクリア
     void DebugImGui(); //< ImGuiデバッグ表示
 

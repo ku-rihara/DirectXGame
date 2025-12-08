@@ -2,7 +2,7 @@
 #include "base/TextureManager.h"
 #include "MathFunction.h"
 
-void EnemyHPBar::Init(const float& hpMax) {
+void EnemyHPBar::Init(float hpMax) {
 
     // スプライト生成
     sprite_.reset(Sprite::Create("boss_Hpbar01.png", false));
@@ -17,7 +17,7 @@ void EnemyHPBar::Init(const float& hpMax) {
     hpMax_ = hpMax;
 }
 
-void EnemyHPBar::Update(const float& hp) {
+void EnemyHPBar::Update(float hp) {
 
     // positionセット
     hpSprite_->transform_.pos = position_;

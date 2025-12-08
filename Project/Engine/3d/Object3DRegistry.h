@@ -18,7 +18,7 @@ private:
     Object3DRegistry& operator=(const Object3DRegistry&) = delete;
 
 public:
-    static Object3DRegistry* GetInstance(); //< シングルトンインスタンス取得
+    static Object3DRegistry* GetInstance(); 
 
     /// <summary>
     /// オブジェクト登録
@@ -32,18 +32,9 @@ public:
     /// <param name="object">解除するオブジェクト</param>
     void UnregisterObject(Object3d* object);
 
-    void UpdateAll(); //< 全オブジェクト更新
-
-    /// <summary>
-    /// 全オブジェクト描画
-    /// </summary>
-    /// <param name="viewProjection">ビュープロジェクション</param>
+    // 全描画、更新
+    void UpdateAll(); 
     void DrawAll(const ViewProjection& viewProjection);
-
-    /// <summary>
-    /// 全オブジェクトのシャドウ描画
-    /// </summary>
-    /// <param name="viewProjection">ビュープロジェクション</param>
     void DrawAllShadow(const ViewProjection& viewProjection);
 
     void Clear();      //< 全オブジェクトクリア

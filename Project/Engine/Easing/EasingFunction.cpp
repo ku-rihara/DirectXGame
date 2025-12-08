@@ -7,7 +7,7 @@
 
 
 
-float EaseInElasticAmplitude(float t, const float& totalTime, const float& amplitude, const float& period) {
+float EaseInElasticAmplitude(float t, float totalTime, float amplitude, float period) {
 
 	if (t <= 0.0f) {
 		return 0.0f;
@@ -21,7 +21,7 @@ float EaseInElasticAmplitude(float t, const float& totalTime, const float& ampli
 	return -amplitude * std::powf(2.0f, 10.0f * (t - 1.0f)) * std::sinf((t - 1.0f - s) * (2.0f * std::numbers::pi_v<float>) / period);
 }
 
-float EaseOutElasticAmplitude(float t, const float& totalTime, float amplitude, float period) {
+float EaseOutElasticAmplitude(float t, float totalTime, float amplitude, float period) {
 	if (t <= 0.0f)
 		return 0.0f;
     if (t >= totalTime)
@@ -33,7 +33,7 @@ float EaseOutElasticAmplitude(float t, const float& totalTime, float amplitude, 
 	return amplitude * std::pow(2.0f, -10.0f * t) * std::sin((t - s) * (2.0f * std::numbers::pi_v<float>) / period);
 }
 
-float EaseInOutElasticAmplitude(float t, const float& totalTime, float amplitude, float period) {
+float EaseInOutElasticAmplitude(float t, float totalTime, float amplitude, float period) {
 	if (t <= 0.0f)
 		return 0.0f;
     if (t >= totalTime)
@@ -50,7 +50,7 @@ float EaseInOutElasticAmplitude(float t, const float& totalTime, float amplitude
 	}
 }
 
-template<typename T> T EaseAmplitudeScale(const T& initScale, const float& easeT, const float& totalTime, const float& amplitude, const float& period) {
+template<typename T> T EaseAmplitudeScale(const T& initScale, float easeT, float totalTime, float amplitude, float period) {
 	T newScale = initScale; // T型のnewScaleを宣言
 
 	if constexpr (std::is_same<T, float>::value) {
@@ -342,7 +342,7 @@ namespace Back {
 		return start + (end - start) * t;
 	}
 
-	template<typename T> T  InSineZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T  InSineZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -358,7 +358,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T OutSineZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T OutSineZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -374,7 +374,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T InOutSineZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T InOutSineZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -390,7 +390,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T InQuadZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T InQuadZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -408,7 +408,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T OutQuadZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T OutQuadZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -426,7 +426,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T InOutQuadZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T InOutQuadZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -448,7 +448,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T InCubicZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T InCubicZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -467,7 +467,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T OutCubicZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T OutCubicZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -486,7 +486,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T InOutCubicZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T InOutCubicZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -508,7 +508,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T InQuartZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T InQuartZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -527,7 +527,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T OutQuartZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T OutQuartZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -546,7 +546,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T InOutQuartZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T InOutQuartZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -568,7 +568,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T InQuintZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T InQuintZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -587,7 +587,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T OutQuintZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T OutQuintZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -606,7 +606,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T InOutQuintZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T InOutQuintZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -628,7 +628,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T InExpoZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T InExpoZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -646,7 +646,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T OutExpoZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T OutExpoZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -664,7 +664,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T InOutExpoZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T InOutExpoZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -690,7 +690,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T InCircZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T InCircZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -709,7 +709,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T OutCircZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T OutCircZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -728,7 +728,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T InOutCircZero(const T& start, const T& end, float t, const float& totalTime, float backRaito)
+	template<typename T> T InOutCircZero(const T& start, const T& end, float t, float totalTime, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -750,7 +750,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T InBackZero(const T& start, const T& end, float t, const float& totalTime, float s, float backRaito)
+	template<typename T> T InBackZero(const T& start, const T& end, float t, float totalTime, float s, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -769,7 +769,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T OutBackZero(const T& start, const T& end, float t, const float& totalTime, float s, float backRaito)
+	template<typename T> T OutBackZero(const T& start, const T& end, float t, float totalTime, float s, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -788,7 +788,7 @@ namespace Back {
 		}
 	}
 
-	template<typename T> T InOutBackZero(const T& start, const T& end, float t, const float& totalTime, float s, float backRaito)
+	template<typename T> T InOutBackZero(const T& start, const T& end, float t, float totalTime, float s, float backRaito)
 	{
 		if (t <= 0.0f) return start;
 		if (t >= totalTime) return start;
@@ -811,13 +811,10 @@ namespace Back {
 		}
 	}
 }
-// ぷにぷに
-template Vector3 EaseAmplitudeScale<Vector3>(const Vector3& initScale, const float& easeT, const float& easeTime, const float& amplitude, const float& period);
-template Vector2 EaseAmplitudeScale<Vector2>(const Vector2& initScale, const float& easeT, const float& easeTime, const float& amplitude, const float& period);
-template float EaseAmplitudeScale<float>(const float& initScale, const float& easeT, const float& easeTime, const float& amplitude, const float& period);
-//*******************************************************************************************************************************************************************
-// Sine**************************************************************************************************************************************************************
-//*******************************************************************************************************************************************************************
+
+template Vector3 EaseAmplitudeScale<Vector3>(const Vector3& initScale, float easeT, float easeTime, float amplitude, float period);
+template Vector2 EaseAmplitudeScale<Vector2>(const Vector2& initScale, float easeT, float easeTime, float amplitude, float period);
+template float EaseAmplitudeScale<float>(const float& initScale, float easeT, float easeTime, float amplitude, float period);
 
 template Vector3 EaseInSine<Vector3>(const Vector3& start, const Vector3& end, float x, float totalX);
 template Vector2 EaseInSine<Vector2>(const Vector2& start, const Vector2& end, float x, float totalX);
@@ -925,101 +922,101 @@ template float EaseInOutBack(const float& start, const float& end, float x, floa
 
 namespace Back {
 
-	template float InSineZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 InSineZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito);
-	template Vector3 InSineZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito);
+	template float InSineZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 InSineZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito);
+	template Vector3 InSineZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito);
 
-	template float OutSineZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 OutSineZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 OutSineZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float OutSineZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 OutSineZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 OutSineZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float InOutSineZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 InOutSineZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 InOutSineZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float InOutSineZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 InOutSineZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 InOutSineZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float InQuadZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 InQuadZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 InQuadZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float InQuadZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 InQuadZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 InQuadZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float OutQuadZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 OutQuadZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 OutQuadZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float OutQuadZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 OutQuadZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 OutQuadZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float InOutQuadZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 InOutQuadZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 InOutQuadZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float InOutQuadZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 InOutQuadZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 InOutQuadZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float InCubicZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 InCubicZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 InCubicZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float InCubicZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 InCubicZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 InCubicZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float OutCubicZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 OutCubicZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 OutCubicZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float OutCubicZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 OutCubicZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 OutCubicZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float InOutCubicZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 InOutCubicZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 InOutCubicZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float InOutCubicZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 InOutCubicZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 InOutCubicZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float InQuartZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 InQuartZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 InQuartZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float InQuartZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 InQuartZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 InQuartZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float OutQuartZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 OutQuartZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 OutQuartZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float OutQuartZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 OutQuartZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 OutQuartZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float InOutQuartZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 InOutQuartZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 InOutQuartZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float InOutQuartZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 InOutQuartZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 InOutQuartZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float InQuintZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 InQuintZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 InQuintZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float InQuintZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 InQuintZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 InQuintZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float OutQuintZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 OutQuintZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 OutQuintZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float OutQuintZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 OutQuintZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 OutQuintZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float InOutQuintZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 InOutQuintZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 InOutQuintZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float InOutQuintZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 InOutQuintZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 InOutQuintZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float InExpoZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 InExpoZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 InExpoZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float InExpoZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 InExpoZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 InExpoZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float OutExpoZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 OutExpoZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 OutExpoZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float OutExpoZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 OutExpoZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 OutExpoZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float InOutExpoZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 InOutExpoZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 InOutExpoZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float InOutExpoZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 InOutExpoZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 InOutExpoZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float InCircZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 InCircZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 InCircZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float InCircZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 InCircZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 InCircZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float OutCircZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 OutCircZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 OutCircZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float OutCircZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 OutCircZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 OutCircZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float InOutCircZero(const float& start, const float& end, float t, const float& totalTime, float backRaito);
-	template Vector2 InOutCircZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float backRaito); 
-	template Vector3 InOutCircZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float backRaito); 
+	template float InOutCircZero(const float& start, const float& end, float t, float totalTime, float backRaito);
+	template Vector2 InOutCircZero(const Vector2& start, const Vector2& end, float t, float totalTime, float backRaito); 
+	template Vector3 InOutCircZero(const Vector3& start, const Vector3& end, float t, float totalTime, float backRaito); 
 
-	template float InBackZero(const float& start, const float& end, float t, const float& totalTime, float s, float backRaito);
-	template Vector2 InBackZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float s, float backRaito); 
-	template Vector3 InBackZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float s, float backRaito); 
+	template float InBackZero(const float& start, const float& end, float t, float totalTime, float s, float backRaito);
+	template Vector2 InBackZero(const Vector2& start, const Vector2& end, float t, float totalTime, float s, float backRaito); 
+	template Vector3 InBackZero(const Vector3& start, const Vector3& end, float t, float totalTime, float s, float backRaito); 
 
-	template float OutBackZero(const float& start, const float& end, float t, const float& totalTime, float s, float backRaito);
-	template Vector2 OutBackZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float s, float backRaito); 
-	template Vector3 OutBackZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float s, float backRaito); 
+	template float OutBackZero(const float& start, const float& end, float t, float totalTime, float s, float backRaito);
+	template Vector2 OutBackZero(const Vector2& start, const Vector2& end, float t, float totalTime, float s, float backRaito); 
+	template Vector3 OutBackZero(const Vector3& start, const Vector3& end, float t, float totalTime, float s, float backRaito); 
 
-	template float InOutBackZero(const float& start, const float& end, float t, const float& totalTime, float s, float backRaito);
-	template Vector2 InOutBackZero(const Vector2& start, const Vector2& end, float t, const float& totalTime, float s, float backRaito); 
-	template Vector3 InOutBackZero(const Vector3& start, const Vector3& end, float t, const float& totalTime, float s, float backRaito); 
+	template float InOutBackZero(const float& start, const float& end, float t, float totalTime, float s, float backRaito);
+	template Vector2 InOutBackZero(const Vector2& start, const Vector2& end, float t, float totalTime, float s, float backRaito); 
+	template Vector3 InOutBackZero(const Vector3& start, const Vector3& end, float t, float totalTime, float s, float backRaito); 
 
 
 }

@@ -12,12 +12,12 @@ void CameraRendition::Init() {
     cameraAnimation_->Init();
 }
 
-void CameraRendition::Update(const float& speedRate) {
+void CameraRendition::Update(float speedRate) {
     if (!pGameCamera_) {
         return;
     }
 
-    shakePlayer_->Update(Frame::DeltaTime());
+    shakePlayer_->Update();
     cameraAnimation_->Update(speedRate);
 }
 

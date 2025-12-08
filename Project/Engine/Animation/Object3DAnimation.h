@@ -1,7 +1,7 @@
 #pragma once
 
 #include "3d/BaseObject3d.h"
-#include "3d/Line3d.h"
+#include "Line3D/Line3D.h"
 #include "Animation/SkeletonData.h"
 #include "Animation/SkinCluster.h"
 #include "AnimationData.h"
@@ -27,7 +27,7 @@ public:
    
     void Init(); //< 初期化
     void ResetAnimation(); //< アニメーションリセット
-    void DebugImgui() override; //< ImGuiデバッグ
+    void DebugImGui() override; //< ImGuiデバッグ
 
     /// <summary>
     /// モデル作成
@@ -52,13 +52,13 @@ public:
     /// アニメーション時間設定
     /// </summary>
     /// <param name="time">設定する時間</param>
-    void SetAnimationTime(const float& time);
+    void SetAnimationTime(float time);
 
     /// <summary>
     /// 更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
 
     /// <summary>
     /// 描画
@@ -76,7 +76,7 @@ public:
     /// デバッグ描画
     /// </summary>
     /// <param name="viewProjection">ビュープロジェクション</param>
-    void DebugDraw(const ViewProjection& viewProjection);
+    void DebugLineSet();
 
 private:
     /// <summary>
@@ -91,7 +91,7 @@ private:
     /// <param name="keyframe">キーフレーム配列</param>
     /// <param name="time">時間</param>
     /// <returns>補間された値</returns>
-    Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframe, const float& time);
+    Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time);
 
     /// <summary>
     /// キーフレーム補間計算(Quaternion)
@@ -99,7 +99,7 @@ private:
     /// <param name="keyframe">キーフレーム配列</param>
     /// <param name="time">時間</param>
     /// <returns>補間された値</returns>
-    Quaternion CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, const float& time);
+    Quaternion CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time);
 
     void CSSkinning(); //< コンピュートシェーダーによるスキニング
 
@@ -112,13 +112,13 @@ private:
     /// アニメーション更新
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    void UpdateAnimation(const float& deltaTime);
+    void UpdateAnimation(float deltaTime);
 
     /// <summary>
     /// アニメーション遷移
     /// </summary>
     /// <param name="deltaTime">デルタタイム</param>
-    void AnimationTransition(const float& deltaTime);
+    void AnimationTransition(float deltaTime);
 
     /// <summary>
     /// WVPデータ更新
@@ -154,7 +154,7 @@ private:
     SkinCluster skinCluster_;
 
     // 描画・デバッグ
-    Line3D line3dDrawer_;
+    std::unique_ptr<Line3D> line3dDrawer_;
 
     // アニメーション状態
     float animationTime_           = 0.0f;
@@ -171,10 +171,10 @@ public:
     /// ============================================================
 
     const Skeleton& GetSkeleton() const { return skeleton_; }
-    const float& GetAnimationTime() const { return animationTime_; }
+    float GetAnimationTime() const { return animationTime_; }
     float GetAnimationDuration() const;
-    const int32_t& GetCurrentAnimationIndex() const { return currentAnimationIndex_; }
+    int32_t GetCurrentAnimationIndex() const { return currentAnimationIndex_; }
     const std::string& GetCurrentAnimationName() const;
     const bool& IsAnimationTransitioning() const { return isChange_; }
-    void SetTransitionDuration(const float& duration) { transitionDuration_ = duration; }
+    void SetTransitionDuration(float duration) { transitionDuration_ = duration; }
 };

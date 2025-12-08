@@ -21,6 +21,7 @@ public:
     // 更新、描画
     void Update();
     void SkyBoxDraw();
+    void Debug();
   
     /// <summary>
     /// シーン切り替え

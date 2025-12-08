@@ -1,11 +1,15 @@
 #include "BaseScene.h"
 #include "base/WinApp.h"
+#include "Frame/Frame.h"
 #include "Lighrt/Light.h"
 #include "PostEffect/PostEffectRenderer.h"
 
+// editor
+#include "Editor/CameraEditor/CameraEditor.h"
+
 // Particle
+#include "Editor/ParticleEditor/ParticleManager.h"
 #include "GPUParticle/GPUParticleManager.h"
-#include "utility/ParticleEditor/ParticleManager.h"
 
 #include <imgui.h>
 
@@ -17,14 +21,12 @@ void BaseScene::Init() {
     textureManager_ = TextureManager::GetInstance();
 
     // 生成
-    debugCamera_  = std::make_unique<DebugCamera>(WinApp::kWindowWidth, WinApp::kWindowHeight);
-    cameraEditor_ = std::make_unique<CameraEditor>();
-    shakeEditor_  = std::make_unique<ShakeEditor>();
+    debugCamera_       = std::make_unique<DebugCamera>(WinApp::kWindowWidth, WinApp::kWindowHeight);
+    effectEditorSuite_ = std::make_unique<EffectEditorSuite>();
 
     // 初期化
     debugCamera_->Init();
-    cameraEditor_->Init(&viewProjection_);
-    shakeEditor_->Init();
+    effectEditorSuite_->Init();
     viewProjection_.Init();
 
     // ビュープロジェクション
@@ -34,6 +36,20 @@ void BaseScene::Init() {
     PostEffectRenderer::GetInstance()->SetViewProjection(&viewProjection_);
     ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
     GPUParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
+
+    effectEditorSuite_->SetViewProjection(&viewProjection_);
+}
+
+void BaseScene::Update() {
+    // エディター機能更新
+    EditorClassUpdate();
+}
+
+void BaseScene::EditorClassUpdate() {
+#ifdef _DEBUG
+    debugCamera_->Update();
+    effectEditorSuite_->Update();
+#endif
 }
 
 void BaseScene::Debug() {
@@ -42,6 +58,11 @@ void BaseScene::Debug() {
     ImGui::DragFloat3("pos", &viewProjection_.translation_.x, 0.1f);
     ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.1f);
     ImGui::End();
+
+    // エディター編集
+    ImGui::Begin("Effect Editor Suite");
+    effectEditorSuite_->EditorUpdate();
+    ImGui::End();
 #endif
 }
 
@@ -49,27 +70,27 @@ void BaseScene::Debug() {
 void BaseScene::ViewProjectionUpdate() {
 #ifdef _DEBUG
     // シーンごとの切り替え処理------------------------------
-    bool isTriggerSpace = input_->TriggerKey(DIK_SPACE);
+    bool isTriggerSpace = input_->TriggerKey(KeyboardKey::Space);
     switch (cameraMode_) {
         ///------------------------------------------------------
         /// Normal Mode
-        ///------------------------------------------------------ 
+        ///------------------------------------------------------
     case BaseScene::CameraMode::NORMAL:
         // デバッグモードへ
         if (isTriggerSpace) {
             cameraMode_ = CameraMode::DEBUG;
         }
         // エディターモードへ
-        if (cameraEditor_->GetIsEditing()) {
+        if (effectEditorSuite_->GetCameraEditor()->GetIsEditing()) {
             cameraMode_ = CameraMode::EDITOR;
         }
         break;
         ///------------------------------------------------------
         /// Editor Mode
-        ///------------------------------------------------------ 
+        ///------------------------------------------------------
     case BaseScene::CameraMode::EDITOR:
         // ノーマルモードへ
-        if (!cameraEditor_->GetIsEditing()) {
+        if (!effectEditorSuite_->GetCameraEditor()->GetIsEditing()) {
             cameraMode_ = CameraMode::NORMAL;
         }
         // デバッグモードへ
@@ -79,7 +100,7 @@ void BaseScene::ViewProjectionUpdate() {
         break;
         ///------------------------------------------------------
         /// Debug Mode
-        ///------------------------------------------------------ 
+        ///------------------------------------------------------
     case BaseScene::CameraMode::DEBUG:
         if (isTriggerSpace) {
             cameraMode_ = CameraMode::NORMAL;

@@ -7,11 +7,9 @@ void BaseAABBCollisionBox::Init() {
 }
 void BaseAABBCollisionBox::Update() {
 
-     SetCollisionScale(size_);
-    SetIsAdaptCollision(isCollision_);
+    SetCollisionScale(size_);
+    SetIsAdaptCollision(isAbleCollision_);
     transform_.UpdateMatrix();
-}
-void BaseAABBCollisionBox::Draw() {
 }
 
 Vector3 BaseAABBCollisionBox::GetCollisionPos() const {
@@ -20,7 +18,6 @@ Vector3 BaseAABBCollisionBox::GetCollisionPos() const {
     Vector3 worldPos = TransformMatrix(offset_, transform_.matWorld_);
     return worldPos;
 }
-
 
 void BaseAABBCollisionBox::SetParentTransform(WorldTransform* transform) {
     transform_.parent_ = transform;
@@ -31,4 +28,3 @@ void BaseAABBCollisionBox::OnCollisionEnter([[maybe_unused]] BaseCollider* other
 
 void BaseAABBCollisionBox::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 }
-

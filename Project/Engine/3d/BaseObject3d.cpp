@@ -3,7 +3,7 @@
 #include "Dx/DirectXCommon.h"
 #include "ModelManager.h"
 
-void BaseObject3d::SetModel(const std::string& modelName) {
+void BaseObject3d::SetModelByName(const std::string& modelName) {
     // モデルを検索してセット
     model_        = (ModelManager::GetInstance()->FindModel(modelName));
     textureIndex_ = model_->GetTextureIndex();
@@ -41,12 +41,13 @@ void BaseObject3d::CreateShadowMap() {
     shadowMap_ = ShadowMap::GetInstance();
 }
 
-void BaseObject3d::DebugImgui() {
+void BaseObject3d::DebugImGui() {
 #ifdef _DEBUG
     material_.DebugImGui();
 #endif
 }
 
-void BaseObject3d::SetTexture(const std::string& name) {
+void BaseObject3d::SetTextureByName(const std::string& name) {
     textureIndex_ = TextureManager::GetInstance()->LoadTexture(textureFirePath_ + name);
 }
+

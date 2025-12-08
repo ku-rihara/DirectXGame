@@ -10,7 +10,7 @@ void StadiumLightEffect::Init(const std::string& filename) {
     });
 }
 
-void StadiumLightEffect::Update(const float& playSpeed) {
+void StadiumLightEffect::Update(float playSpeed) {
     isPulseCycleStart_ = true;
     BaseComboLevelBackObj::Update(playSpeed);
 }

@@ -14,8 +14,9 @@
 #include "input/Input.h"
 
 // editor
-#include "utility/CameraEditor/CameraEditor.h"
-#include "utility/ShakeEditor/ShakeEditor.h"
+#include "Editor/EffectEditorSuite/EffectEditorSuite.h"
+#include "Editor/RailEditor/RailEditor.h"
+#include "Editor/ShakeEditor/ShakeEditor.h"
 
 // debug
 #include "utility/Debug/DebugCamera.h"
@@ -39,7 +40,7 @@ public:
 
     // 初期化、更新、描画
     virtual void Init();
-    virtual void Update()     = 0;
+    virtual void Update();
     virtual void SkyBoxDraw() = 0;
 
     // デバッグ
@@ -49,19 +50,23 @@ public:
     virtual void ViewProjectionUpdate();
     virtual void ViewProcess() = 0;
 
+private:
+    void EditorClassUpdate();
+
 protected:
     DirectXCommon* dxCommon_        = nullptr;
     Input* input_                   = nullptr;
     Audio* audio_                   = nullptr;
     TextureManager* textureManager_ = nullptr;
 
-    std::unique_ptr<CameraEditor> cameraEditor_ = nullptr;
-    std::unique_ptr<ShakeEditor> shakeEditor_   = nullptr;
+    std::unique_ptr<EffectEditorSuite> effectEditorSuite_ = nullptr;
+   
 
     ViewProjection viewProjection_;
 
     std::unique_ptr<DebugCamera> debugCamera_;
     CameraMode cameraMode_ = CameraMode::NORMAL;
+
 
 public:
     ///========================================================

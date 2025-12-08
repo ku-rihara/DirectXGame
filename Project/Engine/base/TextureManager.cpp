@@ -176,7 +176,7 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
     return textureData.index;
 }
 
-const DirectX::TexMetadata& TextureManager::GetMetaData(const uint32_t& textureIndex) {
+const DirectX::TexMetadata& TextureManager::GetMetaData(uint32_t textureIndex) {
     // 範囲外チェック
     assert(textureIndex < textureDates_.size());
 
@@ -194,7 +194,7 @@ const DirectX::TexMetadata& TextureManager::GetMetaData(const uint32_t& textureI
     return it->second.metadata;
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(const uint32_t& index) const {
+D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetTextureHandle(uint32_t index) const {
 
     assert(index < textureDates_.size());
 

@@ -10,7 +10,7 @@ void BasePlayerHand::Init() {
 
     // グローバルパラメータ
     globalParameter_ = GlobalParameter::GetInstance();
-    globalParameter_->CreateGroup(groupName_, false);
+    globalParameter_->CreateGroup(groupName_);
     AddParamGroup();
     ApplyGlobalParameter();
 
@@ -56,7 +56,7 @@ void BasePlayerHand::ParamLoadForImGui() {
 /// パラメータをグループに追加
 ///=================================================================================
 void BasePlayerHand::AddParamGroup() {
-    globalParameter_->CreateGroup(groupName_, false);
+    globalParameter_->CreateGroup(groupName_);
 
     // Position
     globalParameter_->AddItem(groupName_, "Translate", obj3d_->transform_.translation_);
@@ -70,7 +70,7 @@ void BasePlayerHand::AddParamGroup() {
 void BasePlayerHand::SetValues() {
 
     // グループを追加
-    globalParameter_->CreateGroup(groupName_, false);
+    globalParameter_->CreateGroup(groupName_);
 
     // Position
     globalParameter_->SetValue(groupName_, "Translate", obj3d_->transform_.translation_);
@@ -96,7 +96,7 @@ void BasePlayerHand::SaveAndLoad() {
     globalParameter_->ParamSaveForImGui(groupName_);
     ParamLoadForImGui();
 }
-void BasePlayerHand::DissolveAdapt(const float& dissolve) {
+void BasePlayerHand::DissolveAdapt(float dissolve) {
     obj3d_->material_.SetDissolveEdgeColor(Vector3(0.6706f, 0.8824f, 0.9804f));
     obj3d_->material_.SetDissolveEdgeWidth(0.05f);
     obj3d_->material_.SetEnableDissolve(true);

@@ -14,10 +14,8 @@ void CollisionManager::Init() {
 	const char* groupName = "CollisionManager";
 
 	// グループを追加
-	globalParameter_->CreateGroup(groupName,false);
-	globalParameter_->AddSeparatorText("Collider");
-	globalParameter_->AddItem(groupName, "isColliderVisible", isColliderVisible_, GlobalParameter::WidgetType::Checkbox);
-	globalParameter_->AddTreePoP();
+	globalParameter_->CreateGroup(groupName);
+
 }
 
 void CollisionManager::AddCollider(BaseCollider* collider) {
@@ -44,20 +42,18 @@ void CollisionManager::Reset() {
 
 void CollisionManager::Update() { 
 	
-	//imguiからパラメータを取得
+	//imGuiからパラメータを取得
 	ApplyGlobalParameter();
 
 	UpdateWorldTransform();
 
 	CheckAllCollisions();
+
+	LineAllSet();
 }
 
 void CollisionManager::UpdateWorldTransform() {
 	
-	//非表示なら抜ける
-	if (!isColliderVisible_) {
-		return;
-	}
 	//全てのコライダーについて行列更新をする
 	for (BaseCollider* baseCollider : baseColliders_) {
 		baseCollider->UpdateWorldTransform();
@@ -65,7 +61,7 @@ void CollisionManager::UpdateWorldTransform() {
 	}	
 }
 
-void CollisionManager::Draw(const ViewProjection& viewProjection) {
+void CollisionManager::LineAllSet() {
 #ifdef _DEBUG
 
 	// 非表示なら抜ける
@@ -74,10 +70,10 @@ void CollisionManager::Draw(const ViewProjection& viewProjection) {
 	}
 	//全てのコライダーを描画する
 	for (BaseCollider* baseCollider : baseColliders_) {
-		baseCollider->DrawDebugCube(viewProjection);
+		baseCollider->SetDebugCube();
 	}
 #endif // _DEBUG
-	viewProjection;
+
 }
 
 // CheckCollisionPairを改造
@@ -128,9 +124,9 @@ void CollisionManager::CheckCollisionPair(BaseCollider* colliderA, BaseCollider*
 	}
 }
 
-// コリジョン処理を分ける関数
+
 void CollisionManager::HandleCollision(BaseCollider* colliderA, BaseCollider* colliderB) {
-	// **必ず OnCollisionEnter を呼ぶ**
+	//  OnCollisionEnter
 	colliderA->OnCollisionEnter(colliderB);
 	colliderB->OnCollisionEnter(colliderA);
 
@@ -159,13 +155,13 @@ void CollisionManager::CheckAllCollisions() {
 	std::list<BaseCollider*>::iterator itrA = baseColliders_.begin();
 	for (; itrA != baseColliders_.end(); ++itrA) {
 		// イテレータAからコライダーAを取得する
-		BaseCollider* colliderA = *itrA;//ダブルポインタから中身のポインタを取り出す処理
+		BaseCollider* colliderA = *itrA;
 
-		// イテレーターBはイテレータAの次の要素から回す（重複判定を回避）
+		// イテレーターBはイテレータAの次の要素から回す
 		std::list<BaseCollider*>::iterator itrB = itrA;
 		itrB++;
 		for (; itrB != baseColliders_.end(); ++itrB) {
-			BaseCollider* colliderB = *itrB;//ダブルポインタから中身のポインタを取り出す処理
+			BaseCollider* colliderB = *itrB;
 
 			// ペアの当たり判定
 			CheckCollisionPair(colliderA, colliderB);

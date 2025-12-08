@@ -1,5 +1,5 @@
 #pragma once
-#include "utility/EasingCreator/EasingParameterData.h"
+#include "Editor/EasingCreator/EasingParameterData.h"
 #include "Vector2Proxy.h"
 #include <cstdint>
 #include <functional>
@@ -20,7 +20,7 @@ public:
 
     // 初期化(ファイルロード)、更新
     void Init(const std::string& adaptFile);
-    void Update(const float& deltaTime);
+    void Update(float deltaTime);
 
     /// <summary>
     /// イージングパラメータ設定
@@ -90,7 +90,7 @@ private:
     T startValue_;
     T endValue_;
     T baseValue_;
-    T* currentValue_;
+    T* currentOffset_;
 
     float maxTime_     = 0.0f;
     float currentTime_ = 0.0f;
@@ -133,20 +133,22 @@ public:
     /// -------------------------------------------------------------------------
     /// Getter methods
     /// -------------------------------------------------------------------------
-    const T& GetValue() const { return *currentValue_; }
+    const T& GetValue() const { return *currentOffset_; }
     const T& GetEndValue() const { return endValue_; }
+    const T& GetStartValue() const { return startValue_; }
     const bool& IsFinished() const { return isFinished_; }
     const bool& IsPlaying() const { return isPlaying_; }
     const std::string& GetCurrentAppliedFileName() const { return currentAppliedFileName_; }
-    const float& GetCurrentEaseTime() const { return currentTime_; }
+    float GetCurrentEaseTime() const { return currentTime_; }
     /// -------------------------------------------------------------------------
     /// Setter methods
     /// -------------------------------------------------------------------------
     void SetStartValue(const T& value) { startValue_ = value; }
     void SetEndValue(const T& value) { endValue_ = value; }
-    void SetCurrentValue(const T& value);
+    void SetCurrentOffset(const T& value);
     void SetBaseValue(const T& value) { baseValue_ = value; }
     void SetType(const EasingType& type) { type_ = type; }
-    void SetMaxTime(const float& time) { maxTime_ = time; }
+    void SetMaxTime(float time) { maxTime_ = time; }
     void SetIsStartEndReverse(const bool& isReverse) { isStartEndReverse_ = isReverse; }
+    void SetFinishTimeOffset(float time) { finishTimeOffset_ = time; }
 };

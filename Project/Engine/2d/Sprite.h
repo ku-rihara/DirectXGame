@@ -7,7 +7,7 @@
 // struct
 #include "struct/ModelData.h"
 #include "struct/TransformationMatrix.h"
-#include "utility/ParameterEditor/GlobalParameter.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include <cstdint>
 #include <string>
 
@@ -29,10 +29,10 @@ public:
 
     struct Parameter {
         Vector2 position_         = Vector2::ZeroVector();
-        Vector2 scale_            = Vector2::UnitVector();
-        Vector2 uvScale_          = Vector2::UnitVector();
+        Vector2 scale_            = Vector2::OneVector();
+        Vector2 uvScale_          = Vector2::OneVector();
         Vector4 color_            = Vector4::kWHITE();
-        Vector2 startAnchorPoint_ = Vector2::UnitVector();
+        Vector2 startAnchorPoint_ = Vector2::OneVector();
         int32_t startLayerNum_;
     };
 
@@ -50,7 +50,7 @@ public:
     void CreateSprite(const std::string& textureName);
 
     void AdjustParam(); //< パラメータ調整
-    void BindParams();  //< パラメータバインド 
+    void RegisterParams();  //< パラメータバインド 
     void Draw();        //<描画
 
 private:
@@ -113,7 +113,7 @@ public:
     const Vector2& GetAnchorPoint() const { return anchorPoint_; }
     const Vector2& GetTextureSize() const { return textureSize_; }
     const Vector2& GetTextureLeftTop() const { return textureLeftTop_; }
-    const int32_t& GetLayerNum() const { return layerNum_; }
+    int32_t GetLayerNum() const { return layerNum_; }
     const Parameter& GetStartParameter() const { return parameter_; }
     const bool& GetIsFlipX() const { return isFlipX_; }
     const bool& GetIsFlipY() const { return isFlipY_; }
@@ -130,8 +130,8 @@ public:
     void SetIsFlipY(const bool& isFlip) { isFlipY_ = isFlip; }
 
     void SetColor(const Vector3& color);
-    void SetAlpha(const float& alpha);
+    void SetAlpha(float alpha);
 
-    void SetLayerNum(const int32_t& layerNum) { layerNum_ = layerNum; }
+    void SetLayerNum(int32_t layerNum) { layerNum_ = layerNum; }
     void SetIsDraw(const bool& isDraw) { isDraw_ = isDraw; }
 };

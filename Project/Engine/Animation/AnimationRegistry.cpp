@@ -56,7 +56,7 @@ void AnimationRegistry::UnregisterAnimation(Object3DAnimation* animation) {
 ///============================================================
 /// 更新
 ///============================================================
-void AnimationRegistry::UpdateAll(const float& deltaTime) {
+void AnimationRegistry::UpdateAll(float deltaTime) {
 
     for (Object3DAnimation* animation : animations_) {
         if (animation != nullptr && animations_.find(animation) != animations_.end()) {
@@ -90,10 +90,10 @@ void AnimationRegistry::DrawAllShadow(const ViewProjection& viewProjection) {
 ///============================================================
 /// デバッグ描画
 ///============================================================
-void AnimationRegistry::DebugDrawAll(const ViewProjection& viewProjection) {
+void AnimationRegistry::DebugLineAllSet() {
     for (Object3DAnimation* animation : animations_) {
         if (animation != nullptr) {
-            animation->DebugDraw(viewProjection);
+            animation->DebugLineSet();
         }
     }
 }

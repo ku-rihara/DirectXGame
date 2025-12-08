@@ -30,7 +30,7 @@ void PlayerHandLeft::Update() {
     BasePlayerHand::Update();
 }
 
-void PlayerHandLeft::RailForthComboUpdate(const float& speed) {
+void PlayerHandLeft::RailForthComboUpdate(float speed) {
     /// 突き飛ばしコンボレール更新
     trustRailManager_->Update(speed, RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
     obj3d_->transform_.translation_ = (trustRailManager_->GetPositionOnRail());
@@ -52,7 +52,7 @@ void PlayerHandLeft::AdjustParam() {
     }
 }
 
-void PlayerHandLeft::DissolveAdapt(const float& dissolve) {
+void PlayerHandLeft::DissolveAdapt(float dissolve) {
     BasePlayerHand::DissolveAdapt(dissolve);
 }
 

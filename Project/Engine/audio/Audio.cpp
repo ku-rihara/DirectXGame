@@ -83,7 +83,7 @@ int Audio::LoadWave(const std::string& filename) {
 }
 
 
-void Audio::PlayWave(const int& soundId, const float& volume) {
+void Audio::PlayWave(const int& soundId, float volume) {
     if (soundId < 0 || soundId >= soundDatas_.size()) {
         return;
     }

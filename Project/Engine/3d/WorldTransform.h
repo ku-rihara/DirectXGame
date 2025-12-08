@@ -6,10 +6,9 @@
 #include <cstdint>
 #include <d3d12.h>
 #include <list>
+#include <memory>
 #include <string>
 #include <wrl.h>
-#include <cstdint>
-#include <string>
 
 struct ConstBufferDataWorldTransform {
     Matrix4x4 matWorld;
@@ -33,20 +32,28 @@ enum class RotateOder {
     Quaternion, //< クォータニオン
 };
 
+class ObjEaseAnimationPlayer;
 class Object3DAnimation;
 
 /// <summary>
 /// ワールド変換クラス
 /// </summary>
 class WorldTransform {
+private:
+    struct Transform {
+        Vector3 scale = Vector3::OneVector();
+        Vector3 rotation;
+        Vector3 translation;
+        Quaternion quaternion;
+    };
 
 public:
-    WorldTransform()  = default;
-    ~WorldTransform() = default;
+    WorldTransform();
+    ~WorldTransform();
 
-    void Init(); //< 初期化
-
-    void UpdateMatrix(); //< 行列更新
+    // 初期化、更新
+    void Init(); 
+    void UpdateMatrix(); 
 
     /// <summary>
     /// 指定方向を向く
@@ -63,18 +70,48 @@ public:
     /// <param name="adaptRotate">回転適用設定</param>
     void BillboardUpdateMatrix(const ViewProjection& viewProjection, const BillboardType& billboardAxis = BillboardType::XYZ, const AdaptRotate& adaptRotate = {false, false, false});
 
+    /// <summary>
+    /// 正面方向を軸としたStart地点からのoffsetを計算
+    /// </summary>
+    /// <param name="startPos"></param>
+    /// <param name="offsetValue"></param>
+    /// <returns></returns>
+    Vector3 CalcForwardOffset(const Vector3& offsetValue) const;
+
+    /// <summary>
+    /// オブジェクトイージングアニメーション再生
+    /// </summary>
+    /// <param name="categoryName">カテゴリー名</param>
+    /// <param name="animationName">アニメーション名</param>
+    void PlayObjEaseAnimation(const std::string& categoryName, const std::string& animationName);
+
+    /// <summary>
+    /// オブジェクトイージングアニメーション停止
+    /// </summary>
+    void StopObjEaseAnimation();
+
+    /// <summary>
+    /// アニメーション更新
+    /// </summary>
+    /// <param name="deltaTime">デルタタイム</param>
+    void UpdateObjEaseAnimation();
+
 private:
-    void TransferMatrix(); //< 行列転送
     void UpdateAffineMatrix(); //< アフィン行列更新
     void ClearParentJoint(); //< ペアレントジョイントクリア
     void UpdateMatrixWithJoint(); //< ジョイントで行列更新
     bool HasParentJoint() const; //< ペアレントジョイントを持つか
 
+    void ApplyAnimationToTransform();
+    void InitOffsetTransform();
+
 public:
-    Vector3 scale_ = Vector3::UnitVector();
+    Vector3 scale_ = Vector3::OneVector();
     Vector3 rotation_;
     Vector3 translation_;
     Quaternion quaternion_;
+
+    Transform offsetTransform_;
 
     Matrix4x4 matWorld_; //< ワールド行列
 
@@ -89,8 +126,8 @@ private:
     Matrix4x4 billboardMatrix_;
     Matrix4x4 backToFrontMatrix_;
 
-    WorldTransform(const WorldTransform&)            = delete;
-    WorldTransform& operator=(const WorldTransform&) = delete;
+    // オブジェクトイージングアニメーション
+    std::unique_ptr<ObjEaseAnimationPlayer> objEaseAnimationPlayer_;
 
 public:
     /// <summary>
@@ -106,53 +143,15 @@ public:
     /// <param name="jointName">ジョイント名</param>
     void SetParentJoint(const Object3DAnimation* animation, const std::string& jointName);
 
-    Vector3 GetLocalPos() const;      //< ローカル座標取得
-    Vector3 GetWorldPos() const;      //< ワールド座標取得
+    Vector3 GetLocalPos() const; //< ローカル座標取得
+    Vector3 GetWorldPos() const; //< ワールド座標取得
 
-    Vector3 GetRightVector() const;   //< 右方向ベクトル取得
-    Vector3 GetUpVector() const;      //< 上方向ベクトル取得
+    Vector3 GetRightVector() const; //< 右方向ベクトル取得
+    Vector3 GetUpVector() const; //< 上方向ベクトル取得
     Vector3 GetForwardVector() const; //< 前方向ベクトル取得
 
-
-public:
-    WorldTransform(WorldTransform&& other) noexcept
-        : scale_(std::move(other.scale_)),
-          rotation_(std::move(other.rotation_)),
-          translation_(std::move(other.translation_)),
-          quaternion_(std::move(other.quaternion_)),
-          matWorld_(std::move(other.matWorld_)),
-          parent_(other.parent_),
-          rotateOder_(other.rotateOder_),
-          parentAnimation_(other.parentAnimation_),
-          parentJointIndex_(other.parentJointIndex_),
-          parentJointName_(std::move(other.parentJointName_)),
-          billboardMatrix_(std::move(other.billboardMatrix_)),
-          backToFrontMatrix_(std::move(other.backToFrontMatrix_)) {
-
-        other.parentAnimation_  = nullptr;
-        other.parentJointIndex_ = -1;
-        other.parentJointName_.clear();
-    }
-
-    WorldTransform& operator=(WorldTransform&& other) noexcept {
-        if (this != &other) {
-            scale_             = std::move(other.scale_);
-            rotation_          = std::move(other.rotation_);
-            translation_       = std::move(other.translation_);
-            quaternion_        = std::move(other.quaternion_);
-            matWorld_          = std::move(other.matWorld_);
-            parent_            = other.parent_;
-            rotateOder_        = other.rotateOder_;
-            parentAnimation_   = other.parentAnimation_;
-            parentJointIndex_  = other.parentJointIndex_;
-            parentJointName_   = std::move(other.parentJointName_);
-            billboardMatrix_   = std::move(other.billboardMatrix_);
-            backToFrontMatrix_ = std::move(other.backToFrontMatrix_);
-
-            other.parentAnimation_  = nullptr;
-            other.parentJointIndex_ = -1;
-            other.parentJointName_.clear();
-        }
-        return *this;
-    }
+    /// <summary>
+    /// アニメーションプレイヤー取得
+    /// </summary>
+    ObjEaseAnimationPlayer* GetObjEaseAnimationPlayer() { return objEaseAnimationPlayer_.get(); }
 };

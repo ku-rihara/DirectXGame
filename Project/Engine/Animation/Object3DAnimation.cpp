@@ -34,7 +34,7 @@ void Object3DAnimation::Create(const std::string& fileName) {
 
     // Object3Dの作成とモデル設定
     ModelManager::GetInstance()->LoadModel(fileName);
-    SetModel(fileName);
+    SetModelByName(fileName);
 
     // アニメーションデータの読み込み
     animations_.push_back(modelAnimation_->LoadAnimationFile(fileName));
@@ -61,7 +61,7 @@ void Object3DAnimation::Create(const std::string& fileName) {
 ///============================================================
 void Object3DAnimation::Init() {
     transform_.Init();
-    line3dDrawer_.Init(5120);
+    line3dDrawer_.reset(Line3D::Create(5120));
 }
 
 ///============================================================
@@ -99,7 +99,7 @@ void Object3DAnimation::ChangeAnimation(const std::string& animationName) {
 ///============================================================
 /// アニメーション時間設定
 ///============================================================
-void Object3DAnimation::SetAnimationTime(const float& time) {
+void Object3DAnimation::SetAnimationTime(float time) {
     if (!animations_.empty()) {
         float duration = animations_[currentAnimationIndex_].duration;
         animationTime_ = std::fmod(time, duration);
@@ -118,7 +118,7 @@ void Object3DAnimation::ResetAnimation() {
 ///============================================================
 /// 更新
 ///============================================================
-void Object3DAnimation::Update(const float& deltaTime) {
+void Object3DAnimation::Update(float deltaTime) {
     if (animations_.empty()) {
         return;
     }
@@ -137,7 +137,7 @@ void Object3DAnimation::Update(const float& deltaTime) {
 ///============================================================
 /// アニメーション更新
 ///============================================================
-void Object3DAnimation::UpdateAnimation(const float& deltaTime) {
+void Object3DAnimation::UpdateAnimation(float deltaTime) {
     animationTime_ += deltaTime;
     animationTime_ = std::fmod(animationTime_, animations_[currentAnimationIndex_].duration);
 
@@ -196,7 +196,7 @@ void Object3DAnimation::UpdateSkinCluster() {
 ///============================================================
 /// アニメーション遷移
 ///============================================================
-void Object3DAnimation::AnimationTransition(const float& deltaTime) {
+void Object3DAnimation::AnimationTransition(float deltaTime) {
     // 補間タイム加算
     currentTransitionTime_ += deltaTime / transitionDuration_;
     preAnimationTime_ += deltaTime;
@@ -311,29 +311,26 @@ void Object3DAnimation::DrawShadow(const ViewProjection& viewProjection) {
 ///============================================================
 /// デバッグ描画
 ///============================================================
-void Object3DAnimation::DebugDraw(const ViewProjection& viewProjection) {
+void Object3DAnimation::DebugLineSet() {
     for (const Joint& joint : skeleton_.joints) {
         // Joint位置
         Vector3 jointPos = TransformMatrix(transform_.GetWorldPos(), joint.skeletonSpaceMatrix);
-        line3dDrawer_.DrawCubeWireframe(jointPos, Vector3(0.01f, 0.01f, 0.01f), Vector4::kWHITE());
+        line3dDrawer_->SetCubeWireframe(jointPos, Vector3(0.01f, 0.01f, 0.01f), Vector4::kWHITE());
 
         // 親とのライン描画
         if (joint.parent) {
             const Joint& parentJoint = skeleton_.joints[*joint.parent];
             Vector3 parentPos        = TransformMatrix(transform_.GetWorldPos(), parentJoint.skeletonSpaceMatrix);
-            line3dDrawer_.SetLine(jointPos, parentPos, Vector4::kWHITE());
+            line3dDrawer_->SetLine(jointPos, parentPos, Vector4::kWHITE());
         }
     }
-
-    // Joint描画
-    line3dDrawer_.Draw(viewProjection);
 }
 
 ///============================================================
 /// デバッグImGui
 ///============================================================
-void Object3DAnimation::DebugImgui() {
-    BaseObject3d::DebugImgui();
+void Object3DAnimation::DebugImGui() {
+    BaseObject3d::DebugImGui();
 }
 
 ///============================================================
@@ -363,11 +360,11 @@ const std::string& Object3DAnimation::GetCurrentAnimationName() const {
 ///============================================================
 /// 計算メソッド
 ///============================================================
-Vector3 Object3DAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe, const float& time) {
+Vector3 Object3DAnimation::CalculateValue(const std::vector<KeyframeVector3>& keyframe, float time) {
     return modelAnimation_->CalculateValue(keyframe, time);
 }
 
-Quaternion Object3DAnimation::CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, const float& time) {
+Quaternion Object3DAnimation::CalculateValueQuaternion(const std::vector<KeyframeQuaternion>& keyframe, float time) {
     return modelAnimation_->CalculateValueQuaternion(keyframe, time);
 }
 
