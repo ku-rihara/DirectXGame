@@ -10,21 +10,20 @@ void ParticleSection::Init(const std::string& particleName, const std::string& c
     particleName_ = particleName;
     categoryName_ = categoryName;
     sectionIndex_ = sectionIndex;
-    sectionName_  = particleName + "_S" + std::to_string(sectionIndex);
+    sectionName_  = particleName + std::to_string(sectionIndex);
     groupName_    = categoryName + "_" + sectionName_;
     folderPath_   = baseFolderPath_ + categoryName_ + "/" + "Sections/" + particleName_ + "/";
 
     globalParameter_ = GlobalParameter::GetInstance();
 
     // ParticleParameterハンドラーを作成
-    parameterHandler_                = std::make_unique<ParticleParameter>();
-    parameterHandler_->particleName_ = sectionName_;
-    parameterHandler_->ParameterInit();
+    parameterHandler_ = std::make_unique<ParticleParameter>();
 
     // パラメータの登録と取得
     if (!globalParameter_->HasRegisters(sectionName_)) {
+        parameterHandler_->particleName_ = sectionName_;
+        parameterHandler_->Init();
         globalParameter_->CreateGroup(sectionName_);
-        parameterHandler_->RegisterParams();
         RegisterAdditionalParams();
         globalParameter_->SyncParamForGroup(sectionName_);
     } else {
@@ -32,7 +31,7 @@ void ParticleSection::Init(const std::string& particleName, const std::string& c
         GetAdditionalParams();
     }
 
-    // パーティクルグループ作成（デフォルトはPlane）
+    // パーティクルグループ作成
     if (parameterHandler_->useModel_) {
         CreateModelParticle(parameterHandler_->modelFilePath_, parameterHandler_->maxParticleNum_);
     } else {
@@ -127,7 +126,7 @@ void ParticleSection::Update(float speedRate) {
 
     // Rail更新
     if (useRail_ && railPlayer_->IsPlaying()) {
-        railPlayer_->Update();
+        railPlayer_->Update(speedRate);
         parameterHandler_->parameters_.emitPos = railPlayer_->GetCurrentPosition();
     }
 
@@ -177,10 +176,7 @@ void ParticleSection::UpdateEmitTransform() {
 void ParticleSection::SetEmitLine() {
 #ifdef _DEBUG
     if (useRail_) {
-        //// Rail使用時のデバッグ表示
-        // if (railPlayer_->GetRailEditor()) {
-        //     railPlayer_->GetRailEditor()->SetCubeLine(emitBoxTransform_.scale_);
-        // }
+        // Rail使用時のデバッグ表示
     } else {
         debugLine_->SetCubeWireframe(
             emitBoxTransform_.GetWorldPos(),
@@ -268,20 +264,15 @@ void ParticleSection::AdjustParam() {
         ImGui::Checkbox("Use Rail", &useRail_);
 
         if (useRail_) {
-            std::string directory              = globalParameter_->GetDirectoryPath() + "RailEditor/Dates";
-            std::vector<std::string> railFiles = GetFileNamesForDirectory(directory);
+            std::string railDirectory = globalParameter_->GetDirectoryPath() + "RailEditor/Dates";
 
-            if (!railFiles.empty()) {
-                static int railIndex = 0;
-                std::vector<const char*> railNames;
-                for (const auto& file : railFiles) {
-                    railNames.push_back(file.c_str());
-                }
-
-                if (ImGui::Combo("Rail File", &railIndex, railNames.data(), static_cast<int>(railNames.size()))) {
-                    railFileName_ = railFiles[railIndex];
-                }
-            }
+            // FileSelectorを使用してRailファイルを選択
+            railFileSelector_.SelectFile(
+                "Rail File",
+                railDirectory,
+                railFileName_,
+                "",
+                false);
 
             if (ImGui::Button("Preview Rail") && !railFileName_.empty()) {
                 railPlayer_->Play(railFileName_);
@@ -317,16 +308,31 @@ void ParticleSection::AdjustParam() {
         }
     }
 
-    // Primitive設定
-    if (ImGui::CollapsingHeader("Primitive Type")) {
+    // Primitive/Model設定
+    if (ImGui::CollapsingHeader("Primitive/Model Type")) {
         bool useModel = parameterHandler_->useModel_;
         ImGui::Checkbox("Use Model", &useModel);
         parameterHandler_->useModel_ = useModel;
 
         if (useModel) {
-          /*  ImGui::InputText("Model Path", &parameterHandler_->modelFilePath_);*/
-            if (ImGui::Button("Apply Model")) {
-                CreateModelParticle(parameterHandler_->modelFilePath_, parameterHandler_->maxParticleNum_);
+            // モデルフォルダ選択
+            modelFileSelector_.SelectFile(
+                "Model Folder",
+                modelBasePath_,
+                parameterHandler_->modelFilePath_,
+                "",
+                false);
+
+            // モデルパスの表示
+            if (!parameterHandler_->modelFilePath_.empty()) {
+                std::string fullPath = parameterHandler_->modelFilePath_ + "/" + parameterHandler_->modelFilePath_ + ".obj";
+                ImGui::Text("Full Path: %s", fullPath.c_str());
+            }
+
+            if (ImGui::Button("Apply Model") && !parameterHandler_->modelFilePath_.empty()) {
+
+                std::string fullPath = parameterHandler_->modelFilePath_ + "/" + parameterHandler_->modelFilePath_ + ".obj";
+                CreateModelParticle(fullPath, parameterHandler_->maxParticleNum_);
                 AdaptTexture();
             }
         } else {
@@ -398,7 +404,6 @@ void ParticleSection::StartWaiting() {
 }
 
 bool ParticleSection::IsFinished() const {
-    // パーティクルは終了条件がないため常にfalse
-    // 必要に応じてRailの終了やイージングの終了を判定できる
+
     return false;
 }

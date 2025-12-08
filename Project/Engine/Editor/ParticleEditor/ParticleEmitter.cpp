@@ -3,7 +3,6 @@
 #include "ParticleManager.h"
 #include <imgui.h>
 
-
 ///=================================================================================
 /// パーティクル作成
 ///=================================================================================
@@ -37,9 +36,13 @@ void ParticleEmitter::Init() {
 
     ParticleParameter::Init();
 
-    // レールマネージャー
+    // レールマネージャー（旧システム用に維持）
     railManager_ = std::make_unique<RailManager>();
     railManager_->Init(particleName_ + "Emit");
+
+    // RailPlayer（新システム）
+    railPlayer_ = std::make_unique<RailPlayer>();
+    railPlayer_->Init();
 
     /// 発生位置可視化オブジェ
     debugLine_.reset(Line3D::Create(24));
@@ -51,21 +54,27 @@ void ParticleEmitter::Init() {
 ///=================================================================================
 void ParticleEmitter::Emit() {
 
-    // 　発生座標のパターン切り替え
+    //  発生座標のパターン切り替え
     if (isMoveForRail_) {
+        // 旧システム：RailManager使用
         parameters_.emitPos = railManager_->GetWorldTransform().GetWorldPos();
 
         if (!isStartRailMove_) {
             return;
         }
 
+    } else if (useRailPlayer_) {
+        // 新システム：RailPlayer使用
+        if (railPlayer_->IsPlaying()) {
+            parameters_.emitPos = railPlayer_->GetCurrentPosition();
+        }
     } else {
         parameters_.emitPos = parameters_.emitPos;
     }
 
     currentTime_ += Frame::DeltaTime(); // 時間加算
 
-    if (currentTime_ >= intervalTime_ || groupParamaters_.isShot) { // 　間隔ごとに発動
+    if (currentTime_ >= intervalTime_ || groupParamaters_.isShot) { //  間隔ごとに発動
 
         ParticleManager::GetInstance()->Emit(
             particleName_, parameters_, groupParamaters_, particleCount_);
@@ -76,14 +85,13 @@ void ParticleEmitter::Emit() {
 void ParticleEmitter::Update() {
 
     RailMoveUpdate();
+    RailPlayerUpdate();
     UpdateEmitTransform();
     SetEmitLine();
-
-    /* SetValues();*/
 }
 
 void ParticleEmitter::RailMoveUpdate() {
-    // レール更新
+    // 旧システム：RailManager更新
     if (!isStartRailMove_) {
         return;
     }
@@ -94,8 +102,17 @@ void ParticleEmitter::RailMoveUpdate() {
     }
 
     if (!isRailRoop_) {
-     isStartRailMove_ = false;
+        isStartRailMove_ = false;
     }
+}
+
+void ParticleEmitter::RailPlayerUpdate() {
+    // 新システム：RailPlayer更新
+    if (!useRailPlayer_ || !railPlayer_->IsPlaying()) {
+        return;
+    }
+
+    railPlayer_->Update(railPlayerSpeed_);
 }
 
 void ParticleEmitter::EditorUpdate() {
@@ -103,10 +120,27 @@ void ParticleEmitter::EditorUpdate() {
 }
 
 void ParticleEmitter::StartRailEmit() {
-
+    // 旧システム
     isStartRailMove_ = true;
     railManager_->SetRailMoveTime(0.0f);
     railManager_->SetIsRoop(isRailRoop_);
+}
+
+void ParticleEmitter::StartRailPlayerEmit(const std::string& railFileName) {
+    // 新システム
+    if (railFileName.empty()) {
+        return;
+    }
+
+    useRailPlayer_ = true;
+    railPlayer_->Play(railFileName);
+}
+
+void ParticleEmitter::StopRailPlayerEmit() {
+    if (railPlayer_) {
+        railPlayer_->Stop();
+    }
+    useRailPlayer_ = false;
 }
 
 void ParticleEmitter::UpdateEmitTransform() {
@@ -116,10 +150,9 @@ void ParticleEmitter::UpdateEmitTransform() {
         parameters_.positionDist.max.x - parameters_.positionDist.min.x,
         parameters_.positionDist.max.y - parameters_.positionDist.min.y,
         parameters_.positionDist.max.z - parameters_.positionDist.min.z};
-   
+
     emitBoxTransform_.UpdateMatrix();
 }
-
 
 void ParticleEmitter::SetEmitLine() {
 #ifdef _DEBUG
@@ -128,8 +161,7 @@ void ParticleEmitter::SetEmitLine() {
         railManager_->SetCubeLine(emitBoxTransform_.scale_);
 
     } else { // レールに沿わないエミット位置
-        debugLine_->SetCubeWireframe(emitBoxTransform_.GetWorldPos(), emitBoxTransform_.scale_,Vector4::kWHITE());
-     
+        debugLine_->SetCubeWireframe(emitBoxTransform_.GetWorldPos(), emitBoxTransform_.scale_, Vector4::kWHITE());
     }
 #endif // _DEBUG
 }
@@ -164,8 +196,7 @@ void ParticleEmitter::SetFollowingPos(const Vector3* pos) {
     parameters_.followingPos_ = pos;
 }
 
-
 void ParticleEmitter::SetParentJoint(const Object3DAnimation* modelAnimation, const std::string& name) {
     parameters_.jointParent.animation = modelAnimation;
-    parameters_.jointParent.name           = name;
- }
+    parameters_.jointParent.name      = name;
+}

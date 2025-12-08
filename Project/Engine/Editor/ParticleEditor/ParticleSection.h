@@ -8,6 +8,7 @@
 #include "ParticleParameter.h"
 #include "Pipeline/Particle/ParticlePipeline.h"
 #include "Primitive/IPrimitive.h"
+#include "utility/FileSelector/FileSelector.h" 
 #include "utility/TimeModeSelector/TimeModeSelector.h"
 #include <memory>
 #include <string>
@@ -106,11 +107,16 @@ private:
 
     const std::string baseFolderPath_  = "Particle/";
     const std::string textureFilePath_ = "Resources/texture";
+    const std::string modelBasePath_   = "Resources/Model/"; 
     std::string folderPath_;
 
     // Rail関連
     bool useRail_ = false;
     std::string railFileName_;
+    FileSelector railFileSelector_; 
+
+    // Model関連
+    FileSelector modelFileSelector_; 
 
     PlayState playState_ = PlayState::STOPPED;
     TimeModeSelector timeModeSelector_;
