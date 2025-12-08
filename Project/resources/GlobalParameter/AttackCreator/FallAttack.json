@@ -39,6 +39,7 @@
             0.0
         ],
         "enableFall": false,
+        "finishTimeOffset": 0.0,
         "finishWaitTime": 0.0,
         "gamePadBottom": 16384,
         "isAbleInputMoving": false,
@@ -49,8 +50,8 @@
         "keyBordBottom": 35,
         "loopNum": 0,
         "loopWaitTime": 0.0,
-        "moveEaseTime": 0.07000000029802322,
-        "moveEaseType": 11,
+        "moveEaseTime": 0.07999999821186066,
+        "moveEaseType": 9,
         "moveValue": [
             0.0,
             0.0,

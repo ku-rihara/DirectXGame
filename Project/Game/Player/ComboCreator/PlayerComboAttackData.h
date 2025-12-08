@@ -28,7 +28,7 @@ public:
         float easeTime;
         bool isAbleInputMoving;
         bool isPositionYSelect;
-        float 
+        float finishTimeOffset;
     };
 
     // コリジョンパラメータ
@@ -56,12 +56,12 @@ public:
         TriggerCondition condition;
         int32_t keyBordBottom;
         int32_t gamePadBottom;
-        bool requireHit; 
+        bool requireHit;
     };
 
     // 落下パラメータ
     struct FallParam {
-        bool enableFall;      
+        bool enableFall;
     };
 
     // アタックパラメータ

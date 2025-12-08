@@ -4,6 +4,7 @@
 #include "Frame/Frame.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
+#include"Player/PlayerBehavior/PlayerMove.h"
 #include "Player/PlayerBehavior/PlayerJump.h"
 
 DynamicComboAttack::DynamicComboAttack(Player* player, PlayerComboAttackData* attackData)
@@ -147,6 +148,8 @@ void DynamicComboAttack::ChangeNextAttack() {
         }
 
         // データが見つからない場合はルートに戻る
+ 
+            pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
         pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
     }
 }
@@ -240,6 +243,7 @@ void DynamicComboAttack::SetMoveEasing() {
     moveEasing_.SetEndValue(targetPosition_);
     moveEasing_.SetMaxTime(moveParam.easeTime);
     moveEasing_.SetAdaptValue(&currentMoveValue_);
+    moveEasing_.SetFinishTimeOffset(moveParam.finishTimeOffset);
 }
 
 void DynamicComboAttack::Debug() {

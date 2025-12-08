@@ -1,6 +1,6 @@
 {
     "FallRandingAttack": {
-        "CameraAction_FileName": "",
+        "CameraAction_FileName": "FallRandingCamera",
         "CameraAction_StartTiming": 0.0,
         "CameraAction_TriggerByHit": false,
         "Condition": 0,
@@ -26,7 +26,7 @@
         "ShakeAction_StartTiming": 0.0,
         "ShakeAction_TriggerByHit": false,
         "adaptTime": 0.33000001311302185,
-        "blowYPower": 29.489999771118164,
+        "blowYPower": 43.529998779296875,
         "cancelFrame": 0.14000000059604645,
         "collisionOffsetPos": [
             0.0,
@@ -34,11 +34,12 @@
             0.0
         ],
         "collisionSize": [
-            7.0,
-            7.0,
-            7.0
+            9.0,
+            9.0,
+            9.0
         ],
         "enableFall": false,
+        "finishTimeOffset": 0.0,
         "finishWaitTime": 0.11999999731779099,
         "gamePadBottom": 16384,
         "isAbleInputMoving": false,

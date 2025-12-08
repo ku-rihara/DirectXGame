@@ -53,6 +53,7 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "moveEaseTime", &attackParam_.moveParam.easeTime);
     globalParameter_->Regist(groupName_, "isAbleInputMoving", &attackParam_.moveParam.isAbleInputMoving);
     globalParameter_->Regist(groupName_, "isPositionYSelect", &attackParam_.moveParam.isPositionYSelect);
+    globalParameter_->Regist(groupName_, "finishTimeOffset", &attackParam_.moveParam.finishTimeOffset);
 
     // TriggerParam
     globalParameter_->Regist(groupName_, "gamePadBottom", &attackParam_.triggerParam.gamePadBottom);
@@ -123,6 +124,7 @@ void PlayerComboAttackData::AdjustParam() {
     ImGui::DragFloat("Move Ease Time", &attackParam_.moveParam.easeTime, 0.01f);
     ImGui::Checkbox("isPositionYSelect", &attackParam_.moveParam.isPositionYSelect);
     ImGui::DragFloat3("Move Value", &attackParam_.moveParam.value.x, 0.01f);
+    ImGui::DragFloat("Finish Time Offset", &attackParam_.moveParam.finishTimeOffset, 0.01f);
 
     ImGuiEasingTypeSelector("Move Easing Type", attackParam_.moveParam.easeType);
 
