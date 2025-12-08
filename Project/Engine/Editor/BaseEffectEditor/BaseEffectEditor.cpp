@@ -6,6 +6,7 @@
 #include "Editor/RailEditor/RailData.h"
 #include"Editor/ShakeEditor/ShakeData.h"
 #include"Editor/GPUParticleEditor/GPUParticleData.h"
+#include "Editor/ParticleEditor/ParticleData.h"
 // std
 #include <algorithm>
 #include <filesystem>
@@ -667,3 +668,4 @@ template class BaseEffectEditor<ObjEaseAnimationData>;
 template class BaseEffectEditor<RailData>;
 template class BaseEffectEditor<ShakeData>;
 template class BaseEffectEditor<GPUParticleData>;
+template class BaseEffectEditor<ParticleData>;

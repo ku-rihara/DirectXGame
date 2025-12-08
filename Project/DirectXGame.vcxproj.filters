@@ -877,6 +877,18 @@
     <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.cpp">
       <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleData.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleEditor.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticlePlayer.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\ParticleEditor\ParticleSection.cpp">
+      <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1439,6 +1451,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.h">
       <Filter>MyEngine\.h\Editor\GPUParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleData.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleEditor.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticlePlayer.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Editor\ParticleEditor\ParticleSection.h">
+      <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
