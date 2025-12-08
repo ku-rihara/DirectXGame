@@ -1,4 +1,5 @@
 #pragma once
+#include "3d/WorldTransform.h"
 #include "Editor/BaseEffectEditor/BaseEffectPlayer.h"
 #include "GPUParticleData.h"
 #include <memory>
@@ -23,6 +24,18 @@ public:
     // 描画
     void Draw();
 
+    // エミット制御
+    void EmitOnce(); // 一度だけエミット
+    void StartEmit(); // 連続エミット開始
+    void StopEmit(); // 連続エミット停止
+
+    // トランスフォーム設定
+    void SetEmitPosition(const Vector3& position);
+    void SetParentTransform(WorldTransform* parent);
+
+    // エミッター設定
+    void SetEmitterCount(uint32_t count);
+  
 protected:
     //*---------------------------- protected Methods ----------------------------*//
     std::unique_ptr<BaseEffectData> CreateEffectData() override;
@@ -30,9 +43,12 @@ protected:
 private:
     //*---------------------------- private Variant ----------------------------*//
     std::string currentCategoryName_;
+    bool isEmitting_     = false;
+    bool shouldEmitOnce_ = false;
 
 public:
     //*----------------------------- getter Methods -----------------------------*//
     GPUParticleData* GetParticleData();
     const std::string& GetCurrentCategoryName() const { return currentCategoryName_; }
+    bool IsEmitting() const { return isEmitting_; }
 };

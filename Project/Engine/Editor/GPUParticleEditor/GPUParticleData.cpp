@@ -195,3 +195,10 @@ void GPUParticleData::LoadSequenceElements() {
 void GPUParticleData::SaveSequenceElements() {
     BaseSequenceEffectData::SaveSequenceElements();
 }
+
+ GPUParticleSection* GPUParticleData::GetKeyFrame(int32_t index) {
+    if (index >= 0 && index < static_cast<int32_t>(sectionElements_.size())) {
+        return sectionElements_[index].get();
+    }
+    return nullptr;
+}

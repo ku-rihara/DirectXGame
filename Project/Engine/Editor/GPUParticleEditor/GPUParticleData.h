@@ -58,7 +58,7 @@ public:
     //*----------------------------- getter Methods -----------------------------*//
     const std::string& GetCategoryName() const { return categoryName_; }
     bool GetDrawAllSections() const { return drawAllSections_; }
-
+    GPUParticleSection* GetKeyFrame(int32_t index);
     //*----------------------------- setter Methods -----------------------------*//
     void SetDrawAllSections(bool value) { drawAllSections_ = value; }
 };
