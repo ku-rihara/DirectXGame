@@ -150,4 +150,5 @@ public:
     void SetType(const EasingType& type) { type_ = type; }
     void SetMaxTime(float time) { maxTime_ = time; }
     void SetIsStartEndReverse(const bool& isReverse) { isStartEndReverse_ = isReverse; }
+    void SetFinishTimeOffset(float time) { finishTimeOffset_ = time; }
 };
