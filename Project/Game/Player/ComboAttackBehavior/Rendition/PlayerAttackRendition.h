@@ -2,6 +2,7 @@
 
 #include "Editor/RailEditor/RailManager.h"
 #include "Player/ComboCreator/PlayerAttackRenditionData.h"
+#include "Easing/Easing.h"
 
 class Player;
 class PlayerComboAttackData;
@@ -26,4 +27,12 @@ public:
     void Init(Player* player, PlayerComboAttackData* playerComboAttackData);
     void Update(float deltaTime);
     void Reset();
+
+    // ごり押し演出再生
+    bool isRendition_;
+    bool isBlur_;
+    Easing<float> rushBlurEase_;
+    float tempBlurParam_;
+    void PlayRendition();
+
 };

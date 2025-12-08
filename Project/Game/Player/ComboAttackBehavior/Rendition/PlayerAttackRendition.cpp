@@ -23,6 +23,16 @@ void PlayerAttackRendition::Update(float deltaTime) {
         return;
     }
 
+    if (!isRendition_) {
+        PlayRendition();
+        isRendition_ = true;
+    }
+
+    if (isBlur_) {
+        rushBlurEase_.Update(Frame::DeltaTime());
+        PostEffectRenderer::GetInstance()->GetRadialBlur()->SetBlurWidth(tempBlurParam_);
+    }
+
     currentTime_ += deltaTime;
 
     auto& renditionData = playerComboAttackData_->GetRenditionData();
@@ -110,5 +120,35 @@ void PlayerAttackRendition::Update(float deltaTime) {
             // 再生済みに設定
             isObjAnimPlayed_[i] = true;
         }
+    }
+}
+
+void PlayerAttackRendition::PlayRendition() {
+    // ごり押し演出追加処理(絶対消す)
+    std::string name = playerComboAttackData_->GetGroupName();
+    bool usHit       = pPlayer_->GetPlayerCollisionInfo()->GetIsHit();
+
+    if (name == "FallRandingAttack") {
+        pPlayer_->GetEffects()->FallEffectRenditionInit();
+    }
+
+    if (name == "UpperAttack" && usHit) {
+        pPlayer_->GetEffects()->SpecialAttackRenditionInit();
+    }
+
+    if (name == "FallAntipation") {
+        pPlayer_->GetEffects()->SpecialAttackRenditionInit();
+    }
+
+    if (name == "RushAttack") {
+        rushBlurEase_.Init("RushBlur.json");
+        rushBlurEase_.SetAdaptValue(&tempBlurParam_);
+        isBlur_ = true;
+        PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::RADIALBLUR);
+
+        rushBlurEase_.SetOnWaitEndCallback([this]() {
+            PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::NONE);
+        });
+        pPlayer_->GetEffects()->RushAttackRingEffectEmit();
     }
 }

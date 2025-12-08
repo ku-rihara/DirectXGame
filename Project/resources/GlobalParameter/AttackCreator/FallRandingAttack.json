@@ -27,7 +27,7 @@
         "ShakeAction_TriggerByHit": false,
         "adaptTime": 0.33000001311302185,
         "blowYPower": 43.529998779296875,
-        "cancelFrame": 0.14000000059604645,
+        "cancelFrame": 0.10999999940395355,
         "collisionOffsetPos": [
             0.0,
             0.0,
@@ -58,6 +58,6 @@
             0.0
         ],
         "power": 21.030000686645508,
-        "precedeInputFrame": 0.14000000059604645
+        "precedeInputFrame": 0.10999999940395355
     }
 }
