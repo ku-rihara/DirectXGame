@@ -16,7 +16,7 @@ void PrimitiveCylinder::Create() {
     const float kHeight         = 3.0f;
     const float radianPerDivide = (12.0f * std::numbers::pi_v<float>) / float(vertexNum_);
 
-    for (uint32_t index = 0; index < vertexNum_; ++index) {
+    for (uint32_t index = 0; index < vertexNum_/6; ++index) {
         float sin     = std::sin(index * radianPerDivide);
         float cos     = std::cos(index * radianPerDivide);
         float sinNext = std::sin((index + 1) * radianPerDivide);
