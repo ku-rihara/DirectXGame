@@ -48,7 +48,7 @@ void PlayerMove::Update() {
     MoveAnimation();
     WaitAnimation();
 
-    if ((Input::IsPressPad(0, GamepadButton::Y))) {
+    if ((Input::IsPressPad(0, GamepadButton::B))) {
         pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed * 2.4f);
     } else {
         pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);

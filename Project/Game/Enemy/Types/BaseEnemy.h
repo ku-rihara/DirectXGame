@@ -137,6 +137,8 @@ private:
     //　ダメージクールタイムの更新
     void DamageCollingUpdate(float deltaTime);
 
+    void MoveToLimit();
+
 private:
     int deathSound_;
     int thrustSound_;

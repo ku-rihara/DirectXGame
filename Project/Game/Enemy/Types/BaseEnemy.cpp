@@ -18,6 +18,7 @@
 #include "GameCamera/GameCamera.h"
 #include "Matrix4x4.h"
 #include "Player/Player.h"
+#include "Field/Field.h"
 
 ///========================================================
 ///  初期化
@@ -25,7 +26,7 @@
 void BaseEnemy::Init(const Vector3& spawnPos) {
 
     // HP
-    HPMax_ = 105.0f;
+    HPMax_ = 145.0f;
     hp_    = HPMax_;
     hpBar_ = std::make_unique<EnemyHPBar>();
     hpBar_->Init(HPMax_);
@@ -72,6 +73,7 @@ void BaseEnemy::Update() {
 
     collisionBox_->SetPosition(GetWorldPosition());
     collisionBox_->Update();
+    MoveToLimit();
     BaseObject::Update();
 }
 ///========================================================
@@ -210,6 +212,46 @@ void BaseEnemy::TakeDamage(float damageValue) {
 
     if (hp_ < 0.0f) {
         hp_ = 0.0f;
+    }
+}
+
+void BaseEnemy::MoveToLimit() {
+
+    // フィールドの中心とスケールを取得
+    Vector3 fieldCenter = {0.0f, 0.0f, 0.0f}; // フィールド中心
+    Vector3 fieldScale  = Field::baseScale_; // フィールドのスケール
+
+    // プレイヤーのスケールを考慮した半径
+    float radiusX = fieldScale.x - baseTransform_.scale_.x;
+    float radiusZ = fieldScale.z - baseTransform_.scale_.z;
+
+    // 現在位置が範囲内かチェック
+    bool insideX = std::abs(baseTransform_.translation_.x - fieldCenter.x) <= radiusX;
+    bool insideZ = std::abs(baseTransform_.translation_.z - fieldCenter.z) <= radiusZ;
+
+    ///--------------------------------------------------------------------------------
+    /// 範囲外なら戻す
+    ///--------------------------------------------------------------------------------
+
+    if (!insideX) { /// X座標
+        baseTransform_.translation_.x = std::clamp(
+            baseTransform_.translation_.x,
+            fieldCenter.x - radiusX,
+            fieldCenter.x + radiusX);
+    }
+
+    if (!insideZ) { /// Z座標
+        baseTransform_.translation_.z = std::clamp(
+            baseTransform_.translation_.z,
+            fieldCenter.z - radiusZ,
+            fieldCenter.z + radiusZ);
+    }
+
+    // 範囲外の反発処理
+    if (!insideX || !insideZ) {
+        Vector3 directionToCenter = (fieldCenter - baseTransform_.translation_).Normalize();
+        baseTransform_.translation_.x += directionToCenter.x * 0.1f; // 軽く押し戻す
+        baseTransform_.translation_.z += directionToCenter.z * 0.1f; // 軽く押し戻す
     }
 }
 

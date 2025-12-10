@@ -1,0 +1,19 @@
+{
+    "StrongUpperDamage": {
+        "Bound_BounceDamping": 0.23999999463558197,
+        "Bound_BoundNum": 2,
+        "Bound_InitialBounceRate": 0.7699999809265137,
+        "Normal_KnockBackDamping": 0.20000000298023224,
+        "Normal_KnockBackTime": 0.2800000011920929,
+        "ReactionState": 2,
+        "Slammed_Gravity": 0.0,
+        "Slammed_ThrustRotateSpeed": 0.0,
+        "TakeUpper_FallSpeedLimit": 157.60000610351563,
+        "TakeUpper_FloatingTime": 0.0,
+        "TakeUpper_Gravity": 81.30000305175781,
+        "TakeUpper_ThrustRotateSpeed": 45.77000045776367,
+        "TriggerAttackName": "StrongAttack3",
+        "damageCollingTime": 0.5799999833106995,
+        "isPriorityReaction": false
+    }
+}
