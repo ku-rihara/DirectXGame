@@ -4,7 +4,6 @@
 #include "BaseScene.h"
 
 // Obj
-#include "Ground/Ground.h"
 #include "SkyBox/SkyBox.h"
 #include "Editor/TimeScaleEditor/TimeScaleController.h"
 // emitter
@@ -23,7 +22,6 @@ private:
     /// Private variants
     ///========================================================
 
-    std::unique_ptr<Ground> ground_                             = nullptr;
      std::unique_ptr<SkyBox> skuBox_                             = nullptr;
     std::unique_ptr<PutObjForBlender> putObjForBlender          = nullptr;
     std::unique_ptr<TimeScaleController> timeScaleController_   = nullptr;

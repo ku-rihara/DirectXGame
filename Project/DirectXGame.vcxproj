@@ -164,7 +164,6 @@
     <ClCompile Include="Engine\utility\PutObjForBlender\PutObjForBlender.cpp" />
     <ClCompile Include="Engine\utility\TimeModeSelector\TimeModeSelector.cpp" />
     <ClCompile Include="Game\EasingTestObj\EasingTestObj.cpp" />
-    <ClCompile Include="Game\Ground\Ground.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
     <ClCompile Include="Game\Scene\EditorScene.cpp" />
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp" />
@@ -354,7 +353,6 @@
     <ClInclude Include="Engine\utility\PutObjForBlender\PutObjForBlender.h" />
     <ClInclude Include="Engine\utility\TimeModeSelector\TimeModeSelector.h" />
     <ClInclude Include="Game\EasingTestObj\EasingTestObj.h" />
-    <ClInclude Include="Game\Ground\Ground.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
     <ClInclude Include="Game\Scene\EditorScene.h" />
     <ClInclude Include="Game\Scene\Factory\AbstractSceneFactory.h" />

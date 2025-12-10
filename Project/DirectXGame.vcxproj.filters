@@ -94,9 +94,6 @@
     <Filter Include="MyEngine\.h\utility\Debug">
       <UniqueIdentifier>{20818b80-a58e-4c65-84c7-f8fe2b0bdb85}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Ground">
-      <UniqueIdentifier>{1d7f274d-8636-4850-a0ef-f6132e04c95b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Scene\Manager">
       <UniqueIdentifier>{20578600-268f-441b-8c4f-b9fd3cd175ca}</UniqueIdentifier>
     </Filter>
@@ -459,9 +456,6 @@
     </ClCompile>
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp">
       <Filter>MyEngine\.cpp\utility\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Ground\Ground.cpp">
-      <Filter>Game\Ground</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\TitleScene.cpp">
       <Filter>Game\Scene</Filter>
@@ -1013,9 +1007,6 @@
     </ClInclude>
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h">
       <Filter>MyEngine\.h\utility\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Ground\Ground.h">
-      <Filter>Game\Ground</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\TitleScene.h">
       <Filter>Game\Scene</Filter>

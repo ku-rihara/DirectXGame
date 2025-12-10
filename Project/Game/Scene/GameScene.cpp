@@ -18,14 +18,13 @@ void GameScene::Init() {
 
     BaseScene::Init();
 
-    ground_              = std::make_unique<Ground>();
-    skuBox_              = std::make_unique<SkyBox>();
+     skuBox_              = std::make_unique<SkyBox>();
     putObjForBlender     = std::make_unique<PutObjForBlender>();
     timeScaleController_ = std::make_unique<TimeScaleController>();
     cameraPlayer_        = std::make_unique<CameraAnimation>();
 
     /*  monsterBall_->Init();*/
-    ground_->Init();
+   
     skuBox_->Init();
     timeScaleController_->Init();
 
@@ -55,7 +54,7 @@ void GameScene::Update() {
     cameraPlayer_->Update();
 
     // 各クラス更新
-    ground_->Update();
+  
     timeScaleController_->Update(Frame::DeltaTime());
 
   
