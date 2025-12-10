@@ -19,8 +19,6 @@ void GameScene::Init() {
     BaseScene::Init();
 
     ground_              = std::make_unique<Ground>();
-    monsterBall_         = std::make_unique<MonsterBall>();
-    plane_               = std::make_unique<Plane>();
     skuBox_              = std::make_unique<SkyBox>();
     putObjForBlender     = std::make_unique<PutObjForBlender>();
     timeScaleController_ = std::make_unique<TimeScaleController>();
@@ -28,7 +26,6 @@ void GameScene::Init() {
 
     /*  monsterBall_->Init();*/
     ground_->Init();
-    plane_->Init();
     skuBox_->Init();
     timeScaleController_->Init();
 
@@ -61,7 +58,7 @@ void GameScene::Update() {
     ground_->Update();
     timeScaleController_->Update(Frame::DeltaTime());
 
-    plane_->Update();
+  
     skuBox_->Update();
 
     putObjForBlender->EasingUpdateSelectGroup(Frame::DeltaTime(), 0);

@@ -5,8 +5,6 @@
 
 // Obj
 #include "Ground/Ground.h"
-#include "MonsterBall/MonsterBall.h"
-#include "Plane/Plane.h"
 #include "SkyBox/SkyBox.h"
 #include "Editor/TimeScaleEditor/TimeScaleController.h"
 // emitter
@@ -26,9 +24,7 @@ private:
     ///========================================================
 
     std::unique_ptr<Ground> ground_                             = nullptr;
-    std::unique_ptr<MonsterBall> monsterBall_                   = nullptr;
-    std::unique_ptr<Plane> plane_                               = nullptr;
-    std::unique_ptr<SkyBox> skuBox_                             = nullptr;
+     std::unique_ptr<SkyBox> skuBox_                             = nullptr;
     std::unique_ptr<PutObjForBlender> putObjForBlender          = nullptr;
     std::unique_ptr<TimeScaleController> timeScaleController_   = nullptr;
  

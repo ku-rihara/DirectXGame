@@ -109,12 +109,6 @@
     <Filter Include="MyEngine\.cpp\Light">
       <UniqueIdentifier>{5396bc61-e016-4b3e-8707-c28cc9c03b94}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\MonsterBall">
-      <UniqueIdentifier>{0fe76578-dd93-4ebc-a7b1-ff86299b8b82}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Plane">
-      <UniqueIdentifier>{70c3c5e1-9bef-4a27-b4f2-dba2a4e9ab55}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.cpp\Primitive">
       <UniqueIdentifier>{a660c6f0-a988-46d1-bca0-d2fc5408ee78}</UniqueIdentifier>
     </Filter>
@@ -510,12 +504,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Lighrt\AreaLight.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\MonsterBall\MonsterBall.cpp">
-      <Filter>Game\MonsterBall</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Plane\Plane.cpp">
-      <Filter>Game\Plane</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Lighrt\AmbientLight.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
@@ -1073,12 +1061,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Lighrt\AreaLight.h">
       <Filter>MyEngine\.h\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\MonsterBall\MonsterBall.h">
-      <Filter>Game\MonsterBall</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Plane\Plane.h">
-      <Filter>Game\Plane</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Lighrt\AmbientLight.h">
       <Filter>MyEngine\.h\Light</Filter>
