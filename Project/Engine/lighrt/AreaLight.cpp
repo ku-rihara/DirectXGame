@@ -1,4 +1,6 @@
 #include "AreaLight.h"
+
+using namespace KetaEngine;
 #include"Dx/DirectXCommon.h"
 #include <imgui.h>
 #include <numbers>
