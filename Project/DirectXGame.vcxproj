@@ -237,7 +237,7 @@
     <ClCompile Include="Game\Player\TitleBehavior\TitleRightPunch.cpp" />
     <ClCompile Include="Game\Player\TitleBehavior\TitleLeftPunch.cpp" />
     <ClCompile Include="Game\Player\TitleBehavior\TitleWait.cpp" />
-    <ClCompile Include="Game\MonsterBall\MonsterBall.cpp" />
+    <ClCompile Include="Game\Ground\Ground.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
     <ClCompile Include="Game\Scene\EditorScene.cpp" />
     <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp" />
@@ -503,7 +503,7 @@
     <ClInclude Include="Game\Player\TitleBehavior\TitleRightPunch.h" />
     <ClInclude Include="Game\Player\TitleBehavior\TitleLeftPunch.h" />
     <ClInclude Include="Game\Player\TitleBehavior\TitleWait.h" />
-    <ClInclude Include="Game\MonsterBall\MonsterBall.h" />
+    <ClInclude Include="Game\Ground\Ground.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
     <ClInclude Include="Game\Scene\EditorScene.h" />
     <ClInclude Include="Game\Scene\Factory\AbstractSceneFactory.h" />

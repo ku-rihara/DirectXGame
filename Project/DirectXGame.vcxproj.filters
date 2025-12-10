@@ -136,9 +136,6 @@
     <Filter Include="MyEngine\.cpp\Light">
       <UniqueIdentifier>{5396bc61-e016-4b3e-8707-c28cc9c03b94}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\MonsterBall">
-      <UniqueIdentifier>{0fe76578-dd93-4ebc-a7b1-ff86299b8b82}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Player">
       <UniqueIdentifier>{17bc6e81-f103-4b8a-895b-a16298dcba9e}</UniqueIdentifier>
     </Filter>
@@ -654,9 +651,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Lighrt\AreaLight.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\MonsterBall\MonsterBall.cpp">
-      <Filter>Game\MonsterBall</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Lighrt\AmbientLight.cpp">
       <Filter>MyEngine\.cpp\Light</Filter>
@@ -1240,6 +1234,7 @@
     <ClCompile Include="Engine\Editor\ParticleEditor\ParticleSection.cpp">
       <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Ground\Ground.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1439,9 +1434,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Lighrt\AreaLight.h">
       <Filter>MyEngine\.h\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\MonsterBall\MonsterBall.h">
-      <Filter>Game\MonsterBall</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Lighrt\AmbientLight.h">
       <Filter>MyEngine\.h\Light</Filter>
@@ -2037,6 +2029,7 @@
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticleSection.h">
       <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Ground\Ground.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
