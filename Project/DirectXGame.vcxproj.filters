@@ -1234,7 +1234,6 @@
     <ClCompile Include="Engine\Editor\ParticleEditor\ParticleSection.cpp">
       <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Ground\Ground.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -2029,7 +2028,6 @@
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticleSection.h">
       <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Ground\Ground.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
