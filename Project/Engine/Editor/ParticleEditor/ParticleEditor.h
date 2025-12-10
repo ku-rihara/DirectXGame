@@ -7,6 +7,8 @@
 /// <summary>
 /// パーティクルエディター
 /// </summary>
+namespace KetaEngine {
+
 class ParticleEditor : public BaseEffectEditor<ParticleData> {
 public:
     ParticleEditor()  = default;
@@ -34,3 +36,5 @@ private:
     const std::string particleFolderName_ = "Particle/";
     const std::string dateFolderName_     = "Dates/";
 };
+
+}; // KetaEngine

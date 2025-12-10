@@ -8,6 +8,8 @@
 /// <summary>
 /// 輝度ベースアウトラインポストエフェクトクラス
 /// </summary>
+namespace KetaEngine {
+
 class LuminanceBasedOutline : public BasePostEffect {
 public:
     struct ParamData {
@@ -42,3 +44,5 @@ private:
     Microsoft::WRL::ComPtr<ID3D12Resource> paramDataResource_;
     ParamData* paramData_;
 };
+
+}; // KetaEngine

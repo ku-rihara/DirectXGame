@@ -1,4 +1,6 @@
 #include "AmbientLight.h"
+
+using namespace KetaEngine;
 #include"Dx/DirectXCommon.h"
 #include <imgui.h>
 #include "Vector3.h"

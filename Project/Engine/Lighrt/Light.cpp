@@ -1,4 +1,6 @@
 #include "Light.h"
+
+using namespace KetaEngine;
 #include "AmbientLight.h"
 #include "AreaLightManager.h"
 #include "DirectionalLight.h"

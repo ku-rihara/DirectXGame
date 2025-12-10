@@ -1,4 +1,6 @@
 #include "Line3DPipeline.h"
+
+using namespace KetaEngine;
 #include "Dx/DirectXCommon.h"
 #include"Dx/DxCompiler.h"
 #include <cassert>

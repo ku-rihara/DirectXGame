@@ -1,4 +1,6 @@
 #include "GPUParticleSection.h"
+
+using namespace KetaEngine;
 #include "base/TextureManager.h"
 #include "Frame/Frame.h"
 #include "Function/GetFile.h"

@@ -1,5 +1,7 @@
 #include "Dx/DirectXCommon.h"
 #include "MeshMaterial.h"
+
+using namespace KetaEngine;
 #include <cassert>
 #include <imgui.h>
 

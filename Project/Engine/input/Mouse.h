@@ -6,6 +6,8 @@
 #include "3d/ViewProjection.h"
 #include "Vector2.h"
 
+namespace KetaEngine {
+
 struct MouseMove {
     LONG lX;
     LONG lY;
@@ -73,3 +75,5 @@ public:
     /// <returns></returns>
     Vector3 GetMousePos3D(const ViewProjection& viewprojection, float depthFactor, float blockSpacing = 1.0f) const;
 };
+
+}; // KetaEngine

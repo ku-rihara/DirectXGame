@@ -2,6 +2,8 @@
 #include <d3d12.h>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 class WinApp;
 class DirectXCommon;
 class SrvManager;
@@ -39,3 +41,5 @@ private:
     // SRV用デスクリプタヒープ
     Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap_;
 };
+
+}; // KetaEngine

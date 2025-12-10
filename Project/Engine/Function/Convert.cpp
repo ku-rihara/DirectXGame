@@ -1,5 +1,7 @@
 #include "Convert.h"
 
+using namespace KetaEngine;
+
 
 std::string ConvertString(const std::wstring& str) {
 	if (str.empty()) {

@@ -1,4 +1,6 @@
 #include "SrvManager.h"
+
+using namespace KetaEngine;
 #include <cassert>
 
 // 最大SRV数の定義

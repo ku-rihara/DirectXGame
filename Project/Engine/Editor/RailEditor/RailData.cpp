@@ -1,4 +1,6 @@
 #include "RailData.h"
+
+using namespace KetaEngine;
 #include "Frame/Frame.h"
 #include "Line3D/Line3D.h"
 #include "MathFunction.h"

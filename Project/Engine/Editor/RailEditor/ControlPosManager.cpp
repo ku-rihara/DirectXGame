@@ -1,4 +1,6 @@
 #include "ControlPosManager.h"
+
+using namespace KetaEngine;
 #include <d3d12.h>
 #include <fstream>
 #include <imgui.h>

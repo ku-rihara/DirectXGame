@@ -8,6 +8,8 @@
 #include <cstdint>
 #include <string>
 
+namespace KetaEngine {
+
 struct CameraForGPU {
     Vector3 worldPosition_;
 };
@@ -101,3 +103,5 @@ public:
     DirectionalLight* GetDirectionalLight() { return directionalLight_.get(); }
     Vector3 GetWorldCameraPos() const { return cameraForGPUData_->worldPosition_; }
 };
+
+}; // KetaEngine

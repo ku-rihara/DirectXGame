@@ -1,4 +1,6 @@
 #include "ParticleSection.h"
+
+using namespace KetaEngine;
 #include "3d/ModelManager.h"
 #include "base/TextureManager.h"
 #include "Frame/Frame.h"

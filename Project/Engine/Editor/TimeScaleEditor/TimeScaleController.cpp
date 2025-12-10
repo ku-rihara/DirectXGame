@@ -1,4 +1,6 @@
 #include "TimeScaleController.h"
+
+using namespace KetaEngine;
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Frame/Frame.h"
 #include <algorithm>

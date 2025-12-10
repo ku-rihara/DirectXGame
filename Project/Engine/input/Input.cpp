@@ -1,5 +1,7 @@
 // Input.cpp
 #include "Input.h"
+
+using namespace KetaEngine;
 #include <assert.h>
 #include <string>
 #pragma comment(lib, "dinput8.lib")

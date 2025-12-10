@@ -1,4 +1,6 @@
 #include "DxDepthBuffer.h"
+
+using namespace KetaEngine;
 #include "base/DsvManager.h"
 #include "base/SrvManager.h"
 #include <cassert>

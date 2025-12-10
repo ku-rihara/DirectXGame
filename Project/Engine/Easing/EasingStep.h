@@ -8,6 +8,8 @@
 /// <summary>
 /// イージングステップのインターフェース
 /// </summary>
+namespace KetaEngine {
+
 class IEasingStep {
 public:
     virtual ~IEasingStep() = default;
@@ -70,3 +72,5 @@ public:
     void SetOnWaitEndCallback(const std::function<void()>& callback);
     const T& GetValue() const { return easing_->GetValue(); }
 };
+
+}; // KetaEngine

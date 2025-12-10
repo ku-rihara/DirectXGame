@@ -10,6 +10,8 @@
 /// <summary>
 /// 制御点マネージャー
 /// </summary>
+namespace KetaEngine {
+
 class ControlPosManager {
 
 private:
@@ -82,3 +84,5 @@ public:
 
     void SetIsDraw(const bool& is) { isDraw_ = is; }
 };
+
+}; // KetaEngine

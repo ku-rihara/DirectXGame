@@ -4,6 +4,8 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 class BaseEffectData;
 
 /// <summary>
@@ -38,3 +40,5 @@ public:
     //*----------------------------- getter Methods -----------------------------*//
     const std::string& GetCurrentEffectName() const { return currentEffectName_; }
 };
+
+}; // KetaEngine

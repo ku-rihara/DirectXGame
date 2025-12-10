@@ -2,6 +2,8 @@
 
 #include "Core/KTFramework.h"
 
+namespace KetaEngine {
+
 class KTGame : public KTFramework {
 public:
     KTGame()  = default;
@@ -17,3 +19,5 @@ public:
     void DrawShadow() override; //< シャドウ描画
     void Finalize() override; //< 終了処理
 };
+
+}; // KetaEngine

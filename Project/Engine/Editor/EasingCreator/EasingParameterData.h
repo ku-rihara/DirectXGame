@@ -124,6 +124,8 @@ constexpr std::array<const char*, static_cast<int>(AdaptVector2AxisType::COUNT)>
 void ImGuiEasingTypeSelector(const char* label, int32_t& target);
 
 
+namespace KetaEngine {
+
 template <typename T>
 struct EasingParameter {
 
@@ -146,3 +148,5 @@ struct EasingParameter {
 
     float startTimeOffset = 0.0f;
 };
+
+}; // KetaEngine

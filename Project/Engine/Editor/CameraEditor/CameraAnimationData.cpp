@@ -1,4 +1,6 @@
 #include "CameraAnimationData.h"
+
+using namespace KetaEngine;
 #include "Frame/Frame.h"
 #include <algorithm>
 #include <filesystem>

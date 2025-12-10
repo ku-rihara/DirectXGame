@@ -1,4 +1,6 @@
 #include "PointLight.h"
+
+using namespace KetaEngine;
 #include"Dx/DirectXCommon.h"
 #include <imgui.h>
 

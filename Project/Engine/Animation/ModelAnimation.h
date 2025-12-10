@@ -13,6 +13,8 @@
 #include <string>
 #include <vector>
 
+namespace KetaEngine {
+
 class Model;
 
 /// <summary>
@@ -115,3 +117,5 @@ private:
 
     const std::string directoryPath_ = "Resources/Model/";
 };
+
+}; // KetaEngine

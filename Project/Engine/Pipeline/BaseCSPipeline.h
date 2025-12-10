@@ -5,6 +5,8 @@
 #include <Windows.h>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 class DirectXCommon;
 enum class BlendMode;
 
@@ -61,3 +63,5 @@ public:
     ID3D12RootSignature* GetRootSignature() const { return rootSignature_.Get(); }
     ID3D12PipelineState* GetComputePipelineState() const { return computePipelineState_.Get(); }
 };
+
+}; // KetaEngine

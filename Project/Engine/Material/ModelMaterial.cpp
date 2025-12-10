@@ -1,4 +1,6 @@
 #include "ModelMaterial.h"
+
+using namespace KetaEngine;
 #include "base/TextureManager.h"
 #include "Dx/DirectXCommon.h"
 #include <cassert>

@@ -6,6 +6,8 @@
 /// <summary>
 /// スプライト描画パイプラインクラス
 /// </summary>
+namespace KetaEngine {
+
 class SpritePipeline : public BasePipeline {
 public:
     SpritePipeline()  = default;
@@ -45,3 +47,5 @@ private:
 public:
     ID3D12PipelineState* GetGraphicsPipelineStateSprite() const { return graphicsPipelineState_.Get(); }
 };
+
+}; // KetaEngine

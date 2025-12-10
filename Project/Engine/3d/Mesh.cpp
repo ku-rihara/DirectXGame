@@ -1,4 +1,6 @@
 #include "Mesh.h"
+
+using namespace KetaEngine;
 #include"Dx/DirectXCommon.h"
 #include "base/TextureManager.h"
 

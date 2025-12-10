@@ -8,6 +8,8 @@
 #include <memory>
 
 // ゲーム全体
+namespace KetaEngine {
+
 class KTFramework {
 public:
     virtual ~KTFramework() = default;
@@ -36,3 +38,5 @@ protected:
     std::unique_ptr<CollisionManager> collisionManager_;
     std::unique_ptr<EngineCore> engineCore_;
 };
+
+}; // KetaEngine

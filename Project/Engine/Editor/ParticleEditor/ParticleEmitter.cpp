@@ -1,4 +1,6 @@
 #include "ParticleEmitter.h"
+
+using namespace KetaEngine;
 #include "Frame/Frame.h"
 #include "ParticleManager.h"
 #include <imgui.h>

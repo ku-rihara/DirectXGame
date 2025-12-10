@@ -6,6 +6,8 @@
 #include <vector>
 
 // 前方宣言
+namespace KetaEngine {
+
 class Sprite;
 
 /// <summary>
@@ -50,3 +52,5 @@ public:
     bool HasGroupName(const std::string& groupName) const;
     const size_t& GetRegisteredCount() const { return sprites_.size(); }
 };
+
+}; // KetaEngine

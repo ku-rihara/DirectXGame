@@ -2,6 +2,8 @@
 #include"Vector3.h"
 #include"Quaternion.h"
 
+namespace KetaEngine {
+
 struct EulerTransform {
 	Vector3 scale;
 	Vector3 rotate;
@@ -13,3 +15,5 @@ struct QuaternionTransform {
     Quaternion rotate;
     Vector3 translate;
 };
+
+}; // KetaEngine

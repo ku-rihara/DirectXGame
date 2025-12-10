@@ -1,5 +1,7 @@
 #include "KTFramework.h"
 
+using namespace KetaEngine;
+
 // dx
 #include "Dx/DxReleaseChecker.h"
 #include "ShadowMap/ShadowMap.h"

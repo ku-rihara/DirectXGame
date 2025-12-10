@@ -15,6 +15,8 @@ enum class BlendMode {
     Screen,
 };
 
+namespace KetaEngine {
+
 class DirectXCommon;
 
 /// <summary>
@@ -85,3 +87,5 @@ public:
     float GetDissolveEdgeWidth() const { return materialData_->dissolveEdgeWidth; }
     bool IsDissolveEnabled() const { return materialData_->enableDissolve != 0; }
 };
+
+}; // KetaEngine

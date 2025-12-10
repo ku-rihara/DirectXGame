@@ -6,6 +6,8 @@
 /// <summary>
 ///  AABBコライダー
 /// </summary>
+namespace KetaEngine {
+
 class AABBCollider : public BaseCollider {
 public:
     AABBCollider();
@@ -40,3 +42,5 @@ public:
     ///=========================================================================================
     void SetCollisionScale(const Vector3& radius) { collisionScale_ = radius; }
 };
+
+}; // KetaEngine

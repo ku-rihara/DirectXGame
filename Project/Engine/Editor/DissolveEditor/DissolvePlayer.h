@@ -7,6 +7,8 @@
 /// <summary>
 /// ディゾルブ再生クラス
 /// </summary>
+namespace KetaEngine {
+
 class DissolvePlayer {
 public:
     DissolvePlayer()  = default;
@@ -34,3 +36,5 @@ public:
     bool IsDissolveEnabled() const { return dissolveData_->IsDissolveEnabled(); }
     bool IsPlaying() const { return dissolveData_ ? dissolveData_->IsPlaying() : false; }
 };
+
+}; // KetaEngine

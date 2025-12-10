@@ -6,6 +6,8 @@
 /// <summary>
 /// ランダムノイズポストエフェクトクラス
 /// </summary>
+namespace KetaEngine {
+
 class RandomNoize : public BasePostEffect {
 public:
     struct RandomParamData {
@@ -40,3 +42,5 @@ private:
     Microsoft::WRL::ComPtr<ID3D12Resource> paramDataResource_;
     RandomParamData* paramData_;
 };
+
+}; // KetaEngine

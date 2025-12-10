@@ -2,6 +2,8 @@
 #include"Dx/DirectXCommon.h"
 #include"Dx/DxSwapChain.h"
 #include "2d/ImGuiManager.h"
+
+using namespace KetaEngine;
 #include"base/SrvManager.h"
 
 #include<d3d12.h>

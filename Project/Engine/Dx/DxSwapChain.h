@@ -7,6 +7,8 @@
 #include <wrl.h>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 class RtvManager;
 class WinApp;
 
@@ -74,3 +76,5 @@ public:
     const DXGI_SWAP_CHAIN_DESC1& GetDesc() const { return desc_; }
     const D3D12_RENDER_TARGET_VIEW_DESC& GetRTVDesc() const { return rtvDesc_; }
 };
+
+}; // KetaEngine

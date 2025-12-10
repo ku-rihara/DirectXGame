@@ -1,4 +1,6 @@
 #include "GlobalParameter.h"
+
+using namespace KetaEngine;
 #include "base/WinApp.h"
 #include <fstream>
 #include <imgui.h>

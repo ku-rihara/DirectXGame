@@ -17,6 +17,8 @@
 /// <summary>
 /// 入力管理統合クラス
 /// </summary>
+namespace KetaEngine {
+
 class Input {
 private:
     Microsoft::WRL::ComPtr<IDirectInput8> directInput_    = nullptr;
@@ -136,3 +138,5 @@ public:
 
     static size_t GetNumberOfJoysticks(); //< 接続されているジョイスティック数を取得
 };
+
+}; // KetaEngine

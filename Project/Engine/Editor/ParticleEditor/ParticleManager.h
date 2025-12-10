@@ -18,6 +18,8 @@
 #include <memory>
 #include <unordered_map>
 
+namespace KetaEngine {
+
 struct ParticleEmitter::GroupParamaters;
 struct ParticleEmitter::Parameters;
 struct ParticleEmitter::EaseParm;
@@ -214,3 +216,5 @@ public:
     void SetTextureHandle(const std::string name, uint32_t handle);
     void SetAllParticleFile();
 };
+
+}; // KetaEngine

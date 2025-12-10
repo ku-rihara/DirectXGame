@@ -6,6 +6,8 @@
 /// <summary>
 /// グレースケールポストエフェクトクラス
 /// </summary>
+namespace KetaEngine {
+
 class GrayScale : public BasePostEffect {
 private:
     void CreateGraphicsPipeline() override; //< グラフィックスパイプライン作成
@@ -33,3 +35,5 @@ public:
 
 private:
 };
+
+}; // KetaEngine

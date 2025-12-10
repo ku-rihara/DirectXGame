@@ -8,6 +8,8 @@
 /// <summary>
 /// GPUパーティクルデータクラス
 /// </summary>
+namespace KetaEngine {
+
 class GPUParticleData : public BaseSequenceEffectData<GPUParticleSection> {
 public:
     GPUParticleData()           = default;
@@ -62,3 +64,5 @@ public:
     //*----------------------------- setter Methods -----------------------------*//
     void SetDrawAllSections(bool value) { drawAllSections_ = value; }
 };
+
+}; // KetaEngine

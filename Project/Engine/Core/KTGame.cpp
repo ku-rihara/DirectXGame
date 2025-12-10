@@ -1,4 +1,6 @@
 #include "KTGame.h"
+
+using namespace KetaEngine;
 /// Scene
 #include "2d/SpriteRegistry.h"
 #include "3d/Object3DRegistry.h"

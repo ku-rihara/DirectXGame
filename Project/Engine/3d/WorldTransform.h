@@ -10,6 +10,8 @@
 #include <string>
 #include <wrl.h>
 
+namespace KetaEngine {
+
 struct ConstBufferDataWorldTransform {
     Matrix4x4 matWorld;
 };
@@ -155,3 +157,5 @@ public:
     /// </summary>
     ObjEaseAnimationPlayer* GetObjEaseAnimationPlayer() { return objEaseAnimationPlayer_.get(); }
 };
+
+}; // KetaEngine

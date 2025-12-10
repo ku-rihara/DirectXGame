@@ -1,4 +1,6 @@
 #include "EngineCore.h"
+
+using namespace KetaEngine;
 /// 2d
 #include "2d/ImGuiManager.h"
 /// 3d

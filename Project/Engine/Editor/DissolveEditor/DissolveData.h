@@ -7,6 +7,8 @@
 /// <summary>
 /// ディゾルブデータクラス
 /// </summary>
+namespace KetaEngine {
+
 class DissolveData {
 public:
     enum class PlayState {
@@ -82,3 +84,5 @@ public:
     void SetOffsetTime(float time) { offsetTime_ = time; }
     void SetEaseType(int32_t type) { easeType_ = type; }
 };
+
+}; // KetaEngine

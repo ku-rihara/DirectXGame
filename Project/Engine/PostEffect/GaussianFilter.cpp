@@ -1,6 +1,8 @@
 #include "Dx/DirectXCommon.h"
 #include"Dx/DxRenderTarget.h"
 #include "GaussianFilter.h"
+
+using namespace KetaEngine;
 #include "function/Log.h"
 #include <cassert>
 #include <d3dx12.h>

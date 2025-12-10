@@ -5,6 +5,8 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 class Line3D;
 
 /// <summary>
@@ -38,3 +40,5 @@ private:
 public:
     int GetRailCount() const { return static_cast<int>(effects_.size()); }
 };
+
+}; // KetaEngine

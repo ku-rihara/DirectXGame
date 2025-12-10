@@ -1,4 +1,6 @@
 #include "EasingStep.h"
+
+using namespace KetaEngine;
 #include"Vector2.h"
 #include "Vector3.h"
 

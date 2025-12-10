@@ -8,6 +8,8 @@
 /// <summary>
 /// ゲームパッド入力管理クラス(XInput)
 /// </summary>
+namespace KetaEngine {
+
 class Gamepad {
 private:
     enum class PadType {
@@ -84,3 +86,5 @@ public:
     /// <param name="rightVelocity">右モーター強度(0.0f~1.0f)</param>
     void SetVibration(float leftVelocity, float rightVelocity);
 };
+
+}; // KetaEngine

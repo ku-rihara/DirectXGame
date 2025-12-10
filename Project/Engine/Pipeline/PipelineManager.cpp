@@ -1,5 +1,7 @@
 #include "PipelineManager.h"
 
+using namespace KetaEngine;
+
 // Pipeline includes
 #include "Pipeline/Line3D/Line3DPipeline.h"
 #include "Pipeline/Object3D/Object3DPipeline.h"

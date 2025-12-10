@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+namespace KetaEngine {
+
 class TimeScaleController {
 public:
     TimeScaleController()  = default;
@@ -45,3 +47,5 @@ private:
     float currentTimer_     = 0.0f;
     float targetDuration_   = 0.0f;
 };
+
+}; // KetaEngine

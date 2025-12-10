@@ -12,6 +12,8 @@
 #include <string>
 #include <vector>
 
+namespace KetaEngine {
+
 class Object3DAnimation;
 
 /// <summary>
@@ -107,3 +109,5 @@ public:
     void SetTargetPosition(const Vector3& targetPos) { parameters_.targetPos = targetPos; }
     void SetRailPlayerSpeed(float speed) { railPlayerSpeed_ = speed; }
 };
+
+}; // KetaEngine

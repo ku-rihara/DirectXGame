@@ -1,4 +1,6 @@
 #include "DxDevice.h"
+
+using namespace KetaEngine;
 #include "function/Convert.h"
 #include "function/Log.h"
 #include <cassert>

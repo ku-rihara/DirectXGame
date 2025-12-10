@@ -6,6 +6,8 @@
 /// <summary>
 /// RTV管理クラス
 /// </summary>
+namespace KetaEngine {
+
 class RtvManager {
 public:
     RtvManager()  = default;
@@ -84,3 +86,5 @@ public:
     ///===================================================================
     void SetDescriptorHeap(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& srv) { descriptorHeap_ = srv; }
 };
+
+}; // KetaEngine

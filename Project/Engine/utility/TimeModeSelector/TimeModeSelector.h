@@ -8,6 +8,8 @@ enum class TimeMode {
     DELTA_TIME_RATE = 1
 };
 
+namespace KetaEngine {
+
 class GlobalParameter;
 
 class TimeModeSelector {
@@ -29,3 +31,5 @@ private:
 public:
     const int32_t GetTimeModeInt() const { return timeModeInt_; }
 };
+
+}; // KetaEngine

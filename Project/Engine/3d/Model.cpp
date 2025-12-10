@@ -1,5 +1,7 @@
 #include "Model.h"
 
+using namespace KetaEngine;
+
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 //

@@ -1,4 +1,6 @@
 #include "WorldTransform.h"
+
+using namespace KetaEngine;
 #include "Animation/Object3DAnimation.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 

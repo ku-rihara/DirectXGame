@@ -5,6 +5,8 @@
 #include <wrl.h>
 #include <d3d12.h>
 
+namespace KetaEngine {
+
 class DirectXCommon;
 
 /// <summary>
@@ -49,3 +51,5 @@ public:
     MaterialSprite* materialData_;
 
 };
+
+}; // KetaEngine

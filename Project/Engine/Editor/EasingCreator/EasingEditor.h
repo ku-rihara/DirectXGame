@@ -9,6 +9,8 @@
 /// <summary>
 /// イージングエディタクラス
 /// </summary>
+namespace KetaEngine {
+
 class EasingEditor {
 public:
     EasingEditor()  = default;
@@ -45,3 +47,5 @@ public:
     void SetVector2Target(Easing<Vector2>* target) { v2Target_ = target; }
     void SetVector3Target(Easing<Vector3>* target) { v3Target_ = target; }
 };
+
+}; // KetaEngine

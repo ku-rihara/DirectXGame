@@ -1,5 +1,7 @@
 #include "CSPipelineManager.h"
 
+using namespace KetaEngine;
+
 // Pipeline includes
 #include "Pipeline/Skinning/SkinningCSPipeline.h"
 #include"Pipeline/Particle/CS/EmitParticlePipeline.h"

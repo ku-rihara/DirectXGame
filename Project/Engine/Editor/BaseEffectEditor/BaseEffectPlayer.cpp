@@ -1,4 +1,6 @@
 #include "BaseEffectPlayer.h"
+
+using namespace KetaEngine;
 #include "BaseEffectData.h"
 
 void BaseEffectPlayer::Init() {

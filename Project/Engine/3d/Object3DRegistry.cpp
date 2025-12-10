@@ -1,4 +1,6 @@
 #include "Object3DRegistry.h"
+
+using namespace KetaEngine;
 #include "3d/Object3d.h"
 #include "Dx/DirectXCommon.h"
 #include "Pipeline/PipelineManager.h"

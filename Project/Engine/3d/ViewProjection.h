@@ -5,6 +5,8 @@
 #include <d3d12.h>
 #include <wrl.h>
 
+namespace KetaEngine {
+
 struct ConstBufferDataViewProjection {
     Matrix4x4 view;
     Matrix4x4 projection;
@@ -83,3 +85,5 @@ public:
 
     void SetParent(const WorldTransform* parent) { parent_ = parent; }
 };
+
+}

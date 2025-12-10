@@ -2,6 +2,8 @@
 #include"Dx/DxRenderTarget.h"
 #include "BoxFilter.h"
 
+using namespace KetaEngine;
+
 void BoxFilter::Init(DirectXCommon* dxCommon) {
 
     vsName_ = L"resources/Shader/PostEffect/Fullscreen.VS.hlsl";

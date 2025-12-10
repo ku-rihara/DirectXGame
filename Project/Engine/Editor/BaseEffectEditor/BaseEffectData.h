@@ -7,6 +7,8 @@
 /// <summary>
 /// エフェクトデータクラス
 /// </summary>
+namespace KetaEngine {
+
 class BaseEffectData {
 public:
     enum class PlayState {
@@ -60,3 +62,5 @@ public:
     const std::string& GetGroupName() const { return groupName_; }
     PlayState GetPlayState() const { return playState_; }
 };
+
+}; // KetaEngine

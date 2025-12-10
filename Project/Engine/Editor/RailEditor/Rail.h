@@ -9,6 +9,8 @@
 /// <summary>
 /// レール
 /// </summary>
+namespace KetaEngine {
+
 class Rail {
 private:
     const size_t IndexCount_ = 20;
@@ -49,3 +51,5 @@ public:
     const std::vector<Vector3>& GetPointsDrawing() const { return pointsDrawing_; }
     float GetTotalLength() const { return totalRailLength_; }
 };
+
+}; // KetaEngine

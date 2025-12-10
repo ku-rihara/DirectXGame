@@ -1,9 +1,11 @@
 #include "ViewProjection.h"
+
+using namespace KetaEngine;
 #include "Dx/DirectXCommon.h"
 #include "MathFunction.h"
 #include "WorldTransform.h"
 #include <cassert>
-void ViewProjection::Init() {
+void KetaEngine::ViewProjection::Init() {
 
     // 定数バッファ生成
     CreateConstantBuffer();
@@ -19,7 +21,7 @@ void ViewProjection::Init() {
     TransferMatrix();
 }
 
-void ViewProjection::CreateConstantBuffer() {
+void KetaEngine::ViewProjection::CreateConstantBuffer() {
     // デバイスの取得
     Microsoft::WRL::ComPtr<ID3D12Device> device = DirectXCommon::GetInstance()->GetDevice();
     // 定数バッファのサイズを計算
@@ -29,7 +31,7 @@ void ViewProjection::CreateConstantBuffer() {
     constBuffer_ = DirectXCommon::GetInstance()->CreateBufferResource(device, bufferSize);
 }
 
-void ViewProjection::Map() {
+void KetaEngine::ViewProjection::Map() {
     // 定数バッファのマッピング
     D3D12_RANGE readRange = {};
     HRESULT hr            = constBuffer_->Map(0, &readRange, reinterpret_cast<void**>(&constMap));
@@ -40,14 +42,14 @@ void ViewProjection::Map() {
     }
 }
 
-void ViewProjection::TransferMatrix() {
+void KetaEngine::ViewProjection::TransferMatrix() {
     // 定数バッファに行列データを転送する
     constMap->view       = matView_;
     constMap->projection = matProjection_;
     constMap->cameraPos  = translation_;
 }
 
-void ViewProjection::UpdateMatrix() {
+void KetaEngine::ViewProjection::UpdateMatrix() {
 
     //  ビュー行列の更新
     UpdateViewMatrix();
@@ -57,7 +59,7 @@ void ViewProjection::UpdateMatrix() {
     TransferMatrix();
 }
 
-void ViewProjection::UpdateViewMatrix() {
+void KetaEngine::ViewProjection::UpdateViewMatrix() {
     //  ローカル回転
     Vector3 finalRotation  = GetFinalRotation();
     Matrix4x4 rotateMatrix = MakeRotateMatrix(finalRotation);
@@ -80,7 +82,7 @@ void ViewProjection::UpdateViewMatrix() {
     matView_ = Inverse(cameraMatrix_);
 }
 
-void ViewProjection::UpdateProjectionMatrix() {
+void KetaEngine::ViewProjection::UpdateProjectionMatrix() {
     if (projectionType_ == ProjectionType::PERSPECTIVE) {
         // 透視投影
         matProjection_ = MakePerspectiveFovMatrix(ToRadian(fovAngleY_), aspectRatio_, nearZ_, farZ_);
@@ -90,7 +92,7 @@ void ViewProjection::UpdateProjectionMatrix() {
     }
 }
 
-Vector3 ViewProjection::GetWorldPos() const {
+Vector3 KetaEngine::ViewProjection::GetWorldPos() const {
     return Vector3(
         cameraMatrix_.m[3][0], // X成分
         cameraMatrix_.m[3][1], // Y成分
@@ -98,7 +100,7 @@ Vector3 ViewProjection::GetWorldPos() const {
     );
 }
 
-Vector3 ViewProjection::GetFinalPosition() const {
+Vector3 KetaEngine::ViewProjection::GetFinalPosition() const {
     Vector3 finalRotation             = GetFinalRotation();
     Matrix4x4 rotateMatrix            = MakeRotateMatrix(finalRotation);
     Vector3 transformedPositionOffset = TransformNormal(positionOffset_, rotateMatrix);
@@ -106,11 +108,11 @@ Vector3 ViewProjection::GetFinalPosition() const {
     return translation_ + transformedPositionOffset;
 }
 
-Vector3 ViewProjection::GetFinalRotation() const {
+Vector3 KetaEngine::ViewProjection::GetFinalRotation() const {
     return rotation_ + rotationOffset_;
 }
 
-Matrix4x4 ViewProjection::GetBillboardMatrix() const {
+Matrix4x4 KetaEngine::ViewProjection::GetBillboardMatrix() const {
     // カメラ行列から回転成分のみを取得
     Matrix4x4 billboardMatrix = cameraMatrix_;
 
@@ -122,11 +124,11 @@ Matrix4x4 ViewProjection::GetBillboardMatrix() const {
     return billboardMatrix;
 }
 
-void ViewProjection::ClearParent() {
+void KetaEngine::ViewProjection::ClearParent() {
     parent_ = nullptr;
 }
 
-Vector3 ViewProjection::GetForward() const {
+Vector3 KetaEngine::ViewProjection::GetForward() const {
 
     return Vector3(
         cameraMatrix_.m[2][0], // X成分

@@ -8,6 +8,8 @@
 /// <summary>
 /// 3Dライン描画パイプラインクラス
 /// </summary>
+namespace KetaEngine {
+
 class Line3DPipeline : public BasePipeline {
 public:
     Line3DPipeline()  = default;
@@ -39,3 +41,5 @@ protected:
 private:
     Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_;
 };
+
+}; // KetaEngine

@@ -10,6 +10,8 @@
 /// <summary>
 /// アニメーション描画パイプラインクラス
 /// </summary>
+namespace KetaEngine {
+
 class SkinningObject3DPipeline : public BasePipeline {
 public:
     SkinningObject3DPipeline()  = default;
@@ -47,3 +49,5 @@ private:
 public:
     ID3D12PipelineState* GetGrahipcsPipeLileStateAdd() const { return graphicsPipelineStateAdd_.Get(); }
 };
+
+}; // KetaEngine

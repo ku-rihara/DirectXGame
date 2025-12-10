@@ -8,6 +8,8 @@
 /// <summary>
 /// オブジェクトイージングアニメーションエディター
 /// </summary>
+namespace KetaEngine {
+
 class ObjEaseAnimationEditor : public BaseEffectEditor<ObjEaseAnimationData> {
 public:
     struct PreViewTransform {
@@ -64,3 +66,5 @@ public:
     //*----------------------------- getter Methods -----------------------------*//
 
 };
+
+}; // KetaEngine

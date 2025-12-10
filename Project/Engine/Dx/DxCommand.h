@@ -5,6 +5,8 @@
 /// <summary>
 /// コマンドリストを管理するクラス
 /// </summary>
+namespace KetaEngine {
+
 class DxCommand {
 public:
     DxCommand()  = default;
@@ -61,3 +63,5 @@ public:
     ID3D12GraphicsCommandList* GetCommandList() const { return commandList_.Get(); }
     Microsoft::WRL::ComPtr<ID3D12CommandAllocator> GetCommandAllocator() const { return commandAllocator_; }
 };
+
+}; // KetaEngine

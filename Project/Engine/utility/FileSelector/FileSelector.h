@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 
+namespace KetaEngine {
+
 class FileSelector {
 public:
     FileSelector()  = default;
@@ -33,3 +35,5 @@ public:
     const std::string& GetCachedDirectory() const { return cachedDirectory_; }
     const bool& GetNeedsRefresh() const { return needsRefresh_; }
 };
+
+}; // KetaEngine

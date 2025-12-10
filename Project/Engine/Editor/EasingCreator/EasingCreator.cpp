@@ -1,4 +1,6 @@
 #include "EasingCreator.h"
+
+using namespace KetaEngine;
 #include "MathFunction.h"
 #include "vector2.h"
 #include "vector3.h"

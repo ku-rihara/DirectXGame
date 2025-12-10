@@ -13,6 +13,8 @@
 /// <summary>
 /// オブジェクトイージングアニメーションセクション
 /// </summary>
+namespace KetaEngine {
+
 class ObjEaseAnimationSection {
 public:
     enum class TransformType {
@@ -154,3 +156,5 @@ public:
     RailPlayer* GetRailPlayer() { return railPlayer_.get(); }
     bool IsUsingRail() const;
 };
+
+}; // KetaEngine

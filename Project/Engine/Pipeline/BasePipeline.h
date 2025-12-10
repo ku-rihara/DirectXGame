@@ -5,6 +5,8 @@
 #include <dxcapi.h>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 class DirectXCommon;
 enum class BlendMode;
 
@@ -73,3 +75,5 @@ public:
     virtual DirectXCommon* GetDxCommon() const { return dxCommon_; }
     virtual ID3D12RootSignature* GetRootSignature() const { return rootSignature_.Get(); }
 };
+
+}; // KetaEngine

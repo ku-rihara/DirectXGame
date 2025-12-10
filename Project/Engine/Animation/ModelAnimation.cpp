@@ -1,4 +1,6 @@
 #include "ModelAnimation.h"
+
+using namespace KetaEngine;
 #include "3d/Model.h"
 #include "base/SrvManager.h"
 #include "MathFunction.h"

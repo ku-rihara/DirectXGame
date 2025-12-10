@@ -4,6 +4,8 @@
 #include"Vector3.h"
 
 
+namespace KetaEngine {
+
 struct VertexData {
 	Vector4 position;
 	Vector2 texcoord;
@@ -11,3 +13,5 @@ struct VertexData {
 };
 
 
+
+}; // KetaEngine

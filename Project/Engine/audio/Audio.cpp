@@ -1,4 +1,6 @@
 #include "Audio.h"
+
+using namespace KetaEngine;
 #include<fstream>
 #include<assert.h>
 #define ATTENUATION_TIME_MS 50

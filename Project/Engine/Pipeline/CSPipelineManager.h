@@ -7,6 +7,8 @@
 #include <memory>
 #include <unordered_map>
 
+namespace KetaEngine {
+
 class DirectXCommon;
 class BaseCSPipeline;
 class SkinningCSPipeline;
@@ -63,3 +65,5 @@ private:
 public:
     BaseCSPipeline* GetPipeline(const CSPipelineType& type) const;
 };
+
+}; // KetaEngine

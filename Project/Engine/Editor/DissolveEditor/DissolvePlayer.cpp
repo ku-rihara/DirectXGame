@@ -1,5 +1,7 @@
 #include "DissolvePlayer.h"
 
+using namespace KetaEngine;
+
 void DissolvePlayer::Init() {
     dissolveData_ = std::make_unique<DissolveData>();
 }

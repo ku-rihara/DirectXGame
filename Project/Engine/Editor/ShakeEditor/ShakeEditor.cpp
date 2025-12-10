@@ -1,4 +1,6 @@
 #include "ShakeEditor.h"
+
+using namespace KetaEngine;
 #include <imgui.h>
 
 void ShakeEditor::Init(const std::string& editorName, const bool& isUseCategory) {
