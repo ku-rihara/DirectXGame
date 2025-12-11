@@ -32,11 +32,11 @@ public:
 
     enum class TransformState {
         INACTIVE,
-        WAITING,
-        PLAYING,
-        RETURN_WAITING,
-        RETURNING,
-        FINISHED
+        WAITING, 
+        PLAYING, 
+        RETURN_WAITING, 
+        RETURNING, 
+        FINISHED 
     };
 
     struct TransformParam {
@@ -60,16 +60,13 @@ public:
         Vector3 currentOffset = Vector3::ZeroVector();
         Vector3 startValue    = Vector3::ZeroVector();
 
-        // Rail再生中の現在位置を保持
-        Vector3 currentRailPosition = Vector3::ZeroVector();
-
         // イージング
         Easing<Vector3> ease;
         Easing<Vector3> returnEase;
 
         // 個別の状態管理
         TransformState state    = TransformState::INACTIVE;
-        float returnElapsedTime = 0.0f;
+        float returnElapsedTime = 0.0f; 
     };
 
     struct RailFileSelector {

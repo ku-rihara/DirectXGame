@@ -6,7 +6,7 @@
 #include <vector>
 
 /// <summary>
-/// パーティクルデータクラス
+/// パーティクルデータクラス - セクションベースのパーティクル管理
 /// </summary>
 class ParticleData : public BaseSequenceEffectData<ParticleSection> {
 public:
