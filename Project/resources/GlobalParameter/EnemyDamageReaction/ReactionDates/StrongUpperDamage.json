@@ -1,10 +1,10 @@
 {
     "StrongUpperDamage": {
-        "Bound_BounceDamping": 0.23999999463558197,
-        "Bound_BoundNum": 2,
+        "Bound_BounceDamping": 0.18000000715255737,
+        "Bound_BoundNum": 3,
         "Bound_InitialBounceRate": 0.7699999809265137,
-        "Normal_KnockBackDamping": 0.20000000298023224,
-        "Normal_KnockBackTime": 0.2800000011920929,
+        "Normal_KnockBackDamping": 0.30000001192092896,
+        "Normal_KnockBackTime": 0.8899999856948853,
         "ReactionState": 2,
         "Slammed_Gravity": 0.0,
         "Slammed_ThrustRotateSpeed": 0.0,

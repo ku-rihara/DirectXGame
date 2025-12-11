@@ -11,9 +11,11 @@ void HowToOperate::Init() {
     scale_ = Vector2::ZeroVector();
     scaleEasing_.SetAdaptValue(&scale_);
     scaleEasing_.Reset();
+   
 }
 
 void HowToOperate::Update() {
+   
     sprite_->transform_.scale = scale_;
 }
 
@@ -29,3 +31,8 @@ void HowToOperate::Debug() {
     ImGui::SeparatorText("SpriteText");
     ImGui::DragFloat2("howtoope", &position_.x, 0.1f);
 }
+
+  void HowToOperate::SetScale() {
+    scale_ = Vector2::OneVector();
+      sprite_->transform_.scale = Vector2::OneVector();
+  }

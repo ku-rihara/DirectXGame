@@ -64,6 +64,7 @@ void IntroSpawnField::FinishWait() {
 }
 
 void IntroSpawnField::Finish() {
+    pHowToOperate_->SetScale();
     if (pPlayer_) {
         pPlayer_->GameIntroUpdate();
     }

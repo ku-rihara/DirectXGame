@@ -29,4 +29,7 @@ private:
     // スプライト
     std::unique_ptr<Sprite> sprite_;
     Easing<Vector2> scaleEasing_;
+
+    public:
+    void SetScale();
 };

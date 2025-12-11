@@ -26,7 +26,7 @@
 void BaseEnemy::Init(const Vector3& spawnPos) {
 
     // HP
-    HPMax_ = 145.0f;
+    HPMax_ = 115.0f;
     hp_    = HPMax_;
     hpBar_ = std::make_unique<EnemyHPBar>();
     hpBar_->Init(HPMax_);
