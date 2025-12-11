@@ -20,6 +20,7 @@ void ObjEaseAnimationPlayer::Update(float speedRate) {
             currentOffsetTranslation_ = animData->GetActiveKeyFrameValue(ObjEaseAnimationData::TransformType::Translation);
         }
     }
+
 }
 
 void ObjEaseAnimationPlayer::Play(const std::string& animationName) {
