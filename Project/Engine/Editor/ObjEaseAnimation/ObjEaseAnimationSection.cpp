@@ -158,9 +158,15 @@ void ObjEaseAnimationSection::UpdateTransformPlay(TransformParam& param, Transfo
 
     // レールの更新かイージング更新で分岐
     if (type == TransformType::Translation && param.useRail) {
-        railPlayer_->Update();
-        param.currentOffset = railPlayer_->GetCurrentPosition();
-        isFinished          = !railPlayer_->IsPlaying() && !railPlayer_->IsReturning();
+        railPlayer_->Update(deltaTime);
+
+        // Rail再生中の現在位置を保存
+        if (railPlayer_->IsPlaying()) {
+            param.currentRailPosition = railPlayer_->GetCurrentPosition();
+            param.currentOffset       = param.currentRailPosition;
+        }
+
+        isFinished = !railPlayer_->IsPlaying() && !railPlayer_->IsReturning();
     } else {
         param.ease.Update(deltaTime);
         param.currentOffset = param.ease.GetValue();
@@ -247,9 +253,10 @@ void ObjEaseAnimationSection::StartPlay() {
         }
     }
 
-    // Rail使用時はRailを再生
+    // Rail使用時はRailを再生（前回の位置から継続）
     const auto& transParam = transformParams_[static_cast<size_t>(TransformType::Translation)];
     if (transParam.isActive && transParam.useRail && !transParam.railFileName.empty()) {
+        // 前回中断した位置情報がある場合、それを引き継ぐ
         railPlayer_->Play(transParam.railFileName);
     }
 }
@@ -337,6 +344,13 @@ void ObjEaseAnimationSection::ImGuiTransformParam(const char* label, TransformPa
         if (param.useRail) {
             std::string directory = globalParameter_->GetDirectoryPath() + "RailEditor/Dates";
             railFileSelector_.selector.SelectFile("Rail File", directory, param.railFileName, "", true);
+
+            // 現在のRail位置を表示
+            if (railPlayer_ && railPlayer_->IsPlaying()) {
+                Vector3 pos = railPlayer_->GetCurrentPosition();
+                ImGui::Text("Current Rail Position: (%.2f, %.2f, %.2f)", pos.x, pos.y, pos.z);
+            }
+
             ImGui::PopID();
             return;
         }
@@ -394,15 +408,25 @@ void ObjEaseAnimationSection::AdaptValueSetting() {
 void ObjEaseAnimationSection::SetStartValues(const Vector3& scale, const Vector3& rotation, const Vector3& translation) {
     transformParams_[static_cast<size_t>(TransformType::Scale)].ease.SetStartValue(scale);
     transformParams_[static_cast<size_t>(TransformType::Rotation)].ease.SetStartValue(rotation);
-    transformParams_[static_cast<size_t>(TransformType::Translation)].ease.SetStartValue(translation);
 
-    transformParams_[static_cast<size_t>(TransformType::Scale)].startValue       = scale;
-    transformParams_[static_cast<size_t>(TransformType::Rotation)].startValue    = rotation;
-    transformParams_[static_cast<size_t>(TransformType::Translation)].startValue = translation;
+    auto& transParam = transformParams_[static_cast<size_t>(TransformType::Translation)];
 
-    transformParams_[static_cast<size_t>(TransformType::Scale)].currentOffset       = scale;
-    transformParams_[static_cast<size_t>(TransformType::Rotation)].currentOffset    = rotation;
-    transformParams_[static_cast<size_t>(TransformType::Translation)].currentOffset = translation;
+    // Railを使用している場合、現在のRail位置を開始値として使用
+    if (transParam.useRail && transParam.currentRailPosition != Vector3::ZeroVector()) {
+        transParam.ease.SetStartValue(transParam.currentRailPosition);
+        transParam.startValue    = transParam.currentRailPosition;
+        transParam.currentOffset = transParam.currentRailPosition;
+    } else {
+        transParam.ease.SetStartValue(translation);
+        transParam.startValue    = translation;
+        transParam.currentOffset = translation;
+    }
+
+    transformParams_[static_cast<size_t>(TransformType::Scale)].startValue    = scale;
+    transformParams_[static_cast<size_t>(TransformType::Rotation)].startValue = rotation;
+
+    transformParams_[static_cast<size_t>(TransformType::Scale)].currentOffset    = scale;
+    transformParams_[static_cast<size_t>(TransformType::Rotation)].currentOffset = rotation;
 }
 
 bool ObjEaseAnimationSection::IsFinished() const {
