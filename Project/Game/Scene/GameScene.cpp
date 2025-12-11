@@ -82,9 +82,6 @@ void GameScene::Debug() {
     BaseScene::Debug();
     Light::GetInstance()->DebugImGui();
     ImGui::Begin("Object");
-    ground_->Debug();
-    monsterBall_->Debug();
-    plane_->Debug();
     skuBox_->Debug();
     ShadowMap::GetInstance()->DebugImGui();
     ImGui::End();
