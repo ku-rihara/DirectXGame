@@ -22,13 +22,25 @@ public:
     void Play(const std::string& effectName) override;
     void PlayInCategory(const std::string& categoryName, const std::string& animationName);
 
+    // オフセット値のリセット
+    void ResetOffsets();
+
 protected:
     //*---------------------------- protected Methods ----------------------------*//
     std::unique_ptr<BaseEffectData> CreateEffectData() override;
 
 private:
+    //*---------------------------- private Methods ----------------------------*//
+    void SaveCurrentOffsets();
+
+private:
     //*---------------------------- private Variant ----------------------------*//
     std::string currentCategoryName_;
+
+    // 中断時の値を保持
+    Vector3 currentOffsetScale_       = Vector3::OneVector();
+    Vector3 currentOffsetRotation_    = Vector3::ZeroVector();
+    Vector3 currentOffsetTranslation_ = Vector3::ZeroVector();
 
 public:
     //*----------------------------- getter Methods -----------------------------*//

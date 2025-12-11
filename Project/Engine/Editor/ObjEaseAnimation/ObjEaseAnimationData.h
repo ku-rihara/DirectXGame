@@ -34,12 +34,15 @@ public:
     void Play() override;
 
     // カテゴリー対応初期化
-    void InitWithCategory(const std::string& animationName, const std::string& categoryName)override;
+    void InitWithCategory(const std::string& animationName, const std::string& categoryName) override;
 
     // 編集用メソッド
     void AdjustParam();
     void LoadSequenceElements() override;
     void SaveSequenceElements() override;
+
+    // 初期値の設定
+    void SetOriginalValues(const Vector3& scale, const Vector3& rotation, const Vector3& translation);
 
     //*----------------------------- protected Methods from Base -----------------------------*//
 protected:
@@ -58,10 +61,10 @@ private:
     std::string GetSRTName(const TransformType& type) const;
     void CreateOrLoadSections(const std::vector<std::pair<int32_t, std::string>>& KeyFrameFiles);
     void UpdateActiveSection(float speedRate);
-   
+
 private:
     //*---------------------------- private Variant ----------------------------*//
-   
+
     const std::string baseFolderPath_ = "ObjEaseAnimation/";
 
     // originParam
