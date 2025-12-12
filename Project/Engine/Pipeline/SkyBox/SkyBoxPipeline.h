@@ -8,6 +8,8 @@
 /// <summary>
 /// スカイボックス描画パイプラインクラス
 /// </summary>
+namespace KetaEngine {
+
 class SkyBoxPipeline : public BasePipeline {
 public:
     SkyBoxPipeline()  = default;
@@ -50,3 +52,5 @@ private:
 public:
     uint32_t GetEnvironmentalMapTextureHandle() const { return environmentalMapTextureHandle_; }
 };
+
+}; // KetaEngine

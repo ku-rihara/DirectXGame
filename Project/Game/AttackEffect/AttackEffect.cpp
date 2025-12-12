@@ -2,15 +2,15 @@
 #include"Frame/Frame.h" 
 
 void AttackEffect::Init() {
-	timeScaleController_ = std::make_unique<TimeScaleController>();
-    postEffectController_ = std::make_unique<PostEffectController>();
+    timeScaleController_  = std::make_unique<KetaEngine::TimeScaleController>();
+    postEffectController_ = std::make_unique<KetaEngine::PostEffectController>();
     timeScaleController_->Init();
     postEffectController_->Init();
 }
 
 void AttackEffect::Update() {
-    timeScaleController_->Update(Frame::DeltaTime());
-    postEffectController_->Update(Frame::DeltaTime());
+    timeScaleController_->Update(KetaEngine::Frame::DeltaTime());
+    postEffectController_->Update(KetaEngine::Frame::DeltaTime());
 }
 
 void AttackEffect::PlayHitStop(const std::string& timeScaleName) {

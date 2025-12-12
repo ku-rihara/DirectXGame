@@ -8,6 +8,8 @@
 /// <summary>
 /// イージングステップのシーケンス管理クラス
 /// </summary>
+namespace KetaEngine {
+
 class EasingSequence {
 public:
     EasingSequence()  = default;
@@ -59,3 +61,5 @@ public:
     void SetLoop(const bool& loop) { loop_ = loop; }
     void SetOnAllFinishCallback(std::function<void()> callBack) { onAllFinishCallback_ = callBack; }
 };
+
+}; // KetaEngine

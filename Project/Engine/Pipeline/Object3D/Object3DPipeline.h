@@ -10,6 +10,8 @@
 /// <summary>
 /// 3Dオブジェクト描画パイプラインクラス
 /// </summary>
+namespace KetaEngine {
+
 class Object3DPipeline : public BasePipeline {
 public:
     Object3DPipeline()  = default;
@@ -47,3 +49,5 @@ private:
 public:
     ID3D12PipelineState* GetGrahipcsPipeLileStateAdd() const { return graphicsPipelineStateAdd_.Get(); }
 };
+
+}; // KetaEngine

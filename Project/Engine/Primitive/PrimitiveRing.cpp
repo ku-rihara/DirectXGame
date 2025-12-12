@@ -1,4 +1,6 @@
 #include "PrimitiveRing.h"
+
+using namespace KetaEngine;
 #include "3d/Mesh.h"
 #include <numbers>
 #include <vector>

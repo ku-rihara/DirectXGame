@@ -7,6 +7,8 @@
 /// <summary>
 /// リソースバリアを管理するクラス
 /// </summary>
+namespace KetaEngine {
+
 class DxResourceBarrier {
 public:
     DxResourceBarrier()  = default;
@@ -123,3 +125,5 @@ private:
 private:
     std::unordered_map<ID3D12Resource*, D3D12_RESOURCE_STATES> resourceStates_;
 };
+
+}; // KetaEngine

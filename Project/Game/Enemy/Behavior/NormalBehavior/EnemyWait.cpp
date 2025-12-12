@@ -38,7 +38,7 @@ EnemyWait::~EnemyWait() {
 
 void EnemyWait::Update() {
 
-	spriteEase_.Update(Frame::DeltaTimeRate());
+	spriteEase_.Update(KetaEngine::Frame::DeltaTimeRate());
 	pBaseEnemy_->GetNotFindSprite()->SetScale(tempSpriteScale_);
 	
 		// ターゲットへのベクトル

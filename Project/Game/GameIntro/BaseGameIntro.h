@@ -35,7 +35,7 @@ public:
     virtual void AdjustUniqueParam() = 0; //< 固有パラメータ調整
 
 protected:
-    GlobalParameter* globalParameter_ = nullptr;
+    KetaEngine::GlobalParameter* globalParameter_ = nullptr;
     std::string groupName_;
     FireInjectors* pFireInjectors_               = nullptr;
     GameCamera* pGameCamera_                     = nullptr;

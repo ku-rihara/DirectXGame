@@ -1,4 +1,6 @@
 #include "ShakeData.h"
+
+using namespace KetaEngine;
 #include "Frame/Frame.h"
 #include "Shake.h"
 #include <algorithm>

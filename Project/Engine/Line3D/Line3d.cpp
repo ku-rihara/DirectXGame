@@ -1,4 +1,6 @@
 #include "Line3D.h"
+
+using namespace KetaEngine;
 #include "Dx/DirectXCommon.h"
 #include "Line3DManager.h"
 #include "Pipeline/PipelineManager.h"

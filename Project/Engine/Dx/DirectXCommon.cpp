@@ -1,4 +1,6 @@
 #include "DirectXCommon.h"
+
+using namespace KetaEngine;
 #include "base/RtvManager.h"
 #include "base/SrvManager.h"
 #include "base/WinApp.h"

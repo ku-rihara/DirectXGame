@@ -9,6 +9,8 @@
 /// <summary>
 ///  Collider基底クラス
 /// </summary>
+namespace KetaEngine {
+
 class BaseCollider {
 public:
     BaseCollider()          = default;
@@ -74,3 +76,5 @@ public:
     void SetColliding(const bool& colliding) { isColliding_ = colliding; }
     void SetIsAdaptCollision(const bool& is) { isAdaptCollision = is; }
 };
+
+}; // KetaEngine

@@ -19,14 +19,14 @@ private:
 	
 
 	int shandle_;
-	std::unique_ptr<Sprite>screenSprite_;
+    std::unique_ptr<KetaEngine::Sprite> screenSprite_;
 
 	std::unique_ptr<Player>player_ = nullptr;
 	std::unique_ptr<Field>field_ = nullptr;
 	std::unique_ptr<SkyDome> skydome_ = nullptr;
     std::unique_ptr<SkyBox> skyBox_      = nullptr;
     std::unique_ptr<TitleRogo> titleRogo_ = nullptr;
-    std::unique_ptr<PutObjForBlender> putObjForBlender_ = nullptr;
+    std::unique_ptr<KetaEngine::PutObjForBlender> putObjForBlender_ = nullptr;
 
 	bool isTitleRogoUpdate;
 	bool isFinished_;

@@ -6,6 +6,8 @@
 #include <string>
 #include <wrl.h>
 
+namespace KetaEngine {
+
 struct SpotLightData {
     Vector4 color;
     Vector3 position;
@@ -56,3 +58,5 @@ public:
     SpotLightData* GetData() { return lightData_; }
     ID3D12Resource* GetLightResource() const { return lightResource_.Get(); }
 };
+
+}; // KetaEngine

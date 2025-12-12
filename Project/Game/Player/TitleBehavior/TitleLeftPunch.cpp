@@ -42,7 +42,7 @@ TitleLeftPunch::~TitleLeftPunch() {
 void TitleLeftPunch::Update() {
     
     /// スケール変化
-    scalingEase_.Update(Frame::DeltaTimeRate());
+    scalingEase_.Update(KetaEngine::Frame::DeltaTimeRate());
     pPlayer_->SetScale(tempScale_);
  
     switch (order_) {
@@ -53,7 +53,7 @@ void TitleLeftPunch::Update() {
         /// パンチ
         ///----------------------------------------------------
 
-      punchEase_.Update(Frame::DeltaTimeRate());
+      punchEase_.Update(KetaEngine::Frame::DeltaTimeRate());
         pPlayer_->GetLeftHand()->SetObjTranslate(punchPosition_);
 
         break;
@@ -63,13 +63,13 @@ void TitleLeftPunch::Update() {
         /// バックパンチ
         ///----------------------------------------------------
 
-        backPunchEase_.Update(Frame::DeltaTimeRate());
+        backPunchEase_.Update(KetaEngine::Frame::DeltaTimeRate());
         pPlayer_->GetLeftHand()->SetObjTranslate(punchPosition_);
       
         break;
 
     case Order::WAIT:
-        waitTine_ += Frame::DeltaTime();
+        waitTine_ += KetaEngine::Frame::DeltaTime();
 
         /// コンボ途切れ
         if (waitTine_ >= pPlayerParameter_->GetNormalComboParm(SECOND).waitTime) {

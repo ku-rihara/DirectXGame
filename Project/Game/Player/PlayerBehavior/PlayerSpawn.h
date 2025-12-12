@@ -28,14 +28,14 @@ private:
     /// ===================================================
 
     float startWaitTime_;
-    Easing<float> spawnEase_;
+    KetaEngine::Easing<float> spawnEase_;
     float tempDessolve_;
 
     Step step_;
     float speed_;
 
     float animationCollTime_;
-    Easing<float> waitEase_;
+    KetaEngine::Easing<float> waitEase_;
     float tempWaitScaleY_;
 
     float moveEaseTime_;

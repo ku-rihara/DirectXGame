@@ -9,6 +9,8 @@
 /// <summary>
 /// ディゾルブエフェクトクラス
 /// </summary>
+namespace KetaEngine {
+
 class Dissolve : public BasePostEffect {
 public:
     struct ParamData {
@@ -51,3 +53,5 @@ private:
     std::string maskTextureName_;
     uint32_t textureIndex_;
 };
+
+}; // KetaEngine

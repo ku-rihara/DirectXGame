@@ -1,4 +1,6 @@
 #include "DxResourceBarrier.h"
+
+using namespace KetaEngine;
 #include <cassert>
 
 ///==========================================================

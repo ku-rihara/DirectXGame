@@ -57,7 +57,7 @@ private:
 
     // 移動関連
     std::unique_ptr<PlayerAttackRendition> attackRendition_;
-    Easing<Vector3> moveEasing_;
+    KetaEngine::Easing<Vector3> moveEasing_;
     Vector3 currentMoveValue_;
     Vector3 startPosition_;
     Vector3 targetPosition_;

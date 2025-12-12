@@ -6,14 +6,14 @@
 
 void MovieLine::Init() {
     /// グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
 
     // create
     for (int32_t i = 0; i < static_cast<int32_t>(sprite_.size()); ++i) {
-        sprite_[i].reset(Sprite::Create("movieLine.png"));
+        sprite_[i].reset(KetaEngine::Sprite::Create("movieLine.png"));
     }
 
     exitEasing_[0].Init("UPMovieLineExit.json");
@@ -36,14 +36,14 @@ void MovieLine::Init() {
 
 void MovieLine::AppearUpdate() {
     for (int32_t i = 0; i < static_cast<int32_t>(appearEasing_.size()); ++i) {
-        appearEasing_[i].Update(Frame::DeltaTime());
+        appearEasing_[i].Update(KetaEngine::Frame::DeltaTime());
         sprite_[i]->transform_.pos = appearAdaptPos_[i];
     }
 }
 
 void MovieLine::ExitUpdate() {
     for (int32_t i = 0; i < static_cast<int32_t>(exitEasing_.size()); ++i) {
-        exitEasing_[i].Update(Frame::DeltaTime());
+        exitEasing_[i].Update(KetaEngine::Frame::DeltaTime());
         sprite_[i]->transform_.pos = Vector2(appearPosition_[i].x, exitAdaptPos_[i].y);
     }
 }

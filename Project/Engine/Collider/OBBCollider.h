@@ -7,6 +7,8 @@
 /// <summary>
 /// OBBコライダークラス
 /// </summary>
+namespace KetaEngine {
+
 class OBBCollider : public BaseCollider {
 public:
     OBBCollider();
@@ -38,3 +40,5 @@ public:
     // setter
     void SetCollisionSize(const Vector3& size) { obb_.size = size; }
 };
+
+}; // KetaEngine

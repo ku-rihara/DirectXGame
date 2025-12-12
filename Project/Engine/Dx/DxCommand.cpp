@@ -1,4 +1,6 @@
 #include "DxCommand.h"
+
+using namespace KetaEngine;
 #include <cassert>
 
 void DxCommand::Init(Microsoft::WRL::ComPtr<ID3D12Device> device) {

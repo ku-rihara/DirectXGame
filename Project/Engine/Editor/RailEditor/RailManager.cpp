@@ -1,4 +1,5 @@
 #include"RailManager.h"
+using namespace KetaEngine;
 //std
 #include<cmath>
 //Function

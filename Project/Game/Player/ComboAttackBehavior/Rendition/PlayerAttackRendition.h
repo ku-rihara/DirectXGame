@@ -31,7 +31,7 @@ public:
     // ごり押し演出再生
     bool isRendition_;
     bool isBlur_;
-    Easing<float> rushBlurEase_;
+    KetaEngine::Easing<float> rushBlurEase_;
     float tempBlurParam_;
     void PlayRendition();
 

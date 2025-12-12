@@ -1,4 +1,6 @@
 #include "Sprite.h"
+
+using namespace KetaEngine;
 #include "base/TextureManager.h"
 #include "base/WinApp.h"
 #include "Dx/DirectXCommon.h"

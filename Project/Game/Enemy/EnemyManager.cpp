@@ -22,7 +22,7 @@ void EnemyManager::Init() {
     damageReactionController_->Init();
 
     /// グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
@@ -95,7 +95,7 @@ void EnemyManager::Update() {
     ParticleUpdate();
 }
 
-void EnemyManager::HpBarUpdate(const ViewProjection& viewProjection) {
+void EnemyManager::HpBarUpdate(const KetaEngine::ViewProjection& viewProjection) {
 
     for (size_t i = 0; i < enemies_.size(); ++i) {
         enemies_[i]->DisplaySprite(viewProjection);
@@ -192,29 +192,29 @@ void EnemyManager::DamageReactionCreate() {
 void EnemyManager::ParticleInit() {
 
     // damage
-    damageEffect[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffectCenter", PrimitiveType::Plane, 300));
-    damageEffect[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffect", PrimitiveType::Plane, 300));
-    damageEffect[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffectWing", PrimitiveType::Plane, 300));
-    damageEffect[3].emitter.reset(ParticleEmitter::CreateParticlePrimitive("HitEffectStar", PrimitiveType::Plane, 300));
+    damageEffect[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("HitEffectCenter", PrimitiveType::Plane, 300));
+    damageEffect[1].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("HitEffect", PrimitiveType::Plane, 300));
+    damageEffect[2].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("HitEffectWing", PrimitiveType::Plane, 300));
+    damageEffect[3].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("HitEffectStar", PrimitiveType::Plane, 300));
 
     /// death
-    deathParticle_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("EnemyDeathSmoke", PrimitiveType::Plane, 900));
-    deathParticle_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("EnemyDeathFireSmoke", PrimitiveType::Plane, 900));
-    deathParticle_[2].emitter.reset(ParticleEmitter::CreateParticlePrimitive("EnemyDeathSpark", PrimitiveType::Plane, 900));
-    deathParticle_[3].emitter.reset(ParticleEmitter::CreateParticlePrimitive("EnemyDeathMiniSpark", PrimitiveType::Plane, 900));
+    deathParticle_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathSmoke", PrimitiveType::Plane, 900));
+    deathParticle_[1].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathFireSmoke", PrimitiveType::Plane, 900));
+    deathParticle_[2].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathSpark", PrimitiveType::Plane, 900));
+    deathParticle_[3].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("EnemyDeathMiniSpark", PrimitiveType::Plane, 900));
 
     // debri
-    debriParticle_[0].emitter.reset(ParticleEmitter::CreateParticle("DebriName", "debri.obj", 500));
+    debriParticle_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticle("DebriName", "debri.obj", 500));
 
     // EnemySpawn
-    spawnEffectNormal_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("NormalEnemySpawnCircle", PrimitiveType::Cylinder, 200));
-    spawnEffectNormal_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("NormalEnemySpawnSpark", PrimitiveType::Plane, 500));
+    spawnEffectNormal_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("NormalEnemySpawnCircle", PrimitiveType::Cylinder, 200));
+    spawnEffectNormal_[1].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("NormalEnemySpawnSpark", PrimitiveType::Plane, 500));
 
-    spawnEffectStrong_[0].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StrongEnemySpawnCircle", PrimitiveType::Cylinder, 200));
-    spawnEffectStrong_[1].emitter.reset(ParticleEmitter::CreateParticlePrimitive("StrongEnemySpawnSpark", PrimitiveType::Plane, 500));
+    spawnEffectStrong_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("StrongEnemySpawnCircle", PrimitiveType::Cylinder, 200));
+    spawnEffectStrong_[1].emitter.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("StrongEnemySpawnSpark", PrimitiveType::Plane, 500));
 
     // crack
-    fallCrack_.reset(ParticleEmitter::CreateParticlePrimitive("Crack", PrimitiveType::Plane, 30));
+    fallCrack_.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("Crack", PrimitiveType::Plane, 30));
 }
 
 ///----------------------------------------------------------------------

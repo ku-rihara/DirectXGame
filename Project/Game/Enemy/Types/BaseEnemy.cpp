@@ -48,8 +48,8 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
     notFindSprite_->Init();
 
     // audio
-    deathSound_  = Audio::GetInstance()->LoadWave("EnemyDeath.wav");
-    thrustSound_ = Audio::GetInstance()->LoadWave("Enemythurst.wav");
+    deathSound_  = KetaEngine::Audio::GetInstance()->LoadWave("EnemyDeath.wav");
+    thrustSound_ = KetaEngine::Audio::GetInstance()->LoadWave("Enemythurst.wav");
 
     // 振る舞い初期化
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
@@ -66,7 +66,7 @@ void BaseEnemy::Update() {
     }
 
     // ダメージクールタイム更新
-    DamageCollingUpdate(Frame::DeltaTimeRate());
+    DamageCollingUpdate(KetaEngine::Frame::DeltaTimeRate());
 
     // ダメージBehavior更新
     damageBehavior_->Update();
@@ -79,7 +79,7 @@ void BaseEnemy::Update() {
 ///========================================================
 /// HpBar表示
 ///========================================================
-void BaseEnemy::DisplaySprite(const ViewProjection& viewProjection) {
+void BaseEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection) {
     // ワールド座標からスクリーン座標に変換
     Vector2 positionScreen = ScreenTransform(GetWorldPosition(), viewProjection);
     // Vector2に格納
@@ -178,7 +178,7 @@ void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior) {
     moveBehavior_ = std::move(behavior);
 }
 
-bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
+bool BaseEnemy::IsInView(const KetaEngine::ViewProjection& viewProjection) const {
 
     // 敵のワールド座標
     Vector3 positionWorld = GetWorldPosition();
@@ -281,12 +281,12 @@ void BaseEnemy::DamageRenditionInit() {
 void BaseEnemy::ThrustRenditionInit() {
     // ガレキパーティクル
     pEnemyManager_->ThrustEmit(GetWorldPosition());
-    Audio::GetInstance()->PlayWave(thrustSound_, 0.2f);
+    KetaEngine::Audio::GetInstance()->PlayWave(thrustSound_, 0.2f);
 }
 
 void BaseEnemy::DeathRenditionInit() {
     pEnemyManager_->DeathEmit(GetWorldPosition());
-    Audio::GetInstance()->PlayWave(deathSound_, 0.5f);
+    KetaEngine::Audio::GetInstance()->PlayWave(deathSound_, 0.5f);
 }
 
 /// ===================================================
@@ -294,7 +294,7 @@ void BaseEnemy::DeathRenditionInit() {
 /// ===================================================
 void BaseEnemy::Jump(float& speed, float fallSpeedLimit, float gravity) {
     // 移動
-    baseTransform_.translation_.y += speed * Frame::DeltaTimeRate();
+    baseTransform_.translation_.y += speed * KetaEngine::Frame::DeltaTimeRate();
     Fall(speed, fallSpeedLimit, gravity, true);
 }
 
@@ -305,17 +305,15 @@ void BaseEnemy::Fall(float& speed, float fallSpeedLimit, float gravity, const bo
 
     if (!isJump) {
         // 移動
-        baseTransform_.translation_.y += speed * Frame::DeltaTimeRate();
+        baseTransform_.translation_.y += speed * KetaEngine::Frame::DeltaTimeRate();
     }
 
     // 加速する
-    speed = max(speed - (gravity * Frame::DeltaTimeRate()), -fallSpeedLimit);
-
-  
+    speed = max(speed - (gravity * KetaEngine::Frame::DeltaTimeRate()), -fallSpeedLimit);
 }
 
-void BaseEnemy::SetGameCamera(GameCamera* gamecamera) {
-    pGameCamera_ = gamecamera;
+void BaseEnemy::SetGameCamera(GameCamera* gameCamera) {
+    pGameCamera_ = gameCamera;
 }
 
 void BaseEnemy::SetManager(EnemyManager* manager) {

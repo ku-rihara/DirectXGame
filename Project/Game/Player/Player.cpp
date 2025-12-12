@@ -45,7 +45,7 @@ void Player::Init() {
     rightHand_ = std::make_unique<PlayerHandRight>();
 
     // Playerのモデル
-    obj3d_.reset(Object3d::CreateModel("Player.obj"));
+    obj3d_.reset(KetaEngine::Object3d::CreateModel("Player.obj"));
     obj3d_->material_.materialData_->enableLighting = 7;
     obj3d_->material_.SetEnvironmentCoefficient(0.05f);
 
@@ -77,9 +77,9 @@ void Player::Init() {
     baseTransform_.translation_ = parameters_->GetParamaters().startPos_;
 
     // 音
-    punchSoundID_ = Audio::GetInstance()->LoadWave("punchAir.wav");
-    strongPunch_  = Audio::GetInstance()->LoadWave("StrongPunch.wav");
-    fallSound_    = Audio::GetInstance()->LoadWave("PlayerFall.wav");
+    punchSoundID_ = KetaEngine::Audio::GetInstance()->LoadWave("punchAir.wav");
+    strongPunch_  = KetaEngine::Audio::GetInstance()->LoadWave("StrongPunch.wav");
+    fallSound_    = KetaEngine::Audio::GetInstance()->LoadWave("PlayerFall.wav");
 
     /// 通常モードから
     ChangeBehavior(std::make_unique<PlayerSpawn>(this));
@@ -139,7 +139,7 @@ void Player::GameIntroUpdate() {
 Vector3 Player::GetInputDirection() {
 
     Vector3 velocity = {0.0f, 0.0f, 0.0f};
-    Input* input     = Input::GetInstance();
+    KetaEngine::Input* input = KetaEngine::Input::GetInstance();
 
     // キーボード入力
     if (input->PushKey(KeyboardKey::W)) {
@@ -156,7 +156,7 @@ Vector3 Player::GetInputDirection() {
     }
 
     // ジョイスティック入力
-    Vector2 stickInput = Input::GetPadStick(0, 0);
+    Vector2 stickInput = KetaEngine::Input::GetPadStick(0, 0);
     velocity.x += stickInput.x;
     velocity.z += stickInput.y;
 
@@ -174,7 +174,7 @@ void Player::Move(float speed) {
     /// 移動処理
     if (CheckIsMoving()) {
         // 移動量に速さを反映
-        direction_ = Vector3::Normalize(direction_) * (speed)*Frame::DeltaTimeRate();
+        direction_ = Vector3::Normalize(direction_) * (speed)*KetaEngine::Frame::DeltaTimeRate();
         // 移動ベクトルをカメラの角度だけ回転する
         Matrix4x4 rotateMatrix = MakeRotateYMatrix(viewProjection_->rotation_.y);
         direction_             = TransformNormal(direction_, rotateMatrix);
@@ -209,7 +209,7 @@ void Player::AdaptRotate() {
 /// 動いているか
 ///==========================================================
 bool Player::CheckIsMoving() {
-    Input* input               = Input::GetInstance();
+    KetaEngine::Input* input   = KetaEngine::Input::GetInstance();
     bool isMoving              = false;
     const float thresholdValue = 0.3f;
     Vector3 keyboardVelocity   = {0.0f, 0.0f, 0.0f};
@@ -239,7 +239,7 @@ bool Player::CheckIsMoving() {
         //----------------------------------------------------------
         // JoyStick
         //----------------------------------------------------------
-        Vector2 stickInput = Input::GetPadStick(0, 0);
+        Vector2 stickInput = KetaEngine::Input::GetPadStick(0, 0);
 
         if (stickInput.Length() > thresholdValue) {
             isMoving = true;
@@ -297,7 +297,7 @@ void Player::MoveToLimit() {
 /// ===================================================
 void Player::Jump(float& speed, float fallSpeedLimit, float gravity) {
     // 移動
-    baseTransform_.translation_.y += speed * Frame::DeltaTimeRate();
+    baseTransform_.translation_.y += speed * KetaEngine::Frame::DeltaTimeRate();
     Fall(speed, fallSpeedLimit, gravity, true);
 }
 
@@ -308,11 +308,11 @@ void Player::Fall(float& speed, float fallSpeedLimit, float gravity, const bool&
 
     if (!isJump) {
         // 移動
-        baseTransform_.translation_.y += speed * Frame::DeltaTimeRate();
+        baseTransform_.translation_.y += speed * KetaEngine::Frame::DeltaTimeRate();
     }
 
     // 加速する
-    speed = max(speed - (gravity * Frame::DeltaTimeRate()), -fallSpeedLimit);
+    speed = max(speed - (gravity * KetaEngine::Frame::DeltaTimeRate()), -fallSpeedLimit);
 
     // 着地
     if (baseTransform_.translation_.y <= parameters_->GetParamaters().startPos_.y) {
@@ -459,9 +459,9 @@ Vector3 Player::GetCollisionPos() const {
 /// =======================================================================================
 void Player::HeadLightSetting() {
     if (dynamic_cast<ComboAttackRoot*>(comboBehavior_.get())) {
-        Light::GetInstance()->GetAmbientLight()->SetIntensity(0.0f);
+        KetaEngine::Light::GetInstance()->GetAmbientLight()->SetIntensity(0.0f);
     } else {
-        Light::GetInstance()->GetAmbientLight()->SetIntensity(0.9f);
+        KetaEngine::Light::GetInstance()->GetAmbientLight()->SetIntensity(0.9f);
     }
 }
 
@@ -516,7 +516,7 @@ void Player::SetHitStop(AttackEffect* hitStop) {
     pHitStop_ = hitStop;
 }
 
-void Player::SetViewProjection(const ViewProjection* viewProjection) {
+void Player::SetViewProjection(const KetaEngine::ViewProjection* viewProjection) {
     viewProjection_ = viewProjection;
 }
 
@@ -528,13 +528,13 @@ void Player::SetComboAttackController(PlayerComboAttackController* playerComboAt
 /// Sound
 /// =======================================================================================
 void Player::SoundPunch() {
-    Audio::GetInstance()->PlayWave(punchSoundID_, 0.5f);
+    KetaEngine::Audio::GetInstance()->PlayWave(punchSoundID_, 0.5f);
 }
 void Player::SoundStrongPunch() {
-    Audio::GetInstance()->PlayWave(strongPunch_, 0.5f);
+    KetaEngine::Audio::GetInstance()->PlayWave(strongPunch_, 0.5f);
 }
 void Player::FallSound() {
-    Audio::GetInstance()->PlayWave(fallSound_, 0.2f);
+    KetaEngine::Audio::GetInstance()->PlayWave(fallSound_, 0.2f);
 }
 
 bool Player::CheckIsChargeMax() const {

@@ -51,7 +51,7 @@ void EnemyDamageReactionAction::Update() {
     UpdateRenditions();
 
     // タイマー更新
-    reactionTimer_ += Frame::DeltaTime();
+    reactionTimer_ += KetaEngine::Frame::DeltaTime();
 
     // リアクション終了チェック
     if (IsReactionFinished()) {
@@ -178,16 +178,16 @@ void EnemyDamageReactionAction::UpdateNormal() {
     const auto& param = pReactionData_->GetReactionParam().normalParam;
 
     // ノックバックタイマー更新
-    knockBackTimer_ += Frame::DeltaTimeRate();
+    knockBackTimer_ += KetaEngine::Frame::DeltaTimeRate();
 
     // ノックバック時間内の場合
     if (knockBackTimer_ < param.knockBackTime) {
         // 減衰を適用
-        float dampingFactor = 1.0f - (param.knockBackDamping * Frame::DeltaTimeRate());
+        float dampingFactor = 1.0f - (param.knockBackDamping * KetaEngine::Frame::DeltaTimeRate());
         knockBackVelocity_ *= dampingFactor;
 
         // 位置を更新
-        Vector3 newPos = pBaseEnemy_->GetWorldPosition() + knockBackVelocity_ * Frame::DeltaTimeRate();
+        Vector3 newPos = pBaseEnemy_->GetWorldPosition() + knockBackVelocity_ * KetaEngine::Frame::DeltaTimeRate();
         pBaseEnemy_->SetWorldPositionX(newPos.x);
         pBaseEnemy_->SetWorldPositionZ(newPos.z);
     }
@@ -203,11 +203,11 @@ void EnemyDamageReactionAction::UpdateSlammed() {
     // まず地面に叩きつける
     if (!hasReachedGround_) {
         // 重力を適用して加速
-        bounceSpeed_ -= slammedGravity_ * Frame::DeltaTimeRate();
+        bounceSpeed_ -= slammedGravity_ * KetaEngine::Frame::DeltaTimeRate();
 
         // 位置更新
         pBaseEnemy_->SetWorldPositionY(
-            pBaseEnemy_->GetWorldPosition().y + bounceSpeed_ * Frame::DeltaTimeRate());
+            pBaseEnemy_->GetWorldPosition().y + bounceSpeed_ * KetaEngine::Frame::DeltaTimeRate());
 
         // 地面に到達したか確認
         if (pBaseEnemy_->GetWorldPosition().y < enemyParam.basePosY) {
@@ -248,7 +248,7 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
 
         // 回転演出
         float currentRotation = pBaseEnemy_->GetBodyRotation().x;
-        pBaseEnemy_->SetBodyRotateX(currentRotation + takeUpperRotateSpeed_ * Frame::DeltaTimeRate());
+        pBaseEnemy_->SetBodyRotateX(currentRotation + takeUpperRotateSpeed_ * KetaEngine::Frame::DeltaTimeRate());
 
         // 速度が0以下になったら頂点到達
         if (jumpSpeed_ <= 0.0f) {
@@ -259,11 +259,11 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
     // 頂点到達後、浮遊時間中
     else if (floatingTimer_ < floatingTime_) {
         // 浮遊状態を維持
-        floatingTimer_ += Frame::DeltaTimeRate();
+        floatingTimer_ += KetaEngine::Frame::DeltaTimeRate();
 
         // 回転演出
         float currentRotation = pBaseEnemy_->GetBodyRotation().x;
-        pBaseEnemy_->SetBodyRotateX(currentRotation + takeUpperRotateSpeed_ * Frame::DeltaTimeRate());
+        pBaseEnemy_->SetBodyRotateX(currentRotation + takeUpperRotateSpeed_ * KetaEngine::Frame::DeltaTimeRate());
     }
     // 浮遊時間終了後、落下
     else {
@@ -272,7 +272,7 @@ void EnemyDamageReactionAction::UpdateTakeUpper() {
 
         // 回転継続
         float currentRotation = pBaseEnemy_->GetBodyRotation().x;
-        pBaseEnemy_->SetBodyRotateX(currentRotation + takeUpperRotateSpeed_ * Frame::DeltaTimeRate());
+        pBaseEnemy_->SetBodyRotateX(currentRotation + takeUpperRotateSpeed_ * KetaEngine::Frame::DeltaTimeRate());
 
         // 地面に着地したらバウンド処理へ
         if (pBaseEnemy_->GetWorldPosition().y < enemyParam.basePosY) {
@@ -299,16 +299,16 @@ void EnemyDamageReactionAction::UpdateBounce(float basePosY, float gravity, floa
     }
 
     // 重力を適用
-    bounceSpeed_ -= gravity * Frame::DeltaTimeRate();
+    bounceSpeed_ -= gravity * KetaEngine::Frame::DeltaTimeRate();
 
     // 位置更新
     Vector3 currentPos = pBaseEnemy_->GetWorldPosition();
-    currentPos.y += bounceSpeed_ * Frame::DeltaTimeRate();
+    currentPos.y += bounceSpeed_ * KetaEngine::Frame::DeltaTimeRate();
     pBaseEnemy_->SetWorldPositionY(currentPos.y);
 
     // 回転
     float currentRotation = pBaseEnemy_->GetBodyRotation().x;
-    pBaseEnemy_->SetBodyRotateX(currentRotation + rotateSpeed * Frame::DeltaTime());
+    pBaseEnemy_->SetBodyRotateX(currentRotation + rotateSpeed * KetaEngine::Frame::DeltaTime());
 
     // 地面に着地したら次のバウンド
     if (currentPos.y <= basePosY) {

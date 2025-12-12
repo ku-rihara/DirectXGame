@@ -6,6 +6,8 @@
 #include <string>
 #include <wrl.h>
 
+namespace KetaEngine {
+
 class DirectXCommon;
 
 /// <summary>
@@ -53,3 +55,5 @@ public:
     void SetShininess(float shininess) override { materialData_->shininess = shininess; }
     void SetEnvironmentCoefficient(float environmentCoefficient) override { materialData_->environmentCoefficient = environmentCoefficient; }
 };
+
+}; // KetaEngine

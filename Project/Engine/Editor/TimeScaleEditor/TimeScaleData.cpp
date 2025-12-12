@@ -1,4 +1,6 @@
 #include "TimeScaleData.h"
+
+using namespace KetaEngine;
 #include <imgui.h>
 #include <Windows.h>
 

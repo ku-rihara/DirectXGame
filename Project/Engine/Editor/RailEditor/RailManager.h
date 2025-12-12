@@ -9,6 +9,8 @@
 #include "Editor/RailEditor/ControlPosManager.h"
 #include "Editor/RailEditor/Rail.h"
 
+namespace KetaEngine {
+
 class SrvManager;
 
 /// <summary>
@@ -84,3 +86,5 @@ public:
     void SetNearZ(float value) { viewProjection_.nearZ_ = value; }
     void SetFarZ(float value) { viewProjection_.farZ_ = value; }
 };
+
+}; // KetaEngine

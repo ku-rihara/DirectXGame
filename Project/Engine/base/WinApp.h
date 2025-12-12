@@ -9,6 +9,8 @@
 /// <summary>
 /// WinAPIアプリケーションクラス
 /// </summary>
+namespace KetaEngine {
+
 class WinApp {
 
 public:
@@ -53,3 +55,5 @@ public:
     const HINSTANCE& GetHInstance() const { return wc_.hInstance; }
     ID3D12Debug1* GetDebugController() const { return debugController_.Get(); }
 };
+
+}; // KetaEngine

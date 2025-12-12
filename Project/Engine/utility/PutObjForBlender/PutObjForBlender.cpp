@@ -1,4 +1,6 @@
 #include "PutObjForBlender.h"
+
+using namespace KetaEngine;
 #include "3d/Model.h"
 #include "mathFunction.h"
 #include"Frame/Frame.h"

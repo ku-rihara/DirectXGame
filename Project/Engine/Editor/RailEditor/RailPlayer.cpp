@@ -1,5 +1,7 @@
 #include "RailPlayer.h"
 
+using namespace KetaEngine;
+
 void RailPlayer::Init() {
     BaseEffectPlayer::Init();
     currentPosition_ = Vector3::ZeroVector();

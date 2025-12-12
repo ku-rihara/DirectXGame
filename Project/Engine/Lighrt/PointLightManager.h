@@ -6,6 +6,8 @@
 /// <summary>
 /// ポイントライト管理クラス
 /// </summary>
+namespace KetaEngine {
+
 class PointLightManager {
 private:
     std::vector<std::unique_ptr<PointLight>> pointLights_;
@@ -58,3 +60,5 @@ public:
     PointLight* GetPointLight(int num) { return pointLights_[num].get(); }
     size_t GetLightCount() const { return pointLights_.size(); }
 };
+
+}; // KetaEngine

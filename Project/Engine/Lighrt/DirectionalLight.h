@@ -4,6 +4,8 @@
 #include <d3d12.h>
 #include <wrl.h>
 
+namespace KetaEngine {
+
 struct DirectionalLightData {
     Vector4 color; // ライトの色
     Vector3 direction; // ライトの向き
@@ -58,3 +60,5 @@ public:
     ID3D12Resource* GetLightResource() const { return lightResource_.Get(); }
     Vector3 GetDirection() const { return lightData_->direction; }
 };
+
+}; // KetaEngine

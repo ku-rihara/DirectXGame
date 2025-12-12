@@ -8,7 +8,7 @@ EasingTestObj::EasingTestObj() {}
 EasingTestObj::~EasingTestObj() {}
 
 void EasingTestObj::Init() {
-    object3D_.reset(Object3d::CreateModel("DebugSphere.obj"));
+    object3D_.reset(KetaEngine::Object3d::CreateModel("DebugSphere.obj"));
     object3D_->transform_.Init();
     object3D_->transform_.translation_.y = -5.0f;
     object3D_->transform_.translation_.z = -24.0f;
@@ -21,7 +21,7 @@ void EasingTestObj::Init() {
 
 void EasingTestObj::Update() {
 
-    if (Input::GetInstance()->TriggerKey(KeyboardKey::U)) {
+    if (KetaEngine::Input::GetInstance()->TriggerKey(KeyboardKey::U)) {
         easing_.Reset();
     }
     ScaleEasing();
@@ -35,5 +35,5 @@ void EasingTestObj::Debug() {
 }
 
 void EasingTestObj::ScaleEasing() {
-    easing_.Update(Frame::DeltaTime());
+    easing_.Update(KetaEngine::Frame::DeltaTime());
 }

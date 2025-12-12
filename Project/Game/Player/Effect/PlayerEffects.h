@@ -18,7 +18,7 @@ class PlayerEffects {
 public:
     struct ParticleEffect {
         std::string name;
-        std::unique_ptr<ParticleEmitter> emitter;
+        std::unique_ptr<KetaEngine::ParticleEmitter> emitter;
     };
 
 public:
@@ -32,7 +32,7 @@ public:
     /// 初期化
     /// </summary>
     /// <param name="transform">ワールド変換データ</param>
-    void Init(WorldTransform* transform);
+    void Init(KetaEngine::WorldTransform* transform);
 
     /// <summary>
     /// 更新
@@ -50,7 +50,7 @@ private:
     /// private variables
     /// ===================================================
 
-    std::unique_ptr<ParticleEmitter> fallCrack_;
+    std::unique_ptr<KetaEngine::ParticleEmitter> fallCrack_;
     std::array<ParticleEffect, 1> debriParticle_;
     std::array<ParticleEffect, 1> rushParticle_;
     std::array<ParticleEffect, 1> rushRingEffect_;

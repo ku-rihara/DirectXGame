@@ -38,17 +38,17 @@ private:
     ///=============================================
 
     std::string railGroupName_;
-    std::unique_ptr<RailManager> trustRailManager_;
+    std::unique_ptr<KetaEngine::RailManager> trustRailManager_;
 
 public:
     ///===========================================
     /// getter method
     ///=============================================
-    RailManager* GetThrustRailManager() { return trustRailManager_.get(); }
+    KetaEngine::RailManager* GetThrustRailManager() { return trustRailManager_.get(); }
 
     ///===========================================
     /// setter method
     ///=============================================
-    void SetRailParent(WorldTransform* parent) override;
-    void SetParent(WorldTransform* parent) override;
+    void SetRailParent(KetaEngine::WorldTransform* parent) override;
+    void SetParent(KetaEngine::WorldTransform* parent) override;
 };

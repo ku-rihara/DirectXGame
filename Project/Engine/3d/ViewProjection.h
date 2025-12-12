@@ -5,6 +5,8 @@
 #include <d3d12.h>
 #include <wrl.h>
 
+namespace KetaEngine {
+
 struct ConstBufferDataViewProjection {
     Matrix4x4 view;
     Matrix4x4 projection;
@@ -38,26 +40,26 @@ public:
     void Map();                  //< マッピング
 
     // 行列転送、更新
-    void TransferMatrix(); 
-    void UpdateMatrix();   
-    void UpdateViewMatrix();       
-    void UpdateProjectionMatrix(); 
+    void TransferMatrix();
+    void UpdateMatrix();
+    void UpdateViewMatrix();
+    void UpdateProjectionMatrix();
 
     // ペアレント解除
-    void ClearParent();           
+    void ClearParent();
 
 private:
     const WorldTransform* parent_ = nullptr;
 
 public:
-    Vector3 scale_{1, 1, 1};
-    Vector3 rotation_      = {0, 0, 0};
-    Vector3 translation_   = {0, 0, 0};
+    Vector3 scale_ = Vector3::OneVector();
+    Vector3 rotation_;
+    Vector3 translation_;
     Quaternion quaternion_ = Quaternion::Identity();
 
     Vector3 positionOffset_ = {0, 0, 0}; //< 位置オフセット
     Vector3 rotationOffset_ = {0, 0, 0}; //< 回転オフセット
-  
+
     float fovAngleY_   = 45.0f;
     float aspectRatio_ = (float)16 / 9;
     float nearZ_       = 0.1f;
@@ -83,3 +85,5 @@ public:
 
     void SetParent(const WorldTransform* parent) { parent_ = parent; }
 };
+
+}

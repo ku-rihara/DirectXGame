@@ -10,6 +10,8 @@
 /// <summary>
 /// シェイクデータ
 /// </summary>
+namespace KetaEngine {
+
 class ShakeData : public BaseEffectData {
 public:
     enum class ShakeType {
@@ -85,3 +87,5 @@ public:
 
     void SetAxisFlag(const AxisFlag& flag) { axisFlag_ = static_cast<int32_t>(flag); }
 };
+
+}; // KetaEngine

@@ -97,7 +97,7 @@ private:
     //*-------------------------------- Private variants--------------------------------*//
 
     // グローバルパラメータ
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     std::string groupName_;
     const std::string folderPath_          = "EnemyDamageReaction/ReactionDates";
     const std::string renditionFolderPath_ = "Resources/GlobalParameter/EnemyDamageReaction/RenditionDates/";
@@ -107,7 +107,7 @@ private:
     int32_t selectedRenditionIndex_ = -1;
     bool showRenditionList_         = true;
 
-    FileSelector fileSelector_;
+    KetaEngine::FileSelector fileSelector_;
 
     // リアクションパラメータ
     ReactionParameter reactionParam_;

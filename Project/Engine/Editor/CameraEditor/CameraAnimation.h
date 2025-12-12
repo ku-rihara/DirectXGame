@@ -8,6 +8,8 @@
 /// <summary>
 /// カメラアニメーション制御クラス
 /// </summary>
+namespace KetaEngine {
+
 class CameraAnimation : public BaseEffectPlayer {
 public:
     struct CameraParam {
@@ -59,3 +61,5 @@ public:
     void SetAdapt(const bool& adapt) { isAdapt_ = adapt; }
     void SetViewProjection(ViewProjection* viewProjection);
 };
+
+}; // KetaEngine

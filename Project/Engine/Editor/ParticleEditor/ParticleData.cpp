@@ -1,4 +1,6 @@
 #include "ParticleData.h"
+
+using namespace KetaEngine;
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <imgui.h>
 

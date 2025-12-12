@@ -10,6 +10,8 @@
 
 const uint32_t kNumMaxInfluence = 4;
 
+namespace KetaEngine {
+
 struct VertexInfluence {
     std::array<float, kNumMaxInfluence> weights;
     std::array<int32_t, kNumMaxInfluence> jointIndices;
@@ -39,3 +41,5 @@ struct SkinCluster {
     std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> outputVertexUavHandle;
     Microsoft::WRL::ComPtr<ID3D12Resource> skinningInfoResource;
 };
+
+}; // KetaEngine

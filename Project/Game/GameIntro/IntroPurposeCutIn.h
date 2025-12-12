@@ -36,11 +36,11 @@ public:
         float appearScaleY;
         float closeScaleY;
         Vector2 centerScale;
-        std::array<std::unique_ptr<Easing<float>>, 2> sideAppearEase;
-        std::array<std::unique_ptr<Easing<float>>, 2> sideBackEase;
-        std::unique_ptr<Easing<Vector2>> centerAppearEase;
-        std::unique_ptr<Easing<float>> appearScaleEaseY;
-        std::unique_ptr<Easing<float>> closeScaleEaseY;
+        std::array<std::unique_ptr<KetaEngine::Easing<float>>, 2> sideAppearEase;
+        std::array<std::unique_ptr<KetaEngine::Easing<float>>, 2> sideBackEase;
+        std::unique_ptr<KetaEngine::Easing<Vector2>> centerAppearEase;
+        std::unique_ptr<KetaEngine::Easing<float>> appearScaleEaseY;
+        std::unique_ptr<KetaEngine::Easing<float>> closeScaleEaseY;
         bool isBackSideUI = false;
     };
 
@@ -94,8 +94,8 @@ private:
     float closeWaitTime_;
     float centerAppearWaitTime_;
     float finishWaitTime_;
-    std::unique_ptr<Sprite> backLineSprite_;
-    std::array<std::unique_ptr<Sprite>, static_cast<size_t>(SpritePos::COUNT)> sprites_;
+    std::unique_ptr<KetaEngine::Sprite> backLineSprite_;
+    std::array<std::unique_ptr<KetaEngine::Sprite>, static_cast<size_t>(SpritePos::COUNT)> sprites_;
     SpriteVariable spriteVariable_;
     Step step_ = Step::SideAppearWait;
 };

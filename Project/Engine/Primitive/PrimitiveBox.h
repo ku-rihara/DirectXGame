@@ -6,6 +6,8 @@
 /// <summary>
 /// ボックスプリミティブクラス
 /// </summary>
+namespace KetaEngine {
+
 class PrimitiveBox : public IPrimitive {
 public:
     PrimitiveBox()  = default;
@@ -33,3 +35,5 @@ public:
 
 private:
 };
+
+}; // KetaEngine

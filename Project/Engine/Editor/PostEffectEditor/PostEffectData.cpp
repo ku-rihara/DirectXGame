@@ -1,4 +1,6 @@
 #include "PostEffectData.h"
+
+using namespace KetaEngine;
 #include "PostEffect/PostEffectRenderer.h"
 #include <imgui.h>
 #include <Windows.h>

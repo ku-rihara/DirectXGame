@@ -3,6 +3,8 @@
 #include <unordered_set>
 #include <vector>
 
+namespace KetaEngine {
+
 class Object3d;
 class ViewProjection;
 
@@ -49,3 +51,5 @@ private:
 public:
     const size_t& GetRegisteredCount() const { return objects_.size(); }
 };
+
+}; // KetaEngine

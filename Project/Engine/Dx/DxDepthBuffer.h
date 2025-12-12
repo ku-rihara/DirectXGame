@@ -3,6 +3,8 @@
 #include <d3d12.h>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 class DsvManager;
 class SrvManager;
 
@@ -79,3 +81,5 @@ public:
     const D3D12_CPU_DESCRIPTOR_HANDLE& GetDepthSrvCPUHandle() const { return depthTextureCPUSrvHandle_; }
     const D3D12_RESOURCE_STATES& GetCurrentState() const { return currentState_; }
 };
+
+}; // KetaEngine

@@ -8,6 +8,8 @@
 /// <summary>
 /// シェイクプレイヤー
 /// </summary>
+namespace KetaEngine {
+
 class ShakePlayer : public BaseEffectPlayer {
 public:
     ShakePlayer()           = default;
@@ -36,3 +38,5 @@ public:
 
     const Vector3& GetTotalShakeOffset() const { return totalShakeOffset_; }
 };
+
+}; // KetaEngine

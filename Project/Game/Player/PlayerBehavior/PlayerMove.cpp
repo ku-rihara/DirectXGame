@@ -28,7 +28,7 @@ PlayerMove::PlayerMove(Player* player)
     });
     
     // moveEase
-    moveEase_ = std::make_unique<EasingSequence>();
+    moveEase_ = std::make_unique<KetaEngine::EasingSequence>();
     moveEase_->AddStep("PlayerMovePosY.json", &tempPosY_);
     moveEase_->AddStep("PlayerLandingScale.json", &tempScale_);
     moveEase_->SetLoop(true);
@@ -48,14 +48,14 @@ void PlayerMove::Update() {
     MoveAnimation();
     WaitAnimation();
 
-    if ((Input::IsPressPad(0, GamepadButton::B))) {
+    if ((KetaEngine::Input::IsPressPad(0, GamepadButton::B))) {
         pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed * 2.4f);
     } else {
         pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
     }
 
     // 　ジャンプに切り替え
-    if (Input::GetInstance()->PushKey(KeyboardKey::J)) {
+    if (KetaEngine::Input::GetInstance()->PushKey(KeyboardKey::J)) {
         pPlayer_->ChangeBehavior(std::make_unique<PlayerJump>(pPlayer_));
     } else {
         JumpForJoyState(); // コントローラジャンプ
@@ -64,7 +64,7 @@ void PlayerMove::Update() {
 
 void PlayerMove::JumpForJoyState() {
 
-    if (!(Input::IsTriggerPad(0, GamepadButton::A))) {
+    if (!(KetaEngine::Input::IsTriggerPad(0, GamepadButton::A))) {
         return;
     }
 
@@ -79,7 +79,7 @@ void PlayerMove::MoveAnimation() {
     ///============================================================================
     /// 移動アニメーション
     ///============================================================================
-    moveEase_->Update(Frame::DeltaTimeRate());
+    moveEase_->Update(KetaEngine::Frame::DeltaTimeRate());
     pPlayer_->SetHeadPosY(tempPosY_);
     pPlayer_->SetHeadScale(tempScale_);
 }
@@ -93,7 +93,7 @@ void PlayerMove::WaitAnimation() {
     ///============================================================================
     /// 待機アニメーション
     ///============================================================================
-    waitEase_.Update(Frame::DeltaTimeRate());
+    waitEase_.Update(KetaEngine::Frame::DeltaTimeRate());
     pPlayer_->SetScaleY(tempWaitScaleY_);
 }
 

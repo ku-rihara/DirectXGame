@@ -20,6 +20,8 @@ enum class EasingAdaptTransform {
 /// <summary>
 /// Blenderからエクスポートしたオブジェクト配置クラス
 /// </summary>
+namespace KetaEngine {
+
 class PutObjForBlender {
 public:
     struct LevelData {
@@ -120,3 +122,5 @@ public:
 
     void SetLoopEndCallback(int32_t groupNum, const EasingAdaptTransform& transformType, const std::function<void()>& callback);
 };
+
+}; // KetaEngine

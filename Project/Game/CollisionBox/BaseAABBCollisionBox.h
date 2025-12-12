@@ -7,7 +7,7 @@
 /// <summary>
 /// AABBコリジョンボックスの基底クラス
 /// </summary>
-class BaseAABBCollisionBox : public AABBCollider {
+class BaseAABBCollisionBox : public KetaEngine::AABBCollider {
 public:
     BaseAABBCollisionBox()          = default;
     virtual ~BaseAABBCollisionBox() = default;
@@ -24,23 +24,23 @@ public:
     /// 親トランスフォームの設定
     /// </summary>
     /// <param name="transform">親のワールドトランスフォーム</param>
-    virtual void SetParentTransform(WorldTransform* transform);
+    virtual void SetParentTransform(KetaEngine::WorldTransform* transform);
 
     /// <summary>
     /// 衝突開始時コールバック
     /// </summary>
     /// <param name="other">衝突相手のコライダー</param>
-    virtual void OnCollisionEnter([[maybe_unused]] BaseCollider* other) override;
+    virtual void OnCollisionEnter([[maybe_unused]] KetaEngine::BaseCollider* other) override;
 
     /// <summary>
     /// 衝突中コールバック
     /// </summary>
     /// <param name="other">衝突相手のコライダー</param>
-    virtual void OnCollisionStay([[maybe_unused]] BaseCollider* other) override;
+    virtual void OnCollisionStay([[maybe_unused]] KetaEngine::BaseCollider* other) override;
 
 protected:
     // transform,offset
-    WorldTransform transform_;
+    KetaEngine::WorldTransform transform_;
     Vector3 offset_;
     Vector3 size_;
     bool isAbleCollision_ = true;

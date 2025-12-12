@@ -6,7 +6,7 @@
 
 void EnemyDamageReactionData::Init(const std::string& reactionName) {
     // グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     // グループ名設定
     groupName_ = reactionName;
 

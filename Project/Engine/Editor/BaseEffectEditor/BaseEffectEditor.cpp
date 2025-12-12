@@ -1,4 +1,6 @@
 #include "BaseEffectEditor.h"
+
+using namespace KetaEngine;
 // editor
 #include "Editor/CameraEditor/CameraAnimationData.h"
 #include "Editor/ObjEaseAnimation/ObjEaseAnimationData.h"

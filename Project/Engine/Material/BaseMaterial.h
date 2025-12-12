@@ -6,6 +6,8 @@
 #include <string>
 #include <wrl.h>
 
+namespace KetaEngine {
+
 class DirectXCommon;
 
 /// <summary>
@@ -44,3 +46,5 @@ public:
     virtual void SetShininess(float shininess)                           = 0;
     virtual void SetEnvironmentCoefficient(float environmentCoefficient) = 0;
 };
+
+}; // KetaEngine

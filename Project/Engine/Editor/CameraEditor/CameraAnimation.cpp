@@ -1,5 +1,7 @@
 #include "CameraAnimation.h"
 
+using namespace KetaEngine;
+
 void CameraAnimation::Init() {
 
     BaseEffectPlayer::Init();

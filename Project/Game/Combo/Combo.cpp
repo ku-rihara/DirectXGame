@@ -5,7 +5,7 @@
 void Combo::Init() {
 
     // グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
@@ -71,7 +71,7 @@ void Combo::LevelUp() {
 }
 
 void Combo::ComboTimerDecrement() {
-    comboTime_ -= Frame::DeltaTimeRate();
+    comboTime_ -= KetaEngine::Frame::DeltaTimeRate();
 
     //コンボが途切れたらリセット
     if (comboCount_ == 0) {

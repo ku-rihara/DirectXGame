@@ -1,5 +1,7 @@
 #include "ModelManager.h"
 
+using namespace KetaEngine;
+
 ModelManager* ModelManager::instance_ = nullptr;
 std::map<std::string, std::unique_ptr<Model>> ModelManager::models_;
 

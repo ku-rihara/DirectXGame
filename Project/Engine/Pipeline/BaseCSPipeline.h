@@ -5,8 +5,10 @@
 #include <Windows.h>
 #include <wrl/client.h>
 
-class DirectXCommon;
 enum class BlendMode;
+namespace KetaEngine {
+
+class DirectXCommon;
 
 /// <summary>
 /// コンピュートシェーダパイプラインの基底クラス
@@ -61,3 +63,5 @@ public:
     ID3D12RootSignature* GetRootSignature() const { return rootSignature_.Get(); }
     ID3D12PipelineState* GetComputePipelineState() const { return computePipelineState_.Get(); }
 };
+
+}; // KetaEngine

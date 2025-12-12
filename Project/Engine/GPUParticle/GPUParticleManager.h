@@ -12,6 +12,8 @@
 #include <string>
 #include <unordered_map>
 
+namespace KetaEngine {
+
 class Model;
 class IPrimitive;
 class ViewProjection;
@@ -108,3 +110,5 @@ public:
     void SetEmitterSphere(const std::string& name, const ParticleEmit& emitter);
     void SetViewProjection(const ViewProjection* view);
 };
+
+}; // KetaEngine

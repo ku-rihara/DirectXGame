@@ -1,5 +1,7 @@
 #include "ParticlePlayer.h"
 
+using namespace KetaEngine;
+
 void ParticlePlayer::Init() {
     BaseEffectPlayer::Init();
 }

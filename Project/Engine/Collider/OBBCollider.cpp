@@ -1,4 +1,6 @@
 #include "OBBCollider.h"
+
+using namespace KetaEngine;
 #include"Collider/CollisionManager.h"
 
 OBBCollider::OBBCollider() {

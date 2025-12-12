@@ -1,5 +1,7 @@
 #include "KTFramework.h"
 
+using namespace KetaEngine;
+
 // dx
 #include "Dx/DxReleaseChecker.h"
 // dx
@@ -108,13 +110,13 @@ void KTFramework::DisplayFPS() {
 
     // ウィンドウフラグを設定
     ImGui::Begin("FPS Overlay", nullptr,
-        ImGuiWindowFlags_NoTitleBar | // タイトルバーを非表示
-            ImGuiWindowFlags_NoResize | // リサイズを禁止
-            ImGuiWindowFlags_NoMove | // ウィンドウの移動を禁止
-            ImGuiWindowFlags_NoScrollbar | // スクロールバーを非表示
-            ImGuiWindowFlags_NoCollapse | // 折りたたみボタンを非表示
+        ImGuiWindowFlags_NoTitleBar |           // タイトルバーを非表示
+            ImGuiWindowFlags_NoResize |         // リサイズを禁止
+            ImGuiWindowFlags_NoMove |           // ウィンドウの移動を禁止
+            ImGuiWindowFlags_NoScrollbar |      // スクロールバーを非表示
+            ImGuiWindowFlags_NoCollapse |       // 折りたたみボタンを非表示
             ImGuiWindowFlags_AlwaysAutoResize | // 必要なサイズに自動調整
-            ImGuiWindowFlags_NoBackground // 背景を非表示
+            ImGuiWindowFlags_NoBackground       // 背景を非表示
     );
 
     ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(100, 255, 100, 255)); /// 色設定（緑）
@@ -124,6 +126,7 @@ void KTFramework::DisplayFPS() {
     ImGui::End();
 #endif
 }
+
 
 void KTFramework::LoadAllTexture() {
     TextureManager::GetInstance()->LoadTexture("Resources/Texture/uvChecker.png");

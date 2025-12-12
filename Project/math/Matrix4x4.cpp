@@ -344,9 +344,9 @@ Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, f
     return result;
 }
 
-Vector2 ScreenTransform(const Vector3& worldPos, const ViewProjection& viewProjection) {
+Vector2 ScreenTransform(const Vector3& worldPos, const KetaEngine::ViewProjection& viewProjection) {
     // ビューポート行列
-    Matrix4x4 matViewport = MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);
+    Matrix4x4 matViewport = MakeViewportMatrix(0, 0, KetaEngine::WinApp::kWindowWidth, KetaEngine::WinApp::kWindowHeight, 0, 1);
     // ビュー行列とプロジェクション行列、ビューポート行列を合成する
     Matrix4x4 matViewProjectionViewport = viewProjection.matView_ * viewProjection.matProjection_ * matViewport;
     // ワールド→スクリーン変換

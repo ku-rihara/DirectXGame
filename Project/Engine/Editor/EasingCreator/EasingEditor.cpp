@@ -1,4 +1,6 @@
 #include "EasingEditor.h"
+
+using namespace KetaEngine;
 #include <format>
 #include <imgui.h>
 #include <Windows.h>

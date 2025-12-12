@@ -1,4 +1,6 @@
 #include "Object3DAnimation.h"
+
+using namespace KetaEngine;
 #include "3d/ModelManager.h"
 #include "AnimationRegistry.h"
 #include "Dx/DirectXCommon.h"

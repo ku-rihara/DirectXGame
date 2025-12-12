@@ -29,16 +29,16 @@ private:
 
 public:
     struct BottomParam {
-        std::unique_ptr<Sprite> sprite;
+        std::unique_ptr<KetaEngine::Sprite> sprite;
         Vector2 discreteDirection;
         Vector2 posValueOffset;
         bool isNotOperate;
     };
 
     struct EasingParam {
-        std::unique_ptr<Easing<float>> posEasing;
-        std::unique_ptr<Easing<float>> rotateEasing;
-        std::unique_ptr<Easing<Vector2>> scaleEasing;
+        std::unique_ptr<KetaEngine::Easing<float>> posEasing;
+        std::unique_ptr<KetaEngine::Easing<float>> rotateEasing;
+        std::unique_ptr<KetaEngine::Easing<Vector2>> scaleEasing;
         float posEaseValue;
         float rotateEaseValue;
         Vector2 scaleEaseValue;
@@ -56,7 +56,7 @@ public:
     /// </summary>
     /// <param name="basePos">基準位置</param>
     /// <param name="viewProjection">ビュープロジェクション</param>
-    void Update(const Vector3& basePos, const ViewProjection& viewProjection);
+    void Update(const Vector3& basePos, const KetaEngine::ViewProjection& viewProjection);
 
     void RegisterParams(); //< パラメータのバインド
     void AdjustParam(); //< パラメータの調整
@@ -87,7 +87,7 @@ private:
 
 private:
     // global param
-    GlobalParameter* globalParameter_ = nullptr;
+    KetaEngine::GlobalParameter* globalParameter_ = nullptr;
     const std::string groupName_      = "JumpAttackUI";
 
     // スプライト

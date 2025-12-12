@@ -5,6 +5,8 @@
 /// <summary>
 /// パーティクル生成用コンピュートシェーダパイプラインクラス
 /// </summary>
+namespace KetaEngine {
+
 class EmitParticlePipeline : public BaseCSPipeline {
 public:
     EmitParticlePipeline()          = default;
@@ -35,3 +37,5 @@ protected:
 
 private:
 };
+
+}; // KetaEngine

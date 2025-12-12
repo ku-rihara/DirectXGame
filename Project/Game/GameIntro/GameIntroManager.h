@@ -59,15 +59,19 @@ private:
     void MoveToNextIntro(); //< 次のイントロへ移行
 
 private:
-    GlobalParameter* globalParameter_ = nullptr;
+    KetaEngine::GlobalParameter* globalParameter_ = nullptr;
     const std::string groupName_      = "GameIntroManager";
+
     std::array<std::unique_ptr<BaseGameIntro>, static_cast<size_t>(IntroStep::COUNT)> introSequences_;
+
     int32_t currentIndex_                        = 0;
     bool isInitialized_                          = false;
     std::unique_ptr<MovieLine> movieLine_        = nullptr;
     MovieLineState movieLineState_               = MovieLineState::NONE;
+
     float currentPlaySpeedRate_                  = 1.0f;
     float fastSpeedRate_                         = 3.0f;
+
     HowToOperate* pHowToOperate_                 = nullptr;
     GameCamera* pGameCamera_                     = nullptr;
     Player* pPlayer_                             = nullptr;

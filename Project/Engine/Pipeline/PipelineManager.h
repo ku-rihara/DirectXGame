@@ -7,6 +7,8 @@
 #include <memory>
 #include <unordered_map>
 
+namespace KetaEngine {
+
 class DirectXCommon;
 class BasePipeline;
 class SpritePipeline;
@@ -74,3 +76,5 @@ private:
 public:
     BasePipeline* GetPipeline(const PipelineType& type) const;
 };
+
+}; // KetaEngine

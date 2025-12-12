@@ -110,12 +110,12 @@ private:
 private:
     //*-------------------------------- Private variants--------------------------------*//
 
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     std::string groupName_;
     const std::string folderPath_ = "AttackCreator";
 
     PlayerAttackRenditionData renditionData_;
-    FileSelector fileSelector_;
+    KetaEngine::FileSelector fileSelector_;
 
     // 攻撃パラメータ
     AttackParameter attackParam_;

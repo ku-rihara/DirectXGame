@@ -6,6 +6,8 @@
 /// <summary>
 /// エリアライト管理クラス
 /// </summary>
+namespace KetaEngine {
+
 class AreaLightManager {
 private:
     std::vector<std::unique_ptr<AreaLight>> areaLights_;
@@ -45,3 +47,5 @@ public:
     std::vector<AreaLight*> GetLights();
     AreaLight* GetAreaLight(int num) { return areaLights_[num].get(); }
 };
+
+}; // KetaEngine

@@ -35,7 +35,7 @@ private:
     void LoopStart();
   
 private:
-    const WorldTransform* baseTransform_          = nullptr;
+    const KetaEngine::WorldTransform* baseTransform_ = nullptr;
     const PlayerComboAttackData* comboAttackData_ = nullptr;
 
     // time
@@ -62,11 +62,11 @@ public:
     const bool& GetIsInLoopWait() const { return isInLoopWait_; }
     const bool& GetIsHit() const { return isHit_; }
     const bool& GetIsFinish() const { return isFinish_; }
-    const WorldTransform* GetPlayerTransform() const { return baseTransform_; }
+    const KetaEngine::WorldTransform* GetPlayerTransform() const { return baseTransform_; }
    const bool& GetHasHitEnemy() const { return hasHitEnemy_; }
 
     void SetAttackPower(float atkPower) { attackPower_ = atkPower; }
     void SetIsHit(const bool& is) { isHit_ = is; }
-    void SetPlayerBaseTransform(const WorldTransform* playerBaseTransform);
-    void SetParentTransform(WorldTransform* transform) override;
+    void SetPlayerBaseTransform(const KetaEngine::WorldTransform* playerBaseTransform);
+    void SetParentTransform(KetaEngine::WorldTransform* transform) override;
 };

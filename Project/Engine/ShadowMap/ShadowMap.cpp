@@ -1,4 +1,6 @@
 #include "ShadowMap.h"
+
+using namespace KetaEngine;
 #include "3d/Model.h"
 #include "3d/ViewProjection.h"
 #include "3d/WorldTransform.h"

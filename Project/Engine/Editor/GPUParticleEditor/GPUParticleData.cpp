@@ -1,4 +1,6 @@
 #include "GPUParticleData.h"
+
+using namespace KetaEngine;
 #include "GPUParticle/GPUParticleManager.h"
 #include <algorithm>
 #include <filesystem>

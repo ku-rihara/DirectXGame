@@ -1,4 +1,6 @@
 #include "SpriteMaterial.h"
+
+using namespace KetaEngine;
 #include"Dx/DirectXCommon.h"
 #include <imgui.h>
 #include <cassert>

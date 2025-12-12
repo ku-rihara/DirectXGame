@@ -1,4 +1,6 @@
 #include "Rail.h"
+
+using namespace KetaEngine;
 #include "MathFunction.h"
 #include "base/SrvManager.h"
 

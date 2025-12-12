@@ -2,6 +2,8 @@
 
 #include "base/WinApp.h"
 #include <memory>
+namespace KetaEngine {
+
 class DirectXCommon;
 class WinApp;
 class ImGuiManager;
@@ -69,3 +71,5 @@ private:
     ParticleManager* particleManager_;
     GPUParticleManager* gpuParticleManager_;
 };
+
+}; // KetaEngine

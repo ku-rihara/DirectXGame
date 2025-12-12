@@ -1,5 +1,7 @@
 #include "ObjEaseAnimationPlayer.h"
 
+using namespace KetaEngine;
+
 void ObjEaseAnimationPlayer::Init() {
     BaseEffectPlayer::Init();
 }

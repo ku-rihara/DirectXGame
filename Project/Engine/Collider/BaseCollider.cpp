@@ -1,5 +1,7 @@
 #include "Collider/BaseCollider.h"
 
+using namespace KetaEngine;
+
 
 Vector3 BaseCollider::GetCollisionPos() const {
     Vector3 worldPos;

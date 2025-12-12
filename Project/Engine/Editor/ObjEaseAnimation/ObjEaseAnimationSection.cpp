@@ -1,4 +1,6 @@
 #include "ObjEaseAnimationSection.h"
+
+using namespace KetaEngine;
 #include "Frame/Frame.h"
 #include "MathFunction.h"
 #include <imgui.h>

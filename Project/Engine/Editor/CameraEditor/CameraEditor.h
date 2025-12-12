@@ -10,6 +10,8 @@
 /// <summary>
 /// カメラアニメーションエディタクラス
 /// </summary>
+namespace KetaEngine {
+
 class CameraEditor : public BaseEffectEditor<CameraAnimationData> {
 public:
     CameraEditor()  = default;
@@ -58,3 +60,5 @@ public:
     void SetSequenceElementPreviewMode(const bool& enable) { keyFramePreviewMode_ = enable; }
     void SetViewProjection(ViewProjection* vp);
 };
+
+}; // KetaEngine

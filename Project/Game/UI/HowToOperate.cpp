@@ -5,7 +5,7 @@
 
 void HowToOperate::Init() {
   
-    sprite_.reset(Sprite::Create("HowToOperate.png", true));
+    sprite_.reset(KetaEngine::Sprite::Create("HowToOperate.png", true));
 
     scaleEasing_.Init("HowToOperatorEasing.json");
     scale_ = Vector2::ZeroVector();
@@ -20,7 +20,7 @@ void HowToOperate::Update() {
 }
 
 void HowToOperate::ScalingEasing() {
-    scaleEasing_.Update(Frame::DeltaTime());
+    scaleEasing_.Update(KetaEngine::Frame::DeltaTime());
 }
 
 void HowToOperate::Draw() {

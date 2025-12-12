@@ -24,8 +24,8 @@ public:
     void Update(float hp);
 
 private:
-    std::unique_ptr<Sprite> sprite_;
-    std::unique_ptr<Sprite> hpSprite_;
+    std::unique_ptr<KetaEngine::Sprite> sprite_;
+    std::unique_ptr<KetaEngine::Sprite> hpSprite_;
 
     bool isSpawned_ = false;
     bool isDraw_    = false;

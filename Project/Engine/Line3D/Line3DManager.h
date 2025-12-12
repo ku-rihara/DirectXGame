@@ -3,6 +3,8 @@
 #include <memory>
 #include <unordered_set>
 
+namespace KetaEngine {
+
 class Line3D;
 
 /// <summary>
@@ -51,3 +53,5 @@ private:
 public:
     const size_t& GetRegisteredCount() const { return lines_.size(); }
 };
+
+}; // KetaEngine

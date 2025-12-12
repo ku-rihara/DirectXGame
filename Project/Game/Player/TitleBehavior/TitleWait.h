@@ -18,7 +18,7 @@ private:
     /// private variable
     /// ===================================================
     STEP step_;
-    Easing<float> pressEase_;
+    KetaEngine::Easing<float> pressEase_;
     float tempScaleY_;
     float pressScale_;
     float waitTime_;

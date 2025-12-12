@@ -13,6 +13,8 @@
 #include <string>
 #include <vector>
 
+namespace KetaEngine {
+
 class Object3DAnimation;
 
 /// <summary>
@@ -170,3 +172,5 @@ public:
     void SetPreBillBordType(const int& preBillBordType) { billBordType_ = preBillBordType; }
     void SetPreIsShot(const bool& preIsShot) { isShot_ = preIsShot; }
 };
+
+}; // KetaEngine

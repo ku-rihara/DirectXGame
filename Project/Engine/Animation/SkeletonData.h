@@ -7,6 +7,8 @@
 #include<map>
 #include<vector>
 
+namespace KetaEngine {
+
 struct Joint {
     QuaternionTransform transform;
     Matrix4x4 localMatrix;
@@ -22,3 +24,5 @@ struct Skeleton {
     std::map<std::string, int32_t> jointMap;
     std::vector<Joint> joints;
 };
+
+}; // KetaEngine

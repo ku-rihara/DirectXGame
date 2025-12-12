@@ -12,6 +12,8 @@
 /// <summary>
 /// カメラアニメーションデータクラス
 /// </summary>
+namespace KetaEngine {
+
 class CameraAnimationData : public BaseSequenceEffectData<CameraKeyFrame> {
 public:
     struct CameraTransform {
@@ -112,3 +114,5 @@ public:
 
     const bool& IsReturningToInitial() const { return returnParam_.isReturningToInitial; }
 };
+
+}; // KetaEngine

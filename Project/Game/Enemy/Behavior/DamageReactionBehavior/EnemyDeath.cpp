@@ -43,9 +43,9 @@ void EnemyDeath::Update() {
     case Step::DIRECTIONSET:
         AngleCaluclation();
         blowPower_ = Vector3(
-            direction_.x * -pBaseEnemy_->GetParameter().deathBlowValue * Frame::DeltaTimeRate(),
+            direction_.x * -pBaseEnemy_->GetParameter().deathBlowValue * KetaEngine::Frame::DeltaTimeRate(),
             0.0f,
-            direction_.z * -pBaseEnemy_->GetParameter().deathBlowValue * Frame::DeltaTimeRate());
+            direction_.z * -pBaseEnemy_->GetParameter().deathBlowValue * KetaEngine::Frame::DeltaTimeRate());
         step_ = Step::BLOW;
         break;
 
@@ -57,10 +57,10 @@ void EnemyDeath::Update() {
             pBaseEnemy_->GetBaseTransform().rotation_.y,
             objectiveAngle_,
             0.5f));
-        burstTime_ += Frame::DeltaTimeRate();
+        burstTime_ += KetaEngine::Frame::DeltaTimeRate();
 
         // 吹っ飛び回転
-        rotate_ += pBaseEnemy_->GetParameter().deathRotateSpeed * Frame::DeltaTimeRate();
+        rotate_ += pBaseEnemy_->GetParameter().deathRotateSpeed * KetaEngine::Frame::DeltaTimeRate();
         pBaseEnemy_->SetRotationX(rotate_);
 
         // 吹っ飛び適応

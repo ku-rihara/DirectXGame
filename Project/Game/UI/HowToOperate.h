@@ -27,8 +27,8 @@ private:
     Vector2 size_;
     Vector2 scale_;
     // スプライト
-    std::unique_ptr<Sprite> sprite_;
-    Easing<Vector2> scaleEasing_;
+    std::unique_ptr<KetaEngine::Sprite> sprite_;
+    KetaEngine::Easing<Vector2> scaleEasing_;
 
     public:
     void SetScale();

@@ -1,4 +1,6 @@
 #include "RailControlPoint.h"
+
+using namespace KetaEngine;
 #include <imgui.h>
 
 void RailControlPoint::Init(const std::string& railName, int32_t keyNumber) {

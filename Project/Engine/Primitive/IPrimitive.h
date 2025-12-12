@@ -22,6 +22,8 @@ enum class PrimitiveType {
 /// <summary>
 /// プリミティブの基底クラス
 /// </summary>
+namespace KetaEngine {
+
 class IPrimitive {
 public:
     IPrimitive()          = default;
@@ -65,3 +67,5 @@ public:
     void SetwvpDate(Matrix4x4 date) { this->wvpDate_->WVP = date; }
     void SetWorldMatrixDate(Matrix4x4 date) { wvpDate_->World = date; }
 };
+
+}; // KetaEngine

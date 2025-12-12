@@ -35,8 +35,8 @@ private:
     float speed_;
 
     float animationCollTime_;
-    Easing<float> waitEase_;
-    std::unique_ptr<EasingSequence> moveEase_;
+    KetaEngine::Easing<float> waitEase_;
+    std::unique_ptr<KetaEngine::EasingSequence> moveEase_;
     float tempWaitScaleY_;
     float moveEaseTime_;
 

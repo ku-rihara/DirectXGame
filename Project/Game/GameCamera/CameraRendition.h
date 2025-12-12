@@ -32,8 +32,8 @@ public:
 
 private:
     GameCamera* pGameCamera_ = nullptr;
-    std::unique_ptr<ShakePlayer> shakePlayer_;
-    std::unique_ptr<CameraAnimation> cameraAnimation_;
+    std::unique_ptr<KetaEngine::ShakePlayer> shakePlayer_;
+    std::unique_ptr<KetaEngine::CameraAnimation> cameraAnimation_;
 
 public:
     // getter
@@ -41,5 +41,5 @@ public:
 
     // setter
     void SetGameCamera(GameCamera* camera) { pGameCamera_ = camera; }
-    void SetViewProjection(ViewProjection* viewProjection);
+    void SetViewProjection(KetaEngine::ViewProjection* viewProjection);
 };

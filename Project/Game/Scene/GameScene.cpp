@@ -11,7 +11,7 @@
 
 void GameScene::Init() {
     //// グローバル変数の読み込み
-    GlobalParameter::GetInstance()->LoadFiles();
+    KetaEngine::GlobalParameter::GetInstance()->LoadFiles();
     BaseScene::Init();
 
     // オブジェクト生成
@@ -23,8 +23,8 @@ void GameScene::Init() {
     // その他オブジェクト初期化
 
     isfirstChange_ = false;
-    shandle_       = TextureManager::GetInstance()->LoadTexture("Resources/Texture/screenChange.png");
-    screenSprite_.reset(Sprite::Create("screenChange.png"));
+    shandle_       = KetaEngine::TextureManager::GetInstance()->LoadTexture("Resources/Texture/screenChange.png");
+    screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.png"));
 
     finishSpriteEase_.Init("finishSpriteTest.json");
     finishSpriteEase_.SetAdaptValue(&tempSpritePos_);
@@ -32,19 +32,19 @@ void GameScene::Init() {
 
     finishSpriteEase_.SetOnFinishCallback([this]() {
         // 　ジャンプに切り替え
-        if (Input::GetInstance()->PushKey(KeyboardKey::Space)) {
+        if (KetaEngine::Input::GetInstance()->PushKey(KeyboardKey::Space)) {
             isend_ = true;
         } else {
             ChangeForJoyState();
         }
     });
 
-    cSprite_.reset(Sprite::Create("Clear.png"));
+    cSprite_.reset(KetaEngine::Sprite::Create("Clear.png"));
     cSprite_->transform_.pos = Vector2(640, -720);
 
     gameState_ = GameState::INTRO;
 
-    Frame::ResetDeltaTime();
+    KetaEngine::Frame::ResetDeltaTime();
 }
 
 void GameScene::Update() {
@@ -85,20 +85,20 @@ void GameScene::Update() {
 
     if (alpha_ >= 1.2f) {
         alpha_ = 1.0f;
-        SceneManager::GetInstance()->ChangeScene("TITLE");
+        KetaEngine::SceneManager::GetInstance()->ChangeScene("TITLE");
     }
 }
 
 void GameScene::IntroUpdate() {
 
-    if (Frame::DeltaTime() >= 2.0f) {
+    if (KetaEngine::Frame::DeltaTime() >= 2.0f) {
         return;
     }
 
     screenSprite_->SetAlpha(alpha_);
 
     if (!isfirstChange_) {
-        alpha_ -= Frame::DeltaTime();
+        alpha_ -= KetaEngine::Frame::DeltaTime();
 
         if (alpha_ <= 0.0f) {
             alpha_         = 0.0f;
@@ -110,7 +110,7 @@ void GameScene::IntroUpdate() {
     gameIntroManager_->Update();
     howToOperate_->Update();
     if (gameIntroManager_->GetIsFinishStep(GameIntroManager::SpawnField)) {
-        enemySpawner_->Update(Frame::DeltaTimeRate());
+        enemySpawner_->Update(KetaEngine::Frame::DeltaTimeRate());
         enemyManager_->Update();
         enemyManager_->HpBarUpdate(viewProjection_);
     }
@@ -133,13 +133,13 @@ void GameScene::PlayUpdate() {
     player_->Update();
     skyBox_->Update();
     howToOperate_->Update();
-    enemySpawner_->Update(Frame::DeltaTimeRate());
-    continuousEnemySpawner_->Update(Frame::DeltaTimeRate());
+    enemySpawner_->Update(KetaEngine::Frame::DeltaTimeRate());
+    continuousEnemySpawner_->Update(KetaEngine::Frame::DeltaTimeRate());
     enemyManager_->Update();
     combo_->Update();
     fireInjectors_->Update();
     gameCamera_->Update();
-    comboLevelObjHolder_->Update(Frame::DeltaTimeRate());
+    comboLevelObjHolder_->Update(KetaEngine::Frame::DeltaTimeRate());
 
     enemyManager_->HpBarUpdate(viewProjection_);
     lockOnController_->Update(player_.get(), viewProjection_);
@@ -148,14 +148,14 @@ void GameScene::FinishUpdate() {
 
     screenSprite_->SetAlpha(alpha_);
 
-    finishSpriteEase_.Update(Frame::DeltaTime());
+    finishSpriteEase_.Update(KetaEngine::Frame::DeltaTime());
     cSprite_->transform_.pos = tempSpritePos_;
 
     if (!isend_) {
         return;
     }
 
-    alpha_ += Frame::DeltaTime();
+    alpha_ += KetaEngine::Frame::DeltaTime();
 }
 
 /// ===================================================
@@ -173,7 +173,7 @@ void GameScene::Debug() {
 
     BaseScene::Debug();
 
-    Light::GetInstance()->DebugImGui();
+    KetaEngine::Light::GetInstance()->DebugImGui();
     howToOperate_->Debug();
 
     ImGui::Begin("ParameterEditor");
@@ -184,8 +184,8 @@ void GameScene::Debug() {
     combo_->AdjustParam();
     fireInjectors_->AdjustParam();
     gameIntroManager_->AdjustParam();
-    ShadowMap::GetInstance()->DebugImGui();
-    SpriteRegistry::GetInstance()->DebugImGui();
+    KetaEngine::ShadowMap::GetInstance()->DebugImGui();
+    KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();
 
     ImGui::Begin("Rendition");
@@ -217,7 +217,7 @@ void GameScene::ViewProcess() {
 
 void GameScene::ChangeForJoyState() {
 
-    if (!((Input::IsTriggerPad(0, GamepadButton::A)))) {
+    if (!((KetaEngine::Input::IsTriggerPad(0, GamepadButton::A)))) {
         return;
     }
 

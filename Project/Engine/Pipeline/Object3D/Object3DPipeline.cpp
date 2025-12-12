@@ -1,4 +1,6 @@
 #include "Object3DPipeline.h"
+
+using namespace KetaEngine;
 #include "Dx/DxCompiler.h"
 // Function
 #include "function/Log.h"

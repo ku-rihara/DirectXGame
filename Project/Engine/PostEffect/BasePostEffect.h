@@ -7,6 +7,8 @@
 #include <wrl.h>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 class DirectXCommon;
 class ViewProjection;
 
@@ -58,3 +60,5 @@ protected:
 public:
     void SetViewProjection(const ViewProjection* viewProjection);
 };
+
+}; // KetaEngine

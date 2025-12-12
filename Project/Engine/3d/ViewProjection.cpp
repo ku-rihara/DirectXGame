@@ -1,8 +1,12 @@
 #include "ViewProjection.h"
+
 #include "Dx/DirectXCommon.h"
 #include "MathFunction.h"
 #include "WorldTransform.h"
 #include <cassert>
+
+namespace KetaEngine {
+
 void ViewProjection::Init() {
 
     // 定数バッファ生成
@@ -133,4 +137,6 @@ Vector3 ViewProjection::GetForward() const {
         cameraMatrix_.m[2][1], // Y成分
         cameraMatrix_.m[2][2] // Z成分
     );
+}
+
 }

@@ -11,9 +11,12 @@
 #include <memory>
 #include <string>
 
+enum class BlendMode;
 /// <summary>
 /// GPUパーティクルセクション
 /// </summary>
+namespace KetaEngine {
+
 class GPUParticleSection {
 public:
     enum class PlayState {
@@ -176,3 +179,5 @@ public:
     void SetEmitterData(const ParticleEmit& emitter);
     void SetParentBasePos(WorldTransform* parent) { emitBoxTransform_.parent_ = parent; }
 };
+
+}; // KetaEngine

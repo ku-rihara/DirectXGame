@@ -1,9 +1,8 @@
 #include "2d/ImGuiManager.h"
-#include "base/SrvManager.h"
-#include "base/WinApp.h"
-#include "Dx/DirectXCommon.h"
-#include "Dx/DxSwapChain.h"
-
+using namespace KetaEngine;
+#include"base/WinApp.h"
+#include"base/SrvManager.h"
+#include"Dx/DxSwapChain.h"
 #include <d3d12.h>
 #include <imgui_impl_dx12.h>
 #include <imgui_impl_win32.h>

@@ -13,6 +13,8 @@
 /// <summary>
 /// 3Dオブジェクトの基底クラス
 /// </summary>
+namespace KetaEngine {
+
 class BaseObject3d {
 public:
     ///========================================================================================
@@ -79,3 +81,5 @@ public:
     void SetWorldMatrixDate(const Matrix4x4& date) { wvpDate_->World = date; }
     void SetIsShadow(const bool& is) { isShadow_ = is; }
 };
+
+}; // KetaEngine

@@ -16,13 +16,13 @@
 void BaseScene::Init() {
 
     // メンバ変数の初期化
-    input_          = Input::GetInstance();
-    audio_          = Audio::GetInstance();
-    textureManager_ = TextureManager::GetInstance();
+    input_          = KetaEngine::Input::GetInstance();
+    audio_          = KetaEngine::Audio::GetInstance();
+    textureManager_ = KetaEngine::TextureManager::GetInstance();
 
     // 生成
-    debugCamera_       = std::make_unique<DebugCamera>(WinApp::kWindowWidth, WinApp::kWindowHeight);
-    effectEditorSuite_ = std::make_unique<EffectEditorSuite>();
+    debugCamera_       = std::make_unique<KetaEngine::DebugCamera>(KetaEngine::WinApp::kWindowWidth, KetaEngine::WinApp::kWindowHeight);
+    effectEditorSuite_ = std::make_unique<KetaEngine::EffectEditorSuite>();
 
     // 初期化
     debugCamera_->Init();
@@ -33,9 +33,9 @@ void BaseScene::Init() {
     viewProjection_.translation_ = {0, -6.2f, -109.0f};
 
     // viewProjectionのセット
-    PostEffectRenderer::GetInstance()->SetViewProjection(&viewProjection_);
-    ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
-    GPUParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
+    KetaEngine::PostEffectRenderer::GetInstance()->SetViewProjection(&viewProjection_);
+    KetaEngine::ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
+    KetaEngine::GPUParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 
     effectEditorSuite_->SetViewProjection(&viewProjection_);
 }
@@ -131,5 +131,5 @@ void BaseScene::ViewProjectionUpdate() {
         break;
     }
 
-    Light::GetInstance()->SetWorldCameraPos(viewProjection_.GetWorldPos());
+   KetaEngine::Light::GetInstance()->SetWorldCameraPos(viewProjection_.GetWorldPos());
 }

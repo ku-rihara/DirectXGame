@@ -9,13 +9,13 @@
 void BasePlayerHand::Init() {
 
     // グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     AddParamGroup();
     ApplyGlobalParameter();
 
-    emitter_.reset(ParticleEmitter::CreateParticlePrimitive(groupName_, PrimitiveType::Plane, 300));
-    uint32_t handle = TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
+    emitter_.reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive(groupName_, PrimitiveType::Plane, 300));
+    uint32_t handle = KetaEngine::TextureManager::GetInstance()->LoadTexture("Resources/Texture/circle.png");
     emitter_->SetTextureHandle(handle);
 }
 
@@ -110,7 +110,7 @@ void BasePlayerHand::AdjustParamBase() {
     ImGui::DragFloat("RailRunSpeedForth", &railRunSpeedForth_, 0.01f);
 }
 
-void BasePlayerHand::SetParent(WorldTransform* parent) {
+void BasePlayerHand::SetParent(KetaEngine::WorldTransform* parent) {
     obj3d_->transform_.parent_ = parent;
 }
 

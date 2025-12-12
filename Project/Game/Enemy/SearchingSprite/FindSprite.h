@@ -20,7 +20,7 @@ public:
 
 private:
     Vector2 position_;
-    std::unique_ptr<Sprite> sprite_;
+    std::unique_ptr<KetaEngine::Sprite> sprite_;
 
     bool isDraw_ = false;
     float alpha_;

@@ -8,6 +8,8 @@
 /// <summary>
 /// パーティクルデータクラス - セクションベースのパーティクル管理
 /// </summary>
+namespace KetaEngine {
+
 class ParticleData : public BaseSequenceEffectData<ParticleSection> {
 public:
     ParticleData()           = default;
@@ -70,3 +72,5 @@ public:
     //*----------------------------- setter Methods -----------------------------*//
     void SetDrawAllSections(bool value) { drawAllSections_ = value; }
 };
+
+}; // KetaEngine

@@ -8,11 +8,10 @@ public:
     ~SkyDome();
     void Init();
     void Update();
-    void Draw(ViewProjection& viewProjection);
-
+  
 private:
 	// ワールド変換データ
-	WorldTransform transform_;
+    KetaEngine::WorldTransform transform_;
 	// モデル
-	std::unique_ptr<Object3d> obj3D_ = nullptr;
+    std::unique_ptr<KetaEngine::Object3d> obj3D_ = nullptr;
 };

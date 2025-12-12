@@ -4,6 +4,8 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 class Object3DAnimation;
 
 /// <summary>
@@ -50,3 +52,5 @@ public:
     ParticleData* GetParticleData();
     const std::string& GetCurrentCategoryName() const { return currentCategoryName_; }
 };
+
+}; // KetaEngine

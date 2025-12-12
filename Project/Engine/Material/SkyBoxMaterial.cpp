@@ -1,4 +1,6 @@
 #include "SkyBoxMaterial.h"
+
+using namespace KetaEngine;
 #include "Dx/DirectXCommon.h"
 #include <cassert>
 #include <imgui.h>

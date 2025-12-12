@@ -22,7 +22,7 @@ public:
     /// UIスプライトの表示
     /// </summary>
     /// <param name="viewProjection"></param>
-    void DisplaySprite(const ViewProjection& viewProjection) override;
+    void DisplaySprite(const KetaEngine::ViewProjection& viewProjection) override;
 
     void SpawnRenditionInit() override;//<スポーン演出初期化
 

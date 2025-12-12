@@ -5,6 +5,8 @@
 /// <summary>
 /// タイムスケールデータ
 /// </summary>
+namespace KetaEngine {
+
 class TimeScaleData {
 public:
     TimeScaleData()  = default;
@@ -43,3 +45,5 @@ public:
     void SetTimeScale(float timeScale) { timeScale_ = timeScale; }
     void SetDuration(float duration) { duration_ = duration; }
 };
+
+}; // KetaEngine
