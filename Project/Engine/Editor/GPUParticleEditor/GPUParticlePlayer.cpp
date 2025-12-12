@@ -1,20 +1,24 @@
 #include "GPUParticlePlayer.h"
 
 using namespace KetaEngine;
-#include "GPUParticle/GPUParticleManager.h"
 
 void GPUParticlePlayer::Init() {
     BaseEffectPlayer::Init();
-    isEmitting_     = false;
-    shouldEmitOnce_ = false;
 }
 
 void GPUParticlePlayer::Update(float speedRate) {
     if (effectData_) {
         effectData_->Update(speedRate);
 
-        // 連続エミット中または一度だけエミットする場合
-        if (isEmitting_ || shouldEmitOnce_) {
+        // 連続エミットモード
+        if (isContinuousEmit_) {
+            auto* particleData = GetParticleData();
+            if (particleData) {
+                particleData->Draw();
+            }
+        }
+        // 一度だけエミットするモード
+        else if (shouldEmitOnce_) {
             auto* particleData = GetParticleData();
             if (particleData) {
                 particleData->Draw();
@@ -24,26 +28,7 @@ void GPUParticlePlayer::Update(float speedRate) {
     }
 }
 
-void GPUParticlePlayer::Play(const std::string& particleName) {
-    if (effectData_) {
-        effectData_->Pause();
-    }
-
-    effectData_.reset();
-    effectData_ = CreateEffectData();
-
-    auto* particleData = dynamic_cast<GPUParticleData*>(effectData_.get());
-    if (particleData) {
-        particleData->Init(particleName);
-        particleData->LoadData();
-        particleData->Play();
-    }
-
-    currentEffectName_ = particleName;
-    currentCategoryName_.clear();
-}
-
-void GPUParticlePlayer::PlayInCategory(const std::string& categoryName, const std::string& particleName) {
+void GPUParticlePlayer::Play(const std::string& categoryName, const std::string& particleName) {
     // 初回または違うパーティクルの場合はロード
     if (!effectData_ || currentCategoryName_ != categoryName || currentEffectName_ != particleName) {
         if (effectData_) {
@@ -64,26 +49,15 @@ void GPUParticlePlayer::PlayInCategory(const std::string& categoryName, const st
         currentEffectName_   = particleName;
     }
 
-    // 毎回エミット
+    // 連続エミットモードを有効化
+    isContinuousEmit_ = true;
+
+    // パーティクルデータの再生状態を確認
     auto* particleData = GetParticleData();
-    if (particleData) {
-        particleData->Draw();
+    if (particleData && !particleData->IsPlaying()) {
+        particleData->Play();
     }
 }
-
-
-void GPUParticlePlayer::EmitOnce() {
-    shouldEmitOnce_ = true;
-}
-
-void GPUParticlePlayer::StartEmit() {
-    isEmitting_ = true;
-}
-
-void GPUParticlePlayer::StopEmit() {
-    isEmitting_ = false;
-}
-
 void GPUParticlePlayer::SetEmitPosition(const Vector3& position) {
     auto* particleData = GetParticleData();
     if (!particleData) {
@@ -115,8 +89,6 @@ void GPUParticlePlayer::SetParentTransform(WorldTransform* parent) {
         }
     }
 }
-
-
 
 std::unique_ptr<BaseEffectData> GPUParticlePlayer::CreateEffectData() {
     return std::make_unique<GPUParticleData>();

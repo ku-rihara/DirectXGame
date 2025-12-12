@@ -12,9 +12,7 @@
 #include <string>
 
 enum class BlendMode;
-/// <summary>
-/// GPUパーティクルセクション
-/// </summary>
+
 namespace KetaEngine {
 
 class GPUParticleSection {
@@ -22,7 +20,8 @@ public:
     enum class PlayState {
         STOPPED,
         WAITING,
-        PLAYING
+        PLAYING,
+        PAUSED 
     };
 
     enum class BillboardMode {
@@ -73,8 +72,8 @@ public:
     };
 
     struct GroupSettings {
-        BlendMode blendMode   = BlendMode::Add;
-        bool isActive         = true;
+        BlendMode blendMode  = BlendMode::Add;
+        bool isActive        = true;
         bool alignToVelocity = true;
     };
 
@@ -87,6 +86,8 @@ public:
     void Init(const std::string& particleName, const std::string& categoryName, int32_t sectionIndex);
     void Update(float speedRate = 1.0f);
     void Reset();
+    void Pause(); // Pause機能を追加
+    void Resume(); // Resume機能を追加
     bool IsFinished() const;
 
     void LoadData();
@@ -139,7 +140,7 @@ private:
     EmitterSettings emitterSettings_;
     GroupSettings groupSettings_;
 
-    int32_t billboardModeInt_        = 1;
+    int32_t billboardModeInt_    = 1;
     BillboardMode billboardMode_ = BillboardMode::Billboard;
     UVParameters uvParams_;
 
@@ -173,6 +174,7 @@ public:
     const std::string& GetSectionName() const { return sectionName_; }
     const EmitterSettings& GetEmitterSettings() const { return emitterSettings_; }
     const GroupSettings& GetGroupSettings() const { return groupSettings_; }
+    PlayState GetPlayState() const { return playState_; } 
 
     //*----------------------------- setter Methods -----------------------------*//
     void SetTexture(uint32_t textureHandle);
