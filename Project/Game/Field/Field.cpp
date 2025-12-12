@@ -15,7 +15,6 @@ void Field::Init() {
 }
 
 void Field::Update() {
-
-    //gpuParticlePlayer_->Update();
-    //gpuParticlePlayer_->PlayInCategory("Field", "Fire");
+    gpuParticlePlayer_->Play("Field", "Fire");
+    gpuParticlePlayer_->Update();
 }
