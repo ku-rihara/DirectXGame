@@ -862,9 +862,6 @@
     <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticlePlayer.cpp">
       <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.cpp">
-      <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Editor\ParticleEditor\ParticleData.cpp">
       <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
     </ClCompile>
@@ -882,6 +879,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Scene\Factory\SceneFactory.cpp">
       <Filter>MyEngine\.cpp\Scene\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.cpp">
+      <Filter>MyEngine\.cpp\Editor\ObjEaseAnimation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

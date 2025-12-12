@@ -4,6 +4,7 @@
 #include"BaseScene.h"
 
 #include"Editor/ParticleEditor/ParticleEmitter.h"
+#include "Editor/GPUParticleEditor/GPUParticlePlayer.h"
 #include<string>
 #include<array>
 
@@ -15,7 +16,8 @@ private:
 	
 	std::array<std::unique_ptr<KetaEngine::ParticleEmitter>, 3> EnemydamageEffect_;
     std::array<std::unique_ptr<KetaEngine::ParticleEmitter>, 1> afterGlowEffect_;
-  	
+    KetaEngine::GPUParticlePlayer test;
+
 public:
 	
 	TitleScene();

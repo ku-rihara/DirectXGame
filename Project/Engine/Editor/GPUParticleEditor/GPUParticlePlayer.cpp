@@ -4,60 +4,92 @@ using namespace KetaEngine;
 
 void GPUParticlePlayer::Init() {
     BaseEffectPlayer::Init();
+    isInitialized_          = false;
+    playRequestedThisFrame_ = false;
 }
 
-void GPUParticlePlayer::Update(float speedRate) {
-    if (effectData_) {
-        effectData_->Update(speedRate);
+void GPUParticlePlayer::InitEffect(const std::string& categoryName, const std::string& particleName) {
+    // エフェクトデータを作成してロード
+    effectData_ = CreateEffectData();
 
-        // 連続エミットモード
-        if (isContinuousEmit_) {
-            auto* particleData = GetParticleData();
-            if (particleData) {
-                particleData->Draw();
-            }
-        }
-        // 一度だけエミットするモード
-        else if (shouldEmitOnce_) {
-            auto* particleData = GetParticleData();
-            if (particleData) {
-                particleData->Draw();
-            }
-            shouldEmitOnce_ = false;
-        }
-    }
-}
-
-void GPUParticlePlayer::Play(const std::string& categoryName, const std::string& particleName) {
-    // 初回または違うパーティクルの場合はロード
-    if (!effectData_ || currentCategoryName_ != categoryName || currentEffectName_ != particleName) {
-        if (effectData_) {
-            effectData_->Pause();
-        }
-
-        effectData_.reset();
-        effectData_ = CreateEffectData();
-
-        auto* particleData = dynamic_cast<GPUParticleData*>(effectData_.get());
-        if (particleData) {
-            particleData->InitWithCategory(particleName, categoryName);
-            particleData->LoadData();
-            particleData->Play();
-        }
+    auto* particleData = dynamic_cast<GPUParticleData*>(effectData_.get());
+    if (particleData) {
+        particleData->InitWithCategory(particleName, categoryName);
+        particleData->LoadData();
 
         currentCategoryName_ = categoryName;
         currentEffectName_   = particleName;
-    }
-
-    // 連続エミットモードを有効化
-    isContinuousEmit_ = true;
-
-    // パーティクルデータの再生状態を確認
-    auto* particleData = GetParticleData();
-    if (particleData && !particleData->IsPlaying()) {
-        particleData->Play();
+        isInitialized_       = true;
     }
 }
+
+void GPUParticlePlayer::Update(float speedRate) {
+    if (!effectData_ || !isInitialized_) {
+        return;
+    }
+
+    auto* particleData = GetParticleData();
+    if (!particleData) {
+        return;
+    }
+
+    // 今フレームにPlay()が呼ばれていない場合、自動的に停止
+    if (!playRequestedThisFrame_) {
+        if (particleData->IsPlaying()) {
+            particleData->Reset();
+        }
+    }
+
+    // 次フレーム用にリセット
+    playRequestedThisFrame_ = false;
+
+    // エフェクトの更新
+    effectData_->Update(speedRate);
+}
+
+void GPUParticlePlayer::Play(const std::string& categoryName, const std::string& particleName) {
+    // 今フレームにPlay()が呼ばれたことをマーク
+    playRequestedThisFrame_ = true;
+
+    // 初期化されていない、または異なるエフェクトの場合
+    if (!isInitialized_ || currentCategoryName_ != categoryName || currentEffectName_ != particleName) {
+
+        if (effectData_) {
+            effectData_->Pause();
+            effectData_.reset();
+        }
+
+        InitEffect(categoryName, particleName);
+    }
+
+    // エフェクトを再生
+    auto* particleData = GetParticleData();
+    if (particleData) {
+        if (!particleData->IsPlaying()) {
+            particleData->Play();
+        }
+    }
+}
+
+void GPUParticlePlayer::Reset() {
+    auto* particleData = GetParticleData();
+    if (particleData) {
+        particleData->Reset();
+    }
+    playRequestedThisFrame_ = false;
+}
+
+void GPUParticlePlayer::Draw() {
+    if (!isInitialized_) {
+        return;
+    }
+
+    auto* particleData = GetParticleData();
+    if (particleData) {
+        particleData->Draw();
+    }
+}
+
 void GPUParticlePlayer::SetEmitPosition(const Vector3& position) {
     auto* particleData = GetParticleData();
     if (!particleData) {

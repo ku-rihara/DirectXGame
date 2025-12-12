@@ -174,6 +174,15 @@ void GPUParticleSection::Update(float speedRate) {
     }
 
     if (playState_ == PlayState::STOPPED) {
+        // 停止中はエミットフラグを必ずfalseに
+        shouldEmit_  = false;
+        currentTime_ = 0.0f;
+
+        auto group = GPUParticleManager::GetInstance()->GetParticleGroup(groupName_);
+        if (group && group->emitSphereData) {
+            group->emitSphereData->emit          = 0;
+            group->emitSphereData->frequencyTime = 0.0f;
+        }
         return;
     }
 
@@ -182,7 +191,17 @@ void GPUParticleSection::Update(float speedRate) {
         return;
     }
 
-    // PLAYING状態でのみエミット処理を行う
+    if (playState_ == PlayState::PAUSED) {
+        // 一時停止中もエミットを停止
+        shouldEmit_ = false;
+        auto group  = GPUParticleManager::GetInstance()->GetParticleGroup(groupName_);
+        if (group && group->emitSphereData) {
+            group->emitSphereData->emit = 0;
+        }
+        return;
+    }
+
+    // PLAYING
     if (playState_ == PlayState::PLAYING) {
         RailMoveUpdate();
         UpdateEmitTransform();
@@ -190,6 +209,7 @@ void GPUParticleSection::Update(float speedRate) {
 
         currentTime_ += actualDeltaTime;
 
+        // 前回のエミットからの経過時間を確認
         if (currentTime_ >= emitterSettings_.frequency) {
             shouldEmit_  = true;
             currentTime_ = 0.0f;
@@ -210,7 +230,8 @@ void GPUParticleSection::Update(float speedRate) {
             emitterData.count         = emitterSettings_.count;
             emitterData.frequency     = emitterSettings_.frequency;
             emitterData.frequencyTime = currentTime_;
-            emitterData.emit          = shouldEmit_ ? 1 : 0;
+            // shouldEmit_がtrueの時のみエミット
+            emitterData.emit = shouldEmit_ ? 1 : 0;
 
             GPUParticleManager::GetInstance()->SetEmitterSphere(groupName_, emitterData);
         }
@@ -218,7 +239,6 @@ void GPUParticleSection::Update(float speedRate) {
         ApplyParameters();
     }
 }
-
 void GPUParticleSection::UpdateWaiting(float deltaTime) {
     elapsedTime_ += deltaTime;
 
@@ -278,18 +298,26 @@ void GPUParticleSection::SetEmitLine() {
 }
 
 void GPUParticleSection::Emit() {
-    // PLAYINGまたはWAITING状態の時のみエミット可能
-    if (playState_ == PlayState::STOPPED) {
+    // 再生中でない場合はエミットしない
+    if (playState_ != PlayState::PLAYING) {
         return;
     }
 
-    if (!shouldEmit_ || !groupSettings_.isActive) {
+    // アクティブでない場合もエミットしない
+    if (!groupSettings_.isActive) {
+        return;
+    }
+
+    // shouldEmit_がtrueの時のみエミット
+    if (!shouldEmit_) {
         return;
     }
 
     GPUParticleManager::GetInstance()->Emit(groupName_);
-}
 
+    // エミット後、即座にフラグをリセット
+    shouldEmit_ = false;
+}
 void GPUParticleSection::StartRailEmit() {
     isStartRailMove_ = true;
     railManager_->SetRailMoveTime(0.0f);
@@ -540,7 +568,6 @@ void GPUParticleSection::Reset() {
     shouldEmit_  = false;
     playState_   = PlayState::STOPPED;
 
-    // エミッターの状態もリセット
     auto group = GPUParticleManager::GetInstance()->GetParticleGroup(groupName_);
     if (group && group->emitSphereData) {
         group->emitSphereData->emit          = 0;
@@ -553,29 +580,39 @@ void GPUParticleSection::Reset() {
 }
 
 void GPUParticleSection::Pause() {
-    if (playState_ == PlayState::PLAYING) {
+    if (playState_ == PlayState::PLAYING || playState_ == PlayState::WAITING) {
         playState_ = PlayState::PAUSED;
 
-        // Pause時にエミット状態をクリア
+
         shouldEmit_ = false;
         auto group  = GPUParticleManager::GetInstance()->GetParticleGroup(groupName_);
         if (group && group->emitSphereData) {
-            group->emitSphereData->emit = 0;
+            group->emitSphereData->emit          = 0;
+            group->emitSphereData->frequencyTime = 0.0f;
         }
     }
 }
 
+
 void GPUParticleSection::Resume() {
     if (playState_ == PlayState::PAUSED) {
         playState_ = PlayState::PLAYING;
+     
+        currentTime_ = 0.0f;
+        shouldEmit_  = false;
     }
 }
 
 void GPUParticleSection::StartWaiting() {
     playState_   = PlayState::WAITING;
     elapsedTime_ = 0.0f;
-}
+    shouldEmit_  = false;
 
+    auto group = GPUParticleManager::GetInstance()->GetParticleGroup(groupName_);
+    if (group && group->emitSphereData) {
+        group->emitSphereData->emit = 0;
+    }
+}
 bool GPUParticleSection::IsFinished() const {
     return false;
 }
