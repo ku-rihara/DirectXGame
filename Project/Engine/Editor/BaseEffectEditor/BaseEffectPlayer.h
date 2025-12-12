@@ -17,9 +17,10 @@ public:
 
     //*----------------------------- public Methods -----------------------------*//
 
-    virtual void Init()                                = 0;
+    virtual void Init()                         = 0;
     virtual void Update(float speedRate = 1.0f) = 0;
-    virtual void Play(const std::string& effectName)   = 0;
+    virtual void Play([[maybe_unused]] const std::string& effectName);
+    virtual void Play([[maybe_unused]] const std::string& categoryName, [[maybe_unused]] const std::string& effectName);
     virtual void Stop();
     virtual void Reset();
 

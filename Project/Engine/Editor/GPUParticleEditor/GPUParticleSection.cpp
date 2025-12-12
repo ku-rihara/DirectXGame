@@ -20,7 +20,6 @@ void GPUParticleSection::Init(const std::string& particleName, const std::string
 
     globalParameter_ = GlobalParameter::GetInstance();
 
-    // パーティクルグループをマネージャーに作成
     GPUParticleManager::GetInstance()->CreatePrimitiveParticle(groupName_, PrimitiveType::Plane, 1024);
 
     ParameterInit();
@@ -33,21 +32,14 @@ void GPUParticleSection::Init(const std::string& particleName, const std::string
         GetParams();
     }
 
-    // Rail初期化
     railManager_ = std::make_unique<RailManager>();
     railManager_->Init(sectionName_ + "Emit");
 
-    // デバッグライン
     debugLine_.reset(Line3D::Create(24));
     emitBoxTransform_.Init();
 
-    // テクスチャ適用
     AdaptTexture();
-
-    // ブレンドモード適用
     groupSettings_.blendMode = static_cast<BlendMode>(blendModeIndex_);
-
-    // パラメータ適用
     ApplyParameters();
 
     currentTime_ = 0.0f;
@@ -55,9 +47,7 @@ void GPUParticleSection::Init(const std::string& particleName, const std::string
 }
 
 void GPUParticleSection::ParameterInit() {
-
-    billboardMode_ = static_cast<BillboardMode>(billboardModeInt_);
-
+    billboardMode_       = static_cast<BillboardMode>(billboardModeInt_);
     selectedTexturePath_ = "Resources/Texture/circle.png";
     startTime_           = 0.0f;
 }
@@ -192,38 +182,41 @@ void GPUParticleSection::Update(float speedRate) {
         return;
     }
 
-    RailMoveUpdate();
-    UpdateEmitTransform();
-    SetEmitLine();
+    // PLAYING状態でのみエミット処理を行う
+    if (playState_ == PlayState::PLAYING) {
+        RailMoveUpdate();
+        UpdateEmitTransform();
+        SetEmitLine();
 
-    currentTime_ += actualDeltaTime;
+        currentTime_ += actualDeltaTime;
 
-    if (currentTime_ >= emitterSettings_.frequency) {
-        shouldEmit_  = true;
-        currentTime_ = 0.0f;
-    } else {
-        shouldEmit_ = false;
-    }
-
-    auto group = GPUParticleManager::GetInstance()->GetParticleGroup(groupName_);
-    if (group && group->emitSphereData) {
-        ParticleEmit emitterData = *group->emitSphereData;
-
-        if (isMoveForRail_) {
-            emitterData.translate = railManager_->GetWorldTransform().GetWorldPos();
+        if (currentTime_ >= emitterSettings_.frequency) {
+            shouldEmit_  = true;
+            currentTime_ = 0.0f;
         } else {
-            emitterData.translate = emitterSettings_.position;
+            shouldEmit_ = false;
         }
 
-        emitterData.count         = emitterSettings_.count;
-        emitterData.frequency     = emitterSettings_.frequency;
-        emitterData.frequencyTime = currentTime_;
-        emitterData.emit          = shouldEmit_ ? 1 : 0;
+        auto group = GPUParticleManager::GetInstance()->GetParticleGroup(groupName_);
+        if (group && group->emitSphereData) {
+            ParticleEmit emitterData = *group->emitSphereData;
 
-        GPUParticleManager::GetInstance()->SetEmitterSphere(groupName_, emitterData);
+            if (isMoveForRail_) {
+                emitterData.translate = railManager_->GetWorldTransform().GetWorldPos();
+            } else {
+                emitterData.translate = emitterSettings_.position;
+            }
+
+            emitterData.count         = emitterSettings_.count;
+            emitterData.frequency     = emitterSettings_.frequency;
+            emitterData.frequencyTime = currentTime_;
+            emitterData.emit          = shouldEmit_ ? 1 : 0;
+
+            GPUParticleManager::GetInstance()->SetEmitterSphere(groupName_, emitterData);
+        }
+
+        ApplyParameters();
     }
-
-    ApplyParameters();
 }
 
 void GPUParticleSection::UpdateWaiting(float deltaTime) {
@@ -262,17 +255,11 @@ void GPUParticleSection::UpdateEmitTransform() {
         basePosition = emitterSettings_.position;
     }
 
-    // エミット範囲の中心位置を計算
     Vector3 rangeCenter = (transformParams_.translateMax + transformParams_.translateMin) * 0.5f;
+    Vector3 rangeSize   = transformParams_.translateMax - transformParams_.translateMin;
 
-    // エミット範囲のサイズを計算
-    Vector3 rangeSize = transformParams_.translateMax - transformParams_.translateMin;
-
-    // ボックスの中心はベース位置 + 範囲の中心オフセット
     emitBoxTransform_.translation_ = basePosition + rangeCenter;
-
-    // ボックスのスケールは範囲のサイズ
-    emitBoxTransform_.scale_ = rangeSize;
+    emitBoxTransform_.scale_       = rangeSize;
 
     emitBoxTransform_.UpdateMatrix();
 }
@@ -291,6 +278,11 @@ void GPUParticleSection::SetEmitLine() {
 }
 
 void GPUParticleSection::Emit() {
+    // PLAYINGまたはWAITING状態の時のみエミット可能
+    if (playState_ == PlayState::STOPPED) {
+        return;
+    }
+
     if (!shouldEmit_ || !groupSettings_.isActive) {
         return;
     }
@@ -310,7 +302,6 @@ void GPUParticleSection::ApplyParameters() {
         return;
     }
 
-    // リソースのバッファに直接書き込み
     auto& buffers = group->resourceData->GetEmitParamBuffers();
 
     // Transform
@@ -389,7 +380,6 @@ void GPUParticleSection::AdjustParam() {
         }
     }
 
-    // Billboard Settings
     if (ImGui::CollapsingHeader("Billboard & Direction")) {
         const char* modes[] = {"None", "Billboard", "Y-Axis"};
         if (ImGui::Combo("Billboard Mode", &billboardModeInt_, modes, IM_ARRAYSIZE(modes))) {
@@ -398,7 +388,6 @@ void GPUParticleSection::AdjustParam() {
         ImGui::Checkbox("Align To Velocity", &groupSettings_.alignToVelocity);
     }
 
-    // UV Settings
     if (ImGui::CollapsingHeader("UV Animation")) {
         ImGui::DragFloat2("Position", &uvParams_.uvPosition.x, 0.01f);
         ImGui::SliderAngle("Rotate", &uvParams_.uvRotate);
@@ -411,7 +400,6 @@ void GPUParticleSection::AdjustParam() {
         ImGui::Checkbox("Loop", &uvParams_.isUVLoop);
     }
 
-    // テクスチャ選択
     ImGuiTextureSelection();
 
     ImGui::PopID();
@@ -552,8 +540,34 @@ void GPUParticleSection::Reset() {
     shouldEmit_  = false;
     playState_   = PlayState::STOPPED;
 
+    // エミッターの状態もリセット
+    auto group = GPUParticleManager::GetInstance()->GetParticleGroup(groupName_);
+    if (group && group->emitSphereData) {
+        group->emitSphereData->emit          = 0;
+        group->emitSphereData->frequencyTime = 0.0f;
+    }
+
     if (railManager_) {
         railManager_->SetRailMoveTime(0.0f);
+    }
+}
+
+void GPUParticleSection::Pause() {
+    if (playState_ == PlayState::PLAYING) {
+        playState_ = PlayState::PAUSED;
+
+        // Pause時にエミット状態をクリア
+        shouldEmit_ = false;
+        auto group  = GPUParticleManager::GetInstance()->GetParticleGroup(groupName_);
+        if (group && group->emitSphereData) {
+            group->emitSphereData->emit = 0;
+        }
+    }
+}
+
+void GPUParticleSection::Resume() {
+    if (playState_ == PlayState::PAUSED) {
+        playState_ = PlayState::PLAYING;
     }
 }
 
@@ -563,7 +577,5 @@ void GPUParticleSection::StartWaiting() {
 }
 
 bool GPUParticleSection::IsFinished() const {
-    // パーティクルは終了条件がないため、常にfalseを返す
-    // 必要に応じて寿命時間などを追加できる
     return false;
 }

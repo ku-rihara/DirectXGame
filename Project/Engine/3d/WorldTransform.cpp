@@ -308,7 +308,7 @@ void WorldTransform::PlayObjEaseAnimation(const std::string& categoryName, const
         objEaseAnimationPlayer_->Init();
     }
 
-    objEaseAnimationPlayer_->PlayInCategory(categoryName, animationName);
+    objEaseAnimationPlayer_->Play(categoryName, animationName);
 
     // Rail使用時、親を設定
     if (objEaseAnimationPlayer_->GetAnimationData() && objEaseAnimationPlayer_->GetAnimationData()->GetIsUseRailActiveKeyFrame()) {
