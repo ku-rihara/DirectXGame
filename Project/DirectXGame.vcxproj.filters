@@ -94,12 +94,6 @@
     <Filter Include="MyEngine\.h\utility\Debug">
       <UniqueIdentifier>{20818b80-a58e-4c65-84c7-f8fe2b0bdb85}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Scene\Manager">
-      <UniqueIdentifier>{20578600-268f-441b-8c4f-b9fd3cd175ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Scene\Factory">
-      <UniqueIdentifier>{33f429d3-39ce-4d12-9f0a-521b426150fd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyEngine\.h\Light">
       <UniqueIdentifier>{628ab431-7495-4a04-bd50-fe846b42960d}</UniqueIdentifier>
     </Filter>
@@ -355,6 +349,24 @@
     <Filter Include="MyEngine\.cpp\Editor\GPUParticleEditor">
       <UniqueIdentifier>{891cf9dc-1516-4ccb-812e-32cadcff9d26}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.cpp\Scene">
+      <UniqueIdentifier>{026655db-74a6-47d8-8a1f-7aa7e01f04b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Scene">
+      <UniqueIdentifier>{dde66375-3e0a-45fa-9e33-f83fb68b8b5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Scene\Factory">
+      <UniqueIdentifier>{c4c1dae2-abc6-448c-a253-3fdcdbc1fde5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.h\Scene\Manager">
+      <UniqueIdentifier>{3c92dabf-e233-45c2-802c-30eaf967702d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Scene\Factory">
+      <UniqueIdentifier>{6decb64d-417a-4649-aa95-8a30faa375cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\Scene\Manager">
+      <UniqueIdentifier>{716432aa-8f34-4922-935a-5ae2c4a5d1e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -462,12 +474,6 @@
     </ClCompile>
     <ClCompile Include="Game\Scene\BaseScene.cpp">
       <Filter>Game\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Scene\Manager\SceneManager.cpp">
-      <Filter>Game\Scene\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp">
-      <Filter>Game\Scene\Factory</Filter>
     </ClCompile>
     <ClCompile Include="math\Shake.cpp">
       <Filter>liberary\.cpp</Filter>
@@ -871,6 +877,12 @@
     <ClCompile Include="Engine\Editor\ParticleEditor\ParticleSection.cpp">
       <Filter>MyEngine\.cpp\Editor\ParticleEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Scene\Manager\SceneManager.cpp">
+      <Filter>MyEngine\.cpp\Scene\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\Factory\SceneFactory.cpp">
+      <Filter>MyEngine\.cpp\Scene\Factory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1013,15 +1025,6 @@
     </ClInclude>
     <ClInclude Include="Game\Scene\BaseScene.h">
       <Filter>Game\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Scene\Manager\SceneManager.h">
-      <Filter>Game\Scene\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Scene\Factory\AbstractSceneFactory.h">
-      <Filter>Game\Scene\Factory</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Scene\Factory\SceneFactory.h">
-      <Filter>Game\Scene\Factory</Filter>
     </ClInclude>
     <ClInclude Include="math\Shake.h">
       <Filter>liberary\.h</Filter>
@@ -1436,6 +1439,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Editor\ParticleEditor\ParticleSection.h">
       <Filter>MyEngine\.h\Editor\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\Factory\AbstractSceneFactory.h">
+      <Filter>MyEngine\.h\Scene\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\Factory\SceneFactory.h">
+      <Filter>MyEngine\.h\Scene\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\Manager\SceneManager.h">
+      <Filter>MyEngine\.h\Scene\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

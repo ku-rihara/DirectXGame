@@ -4,14 +4,13 @@
 #include "BaseScene.h"
 
 // Obj
-#include "SkyBox/SkyBox.h"
 #include "Editor/TimeScaleEditor/TimeScaleController.h"
+#include "SkyBox/SkyBox.h"
 // emitter
-
 
 #include "utility/PutObjForBlender/PutObjForBlender.h"
 
-#include"Editor/CameraEditor/CameraAnimation.h"
+#include "Editor/CameraEditor/CameraAnimation.h"
 
 /// <summary>
 /// ゲームシーン
@@ -22,14 +21,12 @@ private:
     /// Private variants
     ///========================================================
 
-     std::unique_ptr<SkyBox> skuBox_                             = nullptr;
-    std::unique_ptr<PutObjForBlender> putObjForBlender          = nullptr;
-    std::unique_ptr<TimeScaleController> timeScaleController_   = nullptr;
- 
-    std::unique_ptr<CameraAnimation> cameraPlayer_ = nullptr;
+    std::unique_ptr<SkyBox> skuBox_                                       = nullptr;
+    std::unique_ptr<KetaEngine::PutObjForBlender> putObjForBlender        = nullptr;
+    std::unique_ptr<KetaEngine::TimeScaleController> timeScaleController_ = nullptr;
+    std::unique_ptr<KetaEngine::CameraAnimation> cameraPlayer_            = nullptr;
 
 public:
-
     GameScene();
     ~GameScene() override;
 
@@ -42,7 +39,7 @@ public:
     void Update() override;
     void SkyBoxDraw() override;
 
-    void Debug() override; /// debug
+    void Debug() override;
     void ViewProjectionUpdate() override;
     void ViewProcess() override;
 };

@@ -6,7 +6,9 @@
 class Vector3;
 class Vector2;
 class Quaternion;
+namespace KetaEngine {
 class ViewProjection;
+}
 
 struct Matrix4x4 {
 	float m[4][4];

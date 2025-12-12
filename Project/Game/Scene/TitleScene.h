@@ -3,7 +3,6 @@
 ///baseScene
 #include"BaseScene.h"
 
-
 #include"Editor/ParticleEditor/ParticleEmitter.h"
 #include<string>
 #include<array>
@@ -14,8 +13,8 @@
 class TitleScene :public BaseScene {
 private:
 	
-	std::array<std::unique_ptr<ParticleEmitter>,3>EnemydamageEffect_;
-    std::array<std::unique_ptr<ParticleEmitter>, 1> afterGlowEffect_;
+	std::array<std::unique_ptr<KetaEngine::ParticleEmitter>, 3> EnemydamageEffect_;
+    std::array<std::unique_ptr<KetaEngine::ParticleEmitter>, 1> afterGlowEffect_;
   	
 public:
 	

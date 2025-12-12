@@ -158,6 +158,8 @@
     <ClCompile Include="Engine\Primitive\PrimitiveCylinder.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitivePlane.cpp" />
     <ClCompile Include="Engine\Primitive\PrimitiveRing.cpp" />
+    <ClCompile Include="Engine\Scene\Factory\SceneFactory.cpp" />
+    <ClCompile Include="Engine\Scene\Manager\SceneManager.cpp" />
     <ClCompile Include="Engine\ShadowMap\ShadowMap.cpp" />
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
     <ClCompile Include="Engine\utility\FileSelector\FileSelector.cpp" />
@@ -166,9 +168,7 @@
     <ClCompile Include="Game\EasingTestObj\EasingTestObj.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
     <ClCompile Include="Game\Scene\EditorScene.cpp" />
-    <ClCompile Include="Game\Scene\Factory\SceneFactory.cpp" />
     <ClCompile Include="Game\Scene\GameScene.cpp" />
-    <ClCompile Include="Game\Scene\Manager\SceneManager.cpp" />
     <ClCompile Include="Game\Scene\TitleScene.cpp" />
     <ClCompile Include="Game\SkyBox\SkyBox.cpp" />
     <ClCompile Include="main.cpp" />
@@ -338,6 +338,9 @@
     <ClInclude Include="Engine\Primitive\PrimitiveCylinder.h" />
     <ClInclude Include="Engine\Primitive\PrimitivePlane.h" />
     <ClInclude Include="Engine\Primitive\PrimitiveRing.h" />
+    <ClInclude Include="Engine\Scene\Factory\AbstractSceneFactory.h" />
+    <ClInclude Include="Engine\Scene\Factory\SceneFactory.h" />
+    <ClInclude Include="Engine\Scene\Manager\SceneManager.h" />
     <ClInclude Include="Engine\ShadowMap\ShadowMap.h" />
     <ClInclude Include="Engine\ShadowMap\ShadowMapData.h" />
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h" />
@@ -355,10 +358,7 @@
     <ClInclude Include="Game\EasingTestObj\EasingTestObj.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
     <ClInclude Include="Game\Scene\EditorScene.h" />
-    <ClInclude Include="Game\Scene\Factory\AbstractSceneFactory.h" />
-    <ClInclude Include="Game\Scene\Factory\SceneFactory.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
-    <ClInclude Include="Game\Scene\Manager\SceneManager.h" />
     <ClInclude Include="Game\Scene\TitleScene.h" />
     <ClInclude Include="Game\SkyBox\SkyBox.h" />
     <ClInclude Include="math\Box.h" />

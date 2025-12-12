@@ -18,13 +18,13 @@ void GameScene::Init() {
 
     BaseScene::Init();
 
-     skuBox_              = std::make_unique<SkyBox>();
-    putObjForBlender     = std::make_unique<PutObjForBlender>();
-    timeScaleController_ = std::make_unique<TimeScaleController>();
-    cameraPlayer_        = std::make_unique<CameraAnimation>();
+    skuBox_              = std::make_unique<SkyBox>();
+    putObjForBlender     = std::make_unique<KetaEngine::PutObjForBlender>();
+    timeScaleController_ = std::make_unique<KetaEngine::TimeScaleController>();
+    cameraPlayer_        = std::make_unique<KetaEngine::CameraAnimation>();
 
     /*  monsterBall_->Init();*/
-   
+
     skuBox_->Init();
     timeScaleController_->Init();
 
@@ -35,7 +35,6 @@ void GameScene::Init() {
     putObjForBlender->EasingAllReset();
 
     cameraMode_ = BaseScene::CameraMode::DEBUG;
-
 }
 
 void GameScene::Update() {
@@ -54,19 +53,17 @@ void GameScene::Update() {
     cameraPlayer_->Update();
 
     // 各クラス更新
-  
-    timeScaleController_->Update(Frame::DeltaTime());
+    timeScaleController_->Update(KetaEngine::Frame::DeltaTime());
 
-  
     skuBox_->Update();
 
-    putObjForBlender->EasingUpdateSelectGroup(Frame::DeltaTime(), 0);
+    putObjForBlender->EasingUpdateSelectGroup(KetaEngine::Frame::DeltaTime(), 0);
 
     // viewProjection 更新
     ViewProjectionUpdate();
 
     if (input_->TriggerKey(KeyboardKey::Enter)) {
-        SceneManager::GetInstance()->ChangeScene("TITLE");
+        KetaEngine::SceneManager::GetInstance()->ChangeScene("TITLE");
     }
 }
 
@@ -80,10 +77,10 @@ void GameScene::SkyBoxDraw() {
 void GameScene::Debug() {
 #ifdef _DEBUG
     BaseScene::Debug();
-    Light::GetInstance()->DebugImGui();
+    KetaEngine::Light::GetInstance()->DebugImGui();
     ImGui::Begin("Object");
     skuBox_->Debug();
-    ShadowMap::GetInstance()->DebugImGui();
+    KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     ImGui::End();
 
     ImGui::Begin("editor");

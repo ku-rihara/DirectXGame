@@ -1,16 +1,12 @@
 /// scene
 #include "TitleScene.h"
 #include "GameScene.h"
-#include "Manager/SceneManager.h"
+#include "Scene/Manager/SceneManager.h"
 
-#include "base/TextureManager.h"
 // class
-#include "3d/Object3DRegistry.h"
-#include "Pipeline/PipelineManager.h"
 #include "Editor/ParticleEditor/ParticleManager.h"
 
 // math
-#include "Frame/Frame.h"
 #include <imgui.h>
 
 TitleScene::TitleScene() {}
@@ -24,13 +20,13 @@ void TitleScene::Init() {
 
 
     /// パーティクルデータの読み込みと、モデルの読み込み
-    EnemydamageEffect_[0].reset(ParticleEmitter::CreateParticlePrimitive("comboFireNozzleLeft", PrimitiveType::Plane, 500));
-    EnemydamageEffect_[1].reset(ParticleEmitter::CreateParticlePrimitive("comboFireCenter", PrimitiveType::Plane, 500));
-    EnemydamageEffect_[2].reset(ParticleEmitter::CreateParticlePrimitive("comboFireNozzleRigth", PrimitiveType::Plane, 500));
+    EnemydamageEffect_[0].reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("comboFireNozzleLeft", PrimitiveType::Plane, 500));
+    EnemydamageEffect_[1].reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("comboFireCenter", PrimitiveType::Plane, 500));
+    EnemydamageEffect_[2].reset(KetaEngine::ParticleEmitter::CreateParticlePrimitive("comboFireNozzleRigth", PrimitiveType::Plane, 500));
 
-    afterGlowEffect_[0].reset(ParticleEmitter::CreateParticle("afterGlowEffect", "Suzanne.obj", 500));
+    afterGlowEffect_[0].reset(KetaEngine::ParticleEmitter::CreateParticle("afterGlowEffect", "Suzanne.obj", 500));
 
-    ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
+    KetaEngine::ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
 void TitleScene::Update() {
@@ -42,7 +38,7 @@ void TitleScene::Update() {
         EnemydamageEffect_[i]->EditorUpdate();
         EnemydamageEffect_[i]->Emit();
 
-        if (Input::GetInstance()->TriggerKey(KeyboardKey::O)) {
+        if (KetaEngine::Input::GetInstance()->TriggerKey(KeyboardKey::O)) {
             EnemydamageEffect_[i]->StartRailEmit();
         }
     }
@@ -53,13 +49,13 @@ void TitleScene::Update() {
         afterGlowEffect_[i]->Emit();
     }
 
-    ParticleManager::GetInstance()->Update();
+    KetaEngine::ParticleManager::GetInstance()->Update();
 
     ViewProjectionUpdate();
 
     if (input_->TriggerKey(KeyboardKey::Enter)) {
 
-        SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+        KetaEngine::SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
     }
 }
 

@@ -5,10 +5,10 @@
 #include <Windows.h>
 #include <wrl/client.h>
 
+enum class BlendMode;
 namespace KetaEngine {
 
 class DirectXCommon;
-enum class BlendMode;
 
 /// <summary>
 /// コンピュートシェーダパイプラインの基底クラス

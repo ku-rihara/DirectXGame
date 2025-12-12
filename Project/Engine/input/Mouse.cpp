@@ -1,7 +1,10 @@
 #include"Mouse.h"
+using namespace KetaEngine;
 #include <cmath>
 #include<assert.h>
 #include"base/WinApp.h"
+
+
 void Mouse::Init(Microsoft::WRL::ComPtr<IDirectInput8>directInput,HWND hWnd) {
     hWnd_ = hWnd;
     //マウスデバイスの生成
@@ -25,7 +28,6 @@ void Mouse::Update() {
     devMouse_->GetDeviceState(sizeof(mouse_), &mouse_);
 }
 
-//マウス****************************************************************
 
 bool Mouse::IsPressMouse(int32_t buttonNumber)const {
     return(mouse_.rgbButtons[buttonNumber] & 0x80);
@@ -43,7 +45,7 @@ MouseMove Mouse::GetMouseMove() {
     return move;
 }
 
-Vector3 Mouse::GetMousePos3D(const ViewProjection& viewprojection, float depthFactor, float blockSize) const {
+Vector3 Mouse::GetMousePos3D(const ViewProjection& viewProjection, float depthFactor, float blockSize) const {
     // 2Dマウス座標を取得
     Vector2 mousePos = mousePosition_;
 
@@ -51,20 +53,20 @@ Vector3 Mouse::GetMousePos3D(const ViewProjection& viewprojection, float depthFa
     float windowWidth = WinApp::kWindowWidth;
     float windowHeight = WinApp::kWindowHeight;
 
-    // スクリーン座標を正規化デバイス座標 (NDC) に変換 [-1, 1] の範囲にする
+    // スクリーン座標を正規化デバイス座標の範囲にする
     float ndcX = (2.0f * mousePos.x / windowWidth) - 1.0f;
     float ndcY = 1.0f - (2.0f * mousePos.y / windowHeight);
-    float ndcZ = depthFactor; // Z軸の奥行きを調整するパラメータ
+    float ndcZ = depthFactor;
 
-    // NDC座標をVector3に変換（NDCのZ値をdepthFactorで調整）
+    // NDC座標をVector3に変換
     Vector3 clipPos = { ndcX, ndcY, ndcZ };
 
     // 逆射影行列を使ってクリップ空間からビュー空間へ変換
-    Matrix4x4 invProj = Inverse(viewprojection.matProjection_);
+    Matrix4x4 invProj = Inverse(viewProjection.matProjection_);
     Vector3 viewPos = TransformMatrix(clipPos, invProj);
 
     // ビュー空間からワールド空間へ変換
-    Matrix4x4 invView = Inverse(viewprojection.matView_);
+    Matrix4x4 invView = Inverse(viewProjection.matView_);
     Vector3 worldPos = TransformMatrix(viewPos, invView);
 
     // ブロックサイズに基づいてスナップ処理を適用
@@ -87,7 +89,7 @@ Vector2 Mouse::GetMousePos() {
     POINT mousePos;
     GetCursorPos(&mousePos);
     // スクリーン座標からウィンドウ内座標に変換
-    ScreenToClient(hWnd_, &mousePos); // hWndはウィンドウハンドル
+    ScreenToClient(hWnd_, &mousePos);
     mousePosition_ = Vector2(float(mousePos.x), float(mousePos.y));
 
     return mousePosition_;

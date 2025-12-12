@@ -3,7 +3,9 @@
 #include"Vector2.h"
 #include <vector>
 
+namespace KetaEngine {
 class ViewProjection;
+}
 
 float Lerp(float start, float end, float t);
 
@@ -37,4 +39,4 @@ Vector3 ToRadian(const Vector3& degrees);
 Vector3 ToDegree(const Vector3& radians);
 
 
- Vector3 DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view);
+ Vector3 DirectionToEulerAngles(const Vector3& direction, const KetaEngine::ViewProjection& view);

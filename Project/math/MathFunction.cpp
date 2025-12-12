@@ -44,7 +44,7 @@ Vector3 SLerp(const Vector3& start, const Vector3& end, float t) {
     // 角度θをアークコサインで求める
     float theta = std::acos(dot);
 
-    // もしθが非常に小さい（つまりベクトルがほぼ同じ方向）なら、線形補間を使う
+    // もしθが非常に小さい
     if (std::abs(theta) < 1.0e-5) {
         return Lerp(start, end, t);  // 線形補間で十分
     }
@@ -189,7 +189,7 @@ float LerpShortAngle(float a, float b, float t) {
 	return a + diff * t;
 }
  
-Vector3 DirectionToEulerAngles(const Vector3& direction, const ViewProjection& view) {
+Vector3 DirectionToEulerAngles(const Vector3& direction, const KetaEngine::ViewProjection& view) {
 
     // ベクトル正規化
     Vector3 rdirection = direction.Normalize();

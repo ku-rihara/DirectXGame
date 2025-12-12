@@ -5,10 +5,11 @@
 #include <dxcapi.h>
 #include <wrl/client.h>
 
+enum class BlendMode;
+
 namespace KetaEngine {
 
 class DirectXCommon;
-enum class BlendMode;
 
 /// <summary>
 /// グラフィックスパイプラインの基底クラス
