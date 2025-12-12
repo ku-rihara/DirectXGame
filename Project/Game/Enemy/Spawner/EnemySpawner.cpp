@@ -10,7 +10,7 @@ void EnemySpawner::Init(const std::string& jsonData) {
     SettingGroupSpawnPos();
 
     // グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);

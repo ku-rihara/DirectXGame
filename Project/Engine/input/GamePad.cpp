@@ -1,5 +1,7 @@
 // Gamepad.cpp
 #include "Gamepad.h"
+
+using namespace KetaEngine;
 #include <cmath>
 
 

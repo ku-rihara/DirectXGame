@@ -16,7 +16,7 @@ void GameCamera::Init() {
     viewProjection_.Init();
 
     ///* グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
@@ -45,7 +45,7 @@ void GameCamera::Update(float speedRate) {
 void GameCamera::MoveUpdate() {
 
     // 入力処理
-    Input* input            = Input::GetInstance();
+    KetaEngine::Input* input = KetaEngine::Input::GetInstance();
     const float rotateSpeed = 0.08f;
     Vector2 stickInput      = {0.0f, 0.0f};
 
@@ -63,7 +63,7 @@ void GameCamera::MoveUpdate() {
 
     } else {
         // ================================= GamePad ================================= //
-        stickInput = Input::GetPadStick(0, 1);
+        stickInput = KetaEngine::Input::GetPadStick(0, 1);
     }
 
     ///============================================================
@@ -75,7 +75,7 @@ void GameCamera::MoveUpdate() {
     }
 
     // reset
-    if (input->TriggerKey(KeyboardKey::R) || Input::IsTriggerPad(0, GamepadButton::RS)) {
+    if (input->TriggerKey(KeyboardKey::R) || KetaEngine::Input::IsTriggerPad(0, GamepadButton::RS)) {
         Reset();
     }
 
@@ -167,7 +167,7 @@ Vector3 GameCamera::GetWorldPos() const {
     return worldPos;
 }
 
-void GameCamera::SetTarget(const WorldTransform* target) {
+void GameCamera::SetTarget(const KetaEngine::WorldTransform* target) {
     target_ = target;
     Reset();
 }

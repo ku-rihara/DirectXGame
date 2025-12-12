@@ -7,6 +7,8 @@
 /// <summary>
 /// モデル管理クラス
 /// </summary>
+namespace KetaEngine {
+
 class ModelManager {
 private:
     ModelManager()                               = default;
@@ -44,3 +46,5 @@ private:
     static std::map<std::string, std::unique_ptr<Model>> models_;
     std::unique_ptr<ModelCommon> modelCommon = nullptr;
 };
+
+}; // KetaEngine

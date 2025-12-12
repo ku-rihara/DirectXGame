@@ -1,4 +1,6 @@
 #include "PointLightManager.h"
+
+using namespace KetaEngine;
 #include "Dx/DirectXCommon.h"
 #include "base/SrvManager.h"
 #include <imgui.h>

@@ -1,5 +1,7 @@
 
 #include "EasingFunction.h"
+
+using namespace KetaEngine;
 #include"MathFunction.h"
 ///std
 #include<numbers>

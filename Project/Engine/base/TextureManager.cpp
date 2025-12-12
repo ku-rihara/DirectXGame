@@ -1,4 +1,6 @@
 #include "base/TextureManager.h"
+
+using namespace KetaEngine;
 #include "2d/ImGuiManager.h"
 #include "Dx/DxCommand.h"
 /// srv

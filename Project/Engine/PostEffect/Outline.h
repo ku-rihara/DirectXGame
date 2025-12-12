@@ -8,6 +8,8 @@
 /// <summary>
 /// アウトラインポストエフェクトクラス
 /// </summary>
+namespace KetaEngine {
+
 class Outline : public BasePostEffect {
 public:
     struct ParamData {
@@ -50,3 +52,5 @@ private:
 
     D3D12_STATIC_SAMPLER_DESC staticSamplersOutLine_[2];
 };
+
+}; // KetaEngine

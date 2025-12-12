@@ -4,7 +4,7 @@
 void NotFindSprite::Init() {
     
     // スプライト生成
-    sprite_.reset(Sprite::Create("NotFind.png", false));
+    sprite_.reset(KetaEngine::Sprite::Create("NotFind.png", false));
 
     // アンカーポイント、スケールセット
     sprite_->SetAnchorPoint(Vector2(0.5f, 0.5f));

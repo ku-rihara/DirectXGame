@@ -1,4 +1,6 @@
 #include "WinApp.h"
+
+using namespace KetaEngine;
 #pragma comment(lib, "winmm.lib")
 
 const wchar_t WinApp::kWindowClassName[] = L"DirectXGame";

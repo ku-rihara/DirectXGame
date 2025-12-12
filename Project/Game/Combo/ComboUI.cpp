@@ -6,7 +6,7 @@
 void ComboUI::Init(const ComboDigit& digit) {
 
     /// Sprite create
-    sprite_.reset(Sprite::Create("Number/Numbers.png"));
+    sprite_.reset(KetaEngine::Sprite::Create("Number/Numbers.png"));
    
     CreateGroupName(digit);
 
@@ -105,7 +105,7 @@ void ComboUI::CreateGroupName(const ComboDigit& digit) {
     }
     comboDigit_ = digit;
     // グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);

@@ -20,13 +20,11 @@ public:
     /// 描画
     /// </summary>
     /// <param name="viewProjection">ビュープロジェクション</param>
-    void Draw(ViewProjection& viewProjection);
+    void Draw(KetaEngine::ViewProjection& viewProjection);
 
 private:
-    // ワールド変換データ
-    WorldTransform transform_;
-    // モデル
-    std::unique_ptr<PrimitiveBox> primitiveBox_ = nullptr;
-
-public:
+	// ワールド変換データ
+    KetaEngine::WorldTransform transform_;
+	// モデル
+    std::unique_ptr<KetaEngine::PrimitiveBox> primitiveBox_ = nullptr;
 };

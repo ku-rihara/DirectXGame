@@ -1,4 +1,6 @@
 #include "Easing.h"
+
+using namespace KetaEngine;
 #include "Easing/EasingFunction.h"
 #include "Function/GetFile.h"
 #include "Editor/EasingCreator/EasingCreator.h"

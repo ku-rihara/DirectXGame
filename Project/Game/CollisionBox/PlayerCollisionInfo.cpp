@@ -131,7 +131,7 @@ void PlayerCollisionInfo::OnCollisionStay([[maybe_unused]] BaseCollider* other) 
     }
 }
 
-void PlayerCollisionInfo::SetPlayerBaseTransform(const WorldTransform* playerBaseTransform) {
+void PlayerCollisionInfo::SetPlayerBaseTransform(const KetaEngine::WorldTransform* playerBaseTransform) {
     baseTransform_ = playerBaseTransform;
 }
 
@@ -139,6 +139,6 @@ Vector3 PlayerCollisionInfo::GetCollisionPos() const {
     return BaseAABBCollisionBox::GetCollisionPos();
 }
 
-void PlayerCollisionInfo::SetParentTransform(WorldTransform* transform) {
+void PlayerCollisionInfo::SetParentTransform(KetaEngine::WorldTransform* transform) {
     BaseAABBCollisionBox::SetParentTransform(transform);
 }

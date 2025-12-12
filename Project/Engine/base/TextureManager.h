@@ -6,6 +6,8 @@
 /// std
 #include <unordered_map>
 
+namespace KetaEngine {
+
 class DirectXCommon;
 class SrvManager;
 /// <summary>
@@ -113,3 +115,5 @@ public:
     /// <returns>GPUディスクリプタハンドル</returns>
     D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandleGPU(const std::string& filePath);
 };
+
+}; // KetaEngine

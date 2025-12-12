@@ -12,7 +12,7 @@ protected:
     Player* pPlayer_                   = nullptr; /// プレイヤー
     PlayerParameter* pPlayerParameter_ = nullptr;
 
-    Easing<Vector3> startEasing_;
+    KetaEngine::Easing<Vector3> startEasing_;
     Vector3 tempScaleValue_;
 
     /// motion
@@ -24,8 +24,8 @@ protected:
     float floatValue_;
     float tempFloatValue_;
 
-    Easing<float> rotateEasing_;
-    Easing<float> floatEase_;
+    KetaEngine::Easing<float> rotateEasing_;
+    KetaEngine::Easing<float> floatEase_;
 
 public:
     BaseComboAattackBehavior(const std::string& name, Player* player);

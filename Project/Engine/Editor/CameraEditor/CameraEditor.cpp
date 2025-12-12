@@ -1,4 +1,6 @@
 #include "CameraEditor.h"
+
+using namespace KetaEngine;
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <filesystem>
 #include <imgui.h>

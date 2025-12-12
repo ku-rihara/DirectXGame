@@ -5,6 +5,8 @@
 #include <d3d12.h>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 class DirectXCommon;
 
 class GPUParticleMaterial {
@@ -63,3 +65,5 @@ public:
     UVAnimationData* GetUVAnimeData() { return uvAnimeData_; }
     ID3D12Resource* GetUVAnimeResource() { return uvAnimeResource_.Get(); }
 };
+
+}; // KetaEngine

@@ -4,6 +4,8 @@
 #include"Matrix4x4.h"
 #include "Vector2.h"
 
+namespace KetaEngine {
+
 struct ParticleCS {
     Vector3 translate; 
     float lifeTime; 
@@ -23,3 +25,5 @@ struct PerView {
     int32_t alignToVelocity;
     Vector2 padding;
 };
+
+}; // KetaEngine

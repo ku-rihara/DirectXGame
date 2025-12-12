@@ -1,4 +1,6 @@
 #include "GPUParticleResourceData.h"
+
+using namespace KetaEngine;
 #include "base/SrvManager.h"
 #include "Dx/DirectXCommon.h"
 

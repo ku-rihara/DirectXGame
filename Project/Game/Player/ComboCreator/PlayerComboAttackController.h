@@ -50,7 +50,7 @@ private:
     //*-------------------------------- Private variants--------------------------------*//
     
     // 共通パラメータ
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     const std::string commonGroupName_      = "ComboCommonParam";
     const std::string AttackDataFolderPath_ = "Resources/GlobalParameter/AttackCreator/";
 

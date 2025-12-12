@@ -8,6 +8,8 @@
 #include <vector>
 #include <wrl.h>
 
+namespace KetaEngine {
+
 struct Vertex {
     Vector3 pos;
     Vector4 color;
@@ -78,3 +80,5 @@ private:
     Microsoft::WRL::ComPtr<ID3D12Resource> constantBufferResource_; //< 定数バッファ
     CBuffer* cBufferData_ = nullptr;                                //< 定数バッファデータ
 };
+
+}; // KetaEngine

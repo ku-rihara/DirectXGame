@@ -52,7 +52,7 @@ void PlayerSpawn::Update() {
     case PlayerSpawn::Step::WAIT:
 
        
-        startWaitTime_ += Frame::DeltaTime();
+        startWaitTime_ += KetaEngine::Frame::DeltaTime();
         if (startWaitTime_ < pPlayerParameter_->GetParamaters().spawnParam.waitTime_) {
             break;
         }
@@ -64,7 +64,7 @@ void PlayerSpawn::Update() {
         ///
         ///================================================================
     case PlayerSpawn::Step::SPAWN:
-        spawnEase_.Update(Frame::DeltaTimeRate());
+        spawnEase_.Update(KetaEngine::Frame::DeltaTimeRate());
         pPlayer_->DissolveUpdate(tempDessolve_);
         pPlayer_->GetLeftHand()->DissolveAdapt(tempDessolve_);
         pPlayer_->GetRightHand()->DissolveAdapt(tempDessolve_);

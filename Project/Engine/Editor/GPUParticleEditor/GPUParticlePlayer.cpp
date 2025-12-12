@@ -1,4 +1,6 @@
 #include "GPUParticlePlayer.h"
+
+using namespace KetaEngine;
 #include "GPUParticle/GPUParticleManager.h"
 
 void GPUParticlePlayer::Init() {

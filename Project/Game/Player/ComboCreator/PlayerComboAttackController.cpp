@@ -6,7 +6,7 @@
 
 void PlayerComboAttackController::Init() {
     // 共通パラメータの初期化
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(commonGroupName_);
     BindCommonParams();
     globalParameter_->SyncParamForGroup(commonGroupName_);

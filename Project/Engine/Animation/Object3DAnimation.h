@@ -16,6 +16,8 @@
 /// <summary>
 /// 3Dアニメーションオブジェクトクラス
 /// </summary>
+namespace KetaEngine {
+
 class Object3DAnimation : public BaseObject3d {
 public:
     Object3DAnimation() = default;
@@ -178,3 +180,5 @@ public:
     const bool& IsAnimationTransitioning() const { return isChange_; }
     void SetTransitionDuration(float duration) { transitionDuration_ = duration; }
 };
+
+}; // KetaEngine

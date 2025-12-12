@@ -1,4 +1,6 @@
 #include "DxRenderTarget.h"
+
+using namespace KetaEngine;
 #include "base/DsvManager.h"
 #include "base/RtvManager.h"
 #include "base/SrvManager.h"

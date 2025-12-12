@@ -7,6 +7,8 @@
 #include <memory>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 class RtvManager;
 class SrvManager;
 class DxCommand;
@@ -94,3 +96,5 @@ public:
     void SetUseClasses(DxDepthBuffer* depthBuffer, RtvManager* rtvManager, SrvManager* srvManager,
         DxCommand* dxCommand, DxSwapChain* dxSwapChain, DxResourceBarrier* resourceBarrier);
 };
+
+}; // KetaEngine

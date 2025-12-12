@@ -14,7 +14,7 @@
 class EditorScene : public BaseScene {
 private:
     std::unique_ptr<EasingTestObj> easingTestObject_;
-    EasingEditor easingEditor_;
+    KetaEngine::EasingEditor easingEditor_;
 
 public:
     EditorScene();

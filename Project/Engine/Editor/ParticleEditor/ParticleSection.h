@@ -13,6 +13,8 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 class Object3DAnimation;
 
 /// <summary>
@@ -136,3 +138,5 @@ public:
     void SetTexture(uint32_t textureHandle);
     void SetParentBasePos(WorldTransform* parent) { emitBoxTransform_.parent_ = parent; }
 };
+
+}; // KetaEngine

@@ -1,4 +1,6 @@
 #include "ObjEaseAnimationSection.h"
+
+using namespace KetaEngine;
 #include "Frame/Frame.h"
 #include "MathFunction.h"
 #include <imgui.h>
@@ -8,6 +10,7 @@ void ObjEaseAnimationSection::Init(const std::string& animationName, const std::
     currenTSequenceElementIndex_ = keyNumber;
     groupName_                   = animationName + std::to_string(currenTSequenceElementIndex_);
     folderPath_                  = "ObjEaseAnimation/" + categoryName + "/" + "Sections/" + animationName + "/";
+
 
     // Scaleの初期値を1に設定
     transformParams_[static_cast<size_t>(TransformType::Scale)].endValue = Vector3::OneVector();

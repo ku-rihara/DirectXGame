@@ -14,6 +14,8 @@
 /// <summary>
 /// スプライトクラス
 /// </summary>
+namespace KetaEngine {
+
 class Sprite {
 public:
     struct UVTransform {
@@ -135,3 +137,5 @@ public:
     void SetLayerNum(int32_t layerNum) { layerNum_ = layerNum; }
     void SetIsDraw(const bool& isDraw) { isDraw_ = isDraw; }
 };
+
+}; // KetaEngine

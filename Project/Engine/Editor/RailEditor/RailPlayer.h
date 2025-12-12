@@ -8,6 +8,8 @@
 /// <summary>
 /// レールプレイヤー
 /// </summary>
+namespace KetaEngine {
+
 class RailPlayer : public BaseEffectPlayer {
 public:
     RailPlayer()           = default;
@@ -32,3 +34,5 @@ public:
 
      void SetParent(WorldTransform* parent);
 };
+
+}; // KetaEngine

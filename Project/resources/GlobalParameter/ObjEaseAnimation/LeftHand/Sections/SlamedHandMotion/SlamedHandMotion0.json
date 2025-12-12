@@ -12,11 +12,11 @@
             0.0
         ],
         "Scale_EaseType": 0,
-        "Scale_IsActive": true,
-        "Scale_IsReturnToOrigin": false,
+        "Scale_IsActive": false,
+        "Scale_IsReturnToOrigin": true,
         "Scale_MaxTime": 1.0,
         "Scale_ReturnEaseType": 0,
-        "Scale_ReturnMaxTime": 1.0,
+        "Scale_ReturnMaxTime": 0.0,
         "Scale_endValue": [
             1.0,
             1.0,

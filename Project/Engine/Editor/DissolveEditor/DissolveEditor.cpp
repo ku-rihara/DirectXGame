@@ -1,4 +1,6 @@
 #include "DissolveEditor.h"
+
+using namespace KetaEngine;
 #include <algorithm>
 #include <filesystem>
 #include <imgui.h>

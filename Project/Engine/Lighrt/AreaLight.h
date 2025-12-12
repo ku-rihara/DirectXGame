@@ -4,6 +4,8 @@
 #include <d3d12.h>
 #include <wrl.h>
 
+namespace KetaEngine {
+
 struct AreaLightData {
     Vector4 color;
     Vector3 position;
@@ -54,3 +56,5 @@ public:
     ID3D12Resource* GetLightResource() const { return lightResource_.Get(); }
     AreaLightData* GetData() { return lightData_; }
 };
+
+}; // KetaEngine

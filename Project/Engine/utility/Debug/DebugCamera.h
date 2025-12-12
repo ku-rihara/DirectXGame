@@ -7,6 +7,8 @@
 /// <summary>
 /// デバッグカメラクラス
 /// </summary>
+namespace KetaEngine {
+
 class DebugCamera {
 public:
     DebugCamera(const int& window_width, const int& window_height);
@@ -36,3 +38,5 @@ public:
     void SetNearZ(float value) { viewProjection_.nearZ_ = value; }
     void SetFarZ(float value) { viewProjection_.farZ_ = value; }
 };
+
+}; // KetaEngine

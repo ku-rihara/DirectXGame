@@ -3,7 +3,7 @@
 #include "3d/Object3DRegistry.h"
 #include"2d/SpriteRegistry.h"
 #include "Lighrt/Light.h"
-#include "Manager/SceneManager.h"
+#include "Scene/Manager/SceneManager.h"
 #include "Player/TitleBehavior/TitleRightPunch.h"
 #include "Editor/ParticleEditor/ParticleManager.h"
 
@@ -13,6 +13,7 @@
 // math
 #include <imgui.h>
 
+
 TitleScene::TitleScene() {}
 
 TitleScene::~TitleScene() {
@@ -20,7 +21,7 @@ TitleScene::~TitleScene() {
 
 void TitleScene::Init() {
     //// グローバル変数の読み込み
-    GlobalParameter::GetInstance()->LoadFiles();
+    KetaEngine::GlobalParameter::GetInstance()->LoadFiles();
     BaseScene::Init();
     ///=======================================================================================
     /// 生成
@@ -31,7 +32,7 @@ void TitleScene::Init() {
     skydome_          = std::make_unique<SkyDome>();
     titleRogo_        = std::make_unique<TitleRogo>();
     skyBox_           = std::make_unique<SkyBox>();
-    putObjForBlender_ = std::make_unique<PutObjForBlender>();
+    putObjForBlender_ = std::make_unique<KetaEngine::PutObjForBlender>();
 
     ///=======================================================================================
     /// 初期化
@@ -47,12 +48,12 @@ void TitleScene::Init() {
     viewProjection_.translation_ = {7.8f, 3.6f, 8.3f};
     viewProjection_.rotation_.y  = 3.8f;
 
-    screenSprite_.reset(Sprite::Create("screenChange.png"));
+    screenSprite_.reset(KetaEngine::Sprite::Create("screenChange.png"));
 
     player_->SetTitleBehavior();
     player_->SetWorldPositionY(30.0f);
 
-    ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
+    KetaEngine::ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
 void TitleScene::Update() {
@@ -76,7 +77,7 @@ void TitleScene::Update() {
 
   
     // 　ゲーム遷移
-    if (Input::GetInstance()->PushKey(KeyboardKey::Space)) {
+    if (KetaEngine::Input::GetInstance()->PushKey(KeyboardKey::Space)) {
         isFinished_ = true;
     } else {
         ChangeForJoyState(); // コントローラジャンプ
@@ -86,16 +87,16 @@ void TitleScene::Update() {
     ViewProjectionUpdate();
 
     if (isFinished_) {
-        alpha_ += Frame::DeltaTime();
+        alpha_ += KetaEngine::Frame::DeltaTime();
         if (alpha_ >= 1.2f) {
-            SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+            KetaEngine::SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
         }
     }
 }
 
 void TitleScene::ChangeForJoyState() {
 
-    if (!((Input::IsTriggerPad(0, GamepadButton::A)))) {
+    if (!((KetaEngine::Input::IsTriggerPad(0, GamepadButton::A)))) {
         return;
     }
 
@@ -117,8 +118,8 @@ void TitleScene::Debug() {
     ImGui::End();
 
     ImGui::Begin("Param");
-    Light::GetInstance()->DebugImGui();
-    SpriteRegistry::GetInstance()->DebugImGui();
+    KetaEngine::Light::GetInstance()->DebugImGui();
+    KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();
 #endif
 }
@@ -126,7 +127,7 @@ void TitleScene::Debug() {
 // ビュープロジェクション更新
 void TitleScene::ViewProjectionUpdate() {
     BaseScene::ViewProjectionUpdate();
-    Light::GetInstance()->SetWorldCameraPos(player_->GetWorldPosition());
+    KetaEngine::Light::GetInstance()->SetWorldCameraPos(player_->GetWorldPosition());
 }
 
 void TitleScene::ViewProcess() {

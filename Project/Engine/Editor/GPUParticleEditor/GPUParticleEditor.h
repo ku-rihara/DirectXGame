@@ -7,6 +7,8 @@
 /// <summary>
 /// GPUパーティクルエディター
 /// </summary>
+namespace KetaEngine {
+
 class GPUParticleEditor : public BaseEffectEditor<GPUParticleData> {
 public:
     GPUParticleEditor()  = default;
@@ -34,3 +36,5 @@ private:
     const std::string particleFolderName_ = "GPUParticle/";
     const std::string dateFolderName_     = "Dates/";
 };
+
+}; // KetaEngine

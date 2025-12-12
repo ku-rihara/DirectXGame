@@ -1,16 +1,21 @@
 #include "SceneManager.h"
+using namespace KetaEngine;
+
+// 3d
 #include "3d/Object3DRegistry.h"
 #include "Animation/AnimationRegistry.h"
+// base
 #include "Dx/DirectXCommon.h"
 #include "Frame/Frame.h"
-#include "GPUParticle/GPUParticleManager.h"
-#include "input/Input.h"
 #include "Pipeline/PipelineManager.h"
-#include "Editor/ParameterEditor/GlobalParameter.h"
+// particle
 #include "Editor/ParticleEditor/ParticleManager.h"
+#include "GPUParticle/GPUParticleManager.h"
+// input
+#include "input/Input.h"
+// global parameter
+#include "Editor/ParameterEditor/GlobalParameter.h"
 
-#include "3d/Object3DRegistry.h"
-#include "Animation/AnimationRegistry.h"
 #include <cassert>
 
 // シングルトンインスタンスの取得
@@ -49,8 +54,7 @@ void SceneManager::Update() {
 
 void SceneManager::Debug() {
     scene_->Debug();
-
- }
+}
 
 void SceneManager::SkyBoxDraw() {
     if (scene_) {

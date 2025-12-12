@@ -4,6 +4,8 @@
 /// <summary>
 /// 3Dオブジェクトクラス
 /// </summary>
+namespace KetaEngine {
+
 class Object3d : public BaseObject3d {
 public:
     Object3d() = default;
@@ -31,3 +33,5 @@ private:
     void CreateWVPResource() override;
     void CreateMaterialResource() override;
 };
+
+}; // KetaEngine

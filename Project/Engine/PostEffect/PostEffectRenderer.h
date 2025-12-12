@@ -6,6 +6,8 @@
 #include <array>
 #include <d3d12.h>
 #include <memory>
+namespace KetaEngine {
+
 class ViewProjection;
 
 enum class PostEffectMode {
@@ -99,3 +101,5 @@ public:
     void SetViewProjection(const ViewProjection* viewProjection);
     void SetPostEffectMode(const PostEffectMode& mode) { currentMode_ = mode; }
 };
+
+}; // KetaEngine

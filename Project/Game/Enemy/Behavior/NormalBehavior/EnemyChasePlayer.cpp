@@ -43,11 +43,11 @@ EnemyChasePlayer::~EnemyChasePlayer() {
 
 void EnemyChasePlayer::Update() {
 
-    spriteEasing_.Update(Frame::DeltaTimeRate());
+    spriteEasing_.Update(KetaEngine::Frame::DeltaTimeRate());
     pBaseEnemy_->GetFindSprite()->SetScale(tempSpriteScale_);
 
     // Enemy AmplitudeScaling
-    scaleEasing_.Update(Frame::DeltaTimeRate());
+    scaleEasing_.Update(KetaEngine::Frame::DeltaTimeRate());
     pBaseEnemy_->SetScale(tempEnemyScale_);
 
     // ターゲットへのベクトル
@@ -58,7 +58,7 @@ void EnemyChasePlayer::Update() {
 
     // 追従時間超過時のリセット処理
     if (isChaseTimeOver_) {
-        chaseResetTimer_ += Frame::DeltaTimeRate();
+        chaseResetTimer_ += KetaEngine::Frame::DeltaTimeRate();
 
         // リセット時間が経過したら追従を再開
         if (chaseResetTimer_ >= pBaseEnemy_->GetParameter().chaseResetTime) {
@@ -73,7 +73,7 @@ void EnemyChasePlayer::Update() {
     }
 
     // 追従時間の更新
-    UpdateChaseTime(Frame::DeltaTimeRate());
+    UpdateChaseTime(KetaEngine::Frame::DeltaTimeRate());
 
     // 追従時間が最大値を超えた場合
     if (currentChaseTime_ >= pBaseEnemy_->GetParameter().maxChaseTime) {
@@ -116,7 +116,7 @@ void EnemyChasePlayer::Update() {
     }
 
     /// 変位加算
-    pBaseEnemy_->AddPosition(finalDirection * (pBaseEnemy_->GetParameter().chaseSpeed * Frame::DeltaTime()));
+    pBaseEnemy_->AddPosition(finalDirection * (pBaseEnemy_->GetParameter().chaseSpeed * KetaEngine::Frame::DeltaTime()));
 
     // 目標角度を計算
     float objectiveAngle = std::atan2(-finalDirection.x, -finalDirection.z);

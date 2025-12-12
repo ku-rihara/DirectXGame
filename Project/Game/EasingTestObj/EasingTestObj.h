@@ -4,6 +4,7 @@
 #include "Easing/Easing.h"
 #include "Easing/EasingSequence.h"
 
+
 /// <summary>
 /// イージングテスト用オブジェクトクラス
 /// </summary>
@@ -15,23 +16,20 @@ private:
         Scale, // 拡大縮小
     };
 
+private:
+    // モデル
+    std::unique_ptr<KetaEngine::Object3d> object3D_ = nullptr;
+
+    KetaEngine::Easing<Vector3> easing_;
+
 public:
     EasingTestObj();
     ~EasingTestObj();
-
-    // 初期化、更新
     void Init();
     void Update();
 
-    void Debug(); //< デバッグ処理
-    void ScaleEasing(); //< スケールイージング
+    void Debug();
+    void ScaleEasing();
 
-private:
-    // モデル
-    std::unique_ptr<Object3d> object3D_ = nullptr;
-
-    Easing<Vector3> easing_;
-
-public:
-    Easing<Vector3>& GetEasingData() { return easing_; }
+   KetaEngine::Easing<Vector3>& GetEasingData() { return easing_; }
 };

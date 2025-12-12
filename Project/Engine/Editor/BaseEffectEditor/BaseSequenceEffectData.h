@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 
+namespace KetaEngine {
+
 template <typename TSequenceElement>
 class BaseSequenceEffectData;
 
@@ -57,3 +59,5 @@ public:
     //*----------------------------- setter Methods -----------------------------*//
     void SetSelectedKeyFrameIndex(int32_t index);
 };
+
+}; // KetaEngine

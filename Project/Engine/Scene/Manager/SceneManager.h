@@ -5,14 +5,15 @@
 #include <memory> 
 #include <type_traits>
 
+namespace KetaEngine {
 /// <summary>
 /// シーン管理
 /// </summary>
 class SceneManager {
 private:
-    std::unique_ptr<BaseScene> scene_ = nullptr;           
-    std::unique_ptr<BaseScene> nextScene_ = nullptr;         
-    AbstractSceneFactory* sceneFactory_ = nullptr; 
+    std::unique_ptr<BaseScene> scene_     = nullptr;
+    std::unique_ptr<BaseScene> nextScene_ = nullptr;
+    AbstractSceneFactory* sceneFactory_   = nullptr;
 
 public:
     static SceneManager* GetInstance();
@@ -22,7 +23,7 @@ public:
     void Update();
     void SkyBoxDraw();
     void Debug();
-  
+
     /// <summary>
     /// シーン切り替え
     /// </summary>
@@ -30,15 +31,17 @@ public:
     void ChangeScene(const std::string& scenemane);
 
     ///===========================================================
-    ///getter method
+    /// getter method
     ///===========================================================
     BaseScene* GetScene() const { return scene_.get(); }
 
     ///===========================================================
-    ///setter method
+    /// setter method
     ///===========================================================
     void SetNextScene(std::unique_ptr<BaseScene> nextScene) { nextScene_ = std::move(nextScene); }
     void SetSceneFactory(AbstractSceneFactory* AbstractFactory) {
         sceneFactory_ = AbstractFactory;
     }
 };
+
+}

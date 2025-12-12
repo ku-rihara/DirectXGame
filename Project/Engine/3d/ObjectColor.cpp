@@ -1,4 +1,6 @@
 #include "ObjectColor.h"
+
+using namespace KetaEngine;
 #include"Dx/DirectXCommon.h"
 #include <cassert>
 #include <intsafe.h>

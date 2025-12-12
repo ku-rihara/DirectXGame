@@ -8,6 +8,8 @@
 /// <summary>
 /// GPUパーティクルプレイヤー
 /// </summary>
+namespace KetaEngine {
+
 class GPUParticlePlayer : public BaseEffectPlayer {
 public:
     GPUParticlePlayer()           = default;
@@ -52,3 +54,5 @@ public:
     const std::string& GetCurrentCategoryName() const { return currentCategoryName_; }
     bool IsEmitting() const { return isEmitting_; }
 };
+
+}; // KetaEngine

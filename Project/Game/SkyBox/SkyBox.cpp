@@ -8,7 +8,7 @@ SkyBox::SkyBox() {}
 SkyBox::~SkyBox() {}
 
 void SkyBox::Init() {
-    primitiveBox_ = std::make_unique<PrimitiveBox>();
+    primitiveBox_ = std::make_unique<KetaEngine::PrimitiveBox>();
     primitiveBox_->Init();
     primitiveBox_->SetTexture("Resources/Texture/output.dds");
 	transform_.Init();
@@ -22,7 +22,7 @@ void SkyBox::Update() {
 	transform_.UpdateMatrix();
 }
 
-void SkyBox::Draw(ViewProjection& viewProjection) {
+void SkyBox::Draw(KetaEngine::ViewProjection& viewProjection) {
     primitiveBox_->Draw(transform_, viewProjection);
 }
 

@@ -1,0 +1,63 @@
+{
+    "StrongAttack3": {
+        "CameraAction_FileName": "PlayerthrustAttack",
+        "CameraAction_StartTiming": 0.0,
+        "CameraAction_TriggerByHit": true,
+        "Condition": 0,
+        "HitStop_FileName": "PlayerThurstAttackHitStop",
+        "HitStop_StartTiming": 0.0,
+        "HitStop_TriggerByHit": true,
+        "IsFirstAttack": false,
+        "KnockBackPower": 37.189998626708984,
+        "Main_Head_FileName": "",
+        "Main_Head_StartTiming": 0.0,
+        "NextAttackType": "",
+        "ObjAnim_Head_FileName": "StrongUpper",
+        "ObjAnim_Head_StartTiming": 0.0,
+        "ObjAnim_LeftHand_FileName": "UpperHandMotion",
+        "ObjAnim_LeftHand_StartTiming": 0.0,
+        "ObjAnim_RightHand_FileName": "",
+        "ObjAnim_RightHand_StartTiming": 0.0,
+        "PostEffectParam_FileName": "",
+        "PostEffectParam_StartTiming": 0.0,
+        "PostEffectParam_TriggerByHit": false,
+        "RequireHit": false,
+        "ShakeAction_FileName": "ThurstAttackCamera",
+        "ShakeAction_StartTiming": 0.0,
+        "ShakeAction_TriggerByHit": true,
+        "adaptTime": 0.15000000596046448,
+        "blowYPower": 40.54999923706055,
+        "cancelFrame": 0.0,
+        "collisionOffsetPos": [
+            0.0,
+            0.0,
+            2.130000114440918
+        ],
+        "collisionSize": [
+            6.0,
+            6.0,
+            6.0
+        ],
+        "enableFall": false,
+        "finishTimeOffset": 0.0,
+        "finishWaitTime": 0.15000000596046448,
+        "gamePadBottom": 32768,
+        "isAbleInputMoving": false,
+        "isAlwaysFollowing": false,
+        "isAutoAdvance": false,
+        "isCancel": false,
+        "isPositionYSelect": false,
+        "keyBordBottom": 37,
+        "loopNum": 0,
+        "loopWaitTime": 0.0,
+        "moveEaseTime": 0.0,
+        "moveEaseType": 6,
+        "moveValue": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "power": 15.0,
+        "precedeInputFrame": 0.0
+    }
+}

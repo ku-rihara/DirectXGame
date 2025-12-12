@@ -8,6 +8,8 @@
 /// <summary>
 /// オブジェクトイージングアニメーションプレイヤー
 /// </summary>
+namespace KetaEngine {
+
 class ObjEaseAnimationPlayer : public BaseEffectPlayer {
 public:
     ObjEaseAnimationPlayer()           = default;
@@ -40,3 +42,5 @@ public:
     ObjEaseAnimationData* GetAnimationData();
     const std::string& GetCurrentCategoryName() const { return currentCategoryName_; }
 };
+
+}; // KetaEngine

@@ -3,6 +3,8 @@
 #include <cstdint>
 
 //チャンクヘッダ
+namespace KetaEngine {
+
 struct ChunkHeader {
 	char id[4];//チャンク毎のID
 	int32_t size;//チャンクサイズ
@@ -27,3 +29,5 @@ struct SoundData {
 	unsigned int bufferSize;
 
 };
+
+}; // KetaEngine

@@ -6,6 +6,8 @@
 /// <summary>
 /// ビネットポストエフェクトクラス
 /// </summary>
+namespace KetaEngine {
+
 class Vignette : public BasePostEffect {
 private:
     void CreateGraphicsPipeline() override; //< グラフィックスパイプライン作成
@@ -33,3 +35,5 @@ public:
 
 private:
 };
+
+}; // KetaEngine

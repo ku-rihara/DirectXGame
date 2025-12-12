@@ -39,18 +39,18 @@ public:
 
 private:
     //*-------------------------------- private Method --------------------------------*//
-    void SelectObjAnimationFile(const char* label, std::pair<ObjAnimationParam, FileSelector>& param);
+    void SelectObjAnimationFile(const char* label, std::pair<ObjAnimationParam, KetaEngine::FileSelector>& param);
 
 private:
     //*-------------------------------- Private variants--------------------------------*//
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     std::string groupName_;
     int32_t currentRenditionIndex_            = -1;
     std::string folderPath_                   = "EnemyDamageReaction/RenditionDates/";
     const std::string objAnimationFolderPath_ = "Resources/GlobalParameter/ObjEaseAnimation/Enemy/Dates/";
 
     // オブジェクトアニメーションパラメータ
-    std::pair<ObjAnimationParam, FileSelector> objAnimationParams_;
+    std::pair<ObjAnimationParam, KetaEngine::FileSelector> objAnimationParams_;
 
 public:
     //*-------------------------------- Getter Method --------------------------------*//

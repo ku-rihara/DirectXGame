@@ -23,13 +23,13 @@ private:
     float gaugeMax_;
 
     // sprite
-    std::unique_ptr<Sprite> gaugeFrameSprite_;
-    std::unique_ptr<Sprite> gaugeSprite_;
+    std::unique_ptr<KetaEngine::Sprite> gaugeFrameSprite_;
+    std::unique_ptr<KetaEngine::Sprite> gaugeSprite_;
 
     // position
     Vector2 gaugeFramePos_;
     Vector2 gaugePos_;
 
     // globalParameter
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
 };

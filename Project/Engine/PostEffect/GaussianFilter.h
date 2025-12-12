@@ -6,6 +6,8 @@
 /// <summary>
 /// ガウシアンフィルターポストエフェクトクラス
 /// </summary>
+namespace KetaEngine {
+
 class GaussianFilter : public BasePostEffect {
 public:
     struct ParamData {
@@ -40,3 +42,5 @@ private:
     Microsoft::WRL::ComPtr<ID3D12Resource> paramDataResource_;
     ParamData* paramData_;
 };
+
+}; // KetaEngine

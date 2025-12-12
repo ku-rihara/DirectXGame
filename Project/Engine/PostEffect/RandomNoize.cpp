@@ -1,4 +1,6 @@
 #include "RandomNoize.h"
+
+using namespace KetaEngine;
 #include "Dx/DirectXCommon.h"
 #include"Dx/DxRenderTarget.h"
 #include "Function/Log.h"

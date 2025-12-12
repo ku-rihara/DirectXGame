@@ -45,11 +45,11 @@ protected:
     ///=============================================
 
     /// グローバルパラメータ
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     std::string groupName_;
 
     // emitter
-    std::unique_ptr<ParticleEmitter> emitter_;
+    std::unique_ptr<KetaEngine::ParticleEmitter> emitter_;
     Vector3 direction_;
 
     /// parameter
@@ -64,15 +64,15 @@ public:
     /// getter method
     ///========================================================
     Vector3 GetDirection() const { return direction_; }
-    const WorldTransform& GetObjTransform() const { return obj3d_->transform_; }
+    const KetaEngine::WorldTransform& GetObjTransform() const { return obj3d_->transform_; }
     float GetRailRunSpeedThree() const { return railRunSpeedThree_; }
     float GetRailRunSpeedForth() const { return railRunSpeedForth_; }
 
     ///========================================================
     /// setter method
     ///========================================================
-    virtual void SetRailParent(WorldTransform* parent) = 0;
-    virtual void SetParent(WorldTransform* parent);
+    virtual void SetRailParent(KetaEngine::WorldTransform* parent) = 0;
+    virtual void SetParent(KetaEngine::WorldTransform* parent);
     void SetObjTranslate(const Vector3& pos) { obj3d_->transform_.translation_ = pos; }
     void SetIsEmit(const bool& isEmit) { isEmit_ = isEmit; }
     void SetIsShadow(const bool& isShadow) { isShadow_ = isShadow; }

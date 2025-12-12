@@ -64,7 +64,7 @@ private:
   
 
 private:
-    GlobalParameter* globalParameter_ = nullptr;
+    KetaEngine::GlobalParameter* globalParameter_ = nullptr;
     const std::string groupName_      = "ContinuousEnemySpawner";
 
     EnemyManager* pEnemyManager_    = nullptr;

@@ -1,7 +1,7 @@
 /// scene
 #include "EditorScene.h"
 #include "GameScene.h"
-#include "Manager/SceneManager.h"
+#include "Scene/Manager/SceneManager.h"
 
 #include "base/TextureManager.h"
 // class
@@ -40,14 +40,14 @@ void EditorScene::Update() {
     easingTestObject_->Update();
 
     // 通常のパーティクル更新
-    ParticleManager::GetInstance()->Update();
+    KetaEngine::ParticleManager::GetInstance()->Update();
 
     // GPUパーティクル更新
-    GPUParticleManager::GetInstance()->Update();
+    KetaEngine::GPUParticleManager::GetInstance()->Update();
     ViewProjectionUpdate();
 
     if (input_->TriggerKey(KeyboardKey::Enter)) {
-        SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+        KetaEngine::SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
     }
 }
 

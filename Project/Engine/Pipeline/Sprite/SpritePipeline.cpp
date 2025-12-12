@@ -1,4 +1,6 @@
 #include "SpritePipeline.h"
+
+using namespace KetaEngine;
 #include"Dx/DxCompiler.h"
 #include "function/Log.h"
 #include <cassert>

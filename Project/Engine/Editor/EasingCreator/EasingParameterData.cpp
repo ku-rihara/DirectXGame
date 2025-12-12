@@ -3,9 +3,9 @@
 #include"vector3.h"
 #include <imgui.h>
 
-template struct EasingParameter<float>;
-template struct EasingParameter<Vector2>;
-template struct EasingParameter<Vector3>;
+template struct KetaEngine::EasingParameter<float>;
+template struct KetaEngine::EasingParameter<Vector2>;
+template struct KetaEngine::EasingParameter<Vector3>;
 
 
 void ImGuiEasingTypeSelector(const char* label, int32_t& target) {

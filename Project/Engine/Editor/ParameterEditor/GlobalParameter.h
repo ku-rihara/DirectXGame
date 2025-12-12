@@ -13,6 +13,8 @@
 /// <summary>
 /// グローバルパラメータ管理クラス
 /// </summary>
+namespace KetaEngine {
+
 class GlobalParameter {
 public:
 private:
@@ -143,3 +145,5 @@ private:
 public:
     const std::string& GetDirectoryPath() const { return kDirectoryPath; }
 };
+
+}; // KetaEngine

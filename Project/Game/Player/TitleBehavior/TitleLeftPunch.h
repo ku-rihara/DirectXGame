@@ -32,9 +32,9 @@ private:
     Order order_; /// 振る舞い順序
 
     /// パンチ
-    Easing<Vector3> scalingEase_;
-    Easing<Vector3> punchEase_;
-    Easing<Vector3> backPunchEase_;
+    KetaEngine::Easing<Vector3> scalingEase_;
+    KetaEngine::Easing<Vector3> punchEase_;
+    KetaEngine::Easing<Vector3> backPunchEase_;
 
     Vector3 tempScale_;
 

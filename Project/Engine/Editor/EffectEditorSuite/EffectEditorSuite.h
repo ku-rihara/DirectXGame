@@ -2,6 +2,8 @@
 
 #include <memory>
 
+namespace KetaEngine {
+
 class ViewProjection;
 
 class ObjEaseAnimationEditor;
@@ -34,3 +36,5 @@ public:
     CameraEditor* GetCameraEditor() const { return cameraEditor_.get(); }
     void SetViewProjection(ViewProjection* viewProjection);
 };
+
+}; // KetaEngine

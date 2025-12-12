@@ -1,4 +1,6 @@
 #include "PostEffectController.h"
+
+using namespace KetaEngine;
 #include <algorithm>
 #include <filesystem>
 #include <imgui.h>

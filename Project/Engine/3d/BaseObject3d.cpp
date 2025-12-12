@@ -1,4 +1,6 @@
 #include "BaseObject3d.h"
+
+using namespace KetaEngine;
 #include "base/TextureManager.h"
 #include "Dx/DirectXCommon.h"
 #include "ModelManager.h"

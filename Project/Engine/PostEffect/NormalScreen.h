@@ -6,6 +6,8 @@
 /// <summary>
 /// 通常スクリーンポストエフェクトクラス
 /// </summary>
+namespace KetaEngine {
+
 class NormalScreen : public BasePostEffect {
 private:
     void CreateGraphicsPipeline() override; //< グラフィックスパイプライン作成
@@ -33,3 +35,5 @@ public:
 
 private:
 };
+
+}; // KetaEngine

@@ -18,6 +18,7 @@
 #include "GameCamera/GameCamera.h"
 #include "Matrix4x4.h"
 #include "Player/Player.h"
+#include "Field/Field.h"
 
 ///========================================================
 ///  初期化
@@ -25,7 +26,7 @@
 void BaseEnemy::Init(const Vector3& spawnPos) {
 
     // HP
-    HPMax_ = 105.0f;
+    HPMax_ = 115.0f;
     hp_    = HPMax_;
     hpBar_ = std::make_unique<EnemyHPBar>();
     hpBar_->Init(HPMax_);
@@ -47,8 +48,8 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
     notFindSprite_->Init();
 
     // audio
-    deathSound_  = Audio::GetInstance()->LoadWave("EnemyDeath.wav");
-    thrustSound_ = Audio::GetInstance()->LoadWave("Enemythurst.wav");
+    deathSound_  = KetaEngine::Audio::GetInstance()->LoadWave("EnemyDeath.wav");
+    thrustSound_ = KetaEngine::Audio::GetInstance()->LoadWave("Enemythurst.wav");
 
     // 振る舞い初期化
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
@@ -65,19 +66,20 @@ void BaseEnemy::Update() {
     }
 
     // ダメージクールタイム更新
-    DamageCollingUpdate(Frame::DeltaTimeRate());
+    DamageCollingUpdate(KetaEngine::Frame::DeltaTimeRate());
 
     // ダメージBehavior更新
     damageBehavior_->Update();
 
     collisionBox_->SetPosition(GetWorldPosition());
     collisionBox_->Update();
+    MoveToLimit();
     BaseObject::Update();
 }
 ///========================================================
 /// HpBar表示
 ///========================================================
-void BaseEnemy::DisplaySprite(const ViewProjection& viewProjection) {
+void BaseEnemy::DisplaySprite(const KetaEngine::ViewProjection& viewProjection) {
     // ワールド座標からスクリーン座標に変換
     Vector2 positionScreen = ScreenTransform(GetWorldPosition(), viewProjection);
     // Vector2に格納
@@ -176,7 +178,7 @@ void BaseEnemy::ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior) {
     moveBehavior_ = std::move(behavior);
 }
 
-bool BaseEnemy::IsInView(const ViewProjection& viewProjection) const {
+bool BaseEnemy::IsInView(const KetaEngine::ViewProjection& viewProjection) const {
 
     // 敵のワールド座標
     Vector3 positionWorld = GetWorldPosition();
@@ -213,6 +215,46 @@ void BaseEnemy::TakeDamage(float damageValue) {
     }
 }
 
+void BaseEnemy::MoveToLimit() {
+
+    // フィールドの中心とスケールを取得
+    Vector3 fieldCenter = {0.0f, 0.0f, 0.0f}; // フィールド中心
+    Vector3 fieldScale  = Field::baseScale_; // フィールドのスケール
+
+    // プレイヤーのスケールを考慮した半径
+    float radiusX = fieldScale.x - baseTransform_.scale_.x;
+    float radiusZ = fieldScale.z - baseTransform_.scale_.z;
+
+    // 現在位置が範囲内かチェック
+    bool insideX = std::abs(baseTransform_.translation_.x - fieldCenter.x) <= radiusX;
+    bool insideZ = std::abs(baseTransform_.translation_.z - fieldCenter.z) <= radiusZ;
+
+    ///--------------------------------------------------------------------------------
+    /// 範囲外なら戻す
+    ///--------------------------------------------------------------------------------
+
+    if (!insideX) { /// X座標
+        baseTransform_.translation_.x = std::clamp(
+            baseTransform_.translation_.x,
+            fieldCenter.x - radiusX,
+            fieldCenter.x + radiusX);
+    }
+
+    if (!insideZ) { /// Z座標
+        baseTransform_.translation_.z = std::clamp(
+            baseTransform_.translation_.z,
+            fieldCenter.z - radiusZ,
+            fieldCenter.z + radiusZ);
+    }
+
+    // 範囲外の反発処理
+    if (!insideX || !insideZ) {
+        Vector3 directionToCenter = (fieldCenter - baseTransform_.translation_).Normalize();
+        baseTransform_.translation_.x += directionToCenter.x * 0.1f; // 軽く押し戻す
+        baseTransform_.translation_.z += directionToCenter.z * 0.1f; // 軽く押し戻す
+    }
+}
+
 void BaseEnemy::StartDamageColling(float collingTime, const std::string& reactiveAttackName) {
     isDamageColling_        = true;
     lastReceivedAttackName_ = reactiveAttackName;
@@ -239,12 +281,12 @@ void BaseEnemy::DamageRenditionInit() {
 void BaseEnemy::ThrustRenditionInit() {
     // ガレキパーティクル
     pEnemyManager_->ThrustEmit(GetWorldPosition());
-    Audio::GetInstance()->PlayWave(thrustSound_, 0.2f);
+    KetaEngine::Audio::GetInstance()->PlayWave(thrustSound_, 0.2f);
 }
 
 void BaseEnemy::DeathRenditionInit() {
     pEnemyManager_->DeathEmit(GetWorldPosition());
-    Audio::GetInstance()->PlayWave(deathSound_, 0.5f);
+    KetaEngine::Audio::GetInstance()->PlayWave(deathSound_, 0.5f);
 }
 
 /// ===================================================
@@ -252,7 +294,7 @@ void BaseEnemy::DeathRenditionInit() {
 /// ===================================================
 void BaseEnemy::Jump(float& speed, float fallSpeedLimit, float gravity) {
     // 移動
-    baseTransform_.translation_.y += speed * Frame::DeltaTimeRate();
+    baseTransform_.translation_.y += speed * KetaEngine::Frame::DeltaTimeRate();
     Fall(speed, fallSpeedLimit, gravity, true);
 }
 
@@ -263,17 +305,15 @@ void BaseEnemy::Fall(float& speed, float fallSpeedLimit, float gravity, const bo
 
     if (!isJump) {
         // 移動
-        baseTransform_.translation_.y += speed * Frame::DeltaTimeRate();
+        baseTransform_.translation_.y += speed * KetaEngine::Frame::DeltaTimeRate();
     }
 
     // 加速する
-    speed = max(speed - (gravity * Frame::DeltaTimeRate()), -fallSpeedLimit);
-
-  
+    speed = max(speed - (gravity * KetaEngine::Frame::DeltaTimeRate()), -fallSpeedLimit);
 }
 
-void BaseEnemy::SetGameCamera(GameCamera* gamecamera) {
-    pGameCamera_ = gamecamera;
+void BaseEnemy::SetGameCamera(GameCamera* gameCamera) {
+    pGameCamera_ = gameCamera;
 }
 
 void BaseEnemy::SetManager(EnemyManager* manager) {

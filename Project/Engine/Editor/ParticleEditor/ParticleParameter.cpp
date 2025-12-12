@@ -1,4 +1,6 @@
 #include "ParticleParameter.h"
+
+using namespace KetaEngine;
 #include "base/TextureManager.h"
 #include "Frame/Frame.h"
 #include "ParticleManager.h"

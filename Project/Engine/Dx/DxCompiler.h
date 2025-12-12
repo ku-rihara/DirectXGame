@@ -10,6 +10,8 @@
 /// <summary>
 /// シェーダーコンパイルを行うクラス
 /// </summary>
+namespace KetaEngine {
+
 class DxCompiler {
 public:
     DxCompiler()  = default;
@@ -33,3 +35,5 @@ private:
     Microsoft::WRL::ComPtr<IDxcCompiler3> dxcCompiler_         = nullptr;
     Microsoft::WRL::ComPtr<IDxcIncludeHandler> includeHandler_ = nullptr;
 };
+
+}; // KetaEngine

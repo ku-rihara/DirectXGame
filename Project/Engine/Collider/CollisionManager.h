@@ -5,6 +5,8 @@
 #include <list>
 #include <memory>
 
+namespace KetaEngine {
+
 class BaseCollider;
 /// <summary>
 ///  Collision管理クラス
@@ -75,3 +77,5 @@ private:
     std::string groupName_ = "CollisionManager";
     bool isColliderVisible_;
 };
+
+}; // KetaEngine

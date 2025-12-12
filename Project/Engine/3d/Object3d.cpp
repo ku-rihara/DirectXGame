@@ -1,4 +1,6 @@
 #include "Object3d.h"
+
+using namespace KetaEngine;
 #include "Dx/DirectXCommon.h"
 #include "ModelManager.h"
 #include "Object3DRegistry.h"

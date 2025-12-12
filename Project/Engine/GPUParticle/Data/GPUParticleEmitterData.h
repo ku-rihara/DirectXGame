@@ -4,6 +4,8 @@
 #include "Vector3.h"
 #include <cstdint>
 
+namespace KetaEngine {
+
 struct ParticleEmit {
     Vector3 translate;
     uint32_t count;
@@ -61,3 +63,5 @@ struct PerFrame {
     float time;
     float deltaTime;
 };
+
+}; // KetaEngine

@@ -1,4 +1,6 @@
 #include "PostEffectRenderer.h"
+
+using namespace KetaEngine;
 #include "Dx/DirectXCommon.h"
 
 #include "BoxFilter.h"

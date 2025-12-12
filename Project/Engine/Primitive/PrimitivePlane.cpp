@@ -1,4 +1,6 @@
 #include "PrimitivePlane.h"
+
+using namespace KetaEngine;
 #include "3d/Mesh.h"
 
 void PrimitivePlane::Init() {

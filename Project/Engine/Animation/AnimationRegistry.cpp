@@ -1,4 +1,6 @@
 #include "AnimationRegistry.h"
+
+using namespace KetaEngine;
 #include "Object3DAnimation.h"
 #include <algorithm>
 #include <imgui.h>

@@ -7,6 +7,8 @@
 /// <summary>
 /// イージングクリエータクラス
 /// </summary>
+namespace KetaEngine {
+
 template <typename T>
 class EasingCreator {
 public:
@@ -92,3 +94,5 @@ public:
     void SetAllPresets(const std::unordered_map<std::string, EasingParameter<T>>& newPresets);
     const std::unordered_map<std::string, EasingParameter<T>>& GetAllPresets() const;
 };
+
+}; // KetaEngine

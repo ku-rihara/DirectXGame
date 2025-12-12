@@ -29,8 +29,8 @@ void PlayerAttackRendition::Update(float deltaTime) {
     }
 
     if (isBlur_) {
-        rushBlurEase_.Update(Frame::DeltaTime());
-        PostEffectRenderer::GetInstance()->GetRadialBlur()->SetBlurWidth(tempBlurParam_);
+        rushBlurEase_.Update(KetaEngine::Frame::DeltaTime());
+        KetaEngine::PostEffectRenderer::GetInstance()->GetRadialBlur()->SetBlurWidth(tempBlurParam_);
     }
 
     currentTime_ += deltaTime;
@@ -144,10 +144,10 @@ void PlayerAttackRendition::PlayRendition() {
         rushBlurEase_.Init("RushBlur.json");
         rushBlurEase_.SetAdaptValue(&tempBlurParam_);
         isBlur_ = true;
-        PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::RADIALBLUR);
+        KetaEngine::PostEffectRenderer::GetInstance()->SetPostEffectMode(KetaEngine::PostEffectMode::RADIALBLUR);
 
         rushBlurEase_.SetOnWaitEndCallback([this]() {
-            PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::NONE);
+            KetaEngine::PostEffectRenderer::GetInstance()->SetPostEffectMode(KetaEngine::PostEffectMode::NONE);
         });
         pPlayer_->GetEffects()->RushAttackRingEffectEmit();
     }

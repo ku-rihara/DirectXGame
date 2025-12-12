@@ -10,6 +10,8 @@
 #include <string>
 #include <vector>
 
+namespace KetaEngine {
+
 class Line3D;
 
 /// <summary>
@@ -120,3 +122,5 @@ public:
 
     void SetParent(WorldTransform* parent) { parentTransform_ = parent; }
 };
+
+}; // KetaEngine

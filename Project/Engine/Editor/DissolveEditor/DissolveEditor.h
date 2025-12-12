@@ -8,6 +8,8 @@
 /// <summary>
 /// ディゾルブエディタクラス
 /// </summary>
+namespace KetaEngine {
+
 class DissolveEditor {
 public:
     DissolveEditor()  = default;
@@ -47,3 +49,5 @@ private:
     int selectedIndex_    = -1;
     char nameBuffer_[128] = "";
 };
+
+}; // KetaEngine

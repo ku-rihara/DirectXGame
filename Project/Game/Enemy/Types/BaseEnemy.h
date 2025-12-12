@@ -24,7 +24,7 @@ class AttackEffect;
 /// <summary>
 /// 敵の基底クラス
 /// </summary>
-class BaseEnemy : public BaseObject, public AABBCollider {
+class BaseEnemy : public BaseObject, public KetaEngine::AABBCollider {
 public:
     enum class Type {
         NORMAL,
@@ -69,7 +69,7 @@ public:
     /// スプライトUIの表示
     /// </summary>
     /// <param name="viewProjection">ビュープロジェクション</param>
-    virtual void DisplaySprite(const ViewProjection& viewProjection);
+    virtual void DisplaySprite(const KetaEngine::ViewProjection& viewProjection);
 
     virtual void SpawnRenditionInit() = 0; //< スポーン演出初期化
 
@@ -132,10 +132,12 @@ private:
     /// 視野内判定
     /// </summary>
     /// <param name="viewProjection">ビュープロジェクション</param>
-    bool IsInView(const ViewProjection& viewProjection) const;
+    bool IsInView(const KetaEngine::ViewProjection& viewProjection) const;
 
     //　ダメージクールタイムの更新
     void DamageCollingUpdate(float deltaTime);
+
+    void MoveToLimit();
 
 private:
     int deathSound_;
@@ -185,7 +187,7 @@ public:
     const Type& GetType() const { return type_; }
     const Parameter& GetParameter() const { return parameter_; }
     int32_t GetGroupId() const { return groupId_; }
-    float GetHP() const { return hp_; } // ★追加
+    float GetHP() const { return hp_; } 
     Vector3 GetBodyRotation() const { return obj3d_->transform_.rotation_; }
     Player* GetPlayer() const { return pPlayer_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }

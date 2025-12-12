@@ -1,5 +1,7 @@
 #include "ObjEaseAnimationPlayer.h"
 
+using namespace KetaEngine;
+
 void ObjEaseAnimationPlayer::Init() {
     BaseEffectPlayer::Init();
 }
@@ -8,6 +10,7 @@ void ObjEaseAnimationPlayer::Update(float speedRate) {
     if (effectData_) {
         effectData_->Update(speedRate);
     }
+
 }
 
 void ObjEaseAnimationPlayer::Play(const std::string& animationName) {

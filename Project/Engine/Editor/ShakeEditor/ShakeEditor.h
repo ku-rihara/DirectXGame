@@ -8,6 +8,8 @@
 /// <summary>
 /// シェイクエディター
 /// </summary>
+namespace KetaEngine {
+
 class ShakeEditor : public BaseEffectEditor<ShakeData> {
 public:
     ShakeEditor()  = default;
@@ -42,3 +44,5 @@ public:
 
     int GetShakeCount() const { return static_cast<int>(effects_.size()); }
 };
+
+}; // KetaEngine

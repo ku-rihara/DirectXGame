@@ -1,5 +1,7 @@
 #include "d3d12.h"
 #include "DxReleaseChecker.h"
+
+using namespace KetaEngine;
 #include "dxgi1_6.h"
 #include "dxgidebug.h"
 #include "wrl.h"

@@ -6,6 +6,8 @@
 #include<string>
 #include <map>
 
+namespace KetaEngine {
+
 template<typename tValue>
 struct Keyframe {
     float time;
@@ -30,3 +32,5 @@ struct Animation {
     std::string name;
     std::map<std::string, NodeAnimation> nodeAnimations;
 };
+
+}; // KetaEngine

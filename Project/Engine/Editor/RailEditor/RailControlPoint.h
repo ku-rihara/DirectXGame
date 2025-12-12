@@ -7,6 +7,8 @@
 /// <summary>
 /// レール制御点クラス
 /// </summary>
+namespace KetaEngine {
+
 class RailControlPoint {
 public:
     RailControlPoint()  = default;
@@ -37,3 +39,5 @@ public:
     const Vector3& GetPosition() const { return position_; }
     void SetPosition(const Vector3& position) { position_ = position; }
 };
+
+}; // KetaEngine

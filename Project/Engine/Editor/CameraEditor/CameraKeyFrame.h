@@ -11,6 +11,8 @@
 /// <summary>
 /// カメラキーフレームクラス
 /// </summary>
+namespace KetaEngine {
+
 class CameraKeyFrame {
 public:
     struct KeyFrameParam {
@@ -78,3 +80,5 @@ public:
     void SetStartEasing(const Vector3& pos, const Vector3& rotate, float fov);
  
 };
+
+}; // KetaEngine

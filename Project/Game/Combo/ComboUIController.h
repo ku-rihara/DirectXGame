@@ -50,8 +50,8 @@ public:
     void RegisterParams(); //< パラメータバインド
 
 private:
-    GlobalParameter* globalParameter_; // グローバルパラメータ
-    const std::string groupName_ = "ComboUI"; // グループ名
+    KetaEngine::GlobalParameter* globalParameter_;  // グローバルパラメータ
+    const std::string groupName_ = "ComboUI";       // グループ名
 
     // parameter
     ScalingParameter parameter_;

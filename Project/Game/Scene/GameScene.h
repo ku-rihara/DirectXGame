@@ -101,11 +101,11 @@ private:
     bool isfirstChange_;
     float alpha_;
     int shandle_;
-    std::unique_ptr<Sprite> screenSprite_;
+    std::unique_ptr<KetaEngine::Sprite> screenSprite_;
 
     int chandle_;
-    Easing<Vector2> finishSpriteEase_;
+    KetaEngine::Easing<Vector2> finishSpriteEase_;
     Vector2 tempSpritePos_;
-    std::unique_ptr<Sprite> cSprite_;
+    std::unique_ptr<KetaEngine::Sprite> cSprite_;
     bool isend_;
 };

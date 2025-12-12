@@ -1,5 +1,7 @@
 #include "ShakePlayer.h"
 
+using namespace KetaEngine;
+
 void ShakePlayer::Init() {
     BaseEffectPlayer::Init();
     totalShakeOffset_ = {0.0f, 0.0f, 0.0f};

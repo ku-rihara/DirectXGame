@@ -5,7 +5,7 @@ void BaseGameIntro::Init(const std::string& name) {
     groupName_ = name;
 
     // Global parameter 
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);

@@ -7,6 +7,8 @@
 /// <summary>
 /// SRV管理クラス
 /// </summary>
+namespace KetaEngine {
+
 class SrvManager {
 public:
     SrvManager()  = default;
@@ -113,3 +115,5 @@ public:
     ///===================================================================
     void SetDescriptorHeap(const Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>& srv) { descriptorHeap_ = srv; }
 };
+
+}; // KetaEngine

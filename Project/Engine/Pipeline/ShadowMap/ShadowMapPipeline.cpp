@@ -1,4 +1,6 @@
 #include "ShadowMapPipeline.h"
+
+using namespace KetaEngine;
 #include "Dx/DxCompiler.h"
 // Function
 #include "function/Log.h"

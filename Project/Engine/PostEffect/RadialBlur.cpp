@@ -1,6 +1,8 @@
 #include "Dx/DirectXCommon.h"
 #include"Dx/DxRenderTarget.h"
 #include "RadialBlur.h"
+
+using namespace KetaEngine;
 #include "Function/Log.h"
 #include<imgui.h>
 #include<cassert>

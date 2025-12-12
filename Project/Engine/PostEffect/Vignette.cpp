@@ -1,4 +1,6 @@
 #include "Vignette.h"
+
+using namespace KetaEngine;
 #include"Dx/DxRenderTarget.h"
 #include "Dx/DirectXCommon.h"
 

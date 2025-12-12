@@ -6,6 +6,8 @@
 /// <summary>
 /// ボックスフィルタークラス
 /// </summary>
+namespace KetaEngine {
+
 class BoxFilter : public BasePostEffect {
 private:
     void CreateGraphicsPipeline() override; //< グラフィックスパイプライン作成
@@ -38,3 +40,5 @@ public:
 
 private:
 };
+
+}; // KetaEngine

@@ -55,7 +55,7 @@ void DynamicComboAttack::Update() {
 
      // 攻撃スピード
     const PlayerComboAttackController* attackController = pPlayer_->GetComboAttackController();
-    atkSpeed_                                           = attackController->GetRealAttackSpeed(Frame::DeltaTimeRate());
+    atkSpeed_                                           = attackController->GetRealAttackSpeed(KetaEngine::Frame::DeltaTimeRate());
 
     currentFrame_ += atkSpeed_;
 
@@ -153,7 +153,7 @@ void DynamicComboAttack::ChangeNextAttack() {
         }
 
         // データが見つからない場合はルートに戻る
-        PostEffectRenderer::GetInstance()->SetPostEffectMode(PostEffectMode::NONE);
+        KetaEngine::PostEffectRenderer::GetInstance()->SetPostEffectMode(KetaEngine::PostEffectMode::NONE);
         pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
         pPlayer_->ChangeComboBehavior(std::make_unique<ComboAttackRoot>(pPlayer_));
     }

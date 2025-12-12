@@ -26,11 +26,11 @@ class PlayerComboAttackController;
 /// <summary>
 /// プレイヤークラス
 /// </summary>
-class Player : public BaseObject, public AABBCollider {
+class Player : public BaseObject, public KetaEngine::AABBCollider {
 private:
     struct ParticleEffect {
         std::string name;
-        std::unique_ptr<ParticleEmitter> emitter;
+        std::unique_ptr<KetaEngine::ParticleEmitter> emitter;
     };
 
 public:
@@ -111,7 +111,7 @@ public:
       void MainHeadAnimationStart(const std::string& name);
 
 private:
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "Player";
 
     /// other class
@@ -121,7 +121,7 @@ private:
     AttackEffect* pHitStop_                             = nullptr;
     PlayerComboAttackController* comboAttackController_ = nullptr;
 
-    const ViewProjection* viewProjection_ = nullptr;
+    const KetaEngine::ViewProjection* viewProjection_ = nullptr;
 
     std::unique_ptr<PlayerHandLeft> leftHand_;
     std::unique_ptr<PlayerHandRight> rightHand_;
@@ -173,7 +173,7 @@ public:
 
     //*-- setter --*//
     // class Set
-    void SetViewProjection(const ViewProjection* viewProjection);
+    void SetViewProjection(const KetaEngine::ViewProjection* viewProjection);
     void SetLockOn(LockOnController* lockon);
     void SetGameCamera(GameCamera* gamecamera);
     void SetCombo(Combo* combo);

@@ -1,4 +1,6 @@
 #include "DxSwapChain.h"
+
+using namespace KetaEngine;
 #include "base/RtvManager.h"
 #include "base/WinApp.h"
 #include <cassert>

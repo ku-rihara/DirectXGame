@@ -1,5 +1,7 @@
 // Frame.cpp
 #include "Frame.h"
+
+using namespace KetaEngine;
 #include <thread>
 
 std::chrono::steady_clock::time_point Frame::reference_ = std::chrono::steady_clock::now();

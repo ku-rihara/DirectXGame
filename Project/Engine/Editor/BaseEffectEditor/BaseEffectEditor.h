@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+namespace KetaEngine {
+
 template <typename TEffectData>
 class BaseEffectEditor;
 
@@ -107,3 +109,5 @@ public:
     const std::vector<Category>& GetCategories() const { return categories_; }
     int32_t GetCategoryCount() const { return static_cast<int32_t>(categories_.size()); }
 };
+
+}; // KetaEngine

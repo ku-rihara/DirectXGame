@@ -10,6 +10,8 @@
 /// <summary>
 ///  オーディオクラス
 /// </summary>
+namespace KetaEngine {
+
 class Audio {
 private:
 	//XAudio2のインスタンス
@@ -37,3 +39,5 @@ public:
 	IXAudio2* GetXAudio2()const { return xAudio2_.Get(); }
 };
 
+
+}; // KetaEngine

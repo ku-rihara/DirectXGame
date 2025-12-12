@@ -7,7 +7,7 @@
 
 void PlayerComboAttackData::Init(const std::string& attackName) {
     // グローバルパラメータ
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
 
     // グループ名設定
     groupName_ = attackName;
@@ -180,12 +180,12 @@ bool PlayerComboAttackData::IsReserveNextAttack(float currentTime, const Trigger
     }
 
     // キーボード入力チェック
-    if (Input::GetInstance()->TriggerKey(FromDIKCode(nextAtkTrigger.keyBordBottom))) {
+    if (KetaEngine::Input::GetInstance()->TriggerKey(FromDIKCode(nextAtkTrigger.keyBordBottom))) {
         return true;
     }
 
     // ゲームパッド入力チェック
-    if (Input::IsTriggerPad(0, FromXInputButtonFlag(nextAtkTrigger.gamePadBottom))) {
+    if (KetaEngine::Input::IsTriggerPad(0, FromXInputButtonFlag(nextAtkTrigger.gamePadBottom))) {
         return true;
     }
 
@@ -208,12 +208,12 @@ bool PlayerComboAttackData::IsCancelAttack(float currentTime, const TriggerParam
     }
 
     // キーボード入力チェック
-    if (Input::GetInstance()->TriggerKey(FromDIKCode(nextAtkTrigger.keyBordBottom))) {
+    if (KetaEngine::Input::GetInstance()->TriggerKey(FromDIKCode(nextAtkTrigger.keyBordBottom))) {
         return true;
     }
 
     // ゲームパッド入力チェック
-    if (Input::IsTriggerPad(0, FromXInputButtonFlag(nextAtkTrigger.gamePadBottom))) {
+    if (KetaEngine::Input::IsTriggerPad(0, FromXInputButtonFlag(nextAtkTrigger.gamePadBottom))) {
         return true;
     }
 

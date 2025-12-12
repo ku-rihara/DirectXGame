@@ -2,7 +2,7 @@
 #include <cassert>
 #include <imgui.h>
 
-void PlayerAttackRenditionData::RegisterParams(GlobalParameter* globalParam, const std::string& groupName) {
+void PlayerAttackRenditionData::RegisterParams(KetaEngine::GlobalParameter* globalParam, const std::string& groupName) {
     groupName_ = groupName;
 
     struct RegInfo {
@@ -116,7 +116,7 @@ void PlayerAttackRenditionData::AdjustParam() {
 void PlayerAttackRenditionData::SelectRenditionFile(
     const char* label,
     const std::string& directory,
-    std::pair<RenditionParam, FileSelector>& param) {
+    std::pair<RenditionParam, KetaEngine::FileSelector>& param) {
 
     param.second.SelectFile(label, directory, param.first.fileName, "", true);
 }
@@ -124,7 +124,7 @@ void PlayerAttackRenditionData::SelectRenditionFile(
 void PlayerAttackRenditionData::SelectObjAnimationFile(
     const char* label,
     const std::string& directory,
-    std::pair<ObjAnimationParam, FileSelector>& param) {
+    std::pair<ObjAnimationParam, KetaEngine::FileSelector>& param) {
 
     param.second.SelectFile(label, directory, param.first.fileName, "", true);
 }

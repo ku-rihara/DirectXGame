@@ -96,7 +96,7 @@ private:
     using json = nlohmann::json;
     json jsonData_;
 
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "EnemySpawner";
 
     EnemyManager* pEnemyManager_     = nullptr;

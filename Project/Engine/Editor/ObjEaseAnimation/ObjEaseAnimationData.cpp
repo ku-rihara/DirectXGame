@@ -1,4 +1,6 @@
 #include "ObjEaseAnimationData.h"
+
+using namespace KetaEngine;
 #include "3d/WorldTransform.h"
 #include "Editor/RailEditor/RailPlayer.h"
 #include "MathFunction.h"
@@ -19,6 +21,7 @@ void ObjEaseAnimationData::InitWithCategory(const std::string& animationName, co
     } else {
         GetParams();
     }
+
 
     InitParams();
 }

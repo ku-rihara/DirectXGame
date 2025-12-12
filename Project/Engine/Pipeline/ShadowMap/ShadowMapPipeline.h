@@ -9,6 +9,8 @@
 /// <summary>
 /// シャドウマップ描画パイプラインクラス
 /// </summary>
+namespace KetaEngine {
+
 class ShadowMapPipeline : public BasePipeline {
 public:
     ShadowMapPipeline()  = default;
@@ -43,3 +45,5 @@ private:
 public:
     ID3D12PipelineState* GetPipelineState() const { return pipelineState_.Get(); }
 };
+
+}; // KetaEngine

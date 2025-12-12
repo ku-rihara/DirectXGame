@@ -32,7 +32,7 @@ private:
     // UIコントローラ
     std::unique_ptr<ComboUIController> uiController_;
 
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "Combo";
 
     // parameter

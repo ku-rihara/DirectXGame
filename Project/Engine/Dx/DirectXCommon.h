@@ -7,6 +7,8 @@
 #include <wrl/client.h>
 
 // 前方宣言
+namespace KetaEngine {
+
 class ImGuiManager;
 class TextureManager;
 class SrvManager;
@@ -141,3 +143,5 @@ public:
     Microsoft::WRL::ComPtr<ID3D12Device> GetDevice() const;
     ID3D12GraphicsCommandList* GetCommandList() const;
 };
+
+}; // KetaEngine

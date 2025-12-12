@@ -27,21 +27,21 @@ protected:
     /// ===================================================
 
     // モデル配列データ
-    std::unique_ptr<Object3d> obj3d_;
+    std::unique_ptr<KetaEngine::Object3d> obj3d_;
     // ベースのワールド変換データ
-    WorldTransform baseTransform_;
+    KetaEngine::WorldTransform baseTransform_;
 
 public:
     /// ===================================================
     /// getter
     /// ===================================================
-    const WorldTransform& GetBaseTransform() const { return baseTransform_; }
+    const KetaEngine::WorldTransform& GetBaseTransform() const { return baseTransform_; }
     const Vector3& GetScale() const { return baseTransform_.scale_; }
-    Object3d* GetObject3D() const { return obj3d_.get(); }
+    KetaEngine::Object3d* GetObject3D() const { return obj3d_.get(); }
     /// ===================================================
     /// setter
     /// ===================================================
-    void SetParent(WorldTransform* parent);
+    void SetParent(KetaEngine::WorldTransform* parent);
     void SetColor(const Vector4& color);
     void SetWorldPosition(const Vector3& pos) { baseTransform_.translation_ = pos; }
     void SetWorldPositionY(float pos) { baseTransform_.translation_.y = pos; }

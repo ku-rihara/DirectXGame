@@ -1,5 +1,7 @@
 #include "CollisionManager.h"
 
+using namespace KetaEngine;
+
 #include "Collider/AABBCollider.h"
 #include "Collider/OBBCollider.h"
 #include "Box.h"

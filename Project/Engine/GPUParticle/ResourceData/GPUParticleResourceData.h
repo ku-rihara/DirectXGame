@@ -8,6 +8,8 @@
 #include <utility>
 #include <wrl/client.h>
 
+namespace KetaEngine {
+
 class DirectXCommon;
 class SrvManager;
 
@@ -120,3 +122,5 @@ public:
     // setter
     void SetParticleMaxCount(int32_t maxCount) { particleMaxCount_ = maxCount; }
 };
+
+}; // KetaEngine

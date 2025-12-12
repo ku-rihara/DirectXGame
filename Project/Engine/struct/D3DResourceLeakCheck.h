@@ -5,6 +5,8 @@
 #include<dxgidebug.h>
 #include <wrl.h>
 
+namespace KetaEngine {
+
 struct  D3DResourceLeakChecker {
 	
 	~D3DResourceLeakChecker() {
@@ -18,3 +20,5 @@ struct  D3DResourceLeakChecker {
 		}
 	}
 };
+
+}; // KetaEngine

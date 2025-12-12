@@ -8,6 +8,8 @@
 #include <optional>
 #include <wrl.h>
 
+namespace KetaEngine {
+
 class DirectXCommon;
 
 /// <summary>
@@ -75,3 +77,5 @@ public:
     void SetVertexNormData(uint32_t index, const Vector3& norm) { vertexDate_[index].normal = norm; }
     void SetVertexTexcoordData(uint32_t index, const Vector2& texcoord) { vertexDate_[index].texcoord = texcoord; }
 };
+
+}; // KetaEngine

@@ -5,8 +5,11 @@
 #include <dxcapi.h>
 #include <wrl/client.h>
 
-class DirectXCommon;
 enum class BlendMode;
+
+namespace KetaEngine {
+
+class DirectXCommon;
 
 /// <summary>
 /// グラフィックスパイプラインの基底クラス
@@ -73,3 +76,5 @@ public:
     virtual DirectXCommon* GetDxCommon() const { return dxCommon_; }
     virtual ID3D12RootSignature* GetRootSignature() const { return rootSignature_.Get(); }
 };
+
+}; // KetaEngine

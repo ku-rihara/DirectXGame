@@ -1,4 +1,6 @@
 #include "EmitParticlePipeline.h"
+
+using namespace KetaEngine;
 #include "Dx/DirectXCommon.h"
 #include "Dx/DxCompiler.h"
 #include "function/Log.h"

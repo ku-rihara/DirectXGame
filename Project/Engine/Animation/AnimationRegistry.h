@@ -5,6 +5,8 @@
 #include <vector>
 
 // 前方宣言
+namespace KetaEngine {
+
 class Object3DAnimation;
 class ViewProjection;
 
@@ -73,3 +75,5 @@ private:
 public:
     const size_t& GetRegisteredCount() const { return animations_.size(); }
 };
+
+}; // KetaEngine

@@ -23,11 +23,11 @@ public:
     void Init();
     void Update(float cameraPlaySpeed = 1.0f);
 
-    void MoveUpdate();      //< 移動更新
-    void Reset();           //< リセット
+    void MoveUpdate(); //< 移動更新
+    void Reset(); //< リセット
     void GetIsCameraMove(); //< カメラ移動判定取得
-    void RotateAdapt();     //< 回転適用
-    void TranslateAdapt();  //< 位置適用
+    void RotateAdapt(); //< 回転適用
+    void TranslateAdapt(); //< 位置適用
 
     /// <summary>
     /// アニメーション再生
@@ -53,14 +53,16 @@ public:
     void AdjustParam(); //< パラメータ調整
 
 private:
-    GlobalParameter* globalParameter_;
+    KetaEngine::GlobalParameter* globalParameter_;
     const std::string groupName_ = "GameCamera";
+
     LockOn* lockOn_;
-    ViewProjection viewProjection_;
+    KetaEngine::ViewProjection viewProjection_;
     std::unique_ptr<CameraRendition> rendition_;
-    const WorldTransform* target_ = nullptr;
+    const KetaEngine::WorldTransform* target_ = nullptr;
+
     Vector3 stickInput_;
-    Vector3 interTarget_ = {};
+    Vector3 interTarget_;
     float destinationAngleY_;
     int viewMoveTime_;
     Vector3 shakeOffsetPos_;
@@ -68,13 +70,12 @@ private:
 
 public:
     // getter
-    const ViewProjection& GetViewProjection() { return viewProjection_; }
-    ViewProjection& GetViewProjectionRef() { return viewProjection_; }
-    const Parameter& GetParameter() const { return parameter_; }
-    Vector3 GetWorldPos() const; //< ワールド座標取得
+    const KetaEngine::ViewProjection& GetViewProjection() { return viewProjection_; }
+     const Parameter& GetParameter() const { return parameter_; }
+    Vector3 GetWorldPos() const;
 
     // setter
-    void SetTarget(const WorldTransform* target);
+    void SetTarget(const KetaEngine::WorldTransform* target);
     void SetLockOn(LockOn* lockOn) { lockOn_ = lockOn; }
     void SetShakePos(const Vector3& shake) { shakeOffsetPos_ = shake; }
     void SetShakePosY(float shake) { shakeOffsetPos_.y = shake; }

@@ -7,6 +7,8 @@
 #include <memory>
 #include <string>
 
+namespace KetaEngine {
+
 class WorldTransform;
 class RailPlayer;
 
@@ -77,3 +79,5 @@ public:
     bool GetIsUseRailActiveKeyFrame() const;
     RailPlayer* GetCurrentRailPlayer() const;
 };
+
+}; // KetaEngine

@@ -5,6 +5,8 @@
 /// <summary>
 /// スキニング計算用コンピュートシェーダパイプラインクラス
 /// </summary>
+namespace KetaEngine {
+
 class SkinningCSPipeline : public BaseCSPipeline {
 public:
     SkinningCSPipeline()          = default;
@@ -35,3 +37,5 @@ protected:
 
 private:
 };
+
+}; // KetaEngine

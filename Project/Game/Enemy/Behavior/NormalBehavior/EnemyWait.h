@@ -12,7 +12,7 @@ private:
 
 	bool isChase_;
 
-	Easing<Vector2> spriteEase_;
+	KetaEngine::Easing<Vector2> spriteEase_;
     Vector2 tempSpriteScale_;
 
 public:

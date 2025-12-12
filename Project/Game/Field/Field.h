@@ -21,6 +21,6 @@ public:
     void Update();
 
 private:
-    std::unique_ptr<Object3d> obj3d_                      = nullptr;
-    std::unique_ptr<GPUParticlePlayer> gpuParticlePlayer_ = nullptr;
+    std::unique_ptr<KetaEngine::Object3d> obj3d_                      = nullptr;
+    std::unique_ptr<KetaEngine::GPUParticlePlayer> gpuParticlePlayer_ = nullptr;
 };

@@ -54,12 +54,12 @@ void ComboAttackRoot::Update() {
         bool triggered = false;
 
         // キーボード入力チェック
-        if (Input::GetInstance()->TriggerKey(FromDIKCode(triggerParam.keyBordBottom))) {
+        if (KetaEngine::Input::GetInstance()->TriggerKey(FromDIKCode(triggerParam.keyBordBottom))) {
             triggered = true;
         }
 
         // ゲームパッド入力チェック
-        if (Input::IsTriggerPad(0, FromXInputButtonFlag(triggerParam.gamePadBottom))) {
+        if (KetaEngine::Input::IsTriggerPad(0, FromXInputButtonFlag(triggerParam.gamePadBottom))) {
             triggered = true;
         }
 

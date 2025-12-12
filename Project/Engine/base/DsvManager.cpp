@@ -1,4 +1,6 @@
 #include "DsvManager.h"
+
+using namespace KetaEngine;
 #include <cassert>
 #include <d3d12.h>
 

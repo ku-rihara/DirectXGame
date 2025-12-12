@@ -5,10 +5,10 @@
 void JumpAttackUI::Init() {
 
     // スプライト生成
-    bottoms_[X].sprite.reset(Sprite::Create("OperateUI/OperateX.png"));
-    bottoms_[Y].sprite.reset(Sprite::Create("OperateUI/OperateY.png"));
-    bottoms_[B].sprite.reset(Sprite::Create("OperateUI/OperateB.png"));
-    bottoms_[A].sprite.reset(Sprite::Create("OperateUI/OperateA.png"));
+    bottoms_[X].sprite.reset(KetaEngine::Sprite::Create("OperateUI/OperateX.png"));
+    bottoms_[Y].sprite.reset(KetaEngine::Sprite::Create("OperateUI/OperateY.png"));
+    bottoms_[B].sprite.reset(KetaEngine::Sprite::Create("OperateUI/OperateB.png"));
+    bottoms_[A].sprite.reset(KetaEngine::Sprite::Create("OperateUI/OperateA.png"));
 
     // 移動向き決定
     for (size_t i = 0; i < static_cast<size_t>(Type::COUNT); ++i) {
@@ -16,7 +16,7 @@ void JumpAttackUI::Init() {
     }
 
     // Global parameter
-    globalParameter_ = GlobalParameter::GetInstance();
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
     globalParameter_->SyncParamForGroup(groupName_);
@@ -28,7 +28,7 @@ void JumpAttackUI::Init() {
     bottoms_[A].isNotOperate = true;
 }
 
-void JumpAttackUI::Update(const Vector3& basePos, const ViewProjection& viewProjection) {
+void JumpAttackUI::Update(const Vector3& basePos, const KetaEngine::ViewProjection& viewProjection) {
     (this->*spFuncTable_[static_cast<size_t>(state_)])();
 
     // ターゲットの座標取得
@@ -102,14 +102,14 @@ void JumpAttackUI::Wait() {
 
 void JumpAttackUI::Open() {
 
-    easingParam_.scaleEasing->Update(Frame::DeltaTime());
-    easingParam_.posEasing->Update(Frame::DeltaTime());
-    easingParam_.rotateEasing->Update(Frame::DeltaTime());
+    easingParam_.scaleEasing->Update(KetaEngine::Frame::DeltaTime());
+    easingParam_.posEasing->Update(KetaEngine::Frame::DeltaTime());
+    easingParam_.rotateEasing->Update(KetaEngine::Frame::DeltaTime());
 }
 void JumpAttackUI::Close() {
-    easingParam_.scaleEasing->Update(Frame::DeltaTime());
-    easingParam_.posEasing->Update(Frame::DeltaTime());
-    easingParam_.rotateEasing->Update(Frame::DeltaTime());
+    easingParam_.scaleEasing->Update(KetaEngine::Frame::DeltaTime());
+    easingParam_.posEasing->Update(KetaEngine::Frame::DeltaTime());
+    easingParam_.rotateEasing->Update(KetaEngine::Frame::DeltaTime());
 }
 
 void JumpAttackUI::RegisterParams() {
@@ -140,9 +140,9 @@ void JumpAttackUI::AdjustParam() {
 }
 
 void JumpAttackUI::EasingInit() {
-    easingParam_.scaleEasing  = std::make_unique<Easing<Vector2>>();
-    easingParam_.posEasing    = std::make_unique<Easing<float>>();
-    easingParam_.rotateEasing = std::make_unique<Easing<float>>();
+    easingParam_.scaleEasing  = std::make_unique<KetaEngine::Easing<Vector2>>();
+    easingParam_.posEasing    = std::make_unique<KetaEngine::Easing<float>>();
+    easingParam_.rotateEasing = std::make_unique<KetaEngine::Easing<float>>();
 
     // Init
     easingParam_.scaleEasing->Init("PlayerOperateUIScaling.json");
