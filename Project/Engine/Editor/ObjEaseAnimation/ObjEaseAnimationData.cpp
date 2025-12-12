@@ -22,6 +22,7 @@ void ObjEaseAnimationData::InitWithCategory(const std::string& animationName, co
         GetParams();
     }
 
+
     InitParams();
 }
 
