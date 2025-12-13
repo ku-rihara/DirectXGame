@@ -12,10 +12,10 @@ void Field::Init() {
 
  
     gpuParticlePlayer_.Init();
-    gpuParticlePlayer_.InitEffect("Field", "Fire");
+    gpuParticlePlayer_.InitEffect("Field", "fire");
 }
 
 void Field::Update() {
-    gpuParticlePlayer_.Play("Field", "Fire");
+    gpuParticlePlayer_.Play("Field", "fire");
     gpuParticlePlayer_.Update();
 }
