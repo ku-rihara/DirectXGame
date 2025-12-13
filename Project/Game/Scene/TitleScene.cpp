@@ -30,6 +30,8 @@ void TitleScene::Init() {
     // GPUパーティクルの初期化
     test.Init();
     test.InitEffect("Player", "test1");
+
+    textureManager_->LoadTexture("mario.dds");
 }
 
 void TitleScene::Update() {

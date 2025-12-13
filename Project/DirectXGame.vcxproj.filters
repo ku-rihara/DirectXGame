@@ -367,6 +367,12 @@
     <Filter Include="MyEngine\.cpp\Scene\Manager">
       <UniqueIdentifier>{716432aa-8f34-4922-935a-5ae2c4a5d1e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEngine\.h\utility\TextureConverter">
+      <UniqueIdentifier>{005835e9-a1a0-4f50-be45-0c1cad4898b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyEngine\.cpp\utility\TextureConverter">
+      <UniqueIdentifier>{52df241f-9d7e-41ed-abe1-bd77957cd863}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -882,6 +888,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.cpp">
       <Filter>MyEngine\.cpp\Editor\ObjEaseAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\utility\TextureConverter\TextureConverter.cpp">
+      <Filter>MyEngine\.cpp\utility\TextureConverter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1448,6 +1457,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Scene\Manager\SceneManager.h">
       <Filter>MyEngine\.h\Scene\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\utility\TextureConverter\TextureConverter.h">
+      <Filter>MyEngine\.h\utility\TextureConverter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
