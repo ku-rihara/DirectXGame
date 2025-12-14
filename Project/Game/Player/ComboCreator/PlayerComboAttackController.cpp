@@ -223,7 +223,9 @@ void PlayerComboAttackController::VisualizeComboFlow() {
 
                 // 次の攻撃への矢印
                 if (i < chain.size() - 1) {
+                    ImGui::Indent(50.0f);
                     ImGui::Text("↓");
+                    ImGui::Unindent(50.0f);
                 }
 
                 ImGui::PopID();
