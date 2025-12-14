@@ -886,11 +886,11 @@
     <ClCompile Include="Engine\Scene\Factory\SceneFactory.cpp">
       <Filter>MyEngine\.cpp\Scene\Factory</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.cpp">
-      <Filter>MyEngine\.cpp\Editor\ObjEaseAnimation</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\utility\TextureConverter\TextureConverter.cpp">
       <Filter>MyEngine\.cpp\utility\TextureConverter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.cpp">
+      <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

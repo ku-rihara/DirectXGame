@@ -449,16 +449,16 @@ void GPUParticleSection::EmitParameterEditor() {
         }
 
         if (ImGui::TreeNode("Position Offset")) {
-            ImGui::DragFloat3("Min", &transformParams_.translateMin.x, 0.1f);
-            ImGui::DragFloat3("Max", &transformParams_.translateMax.x, 0.1f);
+            ImGui::DragFloat3("Min", &transformParams_.translateMin.x, 0.01f);
+            ImGui::DragFloat3("Max", &transformParams_.translateMax.x, 0.01f);
             ImGui::TreePop();
         }
     }
 
     if (ImGui::CollapsingHeader("Physics Parameters")) {
         if (ImGui::TreeNode("Velocity")) {
-            ImGui::DragFloat3("Min", &physicsParams_.velocityMin.x, 0.1f);
-            ImGui::DragFloat3("Max", &physicsParams_.velocityMax.x, 0.1f);
+            ImGui::DragFloat3("Min", &physicsParams_.velocityMin.x, 0.01f);
+            ImGui::DragFloat3("Max", &physicsParams_.velocityMax.x, 0.01f);
             ImGui::TreePop();
         }
 
@@ -477,8 +477,8 @@ void GPUParticleSection::EmitParameterEditor() {
         }
 
         if (ImGui::TreeNode("LifeTime & Fade")) {
-            ImGui::DragFloat("Life Min", &appearanceParams_.lifeTimeMin, 0.1f, 0.1f, 10.0f);
-            ImGui::DragFloat("Life Max", &appearanceParams_.lifeTimeMax, 0.1f, 0.1f, 10.0f);
+            ImGui::DragFloat("Life Min", &appearanceParams_.lifeTimeMin, 0.01f, 0.1f, 10.0f);
+            ImGui::DragFloat("Life Max", &appearanceParams_.lifeTimeMax, 0.01f, 0.1f, 10.0f);
             ImGui::TreePop();
         }
     }
@@ -486,7 +486,7 @@ void GPUParticleSection::EmitParameterEditor() {
 
 void GPUParticleSection::EmitterSettingsEditor() {
     if (ImGui::CollapsingHeader("Emitter Settings")) {
-        ImGui::DragFloat3("Position", &emitterSettings_.position.x, 0.1f);
+        ImGui::DragFloat3("Position", &emitterSettings_.position.x, 0.01f);
         ImGui::DragInt("Count", reinterpret_cast<int*>(&emitterSettings_.count), 1, 1, 1000);
         ImGui::DragFloat("Frequency", &emitterSettings_.frequency, 0.01f, 0.01f, 10.0f);
     }
