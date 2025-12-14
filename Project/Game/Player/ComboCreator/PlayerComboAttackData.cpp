@@ -38,6 +38,7 @@ void PlayerComboAttackData::RegisterParams() {
     globalParameter_->Regist(groupName_, "power", &attackParam_.power);
     globalParameter_->Regist(groupName_, "KnockBackPower", &attackParam_.knockBackPower);
     globalParameter_->Regist(groupName_, "blowYPower", &attackParam_.blowYPower);
+    globalParameter_->Regist(groupName_, "isMotionOnly", &attackParam_.isMotionOnly);
 
     // CollisionParam
     globalParameter_->Regist(groupName_, "collisionSize", &attackParam_.collisionParam.size);
@@ -71,7 +72,7 @@ void PlayerComboAttackData::RegisterParams() {
 
     // FallParam
     globalParameter_->Regist(groupName_, "enableFall", &attackParam_.fallParam.enableFall);
-  
+
     // nextAttack
     globalParameter_->Regist(groupName_, "NextAttackType", &attackParam_.nextAttackType);
 
@@ -86,10 +87,13 @@ void PlayerComboAttackData::AdjustParam() {
 #ifdef _DEBUG
 
     ImGui::PushID(groupName_.c_str());
+    ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), (groupName_ + " Editing").c_str());
+    ImGui::Checkbox("is Motion Only", &attackParam_.isMotionOnly);
+    ImGui::Separator();
 
     // TriggerParam
     ImGui::Checkbox("isFirstAttack", &attackParam_.triggerParam.isFirstAttack);
-    ImGui::Checkbox("Require Hit", &attackParam_.triggerParam.requireHit); 
+    ImGui::Checkbox("Require Hit", &attackParam_.triggerParam.requireHit);
     ImGuiKeyboardKeySelector("keyBoard:TriggerBottom", attackParam_.triggerParam.keyBordBottom);
     ImGuiGamepadButtonSelector("GamePad:TriggerBottom", attackParam_.triggerParam.gamePadBottom);
 
@@ -101,22 +105,24 @@ void PlayerComboAttackData::AdjustParam() {
     }
 
     // Simple Parameter
-    ImGui::SeparatorText("simple Parameter");
-    ImGui::DragFloat("Power", &attackParam_.power, 0.01f);
-    ImGui::DragFloat("KnockBack Power", &attackParam_.knockBackPower, 0.01f);
-    ImGui::DragFloat("Blow Y Power", &attackParam_.blowYPower, 0.01f);
+    if (!attackParam_.isMotionOnly) {
+        ImGui::SeparatorText("simple Parameter");
+        ImGui::DragFloat("Power", &attackParam_.power, 0.01f);
+        ImGui::DragFloat("KnockBack Power", &attackParam_.knockBackPower, 0.01f);
+        ImGui::DragFloat("Blow Y Power", &attackParam_.blowYPower, 0.01f);
 
-    // Collision Parameter
-    ImGui::SeparatorText("Collision Parameter");
-    ImGui::DragFloat3("Collision Size", &attackParam_.collisionParam.size.x, 0.01f);
-    ImGui::DragFloat3("Collision Offset Pos", &attackParam_.collisionParam.offsetPos.x, 0.01f);
-    ImGui::DragFloat("Adapt Time", &attackParam_.collisionParam.adaptTime, 0.01f);
-    ImGui::Checkbox("is Auto Advance to Next Attack", &attackParam_.timingParam.isAutoAdvance);
-    ImGui::InputInt("Loop Num", &attackParam_.collisionParam.loopNum);
-    if (attackParam_.collisionParam.loopNum > 0) {
-        ImGui::DragFloat("Loop Wait Time", &attackParam_.collisionParam.loopWaitTime, 0.01f);
+        // Collision Parameter
+        ImGui::SeparatorText("Collision Parameter");
+        ImGui::DragFloat3("Collision Size", &attackParam_.collisionParam.size.x, 0.01f);
+        ImGui::DragFloat3("Collision Offset Pos", &attackParam_.collisionParam.offsetPos.x, 0.01f);
+        ImGui::DragFloat("Adapt Time", &attackParam_.collisionParam.adaptTime, 0.01f);
+        ImGui::Checkbox("is Auto Advance to Next Attack", &attackParam_.timingParam.isAutoAdvance);
+        ImGui::InputInt("Loop Num", &attackParam_.collisionParam.loopNum);
+        if (attackParam_.collisionParam.loopNum > 0) {
+            ImGui::DragFloat("Loop Wait Time", &attackParam_.collisionParam.loopWaitTime, 0.01f);
+        }
+        ImGui::Checkbox("is Always Following", &attackParam_.collisionParam.isAlwaysFollowing);
     }
-    ImGui::Checkbox("is Always Following", &attackParam_.collisionParam.isAlwaysFollowing);
 
     // Move Parameter
     ImGui::SeparatorText("Move Parameter");
@@ -138,10 +144,10 @@ void PlayerComboAttackData::AdjustParam() {
         ImGui::DragFloat("Cancel Time", &attackParam_.timingParam.cancelTime, 0.01f);
     }
 
-    // Fall Parameters 
+    // Fall Parameters
     ImGui::SeparatorText("Fall Parameter");
     ImGui::Checkbox("Enable Fall", &attackParam_.fallParam.enableFall);
-   
+
     // next Attack
     ImGui::SeparatorText("Next Attack");
     SelectNextAttack();

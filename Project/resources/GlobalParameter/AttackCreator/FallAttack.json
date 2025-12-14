@@ -46,6 +46,7 @@
         "isAlwaysFollowing": false,
         "isAutoAdvance": true,
         "isCancel": false,
+        "isMotionOnly": true,
         "isPositionYSelect": true,
         "keyBordBottom": 35,
         "loopNum": 0,
