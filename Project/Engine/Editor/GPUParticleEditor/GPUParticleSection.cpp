@@ -488,7 +488,7 @@ void GPUParticleSection::EmitterSettingsEditor() {
     if (ImGui::CollapsingHeader("Emitter Settings")) {
         ImGui::DragFloat3("Position", &emitterSettings_.position.x, 0.01f);
         ImGui::DragInt("Count", reinterpret_cast<int*>(&emitterSettings_.count), 1, 1, 1000);
-        ImGui::DragFloat("Frequency", &emitterSettings_.frequency, 0.01f, 0.01f, 10.0f);
+        ImGui::DragFloat("Frequency", &emitterSettings_.frequency, 0.001f, 0.0f, 10.0f);
     }
 }
 
