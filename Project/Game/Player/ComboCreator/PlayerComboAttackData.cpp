@@ -88,68 +88,69 @@ void PlayerComboAttackData::AdjustParam() {
 
     ImGui::PushID(groupName_.c_str());
     ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), (groupName_ + " Editing").c_str());
-    ImGui::Checkbox("is Motion Only", &attackParam_.isMotionOnly);
+    ImGui::Checkbox("モーションのみ有効", &attackParam_.isMotionOnly);
     ImGui::Separator();
 
     // TriggerParam
-    ImGui::Checkbox("isFirstAttack", &attackParam_.triggerParam.isFirstAttack);
-    ImGui::Checkbox("Require Hit", &attackParam_.triggerParam.requireHit);
-    ImGuiKeyboardKeySelector("keyBoard:TriggerBottom", attackParam_.triggerParam.keyBordBottom);
-    ImGuiGamepadButtonSelector("GamePad:TriggerBottom", attackParam_.triggerParam.gamePadBottom);
+    ImGui::Checkbox("最初の攻撃", &attackParam_.triggerParam.isFirstAttack);
+    ImGui::Checkbox("前の攻撃がヒットした時が発動条件", &attackParam_.triggerParam.requireHit);
+    ImGuiKeyboardKeySelector("キーボード:ボタン", attackParam_.triggerParam.keyBordBottom);
+    ImGuiGamepadButtonSelector("パッド:ボタン", attackParam_.triggerParam.gamePadBottom);
 
     // 発動条件
-    const char* conditionItems[] = {"Ground", "Air", "Both"};
+    const char* conditionItems[] = {"地面", "空中", "両方"};
     tempCondition_               = static_cast<int>(attackParam_.triggerParam.condition);
-    if (ImGui::Combo("Trigger Condition", &tempCondition_, conditionItems, IM_ARRAYSIZE(conditionItems))) {
+    if (ImGui::Combo("発動できる状況", &tempCondition_, conditionItems, IM_ARRAYSIZE(conditionItems))) {
         attackParam_.triggerParam.condition = static_cast<TriggerCondition>(tempCondition_);
     }
 
     // Simple Parameter
     if (!attackParam_.isMotionOnly) {
-        ImGui::SeparatorText("simple Parameter");
-        ImGui::DragFloat("Power", &attackParam_.power, 0.01f);
-        ImGui::DragFloat("KnockBack Power", &attackParam_.knockBackPower, 0.01f);
-        ImGui::DragFloat("Blow Y Power", &attackParam_.blowYPower, 0.01f);
+        ImGui::SeparatorText("基本パラメータ");
+        ImGui::DragFloat("攻撃力", &attackParam_.power, 0.01f);
+        ImGui::DragFloat("正面のノックバック力", &attackParam_.knockBackPower, 0.01f);
+        ImGui::DragFloat("Y方向のノックバック力", &attackParam_.blowYPower, 0.01f);
 
         // Collision Parameter
-        ImGui::SeparatorText("Collision Parameter");
-        ImGui::DragFloat3("Collision Size", &attackParam_.collisionParam.size.x, 0.01f);
-        ImGui::DragFloat3("Collision Offset Pos", &attackParam_.collisionParam.offsetPos.x, 0.01f);
-        ImGui::DragFloat("Adapt Time", &attackParam_.collisionParam.adaptTime, 0.01f);
-        ImGui::Checkbox("is Auto Advance to Next Attack", &attackParam_.timingParam.isAutoAdvance);
-        ImGui::InputInt("Loop Num", &attackParam_.collisionParam.loopNum);
+        ImGui::SeparatorText("コライダーについて");
+        ImGui::DragFloat3("サイズ", &attackParam_.collisionParam.size.x, 0.01f);
+        ImGui::DragFloat3("オフセット位置", &attackParam_.collisionParam.offsetPos.x, 0.01f);
+        ImGui::DragFloat("適応時間", &attackParam_.collisionParam.adaptTime, 0.01f);
+     
+        ImGui::InputInt("ループ回数", &attackParam_.collisionParam.loopNum);
         if (attackParam_.collisionParam.loopNum > 0) {
-            ImGui::DragFloat("Loop Wait Time", &attackParam_.collisionParam.loopWaitTime, 0.01f);
+            ImGui::DragFloat("ループ待機時間", &attackParam_.collisionParam.loopWaitTime, 0.01f);
         }
-        ImGui::Checkbox("is Always Following", &attackParam_.collisionParam.isAlwaysFollowing);
+        ImGui::Checkbox("プレイヤーに追従する", &attackParam_.collisionParam.isAlwaysFollowing);
     }
 
     // Move Parameter
-    ImGui::SeparatorText("Move Parameter");
-    ImGui::Checkbox("isAble InputMoving", &attackParam_.moveParam.isAbleInputMoving);
-    ImGui::DragFloat("Move Ease Time", &attackParam_.moveParam.easeTime, 0.01f);
-    ImGui::Checkbox("isPositionYSelect", &attackParam_.moveParam.isPositionYSelect);
-    ImGui::DragFloat3("Move Value", &attackParam_.moveParam.value.x, 0.01f);
-    ImGui::DragFloat("Finish Time Offset", &attackParam_.moveParam.finishTimeOffset, 0.01f);
+    ImGui::SeparatorText("移動について");
+    ImGui::Checkbox("攻撃中入力による移動ができる", &attackParam_.moveParam.isAbleInputMoving);
+    ImGui::DragFloat("イージングタイム", &attackParam_.moveParam.easeTime, 0.01f);
+    ImGui::Checkbox("Yの位置を直接指定する", &attackParam_.moveParam.isPositionYSelect);
+    ImGui::DragFloat3("移動量", &attackParam_.moveParam.value.x, 0.01f);
+ /*   ImGui::DragFloat("Finish Time Offset", &attackParam_.moveParam.finishTimeOffset, 0.01f);*/
 
-    ImGuiEasingTypeSelector("Move Easing Type", attackParam_.moveParam.easeType);
+    ImGuiEasingTypeSelector("イージングタイプ", attackParam_.moveParam.easeType);
 
     // Timing Parameters
-    ImGui::SeparatorText("Timing Parameter");
-    ImGui::DragFloat("Precede Input Time", &attackParam_.timingParam.precedeInputTime, 0.01f);
-    ImGui::DragFloat("finish Wait Time", &attackParam_.timingParam.finishWaitTime, 0.01f);
+    ImGui::SeparatorText("タイミングについて");
+    ImGui::Checkbox("自動で次の攻撃に進む", &attackParam_.timingParam.isAutoAdvance);
+    ImGui::DragFloat("先行入力開始タイム", &attackParam_.timingParam.precedeInputTime, 0.01f);
+    ImGui::DragFloat("攻撃終了時の待機時間", &attackParam_.timingParam.finishWaitTime, 0.01f);
 
-    ImGui::Checkbox("is Add Cancel Time", &attackParam_.timingParam.isCancel);
+    ImGui::Checkbox("キャンセルタイムを使う", &attackParam_.timingParam.isCancel);
     if (attackParam_.timingParam.isCancel) {
-        ImGui::DragFloat("Cancel Time", &attackParam_.timingParam.cancelTime, 0.01f);
+        ImGui::DragFloat("キャンセル開始タイム", &attackParam_.timingParam.cancelTime, 0.01f);
     }
 
     // Fall Parameters
     ImGui::SeparatorText("Fall Parameter");
-    ImGui::Checkbox("Enable Fall", &attackParam_.fallParam.enableFall);
+    ImGui::Checkbox("攻撃終了時に落ちる", &attackParam_.fallParam.enableFall);
 
     // next Attack
-    ImGui::SeparatorText("Next Attack");
+    ImGui::SeparatorText("次の攻撃");
     SelectNextAttack();
 
     renditionData_.AdjustParam();
@@ -166,7 +167,7 @@ void PlayerComboAttackData::AdjustParam() {
 
 void PlayerComboAttackData::SelectNextAttack() {
     fileSelector_.SelectFile(
-        "Next Attack Type",
+        "次の攻撃名",
         "Resources/GlobalParameter/AttackCreator",
         attackParam_.nextAttackType,
         groupName_,

@@ -52,14 +52,14 @@ void PlayerComboAttackController::Update(float deltaTime) {
 
 void PlayerComboAttackController::EditorUpdate() {
 #ifdef _DEBUG
-    if (ImGui::CollapsingHeader("Attack Creator Manager")) {
+    if (ImGui::CollapsingHeader("攻撃作成エディター")) {
         ImGui::PushID("Attack Creator Manager");
 
         ImGui::Text("Attack Edit:");
 
         // 新規追加
-        ImGui::InputText("New Attack Name", nameBuffer_, IM_ARRAYSIZE(nameBuffer_));
-        if (ImGui::Button("Add Attack")) {
+        ImGui::InputText("新しい攻撃名", nameBuffer_, IM_ARRAYSIZE(nameBuffer_));
+        if (ImGui::Button("攻撃を追加")) {
             if (strlen(nameBuffer_) > 0) {
                 AddAttack(nameBuffer_);
                 nameBuffer_[0] = '\0';
@@ -188,7 +188,7 @@ void PlayerComboAttackController::VisualizeComboFlow() {
         ImGui::PushID(static_cast<int>(chainIdx));
 
         const auto& chain       = comboChains[chainIdx];
-        std::string headerLabel = "Combo Chain " + std::to_string(chainIdx + 1);
+        std::string headerLabel = "コンボチェイン" + std::to_string(chainIdx + 1);
 
         if (ImGui::TreeNode(headerLabel.c_str())) {
             // チェーン内の各攻撃を表示
