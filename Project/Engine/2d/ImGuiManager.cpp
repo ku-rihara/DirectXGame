@@ -22,18 +22,38 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
     winApp;
     dxCommon_    = dxCommon;
     pSrvManager_ = srvManager;
-
 #ifdef _DEBUG
-
     HRESULT result;
     // ImGuiの初期化
-
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-    io.Fonts->AddFontFromFileTTF("Resources/Font/MPLUS1p-Medium.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    // 矢印記号を含む範囲を追加
+    ImFontConfig config;
+    config.MergeMode = false;
+
+    // 日本語 + 基本記号の範囲を指定
+    static const ImWchar ranges[] = {
+        0x0020,
+        0x00FF, // Basic Latin + Latin Supplement
+        0x2000,
+        0x206F, // General Punctuation
+        0x2190,
+        0x21FF, // 矢印記号の範囲
+        0x3000,
+        0x30FF, // 日本語の句読点とひらがな
+        0x3131,
+        0x3163, // Korean alphabets
+        0x4e00,
+        0x9FAF, // CJK統合漢字
+        0xFF00,
+        0xFFEF, // 半角・全角形
+        0,
+    };
+
+    io.Fonts->AddFontFromFileTTF("Resources/Font/MPLUS1p-Medium.ttf", 18.0f, &config, ranges);
 
     // デスクリプタヒープ設定
     D3D12_DESCRIPTOR_HEAP_DESC desc = {};
@@ -43,10 +63,8 @@ void ImGuiManager::Init(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srv
     // デスクリプタヒープ生成
     result = dxCommon_->GetDevice()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&srvHeap_));
     assert(SUCCEEDED(result));
-
     ImGui::StyleColorsDark();
     ImGui_ImplWin32_Init(winApp->GetHwnd());
-
     ImGui_ImplDX12_Init(dxCommon_->GetDevice().Get(), dxCommon_->GetDxSwapChain()->GetDesc().BufferCount,
         dxCommon_->GetDxSwapChain()->GetRTVDesc().Format, srvHeap_.Get(),
         srvHeap_->GetCPUDescriptorHandleForHeapStart(),
