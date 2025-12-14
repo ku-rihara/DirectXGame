@@ -202,6 +202,8 @@ void PlayerComboAttackController::VisualizeComboFlow() {
 
                 ImGui::PushID(static_cast<int>(i));
                 // 攻撃名を表示
+                ImGui::Text("%d:",i);
+                ImGui::SameLine();
                 if (attack->GetAttackParam().isMotionOnly) {
                     ImGui::TextColored(ImVec4(1.0f, 0.55f, 0.0f, 1.0f), "%s (Motion Only)", attackName.c_str());
                 } else {
