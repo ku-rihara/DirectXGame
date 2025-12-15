@@ -52,37 +52,23 @@ void PlayerComboAttackController::Update(float deltaTime) {
 
 void PlayerComboAttackController::EditorUpdate() {
 #ifdef _DEBUG
-    if (ImGui::CollapsingHeader("Attack Creator Manager")) {
+    if (ImGui::CollapsingHeader("攻撃作成エディター")) {
         ImGui::PushID("Attack Creator Manager");
 
         ImGui::Text("Attack Edit:");
 
         // 新規追加
-        ImGui::InputText("New Attack Name", nameBuffer_, IM_ARRAYSIZE(nameBuffer_));
-        if (ImGui::Button("Add Attack")) {
+        ImGui::InputText("新しい攻撃名", nameBuffer_, IM_ARRAYSIZE(nameBuffer_));
+        if (ImGui::Button("攻撃を追加")) {
             if (strlen(nameBuffer_) > 0) {
                 AddAttack(nameBuffer_);
                 nameBuffer_[0] = '\0';
             }
         }
 
+        // コンボリスト
         ImGui::Separator();
-
-        // 攻撃リスト表示
-        ImGui::Text("Attacks (%d):", static_cast<int>(attacks_.size()));
-        for (int i = 0; i < static_cast<int>(attacks_.size()); i++) {
-            ImGui::PushID(i);
-
-            bool isSelected       = (selectedIndex_ == i);
-            std::string labelText = attacks_[i]->GetGroupName();
-
-            if (ImGui::Selectable(labelText.c_str(), isSelected)) {
-                selectedIndex_ = i;
-            }
-
-            ImGui::PopID();
-        }
-
+        VisualizeComboFlow();
         ImGui::Separator();
 
         // 選択された攻撃データの編集
@@ -184,23 +170,160 @@ void PlayerComboAttackController::AllSaveFile() {
     }
 }
 
-PlayerComboAttackData* PlayerComboAttackController::GetSelectedAttack() {
-    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(attacks_.size())) {
-        return attacks_[selectedIndex_].get();
+void PlayerComboAttackController::VisualizeComboFlow() {
+#ifdef _DEBUG
+    ImGui::PushID("ComboFlowVisualization");
+
+    if (attacks_.empty()) {
+        ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "No attacks available");
+        ImGui::PopID();
+        return;
     }
-    return nullptr;
+
+    // 全ての攻撃をチェーンに分類
+    std::vector<std::vector<std::string>> comboChains = BuildComboChains();
+
+    // 各チェーンを表示
+    for (size_t chainIdx = 0; chainIdx < comboChains.size(); ++chainIdx) {
+        ImGui::PushID(static_cast<int>(chainIdx));
+
+        const auto& chain       = comboChains[chainIdx];
+        std::string headerLabel = "コンボチェイン" + std::to_string(chainIdx + 1);
+
+        if (ImGui::TreeNode(headerLabel.c_str())) {
+            // チェーン内の各攻撃を表示
+            for (size_t i = 0; i < chain.size(); ++i) {
+                const std::string& attackName = chain[i];
+                PlayerComboAttackData* attack = GetAttackByName(attackName);
+
+                if (!attack) {
+                    continue;
+                }
+
+                ImGui::PushID(static_cast<int>(i));
+                // 攻撃名を表示
+                ImGui::Text("%d:",i);
+                ImGui::SameLine();
+                if (attack->GetAttackParam().isMotionOnly) {
+                    ImGui::TextColored(ImVec4(1.0f, 0.55f, 0.0f, 1.0f), "%s (Motion Only)", attackName.c_str());
+                } else {
+                    ImGui::TextColored(ImVec4(0.85f, 0.15f, 0.15f, 1.0f), attackName.c_str());
+                }
+              
+                // 選択中の攻撃を強調表示
+                if (IsValidIndex(selectedIndex_) && attacks_[selectedIndex_]->GetGroupName() == attackName) {
+                    ImGui::SameLine();
+                    ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "[Selected]");
+                }
+
+                // クリックで選択
+                if (ImGui::IsItemClicked()) {
+                    SelectAttackByName(attackName);
+                }
+
+                // 次の攻撃への矢印
+                if (i < chain.size() - 1) {
+                    ImGui::Indent(50.0f);
+                    ImGui::Text("↓");
+                    ImGui::Unindent(50.0f);
+                }
+
+                ImGui::PopID();
+            }
+
+            ImGui::TreePop();
+        }
+
+        // チェーン間の区切り
+        if (chainIdx < comboChains.size() - 1) {
+            ImGui::Separator();
+        }
+
+        ImGui::PopID();
+    }
+
+    ImGui::PopID();
+
+#endif
 }
 
-PlayerComboAttackData* PlayerComboAttackController::GetAttackByName(const std::string& name) {
-    auto it = std::find_if(attacks_.begin(), attacks_.end(),
-        [&name](const std::unique_ptr<PlayerComboAttackData>& attack) {
-            return attack->GetGroupName() == name;
-        });
+std::vector<std::vector<std::string>> PlayerComboAttackController::BuildComboChains() {
+    std::vector<std::vector<std::string>> chains;
+    std::unordered_set<std::string> visited;
 
-    if (it != attacks_.end()) {
-        return it->get();
+    // 開始攻撃を見つける
+    std::unordered_set<std::string> referencedAttacks;
+    for (const auto& attack : attacks_) {
+        const std::string& nextAttack = attack->GetAttackParam().nextAttackType;
+        if (!nextAttack.empty()) {
+            referencedAttacks.insert(nextAttack);
+        }
     }
-    return nullptr;
+
+    // 各開始攻撃からチェーンを構築
+    for (const auto& attack : attacks_) {
+        const std::string& attackName = attack->GetGroupName();
+        bool isFirstAttack            = attack->GetAttackParam().triggerParam.isFirstAttack;
+        bool isNotReferenced          = (referencedAttacks.find(attackName) == referencedAttacks.end());
+
+        // 開始攻撃の条件
+        if ((isFirstAttack || isNotReferenced) && visited.find(attackName) == visited.end()) {
+            std::vector<std::string> chain;
+            BuildChainRecursive(attackName, chain, visited);
+            if (!chain.empty()) {
+                chains.push_back(chain);
+            }
+        }
+    }
+
+    // 孤立した攻撃
+    for (const auto& attack : attacks_) {
+        const std::string& attackName = attack->GetGroupName();
+        if (visited.find(attackName) == visited.end()) {
+            std::vector<std::string> chain;
+            BuildChainRecursive(attackName, chain, visited);
+            if (!chain.empty()) {
+                chains.push_back(chain);
+            }
+        }
+    }
+
+    return chains;
+}
+
+void PlayerComboAttackController::BuildChainRecursive(
+    const std::string& attackName,
+    std::vector<std::string>& chain,
+    std::unordered_set<std::string>& visited) {
+
+    // 循環参照チェック
+    if (visited.find(attackName) != visited.end()) {
+        return;
+    }
+
+    PlayerComboAttackData* attack = GetAttackByName(attackName);
+    if (!attack) {
+        return;
+    }
+
+    // 現在の攻撃を追加
+    chain.push_back(attackName);
+    visited.insert(attackName);
+
+    // 次の攻撃を再帰的に追加
+    const std::string& nextAttack = attack->GetAttackParam().nextAttackType;
+    if (!nextAttack.empty()) {
+        BuildChainRecursive(nextAttack, chain, visited);
+    }
+}
+
+void PlayerComboAttackController::SelectAttackByName(const std::string& name) {
+    for (size_t i = 0; i < attacks_.size(); ++i) {
+        if (attacks_[i]->GetGroupName() == name) {
+            selectedIndex_ = static_cast<int>(i);
+            break;
+        }
+    }
 }
 
 ///==========================================================
@@ -237,7 +360,30 @@ void PlayerComboAttackController::AdjustCommonParam() {
 #endif // _DEBUG
 }
 
-float PlayerComboAttackController::GetRealAttackSpeed(float baseTimeSpeed)const {
+bool PlayerComboAttackController::IsValidIndex(int index) const {
+    return index >= 0 && index < static_cast<int>(attacks_.size());
+}
+
+PlayerComboAttackData* PlayerComboAttackController::GetSelectedAttack() {
+    if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(attacks_.size())) {
+        return attacks_[selectedIndex_].get();
+    }
+    return nullptr;
+}
+
+PlayerComboAttackData* PlayerComboAttackController::GetAttackByName(const std::string& name) {
+    auto it = std::find_if(attacks_.begin(), attacks_.end(),
+        [&name](const std::unique_ptr<PlayerComboAttackData>& attack) {
+            return attack->GetGroupName() == name;
+        });
+
+    if (it != attacks_.end()) {
+        return it->get();
+    }
+    return nullptr;
+}
+
+float PlayerComboAttackController::GetRealAttackSpeed(float baseTimeSpeed) const {
 
     float result = baseTimeSpeed * attackValueForLevel_[pCombo_->GetCurrentLevel()].speedRate;
 

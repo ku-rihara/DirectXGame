@@ -10,12 +10,12 @@ void Field::Init() {
     obj3d_->material_.materialData_->enableLighting = 5;
     obj3d_->material_.SetEnvironmentCoefficient(0.35f);
 
-    gpuParticlePlayer_ = std::make_unique<KetaEngine::GPUParticlePlayer>();
-    gpuParticlePlayer_->Init();
+ 
+    gpuParticlePlayer_.Init();
+    gpuParticlePlayer_.InitEffect("Field", "fire");
 }
 
 void Field::Update() {
-
-    //gpuParticlePlayer_->Update();
-    //gpuParticlePlayer_->PlayInCategory("Field", "Fire");
+    gpuParticlePlayer_.Play("Field", "fire");
+    gpuParticlePlayer_.Update();
 }

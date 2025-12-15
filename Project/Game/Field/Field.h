@@ -22,5 +22,5 @@ public:
 
 private:
     std::unique_ptr<KetaEngine::Object3d> obj3d_                      = nullptr;
-    std::unique_ptr<KetaEngine::GPUParticlePlayer> gpuParticlePlayer_ = nullptr;
+   KetaEngine::GPUParticlePlayer gpuParticlePlayer_;
 };

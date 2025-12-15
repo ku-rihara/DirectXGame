@@ -9,9 +9,9 @@
 namespace KetaEngine {
 
 struct MouseMove {
-    size_t lX;
-    size_t lY;
-    size_t lZ;
+    LONG lX;
+    LONG lY;
+    LONG lZ;
 };
 
 /// <summary>

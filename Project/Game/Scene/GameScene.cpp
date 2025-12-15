@@ -127,6 +127,7 @@ void GameScene::PlayUpdate() {
 
     // Editor
     attackEffect_->Update();
+    field_->Update();
 
     // 各クラス更新
     comboScene_->Update();

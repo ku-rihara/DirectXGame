@@ -20,21 +20,21 @@ void PlayerHandLeft::Init() {
     trustRailManager_->Init(railGroupName_);
 
     BasePlayerHand::Init();
+
+    gpuParticlePlayer_.Init();
+    gpuParticlePlayer_.InitEffect("Player", "LeftHandParticle");
 }
 
 ///=========================================================
 /// 　更新
 ///==========================================================
 void PlayerHandLeft::Update() {
-
+    gpuParticlePlayer_.Play("Player", "LeftHandParticle");
+    gpuParticlePlayer_.SetEmitPosition(GetWorldPosition());
+    gpuParticlePlayer_.Update();
     BasePlayerHand::Update();
 }
 
-void PlayerHandLeft::RailForthComboUpdate(float speed) {
-    /// 突き飛ばしコンボレール更新
-    trustRailManager_->Update(speed, KetaEngine::RailManager::PositionMode::LOCAL, (Vector3(1, 1, 1)));
-    obj3d_->transform_.translation_ = (trustRailManager_->GetPositionOnRail());
-}
 
 ///=====================================================
 ///  パラメータ調節

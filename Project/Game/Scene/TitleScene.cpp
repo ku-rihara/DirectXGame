@@ -54,6 +54,7 @@ void TitleScene::Init() {
     player_->SetWorldPositionY(30.0f);
 
     KetaEngine::ParticleManager::GetInstance()->SetViewProjection(&viewProjection_);
+
 }
 
 void TitleScene::Update() {

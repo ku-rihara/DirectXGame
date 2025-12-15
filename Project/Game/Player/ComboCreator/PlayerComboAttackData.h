@@ -74,6 +74,7 @@ public:
         float knockBackPower;
         float power;
         float blowYPower;
+        bool isMotionOnly = false;
         std::string nextAttackType;
     };
 
