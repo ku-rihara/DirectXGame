@@ -164,7 +164,6 @@
     <ClCompile Include="Engine\utility\Debug\DebugCamera.cpp" />
     <ClCompile Include="Engine\utility\FileSelector\FileSelector.cpp" />
     <ClCompile Include="Engine\utility\PutObjForBlender\PutObjForBlender.cpp" />
-    <ClCompile Include="Engine\utility\TextureConverter\TextureConverter.cpp" />
     <ClCompile Include="Engine\utility\TimeModeSelector\TimeModeSelector.cpp" />
     <ClCompile Include="Game\EasingTestObj\EasingTestObj.cpp" />
     <ClCompile Include="Game\Scene\BaseScene.cpp" />
@@ -355,7 +354,6 @@
     <ClInclude Include="Engine\utility\Debug\DebugCamera.h" />
     <ClInclude Include="Engine\utility\FileSelector\FileSelector.h" />
     <ClInclude Include="Engine\utility\PutObjForBlender\PutObjForBlender.h" />
-    <ClInclude Include="Engine\utility\TextureConverter\TextureConverter.h" />
     <ClInclude Include="Engine\utility\TimeModeSelector\TimeModeSelector.h" />
     <ClInclude Include="Game\EasingTestObj\EasingTestObj.h" />
     <ClInclude Include="Game\Scene\BaseScene.h" />
