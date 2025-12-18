@@ -14,11 +14,12 @@
 #include "AttackEffect/AttackEffect.h"
 #include "audio/Audio.h"
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
+#include "Field/Field.h"
+#include "Field/SideRope/SideRope.h"
 #include "Frame/Frame.h"
 #include "GameCamera/GameCamera.h"
 #include "Matrix4x4.h"
 #include "Player/Player.h"
-#include "Field/Field.h"
 
 ///========================================================
 ///  初期化
@@ -124,36 +125,46 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 
 void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-    //
-    if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
-
-        if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
-            return;
-        }
-
-        if (!attackController->GetComboAttackData()) {
-            return;
-        }
-
-        // プレイヤーの攻撃名を取得
-        std::string attackName = attackController->GetComboAttackData()->GetGroupName();
-
-        // 攻撃名が空かチェック
-        if (attackName.empty()) {
-            return;
-        }
-
-        // ダメージクーリング中
-        if (isDamageColling_ && lastReceivedAttackName_ == attackName) {
-            return;
-        }
+    if (SideRope* sideRope = dynamic_cast<SideRope*>(other)) {
 
         // Rootにし、受けたダメージの判定を行う
         ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
 
-        if (EnemyDamageReactionRoot* damageReaction = dynamic_cast<EnemyDamageReactionRoot*>(damageBehavior_.get())) {
-            damageReaction->SelectDamageActionBehaviorByAttack(attackController);
-        }
+    } else if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
+        // プレイヤーとの攻撃コリジョン判定
+        ChangeDamageReactionByPlayerAttack(attackController);
+        return;
+    }
+}
+
+void BaseEnemy::ChangeDamageReactionByPlayerAttack(PlayerCollisionInfo* attackController) {
+
+    if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
+        return;
+    }
+
+    if (!attackController->GetComboAttackData()) {
+        return;
+    }
+
+    // プレイヤーの攻撃名を取得
+    std::string attackName = attackController->GetComboAttackData()->GetGroupName();
+
+    // 攻撃名が空かチェック
+    if (attackName.empty()) {
+        return;
+    }
+
+    // ダメージクーリング中
+    if (isDamageColling_ && lastReceivedAttackName_ == attackName) {
+        return;
+    }
+
+    // Rootにし、受けたダメージの判定を行う
+    ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
+
+    if (EnemyDamageReactionRoot* damageReaction = dynamic_cast<EnemyDamageReactionRoot*>(damageBehavior_.get())) {
+        damageReaction->SelectDamageActionBehaviorByAttack(attackController);
     }
 }
 
@@ -340,7 +351,7 @@ void BaseEnemy::SetBodyColor(const Vector4& color) {
 }
 
 void BaseEnemy::RotateInit() {
-    obj3d_->transform_.rotation_ =Vector3::ZeroVector();
+    obj3d_->transform_.rotation_ = Vector3::ZeroVector();
 }
 
 void BaseEnemy::ScaleReset() {

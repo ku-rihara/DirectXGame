@@ -502,6 +502,9 @@
     <Filter Include="MyEngine\.cpp\Scene\Manager">
       <UniqueIdentifier>{716432aa-8f34-4922-935a-5ae2c4a5d1e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Field\SideRope">
+      <UniqueIdentifier>{c2dc9632-6ae4-4c2d-8714-ae912c0dea18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1245,6 +1248,15 @@
     </ClCompile>
     <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.cpp">
       <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Field\SideRope\SideRope.cpp">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Field\SideRope\SideRopeController.cpp">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyRopeBoundReaction.cpp">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2039,6 +2051,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Scene\Manager\SceneManager.h">
       <Filter>MyEngine\.h\Scene\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Field\SideRope\SideRope.h">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Field\SideRope\SideRopeController.h">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyRopeBoundReaction.h">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -20,8 +20,8 @@ class GameCamera;
 class EnemyManager;
 class Combo;
 class AttackEffect;
-
-/// <summary>
+class PlayerCollisionInfo;
+    /// <summary>
 /// 敵の基底クラス
 /// </summary>
 class BaseEnemy : public BaseObject, public KetaEngine::AABBCollider {
@@ -75,9 +75,9 @@ public:
 
     void DamageRenditionInit(); //< ダメージ演出初期化
     void ThrustRenditionInit(); //< 突き飛ばし演出初期化
-    void DeathRenditionInit(); //< 死亡演出初期化
-    void ScaleReset(); //< スケールリセット
-    void RotateInit(); //< 回転初期化
+    void DeathRenditionInit();  //< 死亡演出初期化
+    void ScaleReset();          //< スケールリセット
+    void RotateInit();          //< 回転初期化
 
     /// <summary>
     /// ジャンプ処理
@@ -138,6 +138,9 @@ private:
     void DamageCollingUpdate(float deltaTime);
 
     void MoveToLimit();
+
+    // ダメージリアクション変更処理
+    void ChangeDamageReactionByPlayerAttack(PlayerCollisionInfo* attackController);
 
 private:
     int deathSound_;

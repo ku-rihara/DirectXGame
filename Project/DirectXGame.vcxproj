@@ -188,6 +188,7 @@
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReacrtionAction.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.cpp" />
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyRopeBoundReaction.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\BaseEnemyBehavior.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\EnemyChasePlayer.cpp" />
     <ClCompile Include="Game\Enemy\Behavior\NormalBehavior\EnemySpawn.cpp" />
@@ -205,6 +206,8 @@
     <ClCompile Include="Game\Enemy\Types\NormalEnemy.cpp" />
     <ClCompile Include="Game\Enemy\Types\StrongEnemy.cpp" />
     <ClCompile Include="Game\Field\Field.cpp" />
+    <ClCompile Include="Game\Field\SideRope\SideRope.cpp" />
+    <ClCompile Include="Game\Field\SideRope\SideRopeController.cpp" />
     <ClCompile Include="Game\FireInjectors\FireInjectors.cpp" />
     <ClCompile Include="Game\GameCamera\CameraRendition.cpp" />
     <ClCompile Include="Game\GameCamera\GameCamera.cpp" />
@@ -454,6 +457,7 @@
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReacrtionAction.h" />
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.h" />
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDeath.h" />
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyRopeBoundReaction.h" />
     <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\BaseEnemyBehavior.h" />
     <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\EnemyChasePlayer.h" />
     <ClInclude Include="Game\Enemy\Behavior\NormalBehavior\EnemySpawn.h" />
@@ -471,6 +475,8 @@
     <ClInclude Include="Game\Enemy\Types\NormalEnemy.h" />
     <ClInclude Include="Game\Enemy\Types\StrongEnemy.h" />
     <ClInclude Include="Game\Field\Field.h" />
+    <ClInclude Include="Game\Field\SideRope\SideRope.h" />
+    <ClInclude Include="Game\Field\SideRope\SideRopeController.h" />
     <ClInclude Include="Game\FireInjectors\FireInjectors.h" />
     <ClInclude Include="Game\GameCamera\CameraRendition.h" />
     <ClInclude Include="Game\GameCamera\GameCamera.h" />
