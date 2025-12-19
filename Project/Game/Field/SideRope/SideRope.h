@@ -15,6 +15,13 @@ enum class SideRopeType : int32_t {
     COUNT,
 };
 
+struct BounceParam {
+    float maxStretch;         
+    float stretchResistance;  
+    float reboundRate;            
+    float delayTime;        
+};
+
 class BaseEnemy;
 /// <summary>
 /// ゲームフィールドクラス
@@ -57,4 +64,9 @@ private:
     // parameter
     Vector3 collisionSize_;
     Vector3 collisionPos_;
+
+    BounceParam ropeParam_;
+
+public:
+    void SetRopeParam(const BounceParam& param) { ropeParam_ = param; }
 };

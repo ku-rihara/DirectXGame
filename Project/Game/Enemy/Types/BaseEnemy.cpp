@@ -3,6 +3,8 @@
 // behavior
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
 #include "../Behavior/NormalBehavior/EnemySpawn.h"
+#include"../Behavior/DamageReactionBehavior/EnemyDamageReactionAction.h"
+#include"../Behavior/DamageReactionBehavior/EnemyRopeBoundReaction.h"
 #include "Enemy/EnemyManager.h"
 
 #include "Combo/Combo.h"
@@ -127,8 +129,11 @@ void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
     if (SideRope* sideRope = dynamic_cast<SideRope*>(other)) {
 
-        // Rootにし、受けたダメージの判定を行う
-        ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
+       if (EnemyDamageReactionAction* action = dynamic_cast<EnemyDamageReactionAction*>(damageBehavior_.get())) {
+            Vector3 velocity=action->GetKnockBackVelocity();
+           ChangeDamageReactionBehavior(std::make_unique<EnemyRopeBoundReaction>(this, velocity, sideRope));
+            return;
+       }
 
     } else if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
         // プレイヤーとの攻撃コリジョン判定

@@ -19,6 +19,7 @@ void SideRope::Update() {
     // 衝突サイズ、位置設定
     SetCollisionScale(collisionSize_);
     transform_.translation_=collisionPos_;
+    transform_.UpdateMatrix();
 }
 
 void SideRope::Rebound(const ReboundTarget& target) {

@@ -4,12 +4,12 @@
 // 初期化
 EnemyRopeBoundReaction::EnemyRopeBoundReaction(
     BaseEnemy* boss,
-    EnemyDamageReactionData* reactionData,
-     SideRope* sideRope)
+    Vector3 knockBackVelocity,
+    SideRope* sideRope)
     : BaseEnemyDamageReaction("EnemyRopeBoundReaction", boss) {
 
-    pReactionData_ = reactionData;
-    pSideRope_     = sideRope;
+    knockBackVelocity_ = knockBackVelocity;
+    pSideRope_         = sideRope;
 }
 
 EnemyRopeBoundReaction::~EnemyRopeBoundReaction() {

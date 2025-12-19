@@ -1,4 +1,4 @@
-#include "EnemyDamageReacrtionAction.h"
+#include "EnemyDamageReactionAction.h"
 /// obj
 #include "CollisionBox/PlayerCollisionInfo.h"
 #include "Enemy/Types/BaseEnemy.h"

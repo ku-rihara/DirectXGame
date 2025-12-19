@@ -31,8 +31,7 @@ private:
 
     // 死亡リアクション変更
     void ChangeDeathReaction(EnemyDamageReactionData* reactionData);
-    void ChangeRopeBoundReaction(SideRope*sideRope);
-
+  
 private:
     const PlayerCollisionInfo* pPlayerCollisionInfo_    = nullptr;
     EnemyDamageReactionController* pReactionController_ = nullptr;

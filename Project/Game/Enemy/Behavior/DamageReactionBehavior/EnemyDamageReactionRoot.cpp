@@ -1,6 +1,6 @@
 /// behavior
 #include "EnemyDamageReactionRoot.h"
-#include "EnemyDamageReacrtionAction.h"
+#include "EnemyDamageReactionAction.h"
 #include "EnemyRopeBoundReaction.h"
 /// obj
 #include "CollisionBox/PlayerCollisionInfo.h"
@@ -103,10 +103,4 @@ void EnemyDamageReactionRoot::ChangeDeathReaction(EnemyDamageReactionData* react
         pBaseEnemy_->ChangeDamageReactionBehavior(
             std::make_unique<EnemyDeath>(pBaseEnemy_));
     }
-}
-
-void EnemyDamageReactionRoot::ChangeRopeBoundReaction(SideRope* sideRope) {
-    sideRope;
-   /* pBaseEnemy_->ChangeDamageReactionBehavior(
-        std::make_unique<EnemyRopeBoundReaction>(pBaseEnemy_, reactionData, sideRope));*/
 }

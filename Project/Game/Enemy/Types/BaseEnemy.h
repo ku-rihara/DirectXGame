@@ -165,15 +165,17 @@ protected:
     std::unique_ptr<EnemyHPBar> hpBar_;
 
     // parameter
-    bool isDeath_;
     float hp_;
     float HPMax_;
     Vector2 hpBarSize_;
 
+    // frags
     bool isDeathPending_ = false;
+    bool isDamageColling_;
+    bool isDeath_;
+    bool isCollisionRope_;
 
     // hitParam
-    bool isDamageColling_;
     float damageCollTime_;
     std::string lastReceivedAttackName_;
 
