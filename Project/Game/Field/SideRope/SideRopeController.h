@@ -9,15 +9,6 @@
 /// </summary>
 class SideRopeController {
 public:
-    enum class SidePos {
-        FRONT,
-        LEFT,
-        RIGHT,
-        BACK,
-        COUNT,
-    };
-
-public:
   
     SideRopeController() = default;
     ~SideRopeController() = default;
@@ -26,6 +17,8 @@ public:
     void Init();
     void Update();
 
+    void AdjustParam(); //< パラメータ調整
+
 private:
-    std::array<std::unique_ptr<SideRope>, static_cast<size_t>(SidePos::COUNT)> sideRopes_;
+    std::array<std::unique_ptr<SideRope>, static_cast<int32_t>(SideRopeType::COUNT)> sideRopes_;
 };

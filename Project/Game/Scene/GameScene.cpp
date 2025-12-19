@@ -128,6 +128,7 @@ void GameScene::PlayUpdate() {
     // Editor
     attackEffect_->Update();
     field_->Update();
+    sideRopeController_->Update();
 
     // 各クラス更新
     comboScene_->Update();
@@ -179,6 +180,7 @@ void GameScene::Debug() {
 
     ImGui::Begin("ParameterEditor");
     player_->AdjustParam();
+    sideRopeController_->AdjustParam();
     enemyManager_->AdjustParam();
     enemySpawner_->AdjustParam();
     continuousEnemySpawner_->AdjustParam();
@@ -247,6 +249,7 @@ void GameScene::ObjectInit() {
     comboLevelObjHolder_         = std::make_unique<ComboLevelObjHolder>();
     continuousEnemySpawner_      = std::make_unique<ContinuousEnemySpawner>();
     playerComboAttackController_ = std::make_unique<PlayerComboAttackController>();
+    sideRopeController_          = std::make_unique<SideRopeController>();
 
     //*--------------------------------------- 初期化 ---------------------------------------*//
 
@@ -264,6 +267,7 @@ void GameScene::ObjectInit() {
     comboScene_->Init();
     playerComboAttackController_->Init();
     attackEffect_->Init();
+    sideRopeController_->Init();
     viewProjection_.Init();
 
     comboLevelObjHolder_->Add(ComboLevelObjType::STADIUM_LIGHT, "ComboLevel1.json");

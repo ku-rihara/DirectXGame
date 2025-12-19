@@ -23,6 +23,7 @@
 #include "SkyDome/SkyDome.h"
 #include "UI/HowToOperate.h"
 #include "Editor/CameraEditor/CameraEditor.h"
+#include "Field/SideRope/SideRopeController.h"
 
 #include"Editor/CameraEditor/CameraAnimation.h"
 
@@ -87,6 +88,7 @@ private:
     std::unique_ptr<ComboLevelObjHolder> comboLevelObjHolder_                 = nullptr;
     std::unique_ptr<ContinuousEnemySpawner> continuousEnemySpawner_           = nullptr;
     std::unique_ptr<PlayerComboAttackController> playerComboAttackController_ = nullptr;
+    std::unique_ptr<SideRopeController> sideRopeController_                   = nullptr;
 
     GameState gameState_ = GameState::INTRO;
 
