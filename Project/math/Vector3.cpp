@@ -116,27 +116,32 @@ Vector3 Vector3::Normalize()const {
 }
 
 
-// 上方向の単位ベクトルを返す
+
 Vector3 Vector3::ToUp() {
 	return Vector3(0.0f, 1.0f, 0.0f);
 }
 
-// 前方向の単位ベクトルを返す
 Vector3 Vector3::ToForward() {
 	return Vector3(0.0f, 0.0f, 1.0f);
 }
 
-// 右方向の単位ベクトルを返す
 Vector3 Vector3::ToRight() {
 	return Vector3(1.0f, 0.0f, 0.0f);
 }
 
-// ゼロベクトル
+Vector3 Vector3::ToLeft() {
+    return Vector3(-1.0f, 0.0f, 0.0f);
+}
+
+Vector3 Vector3::ToBack() {
+    return Vector3(0.0f, 0.0f, -1.0f);
+}
+
 Vector3 Vector3::ZeroVector() {
 	return Vector3(0, 0, 0);
 }
 
-// 単位ベクトル
+
 Vector3  Vector3::OneVector() {
 	return Vector3(1.0f, 1.0f, 1.0f);
 }
