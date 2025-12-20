@@ -131,14 +131,14 @@ void WorldTransform::SetParent(const WorldTransform* parent) {
 
 Vector3 WorldTransform::LookAt(const Vector3& direction) const {
     // 引数の方向ベクトルを正規化
-    Vector3 normalizedDirection = Vector3::Normalize(direction);
+    Vector3 normalizedDirection = direction.Normalize();
 
     // 現在の行列を基にワールド方向を計算
     Matrix4x4 rotateMatrix = MakeRotateMatrix(rotation_);
     Vector3 worldDirection = TransformNormal(normalizedDirection, rotateMatrix);
 
     // 正規化して返す
-    return Vector3::Normalize(worldDirection);
+    return worldDirection.Normalize();
 }
 
 ///=====================================================
