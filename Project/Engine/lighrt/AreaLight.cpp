@@ -28,12 +28,12 @@ void AreaLight::DebugImGui() {
     ImGui::ColorEdit4("Color", (float*)&lightData_->color);              
     ImGui::DragFloat3("Position", (float*)&lightData_->position, 0.01f); 
     ImGui::DragFloat3("Direction", (float*)&lightData_->normal, 0.01f);  
-    lightData_->normal = Vector3::Normalize(lightData_->normal);         
+    lightData_->normal = lightData_->normal.Normalize();         
 
     ImGui::DragFloat("Width", (float*)&lightData_->width, 0.01f);        
     ImGui::DragFloat("Height", (float*)&lightData_->height, 0.01f);      
     ImGui::DragFloat3("Up", (float*)&lightData_->up, 0.01f);             
-    lightData_->up = Vector3::Normalize(lightData_->up);                 
+    lightData_->up = lightData_->up.Normalize();                 
 
     ImGui::DragFloat("Intensity", (float*)&lightData_->intensity, 0.01f);
     ImGui::DragFloat("Decay", (float*)&lightData_->decay, 0.01f);        
