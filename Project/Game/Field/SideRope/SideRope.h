@@ -28,8 +28,7 @@ class BaseEnemy;
 /// </summary>
 class SideRope : public KetaEngine::AABBCollider {
 public:
-    using ReboundTarget = std::variant<BaseEnemy*>;
-
+  
 public:
     SideRope()  = default;
     ~SideRope() = default;
@@ -39,7 +38,7 @@ public:
     void Update();
 
     // 反発処理
-    void Rebound(const ReboundTarget& target);
+    void Rebound(BaseEnemy* target, const Vector3& velocity);
 
     /// collision
     Vector3 GetCollisionPos() const override;
@@ -49,7 +48,7 @@ public:
 
 private:
     std::string SetGroupNameByType();
-
+    Vector3 CalculateRopeNormal() const;
     // Parameter
     void RegisterParams();
 

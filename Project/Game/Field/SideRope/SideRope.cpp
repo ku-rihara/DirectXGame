@@ -1,7 +1,6 @@
 #include "SideRope.h"
 #include <imgui.h>
 
-
 void SideRope::Init(int32_t type) {
 
     // タイプ設定
@@ -18,13 +17,35 @@ void SideRope::Init(int32_t type) {
 void SideRope::Update() {
     // 衝突サイズ、位置設定
     SetCollisionScale(collisionSize_);
-    transform_.translation_=collisionPos_;
+    transform_.translation_ = collisionPos_;
     transform_.UpdateMatrix();
 }
 
-void SideRope::Rebound(const ReboundTarget& target) {
-  
+void SideRope::Rebound(BaseEnemy* enemy, const Vector3& velocity) {
+    if (!enemy) {
+        return;
+    }
+
+    // ロープの法線方向を計算
+    Vector3 ropeNormal=Cal
 }
+
+Vector3 SideRope::CalculateRopeNormal() const {
+    switch (type_) {
+    case SideRopeType::FRONT:
+        return Vector3::ToForward();
+    
+    case SideRopeType::LEFT:
+      
+    case SideRopeType::RIGHT:
+      
+    case SideRopeType::BACK:
+       
+    case SideRopeType::COUNT:
+       
+   
+    }
+  }
 
 Vector3 SideRope::GetCollisionPos() const {
 
@@ -52,7 +73,7 @@ void SideRope::AdjustParam() {
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
 
-         ImGui::PopID();
+        ImGui::PopID();
     }
 
 #endif // _DEBUG

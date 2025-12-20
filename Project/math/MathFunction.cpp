@@ -27,11 +27,11 @@ Vector3 Lerp(const Vector3& start, const Vector3& end, float t) {
 
 Vector3 SLerp(const Vector3& start, const Vector3& end, float t) {
     // ベクトルの正規化
-    Vector3 Nstart = Vector3::Normalize(start);
-    Vector3 Nend = Vector3::Normalize(end);
+    Vector3 Nstart = start.Normalize();
+    Vector3 Nend   = end.Normalize();
 
     // 内積を求める
-    float dot = Vector3::Dot(Nstart, Nend);
+    float dot = Nstart.Dot(Nend);
 
     // ドット積の誤差補正
     if (dot > 1.0f) {
@@ -46,7 +46,7 @@ Vector3 SLerp(const Vector3& start, const Vector3& end, float t) {
 
     // もしθが非常に小さい
     if (std::abs(theta) < 1.0e-5) {
-        return Lerp(start, end, t);  // 線形補間で十分
+        return Lerp(start, end, t); 
     }
 
     // sinθを求める

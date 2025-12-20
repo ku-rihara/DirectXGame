@@ -174,7 +174,7 @@ void Player::Move(float speed) {
     /// 移動処理
     if (CheckIsMoving()) {
         // 移動量に速さを反映
-        direction_ = Vector3::Normalize(direction_) * (speed)*KetaEngine::Frame::DeltaTimeRate();
+        direction_ = direction_.Normalize() * (speed)*KetaEngine::Frame::DeltaTimeRate();
         // 移動ベクトルをカメラの角度だけ回転する
         Matrix4x4 rotateMatrix = MakeRotateYMatrix(viewProjection_->rotation_.y);
         direction_             = TransformNormal(direction_, rotateMatrix);

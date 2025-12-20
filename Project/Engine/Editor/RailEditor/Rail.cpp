@@ -45,7 +45,7 @@ void Rail::Update(const std::vector<Vector3>& controlPos) {
         Vector3 interpolatedPos = Lerp(pointsDrawing_[currentIndex], pointsDrawing_[currentIndex + 1], t);
 
         Vector3 direction = pointsDrawing_[currentIndex + 1] - interpolatedPos;
-        direction = Vector3::Normalize(direction);
+        direction         = direction.Normalize();
         float rotateY = std::atan2(direction.x, direction.z);
         float rotateX = std::atan2(-direction.y, std::sqrt(direction.x * direction.x + direction.z * direction.z));
 
