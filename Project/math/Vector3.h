@@ -34,11 +34,15 @@ public:
     // スカラー,ベクトル
     friend Vector3 operator*(float scalar, const Vector3& vec);
 
-    static Vector3 ToUp(); // 上方向
+    static Vector3 ToUp();      // 上方向
     static Vector3 ToForward(); // 前方向
-    static Vector3 ToRight(); // 右方向
-    static Vector3 OneVector(); // 単位ベクトル
-    static Vector3 ZeroVector();
+    static Vector3 ToRight();   // 右方向
+    static Vector3 ToLeft();    // 左方向
+    static Vector3 ToBack();    // 後方向
+
+
+    static Vector3 OneVector();  // 単位ベクトル
+    static Vector3 ZeroVector(); // ゼロベクトル
 
     Vector3 Cross(const Vector3& v2) const;
     float Dot(const Vector3& v2) const;
