@@ -23,7 +23,7 @@ void SideRope::Update() {
 }
 
 void SideRope::Rebound(const ReboundTarget& target) {
-    target;
+  
 }
 
 Vector3 SideRope::GetCollisionPos() const {

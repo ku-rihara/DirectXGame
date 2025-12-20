@@ -1258,6 +1258,9 @@
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyRopeBoundReaction.cpp">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Field\SideRope\SideRopeReboundSystem.cpp">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -2060,6 +2063,9 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyRopeBoundReaction.h">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Field\SideRope\SideRopeReboundSystem.h">
+      <Filter>Game\Field\SideRope</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

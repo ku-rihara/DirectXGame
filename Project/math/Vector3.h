@@ -39,7 +39,6 @@ public:
 	static Vector3 Multiply(const Vector3& v1, float v2);
 	static Vector3 Cross(const Vector3& v1, const Vector3& v2);
 	static float Dot(const Vector3& v1, const Vector3& v2);
-	/*static float Length(const Vector3& v);*/
 
 	static Vector3 ToUp();      // 上方向
 	static Vector3 ToForward(); // 前方向
