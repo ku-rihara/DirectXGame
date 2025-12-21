@@ -51,10 +51,10 @@ void Light::InitAllLights() {
     directionalLight_->Init(dxCommon_->GetDevice().Get());
 
     pointLightManager_ = std::make_unique<PointLightManager>();
-    pointLightManager_->Init(dxCommon_->GetDevice().Get()); // 初期化を追加
+    pointLightManager_->Init(dxCommon_->GetDevice().Get()); 
 
     spotLightManager_ = std::make_unique<SpotLightManager>();
-    spotLightManager_->Init(dxCommon_->GetDevice().Get()); // 初期化を追加
+    spotLightManager_->Init(dxCommon_->GetDevice().Get()); 
 
     areaLightManager_ = std::make_unique<AreaLightManager>();
     ambientLight_     = std::make_unique<AmbientLight>();

@@ -119,7 +119,12 @@ void SpatialGrid::SetParam(float cellSize, const Vector3& worldMin, const Vector
 
     // グリッドの分割数を計算
     Vector3 worldSize = worldMax_ - worldMin_;
-    gridWidth_        = static_cast<int>(std::ceil(worldSize.x / cellSize_));
-    gridHeight_       = static_cast<int>(std::ceil(worldSize.y / cellSize_));
-    gridDepth_        = static_cast<int>(std::ceil(worldSize.z / cellSize_));
+
+    if (cellSize_ == 0.0f) {
+        return;
+    }
+
+    gridWidth_  = static_cast<int>(std::ceil(worldSize.x / cellSize_));
+    gridHeight_ = static_cast<int>(std::ceil(worldSize.y / cellSize_));
+    gridDepth_  = static_cast<int>(std::ceil(worldSize.z / cellSize_));
 }
