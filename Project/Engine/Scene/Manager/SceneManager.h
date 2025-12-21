@@ -2,7 +2,8 @@
 
 #include "Scene/BaseScene.h"
 #include "Scene/Factory/AbstractSceneFactory.h"
-#include <memory> 
+#include <Collider/CollisionManager.h>
+#include <memory>
 #include <type_traits>
 
 namespace KetaEngine {
@@ -10,11 +11,6 @@ namespace KetaEngine {
 /// シーン管理
 /// </summary>
 class SceneManager {
-private:
-    std::unique_ptr<BaseScene> scene_     = nullptr;
-    std::unique_ptr<BaseScene> nextScene_ = nullptr;
-    AbstractSceneFactory* sceneFactory_   = nullptr;
-
 public:
     static SceneManager* GetInstance();
     ~SceneManager();
@@ -30,6 +26,13 @@ public:
     /// <param name="sceneName"></param>
     void ChangeScene(const std::string& scenemane);
 
+private:
+    std::unique_ptr<BaseScene> scene_                   = nullptr;
+    std::unique_ptr<BaseScene> nextScene_               = nullptr;
+    AbstractSceneFactory* sceneFactory_                 = nullptr;
+    std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
+
+public:
     ///===========================================================
     /// getter method
     ///===========================================================

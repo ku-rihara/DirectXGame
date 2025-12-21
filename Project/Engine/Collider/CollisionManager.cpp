@@ -12,13 +12,10 @@ std::list<BaseCollider*> CollisionManager::baseColliders_;
 
 void CollisionManager::Init() {
     globalParameter_ = GlobalParameter::GetInstance();
-
-    // グループ名設定
     globalParameter_->CreateGroup(groupName_);
     RegisterParams();
-
-    // パラメータ同期
     globalParameter_->SyncParamForGroup(groupName_);
+
     spatialGrid_ = std::make_unique<SpatialGrid>();
     spatialGrid_->SetParam(cellSize_, worldMin_, worldMax_);
 }
@@ -65,6 +62,11 @@ void CollisionManager::LineAllSet() {
     if (!isColliderVisible_) {
         return;
     }
+
+     if (spatialGrid_) {
+        spatialGrid_->DrawGrid();
+    }
+
     // 全てのコライダーを描画する
     for (BaseCollider* baseCollider : baseColliders_) {
         baseCollider->SetDebugCube();
@@ -143,6 +145,10 @@ void CollisionManager::CheckAllCollisions() {
 
     // グリッドをクリアして再構築
     spatialGrid_->Clear();
+
+    if (baseColliders_.size() < 2) {
+        return; 
+    }
 
     // 全コライダーをグリッドに登録
     for (BaseCollider* collider : baseColliders_) {

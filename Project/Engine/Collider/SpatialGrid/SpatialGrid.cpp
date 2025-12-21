@@ -7,6 +7,13 @@
 
 using namespace KetaEngine;
 
+SpatialGrid::SpatialGrid() {
+    // デバッグ用ライン
+    debugLine_.reset(Line3D::Create(1000));
+}
+
+SpatialGrid::~SpatialGrid() = default;
+
 void SpatialGrid::Clear() {
     grid_.clear();
 }
@@ -119,7 +126,69 @@ void SpatialGrid::SetParam(float cellSize, const Vector3& worldMin, const Vector
 
     // グリッドの分割数を計算
     Vector3 worldSize = worldMax_ - worldMin_;
-    gridWidth_        = static_cast<int>(std::ceil(worldSize.x / cellSize_));
-    gridHeight_       = static_cast<int>(std::ceil(worldSize.y / cellSize_));
-    gridDepth_        = static_cast<int>(std::ceil(worldSize.z / cellSize_));
+
+    if (cellSize_ == 0.0f) {
+        return;
+    }
+
+    gridWidth_  = static_cast<int>(std::ceil(worldSize.x / cellSize_));
+    gridHeight_ = static_cast<int>(std::ceil(worldSize.y / cellSize_));
+    gridDepth_  = static_cast<int>(std::ceil(worldSize.z / cellSize_));
+}
+
+void SpatialGrid::DrawGrid() {
+#ifdef _DEBUG
+
+    Vector4 gridColor   = Vector4(0.3f, 0.3f, 0.3f, 0.5f);
+    Vector4 activeColor = Vector4(0.0f, 1.0f, 0.0f, 0.8f);
+
+    // X軸方向のライ
+    for (int y = 0; y <= gridHeight_; ++y) {
+        for (int z = 0; z <= gridDepth_; ++z) {
+            Vector3 start = worldMin_ + Vector3(0.0f, y * cellSize_, z * cellSize_);
+            Vector3 end   = worldMin_ + Vector3(gridWidth_ * cellSize_, y * cellSize_, z * cellSize_);
+            debugLine_->SetLine(start, end, gridColor);
+        }
+    }
+
+    // Y軸方向のライン
+    for (int x = 0; x <= gridWidth_; ++x) {
+        for (int z = 0; z <= gridDepth_; ++z) {
+            Vector3 start = worldMin_ + Vector3(x * cellSize_, 0.0f, z * cellSize_);
+            Vector3 end   = worldMin_ + Vector3(x * cellSize_, gridHeight_ * cellSize_, z * cellSize_);
+            debugLine_->SetLine(start, end, gridColor);
+        }
+    }
+
+    // Z軸方向のライン
+    for (int x = 0; x <= gridWidth_; ++x) {
+        for (int y = 0; y <= gridHeight_; ++y) {
+            Vector3 start = worldMin_ + Vector3(x * cellSize_, y * cellSize_, 0.0f);
+            Vector3 end   = worldMin_ + Vector3(x * cellSize_, y * cellSize_, gridDepth_ * cellSize_);
+            debugLine_->SetLine(start, end, gridColor);
+        }
+    }
+
+    // コライダーが存在するセルをハイライト
+
+    for (const auto& pair : grid_) {
+        if (!pair.second.empty()) {
+            // インデックスからグリッド座標を逆算
+            int index = pair.first;
+            int x     = index % gridWidth_;
+            int y     = (index / gridWidth_) % gridHeight_;
+            int z     = index / (gridWidth_ * gridHeight_);
+
+            // セルの中心座標
+            Vector3 cellCenter = worldMin_ + Vector3((x + 0.5f) * cellSize_, (y + 0.5f) * cellSize_, (z + 0.5f) * cellSize_);
+
+            // セルのサイズ
+            Vector3 cellSizeVec = Vector3(cellSize_, cellSize_, cellSize_) * 0.95f;
+
+            // セルをボックスとして描画
+            debugLine_->SetCubeWireframe(cellCenter, cellSizeVec, activeColor);
+        }
+    }
+
+#endif
 }

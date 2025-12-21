@@ -38,7 +38,6 @@ protected:
     /// private variants
     ///=======================================================
     std::unique_ptr<AbstractSceneFactory> sceneFactory_;
-    std::unique_ptr<CollisionManager> collisionManager_;
     std::unique_ptr<EngineCore> engineCore_;
 };
 
