@@ -84,8 +84,11 @@ private:
     // globalParameter
     GlobalParameter* globalParameter_;
     const std::string folderPath_ = "Collision";
-   const std::string groupName_ = "CollisionManager";
+    const std::string groupName_  = "CollisionManager";
+
+    bool isGridVisible_;
     bool isColliderVisible_;
+    bool isNotAdaptCollision_ = false;
 
     Vector3 worldMin_;
     Vector3 worldMax_;

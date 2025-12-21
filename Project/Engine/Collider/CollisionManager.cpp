@@ -49,6 +49,11 @@ void CollisionManager::Update() {
 }
 
 void CollisionManager::UpdateWorldTransform() {
+
+    if (isNotAdaptCollision_) {
+        return;
+    }
+
     // 全てのコライダーについて行列更新をする
     for (BaseCollider* baseCollider : baseColliders_) {
         baseCollider->UpdateWorldTransform();
@@ -58,13 +63,14 @@ void CollisionManager::UpdateWorldTransform() {
 
 void CollisionManager::LineAllSet() {
 #ifdef _DEBUG
+
+    if (spatialGrid_ && isGridVisible_) {
+        spatialGrid_->DrawGrid();
+    }
+
     // 非表示なら抜ける
     if (!isColliderVisible_) {
         return;
-    }
-
-     if (spatialGrid_) {
-        spatialGrid_->DrawGrid();
     }
 
     // 全てのコライダーを描画する
@@ -146,8 +152,12 @@ void CollisionManager::CheckAllCollisions() {
     // グリッドをクリアして再構築
     spatialGrid_->Clear();
 
+    if (isNotAdaptCollision_) {
+        return;
+    }
+
     if (baseColliders_.size() < 2) {
-        return; 
+        return;
     }
 
     // 全コライダーをグリッドに登録
@@ -182,6 +192,7 @@ void CollisionManager::CheckAllCollisions() {
 
 void CollisionManager::RegisterParams() {
     globalParameter_->Regist<bool>(groupName_, "isColliderVisible", &isColliderVisible_);
+    globalParameter_->Regist<bool>(groupName_, "isGridVisible", &isGridVisible_);
     globalParameter_->Regist<Vector3>(groupName_, "worldMin", &worldMin_);
     globalParameter_->Regist<Vector3>(groupName_, "worldMax", &worldMax_);
     globalParameter_->Regist<float>(groupName_, "cellSize", &cellSize_);
@@ -196,7 +207,10 @@ void CollisionManager::AdjustParam() {
         ImGui::PushID(groupName_.c_str());
 
         ImGui::Checkbox("IsColliderVisible", &isColliderVisible_);
-        ImGui::DragFloat3("WorldMin",&worldMin_.x, 0.1f);
+        ImGui::Checkbox("isGridVisible", &isGridVisible_);
+        ImGui::Checkbox("isNotAdaptCollision", &isNotAdaptCollision_);
+        ImGui::Separator();
+        ImGui::DragFloat3("WorldMin", &worldMin_.x, 0.1f);
         ImGui::DragFloat3("WorldMax", &worldMax_.x, 0.1f);
         ImGui::DragFloat("CellSize", &cellSize_, 0.1f);
 
@@ -209,9 +223,8 @@ void CollisionManager::AdjustParam() {
         globalParameter_->ParamLoadForImGui(groupName_, folderPath_);
 
         ImGui::PopID();
-
     }
 
-    ImGui::End();   
-    #endif // _DEBUG
+    ImGui::End();
+#endif // _DEBUG
 }
