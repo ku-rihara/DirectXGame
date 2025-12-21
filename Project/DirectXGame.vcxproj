@@ -219,8 +219,8 @@
     <ClCompile Include="Game\GameIntro\MovieLine.cpp" />
     <ClCompile Include="Game\LockOn\LockOn.cpp" />
     <ClCompile Include="Game\LockOn\LockOnController.cpp" />
-    <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp" />
-    <ClCompile Include="Game\Player\ComboAttackBehavior\DynamicComboAttack.cpp" />
+    <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAttackBehavior.cpp" />
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackAction.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.cpp" />
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp" />
     <ClCompile Include="Game\Player\ComboCreator\PlayerAttackRenditionData.cpp" />
@@ -476,6 +476,7 @@
     <ClInclude Include="Game\Enemy\Types\NormalEnemy.h" />
     <ClInclude Include="Game\Enemy\Types\StrongEnemy.h" />
     <ClInclude Include="Game\Field\Field.h" />
+    <ClInclude Include="Game\Field\SideRope\RopeBoundParam.h" />
     <ClInclude Include="Game\Field\SideRope\SideRope.h" />
     <ClInclude Include="Game\Field\SideRope\SideRopeController.h" />
     <ClInclude Include="Game\Field\SideRope\SideRopeReboundSystem.h" />
@@ -489,8 +490,8 @@
     <ClInclude Include="Game\GameIntro\MovieLine.h" />
     <ClInclude Include="Game\LockOn\LockOn.h" />
     <ClInclude Include="Game\LockOn\LockOnController.h" />
-    <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h" />
-    <ClInclude Include="Game\Player\ComboAttackBehavior\DynamicComboAttack.h" />
+    <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAttackBehavior.h" />
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackAction.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\Rendition\PlayerAttackRendition.h" />
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h" />
     <ClInclude Include="Game\Player\ComboCreator\PlayerAttackRenditionData.h" />

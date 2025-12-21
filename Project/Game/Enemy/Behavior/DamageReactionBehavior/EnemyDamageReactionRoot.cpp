@@ -27,8 +27,9 @@ EnemyDamageReactionRoot::EnemyDamageReactionRoot(BaseEnemy* boss)
 EnemyDamageReactionRoot::~EnemyDamageReactionRoot() {
 }
 
-void EnemyDamageReactionRoot::Update() {
+void EnemyDamageReactionRoot::Update(float deltaTime) {
     // 待機
+    deltaTime;
 }
 
 void EnemyDamageReactionRoot::Debug() {

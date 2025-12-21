@@ -10,6 +10,7 @@
 #include "Collider/AABBCollider.h"
 #include "CollisionBox/EnemyCollisionBox.h"
 #include "Enemy/HPBar/EnemyHPBar.h"
+#include"Field/SideRope/SideRopeReboundSystem.h"
 
 #include "../SearchingSprite/FindSprite.h"
 #include "../SearchingSprite/NotFindSprite.h"
@@ -137,8 +138,7 @@ private:
     //　ダメージクールタイムの更新
     void DamageCollingUpdate(float deltaTime);
 
-    void MoveToLimit();
-
+   
     // ダメージリアクション変更処理
     void ChangeDamageReactionByPlayerAttack(PlayerCollisionInfo* attackController);
 
@@ -183,6 +183,9 @@ protected:
     std::unique_ptr<BaseEnemyDamageReaction> damageBehavior_ = nullptr;
     std::unique_ptr<BaseEnemyBehavior> moveBehavior_         = nullptr;
 
+    // ropeReboundSystem
+    SideRopeReboundSystem ropeReboundSystem_;
+
 public:
     /// ========================================================================================
     ///  getter method
@@ -191,6 +194,7 @@ public:
     const bool& GetIsDeathPending() const { return isDeathPending_; }
     const Type& GetType() const { return type_; }
     const Parameter& GetParameter() const { return parameter_; }
+    SideRopeReboundSystem& GetSideRopeReboundSystem() { return ropeReboundSystem_; }
     int32_t GetGroupId() const { return groupId_; }
     float GetHP() const { return hp_; } 
     Vector3 GetBodyRotation() const { return obj3d_->transform_.rotation_; }

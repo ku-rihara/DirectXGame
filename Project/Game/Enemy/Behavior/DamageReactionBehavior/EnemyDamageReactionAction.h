@@ -21,7 +21,7 @@ public:
     EnemyDamageReactionAction(BaseEnemy* boss, EnemyDamageReactionData* reactionData, const PlayerCollisionInfo* playerCollisionInfo);
     ~EnemyDamageReactionAction() override;
 
-    void Update() override;
+    void Update(float deltaTime) override;
     void Debug() override;
 
 private:

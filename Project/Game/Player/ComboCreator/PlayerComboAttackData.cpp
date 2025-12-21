@@ -130,7 +130,7 @@ void PlayerComboAttackData::AdjustParam() {
     ImGui::DragFloat("イージングタイム", &attackParam_.moveParam.easeTime, 0.01f);
     ImGui::Checkbox("Yの位置を直接指定する", &attackParam_.moveParam.isPositionYSelect);
     ImGui::DragFloat3("移動量", &attackParam_.moveParam.value.x, 0.01f);
- /*   ImGui::DragFloat("Finish Time Offset", &attackParam_.moveParam.finishTimeOffset, 0.01f);*/
+    ImGui::DragFloat("終了タイムオフセット", &attackParam_.moveParam.finishTimeOffset, 0.01f);
 
     ImGuiEasingTypeSelector("イージングタイプ", attackParam_.moveParam.easeType);
 

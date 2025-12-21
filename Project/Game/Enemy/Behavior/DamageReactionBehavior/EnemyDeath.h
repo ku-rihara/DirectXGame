@@ -26,6 +26,6 @@ public:
     ~EnemyDeath();
    void  AngleCaluclation();
 
-    void Update() override;
+    void Update(float deltaTime) override;
     void Debug() override;
 };

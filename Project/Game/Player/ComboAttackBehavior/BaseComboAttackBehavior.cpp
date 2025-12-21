@@ -1,9 +1,9 @@
-#include "BaseComboAattackBehavior.h"
+#include "BaseComboAttackBehavior.h"
 #include "Frame/Frame.h"
 #include "Player/Player.h"
 #include"input/Input.h"
 
-BaseComboAattackBehavior::BaseComboAattackBehavior(const std::string& name, Player* player) {
+BaseComboAttackBehavior::BaseComboAttackBehavior(const std::string& name, Player* player) {
     name_             = name;
     pPlayer_          = player;
     pPlayerParameter_ = player->GetParameter();
@@ -12,7 +12,7 @@ BaseComboAattackBehavior::BaseComboAattackBehavior(const std::string& name, Play
 
 
 ///  コンボ移動処理
-void BaseComboAattackBehavior::ChangeNextCombo(std::unique_ptr<BaseComboAattackBehavior> nextCombo) {
+void BaseComboAttackBehavior::ChangeNextCombo(std::unique_ptr<BaseComboAttackBehavior> nextCombo) {
 
     pPlayer_->ChangeComboBehavior(std::move(nextCombo));
 }

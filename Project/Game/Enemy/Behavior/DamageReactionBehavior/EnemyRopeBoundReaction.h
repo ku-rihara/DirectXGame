@@ -11,13 +11,13 @@ class EnemyRopeBoundReaction : public BaseEnemyDamageReaction {
 public:
 public:
     // コンストラクタ
-    EnemyRopeBoundReaction(BaseEnemy* boss, Vector3 knockBackVelocity,  SideRope* sideRope);
+    EnemyRopeBoundReaction(BaseEnemy* boss, Vector3 knockBackVelocity, SideRope* sideRope);
     ~EnemyRopeBoundReaction() override;
 
-    void Update() override;
+    void Update( float deltaTime) override;
     void Debug() override;
 
 private:
     Vector3 knockBackVelocity_;
-    SideRope* pSideRope_                    = nullptr;
+    SideRope* pSideRope_ = nullptr;
 };

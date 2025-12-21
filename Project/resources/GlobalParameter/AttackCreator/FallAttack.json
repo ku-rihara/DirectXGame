@@ -52,7 +52,7 @@
         "loopNum": 0,
         "loopWaitTime": 0.0,
         "moveEaseTime": 0.07999999821186066,
-        "moveEaseType": 9,
+        "moveEaseType": 0,
         "moveValue": [
             0.0,
             0.0,

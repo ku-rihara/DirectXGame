@@ -27,7 +27,7 @@ EnemyDamageReactionAction::EnemyDamageReactionAction(
 EnemyDamageReactionAction::~EnemyDamageReactionAction() {
 }
 
-void EnemyDamageReactionAction::Update() {
+void EnemyDamageReactionAction::Update(float deltaTime) {
     if (!pReactionData_) {
         return;
     }
@@ -51,7 +51,7 @@ void EnemyDamageReactionAction::Update() {
     UpdateRenditions();
 
     // タイマー更新
-    reactionTimer_ += KetaEngine::Frame::DeltaTime();
+    reactionTimer_ += deltaTime;
 
     // リアクション終了チェック
     if (IsReactionFinished()) {

@@ -91,7 +91,8 @@ void Player::Init() {
 /// 　更新
 ///==========================================================
 void Player::Update() {
-    prePos_ = GetWorldPosition(); // 前フレームの座標
+    // 前フレームの座標
+    prePos_ = GetWorldPosition(); 
     // ライト
     HeadLightSetting();
 
@@ -105,9 +106,11 @@ void Player::Update() {
     /// Particle
     effects_->Update(GetWorldPosition());
 
-    comboBehavior_->Update(); // コンボ攻撃攻撃
-    MoveToLimit(); // 移動制限
+    // コンボ更新
+    comboBehavior_->Update(comboAttackController_->GetRealAttackSpeed(KetaEngine::Frame::DeltaTimeRate()));
 
+    // 移動制限
+    MoveToLimit(); 
     UpdateMatrix();
 }
 
@@ -138,7 +141,7 @@ void Player::GameIntroUpdate() {
 ///==========================================================
 Vector3 Player::GetInputDirection() {
 
-    Vector3 velocity = {0.0f, 0.0f, 0.0f};
+    Vector3 velocity         = {0.0f, 0.0f, 0.0f};
     KetaEngine::Input* input = KetaEngine::Input::GetInstance();
 
     // キーボード入力
@@ -346,7 +349,7 @@ void Player::ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior) {
     // 引数で受け取った状態を次の状態としてセット
     behavior_ = std::move(behavior);
 }
-void Player::ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior> behavior) {
+void Player::ChangeComboBehavior(std::unique_ptr<BaseComboAttackBehavior> behavior) {
     // 引数で受け取った状態を次の状態としてセット
     comboBehavior_ = std::move(behavior);
 }

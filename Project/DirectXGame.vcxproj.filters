@@ -694,7 +694,7 @@
     <ClCompile Include="Game\GameCamera\GameCamera.cpp">
       <Filter>Game\GameCamera</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp">
+    <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAttackBehavior.cpp">
       <Filter>Game\Player\Behavior\Base\Atacck</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\TitleBehavior\BaseTitleBehavior.cpp">
@@ -1042,7 +1042,7 @@
     <ClCompile Include="Game\CollisionBox\PlayerCollisionInfo.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\DynamicComboAttack.cpp">
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackAction.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp">
@@ -1485,7 +1485,7 @@
     <ClInclude Include="Game\GameCamera\GameCamera.h">
       <Filter>Game\GameCamera</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h">
+    <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAttackBehavior.h">
       <Filter>Game\Player\Behavior\Base\Atacck</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\TitleBehavior\BaseTitleBehavior.h">
@@ -1845,7 +1845,7 @@
     <ClInclude Include="Game\CollisionBox\PlayerCollisionInfo.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\DynamicComboAttack.h">
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackAction.h">
       <Filter>Game\Player\Behavior\ComboBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h">
@@ -2065,6 +2065,9 @@
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClInclude>
     <ClInclude Include="Game\Field\SideRope\SideRopeReboundSystem.h">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Field\SideRope\RopeBoundParam.h">
       <Filter>Game\Field\SideRope</Filter>
     </ClInclude>
   </ItemGroup>

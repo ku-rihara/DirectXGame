@@ -9,8 +9,8 @@ public:
     BaseEnemyDamageReaction(const std::string& name, BaseEnemy* boss);
     virtual ~BaseEnemyDamageReaction() = default;
 
-    virtual void Update() = 0;
-    virtual void Debug()  = 0;
+    virtual void Update(float deltaTime) = 0;
+    virtual void Debug()                 = 0;
 
 protected:
     // 振る舞い名

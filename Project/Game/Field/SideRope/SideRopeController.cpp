@@ -43,10 +43,10 @@ void SideRopeController::AdjustParam() {
 
         /// Collision
         ImGui::SeparatorText("BoundParam");
-        ImGui::DragFloat("maxStretch", &ropeParam_.maxStretch, 0.1f);
-        ImGui::DragFloat("stretchResistance", &ropeParam_.stretchResistance, 0.1f);
-        ImGui::DragFloat("reboundRate", &ropeParam_.reboundRate, 0.1f);
-        ImGui::DragFloat("delayTime", &ropeParam_.delayTime, 0.1f);
+        ImGui::DragFloat("maxStretch", &ropeParam_.maxStretch, 0.01f);
+        ImGui::DragFloat("stretchResistance", &ropeParam_.stretchResistance, 0.01f);
+        ImGui::DragFloat("reboundRate", &ropeParam_.reboundRate, 0.01f);
+        ImGui::DragFloat("delayTime", &ropeParam_.delayTime, 0.01f);
 
         /// セーブとロード
         globalParameter_->ParamSaveForImGui(groupName_);

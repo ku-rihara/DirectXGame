@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vector3.h"
+#include "RopeBoundParam.h"
 #include <functional>
 
 /// <summary>
@@ -22,10 +23,7 @@ public:
     void Init(
         const Vector3& initialVelocity,
         const Vector3& ropeNormal,
-        float maxStretch,
-        float stretchResistance,
-        float reboundRate,
-        float delayTime);
+       const BounceParam&ropeParam);
 
     // 更新
     Vector3 Update(float deltaTime);
@@ -38,13 +36,10 @@ private:
     Vector3 currentVelocity_;
     Vector3 ropeNormal_;
 
-    float maxStretch_;
-    float stretchResistance_;
-    float reboundRate_;
-    float delayTime_;
-
     float stretchDistance_;
     float currentDelay_;
+
+    BounceParam ropeParam_;
 
     Phase phase_;
     bool isActive_ = false;

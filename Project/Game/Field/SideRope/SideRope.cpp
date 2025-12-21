@@ -1,4 +1,6 @@
 #include "SideRope.h"
+#include"Enemy/Types/BaseEnemy.h"
+#include"SideRopeReboundSystem.h"
 #include <imgui.h>
 
 void SideRope::Init(int32_t type) {
@@ -27,25 +29,29 @@ void SideRope::Rebound(BaseEnemy* enemy, const Vector3& velocity) {
     }
 
     // ロープの法線方向を計算
-    Vector3 ropeNormal=Cal
+    Vector3 ropeNormal = CalculateRopeNormal();
+
+    // 敵のロープ反発状態を初期化
+    SideRopeReboundSystem& sideRopeReboundSystem = enemy->GetSideRopeReboundSystem();
+    sideRopeReboundSystem.Init(velocity, ropeNormal, ropeParam_);
 }
 
 Vector3 SideRope::CalculateRopeNormal() const {
+
+    // 跳ね返り方向を決める
     switch (type_) {
     case SideRopeType::FRONT:
-        return Vector3::ToForward();
-    
+        return Vector3::ToBack();
     case SideRopeType::LEFT:
-      
+        return Vector3::ToRight();
     case SideRopeType::RIGHT:
-      
+        return Vector3::ToLeft();
     case SideRopeType::BACK:
-       
-    case SideRopeType::COUNT:
-       
-   
+        return Vector3::ToForward();
     }
-  }
+
+    return Vector3::ZeroVector();
+}
 
 Vector3 SideRope::GetCollisionPos() const {
 

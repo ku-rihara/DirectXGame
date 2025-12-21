@@ -13,7 +13,7 @@ public:
     EnemyDamageReactionRoot(BaseEnemy* boss);
     ~EnemyDamageReactionRoot();
 
-    void Update() override;
+    void Update(float deltaTime) override;
     void Debug() override;
 
     /// <summary>

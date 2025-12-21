@@ -3,7 +3,7 @@
 #include "BaseObject/BaseObject.h"
 #include "Collider/AABBCollider.h"
 #include "CollisionBox/PlayerCollisionInfo.h"
-#include "ComboAttackBehavior/BaseComboAattackBehavior.h"
+#include "ComboAttackBehavior/BaseComboAttackBehavior.h"
 #include "Effect/PlayerEffects.h"
 #include "JumpAttackUI/JumpAttackUI.h"
 #include "Parameter/PlayerParameter.h"
@@ -88,7 +88,7 @@ public:
 
     // 各Behavior切り替え処理
     void ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior);
-    void ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior> behavior);
+    void ChangeComboBehavior(std::unique_ptr<BaseComboAttackBehavior> behavior);
     void ChangeTitleBehavior(std::unique_ptr<BaseTitleBehavior> behavior);
 
     /// <summary>
@@ -132,7 +132,7 @@ private:
 
     /// behavior
     std::unique_ptr<BasePlayerBehavior> behavior_            = nullptr;
-    std::unique_ptr<BaseComboAattackBehavior> comboBehavior_ = nullptr;
+    std::unique_ptr<BaseComboAttackBehavior> comboBehavior_ = nullptr;
     std::unique_ptr<BaseTitleBehavior> titleBehavior_        = nullptr;
 
 private:

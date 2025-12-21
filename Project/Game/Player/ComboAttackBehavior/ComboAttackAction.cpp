@@ -1,4 +1,4 @@
-#include "DynamicComboAttack.h"
+#include "ComboAttackAction.h"
 #include "CollisionBox/PlayerCollisionInfo.h"
 #include "ComboAttackRoot.h"
 #include "Frame/Frame.h"
@@ -8,8 +8,8 @@
 #include "Player/PlayerBehavior/PlayerMove.h"
 #include <PostEffect/PostEffectRenderer.h>
 
-DynamicComboAttack::DynamicComboAttack(Player* player, PlayerComboAttackData* attackData)
-    : BaseComboAattackBehavior(attackData->GetGroupName(), player) {
+ComboAttackAction::ComboAttackAction(Player* player, PlayerComboAttackData* attackData)
+    : BaseComboAttackBehavior(attackData->GetGroupName(), player) {
 
     // attackDataセット
     attackData_     = attackData;
@@ -18,9 +18,9 @@ DynamicComboAttack::DynamicComboAttack(Player* player, PlayerComboAttackData* at
     Init();
 }
 
-DynamicComboAttack::~DynamicComboAttack() {}
+ComboAttackAction::~ComboAttackAction() {}
 
-void DynamicComboAttack::Init() {
+void ComboAttackAction::Init() {
 
     // タイミングのリセット
     currentFrame_      = 0.0f;
@@ -46,18 +46,14 @@ void DynamicComboAttack::Init() {
     order_ = Order::INIT;
 }
 
-void DynamicComboAttack::Update() {
+void ComboAttackAction::Update(float atkSpeed) {
 
     // 通常移動
     if (attackData_->GetAttackParam().moveParam.isAbleInputMoving) {
         pPlayer_->Move(pPlayerParameter_->GetParamaters().moveSpeed);
     }
 
-     // 攻撃スピード
-    const PlayerComboAttackController* attackController = pPlayer_->GetComboAttackController();
-    atkSpeed_                                           = attackController->GetRealAttackSpeed(KetaEngine::Frame::DeltaTimeRate());
-
-    currentFrame_ += atkSpeed_;
+    currentFrame_ += atkSpeed;
 
     switch (order_) {
 
@@ -68,11 +64,11 @@ void DynamicComboAttack::Update() {
 
         // 攻撃更新
     case Order::ATTACK:
-        UpdateAttack();
+        UpdateAttack(atkSpeed);
         break;
 
     case Order::WAIT:
-        UpdateWait();
+        UpdateWait(atkSpeed);
         break;
 
     case Order::CHANGE:
@@ -81,15 +77,15 @@ void DynamicComboAttack::Update() {
     }
 }
 
-void DynamicComboAttack::InitializeAttack() {
+void ComboAttackAction::InitializeAttack() {
 
     SetupCollision();
     order_ = Order::ATTACK;
 }
 
-void DynamicComboAttack::UpdateAttack() {
+void ComboAttackAction::UpdateAttack(float atkSpeed) {
     // 移動適用
-    ApplyMovement();
+    ApplyMovement(atkSpeed);
 
     // 予約入力
     PreOderNextComboForButton();
@@ -98,7 +94,7 @@ void DynamicComboAttack::UpdateAttack() {
     AttackCancel();
 
     // コリジョン判定
-    pCollisionInfo_->TimerUpdate(atkSpeed_);
+    pCollisionInfo_->TimerUpdate(atkSpeed);
     pCollisionInfo_->Update();
 
     // 敵にヒットしたかをチェック
@@ -108,7 +104,7 @@ void DynamicComboAttack::UpdateAttack() {
 
     // 演出更新
     if (attackRendition_) {
-        attackRendition_->Update(atkSpeed_);
+        attackRendition_->Update(atkSpeed);
     }
 
     // イージングが完了したらWaitへ
@@ -117,12 +113,12 @@ void DynamicComboAttack::UpdateAttack() {
     }
 }
 
-void DynamicComboAttack::UpdateWait() {
+void ComboAttackAction::UpdateWait(float atkSpeed) {
 
     AttackCancel();
 
     pPlayer_->AdaptRotate();
-    waitTime_ += atkSpeed_;
+    waitTime_ += atkSpeed;
 
     if (!attackData_->IsWaitFinish(waitTime_)) {
         return;
@@ -131,7 +127,7 @@ void DynamicComboAttack::UpdateWait() {
     order_ = Order::CHANGE;
 }
 
-void DynamicComboAttack::ChangeNextAttack() {
+void ComboAttackAction::ChangeNextAttack() {
 
     //  自動進行フラグがtrueの場合も次に進む
     bool shouldAdvance = isReserveNextCombo_ || isAttackCancel_ || attackData_->GetAttackParam().timingParam.isAutoAdvance;
@@ -139,8 +135,8 @@ void DynamicComboAttack::ChangeNextAttack() {
     // 次のコンボに移動する
     if (nextAttackData_ && shouldAdvance) {
 
-        BaseComboAattackBehavior::ChangeNextCombo(
-            std::make_unique<DynamicComboAttack>(pPlayer_, nextAttackData_));
+        BaseComboAttackBehavior::ChangeNextCombo(
+            std::make_unique<ComboAttackAction>(pPlayer_, nextAttackData_));
 
         return;
 
@@ -160,7 +156,7 @@ void DynamicComboAttack::ChangeNextAttack() {
 }
 
 ///  コンボ移動フラグ処理
-void DynamicComboAttack::PreOderNextComboForButton() {
+void ComboAttackAction::PreOderNextComboForButton() {
 
     if (!nextAttackData_) {
         isReserveNextCombo_ = false;
@@ -174,7 +170,7 @@ void DynamicComboAttack::PreOderNextComboForButton() {
         hasHitEnemy_);
 }
 
-void DynamicComboAttack::AttackCancel() {
+void ComboAttackAction::AttackCancel() {
 
     // タイミング
     const float cancelStartFrame = attackData_->GetAttackParam().timingParam.cancelTime;
@@ -196,12 +192,12 @@ void DynamicComboAttack::AttackCancel() {
     }
 }
 
-void DynamicComboAttack::ApplyMovement() {
-    moveEasing_.Update(atkSpeed_);
+void ComboAttackAction::ApplyMovement(float atkSpeed) {
+    moveEasing_.Update(atkSpeed);
     pPlayer_->SetWorldPosition(currentMoveValue_);
 }
 
-void DynamicComboAttack::SetupCollision() {
+void ComboAttackAction::SetupCollision() {
     auto& attackParam    = attackData_->GetAttackParam();
     auto& collisionParam = attackParam.collisionParam;
 
@@ -228,7 +224,7 @@ void DynamicComboAttack::SetupCollision() {
     isCollisionActive_ = true;
 }
 
-void DynamicComboAttack::SetMoveEasing() {
+void ComboAttackAction::SetMoveEasing() {
     // targetPosを計算
     const PlayerComboAttackData::MoveParam& moveParam = attackData_->GetAttackParam().moveParam;
     startPosition_                                    = pPlayer_->GetWorldPosition();
@@ -250,7 +246,7 @@ void DynamicComboAttack::SetMoveEasing() {
     moveEasing_.SetFinishTimeOffset(moveParam.finishTimeOffset);
 }
 
-void DynamicComboAttack::Debug() {
+void ComboAttackAction::Debug() {
 #ifdef _DEBUG
 
 #endif

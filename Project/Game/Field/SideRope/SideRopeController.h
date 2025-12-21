@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SideRope.h"
+#include "RopeBoundParam.h"
 #include <array>
 #include <memory>
 

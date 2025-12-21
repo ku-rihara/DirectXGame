@@ -3,6 +3,7 @@
 #include "3d/WorldTransform.h"
 #include "Collider/AABBCollider.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
+#include "RopeBoundParam.h"
 #include <cstdint>
 #include <string>
 #include <variant>
@@ -15,20 +16,13 @@ enum class SideRopeType : int32_t {
     COUNT,
 };
 
-struct BounceParam {
-    float maxStretch;         
-    float stretchResistance;  
-    float reboundRate;            
-    float delayTime;        
-};
-
 class BaseEnemy;
-/// <summary>
+class SideRopeReboundSystem;
+    /// <summary>
 /// ゲームフィールドクラス
 /// </summary>
 class SideRope : public KetaEngine::AABBCollider {
 public:
-  
 public:
     SideRope()  = default;
     ~SideRope() = default;
