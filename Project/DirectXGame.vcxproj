@@ -37,6 +37,7 @@
     <ClCompile Include="Engine\Collider\BaseCollider.cpp" />
     <ClCompile Include="Engine\Collider\CollisionManager.cpp" />
     <ClCompile Include="Engine\Collider\OBBCollider.cpp" />
+    <ClCompile Include="Engine\Collider\SpatialGrid\SpatialGrid.cpp" />
     <ClCompile Include="Engine\Core\EngineCore.cpp" />
     <ClCompile Include="Engine\Core\KTFramework.cpp" />
     <ClCompile Include="Engine\Core\KTGame.cpp" />
@@ -294,6 +295,7 @@
     <ClInclude Include="Engine\Collider\BaseCollider.h" />
     <ClInclude Include="Engine\Collider\CollisionManager.h" />
     <ClInclude Include="Engine\Collider\OBBCollider.h" />
+    <ClInclude Include="Engine\Collider\SpatialGrid\SpatialGrid.h" />
     <ClInclude Include="Engine\Core\EngineCore.h" />
     <ClInclude Include="Engine\Core\KTFramework.h" />
     <ClInclude Include="Engine\Core\KTGame.h" />

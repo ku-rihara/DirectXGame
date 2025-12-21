@@ -1261,6 +1261,9 @@
     <ClCompile Include="Game\Field\SideRope\SideRopeReboundSystem.cpp">
       <Filter>Game\Field\SideRope</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Collider\SpatialGrid\SpatialGrid.cpp">
+      <Filter>MyEngine\.cpp\Collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -2069,6 +2072,9 @@
     </ClInclude>
     <ClInclude Include="Game\Field\SideRope\RopeBoundParam.h">
       <Filter>Game\Field\SideRope</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider\SpatialGrid\SpatialGrid.h">
+      <Filter>MyEngine\.h\Collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

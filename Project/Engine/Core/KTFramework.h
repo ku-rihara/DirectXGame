@@ -24,6 +24,7 @@ public:
     virtual void DrawShadow()     = 0; //< シャドウ描画
     virtual void Finalize();           //< 終了処理
 
+    void Debug();      //< デバッグ
     void DisplayFPS(); //< FPS表示
     void Run();        //< 実行
 
