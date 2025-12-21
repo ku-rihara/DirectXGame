@@ -1,0 +1,16 @@
+{
+    "CollisionManager": {
+        "cellSize": 0.0,
+        "isColliderVisible": true,
+        "worldMax": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "worldMin": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    }
+}
