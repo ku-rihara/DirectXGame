@@ -62,6 +62,11 @@ void CollisionManager::LineAllSet() {
     if (!isColliderVisible_) {
         return;
     }
+
+     if (spatialGrid_) {
+        spatialGrid_->DrawGrid();
+    }
+
     // 全てのコライダーを描画する
     for (BaseCollider* baseCollider : baseColliders_) {
         baseCollider->SetDebugCube();

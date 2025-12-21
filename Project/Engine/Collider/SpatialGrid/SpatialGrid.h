@@ -1,6 +1,8 @@
 #pragma once
 
+#include "Line3D/Line3D.h"
 #include "Vector3.h"
+#include <memory>
 #include <unordered_map>
 #include <vector>
 
@@ -13,8 +15,8 @@ class BaseCollider;
 /// </summary>
 class SpatialGrid {
 public:
-    SpatialGrid()  = default;
-    ~SpatialGrid() = default;
+    SpatialGrid();
+    ~SpatialGrid();
 
     /// <summary>
     /// グリッドをクリア
@@ -33,6 +35,16 @@ public:
     /// <param name="collider">基準となるコライダー</param>
     /// <returns>近隣のコライダーリスト</returns>
     std::vector<BaseCollider*> GetNearbyColliders(BaseCollider* collider);
+
+    /// <summary>
+    /// グリッドをデバッグ描画
+    /// </summary>
+    void DrawGrid();
+
+    /// <summary>
+    /// パラメータ設定
+    /// </summary>
+    void SetParam(float cellSize, const Vector3& worldMin, const Vector3& worldMax);
 
 private:
     /// <summary>
@@ -60,8 +72,11 @@ private:
 
     std::unordered_map<int, std::vector<BaseCollider*>> grid_;
 
+    // デバッグ描画用
+    std::unique_ptr<Line3D> debugLine_;
+   
 public:
-    void SetParam(float cellSize, const Vector3& worldMin, const Vector3& worldMax);
+ 
 };
 
-}
+} // namespace KetaEngine

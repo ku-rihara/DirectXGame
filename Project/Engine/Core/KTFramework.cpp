@@ -28,9 +28,6 @@ void KTFramework::Init() {
     /// エンジン初期化
     engineCore_->Initialize(kWindowTitle, 1280, 720);
 
-    // コリジョン
-    collisionManager_ = std::make_unique<CollisionManager>();
-    collisionManager_->Init();
 }
 
 // ========================================================
@@ -81,13 +78,11 @@ void KTFramework::Update() {
     Debug();
     /// ゲームシーンの毎フレーム処理
     pSceneManager_->Update();
-    /// 当たり判定
-    collisionManager_->Update();
+
 }
 
 void KTFramework::Debug() {
     pSceneManager_->Debug();
-    collisionManager_->AdjustParam();
 }
 
 // ========================================================
