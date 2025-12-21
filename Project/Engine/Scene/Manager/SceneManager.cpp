@@ -37,11 +37,6 @@ void SceneManager::Update() {
         ChangeScene("EDITOR");
     }
 
-    // 現在のシーンを更新
-    if (scene_) {
-        Debug();
-        scene_->Update();
-    }
 
     // 登録されているオブジェクトを更新
     Object3DRegistry::GetInstance()->UpdateAll();

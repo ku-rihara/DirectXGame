@@ -883,6 +883,9 @@
     <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.cpp">
       <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Collider\SpatialGrid\SpatialGrid.cpp">
+      <Filter>MyEngine\.cpp\Collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1448,6 +1451,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Scene\Manager\SceneManager.h">
       <Filter>MyEngine\.h\Scene\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider\SpatialGrid\SpatialGrid.h">
+      <Filter>MyEngine\.h\Collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
