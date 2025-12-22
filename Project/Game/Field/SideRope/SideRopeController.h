@@ -28,7 +28,7 @@ private:
     const std::string groupName_ = "RopeController";
 
     // parameter
-    BounceParam ropeParam_;
+    RopeBoundParam ropeParam_;
 
     std::array<std::unique_ptr<SideRope>, static_cast<int32_t>(SideRopeType::COUNT)> sideRopes_;
 };

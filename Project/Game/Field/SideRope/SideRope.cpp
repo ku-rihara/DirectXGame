@@ -23,18 +23,7 @@ void SideRope::Update() {
     transform_.UpdateMatrix();
 }
 
-void SideRope::Rebound(BaseEnemy* enemy, const Vector3& velocity) {
-    if (!enemy) {
-        return;
-    }
 
-    // ロープの法線方向を計算
-    Vector3 ropeNormal = CalculateRopeNormal();
-
-    // 敵のロープ反発状態を初期化
-    SideRopeReboundSystem& sideRopeReboundSystem = enemy->GetSideRopeReboundSystem();
-    sideRopeReboundSystem.Init(velocity, ropeNormal, ropeParam_);
-}
 
 Vector3 SideRope::CalculateRopeNormal() const {
 

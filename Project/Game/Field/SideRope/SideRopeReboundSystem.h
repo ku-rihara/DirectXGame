@@ -23,7 +23,7 @@ public:
     void Init(
         const Vector3& initialVelocity,
         const Vector3& ropeNormal,
-       const BounceParam&ropeParam);
+       const RopeBoundParam&ropeParam);
 
     // 更新
     Vector3 Update(float deltaTime);
@@ -38,8 +38,9 @@ private:
 
     float stretchDistance_;
     float currentDelay_;
+    float reboundDistance_; 
 
-    BounceParam ropeParam_;
+    RopeBoundParam ropeParam_;
 
     Phase phase_;
     bool isActive_ = false;

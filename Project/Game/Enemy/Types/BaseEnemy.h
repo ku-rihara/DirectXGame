@@ -10,11 +10,11 @@
 #include "Collider/AABBCollider.h"
 #include "CollisionBox/EnemyCollisionBox.h"
 #include "Enemy/HPBar/EnemyHPBar.h"
-#include"Field/SideRope/SideRopeReboundSystem.h"
 
 #include "../SearchingSprite/FindSprite.h"
 #include "../SearchingSprite/NotFindSprite.h"
 #include <cstdint>
+#include <memory>
 
 class Player;
 class GameCamera;
@@ -22,7 +22,7 @@ class EnemyManager;
 class Combo;
 class AttackEffect;
 class PlayerCollisionInfo;
-    /// <summary>
+/// <summary>
 /// 敵の基底クラス
 /// </summary>
 class BaseEnemy : public BaseObject, public KetaEngine::AABBCollider {
@@ -33,25 +33,27 @@ public:
         COUNT,
     };
 
-     struct Parameter {
+    struct Parameter {
         Vector3 initScale_;
         Vector2 hpBarPosOffset;
         float chaseDistance;
         float chaseSpeed;
         float basePosY;
         float burstTime;
-        float avoidanceRadius; 
-        float maxChaseTime;    
-        float chaseResetTime; 
+        float avoidanceRadius;
+        float maxChaseTime;
+        float chaseResetTime;
         float chaseLimitDistance;
 
-        float deathBlowValue; 
+        float deathBlowValue;
         float deathBlowValueY;
-        float deathGravity;   
+        float deathGravity;
         float deathRotateSpeed;
-        float deathBurstTime;  
+        float deathBurstTime;
 
-        float gravity;
+        float ropeReboundJumpValue;
+        float ropeReboundGravity;
+        float ropeReboundFallSpeedLimit;
     };
 
 public:
@@ -76,9 +78,9 @@ public:
 
     void DamageRenditionInit(); //< ダメージ演出初期化
     void ThrustRenditionInit(); //< 突き飛ばし演出初期化
-    void DeathRenditionInit();  //< 死亡演出初期化
-    void ScaleReset();          //< スケールリセット
-    void RotateInit();          //< 回転初期化
+    void DeathRenditionInit(); //< 死亡演出初期化
+    void ScaleReset(); //< スケールリセット
+    void RotateInit(); //< 回転初期化
 
     /// <summary>
     /// ジャンプ処理
@@ -110,14 +112,14 @@ public:
     void TakeDamage(float damageValue);
 
     // ヒットクールタイム開始
-    void StartDamageColling(float collingTime, const std::string&reactiveAttackName);
-  
+    void StartDamageColling(float collingTime, const std::string& reactiveAttackName);
+
     // behavior変更
     void ChangeDamageReactionBehavior(std::unique_ptr<BaseEnemyDamageReaction> behavior);
     void ChangeBehavior(std::unique_ptr<BaseEnemyBehavior> behavior);
 
     void BackToDamageRoot(); //< ダメージルートに戻る
-  
+
     /// ====================================================================
     /// Collision
     /// ====================================================================
@@ -135,10 +137,9 @@ private:
     /// <param name="viewProjection">ビュープロジェクション</param>
     bool IsInView(const KetaEngine::ViewProjection& viewProjection) const;
 
-    //　ダメージクールタイムの更新
+    // ダメージクールタイムの更新
     void DamageCollingUpdate(float deltaTime);
 
-   
     // ダメージリアクション変更処理
     void ChangeDamageReactionByPlayerAttack(PlayerCollisionInfo* attackController);
 
@@ -183,9 +184,6 @@ protected:
     std::unique_ptr<BaseEnemyDamageReaction> damageBehavior_ = nullptr;
     std::unique_ptr<BaseEnemyBehavior> moveBehavior_         = nullptr;
 
-    // ropeReboundSystem
-    SideRopeReboundSystem ropeReboundSystem_;
-
 public:
     /// ========================================================================================
     ///  getter method
@@ -194,9 +192,8 @@ public:
     const bool& GetIsDeathPending() const { return isDeathPending_; }
     const Type& GetType() const { return type_; }
     const Parameter& GetParameter() const { return parameter_; }
-    SideRopeReboundSystem& GetSideRopeReboundSystem() { return ropeReboundSystem_; }
     int32_t GetGroupId() const { return groupId_; }
-    float GetHP() const { return hp_; } 
+    float GetHP() const { return hp_; }
     Vector3 GetBodyRotation() const { return obj3d_->transform_.rotation_; }
     Player* GetPlayer() const { return pPlayer_; }
     GameCamera* GetGameCamera() const { return pGameCamera_; }
@@ -217,6 +214,6 @@ public:
     void SetBodyColor(const Vector4& color);
     void SetIsDeath(const bool& is) { isDeath_ = is; }
     void SetGroupId(const int& groupId) { groupId_ = groupId; }
-    void SetIsDeathPending(const bool& is) { isDeathPending_ = is; } 
+    void SetIsDeathPending(const bool& is) { isDeathPending_ = is; }
     void SetWorldPositionY(float y) { baseTransform_.translation_.y = y; }
 };

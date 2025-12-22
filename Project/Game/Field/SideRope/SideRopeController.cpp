@@ -48,6 +48,10 @@ void SideRopeController::AdjustParam() {
         ImGui::DragFloat("reboundRate", &ropeParam_.reboundRate, 0.01f);
         ImGui::DragFloat("delayTime", &ropeParam_.delayTime, 0.01f);
 
+        for (int32_t i = 0; i < static_cast<int32_t>(SideRopeType::COUNT); ++i) {
+            sideRopes_[i]->SetRopeParam(ropeParam_);
+        }
+
         /// セーブとロード
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);

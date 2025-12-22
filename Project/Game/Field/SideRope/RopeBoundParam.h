@@ -1,6 +1,6 @@
 #pragma once
 
-struct BounceParam {
+struct RopeBoundParam {
     float maxStretch;
     float stretchResistance;
     float reboundRate;
