@@ -92,7 +92,7 @@ void Player::Init() {
 ///==========================================================
 void Player::Update() {
     // 前フレームの座標
-    prePos_ = GetWorldPosition(); 
+    prePos_ = GetWorldPosition();
     // ライト
     HeadLightSetting();
 
@@ -110,7 +110,7 @@ void Player::Update() {
     comboBehavior_->Update(comboAttackController_->GetRealAttackSpeed(KetaEngine::Frame::DeltaTimeRate()));
 
     // 移動制限
-    MoveToLimit(); 
+    MoveToLimit();
     UpdateMatrix();
 }
 
@@ -477,8 +477,12 @@ void Player::RotateReset() {
     obj3d_->transform_.translation_.y = 0.0f;
 }
 
-void Player::PositionYReset() {
+void Player::ResetPositionY() {
     baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
+}
+
+void Player::ResetHeadScale() {
+    obj3d_->transform_.scale_ = Vector3::OneVector();
 }
 
 void Player::InitInGameScene() {

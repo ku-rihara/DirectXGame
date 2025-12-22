@@ -35,9 +35,10 @@ void PlayerJump::Update() {
 
     switch (step_) {
     case PlayerJump::Step::START:
-        if (skipJump_) {
+        if (!skipJump_) {
             pPlayer_->GetGameCamera()->PlayAnimation("PlayerJunmp");
-            pPlayer_->GetJumpAttackUI()->StartOpen();
+            pPlayer_->GetObject3D()->transform_.PlayObjEaseAnimation("Player", "JumpRotation");
+    
         }
         step_ = Step::JUMP;
         break;
@@ -53,7 +54,7 @@ void PlayerJump::Update() {
         if (pPlayer_->GetBaseTransform().translation_.y > pPlayerParameter_->GetParamaters().startPos_.y) {
             return;
         }
-        pPlayer_->GetJumpAttackUI()->StartClose();
+
         // behavior切り替え
         pPlayer_->ChangeBehavior(std::make_unique<PlayerMove>(pPlayer_));
         break;

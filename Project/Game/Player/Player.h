@@ -61,7 +61,11 @@ public:
     void MoveToLimit();           //< 移動制限
     Vector3 GetInputDirection();  //< 入力方向取得
     void UpdateMatrix();          //< 行列更新
-    void PositionYReset();        //< Y座標リセット
+
+    // reset
+    void ResetPositionY(); //< Y座標リセット
+    void ResetHeadScale(); //< 頭スケールリセット
+  
   
     /// <summary>
     /// ディゾルブ更新
@@ -108,7 +112,7 @@ public:
     void SoundStrongPunch();  //< 強パンチ音再生
     void FallSound();         //< 落下音再生
 
-      void MainHeadAnimationStart(const std::string& name);
+    void MainHeadAnimationStart(const std::string& name);
 
 private:
     KetaEngine::GlobalParameter* globalParameter_;
