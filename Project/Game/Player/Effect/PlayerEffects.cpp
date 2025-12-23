@@ -6,7 +6,7 @@
 ///==========================================================
 void PlayerEffects::Init(KetaEngine::WorldTransform* transform) {
 
-    starSound_ = KetaEngine::Audio::GetInstance()->LoadWave("starEffect.wav");
+   /* starSound_ = KetaEngine::Audio::GetInstance()->LoadWave("starEffect.wav");*/
 
     // debri
     debriParticle_[0].emitter.reset(KetaEngine::ParticleEmitter::CreateParticle("DebriParticle", "debri.obj", 100));
@@ -70,7 +70,7 @@ void PlayerEffects::SpecialAttackRenditionInit() {
     for (uint32_t i = 0; i < starEffect_.size(); i++) {
         starEffect_[i].emitter->Emit();
     }
-    KetaEngine::Audio::GetInstance()->PlayWave(starSound_, 0.5f);
+  /*  KetaEngine::Audio::GetInstance()->PlayWave(starSound_, 0.5f);*/
 }
 
 void PlayerEffects::RushAttackEmit() {

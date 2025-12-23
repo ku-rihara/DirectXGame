@@ -51,8 +51,8 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
     notFindSprite_->Init();
 
     // audio
-    deathSound_  = KetaEngine::Audio::GetInstance()->LoadWave("EnemyDeath.wav");
-    thrustSound_ = KetaEngine::Audio::GetInstance()->LoadWave("Enemythurst.wav");
+    /*deathSound_  = KetaEngine::Audio::GetInstance()->LoadWave("EnemyDeath.wav");
+    thrustSound_ = KetaEngine::Audio::GetInstance()->LoadWave("Enemythurst.wav");*/
 
     // 振る舞い初期化
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
@@ -258,12 +258,12 @@ void BaseEnemy::DamageRenditionInit() {
 void BaseEnemy::ThrustRenditionInit() {
     // ガレキパーティクル
     pEnemyManager_->ThrustEmit(GetWorldPosition());
-    KetaEngine::Audio::GetInstance()->PlayWave(thrustSound_, 0.2f);
+  /*  KetaEngine::Audio::GetInstance()->PlayWave(thrustSound_, 0.2f);*/
 }
 
 void BaseEnemy::DeathRenditionInit() {
     pEnemyManager_->DeathEmit(GetWorldPosition());
-    KetaEngine::Audio::GetInstance()->PlayWave(deathSound_, 0.5f);
+   /* KetaEngine::Audio::GetInstance()->PlayWave(deathSound_, 0.5f);*/
 }
 
 /// ===================================================

@@ -77,9 +77,9 @@ void Player::Init() {
     baseTransform_.translation_ = parameters_->GetParamaters().startPos_;
 
     // 音
-    punchSoundID_ = KetaEngine::Audio::GetInstance()->LoadWave("punchAir.wav");
+   /* punchSoundID_ = KetaEngine::Audio::GetInstance()->LoadWave("punchAir.wav");
     strongPunch_  = KetaEngine::Audio::GetInstance()->LoadWave("StrongPunch.wav");
-    fallSound_    = KetaEngine::Audio::GetInstance()->LoadWave("PlayerFall.wav");
+    fallSound_    = KetaEngine::Audio::GetInstance()->LoadWave("PlayerFall.wav");*/
 
     /// 通常モードから
     ChangeBehavior(std::make_unique<PlayerSpawn>(this));
@@ -535,13 +535,13 @@ void Player::SetComboAttackController(PlayerComboAttackController* playerComboAt
 /// Sound
 /// =======================================================================================
 void Player::SoundPunch() {
-    KetaEngine::Audio::GetInstance()->PlayWave(punchSoundID_, 0.5f);
+  /*  KetaEngine::Audio::GetInstance()->PlayWave(punchSoundID_, 0.5f);*/
 }
 void Player::SoundStrongPunch() {
-    KetaEngine::Audio::GetInstance()->PlayWave(strongPunch_, 0.5f);
+   /* KetaEngine::Audio::GetInstance()->PlayWave(strongPunch_, 0.5f);*/
 }
 void Player::FallSound() {
-    KetaEngine::Audio::GetInstance()->PlayWave(fallSound_, 0.2f);
+    /*KetaEngine::Audio::GetInstance()->PlayWave(fallSound_, 0.2f);*/
 }
 
 bool Player::CheckIsChargeMax() const {

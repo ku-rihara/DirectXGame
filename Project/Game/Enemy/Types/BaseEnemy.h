@@ -144,8 +144,8 @@ private:
     void ChangeDamageReactionByPlayerAttack(PlayerCollisionInfo* attackController);
 
 private:
-    int deathSound_;
-    int thrustSound_;
+  /*  int deathSound_;
+    int thrustSound_;*/
     int32_t groupId_;
 
 protected:

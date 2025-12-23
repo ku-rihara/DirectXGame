@@ -153,12 +153,6 @@ private:
     // attackCharge
     float currentUpperChargeTime_;
 
-    // sound
-    int punchSoundID_;
-    int strongPunch_;
-    int fallSound_;
-    int starSound_;
-
 public:
     // getter
     PlayerHandLeft* GetLeftHand() const { return leftHand_.get(); }
