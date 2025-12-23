@@ -897,9 +897,6 @@
     <ClInclude Include="Engine\struct\ModelData.h">
       <Filter>MyEngine\.h\struct</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\struct\SoundData.h">
-      <Filter>MyEngine\.h\struct</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\struct\Transform.h">
       <Filter>MyEngine\.h\struct</Filter>
     </ClInclude>

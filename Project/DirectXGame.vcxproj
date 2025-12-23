@@ -349,7 +349,6 @@
     <ClInclude Include="Engine\struct\MaterialData.h" />
     <ClInclude Include="Engine\struct\ModelData.h" />
     <ClInclude Include="Engine\struct\ParticleForGPU.h" />
-    <ClInclude Include="Engine\struct\SoundData.h" />
     <ClInclude Include="Engine\struct\Transform.h" />
     <ClInclude Include="Engine\struct\TransformationMatrix.h" />
     <ClInclude Include="Engine\struct\VertexData.h" />
