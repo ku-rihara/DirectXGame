@@ -121,7 +121,7 @@ void EnemyDamageReactionAction::InitSlammedReaction(
     const EnemyDamageReactionData::BoundParam& boundParam,
     const EnemyDamageReactionData::SlammedParam& param) {
 
-    // バウンドパラメータの設定（共通）
+    // バウンドパラメータの設定
     maxBoundCount_     = boundParam.boundNum;
     bounceDamping_     = boundParam.bounceDamping;
     initialBounceRate_ = boundParam.initialBounceRate;

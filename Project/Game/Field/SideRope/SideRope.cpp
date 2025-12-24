@@ -30,13 +30,13 @@ Vector3 SideRope::CalculateRopeNormal() const {
     // 跳ね返り方向を決める
     switch (type_) {
     case SideRopeType::FRONT:
-        return Vector3::ToBack();
-    case SideRopeType::LEFT:
-        return Vector3::ToRight();
-    case SideRopeType::RIGHT:
-        return Vector3::ToLeft();
-    case SideRopeType::BACK:
         return Vector3::ToForward();
+    case SideRopeType::LEFT:
+        return Vector3::ToLeft();
+    case SideRopeType::RIGHT:
+        return Vector3::ToRight();
+    case SideRopeType::BACK:
+        return Vector3::ToBack();
     }
 
     return Vector3::ZeroVector();
