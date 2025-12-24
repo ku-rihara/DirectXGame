@@ -250,6 +250,7 @@ void GameScene::ObjectInit() {
     continuousEnemySpawner_      = std::make_unique<ContinuousEnemySpawner>();
     playerComboAttackController_ = std::make_unique<PlayerComboAttackController>();
     sideRopeController_          = std::make_unique<SideRopeController>();
+    audienceController_          = std::make_unique<AudienceController>();
 
     //*--------------------------------------- 初期化 ---------------------------------------*//
 
@@ -268,6 +269,7 @@ void GameScene::ObjectInit() {
     playerComboAttackController_->Init();
     attackEffect_->Init();
     sideRopeController_->Init();
+    audienceController_->Init();
     viewProjection_.Init();
 
     comboLevelObjHolder_->Add(ComboLevelObjType::STADIUM_LIGHT, "ComboLevel1.json");

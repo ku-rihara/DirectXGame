@@ -166,6 +166,12 @@
     <ClCompile Include="Engine\utility\FileSelector\FileSelector.cpp" />
     <ClCompile Include="Engine\utility\PutObjForBlender\PutObjForBlender.cpp" />
     <ClCompile Include="Game\AttackEffect\AttackEffect.cpp" />
+    <ClCompile Include="Game\Audience\Audience.cpp" />
+    <ClCompile Include="Game\Audience\AudienceController.cpp" />
+    <ClCompile Include="Game\Audience\Behavior\AudienceAppear.cpp" />
+    <ClCompile Include="Game\Audience\Behavior\AudienceDisappear.cpp" />
+    <ClCompile Include="Game\Audience\Behavior\AudienceRoot.cpp" />
+    <ClCompile Include="Game\Audience\Behavior\BaseAudienceBehavior.cpp" />
     <ClCompile Include="Game\BackGroundObject\BaseBackGroundObject.cpp" />
     <ClCompile Include="Game\BackGroundObject\ComboLeve\BaseComboLevelBackObj.cpp" />
     <ClCompile Include="Game\BackGroundObject\ComboLeve\ComboLevelObjHolder.cpp" />
@@ -436,6 +442,12 @@
     <ClInclude Include="Engine\utility\FileSelector\FileSelector.h" />
     <ClInclude Include="Engine\utility\PutObjForBlender\PutObjForBlender.h" />
     <ClInclude Include="Game\AttackEffect\AttackEffect.h" />
+    <ClInclude Include="Game\Audience\Audience.h" />
+    <ClInclude Include="Game\Audience\AudienceController.h" />
+    <ClInclude Include="Game\Audience\Behavior\AudienceAppear.h" />
+    <ClInclude Include="Game\Audience\Behavior\AudienceDisappear.h" />
+    <ClInclude Include="Game\Audience\Behavior\AudienceRoot.h" />
+    <ClInclude Include="Game\Audience\Behavior\BaseAudienceBehavior.h" />
     <ClInclude Include="Game\BackGroundObject\BaseBackGroundObject.h" />
     <ClInclude Include="Game\BackGroundObject\ComboLeve\BaseComboLevelBackObj.h" />
     <ClInclude Include="Game\BackGroundObject\ComboLeve\ComboLevelObjHolder.h" />

@@ -1,0 +1,106 @@
+#include "Audience.h"
+#include"Behavior/AudienceRoot.h"
+#include "Combo/Combo.h"
+#include "MathFunction.h"
+#include <imgui.h>
+
+void Audience::Init(int32_t index) {
+
+    // グループ名を設定
+    audienceIndex_ = index;
+    groupName_ += std::to_string(audienceIndex_);
+
+    // グローバルパラメータ
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
+    globalParameter_->CreateGroup(groupName_);
+    RegisterParams();
+    globalParameter_->SyncParamForGroup(groupName_);
+
+    // 列の適応
+    seatsRow_ = static_cast<SeatsRow>(seatsRowIndex_);
+    seatSide_ = static_cast<SeatSide>(seatSideIndex_);
+
+    // アニメーションオブジェクト作成
+    baseTransform_.Init();
+    objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel("test.gltf"));
+    objAnimation_->transform_.SetParent(&baseTransform_);
+
+    // behavior
+    ChangeBehavior(std::make_unique<AudienceRoot>(this));
+}
+
+void Audience::Update() {
+
+    behavior_->Update();
+
+    objAnimation_->transform_.translation_.x = positionX_;
+    // Y回転設定
+    RotateYChangeForSeatSide(seatSide_);
+}
+
+void Audience::RotateYChangeForSeatSide(SeatSide seatSide) {
+    switch (seatSide) {
+    case SeatSide::LEFT:
+        baseTransform_.rotation_.y = ToRadian(-90.0f);
+        break;
+    case SeatSide::RIGHT:
+        baseTransform_.rotation_.y = ToRadian(90.0f);
+        break;
+    case SeatSide::FRONT:
+        baseTransform_.rotation_.y = ToRadian(0.0f);
+        break;
+    case SeatSide::BACK:
+        baseTransform_.rotation_.y = ToRadian(180.0f);
+        break;
+    }
+}
+
+void Audience::AppearByComboLevel(int32_t level) {
+
+    if (appearComboLevel_ == level) {
+
+    }
+}
+
+void Audience::RegisterParams() {
+    globalParameter_->Regist<int32_t>(groupName_, "SeatsRow", &seatsRowIndex_);
+    globalParameter_->Regist<int32_t>(groupName_, "SeatSide", &seatSideIndex_);
+    globalParameter_->Regist<float>(groupName_, "positionX", &positionX_);
+    globalParameter_->Regist<int32_t>(groupName_, "appearComboLevel", &appearComboLevel_);
+}
+
+void Audience::AdjustParam() {
+
+    ImGui::SeparatorText(groupName_.c_str());
+    ImGui::PushID(groupName_.c_str());
+
+    // SeatsRowのコンボボックス
+    const char* seatsRowItems[] = {"FRONT", "MIDDLE", "BACK"};
+    if (ImGui::Combo("Seats Row", &seatsRowIndex_, seatsRowItems, IM_ARRAYSIZE(seatsRowItems))) {
+        seatsRow_ = static_cast<SeatsRow>(seatsRowIndex_);
+    }
+
+    // SeatSideのコンボボックス
+    const char* seatSideItems[] = {"LEFT", "RIGHT", "FRONT", "BACK"};
+    if (ImGui::Combo("Seat Side", &seatSideIndex_, seatSideItems, IM_ARRAYSIZE(seatSideItems))) {
+        seatSide_ = static_cast<SeatSide>(seatSideIndex_);
+    }
+
+    ImGui::DragFloat("Position X", &positionX_, 0.1f);
+    ImGui::InputInt("appearComboLevel", &appearComboLevel_,0,kComboLevel);
+
+    globalParameter_->ParamSaveForImGui(groupName_, folderName_);
+    globalParameter_->ParamLoadForImGui(groupName_, folderName_);
+
+    ImGui::PopID();
+}
+
+void Audience::AdaptPosition(const Vector2& ZYBasePos) {
+
+    objAnimation_->transform_.translation_.y = ZYBasePos.y;
+    objAnimation_->transform_.translation_.z = ZYBasePos.x;
+}
+
+void Audience::ChangeBehavior(std::unique_ptr<BaseAudienceBehavior> behavior) {
+    behavior_ = std::move(behavior);
+}

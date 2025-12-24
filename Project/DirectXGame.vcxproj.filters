@@ -505,6 +505,12 @@
     <Filter Include="Game\Field\SideRope">
       <UniqueIdentifier>{c2dc9632-6ae4-4c2d-8714-ae912c0dea18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Audience">
+      <UniqueIdentifier>{96d14d5f-3312-4d5d-ad76-8f9bc6b404f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Audience\Behavior">
+      <UniqueIdentifier>{b9b0c3cb-e2b1-43a9-b7ee-246537d0dc42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -1263,6 +1269,24 @@
     </ClCompile>
     <ClCompile Include="Engine\Collider\SpatialGrid\SpatialGrid.cpp">
       <Filter>MyEngine\.cpp\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\Audience.cpp">
+      <Filter>Game\Audience</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\AudienceController.cpp">
+      <Filter>Game\Audience</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\Behavior\AudienceAppear.cpp">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\Behavior\AudienceDisappear.cpp">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\Behavior\AudienceRoot.cpp">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\Behavior\BaseAudienceBehavior.cpp">
+      <Filter>Game\Audience\Behavior</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2072,6 +2096,24 @@
     </ClInclude>
     <ClInclude Include="Engine\Collider\SpatialGrid\SpatialGrid.h">
       <Filter>MyEngine\.h\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\Audience.h">
+      <Filter>Game\Audience</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\AudienceController.h">
+      <Filter>Game\Audience</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\Behavior\AudienceAppear.h">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\Behavior\AudienceDisappear.h">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\Behavior\AudienceRoot.h">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\Behavior\BaseAudienceBehavior.h">
+      <Filter>Game\Audience\Behavior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

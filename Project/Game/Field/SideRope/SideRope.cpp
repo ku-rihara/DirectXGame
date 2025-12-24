@@ -23,8 +23,6 @@ void SideRope::Update() {
     transform_.UpdateMatrix();
 }
 
-
-
 Vector3 SideRope::CalculateRopeNormal() const {
 
     // 跳ね返り方向を決める

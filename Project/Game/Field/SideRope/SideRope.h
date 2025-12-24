@@ -30,9 +30,6 @@ public:
     void Init(int32_t type);
     void Update();
 
-    // 反発処理
-    void Rebound(BaseEnemy* target, const SideRopeReboundSystem& reboundSystem, const Vector3& velocity);
-
     /// collision
     Vector3 GetCollisionPos() const override;
 
