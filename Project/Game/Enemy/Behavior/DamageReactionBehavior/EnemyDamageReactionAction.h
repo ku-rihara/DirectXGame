@@ -21,7 +21,7 @@ public:
     EnemyDamageReactionAction(BaseEnemy* boss, EnemyDamageReactionData* reactionData, const PlayerCollisionInfo* playerCollisionInfo);
     ~EnemyDamageReactionAction() override;
 
-    void Update() override;
+    void Update(float deltaTime) override;
     void Debug() override;
 
 private:
@@ -96,4 +96,7 @@ private:
     // 演出管理
     int32_t currentRenditionIndex_ = 0;
     bool hasPlayedRendition_       = false;
+
+public:
+    Vector3 GetKnockBackVelocity() const { return knockBackVelocity_; }
 };

@@ -3,6 +3,8 @@
 // behavior
 #include "../Behavior/DamageReactionBehavior/EnemyDamageReactionRoot.h"
 #include "../Behavior/NormalBehavior/EnemySpawn.h"
+#include"../Behavior/DamageReactionBehavior/EnemyDamageReactionAction.h"
+#include"../Behavior/DamageReactionBehavior/EnemyRopeBoundReaction.h"
 #include "Enemy/EnemyManager.h"
 
 #include "Combo/Combo.h"
@@ -14,11 +16,12 @@
 #include "AttackEffect/AttackEffect.h"
 #include "audio/Audio.h"
 #include "Enemy/Behavior/DamageReactionBehavior/EnemyDeath.h"
+#include "Field/Field.h"
+#include "Field/SideRope/SideRope.h"
 #include "Frame/Frame.h"
 #include "GameCamera/GameCamera.h"
 #include "Matrix4x4.h"
 #include "Player/Player.h"
-#include "Field/Field.h"
 
 ///========================================================
 ///  初期化
@@ -48,8 +51,8 @@ void BaseEnemy::Init(const Vector3& spawnPos) {
     notFindSprite_->Init();
 
     // audio
-    deathSound_  = KetaEngine::Audio::GetInstance()->LoadWave("EnemyDeath.wav");
-    thrustSound_ = KetaEngine::Audio::GetInstance()->LoadWave("Enemythurst.wav");
+    /*deathSound_  = KetaEngine::Audio::GetInstance()->LoadWave("EnemyDeath.wav");
+    thrustSound_ = KetaEngine::Audio::GetInstance()->LoadWave("Enemythurst.wav");*/
 
     // 振る舞い初期化
     ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
@@ -69,11 +72,11 @@ void BaseEnemy::Update() {
     DamageCollingUpdate(KetaEngine::Frame::DeltaTimeRate());
 
     // ダメージBehavior更新
-    damageBehavior_->Update();
+    damageBehavior_->Update(KetaEngine::Frame::DeltaTimeRate());
 
     collisionBox_->SetPosition(GetWorldPosition());
     collisionBox_->Update();
-    MoveToLimit();
+   
     BaseObject::Update();
 }
 ///========================================================
@@ -124,36 +127,49 @@ void BaseEnemy::OnCollisionEnter([[maybe_unused]] BaseCollider* other) {
 
 void BaseEnemy::OnCollisionStay([[maybe_unused]] BaseCollider* other) {
 
-    //
-    if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
+    if (SideRope* sideRope = dynamic_cast<SideRope*>(other)) {
 
-        if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
+       if (EnemyDamageReactionAction* action = dynamic_cast<EnemyDamageReactionAction*>(damageBehavior_.get())) {
+            Vector3 velocity=action->GetKnockBackVelocity();
+           ChangeDamageReactionBehavior(std::make_unique<EnemyRopeBoundReaction>(this, velocity, sideRope));
             return;
-        }
+       }
 
-        if (!attackController->GetComboAttackData()) {
-            return;
-        }
+    } else if (PlayerCollisionInfo* attackController = dynamic_cast<PlayerCollisionInfo*>(other)) {
+        // プレイヤーとの攻撃コリジョン判定
+        ChangeDamageReactionByPlayerAttack(attackController);
+        return;
+    }
+}
 
-        // プレイヤーの攻撃名を取得
-        std::string attackName = attackController->GetComboAttackData()->GetGroupName();
+void BaseEnemy::ChangeDamageReactionByPlayerAttack(PlayerCollisionInfo* attackController) {
 
-        // 攻撃名が空かチェック
-        if (attackName.empty()) {
-            return;
-        }
+    if (dynamic_cast<EnemyDeath*>(damageBehavior_.get())) {
+        return;
+    }
 
-        // ダメージクーリング中
-        if (isDamageColling_ && lastReceivedAttackName_ == attackName) {
-            return;
-        }
+    if (!attackController->GetComboAttackData()) {
+        return;
+    }
 
-        // Rootにし、受けたダメージの判定を行う
-        ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
+    // プレイヤーの攻撃名を取得
+    std::string attackName = attackController->GetComboAttackData()->GetGroupName();
 
-        if (EnemyDamageReactionRoot* damageReaction = dynamic_cast<EnemyDamageReactionRoot*>(damageBehavior_.get())) {
-            damageReaction->SelectDamageActionBehaviorByAttack(attackController);
-        }
+    // 攻撃名が空かチェック
+    if (attackName.empty()) {
+        return;
+    }
+
+    // ダメージクーリング中
+    if (isDamageColling_ && lastReceivedAttackName_ == attackName) {
+        return;
+    }
+
+    // Rootにし、受けたダメージの判定を行う
+    ChangeDamageReactionBehavior(std::make_unique<EnemyDamageReactionRoot>(this));
+
+    if (EnemyDamageReactionRoot* damageReaction = dynamic_cast<EnemyDamageReactionRoot*>(damageBehavior_.get())) {
+        damageReaction->SelectDamageActionBehaviorByAttack(attackController);
     }
 }
 
@@ -215,45 +231,6 @@ void BaseEnemy::TakeDamage(float damageValue) {
     }
 }
 
-void BaseEnemy::MoveToLimit() {
-
-    // フィールドの中心とスケールを取得
-    Vector3 fieldCenter = {0.0f, 0.0f, 0.0f}; // フィールド中心
-    Vector3 fieldScale  = Field::baseScale_; // フィールドのスケール
-
-    // プレイヤーのスケールを考慮した半径
-    float radiusX = fieldScale.x - baseTransform_.scale_.x;
-    float radiusZ = fieldScale.z - baseTransform_.scale_.z;
-
-    // 現在位置が範囲内かチェック
-    bool insideX = std::abs(baseTransform_.translation_.x - fieldCenter.x) <= radiusX;
-    bool insideZ = std::abs(baseTransform_.translation_.z - fieldCenter.z) <= radiusZ;
-
-    ///--------------------------------------------------------------------------------
-    /// 範囲外なら戻す
-    ///--------------------------------------------------------------------------------
-
-    if (!insideX) { /// X座標
-        baseTransform_.translation_.x = std::clamp(
-            baseTransform_.translation_.x,
-            fieldCenter.x - radiusX,
-            fieldCenter.x + radiusX);
-    }
-
-    if (!insideZ) { /// Z座標
-        baseTransform_.translation_.z = std::clamp(
-            baseTransform_.translation_.z,
-            fieldCenter.z - radiusZ,
-            fieldCenter.z + radiusZ);
-    }
-
-    // 範囲外の反発処理
-    if (!insideX || !insideZ) {
-        Vector3 directionToCenter = (fieldCenter - baseTransform_.translation_).Normalize();
-        baseTransform_.translation_.x += directionToCenter.x * 0.1f; // 軽く押し戻す
-        baseTransform_.translation_.z += directionToCenter.z * 0.1f; // 軽く押し戻す
-    }
-}
 
 void BaseEnemy::StartDamageColling(float collingTime, const std::string& reactiveAttackName) {
     isDamageColling_        = true;
@@ -281,12 +258,12 @@ void BaseEnemy::DamageRenditionInit() {
 void BaseEnemy::ThrustRenditionInit() {
     // ガレキパーティクル
     pEnemyManager_->ThrustEmit(GetWorldPosition());
-    KetaEngine::Audio::GetInstance()->PlayWave(thrustSound_, 0.2f);
+  /*  KetaEngine::Audio::GetInstance()->PlayWave(thrustSound_, 0.2f);*/
 }
 
 void BaseEnemy::DeathRenditionInit() {
     pEnemyManager_->DeathEmit(GetWorldPosition());
-    KetaEngine::Audio::GetInstance()->PlayWave(deathSound_, 0.5f);
+   /* KetaEngine::Audio::GetInstance()->PlayWave(deathSound_, 0.5f);*/
 }
 
 /// ===================================================
@@ -340,7 +317,7 @@ void BaseEnemy::SetBodyColor(const Vector4& color) {
 }
 
 void BaseEnemy::RotateInit() {
-    obj3d_->transform_.rotation_ =Vector3::ZeroVector();
+    obj3d_->transform_.rotation_ = Vector3::ZeroVector();
 }
 
 void BaseEnemy::ScaleReset() {

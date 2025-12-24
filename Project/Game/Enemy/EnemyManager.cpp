@@ -118,7 +118,11 @@ void EnemyManager::RegisterParams() {
         globalParameter_->Regist(groupName_, "maxChaseTime" + std::to_string(int(i + 1)), &parameters_[i].maxChaseTime);
         globalParameter_->Regist(groupName_, "chaseResetTime" + std::to_string(int(i + 1)), &parameters_[i].chaseResetTime);
         globalParameter_->Regist(groupName_, "ChaseLimitDistance" + std::to_string(int(i + 1)), &parameters_[i].chaseLimitDistance);
-        globalParameter_->Regist(groupName_, "gravity" + std::to_string(int(i + 1)), &parameters_[i].gravity);
+
+        // ロープパラメータ
+        globalParameter_->Regist(groupName_, "ropeReboundJumpValue" + std::to_string(int(i + 1)), &parameters_[i].ropeReboundJumpValue);
+        globalParameter_->Regist(groupName_, "ropeReboundGravity" + std::to_string(int(i + 1)), &parameters_[i].ropeReboundGravity);
+        globalParameter_->Regist(groupName_, "ropeReboundFallSpeedLimit" + std::to_string(int(i + 1)), &parameters_[i].ropeReboundFallSpeedLimit);
 
         // 死亡パラメータ
         globalParameter_->Regist(groupName_, "deathBlowValue" + std::to_string(int(i + 1)), &parameters_[i].deathBlowValue);
@@ -136,7 +140,6 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::DragFloat("ChaseDistance", &parameters_[static_cast<size_t>(type)].chaseDistance, 0.01f);
     ImGui::DragFloat("basePosY", &parameters_[static_cast<size_t>(type)].basePosY, 0.01f);
     ImGui::DragFloat("burstTime", &parameters_[static_cast<size_t>(type)].burstTime, 0.01f);
-    ImGui::DragFloat("gravity", &parameters_[static_cast<size_t>(type)].gravity, 0.01f);
 
     ImGui::SeparatorText("Chase Settings");
     ImGui::DragFloat("AvoidanceRadius", &parameters_[static_cast<size_t>(type)].avoidanceRadius, 0.1f);
@@ -150,6 +153,11 @@ void EnemyManager::DrawEnemyParamUI(BaseEnemy::Type type) {
     ImGui::DragFloat("DeathGravity", &parameters_[static_cast<size_t>(type)].deathGravity, 0.1f);
     ImGui::DragFloat("DeathRotateSpeed", &parameters_[static_cast<size_t>(type)].deathRotateSpeed, 0.01f);
     ImGui::DragFloat("DeathBurstTime", &parameters_[static_cast<size_t>(type)].deathBurstTime, 0.01f);
+
+    ImGui::SeparatorText("Rope Settings");
+    ImGui::DragFloat("ropeReboundJumpValue", &parameters_[static_cast<size_t>(type)].ropeReboundJumpValue, 0.01f);
+    ImGui::DragFloat("ropeReboundGravity", &parameters_[static_cast<size_t>(type)].ropeReboundGravity, 0.01f);
+    ImGui::DragFloat("ropeReboundFallSpeedLimit", &parameters_[static_cast<size_t>(type)].ropeReboundFallSpeedLimit, 0.01f);
 
     ImGui::SeparatorText("UI");
     ImGui::DragFloat2("HPBarOffsetPos", &parameters_[static_cast<size_t>(type)].hpBarPosOffset.x, 0.01f);

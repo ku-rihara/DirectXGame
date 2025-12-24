@@ -143,7 +143,7 @@ void LockOn::HandleTargetSwitching(const std::vector<LockOnVariant>& targets, co
                 // プレイヤーの前方ベクトルとの角度
                 Vector3 playerForward      = player->GetBaseTransform().GetForwardVector();
                 Vector3 toTargetNormalized = relativePosition.Normalize();
-                float dot                  = Vector3::Dot(playerForward, toTargetNormalized);
+                float dot                  = playerForward.Dot(toTargetNormalized);
                 dot                        = std::clamp(dot, -1.0f, 1.0f);
                 sortValue                  = std::acos(dot); // 角度
             }
@@ -338,7 +338,7 @@ bool LockOn::IsTargetRange(const LockOnVariant& target, const Player* player, Ve
     // プレイヤーの前方ベクトルとの角度チェック
     if (distance > 0.001f) { // ゼロ除算回避
         Vector3 toTargetNormalized = toTarget.Normalize();
-        float dot                  = Vector3::Dot(playerForward, toTargetNormalized);
+        float dot                  = playerForward.Dot(toTargetNormalized);
 
         // dotを-1〜1の範囲にクランプ
         dot         = std::clamp(dot, -1.0f, 1.0f);

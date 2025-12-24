@@ -5,6 +5,7 @@
 class PlayerCollisionInfo;
 class EnemyDamageReactionController;
 class EnemyDamageReactionData;
+class SideRope;
 
 class EnemyDamageReactionRoot : public BaseEnemyDamageReaction {
 public:
@@ -12,7 +13,7 @@ public:
     EnemyDamageReactionRoot(BaseEnemy* boss);
     ~EnemyDamageReactionRoot();
 
-    void Update() override;
+    void Update(float deltaTime) override;
     void Debug() override;
 
     /// <summary>
@@ -28,6 +29,9 @@ private:
     /// <param name="attackName">攻撃名</param>
     void ApplyReactionByAttackName(const std::string& attackName);
 
+    // 死亡リアクション変更
+    void ChangeDeathReaction(EnemyDamageReactionData* reactionData);
+  
 private:
     const PlayerCollisionInfo* pPlayerCollisionInfo_    = nullptr;
     EnemyDamageReactionController* pReactionController_ = nullptr;

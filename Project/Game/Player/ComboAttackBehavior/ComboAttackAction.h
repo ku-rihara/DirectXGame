@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseComboAattackBehavior.h"
+#include "BaseComboAttackBehavior.h"
 #include "Easing/Easing.h"
 #include "Rendition/PlayerAttackRendition.h"
 #include <memory>
@@ -10,13 +10,13 @@ class PlayerCollisionInfo;
 /// <summary>
 /// データ駆動型のコンボ攻撃クラス
 /// </summary>
-class DynamicComboAttack : public BaseComboAattackBehavior {
+class ComboAttackAction : public BaseComboAttackBehavior {
 public:
-    DynamicComboAttack(Player* player, PlayerComboAttackData* attackData);
-    ~DynamicComboAttack();
+    ComboAttackAction(Player* player, PlayerComboAttackData* attackData);
+    ~ComboAttackAction();
 
     void Init() override;
-    void Update() override;
+    void Update(float atkSpeed) override;
     void Debug() override;
 
 private:
@@ -29,10 +29,10 @@ private:
     };
 
     void InitializeAttack();
-    void UpdateAttack();
-    void UpdateWait();
+    void UpdateAttack(float atkSpeed);
+    void UpdateWait(float atkSpeed);
     void ChangeNextAttack();
-    void ApplyMovement();
+    void ApplyMovement(float atkSpeed);
     void SetupCollision();
     void SetMoveEasing();
 
@@ -45,8 +45,7 @@ private:
     PlayerComboAttackData* nextAttackData_ = nullptr;
     PlayerCollisionInfo* pCollisionInfo_   = nullptr;
 
-    float atkSpeed_;
-
+   
     // タイミング
     float currentFrame_;
     float waitTime_;

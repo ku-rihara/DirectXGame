@@ -37,9 +37,7 @@ void SceneManager::Update() {
         ChangeScene("EDITOR");
     }
 
-    // 現在のシーンを更新
     if (scene_) {
-        Debug();
         scene_->Update();
     }
 
@@ -50,10 +48,13 @@ void SceneManager::Update() {
     // パーティクル更新
     ParticleManager::GetInstance()->Update();
     GPUParticleManager::GetInstance()->Update();
+
+    collisionManager_->Update();
 }
 
 void SceneManager::Debug() {
     scene_->Debug();
+    collisionManager_->AdjustParam();
 }
 
 void SceneManager::SkyBoxDraw() {
@@ -76,12 +77,20 @@ void SceneManager::ChangeScene(const std::string& sceneName) {
         scene_.reset();
     }
 
+    if (collisionManager_) {
+        collisionManager_.reset();
+    }
+
     Object3DRegistry::GetInstance()->Clear();
     AnimationRegistry::GetInstance()->Clear();
 
     //// グローバル変数の読み込み
     GlobalParameter::GetInstance()->ResetAllRegister();
     GlobalParameter::GetInstance()->LoadFiles();
+
+     // コリジョン
+    collisionManager_ = std::make_unique<CollisionManager>();
+    collisionManager_->Init();
 
     // 次のシーンを生成
     nextScene_ = std::unique_ptr<BaseScene>(sceneFactory_->CreateScene(sceneName));

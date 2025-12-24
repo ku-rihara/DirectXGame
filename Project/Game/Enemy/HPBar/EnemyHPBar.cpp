@@ -30,6 +30,6 @@ void EnemyHPBar::Update(float hp) {
     sprite_->transform_.pos = position_;
 
     // isDrawセット
-    sprite_->SetIsDraw(isDraw_);
-    hpSprite_->SetIsDraw(isDraw_);
+    sprite_->SetIsDraw(false);
+    hpSprite_->SetIsDraw(false);
 }

@@ -19,7 +19,8 @@ void PlayerParameter::Init() {
 ///==========================================================
 void PlayerParameter::AdjustParam() {
 #ifdef _DEBUG
-    if (ImGui::CollapsingHeader("Player")) {
+    if (ImGui::CollapsingHeader(groupName_.c_str())) {
+        ImGui::PushID(groupName_.c_str());
 
         /// 位置
         ImGui::SeparatorText("Transform");
@@ -93,6 +94,8 @@ void PlayerParameter::AdjustParam() {
         /// セーブとロード
         globalParameter_->ParamSaveForImGui(groupName_);
         globalParameter_->ParamLoadForImGui(groupName_);
+
+        ImGui::PopID();
     }
 
 #endif // _DEBUG

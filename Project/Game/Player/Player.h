@@ -3,7 +3,7 @@
 #include "BaseObject/BaseObject.h"
 #include "Collider/AABBCollider.h"
 #include "CollisionBox/PlayerCollisionInfo.h"
-#include "ComboAttackBehavior/BaseComboAattackBehavior.h"
+#include "ComboAttackBehavior/BaseComboAttackBehavior.h"
 #include "Effect/PlayerEffects.h"
 #include "JumpAttackUI/JumpAttackUI.h"
 #include "Parameter/PlayerParameter.h"
@@ -61,7 +61,11 @@ public:
     void MoveToLimit();           //< 移動制限
     Vector3 GetInputDirection();  //< 入力方向取得
     void UpdateMatrix();          //< 行列更新
-    void PositionYReset();        //< Y座標リセット
+
+    // reset
+    void ResetPositionY(); //< Y座標リセット
+    void ResetHeadScale(); //< 頭スケールリセット
+  
   
     /// <summary>
     /// ディゾルブ更新
@@ -88,7 +92,7 @@ public:
 
     // 各Behavior切り替え処理
     void ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior);
-    void ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior> behavior);
+    void ChangeComboBehavior(std::unique_ptr<BaseComboAttackBehavior> behavior);
     void ChangeTitleBehavior(std::unique_ptr<BaseTitleBehavior> behavior);
 
     /// <summary>
@@ -108,7 +112,7 @@ public:
     void SoundStrongPunch();  //< 強パンチ音再生
     void FallSound();         //< 落下音再生
 
-      void MainHeadAnimationStart(const std::string& name);
+    void MainHeadAnimationStart(const std::string& name);
 
 private:
     KetaEngine::GlobalParameter* globalParameter_;
@@ -132,7 +136,7 @@ private:
 
     /// behavior
     std::unique_ptr<BasePlayerBehavior> behavior_            = nullptr;
-    std::unique_ptr<BaseComboAattackBehavior> comboBehavior_ = nullptr;
+    std::unique_ptr<BaseComboAttackBehavior> comboBehavior_ = nullptr;
     std::unique_ptr<BaseTitleBehavior> titleBehavior_        = nullptr;
 
 private:
@@ -148,12 +152,6 @@ private:
 
     // attackCharge
     float currentUpperChargeTime_;
-
-    // sound
-    int punchSoundID_;
-    int strongPunch_;
-    int fallSound_;
-    int starSound_;
 
 public:
     // getter

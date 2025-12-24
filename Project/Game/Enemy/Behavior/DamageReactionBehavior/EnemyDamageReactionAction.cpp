@@ -1,4 +1,4 @@
-#include "EnemyDamageReacrtionAction.h"
+#include "EnemyDamageReactionAction.h"
 /// obj
 #include "CollisionBox/PlayerCollisionInfo.h"
 #include "Enemy/Types/BaseEnemy.h"
@@ -27,7 +27,7 @@ EnemyDamageReactionAction::EnemyDamageReactionAction(
 EnemyDamageReactionAction::~EnemyDamageReactionAction() {
 }
 
-void EnemyDamageReactionAction::Update() {
+void EnemyDamageReactionAction::Update(float deltaTime) {
     if (!pReactionData_) {
         return;
     }
@@ -51,7 +51,7 @@ void EnemyDamageReactionAction::Update() {
     UpdateRenditions();
 
     // タイマー更新
-    reactionTimer_ += KetaEngine::Frame::DeltaTime();
+    reactionTimer_ += deltaTime;
 
     // リアクション終了チェック
     if (IsReactionFinished()) {
@@ -121,7 +121,7 @@ void EnemyDamageReactionAction::InitSlammedReaction(
     const EnemyDamageReactionData::BoundParam& boundParam,
     const EnemyDamageReactionData::SlammedParam& param) {
 
-    // バウンドパラメータの設定（共通）
+    // バウンドパラメータの設定
     maxBoundCount_     = boundParam.boundNum;
     bounceDamping_     = boundParam.bounceDamping;
     initialBounceRate_ = boundParam.initialBounceRate;

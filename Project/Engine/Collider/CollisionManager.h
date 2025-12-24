@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Editor/ParameterEditor/GlobalParameter.h"
+#include "SpatialGrid/SpatialGrid.h"
 /// std
 #include <list>
 #include <memory>
@@ -19,7 +20,7 @@ public:
     void Init(); //< 初期化
     void Update(); //< 更新
     void LineAllSet();
-   
+
     /// <summary>
     /// コライダーリストに登録
     /// </summary>
@@ -54,9 +55,11 @@ public:
     void HandleCollisionExit(BaseCollider* colliderA, BaseCollider* colliderB);
 
     void UpdateWorldTransform(); //< ワールド変換の更新
-    void Reset();                //< リセット
-    void CheckAllCollisions();   //< 全ての衝突チェック
-    void ApplyGlobalParameter(); //< グローバルパラメータの適用
+    void Reset(); //< リセット
+    void CheckAllCollisions(); //< 全ての衝突チェック
+
+    // パラメータ調整
+    void AdjustParam();
 
 public:
     struct PairHash {
@@ -67,15 +70,29 @@ public:
     };
 
 private:
+    void RegisterParams();
+
+private:
     // コライダーリスト
     static std::list<BaseCollider*> baseColliders_;
     // 衝突状態をペアごとに管理するマップ
     std::unordered_map<std::pair<BaseCollider*, BaseCollider*>, bool, PairHash> collisionStates_;
 
+    // 空間分割グリッド
+    std::unique_ptr<SpatialGrid> spatialGrid_;
+
     // globalParameter
     GlobalParameter* globalParameter_;
-    std::string groupName_ = "CollisionManager";
+    const std::string folderPath_ = "Collision";
+    const std::string groupName_  = "CollisionManager";
+
+    bool isGridVisible_;
     bool isColliderVisible_;
+    bool isNotAdaptCollision_ = false;
+
+    Vector3 worldMin_;
+    Vector3 worldMax_;
+    float cellSize_;
 };
 
 }; // KetaEngine

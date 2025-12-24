@@ -24,6 +24,7 @@ public:
     virtual void DrawShadow()     = 0; //< シャドウ描画
     virtual void Finalize();           //< 終了処理
 
+    void Debug();      //< デバッグ
     void DisplayFPS(); //< FPS表示
     void Run();        //< 実行
 
@@ -37,7 +38,6 @@ protected:
     /// private variants
     ///=======================================================
     std::unique_ptr<AbstractSceneFactory> sceneFactory_;
-    std::unique_ptr<CollisionManager> collisionManager_;
     std::unique_ptr<EngineCore> engineCore_;
 };
 

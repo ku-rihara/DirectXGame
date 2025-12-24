@@ -57,8 +57,6 @@ private:
     std::array<ParticleEffect, 1> afterGlowEffect_;
     std::array<ParticleEffect, 3> starEffect_;
 
-    int32_t starSound_;
-
 public:
     /// =========================================================================================
     /// getter

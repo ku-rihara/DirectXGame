@@ -10,7 +10,7 @@ void LockOnController::Init() {
 }
 void LockOnController::Update(Player* pPlayer, const KetaEngine::ViewProjection& viewProjection) {
 
-    // より安全で読みやすいバージョン
+    
     std::vector<LockOn::LockOnVariant> targets;
     const auto& enemies = pEnemyManager_->GetEnemies();
 

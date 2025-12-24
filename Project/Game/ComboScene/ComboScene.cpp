@@ -70,6 +70,10 @@ void ComboScene::SetComboLevelObjHolder(ComboLevelObjHolder* comboLevelObjHolder
     comboLevelObjHolder_ = comboLevelObjHolder;
 }
 
+void ComboScene::SetAudienceController(AudienceController* audienceController) {
+    audienceController_ = audienceController;
+}
+
 /// --------------------------------------------------------------------------------
 // メンバ関数のポインタ配列
 /// --------------------------------------------------------------------------------

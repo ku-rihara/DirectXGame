@@ -32,10 +32,6 @@ void KTFramework::Init() {
     engineCore_->Initialize(kWindowTitle, 1280, 720);
 
     LoadAllTexture();
-
-    // コリジョン
-    collisionManager_ = std::make_unique<CollisionManager>();
-    collisionManager_->Init();
 }
 
 // ========================================================
@@ -82,10 +78,15 @@ void KTFramework::Update() {
     DisplayFPS();
     /// グローバル変数の更新
     GlobalParameter::GetInstance()->SyncAll();
+    // デバッグ処理
+    Debug();
     /// ゲームシーンの毎フレーム処理
     pSceneManager_->Update();
-    /// 当たり判定
-    collisionManager_->Update();
+
+}
+
+void KTFramework::Debug() {
+    pSceneManager_->Debug();
 }
 
 // ========================================================

@@ -77,9 +77,9 @@ void Player::Init() {
     baseTransform_.translation_ = parameters_->GetParamaters().startPos_;
 
     // 音
-    punchSoundID_ = KetaEngine::Audio::GetInstance()->LoadWave("punchAir.wav");
+   /* punchSoundID_ = KetaEngine::Audio::GetInstance()->LoadWave("punchAir.wav");
     strongPunch_  = KetaEngine::Audio::GetInstance()->LoadWave("StrongPunch.wav");
-    fallSound_    = KetaEngine::Audio::GetInstance()->LoadWave("PlayerFall.wav");
+    fallSound_    = KetaEngine::Audio::GetInstance()->LoadWave("PlayerFall.wav");*/
 
     /// 通常モードから
     ChangeBehavior(std::make_unique<PlayerSpawn>(this));
@@ -91,7 +91,8 @@ void Player::Init() {
 /// 　更新
 ///==========================================================
 void Player::Update() {
-    prePos_ = GetWorldPosition(); // 前フレームの座標
+    // 前フレームの座標
+    prePos_ = GetWorldPosition();
     // ライト
     HeadLightSetting();
 
@@ -105,9 +106,11 @@ void Player::Update() {
     /// Particle
     effects_->Update(GetWorldPosition());
 
-    comboBehavior_->Update(); // コンボ攻撃攻撃
-    MoveToLimit(); // 移動制限
+    // コンボ更新
+    comboBehavior_->Update(comboAttackController_->GetRealAttackSpeed(KetaEngine::Frame::DeltaTimeRate()));
 
+    // 移動制限
+    MoveToLimit();
     UpdateMatrix();
 }
 
@@ -138,7 +141,7 @@ void Player::GameIntroUpdate() {
 ///==========================================================
 Vector3 Player::GetInputDirection() {
 
-    Vector3 velocity = {0.0f, 0.0f, 0.0f};
+    Vector3 velocity         = {0.0f, 0.0f, 0.0f};
     KetaEngine::Input* input = KetaEngine::Input::GetInstance();
 
     // キーボード入力
@@ -174,7 +177,7 @@ void Player::Move(float speed) {
     /// 移動処理
     if (CheckIsMoving()) {
         // 移動量に速さを反映
-        direction_ = Vector3::Normalize(direction_) * (speed)*KetaEngine::Frame::DeltaTimeRate();
+        direction_ = direction_.Normalize() * (speed)*KetaEngine::Frame::DeltaTimeRate();
         // 移動ベクトルをカメラの角度だけ回転する
         Matrix4x4 rotateMatrix = MakeRotateYMatrix(viewProjection_->rotation_.y);
         direction_             = TransformNormal(direction_, rotateMatrix);
@@ -346,7 +349,7 @@ void Player::ChangeBehavior(std::unique_ptr<BasePlayerBehavior> behavior) {
     // 引数で受け取った状態を次の状態としてセット
     behavior_ = std::move(behavior);
 }
-void Player::ChangeComboBehavior(std::unique_ptr<BaseComboAattackBehavior> behavior) {
+void Player::ChangeComboBehavior(std::unique_ptr<BaseComboAttackBehavior> behavior) {
     // 引数で受け取った状態を次の状態としてセット
     comboBehavior_ = std::move(behavior);
 }
@@ -474,8 +477,12 @@ void Player::RotateReset() {
     obj3d_->transform_.translation_.y = 0.0f;
 }
 
-void Player::PositionYReset() {
+void Player::ResetPositionY() {
     baseTransform_.translation_.y = parameters_->GetParamaters().startPos_.y;
+}
+
+void Player::ResetHeadScale() {
+    obj3d_->transform_.scale_ = Vector3::OneVector();
 }
 
 void Player::InitInGameScene() {
@@ -528,13 +535,13 @@ void Player::SetComboAttackController(PlayerComboAttackController* playerComboAt
 /// Sound
 /// =======================================================================================
 void Player::SoundPunch() {
-    KetaEngine::Audio::GetInstance()->PlayWave(punchSoundID_, 0.5f);
+  /*  KetaEngine::Audio::GetInstance()->PlayWave(punchSoundID_, 0.5f);*/
 }
 void Player::SoundStrongPunch() {
-    KetaEngine::Audio::GetInstance()->PlayWave(strongPunch_, 0.5f);
+   /* KetaEngine::Audio::GetInstance()->PlayWave(strongPunch_, 0.5f);*/
 }
 void Player::FallSound() {
-    KetaEngine::Audio::GetInstance()->PlayWave(fallSound_, 0.2f);
+    /*KetaEngine::Audio::GetInstance()->PlayWave(fallSound_, 0.2f);*/
 }
 
 bool Player::CheckIsChargeMax() const {

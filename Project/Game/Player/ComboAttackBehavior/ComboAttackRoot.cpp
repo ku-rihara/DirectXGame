@@ -1,5 +1,5 @@
 #include "ComboAttackRoot.h"
-#include "DynamicComboAttack.h"
+#include "ComboAttackAction.h"
 #include "input/Input.h"
 #include "Player/ComboCreator/PlayerComboAttackController.h"
 #include "Player/Player.h"
@@ -7,7 +7,7 @@
 
 // 初期化
 ComboAttackRoot::ComboAttackRoot(Player* player)
-    : BaseComboAattackBehavior("ComboAttackRoot", player) {
+    : BaseComboAttackBehavior("ComboAttackRoot", player) {
     Init();
 }
 
@@ -19,7 +19,9 @@ void ComboAttackRoot::Init() {
     attackPatern_ = AttackPatern::NORMAL;
 }
 
-void ComboAttackRoot::Update() {
+void ComboAttackRoot::Update(float atkSpeed) {
+    atkSpeed; // 未使用
+
     // 現在の状態を判定
     JudgeAttackPattern();
 
@@ -66,7 +68,7 @@ void ComboAttackRoot::Update() {
         // トリガーされたら攻撃開始
         if (triggered) {
             pPlayer_->ChangeComboBehavior(
-                std::make_unique<DynamicComboAttack>(pPlayer_, attackPtr.get()));
+                std::make_unique<ComboAttackAction>(pPlayer_, attackPtr.get()));
             return; // 最初にマッチした攻撃を実行
         }
     }

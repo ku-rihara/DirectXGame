@@ -5,6 +5,7 @@
 class Player;
 class Combo;
 class ComboLevelObjHolder;
+class AudienceController;
 
 /// <summary>
 /// コンボシーンの制御クラス
@@ -37,14 +38,16 @@ private:
     Player* pPlayer_                          = nullptr;
     Combo* pCombo_                            = nullptr;
     ComboLevelObjHolder* comboLevelObjHolder_ = nullptr;
-    const int32_t levelOffset_                = 1;
+    AudienceController* audienceController_   = nullptr;
+
+    const int32_t levelOffset_ = 1;
 
     State state_ = State::CHECK;
 
 public:
-
     // setter
     void SetPlayer(Player* player);
     void SetCombo(Combo* combo);
     void SetComboLevelObjHolder(ComboLevelObjHolder* comboLevelObjHolder);
+    void SetAudienceController(AudienceController* audienceController);
 };

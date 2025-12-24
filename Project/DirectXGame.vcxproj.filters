@@ -502,6 +502,15 @@
     <Filter Include="MyEngine\.cpp\Scene\Manager">
       <UniqueIdentifier>{716432aa-8f34-4922-935a-5ae2c4a5d1e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Field\SideRope">
+      <UniqueIdentifier>{c2dc9632-6ae4-4c2d-8714-ae912c0dea18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Audience">
+      <UniqueIdentifier>{96d14d5f-3312-4d5d-ad76-8f9bc6b404f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Audience\Behavior">
+      <UniqueIdentifier>{b9b0c3cb-e2b1-43a9-b7ee-246537d0dc42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
@@ -691,7 +700,7 @@
     <ClCompile Include="Game\GameCamera\GameCamera.cpp">
       <Filter>Game\GameCamera</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.cpp">
+    <ClCompile Include="Game\Player\ComboAttackBehavior\BaseComboAttackBehavior.cpp">
       <Filter>Game\Player\Behavior\Base\Atacck</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\TitleBehavior\BaseTitleBehavior.cpp">
@@ -1039,7 +1048,7 @@
     <ClCompile Include="Game\CollisionBox\PlayerCollisionInfo.cpp">
       <Filter>Game\CollisionBox</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Player\ComboAttackBehavior\DynamicComboAttack.cpp">
+    <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackAction.cpp">
       <Filter>Game\Player\Behavior\ComboBehavior</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.cpp">
@@ -1174,7 +1183,7 @@
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.cpp">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReacrtionAction.cpp">
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionAction.cpp">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.cpp">
@@ -1246,6 +1255,39 @@
     <ClCompile Include="Engine\Editor\GPUParticleEditor\GPUParticleSection.cpp">
       <Filter>MyEngine\.cpp\Editor\GPUParticleEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Field\SideRope\SideRope.cpp">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Field\SideRope\SideRopeController.cpp">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyRopeBoundReaction.cpp">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Field\SideRope\SideRopeReboundSystem.cpp">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collider\SpatialGrid\SpatialGrid.cpp">
+      <Filter>MyEngine\.cpp\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\Audience.cpp">
+      <Filter>Game\Audience</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\AudienceController.cpp">
+      <Filter>Game\Audience</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\Behavior\AudienceAppear.cpp">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\Behavior\AudienceDisappear.cpp">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\Behavior\AudienceRoot.cpp">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Audience\Behavior\BaseAudienceBehavior.cpp">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\struct\D3DResourceLeakCheck.h">
@@ -1255,9 +1297,6 @@
       <Filter>MyEngine\.h\struct</Filter>
     </ClInclude>
     <ClInclude Include="Engine\struct\ModelData.h">
-      <Filter>MyEngine\.h\struct</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\struct\SoundData.h">
       <Filter>MyEngine\.h\struct</Filter>
     </ClInclude>
     <ClInclude Include="Engine\struct\Transform.h">
@@ -1470,7 +1509,7 @@
     <ClInclude Include="Game\GameCamera\GameCamera.h">
       <Filter>Game\GameCamera</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAattackBehavior.h">
+    <ClInclude Include="Game\Player\ComboAttackBehavior\BaseComboAttackBehavior.h">
       <Filter>Game\Player\Behavior\Base\Atacck</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\TitleBehavior\BaseTitleBehavior.h">
@@ -1830,7 +1869,7 @@
     <ClInclude Include="Game\CollisionBox\PlayerCollisionInfo.h">
       <Filter>Game\CollisionBox</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Player\ComboAttackBehavior\DynamicComboAttack.h">
+    <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackAction.h">
       <Filter>Game\Player\Behavior\ComboBehavior</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player\ComboAttackBehavior\ComboAttackRoot.h">
@@ -1965,7 +2004,7 @@
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\BaseEnemyDamageReaction.h">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReacrtionAction.h">
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionAction.h">
       <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyDamageReactionRoot.h">
@@ -2039,6 +2078,42 @@
     </ClInclude>
     <ClInclude Include="Engine\Scene\Manager\SceneManager.h">
       <Filter>MyEngine\.h\Scene\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Field\SideRope\SideRope.h">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Field\SideRope\SideRopeController.h">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy\Behavior\DamageReactionBehavior\EnemyRopeBoundReaction.h">
+      <Filter>Game\Enemy\Behevior\DamageReaction</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Field\SideRope\SideRopeReboundSystem.h">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Field\SideRope\RopeBoundParam.h">
+      <Filter>Game\Field\SideRope</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider\SpatialGrid\SpatialGrid.h">
+      <Filter>MyEngine\.h\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\Audience.h">
+      <Filter>Game\Audience</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\AudienceController.h">
+      <Filter>Game\Audience</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\Behavior\AudienceAppear.h">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\Behavior\AudienceDisappear.h">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\Behavior\AudienceRoot.h">
+      <Filter>Game\Audience\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Audience\Behavior\BaseAudienceBehavior.h">
+      <Filter>Game\Audience\Behavior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
