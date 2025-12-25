@@ -1,5 +1,5 @@
 #include "Audience.h"
-#include"Behavior/AudienceRoot.h"
+#include "Behavior/AudienceRoot.h"
 #include "Combo/Combo.h"
 #include "MathFunction.h"
 #include <imgui.h>
@@ -35,10 +35,10 @@ void Audience::Update() {
 
     objAnimation_->transform_.translation_.x = positionX_;
     // Y回転設定
-    RotateYChangeForSeatSide(seatSide_);
+    RotateYChangeBySeatSide(seatSide_);
 }
 
-void Audience::RotateYChangeForSeatSide(SeatSide seatSide) {
+void Audience::RotateYChangeBySeatSide(SeatSide seatSide) {
     switch (seatSide) {
     case SeatSide::LEFT:
         baseTransform_.rotation_.y = ToRadian(-90.0f);
@@ -57,9 +57,36 @@ void Audience::RotateYChangeForSeatSide(SeatSide seatSide) {
 
 void Audience::AppearByComboLevel(int32_t level) {
 
-    if (appearComboLevel_ == level) {
-
+    // スポーン該当か確認
+    if (appearComboLevel_ != level) {
+        return;
     }
+
+    // Rootを取得
+    AudienceRoot* audienceRoot = GetAudienceRoot();
+    if (!audienceRoot) {
+        return;
+    }
+
+    // スポーンモードに移行
+    audienceRoot->ChangeAppearMode();
+}
+
+void Audience::CloseByComboLevel(int32_t level) {
+
+     // クローズ該当か確認
+    if (appearComboLevel_ > level) {
+        return;
+    }
+
+    // Rootを取得
+    AudienceRoot* audienceRoot = GetAudienceRoot();
+    if (!audienceRoot) {
+        return;
+    }
+
+    // クローズモードに移行
+    audienceRoot->ChangeCloseMode();
 }
 
 void Audience::RegisterParams() {
@@ -87,7 +114,7 @@ void Audience::AdjustParam() {
     }
 
     ImGui::DragFloat("Position X", &positionX_, 0.1f);
-    ImGui::InputInt("appearComboLevel", &appearComboLevel_,0,kComboLevel);
+    ImGui::InputInt("appearComboLevel", &appearComboLevel_, 0, kComboLevel);
 
     globalParameter_->ParamSaveForImGui(groupName_, folderName_);
     globalParameter_->ParamLoadForImGui(groupName_, folderName_);
@@ -103,4 +130,11 @@ void Audience::AdaptPosition(const Vector2& ZYBasePos) {
 
 void Audience::ChangeBehavior(std::unique_ptr<BaseAudienceBehavior> behavior) {
     behavior_ = std::move(behavior);
+}
+
+AudienceRoot* Audience::GetAudienceRoot() const {
+    if (AudienceRoot* audienceRoot = dynamic_cast<AudienceRoot*>(behavior_.get())) {
+        return audienceRoot;
+    }
+    return nullptr;
 }

@@ -1,6 +1,7 @@
 #include "ComboScene.h"
 
 #include "BackGroundObject/ComboLeve/ComboLevelObjHolder.h"
+#include"Audience/AudienceController.h"
 #include "Combo/Combo.h"
 #include "Player/Player.h"
 
@@ -37,9 +38,13 @@ void ComboScene::LevelUp() {
 
     pCombo_->LevelUp();
 
-    // レベル対象のオブジェクトをスポーン
+    // レベル対象のオブジェクト、観客をスポーン
     if (pCombo_->GetCurrentLevel() <= static_cast<int32_t>(ComboLevelObjType::COUNT)) {
-        comboLevelObjHolder_->SetEffectMode(static_cast<ComboLevelObjType>(pCombo_->GetCurrentLevel() - levelOffset_), ObjEffectMode::SPAWN);
+        // 例としてpCombo_->GetCurrentLevel()が1になったらindex[0]の演出が始まる
+        int32_t comboLevel = pCombo_->GetCurrentLevel() - levelOffset_;
+
+        comboLevelObjHolder_->SetEffectMode(comboLevel, ObjEffectMode::SPAWN);
+        audienceController_->AppearAudienceByLevel(pCombo_->GetCurrentLevel());
     }
 
     // チェックに戻す

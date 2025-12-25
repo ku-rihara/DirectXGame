@@ -91,9 +91,9 @@ bool ComboLevelObjHolder::GetIsEasingFinish(const ComboLevelObjType& type, int32
     return true;
 }
 
-void ComboLevelObjHolder::SetEffectMode(const ComboLevelObjType& type, const ObjEffectMode& mode) {
+void ComboLevelObjHolder::SetEffectMode(int32_t level, const ObjEffectMode& mode) {
 
-    if (objects_[ToIndex(type)]) {
-        objects_[ToIndex(type)]->SetEffectMode(mode);
+    if (objects_[level]) {
+        objects_[level]->SetEffectMode(mode);
     }
 }

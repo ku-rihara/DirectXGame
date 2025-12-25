@@ -15,6 +15,9 @@ public:
     void Update() override;
     void Debug() override;
 
+    void ChangeCloseMode();
+    void ChangeAppearMode();
+
 private:
     /// ===================================================
     /// private variables

@@ -23,6 +23,8 @@ enum class SeatSide {
     COUNT,
 };
 
+class AudienceRoot;
+
 /// <summary>
 /// 観客
 /// </summary>
@@ -41,13 +43,20 @@ public:
     // adaptPos
     void AdaptPosition(const Vector2& ZXBasePos);
 
-    // changeBehavior
-    void AppearByComboLevel(int32_t level);
+    // change Behabior
+     void ChangeBehavior(std::unique_ptr<BaseAudienceBehavior> behavior);
 
 private:
+
+    // パラメータ登録
     void RegisterParams();
-    void RotateYChangeForSeatSide(SeatSide seatSide);
-    void ChangeBehavior(std::unique_ptr<BaseAudienceBehavior> behavior);
+
+    // RotateY適応
+    void RotateYChangeBySeatSide(SeatSide seatSide);
+    
+     // changeBehavior
+    void AppearByComboLevel(int32_t level);
+    void CloseByComboLevel(int32_t level);
 
 private:
     // global parameter
@@ -60,7 +69,7 @@ private:
     int32_t seatSideIndex_ = 0;
     int32_t audienceIndex_ = 0;
 
-    //
+    // 
     int32_t appearComboLevel_;
 
     // enum
@@ -76,5 +85,7 @@ private:
     std::unique_ptr<BaseAudienceBehavior> behavior_;
 
 public:
+    AudienceRoot* GetAudienceRoot()const;
+
     SeatsRow GetSeatsRow() const { return seatsRow_; }
 };
