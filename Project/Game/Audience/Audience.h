@@ -8,12 +8,6 @@
 #include <memory>
 #include <string>
 
-enum class SeatsRow {
-    FRONT,
-    MIDDLE,
-    BACK,
-    COUNT,
-};
 
 enum class SeatSide {
     LEFT,
@@ -43,8 +37,10 @@ public:
     // adaptPos
     void AdaptPosition(const Vector2& ZXBasePos);
 
-    // change Behabior
+  // changeBehavior
      void ChangeBehavior(std::unique_ptr<BaseAudienceBehavior> behavior);
+    void AppearByComboLevel(int32_t level);
+    void CloseByComboLevel(int32_t level);
 
 private:
 
@@ -54,9 +50,6 @@ private:
     // RotateY適応
     void RotateYChangeBySeatSide(SeatSide seatSide);
     
-     // changeBehavior
-    void AppearByComboLevel(int32_t level);
-    void CloseByComboLevel(int32_t level);
 
 private:
     // global parameter
@@ -70,10 +63,10 @@ private:
     int32_t audienceIndex_ = 0;
 
     // 
+    int32_t seatRowNum_;
     int32_t appearComboLevel_;
 
     // enum
-    SeatsRow seatsRow_ = SeatsRow::FRONT;
     SeatSide seatSide_ = SeatSide::LEFT;
 
     // animationObj
@@ -85,7 +78,7 @@ private:
     std::unique_ptr<BaseAudienceBehavior> behavior_;
 
 public:
+    int32_t GetSeatRowNum() const { return seatRowNum_; }
     AudienceRoot* GetAudienceRoot()const;
 
-    SeatsRow GetSeatsRow() const { return seatsRow_; }
 };

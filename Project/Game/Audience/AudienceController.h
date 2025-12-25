@@ -30,8 +30,8 @@ private:
     void AdaptPositions(int32_t index);
     void RegisterParams();
 
-    // enumからstring
-    std::string SeatsRowToString(SeatsRow seatsRow);
+    // 列番号から位置を計算
+    Vector2 GetSeatsRowZYPos(int32_t row) const;
 
 private:
     const int32_t audienceMaxNum_ = 50;
@@ -40,6 +40,8 @@ private:
     const std::string groupName_                  = "AudienceController";
 
     std::array<std::unique_ptr<Audience>, 50> audiences_;
-    std::array<Vector2, static_cast<int32_t>(SeatsRow::COUNT)> seatsRowZYPos_;
 
+    // 列の設定
+    Vector2 baseSeatsZYPos_{0.0f, 0.0f}; 
+    Vector2 seatsRowZYOffset_{0.0f, 2.0f};
 };

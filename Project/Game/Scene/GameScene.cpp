@@ -129,6 +129,7 @@ void GameScene::PlayUpdate() {
     attackEffect_->Update();
     field_->Update();
     sideRopeController_->Update();
+    audienceController_->Update();
 
     // 各クラス更新
     comboScene_->Update();
@@ -187,6 +188,7 @@ void GameScene::Debug() {
     combo_->AdjustParam();
     fireInjectors_->AdjustParam();
     gameIntroManager_->AdjustParam();
+    audienceController_->AdjustParam();
     KetaEngine::ShadowMap::GetInstance()->DebugImGui();
     KetaEngine::SpriteRegistry::GetInstance()->DebugImGui();
     ImGui::End();

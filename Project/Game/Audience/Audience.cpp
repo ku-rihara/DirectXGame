@@ -17,12 +17,12 @@ void Audience::Init(int32_t index) {
     globalParameter_->SyncParamForGroup(groupName_);
 
     // 列の適応
-    seatsRow_ = static_cast<SeatsRow>(seatsRowIndex_);
     seatSide_ = static_cast<SeatSide>(seatSideIndex_);
 
     // アニメーションオブジェクト作成
     baseTransform_.Init();
-    objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel("test.gltf"));
+    objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel("AudienceCheer.gltf"));
+    objAnimation_->Init();
     objAnimation_->transform_.SetParent(&baseTransform_);
 
     // behavior
@@ -36,6 +36,8 @@ void Audience::Update() {
     objAnimation_->transform_.translation_.x = positionX_;
     // Y回転設定
     RotateYChangeBySeatSide(seatSide_);
+
+    baseTransform_.UpdateMatrix();
 }
 
 void Audience::RotateYChangeBySeatSide(SeatSide seatSide) {
@@ -74,7 +76,7 @@ void Audience::AppearByComboLevel(int32_t level) {
 
 void Audience::CloseByComboLevel(int32_t level) {
 
-     // クローズ該当か確認
+    // クローズ該当か確認
     if (appearComboLevel_ > level) {
         return;
     }
@@ -94,18 +96,15 @@ void Audience::RegisterParams() {
     globalParameter_->Regist<int32_t>(groupName_, "SeatSide", &seatSideIndex_);
     globalParameter_->Regist<float>(groupName_, "positionX", &positionX_);
     globalParameter_->Regist<int32_t>(groupName_, "appearComboLevel", &appearComboLevel_);
+    globalParameter_->Regist<int32_t>(groupName_, "seatRowNum", &seatRowNum_);
 }
-
 void Audience::AdjustParam() {
 
     ImGui::SeparatorText(groupName_.c_str());
     ImGui::PushID(groupName_.c_str());
 
-    // SeatsRowのコンボボックス
-    const char* seatsRowItems[] = {"FRONT", "MIDDLE", "BACK"};
-    if (ImGui::Combo("Seats Row", &seatsRowIndex_, seatsRowItems, IM_ARRAYSIZE(seatsRowItems))) {
-        seatsRow_ = static_cast<SeatsRow>(seatsRowIndex_);
-    }
+    // SeatsRow
+    ImGui::DragInt("seatRowNum", &seatRowNum_, 0, 10);
 
     // SeatSideのコンボボックス
     const char* seatSideItems[] = {"LEFT", "RIGHT", "FRONT", "BACK"};
@@ -114,7 +113,7 @@ void Audience::AdjustParam() {
     }
 
     ImGui::DragFloat("Position X", &positionX_, 0.1f);
-    ImGui::InputInt("appearComboLevel", &appearComboLevel_, 0, kComboLevel);
+    ImGui::DragInt("appearComboLevel", &appearComboLevel_, 0, kComboLevel);
 
     globalParameter_->ParamSaveForImGui(groupName_, folderName_);
     globalParameter_->ParamLoadForImGui(groupName_, folderName_);
