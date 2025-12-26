@@ -311,6 +311,7 @@ void GameScene::SetClassPointer() {
     comboScene_->SetPlayer(player_.get());
     comboScene_->SetCombo(combo_.get());
     comboScene_->SetComboLevelObjHolder(comboLevelObjHolder_.get());
+    comboScene_->SetAudienceController(audienceController_.get());
 
       // Player
     player_->SetViewProjection(&viewProjection_);

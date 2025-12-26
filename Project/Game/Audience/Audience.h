@@ -1,4 +1,5 @@
 #pragma once
+#include"BaseObject/BaseObject.h"
 #include "Animation/Object3DAnimation.h"
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Behavior/BaseAudienceBehavior.h"
@@ -22,7 +23,7 @@ class AudienceRoot;
 /// <summary>
 /// 観客
 /// </summary>
-class Audience {
+class Audience : public BaseObject {
 public:
     Audience()  = default;
     ~Audience() = default;
@@ -55,7 +56,7 @@ private:
     // global parameter
     KetaEngine::GlobalParameter* globalParameter_ = nullptr;
     std::string groupName_                        = "Audience";
-    const std::string folderName_                 = "Application/Audiences";
+    const std::string folderName_                 = "Audiences";
 
     // index
     int32_t seatsRowIndex_ = 0;
@@ -71,7 +72,6 @@ private:
 
     // animationObj
     std::unique_ptr<KetaEngine::Object3DAnimation> objAnimation_;
-    KetaEngine::WorldTransform baseTransform_;
     float positionX_;
 
     // behavior
@@ -81,4 +81,5 @@ public:
     int32_t GetSeatRowNum() const { return seatRowNum_; }
     AudienceRoot* GetAudienceRoot()const;
 
+    void SetBaseScale(Vector3 scale);
 };

@@ -8,6 +8,8 @@
 // 初期化
 AudienceDisappear::AudienceDisappear(Audience* audience)
     : BaseAudienceBehavior("AudienceDisappear", audience) {
+
+    pAudience_->GetObject3D()->transform_.PlayObjEaseAnimation("Audience", "AudienceClose");
 }
 
 AudienceDisappear::~AudienceDisappear() {

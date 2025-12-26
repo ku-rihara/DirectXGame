@@ -30,6 +30,5 @@ void AudienceRoot::ChangeAppearMode() {
     pAudience_->ChangeBehavior(std::make_unique<AudienceAppear>(pAudience_));
 }
 
-
 void AudienceRoot::Debug() {
 }

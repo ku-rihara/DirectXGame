@@ -12,6 +12,8 @@ AudienceAppear::AudienceAppear(Audience* audience)
 
      // 出現状態に設定
     isAppeared_ = true;
+
+    pAudience_->GetObject3D()->transform_.PlayObjEaseAnimation("Audience", "AudienceAppear");
 }
 
 AudienceAppear::~AudienceAppear() {

@@ -44,4 +44,7 @@ private:
     // 列の設定
     Vector2 baseSeatsZYPos_{0.0f, 0.0f}; 
     Vector2 seatsRowZYOffset_{0.0f, 2.0f};
+
+    // transform
+    Vector3 baseTransformScale_;
 };

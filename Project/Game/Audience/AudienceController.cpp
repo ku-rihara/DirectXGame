@@ -13,6 +13,7 @@ void AudienceController::Init() {
     for (int32_t i = 0; i < audienceMaxNum_; i++) {
         audiences_[i] = std::make_unique<Audience>();
         audiences_[i]->Init(i);
+        audiences_[i]->SetBaseScale(baseTransformScale_);
         AdaptPositions(i);
     }
 }
@@ -40,6 +41,7 @@ void AudienceController::AppearAudienceByLevel(int32_t level) {
 void AudienceController::RegisterParams() {
     globalParameter_->Regist<Vector2>(groupName_, "BaseSeatsZYPos", &baseSeatsZYPos_);
     globalParameter_->Regist<Vector2>(groupName_, "SeatsRowZYOffset", &seatsRowZYOffset_);
+    globalParameter_->Regist<Vector3>(groupName_, "baseTransformScale", &baseTransformScale_);
 }
 
 Vector2 AudienceController::GetSeatsRowZYPos(int32_t row) const {
@@ -55,13 +57,15 @@ void AudienceController::AdjustParam() {
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
-        // ベース位置
+        // transform
+        ImGui::DragFloat3("baseScale", &baseTransformScale_.x, 0.01f);
         ImGui::DragFloat2("Base Seats ZY Pos", &baseSeatsZYPos_.x, 0.1f);
 
         // オフセット
         ImGui::DragFloat2("Seats Row ZY Offset", &seatsRowZYOffset_.x, 0.1f);
 
         for (int32_t i = 0; i < audienceMaxNum_; i++) {
+            audiences_[i]->SetBaseScale(baseTransformScale_);
             AdaptPositions(i);
         }
 

@@ -5,6 +5,7 @@
 #include <imgui.h>
 
 void Audience::Init(int32_t index) {
+    BaseObject::Init();
 
     // グループ名を設定
     audienceIndex_ = index;
@@ -20,8 +21,7 @@ void Audience::Init(int32_t index) {
     seatSide_ = static_cast<SeatSide>(seatSideIndex_);
 
     // アニメーションオブジェクト作成
-    baseTransform_.Init();
-    objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel("AudienceCheer.gltf"));
+    objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel("AudienceJump.gltf"));
     objAnimation_->Init();
     objAnimation_->transform_.SetParent(&baseTransform_);
 
@@ -30,14 +30,14 @@ void Audience::Init(int32_t index) {
 }
 
 void Audience::Update() {
-
+ 
     behavior_->Update();
 
     objAnimation_->transform_.translation_.x = positionX_;
     // Y回転設定
     RotateYChangeBySeatSide(seatSide_);
 
-    baseTransform_.UpdateMatrix();
+   BaseObject::Update();
 }
 
 void Audience::RotateYChangeBySeatSide(SeatSide seatSide) {
@@ -97,6 +97,7 @@ void Audience::RegisterParams() {
     globalParameter_->Regist<float>(groupName_, "positionX", &positionX_);
     globalParameter_->Regist<int32_t>(groupName_, "appearComboLevel", &appearComboLevel_);
     globalParameter_->Regist<int32_t>(groupName_, "seatRowNum", &seatRowNum_);
+    
 }
 void Audience::AdjustParam() {
 
@@ -137,3 +138,7 @@ AudienceRoot* Audience::GetAudienceRoot() const {
     }
     return nullptr;
 }
+
+void Audience::SetBaseScale(Vector3 scale) {
+    baseTransform_.scale_ = scale;
+  }
