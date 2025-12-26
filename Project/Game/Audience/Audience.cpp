@@ -21,12 +21,18 @@ void Audience::Init(int32_t index) {
     seatSide_ = static_cast<SeatSide>(seatSideIndex_);
 
     // アニメーションオブジェクト作成
-    objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel("AudienceJump.gltf"));
-    objAnimation_->Init();
-    objAnimation_->transform_.SetParent(&baseTransform_);
+    CreateObject();
 
     // behavior
     ChangeBehavior(std::make_unique<AudienceRoot>(this));
+}
+
+void Audience::CreateObject() {
+    objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel("AudienceJump.gltf"));
+    objAnimation_->Init();
+    objAnimation_->Add("AudienceDisAppear.gltf");
+    objAnimation_->transform_.SetParent(&baseTransform_);
+    objAnimation_->transform_.scale_ = Vector3::ZeroVector();
 }
 
 void Audience::Update() {
@@ -114,7 +120,7 @@ void Audience::AdjustParam() {
     }
 
     ImGui::DragFloat("Position X", &positionX_, 0.1f);
-    ImGui::DragInt("appearComboLevel", &appearComboLevel_, 0, kComboLevel);
+    ImGui::DragInt("appearComboLevel", &appearComboLevel_, 1, kComboLevel);
 
     globalParameter_->ParamSaveForImGui(groupName_, folderName_);
     globalParameter_->ParamLoadForImGui(groupName_, folderName_);

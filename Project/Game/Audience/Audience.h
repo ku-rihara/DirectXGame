@@ -45,9 +45,10 @@ public:
 
 private:
 
+    // オブジェクト生成
+    void CreateObject();
     // パラメータ登録
     void RegisterParams();
-
     // RotateY適応
     void RotateYChangeBySeatSide(SeatSide seatSide);
     
@@ -78,6 +79,7 @@ private:
     std::unique_ptr<BaseAudienceBehavior> behavior_;
 
 public:
+    KetaEngine::Object3DAnimation* GetObjAnimation() { return objAnimation_.get(); }
     int32_t GetSeatRowNum() const { return seatRowNum_; }
     AudienceRoot* GetAudienceRoot()const;
 
