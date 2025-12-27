@@ -162,7 +162,7 @@ Vector3 WorldTransform::GetLocalPos() const {
 }
 
 void WorldTransform::UpdateAffineMatrix() {
-    Vector3 scale             = ScaleCalc(isUseDirectScale_);
+    Vector3 scale             = ScaleCalc(isAdaptDirectScale_);
     const Vector3 rotation    = rotation_ + offsetTransform_.rotation;
     const Vector3 translation = translation_ + offsetTransform_.translation;
     Quaternion quaternion     = quaternion_ * offsetTransform_.quaternion;
@@ -359,7 +359,11 @@ void WorldTransform::ApplyAnimationToTransform() {
     }
 
     // Scaleをオフセット
-    offsetTransform_.scale = objEaseAnimationPlayer_->GetCurrentScale();
+    if (isAdaptDirectScale_) {
+        scale_ = objEaseAnimationPlayer_->GetCurrentScale();
+    } else {
+        offsetTransform_.scale = objEaseAnimationPlayer_->GetCurrentScale();
+    }
 
     // Rotationをオフセット
     if (rotateOder_ == RotateOder::Quaternion) {
