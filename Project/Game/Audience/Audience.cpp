@@ -31,6 +31,7 @@ void Audience::CreateObject() {
     objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel("AudienceJump.gltf"));
     objAnimation_->Init();
     objAnimation_->Add("AudienceDisAppear.gltf");
+    objAnimation_->transform_.SetIsAdaptDirectScale(true);
     objAnimation_->transform_.Init();
     objAnimation_->transform_.SetParent(&baseTransform_);
     objAnimation_->transform_.scale_ = Vector3::ZeroVector();

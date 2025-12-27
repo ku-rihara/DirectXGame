@@ -31,7 +31,7 @@ void AudienceAppear::Update() {
 void AudienceAppear::Init() {
 
     // 出現状態に設定
-    pAudience_->GetObjAnimation()->ChangeAnimation("AudienceAppear");
+    pAudience_->GetObjAnimation()->ChangeAnimation("AudienceJump");
     pAudience_->GetObjAnimation()->SetLoop(true);
 
     currentPhase_ = [this]() {
