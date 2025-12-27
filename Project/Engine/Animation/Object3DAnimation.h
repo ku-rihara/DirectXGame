@@ -21,9 +21,7 @@ namespace KetaEngine {
 
 class Object3DAnimation : public BaseObject3d {
 public:
-    // アニメーション終了時のコールバック型定義
-    using AnimationEndCallback = std::function<void(const std::string& animationName)>;
-
+  
     Object3DAnimation() = default;
     ~Object3DAnimation() override;
 
@@ -177,7 +175,7 @@ private:
     bool hasLoopedThisFrame_ = false;
 
     // コールバック
-    AnimationEndCallback onAnimationEnd_;
+    std::function<void(const std::string& animationName)> onAnimationEnd_;
 
 public:
     /// ============================================================
@@ -194,7 +192,7 @@ public:
 
     void SetTransitionDuration(float duration) { transitionDuration_ = duration; }
     void SetLoop(bool loop) { isLoop_ = loop; }
-    void SetAnimationEndCallback(AnimationEndCallback callback) { onAnimationEnd_ = callback; }
+    void SetAnimationEndCallback(std::function<void(const std::string& animationName)> callback) { onAnimationEnd_ = callback; }
 };
 
 } // KetaEngine
