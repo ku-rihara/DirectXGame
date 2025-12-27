@@ -31,6 +31,7 @@ void AudienceAppear::Update() {
 void AudienceAppear::Init() {
 
     // 出現状態に設定
+    pAudience_->GetObjAnimation()->SetIsDraw(true);
     pAudience_->GetObjAnimation()->ChangeAnimation("AudienceJump");
     pAudience_->GetObjAnimation()->SetLoop(true);
 
@@ -63,5 +64,9 @@ void AudienceAppear::End() {
 }
 
 void AudienceAppear::Debug() {
-    
+    ImGui::Begin("test");
+    ImGui::Text("test:%f,%f,%f", pAudience_->GetObjAnimation()->transform_.scale_.x,
+        pAudience_->GetObjAnimation()->transform_.scale_.y,
+        pAudience_->GetObjAnimation()->transform_.scale_.z);
+    ImGui::End();
 }
