@@ -33,7 +33,7 @@ void Audience::CreateObject() {
     objAnimation_->Add("AudienceDisAppear.gltf");
     objAnimation_->transform_.Init();
     objAnimation_->transform_.SetParent(&baseTransform_);
-    objAnimation_->transform_.scale_ = Vector3::OneVector();
+    objAnimation_->transform_.scale_ = Vector3::ZeroVector();
 }
 
 void Audience::Update() {
@@ -110,10 +110,6 @@ void Audience::AdjustParam() {
 
     ImGui::SeparatorText(groupName_.c_str());
     ImGui::PushID(groupName_.c_str());
-
-    ImGui::DragFloat3("s", &objAnimation_->transform_.scale_.x);
-    ImGui::DragFloat3("r", &objAnimation_->transform_.rotation_.x);
-    ImGui::DragFloat3("t", &objAnimation_->transform_.translation_.x);
 
     // SeatsRow
     ImGui::InputInt("seatRowNum", &seatRowNum_, 0, 10);

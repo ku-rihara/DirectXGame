@@ -20,7 +20,6 @@ AudienceAppear::AudienceAppear(Audience* audience)
 AudienceAppear::~AudienceAppear() {
 }
 
-
 // 更新
 void AudienceAppear::Update() {
 
@@ -29,10 +28,10 @@ void AudienceAppear::Update() {
     }
 }
 
-
 void AudienceAppear::Init() {
 
     // 出現状態に設定
+    pAudience_->GetObjAnimation()->ChangeAnimation("AudienceAppear");
     pAudience_->GetObjAnimation()->SetLoop(true);
 
     currentPhase_ = [this]() {
@@ -41,9 +40,9 @@ void AudienceAppear::Init() {
 }
 
 void AudienceAppear::Start() {
-    if (!pAudience_->GetObjAnimation()->transform_.GetObjEaseAnimationPlayer()->IsPlaying()) {
-        pAudience_->GetObjAnimation()->transform_.PlayObjEaseAnimation("Audience", "AudienceAppear");
-    }
+
+    pAudience_->GetObjAnimation()->transform_.PlayObjEaseAnimation("Audience", "AudienceAppear");
+
     currentPhase_ = [this]() {
         Playing();
     };
@@ -60,13 +59,9 @@ void AudienceAppear::Playing() {
     };
 }
 void AudienceAppear::End() {
-    pAudience_->ChangeBehavior(std::make_unique<AudienceRoot>(pAudience_,true));
+    pAudience_->ChangeBehavior(std::make_unique<AudienceRoot>(pAudience_, true));
 }
 
 void AudienceAppear::Debug() {
-    ImGui::Begin("test");
-    ImGui::Text("test:%f,%f,%f", pAudience_->GetObjAnimation()->transform_.scale_.x,
-        pAudience_->GetObjAnimation()->transform_.scale_.y,
-        pAudience_->GetObjAnimation()->transform_.scale_.z);
-    ImGui::End();
+    
 }

@@ -81,6 +81,7 @@ void AudienceDisappear::EasingPlaying() {
 
 void AudienceDisappear::End() {
     // 終了処理
+    pAudience_->GetObjAnimation()->transform_.scale_ = Vector3::ZeroVector();
     pAudience_->ChangeBehavior(std::make_unique<AudienceRoot>(pAudience_,false));
 }
 
