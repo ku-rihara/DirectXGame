@@ -1,5 +1,7 @@
 #include "AudienceDisappear.h"
 #include "../Audience.h"
+#include "AudienceRoot.h"
+#include "Editor/ObjEaseAnimation/ObjEaseAnimationPlayer.h"
 /// frame
 #include "Frame/Frame.h"
 /// imgui
@@ -15,9 +17,12 @@ AudienceDisappear::AudienceDisappear(Audience* audience)
     };
 
     isAnimationEnd_ = false;
+    pAudience_->GetObjAnimation()->SetLoop(false);
 
-     pAudience_->GetObjAnimation()->SetAnimationEndCallback([]() {
-       
+    pAudience_->GetObjAnimation()->SetAnimationEndCallback([this](const std::string& name) {
+        if (name == "AudienceDisAppear") {
+            isAnimationEnd_ = true;
+        }
     });
 }
 
@@ -47,7 +52,7 @@ void AudienceDisappear::AnimationPlaying() {
         return;
     }
 
-    pAudience_->GetObject3D()->transform_.PlayObjEaseAnimation("Audience", "AudienceAppear");
+    pAudience_->GetObjAnimation()->transform_.PlayObjEaseAnimation("Audience", "AudienceDisAppear");
 
     // 次のフェーズへ
     currentPhase_ = [this]() {
@@ -58,6 +63,10 @@ void AudienceDisappear::AnimationPlaying() {
 void AudienceDisappear::EasingPlaying() {
     // イージング再生処理
 
+    if (!pAudience_->GetObjAnimation()->transform_.GetObjEaseAnimationPlayer()->IsFinished()) {
+        return;
+    }
+
     // 次のフェーズへ
     currentPhase_ = [this]() {
         End();
@@ -66,6 +75,8 @@ void AudienceDisappear::EasingPlaying() {
 
 void AudienceDisappear::End() {
     // 終了処理
+    BaseAudienceBehavior::SetIsAppeared(false);
+    pAudience_->ChangeBehavior(std::make_unique<AudienceRoot>(pAudience_));
 }
 
 void AudienceDisappear::Debug() {

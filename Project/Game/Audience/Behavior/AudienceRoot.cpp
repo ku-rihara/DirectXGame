@@ -20,7 +20,7 @@ AudienceRoot::~AudienceRoot() {
 // 更新
 void AudienceRoot::Update() {
 
-   pAudience_->GetObjAnimation()->SetIsDraw(isAppeared_);
+   pAudience_->GetObjAnimation()->SetIsDraw(BaseAudienceBehavior::GetIsAppeared());
 }
 
 

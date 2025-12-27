@@ -36,14 +36,14 @@ void Audience::CreateObject() {
 }
 
 void Audience::Update() {
- 
+
     behavior_->Update();
 
     objAnimation_->transform_.translation_.x = positionX_;
     // Y回転設定
     RotateYChangeBySeatSide(seatSide_);
 
-   BaseObject::Update();
+    BaseObject::Update();
 }
 
 void Audience::RotateYChangeBySeatSide(SeatSide seatSide) {
@@ -103,7 +103,6 @@ void Audience::RegisterParams() {
     globalParameter_->Regist<float>(groupName_, "positionX", &positionX_);
     globalParameter_->Regist<int32_t>(groupName_, "appearComboLevel", &appearComboLevel_);
     globalParameter_->Regist<int32_t>(groupName_, "seatRowNum", &seatRowNum_);
-    
 }
 void Audience::AdjustParam() {
 
@@ -111,7 +110,8 @@ void Audience::AdjustParam() {
     ImGui::PushID(groupName_.c_str());
 
     // SeatsRow
-    ImGui::DragInt("seatRowNum", &seatRowNum_, 0, 10);
+    ImGui::InputInt("seatRowNum", &seatRowNum_, 0, 10);
+    seatRowNum_ = std::clamp(seatRowNum_, 0, 10);
 
     // SeatSideのコンボボックス
     const char* seatSideItems[] = {"LEFT", "RIGHT", "FRONT", "BACK"};
@@ -120,7 +120,8 @@ void Audience::AdjustParam() {
     }
 
     ImGui::DragFloat("Position X", &positionX_, 0.1f);
-    ImGui::DragInt("appearComboLevel", &appearComboLevel_, 1, kComboLevel);
+    ImGui::InputInt("appearComboLevel", &appearComboLevel_);
+    appearComboLevel_ = std::clamp(appearComboLevel_, 0, kComboLevel - 1);
 
     globalParameter_->ParamSaveForImGui(groupName_, folderName_);
     globalParameter_->ParamLoadForImGui(groupName_, folderName_);
@@ -147,4 +148,4 @@ AudienceRoot* Audience::GetAudienceRoot() const {
 
 void Audience::SetBaseScale(Vector3 scale) {
     baseTransform_.scale_ = scale;
-  }
+}

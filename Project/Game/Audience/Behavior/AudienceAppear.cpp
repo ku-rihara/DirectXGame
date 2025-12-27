@@ -12,7 +12,8 @@ AudienceAppear::AudienceAppear(Audience* audience)
     : BaseAudienceBehavior("AudienceAppear", audience) {
 
     // 出現状態に設定
-    isAppeared_ = true;
+    BaseAudienceBehavior::SetIsAppeared(true);
+    pAudience_->GetObjAnimation()->SetLoop(true);
 
     // 初期フェーズ
     currentPhase_ = [this]() {
@@ -32,13 +33,13 @@ void AudienceAppear::Update() {
 }
 
 void AudienceAppear::Start() {
-    pAudience_->GetObject3D()->transform_.PlayObjEaseAnimation("Audience", "AudienceAppear");
+    pAudience_->GetObjAnimation()->transform_.PlayObjEaseAnimation("Audience", "AudienceAppear");
     currentPhase_ = [this]() {
         Playing();
     };
 }
 void AudienceAppear::Playing() {
-    bool isFinish = pAudience_->GetObject3D()->transform_.GetObjEaseAnimationPlayer()->IsFinished();
+    bool isFinish = pAudience_->GetObjAnimation()->transform_.GetObjEaseAnimationPlayer()->IsFinished();
 
     if (!isFinish) {
         return;

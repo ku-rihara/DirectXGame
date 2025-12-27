@@ -44,7 +44,7 @@ void ComboScene::LevelUp() {
         int32_t comboLevel = pCombo_->GetCurrentLevel() - levelOffset_;
 
         comboLevelObjHolder_->SetEffectMode(comboLevel, ObjEffectMode::SPAWN);
-        audienceController_->AppearAudienceByLevel(pCombo_->GetCurrentLevel());
+        audienceController_->AppearAudienceByLevel(comboLevel);
     }
 
     // チェックに戻す

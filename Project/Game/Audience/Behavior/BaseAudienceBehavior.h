@@ -20,7 +20,10 @@ public:
     virtual void Update() = 0;
     virtual void Debug()  = 0;
 
+public:
     // Getter/Setter
-    bool IsAppeared() const { return isAppeared_; }
-    void SetAppeared(bool appeared) { isAppeared_ = appeared; }
+
+    bool GetIsAppeared() const { return isAppeared_; }
+
+    void SetIsAppeared(bool appeared) { isAppeared_ = appeared; }
 };
