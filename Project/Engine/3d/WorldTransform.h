@@ -5,6 +5,7 @@
 #include "ViewProjection.h"
 #include <cstdint>
 #include <d3d12.h>
+#include <functional>
 #include <list>
 #include <memory>
 #include <string>
@@ -54,8 +55,8 @@ public:
     ~WorldTransform();
 
     // 初期化、更新
-    void Init(); 
-    void UpdateMatrix(); 
+    void Init();
+    void UpdateMatrix();
 
     /// <summary>
     /// 指定方向を向く
@@ -107,6 +108,8 @@ private:
     void ApplyAnimationToTransform();
     void InitOffsetTransform();
 
+    Vector3 ScaleCalc(bool isDirectScale);
+
 public:
     Vector3 scale_ = Vector3::OneVector();
     Vector3 rotation_;
@@ -127,6 +130,8 @@ private:
 
     Matrix4x4 billboardMatrix_;
     Matrix4x4 backToFrontMatrix_;
+
+    bool isUseDirectScale_ = false;
 
     // オブジェクトイージングアニメーション
     std::unique_ptr<ObjEaseAnimationPlayer> objEaseAnimationPlayer_;
