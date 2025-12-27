@@ -18,7 +18,7 @@ public:
     ~CameraEditor() = default;
 
     // 初期化、更新
-    void Init(const std::string& animationName, const bool& isUseCategory = false) override;
+    void Init(const std::string& animationName, bool isUseCategory = false) override;
     void Update(float speedRate = 1.0f) override;
     void EditorUpdate() override;
 
@@ -52,12 +52,12 @@ private:
 
 public:
    
-    const bool& GetAutoApplyToViewProjection() const { return autoApplyToViewProjection_; }
-    const bool& GetSequenceElementPreviewMode() const { return keyFramePreviewMode_; }
+    bool GetAutoApplyToViewProjection() const { return autoApplyToViewProjection_; }
+    bool GetSequenceElementPreviewMode() const { return keyFramePreviewMode_; }
     CameraAnimationData* GetSelectedAnimation();
 
-    void SetAutoApplyToViewProjection(const bool& enable) { autoApplyToViewProjection_ = enable; }
-    void SetSequenceElementPreviewMode(const bool& enable) { keyFramePreviewMode_ = enable; }
+    void SetAutoApplyToViewProjection(bool enable) { autoApplyToViewProjection_ = enable; }
+    void SetSequenceElementPreviewMode(bool enable) { keyFramePreviewMode_ = enable; }
     void SetViewProjection(ViewProjection* vp);
 };
 

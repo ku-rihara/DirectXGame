@@ -8,7 +8,7 @@ using namespace KetaEngine;
 void ControlPosManager::Init() {
 }
 
-void ControlPosManager::Update(const Vector3& Direction, const bool& isDraw) {
+void ControlPosManager::Update(const Vector3& Direction, bool isDraw) {
 
     for (size_t i = 0; i < movePosies_.size(); ++i) {
         obj3ds_[i]->transform_.translation_ = movePosies_[i] * Direction;

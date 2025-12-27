@@ -5,7 +5,7 @@ using namespace KetaEngine;
 #include <filesystem>
 #include <imgui.h>
 
-void CameraEditor::Init(const std::string& animationName, const bool& isUseCategory) {
+void CameraEditor::Init(const std::string& animationName, bool isUseCategory) {
     BaseEffectEditor::Init(animationName, isUseCategory);
 
     preViewCameraObj_.reset(Object3d::CreateModel("debugCube.obj"));

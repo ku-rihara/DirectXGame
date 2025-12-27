@@ -112,7 +112,7 @@ private:
 public:
     //*----------------------------- getter Methods -----------------------------*//
 
-    const bool& IsReturningToInitial() const { return returnParam_.isReturningToInitial; }
+    bool IsReturningToInitial() const { return returnParam_.isReturningToInitial; }
 };
 
 }; // KetaEngine

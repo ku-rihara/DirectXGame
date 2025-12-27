@@ -92,6 +92,7 @@ void Object3DAnimation::ChangeAnimation(const std::string& animationName) {
             animationTime_         = 0.0f;
             currentTransitionTime_ = 0.0f;
             isChange_              = true;
+            hasLoopedThisFrame_    = false;
 
             return;
         }
@@ -103,8 +104,9 @@ void Object3DAnimation::ChangeAnimation(const std::string& animationName) {
 ///============================================================
 void Object3DAnimation::SetAnimationTime(float time) {
     if (!animations_.empty()) {
-        float duration = animations_[currentAnimationIndex_].duration;
-        animationTime_ = std::fmod(time, duration);
+        float duration      = animations_[currentAnimationIndex_].duration;
+        animationTime_      = std::fmod(time, duration);
+        hasLoopedThisFrame_ = false;
     }
 }
 
@@ -115,6 +117,7 @@ void Object3DAnimation::ResetAnimation() {
     animationTime_         = 0.0f;
     currentTransitionTime_ = 0.0f;
     isChange_              = false;
+    hasLoopedThisFrame_    = false;
 }
 
 ///============================================================
@@ -140,8 +143,39 @@ void Object3DAnimation::Update(float deltaTime) {
 /// アニメーション更新
 ///============================================================
 void Object3DAnimation::UpdateAnimation(float deltaTime) {
+    float prevTime = animationTime_;
     animationTime_ += deltaTime;
-    animationTime_ = std::fmod(animationTime_, animations_[currentAnimationIndex_].duration);
+
+    float duration      = animations_[currentAnimationIndex_].duration;
+    hasLoopedThisFrame_ = false;
+
+    // ループ処理
+    if (animationTime_ >= duration) {
+        if (isLoop_) {
+            // ループする場合
+            animationTime_      = std::fmod(animationTime_, duration);
+            hasLoopedThisFrame_ = true;
+
+            // コールバック実行
+            if (onAnimationEnd_) {
+                onAnimationEnd_(animations_[currentAnimationIndex_].name);
+            }
+        } else {
+            // ループしない場合、最後のフレームで停止
+            if (prevTime < duration) {
+                // 初めて終端に到達した時のみコールバック実行
+                animationTime_      = duration;
+                hasLoopedThisFrame_ = true;
+
+                if (onAnimationEnd_) {
+                    onAnimationEnd_(animations_[currentAnimationIndex_].name);
+                }
+            } else {
+                // すでに終端にいる場合はそのまま
+                animationTime_ = duration;
+            }
+        }
+    }
 
     if (isChange_) {
         AnimationTransition(deltaTime);

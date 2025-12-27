@@ -40,7 +40,7 @@ public:
     /// </summary>
     /// <param name="Direction">方向</param>
     /// <param name="isDraw">描画フラグ</param>
-    void Update(const Vector3& Direction = {1.0f, 1.0f, 1.0f}, const bool& isDraw = false);
+    void Update(const Vector3& Direction = {1.0f, 1.0f, 1.0f}, bool isDraw = false);
 
     /// <summary>
     /// 親トランスフォームの設定
@@ -82,7 +82,7 @@ public:
     std::vector<Vector3> GetWorldPositions() const;
     std::vector<Vector3> GetLocalPositions() const;
 
-    void SetIsDraw(const bool& is) { isDraw_ = is; }
+    void SetIsDraw(bool is) { isDraw_ = is; }
 };
 
 }; // KetaEngine
