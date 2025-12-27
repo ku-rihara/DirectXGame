@@ -1,14 +1,13 @@
 #pragma once
-#include"BaseObject/BaseObject.h"
 #include "Animation/Object3DAnimation.h"
-#include "Editor/ParameterEditor/GlobalParameter.h"
+#include "BaseObject/BaseObject.h"
 #include "Behavior/BaseAudienceBehavior.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include <cstdint>
 #include <memory>
 #include <string>
-
 
 enum class SeatSide {
     LEFT,
@@ -38,20 +37,18 @@ public:
     // adaptPos
     void AdaptPosition(const Vector2& ZXBasePos);
 
-  // changeBehavior
-     void ChangeBehavior(std::unique_ptr<BaseAudienceBehavior> behavior);
+    // changeBehavior
+    void ChangeBehavior(std::unique_ptr<BaseAudienceBehavior> behavior);
     void AppearByComboLevel(int32_t level);
-    void CloseByComboLevel(int32_t level);
+    void DisAppearByComboLevel(int32_t level);
 
 private:
-
     // オブジェクト生成
     void CreateObject();
     // パラメータ登録
     void RegisterParams();
     // RotateY適応
     void RotateYChangeBySeatSide(SeatSide seatSide);
-    
 
 private:
     // global parameter
@@ -64,7 +61,7 @@ private:
     int32_t seatSideIndex_ = 0;
     int32_t audienceIndex_ = 0;
 
-    // 
+    //
     int32_t seatRowNum_;
     int32_t appearComboLevel_;
 
@@ -81,7 +78,7 @@ private:
 public:
     KetaEngine::Object3DAnimation* GetObjAnimation() { return objAnimation_.get(); }
     int32_t GetSeatRowNum() const { return seatRowNum_; }
-    AudienceRoot* GetAudienceRoot()const;
+    AudienceRoot* GetAudienceRoot() const;
 
     void SetBaseScale(Vector3 scale);
 };

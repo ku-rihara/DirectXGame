@@ -28,11 +28,13 @@ public:
 
     void CheckIsLevelUp(); //< レベルアップチェック
     void LevelUp();        //< レベルアップ処理
-    void LevelReset();     //< レベルリセット
+    void LevelReset();    //< レベルリセット
 
 private:
     // メンバ関数のポインタ配列
     static void (ComboScene::* spFuncTable_[])();
+
+    int32_t GetComboLevelZeroStart();
 
 private:
     Player* pPlayer_                          = nullptr;

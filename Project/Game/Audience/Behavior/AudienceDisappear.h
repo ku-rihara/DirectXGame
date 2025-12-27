@@ -17,6 +17,7 @@ private:
     /// ===================================================
     /// private methods
     /// ===================================================
+    void Init();
     void Start();
     void AnimationPlaying();
     void EasingPlaying();

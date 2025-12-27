@@ -9,7 +9,7 @@ private:
  
 public:
     // コンストラクタ
-    AudienceRoot(Audience* audience);
+    AudienceRoot(Audience* audience,bool isDraw);
     ~AudienceRoot();
 
     void Update() override;
@@ -22,5 +22,5 @@ private:
     /// ===================================================
     /// private variables
     /// ===================================================
-
+    bool isDraw_;
 };

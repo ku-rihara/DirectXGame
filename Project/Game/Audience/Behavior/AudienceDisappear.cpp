@@ -13,7 +13,7 @@ AudienceDisappear::AudienceDisappear(Audience* audience)
 
     // 初期フェーズをStartに設定
     currentPhase_ = [this]() {
-        Start();
+        Init();
     };
 
     isAnimationEnd_ = false;
@@ -34,6 +34,12 @@ void AudienceDisappear::Update() {
     if (currentPhase_) {
         currentPhase_();
     }
+}
+
+void AudienceDisappear::Init() {
+    currentPhase_ = [this]() {
+        Start();
+    };
 }
 
 void AudienceDisappear::Start() {
@@ -75,8 +81,7 @@ void AudienceDisappear::EasingPlaying() {
 
 void AudienceDisappear::End() {
     // 終了処理
-    BaseAudienceBehavior::SetIsAppeared(false);
-    pAudience_->ChangeBehavior(std::make_unique<AudienceRoot>(pAudience_));
+    pAudience_->ChangeBehavior(std::make_unique<AudienceRoot>(pAudience_,false));
 }
 
 void AudienceDisappear::Debug() {

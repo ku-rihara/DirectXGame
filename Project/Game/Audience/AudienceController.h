@@ -25,6 +25,7 @@ public:
 
     // appear
     void AppearAudienceByLevel(int32_t level);
+    void DisAppearAudience(int32_t level);
 
 private:
     void AdaptPositions(int32_t index);

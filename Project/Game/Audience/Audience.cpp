@@ -24,20 +24,22 @@ void Audience::Init(int32_t index) {
     CreateObject();
 
     // behavior
-    ChangeBehavior(std::make_unique<AudienceRoot>(this));
+    ChangeBehavior(std::make_unique<AudienceRoot>(this,false));
 }
 
 void Audience::CreateObject() {
     objAnimation_.reset(KetaEngine::Object3DAnimation::CreateModel("AudienceJump.gltf"));
     objAnimation_->Init();
     objAnimation_->Add("AudienceDisAppear.gltf");
+    objAnimation_->transform_.Init();
     objAnimation_->transform_.SetParent(&baseTransform_);
-    objAnimation_->transform_.scale_ = Vector3::ZeroVector();
+    objAnimation_->transform_.scale_ = Vector3::OneVector();
 }
 
 void Audience::Update() {
 
     behavior_->Update();
+    behavior_->Debug();
 
     objAnimation_->transform_.translation_.x = positionX_;
     // Y回転設定
@@ -80,7 +82,7 @@ void Audience::AppearByComboLevel(int32_t level) {
     audienceRoot->ChangeAppearMode();
 }
 
-void Audience::CloseByComboLevel(int32_t level) {
+void Audience::DisAppearByComboLevel(int32_t level) {
 
     // クローズ該当か確認
     if (appearComboLevel_ > level) {
@@ -108,6 +110,10 @@ void Audience::AdjustParam() {
 
     ImGui::SeparatorText(groupName_.c_str());
     ImGui::PushID(groupName_.c_str());
+
+    ImGui::DragFloat3("s", &objAnimation_->transform_.scale_.x);
+    ImGui::DragFloat3("r", &objAnimation_->transform_.rotation_.x);
+    ImGui::DragFloat3("t", &objAnimation_->transform_.translation_.x);
 
     // SeatsRow
     ImGui::InputInt("seatRowNum", &seatRowNum_, 0, 10);

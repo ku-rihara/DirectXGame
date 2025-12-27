@@ -40,8 +40,8 @@ void ComboScene::LevelUp() {
 
     // レベル対象のオブジェクト、観客をスポーン
     if (pCombo_->GetCurrentLevel() <= static_cast<int32_t>(ComboLevelObjType::COUNT)) {
-        // 例としてpCombo_->GetCurrentLevel()が1になったらindex[0]の演出が始まる
-        int32_t comboLevel = pCombo_->GetCurrentLevel() - levelOffset_;
+
+        int32_t comboLevel = GetComboLevelZeroStart();
 
         comboLevelObjHolder_->SetEffectMode(comboLevel, ObjEffectMode::SPAWN);
         audienceController_->AppearAudienceByLevel(comboLevel);
@@ -52,13 +52,21 @@ void ComboScene::LevelUp() {
 }
 
 void ComboScene::LevelReset() {
+    int32_t comboLevel = GetComboLevelZeroStart();
     // 背景オブジェクトClose
-    comboLevelObjHolder_->CloseForComboLevel(pCombo_->GetCurrentLevel());
+    comboLevelObjHolder_->CloseForComboLevel(comboLevel);
+    audienceController_->DisAppearAudience(comboLevel);
     // コンボリセット
     pCombo_->Reset();
     // チェックに戻す
     state_ = State::CHECK;
 }
+
+int32_t ComboScene::GetComboLevelZeroStart() {
+    // 例としてpCombo_->GetCurrentLevel()が1になったらindex[0]の演出が始まる
+    return pCombo_->GetCurrentLevel() - levelOffset_;
+}
+
 
 ///--------------------------------------------------------------------------------
 /// class Set

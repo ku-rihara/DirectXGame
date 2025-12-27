@@ -38,6 +38,12 @@ void AudienceController::AppearAudienceByLevel(int32_t level) {
     }
 }
 
+void AudienceController::DisAppearAudience(int32_t level) {
+    for (int32_t i = 0; i < audienceMaxNum_; i++) {
+        audiences_[i]->DisAppearByComboLevel(level);
+    }
+ }
+
 void AudienceController::RegisterParams() {
     globalParameter_->Regist<Vector2>(groupName_, "BaseSeatsZYPos", &baseSeatsZYPos_);
     globalParameter_->Regist<Vector2>(groupName_, "SeatsRowZYOffset", &seatsRowZYOffset_);

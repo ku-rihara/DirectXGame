@@ -74,7 +74,7 @@ void ComboLevelObjHolder::EasingAllReset() {
 
 void ComboLevelObjHolder::CloseForComboLevel(int32_t level) {
     // レベルに応じたオブジェクトのエフェクトモードをCLOSEに設定
-    for (int32_t i = 0; i < level; ++i) {
+    for (int32_t i = 0; i <= level; ++i) {
 
         if (i >= static_cast<int32_t>(ComboLevelObjType::COUNT)) {
             continue;
