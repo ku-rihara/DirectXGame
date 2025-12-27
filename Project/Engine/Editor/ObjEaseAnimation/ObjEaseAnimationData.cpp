@@ -67,19 +67,20 @@ void ObjEaseAnimationData::UpdateKeyFrameProgression() {
 
 void ObjEaseAnimationData::AdvanceToNexTSequenceElement() {
     if (activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size()) - 1) {
+        // 前のセクションの最終値を取得
+        Vector3 startScale       = sectionElements_[activeKeyFrameIndex_]->GetCurrentScale();
+        Vector3 startRotation    = sectionElements_[activeKeyFrameIndex_]->GetCurrentRotation();
+        Vector3 startTranslation = sectionElements_[activeKeyFrameIndex_]->GetCurrentTranslation();
+
+        // 次のセクションへ進む
         activeKeyFrameIndex_++;
 
         if (activeKeyFrameIndex_ < static_cast<int32_t>(sectionElements_.size())) {
-            // 前のキーフレームの最終値を次のキーフレームの開始値として設定
-            Vector3 startScale       = GetActiveKeyFrameValue(TransformType::Scale);
-            Vector3 startRotation    = GetActiveKeyFrameValue(TransformType::Rotation);
-            Vector3 startTranslation = GetActiveKeyFrameValue(TransformType::Translation);
-
+            // 次のセクションの開始値として設定
             sectionElements_[activeKeyFrameIndex_]->SetStartValues(startScale, startRotation, startTranslation);
         }
     }
 }
-
 void ObjEaseAnimationData::Reset() {
     // 全てのキーフレームをリセット
     for (auto& section : sectionElements_) {
