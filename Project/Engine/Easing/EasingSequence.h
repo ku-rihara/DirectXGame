@@ -58,7 +58,7 @@ private:
 public:
     const size_t& GetCurrentIndex() const { return currentStep_; }
     const size_t& GetStepCount() const { return steps_.size(); }
-    void SetLoop(const bool& loop) { loop_ = loop; }
+    void SetLoop(bool loop) { loop_ = loop; }
     void SetOnAllFinishCallback(std::function<void()> callBack) { onAllFinishCallback_ = callBack; }
 };
 

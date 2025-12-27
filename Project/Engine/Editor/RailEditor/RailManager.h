@@ -80,7 +80,7 @@ public:
     void SetParent(WorldTransform* parent);
     void SetScale(Vector3 scale) { scale_ = scale; }
     void SetRailMoveTime(float t) { railMoveTime_ = t; }
-    void SetIsRoop(const bool& is) { isRoop_ = is; }
+    void SetIsRoop(bool is) { isRoop_ = is; }
     void SetFovAngleY(float value) { viewProjection_.fovAngleY_ = value; }
     void SetAspectRatio(float value) { viewProjection_.aspectRatio_ = value; }
     void SetNearZ(float value) { viewProjection_.nearZ_ = value; }

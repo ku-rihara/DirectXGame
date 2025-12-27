@@ -9,15 +9,18 @@ private:
  
 public:
     // コンストラクタ
-    AudienceRoot(Audience* audience);
+    AudienceRoot(Audience* audience,bool isDraw);
     ~AudienceRoot();
 
     void Update() override;
     void Debug() override;
 
+    void ChangeCloseMode();
+    void ChangeAppearMode();
+
 private:
     /// ===================================================
     /// private variables
     /// ===================================================
-
+    bool isDraw_;
 };

@@ -10,8 +10,6 @@ protected:
     std::string name_;
     // 観客
     Audience* pAudience_ = nullptr;
-    // 出現フラグ
-    bool isAppeared_ = false;
 
 public:
     BaseAudienceBehavior(const std::string& name, Audience* audience);
@@ -20,7 +18,11 @@ public:
     virtual void Update() = 0;
     virtual void Debug()  = 0;
 
+private:
+   /* bool isDraw_;*/
+
+public:
     // Getter/Setter
-    bool IsAppeared() const { return isAppeared_; }
-    void SetAppeared(bool appeared) { isAppeared_ = appeared; }
+   /* bool GetIsDraw() const { return isDraw_; }
+    void SetIsDraw(bool is) { isDraw_ = is; }*/
 };

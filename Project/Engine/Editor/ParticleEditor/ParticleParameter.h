@@ -170,7 +170,7 @@ public:
     void SetParameter(const Parameters& param) { parameters_ = param; }
     void SetGroupParameter(const GroupParamaters& groupParam) { groupParamaters_ = groupParam; }
     void SetPreBillBordType(const int& preBillBordType) { billBordType_ = preBillBordType; }
-    void SetPreIsShot(const bool& preIsShot) { isShot_ = preIsShot; }
+    void SetPreIsShot(bool preIsShot) { isShot_ = preIsShot; }
 };
 
 }; // KetaEngine

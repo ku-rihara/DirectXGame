@@ -1,12 +1,13 @@
 #pragma once
 
 #include "3d/BaseObject3d.h"
-#include "Line3D/Line3D.h"
 #include "Animation/SkeletonData.h"
 #include "Animation/SkinCluster.h"
 #include "AnimationData.h"
+#include "Line3D/Line3D.h"
 #include "ModelAnimation.h"
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <Quaternion.h>
 #include <string>
@@ -20,13 +21,14 @@ namespace KetaEngine {
 
 class Object3DAnimation : public BaseObject3d {
 public:
+  
     Object3DAnimation() = default;
     ~Object3DAnimation() override;
 
     /// ============================================================
     /// public methods
     /// ============================================================
-   
+
     void Init(); //< 初期化
     void ResetAnimation(); //< アニメーションリセット
     void DebugImGui() override; //< ImGuiデバッグ
@@ -135,12 +137,13 @@ private:
     /// <returns>ジョイントのポインタ</returns>
     const Joint* GetJoint(const std::string& name) const;
 
-    void CreateWVPResource() override; //< WVPリソース作成
+    void CreateWVPResource() override;      //< WVPリソース作成
     void CreateMaterialResource() override; //< マテリアルリソース作成
-    void CreateShadowMap() override; //< シャドウマップ作成
-    void TransitionFinish(); //< 遷移終了
-    void UpdateSkeleton(); //< スケルトン更新
-    void UpdateSkinCluster(); //< スキンクラスター更新
+    void CreateShadowMap() override;        //< シャドウマップ作成
+
+    void TransitionFinish();                //< 遷移終了
+    void UpdateSkeleton();                  //< スケルトン更新
+    void UpdateSkinCluster();               //< スキンクラスター更新
 
 private:
     /// ============================================================
@@ -167,6 +170,13 @@ private:
     bool isChange_                 = false;
     float transitionDuration_      = 0.3f;
 
+    // ループ関連
+    bool isLoop_             = true;
+    bool hasLoopedThisFrame_ = false;
+
+    // コールバック
+    std::function<void(const std::string& animationName)> onAnimationEnd_;
+
 public:
     /// ============================================================
     /// getter/setter methods
@@ -177,8 +187,12 @@ public:
     float GetAnimationDuration() const;
     int32_t GetCurrentAnimationIndex() const { return currentAnimationIndex_; }
     const std::string& GetCurrentAnimationName() const;
-    const bool& IsAnimationTransitioning() const { return isChange_; }
+    bool IsAnimationTransitioning() const { return isChange_; }
+    bool IsLoop() const { return isLoop_; }
+
     void SetTransitionDuration(float duration) { transitionDuration_ = duration; }
+    void SetLoop(bool loop) { isLoop_ = loop; }
+    void SetAnimationEndCallback(std::function<void(const std::string& animationName)> callback) { onAnimationEnd_ = callback; }
 };
 
-}; // KetaEngine
+} // KetaEngine

@@ -7,7 +7,7 @@ using namespace KetaEngine;
 RailEditor::RailEditor()   = default;
 RailEditor ::~RailEditor() = default;
 
-void RailEditor::Init(const std::string& editorName, const bool& isUseCategory) {
+void RailEditor::Init(const std::string& editorName, bool isUseCategory) {
     BaseEffectEditor::Init(editorName, isUseCategory);
 
     preViewObj_.reset(Object3d::CreateModel("DebugCube.obj"));

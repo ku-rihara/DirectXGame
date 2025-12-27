@@ -149,7 +149,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(
 }
 Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DirectXCommon::InitializeDescriptorHeap(
     Microsoft::WRL::ComPtr<ID3D12Device> device, const D3D12_DESCRIPTOR_HEAP_TYPE& heapType,
-    const UINT& numDescriptors, const bool& shaderVisible) {
+    const UINT& numDescriptors, bool shaderVisible) {
 
     Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap = nullptr;
     D3D12_DESCRIPTOR_HEAP_DESC DescriptorHeapDesc{};

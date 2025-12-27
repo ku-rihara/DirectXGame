@@ -4,9 +4,16 @@
 
 void AudienceController::Init() {
 
+    // グローバルパラメータ
+    globalParameter_ = KetaEngine::GlobalParameter::GetInstance();
+    globalParameter_->CreateGroup(groupName_);
+    RegisterParams();
+    globalParameter_->SyncParamForGroup(groupName_);
+
     for (int32_t i = 0; i < audienceMaxNum_; i++) {
         audiences_[i] = std::make_unique<Audience>();
         audiences_[i]->Init(i);
+        audiences_[i]->SetBaseScale(baseTransformScale_);
         AdaptPositions(i);
     }
 }
@@ -14,8 +21,8 @@ void AudienceController::Init() {
 void AudienceController::AdaptPositions(int32_t index) {
 
     if (audiences_[index]) {
-        SeatsRow seatsRow = audiences_[index]->GetSeatsRow();
-        audiences_[index]->AdaptPosition(seatsRowZYPos_[static_cast<int32_t>(seatsRow)]);
+        int32_t rowNum = audiences_[index]->GetSeatRowNum();
+        audiences_[index]->AdaptPosition(GetSeatsRowZYPos(rowNum));
     }
 }
 
@@ -31,12 +38,23 @@ void AudienceController::AppearAudienceByLevel(int32_t level) {
     }
 }
 
-void AudienceController::RegisterParams() {
-
-    for (int32_t i = 0; i < seatsRowZYPos_.size(); i++) {
-        std::string key = "SeatsRowZYPos" + SeatsRowToString(static_cast<SeatsRow>(i));
-        globalParameter_->Regist<Vector2>(groupName_, key, &seatsRowZYPos_[i]);
+void AudienceController::DisAppearAudience(int32_t level) {
+    for (int32_t i = 0; i < audienceMaxNum_; i++) {
+        audiences_[i]->DisAppearByComboLevel(level);
     }
+ }
+
+void AudienceController::RegisterParams() {
+    globalParameter_->Regist<Vector2>(groupName_, "BaseSeatsZYPos", &baseSeatsZYPos_);
+    globalParameter_->Regist<Vector2>(groupName_, "SeatsRowZYOffset", &seatsRowZYOffset_);
+    globalParameter_->Regist<Vector3>(groupName_, "baseTransformScale", &baseTransformScale_);
+}
+
+Vector2 AudienceController::GetSeatsRowZYPos(int32_t row) const {
+    // ベース位置 + オフセット × 列番号
+    return Vector2{
+        baseSeatsZYPos_.x + seatsRowZYOffset_.x * row,
+        baseSeatsZYPos_.y + seatsRowZYOffset_.y * row};
 }
 
 void AudienceController::AdjustParam() {
@@ -45,14 +63,15 @@ void AudienceController::AdjustParam() {
     if (ImGui::CollapsingHeader(groupName_.c_str())) {
         ImGui::PushID(groupName_.c_str());
 
-        for (int32_t i = 0; i < seatsRowZYPos_.size(); i++) {
-            ImGui::DragFloat2(
-                ("SeatsRowZYPos_" + SeatsRowToString(static_cast<SeatsRow>(i))).c_str(),
-                &seatsRowZYPos_[i].x,
-                0.1f);
-        }
+        // transform
+        ImGui::DragFloat3("baseScale", &baseTransformScale_.x, 0.01f);
+        ImGui::DragFloat2("Base Seats ZY Pos", &baseSeatsZYPos_.x, 0.1f);
+
+        // オフセット
+        ImGui::DragFloat2("Seats Row ZY Offset", &seatsRowZYOffset_.x, 0.1f);
 
         for (int32_t i = 0; i < audienceMaxNum_; i++) {
+            audiences_[i]->SetBaseScale(baseTransformScale_);
             AdaptPositions(i);
         }
 
@@ -69,20 +88,4 @@ void AudienceController::AdjustParam() {
     }
 
 #endif // _DEBUG
-}
-
-std::string AudienceController::SeatsRowToString(SeatsRow seatsRow) {
-
-    switch (seatsRow) {
-    case SeatsRow::FRONT:
-        return "Front";
-    case SeatsRow::MIDDLE:
-        return "Middle";
-    case SeatsRow::BACK:
-        return "Back";
-    case SeatsRow::COUNT:
-        return "Count";
-    }
-
-    return "Unknown";
 }

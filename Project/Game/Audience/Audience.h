@@ -1,19 +1,13 @@
 #pragma once
 #include "Animation/Object3DAnimation.h"
-#include "Editor/ParameterEditor/GlobalParameter.h"
+#include "BaseObject/BaseObject.h"
 #include "Behavior/BaseAudienceBehavior.h"
+#include "Editor/ParameterEditor/GlobalParameter.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include <cstdint>
 #include <memory>
 #include <string>
-
-enum class SeatsRow {
-    FRONT,
-    MIDDLE,
-    BACK,
-    COUNT,
-};
 
 enum class SeatSide {
     LEFT,
@@ -23,10 +17,12 @@ enum class SeatSide {
     COUNT,
 };
 
+class AudienceRoot;
+
 /// <summary>
 /// 観客
 /// </summary>
-class Audience {
+class Audience : public BaseObject {
 public:
     Audience()  = default;
     ~Audience() = default;
@@ -42,18 +38,23 @@ public:
     void AdaptPosition(const Vector2& ZXBasePos);
 
     // changeBehavior
+    void ChangeBehavior(std::unique_ptr<BaseAudienceBehavior> behavior);
     void AppearByComboLevel(int32_t level);
+    void DisAppearByComboLevel(int32_t level);
 
 private:
+    // オブジェクト生成
+    void CreateObject();
+    // パラメータ登録
     void RegisterParams();
-    void RotateYChangeForSeatSide(SeatSide seatSide);
-    void ChangeBehavior(std::unique_ptr<BaseAudienceBehavior> behavior);
+    // RotateY適応
+    void RotateYChangeBySeatSide(SeatSide seatSide);
 
 private:
     // global parameter
     KetaEngine::GlobalParameter* globalParameter_ = nullptr;
     std::string groupName_                        = "Audience";
-    const std::string folderName_                 = "Application/Audiences";
+    const std::string folderName_                 = "Audiences";
 
     // index
     int32_t seatsRowIndex_ = 0;
@@ -61,20 +62,23 @@ private:
     int32_t audienceIndex_ = 0;
 
     //
+    int32_t seatRowNum_;
     int32_t appearComboLevel_;
 
     // enum
-    SeatsRow seatsRow_ = SeatsRow::FRONT;
     SeatSide seatSide_ = SeatSide::LEFT;
 
     // animationObj
     std::unique_ptr<KetaEngine::Object3DAnimation> objAnimation_;
-    KetaEngine::WorldTransform baseTransform_;
     float positionX_;
 
     // behavior
     std::unique_ptr<BaseAudienceBehavior> behavior_;
 
 public:
-    SeatsRow GetSeatsRow() const { return seatsRow_; }
+    KetaEngine::Object3DAnimation* GetObjAnimation() { return objAnimation_.get(); }
+    int32_t GetSeatRowNum() const { return seatRowNum_; }
+    AudienceRoot* GetAudienceRoot() const;
+
+    void SetBaseScale(Vector3 scale);
 };

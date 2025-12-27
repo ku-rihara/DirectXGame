@@ -22,17 +22,17 @@
             1.0,
             1.0
         ],
-        "Translation_EaseType": 0,
+        "Translation_EaseType": 6,
         "Translation_IsActive": true,
         "Translation_IsReturnToOrigin": true,
-        "Translation_MaxTime": 0.15000000596046448,
+        "Translation_MaxTime": 0.10000000149011612,
         "Translation_RailFileName": "",
-        "Translation_ReturnEaseType": 0,
-        "Translation_ReturnMaxTime": 0.20000000298023224,
+        "Translation_ReturnEaseType": 6,
+        "Translation_ReturnMaxTime": 0.18000000715255737,
         "Translation_UseRail": false,
         "Translation_endValue": [
             0.0,
-            5.340000152587891,
+            6.21999979019165,
             0.0
         ],
         "returnStartTime": 0.0,

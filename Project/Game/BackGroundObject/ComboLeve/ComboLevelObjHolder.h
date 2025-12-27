@@ -54,7 +54,7 @@ public:
     /// </summary>
     /// <param name="type">オブジェクトタイプ</param>
     /// <param name="mode">エフェクトモード</param>
-    void SetEffectMode(const ComboLevelObjType& type, const ObjEffectMode& mode);
+    void SetEffectMode(int32_t level, const ObjEffectMode& mode);
 
     void EasingAllReset(); //< 全イージングリセット
 

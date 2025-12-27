@@ -13,7 +13,7 @@ Sprite::~Sprite() {
     }
 }
 
-Sprite* Sprite::Create(const std::string& textureName, const bool& isAbleEdit) {
+Sprite* Sprite::Create(const std::string& textureName, bool isAbleEdit) {
     // 新しいSpriteインスタンスを作成
     std::unique_ptr<Sprite> sprite = std::make_unique<Sprite>();
 
@@ -24,7 +24,7 @@ Sprite* Sprite::Create(const std::string& textureName, const bool& isAbleEdit) {
     return sprite.release();
 }
 
-void Sprite::ParamEditorSet(const std::string& textureName, const bool& isAbleEditor) {
+void Sprite::ParamEditorSet(const std::string& textureName, bool isAbleEditor) {
     if (!isAbleEditor) {
         return;
     }

@@ -5,6 +5,7 @@
 #include "ViewProjection.h"
 #include <cstdint>
 #include <d3d12.h>
+#include <functional>
 #include <list>
 #include <memory>
 #include <string>
@@ -54,8 +55,8 @@ public:
     ~WorldTransform();
 
     // 初期化、更新
-    void Init(); 
-    void UpdateMatrix(); 
+    void Init();
+    void UpdateMatrix();
 
     /// <summary>
     /// 指定方向を向く
@@ -107,6 +108,8 @@ private:
     void ApplyAnimationToTransform();
     void InitOffsetTransform();
 
+    Vector3 ScaleCalc(bool isDirectScale);
+
 public:
     Vector3 scale_ = Vector3::OneVector();
     Vector3 rotation_;
@@ -128,6 +131,8 @@ private:
     Matrix4x4 billboardMatrix_;
     Matrix4x4 backToFrontMatrix_;
 
+    bool isAdaptDirectScale_ = false;
+
     // オブジェクトイージングアニメーション
     std::unique_ptr<ObjEaseAnimationPlayer> objEaseAnimationPlayer_;
 
@@ -144,6 +149,7 @@ public:
     /// <param name="animation">アニメーション</param>
     /// <param name="jointName">ジョイント名</param>
     void SetParentJoint(const Object3DAnimation* animation, const std::string& jointName);
+    void SetIsAdaptDirectScale(bool is) { isAdaptDirectScale_ = is; }
 
     Vector3 GetLocalPos() const; //< ローカル座標取得
     Vector3 GetWorldPos() const; //< ワールド座標取得
@@ -158,4 +164,4 @@ public:
     ObjEaseAnimationPlayer* GetObjEaseAnimationPlayer() { return objEaseAnimationPlayer_.get(); }
 };
 
-}; // KetaEngine
+} // KetaEngine
