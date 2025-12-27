@@ -13,6 +13,12 @@ AudienceDisappear::AudienceDisappear(Audience* audience)
     currentPhase_ = [this]() {
         Start();
     };
+
+    isAnimationEnd_ = false;
+
+     pAudience_->GetObjAnimation()->SetAnimationEndCallback([]() {
+       
+    });
 }
 
 AudienceDisappear::~AudienceDisappear() {
@@ -26,7 +32,7 @@ void AudienceDisappear::Update() {
 }
 
 void AudienceDisappear::Start() {
-    pAudience_->GetObject3D()->transform_.PlayObjEaseAnimation("Audience", "AudienceClose");
+    pAudience_->GetObjAnimation()->ChangeAnimation("AudienceDisAppear");
 
     // 次のフェーズへ
     currentPhase_ = [this]() {
@@ -36,6 +42,12 @@ void AudienceDisappear::Start() {
 
 void AudienceDisappear::AnimationPlaying() {
     // アニメーション再生処理
+
+    if (!isAnimationEnd_) {
+        return;
+    }
+
+    pAudience_->GetObject3D()->transform_.PlayObjEaseAnimation("Audience", "AudienceAppear");
 
     // 次のフェーズへ
     currentPhase_ = [this]() {

@@ -26,4 +26,5 @@ private:
     /// private variables
     /// ===================================================
     std::function<void()> currentPhase_;
+    bool isAnimationEnd_;
 };
