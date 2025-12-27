@@ -4,7 +4,7 @@ using namespace KetaEngine;
 #include "Editor/ParameterEditor/GlobalParameter.h"
 #include <imgui.h>
 
-void ParticleEditor::Init(const std::string& typeName, const bool& isUseCategory) {
+void ParticleEditor::Init(const std::string& typeName, bool isUseCategory) {
     BaseEffectEditor::Init(typeName, isUseCategory);
 }
 

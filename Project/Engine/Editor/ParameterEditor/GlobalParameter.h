@@ -133,8 +133,8 @@ public:
     void ClearRegistersForGroup(const std::string& groupName);
 
     void ResetAllRegister(); //< 全登録リセット
-    void SyncAll(); //< 全同期
-    void LoadFiles(); //< 全ファイル読み込み
+    void SyncAll();          //< 全同期
+    void LoadFiles();        //< 全ファイル読み込み
     bool HasRegisters(const std::string& groupName) const;
 
 private:

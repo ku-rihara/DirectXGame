@@ -48,7 +48,7 @@ public:
     /// <param name="textureName">テクスチャのファイル名</param>
     /// <param name="isAbleEdit">パラメータ編集を可能にするかのフラグ</param>
     /// <returns>作成されたSpriteのポインタ</returns>
-    static Sprite* Create(const std::string& textureName, const bool& isAbleEdit = true);
+    static Sprite* Create(const std::string& textureName, bool isAbleEdit = true);
     void CreateSprite(const std::string& textureName);
 
     void AdjustParam(); //< パラメータ調整
@@ -61,7 +61,7 @@ private:
     /// </summary>
     /// <param name="textureName">テクスチャのファイル名</param>
     /// <param name="isAbleEditor">パラメータ編集を可能にするかのフラグ</param>
-    void ParamEditorSet(const std::string& textureName, const bool& isAbleEditor);
+    void ParamEditorSet(const std::string& textureName, bool isAbleEditor);
 
 public:
     // Transform
@@ -117,9 +117,9 @@ public:
     const Vector2& GetTextureLeftTop() const { return textureLeftTop_; }
     int32_t GetLayerNum() const { return layerNum_; }
     const Parameter& GetStartParameter() const { return parameter_; }
-    const bool& GetIsFlipX() const { return isFlipX_; }
-    const bool& GetIsFlipY() const { return isFlipY_; }
-    const bool& GetIsDraw() const { return isDraw_; };
+    bool GetIsFlipX() const { return isFlipX_; }
+    bool GetIsFlipY() const { return isFlipY_; }
+    bool GetIsDraw() const { return isDraw_; };
 
     ///=========================================================================================
     ///  setter
@@ -128,14 +128,14 @@ public:
     void SetAnchorPoint(const Vector2& anchorPoint) { anchorPoint_ = anchorPoint; }
     void SetTextureLeftTop(const Vector2& leftTop) { textureLeftTop_ = leftTop; }
 
-    void SetIsFlipX(const bool& isFlip) { isFlipX_ = isFlip; }
-    void SetIsFlipY(const bool& isFlip) { isFlipY_ = isFlip; }
+    void SetIsFlipX(bool isFlip) { isFlipX_ = isFlip; }
+    void SetIsFlipY(bool isFlip) { isFlipY_ = isFlip; }
 
     void SetColor(const Vector3& color);
     void SetAlpha(float alpha);
 
     void SetLayerNum(int32_t layerNum) { layerNum_ = layerNum; }
-    void SetIsDraw(const bool& isDraw) { isDraw_ = isDraw; }
+    void SetIsDraw(bool isDraw) { isDraw_ = isDraw; }
 };
 
 }; // KetaEngine

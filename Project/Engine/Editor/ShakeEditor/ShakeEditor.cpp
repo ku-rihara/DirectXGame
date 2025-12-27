@@ -3,7 +3,7 @@
 using namespace KetaEngine;
 #include <imgui.h>
 
-void ShakeEditor::Init(const std::string& editorName, const bool& isUseCategory) {
+void ShakeEditor::Init(const std::string& editorName, bool isUseCategory) {
     BaseEffectEditor::Init(editorName, isUseCategory);
 
     preViewObj_.reset(Object3d::CreateModel("debugCube.obj"));

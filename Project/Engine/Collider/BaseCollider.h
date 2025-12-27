@@ -67,14 +67,14 @@ public:
     /// getter  methods
     /// ===================================================
     uint32_t GetTypeID() const { return typeID_; }
-    const bool& GetIsColliding() const { return isColliding_; }
-    const bool& GetIsCollision() const { return isAdaptCollision; }
+    bool GetIsColliding() const { return isColliding_; }
+    bool GetIsCollision() const { return isAdaptCollision; }
     /// ===================================================
     /// setter  methods
     /// ===================================================
     void SetTypeID(uint32_t typeID) { typeID_ = typeID; }
-    void SetColliding(const bool& colliding) { isColliding_ = colliding; }
-    void SetIsAdaptCollision(const bool& is) { isAdaptCollision = is; }
+    void SetColliding(bool colliding) { isColliding_ = colliding; }
+    void SetIsAdaptCollision(bool is) { isAdaptCollision = is; }
 };
 
 }; // KetaEngine

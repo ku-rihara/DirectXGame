@@ -92,7 +92,7 @@ private:
 
 public:
     // getter
-    const bool& GetIsMoveForRail() const { return isMoveForRail_; }
+    bool GetIsMoveForRail() const { return isMoveForRail_; }
     float GetMoveSpeed() const { return moveSpeed_; }
     bool IsUsingRailPlayer() const { return useRailPlayer_; }
     RailPlayer* GetRailPlayer() { return railPlayer_.get(); }
@@ -104,7 +104,7 @@ public:
     void SetBlendMode(const BlendMode& blendmode);
     void SetBillBordType(const BillboardType& billboardType);
     void SetParentBasePos(WorldTransform* parent);
-    void SetIsMoveForRail(const bool& isMoveForRail) { isMoveForRail_ = isMoveForRail; }
+    void SetIsMoveForRail(bool isMoveForRail) { isMoveForRail_ = isMoveForRail; }
     void SetMoveSpeed(float moveSpeed) { moveSpeed_ = moveSpeed; }
     void SetTargetPosition(const Vector3& targetPos) { parameters_.targetPos = targetPos; }
     void SetRailPlayerSpeed(float speed) { railPlayerSpeed_ = speed; }

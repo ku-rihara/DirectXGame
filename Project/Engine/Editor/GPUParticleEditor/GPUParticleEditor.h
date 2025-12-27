@@ -16,7 +16,7 @@ public:
 
     //*----------------------------- public Methods -----------------------------*//
 
-    void Init(const std::string& typeName, const bool& isUseCategory = false) override;
+    void Init(const std::string& typeName, bool isUseCategory = false) override;
     void Update(float speedRate = 1.0f) override;
     void EditorUpdate() override;
     void PlaySelectedAnimation() override;

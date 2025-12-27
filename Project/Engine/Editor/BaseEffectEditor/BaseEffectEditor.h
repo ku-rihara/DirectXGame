@@ -25,7 +25,7 @@ public:
 
     //*----------------------------- public Methods -----------------------------*//
 
-    virtual void Init(const std::string& typeName, const bool& isUseCategory = false);
+    virtual void Init(const std::string& typeName, bool isUseCategory = false);
     virtual void Update(float deltaTimeOrSpeedRate);
     virtual void EditorUpdate();
 
@@ -102,7 +102,7 @@ public:
     TEffectData* GetSelectedEffect();
     TEffectData* GetEffectByName(const std::string& name);
 
-    const bool& GetIsEditing() const {return isEditing_; }
+    bool GetIsEditing() const {return isEditing_; }
 
     // カテゴリーモード用getter
     TEffectData* GetEffectByName(const std::string& categoryName, const std::string& effectName);

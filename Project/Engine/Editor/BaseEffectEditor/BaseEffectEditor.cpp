@@ -16,7 +16,7 @@ using namespace KetaEngine;
 #include <Windows.h>
 
 template <typename TEffectData>
-void BaseEffectEditor<TEffectData>::Init(const std::string& typeName, const bool& isUseCategory) {
+void BaseEffectEditor<TEffectData>::Init(const std::string& typeName, bool isUseCategory) {
     isUseCategorySystem_ = isUseCategory;
     baseFolderPath_      = GetFolderPath();
     effectTypeName_      = typeName;

@@ -5,7 +5,7 @@ using namespace KetaEngine;
 #include <imgui.h>
 #include <Windows.h>
 
-void ObjEaseAnimationEditor::Init(const std::string& typeName, const bool& isUseCategory) {
+void ObjEaseAnimationEditor::Init(const std::string& typeName, bool isUseCategory) {
     BaseEffectEditor::Init(typeName, isUseCategory);
     InitPreviewObject();
 

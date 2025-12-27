@@ -77,7 +77,7 @@ public:
     /// <param name="shaderVisible">シェーダー可視性</param>
     /// <returns>ディスクリプタヒープ</returns>
     Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> InitializeDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device> device,
-        const D3D12_DESCRIPTOR_HEAP_TYPE& heapType, const UINT& numDescriptors, const bool& shaderVisible);
+        const D3D12_DESCRIPTOR_HEAP_TYPE& heapType, const UINT& numDescriptors, bool shaderVisible);
 
     /// <summary>
     /// CPUディスクリプタハンドル取得

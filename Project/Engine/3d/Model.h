@@ -135,7 +135,7 @@ public:
     const ModelData& GetModelData() { return modelData_; }
     const std::string& GetModelName() const { return modelName_; }
     ID3D12Resource* GetVertexResource() { return vertexResource_.Get(); }
-    const bool& GetIsFileGltf() const { return isFileGltf_; }
+    bool GetIsFileGltf() const { return isFileGltf_; }
 };
 
 }; // KetaEngine
