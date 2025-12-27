@@ -162,9 +162,7 @@ Vector3 WorldTransform::GetLocalPos() const {
 }
 
 void WorldTransform::UpdateAffineMatrix() {
-
-    // オフセット含めた合計を計算
-    const Vector3 scale       = scale_ * offsetTransform_.scale;
+    Vector3 scale             = ScaleCalc(isUseDirectScale_);
     const Vector3 rotation    = rotation_ + offsetTransform_.rotation;
     const Vector3 translation = translation_ + offsetTransform_.translation;
     Quaternion quaternion     = quaternion_ * offsetTransform_.quaternion;
@@ -286,7 +284,7 @@ Vector3 WorldTransform::GetForwardVector() const {
 }
 
 Vector3 WorldTransform::CalcForwardOffset(const Vector3& offsetValue) const {
-    
+
     // 向き(Y軸回転)を取得
     float playerRotationY    = rotation_.y;
     Matrix4x4 rotationMatrix = MakeRotateYMatrix(playerRotationY);
@@ -296,7 +294,14 @@ Vector3 WorldTransform::CalcForwardOffset(const Vector3& offsetValue) const {
     Vector3 worldMoveVector = TransformNormal(localMoveVector, rotationMatrix);
 
     // 目標位置を計算
-    return  worldMoveVector;
+    return worldMoveVector;
+}
+
+Vector3 WorldTransform::ScaleCalc(bool isDirectScale) {
+    if (!isDirectScale) {
+        return scale_ * offsetTransform_.scale;
+    }
+    return scale_;
 }
 
 ///============================================================
