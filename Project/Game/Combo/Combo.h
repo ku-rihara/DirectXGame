@@ -27,6 +27,8 @@ public:
 
     void AdjustParam(); //< パラメータ調整
     void RegisterParams(); //< パラメータバインド
+private:
+    void DebugMode();
 
 private:
     // UIコントローラ
@@ -43,6 +45,9 @@ private:
     int32_t currentLevel_;
 
     bool isReset_ = false;
+
+    // debug用
+    bool isStopComboTime_=false;
 
 public:
     // Getter

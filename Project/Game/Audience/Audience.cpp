@@ -113,7 +113,7 @@ void Audience::AdjustParam() {
     ImGui::PushID(groupName_.c_str());
 
     // SeatsRow
-    ImGui::InputInt("seatRowNum", &seatRowNum_, 0, 10);
+    ImGui::InputInt("seatRowNum", &seatRowNum_);
     seatRowNum_ = std::clamp(seatRowNum_, 0, 10);
 
     // SeatSideのコンボボックス

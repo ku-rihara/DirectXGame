@@ -46,6 +46,8 @@ private:
     Vector2 baseSeatsZYPos_{0.0f, 0.0f}; 
     Vector2 seatsRowZYOffset_{0.0f, 2.0f};
 
+    float cheerAnimationTimer_;
+
     // transform
     Vector3 baseTransformScale_;
 };
